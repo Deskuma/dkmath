@@ -22,11 +22,15 @@ theorem example_theorem (x : ℝ) : cosmic_formula_one x = 1 :=
     simp [cosmic_formula_one]
     ring
 
+example : ∀ x : ℝ, cosmic_formula_one x = 1 := example_theorem
+
 -- 単位宇宙式の恒等式を証明する例
 theorem example_theorem_u (x u : ℝ) : cosmic_formula_u x u = u^2 :=
   by
     simp [cosmic_formula_u]
     ring
+
+example : ∀ x u : ℝ, cosmic_formula_u x u = u^2 := example_theorem_u
 
 -- More theorems and proofs can be added here.
 
