@@ -66,6 +66,69 @@ theorem cosmic_formula_sub_from_add {R : Type*} [CommRing R] (x u : R) :
   rw [←h]
   ring
 
+-- More theorems and proofs can be added here.
+
+/--
+Equality of the two variants of the cosmic formula.
+
+For all real `x` and `u`, the convenience definition `cosmic_formula_u x u`
+coincides with the alternative/subscript definition `cosmic_formula_u_sub x u`.
+The proof proceeds by simplifying/unfolding both definitions.
+-/
+@[simp] lemma cosmic_formula_u_eq_sub (x u : ℝ) :
+    cosmic_formula_u x u = cosmic_formula_u_sub x u := by
+  simp [cosmic_formula_u, cosmic_formula_u_sub]
+
+/-- For any real `x`, `cosmic_formula_one x` is definitionally equal to
+`cosmic_formula_u_sub x 1`. This lemma connects the specialized
+`cosmic_formula_one` with the more general `cosmic_formula_u_sub`
+instantiated at `u = 1`. It is intended as a `@[simp]` lemma so that
+`cosmic_formula_one` can be simplified to the `u_sub` form. -/
+@[simp] lemma cosmic_formula_one_eq_sub (x : ℝ) :
+    cosmic_formula_one x = cosmic_formula_u_sub x (1:ℝ) := by
+  simp [cosmic_formula_one, cosmic_formula_u_sub]
+
+-- Additional lemmas and theorems can be added here.
+
+/-- cosmic_formula_u_sub_u0
+
+For any commutative ring R and element x : R, substituting 0 into the second argument
+of `cosmic_formula_u_sub` yields 0:
+
+  cosmic_formula_u_sub x (0 : R) = 0
+
+Parameters
+- `R` : a type equipped with a `CommRing` instance
+- `x` : an element of `R`
+
+Proof sketch: unfold the definition of `cosmic_formula_u_sub` and finish with `ring`.
+-/
+@[simp] lemma cosmic_formula_u_sub_u0 {R : Type*} [CommRing R] (x : R) :
+    cosmic_formula_u_sub x (0:R) = 0 := by
+  unfold cosmic_formula_u_sub
+  ring
+
+/--
+For any commutative ring R and element `u : R`, evaluating
+`cosmic_formula_u_sub` at `x0 = 0` yields `u^2`. The equality follows
+by unfolding the definition of `cosmic_formula_u_sub` and simplifying.
+-/
+@[simp] lemma cosmic_formula_u_sub_x0 {R : Type*} [CommRing R] (u : R) :
+    cosmic_formula_u_sub (0:R) u = u^2 := by
+  simp [cosmic_formula_u_sub]
+
+-- 加法版でも
+/-- If the parameter `x` is `0`, then `N` evaluates to `0` for any element `u` of a commutative
+semiring `R`. This lemma provides a simplification rule for expressions involving `N` when
+`x` is instantiated to `0`. -/
+@[simp] lemma N_x0 {R : Type*} [CommSemiring R] (u : R) : N (x := (0:R)) u = 0 := by
+  simp [N]
+
+/-- For any commutative semiring R and element u : R, evaluating the polynomial/function P at x = 0
+returns u^2. The proof is by simplification (unfolding the definition of `P`). -/
+@[simp] lemma P_x0 {R : Type*} [CommSemiring R] (u : R) : P (x := (0:R)) u = u^2 := by
+  simp [P]
+
 end CosmicFormula
 
 end DkMath
