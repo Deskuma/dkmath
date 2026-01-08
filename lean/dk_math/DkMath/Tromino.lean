@@ -2,7 +2,7 @@
 import Mathlib
 import DkMath.Polyomino
 
-set_option linter.style.longLine false
+set_option linter.style.longLine true
 
 namespace DkMath
 namespace Polyomino
@@ -144,6 +144,7 @@ lemma area_block2_eq_area_L_add_area_hole :
 -- =========================
 
 /-- 90°回転（原点中心）: (x, y) ↦ (-y, x) -/
+-- rotate 90 degree embedding
 def rot90Emb : Cell ↪ Cell :=
 { toFun := fun c => (-c.2, c.1)
 , inj' := by
@@ -231,24 +232,41 @@ example : area (reflectX L_tromino) = 3 := by
   simpa [area_L_tromino] using (area_reflectX (P := L_tromino))
 
 
+/--
+rotate360_eq (P : Shape) : rotate360 P = P
+
+Proves that rotating a shape by 360 degrees (four successive 90° rotations)
+leaves the shape unchanged. Here `rotate360` is implemented by mapping the
+embedding `rot90Emb` four times over the finset of points of `P`. The proof
+uses extensionality on finsets and the fundamental property `rot90_apply`
+that `rot90Emb` composed with itself four times is the identity.
+
+Proof sketch:
+- For the direction `rotate360 P ⊆ P`, unpack the nested witnesses produced by
+  the four maps (a chain `e → d → b → a → c`) and compose the equalities to
+  obtain `c = rot90Emb^4 e = e`, hence `c ∈ P`.
+- For the direction `P ⊆ rotate360 P`, given `c ∈ P` use the witness
+  `rot90Emb^3 c` and its intermediate images `rot90Emb^2 c`, `rot90Emb c`, `c`
+  to exhibit the required chain; `rot90_apply` simplifies the composed maps.
+
+This lemma encapsulates the geometric intuition that a full 360° rotation is
+the identity on shapes represented as finsets of embedded points.
+-/
 lemma rotate360_eq (P : Shape) : rotate360 P = P := by
   ext c
   simp only [rotate360, rotate90, rotate270, rotate180, Finset.mem_map]
   -- After simp, both sides expand to nested ∃ with ∧
-  -- LHS: ∃ a, (∃ b, (∃ d, (∃ e, e ∈ P ∧ rot90Emb e = d) ∧ rot90Emb d = b) ∧ rot90Emb b = a) ∧ rot90Emb a = c
+  -- LHS: ∃ a, (∃ b, (∃ d, (∃ e, e ∈ P ∧ R90 e = d) ∧ R90 d = b) ∧ R90 b = a) ∧ R90 a = c
   -- RHS: c ∈ P
   constructor
   · intro ⟨a, ⟨b, ⟨d, ⟨e, he_mem, hd_eq⟩, hb_eq⟩, ha_eq⟩, hc_eq⟩
-    -- We have: hd_eq : rot90Emb e = d, hb_eq : rot90Emb d = b, ha_eq : rot90Emb b = a, hc_eq : rot90Emb a = c
-    -- So: rot90Emb (rot90Emb (rot90Emb (rot90Emb e))) = rot90Emb (rot90Emb (rot90Emb d)) = rot90Emb (rot90Emb b) = rot90Emb a = c
-    -- By rot90_apply: rot90Emb^4 = id, so rot90Emb (rot90Emb (rot90Emb (rot90Emb e))) = e
+    -- We have: hd_eq : R90 e = d, hb_eq : R90 d = b, ha_eq : R90 b = a, hc_eq : R90 a = c
+    -- So: R90 (R90 (R90 (R90 e))) = R90 (R90 (R90 d)) = R90 (R90 b) = R90 a = c
+    -- By rot90_apply: R90^4 = id, so R90 (R90 (R90 (R90 e))) = e
     let e360 := rot90Emb (rot90Emb (rot90Emb (rot90Emb e)))
     let e270 := rot90Emb (rot90Emb (rot90Emb e))
     let e180 := rot90Emb (rot90Emb e)
     let e90 := rot90Emb e
-    have ha_eq : rot90Emb b = a := ha_eq
-    have hb_eq : rot90Emb d = b := hb_eq
-    have hd_eq : rot90Emb e = d := hd_eq
     have h_id : e360 = e := by simp [e360, rot90_apply]
     have h_comp : e360 = c := by
       simp only [e360]
