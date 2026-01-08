@@ -1,3 +1,4 @@
+-- cid: 695fc5da-3614-8324-bc69-0417d227baba
 import Mathlib
 import DkMath.Polyomino
 
@@ -102,7 +103,7 @@ def translateEmb' (v : Cell) : Cell ↪ Cell :=
 /-- translateEmb と translateEmb' は同じ定義 -/
 lemma translateEmb_eq_translateEmb' (v : Cell) :
   translateEmb v = translateEmb' v := by
-  rfl
+  ext c <;> rfl
 
 /-- 平行移動 -/
 def translate (v : Cell) (P : Shape) : Shape :=
@@ -119,7 +120,7 @@ example : translate (1,2) L_tromino = {(1,2), (2,2), (1,3)} := by
 /-- 平行移動しても面積（セル数）は変わらない -/
 lemma area_translate (v : Cell) (P : Shape) :
     area (translate v P) = area P := by
-  simp [area, translate]
+  simp only [area, translate, Finset.card_map]
 
 
 /-- 交わらない2つのポリオミノの和集合の面積は足し算 -/
