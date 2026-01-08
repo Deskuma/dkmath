@@ -12,7 +12,7 @@ namespace Tromino
 🟦
 ```
 -/
-def L_tromino : PolyominoType :=
+def L_tromino : Shape :=
   { (0,0), (1,0),
     (0,1) }
 
@@ -22,7 +22,7 @@ def L_tromino : PolyominoType :=
 🟦🟦🟦
 ```
 -/
-def I_tromino : PolyominoType :=
+def I_tromino : Shape :=
   { (0,0), (1,0), (2,0) }
 
 /--
@@ -32,7 +32,7 @@ def I_tromino : PolyominoType :=
 ⬜️⬜️
 ```
 -/
-def block2 : PolyominoType :=
+def block2 : Shape :=
   { (0,0), (1,0),
     (0,1), (1,1) }
 
@@ -43,7 +43,7 @@ def block2 : PolyominoType :=
 ⬜️🟥
 ```
 -/
-def hole2 : PolyominoType :=
+def hole2 : Shape :=
   { (1,1) }
 
 -- 面積の確認
@@ -99,8 +99,13 @@ def translateEmb' (v : Cell) : Cell ↪ Cell :=
   Prod.ext ha hb
 }
 
+/-- translateEmb と translateEmb' は同じ定義 -/
+lemma translateEmb_eq_translateEmb' (v : Cell) :
+  translateEmb v = translateEmb' v := by
+  rfl
+
 /-- 平行移動 -/
-def translate (v : Cell) (P : PolyominoType) : PolyominoType :=
+def translate (v : Cell) (P : Shape) : Shape :=
   P.map (translateEmb' v)
 
 -- test
@@ -112,13 +117,13 @@ example : translate (1,2) L_tromino = {(1,2), (2,2), (1,3)} := by
 -- lemmas about translate
 
 /-- 平行移動しても面積（セル数）は変わらない -/
-lemma area_translate (v : Cell) (P : PolyominoType) :
+lemma area_translate (v : Cell) (P : Shape) :
     area (translate v P) = area P := by
   simp [area, translate]
 
 
 /-- 交わらない2つのポリオミノの和集合の面積は足し算 -/
-lemma area_union_of_disjoint (A B : PolyominoType) (h : Disjoint A B) :
+lemma area_union_of_disjoint (A B : Shape) (h : Disjoint A B) :
     area (A ∪ B) = area A + area B := by
   simpa [area] using (Finset.card_union_of_disjoint h)
 
