@@ -2,6 +2,8 @@
 import Mathlib
 import DkMath.Polyomino
 
+set_option linter.style.longLine false
+
 namespace DkMath
 namespace Polyomino
 namespace Tromino
@@ -159,6 +161,15 @@ def rot90Emb : Cell ↪ Cell :=
 /-- 90°回転 -/
 def rotate90 (P : Shape) : Shape :=
   P.map rot90Emb
+-- 180°, 270°, 360°回転も定義しておく
+def rotate180 (P : Shape) : Shape := rotate90 (rotate90 P)
+def rotate270 (P : Shape) : Shape := rotate90 (rotate180 P)
+def rotate360 (P : Shape) : Shape := rotate90 (rotate270 P)
+
+
+/-- rot90Emb の適用例 -/
+lemma rot90_apply (c : Cell) : rot90Emb c = (-c.2, c.1) := rfl
+
 
 /-- x 軸反転（鏡映）: (x, y) ↦ (x, -y) -/
 def reflectXEmb : Cell ↪ Cell :=
@@ -219,6 +230,49 @@ example : area (rotate90 L_tromino) = 3 := by
 example : area (reflectX L_tromino) = 3 := by
   simpa [area_L_tromino] using (area_reflectX (P := L_tromino))
 
+
+lemma rotate360_eq (P : Shape) : rotate360 P = P := by
+  ext c
+  simp only [rotate360, rotate90, rotate270, rotate180, Finset.mem_map]
+  -- After simp, both sides expand to nested ∃ with ∧
+  -- LHS: ∃ a, (∃ b, (∃ d, (∃ e, e ∈ P ∧ rot90Emb e = d) ∧ rot90Emb d = b) ∧ rot90Emb b = a) ∧ rot90Emb a = c
+  -- RHS: c ∈ P
+  constructor
+  · intro ⟨a, ⟨b, ⟨d, ⟨e, he_mem, hd_eq⟩, hb_eq⟩, ha_eq⟩, hc_eq⟩
+    -- We have: hd_eq : rot90Emb e = d, hb_eq : rot90Emb d = b, ha_eq : rot90Emb b = a, hc_eq : rot90Emb a = c
+    -- So: rot90Emb (rot90Emb (rot90Emb (rot90Emb e))) = rot90Emb (rot90Emb (rot90Emb d)) = rot90Emb (rot90Emb b) = rot90Emb a = c
+    -- By rot90_apply: rot90Emb^4 = id, so rot90Emb (rot90Emb (rot90Emb (rot90Emb e))) = e
+    let e360 := rot90Emb (rot90Emb (rot90Emb (rot90Emb e)))
+    let e270 := rot90Emb (rot90Emb (rot90Emb e))
+    let e180 := rot90Emb (rot90Emb e)
+    let e90 := rot90Emb e
+    have ha_eq : rot90Emb b = a := ha_eq
+    have hb_eq : rot90Emb d = b := hb_eq
+    have hd_eq : rot90Emb e = d := hd_eq
+    have h_id : e360 = e := by simp [e360, rot90_apply]
+    have h_comp : e360 = c := by
+      simp only [e360]
+      calc rot90Emb (rot90Emb (rot90Emb (rot90Emb e)))
+        = rot90Emb (rot90Emb (rot90Emb d)) := by rw [hd_eq]
+        _ = rot90Emb (rot90Emb b) := by rw [hb_eq]
+        _ = rot90Emb a := by rw [ha_eq]
+        _ = c := by rw [hc_eq]
+    rwa [← h_comp, h_id]
+  · intro hc
+    use rot90Emb (rot90Emb (rot90Emb c))
+    refine ⟨?_, ?_⟩
+    · use rot90Emb (rot90Emb c)
+      refine ⟨?_, ?_⟩
+      · use rot90Emb c
+        refine ⟨?_, ?_⟩
+        · exact ⟨c, hc, rfl⟩
+        · simp [rot90_apply]
+      · simp [rot90_apply]
+    · simp [rot90_apply]
+
+
+example : rotate90 L_tromino ≠ L_tromino := by
+  decide
 
 end Tromino
 end Polyomino
