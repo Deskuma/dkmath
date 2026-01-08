@@ -4,7 +4,4 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.Basic
-import DkMath.CosmicFormula
-import DkMath.Polyomino
-import DkMath.Tromino
+-- License file for DkMath project

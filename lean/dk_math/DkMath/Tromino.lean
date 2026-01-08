@@ -1,4 +1,11 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
 -- cid: 695fc5da-3614-8324-bc69-0417d227baba
+
 import Mathlib
 import DkMath.Polyomino
 
