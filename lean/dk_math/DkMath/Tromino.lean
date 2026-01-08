@@ -289,8 +289,55 @@ lemma rotate360_eq (P : Shape) : rotate360 P = P := by
     · simp [rot90_apply]
 
 
+/-- Reflecting twice across the x-axis returns the original shape. -/
+def reflectXX (P : Shape) : Shape := reflectX (reflectX P)
+
+
+/--
+For any shape `P : Shape`, `reflectXX P = P`.
+
+`reflectXX` is defined by mapping `reflectXEmb` over the elements of `P` twice.
+Since `reflectXEmb` is an involution (it is its own inverse), applying it twice
+returns each element to itself, so the induced map on `Shape` is the identity.
+This lemma records that fact.
+-/
+lemma reflectXX_eq (P : Shape) : reflectXX P = P := by
+  ext c
+  simp only [reflectXX, reflectX, Finset.mem_map]
+  constructor
+  · intro ⟨a, ⟨b, hb_mem, hb_eq⟩, ha_eq⟩
+    -- hb_mem : b ∈ P
+    -- hb_eq : reflectXEmb b = a
+    -- ha_eq : reflectXEmb a = c
+    -- Goal: c ∈ P
+    -- Composition: reflectXEmb (reflectXEmb b) = reflectXEmb a = c
+    -- But reflectXEmb (reflectXEmb b) = b by self-inverse property
+    -- Therefore: b = c, so c ∈ P follows from hb_mem
+    have h_comp : reflectXEmb (reflectXEmb b) = b := by simp [reflectXEmb]
+    have h_eq : c = b := by
+      calc c = reflectXEmb a := ha_eq.symm
+        _ = reflectXEmb (reflectXEmb b) := by rw [← hb_eq]
+        _ = b := h_comp
+    rw [h_eq]
+    exact hb_mem
+  · intro hc
+    -- hc : c ∈ P
+    -- Goal: ∃ a, (∃ b, b ∈ P ∧ reflectXEmb b = a) ∧ reflectXEmb a = c
+    -- Use b = c and a = reflectXEmb c
+    use reflectXEmb c
+    refine ⟨⟨c, hc, rfl⟩, ?_⟩
+    simp [reflectXEmb]
+
+
+-- tests
+#eval rotate90 L_tromino  -- {(0, 0), (0, 1), (-1, 0)}
+#eval reflectX L_tromino  -- {(0, 0), (1, 0), (0, -1)}
+#eval reflectY L_tromino  -- {(0, 0), (-1, 0), (0, 1)}
+#eval reflectXX L_tromino -- {(0, 0), (1, 0), (0, 1)}
+
 example : rotate90 L_tromino ≠ L_tromino := by
   decide
+
 
 end Tromino
 end Polyomino
