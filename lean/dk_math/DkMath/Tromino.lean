@@ -137,6 +137,89 @@ lemma area_block2_eq_area_L_add_area_hole :
     (area_union_of_disjoint L_tromino hole2 disjoint_L_hole)
 
 
+-- =========================
+-- Rotation / Reflection
+-- =========================
+
+/-- 90°回転（原点中心）: (x, y) ↦ (-y, x) -/
+def rot90Emb : Cell ↪ Cell :=
+{ toFun := fun c => (-c.2, c.1)
+, inj' := by
+    intro a b h
+    -- h : (-a.2, a.1) = (-b.2, b.1)
+    have h1 : -a.2 = -b.2 := congrArg Prod.fst h
+    have h2 : a.1 = b.1 := congrArg Prod.snd h
+    have ha2 : a.2 = b.2 := by
+      -- -a.2 = -b.2 から a.2 = b.2
+      simpa using (neg_inj.mp h1)
+    -- Cell = ℤ×ℤ なので成分で ext
+    exact Prod.ext h2 ha2
+}
+
+/-- 90°回転 -/
+def rotate90 (P : Shape) : Shape :=
+  P.map rot90Emb
+
+/-- x 軸反転（鏡映）: (x, y) ↦ (x, -y) -/
+def reflectXEmb : Cell ↪ Cell :=
+{ toFun := fun c => (c.1, -c.2)
+, inj' := by
+    intro a b h
+    have h1 : a.1 = b.1 := congrArg (fun c => c.1) h
+    have h2 : -a.2 = -b.2 := congrArg (fun c => c.2) h
+    have ha2 : a.2 = b.2 := by
+      simpa using (neg_inj.mp h2)
+    exact Prod.ext h1 ha2
+}
+
+/-- x 軸反転 -/
+def reflectX (P : Shape) : Shape :=
+  P.map reflectXEmb
+
+/-- y 軸反転（鏡映）: (x, y) ↦ (-x, y) -/
+def reflectYEmb : Cell ↪ Cell :=
+{ toFun := fun c => (-c.1, c.2)
+, inj' := by
+    intro a b h
+    have h1 : -a.1 = -b.1 := congrArg Prod.fst h
+    have h2 : a.2 = b.2 := congrArg (fun c => c.2) h
+    have ha1 : a.1 = b.1 := by
+      simpa using (neg_inj.mp h1)
+    exact Prod.ext ha1 h2
+}
+
+/-- y 軸反転 -/
+def reflectY (P : Shape) : Shape :=
+  P.map reflectYEmb
+
+
+/-- 90°回転しても面積は不変 -/
+lemma area_rotate90 (P : Shape) :
+    area (rotate90 P) = area P := by
+  simp only [area, rotate90, Finset.card_map]
+
+/-- x 軸反転しても面積は不変 -/
+lemma area_reflectX (P : Shape) :
+    area (reflectX P) = area P := by
+  simp only [area, reflectX, Finset.card_map]
+
+/-- y 軸反転しても面積は不変 -/
+lemma area_reflectY (P : Shape) :
+    area (reflectY P) = area P := by
+  simp only [area, reflectY, Finset.card_map]
+
+-- tests
+#eval rotate90 L_tromino
+#eval reflectX L_tromino
+#eval reflectY L_tromino
+
+example : area (rotate90 L_tromino) = 3 := by
+  simpa [area_L_tromino] using (area_rotate90 (P := L_tromino))
+
+example : area (reflectX L_tromino) = 3 := by
+  simpa [area_L_tromino] using (area_reflectX (P := L_tromino))
+
+
 end Tromino
 end Polyomino
 end DkMath
