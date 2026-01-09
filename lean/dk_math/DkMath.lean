@@ -6,5 +6,6 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Basic
 import DkMath.CosmicFormula
+import DkMath.CosmicFormulaGeom
 import DkMath.Polyomino
 import DkMath.Tromino
