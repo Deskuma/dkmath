@@ -30,7 +30,7 @@ def deca : ℕ := 10
 def undeca : ℕ := 11
 def dodeca : ℕ := 12
 def trideca : ℕ := 13
-def tetradeca : ℕ := 14  -- quaddecagon
+def tetradeca : ℕ := 14  -- tetradecagon
 def pentadeca : ℕ := 15  -- quindecagon
 
 
