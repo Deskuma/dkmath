@@ -63,12 +63,12 @@ def isChickenCurry (dish : CurryDish) : Bool :=
 #eval isChickenCurry myFavoriteCurry  -- 出力: true
 
 -- カレー料理の名前を文字列として返す関数
-def CurryDishToString (dish : CurryDish) : String :=
+def curryDishToString (dish : CurryDish) : String :=
   match dish with
   | CurryDish.vegCurry => "Vegetable Curry"
   | CurryDish.chickenCurry => "Chicken Curry"
   | CurryDish.beefCurry => "Beef Curry"
 
-#eval CurryDishToString myFavoriteCurry  -- 出力: "Chicken Curry"
+#eval curryDishToString myFavoriteCurry  -- 出力: "Chicken Curry"
 
 -- 以上のように、inductive を使用してカレー料理の型を定義し、その型に基づく関数を作成しました。
