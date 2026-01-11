@@ -84,21 +84,69 @@ lemma area_body (x u : ℕ) :
     simpa [partB] using (area_translate (v := (x,0)) (S := rect u x))
   have aC : area (partC x u) = x*u := by
     simpa [partC] using (area_translate (v := (0,x)) (S := rect x u))
-
   -- 各領域が互いに素であることを示す
   -- （座標の範囲が互いに排他的であることから従う）
   have disj_AB : Disjoint (partA x) (partB x u) := by
     -- partA: [0,x) × [0,x)、partB: [x,x+u) × [0,x) なので x座標が交わらない
-    sorry  -- TODO: omega による座標不等式の証明（強化フェーズで完成）
-
+    classical
+    refine Finset.disjoint_left.2 ?_
+    intro p hpA hpB
+    -- partA のメンバシップから p.1 < x ∧ p.2 < x を得る
+    simp [partA, rect, square, product_eq_sprod, mem_product, mem_range] at hpA
+    -- partB は平行移動された集合の元なので存在記号を分解する
+    rcases (Finset.mem_map.1 hpB) with ⟨q, hq_in, heq⟩
+    simp [rect, product_eq_sprod, mem_product, mem_range] at hq_in
+    have h1 : p.fst = q.1 + x := by
+      dsimp [translateEmb] at heq
+      exact (congrArg Prod.fst heq).symm
+    -- p.1 = q.1 + x となるので p.1 ≥ x が成り立ち，p.1 < x と矛盾する
+    have hge : x ≤ p.fst := by
+      rw [h1, Nat.add_comm]
+      apply Nat.le_add_right
+    exact lt_irrefl p.fst (lt_of_lt_of_le hpA.left hge)
   have disj_AC : Disjoint (partA x) (partC x u) := by
     -- partA: [0,x) × [0,x)、partC: [0,x) × [x,x+u) なので y座標が交わらない
-    sorry  -- TODO: omega による座標不等式の証明（強化フェーズで完成）
-
+    classical
+    refine Finset.disjoint_left.2 ?_
+    intro p hpA hpC
+    simp [partA, rect, square, product_eq_sprod, mem_product, mem_range] at hpA
+    rcases (Finset.mem_map.1 hpC) with ⟨q, hq_in, heq⟩
+    simp [rect, product_eq_sprod, mem_product, mem_range] at hq_in
+    have h2 : p.snd = q.2 + x := by
+      dsimp [translateEmb] at heq
+      exact (congrArg Prod.snd heq).symm
+    -- p.2 = q.2 + x となるので p.2 ≥ x が成り立ち，p.2 < x と矛盾する
+    have hge : x ≤ p.snd := by
+      rw [h2, Nat.add_comm]
+      apply Nat.le_add_right
+    exact lt_irrefl p.snd (lt_of_lt_of_le hpA.right hge)
   have disj_BC : Disjoint (partB x u) (partC x u) := by
     -- partB: [x,x+u) × [0,x)、partC: [0,x) × [x,x+u) なので x座標とy座標が交わらない
-    sorry  -- TODO: omega による座標不等式の証明（強化フェーズで完成）
-
+    classical
+    refine Finset.disjoint_left.2 ?_
+    intro p hpB hpC
+    -- 両方とも平行移動された集合の元なので存在記号を分解する
+    rcases (Finset.mem_map.1 hpB) with ⟨qb, hb_in, heqb⟩
+    rcases (Finset.mem_map.1 hpC) with ⟨qc, hc_in, heqc⟩
+    simp only [rect, product_eq_sprod, mem_product, mem_range] at hb_in hc_in
+    have hb1 : p.fst = qb.1 + x := by
+      dsimp [translateEmb] at heqb
+      exact (congrArg Prod.fst heqb).symm
+    have _hb2 : p.snd = qb.2 + 0 := by
+      dsimp [translateEmb] at heqb
+      exact (congrArg Prod.snd heqb).symm
+    have hc1 : p.fst = qc.1 := by
+      dsimp [translateEmb] at heqc
+      exact (congrArg Prod.fst heqc).symm
+    have _hc2 : p.snd = qc.2 + x := by
+      dsimp [translateEmb] at heqc
+      exact (congrArg Prod.snd heqc).symm
+    -- heqb から p.fst = qb.1 + x となり p.fst ≥ x、heqc から p.fst = qc.1 と qc.1 < x が得られるので矛盾
+    have hge : x ≤ p.fst := by
+      rw [hb1, Nat.add_comm]; apply Nat.le_add_right
+    have hlt : p.fst < x := by
+      rw [←hc1] at hc_in; exact hc_in.left
+    exact lt_irrefl p.fst (lt_of_lt_of_le hlt hge)
   -- body = (A ∪ B) ∪ C なので、段階的に card を足す
   simp only [body, area]
   rw [Finset.card_union_of_disjoint]
