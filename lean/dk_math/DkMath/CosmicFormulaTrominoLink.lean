@@ -15,9 +15,7 @@ theorem cosmic_diff_int (x u : ℕ) :
   -- まず Nat の等式を取り、ℤ に写して整理
   have h : (x+u) * (x+u) = x * (x + 2*u) + u*u :=
     cosmic_area_identity x u
-  -- ℤへ
-  -- （ここは `zify` / `simp` / `ring` で整える。）
-  -- 具体整形は既存宇宙式側の型に合わせて調整するのがよい。
-  -- 例としては:
-  --   simpa [pow_two] using ...
-  ring
+  -- ℤへ：等式全体を ℤ へ写す
+  have hZ := congrArg (fun n : ℕ => (n : ℤ)) h
+  norm_cast at hZ
+  simpa [pow_two, sub_eq_iff_eq_add, add_comm] using hZ
