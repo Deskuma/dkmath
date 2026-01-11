@@ -4,4 +4,4 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-def hello := "world"
+-- License file for DkMath project

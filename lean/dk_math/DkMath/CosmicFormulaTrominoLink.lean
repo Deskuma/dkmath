@@ -1,0 +1,21 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import Mathlib
+import DkMath.CosmicFormulaGeom
+import DkMath.Tromino
+
+open DkMath.CosmicFormulaGeom
+
+theorem cosmic_diff_int (x u : ℕ) :
+    ((x+u : ℤ)^2 - (x : ℤ) * (x + 2*u) ) = (u : ℤ)^2 := by
+  -- まず Nat の等式を取り、ℤ に写して整理
+  have h : (x+u) * (x+u) = x * (x + 2*u) + u*u :=
+    cosmic_area_identity x u
+  -- ℤへ：等式全体を ℤ へ写す
+  have hZ := congrArg (fun n : ℕ => (n : ℤ)) h
+  norm_cast at hZ
+  simpa [pow_two, sub_eq_iff_eq_add, add_comm] using hZ
