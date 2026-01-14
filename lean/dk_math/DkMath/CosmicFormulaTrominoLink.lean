@@ -30,7 +30,20 @@ def castCell : (ℕ × ℕ) → (ℤ × ℤ) := fun p => (p.1, p.2)
 def castShape (S : DkMath.CosmicFormulaGeom.Shape) : DkMath.Polyomino.Shape :=
   S.image castCell
 
--- 目標：最小例の“形”が一致する（必要なら translate/rotate/reflect まで許す）
+/--
+`bridge_tromino_min` は、特定の形状の有限集合に関する定理です。
+この定理は、以下の3つの形状が等しいことを示します：
+
+1. `castShape (body 1 1)` は `L_tromino` に等しい。
+2. `castShape (gap 1 1)` は `hole2` に等しい。
+3. `castShape (big 1 1)` は `block2` に等しい。
+
+この証明では、`castShape` 関数が `Finset.image` による単純な埋め込みであることを利用し、
+各集合の要素を展開して、`castCell` の作用を計算することで、両辺が同じ有限集合であることを示します。
+
+証明のテクニックとして、`decide` を用いて有限集合の等式を解くか、
+`ext` を使用して要素ごとの所属判定を確認します。
+-/
 theorem bridge_tromino_min :
   castShape (body 1 1) = L_tromino ∧
   castShape (gap 1 1)  = hole2 ∧
@@ -52,7 +65,20 @@ theorem bridge_tromino_min :
   · -- castShape (big 1 1) = block2
     decide
 
--- これが通れば、宇宙式 = トロミノ が一撃で出る
+/--
+この定理 `cosmic_is_tromino` は、特定のポリオミノの面積に関する関係を示しています。
+具体的には、以下の等式を証明します：
+
+\[
+\text{area}(\text{castShape}(\text{body}(1, 1))) +
+\text{area}(\text{castShape}(\text{gap}(1, 1))) =
+\text{area}(\text{castShape}(\text{big}(1, 1)))
+\]
+
+ここで、`body`、`gap`、および `big` はそれぞれ異なる形状を表し、`castShape` はそれらの形状をポリオミノに変換します。
+証明の過程では、`bridge_tromino_min` を用いて具体的な形状に置き換えた後、面積の計算を行います。
+最終的に、トロミノの面積が 3、穴の面積が 1、ブロックの面積が 4 であることを示し、これにより等式が成り立つことを確認します。
+-/
 theorem cosmic_is_tromino :
   DkMath.Polyomino.area (castShape (body 1 1)) + DkMath.Polyomino.area (castShape (gap 1 1))
     = DkMath.Polyomino.area (castShape (big 1 1)) := by
