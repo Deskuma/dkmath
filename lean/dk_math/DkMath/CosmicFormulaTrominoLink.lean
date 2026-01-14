@@ -11,6 +11,23 @@ import DkMath.Tromino
 open DkMath.CosmicFormulaGeom
 open DkMath.Polyomino.Tromino
 
+/--
+# 定理: cosmic_diff_int
+
+この定理は、自然数 `x` と `u` に対して次の等式を示します：
+
+$$
+(x + u)^2 - x \cdot (x + 2u) = u^2
+$$
+
+## 証明の概要
+
+1. **自然数の等式**: 最初に、`(x + u)^2` と `x * (x + 2u)` の間の等式を示す。この等式は `cosmic_area_identity` を用いて導出されます。
+2. **整数への写像**: 次に、得られた等式全体を整数に写像します。この過程で、`congrArg` を使用して自然数から整数への変換を行います。
+3. **簡約**: 最後に、`norm_cast` と `simpa` を用いて等式を簡約し、最終的な結果を得ます。
+
+この定理は、整数の性質を利用して自然数の間の関係を明らかにするものです。
+-/
 theorem cosmic_diff_int (x u : ℕ) :
     ((x+u : ℤ)^2 - (x : ℤ) * (x + 2*u) ) = (u : ℤ)^2 := by
   -- まず Nat の等式を取り、ℤ に写して整理
@@ -69,11 +86,11 @@ theorem bridge_tromino_min :
 この定理 `cosmic_is_tromino` は、特定のポリオミノの面積に関する関係を示しています。
 具体的には、以下の等式を証明します：
 
-\[
+$$
 \text{area}(\text{castShape}(\text{body}(1, 1))) +
 \text{area}(\text{castShape}(\text{gap}(1, 1))) =
 \text{area}(\text{castShape}(\text{big}(1, 1)))
-\]
+$$
 
 ここで、`body`、`gap`、および `big` はそれぞれ異なる形状を表し、`castShape` はそれらの形状をポリオミノに変換します。
 証明の過程では、`bridge_tromino_min` を用いて具体的な形状に置き換えた後、面積の計算を行います。
