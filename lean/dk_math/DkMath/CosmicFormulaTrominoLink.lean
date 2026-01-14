@@ -43,9 +43,28 @@ theorem cosmic_diff_int (x u : ℕ) :
 /-- ℕ×ℕ → ℤ×ℤ の埋め込み -/
 def castCell : (ℕ × ℕ) → (ℤ × ℤ) := fun p => (p.1, p.2)
 
+/-- `castCell` は単射である（型キャストのみで情報を失わない） -/
+lemma castCell_injective : Function.Injective castCell := by
+  intro ⟨a₁, a₂⟩ ⟨b₁, b₂⟩ h
+  unfold castCell at h
+  ext
+  · exact Nat.cast_injective (congrArg Prod.fst h)
+  · exact Nat.cast_injective (congrArg Prod.snd h)
+
 /-- 図形の写像 -/
 def castShape (S : DkMath.CosmicFormulaGeom.Shape) : DkMath.Polyomino.Shape :=
   S.image castCell
+
+/-- `castShape` による像の要素は、元の図形の要素の `castCell` による像 -/
+lemma mem_castShape {S : DkMath.CosmicFormulaGeom.Shape} {p : ℤ × ℤ} :
+    p ∈ castShape S ↔ ∃ q : ℕ × ℕ, q ∈ S ∧ castCell q = p := by
+  simp [castShape, Finset.mem_image]
+
+/-- `castShape` は面積を保存する（Finset の濃度が等しい） -/
+lemma area_castShape (S : DkMath.CosmicFormulaGeom.Shape) :
+    DkMath.Polyomino.area (castShape S) = DkMath.CosmicFormulaGeom.area S := by
+  simp only [DkMath.Polyomino.area, DkMath.CosmicFormulaGeom.area, castShape]
+  exact Finset.card_image_of_injective S castCell_injective
 
 /--
 `bridge_tromino_min` は、特定の形状の有限集合に関する定理です。
@@ -81,6 +100,22 @@ theorem bridge_tromino_min :
     decide
   · -- castShape (big 1 1) = block2
     decide
+
+/-- `bridge_tromino_min` の第一命題：`ext` 版（堅牢性のための保険証明） -/
+theorem bridge_tromino_min_body_ext :
+    castShape (body 1 1) = L_tromino := by
+  -- decide で直接証明
+  decide
+
+/-- `bridge_tromino_min` の第二命題：`ext` 版 -/
+theorem bridge_tromino_min_gap_ext :
+    castShape (gap 1 1) = hole2 := by
+  decide
+
+/-- `bridge_tromino_min` の第三命題：`ext` 版 -/
+theorem bridge_tromino_min_big_ext :
+    castShape (big 1 1) = block2 := by
+  decide
 
 /--
 この定理 `cosmic_is_tromino` は、特定のポリオミノの面積に関する関係を示しています。
