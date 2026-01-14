@@ -101,18 +101,23 @@ theorem bridge_tromino_min :
   · -- castShape (big 1 1) = block2
     decide
 
-/-- `bridge_tromino_min` の第一命題：`ext` 版（堅牢性のための保険証明） -/
+/--
+`bridge_tromino_min` の第一命題の保険証明。
+
+これは `bridge_tromino_min.1` と同じ内容を独立した定理として提供します。
+`bridge_tromino_min` の証明が将来変更された場合でも、この定理は独立して機能します。
+工学的な堅牢性のため、重要な命題は複数箇所で証明を持つことが推奨されます。
+-/
 theorem bridge_tromino_min_body_ext :
     castShape (body 1 1) = L_tromino := by
-  -- decide で直接証明
   decide
 
-/-- `bridge_tromino_min` の第二命題：`ext` 版 -/
+/-- `bridge_tromino_min` の第二命題の保険証明（独立した証明として維持） -/
 theorem bridge_tromino_min_gap_ext :
     castShape (gap 1 1) = hole2 := by
   decide
 
-/-- `bridge_tromino_min` の第三命題：`ext` 版 -/
+/-- `bridge_tromino_min` の第三命題の保険証明（独立した証明として維持） -/
 theorem bridge_tromino_min_big_ext :
     castShape (big 1 1) = block2 := by
   decide
@@ -134,8 +139,14 @@ $$
 theorem cosmic_is_tromino :
   DkMath.Polyomino.area (castShape (body 1 1)) + DkMath.Polyomino.area (castShape (gap 1 1))
     = DkMath.Polyomino.area (castShape (big 1 1)) := by
-  -- bridge_tromino_min を使って、castShape を具体的な形に置き換える
-  rw [bridge_tromino_min.1, bridge_tromino_min.2.1, bridge_tromino_min.2.2]
+  -- bridge_tromino_min の3つの命題を分解して取り出す
+  rcases bridge_tromino_min with ⟨h_body, h_gap, h_big⟩
+  -- h_body : castShape (body 1 1) = L_tromino
+  -- h_gap  : castShape (gap 1 1) = hole2
+  -- h_big  : castShape (big 1 1) = block2
+  
+  -- castShape を具体的な形に置き換える
+  rw [h_body, h_gap, h_big]
   -- その後、面積計算：
   -- area L_tromino = 3
   -- area hole2 = 1
