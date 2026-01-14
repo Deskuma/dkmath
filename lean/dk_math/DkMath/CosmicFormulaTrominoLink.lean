@@ -144,3 +144,25 @@ theorem cosmic_is_tromino :
   simp only [DkMath.Polyomino.Tromino.area_L_tromino,
              DkMath.Polyomino.Tromino.area_hole2,
              DkMath.Polyomino.Tromino.area_block2]
+
+/--
+`cosmic_is_tromino_alt` は、`area_castShape` を活用した別証明です。
+面積保存の補題を使うことで、CosmicFormulaGeom 側の定理に還元します。
+
+この証明では、以下の流れで等式を示します：
+1. `area_castShape` により、castShape された図形の面積を元の図形の面積に書き換える
+2. CosmicFormulaGeom.cosmic_decomposition により、宇宙式の分解定理を適用
+3. これにより、面積の等式が成立することを確認
+
+この証明方法の利点は：
+- 形の一致（`bridge_tromino_min`）を経由せず、面積だけで証明できる
+- 宇宙式側の一般定理を直接活用できる
+- より抽象的で、他の例にも応用しやすい
+-/
+theorem cosmic_is_tromino_alt :
+  DkMath.Polyomino.area (castShape (body 1 1)) + DkMath.Polyomino.area (castShape (gap 1 1))
+    = DkMath.Polyomino.area (castShape (big 1 1)) := by
+  -- area_castShape で面積を CosmicFormulaGeom 側に戻す
+  rw [area_castShape, area_castShape, area_castShape]
+  -- CosmicFormulaGeom の定理を適用
+  exact DkMath.CosmicFormulaGeom.cosmic_decomposition 1 1
