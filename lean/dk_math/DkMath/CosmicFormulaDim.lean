@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import Mathlib
+-- import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
 
 namespace DkMath
 namespace CosmicFormulaDim
@@ -101,6 +102,32 @@ theorem volConstC_nat (n : ℕ) :
 
 /-! そして `EuclideanSpace.volume_ball` を “評価点 n” で回収する橋を架ける。
     ここは coercion (ℝ→ENNReal→ℝ) の整理が主戦場。 -/
+
+
+open scoped Real
+
+/--
+偶数次元 2*m に対する定数 `volConstC` の評価を与える補題。
+
+具体的には
+  volConstC (2*m) = (π : ℂ)^m / (Nat.factorial m : ℂ)
+が成り立つ。
+
+証明の方針：
+定義を展開して (2*m)/2 = m を用い，複素べき乗や有理数のキャストによる簡約を行うと，
+ガンマ関数の項が `Complex.Gamma (m + 1 : ℂ)` の形になる．
+ここで補題 `Complex.Gamma_nat_eq_factorial` を適用して `Γ(m+1)=m!` と置き換えれば結論が得られる。
+-/
+theorem volConstC_even (m : ℕ) :
+    volConstC (2*m) = (π : ℂ)^m / (Nat.factorial m : ℂ) := by
+  -- 展開して (2*m)/2 = m および Γ(m+1)=m! を使う
+  simp only [volConstC, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, mul_div_cancel_left₀,
+    Complex.cpow_natCast]
+  -- ここで ((2*m : ℂ)/2 + 1) が (m + 1 : ℂ) になっているはずなのでガンマ関数の整数値評価を適用
+  have hg : Complex.Gamma (m + 1 : ℂ) = (Nat.factorial m : ℂ) := by
+    -- mathlib の補題を利用
+    exact Complex.Gamma_nat_eq_factorial m
+  rw [hg]
 
 end CosmicFormulaDim
 end DkMath
