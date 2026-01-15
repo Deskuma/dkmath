@@ -141,9 +141,6 @@ theorem cosmic_is_tromino :
     = DkMath.Polyomino.area (castShape (big 1 1)) := by
   -- bridge_tromino_min の3つの命題を分解して取り出す
   rcases bridge_tromino_min with ⟨h_body, h_gap, h_big⟩
-  -- h_body : castShape (body 1 1) = L_tromino
-  -- h_gap  : castShape (gap 1 1) = hole2
-  -- h_big  : castShape (big 1 1) = block2
   
   -- castShape を具体的な形に置き換える
   rw [h_body, h_gap, h_big]
