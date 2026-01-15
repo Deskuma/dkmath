@@ -4,12 +4,13 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.Basic
-import DkMath.Samples
-import DkMath.CosmicFormula
-import DkMath.CosmicFormulaGeom
-import DkMath.CosmicFormulaLinear
-import DkMath.CosmicFormulaTrominoLink
-import DkMath.Polyomino
-import DkMath.PolyominoPrototype
-import DkMath.Tromino
+import DkMath.Basic  -- Basic Definitions and Utilities
+import DkMath.Samples  -- Sample Theorems and Examples
+import DkMath.CosmicFormula  -- Cosmic Formula Basics
+import DkMath.CosmicFormulaDim  -- Cosmic Formula Dimensionality
+import DkMath.CosmicFormulaGeom  -- Cosmic Formula Geometry
+import DkMath.CosmicFormulaLinear  -- Cosmic Formula Linearity
+import DkMath.CosmicFormulaTrominoLink  -- Cosmic Formula and Tromino Link
+import DkMath.Polyomino  -- Polyomino Basics
+import DkMath.PolyominoPrototype  -- Polyomino Prototype
+import DkMath.Tromino  -- Polyomino: Tromino Basics
