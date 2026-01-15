@@ -173,3 +173,24 @@ theorem cosmic_is_tromino_alt :
   rw [area_castShape, area_castShape, area_castShape]
   -- CosmicFormulaGeom の定理を適用
   exact DkMath.CosmicFormulaGeom.cosmic_decomposition 1 1
+
+/-- 宇宙的分解が一般的なトロミノリンク構造でも成立することを示す定理。
+
+任意の自然数 x, u に対して、body(x,u) と gap(x,u) という二つの図形の面積の和が、
+これらを組み合わせた big(x,u) の面積に等しいことを証明する。
+
+この定理は幾何学的な面積計算を離散的なポリオミノ構造に翻訳し、
+基礎となる幾何的分解定理 cosmic_decomposition を適用することで成立する。
+
+具体的には：
+- castShape により幾何的図形をポリオミノの面積表現に変換
+- 両辺の面積計算を統一した後、幾何側の一般定理で結論づける
+-/
+theorem cosmic_is_tromino_general (x u : ℕ) :
+  DkMath.Polyomino.area (castShape (body x u))
+    + DkMath.Polyomino.area (castShape (gap x u))
+    = DkMath.Polyomino.area (castShape (big x u)) := by
+  -- 面積を幾何側へ戻す
+  rw [area_castShape, area_castShape, area_castShape]
+  -- 幾何側の一般定理で閉じる
+  exact DkMath.CosmicFormulaGeom.cosmic_decomposition x u
