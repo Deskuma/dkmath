@@ -17,7 +17,7 @@ open DkMath.Polyomino.Tromino
 この定理は、自然数 `x` と `u` に対して次の等式を示します：
 
 $$
-(x + u)^2 - x \cdot (x + 2u) = u^2
+(x + u)^2 - x (x + 2u) = u^2
 $$
 
 ## 証明の概要
@@ -29,7 +29,7 @@ $$
 この定理は、整数の性質を利用して自然数の間の関係を明らかにするものです。
 -/
 theorem cosmic_diff_int (x u : ℕ) :
-    ((x+u : ℤ)^2 - (x : ℤ) * (x + 2*u) ) = (u : ℤ)^2 := by
+    (x+u : ℤ)^2 - (x * (x + 2*u) : ℤ) = (u : ℤ)^2 := by
   -- まず Nat の等式を取り、ℤ に写して整理
   have h : (x+u) * (x+u) = x * (x + 2*u) + u*u :=
     cosmic_area_identity x u
@@ -110,17 +110,17 @@ theorem bridge_tromino_min :
 -/
 theorem bridge_tromino_min_body_ext :
     castShape (body 1 1) = L_tromino := by
-  decide
+  exact bridge_tromino_min.1
 
 /-- `bridge_tromino_min` の第二命題の保険証明（独立した証明として維持） -/
 theorem bridge_tromino_min_gap_ext :
     castShape (gap 1 1) = hole2 := by
-  decide
+  exact bridge_tromino_min.2.1
 
 /-- `bridge_tromino_min` の第三命題の保険証明（独立した証明として維持） -/
 theorem bridge_tromino_min_big_ext :
     castShape (big 1 1) = block2 := by
-  decide
+  exact bridge_tromino_min.2.2
 
 /--
 この定理 `cosmic_is_tromino` は、特定のポリオミノの面積に関する関係を示しています。
@@ -141,7 +141,6 @@ theorem cosmic_is_tromino :
     = DkMath.Polyomino.area (castShape (big 1 1)) := by
   -- bridge_tromino_min の3つの命題を分解して取り出す
   rcases bridge_tromino_min with ⟨h_body, h_gap, h_big⟩
-  
   -- castShape を具体的な形に置き換える
   rw [h_body, h_gap, h_big]
   -- その後、面積計算：
