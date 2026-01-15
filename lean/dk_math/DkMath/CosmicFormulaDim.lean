@@ -13,10 +13,41 @@ open scoped BigOperators Real
 
 /-! ### A: 代数レイヤ（d 次元の「実体項」G） -/
 
+/-- d 次元の「実体項」G の定義 -/
 noncomputable def G (d : ℕ) (x u : ℝ) : ℝ :=
   ∑ k ∈ Finset.range d,
     (Nat.choose d (k+1) : ℝ) * x^k * u^(d-1-k)
 
+/--
+cosmic_id : (x + u)^d - x * G d x u = u^d に関する数学的説明（日本語）
+
+命題の主張:
+  任意の自然数 d と実数 x, u について
+    (x + u)^d - x * G d x u = u^d
+  が成り立つ。
+
+証明のアイデア（高レベル）:
+  1. 二項定理 (add_pow) を用いて (x + u)^d を
+     Σ_{k=0}^{d} C(d,k) x^k u^{d-k} に展開する。
+  2. 定義から x * G d x u は
+     Σ_{j=0}^{d-1} C(d,j+1) x^{j+1} u^{d-1-j}
+     と展開できる（添え字を調整すれば k≥1 の項に対応する）。
+  3. (1) の和を k=0 の項（即ち u^d）と k≥1 の和に分離する。
+     k≥1 の和は添え字 k ↦ k+1 によって (2) の和と一致するので、
+     (x+u)^d から x * G d x u を引くと残るのは u^d だけになる。
+
+補題・注意点:
+  - Finset.sum_range_succ' を用いて k=d の項（または k=0 の項）を分離する。
+  - 添え字の変形には sum_congr を用いる。具体的には k を k+1 にシフトして
+    指数 d-(k+1) = d-1-k の等式を使う必要がある。
+  - 自然数の減算に関する等式（Nat.sub_sub や Nat.succ_le_of_lt 等）を明示的に
+   扱い、必要なら omega（または同等の補題）で細かい等号を解決する。
+  - 結合・交換・係数に関する単純な代数処理は ring や simp（例えば
+    Nat.choose_zero_right, pow_zero, mul_one）で片付ける。
+
+まとめ:
+  二項展開の k=0 項が目標の u^d を与え、残る項は x*G の展開と対応して互いに打ち消すため、等式が成立する。
+-/
 theorem cosmic_id (d : ℕ) (x u : ℝ) :
     (x + u)^d - x * G d x u = u^d := by
   unfold G
@@ -57,10 +88,13 @@ theorem cosmic_id (d : ℕ) (x u : ℝ) :
 
 /-! ### C: 解析接続の橋脚（体積定数） -/
 
+/-- d 次元球の体積定数の複素数版 -/
 noncomputable def volConstC (s : ℂ) : ℂ :=
   (π : ℂ)^(s/2) / Complex.Gamma (s/2 + 1)
 
 -- 整数点では「いつもの定数」に一致、みたいな補題を作る
+
+/-- 整数点での体積定数の評価 -/
 theorem volConstC_nat (n : ℕ) :
     volConstC n = (π : ℂ)^( (n:ℂ)/2 ) / Complex.Gamma ((n:ℂ)/2 + 1) := by
   simp [volConstC]
