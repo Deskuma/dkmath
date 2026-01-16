@@ -765,10 +765,109 @@ theorem ballVolC_shift2_mul (s : ℂ) (r : ℝ) :
       ring
 
 
+/-! ### D: 実数版の球体積 ballVolR と偶数次元評価 -/
+
+open scoped Real
+open MeasureTheory
+
+/-- 実数次元（自然数 n）での球体積係数を使った “古典版” -/
+noncomputable def ballVolR (n : ℕ) (r : ℝ) : ℝ :=
+  volConstR n * r^n
+
+/-- 偶数次元評価：ballVolR (2*m) r = (π^m / m!) * r^(2*m) -/
+theorem ballVolR_even_eval (m : ℕ) (r : ℝ) :
+    ballVolR (2*m) r = (Real.pi^m / (Nat.factorial m)) * r^(2*m) := by
+  unfold ballVolR
+  -- 既にある `volConstR_even` を差し込むだけ
+  rw [volConstR_even m]
+
+
+/-! ### E: Complex 版 ballVolC と Real 版 ballVolR の一致（偶数次元, r>0） -/
+
+open scoped Real
+open Complex
+
+/-- 偶数次元では ballVolC は実数値で、ballVolR と一致（r>0） -/
+theorem ballVolC_even_eq_ofReal_ballVolR (m : ℕ) (r : ℝ) (hr : 0 < r) :
+    ballVolC (2*m) r = Complex.ofReal (ballVolR (2*m) r) := by
+  -- 両辺とも明示的に計算
+  have hC : ballVolC (2*m) r = ((π : ℂ)^m / (Nat.factorial m : ℂ)) * (r : ℂ)^(2*m) :=
+    ballVolC_even_eval (r := r) hr m
+  have hR : ballVolR (2*m) r = (Real.pi^m / (Nat.factorial m)) * r^(2*m) :=
+    ballVolR_even_eval (m := m) (r := r)
+  rw [hC, hR]
+  -- 複素数版が実数の ofReal と一致
+  norm_num [Complex.ofReal_mul, Complex.ofReal_pow, Complex.ofReal_div]
+
+
+/-! ### F: ENNReal の volume_ball を ballVolR で回収 -/
+
+open scoped Real ENNReal
+open MeasureTheory
+
+/-- r>0, m≥1 の偶数次元球：volume = ofReal (ballVolR (2*m) r) の形 -/
+theorem volume_ball_fin_even_center_pos_ballVolR
+    (m : ℕ) (hm : m ≥ 1)
+    (x : EuclideanSpace ℝ (Fin (2 * m))) (r : ℝ) (hr : 0 < r) :
+    volume (Metric.ball x r)
+      =
+    ENNReal.ofReal (ballVolR (2 * m) r) := by
+  -- 既存の結果を呼ぶ
+  have h := volume_ball_fin_even_center_pos (m := m) (hm := hm) (x := x) (r := r)
+  -- h の型を簡潔にメモ
+  -- h : volume (Metric.ball x r) =
+  --     ENNReal.ofReal (π ^ m / ↑m.factorial) * ENNReal.ofReal r ^ (2 * m)
+  -- 右辺を ballVolR で統一する
+  have hR : ballVolR (2 * m) r = (Real.pi^m / (Nat.factorial m)) * r^(2 * m) :=
+    ballVolR_even_eval m r
+  rw [h]
+  -- volConstR を ballVolR の定義から抽出
+  unfold ballVolR at hR
+  have hvolR : volConstR (2 * m) = (Real.pi^m / (Nat.factorial m)) := by
+    -- hR : volConstR(2m) * r^(2m) = (π^m / m.factorial) * r^(2m)
+    have hr_ne : r ≠ 0 := by
+      intro hr_eq
+      rw [hr_eq] at hr
+      simp at hr
+    have r_ne_pow : r^(2 * m) ≠ 0 := by
+      exact pow_ne_zero _ hr_ne
+    field_simp [r_ne_pow] at hR
+    field_simp [show (Nat.factorial m : ℝ) ≠ 0 by positivity]
+    exact hR
+  unfold ballVolR
+  -- ENNReal の分配
+  have : ENNReal.ofReal (Real.pi ^ m / (Nat.factorial m : ℝ))
+        * ENNReal.ofReal r ^ (2 * m)
+      = ENNReal.ofReal ((Real.pi^m / (Nat.factorial m : ℝ)) * r^(2 * m)) := by
+    rw [show (ENNReal.ofReal r ^ (2 * m) : ℝ≥0∞)
+          = ENNReal.ofReal (r ^ (2 * m)) by
+      simp [ENNReal.ofReal_pow hr.le]]
+    rw [← ENNReal.ofReal_mul (by positivity : 0 ≤ Real.pi ^ m / (Nat.factorial m : ℝ))]
+  simp [hvolR, this]
+
+
 end CosmicFormulaDim
 end DkMath
 
 set_option linter.style.longLine false
 
 /- Memo
+現在のエラーを分析します。主な問題は以下の通り：
+
+1. `ballVolR_even_eval` で simp が `volConstR_even` を使わずに失敗
+2. `volume_ball_fin_even_center_pos` の引数形式が合わない
+3. `ballVolC_even_eq_ofReal_ballVolR` と `volume_ball_fin_even_center_pos_ballVolR` が不完全
+
+ぬしよ！すべてのエラーを潰しきったぞ。わっちのLean技術も冴えたのぅ🍎
+
+**変更内容の総括**：
+
+1. **`ballVolR_even_eval`** → `rw [volConstR_even m]` で置き換えるだけで終了
+2. **`ballVolC_even_eq_ofReal_ballVolR`** → 両辺を明示計算して、複素数キャスト規則で統一
+3. **`volume_ball_fin_even_center_pos_ballVolR`** → 既存定理から ENNReal 分配を使って、`ballVolR` との一致を示した
+
+実装ファイル：
+- CosmicFormulaDim.lean
+
+これで、「次元の解析接続された球体積」が Lean で **完全に往復可能**になったわけじゃ。古典の体積式も、複素拡張も、そこから ENNReal まで、すべて繋がった。宇宙式の $(u^d)$ と同じように「次元」を変数として扱える世界が完成したぞ。
 -/
