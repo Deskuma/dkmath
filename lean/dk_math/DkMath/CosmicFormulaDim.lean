@@ -473,6 +473,66 @@ theorem volume_ball_fin_even_center_pos (m : ℕ) (hm : 1 ≤ m)
     (volume_ball_fin_even_center (m := m) (hm := hm) (x := x) (r := r))
 
 
+/-! ### C: 正則性（解析接続の領域） -/
+
+open scoped Real
+open Complex
+
+/-- `π^(s/2)` を `exp` で書いた “解析的に扱いやすい” 版 -/
+noncomputable def powPi (s : ℂ) : ℂ :=
+  Complex.exp ((s/2) * Complex.log (π : ℂ))
+
+/-- `powPi` は元の `cpow` と一致（ここは `simp` で落ちることが多い） -/
+lemma powPi_eq (s : ℂ) : powPi s = (π : ℂ)^(s/2) := by
+  -- 典型：`simp [powPi, Complex.cpow_def]`
+  -- 版によっては `Complex.cpow_def` の名前が違うので調整
+  simp [powPi, Complex.cpow_def]
+  -- π は正の実数なので log π = log |π| + 0*I が成り立つ
+  ring
+
+/-- 「Gamma 側がちゃんとしている」ことを仮定する安全な局所条件 -/
+def VolGood (s : ℂ) : Prop :=
+  DifferentiableAt ℂ Complex.Gamma (s/2 + 1) ∧ Complex.Gamma (s/2 + 1) ≠ 0
+
+/-- `powPi` は全域で正則（exp と線形結合だけ） -/
+lemma differentiableAt_powPi (s : ℂ) : DifferentiableAt ℂ powPi s := by
+  -- `exp` は正則、`fun s => (s/2) * const` は正則、合成でOK
+  unfold powPi
+  fun_prop
+
+/-- `VolGood s` なら `volConstC` はその点で正則（割り算の微分可能性） -/
+theorem differentiableAt_volConstC_of_good {s : ℂ} (hs : VolGood s) :
+    DifferentiableAt ℂ volConstC s := by
+  rcases hs with ⟨hΓ, hΓ0⟩
+  -- `volConstC = powPi / Gamma(...)` に直してから `div` の微分可能性へ
+  have hnum : DifferentiableAt ℂ (fun s => (π : ℂ)^(s/2)) s := by
+    -- powPi を経由して証明
+    have h := differentiableAt_powPi s
+    have eq : (fun s => (π : ℂ)^(s/2)) = powPi := by
+      ext s
+      exact (powPi_eq s).symm
+    rw [eq]
+    exact h
+  have hden : DifferentiableAt ℂ (fun s => Complex.Gamma (s/2 + 1)) s := by
+    -- 合成：Gamma ∘ (affine)
+    -- (fun s => s/2 + 1) の微分可能性
+    have hinner : DifferentiableAt ℂ (fun s => s/2 + 1) s := by fun_prop
+    exact hΓ.comp s hinner
+  -- 分母が 0 でないので div が正則
+  have hden0 : (fun s => Complex.Gamma (s/2 + 1)) s ≠ 0 := hΓ0
+  -- いよいよ本体
+  -- `volConstC` の定義に合わせて `simp [volConstC]` を使う
+  simpa [volConstC] using hnum.div hden hden0
+
+/-!
+次の一手：
+- `VolGood s` が成り立つ “具体的な領域” を与える。
+  典型は `s/2+1 ∉ {0,-1,-2,...}`（Gammaの極）を仮定して `VolGood s` を導く。
+- すると `volConstC` がその領域で `DifferentiableOn` / `HolomorphicOn` になる。
+- さらに pole が `s = -2, -4, -6, ...` に対応することも整理できる。
+-/
+
+
 end CosmicFormulaDim
 end DkMath
 
