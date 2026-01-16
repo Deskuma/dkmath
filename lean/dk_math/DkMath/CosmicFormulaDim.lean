@@ -290,5 +290,84 @@ theorem volume_ball_fin_even_via_volConstC (m : ℕ) (hm : m ≥ 1) (r : ℝ) :
   simpa [volConstR_eq_re_volConstC_even (m := m)] using h
 
 
+-- 前提として、これらが既にある想定：
+--   volConstR : ℕ → ℝ
+--   volConstR_even : ∀ m, volConstR (2*m) = Real.pi^m / (Nat.factorial m)
+--   volConstC : ℂ → ℂ
+--   volConst_even_identify : ∀ m, (volConstR (2*m) : ℂ) = volConstC (2*m)
+--   volConstR_eq_re_volConstC_even : ∀ m, volConstR (2*m) = (volConstC (2*m)).re
+
+/-- 偶数次元（Fin (2*m)）で、中心を任意 `x` に一般化した球体積（最終形）。 -/
+theorem volume_ball_fin_even_center (m : ℕ) (hm : m ≥ 1)
+    (x : EuclideanSpace ℝ (Fin (2 * m))) (r : ℝ) :
+    volume (Metric.ball x r)
+      =
+    ENNReal.ofReal (Real.pi^m / (Nat.factorial m))
+      * (ENNReal.ofReal r) ^ (2*m) := by
+  classical
+  -- 非空性（`volume_ball` の型推論で要求される環境に備える）
+  have : Nonempty (Fin (2*m)) := by
+    apply Fin.pos_iff_nonempty.mp
+    omega
+  -- 一般公式（中心 x のまま）
+  have hball :=
+    (EuclideanSpace.volume_ball
+      (x := x)
+      (r := r))
+  -- 係数を volConstR にまとめる
+  have hball' :
+      volume (Metric.ball x r)
+        =
+      (ENNReal.ofReal r)^(2*m) * ENNReal.ofReal (volConstR (2*m)) := by
+    -- ここは `EuclideanSpace.volume_ball` の右辺の形に合わせて `simp` が効く
+    simpa [volConstR] using hball
+  -- 偶数次元評価 `volConstR_even` を差し込んで完成
+  calc
+    volume (Metric.ball x r)
+        = (ENNReal.ofReal r)^(2*m) * ENNReal.ofReal (volConstR (2*m)) := hball'
+    _   = (ENNReal.ofReal r)^(2*m) * ENNReal.ofReal (Real.pi^m / (Nat.factorial m)) := by
+          simp [volConstR_even]
+    _   = ENNReal.ofReal (Real.pi^m / (Nat.factorial m)) * (ENNReal.ofReal r)^(2*m) := by
+          ac_rfl
+
+
+/-- 同じ内容を `volConstC` の実部で書く：解析接続（ℂ）へ直結する形。 -/
+theorem volume_ball_fin_even_center_via_volConstC (m : ℕ) (hm : m ≥ 1)
+    (x : EuclideanSpace ℝ (Fin (2 * m))) (r : ℝ) :
+    volume (Metric.ball x r)
+      =
+    ENNReal.ofReal ((volConstC (2*m)).re) * (ENNReal.ofReal r) ^ (2*m) := by
+  -- 実数最終形を経由して係数だけ差し替え
+  have h :=
+    volume_ball_fin_even_center (m := m) (hm := hm) (x := x) (r := r)
+  -- 係数：π^m/m! = volConstR(2m) = re(volConstC(2m))
+  -- ※ `volConstR_even` と `volConstR_eq_re_volConstC_even` で繋ぐ
+  -- 最終調整は必要に応じて `simp` を追加してくれい
+  calc
+    volume (Metric.ball x r)
+        = ENNReal.ofReal (Real.pi^m / (Nat.factorial m)) * (ENNReal.ofReal r)^(2*m) := h
+    _   = ENNReal.ofReal (volConstR (2*m)) * (ENNReal.ofReal r)^(2*m) := by
+          simp [volConstR_even]
+    _   = ENNReal.ofReal ((volConstC (2*m)).re) * (ENNReal.ofReal r)^(2*m) := by
+          simp [volConstR_eq_re_volConstC_even]
+
+
+/-- おまけ：中心によらず体積が同じ（B の目的を「不変性」として明示）。 -/
+theorem volume_ball_fin_even_center_invariant (m : ℕ) (hm : m ≥ 1)
+    (x : EuclideanSpace ℝ (Fin (2 * m))) (r : ℝ) :
+    volume (Metric.ball x r)
+      =
+    volume (Metric.ball (0 : EuclideanSpace ℝ (Fin (2*m))) r) := by
+  -- 両辺とも同じ閉形式に落ちるのでそれで終わらせる
+  calc
+    volume (Metric.ball x r)
+        = ENNReal.ofReal (Real.pi^m / (Nat.factorial m)) * (ENNReal.ofReal r)^(2*m) := by
+          simpa using volume_ball_fin_even_center (m := m) (hm := hm) (x := x) (r := r)
+    _   = volume (Metric.ball (0 : EuclideanSpace ℝ (Fin (2*m))) r) := by
+          symm
+          simpa using volume_ball_fin_even_center (m := m) (hm := hm)
+            (x := (0 : EuclideanSpace ℝ (Fin (2*m)))) (r := r)
+
+
 end CosmicFormulaDim
 end DkMath
