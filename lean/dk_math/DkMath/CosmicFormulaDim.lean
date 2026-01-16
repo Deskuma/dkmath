@@ -1060,6 +1060,56 @@ theorem volConstR_shift2_mul (n : ℕ) :
   simp only [Nat.cast_add, Nat.cast_ofNat]
 
 
+/-! ### L: volConstR (2m+1) の閉形式（積）→ ballVolR → ENNReal 回収 -/
+
+theorem volConstR_odd_step (m : ℕ) :
+    (2*m + 3 : ℝ) * volConstR (2*m + 3) = (2 * Real.pi) * volConstR (2*m + 1) := by
+  -- n = 2m+1 を shift2 に入れる
+  have h := volConstR_shift2_mul (n := 2*m + 1)
+  -- h: ((2m+1)+2) * volConstR((2m+1)+2) = (2π) * volConstR(2m+1)
+  -- これは (2m+3) * volConstR(2m+3) = (2π) * volConstR(2m+1) と同じ
+  have : (2*m + 1 : ℕ) + 2 = 2*m + 3 := by ring
+  simp only [this, Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat] at h
+  exact h
+
+
+theorem volConstR_odd_eval_prod (m : ℕ) :
+    volConstR (2*m + 1) = (2 : ℝ) * (2 * Real.pi)^m / oddDenomR m := by
+  induction m with
+  | zero =>
+      simp [oddDenomR, volConstR_one]
+  | succ m ih =>
+      have hstep := volConstR_odd_step m
+      have hne : (2*m + 3 : ℝ) ≠ 0 := by linarith
+      have hden : oddDenomR (m+1) = oddDenomR m * (2*m + 3 : ℝ) := oddDenomR_succ m
+      -- step を割り算に解いて ih を代入して整形
+      have hsolve :
+          volConstR (2*m + 3)
+            = ((2 * Real.pi) * volConstR (2*m + 1)) / (2*m + 3 : ℝ) := by
+        apply (eq_div_iff hne).2
+        -- (2m+3)*vol = (2π)*prev の形へ
+        simpa [mul_assoc, mul_left_comm, mul_comm] using hstep
+      -- まとめ
+      calc
+        volConstR (2*(m+1) + 1)
+            = volConstR (2*m + 3) := by ring
+        _ = ((2 * Real.pi) * volConstR (2*m + 1)) / (2*m + 3 : ℝ) := by
+              simpa using hsolve
+        _ = ((2 * Real.pi) * ((2 : ℝ) * (2 * Real.pi)^m / oddDenomR m)) / (2*m + 3 : ℝ) := by
+              simp [ih]
+        _ = (2 : ℝ) * (2 * Real.pi)^(m+1) / oddDenomR (m+1) := by
+              rw [hden]
+              field_simp [hne]
+              ring
+
+
+theorem ballVolR_odd_eval (m : ℕ) (r : ℝ) :
+    ballVolR (2*m + 1) r
+      = ((2 : ℝ) * (2 * Real.pi)^m / oddDenomR m) * r^(2*m + 1) := by
+  unfold ballVolR
+  simp [volConstR_odd_eval_prod]
+
+
 end CosmicFormulaDim
 end DkMath
 
