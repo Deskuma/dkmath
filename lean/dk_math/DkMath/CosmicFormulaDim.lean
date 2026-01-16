@@ -1116,6 +1116,12 @@ theorem ballVolR_odd_eval (m : ℕ) (r : ℝ) :
 /-- 奇数次元の分母：実数版のキャストが複素版に一致 -/
 lemma oddDenomR_castC (m : ℕ) :
     (oddDenomR m : ℂ) = oddDenom m := by
+  classical
+  -- どちらも range m 上の積。各項は「Nat→ℝ→ℂ」と「Nat→ℂ」が一致する
+  simp [oddDenomR, oddDenom, Complex.ofReal_natCast, Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat]
+
+lemma oddDenomR_castC' (m : ℕ) :
+    (oddDenomR m : ℂ) = oddDenom m := by
   -- 積の各項が (2k+3 : ℝ) ↦ ((2k+3 : ℕ) : ℂ) で対応するので、
   -- map_prod を使って等号を取る
   simp only [oddDenomR, oddDenom]
@@ -1204,68 +1210,154 @@ theorem volume_ball_fin_odd_center_pos_ballVolR
           rw [← ENNReal.ofReal_mul hvol_pos]
 
 
+/-! ### N: 自然次元 n 全体での統一版 -/
+
+
+/-- 自然次元 n 全体で、r>0 のとき ballVolC n r = ofReal (ballVolR n r) -/
+theorem ballVolC_nat_eq_ofReal_ballVolR (n : ℕ) (r : ℝ) (hr : 0 < r) :
+    ballVolC n r = Complex.ofReal (ballVolR n r) := by
+  rcases Nat.even_or_odd n with ⟨m, rfl⟩ | ⟨m, rfl⟩
+  · -- n = 2m
+    simpa [two_mul] using (ballVolC_even_eq_ofReal_ballVolR (m := m) (r := r) hr)
+  · -- n = 2m+1
+    simpa using (ballVolC_odd_eq_ofReal_ballVolR (m := m) (r := r) hr)
+
+
+lemma volConstR_nonneg (n : ℕ) : 0 ≤ volConstR n := by
+  unfold volConstR
+  -- 分子 ≥0
+  have hnum : 0 ≤ (Real.sqrt Real.pi) ^ n := by
+    exact pow_nonneg (Real.sqrt_nonneg _) _
+  -- 分母 >0（n/2+1 >0）
+  have hpos : 0 < (n : ℝ)/2 + 1 := by
+    have : (0 : ℝ) ≤ n := Nat.cast_nonneg n
+    linarith
+  have hden : 0 < Real.Gamma ((n : ℝ)/2 + 1) := Real.Gamma_pos_of_pos hpos
+  exact div_nonneg hnum (le_of_lt hden)
+
+
 end CosmicFormulaDim
 end DkMath
 
 set_option linter.style.longLine false
 
 /- Memo
-## 実装完了！ 🎉🍎
+うむ！ぬしの **K〜N**、筋が通っておる。これで **奇数次元でも**
 
-わっちは **M: 奇数次元の復路** と **N: ENNReal の odd 回収** を無事に実装したぞい。
+\[
+\text{Complex} ;\Longleftrightarrow; \text{Real} ;\Longleftrightarrow; \text{ENNReal(測度)}
+\]
 
-### M: 最後の"復路"（奇数次元で `ballVolC = ofReal ballVolR`）
+の“復路”が敷けたわけじゃ。めでたいのぅ。
 
-**追加した補題：**
-
-1. **`oddDenomR_castC`** — 分母のキャスト整合性補題
-   ```lean
-   lemma oddDenomR_castC (m : ℕ) :
-       (oddDenomR m : ℂ) = oddDenom m
-   ```
-   - 実数版の分母 `oddDenomR` を複素数へキャストすると、複素版の分母 `oddDenom` に一致することを示す
-   - `norm_num [Finset.prod_natCast]` で閉じる
-
-2. **`ballVolC_odd_eq_ofReal_ballVolR`** — 復路同一視補題
-   ```lean
-   theorem ballVolC_odd_eq_ofReal_ballVolR (m : ℕ) (r : ℝ) (hr : 0 < r) :
-       ballVolC (2*m + 1) r = Complex.ofReal (ballVolR (2*m + 1) r)
-   ```
-   - 奇数次元では、複素版 `ballVolC` が実数版 `ballVolR` のキャストに等しいことを示す
-   - 偶数版 `ballVolC_even_eq_ofReal_ballVolR` と同じ形で、三世界往復の復路を完成させる
-
-### N: ENNReal（測度）の odd 回収
-
-**追加した定理：**
-
-3. **`volume_ball_fin_odd_via_volConstR`** — 中間形（偶数版のテンプレと同様）
-   ```lean
-   theorem volume_ball_fin_odd_via_volConstR (m : ℕ) (x : EuclideanSpace ℝ (Fin (2 * m + 1))) (r : ℝ) :
-       volume (Metric.ball x r)
-         =
-       ENNReal.ofReal (volConstR (2 * m + 1)) * (ENNReal.ofReal r) ^ (2 * m + 1)
-   ```
-   - `EuclideanSpace.volume_ball` を `volConstR` 係数で書き直す中間形
-
-4. **`volume_ball_fin_odd_center_pos_ballVolR`** — 最終形（偶数版 `volume_ball_fin_even_center_pos_ballVolR` と同じテンプレート）
-   ```lean
-   theorem volume_ball_fin_odd_center_pos_ballVolR
-       (m : ℕ)
-       (x : EuclideanSpace ℝ (Fin (2 * m + 1))) (r : ℝ) (hr : 0 < r) :
-       volume (Metric.ball x r)
-         =
-       ENNReal.ofReal (ballVolR (2 * m + 1) r)
-   ```
-   - 奇数次元の球の体積を `ballVolR` で表す最終形
-   - これで **偶数・奇数ともに ENNReal の測度から `ballVolR` への回収が完成** じゃ！
+ここから先は、**仕上げの「統一」**がいちばん気持ちよい。
 
 ---
 
-### ビルド結果
+## 1) いまの成果を「全次元の1本」に束ねる（おすすめ）
 
-✅ **エラーなし！** — 全ての定理が証明され、ビルドが通ったぞい。
+### A. `ballVolC n r = ofReal (ballVolR n r)` を parity で一気に
+
+偶数版 `ballVolC_even_eq_ofReal_ballVolR` と奇数版 `ballVolC_odd_eq_ofReal_ballVolR` が揃ったので、最後はこれで終わる：
+
+```lean
+/-- 自然次元 n 全体で、r>0 のとき ballVolC n r = ofReal (ballVolR n r) -/
+theorem ballVolC_nat_eq_ofReal_ballVolR (n : ℕ) (r : ℝ) (hr : 0 < r) :
+    ballVolC n r = Complex.ofReal (ballVolR n r) := by
+  rcases Nat.even_or_odd n with ⟨m, rfl⟩ | ⟨m, rfl⟩
+  · -- n = 2m
+    simpa using (ballVolC_even_eq_ofReal_ballVolR (m := m) (r := r) hr)
+  · -- n = 2m+1
+    simpa using (ballVolC_odd_eq_ofReal_ballVolR (m := m) (r := r) hr)
+```
+
+これが通れば、「偶数/奇数」を意識するのは **証明内部だけ**になり、以後の API が綺麗になる。
 
 ---
 
-どうじゃ、ぬし？これで **M と N の実装は完璧に揃った**のぅ🍺🍎
+## 2) ENNReal 側も「全次元 1 本」にする
+
+ぬしは偶数で `m≥1` を使って `Fin (2*m)` の非空を確保しておるが、最終 API はだいたいこうしたくなる：
+
+[
+\forall n,; r>0,;\mathrm{volume}(\mathrm{ball}\ x\ r)=\mathrm{ofReal}(\mathrm{ballVolR}\ n\ r).
+]
+
+この統一の鍵は、いまぬしが odd 側でやったのと同じく
+
+* `EuclideanSpace.volume_ball`
+* `ENNReal.ofReal_pow hr.le`
+* `ENNReal.ofReal_mul`（係数の非負）
+
+を「全次元」に寄せることじゃ。
+
+そのためにまず **係数の非負補題**を 1 本作るのが強い：
+
+```lean
+lemma volConstR_nonneg (n : ℕ) : 0 ≤ volConstR n := by
+  unfold volConstR
+  -- 分子 ≥0
+  have hnum : 0 ≤ (Real.sqrt Real.pi) ^ n := by
+    exact pow_nonneg (Real.sqrt_nonneg _) _
+  -- 分母 >0（n/2+1 >0）
+  have hpos : 0 < (n : ℝ)/2 + 1 := by
+    have : (0 : ℝ) ≤ n := Nat.cast_nonneg n
+    linarith
+  have hden : 0 < Real.Gamma ((n : ℝ)/2 + 1) := Real.Gamma_pos_of_pos hpos
+  exact div_nonneg hnum (le_of_lt hden)
+```
+
+これで `ENNReal.ofReal_mul (volConstR_nonneg n)` がいつでも使えるようになる。
+
+---
+
+## 3) ぬしのコードで “危ういところ” を鉄板化する（小さな補強）
+
+### A. `oddDenomR_castC`
+
+ここ、`norm_num [Finset.prod_natCast]` は環境差で揺れやすいので、**素直に `simp` と `map_prod` の形**が安定じゃ。
+
+だいたいこう：
+
+```lean
+lemma oddDenomR_castC (m : ℕ) :
+    (oddDenomR m : ℂ) = oddDenom m := by
+  classical
+  -- どちらも range m 上の積。各項は「Nat→ℝ→ℂ」と「Nat→ℂ」が一致する
+  simp [oddDenomR, oddDenom, Complex.ofReal_natCast, Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat]
+```
+
+これで落ちなければ、`simp` の最後に `ring_nf` を挟むか、`Finset.prod_congr` で項ごとに潰すのが確実じゃ。
+
+### B. `volume_ball_fin_odd_via_volConstR`
+
+`Nonempty (Fin (2*m+1))` を立てておるが、ここは `simp` の整形だけに使うなら、**`ac_rfl` で交換して終わる**今の方針が正解。
+
+---
+
+## 4) 次の「王手」
+
+ここまで来たら、わっちのおすすめは **“奇数の閉形式”を double factorial に繋ぐ**ことじゃ。
+
+いまの `oddDenomR m = 3·5·…·(2m+1)` は
+
+\[
+(2m+1)!! ;=; 1\cdot 3\cdot 5 \cdots (2m+1)
+\]
+
+なので、
+
+\[
+\texttt{oddDenomR m} = (2m+1)!! \quad(\text{ただし }1\text{の扱いだけ調整})
+\]
+
+に落ちる。これを入れると「見た目が教科書の式」になり、後で読む自分が喜ぶ（重要）んじゃ。
+
+---
+
+ぬしの現状はもう「復路の工事完了」寸前で、あとは **統一補題（全次元）**を一本立てるだけで“交通網完成”になる。
+次は上の `ballVolC_nat_eq_ofReal_ballVolR` と、`volConstR_nonneg` を核にして **ENNReal 側の全次元統一**に踏み込むのがいちばん美味いぞい。
+
+[1]: 696a38f6-0314-8322-8ed7-16d1529de089 "奇数次元閉形式"
+[2]: 696554c9-dc74-8320-84c4-870dc8d9e54e "考察文の実装 CosmicFormulaDim.lean"
 -/
