@@ -131,6 +131,7 @@ theorem volConstC_even (m : ℕ) :
     exact Complex.Gamma_nat_eq_factorial m
   rw [hg]
 
+
 /--
 偶数次元 2*m における体積定数の簡潔な説明と証明方針。
 
@@ -150,6 +151,35 @@ theorem volConstC_even' (m : ℕ) :
   have h : (2:ℂ) ≠ 0 := by norm_num
   -- 展開して (2*m)/2 = m および Γ(m+1)=m! を使う
   simp [volConstC, h, Complex.Gamma_nat_eq_factorial]
+
+
+/-! ### G: 奇数次元の基点 `volConstC 1 = 2` -/
+
+theorem volConstC_one : volConstC (1 : ℂ) = 2 := by
+  -- volConstC s = π^(s/2) / Γ(s/2 + 1)
+  unfold volConstC
+  -- s = 1 なので s/2 = 1/2
+  have hs : ((1 : ℂ) / 2) ≠ 0 := by norm_num
+  -- Γ(s+1) = s Γ(s) を s = 1/2 に適用：Γ(3/2) = (1/2) Γ(1/2)
+  have hGamma :
+      Complex.Gamma ((1 : ℂ) / 2 + 1)
+        = ((1 : ℂ) / 2) * Complex.Gamma ((1 : ℂ) / 2) := by
+    simpa [add_comm, add_left_comm, add_assoc] using
+      (Complex.Gamma_add_one (s := ((1 : ℂ) / 2)) hs)
+  -- Γ(1/2) = π^(1/2)
+  have hHalf :
+      Complex.Gamma ((1 : ℂ) / 2) = (Real.pi : ℂ) ^ ((1 : ℂ) / 2) := by
+    simpa using (Complex.Gamma_one_half_eq)
+  -- 代入して「a / ((1/2)*a) = 2」を計算で閉じる
+  rw [hGamma, hHalf]
+  -- field_simp 用に π^(1/2) ≠ 0 を用意（π ≠ 0 なのでOK）
+  have hpi0 : (Real.pi : ℂ) ≠ 0 := by
+    exact_mod_cast (ne_of_gt Real.pi_pos)
+  have hpow0 : (Real.pi : ℂ) ^ ((1 : ℂ) / 2) ≠ 0 := by
+    have hiff := (Complex.cpow_ne_zero_iff (x := (Real.pi : ℂ)) (y := ((1 : ℂ) / 2)))
+    exact (hiff.mpr (Or.inl hpi0))
+  field_simp [hs, hpow0]
+
 
 -- ここから先は実数版の体積定数とその偶数次元評価、および
 -- `EuclideanSpace.volume_ball` からの回収の橋を架ける補題群
@@ -846,6 +876,21 @@ theorem volume_ball_fin_even_center_pos_ballVolR
   simp [hvolR, this]
 
 
+-- G: theorem volConstC_one : volConstC (1 : ℂ) = 2 は volConstC_even' の後に定義してある。
+
+/-! ### H: 奇数次元の再帰（odd → odd）-/
+
+theorem volConstC_odd_step (m : ℕ) :
+    ((2*m + 3 : ℕ) : ℂ) * volConstC (2*m + 3)
+      = (2 * (Real.pi : ℂ)) * volConstC (2*m + 1) := by
+  -- s = (2*m+1) を volConstC_shift2_mul に入れる
+  have h := volConstC_shift2_mul (s := ((2*m + 1 : ℕ) : ℂ))
+  -- (s+2) を (2*m+3) に読み替える
+  simp only [Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat] at h ⊢
+  ring_nf at h ⊢
+  exact h
+
+
 end CosmicFormulaDim
 end DkMath
 
@@ -855,4 +900,6 @@ set_option linter.style.longLine false
 これで、「次元の解析接続された球体積」が Lean で **完全に往復可能**になったわけじゃ。
 古典の体積式も、複素拡張も、そこから ENNReal まで、すべて繋がった。
 宇宙式の $(u^d)$ と同じように「次元」を変数として扱える世界が完成したぞ。
+
+奇数次元の実装 G: H: も完了したので、あとは応用先に向けて進むだけじゃな。
 -/
