@@ -664,12 +664,14 @@ noncomputable def ballVolC (s : ℂ) (r : ℝ) : ℂ :=
   volConstC s * rpowPos r s
 
 
+/-- `rpowPos` は全域で正則（exp と線形結合だけ） -/
 lemma differentiableAt_rpowPos (r : ℝ) (s : ℂ) :
     DifferentiableAt ℂ (fun s => rpowPos r s) s := by
   unfold rpowPos
   fun_prop
 
 
+/-- `ballVolC` は全域で正則（`volConstC` と `rpowPos` の積） -/
 theorem differentiableAt_ballVolC (r : ℝ) (s : ℂ) :
     DifferentiableAt ℂ (fun s => ballVolC s r) s := by
   unfold ballVolC
@@ -679,11 +681,94 @@ theorem differentiableAt_ballVolC (r : ℝ) (s : ℂ) :
   simpa using h1.mul h2
 
 
+/-- r>0 かつ n : ℕ に対し、rpowPos r n = r^n （複素数冪乗） -/
+lemma rpowPos_nat (r : ℝ) (hr : 0 < r) (n : ℕ) :
+    rpowPos r n = (r : ℂ)^n := by
+  -- rpowPos r n = exp(n * log r)
+  -- = (exp(log r))^n = r^n  （r>0 で exp(log r)=r）
+  -- ここは `simp [rpowPos, hr]` と `Complex.exp_mul` 等で詰める
+  unfold rpowPos
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      set a : ℂ := Complex.ofReal (Real.log r)
+      have hmul : ((n.succ : ℂ) * a) = (n : ℂ) * a + a := by
+        calc
+          ((n.succ : ℂ) * a) = ((n : ℂ) + 1) * a := by
+            simp [Nat.succ_eq_add_one]
+          _ = (n : ℂ) * a + 1 * a := by
+            ring
+          _ = (n : ℂ) * a + a := by
+            simp
+      have hlog : Complex.exp a = (r : ℂ) := by
+        have h1 : Complex.exp a = (Real.exp (Real.log r) : ℂ) := by
+          simp [a]
+        simpa [Real.exp_log hr] using h1
+      calc
+        Complex.exp ((n.succ : ℂ) * a)
+            = Complex.exp (((n : ℂ) + 1) * a) := by
+                simp [Nat.succ_eq_add_one]
+        _ = Complex.exp ((n : ℂ) * a + a) := by
+                have hmul' : ((n : ℂ) + 1) * a = (n : ℂ) * a + a := by
+                  ring
+                simp [hmul']
+        _ = Complex.exp ((n : ℂ) * a) * Complex.exp a := by
+                simpa using Complex.exp_add ((n : ℂ) * a) a
+        _ = (r : ℂ)^n * (r : ℂ) := by
+                simp [ih, hlog]
+        _ = (r : ℂ)^(n + 1) := by
+                simp [pow_succ]
+
+/-- 偶数次元評価：ballVolC (2*m) r = (π^m / m!) * r^(2m) -/
+theorem ballVolC_even_eval (r : ℝ) (hr : 0 < r) (m : ℕ) :
+    ballVolC (2*m) r = ((π : ℂ)^m / (Nat.factorial m : ℂ)) * (r : ℂ)^(2*m) := by
+  unfold ballVolC
+  -- volConstC_even と rpowPos_nat を使って simp
+  rw [volConstC_even m]
+  have hrpow : rpowPos r ((2*m : ℕ) : ℂ) = (r : ℂ)^(2*m) := rpowPos_nat r hr (2*m)
+  have hrpow' : rpowPos r (2 * (m : ℂ)) = (r : ℂ)^(2*m) := by
+    simpa [Nat.cast_mul] using hrpow
+  simp [hrpow']
+
+
+/-- 次元シフトの漸化式（掛け算版）：(s+2) * ballVolC (s+2) r = (2π) * r^2 * ballVolC s r -/
+theorem ballVolC_shift2_mul (s : ℂ) (r : ℝ) :
+    (s + 2) * ballVolC (s + 2) r
+      = (2 * (π : ℂ)) * (rpowPos r 2) * ballVolC s r := by
+  -- ballVolC = volConstC * rpowPos
+  -- shift2_mul を掛け算して、rpowPos の exp 法則で rpowPos r (s+2) = rpowPos r s * rpowPos r 2 を使う
+  -- 最後に環計算
+  unfold ballVolC
+  have hrpow : rpowPos r (s + 2) = rpowPos r s * rpowPos r 2 := by
+    unfold rpowPos
+    set a : ℂ := Complex.ofReal (Real.log r)
+    have hmul : (s + 2) * a = s * a + 2 * a := by
+      ring
+    calc
+      Complex.exp ((s + 2) * a)
+    = Complex.exp (s * a + 2 * a) := by
+          simp [hmul]
+      _ = Complex.exp (s * a) * Complex.exp (2 * a) := by
+        simpa using Complex.exp_add (s * a) (2 * a)
+      _ = rpowPos r s * rpowPos r 2 := by
+          simp [rpowPos, a]
+  calc
+    (s + 2) * (volConstC (s + 2) * rpowPos r (s + 2))
+  = ((s + 2) * volConstC (s + 2)) * rpowPos r (s + 2) := by
+      ring
+    _ = ((2 * (π : ℂ)) * volConstC s) * rpowPos r (s + 2) := by
+        simp [volConstC_shift2_mul]
+    _ = ((2 * (π : ℂ)) * volConstC s) * (rpowPos r s * rpowPos r 2) := by
+      simp [hrpow]
+    _ = (2 * (π : ℂ)) * (rpowPos r 2) * (volConstC s * rpowPos r s) := by
+      ring
+
+
 end CosmicFormulaDim
 end DkMath
 
 set_option linter.style.longLine false
 
 /- Memo
-- CosmicFormulaDim.lean にて `volConstC_shift2_mul` を実装。`s=-2` は定義展開で両辺 0 になることを確認し、それ以外は既存の割り算版 `volConstC_shift2` を (s+2) 倍して簡潔に導出。続けて `volConstC_shift2_from_mul` も新しい乗算版を用いて整理し直した。
 -/
