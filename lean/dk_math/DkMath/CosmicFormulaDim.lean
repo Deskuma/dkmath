@@ -104,6 +104,7 @@ theorem volConstC_nat (n : ℕ) :
 /-! そして `EuclideanSpace.volume_ball` を “評価点 n” で回収する橋を架ける。
     ここは coercion (ℝ→ENNReal→ℝ) の整理が主戦場。 -/
 
+-- 偶数次元評価の補題群
 
 open scoped Real
 
@@ -219,6 +220,36 @@ theorem volume_ball_fin_even (m : ℕ) (hm : m ≥ 1) (r : ℝ) :
           simp [volConstR_even]
     _   = ENNReal.ofReal (Real.pi^m / (Nat.factorial m)) * (ENNReal.ofReal r)^(2*m) := by
           ac_rfl
+
+/-!
+### D: 実数版と複素版の体積定数の関係
+-/
+
+open scoped Real
+
+-- 前提：
+--   volConstR : ℕ → ℝ
+--   volConstC : ℂ → ℂ
+--   volConstR_even : ∀ m, volConstR (2*m) = Real.pi^m / (Nat.factorial m)
+--   volConstC_even' : ∀ m, volConstC (2*m) = (π : ℂ)^m / (Nat.factorial m : ℂ)
+
+/-- 偶数次元では、実数版係数を ℂ にキャストすると閉形式 `(π:ℂ)^m / m!` になる。 -/
+theorem volConstR_even_castC (m : ℕ) :
+    (volConstR (2*m) : ℂ) = (π : ℂ)^m / (Nat.factorial m : ℂ) := by
+  -- volConstR_even を ℂ へ持ち上げ
+  have h :=
+    congrArg (fun t : ℝ => (t : ℂ)) (volConstR_even m)
+  -- h : (volConstR (2*m) : ℂ) = (Real.pi^m / (Nat.factorial m) : ℂ)
+  -- 右辺の `(Real.pi : ℂ)` は定義上 `(π : ℂ)` と同じなので、simp で揃う
+  simpa using h
+
+/-- 偶数次元では、`volConstR`（実数）と `volConstC`（複素）が同一の係数を与える。 -/
+theorem volConst_even_identify (m : ℕ) :
+    (volConstR (2*m) : ℂ) = volConstC (2*m) := by
+  -- 複素側を閉形式へ落として比較
+  rw [volConstC_even' m]
+  exact volConstR_even_castC m
+
 
 end CosmicFormulaDim
 end DkMath
