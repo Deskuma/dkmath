@@ -599,10 +599,61 @@ theorem volConstC_shift2 (s : ℂ) (hs : s ≠ -2) :
   rw [div_mul_eq_div_mul_one_div, div_self hs', one_mul]
 
 
+/-- 割り算を消した次元シフト：こちらを“基本形”にすると例外処理が要らぬ。 -/
+theorem volConstC_shift2_mul (s : ℂ) :
+    (s + 2) * volConstC (s + 2) = (2 * (π : ℂ)) * volConstC s := by
+  by_cases hs : s = -2
+  · -- s = -2 では (s+2)=0 なので左辺が 0、右辺も Gamma の極で 1/Γ=0 となる
+    subst hs
+    simp [volConstC]
+  · -- 既存の割り算版に (s+2) を掛けるだけ
+    have hshift := volConstC_shift2 (s := s) hs
+    have hs' : s + 2 ≠ 0 := by
+      intro h
+      apply hs
+      have : s = -(2 : ℂ) := eq_neg_iff_add_eq_zero.mpr h
+      simpa using this
+    have hmul := congrArg (fun t => (s + 2) * t) hshift
+    -- 左辺は (s+2) * volConstC(s+2)、右辺は (s+2) * ((2π)/(s+2)) * volConstC s
+    have hsimp : (s + 2) * (((2 * (π : ℂ)) / (s + 2)) * volConstC s)
+        = (2 * (π : ℂ)) * volConstC s := by
+      field_simp [hs']
+    -- 形を整えて終了
+    simpa [hsimp] using hmul
+
+
+/-- `hs : s ≠ -2` なら、mul 版から割り算版が出る。 -/
+theorem volConstC_shift2_from_mul (s : ℂ) (hs : s ≠ -2) :
+    volConstC (s + 2) = ((2 * (π : ℂ)) / (s + 2)) * volConstC s := by
+  have hs' : s + 2 ≠ 0 := by
+    intro h
+    apply hs
+    -- s = -2 を引き出す
+    have : s = -(2:ℂ) := by
+      -- `eq_neg_iff_add_eq_zero` 等で
+      exact eq_neg_iff_add_eq_zero.mpr h
+    simpa using this
+  -- mul 版を割って終わり
+  have hmul := volConstC_shift2_mul s
+  -- (s+2)≠0 なので両辺に (s+2)⁻¹ を掛ける
+  have hdiv :=
+    congrArg (fun t => (s + 2)⁻¹ * t) hmul
+  -- 左辺で (s+2) を打ち消す
+  have hmain : volConstC (s + 2)
+      = (s + 2)⁻¹ * ((2 * (π : ℂ)) * volConstC s) := by
+    simpa [hs', mul_assoc, mul_left_comm, mul_comm] using hdiv
+  -- 右辺を割り算形に整える
+  have hshape : (s + 2)⁻¹ * ((2 * (π : ℂ)) * volConstC s)
+      = ((2 * (π : ℂ)) / (s + 2)) * volConstC s := by
+    simp [div_eq_mul_inv, mul_left_comm, mul_comm, mul_assoc]
+  simpa [hshape] using hmain
+
+
 end CosmicFormulaDim
 end DkMath
 
 set_option linter.style.longLine false
 
 /- Memo
+- CosmicFormulaDim.lean にて `volConstC_shift2_mul` を実装。`s=-2` は定義展開で両辺 0 になることを確認し、それ以外は既存の割り算版 `volConstC_shift2` を (s+2) 倍して簡潔に導出。続けて `volConstC_shift2_from_mul` も新しい乗算版を用いて整理し直した。
 -/
