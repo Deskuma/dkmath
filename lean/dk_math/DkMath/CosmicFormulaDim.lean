@@ -552,6 +552,7 @@ lemma differentiableAt_one_div_Gamma_affine (s : ℂ) :
   -- 1/z = z⁻¹ を使って型を合わせる
   simpa [div_eq_inv_mul, one_mul] using h
 
+
 /-- `volConstC` は全域で正則（= entire）。 -/
 theorem differentiableAt_volConstC (s : ℂ) :
     DifferentiableAt ℂ volConstC s := by
@@ -571,10 +572,31 @@ theorem differentiableAt_volConstC (s : ℂ) :
   -- `volConstC` の定義が `/` なら `div_eq_mul_inv` と `one_div` で合わせる
   simpa [volConstC, div_eq_mul_inv, one_div] using hnum.mul hrec
 
+
 /-- したがって `volConstC` は関数として全域で微分可能。 -/
 theorem differentiable_volConstC : Differentiable ℂ volConstC := by
   intro s
   exact differentiableAt_volConstC s
+
+
+/-- 次元シフトの漸化式：volConstC (s+2) = (2π/(s+2)) * volConstC s
+    注：s = -2 では両辺とも特異点を持つため、s ≠ -2 を仮定する -/
+theorem volConstC_shift2 (s : ℂ) (hs : s ≠ -2) :
+    volConstC (s + 2) = ((2 * (π : ℂ)) / (s + 2)) * volConstC s := by
+  unfold volConstC
+  rw [show (s + 2) / 2 = s / 2 + 1 by ring]
+  rw [Complex.cpow_add _ _ (Complex.ofReal_ne_zero.mpr (ne_of_gt Real.pi_pos)), Complex.cpow_one]
+  simp only [div_eq_mul_inv]
+  rw [Complex.one_div_Gamma_eq_self_mul_one_div_Gamma_add_one (s * 2⁻¹ + 1)]
+  field_simp [hs]
+  -- ゴール：1 / Gamma ((s + 2 + 2) / 2) = (s + 2) / ((s + 2) * Gamma ((s + 2 + 2) / 2))
+  -- これは (s+2) / ((s+2) * x) = 1 / x という単純な等式
+  have hs' : s + 2 ≠ 0 := by
+    intro h
+    apply hs
+    have h' : s = -(2 : ℂ) := eq_neg_iff_add_eq_zero.mpr h
+    simpa using h'
+  rw [div_mul_eq_div_mul_one_div, div_self hs', one_mul]
 
 
 end CosmicFormulaDim
