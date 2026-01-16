@@ -129,5 +129,26 @@ theorem volConstC_even (m : ℕ) :
     exact Complex.Gamma_nat_eq_factorial m
   rw [hg]
 
+/--
+偶数次元 2*m における体積定数の簡潔な説明と証明方針。
+
+定理は
+  volConstC (2*m) = (π : ℂ)^m / (Nat.factorial m : ℂ)
+を主張する。証明は定義
+  volConstC n = π^(n/2) / Γ(n/2 + 1)
+に n = 2*m を代入し、(2*m)/2 = m を用いることで
+  π^(m) / Γ(m + 1)
+とし、さらにガンマ関数の整数引数に対する恒等式
+  Γ(m+1) = m!
+(Complex.Gamma_nat_eq_factorial) を適用して右辺が π^m / m! になることから得られる。
+また証明中に (2 : ℂ) ≠ 0 を確認するために norm_num を用いている。
+-/
+theorem volConstC_even' (m : ℕ) :
+    volConstC (2*m) = (π : ℂ)^m / (Nat.factorial m : ℂ) := by
+  have h : (2:ℂ) ≠ 0 := by norm_num
+  -- 展開して (2*m)/2 = m および Γ(m+1)=m! を使う
+  simp [volConstC, h, Complex.Gamma_nat_eq_factorial]
+
+
 end CosmicFormulaDim
 end DkMath
