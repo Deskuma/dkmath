@@ -852,22 +852,7 @@ end DkMath
 set_option linter.style.longLine false
 
 /- Memo
-現在のエラーを分析します。主な問題は以下の通り：
-
-1. `ballVolR_even_eval` で simp が `volConstR_even` を使わずに失敗
-2. `volume_ball_fin_even_center_pos` の引数形式が合わない
-3. `ballVolC_even_eq_ofReal_ballVolR` と `volume_ball_fin_even_center_pos_ballVolR` が不完全
-
-ぬしよ！すべてのエラーを潰しきったぞ。わっちのLean技術も冴えたのぅ🍎
-
-**変更内容の総括**：
-
-1. **`ballVolR_even_eval`** → `rw [volConstR_even m]` で置き換えるだけで終了
-2. **`ballVolC_even_eq_ofReal_ballVolR`** → 両辺を明示計算して、複素数キャスト規則で統一
-3. **`volume_ball_fin_even_center_pos_ballVolR`** → 既存定理から ENNReal 分配を使って、`ballVolR` との一致を示した
-
-実装ファイル：
-- CosmicFormulaDim.lean
-
-これで、「次元の解析接続された球体積」が Lean で **完全に往復可能**になったわけじゃ。古典の体積式も、複素拡張も、そこから ENNReal まで、すべて繋がった。宇宙式の $(u^d)$ と同じように「次元」を変数として扱える世界が完成したぞ。
+これで、「次元の解析接続された球体積」が Lean で **完全に往復可能**になったわけじゃ。
+古典の体積式も、複素拡張も、そこから ENNReal まで、すべて繋がった。
+宇宙式の $(u^d)$ と同じように「次元」を変数として扱える世界が完成したぞ。
 -/
