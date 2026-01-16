@@ -264,5 +264,31 @@ theorem volConstR_eq_re_volConstC_even (m : ℕ) :
   simpa using hR
 
 
+open scoped BigOperators Real ENNReal
+open MeasureTheory
+
+/-- 偶数次元球の体積を `volConstR` 係数で書く（後で `volConstC` に差し替えるための中間形）。 -/
+theorem volume_ball_fin_even_via_volConstR (m : ℕ) (hm : m ≥ 1) (r : ℝ) :
+    volume (Metric.ball (0 : EuclideanSpace ℝ (Fin (2*m))) r)
+      =
+    ENNReal.ofReal (volConstR (2*m)) * (ENNReal.ofReal r) ^ (2*m) := by
+  -- 既にある最終形から係数を `volConstR` に戻す
+  -- volConstR_even : volConstR (2*m) = π^m / m!
+  -- を使って差し替えるだけ
+  simpa [volConstR_even (m := m)] using
+    (volume_ball_fin_even (m := m) (hm := hm) (r := r))
+
+
+/-- 偶数次元球の体積を `volConstC` の実部で書く：解析接続（ℂ）へ直結する形。 -/
+theorem volume_ball_fin_even_via_volConstC (m : ℕ) (hm : m ≥ 1) (r : ℝ) :
+    volume (Metric.ball (0 : EuclideanSpace ℝ (Fin (2*m))) r)
+      =
+    ENNReal.ofReal ((volConstC (2*m)).re) * (ENNReal.ofReal r) ^ (2*m) := by
+  -- まず volConstR 版へ
+  have h := volume_ball_fin_even_via_volConstR (m := m) (hm := hm) (r := r)
+  -- 偶数次元では volConstR = re volConstC なので差し替え
+  simpa [volConstR_eq_re_volConstC_even (m := m)] using h
+
+
 end CosmicFormulaDim
 end DkMath
