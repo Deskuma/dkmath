@@ -377,12 +377,28 @@ theorem volume_ball_fin_even_center_invariant (m : ℕ) (hm : m ≥ 1)
 
 /-! ### 0次元（m=0）の特殊ケース -/
 
-/-- 0次元 EuclideanSpace の全空間の体積は 1。
-    注：この補題は Mathlib の Haar 測度の正規化条件から従うが、
-    具体的な証明は複雑なため、一旦 axiom としている。
-    実用上は volume_ball_fin_zero_* 系の補題で十分。 -/
-axiom volume_univ_fin0 :
-    volume (Set.univ : Set (EuclideanSpace ℝ (Fin 0))) = 1
+/-!
+### 0次元（Fin 0）の全体体積は 1：Mathlib の補題から完全証明
+
+証明の流れ：
+1. `Fin 0` は `IsEmpty` のインスタンス（`Fin.isEmpty`）
+2. `IsEmpty` なら `volume = Measure.dirac 0`（`PiLp.volume_euclideanSpace_eq_dirac`）
+3. `dirac 0 univ = 1`（`Measure.dirac_apply_of_mem`）
+
+これにより **axiom も sorry も使わず** 完全証明が得られる。
+-/
+
+theorem volume_univ_fin0 :
+    volume (Set.univ : Set (EuclideanSpace ℝ (Fin 0))) = 1 := by
+  -- Fin 0 は空型なので、EuclideanSpace ℝ (Fin 0) の体積測度は dirac 0
+  have hvol : (volume : Measure (EuclideanSpace ℝ (Fin 0))) = Measure.dirac 0 :=
+    volume_euclideanSpace_eq_dirac (ι := Fin 0)
+  -- dirac 測度で univ を測ると 1（0 ∈ univ なので）
+  calc
+    volume (Set.univ : Set (EuclideanSpace ℝ (Fin 0)))
+        = Measure.dirac 0 (Set.univ : Set (EuclideanSpace ℝ (Fin 0))) := by rw [hvol]
+    _   = 1 := Measure.dirac_apply_of_mem (Set.mem_univ 0)
+
 
 /-- 0次元球の体積（r > 0 の場合）。球は全体と一致し、体積は 1。 -/
 theorem volume_ball_fin_zero_pos (x : EuclideanSpace ℝ (Fin 0)) (r : ℝ) (hr : 0 < r) :
@@ -394,9 +410,9 @@ theorem volume_ball_fin_zero_pos (x : EuclideanSpace ℝ (Fin 0)) (r : ℝ) (hr 
     -- Unique より y = x なので dist y x = 0 < r
     have : y = x := Subsingleton.elim y x
     simp [this, hr]
-  -- 全体の体積は 1（これは前の補題に依存）
+  -- 全体の体積は 1（前の定理より）
   rw [hball_univ]
-  exact volume_univ_fin0  -- axiom に依存
+  exact volume_univ_fin0
 
 
 /-- 0次元球の体積（if 版）。 -/
@@ -571,4 +587,28 @@ A（例外潰し）の“最終形”としては、今
 
 この段まで来たら、いよいよ **C（正則性）** が “腹の底から” 始められるのぅ。
 次の返事では、`volConstC` の極の集合（負の偶整数列）を `Set ℂ` で定義して、`DifferentiableOn` を立てる骨組みをそのまま書いて渡すぞ。
+-/
+/-! ## 🎉 axiom 完全撲滅達成！🍎
+
+**証明完了**：0次元（Fin 0）の全体体積 = 1 を **axiom も sorry も使わず** 証明した。
+
+### 使用した Mathlib の補題：
+
+1. **`Fin.isEmpty`** : `Fin 0` は空型（`IsEmpty` のインスタンス）
+2. **`PiLp.volume_euclideanSpace_eq_dirac`** : 空型なら体積測度は Dirac 測度
+   ```lean
+   [IsEmpty ι] → volume = Measure.dirac 0
+   ```
+3. **`Measure.dirac_apply_of_mem`** : 点が集合に含まれるなら Dirac 測度は 1
+   ```lean
+   a ∈ s  ⟹  dirac a s = 1
+   ```
+
+これにより、**数学的に正しく、Lean も完全に納得**する証明が完成した。
+公理系に穴は無く、Mathlib の既存補題から論理的に導出できることを確認したぞい🍷
+
+### 次の段階：C（解析接続）へ
+
+A（代数・幾何）層が **sorry も axiom も無く** 完成した。
+いよいよ本丸の解析接続層に進めるのぅ！
 -/
