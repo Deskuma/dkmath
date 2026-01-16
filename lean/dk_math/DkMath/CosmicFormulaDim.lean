@@ -960,6 +960,27 @@ theorem volConstC_odd_eval_prod (m : ℕ) :
               ring
 
 
+/-! ### J: 奇数次元評価：ballVolC (2m+1) -/
+
+theorem ballVolC_odd_eval (r : ℝ) (hr : 0 < r) (m : ℕ) :
+    ballVolC (2*m + 1) r
+      = ((2 : ℂ) * (2 * (π : ℂ))^m / oddDenom m) * (r : ℂ)^(2*m + 1) := by
+  unfold ballVolC
+  -- rpowPos を nat 冪へ
+  have hpow : rpowPos r ((2 * m + 1 : ℕ) : ℂ) = (r : ℂ)^(2*m + 1) := by
+    simpa [Nat.cast_mul, Nat.cast_add] using rpowPos_nat (r := r) hr (2 * m + 1)
+  -- volConstC の奇数次元の閉形式
+  have hvol : volConstC ((2 * m + 1 : ℕ) : ℂ) = (2 : ℂ) * (2 * (π : ℂ))^m / oddDenom m := by
+    simpa [Nat.cast_mul, Nat.cast_add] using volConstC_odd_eval_prod m
+  -- 計算
+  calc
+    volConstC (2 * m + 1) * rpowPos r (2 * m + 1)
+        = volConstC ((2 * m + 1 : ℕ) : ℂ) * rpowPos r ((2 * m + 1 : ℕ) : ℂ) := by
+          norm_cast
+      _ = ((2 : ℂ) * (2 * (π : ℂ))^m / oddDenom m) * (r : ℂ)^(2*m + 1) := by
+          rw [hvol, hpow]
+
+
 end CosmicFormulaDim
 end DkMath
 
