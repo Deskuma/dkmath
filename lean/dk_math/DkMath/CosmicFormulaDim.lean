@@ -1027,19 +1027,16 @@ theorem volConstR_shift2_mul (n : ℕ) :
       have : (0 : ℝ) ≤ n := Nat.cast_nonneg n
       linarith
     exact ne_of_gt h_pos
-
   -- ゴール式の分母を hΓ へ合わせるため、等式を先に作る
   have h_eq : (↑(n + 2) : ℝ) / 2 + 1 = ↑n / 2 + 2 := by
     push_cast
     ring
-
   have hΓ :
       Real.Gamma ((n : ℝ)/2 + 2)
         = ((n : ℝ)/2 + 1) * Real.Gamma ((n : ℝ)/2 + 1) := by
     have h_eq' : ((n : ℝ)/2 + 2 : ℝ) = ((n : ℝ)/2 + 1) + 1 := by ring
     rw [h_eq']
     exact Real.Gamma_add_one (s := ((n : ℝ)/2 + 1)) hz
-
   -- (√π)^(n+2) = (√π)^n * π
   have hsqrt : (Real.sqrt Real.pi)^(n+2) = (Real.sqrt Real.pi)^n * Real.pi := by
     calc
@@ -1048,11 +1045,16 @@ theorem volConstR_shift2_mul (n : ℕ) :
               simp [pow_add]
       _   = (Real.sqrt Real.pi)^n * Real.pi := by
               simp [Real.sq_sqrt (le_of_lt Real.pi_pos)]
-
   -- 仕上げ：ゴール式の分母を h_eq で書き替える
   rw [hsqrt, h_eq, hΓ]
   have hfac0 : Real.Gamma ((n : ℝ)/2 + 1) ≠ 0 := by
-    admit
+    -- (n : ℝ)/2 + 1 ≥ 1 > 0 なので Gamma((n:ℝ)/2 + 1) > 0
+    have h_pos : 0 < (n : ℝ)/2 + 1 := by
+      have : (0 : ℝ) ≤ n := Nat.cast_nonneg n
+      linarith
+    -- Gamma 関数は正の実数で正の値を取る
+    have : 0 < Real.Gamma ((n : ℝ)/2 + 1) := Real.Gamma_pos_of_pos h_pos
+    exact ne_of_gt this
   field_simp [hz, hfac0]
   -- field_simp の後、cast と加算の微妙な違いを simp で正規化
   simp only [Nat.cast_add, Nat.cast_ofNat]
