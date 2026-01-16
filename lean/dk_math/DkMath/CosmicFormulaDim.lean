@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 -- import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
+-- import Mathlib.MeasureTheory.Measure.Lebesgue.VolumeOfBalls
 
 namespace DkMath
 namespace CosmicFormulaDim
@@ -149,6 +150,75 @@ theorem volConstC_even' (m : ℕ) :
   -- 展開して (2*m)/2 = m および Γ(m+1)=m! を使う
   simp [volConstC, h, Complex.Gamma_nat_eq_factorial]
 
+-- ここから先は実数版の体積定数とその偶数次元評価、および
+-- `EuclideanSpace.volume_ball` からの回収の橋を架ける補題群
+
+open scoped BigOperators Real ENNReal
+open MeasureTheory
+
+/-- 実数版：体積定数（mathlib の `EuclideanSpace.volume_ball` に合わせて √π を使う版） -/
+noncomputable def volConstR (n : ℕ) : ℝ :=
+  (Real.sqrt Real.pi) ^ n / Real.Gamma ((n : ℝ) / 2 + 1)
+
+/-- 偶数次元での実数版体積定数の評価：volConstR (2*m) = π^m / m! -/
+theorem volConstR_even (m : ℕ) :
+    volConstR (2*m) = Real.pi^m / (Nat.factorial m) := by
+  unfold volConstR
+  -- 分子の簡約：(√π)^(2*m) = π^m
+  have hsqrt : (Real.sqrt Real.pi)^(2*m) = Real.pi^m := by
+    have h1 : (Real.sqrt Real.pi)^(2*m) = ((Real.sqrt Real.pi)^2)^m := by
+      rw [← pow_mul]
+    rw [h1, Real.sq_sqrt (le_of_lt Real.pi_pos)]
+  rw [hsqrt]
+  -- 分母の簡約：↑(2*m)/2 + 1 = ↑m + 1 にしてからガンマ関数を階乗に変換
+  congr 1
+  have hdiv : (↑(2*m) : ℝ)/2 + 1 = (m : ℝ) + 1 := by
+    push_cast
+    ring
+  rw [hdiv, Real.Gamma_nat_eq_factorial]
+
+
+/-!
+## 偶数次元の球体積：`EuclideanSpace.volume_ball` から回収する橋
+
+目標（概形）：
+  volume (ball (0) r) = ofReal (π^m / m!) * (ofReal r)^(2*m)
+
+注意：
+- `volume` は `ENNReal`、係数は `Real` → `ENNReal.ofReal` へキャストされる。
+- `r < 0` の場合は ball が空になったり `ofReal` が 0 扱いになったりするので、
+  必要なら `by_cases hr : 0 ≤ r` を挟む。
+-/
+
+/-- `EuclideanSpace ℝ (Fin (2*m))` の原点中心球の体積（偶数次元版の形） -/
+theorem volume_ball_fin_even (m : ℕ) (hm : m ≥ 1) (r : ℝ) :
+    volume (Metric.ball (0 : EuclideanSpace ℝ (Fin (2*m))) r)
+      =
+    ENNReal.ofReal (Real.pi^m / (Nat.factorial m))
+      * (ENNReal.ofReal r) ^ (2*m) := by
+  classical
+  -- m ≥ 1 より 2*m ≥ 2 > 0 なので Fin (2*m) は非空
+  have : Nonempty (Fin (2*m)) := by
+    apply Fin.pos_iff_nonempty.mp
+    omega
+  -- 一般公式を取得
+  have hball :=
+    (EuclideanSpace.volume_ball
+      (x := (0 : EuclideanSpace ℝ (Fin (2*m))))
+      (r := r))
+  -- volConstR を用いて係数を整理
+  have hball' : volume (Metric.ball (0 : EuclideanSpace ℝ (Fin (2*m))) r)
+        =
+      (ENNReal.ofReal r)^(2*m) * ENNReal.ofReal (volConstR (2*m)) := by
+    simpa [volConstR] using hball
+  -- volConstR_even で π^m/m! に評価
+  calc
+    volume (Metric.ball (0 : EuclideanSpace ℝ (Fin (2*m))) r)
+        = (ENNReal.ofReal r)^(2*m) * ENNReal.ofReal (volConstR (2*m)) := hball'
+    _   = (ENNReal.ofReal r)^(2*m) * ENNReal.ofReal (Real.pi^m / (Nat.factorial m)) := by
+          simp [volConstR_even]
+    _   = ENNReal.ofReal (Real.pi^m / (Nat.factorial m)) * (ENNReal.ofReal r)^(2*m) := by
+          ac_rfl
 
 end CosmicFormulaDim
 end DkMath
