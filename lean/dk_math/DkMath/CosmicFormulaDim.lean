@@ -369,5 +369,65 @@ theorem volume_ball_fin_even_center_invariant (m : ℕ) (hm : m ≥ 1)
             (x := (0 : EuclideanSpace ℝ (Fin (2*m)))) (r := r)
 
 
+-- 既にある前提（お主の環境にあるはず）
+-- volConstR : ℕ → ℝ
+-- volConstR_even : ∀ m, volConstR (2*m) = Real.pi^m / (Nat.factorial m)
+-- volume_ball_fin_even_center : ∀ m (hm : m ≥ 1) x r, ...
+--   volume (Metric.ball x r) = ofReal(pi^m/m!) * (ofReal r)^(2*m)
+
+theorem volume_ball_fin_even_center_if (m : ℕ)
+    (x : EuclideanSpace ℝ (Fin (2 * m))) (r : ℝ) :
+    volume (Metric.ball x r)
+      =
+    (if 0 < r then
+        ENNReal.ofReal (Real.pi^m / (Nat.factorial m))
+          * (ENNReal.ofReal r) ^ (2 * m)
+     else 0) := by
+  classical
+  by_cases hr : 0 < r
+  · -- r > 0 の場合：m=0 と m≥1 を分岐して回収
+    by_cases hm0 : m = 0
+    · -- m=0（0次元）ケース：特殊処理
+      subst hm0
+      -- Fin 0 は空型のため、以下のようにして計算する：
+      -- Fin 0 での点は唯一で、Metric.ball x r は r > 0 なら {x}、r ≤ 0 なら ∅
+      -- 通常の測度では点の測度は 0 なので、いずれにせよ体積は 0。
+      -- しかし形式的には、以下の論理で証明できるはず：
+      norm_num
+      -- 実装上、Fin 0 での `EuclideanSpace.volume_ball` は単純化される
+      -- π^0 / 0! * r^0 = 1 * 1 = 1 となるべきが、
+      -- 点集合の測度は 0 であり、矛盾する場合がある。
+      -- ここは数学的定義と Lean の実装の境界であり、さらなる専門知識が必要。
+      sorry
+    · -- m≥1 ケース：既に作った中心一般化補題を使う
+      have hm1 : m ≥ 1 := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hm0)
+      simpa [hr] using
+        (volume_ball_fin_even_center (m := m) (hm := hm1) (x := x) (r := r))
+  · -- r ≤ 0 の場合：球は空なので体積 0
+    have hle : r ≤ 0 := le_of_not_gt hr
+    have hempty : Metric.ball x r = (∅ : Set (EuclideanSpace ℝ (Fin (2 * m)))) := by
+      ext y
+      constructor
+      · intro hy
+        have hyr : dist y x < r := Metric.mem_ball.mp hy
+        have h_dist_nonneg : 0 ≤ dist y x := dist_nonneg
+        -- dist y x ≥ 0 かつ r ≤ 0 なので dist y x < r は不可能
+        -- hyr: dist y x < r, hle: r ≤ 0 から dist y x < 0
+        -- これは h_dist_nonneg: 0 ≤ dist y x と矛盾
+        linarith
+      · intro hy; cases hy
+    simp [hr, hempty]
+
+
+/-- `r>0` 版：`if` を剥がした使いやすい形。 -/
+theorem volume_ball_fin_even_center_pos (m : ℕ)
+    (x : EuclideanSpace ℝ (Fin (2 * m))) (r : ℝ) (hr : 0 < r) :
+    volume (Metric.ball x r)
+      =
+    ENNReal.ofReal (Real.pi^m / (Nat.factorial m))
+      * (ENNReal.ofReal r) ^ (2 * m) := by
+  simp [volume_ball_fin_even_center_if, hr]
+
+
 end CosmicFormulaDim
 end DkMath
