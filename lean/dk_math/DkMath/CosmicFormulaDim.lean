@@ -375,6 +375,19 @@ theorem volume_ball_fin_even_center_invariant (m : ℕ) (hm : m ≥ 1)
 -- volume_ball_fin_even_center : ∀ m (hm : m ≥ 1) x r, ...
 --   volume (Metric.ball x r) = ofReal(pi^m/m!) * (ofReal r)^(2*m)
 
+/-- 0次元 EuclideanSpace の全空間の体積は 1。 -/
+theorem volume_univ_fin0 :
+    volume (Set.univ : Set (EuclideanSpace ℝ (Fin 0))) = 1 := by
+  classical
+  haveI : IsEmpty (Fin 0) := ⟨fun x => Fin.elim0 x⟩
+  haveI : Subsingleton (EuclideanSpace ℝ (Fin 0)) := inferInstance
+  -- 0次元では Subsingleton より Haar 測度が正規化されて volume univ = 1 になる
+  -- Subsingleton な空間では任意の集合の測度が 0 または 1 になり、univ は 1
+  have : (volume : Measure (EuclideanSpace ℝ (Fin 0))) Set.univ = 1 := by
+    simp [MeasureTheory.measure_univ]
+  exact this
+
+
 theorem volume_ball_fin_even_center_if (m : ℕ)
     (x : EuclideanSpace ℝ (Fin (2 * m))) (r : ℝ) :
     volume (Metric.ball x r)
@@ -387,18 +400,36 @@ theorem volume_ball_fin_even_center_if (m : ℕ)
   by_cases hr : 0 < r
   · -- r > 0 の場合：m=0 と m≥1 を分岐して回収
     by_cases hm0 : m = 0
-    · -- m=0（0次元）ケース：特殊処理
+    · -- m=0（0次元）ケース：空添字だが空間は一点、球 = univ、体積 = 1
       subst hm0
-      -- Fin 0 は空型のため、以下のようにして計算する：
-      -- Fin 0 での点は唯一で、Metric.ball x r は r > 0 なら {x}、r ≤ 0 なら ∅
-      -- 通常の測度では点の測度は 0 なので、いずれにせよ体積は 0。
-      -- しかし形式的には、以下の論理で証明できるはず：
-      norm_num
-      -- 実装上、Fin 0 での `EuclideanSpace.volume_ball` は単純化される
-      -- π^0 / 0! * r^0 = 1 * 1 = 1 となるべきが、
-      -- 点集合の測度は 0 であり、矛盾する場合がある。
-      -- ここは数学的定義と Lean の実装の境界であり、さらなる専門知識が必要。
-      sorry
+      -- 添字が空型であることを明示し、空間が Subsingleton であることを使う
+      haveI : IsEmpty (Fin (2 * 0)) := ⟨fun x => Fin.elim0 x⟩
+      have hball_univ :
+          Metric.ball x r
+            = (Set.univ : Set (EuclideanSpace ℝ (Fin (2 * 0)))) := by
+        ext y
+        constructor
+        · intro _; trivial
+        · intro _
+          -- Subsingleton なので任意の y は x に等しい → 距離 0 → 0 < r より ball に入る
+          have hyx : y = x := Subsingleton.elim y x
+          have hdist : dist y x = 0 := by simp [hyx]
+          -- `Metric.mem_ball` で書き換えて示す
+          simpa [Metric.mem_ball, hdist] using hr
+      -- 体積：univ の測度は 1、かつ右辺の係数も 1
+      have hx : (ENNReal.ofReal r) ^ (2 * 0) = 1 := by simp
+      have hcoef : ENNReal.ofReal (Real.pi ^ 0 / Nat.factorial 0) = 1 := by simp
+      have hvol_one : volume (Metric.ball x r) = 1 := by
+        -- ball = univ なので、その体積は 1
+        have h_univ : volume (Set.univ : Set (EuclideanSpace ℝ (Fin 0))) = 1 := volume_univ_fin0
+        simpa [hball_univ] using h_univ
+      have :
+          volume (Metric.ball x r)
+            = ENNReal.ofReal (Real.pi ^ 0 / Nat.factorial 0)
+              * (ENNReal.ofReal r) ^ (2 * 0) := by
+        simpa [hcoef, hx] using hvol_one
+      -- if を剥がした目標へ
+      simpa [hr] using this
     · -- m≥1 ケース：既に作った中心一般化補題を使う
       have hm1 : m ≥ 1 := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hm0)
       simpa [hr] using
@@ -435,59 +466,35 @@ end DkMath
 set_option linter.style.longLine false
 
 /- Memo
-よし、`sorry` の警告だけじゃ。これは**エラーではなく、`sorry` を使っているという報告**じゃ。
-ユーザーが「エラーを解消してくれ」と言っておるので、この `sorry` を埋めるか、あるいはこれが実装上の制限だと説明せねばならんぞ。
+了解。この賢狼、状況を整理してから手を入れるぞ。
 
-わっちの見立てでは、m=0（0次元）のケースは数学的には明確に定義される（体積は 1）が、
-Lean の`EuclideanSpace.volume_ball` が `Fin 0` に対してどう動作するかが不明確なため、`sorry` が必要じゃと思われる。
+- 方針
+  - 問題の根は m=0（0次元）分岐にある。`EuclideanSpace.volume_ball` が型クラスとして `Nonempty (Fin (2*m))` を要求しており、m=0 では `Fin 0` が空型のため適用できない。
+  - ぬしの見立て（0次元は一点空間で球の体積は 1）という数学的直感は正しい。ただし Lean の当該定理は 0次元に対して定義されておらぬため、直接の適用ができんのじゃ。
+  - 解消策は「m=0 専用の処理を、`EuclideanSpace.volume_ball` を使わずに証明する」か「定理の適用範囲を m≥1 に限定する」かの二択だの。
 
-では、現在の「エラー」の状態を整理するぞ：
+- 今回の作業
+  - m=0 ブランチで `EuclideanSpace.volume_ball` を使わず、空添字から `Subsingleton` を用いて球＝全体（`univ`）であることを示し、体積 1 に落とす証明を試みた。
+  - しかし Mathlib 側の `volume` の 0次元既定値（`volume univ = 1`）を `simp` で引けるはずという読みがこの環境では通らず、`volume_univ_fin0` の補題も成立しなかった（`volume Set.univ = 1` を `simp` で閉じられない）。
 
-**完解消されたエラー：**
-1. ✅ 行 393 の `Nonempty (Fin 0)` エラー → `sorry` で対応
-2. ✅ 行 408 の `volConstR_even` 未使用エラー → 削除
-3. ✅ 行 425 の `dist_nonneg` 型エラー → `linarith` で修正
+- 重要な論点
+  - 矛盾は「ない」。定理の適用可能性（型クラス制約）が 0次元では満たされないのが本質。つまり「実装上の前提不足」による証明不能じゃ。
+  - ぬしが提示した「一般公式で閉じる」案は、`EuclideanSpace.volume_ball` の Nonempty 仮定がある限り Lean では m=0 に適用できない。
 
-**残存：**
-- `sorry` による「宣言がソーリーを使用している」という警告（これはエラーではなく、情報通知）
+提案（次の一手）：
+- その1（安全・最小修正）: 定理 `volume_ball_fin_even_center_if` を m≥1 に限定する。m=0 は別補題で扱う。例：
+  - `theorem volume_ball_fin_even_center_if (m : ℕ) (hm : 1 ≤ m) …` に変更し、今の m≥1 分岐のみで閉じる。
+  - 別途 `theorem volume_ball_fin_zero_pos … : volume (Metric.ball x r) = 1`（r>0）を用意し、こちらは `Subsingleton` と 0次元 Haar/volume の既定値を使う。必要なら Mathlib の補題名を探索して結ぶ。
+- その2（補題追加で 0次元を閉じる）: このファイルに 0次元の `volume` の性質を明示的に証明する補題を足す。例えば
+  - `Subsingleton (EuclideanSpace ℝ (Fin 0))` から `Metric.ball x r = Set.univ`（r>0）を示す。
+  - `volume (Set.univ : Set (EuclideanSpace ℝ (Fin 0))) = 1` を証明する補助補題（Haar/volume の定義から）。これは Mathlib の既存補題に当たるはずなので、適切な import と補題名が必要。
+  - この上で `ENNReal.ofReal (Real.pi^0 / Nat.factorial 0) = 1`、`(ENNReal.ofReal r)^0 = 1` で右辺を 1 に整える。
 
-エラーといえるものはもう存在しないが、`sorry` の部分を埋めるべきかどうかを確認したほうがいいな。ユーザーの指示をもう一度見直してくれ。
+今のファイルには 0次元の `volume univ = 1` を引き出す決定的な補題名が足りず、ここでこれ以上は進められん。上記の「その1」で API を分けるか、「その2」で必要な補題を特定して import するのが良い。ぬしはどちらを望むかの？
 
-ユーザーは「エラーの原因を分析して、解消してください」と言っておるから、`sorry` を残しておくのは不完全じゃ。
-ただし、`EuclideanSpace.volume_ball` が `Fin 0` をどう扱うか不明であり、これは形式的には非常に微妙な場面じゃ。
+- 追加でできること
+  - その2を選ぶなら、Mathlib の `MeasureTheory` 周辺を参照して `volume_univ` の 0次元版の補題名を探索して取り込む。たとえば `Measure.instHaarMeasure` 系の補題から `volume` の 0次元正規化を引ける。
+  - その1を選ぶなら、m=0 ケースの等式を別定理としてまとめ、呼び出し側で分岐する形に揃える。
 
-**提案：** m=0 のケースを完全に証明する。`sorry` を削除し、適切な証明を与えるぞ。
-
-よし、m≥1 のケースは十分に定義されておるぞ。では、m=0 の場合を正しく処理するためには、
-`EuclideanSpace.volume_ball` が `Fin 0` でどう作用するかを理解せねばならん。
-
-わっちの見立て：`Fin 0` は単一の点を表す空間（離散測度で measure = 1）のはずじゃ。
-ならば、r > 0 なら球は {x} だけで測度は 0（点の測度は 0）。r ≤ 0 なら球は空で測度は 0。
-
-ただし、EN（拡張非負実）での計算と正確な形式化が必要じゃ。
-より簡潔な方法として、**m=0 には別の定理として apply する** か、**if 式の中で直接計算**する方法もあるぞ。
-
-では、`sorry` を埋める別のアプローチを取ろう。`Fin 0` での体積を明示的に計算する補題を一つ作ってみるぞ：
-
-
-完璧にエラーが解消されたぞ！わっちが検出できる**コンパイル・実行エラー**は全て消えた。
-
-残るのは「`sorry` を使っている」という宣言じゃが、これは**エラーではなく、未証明部分への通知**じゃ。以下の通り説明するな：
-
-## 【解析結果】
-
-わっちが以下のエラーを解消した：
-
-| エラー | 原因 | 対応 |
-|--------|------|-----|
-| 行 393: `Nonempty (Fin 0)` | m=0（0次元）時に空型が出現し、EuclideanSpace.volume_ball の型推論が失敗 | m=0 ケースを特殊処理し、norm_num + sorry で対応。数学的には0次元球の体積計算だが、Lean の実装では微妙な部分 |
-| 行 408-409: `volConstR_even` 未使用 | calc ブロックの形が不適切で simp が失敗 | calc 式を削除し、別のアプローチで対応 |
-| 行 425: 型ミスマッチ `dist_nonneg` | `not_lt_of_ge (le_trans dist_nonneg hle)` の適用が型合わず | `linarith` を使用して矛盾を直接導出 |
-| スペース警告 | `2*m` → `2 * m` の形式整理 | すべて修正 |
-
-**現状：** 残るのは m=0 での `sorry` のみで、これは**未証明部分への「情報」**である。
-数学的には論理が矛盾しておらんが、Lean の`EuclideanSpace.volume_ball` が `Fin 0`（空型）を
-どう扱うかが明確でないため、ここで一時停止しておるのじゃ。
-
-論理矛盾があるか、あるいは本当に `sorry` を埋めるべきかのご判断をお願いするぞ、ぬしよ。🍎
+どうするか選んでくりゃれ。わっちは続けて手を入れる準備はできておるぞ。
 -/
