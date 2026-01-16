@@ -648,6 +648,36 @@ theorem volConstC_shift2_from_mul (s : ℂ) (hs : s ≠ -2) :
     simp [div_eq_mul_inv, mul_left_comm, mul_comm, mul_assoc]
   simpa [hshape] using hmain
 
+--
+
+/-! ### 解析接続された球体積：BallVolC(s,r) -/
+
+open scoped Real
+open Complex
+
+/-- `r>0` の実半径に対し、枝問題を避けて `r^s := exp(s * log r)` と定義 -/
+noncomputable def rpowPos (r : ℝ) (s : ℂ) : ℂ :=
+  Complex.exp (s * (Complex.ofReal (Real.log r)))
+
+/-- 解析接続された球体積（複素次元 s, 実半径 r） -/
+noncomputable def ballVolC (s : ℂ) (r : ℝ) : ℂ :=
+  volConstC s * rpowPos r s
+
+
+lemma differentiableAt_rpowPos (r : ℝ) (s : ℂ) :
+    DifferentiableAt ℂ (fun s => rpowPos r s) s := by
+  unfold rpowPos
+  fun_prop
+
+
+theorem differentiableAt_ballVolC (r : ℝ) (s : ℂ) :
+    DifferentiableAt ℂ (fun s => ballVolC s r) s := by
+  unfold ballVolC
+  -- volConstC は entire（既に証明済み）
+  have h1 : DifferentiableAt ℂ volConstC s := differentiableAt_volConstC s
+  have h2 : DifferentiableAt ℂ (fun s => rpowPos r s) s := differentiableAt_rpowPos r s
+  simpa using h1.mul h2
+
 
 end CosmicFormulaDim
 end DkMath
