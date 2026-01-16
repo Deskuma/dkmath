@@ -533,6 +533,50 @@ theorem differentiableAt_volConstC_of_good {s : ℂ} (hs : VolGood s) :
 -/
 
 
+/-! ### C': 正則性の強化（`volConstC` は全域で正則） -/
+
+open scoped Real
+open Complex
+
+/-- `s ↦ 1 / Γ(s/2 + 1)` は全域で正則（`1/Γ` が全域正則なので合成で落ちる） -/
+lemma differentiableAt_one_div_Gamma_affine (s : ℂ) :
+    DifferentiableAt ℂ (fun s => (1 : ℂ) / Complex.Gamma (s/2 + 1)) s := by
+  -- `1/Γ` は全域で微分可能
+  have h_outer : DifferentiableAt ℂ (fun z : ℂ => (Complex.Gamma z)⁻¹) (s/2 + 1) :=
+    (Complex.differentiable_one_div_Gamma).differentiableAt
+  -- 内側 `s ↦ s/2 + 1` も正則
+  have h_inner : DifferentiableAt ℂ (fun s : ℂ => s/2 + 1) s := by
+    fun_prop
+  -- 合成
+  have h := h_outer.comp s h_inner
+  -- 1/z = z⁻¹ を使って型を合わせる
+  simpa [div_eq_inv_mul, one_mul] using h
+
+/-- `volConstC` は全域で正則（= entire）。 -/
+theorem differentiableAt_volConstC (s : ℂ) :
+    DifferentiableAt ℂ volConstC s := by
+  -- 分子側：`powPi` を経由
+  have hnum : DifferentiableAt ℂ (fun s => (π : ℂ)^(s/2)) s := by
+    -- `powPi` が全域正則、かつ `powPi_eq` で同一視
+    have h := differentiableAt_powPi s
+    have eq : (fun s => (π : ℂ)^(s/2)) = powPi := by
+      ext s
+      exact (powPi_eq s).symm
+    rw [eq]
+    exact h
+  -- 分母側は「割る」のでなく「掛ける」に直す：`/ Γ = * (1/Γ)`
+  have hrec : DifferentiableAt ℂ (fun s => (1 : ℂ) / Complex.Gamma (s/2 + 1)) s :=
+    differentiableAt_one_div_Gamma_affine s
+  -- 仕上げ：積の正則性
+  -- `volConstC` の定義が `/` なら `div_eq_mul_inv` と `one_div` で合わせる
+  simpa [volConstC, div_eq_mul_inv, one_div] using hnum.mul hrec
+
+/-- したがって `volConstC` は関数として全域で微分可能。 -/
+theorem differentiable_volConstC : Differentiable ℂ volConstC := by
+  intro s
+  exact differentiableAt_volConstC s
+
+
 end CosmicFormulaDim
 end DkMath
 
