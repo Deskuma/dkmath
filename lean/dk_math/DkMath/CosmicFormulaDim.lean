@@ -891,6 +891,75 @@ theorem volConstC_odd_step (m : ℕ) :
   exact h
 
 
+/-! ### I: 奇数次元の閉形式（まずは積の形） -/
+
+open scoped BigOperators
+
+/-- 奇数次元の分母（3·5·…·(2m+1)）を range 積で持つ -/
+noncomputable def oddDenom (m : ℕ) : ℂ :=
+  ∏ k ∈ Finset.range m, ((2*k + 3 : ℕ) : ℂ)
+
+lemma oddDenom_succ (m : ℕ) :
+    oddDenom (m+1) = oddDenom m * ((2*m + 3 : ℕ) : ℂ) := by
+  -- range (m+1) = range m ∪ {m}
+  simp only [oddDenom, Finset.range_add_one, mul_comm, Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat,
+    Finset.mem_range, lt_self_iff_false, not_false_eq_true, Finset.prod_insert]
+
+/--
+奇数次元の体積定数（複素版）の閉形式（積で表現）：
+  volConstC (2m+1) = 2 * (2π)^m / (3·5·…·(2m+1))
+-/
+theorem volConstC_odd_eval_prod (m : ℕ) :
+    volConstC (2*m + 1)
+      = (2 : ℂ) * (2 * (π : ℂ))^m / oddDenom m := by
+  induction m with
+  | zero =>
+      -- 2*0+1 = 1, oddDenom 0 = 1
+      simp [oddDenom, volConstC_one]
+  | succ m ih =>
+      -- 目標の左辺は volConstC (2*(m+1)+1) = volConstC (2*m+3)
+      -- まず step を “割り算の形” に解く
+      have hstep := volConstC_odd_step m
+      have hne : ((2*m + 3 : ℕ) : ℂ) ≠ 0 := by
+        -- 2*m+3 は自然数として 0 ではない
+        exact_mod_cast (Nat.succ_ne_zero (2*m + 2))
+      have hsolve :
+          volConstC (2*m + 3)
+            = ((2 * (π : ℂ)) * volConstC (2*m + 1)) / ((2*m + 3 : ℕ) : ℂ) := by
+        -- b = c / a  ↔  b*a = c
+        apply (eq_div_iff (by simpa using hne)).2
+        -- step の a*b=c を b*a=c に並べ替える
+        simpa [mul_assoc, mul_left_comm, mul_comm] using hstep
+      -- 分母 oddDenom の更新
+      have hden : oddDenom (m+1) = oddDenom m * ((2*m + 3 : ℕ) : ℂ) := oddDenom_succ m
+      -- 仕上げ：hsolve に ih を代入して整形
+      -- ※ `field_simp` + `ring` が一番頑丈
+      simp only [Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat] at hsolve
+      -- ここからは計算整形
+      -- volConstC(2m+3) を hsolve, volConstC(2m+1) を ih で置換
+      -- (2π)^(m+1) と oddDenom(m+1) の形に揃える
+      calc
+        volConstC (2 * ↑(m + 1) + 1)
+            = volConstC (2 * ↑m + 3) := by
+              simp only [Nat.cast_add]
+              ring_nf
+        _ = ((2 * (π : ℂ)) * volConstC (2*m + 1)) / ((2*m + 3 : ℕ) : ℂ) := by
+              simpa [mul_assoc, mul_left_comm, mul_comm] using hsolve
+        _ = ((2 * (π : ℂ)) * ((2 : ℂ) * (2 * (π : ℂ))^m / oddDenom m)) / ((2*m + 3 : ℕ) : ℂ) := by
+              simp [ih]
+        _ = (2 : ℂ) * (2 * (π : ℂ))^(m+1) / oddDenom (m+1) := by
+              -- ここが “整形区間”
+              -- oddDenom(m+1)=oddDenom m*(2m+3) を使って分母をまとめる
+              -- (2π)^(m+1)=(2π)^m*(2π) もまとめる
+              -- `field_simp` が強い
+              -- （必要なら `have : oddDenom m ≠ 0 := by ...` を足す）
+              -- まず分母更新を入れる
+              rw [hden]
+              -- 整形
+              field_simp [hne]
+              ring
+
+
 end CosmicFormulaDim
 end DkMath
 
