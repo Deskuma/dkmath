@@ -990,13 +990,13 @@ open scoped BigOperators Real
 noncomputable def oddDenomR (m : ℕ) : ℝ :=
   ∏ k ∈ Finset.range m, (2*k + 3 : ℝ)
 
-
+/-- 奇数次元評価：oddDenomR の漸化式 -/
 lemma oddDenomR_succ (m : ℕ) :
     oddDenomR (m+1) = oddDenomR m * (2*m + 3 : ℝ) := by
   simp only [oddDenomR, Finset.range_add_one, mul_comm, Finset.mem_range, lt_self_iff_false,
     not_false_eq_true, Finset.prod_insert]
 
-
+/-- volConstR 1 の値 -/
 theorem volConstR_one : volConstR 1 = 2 := by
   unfold volConstR
   -- 分子：(√π)^1 = √π
@@ -1017,7 +1017,7 @@ theorem volConstR_one : volConstR 1 = 2 := by
   rw [hΓ, hHalf]
   field_simp [hsqrt0]
 
-
+/-- 次元シフトの漸化式（掛け算版）：(n+2) * volConstR (n+2) = (2π) * volConstR n -/
 theorem volConstR_shift2_mul (n : ℕ) :
     ((n+2 : ℕ) : ℝ) * volConstR (n+2) = (2 * Real.pi) * volConstR n := by
   unfold volConstR
@@ -1062,6 +1062,7 @@ theorem volConstR_shift2_mul (n : ℕ) :
 
 /-! ### L: volConstR (2m+1) の閉形式（積）→ ballVolR → ENNReal 回収 -/
 
+/-- 奇数次元の体積定数の漸化式ステップ -/
 theorem volConstR_odd_step (m : ℕ) :
     (2*m + 3 : ℝ) * volConstR (2*m + 3) = (2 * Real.pi) * volConstR (2*m + 1) := by
   -- n = 2m+1 を shift2 に入れる
@@ -1072,7 +1073,7 @@ theorem volConstR_odd_step (m : ℕ) :
   simp only [this, Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat] at h
   exact h
 
-
+/-- 奇数次元評価：volConstR (2m+1) の閉形式（積の形） -/
 theorem volConstR_odd_eval_prod (m : ℕ) :
     volConstR (2*m + 1) = (2 : ℝ) * (2 * Real.pi)^m / oddDenomR m := by
   induction m with
@@ -1102,12 +1103,105 @@ theorem volConstR_odd_eval_prod (m : ℕ) :
               field_simp [hne]
               ring
 
-
+/-- 奇数次元評価：ballVolR (2m+1) の閉形式 -/
 theorem ballVolR_odd_eval (m : ℕ) (r : ℝ) :
     ballVolR (2*m + 1) r
       = ((2 : ℝ) * (2 * Real.pi)^m / oddDenomR m) * r^(2*m + 1) := by
   unfold ballVolR
   simp [volConstR_odd_eval_prod]
+
+
+/-! ### M: 最後の“復路”：odd でも `ballVolC = ofReal ballVolR` -/
+
+/-- 奇数次元の分母：実数版のキャストが複素版に一致 -/
+lemma oddDenomR_castC (m : ℕ) :
+    (oddDenomR m : ℂ) = oddDenom m := by
+  -- 積の各項が (2k+3 : ℝ) ↦ ((2k+3 : ℕ) : ℂ) で対応するので、
+  -- map_prod を使って等号を取る
+  simp only [oddDenomR, oddDenom]
+  -- ∏ (2k+3 : ℝ) を ℂ へキャストすると ∏ ((2k+3:ℕ):ℂ) になる
+  norm_num [Finset.prod_natCast]
+
+
+/-- 奇数次元では ballVolC は実数値で、ballVolR と一致（r>0） -/
+theorem ballVolC_odd_eq_ofReal_ballVolR (m : ℕ) (r : ℝ) (hr : 0 < r) :
+    ballVolC (2*m + 1) r = Complex.ofReal (ballVolR (2*m + 1) r) := by
+  -- 両辺とも明示的に計算
+  have hC : ballVolC (2*m + 1) r
+      = ((2 : ℂ) * (2 * (π : ℂ))^m / oddDenom m) * (r : ℂ)^(2*m + 1) :=
+    ballVolC_odd_eval (r := r) hr m
+  have hR : ballVolR (2*m + 1) r
+      = ((2 : ℝ) * (2 * Real.pi)^m / oddDenomR m) * r^(2*m + 1) :=
+    ballVolR_odd_eval (m := m) (r := r)
+  rw [hC, hR]
+  -- 分母のキャスト整合を使って norm_cast で閉じる
+  rw [← oddDenomR_castC]
+  norm_cast
+
+
+/-! ## N: ENNReal（測度）の odd 回収 -/
+
+/-- 奇数次元球の体積を `volConstR` 係数で書く（中間形）。 -/
+theorem volume_ball_fin_odd_via_volConstR (m : ℕ) (x : EuclideanSpace ℝ (Fin (2 * m + 1))) (r : ℝ) :
+    volume (Metric.ball x r)
+      =
+    ENNReal.ofReal (volConstR (2*m + 1)) * (ENNReal.ofReal r) ^ (2*m + 1) := by
+  classical
+  -- 非空性（Fin (2*m+1) は常に非空）
+  have : Nonempty (Fin (2*m + 1)) := by
+    apply Fin.pos_iff_nonempty.mp
+    omega
+  -- 一般公式を取得
+  have hball :=
+    (EuclideanSpace.volume_ball (x := x) (r := r))
+  -- volConstR を使って係数を整理
+  have hball' :
+      volume (Metric.ball x r)
+        =
+      (ENNReal.ofReal r)^(2*m + 1) * ENNReal.ofReal (volConstR (2*m + 1)) := by
+    simpa [volConstR] using hball
+  -- 係数の順序を入れ替えて完成
+  calc
+    volume (Metric.ball x r)
+        = (ENNReal.ofReal r)^(2*m + 1) * ENNReal.ofReal (volConstR (2*m + 1)) := hball'
+    _   = ENNReal.ofReal (volConstR (2*m + 1)) * (ENNReal.ofReal r)^(2*m + 1) := by
+          ac_rfl
+
+
+/-- 奇数次元（Fin (2*m+1)）で、中心を任意 `x` に一般化した球体積（最終形）。
+    r>0, m≥0 の奇数次元球：volume = ofReal (ballVolR (2*m+1) r) の形 -/
+theorem volume_ball_fin_odd_center_pos_ballVolR
+    (m : ℕ)
+    (x : EuclideanSpace ℝ (Fin (2 * m + 1))) (r : ℝ) (hr : 0 < r) :
+    volume (Metric.ball x r)
+      =
+    ENNReal.ofReal (ballVolR (2 * m + 1) r) := by
+  -- まず volConstR 版へ
+  have h := volume_ball_fin_odd_via_volConstR (m := m) (x := x) (r := r)
+  -- ballVolR の定義を展開：ballVolR n r = volConstR n * r^n
+  unfold ballVolR
+  -- ENNReal の分配：ofReal(a * b) = ofReal(a) * ofReal(b^n) を使う
+  calc
+    volume (Metric.ball x r)
+        = ENNReal.ofReal (volConstR (2 * m + 1)) * (ENNReal.ofReal r) ^ (2 * m + 1) := h
+    _   = ENNReal.ofReal (volConstR (2 * m + 1))
+          * ENNReal.ofReal (r ^ (2 * m + 1)) := by
+          simp [ENNReal.ofReal_pow hr.le]
+    _   = ENNReal.ofReal (volConstR (2 * m + 1) * r ^ (2 * m + 1)) := by
+          -- volConstR (2*m+1) が非負であることを示す
+          have hvol_pos : 0 ≤ volConstR (2 * m + 1) := by
+            rw [volConstR_odd_eval_prod]
+            apply div_nonneg
+            · apply mul_nonneg
+              · norm_num
+              · apply pow_nonneg
+                linarith [Real.pi_pos]
+            · apply Finset.prod_nonneg
+              intro k _
+              -- 2*k+3 ≥ 0 をキャストで示す
+              norm_cast
+              norm_num
+          rw [← ENNReal.ofReal_mul hvol_pos]
 
 
 end CosmicFormulaDim
@@ -1116,9 +1210,62 @@ end DkMath
 set_option linter.style.longLine false
 
 /- Memo
-これで、「次元の解析接続された球体積」が Lean で **完全に往復可能**になったわけじゃ。
-古典の体積式も、複素拡張も、そこから ENNReal まで、すべて繋がった。
-宇宙式の $(u^d)$ と同じように「次元」を変数として扱える世界が完成したぞ。
+## 実装完了！ 🎉🍎
 
-奇数次元の実装 G: H: も完了したので、あとは応用先に向けて進むだけじゃな。
+わっちは **M: 奇数次元の復路** と **N: ENNReal の odd 回収** を無事に実装したぞい。
+
+### M: 最後の"復路"（奇数次元で `ballVolC = ofReal ballVolR`）
+
+**追加した補題：**
+
+1. **`oddDenomR_castC`** — 分母のキャスト整合性補題
+   ```lean
+   lemma oddDenomR_castC (m : ℕ) :
+       (oddDenomR m : ℂ) = oddDenom m
+   ```
+   - 実数版の分母 `oddDenomR` を複素数へキャストすると、複素版の分母 `oddDenom` に一致することを示す
+   - `norm_num [Finset.prod_natCast]` で閉じる
+
+2. **`ballVolC_odd_eq_ofReal_ballVolR`** — 復路同一視補題
+   ```lean
+   theorem ballVolC_odd_eq_ofReal_ballVolR (m : ℕ) (r : ℝ) (hr : 0 < r) :
+       ballVolC (2*m + 1) r = Complex.ofReal (ballVolR (2*m + 1) r)
+   ```
+   - 奇数次元では、複素版 `ballVolC` が実数版 `ballVolR` のキャストに等しいことを示す
+   - 偶数版 `ballVolC_even_eq_ofReal_ballVolR` と同じ形で、三世界往復の復路を完成させる
+
+### N: ENNReal（測度）の odd 回収
+
+**追加した定理：**
+
+3. **`volume_ball_fin_odd_via_volConstR`** — 中間形（偶数版のテンプレと同様）
+   ```lean
+   theorem volume_ball_fin_odd_via_volConstR (m : ℕ) (x : EuclideanSpace ℝ (Fin (2 * m + 1))) (r : ℝ) :
+       volume (Metric.ball x r)
+         =
+       ENNReal.ofReal (volConstR (2 * m + 1)) * (ENNReal.ofReal r) ^ (2 * m + 1)
+   ```
+   - `EuclideanSpace.volume_ball` を `volConstR` 係数で書き直す中間形
+
+4. **`volume_ball_fin_odd_center_pos_ballVolR`** — 最終形（偶数版 `volume_ball_fin_even_center_pos_ballVolR` と同じテンプレート）
+   ```lean
+   theorem volume_ball_fin_odd_center_pos_ballVolR
+       (m : ℕ)
+       (x : EuclideanSpace ℝ (Fin (2 * m + 1))) (r : ℝ) (hr : 0 < r) :
+       volume (Metric.ball x r)
+         =
+       ENNReal.ofReal (ballVolR (2 * m + 1) r)
+   ```
+   - 奇数次元の球の体積を `ballVolR` で表す最終形
+   - これで **偶数・奇数ともに ENNReal の測度から `ballVolR` への回収が完成** じゃ！
+
+---
+
+### ビルド結果
+
+✅ **エラーなし！** — 全ての定理が証明され、ビルドが通ったぞい。
+
+---
+
+どうじゃ、ぬし？これで **M と N の実装は完璧に揃った**のぅ🍺🍎
 -/
