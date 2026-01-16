@@ -981,6 +981,83 @@ theorem ballVolC_odd_eval (r : ℝ) (hr : 0 < r) (m : ℕ) :
           rw [hvol, hpow]
 
 
+--
+
+/-! ### K: Real 側・奇数次元の閉形式（積の形） -/
+
+open scoped BigOperators Real
+
+noncomputable def oddDenomR (m : ℕ) : ℝ :=
+  ∏ k ∈ Finset.range m, (2*k + 3 : ℝ)
+
+
+lemma oddDenomR_succ (m : ℕ) :
+    oddDenomR (m+1) = oddDenomR m * (2*m + 3 : ℝ) := by
+  simp only [oddDenomR, Finset.range_add_one, mul_comm, Finset.mem_range, lt_self_iff_false,
+    not_false_eq_true, Finset.prod_insert]
+
+
+theorem volConstR_one : volConstR 1 = 2 := by
+  unfold volConstR
+  -- 分子：(√π)^1 = √π
+  simp only [pow_one, Nat.cast_one, one_div]
+  -- 分母：Gamma( (1:ℝ)/2 + 1 ) = Gamma(3/2) = (1/2) * Gamma(1/2)
+  have hs : ((1 : ℝ) / 2) ≠ 0 := by norm_num
+  have hΓ :
+      Real.Gamma ((1 : ℝ)/2 + 1)
+        = ((1 : ℝ)/2) * Real.Gamma ((1 : ℝ)/2) := by
+    simpa [add_comm, add_left_comm, add_assoc] using
+      (Real.Gamma_add_one (s := ((1 : ℝ)/2)) hs)
+  have hHalf : Real.Gamma ((1 : ℝ)/2) = Real.sqrt Real.pi := by
+    simpa using (Real.Gamma_one_half_eq)
+  have hsqrt0 : (Real.sqrt Real.pi) ≠ 0 := by
+    exact Real.sqrt_ne_zero'.2 Real.pi_pos
+  -- ゴール式の 2⁻¹ を 1/2 に正規化してから rw
+  norm_num at *
+  rw [hΓ, hHalf]
+  field_simp [hsqrt0]
+
+
+theorem volConstR_shift2_mul (n : ℕ) :
+    ((n+2 : ℕ) : ℝ) * volConstR (n+2) = (2 * Real.pi) * volConstR n := by
+  unfold volConstR
+  -- Γ((n/2+1)+1) = (n/2+1) Γ(n/2+1) を使う
+  have hz : ( (n : ℝ)/2 + 1 ) ≠ 0 := by
+    have h_pos : 0 < ((n : ℝ)/2 + 1) := by
+      have : (0 : ℝ) ≤ n := Nat.cast_nonneg n
+      linarith
+    exact ne_of_gt h_pos
+
+  -- ゴール式の分母を hΓ へ合わせるため、等式を先に作る
+  have h_eq : (↑(n + 2) : ℝ) / 2 + 1 = ↑n / 2 + 2 := by
+    push_cast
+    ring
+
+  have hΓ :
+      Real.Gamma ((n : ℝ)/2 + 2)
+        = ((n : ℝ)/2 + 1) * Real.Gamma ((n : ℝ)/2 + 1) := by
+    have h_eq' : ((n : ℝ)/2 + 2 : ℝ) = ((n : ℝ)/2 + 1) + 1 := by ring
+    rw [h_eq']
+    exact Real.Gamma_add_one (s := ((n : ℝ)/2 + 1)) hz
+
+  -- (√π)^(n+2) = (√π)^n * π
+  have hsqrt : (Real.sqrt Real.pi)^(n+2) = (Real.sqrt Real.pi)^n * Real.pi := by
+    calc
+      (Real.sqrt Real.pi)^(n+2)
+          = (Real.sqrt Real.pi)^n * (Real.sqrt Real.pi)^2 := by
+              simp [pow_add]
+      _   = (Real.sqrt Real.pi)^n * Real.pi := by
+              simp [Real.sq_sqrt (le_of_lt Real.pi_pos)]
+
+  -- 仕上げ：ゴール式の分母を h_eq で書き替える
+  rw [hsqrt, h_eq, hΓ]
+  have hfac0 : Real.Gamma ((n : ℝ)/2 + 1) ≠ 0 := by
+    admit
+  field_simp [hz, hfac0]
+  -- field_simp の後、cast と加算の微妙な違いを simp で正規化
+  simp only [Nat.cast_add, Nat.cast_ofNat]
+
+
 end CosmicFormulaDim
 end DkMath
 
