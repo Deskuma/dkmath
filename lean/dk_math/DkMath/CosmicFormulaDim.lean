@@ -375,21 +375,11 @@ theorem volume_ball_fin_even_center_invariant (m : ℕ) (hm : m ≥ 1)
 -- volume_ball_fin_even_center : ∀ m (hm : m ≥ 1) x r, ...
 --   volume (Metric.ball x r) = ofReal(pi^m/m!) * (ofReal r)^(2*m)
 
-/-- 0次元 EuclideanSpace の全空間の体積は 1。 -/
-theorem volume_univ_fin0 :
-    volume (Set.univ : Set (EuclideanSpace ℝ (Fin 0))) = 1 := by
-  classical
-  haveI : IsEmpty (Fin 0) := ⟨fun x => Fin.elim0 x⟩
-  haveI : Subsingleton (EuclideanSpace ℝ (Fin 0)) := inferInstance
-  -- 0次元では Subsingleton より Haar 測度が正規化されて volume univ = 1 になる
-  -- Subsingleton な空間では任意の集合の測度が 0 または 1 になり、univ は 1
-  have : (volume : Measure (EuclideanSpace ℝ (Fin 0))) Set.univ = 1 := by
-    simp [MeasureTheory.measure_univ]
-  exact this
+-- （参考）0次元 EuclideanSpace の全空間の体積は 1 になるが、本ファイルでは未使用。
 
 
-theorem volume_ball_fin_even_center_if (m : ℕ)
-    (x : EuclideanSpace ℝ (Fin (2 * m))) (r : ℝ) :
+theorem volume_ball_fin_even_center_if (m : ℕ) (hm : 1 ≤ m)
+  (x : EuclideanSpace ℝ (Fin (2 * m))) (r : ℝ) :
     volume (Metric.ball x r)
       =
     (if 0 < r then
@@ -398,42 +388,9 @@ theorem volume_ball_fin_even_center_if (m : ℕ)
      else 0) := by
   classical
   by_cases hr : 0 < r
-  · -- r > 0 の場合：m=0 と m≥1 を分岐して回収
-    by_cases hm0 : m = 0
-    · -- m=0（0次元）ケース：空添字だが空間は一点、球 = univ、体積 = 1
-      subst hm0
-      -- 添字が空型であることを明示し、空間が Subsingleton であることを使う
-      haveI : IsEmpty (Fin (2 * 0)) := ⟨fun x => Fin.elim0 x⟩
-      have hball_univ :
-          Metric.ball x r
-            = (Set.univ : Set (EuclideanSpace ℝ (Fin (2 * 0)))) := by
-        ext y
-        constructor
-        · intro _; trivial
-        · intro _
-          -- Subsingleton なので任意の y は x に等しい → 距離 0 → 0 < r より ball に入る
-          have hyx : y = x := Subsingleton.elim y x
-          have hdist : dist y x = 0 := by simp [hyx]
-          -- `Metric.mem_ball` で書き換えて示す
-          simpa [Metric.mem_ball, hdist] using hr
-      -- 体積：univ の測度は 1、かつ右辺の係数も 1
-      have hx : (ENNReal.ofReal r) ^ (2 * 0) = 1 := by simp
-      have hcoef : ENNReal.ofReal (Real.pi ^ 0 / Nat.factorial 0) = 1 := by simp
-      have hvol_one : volume (Metric.ball x r) = 1 := by
-        -- ball = univ なので、その体積は 1
-        have h_univ : volume (Set.univ : Set (EuclideanSpace ℝ (Fin 0))) = 1 := volume_univ_fin0
-        simpa [hball_univ] using h_univ
-      have :
-          volume (Metric.ball x r)
-            = ENNReal.ofReal (Real.pi ^ 0 / Nat.factorial 0)
-              * (ENNReal.ofReal r) ^ (2 * 0) := by
-        simpa [hcoef, hx] using hvol_one
-      -- if を剥がした目標へ
-      simpa [hr] using this
-    · -- m≥1 ケース：既に作った中心一般化補題を使う
-      have hm1 : m ≥ 1 := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hm0)
-      simpa [hr] using
-        (volume_ball_fin_even_center (m := m) (hm := hm1) (x := x) (r := r))
+  · -- r > 0 の場合：m≥1 の既存補題で回収
+    simpa [hr] using
+      (volume_ball_fin_even_center (m := m) (hm := hm) (x := x) (r := r))
   · -- r ≤ 0 の場合：球は空なので体積 0
     have hle : r ≤ 0 := le_of_not_gt hr
     have hempty : Metric.ball x r = (∅ : Set (EuclideanSpace ℝ (Fin (2 * m)))) := by
@@ -451,13 +408,15 @@ theorem volume_ball_fin_even_center_if (m : ℕ)
 
 
 /-- `r>0` 版：`if` を剥がした使いやすい形。 -/
-theorem volume_ball_fin_even_center_pos (m : ℕ)
-    (x : EuclideanSpace ℝ (Fin (2 * m))) (r : ℝ) (hr : 0 < r) :
+theorem volume_ball_fin_even_center_pos (m : ℕ) (hm : 1 ≤ m)
+  (x : EuclideanSpace ℝ (Fin (2 * m))) (r : ℝ) :
     volume (Metric.ball x r)
       =
     ENNReal.ofReal (Real.pi^m / (Nat.factorial m))
       * (ENNReal.ofReal r) ^ (2 * m) := by
-  simp [volume_ball_fin_even_center_if, hr]
+  -- 既存の中心一般化補題をそのまま適用して閉じる
+  simpa using
+    (volume_ball_fin_even_center (m := m) (hm := hm) (x := x) (r := r))
 
 
 end CosmicFormulaDim
