@@ -243,12 +243,25 @@ theorem volConstR_even_castC (m : ℕ) :
   -- 右辺の `(Real.pi : ℂ)` は定義上 `(π : ℂ)` と同じなので、simp で揃う
   simpa using h
 
+
 /-- 偶数次元では、`volConstR`（実数）と `volConstC`（複素）が同一の係数を与える。 -/
 theorem volConst_even_identify (m : ℕ) :
     (volConstR (2*m) : ℂ) = volConstC (2*m) := by
   -- 複素側を閉形式へ落として比較
   rw [volConstC_even' m]
   exact volConstR_even_castC m
+
+
+/-- 偶数次元では `volConstR` は `volConstC` の実部に一致する（同一視の実用形）。 -/
+theorem volConstR_eq_re_volConstC_even (m : ℕ) :
+    volConstR (2*m) = (volConstC (2*m)).re := by
+  -- 手1で作った同一視： (volConstR (2*m) : ℂ) = volConstC (2*m)
+  have hC : (volConstR (2*m) : ℂ) = volConstC (2*m) :=
+    volConst_even_identify (m := m)
+  -- 両辺の実部を取る
+  have hR := congrArg Complex.re hC
+  -- re (ofReal a) = a で左辺が落ちる
+  simpa using hR
 
 
 end CosmicFormulaDim
