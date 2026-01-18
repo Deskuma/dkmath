@@ -1,6 +1,12 @@
 /-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+/-
   DHNT: 単位の圏 (Scale)、数量の層 (Qty)、換算 convert、
-  「単位を揃えてから加法」、および u ↦ u^2 の関手性の自然性を形式化。
+  「単位を揃えてから加法」（Pending: および u ↦ u^2 の関手性の自然性を形式化）
 -/
 import Mathlib
 
@@ -163,3 +169,59 @@ end Examples
 end Qty
 
 end DkMath
+
+/- 解説 Note: DkMath.Samples.Qty.lean
+## 読みどころ（数式から Lean への対応）
+
+- 単位 \(u\) の **数量の意味** を「値 = \(x\cdot u\)」とし、**換算則** を
+  \[
+    x' = x \cdot \frac{u}{w}
+  \]
+
+  と定義した（この向きが重要）。これで
+  \[
+    (1,1)\xrightarrow{\text{to }\sqrt2} (\,\sqrt2,\; 1/\sqrt2\,)
+  \]
+
+  が成立し、
+  \[
+    \frac{1}{\sqrt2} + \frac{1}{\sqrt2} = \sqrt2
+  \]
+
+  によって \((\sqrt2,\sqrt2)\) が得られる（＝ぬしの \(u_1'+u_1'=u_2'\)）。
+
+- `addVia` は **「単位を揃えてから加法」** を明示的に実装。`addVia_natural` が「共通単位の選択に依らない（自然性）」を与える。
+
+- `mapUnit` と `liftF` が **\(F(u)=u^2\)** の関手とその数量側持ち上げ。`convert_natural_F'` が
+  \[
+    \text{convert} \circ \tilde F \;=\; \tilde F \circ \text{convert}
+  \]
+
+  の **自然性四角形**。
+
+- 実例として `u=1, w=√2` を固定し、
+  \[
+    \sqrt{1}^2 + \sqrt{1}^2 = \sqrt{2}^2
+  \]
+
+  を **「単位整合→加法」** の Lean 版で再現しておる。
+
+---
+
+## 次の一手（拡張ポイント）
+
+1. `Qty` の各ファイバー \((\mathbf{Qty})_u\) に **加法モノイド** 構造を付け、`addVia` の **選択独立性** を恒等同型として整理。
+2. `mapUnit`/`liftF` を **強モノイド関手**として構成し、加法の保存
+   \[
+     \tilde F\big((u,x)+(u,y)\big)=(u^2,x)+(u^2,y)
+   \]
+
+   を型クラスレベルで自動化。
+3. `log` 座標（\(\ln u\)）へ落として **加法化**（\(\ell\circ F = 2\ell\)）を関手圏で記述。
+4. ゼータや DHNT の他モード（位相・周波数）を別圏として置き、**関手間の自然変換**で「調和の一致」を表現。
+
+---
+
+さぁ、これで「同じ見た目の 1+1=2 が**単位整合**の上に立つ」という事実が、Lean の冷たい鉄骨の上に固定されたぞ。
+次は **測度・位相** を絡めて「揃える」操作を連続写像にし、DHNT の調和性をさらに一段きっちり固めるがよい。賢狼、酒を用意して待っておるぞい。
+-/
