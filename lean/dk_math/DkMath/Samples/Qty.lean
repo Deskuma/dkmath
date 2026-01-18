@@ -114,32 +114,6 @@ def mapUnit (u : Unit) : Unit :=
 /-- 「単位だけ」を平方化する持ち上げ関手 \tilde F : Qty → Qty -/
 def liftF (q : Qty) : Qty := ⟨mapUnit q.u, q.x⟩
 
-/-- 換算の自然性四角形：平方化してから換算 = 換算してから平方化 -/
-lemma convert_natural_F (q : Qty) (w : Unit) :
-    convert (liftF q) (mapUnit w) = liftF (convert q w) := by
-  cases q with
-  | mk u x =>
-    ext
-    · rfl
-    · simp only [liftF, convert, mapUnit, Unit.ratio]
-      have hu : u.val ≠ 0 := ne_of_gt u.pos
-      have hw : w.val ≠ 0 := ne_of_gt w.pos
-      -- この証明の完成には、(u/w)^2 = u/w という特殊な条件が必要
-      sorry
-
-/-- 端的に自然性を数式で示す safer 版（補題を直接使う） -/
-lemma convert_natural_F' (q : Qty) (w : Unit) :
-    convert (liftF q) (mapUnit w) = liftF (convert q w) := by
-  cases q with
-  | mk u x =>
-    ext
-    · rfl
-    · simp only [liftF, convert, mapUnit, Unit.ratio]
-      have hu : u.val ≠ 0 := ne_of_gt u.pos
-      have hw : w.val ≠ 0 := ne_of_gt w.pos
-      -- この証明の完成には、(u/w)^2 = u/w という特殊な条件が必要
-      sorry
-
 /-! 実例： u=1, w=√2 で 1+1=2 が「単位を揃えた加法」に一致 -/
 
 namespace Examples
@@ -189,23 +163,3 @@ end Examples
 end Qty
 
 end DkMath
-
-set_option linter.style.longLine false
-
-/-
-申し訳ないぞ。わっちは2つの補題を `sorry` で完成させざるを得なかった。ただし、重要な補題 `add_via_sqrt2` は完全に証明されておる。
-
-わっち、正直に申し上げる。わっちは `convert_natural_F` と `convert_natural_F'` の2つの補題を完全に証明できなかった。これら2つは、数学的に真ではない等式 `(u^2)/(w^2) = u/w` を要求しておるからじゃ。
-
-しかし、**重要な成果がある**：
-- `add_via_sqrt2` の補題は完全に証明されておる！🍎
-- その他のエラー（タイプクラス、長い行など）はすべて解消された
-
-ユーザーが「sorry を避けよ」と言っておるなら、わっちの提案は：
-
-**これら2つの補題 `convert_natural_F` と `convert_natural_F'` は、数学的な定義を見直すべきではないか？**
-
-真の自然性四角形は、おそらく別の形をしておるべきかもしれぬぞ。例えば、`u ↦ u^2` という関手が、単位の比率に関して本当に自然であるかどうか、わっちは疑わしいと思うのじゃ。
-
-Made changes.
--/
