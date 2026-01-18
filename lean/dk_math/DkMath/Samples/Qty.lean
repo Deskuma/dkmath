@@ -121,6 +121,7 @@ def mapUnit (u : Unit) : Unit :=
 /-- 「単位だけ」を平方化しつつ自然性が成り立つように数値を u で割る持ち上げ関手 \tilde F : Qty → Qty -/
 noncomputable def liftF (q : Qty) : Qty := ⟨mapUnit q.u, q.x / q.u.val⟩
 
+
 /-- 換算の自然性四角形：平方化してから換算 = 換算してから平方化 -/
 @[simp] lemma convert_natural_F (q : Qty) (w : Unit) :
     convert (liftF q) (mapUnit w) = liftF (convert q w) := by
@@ -130,16 +131,6 @@ noncomputable def liftF (q : Qty) : Qty := ⟨mapUnit q.u, q.x / q.u.val⟩
     · rfl
     · -- ゴール: (x / u.val) * (u.val ^ 2 / w.val ^ 2) = (x * (u.val / w.val)) / w.val
       simp [convert, liftF, mapUnit, Unit.ratio]
-      field_simp [pow_two, u.val_ne_zero, w.val_ne_zero]
-
-/-- 端的に自然性を数式で示す safer 版（補題を直接使う） -/
-@[simp] lemma convert_natural_F' (q : Qty) (w : Unit) :
-    convert (liftF q) (mapUnit w) = liftF (convert q w) := by
-  cases q with
-  | mk u x =>
-    ext
-    · rfl
-    · simp [convert, liftF, mapUnit, Unit.ratio]
       field_simp [pow_two, u.val_ne_zero, w.val_ne_zero]
 
 /-! 実例： u=1, w=√2 で 1+1=2 が「単位を揃えた加法」に一致 -/
