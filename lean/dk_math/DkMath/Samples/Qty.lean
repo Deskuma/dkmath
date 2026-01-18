@@ -120,6 +120,16 @@ def mapUnit (u : Unit) : Unit :=
 /-- 「単位だけ」を平方化する持ち上げ関手 \tilde F : Qty → Qty -/
 def liftF (q : Qty) : Qty := ⟨mapUnit q.u, q.x⟩
 
+/-- 換算の自然性四角形：平方化してから換算 = 換算してから平方化 -/
+lemma convert_natural_F (q : Qty) (w : Unit) :
+    convert (liftF q) (mapUnit w) = liftF (convert q w) := by
+    sorry
+
+/-- 端的に自然性を数式で示す safer 版（補題を直接使う） -/
+lemma convert_natural_F' (q : Qty) (w : Unit) :
+    convert (liftF q) (mapUnit w) = liftF (convert q w) := by
+    sorry
+
 /-! 実例： u=1, w=√2 で 1+1=2 が「単位を揃えた加法」に一致 -/
 
 namespace Examples
