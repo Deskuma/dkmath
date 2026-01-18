@@ -92,8 +92,9 @@ lemma convert_comp (q : Qty) (v w : Unit) :
       simp only [convert, mul_assoc, this]
 
 /-- 同一単位ファイバー内の加法 -/
-def addSame (u : Unit) (a b : Qty) (_ha : a.u = u) (_hb : b.u = u) : Qty :=
-  ⟨u, (by simpa [_ha, _hb] using (a.x + b.x))⟩
+def addSame (u : Unit) (a b : Qty) : Qty :=
+  ⟨u, a.x + b.x⟩
+  -- (ha : a.u = u) (hb : b.u = u); (by simpa [ha, hb] using (a.x + b.x))
 
 /-- 異単位の加法：共通単位 w に揃えて足す -/
 noncomputable def addVia (w : Unit) (a b : Qty) : Qty :=
