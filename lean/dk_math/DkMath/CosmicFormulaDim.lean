@@ -160,7 +160,7 @@ theorem volConstC_one : volConstC (1 : ℂ) = 2 := by
   unfold volConstC
   -- s = 1 なので s/2 = 1/2
   have hs : ((1 : ℂ) / 2) ≠ 0 := by norm_num
-  -- Γ(s+1) = s Γ(s) を s = 1/2 に適用：Γ(3/2) = (1/2) Γ(1/2)
+  -- Γ(s+1) = s Γ(s) を s = (1 : ℂ) / 2 に適用：Γ(1/2 + 1) = (1/2) Γ(1/2)
   have hGamma :
       Complex.Gamma ((1 : ℂ) / 2 + 1)
         = ((1 : ℂ) / 2) * Complex.Gamma ((1 : ℂ) / 2) := by
