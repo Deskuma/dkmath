@@ -138,16 +138,36 @@ noncomputable def liftF (q : Qty) : Qty := ⟨mapUnit q.u, q.x / q.u.val⟩
 namespace Examples
 
 def u1 : Unit := ⟨1, by norm_num⟩
-def u2 : Unit := ⟨2, by norm_num⟩
+def u2 : Unit := ⟨2, by norm_num⟩  -- 単位 2（参考用）
 noncomputable def wSqrt2 : Unit :=
   ⟨Real.sqrt 2, by exact Real.sqrt_pos.mpr (by norm_num : 0 < (2:ℝ))⟩
 
 def one_at_u1 : Qty := ⟨u1, 1⟩
+def one_at_u2 : Qty := ⟨u2, 1⟩  -- 単位 2 上の 1（参考用）
+def two_at_u2 : Qty := ⟨u2, 2⟩  -- 単位 2 上の 2（参考用）
 
 /-- (1,1) を √2 単位へ換算すると数値は 1/√2 -/
 lemma convert_one_to_sqrt2 :
     (convert one_at_u1 wSqrt2).x = 1 / Real.sqrt 2 := by
   simp [one_at_u1, convert, Unit.ratio, u1, wSqrt2]
+
+/-- (2,1) を √2 単位へ換算すると数値は 2/√2 -/
+lemma convert_two_one_to_sqrt2 :
+    convert one_at_u2 wSqrt2 = ⟨wSqrt2, 2 / Real.sqrt 2⟩ := by
+  ext <;> simp [convert, Unit.ratio, one_at_u2, u2, wSqrt2]
+
+/-- (2,2) を √2 単位へ換算すると数値は 4/√2 -/
+lemma convert_two_two_to_sqrt2 :
+    convert two_at_u2 wSqrt2 = ⟨wSqrt2, 4 / Real.sqrt 2⟩ := by
+  ext <;> simp [convert, Unit.ratio, two_at_u2, u2, wSqrt2]
+  -- 2 * √2 = 4 / √2 を示す
+  have sqrt2_ne : Real.sqrt 2 ≠ 0 := by
+    apply ne_of_gt
+    exact Real.sqrt_pos.mpr (by norm_num)
+  field_simp [sqrt2_ne]
+  have h : (Real.sqrt 2) ^ 2 = 2 := Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)
+  rw [h]
+  ring
 
 /-- 同単位での和： (1,1)+(1,1) = (1,2) -/
 lemma add_same_unit :
