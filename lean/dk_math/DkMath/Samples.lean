@@ -8,3 +8,4 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Samples.Curry
 import DkMath.Samples.CurryDish
+import DkMath.Samples.Qty
