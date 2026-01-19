@@ -10,33 +10,132 @@ namespace DkMath
 
 namespace CosmicFormula
 
-/-- 宇宙式 Basic Cosmic Formula -/
--- 宇宙式の基本形（恒等式）
+/-- A: 宇宙式 Basic Cosmic Formula -/
 def cosmic_formula_one (x : ℝ) : ℝ :=
   (x + 1)^2 - x * (x + 2)
+  -- 宇宙式の基本形（恒等式）
 
-/-- 単位宇宙式 Unit Cosmic Formula -/
--- u を任意の実数に拡張した形
+/-- A': 宇宙式 Basic Cosmic Formula Alt. -/
+def cosmic_formula_one' (x : ℝ) : ℝ :=
+  (x + 1)^2 - x^2 - 2 * x
+  -- 宇宙式の基本形（トロミノ構造式）
+
+/-- B: 単位宇宙式 Unit Cosmic Formula -/
 def cosmic_formula_u (x u : ℝ) : ℝ :=
   (x + u)^2 - x * (x + 2 * u)
+  -- u を任意の実数に拡張した形
+
+/-- B':単位宇宙式 Unit Cosmic Formula Alt. -/
+def cosmic_formula_u' (x u : ℝ) : ℝ :=
+  (x + u)^2 - x^2 - 2 * x * u
+  -- u を任意の実数に拡張した形（トロミノ構造式）
+
+/-- C: 基本単位宇宙式 Basic Unit Cosmic Formula -/
+def cosmic_formula_unit_one (x : ℝ) : ℝ :=
+  cosmic_formula_u x 1  -- A == B(1)
+  -- 単位宇宙式の基本単位形（定義参照版）
+
+-- 上記の定義の等価性を示す補題群
+
+/-- 宇宙式 Basic Cosmic Formula と単位宇宙式 Basic Unit Cosmic Formula の等価性 -/
+@[simp] lemma cosmic_formula_one_eq_unit_one (x : ℝ) :
+    cosmic_formula_one x = cosmic_formula_unit_one x := by
+  -- 定義展開で等しい
+  simp [cosmic_formula_one, cosmic_formula_unit_one, cosmic_formula_u]
+
+/-- 宇宙式 Basic Cosmic Formula とその別形の等価性 -/
+@[simp] lemma cosmic_formula_one_eq_one' (x : ℝ) :
+    cosmic_formula_one x = cosmic_formula_one' x := by
+  -- 定義展開で等しい
+  simp [cosmic_formula_one, cosmic_formula_one']
+  ring_nf
+
+/-- 単位宇宙式 Unit Cosmic Formula とその別形の等価性 -/
+@[simp] lemma cosmic_formula_u_eq_u' (x u : ℝ) :
+    cosmic_formula_u x u = cosmic_formula_u' x u := by
+  -- 定義展開で等しい
+  simp [cosmic_formula_u, cosmic_formula_u']
+  ring_nf
 
 -- Additional definitions and theorems related to the cosmic formula can be added here.
 
 -- 宇宙式の恒等式を証明する例
-theorem example_theorem (x : ℝ) : cosmic_formula_one x = 1 :=
+@[simp] theorem cosmic_formula_one_theorem (x : ℝ) : cosmic_formula_one x = 1 :=
   by
     simp [cosmic_formula_one]
     ring
 
-example : ∀ x : ℝ, cosmic_formula_one x = 1 := example_theorem
+example : ∀ x : ℝ, cosmic_formula_one x = 1 := cosmic_formula_one_theorem
 
 -- 単位宇宙式の恒等式を証明する例
-theorem example_theorem_u (x u : ℝ) : cosmic_formula_u x u = u^2 :=
+@[simp] theorem cosmic_formula_unit_theorem (x u : ℝ) : cosmic_formula_u x u = u^2 :=
   by
     simp [cosmic_formula_u]
     ring
 
-example : ∀ x u : ℝ, cosmic_formula_u x u = u^2 := example_theorem_u
+-- test
+example : ∀ x u : ℝ, cosmic_formula_u x u = u^2 := cosmic_formula_unit_theorem
+
+/-- 全ての実数 x において 1 を返す -/
+theorem cosmic_formula_one_const :
+    ∀ x : ℝ, cosmic_formula_one x = 1 := by
+  intro x
+  simp [cosmic_formula_one]
+  ring
+
+/-- 全ての実数 x, u において u ↦ u^2 を返す -/
+theorem cosmic_formula_u_const :
+    ∀ x u : ℝ, cosmic_formula_u x u = u^2 := by
+  intros x u
+  simp [cosmic_formula_u]
+  ring
+
+/-- 全ての関数 f(x) において 1 を返す -/
+theorem cosmic_formula_one_func :
+    ∀ (f : ℝ → ℝ) (x : ℝ), cosmic_formula_one (f x) = 1 := by
+  intros f x
+  simp [cosmic_formula_one]
+  ring
+
+/-- 全ての関数 f(x), g(u) において g(u) ↦ (g(u))^2 を返す -/
+theorem cosmic_formula_u_func :
+    ∀ (f : ℝ → ℝ) (g : ℝ → ℝ) (x u : ℝ),
+      cosmic_formula_u (f x) (g u) = (g u)^2 := by
+  intros f g x u
+  simp [cosmic_formula_u]
+  ring
+
+/-- 宇宙式の 1 + 1 = 2 -/
+theorem cosmic_formula_one_add :
+    ∀ x y : ℝ, cosmic_formula_one x + cosmic_formula_one y = 2 := by
+  intros x y
+  simp [cosmic_formula_one]
+  ring
+
+/-- 単位宇宙式による異なる単位の加法 -/
+theorem cosmic_formula_u_add :
+    ∀ x y u v : ℝ,
+      cosmic_formula_u x u + cosmic_formula_u y v = u^2 + v^2 := by
+  intros x y u v
+  simp [cosmic_formula_u]
+  ring
+
+/-- 宇宙式の加法（関数版）f(x) + f(y) = 2 -/
+theorem cosmic_formula_one_func_add :
+    ∀ (f : ℝ → ℝ) (x y : ℝ),
+      cosmic_formula_one (f x) + cosmic_formula_one (f y) = 2 := by
+  intros f x y
+  simp [cosmic_formula_one]
+  ring
+
+/-- 単位宇宙式による異なる単位の加法（関数版）
+  ⟨ f(x), g(u) ⟩ + ⟨ f(y), g(v) ⟩ = (g(u))^2 + (g(v))^2 -/
+theorem cosmic_formula_u_func_add :
+    ∀ (f : ℝ → ℝ) (g : ℝ → ℝ) (x y u v : ℝ),
+      cosmic_formula_u (f x) (g u) + cosmic_formula_u (f y) (g v) = (g u)^2 + (g v)^2 := by
+  intros f g x y u v
+  simp [cosmic_formula_u]
+  ring
 
 -- More theorems and proofs can be added here.
 
@@ -44,14 +143,14 @@ example : ∀ x u : ℝ, cosmic_formula_u x u = u^2 := example_theorem_u
 def cosmic_formula_u_sub {R : Type*} [CommRing R] (x u : R) : R :=
   (x + u)^2 - x * (x + 2 * u)
 
-@[simp] theorem cosmic_formula_u_sub_eq {R : Type*} [CommRing R] (x u : R) :
+@[simp] theorem cosmic_formula_unit_sub_eq {R : Type*} [CommRing R] (x u : R) :
     cosmic_formula_u_sub x u = u^2 := by
   unfold cosmic_formula_u_sub
   ring
 
 @[simp] theorem cosmic_formula_one_sub_eq {R : Type*} [CommRing R] (x : R) :
     cosmic_formula_u_sub x (1 : R) = 1 := by
-  simp [cosmic_formula_u_sub_eq]
+  simp [cosmic_formula_unit_sub_eq]
 
 -- 「加法」版（こちらが宇宙式の素顔。減法なしで済むので CommSemiring まで下げられる）
 def N {R : Type*} [CommSemiring R] (x u : R) : R := x * (x + 2 * u)
