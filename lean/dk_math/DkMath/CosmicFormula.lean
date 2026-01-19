@@ -38,19 +38,19 @@ def cosmic_formula_unit_one (x : ℝ) : ℝ :=
 -- 上記の定義の等価性を示す補題群
 
 /-- 宇宙式 Basic Cosmic Formula と単位宇宙式 Basic Unit Cosmic Formula の等価性 -/
-@[simp] lemma cosmic_formula_one_eq_unit_one (x : ℝ) :
+lemma cosmic_formula_one_eq_unit_one (x : ℝ) :
     cosmic_formula_one x = cosmic_formula_unit_one x := by
   -- 定義展開で等しい
   simp [cosmic_formula_one, cosmic_formula_unit_one, cosmic_formula_u]
 
 /-- 宇宙式 Basic Cosmic Formula とその別形の等価性 -/
-@[simp] lemma cosmic_formula_one_eq_alt (x : ℝ) :
+lemma cosmic_formula_one_eq_alt (x : ℝ) :
     cosmic_formula_one x = cosmic_formula_one_alt x := by
   simp [cosmic_formula_one, cosmic_formula_one_alt]
   ring
 
 /-- 単位宇宙式 Unit Cosmic Formula とその別形の等価性 -/
-@[simp] lemma cosmic_formula_u_eq_alt (x u : ℝ) :
+lemma cosmic_formula_u_eq_alt (x u : ℝ) :
     cosmic_formula_u x u = cosmic_formula_u_alt x u := by
   simp [cosmic_formula_u, cosmic_formula_u_alt]
   ring
@@ -78,34 +78,36 @@ example : ∀ x u : ℝ, cosmic_formula_u x u = u^2 := cosmic_formula_unit_theor
 theorem cosmic_formula_one_func :
     ∀ (f : ℝ → ℝ) (x : ℝ), cosmic_formula_one (f x) = 1 := by
   intro f x
-  simpa using cosmic_formula_one_theorem (x := f x)
+  simp [cosmic_formula_one_theorem]
 
 /-- 全ての関数 f(x), g(u) において g(u) ↦ (g(u))^2 を返す -/
 theorem cosmic_formula_u_func :
     ∀ (f : ℝ → ℝ) (g : ℝ → ℝ) (x u : ℝ),
       cosmic_formula_u (f x) (g u) = (g u)^2 := by
   intro f g x u
-  simpa using cosmic_formula_unit_theorem (x := f x) (u := g u)
+  simp [cosmic_formula_unit_theorem]
 
 /-- 宇宙式の 1 + 1 = 2 -/
 theorem cosmic_formula_one_add :
     ∀ x y : ℝ, cosmic_formula_one x + cosmic_formula_one y = 2 := by
   intro x y
-  simp
+  simp only [cosmic_formula_one_theorem]
+  norm_num
 
 /-- 単位宇宙式による異なる単位の加法 -/
 theorem cosmic_formula_u_add :
     ∀ x y u v : ℝ,
       cosmic_formula_u x u + cosmic_formula_u y v = u^2 + v^2 := by
   intro x y u v
-  simp
+  simp only [cosmic_formula_unit_theorem]
 
 /-- 宇宙式の加法（関数版）f(x) + f(y) = 2 -/
 theorem cosmic_formula_one_func_add :
     ∀ (f : ℝ → ℝ) (x y : ℝ),
       cosmic_formula_one (f x) + cosmic_formula_one (f y) = 2 := by
   intro f x y
-  simp
+  simp only [cosmic_formula_one_theorem]
+  norm_num
 
 /-- 単位宇宙式による異なる単位の加法（関数版）
   ⟨ f(x), g(u) ⟩ + ⟨ f(y), g(v) ⟩ = (g(u))^2 + (g(v))^2 -/
@@ -113,7 +115,7 @@ theorem cosmic_formula_u_func_add :
     ∀ (f : ℝ → ℝ) (g : ℝ → ℝ) (x y u v : ℝ),
       cosmic_formula_u (f x) (g u) + cosmic_formula_u (f y) (g v) = (g u)^2 + (g v)^2 := by
   intro f g x y u v
-  simp
+  simp only [cosmic_formula_unit_theorem]
 
 -- More theorems and proofs can be added here.
 
@@ -158,7 +160,7 @@ For all real `x` and `u`, the convenience definition `cosmic_formula_u x u`
 coincides with the alternative/subscript definition `cosmic_formula_u_sub x u`.
 The proof proceeds by simplifying/unfolding both definitions.
 -/
-@[simp] lemma cosmic_formula_u_eq_sub (x u : ℝ) :
+lemma cosmic_formula_u_eq_sub (x u : ℝ) :
     cosmic_formula_u x u = cosmic_formula_u_sub x u := by
   simp [cosmic_formula_u, cosmic_formula_u_sub]
 
@@ -167,7 +169,7 @@ The proof proceeds by simplifying/unfolding both definitions.
 `cosmic_formula_one` with the more general `cosmic_formula_u_sub`
 instantiated at `u = 1`. It is intended as a `@[simp]` lemma so that
 `cosmic_formula_one` can be simplified to the `u_sub` form. -/
-@[simp] lemma cosmic_formula_one_eq_sub (x : ℝ) :
+lemma cosmic_formula_one_eq_sub (x : ℝ) :
     cosmic_formula_one x = cosmic_formula_u_sub x (1:ℝ) := by
   simp [cosmic_formula_one, cosmic_formula_u_sub]
 
