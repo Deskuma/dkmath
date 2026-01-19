@@ -11,6 +11,8 @@ import Mathlib
 
 namespace DkMath
 
+namespace DHNT
+
 open scoped Real
 
 /-- 正の実数を単位と見なす -/
@@ -416,6 +418,8 @@ namespace Qty
     field_simp [u.val_ne_zero, w.val_ne_zero]
 
 end Qty
+
+end DHNT
 
 end DkMath
 
