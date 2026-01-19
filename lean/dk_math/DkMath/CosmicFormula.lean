@@ -16,7 +16,7 @@ def cosmic_formula_one (x : ℝ) : ℝ :=
   -- 宇宙式の基本形（恒等式）
 
 /-- A': 宇宙式 Basic Cosmic Formula Alt. -/
-def cosmic_formula_one' (x : ℝ) : ℝ :=
+def cosmic_formula_one_alt (x : ℝ) : ℝ :=
   (x + 1)^2 - x^2 - 2 * x
   -- 宇宙式の基本形（トロミノ構造式）
 
@@ -26,7 +26,7 @@ def cosmic_formula_u (x u : ℝ) : ℝ :=
   -- u を任意の実数に拡張した形
 
 /-- B':単位宇宙式 Unit Cosmic Formula Alt. -/
-def cosmic_formula_u' (x u : ℝ) : ℝ :=
+def cosmic_formula_u_alt (x u : ℝ) : ℝ :=
   (x + u)^2 - x^2 - 2 * x * u
   -- u を任意の実数に拡張した形（トロミノ構造式）
 
@@ -44,18 +44,16 @@ def cosmic_formula_unit_one (x : ℝ) : ℝ :=
   simp [cosmic_formula_one, cosmic_formula_unit_one, cosmic_formula_u]
 
 /-- 宇宙式 Basic Cosmic Formula とその別形の等価性 -/
-@[simp] lemma cosmic_formula_one_eq_one' (x : ℝ) :
-    cosmic_formula_one x = cosmic_formula_one' x := by
-  -- 定義展開で等しい
-  simp [cosmic_formula_one, cosmic_formula_one']
-  ring_nf
+@[simp] lemma cosmic_formula_one_eq_alt (x : ℝ) :
+    cosmic_formula_one x = cosmic_formula_one_alt x := by
+  simp [cosmic_formula_one, cosmic_formula_one_alt]
+  ring
 
 /-- 単位宇宙式 Unit Cosmic Formula とその別形の等価性 -/
-@[simp] lemma cosmic_formula_u_eq_u' (x u : ℝ) :
-    cosmic_formula_u x u = cosmic_formula_u' x u := by
-  -- 定義展開で等しい
-  simp [cosmic_formula_u, cosmic_formula_u']
-  ring_nf
+@[simp] lemma cosmic_formula_u_eq_alt (x u : ℝ) :
+    cosmic_formula_u x u = cosmic_formula_u_alt x u := by
+  simp [cosmic_formula_u, cosmic_formula_u_alt]
+  ring
 
 -- Additional definitions and theorems related to the cosmic formula can be added here.
 
@@ -76,66 +74,46 @@ example : ∀ x : ℝ, cosmic_formula_one x = 1 := cosmic_formula_one_theorem
 -- test
 example : ∀ x u : ℝ, cosmic_formula_u x u = u^2 := cosmic_formula_unit_theorem
 
-/-- 全ての実数 x において 1 を返す -/
-theorem cosmic_formula_one_const :
-    ∀ x : ℝ, cosmic_formula_one x = 1 := by
-  intro x
-  simp [cosmic_formula_one]
-  ring
-
-/-- 全ての実数 x, u において u ↦ u^2 を返す -/
-theorem cosmic_formula_u_const :
-    ∀ x u : ℝ, cosmic_formula_u x u = u^2 := by
-  intros x u
-  simp [cosmic_formula_u]
-  ring
-
 /-- 全ての関数 f(x) において 1 を返す -/
 theorem cosmic_formula_one_func :
     ∀ (f : ℝ → ℝ) (x : ℝ), cosmic_formula_one (f x) = 1 := by
-  intros f x
-  simp [cosmic_formula_one]
-  ring
+  intro f x
+  simpa using cosmic_formula_one_theorem (x := f x)
 
 /-- 全ての関数 f(x), g(u) において g(u) ↦ (g(u))^2 を返す -/
 theorem cosmic_formula_u_func :
     ∀ (f : ℝ → ℝ) (g : ℝ → ℝ) (x u : ℝ),
       cosmic_formula_u (f x) (g u) = (g u)^2 := by
-  intros f g x u
-  simp [cosmic_formula_u]
-  ring
+  intro f g x u
+  simpa using cosmic_formula_unit_theorem (x := f x) (u := g u)
 
 /-- 宇宙式の 1 + 1 = 2 -/
 theorem cosmic_formula_one_add :
     ∀ x y : ℝ, cosmic_formula_one x + cosmic_formula_one y = 2 := by
-  intros x y
-  simp [cosmic_formula_one]
-  ring
+  intro x y
+  simp
 
 /-- 単位宇宙式による異なる単位の加法 -/
 theorem cosmic_formula_u_add :
     ∀ x y u v : ℝ,
       cosmic_formula_u x u + cosmic_formula_u y v = u^2 + v^2 := by
-  intros x y u v
-  simp [cosmic_formula_u]
-  ring
+  intro x y u v
+  simp
 
 /-- 宇宙式の加法（関数版）f(x) + f(y) = 2 -/
 theorem cosmic_formula_one_func_add :
     ∀ (f : ℝ → ℝ) (x y : ℝ),
       cosmic_formula_one (f x) + cosmic_formula_one (f y) = 2 := by
-  intros f x y
-  simp [cosmic_formula_one]
-  ring
+  intro f x y
+  simp
 
 /-- 単位宇宙式による異なる単位の加法（関数版）
   ⟨ f(x), g(u) ⟩ + ⟨ f(y), g(v) ⟩ = (g(u))^2 + (g(v))^2 -/
 theorem cosmic_formula_u_func_add :
     ∀ (f : ℝ → ℝ) (g : ℝ → ℝ) (x y u v : ℝ),
       cosmic_formula_u (f x) (g u) + cosmic_formula_u (f y) (g v) = (g u)^2 + (g v)^2 := by
-  intros f g x y u v
-  simp [cosmic_formula_u]
-  ring
+  intro f g x y u v
+  simp
 
 -- More theorems and proofs can be added here.
 
