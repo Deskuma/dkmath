@@ -14,3 +14,4 @@ import DkMath.CosmicFormulaTrominoLink  -- Cosmic Formula and Tromino Link
 import DkMath.Polyomino  -- Polyomino Basics
 import DkMath.PolyominoPrototype  -- Polyomino Prototype
 import DkMath.Tromino  -- Polyomino: Tromino Basics
+import DkMath.DHNT  -- DHNT: Units and Quantities (Dynamic Harmonic Number Theory)
