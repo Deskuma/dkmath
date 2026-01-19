@@ -346,8 +346,8 @@ def mapUnitN (n : ℕ) (u : Unit) : Unit :=
   ⟨u.val ^ n, by exact pow_pos u.pos n⟩
 
 /-
-  単位の“掛け算”を @[simp] instance : Mul DUnit として与え、
-  mapUnitN を Monoid.End DUnit の元として登録しておくと、
+  単位の“掛け算”を @[simp] instance : Mul Unit として与え、
+  mapUnitN を Monoid.End Unit の元として登録しておくと、
   ratio_mapUnitN が isMulHom 的に自動で転がる。
 -/
 -- Monoid.End のインスタンスをここで与えると、構造体の Prop 項（pos など）の
