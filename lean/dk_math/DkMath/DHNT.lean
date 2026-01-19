@@ -273,8 +273,6 @@ namespace QtyT
 -- 既存の Zero, Add, AddCommMonoid に加えてスカラー倍
 instance (u : Unit) : SMul ℝ (QtyT u) := ⟨fun r q => ⟨r * q.x⟩⟩
 
-instance (u : Unit) : AddCommMonoid (QtyT u) := inferInstance   -- ぬしの定義のままでOK
-
 instance (u : Unit) : Module ℝ (QtyT u) where
   smul_add r a b := by ext; exact mul_add r a.x b.x
   add_smul r s a := by ext; exact add_mul r s a.x
