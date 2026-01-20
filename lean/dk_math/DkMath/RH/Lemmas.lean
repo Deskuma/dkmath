@@ -9,6 +9,7 @@ import DkMath.RH.Basic  -- Riemann Hypothesis Basic Utilities
 import DkMath.RH.Defs  -- Riemann Hypothesis Definitions
 
 -- ----------------------------------------------------------------------------
+-- cid: 696e90e6-f128-8323-8b07-86794a7730d2
 
 namespace DkMath.RH
 
@@ -70,14 +71,7 @@ lemma torque_eq_im_mul_conj (z dz : ℂ) :
   simp only [torque, star, mul_im, mul_neg]
   ring
 
-end DkMath.RH
-
 -- ----------------------------------------------------------------------------
-
-namespace DkMath.RH
-
-open scoped Real
-open Complex
 
 /-- 位相速度とトルクの関係式 -/
 lemma phaseVel_eq_torque_div_normSq (f : ℝ → ℂ) (t : ℝ) :
@@ -86,13 +80,6 @@ lemma phaseVel_eq_torque_div_normSq (f : ℝ → ℂ) (t : ℝ) :
   -- phaseVel の定義を開いて、すでにある代数コアへ接続
   simpa [phaseVel] using
     (im_div_eq_torque_div_normSq (z := f t) (dz := deriv f t))
-
-end DkMath.RH
-
-namespace DkMath.RH
-
-open scoped Real
-open Complex
 
 /-- 局所ドリフト消失と位相速度ゼロの同値性 -/
 lemma driftFreeLocal_iff_phaseVel_eq_zero
