@@ -88,3 +88,18 @@ lemma phaseVel_eq_torque_div_normSq (f : ℝ → ℂ) (t : ℝ) :
     (im_div_eq_torque_div_normSq (z := f t) (dz := deriv f t))
 
 end DkMath.RH
+
+namespace DkMath.RH
+
+open scoped Real
+open Complex
+
+/-- 局所ドリフト消失と位相速度ゼロの同値性 -/
+lemma driftFreeLocal_iff_phaseVel_eq_zero
+    (f : ℝ → ℂ) (t : ℝ) (hz : f t ≠ 0) :
+    driftFreeLocal (f t) (deriv f t) ↔ phaseVel f t = 0 := by
+  -- driftFreeLocal ↔ Im((deriv f t)/(f t))=0 ↔ phaseVel=0
+  simpa [phaseVel] using
+    (driftFreeLocal_iff_im_div_eq_zero (z := f t) (dz := deriv f t) hz)
+
+end DkMath.RH
