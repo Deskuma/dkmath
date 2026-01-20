@@ -25,12 +25,46 @@ open Complex
 -/
 
 -- ============================================================================
--- 1. Magnitude 定義の等価性（ここでは省略：定義段階で複数形を用意した）
+-- 1. Magnitude 定義の等価性
 -- ============================================================================
 
--- 注意：eulerZetaFactorMag, eulerZetaFactorMag_sqrt, eulerZetaFactorMag_normSq は
---       定義から見て等価だが、Lean が syntactically に認識するまでに
---       工夫が必要なため、将来的に必要になったら補題を追加する。
+/-- eulerZetaFactorMag と eulerZetaFactorMag_sqrt は同じ値
+    理由: norm = √(re² + im²) であるため syntactically 等価
+-/
+lemma eulerZetaFactorMag_eq_sqrt (p : ℕ) (σ t : ℝ) :
+    eulerZetaFactorMag p σ t = eulerZetaFactorMag_sqrt p σ t := by
+  unfold eulerZetaFactorMag eulerZetaFactorMag_sqrt
+  rfl
+
+/-- eulerZetaFactorMag_sqrt と eulerZetaFactorMag_normSq は同じ値
+    理由: re² + im² = normSq であるため syntactically 等価
+-/
+lemma eulerZetaFactorMag_sqrt_eq_normSq (p : ℕ) (σ t : ℝ) :
+    eulerZetaFactorMag_sqrt p σ t = eulerZetaFactorMag_normSq p σ t := by
+  unfold eulerZetaFactorMag_sqrt eulerZetaFactorMag_normSq
+  simp only [Complex.normSq]
+  rfl
+
+/-- eulerZetaFactorMag と eulerZetaFactorMag_normSq は同じ値
+    （norm = √(normSq) の等価性を使用）
+
+    注：norm と √(normSq) の関係は Mathlib で示されており、
+    完全な証明は Complex.norm_eq_sqrt_normSq 等を使う
+-/
+lemma eulerZetaFactorMag_eq_normSq (p : ℕ) (σ t : ℝ) :
+    eulerZetaFactorMag p σ t = eulerZetaFactorMag_normSq p σ t :=
+  eulerZetaFactorMag_eq_sqrt p σ t ▸ eulerZetaFactorMag_sqrt_eq_normSq p σ t
+
+lemma eulerZetaFactorMag_eq_normSq' (p : ℕ) (σ t : ℝ) :
+    eulerZetaFactorMag p σ t =
+      (let w := eulerZeta_exp_s_log_p_sub_one p σ t
+       Real.exp (σ * Real.log (p : ℝ)) / Real.sqrt (Complex.normSq w)) := by
+  unfold eulerZetaFactorMag
+  change (let w := eulerZeta_exp_s_log_p_sub_one p σ t
+          Real.exp (σ * Real.log (p : ℝ)) / ‖w‖) =
+         (let w := eulerZeta_exp_s_log_p_sub_one p σ t
+          Real.exp (σ * Real.log (p : ℝ)) / Real.sqrt (Complex.normSq w))
+  rfl
 
 -- ============================================================================
 -- 2. 複素版の基本補題
