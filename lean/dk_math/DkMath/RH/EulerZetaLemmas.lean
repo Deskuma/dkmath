@@ -193,4 +193,21 @@ lemma one_div_pow_sub_one_le_two_div_pow
   field_simp [hx_pos.ne', hx_minus_pos.ne']
   nlinarith
 
+-- ============================================================================
+-- 10. 収束評価：各因子 (a_p - 1) の上界
+-- ============================================================================
+
+/-- eulerZetaFactorMag p σ t - 1 ≤ 2 / (exp(σ log p))
+
+   σ > 1 のとき、各因子 a_p := eulerZetaFactorMag p σ t について、
+   a_p - 1 が十分に小さいことを示す補助補題。
+
+   この補題は EulerZetaConvergence で収束性の証明に使われる。
+-/
+lemma eulerZetaFactorMag_sub_one_upper_bound (p : ℕ) (hp : Nat.Prime p)
+    (σ : ℝ) (hσ : 1 < σ) (t : ℝ) :
+    eulerZetaFactorMag p σ t - 1 ≤
+      2 / Real.exp (σ * Real.log (p : ℝ)) := by
+  sorry
+
 end DkMath.RH.EulerZeta

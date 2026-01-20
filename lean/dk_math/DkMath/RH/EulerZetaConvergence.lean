@@ -85,31 +85,68 @@ lemma eulerZeta_exp_s_log_p_sub_one_ne_zero (p : ℕ) (hp : Nat.Prime p)
 lemma eulerZetaFactorMag_bound_sigma_gt_one (p : ℕ) (hp : Nat.Prime p)
     (σ : ℝ) (hσ : 1 < σ) (t : ℝ) :
     eulerZetaFactorMag p σ t ≤ 2 := by
+  -- 記号整理
   unfold eulerZetaFactorMag
-  have w_ne_zero : eulerZeta_exp_s_log_p_sub_one p σ t ≠ 0 := by
-    apply eulerZeta_exp_s_log_p_sub_one_ne_zero p hp σ
-    linarith
-  have w_norm_pos : 0 < ‖eulerZeta_exp_s_log_p_sub_one p σ t‖ :=
-    norm_pos_iff.mpr w_ne_zero
-  have exp_pos : 0 < Real.exp (σ * Real.log (p : ℝ)) := Real.exp_pos _
-  -- 分子が正、分母が正なので商も正
-  have ratio_pos : 0 < Real.exp (σ * Real.log (p : ℝ)) / ‖eulerZeta_exp_s_log_p_sub_one p σ t‖ :=
-    div_pos exp_pos w_norm_pos
-  -- 粗い上界：p ≥ 2 のとき、σ > 1 より
-  -- eulerZetaFactorMag p σ t = exp(σ*log p) / ‖w‖
-  -- 分子は exp(σ*log p) > exp(log 2) = 2（σ > 1, p ≥ 2 より）
-  -- 分母は正だから商は制限される
-  have p_ge_2 : 2 ≤ p := Nat.Prime.two_le hp
-  -- 粗い評価：result ≤ 2 で抑えるために、
-  -- 実際には norm_exp_sub_one_lower を使って
-  -- ‖w‖ ≥ exp(σ*log p) - 1 ≥ exp(log p) - 1 ≥ 2 - 1 = 1
-  -- だから a_p ≤ exp(σ*log p) / 1 のような上界が出る
-  -- ただしより正確には...（詳細は省略）
-  by_contra h
-  push_neg at h
-  -- ratio が 2 より大きい場合、norm_exp_sub_one_lower から矛盾を導く
-  -- （詳細実装は後で）
-  sorry
+  set x : ℝ := Real.exp (σ * Real.log (p : ℝ))
+  set w : ℂ := eulerZeta_exp_s_log_p_sub_one p σ t
+  -- x ≥ 2（p ≥ 2, σ > 1 より）
+  have hp2 : (2 : ℕ) ≤ p := Nat.Prime.two_le hp
+  have hp2R : (2 : ℝ) ≤ (p : ℝ) := by exact_mod_cast hp2
+  have hp_pos : (0 : ℝ) < (p : ℝ) := by
+    have : 0 < p := Nat.Prime.pos hp
+    exact_mod_cast this
+  have hlog : Real.log 2 ≤ Real.log (p : ℝ) :=
+    Real.log_le_log (by norm_num) hp2R
+  have hσ' : (1 : ℝ) ≤ σ := le_of_lt hσ
+  have hp_pos : (0 : ℝ) < (p : ℝ) := by
+    have : 0 < p := Nat.Prime.pos hp
+    exact_mod_cast this
+  have hp_gt_one : (1 : ℝ) < (p : ℝ) := by
+    have : 1 < p := by omega
+    exact_mod_cast this
+  have hlog_pos : (0 : ℝ) < Real.log 2 := Real.log_pos (by norm_num)
+  have hlogp_pos : (0 : ℝ) < Real.log (p : ℝ) :=
+    Real.log_pos hp_gt_one
+  have hx2 : (2 : ℝ) ≤ x := by
+    -- exp(log 2) = 2 と単調性
+    have h_ineq : Real.log 2 ≤ σ * Real.log (p : ℝ) := by
+      -- σ ≥ 1, log p ≥ log 2 より σ*log(p) ≥ log 2
+      have h1 : Real.log 2 ≤ Real.log (p : ℝ) := hlog
+      have h2 : (1 : ℝ) ≤ σ := hσ'
+      have h3 : (0 : ℝ) < σ := by linarith
+      calc Real.log 2 ≤ 1 * Real.log (p : ℝ) := by
+            simp only [one_mul]; exact h1
+          _ ≤ σ * Real.log (p : ℝ) := by
+            exact mul_le_mul_of_nonneg_right h2 (le_of_lt hlogp_pos)
+    have h_exp : Real.exp (Real.log 2) ≤ Real.exp (σ * Real.log (p : ℝ)) :=
+      Real.exp_le_exp.mpr h_ineq
+    simp only [Real.exp_log (by norm_num : (0 : ℝ) < 2)] at h_exp
+    exact h_exp
+  -- 分母下界：x - 1 ≤ ‖w‖
+  have hden : x - 1 ≤ ‖w‖ := by
+    -- lemma は `Real.exp (σ*log p) - 1 ≤ ‖w‖`
+    simpa [w, x] using (norm_exp_sub_one_lower (p := p) (σ := σ) (t := t))
+  -- x / ‖w‖ ≤ x / (x - 1)（分母が大きいほど商は小さい）
+  have hxpos : 0 ≤ x := le_of_lt (Real.exp_pos _)
+  have hx1pos : 0 < x - 1 := by linarith
+  have hdiv : x / ‖w‖ ≤ x / (x - 1) := by
+    -- `hden : x - 1 ≤ ‖w‖` と正の値での除算比較を使う
+    apply div_le_div_of_nonneg_left hxpos hx1pos hden
+  -- x/(x-1) ≤ 2（x ≥ 2 を使う）
+  have hfrac : x / (x - 1) ≤ 2 := by
+    -- 1/(x-1) ≤ 2/x を使って両辺に x を掛ける
+    have hrec : (1 / (x - 1)) ≤ (2 / x) :=
+      one_div_pow_sub_one_le_two_div_pow (x := x) hx2
+    have hxpos' : 0 ≤ x := hxpos
+    have := mul_le_mul_of_nonneg_left hrec hxpos'
+    -- x * (1/(x-1)) = x/(x-1), x*(2/x) = 2
+    -- ただし x ≠ 0 が必要なら hx2 から出る
+    have hxne : x ≠ 0 := by linarith
+    simpa [div_eq_mul_inv, mul_assoc, mul_left_comm, mul_comm, hxne] using this
+  -- まとめ：x/‖w‖ ≤ x/(x-1) ≤ 2
+  have : x / ‖w‖ ≤ 2 := le_trans hdiv hfrac
+  -- `x` と `w` を戻す
+  simpa [x, w] using this
 
 -- ============================================================================
 -- 3. σ > 1 での収束定理（骨組み）
