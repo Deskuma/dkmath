@@ -9,7 +9,7 @@ import DkMath.RH.EulerZeta
 
 -- ============================================================================
 
-namespace DkMath.RH
+namespace DkMath.RH.EulerZeta
 
 open DkMath.Basic
 open scoped Real
@@ -74,4 +74,4 @@ lemma log_p_pos (p : ℕ) (hp : Nat.Prime p) :
     0 < Real.log (p : ℝ) :=
   Real.log_pos (by norm_cast; exact Nat.Prime.two_le hp)
 
-end DkMath.RH
+end DkMath.RH.EulerZeta

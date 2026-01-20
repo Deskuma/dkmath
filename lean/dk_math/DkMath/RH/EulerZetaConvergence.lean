@@ -9,7 +9,7 @@ import DkMath.RH.EulerZetaLemmas
 
 -- ============================================================================
 
-namespace DkMath.RH
+namespace DkMath.RH.EulerZeta
 
 open DkMath.Basic
 open scoped Real
@@ -80,4 +80,4 @@ theorem eulerZetaMag_pos_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : ℝ) :
   -- プレースホルダー：tprod の性質から
   sorry
 
-end DkMath.RH
+end DkMath.RH.EulerZeta

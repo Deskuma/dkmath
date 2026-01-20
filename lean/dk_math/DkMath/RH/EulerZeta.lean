@@ -11,7 +11,7 @@ import DkMath.RH.Defs
 
 -- ============================================================================
 
-namespace DkMath.RH
+namespace DkMath.RH.EulerZeta
 
 open DkMath.Basic
 open scoped Real
@@ -142,4 +142,4 @@ lemma eulerZetaFactorMag_eq_normSq' (p : ℕ) (σ t : ℝ) :
 def EulerZetaMagMultipliable (σ t : ℝ) : Prop :=
   Multipliable (fun p : {p // Nat.Prime p} => eulerZetaFactorMag p.1 σ t)
 
-end DkMath.RH
+end DkMath.RH.EulerZeta
