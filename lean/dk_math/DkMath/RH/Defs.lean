@@ -36,6 +36,10 @@ noncomputable def phaseVel (f : ℝ → ℂ) (t : ℝ) : ℝ :=
 noncomputable def phaseUnwrap (f : ℝ → ℂ) (t0 θ0 : ℝ) (t : ℝ) : ℝ :=
   θ0 + ∫ u in t0..t, phaseVel f u
 
+/-- 点 t でのドリフト消失（関数版） -/
+def driftFreeAt (f : ℝ → ℂ) (t : ℝ) : Prop :=
+  driftFreeLocal (f t) (deriv f t)
+
 end DkMath.RH
 
 -- ----------------------------------------------------------------------------

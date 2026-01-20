@@ -108,4 +108,9 @@ lemma driftFreeLocal_iff_phaseVel_eq_zero
   simpa [phaseVel] using
     (driftFreeLocal_iff_im_div_eq_zero (z := f t) (dz := deriv f t) hz)
 
+/-- 点 t でのドリフト消失は位相速度ゼロと同値（f t ≠ 0） -/
+lemma driftFreeAt_iff_phaseVel_eq_zero (f : ℝ → ℂ) (t : ℝ) (hz : f t ≠ 0) :
+    driftFreeAt f t ↔ phaseVel f t = 0 := by
+  simpa [driftFreeAt] using (driftFreeLocal_iff_phaseVel_eq_zero (f:=f) (t:=t) hz)
+
 end DkMath.RH
