@@ -173,13 +173,53 @@ theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : �
   -- 道筋：Summable (fun p => ‖a p - 1‖) ⟹ Multipliable a
 
   -- Step 1: 各素数 p に対して a_p ≥ 1 を示す
-  -- （これは eulerZetaFactorMag_bound_sigma_gt_one から出る）
   have ha_ge_one : ∀ p : {p // Nat.Prime p}, 1 ≤ a p := by
-    intro p
-    unfold a
-    have := eulerZetaFactorMag_bound_sigma_gt_one p.1 p.2 σ hσ t
-    sorry -- eulerZetaFactorMag_bound_sigma_gt_one から a_p ≤ 2 なので、
-           -- より詳細な評価で a_p ≥ 1 を示す必要
+    intro ⟨p, hp⟩
+    unfold a eulerZetaFactorMag
+    set x := Real.exp (σ * Real.log (↑p : ℝ))
+    set w := eulerZeta_exp_s_log_p_sub_one p σ t
+    -- x - 1 ≤ ‖w‖ （norm_exp_sub_one_lower）
+    have h_den : x - 1 ≤ ‖w‖ := norm_exp_sub_one_lower p σ t
+    -- x ≥ 2 （p ≥ 2, σ > 1 より）
+    have hx_ge_2 : 2 ≤ x := by
+      have hp2 : (2 : ℕ) ≤ p := Nat.Prime.two_le hp
+      have hp_gt_one : (1 : ℝ) < p := by
+        have : 1 < p := by omega
+        exact_mod_cast this
+      have h_log : Real.log 2 ≤ Real.log (p : ℝ) :=
+        Real.log_le_log (by norm_num) (by exact_mod_cast (by omega : 2 ≤ p))
+      have h_ineq : Real.log 2 ≤ σ * Real.log (p : ℝ) := by
+        have h1 : Real.log 2 ≤ 1 * Real.log (p : ℝ) := by simp [h_log]
+        have h2 : (1 : ℝ) ≤ σ := le_of_lt hσ
+        calc Real.log 2 ≤ 1 * Real.log (p : ℝ) := h1
+            _ ≤ σ * Real.log (p : ℝ) := by
+              apply mul_le_mul_of_nonneg_right h2
+              have : (1 : ℝ) ≤ (p : ℝ) := by
+                have : 1 ≤ p := by omega
+                exact_mod_cast this
+              exact Real.log_nonneg this
+      have h_exp : Real.exp (Real.log 2) ≤ Real.exp (σ * Real.log (p : ℝ)) :=
+        Real.exp_le_exp.mpr h_ineq
+      simp only [Real.exp_log (by norm_num : (0 : ℝ) < 2)] at h_exp
+      exact h_exp
+    -- x - 1 ≤ ‖w‖ ≤ x より、x/‖w‖ ≥ x/x = 1
+    have hx_pos : 0 < x := Real.exp_pos _
+    have hxm1_pos : 0 < x - 1 := by linarith
+    have hw_norm_pos : 0 < ‖w‖ := by
+      have : ‖w‖ ≥ x - 1 := h_den
+      linarith
+    have : 1 ≤ x / (x - 1) := by
+      have h : x - 1 < x := by linarith
+      have hneq : (x - 1 : ℝ) ≠ 0 := hxm1_pos.ne'
+      have : x / (x - 1) = 1 + 1 / (x - 1) := by field_simp; ring
+      rw [this]
+      have : 0 < 1 / (x - 1) := div_pos one_pos hxm1_pos
+      linarith
+    calc 1 ≤ x / (x - 1) := this
+        _ ≤ x / ‖w‖ := by
+          -- h_den : x - 1 ≤ ‖w‖ より
+          -- 分数で分母が大きい方が値は小さい
+          sorry -- 分数の除算関係の補題を使用
 
   -- Step 2: ‖a_p - 1‖ の上界を得る
   have h_summable_norm_sub_one :
@@ -227,8 +267,8 @@ theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : �
 
   -- Step 3: Summable (‖a_p - 1‖) から Multipliable a を導く
   -- Mathlib の定理：∑' ‖a_p - 1‖ が収束 ⟹ ∏' a_p が Multipliable
-  -- これは `multipliable_of_summable_norm` の形で得られる
-  -- 実装：正確な補題名を確認して完成させる
+  -- これは `Multipliable.of_summable_norm` または類似の形で得られる
+  -- 正確な補題名は Mathlibで確認が必要
   sorry
 
 /-- σ > 1 のとき、eulerZetaMag σ t は有限の正の値に収束する
@@ -243,10 +283,10 @@ theorem eulerZetaMag_pos_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : ℝ) :
   unfold eulerZetaMag
   -- eulerZetaMag_multipliable_sigma_gt_one から無限積が収束
   have mult := eulerZetaMag_multipliable_sigma_gt_one σ hσ t
+
   -- 各因子 eulerZetaFactorMag p σ t > 0：
   -- - 分子 exp(σ*log p) > 0（指数は常に正）
   -- - 分母 ‖w‖ > 0（w ≠ 0 から）
-  -- よって各因子 > 0
   have factor_pos : ∀ p : ℕ, Nat.Prime p → 0 < eulerZetaFactorMag p σ t := by
     intro p hp
     unfold eulerZetaFactorMag
@@ -255,11 +295,10 @@ theorem eulerZetaMag_pos_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : ℝ) :
       eulerZeta_exp_s_log_p_sub_one_ne_zero p hp σ (by linarith : 0 < σ) t
     have w_norm_pos : 0 < ‖eulerZeta_exp_s_log_p_sub_one p σ t‖ := norm_pos_iff.mpr w_ne_zero
     exact div_pos exp_pos w_norm_pos
-  -- tprod は「各因子が正で Multipliable」なら正値
-  -- HasProd を使って HasProd.prod_pos のような補題があるが、
-  -- ここではダイレクトに正値を示す：
-  -- Multipliable ⟹ HasProd が存在 ⟹ 極限値が正（各因子が正のため）
-  -- 実装：Finprod や部分積の極限をとって正値を確認
+
+  -- Multipliable かつ各因子が正なら、無限積は正値
+  -- HasProd が存在することを mult から取り、各因子の正値性を使う
+  -- 部分積の極限を取ることで正値を確認
   sorry
 
 end DkMath.RH.EulerZeta
