@@ -27,7 +27,7 @@ lemma denom_eq_normSq (z : ℂ) : denom z = Complex.normSq z := by
 z ≠ 0 のとき、Im(dz / z) = torque z dz / normSq z
 （文書の dθ/dt 公式の“形”そのもの）
 -/
-lemma im_div_eq_torque_div_normSq {z dz : ℂ} (_hz : z ≠ 0) :
+lemma im_div_eq_torque_div_normSq {z dz : ℂ} :
     (dz / z).im = (torque z dz) / (Complex.normSq z) := by
   -- dz / z = dz * (conj z) / normSq z を使って展開するのが定石
   -- ここは `simp` + `ring` で落ちることが多い
@@ -54,11 +54,11 @@ lemma driftFreeLocal_iff_im_div_eq_zero {z dz : ℂ} (hz : z ≠ 0) :
   · intro h
     calc
       (dz / z).im = (torque z dz) / Complex.normSq z := by
-        simpa using (im_div_eq_torque_div_normSq (z:=z) (dz:=dz) hz)
+        simpa using (im_div_eq_torque_div_normSq (z:=z) (dz:=dz))
       _ = 0 := by simp [driftFreeLocal] at h; simp [h]
   · intro h
     have h' : (torque z dz) / Complex.normSq z = 0 := by
-      simpa [im_div_eq_torque_div_normSq (z:=z) (dz:=dz) hz] using h
+      simpa [im_div_eq_torque_div_normSq (z:=z) (dz:=dz)] using h
     have h'' : torque z dz = 0 ∨ Complex.normSq z = 0 := (div_eq_zero_iff).1 h'
     have ht : torque z dz = 0 := h''.resolve_right hnorm
     simpa [driftFreeLocal] using ht

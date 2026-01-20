@@ -28,6 +28,14 @@ def denom (z : ℂ) : ℝ :=
 def driftFreeLocal (z dz : ℂ) : Prop :=
   torque z dz = 0
 
+/-- 位相速度: Im( (df/dt) / f ) -/
+noncomputable def phaseVel (f : ℝ → ℂ) (t : ℝ) : ℝ :=
+  ((deriv f t) / (f t)).im
+
+/-- 位相のアンラップ: 初期位相 θ0 からの積分による位相の連続化 -/
+noncomputable def phaseUnwrap (f : ℝ → ℂ) (t0 θ0 : ℝ) (t : ℝ) : ℝ :=
+  θ0 + ∫ u in t0..t, phaseVel f u
+
 end DkMath.RH
 
 -- ----------------------------------------------------------------------------
