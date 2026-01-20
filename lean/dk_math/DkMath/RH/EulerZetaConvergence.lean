@@ -94,28 +94,32 @@ lemma eulerZeta_exp_s_log_p_sub_one_ne_zero (p : ℕ) (hp : Nat.Prime p)
 
 /-- σ > 1 のとき、∏'_{p prime} eulerZetaFactorMag p σ t が収束する
 
-   証明戦略:
-   - ∑'_{p prime} (eulerZetaFactorMag p σ t - 1) が絶対収束することを示す
-   - これは ∑'_{p} (1/p^σ) のような古典的な評価に帰着する
+   戦略：
+   1. a_p := eulerZetaFactorMag p σ t とする
+   2. 0 ≤ a_p - 1 ≤ 1/(p^σ - 1) の評価を示す（分子・分母の評価から）
+   3. ∑' |a_p - 1| ≤ ∑' 1/(p^σ - 1) ≤ 2 * ∑' 1/p^σ < ∞ で収束
+   4. Multipliable.of_summable_norm で無限積の収束を導く
 -/
 theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : ℝ) :
     EulerZetaMagMultipliable σ t := by
   unfold EulerZetaMagMultipliable
-  -- σ > 1 のときに各因子 eulerZetaFactorMag p σ t が1に近く、
-  -- その偏差の無限和が収束することから、無限積が収束する。
-  --
   -- 当面は「粗い上界」で構わない：
-  -- | eulerZetaFactorMag p σ t - 1 | ≤ O(p^{-σ})
-  -- よって ∑ | eulerZetaFactorMag p σ t - 1 | ≤ ∑ p^{-σ} < ∞
+  -- 0 ≤ eulerZetaFactorMag p σ t - 1 ≤ 1/(p^σ - 1)
+  -- ∑ 1/(p^σ - 1) は σ > 1 で収束（比較による）
+  -- → Multipliable が成り立つ
   sorry
 
-/-- σ > 1 のとき、eulerZetaMag σ t は有限の正の値に収束する -/
+/-- σ > 1 のとき、eulerZetaMag σ t は有限の正の値に収束する
+
+   戦略：
+   1. eulerZetaMag_multipliable_sigma_gt_one から Multipliable を取得
+   2. 各因子 eulerZetaFactorMag p σ t > 0 を確認
+   3. 無限積が収束し、かつ各因子が正ならば積も正
+-/
 theorem eulerZetaMag_pos_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : ℝ) :
     0 < eulerZetaMag σ t := by
   unfold eulerZetaMag
-  -- tprod のべき級数展開か連続性を用いて、
-  -- 各 eulerZetaFactorMag p σ t > 0 かつ Multipliable であれば
-  -- tprod の値も正になることを示す
+  -- Multipliable + 各因子の正性 → 積の正性
   sorry
 
 end DkMath.RH.EulerZeta

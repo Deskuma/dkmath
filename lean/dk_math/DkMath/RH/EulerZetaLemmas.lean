@@ -147,4 +147,41 @@ lemma exp_eq_one_iff_eq_zero (α : ℝ) : Real.exp α = 1 ↔ α = 0 := by
     exact this
   · intro h; simp [h]
 
+-- ============================================================================
+-- 8. 分母の下界評価（σ > 0 のとき）
+-- ============================================================================
+
+/-- σ > 0 のとき、‖w‖ ≥ exp(σ*log p) - 1
+
+   w = exp((σ+it)*log p) - 1 に対して、
+   三角不等式と ‖exp(z)‖ = exp(Re(z)) を組み合わせて示す。
+
+   理由：
+   - z = (σ+it)*log p とすれば w = exp(z) - 1
+   - ‖z - 1‖ ≥ |‖z‖ - 1|（三角不等式）
+   - ‖exp(z)‖ = exp(Re(z)) = exp(σ*log p)
+   - σ*log p ≥ 0 なら |exp(...) - 1| = exp(...) - 1
+-/
+lemma norm_exp_sub_one_lower (p : ℕ) (σ t : ℝ) (hσ : 0 ≤ σ) :
+    Real.exp (σ * Real.log (p : ℝ)) - 1 ≤
+      ‖eulerZeta_exp_s_log_p_sub_one p σ t‖ := by
+  sorry
+
+-- ============================================================================
+-- 9. 逆数の比較評価
+-- ============================================================================
+
+/-- 2 ≤ x のとき、1/(x-1) ≤ 2/x
+
+   証明：1/(x-1) ≤ 2/x ⟺ x ≤ 2(x-1) ⟺ 2 ≤ x
+-/
+lemma one_div_pow_sub_one_le_two_div_pow
+    {x : ℝ} (hx : 2 ≤ x) :
+    (1 / (x - 1)) ≤ (2 / x) := by
+  have hx_pos : 0 < x := by linarith
+  have hx_minus_pos : 0 < x - 1 := by linarith
+  -- 1/(x-1) ≤ 2/x ⟺ x ≤ 2(x-1) ⟺ x ≤ 2x - 2 ⟺ 2 ≤ x
+  field_simp [hx_pos.ne', hx_minus_pos.ne']
+  nlinarith
+
 end DkMath.RH.EulerZeta
