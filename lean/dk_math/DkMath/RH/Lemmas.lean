@@ -91,6 +91,15 @@ lemma phaseVel_eq_torque_div_normSq (f : ℝ → ℂ) (t : ℝ) :
   simpa [phaseVel] using
     (im_div_eq_torque_div_normSq (z := f t) (dz := deriv f t))
 
+/-- 位相速度の別表現: Im( f' * conj f ) / normSq f -/
+lemma phaseVel_eq_im_mul_conj_div_normSq (f : ℝ → ℂ) (t : ℝ) :
+    phaseVel f t = ((deriv f t * conj (f t)).im) / Complex.normSq (f t) := by
+  -- 既存補題 + torque_eq_im_mul_conj
+  simp only [phaseVel_eq_torque_div_normSq, torque_eq_im_mul_conj, mul_im, conj_im, mul_neg,
+    conj_re]
+
+-- ----------------------------------------------------------------------------
+
 /-- 局所ドリフト消失と位相速度ゼロの同値性 -/
 lemma driftFreeLocal_iff_phaseVel_eq_zero
     (f : ℝ → ℂ) (t : ℝ) (hz : f t ≠ 0) :
