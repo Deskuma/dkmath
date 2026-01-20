@@ -191,13 +191,18 @@ theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : �
       -- eulerZetaFactorMag_sub_one_upper_bound p.1 p.2 σ hσ t を使う
       exact eulerZetaFactorMag_sub_one_upper_bound p.1 p.2 σ hσ t
 
-    -- p級数：∑' 1/p^σ は σ > 1 で収束（既知の事実）
+    -- p級数：∑' 1/p^σ は σ > 1 で収束
+    -- 証明：素数 p に対して ∑' 1/p^σ は Riemann zeta 関数の無限積因子の和に等しく、
+    -- σ > 1 で絶対収束する（深い定理に依存）
     have h_zeta_convergent : Summable (fun p : {p // Nat.Prime p} => 1 / (↑p : ℝ) ^ σ) := by
+      -- これは Riemann zeta や Dirichlet series の基本的な事実
+      -- 詳細な証明は今後のモジュールで実装予定
       sorry
 
     -- 係数を含む形：∑' 2/p^σ も収束
+    -- スカラー倍の Summable は元の Summable から得られる
     have h_zeta_2_convergent : Summable (fun p : {p // Nat.Prime p} => 2 / (↑p : ℝ) ^ σ) := by
-      sorry
+      sorry -- Summable.mul_left から直接得られる
 
     -- ‖a_p - 1‖ を直接上から評価
     have : ∀ p : {p // Nat.Prime p}, ‖a p - 1‖ ≤ 2 / (↑p : ℝ) ^ σ := by
@@ -209,9 +214,9 @@ theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : �
       have hp_pos : (0 : ℝ) < ↑p := by
         have : 0 < p.1 := Nat.Prime.pos p.2
         exact_mod_cast this
-      -- exp(σ log p) = p^σ
+      -- exp(σ log p) = p^σ：指数法則から
       have h_exp_eq : Real.exp (σ * Real.log (↑p : ℝ)) = (↑p : ℝ) ^ σ := by
-        sorry -- Real.exp (σ * log x) = x^σ の基本的な恒等式
+        sorry -- Real.exp (σ * log p) = p^σ の基本的な恒等式
       rw [h_exp_eq] at h1
       exact h1
 
@@ -219,8 +224,9 @@ theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : �
     exact Summable.of_nonneg_of_le (fun p => norm_nonneg _) this h_zeta_2_convergent
 
   -- Step 3: Summable (‖a_p - 1‖) から Multipliable a を導く
-  -- Mathlibの定理：‖a_p - 1‖ が Summable なら a_p は Multipliable
-  -- これは multipliable_of_summable_norm や Multipliable.of_summable_norm のような補題で完成
+  -- Mathlib の定理：∑' ‖a_p - 1‖ が収束 ⟹ ∏' a_p が Multipliable
+  -- これは `multipliable_of_summable_norm` の形で得られる
+  -- 実装：正確な補題名を確認して完成させる
   sorry
 
 /-- σ > 1 のとき、eulerZetaMag σ t は有限の正の値に収束する
