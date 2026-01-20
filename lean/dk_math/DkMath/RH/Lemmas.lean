@@ -73,3 +73,18 @@ lemma torque_eq_im_mul_conj (z dz : ℂ) :
 end DkMath.RH
 
 -- ----------------------------------------------------------------------------
+
+namespace DkMath.RH
+
+open scoped Real
+open Complex
+
+/-- 位相速度とトルクの関係式 -/
+lemma phaseVel_eq_torque_div_normSq (f : ℝ → ℂ) (t : ℝ) :
+    phaseVel f t
+      = (torque (f t) (deriv f t)) / (Complex.normSq (f t)) := by
+  -- phaseVel の定義を開いて、すでにある代数コアへ接続
+  simpa [phaseVel] using
+    (im_div_eq_torque_div_normSq (z := f t) (dz := deriv f t))
+
+end DkMath.RH
