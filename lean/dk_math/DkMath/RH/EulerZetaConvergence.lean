@@ -163,18 +163,64 @@ lemma eulerZetaFactorMag_bound_sigma_gt_one (p : ℕ) (hp : Nat.Prime p)
 theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : ℝ) :
     EulerZetaMagMultipliable σ t := by
   unfold EulerZetaMagMultipliable
-  -- Multipliable は HasProd の存在を意味する
-  -- 実装方針：
-  -- σ > 1 では、各素数 p に対して
-  -- a_p := eulerZetaFactorMag p σ t は 1 に十分に近く、
-  -- かつ σ*log(p) > log(p) より指数が支配的
-  -- 部分積の極限を使って HasProd を構成する
-  --
-  -- 詳細：
-  -- 1. 部分積 ∏_{p ≤ N} a_p を定義
-  -- 2. N → ∞ で収束することを示す
-  -- 3. HasProd を構成
-  -- （実装は複雑なので、当面プレースホルダー）
+
+  -- a_p := eulerZetaFactorMag p σ t
+  let a : {p // Nat.Prime p} → ℝ := fun p => eulerZetaFactorMag p.1 σ t
+
+  -- 目標：Multipliable a
+  -- 道筋：Summable (fun p => ‖a p - 1‖) ⟹ Multipliable a
+
+  -- Step 1: 各素数 p に対して a_p ≥ 1 を示す
+  -- （これは eulerZetaFactorMag_bound_sigma_gt_one から出る）
+  have ha_ge_one : ∀ p : {p // Nat.Prime p}, 1 ≤ a p := by
+    intro p
+    unfold a
+    have := eulerZetaFactorMag_bound_sigma_gt_one p.1 p.2 σ hσ t
+    sorry -- eulerZetaFactorMag_bound_sigma_gt_one から a_p ≤ 2 なので、
+           -- より詳細な評価で a_p ≥ 1 を示す必要
+
+  -- Step 2: ‖a_p - 1‖ の上界を得る
+  have h_summable_norm_sub_one :
+      Summable (fun p : {p // Nat.Prime p} => ‖a p - 1‖) := by
+    -- ‖a_p - 1‖ ≤ 2 / p^σ という上界を示す必要
+    -- これは eulerZetaFactorMag_sub_one_upper_bound から出る
+    have h_bound : ∀ p : {p // Nat.Prime p},
+        a p - 1 ≤ 2 / Real.exp (σ * Real.log (↑p : ℝ)) := by
+      intro p
+      unfold a
+      -- eulerZetaFactorMag_sub_one_upper_bound p.1 p.2 σ hσ t を使う
+      exact eulerZetaFactorMag_sub_one_upper_bound p.1 p.2 σ hσ t
+
+    -- p級数：∑' 1/p^σ は σ > 1 で収束（既知の事実）
+    have h_zeta_convergent : Summable (fun p : {p // Nat.Prime p} => 1 / (↑p : ℝ) ^ σ) := by
+      sorry
+
+    -- 係数を含む形：∑' 2/p^σ も収束
+    have h_zeta_2_convergent : Summable (fun p : {p // Nat.Prime p} => 2 / (↑p : ℝ) ^ σ) := by
+      sorry
+
+    -- ‖a_p - 1‖ を直接上から評価
+    have : ∀ p : {p // Nat.Prime p}, ‖a p - 1‖ ≤ 2 / (↑p : ℝ) ^ σ := by
+      intro p
+      have h_nonneg : 0 ≤ a p - 1 := by linarith [ha_ge_one p]
+      have h_norm : ‖a p - 1‖ = a p - 1 := abs_of_nonneg h_nonneg
+      rw [h_norm]
+      have h1 := h_bound p
+      have hp_pos : (0 : ℝ) < ↑p := by
+        have : 0 < p.1 := Nat.Prime.pos p.2
+        exact_mod_cast this
+      -- exp(σ log p) = p^σ
+      have h_exp_eq : Real.exp (σ * Real.log (↑p : ℝ)) = (↑p : ℝ) ^ σ := by
+        sorry -- Real.exp (σ * log x) = x^σ の基本的な恒等式
+      rw [h_exp_eq] at h1
+      exact h1
+
+    -- Summable 由比較判定法
+    exact Summable.of_nonneg_of_le (fun p => norm_nonneg _) this h_zeta_2_convergent
+
+  -- Step 3: Summable (‖a_p - 1‖) から Multipliable a を導く
+  -- Mathlibの定理：‖a_p - 1‖ が Summable なら a_p は Multipliable
+  -- これは multipliable_of_summable_norm や Multipliable.of_summable_norm のような補題で完成
   sorry
 
 /-- σ > 1 のとき、eulerZetaMag σ t は有限の正の値に収束する
