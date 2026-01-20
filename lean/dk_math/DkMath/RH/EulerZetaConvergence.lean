@@ -103,10 +103,14 @@ lemma eulerZeta_exp_s_log_p_sub_one_ne_zero (p : ℕ) (hp : Nat.Prime p)
 theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : ℝ) :
     EulerZetaMagMultipliable σ t := by
   unfold EulerZetaMagMultipliable
-  -- 当面は「粗い上界」で構わない：
-  -- 0 ≤ eulerZetaFactorMag p σ t - 1 ≤ 1/(p^σ - 1)
-  -- ∑ 1/(p^σ - 1) は σ > 1 で収束（比較による）
-  -- → Multipliable が成り立つ
+  -- a_p := eulerZetaFactorMag p σ t
+  -- 各因子が 0 < a_p に注目し、a_p - 1 の上界を取る
+  -- w = exp((σ+it)*log p) - 1 に対して norm_exp_sub_one_lower から
+  -- |w| ≥ exp(σ*log p) - 1
+  -- よって a_p = exp(σ*log p) / |w| ≤ exp(σ*log p) / (exp(σ*log p) - 1)
+  --           = 1 + 1/(exp(σ*log p) - 1)
+  -- ここで exp(σ*log p) = p^σ の評価、および
+  -- ∑ 1/(p^σ - 1) < ∞ の言及へ向かう
   sorry
 
 /-- σ > 1 のとき、eulerZetaMag σ t は有限の正の値に収束する
@@ -120,6 +124,7 @@ theorem eulerZetaMag_pos_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : ℝ) :
     0 < eulerZetaMag σ t := by
   unfold eulerZetaMag
   -- Multipliable + 各因子の正性 → 積の正性
+  -- eulerZetaFactorMag p σ t > 0 は分子分母が正であることから
   sorry
 
 end DkMath.RH.EulerZeta

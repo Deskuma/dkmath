@@ -115,12 +115,14 @@ lemma log_p_pos (p : ℕ) (hp : Nat.Prime p) :
 /-- vertical σ t * (log p : ℂ) の実部は σ * log p -/
 lemma vertical_mul_log_p_re (p : ℕ) (σ t : ℝ) :
     (vertical σ t * (Real.log (p : ℝ) : ℂ)).re = σ * Real.log (p : ℝ) := by
-  sorry
+  simp only [vertical, mul_re, add_re, ofReal_re, ofReal_im, I_re, I_im]
+  ring
 
 /-- vertical σ t * (log p : ℂ) の虚部は t * log p -/
 lemma vertical_mul_log_p_im (p : ℕ) (σ t : ℝ) :
     (vertical σ t * (Real.log (p : ℝ) : ℂ)).im = t * Real.log (p : ℝ) := by
-  sorry
+  simp only [vertical, mul_im, add_im, ofReal_im, ofReal_re, I_re, I_im]
+  ring
 
 -- ============================================================================
 -- 6. σ * log p ≠ 0 の判定
@@ -162,10 +164,17 @@ lemma exp_eq_one_iff_eq_zero (α : ℝ) : Real.exp α = 1 ↔ α = 0 := by
    - ‖exp(z)‖ = exp(Re(z)) = exp(σ*log p)
    - σ*log p ≥ 0 なら |exp(...) - 1| = exp(...) - 1
 -/
-lemma norm_exp_sub_one_lower (p : ℕ) (σ t : ℝ) (hσ : 0 ≤ σ) :
+lemma norm_exp_sub_one_lower (p : ℕ) (σ t : ℝ) :
     Real.exp (σ * Real.log (p : ℝ)) - 1 ≤
       ‖eulerZeta_exp_s_log_p_sub_one p σ t‖ := by
-  sorry
+  unfold eulerZeta_exp_s_log_p_sub_one
+  set z := vertical σ t * (Real.log (p : ℝ) : ℂ)
+  have h := norm_sub_norm_le (Complex.exp z) (1 : ℂ)
+  have norm_exp_eq : ‖Complex.exp z‖ = Real.exp (z.re) := Complex.norm_exp z
+  have z_re_eq : z.re = σ * Real.log (p : ℝ) := vertical_mul_log_p_re p σ t
+  have norm_one_eq : ‖(1 : ℂ)‖ = 1 := by norm_num
+  rw [norm_exp_eq, z_re_eq, norm_one_eq] at h
+  linarith
 
 -- ============================================================================
 -- 9. 逆数の比較評価
