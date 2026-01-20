@@ -108,4 +108,43 @@ lemma log_p_pos (p : ℕ) (hp : Nat.Prime p) :
     0 < Real.log (p : ℝ) :=
   Real.log_pos (by norm_cast; exact Nat.Prime.two_le hp)
 
+-- ============================================================================
+-- 5. vertical と log p の合成の実部・虚部
+-- ============================================================================
+
+/-- vertical σ t * (log p : ℂ) の実部は σ * log p -/
+lemma vertical_mul_log_p_re (p : ℕ) (σ t : ℝ) :
+    (vertical σ t * (Real.log (p : ℝ) : ℂ)).re = σ * Real.log (p : ℝ) := by
+  sorry
+
+/-- vertical σ t * (log p : ℂ) の虚部は t * log p -/
+lemma vertical_mul_log_p_im (p : ℕ) (σ t : ℝ) :
+    (vertical σ t * (Real.log (p : ℝ) : ℂ)).im = t * Real.log (p : ℝ) := by
+  sorry
+
+-- ============================================================================
+-- 6. σ * log p ≠ 0 の判定
+-- ============================================================================
+
+/-- σ > 0 で素数 p のとき σ * log p ≠ 0 -/
+lemma sigma_log_p_ne_zero (p : ℕ) (hp : Nat.Prime p) (σ : ℝ) (hσ : 0 < σ) :
+    σ * Real.log (p : ℝ) ≠ 0 := by
+  apply mul_ne_zero
+  · exact hσ.ne'
+  · exact (log_p_pos p hp).ne'
+
+-- ============================================================================
+-- 7. exp(α) = 1 ⟹ α = 0 （実数版）
+-- ============================================================================
+
+/-- 実数で exp(α) = 1 ならば α = 0 -/
+lemma exp_eq_one_iff_eq_zero (α : ℝ) : Real.exp α = 1 ↔ α = 0 := by
+  constructor
+  · intro h
+    have : α = Real.log (Real.exp α) := by simp only [Real.log_exp]
+    rw [h] at this
+    simp only [Real.log_one] at this
+    exact this
+  · intro h; simp [h]
+
 end DkMath.RH.EulerZeta

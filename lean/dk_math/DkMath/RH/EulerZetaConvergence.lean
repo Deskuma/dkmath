@@ -54,8 +54,39 @@ lemma eulerZeta_exp_s_log_p_sub_one_ne_zero (p : ℕ) (hp : Nat.Prime p)
   unfold eulerZeta_exp_s_log_p_sub_one
   intro hw
   -- eulerZeta_exp_s_log_p_sub_one p σ t = 0 より
-  -- Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) = 1
-  sorry  -- 複雑なため後で実装
+  -- exp(vertical σ t * (Real.log (p : ℝ) : ℂ)) = 1
+  set log_p := (Real.log (p : ℝ) : ℂ)
+  set z := vertical σ t * log_p
+  -- w := exp(z) - 1 = 0 ならば exp(z) = 1
+  have exp_z_eq_one : Complex.exp z = 1 := by
+    -- w = exp(z) - 1 = 0 から exp(z) = 1 を導く
+    -- hw : eulerZeta_exp_s_log_p_sub_one p σ t = 0
+    -- つまり exp(z) - 1 = 0
+    have h : Complex.exp z - 1 = 0 := hw
+    have eq : Complex.exp z = Complex.exp z - 1 + 1 := by ring
+    rw [h] at eq
+    norm_num at eq
+    exact eq
+  -- ノルムを取る：‖exp(z)‖ = 1
+  have norm_eq : ‖Complex.exp z‖ = 1 := by
+    simp only [exp_z_eq_one, norm_one]
+  -- ‖exp(z)‖ = exp(z.re) という標準補題を使う
+  have norm_exp_eq : ‖Complex.exp z‖ = Real.exp (z.re) :=
+    Complex.norm_exp _
+  rw [norm_exp_eq] at norm_eq
+  -- z.re = σ * log p （vertical_mul_log_p_re を使う）
+  have z_re : z.re = σ * Real.log (p : ℝ) :=
+    vertical_mul_log_p_re p σ t
+  rw [z_re] at norm_eq
+  -- よって exp(σ * log p) = 1
+  have exp_sigma_log_p_eq_one : Real.exp (σ * Real.log (p : ℝ)) = 1 := norm_eq
+  -- ⟺ σ * log p = 0 （exp_eq_one_iff_eq_zero を使う）
+  have sigma_log_p_eq_zero : σ * Real.log (p : ℝ) = 0 :=
+    (exp_eq_one_iff_eq_zero _).mp exp_sigma_log_p_eq_one
+  -- だがこれは矛盾：σ > 0 で log p > 0 だから σ * log p ≠ 0
+  have : σ * Real.log (p : ℝ) ≠ 0 :=
+    sigma_log_p_ne_zero p hp σ hσ
+  exact this sigma_log_p_eq_zero
 
 -- ============================================================================
 -- 3. σ > 1 での収束定理（骨組み）
@@ -70,14 +101,21 @@ lemma eulerZeta_exp_s_log_p_sub_one_ne_zero (p : ℕ) (hp : Nat.Prime p)
 theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : ℝ) :
     EulerZetaMagMultipliable σ t := by
   unfold EulerZetaMagMultipliable
-  -- プレースホルダー：Multipliable の定義と評価を使う
+  -- σ > 1 のときに各因子 eulerZetaFactorMag p σ t が1に近く、
+  -- その偏差の無限和が収束することから、無限積が収束する。
+  --
+  -- 当面は「粗い上界」で構わない：
+  -- | eulerZetaFactorMag p σ t - 1 | ≤ O(p^{-σ})
+  -- よって ∑ | eulerZetaFactorMag p σ t - 1 | ≤ ∑ p^{-σ} < ∞
   sorry
 
 /-- σ > 1 のとき、eulerZetaMag σ t は有限の正の値に収束する -/
 theorem eulerZetaMag_pos_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : ℝ) :
     0 < eulerZetaMag σ t := by
   unfold eulerZetaMag
-  -- プレースホルダー：tprod の性質から
+  -- tprod のべき級数展開か連続性を用いて、
+  -- 各 eulerZetaFactorMag p σ t > 0 かつ Multipliable であれば
+  -- tprod の値も正になることを示す
   sorry
 
 end DkMath.RH.EulerZeta
