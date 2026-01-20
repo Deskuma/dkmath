@@ -63,6 +63,12 @@ lemma driftFreeLocal_iff_im_div_eq_zero {z dz : ℂ} (hz : z ≠ 0) :
     have ht : torque z dz = 0 := h''.resolve_right hnorm
     simpa [driftFreeLocal] using ht
 
+/-- トルクと共役複素数の積の虚部の等式 -/
+lemma torque_eq_im_mul_conj (z dz : ℂ) :
+    torque z dz = (dz * star z).im := by
+  -- 展開して simp/ring
+  simp only [torque, star, mul_im, mul_neg]
+  ring
 
 end DkMath.RH
 
