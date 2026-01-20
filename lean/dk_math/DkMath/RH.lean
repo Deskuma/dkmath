@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import Mathlib
 import DkMath.Basic  -- Basic Definitions and Utilities
 import DkMath.RH.Basic
+import DkMath.RH.Defs
+import DkMath.RH.Lemmas
 
 -- ----------------------------------------------------------------------------
 
@@ -27,18 +29,7 @@ namespace DkMath.RH
 open scoped Real
 open Complex
 
-/-- 縦線パス: s = σ + i t -/
-def vertical (σ t : ℝ) : ℂ :=
-  (σ : ℂ) + (t : ℂ) * Complex.I
-
-/-- “トルク”(分子) : Re(z)*Im(dz) - Im(z)*Re(dz) -/
-def torque (z dz : ℂ) : ℝ :=
-  z.re * dz.im - z.im * dz.re
-
-/-- 角速度の分母: Re(z)^2 + Im(z)^2 (= Complex.normSq z) -/
-def denom (z : ℂ) : ℝ :=
-  z.re^2 + z.im^2
-
+/-- 分母の定義と基本補題群 -/
 lemma denom_eq_normSq (z : ℂ) : denom z = Complex.normSq z := by
   simp [denom, Complex.normSq]
   ring
