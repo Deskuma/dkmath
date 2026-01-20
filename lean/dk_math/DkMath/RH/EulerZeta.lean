@@ -121,6 +121,17 @@ lemma eulerZetaFactorMag_eq_normSq (p : ℕ) (σ t : ℝ) :
     eulerZetaFactorMag p σ t = eulerZetaFactorMag_normSq p σ t :=
   eulerZetaFactorMag_eq_sqrt p σ t ▸ eulerZetaFactorMag_sqrt_eq_normSq p σ t
 
+lemma eulerZetaFactorMag_eq_normSq' (p : ℕ) (σ t : ℝ) :
+    eulerZetaFactorMag p σ t =
+      (let w := eulerZeta_exp_s_log_p_sub_one p σ t
+       Real.exp (σ * Real.log (p : ℝ)) / Real.sqrt (Complex.normSq w)) := by
+  unfold eulerZetaFactorMag
+  change (let w := eulerZeta_exp_s_log_p_sub_one p σ t
+          Real.exp (σ * Real.log (p : ℝ)) / ‖w‖) =
+         (let w := eulerZeta_exp_s_log_p_sub_one p σ t
+          Real.exp (σ * Real.log (p : ℝ)) / Real.sqrt (Complex.normSq w))
+  rfl
+
 -- ============================================================================
 -- 4. 収束性の述語
 -- ============================================================================
