@@ -25,21 +25,6 @@ open Complex
 -/
 
 -- ============================================================================
--- 1. σ > 1 での基本的な上界
--- ============================================================================
-
-/-- σ > 1 のとき、eulerZetaFactorMag p σ t は 1 に近い
-
-   直感: σ が 1 より十分大きいとき、
-   exp(σ log p) / |exp((σ+it) log p) - 1| ≈ exp(σ log p) / exp(σ log p) = 1 に近づく
--/
-lemma eulerZetaFactorMag_bound_sigma_gt_one (p : ℕ) (hp : Nat.Prime p)
-    (σ : ℝ) (hσ : 1 < σ) (t : ℝ) :
-    eulerZetaFactorMag p σ t ≤ 1 + 1 := by
-  -- プレースホルダー：後で精密な評価に置き換える
-  sorry
-
--- ============================================================================
 -- 2. w ≠ 0 の条件（σ > 0）
 -- ============================================================================
 
@@ -89,6 +74,44 @@ lemma eulerZeta_exp_s_log_p_sub_one_ne_zero (p : ℕ) (hp : Nat.Prime p)
   exact this sigma_log_p_eq_zero
 
 -- ============================================================================
+-- 1. σ > 1 での基本的な上界
+-- ============================================================================
+
+/-- σ > 1 のとき、eulerZetaFactorMag p σ t は 1 に近い
+
+   直感: σ が 1 より十分大きいとき、
+   exp(σ log p) / |exp((σ+it) log p) - 1| ≈ exp(σ log p) / exp(σ log p) = 1 に近づく
+-/
+lemma eulerZetaFactorMag_bound_sigma_gt_one (p : ℕ) (hp : Nat.Prime p)
+    (σ : ℝ) (hσ : 1 < σ) (t : ℝ) :
+    eulerZetaFactorMag p σ t ≤ 2 := by
+  unfold eulerZetaFactorMag
+  have w_ne_zero : eulerZeta_exp_s_log_p_sub_one p σ t ≠ 0 := by
+    apply eulerZeta_exp_s_log_p_sub_one_ne_zero p hp σ
+    linarith
+  have w_norm_pos : 0 < ‖eulerZeta_exp_s_log_p_sub_one p σ t‖ :=
+    norm_pos_iff.mpr w_ne_zero
+  have exp_pos : 0 < Real.exp (σ * Real.log (p : ℝ)) := Real.exp_pos _
+  -- 分子が正、分母が正なので商も正
+  have ratio_pos : 0 < Real.exp (σ * Real.log (p : ℝ)) / ‖eulerZeta_exp_s_log_p_sub_one p σ t‖ :=
+    div_pos exp_pos w_norm_pos
+  -- 粗い上界：p ≥ 2 のとき、σ > 1 より
+  -- eulerZetaFactorMag p σ t = exp(σ*log p) / ‖w‖
+  -- 分子は exp(σ*log p) > exp(log 2) = 2（σ > 1, p ≥ 2 より）
+  -- 分母は正だから商は制限される
+  have p_ge_2 : 2 ≤ p := Nat.Prime.two_le hp
+  -- 粗い評価：result ≤ 2 で抑えるために、
+  -- 実際には norm_exp_sub_one_lower を使って
+  -- ‖w‖ ≥ exp(σ*log p) - 1 ≥ exp(log p) - 1 ≥ 2 - 1 = 1
+  -- だから a_p ≤ exp(σ*log p) / 1 のような上界が出る
+  -- ただしより正確には...（詳細は省略）
+  by_contra h
+  push_neg at h
+  -- ratio が 2 より大きい場合、norm_exp_sub_one_lower から矛盾を導く
+  -- （詳細実装は後で）
+  sorry
+
+-- ============================================================================
 -- 3. σ > 1 での収束定理（骨組み）
 -- ============================================================================
 
@@ -103,14 +126,18 @@ lemma eulerZeta_exp_s_log_p_sub_one_ne_zero (p : ℕ) (hp : Nat.Prime p)
 theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : ℝ) :
     EulerZetaMagMultipliable σ t := by
   unfold EulerZetaMagMultipliable
-  -- a_p := eulerZetaFactorMag p σ t
-  -- 各因子が 0 < a_p に注目し、a_p - 1 の上界を取る
-  -- w = exp((σ+it)*log p) - 1 に対して norm_exp_sub_one_lower から
-  -- |w| ≥ exp(σ*log p) - 1
-  -- よって a_p = exp(σ*log p) / |w| ≤ exp(σ*log p) / (exp(σ*log p) - 1)
-  --           = 1 + 1/(exp(σ*log p) - 1)
-  -- ここで exp(σ*log p) = p^σ の評価、および
-  -- ∑ 1/(p^σ - 1) < ∞ の言及へ向かう
+  -- Multipliable は HasProd の存在を意味する
+  -- 実装方針：
+  -- σ > 1 では、各素数 p に対して
+  -- a_p := eulerZetaFactorMag p σ t は 1 に十分に近く、
+  -- かつ σ*log(p) > log(p) より指数が支配的
+  -- 部分積の極限を使って HasProd を構成する
+  --
+  -- 詳細：
+  -- 1. 部分積 ∏_{p ≤ N} a_p を定義
+  -- 2. N → ∞ で収束することを示す
+  -- 3. HasProd を構成
+  -- （実装は複雑なので、当面プレースホルダー）
   sorry
 
 /-- σ > 1 のとき、eulerZetaMag σ t は有限の正の値に収束する
@@ -123,8 +150,25 @@ theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : �
 theorem eulerZetaMag_pos_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : ℝ) :
     0 < eulerZetaMag σ t := by
   unfold eulerZetaMag
-  -- Multipliable + 各因子の正性 → 積の正性
-  -- eulerZetaFactorMag p σ t > 0 は分子分母が正であることから
+  -- eulerZetaMag_multipliable_sigma_gt_one から無限積が収束
+  have mult := eulerZetaMag_multipliable_sigma_gt_one σ hσ t
+  -- 各因子 eulerZetaFactorMag p σ t > 0：
+  -- - 分子 exp(σ*log p) > 0（指数は常に正）
+  -- - 分母 ‖w‖ > 0（w ≠ 0 から）
+  -- よって各因子 > 0
+  have factor_pos : ∀ p : ℕ, Nat.Prime p → 0 < eulerZetaFactorMag p σ t := by
+    intro p hp
+    unfold eulerZetaFactorMag
+    have exp_pos : 0 < Real.exp (σ * Real.log (p : ℝ)) := Real.exp_pos _
+    have w_ne_zero : eulerZeta_exp_s_log_p_sub_one p σ t ≠ 0 :=
+      eulerZeta_exp_s_log_p_sub_one_ne_zero p hp σ (by linarith : 0 < σ) t
+    have w_norm_pos : 0 < ‖eulerZeta_exp_s_log_p_sub_one p σ t‖ := norm_pos_iff.mpr w_ne_zero
+    exact div_pos exp_pos w_norm_pos
+  -- tprod は「各因子が正で Multipliable」なら正値
+  -- HasProd を使って HasProd.prod_pos のような補題があるが、
+  -- ここではダイレクトに正値を示す：
+  -- Multipliable ⟹ HasProd が存在 ⟹ 極限値が正（各因子が正のため）
+  -- 実装：Finprod や部分積の極限をとって正値を確認
   sorry
 
 end DkMath.RH.EulerZeta
