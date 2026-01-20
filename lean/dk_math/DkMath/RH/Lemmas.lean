@@ -95,8 +95,7 @@ lemma phaseVel_eq_torque_div_normSq (f : ℝ → ℂ) (t : ℝ) :
 lemma phaseVel_eq_im_mul_conj_div_normSq (f : ℝ → ℂ) (t : ℝ) :
     phaseVel f t = ((deriv f t * conj (f t)).im) / Complex.normSq (f t) := by
   -- 既存補題 + torque_eq_im_mul_conj
-  simp only [phaseVel_eq_torque_div_normSq, torque_eq_im_mul_conj, mul_im, conj_im, mul_neg,
-    conj_re]
+  simp [phaseVel_eq_torque_div_normSq, torque_eq_im_mul_conj]
 
 -- ----------------------------------------------------------------------------
 
