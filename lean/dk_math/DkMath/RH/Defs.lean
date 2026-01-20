@@ -24,6 +24,9 @@ def torque (z dz : ℂ) : ℝ :=
 def denom (z : ℂ) : ℝ :=
   z.re^2 + z.im^2
 
+/-- ドリフト消失（局所）: torque = 0 -/
+def driftFreeLocal (z dz : ℂ) : Prop :=
+  torque z dz = 0
 
 end DkMath.RH
 
