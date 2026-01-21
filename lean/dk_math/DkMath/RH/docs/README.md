@@ -31,7 +31,7 @@
 
 $$
   \Large
-  \zeta_e(s) = \prod_{p} \frac{e^{\,\sigma \log p}}{| e^{\,(\sigma+it) \log p} - 1 |}
+  \zeta_e(s) = \prod_{p} \frac{e^{\sigma \log p}}{| e^{(\sigma+it) \log p} - 1 |}
 $$
 
 オイラー積表示より導出されたゼータ関数の変形版で、位相因子を含むものを指します。
