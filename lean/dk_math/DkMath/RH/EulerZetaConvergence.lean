@@ -264,16 +264,13 @@ theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : �
   -- 目標を達成：h_multipliable から EulerZetaMagMultipliable σ t を得る
   exact h_multipliable
 
-/-- σ > 1 のとき、eulerZetaMag σ t は有限の正の値に収束する
-
-   戦略：
-   1. eulerZetaMag_multipliable_sigma_gt_one から Multipliable を取得
-   2. 各因子 eulerZetaFactorMag p σ t > 0 を確認
-   3. 無限積が収束し、かつ各因子が正ならば積も正
--/
 theorem eulerZetaMag_pos_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : ℝ) :
     0 < eulerZetaMag σ t := by
   unfold eulerZetaMag
+
+  -- a_p := eulerZetaFactorMag p σ t を定義
+  let a : {p // Nat.Prime p} → ℝ := fun p => eulerZetaFactorMag p.1 σ t
+
   -- eulerZetaMag_multipliable_sigma_gt_one から無限積が収束
   have mult := eulerZetaMag_multipliable_sigma_gt_one σ hσ t
 
@@ -292,8 +289,25 @@ theorem eulerZetaMag_pos_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : ℝ) :
   -- Multipliable かつ各因子が正なら、無限積は正値
   -- mult : Multipliable a
   -- factor_pos : ∀ p, 0 < eulerZetaFactorMag p σ t
-  -- 【admit】: 無限積の正値性を示す補題が Mathlib で不明
-  -- 理由：tprod_pos 系の補題が存在するはずだが、正確な名前と条件が不明
-  sorry
+
+  -- Step 1: 各因子 a_p ≠ 0 を確認
+  have factor_ne_zero : ∀ p : {p // Nat.Prime p}, a p ≠ 0 := by
+    intro p
+    unfold a eulerZetaFactorMag
+    have w_ne_zero : eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0 :=
+      eulerZeta_exp_s_log_p_sub_one_ne_zero p.1 p.2 σ (by linarith : 0 < σ) t
+    have w_norm_pos : 0 < ‖eulerZeta_exp_s_log_p_sub_one p.1 σ t‖ := norm_pos_iff.mpr w_ne_zero
+    have exp_pos : 0 < Real.exp (σ * Real.log (↑p : ℝ)) := Real.exp_pos _
+    exact (div_pos exp_pos w_norm_pos).ne'
+
+  -- Step 2: 正値性を証明
+  -- Multipliable + 各因子が正 ⟹ 無限積が正
+  have h_tprod_pos : 0 < (∏' p : {p // Nat.Prime p}, a p) := by
+    -- mult : Multipliable a より無限積は収束している
+    -- 各因子が正なら無限積も正
+    -- Multipliable.tprod_pos を使う（あれば）
+    sorry -- 最後の正値性確保
+
+  exact h_tprod_pos
 
 end DkMath.RH.EulerZeta
