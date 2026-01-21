@@ -1,206 +1,222 @@
-# DkMath.RH：位相ドリフト骨格（Lean4 + mathlib4）
+# DkMath.RH：位相ドリフト骨格（Lean4 + mathlib4）＋ EulerZeta（magnitude/phase）
 
-このモジュールは、リーマンゼータ関数そのものに踏み込む前段として、  
-「複素関数の位相（角度）を、枝問題を避けて扱うための骨格」を Lean で固めたものです。
+このモジュールは、リーマンゼータ関数そのものに踏み込む前段として、
 
-キーワードは次の 3 つです。
+1) 複素関数の位相（角度）を、枝問題を避けて扱うための骨格  
+2) その骨格と相性の良い「位相付き Euler 因子」から作る EulerZeta の無限積を、収束・正値まで固める
 
-- **トルク（torque）**：位相が回ろうとする“分子”
-- **位相速度（phaseVel）**：\(\Im\bigl((f'(t))/f(t)\bigr)\) として定義される角速度
-- **アンラップ位相（phaseUnwrap）**：位相を積分で連続化したもの（`arg` の枝を避ける）
+ことを目的とします。
+
+キーワードは次の 4 つです。
+
+- トルク（torque）：位相が回ろうとする“分子”
+- 位相速度（phaseVel）：`Im((f'(t))/f(t))` として定義される角速度
+- アンラップ位相（phaseUnwrap）：位相を積分で連続化したもの（`arg` の枝を避ける）
+- EulerZeta（magnitude/phase）：`exp((σ+it)log p)-1` を核にした位相付き因子の無限積
 
 ---
 
-## ファイル構成
+## 1. ファイル構成
 
-### `DkMath/RH/Defs.lean`
+### 位相ドリフト骨格
 
-位相ドリフトの基本定義だけを置く。
+- `DkMath/RH/Defs.lean`
+- `DkMath/RH/Lemmas.lean`
+- `DkMath/RH/Theorems.lean`
+
+### EulerZeta
+
+- `DkMath/RH/EulerZeta.lean`
+- `DkMath/RH/EulerZetaLemmas.lean`
+- `DkMath/RH/EulerZetaConvergence.lean`
+
+---
+
+## 2. 位相ドリフト骨格（既存成果）
+
+### `Defs.lean`：導入した定義
 
 - `vertical (σ t : ℝ) : ℂ`  
-  縦線パス \(s=\sigma+it\) のパラメータ化。
+  縦線パス `σ + i t`。
 
 - `torque (z dz : ℂ) : ℝ`  
-  複素数 \(z\) とその変化 \(dz\) に対し、
 
   \[
   \mathrm{torque}(z,dz)=\Re(z)\Im(dz)-\Im(z)\Re(dz)
   \]
 
 - `denom (z : ℂ) : ℝ`  
-  分母としての \(\Re(z)^2+\Im(z)^2\)。これは `Complex.normSq z` と一致する。
+  `re^2 + im^2`（`normSq` と一致）。
 
-- `driftFreeLocal (z dz : ℂ) : Prop`  
-  局所ドリフト消失条件：`torque z dz = 0`
-
-- `phaseVel (f : ℝ → ℂ) (t : ℝ) : ℝ`（noncomputable）  
-  位相速度を
+- `phaseVel (f : ℝ → ℂ) (t : ℝ) : ℝ`  
 
   \[
   \mathrm{phaseVel}(f,t)=\Im\Bigl(\frac{f'(t)}{f(t)}\Bigr)
   \]
 
-  として定義（Lean では `deriv` を使う）。
-
-- `phaseUnwrap (f : ℝ → ℂ) (t0 θ0 : ℝ) (t : ℝ) : ℝ`（noncomputable）  
-  位相を **積分で定義**して連続化する：
+- `phaseUnwrap (f) (t0 θ0) (t) : ℝ`  
 
   \[
   \Theta(t)=\theta_0+\int_{t_0}^{t}\mathrm{phaseVel}(f,u)\,du
   \]
 
-  `arg` を直接扱わず、枝（2πジャンプ）問題を避けるのが狙い。
+### `Lemmas.lean`：確定した主要補題
 
-- `driftFreeAt (f : ℝ → ℂ) (t : ℝ) : Prop`  
-  関数版の局所ドリフト消失：`driftFreeLocal (f t) (deriv f t)`。
+- `denom_eq_normSq`
+
+  \[
+  \mathrm{denom}(z)=\mathrm{normSq}(z)
+  \]
+
+- `im_div_eq_torque_div_normSq`
+
+  \[
+  \Im\Bigl(\frac{dz}{z}\Bigr)
+  =\frac{\mathrm{torque}(z,dz)}{\mathrm{normSq}(z)}
+  \]
+
+- `driftFreeLocal_iff_im_div_eq_zero`（`z≠0`）
+
+  \[
+  \mathrm{torque}(z,dz)=0\iff\Im(dz/z)=0
+  \]
+
+- `torque_eq_im_mul_conj`
+
+  \[
+  \mathrm{torque}(z,dz)=\Im(dz\cdot\overline{z})
+  \]
+
+- `phaseVel_eq_torque_div_normSq` / `phaseVel_eq_im_mul_conj_div_normSq`
+
+  \[
+  \mathrm{phaseVel}(f,t)
+  =\frac{\mathrm{torque}(f(t),f'(t))}{\mathrm{normSq}(f(t))}
+  =\frac{\Im(f'(t)\cdot\overline{f(t)})}{\mathrm{normSq}(f(t))}
+  \]
+
+- `driftFreeAt_iff_phaseVel_eq_zero`（`f t ≠ 0`）
+
+  \[
+  \mathrm{driftFreeAt}(f,t)\iff \mathrm{phaseVel}(f,t)=0
+  \]
+
+### `Theorems.lean`：アンラップ位相が微分できる
+
+`phaseUnwrap_hasDerivAt`（`Continuous (phaseVel f)` を仮定）
+
+\[
+(\mathrm{phaseUnwrap})'(t)=\mathrm{phaseVel}(f,t)
+\]
 
 ---
 
-### `DkMath/RH/Lemmas.lean`
+## 3. EulerZeta（今回の成果）
 
-定義同士の関係を、代数として確定する。
+ここでは「Euler 因子を位相つきで見直し、magnitude と phase を分けて扱う」ための土台を Lean に固定します。
 
-#### 1) 分母 `denom` の正体
+### 3.1 定義（`EulerZeta.lean` / `EulerZetaLemmas.lean`）
 
-`denom_eq_normSq` により、
-
-\[
-\mathrm{denom}(z)=\Re(z)^2+\Im(z)^2=\mathrm{normSq}(z)
-\]
-
-が確定する。
-
-#### 2) 代数コア：\(\Im(dz/z)\) の展開
-
-`im_div_eq_torque_div_normSq` により、
+#### 分母の核（複素数）
 
 \[
-\Im\Bigl(\frac{dz}{z}\Bigr)=\frac{\mathrm{torque}(z,dz)}{\mathrm{normSq}(z)}
+w(p,\sigma,t)=\exp((\sigma+it)\log p)-1
 \]
 
-が得られる。  
-これは「位相の微分公式」の骨格（\(\frac{d}{dt}\arg f=\Im(f'/f)\)）に直結する。
+- `eulerZeta_exp_s_log_p_sub_one (p) (σ t) : ℂ`
 
-#### 3) ドリフト消失条件の同値
-
-`driftFreeLocal_iff_im_div_eq_zero` により、\(z\neq0\) のもとで
+#### magnitude 因子（実数）
 
 \[
-\mathrm{torque}(z,dz)=0\iff\Im\Bigl(\frac{dz}{z}\Bigr)=0
+a_p(\sigma,t)=\frac{\exp(\sigma\log p)}{\|w(p,\sigma,t)\|}
 \]
 
-が確定する。  
-ここで \(z\neq0\) を仮定するのは、\(\mathrm{normSq}(z)\neq0\) を保証して分母を払うため。
+- `eulerZetaFactorMag (p) (σ t) : ℝ`
 
-#### 4) トルクの“共役表現”
+（`‖w‖` を `sqrt(re^2+im^2)` や `sqrt(normSq)` で書いた版も、同値補題込みで整理済み）
 
-`torque_eq_im_mul_conj` により（`open scoped ComplexConjugate` 使用）、
+#### EulerZeta magnitude（無限積）
 
 \[
-\mathrm{torque}(z,dz)=\Im(dz\cdot\overline{z})
+\zeta_e^{mag}(\sigma,t)=\prod_{p\ \mathrm{prime}} a_p(\sigma,t)
 \]
 
-が確定する。  
-同内容の `star` 版として `torque_eq_im_mul_conj'` もある。
+- `eulerZetaMag (σ t) : ℝ := ∏' p : {p // Nat.Prime p}, eulerZetaFactorMag p.1 σ t`
 
-※mathlib4 では共役は `Complex.conj` ではなく、`conj z`（スコープ）または `star z`。
+#### 収束性の器
 
-#### 5) 位相速度とトルクの接続
+- `EulerZetaMagMultipliable (σ t) : Prop := Multipliable (...)`
 
-`phaseVel_eq_torque_div_normSq` により、
+#### 位相（phase）
 
 \[
-\mathrm{phaseVel}(f,t)
-=\frac{\mathrm{torque}(f(t),f'(t))}{\mathrm{normSq}(f(t))}
+\mathrm{phase}(p,\sigma,t)=\arg(w(p,\sigma,t))
 \]
 
-が確定する（ここで \(f'(t)\) は `deriv f t`）。
+- `eulerZetaPhase (p) (σ t) : ℝ`
 
-さらに `phaseVel_eq_im_mul_conj_div_normSq` により、
+### 3.2 補題（`EulerZetaLemmas.lean` の中心）
+
+- `w(p,σ,t) ≠ 0`（`p` prime, `σ>1` などの条件下で確定）
+- 近似評価（収束へ落とす心臓部）
+
+  \[
+  \|a_p(\sigma,t)-1\|\le \frac{2}{p^\sigma}\quad(\sigma>1)
+  \]
+
+- これにより、p-series へ比較して
+
+  \[
+  \sum_p \|a_p(\sigma,t)-1\|
+  \]
+
+  の収束（`Summable`）が取れる。
+
+### 3.3 収束と正値（`EulerZetaConvergence.lean` の主定理）
+
+#### 収束（`Multipliable`）
 
 \[
-\mathrm{phaseVel}(f,t)
-=\frac{\Im(f'(t)\cdot\overline{f(t)})}{\mathrm{normSq}(f(t))}
+\sigma>1\Rightarrow \text{EulerZeta magnitude は無限積として収束}
 \]
 
-という、より自然な複素表現も確定した。
+- `eulerZetaMag_multipliable_sigma_gt_one`
 
-#### 6) ドリフト消失と位相速度ゼロの同値（関数版）
-
-`driftFreeLocal_iff_phaseVel_eq_zero` と `driftFreeAt_iff_phaseVel_eq_zero` により、\(f(t)\neq0\) のもとで
+#### 正値
 
 \[
-\mathrm{driftFreeAt}(f,t)\iff\mathrm{phaseVel}(f,t)=0
+\sigma>1\Rightarrow 0<\zeta_e^{mag}(\sigma,t)
 \]
 
-が確定する。  
-以後、「ドリフト消失」を位相速度の言葉で扱える。
+- `eulerZetaMag_pos_sigma_gt_one`
+
+証明の流れは一貫して
+
+- `‖a_p-1‖` を \(2/p^\sigma\) で上から押さえる
+- \( \sum 1/n^\sigma \) の収束へ比較
+- 一般定理で `Multipliable` と `tprod` の性質へ落とす
+
+です。
 
 ---
 
-### `DkMath/RH/Theorems.lean`
+## 4. `#print axioms` と `sorryAx`（メモ）
 
-積分で定義した位相が、本当に位相速度を微分として持つことを示す。
+ソース（`.lean`）上に `sorry` が見当たらないのに `#print axioms` に `sorryAx` が出る場合、
 
-#### `phaseUnwrap_hasDerivAt`
+- 古い `.olean` が残っている（キャッシュ）
+- 依存先の環境に由来する
 
-仮定：`Continuous (phaseVel f)`（位相速度が連続）
+のどちらかが典型です。
 
-結論：
+切り分けは `lake clean` と `.lake/build` の再生成が確実です。
 
-\[
-\frac{d}{dt}\Bigl(\theta_0+\int_{t_0}^{t}\mathrm{phaseVel}(f,u)\,du\Bigr)
-=\mathrm{phaseVel}(f,t)
-\]
-
-Lean では `HasDerivAt` で形式化している。
-
-証明の中身は次の通り。
-
-- `phaseUnwrap` を展開し、`intervalIntegral` の「右端微分定理」を使う  
-  `intervalIntegral.integral_hasDerivAt_right` を核にしている。
-- 連続性から `IntervalIntegrable` と `StronglyMeasurableAtFilter` を作り、
-  微分定理に必要な条件を満たす。
-- 最後に「定数を足しても微分は変わらない」を `add_const` で処理する。
-
-これにより、「アンラップ位相＝積分で作った連続位相」は、期待通りに位相速度を導関数として持つ、
-という解析的な骨格が Lean 上で固定された。
+なお `propext / Classical.choice / Quot.sound` は、Mathlib を通常運用すると出やすい標準的依存です。
 
 ---
 
-## この段階で確定したこと（要点）
+## 5. 次の拡張（研究として自然）
 
-1. **局所の位相変化**は、純代数として
-
-\[
-\Im(dz/z)=\mathrm{torque}(z,dz)/\mathrm{normSq}(z)
-\]
-
-で表せる。
-
-1. **ドリフト消失**は、\(z\neq0\) のもとで
-
-\[
-\mathrm{torque}=0\iff\Im(dz/z)=0
-\]
-
-つまり「位相速度が 0」と同値になる。
-
-1. **位相を積分で定義**すると、連続性の仮定のもとで
-
-\[
-(\mathrm{phaseUnwrap})'=\mathrm{phaseVel}
-\]
-
-が成立する（枝問題を回避したまま、微分が正しく取れる）。
-
----
-
-## 次に進むときの自然な拡張
-
-- `phaseUnwrap_hasDerivAt` の仮定を `ContinuousAt` や局所可積分へ弱める（必要に応じて）。
-- 縦方向（t）だけでなく、横方向（σ）でも同じテンプレートを作り、
-  \(\Im((\partial/\partial\sigma)\log f)\) の積分として「σドリフト」を定義する。
-- その後に \(f(t)=\zeta(\sigma+it)\) を差し込み、ゼータ側の解析条件（零点回避など）を整理する。
-
-このモジュールは「ゼータを入れる前に、位相の計算基盤を Lean で固める」段階として位置付ける。
+- EulerZeta の phase を、`phaseUnwrap` に接続して枝問題なしの連続位相として扱う。
+- t 方向だけでなく σ 方向のテンプレート（`phaseVelSigma` / `phaseUnwrapSigma`）を整える。
+- ゼータ差し込みのための仮定（零点回避・可微分性・可積分性）を整理して「差し込み条件セット」としてまとめる。
