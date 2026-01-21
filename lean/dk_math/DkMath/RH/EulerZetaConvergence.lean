@@ -170,70 +170,39 @@ theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : �
   let a : {p // Nat.Prime p} → ℝ := fun p => eulerZetaFactorMag p.1 σ t
 
   -- 目標：Multipliable a
-  -- 道筋：Summable (fun p => ‖a p - 1‖) ⟹ Multipliable a
+  -- 道筋：Summable (fun p => ‖a p - 1‖) ⟹ Multipliable a（既製品）
 
-  -- Step 1: 各素数 p に対して a_p ≥ 1 を示す
-  have ha_ge_one : ∀ p : {p // Nat.Prime p}, 1 ≤ a p := by
+  -- Step 1: ‖a_p - 1‖ の上界を構築
+  -- 方針：eulerZetaFactorMag_sub_one_upper_bound が既に ≤ 2 / exp(σ log p) を与えるので、
+  -- それを使って直接 Summable を示す
+
+  have h_norm_sub_one_bound : ∀ p : {p // Nat.Prime p},
+      ‖a p - 1‖ ≤ 2 / (↑p : ℝ) ^ σ := by
     intro ⟨p, hp⟩
     unfold a eulerZetaFactorMag
-    set x := Real.exp (σ * Real.log (↑p : ℝ))
-    set w := eulerZeta_exp_s_log_p_sub_one p σ t
-    -- x - 1 ≤ ‖w‖ （norm_exp_sub_one_lower）
-    have h_den : x - 1 ≤ ‖w‖ := norm_exp_sub_one_lower p σ t
-    -- x ≥ 2 （p ≥ 2, σ > 1 より）
-    have hx_ge_2 : 2 ≤ x := by
-      have hp2 : (2 : ℕ) ≤ p := Nat.Prime.two_le hp
-      have hp_gt_one : (1 : ℝ) < p := by
-        have : 1 < p := by omega
-        exact_mod_cast this
-      have h_log : Real.log 2 ≤ Real.log (p : ℝ) :=
-        Real.log_le_log (by norm_num) (by exact_mod_cast (by omega : 2 ≤ p))
-      have h_ineq : Real.log 2 ≤ σ * Real.log (p : ℝ) := by
-        have h1 : Real.log 2 ≤ 1 * Real.log (p : ℝ) := by simp [h_log]
-        have h2 : (1 : ℝ) ≤ σ := le_of_lt hσ
-        calc Real.log 2 ≤ 1 * Real.log (p : ℝ) := h1
-            _ ≤ σ * Real.log (p : ℝ) := by
-              apply mul_le_mul_of_nonneg_right h2
-              have : (1 : ℝ) ≤ (p : ℝ) := by
-                have : 1 ≤ p := by omega
-                exact_mod_cast this
-              exact Real.log_nonneg this
-      have h_exp : Real.exp (Real.log 2) ≤ Real.exp (σ * Real.log (p : ℝ)) :=
-        Real.exp_le_exp.mpr h_ineq
-      simp only [Real.exp_log (by norm_num : (0 : ℝ) < 2)] at h_exp
-      exact h_exp
-    -- x - 1 ≤ ‖w‖ ≤ x より、x/‖w‖ ≥ x/x = 1
-    have hx_pos : 0 < x := Real.exp_pos _
-    have hxm1_pos : 0 < x - 1 := by linarith
-    have hw_norm_pos : 0 < ‖w‖ := by
-      have : ‖w‖ ≥ x - 1 := h_den
-      linarith
-    have h1_le_div : 1 ≤ x / (x - 1) := by
-      have h : x - 1 < x := by linarith
-      have hneq : (x - 1 : ℝ) ≠ 0 := hxm1_pos.ne'
-      have : x / (x - 1) = 1 + 1 / (x - 1) := by field_simp; ring
-      rw [this]
-      have : 0 < 1 / (x - 1) := div_pos one_pos hxm1_pos
-      linarith
-    have hdiv_le : x / (x - 1) ≤ x / ‖w‖ := by
-      -- h_den : x - 1 ≤ ‖w‖ より、x/(x-1) ≤ x/‖w‖
-      -- 理由：分母が小さいほど商は大きい
-      -- x > 0, 0 < x-1 ≤ ‖w‖ より x/(x-1) ≤ x/‖w‖
-      -- 【admit】: 不等式の方向性を扱う補題が複雑なためadmit
-      sorry
-    calc 1 ≤ x / (x - 1) := h1_le_div
-        _ ≤ x / ‖w‖ := hdiv_le
+    -- eulerZetaFactorMag_sub_one_upper_bound から得られる上界
+    have h_bound := eulerZetaFactorMag_sub_one_upper_bound p hp σ hσ t
+    -- h_bound : eulerZetaFactorMag p σ t - 1 ≤ 2 / exp(σ * log p)
 
-  -- Step 2: ‖a_p - 1‖ の上界を得る
+    have hp_pos : (0 : ℝ) < ↑p := by
+      have : 0 < p := Nat.Prime.pos hp
+      exact_mod_cast this
+
+    -- exp(σ log p) = p^σ
+    have h_exp_eq : Real.exp (σ * Real.log (↑p : ℝ)) = (↑p : ℝ) ^ σ := by
+      rw [Real.rpow_def_of_pos hp_pos, mul_comm]
+
+    rw [h_exp_eq]
+    sorry -- h_bound と組み合わせて最終形に
+
+  -- Step 2: Summable に落とす
   have h_summable_norm_sub_one :
       Summable (fun p : {p // Nat.Prime p} => ‖a p - 1‖) := by
-    -- ‖a_p - 1‖ ≤ 2 / p^σ という上界を示す必要
-    -- これは eulerZetaFactorMag_sub_one_upper_bound から出る
+    -- ‖a_p - 1‖ ≤ 2 / p^σ という上界から
     have h_bound : ∀ p : {p // Nat.Prime p},
         a p - 1 ≤ 2 / Real.exp (σ * Real.log (↑p : ℝ)) := by
       intro p
       unfold a
-      -- eulerZetaFactorMag_sub_one_upper_bound p.1 p.2 σ hσ t を使う
       exact eulerZetaFactorMag_sub_one_upper_bound p.1 p.2 σ hσ t
 
     -- p級数：∑' 1/p^σ は σ > 1 で収束
@@ -254,18 +223,17 @@ theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : �
 
     have : ∀ p : {p // Nat.Prime p}, ‖a p - 1‖ ≤ 2 / (↑p : ℝ) ^ σ := by
       intro p
-      have h_nonneg : 0 ≤ a p - 1 := by linarith [ha_ge_one p]
-      have h_norm : ‖a p - 1‖ = a p - 1 := abs_of_nonneg h_nonneg
-      rw [h_norm]
+      -- h_bound から: a p - 1 ≤ 2 / exp(σ log p)
       have h1 := h_bound p
       have hp_pos : (0 : ℝ) < ↑p := by
         have : 0 < p.1 := Nat.Prime.pos p.2
         exact_mod_cast this
-      -- exp(σ log p) = p^σ：指数法則から
+      -- exp(σ log p) = p^σ
       have h_exp_eq : Real.exp (σ * Real.log (↑p : ℝ)) = (↑p : ℝ) ^ σ := by
         rw [Real.rpow_def_of_pos hp_pos, mul_comm]
       rw [h_exp_eq] at h1
-      exact h1
+      -- ‖a p - 1‖ ≤ a p - 1 ≤ 2 / p^σ (符号は後で確認)
+      sorry -- 符号の確認と norm の処理
 
     -- Summable 由比較判定法
     -- this : ∀ p, ‖a_p - 1‖ ≤ 2 / p^σ
