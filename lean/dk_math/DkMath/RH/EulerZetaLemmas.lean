@@ -219,16 +219,22 @@ lemma eulerZetaFactorMag_sub_one_upper_bound (p : ℕ) (hp : Nat.Prime p)
   unfold eulerZetaFactorMag
   set x := Real.exp (σ * Real.log (p : ℝ))
   set w := eulerZeta_exp_s_log_p_sub_one p σ t
-
   -- 基本的な正性・非零条件
   have hx_pos : 0 < x := Real.exp_pos _
   have w_ne : w ≠ 0 := by
     -- w ≠ 0 であることを示す
     -- σ > 1 > 0 より norm_exp_sub_one_lower が適用でき、
     -- x - 1 ≤ ‖w‖ が得られるので w ≠ 0 が必要
-    sorry
+    have h_den : x - 1 ≤ ‖w‖ := norm_exp_sub_one_lower p σ t
+    -- x = exp(σ * log p) > 1 since σ > 1 and log p > 0 for prime p ≥ 2
+    have h_log_pos : 0 < Real.log (p : ℝ) := log_p_pos p hp
+    have hσ_pos : 0 < σ := by linarith [hσ]
+    have h_prod_pos : 0 < σ * Real.log (p : ℝ) := mul_pos hσ_pos h_log_pos
+    have h_x_gt_one : 1 < x := by simpa [x] using Real.exp_lt_exp.mpr h_prod_pos
+    have h_x_minus_one_pos : 0 < x - 1 := by linarith [h_x_gt_one]
+    have hw_pos : 0 < ‖w‖ := by linarith [h_den, h_x_minus_one_pos]
+    exact (norm_pos_iff.mp hw_pos)
   have w_norm_pos : 0 < ‖w‖ := norm_pos_iff.mpr w_ne
-
   -- x ≥ 2（p ≥ 2, σ > 1 より exp(σ log p) ≥ 2）
   have hx_ge_2 : 2 ≤ x := by
     have hp2 : 2 ≤ p := Nat.Prime.two_le hp
@@ -252,17 +258,13 @@ lemma eulerZetaFactorMag_sub_one_upper_bound (p : ℕ) (hp : Nat.Prime p)
       Real.exp_le_exp.mpr h_ineq
     simp only [Real.exp_log (by norm_num : (0 : ℝ) < 2)] at h_exp
     exact h_exp
-
   -- 分母下界：x - 1 ≤ ‖w‖
   have h_den : x - 1 ≤ ‖w‖ := norm_exp_sub_one_lower p σ t
-
   -- x - 1 > 0
   have h_x_minus_one_pos : 0 < x - 1 := by linarith
-
   -- a_p - 1 = x/‖w‖ - 1 = (x - ‖w‖) / ‖w‖
   have h_eq : x / ‖w‖ - 1 = (x - ‖w‖) / ‖w‖ := by
     field_simp [w_norm_pos.ne']
-
   -- (x - ‖w‖) / ‖w‖ ≤ 1 / (x - 1)
   have h_upper_1 : x / ‖w‖ - 1 ≤ 1 / (x - 1) := by
     rw [h_eq]
@@ -289,11 +291,9 @@ lemma eulerZetaFactorMag_sub_one_upper_bound (p : ℕ) (hp : Nat.Prime p)
           exact mul_nonneg ‹0 ≤ ‖w‖› ‹0 ≤ x - 1›
         _ = 1 / (x - 1) := by
           field_simp [w_norm_pos.ne']
-
   -- 1 / (x - 1) ≤ 2 / x
   have h_upper_2 : (1 : ℝ) / (x - 1) ≤ 2 / x :=
     one_div_pow_sub_one_le_two_div_pow hx_ge_2
-
   -- 合わせる
   calc x / ‖w‖ - 1 ≤ 1 / (x - 1) := h_upper_1
       _ ≤ 2 / x := h_upper_2
