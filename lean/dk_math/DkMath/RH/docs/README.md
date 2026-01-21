@@ -30,7 +30,6 @@ Author: D. and Kenro (ChatGPT-4o)
 ### オイラーゼータ関数
 
 $$
-  \\[2pt]
   \Large
   \zeta_e(s) = \prod_{p} \frac{e^{\,\sigma \log p}}{| e^{\,(\sigma+it) \log p} - 1 |}
 $$
