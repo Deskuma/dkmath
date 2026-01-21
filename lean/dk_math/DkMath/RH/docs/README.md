@@ -15,6 +15,15 @@
 
 ---
 
+## 論文
+
+このモジュール群の理論的背景は、次の論文に基づきます。
+
+[Euler Zeta Function ζe(s): A Novel Approach to Prime Distribution through Scale Analysis](./EulerZetaFunction-v0-1.pdf)
+cid: 67d46595-3550-8009-896d-00c3263c4f23
+March 15, 2025
+Author: D. and Kenro (ChatGPT-4o)
+
 ## ファイル構成（現状）
 
 ### 位相ドリフト骨格
@@ -52,7 +61,7 @@
 - 「ドリフト消失」は「位相速度ゼロ」と同値になった（零点回避 `f t ≠ 0` を条件に）。
 - `arg` を使わず、位相を積分で定義した上で、微分が正しく戻ることを示した。
 
-（詳細は [`!docs-DkMath_RH.md`](./!docs-DkMath_RH.md) を参照）
+（詳細は [DkMath_RH.md](./DkMath_RH.md) を参照）
 
 ---
 
