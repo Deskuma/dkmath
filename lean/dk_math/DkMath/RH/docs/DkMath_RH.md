@@ -228,5 +228,6 @@ $$
 
 ---
 
-GitHub Markdown and $\LaTeX$ Style
+VSCode and GitHub Markdown $\LaTeX$ Style Documentation
+
 This document uses GitHub-flavored Markdown and $\LaTeX$ for mathematical expressions. To render the $\LaTeX$ expressions correctly, ensure that your Markdown viewer supports MathJax or a similar library.
