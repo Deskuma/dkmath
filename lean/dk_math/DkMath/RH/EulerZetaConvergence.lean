@@ -154,6 +154,8 @@ lemma eulerZetaFactorMag_bound_sigma_gt_one (p : ℕ) (hp : Nat.Prime p)
 -- 3. σ > 1 での収束定理（骨組み）
 -- ============================================================================
 
+
+set_option maxHeartbeats 1000000 in
 /-- σ > 1 のとき、∏'_{p prime} eulerZetaFactorMag p σ t が収束する
 
    戦略：
@@ -246,7 +248,13 @@ theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : �
     -- 係数を含む形：∑' 2/p^σ も収束
     -- スカラー倍の Summable は元の Summable から得られる
     have h_zeta_2_convergent : Summable (fun p : {p // Nat.Prime p} => 2 / (↑p : ℝ) ^ σ) := by
-      sorry -- h_zeta_convergent のスカラー倍
+      -- sorry -- h_zeta_convergent のスカラー倍
+      have : (fun p : {p // Nat.Prime p} => 2 / (↑p : ℝ) ^ σ) =
+             (fun p : {p // Nat.Prime p} => (2 : ℝ) * (1 / (↑p : ℝ) ^ σ)) := by
+        ext p; ring
+      rw [this]
+      -- ⊢ Summable fun p ↦ 2 * (1 / ↑↑p ^ σ)
+      exact Summable.const_smul h_zeta_convergent 2
 
     have : ∀ p : {p // Nat.Prime p}, ‖a p - 1‖ ≤ 2 / (↑p : ℝ) ^ σ := by
       intro p
