@@ -1,7 +1,7 @@
 # DkMath.RH：位相ドリフト骨格（Lean4 + mathlib4）＋ EulerZeta（magnitude/phase）
 
-Authors: D. and Kenro (ChatGPT-5.2)
-Last updated: 2026/01/21 15:55
+- Authors: D. and Kenro (ChatGPT-5.2)
+- Last updated: 2026/01/21 15:55
 
 このモジュールは、リーマンゼータ関数そのものに踏み込む前段として、
 
@@ -39,70 +39,71 @@ Last updated: 2026/01/21 15:55
 
 ### `Defs.lean`：導入した定義
 
-- `vertical (σ t : ℝ) : ℂ`  
-  縦線パス `σ + i t`。
+#### `vertical (σ t : ℝ) : ℂ`
 
-- `torque (z dz : ℂ) : ℝ`  
+縦線パス `σ + i t`。
 
-  $$
-  \mathrm{torque}(z,dz)=\Re(z)\Im(dz)-\Im(z)\Re(dz)
-  $$
+#### `torque (z dz : ℂ) : ℝ`  
 
-- `denom (z : ℂ) : ℝ`  
-  `re^2 + im^2`（`normSq` と一致）。
+$$
+\mathrm{torque}(z,dz)=\Re(z)\Im(dz)-\Im(z)\Re(dz)
+$$
 
-- `phaseVel (f : ℝ → ℂ) (t : ℝ) : ℝ`  
+#### `denom (z : ℂ) : ℝ`  
 
-  $$
-  \mathrm{phaseVel}(f,t)=\Im\Bigl(\frac{f'(t)}{f(t)}\Bigr)
-  $$
+`re^2 + im^2`（`normSq` と一致）。
 
-- `phaseUnwrap (f) (t0 θ0) (t) : ℝ`  
+#### `phaseVel (f : ℝ → ℂ) (t : ℝ) : ℝ`  
 
-  $$
-  \Theta(t)=\theta_0+\int_{t_0}^{t}\mathrm{phaseVel}(f,u)\,du
-  $$
+$$
+\mathrm{phaseVel}(f,t)=\Im\Bigl(\frac{f'(t)}{f(t)}\Bigr)
+$$
+
+#### `phaseUnwrap (f) (t0 θ0) (t) : ℝ`  
+
+$$
+\Theta(t)=\theta_0+\int_{t_0}^{t}\mathrm{phaseVel}(f,u)\,du
+$$
 
 ### `Lemmas.lean`：確定した主要補題
 
-- `denom_eq_normSq`
+#### `denom_eq_normSq`
 
-  $$
-  \mathrm{denom}(z)=\mathrm{normSq}(z)
-  $$
+$$
+\mathrm{denom}(z)=\mathrm{normSq}(z)
+$$
 
-- `im_div_eq_torque_div_normSq`
+#### `im_div_eq_torque_div_normSq`
 
-  $$
-  \Im\Bigl(\frac{dz}{z}\Bigr)
-  =\frac{\mathrm{torque}(z,dz)}{\mathrm{normSq}(z)}
-  $$
+$$
+\Im\Bigl(\frac{dz}{z}\Bigr)=\frac{\mathrm{torque}(z,dz)}{\mathrm{normSq}(z)}
+$$
 
-- `driftFreeLocal_iff_im_div_eq_zero`（`z≠0`）
+#### `driftFreeLocal_iff_im_div_eq_zero`（`z≠0`）
 
-  $$
-  \mathrm{torque}(z,dz)=0\iff\Im(dz/z)=0
-  $$
+$$
+\mathrm{torque}(z,dz)=0\iff\Im(dz/z)=0
+$$
 
-- `torque_eq_im_mul_conj`
+#### `torque_eq_im_mul_conj`
 
-  $$
-  \mathrm{torque}(z,dz)=\Im(dz\cdot\overline{z})
-  $$
+$$
+\mathrm{torque}(z,dz)=\Im(dz\cdot\overline{z})
+$$
 
-- `phaseVel_eq_torque_div_normSq` / `phaseVel_eq_im_mul_conj_div_normSq`
+#### `phaseVel_eq_torque_div_normSq` / `phaseVel_eq_im_mul_conj_div_normSq`
 
-  $$
-  \mathrm{phaseVel}(f,t)
-  =\frac{\mathrm{torque}(f(t),f'(t))}{\mathrm{normSq}(f(t))}
-  =\frac{\Im(f'(t)\cdot\overline{f(t)})}{\mathrm{normSq}(f(t))}
-  $$
+$$
+\mathrm{phaseVel}(f,t)=
+\frac{\mathrm{torque}(f(t),f'(t))}{\mathrm{normSq}(f(t))}=
+\frac{\Im(f'(t)\cdot\overline{f(t)})}{\mathrm{normSq}(f(t))}
+$$
 
-- `driftFreeAt_iff_phaseVel_eq_zero`（`f t ≠ 0`）
+#### `driftFreeAt_iff_phaseVel_eq_zero`（`f t ≠ 0`）
 
-  $$
-  \mathrm{driftFreeAt}(f,t)\iff \mathrm{phaseVel}(f,t)=0
-  $$
+$$
+\mathrm{driftFreeAt}(f,t)\iff \mathrm{phaseVel}(f,t)=0
+$$
 
 ### `Theorems.lean`：アンラップ位相が微分できる
 
@@ -160,20 +161,21 @@ $$
 
 ### 3.2 補題（`EulerZetaLemmas.lean` の中心）
 
-- `w(p,σ,t) ≠ 0`（`p` prime, `σ>1` などの条件下で確定）
-- 近似評価（収束へ落とす心臓部）
+#### `w(p,σ,t) ≠ 0`（`p` prime, `σ>1` などの条件下で確定）
 
-  $$
-  \|a_p(\sigma,t)-1\|\le \frac{2}{p^\sigma}\quad(\sigma>1)
-  $$
+近似評価（収束へ落とす心臓部）
 
-- これにより、p-series へ比較して
+$$
+\|a_p(\sigma,t)-1\|\le \frac{2}{p^\sigma}\quad(\sigma>1)
+$$
 
-  $$
-  \sum_p \|a_p(\sigma,t)-1\|
-  $$
+これにより、p-series へ比較して
 
-  の収束（`Summable`）が取れる。
+$$
+\sum_p \|a_p(\sigma,t)-1\|
+$$
+
+の収束（`Summable`）が取れる。
 
 ### 3.3 収束と正値（`EulerZetaConvergence.lean` の主定理）
 
