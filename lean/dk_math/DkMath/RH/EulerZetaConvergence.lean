@@ -78,6 +78,117 @@ lemma eulerZeta_exp_s_log_p_sub_one_ne_zero (p : ℕ) (hp : Nat.Prime p)
     sigma_log_p_ne_zero p hp σ hσ
   exact this sigma_log_p_eq_zero
 
+/-- σ > 1 のとき、exp((σ+it) log p) - 1 ≠ 0 -/
+theorem eulerZeta_exp_s_log_p_sub_one_ne_zero_strong
+    (p : ℕ) (hp : Nat.Prime p) (σ t : ℝ) (hσ : 1 < σ) :
+    eulerZeta_exp_s_log_p_sub_one p σ t ≠ 0 := by
+  -- 既存の補題を再利用
+  exact eulerZeta_exp_s_log_p_sub_one_ne_zero p hp σ (lt_trans (by norm_num) hσ) t
+
+/-- ‖eulerZetaFactorMag p σ t - 1‖ ≤ 2 / p^σ
+
+   強い形の上界
+-/
+theorem eulerZetaFactorMag_norm_sub_one_upper_bound
+    (p : ℕ) (hp : Nat.Prime p) (σ t : ℝ) (hσ : 1 < σ) :
+    ‖eulerZetaFactorMag p σ t - 1‖ ≤ 2 / ((p : ℝ) ^ σ) := by
+  have hσ0 : 0 < σ := lt_trans (by norm_num) hσ
+  have hp2 : (2 : ℕ) ≤ p := Nat.Prime.two_le hp
+  have hp_pos : 0 < (p : ℝ) := by
+    have : (0 : ℕ) < p := lt_of_lt_of_le (by decide : (0:ℕ) < 2) hp2
+    exact_mod_cast this
+  have hlogp_pos : 0 < Real.log (p : ℝ) := by
+    have hp1 : (1 : ℝ) < (p : ℝ) := by
+      exact_mod_cast (lt_of_lt_of_le (by decide : (1:ℕ) < 2) hp2)
+    exact Real.log_pos hp1
+  let z : ℂ := vertical σ t * (Real.log (p : ℝ) : ℂ)
+  let w : ℂ := Complex.exp z - 1
+  let x : ℝ := Real.exp (σ * Real.log (p : ℝ))
+  have hw_ne : w ≠ 0 :=
+    eulerZeta_exp_s_log_p_sub_one_ne_zero_strong p hp σ t hσ
+  have hw_norm_pos : 0 < ‖w‖ := (norm_pos_iff).2 hw_ne
+  have hden_lower : x - 1 ≤ ‖w‖ := by
+    have h := norm_sub_norm_le (Complex.exp z) (1 : ℂ)
+    have : ‖Complex.exp z‖ = x := by
+      calc
+        ‖Complex.exp z‖ = Real.exp (z.re) := Complex.norm_exp _
+        _ = Real.exp (σ * Real.log (p : ℝ)) := by
+          have z_re := vertical_mul_log_p_re p σ t
+          rw [z_re]
+        _ = x := rfl
+    rw [this] at h
+    have : ‖(1 : ℂ)‖ = 1 := norm_one
+    rw [this] at h
+    have : ‖Complex.exp z - 1‖ = ‖w‖ := rfl
+    rw [this] at h
+    linarith
+  have hx_rpow : x = (p : ℝ) ^ σ := by
+    rw [Real.rpow_def_of_pos hp_pos]
+    simp [x, mul_comm]
+  have hx_ge_p : (p : ℝ) ≤ x := by
+    have hσ1 : (1 : ℝ) ≤ σ := le_of_lt hσ
+    have hlogp_nonneg : 0 ≤ Real.log (p : ℝ) := le_of_lt hlogp_pos
+    have hmul : Real.log (p : ℝ) ≤ σ * Real.log (p : ℝ) := by
+      calc Real.log (p : ℝ) = 1 * Real.log (p : ℝ) := by ring
+        _ ≤ σ * Real.log (p : ℝ) := mul_le_mul_of_nonneg_right hσ1 hlogp_nonneg
+    have hexp := Real.exp_le_exp.mpr hmul
+    calc (p : ℝ) = Real.exp (Real.log (p : ℝ)) := (Real.exp_log hp_pos).symm
+      _ ≤ Real.exp (σ * Real.log (p : ℝ)) := hexp
+      _ = x := rfl
+  have hx_ge_two : (2 : ℝ) ≤ x := by
+    have hp2r : (2 : ℝ) ≤ (p : ℝ) := by exact_mod_cast hp2
+    exact le_trans hp2r hx_ge_p
+  have hx_gt_one : 1 < x := lt_of_lt_of_le (by norm_num) hx_ge_two
+  have hx_m1_pos : 0 < x - 1 := sub_pos.mpr hx_gt_one
+  have hgap : |x - ‖w‖| ≤ 1 := by
+    have h := abs_norm_sub_norm_le (Complex.exp z) (Complex.exp z - 1)
+    have h_norm_exp : ‖Complex.exp z‖ = x := by
+      calc
+        ‖Complex.exp z‖ = Real.exp (z.re) := Complex.norm_exp _
+        _ = Real.exp (σ * Real.log (p : ℝ)) := by
+          have z_re := vertical_mul_log_p_re p σ t
+          rw [z_re]
+        _ = x := rfl
+    have h_norm_w : ‖Complex.exp z - 1‖ = ‖w‖ := rfl
+    simpa [h_norm_exp, h_norm_w] using h
+  have habs : |(x / ‖w‖) - 1| = |x - ‖w‖| / ‖w‖ := by
+    have hw0 : ‖w‖ ≠ 0 := ne_of_gt hw_norm_pos
+    calc
+      |(x / ‖w‖) - 1|
+          = |(x - ‖w‖) / ‖w‖| := by field_simp [hw0]
+      _ = |x - ‖w‖| / |‖w‖| := abs_div (x - ‖w‖) ‖w‖
+      _ = |x - ‖w‖| / ‖w‖ := by simp [abs_of_nonneg (norm_nonneg _)]
+  have h1 : |x - ‖w‖| / ‖w‖ ≤ 1 / (x - 1) := by
+    have hA : |x - ‖w‖| / ‖w‖ ≤ 1 / ‖w‖ :=
+      div_le_div_of_nonneg_right hgap (le_of_lt hw_norm_pos)
+    have hB : (1 : ℝ) / ‖w‖ ≤ 1 / (x - 1) :=
+      one_div_le_one_div_of_le hx_m1_pos hden_lower
+    exact le_trans hA hB
+  have h2 : (1 : ℝ) / (x - 1) ≤ 2 / x := by
+    -- 直接計算して差をとると整理しやすい。
+    -- 2/x - 1/(x-1) = (x-2) / (x*(x-1)) であり、分子は非負、分母は正なので右辺は非負。
+    have hx_pos : 0 < x := Real.exp_pos _
+    have hx_ne : x ≠ 0 := by linarith [hx_ge_two]
+    have hx_m1_ne : x - 1 ≠ 0 := by linarith [hx_gt_one]
+    have hdiff : 2 / x - 1 / (x - 1) = (x - 2) / (x * (x - 1)) := by
+      field_simp [hx_ne, hx_m1_ne]
+      ring
+    have hnum_nonneg : 0 ≤ x - 2 := by linarith [hx_ge_two]
+    have hden_pos : 0 < x * (x - 1) := mul_pos hx_pos hx_m1_pos
+    have hrhs_nonneg := div_nonneg hnum_nonneg (le_of_lt hden_pos)
+    rw [←hdiff] at hrhs_nonneg
+    exact le_of_sub_nonneg hrhs_nonneg
+  have : ‖eulerZetaFactorMag p σ t - 1‖ ≤ 2 / x := by
+    have hxw : eulerZetaFactorMag p σ t = x / ‖w‖ := by
+      simp [eulerZetaFactorMag, eulerZeta_exp_s_log_p_sub_one, w, z, x, vertical]
+    calc
+      ‖eulerZetaFactorMag p σ t - 1‖
+          = |(x / ‖w‖) - 1| := by simp [hxw, Real.norm_eq_abs]
+      _ = |x - ‖w‖| / ‖w‖ := habs
+      _ ≤ (1 : ℝ) / (x - 1) := h1
+      _ ≤ 2 / x := h2
+  simpa [hx_rpow] using this
+
 -- ============================================================================
 -- 1. σ > 1 での基本的な上界
 -- ============================================================================
