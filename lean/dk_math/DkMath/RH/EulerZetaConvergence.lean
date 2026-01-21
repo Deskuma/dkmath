@@ -4,6 +4,8 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import Mathlib.Analysis.PSeries
+
 import DkMath.RH.Defs
 import DkMath.RH.EulerZetaLemmas
 
@@ -206,11 +208,9 @@ theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : �
       exact eulerZetaFactorMag_sub_one_upper_bound p.1 p.2 σ hσ t
 
     -- p級数：∑' 1/p^σ は σ > 1 で収束
-    -- 【admit】: 素数への制限が必要（自然数全体 → 素数のみ）
-    -- 理由：Mathlib の Real.summable_nat_rpow は自然数全体に対するもので、
-    --       素数のSubtype への制限を示す補題が複雑
+    -- Mathlib の実装を使う
     have h_zeta_convergent : Summable (fun p : {p // Nat.Prime p} => 1 / (↑p : ℝ) ^ σ) := by
-      sorry
+      exact summable_one_div_prime_rpow_sigma σ hσ
 
     -- 係数を含む形：∑' 2/p^σ も収束
     -- スカラー倍の Summable は元の Summable から得られる

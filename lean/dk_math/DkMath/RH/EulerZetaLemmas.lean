@@ -4,6 +4,8 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import Mathlib.Analysis.PSeries
+
 import DkMath.RH.Defs
 import DkMath.RH.EulerZeta
 
@@ -295,5 +297,33 @@ lemma eulerZetaFactorMag_sub_one_upper_bound (p : ℕ) (hp : Nat.Prime p)
   -- 合わせる
   calc x / ‖w‖ - 1 ≤ 1 / (x - 1) := h_upper_1
       _ ≤ 2 / x := h_upper_2
+
+/-- σ > 1 のとき、自然数の p-series ∑' 1/n^σ が収束する
+
+   これは Mathlib の `Real.summable_one_div_nat_rpow` で提供されている。
+-/
+theorem summable_one_div_nat_rpow_sigma (σ : ℝ) (hσ : 1 < σ) :
+    Summable (fun n : ℕ => (1 : ℝ) / (n : ℝ) ^ σ) :=
+  (Real.summable_one_div_nat_rpow).mpr hσ
+
+/-- σ > 1 のとき、素数に制限した p-series ∑' 1/p^σ が収束する
+
+   自然数版から Subtype.val の単射性で落とす。
+-/
+theorem summable_one_div_prime_rpow_sigma (σ : ℝ) (hσ : 1 < σ) :
+    Summable (fun p : {p // Nat.Prime p} => (1 : ℝ) / (↑p : ℝ) ^ σ) := by
+  -- 自然数版の収束
+  have h_nat : Summable (fun n : ℕ => (1 : ℝ) / (n : ℝ) ^ σ) :=
+    summable_one_div_nat_rpow_sigma σ hσ
+  -- 素数への制限は Subtype.val : {p // Nat.Prime p} → ℕ が単射だから
+  -- comp_injective で得られる
+  have h_inj : Function.Injective (Subtype.val : {p // Nat.Prime p} → ℕ) :=
+    Subtype.coe_injective
+  -- f (coe p) = 1 / (↑p : ℝ) ^ σ の形で comp_injective を使う
+  have : (fun p : {p // Nat.Prime p} => (1 : ℝ) / (↑p : ℝ) ^ σ) =
+         (fun n : ℕ => (1 : ℝ) / (n : ℝ) ^ σ) ∘ (Subtype.val : {p // Nat.Prime p} → ℕ) := by
+    rfl
+  rw [this]
+  exact Summable.comp_injective h_nat h_inj
 
 end DkMath.RH.EulerZeta
