@@ -51,7 +51,7 @@ $$
   \;\right)
 $$
 
-ここで $s = \sigma + it$ とします。
+※ $s = \sigma + it$ : 複素数変数
 
 ---
 
@@ -162,4 +162,4 @@ $$
 ---
 
 GitHub Markdown and $\LaTeX$ Style
-This README file uses GitHub-flavored Markdown and $\LaTeX$ for mathematical expressions. To render the $\LaTeX$ expressions correctly, ensure that your Markdown viewer supports MathJax or a similar library.
+This document uses GitHub-flavored Markdown and $\LaTeX$ for mathematical expressions. To render the $\LaTeX$ expressions correctly, ensure that your Markdown viewer supports MathJax or a similar library.
