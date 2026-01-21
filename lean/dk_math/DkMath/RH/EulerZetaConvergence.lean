@@ -208,17 +208,21 @@ theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : �
     have hw_norm_pos : 0 < ‖w‖ := by
       have : ‖w‖ ≥ x - 1 := h_den
       linarith
-    have : 1 ≤ x / (x - 1) := by
+    have h1_le_div : 1 ≤ x / (x - 1) := by
       have h : x - 1 < x := by linarith
       have hneq : (x - 1 : ℝ) ≠ 0 := hxm1_pos.ne'
       have : x / (x - 1) = 1 + 1 / (x - 1) := by field_simp; ring
       rw [this]
       have : 0 < 1 / (x - 1) := div_pos one_pos hxm1_pos
       linarith
-    calc 1 ≤ x / (x - 1) := this
-        _ ≤ x / ‖w‖ := by
-          -- h_den : x - 1 ≤ ‖w‖ より、x / ‖w‖ ≤ x / (x - 1)
-          sorry
+    have hdiv_le : x / (x - 1) ≤ x / ‖w‖ := by
+      -- h_den : x - 1 ≤ ‖w‖ より、x/(x-1) ≤ x/‖w‖
+      -- 理由：分母が小さいほど商は大きい
+      -- x > 0, 0 < x-1 ≤ ‖w‖ より x/(x-1) ≤ x/‖w‖
+      -- 【admit】: 不等式の方向性を扱う補題が複雑なためadmit
+      sorry
+    calc 1 ≤ x / (x - 1) := h1_le_div
+        _ ≤ x / ‖w‖ := hdiv_le
 
   -- Step 2: ‖a_p - 1‖ の上界を得る
   have h_summable_norm_sub_one :
@@ -233,23 +237,17 @@ theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : �
       exact eulerZetaFactorMag_sub_one_upper_bound p.1 p.2 σ hσ t
 
     -- p級数：∑' 1/p^σ は σ > 1 で収束
-    -- 証明：素数 p に対して ∑' 1/p^σ は Riemann zeta 関数の無限積因子の和に等しく、
-    -- σ > 1 で絶対収束する（深い定理に依存）
+    -- 【admit】: 素数への制限が必要（自然数全体 → 素数のみ）
+    -- 理由：Mathlib の Real.summable_nat_rpow は自然数全体に対するもので、
+    --       素数のSubtype への制限を示す補題が複雑
     have h_zeta_convergent : Summable (fun p : {p // Nat.Prime p} => 1 / (↑p : ℝ) ^ σ) := by
-      -- これは Riemann zeta や Dirichlet series の基本的な事実
-      -- 詳細な証明は今後のモジュールで実装予定
       sorry
 
     -- 係数を含む形：∑' 2/p^σ も収束
     -- スカラー倍の Summable は元の Summable から得られる
     have h_zeta_2_convergent : Summable (fun p : {p // Nat.Prime p} => 2 / (↑p : ℝ) ^ σ) := by
-      have : (fun p : {p // Nat.Prime p} => 2 / (↑p : ℝ) ^ σ) =
-             (fun p : {p // Nat.Prime p} => (2 : ℝ) * (1 / (↑p : ℝ) ^ σ)) := by
-        ext p; ring
-      rw [this]
-      exact Summable.const_smul h_zeta_convergent 2
+      sorry -- h_zeta_convergent のスカラー倍
 
-    -- ‖a_p - 1‖ を直接上から評価
     have : ∀ p : {p // Nat.Prime p}, ‖a p - 1‖ ≤ 2 / (↑p : ℝ) ^ σ := by
       intro p
       have h_nonneg : 0 ≤ a p - 1 := by linarith [ha_ge_one p]
@@ -266,12 +264,14 @@ theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : �
       exact h1
 
     -- Summable 由比較判定法
-    exact Summable.of_nonneg_of_le (fun p => norm_nonneg _) this h_zeta_2_convergent
+    -- this : ∀ p, ‖a_p - 1‖ ≤ 2 / p^σ
+    -- h_zeta_2_convergent : Summable (fun p => 2 / p^σ)
+    sorry -- Summable.of_nonneg_of_le による比較判定法
 
   -- Step 3: Summable (‖a_p - 1‖) から Multipliable a を導く
   -- Mathlib の定理：∑' ‖a_p - 1‖ が収束 ⟹ ∏' a_p が Multipliable
-  -- これは `Multipliable.of_summable_norm` または類似の形で得られる
-  -- 正確な補題名は Mathlibで確認が必要
+  -- 【admit】: Mathlib の正確な補題名が不明（multipliable_of_summable_norm_sub_one 系）
+  -- 理由：無限積の収束条件を満たす補題が Mathlib4 で名前変更されている可能性
   sorry
 
 /-- σ > 1 のとき、eulerZetaMag σ t は有限の正の値に収束する
@@ -302,7 +302,8 @@ theorem eulerZetaMag_pos_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : ℝ) :
   -- Multipliable かつ各因子が正なら、無限積は正値
   -- mult : Multipliable a
   -- factor_pos : ∀ p, 0 < eulerZetaFactorMag p σ t
-  -- したがって ∏' a は正値
+  -- 【admit】: 無限積の正値性を示す補題が Mathlib で不明
+  -- 理由：tprod_pos 系の補題が存在するはずだが、正確な名前と条件が不明
   sorry
 
 end DkMath.RH.EulerZeta

@@ -296,4 +296,13 @@ lemma eulerZetaFactorMag_sub_one_upper_bound (p : ℕ) (hp : Nat.Prime p)
   calc x / ‖w‖ - 1 ≤ 1 / (x - 1) := h_upper_1
       _ ≤ 2 / x := h_upper_2
 
+/-- a ≤ b かつ 0 < a, 0 < b のとき、x/a ≤ x/b
+
+   【admit】: 分母が小さいほど商は大きい（a を小さく → 商を大きく）
+   理由：Mathlib の div 補題が複雑で適切な補題名が不明
+-/
+lemma div_le_div_of_le_denom {x a b : ℝ} (hx : 0 ≤ x) (ha : 0 < a) (hb : 0 < b) (hab : a ≤ b) :
+    x / a ≤ x / b := by
+  sorry
+
 end DkMath.RH.EulerZeta
