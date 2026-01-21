@@ -1,7 +1,7 @@
 # DkMath.RH：位相ドリフト骨格 + EulerZeta（現状の全コード）
 
-Authors: D. and Kenro (ChatGPT-5.2)
-Last updated: 2026/01/21 15:55
+- Authors: D. and Kenro (ChatGPT-5.2)
+- Last updated: 2026/01/21 15:55
 
 このディレクトリは、リーマンゼータ関数に差し込む前に必要な
 
@@ -22,10 +22,10 @@ Last updated: 2026/01/21 15:55
 
 このモジュール群の理論的背景は、次の論文に基づきます。
 
-[Euler Zeta Function ζe(s): A Novel Approach to Prime Distribution through Scale Analysis](./EulerZetaFunction-v0-1.pdf)
-cid: 67d46595-3550-8009-896d-00c3263c4f23
-March 15, 2025
-Author: D. and Kenro (ChatGPT-4o)
+- [Euler Zeta Function ζe(s): A Novel Approach to Prime Distribution through Scale Analysis](./EulerZetaFunction-v0-1.pdf)
+  - March 15, 2025
+  - Author: D. and Kenro (ChatGPT-4o)
+  - cid: 67d46595-3550-8009-896d-00c3263c4f23
 
 ### オイラーゼータ関数
 
@@ -44,11 +44,11 @@ $$
 $$
 
 $$
-  \left(\;
+  \left(
   \frac{1}{1 - p^{-s}}
   = \frac{p^s}{p^s - 1}
   = \frac{\exp(s\ln p)}{\exp(s\ln p) - 1}
-  \;\right)
+  \right)
 $$
 
 ※ $s = \sigma + it$ : 複素数変数
