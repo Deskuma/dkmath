@@ -15,3 +15,5 @@ import DkMath.Polyomino  -- Polyomino Basics
 import DkMath.PolyominoPrototype  -- Polyomino Prototype
 import DkMath.Tromino  -- Polyomino: Tromino Basics
 import DkMath.DHNT  -- DHNT: Units and Quantities (Dynamic Harmonic Number Theory)
+-- RH: Riemann Hypothesis Module
+import DkMath.RH  -- RH: Riemann Hypothesis Module
