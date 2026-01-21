@@ -41,13 +41,11 @@ Author: D. and Kenro (ChatGPT-4o)
 
 \[
   \left(\;
-  \frac{1}{1 - p
-  ^{-s}}
+  \frac{1}{1 - p^{-s}}
   = \frac{p^s}{p^s - 1}
   = \frac{\exp(s\ln p)}{\exp(s\ln p) - 1}
   \;\right)
 \]
-
 ここで `s = σ + it` とします。
 
 ---
