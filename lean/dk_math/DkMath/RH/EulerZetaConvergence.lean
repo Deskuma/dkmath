@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import Mathlib.Analysis.PSeries
+import Mathlib.Analysis.SpecialFunctions.Log.Summable
 
 import DkMath.RH.Defs
 import DkMath.RH.EulerZetaLemmas
@@ -241,10 +242,27 @@ theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : �
     sorry -- Summable.of_nonneg_of_le による比較判定法
 
   -- Step 3: Summable (‖a_p - 1‖) から Multipliable a を導く
-  -- Mathlib の定理：∑' ‖a_p - 1‖ が収束 ⟹ ∏' a_p が Multipliable
-  -- 【admit】: Mathlib の正確な補題名が不明（multipliable_of_summable_norm_sub_one 系）
-  -- 理由：無限積の収束条件を満たす補題が Mathlib4 で名前変更されている可能性
-  sorry
+  -- 戦略：a_p = 1 + f_p の形にして、multipliable_one_add_of_summable を使う
+  -- ここで f_p := eulerZetaFactorMag p σ t - 1 とすると、
+  -- ∑' ‖f_p‖ が収束すれば ∏' (1 + f_p) = ∏' a_p が Multipliable になる
+
+  have h_multipliable : Multipliable a := by
+    -- f_p := a_p - 1 と定義
+    let f : {p // Nat.Prime p} → ℝ := fun p => a p - 1
+
+    -- a_p = 1 + f_p を確認（ring で処理）
+    have h_eq : ∀ p, a p = 1 + (a p - 1) := fun p => by ring
+
+    -- multipliable_one_add_of_summable を直接使用
+    -- ∑' ‖a_p - 1‖ が収束することから ∏' a_p が Multipliable
+    have hsum : Summable fun p => ‖a p - 1‖ := h_summable_norm_sub_one
+
+    convert multipliable_one_add_of_summable hsum using 1
+    ext p
+    ring
+
+  -- 目標を達成：h_multipliable から EulerZetaMagMultipliable σ t を得る
+  exact h_multipliable
 
 /-- σ > 1 のとき、eulerZetaMag σ t は有限の正の値に収束する
 
