@@ -217,9 +217,8 @@ theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : �
       linarith
     calc 1 ≤ x / (x - 1) := this
         _ ≤ x / ‖w‖ := by
-          -- h_den : x - 1 ≤ ‖w‖ より
-          -- 分数で分母が大きい方が値は小さい
-          sorry -- 分数の除算関係の補題を使用
+          -- h_den : x - 1 ≤ ‖w‖ より、x / ‖w‖ ≤ x / (x - 1)
+          sorry
 
   -- Step 2: ‖a_p - 1‖ の上界を得る
   have h_summable_norm_sub_one :
@@ -244,7 +243,11 @@ theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : �
     -- 係数を含む形：∑' 2/p^σ も収束
     -- スカラー倍の Summable は元の Summable から得られる
     have h_zeta_2_convergent : Summable (fun p : {p // Nat.Prime p} => 2 / (↑p : ℝ) ^ σ) := by
-      sorry -- Summable.mul_left から直接得られる
+      have : (fun p : {p // Nat.Prime p} => 2 / (↑p : ℝ) ^ σ) =
+             (fun p : {p // Nat.Prime p} => (2 : ℝ) * (1 / (↑p : ℝ) ^ σ)) := by
+        ext p; ring
+      rw [this]
+      exact Summable.const_smul h_zeta_convergent 2
 
     -- ‖a_p - 1‖ を直接上から評価
     have : ∀ p : {p // Nat.Prime p}, ‖a p - 1‖ ≤ 2 / (↑p : ℝ) ^ σ := by
@@ -258,7 +261,7 @@ theorem eulerZetaMag_multipliable_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : �
         exact_mod_cast this
       -- exp(σ log p) = p^σ：指数法則から
       have h_exp_eq : Real.exp (σ * Real.log (↑p : ℝ)) = (↑p : ℝ) ^ σ := by
-        sorry -- Real.exp (σ * log p) = p^σ の基本的な恒等式
+        rw [Real.rpow_def_of_pos hp_pos, mul_comm]
       rw [h_exp_eq] at h1
       exact h1
 
@@ -297,8 +300,9 @@ theorem eulerZetaMag_pos_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : ℝ) :
     exact div_pos exp_pos w_norm_pos
 
   -- Multipliable かつ各因子が正なら、無限積は正値
-  -- HasProd が存在することを mult から取り、各因子の正値性を使う
-  -- 部分積の極限を取ることで正値を確認
+  -- mult : Multipliable a
+  -- factor_pos : ∀ p, 0 < eulerZetaFactorMag p σ t
+  -- したがって ∏' a は正値
   sorry
 
 end DkMath.RH.EulerZeta
