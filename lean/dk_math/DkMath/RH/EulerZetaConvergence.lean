@@ -303,10 +303,26 @@ theorem eulerZetaMag_pos_sigma_gt_one (σ : ℝ) (hσ : 1 < σ) (t : ℝ) :
   -- Step 2: 正値性を証明
   -- Multipliable + 各因子が正 ⟹ 無限積が正
   have h_tprod_pos : 0 < (∏' p : {p // Nat.Prime p}, a p) := by
-    -- mult : Multipliable a より無限積は収束している
     -- 各因子が正なら無限積も正
-    -- Multipliable.tprod_pos を使う（あれば）
-    sorry -- 最後の正値性確保
+    -- Mathlib の直接的な補題：HProd（無限積）は各因子が正なら正
+    have h_pos : ∀ p : {p // Nat.Prime p}, 0 < a p := fun p => factor_pos p.1 p.2
+
+    -- tprod は有限積の supremum として定義される
+    -- 有限部分積は全て正で、正の値に収束する
+    -- したがって無限積も正
+
+    -- 簡潔には：a_p = 1 + f_p で |f_p| ≤ 2/p^σ
+    -- ∏(1 + f_p) は Multipliable かつ 1 より大きい
+    have h_a_ge_one : ∀ p : {p // Nat.Prime p}, 1 ≤ a p := by
+      intro p
+      -- a_p = eulerZetaFactorMag p σ t
+      -- eulerZetaFactorMag = exp(σ log p) / |exp((σ+it) log p) - 1|
+      -- 分子 ≥ exp(0) = 1, 分母 > 0 より a_p > 0
+      -- さらに a_p > 0 かつ Multipliable なら ∏a_p > 0
+      sorry -- 1 ≤ a_p を示す（または別の方法で正値性を導く）
+
+    -- これで正値性が出る
+    sorry -- tprod の正値性（補題を特定後に埋める）
 
   exact h_tprod_pos
 
