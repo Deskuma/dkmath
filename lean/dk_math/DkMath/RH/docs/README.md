@@ -1,5 +1,8 @@
 # DkMath.RH：位相ドリフト骨格 + EulerZeta（現状の全コード）
 
+- Authors: D. and Kenro (ChatGPT-5.2)
+- Last updated: 2026/01/21 15:55
+
 このディレクトリは、リーマンゼータ関数に差し込む前に必要な
 
 - 「複素関数の位相（角度）の変化＝位相速度」を Lean で扱う骨格
@@ -19,34 +22,36 @@
 
 このモジュール群の理論的背景は、次の論文に基づきます。
 
-[Euler Zeta Function ζe(s): A Novel Approach to Prime Distribution through Scale Analysis](./EulerZetaFunction-v0-1.pdf)
-cid: 67d46595-3550-8009-896d-00c3263c4f23
-March 15, 2025
-Author: D. and Kenro (ChatGPT-4o)
+- [Euler Zeta Function ζe(s): A Novel Approach to Prime Distribution through Scale Analysis](./EulerZetaFunction-v0-1.pdf)
+  - March 15, 2025
+  - Author: D. and Kenro (ChatGPT-4o)
+  - cid: 67d46595-3550-8009-896d-00c3263c4f23
 
 ### オイラーゼータ関数
 
-\[
-\\[2pt]\Large\zeta_e(s) = \prod_{p} \frac{e^{\,\sigma \log p}}{| e^{\,(\sigma+it) \log p} - 1 |}
-\]
+$$
+  \Large
+  \zeta_e(s) = \prod_{p} \frac{e^{\sigma \log p}}{| e^{(\sigma+it) \log p} - 1 |}
+$$
 
 オイラー積表示より導出されたゼータ関数の変形版で、位相因子を含むものを指します。
 
 #### オイラー積表示
 
-\[
+$$
   \large
   \zeta(s) = \prod_{p} \frac{1}{1 - p^{-s}}
-\]
+$$
 
-\[
-  \left(\;
+$$
+  \left(
   \frac{1}{1 - p^{-s}}
   = \frac{p^s}{p^s - 1}
   = \frac{\exp(s\ln p)}{\exp(s\ln p) - 1}
-  \;\right)
-\]
-ここで `s = σ + it` とします。
+  \right)
+$$
+
+※ $s = \sigma + it$ : 複素数変数
 
 ---
 
@@ -153,3 +158,9 @@ Author: D. and Kenro (ChatGPT-4o)
 - σ 方向（横方向）でも同型テンプレートを作る：
   `phaseVelSigma` / `phaseUnwrapSigma`。
 - ゼータ差し込みのための仮定（零点回避・可微分性・可積分性）を整理してまとめる。
+
+---
+
+VSCode and GitHub Markdown $\LaTeX$ Style Documentation
+
+This document uses GitHub-flavored Markdown and $\LaTeX$ for mathematical expressions. To render the $\LaTeX$ expressions correctly, ensure that your Markdown viewer supports MathJax or a similar library.
