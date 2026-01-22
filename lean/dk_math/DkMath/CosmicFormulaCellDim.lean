@@ -114,7 +114,111 @@ def Gbinom (d x u : ℕ) : ℕ :=
 -/
 theorem pow_sub_pow_eq_mul_Gbinom (d x u : ℕ) :
     (x + u) ^ d - u ^ d = x * Gbinom d x u := by
-  sorry
+  classical
+  cases d with
+  | zero =>
+    simp [Gbinom]
+  | succ d =>
+    -- 以後 n = d+1
+    set n : ℕ := d+1
+    have hn : n = d+1 := rfl
+
+    -- (u+x)^n の二項展開：Σ choose n k * u^k * x^(n-k)
+    have hpow :
+        (u + x)^n
+          = Finset.sum (Finset.range (n+1)) fun k => Nat.choose n k * u ^ k * x ^ (n - k) := by
+      have h := add_pow u x n
+      calc (u + x)^n
+          = Finset.sum (Finset.range (n+1)) fun k => u ^ k * x ^ (n - k) * ↑(Nat.choose n k) := h
+        _ = Finset.sum (Finset.range (n+1)) fun k => Nat.choose n k * u ^ k * x ^ (n - k) := by
+          apply Finset.sum_congr rfl
+          intro k _
+          norm_num [mul_comm, mul_assoc, mul_left_comm]
+
+    -- u+x = x+u を使って左辺を合わせる
+    have hpow' :
+        (x + u)^n
+          = Finset.sum (Finset.range (n+1)) fun k => Nat.choose n k * u ^ k * x ^ (n - k) := by
+      rw [add_comm]
+      exact hpow
+
+    -- 末項 k=n は choose n n * u^n * x^0 = u^n
+    have h_last :
+        (↑(Nat.choose n n)) * u ^ n * x ^ (n-n) = u^n := by
+      norm_num [Nat.choose_self, pow_zero]
+
+    -- `Σ_{k<n+1} f k = Σ_{k < n} f k + f n` を使って末項を剥がし、差を取る
+    let f : ℕ → ℕ := fun k => Nat.choose n k * u ^ k * x ^ (n-k)
+    have hsplit :
+        Finset.sum (Finset.range (n+1)) f = Finset.sum (Finset.range n) f + f n := by
+      simpa using (Finset.sum_range_succ f n)
+
+    have hsub :
+        (x+u)^n - u^n = Finset.sum (Finset.range n) f := by
+      have : (x+u)^n = Finset.sum (Finset.range n) f + f n := by
+        simpa [hpow', hsplit]
+      have f_n_eq : f n = u^n := by
+        dsimp [f]
+        exact h_last
+      calc
+        (x+u)^n - u^n
+            = (Finset.sum (Finset.range n) f + f n) - u^n := by
+          rw [this]
+        _ = Finset.sum (Finset.range n) f := by
+          rw [f_n_eq]
+          omega
+
+    -- 反転して x^(k+1) の形を作る（k ↦ (n-1-k)）
+    have hreflect :
+        Finset.sum (Finset.range n) f
+          = Finset.sum (Finset.range n) fun k => Nat.choose n (n-(k+1)) * u^(n-(k+1)) * x^(k+1) := by
+      have h := (Finset.sum_range_reflect f n).symm
+      refine Eq.trans h ?_
+      apply Finset.sum_congr rfl
+      intro k hk
+      dsimp [f]
+      have hk_lt : k < n := Finset.mem_range.1 hk
+      have : n - 1 - k = n - (k + 1) := by omega
+      rw [this]
+      -- 目標: n.choose (n - (k+1)) * u ^ (n - (k+1)) * x ^ (n - (n - (k+1))) =
+      --       n.choose (n - (k+1)) * u ^ (n - (k+1)) * x ^ (k+1)
+      have h_exp : n - (n - (k + 1)) = k + 1 := by omega
+      rw [h_exp]
+
+    -- choose の対称性：choose n (n-1-k) = choose n (k+1)
+    have hchoose :
+            Finset.sum (Finset.range n) fun k => Nat.choose n (n-(k+1)) * u^(n-(k+1)) * x^(k+1)
+          = Finset.sum (Finset.range n) fun k => Nat.choose n (   k+1 ) * u^(n-(k+1)) * x^(k+1) := by
+      apply Finset.sum_congr rfl
+      intro k hk
+      dsimp
+      have hk_lt : k < n := Finset.mem_range.1 hk
+      have hk1_le : k + 1 ≤ n := by omega
+      rw [Nat.choose_symm hk1_le]
+
+    -- x^(k+1)=x*x^k で因数 x を外に出す → 定義した Gbinom に一致
+    have hfactor :
+        Finset.sum (Finset.range n) fun k => Nat.choose n (k+1) * u^(n-(k+1)) * x^(k+1)
+          = x * Gbinom n x u := by
+      have : Finset.sum (Finset.range n) fun k => Nat.choose n (k+1) * u^(n-(k+1)) * x^(k+1)
+        = Finset.sum (Finset.range n) fun k => x * (Nat.choose n (k+1) * u^(n-(k+1)) * x^k) := by
+        apply Finset.sum_congr rfl
+        intro k hk
+        dsimp
+        rw [pow_succ]
+      rw [this]
+      simp only [Finset.mul_sum]
+      congr 1
+      ext k
+      simp [Gbinom, mul_comm, mul_assoc]
+
+    -- まとめ
+    calc
+      (x+u)^n - u^n
+          = Finset.sum (Finset.range n) fun k => f k := hsub
+      _ = Finset.sum (Finset.range n) fun k => Nat.choose n (n-(k+1)) * u^(n-(k+1)) * x^(k+1) := hreflect
+      _ = Finset.sum (Finset.range n) fun k => Nat.choose n (k+1) * u^(n-(k+1)) * x^(k+1) := hchoose
+      _ = x * Gbinom n x u := hfactor
 
 end CosmicFormulaCellDim
 end DkMath
