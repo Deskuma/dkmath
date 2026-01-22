@@ -141,7 +141,7 @@ theorem card_Body_pow_form (d x u : ℕ) :
 
 /-- 差のべきの因数分解に使う和 `G` -/
 def G (d x u : ℕ) : ℕ :=
-  ∑ k ∈ Finset.range d, (x + u)^(d - 1 - k) * u ^ k
+  Finset.sum (Finset.range d) fun k => (x + u)^(d - 1 - k) * u ^ k
 
 /-- (x+u)^d - u^d = x * G x u -/
 theorem pow_sub_pow_eq_mul_G (d x u : ℕ) :
@@ -153,25 +153,20 @@ theorem pow_sub_pow_eq_mul_G (d x u : ℕ) :
   | succ d ih =>
     let a := x + u
     let b := u
-    have step : a ^ (d + 1) - b ^ (d + 1) = a * (a ^ d - b ^ d) + (a - b) * b ^ d := by
-      calc
-        a ^ (d + 1) - b ^ (d + 1) = a * a ^ d - b * b ^ d := by simp [pow_succ]
-        _ = a * (a ^ d - b ^ d) + b ^ d * (a - b) := by simp [mul_sub, sub_mul]
-    rw [step]
-    -- apply IH to (a ^ d - b ^ d)
-    have ih' : a ^ d - b ^ d = x * (∑ k ∈ (Finset.range d), a ^ (d - 1 - k) * b ^ k) := by
-      have h := ih (x := x) (u := u)
-      exact h
-    rw [ih']
-    simp only [mul_assoc]
-    calc
-      a * (x * (∑ k ∈ (Finset.range d), a ^ (d - 1 - k) * b ^ k)) + x * b ^ d
-          = x * (a * (∑ k ∈ (Finset.range d), a ^ (d - 1 - k) * b ^ k) + b ^ d) := by
-        simp [mul_add, mul_comm]
-      _ = x * ((∑ k ∈ (Finset.range d), a * (a ^ (d - 1 - k) * b ^ k)) + b ^ d) := by
-        simp [Finset.mul_sum]
-      _ = x * ((∑ k ∈ (Finset.range d), a ^ (d - k) * b ^ k) + b ^ d) := by simp [pow_succ]
-      _ = x * (∑ k ∈ (Finset.range (d + 1)), a ^ (d - k) * b ^ k) := by simp [Finset.sum_range_succ]
+    -- Use the geometric-sum lemma: (∑_{i<d+1} a^i b^{d-i})*(a-b) + b^{d+1} = a^{d+1}.
+    have h := (Commute.all (a - b) b).geom_sum₂_mul_add (d + 1)
+    -- reflect the sum indices so it matches our `Finset.sum (range (d+1)) fun k => a^(d-k) * b^k` form
+    have sum_reflect :
+        Finset.sum (Finset.range (d + 1)) fun k => a ^ (d - k) * b ^ k =
+          Finset.sum (Finset.range (d + 1)) fun i => a ^ i * b ^ (d - i) := by
+      rw [← Finset.sum_range_reflect]
+      simp
+    have h' : (a - b) * (Finset.sum (Finset.range (d + 1)) fun k => a ^ (d - k) * b ^ k) =
+        a ^ (d + 1) - b ^ (d + 1) := by
+      rw [← sum_reflect] at h
+      apply eq_tsub_of_add_eq h
+    have h_ab : a - b = x := by simp [a, b]
+    simpa [h_ab] using (Eq.symm h')
 
 end CosmicFormulaCellDim
 end DkMath
