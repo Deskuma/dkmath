@@ -168,7 +168,7 @@ theorem pow_sub_pow_eq_mul_G (d x u : ℕ) :
       -- 簡約: a - b + b = a, d + 1 - 1 - j = d - j
       simp only [Nat.add_sub_cancel] at h1
       -- a - b = x より a = x + b を先に確立する
-      have ha_eq : a = x + b := by omega
+      have ha_eq : a = x + b := by simp [a, b]
       convert h1 using 2
       · -- ⊢ ∑ k ∈ Finset.range (d + 1), a ^ (d - k) * b ^ k
         -- = ∑ x ∈ Finset.range (d + 1), (a - b + b) ^ (d - x) * b ^ (d - (d - x))
