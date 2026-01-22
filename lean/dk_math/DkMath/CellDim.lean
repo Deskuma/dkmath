@@ -15,7 +15,7 @@ namespace CellDim
 
 open scoped BigOperators
 
-variable {d : ℕ}
+variable {d : ℕ} [DecidableEq (Fin d)]
 
 instance : Add (Cell d) where
   add := fun x y => fun i => x i + y i
@@ -66,6 +66,7 @@ def translate (v : Cell d) (S : Finset (Cell d)) : Finset (Cell d) :=
     translate (d := d) v (∅ : Finset (Cell d)) = ∅ := by
   simp [translate, Finset.map_empty]
 
+
 /-! ### Box（直方体）: `0 ≤ p(i) < a(i)` を満たすセル集合 -/
 
 /-- `Fin d → ℕ` を `Cell d = Fin d → ℤ` に埋め込む。 -/
@@ -100,6 +101,27 @@ def Box (a : Fin d → ℕ) : Finset (Cell d) :=
   -- `s` has elements of type `∀ i ∈ Finset.univ, ℕ`. We convert that to `Fin d → ℕ` and then
   -- embed into `Cell d` using `ofNatCellEmb`.
   s.map ((piToFunEmb d).trans (ofNatCellEmb d))
+
+lemma range_mono {m n : ℕ} (h : m ≤ n) : Finset.range m ⊆ Finset.range n := by
+  intro k hk
+  exact Finset.mem_range.2 (lt_of_lt_of_le (Finset.mem_range.1 hk) h)
+
+-- Box 定義が `let s := Finset.pi univ ...; s.map ...` なので、それに沿って証明する
+lemma Box_mono {a b : Fin d → ℕ} (h : ∀ i, a i ≤ b i) :
+    Box (d := d) a ⊆ Box (d := d) b := by
+  classical
+  let sA := Finset.pi (Finset.univ : Finset (Fin d)) fun i => Finset.range (a i)
+  let sB := Finset.pi (Finset.univ : Finset (Fin d)) fun i => Finset.range (b i)
+  have hsub_pi : sA ⊆ sB := by
+    apply Finset.pi_subset
+    intro i _
+    exact range_mono (h i)
+  -- map の単調性で持ち上げる
+  let f := ((piToFunEmb d).trans (ofNatCellEmb d))
+  -- 展開して `s.map f` の形にしたうえで map の単調性を適用する
+  unfold Box
+  dsimp
+  exact (Finset.map_subset_map (f := f)).mpr hsub_pi
 
 @[simp] lemma card_Box (a : Fin d → ℕ) :
     (Box (d := d) a).card =
