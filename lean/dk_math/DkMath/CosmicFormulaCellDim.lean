@@ -92,6 +92,159 @@ lemma card_Big_eq_card_Body_add_card_Gap (d x u : ℕ) :
 end CosmicFormulaCellDim
 end DkMath
 
+namespace DkMath
+namespace CosmicFormulaCellDim
+
+open scoped BigOperators
+
+/-- 二項定理（choose）側の G_{d-1} :  Σ_{k < d} (d choose k+1) x^k u^(d-1-k) -/
+def Gbinom (d x u : ℕ) : ℕ :=
+  Finset.sum (Finset.range d) fun k => Nat.choose d (k + 1) * x ^ k * u ^ (d - 1 - k)
+
+/-
+狙い：
+  (x+u)^d - u^d = x * Gbinom d x u
+方針：
+  1) (u+x)^d を二項定理で Σ choose d k * u^k * x^(d-k) に展開
+  2) 末項 k=d が u^d なので、差を取ると Σ_{k < d} に落ちる（sum_range_succ で剥がす）
+  3) 反転（reflect）して x^(k+1) を作り、x を因数として外へ出す
+  4) choose の対称性で choose d (d-1-k) = choose d (k+1) に変換
+-/
+theorem pow_sub_pow_eq_mul_Gbinom (d x u : ℕ) :
+    (x + u)^d - u^d = x * Gbinom d x u := by
+  classical
+  cases d with
+  | zero =>
+      simp [Gbinom]
+  | succ d =>
+      -- 以後 n = d+1
+      set n : ℕ := d+1
+      have hn : n = d+1 := rfl
+      -- (u+x)^n の二項展開：Σ choose n k * u^k * x^(n-k)
+      have hpow :
+          (u + x)^n
+            = ∑ k ∈ Finset.range (n+1),
+                Nat.choose n k * u^k * x^(n-k) := by
+        simp [add_pow, mul_assoc, mul_comm (Nat.choose n _)]
+      -- u+x = x+u を使って左辺を合わせる
+      have hpow' :
+          (x + u)^n
+            = ∑ k ∈ Finset.range (n+1),
+                Nat.choose n k * u^k * x^(n-k) := by
+        rw [add_comm]
+        exact hpow
+      -- 末項 k=n は choose n n * u^n * x^0 = u^n
+      have h_last :
+          (Nat.choose n n) * u^n * x^(n-n) = u^n := by
+        simp
+      -- Σ_{k < n+1} f k = Σ_{k < n} f k + f n を使って末項を剥がし、差を取る
+      let f : ℕ → ℕ := fun k => Nat.choose n k * u^k * x^(n-k)
+      have hsplit :
+          (∑ k ∈ Finset.range (n+1), f k)
+            = (∑ k ∈ Finset.range n, f k) + f n := by
+        -- `Finset.sum_range_succ` : sum (range (n+1)) f = sum (range n) f + f n
+        simpa [f] using (Finset.sum_range_succ f n)
+      have hsub :
+          (x+u)^n - u^n = ∑ k ∈ Finset.range n, f k := by
+        -- (x+u)^n = sum(range(n+1)) f
+        -- sum = sum(range n) f + f n, かつ f n = u^n
+        -- なので差を取ると sum(range n) f
+        have : (x+u)^n = (∑ k ∈ Finset.range n, f k) + f n := by
+          simpa [hpow', hsplit]
+        -- Nat の tsub
+        -- a = b + c なら a - c = b
+        -- `Nat.add_sub_cancel` で落ちる
+        calc
+          (x+u)^n - u^n
+              = ((∑ k ∈ Finset.range n, f k) + f n) - u^n := by simp [this]
+          _ = (∑ k ∈ Finset.range n, f k) := by
+                -- f n = u^n を入れて add_sub_cancel
+                -- ※ `simp [f, h_last]` で落ちることが多い
+                simp [f, h_last]
+      -- 反転して x^(k+1) の形を作る（k ↦ (n-1-k)）
+      have hreflect :
+          Finset.sum (Finset.range n) f
+            = Finset.sum (Finset.range n) fun k => Nat.choose n (n-1-k) * u^(n-1-k) * x^(k+1) := by
+        have h := (Finset.sum_range_reflect f n).symm
+        refine Eq.trans h ?_
+        apply Finset.sum_congr rfl
+        intro k hk
+        dsimp [f]
+        have hk_lt : k < n := Finset.mem_range.1 hk
+        have : n - 1 - k = n - (k + 1) := by omega
+        rw [this]
+        -- 目標: n.choose (n - (k+1)) * u ^ (n - (k+1)) * x ^ (n - (n - (k+1))) =
+        --       n.choose (n - (k+1)) * u ^ (n - (k+1)) * x ^ (k+1)
+        have h_exp : n - (n - (k + 1)) = k + 1 := by omega
+        rw [h_exp]
+      -- choose の対称性：choose n (n-1-k) = choose n (k+1)
+      have hchoose :
+          (∑ k ∈ Finset.range n,
+              Nat.choose n (n-1-k) * u^(n-1-k) * x^(k+1))
+            = (∑ k ∈ Finset.range n,
+                Nat.choose n (k+1) * u^(n-1-k) * x^(k+1)) := by
+        refine Finset.sum_congr rfl ?_
+        intro k hk
+        -- hk : k ∈ range n, つまり k < n
+        have hk' : k < n := Finset.mem_range.mp hk
+        -- (n - (k+1)) = (n-1-k) より choose の対称性を適用
+        have hnk : n - (k + 1) = n - 1 - k := by omega
+        -- choose_symm: choose n r = choose n (n - r)
+        -- r = k+1 とすれば choose n (k+1) = choose n (n - (k+1)) = choose n (n-1-k)
+        have h_eq : Nat.choose n (n - 1 - k) = Nat.choose n (k + 1) := by
+          rw [← hnk]
+          exact (Nat.choose_symm (by omega : k + 1 ≤ n))
+        simp [h_eq]
+      -- x^(k+1)=x*x^k で因数 x を外に出す → 定義した Gbinom に一致
+      have hfactor :
+          (∑ k ∈ Finset.range n,
+              Nat.choose n (k+1) * u^(n-1-k) * x^(k+1))
+            = x * Gbinom n x u := by
+        -- 右は ∑ choose n (k+1) * x^k * u^(n-1-k) に x を掛けたもの
+        -- x^(k+1) = x * x^k
+        have h1 : (∑ k ∈ Finset.range n,
+                  Nat.choose n (k+1) * u^(n-1-k) * x^(k+1))
+              = (∑ k ∈ Finset.range n,
+                  Nat.choose n (k+1) * u^(n-1-k) * (x * x^k)) := by
+          refine Finset.sum_congr rfl ?_
+          intro k hk
+          ring
+        rw [h1]
+        -- 分配法則：∑ a * (x * b) = ∑ x * (a * b) = x * ∑ a * b
+        have h2 : (∑ k ∈ Finset.range n,
+                  Nat.choose n (k+1) * u^(n-1-k) * (x * x^k))
+              = (x * ∑ k ∈ Finset.range n,
+                  Nat.choose n (k+1) * u^(n-1-k) * x^k) := by
+          rw [Finset.mul_sum]
+          refine Finset.sum_congr rfl ?_
+          intro k hk
+          ring
+        rw [h2]
+        congr 1
+        simp only [Gbinom]
+        refine Finset.sum_congr rfl ?_
+        intro k hk
+        ring
+      -- まとめ
+      -- (x+u)^n - u^n = x * Gbinom n x u
+      -- ただし n=d+1 で、元の主張は d=n なので simp で戻す
+      -- ここでは n=d+1 なので主張は d=n、つまり succ ケースの d に対応
+      -- よって d+1 の形を返す
+      -- 最終的に (x+u)^(d+1) - u^(d+1) = x * Gbinom (d+1) x u
+      -- になる
+      -- 実際：
+      calc
+        (x+u)^n - u^n
+            = ∑ k ∈ Finset.range n, f k := hsub
+        _ = ∑ k ∈ Finset.range n,
+                Nat.choose n (n-1-k) * u^(n-1-k) * x^(k+1) := hreflect
+        _ = ∑ k ∈ Finset.range n,
+                Nat.choose n (k+1) * u^(n-1-k) * x^(k+1) := hchoose
+        _ = x * Gbinom n x u := hfactor
+
+end CosmicFormulaCellDim
+end DkMath
+
 /-! ### 補題群: 積をべきに畳み、card を差で表す -/
 
 namespace DkMath
@@ -193,159 +346,21 @@ theorem card_Body_eq_mul_G (d x u : ℕ) :
   -- 既存の card_Body_pow_form と今回の pow_sub_pow_eq_mul_G を繋ぐ
   simpa [card_Body_pow_form (d := d) x u] using pow_sub_pow_eq_mul_G d x u
 
+/-- 既存の幾何和版 `G` と二項定理版 `Gbinom` は、少なくとも `x` を掛けると一致。 -/
+theorem mul_G_eq_mul_Gbinom (d x u : ℕ) :
+    x * G d x u = x * Gbinom d x u := by
+  -- 左辺も右辺も (x+u)^d - u^d に等しい
+  calc
+    x * G d x u = (x+u)^d - u^d := by
+      exact (pow_sub_pow_eq_mul_G d x u).symm
+    _ = x * Gbinom d x u := by
+      exact pow_sub_pow_eq_mul_Gbinom d x u
+
+/-- おまけ：x > 0 なら G 自体も一致（Nat の乗法キャンセル）。 -/
+theorem G_eq_Gbinom_of_pos {d x u : ℕ} (hx : 0 < x) :
+    G d x u = Gbinom d x u := by
+  have h := mul_G_eq_mul_Gbinom (d := d) (x := x) (u := u)
+  exact Nat.mul_left_cancel (Nat.pos_iff_ne_zero.mpr (Nat.pos_iff_ne_zero.mp hx)) h
+
 end CosmicFormulaCellDim
 end DkMath
-
-/- 解説
-よし、ぬしよ。ここまでで Lean 上に「無次元化された宇宙式（Cell/Finset 版）」が **“集合として”** も **“数式として”** も噛み合って閉じた。
-つまり――“平面のトロミノ絵”から始まった話が、**任意次元 (d)** の抽象格子で **不変量の法則**として成立した、ということじゃ。
-
-以下、ここでの到達点を一旦まとめるぞ。
-
----
-
-## 1. 何を作ったか：無次元 Cell と translate の核
-
-* 2次元 \((\mathbb{Z}\times\mathbb{Z})\) に縛られず、一般形として
-  \[
-  \mathrm{Cell}\ d := \mathrm{Fin}\ d \to \mathbb{Z}
-  \]
-  を採用した。
-* 平行移動 `translate` を `Finset.map`（埋め込み）で実装し、**card が保存される**ことを証明した：
-  \[
-  \#(\mathrm{translate}\ v\ S)=\#S
-  \]
-  これは「座標原点や位置は本質ではない」という、無次元化の土台になっておる。
-
----
-
-## 2. “箱” Box と “量＝card” の次元一般化
-
-* 各軸で区間 ([0,a_i)) を取る直方体（箱）`Box` を Finset として定義した。
-* その card を “軸ごとの積” に落とせる（仕上げた補題群で）：
-  \[
-  \#\mathrm{Box}(a)=\prod_{i\in \mathrm{Fin}\ d} a_i
-  \]
-  特に `constVec` で全軸同一長を与えると、
-  \[
-  \prod_{i\in\mathrm{Fin}\ d} n = n^d
-  \]
-  が確立し、箱の card が **べき**として畳めるようになった。
-
----
-
-## 3. Big / Gap / Body の三分割を“集合”で作り、分解法則を得た
-
-* 全体：
-  \[
-  \mathrm{Big}(d,x,u)=\mathrm{Box}(x+u)
-  \]
-* 余白：
-  \[
-  \mathrm{Gap}(d,u)=\mathrm{Box}(u)
-  \]
-* 実体：
-  \[
-  \mathrm{Body}=\mathrm{Big}\setminus \mathrm{Gap}
-  \]
-  そして、**集合として**
-  \[
-  \mathrm{Big}=\mathrm{Body}\cup \mathrm{Gap},\qquad
-  \mathrm{Body}\cap\mathrm{Gap}=\varnothing
-  \]
-  が成り立つので、card による加法則：
-  \[
-  \#\mathrm{Big}=\#\mathrm{Body}+\#\mathrm{Gap}
-  \]
-  が出た。
-
-これは「#Big = #Body + #Gap」という、あなたの言う **“Big/Body/Gap の構造”** を、完全に Lean の定理として固定した瞬間じゃ。
-
----
-
-## 4. card を次元 (d) のべきへ畳み、Body を差で表した
-
-あなたが仕上げた補題群で、
-\[
-\#\mathrm{Big}=(x+u)^d,\quad \#\mathrm{Gap}=u^d
-\]
-ゆえに
-\[
-\#\mathrm{Body}=(x+u)^d-u^d
-\]
-が確定した。
-
-ここまででも「余白を引くと実体が出る」が、次元に依存せず成立する、と解ったわけじゃな。
-
----
-
-## 5. 差のべき因数分解で “本体は必ず x 倍” が確定した
-
-そして核心。あなたが通した：
-
-\[
-(x+u)^d-u^d = x\cdot G(d,x,u)
-\]
-（幾何和補題を用いた差のべき因数分解）
-
-これと、上の \(\#\mathrm{Body}=(x+u)^d-u^d\) が繋がって、
-
-\[
-\boxed{\ \#\mathrm{Body} = x\cdot G(d,x,u)\ }
-\]
-
-が Lean 上で確定した。
-
-### ここで解った“本質”
-
-* Body は「Big から Gap を引いた残り」だが、その濃度は **常に x の倍数**になる。
-* つまり、**余白 (u^d) を除いた実体は、必ず x 個ぶんの“層/束”に分解できる**。
-* あなたの言葉で言えば
-  **「#Body := xG_{d-1}(x,u) が、次元一般化の複雑さの受け皿」**
-  が、単なる直観ではなく “定理” になった。
-
----
-
-## 6. 何が嬉しいか：平面の絵から、次元不変の法則へ
-
-この一連の成果は、単に \((x+u)^d-u^d\) を計算しただけではない。
-
-* **集合（タイル）側**で Big/Body/Gap の分解が成り立ち、
-* **数式側**で差のべきが (x) を因数にもつことが証明され、
-* その二つが **card を介して完全に一致**した。
-
-ゆえに、あなたの宇宙式は「図の比喩」ではなく、
-
-> **“格子上の有限集合の不変量（card）として成立する、次元 (d) によらない保存則”**
-
-として確立された、ということじゃ。
-
----
-
-## 7. 次の展望（ここから先に何が乗るか）
-
-ここまでで「無次元化の骨」が通ったので、次は二方向に伸ばせる：
-
-1. **Body の“構成”を改善**
-   いまは `sdiff`（差集合）で Body を定義している。
-   これを、あなたの本命どおり「軸の最小位置で分類した disjoint union」として **明示構成**に置換すると、
-   `x * G` が “数式” ではなく “タイルの実分解” として見えるようになる。
-
-2. **二項係数版 (G_{d-1}) との同値**
-   今の `G` は幾何和型。
-   二項定理版の
-   \[
-   \sum_{k=0}^{d-1}\binom{d}{k+1}x^k u^{d-1-k}
-   \]
-   と同値を示すと、あなたの「情報増加＝係数構造」の物語が、そのまま Lean の定理カタログになる。
-
----
-
-まとめると、こうじゃ：
-
-**“Cell を d 次元へ無次元化しても、Big/Body/Gap の分解保存則は壊れない。
-そして Body の濃度は必ず x 倍で、差のべき因数分解がその理由である。”**
-
-これが今回の到達点じゃよ。
-リンゴ酒でも開けたい気分じゃの🍎🍷
--/
