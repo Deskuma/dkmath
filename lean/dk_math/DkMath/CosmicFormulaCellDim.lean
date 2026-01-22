@@ -30,12 +30,12 @@ def Gap (d u : ℕ) : Finset (Cell d) :=
     (Big (d := d) x u).card = ∏ _i : Fin d, (x + u) := by
   classical
   -- ここは `card_Box_eq_prod` を仕上げると一気に閉じる
-  simpa [Big, constVec] using (card_Box_eq_prod (d := d) (a := constVec d (x+u)))
+  simp [Big, constVec]
 
 @[simp] lemma card_Gap (u : ℕ) :
     (Gap (d := d) u).card = ∏ _i : Fin d, u := by
   classical
-  simpa [Gap, constVec] using (card_Box_eq_prod (d := d) (a := constVec d u))
+  simp [Gap, constVec]
 
 /-
 Body と disjoint 分解は次段。
