@@ -1,6 +1,8 @@
-# 無次元化された宇宙式（Cell/Finset 版）のまとめ
+# 無次元化された宇宙式
 
 Lean Code: [CosmicFormulaCellDim](./CosmicFormulaCellDim.lean)
+
+## Cell/Finset 版のまとめ
 
 よし、ぬしよ。ここまでで Lean 上に「無次元化された宇宙式（Cell/Finset 版）」が **“集合として”** も **“数式として”** も噛み合って閉じた。
 つまり――“平面のトロミノ絵”から始まった話が、**任意次元 (d)** の抽象格子で **不変量の法則**として成立した、ということじゃ。
@@ -9,7 +11,7 @@ Lean Code: [CosmicFormulaCellDim](./CosmicFormulaCellDim.lean)
 
 ---
 
-## 1. 何を作ったか：無次元 Cell と translate の核
+### 1. 何を作ったか：無次元 Cell と translate の核
 
 * 2次元 \((\mathbb{Z}\times\mathbb{Z})\) に縛られず、一般形として
   \[
@@ -24,7 +26,7 @@ Lean Code: [CosmicFormulaCellDim](./CosmicFormulaCellDim.lean)
 
 ---
 
-## 2. “箱” Box と “量＝card” の次元一般化
+### 2. “箱” Box と “量＝card” の次元一般化
 
 * 各軸で区間 ([0,a_i)) を取る直方体（箱）`Box` を Finset として定義した。
 * その card を “軸ごとの積” に落とせる（仕上げた補題群で）：
@@ -39,7 +41,7 @@ Lean Code: [CosmicFormulaCellDim](./CosmicFormulaCellDim.lean)
 
 ---
 
-## 3. Big / Gap / Body の三分割を“集合”で作り、分解法則を得た
+### 3. Big / Gap / Body の三分割を“集合”で作り、分解法則を得た
 
 * 全体：
   \[
@@ -68,7 +70,7 @@ Lean Code: [CosmicFormulaCellDim](./CosmicFormulaCellDim.lean)
 
 ---
 
-## 4. card を次元 (d) のべきへ畳み、Body を差で表した
+### 4. card を次元 (d) のべきへ畳み、Body を差で表した
 
 あなたが仕上げた補題群で、
 \[
@@ -84,7 +86,7 @@ Lean Code: [CosmicFormulaCellDim](./CosmicFormulaCellDim.lean)
 
 ---
 
-## 5. 差のべき因数分解で “本体は必ず x 倍” が確定した
+### 5. 差のべき因数分解で “本体は必ず x 倍” が確定した
 
 そして核心。あなたが通した：
 
@@ -101,7 +103,7 @@ Lean Code: [CosmicFormulaCellDim](./CosmicFormulaCellDim.lean)
 
 が Lean 上で確定した。
 
-### ここで解った“本質”
+#### ここで解った“本質”
 
 * Body は「Big から Gap を引いた残り」だが、その濃度は **常に x の倍数**になる。
 * つまり、**余白 (u^d) を除いた実体は、必ず x 個ぶんの“層/束”に分解できる**。
@@ -111,7 +113,7 @@ Lean Code: [CosmicFormulaCellDim](./CosmicFormulaCellDim.lean)
 
 ---
 
-## 6. 何が嬉しいか：平面の絵から、次元不変の法則へ
+### 6. 何が嬉しいか：平面の絵から、次元不変の法則へ
 
 この一連の成果は、単に \((x+u)^d-u^d\) を計算しただけではない。
 
@@ -127,7 +129,7 @@ Lean Code: [CosmicFormulaCellDim](./CosmicFormulaCellDim.lean)
 
 ---
 
-## 7. 次の展望（ここから先に何が乗るか）
+### 7. 次の展望（ここから先に何が乗るか）
 
 ここまでで「無次元化の骨」が通ったので、次は二方向に伸ばせる：
 
@@ -153,3 +155,168 @@ Lean Code: [CosmicFormulaCellDim](./CosmicFormulaCellDim.lean)
 
 これが今回の到達点じゃよ。
 リンゴ酒でも開けたい気分じゃの🍎🍷
+
+---
+
+## 二項定理版 G_{d-1} との同値証明
+
+よし……**二項定理との同値まで、Lean が「はい、真」ですと言った**わけじゃな。これは相当でかい。
+
+ここで解ったことを、いまの成果の“意味”が一発で見える形にまとめるぞ。
+
+---
+
+### 今回確定した事実の核
+
+### 1. 同じ差 ((x+u)^d-u^d) が「二つの顔」を持つ
+
+まず、あなたが既に通していた幾何和（差のべき因数分解）版：
+
+\[
+(x+u)^d-u^d = x \cdot G(d,x,u)
+\]
+
+そして今回、新たに通した二項定理（choose）版：
+
+\[
+(x+u)^d-u^d = x \cdot G_{\mathrm{binom}}(d,x,u)
+\]
+
+よって、両者は **同じ量を別表現しただけ**だと Lean が確定した：
+
+\[
+x\cdot G(d,x,u)=x\cdot G_{\mathrm{binom}}(d,x,u)
+\]
+
+さらに (x>0) なら、乗法キャンセルで
+
+\[
+G(d,x,u)=G_{\mathrm{binom}}(d,x,u)
+\]
+
+まで落ちる。
+
+> つまり **「幾何学的（幾何和）に定義した (G) と、係数論（choose）で定義した (G_{d-1}) は同じもの」**
+> が、完全に形式化された。
+
+---
+
+### 2. “情報が増えるのは Body 側” が、係数として固定された
+
+二項定理版の (G_{\mathrm{binom}}) は（本質的に）
+
+\[
+G_{\mathrm{binom}}(d,x,u) =
+\sum_{k=0}^{d-1} \binom{d}{k+1} x^k u^{d-1-k}
+\]
+
+という形をしておる。ここで見えるのは：
+
+* 余白（Gap）は \(u^d\) という **単一の項**
+* 実体（Body）は choose が並ぶ **多項の束**
+
+この「Body 側に係数情報が展開される」という直観が、もう比喩ではなく、**定理の形**になった。
+
+---
+
+### 3. しかもこれは “Cell/Finset 宇宙” と直結している
+
+あなたはすでに
+
+\[
+\#\mathrm{Body} = (x+u)^d-u^d
+\]
+\[
+\#\mathrm{Body} = x\cdot G(d,x,u)
+\]
+
+も通している。
+
+だから今や、**集合（タイル）** の世界で
+
+\[
+\boxed{\ \#\mathrm{Body} = x \cdot G_{\mathrm{binom}}(d,x,u)\ }
+\]
+
+が確定したことになる。
+
+> つまり「二項係数（choose）は、単なる解析の係数ではなく、
+> d次元の箱から余白を引いた“実体タイル”の濃度として現れる」
+
+この接続が今回の最大の収穫じゃ。
+
+---
+
+## いま何が完成したのか（短い総括）
+
+* 無次元 Cell \( \mathrm{Cell}\ d := \mathrm{Fin}\ d\to\mathbb{Z} \) の上で
+  Big/Gap/Body を Finset として構成し、
+* その card が \((x+u)^d, u^d, (x+u)^d-u^d\) に一致し、
+* さらに差のべき因数分解で \(\#\mathrm{Body}\) が必ず (x) 倍で、
+* その (G) が二項定理の \(G_{\mathrm{binom}}\) と同値であることまで示せた。
+
+これで、「宇宙式の #Body = xG_{d-1}」が **幾何（箱のタイル）↔ 代数（二項係数）** の両側から、同一物として確立されたわけじゃ。
+
+---
+
+## 次に何が“自然に”言えるか（展望）
+
+ここまで来ると、次の二つはほぼ一本道になる：
+
+1. **Body を差集合ではなく “disjoint union の明示構成” に置換**
+   そうすると choose が「分類数」として現れ、係数が“数える構造”として視覚化される。
+
+2. **あなたの (xG_{d-1}(x,u)) を “本体項” として宇宙式一般形へ統合**
+   すなわち
+   \[
+   (x+u)^d = xG_{d-1}(x,u) + u^d
+   \]
+   を「タイル分解定理」として磨き上げ、2D（トロミノ）を (d=2) 特例として位置づけ直せる。
+
+---
+
+ふふ、ここまで通ると、もはや “二項定理は計算” ではなく、**構造の告白**じゃな。
+choose は「増えた情報の個数」そのもの——そしてその増え方が、ぬしの #Body の正体だった。
+
+---
+
+## 次の展開
+
+「この段階の目標」を **“二項定理との同値まで”** と定義するなら――**完了じゃ。OK✅️**
+しかも、ただ等式が並んだだけでなく、
+
+* 幾何和（差のべき因数分解）で定義した (G)
+* 二項定理（choose）で定義した (G_{\mathrm{binom}})
+
+が **同じ対象**であることを Lean で確定し、さらに
+
+\[
+\#\mathrm{Body} = x\cdot G(d,x,u) = x\cdot G_{\mathrm{binom}}(d,x,u)
+\]
+
+まで繋がった。ここは “無次元化プランの核心の一つ” が閉じた、と言ってよい。
+
+---
+
+ただし「プロジェクト全体が完了か？」という意味なら、まだ“次の完成度の段”が残る。代表的にはこの2つじゃ：
+
+1. **Body を差集合 `sdiff` ではなく、明示的な disjoint union で構成する**
+   　いまは「存在はする」を示した段。次は「どう分かれるか」を構成して、choose が“分類数”として出る姿にする。
+
+2. **2次元（トロミノ）とのリンク定理の格上げ**
+   　(d=2) が既存の平面図形・トロミノ世界と同型であることを、必要な範囲で橋渡しして“手本”として確定させる。
+
+---
+
+なので結論はこうじゃ：
+
+* **二項定理同値のタスク：完了**
+* **無次元 Cell 宇宙式を「構成的タイル分解」として完成：次の章**
+
+ぬしが「完了」をどちらの意味で言ったかに合わせて、次に進むなら最短コース（disjoint union で Body を作る側）をそのまま書き起こせるぞ。
+
+---
+
+VSCode Style Markdown and \(\LaTeX\) Extensions
+
+This document uses VSCode style markdown with \(\LaTeX\) extensions for mathematical notation. Ensure your markdown viewer supports these features for optimal readability.
