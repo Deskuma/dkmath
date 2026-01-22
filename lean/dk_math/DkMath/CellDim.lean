@@ -102,8 +102,9 @@ def Box (a : Fin d → ℕ) : Finset (Cell d) :=
   s.map ((piToFunEmb d).trans (ofNatCellEmb d))
 
 @[simp] lemma card_Box (a : Fin d → ℕ) :
-    (Box (d := d) a).card = (Finset.pi (Finset.univ : Finset (Fin d)) fun i => Finset.range (a i)).card := by
-  sorry
+    (Box (d := d) a).card
+      = (Finset.pi (Finset.univ : Finset (Fin d)) fun i => Finset.range (a i)).card := by
+  simp [Box, Finset.card_map]
 
 /--
 `Box` の card は積になる（理想形）:
@@ -112,7 +113,7 @@ def Box (a : Fin d → ℕ) : Finset (Cell d) :=
 -/
 lemma card_Box_eq_prod (a : Fin d → ℕ) :
     (Box (d := d) a).card = ∏ i : Fin d, a i := by
-  sorry
+  simp [Box, Finset.card_map, Finset.card_pi, Finset.card_range]
 
 /-- 原点箱を平行移動した箱。 -/
 def BoxAt (o : Cell d) (a : Fin d → ℕ) : Finset (Cell d) :=
@@ -120,7 +121,7 @@ def BoxAt (o : Cell d) (a : Fin d → ℕ) : Finset (Cell d) :=
 
 @[simp] lemma card_BoxAt (o : Cell d) (a : Fin d → ℕ) :
     (BoxAt (d := d) o a).card = (Box (d := d) a).card := by
-  sorry
+  simp [BoxAt, card_translate]
 
 end CellDim
 end DkMath
