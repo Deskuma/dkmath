@@ -112,13 +112,13 @@ lemma prod_const_fin (n : ℕ) :
 theorem card_Big_pow (x u : ℕ) :
     (Big (d := d) x u).card = (x + u) ^ d := by
   classical
-  simp [card_Big]
+  simp only [card_Big, Finset.prod_const, Finset.card_univ, Fintype.card_fin]
 
 /-- card_Gap をべき表示にする -/
 theorem card_Gap_pow (u : ℕ) :
     (Gap (d := d) u).card = u ^ d := by
   classical
-  simp [card_Gap]
+  simp only [card_Gap, Finset.prod_const, Finset.card_univ, Fintype.card_fin]
 
 /-- Body の濃度は全体から gap を引いたものに等しい -/
 theorem card_Body_eq_sub (d x u : ℕ) :
@@ -137,7 +137,7 @@ theorem card_Body_eq_sub (d x u : ℕ) :
 theorem card_Body_pow_form (d x u : ℕ) :
     (Body (d := d) x u).card = (x + u) ^ d - u ^ d := by
   classical
-  simp [card_Body_eq_sub (d := d) x u, card_Big_pow (d := d) x u, card_Gap_pow (d := d) u]
+  simp only [card_Body_eq_sub (d := d) x u, card_Big_pow (d := d) x u, card_Gap_pow (d := d) u]
 
 end CosmicFormulaCellDim
 end DkMath
