@@ -15,14 +15,14 @@ open DkMath.CellDim
 
 variable {d : ℕ}
 
-/-- 定数ベクトル（各軸同じ長さ）。-/
+/-- 定数ベクトル（各軸同じ長さ） -/
 def constVec (d : ℕ) (n : ℕ) : Fin d → ℕ := fun _ => n
 
-/-- Big: (x+u)^d 個のセル（箱）。-/
+/-- Big: (x+u)^d 個のセル（箱） -/
 def Big (d x u : ℕ) : Finset (Cell d) :=
   Box (d := d) (constVec d (x + u))
 
-/-- Gap: u^d 個のセル（箱）。-/
+/-- Gap: u^d 個のセル（箱） -/
 def Gap (d u : ℕ) : Finset (Cell d) :=
   Box (d := d) (constVec d u)
 
