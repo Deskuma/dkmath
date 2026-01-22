@@ -139,5 +139,39 @@ theorem card_Body_pow_form (d x u : ℕ) :
   classical
   simp only [card_Body_eq_sub (d := d) x u, card_Big_pow (d := d) x u, card_Gap_pow (d := d) u]
 
+/-- 差のべきの因数分解に使う和 `G` -/
+def G (d x u : ℕ) : ℕ :=
+  ∑ k ∈ Finset.range d, (x + u)^(d - 1 - k) * u ^ k
+
+/-- (x+u)^d - u^d = x * G x u -/
+theorem pow_sub_pow_eq_mul_G (d x u : ℕ) :
+    (x + u) ^ d - u ^ d = x * G d x u := by
+  induction d with
+  | zero =>
+    -- range 0 の和は 0, 両辺とも 0
+    simp [G]
+  | succ d ih =>
+    let a := x + u
+    let b := u
+    have step : a ^ (d + 1) - b ^ (d + 1) = a * (a ^ d - b ^ d) + (a - b) * b ^ d := by
+      calc
+        a ^ (d + 1) - b ^ (d + 1) = a * a ^ d - b * b ^ d := by simp [pow_succ]
+        _ = a * (a ^ d - b ^ d) + b ^ d * (a - b) := by simp [mul_sub, sub_mul]
+    rw [step]
+    -- apply IH to (a ^ d - b ^ d)
+    have ih' : a ^ d - b ^ d = x * (∑ k ∈ (Finset.range d), a ^ (d - 1 - k) * b ^ k) := by
+      have h := ih (x := x) (u := u)
+      exact h
+    rw [ih']
+    simp only [mul_assoc]
+    calc
+      a * (x * (∑ k ∈ (Finset.range d), a ^ (d - 1 - k) * b ^ k)) + x * b ^ d
+          = x * (a * (∑ k ∈ (Finset.range d), a ^ (d - 1 - k) * b ^ k) + b ^ d) := by
+        simp [mul_add, mul_comm]
+      _ = x * ((∑ k ∈ (Finset.range d), a * (a ^ (d - 1 - k) * b ^ k)) + b ^ d) := by
+        simp [Finset.mul_sum]
+      _ = x * ((∑ k ∈ (Finset.range d), a ^ (d - k) * b ^ k) + b ^ d) := by simp [pow_succ]
+      _ = x * (∑ k ∈ (Finset.range (d + 1)), a ^ (d - k) * b ^ k) := by simp [Finset.sum_range_succ]
+
 end CosmicFormulaCellDim
 end DkMath
