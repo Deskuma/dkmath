@@ -187,5 +187,11 @@ theorem pow_sub_pow_eq_mul_G (d x u : ℕ) :
         simp [ha_eq]
     simpa [h_ab] using (Eq.symm h')
 
+/-- 最終形: Body = x * G d x u -/
+theorem card_Body_eq_mul_G (d x u : ℕ) :
+    (Body (d := d) x u).card = x * G d x u := by
+  -- 既存の card_Body_pow_form と今回の pow_sub_pow_eq_mul_G を繋ぐ
+  simpa [card_Body_pow_form (d := d) x u] using pow_sub_pow_eq_mul_G d x u
+
 end CosmicFormulaCellDim
 end DkMath
