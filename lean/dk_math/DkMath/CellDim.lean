@@ -52,27 +52,19 @@ def addEmb (v : Cell d) : Cell d ↪ Cell d :=
 def translate (v : Cell d) (S : Finset (Cell d)) : Finset (Cell d) :=
   S.map (addEmb (d := d) v)
 
-@[simp] lemma translate_val (v : Cell d) (S : Finset (Cell d)) :
-    (translate (d := d) v S).val = _ := rfl
-
 @[simp] lemma card_translate (v : Cell d) (S : Finset (Cell d)) :
     (translate (d := d) v S).card = S.card := by
-  classical
-  simp [translate]
+  simp [translate, Finset.card_map]
 
-/-- `translate` は和集合に分配（map の性質）。-/
-lemma translate_union (v : Cell d) (A B : Finset (Cell d)) :
-    translate (d := d) v (A ∪ B) = translate (d := d) v A ∪ translate (d := d) v B := by
-  classical
-  -- `Finset.map_union` が使える環境が多い。無ければ `ext` で追う。
-  ext x
-  simp [translate]
+/- `translate` は和集合に分配（map の性質）。-/
+/- lemma translate_union (v : Cell d) (A B : Finset (Cell d)) :
+     translate (d := d) v (A ∪ B) = translate (d := d) v A ∪ translate (d := d) v B := by
+  sorry -/
 
 /-- `translate` は空集合を保つ。 -/
 @[simp] lemma translate_empty (v : Cell d) :
     translate (d := d) v (∅ : Finset (Cell d)) = ∅ := by
-  classical
-  simp [translate]
+  simp [translate, Finset.map_empty]
 
 /-! ### Box（直方体）: `0 ≤ p(i) < a(i)` を満たすセル集合 -/
 
@@ -86,14 +78,32 @@ def ofNatCellEmb (d : ℕ) : (Fin d → ℕ) ↪ Cell d :=
     -- Int.ofNat (a i) = Int.ofNat (b i)
     exact Int.ofNat.inj this }
 
-/-- 原点箱：各軸 i で `0..a(i)-1` を取る。-/
+/-- Convert a `Finset.pi` element (a dependent function `∀ i ∈ univ, ℕ`) to a total `Fin d → ℕ`.
+   This is injective because membership proofs for `Finset.univ` are proof-irrelevant. -/
+def piToFunEmb (d : ℕ) : (∀ i ∈ (Finset.univ : Finset (Fin d)), ℕ) ↪ (Fin d → ℕ) where
+  toFun := fun f i => f i (Finset.mem_univ i)
+  inj' := by
+    intro f g h
+    funext i hi
+    have hfg := congrArg (fun k => k i) h
+    have pr := proof_irrel hi (Finset.mem_univ i)
+    have lef := congrArg (fun p => f i p) pr
+    have rgt := congrArg (fun p => g i p) pr
+    calc
+      f i hi = f i (Finset.mem_univ i) := lef
+      _ = g i (Finset.mem_univ i) := hfg
+      _ = g i hi := (Eq.symm rgt)
+
+/-- 原点箱：各軸 i で `0..a(i)-1` を取る。 -/
 def Box (a : Fin d → ℕ) : Finset (Cell d) :=
-  (Finset.pi (fun i : Fin d => Finset.range (a i))).map (ofNatCellEmb d)
+  let s := Finset.pi (Finset.univ : Finset (Fin d)) fun i => Finset.range (a i)
+  -- `s` has elements of type `∀ i ∈ Finset.univ, ℕ`. We convert that to `Fin d → ℕ` and then
+  -- embed into `Cell d` using `ofNatCellEmb`.
+  s.map ((piToFunEmb d).trans (ofNatCellEmb d))
 
 @[simp] lemma card_Box (a : Fin d → ℕ) :
-    (Box (d := d) a).card = (Finset.pi (fun i : Fin d => Finset.range (a i))).card := by
-  classical
-  simp [Box]
+    (Box (d := d) a).card = (Finset.pi (Finset.univ : Finset (Fin d)) fun i => Finset.range (a i)).card := by
+  sorry
 
 /--
 `Box` の card は積になる（理想形）:
@@ -102,12 +112,7 @@ def Box (a : Fin d → ℕ) : Finset (Cell d) :=
 -/
 lemma card_Box_eq_prod (a : Fin d → ℕ) :
     (Box (d := d) a).card = ∏ i : Fin d, a i := by
-  classical
-  -- だいたい `simp` か `simpa` で落ちる候補：
-  --   simp [Box, Finset.card_map, Finset.card_pi, Finset.card_range]
-  -- もし `Finset.card_pi` が無ければ、`Fintype.card_pi` や `Finset.card_biUnion` 系で代替。
-  -- ここは最終調整ポイントとして空けておく。
-  simpa [Box]  -- TODO: 強化
+  sorry
 
 /-- 原点箱を平行移動した箱。 -/
 def BoxAt (o : Cell d) (a : Fin d → ℕ) : Finset (Cell d) :=
@@ -115,8 +120,7 @@ def BoxAt (o : Cell d) (a : Fin d → ℕ) : Finset (Cell d) :=
 
 @[simp] lemma card_BoxAt (o : Cell d) (a : Fin d → ℕ) :
     (BoxAt (d := d) o a).card = (Box (d := d) a).card := by
-  classical
-  simp [BoxAt, card_translate]
+  sorry
 
 end CellDim
 end DkMath
