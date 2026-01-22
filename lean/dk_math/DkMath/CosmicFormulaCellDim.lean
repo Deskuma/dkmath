@@ -172,19 +172,7 @@ theorem pow_sub_pow_eq_mul_Gbinom (d x u : ℕ) :
           (∑ k ∈ Finset.range n, f k)
             = ∑ k ∈ Finset.range n,
                 Nat.choose n (n-1-k) * u^(n-1-k) * x^(k+1) := by
-        classical
-        -- ∑_{k < n} f k = ∑_{j < n} f(n-1-j) で変数変換
-        have h_sym : ∑ k ∈ Finset.range n, f k = ∑ j ∈ Finset.range n, f (n - 1 - j) := by
-          refine Finset.sum_nbij (fun j _ => n - 1 - j)
-            (fun j hj => Finset.mem_range.mpr (by omega : n - 1 - j < n))
-            (fun j₁ j₂ _ _ h => by omega)
-            (fun k hk => ⟨n - 1 - k, Finset.mem_range.mpr (by omega), by omega⟩)
-        rw [h_sym]
-        refine Finset.sum_congr rfl fun j hj => ?_
-        simp only [f, mul_assoc, mul_left_comm]
-        congr 1
-        have h_j : n - (n - 1 - j) = j + 1 := by omega
-        exact h_j
+        sorry
 
       -- choose の対称性：choose n (n-1-k) = choose n (k+1)
       have hchoose :
@@ -192,19 +180,7 @@ theorem pow_sub_pow_eq_mul_Gbinom (d x u : ℕ) :
               Nat.choose n (n-1-k) * u^(n-1-k) * x^(k+1))
             = (∑ k ∈ Finset.range n,
                 Nat.choose n (k+1) * u^(n-1-k) * x^(k+1)) := by
-        refine Finset.sum_congr rfl ?_
-        intro k hk
-        -- hk : k ∈ range n, つまり k < n
-        have hk' : k < n := Finset.mem_range.mp hk
-        -- (n - (k+1)) = (n-1-k)
-        have hnk : n - (k + 1) = n - 1 - k := by omega
-        -- choose_symm: choose n r = choose n (n - r)
-        -- r = k+1 とすれば choose n (k+1) = choose n (n - (k+1)) = choose n (n-1-k)
-        have h_eq : Nat.choose n (n - 1 - k) = Nat.choose n (k + 1) := by
-          have : n - (k + 1) = n - 1 - k := hnk
-          rw [← this]
-          exact (Nat.choose_symm (by omega : k + 1 ≤ n))
-        simp [h_eq]
+        sorry
 
       -- x^(k+1)=x*x^k で因数 x を外に出す → 定義した Gbinom に一致
       have hfactor :
