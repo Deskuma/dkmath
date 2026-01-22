@@ -91,3 +91,53 @@ lemma card_Big_eq_card_Body_add_card_Gap (d x u : ℕ) :
 
 end CosmicFormulaCellDim
 end DkMath
+
+/-! ### 補題群: 積をべきに畳み、card を差で表す -/
+
+namespace DkMath
+namespace CosmicFormulaCellDim
+
+open scoped BigOperators
+open DkMath.CellDim
+
+variable {d : ℕ}
+
+/-- Fin d 上の定数積はべきに畳める: (∏ _ : Fin d, n) = n^d. -/
+lemma prod_const_fin (n : ℕ) :
+    (∏ _i : Fin d, n) = n ^ d := by
+  classical
+  simp [Finset.prod_const, Fintype.card_fin]
+
+/-- card_Big をべき表示にする -/
+theorem card_Big_pow (x u : ℕ) :
+    (Big (d := d) x u).card = (x + u) ^ d := by
+  classical
+  simp [card_Big]
+
+/-- card_Gap をべき表示にする -/
+theorem card_Gap_pow (u : ℕ) :
+    (Gap (d := d) u).card = u ^ d := by
+  classical
+  simp [card_Gap]
+
+/-- Body の濃度は全体から gap を引いたものに等しい -/
+theorem card_Body_eq_sub (d x u : ℕ) :
+    (Body (d := d) x u).card =
+      (Big (d := d) x u).card - (Gap (d := d) u).card := by
+  classical
+  have h := card_Big_eq_card_Body_add_card_Gap (d := d) x u
+  calc
+    (Body (d := d) x u).card
+        = ((Body (d := d) x u).card + (Gap (d := d) u).card) - (Gap (d := d) u).card := by
+          rw [Nat.add_sub_cancel (Body (d := d) x u).card (Gap (d := d) u).card]
+    _ = (Big (d := d) x u).card - (Gap (d := d) u).card := by
+          rw [h]
+
+/-- 最終形: Body = (x+u)^d - u^d. -/
+theorem card_Body_pow_form (d x u : ℕ) :
+    (Body (d := d) x u).card = (x + u) ^ d - u ^ d := by
+  classical
+  simp [card_Body_eq_sub (d := d) x u, card_Big_pow (d := d) x u, card_Gap_pow (d := d) u]
+
+end CosmicFormulaCellDim
+end DkMath
