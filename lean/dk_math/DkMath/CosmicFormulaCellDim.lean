@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import Mathlib
 import DkMath.CellDim
 
+set_option diagnostics true
+
 namespace DkMath
 namespace CosmicFormulaCellDim
 
@@ -88,6 +90,31 @@ lemma card_Big_eq_card_Body_add_card_Gap (d x u : ℕ) :
         _ = (Body (d := d) x u).card + (Gap (d := d) u).card := by
           simpa using (Finset.card_union_of_disjoint hdis)
 
+
+end CosmicFormulaCellDim
+end DkMath
+
+namespace DkMath
+namespace CosmicFormulaCellDim
+
+open scoped BigOperators
+
+/-- 二項定理（choose）側の G_{d-1} :  Σ_{k < d} (d choose k+1) x^k u^(d-1-k) -/
+def Gbinom (d x u : ℕ) : ℕ :=
+  Finset.sum (Finset.range d) fun k => Nat.choose d (k + 1) * x ^ k * u ^ (d - 1 - k)
+
+/-
+狙い：
+  (x+u)^d - u^d = x * Gbinom d x u
+方針：
+  1) (u+x)^d を二項定理で Σ choose n k * u^k * x^(n-k) に展開
+  2) 末項 k=n が u^n なので、差を取ると Σ_{k < n} に落ちる（sum_range_succ で剥がす）
+  3) 反転（reflect）して x^(k+1) を作り、x を因数として外へ出す
+  4) choose の対称性で choose n (n-1-k) = choose n (k+1) に変換
+-/
+theorem pow_sub_pow_eq_mul_Gbinom (d x u : ℕ) :
+    (x + u) ^ d - u ^ d = x * Gbinom d x u := by
+  sorry
 
 end CosmicFormulaCellDim
 end DkMath
@@ -192,6 +219,22 @@ theorem card_Body_eq_mul_G (d x u : ℕ) :
     (Body (d := d) x u).card = x * G d x u := by
   -- 既存の card_Body_pow_form と今回の pow_sub_pow_eq_mul_G を繋ぐ
   simpa [card_Body_pow_form (d := d) x u] using pow_sub_pow_eq_mul_G d x u
+
+/-- 既存の幾何和版 `G` と二項定理版 `Gbinom` は、少なくとも `x` を掛けると一致。 -/
+theorem mul_G_eq_mul_Gbinom (d x u : ℕ) :
+    x * G d x u = x * Gbinom d x u := by
+  -- 左辺も右辺も (x+u)^d - u^d に等しい
+  calc
+    x * G d x u = (x+u)^d - u^d := by
+      exact (pow_sub_pow_eq_mul_G d x u).symm
+    _ = x * Gbinom d x u := by
+      exact pow_sub_pow_eq_mul_Gbinom d x u
+
+/-- おまけ：x > 0 なら G 自体も一致（Nat の乗法キャンセル）。 -/
+theorem G_eq_Gbinom_of_pos {d x u : ℕ} (hx : 0 < x) :
+    G d x u = Gbinom d x u := by
+  have h := mul_G_eq_mul_Gbinom (d := d) (x := x) (u := u)
+  exact Nat.mul_left_cancel (Nat.pos_iff_ne_zero.mpr (Nat.pos_iff_ne_zero.mp hx)) h
 
 end CosmicFormulaCellDim
 end DkMath
