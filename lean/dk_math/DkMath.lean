@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.Basic  -- Basic Definitions and Utilities
 import DkMath.Samples  -- Sample Theorems and Examples
 -- Cosmic Formula Module
+import DkMath.CellDim  -- Cell Dimensionality
 import DkMath.CosmicFormula  -- Cosmic Formula Basics
 import DkMath.CosmicFormulaDim  -- Cosmic Formula Dimensionality
 import DkMath.CosmicFormulaGeom  -- Cosmic Formula Geometry
