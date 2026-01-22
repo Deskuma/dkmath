@@ -102,8 +102,9 @@ def Box (a : Fin d → ℕ) : Finset (Cell d) :=
   s.map ((piToFunEmb d).trans (ofNatCellEmb d))
 
 @[simp] lemma card_Box (a : Fin d → ℕ) :
-    (Box (d := d) a).card
-      = (Finset.pi (Finset.univ : Finset (Fin d)) fun i => Finset.range (a i)).card := by
+    (Box (d := d) a).card =
+      (Finset.pi (Finset.univ : Finset (Fin d)) fun i =>
+        Finset.range (a i)).card := by
   simp [Box, Finset.card_map]
 
 /--
