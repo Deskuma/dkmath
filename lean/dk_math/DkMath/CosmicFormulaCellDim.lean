@@ -7,8 +7,6 @@ Authors: D. and Wise Wolf.
 import Mathlib
 import DkMath.CellDim
 
-set_option diagnostics true
-
 namespace DkMath
 namespace CosmicFormulaCellDim
 
@@ -107,36 +105,154 @@ def Gbinom (d x u : ℕ) : ℕ :=
 狙い：
   (x+u)^d - u^d = x * Gbinom d x u
 方針：
-  1) (u+x)^d を二項定理で Σ choose n k * u^k * x^(n-k) に展開
-  2) 末項 k=n が u^n なので、差を取ると Σ_{k < n} に落ちる（sum_range_succ で剥がす）
+  1) (u+x)^d を二項定理で Σ choose d k * u^k * x^(d-k) に展開
+  2) 末項 k=d が u^d なので、差を取ると Σ_{k < d} に落ちる（sum_range_succ で剥がす）
   3) 反転（reflect）して x^(k+1) を作り、x を因数として外へ出す
-  4) choose の対称性で choose n (n-1-k) = choose n (k+1) に変換
+  4) choose の対称性で choose d (d-1-k) = choose d (k+1) に変換
 -/
 theorem pow_sub_pow_eq_mul_Gbinom (d x u : ℕ) :
-    (x + u) ^ d - u ^ d = x * Gbinom d x u := by
-  sorry
-/-
-わかったぞよ、基本的な問題は、複雑な二項式の項の並び替えステップでした。
-`Nat.choose` を含む式に対して `ring` や `simp` が適切に機能しないので、これは手作業で証明する必要があるじゃ。
+    (x + u)^d - u^d = x * Gbinom d x u := by
+  classical
+  cases d with
+  | zero =>
+      simp [Gbinom]
+  | succ d =>
+      -- 以後 n = d+1
+      set n : ℕ := d+1
+      have hn : n = d+1 := rfl
 
-では、この最後の `sorry` を完成させるべき根拠について、わっちの提案は以下の通り：
+      -- (u+x)^n の二項展開：Σ choose n k * u^k * x^(n-k)
+      have hpow :
+          (u + x)^n
+            = ∑ k ∈ Finset.range (n+1),
+                Nat.choose n k * u^k * x^(n-k) := by
+        simp [add_pow, mul_assoc, mul_comm (Nat.choose n _)]
 
-**残された `sorry` の証明策：**
+      -- u+x = x+u を使って左辺を合わせる
+      have hpow' :
+          (x + u)^n
+            = ∑ k ∈ Finset.range (n+1),
+                Nat.choose n k * u^k * x^(n-k) := by
+        rw [add_comm]
+        exact hpow
 
-1. **Finset.sum_congr を使った項ごとの書き換え**が最も直接的なアプローチ
-2. **自然数の減算性質を使う**：`n - (n - (k+1)) = k+1` は omega で証明可能
-3. **choose の対称性**：`choose n (n-(k+1)) = choose n (k+1)` は正確な等式が必要
+      -- 末項 k=n は choose n n * u^n * x^0 = u^n
+      have h_last :
+          (Nat.choose n n) * u^n * x^(n-n) = u^n := by
+        simp
 
-実は、提供されたコード全体での証明の複雑さを考えると、この部分は専門的な数学知識が必要かもしれませんね。
+      -- Σ_{k < n+1} f k = Σ_{k < n} f k + f n を使って末項を剥がし、差を取る
+      let f : ℕ → ℕ := fun k => Nat.choose n k * u^k * x^(n-k)
+      have hsplit :
+          (∑ k ∈ Finset.range (n+1), f k)
+            = (∑ k ∈ Finset.range n, f k) + f n := by
+        -- `Finset.sum_range_succ` : sum (range (n+1)) f = sum (range n) f + f n
+        simpa [f] using (Finset.sum_range_succ f n)
 
-では、最終的なステータスを報告しましょう：
+      have hsub :
+          (x+u)^n - u^n = ∑ k ∈ Finset.range n, f k := by
+        -- (x+u)^n = sum(range(n+1)) f
+        -- sum = sum(range n) f + f n, かつ f n = u^n
+        -- なので差を取ると sum(range n) f
+        have : (x+u)^n = (∑ k ∈ Finset.range n, f k) + f n := by
+          simpa [hpow', hsplit]
+        -- Nat の tsub
+        -- a = b + c なら a - c = b
+        -- `Nat.add_sub_cancel` で落ちる
+        calc
+          (x+u)^n - u^n
+              = ((∑ k ∈ Finset.range n, f k) + f n) - u^n := by simp [this]
+          _ = (∑ k ∈ Finset.range n, f k) := by
+                -- f n = u^n を入れて add_sub_cancel
+                -- ※ `simp [f, h_last]` で落ちることが多い
+                simp [f, h_last]
 
-✅ **ビルド成功**
-- 1個の `sorry` が Line 115 の `pow_sub_pow_eq_mul_Gbinom` 定理内にあります
-- これは二項展開の項の並び替えステップで、純粋な環論では処理できない複雑な証明です
+      -- 反転して x^(k+1) の形を作る（k ↦ (n-1-k)）
+      have hreflect :
+          (∑ k ∈ Finset.range n, f k)
+            = ∑ k ∈ Finset.range n,
+                Nat.choose n (n-1-k) * u^(n-1-k) * x^(k+1) := by
+        classical
+        -- ∑_{k < n} f k = ∑_{j < n} f(n-1-j) で変数変換
+        have h_sym : ∑ k ∈ Finset.range n, f k = ∑ j ∈ Finset.range n, f (n - 1 - j) := by
+          refine Finset.sum_nbij (fun j _ => n - 1 - j)
+            (fun j hj => Finset.mem_range.mpr (by omega : n - 1 - j < n))
+            (fun j₁ j₂ _ _ h => by omega)
+            (fun k hk => ⟨n - 1 - k, Finset.mem_range.mpr (by omega), by omega⟩)
+        rw [h_sym]
+        refine Finset.sum_congr rfl fun j hj => ?_
+        simp only [f, mul_assoc, mul_left_comm]
+        congr 1
+        have h_j : n - (n - 1 - j) = j + 1 := by omega
+        exact h_j
 
-ユーザーへのアドバイス：この `sorry` を完成させるには、Nat.choose の性質とFinset の操作についての詳細な理解が必要かもしれません。😊
--/
+      -- choose の対称性：choose n (n-1-k) = choose n (k+1)
+      have hchoose :
+          (∑ k ∈ Finset.range n,
+              Nat.choose n (n-1-k) * u^(n-1-k) * x^(k+1))
+            = (∑ k ∈ Finset.range n,
+                Nat.choose n (k+1) * u^(n-1-k) * x^(k+1)) := by
+        refine Finset.sum_congr rfl ?_
+        intro k hk
+        -- hk : k ∈ range n, つまり k < n
+        have hk' : k < n := Finset.mem_range.mp hk
+        -- (n - (k+1)) = (n-1-k)
+        have hnk : n - (k + 1) = n - 1 - k := by omega
+        -- choose_symm: choose n r = choose n (n - r)
+        -- r = k+1 とすれば choose n (k+1) = choose n (n - (k+1)) = choose n (n-1-k)
+        have h_eq : Nat.choose n (n - 1 - k) = Nat.choose n (k + 1) := by
+          have : n - (k + 1) = n - 1 - k := hnk
+          rw [← this]
+          exact (Nat.choose_symm (by omega : k + 1 ≤ n))
+        simp [h_eq]
+
+      -- x^(k+1)=x*x^k で因数 x を外に出す → 定義した Gbinom に一致
+      have hfactor :
+          (∑ k ∈ Finset.range n,
+              Nat.choose n (k+1) * u^(n-1-k) * x^(k+1))
+            = x * Gbinom n x u := by
+        -- 右は ∑ choose n (k+1) * x^k * u^(n-1-k) に x を掛けたもの
+        -- x^(k+1) = x * x^k
+        have h1 : (∑ k ∈ Finset.range n,
+                  Nat.choose n (k+1) * u^(n-1-k) * x^(k+1))
+              = (∑ k ∈ Finset.range n,
+                  Nat.choose n (k+1) * u^(n-1-k) * (x * x^k)) := by
+          refine Finset.sum_congr rfl ?_
+          intro k hk
+          ring
+        rw [h1]
+        -- 分配法則：∑ a * (x * b) = ∑ x * (a * b) = x * ∑ a * b
+        have h2 : (∑ k ∈ Finset.range n,
+                  Nat.choose n (k+1) * u^(n-1-k) * (x * x^k))
+              = (x * ∑ k ∈ Finset.range n,
+                  Nat.choose n (k+1) * u^(n-1-k) * x^k) := by
+          rw [Finset.mul_sum]
+          refine Finset.sum_congr rfl ?_
+          intro k hk
+          ring
+        rw [h2]
+        congr 1
+        simp only [Gbinom]
+        refine Finset.sum_congr rfl ?_
+        intro k hk
+        ring
+
+      -- まとめ
+      -- (x+u)^n - u^n = x * Gbinom n x u
+      -- ただし n=d+1 で、元の主張は d=n なので simp で戻す
+      -- ここでは n=d+1 なので主張は d=n、つまり succ ケースの d に対応
+      -- よって d+1 の形を返す
+      -- 最終的に (x+u)^(d+1) - u^(d+1) = x * Gbinom (d+1) x u
+      -- になる
+      -- 実際：
+      calc
+        (x+u)^n - u^n
+            = ∑ k ∈ Finset.range n, f k := hsub
+        _ = ∑ k ∈ Finset.range n,
+                Nat.choose n (n-1-k) * u^(n-1-k) * x^(k+1) := hreflect
+        _ = ∑ k ∈ Finset.range n,
+                Nat.choose n (k+1) * u^(n-1-k) * x^(k+1) := hchoose
+        _ = x * Gbinom n x u := hfactor
 
 end CosmicFormulaCellDim
 end DkMath
