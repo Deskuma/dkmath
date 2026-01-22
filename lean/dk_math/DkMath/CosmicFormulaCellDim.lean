@@ -153,19 +153,38 @@ theorem pow_sub_pow_eq_mul_G (d x u : ℕ) :
   | succ d ih =>
     let a := x + u
     let b := u
-    -- Use the geometric-sum lemma: (∑_{i<d+1} a^i b^{d-i})*(a-b) + b^{d+1} = a^{d+1}.
-    have h := (Commute.all (a - b) b).geom_sum₂_mul_add (d + 1)
-    -- reflect the sum indices so it matches our `Finset.sum (range (d+1)) fun k => a^(d-k) * b^k` form
-    have sum_reflect :
-        Finset.sum (Finset.range (d + 1)) fun k => a ^ (d - k) * b ^ k =
-          Finset.sum (Finset.range (d + 1)) fun i => a ^ i * b ^ (d - i) := by
-      rw [← Finset.sum_range_reflect]
-      simp
-    have h' : (a - b) * (Finset.sum (Finset.range (d + 1)) fun k => a ^ (d - k) * b ^ k) =
-        a ^ (d + 1) - b ^ (d + 1) := by
-      rw [← sum_reflect] at h
-      apply eq_tsub_of_add_eq h
     have h_ab : a - b = x := by simp [a, b]
+    -- 幾何和の補題を使用します: (∑_{i < d+1} a^i b^{d-i})*(a-b) + b^{d+1} = a^{d+1}
+    have h := (Commute.all (a - b) b).geom_sum₂_mul_add (d + 1)
+    -- 合計インデックスを反映して、`∑ k ∈ Finset.range (d+1), a^(d-k) * b^k` 形式と一致するようにします。
+    have h' : (a - b) * ∑ k ∈ Finset.range (d + 1), a ^ (d - k) * b ^ k
+      = a ^ (d + 1) - b ^ (d + 1) := by
+      -- 直接 `Finset.sum_range_reflect` を使って h の和の向きを反転する
+      rw [← Finset.sum_range_reflect] at h
+      -- eq_tsub_of_add_eq h は `(Finset.sum ... ) * (a - b) = a^(d+1) - b^(d+1)` を与えるので、
+      -- それを目的形に合わせるために `mul_comm` で掛け算の順序を入れ替える。
+      let h1 := eq_tsub_of_add_eq h
+      rw [mul_comm] at h1
+      -- 簡約: a - b + b = a, d + 1 - 1 - j = d - j
+      simp only [Nat.add_sub_cancel] at h1
+      -- a - b = x より a = x + b を先に確立する
+      have ha_eq : a = x + b := by omega
+      convert h1 using 2
+      · -- ⊢ ∑ k ∈ Finset.range (d + 1), a ^ (d - k) * b ^ k
+        -- = ∑ x ∈ Finset.range (d + 1), (a - b + b) ^ (d - x) * b ^ (d - (d - x))
+        refine Finset.sum_congr rfl ?_
+        intro x_1 hx
+        have hx' : x_1 ≤ d := Nat.le_of_lt_succ (Finset.mem_range.1 hx)
+        have hsub : d - (d - x_1) = x_1 := by
+          apply (Nat.sub_eq_iff_eq_add (a := d) (b := d - x_1) (c := x_1) (Nat.sub_le _ _)).2
+          simpa using (Nat.add_sub_of_le hx').symm
+        have hsum : a - b + b = a := by
+          calc
+            a - b + b = x + b := by simp [h_ab]
+            _ = a := by simp [ha_eq]
+        simp [hsub, hsum]
+      · -- ⊢ a ^ (d + 1) = (a - b + b) ^ (d + 1)
+        simp [ha_eq]
     simpa [h_ab] using (Eq.symm h')
 
 end CosmicFormulaCellDim
