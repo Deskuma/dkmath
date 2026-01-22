@@ -17,13 +17,26 @@ open scoped BigOperators
 
 variable {d : ℕ}
 
-instance : Add (Cell d) := inferInstance
-instance : Zero (Cell d) := inferInstance
-instance : Sub (Cell d) := inferInstance
-instance : Neg (Cell d) := inferInstance
-instance : AddGroup (Cell d) := inferInstance
+instance : Add (Cell d) where
+  add := fun x y => fun i => x i + y i
 
-/-- 平行移動のための埋め込み `p ↦ p + v`（injective）。-/
+instance : Zero (Cell d) where
+  zero := fun _ => 0
+
+instance : Neg (Cell d) where
+  neg := fun x => fun i => - x i
+
+instance : Sub (Cell d) where
+  sub := fun x y => fun i => x i - y i
+
+/-
+Note: pointwise `AddGroup` (and related bundled instances) can be derived
+from these pointwise defs. We avoid adding an explicit `AddGroup` here to
+keep proofs localized; add it later if Mathlib usage requires the full
+algebraic structure.
+-/
+
+/-- 平行移動のための埋め込み `p ↦ p + v`（injective）。 -/
 def addEmb (v : Cell d) : Cell d ↪ Cell d :=
 { toFun := fun p => p + v
   inj' := by
@@ -55,7 +68,7 @@ lemma translate_union (v : Cell d) (A B : Finset (Cell d)) :
   ext x
   simp [translate]
 
-/-- `translate` は空集合を保つ。-/
+/-- `translate` は空集合を保つ。 -/
 @[simp] lemma translate_empty (v : Cell d) :
     translate (d := d) v (∅ : Finset (Cell d)) = ∅ := by
   classical
