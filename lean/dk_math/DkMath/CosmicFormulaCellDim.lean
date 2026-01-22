@@ -169,10 +169,20 @@ theorem pow_sub_pow_eq_mul_Gbinom (d x u : ℕ) :
 
       -- 反転して x^(k+1) の形を作る（k ↦ (n-1-k)）
       have hreflect :
-          (∑ k ∈ Finset.range n, f k)
-            = ∑ k ∈ Finset.range n,
-                Nat.choose n (n-1-k) * u^(n-1-k) * x^(k+1) := by
-        sorry
+          Finset.sum (Finset.range n) f
+            = Finset.sum (Finset.range n) fun k => Nat.choose n (n-1-k) * u^(n-1-k) * x^(k+1) := by
+        have h := (Finset.sum_range_reflect f n).symm
+        refine Eq.trans h ?_
+        apply Finset.sum_congr rfl
+        intro k hk
+        dsimp [f]
+        have hk_lt : k < n := Finset.mem_range.1 hk
+        have : n - 1 - k = n - (k + 1) := by omega
+        rw [this]
+        -- 目標: n.choose (n - (k+1)) * u ^ (n - (k+1)) * x ^ (n - (n - (k+1))) =
+        --       n.choose (n - (k+1)) * u ^ (n - (k+1)) * x ^ (k+1)
+        have h_exp : n - (n - (k + 1)) = k + 1 := by omega
+        rw [h_exp]
 
       -- choose の対称性：choose n (n-1-k) = choose n (k+1)
       have hchoose :
