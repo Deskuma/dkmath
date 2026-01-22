@@ -120,14 +120,12 @@ theorem pow_sub_pow_eq_mul_Gbinom (d x u : ℕ) :
       -- 以後 n = d+1
       set n : ℕ := d+1
       have hn : n = d+1 := rfl
-
       -- (u+x)^n の二項展開：Σ choose n k * u^k * x^(n-k)
       have hpow :
           (u + x)^n
             = ∑ k ∈ Finset.range (n+1),
                 Nat.choose n k * u^k * x^(n-k) := by
         simp [add_pow, mul_assoc, mul_comm (Nat.choose n _)]
-
       -- u+x = x+u を使って左辺を合わせる
       have hpow' :
           (x + u)^n
@@ -135,12 +133,10 @@ theorem pow_sub_pow_eq_mul_Gbinom (d x u : ℕ) :
                 Nat.choose n k * u^k * x^(n-k) := by
         rw [add_comm]
         exact hpow
-
       -- 末項 k=n は choose n n * u^n * x^0 = u^n
       have h_last :
           (Nat.choose n n) * u^n * x^(n-n) = u^n := by
         simp
-
       -- Σ_{k < n+1} f k = Σ_{k < n} f k + f n を使って末項を剥がし、差を取る
       let f : ℕ → ℕ := fun k => Nat.choose n k * u^k * x^(n-k)
       have hsplit :
@@ -148,7 +144,6 @@ theorem pow_sub_pow_eq_mul_Gbinom (d x u : ℕ) :
             = (∑ k ∈ Finset.range n, f k) + f n := by
         -- `Finset.sum_range_succ` : sum (range (n+1)) f = sum (range n) f + f n
         simpa [f] using (Finset.sum_range_succ f n)
-
       have hsub :
           (x+u)^n - u^n = ∑ k ∈ Finset.range n, f k := by
         -- (x+u)^n = sum(range(n+1)) f
@@ -166,7 +161,6 @@ theorem pow_sub_pow_eq_mul_Gbinom (d x u : ℕ) :
                 -- f n = u^n を入れて add_sub_cancel
                 -- ※ `simp [f, h_last]` で落ちることが多い
                 simp [f, h_last]
-
       -- 反転して x^(k+1) の形を作る（k ↦ (n-1-k)）
       have hreflect :
           Finset.sum (Finset.range n) f
@@ -183,15 +177,24 @@ theorem pow_sub_pow_eq_mul_Gbinom (d x u : ℕ) :
         --       n.choose (n - (k+1)) * u ^ (n - (k+1)) * x ^ (k+1)
         have h_exp : n - (n - (k + 1)) = k + 1 := by omega
         rw [h_exp]
-
       -- choose の対称性：choose n (n-1-k) = choose n (k+1)
       have hchoose :
           (∑ k ∈ Finset.range n,
               Nat.choose n (n-1-k) * u^(n-1-k) * x^(k+1))
             = (∑ k ∈ Finset.range n,
                 Nat.choose n (k+1) * u^(n-1-k) * x^(k+1)) := by
-        sorry
-
+        refine Finset.sum_congr rfl ?_
+        intro k hk
+        -- hk : k ∈ range n, つまり k < n
+        have hk' : k < n := Finset.mem_range.mp hk
+        -- (n - (k+1)) = (n-1-k) より choose の対称性を適用
+        have hnk : n - (k + 1) = n - 1 - k := by omega
+        -- choose_symm: choose n r = choose n (n - r)
+        -- r = k+1 とすれば choose n (k+1) = choose n (n - (k+1)) = choose n (n-1-k)
+        have h_eq : Nat.choose n (n - 1 - k) = Nat.choose n (k + 1) := by
+          rw [← hnk]
+          exact (Nat.choose_symm (by omega : k + 1 ≤ n))
+        simp [h_eq]
       -- x^(k+1)=x*x^k で因数 x を外に出す → 定義した Gbinom に一致
       have hfactor :
           (∑ k ∈ Finset.range n,
@@ -222,7 +225,6 @@ theorem pow_sub_pow_eq_mul_Gbinom (d x u : ℕ) :
         refine Finset.sum_congr rfl ?_
         intro k hk
         ring
-
       -- まとめ
       -- (x+u)^n - u^n = x * Gbinom n x u
       -- ただし n=d+1 で、元の主張は d=n なので simp で戻す
