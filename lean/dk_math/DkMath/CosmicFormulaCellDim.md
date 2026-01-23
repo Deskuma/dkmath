@@ -2,6 +2,344 @@
 
 Lean Code: [CosmicFormulaCellDim](./CosmicFormulaCellDim.lean)
 
+## README / 論文向け
+
+了解じゃ。以下はそのまま README や論文 Appendix に貼れるように、**「何を定義し、何を示し、なぜ重要か」** の順で整理した **定理リスト** じゃ。
+（名前はお主の実装に合わせて調整できるよう、*概念名＋代表的な定理名候補* の形で書く）
+
+---
+
+## 定理リスト
+
+本節では、**格子セルの有限集合（Finset）** として宇宙式構造を実装し、2次元平面から **任意次元 (d)** へ無次元一般化したうえで、**Big/Body/Gap 分解**と **二項定理との同値**、さらに **構成的（disjoint union）分解**までを Lean で形式証明した成果を列挙する。
+
+---
+
+## 0. 基本設定：無次元セル空間
+
+### 定義：d 次元セル
+
+* `Cell (d : ℕ) := Fin d → ℤ`
+
+**意味**：座標系に依存せず、(d) 次元格子点を一様に扱うための基本型。
+
+---
+
+## 1. 平行移動と濃度（card）の不変性
+
+### 定義：平行移動の埋め込みと translate
+
+* `addEmb (v : Cell d) : Cell d ↪ Cell d`
+* `translate (v : Cell d) (S : Finset (Cell d)) : Finset (Cell d)`
+
+### 補題：平行移動は濃度を保存する
+
+* `card_translate : (translate v S).card = S.card`
+
+**意味**：配置（原点や位置）は本質ではなく、以後の議論は “形（集合）” のみに依存する。
+
+---
+
+## 2. 直方体（Box）とその濃度計算
+
+### 定義：原点箱 Box
+
+* `Box (a : Fin d → ℕ) : Finset (Cell d)`
+
+  * 各軸で `0 ≤ coord < a(i)` を満たすセル集合
+
+### 補題：箱の濃度は軸長の積
+
+* `card_Box_eq_prod : (Box a).card = ∏ i : Fin d, a i`
+
+### 定義：平行移動箱 BoxAt
+
+* `BoxAt (o : Cell d) (a : Fin d → ℕ) : Finset (Cell d)`
+
+### 補題：BoxAt の濃度は Box と同じ
+
+* `card_BoxAt : (BoxAt o a).card = (Box a).card`
+
+**意味**：幾何（箱）を “有限集合の濃度” に落とすことで、次元一般化された面積・体積に相当する量を扱える。
+
+---
+
+## 3. Big / Gap / Body（宇宙式の三分割）
+
+### 定義：定数ベクトル
+
+* `constVec (d : ℕ) (n : ℕ) : Fin d → ℕ`
+
+### 定義：全体 Big と余白 Gap
+
+* `Big (d x u : ℕ) := Box (constVec d (x+u))`
+* `Gap (d u : ℕ) := Box (constVec d u)`
+
+### 定義：実体 Body（差集合）
+
+* `Body (d x u : ℕ) := Big (d,x,u) \ Gap (d,u)`
+
+---
+
+## 4. 集合としての分解（Big = Body ∪ Gap）
+
+### 補題：Gap ⊆ Big
+
+* `Gap_subset_Big`
+
+### 定理：Big の分解（集合等式）
+
+* `Big_eq_Body_union_Gap : Big = Body ∪ Gap`
+
+### 定理：Body と Gap は交わらない
+
+* `Disjoint_Body_Gap : Disjoint Body Gap`
+
+### 定理：濃度の加法則
+
+* `card_Big_eq_card_Body_add_card_Gap :
+    card Big = card Body + card Gap`
+
+**意味**：宇宙式の「全体＝実体＋余白」が、集合論（Finset）として厳密に成立する。
+
+---
+
+## 5. 積をべきへ畳み、Body を差で表す
+
+### 補題：定数積はべき
+
+* `prod_const_fin : (∏ _ : Fin d, n) = n^d`
+
+### 定理：Big と Gap の濃度はべき
+
+* `card_Big_pow : card Big = (x+u)^d`
+* `card_Gap_pow : card Gap = u^d`
+
+### 定理：Body の濃度は差
+
+* `card_Body_pow_form : card Body = (x+u)^d - u^d`
+
+**意味**：Big/Gap/Body を、次元 (d) のべきとして明示化し、宇宙式の “濃度差” を確定する。
+
+---
+
+## 6. 差のべき因数分解：幾何和版 (G)
+
+### 定義：幾何和（差のべき因数分解に現れる和）
+
+* `G (d x u : ℕ) := ∑ k < d, (x+u)^(d-1-k) * u^k`（実装形に従う）
+
+### 定理：差のべきの因数分解
+
+* `pow_sub_pow_eq_mul_G :
+    (x+u)^d - u^d = x * G d x u`
+
+### 定理：Body の最終形（幾何和版）
+
+* `card_Body_eq_mul_G :
+    card Body = x * G d x u`
+
+**意味**：余白を除いた実体は **必ず (x) 倍**になり、実体の構造は (G) に全て吸収される。
+
+---
+
+## 7. 二項定理版 \(G_{\mathrm{binom}}\) と同値性
+
+### 定義：choose（係数）版
+
+* `Gbinom (d x u : ℕ) := ∑ k < d, choose d (k+1) * x^k * u^(d-1-k)`
+
+### 定理：二項定理からの因数分解
+
+* `pow_sub_pow_eq_mul_Gbinom :
+    (x+u)^d - u^d = x * Gbinom d x u`
+
+### 定理：両者は（少なくとも x を掛けると）一致
+
+* `mul_G_eq_mul_Gbinom :
+    x * G d x u = x * Gbinom d x u`
+
+### 定理：(x > 0) なら (G) 自体が一致
+
+* `G_eq_Gbinom_of_pos (hx : 0 < x) :
+    G d x u = Gbinom d x u`
+
+**意味**：**幾何（幾何和）** と **代数（二項係数）** が同一対象を表していることを形式的に確定。
+choose は単なる計算係数ではなく、後述の“分類数”として現れる基盤となる。
+
+---
+
+## 8. 2D 手本（Cell2）と平面への橋渡し
+
+### 定義：2D の略記と座標関数
+
+* `Cell2 := Cell 2`
+* `x2`, `y2`, `mk2`, `mk2_eta`
+
+### 定義：Cell2 と (ℤ×ℤ) の同値
+
+* `cell2EquivProd : Cell2 ≃ (ℤ × ℤ)`
+
+### 2D 手本：矩形の濃度と L 字分解（card）
+
+* `Rect2`, `RectAt2`
+* `card_Rect2`, `card_RectAt2`
+* `G_two_dim_eval : G 2 x u = x + 2u`
+* `card_Body2_eq_x_mul : card Body = x*(x+2u)`
+* `card_Body2_as_two_rects`（矩形2枚の濃度和として）
+
+**意味**：平面の直観（L字＝2矩形）を “手本の皮” として確立し、一般次元への読み替えの足場を作る。
+
+---
+
+## 9. 構成的分解（Slab）による Body の disjoint union（本命）
+
+### 定義：Slab（最小軸ルールによる層）
+
+* `Slab0`, `slabShift`, `Slab` など（実装形に従う）
+
+### 定理：Slab は互いに交わらない
+
+* `Slab_pairwise_disjoint`（あるいは `Pairwise (Disjoint ...)`）
+
+### 定理：Body は Slab の disjoint union
+
+* `Body_eq_iUnion_Slab` あるいは `Body_eq_biUnion_Slab`（実装に従う）
+
+### 定理：濃度は Slab 濃度の和
+
+* `card_Body_eq_sum_card_Slab`
+
+### 定理：この構成的和は (x\cdot G) に一致
+
+* `card_Body_eq_mul_G_constructive`（命名は任意）
+
+**意味**：choose 係数が **「分類数（構成的分割の数え上げ）」** として現れる段階。
+差集合による存在証明ではなく、**分割＝構成**として宇宙式を確立する。
+
+---
+
+## 最終到達点（宇宙式：無次元 Finset 版）
+
+以上を総合し、任意の \(d,x,u\in\mathbb{N}\) に対して
+
+\[
+\mathrm{Big}=\mathrm{Body}\sqcup\mathrm{Gap},\qquad
+\#\mathrm{Big}=(x+u)^d,\quad \#\mathrm{Gap}=u^d,
+\]
+
+\[
+\boxed{\ \#\mathrm{Body}=(x+u)^d-u^d = x\cdot G(d,x,u)=x\cdot G_{\mathrm{binom}}(d,x,u)\ }
+\]
+
+が Lean により形式証明された。
+
+---
+
+## 付記（読む人へのガイド）
+
+* **幾何的側面**：Box / translate / disjoint union（Slab）
+* **代数的側面**：べきの差の因数分解（幾何和）と二項係数（choose）
+* **橋渡し**：card（濃度）が両者を同一視する
+
+---
+
+必要なら、このリストをそのまま **README セクション構成**（Motivation → Definitions → Main Theorems → 2D Example → Constructive Decomposition → Outlook）に整形して、ファイルに貼れる Markdown にも仕上げられるぞ。
+
+---
+
+$$
+◇\qquad\qquad～\qquad\qquad◇\qquad\qquad～\qquad\qquad◇
+$$
+
+---
+
+## 最終結論
+
+ぬしよ……やりおったな！🎉
+**“差集合で存在を言う”** から **“分解で構成を見せる”** へ――ここを Lean で完走できたのは、研究としても実装としても一段格が上がった証じゃ。
+
+ここで、いま「何が確定したか」を短く太く刻んでおくぞ。
+
+---
+
+## 何が確定したのか（今回の“完全に通した”の意味）
+
+### 1. Body は「作れる」だけでなく「分解して作れる」
+
+これまで：
+\[
+\mathrm{Body} := \mathrm{Big}\setminus \mathrm{Gap}
+\]
+という **差集合**で定義して、card の式を導いた。
+
+今回：
+\[
+\mathrm{Body} = \bigsqcup_{i \in \mathrm{Fin}\ d} \mathrm{Slab}(i)
+\]
+のように、**Slab（層）たちの disjoint union**として「構成的に」作れた。
+
+これは直観的には「余白の外側を、最小軸ルールで一意に分類した」というやつじゃ。
+
+---
+
+### 2. 係数が“分類数”になった（choose の正体が見えた）
+
+Slab 分解が通ると、card は
+
+\[
+\#\mathrm{Body}=\sum_i \#\mathrm{Slab}(i)
+\]
+
+という **数え上げ**に落ちる。
+そしてこれが最終的に
+
+\[
+\#\mathrm{Body} = (x+u)^d-u^d = x\cdot G(d,x,u)
+\]
+さらに
+\[
+x\cdot G(d,x,u)=x\cdot G_{\mathrm{binom}}(d,x,u)
+\]
+へ接続される。
+
+つまり二項係数（choose）は「計算上の係数」ではなく、**“層の分類を数えた結果”** として出てくる、という構造が Lean 上で固定された。
+
+---
+
+### 3) 2D トロミノの手本は、d 次元の影として正当化された
+
+`Cell2` 整備 → 2D の L字手本 → d次元 Slab 構成、が一本の道になった。
+平面の絵は“比喩”ではなく、**一般次元の特例**として扱える状態になったわけじゃ。
+
+---
+
+## 次にやると「成果が論文/README として光る」整備
+
+ここからは新しい定理を増やすより、**見せ方の仕上げ**が効く。
+
+* 定理カタログ化：
+  `Body_decomp`, `Slab_pairwise_disjoint`, `card_Body_eq_sum`, `card_Body_eq_mul_G`, `G_eq_Gbinom` を “章立て” で並べる
+* 命名と配置：`CellDim` / `CosmicFormulaCellDim` の API を固定（`abbrev`/`def` の公開範囲）
+* 2D への投影補題：`d=2` を `cell2EquivProd` 経由で旧コードへ橋渡し（必要なら）
+
+ここまで整えると、読む者が「何が新しいのか」を一発で理解できる。
+
+---
+
+いやはや、わっちは賢狼じゃが、これは素直に祝杯じゃの🍎🍷
+“理屈が通る”だけでなく、“構成が通る”――これが形式化の醍醐味じゃ。
+
+次は、成果の **定理リスト（README/論文向け）** を、そのまま貼れる形で作ってしまうのが一番うまい流れじゃな。
+
+---
+
+$$
+◇\qquad\qquad～\qquad\qquad◇\qquad\qquad～\qquad\qquad◇
+$$
+
+---
+
 ## Cell/Finset 版のまとめ
 
 よし、ぬしよ。ここまでで Lean 上に「無次元化された宇宙式（Cell/Finset 版）」が **“集合として”** も **“数式として”** も噛み合って閉じた。

@@ -146,5 +146,45 @@ def BoxAt (o : Cell d) (a : Fin d → ℕ) : Finset (Cell d) :=
     (BoxAt (d := d) o a).card = (Box (d := d) a).card := by
   simp [BoxAt, card_translate]
 
+/-! ### 2次元座標の便宜（手本の皮として） -/
+
+/-- 2次元セルの型略記 -/
+abbrev Cell2 : Type := Cell 2
+
+/-- 2次元セルの x 座標アクセス -/
+abbrev x2 (p : Cell2) : ℤ := p ⟨0, by decide⟩
+
+/-- 2次元セルの y 座標アクセス -/
+abbrev y2 (p : Cell2) : ℤ := p ⟨1, by decide⟩
+
+/-- 2次元座標から Cell2 を構築 -/
+def mk2 (x y : ℤ) : Cell2 :=
+  fun i => if (i : ℕ) = 0 then x else y
+
+@[simp] lemma x2_mk2 (x y : ℤ) : x2 (mk2 x y) = x := by
+  unfold x2 mk2
+  simp
+
+@[simp] lemma y2_mk2 (x y : ℤ) : y2 (mk2 x y) = y := by
+  unfold y2 mk2
+  simp
+
+/-- mk2 による Cell2 の可逆性 -/
+lemma mk2_eta (p : Cell2) : mk2 (x2 p) (y2 p) = p := by
+  funext i
+  fin_cases i <;> simp [x2, y2, mk2]
+
+/-- Cell2 と (ℤ × ℤ) の同値 -/
+def cell2EquivProd : Cell2 ≃ (ℤ × ℤ) where
+  toFun := fun p => (x2 p, y2 p)
+  invFun := fun q => mk2 q.1 q.2
+  left_inv := by
+    intro p
+    exact mk2_eta p
+  right_inv := by
+    intro q
+    cases q
+    simp [x2_mk2, y2_mk2]
+
 end CellDim
 end DkMath
