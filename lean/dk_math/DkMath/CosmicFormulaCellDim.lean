@@ -362,5 +362,91 @@ theorem G_eq_Gbinom_of_pos {d x u : ℕ} (hx : 0 < x) :
   have h := mul_G_eq_mul_Gbinom (d := d) (x := x) (u := u)
   exact Nat.mul_left_cancel (Nat.pos_iff_ne_zero.mpr (Nat.pos_iff_ne_zero.mp hx)) h
 
+/-! ### 2D 手本：Body の L字分解（card 版） -/
+
+/-- 2次元の長さベクトル（w,h） -/
+def vec2 (w h : ℕ) : Fin 2 → ℕ :=
+  fun i => if (i : ℕ) = 0 then w else h
+
+@[simp] lemma vec2_fst (w h : ℕ) : vec2 w h ⟨0, by decide⟩ = w := by
+  simp [vec2]
+
+@[simp] lemma vec2_snd (w h : ℕ) : vec2 w h ⟨1, by decide⟩ = h := by
+  simp [vec2]
+
+/-- 2D 矩形（原点） -/
+def Rect2 (w h : ℕ) : Finset (Cell2) :=
+  Box (d := 2) (vec2 w h)
+
+/-- 2D 矩形（平行移動） -/
+def RectAt2 (ox oy : ℤ) (w h : ℕ) : Finset (Cell2) :=
+  BoxAt (d := 2) (mk2 ox oy) (vec2 w h)
+
+/-- 2D 矩形の濃度は w*h -/
+theorem card_Rect2 (w h : ℕ) :
+    (Rect2 w h).card = w * h := by
+  classical
+  -- card_Box_eq_prod がある前提（既に d 次元側で整備済みのはず）
+  -- ∏ i:Fin 2, vec2 w h i = w*h へ simp で落ちる
+  unfold Rect2 Box vec2
+  simp only [Finset.card_map, Finset.card_pi, Finset.card_range]
+  norm_num
+
+/-- 平行移動しても濃度は同じ -/
+theorem card_RectAt2 (ox oy : ℤ) (w h : ℕ) :
+    (RectAt2 ox oy w h).card = w * h := by
+  classical
+  simp [RectAt2, BoxAt, card_translate, vec2]
+
+/-- ついで：2D の G は x+2u（幾何和でも二項でも一致） -/
+theorem G_two_dim_eval (x u : ℕ) :
+    G 2 x u = x + 2*u := by
+  classical
+  -- G 2 x u = Σ_{k<2} (x+u)^(1-k) * u^k = (x+u)^1*u^0 + (x+u)^0*u^1
+  -- = (x+u) + u
+  unfold G
+  simp only [Finset.sum_range_succ, Finset.sum_range_zero, zero_add]
+  norm_num
+  ring
+
+/-- 2D の最終形（既に通しているはずだが、手本として露出） -/
+theorem card_Body2_eq_x_mul (x u : ℕ) :
+    (Body (d := 2) x u).card = x * (x + 2*u) := by
+  classical
+  -- 既に card_Body_eq_mul_G があるので、G_two_dim_eval で落とす
+  simp [G_two_dim_eval, card_Body_eq_mul_G]
+
+/--
+2D の Body 濃度は「2つの矩形濃度の和」になる（L字の手本）。
+
+Big: (x+u)×(x+u)
+Gap: u×u
+Body は
+  A: 左の帯  (幅 u, 高さ x) を上へ u だけ平行移動
+  B: 右の帯  (幅 x, 高さ x+u) を右へ u だけ平行移動
+の濃度和として表せる。
+-/
+theorem card_Body2_as_two_rects (x u : ℕ) :
+    (Body (d := 2) x u).card
+      = (RectAt2 0 (Int.ofNat u) u x).card
+        + (RectAt2 (Int.ofNat u) 0 x (x+u)).card := by
+  classical
+  -- 左辺は既に確立：card_Body_pow_form などから
+  -- (x+u)^2 - u^2 = x*(x+2u)
+  -- 右辺は矩形2枚の濃度：u*x + x*(x+u) = x*(x+2u)
+  -- まず右側を w*h に落とす
+  have h_left : (Body (d := 2) x u).card = x * (x + 2*u) :=
+    card_Body2_eq_x_mul x u
+  have h_right : (RectAt2 0 (Int.ofNat u) u x).card + (RectAt2 (Int.ofNat u) 0 x (x+u)).card
+      = u*x + x*(x+u) := by
+    simp [card_RectAt2, Nat.mul_comm]
+  calc (Body (d := 2) x u).card
+      = x * (x + 2*u) := h_left
+    _ = x*x + x*(2*u) := Nat.mul_add x x (2*u)
+    _ = x*x + 2*x*u := by ring
+    _ = u*x + x*x + x*u := by ring
+    _ = u*x + x*(x+u) := by ring
+    _ = (RectAt2 0 (Int.ofNat u) u x).card + (RectAt2 (Int.ofNat u) 0 x (x+u)).card := h_right.symm
+
 end CosmicFormulaCellDim
 end DkMath
