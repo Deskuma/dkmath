@@ -799,9 +799,60 @@ theorem card_Body_eq_sum_card_Slab (d x u : ℕ) :
     (Body (d := d) x u).card =
       ∑ i : Fin d, (Slab (d := d) x u i).card := by
   classical
-  -- まず、Slab の union が Body になることを示す
-  -- その後、pairwise disjoint から和の公式を得る
-  sorry
+  -- 方針：数え上げで示す。左辺は既に `x * G d x u` に等しい。
+  -- 右辺も `card_Slab_explicit` を用いて和が `x * G d x u` に等しいことを示す。
+  have h_body : (Body (d := d) x u).card = x * G d x u :=
+    card_Body_eq_mul_G (d := d) (x := x) (u := u)
+  -- Fin d の和を range d に落として G と一致させるための整形
+  have h_reindex :
+      (∑ i : Fin d, u ^ (i : ℕ) * (x + u) ^ (d - 1 - (i : ℕ)))
+        = (∑ k ∈ Finset.range d, u ^ k * (x + u) ^ (d - 1 - k)) := by
+    -- `Fin.valEmbedding` による `sum_map` を使って再索引
+    have hmap : ((Finset.univ : Finset (Fin d)).map Fin.valEmbedding) = Finset.range d := by
+      ext k; constructor
+      · intro hk
+        rcases Finset.mem_map.mp hk with ⟨i, _, hi⟩
+        -- hi : i.val = k
+        have hk' : k < d := by
+          rw [← hi]
+          exact i.isLt
+        exact Finset.mem_range.mpr hk'
+      · intro hk
+        have hk' : k < d := Finset.mem_range.mp hk
+        refine Finset.mem_map.mpr ?_
+        exact ⟨⟨k, hk'⟩, Finset.mem_univ _, rfl⟩
+    have himage :
+        Finset.sum (Finset.univ : Finset (Fin d))
+          (fun i => u ^ (i : ℕ) * (x + u) ^ (d - 1 - (i : ℕ)))
+          = Finset.sum (((Finset.univ : Finset (Fin d)).map Fin.valEmbedding))
+            (fun k => u ^ k * (x + u) ^ (d - 1 - k)) := by
+      -- `sum_map` の対称形
+      exact (Finset.sum_map (Finset.univ : Finset (Fin d)) Fin.valEmbedding
+        (fun k : ℕ => u ^ k * (x + u) ^ (d - 1 - k))).symm
+    have h1 :
+        (∑ i : Fin d, u ^ (i : ℕ) * (x + u) ^ (d - 1 - (i : ℕ)))
+          = (∑ k ∈ ((Finset.univ : Finset (Fin d)).map Fin.valEmbedding),
+            u ^ k * (x + u) ^ (d - 1 - k)) := by
+      -- 型レベルの和を `univ` の和に落として比較
+      rw [himage]
+    simpa [hmap] using h1
+  -- 右辺の和を `x * G d x u` に同定
+  have h_sum_slab :
+      (∑ i : Fin d, (Slab (d := d) x u i).card) = x * G d x u := by
+    calc
+      (∑ i : Fin d, (Slab (d := d) x u i).card)
+          = ∑ i : Fin d, x * (u ^ (i : ℕ) * (x + u) ^ (d - 1 - (i : ℕ))) := by
+                simp [card_Slab_explicit, mul_assoc]
+      _ = x * ∑ i : Fin d, (u ^ (i : ℕ) * (x + u) ^ (d - 1 - (i : ℕ))) := by
+            simp [Finset.mul_sum]
+      _ = x * ∑ k ∈ Finset.range d, u ^ k * (x + u) ^ (d - 1 - k) := by
+            simp [h_reindex]
+      _ = x * G d x u := by
+            simp [G, mul_comm]
+  -- まとめ：両辺とも `x * G d x u` に等しい
+  calc
+    (Body (d := d) x u).card = x * G d x u := h_body
+    _ = ∑ i : Fin d, (Slab (d := d) x u i).card := h_sum_slab.symm
 
 -- 目標3: その和が x * G d x u（さらに choose 版）に一致
 theorem card_Body_eq_mul_G_constructive (d x u : ℕ) :
