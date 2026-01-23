@@ -667,8 +667,132 @@ lemma Slab_pairwise_disjoint (d x u : ℕ) :
     ∀ i j : Fin d, i ≠ j → Disjoint (Slab (d := d) x u i) (Slab (d := d) x u j) := by
   classical
   intro i j hij
-  -- この証明は membership を使う必要がある
-  sorry
+  -- 交わると仮定して矛盾を導く（軸 i と j の区間が食い違う）
+  refine Finset.disjoint_left.mpr ?_
+  intro p hp_i hp_j
+  -- Slab(i) の membership を Slab0 の元 + shift に分解
+  rcases Finset.mem_map.mp hp_i with ⟨qi, hqi, hpi⟩
+  rcases Finset.mem_map.mp hp_j with ⟨qj, hqj, hpj⟩
+  -- qi ∈ Slab0 i, qj ∈ Slab0 j
+  -- 軸をケース分け：i < j か j < i
+  rcases lt_or_gt_of_ne hij with hlt | hgt
+  · -- ケース i < j：軸 i で区間が食い違う
+    -- qi の軸 i は [0,x) を u だけ平行移動 → [u,u+x)
+    -- qj の軸 i は [0,u) のまま → 矛盾
+    -- まず qi の軸 i の上界
+    have hqi_axis : ∃ ri : ℕ, ri < x ∧ qi i = Int.ofNat ri := by
+      -- Slab0 は Box の map なので、成分は 0..len-1 の Int.ofNat
+      rcases Finset.mem_map.mp hqi with ⟨riFun, hri_mem, hqi_eq⟩
+      rcases Finset.mem_pi.mp hri_mem i (Finset.mem_univ _) with hri_range
+      have hlen : slabLen (d := d) x u i i = x := by simp [slabLen]
+      rcases Finset.mem_range.mp hri_range with hri_lt_raw
+      have hri_lt : riFun i (Finset.mem_univ _) < x := by simpa [hlen] using hri_lt_raw
+      refine ⟨riFun i (Finset.mem_univ _), hri_lt, ?_⟩
+      -- qi = ofNatCellEmb … riFun
+      have := congrArg (fun f => f i) hqi_eq
+      simpa [CellDim.ofNatCellEmb, Function.Embedding.trans, CellDim.piToFunEmb] using this.symm
+    -- qj の軸 i の上界（i < j なので長さは u）
+    have hqj_axis : ∃ rj : ℕ, rj < u ∧ qj i = Int.ofNat rj := by
+      rcases Finset.mem_map.mp hqj with ⟨rjFun, hrj_mem, hqj_eq⟩
+      rcases Finset.mem_pi.mp hrj_mem i (Finset.mem_univ _) with hrj_range
+      have hlen : slabLen (d := d) x u j i = u := by
+        simp [slabLen, hlt]
+      have hrj_lt : rjFun i (Finset.mem_univ _) < u := by
+        have := Finset.mem_range.mp hrj_range
+        simpa [hlen] using this
+      refine ⟨rjFun i (Finset.mem_univ _), hrj_lt, ?_⟩
+      have := congrArg (fun f => f i) hqj_eq
+      simpa [CellDim.ofNatCellEmb, Function.Embedding.trans, CellDim.piToFunEmb] using this.symm
+    rcases hqi_axis with ⟨ri, hri_lt, hqi_eq⟩
+    rcases hqj_axis with ⟨rj, hrj_lt, hqj_eq⟩
+    -- p i を両方の表現から計算
+    have hp_i_from_qi : p i = Int.ofNat ri + Int.ofNat u := by
+      have h0 := congrArg (fun f => f i) hpi
+      dsimp [CellDim.addEmb] at h0
+      have h : qi i + slabShift (d := d) u i i = p i := by simpa using h0
+      have h' : qi i + Int.ofNat u = p i := by simpa [slabShift] using h
+      calc
+        p i = qi i + Int.ofNat u := h'.symm
+        _ = Int.ofNat ri + Int.ofNat u := by simpa [hqi_eq]
+    have hp_i_from_qj : p i = Int.ofNat rj := by
+      have h0 := congrArg (fun f => f i) hpj
+      dsimp [CellDim.addEmb] at h0
+      have h : qj i + slabShift (d := d) u j i = p i := by simpa using h0
+      have h' : qj i = p i := by
+        have : slabShift (d := d) u j i = 0 := by simp [slabShift, hlt, hij]
+        simpa [this] using h
+      calc
+        p i = qj i := h'.symm
+        _ = Int.ofNat rj := by simpa [hqj_eq]
+    -- 片方は u 以上、もう片方は u 未満で矛盾
+    have hge : (Int.ofNat u : ℤ) ≤ p i := by
+      have hp := hp_i_from_qi
+      have hnonneg : (0 : ℤ) ≤ (Int.ofNat ri : ℤ) := by exact Int.ofNat_nonneg ri
+      have : (Int.ofNat u : ℤ) ≤ Int.ofNat ri + Int.ofNat u := by
+        have := add_le_add_right hnonneg (Int.ofNat u)
+        simpa using this
+      simpa [hp] using this
+    have hltu : p i < Int.ofNat u := by
+      have : Int.ofNat rj < Int.ofNat u := by exact Int.ofNat_lt.mpr hrj_lt
+      simpa [hp_i_from_qj] using this
+    exact (not_le_of_gt hltu) hge
+  · -- ケース j < i：軸 j で同様に矛盾を作る（左右対称）
+    have hqj_axis : ∃ rj : ℕ, rj < x ∧ qj j = Int.ofNat rj := by
+      rcases Finset.mem_map.mp hqj with ⟨rjFun, hrj_mem, hqj_eq⟩
+      rcases Finset.mem_pi.mp hrj_mem j (Finset.mem_univ _) with hrj_range
+      have hlen : slabLen (d := d) x u j j = x := by simp [slabLen]
+      have hrj_lt : rjFun j (Finset.mem_univ _) < x := by
+        have := Finset.mem_range.mp hrj_range
+        simpa [hlen] using this
+      refine ⟨rjFun j (Finset.mem_univ _), hrj_lt, ?_⟩
+      have := congrArg (fun f => f j) hqj_eq
+      simpa [CellDim.ofNatCellEmb, Function.Embedding.trans, CellDim.piToFunEmb] using this.symm
+    have hqi_axis : ∃ ri : ℕ, ri < u ∧ qi j = Int.ofNat ri := by
+      rcases Finset.mem_map.mp hqi with ⟨riFun, hri_mem, hqi_eq⟩
+      rcases Finset.mem_pi.mp hri_mem j (Finset.mem_univ _) with hri_range
+      have hri_lt : riFun j (Finset.mem_univ _) < u := by
+        have := Finset.mem_range.mp hri_range
+        -- slabLen (index i) at axis j は u（j < i）
+        have hcase : slabLen (d := d) x u i j = u := by
+          have hjlt : j < i := hgt
+          have hjne : j ≠ i := Fin.ne_of_lt hgt
+          simp [slabLen, hjlt, hjne]
+        simpa [hcase] using this
+      refine ⟨riFun j (Finset.mem_univ _), hri_lt, ?_⟩
+      have := congrArg (fun f => f j) hqi_eq
+      simpa [CellDim.ofNatCellEmb, Function.Embedding.trans, CellDim.piToFunEmb] using this.symm
+    rcases hqj_axis with ⟨rj, hrj_lt, hqj_eq⟩
+    rcases hqi_axis with ⟨ri, hri_lt, hqi_eq⟩
+    have hp_j_from_qj : p j = Int.ofNat rj + Int.ofNat u := by
+      have h0 := congrArg (fun f => f j) hpj
+      dsimp [CellDim.addEmb] at h0
+      have h : qj j + slabShift (d := d) u j j = p j := by simpa using h0
+      have h' : qj j + Int.ofNat u = p j := by simpa [slabShift] using h
+      calc
+        p j = qj j + Int.ofNat u := h'.symm
+        _ = Int.ofNat rj + Int.ofNat u := by simpa [hqj_eq]
+    have hp_j_from_qi : p j = Int.ofNat ri := by
+      have h0 := congrArg (fun f => f j) hpi
+      dsimp [CellDim.addEmb] at h0
+      have h : qi j + slabShift (d := d) u i j = p j := by simpa using h0
+      have h' : qi j = p j := by
+        have hjne : j ≠ i := Fin.ne_of_lt hgt
+        have : slabShift (d := d) u i j = 0 := by simp [slabShift, hgt, hjne]
+        simpa [this] using h
+      calc
+        p j = qi j := h'.symm
+        _ = Int.ofNat ri := by simpa [hqi_eq]
+    have hge : (Int.ofNat u : ℤ) ≤ p j := by
+      have hp := hp_j_from_qj
+      have hnonneg : (0 : ℤ) ≤ (Int.ofNat rj : ℤ) := by exact Int.ofNat_nonneg rj
+      have : (Int.ofNat u : ℤ) ≤ Int.ofNat rj + Int.ofNat u := by
+        have := add_le_add_right hnonneg (Int.ofNat u)
+        simpa using this
+      simpa [hp] using this
+    have hltu : p j < Int.ofNat u := by
+      have : Int.ofNat ri < Int.ofNat u := by exact Int.ofNat_lt.mpr hri_lt
+      simpa [hp_j_from_qi] using this
+    exact (not_le_of_gt hltu) hge
 
 -- 目標2: Body の card は Slab の card の和
 theorem card_Body_eq_sum_card_Slab (d x u : ℕ) :
