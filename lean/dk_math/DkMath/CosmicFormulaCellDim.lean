@@ -509,10 +509,8 @@ lemma prod_slabLen_split (d x u : ℕ) (i : Fin d) :
             | inl hlt => exact hlt
             | inr heq => exact absurd (Fin.ext heq).symm h2)
     · intro _; trivial
-
   -- 積を3つの部分に分解
   conv_lhs => rw [h_split]
-
   -- union の積を分解（2回）
   rw [Finset.prod_union]
   · rw [Finset.prod_union]
@@ -554,15 +552,98 @@ lemma prod_slabLen_split (d x u : ℕ) (i : Fin d) :
                  Finset.mem_univ, true_and]
       exact Fin.lt_irrefl i
 
+/-- Fin d 内で j < i を満たす要素の個数は i 個 -/
+lemma card_filter_lt_fin (d : ℕ) (i : Fin d) :
+    (Finset.univ.filter (· < i)).card = (i : ℕ) := by
+  classical
+  -- `Fin d` の「j < i」を自然数に落として、`range i` との全単射で数える
+  have hi : i.val < d := i.isLt
+  -- s = { j | j < i }
+  let s : Finset (Fin d) := Finset.univ.filter (· < i)
+  -- t = {0,1,...,i-1}
+  let t : Finset ℕ := Finset.range i.val
+  have h_mem : ∀ j : Fin d, j ∈ s → j.val ∈ t := by
+    intro j hj
+    have hj_lt : j < i := (Finset.mem_filter.mp hj).2
+    exact Finset.mem_range.mpr (by simpa using hj_lt)
+  have h_inj : ∀ (a : Fin d) (ha : a ∈ s) (b : Fin d) (hb : b ∈ s),
+      (fun (j : Fin d) _ => j.val) a ha = (fun j _ => j.val) b hb → a = b := by
+    intro a ha b hb hval
+    exact Fin.ext hval
+  have h_surj : ∀ n : ℕ, n ∈ t → ∃ j : Fin d, ∃ hj : j ∈ s, (fun j _ => j.val) j hj = n := by
+    intro n hn
+    have hn_lt : n < i.val := Finset.mem_range.mp hn
+    have hn_lt_d : n < d := Nat.lt_trans hn_lt hi
+    refine ⟨⟨n, hn_lt_d⟩, ?_, rfl⟩
+    have : (⟨n, hn_lt_d⟩ : Fin d) < i := by simpa using hn_lt
+    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, this⟩
+  have h_card : s.card = t.card :=
+    Finset.card_bij (s := s) (t := t) (i := fun (j : Fin d) _ => j.val)
+      h_mem h_inj h_surj
+  -- 目標の形に戻す
+  simpa [s, t, Finset.card_range] using h_card
+
 /-- Fin d 内で i < j を満たす要素の個数は d - 1 - i 個 -/
 lemma card_filter_gt_fin (d : ℕ) (i : Fin d) :
     (Finset.univ.filter (i < ·)).card = (d - 1 - (i : ℕ)) := by
-  sorry
+  classical
+  -- まず j ≤ i の個数を数える：{0,…,i} で i+1 個
+  have hi : i.val < d := i.isLt
+  let s_le : Finset (Fin d) := Finset.univ.filter (· ≤ i)
+  let t_le : Finset ℕ := Finset.range (i.val + 1)
+  have h_mem : ∀ j : Fin d, j ∈ s_le → j.val ∈ t_le := by
+    intro j hj
+    have hj_le : j ≤ i := (Finset.mem_filter.mp hj).2
+    exact Finset.mem_range.mpr (Nat.lt_of_le_of_lt hj_le (Nat.lt_succ_self _))
+  have h_inj : ∀ (a : Fin d) (ha : a ∈ s_le) (b : Fin d) (hb : b ∈ s_le),
+      (fun (j : Fin d) _ => j.val) a ha = (fun j _ => j.val) b hb → a = b := by
+    intro a ha b hb hval; exact Fin.ext hval
+  have h_surj : ∀ n : ℕ, n ∈ t_le → ∃ j : Fin d, ∃ hj : j ∈ s_le, (fun j _ => j.val) j hj = n := by
+    intro n hn
+    have hn_lt : n < i.val + 1 := Finset.mem_range.mp hn
+    have hn_le : n ≤ i.val := Nat.lt_succ_iff.mp hn_lt
+    have hn_lt_d : n < d := lt_of_le_of_lt hn_le hi
+    refine ⟨⟨n, hn_lt_d⟩, ?_, rfl⟩
+    have : (⟨n, hn_lt_d⟩ : Fin d) ≤ i := by simpa using hn_le
+    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, this⟩
+  have h_card_le : s_le.card = t_le.card :=
+    Finset.card_bij (s := s_le) (t := t_le) (i := fun (j : Fin d) _ => j.val)
+      h_mem h_inj h_surj
+  have h_le_card : (Finset.univ.filter (· ≤ i)).card = i.val + 1 := by
+    simpa [s_le, t_le, Finset.card_range] using h_card_le
+  -- 全体 d 個から j ≤ i (i+1 個) を除いた残りが j > i
+  have h_split := Finset.filter_card_add_filter_neg_card_eq_card
+    (s := (Finset.univ : Finset (Fin d))) (p := fun j => j ≤ i)
+  have h_split' :
+      (Finset.univ.filter (· ≤ i)).card + (Finset.univ.filter fun j => ¬ j ≤ i).card = d := by
+    simpa [Finset.card_univ, Fintype.card_fin] using h_split
+  have h_gt_card_neg : (Finset.univ.filter fun j => ¬ j ≤ i).card = d - (i.val + 1) := by
+    have hsum' : i.val + 1 + (Finset.univ.filter fun j => ¬ j ≤ i).card = d := by
+      simpa [h_le_card, Nat.add_comm] using h_split'
+    calc
+      (Finset.univ.filter fun j => ¬ j ≤ i).card
+          = (i.val + 1 + (Finset.univ.filter fun j => ¬ j ≤ i).card) - (i.val + 1) := by
+              have h := Nat.add_sub_cancel_left
+                (i.val + 1) (Finset.univ.filter fun j => ¬ j ≤ i).card
+              exact h.symm
+      _ = d - (i.val + 1) := by
+        have h := congrArg (fun n => n - (i.val + 1)) hsum'
+        -- h : (i.val + 1 + card_gt) - (i.val + 1) = d - (i.val + 1)
+        simpa [Nat.add_comm, Nat.add_left_comm, Nat.add_assoc] using h
+  have h_neg_eq_gt : (Finset.univ.filter fun j => ¬ j ≤ i) = Finset.univ.filter fun j => i < j := by
+    ext j; simp [not_le]
+  have h_subst : d - (i.val + 1) = d - 1 - i.val := by
+    calc
+      d - (i.val + 1) = d - (1 + i.val) := by ac_rfl
+      _ = d - 1 - i.val := (Nat.sub_sub d 1 i.val).symm
+  simpa [h_neg_eq_gt, h_subst] using h_gt_card_neg
 
 /-- slabLen の積における左側（j < i）の部分は u^(i : ℕ) に等しい -/
-lemma prod_slabLen_left (d x u : ℕ) (i : Fin d) :
+lemma prod_slabLen_left (d _x u : ℕ) (i : Fin d) :
     (∏ j : Fin d with j < i, u) = u ^ (i : ℕ) := by
-  sorry
+  classical
+  conv_lhs => rw [Finset.prod_const]
+  simp [card_filter_lt_fin (d := d) (i := i)]
 
 /-- slabLen の積における右側（i < j）の部分は (x + u)^(d - 1 - (i : ℕ)) に等しい -/
 lemma prod_slabLen_right (d x u : ℕ) (i : Fin d) :
