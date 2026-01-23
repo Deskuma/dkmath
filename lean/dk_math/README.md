@@ -153,7 +153,7 @@ presented by D. and Wise Wolf
 - `card_Body_eq_sum_card_Slab`
 - `card_Body_eq_mul_G_constructive`
 
-> ここで choose 係数が「計算係数」ではなく **分類数（分割の数え上げ）**として現れます。
+> ここで choose 係数が「計算係数」ではなく **分類数（分割の数え上げ）** として現れます。
 
 ---
 
@@ -173,9 +173,9 @@ presented by D. and Wise Wolf
 
 ## 研究上の解釈（短いメモ）
 
-- **Gap** は単純な (u^d)（余白の不変量）
-- **Body** は差として ((x+u)^d-u^d) だが、必ず (x) を因数にもつ
-- 幾何和版 (G) と choose 版 (G_{\mathrm{binom}}) は同値であり、係数は **分類の構造**として理解できる
+- **Gap** は単純な \(u^d\)（余白の不変量）
+- **Body** は差として \((x+u)^d-u^d\) だが、必ず \(x\) を因数にもつ
+- 幾何和版 \(G\) と choose 版 \(G_{\mathrm{binom}}\) は同値であり、係数は **分類の構造**として理解できる
 - Slab 分解により、宇宙式は「差集合の存在」ではなく「分割による構成」へ昇格する
 
 ---
@@ -183,9 +183,7 @@ presented by D. and Wise Wolf
 ## ファイル構成（例）
 
 - `CellDim.lean`：`Cell d`, `translate`, `Box`, `card` 補題群、`Cell2` 整備
-- `CosmicFormulaCellDim.lean`：Big/Gap/Body、べき化、(G)・(G_{\mathrm{binom}})、Slab 分解、2D 手本
-
-（※ 実際の配置はリポジトリ都合に合わせて調整）
+- `CosmicFormulaCellDim.lean`：Big/Gap/Body、べき化、\(G\)・\(G_{\mathrm{binom}}\)、Slab 分解、2D 手本
 
 ---
 
@@ -193,7 +191,7 @@ presented by D. and Wise Wolf
 
 - **Slab 分解の API 整備**（命名・補題の粒度を固定し再利用性を上げる）
 - **2D（トロミノ/図形）側とのリンク強化**（既存平面コードとの往復補題）
-- **一般化宇宙式（他の形状、他の分割ルール）**への拡張
+- **一般化宇宙式（他の形状、他の分割ルール）** への拡張
 - `Nat` 以外（`ℤ`, `ℚ`, `ℝ`）への持ち上げと、解析的道具（生成関数など）との接続
 
 ---
