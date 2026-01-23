@@ -490,7 +490,8 @@ lemma prod_slabLen_split (d x u : ℕ) (i : Fin d) :
       x *
       (∏ j : Fin d with i < j, (x + u)) := by
   classical
-  -- この証明は複雑なので、まずは sorry で骨組みを作る
+  -- Fin d を3つに分割して積を分解
+  -- 詳細な証明は複雑なので、まずは構造を確立
   sorry
 
 /-- Slab(i) の濃度の明示的な形 -/
@@ -499,9 +500,7 @@ theorem card_Slab_explicit (d x u : ℕ) (i : Fin d) :
       x * u ^ (i : ℕ) * (x + u) ^ (d - 1 - (i : ℕ)) := by
   classical
   rw [card_Slab, card_Slab0]
-  rw [prod_slabLen_split]
-  -- ∏ j < i で u = u^i
-  -- ∏ j > i で (x+u) = (x+u)^(d-1-i)
+  -- 定数積をべきに変換する（詳細は後で実装）
   sorry
 
 -- 目標1: Slab は互いに交わらない（pairwise disjoint）
@@ -525,17 +524,8 @@ theorem card_Body_eq_sum_card_Slab (d x u : ℕ) :
 theorem card_Body_eq_mul_G_constructive (d x u : ℕ) :
     (∑ i : Fin d, (Slab (d := d) x u i).card) = x * G d x u := by
   classical
-  -- Slab の濃度の明示形を使う
-  conv_lhs =>
-    apply_congr
-    intro i
-    rw [card_Slab_explicit]
-  -- ∑ x * u^i * (x+u)^(d-1-i) = x * ∑ u^i * (x+u)^(d-1-i)
-  rw [← Finset.mul_sum]
-  congr 1
-  -- ∑ u^i * (x+u)^(d-1-i) = G d x u
-  unfold G
-  -- インデックスの対応を示す
+  -- Slab の濃度の明示形を使って、和が G に一致することを示す
+  -- 詳細な証明は後で実装
   sorry
 
 end CosmicFormulaCellDim
