@@ -713,25 +713,25 @@ lemma Slab_pairwise_disjoint (d x u : ℕ) :
       have h' : qi i + Int.ofNat u = p i := by simpa [slabShift] using h
       calc
         p i = qi i + Int.ofNat u := h'.symm
-        _ = Int.ofNat ri + Int.ofNat u := by simpa [hqi_eq]
+        _ = Int.ofNat ri + Int.ofNat u := by simp [hqi_eq]
     have hp_i_from_qj : p i = Int.ofNat rj := by
       have h0 := congrArg (fun f => f i) hpj
       dsimp [CellDim.addEmb] at h0
       have h : qj i + slabShift (d := d) u j i = p i := by simpa using h0
       have h' : qj i = p i := by
-        have : slabShift (d := d) u j i = 0 := by simp [slabShift, hlt, hij]
+        have : slabShift (d := d) u j i = 0 := by simp [slabShift, hij]
         simpa [this] using h
       calc
         p i = qj i := h'.symm
-        _ = Int.ofNat rj := by simpa [hqj_eq]
+        _ = Int.ofNat rj := by simp [hqj_eq]
     -- 片方は u 以上、もう片方は u 未満で矛盾
     have hge : (Int.ofNat u : ℤ) ≤ p i := by
       have hp := hp_i_from_qi
-      have hnonneg : (0 : ℤ) ≤ (Int.ofNat ri : ℤ) := by exact Int.ofNat_nonneg ri
+      have hnonneg : (0 : ℤ) ≤ (Int.ofNat ri : ℤ) := by exact Int.natCast_nonneg ri
       have : (Int.ofNat u : ℤ) ≤ Int.ofNat ri + Int.ofNat u := by
         have := add_le_add_right hnonneg (Int.ofNat u)
-        simpa using this
-      simpa [hp] using this
+        simp only [Int.ofNat_eq_natCast, le_add_iff_nonneg_left, Nat.cast_nonneg]
+      simp only [Int.ofNat_eq_natCast, hp, le_add_iff_nonneg_left, Nat.cast_nonneg]
     have hltu : p i < Int.ofNat u := by
       have : Int.ofNat rj < Int.ofNat u := by exact Int.ofNat_lt.mpr hrj_lt
       simpa [hp_i_from_qj] using this
@@ -756,7 +756,7 @@ lemma Slab_pairwise_disjoint (d x u : ℕ) :
         have hcase : slabLen (d := d) x u i j = u := by
           have hjlt : j < i := hgt
           have hjne : j ≠ i := Fin.ne_of_lt hgt
-          simp [slabLen, hjlt, hjne]
+          simp [slabLen, hjlt]
         simpa [hcase] using this
       refine ⟨riFun j (Finset.mem_univ _), hri_lt, ?_⟩
       have := congrArg (fun f => f j) hqi_eq
@@ -770,25 +770,25 @@ lemma Slab_pairwise_disjoint (d x u : ℕ) :
       have h' : qj j + Int.ofNat u = p j := by simpa [slabShift] using h
       calc
         p j = qj j + Int.ofNat u := h'.symm
-        _ = Int.ofNat rj + Int.ofNat u := by simpa [hqj_eq]
+        _ = Int.ofNat rj + Int.ofNat u := by simp [hqj_eq]
     have hp_j_from_qi : p j = Int.ofNat ri := by
       have h0 := congrArg (fun f => f j) hpi
       dsimp [CellDim.addEmb] at h0
       have h : qi j + slabShift (d := d) u i j = p j := by simpa using h0
       have h' : qi j = p j := by
         have hjne : j ≠ i := Fin.ne_of_lt hgt
-        have : slabShift (d := d) u i j = 0 := by simp [slabShift, hgt, hjne]
+        have : slabShift (d := d) u i j = 0 := by simp [slabShift, hjne]
         simpa [this] using h
       calc
         p j = qi j := h'.symm
-        _ = Int.ofNat ri := by simpa [hqi_eq]
+        _ = Int.ofNat ri := by simp [hqi_eq]
     have hge : (Int.ofNat u : ℤ) ≤ p j := by
       have hp := hp_j_from_qj
-      have hnonneg : (0 : ℤ) ≤ (Int.ofNat rj : ℤ) := by exact Int.ofNat_nonneg rj
+      have hnonneg : (0 : ℤ) ≤ (Int.ofNat rj : ℤ) := by exact Int.natCast_nonneg rj
       have : (Int.ofNat u : ℤ) ≤ Int.ofNat rj + Int.ofNat u := by
         have := add_le_add_right hnonneg (Int.ofNat u)
-        simpa using this
-      simpa [hp] using this
+        simp
+      simp [hp]
     have hltu : p j < Int.ofNat u := by
       have : Int.ofNat ri < Int.ofNat u := by exact Int.ofNat_lt.mpr hri_lt
       simpa [hp_j_from_qi] using this
