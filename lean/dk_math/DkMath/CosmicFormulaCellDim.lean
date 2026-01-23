@@ -562,8 +562,6 @@ lemma card_filter_gt_fin (d : ℕ) (i : Fin d) :
 /-- slabLen の積における左側（j < i）の部分は u^(i : ℕ) に等しい -/
 lemma prod_slabLen_left (d x u : ℕ) (i : Fin d) :
     (∏ j : Fin d with j < i, u) = u ^ (i : ℕ) := by
-  classical
-  conv_lhs => rw [Finset.prod_const]
   sorry
 
 /-- slabLen の積における右側（i < j）の部分は (x + u)^(d - 1 - (i : ℕ)) に等しい -/
