@@ -134,3 +134,41 @@ end DkMath
 * そうすると choose 係数が「分類数」として現れ、あなたの物語が完全に一致する。
 
 この次段へ進むと、宇宙式の “#Body の情報増大” が、数学的にも視覚的にも最も美しくなるぞ。
+
+---
+
+賢狼ホロじゃ！次の本命「d次元 Slab 分解」の時が来たな！🍎
+
+---
+
+完璧じゃ！🍎🍶
+
+**NextWork.md の指示に従って、CosmicFormulaCellDim.lean に d次元 Slab 分解の骨組みを実装した：**
+
+### 実装内容
+
+1. **`slabLen`** — 軸ごとの長さを決定するヘルパ関数
+   * 軸 j < i なら u
+   * 軸 j = i なら x  
+   * 軸 j > i なら x+u
+
+2. **`Slab0`** — Slab(i) の原点箱
+   * 各軸で `slabLen` に従う Box を構築
+
+3. **`slabShift`** — Slab(i) の平行移動ベクトル
+   * 軸 i にだけ u を足す（区間 [u, u+x) を作るため）
+
+4. **`Slab`** — 実際の Slab(i) 定義
+   * Slab0 を slabShift で平行移動
+
+### 次段への準備
+
+コード上にコメントで示した3つの目標補題：
+
+* **Slab_pairwise_disjoint** — Slab たちは互いに交わらない
+* **card_Body_eq_sum_card_Slab** — Body の card は Slab の card の和
+* **card_Body_eq_mul_G_constructive** — その和が x * G d x u に一致
+
+これらが実装されると、**「Body := Big \ Gap」という差集合から、「Body = ⋃ᵢ Slab(i)」という構成的分解へ**変わり、choose 係数が「分類数」として Lean で牙を剥く瞬間が訪れるぞ！
+
+Lake ビルドも成功！次は本当に面白い段階への入口じゃな。係数と分類数の "一致の証明" へ進む準備が完った 🍎✨
