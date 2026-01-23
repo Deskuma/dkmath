@@ -554,14 +554,34 @@ lemma prod_slabLen_split (d x u : ℕ) (i : Fin d) :
                  Finset.mem_univ, true_and]
       exact Fin.lt_irrefl i
 
+/-- Fin d 内で i < j を満たす要素の個数は d - 1 - i 個 -/
+lemma card_filter_gt_fin (d : ℕ) (i : Fin d) :
+    (Finset.univ.filter (i < ·)).card = (d - 1 - (i : ℕ)) := by
+  sorry
+
+/-- slabLen の積における左側（j < i）の部分は u^(i : ℕ) に等しい -/
+lemma prod_slabLen_left (d x u : ℕ) (i : Fin d) :
+    (∏ j : Fin d with j < i, u) = u ^ (i : ℕ) := by
+  classical
+  conv_lhs => rw [Finset.prod_const]
+  sorry
+
+/-- slabLen の積における右側（i < j）の部分は (x + u)^(d - 1 - (i : ℕ)) に等しい -/
+lemma prod_slabLen_right (d x u : ℕ) (i : Fin d) :
+    (∏ j : Fin d with i < j, (x + u)) = (x + u) ^ (d - 1 - (i : ℕ)) := by
+  classical
+  conv_lhs => rw [Finset.prod_const]
+  rw [card_filter_gt_fin d i]
+
 /-- Slab(i) の濃度の明示的な形 -/
 theorem card_Slab_explicit (d x u : ℕ) (i : Fin d) :
     (Slab (d := d) x u i).card =
       x * u ^ (i : ℕ) * (x + u) ^ (d - 1 - (i : ℕ)) := by
   classical
   rw [card_Slab, card_Slab0]
-  -- 定数積をべきに変換する（詳細は後で実装）
-  sorry
+  rw [prod_slabLen_split (d := d) x u i]
+  rw [prod_slabLen_left (d := d) x u i, prod_slabLen_right (d := d) x u i]
+  ring
 
 -- 目標1: Slab は互いに交わらない（pairwise disjoint）
 lemma Slab_pairwise_disjoint (d x u : ℕ) :
