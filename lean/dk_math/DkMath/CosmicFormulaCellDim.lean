@@ -858,9 +858,12 @@ theorem card_Body_eq_sum_card_Slab (d x u : ℕ) :
 theorem card_Body_eq_mul_G_constructive (d x u : ℕ) :
     (∑ i : Fin d, (Slab (d := d) x u i).card) = x * G d x u := by
   classical
-  -- Slab の濃度の明示形を使って、和が G に一致することを示す
-  -- 詳細な証明は後で実装
-  sorry
+  -- card_Body_eq_sum_card_Slab と card_Body_eq_mul_G をつなぐ
+  have h1 : (Body (d := d) x u).card = ∑ i : Fin d, (Slab (d := d) x u i).card :=
+    card_Body_eq_sum_card_Slab (d := d) (x := x) (u := u)
+  have h2 : (Body (d := d) x u).card = x * G d x u :=
+    card_Body_eq_mul_G (d := d) (x := x) (u := u)
+  exact h1.symm.trans h2
 
 end CosmicFormulaCellDim
 end DkMath
