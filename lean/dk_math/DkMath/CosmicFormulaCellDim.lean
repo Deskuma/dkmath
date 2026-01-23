@@ -490,9 +490,69 @@ lemma prod_slabLen_split (d x u : ℕ) (i : Fin d) :
       x *
       (∏ j : Fin d with i < j, (x + u)) := by
   classical
-  -- Fin d を3つに分割して積を分解
-  -- 詳細な証明は複雑なので、まずは構造を確立
-  sorry
+  -- まず i の位置で積を分離する
+  have h_split : (Finset.univ : Finset (Fin d)) =
+    Finset.univ.filter (· < i) ∪ {i} ∪ Finset.univ.filter (i < ·) := by
+    ext j
+    simp only [Finset.mem_union, Finset.mem_filter, Finset.mem_univ, true_and,
+               Finset.mem_singleton]
+    constructor
+    · intro _
+      by_cases h1 : j < i
+      · exact Or.inl (Or.inl h1)
+      · by_cases h2 : j = i
+        · exact Or.inl (Or.inr h2)
+        · push_neg at h1
+          exact Or.inr (by
+            have : i ≤ j := h1
+            cases Nat.lt_or_eq_of_le this with
+            | inl hlt => exact hlt
+            | inr heq => exact absurd (Fin.ext heq).symm h2)
+    · intro _; trivial
+
+  -- 積を3つの部分に分解
+  conv_lhs => rw [h_split]
+
+  -- union の積を分解（2回）
+  rw [Finset.prod_union]
+  · rw [Finset.prod_union]
+    · -- 3つの部分の積を評価
+      simp only [Finset.prod_singleton]
+      -- slabLen (d := d) x u i i = x
+      have hi : slabLen (d := d) x u i i = x := by
+        simp only [slabLen, lt_self_iff_false, ite_false, ite_true]
+      rw [hi]
+      -- 左側と右側の積を個別に変形
+      have h_left : (∏ j : Fin d with j < i, slabLen (d := d) x u i j) =
+                    (∏ j : Fin d with j < i, u) := by
+        refine Finset.prod_congr rfl ?_
+        intro j hj
+        simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hj
+        simp only [slabLen, hj, ite_true]
+      have h_right : (∏ j : Fin d with i < j, slabLen (d := d) x u i j) =
+                     (∏ j : Fin d with i < j, (x + u)) := by
+        refine Finset.prod_congr rfl ?_
+        intro j hj
+        simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hj
+        simp only [slabLen]
+        have h1 : ¬(j < i) := fun hcontra => Fin.lt_irrefl j (Fin.lt_trans hcontra hj)
+        simp only [h1, ite_false]
+        have h2 : j ≠ i := Fin.ne_of_gt hj
+        simp only [h2, ite_false]
+      simp only [h_left, h_right]
+    · -- filter (· < i) と {i} は disjoint
+      simp only [Finset.disjoint_singleton_right, Finset.mem_filter,
+                 Finset.mem_univ, true_and]
+      exact Fin.lt_irrefl i
+  · -- (filter (· < i) ∪ {i}) と filter (i < ·) は disjoint
+    rw [Finset.disjoint_union_left]
+    constructor
+    · simp only [Finset.disjoint_filter]
+      intro j _ hlt hgt
+      exact Fin.lt_irrefl j (Fin.lt_trans hlt hgt)
+    · simp only [Finset.disjoint_singleton_left, Finset.mem_filter,
+                 Finset.mem_univ, true_and]
+      exact Fin.lt_irrefl i
 
 /-- Slab(i) の濃度の明示的な形 -/
 theorem card_Slab_explicit (d x u : ℕ) (i : Fin d) :
