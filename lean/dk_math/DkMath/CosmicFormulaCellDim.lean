@@ -448,5 +448,32 @@ theorem card_Body2_as_two_rects (x u : ℕ) :
     _ = u*x + x*(x+u) := by ring
     _ = (RectAt2 0 (Int.ofNat u) u x).card + (RectAt2 (Int.ofNat u) 0 x (x+u)).card := h_right.symm
 
+/-! ### 一般次元の Slab 分解（次の本命） -/
+
+/-- Fin d 上の「下側長 u / 上側長 x / 全長 x+u」を軸ごとに組むヘルパ -/
+def slabLen (x u : ℕ) (i : Fin d) (j : Fin d) : ℕ :=
+  if j < i then u else if j = i then x else (x+u)
+
+/-- Slab(i) の原点箱（あとで translate でオフセット u を載せる） -/
+def Slab0 (d x u : ℕ) (i : Fin d) : Finset (Cell d) :=
+  Box (d := d) (fun j => slabLen (d := d) x u i j)
+
+/-- Slab(i) の平行移動：軸 i にだけ u を足す（区間 [u, u+x) を作る） -/
+def slabShift (d u : ℕ) (i : Fin d) : Cell d :=
+  fun j => if j = i then Int.ofNat u else 0
+
+/-- Slab(i) の定義：Slab0 を軸 i 方向に u だけ平行移動 -/
+def Slab (d x u : ℕ) (i : Fin d) : Finset (Cell d) :=
+  translate (d := d) (slabShift (d := d) u i) (Slab0 (d := d) x u i)
+
+-- 目標1: Slab は互いに交わらない（pairwise disjoint）
+-- lemma Slab_pairwise_disjoint ...
+
+-- 目標2: Body の card は Slab の card の和
+-- theorem card_Body_eq_sum_card_Slab ...
+
+-- 目標3: その和が x * G d x u（さらに choose 版）に一致
+-- theorem card_Body_eq_mul_G_constructive ...
+
 end CosmicFormulaCellDim
 end DkMath
