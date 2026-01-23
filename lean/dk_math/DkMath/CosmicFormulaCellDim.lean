@@ -466,14 +466,77 @@ def slabShift (d u : ℕ) (i : Fin d) : Cell d :=
 def Slab (d x u : ℕ) (i : Fin d) : Finset (Cell d) :=
   translate (d := d) (slabShift (d := d) u i) (Slab0 (d := d) x u i)
 
+/-! ### Slab の性質と分解定理 -/
+
+/-- Slab0 の濃度：∏ slabLen の積 -/
+lemma card_Slab0 (d x u : ℕ) (i : Fin d) :
+    (Slab0 (d := d) x u i).card =
+      (∏ j : Fin d, slabLen (d := d) x u i j) := by
+  classical
+  unfold Slab0
+  rw [card_Box_eq_prod]
+
+/-- Slab の濃度は平行移動しても変わらない -/
+lemma card_Slab (d x u : ℕ) (i : Fin d) :
+    (Slab (d := d) x u i).card = (Slab0 (d := d) x u i).card := by
+  classical
+  unfold Slab
+  simp [card_translate]
+
+/-- slabLen の積を3つの部分に分解する補助補題 -/
+lemma prod_slabLen_split (d x u : ℕ) (i : Fin d) :
+    (∏ j : Fin d, slabLen (d := d) x u i j) =
+      (∏ j : Fin d with j < i, u) *
+      x *
+      (∏ j : Fin d with i < j, (x + u)) := by
+  classical
+  -- この証明は複雑なので、まずは sorry で骨組みを作る
+  sorry
+
+/-- Slab(i) の濃度の明示的な形 -/
+theorem card_Slab_explicit (d x u : ℕ) (i : Fin d) :
+    (Slab (d := d) x u i).card =
+      x * u ^ (i : ℕ) * (x + u) ^ (d - 1 - (i : ℕ)) := by
+  classical
+  rw [card_Slab, card_Slab0]
+  rw [prod_slabLen_split]
+  -- ∏ j < i で u = u^i
+  -- ∏ j > i で (x+u) = (x+u)^(d-1-i)
+  sorry
+
 -- 目標1: Slab は互いに交わらない（pairwise disjoint）
--- lemma Slab_pairwise_disjoint ...
+lemma Slab_pairwise_disjoint (d x u : ℕ) :
+    ∀ i j : Fin d, i ≠ j → Disjoint (Slab (d := d) x u i) (Slab (d := d) x u j) := by
+  classical
+  intro i j hij
+  -- この証明は membership を使う必要がある
+  sorry
 
 -- 目標2: Body の card は Slab の card の和
--- theorem card_Body_eq_sum_card_Slab ...
+theorem card_Body_eq_sum_card_Slab (d x u : ℕ) :
+    (Body (d := d) x u).card =
+      ∑ i : Fin d, (Slab (d := d) x u i).card := by
+  classical
+  -- まず、Slab の union が Body になることを示す
+  -- その後、pairwise disjoint から和の公式を得る
+  sorry
 
 -- 目標3: その和が x * G d x u（さらに choose 版）に一致
--- theorem card_Body_eq_mul_G_constructive ...
+theorem card_Body_eq_mul_G_constructive (d x u : ℕ) :
+    (∑ i : Fin d, (Slab (d := d) x u i).card) = x * G d x u := by
+  classical
+  -- Slab の濃度の明示形を使う
+  conv_lhs =>
+    apply_congr
+    intro i
+    rw [card_Slab_explicit]
+  -- ∑ x * u^i * (x+u)^(d-1-i) = x * ∑ u^i * (x+u)^(d-1-i)
+  rw [← Finset.mul_sum]
+  congr 1
+  -- ∑ u^i * (x+u)^(d-1-i) = G d x u
+  unfold G
+  -- インデックスの対応を示す
+  sorry
 
 end CosmicFormulaCellDim
 end DkMath
