@@ -1,18 +1,15 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# 与えられた *.lean から def, lemma, theorem, example, instance, axiom, variable, constant の行を抽出して *.md に変換する
-# def は := 以降を含む
-# lemma, theorem, example, instance, axiom, variable, constant は := by まで
+# Leanファイルから定義をLean LSPを使って抜き出し、Markdownに変換
 
 import argparse
 import json
 import os
-import re
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any, Dict, List, Optional
 
 
 # Lean LSP クライアントの簡易実装
@@ -107,25 +104,6 @@ class LeanLspClient:
             self.proc.terminate()
 
 
-DECL_PATTERN = re.compile(
-    r"^(?:\s*@\[.*\]\s*)*(?:private\s+)?(?:noncomputable\s+)?(def|lemma|theorem|example|instance|axiom|variable|constant)\b"
-)
-
-
-def detect_keyword(line: str) -> Optional[str]:
-    stripped = line.lstrip()
-    m = DECL_PATTERN.match(stripped)
-    return m.group(1) if m else None
-
-
-def first_decl_line(lines: Iterable[str]) -> Optional[str]:
-    for ln in lines:
-        kw = detect_keyword(ln)
-        if kw:
-            return ln
-    return None
-
-
 def find_project_root(start: Path) -> Path:
     for cur in [start] + list(start.parents):
         if (cur / "lakefile.toml").is_file() or (cur / "lean-toolchain").is_file():
@@ -133,7 +111,7 @@ def find_project_root(start: Path) -> Path:
     return start
 
 
-def extract_definitions_lsp(input_file: str, output_file: str) -> None:
+def extract_definitions(input_file: str, output_file: str) -> None:
     with open(input_file, "r", encoding="utf-8") as f:
         text = f.read()
 
@@ -212,18 +190,10 @@ def extract_definitions_lsp(input_file: str, output_file: str) -> None:
         if sym.get("kind") not in allowed_kinds:
             continue
         snippet = slice_by_range(rng)
-        head_line = first_decl_line(snippet.splitlines())
-        kw = detect_keyword(head_line or "")
-        if not kw:
-            continue
-        ident_match = re.search(
-            r"^(?:def|lemma|theorem|example|instance|axiom|variable|constant)\s+([^\s:(]+)",
-            (head_line or "").lstrip(),
-        )
-        ident = ident_match.group(1) if ident_match else sym.get("name", "(unknown)")
+        ident = sym.get("name", "(unknown)")
         collected.append(
             {
-                "keyword": kw,
+                "keyword": "decl",
                 "ident": ident,
                 "snippet": snippet.rstrip() + "\n",
                 "truncated": False,
@@ -233,87 +203,6 @@ def extract_definitions_lsp(input_file: str, output_file: str) -> None:
 
     collected.sort(key=lambda x: x["start"])
     write_markdown(input_file, output_file, collected)
-
-
-def extract_definitions_regex(input_file: str, output_file: str) -> None:
-    with open(input_file, "r", encoding="utf-8") as f:
-        text = f.read()
-
-    def remove_comments(s: str) -> str:
-        out_chars: List[str] = []
-        i = 0
-        n = len(s)
-        block_level = 0
-        while i < n:
-            if i + 1 < n and s[i] == "/" and s[i + 1] == "-":
-                block_level += 1
-                i += 2
-                continue
-            if i + 1 < n and s[i] == "-" and s[i + 1] == "/" and block_level > 0:
-                block_level -= 1
-                i += 2
-                continue
-            if block_level > 0:
-                i += 1
-                continue
-            if i + 1 < n and s[i] == "-" and s[i + 1] == "-":
-                i += 2
-                while i < n and s[i] != "\n":
-                    i += 1
-                continue
-            out_chars.append(s[i])
-            i += 1
-        return "".join(out_chars)
-
-    cleaned = remove_comments(text)
-    lines = cleaned.splitlines(keepends=True)
-    start_pat = re.compile(
-        r"^(?:@[\[].*\]\s*)*(?:noncomputable\s+)?(def|lemma|theorem|example|instance|axiom|variable|constant)\s"
-    )
-    definitions = []
-    i = 0
-    nlines = len(lines)
-    while i < nlines:
-        line = lines[i]
-        stripped_line = line.lstrip()
-        m = start_pat.match(stripped_line)
-        if m:
-            keyword = m.group(1)
-            id_m = re.search(
-                r"(?:def|lemma|theorem|example|instance|axiom|variable|constant)\s+([^\s:(]+)",
-                stripped_line,
-            )
-            ident = id_m.group(1) if id_m else "(unknown)"
-            j = i
-            block_lines = []
-            while j < nlines:
-                cur = lines[j]
-                cur_stripped = cur.lstrip()
-                if j != i and start_pat.match(cur_stripped):
-                    break
-                block_lines.append(cur)
-                j += 1
-            truncated = False
-            if keyword in ("lemma", "theorem"):
-                for k, bl in enumerate(block_lines):
-                    if re.search(r":=\s*by", bl):
-                        block_lines = block_lines[: k + 1]
-                        truncated = True
-                        break
-            definitions.append(
-                {
-                    "keyword": keyword,
-                    "ident": ident,
-                    "snippet": "".join(block_lines),
-                    "truncated": truncated,
-                    "start": i,
-                }
-            )
-            i = j
-        else:
-            i += 1
-
-    write_markdown(input_file, output_file, definitions)
 
 
 def write_markdown(
@@ -338,39 +227,21 @@ def write_markdown(
 
 
 def main():
-    # コマンドライン引数の解析
     parser = argparse.ArgumentParser(
-        description="Extract definitions from Lean files to Markdown."
+        description="Extract definitions from Lean files to Markdown using Lean LSP."
     )
     parser.add_argument("input", help="Input .lean file")
     parser.add_argument(
         "output",
         default="__Theorems.md",
-        help="Output .md file (default: Theorems.md)",
+        help="Output .md file (default: __Theorems.md)",
         nargs="?",
     )
-    parser.add_argument(
-        "--use-lsp",
-        action="store_true",
-        help="Use Lean LSP (lean --server) for robust parsing",
-    )
     args = parser.parse_args()
-    # 入力ファイルの存在確認
     if not os.path.isfile(args.input):
-        # 存在しない: エラーメッセージを表示して終了
         print(f"Error: Input file {args.input} does not exist.")
         sys.exit(1)
-    try:
-        if args.use_lsp:
-            extract_definitions_lsp(args.input, args.output)
-        else:
-            extract_definitions_regex(args.input, args.output)
-    except Exception as exc:
-        print(
-            f"[warn] LSP extraction failed ({exc}). Falling back to regex parsing...",
-            file=sys.stderr,
-        )
-        extract_definitions_regex(args.input, args.output)
+    extract_definitions(args.input, args.output)
 
 
 if __name__ == "__main__":
