@@ -108,7 +108,10 @@ def find_project_root(start: Path) -> Path:
     for cur in [start] + list(start.parents):
         if (cur / "lakefile.toml").is_file() or (cur / "lean-toolchain").is_file():
             return cur
-    return start
+    raise FileNotFoundError(
+        f"No Lean/Lake project root found starting from '{start}'. "
+        "Expected a 'lakefile.toml' or 'lean-toolchain' in this directory or one of its parents."
+    )
 
 
 def extract_definitions(input_file: str, output_file: str) -> None:
