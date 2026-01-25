@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Leanファイルから定義をLean LSPを使って抜き出し、Markdownに変換
