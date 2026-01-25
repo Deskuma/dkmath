@@ -9,12 +9,16 @@ import os
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 
 # Lean LSP クライアントの簡易実装
 class LeanLspClient:
-    def __init__(self, cmd: Optional[List[str]] = None, cwd: Optional[str] = None):
+    def __init__(
+        self,
+        cmd: Optional[List[str]] = None,
+        cwd: Optional[Union[str, Path]] = None,
+    ):
         self.cmd = cmd or ["lake", "env", "lean", "--server"]
         try:
             self.proc = subprocess.Popen(
