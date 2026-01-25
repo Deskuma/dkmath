@@ -223,7 +223,6 @@ def write_markdown(
             else:
                 f.write("```\n")
     print(f"Extracted {len(definitions)} definitions to {output_file}")
-    return
 
 
 def main():
