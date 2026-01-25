@@ -16,13 +16,39 @@ from typing import Any, Dict, List, Optional
 class LeanLspClient:
     def __init__(self, cmd: Optional[List[str]] = None, cwd: Optional[str] = None):
         self.cmd = cmd or ["lake", "env", "lean", "--server"]
-        self.proc = subprocess.Popen(
-            self.cmd,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            cwd=cwd,
-        )
+        try:
+            self.proc = subprocess.Popen(
+                self.cmd,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                cwd=cwd,
+            )
+        except OSError as exc:
+            # Provide a clear message when the Lean LSP server cannot be started,
+            # for example when `lake` is not installed or not in PATH.
+            raise RuntimeError(
+                "Failed to start Lean LSP server. "
+                "Please ensure that `lake env lean --server` is installed and "
+                "available in your PATH."
+            ) from exc
+
+        # If the process exits immediately, surface a helpful error with stderr.
+        return_code = self.proc.poll()
+        if return_code is not None:
+            stderr_output = ""
+            if self.proc.stderr is not None:
+                try:
+                    stderr_output = self.proc.stderr.read().decode("utf-8", errors="replace")
+                except Exception:
+                    stderr_output = ""
+            msg = (
+                f"Lean LSP server exited immediately with code {return_code}. "
+                f"Command: {' '.join(self.cmd)}."
+            )
+            if stderr_output.strip():
+                msg += f" Stderr: {stderr_output.strip()}"
+            raise RuntimeError(msg)
         self.next_id = 1
 
     def _read_message(self) -> Dict[str, Any]:
