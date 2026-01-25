@@ -120,7 +120,7 @@ def extract_definitions(input_file: str, output_file: str) -> None:
     file_uri = file_path.as_uri()
     root_uri = root_path.as_uri()
 
-    client = LeanLspClient(cwd=root_path)
+    client = LeanLspClient(cwd=str(root_path))
     try:
         _ = client.request(
             "initialize",
