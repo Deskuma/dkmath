@@ -97,6 +97,17 @@ LSP/JSON-RPC の簡易クライアント実装：
 5. ファイル内の出現順でソート
 6. Markdown に整形
 
+## テスト
+
+- `test_theorem_picker.py` にユニットテストを実装
+- 様々な定義スタイル・属性・複雑な構文に対応
+
+### テスト実行方法
+
+```bash
+python -m pytest test_theorem_picker.py -v
+```
+
 ## 動作要件
 
 - Python 3.8 以上
