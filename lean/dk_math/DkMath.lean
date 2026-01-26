@@ -14,6 +14,7 @@ import DkMath.CosmicFormulaGeom  -- Cosmic Formula Geometry
 import DkMath.CosmicFormulaLinear  -- Cosmic Formula Linearity
 import DkMath.CosmicFormulaTrominoLink  -- Cosmic Formula and Tromino Link
 import DkMath.CosmicFormulaCellDim  -- Cosmic Formula Cell Dimensionality
+import DkMath.CosmicFormulaExp  -- Cosmic Formula Exponent
 -- Polyomino Module
 import DkMath.Polyomino  -- Polyomino Basics
 import DkMath.PolyominoPrototype  -- Polyomino Prototype
