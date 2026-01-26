@@ -97,18 +97,46 @@ namespace CosmicFormulaCellDim
 
 open scoped BigOperators
 
-/-- 二項定理（choose）側の G_{d-1} :  Σ_{k < d} (d choose k+1) x^k u^(d-1-k) -/
+/-- 二項定理（choose）側の G_{d-1} := Σ_{k < d} (d choose k+1) x^k u^(d-1-k) -/
 def Gbinom (d x u : ℕ) : ℕ :=
   Finset.sum (Finset.range d) fun k => Nat.choose d (k + 1) * x ^ k * u ^ (d - 1 - k)
+  -- Gbinom: LaTeX: $G_{d-1}(x,u) = \sum_{k=0}^{d-1} \binom{d}{k+1} x^k u^{d-1-k}$
 
-/-
+/- 等式： (x+u)^d - u^d = x * Gbinom d x u -/
+/- 戦略 -----------------------------------------------------------------------
 狙い：
   (x+u)^d - u^d = x * Gbinom d x u
 方針：
-  1) (u+x)^d を二項定理で Σ choose d k * u^k * x^(d-k) に展開
-  2) 末項 k=d が u^d なので、差を取ると Σ_{k < d} に落ちる（sum_range_succ で剥がす）
-  3) 反転（reflect）して x^(k+1) を作り、x を因数として外へ出す
-  4) choose の対称性で choose d (d-1-k) = choose d (k+1) に変換
+  1. (u+x)^d を二項定理で Σ choose d k * u^k * x^(d-k) に展開
+  2. 末項 k=d が u^d なので、差を取ると Σ_{k < d} に落ちる（sum_range_succ で剥がす）
+  3. 反転（reflect）して x^(k+1) を作り、x を因数として外へ出す
+  4. choose の対称性で choose d (d-1-k) = choose d (k+1) に変換
+------------------------------------------------------------------------------- -/
+
+/--
+二項展開を用いた累乗差の公式。（差の因数分解：n乗の差の因数分解公式 版）
+
+`(x + u)^d - u^d = x * Gbinom d x u` が成り立つことを示す定理。
+
+この証明は以下の主要ステップから構成される：
+
+1. **二項展開**：$(x+u)^n = \sum_{k=0}^{n} \binom{n}{k} u^k x^{n-k}$
+
+2. **末項除去**：展開式の $k=n$ 項は $u^n$ であり、これを差に含める形で整理
+
+3. **反転変換**：$k \mapsto n-1-k$ の変数置換により、$x$ の指数を $k+1$ に統一
+
+4. **対称性の利用**：二項係数の対称性 $\binom{n}{n-1-k} = \binom{n}{k+1}$ を適用
+
+5. **因数分解**：$x^{k+1} = x \cdot x^k$ により $x$ を全体の和の外に出して、`Gbinom` の定義と一致させる
+
+結果として、$(x+u)^d - u^d$ が $x$ とコスミック二項係数 `Gbinom` の積に等しいことが示される。
+
+**例**：
+- $d=1$：$(x+u)-u = x = x \cdot 1$
+- $d=2$：$(x+u)^2 - u^2 = 2ux + x^2 = x(2u + x)$
+- $d=3$：$(x+u)^3 - u^3 = 3u^2x + 3ux^2 + x^3 = x(3u^2 + 3ux + x^2)$
+- $d=4$：$(x+u)^4 - u^4 = 4u^3x + 6u^2x^2 + 4ux^3 + x^4 = x(4u^3 + 6u^2x + 4ux^2 + x^3)$
 -/
 theorem pow_sub_pow_eq_mul_Gbinom (d x u : ℕ) :
     (x + u)^d - u^d = x * Gbinom d x u := by
@@ -866,4 +894,51 @@ theorem card_Body_eq_mul_G_constructive (d x u : ℕ) :
   exact h1.symm.trans h2
 
 end CosmicFormulaCellDim
+
+-- ========================================================
+
+/-! ## まとめ定理「箱の形で1本」にまとめ直す
+Note: 箱の形で1本にまとめた「見栄え専用定理」😏 -/
+
+namespace CosmicFormulaTheory
+
+open CosmicFormulaCellDim
+
+/-- 論文用まとめ：
+    `Body = (x+u)^d - u^d = x*G = x*Gbinom` -/
+theorem card_Body_chain (d x u : ℕ) :
+    (Body (d := d) x u).card
+      = (x + u)^d - u^d ∧
+    (x + u)^d - u^d
+      = x * G d x u ∧
+    (x + u)^d - u^d
+      = x * Gbinom d x u := by
+  constructor
+  · exact card_Body_pow_form (d := d) x u
+  constructor
+  · exact pow_sub_pow_eq_mul_G d x u
+  · exact pow_sub_pow_eq_mul_Gbinom d x u
+
+-- --------------------------------------------------------
+
+/-- 論文用まとめその1：`#Body = (x+u)^d - u^d` -/
+theorem card_Body_box (d x u : ℕ) :
+    (Body (d := d) x u).card
+      = (x+u)^d - u^d := by
+  exact card_Body_pow_form (d := d) x u
+
+/-- 論文用まとめその2：`(x+u)^d - u^d = x*G` -/
+theorem pow_sub_pow_box (d x u : ℕ) :
+    (x+u)^d - u^d
+      = x * G d x u := by
+  exact pow_sub_pow_eq_mul_G d x u
+
+/-- 論文用まとめその3：`(x+u)^d - u^d = x*Gbinom` -/
+theorem pow_sub_pow_box_binom (d x u : ℕ) :
+    (x+u)^d - u^d
+      = x * Gbinom d x u := by
+  exact pow_sub_pow_eq_mul_Gbinom d x u
+
+
+end CosmicFormulaTheory
 end DkMath
