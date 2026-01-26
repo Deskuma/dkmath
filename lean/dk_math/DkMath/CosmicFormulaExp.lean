@@ -4,10 +4,13 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+-- Note: 指数の「次元昇華」原理である無次元宇宙式の量の不変量を Lean で確認する。
+-- ここでは自然数版で確認する。実数(CellDim)版は CosmicFormulaCellDim.lean 側で確認する。
+
 import Mathlib
 
 namespace DkMath
-namespace CosmicExponent
+namespace CosmicFormulaExp  -- Cosmic Formula Exponent の略
 
 /-!
 # 無次元宇宙式（量の不変量）を Lean で確認する
@@ -114,5 +117,5 @@ theorem Body_dimAmplify_sub_unit
   simpa using Body_eq_base_p (p := p) (d := d) (u := u) hp
 
 
-end CosmicExponent
+end CosmicFormulaExp
 end DkMath
