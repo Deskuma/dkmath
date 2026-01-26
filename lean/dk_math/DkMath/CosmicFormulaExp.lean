@@ -111,7 +111,7 @@ theorem Big_Gap_Body (d x u : ℕ) :
   · rfl
 
 /-- 無次元比 (r+1=p) を x=(p-1)u で実現したときの Body 量： (p^d-1)u^d -/
-theorem Body_dimAmplify_sub_unit
+theorem Body_dim_amplify_sub_unit
     (p d u : ℕ) (hp : 1 ≤ p) :
     Body d ((p - 1) * u) u = (p^d - 1) * u^d := by
   simpa using Body_eq_base_p (p := p) (d := d) (u := u) hp
