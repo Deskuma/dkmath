@@ -911,7 +911,7 @@ open CosmicFormulaCellDim
 
 /-- 論文用まとめ：
     `Body = (x+u)^d - u^d = x*G = x*Gbinom` -/
-theorem card_Body_chain (d x u : ℕ) :
+theorem card_Body_box_chain' (d x u : ℕ) :
     (Body (d := d) x u).card
       = (x + u)^d - u^d ∧
     (x + u)^d - u^d
@@ -959,9 +959,7 @@ theorem card_Body_box_chain (d x u : ℕ) :
   · -- #Body = (x+u)^d - u^d
     exact card_Body_pow_form (d := d) x u
   constructor
-  · -- #Body = x*G
-    -- まず chain を使うならこれでもよいし、直接書いてもよい
-    -- 直接：
+  · -- #Body = x*G（等式のチェーンで示す）
     calc
       (Body (d := d) x u).card
           = (x + u)^d - u^d := card_Body_pow_form (d := d) x u
