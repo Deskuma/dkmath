@@ -897,19 +897,21 @@ theorem card_Body_eq_mul_G_constructive (d x u : ℕ) :
   exact h1.symm.trans h2
 
 end CosmicFormulaCellDim
+end DkMath
 
 -- ========================================================
 
 /-! ## まとめ定理「箱の形で1本」にまとめ直す
 Note: 箱の形で1本にまとめた「見栄え専用定理」😏 -/
 
+namespace DkMath
 namespace CosmicFormulaTheory
 
 open CosmicFormulaCellDim
 
 /-- 論文用まとめ：
     `Body = (x+u)^d - u^d = x*G = x*Gbinom` -/
-theorem card_Body_chain (d x u : ℕ) :
+theorem card_Body_box_chain' (d x u : ℕ) :
     (Body (d := d) x u).card
       = (x + u)^d - u^d ∧
     (x + u)^d - u^d
@@ -942,6 +944,31 @@ theorem pow_sub_pow_box_binom (d x u : ℕ) :
       = x * Gbinom d x u := by
   exact pow_sub_pow_eq_mul_Gbinom d x u
 
+-- ========================================================
+
+/-- 論文箱式（等式チェーン版）：
+    `#Body = (x+u)^d - u^d = x*G = x*Gbinom` -/
+theorem card_Body_box_chain (d x u : ℕ) :
+    (Body (d := d) x u).card  -- #Body = (x+u)^d - u^d
+      = (x + u)^d - u^d ∧
+    (Body (d := d) x u).card  -- #Body = x*G
+      = x * G d x u ∧
+    (Body (d := d) x u).card  -- #Body = x*Gbinom
+      = x * Gbinom d x u := by
+  constructor
+  · -- #Body = (x+u)^d - u^d
+    exact card_Body_pow_form (d := d) x u
+  constructor
+  · -- #Body = x*G（等式のチェーンで示す）
+    calc
+      (Body (d := d) x u).card
+          = (x + u)^d - u^d := card_Body_pow_form (d := d) x u
+      _ = x * G d x u := pow_sub_pow_eq_mul_G d x u
+  · -- #Body = x*Gbinom
+    calc
+      (Body (d := d) x u).card
+          = (x + u)^d - u^d := card_Body_pow_form (d := d) x u
+      _ = x * Gbinom d x u := pow_sub_pow_eq_mul_Gbinom d x u
 
 end CosmicFormulaTheory
 end DkMath
