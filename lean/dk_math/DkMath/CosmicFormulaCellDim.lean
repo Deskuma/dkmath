@@ -97,10 +97,13 @@ namespace CosmicFormulaCellDim
 
 open scoped BigOperators
 
-/-- 二項定理（choose）側の G_{d-1} := Σ_{k < d} (d choose k+1) x^k u^(d-1-k) -/
+/--
+二項定理（choose）側の `G_{d-1} := Σ_{k < d} (d choose k+1) x^k u^(d-1-k)` を表す関数。
+
+LaTeX: $G_{d-1}(x,u) = \sum_{k=0}^{d-1} \binom{d}{k+1} x^k u^{d-1-k}$.
+-/
 def Gbinom (d x u : ℕ) : ℕ :=
   Finset.sum (Finset.range d) fun k => Nat.choose d (k + 1) * x ^ k * u ^ (d - 1 - k)
-  -- Gbinom: LaTeX: $G_{d-1}(x,u) = \sum_{k=0}^{d-1} \binom{d}{k+1} x^k u^{d-1-k}$
 
 /- 等式： (x+u)^d - u^d = x * Gbinom d x u -/
 /- 戦略 -----------------------------------------------------------------------
