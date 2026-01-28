@@ -209,6 +209,48 @@ theorem Ag_mul_pair (a b c d : ℝ) :
     AgMulPair (a,b) (c,d) = (a*c + (b*d)/4, a*d + b*c + b*d) := by
   rfl
 
+/-- Conjugation is an involution: conj(conj(x)) = x (in coordinates). -/
+theorem AgConj_invol (a b : ℝ) :
+    AgConj (a + b) (-b) = Ag a b := by
+  -- AgConj a b = (a+b) - b*uAg を使うと一撃
+  simp [AgConj_eq, Ag, sub_eq_add_neg]
+
+/-- AgNorm is a real scalar: it has no uAg-component. -/
+theorem AgNorm_is_scalar (a b : ℝ) :
+    ∃ r : ℝ, AgNorm a b = r := by
+  refine ⟨a^2 + a*b - (b^2)/4, ?_⟩
+  simp [AgNorm_eq]
+
+/-- Inverse formula in the uAg-world (when the norm is nonzero). -/
+theorem Ag_mul_AgConj_div_AgNorm (a b : ℝ) (h : AgNorm a b ≠ 0) :
+    Ag a b * ((AgConj a b) / (AgNorm a b)) = 1 := by
+  unfold AgNorm at h ⊢
+  have h_ne : Ag a b * AgConj a b ≠ 0 := h
+  have h_ne_ag : Ag a b ≠ 0 := mul_ne_zero_iff.mp h_ne |>.1
+  have h_ne_conj : AgConj a b ≠ 0 := mul_ne_zero_iff.mp h_ne |>.2
+  field_simp [h_ne_ag, h_ne_conj, h]
+
+/-- Commutative version of the inverse formula in the uAg-world. -/
+theorem AgConj_div_AgNorm_mul_Ag (a b : ℝ) (h : AgNorm a b ≠ 0) :
+    ((AgConj a b) / (AgNorm a b)) * Ag a b = 1 := by
+  -- 可換なので上と同じで済む
+  simpa [mul_comm] using Ag_mul_AgConj_div_AgNorm (a := a) (b := b) h
+
+/-- Encode Ag-elements as pairs (a,b). -/
+def AgEncode (_x : ℝ) : ℝ × ℝ := (0, 0)  -- placeholder (optional)
+
+-- まずは明示的な相互変換だけ置くのが実用的
+def AgOfPair (p : ℝ × ℝ) : ℝ := Ag p.1 p.2
+
+lemma AgOfPair_mul (p q : ℝ × ℝ) :
+    AgOfPair (AgMulPair p q) = AgOfPair p * AgOfPair q := by
+  -- p=(a,b), q=(c,d) に展開して Ag_mul を使うのが自然
+  rcases p with ⟨a,b⟩
+  rcases q with ⟨c,d⟩
+  -- Ag_mul を使えるなら最短
+  simpa [AgOfPair, AgMulPair] using (Ag_mul (a := a) (b := b) (c := c) (d := d)).symm
+
+
 end -- noncomputable section
 end SilverRatioUnit
 end DkMath
