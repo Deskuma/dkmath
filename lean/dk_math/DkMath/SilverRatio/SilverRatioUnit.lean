@@ -22,23 +22,24 @@ namespace SilverRatioUnit
 
 open Real
 
+noncomputable section
+
 /-- √2 as a real number -/
-noncomputable def sqrt2 : ℝ := Real.sqrt 2
+def sqrt2 : ℝ := Real.sqrt 2
 
 /-- silver ratio: σ := 1 + √2 -/
-noncomputable def sigma : ℝ := 1 + sqrt2
+def sigma : ℝ := 1 + sqrt2
 
 /-- silver ratio unit: uAg := σ / 2 = (1 + √2)/2 -/
-noncomputable def uAg : ℝ := sigma / 2
+def uAg : ℝ := sigma / 2
 
 /-- ΔAg := uAg^2 - uAg (the constant "gap" in the uAg-world) -/
-noncomputable def deltaAg : ℝ := uAg^2 - uAg
+def deltaAg : ℝ := uAg^2 - uAg
 
-/-- Key lemma: sqrt2 ^ 2 = 2 -/
-@[simp]
-lemma sqrt2_sq : sqrt2 ^ 2 = 2 := by
+/-- Key lemma: sqrt2 ^ 2 = 2 (robust) -/
+@[simp] lemma sqrt2_sq : sqrt2 ^ 2 = (2 : ℝ) := by
   unfold sqrt2
-  norm_num
+  simp [pow_two, Real.mul_self_sqrt]
 
 /-- sqrt2 > 0 -/
 lemma sqrt2_pos : 0 < sqrt2 := by
@@ -61,22 +62,17 @@ Main closure law for the silver ratio unit:
 uAg^2 = uAg + 1/4.
 -/
 theorem uAg_sq_eq : uAg^2 = uAg + (1/4 : ℝ) := by
-  -- reduce to a pure algebraic identity using sqrt2^2 = 2
-  -- Start from the concrete form uAg = (1 + sqrt2)/2
-  have h := sqrt2_sq
-  -- rewrite uAg and clear denominators
-  -- goal becomes: ((1+sqrt2)/2)^2 = (1+sqrt2)/2 + 1/4
-  simp [uAg_eq, pow_two]  -- puts the goal in terms of (1+sqrt2)/2
-  -- Now:
-  -- ⊢ ((1 + sqrt2) / 2) * ((1 + sqrt2) / 2) = (1 + sqrt2) / 2 + 1/4
-  field_simp [pow_two]    -- clears denominators (×4)
-  -- goal: (1 + sqrt2)^2 * 4 = 2 * ((1 + sqrt2) * 4 + 2)
-  -- expand and use h
-  calc (1 + sqrt2) ^ 2 * 4
-      = (1 + 2 * sqrt2 + sqrt2 ^ 2) * 4 := by ring
-    _ = (1 + 2 * sqrt2 + 2) * 4 := by rw [h]
-    _ = (3 + 2 * sqrt2) * 4 := by ring
-    _ = 2 * ((1 + sqrt2) * 4 + 2) := by ring
+  have h : sqrt2 ^ 2 = (2 : ℝ) := sqrt2_sq
+  simp [uAg_eq, pow_two]
+  field_simp [pow_two]
+  -- goal is purely algebraic now
+  -- Use h to replace sqrt2^2
+  -- (ring handles the rest)
+  calc
+    (1 + sqrt2) ^ 2 * 4
+        = (1 + 2 * sqrt2 + sqrt2 ^ 2) * 4 := by ring
+    _   = (1 + 2 * sqrt2 + 2) * 4 := by simp [h]
+    _   = 2 * ((1 + sqrt2) * 4 + 2) := by ring
 
 /-- The gap is constant: ΔAg = 1/4. -/
 theorem deltaAg_eq : deltaAg = (1/4 : ℝ) := by
@@ -88,24 +84,23 @@ theorem deltaAg_eq : deltaAg = (1/4 : ℝ) := by
 /-- e/4 = e * ΔAg, where e := exp 1. -/
 theorem e_div_four_eq_e_mul_delta :
     (Real.exp 1) / 4 = (Real.exp 1) * deltaAg := by
-  -- substitute ΔAg = 1/4
+  -- ΔAg = 1/4 を代入するだけ
   simp only [div_eq_mul_inv, mul_comm, deltaAg_eq, one_mul]
 
 /-- Observed coefficient: α := 4/e. -/
-noncomputable def alpha : ℝ := 4 / (Real.exp 1)
+def alpha : ℝ := 4 / (Real.exp 1)
 
 /-- α⁻¹ = e * ΔAg (so α⁻¹ = e/4). -/
 theorem inv_alpha_eq_e_mul_delta :
     (alpha)⁻¹ = (Real.exp 1) * deltaAg := by
   -- alpha⁻¹ = (4 / e)⁻¹ = e / 4, then use the previous theorem.
   -- In a field, `(a / b)⁻¹ = b / a` holds by simp.
-  -- If simp fails in your Mathlib, rewrite with `div_eq_mul_inv` and group laws.
   have : (alpha)⁻¹ = (Real.exp 1) / 4 := by
     -- `(4 / e)⁻¹ = e / 4`
     simp [alpha]
   -- now replace (exp 1)/4 with exp 1 * ΔAg
   simpa [this] using (e_div_four_eq_e_mul_delta)
 
+end -- noncomputable section
 end SilverRatioUnit
-
 end DkMath
