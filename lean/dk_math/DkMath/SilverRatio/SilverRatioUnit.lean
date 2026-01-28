@@ -349,6 +349,19 @@ theorem e_div_four_eq_e_mul_Gap_uAg :
   rw [Gap_uAg]
   ring
 
+-- ----------------------------------------------------------------------------
+
+/-- AgNorm is multiplicative (pair form). -/
+theorem AgNorm_mul (a b c d : ℝ) :
+    AgNorm (a*c + (b*d)/4) (a*d + b*c + b*d)
+      = (AgNorm a b) * (AgNorm c d) := by
+  -- 左辺は Ag_mul で作られる積の係数
+  -- 右辺は定義どおり
+  -- ここは最終的に ring_nf / nlinarith で倒せるはず
+  simp [AgNorm_eq]  -- ノルムの閉形式へ落とす
+  ring
+
+
 end -- noncomputable section
 end SilverRatioUnit
 end DkMath
