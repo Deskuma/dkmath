@@ -162,6 +162,53 @@ theorem Ag_mul (a b c d : ℝ) :
   simp only [mul_comm, mul_left_comm, one_div, mul_assoc, sqrt2_sq]
   ring
 
+-- ----------------------------------------------------------------------------
+
+/-- Galois conjugate of uAg is 1 - uAg. -/
+lemma uAg_conj' : (1 - uAg) = (1 - sqrt2) / 2 := by
+  -- 1 - (1+sqrt2)/2 = (1 - sqrt2)/2
+  simp only [uAg_eq]
+  field_simp
+  ring
+
+/-- Conjugation on Ag-elements: a + b*uAg ↦ a + b*(1-uAg). -/
+def AgConj (a b : ℝ) : ℝ := a + b * (1 - uAg)
+
+/-- Norm in the uAg-world. -/
+def AgNorm (a b : ℝ) : ℝ := (Ag a b) * (AgConj a b)
+
+lemma AgConj_eq (a b : ℝ) : AgConj a b = (a + b) - b * uAg := by
+  simp only [AgConj, uAg_eq, sub_eq_add_neg, mul_add, mul_one, mul_neg]
+  ring
+
+/-- Closed form of the norm: a^2 + a*b - (b^2)/4. -/
+theorem AgNorm_eq (a b : ℝ) :
+    AgNorm a b = a^2 + a*b - (b^2)/4 := by
+  -- expand and reduce uAg^2
+  simp only [AgNorm, Ag, AgConj, mul_add, add_mul]
+  have h := uAg_sq_sub_uAg
+  nlinarith [h]
+
+/-- Inverse formula in the uAg-world (when the norm is nonzero). -/
+theorem Ag_inv (a b : ℝ) (h : AgNorm a b ≠ 0) :
+    (Ag a b)⁻¹ = (AgConj a b) / (AgNorm a b) := by
+  have h' : Ag a b ≠ 0 := by
+    unfold AgNorm at h
+    exact mul_ne_zero_iff.mp h |>.1
+  field_simp [h', h]
+  unfold AgNorm
+  ring
+
+/-- Pair multiplication rule corresponding to Ag. -/
+def AgMulPair (p q : ℝ × ℝ) : ℝ × ℝ :=
+  let a := p.1; let b := p.2
+  let c := q.1; let d := q.2
+  (a*c + (b*d)/4, a*d + b*c + b*d)
+
+theorem Ag_mul_pair (a b c d : ℝ) :
+    AgMulPair (a,b) (c,d) = (a*c + (b*d)/4, a*d + b*c + b*d) := by
+  rfl
+
 end -- noncomputable section
 end SilverRatioUnit
 end DkMath
