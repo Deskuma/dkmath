@@ -19,6 +19,8 @@ import DkMath.CosmicFormulaExp  -- Cosmic Formula Exponent
 import DkMath.Polyomino  -- Polyomino Basics
 import DkMath.PolyominoPrototype  -- Polyomino Prototype
 import DkMath.Tromino  -- Polyomino: Tromino Basics
+-- Silver Ratio Module
+import DkMath.SilverRatio  -- Silver Ratio Unit
 -- DHNT: Dynamic Harmonic Number Theory
 import DkMath.DHNT  -- DHNT: Units and Quantities (Dynamic Harmonic Number Theory)
 -- RH: Riemann Hypothesis Module
