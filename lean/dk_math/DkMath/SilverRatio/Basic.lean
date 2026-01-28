@@ -7,3 +7,4 @@ Authors: D. and Wise Wolf.
 import DkMath.SilverRatio.Sqrt2Lemmas
 import DkMath.SilverRatio.SilverRatioUnit
 import DkMath.SilverRatio.SilverRatioCircle
+import DkMath.SilverRatio.SilverRatioUnit_new_theorems
