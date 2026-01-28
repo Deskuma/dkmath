@@ -212,9 +212,192 @@ Ag の世界を「R×R を表現する 構文」として扱い
 -/
 theorem Ag_rep_exists_unique (x : ℝ) :
     ∃! (p : ℝ × ℝ), Ag p.1 p.2 = x := by
-  -- ここは sqrt2_irrational を使う（やや重いが一度やれば強い）
-  -- 将来やる価値が高い
-  sorry
+  use (x, 0)
+  constructor
+  · simp [Ag]
+  · intro ⟨a, b⟩ hab
+    simp only [Ag] at hab ⊢
+    -- hab : a + b * uAg = x
+    -- Goal : a = x ∧ b = 0
+
+    -- Key insight: √2 is irrational, so if b ≠ 0, we can derive a contradiction
+    by_cases hb : b = 0
+    · -- Case b = 0
+      simp [hb] at hab
+      exact ⟨hab, hb⟩
+    · -- Case b ≠ 0, we show a contradiction
+      -- From a + b * (1 + √2) / 2 = x:
+      -- 2*a + b + b*√2 = 2*x
+      -- b*√2 = 2*x - 2*a - b
+      -- √2 = (2*x - 2*a - b) / b
+
+      have h_eq : b * sqrt2 = 2*x - 2*a - b := by
+        have : a + b * (1 + sqrt2) / 2 = x := hab
+        nlinarith [mul_comm b sqrt2]
+
+      -- Divide both sides by b
+      have h_sqrt2 : sqrt2 = (2*x - 2*a - b) / b := by
+        field_simp [hb]
+        exact h_eq
+
+      -- Now we show that the right side being rational contradicts √2 being irrational
+      -- Rearrange: b * √2 = 2*x - 2*a - b
+      -- If we think of this as a linear combination of 1 and √2:
+      -- (2*a + b - 2*x) + b*√2 = 0
+
+      -- The irrationality of √2 means: ∀ q : ℚ, sqrt2 ≠ ↑q
+      have h_irrat : Irrational sqrt2 := sqrt2_irrational
+
+      -- The RHS (2*x - 2*a - b) / b can be thought of as a specific value
+      -- But more directly: if b*√2 = c for some c, then either b = 0 or √2 = c/b ∈ ℝ
+      -- Since √2 is irrational (not in ℚ), we'd need b = 0
+
+      -- Use a different approach: appeal to linear independence of {1, √2}
+      -- For ℚ-vector space structure
+      have h_indep : ∀ q : ℚ, sqrt2 ≠ (q : ℝ) := fun q => h_irrat q
+
+      -- From hab, we can write:
+      -- a + b/2 + (b/2)*√2 = x
+      -- (a + b/2 - x) + (b/2)*√2 = 0
+
+      have h_combo : (a + b/2 - x) + (b/2)*sqrt2 = 0 := by
+        have : a + b * (1 + sqrt2) / 2 = x := hab
+        nlinarith [mul_comm b sqrt2]
+
+      -- Now, express this as: (a + b/2 - x) = -(b/2)*√2
+      -- If b/2 ≠ 0, then √2 = -(a + b/2 - x) / (b/2) = (x - a - b/2) / (b/2)
+      -- which would be a rational number (contradicting irrationality of √2)
+
+      have hb_half : b/2 ≠ 0 := by nlinarith [hb]
+
+      have h_sqrt2_alt : sqrt2 = (x - a - b/2) / (b/2) := by
+        field_simp [hb_half]
+        nlinarith [h_combo]
+
+      -- Now we have sqrt2 equal to (x - a - b/2) / (b/2), which is a real number
+      -- For a contradiction, we'd need to show this is rational
+      -- Actually, a more elegant approach: use the linear independence directly
+
+      -- Let's use Irrational more carefully
+      -- Irrational x means: ∀ q : ℚ, ↑q ≠ x
+      -- So sqrt2 ≠ ↑q for any rational q
+
+      -- From h_combo: (a + b/2 - x) + (b/2)*sqrt2 = 0
+      -- Rearrange: (a + b/2 - x) = -(b/2)*sqrt2
+
+      -- If we work in ℚ[√2], {1, √2} is a basis.
+      -- This means if c + d*√2 = 0 where c, d ∈ ℚ, then c = d = 0.
+
+      -- But here, c and d may not be rational.
+      -- However, we can derive a contradiction using irrationality:
+
+      -- From h_combo: (a + b/2 - x) = -(b/2)*sqrt2
+      -- Since b ≠ 0, we have b/2 ≠ 0
+      -- So sqrt2 = -(a + b/2 - x) / (b/2)
+
+      -- The value (a + b/2 - x) / (b/2) is some real number r
+      -- So sqrt2 = -r
+      -- This contradicts sqrt2 > 0 (unless we're more careful)
+
+      -- Let me reconsider: Actually the key is that no non-zero real multiple
+      -- of √2 can equal a real number in a non-trivial way that we can exploit
+
+      -- More direct proof: using the definition of Irrational
+      -- and properties specific to √2
+
+      exfalso  -- derive False
+
+      -- From (a + b/2 - x) + (b/2)*sqrt2 = 0 and b ≠ 0:
+      -- We have: -(a + b/2 - x) / (b/2) = sqrt2
+
+      -- Now use a key algebraic fact: if r + s*√2 = 0 where r, s ∈ ℝ,
+      -- and √2 ∉ ℚ, then we must have s = 0 and r = 0
+      -- (This follows from the linear independence of {1, √2} over ℚ)
+
+      -- To use irrationality properly, we note:
+      -- sqrt2_irrational : Irrational sqrt2
+      -- means: ∀ (q : ℚ), (q : ℝ) ≠ sqrt2
+
+      -- From h_combo we have (a + b/2 - x) = -(b/2)*sqrt2
+      -- Taking absolute values: |a + b/2 - x| = |b/2|*sqrt2
+
+      -- If a + b/2 - x ≠ 0, then sqrt2 = |a + b/2 - x| / |b/2|
+      -- which is a positive real number
+
+      -- Now the key: can |a + b/2 - x| / |b/2| be rational?
+      -- If both a, x are "generic" reals, this could be any real
+      -- So this approach doesn't immediately give contradiction
+
+      -- Let me reconsider the structure. We need a finer argument.
+      -- The fact is: {1, √2} are ℚ-linearly independent
+      -- This means if c₀·1 + c₁·√2 = 0 with c₀, c₁ ∈ ℚ, then c₀ = c₁ = 0
+
+      -- From h_combo: (a + b/2 - x) + (b/2)*√2 = 0
+      -- This is in the form c₀ + c₁*√2 = 0 but c₀, c₁ are not necessarily in ℚ
+
+      -- However, we can use this fact: suppose b ≠ 0
+      -- Then b/2 ≠ 0, so sqrt2 = (x - a - b/2) / (b/2)
+      -- Let's call this value q := (x - a - b/2) / (b/2)
+      -- Then sqrt2 = q
+
+      -- Now, is q necessarily irrational? Not obviously, unless we constrain a, x
+
+      -- Hmm, I think the issue is that the statement ∃! (p : ℝ × ℝ), Ag p.1 p.2 = x
+      -- should NOT require a, b to satisfy any constraints
+      -- In that case, we NEED to show that for ANY choice of different a,b,
+      -- if both satisfy Ag a b = x, then a = a' and b = b'
+
+      -- The right argument is:
+      -- If Ag a b = x and Ag a' b' = x, then Ag a b = Ag a' b'
+      -- => a + b*uAg = a' + b'*uAg
+      -- => (a - a') + (b - b')*uAg = 0
+      -- => (a - a') + (b - b')*(1 + √2)/2 = 0
+      -- => 2(a - a') + (b - b') + (b - b')*√2 = 0
+
+      -- Now, if we write this as C + D*√2 = 0 where:
+      -- C = 2(a - a') + (b - b')
+      -- D = b - b'
+
+      -- The irrationality of √2 implies:
+      -- If C + D*√2 = 0, then D = 0 (since √2 ∉ ℚ wouldn't directly apply)
+
+      -- Actually, the precise lemma we need is:
+      -- ∀ r s : ℝ, (r + s*√2 = 0 ∧ s ≠ 0) ⟹ False
+      -- because otherwise √2 would be rational
+
+      have key : ∀ r s : ℝ, (r + s * sqrt2 = 0 ∧ s ≠ 0) ⟹ False := by
+        intro r s ⟨h_sum, hs_ne⟩
+        -- From r + s*√2 = 0, we get √2 = -r/s
+        have : sqrt2 = -r / s := by field_simp [hs_ne]; linarith [h_sum]
+        -- Now -r/s is some real number; we'd need it to be irrational
+        -- But wait, that's not automatic from h_irrat
+        -- Actually, h_irrat says √2 ∉ ℚ, not that it's algebraically irrational
+
+        -- Let me think differently: if √2 = -r/s, then
+        -- √2 would be the quotient of two reals, which is just another real
+        -- This doesn't give us a contradiction directly
+
+        -- UNLESS we use the fact that √2 satisfies x² = 2 in a special way
+        -- Specifically: √2 is the unique positive solution to x² = 2
+        -- And any algebraic equation satisfied by √2 over ℚ is such that
+        -- √2 ∉ ℚ
+
+        -- The proper way: use that √2 is irrational over ℚ[√2]
+        -- i.e., it doesn't lie in ℚ
+
+        -- From √2 = -r/s, either:
+        -- (1) Both r and s are 0 (contradiction with hs_ne)
+        -- (2) Or √2 = -r/s is a well-defined real that equals √2
+
+        -- For a contradiction from Irrational sqrt2, we'd need
+        -- -r/s ∈ ℚ, which we can't assume
+
+        sorry
+
+      -- Okay, I need to rethink. Let me look at the actual definition of Irrational
+      -- and what tools Mathlib provides
+
+      sorry
 
 
 -- まずは明示的な相互変換だけ置くのが実用的
