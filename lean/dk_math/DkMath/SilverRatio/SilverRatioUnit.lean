@@ -210,6 +210,49 @@ Ag の世界を「R×R を表現する 構文」として扱い
 
 つまり：
 -/
+
+/-- Linear independence of {1, √2} over ℚ.
+   If a + b*√2 = c + d*√2 where a,b,c,d ∈ ℚ, then a=c and b=d.
+-/
+lemma sqrt2_Q_lin_indep (a b c d : ℚ) :
+    (a : ℝ) + (b : ℝ) * sqrt2 = (c : ℝ) + (d : ℝ) * sqrt2 → a = c ∧ b = d := by
+  intro h
+  by_cases hbd : b = d
+  · simp only [hbd, add_right_cancel] at h
+    have : (a : ℝ) = (c : ℝ) := h
+    simp only [Rat.cast_injective.eq_iff] at this
+    exact ⟨this, hbd⟩
+  · have h_diff : ((a - c : ℚ) : ℝ) + ((b - d : ℚ) : ℝ) * sqrt2 = 0 := by nlinarith [h]
+    have hbd_ne : ((b - d : ℚ) : ℝ) ≠ 0 := by norm_cast; omega
+    have h_sqrt2 : sqrt2 = -((a - c : ℚ) : ℝ) / ((b - d : ℚ) : ℝ) := by
+      field_simp [hbd_ne]; linarith [h_diff]
+    have : sqrt2 ∈ Set.range ((↑) : ℚ → ℝ) := ⟨-(a - c) / (b - d), by simp [h_sqrt2]⟩
+    exact absurd this (sqrt2_irrational)
+
+/-- Definition: ℚ(√2) via uAg basis.
+   InQAdjSqrt2Ag x iff x = a + b*uAg for some a,b ∈ ℚ.
+-/
+def InQAdjSqrt2Ag (x : ℝ) : Prop := ∃ a b : ℚ, (a : ℝ) + (b : ℝ) * uAg = x
+
+/-- In ℚ(√2), the representation with basis {1, uAg} is unique. -/
+theorem Ag_rep_unique_in_Q_ext (x : ℝ) (hx : InQAdjSqrt2Ag x) :
+    ∃! (p : ℚ × ℚ), (p.1 : ℝ) + (p.2 : ℝ) * uAg = x := by
+  obtain ⟨a₀, b₀, h₀⟩ := hx
+  use (a₀, b₀)
+  constructor
+  · exact h₀
+  · intro ⟨a, b⟩ hab
+    simp only [Prod.mk.injEq]
+    have h_diff : (a : ℝ) + (b : ℝ) * uAg = (a₀ : ℝ) + (b₀ : ℝ) * uAg := by
+      rw [hab, h₀]
+    rw [uAg_eq] at h_diff
+    have h_canonical : ((2 * a + b : ℚ) : ℝ) + ((b : ℚ) : ℝ) * sqrt2
+                     = ((2 * a₀ + b₀ : ℚ) : ℝ) + ((b₀ : ℚ) : ℝ) * sqrt2 := by
+      norm_cast at h_diff ⊢
+      nlinarith [h_diff]
+    have ⟨heq1, heq2⟩ := sqrt2_Q_lin_indep (2*a + b) b (2*a₀ + b₀) b₀ h_canonical
+    omega
+
 theorem Ag_rep_exists_unique (x : ℝ) :
     ∃! (p : ℝ × ℝ), Ag p.1 p.2 = x := by
   use (x, 0)
