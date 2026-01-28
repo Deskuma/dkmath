@@ -336,6 +336,19 @@ theorem SilverRatioUnit_core_summary :
   · intro a b
     simp [AgNorm_eq]
 
+/-- mixTerm appears as the extra term in the uAg-component of Ag multiplication. -/
+lemma Ag_mul_mixTerm (a b c d : ℝ) :
+    Ag a b * Ag c d = Ag (a*c + (mixTerm b d)/4) (a*d + b*c + mixTerm b d) := by
+  -- mixTerm = b*d を畳むだけ
+  simpa [mixTerm] using (Ag_mul (a := a) (b := b) (c := c) (d := d))
+
+/-- e/4 = e * Gap(uAg), where e := exp 1. -/
+theorem e_div_four_eq_e_mul_Gap_uAg :
+    (Real.exp 1) / 4 = (Real.exp 1) * Gap uAg := by
+  -- Gap uAg = 1/4 を使うだけ
+  rw [Gap_uAg]
+  ring
+
 end -- noncomputable section
 end SilverRatioUnit
 end DkMath
