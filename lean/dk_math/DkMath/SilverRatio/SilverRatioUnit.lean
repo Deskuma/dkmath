@@ -22,8 +22,11 @@ namespace SilverRatioUnit
 
 open Real
 
+/-- √2 as a real number -/
+noncomputable def sqrt2 : ℝ := Real.sqrt 2
+
 /-- silver ratio: σ := 1 + √2 -/
-noncomputable def sigma : ℝ := 1 + Real.sqrt 2
+noncomputable def sigma : ℝ := 1 + sqrt2
 
 /-- silver ratio unit: uAg := σ / 2 = (1 + √2)/2 -/
 noncomputable def uAg : ℝ := sigma / 2
@@ -31,39 +34,49 @@ noncomputable def uAg : ℝ := sigma / 2
 /-- ΔAg := uAg^2 - uAg (the constant "gap" in the uAg-world) -/
 noncomputable def deltaAg : ℝ := uAg^2 - uAg
 
-@[simp] lemma uAg_eq : uAg = (1 + Real.sqrt 2) / 2 := by
-  simp [uAg, sigma, div_eq_mul_inv]
+/-- Key lemma: sqrt2 ^ 2 = 2 -/
+@[simp]
+lemma sqrt2_sq : sqrt2 ^ 2 = 2 := by
+  unfold sqrt2
+  norm_num
 
-/-- helper: (√2)^2 = 2 -/
-lemma sq_sqrt_two : (Real.sqrt 2)^2 = (2 : ℝ) := by
-  -- `Real.sq_sqrt` returns (sqrt x)^2 = x for 0 ≤ x, up to simp normalization.
-  -- Different Mathlib versions may prefer `by simp [pow_two]`.
-  simp only [pow_two, Nat.ofNat_nonneg, mul_self_sqrt]
+/-- sqrt2 > 0 -/
+lemma sqrt2_pos : 0 < sqrt2 := by
+  unfold sqrt2
+  exact Real.sqrt_pos.mpr (by norm_num : (0 : ℝ) < 2)
+
+/-- sqrt2 ≠ 0 -/
+lemma sqrt2_ne_zero : sqrt2 ≠ 0 := ne_of_gt sqrt2_pos
+
+/-- sqrt2 is irrational -/
+lemma sqrt2_irrational : Irrational sqrt2 := by
+  unfold sqrt2
+  exact irrational_sqrt_two
+
+@[simp] lemma uAg_eq : uAg = (1 + sqrt2) / 2 := by
+  simp [uAg, sigma, div_eq_mul_inv]
 
 /--
 Main closure law for the silver ratio unit:
 uAg^2 = uAg + 1/4.
 -/
 theorem uAg_sq_eq : uAg^2 = uAg + (1/4 : ℝ) := by
-  -- reduce to a pure algebraic identity using (√2)^2 = 2
-  -- Start from the concrete form uAg = (1 + √2)/2
-  have hs : (Real.sqrt 2)^2 = (2 : ℝ) := sq_sqrt_two
+  -- reduce to a pure algebraic identity using sqrt2^2 = 2
+  -- Start from the concrete form uAg = (1 + sqrt2)/2
+  have h := sqrt2_sq
   -- rewrite uAg and clear denominators
-  -- goal becomes: ((1+√2)/2)^2 = (1+√2)/2 + 1/4
-  -- Multiply by 4 and expand; it reduces to hs.
-  -- `field_simp` works well here.
-  -- (If `field_simp` complains, replace 2 with (2:ℝ) etc.)
-  simp [uAg_eq, pow_two]  -- puts the goal in terms of (1+√2)/2
+  -- goal becomes: ((1+sqrt2)/2)^2 = (1+sqrt2)/2 + 1/4
+  simp [uAg_eq, pow_two]  -- puts the goal in terms of (1+sqrt2)/2
   -- Now:
-  -- ⊢ ((1 + √2) / 2) * ((1 + √2) / 2) = (1 + √2) / 2 + 1/4
+  -- ⊢ ((1 + sqrt2) / 2) * ((1 + sqrt2) / 2) = (1 + sqrt2) / 2 + 1/4
   field_simp [pow_two]    -- clears denominators (×4)
-  -- goal: (1 + √2)^2 * 4 = 2 * ((1 + √2) * 4 + 2)
-  -- expand and use hs
-  have : (1 + Real.sqrt 2)^2 * 4 = 2 * ((1 + Real.sqrt 2) * 4 + 2) := by
-    ring_nf
-    rw [hs]
-    ring
-  exact this
+  -- goal: (1 + sqrt2)^2 * 4 = 2 * ((1 + sqrt2) * 4 + 2)
+  -- expand and use h
+  calc (1 + sqrt2) ^ 2 * 4
+      = (1 + 2 * sqrt2 + sqrt2 ^ 2) * 4 := by ring
+    _ = (1 + 2 * sqrt2 + 2) * 4 := by rw [h]
+    _ = (3 + 2 * sqrt2) * 4 := by ring
+    _ = 2 * ((1 + sqrt2) * 4 + 2) := by ring
 
 /-- The gap is constant: ΔAg = 1/4. -/
 theorem deltaAg_eq : deltaAg = (1/4 : ℝ) := by
