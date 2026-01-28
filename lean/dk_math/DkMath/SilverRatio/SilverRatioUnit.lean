@@ -272,6 +272,32 @@ lemma AgOfPair_mul (p q : ℝ × ℝ) :
   -- Ag_mul を使えるなら最短
   simpa [AgOfPair, AgMulPair] using (Ag_mul (a := a) (b := b) (c := c) (d := d)).symm
 
+-- ----------------------------------------------------------------------------
+/-- Geometry in the silver ratio unit world -/
+theorem AgNorm_eq_zero_iff (a b : ℝ) :
+    AgNorm a b = 0 ↔ a^2 + a*b - (b^2)/4 = 0 := by
+  simp [AgNorm_eq]
+
+-- ----------------------------------------------------------------------------
+/- Additional derived constants -/
+
+/-- ΔAg := uAg^2 - uAg (the constant "gap" in the uAg-world) -/
+def ΔAg : ℝ := uAg^2 - uAg
+
+/-- ΔAg = 1/4. -/
+@[simp] lemma ΔAg_eq : ΔAg = (1/4 : ℝ) := by
+  -- uAg_sq_sub_uAg を流用
+  simpa [ΔAg] using uAg_sq_sub_uAg
+
+/-- Gap function: Gap(u) = u^2 - u -/
+def Gap (u : ℝ) : ℝ := u^2 - u   -- 「二乗で混ぜて、一次へ戻す」としてのギャップ
+
+/-- Gap(uAg) = 1/4. -/
+lemma Gap_uAg : Gap uAg = (1/4 : ℝ) := by
+  -- Gap uAg = uAg^2 - uAg = 1/4
+  unfold Gap
+  exact uAg_sq_sub_uAg
+
 
 end -- noncomputable section
 end SilverRatioUnit
