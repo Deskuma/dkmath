@@ -239,6 +239,28 @@ theorem AgConj_div_AgNorm_mul_Ag (a b : ℝ) (h : AgNorm a b ≠ 0) :
 /-- Encode Ag-elements as pairs (a,b). -/
 def AgEncode (_x : ℝ) : ℝ × ℝ := (0, 0)  -- placeholder (optional)
 
+/- Meta-note (D., 2026/01/28 10:58)
+1) AgEncode を “ダミー” から卒業させる（本命：係数抽出）
+
+いま AgEncode が placeholder じゃが、これをちゃんと定義できると、構造が一気に締まる。
+そのために必要なのは「{1,uAg} が Q-線形独立」みたいな議論……ではなく、
+実は 2 の無理性を使って 実数係数でも一意性を取れる。
+
+最短の実用路線はこう：
+
+Ag の世界を「R×R を表現する 構文」として扱い
+
+逆方向 encode は “定義” せず、必要なときだけ ∃!（存在一意）で取り出す
+
+つまり：
+-/
+theorem Ag_rep_exists_unique (x : ℝ) :
+    ∃! (p : ℝ × ℝ), Ag p.1 p.2 = x := by
+  -- ここは sqrt2_irrational を使う（やや重いが一度やれば強い）
+  -- 将来やる価値が高い
+  sorry
+
+
 -- まずは明示的な相互変換だけ置くのが実用的
 def AgOfPair (p : ℝ × ℝ) : ℝ := Ag p.1 p.2
 
