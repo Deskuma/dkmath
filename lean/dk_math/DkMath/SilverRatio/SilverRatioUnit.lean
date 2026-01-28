@@ -298,6 +298,43 @@ lemma Gap_uAg : Gap uAg = (1/4 : ℝ) := by
   unfold Gap
   exact uAg_sq_sub_uAg
 
+/-- Gap(uAg) = ΔAg. -/
+lemma Gap_uAg_eq_ΔAg : Gap uAg = ΔAg := by
+  simp [Gap, ΔAg]
+
+/-- Mixed term in Ag multiplication: mixTerm(b,d) = b*d -/
+def mixTerm (b d : ℝ) : ℝ := b*d
+-- Ag_mul の第2成分に mixTerm が現れる、みたいな補題を作ると読み物として強い
+
+/-- AgNorm = 0 ならば (a + b/2)² = (b²)/2 である（平方完成版） -/
+theorem AgNorm_eq_zero_iff_sq (a b : ℝ) :
+    AgNorm a b = 0 ↔ (a + b/2)^2 = (b^2)/2 := by
+  -- まず AgNorm_eq_zero_iff で二次式へ
+  -- そこから ring で平方完成へ
+  have := (AgNorm_eq_zero_iff (a := a) (b := b))
+  -- 右辺を変形
+  constructor
+  · intro h
+    have h' : a^2 + a*b - (b^2)/4 = 0 := (this.mp h)
+    -- ring で整形
+    -- nlinarith が通りやすい
+    nlinarith
+  · intro h
+    -- 逆向きも nlinarith で行けることが多い
+    have h_eq : a^2 + a*b - (b^2)/4 = 0 := by nlinarith
+    exact this.mpr h_eq
+
+-- ============================================================================
+
+/-- Summary of core results in the silver ratio unit world -/
+theorem SilverRatioUnit_core_summary :
+    Gap uAg = (1/4 : ℝ) ∧ ΔAg = (1/4 : ℝ) ∧ (∀ a b, AgNorm a b = a^2 + a*b - (b^2)/4) := by
+  constructor
+  · exact Gap_uAg
+  constructor
+  · exact ΔAg_eq
+  · intro a b
+    simp [AgNorm_eq]
 
 end -- noncomputable section
 end SilverRatioUnit
