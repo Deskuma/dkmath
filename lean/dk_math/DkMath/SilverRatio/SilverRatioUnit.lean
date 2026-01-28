@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 -- cid: 6979430e-4324-83a6-b491-838e096d3d58
 
 import Mathlib
+import DkMath.SilverRatio.Sqrt2Lemmas
 
 namespace DkMath
 
@@ -23,38 +24,21 @@ namespace DkMath
 namespace SilverRatioUnit
 
 open Real
+open DkMath.SilverRatio.Sqrt2
 
 noncomputable section
 
-/-- √2 as a real number -/
-def sqrt2 : ℝ := Real.sqrt 2
-
-/-- silver ratio: σ := 1 + √2 -/
-def sigma : ℝ := 1 + sqrt2
+#check sqrt2  -- Real.sqrt 2
+#check sigma  -- 1 + sqrt2
+#check sqrt2_sq  -- sqrt2 ^ 2 = 2
+#check sqrt2_pos  -- 0 < sqrt2
+#check sqrt2_ne_zero  -- sqrt2 ≠ 0
 
 /-- silver ratio unit: uAg := σ / 2 = (1 + √2)/2 -/
 def uAg : ℝ := sigma / 2
 
 /-- ΔAg := uAg^2 - uAg (the constant "gap" in the uAg-world) -/
 def deltaAg : ℝ := uAg^2 - uAg
-
-/-- Key lemma: sqrt2 ^ 2 = 2 (robust) -/
-@[simp] lemma sqrt2_sq : sqrt2 ^ 2 = (2 : ℝ) := by
-  unfold sqrt2
-  simp [pow_two, Real.mul_self_sqrt]
-
-/-- sqrt2 > 0 -/
-lemma sqrt2_pos : 0 < sqrt2 := by
-  unfold sqrt2
-  exact Real.sqrt_pos.mpr (by norm_num : (0 : ℝ) < 2)
-
-/-- sqrt2 ≠ 0 -/
-lemma sqrt2_ne_zero : sqrt2 ≠ 0 := ne_of_gt sqrt2_pos
-
-/-- sqrt2 is irrational -/
-lemma sqrt2_irrational : Irrational sqrt2 := by
-  unfold sqrt2
-  exact irrational_sqrt_two
 
 @[simp] lemma uAg_eq : uAg = (1 + sqrt2) / 2 := by
   simp [uAg, sigma, div_eq_mul_inv]
@@ -102,34 +86,6 @@ theorem inv_alpha_eq_e_mul_delta :
     simp [alpha]
   -- now replace (exp 1)/4 with exp 1 * ΔAg
   simpa [this] using (e_div_four_eq_e_mul_delta)
-
--- Supporting lemmas for algebraic manipulations
-
-/-- (sqrt2 - 1)² = 3 - 2·sqrt2 -/
-lemma sqrt2_minus_one_sq : (sqrt2 - 1) ^ 2 = 3 - 2 * sqrt2 := by
-  have h := sqrt2_sq
-  calc
-    (sqrt2 - 1) ^ 2
-      = sqrt2 ^ 2 - 2 * sqrt2 + 1 := by ring
-    _ = 2 - 2 * sqrt2 + 1 := by rw [h]
-    _ = 3 - 2 * sqrt2 := by linarith
-
--- Additional lemmas for convenience
-
-/-- 1/sqrt2 = sqrt2/2 (rationalize denominator) -/
-lemma one_div_sqrt2 : (1 : ℝ) / sqrt2 = sqrt2 / 2 := by
-  field_simp [sqrt2_ne_zero]
-  rw [sqrt2_sq]
-
-/-- sqrt2/2 > 0 -/
-lemma sqrt2_div_two_pos : 0 < sqrt2 / 2 := by
-  exact div_pos sqrt2_pos (by norm_num : (0 : ℝ) < 2)
-
-/-- (sqrt2/2)² = 1/2 -/
-lemma sqrt2_div_two_sq : (sqrt2 / 2) ^ 2 = 1 / 2 := by
-  have h := sqrt2_sq
-  field_simp
-  rw [h]
 
 -- Algebraic manipulations in the uAg-world
 

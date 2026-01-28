@@ -107,6 +107,7 @@ algebraic verifications with the standard tactic toolbox.
 -/
 
 import Mathlib
+import DkMath.SilverRatio.Sqrt2Lemmas
 
 /-!
 Analytic coordinate development for the White-Silver-Ratio circle.
@@ -122,7 +123,9 @@ noncomputable section
 
 open Real
 
-namespace SilverRatio
+namespace DkMath.SilverRatio.SilverRatioCircle
+
+open DkMath.SilverRatio.Sqrt2
 
 abbrev Point := ℝ × ℝ
 
@@ -144,64 +147,7 @@ def C : Point := (1, 1)
 def D : Point := (0, 1)
 
 -- Intersection E of diagonal y = x and circle centered at A radius 1
-def sqrt2 : ℝ := Real.sqrt 2
 
--- Key lemma: sqrt2 ^ 2 = 2
-@[simp]
-lemma sqrt2_sq : sqrt2 ^ 2 = 2 := by
-  unfold sqrt2
-  norm_num
-
--- Key lemma: sqrt2 * sqrt2⁻¹ = 1
-@[simp]
-lemma sqrt2_mul_inv : sqrt2 * sqrt2⁻¹ = 1 := by
-  unfold sqrt2
-  norm_num [Real.sqrt_mul_self]
-
--- Key lemma: sqrt2⁻¹ = sqrt2 / 2 (rationalize denominator)
-@[simp]
-lemma sqrt2_inv : sqrt2⁻¹ = sqrt2 / 2 := by
-  field_simp [sqrt2]
-  rw [sqrt2_sq]
-
--- Supporting lemmas for algebraic manipulations
-
-/-- sqrt2 > 0 -/
-lemma sqrt2_pos : 0 < sqrt2 := by
-  unfold sqrt2
-  exact Real.sqrt_pos.mpr (by norm_num : (0 : ℝ) < 2)
-
-/-- sqrt2 ≠ 0 -/
-lemma sqrt2_ne_zero : sqrt2 ≠ 0 := ne_of_gt sqrt2_pos
-
-/-- sqrt2 is irrational -/
-lemma sqrt2_irrational : Irrational sqrt2 := by
-  unfold sqrt2
-  exact irrational_sqrt_two
-
-/-- (sqrt2 - 1)² = 3 - 2·sqrt2 -/
-lemma sqrt2_minus_one_sq : (sqrt2 - 1) ^ 2 = 3 - 2 * sqrt2 := by
-  have h := sqrt2_sq
-  calc
-    (sqrt2 - 1) ^ 2
-      = sqrt2 ^ 2 - 2 * sqrt2 + 1 := by ring
-    _ = 2 - 2 * sqrt2 + 1 := by rw [h]
-    _ = 3 - 2 * sqrt2 := by linarith
-
-/-- 1/sqrt2 = sqrt2/2 (alternative form) -/
-lemma one_div_sqrt2 : (1 : ℝ) / sqrt2 = sqrt2 / 2 := by
-  field_simp [sqrt2_ne_zero]
-  rw [sqrt2_sq]
-
-/-- sqrt2/2 > 0 -/
-lemma sqrt2_div_two_pos : 0 < sqrt2 / 2 := by
-  exact div_pos sqrt2_pos (by norm_num : (0 : ℝ) < 2)
-
-/-- (sqrt2/2)² = 1/2 -/
-lemma sqrt2_div_two_sq : (sqrt2 / 2) ^ 2 = 1 / 2 := by
-  have h := sqrt2_sq
-  field_simp
-  rw [h]
 
 -- Intersection E of diagonal y = x and circle centered at A radius 1
 -- Direct coordinate definition: E = (1/sqrt2, 1/sqrt2)
@@ -269,6 +215,7 @@ theorem bcfg_concyclic : concyclic4 B C F G := by
           rw [this]
       _ = sqrt2 ^ 2 * ((sqrt2 - 1 - 2) ^ 2 + (1 - 2 * 0) ^ 2) := by rw [h_sq]
 
-end SilverRatio
+
+end DkMath.SilverRatio.SilverRatioCircle
 
 /- End of analytic development -/
