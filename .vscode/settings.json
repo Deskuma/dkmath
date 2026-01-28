@@ -1,11 +1,20 @@
 {
     "cSpell.words": [
+        "bcfg",
+        "coeffs",
+        "dkmath",
+        "Finsupp",
+        "forall",
         "Gbinom",
         "hchoose",
         "hfactor",
         "hpow",
         "hreflect",
         "hsub",
+        "indep",
+        "invol",
+        "irrat",
+        "minpoly",
         "tsub"
     ]
 }
