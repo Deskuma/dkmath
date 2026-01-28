@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 /-
-# Analytic coordinate development for the White–Silver–Ratio circle (overview)
+# Analytic coordinate development for the White-Silver-Ratio circle (overview)
 
 This file gives a compact, elementary coordinate setup and proves a single
 geometric fact: the four points B, C, F, G are concyclic for a specific
