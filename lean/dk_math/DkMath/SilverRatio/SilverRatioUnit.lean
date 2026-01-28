@@ -4,6 +4,8 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+-- cid: 6979430e-4324-83a6-b491-838e096d3d58
+
 import Mathlib
 
 namespace DkMath
@@ -100,6 +102,65 @@ theorem inv_alpha_eq_e_mul_delta :
     simp [alpha]
   -- now replace (exp 1)/4 with exp 1 * ΔAg
   simpa [this] using (e_div_four_eq_e_mul_delta)
+
+-- Supporting lemmas for algebraic manipulations
+
+/-- (sqrt2 - 1)² = 3 - 2·sqrt2 -/
+lemma sqrt2_minus_one_sq : (sqrt2 - 1) ^ 2 = 3 - 2 * sqrt2 := by
+  have h := sqrt2_sq
+  calc
+    (sqrt2 - 1) ^ 2
+      = sqrt2 ^ 2 - 2 * sqrt2 + 1 := by ring
+    _ = 2 - 2 * sqrt2 + 1 := by rw [h]
+    _ = 3 - 2 * sqrt2 := by linarith
+
+-- Additional lemmas for convenience
+
+/-- 1/sqrt2 = sqrt2/2 (rationalize denominator) -/
+lemma one_div_sqrt2 : (1 : ℝ) / sqrt2 = sqrt2 / 2 := by
+  field_simp [sqrt2_ne_zero]
+  rw [sqrt2_sq]
+
+/-- sqrt2/2 > 0 -/
+lemma sqrt2_div_two_pos : 0 < sqrt2 / 2 := by
+  exact div_pos sqrt2_pos (by norm_num : (0 : ℝ) < 2)
+
+/-- (sqrt2/2)² = 1/2 -/
+lemma sqrt2_div_two_sq : (sqrt2 / 2) ^ 2 = 1 / 2 := by
+  have h := sqrt2_sq
+  field_simp
+  rw [h]
+
+-- Algebraic manipulations in the uAg-world
+
+/-- conjugation on uAg induced by sqrt2 ↦ -sqrt2 : conj(uAg) = 1 - uAg -/
+lemma uAg_conj : (1 - uAg) = (1 - (1 + sqrt2) / 2) := by
+  simp [uAg_eq]
+
+/-- handy: sqrt2 = 2*uAg - 1 -/
+lemma sqrt2_eq_two_uAg_sub_one : sqrt2 = 2 * uAg - 1 := by
+  -- from uAg = (1 + sqrt2)/2
+  have := uAg_eq
+  -- rearrange
+  nlinarith [this]
+
+/-- alternate closure form: uAg^2 - uAg = 1/4 -/
+theorem uAg_sq_sub_uAg : uAg^2 - uAg = (1/4 : ℝ) := by
+  -- from uAg_sq_eq
+  have := uAg_sq_eq
+  nlinarith [this]
+
+/-- two-component representation: a + b*uAg -/
+def Ag (a b : ℝ) : ℝ := a + b * uAg
+
+/-- multiplication closes in the basis {1, uAg}: (a+bu)(c+du)= (ac+bd/4) + (ad+bc+bd)u -/
+theorem Ag_mul (a b c d : ℝ) :
+    Ag a b * Ag c d = Ag (a*c + (b*d)/4) (a*d + b*c + b*d) := by
+  -- expand and reduce uAg^2 using uAg_sq_eq
+  simp only [Ag, uAg_eq]
+  ring_nf
+  simp only [mul_comm, mul_left_comm, one_div, mul_assoc, sqrt2_sq]
+  ring
 
 end -- noncomputable section
 end SilverRatioUnit
