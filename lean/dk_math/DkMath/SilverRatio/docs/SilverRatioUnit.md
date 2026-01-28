@@ -1,6 +1,10 @@
 # 白銀単位（Silver Ratio Unit）
 
-docs/SilverRatioUnit.md
+file: docs/SilverRatioUnit.md
+cid: 6979430e-4324-83a6-b491-838e096d3d58
+
+Authors: D. and Wise Wolf.
+Date: 2026/01/28 13:50
 
 ## 0. 概要
 
