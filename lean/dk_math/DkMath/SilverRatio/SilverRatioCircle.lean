@@ -249,9 +249,25 @@ theorem bcfg_concyclic : concyclic4 B C F G := by
     dsimp [dist_sq, O, G, B]
     have h_ne := sqrt2_ne_zero
     have h_sq := sqrt2_sq
-    -- ⊢ ((sqrt2 - 1) / 2 - -1 / sqrt2) ^ 2 + (1 / 2 - 1 / sqrt2) ^ 2
-    -- = ((sqrt2 - 1) / 2 - 1) ^ 2 + (1 / 2 - 0) ^ 2
-    grind => ring
+    -- ここで grind で通るが、手動で証明を書くと以下のようになる
+    field_simp [h_ne]
+    calc (sqrt2 * (sqrt2 - 1) - -2) ^ 2 + (sqrt2 - 2) ^ 2
+        = (sqrt2 ^ 2 - sqrt2 + 2) ^ 2 + (sqrt2 - 2) ^ 2 := by ring
+      _ = (2 - sqrt2 + 2) ^ 2 + (sqrt2 - 2) ^ 2 := by rw [h_sq]
+      _ = (4 - sqrt2) ^ 2 + (sqrt2 - 2) ^ 2 := by ring
+      _ = 16 - 8 * sqrt2 + sqrt2 ^ 2 + sqrt2 ^ 2 - 4 * sqrt2 + 4 := by ring
+      _ = 16 - 8 * sqrt2 + 2 + 2 - 4 * sqrt2 + 4 := by rw [h_sq]
+      _ = 24 - 12 * sqrt2 := by ring
+      _ = 2 * (12 - 6 * sqrt2) := by ring
+      _ = 2 * ((sqrt2 - 1 - 2) ^ 2 + (1 - 2 * 0) ^ 2) := by
+          have : (sqrt2 - 1 - 2) ^ 2 + (1 - 2 * 0) ^ 2 = 12 - 6 * sqrt2 := by
+            calc (sqrt2 - 1 - 2) ^ 2 + (1 - 2 * 0) ^ 2
+                = (sqrt2 - 3) ^ 2 + 1 := by ring
+              _ = sqrt2 ^ 2 - 6 * sqrt2 + 9 + 1 := by ring
+              _ = 2 - 6 * sqrt2 + 9 + 1 := by rw [h_sq]
+              _ = 12 - 6 * sqrt2 := by ring
+          rw [this]
+      _ = sqrt2 ^ 2 * ((sqrt2 - 1 - 2) ^ 2 + (1 - 2 * 0) ^ 2) := by rw [h_sq]
 
 end SilverRatio
 
