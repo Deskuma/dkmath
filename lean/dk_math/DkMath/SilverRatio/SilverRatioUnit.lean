@@ -281,13 +281,13 @@ theorem AgNorm_eq_zero_iff (a b : ℝ) :
 -- ----------------------------------------------------------------------------
 /- Additional derived constants -/
 
-/-- ΔAg := uAg^2 - uAg (the constant "gap" in the uAg-world) -/
-def ΔAg : ℝ := uAg^2 - uAg
+/-- Unicode alias for the core constant `deltaAg := uAg^2 - uAg`. -/
+def ΔAg : ℝ := deltaAg
 
 /-- ΔAg = 1/4. -/
 @[simp] lemma ΔAg_eq : ΔAg = (1/4 : ℝ) := by
-  -- uAg_sq_sub_uAg を流用
-  simpa [ΔAg] using uAg_sq_sub_uAg
+  -- unfold through the canonical ASCII name `deltaAg`
+  simpa [ΔAg, deltaAg] using uAg_sq_sub_uAg
 
 /-- Gap function: Gap(u) = u^2 - u -/
 def Gap (u : ℝ) : ℝ := u^2 - u   -- 「二乗で混ぜて、一次へ戻す」としてのギャップ
@@ -300,7 +300,7 @@ lemma Gap_uAg : Gap uAg = (1/4 : ℝ) := by
 
 /-- Gap(uAg) = ΔAg. -/
 lemma Gap_uAg_eq_ΔAg : Gap uAg = ΔAg := by
-  simp [Gap, ΔAg]
+  simp only [Gap, uAg_eq, ΔAg, deltaAg]
 
 /-- Mixed term in Ag multiplication: mixTerm(b,d) = b*d -/
 def mixTerm (b d : ℝ) : ℝ := b*d
