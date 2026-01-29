@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Basic  -- Basic Definitions and Utilities
 import DkMath.Samples  -- Sample Theorems and Examples
+-- Collatz Module (2026 Cartography Research)
+import DkMath.Collatz.Collatz2K26  -- Collatz2K26: Accelerated Collatz Dynamics
 -- Cosmic Formula Module
 import DkMath.CellDim  -- Cell Dimensionality
 import DkMath.CosmicFormula  -- Cosmic Formula Basics
