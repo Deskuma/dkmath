@@ -31,10 +31,15 @@ lemma shift_ge (k m n : ℕ) : n ≤ shift k m n := by
   unfold shift pow2
   omega
 
-/-- Helper lemma: v₂ valuation property for sums when one term has much higher valuation. -/
+/-- Helper lemma: v₂ valuation property for sums when one term has much higher valuation.
+
+    If v₂(a) < v₂(b), then v₂(a + b) = v₂(a).
+
+    This is a key property of p-adic valuations: the smaller valuation dominates.
+-/
 lemma v2_add_of_lower_val (a b : ℕ) (h : v2 a < v2 b) :
   v2 (a + b) = v2 a := by
-  -- If v2(a) < v2(b), then the lower power of 2 dominates the sum
+  -- Strategy: strong induction on a, case analysis on parity
   sorry
 
 /-- The central theorem of petal conservation (Main Theorem).
@@ -54,15 +59,13 @@ theorem v2_shift_invariant
   (hk : v2 (3 * n + 1) < k) :
   v2 (3 * (shift k m n) + 1) = v2 (3 * n + 1) := by
   unfold shift
-  -- Goal: v2(3*(n + 2^k*m) + 1) = v2(3*n + 1)
-  -- This simplifies to: v2((3*n+1) + 3*2^k*m) = v2(3*n+1)
   have h_expand : 3 * (n + pow2 k * m) + 1 = (3*n + 1) + 3 * (pow2 k * m) := by ring
   rw [h_expand]
-  -- Now apply v2_add_of_lower_val
   apply v2_add_of_lower_val
-  -- We need to show v2(3*n + 1) < v2(3*(2^k*m))
-  -- We have v2(3*n + 1) < k by assumption
-  -- We need v2(3*2^k*m) ≥ k
+  -- The remaining goal: v2(3*n + 1) < v2(3*2^k*m)
+  -- This follows from: v2(3*n+1) < k ≤ v2(3*2^k*m)
+  -- The inequality k ≤ v2(3*2^k*m) requires understanding the multiplicative
+  -- structure and is left as a lemma to be completed.
   sorry
 
 end DkMath.Collatz
