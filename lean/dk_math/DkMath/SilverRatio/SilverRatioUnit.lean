@@ -306,7 +306,14 @@ lemma sqrt2_Q_lin_indep (a b c d : ℚ) :
       have : (a : ℝ) + (d : ℝ) * sqrt2 = (c : ℝ) + (d : ℝ) * sqrt2 := h
       linarith
     exact ⟨Rat.cast_injective this, hbd⟩
-  · have hbd_ne : ((b - d : ℚ) : ℝ) ≠ 0 := by norm_cast; intro heq; grind only
+  · have hbd_ne : ((b - d : ℚ) : ℝ) ≠ 0 := by
+      intro heq
+      have hq : b - d = 0 := by
+        apply Rat.cast_injective (α := ℝ)
+        simpa using heq
+      have : b = d := by
+        linarith
+      exact hbd this
     have h_diff : ((a - c : ℚ) : ℝ) + ((b - d : ℚ) : ℝ) * sqrt2 = 0 := by
       have : (a : ℝ) + (b : ℝ) * sqrt2 = (c : ℝ) + (d : ℝ) * sqrt2 := h
       have : (a : ℝ) - (c : ℝ) + ((b : ℝ) - (d : ℝ)) * sqrt2
