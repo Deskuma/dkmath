@@ -2,19 +2,21 @@
 Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
 Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
-
--- Title: Unique Representation via Irrational Numbers
--- Purpose: Demonstrate proof techniques using Irrational to establish
---          unique representations in ℚ(√2)
--- Date: 2026-01-28
 -/
 
 import Mathlib
 import DkMath.SilverRatio.Sqrt2Lemmas
 
-namespace DkMath
+namespace DkMath.UniqueRepresentation
 
-namespace UniqueRepresentation
+/-! ## UR: SilverRatio
+Title: Unique Representation via Irrational Numbers
+Purpose: Demonstrate proof techniques using Irrational to establish
+         unique representations in ℚ(√2)
+Date: 2026-01-28
+-/
+
+namespace SilverRatio
 
 open Real
 open DkMath.SilverRatio.Sqrt2
@@ -47,6 +49,7 @@ noncomputable section
   - So b = d, hence a = c
 -/
 
+/-- Linear independence of {1, √2} over ℚ -/
 theorem sqrt2_lin_indep_over_rat (a b c d : ℚ) :
     (a : ℝ) + (b : ℝ) * sqrt2 = (c : ℝ) + (d : ℝ) * sqrt2 →
     a = c ∧ b = d := by
@@ -93,22 +96,28 @@ theorem sqrt2_lin_indep_over_rat (a b c d : ℚ) :
     -- But √2 is irrational, contradiction
     exact h_irrat hq
 
+#print axioms sqrt2_lin_indep_over_rat
 
 -- ============================================================================
 -- Part 2: Representation in Simple Basis (a + b·√2)
 -- ============================================================================
 
+/-- Simple form representation: a + b·√2 -/
 def SimpleForm (a b : ℝ) : ℝ := a + b * sqrt2
 
 -- The representation is unique when restricted to a specific form
 -- But globally it depends on the subring we're working in.
 
 -- Version 1: For rational coefficients (provable)
+
+/-- Uniqueness of SimpleForm representation for rational coefficients -/
 theorem SimpleForm_unique_rat (_x : ℝ) (a b c d : ℚ) :
     SimpleForm (a : ℝ) (b : ℝ) = SimpleForm (c : ℝ) (d : ℝ) →
     a = c ∧ b = d := by
   intro h
   exact sqrt2_lin_indep_over_rat a b c d (by simpa [SimpleForm] using h)
+
+#print axioms SimpleForm_unique_rat
 
 -- Version 2: For all reals, we need uniqueness only for a specific pair
 /-
@@ -129,6 +138,7 @@ theorem SimpleForm_unique_rat (_x : ℝ) (a b c d : ℚ) :
 -- For example: SimpleForm 1 1 = 1 + √2
 --              SimpleForm (1 + √2) 0 would also equal 1 + √2 if we expand differently
 
+/-- Counterexample showing that SimpleForm is not injective over ℝ -/
 theorem SimpleForm_not_injective :
     ∃ _x a b c d : ℝ,
       (a, b) ≠ (c, d) ∧ SimpleForm a b = SimpleForm c d := by
@@ -140,6 +150,8 @@ theorem SimpleForm_not_injective :
   constructor
   · norm_num
   · simp [SimpleForm]
+
+#print axioms SimpleForm_not_injective
 
 -- ============================================================================
 -- Part 3: Unique Representation when Restricting Coefficient Domain
@@ -156,10 +168,12 @@ theorem SimpleForm_not_injective :
 -/
 
 -- Define the field ℚ(√2)
+
+/-- The set of real numbers that can be expressed as a + b·√2 with a, b ∈ ℚ -/
 def RatAdjSqrt2 : Set ℝ :=
   {x | ∃ a b : ℚ, (a : ℝ) + (b : ℝ) * sqrt2 = x}
 
--- Unique representation theorem for elements in ℚ(√2)
+/-- Unique representation theorem for elements in ℚ(√2) -/
 theorem unique_rep_in_rat_adj_sqrt2 (x : ℝ) (hx : x ∈ RatAdjSqrt2) :
     ∃! (p : ℚ × ℚ), SimpleForm (p.1 : ℝ) (p.2 : ℝ) = x := by
   -- Extract the witnesses from hx
@@ -179,11 +193,13 @@ theorem unique_rep_in_rat_adj_sqrt2 (x : ℝ) (hx : x ∈ RatAdjSqrt2) :
     simp only [Prod.mk.injEq]
     exact ⟨hac, hbd⟩
 
+#print axioms unique_rep_in_rat_adj_sqrt2
+
 -- ============================================================================
 -- Part 4: Complementary Results and Utilities
 -- ============================================================================
 
--- Lemma: The representation is constructive
+/-- Lemma: The representation is constructively obtainable -/
 theorem unique_rep_constructive (x : ℝ) (hx : x ∈ RatAdjSqrt2) :
     ∃ (a b : ℚ), (a : ℝ) + (b : ℝ) * sqrt2 = x ∧
     ∀ (a' b' : ℚ), (a' : ℝ) + (b' : ℝ) * sqrt2 = x → a' = a ∧ b' = b := by
@@ -196,7 +212,7 @@ theorem unique_rep_constructive (x : ℝ) (hx : x ∈ RatAdjSqrt2) :
       exact ha' ▸ hab.symm
     exact sqrt2_lin_indep_over_rat a' b' a b this
 
--- Lemma: Addition preserves membership in ℚ(√2)
+/-- Lemma: Addition preserves membership in ℚ(√2) -/
 theorem RatAdjSqrt2_add (x y : ℝ) (hx : x ∈ RatAdjSqrt2) (hy : y ∈ RatAdjSqrt2) :
     x + y ∈ RatAdjSqrt2 := by
   obtain ⟨a, b, hab⟩ := hx
@@ -205,7 +221,7 @@ theorem RatAdjSqrt2_add (x y : ℝ) (hx : x ∈ RatAdjSqrt2) (hy : y ∈ RatAdjS
     push_cast
     nlinarith [hab, hcd]⟩
 
--- Lemma: Multiplication preserves membership in ℚ(√2)
+/-- Lemma: Multiplication preserves membership in ℚ(√2) -/
 theorem RatAdjSqrt2_mul (x y : ℝ) (hx : x ∈ RatAdjSqrt2) (hy : y ∈ RatAdjSqrt2) :
     x * y ∈ RatAdjSqrt2 := by
   obtain ⟨a, b, hab⟩ := hx
@@ -219,6 +235,10 @@ theorem RatAdjSqrt2_mul (x y : ℝ) (hx : x ∈ RatAdjSqrt2) (hy : y ∈ RatAdjS
     _ = a*c + a*d*sqrt2 + b*c*sqrt2 + b*d*sqrt2^2 := by rw [sqrt2_sq]; ring
     _ = (a + b*sqrt2) * (c + d*sqrt2) := by ring
     _ = x * y := by rw [← hab, ← hcd]
+
+#print axioms unique_rep_in_rat_adj_sqrt2
+#print axioms RatAdjSqrt2_add
+#print axioms RatAdjSqrt2_mul
 
 -- ============================================================================
 -- Part 5: Syntax Patterns and Proof Techniques
@@ -260,6 +280,7 @@ theorem RatAdjSqrt2_mul (x y : ℝ) (hx : x ∈ RatAdjSqrt2) (hy : y ∈ RatAdjS
 -- Example: Complete proof of a concrete statement
 -- ============================================================================
 
+/-- Example: Prove uniqueness of representation in basis {1, uAg} where uAg = (1 + √2)/2 -/
 example :
   let u := (1 + sqrt2) / 2
   ∀ (a b c d : ℚ), (a : ℝ) + (b : ℝ) * u = (c : ℝ) + (d : ℝ) * u →
@@ -292,6 +313,41 @@ example :
 
 end -- noncomputable section
 
-end UniqueRepresentation
+/- ## 解説：
+  ここでは、√2の無理性を利用して、ℚ(√2)における
+  a + b·√2 の表現の一意性を証明しました。
 
-end DkMath
+  主なポイントは以下の通りです：
+
+  1. √2の無理性を用いて、{1, √2}がℚ上で線形独立であることを示しました。
+     これにより、a + b·√2 = c + d·√2 ならば a = c かつ b = d が導かれます。
+
+  2. ℚ(√2)に属する実数 x に対して、x = a + b·√2 と表せる
+     (a, b) ∈ ℚ × ℚ の組が一意に存在することを証明しました。
+
+  3. 証明過程でよく使われるパターンとして、
+     - 無理数の定義から矛盾を導く方法
+     - 線形独立性を利用する方法
+     - 有理係数の場合と実数全体の場合で場合分けする方法
+     を紹介しました。
+
+  このようにして、√2の無理性を活用した一意表現の理論的基盤を確立しました。
+-/
+
+/- ## 応用例：基底 {1, uAg} による一意表現の証明
+  ここでは、uAg = (1 + √2)/2 を用いた基底に関して、
+  a + b·uAg の表現が一意であることを示します。
+
+  証明の流れは以下の通りです：
+
+  1. uAg を √2 を用いて書き換え、標準形 a' + b'·√2 に変換します。
+  2. 変換後の等式に対して、先に示した線形独立性を適用します。
+  3. 最終的に、元の係数 a, b が等しいことを導きます。
+
+  この応用例により、異なる基底に対しても
+  一意表現の理論が適用可能であることが示されました。
+-/
+
+end SilverRatio
+
+end DkMath.UniqueRepresentation

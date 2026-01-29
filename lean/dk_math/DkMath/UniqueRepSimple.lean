@@ -11,6 +11,10 @@ Date: 2026-01-28
 import Mathlib
 import DkMath.SilverRatio.Sqrt2Lemmas
 
+namespace DkMath.UniqueRepresentation
+
+namespace SilverRatio
+
 open Real
 open DkMath.SilverRatio.Sqrt2
 
@@ -26,36 +30,48 @@ theorem sqrt2_lin_indep_over_rat (a b c d : ℚ) :
     (a : ℝ) + (b : ℝ) * sqrt2 = (c : ℝ) + (d : ℝ) * sqrt2 →
     a = c ∧ b = d := by
   intro h
-
-  -- Rearrange: (a - c) + (b - d)·√2 = 0
-  have key : ((a - c) : ℝ) + ((b - d) : ℝ) * sqrt2 = 0 := by
-    have := h
-    change ((a - c) : ℝ) + ((b - d) : ℝ) * sqrt2 = 0
-    nlinarith [h]
-
+  -- Rearrange to get (a - c) + (b - d)·√2 = 0
+  have key : ((a - c : ℚ) : ℝ) + ((b - d : ℚ) : ℝ) * sqrt2 = 0 := by
+    push_cast
+    linarith [h]
   by_cases hbd : b = d
   · -- Case: b = d, so a = c
-    have : ((a - c) : ℝ) = 0 := by
-      simp only [hbd, sub_self, zero_mul, add_zero] at key
-      exact key
+    have h' : (↑a - ↑c : ℝ) = (0 : ℝ) := by
+      rw [hbd] at key
+      push_cast at key
+      simp only [sub_self, zero_mul] at key
+      linarith [key]
     have : (a - c : ℚ) = 0 := by
-      have : (↑(a - c) : ℝ) = ↑(0 : ℚ) := by simp [this]
+      have : (↑(a - c) : ℝ) = ↑(0 : ℚ) := by simp [h']
       exact Rat.cast_injective this
     exact ⟨by linarith [this], hbd⟩
-
   · -- Case: b ≠ d, derive contradiction
-    -- The proof relies on √2's irrationality preventing the equation
-    -- (a-c) + (b-d)·√2 = 0 from holding (unless b-d = 0)
+    have h_irrat : Irrational sqrt2 := sqrt2_irrational
+    -- From the key equation, if b ≠ d, then √2 = -(a-c)/(b-d)
+    have hbd_ne : ↑(b - d) ≠ 0 := by
+      intro h_eq
+      have : (↑(b - d) : ℝ) = ↑(0 : ℚ) := by simp [h_eq]
+      have : b - d = 0 := Rat.cast_injective this
+      exact hbd (by linarith [this])
+    have sqrt2_iso : ((b - d : ℚ) : ℝ) * sqrt2 = -((a - c : ℚ) : ℝ) := by linarith [key]
+    -- From √2 = -(a-c)/(b-d), we derive a contradiction with irrationality
+    exfalso
+    have sqrt2_eq : sqrt2 = -(↑(a - c) / ↑(b - d)) := by
+      have h1 : (↑(b - d) : ℝ) * sqrt2 = -(↑(a - c) : ℝ) := sqrt2_iso
+      have : sqrt2 = (-(↑(a - c) : ℝ)) / (↑(b - d) : ℝ) := by
+        field_simp [hbd_ne] at h1 ⊢
+        exact h1
+      simp only [neg_div] at this
+      exact this
+    -- The RHS is a rational number
+    have hq : sqrt2 ∈ Set.range ((↑) : ℚ → ℝ) := by
+      use -((a - c) / (b - d))
+      simp only [Rat.cast_div, Rat.cast_neg]
+      exact sqrt2_eq.symm
+    -- But √2 is irrational, contradiction
+    exact h_irrat hq
 
-    -- Since √2 is irrational, we have:
-    -- √2 = -((a-c)/(b-d)) would mean √2 is a ratio of rationals
-    -- which contradicts irrationality
-
-    -- More precisely: we can appeal to the minimal polynomial of √2
-    -- or use a direct contradiction argument
-
-    sorry -- The rigorous proof requires showing that
-           -- (a-c) + (b-d)·√2 = 0 with (b-d) ≠ 0 is impossible when √2 is irrational
+#print axioms sqrt2_lin_indep_over_rat
 
 /-- Unique representation in ℚ(√2) -/
 def InQAdjSqrt2 (x : ℝ) : Prop :=
@@ -73,3 +89,11 @@ theorem unique_rep_in_Q_sqrt2 (x : ℝ) (hx : InQAdjSqrt2 x) :
       hab' ▸ hab.symm
     have ⟨ha, hb⟩ := sqrt2_lin_indep_over_rat a' b' a b this
     exact ⟨ha, hb⟩
+
+#print axioms unique_rep_in_Q_sqrt2
+
+end -- noncomputable section
+
+end SilverRatio
+
+end DkMath.UniqueRepresentation

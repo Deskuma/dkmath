@@ -123,7 +123,7 @@ noncomputable section
 
 open Real
 
-namespace DkMath.SilverRatio.SilverRatioCircle
+namespace DkMath.SilverRatio.Circle
 
 open DkMath.SilverRatio.Sqrt2
 
@@ -215,7 +215,8 @@ theorem bcfg_concyclic : concyclic4 B C F G := by
           rw [this]
       _ = sqrt2 ^ 2 * ((sqrt2 - 1 - 2) ^ 2 + (1 - 2 * 0) ^ 2) := by rw [h_sq]
 
+#print axioms bcfg_concyclic
 
-end DkMath.SilverRatio.SilverRatioCircle
+end DkMath.SilverRatio.Circle
 
 /- End of analytic development -/

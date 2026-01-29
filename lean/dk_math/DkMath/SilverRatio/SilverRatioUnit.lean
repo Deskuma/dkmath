@@ -5,13 +5,12 @@ Authors: D. and Wise Wolf.
 -/
 
 -- cid: 6979430e-4324-83a6-b491-838e096d3d58
+-- cid: 697a85c0-f920-8323-9204-b9c2877e3025
 
 import Mathlib
 import DkMath.SilverRatio.Sqrt2Lemmas
 
-namespace DkMath
-
-/-
+/-!
   Silver Ratio Unit formalization (core lemmas)
 
   Notation policy:
@@ -21,7 +20,7 @@ namespace DkMath
     e     := Real.exp 1
 -/
 
-namespace SilverRatioUnit
+namespace DkMath.SilverRatio.Unit
 
 open Real
 open DkMath.SilverRatio.Sqrt2
@@ -33,6 +32,7 @@ noncomputable section
 #check sqrt2_sq  -- sqrt2 ^ 2 = 2
 #check sqrt2_pos  -- 0 < sqrt2
 #check sqrt2_ne_zero  -- sqrt2 ≠ 0
+#check sqrt2_irrational  -- Irrational sqrt2
 
 /-- silver ratio unit: uAg := σ / 2 = (1 + √2)/2 -/
 def uAg : ℝ := sigma / 2
@@ -192,48 +192,6 @@ theorem AgConj_div_AgNorm_mul_Ag (a b : ℝ) (h : AgNorm a b ≠ 0) :
   -- 可換なので上と同じで済む
   simpa [mul_comm] using Ag_mul_AgConj_div_AgNorm (a := a) (b := b) h
 
-/-- Encode Ag-elements as pairs (a,b). -/
-def AgEncode (_x : ℝ) : ℝ × ℝ := (0, 0)  -- placeholder (optional)
-
-/- Meta-note (D., 2026/01/28 10:58)
-1) AgEncode を “ダミー” から卒業させる（本命：係数抽出）
-
-いま AgEncode が placeholder じゃが、これをちゃんと定義できると、構造が一気に締まる。
-そのために必要なのは「{1,uAg} が Q-線形独立」みたいな議論……ではなく、
-実は 2 の無理性を使って 実数係数でも一意性を取れる。
-
-最短の実用路線はこう：
-
-Ag の世界を「R×R を表現する 構文」として扱い
-
-逆方向 encode は “定義” せず、必要なときだけ ∃!（存在一意）で取り出す
-
-つまり：
--/
-
-theorem Ag_rep_exists_unique (x : ℝ) :
-    ∃! (p : ℝ × ℝ), Ag p.1 p.2 = x := by
-/-
-## 📋 進捗レポート
-
-わっちは、ぬしの要求「sorryを無くして定理を完成させる」に向けて、深く本質的な理解に到達しました。🧙‍♀️
-
-**🔍 発見：定理の根本的な問題**
-
-元の定理：
-```lean
-theorem Ag_rep_exists_unique (x : ℝ) :
-    ∃! (p : ℝ × ℝ), Ag p.1 p.2 = x
-```
-
-この主張は、**任意の実数 x ∈ ℝ では成立しません！**
-
-理由：
-- {1, uAg} は ℚ上で線形独立だが、ℝ上では **線形従属** です
-- ℝ は1次元なので、任何の2つの元の間に線形関係が存在します
--/
-  sorry
-
 -- ----------------------------------------------------------------------------
 /-- Geometry in the silver ratio unit world -/
 theorem AgNorm_eq_zero_iff (a b : ℝ) :
@@ -323,7 +281,86 @@ theorem AgNorm_mul (a b c d : ℝ) :
   simp [AgNorm_eq]  -- ノルムの閉形式へ落とす
   ring
 
+-- ----------------------------------------------------------------------------
+
+/-
+New theorems for SilverRatioUnit: Unique representation in Q(√2)
+
+Key insight: The naive statement "∃! (p : ℝ × ℝ), Ag p.1 p.2 = x" is NOT true
+for all x ∈ ℝ. However, it IS true when x ∈ ℚ(√2) and (a,b) ∈ ℚ².
+
+This is because {1, √2} is ℚ-linearly independent (from √2's irrationality),
+which makes uAg = (1 + √2)/2 generate a unique representation system.
+-/
+
+/-- Linear independence of {1, √2} over ℚ.
+   Key lemma: If a + b*√2 = c + d*√2 where a,b,c,d ∈ ℚ, then a=c and b=d.
+   This follows from √2 being irrational.
+-/
+lemma sqrt2_Q_lin_indep (a b c d : ℚ) :
+    (a : ℝ) + (b : ℝ) * sqrt2 = (c : ℝ) + (d : ℝ) * sqrt2 → a = c ∧ b = d := by
+  intro h
+  by_cases hbd : b = d
+  · have : (a : ℝ) = (c : ℝ) := by
+      rw [hbd] at h
+      have : (a : ℝ) + (d : ℝ) * sqrt2 = (c : ℝ) + (d : ℝ) * sqrt2 := h
+      linarith
+    exact ⟨Rat.cast_injective this, hbd⟩
+  · have hbd_ne : ((b - d : ℚ) : ℝ) ≠ 0 := by norm_cast; intro heq; grind only
+    have h_diff : ((a - c : ℚ) : ℝ) + ((b - d : ℚ) : ℝ) * sqrt2 = 0 := by
+      have : (a : ℝ) + (b : ℝ) * sqrt2 = (c : ℝ) + (d : ℝ) * sqrt2 := h
+      have : (a : ℝ) - (c : ℝ) + ((b : ℝ) - (d : ℝ)) * sqrt2
+           = (a : ℝ) + (b : ℝ) * sqrt2 - ((c : ℝ) + (d : ℝ) * sqrt2) := by ring
+      calc ((a - c : ℚ) : ℝ) + ((b - d : ℚ) : ℝ) * sqrt2
+           = (a : ℝ) - (c : ℝ) + ((b : ℝ) - (d : ℝ)) * sqrt2 := by push_cast; ring
+         _ = (a : ℝ) + (b : ℝ) * sqrt2 - ((c : ℝ) + (d : ℝ) * sqrt2) := this
+         _ = 0 := by rw [h]; ring
+    have h_sqrt2 : sqrt2 = -((a - c : ℚ) : ℝ) / ((b - d : ℚ) : ℝ) := by
+      field_simp [hbd_ne]
+      have : ((a - c : ℚ) : ℝ) + ((b - d : ℚ) : ℝ) * sqrt2 = 0 := h_diff
+      nlinarith [this]
+    have : sqrt2 ∈ Set.range ((↑) : ℚ → ℝ) := by
+      use (-(a - c) : ℚ) / (b - d)
+      simp only [Rat.cast_div, Rat.cast_neg]
+      exact h_sqrt2.symm
+    exact absurd this (sqrt2_irrational)
+
+/-- Definition: Elements of ℚ(√2) expressed via uAg basis.
+   InQAdjSqrt2Ag x means x = a + b*uAg for some rational a, b.
+   Since uAg = (1 + √2)/2, this is equivalent to x ∈ ℚ(√2).
+-/
+def InQAdjSqrt2Ag (x : ℝ) : Prop := ∃ a b : ℚ, (a : ℝ) + (b : ℝ) * uAg = x
+
+/-- THEOREM: In ℚ(√2), the representation with basis {1, uAg} is UNIQUE.
+   This is the correct and precise form of the "unique representation" result,
+   with the restricted domain x ∈ ℚ(√2) and codomain (a,b) ∈ ℚ × ℚ.
+-/
+theorem Ag_rep_unique_in_Q_ext (x : ℝ) (hx : InQAdjSqrt2Ag x) :
+    ∃! (p : ℚ × ℚ), (p.1 : ℝ) + (p.2 : ℝ) * uAg = x := by
+  obtain ⟨a₀, b₀, h₀⟩ := hx
+  use (a₀, b₀)
+  refine ⟨h₀, fun ⟨a, b⟩ hab ↦ ?_⟩
+  simp only [Prod.mk.injEq]
+  -- Both (a, b) and (a₀, b₀) satisfy the equation
+  have h_diff : (a : ℝ) + (b : ℝ) * uAg = (a₀ : ℝ) + (b₀ : ℝ) * uAg := by rw [hab, h₀]
+  rw [uAg_eq] at h_diff
+  -- Rewrite in standard form: (2a + b) + b*√2 = (2a₀ + b₀) + b₀*√2
+  have h_canonical : ((2 * a + b : ℚ) : ℝ) + ((b : ℚ) : ℝ) * sqrt2
+                   = ((2 * a₀ + b₀ : ℚ) : ℝ) + ((b₀ : ℚ) : ℝ) * sqrt2 := by
+    have h_eq : (a : ℝ) + (b : ℝ) * ((1 + sqrt2) / 2)
+              = (a₀ : ℝ) + (b₀ : ℝ) * ((1 + sqrt2) / 2) := h_diff
+    field_simp at h_eq
+    push_cast at h_eq ⊢
+    linarith [h_eq]
+  -- Apply Q-linear independence
+  have ⟨heq1, heq2⟩ := sqrt2_Q_lin_indep (2*a + b) b (2*a₀ + b₀) b₀ h_canonical
+  constructor
+  · have h2a : (2 : ℚ) * (a - a₀) = 0 := by linarith [heq1]
+    have : (a : ℚ) - a₀ = 0 := by linarith [h2a]
+    linarith
+  · exact heq2
+
 
 end -- noncomputable section
-end SilverRatioUnit
-end DkMath
+
+end DkMath.SilverRatio.Unit
