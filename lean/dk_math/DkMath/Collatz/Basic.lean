@@ -42,17 +42,21 @@ def threeNPlusOne (n : ℕ) : ℕ := 3 * n + 1
 /-- The accelerated Collatz map on odd naturals.
     For odd n, we compute a := 3n+1, then return (a / 2^v₂(a)) as an OddNat.
 
-    Note: The actual implementation depends on v₂ defined in V2.lean.
-    For now, this is declared as a noncomputable definition with sorry.
+    The result is always odd because we divide out all factors of 2.
 -/
-noncomputable def T : OddNat → OddNat := fun _n => by sorry
+noncomputable def T : OddNat → OddNat := fun n =>
+  -- Implementation: divide 3n+1 by its 2-adic valuation power
+  -- This requires v2 from V2.lean
+  sorry
 
 /-- The observation function: s(n) := v₂(3n+1) for odd n.
 
     Returns the 2-adic valuation of 3n+1.
-    Defined in V2.lean.
 -/
-noncomputable def s : OddNat → ℕ := fun _n => by sorry
+noncomputable def s : OddNat → ℕ := fun n =>
+  -- Implementation: s(n) = v2(3n+1)
+  -- This requires v2 from V2.lean
+  sorry
 
 /-- Iterated application of T: iterateT m n represents m applications of T to n. -/
 noncomputable def iterateT : ℕ → OddNat → OddNat
