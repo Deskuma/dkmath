@@ -20,7 +20,7 @@ import DkMath.SilverRatio.Sqrt2Lemmas
     e     := Real.exp 1
 -/
 
-namespace DkMath.SilverRatio.SilverRatioUnit
+namespace DkMath.SilverRatio.Unit
 
 open Real
 open DkMath.SilverRatio.Sqrt2
@@ -363,4 +363,4 @@ theorem Ag_rep_unique_in_Q_ext (x : ℝ) (hx : InQAdjSqrt2Ag x) :
 
 end -- noncomputable section
 
-end DkMath.SilverRatio.SilverRatioUnit
+end DkMath.SilverRatio.Unit

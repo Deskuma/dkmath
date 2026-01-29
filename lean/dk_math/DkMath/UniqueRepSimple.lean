@@ -13,6 +13,8 @@ import DkMath.SilverRatio.Sqrt2Lemmas
 
 namespace DkMath.UniqueRepresentation
 
+namespace SilverRatio
+
 open Real
 open DkMath.SilverRatio.Sqrt2
 
@@ -91,5 +93,7 @@ theorem unique_rep_in_Q_sqrt2 (x : ℝ) (hx : InQAdjSqrt2 x) :
 #print axioms unique_rep_in_Q_sqrt2
 
 end -- noncomputable section
+
+end SilverRatio
 
 end DkMath.UniqueRepresentation
