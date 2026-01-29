@@ -96,6 +96,7 @@ theorem sqrt2_lin_indep_over_rat (a b c d : ℚ) :
     -- But √2 is irrational, contradiction
     exact h_irrat hq
 
+#print axioms sqrt2_lin_indep_over_rat
 
 -- ============================================================================
 -- Part 2: Representation in Simple Basis (a + b·√2)
@@ -115,6 +116,8 @@ theorem SimpleForm_unique_rat (_x : ℝ) (a b c d : ℚ) :
     a = c ∧ b = d := by
   intro h
   exact sqrt2_lin_indep_over_rat a b c d (by simpa [SimpleForm] using h)
+
+#print axioms SimpleForm_unique_rat
 
 -- Version 2: For all reals, we need uniqueness only for a specific pair
 /-
@@ -147,6 +150,8 @@ theorem SimpleForm_not_injective :
   constructor
   · norm_num
   · simp [SimpleForm]
+
+#print axioms SimpleForm_not_injective
 
 -- ============================================================================
 -- Part 3: Unique Representation when Restricting Coefficient Domain
@@ -188,6 +193,8 @@ theorem unique_rep_in_rat_adj_sqrt2 (x : ℝ) (hx : x ∈ RatAdjSqrt2) :
     simp only [Prod.mk.injEq]
     exact ⟨hac, hbd⟩
 
+#print axioms unique_rep_in_rat_adj_sqrt2
+
 -- ============================================================================
 -- Part 4: Complementary Results and Utilities
 -- ============================================================================
@@ -228,6 +235,10 @@ theorem RatAdjSqrt2_mul (x y : ℝ) (hx : x ∈ RatAdjSqrt2) (hy : y ∈ RatAdjS
     _ = a*c + a*d*sqrt2 + b*c*sqrt2 + b*d*sqrt2^2 := by rw [sqrt2_sq]; ring
     _ = (a + b*sqrt2) * (c + d*sqrt2) := by ring
     _ = x * y := by rw [← hab, ← hcd]
+
+#print axioms unique_rep_in_rat_adj_sqrt2
+#print axioms RatAdjSqrt2_add
+#print axioms RatAdjSqrt2_mul
 
 -- ============================================================================
 -- Part 5: Syntax Patterns and Proof Techniques
