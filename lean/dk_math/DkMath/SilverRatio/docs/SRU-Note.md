@@ -1,7 +1,7 @@
 # SRU Note
 
 Silver Ratio Universality (SRU) Note
-===============================
+------------------------------------
 
 ## 1. 基本定義
 
@@ -128,7 +128,9 @@ Silver Ratio Universality (SRU) Note
 「R×R を表現する 構文」は、実際には **偽** じゃから、注意するのじゃぞ。
 **真** は、ℚ(√2) の部分集合上でのみ成り立つ。じゃ。
 
-[DEMO: UniqueRepresentation.lean)](/lean/dk_math/DkMath/UniqueRepresentation.lean)
+- DEMO:
+  - [UniqueRepSimple.lean](/lean/dk_math/DkMath/UniqueRepSimple.lean)
+  - [UniqueRepresentation.lean)](/lean/dk_math/DkMath/UniqueRepresentation.lean)
 
 ````lean
 /-- Encode Ag-elements as pairs (a,b). -/
