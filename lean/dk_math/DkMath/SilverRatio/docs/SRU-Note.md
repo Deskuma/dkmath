@@ -76,7 +76,8 @@ Silver Ratio Universality (SRU) Note
   \]
 - **ノルムの積性**
   \[
-  AgNorm(a_1,b_1)\,AgNorm(a_2,b_2) = AgNorm(a_1,b_1)\,AgNorm(a_2,b_2)
+  AgNorm(a_1 a_2 + \mathrm{mixTerm}(b_1,b_2),\, a_1 b_2 + a_2 b_1 + b_1 b_2)
+  = AgNorm(a_1,b_1)\,AgNorm(a_2,b_2)
   \]
 
 ### 2.3 一意表現定理
