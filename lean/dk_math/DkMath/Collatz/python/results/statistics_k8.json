@@ -1,0 +1,14 @@
+{
+  "k": 8,
+  "block_size": 256,
+  "num_trajectories": 32,
+  "num_difference_logs": 60,
+  "log2_3": 1.5849625007211563,
+  "drift_mean": -5.195628506542938,
+  "drift_std": 1.4004294781372795,
+  "drift_min": -6.60149997115375,
+  "drift_max": -0.4150374992788437,
+  "diff_first_delta_mean": 4.0,
+  "diff_first_delta_median": 4.0,
+  "diff_first_delta_max": 4.0
+}
