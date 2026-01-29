@@ -131,7 +131,7 @@ Silver Ratio Universality (SRU) Note
 
 - DEMO:
   - [UniqueRepSimple.lean](/lean/dk_math/DkMath/UniqueRepSimple.lean)
-  - [UniqueRepresentation.lean)](/lean/dk_math/DkMath/UniqueRepresentation.lean)
+  - [UniqueRepresentation.lean](/lean/dk_math/DkMath/UniqueRepresentation.lean)
 
 ````lean
 /-- Encode Ag-elements as pairs (a,b). -/
