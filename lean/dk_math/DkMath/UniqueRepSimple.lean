@@ -26,7 +26,7 @@ When √2 is irrational, we can use it to establish linear independence of {1, �
 -/
 
 /-- Linear independence of {1, √2} over ℚ -/
-theorem sqrt2_lin_indep_over_rat (a b c d : ℚ) :
+theorem sqrt2_lin_indep_over_rat' (a b c d : ℚ) :
     (a : ℝ) + (b : ℝ) * sqrt2 = (c : ℝ) + (d : ℝ) * sqrt2 →
     a = c ∧ b = d := by
   intro h
@@ -71,7 +71,7 @@ theorem sqrt2_lin_indep_over_rat (a b c d : ℚ) :
     -- But √2 is irrational, contradiction
     exact h_irrat hq
 
-#print axioms sqrt2_lin_indep_over_rat
+#print axioms sqrt2_lin_indep_over_rat'
 
 /-- Unique representation in ℚ(√2) -/
 def InQAdjSqrt2 (x : ℝ) : Prop :=
@@ -87,7 +87,7 @@ theorem unique_rep_in_Q_sqrt2 (x : ℝ) (hx : InQAdjSqrt2 x) :
   · intros a' b' hab'
     have : (a' : ℝ) + (b' : ℝ) * sqrt2 = (a : ℝ) + (b : ℝ) * sqrt2 :=
       hab' ▸ hab.symm
-    have ⟨ha, hb⟩ := sqrt2_lin_indep_over_rat a' b' a b this
+    have ⟨ha, hb⟩ := sqrt2_lin_indep_over_rat' a' b' a b this
     exact ⟨ha, hb⟩
 
 #print axioms unique_rep_in_Q_sqrt2
