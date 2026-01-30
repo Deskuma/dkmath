@@ -36,29 +36,20 @@ lemma shift_ge (k m n : ℕ) : n ≤ shift k m n := by
     If v₂(a) < v₂(b), then v₂(a + b) = v₂(a).
 
     This is a key property of p-adic valuations: the smaller valuation dominates.
+
+    Proof strategy:
+    1. If a = 0: v2(0) = 0 < v2(b), contradiction
+    2. If a is odd: v2(a) = 0 < v2(b), so b is even
+       Thus v2(a + b) = 0 = v2(a)
+    3. If a is even: v2(a) = 1 + v2(a/2) < v2(b)
+       So v2(b) ≥ 1, meaning b is even: v2(b) = 1 + v2(b/2)
+       Then v2(a + b) = 1 + v2((a + b)/2) = 1 + v2(a/2 + b/2)
+       By IH: v2(a/2 + b/2) = v2(a/2)
+       So v2(a + b) = 1 + v2(a/2) = v2(a)
 -/
--- Key property for v2 under addition
--- When one term has much lower 2-adic valuation, it dominates the sum
 lemma v2_add_of_lower_val (a b : ℕ) (h : v2 a < v2 b) :
   v2 (a + b) = v2 a := by
-  -- This lemma states a fundamental property of 2-adic valuations:
-  -- The term with smaller valuation dominates the sum.
-  --
-  -- Proof strategy:
-  -- 1. If a = 0: v2(0) = 0 < v2(b), contradiction
-  -- 2. If a is odd: v2(a) = 0 < v2(b), so b is even
-  --    Thus v2(a + b) = 0 = v2(a)
-  -- 3. If a is even: v2(a) = 1 + v2(a/2) < v2(b)
-  --    So v2(b) ≥ 1, meaning b is even: v2(b) = 1 + v2(b/2)
-  --    Then v2(a + b) = 1 + v2((a + b)/2) = 1 + v2(a/2 + b/2)
-  --    By IH: v2(a/2 + b/2) = v2(a/2)
-  --    So v2(a + b) = 1 + v2(a/2) = v2(a)
-
-  -- For now, we assert the truth of this lemma, which can be proven
-  -- by strong structural induction on a with the above case analysis.
-  -- The formal proof would unfold v2's definition recursively.
   sorry
-
 
 /-- The central theorem of petal conservation (Main Theorem).
 
