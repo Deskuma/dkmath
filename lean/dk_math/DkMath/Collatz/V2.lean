@@ -139,20 +139,5 @@ lemma v2_pow2 (k : ℕ) : v2 (pow2 k) = k := by
     rw [ih]
     ring
 
-/-- Helper: if 2^s | a but 2^(s+1) ∤ a, then v₂(a) = s.
 
-    v2Spec defines the specification for v₂: v2Spec a s holds iff 2^s divides a
-    and 2^(s+1) does not divide a. The definition of v₂ is designed to extract
-    exactly this value s. Therefore, the two are equivalent by design.
--/
-axiom v2_unique (a s : ℕ) (h : v2Spec a s) : v2 a = s
-
-/-- Core property: 2^(v₂(a)) divides a.
-
-    This is a direct consequence of the definition of v₂:
-    - If a = 0: v₂(0) = 0, and 2^0 = 1 | 0 ✓
-    - If a is odd: v₂(a) = 0, and 2^0 = 1 | a ✓
-    - If a is even: v₂(a) = 1 + v₂(a/2), so 2^(1+v₂(a/2)) | 2·(a/2) = a by recursion ✓
--/
-axiom v2_dvd (a : ℕ) : pow2 (v2 a) ∣ a
 end DkMath.Collatz
