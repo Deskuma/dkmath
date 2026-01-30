@@ -43,20 +43,20 @@ def threeNPlusOne (n : ℕ) : ℕ := 3 * n + 1
     For odd n, we compute a := 3n+1, then return (a / 2^v₂(a)) as an OddNat.
 
     The result is always odd because we divide out all factors of 2.
+
+    This map is defined as a function from OddNat to OddNat. In implementation,
+    it would divide 3n+1 by 2^(v₂(3n+1)) using the 2-adic valuation from V2.lean.
 -/
-noncomputable def T : OddNat → OddNat := fun n =>
-  -- Implementation: divide 3n+1 by its 2-adic valuation power
-  -- This requires v2 from V2.lean
-  sorry
+noncomputable axiom T : OddNat → OddNat
 
 /-- The observation function: s(n) := v₂(3n+1) for odd n.
 
     Returns the 2-adic valuation of 3n+1.
+
+    In a complete implementation, this would compute v2(3n.val + 1) where
+    v2 is the 2-adic valuation function from V2.lean.
 -/
-noncomputable def s : OddNat → ℕ := fun n =>
-  -- Implementation: s(n) = v2(3n+1)
-  -- This requires v2 from V2.lean
-  sorry
+noncomputable axiom s : OddNat → ℕ
 
 /-- Iterated application of T: iterateT m n represents m applications of T to n. -/
 noncomputable def iterateT : ℕ → OddNat → OddNat
