@@ -103,6 +103,10 @@ theorem v2_shift_invariant
       rw [rhs_comm]
       apply Nat.le_add_right
     have h_lt : v2 (3 * n + 1) < v2 (3 * (pow2 k * m)) := lt_of_lt_of_le hk k_le_prod
-    apply v2_add_of_lower_val (3 * n + 1) (3 * (pow2 k * m)) h_lt
+    -- Now we need to show: v2 ((3*n+1) + 3*(pow2 k * m)) = v2 (3*n+1)
+    -- This is the p-adic valuation property: if v2(a) < v2(b), then v2(a + b) = v2(a)
+    -- For now, we use the general lemma v2_add_of_lower_val
+    exact v2_add_of_lower_val (3 * n + 1) (3 * (pow2 k * m)) h_lt
+
 
 end DkMath.Collatz
