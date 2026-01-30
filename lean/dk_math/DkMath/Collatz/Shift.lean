@@ -57,24 +57,45 @@ lemma v2_add_of_lower_val (a b : ℕ) (h : v2 a < v2 b) :
 -/
 theorem v2_shift_invariant
   (k m n : ℕ)
-  (hn : n % 2 = 1)
   (hk : v2 (3 * n + 1) < k) :
   v2 (3 * (shift k m n) + 1) = v2 (3 * n + 1) := by
   unfold shift
-  have h_expand : 3 * (n + pow2 k * m) + 1 = (3*n + 1) + 3 * (pow2 k * m) := by ring
-  rw [h_expand]
-  apply v2_add_of_lower_val
-  -- We need: v2(3*n + 1) < v2(3*2^k*m)
-  -- Case split on m
+  -- handle m = 0 separately (trivial)
   by_cases hm : m = 0
-  · -- Case: m = 0 leads to contradiction
-    simp [hm]
-    -- v2(3*n+1) < v2(0) = 0
-    -- But v2(3*n+1) ≥ 1, contradiction
-    have : 1 ≤ v2 (3*n + 1) := v2_3n_plus_1_ge_1 n hn
-    have : v2 (0 : ℕ) = 0 := by unfold v2; simp
-    sorry
-  · -- Case: m > 0
-    sorry
+  · -- m = 0 -> shift k 0 n = n
+    simp [hm, mul_zero, add_zero]
+  · -- m > 0 case: we can apply multiplicativity lemmas safely
+    have h_expand : 3 * (n + pow2 k * m) + 1 = (3*n + 1) + 3 * (pow2 k * m) := by ring
+    rw [h_expand]
+    -- prove positivity facts
+    have m_pos : 0 < m := Nat.pos_of_ne_zero hm
+    have pow2_pos : 0 < pow2 k := by
+      change 0 < (2 : ℕ) ^ k
+      apply Nat.pow_pos
+      norm_num
+    -- v2 multiplicativity for 3 * (pow2 k * m)
+    have prod_v2 : v2 (3 * (pow2 k * m)) = v2 3 + v2 (pow2 k * m) := by
+      have three_pos : 0 < (3 : ℕ) := by norm_num
+      have mul_pos : 0 < pow2 k * m := by
+        apply Nat.mul_pos
+        · exact pow2_pos
+        · exact m_pos
+      apply v2_mul
+      · exact three_pos
+      · exact mul_pos
+    -- v2 multiplicativity for pow2 k * m
+    have pow2m_v2 : v2 (pow2 k * m) = v2 (pow2 k) + v2 m := by
+      apply v2_mul
+      · exact pow2_pos
+      · exact m_pos
+    have k_le_prod : k ≤ v2 (3 * (pow2 k * m)) := by
+      rw [prod_v2, pow2m_v2, v2_pow2]
+      -- v2 3 + v2 m is nonnegative, so k ≤ k + (v2 3 + v2 m)
+      -- rewrite the RHS to the form k + (v2 3 + v2 m) and apply Nat.le_add_right
+      have rhs_comm : v2 3 + (k + v2 m) = k + (v2 3 + v2 m) := by ring
+      rw [rhs_comm]
+      apply Nat.le_add_right
+    have h_lt : v2 (3 * n + 1) < v2 (3 * (pow2 k * m)) := lt_of_lt_of_le hk k_le_prod
+    apply v2_add_of_lower_val (3 * n + 1) (3 * (pow2 k * m)) h_lt
 
 end DkMath.Collatz
