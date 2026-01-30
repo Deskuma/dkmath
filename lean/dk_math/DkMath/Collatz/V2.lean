@@ -39,6 +39,11 @@ def v2 (a : ℕ) : ℕ :=
   else if a % 2 = 1 then 0
   else 1 + v2 (a / 2)
 
+/-- v₂(0) = 0 (by definition). -/
+lemma v2_zero : v2 0 = 0 := by
+  unfold v2
+  simp
+
 /-- For odd a, v₂(a) = 0. -/
 lemma v2_odd (a : ℕ) (ha : a % 2 = 1) : v2 a = 0 := by
   unfold v2
@@ -88,6 +93,13 @@ lemma v2_unique (a s : ℕ) (h : v2Spec a s) : v2 a = s := by
   -- The recursive definition of v2 extracts the exact power
   -- For this, we would need a stronger induction principle or a direct proof
   -- For now, we assert that the definition matches the spec
+  sorry
+
+/-- Core property: 2^(v₂(a)) divides a. -/
+lemma v2_dvd (a : ℕ) : pow2 (v2 a) ∣ a := by
+  -- The definition of v2 ensures this holds
+  -- For a = 0: v2 0 = 0, so 2^0 = 1 | 0 ✓
+  -- For a > 0: by induction on the recursion depth
   sorry
 
 end DkMath.Collatz
