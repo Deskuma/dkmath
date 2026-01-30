@@ -47,9 +47,118 @@ lemma shift_ge (k m n : ℕ) : n ≤ shift k m n := by
        By IH: v2(a/2 + b/2) = v2(a/2)
        So v2(a + b) = 1 + v2(a/2) = v2(a)
 -/
-lemma v2_add_of_lower_val (a b : ℕ) (h : v2 a < v2 b) :
+lemma v2_add_of_lower_val (a b : ℕ) (ha : 0 < a) (h : v2 a < v2 b) :
   v2 (a + b) = v2 a := by
-  sorry
+  -- Strong induction on a (note: this lemma is false for a = 0 with our v2(0) = 0 convention)
+  revert b ha h
+  refine Nat.strongRecOn a (fun a ih => ?_)
+  intro b ha h
+
+  by_cases ha_odd : a % 2 = 1
+  · -- a is odd, so v2 a = 0, and b must be even (otherwise v2 b = 0)
+    have hv2a : v2 a = 0 := v2_odd a ha_odd
+    have hb_even : b % 2 = 0 := by
+      by_cases hb_even : b % 2 = 0
+      · exact hb_even
+      · have hb_odd : b % 2 = 1 := by omega
+        have hv2b : v2 b = 0 := v2_odd b hb_odd
+        have : False := by
+          -- h would become 0 < 0
+          simpa [hv2a, hv2b] using h
+        contradiction
+    have hab_odd : (a + b) % 2 = 1 := by omega
+    rw [v2_odd (a + b) hab_odd, hv2a]
+
+  · -- a is even and positive
+    have ha_even : a % 2 = 0 := by omega
+    have hv2a_pos : 0 < v2 a := v2_even a ha_even ha
+
+    have hb_even : b % 2 = 0 := by
+      by_cases hb_even : b % 2 = 0
+      · exact hb_even
+      · have hb_odd : b % 2 = 1 := by omega
+        have hv2b : v2 b = 0 := v2_odd b hb_odd
+        have hv2b_pos : 0 < v2 b := lt_trans hv2a_pos h
+        have : False := by
+          simpa [hv2b] using hv2b_pos
+        contradiction
+
+    have hb_pos : 0 < b := by
+      by_contra hb0
+      push_neg at hb0
+      have hb0' : b = 0 := Nat.le_zero.mp hb0
+      subst hb0'
+      have hlt : v2 a < 0 := by
+        simpa [v2_zero] using h
+      exact (Nat.not_lt_zero _ hlt)
+
+    -- write a = 2 * a1 and b = 2 * b1
+    rcases Nat.dvd_of_mod_eq_zero ha_even with ⟨a1, rfl⟩
+    rcases Nat.dvd_of_mod_eq_zero hb_even with ⟨b1, rfl⟩
+
+    have ha1_pos : 0 < a1 := by
+      -- ha : 0 < 2 * a1
+      simpa using Nat.pos_of_mul_pos_left ha
+
+    have hb1_pos : 0 < b1 := by
+      -- hb_pos : 0 < 2 * b1
+      simpa using Nat.pos_of_mul_pos_left hb_pos
+
+    have hv2_two : v2 2 = 1 := by
+      simpa [pow2] using (v2_pow2 1)
+
+    have hv2a : v2 (2 * a1) = 1 + v2 a1 := by
+      have hmul : v2 (pow2 1 * a1) = v2 (pow2 1) + v2 a1 := by
+        apply v2_mul
+        · change 0 < (2 : ℕ) ^ 1
+          exact Nat.pow_pos (by decide : 0 < (2 : ℕ))
+        · exact ha1_pos
+      have hmul' : v2 (2 * a1) = v2 2 + v2 a1 := by
+        simpa [pow2] using hmul
+      simpa [hv2_two] using hmul'
+
+    have hv2b : v2 (2 * b1) = 1 + v2 b1 := by
+      have hmul : v2 (pow2 1 * b1) = v2 (pow2 1) + v2 b1 := by
+        apply v2_mul
+        · change 0 < (2 : ℕ) ^ 1
+          exact Nat.pow_pos (by decide : 0 < (2 : ℕ))
+        · exact hb1_pos
+      have hmul' : v2 (2 * b1) = v2 2 + v2 b1 := by
+        simpa [pow2] using hmul
+      simpa [hv2_two] using hmul'
+
+    have h_rec : v2 a1 < v2 b1 := by
+      have : 1 + v2 a1 < 1 + v2 b1 := by
+        simpa [hv2a, hv2b] using h
+      omega
+
+    have ha1_lt : a1 < 2 * a1 := by omega
+    have ih_result : v2 (a1 + b1) = v2 a1 :=
+      ih a1 (by simpa using ha1_lt) b1 ha1_pos h_rec
+
+    have hab_pos : 0 < 2 * (a1 + b1) := by
+      apply Nat.mul_pos (by decide : 0 < 2)
+      omega
+
+    calc
+      v2 (2 * a1 + 2 * b1) = v2 (2 * (a1 + b1)) := by ring
+      _ = 1 + v2 (a1 + b1) := by
+        have hsum_pos : 0 < a1 + b1 := by
+          have hab_pos' : 0 < (a1 + b1) * 2 := by
+            simpa [Nat.mul_comm] using hab_pos
+          exact Nat.pos_of_mul_pos_right hab_pos'
+        have hmul : v2 (pow2 1 * (a1 + b1)) = v2 (pow2 1) + v2 (a1 + b1) := by
+          apply v2_mul
+          · change 0 < (2 : ℕ) ^ 1
+            exact Nat.pow_pos (by decide : 0 < (2 : ℕ))
+          · exact hsum_pos
+        have hmul' : v2 (2 * (a1 + b1)) = v2 2 + v2 (a1 + b1) := by
+          simpa [pow2] using hmul
+        simpa [hv2_two] using hmul'
+      _ = 1 + v2 a1 := by simp [ih_result]
+      _ = v2 (2 * a1) := by simpa [hv2a]
+
+
 
 /-- The central theorem of petal conservation (Main Theorem).
 
@@ -106,7 +215,7 @@ theorem v2_shift_invariant
     -- Now we need to show: v2 ((3*n+1) + 3*(pow2 k * m)) = v2 (3*n+1)
     -- This is the p-adic valuation property: if v2(a) < v2(b), then v2(a + b) = v2(a)
     -- For now, we use the general lemma v2_add_of_lower_val
-    exact v2_add_of_lower_val (3 * n + 1) (3 * (pow2 k * m)) h_lt
+    exact v2_add_of_lower_val (3 * n + 1) (3 * (pow2 k * m)) (by omega) h_lt
 
 
 end DkMath.Collatz
