@@ -95,7 +95,49 @@ axiom v2_mul (a b : ℕ) (ha : 0 < a) (hb : 0 < b) :
 
     This is a fundamental property of 2-adic valuation on powers of 2.
 -/
-axiom v2_pow2 (k : ℕ) : v2 (pow2 k) = k
+lemma v2_pow2 (k : ℕ) : v2 (pow2 k) = k := by
+  -- Proof by induction on k
+  induction k with
+  | zero =>
+    -- Base case: v2(2^0) = v2(1) = 0
+    unfold v2 pow2
+    simp
+  | succ k' ih =>
+    -- Inductive step: v2(2^(k'+1)) = k' + 1
+    unfold pow2
+    show v2 (2 ^ (k' + 1)) = k' + 1
+    -- 2^(k'+1) = 2 * 2^k'
+    have eq1 : (2 : ℕ) ^ (k' + 1) = 2 * 2 ^ k' := by ring
+    rw [eq1]
+    -- Now unfold v2
+    unfold v2
+    -- 2 * 2^k' ≠ 0
+    have ne_zero : ¬(2 * 2 ^ k' = 0) := by
+      intro h
+      have : 2 ^ k' = 0 := by
+        cases Nat.eq_zero_or_pos (2 ^ k') with
+        | inl h' => exact h'
+        | inr h' =>
+          have : 2 * 2 ^ k' > 0 := Nat.mul_pos (by norm_num : 0 < 2) h'
+          omega
+      have : (2 : ℕ) = 0 ∨ k' ≠ 0 ∧ (2 : ℕ) = 0 := by
+        cases k' <;> simp [pow_succ] at this
+      omega
+    simp only [ne_zero, ↓reduceIte]
+    -- (2 * 2^k') % 2 ≠ 1 (it's 0)
+    have not_one : ¬((2 * 2 ^ k') % 2 = 1) := by
+      rw [Nat.mul_mod]
+      norm_num
+    simp only [not_one, ↓reduceIte]
+    -- (2 * 2^k') / 2 = 2^k'
+    have div_eq : (2 * 2 ^ k') / 2 = 2 ^ k' := by
+      rw [Nat.mul_div_cancel_left]
+      norm_num
+    rw [div_eq]
+    -- Apply IH
+    unfold pow2 at ih
+    rw [ih]
+    ring
 
 /-- Helper: if 2^s | a but 2^(s+1) ∤ a, then v₂(a) = s.
 
