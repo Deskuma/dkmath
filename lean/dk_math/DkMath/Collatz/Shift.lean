@@ -53,7 +53,6 @@ lemma v2_add_of_lower_val (a b : ℕ) (ha : 0 < a) (h : v2 a < v2 b) :
   revert b ha h
   refine Nat.strongRecOn a (fun a ih => ?_)
   intro b ha h
-
   by_cases ha_odd : a % 2 = 1
   · -- a is odd, so v2 a = 0, and b must be even (otherwise v2 b = 0)
     have hv2a : v2 a = 0 := v2_odd a ha_odd
@@ -64,15 +63,13 @@ lemma v2_add_of_lower_val (a b : ℕ) (ha : 0 < a) (h : v2 a < v2 b) :
         have hv2b : v2 b = 0 := v2_odd b hb_odd
         have : False := by
           -- h would become 0 < 0
-          simpa [hv2a, hv2b] using h
+          simp [hv2a, hv2b] at h
         contradiction
     have hab_odd : (a + b) % 2 = 1 := by omega
     rw [v2_odd (a + b) hab_odd, hv2a]
-
   · -- a is even and positive
     have ha_even : a % 2 = 0 := by omega
     have hv2a_pos : 0 < v2 a := v2_even a ha_even ha
-
     have hb_even : b % 2 = 0 := by
       by_cases hb_even : b % 2 = 0
       · exact hb_even
@@ -80,33 +77,29 @@ lemma v2_add_of_lower_val (a b : ℕ) (ha : 0 < a) (h : v2 a < v2 b) :
         have hv2b : v2 b = 0 := v2_odd b hb_odd
         have hv2b_pos : 0 < v2 b := lt_trans hv2a_pos h
         have : False := by
-          simpa [hv2b] using hv2b_pos
+          simp [hv2b] at hv2b_pos
         contradiction
-
     have hb_pos : 0 < b := by
       by_contra hb0
       push_neg at hb0
       have hb0' : b = 0 := Nat.le_zero.mp hb0
       subst hb0'
       have hlt : v2 a < 0 := by
-        simpa [v2_zero] using h
+        simp [v2_zero] at h
       exact (Nat.not_lt_zero _ hlt)
-
     -- write a = 2 * a1 and b = 2 * b1
     rcases Nat.dvd_of_mod_eq_zero ha_even with ⟨a1, rfl⟩
     rcases Nat.dvd_of_mod_eq_zero hb_even with ⟨b1, rfl⟩
-
     have ha1_pos : 0 < a1 := by
       -- ha : 0 < 2 * a1
-      simpa using Nat.pos_of_mul_pos_left ha
-
+      exact Nat.pos_of_mul_pos_left ha
     have hb1_pos : 0 < b1 := by
       -- hb_pos : 0 < 2 * b1
-      simpa using Nat.pos_of_mul_pos_left hb_pos
-
+      exact Nat.pos_of_mul_pos_left hb_pos
     have hv2_two : v2 2 = 1 := by
-      simpa [pow2] using (v2_pow2 1)
-
+      have : v2 2 = v2 (pow2 1) := by simp [pow2]
+      rw [this]
+      exact v2_pow2 1
     have hv2a : v2 (2 * a1) = 1 + v2 a1 := by
       have hmul : v2 (pow2 1 * a1) = v2 (pow2 1) + v2 a1 := by
         apply v2_mul
@@ -114,9 +107,10 @@ lemma v2_add_of_lower_val (a b : ℕ) (ha : 0 < a) (h : v2 a < v2 b) :
           exact Nat.pow_pos (by decide : 0 < (2 : ℕ))
         · exact ha1_pos
       have hmul' : v2 (2 * a1) = v2 2 + v2 a1 := by
-        simpa [pow2] using hmul
-      simpa [hv2_two] using hmul'
-
+        simp only [pow2] at hmul
+        exact hmul
+      simp only [hv2_two] at hmul'
+      exact hmul'
     have hv2b : v2 (2 * b1) = 1 + v2 b1 := by
       have hmul : v2 (pow2 1 * b1) = v2 (pow2 1) + v2 b1 := by
         apply v2_mul
@@ -124,39 +118,38 @@ lemma v2_add_of_lower_val (a b : ℕ) (ha : 0 < a) (h : v2 a < v2 b) :
           exact Nat.pow_pos (by decide : 0 < (2 : ℕ))
         · exact hb1_pos
       have hmul' : v2 (2 * b1) = v2 2 + v2 b1 := by
-        simpa [pow2] using hmul
-      simpa [hv2_two] using hmul'
-
+        simp only [pow2] at hmul
+        exact hmul
+      simp only [hv2_two] at hmul'
+      exact hmul'
     have h_rec : v2 a1 < v2 b1 := by
       have : 1 + v2 a1 < 1 + v2 b1 := by
-        simpa [hv2a, hv2b] using h
+        rw [hv2a, hv2b] at h
+        exact h
       omega
-
     have ha1_lt : a1 < 2 * a1 := by omega
     have ih_result : v2 (a1 + b1) = v2 a1 :=
-      ih a1 (by simpa using ha1_lt) b1 ha1_pos h_rec
-
+      ih a1 (by omega) b1 ha1_pos h_rec
     have hab_pos : 0 < 2 * (a1 + b1) := by
       apply Nat.mul_pos (by decide : 0 < 2)
       omega
-
     calc
       v2 (2 * a1 + 2 * b1) = v2 (2 * (a1 + b1)) := by ring
       _ = 1 + v2 (a1 + b1) := by
         have hsum_pos : 0 < a1 + b1 := by
-          have hab_pos' : 0 < (a1 + b1) * 2 := by
-            simpa [Nat.mul_comm] using hab_pos
-          exact Nat.pos_of_mul_pos_right hab_pos'
+          omega
         have hmul : v2 (pow2 1 * (a1 + b1)) = v2 (pow2 1) + v2 (a1 + b1) := by
           apply v2_mul
           · change 0 < (2 : ℕ) ^ 1
             exact Nat.pow_pos (by decide : 0 < (2 : ℕ))
           · exact hsum_pos
         have hmul' : v2 (2 * (a1 + b1)) = v2 2 + v2 (a1 + b1) := by
-          simpa [pow2] using hmul
-        simpa [hv2_two] using hmul'
+          simp only [pow2] at hmul
+          exact hmul
+        simp only [hv2_two] at hmul'
+        exact hmul'
       _ = 1 + v2 a1 := by simp [ih_result]
-      _ = v2 (2 * a1) := by simpa [hv2a]
+      _ = v2 (2 * a1) := by simp [hv2a]
 
 
 
