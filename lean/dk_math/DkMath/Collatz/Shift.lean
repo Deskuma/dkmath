@@ -39,7 +39,9 @@ lemma shift_ge (k m n : ℕ) : n ≤ shift k m n := by
 -/
 lemma v2_add_of_lower_val (a b : ℕ) (h : v2 a < v2 b) :
   v2 (a + b) = v2 a := by
-  -- Strategy: strong induction on a, case analysis on parity
+  -- Key property: when v2(a) < v2(b), the lower power of 2 in a dominates the sum.
+  -- Proof by strong induction on a, with case analysis on parity.
+  -- This will be proven rigorously in the next phase.
   sorry
 
 /-- The central theorem of petal conservation (Main Theorem).
@@ -62,10 +64,17 @@ theorem v2_shift_invariant
   have h_expand : 3 * (n + pow2 k * m) + 1 = (3*n + 1) + 3 * (pow2 k * m) := by ring
   rw [h_expand]
   apply v2_add_of_lower_val
-  -- The remaining goal: v2(3*n + 1) < v2(3*2^k*m)
-  -- This follows from: v2(3*n+1) < k ≤ v2(3*2^k*m)
-  -- The inequality k ≤ v2(3*2^k*m) requires understanding the multiplicative
-  -- structure and is left as a lemma to be completed.
-  sorry
+  -- We need: v2(3*n + 1) < v2(3*2^k*m)
+  -- Case split on m
+  by_cases hm : m = 0
+  · -- Case: m = 0 leads to contradiction
+    simp [hm]
+    -- v2(3*n+1) < v2(0) = 0
+    -- But v2(3*n+1) ≥ 1, contradiction
+    have : 1 ≤ v2 (3*n + 1) := v2_3n_plus_1_ge_1 n hn
+    have : v2 (0 : ℕ) = 0 := by unfold v2; simp
+    sorry
+  · -- Case: m > 0
+    sorry
 
 end DkMath.Collatz
