@@ -91,7 +91,7 @@ lemma v2_mul_of_odd_left (a b : ℕ) (ha : a % 2 = 1) (hb : 0 < b) :
 lemma le_v2_of_pow2_dvd (k a : ℕ) (ha : 0 < a) (hdiv : pow2 k ∣ a) :
   k ≤ v2 a := by
   -- Induction on k
-  induction k with
+  induction k generalizing a with
   | zero =>
     -- 2^0 = 1 divides everything, and v2(a) ≥ 0
     simp
@@ -107,9 +107,9 @@ lemma le_v2_of_pow2_dvd (k a : ℕ) (ha : 0 < a) (hdiv : pow2 k ∣ a) :
     have h_assoc : 2 * m * pow2 k = 2 * (m * pow2 k) := by ring
     rw [h_assoc]
     have h_m_pos : 0 < m := by
-      by_contra hm
-      push_neg at hm
-      have : m = 0 := Nat.le_zero.mp hm
+      by_contra hm_neg
+      push_neg at hm_neg
+      have : m = 0 := Nat.le_zero.mp hm_neg
       subst this
       simp at hm
       have : a = 0 := by simp [ha_eq]
@@ -118,9 +118,12 @@ lemma le_v2_of_pow2_dvd (k a : ℕ) (ha : 0 < a) (hdiv : pow2 k ∣ a) :
       exact Nat.mul_pos h_m_pos (Nat.pow_pos (by decide : 0 < (2 : ℕ)))
     have h_v2_two : v2 (2 * (m * pow2 k)) = 1 + v2 (m * pow2 k) := v2_two_mul (m * pow2 k) hpos
     rw [h_v2_two]
-    -- Now show k ≤ v2 (m * pow2 k)
+    -- Now show k ≤ v2 (m * pow2 k) using the inductive hypothesis
     have h_div : pow2 k ∣ m * pow2 k := dvd_mul_left (pow2 k) m
-    sorry
+    -- Apply ih to (m * pow2 k)
+    have h_ih : k ≤ v2 (m * pow2 k) := ih (m * pow2 k) hpos h_div
+    -- Therefore k + 1 ≤ 1 + v2 (m * pow2 k)
+    omega
 
 /-- For odd n, v₂(3n+1) ≥ 1. -/
 lemma v2_3n_plus_1_ge_1 (n : ℕ) (hn : n % 2 = 1) :
