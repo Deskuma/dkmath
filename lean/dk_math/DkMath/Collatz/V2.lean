@@ -106,36 +106,36 @@ lemma v2_even (a : ℕ) (ha : a % 2 = 0) (h_pos : 0 < a) : 0 < v2 a := by
     have : 0 ≤ padicValNat 2 (a / 2) := Nat.zero_le _
     linarith
 
-
+/-- peel one 2 from a positive even number -/
 lemma v2_step_of_even (a : ℕ) (ha : a % 2 = 0) (hpos : 0 < a) :
-  v2 a = 1 + v2 (a / 2) := by sorry
-/-
+  v2 a = 1 + v2 (a / 2) := by
+  -- a % 2 = 0 より a = 2 * b と書ける
+  obtain ⟨b, rfl⟩ : ∃ b, a = 2 * b := by
+    have hdiv : 2 ∣ a := Nat.dvd_iff_mod_eq_zero.mpr ha
+    use a / 2
+    rw [Nat.mul_div_cancel' hdiv]
+  -- b ≠ 0 かつ 2 ≠ 0 を用いる
+  have h2_ne : (2 : ℕ) ≠ 0 := by norm_num
+  have hb_ne : b ≠ 0 := by
+    intro hb0
+    simp [hb0] at hpos
+  -- v2 (2 * b) = padicValNat 2 (2 * b) なので書き換え
   unfold v2
-  -- padicValNat 2 a の定義を使う
-  rw [padicValNat]
-  -- a ≠ 0 より
-  have h0 : a ≠ 0 := Nat.ne_of_gt hpos
-  contradiction
-  -- padicValNat.aux 2 a (Nat.prime_two) の定義を使う
-  unfold padicValNat.aux
-  -- Nat.find (ExistsUnique.exists (Nat.existsUnique_pow_dvd_and_not_dvd 2 a _))
-  -- padicValNat 2 (a / 2) も同様に定義を展開
-  -- a % 2 = 0 より a = 2 * b の形
-  obtain ⟨b, rfl⟩ : ∃ b, a = 2 * b := Nat.exists_eq_mul_left_of_dvd (by norm_num) (by
-    rw [←Nat.dvd_iff_mod_eq_zero]
-    exact ha)
-  -- 0 < a = 2 * b より 0 < b
-  have hb : 0 < b := by
-    apply Nat.pos_of_ne_zero
-    intro h
-    rw [h] at hpos
-    simp at hpos
-  -- padicValNat 2 (2 * b) = 1 + padicValNat 2 b を示す
-  rw [Nat.padicValNat.mul (by norm_num : Nat.Prime 2) (by norm_num : 2 ≠ 0) hb.ne']
+  -- padicValNat の乗法性を適用して結論を得る
+  rw [padicValNat.mul h2_ne hb_ne]
   simp
+
+/-- v₂ as defined recursively equals v₂ as defined via padicValNat.
+
+    This lemma shows that our recursive definition v2' matches the
+    standard definition v2 using padicValNat.
+
+    Proof by cases on a:
+    - If a = 0, both sides equal 0.
+    - If a is odd, both sides equal 0.
+    - If a is even and positive, we use the step lemma to peel off factors of 2
+      and apply induction.
 -/
-
-
 lemma v2_eq_v2' (a : ℕ) : v2 a = v2' a := by
   unfold v2'
   by_cases h_zero : a = 0
