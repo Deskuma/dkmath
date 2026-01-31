@@ -121,7 +121,7 @@ lemma v2_add_of_lower_val (a b : ℕ) (ha : 0 < a) (h : v2 a < v2 b) :
       _ = 1 + v2 a1 := by simp [ih_result]
       _ = v2 (2 * a1) := by simp [hv2a]
 
-
+#print axioms v2_add_of_lower_val
 
 /-- The central theorem of petal conservation (Main Theorem).
 
@@ -169,5 +169,6 @@ theorem v2_shift_invariant
     -- For now, we use the general lemma v2_add_of_lower_val
     exact v2_add_of_lower_val (3 * n + 1) (3 * (pow2 k * m)) (by omega) h_lt
 
+#print axioms v2_shift_invariant
 
 end DkMath.Collatz
