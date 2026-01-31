@@ -1,316 +1,264 @@
-# Collatz Cartography: 2026 Research Framework
+# Collatz Cartography  
 
-**Date**: 2026年1月30日  
-**Authors**: D. and Wise Wolf  
-**License**: MIT  
+— Block Self-Similarity (“Petals”) and Singular Ridges in the Accelerated Collatz Map —
 
----
-
-## Overview
-
-This document describes the integrated research framework for the accelerated Collatz conjecture, combining formal Lean verification with experimental Python observation. The goal is to understand the "petal structure" at scale $2^k$ and extract boundary conditions that distinguish between convergent and divergent behaviors.
-
-### Core Insight: Petal Conservation
-
-The central mathematical insight is:
-
-> **If $v_2(3n+1) < k$, then shifting $n$ by a block of size $2^k$ does not change $v_2(3n'+1)$.**
-
-This "petal conservation" law means that anomalies (points where $v_2(3n+1) \geq k$) form localized filaments — the singular structure we're mapping.
+> This document is a design note for a numerical-verification program that views the Collatz dynamics through **geometric–self-similar blocks** of size \(2^k\) (“petals”).  
+> The goal is to **map where differences actually arise** under block offsets, identify **singular ridges**, and extract **inequality-style boundary conditions** that separate “contained / convergent-looking” behavior from “spiky / jumpy” behavior.
 
 ---
 
-## 1. Lean Formalization Layer
+## 0. Goal (What are we trying to achieve?)
 
-### 1.1 Module Structure
+Before chasing a full proof, this project aims to fix and observe the *structural* claims that make the “petal” picture meaningful:
 
-```
-DkMath/Collatz/
-├── Basic.lean        # Core definitions: C(n), T(n), OddNat, s(n)
-├── V2.lean           # 2-adic valuation: v₂(a), v₂Spec
-├── Shift.lean        # Block shift and petal conservation theorem
-└── Collatz2K26.lean  # Main integration module
-```
+1. **Block (petal) invariance**  
+   Under an offset \(+2^k m\), how long does the dynamics remain effectively “the same” inside a block?
 
-### 1.2 Basic Definitions (Basic.lean)
+2. **Where do differences actually originate?**  
+   When two offset trajectories diverge, *where* does the divergence first appear?
 
-**Collatz Map:**
-$$C(n) = \begin{cases} n/2 & \text{if } 2 | n \\ 3n+1 & \text{otherwise} \end{cases}$$
-
-**Accelerated Collatz Map** (on odd naturals):
-$$T(n) = \frac{3n+1}{2^{v_2(3n+1)}}$$
-
-**Observation Function:**
-$$s(n) := v_2(3n+1)$$
-
-where $v_2(a)$ is the highest power of 2 dividing $a$.
-
-**Partial Sums and Drift:**
-$$S_m(n) = \sum_{i=0}^{m-1} s(T^i(n))$$
-$$D_m(n) = m \log_2(3) - S_m(n)$$
-
-### 1.3 2-adic Valuation (V2.lean)
-
-**Specification:**
-$$v_2\text{Spec}(a, s) :\Leftrightarrow 2^s | a \land 2^{s+1} \nmid a$$
-
-**Definition:**
-The function `v2` returns the unique $s$ satisfying $v_2\text{Spec}(a, s)$.
-
-**Key Lemmas:**
-
-- `v2_odd`: For odd $a$, $v_2(a) = 0$
-- `v2_even`: For even $a$, $v_2(a) > 0$
-- `v2_mul`: $v_2(ab) = v_2(a) + v_2(b)$ (multiplicative)
-- `v2_3n_plus_1_ge_1`: For odd $n$, $v_2(3n+1) \geq 1$
-
-### 1.4 Block Shift and Petal Conservation (Shift.lean)
-
-**Definition:**
-$$\text{shift}(k, m, n) = n + 2^k \cdot m$$
-
-**Central Theorem (Petal Conservation):**
-
-```lean
-theorem v2_shift_invariant
-  (k m n : ℕ)
-  (hn : n % 2 = 1)
-  (hk : v2 (3*n + 1) < k) :
-  v2 (3 * (shift k m n) + 1) = v2 (3*n + 1)
-```
-
-**Interpretation:**
-
-- When $v_2(3n+1) < k$, the "petal" is small enough that it doesn't interact with the block boundary.
-- Shifting by a full block size $2^k$ preserves the observation value.
-- Differences between shifted and unshifted trajectories can only arise at "singular" positions where $v_2 \geq k$.
+3. **Quantify “spikes” (bad cases) as measurable terrain**  
+   Capture “bad cases” as *density / ridges inside blocks*, not just isolated outliers.
 
 ---
 
-## 2. Python Experimental Framework
+## 1. Worldview: the Petal Model (Block Self-Similarity)
 
-### 2.1 Core Module: `collatz_experiment.py`
+Fix a block exponent \(k\) and define the block size
 
-A comprehensive Python framework for:
+\[
+B := 2^k.
+\]
 
-1. Computing trajectories with full logging
-2. Generating difference logs for block comparisons
-3. Computing statistics and extracting boundary conditions
+Think of the natural numbers as tiled by blocks (petals):
 
-### 2.2 Log Types
+- \([0,B), [B,2B), [2B,3B), \dots\)
 
-#### Trajectory Log (TrajactoryLog)
+The guiding intuition:
 
-For a starting odd $n_0$, record $m$ steps of the accelerated Collatz map:
-
-```python
-@dataclass
-class TrajectorySegment:
-    step: int       # Step number
-    n: int          # Current odd natural
-    a: int          # 3n + 1
-    s: int          # v₂(a)
-    n_next: int     # T(n) = a / 2^s
-```
-
-**Computed quantities:**
-
-- $S_m = \sum_i s_i$ (total observation)
-- $D_m = m \log_2(3) - S_m$ (drift)
-
-#### Difference Log (DifferenceLog)
-
-Compare trajectory from $n$ with trajectory from $n' = n + 2^k \cdot m_{\text{shift}}$:
-
-```python
-@dataclass
-class DifferenceSegment:
-    step: int
-    delta_s: int             # s(n'_i) - s(n_i)
-    singular_at_base: bool   # s(n) >= k
-```
-
-**Key metrics:**
-
-- `first_delta_index`: First step where $\Delta s_i \neq 0$ (first divergence point)
-- `singular_indices`: Steps where base trajectory is at/above singularity threshold
-
-### 2.3 Experiment Configuration
-
-```python
-class ExperimentConfig:
-    k: int           # Block size exponent (2^k)
-    max_m: int       # Trajectory length
-    num_bases: int   # How many base odd numbers to test
-```
-
-### 2.4 Running Experiments
-
-**Example: k = 8 (block size 256)**
-
-```bash
-python3 collatz_experiment.py --k 8 --max-m 256 --num-bases 32 --output results/
-```
-
-**Output:**
-
-- `trajectories_k8.json`: All trajectory logs
-- `differences_k8.json`: Difference logs for selected pairs
-- `statistics_k8.json`: Summary statistics
+- Many features repeat across scales (self-similarity),
+- Differences under offsets tend to **activate near boundaries / singular events**.
 
 ---
 
-## 3. Experimental Results (k = 8)
+## 2. Accelerated Collatz on Odd Integers (Observation System)
 
-### 3.1 Summary Statistics
+Work on odd integers only. Define the accelerated Collatz map
 
-| Metric | Value |
-|--------|-------|
-| Block size | 256 |
-| Number of trajectories | 32 |
-| Number of difference logs | 60 |
-| $\log_2(3)$ | 1.584963 |
-| **Drift mean** | -5.196 |
-| **Drift std** | 1.400 |
-| **Drift range** | [-6.602, -0.415] |
+\[
+T(n) := \frac{3n+1}{2^{v_2(3n+1)}} \quad (\text{always odd}),
+\]
 
-### 3.2 Singularity Observations
+and the observation function
 
-- **First difference index (mean)**: 4.0 steps
-- **First difference index (median)**: 4.0 steps
-- **First difference index (max)**: 4.0 steps
+\[
+s(n) := v_2(3n+1),
+\]
 
-**Interpretation:**
-In the tested block comparisons, shifts begin to show observable differences around step 4, suggesting a characteristic "induction length" for the block size $2^8$.
-
-### 3.3 Drift Characteristics
-
-The drift $D_m$ is consistently negative over the observed range:
-
-- **Mean drift**: $\approx -5.2$ (slight systematic decrease)
-- **Variability**: $\sigma \approx 1.4$ (moderate spread across initial conditions)
-- **Range**: Spans about 6.2 units across all tested trajectories
-
-This negative drift indicates that, on average, the sum $S_m$ grows faster than expected from pure geometric scaling at rate $\log_2(3)$, suggesting that the Collatz dynamics includes mechanisms that amplify $v_2$ beyond the geometric baseline.
+where \(v_2(x)\) is the 2-adic valuation (the exponent of 2 dividing \(x\)).
 
 ---
 
-## 4. Next Steps in the Investigation
+## 3. Drift (A Proxy for “How High It Spikes”)
 
-### 4.1 Phase I: Refine the Cartography
+Define the partial sum
 
-1. **Extend $k$ range:** Repeat experiments for $k \in \{6, 7, 8, 9, 10\}$
-2. **Analyze singularity distributions:**
-   - Heatmaps: horizontal = $n \bmod 2^k$, vertical = $j$ (block index), color = first singularity position
-   - Expected pattern: Vertical lines (filaments) where $v_2 \geq k$ starting point
-3. **Study boundary effects:**
-   - Scan $\max_{t \leq m} D_t(n)$ as a function of initial conditions
-   - Identify thresholds that separate "stable" from "divergent" phases
+\[
+S_m := \sum_{i=0}^{m-1} s(T^i(n)),
+\]
 
-### 4.2 Phase II: Extract Boundary Inequalities
+and the drift
 
-From Python experiments, infer candidates for:
-$$\Phi(n, k) := \text{(condition distinguishing stable from unstable)}$$
+\[
+D_m := m\log_2 3 - S_m.
+\]
 
-Examples:
+The key quantity is not the final \(D_m\), but the **maximum prefix drift**
 
-- $v_2(3n+1) \geq k$ (already formalized in Lean)
-- Maximum drift before iteration $i_0$: $\max_{t \leq i_0} D_t > B_0(k)$
-- Cumulative singularity burden: $\#\{i < m : v_2(T^i(n)) \geq k\}$
+\[
+\max_{t\le m} D_t,
+\]
 
-### 4.3 Phase III: Formalize in Lean
-
-Once candidates are identified from Python:
-
-1. Define the boundary proposition formally in Lean
-2. State it as a theorem with assumptions on $n$, $k$, etc.
-3. Prove or assume the necessary supporting lemmas
-4. Use it to reason about convergence guarantees
+which we interpret as “the maximum spike inside the observation window.”
 
 ---
 
-## 5. Code Organization and Workflow
+## 4. Block Offset Comparison (Petal-to-Petal Comparison)
 
-### 5.1 Lean Files
+Fix \(k\). For a base odd integer \(n_0\), compare it against
 
-| File | Purpose | Status |
-|------|---------|--------|
-| `Basic.lean` | Core definitions (C, T, OddNat) | ✓ Complete (skeleton) |
-| `V2.lean` | 2-adic valuation and lemmas | ✓ Complete (spec + stubs) |
-| `Shift.lean` | Petal conservation theorem | ✓ Complete (main theorem + stubs) |
-| `Collatz2K26.lean` | Integration and higher-level results | ✓ In progress |
+\[
+n_0' := n_0 + 2^k\cdot m
+\]
 
-### 5.2 Python Files
+for various shift multipliers \(m\).
 
-| File | Purpose | Status |
-|------|---------|--------|
-| `collatz_experiment.py` | Main experimental framework | ✓ Complete |
-| (Future) `analyze_heatmaps.py` | Visualization and filament analysis | ⧗ Planned |
-| (Future) `extract_boundaries.py` | Automated boundary candidate extraction | ⧗ Planned |
+### 4.1 Difference in the valuation signal
 
-### 5.3 Documentation
+Define
 
-| File | Purpose | Status |
-|------|---------|--------|
-| `docs/CollatzCartography.md` | This file | ✓ In progress |
-| `theorem_picker.md` | Theorem candidates from earlier phases | ✓ Existing |
-| `__Theorems.md` | Formalized theorem statements | ⧗ To be updated |
+\[
+\Delta s_t := s(n_t') - s(n_t).
+\]
 
----
+The **first time the signal differs** is
 
-## 6. Mathematical Notation Reference
+\[
+\mathrm{first\_delta} := \min\{t \mid \Delta s_t \ne 0\}.
+\]
 
-| Symbol | Meaning |
-|--------|---------|
-| $v_2(a)$ | 2-adic valuation of $a$ (highest power of 2 dividing $a$) |
-| $C(n)$ | Standard Collatz map |
-| $T(n)$ | Accelerated Collatz map (odd $n$ → odd $(3n+1)/2^{v_2(3n+1)}$) |
-| $s(n)$ | Observation function $= v_2(3n+1)$ |
-| $S_m(n)$ | Partial sum $= \sum_{i=0}^{m-1} s(T^i(n))$ |
-| $D_m(n)$ | Drift $= m \log_2(3) - S_m(n)$ |
-| $\text{shift}(k, m, n)$ | Block shift $= n + 2^k m$ |
-| $\text{OddNat}$ | Type of odd natural numbers |
+### 4.2 Terrain signal: the 2-power structure of the offset
 
----
+Define
 
-## 7. References and Related Work
+\[
+\Delta n_t := n_t' - n_t,\qquad v_2(|\Delta n_t|).
+\]
 
-- **Collatz Conjecture**: Lagarias, J. C. (1985). "The 3x+1 problem and its generalizations."
-- **p-adic methods**: Motivated by classical work in arithmetic dynamics.
-- **Lean/Mathlib**: Formal verification framework (<https://lean-lang.org/>).
-- **This project**: Building a bridge between formal verification (Lean) and experimental observation (Python).
+This is the “petal terrain”: how strongly the offset remains aligned in 2-power terms as time evolves.
+
+At \(t=0\),
+
+\[
+\Delta n_0 = 2^k m \Rightarrow v_2(\Delta n_0)=k+v_2(m),
+\]
+
+but as dynamics proceed, the nonlinear map tends to erode this alignment—possibly in a structured way.
 
 ---
 
-## Appendix: Running the Full Workflow
+## 5. Core Hypotheses (Working Theory)
 
-### Quick Start
+> These are **working hypotheses**, not truths. The point is to test them.
 
-```bash
-cd /home/deskuma/develop/lean/dkmath/lean/dk_math
+### H1. Invariance in the non-singular region
 
-# 1. Run Python experiments
-python3 collatz_experiment.py --k 8 --max-m 256 --num-bases 32 --output results/
+For many points, \(\Delta s_t=0\) persists for a while; offsets do not immediately matter.
 
-# 2. Build Lean project (skeleton definitions are complete)
-lake build
+### H2. Singular ridges trigger divergence
 
-# 3. (Future) Analyze results
-python3 analyze_heatmaps.py --input results/trajectories_k8.json --output results/heatmaps.png
-```
+Differences activate preferentially near indices where
 
-### Expected Outputs
+\[
+s(n)=v_2(3n+1)\ge k.
+\]
 
-```
-results/
-├── trajectories_k8.json      # Full trajectory logs
-├── differences_k8.json       # Block comparison logs
-├── statistics_k8.json        # Summary statistics
-└── (future) heatmaps.png     # Visualization of singularity filaments
-```
+These are the “singular ridges” (or “singular spine”) relative to block size \(2^k\).
+
+### H3. Spikes are governed by max-prefix behavior
+
+The key spike diagnostic is \(\max_{t\le m} D_t\), not the terminal drift.
+
+### H4. Boundaries appear as ridges, not single points
+
+Bad behavior likely forms *bands / ridges* (dense regions) rather than rare isolated outliers.
 
 ---
 
-**End of Document**
+## 6. Implementation (Python Experiment)
 
-Last updated: 2026年1月30日
+The experimental instrument is `collatz_experiment.py`.
+
+### 6.1 Outputs
+
+- `trajectories_k{k}.json`  
+  Per-base trajectory logs: \((n,a=3n+1,s,n_{\text{next}})\), plus \(S_m\), \(D_m\), and `max_prefix_D`.
+
+- `differences_k{k}.json`  
+  Pairwise comparison logs for base vs offset: \(\Delta s_t\), `first_delta_index`, \(\Delta n_t\), and \(v_2(|\Delta n_t|)\).
+
+- `statistics_k{k}.json`  
+  Aggregate statistics: means / maxima / minima / standard deviations for drift, spikes, and terrain.
+
+### 6.2 Observation window note
+
+`first_delta_index = null` does **not** mean “no difference forever.”  
+It means **no difference within the finite observation window** (finite steps).
+
+---
+
+## 7. Lean Formalization (Fixing the Skeleton)
+
+The Python experiment is observation; the Lean side fixes the structural skeleton so that the observation is meaningful.
+
+Example fixed facts (informal summary):
+
+- Basic “peel off a factor of 2” behavior for \(v_2\),
+- \(v_2(2x)=1+v_2(x)\),
+- A key block-shift invariance statement:
+  under suitable non-singularity conditions, shifting by \(+2^k m\) preserves the relevant \(v_2\) behavior.
+  (In other words: **differences are forced to concentrate around the singular ridges**.)
+
+---
+
+## 8. Experiment Plan (What to run next)
+
+### 8.1 Scale sweep (self-similarity check)
+
+Run for
+
+\[
+k\in\{6,8,10,12\}
+\]
+
+and compare distributions across scales.
+
+### 8.2 Increase samples
+
+- Increase base points \(n_0\) (thousands to tens of thousands),
+- Increase shift multipliers \(m\) (wider range).
+
+### 8.3 Ridge extraction metrics (make boundaries visible)
+
+Add and analyze:
+
+- Terrain break time  
+  \[
+  \tau_r := \min\{t : v_2(\Delta n_t) < r\}
+  \]
+  for thresholds \(r\) such as \(k, k-1, k-2\).
+
+- Correlations:
+  - `max_prefix_D` vs \(\tau_r\),
+  - `min_delta_s` (negative direction) vs spike magnitude,
+  - density of singular indices \(\#\{t\le m: s(n_t)\ge k\}\).
+
+---
+
+## 9. Toward Inequality-Style Boundary Conditions
+
+A long-term goal is to turn “ridges” into inequality candidates, e.g.:
+
+- A sufficient condition for “contained / not-too-spiky” behavior (empirical → conjectural):
+  \[
+  \max_{t\le m} D_t \le C \Rightarrow \text{(no large spike up to time \(m\))}
+  \]
+
+- A necessary condition for divergence activation:
+  \[
+  \exists t\le m,\ s(n_t)\ge k \Rightarrow \text{(offset differences become likely)}
+  \]
+
+At this stage we prioritize finding **statistically strong conditions** before attempting proof.
+
+---
+
+## 10. Current Status
+
+- ✅ Lean skeleton: key invariance and valuation lemmas fixed (no project-specific axioms).
+- ✅ Python instrument: trajectories, differences, and statistics exported as JSON.
+- ✅ Expanded stats:
+  - `max_prefix_D` (spike measure),
+  - `v2_delta_n` (petal terrain),
+  - signed difference metrics (`min_delta_s`, `max_abs_delta_s`, `sum_delta_s`).
+
+- ⏳ Next: scale sweep and sample growth to determine whether the boundary is a sharp “line” or a broad “ridge.”
+
+---
+
+## Appendix A. Terminology
+
+- **Petal / block**: an interval of size \(2^k\).
+- **Singular ridge**: indices where \(s(n)=v_2(3n+1)\ge k\) relative to block size \(2^k\).
+- **Terrain**: the evolution of \(v_2(|\Delta n_t|)\), describing how offset alignment erodes.
+- **Spike (max-prefix)**: \(\max_{t\le m} D_t\), a proxy for maximum upward excursion.
