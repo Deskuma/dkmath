@@ -85,7 +85,7 @@ lemma v2_add_of_lower_val (a b : ℕ) (ha : 0 < a) (h : v2 a < v2 b) :
       have hb0' : b = 0 := Nat.le_zero.mp hb0
       subst hb0'
       have hlt : v2 a < 0 := by
-        simp [v2_zero] at h
+        simp at h
       exact (Nat.not_lt_zero _ hlt)
     -- write a = 2 * a1 and b = 2 * b1
     rcases Nat.dvd_of_mod_eq_zero ha_even with ⟨a1, rfl⟩

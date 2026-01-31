@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import Mathlib
+import DkMath.ABC.PadicValNat
 import DkMath.Collatz.Basic
 
 /-!
@@ -19,6 +20,8 @@ Definition: v₂(a) = s iff 2^s | a and 2^(s+1) ∤ a.
 
 namespace DkMath.Collatz
 
+open DkMath.ABC
+
 /-- The specification for v₂: v₂Spec a s holds iff 2^s divides a and
     2^(s+1) does not divide a.
 
@@ -27,6 +30,8 @@ namespace DkMath.Collatz
 def v2Spec (a s : ℕ) : Prop :=
   (pow2 s ∣ a) ∧ ¬ (pow2 (s+1) ∣ a)
 
+abbrev v2 (a : ℕ) : ℕ := padicValNat 2 a
+
 /-- The 2-adic valuation of a natural number a.
 
     v₂(a) returns the highest exponent s such that 2^s | a.
@@ -34,7 +39,7 @@ def v2Spec (a s : ℕ) : Prop :=
     Implementation: We recursively divide by 2 until the result is odd.
     This is computable and gives the correct 2-adic valuation.
 -/
-def v2 (a : ℕ) : ℕ :=
+def v2' (a : ℕ) : ℕ :=
   if a = 0 then 0
   else if a % 2 = 1 then 0
   else 1 + v2 (a / 2)
@@ -49,24 +54,105 @@ lemma v2_odd (a : ℕ) (ha : a % 2 = 1) : v2 a = 0 := by
   unfold v2
   by_cases h_zero : a = 0
   · simp [h_zero]
-  · simp [h_zero, ha]
+  · -- a ≠ 0 かつ a % 2 = 1（奇数）の場合、padicValNat 2 a = 0
+    unfold padicValNat
+    -- 奇数なので2で割り切れない
+    have h : ¬ 2 ∣ a := by
+      rw [Nat.dvd_iff_mod_eq_zero]
+      intro contra
+      rw [contra] at ha
+      simp at ha
+    simp [h]
+
+#check padic_val_two_of_even
 
 /-- For even a > 0, v₂(a) > 0. -/
 lemma v2_even (a : ℕ) (ha : a % 2 = 0) (h_pos : 0 < a) : 0 < v2 a := by
   unfold v2
-  split
-  · -- a = 0, contradicts h_pos
-    omega
-  · split
-    · -- a % 2 = 1, contradicts ha
+  by_cases h_zero : a = 0
+  · simp [h_zero] at h_pos
+  · -- a ≠ 0 かつ a % 2 = 0 より a > 0 で even
+    -- padicValNat 2 a ≥ 1 を示す
+    -- padicValNat 2 a は a を 2 で割れる回数
+    -- a は 2 で割り切れるので 1 回は割れる
+    have h_div : 2 ∣ a := by
+      rw [Nat.dvd_iff_mod_eq_zero]
+      exact ha
+    -- a ≠ 0 なので a / 2 < a
+    -- padicValNat 2 a = 1 + padicValNat 2 (a / 2)
+    have h_v2 : padicValNat 2 a = 1 + padicValNat 2 (a / 2) := by
+      -- a は偶数で 0 < a なので、a ≥ 2
+      have ha_ge2 : 2 ≤ a := by
+        by_contra h_contra
+        push_neg at h_contra
+        have : a < 2 := h_contra
+        have : a ≤ 1 := by omega
+        match a with
+        | 0 => simp at h_pos
+        | 1 => simp at ha
+        | n + 2 => omega
+      -- a / 2 > 0
+      have h_a_div_pos : a / 2 ≠ 0 := by omega
+      -- a = 2 * (a / 2) から (a / 2) = a / 2 は当たり前
+      have h_div_div : 2 * (a / 2) / 2 = a / 2 := by
+        simp only [Nat.mul_div_cancel_left _ (by norm_num : 0 < 2)]
+      -- padic_val_two_of_even を適用
+      have h_result : padicValNat 2 (2 * (a / 2)) = 1 + padicValNat 2 (a / 2) :=
+        (padic_val_two_of_even (a / 2)).2 h_a_div_pos
+      -- a = 2 * (a / 2) より
+      convert h_result using 2
       omega
-    · -- a is even and > 0, so 1 + v2(a/2) > 0
-      omega
+    -- padicValNat 2 (a / 2) ≥ 0 なので padicValNat 2 a ≥ 1
+    have : 0 ≤ padicValNat 2 (a / 2) := Nat.zero_le _
+    linarith
+
+
+lemma v2_step_of_even (a : ℕ) (ha : a % 2 = 0) (hpos : 0 < a) :
+  v2 a = 1 + v2 (a / 2) := by sorry
+/-
+  unfold v2
+  -- padicValNat 2 a の定義を使う
+  rw [padicValNat]
+  -- a ≠ 0 より
+  have h0 : a ≠ 0 := Nat.ne_of_gt hpos
+  contradiction
+  -- padicValNat.aux 2 a (Nat.prime_two) の定義を使う
+  unfold padicValNat.aux
+  -- Nat.find (ExistsUnique.exists (Nat.existsUnique_pow_dvd_and_not_dvd 2 a _))
+  -- padicValNat 2 (a / 2) も同様に定義を展開
+  -- a % 2 = 0 より a = 2 * b の形
+  obtain ⟨b, rfl⟩ : ∃ b, a = 2 * b := Nat.exists_eq_mul_left_of_dvd (by norm_num) (by
+    rw [←Nat.dvd_iff_mod_eq_zero]
+    exact ha)
+  -- 0 < a = 2 * b より 0 < b
+  have hb : 0 < b := by
+    apply Nat.pos_of_ne_zero
+    intro h
+    rw [h] at hpos
+    simp at hpos
+  -- padicValNat 2 (2 * b) = 1 + padicValNat 2 b を示す
+  rw [Nat.padicValNat.mul (by norm_num : Nat.Prime 2) (by norm_num : 2 ≠ 0) hb.ne']
+  simp
+-/
+
+
+lemma v2_eq_v2' (a : ℕ) : v2 a = v2' a := by
+  unfold v2'
+  by_cases h_zero : a = 0
+  · -- a = 0 case
+    rw [h_zero]
+    simp
+  · -- a ≠ 0 case
+    have h_pos : 0 < a := Nat.pos_of_ne_zero h_zero
+    by_cases h_odd : a % 2 = 1
+    · -- a is odd
+      rw [v2_odd a h_odd]
+      simp [h_zero, h_odd]
+    · -- a is even
+      rw [v2_step_of_even a (by omega) h_pos]
+      simp [h_zero, h_odd]
 
 /- even step: peel one 2 from a positive even number -/
-lemma v2_step_of_even (a : ℕ) (ha : a % 2 = 0) (hpos : 0 < a) :
-  v2 a = 1 + v2 (a / 2) := by
-  sorry
 
 /- peeling off the 2 factor -/
 lemma v2_two_mul (x : ℕ) (hx : 0 < x) :
@@ -152,31 +238,16 @@ lemma v2_pow2 (k : ℕ) : v2 (pow2 k) = k := by
     rw [eq1]
     -- Now unfold v2
     unfold v2
-    -- 2 * 2^k' ≠ 0
-    have ne_zero : ¬(2 * 2 ^ k' = 0) := by
-      intro h
-      have : 2 ^ k' = 0 := by
-        cases Nat.eq_zero_or_pos (2 ^ k') with
-        | inl h' => exact h'
-        | inr h' =>
-          have : 2 * 2 ^ k' > 0 := Nat.mul_pos (by norm_num : 0 < 2) h'
-          omega
-      have : (2 : ℕ) = 0 ∨ k' ≠ 0 ∧ (2 : ℕ) = 0 := by
-        cases k' <;> simp [pow_succ] at this
-      omega
-    simp only [ne_zero, ↓reduceIte]
-    -- (2 * 2^k') % 2 ≠ 1 (it's 0)
-    have not_one : ¬((2 * 2 ^ k') % 2 = 1) := by
-      rw [Nat.mul_mod]
+    -- Use the property that padicValNat 2 (2 * m) = 1 + padicValNat 2 m
+    have h_v2_step : padicValNat 2 (2 * 2 ^ k') = 1 + padicValNat 2 (2 ^ k') := by
+      have h2_ne : (2 : ℕ) ≠ 0 := by norm_num
+      have hk_ne : 2 ^ k' ≠ 0 := by norm_num
+      rw [padicValNat.mul h2_ne hk_ne]
       norm_num
-    simp only [not_one, ↓reduceIte]
-    -- (2 * 2^k') / 2 = 2^k'
-    have div_eq : (2 * 2 ^ k') / 2 = 2 ^ k' := by
-      rw [Nat.mul_div_cancel_left]
-      norm_num
-    rw [div_eq]
+    simp only [h_v2_step]
     -- Apply IH
     unfold pow2 at ih
+    unfold v2 at ih
     rw [ih]
     ring
 
