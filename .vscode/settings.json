@@ -12,8 +12,10 @@
         "tsub"
     ],
     "markdownlint.config": {
+        "MD025": false,
         "MD036": false,
-        "MD040": false
+        "MD040": false,
+        "MD060": false
     },
     "markdownlint.customRules": []
 }
