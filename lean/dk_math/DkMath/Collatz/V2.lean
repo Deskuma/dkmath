@@ -79,11 +79,6 @@ lemma v2_two_mul (x : ℕ) (hx : 0 < x) :
   simp only [h_div] at h
   exact h
 
-/- odd multiplier does not affect v2 -/
-lemma v2_mul_of_odd_left (a b : ℕ) (ha : a % 2 = 1) (hb : 0 < b) :
-  v2 (a * b) = v2 b := by
-  sorry
-
 /-- If 2^k divides a, then k ≤ v₂(a).
 
     Proof by induction on k: peel off factors of 2 and apply v2_two_mul.
@@ -132,14 +127,6 @@ lemma v2_3n_plus_1_ge_1 (n : ℕ) (hn : n % 2 = 1) :
   have h_even : (3*n + 1) % 2 = 0 := by omega
   have h_pos : 0 < 3*n + 1 := by omega
   exact Nat.succ_le_of_lt (v2_even (3*n + 1) h_even h_pos)
-
-/- Multiplicative property: v₂(a * b) = v₂(a) + v₂(b).
-
-    This is a fundamental property of 2-adic valuation.
--/
-theorem v2_mul (a b : ℕ) (ha : 0 < a) (hb : 0 < b) :
-  v2 (a * b) = v2 a + v2 b := by
-  sorry
 
 /-- v₂(2^k) = k.
 
