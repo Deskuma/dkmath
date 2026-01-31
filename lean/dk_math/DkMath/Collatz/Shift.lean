@@ -114,7 +114,7 @@ lemma v2_add_of_lower_val (a b : ℕ) (ha : 0 < a) (h : v2 a < v2 b) :
       apply Nat.mul_pos (by decide : 0 < 2)
       omega
     calc
-      v2 (2 * a1 + 2 * b1) = v2 (2 * (a1 + b1)) := by ring
+      v2 (2 * a1 + 2 * b1) = v2 (2 * (a1 + b1)) := by ring_nf
       _ = 1 + v2 (a1 + b1) := by
         have hsum_pos : 0 < a1 + b1 := by omega
         exact v2_two_mul (a1 + b1) hsum_pos
