@@ -37,8 +37,8 @@ s(n) := v_2(3n+1)
 - 途中の最大跳ね上がり（prefix 最大）  
   \[
   \max_{t\le m} D_t
-  \ CT  %% (TODO: "\CT" って何だ？)
   \]
+  （JSON キー: `max_prefix_D`）
 
 をログ・統計として出力します。
 
