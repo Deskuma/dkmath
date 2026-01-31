@@ -1,0 +1,21 @@
+{
+  "k": 8,
+  "block_size": 256,
+  "num_trajectories": 16,
+  "num_difference_logs": 60,
+  "log2_3": 1.5849625007211563,
+  "drift_mean": -4.188157024624377,
+  "drift_std": 1.3459960031228988,
+  "drift_min": -5.60149997115375,
+  "drift_max": -0.4150374992788437,
+  "max_prefix_D_mean": 1.2526320347205646,
+  "max_prefix_D_std": 2.097125976196293,
+  "max_prefix_D_min": 0.0,
+  "max_prefix_D_max": 6.7188000230770015,
+  "diff_first_delta_mean": 4.0,
+  "diff_first_delta_median": 4.0,
+  "diff_first_delta_max": 4.0,
+  "v2_delta_n_mean": 6.161111111111111,
+  "v2_delta_n_max": 11.0,
+  "v2_delta_n_min": 1.0
+}

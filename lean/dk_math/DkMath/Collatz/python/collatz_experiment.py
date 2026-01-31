@@ -103,9 +103,31 @@ class TrajectoryLog:
         return self.m * self.log2_3 - self.S_m
 
     @property
+    def max_prefix_D(self) -> float:
+        """Maximum prefix drift: max_{t ≤ m} D_t = max_{t ≤ m} (t·log₂(3) - S_t)."""
+        max_d = 0.0
+        cumsum_s = 0
+        for t, seg in enumerate(self.segments, start=1):
+            cumsum_s += seg.s
+            d_t = t * self.log2_3 - cumsum_s
+            max_d = max(max_d, d_t)
+        return max_d
+
+    @property
     def s_sequence(self) -> List[int]:
         """Extract the sequence of s values."""
         return [seg.s for seg in self.segments]
+
+    @property
+    def D_sequence(self) -> List[float]:
+        """Extract the sequence of prefix drift values: D_t = t·log₂(3) - S_t."""
+        cumsum_s = 0
+        d_sequence = []
+        for t, seg in enumerate(self.segments, start=1):
+            cumsum_s += seg.s
+            d_t = t * self.log2_3 - cumsum_s
+            d_sequence.append(d_t)
+        return d_sequence
 
     def to_dict(self):
         """Serialize to dict for JSON export."""
@@ -116,7 +138,9 @@ class TrajectoryLog:
             "log2_3": self.log2_3,
             "S_m": self.S_m,
             "D_m": self.D_m,
+            "max_prefix_D": self.max_prefix_D,
             "s_sequence": self.s_sequence,
+            "D_sequence": self.D_sequence,
             "segments": [asdict(seg) for seg in self.segments],
         }
 
@@ -177,6 +201,10 @@ class DifferenceSegment:
     s_base: int
     s_shifted: int
     singular_at_base: bool  # = s(n) >= k
+    n_base: int  # Base trajectory n at this step
+    n_shifted: int  # Shifted trajectory n' at this step
+    delta_n: int  # = n_shifted - n_base (will be zero if trajectories match)
+    v2_delta_n: int  # = v₂(|delta_n|), or 0 if delta_n == 0
 
 
 @dataclass
@@ -213,7 +241,17 @@ class DifferenceLog:
             "m": self.m,
             "first_delta_index": self.first_delta_index,
             "singular_indices": self.singular_indices,
-            "max_delta_s": max((seg.delta_s for seg in self.segments), default=0),
+            "max_abs_delta_s": max(
+                (abs(seg.delta_s) for seg in self.segments), default=0
+            ),
+            "min_delta_s": min((seg.delta_s for seg in self.segments), default=0),
+            "sum_delta_s": sum(seg.delta_s for seg in self.segments),
+            "first_delta_value": (
+                self.segments[self.first_delta_index].delta_s
+                if self.first_delta_index is not None
+                else None
+            ),
+            "max_v2_delta_n": max((seg.v2_delta_n for seg in self.segments), default=0),
             "segments": [asdict(seg) for seg in self.segments],
         }
 
@@ -249,6 +287,10 @@ def compute_difference_log(
         delta_s = seg_shifted.s - seg_base.s
         singular = seg_base.s >= k
 
+        # Compute n difference and its v₂
+        delta_n = seg_shifted.n - seg_base.n
+        v2_delta_n = v2(abs(delta_n)) if delta_n != 0 else 0
+
         segments.append(
             DifferenceSegment(
                 step=i,
@@ -256,6 +298,10 @@ def compute_difference_log(
                 s_base=seg_base.s,
                 s_shifted=seg_shifted.s,
                 singular_at_base=singular,
+                n_base=seg_base.n,
+                n_shifted=seg_shifted.n,
+                delta_n=delta_n,
+                v2_delta_n=v2_delta_n,
             )
         )
 
@@ -344,6 +390,13 @@ class CartographyExperiment:
         stats["drift_min"] = float(np.min(drifts))
         stats["drift_max"] = float(np.max(drifts))
 
+        # Max prefix drift statistics (跳ね上がり)
+        max_prefix_drifts = [log.max_prefix_D for log in self.trajectory_logs]
+        stats["max_prefix_D_mean"] = float(np.mean(max_prefix_drifts))
+        stats["max_prefix_D_std"] = float(np.std(max_prefix_drifts))
+        stats["max_prefix_D_min"] = float(np.min(max_prefix_drifts))
+        stats["max_prefix_D_max"] = float(np.max(max_prefix_drifts))
+
         # First singularity index statistics
         first_singular_indices = []
         for log in self.trajectory_logs:
@@ -367,6 +420,18 @@ class CartographyExperiment:
             stats["diff_first_delta_mean"] = float(np.mean(first_deltas))
             stats["diff_first_delta_median"] = float(np.median(first_deltas))
             stats["diff_first_delta_max"] = float(np.max(first_deltas))
+
+        # v₂(delta_n) statistics (花弁保存則)
+        v2_delta_ns = []
+        for diff_log in self.difference_logs:
+            for seg in diff_log.segments:
+                if seg.v2_delta_n > 0:
+                    v2_delta_ns.append(seg.v2_delta_n)
+
+        if v2_delta_ns:
+            stats["v2_delta_n_mean"] = float(np.mean(v2_delta_ns))
+            stats["v2_delta_n_max"] = float(np.max(v2_delta_ns))
+            stats["v2_delta_n_min"] = float(np.min(v2_delta_ns))
 
         return stats
 
