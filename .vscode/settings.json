@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "corrcoef",
         "elim",
         "Gbinom",
         "hchoose",
@@ -9,6 +10,8 @@
         "hpow",
         "hreflect",
         "hsub",
+        "ssum",
+        "traj",
         "tsub"
     ],
     "markdownlint.config": {
