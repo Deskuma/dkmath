@@ -100,28 +100,8 @@ lemma v2_add_of_lower_val (a b : ℕ) (ha : 0 < a) (h : v2 a < v2 b) :
       have : v2 2 = v2 (pow2 1) := by simp [pow2]
       rw [this]
       exact v2_pow2 1
-    have hv2a : v2 (2 * a1) = 1 + v2 a1 := by
-      have hmul : v2 (pow2 1 * a1) = v2 (pow2 1) + v2 a1 := by
-        apply v2_mul
-        · change 0 < (2 : ℕ) ^ 1
-          exact Nat.pow_pos (by decide : 0 < (2 : ℕ))
-        · exact ha1_pos
-      have hmul' : v2 (2 * a1) = v2 2 + v2 a1 := by
-        simp only [pow2] at hmul
-        exact hmul
-      simp only [hv2_two] at hmul'
-      exact hmul'
-    have hv2b : v2 (2 * b1) = 1 + v2 b1 := by
-      have hmul : v2 (pow2 1 * b1) = v2 (pow2 1) + v2 b1 := by
-        apply v2_mul
-        · change 0 < (2 : ℕ) ^ 1
-          exact Nat.pow_pos (by decide : 0 < (2 : ℕ))
-        · exact hb1_pos
-      have hmul' : v2 (2 * b1) = v2 2 + v2 b1 := by
-        simp only [pow2] at hmul
-        exact hmul
-      simp only [hv2_two] at hmul'
-      exact hmul'
+    have hv2a : v2 (2 * a1) = 1 + v2 a1 := v2_two_mul a1 ha1_pos
+    have hv2b : v2 (2 * b1) = 1 + v2 b1 := v2_two_mul b1 hb1_pos
     have h_rec : v2 a1 < v2 b1 := by
       have : 1 + v2 a1 < 1 + v2 b1 := by
         rw [hv2a, hv2b] at h
@@ -136,18 +116,8 @@ lemma v2_add_of_lower_val (a b : ℕ) (ha : 0 < a) (h : v2 a < v2 b) :
     calc
       v2 (2 * a1 + 2 * b1) = v2 (2 * (a1 + b1)) := by ring
       _ = 1 + v2 (a1 + b1) := by
-        have hsum_pos : 0 < a1 + b1 := by
-          omega
-        have hmul : v2 (pow2 1 * (a1 + b1)) = v2 (pow2 1) + v2 (a1 + b1) := by
-          apply v2_mul
-          · change 0 < (2 : ℕ) ^ 1
-            exact Nat.pow_pos (by decide : 0 < (2 : ℕ))
-          · exact hsum_pos
-        have hmul' : v2 (2 * (a1 + b1)) = v2 2 + v2 (a1 + b1) := by
-          simp only [pow2] at hmul
-          exact hmul
-        simp only [hv2_two] at hmul'
-        exact hmul'
+        have hsum_pos : 0 < a1 + b1 := by omega
+        exact v2_two_mul (a1 + b1) hsum_pos
       _ = 1 + v2 a1 := by simp [ih_result]
       _ = v2 (2 * a1) := by simp [hv2a]
 
@@ -182,28 +152,17 @@ theorem v2_shift_invariant
       change 0 < (2 : ℕ) ^ k
       apply Nat.pow_pos
       norm_num
-    -- v2 multiplicativity for 3 * (pow2 k * m)
-    have prod_v2 : v2 (3 * (pow2 k * m)) = v2 3 + v2 (pow2 k * m) := by
-      have three_pos : 0 < (3 : ℕ) := by norm_num
-      have mul_pos : 0 < pow2 k * m := by
-        apply Nat.mul_pos
-        · exact pow2_pos
-        · exact m_pos
-      apply v2_mul
-      · exact three_pos
-      · exact mul_pos
-    -- v2 multiplicativity for pow2 k * m
-    have pow2m_v2 : v2 (pow2 k * m) = v2 (pow2 k) + v2 m := by
-      apply v2_mul
-      · exact pow2_pos
-      · exact m_pos
+    -- Key fact: pow2 k divides (3 * (pow2 k * m))
+    have h_dvd : pow2 k ∣ 3 * (pow2 k * m) := by
+      use 3 * m
+      ring
+    -- Therefore k ≤ v2 (3 * (pow2 k * m))
     have k_le_prod : k ≤ v2 (3 * (pow2 k * m)) := by
-      rw [prod_v2, pow2m_v2, v2_pow2]
-      -- v2 3 + v2 m is nonnegative, so k ≤ k + (v2 3 + v2 m)
-      -- rewrite the RHS to the form k + (v2 3 + v2 m) and apply Nat.le_add_right
-      have rhs_comm : v2 3 + (k + v2 m) = k + (v2 3 + v2 m) := by ring
-      rw [rhs_comm]
-      apply Nat.le_add_right
+      have mul_pos : 0 < 3 * (pow2 k * m) := by
+        apply Nat.mul_pos
+        · norm_num
+        · exact Nat.mul_pos pow2_pos m_pos
+      exact le_v2_of_pow2_dvd k (3 * (pow2 k * m)) mul_pos h_dvd
     have h_lt : v2 (3 * n + 1) < v2 (3 * (pow2 k * m)) := lt_of_lt_of_le hk k_le_prod
     -- Now we need to show: v2 ((3*n+1) + 3*(pow2 k * m)) = v2 (3*n+1)
     -- This is the p-adic valuation property: if v2(a) < v2(b), then v2(a + b) = v2(a)

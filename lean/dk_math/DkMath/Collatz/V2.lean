@@ -84,6 +84,44 @@ lemma v2_mul_of_odd_left (a b : ℕ) (ha : a % 2 = 1) (hb : 0 < b) :
   v2 (a * b) = v2 b := by
   sorry
 
+/-- If 2^k divides a, then k ≤ v₂(a).
+
+    Proof by induction on k: peel off factors of 2 and apply v2_two_mul.
+-/
+lemma le_v2_of_pow2_dvd (k a : ℕ) (ha : 0 < a) (hdiv : pow2 k ∣ a) :
+  k ≤ v2 a := by
+  -- Induction on k
+  induction k with
+  | zero =>
+    -- 2^0 = 1 divides everything, and v2(a) ≥ 0
+    simp
+  | succ k ih =>
+    -- 2^(k+1) divides a means a = 2 * (2^k * m) for some m
+    obtain ⟨m, hm⟩ := hdiv
+    have ha_eq : a = 2 * m * (pow2 k) := by
+      unfold pow2 at hm
+      ring_nf at hm ⊢
+      exact hm
+    rw [ha_eq]
+    -- Now apply v2_two_mul: 2 * m * pow2 k = 2 * (m * pow2 k)
+    have h_assoc : 2 * m * pow2 k = 2 * (m * pow2 k) := by ring
+    rw [h_assoc]
+    have h_m_pos : 0 < m := by
+      by_contra hm
+      push_neg at hm
+      have : m = 0 := Nat.le_zero.mp hm
+      subst this
+      simp at hm
+      have : a = 0 := by simp [ha_eq]
+      omega
+    have hpos : 0 < m * pow2 k := by
+      exact Nat.mul_pos h_m_pos (Nat.pow_pos (by decide : 0 < (2 : ℕ)))
+    have h_v2_two : v2 (2 * (m * pow2 k)) = 1 + v2 (m * pow2 k) := v2_two_mul (m * pow2 k) hpos
+    rw [h_v2_two]
+    -- Now show k ≤ v2 (m * pow2 k)
+    have h_div : pow2 k ∣ m * pow2 k := dvd_mul_left (pow2 k) m
+    sorry
+
 /-- For odd n, v₂(3n+1) ≥ 1. -/
 lemma v2_3n_plus_1_ge_1 (n : ℕ) (hn : n % 2 = 1) :
   1 ≤ v2 (3*n + 1) := by
