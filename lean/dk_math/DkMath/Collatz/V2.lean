@@ -63,6 +63,27 @@ lemma v2_even (a : ℕ) (ha : a % 2 = 0) (h_pos : 0 < a) : 0 < v2 a := by
     · -- a is even and > 0, so 1 + v2(a/2) > 0
       omega
 
+/- even step: peel one 2 from a positive even number -/
+lemma v2_step_of_even (a : ℕ) (ha : a % 2 = 0) (hpos : 0 < a) :
+  v2 a = 1 + v2 (a / 2) := by
+  sorry
+
+/- peeling off the 2 factor -/
+lemma v2_two_mul (x : ℕ) (hx : 0 < x) :
+  v2 (2 * x) = 1 + v2 x := by
+  have h_even : (2 * x) % 2 = 0 := by simp
+  have h_pos : 0 < 2 * x := Nat.mul_pos (by norm_num : 0 < (2 : ℕ)) hx
+  have h := v2_step_of_even (2 * x) h_even h_pos
+  have h_div : (2 * x) / 2 = x := by
+    simp only [Nat.mul_div_cancel_left x (by norm_num : 0 < 2)]
+  simp only [h_div] at h
+  exact h
+
+/- odd multiplier does not affect v2 -/
+lemma v2_mul_of_odd_left (a b : ℕ) (ha : a % 2 = 1) (hb : 0 < b) :
+  v2 (a * b) = v2 b := by
+  sorry
+
 /-- For odd n, v₂(3n+1) ≥ 1. -/
 lemma v2_3n_plus_1_ge_1 (n : ℕ) (hn : n % 2 = 1) :
   1 ≤ v2 (3*n + 1) := by
@@ -71,21 +92,13 @@ lemma v2_3n_plus_1_ge_1 (n : ℕ) (hn : n % 2 = 1) :
   have h_pos : 0 < 3*n + 1 := by omega
   exact Nat.succ_le_of_lt (v2_even (3*n + 1) h_even h_pos)
 
-/-- Multiplicative property: v₂(a * b) = v₂(a) + v₂(b).
+/- Multiplicative property: v₂(a * b) = v₂(a) + v₂(b).
 
-    This is a fundamental property of 2-adic valuation. While provable in principle
-    by strong induction on a with careful parity analysis, the formal proof in Lean
-    requires sophisticated tactics beyond the scope of this formalization.
-
-    Mathematically, this follows directly from the recursive definition of v₂:
-    - If a is odd: v₂(a) = 0, so v₂(a*b) = v₂(b) = v₂(a) + v₂(b) ✓
-    - If a is even: v₂(a*b) = v₂(2*(a/2)*b)
-      = 1 + v₂((a/2)*b) = 1 + v₂(a/2) + v₂(b) = v₂(a) + v₂(b) ✓
-
-    We assert this as a true mathematical principle.
+    This is a fundamental property of 2-adic valuation.
 -/
-axiom v2_mul (a b : ℕ) (ha : 0 < a) (hb : 0 < b) :
-  v2 (a * b) = v2 a + v2 b
+theorem v2_mul (a b : ℕ) (ha : 0 < a) (hb : 0 < b) :
+  v2 (a * b) = v2 a + v2 b := by
+  sorry
 
 /-- v₂(2^k) = k.
 
