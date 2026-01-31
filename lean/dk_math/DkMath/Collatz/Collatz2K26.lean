@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Collatz.Basic
 import DkMath.Collatz.V2
+import DkMath.Collatz.Accelerated
 import DkMath.Collatz.Shift
 
 /-
@@ -19,8 +20,9 @@ Main module for the 2026 research into the accelerated Collatz map, focusing on:
 4. **Conservation Laws**: Shift-invariance and phase transitions
 
 Structure:
-  - Basic.lean:  Core definitions (C, T, OddNat, s, S_m, D_m)
-  - V2.lean:     2-adic valuation v₂ and foundational lemmas
-  - Shift.lean:  Block shift, petal conservation (v₂ invariance)
-  - This file:   Integration and higher-level properties
+  - Basic.lean:       Core types and basic functions (C, OddNat, threeNPlusOne)
+  - V2.lean:          2-adic valuation v₂ and foundational lemmas
+  - Accelerated.lean: Accelerated map T, observation s, and sequence sums
+  - Shift.lean:       Block shift, petal conservation (v₂ invariance)
+  - This file:        Integration and higher-level properties
 -/

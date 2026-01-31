@@ -39,45 +39,4 @@ def mkOddNat (n : ℕ) (h : n % 2 = 1) : OddNat := ⟨n, h⟩
 /-- 3n + 1 for n ∈ ℕ. -/
 def threeNPlusOne (n : ℕ) : ℕ := 3 * n + 1
 
-/-- The accelerated Collatz map on odd naturals.
-    For odd n, we compute a := 3n+1, then return (a / 2^v₂(a)) as an OddNat.
-
-    The result is always odd because we divide out all factors of 2.
-
-    This map is defined as a function from OddNat to OddNat. In implementation,
-    it would divide 3n+1 by 2^(v₂(3n+1)) using the 2-adic valuation from V2.lean.
--/
-noncomputable axiom T : OddNat → OddNat
-
-/-- The observation function: s(n) := v₂(3n+1) for odd n.
-
-    Returns the 2-adic valuation of 3n+1.
-
-    In a complete implementation, this would compute v2(3n.val + 1) where
-    v2 is the 2-adic valuation function from V2.lean.
--/
-noncomputable axiom s : OddNat → ℕ
-
-/-- Iterated application of T: iterateT m n represents m applications of T to n. -/
-noncomputable def iterateT : ℕ → OddNat → OddNat
-| 0, n => n
-| m+1, n => iterateT m (T n)
-
-/-- The partial sum of the observation sequence over m steps.
-    S_m(n) := ∑_{i=0}^{m-1} s(T^i(n))
-
-    Recursively: sumS(0) = 0, sumS(m+1) = sumS(m) + s(iterateT(m)(n))
--/
-noncomputable def sumS : OddNat → ℕ → ℕ
-| _, 0 => 0
-| n, m+1 => sumS n m + s (iterateT m n)
-
-/-- The drift at step m (up to numeric scale).
-    D_m(n) := m·log₂(3) - S_m(n) (in ℝ)
-
-    For now we keep this symbolic; actual numeric computation in Python.
--/
-noncomputable def driftReal : OddNat → ℕ → ℝ := fun n m =>
-  (m : ℝ) * (Real.log 3 / Real.log 2) - (sumS n m : ℝ)
-
 end DkMath.Collatz
