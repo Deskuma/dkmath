@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import Mathlib
 import DkMath.ABC.PadicValNat
 
+#print "file: DkMath.ABC.CountPowersDividing2n1"
+
 namespace DkMath.ABC
 
 set_option linter.style.emptyLine false

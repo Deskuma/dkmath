@@ -6,6 +6,10 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Basic  -- Basic Definitions and Utilities
 import DkMath.Samples  -- Sample Theorems and Examples
+-- ABC: abc Conjecture Module
+import DkMath.ABC.Basic  -- ABC Conjecture Basics
+import DkMath.ABC.PadicValNat  -- ABC: p-adic Valuation on Natural Numbers
+import DkMath.ABC.CountPowersDividing2n1  -- ABC: Counting Powers Dividing 2n+1
 -- Cosmic Formula Module
 import DkMath.CellDim  -- Cell Dimensionality
 import DkMath.CosmicFormula  -- Cosmic Formula Basics
@@ -28,3 +32,11 @@ import DkMath.UniqueRepresentation  -- Silver Ratio Unique Representation
 import DkMath.DHNT  -- DHNT: Units and Quantities (Dynamic Harmonic Number Theory)
 -- RH: Riemann Hypothesis Module
 import DkMath.RH  -- RH: Riemann Hypothesis Module
+
+#print "file: DkMath"
+
+namespace DkMath
+
+-- None
+
+end DkMath
