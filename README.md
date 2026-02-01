@@ -60,9 +60,9 @@ $$
 
 詳細は [lean/dk_math/DkMath/Collatz/python/README.md](./lean/dk_math/DkMath/Collatz/python/README.md) を参照。
 
-### Collatz Formalization Completion Report (2026/01/30)
+### Collatz Implementation Report (2026/01/30)
 
-コラッツ予想の形式化プロジェクトにおける進捗報告書（2026年1月30日版）。
+コラッツ予想の形式化プロジェクトにおける実装報告書（2026年1月30日版）。
 
 詳細は [lean/dk_math/DkMath/Collatz/docs/IMPLEMENTATION_REPORT_20260130.md](./lean/dk_math/DkMath/Collatz/docs/IMPLEMENTATION_REPORT_20260130.md) を参照。
 
@@ -71,12 +71,6 @@ $$
 コラッツ予想の形式化プロジェクトにおける補助補題完成報告書（2026年1月30日版）。
 
 詳細は [lean/dk_math/DkMath/Collatz/docs/AUXILIARY_LEMMA_COMPLETION_20260130.md](./lean/dk_math/DkMath/Collatz/docs/AUXILIARY_LEMMA_COMPLETION_20260130.md) を参照。
-
-### Collatz Implementation Report (2026/01/30)
-
-コラッツ予想の形式化プロジェクトにおける実装報告書（2026年1月30日版）。
-
-詳細は [lean/dk_math/DkMath/Collatz/docs/IMPLEMENTATION_REPORT_20260130.md](./lean/dk_math/DkMath/Collatz/docs/IMPLEMENTATION_REPORT_20260130.md) を参照。
 
 ## License
 
