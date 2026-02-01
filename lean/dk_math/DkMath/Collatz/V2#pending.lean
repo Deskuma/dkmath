@@ -4,6 +4,11 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+-- ------------------------------------------------------------------------------------------------
+-- ※このファイルは、謝って import されないように特殊なファイル名 #pending.lean にしてあります。
+-- * This file is named #pending.lean to avoid being accidentally imported. *
+-- ------------------------------------------------------------------------------------------------
+
 import Mathlib
 import DkMath.Collatz.Basic
 import DkMath.Collatz.V2
