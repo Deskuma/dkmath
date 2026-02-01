@@ -82,7 +82,7 @@ Contributions are welcome! Please read the [CONTRIBUTING.md](./CONTRIBUTING.md) 
 
 ## Contact
 
-For questions or suggestions, please contact D. or Wise Wolf. (now secretly working together)
+For questions or suggestions, please contact D. or Wise Wolf. (It's still a secret for now)
 
 ## Acknowledgements
 
