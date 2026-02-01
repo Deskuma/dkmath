@@ -82,7 +82,7 @@ Contributions are welcome! Please read the [CONTRIBUTING.md](./CONTRIBUTING.md) 
 
 ## Contact
 
-For questions or suggestions, please contact D. or Wise Wolf.
+For questions or suggestions, please contact D. or Wise Wolf. (It's still a secret for now)
 
 ## Acknowledgements
 
@@ -92,7 +92,9 @@ For questions or suggestions, please contact D. or Wise Wolf.
   - GitHub Copilot: Assisted in code completion and suggestions.
 - Mathematical Inspiration:
   - 🧠My Brain: For the original insights and ideas leading to the development of the Cosmic Formula and related theories.
-  - $f(x) = (x+1)^2 - x^2 - 2x - 1$: The Cosmic Formula that sparked the exploration of new mathematical perspectives.
+  - $f(x) = (x+1)^2 - x^2 - 2x - 1 = 0 = (P+1)^2 - (N=P^2 - 2P) - (U=1)$:
+    - The Cosmic Formula that sparked the exploration of new mathematical perspectives.
+- Mathematicians:
   - Euler, Gauss, Riemann, and other great mathematicians: For laying the foundational work in number theory and analysis that inspired this project.
     - Euler's formula: $e^{i\pi} + 1 = 0$: For its profound beauty and connection between fundamental constants.
       - This formula made me realize that it represents all units. The unit is not a single unit but a composite one. This insight led to the idea of exploring numbers through their relationships and dynamics, rather than just their static properties.
@@ -103,4 +105,5 @@ For questions or suggestions, please contact D. or Wise Wolf.
 - Mathematical Structures:
   - $\mathbb{Z}_2$ (2-adic integers): For providing a rich structure that underpins the exploration of valuations and dynamics in number theory.
   - Dynamic Harmonic Number Theory (DHNT): For offering a novel perspective on number theory that emphasizes dynamics and relationships over static properties.
-  - Lean Theorem Prover: For enabling the formalization and verification of mathematical concepts and proofs in this project.
+- Computational Tools:
+  - [Lean](https://lean-lang.org/) Theorem Prover: For enabling the formalization and verification of mathematical concepts and proofs in this project.
