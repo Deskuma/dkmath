@@ -10,6 +10,8 @@ import DkMath.Samples  -- Sample Theorems and Examples
 import DkMath.ABC.Basic  -- ABC Conjecture Basics
 import DkMath.ABC.PadicValNat  -- ABC: p-adic Valuation on Natural Numbers
 import DkMath.ABC.CountPowersDividing2n1  -- ABC: Counting Powers Dividing 2n+1
+-- Collatz Module (2026 Cartography Research)
+import DkMath.Collatz.Collatz2K26  -- Collatz2K26: Accelerated Collatz Dynamics
 -- Cosmic Formula Module
 import DkMath.CellDim  -- Cell Dimensionality
 import DkMath.CosmicFormula  -- Cosmic Formula Basics
