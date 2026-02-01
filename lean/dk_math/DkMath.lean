@@ -33,6 +33,30 @@ import DkMath.DHNT  -- DHNT: Units and Quantities (Dynamic Harmonic Number Theor
 -- RH: Riemann Hypothesis Module
 import DkMath.RH  -- RH: Riemann Hypothesis Module
 
+-- >|---|-----------|------------------|-------------------|-------------------|----------|---------
+
+/-!
+
+# DkMath Library
+
+This is the main module file for the DkMath library, which encompasses various mathematical
+concepts and theories. The library is organized into several submodules, each focusing on
+specific areas of mathematics, including the ABC conjecture, Cosmic Formula, Polyominoes,
+Silver Ratio, Dynamic Harmonic Number Theory (DHNT), and the Riemann Hypothesis (RH).
+
+## Modules Included:
+
+- Basic Definitions and Utilities
+- ABC Conjecture Module
+- Cosmic Formula Module
+- Polyomino Module
+- Silver Ratio Module
+- DHNT: Dynamic Harmonic Number Theory
+- RH: Riemann Hypothesis Module
+
+Each submodule contains definitions, theorems, and proofs relevant to its area of study.
+-/
+
 #print "file: DkMath"
 
 namespace DkMath
