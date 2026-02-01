@@ -214,7 +214,7 @@ class HyperIntegerV2:
         return HyperIntegerV2.from_int(self.d, n, normalize=normalize)
 
     def neg(self) -> "HyperIntegerV2":
-        return HyperIntegerV2(d=self.d, A=self.A, D=-self.D)
+        return HyperIntegerV2.from_int(self.d, -self.val(), normalize=False)
 
     # -----------------------------
     # Identity-driven update: shift base by x using Body
