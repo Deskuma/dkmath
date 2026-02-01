@@ -13,6 +13,8 @@ import Mathlib
 import DkMath.Collatz.Basic
 import DkMath.Collatz.V2
 
+#print "file: DkMath.Collatz.V2#pending"
+
 /-!
 # Collatz: 2-adic Valuation (v₂)
 

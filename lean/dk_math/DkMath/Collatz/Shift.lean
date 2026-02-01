@@ -8,6 +8,8 @@ import Mathlib
 import DkMath.Collatz.Basic
 import DkMath.Collatz.V2
 
+#print "file: DkMath.Collatz.Shift"
+
 /-!
 
 # Collatz: Block Shift and Invariance (The Petal Conservation)

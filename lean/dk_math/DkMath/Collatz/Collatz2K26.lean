@@ -9,6 +9,8 @@ import DkMath.Collatz.V2
 import DkMath.Collatz.Accelerated
 import DkMath.Collatz.Shift
 
+#print "file: DkMath.Collatz.Collatz2K26"
+
 /-
 # Collatz2K26: Cartography of the Accelerated Collatz Dynamics
 

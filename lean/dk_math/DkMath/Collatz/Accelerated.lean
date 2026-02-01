@@ -8,6 +8,8 @@ import Mathlib
 import DkMath.Collatz.Basic
 import DkMath.Collatz.V2
 
+#print "file: DkMath.Collatz.Accelerated"
+
 /-!
 # Collatz: Accelerated Map
 

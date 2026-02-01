@@ -8,6 +8,8 @@ import Mathlib
 import DkMath.ABC.PadicValNat
 import DkMath.Collatz.Basic
 
+#print "file: DkMath.Collatz.V2"
+
 /-!
 # Collatz: 2-adic Valuation (v₂)
 
