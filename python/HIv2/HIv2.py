@@ -132,11 +132,24 @@ class HyperIntegerV2:
 
     def normalize(self, max_iters: int = 10_000) -> "HyperIntegerV2":
         """
-        Adjust A so that residual D becomes 'small' relative to local base gaps.
+        Adjust A so that residual D becomes "small" relative to local base gaps.
         This implements the d-dimensional completion mechanism.
 
         Strategy:
-          - repeatedly absorb +/- delta_step(d,A) into A until D is within a local band.
+          - repeatedly absorb +/- delta_step(d, A) into A until D is within a local band.
+
+        Notes on negative A:
+          - This method works for any integer A (including negative values); it always
+            preserves the invariant val == A**d + D.
+          - For negative A, in particular when d is even, delta_step(d, A) and
+            delta_step(d, A - 1) can be negative. The update rules in the loop still
+            apply, but the effect is that normalization tends to move A toward
+            non-negative values while shrinking |D| into the local "nearest base"
+            band defined by roughly half of the forward/backward steps.
+          - HyperIntegerV2.from_int(...) always constructs instances with A >= 0.
+            Callers that manually build HyperIntegerV2 with a negative A should be
+            aware that calling normalize() may change the sign of A even though the
+            represented value (A**d + D) remains unchanged.
         """
         d, A, D = self.d, self.A, self.D
         if d < 1:
