@@ -1,6 +1,9 @@
 {
     "cSpell.words": [
         "bijective",
+        "bitlen",
+        "coeff",
+        "coeffs",
         "Coprime",
         "corrcoef",
         "elim",
@@ -21,6 +24,7 @@
         "hreflect",
         "hsub",
         "hunit",
+        "Polyominoes",
         "rmod",
         "ssum",
         "traj",
