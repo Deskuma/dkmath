@@ -17,7 +17,7 @@ License: MIT
 import numpy as np
 import math
 import json
-from typing import Tuple, List, Dict, Optional
+from typing import List, Dict, Optional
 from dataclasses import dataclass, asdict
 from enum import Enum
 import argparse
