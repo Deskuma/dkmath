@@ -101,6 +101,6 @@ For questions or suggestions, please contact D. or Wise Wolf.
     - Ramanujan's work on modular forms and partitions: For inspiring new ways to think about number representations.
     - Fermat's Little Theorem: For its fundamental role in modular arithmetic and number theory.
 - Mathematical Structures:
-  - $\mathbb{Z}_2$ (2-adic integers): For providing a rich structure that underpins the exploration of valuations and dynamics in   number theory.
+  - $\mathbb{Z}_2$ (2-adic integers): For providing a rich structure that underpins the exploration of valuations and dynamics in number theory.
   - Dynamic Harmonic Number Theory (DHNT): For offering a novel perspective on number theory that emphasizes dynamics and relationships over static properties.
   - Lean Theorem Prover: For enabling the formalization and verification of mathematical concepts and proofs in this project.
