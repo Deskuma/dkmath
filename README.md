@@ -92,7 +92,7 @@ For questions or suggestions, please contact D. or Wise Wolf. (now secretly work
   - GitHub Copilot: Assisted in code completion and suggestions.
 - Mathematical Inspiration:
   - 🧠My Brain: For the original insights and ideas leading to the development of the Cosmic Formula and related theories.
-  - $f(x) = (x+1)^2 - x^2 - 2x - 1 = 0 = (P+1)^2 - (N=P^2 - 2P) - (U=1) = 0$:
+  - $f(x) = (x+1)^2 - x^2 - 2x - 1 = 0 = (P+1)^2 - (N=P^2 - 2P) - (U=1)$:
     - The Cosmic Formula that sparked the exploration of new mathematical perspectives.
 - Mathematicians:
   - Euler, Gauss, Riemann, and other great mathematicians: For laying the foundational work in number theory and analysis that inspired this project.
