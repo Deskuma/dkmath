@@ -57,6 +57,7 @@ Silver Ratio, Dynamic Harmonic Number Theory (DHNT), and the Riemann Hypothesis 
 Each submodule contains definitions, theorems, and proofs relevant to its area of study.
 -/
 
+-- build check marker: sh: $ lake build -v --no-ansi --log-level=info | grep -B1 "file: "
 #print "file: DkMath"
 
 namespace DkMath
