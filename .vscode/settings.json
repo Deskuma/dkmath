@@ -1,20 +1,36 @@
 {
     "cSpell.words": [
-        "bcfg",
-        "coeffs",
-        "dkmath",
-        "Finsupp",
-        "forall",
+        "bijective",
+        "Coprime",
+        "corrcoef",
+        "elim",
         "Gbinom",
+        "hcard",
         "hchoose",
+        "hcop",
+        "hdiv",
         "hfactor",
+        "hident",
+        "hmem",
+        "hmod",
+        "hmodd",
+        "hmpos",
+        "hpodd",
+        "hpos",
         "hpow",
         "hreflect",
         "hsub",
-        "indep",
-        "invol",
-        "irrat",
-        "minpoly",
+        "hunit",
+        "rmod",
+        "ssum",
+        "traj",
         "tsub"
-    ]
+    ],
+    "markdownlint.config": {
+        "MD025": false,
+        "MD036": false,
+        "MD040": false,
+        "MD060": false
+    },
+    "markdownlint.customRules": []
 }
