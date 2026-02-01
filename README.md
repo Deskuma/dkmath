@@ -94,7 +94,7 @@ For questions or suggestions, please contact D. or Wise Wolf.
   - 🧠My Brain: For the original insights and ideas leading to the development of the Cosmic Formula and related theories.
   - $f(x) = (x+1)^2 - x^2 - 2x - 1$: The Cosmic Formula that sparked the exploration of new mathematical perspectives.
   - Euler, Gauss, Riemann, and other great mathematicians: For laying the foundational work in number theory and analysis that inspired this project.
-    - Euler's formula: \(e^{i\pi} + 1 = 0\): For its profound beauty and connection between fundamental constants.
+    - Euler's formula: $e^{i\pi} + 1 = 0$: For its profound beauty and connection between fundamental constants.
       - This formula made me realize that it represents all units. The unit is not a single unit but a composite one. This insight led to the idea of exploring numbers through their relationships and dynamics, rather than just their static properties.
     - Gaussian integers: For their role in extending the concept of integers to the complex plane.
     - Riemann Zeta Function: For its deep connections to prime numbers and analytic number theory.
