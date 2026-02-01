@@ -286,4 +286,9 @@ if __name__ == "__main__":
     h4 = h3.shift_base(17)
     assert h3.val() == h4.val()
 
+    # neg preserves value relationship
+    h5 = HyperIntegerV2.from_int(3, 10**15 + 42)
+    h5_neg = h5.neg()
+    assert h5_neg.val() == -h5.val()
+
     print("OK: HyperIntegerV2 core sanity tests passed.")
