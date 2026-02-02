@@ -39,13 +39,19 @@ namespace DkMath.CosmicFormulaBinom
 
 open scoped BigOperators
 
+-- ----------------------------------------------------------------------------
+-- 減算形の恒等式 (CommRing)
+-- ----------------------------------------------------------------------------
+
+section CommRing
+
 /-! ### 無次元版: G と Z_d の定義と恒等式の証明 -/
 
 /-- d 次元の「無次元実体項」G の定義（係数は Nat.choose を射影したもの） -/
 noncomputable def G {R : Type _} [CommRing R] (d : ℕ) (x u : R) : R :=
     ∑ k ∈ Finset.range d, (Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k)
 
-/-- 無次元宇宙式の恒等式: (x+u)^d - x * G d x u = u^d -/
+/-- d 次元の「無次元実体項」G の定義（係数は Nat.choose を射影したもの） -/
 theorem cosmic_id {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
         (x + u) ^ d - x * G d x u = u ^ d := by
     unfold G
@@ -87,11 +93,60 @@ theorem Z_eq_zero {R : Type _} [CommRing R] (d : ℕ) (x u : R) : Z d x u = 0 :=
     rw [h]
     simp
 
-/-- 無次元宇宙式の恒等式の同値変形: iff_dim_G -/
+-- ----------------------------------------------------------------------------
+-- 恒等式の同値変形 (iff)
+-- ----------------------------------------------------------------------------
+
+/-- 無次元宇宙式の恒等式の同値変形: iff_dim_G (加法形) -/
 lemma dim_G_iff (d : ℕ) (x u : ℝ) :
-    (x + u) ^ d - x * DkMath.CosmicFormulaDim.G d x u
-        = u ^ d ↔ (x + u) ^ d - x * G d x u = u ^ d := by
+    (x + u) ^ d = x * DkMath.CosmicFormulaDim.G d x u + u ^ d
+        ↔ (x + u) ^ d = x * G d x u + u ^ d := by
     simp [DkMath.CosmicFormulaDim.G, G]
 
+end CommRing
+
+-- ----------------------------------------------------------------------------
+-- 無減算形の恒等式 (CommSemiring)
+-- ----------------------------------------------------------------------------
+
+section CommSemiring
+
+/-- d 次元の「無次元実体項」G (CommSemiring) の定義（係数は Nat.choose を射影したもの） -/
+noncomputable def G' {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R :=
+    ∑ k ∈ Finset.range d, (Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k)
+
+/-! 無減算形の恒等式: (x+u)^d = x * G d x u + u^d (CommSemiring) -/
+theorem cosmic_id' {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
+        (x + u) ^ d = x * G' d x u + u ^ d := by
+    unfold G'
+    rw [add_pow, Finset.mul_sum]
+    -- 二項展開を k=0 項と k≥1 項に分ける（項の順序を `add_pow` の出力に合わせる）
+    have h1 : ∑ k ∈ Finset.range (d + 1), x ^ k * u ^ (d - k) * (Nat.choose d k : R)
+        = x ^ 0 * u ^ d * (Nat.choose d 0 : R)
+            + ∑ k ∈ Finset.range d, x ^ (k + 1) * u ^ (d - 1 - k) * (Nat.choose d (k + 1) : R) := by
+        rw [Finset.sum_range_succ']
+        simp only [pow_zero, Nat.sub_zero]
+        rw [add_comm]
+        congr 1
+        apply Finset.sum_congr rfl
+        intro k hk
+        congr 2
+        have hk' : k < d := Finset.mem_range.mp hk
+        have hss : k + 1 ≤ d := Nat.succ_le_of_lt hk'
+        have h2 : d - (k + 1) = d - k - 1 := Nat.sub_sub d k 1
+        have h3 : d - k - 1 = d - 1 - k := by omega
+        rw [h2, h3]
+    -- x * G を展開すると h1 の第2項と一致する（項順序を合わせる）
+    have h2 : ∑ k ∈ Finset.range d, x * ((Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k))
+        = ∑ k ∈ Finset.range d, x ^ (k + 1) * u ^ (d - 1 - k) * (Nat.choose d (k + 1) : R) := by
+        apply Finset.sum_congr rfl
+        intro k _
+        ring
+    -- 以上の等式から二項展開の和が x*G + u^d に一致する
+    rw [h1, h2]
+    simp only [Nat.choose_zero_right, Nat.cast_one, pow_zero, mul_one]
+    ring
+
+end CommSemiring
 
 end DkMath.CosmicFormulaBinom
