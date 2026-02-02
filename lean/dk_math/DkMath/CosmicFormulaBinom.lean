@@ -115,11 +115,33 @@ theorem f_eq_pow_sub {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
     rw [hsum]
     simp
 
+/-- 無次元版: R の定義 -/
+def R (d : ℕ) (x u : ℝ) : ℝ := (x + u) ^ d - u ^ d - (Nat.choose d 1 : ℝ) * x * u ^ (d - 1)
+
+#eval R 3 2 1  -- 20
+#eval R 4 2 1  -- 72
+#eval R 5 2 1  -- 232
+#eval R 6 2 1  -- 716
+
+/-- f は無次元宇宙式の関係式に等しい -/
+theorem f_eq_relation {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
+    f d x u = x * (G d x u - (Nat.choose d 1 : R) * u ^ (d - 1)) := by
+    rw [f_eq_pow_sub]
+    have h := cosmic_id d x u
+    rw [←h]
+    simp
+    ring
+
 -- ----------------------------------------------------------------------------
 -- 恒等式の同値変形 (iff)
 -- ----------------------------------------------------------------------------
 
-/-- 無次元宇宙式の恒等式の同値変形: iff_dim_G (加法形) -/
+/-- 無次元宇宙式の恒等式の同値変形: f_eq_zero_iff -/
+lemma f_eq_zero_iff {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
+    f d x u = 0 ↔ x * (G d x u - (Nat.choose d 1 : R) * u ^ (d - 1)) = 0 := by
+    rw [f_eq_relation]
+
+/-- 無次元宇宙式の恒等式の同値変形: dim_G_iff (加法形) -/
 lemma dim_G_iff (d : ℕ) (x u : ℝ) :
     (x + u) ^ d = x * DkMath.CosmicFormulaDim.G d x u + u ^ d
         ↔ (x + u) ^ d = x * G d x u + u ^ d := by
