@@ -51,7 +51,9 @@ section CommRing
 def G {R : Type _} [CommRing R] (d : ℕ) (x u : R) : R :=
     ∑ k ∈ Finset.range d, (Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k)
 
-/-- d 次元の「無次元実体項」G の定義（係数は Nat.choose を射影したもの） -/
+/-- 無次元宇宙式に対する恒等式：
+`CommRing` 上で任意の `d, x, u` について
+`(x + u) ^ d - x * G d x u = u ^ d` が成り立つことを示す定理。 -/
 theorem cosmic_id {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
         (x + u) ^ d - x * G d x u = u ^ d := by
     unfold G
