@@ -48,7 +48,7 @@ section CommRing
 /-! ### 無次元版: G と Z_d の定義と恒等式の証明 -/
 
 /-- d 次元の「無次元実体項」G の定義（係数は Nat.choose を射影したもの） -/
-noncomputable def G {R : Type _} [CommRing R] (d : ℕ) (x u : R) : R :=
+def G {R : Type _} [CommRing R] (d : ℕ) (x u : R) : R :=
     ∑ k ∈ Finset.range d, (Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k)
 
 /-- d 次元の「無次元実体項」G の定義（係数は Nat.choose を射影したもの） -/
@@ -83,7 +83,7 @@ theorem cosmic_id {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
     ring
 
 /-- 無次元 Z_d の定義 -/
-noncomputable def Z {R : Type _} [CommRing R] (d : ℕ) (x u : R) : R :=
+def Z {R : Type _} [CommRing R] (d : ℕ) (x u : R) : R :=
     (x + u) ^ d - x * G d x u - u ^ d
 
 /-- Z_d は恒等的に 0 である -/
@@ -96,7 +96,7 @@ theorem Z_eq_zero {R : Type _} [CommRing R] (d : ℕ) (x u : R) : Z d x u = 0 :=
 /-! ### f_d の定義と二項展開による表現 -/
 
 /-- d 次の無次元多項式 f の定義: k=0,1 の項を除いた二項和 -/
-noncomputable def f {R : Type _} [CommRing R] (d : ℕ) (x u : R) : R :=
+def f {R : Type _} [CommRing R] (d : ℕ) (x u : R) : R :=
     (∑ k ∈ Finset.range (d + 1), (Nat.choose d k : R) * x ^ k * u ^ (d - k))
     - (Nat.choose d 0 : R) * x ^ 0 * u ^ d
     - (Nat.choose d 1 : R) * x ^ 1 * u ^ (d - 1)
@@ -156,7 +156,7 @@ end CommRing
 section CommSemiring
 
 /-- d 次元の「無次元実体項」G (CommSemiring) の定義（係数は Nat.choose を射影したもの） -/
-noncomputable def G' {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R :=
+def G' {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R :=
     ∑ k ∈ Finset.range d, (Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k)
 
 /-! 無減算形の恒等式: (x+u)^d = x * G d x u + u^d (CommSemiring) -/
