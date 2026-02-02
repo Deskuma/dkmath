@@ -26,8 +26,10 @@
         "hunit",
         "Polyominoes",
         "rmod",
+        "segs",
         "ssum",
         "traj",
+        "trajs",
         "tsub"
     ],
     "markdownlint.config": {
