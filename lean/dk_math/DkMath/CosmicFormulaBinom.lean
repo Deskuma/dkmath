@@ -82,9 +82,12 @@ theorem cosmic_id {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
     simp only [Nat.choose_zero_right, Nat.cast_one, pow_zero, mul_one]
     ring
 
-/-- 無次元 Z_d の定義 -/
+/-- 無次元 Z_d の定義:
+LaTeX:
+Z_d(x;u) = (x+u)^d -\left( x \sum_{k=0}^{d-1} \binom{d}{k+1} u^{d-1-k} x^k \right) -u^d
+-/
 def Z {R : Type _} [CommRing R] (d : ℕ) (x u : R) : R :=
-    (x + u) ^ d - x * G d x u - u ^ d
+    (x + u) ^ d - (x * G d x u) - u ^ d
 
 /-- Z_d は恒等的に 0 である -/
 theorem Z_eq_zero {R : Type _} [CommRing R] (d : ℕ) (x u : R) : Z d x u = 0 := by
