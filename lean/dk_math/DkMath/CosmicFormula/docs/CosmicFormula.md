@@ -131,7 +131,7 @@ $$
 $f_d(x;u) \to U_d(x;u)$ と関数名を変えます。
 
 $$
-f_d(x;u) = U_d(x;u) := (x+u)^d -\left( x \sum_{k=0}^{d-1} \binom{d}{k+1} x^k u^{d-1-k} \right) = u^d
+f_d(x;u) = U_d(x;u) := (x+u)^d -\left( x \sum_{k=0}^{d-1} \binom{d}{k+1}\ x^k\ u^{d-1-k} \right) = u^d
 %% verified: cosmic_formula_dim_identity_binom
 $$
 
@@ -146,7 +146,7 @@ theorem cosmic_id {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
 
 $$
 \Large
-G_{d-1}(x,u) := \sum_{k=0}^{d-1} \binom{d}{k+1}\\,x^k\\,u^{(d-1-k)}
+G_{d-1}(x,u) := \sum_{k=0}^{d-1} \binom{d}{k+1}\ x^k\ u^{(d-1-k)}
 %% verified: cosmic_formula_dim_identity_G_definition
 $$
 
@@ -171,12 +171,12 @@ noncomputable def G (d : ℕ) (x u : ℝ) : ℝ :=
 
 ### Zero-sum ゲームの定義
 
-$G$ にかかる $x$ 係数は、以下の恒等式を満たします。 $x\\,G_{d-1}(x,u)$
+$G$ にかかる $x$ 係数は、以下の恒等式を満たします。 $x\ G_{d-1}(x,u)$
 
 [CosmicFormulaBinom#Z_eq_zero](/lean/dk_math/DkMath/CosmicFormulaBinom.lean)
 
 $$
-Z_d(x;u) = [\\,(x+u)^d - u^d\\,] - [\\,x\\,G_{d-1}(x,u)\\,] = 0
+Z_d(x;u) = [\ (x+u)^d - u^d\ ] - [\ x\ G_{d-1}(x,u)\ ] = 0
 %% verified: cosmic_formula_dim_identity_Z_definition
 $$
 
@@ -190,7 +190,7 @@ theorem Z_eq_zero {R : Type _} [CommRing R] (d : ℕ) (x u : R) : Z d x u = 0 :=
 上記より、べき乗の差の因数分解と二項定理の恒等式が得られます。
 
 $$
-(x+u)^d - u^d = x\\,G_{d-1}(x,u) \iff \frac{(x+u)^d - u^d}{x} = G_{d-1}(x,u)
+(x+u)^d - u^d = x\ G_{d-1}(x,u) \iff \frac{(x+u)^d - u^d}{x} = G_{d-1}(x,u)
 %% verified: cosmic_formula_dim_identity_power_difference
 $$
 
@@ -199,6 +199,7 @@ $$
 [^1]: 注意：可換環 $\mathbb{R}$ の元として両辺を割る場合は $x$ が可逆（unit）である必要がある。
 
 > 注意：可換環 $\mathbb{R}$ の元として両辺を割る場合は $x$ が可逆（unit）である必要がある。
+>
 > - 「 $x$ が可逆（unit）である」は $\mathbb{R}$ に逆元 $x⁻¹$ が存在して $x·x⁻¹ = 1$ とできることを意味する。
 > 可逆でない元についてはリング内で「 $\div x$ 」を定義できない（ $x⁻¹$ を掛けられない）。
 > - だが今回の等式は多項式環 $\mathbb{R}[x,u]$ 内の話であって $(x+u)^d - u^d$ は定数項が $0$ なので多項式として $x$ で割り切れる。
@@ -220,7 +221,7 @@ $$
 $x$ を掛け直すと、
 
 $$
-x\\,T_d(x;u) = (x+u)^d - u^d = x\\,G_{d-1}(x,u)
+x\ T_d(x;u) = (x+u)^d - u^d = x\ G_{d-1}(x,u)
 %% verified: cosmic_formula_dim_identity_T_multiplication
 $$
 
@@ -276,13 +277,13 @@ $$
 Y = W - x^d = \sum_{k=1}^{d} \binom{d}{k} u^k x^{d-k}
 $$
 
-2. $u^d$ を差し引いた形
+1. $u^d$ を差し引いた形
 
 $$
 Y = W - u^d = \sum_{k=1}^{d} \binom{d}{k} x^k u^{d-k}
 $$
 
-3. 二項係数の対称性（パスカルの三角形の根拠）
+1. 二項係数の対称性（パスカルの三角形の根拠）
 
 $$
 \binom{d}{k} = \binom{d}{d-k}
@@ -294,10 +295,10 @@ $$
 
 $$
 \begin{align*}
-W = (x+u)^d &= x^d + Y = u^d + Y \\\\[8pt]
-&= x^d + \sum_{k=1}^{d} \binom{d}{k} u^k x^{d-k} \\\\[4pt]
-&= u^d + \sum_{k=1}^{d} \binom{d}{k} x^k u^{d-k} \\\\[16pt]
-&= \sum_{k=0}^{d} \binom{d}{k} x^k u^{d-k}
+W = (x+u)^d &= x^d + Y = u^d + Y \\
+&= x^d + \sum_{k=1}^{d} \binom{d}{k}\ u^k\ x^{d-k} \\
+&= u^d + \sum_{k=1}^{d} \binom{d}{k}\ x^k\ u^{d-k} \\
+&= \sum_{k=0}^{d} \binom{d}{k}\ x^k\ u^{d-k}
 \end{align*}
 %% verified: cosmic_formula_dim_identity_total_definition
 $$
@@ -312,7 +313,9 @@ $$
 \hat{f}(\hat{x};\hat{u}) = \frac{f(x;u)}{u^2} = \left(\frac{x}{u} + 1\right)^2 - \left(\frac{x}{u}\right)^2 - 2\left(\frac{x}{u}\right) = 1
 $$
 
-ここで $\hat{x} = \frac{x}{u}$ および $\hat{u} = 1$ と定義されます。無次元宇宙式は、変数のスケーリングに依存せず、恒等的に $1$ となる形式を提供します。
+ここで $\hat{x} = \frac{x}{u}$ および $\hat{u} = 1$ と定義されます。
+
+無次元宇宙式は、変数のスケーリングに依存せず、恒等的に $1$ となる形式を提供します。
 
 この無次元形式は、宇宙式のさらなる一般化であり、数学的および物理学的な応用において重要な役割を果たします。
 
@@ -324,12 +327,12 @@ $$
 
 $$
 (x+u)^d
-= u^d + x\sum_{k=0}^{d-1}\binom{d}{k+1}\\,x^k\\,u^{\\,d-1-k}
+= u^d + x\sum_{k=0}^{d-1}\binom{d}{k+1}\ x^k\ u^{d-1-k}
 $$
 
 $$
 V_d^+(x;u)=(x+u)^d+u^d
-=2u^d + x\sum_{k=0}^{d-1}\binom{d}{k+1}\\,x^k\\,u^{\\,d-1-k}
+=2u^d + x\sum_{k=0}^{d-1}\binom{d}{k+1}\ x^k\ u^{d-1-k}
 $$
 
 $$
@@ -339,7 +342,7 @@ $$
 
 $$
 \Delta_d(x;u)
-=\sum_{j=1}^{d-1}\binom{d}{j}(2^j-1)\\,x^{\\,d-j}u^j \\;+\\;(2^d-2)u^d
+=\sum_{j=1}^{d-1}\binom{d}{j}(2^j-1)\ x^{d-j}u^j \ +\ (2^d-2)u^d
 $$
 
 $$
