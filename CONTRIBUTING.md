@@ -19,4 +19,5 @@ By contributing to D.K. math, you agree to abide by our [Code of Conduct](./CODE
 ## Getting Help
 
 If you have questions or need assistance, feel free to reach out to the maintainers or open an issue in the repository.
+
 Thank you for contributing to D.K. math! Your efforts help make this project better for everyone.
