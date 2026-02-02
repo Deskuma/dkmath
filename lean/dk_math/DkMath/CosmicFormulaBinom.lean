@@ -93,6 +93,28 @@ theorem Z_eq_zero {R : Type _} [CommRing R] (d : ℕ) (x u : R) : Z d x u = 0 :=
     rw [h]
     simp
 
+/-! ### f_d の定義と二項展開による表現 -/
+
+/-- d 次の無次元多項式 f の定義: k=0,1 の項を除いた二項和 -/
+noncomputable def f {R : Type _} [CommRing R] (d : ℕ) (x u : R) : R :=
+    (∑ k ∈ Finset.range (d + 1), (Nat.choose d k : R) * x ^ k * u ^ (d - k))
+    - (Nat.choose d 0 : R) * x ^ 0 * u ^ d
+    - (Nat.choose d 1 : R) * x ^ 1 * u ^ (d - 1)
+
+/-! f は二項展開から (x+u)^d - u^d - (choose d 1) * x * u^(d-1) に等しい -/
+theorem f_eq_pow_sub {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
+        f d x u = (x + u) ^ d - u ^ d - (Nat.choose d 1 : R) * x * u ^ (d - 1) := by
+    unfold f
+    rw [add_pow]
+    simp only [Nat.choose_zero_right, Nat.cast_one, pow_zero, mul_one]
+    have hsum : ∑ k ∈ Finset.range (d + 1), (Nat.choose d k : R) * x ^ k * u ^ (d - k) =
+        ∑ k ∈ Finset.range (d + 1), x ^ k * u ^ (d - k) * ↑(d.choose k) := by
+        apply Finset.sum_congr rfl
+        intro k _
+        ring
+    rw [hsum]
+    simp
+
 -- ----------------------------------------------------------------------------
 -- 恒等式の同値変形 (iff)
 -- ----------------------------------------------------------------------------
