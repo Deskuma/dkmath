@@ -14,7 +14,7 @@ f(x) = (x+1)^2 - x(x+2) = 1
 %% verified: cosmic_formula
 $$
 
-ここで、$f(x)$ は任意の実数 $x \in \mathbb{R}$ に対して成立する恒等式です。
+ここで $f(x)$ は任意の実数 $x \in \mathbb{R}$ に対して成立する恒等式です。
 
 [CosmicFormula.lean](/lean/dk_math/DkMath/CosmicFormula.lean)
 
@@ -110,7 +110,7 @@ f_d(x;u) = (x+u)^d - x^d - d x^{d-1} u = \binom{d}{2} u^2 x^{d-2} + \binom{d}{3}
 %% verified: cosmic_formula_dim_identity
 $$
 
-ここで、$d\in\mathbb{N}$ は任意の正整数です。
+ここで $d\in\mathbb{N}$ は任意の正整数です。
 この無次元宇宙式は、より高次の多項式に対しても同様の恒等式を提供します。
 
 和の二項展開式表示では、
@@ -146,7 +146,7 @@ theorem cosmic_id {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
 
 $$
 \Large
-G_{d-1}(x,u) := \sum_{k=0}^{d-1} \binom{d}{k+1}\,x^k\,u^{(d-1-k)}
+G_{d-1}(x,u) := \sum_{k=0}^{d-1} \binom{d}{k+1}\\,x^k\\,u^{(d-1-k)}
 %% verified: cosmic_formula_dim_identity_G_definition
 $$
 
@@ -171,12 +171,12 @@ noncomputable def G (d : ℕ) (x u : ℝ) : ℝ :=
 
 ### Zero-sum ゲームの定義
 
-$G$ にかかる $x$ 係数は、以下の恒等式を満たします。$x\,G_{d-1}(x,u)$
+$G$ にかかる $x$ 係数は、以下の恒等式を満たします。 $x\\,G_{d-1}(x,u)$
 
 [CosmicFormulaBinom#Z_eq_zero](/lean/dk_math/DkMath/CosmicFormulaBinom.lean)
 
 $$
-Z_d(x;u) = [\,(x+u)^d - u^d\,] - [\,x\,G_{d-1}(x,u)\,] = 0
+Z_d(x;u) = [\\,(x+u)^d - u^d\\,] - [\\,x\\,G_{d-1}(x,u)\\,] = 0
 %% verified: cosmic_formula_dim_identity_Z_definition
 $$
 
@@ -190,7 +190,7 @@ theorem Z_eq_zero {R : Type _} [CommRing R] (d : ℕ) (x u : R) : Z d x u = 0 :=
 上記より、べき乗の差の因数分解と二項定理の恒等式が得られます。
 
 $$
-(x+u)^d - u^d = x\,G_{d-1}(x,u) \iff \frac{(x+u)^d - u^d}{x} = G_{d-1}(x,u)
+(x+u)^d - u^d = x\\,G_{d-1}(x,u) \iff \frac{(x+u)^d - u^d}{x} = G_{d-1}(x,u)
 %% verified: cosmic_formula_dim_identity_power_difference
 $$
 
@@ -220,7 +220,7 @@ $$
 $x$ を掛け直すと、
 
 $$
-x\,T_d(x;u) = (x+u)^d - u^d = x\,G_{d-1}(x,u)
+x\\,T_d(x;u) = (x+u)^d - u^d = x\\,G_{d-1}(x,u)
 %% verified: cosmic_formula_dim_identity_T_multiplication
 $$
 
@@ -312,7 +312,7 @@ $$
 \hat{f}(\hat{x};\hat{u}) = \frac{f(x;u)}{u^2} = \left(\frac{x}{u} + 1\right)^2 - \left(\frac{x}{u}\right)^2 - 2\left(\frac{x}{u}\right) = 1
 $$
 
-ここで、 $\hat{x} = \frac{x}{u}$ および $\hat{u} = 1$ と定義されます。無次元宇宙式は、変数のスケーリングに依存せず、恒等的に $1$ となる形式を提供します。
+ここで $\hat{x} = \frac{x}{u}$ および $\hat{u} = 1$ と定義されます。無次元宇宙式は、変数のスケーリングに依存せず、恒等的に $1$ となる形式を提供します。
 
 この無次元形式は、宇宙式のさらなる一般化であり、数学的および物理学的な応用において重要な役割を果たします。
 
