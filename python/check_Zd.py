@@ -5,7 +5,7 @@ from math import comb
 def Z_lhs(x, u, d):
     # (x+u)^d - x * sum_{k=0}^{d-1} C(d,k+1) u^{d-1-k} x^k
     s = 0
-    for k in range(0, max(0, d)):
+    for k in range(d):
         s += comb(d, k + 1) * (u ** (d - 1 - k)) * (x**k)
     return (x + u) ** d - x * s
 
