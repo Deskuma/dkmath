@@ -14,7 +14,7 @@ f(x) = (x+1)^2 - x(x+2) = 1
 %% verified: cosmic_formula
 $$
 
-ここで、$f(x)$ は任意の実数 $x \in \R$ に対して成立する恒等式です。
+ここで、$f(x)$ は任意の実数 $x \in \mathbb{R}$ に対して成立する恒等式です。
 
 [CosmicFormula.lean](/lean/dk_math/DkMath/CosmicFormula.lean)
 
