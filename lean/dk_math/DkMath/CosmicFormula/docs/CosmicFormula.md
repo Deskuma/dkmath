@@ -80,7 +80,7 @@ $$
 差の因数分解の方程式より、以下の恒等式が導けます。
 
 $$
-f_d(x;u) = (x+u)^d - x^d - d x^{d-1} u = \binom{d}{2} u^2 x^{d-2} + \binom{d}{3} u^3 x^{d-3} + \cdots + u^d=0
+f_d(x;u) = (x+u)^d - x^d - d x^{d-1} u = \binom{d}{2} u^2 x^{d-2} + \binom{d}{3} u^3 x^{d-3} + \cdots + u^d
 $$
 
 ここで、$d\in\mathbb{N}$ は任意の正整数です。この無次元宇宙式は、より高次の多項式に対しても同様の恒等式を提供します。
@@ -88,11 +88,13 @@ $$
 和の二項展開式表示では、
 
 $$
-f_d(x;u) = \sum_{k=2}^{d} \binom{d}{k} u^k x^{d-k} = 0
+f_d(x;u) = \sum_{k=2}^{d} \binom{d}{k} u^k x^{d-k} = 0, \quad (d\ge2)
 $$
 
+[CosmicFormulaBinom](/lean/dk_math/DkMath/CosmicFormulaBinom.lean) モジュールで証明された恒等式です。
+
 $$
-Z_d(x;u) = (x+u)^d -\left( x \sum_{k=0}^{d-1} \binom{d}{k+1} u^{d-1-k} x^k \right) -u^d=0
+Z_d(x;u) = (x+u)^d -\left( x \sum_{k=0}^{d-1} \binom{d}{k+1} u^{d-1-k} x^k \right) = u^d
 $$
 
 ### 無次元宇宙式の特殊ケース
