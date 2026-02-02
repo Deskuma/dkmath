@@ -31,8 +31,7 @@ $$
 以下は Python 検証 OK
 
 $$
-Z_d(x;u) =
-(x+u)^d -\left( x \sum_{k=0}^{d-1} \binom{d}{k+1} u^{d-1-k} x^k \right) = u^d
+Z_d(x;u) = (x+u)^d -\left( x \sum_{k=0}^{d-1} \binom{d}{k+1} u^{d-1-k} x^k \right) = u^d
 $$
 -/
 
@@ -76,6 +75,17 @@ theorem cosmic_id {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
     rw [h1, h2]
     simp only [Nat.choose_zero_right, Nat.cast_one, pow_zero, mul_one]
     ring
+
+/-- 無次元 Z_d の定義 -/
+noncomputable def Z {R : Type _} [CommRing R] (d : ℕ) (x u : R) : R :=
+    (x + u) ^ d - x * G d x u - u ^ d
+
+/-- Z_d は恒等的に 0 である -/
+theorem Z_eq_zero {R : Type _} [CommRing R] (d : ℕ) (x u : R) : Z d x u = 0 := by
+    unfold Z
+    have h := cosmic_id d x u
+    rw [h]
+    simp
 
 /-- 無次元宇宙式の恒等式の同値変形: iff_dim_G -/
 lemma dim_G_iff (d : ℕ) (x u : ℝ) :
