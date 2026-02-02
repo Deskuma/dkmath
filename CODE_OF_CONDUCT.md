@@ -32,7 +32,7 @@ This Code of Conduct applies both within project spaces and in public spaces whe
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team at [INSERT CONTACT EMAIL] (It's still a secret for now). All complaints will be reviewed and investigated promptly and fairly.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the project team using the contact details provided in the project documentation (such as the README or issue tracker). All complaints will be reviewed and investigated promptly and fairly.
 
 ## Attribution
 
