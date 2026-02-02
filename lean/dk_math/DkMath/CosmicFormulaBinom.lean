@@ -33,6 +33,13 @@ $$
 $$
 Z_d(x;u) = (x+u)^d -\left( x \sum_{k=0}^{d-1} \binom{d}{k+1} u^{d-1-k} x^k \right) = u^d
 $$
+
+ゆえに
+
+$$
+Z_d(x;u) = (x+u)^d -\left( x \sum_{k=0}^{d-1} \binom{d}{k+1} u^{d-1-k} x^k \right) - u^d = 0
+$$
+
 -/
 
 namespace DkMath.CosmicFormulaBinom
@@ -51,11 +58,86 @@ section CommRing
 def G {R : Type _} [CommRing R] (d : ℕ) (x u : R) : R :=
     ∑ k ∈ Finset.range d, (Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k)
 
+/-- 無次元版: Big の定義 -/
+def Big {R : Type _} [CommRing R] (d : ℕ) (x u : R) : R := (x + u) ^ d
+
+/-- 無次元版: Gap の定義 -/
+def Gap {R : Type _} [CommRing R] (d : ℕ) (u : R) : R := u ^ d
+
+/-- 無次元版: Body の定義 -/
+def Body {R : Type _} [CommRing R] (d : ℕ) (x u : R) : R := x * G d x u
+
+/-- 無次元版: Big は Body と Gap の和に等しい -/
+theorem big_is_body_and_gap {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
+    Big d x u = Body d x u + Gap d u := by
+    unfold Big Body Gap G
+    rw [add_pow, Finset.mul_sum]
+    -- 二項展開を k=0 項と k≥1 項に分ける（項の順序を `add_pow` の出力に合わせる）
+    have h1 : ∑ k ∈ Finset.range (d + 1), x ^ k * u ^ (d - k) * (Nat.choose d k : R)
+      = x ^ 0 * u ^ d * (Nat.choose d 0 : R)
+      + ∑ k ∈ Finset.range d, x ^ (k + 1) * u ^ (d - 1 - k) * (Nat.choose d (k + 1) : R) := by
+        rw [Finset.sum_range_succ']
+        simp only [pow_zero, Nat.sub_zero]
+        rw [add_comm]
+        congr 1
+        apply Finset.sum_congr rfl
+        intro k hk
+        congr 2
+        have hk' : k < d := Finset.mem_range.mp hk
+        have hss : k + 1 ≤ d := Nat.succ_le_of_lt hk'
+        have h2 : d - (k + 1) = d - k - 1 := Nat.sub_sub d k 1
+        have h3 : d - k - 1 = d - 1 - k := by omega
+        rw [h2, h3]
+    -- x * G を展開すると h1 の第2項と一致する（項順序を合わせる）
+    have h2 : ∑ k ∈ Finset.range d, x * ((Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k))
+      = ∑ k ∈ Finset.range d, x ^ (k + 1) * u ^ (d - 1 - k) * (Nat.choose d (k + 1) : R) := by
+        apply Finset.sum_congr rfl
+        intro k _
+        ring
+    rw [h1, h2]
+    simp only [Nat.choose_zero_right, Nat.cast_one, pow_zero, mul_one]
+    ring
+
 /-- 無次元宇宙式に対する恒等式：
 `CommRing` 上で任意の `d, x, u` について
 `(x + u) ^ d - x * G d x u = u ^ d` が成り立つことを示す定理。 -/
 theorem cosmic_id {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
-        (x + u) ^ d - x * G d x u = u ^ d := by
+    Big d x u - Body d x u = Gap d u := by
+    unfold Big Body Gap G
+    rw [add_pow, Finset.mul_sum]
+    -- 二項展開を k=0 項と k≥1 項に分ける（項の順序を `add_pow` の出力に合わせる）
+    have h1 : ∑ k ∈ Finset.range (d + 1), x ^ k * u ^ (d - k) * (Nat.choose d k : R)
+      = x ^ 0 * u ^ d * (Nat.choose d 0 : R)
+      + ∑ k ∈ Finset.range d, x ^ (k + 1) * u ^ (d - 1 - k) * (Nat.choose d (k + 1) : R) := by
+        rw [Finset.sum_range_succ']
+        simp only [pow_zero, Nat.sub_zero]
+        rw [add_comm]
+        congr 1
+        apply Finset.sum_congr rfl
+        intro k hk
+        congr 2
+        have hk' : k < d := Finset.mem_range.mp hk
+        have hss : k + 1 ≤ d := Nat.succ_le_of_lt hk'
+        have h2 : d - (k + 1) = d - k - 1 := Nat.sub_sub d k 1
+        have h3 : d - k - 1 = d - 1 - k := by omega
+        rw [h2, h3]
+    -- x * G を展開すると h1 の第2項と一致する（項順序を合わせる）
+    have h2 : ∑ k ∈ Finset.range d, x * ((Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k))
+      = ∑ k ∈ Finset.range d, x ^ (k + 1) * u ^ (d - 1 - k) * (Nat.choose d (k + 1) : R) := by
+        apply Finset.sum_congr rfl
+        intro k _
+        ring
+    rw [h1, h2]
+    simp only [Nat.choose_zero_right, Nat.cast_one, pow_zero, mul_one]
+    ring
+
+@[simp]
+theorem cosmic_formula_binom {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
+        (x + u) ^ d - (x * G d x u) = u ^ d := by
+        simpa using cosmic_id d x u
+
+theorem cosmic_id' {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
+        (x + u) ^ d - (x * G d x u) = u ^ d := by
     unfold G
     rw [add_pow, Finset.mul_sum]
     -- 二項展開を k=0 項と k≥1 項に分ける（項の順序を `add_pow` の出力に合わせる）
@@ -91,10 +173,13 @@ Z_d(x;u) = (x+u)^d -\left( x \sum_{k=0}^{d-1} \binom{d}{k+1} u^{d-1-k} x^k \righ
 def Z {R : Type _} [CommRing R] (d : ℕ) (x u : R) : R :=
     (x + u) ^ d - (x * G d x u) - u ^ d
 
+def Z' {R : Type _} [CommRing R] (d : ℕ) (x u : R) : R :=
+    (x + u) ^ d - (x * G d x u) - u ^ d
+
 /-- Z_d は恒等的に 0 である -/
 theorem Z_eq_zero {R : Type _} [CommRing R] (d : ℕ) (x u : R) : Z d x u = 0 := by
     unfold Z
-    have h := cosmic_id d x u
+    have h := cosmic_formula_binom d x u
     rw [h]
     simp
 
@@ -132,8 +217,11 @@ def R (d : ℕ) (x u : ℝ) : ℝ := (x + u) ^ d - u ^ d - (Nat.choose d 1 : ℝ
 theorem f_eq_relation {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
     f d x u = x * (G d x u - (Nat.choose d 1 : R) * u ^ (d - 1)) := by
     rw [f_eq_pow_sub]
-    have h := cosmic_id d x u
-    rw [←h]
+    -- Use cosmic_formula_binom which states (x + u)^d - x * G d x u = u^d
+    have h' : (x + u) ^ d - u ^ d = x * G d x u := by
+      rw [←cosmic_formula_binom d x u]
+      ring
+    rw [h']
     simp
     ring
 
@@ -165,7 +253,7 @@ def G' {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R :=
     ∑ k ∈ Finset.range d, (Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k)
 
 /-! 無減算形の恒等式: (x+u)^d = x * G d x u + u^d (CommSemiring) -/
-theorem cosmic_id' {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
+theorem cosmic_id_csr {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
         (x + u) ^ d = x * G' d x u + u ^ d := by
     unfold G'
     rw [add_pow, Finset.mul_sum]
