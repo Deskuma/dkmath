@@ -25,12 +25,48 @@ section GeneralU
 
 variable {State : Type _} {T : State → State} {I : State → ℕ}
 
-/-- 同じ定理、別証明。 -/
-example /- I_iterate_of_u -/ (u : ℕ) (h : ∀ s, I (T s) = I s + u) :
+/-- 1 増分の場合：`I (T s) = I s + 1` ならば k 回反復すると `I (iterate T k s) = I s + k` である。 -/
+example /- I_iterate_of_unit -/
+  (h : ∀ s, I (T s) = I s + 1) : ∀ k s, I (iterate T k s) = I s + k := by
+  intro k s
+  induction k generalizing s
+  case zero => rw [iterate_zero]; simp [add_zero]
+  case succ k ih =>
+    simp [iterate_succ, (ih (T s)), (h s), (add_assoc (I s) 1 k), add_comm 1 k]
+
+/-- `I` が 1 増分ならば、非自明な閉路（k>0）は存在しない。 -/
+example /- I_iterate_of_unit -/
+  (h : ∀ s, I (T s) = I s + 1) :
+  ∀ k s, I (iterate T k s) = I s + k := by
+  intro k s
+  induction k generalizing s with
+  | zero => simp [iterate, add_zero]
+  | succ k ih =>
+    calc
+      I (iterate T (k + 1) s) = I (iterate T k (T s)) := by simp [iterate]
+      _ = I (T s) + k := by exact ih (T s)
+      _ = I s + 1 + k := by rw [h s]
+      _ = I s + (k + 1) := by
+        rw [add_assoc, add_comm 1 k]
+
+/-- `I` が 1 増分ならば、非自明な閉路（k>0）は存在しない。 -/
+example /- no_nontrivial_cycle_unit -/
+  (h : ∀ s, I (T s) = I s + 1) :
+  ∀ k s, iterate T k s = s → k = 0 := by
+  intros k s hk
+  have eqI := congrArg I hk
+  rw [I_iterate_of_unit h k s] at eqI
+  -- I s + k = I s を得る -> 左側の加算をキャンセルして k = 0
+  rw [← Nat.add_zero (I s)] at eqI
+  exact Nat.add_left_cancel eqI
+
+/-- 一般化：`I (T s) = I s + u` のとき、`I (iterate T k s) = I s + k * u`。 -/
+example /- I_iterate_of_u -/
+  (u : ℕ) (h : ∀ s, I (T s) = I s + u) :
   ∀ k s, I (iterate T k s) = I s + k * u := by
   intro k s
   induction k generalizing s with
-  | zero => simp only [iterate, Function.iterate_zero_apply, zero_mul, add_zero]
+  | zero => simp [iterate, zero_mul, add_zero]
   | succ k ih =>
     calc
       I (iterate T (k + 1) s) = I (iterate T k (T s)) := by simp [iterate]
