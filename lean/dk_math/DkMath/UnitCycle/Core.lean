@@ -24,7 +24,8 @@ def iterate {α : Type _} (f : α → α) : Nat → α → α
 theorem iterate_zero {α} (f : α → α) (x : α) : iterate f 0 x = x := rfl
 
 @[simp]
-theorem iterate_succ {α} (f : α → α) (n : Nat) (x : α) : iterate f (n + 1) x = iterate f n (f x) := rfl
+theorem iterate_succ {α} (f : α → α) (n : Nat) (x : α) :
+  iterate f (n + 1) x = iterate f n (f x) := rfl
 
 section UnitIncrement
 
@@ -34,7 +35,7 @@ variable {State : Type _} {T : State → State} {I : State → ℕ}
 theorem I_iterate_of_unit (h : ∀ s, I (T s) = I s + 1) : ∀ k s, I (iterate T k s) = I s + k := by
   intro k s
   induction k generalizing s
-  case zero => rw [iterate_zero]; simp [Nat.add_zero]
+  case zero => rw [iterate_zero]; simp only [add_zero]
   case succ k ih =>
     rw [iterate_succ]
     have ih' := ih (T s)
@@ -46,7 +47,7 @@ theorem I_iterate_of_unit (h : ∀ s, I (T s) = I s + 1) : ∀ k s, I (iterate T
 theorem I_iterate_of_unit' (h : ∀ s, I (T s) = I s + 1) : ∀ k s, I (iterate T k s) = I s + k := by
   intro k s
   induction k generalizing s with
-  | zero => simp [iterate, Nat.add_zero]
+  | zero => simp only [iterate, add_zero]
   | succ k ih =>
     calc
       I (iterate T (k + 1) s) = I (iterate T k (T s)) := by simp [iterate]
@@ -57,7 +58,8 @@ theorem I_iterate_of_unit' (h : ∀ s, I (T s) = I s + 1) : ∀ k s, I (iterate 
 
 
 /-- `I` が 1 増分ならば、非自明な閉路（k>0）は存在しない。 -/
-theorem no_nontrivial_cycle_unit (h : ∀ s, I (T s) = I s + 1) : ∀ k s, iterate T k s = s → k = 0 := by
+theorem no_nontrivial_cycle_unit (h : ∀ s, I (T s) = I s + 1) :
+  ∀ k s, iterate T k s = s → k = 0 := by
   intros k s hk
   have eqI := congrArg I hk
   rw [I_iterate_of_unit h k s] at eqI
@@ -72,10 +74,11 @@ section GeneralU
 variable {State : Type _} {T : State → State} {I : State → ℕ}
 
 /-- 一般化：`I (T s) = I s + u` のとき、`I (iterate T k s) = I s + k * u`。 -/
-theorem I_iterate_of_u (u : ℕ) (h : ∀ s, I (T s) = I s + u) : ∀ k s, I (iterate T k s) = I s + k * u := by
+theorem I_iterate_of_u (u : ℕ) (h : ∀ s, I (T s) = I s + u) :
+  ∀ k s, I (iterate T k s) = I s + k * u := by
   intro k s
   induction k generalizing s
-  case zero => rw [iterate_zero]; simp [Nat.mul_zero]
+  case zero => rw [iterate_zero]; simp only [zero_mul, add_zero]
   case succ k ih =>
     rw [iterate_succ]
     have ih' := ih (T s)
@@ -85,10 +88,11 @@ theorem I_iterate_of_u (u : ℕ) (h : ∀ s, I (T s) = I s + u) : ∀ k s, I (it
     rw [add_comm u (k * u)]
     rw [← Nat.succ_mul]
 
-theorem I_iterate_of_u' (u : ℕ) (h : ∀ s, I (T s) = I s + u) : ∀ k s, I (iterate T k s) = I s + k * u := by
+theorem I_iterate_of_u' (u : ℕ) (h : ∀ s, I (T s) = I s + u) :
+  ∀ k s, I (iterate T k s) = I s + k * u := by
   intro k s
   induction k generalizing s with
-  | zero => simp [iterate, Nat.mul_zero]
+  | zero => simp only [iterate, zero_mul, add_zero]
   | succ k ih =>
     calc
       I (iterate T (k + 1) s) = I (iterate T k (T s)) := by simp [iterate]
@@ -98,7 +102,8 @@ theorem I_iterate_of_u' (u : ℕ) (h : ∀ s, I (T s) = I s + u) : ∀ k s, I (i
         rw [add_assoc, add_comm u (k * u), ← Nat.succ_mul]
 
 /-- 閉路なら k * u = 0。 -/
-theorem cycle_mul_zero (u : ℕ) (h : ∀ s, I (T s) = I s + u) : ∀ k s, iterate T k s = s → k * u = 0 := by
+theorem cycle_mul_zero (u : ℕ) (h : ∀ s, I (T s) = I s + u) :
+  ∀ k s, iterate T k s = s → k * u = 0 := by
   intros k s hk
   have eqI := congrArg I hk
   rw [I_iterate_of_u u h k s] at eqI
@@ -107,7 +112,8 @@ theorem cycle_mul_zero (u : ℕ) (h : ∀ s, I (T s) = I s + u) : ∀ k s, itera
   exact Nat.add_left_cancel eqI
 
 /-- 特に u > 0 のとき、非自明な閉路は存在しない（k=0）。 -/
-theorem no_nontrivial_cycle_of_pos_u (u : ℕ) (h : ∀ s, I (T s) = I s + u) (hu : u > 0) : ∀ k s, iterate T k s = s → k = 0 := by
+theorem no_nontrivial_cycle_of_pos_u (u : ℕ) (h :
+  ∀ s, I (T s) = I s + u) (hu : u > 0) : ∀ k s, iterate T k s = s → k = 0 := by
   intros k s hk
   have := cycle_mul_zero u h k s hk
   -- k * u = 0 から `k = 0 ∨ u = 0` が得られる
