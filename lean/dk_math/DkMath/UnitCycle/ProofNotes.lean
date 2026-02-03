@@ -77,4 +77,43 @@ example /- I_iterate_of_u -/
 
 end GeneralU
 
+namespace ProofNotes
+
+namespace Examples
+
+/-- 最小の State の例：`val : ℕ` を持つ。 -/
+structure State where
+  val : ℕ
+  deriving Repr, Inhabited
+
+/-- 恒等変換（u = 0）の例：この場合は任意の k で閉路になる（非自明閉路が存在する）。 -/
+def T0 (s : State) : State := s
+
+/-- 恒等変換の反復は常に元に戻る。 -/
+example /- iterate_T0 -/
+(k : ℕ) (s : State) : iterate T0 k s = s := by
+  induction k generalizing s
+  case zero => simp [iterate]
+  case succ k ih =>
+    calc
+      iterate T0 (k + 1) s = iterate T0 k (T0 s) := by simp [iterate]
+      _ = T0 s := by exact ih (T0 s)
+      _ = s := by rfl
+
+/-- 2 要素の巡回（スワップ）例。2 回で元に戻るため k = 2 の非自明閉路がある。 -/
+structure State2 where v : Bool deriving Repr, Inhabited
+
+/-- スワップ遷移。 -/
+def Tswap (s : State2) : State2 := { v := not s.v }
+
+/-- スワップ遷移の 2 回反復は元に戻る。 -/
+example /- iterate_Tswap_two -/
+  (s : State2) : iterate Tswap 2 s = s := by
+  cases s
+  simp [iterate, Tswap]
+
+end Examples
+
+end ProofNotes
+
 end DkMath.UnitCycle
