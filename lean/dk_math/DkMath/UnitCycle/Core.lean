@@ -15,17 +15,17 @@ import Mathlib
 
 namespace DkMath.UnitCycle
 
-/-- 単純な反復関数。`iterate f n x` は `f` を n 回適用した結果。 -/
-def iterate {α : Type _} (f : α → α) : Nat → α → α
-  | 0 => fun x => x
-  | n+1 => fun x => iterate f n (f x)
+/-- `iterate` は Mathlib の反復表記 `f^[n]` を利用する。 -/
+abbrev iterate {α : Type _} (f : α → α) : Nat → α → α := fun n x => f^[n] x
 
 @[simp]
-theorem iterate_zero {α} (f : α → α) (x : α) : iterate f 0 x = x := rfl
+theorem iterate_zero {α} (f : α → α) (x : α) : iterate f 0 x = x := by
+  simp [iterate, Function.iterate_zero_apply]
 
 @[simp]
-theorem iterate_succ {α} (f : α → α) (n : Nat) (x : α) :
-  iterate f (n + 1) x = iterate f n (f x) := rfl
+theorem iterate_succ
+  {α} (f : α → α) (n : Nat) (x : α) : iterate f (n + 1) x = iterate f n (f x) := by
+  simp [iterate, Function.iterate_succ_apply]
 
 section UnitIncrement
 
@@ -60,7 +60,7 @@ example /- I_iterate_of_u -/ (u : ℕ) (h : ∀ s, I (T s) = I s + u) :
   ∀ k s, I (iterate T k s) = I s + k * u := by
   intro k s
   induction k generalizing s with
-  | zero => simp only [iterate, zero_mul, add_zero]
+  | zero => simp only [iterate, Function.iterate_zero_apply, zero_mul, add_zero]
   | succ k ih =>
     calc
       I (iterate T (k + 1) s) = I (iterate T k (T s)) := by simp [iterate]
