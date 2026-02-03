@@ -13,15 +13,7 @@ import DkMath.ABC.CountPowersDividing2n1  -- ABC: Counting Powers Dividing 2n+1
 -- Collatz Module (2026 Cartography Research)
 import DkMath.Collatz.Collatz2K26  -- Collatz2K26: Accelerated Collatz Dynamics
 -- Cosmic Formula Module
-import DkMath.CellDim  -- Cell Dimensionality
 import DkMath.CosmicFormula  -- Cosmic Formula Basics
-import DkMath.CosmicFormulaDim  -- Cosmic Formula Dimensionality
-import DkMath.CosmicFormulaGeom  -- Cosmic Formula Geometry
-import DkMath.CosmicFormulaLinear  -- Cosmic Formula Linearity
-import DkMath.CosmicFormulaTrominoLink  -- Cosmic Formula and Tromino Link
-import DkMath.CosmicFormulaCellDim  -- Cosmic Formula Cell Dimensionality
-import DkMath.CosmicFormulaExp  -- Cosmic Formula Exponent
-import DkMath.CosmicFormulaBinom  -- Cosmic Formula Binomial Expansion
 -- Polyomino Module
 import DkMath.Polyomino  -- Polyomino Basics
 import DkMath.PolyominoPrototype  -- Polyomino Prototype

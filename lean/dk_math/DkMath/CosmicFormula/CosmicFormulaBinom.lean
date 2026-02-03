@@ -5,9 +5,9 @@ Authors: D. and Wise Wolf.
 -/
 
 import Mathlib
-import DkMath.CosmicFormulaDim  -- Cosmic Formula Dimensionality
+import DkMath.CosmicFormula.CosmicFormulaDim  -- Cosmic Formula Dimensionality
 
-#print "file: DkMath.CosmicFormulaBinom"
+#print "file: DkMath.CosmicFormula.CosmicFormulaBinom"
 
 /-! ## 無次元宇宙式 Basic Dimless Cosmic Formula
 

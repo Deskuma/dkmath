@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import Mathlib
-import DkMath.CosmicFormulaGeom
+import DkMath.CosmicFormula.CosmicFormulaGeom
 import DkMath.Tromino
 
 open DkMath.CosmicFormulaGeom
