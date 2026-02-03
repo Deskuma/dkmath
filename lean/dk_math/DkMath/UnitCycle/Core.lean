@@ -35,34 +35,10 @@ variable {State : Type _} {T : State → State} {I : State → ℕ}
 theorem I_iterate_of_unit (h : ∀ s, I (T s) = I s + 1) : ∀ k s, I (iterate T k s) = I s + k := by
   intro k s
   induction k generalizing s
-  case zero => rw [iterate_zero]; simp only [add_zero]
+  case zero => simp [iterate]
   case succ k ih =>
     simp [iterate_succ, (ih (T s)), (h s), (add_assoc (I s) 1 k), add_comm 1 k]
 
-/-- 同じ定理、別証明。 -/
-example /- I_iterate_of_unit -/ (h : ∀ s, I (T s) = I s + 1) :
-  ∀ k s, I (iterate T k s) = I s + k := by
-  intro k s
-  induction k generalizing s with
-  | zero => simp only [iterate, add_zero]
-  | succ k ih =>
-    calc
-      I (iterate T (k + 1) s) = I (iterate T k (T s)) := by simp [iterate]
-      _ = I (T s) + k := by exact ih (T s)
-      _ = I s + 1 + k := by rw [h s]
-      _ = I s + (k + 1) := by
-        rw [add_assoc, add_comm 1 k]
-
-
-/-- `I` が 1 増分ならば、非自明な閉路（k>0）は存在しない。 -/
-theorem no_nontrivial_cycle_unit (h : ∀ s, I (T s) = I s + 1) :
-  ∀ k s, iterate T k s = s → k = 0 := by
-  intros k s hk
-  have eqI := congrArg I hk
-  rw [I_iterate_of_unit h k s] at eqI
-  -- I s + k = I s を得る -> 左側の加算をキャンセルして k = 0
-  rw [← Nat.add_zero (I s)] at eqI
-  exact Nat.add_left_cancel eqI
 
 end UnitIncrement
 
@@ -75,7 +51,7 @@ theorem I_iterate_of_u (u : ℕ) (h : ∀ s, I (T s) = I s + u) :
   ∀ k s, I (iterate T k s) = I s + k * u := by
   intro k s
   induction k generalizing s
-  case zero => rw [iterate_zero]; simp only [zero_mul, add_zero]
+  case zero => simp [iterate, zero_mul]
   case succ k ih =>
     simp [iterate_succ, (ih (T s)), (h s), (add_assoc), (add_comm u (k * u)), ← Nat.succ_mul]
 
@@ -115,5 +91,17 @@ theorem no_nontrivial_cycle_of_pos_u (u : ℕ) (h :
   | inr hu0 => exact (False.elim (Nat.ne_of_gt hu hu0))
 
 end GeneralU
+
+section UnitAsCorollary
+
+variable {State : Type _} {T : State → State} {I : State → ℕ}
+
+/-- `u = 1` の特例としての非自明閉路否定。一般版 `no_nontrivial_cycle_of_pos_u` から導出する。 -/
+theorem no_nontrivial_cycle_unit (h : ∀ s, I (T s) = I s + 1) :
+  ∀ k s, iterate T k s = s → k = 0 := by
+  -- 1 > 0 は自明
+  exact no_nontrivial_cycle_of_pos_u 1 h (by decide)
+
+end UnitAsCorollary
 
 end DkMath.UnitCycle
