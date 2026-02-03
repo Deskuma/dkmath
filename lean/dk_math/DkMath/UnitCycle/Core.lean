@@ -19,8 +19,7 @@ namespace DkMath.UnitCycle
 abbrev iterate {α : Type _} (f : α → α) : Nat → α → α := fun n x => f^[n] x
 
 @[simp]
-theorem iterate_zero {α} (f : α → α) (x : α) : iterate f 0 x = x := by
-  simp [iterate, Function.iterate_zero_apply]
+theorem iterate_zero {α} (f : α → α) (x : α) : iterate f 0 x = x := rfl
 
 @[simp]
 theorem iterate_succ
@@ -78,16 +77,57 @@ theorem no_nontrivial_cycle_of_pos_u (u : ℕ) (h :
 
 end GeneralU
 
-section UnitAsCorollary
+section GeOne
 
 variable {State : Type _} {T : State → State} {I : State → ℕ}
 
-/-- `u = 1` の特例としての非自明閉路否定。一般版 `no_nontrivial_cycle_of_pos_u` から導出する。 -/
-theorem no_nontrivial_cycle_unit (h : ∀ s, I (T s) = I s + 1) :
-  ∀ k s, iterate T k s = s → k = 0 := by
-  -- 1 > 0 は自明
-  exact no_nontrivial_cycle_of_pos_u 1 h (by decide)
+/--
+不等式版：`I (T s) ≥ I s + 1` が常に成り立つなら、k 回反復しても
+`I (iterate T k s) ≥ I s + k` が成り立つ。
 
-end UnitAsCorollary
+増分一定（`= I s + u`）を仮定できない実モデル向け。
+-/
+theorem I_iterate_of_ge_one (h : ∀ s, I (T s) ≥ I s + 1) :
+    ∀ k s, I (iterate T k s) ≥ I s + k := by
+  intro k s
+  induction k generalizing s with
+  | zero =>
+      simp [iterate]
+  | succ k ih =>
+      -- k+1 回反復は、k 回反復を `T s` から始めるのと同じ
+      have h1 : I (iterate T k (T s)) ≥ I (T s) + k := ih (T s)
+      have h2 : I (T s) + k ≥ I s + (k + 1) := by
+        -- `I (T s) ≥ I s + 1` に k を加える
+        have := Nat.add_le_add_right (h s) k
+        -- (I s + 1) + k = I s + (k + 1)
+        simpa [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using this
+      -- 連鎖して結論へ
+      have : I (iterate T (k + 1) s) ≥ I s + (k + 1) := by
+        -- iterate_succ: iterate T (k+1) s = iterate T k (T s)
+        simpa [iterate_succ] using (ge_trans h1 h2)
+      simpa [Nat.succ_eq_add_one] using this
+
+/--
+不等式版：`I (T s) ≥ I s + 1` が常に成り立つなら、非自明な閉路は存在しない。
+すなわち `iterate T k s = s` ならば `k = 0`。
+-/
+theorem no_nontrivial_cycle_of_ge_one (h : ∀ s, I (T s) ≥ I s + 1) :
+    ∀ k s, iterate T k s = s → k = 0 := by
+  intro k s hk
+  cases k with
+  | zero => rfl
+  | succ k =>
+      -- 閉路仮定から矛盾を出す：I が必ず増えるのに元へ戻ることはできない
+      have hge : I (iterate T (Nat.succ k) s) ≥ I s + Nat.succ k :=
+        I_iterate_of_ge_one (State := State) (T := T) (I := I) h (Nat.succ k) s
+      have eqI : I (iterate T (Nat.succ k) s) = I s := congrArg I hk
+      have ge' : I s ≥ I s + Nat.succ k := by
+        rw [eqI] at hge
+        exact hge
+      have lt' : I s < I s + Nat.succ k :=
+        Nat.lt_add_of_pos_right (Nat.succ_pos k)
+      exact (False.elim ((not_lt_of_ge ge') lt'))
+
+end GeOne
 
 end DkMath.UnitCycle
