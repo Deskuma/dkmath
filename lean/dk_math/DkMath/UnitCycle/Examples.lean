@@ -144,6 +144,30 @@ theorem no_cycle_tg (k : ℕ) (s : State) (h : iterate Tg k s = s) : k = 0 :=
 
 end StateDependent
 
+/-! ## (B) 増分が局所的に大きい例（周期ごとにスパイク） -/
+section LocalSpike
+
+/-- 局所スパイク：10 の倍数のとき 5 それ以外は 1 -/
+def g_spike (s : State) : ℕ := if s.val % 10 = 0 then 5 else 1
+
+def T_spike (s : State) : State := { val := s.val + g_spike s }
+
+lemma hg_spike : ∀ s : State, 1 ≤ g_spike s := by
+  intro s
+  dsimp [g_spike]
+  split_ifs with h
+  · decide
+  · decide
+
+lemma hT_spike : ∀ s : State, I (T_spike s) ≥ I s + g_spike s := by
+  intro s; simp [T_spike, I, g_spike]
+
+/-- 局所スパイクでも閉路は存在しない（≥1 が満たされれば一般定理で排除）。 -/
+theorem no_cycle_spike (k : ℕ) (s : State) (h : iterate T_spike k s = s) : k = 0 :=
+  no_nontrivial_cycle_of_ge_g (State := State) (T := T_spike) (I := I) (g := g_spike) hg_spike hT_spike k s h
+
+end LocalSpike
+
 /-! ## 6) 厳密増分の例：T1 は I を厳密増加させる -/
 
 section Strict
