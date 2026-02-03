@@ -142,6 +142,9 @@ theorem sum_g_pos9_k2 :
     (∑ i ∈ Finset.range 2, g ((T^[i]) s0)) = 6 := by
   -- range 2 = {0,1}
   -- T^[0] s0 = s0, T^[1] s0 = T s0
+  -- NOTE: This proof relies on `simp` expanding `Finset.sum` over `range 2`,
+  -- unfolding the iterates `T^[i]` and evaluating the concrete arithmetic
+  -- needed to conclude that the sum is `6`.
   simp [Finset.sum_range_succ, s0, T, g, Nat.add_comm]
 
 /-- k=2 に対して Σg=6 なので、単純な +k (=2) より 4 大きい -/
