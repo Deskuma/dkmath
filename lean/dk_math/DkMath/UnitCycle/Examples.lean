@@ -105,7 +105,6 @@ theorem identity_has_nontrivial_cycle :
 example (s : State) : iterate T0 3 s = s := by
   simpa using iterate_T0 3 s
 
-
 end ZeroIncrement
 
 /-! ## 4) 境界：周期写像は閉路を持つ（増分不変量が無い例） -/
@@ -122,5 +121,44 @@ example : iterate Tswap 1 true = false := by
   simp [iterate, Tswap]
 
 end SwapCycle
+
+/-! ## 5) 状態依存増分：g(s) = 1 + s.val（常に ≥1） -/
+
+section StateDependent
+
+def g (s : State) : ℕ := 1 + s.val
+
+def Tg (s : State) : State := { val := s.val + g s }
+
+lemma hg : ∀ s : State, 1 ≤ g s := by
+  intro s
+  simp [g]
+
+lemma hTg : ∀ s : State, I (Tg s) ≥ I s + g s := by
+  intro s
+  simp [Tg, I, g]
+
+/-- 状態依存増分が ≥1 の場合にも閉路は存在しない。 -/
+theorem no_cycle_tg (k : ℕ) (s : State) (h : iterate Tg k s = s) : k = 0 :=
+  no_nontrivial_cycle_of_ge_g (State := State) (T := Tg) (I := I) (g := g) hg hTg k s h
+
+end StateDependent
+
+/-! ## 6) 厳密増分の例：T1 は I を厳密増加させる -/
+
+section Strict
+
+lemma strict_T1 : ∀ s : State, I (T1 s) > I s := by
+  intro s
+  have : I (T1 s) = I s + 1 := by simp [T1, I]
+  rw [this]
+  -- I s < I s + 1
+  exact Nat.lt_add_of_pos_right (Nat.succ_pos 0)
+
+/-- 厳密増分から閉路を排除できる。 -/
+theorem no_cycle_strict (k : ℕ) (s : State) (h : iterate T1 k s = s) : k = 0 :=
+  no_nontrivial_cycle_of_strict (State := State) (T := T1) (I := I) strict_T1 k s h
+
+end Strict
 
 end DkMath.UnitCycle

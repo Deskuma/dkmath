@@ -139,4 +139,60 @@ theorem no_nontrivial_cycle_of_ge_one (h : ∀ s, I (T s) ≥ I s + 1) :
 
 end GeOne
 
+section StateDependentIncrement
+
+variable {State : Type _} {T : State → State} {I : State → ℕ} {g : State → ℕ}
+
+/-- 状態依存の増分でも、常に `g s ≥ 1` なら `I` は反復で少なくとも `k` 増える。 -/
+theorem I_iterate_of_ge_g (hg : ∀ s, 1 ≤ g s) (hT : ∀ s, I (T s) ≥ I s + g s) :
+  ∀ k s, I (iterate T k s) ≥ I s + k := by
+  intro k s
+  induction k generalizing s
+  case zero => simp [iterate]
+  case succ k ih =>
+    -- iterate_succ : iterate T (k + 1) s = iterate T k (T s)
+    have ih' := ih (T s)
+    have step := hT s
+    have g1 := hg s
+    calc
+      I (iterate T (k + 1) s) = I (iterate T k (T s)) := by simp [iterate_succ]
+      _ ≥ I (T s) + k := by exact ih'
+      _ ≥ (I s + g s) + k := by exact Nat.add_le_add_right step k
+      _ ≥ (I s + 1) + k := by exact Nat.add_le_add_right (Nat.add_le_add_left g1 (I s)) k
+      _ = I s + (k + 1) := by simp [Nat.add_left_comm, Nat.add_comm]
+
+/-- 状態依存増分 `g(s)≥1` の下で、非自明閉路は存在しない。 -/
+theorem no_nontrivial_cycle_of_ge_g (hg : ∀ s, 1 ≤ g s) (hT : ∀ s, I (T s) ≥ I s + g s) :
+  ∀ k s, iterate T k s = s → k = 0 := by
+  intro k s hcyc
+  have hk := I_iterate_of_ge_g (State := State) (T := T) (I := I) (g := g) hg hT k s
+  have hle : I s + k ≤ I s := by simpa [hcyc] using hk
+  cases k with
+  | zero => rfl
+  | succ k =>
+    -- k+1 が正なので I s < I s + (k+1) が成り立つ
+    have hlt : I s < I s + (k + 1) := Nat.lt_add_of_pos_right (Nat.succ_pos k)
+    have : I s < I s := lt_of_lt_of_le hlt hle
+    exact absurd this (Nat.lt_irrefl _)
+
+end StateDependentIncrement
+
+section StrictIncrement
+
+variable {State : Type _} {T : State → State} {I : State → ℕ}
+
+/-- `I (T s) > I s` なら `I (T s) ≥ I s + 1` に落ちる（Nat）。 -/
+lemma ge_one_of_strict (h : ∀ s, I (T s) > I s) : ∀ s, I (T s) ≥ I s + 1 := by
+  intro s
+  have : Nat.succ (I s) ≤ I (T s) := Nat.succ_le_of_lt (h s)
+  simpa [Nat.succ_eq_add_one] using this
+
+/-- 厳密増分なら既存の不等式版定理へ落として非自明閉路を排除する。 -/
+theorem no_nontrivial_cycle_of_strict (h : ∀ s, I (T s) > I s) :
+  ∀ k s, iterate T k s = s → k = 0 := by
+  intro k s hk
+  exact no_nontrivial_cycle_of_ge_one (State := State) (T := T) (I := I) (ge_one_of_strict h) k s hk
+
+end StrictIncrement
+
 end DkMath.UnitCycle
