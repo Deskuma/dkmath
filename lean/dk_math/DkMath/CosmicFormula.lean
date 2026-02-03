@@ -35,6 +35,9 @@ def cosmic_formula_unit_one (x : ℝ) : ℝ :=
   cosmic_formula_unit x 1  -- A == B(1)
   -- 単位宇宙式の基本単位形（定義参照版）
 
+/-- D: 宇宙式 Cosmic Formula -/
+abbrev cosmic_formula := cosmic_formula_one  -- 宇宙式の標準名
+
 -- 上記の定義の等価性を示す補題群
 
 /-- 宇宙式 Basic Cosmic Formula と単位宇宙式 Basic Unit Cosmic Formula の等価性 -/
