@@ -12,11 +12,11 @@ import DkMath.UnitCycle.Core
 -- ----------------------------------------------------------------------------
 -- DkMath.UnitCycle.ProofNotes
 --
--- 補助証明ノート：DkMath.UnitCycle.Core の定理の別証明例。
+-- 補助証明ノート：`DkMath.UnitCycle.Core` における定理の別証明・教育用の例をまとめる。
 --
--- ※この Lean はあくまで補助的なものであり、DkMath の正式な一部ではない。
--- > import DkMath.UnitCycle.Core で Core の内容を利用できる。
--- > このファイルに追加する補題は example として記述する。
+-- ※この Lean ファイルは DkMath.UnitCycle の補助モジュールであり、公開 API には含めない。
+-- > `import DkMath.UnitCycle.Core` により Core の内容を利用しつつ、ここでは別証明を記録する。
+-- > このファイルに追加する補題は `example` として記述し、ライブラリ本体の仕様に影響しないようにする。
 -- ----------------------------------------------------------------------------
 
 namespace DkMath.UnitCycle
