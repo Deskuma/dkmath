@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 
+open scoped BigOperators
+
 #print "file: DkMath.UnitCycle.Core"
 -- ----------------------------------------------------------------------------
 -- DkMath.UnitCycle.Core
@@ -25,6 +27,12 @@ theorem iterate_zero {α} (f : α → α) (x : α) : iterate f 0 x = x := rfl
 theorem iterate_succ
   {α} (f : α → α) (n : Nat) (x : α) : iterate f (n + 1) x = iterate f n (f x) := by
   simp [iterate, Function.iterate_succ_apply]
+
+/-- iterate の前後適用が入れ替えられる補題 -/
+theorem iterate_comm {α} (f : α → α) (n : Nat) (x : α) : iterate f n (f x) = f (iterate f n x) := by
+  induction n generalizing x with
+  | zero => simp [iterate]
+  | succ n ih => simp [iterate_succ, ih]
 
 section UnitIncrement
 
@@ -138,6 +146,42 @@ theorem no_nontrivial_cycle_of_ge_one (h : ∀ s, I (T s) ≥ I s + 1) :
       exact (False.elim ((not_lt_of_ge ge') lt'))
 
 end GeOne
+
+section SumIncrement
+
+variable {State : Type _} {T : State → State} {I : State → ℕ} {g : State → ℕ}
+
+/-- 反復ごとの増分の総和で下から抑える（最強の形）。 -/
+theorem I_iterate_ge_sum_g (hT : ∀ s, I (T s) ≥ I s + g s) :
+  ∀ k s, I (iterate T k s) ≥ I s + (Finset.sum (Finset.range k) fun i => g (iterate T i s)) := by
+  intro k s
+  induction k generalizing s with
+  | zero => simp [iterate]
+  | succ k ih =>
+    have step := hT (iterate T k s)
+    have ih' := ih s
+    have A := le_trans (Nat.add_le_add_right ih' (g (iterate T k s))) step
+    let e := (iterate_succ (f := T) k s).trans (iterate_comm (f := T) k s)
+    -- 左辺を e で書き換え、右辺の sum を開いて A と直接一致させる
+    rw [e]
+    rw [Finset.sum_range_succ (fun i => g (iterate T i s)) k]
+    simp only [ge_iff_le, add_assoc] at *
+    exact A
+
+/-- `g(s) ≥ 1` なら総和版から即座に `+k` 版が出る。 -/
+theorem I_iterate_ge_add_k (hg : ∀ s, 1 ≤ g s) (hT : ∀ s, I (T s) ≥ I s + g s) :
+  ∀ k s, I (iterate T k s) ≥ I s + k := by
+  intro k s
+  have hs := I_iterate_ge_sum_g (T := T) (I := I) (g := g) hT k s
+  have hsum : k ≤ (Finset.sum (Finset.range k) fun i => g (iterate T i s)) := by
+    have : (Finset.sum (Finset.range k) fun i => (1 : ℕ))
+         ≤ (Finset.sum (Finset.range k) fun i => g (iterate T i s)) :=
+      Finset.sum_le_sum fun i hi => hg (iterate T i s)
+    simpa [Finset.sum_const, Finset.card_range] using this
+  -- I s + k ≤ I s + Σ g ≤ I(iterate T k s)
+  exact le_trans (Nat.add_le_add_left hsum (I s)) hs
+
+end SumIncrement
 
 section StateDependentIncrement
 
