@@ -37,14 +37,11 @@ theorem I_iterate_of_unit (h : ∀ s, I (T s) = I s + 1) : ∀ k s, I (iterate T
   induction k generalizing s
   case zero => rw [iterate_zero]; simp only [add_zero]
   case succ k ih =>
-    rw [iterate_succ]
-    have ih' := ih (T s)
-    rw [ih']
-    rw [h s]
-    rw [add_assoc (I s) 1 k]
-    rw [add_comm 1 k]
+    simp [iterate_succ, (ih (T s)), (h s), (add_assoc (I s) 1 k), add_comm 1 k]
 
-theorem I_iterate_of_unit' (h : ∀ s, I (T s) = I s + 1) : ∀ k s, I (iterate T k s) = I s + k := by
+/-- 同じ定理、別証明。 -/
+example /- I_iterate_of_unit -/ (h : ∀ s, I (T s) = I s + 1) :
+  ∀ k s, I (iterate T k s) = I s + k := by
   intro k s
   induction k generalizing s with
   | zero => simp only [iterate, add_zero]
@@ -80,15 +77,10 @@ theorem I_iterate_of_u (u : ℕ) (h : ∀ s, I (T s) = I s + u) :
   induction k generalizing s
   case zero => rw [iterate_zero]; simp only [zero_mul, add_zero]
   case succ k ih =>
-    rw [iterate_succ]
-    have ih' := ih (T s)
-    rw [ih']
-    rw [h s]
-    rw [add_assoc]
-    rw [add_comm u (k * u)]
-    rw [← Nat.succ_mul]
+    simp [iterate_succ, (ih (T s)), (h s), (add_assoc), (add_comm u (k * u)), ← Nat.succ_mul]
 
-theorem I_iterate_of_u' (u : ℕ) (h : ∀ s, I (T s) = I s + u) :
+/-- 同じ定理、別証明。 -/
+example /- I_iterate_of_u -/ (u : ℕ) (h : ∀ s, I (T s) = I s + u) :
   ∀ k s, I (iterate T k s) = I s + k * u := by
   intro k s
   induction k generalizing s with
