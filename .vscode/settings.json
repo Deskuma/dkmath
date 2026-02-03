@@ -30,6 +30,7 @@
         "ssum",
         "traj",
         "trajs",
+        "trominoes",
         "tsub"
     ],
     "markdownlint.config": {
