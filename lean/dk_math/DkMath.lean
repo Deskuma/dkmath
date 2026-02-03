@@ -27,6 +27,8 @@ import DkMath.UniqueRepresentation  -- Silver Ratio Unique Representation
 import DkMath.DHNT  -- DHNT: Units and Quantities (Dynamic Harmonic Number Theory)
 -- RH: Riemann Hypothesis Module
 import DkMath.RH  -- RH: Riemann Hypothesis Module
+-- Unit Cycle Module
+import DkMath.UnitCycle  -- Unit Cycle Basics
 
 -- >|---|-----------|------------------|-------------------|-------------------|----------|---------
 

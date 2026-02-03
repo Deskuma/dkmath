@@ -25,6 +25,7 @@
         "hsub",
         "hunit",
         "Polyominoes",
+        "Repr",
         "rmod",
         "segs",
         "ssum",
