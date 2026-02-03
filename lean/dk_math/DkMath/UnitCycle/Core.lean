@@ -38,6 +38,15 @@ theorem I_iterate_of_unit (h : ∀ s, I (T s) = I s + 1) : ∀ k s, I (iterate T
   case succ k ih =>
     simp [iterate_succ, (ih (T s)), (h s), (add_assoc (I s) 1 k), add_comm 1 k]
 
+/-- `I` が 1 増分ならば、非自明な閉路（k>0）は存在しない。 -/
+theorem no_nontrivial_cycle_unit (h : ∀ s, I (T s) = I s + 1) :
+  ∀ k s, iterate T k s = s → k = 0 := by
+  intros k s hk
+  have eqI := congrArg I hk
+  rw [I_iterate_of_unit h k s] at eqI
+  -- I s + k = I s を得る -> 左側の加算をキャンセルして k = 0
+  rw [← Nat.add_zero (I s)] at eqI
+  exact Nat.add_left_cancel eqI
 
 end UnitIncrement
 
