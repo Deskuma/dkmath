@@ -4,8 +4,9 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import Mathlib
+-- import Mathlib
 import DkMath.UnitCycle.Core
+import DkMath.UnitCycle.RelPolygon
 
 #print "file: DkMath.UnitCycle.Examples"
 
@@ -169,60 +170,38 @@ theorem no_cycle_spike (k : ℕ) (s : State) (h : iterate T_spike k s = s) : k =
 
 end LocalSpike
 
-/-! ## RelPolygon 最小モデル（相対多角数の試し刺し） -/
-section RelPolygon
+/-! ## RelPolygon の最小モデルは `RelPolygon.lean` に移動しました -/
 
-/-- 最小モデルの状態：周回位置 pos と蓄積 val を持つ。 -/
-structure RState where
-  pos : ℕ
-  val : ℕ
-  deriving Repr, Inhabited
+-- Use fully-qualified `RelPolygon.*` names to avoid shadowing with local `State`.
+section RelPolygonExamples
 
-/-- 局所スパイク：pos が 10 の倍数のとき 5, それ以外は 1 -/
-def g_rel (s : RState) : ℕ := if s.pos % 10 = 0 then 5 else 1
-
-/-- 周回写像：位置を 1 進め、ギャップを val に加算する。 -/
-def T_rel (s : RState) : RState := { pos := s.pos + 1, val := s.val + g_rel s }
-
-/-- 不変量は蓄積 val を取る。 -/
-def I_rel (s : RState) : ℕ := s.val
-
-lemma hg_rel : ∀ s : RState, 1 ≤ g_rel s := by
-  intro s
-  dsimp [g_rel]
-  split_ifs with h
-  · decide
-  · decide
-
-lemma hT_rel : ∀ s : RState, I_rel (T_rel s) ≥ I_rel s + g_rel s := by
-  intro s; simp [I_rel, T_rel, g_rel]
-
-/-- 総和版をそのまま適用する定理（単純な alias）。 -/
-theorem rel_sum_lower (k : ℕ) (s : RState) :
-  I_rel (iterate T_rel k s)
-≥ I_rel s + Finset.sum (Finset.range k) fun i => g_rel (iterate T_rel i s) :=
-  I_iterate_ge_sum_g (T := T_rel) (I := I_rel) (g := g_rel) hT_rel k s
-
--- s9 = pos=9,val=0, 2 ステップでの累積を直接計算して見せる（Finset の展開に依存しない実証）
-def s9 : RState := { pos := 9, val := 0 }
-
-lemma rel_example_k2_eq : I_rel (iterate T_rel 2 s9) = 6 := by
-  have hI : ∀ s, I_rel (T_rel s) = I_rel s + g_rel s := by intro s; simp [I_rel, T_rel, g_rel]
-  have H : I_rel (iterate T_rel 2 s9) = I_rel (T_rel (T_rel s9)) := by simp [iterate]
-  rw [H]
-  rw [hI (T_rel s9)]
-  rw [hI s9]
-  have h0 : I_rel s9 = 0 := by simp [I_rel, s9]
-  have h1 : g_rel s9 = 1 := by simp [g_rel, s9]
-  have h2 : g_rel (T_rel s9) = 5 := by simp [g_rel, T_rel, s9]
-  simp [h0, h1, h2]
+/-- 具体例：`pos=9`（`RelPolygon.s0`）、2 ステップでの累積を直接計算して見せる（Finset の展開に依存しない実証）。 -/
+lemma rel_example_k2_eq : RelPolygon.I (iterate RelPolygon.T 2 RelPolygon.s0) = 6 := by
+  have hI : ∀ s : RelPolygon.RPState, RelPolygon.I (RelPolygon.T s)
+      = RelPolygon.I s + RelPolygon.g s := by
+    intro s; simp [RelPolygon.I, RelPolygon.T, RelPolygon.g]
+  calc
+    RelPolygon.I (iterate RelPolygon.T 2 RelPolygon.s0)
+      = RelPolygon.I (RelPolygon.T (RelPolygon.T RelPolygon.s0)) := by simp [iterate]
+    _ = RelPolygon.I (RelPolygon.T RelPolygon.s0) + RelPolygon.g (RelPolygon.T RelPolygon.s0) := by
+      rw [hI (RelPolygon.T RelPolygon.s0)]
+    _ = (RelPolygon.I RelPolygon.s0 + RelPolygon.g RelPolygon.s0)
+        + RelPolygon.g (RelPolygon.T RelPolygon.s0) := by
+      rw [hI RelPolygon.s0]
+    _ = 0 + 1 + 5 := by
+      have h0 : RelPolygon.I RelPolygon.s0 = 0 := by simp [RelPolygon.I, RelPolygon.s0]
+      have h1 : RelPolygon.g RelPolygon.s0 = 1 := by simp [RelPolygon.g, RelPolygon.s0]
+      have h2 : RelPolygon.g (RelPolygon.T RelPolygon.s0) = 5 := by
+        simp [RelPolygon.g, RelPolygon.T, RelPolygon.s0]
+      simp [h0, h1, h2]
+    _ = 6 := by norm_num
 
 /-- 例の可視化：2 ステップで少なくとも 6 以上増える。 -/
-theorem rel_example_k2 : I_rel (iterate T_rel 2 s9) ≥ 6 := by
+theorem rel_example_k2 : RelPolygon.I (iterate RelPolygon.T 2 RelPolygon.s0) ≥ 6 := by
   apply Nat.le_of_eq
   exact rel_example_k2_eq
 
-end RelPolygon
+end RelPolygonExamples
 
 /-! ## 6) 厳密増分の例：T1 は I を厳密増加させる -/
 

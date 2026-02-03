@@ -4,12 +4,14 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import Mathlib
+-- import Mathlib
 import DkMath.UnitCycle.Core
 
 #print "file: DkMath.UnitCycle.RelPolygon"
 
-namespace DkMath.UnitCycle
+namespace DkMath.UnitCycle.RelPolygon
+
+open DkMath.UnitCycle -- allow access to core names if needed
 
 /-!
 # 相対多角数（周回）最小モデル
@@ -153,4 +155,4 @@ theorem I_pos9_k2_ge_6 : I ((T^[2]) s0) ≥ 6 := by
   -- I s0 = 0, Σg = 6 を代入
   simpa [I, s0, sum_g_pos9_k2] using h
 
-end DkMath.UnitCycle
+end DkMath.UnitCycle.RelPolygon
