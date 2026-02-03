@@ -164,7 +164,8 @@ lemma hT_spike : ∀ s : State, I (T_spike s) ≥ I s + g_spike s := by
 
 /-- 局所スパイクでも閉路は存在しない（≥1 が満たされれば一般定理で排除）。 -/
 theorem no_cycle_spike (k : ℕ) (s : State) (h : iterate T_spike k s = s) : k = 0 :=
-  no_nontrivial_cycle_of_ge_g (State := State) (T := T_spike) (I := I) (g := g_spike) hg_spike hT_spike k s h
+  no_nontrivial_cycle_of_ge_g
+  (State := State) (T := T_spike) (I := I) (g := g_spike) hg_spike hT_spike k s h
 
 end LocalSpike
 
@@ -198,7 +199,8 @@ lemma hT_rel : ∀ s : RState, I_rel (T_rel s) ≥ I_rel s + g_rel s := by
 
 /-- 総和版をそのまま適用する定理（単純な alias）。 -/
 theorem rel_sum_lower (k : ℕ) (s : RState) :
-  I_rel (iterate T_rel k s) ≥ I_rel s + Finset.sum (Finset.range k) fun i => g_rel (iterate T_rel i s) :=
+  I_rel (iterate T_rel k s)
+≥ I_rel s + Finset.sum (Finset.range k) fun i => g_rel (iterate T_rel i s) :=
   I_iterate_ge_sum_g (T := T_rel) (I := I_rel) (g := g_rel) hT_rel k s
 
 -- s9 = pos=9,val=0, 2 ステップでの累積を直接計算して見せる（Finset の展開に依存しない実証）
