@@ -17,7 +17,7 @@ open scoped BigOperators
 
 namespace DkMath.UnitCycle
 
-/-- `iterate` は Mathlib の反復表記 `f^[n]` を利用する。 -/
+/-- `iterate` は Lean 4 の組み込み記法 `f^[n]`（`Function.iterate`）を利用する。 -/
 abbrev iterate {α : Type _} (f : α → α) : Nat → α → α := fun n x => f^[n] x
 
 @[simp]
