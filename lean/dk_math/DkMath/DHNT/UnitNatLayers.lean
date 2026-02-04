@@ -91,7 +91,7 @@ def floorBridge : Bridge where
   phi := fun u => Int.toNat (Int.floor u.val) + 1
   pi  := piUnit
 
-/-- phi(u) > 0 を示す -/
+/-- phi(u) > 0 を示す: floorBridge -/
 theorem floorBridge_pos (u : Unit) : floorBridge.phi u > 0 := by
   dsimp [floorBridge]
   apply Nat.succ_pos
@@ -101,9 +101,31 @@ def scale10Bridge : Bridge where
   phi := fun u => Int.toNat (Int.floor (u.val * 10)) + 1
   pi  := piUnit
 
-/-- phi(u) > 0 を示す -/
+/-- phi(u) > 0 を示す: scale10Bridge -/
 theorem scale10Bridge_pos (u : Unit) : scale10Bridge.phi u > 0 := by
   dsimp [scale10Bridge]
+  apply Nat.succ_pos
+
+/-! 追加の具体化：有理近似（scale1000）と作図可能（sqrt による近似）の橋 -/
+
+/-- u.val を 1000 倍して floor を取り、1 を加える有理近似ベースの Bridge -/
+def rationalApproxBridge : Bridge where
+  phi := fun u => Int.toNat (Int.floor (u.val * 1000)) + 1
+  pi  := piUnit
+
+/-- phi(u) > 0 を示す: rationalApproxBridge -/
+theorem rationalApproxBridge_pos (u : Unit) : rationalApproxBridge.phi u > 0 := by
+  dsimp [rationalApproxBridge]
+  apply Nat.succ_pos
+
+/-- 作図可能な近似の簡易モデル：sqrt を使って一段階の平方根近似を取り、100 倍して floor を取る -/
+def constructibleBridge : Bridge where
+  phi := fun u => Int.toNat (Int.floor (Real.sqrt u.val * 100)) + 1
+  pi  := piUnit
+
+/-- phi(u) > 0 を示す: constructibleBridge -/
+theorem constructibleBridge_pos (u : Unit) : constructibleBridge.phi u > 0 := by
+  dsimp [constructibleBridge]
   apply Nat.succ_pos
 
 /-! ## Small examples for CI: use `State := Nat`, `T := succ`, `I := id` which satisfy `Progress` -/
