@@ -12,6 +12,6 @@
 
 ### Unit/Nat 層の区別を明確化
 
-- [ ] [Question.md](/lean/dk_math/DkMath/DHNT/Pie/docs/Question.md) の前提内容を確認と把握。
-- [ ] [Unit 層と Nat 層の違いを明確化](/lean/dk_math/DkMath/DHNT/Pie/docs/unit_nat_layers_and_the_white_silver_circle_theorem_notes.md) の内容を整理し、Unit 層と Nat 層の違いを明確に説明。
-- [ ] Lean コード例を追加し、各層の概念を具体的に示す。
+- [X] [Question.md](/lean/dk_math/DkMath/DHNT/Pie/docs/Question.md) の前提内容を確認と把握。
+- [X] [Unit 層と Nat 層の違いを明確化](/lean/dk_math/DkMath/DHNT/Pie/docs/unit_nat_layers_and_the_white_silver_circle_theorem_notes.md) の内容を整理し、Unit 層と Nat 層の違いを明確に説明。
+- [X] Lean コード例を追加し、各層の概念を具体的に示す。
