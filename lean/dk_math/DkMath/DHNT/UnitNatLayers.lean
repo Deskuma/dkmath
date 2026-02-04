@@ -82,6 +82,26 @@ theorem not_mixable_piBridge {State : Type} {T : State → State} {I : State →
   (hP : Progress T I) : ¬ MixableViaBridge T I piBridge :=
   not_mixable_via_bridge_of_progress (hP := hP)
 
+/-! 追加の具体例：floor による橋と倍率 10 のスケール橋 -/
+
+/-- floor によって Unit の大きさを Nat に落とし、常に 1 以上にする Bridge -/
+def floorBridge : Bridge where
+  phi := fun u => Int.toNat (Int.floor u.val) + 1
+  pi  := piUnit
+
+theorem floorBridge_pos (u : Unit) : floorBridge.phi u > 0 := by
+  dsimp [floorBridge]
+  apply Nat.succ_pos
+
+/-- u.val * 10 の floor を取ることで小数帯域を粗く量子化する Bridge -/
+def scale10Bridge : Bridge where
+  phi := fun u => Int.toNat (Int.floor (u.val * 10)) + 1
+  pi  := piUnit
+
+theorem scale10Bridge_pos (u : Unit) : scale10Bridge.phi u > 0 := by
+  dsimp [scale10Bridge]
+  apply Nat.succ_pos
+
 end -- noncomputable section
 
 end BridgeBased
