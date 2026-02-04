@@ -72,8 +72,10 @@ noncomputable section
 
 open Real
 
+/-- π を Unit として使う Bridge -/
 def piUnit : Unit := ⟨Real.pi, Real.pi_pos⟩
 
+/-- π を像とする Bridge -/
 def piBridge : Bridge where
   phi := fun _ => 1
   pi  := piUnit
@@ -89,6 +91,7 @@ def floorBridge : Bridge where
   phi := fun u => Int.toNat (Int.floor u.val) + 1
   pi  := piUnit
 
+/-- phi(u) > 0 を示す -/
 theorem floorBridge_pos (u : Unit) : floorBridge.phi u > 0 := by
   dsimp [floorBridge]
   apply Nat.succ_pos
@@ -98,9 +101,35 @@ def scale10Bridge : Bridge where
   phi := fun u => Int.toNat (Int.floor (u.val * 10)) + 1
   pi  := piUnit
 
+/-- phi(u) > 0 を示す -/
 theorem scale10Bridge_pos (u : Unit) : scale10Bridge.phi u > 0 := by
   dsimp [scale10Bridge]
   apply Nat.succ_pos
+
+/-! ## Small examples for CI: use `State := Nat`, `T := succ`, `I := id` which satisfy `Progress` -/
+
+def T_succ (n : Nat) := n + 1
+def I_id (n : Nat) := n
+
+/-! ### 交えない例：T = succ, I = id のとき -/
+
+/-- piBridge による交えない例 -/
+example : ¬ MixableViaBridge (T := T_succ) (I := I_id) piBridge := by
+  have hP : Progress T_succ I_id := by
+    intro s
+    dsimp [T_succ, I_id]
+    exact Nat.le_refl (s + 1)
+  exact not_mixable_piBridge hP
+
+/-- floorBridge による交えない例 -/
+example : ¬ MixableViaBridge (T := T_succ) (I := I_id) floorBridge := by
+  have hP : Progress T_succ I_id := by intro s; dsimp [T_succ, I_id]; exact Nat.le_refl (s + 1)
+  exact not_mixable_via_bridge_of_progress (hP := hP)
+
+/-- scale10Bridge による交えない例 -/
+example : ¬ MixableViaBridge (T := T_succ) (I := I_id) scale10Bridge := by
+  have hP : Progress T_succ I_id := by intro s; dsimp [T_succ, I_id]; exact Nat.le_refl (s + 1)
+  exact not_mixable_via_bridge_of_progress (hP := hP)
 
 end -- noncomputable section
 
