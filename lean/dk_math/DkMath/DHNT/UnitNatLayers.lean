@@ -153,6 +153,18 @@ example : ¬ MixableViaBridge (T := T_succ) (I := I_id) scale10Bridge := by
   have hP : Progress T_succ I_id := by intro s; dsimp [T_succ, I_id]; exact Nat.le_refl (s + 1)
   exact not_mixable_via_bridge_of_progress (hP := hP)
 
+/-! 追加の CI 例：rationalApproxBridge / constructibleBridge -/
+
+/-- rationalApproxBridge による交えない例 -/
+example : ¬ MixableViaBridge (T := T_succ) (I := I_id) rationalApproxBridge := by
+  have hP : Progress T_succ I_id := by intro s; dsimp [T_succ, I_id]; exact Nat.le_refl (s + 1)
+  exact not_mixable_via_bridge_of_progress (hP := hP)
+
+/-- constructibleBridge による交えない例 -/
+example : ¬ MixableViaBridge (T := T_succ) (I := I_id) constructibleBridge := by
+  have hP : Progress T_succ I_id := by intro s; dsimp [T_succ, I_id]; exact Nat.le_refl (s + 1)
+  exact not_mixable_via_bridge_of_progress (hP := hP)
+
 end -- noncomputable section
 
 end BridgeBased
