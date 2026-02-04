@@ -420,12 +420,3 @@ end Qty
 end DHNT
 
 end DkMath
-
--- -------------------------------------------------------
-/- 2026/01/19  7:50 build success with Mathlib4 leanprover-community/mathlib:
-  checking out revision '2df2f0150c275ad53cb3c90f7c98ec15a56a1a67'
-  leanprover/lean4:v4.26.0
----
-$ lake build MathlibHello/DHNT.lean
-Build completed successfully (7743 jobs).
--/
