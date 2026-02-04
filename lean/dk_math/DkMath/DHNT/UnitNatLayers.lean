@@ -4,8 +4,8 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMath.DHNT.DHNT_Base
 import DkMath.UnitCycle.Core
--- import DkMath.DHNT.DHNT_Base
 
 /-
 Unit/Nat 層の最小 Lean 定義と交えない定理
@@ -43,6 +43,7 @@ section BridgeBased
 /-- 抽象的な橋渡し（Unit → ℕ） -/
 class Bridge where
   phi : Unit → Nat
+  pi  : Unit
 
 /-- ある Unit の像の長さで閉路が生じることを表す -/
 def HasCycleOfUnit {State : Type} (T : State → State) (B : Bridge) : Prop :=
@@ -66,6 +67,22 @@ theorem not_mixable_via_bridge_of_progress {State : Type} {T : State → State} 
     exact hk.right
   have hk0 := no_nontrivial_cycle_of_ge_one (State := State) (T := T) (I := I) hP (B.phi u) s hk_eq
   exact (Nat.ne_of_gt hkpos) hk0
+
+noncomputable section
+
+open Real
+
+def piUnit : Unit := ⟨Real.pi, Real.pi_pos⟩
+
+def piBridge : Bridge where
+  phi := fun _ => 1
+  pi  := piUnit
+
+theorem not_mixable_piBridge {State : Type} {T : State → State} {I : State → Nat}
+  (hP : Progress T I) : ¬ MixableViaBridge T I piBridge :=
+  not_mixable_via_bridge_of_progress (hP := hP)
+
+end -- noncomputable section
 
 end BridgeBased
 
