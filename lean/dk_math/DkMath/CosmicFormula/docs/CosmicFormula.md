@@ -1,14 +1,21 @@
 # 宇宙式 (Cosmic Formula)
 
-このドキュメントは、宇宙式 (Cosmic Formula) に関する理論的背景、定義、性質、および応用例を提供します。
+## はじめに
 
-宇宙式は、数学的および物理学的な概念を結びつける強力なツールであり、その理解は多くの分野での研究に役立ちます。
+このドキュメントは、動的調和数論 (Dynamic Harmonic Number Theory; DHNT) における、
+核となる 宇宙式 (Cosmic Formula) の役割について説明します。
+
+宇宙式に関する理論的背景、定義、性質、および応用例を提供します。
+
+この式は、数学的および物理学的な概念を結びつける強力なツールであり、その理解は多くの分野での研究に役立つと考えられます。
 
 ---
 
 ## 概要
 
-宇宙式は、自然数 $N$ と素数積構造 $P$ の関係を表す基本的な恒等式です。この式は、宇宙の構造とその成分間の関係を示すものであり、数学的な解析や物理学的なモデルにおいて重要な役割を果たします。
+宇宙式は、自然数 $N$ と素数積構造 $P$ の関係を表す基本的な恒等式です。
+
+この式は、数宇宙の構造とその成分間の関係を示すものであり、数学的な解析や物理学的なモデルにおいて解析的な基盤を提供します。
 
 $$
 \LARGE
@@ -126,7 +133,9 @@ $(x+1)^2$ の展開を差し引けば、ゼロになるのは当然の結果で�
 
 ---
 
-### 一般化: 単位宇宙式（平方完成 版）
+### 一般化: 単位 宇宙式（平方完成 版）
+
+#### Unit Cosmic Formula - Completed Square Version
 
 #### 定数項
 
@@ -159,81 +168,83 @@ f(x;u) = u^2
 %% verified: cosmic_formula_unit_identity_final
 $$
 
-この形は、宇宙式の一段階、一般化された形式であり $u$ の値に応じて異なる恒等式を提供します。
+この形は、宇宙式の一段階、一般化された形式であり $u$ の値を次元昇華させる役割を果たします。また $x$ に **依存しない** 恒等式を提供します。ですが、**無視されているわけではない** という観点が重要です。$u=1$ とすれば元の宇宙式に戻ります。
 
 ---
 
-### 一般化: 無次元宇宙式（d 次元完成 版）
+### 一般化: 無次元 宇宙式（d 次元完成 版）
 
-べき乗の差の因数分解の公式より、以下の恒等式が導けます。
+#### Dimensionless Cosmic Formula - d-Dimensional Completed Version
 
-$$
-f_d(x;u) = (x+u)^d - \binom{d}{1} x^{d-1} u = \binom{d}{2} x^{d-2} u^2 + \binom{d}{3} x^{d-3} u^3 + \cdots + u^d.
-%% verified: cosmic_formula_dim_identity
-$$
-
-- $\binom{d}{1} x^{d-1} u = (x^d + d x^{d-1} u)$ と書き換えられます。
-- ここで、$d\in\mathbb{N}$ は任意の正整数です。$x$ および $u$ は実数です。
-
-この無次元宇宙式は、より高次の多項式に対しても同様の恒等式を提供します。
-
-和の二項展開式表示では、
-
-$$
-f_d(x;u) = \sum_{k=2}^{d} \binom{d}{k}\ x^{d-k}\ u^k
-%% verified: cosmic_formula_dim_identity_sum
-$$
-
-となります。
-
-> $u^d = (x^d + d x^{d-1} u)$ を引いた形で、べき乗の差の因数分解を表現しています。
->
-> **二項定理の公式**
->
-> $$
-> (x+u)^d = \sum_{k=0}^{d} \binom{d}{k}\ x^{d-k}\ u^k
-> $$
->
-> その中で、$k=0,1$ の項を除いた残りの和が得られます。
->
-> $$
-> (x+u)^d = x^d + d x^{d-1} u + \sum_{k=2}^{d} \binom{d}{k}\ x^{d-k}\ u^k
-> $$
->
-> ここから $x^d + d x^{d-1} u$ を引くと、上記の恒等式が得られます。
-> $$
-> f_d(x;u) = (x+u)^d - \left( x^d + d x^{d-1} u \right) = \sum_{k=2}^{d} \binom{d}{k}\ x^{d-k}\ u^k
-> $$
-> これは、べき乗の差の因数分解の一般形を示しています。
-> $$
-> (x+u)^d - u^d = x \sum_{k=0}^{d-1} \binom{d}{k+1} x^k u^{d-1-k}
-> $$
-
----
-
-### 無次元単位宇宙式 $U_d$
-
-$f_d(x;u) \to U_d(x;u)$ と関数名を変えます。
-
-$$
-f_d(x;u) = U_d(x;u) := (x+u)^d -\left( x \sum_{k=0}^{d-1} \binom{d}{k+1} x^k u^{d-1-k} \right) = u^d
-%% verified: cosmic_formula_dim_identity_binom
-$$
-
-これは [CosmicFormulaBinom](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean#L104)#cosmic_id モジュールで形式化された恒等式です。
-
-```lean
-theorem cosmic_id {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
-        (x + u) ^ d - x * G d x u = u ^ d := by ...
-```
-
-二項定理項を$G$と定義すると、
+単位宇宙式の一般化として、次の無次元宇宙式を定義します。
 
 $$
 \Large
+G_{d}(x;u) = (x+u)^d - u^d
+$$
+
+二項定理の公式より、以下の恒等式を得ます。
+
+$$
+\begin{align*}
+(x+u)^d &= \sum_{k=0}^{d} \binom{d}{k}\ x^{d-k}\ u^k \\
+  &= x^d + \binom{d}{1} x^{d-1} u + \binom{d}{2} x^{d-2} u^2 + \binom{d}{3} x^{d-3} u^3 + \cdots + u^d.
+\end{align*}
+$$
+
+- ここで、$d\in\mathbb{N}$ 任意の正整数、$x,u\in\mathbb{R}$ 任意の実数で恒等です。
+- $d\in\mathbb{R}$ 任意の実数に拡張する場合は、二項定理の一般化を用います。 $\to \Gamma(x)$ 関数。
+- $u=1$ とすれば、元の宇宙式に戻ります。
+
+ここから $u^d$ を引くと $G_d(x;u) = (x+u)^d - u^d$ となり、次の恒等式を得ます。
+
+$$
+\begin{align*}
+G_d(x;u) &= (x+u)^d - u^d \\&= x^d + \binom{d}{1} x^{d-1} u + \binom{d}{2} x^{d-2} u^2 + \binom{d}{3} x^{d-3} u^3 + \cdots \cancel{(+ u^d - u^d)}.
+%% verified: cosmic_formula_dim_identity
+\end{align*}
+$$
+
+最後の項 $u^d$ 項が消えるため、$G_d(x;u)$ は $x$ の多項式となります。
+
+すべての項に $x$ が含まれるため、$x$ で割ることができます。
+
+よって、
+
+$$
+\Large
+\frac{G_d(x;u)}{x} = \sum_{k=0}^{d-1} \binom{d}{k+1} x^k u^{d-1-k}
+%% verified: cosmic_formula_dim_identity_divided
+$$
+
+- 最後の項を取り除くので、和の上限が $d-1$ となります。
+- また、各項の二項係数は $\binom{d}{k+1}$ となり、指数が $u^{d-1-k}$ であることに注意してください。
+
+この無次元宇宙式は、より高次の多項式に対しても同様の恒等式を提供します。
+
+---
+
+### 無次元 単位 宇宙式 $U_d$
+
+#### Dimensionless Unit Cosmic Formula
+
+次の恒等式を定義します。
+
+$$
+\large
+U_d(x;u) := (x+u)^d -\left( x \sum_{k=0}^{d-1} \binom{d}{k+1} x^k u^{d-1-k} \right) = u^d
+%% verified: cosmic_formula_dim_identity_binom
+$$
+
+二項定理項を $x$ で割った **核** を $G_{d-1}$ と定義すると、
+
+$$
+\large
 G_{d-1}(x,u) := \sum_{k=0}^{d-1} \binom{d}{k+1}\,x^k\,u^{(d-1-k)}
 %% verified: cosmic_formula_dim_identity_G_definition
 $$
+
+と、なります。
 
 ```lean
 /-- d 次元の「無次元実体項」G の定義（係数は Nat.choose を射影したもの） -/
@@ -252,9 +263,32 @@ noncomputable def G (d : ℕ) (x u : ℝ) : ℝ :=
 
 に対応します。
 
+このとき、無次元 単位 宇宙式は、
+
+$$
+\Large
+U_d(x;u) := (x+u)^d - x\,G_{d-1}(x,u) = u^d
+%% verified: cosmic_formula_dim_identity_U_definition
+$$
+
+と、書けます。
+
+#### Lean における形式化 cosmic_id
+
+これは [CosmicFormulaBinom](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean#L104)#cosmic_id モジュールで形式化された恒等式です。
+
+```lean
+theorem cosmic_id {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
+  (x + u) ^ d - x * G d x u = u ^ d := by ...
+```
+
+2026/02/06 14:22 現在、Lean での形式化が完了しています。
+
 ---
 
 ### Zero-sum Game: $Z_d$ 恒等式
+
+#### Zero-sum Game: Z_d Identity
 
 $G$ にかかる $x$ 係数 $\Rightarrow x\ G_{d-1}(x,u)$ は、以下の恒等式を満たします。
 
@@ -264,7 +298,9 @@ Z_d(x;u) = \bigl[\ (x+u)^d - u^d \ \bigr] - \bigl[\ x\ G_{d-1}(x,u) \ \bigr] = 0
 %% verified: cosmic_formula_dim_identity_Z_definition
 $$
 
-で、ゼロサムゲームです。
+と、ゼロサムゲームが成立します。
+
+### Lean における形式化 Z_eq_zero
 
 [CosmicFormulaBinom](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean#L180)#Z_eq_zero モジュールで形式化された恒等式です。
 
@@ -273,13 +309,24 @@ $$
 theorem Z_eq_zero {R : Type _} [CommRing R] (d : ℕ) (x u : R) : Z d x u = 0 := by ...
 ```
 
-上記より、べき乗の差の因数分解と二項定理の恒等式が得られます。
+---
+
+### べき乗差の因数分解
+
+#### Squared Difference of Powers Factorization
+
+上記より、同型写像として、
 
 $$
+a^n - b^n = (a - b) \sum_{k=0}^{n-1} a^{n-1-k} b^k\\
+\Updownarrow\\
 (x+u)^d - u^d = x\,G_{d-1}(x,u) \iff \frac{(x+u)^d - u^d}{x} = G_{d-1}(x,u)
-%% verified: cosmic_formula_dim_identity_power_difference
+%% verified: cosmic_formula_dim_identity_power_difference_factorization
 $$
-これは、べき乗の差の因数分解の一般形に対応します。[^1]
+
+となり、これは、べき乗の差の因数分解の一般形に対応します。
+
+> 注意：可換環 $\mathbb{R}$ の元として両辺を割る場合は $x$ が可逆（unit）である必要がある。[^1]
 
 [^1]:
 
@@ -291,11 +338,9 @@ $$
       ここでの「$/x$」は多項式除法（商多項式を取ること）であり、$x$ の逆元を要しない。
     - 留意点：ある $r∈\R$ を代入してから両辺を $\mathbb{R}$ 内で割りたい（数として $/r$ をとる）なら、その代入値 $r$ が $\mathbb{R}$ の単元である必要がある。また、等式 $x·A = x·B$ から $A = B$ を結論づけるには一般に $x$ が零因子でないこと（あるいは可逆であること）が必要となる。
 
----
+#### $x$ 係数による表現
 
-### $x$ 係数による表現
-
-べき乗の差の因数分解を$T$と定義すると、
+べき乗の差の因数分解を $T$ と定義すると、
 
 $$
 T_d(x;u) := \frac{(x+u)^d - u^d}{x} = G_{d-1}(x,u)
@@ -312,6 +357,7 @@ $$
 よって、
 
 $$
+\Large
 T_d(x;u) = G_{d-1}(x,u)
 %% verified: cosmic_formula_dim_identity_T_equals_G
 $$
@@ -322,22 +368,114 @@ $$
 
 ### $x,u$ の交換と対称性
 
-$x,u$ の役割を変えると、
+二項定理の対称性により $\large{x,u}$ の役割を変えると、
 
 $$
-(x+u)^d - x^d = \sum_{k=1}^{d} \binom{d}{k}\ u^k\ x^{d-k}
+\large
+(x+u)^d - \LARGE x^d \large = \sum_{k=1}^{d} \binom{d}{k}\ u^k\ \LARGE x^{d-k}
 %% verified: cosmic_formula_dim_identity_power_difference_expanded
+$$
+
+$$
+\large
+(x+u)^d - \LARGE u^d \large = \sum_{k=1}^{d} \binom{d}{k}\ x^k\ \LARGE u^{d-k}
+%% verified: cosmic_formula_dim_identity_power_difference_expanded_reversed
 $$
 
 が、成り立ちます。
 
+ともに、二項定理の展開式が得られます。異なるのは、引かれるべき項が $\large{x}^d$ か $\large{u}^d$ かの違いだけです。
+
+これにより、$\large{x,u}$ の交換対称性が確認できます。
+
+#### 単位と構造の交換則
+
+この交換則により、次のことが解ります。
+
+- 引かれるべき項が $\large{x}^d$ であれ $\large{u}^d$ であれ、全体 $(x+u)^d$ は変わらない。
+- したがって、全体 $(x+u)^d$ は、引かれるべき項に依存しない。保存量である。
+- 引かれるべき項が変わると、差 $Y$ の形が変わる。
+
 $$
-(x+u)^d - u^d = \sum_{k=1}^{d} \binom{d}{k}\ x^k\ u^{d-k}
-%% verified: cosmic_formula_dim_identity_power_difference_expanded_reversed
+\large
+Y = (x+u)^d - \LARGE x^d \large \neq (x+u)^d - \LARGE u^d
 $$
 
-ともに、二項定理の展開式が得られます。
-異なるのは、引かれるべき項が $x^d$ か $u^d$ かの違いだけです。
+変わるが、式の構造は同じである事により、**構造の保存** であることが分かります。
+そのスケーリングは、引かれるべき項の構造比に依存します。
+
+$$
+\large
+\frac{(x+u)^d - \LARGE x^d \large}{(x+u)^d - \LARGE u^d \large} = \frac{\sum_{k=1}^{d} \binom{d}{k}\ u^k\ \LARGE x^{d-k}}{\sum_{k=1}^{d} \binom{d}{k}\ x^k\ \LARGE u^{d-k}}
+%% verified: cosmic_formula_dim_identity_structure_ratio
+$$
+
+この比率は、$x$ と $u$ の交換により逆数になります。
+
+$$
+\large
+\frac{(x+u)^d - \LARGE u^d \large}{(x+u)^d - \LARGE x^d \large} = \frac{\sum_{k=1}^{d} \binom{d}{k}\ x^k\ \LARGE u^{d-k}}{\sum_{k=1}^{d} \binom{d}{k}\ u^k\ \LARGE x^{d-k}} = \left(\frac{(x+u)^d - \LARGE x^d \large}{(x+u)^d - \LARGE u^d \large}\right)^{-1}
+$$
+
+簡略化し $R_x$ および $R_u$ と定義すると、
+
+$$
+R_x := (x+u)^d - x^d
+$$
+
+$$
+R_u := (x+u)^d - u^d
+$$
+
+交換対称性は、
+
+$$
+\large
+\frac{R_x}{R_u} \times \frac{R_u}{R_x} = 1
+%% verified: cosmic_formula_dim_identity_exchange_symmetry
+$$
+
+で、Normalized Ratio = 1 となります。
+
+この保存量を超えない限りで、$x$ と $u$ の役割を交換しても、式の構造は保存されます。
+
+この保存量が、**正規化単位** としての役割を果たします。
+
+#### 単位化構造
+
+二項定理項の和全体 $(x+u)^d$ は、引かれるべき項に依存せず保存される。
+したがって、引かれるべき項を変えることは、**単位化構造** の変更に相当します。
+
+この単位化構造は、式の全体的な形を保ちながら、特定の成分の役割を変えることができます。
+異なる単位系間での演算が写像関係で結ばれる理由は、この交換対称性に基づいています。
+
+保存量が同量であるならば、異なる単位化構造間での変換は可能です。また、その変換は逆数関係にあります。
+
+指数対数の底の変換原理も、同様の考え方に基づいています。
+
+全体の総量が異なるスケールに対しても、保存量スケーリングを用いることで、異なる単位化構造間での変換が可能です。
+
+つまり、保存量の全体を正規化した後に、異なる単位化構造間での変換を行うことができます。これは、再帰的に可能です。
+
+#### Lean における形式化 exchange_symmetry
+
+> *TODO: 未完成*
+Note: Lean では、除算において零除算を避けるために、可換環の元が可逆（unit）であることを仮定する必要があります。
+交差積表示での正規化表現が Lean では、通しやすい。
+$$
+\large
+\frac{R_x}{R_u} \times R_u = R_x \quad (R_u \ne 0) \qquad \frac{R_u}{R_x} \times R_x = R_u \quad (R_x \ne 0)
+%% verified: cosmic_formula_dim_identity_exchange_symmetry_cross_multiplication
+$$
+既に、単位０世界の演算不可能性（計算可能数の存在否定）は成されている補題があるので、
+そこから存在論への展開を行って $ R \ne 0 $ を仮定できる。
+
+[CosmicFormulaBinom](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean)#exchange_symmetry モジュールで形式化された恒等式です。
+
+```lean
+theorem exchange_symmetry {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
+  (R_x d x u) / (R_u d x u) * (R_u d x u) / (R_x d x u) = 1 := by ...
+```
 
 ---
 
