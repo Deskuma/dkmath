@@ -226,14 +226,15 @@ d = [2**ni for ni in n]
 x = [1.0, 2.0, 3.0, 4.0]
 thetas = np.linspace(-6.0, 6.0, 3000)
 algo_binom = 1 == 1  # True: binomial, False: complex power
-multi_plots = 1 == 1  # True: multiple plots, False: single plot
+multi_plots = 1 == 0  # True: multiple plots, False: single plot
 
 if multi_plots:
     for di in d:
         for xi in x:
             plot_G_plots(di, xi, thetas, binom=algo_binom)
 else:
-    plot_G_plots(8, 1.0, thetas, binom=algo_binom)
+    plot_G_plots(8, 1.0, thetas, binom=True)
+    plot_G_plots(8, 1.0, thetas, binom=False)
 
 # --- Find approximate Im(G)=0 crossings for d=8, x=1.0 ---
 d = 8
