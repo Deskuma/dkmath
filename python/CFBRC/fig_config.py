@@ -61,7 +61,7 @@ class Fig4Config(FigConfig):
             self.update_binom(binom)
         filename = f"{self.prefix}#4-{label}-{dx}-{self.graph_version}.png"
         self.update_binom(original_binom)  # Restore original binom
-        print(f"Fig4Config filename generated: {filename}") if self.debug or 1 else None
+        print(f"Fig4Config filename generated: {filename}") if self.debug else None
         return filename
 
 
