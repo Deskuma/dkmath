@@ -1,7 +1,10 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 ## Additional experiment: numerical plots and real-axis crossings for even d #4
 
 import numpy as np
 import matplotlib.pyplot as plt
+from fig_config import fig4_config
 
 
 # ※再定義
@@ -126,6 +129,7 @@ def G_complex(x, theta, d, binom=True):
     return G_no_lib(x, theta, d, binom=binom)
 
 
+# -- Angle calculation ---
 def my_angle(Re, Im):
     return np.arctan2(Im, Re)
 
@@ -133,50 +137,58 @@ def my_angle(Re, Im):
 # --- Plotting function ---
 def plot_G_plots(d, x, thetas, binom=False):
 
-    fig_dpi = 200  # 300
-    algorithm = "b" if binom else "c"
-    graph_version = "v1" + algorithm
-    release = False
-    prefix = "" if release else "__"
+    # Format d and x to two decimal places for filenames and titles
+    ds = f"{d:.2f}"
+    xs = f"{x:.2f}"
 
-    show = True if d == 8 and x == 1.0 else False
-    print(f"Plotting G plots for d={d}, x={x}, binom={binom}, show={show}")
+    df = float(ds)
+    xf = float(xs)
 
+    dx = f"d{df:.2f}-x{xf:.2f}"
+
+    if fig4_config:
+        fig_dpi = fig4_config.dpi
+    else:
+        raise ValueError("fig_config is not defined.")
+
+    show = False  # Override to not show plots interactively
+    print(f"Plotting G plots for d={ds}, x={xs}, binom={binom}, show={show}")
+
+    # Compute G
     (Re, Im, Abs) = G_complex(x, thetas, d, binom=binom)
     Arg = my_angle(Re, Im)
 
-    # Plot 1: Parametric curve in the complex plane (固定幅)
+    # Plot 1: Parametric curve in the complex plane
     plt.figure(figsize=(10, 6))
     plt.plot(Re, Im)
     plt.gca().set_aspect("equal", "box")
-    plt.title(f"Parametric curve of G(theta): d={d}, x={x}")
+    plt.title(f"Parametric curve of G(theta): d={ds}, x={xs}")
     plt.xlabel("Re(G)")
     plt.ylabel("Im(G)")
     plt.grid(True)
-    plt.tight_layout()
     plt.savefig(
-        f"{prefix}#4-1_G_parametric_curve-d{d}-x{x}-{graph_version}.png",
+        fig4_config.filename("4-1_G_parametric_curve", dx, binom=binom),
         dpi=fig_dpi,
         bbox_inches="tight",
     )
     plt.show() if show else None
 
     # Plot 2: Phase vs theta
-    plt.figure()
+    plt.figure(figsize=(10, 6))
     plt.plot(thetas, Arg)
-    plt.title(f"arg(G) vs theta: d={d}, x={x}")
+    plt.title(f"arg(G) vs theta: d={ds}, x={xs}")
     plt.xlabel("theta")
     plt.ylabel("arg(G) [rad]")
     plt.grid(True)
     plt.savefig(
-        f"{prefix}#4-2_G_phase_vs_theta-d{d}-x{x}-{graph_version}.png",
+        fig4_config.filename("4-2_G_phase_vs_theta", dx, binom=binom),
         dpi=fig_dpi,
         bbox_inches="tight",
     )
     plt.show() if show else None
 
     # Plot 2: Phase vs theta (unwrapped)
-    plt.figure()
+    plt.figure(figsize=(10, 6))
     plt.plot(thetas, np.unwrap(Arg))
     # x = 0 の差表値をラベルに追加
     x0value = np.unwrap(Arg)[thetas.size // 2]
@@ -191,26 +203,26 @@ def plot_G_plots(d, x, thetas, binom=False):
     )
     plt.legend()
 
-    plt.title(f"arg(G) vs theta (unwrapped): d={d}, x={x}")
+    plt.title(f"arg(G) vs theta (unwrapped): d={ds}, x={xs}")
     plt.xlabel("theta")
     plt.ylabel("arg(G) [rad]")
     plt.grid(True)
     plt.savefig(
-        f"{prefix}#4-2_G_phase_vs_theta_unwrapped-d{d}-x{x}-{graph_version}.png",
+        fig4_config.filename("4-2_G_phase_vs_theta_unwrapped", dx, binom=binom),
         dpi=fig_dpi,
         bbox_inches="tight",
     )
     plt.show() if show else None
 
     # Plot 3: Magnitude vs theta
-    plt.figure()
+    plt.figure(figsize=(10, 6))
     plt.plot(thetas, Abs)
-    plt.title(f"|G| vs theta: d={d}, x={x}")
+    plt.title(f"|G| vs theta: d={ds}, x={xs}")
     plt.xlabel("theta")
     plt.ylabel("|G|")
     plt.grid(True)
     plt.savefig(
-        f"{prefix}#4-3_G_magnitude_vs_theta-d{d}-x{x}-{graph_version}.png",
+        fig4_config.filename("4-3_G_magnitude_vs_theta", dx, binom=binom),
         dpi=fig_dpi,
         bbox_inches="tight",
     )
@@ -227,14 +239,20 @@ x = [1.0, 2.0, 3.0, 4.0]
 thetas = np.linspace(-6.0, 6.0, 3000)
 algo_binom = 1 == 1  # True: binomial, False: complex power
 multi_plots = 1 == 0  # True: multiple plots, False: single plot
+delta_plots = 0.1  # x 増分（delta_plots=0 で無効）
 
 if multi_plots:
     for di in d:
         for xi in x:
             plot_G_plots(di, xi, thetas, binom=algo_binom)
 else:
-    plot_G_plots(8, 1.0, thetas, binom=True)
-    plot_G_plots(8, 1.0, thetas, binom=False)
+    if delta_plots > 0.0:
+        for x in np.arange(0.0, 10 + delta_plots, delta_plots):
+            plot_G_plots(8, x, thetas, binom=True)
+            plot_G_plots(8, x, thetas, binom=False)
+    else:
+        plot_G_plots(8, 1.0, thetas, binom=True)
+        plot_G_plots(8, 1.0, thetas, binom=False)
 
 # --- Find approximate Im(G)=0 crossings for d=8, x=1.0 ---
 d = 8
