@@ -231,50 +231,53 @@ def plot_G_plots(d, x, thetas, binom=False):
     plt.close("all")
 
 
-# Multiple plots for d=2,4,8
-# Parameters
-n = [1, 2, 3]  # 2^n
-d = [2**ni for ni in n]
-x = [1.0, 2.0, 3.0, 4.0]
-thetas = np.linspace(-6.0, 6.0, 3000)
-algo_binom = 1 == 1  # True: binomial, False: complex power
-multi_plots = 1 == 0  # True: multiple plots, False: single plot
-delta_plots = 0.0  # x 増分（delta_plots=0 で無効）
+if __name__ == "__main__":
+    # Multiple plots for d=2,4,8
+    # Parameters
+    n = [1, 2, 3]  # 2^n
+    d = [2**ni for ni in n]
+    x = [1.0, 2.0, 3.0, 4.0]
+    thetas = np.linspace(-6.0, 6.0, 3000)
+    algo_binom = 1 == 1  # True: binomial, False: complex power
+    multi_plots = 1 == 0  # True: multiple plots, False: single plot
+    delta_plots = 0.0  # x 増分（delta_plots=0 で無効）
 
-if multi_plots:
-    for di in d:
-        for xi in x:
-            plot_G_plots(di, xi, thetas, binom=algo_binom)
-else:
-    if delta_plots > 0.0:
-        for x in np.arange(0.0, 10 + delta_plots, delta_plots):
-            plot_G_plots(8, x, thetas, binom=True)
-            plot_G_plots(8, x, thetas, binom=False)
+    if multi_plots:
+        for di in d:
+            for xi in x:
+                plot_G_plots(di, xi, thetas, binom=algo_binom)
     else:
-        plot_G_plots(8, 1.0, thetas, binom=True)
-        plot_G_plots(8, 1.0, thetas, binom=False)
+        if delta_plots > 0.0:
+            for x in np.arange(0.0, 10 + delta_plots, delta_plots):
+                plot_G_plots(8, x, thetas, binom=True)
+                plot_G_plots(8, x, thetas, binom=False)
+        else:
+            plot_G_plots(8, 1.0, thetas, binom=True)
+            plot_G_plots(8, 1.0, thetas, binom=False)
 
-# --- Find approximate Im(G)=0 crossings for d=8, x=1.0 ---
-d = 8
-x = 1.0
-(Re, Im, Abs) = G_complex(x, thetas, d, binom=algo_binom)
-Arg = my_angle(Re, Im)
+    # --- Find approximate Im(G)=0 crossings for d=8, x=1.0 ---
+    d = 8
+    x = 1.0
+    (Re, Im, Abs) = G_complex(x, thetas, d, binom=algo_binom)
+    Arg = my_angle(Re, Im)
 
-# Find approximate Im(G)=0 crossings (phase-lock candidates on the real axis)
-sgn = np.sign(Im)
-zero_cross_idx = np.where(np.diff(sgn) != 0)[0]
+    # Find approximate Im(G)=0 crossings (phase-lock candidates on the real axis)
+    sgn = np.sign(Im)
+    zero_cross_idx = np.where(np.diff(sgn) != 0)[0]
 
-zeros = []
-for i in zero_cross_idx:
-    t0, t1 = thetas[i], thetas[i + 1]
-    y0, y1 = Im[i], Im[i + 1]
-    if y1 != y0:
-        tz = t0 - y0 * (t1 - t0) / (y1 - y0)
-        zeros.append(tz)
+    zeros = []
+    for i in zero_cross_idx:
+        t0, t1 = thetas[i], thetas[i + 1]
+        y0, y1 = Im[i], Im[i + 1]
+        if y1 != y0:
+            tz = t0 - y0 * (t1 - t0) / (y1 - y0)
+            zeros.append(tz)
 
-# Output the found zeros
-zeros = np.array(zeros)
-print("Approximate Im(G)=0 crossings for d=8, x=1.0:\n", str(zeros[:12]), len(zeros))
+    # Output the found zeros
+    zeros = np.array(zeros)
+    print(
+        "Approximate Im(G)=0 crossings for d=8, x=1.0:\n", str(zeros[:12]), len(zeros)
+    )
 
 # ============================================================
 # Deep dive: term-wise decomposition / partial sums / dominance
@@ -434,5 +437,6 @@ def plot_G_deep(d, x, thetas, topk=5, binom=True):
     plt.close("all")
 
 
-plot_G_deep(8, 4.0, thetas, topk=6, binom=True)
-plot_G_deep(8, 5.0, thetas, topk=6, binom=True)
+if __name__ == "__main__":
+    plot_G_deep(8, 4.0, thetas, topk=6, binom=True)
+    plot_G_deep(8, 5.0, thetas, topk=6, binom=True)
