@@ -55,20 +55,6 @@ def to_tex(katex: str) -> str:
 
     return tex
 
-    tex = katex
-    for pattern, replacement in replacements.items():
-        # Use a callable replacement to avoid re.sub template parsing of backslashes
-        def _repl(match, rep=replacement):
-            s = rep
-            # substitute numeric backreferences \1, \2, ... with match groups
-            for i, g in enumerate(match.groups(), start=1):
-                s = s.replace(f"\\{i}", g or "")
-            return s
-
-        tex = re.sub(pattern, _repl, tex)
-
-    return tex
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Convert KaTeX to LaTeX")
