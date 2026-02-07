@@ -15,6 +15,7 @@
         "definitionally",
         "dimless",
         "dmypy",
+        "dtheta",
         "elim",
         "figsize",
         "Gbinom",
@@ -66,6 +67,7 @@
         "rint",
         "rmod",
         "ropeproject",
+        "sabs",
         "scrapy",
         "sdist",
         "segs",
@@ -79,11 +81,14 @@
         "trominoes",
         "tsub",
         "Tswap",
+        "twopi",
         "venv",
         "verca",
         "webassets",
         "xlabel",
-        "ylabel"
+        "ylabel",
+        "Δarg",
+        "Δentropy"
     ],
     "markdownlint.config": {
         "MD025": false,
