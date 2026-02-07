@@ -4,5 +4,5 @@
 
 ## 目次
 
-- [NP 単位](UnitNP.lean)
+- [NP 単位](NPUnit.lean)
   - \< N, P \> ２つのセットで進む位相単位です。
