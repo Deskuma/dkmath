@@ -5,6 +5,8 @@ Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
 Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 
+cid: 6986ab45-8ed4-83a4-b4b7-bafb7db2e5dc
+
 CosmicComplex (CC) — initial template (雛形)
 
 目的:
