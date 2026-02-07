@@ -84,9 +84,9 @@ obs = cc.observe(theta)
 
 ### 2.3 位相速度（位相微分）
 
-\[
+$$
 \omega(\theta) = \frac{d}{d\theta} \arg G(\theta)
-\]
+$$
 
 は、`observe` を θ グリッド上で評価し、
 
@@ -145,14 +145,14 @@ motion = cc.motion(theta, op)
 本設計は π 非依存のため、以下の拡張が自然に可能：
 
 - 虚軸スケール変更
-  \[
+  $$
   G(\theta) = (x + i\alpha\theta)^d
-  \]
+  $$
 
 - 斜交化（直交破壊）
-  \[
+  $$
   z = x + (\beta + i\alpha)\theta
-  \]
+  $$
 
 これにより
 
@@ -167,10 +167,10 @@ motion = cc.motion(theta, op)
 ## 5. 研究的背景（メモ）
 
 - 位相微分は
-  \[
+  $$
   \frac{d}{d\theta}\arg G
   = \operatorname{Im}\!\left(\frac{G'}{G}\right)
-  \]
+  $$
 
   に対応し、ζ関数の \(\zeta'/\zeta\) と同型の構造を持つ。
 - 本モジュールは
