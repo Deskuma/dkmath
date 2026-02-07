@@ -1,0 +1,8 @@
+# Develop MEMO
+
+## 2026/02/07 19:27
+
+merge nightly config files into main branch
+
+- nightly の .vscode/settings.json と .gitignore だけは、先に反映しておく。
+- この MEMO を、ここに残しておく。
