@@ -273,9 +273,10 @@ class CosmicComplex:
         Gv = self.G(th2, p2)
 
         abs_ts = [abs(z) for z in ts]
-        sabs = sum(abs_ts) + 1e-300
+        # use fsum for better numeric stability; guard against zero total
+        sabs = math.fsum(abs_ts) or 1e-300
         contrib = [a / sabs for a in abs_ts]
-        dominant_k = max(range(len(abs_ts)), key=lambda k: abs_ts[k]) if abs_ts else 0
+        dominant_k = max(range(len(abs_ts)), key=lambda k: abs_ts[k], default=0)
 
         # partial sums polygon
         ps: List[complex] = []
@@ -286,7 +287,8 @@ class CosmicComplex:
 
         # phase + entropy
         arg = cmath.phase(Gv)
-        H = -sum(pk * safe_log(pk) for pk in contrib)
+        # use fsum for more accurate summation in entropy
+        H = -math.fsum(pk * safe_log(pk) for pk in contrib)
 
         obs = Observation(
             theta=th2,
