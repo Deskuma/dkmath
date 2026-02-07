@@ -1,0 +1,306 @@
+% !TEX program = lualatex
+% NOTE: 日本語文書の安定性のため LuaLaTeX + LuaTeX-ja（ltjsarticle）を使用する。
+\documentclass[11pt]{ltjsarticle}
+
+\usepackage{fontspec}
+\usepackage{luatexja-fontspec}
+\setmainfont{Latin Modern Roman}
+\IfFontExistsTF{Noto Serif CJK JP}{%
+  \setmainjfont[AutoFakeSlant=0.2]{Noto Serif CJK JP}
+  \setmonojfont[AutoFakeSlant=0.2]{Noto Serif CJK JP}%
+}{%
+  \IfFontExistsTF{Source Han Serif JP}{%
+    \setmainjfont[AutoFakeSlant=0.2]{Source Han Serif JP}
+    \setmonojfont[AutoFakeSlant=0.2]{Source Han Serif JP}%
+  }{%
+    \IfFontExistsTF{HaranoAjiMincho}{%
+      \setmainjfont[AutoFakeSlant=0.2]{HaranoAjiMincho}
+      \setmonojfont[AutoFakeSlant=0.2]{HaranoAjiMincho}%
+    }{%
+      \IfFontExistsTF{IPAexMincho}{%
+        \setmainjfont[AutoFakeSlant=0.2]{IPAexMincho}
+        \setmonojfont[AutoFakeSlant=0.2]{IPAexMincho}%
+      }{%
+        \setmainjfont[AutoFakeSlant=0.2]{IPAMincho}% last-resort fallback
+        \setmonojfont[AutoFakeSlant=0.2]{IPAMincho}%
+      }%
+    }%
+  }%
+}%
+
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{lmodern}
+\usepackage{amsmath, amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.8\baselineskip}
+
+% --- theorem styles ---
+% NOTE: 本文の日本語が斜体になるのを避けるため、定理環境はローマン体（definition）で統一する。
+\theoremstyle{definition}
+\newtheorem{theorem}{定理}
+\newtheorem{proposition}{命題}
+\newtheorem{corollary}{系}
+\newtheorem{lemma}{補題}
+\newtheorem{definition}{定義}
+\newtheorem{remark}{注意}
+
+% --- macros ---
+\newcommand{\ii}{\mathrm{i}}
+\DeclareMathOperator{\RePart}{Re}
+\DeclareMathOperator{\ImPart}{Im}
+\DeclareMathOperator{\Arg}{arg}
+
+\title{複素冪の多項式化と実軸交差（位相ロック候補）の\\安定抽出}
+\author{D. \and Wise Wolf.(GPT)}
+\date{- v1.3.0 rev.2026-02-07 -}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+複素数のべき演算は、二項展開により実部・虚部を偶数項／奇数項へ分離できる。
+本稿ではこの古典的恒等式を、差分
+\(G_d(x,\theta)=(x+\ii\theta)^d-(\ii\theta)^d\)
+に適用し、複素数型を用いずに（実数の和と積のみで）\(\RePart G_d\), \(\ImPart G_d\) を直接計算する枠組みを整理する。
+さらに、\(\ImPart G_d(x,\theta)=0\)（複素平面での実軸交差）を位相ロック候補として数値的に抽出する手順（符号反転＋線形補間）を与え、次数 \(d\) と補正項 \((\ii\theta)^d\) の役割（\(d\bmod 4\) 分岐）を明示する。
+最後に、次数の実数化（ガンマ関数による二項係数の拡張）により、有限和の偶奇分離が無限級数の偶奇部分級数へ連続化される展望を述べる。
+\end{abstract}
+
+\section{導入}
+複素べき \((x+\ii\theta)^d\) は、直接計算すると複素演算（とくに位相 \(\Arg\) と分岐）に依存する。
+一方で、整数次数 \(d\in\mathbb{N}\) に限れば、二項定理による展開を通じて複素べきを実数多項式へ還元できる。
+
+本稿の狙いは、恒等式そのものの新規性ではなく、(i)~差分 \(G_d\) の導入により構造（\(x\) の因子や補正項の位相）を可視化し、(ii)~実軸交差 \(\ImPart G_d=0\) を安定に抽出する計算手順として統合する点にある。
+
+\section{定義と基本恒等式}
+\begin{definition}[対象関数]
+整数 \(d\ge 1\)、実数 \(x\in\mathbb{R}\)、\(\theta\in\mathbb{R}\) に対し
+\begin{equation}
+  G_d(x,\theta) \coloneqq (x+\ii\theta)^d-(\ii\theta)^d
+\end{equation}
+を定める。
+\end{definition}
+
+\begin{proposition}[べき乗差の因数分解]
+\(A,B\) を可換環の元、\(d\in\mathbb{N}\) とする。
+このとき
+\begin{equation}
+  A^d-B^d=(A-B)\sum_{j=0}^{d-1}A^{d-1-j}B^j
+\end{equation}
+が成り立つ。
+\end{proposition}
+
+\begin{remark}
+\(A=x+\ii\theta\), \(B=\ii\theta\) とすると \(A-B=x\) であるから、\(G_d(x,\theta)\) は常に \(x\) を因子に持つ。
+この「核（\(x\)）が必ず立つ」事実は、以後の交差・零点の議論で構造的制約を与える。
+\end{remark}
+
+\section{多項差分への一般化：単位の増殖と合成}
+複素数の虚部を「単位」の合成として捉えるために、二単位 \(u,v\) を導入した多項差分を考える。
+\(w\coloneqq u+v\) とおくと、自然な一般化は
+\begin{equation}
+  F_d(x;u,v) \coloneqq (x+u+v)^d-(u+v)^d = (x+w)^d-w^d
+\end{equation}
+である。
+この差分は \(x=0\) で消えるので、必ず \(x\) を因子に持ち、
+\begin{equation}
+  \frac{F_d(x;u,v)}{x} = \sum_{m=0}^{d-1}(x+w)^{d-1-m}w^m
+\end{equation}
+と書ける（べき乗差の因数分解）。
+
+さらに \(x\) に関する多項式としては
+\begin{equation}
+  F_d(x;u,v)=\sum_{k=1}^{d}\binom{d}{k}(u+v)^{d-k}x^k,
+  \qquad
+  \frac{F_d(x;u,v)}{x}=\sum_{k=1}^{d}\binom{d}{k}(u+v)^{d-k}x^{k-1}
+\end{equation}
+となり、係数が \((u+v)^{\cdot}\) の冪として規則的に入る。
+\((u+v)^{n}\) をさらに二項展開すれば、\(u^jv^{n-j}\) の混合単項式が二段階の組合せ係数で現れる。
+
+\begin{remark}
+\(u+v\mapsto \ii\theta\) と置けば
+\(F_d(x;u,v)\mapsto (x+\ii\theta)^d-(\ii\theta)^d=G_d(x,\theta)\)
+となり、上の多項差分は本稿の複素差分に一致する。
+したがって \(u,v\) は「虚部（位相）側の内部自由度」として、合成（\(u+v\)）と分離（\(u,v\) への再展開）を同一の枠組みで扱える。
+\end{remark}
+
+\section{二項展開と偶奇分離：複素数型を使わない \(\Re\)/\(\Im\) 計算}
+\begin{lemma}[二項展開]
+\(d\in\mathbb{N}\) に対して
+\begin{equation}
+  (x+\ii\theta)^d=\sum_{k=0}^{d}\binom{d}{k}x^{d-k}(\ii\theta)^k
+\end{equation}
+が成り立つ。
+\end{lemma}
+
+\begin{theorem}[偶奇分離による実部・虚部の閉形式]
+\(d\in\mathbb{N}\) とする。
+このとき
+\begin{align}
+  \RePart\bigl((x+\ii\theta)^d\bigr)
+  &= \sum_{m=0}^{\lfloor d/2\rfloor}\binom{d}{2m}(-1)^m x^{d-2m}\theta^{2m}, \\
+  \ImPart\bigl((x+\ii\theta)^d\bigr)
+  &= \sum_{m=0}^{\lfloor (d-1)/2\rfloor}\binom{d}{2m+1}(-1)^m x^{d-(2m+1)}\theta^{2m+1}.
+\end{align}
+\end{theorem}
+
+\begin{proposition}[補正項 \((\ii\theta)^d\) の \(d\bmod 4\) 分岐]
+\(d\in\mathbb{N}\) に対し
+\begin{equation}
+  (\ii\theta)^d = \theta^d\,\ii^d,
+  \qquad
+  \ii^d \in \{1,\ii,-1,-\ii\}\ (d\bmod 4)
+\end{equation}
+である。
+したがって、\(G_d(x,\theta)\) の実部・虚部は
+\begin{equation}
+  \RePart G_d = \RePart (x+\ii\theta)^d - \RePart (\ii\theta)^d,
+  \quad
+  \ImPart G_d = \ImPart (x+\ii\theta)^d - \ImPart (\ii\theta)^d
+\end{equation}
+として、実数演算のみで決定できる。
+\end{proposition}
+
+\section{実軸交差の抽出：\(\ImPart G_d(x,\theta)=0\)}
+\subsection{解釈}
+\(\ImPart G_d(x,\theta)=0\) は、複素平面上の軌跡 \(\theta\mapsto G_d(x,\theta)\) が実軸を横切る条件である。
+交差点では \(\Arg(G_d)\in\{0,\pi\}\) となるため、位相ロック（同相／逆相）候補を与える。
+
+\subsection{数値的抽出手順（符号反転＋線形補間）}
+区間上の離散サンプル \(\theta_0<\theta_1<\cdots<\theta_N\) に対し、\(y_n\coloneqq \ImPart G_d(x,\theta_n)\) を計算する。
+隣接点で符号が変わる箇所 \(y_n\,y_{n+1}<0\) を検出したら、零点を
+\begin{equation}
+  \theta_{\ast} \approx \theta_n - y_n\left(\frac{\theta_{n+1}-\theta_n}{y_{n+1}-y_n}\right),
+  \qquad y_n := \ImPart G_d(x,\theta_n)
+\end{equation}
+で補間する。
+
+\subsection{偶数次数における交差点の閉形式と個数（\(d-1\)）}
+\begin{theorem}[偶数 \(d\) における交差点の閉形式]
+\(x>0\)、\(d\in\mathbb{N}\) を偶数とする。
+このとき
+\begin{equation}
+  \ImPart G_d(x,\theta)=0
+  \quad\Longleftrightarrow\quad
+  \theta = x\tan\left(\frac{k\pi}{d}\right)
+\end{equation}
+を満たす整数 \(k\) が存在する。
+さらに、\(\phi\coloneqq \arctan(\theta/x)\in\left(-\frac{\pi}{2},\frac{\pi}{2}\right)\) とおくと
+\(\ImPart (x+\ii\theta)^d=r^d\sin(d\phi)\)（\(r=\sqrt{x^2+\theta^2}\)）より、交差条件は \(\sin(d\phi)=0\) に帰着する。
+\end{theorem}
+
+\begin{corollary}[交差点の個数（\(d-1\)）]
+上の仮定の下で、\(x>0\) に対する交差点 \(\theta\) の個数は \(d-1\) 個である。
+実際、\(\phi\in(-\pi/2,\pi/2)\) が開区間であるため、許される \(k\) は
+\begin{equation}
+  k=-\left(\frac{d}{2}-1\right),\dots,-1,0,1,\dots,\left(\frac{d}{2}-1\right)
+\end{equation}
+に限られる。
+\end{corollary}
+
+\begin{remark}
+上の閉形式は、零交差検出（符号反転＋線形補間）の回帰テストとして利用できる。
+また、\(d\) が偶数のときは \((\ii\theta)^d\) が実数であるため、\(\ImPart G_d(x,\theta)=0\) は \(\ImPart(x+\ii\theta)^d=0\) と同値である。
+\end{remark}
+
+図\ref{fig:imG-zeros} は、\(\ImPart G_d(x,\theta)\) の符号変化（零交差）として交差点が現れる様子を示す。
+偶数次数では、閉形式 \(\theta=x\tan(k\pi/d)\)（定理）により交差点の理論位置が与えられるため、検出点が \(d-1\) 個であることと併せて、実装の回帰テストとしても機能する。
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.92\linewidth]{\detokenize{resource/fig-imG_zeros-v1.png}}
+  \caption{\(\ImPart G_d(x,\theta)\) と零交差点（交差候補）の観測例。偶数次数では理論値 \(\theta=x\tan(k\pi/d)\) により交差点の位置と個数（\(d-1\)）が事前に与えられる。縦軸は符号付き対数（symlog）表示である。}
+  \label{fig:imG-zeros}
+\end{figure}
+
+\begin{figure}[b]
+  \centering
+  \includegraphics[width=0.92\linewidth]{\detokenize{resource/fig-phase_derivative_unwrapped-v0.png}}
+  \caption{unwrap 位相 \(\Phi(\theta)\) の数値微分 \(\Phi'(\theta)\) の観測例。位相の急回転を可視化し、交差候補や構造変化点の近傍を特定する。}
+  \label{fig:phase-derivative-unwrapped}
+\end{figure}
+
+\section{観測ログとしての複素冪：CosmicComplex（CC）}
+本研究の実装資料 \texttt{CosmicComplex.py} では、\(G(\theta)\) を単なる値ではなく、展開項の寄与・部分和・位相の「観測ログ」として扱う枠組み（CosmicComplex, CC）が提案されている。
+CC の基本設定では \(G(\theta)=(x+\ii\theta)^d\) を「母関数」として観測し、差分 \(G_d(x,\theta)=(x+\ii\theta)^d-(\ii\theta)^d\) は、\((\ii\theta)^d\) を減算するフィルタ（観測後処理、あるいは \texttt{G} の定義差し替え）として実装・解釈できる。
+
+\subsection{項分解と寄与率}
+CC では
+\begin{equation}
+  T_k(\theta) \coloneqq \binom{d}{k}x^{d-k}(\ii\theta)^k, \qquad k=0,1,\dots,d
+\end{equation}
+を基本項として \(G(\theta)=\sum_{k=0}^{d}T_k(\theta)\) を観測する。
+各項の大きさ \(|T_k|\) を用い、
+\begin{equation}
+  p_k(\theta) \coloneqq \frac{|T_k(\theta)|}{\sum_{j=0}^{d}|T_j(\theta)|}
+\end{equation}
+を寄与率（正規化された寄与）として定義することで、支配的な項（\(\arg\max_k |T_k|\)）や、寄与の分散度を定量化できる。
+
+\subsection{部分和ポリゴンと位相}
+部分和
+\begin{equation}
+  S_m(\theta) \coloneqq \sum_{k=0}^{m}T_k(\theta), \qquad m=0,1,\dots,d
+\end{equation}
+の軌跡（ポリゴン）は、\(G(\theta)\) がどの項の累積として形成されるかを可視化する。
+また \(\Arg(G(\theta))\) を観測し、必要に応じて unwrap を施すことで、実軸交差や位相の急変点と項寄与の変化を同一フレームで追跡できる。
+
+\subsubsection{unwrap 位相と位相微分の観測}
+unwrap した位相を \(\Phi(\theta)\) とし、格子点 \(\{\theta_n\}\) 上の有限差分で
+\begin{equation}
+  \Phi'(\theta_n) \approx \frac{\Phi(\theta_{n+1})-\Phi(\theta_n)}{\theta_{n+1}-\theta_n}
+\end{equation}
+を評価すると、位相が急激に回転する領域（\(|\Phi'|\) が大きい領域）を同定できる。
+この量は、実軸交差（位相ロック候補）近傍での位相挙動や、支配項の入れ替わり（dominant\_k の移動）と併せて解析する際の補助指標となる。
+
+\subsection{寄与率エントロピー}
+寄与率 \(p_k\) から
+\begin{equation}
+  H(\theta) \coloneqq -\sum_{k=0}^{d} p_k(\theta)\log p_k(\theta)
+\end{equation}
+を定義すると、少数項が卓越する領域（小さい \(H\)）と、多数項が拮抗する領域（大きい \(H\)）を指標化できる。
+
+\subsection{演算のモノイド化と Motion/Delta}
+CC の特徴は、パラメータ変換（例：\(x\) のスケール）や \(\theta\) の変換（例：\(\theta\mapsto -\theta\)）を「演算」\(\mathrm{Op}\) として合成（モノイド）し、演算前後の差分
+\begin{equation}
+  \Delta G,\ \Delta \Arg,\ \Delta H,\ \Delta p_k
+\end{equation}
+を \texttt{Motion}（before/after）として記録する点にある。
+これにより、位相ロック候補（実軸交差）の近傍で「何が変化したか」を、値の変化だけでなく項構造の変化として同定する道筋が得られる。
+
+\section{数値実験（記述）}
+実装では、例として \(d=8\), \(x=1\), \(\theta\in[-6,6]\) の格子上で
+\begin{itemize}
+  \item \(G_d\) の複素平面軌跡（パラメトリック曲線）、
+  \item 位相 \(\Arg(G_d)\) と unwrap した位相、
+  \item 振幅 \(|G_d|\),
+  \item \(\ImPart(G_d)=0\) の交差点候補（零交差）
+\end{itemize}
+を同一のコードパスで得ている。
+本稿では、(i)~二項展開（偶奇分離）で得た \(\RePart,\ImPart\) と、(ii)~複素数型により直接計算した結果が一致することを、実装検証（回帰）として位置づける。
+
+\section{展望：次数 \(d\) の実数化と d/2 構造の連続化}
+次数を \(d\in\mathbb{R}\) へ拡張したい場合、二項係数を
+\begin{equation}
+  \binom{d}{k}=\frac{\Gamma(d+1)}{\Gamma(k+1)\Gamma(d-k+1)}\qquad (k\in\mathbb{N})
+\end{equation}
+で定義するのが自然である。
+このとき二項展開は一般に有限和から無限級数へ移行し、例えば \(x>0\) として
+\begin{equation}
+  (x+\ii\theta)^d
+  = x^d\left(1+\ii\frac{\theta}{x}\right)^d
+  = x^d\sum_{k=0}^{\infty}\binom{d}{k}\left(\ii\frac{\theta}{x}\right)^k
+  \qquad \left|\frac{\theta}{x}\right|<1
+\end{equation}
+が得られる。
+偶奇分離（本稿の d/2 構造）は、有限個の偶数項／奇数項から、偶数次数部分級数／奇数次数部分級数へ昇華する。
+一方で、整数次数で現れる交差点個数の離散構造（例：\(d-1\) 型の数え上げ）は、連続化により床関数的な振る舞いへ移行し得るため、定義域・収束・分岐の取り扱いを分けて論じる必要がある。
+
+\section{結論}
+整数次数 \(d\) に対し、複素べき \((x+\ii\theta)^d\) は二項展開の偶奇分離により実数多項式として評価できる。
+差分 \(G_d(x,\theta)\) により補正項 \((\ii\theta)^d\) を明示すると、\(d\bmod 4\) のみに依存する単純な補正として整理され、\(\ImPart G_d=0\) の実軸交差（位相ロック候補）を、符号反転＋線形補間で安定に抽出できる。
+
+\end{document}
