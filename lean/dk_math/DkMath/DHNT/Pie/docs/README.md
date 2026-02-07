@@ -29,6 +29,7 @@
 
 * cid: 6981de64-1474-83a8-bd31-27b08cfb26bf
 
-* [問題の詳細](./Question.md)
+* [問題の詳細](./Question-260130.md)
+* [回答の要約](/lean/dk_math/DkMath/DHNT/Pie/docs/Answer-260130.md)
 * [解答のヒント](/lean/dk_math/DkMath/UnitCycle/docs/README.md)
 * [命題分析](/lean/dk_math/DkMath/DHNT/Pie/docs/unit_nat_layers_and_the_white_silver_circle_theorem_notes.md)

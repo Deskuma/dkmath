@@ -36,6 +36,14 @@ $$
 
 詳細は [lean/dk_math/DkMath/CosmicFormula/docs/CosmicFormula.md](./lean/dk_math/DkMath/CosmicFormula/docs/CosmicFormula.md) を参照。
 
+### Cosmic Formula Binomial Real Complex (CFBRC)
+
+— 二項展開複素化モジュール —
+
+宇宙式の一般化 $G(x,w;d)=(x+w)^d - w^d$ の複素化 $w=i\theta$ に伴う代数構造と位相挙動を解析する Python モジュール。
+
+詳細は [python/CFBRC/README.md](./python/CFBRC/README.md) を参照。
+
 ### Collatz Cartography
 
 — 相対多角数（花弁）視点による「区間保存」と「特異筋」の観測 —

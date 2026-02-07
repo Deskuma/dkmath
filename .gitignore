@@ -1,5 +1,7 @@
 # Project specific ignores
 notes/
+__*
+!__init__.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

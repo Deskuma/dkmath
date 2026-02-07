@@ -2,7 +2,7 @@
 
 > GitHub に置く「定理資料」ドラフト。  
 > 目的：reddit 的な「\(\pi\) と \(e\) は交えるか？」を、
-> **層（Layer）と橋（Bridge）**で分解し、Lean 形式化（UnitCycle / SilverRatio.Circle）へ接続する。
+> **層（Layer）と橋（Bridge）** で分解し、Lean 形式化（UnitCycle / SilverRatio.Circle）へ接続する。
 
 ---
 
@@ -15,6 +15,23 @@
 - **Bridge（橋）**：log/exp、作図（円と交点）、相似変換など。
 
 以降の「交える／交えない」は、**どの層で同じ操作を共有できるか**の問いとして扱う。
+
+### 0.1 Lean への接続（この資料が指す参照先）
+
+この資料の「層」は、Lean 側ではおおむね次で受ける：
+
+- Nat 層（反復・増分・閉路否定）
+  - `import DkMath.UnitCycle.Core`
+  - 代表定理：`no_nontrivial_cycle_of_ge_one`
+- Nat 層の例（境界例・RelPolygon）
+  - `import DkMath.UnitCycle.Examples`
+- Bridge（Nat⇄Unit の最小接続の雛形）
+  - `import DkMath.UnitCycle.CosmicBridge`
+- Unit/作図層（白銀単位円の座標代数）
+  - `namespace DkMath.SilverRatio.Circle`
+  - 代表定理：`bcfg_concyclic : concyclic4 B C F G`
+
+注意：Euler の等式（例：\(\exp(i\pi)+1=0\)）を Nat 層の閉路議論へ “そのまま” 入れるのは型違いであり、Bridge を通して観測値へ落とす、という方針が筋じゃ。
 
 ---
 
@@ -78,6 +95,36 @@ I(T^{[k]}(s))\ge I(s)+k
 \]
 
 > Lean: `I_iterate_ge_sum_g`, `I_iterate_ge_add_k`（および補助補題）
+
+### 1.5 最小 Lean スケッチ（Nat 層：progress と cycle は両立しない）
+
+この資料でいう「Nat 層で交えない」を、Lean で最小限に書くとこういう形になる。
+
+```lean
+import DkMath.UnitCycle.Core
+
+namespace DkMath.DHNT
+
+open DkMath.UnitCycle
+
+def Progress {State : Type} (T : State → State) (I : State → Nat) : Prop :=
+  ∀ s, I (T s) ≥ I s + 1
+
+def HasCycle {State : Type} (T : State → State) : Prop :=
+  ∃ s k, k > 0 ∧ iterate T k s = s
+
+theorem not_hasCycle_of_progress {State : Type} {T : State → State} {I : State → Nat}
+  (hP : Progress T I) : ¬ HasCycle T := by
+  intro hC
+  rcases hC with ⟨s, k, hkpos, hk⟩
+  have hk0 : k = 0 :=
+    no_nontrivial_cycle_of_ge_one (State := State) (T := T) (I := I) hP k s hk
+  exact (Nat.ne_of_gt hkpos) hk0
+
+end DkMath.DHNT
+```
+
+この形が一度立てば、「\(\pi\) 的＝閉路」「\(e\) 的＝単位増分」という翻訳は、Nat 層の内部だけで矛盾として裁けるようになる。
 
 ---
 
