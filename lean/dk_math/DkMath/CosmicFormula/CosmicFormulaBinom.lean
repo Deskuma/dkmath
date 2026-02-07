@@ -179,8 +179,9 @@ def Z' {R : Type _} [CommRing R] (d : ℕ) (x u : R) : R :=
 /-- Z_d は恒等的に 0 である -/
 theorem Z_eq_zero {R : Type _} [CommRing R] (d : ℕ) (x u : R) : Z d x u = 0 := by
     unfold Z
-    have h := cosmic_formula_binom d x u
-    simp
+    -- Use cosmic_formula_binom which states (x + u)^d - x * G d x u = u^d
+    -- Thus, we have (x + u)^d - x * G d x u - u^d = u^d - u^d = 0
+    simp only [cosmic_formula_binom, sub_self]
 
 /-! ### f_d の定義と二項展開による表現 -/
 
