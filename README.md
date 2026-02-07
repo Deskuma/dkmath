@@ -42,7 +42,7 @@ $$
 
 宇宙式の一般化 $G(x,w;d)=(x+w)^d - w^d$ の複素化 $w=i\theta$ に伴う代数構造と位相挙動を解析する Python モジュール。
 
-詳細は [python/CFBRC/README.md](./lean/dk_math/DkMath/CosmicFormula/python/CFBRC/README.md) を参照。
+詳細は [python/CFBRC/README.md](./python/CFBRC/README.md) を参照。
 
 ### Collatz Cartography
 
