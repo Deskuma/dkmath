@@ -6,7 +6,7 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 
-namespace DkMath.Samples.SketchBook
+namespace DkMath.Algebra.DiffPow
 
 open scoped BigOperators
 open Finset
@@ -104,8 +104,4 @@ theorem BodyPow_factor {α : Type*} [CommRing α] (x u : α) (d : ℕ) :
     rw [diffPowSum]
     ring
 
-end SketchBook
-
-end Samples
-
-end DkMath
+end DkMath.Algebra.DiffPow
