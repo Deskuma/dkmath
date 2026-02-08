@@ -163,6 +163,56 @@ theorem prime_dividing_gcd_divides_d {p : ℕ} (hp : p.Prime) {a b : ℤ} {d : �
 
 
 
+/-- Nat-level補題：|a-b| と |S| の自然数 gcd が d を割る。 -/
+theorem gcd_natAbs_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd a b = 1) :
+    ( (a - b).natAbs.gcd (diffPowSum a b d).natAbs ) ∣ d := by
+  set N := (a - b).natAbs.gcd (diffPowSum a b d).natAbs
+  have N_div_d : N ∣ d := by
+    apply Nat.strong_induction_on N
+    intro n IH
+    by_cases hn0 : n = 0
+    · -- n = 0 leads to contradiction with hab
+      have eqN : (a - b).natAbs.gcd (diffPowSum a b d).natAbs = 0 := by simpa [N, hn0] using rfl
+      have ⟨ha0, hb0⟩ := Nat.gcd_eq_zero_iff.1 eqN
+      have ha : a - b = 0 := by simpa [ha0] using rfl
+      have hb : diffPowSum a b d = 0 := by simpa [hb0] using rfl
+      have : a = b := by linarith [ha]
+      have S_eq : diffPowSum a b d = (d : ℤ) * b ^ (d - 1) := by
+        unfold diffPowSum
+        simp [ha, Finset.sum_const, Finset.card_range]
+      have hprod : (d : ℤ) * b ^ (d - 1) = 0 := by simpa [S_eq, hb] using rfl
+      have habs := congrArg Int.natAbs hprod
+      rw [Int.natAbs_mul, Int.natAbs_natCast, Int.natAbs_pow] at habs
+      have : d * (b.natAbs ^ (d - 1)) = 0 := by simpa using habs
+      have : b.natAbs = 0 := by
+        have : d ≠ 0 := by linarith [hd]
+        apply Nat.eq_zero_of_mul_eq_zero_left this
+        exact this
+      have : b = 0 := by simpa [Int.natAbs_eq_zero] using this
+      have : a = 0 := by linarith [this]
+      have : Int.gcd a b = 0 := by simp [this]
+      simp [hab] at this
+    by_cases hn1 : n = 1
+    · exact dvd_one d
+    · -- n ≥ 2: pick prime divisor and descend
+      have hnpos : 1 < n := by
+        have hn0' : n ≠ 0 := by intro H; linarith [H]
+        have hn1' : n ≠ 1 := by intro H; linarith [H]
+        linarith
+      obtain ⟨p, hp, pdivn⟩ := Nat.exists_prime_and_dvd hnpos
+      have pd1 : p ∣ (a - b).natAbs := by apply Nat.dvd_trans pdivn (Nat.gcd_dvd_left _ _)
+      have pd2 : p ∣ (diffPowSum a b d).natAbs := by apply Nat.dvd_trans pdivn (Nat.gcd_dvd_right _ _)
+      have pint : (p : ℤ) ∣ Int.gcd (a - b) (diffPowSum a b d) := by
+        have : (p : ℤ) ∣ (a - b) := by simpa using Int.dvd_natAbs.2 pd1
+        have : (p : ℤ) ∣ diffPowSum a b d := by simpa using Int.dvd_natAbs.2 pd2
+        exact Int.dvd_gcd this this
+      have pdivd : (p : ℕ) ∣ d := by apply prime_dividing_gcd_divides_d hp hab; simpa using pint
+      let m := n / p
+      have m_lt : m < n := Nat.div_lt_self (by linarith [hp.one_lt]) (by linarith [hnpos])
+      have m_dvd : m ∣ d := by apply IH m m_lt
+      have : n = p * m := by simp [n, m, Nat.mul_div_cancel' pdivn]
+      exact Nat.mul_dvd_mul pdivd m_dvd
+
 /-- 一般版：`gcd (a - b, diffPowSum a b d)` は `d` を割る（前提：`gcd a b = 1`）。 -/
 theorem gcd_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd a b = 1) :
     Int.gcd (a - b) (diffPowSum a b d) ∣ (d : ℤ) := by
