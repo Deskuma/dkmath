@@ -12,7 +12,7 @@ open scoped BigOperators
 open Finset
 
 /-!
-`a^d - b^d = (a - b) * ∑ i in range d, a^(d-1-i) * b^i`
+`a^d - b^d = (a - b) * ∑ i ∈ range d, a^(d-1-i) * b^i`
 という「差の冪の因数分解」を “宇宙式の Body 項” として使う下地。
 
 型はまず `CommRing`（減法が要る）で作り、必要なら `ℤ` に落とす。
