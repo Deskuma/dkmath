@@ -161,4 +161,104 @@ theorem prime_dividing_gcd_divides_d {p : ℕ} (hp : p.Prime) {a b : ℤ} {d : �
   -- done: (p : ℕ) ∣ d
   exact this
 
+/-- 一般版：`gcd (a - b, diffPowSum a b d)` は `d` を割る（前提：`gcd a b = 1`）。 -/
+theorem gcd_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd a b = 1) :
+    Int.gcd (a - b) (diffPowSum a b d) ∣ (d : ℕ) := by
+  set g := (Int.gcd (a - b) (diffPowSum a b d) : ℤ)
+  have g_dvd_S := Int.gcd_dvd_right (a - b) (diffPowSum a b d)
+  have g_dvd_ab := Int.gcd_dvd_left (a - b) (diffPowSum a b d)
+  -- show g ∣ d * b^(d-1)
+  have S_minus_eq : diffPowSum a b d - (d : ℤ) * b ^ (d - 1) = ∑ i ∈ range d, (a ^ (d - 1 - i) * b ^ i - b ^ (d - 1)) := by
+    unfold diffPowSum
+    have : (d : ℤ) * b ^ (d - 1) = ∑ i ∈ range d, b ^ (d - 1) := by simp [Finset.sum_const, Finset.card_range]
+    rw [this]
+    simp [Finset.sum_sub_distrib]
+  have ab_div := by
+    have : (a - b) ∣ (diffPowSum a b d - (d : ℤ) * b ^ (d - 1)) := by
+      rw [S_minus_eq]
+      apply Finset.dvd_sum
+      intro i hi
+      have hle : i ≤ d - 1 := by
+        have hlt : i < d := by exact Finset.mem_range.mp hi
+        exact Nat.le_pred_of_lt hlt
+      have hpow : b ^ (d - 1) = b ^ (d - 1 - i) * b ^ i := by
+        have eq : (d - 1) = (d - 1 - i) + i := by omega
+        calc b ^ (d - 1) = b ^ ((d - 1 - i) + i) := by congr 1
+          _ = b ^ (d - 1 - i) * b ^ i := by rw [pow_add]
+      have heq : a ^ (d - 1 - i) * b ^ i - b ^ (d - 1) = b ^ i * (a ^ (d - 1 - i) - b ^ (d - 1 - i)) := by
+        rw [hpow]; ring
+      rw [heq]
+      have eq := pow_sub_pow_factor (a := a) (b := b) (d := d - 1 - i)
+      have : (a - b) ∣ (a ^ (d - 1 - i) - b ^ (d - 1 - i)) := by
+        rw [eq]; simp
+      have hmul := dvd_mul_of_dvd_left this (b ^ i)
+      simpa [mul_comm] using hmul
+    exact this
+  have g_div_dbpow := by
+    have pp1 : g ∣ diffPowSum a b d := g_dvd_S
+    have pp2 : g ∣ (diffPowSum a b d - (d : ℤ) * b ^ (d - 1)) := by
+      apply Int.dvd_trans g_dvd_ab
+      exact ab_div
+    have : g ∣ (d : ℤ) * b ^ (d - 1) := by simpa using Int.dvd_sub pp1 pp2
+    exact this
+
+  -- Work with N = gcd(|a-b|, |S|) on nat level and prove N ∣ d by prime descent
+  let N := (a - b).natAbs.gcd (diffPowSum a b d).natAbs
+  have N_pos : 1 ≤ d := hd
+  have N_div_d : N ∣ d := by
+    apply Nat.strong_induction_on N
+    intro n IH
+    by_cases hn : n ≤ 1
+    · have : n = 0 ∨ n = 1 := by linarith
+      cases this
+      · -- n = 0 leads to contradiction with hab
+        have hn0 := this
+        have eq_gcd : (a - b).natAbs.gcd (diffPowSum a b d).natAbs = 0 := by simp [N, hn0]
+        have ⟨ha0, hb0⟩ := Nat.gcd_eq_zero_iff.1 eq_gcd
+        have ha : a - b = 0 := by simpa [ha0] using rfl
+        have hb : diffPowSum a b d = 0 := by simpa [hb0] using rfl
+        have : a = b := by linarith [ha]
+        -- with a = b we have S = d * b^(d-1), so S = 0 implies b = 0 (since d ≥ 1)
+        have S_eq : diffPowSum a b d = (d : ℤ) * b ^ (d - 1) := by
+          unfold diffPowSum
+          have : ∑ i ∈ Finset.range d, a ^ (d - 1 - i) * b ^ i = ∑ i ∈ Finset.range d, b ^ (d - 1) := by
+            apply Finset.sum_congr rfl
+            intro i hi
+            simp [ha]
+          rw [this]
+          simp [Finset.sum_const, Finset.card_range]
+        have : (d : ℤ) * b ^ (d - 1) = 0 := by simpa [S_eq, hb] using rfl
+        have : b ^ (d - 1) = 0 := by
+          have : (d : ℤ) ≠ 0 := by norm_num at hd; exact (ne_of_gt (Nat.zero_lt_iff.mpr (lt_of_le_of_lt hd (by decide))))
+          have := Int.mul_right_eq_zero.1 this
+          exact this
+        have : b = 0 := by
+          have : b ^ (d - 1) = 0 := this
+          have : b = 0 := by
+            apply Int.eq_zero_of_pow_eq_zero
+            exact this
+          exact this
+        have : a = 0 := by linarith [this]
+        have : Int.gcd a b = 0 := by simp [this]
+        simp [hab] at this
+      · exact dvd_one d
+    · -- n ≥ 2
+      have hnpos : 1 < n := by linarith [hn]
+      obtain ⟨p, hp, pdivn⟩ := Nat.exists_prime_and_dvd hnpos
+      have pd1 : p ∣ (a - b).natAbs := by apply Nat.dvd_trans pdivn (Nat.gcd_dvd_left _ _)
+      have pd2 : p ∣ (diffPowSum a b d).natAbs := by apply Nat.dvd_trans pdivn (Nat.gcd_dvd_right _ _)
+      have pint : (p : ℤ) ∣ Int.gcd (a - b) (diffPowSum a b d) := by
+        have : (p : ℤ) ∣ (a - b) := by simpa using Int.dvd_natAbs.2 pd1
+        have : (p : ℤ) ∣ diffPowSum a b d := by simpa using Int.dvd_natAbs.2 pd2
+        exact Int.dvd_gcd this this
+      have pdivd : (p : ℕ) ∣ d := by apply prime_dividing_gcd_divides_d hp hab; simpa using pint
+      let m := n / p
+      have m_lt : m < n := Nat.div_lt_self (by linarith [hp.one_lt]) (by linarith [hnpos])
+      have m_dvd : m ∣ d := by apply IH m m_lt
+      have : n = p * m := by simp [n, m, Nat.mul_div_cancel' pdivn]
+      rwa [this]
+  rcases N_div_d with ⟨k, hk⟩
+  use k
+  simp [hk]
+
 end DkMath.NumberTheory.GcdDiffPow
