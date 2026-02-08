@@ -22,6 +22,20 @@ open Finset
 def diffPowSum {α : Type*} [CommRing α] (a b : α) (d : ℕ) : α :=
   ∑ i ∈ range d, a^(d - 1 - i) * b^i
 
+/-- 差の冪和から定数項を引いた形
+ (∑ i ∈ range d,  a ^ (d - 1 - i) * b ^ i) - (d : ℤ) * b ^ (d - 1)
+= ∑ i ∈ range d, (a ^ (d - 1 - i) * b ^ i  -           b ^ (d - 1))
+-/
+lemma diffPowSum_sub_const_mul {α : Type*} [CommRing α] (a b : α) (d : ℕ) :
+    diffPowSum a b d - (d : α) * b ^ (d - 1) =
+    ∑ i ∈ range d, (a ^ (d - 1 - i) * b ^ i - b ^ (d - 1)) := by
+  -- expand the definition of diffPowSum and rewrite the constant sum
+  unfold diffPowSum
+  have : (d : α) * b ^ (d - 1) = ∑ i ∈ range d, b ^ (d - 1) := by
+    simp [Finset.sum_const, Finset.card_range]
+  rw [this]
+  simp only [Finset.sum_sub_distrib]
+
 /--
 差の冪の因数分解（目標）：
 
