@@ -161,9 +161,11 @@ theorem prime_dividing_gcd_divides_d {p : ℕ} (hp : p.Prime) {a b : ℤ} {d : �
   -- done: (p : ℕ) ∣ d
   exact this
 
+
+
 /-- 一般版：`gcd (a - b, diffPowSum a b d)` は `d` を割る（前提：`gcd a b = 1`）。 -/
 theorem gcd_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd a b = 1) :
-    Int.gcd (a - b) (diffPowSum a b d) ∣ (d : ℕ) := by
+    Int.gcd (a - b) (diffPowSum a b d) ∣ (d : ℤ) := by
   set g := (Int.gcd (a - b) (diffPowSum a b d) : ℤ)
   have g_dvd_S := Int.gcd_dvd_right (a - b) (diffPowSum a b d)
   have g_dvd_ab := Int.gcd_dvd_left (a - b) (diffPowSum a b d)
@@ -202,62 +204,65 @@ theorem gcd_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd a b = 
     have : g ∣ (d : ℤ) * b ^ (d - 1) := by simpa using Int.dvd_sub pp1 pp2
     exact this
 
-  -- Work with N = gcd(|a-b|, |S|) on nat level and prove N ∣ d by prime descent
-  let N := (a - b).natAbs.gcd (diffPowSum a b d).natAbs
-  have N_pos : 1 ≤ d := hd
-  have N_div_d : N ∣ d := by
-    apply Nat.strong_induction_on N
-    intro n IH
-    by_cases h0 : n = 0
-    · by_cases h0 : n = 0
-      · have hn0 := h0
-      · by_cases h1 : n = 1
-      · -- n = 0 leads to contradiction with hab
-        have hn0 := this
-        have eq_gcd : (a - b).natAbs.gcd (diffPowSum a b d).natAbs = 0 := by simp [N, hn0]
-        have ⟨ha0, hb0⟩ := Nat.gcd_eq_zero_iff.1 eq_gcd
-        have ha : a - b = 0 := by simpa [ha0] using rfl
-        have hb : diffPowSum a b d = 0 := by simpa [hb0] using rfl
-        have : a = b := by linarith [ha]
-        -- with a = b we have S = d * b^(d-1), so S = 0 implies b = 0 (since d ≥ 1)
-        have S_eq : diffPowSum a b d = (d : ℤ) * b ^ (d - 1) := by
-          unfold diffPowSum
-          have : ∑ i ∈ Finset.range d, a ^ (d - 1 - i) * b ^ i = ∑ i ∈ Finset.range d, b ^ (d - 1) := by
-            apply Finset.sum_congr rfl
-            intro i hi
-            simp [ha]
-          rw [this]
-          simp [Finset.sum_const, Finset.card_range]
-        have hprod : (d : ℤ) * b ^ (d - 1) = 0 := by simpa [S_eq, hb] using rfl
-        have habs := congrArg Int.natAbs hprod
-        rw [Int.natAbs_mul, Int.natAbs_natCast, Int.natAbs_pow] at habs
-        have : d * (b.natAbs ^ (d - 1)) = 0 := by simpa using habs
-        have : b.natAbs = 0 := by
-          have : d ≠ 0 := by linarith [hd]
-          apply Nat.eq_zero_of_mul_eq_zero_left this
-          exact this
-        have : b = 0 := by simpa [Int.natAbs_eq_zero] using this
-        have : a = 0 := by linarith [this]
-        have : Int.gcd a b = 0 := by simp [this]
-        simp [hab] at this
-      · exact dvd_one d
-    · -- n ≥ 2
-      have hnpos : 1 < n := by linarith [hn]
-      obtain ⟨p, hp, pdivn⟩ := Nat.exists_prime_and_dvd hnpos
-      have pd1 : p ∣ (a - b).natAbs := by apply Nat.dvd_trans pdivn (Nat.gcd_dvd_left _ _)
-      have pd2 : p ∣ (diffPowSum a b d).natAbs := by apply Nat.dvd_trans pdivn (Nat.gcd_dvd_right _ _)
-      have pint : (p : ℤ) ∣ Int.gcd (a - b) (diffPowSum a b d) := by
-        have : (p : ℤ) ∣ (a - b) := by simpa using Int.dvd_natAbs.2 pd1
-        have : (p : ℤ) ∣ diffPowSum a b d := by simpa using Int.dvd_natAbs.2 pd2
-        exact Int.dvd_gcd this this
-      have pdivd : (p : ℕ) ∣ d := by apply prime_dividing_gcd_divides_d hp hab; simpa using pint
-      let m := n / p
-      have m_lt : m < n := Nat.div_lt_self (by linarith [hp.one_lt]) (by linarith [hnpos])
-      have m_dvd : m ∣ d := by apply IH m m_lt
-      have : n = p * m := by simp [n, m, Nat.mul_div_cancel' pdivn]
-      rwa [this]
-  rcases N_div_d with ⟨k, hk⟩
-  use k
-  simp [hk]
+  -- show gcd(g, b) = 1 on the nat-level: Nat.gcd g.natAbs b.natAbs = 1
+  let r := Int.gcd g b
+  have r_dvd_g := Int.gcd_dvd_left g b
+  have r_dvd_b := Int.gcd_dvd_right g b
+  have r_dvd_a_sub := by apply Int.dvd_trans r_dvd_g g_dvd_ab
+  have r_dvd_a := by simpa using Int.dvd_add r_dvd_a_sub r_dvd_b
+  have r_dvd_gcdab := Int.dvd_gcd r_dvd_a r_dvd_b
+  rcases (by simpa [hab] using r_dvd_gcdab) with ⟨u, hu⟩
+  -- rewrite gcd_eq_natAbs into the integer equation and deduce Nat.gcd ... ∣ 1
+  have h := gcd_eq_natAbs (g := g) (h := b)
+  rw [h] at hu
+  have : (Nat.gcd g.natAbs b.natAbs : ℤ) = r := by simpa using (gcd_eq_natAbs (g := g) (h := b)).symm
+  have gcd_nat_eq_r_nat : Nat.gcd g.natAbs b.natAbs = r.natAbs := by
+    have eq := congrArg Int.natAbs this
+    simp at eq
+    exact eq
+  -- from 1 = r * u deduce r.natAbs = 1
+  have : r.natAbs = 1 := by
+    have hnat := congrArg Int.natAbs hu
+    simp at hnat
+    have : r.natAbs * u.natAbs = 1 := hnat.symm
+    have : r.natAbs ∣ 1 := by use u.natAbs; simpa using this
+    simpa [Nat.dvd_one] using this
+  have nat_coprime : Nat.gcd g.natAbs b.natAbs = 1 := by
+    rw [gcd_nat_eq_r_nat]
+    exact this
+
+  -- from g ∣ d * b^(d-1) get natural divisibility and apply coprime lemma
+  rcases g_div_dbpow with ⟨t, ht⟩
+  have hn := congrArg Int.natAbs ht
+  simp at hn
+  have : g.natAbs * t.natAbs = d * (b.natAbs ^ (d - 1)) := by
+    calc
+      g.natAbs * t.natAbs = Int.natAbs g * t.natAbs := by rfl
+      _ = Int.natAbs (g * t) := by rw [Int.natAbs_mul]
+      _ = Int.natAbs (d * b ^ (d - 1)) := by simpa using hn.symm
+      _ = d * (b.natAbs ^ (d - 1)) := by
+        calc
+          Int.natAbs (d * b ^ (d - 1)) = Int.natAbs (d : ℤ) * Int.natAbs (b ^ (d - 1)) := by simp [Int.natAbs_mul]
+          _ = Int.natAbs (d : ℤ) * (b.natAbs ^ (d - 1)) := by simp [Int.natAbs_pow]
+          _ = d * (b.natAbs ^ (d - 1)) := by
+            have : Int.natAbs (d : ℤ) = d := by
+              induction d with
+              | zero => simp
+              | succ _ => omega
+            rw [this]
+  -- so g.natAbs ∣ d * (b.natAbs ^ (d - 1))
+  have nat_div : g.natAbs ∣ d * (b.natAbs ^ (d - 1)) := by
+    use t.natAbs; simp [this]
+
+  have cop := Nat.coprime_iff_gcd_eq_one.mpr nat_coprime
+  have coppow := cop.pow_right (d - 1)
+  have gnat_div_d : g.natAbs ∣ d := by apply Nat.Coprime.dvd_of_dvd_mul_right coppow nat_div
+  rcases gnat_div_d with ⟨k2, hk2⟩
+  use ((g.sign : ℤ) * (k2 : ℤ) : ℤ)
+  calc
+    (d : ℤ) = (g.natAbs : ℤ) * (k2 : ℤ) := by simpa using congrArg Int.cast hk2
+    _ = g * (g.sign : ℤ) * (k2 : ℤ) := by simpa using (Int.sign_mul_natAbs g).symm
+    _ = g * ((g.sign : ℤ) * (k2 : ℤ)) := by ring
+
 
 end DkMath.NumberTheory.GcdDiffPow
