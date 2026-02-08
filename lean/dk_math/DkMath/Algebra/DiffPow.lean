@@ -12,7 +12,7 @@ open scoped BigOperators
 open Finset
 
 /-!
-`a^d - b^d = (a - b) * ∑ i in range d, a^(d-1-i) * b^i`
+`a^d - b^d = (a - b) * ∑ i ∈ range d, a^(d-1-i) * b^i`
 という「差の冪の因数分解」を “宇宙式の Body 項” として使う下地。
 
 型はまず `CommRing`（減法が要る）で作り、必要なら `ℤ` に落とす。
@@ -21,6 +21,20 @@ open Finset
 /-- 差の冪の因数分解に出る和：`∑_{i=0}^{d-1} a^(d-1-i) * b^i` -/
 def diffPowSum {α : Type*} [CommRing α] (a b : α) (d : ℕ) : α :=
   ∑ i ∈ range d, a^(d - 1 - i) * b^i
+
+/-- 差の冪和から定数項を引いた形
+ (∑ i ∈ range d,  a ^ (d - 1 - i) * b ^ i) - (d : ℤ) * b ^ (d - 1)
+= ∑ i ∈ range d, (a ^ (d - 1 - i) * b ^ i  -           b ^ (d - 1))
+-/
+lemma diffPowSum_sub_const_mul {α : Type*} [CommRing α] (a b : α) (d : ℕ) :
+    diffPowSum a b d - (d : α) * b ^ (d - 1) =
+    ∑ i ∈ range d, (a ^ (d - 1 - i) * b ^ i - b ^ (d - 1)) := by
+  -- expand the definition of diffPowSum and rewrite the constant sum
+  unfold diffPowSum
+  have : (d : α) * b ^ (d - 1) = ∑ i ∈ range d, b ^ (d - 1) := by
+    simp [Finset.sum_const, Finset.card_range]
+  rw [this]
+  simp only [Finset.sum_sub_distrib]
 
 /--
 差の冪の因数分解（目標）：

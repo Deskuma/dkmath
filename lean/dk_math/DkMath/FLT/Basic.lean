@@ -5,3 +5,4 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Algebra.DiffPow
+import DkMath.NumberTheory.GcdDiffPow
