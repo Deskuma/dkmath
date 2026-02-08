@@ -4,5 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+-- cid: 697d62b5-312c-83a8-a917-f4aca8fa80ca
+
 import DkMath.Algebra.DiffPow
 import DkMath.NumberTheory.GcdDiffPow
