@@ -208,9 +208,10 @@ theorem gcd_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd a b = 
   have N_div_d : N ∣ d := by
     apply Nat.strong_induction_on N
     intro n IH
-    by_cases hn : n ≤ 1
-    · have : n = 0 ∨ n = 1 := by linarith
-      cases this
+    by_cases h0 : n = 0
+    · by_cases h0 : n = 0
+      · have hn0 := h0
+      · by_cases h1 : n = 1
       · -- n = 0 leads to contradiction with hab
         have hn0 := this
         have eq_gcd : (a - b).natAbs.gcd (diffPowSum a b d).natAbs = 0 := by simp [N, hn0]
@@ -227,17 +228,15 @@ theorem gcd_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd a b = 
             simp [ha]
           rw [this]
           simp [Finset.sum_const, Finset.card_range]
-        have : (d : ℤ) * b ^ (d - 1) = 0 := by simpa [S_eq, hb] using rfl
-        have : b ^ (d - 1) = 0 := by
-          have : (d : ℤ) ≠ 0 := by norm_num at hd; exact (ne_of_gt (Nat.zero_lt_iff.mpr (lt_of_le_of_lt hd (by decide))))
-          have := Int.mul_right_eq_zero.1 this
+        have hprod : (d : ℤ) * b ^ (d - 1) = 0 := by simpa [S_eq, hb] using rfl
+        have habs := congrArg Int.natAbs hprod
+        rw [Int.natAbs_mul, Int.natAbs_natCast, Int.natAbs_pow] at habs
+        have : d * (b.natAbs ^ (d - 1)) = 0 := by simpa using habs
+        have : b.natAbs = 0 := by
+          have : d ≠ 0 := by linarith [hd]
+          apply Nat.eq_zero_of_mul_eq_zero_left this
           exact this
-        have : b = 0 := by
-          have : b ^ (d - 1) = 0 := this
-          have : b = 0 := by
-            apply Int.eq_zero_of_pow_eq_zero
-            exact this
-          exact this
+        have : b = 0 := by simpa [Int.natAbs_eq_zero] using this
         have : a = 0 := by linarith [this]
         have : Int.gcd a b = 0 := by simp [this]
         simp [hab] at this
