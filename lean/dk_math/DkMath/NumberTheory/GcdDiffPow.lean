@@ -235,7 +235,7 @@ theorem gcd_natAbs_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd
     cases n with
     | zero =>
       -- n = 0 leads to contradiction with hab
-      have eqN : (a - b).natAbs.gcd (diffPowSum a b d).natAbs = 0 := by simp [N, rfl]
+      have eqN : (a - b).natAbs.gcd (diffPowSum a b d).natAbs = 0 := by simpa [N] using rfl
       have ⟨ha0, hb0⟩ := Nat.gcd_eq_zero_iff.1 eqN
       have ha : a - b = 0 := by simpa [ha0] using rfl
       have hb : diffPowSum a b d = 0 := by simpa [hb0] using rfl
@@ -246,12 +246,12 @@ theorem gcd_natAbs_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd
       have hprod : (d : ℤ) * b ^ (d - 1) = 0 := by simpa [S_eq, hb] using rfl
       have habs := congrArg Int.natAbs hprod
       rw [Int.natAbs_mul, Int.natAbs_natCast, Int.natAbs_pow] at habs
-      have : d * (b.natAbs ^ (d - 1)) = 0 := by simpa using habs
-      have : b.natAbs = 0 := by
-        have : d ≠ 0 := by linarith [hd]
-        apply Nat.eq_zero_of_mul_eq_zero_left this
-        exact this
-      have : b = 0 := by simpa [Int.natAbs_eq_zero] using this
+      have hmul : d * (b.natAbs ^ (d - 1)) = 0 := by simpa using habs
+      have hb_nat_zero : b.natAbs = 0 := by
+        rcases (Nat.mul_eq_zero).mp hmul with hd0 | hb0
+        · have : d = 0 := hd0; linarith [hd]
+        · exact hb0
+      have : b = 0 := by simpa [Int.natAbs_eq_zero] using hb_nat_zero
       have : a = 0 := by linarith [this]
       have : Int.gcd a b = 0 := by simp [this]
       simp [hab] at this
@@ -259,7 +259,7 @@ theorem gcd_natAbs_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd
     | succ n' =>
       by_cases hn1 : n' = 0
       · -- n = 1
-        exact dvd_one d
+        exact one_dvd d
       · -- n ≥ 2
         let n := n' + 1
         have hnpos : 1 < n := by linarith [hn1]
@@ -281,7 +281,7 @@ theorem gcd_natAbs_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd
         have m_ge1 : 1 ≤ m := by
           have mpos : 0 < m := Nat.pos_of_ne_zero m_ne_zero
           exact Nat.succ_le_iff.mpr mpos
-        have m_dvd : m ∣ d := by apply IH m m_lt
+        have m_dvd : m ∣ d := by apply IH m m_lt m_ge1
         have : n = p * m := by simp [n, m, Nat.mul_div_cancel' pdivn]
         exact Nat.mul_dvd_mul pdivd m_dvd
       done  --
