@@ -194,6 +194,7 @@ theorem gcd_natAbs_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd
         exact term_eq i hi
       rw [this]
       simp [Finset.sum_const, Finset.card_range]
+      done
     have hprod : (d : ℤ) * b ^ (d - 1) = 0 := by
       rw [S_eq] at hS_zero
       exact hS_zero
@@ -220,6 +221,7 @@ theorem gcd_natAbs_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd
           simp at h_mul_zero
         · -- それ以外は b.natAbs = 0 のみ
           exact h_b_zero.left
+      done
     have h_b_zero : b = 0 := by simpa [Int.natAbs_eq_zero] using h_b_nat_zero
     have h_a_zero : a = 0 := by simp [h_a_eq_b, h_b_zero]
     -- rewrite hab using a = 0, b = 0 to get contradiction
@@ -228,41 +230,63 @@ theorem gcd_natAbs_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd
   · -- N ≥ 1, prove the divisibility by strong induction on positive n
     have N_pos : 1 ≤ N := by
       exact Nat.succ_le_of_lt (Nat.pos_of_ne_zero hN)
-    have : 1 ≤ N → N ∣ d := by
-      apply Nat.strong_induction_on N (fun n => 1 ≤ n → n ∣ d)
-      intro n IH
-      intro hnpos
-      cases n with
-      | zero => contradiction
-      | succ n' =>
-        by_cases h1 : n = 1
-        · -- n = 1
-          exact dvd_one d
-        · -- n ≥ 2
-          have hnlt : 1 < n := by linarith [hnpos, h1]
-          obtain ⟨p, hp, pdivn⟩ := Nat.exists_prime_and_dvd hnlt
-          have pd1 : p ∣ (a - b).natAbs := by apply Nat.dvd_trans pdivn (Nat.gcd_dvd_left _ _)
-          have pd2 : p ∣ (diffPowSum a b d).natAbs := by apply Nat.dvd_trans pdivn (Nat.gcd_dvd_right _ _)
-          have pint : (p : ℤ) ∣ Int.gcd (a - b) (diffPowSum a b d) := by
-            have : (p : ℤ) ∣ (a - b) := by simpa using Int.dvd_natAbs.2 pd1
-            have : (p : ℤ) ∣ diffPowSum a b d := by simpa using Int.dvd_natAbs.2 pd2
-            exact Int.dvd_gcd this this
-          have pdivd : (p : ℕ) ∣ d := by apply prime_dividing_gcd_divides_d hp hab; simpa using pint
-          let m := n / p
-          have m_lt : m < n := Nat.div_lt_self (by linarith [hp.one_lt]) (by linarith [hnlt])
-          have m_ne_zero : m ≠ 0 := by
-            intro hm
-            have eqnm : n = p * m := by simp [n, m, Nat.mul_div_cancel' pdivn]
-            have n_zero : n = 0 := by simpa [hm] using eqnm
-            linarith [hnpos, n_zero]
-          have m_ge1 : 1 ≤ m := by
-            have mpos : 0 < m := Nat.pos_of_ne_zero m_ne_zero
-            exact Nat.succ_le_iff.mpr mpos
-          have m_dvd : m ∣ d := by apply IH m m_lt m_ge1
-          have : n = p * m := by simp [n, m, Nat.mul_div_cancel' pdivn]
-          exact Nat.mul_dvd_mul pdivd m_dvd
-    exact this N_pos
-
+    refine Nat.strong_induction_on N ?_
+    intro n IH
+    cases n with
+    | zero =>
+      -- n = 0 leads to contradiction with hab
+      have eqN : (a - b).natAbs.gcd (diffPowSum a b d).natAbs = 0 := by simp [N, rfl]
+      have ⟨ha0, hb0⟩ := Nat.gcd_eq_zero_iff.1 eqN
+      have ha : a - b = 0 := by simpa [ha0] using rfl
+      have hb : diffPowSum a b d = 0 := by simpa [hb0] using rfl
+      have : a = b := by linarith [ha]
+      have S_eq : diffPowSum a b d = (d : ℤ) * b ^ (d - 1) := by
+        unfold diffPowSum
+        simp [ha, Finset.sum_const, Finset.card_range]
+      have hprod : (d : ℤ) * b ^ (d - 1) = 0 := by simpa [S_eq, hb] using rfl
+      have habs := congrArg Int.natAbs hprod
+      rw [Int.natAbs_mul, Int.natAbs_natCast, Int.natAbs_pow] at habs
+      have : d * (b.natAbs ^ (d - 1)) = 0 := by simpa using habs
+      have : b.natAbs = 0 := by
+        have : d ≠ 0 := by linarith [hd]
+        apply Nat.eq_zero_of_mul_eq_zero_left this
+        exact this
+      have : b = 0 := by simpa [Int.natAbs_eq_zero] using this
+      have : a = 0 := by linarith [this]
+      have : Int.gcd a b = 0 := by simp [this]
+      simp [hab] at this
+      done
+    | succ n' =>
+      by_cases hn1 : n' = 0
+      · -- n = 1
+        exact dvd_one d
+      · -- n ≥ 2
+        let n := n' + 1
+        have hnpos : 1 < n := by linarith [hn1]
+        obtain ⟨p, hp, pdivn⟩ := Nat.exists_prime_and_dvd hnpos
+        have pd1 : p ∣ (a - b).natAbs := by apply Nat.dvd_trans pdivn (Nat.gcd_dvd_left _ _)
+        have pd2 : p ∣ (diffPowSum a b d).natAbs := by apply Nat.dvd_trans pdivn (Nat.gcd_dvd_right _ _)
+        have pint : (p : ℤ) ∣ Int.gcd (a - b) (diffPowSum a b d) := by
+          have : (p : ℤ) ∣ (a - b) := by simpa using Int.dvd_natAbs.2 pd1
+          have : (p : ℤ) ∣ diffPowSum a b d := by simpa using Int.dvd_natAbs.2 pd2
+          exact Int.dvd_gcd this this
+        have pdivd : (p : ℕ) ∣ d := by apply prime_dividing_gcd_divides_d hp hab; simpa using pint
+        let m := n / p
+        have m_lt : m < n := Nat.div_lt_self (by linarith [hp.one_lt]) (by linarith [hnpos])
+        have m_ne_zero : m ≠ 0 := by
+          intro hm
+          have eqnm : n = p * m := by simp [n, m, Nat.mul_div_cancel' pdivn]
+          have n_zero : n = 0 := by simpa [hm] using eqnm
+          linarith [hnpos, n_zero]
+        have m_ge1 : 1 ≤ m := by
+          have mpos : 0 < m := Nat.pos_of_ne_zero m_ne_zero
+          exact Nat.succ_le_iff.mpr mpos
+        have m_dvd : m ∣ d := by apply IH m m_lt
+        have : n = p * m := by simp [n, m, Nat.mul_div_cancel' pdivn]
+        exact Nat.mul_dvd_mul pdivd m_dvd
+      done  --
+    done
+  done
 
 
 
