@@ -150,13 +150,11 @@ def shorten_by_section(snippet: str) -> Dict[str, Union[str, bool]]:
     for idx, line in enumerate(lines):
         if re.search(r"\bby\b", line):
             truncated = idx < len(lines) - 1
+            shortened_lines = lines[: idx + 1]
             if truncated:
                 # Append " ..." to the line containing "by"
-                shortened_lines = lines[: idx + 1]
                 shortened_lines[-1] = shortened_lines[-1].rstrip() + " ..."
-                shortened = "\n".join(shortened_lines) + "\n"
-            else:
-                shortened = "\n".join(lines[: idx + 1]).rstrip() + "\n"
+            shortened = "\n".join(shortened_lines).rstrip() + "\n"
             return {"snippet": shortened, "truncated": truncated}
     return {"snippet": snippet, "truncated": False}
 

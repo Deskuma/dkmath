@@ -92,7 +92,7 @@ def test_theorem_picker_short_option():
                 content = f.read()
                 # "by ..." のパターンを Lean コードブロック内で確認
                 # Markdown の ```lean ... ``` ブロック内で "by ..." を探す
-                lean_blocks = re.findall(r'```lean\n(.*?)```', content, re.DOTALL)
+                lean_blocks = re.findall(r'```lean\s*\n(.*?)\n\s*```', content, re.DOTALL)
                 for block in lean_blocks:
                     if re.search(r'\bby\s+\.\.\.', block):
                         found_ellipsis = True
