@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import Mathlib
+-- import Mathlib
 import DkMath.Algebra.DiffPow
 
 namespace DkMath.NumberTheory.GcdDiffPow
@@ -12,6 +12,8 @@ namespace DkMath.NumberTheory.GcdDiffPow
 open scoped BigOperators
 open Finset
 open DkMath.Algebra.DiffPow
+
+set_option linter.unusedTactic false
 
 /-!
 素因子補題：もし素数 p が `a - b` と `diffPowSum (a,b,d)` 両方を割るなら、かつ `gcd a b = 1` のとき p は d を割る。
@@ -53,7 +55,7 @@ theorem prime_dividing_gcd_divides_d {p : ℕ} (hp : p.Prime) {a b : ℤ} {d : �
     intro i hi
     have eq := pow_sub_pow_factor (a := a) (b := b) (d := d - 1 - i)
     rw [eq]
-    simp
+    simp only [dvd_mul_right]
   -- multiply by b^i to get divisibility of each summand and sum up
   have : (a - b) ∣ (S - (d : ℤ) * b ^ (d - 1)) := by
     rw [S_minus_eq]
@@ -65,7 +67,7 @@ theorem prime_dividing_gcd_divides_d {p : ℕ} (hp : p.Prime) {a b : ℤ} {d : �
       have hlt : i < d := by exact Finset.mem_range.mp hi
       exact Nat.le_pred_of_lt hlt
     have hpow : b ^ (d - 1) = b ^ (d - 1 - i) * b ^ i := by
-      have eq : (d - 1) = (d - 1 - i) + i := by omega
+      have eq : (d - 1) = (d - 1 - i) + i := by grind  -- omega -- ok
       calc b ^ (d - 1) = b ^ ((d - 1 - i) + i) := by congr 1
         _ = b ^ (d - 1 - i) * b ^ i := by rw [pow_add]
     have heq : a ^ (d - 1 - i) * b ^ i - b ^ (d - 1)
@@ -140,6 +142,7 @@ theorem prime_dividing_gcd_divides_d {p : ℕ} (hp : p.Prime) {a b : ℤ} {d : �
         rcases hd with (h1 | h2)
         · exact ih h1
         · exact h2
+        done
     · -- derive p ∣ b.natAbs from p ∣ b.natAbs^(d-1)
       have pb : (p : ℕ) ∣ b.natAbs := by
         exact prime_divides_pow (d - 1) pbpow
@@ -154,11 +157,17 @@ theorem prime_dividing_gcd_divides_d {p : ℕ} (hp : p.Prime) {a b : ℤ} {d : �
             have : ↑(p * m) = pp * (m : ℤ) := by simp [pp]
             rw [this]
             ring
+            done
+      -- derive contradiction pp ∣ b
       have : b = pp * bm := by rw [h1, h2]
       have pp_div_b : pp ∣ b := by use bm
       have : False := pp_not_dvd_b pp_div_b
-      exact False.elim this
+      contradiction -- finish ok
+      done
   -- done: (p : ℕ) ∣ d
   exact this
+  done
+
+
 
 end DkMath.NumberTheory.GcdDiffPow
