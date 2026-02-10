@@ -4,9 +4,8 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
--- import Mathlib
 import DkMath.Algebra.DiffPow
-import DkMath.NumberTheory.GcdDiffPow
+import DkMath.NumberTheory.GcdLemmas
 
 namespace DkMath.NumberTheory.GcdDiffPow
 
@@ -14,42 +13,47 @@ open scoped BigOperators
 open Finset
 open DkMath.Algebra.DiffPow
 
+set_option linter.style.emptyLine false
+
 /-!
 素因子補題：もし素数 p が `a - b` と `diffPowSum (a,b,d)` 両方を割るなら、かつ `gcd a b = 1` のとき p は d を割る。
 これは `gcd (a-b, S_d(a,b)) | d` の核心部分となる補題である。
 -/
 
-/-- 補助補題：全ての素因子p が d を割るなら n | d
-
-    リファレンス実装：n の全ての素因子が d を割る場合、n ∣ d が成立する。
-    これは gcd n d = n という gcd の基本的な性質から得られる。
-
-    注：d > 0 の前提は、n = 0 のとき 0 ∣ d ⟺ d = 0 を回避するために必要。
--/
-lemma nat_dvd_of_all_prime_factors_dvd {n d : ℕ}
-    (h : ∀ p : ℕ, Nat.Prime p → p ∣ n → p ∣ d) (d_pos : 0 < d) : n ∣ d := by
-  -- 補題の証明：背理法と gcd の最小素因子分解を使う
-  -- n の全ての素因子が d を割れば、gcd n d = n が成立
-  -- Nat.gcd_eq_left_iff_dvd: gcd n d = n ↔ n ∣ d を利用
-  apply Nat.gcd_eq_left_iff_dvd.mp
-
-  -- gcd n d = n を証明する
-  -- 実装は複雑だが、本質的には以下の事実に依存：
-  -- n > 1 なら n = minFac(n) * m と分解でき、
-  -- h から minFac(n) | d で m < n、
-  -- m の全ての素因子も d を割ることから m ∣ d、
-  -- したがって n ∣ d が得られる
-  sorry
-
 /-- Nat-level補題：|a-b| と |S| の自然数 gcd が d を割る。 -/
-theorem gcd_natAbs_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd a b = 1) :
+theorem gcd_natAbs_divides_d {a b : ℤ} {d : ℕ} (hab : Int.gcd a b = 1)
+    (hab_ne : a ≠ b) :
     (a - b).natAbs.gcd (diffPowSum a b d).natAbs ∣ d := by
-  let g := (a - b).natAbs.gcd (diffPowSum a b d).natAbs
-  have key : ∀ p : ℕ, Nat.Prime p → p ∣ g → (p : ℕ) ∣ d := by
-    intro p hp_prime hp_dvd_g
-    have hp_dvd_int : (p : ℤ) ∣ Int.gcd (a - b) (diffPowSum a b d) := by
-      exact_mod_cast hp_dvd_g
-    exact prime_dividing_gcd_divides_d hp_prime hab hp_dvd_int
-  exact nat_dvd_of_all_prime_factors_dvd key hd
+  set g := (a - b).natAbs.gcd (diffPowSum a b d).natAbs
+  -- Strategy: Show that for all prime powers p^k, p^k ∣ g → p^k ∣ d
+  -- Then use nat_dvd_of_all_prime_powers_dvd to conclude g ∣ d
+
+  -- First, handle the trivial case g = 0 (impossible since a ≠ b)
+  have hg_pos : 0 < g := by
+    have hab_natAbs_pos : 0 < (a - b).natAbs := by
+      simp [Int.natAbs_pos, sub_ne_zero, hab_ne]
+    exact Nat.gcd_pos_of_pos_left _ hab_natAbs_pos
+
+  -- Apply nat_dvd_of_all_prime_powers_dvd
+  apply nat_dvd_of_all_prime_powers_dvd (hn := hg_pos)
+  intro p k hp hpk
+
+  -- Need to show: p^k ∣ d
+  -- We have: p^k ∣ g = gcd(|a-b|, |S|)
+  -- This means (p:ℤ)^k ∣ Int.gcd(a-b, S)
+  -- Then by prime_pow_dividing_gcd_divides_d_pow, we get (p:ℤ)^k ∣ d
+
+  -- Convert Nat.gcd to Int.gcd
+  have : (p : ℤ) ^ k ∣ Int.gcd (a - b) (diffPowSum a b d) := by
+    -- Use Int.gcd_eq_natAbs: Int.gcd a b = (a.natAbs.gcd b.natAbs : ℤ)
+    rw [Int.gcd_eq_natAbs]
+    -- Now (p:ℤ)^k ∣ (g:ℤ) because p^k ∣ g in Nat
+    exact Int.natCast_dvd_natCast.mpr hpk
+
+  -- Apply the prime power lemma
+  have hpk_d_int : (p : ℤ) ^ k ∣ (d : ℤ) :=
+    prime_pow_dividing_gcd_divides_d_pow hp hab this
+  -- Convert back to Nat
+  exact Int.natCast_dvd_natCast.mp hpk_d_int
 
 end DkMath.NumberTheory.GcdDiffPow

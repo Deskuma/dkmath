@@ -22,58 +22,66 @@ open DkMath.Algebra.DiffPow
 /-- 主定理：|a-b| と |S| の整数 gcd が d を割る。 -/
 theorem gcd_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd a b = 1) :
     Int.gcd (a - b) (diffPowSum a b d) ∣ d := by
-  set g := (Int.gcd (a - b) (diffPowSum a b d) : ℤ)
-  have g_dvd_S := Int.gcd_dvd_right (a - b) (diffPowSum a b d)
-  have g_dvd_ab := Int.gcd_dvd_left (a - b) (diffPowSum a b d)
-  -- show g ∣ d * b^(d-1)
-  have S_minus_eq : diffPowSum a b d - (d : ℤ) * b ^ (d - 1)
-    = ∑ i ∈ range d, (a ^ (d - 1 - i) * b ^ i - b ^ (d - 1)) := by
-    unfold diffPowSum
-    have : (d : ℤ) * b ^ (d - 1) = ∑ i ∈ range d, b ^ (d - 1) := by
-      simp [Finset.sum_const, Finset.card_range]
+  -- Case split: a = b or a ≠ b
+  by_cases hab_ne :  a = b
+  · -- Case a = b: then gcd a b = |a| = 1, so a = ±1
+    subst hab_ne
+    -- a = b implies a - b = 0, so gcd 0 (diffPowSum a a d)
+    -- gcd a a = |a| = 1, so a = ±1, and diffPowSum a a d = d * a^(d-1) = ±d
+    -- Therefore gcd 0 (±d) = d, and d ∣ d
+    have hab0 : a - a = 0 := by ring
+    rw [hab0]
+    have hgcd : Int.gcd 0 (diffPowSum a a d) = Int.natAbs (diffPowSum a a d) :=
+      Int.gcd_zero_left _
+    rw [hgcd]
+    -- Show |a| = 1 from gcd a a = 1
+    have ha : Int.natAbs a = 1 := by
+      have := Int.gcd_eq_natAbs (a := a) (b := a)
+      rw [hab] at this
+      simp [Nat.gcd_self] at this
+      exact this.symm
+    -- diffPowSum a a d = ∑_{i < d} a^(d-1) = d * a^(d-1)
+    have hs : diffPowSum a a d = d * a ^ (d - 1) := by
+      unfold diffPowSum
+      have : ∀ i ∈ Finset.range d, a ^ (d - 1 - i) * a ^ i = a ^ (d - 1) := by
+        intro i hi
+        rw [← pow_add]
+        congr 1
+        have : i < d := Finset.mem_range.mp hi
+        omega
+      calc ∑ i ∈ Finset.range d, a ^ (d - 1 - i) * a ^ i
+        = ∑ i ∈ Finset.range d, a ^ (d - 1) := Finset.sum_congr rfl (fun i hi => this i hi)
+        _ = Finset.card (Finset.range d) • a ^ (d - 1) := Finset.sum_const _
+        _ = d • a ^ (d - 1) := by rw [Finset.card_range]
+        _ = d * a ^ (d - 1) := by rw [nsmul_eq_mul]
+    rw [hs]
+    -- |d * a^(d-1)| = d since |a^(d-1)| = 1
+    have : Int.natAbs (d * a ^ (d - 1)) = d := by
+      rw [Int.natAbs_mul, Int.natAbs_pow, ha, Int.natAbs_natCast]
+      ring
     rw [this]
-    simp [Finset.sum_sub_distrib]
-  have ab_div := by
-    have : (a - b) ∣ (diffPowSum a b d - (d : ℤ) * b ^ (d - 1)) := by
-      rw [S_minus_eq]
-      apply Finset.dvd_sum
-      intro i hi
-      have hle : i ≤ d - 1 := by
-        have hlt : i < d := by exact Finset.mem_range.mp hi
-        exact Nat.le_pred_of_lt hlt
-      have hpow : b ^ (d - 1) = b ^ (d - 1 - i) * b ^ i := by
-        have eq : (d - 1) = (d - 1 - i) + i := by omega
-        calc b ^ (d - 1) = b ^ ((d - 1 - i) + i) := by congr 1
-          _ = b ^ (d - 1 - i) * b ^ i := by rw [pow_add]
-      have heq : a ^ (d - 1 - i) * b ^ i - b ^ (d - 1)
-        = b ^ i * (a ^ (d - 1 - i) - b ^ (d - 1 - i)) := by
-        rw [hpow]; ring
-      rw [heq]
-      have eq := pow_sub_pow_factor (a := a) (b := b) (d := d - 1 - i)
-      have : (a - b) ∣ (a ^ (d - 1 - i) - b ^ (d - 1 - i)) := by
-        rw [eq]; simp
-      have hmul := dvd_mul_of_dvd_left this (b ^ i)
-      simpa [mul_comm] using hmul
-    exact this
-  -- Use natural-level gcd lemma directly to finish
-  rcases gcd_natAbs_divides_d hd hab with ⟨k, hk⟩
-  -- use the basic lemma `gcd_eq_natAbs` (available from Mathlib) to relate integer gcd to nat gcd
-  have h := Int.gcd_eq_natAbs (a := a - b) (b := diffPowSum a b d)
-  have eqN : Int.gcd (a - b) (diffPowSum a b d)
-    = ((a - b).natAbs.gcd (diffPowSum a b d).natAbs : ℤ) := by simpa using h.symm
-  use k
-  have eq_nat : (Int.gcd (a - b) (diffPowSum a b d) : ℕ)
-    = (a - b).natAbs.gcd (diffPowSum a b d).natAbs := by
-    exact Int.natAbs_gcd (a - b) (diffPowSum a b d)
-  have h_cast : (Int.gcd (a - b) (diffPowSum a b d) : ℤ) * ↑k = ↑d := by
-    have eq := congrArg (fun (x : ℕ) => (x : ℤ)) hk
-    simp only [Nat.cast_mul] at eq
-    exact eq.symm
-  have h_eq : d = (a - b).gcd (diffPowSum a b d) * k := by
-    have : (d : ℤ) = ((a - b).gcd (diffPowSum a b d) : ℤ) * ↑k := h_cast.symm
-    have : d = (a - b).gcd (diffPowSum a b d) * k := by omega
-    exact this
-  exact h_eq
+  · -- Case a ≠ b: use the natural-level gcd lemma
+    -- Use natural-level gcd lemma directly to finish
+    have h_natAbs : (a - b).natAbs.gcd (diffPowSum a b d).natAbs ∣ d :=
+      gcd_natAbs_divides_d hab hab_ne
+    -- use the basic lemma `gcd_eq_natAbs` to relate integer gcd to nat gcd
+    have h := Int.gcd_eq_natAbs (a := a - b) (b := diffPowSum a b d)
+    have eqN : Int.gcd (a - b) (diffPowSum a b d)
+      = ((a - b).natAbs.gcd (diffPowSum a b d).natAbs : ℤ) := by simpa using h.symm
+    obtain ⟨k, hk⟩ := h_natAbs
+    use k
+    have eq_nat : (Int.gcd (a - b) (diffPowSum a b d) : ℕ)
+      = (a - b).natAbs.gcd (diffPowSum a b d).natAbs := by
+      exact Int.natAbs_gcd (a - b) (diffPowSum a b d)
+    have h_cast : (Int.gcd (a - b) (diffPowSum a b d) : ℤ) * ↑k = ↑d := by
+      have eq := congrArg (fun (x : ℕ) => (x : ℤ)) hk
+      simp only [Nat.cast_mul] at eq
+      exact eq.symm
+    have h_eq : d = (a - b).gcd (diffPowSum a b d) * k := by
+      have : (d : ℤ) = ((a - b).gcd (diffPowSum a b d) : ℤ) * ↑k := h_cast.symm
+      have : d = (a - b).gcd (diffPowSum a b d) * k := by omega
+      exact this
+    exact h_eq
 
 
 end DkMath.NumberTheory.GcdDiffPow
