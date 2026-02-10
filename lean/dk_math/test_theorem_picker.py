@@ -113,9 +113,14 @@ def test_theorem_picker_short_option():
         # NOTE: lemma の抽出は Lean LSP のバージョンや SymbolKind の扱いに依存する
         # 補題が抽出されない場合もあるため、警告のみで続行
         if "example_lemma" not in combined:
-            warnings.warn("lemma `example_lemma` was not extracted. This may be due to LSP SymbolKind handling.")
+            warnings.warn(
+                "lemma `example_lemma` was not extracted. This may be due to LSP SymbolKind handling.",
+                UserWarning
+            )
 
         # 定義が抽出されることを確認
+        # NOTE: 少なくとも1つの定義が抽出されることを確認
+        # （全ての定義が抽出されるかは LSP の実装に依存）
         assert "simple_def" in combined or "another_def" in combined, (
             "Expected at least one definition to appear in the output."
         )
