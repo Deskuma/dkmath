@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 from pathlib import Path
+import shutil
+import tempfile
 
 
 def test_extract_definitions():
@@ -42,9 +44,41 @@ def test_theorem_picker_help():
     )
     assert result.returncode == 0, "Help output failed"
     assert "extract definitions" in result.stdout.lower()
+    assert "--short" in result.stdout
+
+
+def test_theorem_picker_short_option():
+    """
+    --short オプションで CosmicFormula 配下の全 .lean を処理できることを確認。
+    """
+    import subprocess
+    import pytest
+
+    if shutil.which("lake") is None:
+        pytest.skip("lake is not available; skipping LSP-backed extraction test.")
+
+    base_dir = Path(__file__).parent
+    lean_dir = base_dir / "DkMath" / "CosmicFormula"
+    lean_files = sorted(lean_dir.glob("*.lean"))
+    assert lean_files, f"No .lean files found in {lean_dir}"
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        for lean_file in lean_files:
+            output_path = Path(tmpdir) / f"{lean_file.stem}-v0.md"
+            result = subprocess.run(
+                ["python", "theorem_picker.py", str(lean_file), str(output_path), "--short"],
+                cwd=base_dir,
+                capture_output=True,
+                text=True,
+            )
+            assert result.returncode == 0, (
+                f"theorem_picker.py failed for {lean_file}: {result.stderr}"
+            )
+            assert output_path.exists(), f"Output not generated: {output_path}"
 
 
 if __name__ == "__main__":
     test_extract_definitions()
     test_theorem_picker_help()
+    test_theorem_picker_short_option()
     print("All tests passed!")

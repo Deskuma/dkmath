@@ -5,12 +5,13 @@ Lean ファイルから定義・定理・補題などを抽出し、Markdown に
 ## 使用方法
 
 ```bash
-python theorem_picker.py input.lean [output.md]
+python theorem_picker.py input.lean [output.md] [--short]
 ```
 
 - `input.lean`: 抽出対象の Lean ファイル
 - `output.md`: 出力先 Markdown ファイル（デフォルト: `__Theorems.md`）
   - ファイルが存在すれば上書きされます
+- `--short`: `by` ブロック以降を `...` で省略出力する
 
 ## 出力形式
 
@@ -44,9 +45,9 @@ python theorem_picker.py input.lean [output.md]
 
 定義コード全体を含める。
 
-### lemma / theorem（定理・補題）
+### `--short` オプション指定時
 
-最初に出現する `:= by` を含む行までを掲載し、それ以降は `...` で省略表示。
+最初に出現する `by` を含む行までを掲載し、それ以降は `...` で省略表示する。定義・補題・定理・例など宣言種別に関係なく適用される。
 
 例：
 
@@ -55,9 +56,9 @@ lemma example_lemma : P := by
   ...
 ```
 
-### instance（インスタンス）
+### `--short` 未指定時
 
-完全なコードを掲載。
+従来通り、宣言コード全体を掲載。
 
 ## 実装の特徴
 
