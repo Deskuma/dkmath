@@ -114,7 +114,7 @@ def test_theorem_picker_short_option():
         # 補題が抽出されない場合もあるため、警告のみで続行
         if "example_lemma" not in combined:
             warnings.warn(
-                "lemma `example_lemma` was not extracted. This may be due to LSP SymbolKind handling.",
+                "Lemma `example_lemma` was not extracted. This may be due to LSP SymbolKind handling.",
                 UserWarning
             )
 
