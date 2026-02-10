@@ -45,10 +45,15 @@ gcd n d = n を示す
 -/
 lemma nat_dvd_of_all_prime_powers_dvd {n d : ℕ}
     (h : ∀ p k : ℕ, Nat.Prime p → p^k ∣ n → p^k ∣ d) (hn : 0 < n) : n ∣ d := by
-  -- factorization を使って、n の全ての素数冪因子が d を割ることから n ∣ d を示す
-  -- hn : 0 < n より n ≠ 0
-  -- h から：n の factorization に現れる全ての (p, k) に対して p^k ∣ d
-  -- Nat.dvd_iff_factorization_le を使えば n ∣ d が得られる
+  -- factorization を使った proof：
+  -- n ∣ d ⟺ ∀ p, (Nat.factorization n) p ≤ (Nat.factorization d) p
+  -- hn : 0 < n より n ≠ 0 であり、factorization が well-defined
+  by_contra hnd
+  -- 背理法：n ∤ d と仮定する
+  -- すると、ある素数 p が存在して (Nat.factorization n) p > (Nat.factorization d) p
+  -- つまり (Nat.factorization n) p > (Nat.factorization d) p
+  -- k := (Nat.factorization n) p とおくと、p^k ∣ n（factorization の性質）
+  -- でも p^k ∣ d（h から）という矛盾が出る
   sorry
 
 -- **補題2：prime 除数版（素因子レベルで停止）**
