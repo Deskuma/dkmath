@@ -150,7 +150,11 @@ def shorten_by_section(snippet: str) -> Dict[str, Union[str, bool]]:
     for idx, line in enumerate(lines):
         if re.search(r"\bby\b", line):
             truncated = idx < len(lines) - 1
-            shortened = "\n".join(lines[: idx + 1]).rstrip() + "\n"
+            shortened_lines = lines[: idx + 1]
+            if truncated:
+                # Append " ..." to the line containing "by"
+                shortened_lines[-1] = shortened_lines[-1].rstrip() + " ..."
+            shortened = "\n".join(shortened_lines).rstrip() + "\n"
             return {"snippet": shortened, "truncated": truncated}
     return {"snippet": snippet, "truncated": False}
 
@@ -267,8 +271,6 @@ def write_markdown(
             f.write(f"### {item['ident']}\n\n")
             f.write("```lean\n")
             f.write(item["snippet"].rstrip() + "\n")
-            if item.get("truncated"):
-                f.write("  ...\n")
             if idx < len(definitions) - 1:
                 f.write("```\n\n")
             else:

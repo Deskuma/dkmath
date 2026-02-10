@@ -50,12 +50,22 @@ def test_theorem_picker_help():
 def test_theorem_picker_short_option():
     """
     --short オプションで CosmicFormula 配下の全 .lean を処理できることを確認。
+    出力を読み取り、実際に ... が含まれ、by 以降が省略されていることを検証。
     """
     import subprocess
-    import pytest
+    import re
+    try:
+        import pytest
+        pytest_available = True
+    except ImportError:
+        pytest_available = False
 
     if shutil.which("lake") is None:
-        pytest.skip("lake is not available; skipping LSP-backed extraction test.")
+        if pytest_available:
+            pytest.skip("lake is not available; skipping LSP-backed extraction test.")
+        else:
+            print("Skipping test: lake is not available")
+            return
 
     base_dir = Path(__file__).parent
     lean_dir = base_dir / "DkMath" / "CosmicFormula"
@@ -63,6 +73,7 @@ def test_theorem_picker_short_option():
     assert lean_files, f"No .lean files found in {lean_dir}"
 
     with tempfile.TemporaryDirectory() as tmpdir:
+        found_ellipsis = False
         for lean_file in lean_files:
             output_path = Path(tmpdir) / f"{lean_file.stem}-v0.md"
             result = subprocess.run(
@@ -75,6 +86,19 @@ def test_theorem_picker_short_option():
                 f"theorem_picker.py failed for {lean_file}: {result.stderr}"
             )
             assert output_path.exists(), f"Output not generated: {output_path}"
+            
+            # Lean コードブロック内で "by ..." パターンが使われていることを確認
+            content = output_path.read_text(encoding="utf-8")
+            lean_blocks = re.findall(r'```lean\s*\n(.*?)```', content, re.DOTALL)
+            for block in lean_blocks:
+                if re.search(r'\bby \.\.\.', block):
+                    found_ellipsis = True
+                    break
+        
+        # 少なくとも1つのファイルで省略が行われたことを確認
+        assert found_ellipsis, (
+            "No 'by ...' pattern found in any Lean code blocks. Expected at least one theorem with 'by' to be truncated."
+        )
 
 
 if __name__ == "__main__":
