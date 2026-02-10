@@ -13,13 +13,15 @@ open scoped BigOperators
 open Finset
 open DkMath.Algebra.DiffPow
 
+set_option linter.style.emptyLine false
+
 /-!
 素因子補題：もし素数 p が `a - b` と `diffPowSum (a,b,d)` 両方を割るなら、かつ `gcd a b = 1` のとき p は d を割る。
 これは `gcd (a-b, S_d(a,b)) | d` の核心部分となる補題である。
 -/
 
 /-- Nat-level補題：|a-b| と |S| の自然数 gcd が d を割る。 -/
-theorem gcd_natAbs_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd a b = 1)
+theorem gcd_natAbs_divides_d {a b : ℤ} {d : ℕ} (hab : Int.gcd a b = 1)
     (hab_ne : a ≠ b) :
     (a - b).natAbs.gcd (diffPowSum a b d).natAbs ∣ d := by
   set g := (a - b).natAbs.gcd (diffPowSum a b d).natAbs
@@ -43,13 +45,15 @@ theorem gcd_natAbs_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd
 
   -- Convert Nat.gcd to Int.gcd
   have : (p : ℤ) ^ k ∣ Int.gcd (a - b) (diffPowSum a b d) := by
-    sorry  -- Need to relate Nat.gcd and Int.gcd
+    -- Use Int.gcd_eq_natAbs: Int.gcd a b = (a.natAbs.gcd b.natAbs : ℤ)
+    rw [Int.gcd_eq_natAbs]
+    -- Now (p:ℤ)^k ∣ (g:ℤ) because p^k ∣ g in Nat
+    exact Int.natCast_dvd_natCast.mpr hpk
 
   -- Apply the prime power lemma
   have hpk_d_int : (p : ℤ) ^ k ∣ (d : ℤ) :=
     prime_pow_dividing_gcd_divides_d_pow hp hab this
-
   -- Convert back to Nat
-  sorry  -- Need Int.coe_nat_dvd or similar
+  exact Int.natCast_dvd_natCast.mp hpk_d_int
 
 end DkMath.NumberTheory.GcdDiffPow

@@ -14,6 +14,7 @@ open Finset
 open DkMath.Algebra.DiffPow
 
 set_option linter.style.longLine false
+set_option linter.style.emptyLine false
 
 /- gcd に関する補題群 ---------------------------------------------------------
 
@@ -48,16 +49,9 @@ gcd n d = n を示す
 lemma nat_dvd_of_all_prime_powers_dvd {n d : ℕ}
     (h : ∀ p k : ℕ, Nat.Prime p → p^k ∣ n → p^k ∣ d) (hn : 0 < n) : n ∣ d := by
   -- Strategy: use Nat.factorization to show v_p(n) ≤ v_p(d) for all primes p
-  -- This is equivalent to n ∣ d
-  by_cases hd : d = 0
-  · -- d = 0: then n ∣ 0 is equivalent to n = 0 or d = 0, latter holds
-    simp [hd]
-  · -- d > 0 case: use factorization
-    -- We need to show: for all primes p, p.factorization n ≤ p.factorization d
-    -- From h, we know: p^k ∣ n → p^k ∣ d for all k
-    -- In particular, p^(n.factorization p) ∣ n → p^(n.factorization p) ∣ d
-    -- This gives n.factorization p ≤ d.factorization p
-    sorry  -- Apply Nat.dvd_iff_factorization_le or similar
+  -- This is equivalent to n ∣ d by some Mathlib lemma (name TBD)
+  -- TODO: Find the correct Mathlib lemma name for factorization-based divisibility
+  sorry
 
 -- **補題2：prime power 版（素数冪レベル）**
 /-- 補助補題：p^k が gcd を割るなら p^k が d を割る（Integer variant）
@@ -115,7 +109,6 @@ lemma prime_pow_dividing_gcd_divides_d_pow {p k : ℕ} (hp : Nat.Prime p)
       have : (d : ℤ) * b ^ (d - 1) = diffPowSum a b d - (diffPowSum a b d - (d : ℤ) * b ^ (d - 1)) := by ring
       rw [this]
       exact dvd_sub hpk_S hpk_S_minus
-
     -- Step 5: Show p ∤ b (from gcd(a,b)=1 and p|(a-b))
     have hp_not_b : ¬((p : ℤ) ∣ b) := by
       intro hp_b
@@ -129,8 +122,14 @@ lemma prime_pow_dividing_gcd_divides_d_pow {p k : ℕ} (hp : Nat.Prime p)
         exact Int.dvd_add hp_1 hp_b
       -- But then gcd(a,b) ≥ p > 1, contradicting gcd(a,b)=1
       have : (p : ℤ) ∣ (Int.gcd a b : ℤ) := by
-        simp [Int.gcd_eq_natAbs]
-        sorry  -- Need to convert Int divisibility to Nat gcd
+        rw [Int.gcd_eq_natAbs]
+        -- p|a and p|b in ℤ, so p|(gcd a.natAbs b.natAbs) in ℕ
+        have hp_a_nat : (p : ℕ) ∣ a.natAbs := by
+          exact Int.natCast_dvd.mp hp_a
+        have hp_b_nat : (p : ℕ) ∣ b.natAbs := by
+          exact Int.natCast_dvd.mp hp_b
+        have : (p : ℕ) ∣ a.natAbs.gcd b.natAbs := Nat.dvd_gcd hp_a_nat hp_b_nat
+        exact Int.natCast_dvd_natCast.mpr this
       rw [hab] at this
       simp only [Nat.cast_one] at this
       have : (p : ℤ) ≤ 1 := Int.le_of_dvd zero_lt_one this
@@ -138,17 +137,37 @@ lemma prime_pow_dividing_gcd_divides_d_pow {p k : ℕ} (hp : Nat.Prime p)
         have := hp.two_le
         omega
       omega
-
     -- Step 6: p^k ∣ d (coprime argument)
     by_cases hd : d = 0
     · simp [hd]
     · have hd_pos : 0 < d := Nat.pos_of_ne_zero hd
-      have hpk_natAbs : (p ^ k : ℕ) ∣ (d * b.natAbs ^ (d - 1)) := by
-        sorry
+      -- Convert Int divisibility to Nat
+      have hpk_nat_db : (p ^ k : ℕ) ∣ (d * b.natAbs ^ (d - 1)) := by
+        -- hpk_db: (p:ℤ)^k ∣ (d:ℤ) * b^(d-1)
+        -- Key: b^(d-1) in ℤ has natAbs = b.natAbs^(d-1)
+        have hb_pow : (b ^ (d - 1)).natAbs = b.natAbs ^ (d - 1) := Int.natAbs_pow b (d - 1)
+        have : ((d : ℤ) * b ^ (d - 1)).natAbs = d * b.natAbs ^ (d - 1) := by
+          simp only [Int.natAbs_mul, Int.natAbs_natCast, hb_pow]
+        rw [← this]
+        exact Int.natCast_dvd.mp hpk_db
+      -- Show coprime: p^k and b.natAbs are coprime
       have hcoprime : Nat.Coprime (p ^ k) b.natAbs := by
-        sorry
+        -- Use hp_not_b: ¬((p:ℤ) ∣ b)
+        have hp_not_b_nat : ¬(p ∣ b.natAbs) := by
+          intro h
+          apply hp_not_b
+          exact Int.natCast_dvd.mpr h
+        -- gcd(p, b.natAbs) = 1 because p is prime and doesn't divide b.natAbs
+        have hgcd_p : Nat.Coprime p b.natAbs := by
+          exact (Nat.Prime.coprime_iff_not_dvd hp).mpr hp_not_b_nat
+        -- Lift to p^k: if gcd(p, b) = 1 then gcd(p^k, b) = 1
+        exact hgcd_p.pow_left k
+      -- Use coprimality to extract p^k ∣ d from p^k ∣ d * b.natAbs^(d-1)
       have : (p ^ k : ℕ) ∣ d := by
-        sorry
+        -- Use Nat.Coprime.dvd_of_dvd_mul_right or similar
+        have hcoprime_pow : Nat.Coprime (p ^ k) (b.natAbs ^ (d - 1)) := by
+          exact Nat.Coprime.pow_right (d - 1) hcoprime
+        exact Nat.Coprime.dvd_of_dvd_mul_right hcoprime_pow hpk_nat_db
       exact Int.natCast_dvd_natCast.mpr this
 
 -- **補題3：gcd 全体が d を割る（最強版）**

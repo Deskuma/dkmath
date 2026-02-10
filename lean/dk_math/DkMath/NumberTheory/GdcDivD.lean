@@ -58,7 +58,7 @@ theorem gcd_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd a b = 
   -- Use natural-level gcd lemma directly to finish
   have hab_ne : a ≠ b := by sorry
   have h_natAbs : (a - b).natAbs.gcd (diffPowSum a b d).natAbs ∣ d :=
-    gcd_natAbs_divides_d hd hab hab_ne
+    gcd_natAbs_divides_d hab hab_ne
   -- use the basic lemma `gcd_eq_natAbs` to relate integer gcd to nat gcd
   have h := Int.gcd_eq_natAbs (a := a - b) (b := diffPowSum a b d)
   have eqN : Int.gcd (a - b) (diffPowSum a b d)
