@@ -47,13 +47,12 @@ python theorem_picker.py input.lean [output.md] [--short]
 
 ### `--short` オプション指定時
 
-最初に出現する `by` を含む行までを掲載し、それ以降は `...` で省略表示する。定義・補題・定理・例など宣言種別に関係なく適用される。
+`by` を含む行を `by ...` の形式で省略表示する。定義・補題・定理・例など宣言種別に関係なく適用される。
 
 例：
 
 ```lean
-lemma example_lemma : P := by
-  ...
+lemma example_lemma : P := by ...
 ```
 
 ### `--short` 未指定時
