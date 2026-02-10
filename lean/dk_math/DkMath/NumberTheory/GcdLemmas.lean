@@ -48,10 +48,20 @@ gcd n d = n を示す
 -/
 lemma nat_dvd_of_all_prime_powers_dvd {n d : ℕ}
     (h : ∀ p k : ℕ, Nat.Prime p → p^k ∣ n → p^k ∣ d) (hn : 0 < n) : n ∣ d := by
-  -- Strategy: use Nat.factorization to show v_p(n) ≤ v_p(d) for all primes p
-  -- This is equivalent to n ∣ d by some Mathlib lemma (name TBD)
-  -- TODO: Find the correct Mathlib lemma name for factorization-based divisibility
-  sorry
+  -- Strategy: use factorization_prime_le_iff_dvd
+  by_cases hd : d = 0
+  · simp [hd]
+  · -- d ≠ 0 case: use factorization
+    have hn_ne : n ≠ 0 := Nat.pos_iff_ne_zero.mp hn
+    rw [← Nat.factorization_prime_le_iff_dvd hn_ne hd]
+    intro p hp
+    -- For each prime p, show n.factorization p ≤ d.factorization p
+    -- Strategy: p^(n.factorization p) ∣ n, so by h, p^(n.factorization p) ∣ d
+    have hpow_n : p ^ n.factorization p ∣ n := by
+      rw [hp.pow_dvd_iff_le_factorization hn_ne]
+    have hpow_d : p ^ n.factorization p ∣ d := h p (n.factorization p) hp hpow_n
+    -- Convert to factorization inequality
+    exact (hp.pow_dvd_iff_le_factorization hd).mp hpow_d
 
 -- **補題2：prime power 版（素数冪レベル）**
 /-- 補助補題：p^k が gcd を割るなら p^k が d を割る（Integer variant）
