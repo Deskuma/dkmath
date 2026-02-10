@@ -146,24 +146,25 @@ def test_theorem_picker_short_option():
             "Expected `by ...` truncation in the output, but it was not found."
         )
 
-        # 元の証明本体が含まれていないことを確認（省略されているはず）
-        # TestShort.lean には "trivial" と "rfl" が複数行証明に含まれている
-        # 少なくとも一部の証明本体は省略されているべき
-        # 完全に除外されるわけではないので、より厳密には個別のケースをチェック
-        
+        # 個別の定理で省略が正しく行われているか確認（決定論的検証）
         # simple_theorem は複数行の `by` 証明なので省略されるはず
         simple_theorem_match = re.search(
             r'theorem simple_theorem.*?```',
             content,
             re.DOTALL
         )
-        if simple_theorem_match:
-            simple_theorem_text = simple_theorem_match.group(0)
-            # "by ..." となっているか、または "trivial" が含まれていないことを確認
-            # --short オプションでは "by ..." に省略されるはず
-            assert "by ..." in simple_theorem_text or "trivial" not in simple_theorem_text, (
-                "Expected simple_theorem to be truncated with --short option."
-            )
+        assert simple_theorem_match is not None, (
+            "Expected theorem `simple_theorem` to appear in the output for truncation check."
+        )
+        
+        simple_theorem_text = simple_theorem_match.group(0)
+        # --short オプションでは "by ..." に省略され、元の証明本体（"trivial"）は含まれないはず
+        assert "by ..." in simple_theorem_text, (
+            "Expected `simple_theorem` to contain `by ...` with --short option."
+        )
+        assert "trivial" not in simple_theorem_text, (
+            "Expected `simple_theorem` to NOT contain the proof body `trivial` with --short option."
+        )
 
 
 if __name__ == "__main__":
