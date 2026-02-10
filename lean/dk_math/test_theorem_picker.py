@@ -121,9 +121,24 @@ def test_theorem_picker_short_option():
         # 定義が抽出されることを確認
         # NOTE: 少なくとも1つの定義が抽出されることを確認
         # （全ての定義が抽出されるかは LSP の実装に依存）
-        assert "simple_def" in combined or "another_def" in combined, (
+        simple_def_present = "simple_def" in combined
+        another_def_present = "another_def" in combined
+        
+        assert simple_def_present or another_def_present, (
             "Expected at least one definition to appear in the output."
         )
+        
+        # 両方の定義が抽出されることが理想的だが、片方だけの場合は警告
+        if not (simple_def_present and another_def_present):
+            missing = []
+            if not simple_def_present:
+                missing.append("simple_def")
+            if not another_def_present:
+                missing.append("another_def")
+            warnings.warn(
+                f"Definition(s) {', '.join(missing)} not extracted. This may be due to LSP SymbolKind handling.",
+                UserWarning
+            )
 
         # `by ...` 省略が行われていることを確認
         assert re.search(r'\bby \.\.\.', combined), (
