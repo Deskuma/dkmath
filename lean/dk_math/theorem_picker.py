@@ -209,7 +209,11 @@ def extract_definitions(input_file: str, output_file: str, short: bool) -> None:
 
     flat_symbols = flatten(symbols) if isinstance(symbols, list) else []
 
-    allowed_kinds = {5, 6, 12, 13, 14, 25}
+    # LSP SymbolKind values that might be used in Lean:
+    # 5=Class, 6=Method, 7=Property, 8=Field, 9=Constructor,
+    # 12=Function (theorems), 13=Variable, 14=Constant, 25=Operator
+    # Note: Lean LSP may use different kinds for lemma vs theorem
+    allowed_kinds = {5, 6, 7, 8, 9, 12, 13, 14, 25}
 
     lines = text.splitlines(keepends=True)
     line_offsets: List[int] = []
