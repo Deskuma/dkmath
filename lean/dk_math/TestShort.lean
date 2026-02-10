@@ -4,6 +4,7 @@ Sample Lean file for testing theorem_picker.py --short option.
 このファイルは test_theorem_picker.py で使用されるテストサンプルです。
 --short オプションの動作確認のため、複数行の `by` 証明を含んでいます。
 -/
+import Mathlib.Data.Nat.Basic
 
 theorem simple_theorem : True := by
   trivial
