@@ -2,6 +2,7 @@
 from pathlib import Path
 import shutil
 import tempfile
+import warnings
 
 
 def test_extract_definitions():
@@ -112,9 +113,8 @@ def test_theorem_picker_short_option():
         # NOTE: lemma の抽出は Lean LSP のバージョンや SymbolKind の扱いに依存する
         # 補題が抽出されない場合もあるため、警告のみで続行
         if "example_lemma" not in combined:
-            import warnings
             warnings.warn("lemma `example_lemma` was not extracted. This may be due to LSP SymbolKind handling.")
-        
+
         # 定義が抽出されることを確認
         assert "simple_def" in combined or "another_def" in combined, (
             "Expected at least one definition to appear in the output."
