@@ -49,8 +49,16 @@ def test_theorem_picker_help():
 
 def test_theorem_picker_short_option():
     """
-    --short オプションで CosmicFormula 配下の全 .lean を処理できることを確認。
-    出力を読み取り、実際に ... が含まれ、by 以降が省略されていることを検証。
+    --short オプションで、複数行の `by` 証明を含む Lean ファイルが
+    期待通りに `by ...` に省略されることを確認する。
+
+    このテストでは、内容が固定された TestShort.lean を使用し、
+    theorem_picker.py の出力を検証することで、プロジェクトのソース構成に
+    依存しない決定的なテストとする。
+
+    テストサンプル: TestShort.lean
+    - 仕様変更があればこのサンプルファイルも更新すること
+    - サンプルには複数行の `by` 証明を含む定理・補題が含まれる
     """
     import subprocess
     import re
@@ -68,37 +76,66 @@ def test_theorem_picker_short_option():
             return
 
     base_dir = Path(__file__).parent
-    lean_dir = base_dir / "DkMath" / "CosmicFormula"
-    lean_files = sorted(lean_dir.glob("*.lean"))
-    assert lean_files, f"No .lean files found in {lean_dir}"
+    lean_file = base_dir / "TestShort.lean"
+    
+    # サンプルファイルが存在することを確認
+    assert lean_file.exists(), f"Test sample file not found: {lean_file}"
 
     with tempfile.TemporaryDirectory() as tmpdir:
-        found_ellipsis = False
-        for lean_file in lean_files:
-            output_path = Path(tmpdir) / f"{lean_file.stem}-v0.md"
-            result = subprocess.run(
-                ["python", "theorem_picker.py", str(lean_file), str(output_path), "--short"],
-                cwd=base_dir,
-                capture_output=True,
-                text=True,
-            )
-            assert result.returncode == 0, (
-                f"theorem_picker.py failed for {lean_file}: {result.stderr}"
-            )
-            assert output_path.exists(), f"Output not generated: {output_path}"
-            
-            # Lean コードブロック内で "by ..." パターンが使われていることを確認
-            content = output_path.read_text(encoding="utf-8")
-            lean_blocks = re.findall(r'```lean\s*\n(.*?)```', content, re.DOTALL)
-            for block in lean_blocks:
-                if re.search(r'\bby \.\.\.', block):
-                    found_ellipsis = True
-                    break
-        
-        # 少なくとも1つのファイルで省略が行われたことを確認
-        assert found_ellipsis, (
-            "No 'by ...' pattern found in any Lean code blocks. Expected at least one theorem with 'by' to be truncated."
+        output_path = Path(tmpdir) / "TestShort-output.md"
+        result = subprocess.run(
+            ["python", "theorem_picker.py", str(lean_file), str(output_path), "--short"],
+            cwd=base_dir,
+            capture_output=True,
+            text=True,
         )
+        assert result.returncode == 0, (
+            f"theorem_picker.py failed for {lean_file}: {result.stderr}"
+        )
+        assert output_path.exists(), f"Output not generated: {output_path}"
+
+        # 出力された Markdown から Lean コードブロックを抽出
+        content = output_path.read_text(encoding="utf-8")
+        lean_blocks = re.findall(r'```lean\s*\n(.*?)```', content, re.DOTALL)
+        assert lean_blocks, "No Lean code blocks found in theorem_picker output."
+
+        # 全てのブロックを結合して検証
+        combined = "\n\n".join(lean_blocks)
+
+        # TestShort.lean に含まれる定理・補題が抽出されていることを確認
+        assert "simple_theorem" in combined, (
+            "Expected theorem `simple_theorem` to appear in the output."
+        )
+        assert "multi_line_proof" in combined, (
+            "Expected theorem `multi_line_proof` to appear in the output."
+        )
+        assert "example_lemma" in combined, (
+            "Expected lemma `example_lemma` to appear in the output."
+        )
+
+        # `by ...` 省略が行われていることを確認
+        assert re.search(r'\bby \.\.\.', combined), (
+            "Expected `by ...` truncation in the output, but it was not found."
+        )
+
+        # 元の証明本体が含まれていないことを確認（省略されているはず）
+        # TestShort.lean には "trivial" と "rfl" が複数行証明に含まれている
+        # 少なくとも一部の証明本体は省略されているべき
+        # 完全に除外されるわけではないので、より厳密には個別のケースをチェック
+        
+        # simple_theorem は1行なので省略されるはず
+        simple_theorem_match = re.search(
+            r'theorem simple_theorem.*?```',
+            content,
+            re.DOTALL
+        )
+        if simple_theorem_match:
+            simple_theorem_text = simple_theorem_match.group(0)
+            # "by ..." となっているか、または "trivial" が含まれていないことを確認
+            # --short オプションでは "by ..." に省略されるはず
+            assert "by ..." in simple_theorem_text or "trivial" not in simple_theorem_text, (
+                "Expected simple_theorem to be truncated with --short option."
+            )
 
 
 if __name__ == "__main__":
