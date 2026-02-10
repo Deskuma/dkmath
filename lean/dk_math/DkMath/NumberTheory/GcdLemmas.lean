@@ -44,7 +44,11 @@ gcd n d = n を示す
     入射性（重複度の保存）を正しく捉えられる。
 -/
 lemma nat_dvd_of_all_prime_powers_dvd {n d : ℕ}
-    (h : ∀ p k : ℕ, Nat.Prime p → p^k ∣ n → p^k ∣ d) : n ∣ d := by
+    (h : ∀ p k : ℕ, Nat.Prime p → p^k ∣ n → p^k ∣ d) (hn : 0 < n) : n ∣ d := by
+  -- factorization を使って、n の全ての素数冪因子が d を割ることから n ∣ d を示す
+  -- hn : 0 < n より n ≠ 0
+  -- h から：n の factorization に現れる全ての (p, k) に対して p^k ∣ d
+  -- Nat.dvd_iff_factorization_le を使えば n ∣ d が得られる
   sorry
 
 -- **補題2：prime 除数版（素因子レベルで停止）**
@@ -66,9 +70,10 @@ lemma prime_dividing_gcd_divides_d {a b d : ℕ} {p : ℕ}
     リファレンス実装：特定の条件下（a, b の差や和から出される関係式）で
     gcd(a, b) が d を割る。
 -/
-lemma gcd_divides_d {a b d : ℕ} (h : ∀ p k : ℕ, Nat.Prime p → p^k ∣ Nat.gcd a b → p^k ∣ d) :
-    Nat.gcd a b ∣ d := by
-  sorry
+lemma gcd_divides_d {a b d : ℕ} (hgcd : 0 < Nat.gcd a b)
+    (h : ∀ p k : ℕ, Nat.Prime p → p^k ∣ Nat.gcd a b → p^k ∣ d) :
+    Nat.gcd a b ∣ d :=
+  nat_dvd_of_all_prime_powers_dvd h hgcd
 
 -- ----------------------------------------------------------------------------
 
