@@ -417,3 +417,22 @@ g\mid d
 
 ぬしの現在地はまさに「橋脚を打っている」段階。橋脚が立てば、上に“矛盾の梁”を載せられる。これは良い進み方じゃよ。
 -/
+
+/- MEMO:
+動的調和数論 DHNT：指数対数
+
+e^k ↔ e_k
+
+x e^k ↔ k log_e(x)
+
+証明：
+log_e(x) = y ↔ e^y = x
+x e^k = x e^{log_e(x)} = x * x = x^2
+x e^k = e^{k log_e(x)}
+
+x G_{d-1}(x,u) = x (x^{d-1} + ... + u^{d-1}) = x^d + ... + x u^{d-1}
+x G_{d-1}(x,u) = t^d = t (t^{d-1})
+
+ln(x G_{d-1}(x,u)) = ln(t^d) = d ln(t)
+ln(G_{d-1}(x,u)) = ln(t^{d-1}) = (d-1) ln(t)
+-/
