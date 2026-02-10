@@ -89,9 +89,9 @@ def test_theorem_picker_short_option():
             
             # Lean コードブロック内で "by ..." パターンが使われていることを確認
             content = output_path.read_text(encoding="utf-8")
-            lean_blocks = re.findall(r'```lean\s*\n(.*?)\n\s*```', content, re.DOTALL)
+            lean_blocks = re.findall(r'```lean\s*\n(.*?)```', content, re.DOTALL)
             for block in lean_blocks:
-                if re.search(r'\bby\s+\.\.\.', block):
+                if re.search(r'\bby \.\.\.', block):
                     found_ellipsis = True
                     break
         
