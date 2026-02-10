@@ -57,7 +57,7 @@ Lean Git リポジトリのトップレベル README ファイルです。
   - 通常のマージ（merge commit を残す）
   - squash マージ（main 側の履歴を簡潔に保つ場合）
 
-※ squash マージを用いた場合でも、  
+※ squash マージを用いた場合でも、
 　feature ブランチ自体は削除せず、研究過程の記録として保持する。
 
 ---

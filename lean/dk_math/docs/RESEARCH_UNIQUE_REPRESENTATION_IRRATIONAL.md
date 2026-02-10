@@ -1,6 +1,6 @@
 # Lean 4 Mathlib における無理数型を使った一意表現の証明方法
 
-**作成**: 2026-01-28  
+**作成**: 2026-01-28
 **対象**: Lean 4 + Mathlib における `Irrational` 型を使った一意表現定理の研究
 
 ---
@@ -43,15 +43,15 @@ theorem Nat.Prime.irrational_sqrt {p : ℕ} (hp : Nat.Prime p) : Irrational (√
 theorem Irrational.ne_rat (h : Irrational x) (q : ℚ) : x ≠ q
 -- x が無理数なら、任意の有理数 q と異なる
 
-theorem irrational_iff_ne_rational (x : ℝ) : 
+theorem irrational_iff_ne_rational (x : ℝ) :
   Irrational x ↔ ∀ a b : ℤ, b ≠ 0 → x ≠ a / b
 -- 別形式：x が無理数 ⟺ どの整数係数の分数とも異なる
 
-theorem Irrational.add_cases : 
+theorem Irrational.add_cases :
   Irrational (x + y) → Irrational x ∨ Irrational y
 -- x + y が無理数なら、少なくとも x か y の一方は無理数
 
-theorem Irrational.ratCast_add (h : Irrational x) : 
+theorem Irrational.ratCast_add (h : Irrational x) :
   Irrational (q + x)
 -- 有理数を足しても無理数
 ```
@@ -80,14 +80,14 @@ def LinearIndependent : Prop :=
 
 ```lean4
 theorem Fintype.linearIndependent_iff :
-  LinearIndependent R v ↔ 
+  LinearIndependent R v ↔
     ∀ g : ι →₀ R, (Finsupp.sum g fun i a => a • v i) = 0 → g = 0
 ```
 
 **さらに単純な形**（すべてのスカラーが0の場合）:
 
 ```lean4
-LinearIndependent R v ↔ 
+LinearIndependent R v ↔
   (∀ (l : ι →₀ R), (l.sum fun i a => a • v i : M) = 0 → l = 0)
 ```
 
@@ -156,7 +156,7 @@ theorem Ag_rep_exists_unique (x : ℝ) :
   · intro ⟨a, b⟩ hab
     -- hab : a + b·uAg = x
     -- ゴール : a = x ∧ b = 0
-    
+
     -- 無理性を使う：
     by_cases hb : b = 0
     · simp [hb] at hab
@@ -164,7 +164,7 @@ theorem Ag_rep_exists_unique (x : ℝ) :
     · -- b ≠ 0 の場合は矛盾を導く
       -- hab を展開: a + b·(1+√2)/2 = x
       -- ⟹ (a + b/2) + (b/2)·√2 = x
-      
+
       -- √2 = (x - a - b/2)/(b/2) となるが
       -- √2 は無理数なので矛盾
       have h_irrat : Irrational sqrt2 := sqrt2_irrational
@@ -247,7 +247,7 @@ theorem Ag_rep_unique_full (x : ℝ) :
 
 ```lean4
 theorem key_equation_implies_contradiction (x a b : ℝ) (hb : b ≠ 0) :
-    a + b * (Real.sqrt 2) = x → 
+    a + b * (Real.sqrt 2) = x →
     Real.sqrt 2 = (x - a - b/2) / (b/2) := by
   intro hab
   have : (b/2) * Real.sqrt 2 = x - a - b/2 := by nlinarith [hab]
@@ -313,21 +313,21 @@ theorem Ag_rep_exists_unique (x : ℝ) :
 proof outline:
   Step 1: Show (x, 0) satisfies the equation
           Ag x 0 = x + 0 * uAg = x ✓
-  
+
   Step 2: Show uniqueness
           Assume Ag a b = x for some (a, b)
-          
+
     Case 2a: b = 0
              Then a + 0 * uAg = x ⟹ a = x
              Done: a = x, b = 0
-    
+
     Case 2b: b ≠ 0
              Then a + b * (1+√2)/2 = x
              ⟹ (a + b/2) + (b/2)·√2 = x
              ⟹ √2 = (x - a - b/2)/(b/2)
-             
+
              但し√2 は無理数なので...
-             
+
              Here we need:
              - Either a strict proof using Irrational
              - Or restriction to ℚ-coefficients
@@ -347,7 +347,7 @@ theorem Ag_rep_exists (x : ℝ) :
   exact ⟨(x, 0), by simp [Ag]⟩
 
 -- オプション3：制限された x に対してのみ
-theorem Ag_rep_unique_alg (x : ℝ) 
+theorem Ag_rep_unique_alg (x : ℝ)
     (hx : ∃ a b : ℚ, (a : ℝ) + (b : ℝ) * Real.sqrt 2 = x) :
     ∃! (p : ℝ × ℝ), Ag p.1 p.2 = x
 ```
@@ -375,10 +375,10 @@ theorem Ag_rep_unique_alg (x : ℝ)
 ```
 Phase 1: ℚ係数版を完成させる
   └─ LinearIndependent を使用
-  
+
 Phase 2: ℝ係数版の存在を証明
   └─ (x, 0) が常に存在
-  
+
 Phase 3: 一意性の困難な部分
   └─ Irrational.ne_rat や exfalso を活用
   └─ あるいは代数的数の理論を導入

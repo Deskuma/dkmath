@@ -151,7 +151,7 @@ end DkMath
 
 1. **`slabLen`** — 軸ごとの長さを決定するヘルパ関数
    * 軸 j < i なら u
-   * 軸 j = i なら x  
+   * 軸 j = i なら x
    * 軸 j > i なら x+u
 
 2. **`Slab0`** — Slab(i) の原点箱
@@ -209,7 +209,7 @@ CosmicFormulaCellDim.lean に以下の補題と定理を追加したのじゃ：
 
 1. **`card_filter_gt_fin`** - Fin d 内で i < j を満たす要素の個数
 2. **`prod_slabLen_left`** - 左側（j < i）の積をべき乗で表現
-3. **`prod_slabLen_right`** - 右側（i < j）の積をべき乗で表現  
+3. **`prod_slabLen_right`** - 右側（i < j）の積をべき乗で表現
 4. **`card_Slab_explicit`** - **Slab(i) の濃度を明示的な形で表現**
 
 ### 最終形

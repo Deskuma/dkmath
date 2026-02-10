@@ -1,6 +1,6 @@
 # Unit–Nat Layers and the White‑Silver Circle — Theorem Notes
 
-> GitHub に置く「定理資料」ドラフト。  
+> GitHub に置く「定理資料」ドラフト。
 > 目的：reddit 的な「\(\pi\) と \(e\) は交えるか？」を、
 > **層（Layer）と橋（Bridge）** で分解し、Lean 形式化（UnitCycle / SilverRatio.Circle）へ接続する。
 

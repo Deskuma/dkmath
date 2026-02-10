@@ -5,7 +5,7 @@
 
 このモジュールは、リーマンゼータ関数そのものに踏み込む前段として、
 
-1) 複素関数の位相（角度）を、枝問題を避けて扱うための骨格  
+1) 複素関数の位相（角度）を、枝問題を避けて扱うための骨格
 2) その骨格と相性の良い「位相付き Euler 因子」から作る EulerZeta の無限積を、収束・正値まで固める
 
 ことを目的とします。
@@ -43,23 +43,23 @@
 
 縦線パス `σ + i t`。
 
-#### `torque (z dz : ℂ) : ℝ`  
+#### `torque (z dz : ℂ) : ℝ`
 
 $$
 \mathrm{torque}(z,dz)=\Re(z)\Im(dz)-\Im(z)\Re(dz)
 $$
 
-#### `denom (z : ℂ) : ℝ`  
+#### `denom (z : ℂ) : ℝ`
 
 `re^2 + im^2`（`normSq` と一致）。
 
-#### `phaseVel (f : ℝ → ℂ) (t : ℝ) : ℝ`  
+#### `phaseVel (f : ℝ → ℂ) (t : ℝ) : ℝ`
 
 $$
 \mathrm{phaseVel}(f,t)=\Im\Bigl(\frac{f'(t)}{f(t)}\Bigr)
 $$
 
-#### `phaseUnwrap (f) (t0 θ0) (t) : ℝ`  
+#### `phaseUnwrap (f) (t0 θ0) (t) : ℝ`
 
 $$
 \Theta(t)=\theta_0+\int_{t_0}^{t}\mathrm{phaseVel}(f,u)\,du
