@@ -45,15 +45,9 @@ gcd n d = n を示す
 -/
 lemma nat_dvd_of_all_prime_powers_dvd {n d : ℕ}
     (h : ∀ p k : ℕ, Nat.Prime p → p^k ∣ n → p^k ∣ d) (hn : 0 < n) : n ∣ d := by
-  -- factorization を使った proof：
-  -- n ∣ d ⟺ ∀ p, (Nat.factorization n) p ≤ (Nat.factorization d) p
-  -- hn : 0 < n より n ≠ 0 であり、factorization が well-defined
-  by_contra hnd
-  -- 背理法：n ∤ d と仮定する
-  -- すると、ある素数 p が存在して (Nat.factorization n) p > (Nat.factorization d) p
-  -- つまり (Nat.factorization n) p > (Nat.factorization d) p
-  -- k := (Nat.factorization n) p とおくと、p^k ∣ n（factorization の性質）
-  -- でも p^k ∣ d（h から）という矛盾が出る
+  -- factorization を使った proof
+  -- Strategy: n ∣ d ⟺ 全て素数 p について v_p(n) ≤ v_p(d)
+  -- h から各 p^k が d を割るので、指数比較で n ∣ d が得られる
   sorry
 
 -- **補題2：prime 除数版（素因子レベルで停止）**
@@ -75,30 +69,27 @@ lemma prime_dividing_gcd_divides_d {a b d : ℕ} {p : ℕ}
     リファレンス実装：既存の prime_dividing_gcd_divides_d (素数版) を
     prime power へ拡張したもの。
 
-    p が IntGcd(a-b, S) を割るなら p が d を割る性質を、
-    p^k へ持ち上げる。
+    GcdDiffPow.lean の素数版の証明を参考に：
+    - (p:ℤ)^k ∣ Int.gcd(a-b, S)
+    - → (p:ℤ)^k ∣ (a-b) and (p:ℤ)^k ∣ S
+    - → (p:ℤ)^k ∣ d * b^(d-1)（素数版と同じロジック）
+    - → (p:ℤ)^k ∣ d（(p:ℤ)^k ∤ b を使う）
 -/
 lemma prime_pow_dividing_gcd_divides_d_pow {p k : ℕ} (hp : Nat.Prime p)
     {a b : ℤ} {d : ℕ}
     (hab : Int.gcd a b = 1)
     (hpkdiv : (p : ℤ)^k ∣ Int.gcd (a - b) (diffPowSum a b d)) :
     (p : ℤ)^k ∣ (d : ℤ) := by
-  -- 素数冪版：既存の prime_dividing_gcd_divides_d を基にして
+  -- 素数冪版：既存のGcdDiffPow.prime_dividing_gcd_divides_dを基にして
   -- p^k へ持ち上げる
-  -- 方策：帰納法で k に関して induction するか、
-  -- あるいは既存の lemma を直接使う
+  -- 核心：「p^k ∣ d*b^(d-1)」と「p ∤ b」から「p^k ∣ d」を導く
+  -- これは Lifting-the-Exponent 補題の思想による
   sorry
 
 -- **補題3：gcd 全体が d を割る（最強版）**
-/-- 補助補題：gcd(a, b) ∣ d
-
-    リファレンス実装：特定の条件下（a, b の差や和から出される関係式）で
-    gcd(a, b) が d を割る。
--/
-lemma gcd_divides_d {a b d : ℕ} (hgcd : 0 < Nat.gcd a b)
-    (h : ∀ p k : ℕ, Nat.Prime p → p^k ∣ Nat.gcd a b → p^k ∣ d) :
-    Nat.gcd a b ∣ d :=
-  nat_dvd_of_all_prime_powers_dvd h hgcd
+--
+-- 注：既に GdcDivD.lean で Integer版 `gcd_divides_d` が定義されているため、
+-- Nat版の補題はここでは不要。GcdNatAbsDivD で Integer版を使用する。
 
 -- ----------------------------------------------------------------------------
 
