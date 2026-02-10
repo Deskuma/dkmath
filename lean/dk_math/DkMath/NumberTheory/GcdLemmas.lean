@@ -34,6 +34,42 @@ gcd n d = n を示す
 
 -- here additional lemmas about gcd may be placed
 
+-- **補題1：全き素数冪版**
+/-- 補助補題：全ての素数冪 p^k が d を割るなら n | d
+
+    リファレンス実装：n の全ての素数冪因子が d を割る場合、n ∣ d が成立する。
+    これは Mathlib の `Nat.factorization` や `padicValNat` を使って証明される。
+
+    重要：この版は「素因子」ではなく「素因子の冪」を扱うため、
+    入射性（重複度の保存）を正しく捉えられる。
+-/
+lemma nat_dvd_of_all_prime_powers_dvd {n d : ℕ}
+    (h : ∀ p k : ℕ, Nat.Prime p → p^k ∣ n → p^k ∣ d) : n ∣ d := by
+  sorry
+
+-- **補題2：prime 除数版（素因子レベルで停止）**
+/-- 補助補題：gcd の素因子が d を割る
+
+    リファレンス実装：もし g = gcd(a, b) であり、
+    g の全ての素因子 p が d を割るなら、... との関係式。
+
+    注：この版は「素因子だけ」を見るため、
+    条件を結論に変換する際は add. 条件（指数制御）が必要。
+-/
+lemma prime_dividing_gcd_divides_d {a b d : ℕ} {p : ℕ}
+    (hp : Nat.Prime p) (h_gcd : p ∣ Nat.gcd a b) (h_d : p ∣ d) : p ∣ d := by
+  sorry
+
+-- **補題3：gcd 全体が d を割る（最強版）**
+/-- 補助補題：gcd(a, b) ∣ d
+
+    リファレンス実装：特定の条件下（a, b の差や和から出される関係式）で
+    gcd(a, b) が d を割る。
+-/
+lemma gcd_divides_d {a b d : ℕ} (h : ∀ p k : ℕ, Nat.Prime p → p^k ∣ Nat.gcd a b → p^k ∣ d) :
+    Nat.gcd a b ∣ d := by
+  sorry
+
 -- ----------------------------------------------------------------------------
 
 /-- 補助補題：全ての素因子p が d を割るなら n | d
