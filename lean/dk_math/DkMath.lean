@@ -29,6 +29,8 @@ import DkMath.DHNT  -- DHNT: Units and Quantities (Dynamic Harmonic Number Theor
 import DkMath.RH  -- RH: Riemann Hypothesis Module
 -- Unit Cycle Module
 import DkMath.UnitCycle  -- Unit Cycle Basics
+-- FLT: Fermat's Last Theorem Module
+import DkMath.FLT  -- FLT: Fermat's Last Theorem Module
 
 -- >|---|-----------|------------------|-------------------|-------------------|----------|---------
 
