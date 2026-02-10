@@ -56,11 +56,14 @@ theorem gcd_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd a b = 
       simpa [mul_comm] using hmul
     exact this
   -- Use natural-level gcd lemma directly to finish
-  rcases gcd_natAbs_divides_d hd hab with ⟨k, hk⟩
-  -- use the basic lemma `gcd_eq_natAbs` (available from Mathlib) to relate integer gcd to nat gcd
+  have hab_ne : a ≠ b := by sorry
+  have h_natAbs : (a - b).natAbs.gcd (diffPowSum a b d).natAbs ∣ d :=
+    gcd_natAbs_divides_d hd hab hab_ne
+  -- use the basic lemma `gcd_eq_natAbs` to relate integer gcd to nat gcd
   have h := Int.gcd_eq_natAbs (a := a - b) (b := diffPowSum a b d)
   have eqN : Int.gcd (a - b) (diffPowSum a b d)
     = ((a - b).natAbs.gcd (diffPowSum a b d).natAbs : ℤ) := by simpa using h.symm
+  obtain ⟨k, hk⟩ := h_natAbs
   use k
   have eq_nat : (Int.gcd (a - b) (diffPowSum a b d) : ℕ)
     = (a - b).natAbs.gcd (diffPowSum a b d).natAbs := by
