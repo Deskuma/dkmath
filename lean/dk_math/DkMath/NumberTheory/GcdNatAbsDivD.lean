@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Algebra.DiffPow
+import DkMath.NumberTheory.GcdLemmas
 
 namespace DkMath.NumberTheory.GcdDiffPow
 
@@ -21,6 +22,34 @@ open DkMath.Algebra.DiffPow
 theorem gcd_natAbs_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd a b = 1)
     (hab_ne : a ≠ b) :
     (a - b).natAbs.gcd (diffPowSum a b d).natAbs ∣ d := by
-  sorry
+  set g := (a - b).natAbs.gcd (diffPowSum a b d).natAbs
+  -- Strategy: Show that for all prime powers p^k, p^k ∣ g → p^k ∣ d
+  -- Then use nat_dvd_of_all_prime_powers_dvd to conclude g ∣ d
+
+  -- First, handle the trivial case g = 0 (impossible since a ≠ b)
+  have hg_pos : 0 < g := by
+    have hab_natAbs_pos : 0 < (a - b).natAbs := by
+      simp [Int.natAbs_pos, sub_ne_zero, hab_ne]
+    exact Nat.gcd_pos_of_pos_left _ hab_natAbs_pos
+
+  -- Apply nat_dvd_of_all_prime_powers_dvd
+  apply nat_dvd_of_all_prime_powers_dvd (hn := hg_pos)
+  intro p k hp hpk
+
+  -- Need to show: p^k ∣ d
+  -- We have: p^k ∣ g = gcd(|a-b|, |S|)
+  -- This means (p:ℤ)^k ∣ Int.gcd(a-b, S)
+  -- Then by prime_pow_dividing_gcd_divides_d_pow, we get (p:ℤ)^k ∣ d
+
+  -- Convert Nat.gcd to Int.gcd
+  have : (p : ℤ) ^ k ∣ Int.gcd (a - b) (diffPowSum a b d) := by
+    sorry  -- Need to relate Nat.gcd and Int.gcd
+
+  -- Apply the prime power lemma
+  have hpk_d_int : (p : ℤ) ^ k ∣ (d : ℤ) :=
+    prime_pow_dividing_gcd_divides_d_pow hp hab this
+
+  -- Convert back to Nat
+  sorry  -- Need Int.coe_nat_dvd or similar
 
 end DkMath.NumberTheory.GcdDiffPow
