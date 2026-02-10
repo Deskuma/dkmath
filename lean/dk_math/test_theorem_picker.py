@@ -123,7 +123,7 @@ def test_theorem_picker_short_option():
         # 少なくとも一部の証明本体は省略されているべき
         # 完全に除外されるわけではないので、より厳密には個別のケースをチェック
         
-        # simple_theorem は1行なので省略されるはず
+        # simple_theorem は複数行の `by` 証明なので省略されるはず
         simple_theorem_match = re.search(
             r'theorem simple_theorem.*?```',
             content,
