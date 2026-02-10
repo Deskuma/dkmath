@@ -20,13 +20,27 @@ open DkMath.Algebra.DiffPow
 -/
 
 /-- Nat-level補題：|a-b| と |S| の自然数 gcd が d を割る。 -/
-theorem gcd_natAbs_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd a b = 1) :
+theorem gcd_natAbs_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd a b = 1)
+    (hab_ne : a ≠ b) :
     (a - b).natAbs.gcd (diffPowSum a b d).natAbs ∣ d := by
   let g := (a - b).natAbs.gcd (diffPowSum a b d).natAbs
 
-  -- gcd は常にpositive（ただし a=b=0の時の特例を除く、ここでは不要）
+  -- gcd は常にpositive（a ≠ b より (a-b).natAbs > 0）
   have hg_pos : 0 < g := by
-    sorry
+    -- 背理法：g = 0 と仮定すると矛盾
+    by_contra h
+    push_neg at h
+    simp only [Nat.le_zero] at h
+    -- g = 0 なら gcd(|a-b|, |S|) = 0
+    -- つまり |a-b| = 0 and |S| = 0
+    have hab_eq : (a - b).natAbs = 0 := by
+      have := Nat.eq_zero_of_gcd_eq_zero_left h
+      exact this
+    -- |a-b| = 0 なら a = b
+    have hab_eq_int : (a - b : ℤ) = 0 := Int.natAbs_eq_zero.mp hab_eq
+    have hab_eq_final : a = b := by omega
+    -- しかし hab_ne : a ≠ b に矛盾
+    exact hab_ne hab_eq_final
 
   -- prime power版の key：p^k が g を割るなら p^k が d を割る
   have key_pow : ∀ p k : ℕ, Nat.Prime p → p^k ∣ g → p^k ∣ d := by
