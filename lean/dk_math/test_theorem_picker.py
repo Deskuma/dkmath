@@ -123,20 +123,21 @@ def test_theorem_picker_short_option():
         # （全ての定義が抽出されるかは LSP の実装に依存）
         simple_def_present = "simple_def" in combined
         another_def_present = "another_def" in combined
-        
+
+        # 少なくとも1つの定義が必要
         assert simple_def_present or another_def_present, (
             "Expected at least one definition to appear in the output."
         )
-        
-        # 両方の定義が抽出されることが理想的だが、片方だけの場合は警告
-        if not (simple_def_present and another_def_present):
-            missing = []
-            if not simple_def_present:
-                missing.append("simple_def")
-            if not another_def_present:
-                missing.append("another_def")
+
+        # 個別に欠けている定義を警告
+        if not simple_def_present:
             warnings.warn(
-                f"Definition(s) {', '.join(missing)} not extracted. This may be due to LSP SymbolKind handling.",
+                "Definition `simple_def` not extracted. This may be due to LSP SymbolKind handling.",
+                UserWarning
+            )
+        if not another_def_present:
+            warnings.warn(
+                "Definition `another_def` not extracted. This may be due to LSP SymbolKind handling.",
                 UserWarning
             )
 
