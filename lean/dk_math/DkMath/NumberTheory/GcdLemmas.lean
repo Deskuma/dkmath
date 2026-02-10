@@ -69,6 +69,26 @@ lemma prime_dividing_gcd_divides_d {a b d : ℕ} {p : ℕ}
     (hp : Nat.Prime p) (h_gcd : p ∣ Nat.gcd a b) (h_d : p ∣ d) : p ∣ d := by
   sorry
 
+-- **補題2b：prime power 版（素数冪レベル）**
+/-- 補助補題：p^k が gcd を割るなら p^k が d を割る（Integer variant）
+
+    リファレンス実装：既存の prime_dividing_gcd_divides_d (素数版) を
+    prime power へ拡張したもの。
+
+    p が IntGcd(a-b, S) を割るなら p が d を割る性質を、
+    p^k へ持ち上げる。
+-/
+lemma prime_pow_dividing_gcd_divides_d_pow {p k : ℕ} (hp : Nat.Prime p)
+    {a b : ℤ} {d : ℕ}
+    (hab : Int.gcd a b = 1)
+    (hpkdiv : (p : ℤ)^k ∣ Int.gcd (a - b) (diffPowSum a b d)) :
+    (p : ℤ)^k ∣ (d : ℤ) := by
+  -- 素数冪版：既存の prime_dividing_gcd_divides_d を基にして
+  -- p^k へ持ち上げる
+  -- 方策：帰納法で k に関して induction するか、
+  -- あるいは既存の lemma を直接使う
+  sorry
+
 -- **補題3：gcd 全体が d を割る（最強版）**
 /-- 補助補題：gcd(a, b) ∣ d
 
