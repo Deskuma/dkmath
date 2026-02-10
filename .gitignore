@@ -1,5 +1,4 @@
 # Project specific ignores
-notes/
 __*
 !__init__.py
 

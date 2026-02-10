@@ -82,7 +82,7 @@ have hbd_ne : ((b - d : ℚ) : ℝ) ≠ 0 := by norm_cast; intro heq; grind only
 ↑ `grind` は非標準タクティック。`omega` の方が推奨されるかも。試してみると：
 
 ```lean
-have hbd_ne : ((b - d : ℚ) : ℝ) ≠ 0 := by 
+have hbd_ne : ((b - d : ℚ) : ℝ) ≠ 0 := by
   norm_cast
   intro heq
   omega
@@ -412,9 +412,9 @@ UniqueRepSimple.lean
   - sqrt2_lin_indep_over_rat
   - InQAdjSqrt2
   - unique_rep_in_Q_sqrt2
-    
+
     ↓↓ (展開・応用)
-    
+
 UniqueRepresentation.lean
     ↓
   [教科書的解説＋拡張]

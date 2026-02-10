@@ -59,28 +59,28 @@ $$
 
 ### 位相ドリフト骨格
 
-- `Basic.lean`  
+- `Basic.lean`
   空ファイル（予約）。将来の共通設定や再輸出（re-export）置き場候補。
 
-- `Defs.lean`  
+- `Defs.lean`
   定義置き場（記号・概念の導入のみ）。
 
-- `Lemmas.lean`  
+- `Lemmas.lean`
   定義間の関係を示す補題（代数コア、同値、別表現など）。
 
-- `Theorems.lean`  
+- `Theorems.lean`
   積分で定義した位相が期待通り微分できること（解析骨格）を示す定理。
 
 ### EulerZeta（今回追加された成果）
 
-- `EulerZeta.lean`  
+- `EulerZeta.lean`
   EulerZeta（magnitude/phase）に関する公開インタフェース（定義の再輸出、主要定理の提示）。
 
-- `EulerZetaLemmas.lean`  
+- `EulerZetaLemmas.lean`
   EulerZeta の局所補題集：
   分母 `w = exp((σ+it)log p) - 1` の非零、`‖a_p - 1‖` の評価など。
 
-- `EulerZetaConvergence.lean`  
+- `EulerZetaConvergence.lean`
   収束と正値の主証明：
   `σ > 1` のもとで `EulerZetaMagMultipliable` と `0 < eulerZetaMag` を確定。
 
@@ -102,10 +102,10 @@ $$
 
 素数ごとに
 
-- 分母（複素数）  
+- 分母（複素数）
   `w(p,σ,t) := exp((σ+it)log p) - 1`
 
-- magnitude 因子（実数）  
+- magnitude 因子（実数）
   `a_p(σ,t) := exp(σ log p) / ‖w(p,σ,t)‖`
 
 を定義し、EulerZeta magnitude を
@@ -122,10 +122,10 @@ $$
 
 ### 主定理（σ > 1）
 
-- `eulerZetaMag_multipliable_sigma_gt_one`  
+- `eulerZetaMag_multipliable_sigma_gt_one`
   `σ > 1` のもとで EulerZeta magnitude の無限積が収束（`Multipliable`）。
 
-- `eulerZetaMag_pos_sigma_gt_one`  
+- `eulerZetaMag_pos_sigma_gt_one`
   `σ > 1` のもとで `0 < eulerZetaMag σ t`。
 
 ### 証明戦略（要点）

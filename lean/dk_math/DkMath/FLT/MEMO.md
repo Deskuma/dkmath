@@ -38,7 +38,7 @@
 
 4. [ ] 開発フロー（短く）
    - [ ] 小さく切って PR を出す（DiffPow → gcd → NoPerfectPower の順）。
-   - [ ] 各PRで `lake build` を必ず通す（CI を意識）。  
+   - [ ] 各PRで `lake build` を必ず通す（CI を意識）。
    - [ ] ドキュメント（各ファイル先頭）と README を更新する。
 
 参考（既存実装）
