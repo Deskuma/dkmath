@@ -50,7 +50,7 @@ def test_theorem_picker_help():
 def test_theorem_picker_short_option():
     """
     --short オプションで CosmicFormula 配下の全 .lean を処理できることを確認。
-    出力を読み取り、実際に "..." が含まれ、"by" 以降が省略されていることを検証。
+    出力を読み取り、実際に ... が含まれ、by 以降が省略されていることを検証。
     """
     import subprocess
     import re
@@ -87,16 +87,13 @@ def test_theorem_picker_short_option():
             )
             assert output_path.exists(), f"Output not generated: {output_path}"
             
-            # 出力ファイルを読み取り、"..." が含まれることを確認
-            with open(output_path, "r", encoding="utf-8") as f:
-                content = f.read()
-                # "by ..." のパターンを Lean コードブロック内で確認
-                # Markdown の ```lean ... ``` ブロック内で "by ..." を探す
-                lean_blocks = re.findall(r'```lean\s*\n(.*?)\n\s*```', content, re.DOTALL)
-                for block in lean_blocks:
-                    if re.search(r'\bby\s+\.\.\.', block):
-                        found_ellipsis = True
-                        break
+            # Lean コードブロック内で "by ..." パターンが使われていることを確認
+            content = output_path.read_text(encoding="utf-8")
+            lean_blocks = re.findall(r'```lean\s*\n(.*?)\n\s*```', content, re.DOTALL)
+            for block in lean_blocks:
+                if re.search(r'\bby\s+\.\.\.', block):
+                    found_ellipsis = True
+                    break
         
         # 少なくとも1つのファイルで省略が行われたことを確認
         assert found_ellipsis, (
