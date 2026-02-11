@@ -139,19 +139,89 @@ lemma prime_not_dvd_d_of_gcd_dvd {a b : ℤ} {d : ℕ}
 def quotientPrimePow (a b p : ℕ) : ℕ :=
   (a^p - b^p) / (a - b)
 
-/-- 素数冪の場合、商は正で 1 より大きい -/
-lemma quotientPrimePow_gt_one {a b p : ℕ}
-    (hp : Nat.Prime p) (ha : b < a) (hb : 0 < b) :
-    1 < quotientPrimePow a b p := by
-  sorry
-
 /-- 素数冪の商 G が存在し、a^p - b^p = (a - b) * G -/
 lemma pow_sub_pow_eq_diff_mul_quotient {a b p : ℕ}
     (hp : Nat.Prime p) (ha : b < a) :
     a^p - b^p = (a - b) * quotientPrimePow a b p := by
-  sorry
+  unfold quotientPrimePow
+  -- ℤ での pow_sub_pow_factor を使う
+  have key : (a : ℤ)^p - (b : ℤ)^p = ((a : ℤ) - (b : ℤ)) * diffPowSum (a : ℤ) (b : ℤ) p :=
+    DkMath.Algebra.DiffPow.pow_sub_pow_factor (a : ℤ) (b : ℤ) p
+  -- Nat での可除性に変換
+  have hab_le : b ≤ a := Nat.le_of_lt ha
+  have hab_pow : b^p ≤ a^p := Nat.pow_le_pow_left hab_le p
+  -- (a - b) ∣ (a^p - b^p) を Int から示す
+  have hdvd : (a - b) ∣ (a^p - b^p) := by
+    have h1 : ((a - b : ℕ) : ℤ) = (a : ℤ) - (b : ℤ) := Nat.cast_sub hab_le
+    have h2 : ((a^p - b^p : ℕ) : ℤ) = (a : ℤ)^p - (b : ℤ)^p := by
+      simp only [Nat.cast_sub hab_pow, Nat.cast_pow]
+    have key' : (a : ℤ) - (b : ℤ) ∣ (a : ℤ)^p - (b : ℤ)^p := by
+      rw [key]
+      exact dvd_mul_right _ _
+    rw [← h1, ← h2] at key'
+    exact Int.ofNat_dvd.mp key'
+  -- div_mul_cancel を使う
+  rw [Nat.mul_comm]
+  exact (Nat.div_mul_cancel hdvd).symm
 
-/-- 素数冪の場合の軽量版 Zsigmondy（prime p, p ≥ 3）-/
+/-- 素数冪の場合、a > b なら 0 < a^p - b^p -/
+theorem pow_sub_pos {a b : ℕ} {p : ℕ}
+  (hp : Nat.Prime p) (ha : a > b) : 0 < a ^ p - b ^ p := by
+  -- p が素数なら p ≠ 0
+  have hp_ne_zero : p ≠ 0 := Nat.Prime.ne_zero hp
+  -- a > b より a^p > b^p
+  have han : a ^ p > b ^ p := Nat.pow_lt_pow_left ha hp_ne_zero
+  -- したがって 0 < a^p - b^p
+  exact Nat.zero_lt_sub_of_lt han
+
+/-- 素数冪の場合、商は正で 1 より大きい -/
+lemma quotientPrimePow_gt_one {a b p : ℕ}
+    (hp : Nat.Prime p) (ha : b < a) (hb : 0 < b) :
+    1 < quotientPrimePow a b p := by
+  -- a^p - b^p = (a - b) * G を使う
+  have heq := pow_sub_pow_eq_diff_mul_quotient hp ha
+  --  p ≥ 2 なので a^p - b^p > a - b を示せば G > 1
+  have hp_ge : 2 ≤ p := hp.two_le
+  -- a > 1 (∵ a > b ≥ 1)
+  have ha_ge : 1 < a := by omega
+  -- a^2 ≥ a + 1 (∵ a ≥ 2)
+  have ha2_bound : a + 1 ≤ a^2 := by nlinarith [sq_nonneg (a - 1)]
+  -- a^p ≥ a^2 (∵ p ≥ 2)
+  have hap_bound : a^2 ≤ a^p := Nat.pow_le_pow_right (Nat.zero_lt_of_lt ha) hp_ge
+  -- したがって a^p ≥ a + 1 > a
+  have ha_pow_gt : a < a^p := by omega
+  -- a^p - b^p ≥ a^p - a （∵ b^p ≤ a, 実は b < a なので b^p < a^p）
+  -- よりシンプルに：a - b < a < a^p ≤ a^p - b^p + b^p
+  -- つまり a - b + b^p < a^p
+  -- これは a + (b^p - b) < a^p
+  -- b < a かつ p ≥ 2 より b^p ≥ b なので...
+  -- 直接 omega で示す
+  have : a - b < a^p - b^p := by
+    -- a < a^p かつ b^p < a^p （∵ b < a）より
+    have ha_pow_lt : a < a^p := by
+      calc a
+        _ = a^1 := (pow_one a).symm
+        _ < a^p := Nat.pow_lt_pow_right ha_ge hp_ge
+    have hab_pow_le : b^p ≤ a^p := Nat.pow_le_pow_left (Nat.le_of_lt ha) p
+    -- まず a^p - b^p > 0 を確認
+    have hpos : 0 < a^p - b^p := by simp [pow_sub_pos hp ha]
+    -- a - b < a かつ a < a^p - b^p + b^p = a^p を使う
+    have : a - b < a := Nat.sub_lt (Nat.zero_lt_of_lt ha) hb
+    have : a ≤ a^p := Nat.le_of_lt ha_pow_lt
+    -- a^p = a^p - b^p + b^p より
+    have heq : a^p = a^p - b^p + b^p := (Nat.sub_add_cancel hab_pow_le).symm
+    calc a - b
+      _ < a := Nat.sub_lt (Nat.zero_lt_of_lt ha) hb
+      _ < a^p := ha_pow_lt
+      _ = a^p - b^p + b^p := heq
+    sorry -- TODO: a < a^p - b^p + b^p から a - b < a^p - b^p を導く
+  -- heq と合わせて G > 1
+  have : (a - b) * 1 < (a - b) * quotientPrimePow a b p := by
+    rw [mul_one, ← heq]
+    exact this
+  exact Nat.lt_of_mul_lt_mul_left this
+
+/-- 素数冪の場合の軽量版 Zsigmondy（prime p, p ≥ 3） -/
 lemma exists_prime_divisor_not_dividing_diff_of_prime_exp
     {a b p : ℕ}
     (hp : Nat.Prime p) (hp_ge : 3 ≤ p)
