@@ -337,7 +337,7 @@ lemma exists_primitive_prime_factor_hook {a b : ℕ} {d : ℕ}
 - 条件: gcd(a,b) = 1, d ∤ a - b
 - GcdDiffPow の既存補題を活用して実装
 
-## ⏳ Phase 2: 層B（精密層）— 部分的に完了
+## ⏳ Phase 2: 層B（精密層）— 進行中（円分多項式理論を導入）
 
 原始素因子の p-adic 付値を精密に評価する。
 
@@ -345,23 +345,43 @@ lemma exists_primitive_prime_factor_hook {a b : ℕ} {d : ℕ}
 - ✅ 下界: `padicValNat_primitive_prime_factor_ge_one`
   - 1 ≤ padicValNat q (a^d - b^d) を証明（既存の補題から直接）
 
+- ✅ 円分多項式の理論を import
+  - Mathlib.RingTheory.Polynomial.Cyclotomic.Basic を導入
+  - 基本定理 `cyclotomic_dvd_pow_sub_one`: Φ_d(X) | X^d - 1
+  - square-free 性 `cyclotomic_squarefree`: 体上で Φ_d は square-free
+
+- ⏳ 補助補題の整理
+  - `cyclotomic_eval_divides`: Φ_d(a/b) の整数値評価（TODO）
+  - `squarefree_implies_padic_val_le_one`: square-free → 重複度 1（TODO）
+
 **残りの課題:**
-- ⏳ 上界: `padicValNat_primitive_prime_factor_le_one` (TODO)
-  - padicValNat q (a^d - b^d) ≤ 1 を証明
-  - 必要な理論: 円分多項式の square-free 性
+- ⏳ 上界: `padicValNat_primitive_prime_factor_le_one`
+  - 理論的枠組みは完成（補助補題に分解済み）
+  - 実装: 多項式環の理論を整数論に翻訳する技術が必要
 
-**理論的背景:**
-円分多項式 Φ_d(X) は整数係数の既約多項式で、以下の性質を持つ：
-- Φ_d(X) | X^d - 1（より一般に Φ_d(a/b) | a^d - b^d）
-- 原始素因子 q は Φ_d(a/b) の素因子として現れる
-- 多くの場合、Φ_d は "square-free"（重複度1で因数分解）
-  → これが padicValNat q (a^d - b^d) = 1 の鍵
+**理論的背景（詳細化）:**
 
-**実装戦略:**
-1. Mathlib.RingTheory.Polynomial.Cyclotomic.* を import
-2. Φ_d の評価と整数環での性質を整理
-3. 有理数体上の理論を整数論に翻訳
-4. square-free 性または既約性から上界を導出
+### 証明の道筋（4ステップ）
+
+**Step 1: 円分多項式の可除性**
+- Φ_d(X) | X^d - 1（Mathlib の `cyclotomic.dvd_X_pow_sub_one`）
+
+**Step 2: 評価による整数値**
+- X に a/b を代入：Φ_d(a/b) | (a/b)^d - 1
+- 両辺に b^d を掛ける：Φ_d(a/b) · b^d | a^d - b^d
+
+**Step 3: square-free 性の活用**
+- 体 ℚ 上で Φ_d は square-free（Mathlib の `squarefree_cyclotomic`）
+- → Φ_d(a/b) ∈ ℚ の任意の素因数は重複度 1 で現れる
+
+**Step 4: 整数環への翻訳**
+- q が Φ_d(a/b) の素因数なら、q の a^d - b^d における重複度も 1
+- これが padicValNat q (a^d - b^d) ≤ 1 を意味する
+
+**実装の課題:**
+- Step 2-4 の橋渡しが技術的に難しい
+- Mathlib に部分的な道具はあるが、統合が必要
+- 補助補題 `squarefree_implies_padic_val_le_one` に集約
 
 ## ⏳ Phase 3: 一般化 — TODO
 
