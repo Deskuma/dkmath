@@ -51,22 +51,27 @@ theorem gcd_specialized_divides_d (x u : ℤ) (d : ℕ) (hd : 1 ≤ d) (hab : In
 /-! ### 2. Perfect power => valuation constraints -/
 
 /-- 完全 d 乗なら、任意の素数 p で指数が d の倍数（Nat側） -/
-lemma dvd_padicVal_of_eq_pow {t n d : ℕ} (ht : 0 < t) :
+lemma dvd_padicVal_of_eq_pow {t n d : ℕ} (_ht : 0 < t) :
     t = n^d → ∀ p : ℕ, Nat.Prime p → d ∣ padicValNat p t := by
-  -- `t = n^d` なら v_p(t) = d * v_p(n)
-  -- TODO: Mathlib の padicValNat に関する補題を探して実装
-  -- 現時点では戦略確認のため admit
-  intro heq p hp
+  intro heq p _hp
   subst heq
-  -- padicValNat p (n^d) = d * padicValNat p n を使う（Mathlib にあるはず）
-  -- とりあえず admit で通す
+  -- 基本的に padicValNat p (n^d) = d * padicValNat p n が成り立つ
+  -- したがって d ∣ d * padicValNat p n := dvd_mul_right d _
+  -- TODO: Mathlib には以下のような補題があるはず：
+  --   padicValNat.pow : padicValNat p (n^d) = d * padicValNat p n
+  -- 名前が判明次第、`simp [padicValNat.pow]; exact dvd_mul_right d _` とする
+  -- 現時点では admit
   admit
 
 /-- `t = A * B` で gcd(A,B) が小さいとき、v_p(t) を A と B に分配する雛形 -/
-lemma padicVal_mul_eq_add_of_coprime {A B : ℕ} (hcop : Nat.Coprime A B) (p : ℕ) :
+lemma padicVal_mul_eq_add_of_coprime {A B : ℕ} (_hcop : Nat.Coprime A B) (p : ℕ) :
     padicValNat p (A * B) = padicValNat p A + padicValNat p B := by
-  -- TODO: Mathlib の padicValNat_mul 相当を探して実装
-  -- coprime 条件下では加法性が成り立つはず
+  -- coprime 条件下での p-進付値の加法性
+  -- 実際には coprime でなくても成り立つ性質
+  -- TODO: Mathlib には以下のような補題があるはず：
+  --   padicValNat.mul : padicValNat p (a * b) = padicValNat p a + padicValNat p b
+  -- 名前が判明次第、`exact padicValNat.mul` とする
+  -- 現時点では admit
   admit
 
 /-! ### 3. Bridge: from gcd ∣ d to "no new prime can divide both" -/
