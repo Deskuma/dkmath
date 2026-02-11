@@ -168,18 +168,55 @@ q の a^d - b^d における重複度は 1 以下。
 2. 有理数が square-free → その任意の素因数は重複度 1
 3. Φ_d(a/b) · b^d | a^d - b^d と組み合わせる
 
-**実装の課題:**
-"有理数が square-free" という概念を正確に定式化し、
-それを整数の素因数分解に結びつける必要がある。
+**実装の課題（詳細）:**
 
-**現状:** 理論的には確立されているが、Lean での形式化は未完成。
+### 課題 1: 多項式の評価 → 整数値
+Φ_d(X) ∈ ℤ[X] に対して、X = a/b を代入すると Φ_d(a/b) ∈ ℚ。
+これを整数論に翻訳するには：
+- b^(deg Φ_d) · Φ_d(a/b) ∈ ℤ を示す
+- Mathlib に `Polynomial.aeval` などがあるが、整数値性の保証が必要
+
+### 課題 2: square-free 性の翻訳
+多項式の square-free 性（代数的概念）を素因数の重複度（整数論的概念）に結びつける：
+- Φ_d が square-free ⇒ Φ_d(a/b) の "分子" が square-free
+- これには、分子と分母の分離、既約分数の扱いが必要
+- Mathlib の `Squarefree` の定義と整数の素因数分解の関係
+
+### 課題 3: padicValNat への接続
+最終的に padicValNat に翻訳する：
+- ℚ の素因数分解 → ℤ の素因数分解 → padicValNat
+- 各ステップで情報の損失がないことを保証
+
+**代替アプローチ:**
+
+### アプローチ A: Lifting the Exponent Lemma (LTE)
+q ≠ d の素数に対して、q | a^d - b^d かつ q ∤ a - b なら、
+より直接的な LTE の適用で padicValNat を評価できる可能性。
+
+### アプローチ B: 具体的なケース (d = 3, 5, 7)
+小さい素数 d について具体的に計算し、パターンを見つける：
+- d = 3: a^3 - b^3 = (a - b)(a^2 + ab + b^2)
+- q | a^2 + ab + b^2 かつ q ∤ a - b のとき、q^2 ∤ a^3 - b^3 を示す
+
+### アプローチ C: Mathlib への貢献
+この補題自体を Mathlib に提案し、コミュニティの知恵を借りる。
+
+**現在の方針:**
+理論的枠組みは確立。実装は将来の PR で段階的に進める。
+まずは応用（完全冪判定）を試して、実用性と必要性を確認する。
+
+**参考文献:**
+- Bang's theorem (1886): 原始素因子の存在
+- Zsigmondy's theorem (1892): 一般化と例外の特定
+- Mihăilescu's theorem (2002): Catalan 予想の解決（関連技術）
 -/
 lemma squarefree_implies_padic_val_le_one (d a b q : ℕ)
     (hd_prime : Nat.Prime d) (hb : 0 < b) (hab : Nat.Coprime a b)
     (hq_prime : Nat.Prime q) (hq_div : q ∣ a ^ d - b ^ d) :
     padicValNat q (a ^ d - b ^ d) ≤ 1 := by
   -- TODO: 円分多項式の square-free 性を活用
-  -- この補題が完成すれば、padicValNat_primitive_prime_factor_le_one は直ちに従う
+  -- 実装の課題は上記コメント参照
+  -- 代替アプローチの検討が必要
   sorry
 
 -- ========================================
