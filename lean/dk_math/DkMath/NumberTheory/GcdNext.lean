@@ -253,7 +253,7 @@ lemma quotientPrimePow_gt_one {a b p : ℕ}
 -/
 lemma exists_prime_divisor_not_dividing_diff_of_prime_exp
     {a b p : ℕ}
-    (hp : Nat.Prime p) (hp_ge : 3 ≤ p)
+    (hp : Nat.Prime p) (_hp_ge : 3 ≤ p)
     (ha : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
     (hpnd : ¬ p ∣ a - b) :
     ∃ q : ℕ, Nat.Prime q ∧ q ∣ a^p - b^p ∧ ¬ q ∣ a - b := by
