@@ -176,61 +176,72 @@ theorem pow_sub_pos {a b : ℕ} {p : ℕ}
 
 /-- 素数冪の場合、商は正で 1 より大きい -/
 lemma quotientPrimePow_gt_one {a b p : ℕ}
-    (hp : Nat.Prime p) (ha : b < a) (hb : 0 < b) :
+    (hp : Nat.Prime p) (ha : b < a) (_hb : 0 < b) :
     1 < quotientPrimePow a b p := by
-  -- a^p - b^p = (a - b) * G を使う
-  have heq := pow_sub_pow_eq_diff_mul_quotient hp ha
-  --  p ≥ 2 なので a^p - b^p > a - b を示せば G > 1
-  have hp_ge : 2 ≤ p := hp.two_le
-  -- a > 1 (∵ a > b ≥ 1)
-  have ha_ge : 1 < a := by omega
-  -- a^2 ≥ a + 1 (∵ a ≥ 2)
-  have ha2_bound : a + 1 ≤ a^2 := by nlinarith [sq_nonneg (a - 1)]
-  -- a^p ≥ a^2 (∵ p ≥ 2)
-  have hap_bound : a^2 ≤ a^p := Nat.pow_le_pow_right (Nat.zero_lt_of_lt ha) hp_ge
-  -- したがって a^p ≥ a + 1 > a
-  have ha_pow_gt : a < a^p := by omega
-  -- a^p - b^p ≥ a^p - a （∵ b^p ≤ a, 実は b < a なので b^p < a^p）
-  -- よりシンプルに：a - b < a < a^p ≤ a^p - b^p + b^p
-  -- つまり a - b + b^p < a^p
-  -- これは a + (b^p - b) < a^p
-  -- b < a かつ p ≥ 2 より b^p ≥ b なので...
-  -- 直接 omega で示す
-  have : a - b < a^p - b^p := by
-    -- a < a^p かつ b^p < a^p （∵ b < a）より
-    have ha_pow_lt : a < a^p := by
-      calc a
-        _ = a^1 := (pow_one a).symm
-        _ < a^p := Nat.pow_lt_pow_right ha_ge hp_ge
-    have hab_pow_le : b^p ≤ a^p := Nat.pow_le_pow_left (Nat.le_of_lt ha) p
-    -- まず a^p - b^p > 0 を確認
-    have hpos : 0 < a^p - b^p := by simp [pow_sub_pos hp ha]
-    -- b ≤ b^p (p ≥ 1 より)
-    have hb_pow : b ≤ b^p := Nat.le_self_pow (Nat.Prime.pos hp).ne' b
-    -- ℤ で証明してから ℕ に戻す
-    have hab_le' : b ≤ a := Nat.le_of_lt ha
-    have ha_z : (a : ℤ) < (a^p : ℤ) := Nat.cast_lt.mpr ha_pow_lt
-    have hb_z : (b : ℤ) ≤ (b^p : ℤ) := Nat.cast_le.mpr hb_pow
-    -- (a : ℤ) - (b : ℤ) < (a^p : ℤ) - (b^p : ℤ) を示す
-    have h_z : (a : ℤ) - (b : ℤ) < (a^p : ℤ) - (b^p : ℤ) := by
-      -- 引き算を足し算に変換
-      have h_neg : (-(b^p : ℤ)) ≤ (-(b : ℤ)) := by linarith [hb_z]
-      calc (a : ℤ) - (b : ℤ)
-        _ = (a : ℤ) + (-(b : ℤ)) := sub_eq_add_neg _ _
-        _ < (a^p : ℤ) + (-(b : ℤ)) := by linarith [ha_z]
-        _ ≤ (a^p : ℤ) + (-(b^p : ℤ)) := by sorry  -- 後まわし
-        _ = (a^p : ℤ) - (b^p : ℤ) := (sub_eq_add_neg _ _).symm
-    -- ℕ に戻す：↑(a - b) < ↑(a^p - b^p)
-    have : (↑(a - b) : ℤ) < ↑(a^p - b^p) := by
-      simp only [Nat.cast_sub hab_le', Nat.cast_sub hab_pow_le, Nat.cast_pow]
-      exact h_z
-    -- omega で ℕ の不等式に変換
+  have hab_pos : 0 < a - b := Nat.sub_pos_of_lt ha
+  have hab_ne : a - b ≠ 0 := Nat.ne_of_gt hab_pos
+
+  -- p ≥ 2
+  have hp_ge2 : 2 ≤ p := hp.two_le
+  have hp1_pos : 0 < p - 1 := by
+    -- 1 < p (prime) なので p-1 > 0
+    exact Nat.sub_pos_of_lt hp.one_lt
+
+  -- 1 < a（a > b ≥ 0 かつ b < a より、a ≥ 1 では弱いので、ここは 1 < a を作る）
+  have ha_gt1 : 1 < a := by
+    -- b < a かつ b ≥ 0 なので a ≥ 1、さらに a ≠ 1 を言えば 1 < a
+    -- ここは簡単に omega が通るなら omega、通らなければ場合分けでもOK
     omega
-  -- heq と合わせて G > 1
-  have : (a - b) * 1 < (a - b) * quotientPrimePow a b p := by
-    rw [mul_one, ← heq]
-    exact this
-  exact Nat.lt_of_mul_lt_mul_left this
+
+  -- 2 ≤ a^(p-1)
+  have two_le_apow : 2 ≤ a^(p-1) := by
+    -- 2 ≤ m ↔ 1 < m
+    have : 1 < a^(p-1) := by
+      calc 1
+        _ = a^0 := (pow_zero a).symm
+        _ < a^(p-1) := Nat.pow_lt_pow_right ha_gt1 hp1_pos
+    exact Nat.succ_le_of_lt this
+
+  -- a^(p-1) ≤ (a^p - b^p) / (a-b)
+  have apow_le_quot : a^(p-1) ≤ quotientPrimePow a b p := by
+    unfold quotientPrimePow
+    -- Nat.le_div_iff_mul_le : 0 < k → (m ≤ n / k ↔ m*k ≤ n)
+    have hmul : a^(p-1) * (a - b) ≤ a^p - b^p := by
+      -- b^p ≤ a^(p-1)*b を示して引き算で吸収
+      have hb_le_a : b ≤ a := Nat.le_of_lt ha
+      have hbpow_le_apow : b^(p-1) ≤ a^(p-1) := Nat.pow_le_pow_left hb_le_a (p-1)
+      have hb_mul : b^(p-1) * b ≤ a^(p-1) * b := Nat.mul_le_mul_right b hbpow_le_apow
+      have hbpow : b^p = b^(p-1) * b := by
+        -- p = (p-1)+1
+        have hp_eq : p = (p - 1) + 1 := (Nat.sub_add_cancel (Nat.succ_le_iff.2 hp.pos)).symm
+        -- b^p = b^(p-1+1) = b^(p-1) * b
+        rw [hp_eq]
+        exact pow_succ b (p - 1)
+      have hapow : a^p = a^(p-1) * a := by
+        have hp_eq : p = (p - 1) + 1 := (Nat.sub_add_cancel (Nat.succ_le_iff.2 hp.pos)).symm
+        rw [hp_eq]
+        exact pow_succ a (p - 1)
+      -- 目的：a^(p-1)*(a-b) ≤ a^p - b^p
+      --     ⇔ a^(p-1)*a - a^(p-1)*b ≤ a^p - b^p
+      --     ⇔ b^p ≤ a^(p-1)*b
+      -- そして b^p = b^(p-1)*b ≤ a^(p-1)*b
+      have hbpow_le : b^p ≤ a^(p-1) * b := by
+        rw [hbpow]
+        exact hb_mul
+      have hab_pow_le : b^p ≤ a^p := Nat.pow_le_pow_left hb_le_a p
+      have ha_ge_b_pow : a^(p-1) * b ≤ a^p := by
+        calc a^(p-1) * b
+          _ ≤ a^(p-1) * a := Nat.mul_le_mul_left _ hb_le_a
+          _ = a^p := by rw [← hapow]
+      calc a^(p-1) * (a - b)
+        _ = a^(p-1) * a - a^(p-1) * b := Nat.mul_sub_left_distrib (a^(p-1)) a b
+        _ = a^p - a^(p-1) * b := by rw [← hapow]
+        _ ≤ a^p - b^p := Nat.sub_le_sub_left hbpow_le (a^p)
+    exact (Nat.le_div_iff_mul_le hab_pos).2 hmul
+
+  -- 2 ≤ quotient → 1 < quotient
+  have : 2 ≤ quotientPrimePow a b p := le_trans two_le_apow apow_le_quot
+  exact Nat.lt_of_succ_le this
 
 /-- 素数冪の場合の軽量版 Zsigmondy（prime p, p ≥ 3） -/
 lemma exists_prime_divisor_not_dividing_diff_of_prime_exp
