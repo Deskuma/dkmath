@@ -1,4 +1,5 @@
 # Project specific ignores
+lena/dk_math/notes/
 __*
 !__init__.py
 
