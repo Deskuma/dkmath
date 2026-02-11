@@ -53,26 +53,53 @@ theorem gcd_specialized_divides_d (x u : ℤ) (d : ℕ) (hd : 1 ≤ d) (hab : In
 /-- 完全 d 乗なら、任意の素数 p で指数が d の倍数（Nat側） -/
 lemma dvd_padicVal_of_eq_pow {t n d : ℕ} (_ht : 0 < t) :
     t = n^d → ∀ p : ℕ, Nat.Prime p → d ∣ padicValNat p t := by
-  intro heq p _hp
+  intro heq p hp
   subst heq
-  -- 基本的に padicValNat p (n^d) = d * padicValNat p n が成り立つ
-  -- したがって d ∣ d * padicValNat p n := dvd_mul_right d _
-  -- TODO: Mathlib には以下のような補題があるはず：
-  --   padicValNat.pow : padicValNat p (n^d) = d * padicValNat p n
-  -- 名前が判明次第、`simp [padicValNat.pow]; exact dvd_mul_right d _` とする
-  -- 現時点では admit
-  admit
+  -- padicValNat.pow は Fact (Nat.Prime p) のインスタンスが必要
+  haveI : Fact p.Prime := ⟨hp⟩
+  -- padicValNat.pow : padicValNat p (a ^ n) = n * padicValNat p a (a ≠ 0 条件付き)
+  by_cases hn : n = 0
+  · -- n = 0 の場合
+    subst hn
+    by_cases hd : d = 0
+    · -- d = 0 の場合、 0^0 = 1 なので padicValNat p 1 = 0
+      subst hd
+      simp
+    · -- d > 0 の場合、 0^d = 0 なので矛盾 (前提 0 < t)
+      exfalso
+      simp [zero_pow hd] at _ht
+  · -- n ≠ 0 の場合
+    -- padicValNat.pow (n : ℕ) (ha : a ≠ 0) : padicValNat p (a ^ n) = n * padicValNat p a
+    -- ここで a = n, 冪の指数 = d なので
+    have key : padicValNat p (n ^ d) = d * padicValNat p n := padicValNat.pow d hn
+    rw [key]
+    -- d * padicValNat p n で d ∣ ...
+    exact dvd_mul_right d _
 
 /-- `t = A * B` で gcd(A,B) が小さいとき、v_p(t) を A と B に分配する雛形 -/
-lemma padicVal_mul_eq_add_of_coprime {A B : ℕ} (_hcop : Nat.Coprime A B) (p : ℕ) :
+lemma padicVal_mul_eq_add_of_coprime {A B : ℕ} (hcop : Nat.Coprime A B) {p : ℕ} (hp : Nat.Prime p) :
     padicValNat p (A * B) = padicValNat p A + padicValNat p B := by
-  -- coprime 条件下での p-進付値の加法性
-  -- 実際には coprime でなくても成り立つ性質
-  -- TODO: Mathlib には以下のような補題があるはず：
-  --   padicValNat.mul : padicValNat p (a * b) = padicValNat p a + padicValNat p b
-  -- 名前が判明次第、`exact padicValNat.mul` とする
-  -- 現時点では admit
-  admit
+  -- Fact インスタンスを用意
+  haveI : Fact p.Prime := ⟨hp⟩
+  -- padicValNat.mul : a ≠ 0 → b ≠ 0 → padicValNat p (a * b) = padicValNat p a + padicValNat p b
+  by_cases hA : A = 0
+  · subst hA
+    -- 0.Coprime B → B = 1
+    have : B = 1 := by
+      have := Nat.Coprime.symm hcop
+      simp [Nat.Coprime, Nat.gcd_zero_right] at this
+      exact this
+    subst this
+    simp
+  · by_cases hB : B = 0
+    · subst hB
+      -- A.Coprime 0 → A = 1
+      have : A = 1 := by
+        simp [Nat.Coprime, Nat.gcd_zero_right] at hcop
+        exact hcop
+      subst this
+      simp
+    · exact padicValNat.mul hA hB
 
 /-! ### 3. Bridge: from gcd ∣ d to "no new prime can divide both" -/
 
