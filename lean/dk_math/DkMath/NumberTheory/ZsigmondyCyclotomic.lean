@@ -686,18 +686,37 @@ lemma exists_primitive_prime_factor_hook {a b : ℕ} {d : ℕ}
 
 **G 解析の具体的戦略:**
 
-##### 戦略 1: 二項係数の素因数分解
-- Lucas の定理：p | C(n, k) の条件
-- Kummer の定理：v_p(C(n, k)) の計算
-- これらから G の各項の padicValNat を評価
+##### 戦略 1: Lucas/Kummer 定理による二項係数解析（新規強化！）
+**✅ Mathlib の既存定理を活用:**
+- **Lucas の定理** (`Choose.choose_modEq_prod_range_choose`):
+  - C(n, k) ≡ ∏ C(nᵢ, kᵢ) (mod p)
+  - 応用：G の mod p 性質を解析
+- **Kummer の定理** (`padicValNat_choose`):
+  - padicValNat p (C(n, k)) = (桁上がりの回数)
+  - 応用：G の各項の padicValNat を評価
 
-##### 戦略 2: G の全体構造
+**実装済み:**
+- ✅ `lucas_theorem_for_binomial_coeff`: Lucas のラッパー
+- ✅ `kummer_theorem_for_binomial_coeff`: Kummer のラッパー
+- ⏳ `padicValNat_binomial_coeff_in_G`: G の二項係数の評価（TODO）
+
+**戦略の詳細:**
+1. G d x u = Σ_{k=0}^{d-1} C(d, k+1) x^k u^{d-1-k}
+2. 各 C(d, k+1) の padicValNat を Kummer で評価
+3. d が素数の場合、C(d, k+1) の特殊性を利用
+4. q ≠ d または q = d で場合分け
+
+##### 戦略 2: G の全体構造解析
 - G が "ほぼ square-free" であることを示す
 - 各素数 q に対して padicValNat q (G) ≤ 1
+- Lucas/Kummer から導かれる性質を統合
 
 ##### 戦略 3: 具体例からのパターン認識
-- d = 3: G 3 x u = x^2 + 3xu + 3u^2
-- d = 5: G 5 x u を展開して性質を調べる
+- **d = 3**: G 3 x u = x^2 + 3xu + 3u^2
+  - 係数 1, 3, 3 の素因数分解
+  - Kummer により padicValNat の評価
+- **d = 5**: G 5 x u の明示的展開（TODO）
+  - 同様のパターンを探す
 - 一般化可能なパターンを見つける
 
 ### ✅ 補助補題の実装状況
