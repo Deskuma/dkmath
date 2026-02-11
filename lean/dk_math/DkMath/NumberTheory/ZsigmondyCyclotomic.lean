@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 -- import Mathlib
 import DkMath.ABC.PadicValNat
+import Mathlib.NumberTheory.Padics.PadicVal.Basic
 -- import Mathlib.NumberTheory.Padics.PadicVal.Defs
 import DkMath.Algebra.DiffPow
 import DkMath.NumberTheory.GcdDiffPow
@@ -296,34 +297,10 @@ G 全体の padicValNat も小さい可能性がある。
 -/
 lemma kummer_theorem_for_binomial_coeff (p n k : ℕ) [hp : Fact p.Prime] (hkn : k ≤ n) :
     (p - 1) * padicValNat p (choose n k) =
-    (p.digits k).sum + (p.digits (n - k)).sum - (p.digits n).sum :=
-  padicValNat.sub_one_mul_padicValNat_choose_eq_sub_sum_digits hkn
-
-/-- G の二項係数に対する padicValNat 評価
-
-**数学的内容:**
-G d x u = Σ_{k=0}^{d-1} C(d, k+1) x^k u^{d-1-k}
-
-各項の係数 C(d, k+1) の padicValNat q を評価する。
-
-**戦略:**
-1. Kummer の定理により padicValNat q (C(d, k+1)) を計算
-2. d が素数の場合、特に簡単な評価が可能
-3. q ≠ d の場合と q = d の場合を分けて考える
-
-**課題:**
-個々の係数の padicValNat ではなく、和 G 全体の padicValNat が必要。
-これには追加の議論（項の独立性など）が必要。
-
-**TODO:** 具体的な d (d = 3, 5) で試して、パターンを見つける。
--/
-lemma padicValNat_binomial_coeff_in_G (d k q : ℕ) (hd : Nat.Prime d) (hk : k < d)
-    (hq : Nat.Prime q) :
-    padicValNat q (choose d (k + 1)) ≤ 1 := by
-  -- TODO: Kummer の定理を使って評価
-  -- d が素数で k < d のとき、C(d, k+1) の性質を使う
-  -- q = d の場合: C(d, k+1) ≡ 0 (mod d) for 0 < k+1 < d
-  -- q ≠ d の場合: より小さい padicValNat
+    (p.digits k).sum + (p.digits (n - k)).sum - (p.digits n).sum := by
+  -- TODO: Mathlib の Kummer定理を正しく参照
+  -- 現状は定理が見つからないので、sorry にしておく
+  -- 将来的には padicValNat.sub_one_mul_padicValNat_choose_eq_sub_sum_digits を使う
   sorry
 
 /-- 円分多項式の整数値評価（補助補題）
