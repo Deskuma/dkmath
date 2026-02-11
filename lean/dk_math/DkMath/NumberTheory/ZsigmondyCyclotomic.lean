@@ -204,7 +204,9 @@ lemma padicValNat_factorization {a b d q N : ℕ} (hd : 0 < d) (hab : b < a)
   have hab_ne : a - b ≠ 0 := Nat.sub_ne_zero_of_lt hab
   -- hfactor を使って padicValNat.mul を適用
   rw [hfactor]
-  exact padicValNat.mul hq_prime.prime hab_ne hN
+  -- Fact q.Prime のインスタンスを作成
+  haveI : Fact q.Prime := ⟨hq_prime⟩
+  exact padicValNat.mul hab_ne hN
 
 /-- 原始素因子と G の関係（padicValNat の帰着）
 
