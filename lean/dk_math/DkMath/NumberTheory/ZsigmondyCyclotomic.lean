@@ -402,50 +402,60 @@ lemma exists_primitive_prime_factor_hook {a b : ℕ} {d : ℕ}
 - 条件: gcd(a,b) = 1, d ∤ a - b
 - GcdDiffPow の既存補題を活用して実装
 
-## ⏳ Phase 2: 層B（精密層）— 進行中（円分多項式理論を導入）
+## ⏳ Phase 2: 層B（精密層）— 進行中（理論的枠組みを確立、実装は段階的）
 
 原始素因子の p-adic 付値を精密に評価する。
 
 **現在の成果:**
-- ✅ 下界: `padicValNat_primitive_prime_factor_ge_one`
-  - 1 ≤ padicValNat q (a^d - b^d) を証明（既存の補題から直接）
 
-- ✅ 円分多項式の理論を import
-  - Mathlib.RingTheory.Polynomial.Cyclotomic.Basic を導入
-  - 基本定理 `cyclotomic_dvd_pow_sub_one`: Φ_d(X) | X^d - 1
-  - square-free 性 `cyclotomic_squarefree`: 体上で Φ_d は square-free
+### ✅ 下界の証明（完全実装）
+- `padicValNat_primitive_prime_factor_ge_one`
+- 1 ≤ padicValNat q (a^d - b^d) を証明（既存の補題から直接）
 
-- ⏳ 補助補題の整理
-  - `cyclotomic_eval_divides`: Φ_d(a/b) の整数値評価（TODO）
-  - `squarefree_implies_padic_val_le_one`: square-free → 重複度 1（TODO）
+### ✅ 円分多項式の理論を導入
+- Mathlib.RingTheory.Polynomial.Cyclotomic.Basic を import
+- 基本定理 `cyclotomic_dvd_pow_sub_one`: Φ_d(X) | X^d - 1
+- square-free 性 `cyclotomic_squarefree`: 体上で Φ_d は square-free
+
+### ✅ 証明戦略の確立（4ステップに分解）
+1. 円分多項式の可除性（Mathlib ✅）
+2. 評価による整数値（TODO ⏳）
+3. square-free 性の活用（Mathlib ✅）
+4. 整数環への翻訳（TODO ⏳）
+
+### ✅ 補助補題の設計
+- `cyclotomic_eval_divides`: Φ_d(a/b) の整数値評価（TODO）
+- `squarefree_implies_padic_val_le_one`: square-free → 重複度 1（TODO）
+  - **詳細な実装課題を文書化**
+  - 3つの課題（評価、square-free 翻訳、padicValNat 接続）を明確化
+  - 代替アプローチ（LTE、具体例、Mathlib 貢献）を提示
+
+### ⏳ 特殊ケースの試験的実装
+- `padicValNat_le_one_of_prime_divisor_case_three`: d = 3 の場合（TODO）
+- 初等的な整数論で証明を試みる
+- d = 5, 7 と拡張してパターンを見つける方針
 
 **残りの課題:**
-- ⏳ 上界: `padicValNat_primitive_prime_factor_le_one`
-  - 理論的枠組みは完成（補助補題に分解済み）
-  - 実装: 多項式環の理論を整数論に翻訳する技術が必要
 
-**理論的背景（詳細化）:**
+### 重要: 実装の本質的困難を認識
+多項式環の理論を整数論に翻訳する橋渡しは、Mathlib v4.26.0 では技術的に難しい。
+理由：
+1. 多項式の評価 Φ_d(a/b) ∈ ℚ を整数値に変換する技術
+2. square-free 性（代数的概念）を素因数分解（整数論的概念）に結びつける理論
+3. Mathlib にツールは部分的にあるが、完全な統合はまだない
 
-### 証明の道筋（4ステップ）
+### 現実的な方針（3段階）
+1. **特殊ケース（d = 3, 5）で証明を試みる**
+   - パターンを見つけて一般化のヒントを得る
+2. **代替理論（LTE）を探索**
+   - Lifting the Exponent Lemma の直接適用
+3. **Mathlib への貢献を検討**
+   - コミュニティの知恵を借りる
 
-**Step 1: 円分多項式の可除性**
-- Φ_d(X) | X^d - 1（Mathlib の `cyclotomic.dvd_X_pow_sub_one`）
-
-**Step 2: 評価による整数値**
-- X に a/b を代入：Φ_d(a/b) | (a/b)^d - 1
-- 両辺に b^d を掛ける：Φ_d(a/b) · b^d | a^d - b^d
-
-**Step 3: square-free 性の活用**
-- 体 ℚ 上で Φ_d は square-free（Mathlib の `squarefree_cyclotomic`）
-- → Φ_d(a/b) ∈ ℚ の任意の素因数は重複度 1 で現れる
-
-**Step 4: 整数環への翻訳**
-- q が Φ_d(a/b) の素因数なら、q の a^d - b^d における重複度も 1
-- これが padicValNat q (a^d - b^d) ≤ 1 を意味する
-
-**実装の課題:**
+**実装の課題（詳細文書化済み）:**
 - Step 2-4 の橋渡しが技術的に難しい
-- Mathlib に部分的な道具はあるが、統合が必要
+- 補助補題 `squarefree_implies_padic_val_le_one` に詳細コメント追加
+- 3つの具体的課題と3つの代替アプローチを明示
 - 補助補題 `squarefree_implies_padic_val_le_one` に集約
 
 ## ⏳ Phase 3: 一般化 — TODO
