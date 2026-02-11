@@ -135,6 +135,43 @@ lemma prime_not_dvd_d_of_gcd_dvd {a b : ℤ} {d : ℕ}
 
 /-! ### 4. Zsigmondy hook (optional) -/
 
+/-- a^p - b^p を a - b で割った商（p は素数） -/
+def quotientPrimePow (a b p : ℕ) : ℕ :=
+  (a^p - b^p) / (a - b)
+
+/-- 素数冪の場合、商は正で 1 より大きい -/
+lemma quotientPrimePow_gt_one {a b p : ℕ}
+    (hp : Nat.Prime p) (ha : b < a) (hb : 0 < b) :
+    1 < quotientPrimePow a b p := by
+  sorry
+
+/-- 素数冪の商 G が存在し、a^p - b^p = (a - b) * G -/
+lemma pow_sub_pow_eq_diff_mul_quotient {a b p : ℕ}
+    (hp : Nat.Prime p) (ha : b < a) :
+    a^p - b^p = (a - b) * quotientPrimePow a b p := by
+  sorry
+
+/-- 素数冪の場合の軽量版 Zsigmondy（prime p, p ≥ 3）-/
+lemma exists_prime_divisor_not_dividing_diff_of_prime_exp
+    {a b p : ℕ}
+    (hp : Nat.Prime p) (hp_ge : 3 ≤ p)
+    (ha : b < a) (hb : 0 < b) (hab : Nat.Coprime a b) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ a^p - b^p ∧ ¬ q ∣ a - b := by
+  -- 方針：G = (a^p - b^p) / (a - b) の素因子を取る
+  have hG_gt : 1 < quotientPrimePow a b p := quotientPrimePow_gt_one hp ha hb
+  have hG_ne : quotientPrimePow a b p ≠ 1 := Nat.ne_of_gt hG_gt
+  -- G ≠ 1 なので素因子が存在
+  have ⟨q, hq_prime, hq_div_G⟩ := Nat.exists_prime_and_dvd hG_ne
+  use q, hq_prime
+  constructor
+  · -- q ∣ G かつ a^p - b^p = (a-b) * G なので q ∣ a^p - b^p
+    have heq := pow_sub_pow_eq_diff_mul_quotient hp ha
+    rw [heq]
+    exact dvd_mul_of_dvd_right hq_div_G _
+  · -- q ∣ a - b なら矛盾を導く
+    intro hq_div_diff
+    sorry -- TODO: gcd の性質から矛盾を示す
+
 /-- Zsigmondy の原始素因子定理のフック
 
 **TODO（別 PR で実装予定）:**
@@ -156,12 +193,25 @@ a > b ≥ 1, gcd(a,b) = 1, d > 1 のとき、
 - 例外2: a = 2, b = 1, d = 6
 原始素因子 q とは：q ∣ a^d - b^d かつ q ∤ a^k - b^k （∀k < d）を満たす素数。
 
-現在は `admit` のまま残し、枠組みだけ示す。
+現在は軽量版（prime d ≥ 3）を優先実装。完全版は別 PR で。
 -/
 lemma exists_primitive_prime_factor_hook {a b : ℕ} {d : ℕ}
     (ha : 0 < a) (hb : 0 < b) (hab : Nat.Coprime a b) (hd : 2 < d) :
     ∃ q : ℕ, Nat.Prime q ∧ q ∣ a^d - b^d ∧ ¬ q ∣ a - b := by
-  sorry
+  -- まずは d が素数の場合に限定（軽量版）
+  by_cases hd_prime : Nat.Prime d
+  · -- d が素数の場合
+    have : b < a := by
+      by_contra h_not_lt
+      push_neg at h_not_lt
+      -- a ≤ b だが gcd(a,b) = 1 かつ 0 < a, 0 < b なら a = b = 1 のみ
+      -- しかし a = b = 1 なら hab : Coprime 1 1 = true だが、
+      -- a^d - b^d = 0 となり後で矛盾
+      sorry
+    have hp_ge : 3 ≤ d := by omega
+    exact exists_prime_divisor_not_dividing_diff_of_prime_exp hd_prime hp_ge this hb hab
+  · -- d が合成数の場合は TODO（別 PR）
+    sorry
 
 /-! ### 5. Main target skeleton: (x+u)^d - u^d is not a perfect d-th power (strategy stub) -/
 
