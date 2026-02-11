@@ -15,6 +15,8 @@ import Mathlib.RingTheory.Polynomial.Cyclotomic.Basic
 import Mathlib.RingTheory.Int.Basic
 -- Cosmic Formula theory (べき乗差の因数分解)
 import DkMath.CosmicFormula.CosmicFormulaBinom
+-- Lucas/Kummer theorems (二項係数の理論)
+import Mathlib.Data.Nat.Choose.Lucas
 
 set_option linter.style.emptyLine false
 
@@ -27,6 +29,7 @@ open DkMath.Algebra.DiffPow
 open DkMath.NumberTheory.GcdDiffPow
 open Polynomial
 open DkMath.CosmicFormulaBinom  -- Cosmic Formula の G, cosmic_id を使用
+open Nat (choose)  -- 二項係数
 
 -- ========================================
 -- § 1. 原始素因子の存在条件に関する補助補題
