@@ -153,21 +153,32 @@ G_{d-1}(a, b) = Σ_{k=0}^{d-1} C(d, k+1) a^k b^{d-1-k}
 CosmicFormulaBinom.cosmic_id より（整数環 ℤ で）：
 (x + u)^d - x · G d x u = u^d
 
-これを a = x + u, b = u として解釈すると：
-a^d - (a - b) · G d (a - b) b = b^d
-⇒ a^d - b^d = (a - b) · G d (a - b) b
+これを変形して：
+(x + u)^d - u^d = x · G d x u
 
-**実装:**
-Cosmic Formula の既存の形式化を活用する。
-ℕ 上では直接使えないので、ℤ にキャストして計算する。
+a = x + u, b = u とすると：
+a^d - b^d = (a - b) · G d (a - b) b
+
+**証明:**
+x = (a - b : ℕ), u = (b : ℕ) として cosmic_id を適用する。
 -/
-lemma pow_sub_pow_factor_cosmic {a b : ℕ} {d : ℕ} (hd : 0 < d) (hab : b < a) :
+lemma pow_sub_pow_factor_cosmic {a b : ℕ} {d : ℕ} (_hd : 0 < d) (hab : b < a) :
     (a ^ d : ℤ) - (b ^ d : ℤ) = ((a - b : ℕ) : ℤ) * G d ((a - b : ℕ) : ℤ) (b : ℤ) := by
-  -- TODO: cosmic_id から導出
-  -- ℤ 上で (a - b + b)^d - (a - b) * G d (a - b) b = b^d
-  -- ⇒ a^d - (a - b) * G d (a - b) b = b^d
-  -- ⇒ a^d - b^d = (a - b) * G d (a - b) b
-  sorry
+  -- cosmic_id を ℤ 上で適用
+  have h := cosmic_id d ((a - b : ℕ) : ℤ) ((b : ℕ) : ℤ)
+  -- Big, Body, Gap の定義を展開
+  unfold Big Body Gap at h
+  -- h: (↑(a - b) + ↑b) ^ d - ↑(a - b) * G d ↑(a - b) ↑b = ↑b ^ d
+  -- a - b + b = a (ℕ では b < a より成り立つ)
+  have hab_add : (a - b : ℕ) + b = a := Nat.sub_add_cancel (Nat.le_of_lt hab)
+  -- ℤ へのキャストを保存
+  have hab_add_cast : ((a - b : ℕ) : ℤ) + ((b : ℕ) : ℤ) = (a : ℤ) := by
+    simp only [← Nat.cast_add, hab_add]
+  -- h を書き換え
+  rw [hab_add_cast] at h
+  -- h: ↑a ^ d - ↑(a - b) * G d ↑(a - b) ↑b = ↑b ^ d
+  -- 両辺から ↑b ^ d を引く
+  linarith [h]
 
 /-- 円分多項式の整数値評価（補助補題）
 
