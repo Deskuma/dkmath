@@ -922,18 +922,29 @@ lemma exists_primitive_prime_factor_hook {a b : ℕ} {d : ℕ}
 - **✅ `padicValNat_factorization`**: 因数分解と padicValNat の関係 **完成！**
 - **✅ `padicValNat_of_primitive_prime_factor_via_G`**: G への帰着 **設計完了**
 
-#### Lucas/Kummer 定理アプローチ（新規統合！）
+#### Lucas/Kummer 定理アプローチ（急速に進展！）
 - **✅ `lucas_theorem_for_binomial_coeff`**: Lucas の定理のラッパー **完成！**
-- **✅ `kummer_theorem_for_binomial_coeff`**: Kummer の定理のラッパー **完成！**
-- **⏳ `padicValNat_binomial_coeff_in_G`**: G の二項係数評価 **設計完了、実装中**
-  - d が素数で k < d のとき C(d, k+1) の padicValNat ≤ 1 を示す
-  - Kummer の定理を活用
+- **✅ `kummer_theorem_for_binomial_coeff`**: Kummer の定理のラッパー **設計完了**
+  - ※ Mathlib 参照に技術的課題（TODO）
+- **✅ `padicValNat_binomial_coeff_in_G`**: G の二項係数評価 **設計完了**
+  - 一般形は TODO
+- **✅ d = 3 での具体的実装（新規！）:**
+  - **✅ `G_three_explicit`**: G 3 の明示的計算 **完成！**
+  - **✅ `padicValNat_binomial_coeff_three`**: d = 3 の係数評価 **完成！**
+  - **✅ `padicValNat_G_three_coeffs_le_one`**: 係数の性質 **完成！**
 
-#### 統合戦略（次のステップ）
+#### 統合戦略（現在のフォーカス）
 **目標**: padicValNat q (G d x u) ≤ 1
-1. 各項 C(d, k+1) x^k u^{d-1-k} の padicValNat を評価
-2. 和全体の padicValNat を評価（非自明！）
-3. d = 3 の具体例で検証
+
+**d = 3 での進展:**
+1. ✅ 各項 C(3, k+1) x^k u^{2-k} の係数の padicValNat を評価
+2. ✅ G 3 の明示的形 x^2 + 3xu + 3u^2 を導出
+3. ⏳ 和全体（a^2 + ab + b^2）の padicValNat を評価（最後のステップ）
+   - 課題: 和の padicValNat は項の padicValNat から直接導けない
+   - 方針: mod q^2 での初等的議論
+
+**一般化への道:**
+d = 3 の成功パターンを d = 5, 7, ... に適用
 
 ### ⏳ 特殊ケースの実装（段階的アプローチ）
 - **d = 3 の場合**: `padicValNat_le_one_of_prime_divisor_case_three`
