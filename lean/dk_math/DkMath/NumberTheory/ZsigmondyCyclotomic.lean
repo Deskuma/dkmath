@@ -303,6 +303,158 @@ lemma kummer_theorem_for_binomial_coeff (p n k : ℕ) [hp : Fact p.Prime] (hkn :
   -- 将来的には padicValNat.sub_one_mul_padicValNat_choose_eq_sub_sum_digits を使う
   sorry
 
+-- ========================================
+-- § 3d. d = 3 での Lucas/Kummer 定理の適用（具体例）
+-- ========================================
+
+/-- G 3 の明示的計算
+
+**数学的内容:**
+G d x u = Σ_{k=0}^{d-1} C(d, k+1) x^k u^{d-1-k}
+
+d = 3 の場合：
+G 3 x u = Σ_{k=0}^{2} C(3, k+1) x^k u^{2-k}
+        = C(3,1) u^2 + C(3,2) xu + C(3,3) x^2
+        = 3u^2 + 3xu + x^2
+
+**係数の確認:**
+- C(3, 1) = 3
+- C(3, 2) = 3
+- C(3, 3) = 1
+
+**古典的因数分解との一致:**
+x = a - b, u = b のとき：
+G 3 (a-b) b = (a-b)^2 + 3(a-b)b + 3b^2
+            = a^2 - 2ab + b^2 + 3ab - 3b^2 + 3b^2
+            = a^2 + ab + b^2
+
+したがって：
+a^3 - b^3 = (a - b)(a^2 + ab + b^2)
+-/
+lemma G_three_explicit (x u : ℤ) :
+    G 3 x u = x ^ 2 + 3 * x * u + 3 * u ^ 2 := by
+  unfold G
+  -- G 3 x u = Σ k ∈ range 3, C(3, k+1) * x^k * u^{2-k}
+  rw [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_zero]
+  -- k = 0: C(3, 1) * x^0 * u^2 = 3u^2
+  -- k = 1: C(3, 2) * x^1 * u^1 = 3xu
+  -- k = 2: C(3, 3) * x^2 * u^0 = x^2
+  simp only [Nat.choose, pow_zero, pow_one, pow_two, one_mul, mul_one, add_zero]
+  ring
+
+/-- d = 3 の二項係数の padicValNat 評価
+
+**数学的内容:**
+d = 3 の場合の二項係数：
+- C(3, 1) = 3 = 3^1
+- C(3, 2) = 3 = 3^1
+- C(3, 3) = 1 = 3^0
+
+**padicValNat q での評価:**
+- q = 3 のとき: padicValNat 3 (C(3, k)) = 1 (k = 1, 2), 0 (k = 3)
+- q ≠ 3 のとき: padicValNat q (C(3, k)) = 0 (すべての k)
+
+**鍵となる観察:**
+C(3, 1) と C(3, 2) はともに 3 を含むが、3^2 では割り切れない。
+したがって、q = 3 の場合でも各項の padicValNat は高々 1。
+
+**Kummer の定理による確認:**
+C(3, 1) = 3: padicValNat 3 (3) = 1 ✓
+C(3, 2) = 3: padicValNat 3 (3) = 1 ✓
+C(3, 3) = 1: padicValNat 3 (1) = 0 ✓
+-/
+lemma padicValNat_binomial_coeff_three (k q : ℕ) (hk : k ∈ ({1, 2, 3} : Finset ℕ))
+    (hq : Nat.Prime q) :
+    padicValNat q (choose 3 k) ≤ 1 := by
+  have hq_fact : Fact q.Prime := ⟨hq⟩
+  fin_cases hk
+  · -- k = 1: C(3, 1) = 3
+    simp only [Nat.choose_one_right]
+    by_cases hq3 : q = 3
+    · -- q = 3 の場合
+      rw [hq3]
+      have : padicValNat 3 3 = 1 := by
+        have h3_prime : Nat.Prime 3 := Nat.prime_three
+        have : Fact (Nat.Prime 3) := ⟨h3_prime⟩
+        -- padicValNat 3 3 = 1
+        sorry  -- TODO: padicValNat の具体値計算
+      rw [this]
+    · -- q ≠ 3 の場合
+      have : ¬ q ∣ 3 := by
+        intro h
+        have : q ∣ 3 → q = 1 ∨ q = 3 := Nat.Prime.eq_one_or_self_of_dvd hq 3 h
+        cases this with
+        | inl h1 => exact Nat.Prime.ne_one hq h1
+        | inr h3 => exact hq3 h3
+      have : padicValNat q 3 = 0 := padicValNat.eq_zero_of_not_dvd this
+      rw [this]
+      omega
+  · -- k = 2: C(3, 2) = 3
+    simp only [Nat.choose_symm_of_eq_add (by omega : 2 = 3 - 1), Nat.choose_one_right]
+    by_cases hq3 : q = 3
+    · -- q = 3 の場合（k = 1 と同じ）
+      rw [hq3]
+      sorry  -- TODO: 同上
+    · -- q ≠ 3 の場合
+      have : ¬ q ∣ 3 := by
+        intro h
+        have : q ∣ 3 → q = 1 ∨ q = 3 := Nat.Prime.eq_one_or_self_of_dvd hq 3 h
+        cases this with
+        | inl h1 => exact Nat.Prime.ne_one hq h1
+        | inr h3 => exact hq3 h3
+      have : padicValNat q 3 = 0 := padicValNat.eq_zero_of_not_dvd this
+      rw [this]
+      omega
+  · -- k = 3: C(3, 3) = 1
+    simp only [Nat.choose_self]
+    have : padicValNat q 1 = 0 := by
+      have : ¬ q ∣ 1 := Nat.Prime.not_dvd_one hq
+      exact padicValNat.eq_zero_of_not_dvd this
+    rw [this]
+    omega
+
+/-- G 3 の各項の padicValNat 評価（初等的アプローチ）
+
+**数学的内容:**
+G 3 x u = x^2 + 3xu + 3u^2
+
+各項について：
+- 第1項 x^2: 係数 1 → padicValNat q (1) = 0
+- 第2項 3xu: 係数 3 → padicValNat q (3) ≤ 1
+- 第3項 3u^2: 係数 3 → padicValNat q (3) ≤ 1
+
+**重要な観察:**
+q ≠ 3 の場合、すべての係数の padicValNat q = 0
+q = 3 の場合でも、各係数の padicValNat 3 ≤ 1
+
+**次のステップ:**
+これらの項の和 G 3 x u の padicValNat を評価するには、
+x と u の具体的な値（a - b と b）での評価が必要。
+
+**課題:**
+和の padicValNat は個々の項の padicValNat から直接は導けない。
+より深い議論が必要。
+-/
+lemma padicValNat_G_three_coeffs_le_one (q : ℕ) (hq : Nat.Prime q) :
+    padicValNat q 1 = 0 ∧ padicValNat q 3 ≤ 1 := by
+  constructor
+  · have : ¬ q ∣ 1 := Nat.Prime.not_dvd_one hq
+    exact padicValNat.eq_zero_of_not_dvd this
+  · by_cases hq3 : q = 3
+    · -- q = 3 の場合
+      rw [hq3]
+      sorry  -- TODO: padicValNat 3 3 = 1
+    · -- q ≠ 3 の場合
+      have : ¬ q ∣ 3 := by
+        intro h
+        have : q ∣ 3 → q = 1 ∨ q = 3 := Nat.Prime.eq_one_or_self_of_dvd hq 3 h
+        cases this with
+        | inl h1 => exact Nat.Prime.ne_one hq h1
+        | inr h3 => exact hq3 h3
+      have : padicValNat q 3 = 0 := padicValNat.eq_zero_of_not_dvd this
+      rw [this]
+      omega
+
 /-- 円分多項式の整数値評価（補助補題）
 
 **数学的内容:**
