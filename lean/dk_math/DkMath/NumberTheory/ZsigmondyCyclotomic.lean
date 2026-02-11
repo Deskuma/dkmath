@@ -883,13 +883,33 @@ lemma exists_primitive_prime_factor_hook {a b : ℕ} {d : ℕ}
 - 各素数 q に対して padicValNat q (G) ≤ 1
 - Lucas/Kummer から導かれる性質を統合
 
-##### 戦略 3: 具体例からのパターン認識
-- **d = 3**: G 3 x u = x^2 + 3xu + 3u^2
-  - 係数 1, 3, 3 の素因数分解
-  - Kummer により padicValNat の評価
-- **d = 5**: G 5 x u の明示的展開（TODO）
-  - 同様のパターンを探す
-- 一般化可能なパターンを見つける
+##### 戦略 3: 具体例からのパターン認識（大きく進展！）
+**✅ d = 3 での Lucas/Kummer 適用完了:**
+- **✅ `G_three_explicit`**: G 3 x u = x^2 + 3xu + 3u^2 の証明
+  - Cosmic Formula の定義から明示的に導出
+  - 古典的因数分解 a^3 - b^3 = (a - b)(a^2 + ab + b^2) との一致を確認
+- **✅ `padicValNat_binomial_coeff_three`**: d = 3 の二項係数の評価
+  - C(3, 1) = 3, C(3, 2) = 3, C(3, 3) = 1
+  - 各係数の padicValNat q ≤ 1 を証明（q = 3 でも）
+  - Lucas/Kummer の具体的適用例
+- **✅ `padicValNat_G_three_coeffs_le_one`**: G 3 の係数の性質
+  - すべての係数の padicValNat が高々 1
+  - q ≠ 3 なら padicValNat = 0, q = 3 なら padicValNat ≤ 1
+- **✅ `padicValNat_le_one_of_prime_divisor_case_three`**: 大幅強化
+  - Lucas/Kummer 適用結果を反映
+  - 証明方針が明確化（mod q^2 での議論）
+  - TODO: 最後の技術的ステップ（q^2 ∤ a^2 + ab + b^2）
+
+**d = 3 での成果の重要性:**
+1. **理論の検証**: Cosmic Formula + Lucas/Kummer が実際に機能
+2. **明示的計算**: 抽象的理論を具体的な数値で確認
+3. **一般化への道**: d = 5, 7 への拡張方法が見えてきた
+4. **技術的課題の特定**: 和の padicValNat 評価が残る課題
+
+**次のステップ（d = 5 へ）:**
+- G 5 x u の明示的展開
+- 係数 C(5, k+1) の padicValNat 評価
+- 同様のパターンの確認
 
 ### ✅ 補助補題の実装状況
 
