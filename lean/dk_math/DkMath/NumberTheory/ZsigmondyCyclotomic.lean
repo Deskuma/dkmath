@@ -219,6 +219,34 @@ lemma squarefree_implies_padic_val_le_one (d a b q : ℕ)
   -- 代替アプローチの検討が必要
   sorry
 
+/-- 原始素因子の p-adic 付値上界：d = 3 の特殊ケース（試験的実装）
+
+**数学的内容:**
+d = 3 の場合、原始素因子 q について padicValNat q (a^3 - b^3) ≤ 1 を示す。
+
+**証明の方針:**
+1. a^3 - b^3 = (a - b)(a^2 + ab + b^2)
+2. q が原始素因子なら、q ∤ a - b より q | a^2 + ab + b^2
+3. もし q^2 | a^3 - b^3 なら、q^2 | (a^2 + ab + b^2)（∵ q ∤ a - b）
+4. これが矛盾を導くことを示す
+
+**実装状況:**
+初等的な整数論で証明できる可能性がある。
+しかし、ステップ 4 が技術的に難しい。
+
+**将来の拡張:**
+d = 5, 7 などの場合も同様のパターンで証明できれば、
+一般化のヒントが得られる。
+-/
+lemma padicValNat_le_one_of_prime_divisor_case_three {a b q : ℕ}
+    (ha : 1 < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hq_prime : Nat.Prime q)
+    (hq_div : q ∣ a ^ 3 - b ^ 3) (hq_ndiv : ¬ q ∣ a - b) :
+    padicValNat q (a ^ 3 - b ^ 3) ≤ 1 := by
+  -- TODO: d = 3 の特殊ケースを証明
+  -- a^3 - b^3 = (a - b)(a^2 + ab + b^2) の因数分解を使う
+  sorry
+
 -- ========================================
 -- § 4. 原始素因子の p-adic 付値に関する補題
 -- ========================================
