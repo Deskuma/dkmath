@@ -488,46 +488,56 @@ lemma exists_primitive_prime_factor_hook {a b : ℕ} {d : ℕ}
 - 基本定理 `cyclotomic_dvd_pow_sub_one`: Φ_d(X) | X^d - 1
 - square-free 性 `cyclotomic_squarefree`: 体上で Φ_d は square-free
 
-### ✅ **Cosmic Formula 理論を統合（新規）**
+### ✅ **Cosmic Formula 理論を統合（重要な進展！）**
 - DkMath.CosmicFormula.CosmicFormulaBinom を import
 - べき乗差の因数分解：a^d - b^d = (a - b) · G_{d-1}(a, b)
 - `cosmic_id` 定理：(x + u)^d - x · G d x u = u^d（既に形式化済み）
 - G の明示的表現：G_{d-1}(x, u) = Σ_{k=0}^{d-1} C(d, k+1) x^k u^{d-1-k}
+- **✅ `pow_sub_pow_factor_cosmic` 完成！**
+  - cosmic_id から a^d - b^d = (a - b) · G d (a - b) b を導出
+  - ℤ 上での証明が完了
 
 **Cosmic Formula の利点:**
 1. **既に完全に形式化されている**：CosmicFormulaBinom.lean に証明済み
 2. **明示的な表現**：G の二項係数による具体的な構造
 3. **一般化への道**：任意の d に対する統一的な扱い
 4. **整数論との親和性**：多項式環と整数環の橋渡しが自然
+5. **✨ 円分多項式より実装が容易**：多項式評価の問題を回避
 
 ### ✅ 証明戦略の確立（2つのアプローチ）
 
-#### アプローチ A: 円分多項式経由（4ステップ）
+#### アプローチ A: 円分多項式経由（理論的）
 1. 円分多項式の可除性（Mathlib ✅）
 2. 評価による整数値（TODO ⏳）
 3. square-free 性の活用（Mathlib ✅）
 4. 整数環への翻訳（TODO ⏳）
 
-#### アプローチ B: Cosmic Formula 経由（新戦略）
-1. べき乗差の因数分解：a^d - b^d = (a - b) · G_{d-1}(a, b)
-2. 原始素因子の性質：q ∤ a - b ⇒ q | G_{d-1}(a, b)
-3. G の構造解析：二項係数の性質から q^2 ∤ G_{d-1}(a, b) を導く
-4. 結論：padicValNat q (a^d - b^d) ≤ 1
+**課題:** Step 2-4 の橋渡しが技術的に難しい
 
-### ✅ 補助補題の設計
+#### アプローチ B: Cosmic Formula 経由（実装主体） ⭐推奨
+1. ✅ べき乗差の因数分解：`pow_sub_pow_factor_cosmic` 完成
+2. ⏳ 原始素因子の性質：q ∤ a - b ⇒ q | G_{d-1}(a, b)
+3. ⏳ G の構造解析：二項係数の性質から q^2 ∤ G_{d-1}(a, b) を導く
+4. ⏳ 結論：padicValNat q (a^d - b^d) ≤ 1
+
+**利点:** 既存の形式化を直接活用、段階的実装が可能
+
+### ✅ 補助補題の実装状況
 
 #### 円分多項式アプローチ
 - `cyclotomic_eval_divides`: Φ_d(a/b) の整数値評価（TODO）
 - `squarefree_implies_padic_val_le_one`: square-free → 重複度 1（TODO）
 
-#### Cosmic Formula アプローチ（新規）
-- `pow_sub_pow_factor_cosmic`: a^d - b^d = (a - b) · G d (a - b) b（TODO）
-- G の性質から padicValNat の上界を導く補題群（TODO）
+#### Cosmic Formula アプローチ（実装中）
+- **✅ `pow_sub_pow_factor_cosmic`**: a^d - b^d = (a - b) · G d (a - b) b **完成！**
+- ⏳ G の性質から padicValNat の上界を導く補題群（次のステップ）
 
-### ⏳ 特殊ケースの実装
-- `padicValNat_le_one_of_prime_divisor_case_three`: d = 3 の場合（Cosmic Formula 版）
-  - G_2(x, u) = x^2 + 3xu + 3u^2 の明示的表現を活用
-  - 古典的因数分解 a^3 - b^3 = (a - b)(a^2 + ab + b^2) と一致
+### ⏳ 特殊ケースの実装（具体的進展）
+- `padicValNat_le_one_of_prime_divisor_case_three`: d = 3 の場合
+  - ✅ Cosmic Formula による表現を明確化
+  - G 3 (a-b) b = a^2 + ab + b^2 と古典的因数分解の一致を確認
+  - ⏳ q^2 ∤ a^2 + ab + b^2 の証明（初等整数論で可能だが技術的）
+  - d = 5, 7 への拡張方針が明確
 - d = 5, 7 への拡張方針が明確
 
 **残りの課題:**
