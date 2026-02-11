@@ -251,7 +251,13 @@ lemma exists_prime_divisor_not_dividing_diff_of_prime_exp
     exact dvd_mul_of_dvd_right hq_div_G _
   · -- q ∣ a - b なら矛盾を導く
     intro hq_div_diff
-    sorry -- TODO: gcd の性質から矛盾を示す
+    -- q は G = (a^p - b^p)/(a - b) の素因子
+    -- かつ q ∣ a - b と仮定したが、矛盾を導く
+    -- ※ 正確な矛盾は Lifting the Exponent (LTE) 補題から：
+    --   p が素数で q ∣ a - b ⇒ v_q(a^p - b^p) = v_q(a - b)
+    --   しかし q は G の素因子なので v_q(G) > 0
+    --   これと v_q(a - b) の関係から矛盾が生じる（LTE補題の詳細実装待ち）
+    sorry
 
 /-- Zsigmondy の原始素因子定理のフック
 
@@ -282,15 +288,16 @@ lemma exists_primitive_prime_factor_hook {a b : ℕ} {d : ℕ}
   -- まずは d が素数の場合に限定（軽量版）
   by_cases hd_prime : Nat.Prime d
   · -- d が素数の場合
-    have : b < a := by
-      by_contra h_not_lt
-      push_neg at h_not_lt
-      -- a ≤ b だが gcd(a,b) = 1 かつ 0 < a, 0 < b なら a = b = 1 のみ
-      -- しかし a = b = 1 なら hab : Coprime 1 1 = true だが、
-      -- a^d - b^d = 0 となり後で矛盾
+    have hab_lt : b < a := by
+      -- ha : 0 < a, hb : 0 < b, hab : Coprime a b
+      -- から b < a を導出するには：
+      -- a ≤ b だと a^d - b^d = 0 または ≤ 0 となり、原始素因子を持たない
+      -- したがって a > b が必須
+      -- ただし、仮説だけからの直接的な導出は難しい
+      -- （数学的には自明だが、Lean での形式化が複雑）
       sorry
     have hp_ge : 3 ≤ d := by omega
-    exact exists_prime_divisor_not_dividing_diff_of_prime_exp hd_prime hp_ge this hb hab
+    exact exists_prime_divisor_not_dividing_diff_of_prime_exp hd_prime hp_ge hab_lt hb hab
   · -- d が合成数の場合は TODO（別 PR）
     sorry
 
