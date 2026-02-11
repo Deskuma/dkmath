@@ -721,17 +721,27 @@ lemma exists_primitive_prime_factor_hook {a b : ℕ} {d : ℕ}
 
 ### ✅ 補助補題の実装状況
 
-#### 円分多項式アプローチ
+#### 円分多項式アプローチ（理論的背景）
 - `cyclotomic_eval_divides`: Φ_d(a/b) の整数値評価（理論的）
 - `squarefree_implies_padic_val_le_one`: Cosmic Formula 経由に更新
 
 #### Cosmic Formula アプローチ（急速に進展中！）
 - **✅ `pow_sub_pow_factor_cosmic`**: べき乗差の因数分解 **完成！**
-- **✅ `padicValNat_factorization`**: 因数分解と padicValNat の関係 **設計完了**
+- **✅ `padicValNat_factorization`**: 因数分解と padicValNat の関係 **完成！**
 - **✅ `padicValNat_of_primitive_prime_factor_via_G`**: G への帰着 **設計完了**
-- ⏳ **G の性質解析補題群**（次のステップ）:
-  - `padicValNat_G_le_one`: G の padicValNat 上界（目標）
-  - 二項係数と Lucas/Kummer 定理の活用
+
+#### Lucas/Kummer 定理アプローチ（新規統合！）
+- **✅ `lucas_theorem_for_binomial_coeff`**: Lucas の定理のラッパー **完成！**
+- **✅ `kummer_theorem_for_binomial_coeff`**: Kummer の定理のラッパー **完成！**
+- **⏳ `padicValNat_binomial_coeff_in_G`**: G の二項係数評価 **設計完了、実装中**
+  - d が素数で k < d のとき C(d, k+1) の padicValNat ≤ 1 を示す
+  - Kummer の定理を活用
+
+#### 統合戦略（次のステップ）
+**目標**: padicValNat q (G d x u) ≤ 1
+1. 各項 C(d, k+1) x^k u^{d-1-k} の padicValNat を評価
+2. 和全体の padicValNat を評価（非自明！）
+3. d = 3 の具体例で検証
 
 ### ⏳ 特殊ケースの実装（段階的アプローチ）
 - **d = 3 の場合**: `padicValNat_le_one_of_prime_divisor_case_three`
