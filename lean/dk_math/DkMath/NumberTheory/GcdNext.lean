@@ -87,7 +87,7 @@ lemma padicVal_mul_eq_add_of_coprime {A B : ℕ} (hcop : Nat.Coprime A B) {p : �
     -- 0.Coprime B → B = 1
     have : B = 1 := by
       have := Nat.Coprime.symm hcop
-      simp [Nat.Coprime, Nat.gcd_zero_right] at this
+      simp only [Nat.Coprime, Nat.gcd_zero_right] at this
       exact this
     subst this
     simp
@@ -95,7 +95,7 @@ lemma padicVal_mul_eq_add_of_coprime {A B : ℕ} (hcop : Nat.Coprime A B) {p : �
     · subst hB
       -- A.Coprime 0 → A = 1
       have : A = 1 := by
-        simp [Nat.Coprime, Nat.gcd_zero_right] at hcop
+        simp only [Nat.Coprime, Nat.gcd_zero_right] at hcop
         exact hcop
       subst this
       simp
