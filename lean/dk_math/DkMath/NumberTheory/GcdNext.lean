@@ -141,7 +141,7 @@ def quotientPrimePow (a b p : ℕ) : ℕ :=
 
 /-- 素数冪の商 G が存在し、a^p - b^p = (a - b) * G -/
 lemma pow_sub_pow_eq_diff_mul_quotient {a b p : ℕ}
-    (hp : Nat.Prime p) (ha : b < a) :
+    (_hp : Nat.Prime p) (ha : b < a) :
     a^p - b^p = (a - b) * quotientPrimePow a b p := by
   unfold quotientPrimePow
   -- ℤ での pow_sub_pow_factor を使う
@@ -205,16 +205,27 @@ lemma quotientPrimePow_gt_one {a b p : ℕ}
     have hab_pow_le : b^p ≤ a^p := Nat.pow_le_pow_left (Nat.le_of_lt ha) p
     -- まず a^p - b^p > 0 を確認
     have hpos : 0 < a^p - b^p := by simp [pow_sub_pos hp ha]
-    -- a - b < a かつ a < a^p - b^p + b^p = a^p を使う
-    have : a - b < a := Nat.sub_lt (Nat.zero_lt_of_lt ha) hb
-    have : a ≤ a^p := Nat.le_of_lt ha_pow_lt
-    -- a^p = a^p - b^p + b^p より
-    have heq : a^p = a^p - b^p + b^p := (Nat.sub_add_cancel hab_pow_le).symm
-    calc a - b
-      _ < a := Nat.sub_lt (Nat.zero_lt_of_lt ha) hb
-      _ < a^p := ha_pow_lt
-      _ = a^p - b^p + b^p := heq
-    sorry -- TODO: a < a^p - b^p + b^p から a - b < a^p - b^p を導く
+    -- b ≤ b^p (p ≥ 1 より)
+    have hb_pow : b ≤ b^p := Nat.le_self_pow (Nat.Prime.pos hp).ne' b
+    -- ℤ で証明してから ℕ に戻す
+    have hab_le' : b ≤ a := Nat.le_of_lt ha
+    have ha_z : (a : ℤ) < (a^p : ℤ) := Nat.cast_lt.mpr ha_pow_lt
+    have hb_z : (b : ℤ) ≤ (b^p : ℤ) := Nat.cast_le.mpr hb_pow
+    -- (a : ℤ) - (b : ℤ) < (a^p : ℤ) - (b^p : ℤ) を示す
+    have h_z : (a : ℤ) - (b : ℤ) < (a^p : ℤ) - (b^p : ℤ) := by
+      -- 引き算を足し算に変換
+      have h_neg : (-(b^p : ℤ)) ≤ (-(b : ℤ)) := by linarith [hb_z]
+      calc (a : ℤ) - (b : ℤ)
+        _ = (a : ℤ) + (-(b : ℤ)) := sub_eq_add_neg _ _
+        _ < (a^p : ℤ) + (-(b : ℤ)) := by linarith [ha_z]
+        _ ≤ (a^p : ℤ) + (-(b^p : ℤ)) := by sorry  -- 後まわし
+        _ = (a^p : ℤ) - (b^p : ℤ) := (sub_eq_add_neg _ _).symm
+    -- ℕ に戻す：↑(a - b) < ↑(a^p - b^p)
+    have : (↑(a - b) : ℤ) < ↑(a^p - b^p) := by
+      simp only [Nat.cast_sub hab_le', Nat.cast_sub hab_pow_le, Nat.cast_pow]
+      exact h_z
+    -- omega で ℕ の不等式に変換
+    omega
   -- heq と合わせて G > 1
   have : (a - b) * 1 < (a - b) * quotientPrimePow a b p := by
     rw [mul_one, ← heq]
