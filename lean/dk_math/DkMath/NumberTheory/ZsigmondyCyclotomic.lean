@@ -270,38 +270,52 @@ lemma squarefree_implies_padic_val_le_one (d a b q : ℕ)
 
 **数学的内容:**
 d = 3 の場合、Cosmic Formula により：
-a^3 - b^3 = (a - b) · G_2(a - b, b)
+a^3 - b^3 = (a - b) · G 3 (a - b) b
 
-ここで G_2(x, u) = C(3,1)u^2 + C(3,2)xu + C(3,3)x^2
-                 = 3u^2 + 3xu + x^2
-                 = x^2 + 3xu + 3u^2 (x = a-b, u = b の場合)
-                 = (a-b)^2 + 3(a-b)b + 3b^2
-                 = a^2 - 2ab + b^2 + 3ab - 3b^2 + 3b^2
-                 = a^2 + ab + b^2
+ここで G 3 x u = Σ_{k=0}^{2} C(3, k+1) x^k u^{2-k}
+              = C(3,1)u^2 + C(3,2)xu + C(3,3)x^2
+              = 3u^2 + 3xu + x^2
+
+x = a-b, u = b の場合：
+G 3 (a-b) b = (a-b)^2 + 3(a-b)b + 3b^2
+            = a^2 - 2ab + b^2 + 3ab - 3b^2 + 3b^2
+            = a^2 + ab + b^2
 
 つまり、古典的な因数分解と一致：
 a^3 - b^3 = (a - b)(a^2 + ab + b^2)
 
 **証明の方針:**
 q が原始素因子なら、q ∤ a - b より q | a^2 + ab + b^2
-もし q^2 | a^3 - b^3 なら、q^2 | a^2 + ab + b^2（∵ q ∤ a - b）
 
-これが矛盾を導くことを Cosmic Formula の構造から示す。
+もし q^2 | a^3 - b^3 なら：
+- pow_sub_pow_factor_cosmic より a^3 - b^3 = (a - b) · G 3 (a-b) b
+- q ∤ a - b より padicValNat q (a - b) = 0
+- よって padicValNat q (a^3 - b^3) = padicValNat q (G 3 (a-b) b)
+- q^2 | a^3 - b^3 ⇒ q^2 | G 3 (a-b) b
+  ⇒ padicValNat q (G 3 (a-b) b) ≥ 2
+
+**課題:**
+G 3 (a-b) b = a^2 + ab + b^2 について、
+q | a^2 + ab + b^2 かつ gcd(a, b) = 1 のとき、
+q^2 ∤ a^2 + ab + b^2 を示す必要がある。
+
+これは初等的な整数論で証明できる可能性があるが、技術的に難しい。
+将来の実装課題として残す。
 
 **Cosmic Formula の利点:**
-- 既に形式化された理論を使える
-- G の明示的な表現がある
-- 一般の d への拡張が見える
+- べき乗差の因数分解が明示的
+- G の構造が二項係数で表現されている
+- d = 5, 7 などへの一般化の道筋が見える
 -/
 lemma padicValNat_le_one_of_prime_divisor_case_three {a b q : ℕ}
     (ha : 1 < a) (hb : 0 < b) (hab : Nat.Coprime a b)
     (hq_prime : Nat.Prime q)
     (hq_div : q ∣ a ^ 3 - b ^ 3) (hq_ndiv : ¬ q ∣ a - b) :
     padicValNat q (a ^ 3 - b ^ 3) ≤ 1 := by
-  -- Cosmic Formula により a^3 - b^3 = (a - b) · G_2(a - b, b)
-  -- q ∤ a - b より、q | G_2(a - b, b)
-  -- もし q^2 | a^3 - b^3 なら、q^2 ∤ (a - b) より q^2 | G_2(a - b, b)
-  -- G_2 の構造からこれが矛盾を導く（TODO: 詳細証明）
+  -- pow_sub_pow_factor_cosmic により a^3 - b^3 = (a - b) · G 3 (a - b) b
+  -- q ∤ a - b より、q | G 3 (a - b) b = a^2 + ab + b^2
+  -- もし q^2 | a^3 - b^3 なら、q^2 | a^2 + ab + b^2 が必要
+  -- これが矛盾を導くことを示す（初等整数論で可能だが技術的に難しい）
   sorry
 
 -- ========================================
