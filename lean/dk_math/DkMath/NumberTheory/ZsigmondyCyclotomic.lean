@@ -180,6 +180,59 @@ lemma pow_sub_pow_factor_cosmic {a b : ℕ} {d : ℕ} (_hd : 0 < d) (hab : b < a
   -- 両辺から ↑b ^ d を引く
   linarith [h]
 
+/-- padicValNat と因数分解の関係（基本補題）
+
+**数学的内容:**
+a^d - b^d = (a - b) · N かつ a - b ≠ 0, N ≠ 0 のとき、
+padicValNat の乗法性より：
+padicValNat q (a^d - b^d) = padicValNat q (a - b) + padicValNat q N
+
+**証明の方針:**
+Mathlib の padicValNat.mul を使用する。
+ただし、a - b と N が両方とも非零であることを示す必要がある。
+
+**応用:**
+q ∤ a - b のとき padicValNat q (a - b) = 0 より、
+padicValNat q (a^d - b^d) = padicValNat q N
+となり、問題が N の性質に帰着される。
+-/
+lemma padicValNat_factorization {a b d q N : ℕ} (hd : 0 < d) (hab : b < a)
+    (hq_prime : Nat.Prime q)
+    (hfactor : a ^ d - b ^ d = (a - b) * N) (hN : N ≠ 0) :
+    padicValNat q (a ^ d - b ^ d) = padicValNat q (a - b) + padicValNat q N := by
+  -- a - b ≠ 0 を示す
+  have hab_ne : a - b ≠ 0 := Nat.sub_ne_zero_of_lt hab
+  -- hfactor を使って padicValNat.mul を適用
+  rw [hfactor]
+  exact padicValNat.mul hq_prime.prime hab_ne hN
+
+/-- 原始素因子と G の関係（padicValNat の帰着）
+
+**数学的内容:**
+q が原始素因子（q | a^d - b^d かつ q ∤ a - b）のとき、
+Cosmic Formula により a^d - b^d = (a - b) · G d (a-b) b より、
+padicValNat q (a^d - b^d) = padicValNat q (G d (a-b) b)
+
+**証明:**
+1. q ∤ a - b より padicValNat q (a - b) = 0
+2. padicValNat の乗法性より帰着
+
+**重要性:**
+これにより、padicValNat q (a^d - b^d) ≤ 1 の証明が、
+padicValNat q (G d (a-b) b) ≤ 1 の証明に帰着される。
+
+G の構造解析が鍵となる。
+-/
+lemma padicValNat_of_primitive_prime_factor_via_G {a b d q : ℕ}
+    (hd : 0 < d) (hab : b < a) (hq_prime : Nat.Prime q)
+    (hq_ndiv : ¬ q ∣ a - b) :
+    ∃ N : ℕ, N ≠ 0 ∧ a ^ d - b ^ d = (a - b) * N ∧
+    padicValNat q (a ^ d - b ^ d) = padicValNat q N := by
+  -- TODO: pow_sub_pow_factor_cosmic を ℕ に翻訳して使う
+  -- N を G の評価として定義
+  -- padicValNat q (a - b) = 0 を使って等式を導く
+  sorry
+
 /-- 円分多項式の整数値評価（補助補題）
 
 **数学的内容:**
@@ -204,66 +257,57 @@ lemma cyclotomic_eval_divides (d a b : ℕ) (_hd : 0 < d) (_hb : 0 < b) :
   use 1
   simp
 
-/-- 円分多項式の square-free 性から素因数の重複度へ（翻訳補題）
+/-- 円分多項式の square-free 性から素因数の重複度へ（Cosmic Formula 経由の翻訳補題）
 
 **数学的内容:**
 Φ_d が体 ℚ 上で square-free で、q が Φ_d(a/b) の素因数なら、
 q の a^d - b^d における重複度は 1 以下。
 
-**証明の方針:**
-1. Φ_d が square-free → Φ_d(a/b) も "square-free" な有理数
-2. 有理数が square-free → その任意の素因数は重複度 1
-3. Φ_d(a/b) · b^d | a^d - b^d と組み合わせる
+**Cosmic Formula 経由のアプローチ:**
 
-**実装の課題（詳細）:**
+### Step 1: べき乗差の因数分解
+`pow_sub_pow_factor_cosmic` より：
+a^d - b^d = (a - b) · G d (a - b) b
 
-### 課題 1: 多項式の評価 → 整数値
-Φ_d(X) ∈ ℤ[X] に対して、X = a/b を代入すると Φ_d(a/b) ∈ ℚ。
-これを整数論に翻訳するには：
-- b^(deg Φ_d) · Φ_d(a/b) ∈ ℤ を示す
-- Mathlib に `Polynomial.aeval` などがあるが、整数値性の保証が必要
+### Step 2: padicValNat の帰着
+`padicValNat_of_primitive_prime_factor_via_G` より：
+q ∤ a - b のとき、
+padicValNat q (a^d - b^d) = padicValNat q (G d (a-b) b)
 
-### 課題 2: square-free 性の翻訳
-多項式の square-free 性（代数的概念）を素因数の重複度（整数論的概念）に結びつける：
-- Φ_d が square-free ⇒ Φ_d(a/b) の "分子" が square-free
-- これには、分子と分母の分離、既約分数の扱いが必要
-- Mathlib の `Squarefree` の定義と整数の素因数分解の関係
+### Step 3: G の構造解析
+G d x u = Σ_{k=0}^{d-1} C(d, k+1) x^k u^{d-1-k}
 
-### 課題 3: padicValNat への接続
-最終的に padicValNat に翻訳する：
-- ℚ の素因数分解 → ℤ の素因数分解 → padicValNat
-- 各ステップで情報の損失がないことを保証
+**課題:** G の二項係数の性質から padicValNat q (G d x u) ≤ 1 を導く
 
-**代替アプローチ:**
+**2つのサブアプローチ:**
 
-### アプローチ A: Lifting the Exponent Lemma (LTE)
-q ≠ d の素数に対して、q | a^d - b^d かつ q ∤ a - b なら、
-より直接的な LTE の適用で padicValNat を評価できる可能性。
+#### サブA: 円分多項式との関係
+- Φ_d が square-free ⇒ G が square-free（何らかの意味で）
+- 多項式環の square-free 性 → 整数環の素因数分解
 
-### アプローチ B: 具体的なケース (d = 3, 5, 7)
-小さい素数 d について具体的に計算し、パターンを見つける：
-- d = 3: a^3 - b^3 = (a - b)(a^2 + ab + b^2)
-- q | a^2 + ab + b^2 かつ q ∤ a - b のとき、q^2 ∤ a^3 - b^3 を示す
+#### サブB: G の直接解析（より具体的）
+- G の各項 C(d, k+1) x^k u^{d-1-k} の素因数を解析
+- q が G の複数の項に q^2 で現れないことを示す
+- 二項係数の性質（Lucas の定理など）を活用
 
-### アプローチ C: Mathlib への貢献
-この補題自体を Mathlib に提案し、コミュニティの知恵を借りる。
+**現状の理論的枠組み:**
+- Step 1, 2 は実装済み/実装可能
+- Step 3 が本質的に難しい
+- サブB が具体的ケース（d = 3, 5）では実装可能
 
-**現在の方針:**
-理論的枠組みは確立。実装は将来の PR で段階的に進める。
-まずは応用（完全冪判定）を試して、実用性と必要性を確認する。
-
-**参考文献:**
-- Bang's theorem (1886): 原始素因子の存在
-- Zsigmondy's theorem (1892): 一般化と例外の特定
-- Mihăilescu's theorem (2002): Catalan 予想の解決（関連技術）
+**実装方針:**
+1. まず d = 3 の具体例で G の性質を解析
+2. パターンを見つけて一般化
+3. 必要なら Mathlib への貢献を検討
 -/
 lemma squarefree_implies_padic_val_le_one (d a b q : ℕ)
     (hd_prime : Nat.Prime d) (hb : 0 < b) (hab : Nat.Coprime a b)
     (hq_prime : Nat.Prime q) (hq_div : q ∣ a ^ d - b ^ d) :
     padicValNat q (a ^ d - b ^ d) ≤ 1 := by
-  -- TODO: 円分多項式の square-free 性を活用
-  -- 実装の課題は上記コメント参照
-  -- 代替アプローチの検討が必要
+  -- Cosmic Formula 経由のアプローチ
+  -- Step 1: べき乗差の因数分解（pow_sub_pow_factor_cosmic）
+  -- Step 2: padicValNat の帰着（padicValNat_of_primitive_prime_factor_via_G）
+  -- Step 3: G の構造解析（TODO: 最も難しい部分）
   sorry
 
 /-- 原始素因子の p-adic 付値上界：d = 3 の特殊ケース（Cosmic Formula 版）
@@ -515,30 +559,59 @@ lemma exists_primitive_prime_factor_hook {a b : ℕ} {d : ℕ}
 **課題:** Step 2-4 の橋渡しが技術的に難しい
 
 #### アプローチ B: Cosmic Formula 経由（実装主体） ⭐推奨
-1. ✅ べき乗差の因数分解：`pow_sub_pow_factor_cosmic` 完成
-2. ⏳ 原始素因子の性質：q ∤ a - b ⇒ q | G_{d-1}(a, b)
-3. ⏳ G の構造解析：二項係数の性質から q^2 ∤ G_{d-1}(a, b) を導く
-4. ⏳ 結論：padicValNat q (a^d - b^d) ≤ 1
+1. ✅ **べき乗差の因数分解**：`pow_sub_pow_factor_cosmic` **完成！**
+   - a^d - b^d = (a - b) · G d (a - b) b をℤ上で証明
+2. ✅ **padicValNat の帰着補題を設計**：
+   - `padicValNat_factorization`: 因数分解と padicValNat の関係
+   - `padicValNat_of_primitive_prime_factor_via_G`: 原始素因子との関係
+3. ⏳ **G の構造解析**（現在のフォーカス）：
+   - G d x u = Σ_{k=0}^{d-1} C(d, k+1) x^k u^{d-1-k}
+   - 二項係数の性質から q^2 ∤ G を導く
+4. ⏳ **結論**: padicValNat q (a^d - b^d) ≤ 1
 
 **利点:** 既存の形式化を直接活用、段階的実装が可能
+
+**G 解析の具体的戦略:**
+
+##### 戦略 1: 二項係数の素因数分解
+- Lucas の定理：p | C(n, k) の条件
+- Kummer の定理：v_p(C(n, k)) の計算
+- これらから G の各項の padicValNat を評価
+
+##### 戦略 2: G の全体構造
+- G が "ほぼ square-free" であることを示す
+- 各素数 q に対して padicValNat q (G) ≤ 1
+
+##### 戦略 3: 具体例からのパターン認識
+- d = 3: G 3 x u = x^2 + 3xu + 3u^2
+- d = 5: G 5 x u を展開して性質を調べる
+- 一般化可能なパターンを見つける
 
 ### ✅ 補助補題の実装状況
 
 #### 円分多項式アプローチ
-- `cyclotomic_eval_divides`: Φ_d(a/b) の整数値評価（TODO）
-- `squarefree_implies_padic_val_le_one`: square-free → 重複度 1（TODO）
+- `cyclotomic_eval_divides`: Φ_d(a/b) の整数値評価（理論的）
+- `squarefree_implies_padic_val_le_one`: Cosmic Formula 経由に更新
 
-#### Cosmic Formula アプローチ（実装中）
-- **✅ `pow_sub_pow_factor_cosmic`**: a^d - b^d = (a - b) · G d (a - b) b **完成！**
-- ⏳ G の性質から padicValNat の上界を導く補題群（次のステップ）
+#### Cosmic Formula アプローチ（急速に進展中！）
+- **✅ `pow_sub_pow_factor_cosmic`**: べき乗差の因数分解 **完成！**
+- **✅ `padicValNat_factorization`**: 因数分解と padicValNat の関係 **設計完了**
+- **✅ `padicValNat_of_primitive_prime_factor_via_G`**: G への帰着 **設計完了**
+- ⏳ **G の性質解析補題群**（次のステップ）:
+  - `padicValNat_G_le_one`: G の padicValNat 上界（目標）
+  - 二項係数と Lucas/Kummer 定理の活用
 
-### ⏳ 特殊ケースの実装（具体的進展）
-- `padicValNat_le_one_of_prime_divisor_case_three`: d = 3 の場合
+### ⏳ 特殊ケースの実装（段階的アプローチ）
+- **d = 3 の場合**: `padicValNat_le_one_of_prime_divisor_case_three`
   - ✅ Cosmic Formula による表現を明確化
-  - G 3 (a-b) b = a^2 + ab + b^2 と古典的因数分解の一致を確認
-  - ⏳ q^2 ∤ a^2 + ab + b^2 の証明（初等整数論で可能だが技術的）
-  - d = 5, 7 への拡張方針が明確
-- d = 5, 7 への拡張方針が明確
+  - G 3 (a-b) b = (a-b)^2 + 3(a-b)b + 3b^2 = a^2 + ab + b^2
+  - ⏳ **次のステップ**: q^2 ∤ a^2 + ab + b^2 の証明
+    - q | a^2 + ab + b^2 かつ gcd(a, b) = 1 の条件下で
+    - q^2 | a^2 + ab + b^2 が矛盾を導くことを示す
+  - **実装方針**: 初等整数論 + mod q^2 の計算
+- **d = 5 の場合**:（将来の拡張）
+  - G 5 x u の明示的展開
+  - 同様のパターンを探す
 
 **残りの課題:**
 
