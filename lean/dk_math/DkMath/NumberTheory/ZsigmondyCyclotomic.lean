@@ -568,20 +568,63 @@ q^2 ∤ a^2 + ab + b^2 を示す必要がある。
 これは初等的な整数論で証明できる可能性があるが、技術的に難しい。
 将来の実装課題として残す。
 
-**Cosmic Formula の利点:**
-- べき乗差の因数分解が明示的
-- G の構造が二項係数で表現されている
-- d = 5, 7 などへの一般化の道筋が見える
+/-- 原始素因子の p-adic 付値上界：d = 3 の特殊ケース（Lucas/Kummer 版）
+
+**数学的内容:**
+d = 3 の場合、Cosmic Formula により：
+a^3 - b^3 = (a - b) · G 3 (a - b) b
+
+G 3 の明示的形（`G_three_explicit` より）：
+G 3 x u = x^2 + 3xu + 3u^2
+
+x = a-b, u = b の場合：
+G 3 (a-b) b = (a-b)^2 + 3(a-b)b + 3b^2 = a^2 + ab + b^2
+
+**Lucas/Kummer 定理の適用結果:**
+係数の解析（`padicValNat_binomial_coeff_three` より）：
+- C(3, 1) = 3: padicValNat q (3) ≤ 1
+- C(3, 2) = 3: padicValNat q (3) ≤ 1
+- C(3, 3) = 1: padicValNat q (1) = 0
+
+各係数の padicValNat が 1 以下であることが示された。
+
+**証明の方針（初等的アプローチ）:**
+q が原始素因子なら、q ∤ a - b より q | a^2 + ab + b^2
+
+もし q^2 | a^3 - b^3 なら：
+1. pow_sub_pow_factor_cosmic より a^3 - b^3 = (a - b) · G 3 (a-b) b
+2. q ∤ a - b より padicValNat q (a - b) = 0
+3. よって padicValNat q (a^3 - b^3) = padicValNat q (a^2 + ab + b^2)
+4. q^2 | a^3 - b^3 ⇒ padicValNat q (a^2 + ab + b^2) ≥ 2
+
+**鍵となる補題（TODO）:**
+q | a^2 + ab + b^2 かつ gcd(a, b) = 1 のとき、
+q^2 ∤ a^2 + ab + b^2 を示す。
+
+**アプローチ:**
+mod q^2 での議論：
+- q | a^2 + ab + b^2 ⇒ a^2 + ab + b^2 ≡ 0 (mod q)
+- もし q^2 | a^2 + ab + b^2 なら a^2 + ab + b^2 ≡ 0 (mod q^2)
+- gcd(a, b) = 1 と組み合わせて矛盾を導く
+
+**具体的な場合分け:**
+- q | a かつ q ∤ b ⇒ q | a^2 + ab から q | b^2 ⇒ q | b（矛盾）
+- q ∤ a かつ q | b ⇒ 同様に矛盾
+- q ∤ a かつ q ∤ b ⇒ q | a^2 + ab + b^2 の性質から矛盾
+
+**Lucas/Kummer の寄与:**
+係数の padicValNat 解析により、G 3 の構造が明確になった。
+これは将来の完全証明への重要なステップ。
 -/
 lemma padicValNat_le_one_of_prime_divisor_case_three {a b q : ℕ}
     (ha : 1 < a) (hb : 0 < b) (hab : Nat.Coprime a b)
     (hq_prime : Nat.Prime q)
     (hq_div : q ∣ a ^ 3 - b ^ 3) (hq_ndiv : ¬ q ∣ a - b) :
     padicValNat q (a ^ 3 - b ^ 3) ≤ 1 := by
-  -- pow_sub_pow_factor_cosmic により a^3 - b^3 = (a - b) · G 3 (a - b) b
-  -- q ∤ a - b より、q | G 3 (a - b) b = a^2 + ab + b^2
-  -- もし q^2 | a^3 - b^3 なら、q^2 | a^2 + ab + b^2 が必要
-  -- これが矛盾を導くことを示す（初等整数論で可能だが技術的に難しい）
+  -- G_three_explicit により G 3 (a-b) b = (a-b)^2 + 3(a-b)b + 3b^2
+  -- padicValNat_binomial_coeff_three により係数の padicValNat ≤ 1
+  -- TODO: q^2 ∤ a^2 + ab + b^2 の証明（初等整数論）
+  -- 現状では sorry
   sorry
 
 -- ========================================
