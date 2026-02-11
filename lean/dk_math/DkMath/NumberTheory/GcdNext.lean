@@ -10,6 +10,8 @@ import DkMath.Algebra.DiffPow
 import DkMath.NumberTheory.GcdDiffPow
 import DkMath.NumberTheory.GdcDivD
 
+set_option linter.style.emptyLine false
+
 namespace DkMath.NumberTheory.GcdNext
 
 open scoped BigOperators
