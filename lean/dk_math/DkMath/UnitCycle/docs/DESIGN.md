@@ -76,7 +76,7 @@
 
 ## 実装計画（Lean ファイル構成案）
 
-### 1) コア補題層（抽象）
+### 1. コア補題層（抽象）
 
 **ファイル案**：`DkMath/UnitCycle/Core.lean`
 
@@ -86,7 +86,7 @@
 - `I_T`（増分則）の仮定から `I_iterate`（反復後の増分）を帰納法で証明
 - 閉路否定定理 `no_nontrivial_cycle` を証明
 
-### 2) 具体インスタンス層（最小の State）
+### 2. 具体インスタンス層（最小の State）
 
 **ファイル案**：`DkMath/UnitCycle/Examples.lean`
 
@@ -97,7 +97,7 @@
 - `I s := s.val`
 - コア定理を適用して閉路不可能を確認
 
-### 3) 宇宙式接続層（将来）
+### 3. 宇宙式接続層（将来）
 
 **ファイル案**：`DkMath/UnitCycle/CosmicBridge.lean`
 
