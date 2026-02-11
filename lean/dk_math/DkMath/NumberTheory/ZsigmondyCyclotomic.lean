@@ -196,7 +196,7 @@ q ∤ a - b のとき padicValNat q (a - b) = 0 より、
 padicValNat q (a^d - b^d) = padicValNat q N
 となり、問題が N の性質に帰着される。
 -/
-lemma padicValNat_factorization {a b d q N : ℕ} (hd : 0 < d) (hab : b < a)
+lemma padicValNat_factorization {a b d q N : ℕ} (_hd : 0 < d) (hab : b < a)
     (hq_prime : Nat.Prime q)
     (hfactor : a ^ d - b ^ d = (a - b) * N) (hN : N ≠ 0) :
     padicValNat q (a ^ d - b ^ d) = padicValNat q (a - b) + padicValNat q N := by
