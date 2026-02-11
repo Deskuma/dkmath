@@ -238,6 +238,94 @@ lemma padicValNat_of_primitive_prime_factor_via_G {a b d q : ℕ}
   -- padicValNat q (a - b) = 0 を使って等式を導く
   sorry
 
+-- ========================================
+-- § 3c. Lucas/Kummer 定理による G の解析
+-- ========================================
+
+/-- Lucas の定理の適用可能性
+
+**数学的内容:**
+Lucas の定理（Mathlib 定理）：
+素数 p に対して、二項係数 C(n, k) ≡ ∏ C(nᵢ, kᵢ) (mod p)
+ここで nᵢ, kᵢ は n, k の p 進表現の i 桁目。
+
+**Mathlib での実装:**
+- `Choose.choose_modEq_prod_range_choose`: Lucas の定理の主定理
+- `Choose.choose_modEq_choose_mod_mul_choose_div`: 再帰的形式
+
+**G への応用:**
+G d x u = Σ_{k=0}^{d-1} C(d, k+1) x^k u^{d-1-k}
+
+各項の係数 C(d, k+1) について Lucas の定理を適用することで、
+G の mod p での性質を解析できる。
+
+**実装方針:**
+1. G の各項を mod p で評価
+2. Lucas の定理により二項係数を分解
+3. p-adic valuation の性質を導出
+-/
+lemma lucas_theorem_for_binomial_coeff (p n k : ℕ) [hp : Fact p.Prime] {a : ℕ}
+    (ha₁ : n < p ^ a) (ha₂ : k < p ^ a) :
+    choose n k ≡ ∏ i ∈ range a, choose (n / p ^ i % p) (k / p ^ i % p) [MOD p] :=
+  Choose.choose_modEq_prod_range_choose_nat ha₁ ha₂
+
+/-- Kummer の定理：二項係数の p-adic valuation
+
+**数学的内容:**
+Kummer の定理（Mathlib 定理）：
+padicValNat p (C(n, k)) = (k と n-k を p 進数で足す時の桁上がりの回数)
+
+**Mathlib での実装:**
+- `padicValNat_choose`: 桁上がりの数として表現
+- `sub_one_mul_padicValNat_choose_eq_sub_sum_digits`: 桁の和として表現
+
+**数学的意味:**
+(p - 1) · padicValNat p (C(n, k))
+  = (p 進で k の桁の和) + (p 進で (n-k) の桁の和) - (p 進で n の桁の和)
+
+**G への応用:**
+G d x u = Σ_{k=0}^{d-1} C(d, k+1) x^k u^{d-1-k}
+
+各項の padicValNat を Kummer の定理で評価することで、
+padicValNat q (G d x u) の上界を導くことができる可能性。
+
+**鍵となる観察:**
+もし各 k について padicValNat q (C(d, k+1)) が小さければ、
+そして x^k u^{d-1-k} の項が互いに打ち消し合わなければ、
+G 全体の padicValNat も小さい可能性がある。
+-/
+lemma kummer_theorem_for_binomial_coeff (p n k : ℕ) [hp : Fact p.Prime] (hkn : k ≤ n) :
+    (p - 1) * padicValNat p (choose n k) =
+    (p.digits k).sum + (p.digits (n - k)).sum - (p.digits n).sum :=
+  padicValNat.sub_one_mul_padicValNat_choose_eq_sub_sum_digits hkn
+
+/-- G の二項係数に対する padicValNat 評価
+
+**数学的内容:**
+G d x u = Σ_{k=0}^{d-1} C(d, k+1) x^k u^{d-1-k}
+
+各項の係数 C(d, k+1) の padicValNat q を評価する。
+
+**戦略:**
+1. Kummer の定理により padicValNat q (C(d, k+1)) を計算
+2. d が素数の場合、特に簡単な評価が可能
+3. q ≠ d の場合と q = d の場合を分けて考える
+
+**課題:**
+個々の係数の padicValNat ではなく、和 G 全体の padicValNat が必要。
+これには追加の議論（項の独立性など）が必要。
+
+**TODO:** 具体的な d (d = 3, 5) で試して、パターンを見つける。
+-/
+lemma padicValNat_binomial_coeff_in_G (d k q : ℕ) (hd : Nat.Prime d) (hk : k < d)
+    (hq : Nat.Prime q) :
+    padicValNat q (choose d (k + 1)) ≤ 1 := by
+  -- TODO: Kummer の定理を使って評価
+  -- d が素数で k < d のとき、C(d, k+1) の性質を使う
+  -- q = d の場合: C(d, k+1) ≡ 0 (mod d) for 0 < k+1 < d
+  -- q ≠ d の場合: より小さい padicValNat
+  sorry
+
 /-- 円分多項式の整数値評価（補助補題）
 
 **数学的内容:**
