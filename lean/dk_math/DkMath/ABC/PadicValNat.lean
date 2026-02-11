@@ -158,5 +158,77 @@ lemma padicValNat_le_iff_dvd {p n : ℕ} (hp : p.Prime) (hn : n ≠ 0) (k : ℕ)
   -- Fact.mk hp で Fact p.Prime のインスタンスを明示的に与える（※ここが Mathlib の仮定と異なるところ）
   -- padicValNat_dvd_iff_le は n ≠ 0 の仮定も必要なので hn も与える
 
+/-! ### p-adic Valuation of Powers -/
+
+/--
+`padicValNat_pow` は、素数 `p` と 0 でない自然数 `a`、および自然数 `d` に対して、
+`padicValNat p (a ^ d) = d * padicValNat p a` が成り立つことを示す補題です。
+
+これは **Lifting the Exponent (LTE) 補題**の基本形であり、
+冪乗の p-adic valuation は指数倍になることを表しています。
+
+**証明のポイント:**
+- Mathlib の `padicValNat.pow` を使用
+- `[Fact p.Prime]` インスタンスを `haveI` で提供
+- `a = 0` の場合と `a ≠ 0` の場合を分けて処理
+
+**使用例:**
+```lean
+example (hp : Nat.Prime 3) (ha : 6 ≠ 0) :
+  padicValNat 3 (6 ^ 5) = 5 * padicValNat 3 6 :=
+  padicValNat_pow hp 5 ha
+```
+
+**数学的意味:**
+p が素因数として a に k 回現れるなら、a^d には d*k 回現れます。
+これは v_p(a^d) = d · v_p(a) と表記されます。
+-/
+lemma padicValNat_pow {p a : ℕ} (hp : p.Prime) (d : ℕ) (ha : a ≠ 0) :
+    padicValNat p (a ^ d) = d * padicValNat p a := by
+  -- Fact インスタンスを用意
+  haveI : Fact p.Prime := ⟨hp⟩
+  -- Mathlib の padicValNat.pow を適用
+  -- padicValNat.pow (n : ℕ) (ha : a ≠ 0) : padicValNat p (a ^ n) = n * padicValNat p a
+  exact padicValNat.pow d ha
+
+/--
+`padicValNat_pow'` は `padicValNat_pow` の変形版で、
+0 でない自然数 `a` に対して、`a^d ≠ 0` の条件から `padicValNat p (a ^ d) = d * padicValNat p a` を導きます。
+
+**使用例:**
+冪乗が 0 でないことが既知の場合に便利です。
+```lean
+example (hp : Nat.Prime 3) (hpow : 6 ^ 5 ≠ 0) :
+  padicValNat 3 (6 ^ 5) = 5 * padicValNat 3 6 :=
+  padicValNat_pow' hp 5 hpow
+```
+-/
+lemma padicValNat_pow' {p a : ℕ} (hp : p.Prime) (d : ℕ) (hpow : a ^ d ≠ 0) :
+    padicValNat p (a ^ d) = d * padicValNat p a := by
+  by_cases hd : d = 0
+  · -- d = 0 の場合：a^0 = 1 で padicValNat p 1 = 0
+    subst hd
+    simp [padicValNat.one]
+  · -- d ≠ 0 の場合：a^d ≠ 0 から a ≠ 0 を導く
+    have ha : a ≠ 0 := by
+      intro ha_eq
+      rw [ha_eq, zero_pow hd] at hpow
+      exact hpow rfl
+    exact padicValNat_pow hp d ha
+
+/--
+`dvd_padicValNat_pow` は、`d ∣ padicValNat p (a ^ d)` が成り立つことを示します。
+
+これは完全冪判定に使われる重要な性質で、
+「a^d が完全冪なら、すべての素因数の指数は d の倍数」という事実の基礎となります。
+
+**証明:**
+`padicValNat p (a ^ d) = d * padicValNat p a` より、d が因子として現れます。
+-/
+lemma dvd_padicValNat_pow {p a : ℕ} (hp : p.Prime) (d : ℕ) (ha : a ≠ 0) :
+    d ∣ padicValNat p (a ^ d) := by
+  rw [padicValNat_pow hp d ha]
+  exact dvd_mul_right d _
+
 
 end DkMath.ABC
