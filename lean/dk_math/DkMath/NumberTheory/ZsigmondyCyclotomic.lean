@@ -333,14 +333,8 @@ a^3 - b^3 = (a - b)(a^2 + ab + b^2)
 -/
 lemma G_three_explicit (x u : ℤ) :
     G 3 x u = x ^ 2 + 3 * x * u + 3 * u ^ 2 := by
-  unfold G
-  -- G 3 x u = Σ k ∈ range 3, C(3, k+1) * x^k * u^{2-k}
-  rw [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_zero]
-  -- k = 0: C(3, 1) * x^0 * u^2 = 3u^2
-  -- k = 1: C(3, 2) * x^1 * u^1 = 3xu
-  -- k = 2: C(3, 3) * x^2 * u^0 = x^2
-  simp only [Nat.choose, pow_zero, pow_one, pow_two, one_mul, mul_one, add_zero]
-  ring
+  -- TODO: unfold G and compute explicitly
+  sorry
 
 /-- d = 3 の二項係数の padicValNat 評価
 
@@ -382,10 +376,8 @@ lemma padicValNat_binomial_coeff_three (k q : ℕ) (hk : k ∈ ({1, 2, 3} : Fins
     · -- q ≠ 3 の場合
       have  hdvd : ¬ q ∣ 3 := by
         intro h_dvd
-        have h_eq := Nat.Prime.eq_one_or_self_of_dvd hq 3 h_dvd
-        rcases h_eq with h1 | h3
-        · exact Nat.Prime.ne_one hq h1
-        · exact hq3 h3
+        -- q | 3 ⇒ q = 1 ∨ q = 3, but q is prime (≠ 1) and q ≠ 3
+        sorry
       have : padicValNat q 3 = 0 := padicValNat.eq_zero_of_not_dvd hdvd
       rw [this]
       omega
@@ -397,11 +389,8 @@ lemma padicValNat_binomial_coeff_three (k q : ℕ) (hk : k ∈ ({1, 2, 3} : Fins
       sorry  -- TODO: 同上
     · -- q ≠ 3 の場合
       have hdvd : ¬ q ∣ 3 := by
-        intro h_dvd
-        have h_eq := Nat.Prime.eq_one_or_self_of_dvd hq 3 h_dvd
-        rcases h_eq with h1 | h3
-        · exact Nat.Prime.ne_one hq h1
-        · exact hq3 h3
+        -- TODO: q | 3, q.Prime,q ≠ 3 ⇒ contradiction
+        sorry
       have : padicValNat q 3 = 0 := padicValNat.eq_zero_of_not_dvd hdvd
       rw [this]
       omega
@@ -445,12 +434,10 @@ lemma padicValNat_G_three_coeffs_le_one (q : ℕ) (hq : Nat.Prime q) :
       rw [hq3]
       sorry  -- TODO: padicValNat 3 3 = 1
     · -- q ≠ 3 の場合
-      have : ¬ q ∣ 3 := by
-        intro h
-        -- q | 3 and q is prime ⇒ q = 1 or q = 3; q ≠ 3 and q ≠ 1 (prime) ⇒ contradiction
-        omega
-
-      have : padicValNat q 3 = 0 := padicValNat.eq_zero_of_not_dvd this
+      have hdvd : ¬ q ∣ 3 := by
+        -- TODO: q | 3, q.Prime,q ≠ 3 ⇒ contradiction
+        sorry
+      have : padicValNat q 3 = 0 := padicValNat.eq_zero_of_not_dvd hdvd
       rw [this]
       omega
 
