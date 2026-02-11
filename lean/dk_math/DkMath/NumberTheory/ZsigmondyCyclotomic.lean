@@ -382,10 +382,9 @@ lemma padicValNat_binomial_coeff_three (k q : ℕ) (hk : k ∈ ({1, 2, 3} : Fins
     · -- q ≠ 3 の場合
       have : ¬ q ∣ 3 := by
         intro h
-        have : q ∣ 3 → q = 1 ∨ q = 3 := Nat.Prime.eq_one_or_self_of_dvd hq 3 h
-        cases this with
-        | inl h1 => exact Nat.Prime.ne_one hq h1
-        | inr h3 => exact hq3 h3
+        -- q | 3 and q is prime ⇒ q = 1 or q = 3; q ≠ 3 and q ≠ 1 (prime) ⇒ contradiction
+        omega
+
       have : padicValNat q 3 = 0 := padicValNat.eq_zero_of_not_dvd this
       rw [this]
       omega
@@ -398,10 +397,9 @@ lemma padicValNat_binomial_coeff_three (k q : ℕ) (hk : k ∈ ({1, 2, 3} : Fins
     · -- q ≠ 3 の場合
       have : ¬ q ∣ 3 := by
         intro h
-        have : q ∣ 3 → q = 1 ∨ q = 3 := Nat.Prime.eq_one_or_self_of_dvd hq 3 h
-        cases this with
-        | inl h1 => exact Nat.Prime.ne_one hq h1
-        | inr h3 => exact hq3 h3
+        -- q | 3 and q is prime ⇒ q = 1 or q = 3; q ≠ 3 and q ≠ 1 (prime) ⇒ contradiction
+        omega
+
       have : padicValNat q 3 = 0 := padicValNat.eq_zero_of_not_dvd this
       rw [this]
       omega
@@ -447,10 +445,9 @@ lemma padicValNat_G_three_coeffs_le_one (q : ℕ) (hq : Nat.Prime q) :
     · -- q ≠ 3 の場合
       have : ¬ q ∣ 3 := by
         intro h
-        have : q ∣ 3 → q = 1 ∨ q = 3 := Nat.Prime.eq_one_or_self_of_dvd hq 3 h
-        cases this with
-        | inl h1 => exact Nat.Prime.ne_one hq h1
-        | inr h3 => exact hq3 h3
+        -- q | 3 and q is prime ⇒ q = 1 or q = 3; q ≠ 3 and q ≠ 1 (prime) ⇒ contradiction
+        omega
+
       have : padicValNat q 3 = 0 := padicValNat.eq_zero_of_not_dvd this
       rw [this]
       omega
@@ -567,6 +564,16 @@ q^2 ∤ a^2 + ab + b^2 を示す必要がある。
 
 これは初等的な整数論で証明できる可能性があるが、技術的に難しい。
 将来の実装課題として残す。
+-/
+example : ∀ (a b q : ℕ) (ha : 1 < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hq_prime : Nat.Prime q)
+    (hq_div : q ∣ a ^ 3 - b ^ 3) (hq_ndiv : ¬ q ∣ a - b),
+    padicValNat q (a ^ 3 - b ^ 3) ≤ 1 := by
+  -- Cosmic Formula 経由のアプローチ
+  -- pow_sub_pow_factor_cosmic を使って因数分解
+  -- padicValNat_of_primitive_prime_factor_via_G を使って帰着
+  -- G_three_explicit を使って G の形を明示
+  sorry  -- docstring 用の例(実装は padicValNat_le_one_of_prime_divisor_case_three にて)
 
 /-- 原始素因子の p-adic 付値上界：d = 3 の特殊ケース（Lucas/Kummer 版）
 
@@ -765,6 +772,8 @@ lemma exists_primitive_prime_factor_hook {a b : ℕ} {d : ℕ}
     exact ⟨q, hq_prime, hq_div, hq_ndiv, hvad⟩
   · -- d が合成数の場合は TODO（別 PR）
     sorry
+
+end DkMath.NumberTheory.GcdNext
 
 -- ========================================
 -- § 5. 開発ロードマップ
@@ -1078,5 +1087,3 @@ d = 3 の成功パターンを d = 5, 7, ... に適用
 - 完全冪判定などの応用例
 
 -/
-
-end DkMath.NumberTheory.GcdNext
