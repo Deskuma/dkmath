@@ -380,27 +380,29 @@ lemma padicValNat_binomial_coeff_three (k q : ℕ) (hk : k ∈ ({1, 2, 3} : Fins
         sorry  -- TODO: padicValNat の具体値計算
       rw [this]
     · -- q ≠ 3 の場合
-      have : ¬ q ∣ 3 := by
-        intro h
-        -- q | 3 and q is prime ⇒ q = 1 or q = 3; q ≠ 3 and q ≠ 1 (prime) ⇒ contradiction
-        omega
-
-      have : padicValNat q 3 = 0 := padicValNat.eq_zero_of_not_dvd this
+      have  hdvd : ¬ q ∣ 3 := by
+        intro h_dvd
+        have h_eq := Nat.Prime.eq_one_or_self_of_dvd hq 3 h_dvd
+        rcases h_eq with h1 | h3
+        · exact Nat.Prime.ne_one hq h1
+        · exact hq3 h3
+      have : padicValNat q 3 = 0 := padicValNat.eq_zero_of_not_dvd hdvd
       rw [this]
       omega
   · -- k = 2: C(3, 2) = 3
-    simp only [Nat.choose_symm_of_eq_add (by omega : 2 = 3 - 1), Nat.choose_one_right]
+    norm_num [Nat.choose]
     by_cases hq3 : q = 3
     · -- q = 3 の場合（k = 1 と同じ）
       rw [hq3]
       sorry  -- TODO: 同上
     · -- q ≠ 3 の場合
-      have : ¬ q ∣ 3 := by
-        intro h
-        -- q | 3 and q is prime ⇒ q = 1 or q = 3; q ≠ 3 and q ≠ 1 (prime) ⇒ contradiction
-        omega
-
-      have : padicValNat q 3 = 0 := padicValNat.eq_zero_of_not_dvd this
+      have hdvd : ¬ q ∣ 3 := by
+        intro h_dvd
+        have h_eq := Nat.Prime.eq_one_or_self_of_dvd hq 3 h_dvd
+        rcases h_eq with h1 | h3
+        · exact Nat.Prime.ne_one hq h1
+        · exact hq3 h3
+      have : padicValNat q 3 = 0 := padicValNat.eq_zero_of_not_dvd hdvd
       rw [this]
       omega
   · -- k = 3: C(3, 3) = 1
