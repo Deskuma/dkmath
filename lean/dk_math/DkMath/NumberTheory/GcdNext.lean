@@ -4,7 +4,8 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import Mathlib.NumberTheory.Padics.PadicVal.Defs
+import DkMath.ABC.PadicValNat
+-- import Mathlib.NumberTheory.Padics.PadicVal.Defs
 import DkMath.Algebra.DiffPow
 import DkMath.NumberTheory.GcdDiffPow
 import DkMath.NumberTheory.GdcDivD
