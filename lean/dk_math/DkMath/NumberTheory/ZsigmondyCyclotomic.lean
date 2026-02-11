@@ -634,6 +634,26 @@ lemma exists_primitive_prime_factor_hook {a b : ℕ} {d : ℕ}
   - cosmic_id から a^d - b^d = (a - b) · G d (a - b) b を導出
   - ℤ 上での証明が完了
 
+### ✅ **Lucas/Kummer 定理を統合（新規！）**
+- Mathlib.Data.Nat.Choose.Lucas を import
+- **Lucas の定理**（Mathlib 既存）：
+  - `Choose.choose_modEq_prod_range_choose`: 二項係数の mod p での積表現
+  - 応用：G の各項の mod p 性質を解析
+- **Kummer の定理**（Mathlib 既存）：
+  - `padicValNat_choose`: C(n, k) の p-adic valuation
+  - `sub_one_mul_padicValNat_choose_eq_sub_sum_digits`: 桁の和による表現
+  - 応用：G の各項の padicValNat を評価
+- **✅ 補助補題を設計**：
+  - `lucas_theorem_for_binomial_coeff`: Lucas の定理のラッパー
+  - `kummer_theorem_for_binomial_coeff`: Kummer の定理のラッパー
+  - `padicValNat_binomial_coeff_in_G`: G の二項係数の padicValNat 評価
+
+**Cosmic Formula + Lucas/Kummer の相乗効果:**
+1. **Cosmic Formula** で G の構造を明示化
+2. **Lucas の定理** で G の mod p 性質を解析
+3. **Kummer の定理** で G の padicValNat 上界を評価
+4. **統合** で padicValNat q (a^d - b^d) ≤ 1 を証明
+
 **Cosmic Formula の利点:**
 1. **既に完全に形式化されている**：CosmicFormulaBinom.lean に証明済み
 2. **明示的な表現**：G の二項係数による具体的な構造
