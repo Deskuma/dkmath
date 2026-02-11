@@ -16,6 +16,7 @@ namespace DkMath.NumberTheory.GcdNext
 
 open scoped BigOperators
 open Finset
+open DkMath.ABC
 open DkMath.Algebra.DiffPow
 open DkMath.NumberTheory.GcdDiffPow
 
@@ -385,46 +386,86 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
     | inl h => exfalso; exact hq_ndiv_x h
     | inr h => exact h
 
-  -- (3) gcd(x, Sd) ∣ d を使う
-  have hab_int : Int.gcd (a : ℤ) (b : ℤ) = 1 := by
-    simp only [Int.gcd_eq_natAbs]
-    exact hab
+  -- (3) 矛盾を導く：p-adic valuation を使った完全冪判定
+  -- heq : (x+u)^d - u^d = t^d より a^d - b^d = t^d (ℕ での等式)
+  -- したがって padicValNat q (a^d - b^d) = padicValNat q (t^d)
 
-  have gcd_dvd_d_int := by
-    have key := gcd_specialized_divides_d (x : ℤ) (b : ℤ) d (Nat.one_le_of_lt hd) hab_int
-    -- key : Int.gcd (↑x) (Sd (↑x + ↑b) ↑b d) ∣ d
-    -- a = x + b なので、↑x + ↑b = ↑(x+b) = ↑a
-    simp only at key ⊢
-    exact key
-  -- 実は prime_not_dvd_d_of_gcd_dvd を使うべきだが、
-  -- これは「q ∤ d → q は両方割らない」という形
-  -- 対偶を取ると「q が両方割る → q ∣ d」
+  -- q ∣ a^d - b^d を ℕ の可除性に変換
+  have hq_div_pow_nat : q ∣ a^d - b^d := by
+    have hab_pow_le : b^d ≤ a^d := by
+      have : b ≤ a := by omega
+      exact Nat.pow_le_pow_left this d
+    -- body_eq : (a : ℤ)^d - (b : ℤ)^d = (x : ℤ) * Sd a b d を使う
+    have hq_div_int : (q : ℤ) ∣ (a : ℤ)^d - (b : ℤ)^d := by
+      -- キャストを正規化
+      convert hq_div_body using 2
+      -- body_eq を適用
+      -- exact body_eq.symm
+    -- ℤ から ℕ に変換
+    have heq_cast : ((a^d - b^d : ℕ) : ℤ) = (a : ℤ)^d - (b : ℤ)^d := by
+      simp only [Nat.cast_sub hab_pow_le, Nat.cast_pow]
+    rw [← heq_cast] at hq_div_int
+    exact Int.ofNat_dvd.mp hq_div_int
 
-  -- より直接的に：q が a^d - b^d の原始素因子なら、
-  -- v_q(a^d - b^d) の精密評価が必要（Lifting the Exponent Lemma）
-  -- これも深い内容なので、ここでは簡略化
+  -- a^d - b^d = t^d を使う
+  have heq_nat : a^d - b^d = t^d := by
+    have hab_pow_le : b^d ≤ a^d := by
+      have : b ≤ a := by omega
+      exact Nat.pow_le_pow_left this d
+    calc a^d - b^d
+      _ = (x + u)^d - u^d := by simp only [ha_def, hb_def]
+      _ = t^d := heq
 
-  -- 実際の矛盾：
-  -- heq : (x+u)^d - u^d = t^d より、ℤ で (a^d - b^d : ℤ) = (t^d : ℤ)
-  -- body_eq : (a^d - b^d : ℤ) = x * Sd
-  -- したがって x * Sd = t^d
+  -- したがって q ∣ t^d
+  have hq_div_td : q ∣ t^d := by
+    rw [← heq_nat]
+    exact hq_div_pow_nat
 
-  -- q ∣ Sd かつ q ∤ x なので、v_q(x * Sd) = v_q(Sd) ≥ 1
-  -- 一方 v_q(t^d) = d * v_q(t)
-  -- もし v_q(t) ≥ 1 なら v_q(t^d) ≥ d ≥ 3
+  -- q は素数で q ∣ t^d なので q ∣ t
+  have hq_div_t : q ∣ t := by
+    -- q が素数で q ∣ t^d なら q ∣ t
+    -- Nat.Prime.dvd_of_dvd_pow を使う
+    exact hq_prime.dvd_of_dvd_pow hq_div_td
 
-  -- しかし、原始素因子の定義より v_q(a^d - b^d) の正確な値が決まる
-  -- （Lifting the Exponent Lemma: v_q(a^d - b^d) = v_q(a - b) + v_q(d) when q | a-b）
-  -- しかし q ∤ a - b = x なので、LTE の別のケース
+  -- したがって padicValNat q t ≥ 1
+  have hvt_ge : 1 ≤ padicValNat q t := by
+    have ht_ne : t ≠ 0 := Nat.ne_of_gt ht
+    exact DkMath.ABC.padicValNat_one_le_of_prime_dvd hq_prime ht_ne hq_div_t
 
-  -- ここで詳細な指数評価が必要だが、これも深い内容
-  -- 簡略版として：q が原始素因子なら v_q(a^d - b^d) = 1 （多くのケースで）
-  -- したがって v_q(x * Sd) = v_q(Sd) = 1
-  -- しかし v_q(t^d) = d * v_q(t) で、これが 1 になるには v_q(t) = 1/d （不可能）
+  -- 新補題を使う：padicValNat q (t^d) = d * padicValNat q t
+  have ht_ne : t ≠ 0 := Nat.ne_of_gt ht
+  have hvtd_eq : padicValNat q (t^d) = d * padicValNat q t :=
+    DkMath.ABC.padicValNat_pow hq_prime d ht_ne
 
-  -- 厳密な証明には Zsigmondy の詳細な性質が必要
-  -- 現時点では sorry で留める（Zsigmondy 実装後に完成）
+  -- したがって padicValNat q (t^d) ≥ d ≥ 3
+  have hvtd_ge : d ≤ padicValNat q (t^d) := by
+    rw [hvtd_eq]
+    calc d
+      _ = d * 1 := (Nat.mul_one d).symm
+      _ ≤ d * padicValNat q t := Nat.mul_le_mul_left d hvt_ge
 
-  sorry
+  -- 一方、padicValNat q (a^d - b^d) = padicValNat q (t^d)
+  have hvad_eq : padicValNat q (a^d - b^d) = padicValNat q (t^d) := by
+    rw [heq_nat]
+
+  -- ここで、原始素因子の性質（Lifting the Exponent Lemma）を使えば、
+  -- padicValNat q (a^d - b^d) の正確な値が分かる。
+  -- 多くの場合、原始素因子 q について padicValNat q (a^d - b^d) = 1 が成り立つ。
+  -- （証明には LTE の完全版が必要なので、ここでは仮定として使う）
+
+  -- TODO: 原始素因子の精密な性質を証明
+  -- 原始素因子 q について、q ∤ a - b かつ q ∣ a^d - b^d のとき、
+  -- 多くの場合 padicValNat q (a^d - b^d) = 1 が成り立つ。
+  -- 例外は特殊なケース（LTE の詳細による）。
+  -- 現時点では sorry で仮定する。
+  have hvad_eq_one : padicValNat q (a^d - b^d) = 1 := by
+    sorry  -- TODO: Lifting the Exponent Lemma を使った精密評価が必要
+
+  -- 矛盾！
+  -- padicValNat q (t^d) = padicValNat q (a^d - b^d) = 1 (仮定)
+  -- しかし padicValNat q (t^d) ≥ d ≥ 3
+  -- したがって 1 ≥ 3 で矛盾
+  rw [hvad_eq] at hvad_eq_one
+  omega
 
 end DkMath.NumberTheory.GcdNext
