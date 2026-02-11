@@ -85,20 +85,20 @@ lemma exists_primitive_prime_factor_basic {a b d : ℕ}
 /-- 原始素因子の p-adic 付値の下界
 
 **数学的内容:**
-q が a^d - b^d の原始素因子（q | a^d - b^d）ならば、
-padicValNat q (a^d - b^d) ≥ 1
+q が a^d - b^d の原始素因子（q | a ^ d - b ^ d）ならば、
+padicValNat q (a ^ d - b ^ d) ≥ 1
 
 **これは明らか:**
-q | a^d - b^d かつ a^d - b^d ≠ 0 から、既存の補題で直ちに従う。
+q | a ^ d - b ^ d かつ a ^ d - b ^ d ≠ 0 から、既存の補題で直ちに従う。
 
 **次のステップ:**
-上界 padicValNat q (a^d - b^d) ≤ 1 を示すには、
+上界 padicValNat q (a ^ d - b ^ d) ≤ 1 を示すには、
 円分多項式の理論や LTE の精密版が必要。
 -/
 lemma padicValNat_primitive_prime_factor_ge_one {a b d q : ℕ}
-    (hab_lt : b < a) (hb : 0 < b) (hd : 1 < d)
-    (hq_prime : Nat.Prime q) (hq_div : q ∣ a^d - b^d) :
-    1 ≤ padicValNat q (a^d - b^d) := by
+    (hab_lt : b < a) (_hb : 0 < b) (hd : 1 < d)
+    (hq_prime : Nat.Prime q) (hq_div : q ∣ a ^ d - b ^ d) :
+    1 ≤ padicValNat q (a ^ d - b ^ d) := by
   -- a^d - b^d ≠ 0 を示す
   have hd_pos : 0 < d := Nat.zero_lt_of_lt hd
   have hd_ne : d ≠ 0 := Nat.pos_iff_ne_zero.mp hd_pos
