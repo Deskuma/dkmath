@@ -79,7 +79,64 @@ lemma exists_primitive_prime_factor_basic {a b d : ℕ}
   exact exists_prime_divisor_not_dividing_diff_of_prime_exp hd_prime hd_ge hab_lt hb hab hpnd
 
 -- ========================================
--- § 3. Zsigmondy の原始素因子定理（層B：精密層、TODO）
+-- § 3. 原始素因子の p-adic 付値に関する補題
+-- ========================================
+
+/-- 原始素因子の p-adic 付値の下界
+
+**数学的内容:**
+q が a^d - b^d の原始素因子（q | a^d - b^d）ならば、
+padicValNat q (a^d - b^d) ≥ 1
+
+**これは明らか:**
+q | a^d - b^d かつ a^d - b^d ≠ 0 から、既存の補題で直ちに従う。
+
+**次のステップ:**
+上界 padicValNat q (a^d - b^d) ≤ 1 を示すには、
+円分多項式の理論や LTE の精密版が必要。
+-/
+lemma padicValNat_primitive_prime_factor_ge_one {a b d q : ℕ}
+    (hab_lt : b < a) (hb : 0 < b) (hd : 1 < d)
+    (hq_prime : Nat.Prime q) (hq_div : q ∣ a^d - b^d) :
+    1 ≤ padicValNat q (a^d - b^d) := by
+  -- a^d - b^d ≠ 0 を示す
+  have hd_pos : 0 < d := Nat.zero_lt_of_lt hd
+  have hd_ne : d ≠ 0 := Nat.pos_iff_ne_zero.mp hd_pos
+  have hab_pow : b^d < a^d := Nat.pow_lt_pow_left hab_lt hd_ne
+  have hne : a^d - b^d ≠ 0 := Nat.sub_ne_zero_of_lt hab_pow
+  -- padicValNat_one_le_of_prime_dvd を適用
+  exact padicValNat_one_le_of_prime_dvd hq_prime hne hq_div
+
+/-- 原始素因子の p-adic 付値の上界（TODO）
+
+**数学的内容:**
+q が a^d - b^d の原始素因子で、追加の条件（例：円分多項式が square-free）
+を満たすなら、padicValNat q (a^d - b^d) ≤ 1
+
+**証明の方針:**
+- 円分多項式 Φ_d(X) が a^d - b^d を割る（Mathlib にある）
+- 原始素因子 q は Φ_d(a/b) の素因子
+- Φ_d が square-free なら、q の指数は 1
+
+**必要な理論:**
+- Mathlib.RingTheory.Polynomial.Cyclotomic.Basic の活用
+- 円分多項式の既約性または square-free 性
+- 有理数体上での評価と整数論への翻訳
+
+**現状:** これは深い定理で、別 PR で段階的に実装予定
+-/
+lemma padicValNat_primitive_prime_factor_le_one {a b d q : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b)
+    (hq_prime : Nat.Prime q)
+    (hq_div : q ∣ a ^ d - b ^ d) (hq_ndiv : ¬ q ∣ a - b) :
+    padicValNat q (a ^ d - b ^ d) ≤ 1 := by
+  -- TODO: 円分多項式の理論を使った証明
+  sorry
+
+-- ========================================
+-- § 4. Zsigmondy の原始素因子定理（層B：精密層、TODO）
 -- ========================================
 
 /-- Zsigmondy の原始素因子定理のフック
@@ -119,20 +176,31 @@ lemma exists_primitive_prime_factor_hook {a b : ℕ} {d : ℕ}
     have hpnd : ¬ d ∣ a - b := by
       sorry  -- TODO: d が素数で d ≥ 3 の場合、一般には証明が必要
 
-    -- exists_prime_divisor_not_dividing_diff_of_prime_exp から q を得る
+    -- 層A から原始素因子 q を得る
     obtain ⟨q, hq_prime, hq_div, hq_ndiv⟩ :=
-      exists_prime_divisor_not_dividing_diff_of_prime_exp hd_prime hp_ge hab_lt hb hab hpnd
+      exists_primitive_prime_factor_basic hd_prime hp_ge hab_lt hb hab hpnd
 
-    -- padicValNat q (a^d - b^d) = 1 を示す（LTE が必要）
-    have hvad : padicValNat q (a^d - b^d) = 1 := by
-      sorry  -- TODO: Lifting the Exponent Lemma を使った精密評価が必要
+    -- padicValNat q (a^d - b^d) = 1 を示す（下界と上界を組み合わせる）
+    have hvad : padicValNat q (a ^ d - b ^ d) = 1 := by
+      -- 下界：1 ≤ padicValNat q (a^d - b^d)
+      have h1 : 2 < d := hd
+      have hd_ge_one : 1 < d := by omega
+      have hge : 1 ≤ padicValNat q (a ^ d - b ^ d) :=
+        padicValNat_primitive_prime_factor_ge_one hab_lt hb hd_ge_one hq_prime hq_div
+
+      -- 上界：padicValNat q (a^d - b^d) ≤ 1
+      have hle : padicValNat q (a ^ d - b ^ d) ≤ 1 :=
+        padicValNat_primitive_prime_factor_le_one
+          hd_prime hp_ge hab_lt hb hab hpnd hq_prime hq_div hq_ndiv
+      -- 結論：1 ≤ x ∧ x ≤ 1 ⇒ x = 1
+      omega
 
     exact ⟨q, hq_prime, hq_div, hq_ndiv, hvad⟩
   · -- d が合成数の場合は TODO（別 PR）
     sorry
 
 -- ========================================
--- § 4. 開発ロードマップ
+-- § 5. 開発ロードマップ
 -- ========================================
 
 /- **Zsigmondy 理論の段階的な実装方針**
@@ -147,17 +215,31 @@ lemma exists_primitive_prime_factor_hook {a b : ℕ} {d : ℕ}
 - 条件: gcd(a,b) = 1, d ∤ a - b
 - GcdDiffPow の既存補題を活用して実装
 
-## ⏳ Phase 2: 層B（精密層）— TODO
+## ⏳ Phase 2: 層B（精密層）— 部分的に完了
 
 原始素因子の p-adic 付値を精密に評価する。
 
-**必要な理論:**
-- Lifting the Exponent Lemma (LTE)
-- または Cyclotomic polynomial の性質
+**現在の成果:**
+- ✅ 下界: `padicValNat_primitive_prime_factor_ge_one`
+  - 1 ≤ padicValNat q (a^d - b^d) を証明（既存の補題から直接）
 
-**目標:**
-- padicValNat q (a^d - b^d) = 1 を証明
-- 完全冪判定への応用を可能にする
+**残りの課題:**
+- ⏳ 上界: `padicValNat_primitive_prime_factor_le_one` (TODO)
+  - padicValNat q (a^d - b^d) ≤ 1 を証明
+  - 必要な理論: 円分多項式の square-free 性
+
+**理論的背景:**
+円分多項式 Φ_d(X) は整数係数の既約多項式で、以下の性質を持つ：
+- Φ_d(X) | X^d - 1（より一般に Φ_d(a/b) | a^d - b^d）
+- 原始素因子 q は Φ_d(a/b) の素因子として現れる
+- 多くの場合、Φ_d は "square-free"（重複度1で因数分解）
+  → これが padicValNat q (a^d - b^d) = 1 の鍵
+
+**実装戦略:**
+1. Mathlib.RingTheory.Polynomial.Cyclotomic.* を import
+2. Φ_d の評価と整数環での性質を整理
+3. 有理数体上の理論を整数論に翻訳
+4. square-free 性または既約性から上界を導出
 
 ## ⏳ Phase 3: 一般化 — TODO
 
