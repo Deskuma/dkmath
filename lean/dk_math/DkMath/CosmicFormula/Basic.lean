@@ -15,6 +15,7 @@ import DkMath.CosmicFormula.CosmicFormulaTrominoLink  -- Cosmic Formula and Trom
 import DkMath.CosmicFormula.CosmicFormulaCellDim  -- Cosmic Formula Cell Dimensionality
 import DkMath.CosmicFormula.CosmicFormulaExp  -- Cosmic Formula Exponent
 import DkMath.CosmicFormula.CosmicFormulaBinom  -- Cosmic Formula Binomial Expansion
+import DkMath.CosmicFormula.CosmicTheorems  -- Cosmic Formula Theorems
 
 #print "file: DkMath.CosmicFormula.Basic"
 

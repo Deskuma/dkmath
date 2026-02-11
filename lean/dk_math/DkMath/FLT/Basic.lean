@@ -8,5 +8,6 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Algebra.DiffPow
 import DkMath.NumberTheory.GdcDivD
+import DkMath.NumberTheory.GcdNext
 
 set_option linter.style.longLine false

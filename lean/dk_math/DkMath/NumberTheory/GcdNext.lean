@@ -1,0 +1,290 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import DkMath.NumberTheory.ZsigmondyCyclotomic
+
+set_option linter.style.emptyLine false
+
+namespace DkMath.NumberTheory.GcdNext
+
+open scoped BigOperators
+open Finset
+open DkMath.ABC
+open DkMath.Algebra.DiffPow
+open DkMath.NumberTheory.GcdDiffPow
+
+/-!
+## GcdNext-step lemma skeletons
+
+目的：
+1) 宇宙式の Body = 差の冪 の “特化形” を ready-made で使えるようにする
+2) 「完全 d 乗」仮定を `padicValNat` / `factorization` 的な条件へ落とす
+3) Zsigmondy（原始素因子）が使える環境なら接続点を用意する
+-/
+
+/-! ### 0. Notation helpers -/
+
+def Sd (a b : ℤ) (d : ℕ) : ℤ := diffPowSum a b d
+
+def Body (x u : ℤ) (d : ℕ) : ℤ := (x + u)^d - u^d
+
+/-! ### 1. Specialization: gcd(x, Sd(x+u,u,d)) ∣ d -/
+
+/-- `a := x+u`, `b := u` の特化：gcd(x, Sd(x+u,u,d)) ∣ d -/
+theorem gcd_specialized_divides_d (x u : ℤ) (d : ℕ) (hd : 1 ≤ d) (hab : Int.gcd (x + u) u = 1) :
+    Int.gcd x (Sd (x+u) u d) ∣ d := by
+  -- `a-b = x` なので `gcd_divides_d` のラッパ
+  -- `gcd_divides_d` : Int.gcd (a-b) (Sd a b d) ∣ d を使う
+  have key : Int.gcd ((x+u) - u) (diffPowSum (x+u) u d) ∣ d :=
+    DkMath.NumberTheory.GcdDiffPow.gcd_divides_d hd hab
+  have eq : (x+u) - u = x := by ring
+  rw [eq] at key
+  exact key
+
+/-! ### 2. Perfect power => valuation constraints -/
+
+/-- 完全 d 乗なら、任意の素数 p で指数が d の倍数（Nat側） -/
+lemma dvd_padicVal_of_eq_pow {t n d : ℕ} (_ht : 0 < t) :
+    t = n^d → ∀ p : ℕ, Nat.Prime p → d ∣ padicValNat p t := by
+  intro heq p hp
+  subst heq
+  -- padicValNat.pow は Fact (Nat.Prime p) のインスタンスが必要
+  haveI : Fact p.Prime := ⟨hp⟩
+  -- padicValNat.pow : padicValNat p (a ^ n) = n * padicValNat p a (a ≠ 0 条件付き)
+  by_cases hn : n = 0
+  · -- n = 0 の場合
+    subst hn
+    by_cases hd : d = 0
+    · -- d = 0 の場合、 0^0 = 1 なので padicValNat p 1 = 0
+      subst hd
+      simp
+    · -- d > 0 の場合、 0^d = 0 なので矛盾 (前提 0 < t)
+      exfalso
+      simp [zero_pow hd] at _ht
+  · -- n ≠ 0 の場合
+    -- padicValNat.pow (n : ℕ) (ha : a ≠ 0) : padicValNat p (a ^ n) = n * padicValNat p a
+    -- ここで a = n, 冪の指数 = d なので
+    have key : padicValNat p (n ^ d) = d * padicValNat p n := padicValNat.pow d hn
+    rw [key]
+    -- d * padicValNat p n で d ∣ ...
+    exact dvd_mul_right d _
+
+/-- `t = A * B` で gcd(A,B) が小さいとき、v_p(t) を A と B に分配する雛形 -/
+lemma padicVal_mul_eq_add_of_coprime {A B : ℕ} (hcop : Nat.Coprime A B) {p : ℕ} (hp : Nat.Prime p) :
+    padicValNat p (A * B) = padicValNat p A + padicValNat p B := by
+  -- Fact インスタンスを用意
+  haveI : Fact p.Prime := ⟨hp⟩
+  -- padicValNat.mul : a ≠ 0 → b ≠ 0 → padicValNat p (a * b) = padicValNat p a + padicValNat p b
+  by_cases hA : A = 0
+  · subst hA
+    -- 0.Coprime B → B = 1
+    have : B = 1 := by
+      have := Nat.Coprime.symm hcop
+      simp only [Nat.Coprime, Nat.gcd_zero_right] at this
+      exact this
+    subst this
+    simp
+  · by_cases hB : B = 0
+    · subst hB
+      -- A.Coprime 0 → A = 1
+      have : A = 1 := by
+        simp only [Nat.Coprime, Nat.gcd_zero_right] at hcop
+        exact hcop
+      subst this
+      simp
+    · exact padicValNat.mul hA hB
+
+/-! ### 3. Bridge: from gcd ∣ d to "no new prime can divide both" -/
+
+/-- gcd が d を割るなら、p ∤ d なら同時割りは起きない（NatAbs版の雛形） -/
+lemma prime_not_dvd_d_of_gcd_dvd {a b : ℤ} {d : ℕ}
+    (hd : 1 ≤ d) (hab : Int.gcd a b = 1)
+    (p : ℕ) (_hp : Nat.Prime p)
+    (hpnd : ¬ p ∣ d) :
+    ¬ (p ∣ (a - b).natAbs ∧ p ∣ (Sd a b d).natAbs) := by
+  -- 対偶：p が両方割る ⇒ p ∣ gcd ⇒ p ∣ d、なので矛盾
+  intro ⟨hdiv_ab, hdiv_sd⟩
+  -- gcd_divides_d を使う
+  have gcd_dvd_d : Int.gcd (a - b) (diffPowSum a b d) ∣ d :=
+    DkMath.NumberTheory.GcdDiffPow.gcd_divides_d hd hab
+  -- p ∣ (a-b).natAbs かつ p ∣ (Sd a b d).natAbs なら
+  -- p ∣ Int.gcd (a-b) (diffPowSum a b d)
+  have p_dvd_gcd : (p : ℤ) ∣ Int.gcd (a - b) (diffPowSum a b d) := by
+    -- Int.gcd の natAbs での表現を使う
+    have eq := Int.gcd_eq_natAbs (a := a - b) (b := diffPowSum a b d)
+    rw [eq]
+    -- p ∣ natAbs.gcd を示す
+    have h : p ∣ (a - b).natAbs.gcd (diffPowSum a b d).natAbs :=
+      Nat.dvd_gcd hdiv_ab hdiv_sd
+    exact Int.ofNat_dvd.mpr h
+  -- したがって p ∣ d
+  obtain ⟨k, hk⟩ := gcd_dvd_d
+  have p_dvd_d_int : (p : ℤ) ∣ (d : ℤ) := by
+    calc (p : ℤ)
+      _ ∣ Int.gcd (a - b) (diffPowSum a b d) := p_dvd_gcd
+      _ ∣ (d : ℤ) := by
+        use k
+        exact_mod_cast hk
+  have p_dvd_d_nat : p ∣ d := by
+    exact Int.ofNat_dvd.mp p_dvd_d_int
+  -- 矛盾
+  exact hpnd p_dvd_d_nat
+
+/-! ### 4. Zsigmondy hook (optional) -/
+
+/-- 素数冪の場合、a > b なら 0 < a^p - b^p -/
+theorem pow_sub_pos {a b : ℕ} {p : ℕ}
+  (hp : Nat.Prime p) (ha : a > b) : 0 < a ^ p - b ^ p := by
+  -- p が素数なら p ≠ 0
+  have hp_ne_zero : p ≠ 0 := Nat.Prime.ne_zero hp
+  -- a > b より a^p > b^p
+  have han : a ^ p > b ^ p := Nat.pow_lt_pow_left ha hp_ne_zero
+  -- したがって 0 < a^p - b^p
+  exact Nat.zero_lt_sub_of_lt han
+
+/-! ### 5. Main target skeleton: (x+u)^d - u^d is not a perfect d-th power (strategy stub) -/
+
+/-- 目標の雛形：Body(x,u,d) は完全 d 乗にならない（d > 2）
+
+**証明構造（Zsigmondy フック使用）:**
+最後の `sorry` は `exists_primitive_prime_factor_hook` の実装が完了すれば消える。
+-/
+theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
+    (hd : 2 < d) (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime (x + u) u) :
+    ¬ ∃ t : ℕ, 0 < t ∧ (x+u)^d - u^d = t^d := by
+  intro ⟨t, ht, heq⟩
+
+  -- 準備：a := x+u, b := u とおく
+  set a := x + u with ha_def
+  set b := u with hb_def
+
+  -- (1) 基本分解：a^d - b^d = x * Sd(a,b,d)
+  have body_eq : (a : ℤ)^d - (b : ℤ)^d = (x : ℤ) * Sd a b d := by
+    have key := DkMath.Algebra.DiffPow.pow_sub_pow_factor (a : ℤ) (b : ℤ) d
+    have x_eq : (x : ℤ) = (a : ℤ) - (b : ℤ) := by omega
+    rw [x_eq]
+    exact key
+
+  -- (2) Zsigmondy フックを使用：原始素因子 q の存在
+  -- a = x + u > u = b （x > 0 より）、且つ coprime
+  have hab_lt : b < a := by
+    simp only [ha_def, hb_def]
+    omega
+  have hb_pos : 0 < b := hu
+  have hab : Nat.Coprime a b := hcop
+
+  obtain ⟨q, hq_prime, hq_div_pow, hq_ndiv_diff, hvad_eq_one⟩ :=
+    exists_primitive_prime_factor_hook hab_lt hb_pos hab hd
+
+  -- q ∣ a^d - b^d かつ q ∤ a - b = x
+  -- body_eq より a^d - b^d = x * Sd なので、q ∣ x * Sd
+  -- q ∤ x より q ∣ Sd
+
+  have hq_div_body : (q : ℤ) ∣ (a : ℤ)^d - (b : ℤ)^d := by
+    -- a^d ≥ b^d を示す
+    have hab_le : b ≤ a := by
+      simp only [ha_def, hb_def]; omega
+    have hab_pow : b^d ≤ a^d := Nat.pow_le_pow_left hab_le d
+    have : ((a^d - b^d : ℕ) : ℤ) = (a : ℤ)^d - (b : ℤ)^d := by
+      simp only [Nat.cast_sub hab_pow, Nat.cast_pow]
+    rw [← this]
+    exact Int.ofNat_dvd.mpr hq_div_pow
+
+  rw [body_eq] at hq_div_body
+
+  -- q ∣ x * Sd かつ q ∤ x なら q ∣ Sd
+  have hq_ndiv_x : ¬ (q : ℤ) ∣ (x : ℤ) := by
+    intro hdiv
+    apply hq_ndiv_diff
+    -- a - b = x を使う
+    have x_eq_ab : x = a - b := by omega
+    rw [← x_eq_ab]
+    exact Int.ofNat_dvd.mp hdiv
+
+  have hq_div_Sd : (q : ℤ) ∣ Sd a b d := by
+    -- 最初に hq_div_body を body_eq で書き換えて hq_div_prod を得る
+    have hq_div_prod : (q : ℤ) ∣ (x : ℤ) * Sd a b d :=
+      body_eq ▸ hq_div_body
+    -- q は素数で q ∣ x * Sd かつ q ∤ x なので q ∣ Sd
+    have hq_prime_int : Prime (q : ℤ) := Nat.prime_iff_prime_int.mp hq_prime
+    have : (q : ℤ) ∣ (x : ℤ) ∨ (q : ℤ) ∣ Sd a b d := hq_prime_int.dvd_mul.mp hq_div_prod
+    cases this with
+    | inl h => exfalso; exact hq_ndiv_x h
+    | inr h => exact h
+
+  -- (3) 矛盾を導く：p-adic valuation を使った完全冪判定
+  -- heq : (x+u)^d - u^d = t^d より a^d - b^d = t^d (ℕ での等式)
+  -- したがって padicValNat q (a^d - b^d) = padicValNat q (t^d)
+
+  -- q ∣ a^d - b^d を ℕ の可除性に変換
+  have hq_div_pow_nat : q ∣ a^d - b^d := by
+    have hab_pow_le : b^d ≤ a^d := by
+      have : b ≤ a := by omega
+      exact Nat.pow_le_pow_left this d
+    -- body_eq : (a : ℤ)^d - (b : ℤ)^d = (x : ℤ) * Sd a b d を使う
+    have hq_div_int : (q : ℤ) ∣ (a : ℤ)^d - (b : ℤ)^d := by
+      -- キャストを正規化
+      convert hq_div_body using 2
+      -- body_eq を適用
+      -- exact body_eq.symm
+    -- ℤ から ℕ に変換
+    have heq_cast : ((a^d - b^d : ℕ) : ℤ) = (a : ℤ)^d - (b : ℤ)^d := by
+      simp only [Nat.cast_sub hab_pow_le, Nat.cast_pow]
+    rw [← heq_cast] at hq_div_int
+    exact Int.ofNat_dvd.mp hq_div_int
+
+  -- a^d - b^d = t^d を使う
+  have heq_nat : a^d - b^d = t^d := by
+    have hab_pow_le : b^d ≤ a^d := by
+      have : b ≤ a := by omega
+      exact Nat.pow_le_pow_left this d
+    calc a^d - b^d
+      _ = (x + u)^d - u^d := by simp only [ha_def, hb_def]
+      _ = t^d := heq
+
+  -- したがって q ∣ t^d
+  have hq_div_td : q ∣ t^d := by
+    rw [← heq_nat]
+    exact hq_div_pow_nat
+
+  -- q は素数で q ∣ t^d なので q ∣ t
+  have hq_div_t : q ∣ t := by
+    -- q が素数で q ∣ t^d なら q ∣ t
+    -- Nat.Prime.dvd_of_dvd_pow を使う
+    exact hq_prime.dvd_of_dvd_pow hq_div_td
+
+  -- したがって padicValNat q t ≥ 1
+  have hvt_ge : 1 ≤ padicValNat q t := by
+    have ht_ne : t ≠ 0 := Nat.ne_of_gt ht
+    exact DkMath.ABC.padicValNat_one_le_of_prime_dvd hq_prime ht_ne hq_div_t
+
+  -- 新補題を使う：padicValNat q (t^d) = d * padicValNat q t
+  have ht_ne : t ≠ 0 := Nat.ne_of_gt ht
+  have hvtd_eq : padicValNat q (t^d) = d * padicValNat q t :=
+    DkMath.ABC.padicValNat_pow hq_prime d ht_ne
+
+  -- したがって padicValNat q (t^d) ≥ d ≥ 3
+  have hvtd_ge : d ≤ padicValNat q (t^d) := by
+    rw [hvtd_eq]
+    calc d
+      _ = d * 1 := (Nat.mul_one d).symm
+      _ ≤ d * padicValNat q t := Nat.mul_le_mul_left d hvt_ge
+
+  -- 一方、padicValNat q (a^d - b^d) = padicValNat q (t^d)
+  have hvad_eq : padicValNat q (a^d - b^d) = padicValNat q (t^d) := by
+    rw [heq_nat]
+
+  -- フックから受け取った hvad_eq_one : padicValNat q (a^d - b^d) = 1 を使う
+  -- （この性質は Lifting the Exponent Lemma から導かれる）
+
+  -- 矛盾！
+  -- padicValNat q (t^d) = padicValNat q (a^d - b^d) = 1 (フックより)
+  -- しかし padicValNat q (t^d) ≥ d ≥ 3
+  -- したがって 1 ≥ 3 で矛盾
+  rw [hvad_eq] at hvad_eq_one
+  omega
+
+end DkMath.NumberTheory.GcdNext

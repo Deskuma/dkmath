@@ -254,17 +254,17 @@ end CommRing
 section CommSemiring
 
 /-- d 次元の「無次元実体項」G (CommSemiring) の定義（係数は Nat.choose を射影したもの） -/
-def GN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R :=
+@[simp] def GN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R :=
     ∑ k ∈ Finset.range d, (Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k)
 
 /-- 無次元版: Big の定義 -/
-def BigN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R := (x + u) ^ d
+@[simp] def BigN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R := (x + u) ^ d
 
 /-- 無次元版: Gap の定義 -/
-def GapN {R : Type _} [CommSemiring R] (d : ℕ) (u : R) : R := u ^ d
+@[simp] def GapN {R : Type _} [CommSemiring R] (d : ℕ) (u : R) : R := u ^ d
 
 /-- 無次元版: Body の定義 -/
-def BodyN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R := x * GN d x u
+@[simp] def BodyN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R := x * GN d x u
 
 /-- 無次元宇宙式に対する恒等式（CommSemiring）：
 `(x + u) ^ d = x * G d x u + u ^ d` が成り立つことを示す定理。 -/
