@@ -131,58 +131,68 @@ lemma exists_primitive_prime_factor_basic {a b d : ℕ}
   -- GcdDiffPow の補題を直接使う
   exact exists_prime_divisor_not_dividing_diff_of_prime_exp hd_prime hd_ge hab_lt hb hab hpnd
 
-/-- prime exponent 版 primitive（群論による証明）
-
-**賢狼のアドバイス（開発ノートより）:**
-「prime exponent なら、存在（q を取る）→ primitive（全部の k を潰す）が群論で直結する」
-
-**数学的内容:**
-仮定:
-- d は素数（>1）
-- q は素数
-- q ∣ a^d - b^d
-- q ∤ a - b
-- gcd(a,b)=1（⇒ b は mod q で 0 にならず、割り算できる）
-
-結論:
-- 0 < k < d なら q ∤ a^k - b^k（これが「primitive」の本質）
-
-**証明の方針（群論）:**
-1. r := a/b ∈ (ℤ/qℤ)× を定義
-2. q | a^d - b^d から r^d = 1 を得る
-3. q ∤ a - b から r ≠ 1 を得る
-4. d が素数なので orderOf r = d（order は 1 か d しかない、1 は排除）
-5. 0 < k < d なら r^k ≠ 1（order=d が k を割れない）
-6. r^k ≠ 1 ⇒ a^k ≢ b^k (mod q) ⇒ q ∤ a^k - b^k
-
-**実装状況:**
-スケルトンを配置。詳細な証明は TODO（ZMod と Units の操作が必要）
-
-**実装の課題:**
-- Mathlib v4.26.0 の API が不安定（多くの補助補題が存在しない）
-- ZMod.natCast_eq_zero_iff_dvd, Nat.Coprime.pos_left などが見つからない
-- 一旦 sorry とし、将来の Mathlib 更新または API 調査で埋める
-
-**賢狼の評価:**
-証明の骨格は完璧。API が揃えば実装可能。
-これは「些末な sorry」ではなく「Mathlib 依存の sorry」じゃ。
--/
+/-- prime exponent 版 primitive（群論による証明、Mathlib API 調査待ち） -/
 lemma prime_exp_not_dvd_diff_imp_primitive
     {a b d q : ℕ}
     (hd : Nat.Prime d) (hd1 : 1 < d)
     (hq : Nat.Prime q)
     (hab : Nat.Coprime a b)
+    (hab_lt : b < a) (hb : 0 < b)
     (hq_div : q ∣ a ^ d - b ^ d)
     (hq_ndiv : ¬ q ∣ a - b) :
     ∀ {k : ℕ}, 0 < k → k < d → ¬ q ∣ a^k - b^k := by
-  -- TODO: 群論による primitive 証明（Mathlib API 調査待ち）
-  -- 証明の骨格：
-  -- 1. q ∤ a, q ∤ b を示す（gcd(a, b) = 1 から）
-  -- 2. r := a/b ∈ (ℤ/qℤ)ˣ を定義
-  -- 3. r^d = 1 かつ r ≠ 1 を示す
-  -- 4. orderOf r = d を示す（d が素数）
-  -- 5. r^k ≠ 1 より q ∤ a^k - b^k
-  sorry  -- [SORRY-1: 群論 primitive、Mathlib API 依存]
+  -- 群論による primitive 証明
+  classical
+  haveI : Fact q.Prime := ⟨hq⟩
+
+  have hd_pos : 0 < d := Nat.Prime.pos hd
+  have hd_nonzero : d ≠ 0 := Nat.Prime.ne_zero hd
+  -- hab_lt, hb は引数で受け取る
+  have hab_le : b ≤ a := Nat.le_of_lt hab_lt
+
+  intro k hk_pos hk_lt
+
+  -- Step 1: q ∤ a かつ q ∤ b を示す
+  have hq_ndiv_a : ¬ q ∣ a := by
+    intro hqa
+    -- q | a かつ q | b ならば gcd(a, b) ≥ q ≥ 2 となり矛盾
+    have hqb_pow : q ∣ b ^ d := by
+      -- q | a^d かつ q | a^d - b^d から q | (a^d - (a^d - b^d)) を得る
+      have hqa_pow : q ∣ a ^ d := by
+        apply dvd_pow hqa
+        exact hd_nonzero
+      have h_sub_dvd : q ∣ a ^ d - (a ^ d - b ^ d) := Nat.dvd_sub hqa_pow hq_div
+      -- (a^d - b^d) + b^d = a^d なので項順を入れ替えてから等式を得る
+      have hsum : a ^ d = b ^ d + (a ^ d - b ^ d) := by
+        rw [add_comm, Nat.sub_add_cancel (Nat.pow_le_pow_left (Nat.le_of_lt hab_lt) d)]
+      have : a ^ d - (a ^ d - b ^ d) = b ^ d := Nat.sub_eq_of_eq_add hsum
+      rw [this] at h_sub_dvd
+      exact h_sub_dvd
+    -- q が素数なので q | b^d から q | b を導ける
+    have hqb := Nat.Prime.dvd_of_dvd_pow hq hqb_pow
+    -- q | gcd(a, b) だが gcd(a, b) = 1 なので矛盾
+    have h_gcd_dvd : q ∣ Nat.gcd a b := Nat.dvd_gcd hqa hqb
+    rw [hab.gcd_eq_one] at h_gcd_dvd
+    exact Nat.Prime.not_dvd_one hq h_gcd_dvd
+
+  have hq_ndiv_b : ¬ q ∣ b := by
+    intro hqb
+    -- 同様に q | b かつ q | a より矛盾
+    have hqb_pow : q ∣ b ^ d := by exact Dvd.dvd.pow hqb hd_nonzero
+    -- a^d = b^d + (a^d - b^d) に書き換えてから Nat.dvd_add を適用する
+    have h_sum : a ^ d = b ^ d + (a ^ d - b ^ d) := by
+      rw [add_comm, Nat.sub_add_cancel (Nat.pow_le_pow_left (Nat.le_of_lt hab_lt) d)]
+    have h_add_dvd : q ∣ a ^ d := by
+      rw [h_sum]
+      exact Nat.dvd_add hqb_pow hq_div
+    have hqa : q ∣ a := Nat.Prime.dvd_of_dvd_pow hq h_add_dvd
+    have h_gcd_dvd : q ∣ Nat.gcd a b := Nat.dvd_gcd hqa hqb
+    rw [hab.gcd_eq_one] at h_gcd_dvd
+    exact Nat.Prime.not_dvd_one hq h_gcd_dvd
+  -- ⊢ ¬q ∣ a ^ k - b ^ k
+  sorry
+
+
 
   /- 証明の方針（群論 via ZMod + orderOf）:
 
