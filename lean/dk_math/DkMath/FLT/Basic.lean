@@ -99,9 +99,24 @@ lemma x3_div_u2 (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h_gcd : u.gcd (
   -- 故に u = a^3 とおけば u^2 = a^6 が x^3 を割り切るのは必定。
   sorry
 
+/-- 補題: $u$ と $GN(3, u, y)$ の最大公約数は $\gcd(u, 3)$ に等しい -/
+lemma gcd_u_GN3 {u y : ℕ} (h_gcd_uy : u.gcd y = 1) : u.gcd (GN 3 u y) = u.gcd 3 := by
+  rw [GN_quadratic]
+  -- u.gcd (u^2 + 3uy + 3y^2) = u.gcd (3y^2)
+  have h1 : u.gcd (u ^ 2 + 3 * u * y + 3 * y ^ 2) = u.gcd (3 * y ^ 2) := by
+    have : u ^ 2 + 3 * u * y + 3 * y ^ 2 = 3 * y ^ 2 + (u + 3 * y) * u := by ring
+    rw [this, Nat.gcd_add_mul_right_right]
+  rw [h1]
+  -- u.gcd (3 * y^2) = u.gcd 3 (∵ gcd(u, y) = 1)
+  have h_coprime : u.Coprime (y ^ 2) := Nat.Coprime.pow_right 2 h_gcd_uy
+  have : u.gcd (3 * y ^ 2) = u.gcd 3 := by
+    rw [Nat.gcd_comm, h_coprime.symm.gcd_mul_right_cancel, Nat.gcd_comm]
+  exact this
+
 /-- メイン定理: フェルマーの最終定理 $n=3$ の場合 -/
 theorem FLT_case_3 (x y z : ℕ) (h_coprime : Nat.gcd x y = 1) (h_body : z ^ 3 = x ^ 3 + y ^ 3) : False := by
   -- 1. 変数変換 u = z - y
+  let u := z - y
   -- 2. GN_quadratic を用いて z^3 - y^3 = u * GN 3 u y を展開
   -- 3. x3_div_u2 を用いて矛盾を導く
   sorry
