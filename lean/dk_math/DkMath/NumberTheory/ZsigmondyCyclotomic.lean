@@ -631,7 +631,7 @@ lemma padicValNat_binomial_coeff_three (k q : ℕ) (hk : k ∈ ({1, 2, 3} : Fins
     rw [this]
     omega
 
-/-- G 3 の各項の padicValNat 評価（初等的アプローチ）
+/-- G 3 の各項の padicValNat 評価（初等的アプローチ）— ✅ 完成！NEW!
 
 **数学的内容:**
 G 3 x u = x^2 + 3xu + 3u^2
@@ -645,6 +645,12 @@ G 3 x u = x^2 + 3xu + 3u^2
 q ≠ 3 の場合、すべての係数の padicValNat q = 0
 q = 3 の場合でも、各係数の padicValNat 3 ≤ 1
 
+**証明:**
+padicValNat q 1 = 0 は明らか（q ∤ 1）
+padicValNat q 3 ≤ 1 は場合分け：
+- q = 3: padicValNat 3 3 = 1（padicValNat_self）
+- q ≠ 3: q が素数で q | 3 ⇒ q = 3 より矛盾、よって padicValNat q 3 = 0
+
 **次のステップ:**
 これらの項の和 G 3 x u の padicValNat を評価するには、
 x と u の具体的な値（a - b と b）での評価が必要。
@@ -652,6 +658,8 @@ x と u の具体的な値（a - b と b）での評価が必要。
 **課題:**
 和の padicValNat は個々の項の padicValNat から直接は導けない。
 より深い議論が必要。
+
+**実装状況:** ✅ no sorry で完成！（NEW!）
 -/
 lemma padicValNat_G_three_coeffs_le_one (q : ℕ) (hq : Nat.Prime q) :
     padicValNat q 1 = 0 ∧ padicValNat q 3 ≤ 1 := by
@@ -661,11 +669,32 @@ lemma padicValNat_G_three_coeffs_le_one (q : ℕ) (hq : Nat.Prime q) :
   · by_cases hq3 : q = 3
     · -- q = 3 の場合
       rw [hq3]
-      sorry  -- TODO: padicValNat 3 3 = 1
+      have : padicValNat 3 3 = 1 := by
+        have h3_prime : Nat.Prime 3 := Nat.prime_three
+        have : Fact (Nat.Prime 3) := ⟨h3_prime⟩
+        exact padicValNat_self
+      rw [this]
     · -- q ≠ 3 の場合
       have hdvd : ¬ q ∣ 3 := by
-        -- TODO: q | 3, q.Prime,q ≠ 3 ⇒ contradiction
-        sorry
+        intro h_dvd
+        have hq_ne0 : q ≠ 0 := Nat.Prime.ne_zero hq
+        have q_le3 : q ≤ 3 := Nat.le_of_dvd (Nat.pos_iff_ne_zero.mpr Nat.prime_three.ne_zero) h_dvd
+        cases Nat.eq_or_lt_of_le q_le3 with
+        | inl hq_eq3 =>
+          rw [hq_eq3] at hq3
+          exact hq3 rfl
+        | inr hq_lt3 =>
+          have q_eq_2 : q = 2 := by
+            have : q = 2 ∨ q = 1 := by omega
+            cases this with
+            | inl h => exact h
+            | inr h1 =>
+              exfalso
+              have hq1 := Nat.Prime.ne_one hq
+              exact hq1 h1
+          rw [q_eq_2] at h_dvd
+          have : ¬ 2 ∣ 3 := by norm_num
+          exact this h_dvd
       have : padicValNat q 3 = 0 := padicValNat.eq_zero_of_not_dvd hdvd
       rw [this]
       omega
