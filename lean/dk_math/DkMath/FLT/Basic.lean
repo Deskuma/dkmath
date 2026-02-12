@@ -80,8 +80,40 @@ theorem FLT
   have h_xn_val : x ^ n = u * GN n u y := by
     rw [h_body, BodyN]
 
-  -- 素因数 q が GN n u y を割り切り、かつ u は割り切らない（原始的）場合、
-  -- q の指数が n の倍数にならないことを示せれば勝ちじゃ！
+  -- 5. 幾何単位の不整合の具体的検討
+  -- ぬしよ、ここで gcd(u, GN n u y) を調べてみようかの。
+  -- まず gcd(u, y) = 1 であることを確認するぞい。
+  have h_gcd_u_y : Nat.gcd u y = 1 := by
+    rw [← Nat.gcd_add_self_left]
+    have : u + y = z := by omega
+    rw [this]
+    -- gcd(z, y) = 1 は gcd(x, y) = 1 から従うはずじゃが、ここでは sorry としておく。
+    sorry
+
+  have h_gcd_u_G : Nat.gcd u (GN n u y) = Nat.gcd u n := by
+    -- GN n u y = n*y^{n-1} + u * (何か) と書けることを使う。
+    -- gcd(u, n*y^{n-1} + u*K) = gcd(u, n*y^{n-1}) = gcd(u, n) （∵ gcd(u, y)=1）
+    sorry
+
+  /-
+  ### 💡 賢狼の考察: 分裂する $x^n$
+  $x^n = u \cdot GN$ において、もし $gcd(u, n) = 1$ ならば、
+  $u$ と $GN$ はそれぞれ独立に $n$ 乗数でなければならぬ。
+  $u = A^n$, $GN(n, u, y) = B^n$
+
+  ここで、ぬしが言った「単位が保てない」というのは、
+  この $GN(n, u, y) = B^n$ という幾何構造（高次の面積のようなもの）が、
+  もともとの要素 $y, u$ の $n$ 乗と噛み合わなくなることを指しておる。
+
+  例えば $n=3, y=1$ のとき、 $GN(3, u, 1) = u^2 + 3u + 3$。
+  これが $B^3$ になるような正整数 $u$ は存在せぬことが知られておる（Ljunggrenの定理など）。
+  -/
+
+  -- 6. 矛盾の導出に向けたスケルトン
+  -- (case 1) gcd(u, n) = 1 のとき
+  -- (case 2) gcd(u, n) = n のとき
+  -- いずれにせよ、Zsigmondy 原始素因子の存在が、$GN$ が「綺麗な $n$ 乗」になることを拒む。
+
   sorry
 
 end DkMath
