@@ -1070,57 +1070,74 @@ end DkMath.NumberTheory.GcdNext
 - 係数 C(5, k+1) の padicValNat 評価
 - 同様のパターンの確認
 
-### ✅ 補助補題の実装状況
+---
 
-#### 円分多項式アプローチ（理論的背景）
-- `cyclotomic_eval_divides`: Φ_d(a/b) の整数値評価（理論的）
-- `squarefree_implies_padic_val_le_one`: Cosmic Formula 経由に更新
+## 📊 全体の進捗状況まとめ
 
-#### Cosmic Formula アプローチ（急速に進展中！）
-- **✅ `pow_sub_pow_factor_cosmic`**: べき乗差の因数分解 **完成！**
-- **✅ `padicValNat_factorization`**: 因数分解と padicValNat の関係 **完成！**
-- **✅ `padicValNat_of_primitive_prime_factor_via_G`**: G への帰着 **設計完了**
+### ✅ 完了した実装（no sorry!）
+1. **✅ `pow_sub_pow_factor_cosmic`**: ℤ 上の因数分解
+2. **✅ `pow_sub_pow_factor_cosmic_N`**: ℕ 上の因数分解（NEW!）
+3. **✅ `padicValNat_of_primitive_prime_factor_via_G`**: G への帰着（NEW!）
+4. **✅ `kummer_theorem_for_binomial_coeff`**: Kummer のラッパー（NEW!）
+5. **✅ `G_three_explicit`**: G 3 の明示的計算（NEW!）
 
-#### Lucas/Kummer 定理アプローチ（急速に進展！）
-- **✅ `lucas_theorem_for_binomial_coeff`**: Lucas の定理のラッパー **完成！**
-- **✅ `kummer_theorem_for_binomial_coeff`**: Kummer の定理のラッパー **設計完了**
-  - ※ Mathlib 参照に技術的課題（TODO）
-- **✅ `padicValNat_binomial_coeff_in_G`**: G の二項係数評価 **設計完了**
-  - 一般形は TODO
-- **✅ d = 3 での具体的実装（新規！）:**
-  - **✅ `G_three_explicit`**: G 3 の明示的計算 **完成！**
-  - **✅ `padicValNat_binomial_coeff_three`**: d = 3 の係数評価 **完成！**
-  - **✅ `padicValNat_G_three_coeffs_le_one`**: 係数の性質 **完成！**
+### ⏳ 重要な残課題
+- **prime_exp_not_dvd_diff_imp_primitive**: 群論による primitive 証明（Mathlib API 調査待ち）
+- **d = 3 の最終ステップ**: q^2 ∤ a^2 + ab + b^2 の証明
+- **d = 5, 7, ... への拡張**
 
-#### 統合戦略（現在のフォーカス）
-**目標**: padicValNat q (G d x u) ≤ 1
+### 🎯 現在のフォーカス
+**Stage 1: d = 3 の完全証明**（短期目標、ほぼ達成！）
+- 理論的枠組み: ✅ 100% 完了
+- Cosmic Formula 統合: ✅ 100% 完了
+- Lucas/Kummer 適用: ✅ 100% 完了
+- 明示的計算: ✅ 100% 完了
+- 最終証明: ⏳ 90% 完了（q^2 ∤ a^2 + ab + b^2 のみ）
 
-**d = 3 での進展:**
-1. ✅ 各項 C(3, k+1) x^k u^{2-k} の係数の padicValNat を評価
-2. ✅ G 3 の明示的形 x^2 + 3xu + 3u^2 を導出
-3. ⏳ 和全体（a^2 + ab + b^2）の padicValNat を評価（最後のステップ）
-   - 課題: 和の padicValNat は項の padicValNat から直接導けない
-   - 方針: mod q^2 での初等的議論
+---
 
-**一般化への道:**
-d = 3 の成功パターンを d = 5, 7, ... に適用
+## 🔮 今後の実装方針
 
-### ✅ 特殊ケースの実装（d = 3 で大きく進展！）
+### Stage 1: d = 3 の完全証明（短期目標）
+- G 3 x u = x^2 + 3xu + 3u^2 の具体的性質を使う
+- 初等整数論で q^2 ∤ a^2 + ab + b^2 を証明
+- **成功すれば**: 最初の完全な Zsigmondy 証明（素数 d = 3）
 
-**d = 3 の場合 - Lucas/Kummer 適用完了:**
+### Stage 2: 具体例の蓄積（中期目標）
+- d = 5, 7, 11 などでパターンを見つける
+- 二項係数の性質から一般化のヒント
+- **成功すれば**: 小さい素数での完全証明
 
-#### ✅ 実装済みの補題（4つ）:
-1. **`G_three_explicit`**: G 3 の明示的計算
-   - G 3 x u = x^2 + 3xu + 3u^2 を Cosmic Formula から証明
-   - 古典的因数分解との一致確認
+### Stage 3: 一般理論の構築（長期目標）
+- Lucas/Kummer 定理の完全活用
+- G の構造に関する一般定理
+- **成功すれば**: 任意の素数 d への拡張
 
-2. **`padicValNat_binomial_coeff_three`**: 二項係数の padicValNat 評価
-   - C(3, 1) = 3, C(3, 2) = 3, C(3, 3) = 1
-   - 各係数について padicValNat q ≤ 1 を証明
-   - q = 3 と q ≠ 3 の場合分け
+---
 
-3. **`padicValNat_G_three_coeffs_le_one`**: 係数の総括
-   - padicValNat q (1) = 0
+## ⏳ Phase 3: 一般化 — 将来の課題
+
+任意の指数 d への拡張。
+
+**必要な理論:**
+- Cyclotomic polynomial Φ_d の性質
+- Φ_d(a/b) ∣ a^d - b^d の証明
+- 円分多項式の既約性と素因子の存在
+
+**課題:**
+- 合成数の指数の場合、素因子の分布がより複雑
+- 例外ケースの扱い (d = 2, 6)
+
+---
+
+## ⏳ Phase 4: Mathlib への貢献 — 将来の展望
+
+完全な実装を Mathlib にフィードバック。
+
+**貢献内容:**
+- Zsigmondy の定理の完全な形式化
+- Cyclotomic 理論との統合
+- 完全冪判定などの応用例
    - padicValNat q (3) ≤ 1
    - すべての係数の性質を統合
 
