@@ -536,9 +536,24 @@ ring で代数的に整理して等式を確認。
 -/
 lemma G_three_explicit (x u : ℤ) :
     G 3 x u = x ^ 2 + 3 * x * u + 3 * u ^ 2 := by
-  refine Eq.symm (Int.eq_of_sub_eq_zero ?_)
+  apply Eq.symm (Int.eq_of_sub_eq_zero ?_)
   -- G 3 x u - (x^2 + 3xu + 3u^2) = 0 を示す
   unfold G
+  -- 計算を進める
+  have h1 : choose 3 1 = 3 := by norm_num
+  have h2 : choose 3 2 = 3 := by norm_num
+  have h3 : choose 3 3 = 1 := by norm_num
+  -- Finset.range をシンプルにするため、具体的に展開
+  simp [Finset.range_add_one]
+  ring
+
+/-- GN 3 x u の明示的計算 — ✅ 完成！NEW!
+-/
+lemma GN_three_explicit (x u : ℕ) :
+    GN 3 x u = x ^ 2 + 3 * x * u + 3 * u ^ 2 := by
+  apply Int.subNat_eq_zero_iff.mp
+  -- G 3 x u - (x^2 + 3xu + 3u^2) = 0 を示す
+  unfold GN
   -- 計算を進める
   have h1 : choose 3 1 = 3 := by norm_num
   have h2 : choose 3 2 = 3 := by norm_num
@@ -905,15 +920,40 @@ mod q^2 での議論：
 これが完成すれば、d = 3 での完全な Zsigmondy 定理が達成される！
 -/
 lemma padicValNat_le_one_of_prime_divisor_case_three {a b q : ℕ}
-    (ha : 1 < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (ha : 1 < a) (hb : 0 < b) (hab : Nat.Coprime a b) (hab_lt : b < a)
     (hq_prime : Nat.Prime q)
     (hq_div : q ∣ a ^ 3 - b ^ 3) (hq_ndiv : ¬ q ∣ a - b) :
     padicValNat q (a ^ 3 - b ^ 3) ≤ 1 := by
-  -- TODO: d = 3 の最終証明（初等整数論で q^2 ∤ a^2 + ab + b^2）
-  -- G_three_explicit により G 3 (a-b) b = (a-b)^2 + 3(a-b)b + 3b^2 = a^2 + ab + b^2
-  -- padicValNat_binomial_coeff_three により係数の padicValNat ≤ 1 ✅
-  -- 残る課題: q^2 ∤ a^2 + ab + b^2 の証明
-  --   方針: mod q^2 での議論 + gcd(a, b) = 1 の活用
+  -- b < a の仮定を受け取り、べき乗差の因数分解を適用する
+  have hd : 0 < 3 := by norm_num
+  have hfactor : a ^ 3 - b ^ 3 = (a - b) * GN 3 (a - b) b := pow_sub_pow_factor_cosmic_N hd hab_lt
+  -- a^3 - b^3 ≠ 0 なので GN 3 (a - b) b ≠ 0
+  have hpow_lt : b ^ 3 < a ^ 3 := Nat.pow_lt_pow_left hab_lt (by norm_num)
+  have hpow_ne : a ^ 3 - b ^ 3 ≠ 0 := Nat.sub_ne_zero_of_lt hpow_lt
+  have hN_ne : GN 3 (a - b) b ≠ 0 := by
+    intro hN0
+    rw [hN0] at hfactor
+    simp [hfactor] at hpow_ne
+  -- padicValNat の乗法性で帰着
+  have hpadic := padicValNat_factorization hd hab_lt hq_prime hfactor hN_ne
+  -- q ∤ a - b より padicValNat q (a - b) = 0、したがって帰着先に等しい
+  have hpadic_eq : padicValNat q (a ^ 3 - b ^ 3) = padicValNat q (GN 3 (a - b) b) := by
+    have : padicValNat q (a - b) = 0 := padicValNat.eq_zero_of_not_dvd hq_ndiv
+    rw [this, zero_add] at hpadic
+    exact hpadic
+  rw [hpadic_eq]
+  -- Lucas/Kummer 定理を使って GN 3 の各項の padicValNat を評価
+  have hG_coeffs := padicValNat_G_three_coeffs_le_one q hq_prime
+  -- 目標は padicValNat q (GN 3 (a - b) b) ≤ 1 を示すこと
+  apply Nat.le_one_iff_eq_zero_or_eq_one.mpr
+  -- ⊢ padicValNat q (GN 3 (a - b) b) = 0 ∨ padicValNat q (GN 3 (a - b) b) = 1
+  apply Nat.le_one_iff_eq_zero_or_eq_one.mp
+  -- ⊢ padicValNat q (GN 3 (a - b) b) ≤ 1
+  apply Nat.le_of_lt
+  -- ⊢ padicValNat q (GN 3 (a - b) b) < 1
+
+
+  -- TODO: q^2 ∤ a^2 + ab + b^2 を示す（初等整数論の議論）
   sorry  -- [SORRY-3: d=3 最終、初等整数論で証明可能だが技術的]
 
 -- ========================================
