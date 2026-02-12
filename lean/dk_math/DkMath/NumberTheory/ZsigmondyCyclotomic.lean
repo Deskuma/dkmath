@@ -124,7 +124,7 @@ lemma prime_exp_not_dvd_diff_imp_primitive
     (hd : Nat.Prime d) (hd1 : 1 < d)
     (hq : Nat.Prime q)
     (hab : Nat.Coprime a b)
-    (hq_div : q ∣ a^d - b^d)
+    (hq_div : q ∣ a ^ d - b ^ d)
     (hq_ndiv : ¬ q ∣ a - b) :
     ∀ {k : ℕ}, 0 < k → k < d → ¬ q ∣ a^k - b^k := by
   classical
@@ -270,6 +270,19 @@ lemma pow_sub_pow_factor_cosmic {a b : ℕ} {d : ℕ} (_hd : 0 < d) (hab : b < a
   -- 両辺から ↑b ^ d を引く
   linarith [h]
 
+lemma pow_sub_pow_factor_cosmic_N {a b : ℕ} {d : ℕ} (hd : 0 < d) (hab : b < a) :
+    a ^ d - b ^ d = (a - b : ℕ) * GN d (a - b : ℕ) (b : ℕ) := by
+    refine Nat.sub_eq_of_eq_add ?_
+    -- ⊢ a ^ d = (a - b) * GN d (a - b) b + b ^ d
+    have hbig := cosmic_id_csr d (a - b) b
+    simp only [BigN, BodyN, GapN] at hbig
+    rw [← hbig]
+    ring_nf
+    refine (Nat.pow_left_inj ?_).mpr ?_
+    · exact Nat.ne_zero_of_lt hd
+    · refine Eq.symm (Nat.sub_add_cancel ?_)
+      exact Nat.le_of_lt hab
+
 /-- padicValNat と因数分解の関係（基本補題）
 
 **数学的内容:**
@@ -320,10 +333,31 @@ lemma padicValNat_of_primitive_prime_factor_via_G {a b d q : ℕ}
     (hq_ndiv : ¬ q ∣ a - b) :
     ∃ N : ℕ, N ≠ 0 ∧ a ^ d - b ^ d = (a - b) * N ∧
     padicValNat q (a ^ d - b ^ d) = padicValNat q N := by
-  -- TODO: pow_sub_pow_factor_cosmic を ℕ に翻訳して使う
-  -- N を G の評価として定義
-  -- padicValNat q (a - b) = 0 を使って等式を導く
-  sorry
+  -- N を GN d (a - b) b として選び、因数分解と padicValNat の等式を導く
+  let N := GN d (a - b) b
+  -- pow_sub_pow_factor_cosmic_N により因数分解が成り立つ
+  have hfactor : a ^ d - b ^ d = (a - b) * N := pow_sub_pow_factor_cosmic_N hd hab
+  -- a^d - b^d は 0 でない（b < a より）
+  have hd_ne : d ≠ 0 := Nat.pos_iff_ne_zero.mp hd
+  have hpow_ne : a ^ d - b ^ d ≠ 0 := by
+    have : b ^ d < a ^ d := Nat.pow_lt_pow_left hab hd_ne
+    exact Nat.sub_ne_zero_of_lt this
+  -- N が 0 であれば RHS = 0 となり矛盾するので N ≠ 0
+  have hN_ne : N ≠ 0 := by
+    intro hN0
+    -- まず hfactor で N を出現させてから hN0 で 0 に置換する
+    have : a ^ d - b ^ d = (a - b) * N := hfactor
+    rw [hN0] at this
+    -- これで a ^ d - b ^ d = (a - b) * 0 となる
+    simp only [mul_zero] at this
+    exact (hpow_ne this).elim
+  -- padicValNat の乗法性を適用して等式を得る
+  have hpadic := padicValNat_factorization hd hab hq_prime hfactor hN_ne
+  -- q ∤ a - b より padicValNat q (a - b) = 0
+  have hpadic_zero : padicValNat q (a - b) = 0 := padicValNat.eq_zero_of_not_dvd hq_ndiv
+  rw [hpadic_zero, zero_add] at hpadic
+  -- 結論：存在を提示
+  exact ⟨N, hN_ne, hfactor, hpadic⟩  -- or use N
 
 -- ========================================
 -- § 3c. Lucas/Kummer 定理による G の解析
@@ -387,13 +421,13 @@ lemma kummer_theorem_for_binomial_coeff (p n k : ℕ) [hp : Fact p.Prime] (hkn :
   -- TODO: Mathlib の Kummer定理を正しく参照
   -- 現状は定理が見つからないので、sorry にしておく
   -- 将来的には padicValNat.sub_one_mul_padicValNat_choose_eq_sub_sum_digits を使う
-  sorry
+  exact sub_one_mul_padicValNat_choose_eq_sub_sum_digits hkn
 
 -- ========================================
 -- § 3d. d = 3 での Lucas/Kummer 定理の適用（具体例）
 -- ========================================
 
-/-- G 3 の明示的計算
+/-- G 3 x u の明示的計算
 
 **数学的内容:**
 G d x u = Σ_{k=0}^{d-1} C(d, k+1) x^k u^{d-1-k}
@@ -420,7 +454,16 @@ a^3 - b^3 = (a - b)(a^2 + ab + b^2)
 lemma G_three_explicit (x u : ℤ) :
     G 3 x u = x ^ 2 + 3 * x * u + 3 * u ^ 2 := by
   -- TODO: unfold G and compute explicitly
-  sorry
+  refine Eq.symm (Int.eq_of_sub_eq_zero ?_)
+  -- G 3 x u - (x^2 + 3xu + 3u^2) = 0 を示す
+  unfold G
+  -- 計算を進める
+  have h1 : choose 3 1 = 3 := by norm_num
+  have h2 : choose 3 2 = 3 := by norm_num
+  have h3 : choose 3 3 = 1 := by norm_num
+  -- Finset.range をシンプルにするため、具体的に展開
+  simp [Finset.range_add_one]
+  ring
 
 /-- d = 3 の二項係数の padicValNat 評価
 
