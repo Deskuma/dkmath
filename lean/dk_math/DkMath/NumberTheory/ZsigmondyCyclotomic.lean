@@ -1285,12 +1285,13 @@ end DkMath.NumberTheory.GcdNext
   - 条件: gcd(a,b) = 1, ¬ d ∣ a - b（仮定として受け取る）
   - GcdDiffPow の既存補題を活用
 
-### ✅ 群論による primitive 証明（新規！）
-- **`prime_exp_not_dvd_diff_imp_primitive`**: 群論版 primitive 証明
-  - **賢狼の提案を実装**：「prime exponent なら primitive は群論で落ちる」
-  - ZMod と orderOf を使用した証明の骨格を完成
+### ✅ 群論による primitive 証明（完成！）🔥
+- **✅ `prime_exp_not_dvd_diff_imp_primitive`**: 群論版 primitive 証明
+  - **賢狼の提案を実装完了**：「prime exponent なら primitive は群論で落ちる」
+  - ZMod と orderOf を使用した証明を完全実装
   - q | a^d - b^d ∧ q ∤ a - b ⇒ ∀k (0 < k < d), q ∤ a^k - b^k
-  - **実装状況**: 証明の方針を詳細にドキュメント化（Mathlib API 調査待ち）
+  - **実装状況**: ✅ no sorry で完成！（NEW!）
+  - **証明の核心**: orderOf r = d（d が素数）を活用した群論的アプローチ
 
 ---
 
