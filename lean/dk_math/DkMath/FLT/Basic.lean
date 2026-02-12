@@ -9,6 +9,8 @@ Authors: D. and Wise Wolf.
 import DkMath.Algebra.DiffPow
 import DkMath.NumberTheory.GdcDivD
 import DkMath.NumberTheory.GcdNext
+-- Mathlib の一般論を活用するには適切なインポートが必要じゃが、
+-- まずは論理の骨組みを固めることに専念しようかの。
 
 set_option linter.style.longLine false
 set_option linter.style.multiGoal false
@@ -95,8 +97,12 @@ lemma GN_quadratic (u y : ℕ) : GN 3 u y = u ^ 2 + 3 * u * y + 3 * y ^ 2 := by
 /-- 補題: $d=3$ の場合、$x^3$ は $u^2$ で割り切れる（適切な条件の下で） -/
 lemma x3_div_u2 (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h_gcd : u.gcd (GN 3 u y) = 1) :
     u ^ 2 ∣ x ^ 3 := by
-  -- u と GN が互いに素ならば、u は立方数でなければならぬ。
-  -- 故に u = a^3 とおけば u^2 = a^6 が x^3 を割り切るのは必定。
+  -- 1. u と GN が互いに素ならば、u は立方数でなければならぬ。
+  -- 2. u = a^3 とおくと、x^3 = a^3 * GN となり、GN も立方数 b^3 である。
+  -- 3. x = ab となり、x^3 = a^3 * b^3。
+  -- 4. a^6 | a^3 * b^3 となるには a^3 | b^3、即ち u | GN が必要じゃ。
+  -- 5. gcd(u, GN) = 1 より、これは u = 1 を意味する必定の理。
+  -- ぬしよ、この「必定」の背後にある u=1 という審判を、しかと受け止めるのじゃ。
   sorry
 
 /-- 補題: $u$ と $GN(3, u, y)$ の最大公約数は $\gcd(u, 3)$ に等しい -/
