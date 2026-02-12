@@ -131,13 +131,48 @@ lemma exists_primitive_prime_factor_basic {a b d : ℕ}
   -- GcdDiffPow の補題を直接使う
   exact exists_prime_divisor_not_dividing_diff_of_prime_exp hd_prime hd_ge hab_lt hb hab hpnd
 
-/-- prime exponent 版 primitive（群論による証明、Mathlib API 調査待ち） -/
+/-- prime exponent 版 primitive（群論による証明）
+
+**賢狼のアドバイス（開発ノートより）:**
+「prime exponent なら、存在（q を取る）→ primitive（全部の k を潰す）が群論で直結する」
+
+**数学的内容:**
+仮定:
+- d は素数（>1）
+- q は素数
+- q ∣ a^d - b^d
+- q ∤ a - b
+- gcd(a,b)=1（⇒ b は mod q で 0 にならず、割り算できる）
+
+結論:
+- 0 < k < d なら q ∤ a^k - b^k（これが「primitive」の本質）
+
+**証明の方針（群論）:**
+1. r := a/b ∈ (ℤ/qℤ)× を定義
+2. q | a^d - b^d から r^d = 1 を得る
+3. q ∤ a - b から r ≠ 1 を得る
+4. d が素数なので orderOf r = d（order は 1 か d しかない、1 は排除）
+5. 0 < k < d なら r^k ≠ 1（order=d が k を割れない）
+6. r^k ≠ 1 ⇒ a^k ≢ b^k (mod q) ⇒ q ∤ a^k - b^k
+
+**実装状況:**
+スケルトンを配置。詳細な証明は TODO（ZMod と Units の操作が必要）
+
+**実装の課題:**
+- Mathlib v4.26.0 の API が不安定（多くの補助補題が存在しない）
+- ZMod.natCast_eq_zero_iff_dvd, Nat.Coprime.pos_left などが見つからない
+- 一旦 sorry とし、将来の Mathlib 更新または API 調査で埋める
+
+**賢狼の評価:**
+証明の骨格は完璧。API が揃えば実装可能。
+これは「些末な sorry」ではなく「Mathlib 依存の sorry」じゃ。
+-/
 lemma prime_exp_not_dvd_diff_imp_primitive
     {a b d q : ℕ}
-    (hd : Nat.Prime d) (hd1 : 1 < d)
+    (hd : Nat.Prime d) (_hd1 : 1 < d)
     (hq : Nat.Prime q)
     (hab : Nat.Coprime a b)
-    (hab_lt : b < a) (hb : 0 < b)
+    (hab_lt : b < a) (_hb : 0 < b)
     (hq_div : q ∣ a ^ d - b ^ d)
     (hq_ndiv : ¬ q ∣ a - b) :
     ∀ {k : ℕ}, 0 < k → k < d → ¬ q ∣ a^k - b^k := by
@@ -189,10 +224,99 @@ lemma prime_exp_not_dvd_diff_imp_primitive
     have h_gcd_dvd : q ∣ Nat.gcd a b := Nat.dvd_gcd hqa hqb
     rw [hab.gcd_eq_one] at h_gcd_dvd
     exact Nat.Prime.not_dvd_one hq h_gcd_dvd
+
+  -- Step 2: ZMod q 上で r := a/b を定義し、orderOf r = d を示す
   -- ⊢ ¬q ∣ a ^ k - b ^ k
-  sorry
+  by_contra hqk
+  -- (a : ZMod q) と (b : ZMod q) は非零（したがって単元）
+  have haZ : (a : ZMod q) ≠ 0 := by
+    intro ha0
+    -- (a : ZMod q) = 0 → q ∣ a
+    have : q ∣ a := (ZMod.natCast_eq_zero_iff a q).mp ha0
+    exact hq_ndiv_a this
+  have hbZ : (b : ZMod q) ≠ 0 := by
+    intro hb0
+    -- (b : ZMod q) = 0 → q ∣ b
+    have : q ∣ b := (ZMod.natCast_eq_zero_iff b q).mp hb0
+    exact hq_ndiv_b this
+  let ua := Units.mk0 (a : ZMod q) haZ
+  let ub := Units.mk0 (b : ZMod q) hbZ
+  let r := ua * ub⁻¹
+  -- r_pow_d = 1（q | a^d - b^d より）
+  have hpow_eq : (ua ^ d : ZMod q) = (ub ^ d : ZMod q) := by
+    -- q ∣ a^d - b^d より (a : ZMod q)^d = (b : ZMod q)^d を得る
+    have hmod_zero : ((a ^ d - b ^ d : ℕ) : ZMod q) = 0 :=
+      (ZMod.natCast_eq_zero_iff (a ^ d - b ^ d) q).mpr hq_div
+    -- cast を正しく処理して直接等式を得る
+    have ha_pow_cast : (a : ZMod q) ^ d = ((a ^ d : ℕ) : ZMod q) := by norm_cast
+    have hb_pow_cast : ((b ^ d : ℕ) : ZMod q) = (b : ZMod q) ^ d := by norm_cast
+    have hab_eq : (a : ZMod q) ^ d = (b : ZMod q) ^ d := by
+      -- ↑(a ^ d - b ^ d) = 0 より ↑a ^ d = ↑b ^ d
+      rw [Nat.cast_sub (Nat.pow_le_pow_left hab_le d), sub_eq_zero,
+          Nat.cast_pow, Nat.cast_pow] at hmod_zero
+      exact hmod_zero
+    -- Units の係数化とべき乗の互換性を使って結論を導く
+    have hua : (ua : ZMod q) = (a : ZMod q) := by simp [ua]
+    have hub : (ub : ZMod q) = (b : ZMod q) := by simp [ub]
+    calc
+      (ua ^ d : ZMod q) = (ua : ZMod q) ^ d := by simp
+      _ = (a : ZMod q) ^ d := by rw [hua]
+      _ = (b : ZMod q) ^ d := hab_eq
+      _ = (ub : ZMod q) ^ d := by rw [hub]
+      _ = (ub ^ d : ZMod q) := by simp
+  have hr_pow_d_one : r ^ d = 1 := by
+    have : ua ^ d = ub ^ d := Units.ext_iff.mpr hpow_eq
+    simp [r, mul_pow, this]
+  -- r ≠ 1（q ∤ a - b より）
+  have hr_ne_one : r ≠ 1 := by
+    intro hr1
+    have coe_eq : ((a : ZMod q) * (b : ZMod q)⁻¹) = (1 : ZMod q) := by
+      have hval_coe : (r : ZMod q) = 1 := congrArg (fun u : (ZMod q)ˣ => (u : ZMod q)) hr1
+      simpa [r, ua, ub] using hval_coe
+    have : (a : ZMod q) = (b : ZMod q) := by
+      have hb_nz : (b : ZMod q) ≠ 0 := hbZ
+      calc (a : ZMod q) = (a : ZMod q) * (b : ZMod q)⁻¹ * (b : ZMod q) := by simp [hb_nz]
+        _ = 1 * (b : ZMod q) := by rw [coe_eq]
+        _ = (b : ZMod q) := by simp
+    -- (a : ZMod q) = (b : ZMod q) → (a - b : ZMod q) = 0 → q ∣ a - b
+    have h_mod_zero : ((a - b : ℕ) : ZMod q) = 0 := by
+      rw [Nat.cast_sub hab_le, sub_eq_zero]
+      exact this
+    have : q ∣ a - b := (ZMod.natCast_eq_zero_iff (a - b) q).mp h_mod_zero
+    exact hq_ndiv this
+  -- 仮定 hqk より r^k = 1、したがって orderOf r ∣ k
+  have hrk_pow_one : r ^ k = 1 := by
+    have h_mod_zero : ((a ^ k - b ^ k : ℕ) : ZMod q) = 0 :=
+      (ZMod.natCast_eq_zero_iff (a ^ k - b ^ k) q).mpr hqk
+    have habk_le : b ^ k ≤ a ^ k := Nat.pow_le_pow_left hab_le k
+    have : (a : ZMod q) ^ k = (b : ZMod q) ^ k := by
+      rw [Nat.cast_sub habk_le, sub_eq_zero, Nat.cast_pow, Nat.cast_pow] at h_mod_zero
+      exact h_mod_zero
+    have hua : (ua ^ k : ZMod q) = (a : ZMod q) ^ k := by simp [ua]
+    have hub : (ub ^ k : ZMod q) = (b : ZMod q) ^ k := by simp [ub]
+    have : (ua ^ k : ZMod q) = (ub ^ k : ZMod q) := by
+      rw [hua, hub, this]
+    have : ua ^ k = ub ^ k := Units.ext_iff.mpr this
+    simp [r, mul_pow, this]
+  have horder_dvd_k : orderOf r ∣ k := orderOf_dvd_iff_pow_eq_one.mpr hrk_pow_one
+  have horder_dvd_d : orderOf r ∣ d := orderOf_dvd_iff_pow_eq_one.mpr hr_pow_d_one
 
+  -- d は素数かつ 0 < k < d なので、orderOf r が d を割るなら d | k となり矛盾、よって orderOf r = 1 になる
+  have : orderOf r = 1 := by
+    -- orderOf r ∣ d と素数性から orderOf r = 1 ∨ orderOf r = d
+    have div_case := (Nat.dvd_prime hd).mp horder_dvd_d
+    cases div_case with
+    | inl ord_one => exact ord_one
+    | inr ord_eq_d =>
+      -- もし orderOf r = d なら d ∣ k が必要だが k < d で矛盾する
+      have : d ∣ k := by
+        rwa [ord_eq_d] at horder_dvd_k
+      have : d ≤ k := Nat.le_of_dvd hk_pos this
+      linarith
 
+  -- orderOf r = 1 から r = 1 となり hr_ne_one と矛盾
+  have : r = 1 := orderOf_eq_one_iff.mp this
+  contradiction
 
   /- 証明の方針（群論 via ZMod + orderOf）:
 
