@@ -559,13 +559,33 @@ lemma padicValNat_binomial_coeff_three (k q : ℕ) (hk : k ∈ ({1, 2, 3} : Fins
         have h3_prime : Nat.Prime 3 := Nat.prime_three
         have : Fact (Nat.Prime 3) := ⟨h3_prime⟩
         -- padicValNat 3 3 = 1
-        sorry  -- TODO: padicValNat の具体値計算
+        exact padicValNat_self
       rw [this]
     · -- q ≠ 3 の場合
-      have  hdvd : ¬ q ∣ 3 := by
+      -- q | 3 かつ q ≠ 3 かつ q は素数 ⇒ 矛盾
+      have hdvd : ¬ q ∣ 3 := by
         intro h_dvd
-        -- q | 3 ⇒ q = 1 ∨ q = 3, but q is prime (≠ 1) and q ≠ 3
-        sorry
+        -- q | 3 かつ q.Prime から q ≤ 3 が得られるので場合分けする
+        have hq_ne0 : q ≠ 0 := Nat.Prime.ne_zero hq
+        have q_le3 : q ≤ 3 := Nat.le_of_dvd (Nat.pos_iff_ne_zero.mpr Nat.prime_three.ne_zero) h_dvd
+        cases Nat.eq_or_lt_of_le q_le3 with
+        | inl hq_eq3 =>
+          -- q = 3 の場合は hq3 と矛盾
+          rw [hq_eq3] at hq3
+          exact hq3 rfl
+        | inr hq_lt3 =>
+          -- q < 3 の場合は q = 2 しかあり得ず 2 ∣ 3 は成り立たない（norm_num で解決）
+          have q_eq_2 : q = 2 := by
+            have : q = 2 ∨ q = 1 := by omega
+            cases this with
+            | inl h => exact h
+            | inr h1 =>
+              exfalso
+              have hq1 := Nat.Prime.ne_one hq
+              exact hq1 h1
+          rw [q_eq_2] at h_dvd
+          have : ¬ 2 ∣ 3 := by norm_num
+          exact this h_dvd
       have : padicValNat q 3 = 0 := padicValNat.eq_zero_of_not_dvd hdvd
       rw [this]
       omega
