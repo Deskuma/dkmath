@@ -1160,71 +1160,14 @@ lemma padicValNat_primitive_prime_factor_le_one {a b d q : ℕ}
 -- § 4. Zsigmondy の原始素因子定理（層B：精密層、TODO）
 -- ========================================
 
-/-- Zsigmondy の原始素因子定理のフック
+/-- Zsigmondy の原始素因子定理（層A：素数指数版、存在のみ保証） -/
+lemma exists_primitive_prime_factor_prime {a b : ℕ} {d : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ a^d - b^d ∧ ¬ q ∣ a - b := by
+  exact exists_primitive_prime_factor_basic hd_prime hd_ge hab_lt hb hab hpnd
 
-**TODO（別 PR で実装予定）:**
-Mathlib v4.26.0 には Zsigmondy の原始素因子定理の完全な形式化がまだ存在しない。
-将来的には円分多項式（Cyclotomic polynomial）経由で次のように実装する：
-- `Cyclotomic.dvd_pow_sub_pow`: Φ_d(a/b) ∣ a^d - b^d
-- 円分多項式の既約性と素因子の存在
-
-**代替実装案：**
-- 選択肢A: d = 3, 5 など小さいケースだけ初等的に証明
-- 選択肢B: Cyclotomic 理論を段階的に構築（重工事）
-- 選択肢C: 既存の Mathlib.NumberTheory.Cyclotomic.* を活用
-
-**数学的内容:**
-Zsigmondy の定理（1892）：
-a > b ≥ 1, gcd(a,b) = 1, d > 1 のとき、
-次の例外を除いて、a^d - b^d は「原始素因子」（primitive prime divisor）を持つ：
-- 例外1: a - b = 1 かつ d = 2
-- 例外2: a = 2, b = 1, d = 6
-原始素因子 q とは：q ∣ a^d - b^d かつ q ∤ a^k - b^k （∀k < d）を満たす素数。
-
-現在は軽量版（prime d ≥ 3）を優先実装。完全版は別 PR で。
-
-**強化版**: 原始素因子 q について padicValNat q (a^d - b^d) = 1 を保証し、
-完全冪判定に必要な付值情報を供給する。
--/
-lemma exists_primitive_prime_factor_hook {a b : ℕ} {d : ℕ}
-    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b) (hd : 2 < d) :
-    ∃ q : ℕ, Nat.Prime q ∧ q ∣ a^d - b^d ∧ ¬ q ∣ a - b ∧ padicValNat q (a^d - b^d) = 1 := by
-  -- まずは d が素数の場合に限定（軽量版）
-  by_cases hd_prime : Nat.Prime d
-  · -- d が素数の場合
-    have hp_ge : 3 ≤ d := by omega
-    -- ¬ d ∣ a - b を仮定
-    -- 注意: これは一般には証明できない（入力データ依存）
-    -- 具体的なケースや by_cases で分岐する必要がある
-    have hpnd : ¬ d ∣ a - b := by
-      sorry  -- [SORRY-5: ケースバイケース、一般証明不可]
-      -- d | a - b の場合は別の議論が必要
-      -- または具体的な a, b の値で示す
-
-    -- 層A から原始素因子 q を得る
-    obtain ⟨q, hq_prime, hq_div, hq_ndiv⟩ :=
-      exists_primitive_prime_factor_basic hd_prime hp_ge hab_lt hb hab hpnd
-
-    -- padicValNat q (a^d - b^d) = 1 を示す（下界と上界を組み合わせる）
-    have hvad : padicValNat q (a ^ d - b ^ d) = 1 := by
-      -- 下界：1 ≤ padicValNat q (a^d - b^d)
-      have h1 : 2 < d := hd
-      have hd_ge_one : 1 < d := by omega
-      have hge : 1 ≤ padicValNat q (a ^ d - b ^ d) :=
-        padicValNat_primitive_prime_factor_ge_one hab_lt hb hd_ge_one hq_prime hq_div
-
-      -- 上界：padicValNat q (a^d - b^d) ≤ 1
-      have hle : padicValNat q (a ^ d - b ^ d) ≤ 1 :=
-        padicValNat_primitive_prime_factor_le_one
-          hd_prime hp_ge hab_lt hb hab hpnd hq_prime hq_div hq_ndiv
-      -- 結論：1 ≤ x ∧ x ≤ 1 ⇒ x = 1
-      omega
-
-    exact ⟨q, hq_prime, hq_div, hq_ndiv, hvad⟩
-  · -- d が合成数の場合は TODO（別 PR）
-    -- 注意: 合成数の指数では、Zsigmondy の完全版が必要
-    -- 現在の実装は素数指数に限定（軽量版）
-    sorry  -- [SORRY-6: 合成数指数、将来の拡張課題]
 
 end DkMath.NumberTheory.GcdNext
 
