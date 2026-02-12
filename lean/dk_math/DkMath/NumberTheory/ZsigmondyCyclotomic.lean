@@ -18,6 +18,9 @@ import Mathlib.RingTheory.Int.Basic
 import DkMath.CosmicFormula.CosmicFormulaBinom
 -- Lucas/Kummer theorems (二項係数の理論)
 import Mathlib.Data.Nat.Choose.Lucas
+-- 群論（orderOf を使った primitive 証明用）
+import Mathlib.Data.ZMod.Basic
+import Mathlib.GroupTheory.OrderOfElement
 
 set_option linter.style.emptyLine false
 
@@ -88,6 +91,52 @@ lemma exists_primitive_prime_factor_basic {a b d : ℕ}
     ∃ q : ℕ, Nat.Prime q ∧ q ∣ a^d - b^d ∧ ¬ q ∣ a - b := by
   -- GcdDiffPow の補題を直接使う
   exact exists_prime_divisor_not_dividing_diff_of_prime_exp hd_prime hd_ge hab_lt hb hab hpnd
+
+/-- prime exponent 版 primitive（群論による証明）
+
+**賢狼のアドバイス（開発ノートより）:**
+「prime exponent なら、存在（q を取る）→ primitive（全部の k を潰す）が群論で直結する」
+
+**数学的内容:**
+仮定:
+- d は素数（>1）
+- q は素数
+- q ∣ a^d - b^d
+- q ∤ a - b
+- gcd(a,b)=1（⇒ b は mod q で 0 にならず、割り算できる）
+
+結論:
+- 0 < k < d なら q ∤ a^k - b^k（これが「primitive」の本質）
+
+**証明の方針（群論）:**
+1. r := a/b ∈ (ℤ/qℤ)× を定義
+2. q | a^d - b^d から r^d = 1 を得る
+3. q ∤ a - b から r ≠ 1 を得る
+4. d が素数なので orderOf r = d（order は 1 か d しかない、1 は排除）
+5. 0 < k < d なら r^k ≠ 1（order=d が k を割れない）
+6. r^k ≠ 1 ⇒ a^k ≢ b^k (mod q) ⇒ q ∤ a^k - b^k
+
+**実装状況:**
+スケルトンを配置。詳細な証明は TODO（ZMod と Units の操作が必要）
+-/
+lemma prime_exp_not_dvd_diff_imp_primitive
+    {a b d q : ℕ}
+    (hd : Nat.Prime d) (hd1 : 1 < d)
+    (hq : Nat.Prime q)
+    (hab : Nat.Coprime a b)
+    (hq_div : q ∣ a^d - b^d)
+    (hq_ndiv : ¬ q ∣ a - b) :
+    ∀ {k : ℕ}, 0 < k → k < d → ¬ q ∣ a^k - b^k := by
+  classical
+  haveI : Fact q.Prime := ⟨hq⟩
+  -- TODO: 群論による証明（開発ノートのスケルトン参照）
+  -- 1) b が mod q で 0 にならない（b が割れる）を確保
+  -- 2) Units（乗法群）に持ち上げて r := a/b を定義
+  -- 3) q | a^d - b^d から r^d = 1 を得る
+  -- 4) q ∤ a-b から r ≠ 1 を得る
+  -- 5) d が素数なので orderOf r = d
+  -- 6) 0 < k < d なら r^k ≠ 1（order=d が k を割れない）
+  sorry
 
 -- ========================================
 -- § 3. 円分多項式の基本性質
