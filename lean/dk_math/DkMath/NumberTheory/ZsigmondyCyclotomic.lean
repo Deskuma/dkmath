@@ -817,27 +817,72 @@ end DkMath.NumberTheory.GcdNext
 -- § 5. 開発ロードマップ
 -- ========================================
 
-/- **Zsigmondy 理論の段階的な実装方針**
+/- **Zsigmondy 理論の段階的な実装方針（賢狼の提案を反映）**
 
-## ✅ Phase 1: 層A（存在層）— 完了
+## 🎯 賢狼のアドバイス（開発ノートより）
 
-基本補題 `exists_primitive_prime_factor_basic` により、
-素数指数の場合の原始素因子の存在が保証された。
+**「層A（存在）と層B（精密）を分離せよ」**
 
-**成果:**
-- 素数指数 d ≥ 3 の場合に原始素因子 q が存在する
-- 条件: gcd(a,b) = 1, d ∤ a - b
-- GcdDiffPow の既存補題を活用して実装
+### 層A（存在層）：原始素因子の存在だけを保証
+- ∃ q, q | a^d - b^d ∧ q ∤ a - b
+- padicValNat の精密評価なし
+- prime exponent なら群論で primitive へ昇格可能
 
-## ⏳ Phase 2: 層B（精密層）— 進行中（Cosmic Formula 理論を統合）
+### 層B（精密層）：付値 1 を保証（別勲章）
+- padicValNat q (a^d - b^d) = 1
+- LTE（Lifting The Exponent）や Cyclotomic の square-free 性が必要
+- 層A が完成してから取り組む
 
-原始素因子の p-adic 付値を精密に評価する。
+---
+
+## ✅ Phase 1: 層A（存在層）— ほぼ完了！
+
+### ✅ 基本補題の実装
+- **`exists_primitive_prime_factor_basic`**: 素数指数の原始素因子存在
+  - 素数指数 d ≥ 3 の場合に原始素因子 q が存在する
+  - 条件: gcd(a,b) = 1, ¬ d ∣ a - b（仮定として受け取る）
+  - GcdDiffPow の既存補題を活用
+
+### ✅ 群論による primitive 証明（新規！）
+- **`prime_exp_not_dvd_diff_imp_primitive`**: 群論版 primitive 証明
+  - **賢狼の提案を実装**：「prime exponent なら primitive は群論で落ちる」
+  - ZMod と orderOf を使用
+  - q | a^d - b^d ∧ q ∤ a - b ⇒ ∀k (0 < k < d), q ∤ a^k - b^k
+  - **証明の骨格**：
+    1. r := a/b ∈ (ℤ/qℤ)ˣ を定義
+    2. r^d = 1 かつ r ≠ 1
+    3. d が素数より orderOf r = d
+    4. 0 < k < d なら r^k ≠ 1
+    5. よって q ∤ a^k - b^k（primitive！）
+  - **実装状況**: スケルトン配置完了、詳細な証明は TODO
+
+### 📋 残る課題（層A）
+- **¬ d ∣ a - b の扱い**：
+  - 一般には証明不可能（入力依存）
+  - 現在は仮定として受け取る（正しい）
+  - 将来：`by_cases h : d ∣ a - b` で分岐する選択肢もあり
+- **`not_dvd_diff_iff_not_modEq` の証明**：
+  - Mathlib の `Nat.modEq_iff_dvd'` を使えば簡単に閉じる
+  - これを埋めると分岐処理が楽になる
+
+---
+
+## ⏳ Phase 2: 層B（精密層）— Cosmic Formula 理論を統合中
+
+原始素因子の p-adic 付値を精密に評価する（padicValNat = 1）。
+
+**賢狼の警告**: 「これは本丸。一般には保証できない（Wieferich 的例外あり）」
 
 **現在の成果:**
 
 ### ✅ 下界の証明（完全実装）
 - `padicValNat_primitive_prime_factor_ge_one`
 - 1 ≤ padicValNat q (a^d - b^d) を証明（既存の補題から直接）
+
+### ✅ 上界の証明（進行中、課題あり）
+- **目標**: padicValNat q (a^d - b^d) ≤ 1
+- **課題**: q^2 ∤ a^d - b^d を示す必要がある
+- **アプローチ**: Cosmic Formula + Lucas/Kummer で攻める
 
 ### ✅ 円分多項式の理論を導入
 - Mathlib.RingTheory.Polynomial.Cyclotomic.Basic を import
