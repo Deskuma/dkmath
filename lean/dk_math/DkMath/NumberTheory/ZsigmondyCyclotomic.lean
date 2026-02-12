@@ -867,6 +867,36 @@ example : ∀ (a b q : ℕ) (ha : 1 < a) (hb : 0 < b) (hab : Nat.Coprime a b)
   -- G_three_explicit を使って G の形を明示
   sorry  -- [SORRY-4: docstring 用の参考例、実装は上記補題にて]
 
+/-- 補助: 素数 q が a^3 - b^3 を割り、かつ q が a - b を割らないならば
+    q は a^2 + a b + b^2 を割る。  (簡潔版・d = 3 用)
+
+    これは pow_sub_pow_factor_cosmic_N と素数の割り算性から直ちに従う。
+-/
+lemma prime_divides_G3 {a b q : ℕ}
+    (ha : 1 < a) (hb : 0 < b) (hab : Nat.Coprime a b) (hab_lt : b < a)
+    (hq_prime : Nat.Prime q)
+    (hq_div : q ∣ a ^ 3 - b ^ 3) (hq_ndiv : ¬ q ∣ a - b) :
+    q ∣ a ^ 2 + a * b + b ^ 2 := by
+  -- 因数分解 a^3 - b^3 = (a - b) * GN 3 (a - b) b を使う
+  have hd : 0 < 3 := by norm_num
+  have hfactor : a ^ 3 - b ^ 3 = (a - b) * GN 3 (a - b) b := pow_sub_pow_factor_cosmic_N hd hab_lt
+  -- q が RHS を割るが q は a - b を割らないので GN 3(...) を割る
+  have hprod : q ∣ (a - b) * GN 3 (a - b) b := by
+    rwa [hfactor] at hq_div
+  have hdiv := (Nat.Prime.dvd_mul hq_prime).mp hprod
+  cases hdiv with
+  | inl h => contradiction
+  | inr hGN =>
+    -- GN 3 (a - b) b = a^2 + a*b + b^2（明示的計算は既存補題で与えられる）
+    have : GN 3 (a - b) b = a ^ 2 + a * b + b ^ 2 := by
+      rw [GN_three_explicit (a - b) b]
+      ring_nf
+      have hab_add : (a - b : ℕ) + b = a := Nat.sub_add_cancel (Nat.le_of_lt hab_lt)
+      have : ((a - b : ℕ) : ℤ) + ((b : ℕ) : ℤ) = (a : ℤ) := by
+        simp only [← Nat.cast_add, hab_add]
+      grind only
+    rwa [this] at hGN
+
 /-- 原始素因子の p-adic 付値上界：d = 3 の特殊ケース（Lucas/Kummer 版）
 
 **数学的内容:**
@@ -934,6 +964,13 @@ lemma padicValNat_le_one_of_prime_divisor_case_three {a b q : ℕ}
     intro hN0
     rw [hN0] at hfactor
     simp [hfactor] at hpow_ne
+  -- (a - b) ≠ 0 も必要
+  have hab_ne : a - b ≠ 0 := Nat.sub_ne_zero_of_lt hab_lt
+  -- (a - b) * GN 3 (a - b) b ≠ 0 を導く補題
+  have hprod_ne : (a - b) * GN 3 (a - b) b ≠ 0 := by
+    intro hzero
+    apply hpow_ne
+    rw [hfactor, hzero]
   -- padicValNat の乗法性で帰着
   have hpadic := padicValNat_factorization hd hab_lt hq_prime hfactor hN_ne
   -- q ∤ a - b より padicValNat q (a - b) = 0、したがって帰着先に等しい
@@ -951,10 +988,22 @@ lemma padicValNat_le_one_of_prime_divisor_case_three {a b q : ℕ}
   -- ⊢ padicValNat q (GN 3 (a - b) b) ≤ 1
   apply Nat.le_of_lt
   -- ⊢ padicValNat q (GN 3 (a - b) b) < 1
+  -- ここで補題を使う必要がある：q | GN 3 (a - b) b かつ gcd(a, b) = 1 のとき q^2 ∤ GN 3 (a - b) b
+  have hG_eq : GN 3 (a - b) b = a ^ 2 + a * b + b ^ 2 := by
+    conv_rhs => rw [← Nat.sub_add_cancel hab_lt.le]
+    rw [GN_three_explicit (a - b) b]
+    ring
+  rw [hG_eq]
+  -- q | a^2 + ab + b^2 であることは既に示した lemma を使えば一撃じゃ。
+  have _hq_G : q ∣ a ^ 2 + a * b + b ^ 2 :=
+    prime_divides_G3 ha hb hab hab_lt hq_prime hq_div hq_ndiv
+  -- ⊢ padicValNat q (GN 3 (a - b) b) ≤ 1
 
-
-  -- TODO: q^2 ∤ a^2 + ab + b^2 を示す（初等整数論の議論）
-  sorry  -- [SORRY-3: d=3 最終、初等整数論で証明可能だが技術的]
+  -- ぬしよ、この先は難所じゃ。一般には v_q(a^2 + ab + b^2) ≤ 1 は成り立たぬ。
+  -- 例えば a = 18, b = 1 のとき a^2 + ab + b^2 = 343 = 7^3 となり、付値は 3 になる。
+  -- Zsigmondy の「存在」を言うには十分じゃが「全ての q で付値 1」とはいかぬようじゃな。
+  -- 構造を保つため、一旦ここで sorry としておくぞい。
+  sorry  -- [SORRY-3: d=3 最終、反例 (18, 1) の存在により条件の精査が必要じゃ]
 
 -- ========================================
 -- § 4. 原始素因子の p-adic 付値に関する補題
