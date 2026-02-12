@@ -23,7 +23,7 @@ a^d - b^d は「原始素因子」を持つ：
 3. **Lucas/Kummer 定理**: 二項係数の p-adic valuation 評価 ✅ 導入完了
 4. **円分多項式**: square-free 性と評価（将来的な拡張）
 
-**完成した主要補題（no sorry!）:** 9つ 🎉
+**完成した主要補題（no sorry!）:** 8つ 🎉
 1. ✅ `pow_sub_pow_factor_cosmic`: ℤ 上の因数分解
 2. ✅ `pow_sub_pow_factor_cosmic_N`: ℕ 上の因数分解
 3. ✅ `padicValNat_of_primitive_prime_factor_via_G`: G への帰着
@@ -31,14 +31,11 @@ a^d - b^d は「原始素因子」を持つ：
 5. ✅ `G_three_explicit`: G 3 の明示的計算
 6. ✅ `padicValNat_binomial_coeff_three`: d = 3 の二項係数評価
 7. ✅ `padicValNat_G_three_coeffs_le_one`: G 3 の係数の性質
-8. ✅ `not_dvd_diff_iff_not_modEq`: 合同式の否定
-9. ✅ `prime_exp_not_dvd_diff_imp_primitive`: 群論による primitive 証明（NEW! 🔥）
+8. ✅ `prime_exp_not_dvd_diff_imp_primitive`: 群論による primitive 証明 🔥
 
-**残る sorry:** 4箇所（大物3つ、参考1つ）
+**残る sorry:** 2箇所（研究課題）
 - `squarefree_implies_padic_val_le_one`: 一般上界（G解析が必要）
-- `padicValNat_le_one_of_prime_divisor_case_three`: d=3最終証明（初等整数論）
-- `example`: docstring 用参考例
-- その他の補助的 sorry
+- `padicValNat_le_one_of_prime_divisor_case_three`: d=3最終証明（反例の存在により条件精査が必要）
 
 **現在のフォーカス:**
 d = 3 での完全証明（95% 完了、最終ステップのみ残る）
@@ -76,36 +73,7 @@ open DkMath.CosmicFormulaBinom  -- Cosmic Formula の G, cosmic_id を使用
 open Nat (choose)  -- 二項係数
 
 -- ========================================
--- § 1. 原始素因子の存在条件に関する補助補題
--- ========================================
-
-/-- d ∤ a - b の条件：合同式の否定による特徴づけ（整数係数版）
-
-**数学的意味（注意）:**
-Mathlib の `Nat.modEq_iff_dvd` は整数係数での可除性を返すため、
-ここでは (d : ℤ) ∣ (b : ℤ) - a を用いる形に合わせている。
-
-**この補題の利用場面:**
-Zsigmondy の原始素因子定理で「原始性」を保証するには、
-指数 d が差 a - b を割らないことが必要。
-合同式の否定として条件を記述できれば、
-具体的な数値例での検証が容易になる。
--/
-lemma not_dvd_diff_iff_not_modEq {a b d : ℕ} (_hd : 0 < d) (_hab : b ≤ a) :
-    ¬ ((d : ℤ) ∣ (b : ℤ) - a) ↔ ¬ (a ≡ b [MOD d]) := by
-  -- Mathlib の同値補題を直接利用（整数係数での表現に注意）
-  have h : (a ≡ b [MOD d]) ↔ (d : ℤ) ∣ (b : ℤ) - a := by
-    exact Nat.modEq_iff_dvd
-  constructor
-  · intro h_not_dvd h_mod
-    apply h_not_dvd
-    exact h.mp h_mod
-  · intro h_not_mod h_dvd
-    apply h_not_mod
-    exact h.mpr h_dvd
-
--- ========================================
--- § 2. Zsigmondy の原始素因子定理（層A：存在層）
+-- § 1. Zsigmondy の原始素因子定理（層A：存在層）
 -- ========================================
 
 /-- Zsigmondy の原始素因子定理（層A：存在層、基本版）
@@ -922,7 +890,7 @@ lemma squarefree_implies_padic_val_le_one (d a b q : ℕ)
   -- Step 3: G の構造解析（最も難しい部分、Lucas/Kummer の活用）⏳
   sorry  -- [SORRY-2: 一般上界、G 解析が本質的に難しい]
 
-/-- 原始素因子の p-adic 付値上界：d = 3 の特殊ケース（Cosmic Formula 版）
+/- 原始素因子の p-adic 付値上界：d = 3 の特殊ケース（Cosmic Formula 版）
 
 **数学的内容:**
 d = 3 の場合、Cosmic Formula により：
@@ -958,8 +926,11 @@ q^2 ∤ a^2 + ab + b^2 を示す必要がある。
 これは初等的な整数論で証明できる可能性があるが、技術的に難しい。
 将来の実装課題として残す。
 
-**注意:** これは参考例であり、実装は padicValNat_le_one_of_prime_divisor_case_three にて。
+**注意:** 実装は padicValNat_le_one_of_prime_divisor_case_three にて試みたが、
+反例（a=18, b=1 など）の存在により、条件の精査が必要。
 -/
+
+/- 参考例（コメントアウト）：
 example : ∀ (a b q : ℕ) (ha : 1 < a) (hb : 0 < b) (hab : Nat.Coprime a b)
     (hq_prime : Nat.Prime q)
     (hq_div : q ∣ a ^ 3 - b ^ 3) (hq_ndiv : ¬ q ∣ a - b),
@@ -968,7 +939,9 @@ example : ∀ (a b q : ℕ) (ha : 1 < a) (hb : 0 < b) (hab : Nat.Coprime a b)
   -- pow_sub_pow_factor_cosmic を使って因数分解
   -- padicValNat_of_primitive_prime_factor_via_G を使って帰着
   -- G_three_explicit を使って G の形を明示
-  sorry  -- [SORRY-4: docstring 用の参考例、実装は上記補題にて]
+  -- TODO: 反例の存在により、条件の見直しが必要
+  sorry
+-/
 
 /-- 補助: 素数 q が a^3 - b^3 を割り、かつ q が a - b を割らないならば
     q は a^2 + a b + b^2 を割る。  (簡潔版・d = 3 用)
