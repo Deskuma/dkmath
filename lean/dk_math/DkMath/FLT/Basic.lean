@@ -80,6 +80,32 @@ example {x} (y z : ℕ) : x ^ 3 = (z - y) * (z ^ 2 + z * y + y ^ 2) + 1 := by
   · sorry
   · sorry
 
+/-- 補題: $d=2$ の場合、$GN$ は線形式である -/
+lemma GN_linear (u y : ℕ) : GN 2 u y = u + 2 * y := by
+  unfold GN
+  simp [Finset.sum_range_succ]
+  ring
+
+/-- 補題: $d=3$ の場合、$GN$ は二次形式である -/
+lemma GN_quadratic (u y : ℕ) : GN 3 u y = u ^ 2 + 3 * u * y + 3 * y ^ 2 := by
+  unfold GN
+  simp [Finset.sum_range_succ]
+  ring
+
+/-- 補題: $d=3$ の場合、$x^3$ は $u^2$ で割り切れる（適切な条件の下で） -/
+lemma x3_div_u2 (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h_gcd : u.gcd (GN 3 u y) = 1) :
+    u ^ 2 ∣ x ^ 3 := by
+  -- u と GN が互いに素ならば、u は立方数でなければならぬ。
+  -- 故に u = a^3 とおけば u^2 = a^6 が x^3 を割り切るのは必定。
+  sorry
+
+/-- メイン定理: フェルマーの最終定理 $n=3$ の場合 -/
+theorem FLT_case_3 (x y z : ℕ) (h_coprime : Nat.gcd x y = 1) (h_body : z ^ 3 = x ^ 3 + y ^ 3) : False := by
+  -- 1. 変数変換 u = z - y
+  -- 2. GN_quadratic を用いて z^3 - y^3 = u * GN 3 u y を展開
+  -- 3. x3_div_u2 を用いて矛盾を導く
+  sorry
+
 /-- Fermat's Last Theorem (FLT)
 Cosmic Formula を用いた新しい証明
 $$
