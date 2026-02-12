@@ -23,7 +23,7 @@ a^d - b^d は「原始素因子」を持つ：
 3. **Lucas/Kummer 定理**: 二項係数の p-adic valuation 評価 ✅ 導入完了
 4. **円分多項式**: square-free 性と評価（将来的な拡張）
 
-**完成した主要補題（no sorry!）:** 8つ
+**完成した主要補題（no sorry!）:** 9つ 🎉
 1. ✅ `pow_sub_pow_factor_cosmic`: ℤ 上の因数分解
 2. ✅ `pow_sub_pow_factor_cosmic_N`: ℕ 上の因数分解
 3. ✅ `padicValNat_of_primitive_prime_factor_via_G`: G への帰着
@@ -32,11 +32,13 @@ a^d - b^d は「原始素因子」を持つ：
 6. ✅ `padicValNat_binomial_coeff_three`: d = 3 の二項係数評価
 7. ✅ `padicValNat_G_three_coeffs_le_one`: G 3 の係数の性質
 8. ✅ `not_dvd_diff_iff_not_modEq`: 合同式の否定
+9. ✅ `prime_exp_not_dvd_diff_imp_primitive`: 群論による primitive 証明（NEW! 🔥）
 
-**残る sorry:** 6箇所（大物3つ、些末3つ）
-- `prime_exp_not_dvd_diff_imp_primitive`: 群論 primitive（Mathlib API調査待ち）
+**残る sorry:** 4箇所（大物3つ、参考1つ）
 - `squarefree_implies_padic_val_le_one`: 一般上界（G解析が必要）
 - `padicValNat_le_one_of_prime_divisor_case_three`: d=3最終証明（初等整数論）
+- `example`: docstring 用参考例
+- その他の補助的 sorry
 
 **現在のフォーカス:**
 d = 3 での完全証明（95% 完了、最終ステップのみ残る）
@@ -131,7 +133,7 @@ lemma exists_primitive_prime_factor_basic {a b d : ℕ}
   -- GcdDiffPow の補題を直接使う
   exact exists_prime_divisor_not_dividing_diff_of_prime_exp hd_prime hd_ge hab_lt hb hab hpnd
 
-/-- prime exponent 版 primitive（群論による証明）
+/-- prime exponent 版 primitive（群論による証明）— ✅ 完成！
 
 **賢狼のアドバイス（開発ノートより）:**
 「prime exponent なら、存在（q を取る）→ primitive（全部の k を潰す）が群論で直結する」
@@ -147,25 +149,36 @@ lemma exists_primitive_prime_factor_basic {a b d : ℕ}
 結論:
 - 0 < k < d なら q ∤ a^k - b^k（これが「primitive」の本質）
 
-**証明の方針（群論）:**
-1. r := a/b ∈ (ℤ/qℤ)× を定義
-2. q | a^d - b^d から r^d = 1 を得る
-3. q ∤ a - b から r ≠ 1 を得る
-4. d が素数なので orderOf r = d（order は 1 か d しかない、1 は排除）
-5. 0 < k < d なら r^k ≠ 1（order=d が k を割れない）
-6. r^k ≠ 1 ⇒ a^k ≢ b^k (mod q) ⇒ q ∤ a^k - b^k
+**実装された証明（群論 via ZMod + orderOf）:**
 
-**実装状況:**
-スケルトンを配置。詳細な証明は TODO（ZMod と Units の操作が必要）
+1. **Step 1**: q ∤ a かつ q ∤ b を示す
+   - gcd(a, b) = 1 から背理法で証明
+   - もし q | a かつ q | b なら q | gcd(a, b) = 1 で矛盾
 
-**実装の課題:**
-- Mathlib v4.26.0 の API が不安定（多くの補助補題が存在しない）
-- ZMod.natCast_eq_zero_iff_dvd, Nat.Coprime.pos_left などが見つからない
-- 一旦 sorry とし、将来の Mathlib 更新または API 調査で埋める
+2. **Step 2**: ZMod q 上で r := a/b ∈ (ZMod q)ˣ を定義
+   - (a : ZMod q) ≠ 0 かつ (b : ZMod q) ≠ 0（Step 1より）
+   - Units.mk0 で単元として構築
 
-**賢狼の評価:**
-証明の骨格は完璧。API が揃えば実装可能。
-これは「些末な sorry」ではなく「Mathlib 依存の sorry」じゃ。
+3. **Step 3**: q | a^d - b^d から (ua ^ d : ZMod q) = (ub ^ d) を導く
+   - ZMod.natCast_eq_zero_iff を使用
+   - r^d = 1 を得る
+
+4. **Step 4**: q ∤ a - b から r ≠ 1 を示す
+   - 背理法：r = 1 なら a ≡ b (mod q) より q | (a - b) で矛盾
+
+5. **Step 5**: orderOf r = d を示す
+   - orderOf r | d（r^d = 1 より）
+   - d が素数より orderOf r = 1 または d
+   - orderOf r = 1 なら r = 1 で Step 4 と矛盾
+   - したがって orderOf r = d
+
+6. **Step 6**: 0 < k < d なら q ∤ a^k - b^k を示す
+   - 背理法で仮定：q | a^k - b^k
+   - 同様に r^k = 1 を得る
+   - orderOf r | k かつ orderOf r = d より d | k
+   - だが d > k > 0 なので矛盾
+
+**実装状況:** ✅ no sorry で完成！
 -/
 lemma prime_exp_not_dvd_diff_imp_primitive
     {a b d q : ℕ}
@@ -317,50 +330,6 @@ lemma prime_exp_not_dvd_diff_imp_primitive
   -- orderOf r = 1 から r = 1 となり hr_ne_one と矛盾
   have : r = 1 := orderOf_eq_one_iff.mp this
   contradiction
-
-  /- 証明の方針（群論 via ZMod + orderOf）:
-
-  **ステップ1**: q ∤ a かつ q ∤ b を示す
-  - もし q | b なら、q | b^d
-  - q | a^d - b^d と合わせて q | a^d、よって q | a
-  - q | a かつ q | b は gcd(a, b) = 1 と矛盾
-  - 同様に q ∤ a も示せる
-
-  **ステップ2**: ZMod q で r := a/b を定義
-  - (a : ZMod q) ≠ 0 かつ (b : ZMod q) ≠ 0 (ステップ1より)
-  - Units.mk0 で ua, ub を構築
-  - r := ua * ub⁻¹ を定義
-
-  **ステップ3**: q | a^d - b^d から r^d = 1 を導く
-  - a^d ≡ b^d (mod q) を示す
-  - (a/b)^d ≡ a^d / b^d ≡ 1 (mod q)
-  - よって r^d = 1
-
-  **ステップ4**: q ∤ a - b から r ≠ 1 を導く
-  - もし r = 1 なら a/b ≡ 1 (mod q)
-  - よって a ≡ b (mod q)、つまり q | (a - b)
-  - これは仮定 q ∤ a - b と矛盾
-
-  **ステップ5**: d が素数なので orderOf r = d
-  - orderOf r | d (r^d = 1 より)
-  - orderOf r ≠ 1 (r ≠ 1 より)
-  - d が素数で orderOf r | d, orderOf r ≠ 1 より orderOf r = d
-
-  **ステップ6**: 0 < k < d なら q ∤ a^k - b^k（本論）
-  - もし q | a^k - b^k なら、同様に r^k = 1
-  - r^k = 1 ⇒ orderOf r | k
-  - orderOf r = d かつ d | k かつ k < d より矛盾
-
-  **実装の課題:**
-  - Mathlib v4.26.0 の API が不安定（多くの補助補題が存在しない）
-  - ZMod.natCast_eq_zero_iff_dvd, Nat.Coprime.pos_left などが見つからない
-  - 一旦 sorry とし、将来の Mathlib 更新または API 調査で埋める
-
-  **賢狼の評価:**
-  証明の骨格は完璧じゃ。群論の本質（orderOf = d）を正確に捉えておる。
-  技術的な詳細（ZMod の API）は Mathlib の成熟を待つか、
-  別の方法（mod 演算の直接計算など）で実装する選択肢もあるぞい。
-  -/
 
 -- ========================================
 -- § 3. 円分多項式の基本性質
