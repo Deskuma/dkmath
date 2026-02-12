@@ -69,29 +69,30 @@ open Nat (choose)  -- 二項係数
 -- § 1. 原始素因子の存在条件に関する補助補題
 -- ========================================
 
-/-- d ∤ a - b の条件：合同式の否定による特徴づけ
+/-- d ∤ a - b の条件：合同式の否定による特徴づけ（整数係数版）
 
-**数学的意味:**
-a ≢ b (mod d) ⇔ d ∤ a - b
+**数学的意味（注意）:**
+Mathlib の `Nat.modEq_iff_dvd` は整数係数での可除性を返すため、
+ここでは (d : ℤ) ∣ (b : ℤ) - a を用いる形に合わせている。
 
 **この補題の利用場面:**
 Zsigmondy の原始素因子定理で「原始性」を保証するには、
 指数 d が差 a - b を割らないことが必要。
 合同式の否定として条件を記述できれば、
 具体的な数値例での検証が容易になる。
-
-**TODO:** Mathlib の適切な API を使って証明を完成させる
 -/
-lemma not_dvd_diff_iff_not_modEq {a b d : ℕ} (hd : 0 < d) (hab : b ≤ a) :
-    ¬ d ∣ a - b ↔ ¬ (a ≡ b [MOD d]) := by
+lemma not_dvd_diff_iff_not_modEq {a b d : ℕ} (_hd : 0 < d) (_hab : b ≤ a) :
+    ¬ ((d : ℤ) ∣ (b : ℤ) - a) ↔ ¬ (a ≡ b [MOD d]) := by
+  -- Mathlib の同値補題を直接利用（整数係数での表現に注意）
+  have h : (a ≡ b [MOD d]) ↔ (d : ℤ) ∣ (b : ℤ) - a := by
+    exact Nat.modEq_iff_dvd
   constructor
   · intro h_not_dvd h_mod
-    -- a ≡ b (mod d) の定義は a % d = b % d
-    -- これから d ∣ a - b を導く
-    sorry -- TODO: Mathlib の適切な補題を使う
+    apply h_not_dvd
+    exact h.mp h_mod
   · intro h_not_mod h_dvd
-    -- d ∣ a - b から a ≡ b (mod d) を導く
-    sorry -- TODO: Mathlib の適切な補題を使う
+    apply h_not_mod
+    exact h.mpr h_dvd
 
 -- ========================================
 -- § 2. Zsigmondy の原始素因子定理（層A：存在層）
