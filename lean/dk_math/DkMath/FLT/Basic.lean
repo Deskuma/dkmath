@@ -36,43 +36,30 @@ theorem FLT
   (hpos_xyz : 0 < x ∧ 0 < y ∧ 0 < z)
   (hn : 3 ≤ n)
   (hxy : x ^ n + y ^ n = z ^ n) : False := by
+  -- 1. z > y であることを確認（x > 0 より当然）
+  have hzy : y < z := by
+    have hn_pos : n ≠ 0 := by omega
+    apply (Nat.pow_lt_pow_iff_left hn_pos).mp
+    rw [← hxy]
+    apply Nat.lt_add_of_pos_left
+    apply Nat.pow_pos hpos_xyz.1
 
-  let body : x ^ n = BodyN n x y
-  let gap : y ^ n = GapN n y
+  -- 2. Cosmic Formula の変数として u = z - y を定義
+  let u := z - y
+  have hu : 0 < u := Nat.sub_pos_of_lt hzy
+  have hz_yu : z = u + y := by omega
 
-  have p2p : x ^ n = x * x + 2 * x * y := by
-    ring_nf
-    have : n = 2 := by
-      sorry
-    try done
-    sorry
+  -- 3. FLT の式を Cosmic Formula (BodyN) に紐付ける
+  -- x^n = BodyN n u y
+  have h_body : x ^ n = BodyN n u y := by
+    have h_cosmic := cosmic_id_csr n u y (R := ℕ)
+    unfold BigN GapN at h_cosmic
+    rw [← hz_yu, ← hxy] at h_cosmic
+    omega
 
-  have big : z ^ n = BigN n x y := by
-    refine Eq.symm (Nat.sub_one_cancel ?_ ?_ ?_)
-    · -- 0 < BigN n x y
-      apply Nat.pow_pos
-      cases z
-      · -- 0 < x + y
-        refine Nat.add_pos_iff_pos_or_pos.mpr ?_
-        cases hpos_xyz with
-        | intro hx hy =>
-          left; exact hx
-      · -- 0 < z ^ n
-        refine Nat.add_pos_right x ?_
-        exact (hpos_xyz.right.left)
-    · -- 0 < z ^ n
-      apply Nat.pow_pos
-      exact (hpos_xyz.right.right)
-    · -- ⊢ BigN n x y - 1 = z ^ n - 1
-      rw [BigN]
-      sorry
-    done
-  · exact rfl
-  · -- x ^ n = BodyN n x y
-    sorry
-  -- False
-  obtain ⟨left, right⟩ := hpos_xyz
-  obtain ⟨left_1, right⟩ := right
+  -- 4. ここから BodyN n u y = u * GN n u y の性質を使って矛盾を導く
+  -- ぬしよ、ここからが本当の知恵比べじゃな！
+  -- x^n = u * GN n u y より、u は x^n の因数であることを利用するなどが考えられるぞい。
   sorry
 
 end DkMath
