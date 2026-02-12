@@ -1437,7 +1437,7 @@ end DkMath.NumberTheory.GcdNext
 
 ## 📊 全体の進捗状況まとめ
 
-### ✅ 完了した実装（no sorry!）— 8つ達成！
+### ✅ 完了した実装（no sorry!）— 9つ達成！🎉
 1. **✅ `pow_sub_pow_factor_cosmic`**: ℤ 上の因数分解
 2. **✅ `pow_sub_pow_factor_cosmic_N`**: ℕ 上の因数分解
 3. **✅ `padicValNat_of_primitive_prime_factor_via_G`**: G への帰着
@@ -1446,43 +1446,46 @@ end DkMath.NumberTheory.GcdNext
 6. **✅ `padicValNat_binomial_coeff_three`**: d = 3 の二項係数評価
 7. **✅ `padicValNat_G_three_coeffs_le_one`**: G 3 の係数の性質
 8. **✅ `not_dvd_diff_iff_not_modEq`**: 合同式の否定
+9. **✅ `prime_exp_not_dvd_diff_imp_primitive`**: 群論による primitive 証明（NEW! 🔥）
 
-### ⏳ 残る sorry — 6箇所（分類済み）
+### ⏳ 残る sorry — 4箇所（分類済み）
 
 #### 大物（理論的に難しい）— 3つ
-1. **`prime_exp_not_dvd_diff_imp_primitive`** (L207)
-   - 群論による primitive 証明
-   - 骨格完成、Mathlib API 調査が必要
-   - ZMod と Units の操作
 
-2. **`squarefree_implies_padic_val_le_one`** (L778)
+1. **`squarefree_implies_padic_val_le_one`** (L914)
    - 一般的な padicValNat 上界証明
    - G の構造解析が必要（本質的に難しい）
    - d = 3, 5, ... での具体例から一般化へ
 
-3. **`padicValNat_le_one_of_prime_divisor_case_three`** (L883)
+2. **`padicValNat_le_one_of_prime_divisor_case_three`** (L1055)
    - d = 3 での最終証明
    - q^2 ∤ a^2 + ab + b^2 を示す
    - 初等整数論で可能（技術的に難）
    - **これが完成すれば d = 3 での完全 Zsigmondy 達成！**
 
-#### 些末または参考用 — 3つ
-4. **`example`** (L824): docstring 用の参考例
-5. **`hpnd`** (L999): ¬ d ∣ a - b の証明（一般には不可能、ケースバイケース）
-6. **その他** (L1022): 上界証明の組み合わせ部分
+3. **その他の補助的 sorry**
+   - ケースバイケースの条件や合成数指数の扱い
+
+#### 参考用 — 1つ
+4. **`example`** (L963): docstring 用の参考例
+
+### 🎯 現在のフォーカス
+
 **Stage 1: d = 3 の完全証明**（短期目標、ほぼ達成！）
 - 理論的枠組み: ✅ 100% 完了
 - Cosmic Formula 統合: ✅ 100% 完了
 - Lucas/Kummer 適用: ✅ 100% 完了
 - 明示的計算: ✅ 100% 完了
-- 二項係数評価: ✅ 100% 完了（NEW!）
-- 係数の性質: ✅ 100% 完了（NEW!）
+- 二項係数評価: ✅ 100% 完了
+- 係数の性質: ✅ 100% 完了
+- 群論 primitive: ✅ 100% 完了（NEW!）
 - **最終証明: ⏳ 95% 完了（q^2 ∤ a^2 + ab + b^2 のみ残る）**
 
 **達成済み:**
-- 8つの主要補題が no sorry で完成
+- 9つの主要補題が no sorry で完成
 - d = 3 の理論構築がほぼ完了
 - Cosmic Formula + Lucas/Kummer の統合成功
+- **群論による primitive 証明が完成** 🔥
 
 ---
 
