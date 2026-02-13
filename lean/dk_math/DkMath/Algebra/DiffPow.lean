@@ -215,6 +215,18 @@ theorem pow_sub_pow_factor' {α : Type*} [CommRing α] (a b : α) (d : ℕ) :
   -- `diffPowSum'` は `diffPowSum` と同じ定義なので、既に証明済みの `pow_sub_pow_factor` を流用する
   simpa [diffPowSum, diffPowSum'] using pow_sub_pow_factor (a := a) (b := b) (d := d)
 
+
+
+/-- 自然数版：b ≤ a のときのべき乗差の分解（Nat での `a - b` を含む形） -/
+theorem pow_sub_pow_nat {a b d : ℕ} (h : b ≤ a) :
+    a ^ d = b ^ d + (a - b) * diffPowSum' (a : ℕ) b d := by
+  apply Int.natCast_inj.1
+  push_cast [h]
+  rw [show ↑(diffPowSum' a b d) = diffPowSum (a : ℤ) (b : ℤ) d by
+    simp [diffPowSum, diffPowSum'];]
+  rw [← pow_sub_pow_factor]
+  ring
+
 end CommSemiring
 
 end DkMath.Algebra.DiffPow
