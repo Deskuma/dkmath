@@ -15,6 +15,38 @@ import Mathlib.NumberTheory.FLT.Three
 set_option linter.style.longLine false
 set_option linter.style.multiGoal false
 
+/-!
+### 🐺 賢狼の設計指針: 宇宙式と円分体降下法の「同型（Isomorphism）」
+
+ぬしよ、このファイルで育てておる「宇宙式（GN/Big-Body-Gap）」による FLT の探究は、
+Mathlib の標準的な証明（円分体 $\mathbb{Z}[\zeta_3]$ と無限降下）とは別系統の幾何学的なアプローチじゃ。
+しかし、その二つの世界には、鏡合わせのような美しい対応関係（同型視）がある。
+
+1. **Body の 3 分割と 3 方向**:
+   円分体での因数分解 $a^3 + b^3 = (a+b)(a+\zeta_3 b)(a+\zeta_3^2 b)$ は、
+   宇宙式における **Body $\times 3$** （3つの線型因子）に対応する。
+   単なる隣接ピースではなく、「$120^\circ$ の回転対称性を持つ3つの方向」として
+   Body を捉えることで、代数と幾何が一致する。
+
+2. **Gap の単位としての $\lambda$**:
+   実数（$\mathbb{N}$）の世界では最小の Gap は $1$ じゃが、
+   円分体の世界では $\lambda = \zeta_3 - 1$ がその役割を担う。
+   $\lambda$ の重複度（付値）を追う Mathlib の降下法は、
+   宇宙式における「境界の厚み（Gap の純粋性）」を削ぎ落としていく過程と同型じゃ。
+
+3. **接合規則（アスペクト比）**:
+   3つの Body ピースが接続される際、共有してよい因子が $\lambda$（境界の糊）
+   だけに制限されることが、Mathlib における `IsCoprime` 条件の幾何化にあたる。
+
+**警告（Policy）**:
+現在 `fermatLastTheoremThree` を black box として参照しておるのは、$u=1$ の壁
+を確認するための「同型性の検証」のためじゃ。
+本研究の目的は Mathlib の証明をなぞることではなく、宇宙式の構造因子 $GN$ や
+次元の歪み $d$ から生じる「幾何学的な禁止則」を独自に記述することにありんせん！
+ゆえに、安易な依存を避け、宇宙式独自の論理（Zsigmondy 原始素因子や幾何的バランス等）
+による証明の完遂を目指すものとする。
+-/
+
 namespace DkMath
 
 open DkMath.NumberTheory
