@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 -- cid: 697d62b5-312c-83a8-a917-f4aca8fa80ca
 
+import DkMath.Basic
 import DkMath.Algebra.DiffPow
 import DkMath.NumberTheory.GdcDivD
 import DkMath.NumberTheory.GcdNext
@@ -54,65 +55,6 @@ open DkMath.Algebra
 open DkMath.CosmicFormulaBinom
 
 set_option linter.unusedTactic false in
-
-/-- Cubic difference formula:
-$$
-\Large
-z^3 - y^3 = (z - y)(z^2 + zy + y^2)\\[16pt]
-\normalsize
-$$
-z: Big := Universe
-y: Gap := Unit
--/
-def x3sub (y z : ℕ) : ℕ := (z - y) * (z ^ 2 + z * y + y ^ 2)
-/--
-Cubic power formula:
-$$
-\Large
-x^3 = x \cdot x \cdot x\\[16pt]
-\normalsize
-$$
-x: Body := Geometric Value = (Big - Unit)
--/
-def x3pow (x : ℕ) : ℕ := x ^ 3
-
-#eval x3sub 1 3  -- 26
-#eval x3pow 3    -- 27
-
-#eval x3sub 1 5  -- 124
-#eval x3pow 5    -- 125
-
-#eval x3sub 1 7  -- 342
-#eval x3pow 7    -- 343
-
-#eval x3sub 1 9  -- 728
-#eval x3pow 9    -- 729
-
-#eval x3sub 1 2  -- 7
-#eval x3pow 2    -- 8
-
-#eval x3sub 2 3  -- 19
-#eval x3pow 3    -- 27
-
-#eval x3sub 4 5  -- 61
-#eval x3pow 4    -- 64
-
-#eval x3sub 5 6  -- 91
-#eval x3pow 5    -- 125
-
-example {x} (y z : ℕ) : x ^ 3 = (z - y) * (z ^ 2 + z * y + y ^ 2) + 1 := by
-  refine (Nat.Prime.pow_eq_iff ?_).mpr ?_
-  /-
-  case refine_1
-  x y z : ℕ
-  ⊢ Nat.Prime ((z - y) * (z ^ 2 + z * y + y ^ 2))
-
-  case refine_2
-  x y z : ℕ
-  ⊢ x = (z - y) * (z ^ 2 + z * y + y ^ 2) ∧ 3 = 1
-  -/
-  · sorry
-  · sorry
 
 /-- 補題: $d=2$ の場合、$GN$ は線形式である -/
 lemma GN_linear (u y : ℕ) : GN 2 u y = u + 2 * y := by
@@ -229,6 +171,7 @@ theorem FLT
   {x y z : ℕ} (n : ℕ)
   (hpos_xyz : 0 < x ∧ 0 < y ∧ 0 < z)
   (hn : 3 ≤ n)
+  (h_coprime : Nat.gcd x y = 1)
   (hxy : x ^ n + y ^ n = z ^ n) : False := by
   -- 1. z > y であることを確認（x > 0 より当然）
   have hzy : y < z := by
@@ -283,9 +226,43 @@ theorem FLT
   -- 一般の y, u については、GN(n, u, y) が新しい素因数（Zsigmondy 原始素因子）を
   -- 持つことを利用して、$x^n$ の $n$ 乗構造と矛盾することを示すのが本筋じゃな。
 
-  have h_gcd : Nat.gcd x y = 1 := by
-    -- ここで一般性を失わずに gcd(x, y) = 1 とできるが、一旦 sorry で進めるぞい。
-    sorry
+  have h_gcd_u_y : Nat.gcd u y = 1 := by
+    -- g = gcd(y, z) とおく。g | y, g | z ならば g^n | y^n, z^n → g^n | x^n → g | x
+    let g := Nat.gcd y z
+    have hg_y : g ∣ y := Nat.gcd_dvd_left y z
+    have hg_z : g ∣ z := Nat.gcd_dvd_right y z
+    have hg_y_pow : g ^ n ∣ y ^ n := pow_dvd_pow_of_dvd hg_y n
+    have hg_z_pow : g ^ n ∣ z ^ n := pow_dvd_pow_of_dvd hg_z n
+    have hg_x_pow : g ^ n ∣ x ^ n := by
+      have : z ^ n - y ^ n = x ^ n := by
+        rw [← hxy]
+        simp
+      rw [← this]
+      exact Nat.dvd_sub hg_z_pow hg_y_pow
+    have n_ne_zero : n ≠ 0 := by
+      intro heq
+      have : 3 ≤ 0 := by rwa [heq] at hn
+      linarith
+    have hg_x : g ∣ x := (Nat.pow_dvd_pow_iff n_ne_zero).mp hg_x_pow
+    have hd : g ∣ Nat.gcd x y := Nat.dvd_gcd hg_x hg_y
+    -- gcd(x,y) = 1 を仮定しているので g = 1
+    have hg_one : g = 1 := by rw [h_coprime] at hd; exact Nat.eq_one_of_dvd_one hd
+    -- よって gcd(y,z)=1, さらに u = z - y より gcd(u,y)=1
+    have h_gcd_yz : Nat.gcd y z = 1 := by simpa [g] using hg_one
+    have h_gcd_u_y : Nat.gcd u y = 1 := by
+      have h1 : Nat.gcd z y = 1 := by
+        have : Nat.gcd y z = 1 := by simpa [g] using hg_one
+        rwa [Nat.gcd_comm] at this
+      have h_eq : u.gcd y = z.gcd y := by
+        dsimp [u]
+        have step := Nat.gcd_sub_self_right hzy.le
+        calc
+          (z - y).gcd y = y.gcd (z - y) := by rw [Nat.gcd_comm]
+          _ = y.gcd z := by rw [step]
+          _ = z.gcd y := by rw [Nat.gcd_comm]
+      rw [h_eq]
+      exact h1
+    exact h_gcd_u_y
 
   -- x^n = u * GN n u y
   have h_xn_val : x ^ n = u * GN n u y := by
