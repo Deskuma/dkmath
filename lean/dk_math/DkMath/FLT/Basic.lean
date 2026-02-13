@@ -15,6 +15,7 @@ import Mathlib.NumberTheory.FLT.Three
 
 set_option linter.style.longLine false
 set_option linter.style.multiGoal false
+set_option linter.style.emptyLine false
 
 /-!
 ### 🐺 賢狼の設計指針: 宇宙式と円分体降下法の「同型（Isomorphism）」
@@ -412,7 +413,8 @@ theorem FLT {x y z : ℕ} (n : ℕ) (hpos_xyz : 0 < x ∧ 0 < y ∧ 0 < z) (hn :
   -- 正性の保持
   -- g ≠ 0 (さもなくば x = 0 と矛盾)
   have g_ne_zero : g ≠ 0 := by
-    intro heq; rw [heq] at hx_mul; simp [mul_zero] at hx_mul; exact (ne_of_gt hpos_xyz.1) hx_mul
+    intro heq; rw [heq] at hx_mul; simp only [zero_mul] at hx_mul
+    exact (ne_of_gt hpos_xyz.1) hx_mul
   have hg_pos : 0 < g := Nat.pos_of_ne_zero g_ne_zero
   have hx'_pos : 0 < x' := by
     have : 0 < g * x' := by rw [← hx_mul]; exact hpos_xyz.1
@@ -428,7 +430,7 @@ theorem FLT {x y z : ℕ} (n : ℕ) (hpos_xyz : 0 < x ∧ 0 < y ∧ 0 < z) (hn :
   have h_gcd_mul : Nat.gcd (g * x') (g * y') = g * Nat.gcd x' y' :=
     Nat.gcd_mul_left g x' y'
   have h_gcd_eq : g = g * Nat.gcd x' y' := by
-    simp [hx_mul, hy_mul] at h_gcd_mul
+    simp only at h_gcd_mul
     -- Nat.gcd x y = g, と対応させる
     have : Nat.gcd x y = g := by rfl
     calc
