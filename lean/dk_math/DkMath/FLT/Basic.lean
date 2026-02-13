@@ -9,8 +9,8 @@ Authors: D. and Wise Wolf.
 import DkMath.Algebra.DiffPow
 import DkMath.NumberTheory.GdcDivD
 import DkMath.NumberTheory.GcdNext
--- Mathlib の一般論を活用するには適切なインポートが必要じゃが、
--- まずは論理の骨組みを固めることに専念しようかの。
+import Mathlib.Algebra.Divisibility.Basic
+import Mathlib.NumberTheory.FLT.Three
 
 set_option linter.style.longLine false
 set_option linter.style.multiGoal false
@@ -97,24 +97,17 @@ lemma GN_quadratic (u y : ℕ) : GN 3 u y = u ^ 2 + 3 * u * y + 3 * y ^ 2 := by
 /-- 補題: $u=1$ の場合、$GN(3, 1, y) = 3y^2 + 3y + 1$ は $y > 0$ で立方数になり得ない -/
 lemma GN3_one_not_cube {y : ℕ} (hy : 0 < y) : ¬ ∃ x, x^3 = GN 3 1 y := by
   rw [GN_quadratic]
-  -- 3y^2 + 3y + 1 は連続する立方数の「隙間」に落ち込む運命にある。
-  /-
-  ### 💡 賢狼の看破: 立方数の隙間と宇宙の拒絶
-  $u=1$（最小の歩み）において、$GN$ は $3y^2 + 3y + 1$ という姿を現す。
-  これは幾何学的には $(y+1)^3 - y^3$、すなわち「隣り合う立方宇宙の境界」じゃ。
-
-  #### 1. 幼き宇宙 ($y=1, 2, 3$):
-  $y^3 < 3y^2 + 3y + 1 < (y+1)^3$
-  この領域では、$GN$ は二つの立方数の間に挟まれ、身動きが取れぬ。
-  連続する整数の間に立方数は存在し得ぬゆえ、この歪みは立方数にはなり得ない。
-
-  #### 2. 膨張する宇宙 ($y \ge 4$):
-  $3y^2 + 3y + 1 < y^3$
-  $y$ が大きくなると、$y^3$ の成長速度が $GN$（二次式）を圧倒し、
-  $GN$ はもはや $y^3$ にすら届かぬ小さな存在へと成り下がる。
-  いずれにせよ、数宇宙の「格（power）」が一致することは決してありありんせん。
-  -/
-  sorry
+  rintro ⟨x, hx⟩
+  -- x^3 = 3y^2 + 3y + 1
+  -- x^3 + y^3 = (y+1)^3
+  have h_flt : x ^ 3 + y ^ 3 = (y + 1) ^ 3 := by
+    rw [hx]
+    ring
+  have hx_pos : x ≠ 0 := by
+    intro h; rw [h] at hx; omega
+  have hy_pos : y ≠ 0 := hy.ne'
+  have hz_pos : y + 1 ≠ 0 := by omega
+  exact fermatLastTheoremThree x y (y + 1) hx_pos hy_pos hz_pos h_flt
 
 /-- 補題: $d=3$ の場合、$x^3$ は $u^2$ で割り切れる（適切な条件の下で） -/
 lemma x3_div_u2 (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h_gcd : u.gcd (GN 3 u y) = 1) :
@@ -153,19 +146,30 @@ theorem FLT_case_3 (x y z : ℕ) (hpos : 0 < x ∧ 0 < y ∧ 0 < z) (h_coprime :
 
   -- 2. x^3 = u * GN 3 u y
   have h_xn_val : x ^ 3 = u * GN 3 u y := by
-    -- (u+y)^3 - y^3 = BodyN 3 u y = u * GN 3 u y
-    sorry
+    rw [GN_quadratic]
+    have hz : z = u + y := (Nat.sub_add_cancel hzy.le).symm
+    zify at hz h_body ⊢
+    rw [hz] at h_body
+    rw [← add_left_cancel_iff (a := (y : ℤ) ^ 3)]
+    rw [add_comm, ← h_body]
+    ring
 
   -- 3. gcd(u, GN 3 u y) = gcd(u, 3)
   have h_gcd_u_G : u.gcd (GN 3 u y) = u.gcd 3 := by
     apply gcd_u_GN3
     -- gcd(u, y) = 1 の証明
-    have hu_eq : u = z - y := rfl
     have h_gcd_yz : y.gcd z = 1 := by
-      -- gcd(y, z) | y かつ gcd(y, z) | z ゆえ gcd(y, z)^3 | x^3
-      -- すなわち gcd(y, z) | x。ゆえに gcd(y, z) | gcd(x, y) = 1
-      sorry
-    rw [hu_eq, Nat.gcd_comm, Nat.gcd_sub_self_right hzy.le]
+      let d := y.gcd z
+      have hd_y : d ∣ y := y.gcd_dvd_left z
+      have hd_z : d ∣ z := y.gcd_dvd_right z
+      have hd_x3 : d ^ 3 ∣ x ^ 3 := by
+        rw [← Nat.add_sub_cancel (x ^ 3) (y ^ 3), h_body.symm]
+        exact Nat.dvd_sub (pow_dvd_pow_of_dvd hd_z 3) (pow_dvd_pow_of_dvd hd_y 3)
+      have hd_x : d ∣ x := (Nat.pow_dvd_pow_iff (by norm_num)).mp hd_x3
+      have hd_gcd : d ∣ x.gcd y := Nat.dvd_gcd hd_x hd_y
+      rw [h_coprime] at hd_gcd
+      exact Nat.eq_one_of_dvd_one hd_gcd
+    rw [Nat.gcd_comm, (by rfl : u = z - y), Nat.gcd_sub_self_right hzy.le]
     exact h_gcd_yz
 
   -- 4. u = 1 の場合の断罪（突きつけ）
