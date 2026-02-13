@@ -167,7 +167,7 @@ x^{n-1} = G_{d-1}(x,u) = \frac{(x+u)^d - u^d}{x}\\[16pt]
 G_{d-1}(x,u) = \sum_{k=0}^{d-1} \binom{d}{k+1} x^k\ u^{d-1-k}
 $$
 -/
-theorem FLT
+theorem FLT_of_coprime
   {x y z : ℕ} (n : ℕ)
   (hpos_xyz : 0 < x ∧ 0 < y ∧ 0 < z)
   (hn : 3 ≤ n)
@@ -362,5 +362,80 @@ theorem FLT
   -- いずれにせよ、Zsigmondy 原始素因子の存在が、$GN$ が「綺麗な $n$ 乗」になることを拒む。
 
   sorry
+
+/-- 汎用版：gcd を自動で取り除き、原始解へ還元してから `FLT_of_coprime` を呼ぶ。 -/
+theorem FLT {x y z : ℕ} (n : ℕ) (hpos_xyz : 0 < x ∧ 0 < y ∧ 0 < z) (hn : 3 ≤ n)
+    (hxy : x ^ n + y ^ n = z ^ n) : False := by
+  let g := Nat.gcd x y
+  by_cases hg1 : g = 1
+  · -- 既に互いに素ならばそのままコプロ版を呼ぶ
+    apply FLT_of_coprime n hpos_xyz hn (by simpa [g] using hg1) hxy
+
+  -- g > 1 の場合は g で同時に割って原始解に還元する
+  have gx_dvd : g ∣ x := Nat.gcd_dvd_left x y
+  have gy_dvd : g ∣ y := Nat.gcd_dvd_right x y
+  let x' := x / g
+  let y' := y / g
+  -- g^n | x^n, g^n | y^n ⇒ g^n | z^n なので g | z
+  have gpow_dvd_sum : g ^ n ∣ x ^ n + y ^ n := by
+    apply Nat.dvd_add
+    · exact pow_dvd_pow_of_dvd gx_dvd n
+    · exact pow_dvd_pow_of_dvd gy_dvd n
+  have gpow_dvd_zpow : g ^ n ∣ z ^ n := by rwa [hxy] at gpow_dvd_sum
+  have n_ne_zero : n ≠ 0 := by
+    intro heq
+    have : 3 ≤ 0 := by rwa [heq] at hn
+    linarith
+  have g_dvd_z : g ∣ z := (Nat.pow_dvd_pow_iff n_ne_zero).mp gpow_dvd_zpow
+  let z' := z / g
+
+  -- 割り切りの等式
+  have hx_mul : x = g * x' := (Nat.mul_div_cancel' gx_dvd).symm
+  have hy_mul : y = g * y' := (Nat.mul_div_cancel' gy_dvd).symm
+  have hz_mul : z = g * z' := (Nat.mul_div_cancel' g_dvd_z).symm
+
+  -- 正性の保持
+  -- g ≠ 0 (さもなくば x = 0 と矛盾)
+  have g_ne_zero : g ≠ 0 := by
+    intro heq; rw [heq] at hx_mul; simp [mul_zero] at hx_mul; exact (ne_of_gt hpos_xyz.1) hx_mul
+  have hg_pos : 0 < g := Nat.pos_of_ne_zero g_ne_zero
+  have hx'_pos : 0 < x' := by
+    have : 0 < g * x' := by rw [← hx_mul]; exact hpos_xyz.1
+    exact Nat.pos_of_mul_pos_left this
+  have hy'_pos : 0 < y' := by
+    have : 0 < g * y' := by rw [← hy_mul]; exact hpos_xyz.2.1
+    exact Nat.pos_of_mul_pos_left this
+  have hz'_pos : 0 < z' := by
+    have : 0 < g * z' := by rw [← hz_mul]; exact hpos_xyz.2.2
+    exact Nat.pos_of_mul_pos_left this
+
+  -- gcd(x', y') = 1
+  have h_gcd_mul : Nat.gcd (g * x') (g * y') = g * Nat.gcd x' y' :=
+    Nat.gcd_mul_left g x' y'
+  have h_gcd_eq : g = g * Nat.gcd x' y' := by
+    simp [hx_mul, hy_mul] at h_gcd_mul
+    -- Nat.gcd x y = g, と対応させる
+    have : Nat.gcd x y = g := by rfl
+    calc
+      g = Nat.gcd x y := by rfl
+      _ = Nat.gcd (g * x') (g * y') := by simp [hx_mul, hy_mul]
+      _ = g * Nat.gcd x' y' := by exact h_gcd_mul
+  have h_gcd_x'y' : Nat.gcd x' y' = 1 := by
+    have eq_mul' : g * 1 = g * Nat.gcd x' y' := by rw [Nat.mul_one, ← h_gcd_eq]
+    have h1 := Nat.mul_left_cancel hg_pos eq_mul'
+    exact (Eq.symm h1)
+
+  -- 割った後の方程式： (x/g)^n + (y/g)^n = (z/g)^n
+  have hxy' : x' ^ n + y' ^ n = z' ^ n := by
+    have hx_pow : x ^ n = g ^ n * x' ^ n := by rw [hx_mul, mul_pow]
+    have hy_pow : y ^ n = g ^ n * y' ^ n := by rw [hy_mul, mul_pow]
+    have hz_pow : z ^ n = g ^ n * z' ^ n := by rw [hz_mul, mul_pow]
+    have eq_mul : g ^ n * (x' ^ n + y' ^ n) = g ^ n * z' ^ n := by
+      rw [mul_add, ← hx_pow, ← hy_pow, hxy, ← hz_pow]
+    have gpow_pos : 0 < g ^ n := by apply Nat.pow_pos; exact hg_pos
+    exact Nat.mul_left_cancel gpow_pos eq_mul
+
+  -- 最終的に原始解に還元して `FLT_of_coprime` を適用
+  exact FLT_of_coprime n (And.intro hx'_pos (And.intro hy'_pos hz'_pos)) hn h_gcd_x'y' hxy'
 
 end DkMath
