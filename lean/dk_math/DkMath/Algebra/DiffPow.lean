@@ -200,24 +200,33 @@ end CommRing
 
 section CommSemiring
 
--- CommRing ではなく CommSemiring 上で定義したい場合のバージョン
+-- CommSemiring 用の補助定義と注意
+-- `diffPowSum'` は semiring 上でも和を定義するための同義の定義である。
+-- 引き算 (`-`) が必要な主張（因数分解そのもの）は `CommRing` の下で扱うが、
+-- `diffPowSum'` を使うことで semiring 側の計算と互換にできるようにしてある。
 /-- 差の冪の因数分解に出る和 (Difference Power Sum) -/
 def diffPowSum' {α : Type*} [CommSemiring α] (a b : α) (d : ℕ) : α :=
   ∑ i ∈ range d, a^(d - 1 - i) * b^i
 
 /--
-この定理は `CommSemiring` 上では "引き算 ( - )" が定義されないため直接表現できん。
-したがって semiring レベルの和 `diffPowSum'` は保持しつつ、因数分解の主張は `CommRing` 上で成り立つ
-という形にしておく。
+Semiring 用の和 `diffPowSum'` を保持したまま、`CommRing` 上でべき乗差の因数分解が成り立つことを示す補題。
+実際の証明は `CommRing` 上で既に証明済みの `pow_sub_pow_factor` を再利用している（`simpa`）。
+補足：`diffPowSum'` は `CommRing` 上では `diffPowSum` と一致する。
 -/
 theorem pow_sub_pow_factor' {α : Type*} [CommRing α] (a b : α) (d : ℕ) :
     a^d - b^d = (a - b) * diffPowSum' a b d := by
-  -- `diffPowSum'` は `diffPowSum` と同じ定義なので、既に証明済みの `pow_sub_pow_factor` を流用する
+  -- 証明：ring 版を流用（`diffPowSum'` は `diffPowSum` と一致）
   simpa [diffPowSum, diffPowSum'] using pow_sub_pow_factor (a := a) (b := b) (d := d)
 
 
 
-/-- 自然数版：b ≤ a のときのべき乗差の分解（Nat での `a - b` を含む形） -/
+/--
+自然数版：b ≤ a のときのべき乗差の分解（Nat での `a - b` を含む形）。
+
+証明方針：ℤ に持ち上げて `pow_sub_pow_factor`（整数/環版）を適用し、
+最後に `Int.natCast_inj` で ℕ に戻すことで簡潔に示してある。
+（semiring/ring の差は `diffPowSum'` と `diffPowSum` の対応で扱っている）
+-/
 theorem pow_sub_pow_nat {a b d : ℕ} (h : b ≤ a) :
     a ^ d = b ^ d + (a - b) * diffPowSum' (a : ℕ) b d := by
   apply Int.natCast_inj.1
