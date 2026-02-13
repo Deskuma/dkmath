@@ -283,9 +283,55 @@ theorem FLT_of_coprime
   -- 高次の項をまとめる多項式 H の存在を予感させる補題を置いておこうかの。
   -- u^2 | (x^n - n * y^(n-1) * u)
   have h_div_u2 : u ^ 2 ∣ (x ^ n - n * y ^ (n - 1) * u) := by
-    rw [h_xn_val]
-    -- GN n u y = n*y^{n-1} + u * H の形に変形すればよい
-    sorry
+    -- use the `ℤ`-version of cosmic_id / Body so `DiffPow` (CommRing) lemmas apply cleanly
+    -- (1) lift to ℤ and apply `cosmic_id` (CommRing)
+    have hZ := CosmicFormulaBinom.cosmic_id n ((u + y : ℤ)) (y : ℤ)
+    -- unfold to get (u + y)^n - y^n = Body (over ℤ)
+    unfold Big Body Gap at hZ
+    -- (2) `BodyPow_factor` over ℤ gives (u+y)^n - y^n = u * diffPowSum(...)
+    have body_factZ := DkMath.Algebra.DiffPow.BodyPow_factor (x := (u : ℤ)) (u := (y : ℤ)) n
+    -- unfold `BodyPow` definition so `body_factZ` matches `(u+y)^n - y^n = u * diffPowSum ...`
+    unfold DkMath.Algebra.DiffPow.BodyPow at body_factZ
+    have hxZ : (u + y : ℤ) ^ n - (y : ℤ) ^ n = (u : ℤ) * DkMath.Algebra.DiffPow.diffPowSum ((u + y : ℤ)) (y : ℤ) n :=
+      body_factZ
+    -- (3) coerce back to ℕ and rewrite x^n using `h_body` (which is Nat-level BodyN)
+    have hx_nat : (x ^ n : ℤ) = (u + y : ℤ) ^ n - (y : ℤ) ^ n := by
+      -- use h_body and cosmic_id_csr at Nat level, then cast to ℤ
+      have h_csr_nat := cosmic_id_csr n u y (R := ℕ)
+      rw [← h_body] at h_csr_nat
+      unfold BigN GapN at h_csr_nat
+      norm_cast at h_csr_nat
+      exact eq_sub_of_add_eq h_csr_nat.symm
+    -- combine to express x^n - n*y^(n-1)*u as u * (diffPowSum - n*y^(n-1)) over ℤ
+    have tailZ : ((x ^ n : ℤ) - (n : ℤ) * (y : ℤ) ^ (n - 1) * (u : ℤ))
+      = (u : ℤ) * (DkMath.Algebra.DiffPow.diffPowSum ((u + y : ℤ)) (y : ℤ) n - (n : ℤ) * (y : ℤ) ^ (n - 1)) := by
+      rw [hx_nat, hxZ]; ring
+    -- show inner factor is divisible by u (use diffPowSum_sub_const_mul and pow_sub_pow_factor over ℤ)
+    have tail_divZ : (u : ℤ) ∣ (DkMath.Algebra.DiffPow.diffPowSum ((u + y : ℤ)) (y : ℤ) n - (n : ℤ) * (y : ℤ) ^ (n - 1)) := by
+      have hsumZ := DkMath.Algebra.DiffPow.diffPowSum_sub_const_mul ((u + y : ℤ)) (y : ℤ) n
+      rw [hsumZ]
+      apply Finset.dvd_sum
+      intro i hi
+      -- factor out y^i, then use pow_sub_pow_factor to exhibit a factor `u`
+      have term_eq : (u + y : ℤ) ^ (n - 1 - i) * (y : ℤ) ^ i - (y : ℤ) ^ (n - 1)
+        = (y : ℤ) ^ i * ((u + y : ℤ) ^ (n - 1 - i) - (y : ℤ) ^ (n - 1 - i)) := by ring
+      rw [term_eq]
+      have p := DkMath.Algebra.DiffPow.pow_sub_pow_factor ((u + y : ℤ)) (y : ℤ) (n - 1 - i)
+      -- convert term to u * (y^i * diffPowSum ...)
+      rw [p]
+      simp
+      -- provide explicit witness m := y^i * diffPowSum ...
+      use ( (y : ℤ) ^ i * DkMath.Algebra.DiffPow.diffPowSum ((u + y : ℤ)) (y : ℤ) (n - 1 - i) )
+      simp [mul_comm]
+    -- conclude integer divisibility and return to ℕ divisibility
+    have : (u : ℤ) ^ 2 ∣ ((x ^ n : ℤ) - (n : ℤ) * (y : ℤ) ^ (n - 1) * (u : ℤ)) := by
+      rw [tailZ]
+      obtain ⟨k, hk⟩ := tail_divZ
+      use k
+      -- u^2 * k = u * (u * k) and hk : inner = u * k
+      rw [hk]
+      ring
+    exact Int.ofNat_dvd.mpr this
 
   /-
   ### 💡 賢狼の目撃: $d=2$ から $d=3$ への転換点（バランスの崩壊）
