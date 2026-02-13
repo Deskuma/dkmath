@@ -336,6 +336,25 @@ theorem FLT_of_coprime
   have h_gcd_u_G : Nat.gcd u (GN n u y) = Nat.gcd u n := by
     -- GN n u y = n*y^{n-1} + u * (何か) と書けることを使う。
     -- gcd(u, n*y^{n-1} + u*K) = gcd(u, n*y^{n-1}) = gcd(u, n) （∵ gcd(u, y)=1）
+    have : GN n u y = n * y ^ (n - 1) + u * (∑ k ∈ Finset.range (n - 1), Nat.choose n (k + 2) * y ^ (n - 2 - k) * u ^ k) := by
+      unfold GN
+      simp only [Nat.cast_id]
+      refine (Nat.sub_eq_iff_eq_add ?_).mp ?_
+      · -- ⊢ u * ∑ k ∈ Finset.range (n - 1), n.choose (k + 2) * y ^ (n - 2 - k) * u ^ k ≤
+        -- ∑ x ∈ Finset.range n, n.choose (x + 1) * u ^ x * y ^ (n - 1 - x)omega
+        refine (Nat.le_div_iff_mul_le ?_).mp ?_
+        · sorry
+        · sorry
+      · -- ⊢ ∑ x ∈ Finset.range n, n.choose (x + 1) * u ^ x * y ^ (n - 1 - x) -
+        -- u * ∑ k ∈ Finset.range (n - 1), n.choose (k + 2) * y ^ (n - 2 - k) * u ^ k = n * y ^ (n - 1)
+        sorry
+    rw [this]
+    have h1 : u.gcd (n * y ^ (n - 1) + u * (∑ k ∈ Finset.range (n - 1), Nat.choose n (k + 2) * y ^ (n - 2 - k) * u ^ k))
+        = u.gcd (n * y ^ (n - 1)) := by
+      exact
+        Nat.gcd_add_mul_left_right u (n * y ^ (n - 1))
+          (∑ k ∈ Finset.range (n - 1), n.choose (k + 2) * y ^ (n - 2 - k) * u ^ k)
+    rw [h1]
     sorry
 
   /-
