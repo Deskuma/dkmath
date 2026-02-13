@@ -330,12 +330,8 @@ theorem FLT_of_coprime
   -- 5. 幾何単位の不整合の具体的検討
   -- ぬしよ、ここで gcd(u, GN n u y) を調べてみようかの。
   -- まず gcd(u, y) = 1 であることを確認するぞい。
-  have h_gcd_u_y : Nat.gcd u y = 1 := by
-    rw [← Nat.gcd_add_self_left]
-    have : u + y = z := by omega
-    rw [this]
-    -- gcd(z, y) = 1 は gcd(x, y) = 1 から従うはずじゃが、ここでは sorry としておく。
-    sorry
+  -- have h_gcd_u_y : Nat.gcd u y = 1 := by ... (上述の証明)
+  have : u.gcd y = 1 := h_gcd_u_y
 
   have h_gcd_u_G : Nat.gcd u (GN n u y) = Nat.gcd u n := by
     -- GN n u y = n*y^{n-1} + u * (何か) と書けることを使う。
