@@ -1,4 +1,5 @@
 # Project specific ignores
+lean/dk_math/notes/
 __*
 !__init__.py
 

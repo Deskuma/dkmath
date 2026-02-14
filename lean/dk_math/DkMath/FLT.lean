@@ -5,3 +5,5 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.Basic
+
+set_option linter.style.longLine false

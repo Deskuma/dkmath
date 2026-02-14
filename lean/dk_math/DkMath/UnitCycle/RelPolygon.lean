@@ -56,7 +56,7 @@ DkMath/UnitCycle/RelPolygon.lean
   k=2 に対して余分に +4 が乗ることを見せる。
 -/
 
-/-! ## 1) 最小 State -/
+/-! ## 1. 最小 State -/
 
 /-- 周回位置 `pos` と蓄積値 `val` を持つ最小状態 -/
 structure RPState where
@@ -64,7 +64,7 @@ structure RPState where
   val : ℕ
 deriving Repr
 
-/-! ## 2) 局所スパイク増分 g(pos) -/
+/-! ## 2. 局所スパイク増分 g(pos) -/
 
 /-- 局所スパイク：pos が 10 の倍数なら 5、それ以外は 1 -/
 def g (s : RPState) : ℕ :=
@@ -78,7 +78,7 @@ def T (s : RPState) : RPState :=
 /-- ポテンシャル：今回は val をそのまま使う -/
 def I (s : RPState) : ℕ := s.val
 
-/-! ## 3) 基本補題：g ≥ 1 と I(T s) ≥ I s + g s -/
+/-! ## 3. 基本補題：g ≥ 1 と I(T s) ≥ I s + g s -/
 
 lemma hg : ∀ s : RPState, 1 ≤ g s := by
   intro s
@@ -90,8 +90,7 @@ lemma hT : ∀ s : RPState, I (T s) ≥ I s + g s := by
   -- I(T s) = s.val + g s
   simp [T, I]
 
-/-!
-## 4) 総和版の適用（コア定理に委譲）
+/-! ## 4. 総和版の適用（コア定理に委譲）
 
 Core 側に以下の形の定理がある前提：
 
@@ -122,7 +121,7 @@ theorem I_iterate_ge_sum_fn
   -- そうでない場合、Core 側の iterate 記法に統一して使ってよい。
   simpa using (I_iterate_ge_sum (k := k) (s := s))
 
-/-! ## 5) 具体例：pos=9, k=2 で Σg=6（余分に +4） -/
+/-! ## 5. 具体例：pos=9, k=2 で Σg=6（余分に +4） -/
 
 /-- 初期状態：pos=9, val=0 -/
 def s0 : RPState := { pos := 9, val := 0 }
