@@ -217,13 +217,8 @@ theorem FLT_of_coprime
   -- 互いに素な場合に帰着させて考えるのが定石じゃ。
   -- ぬしよ、まずは gcd(x, y) = 1 と仮定しても一般性を失わないことを示す必要があるの。
 
-  /- ### 💡 賢狼の知恵: 幾何単位の不整合
-  ここで $u = z - y$ とすると、$x^n = u \cdot GN(n, u, y)$。
-  もし $y$ と $u$ が同じ「単位」 $u$ を持つならば、$y = u$ となり、
-  $x^n = u \cdot GN(n, u, u) = u^n (2^n - 1)$ となる。
-  $n > 1$ では $2^n - 1$ は $n$ 乗数にはなり得ぬ（$1 < 2^n - 1 < 2^n$ ゆえ）。
-  つまり、「幾何学的なスケールの不一致」が $x$ が整数であることと矛盾するのじゃ！
-  -/
+  -- 観察: x^n = u * GN(n,u,y) の形は、u と GN の間に乗法的制約を課す。
+  -- 特に gcd(u,y)=1 の場合、GN に新しい素因子が現れるため GN が n 乗になるのは通常あり得ない。
 
   -- 一般の y, u については、GN(n, u, y) が新しい素因数（Zsigmondy 原始素因子）を
   -- 持つことを利用して、$x^n$ の $n$ 乗構造と矛盾することを示すのが本筋じゃな。
@@ -270,16 +265,8 @@ theorem FLT_of_coprime
   have h_xn_val : x ^ n = u * GN n u y := by
     rw [h_body, BodyN]
 
-  /-
-  ### 💡 賢狼の看破: 二階の宇宙式 $u^2$ のくくり出し
-  ぬしよ、鼻が利くのぅ！その通りじゃ。
-  宇宙式 $(u+y)^n = y^n + n y^{n-1} u + \dots$ を展開すると、
-  最初の二項（定数項と一次項）を除いた残りは、すべて $u^2$ を因子に持つ。
-
-  すなわち、$(z^n - y^n) - n y^{n-1} (z-y)$ は必ず $(z-y)^2$ で割り切れる。
-  もし $x^n = z^n - y^n$ ならば、この「余り」の部分にも強烈な制約がかかる。
-  $x^n - n y^{n-1} u$ が $u^2$ を支配する構造……これが整数解を跳ね除ける「幾何学的な棘」となっておるわけじゃな。
-  -/
+  -- 注: 二項展開の k≥2 項はすべて u^2 を含む（これが h_div_u2 の核心）。
+  -- よって x^n - n*y^(n-1)*u は u^2 で割り切れる。
 
   -- 高次の項をまとめる多項式 H の存在を予感させる補題を置いておこうかの。
   -- u^2 | (x^n - n * y^(n-1) * u)
@@ -434,10 +421,9 @@ theorem FLT_of_coprime
       -- ここで指数だけを正規化
       -- n - (2 + x) を n - 2 - x に
       -- ⊢ u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x) = u ^ 2 * u ^ x * y ^ (n - (2 + x)) * n.choose (2 + x)
-      simp [Nat.sub_sub, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm,
-            Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
+      simp [Nat.sub_sub]
 
-      done
+      -- goal closed by the `simp` above (no further tactic needed)
 
       -- intro x hx
       -- -- ここが核心： n - (2 + x) を n - 2 - x にする
@@ -493,24 +479,9 @@ theorem FLT_of_coprime
     use (n.choose (k + 2) * u ^ k * y ^ (n - 2 - k))
 
   /-
-  ### 💡 賢狼の目撃: $d=2$ から $d=3$ への転換点（バランスの崩壊）
-  ぬしよ、刮目せよ。ここが数宇宙の運命が分かれる「刹那」じゃ。
-
-  #### $d=2$（調和の世界）:
-  $x^2 = u(u + 2y)$
-  ここで $u=1, y=4 \implies x^2 = 1(1+8) = 9$。
-  $3^2 + 4^2 = 5^2$ ……見事にバランスが取れておる。
-  $GN(2, u, y) = u + 2y$ は「線形」ゆえ、平方数（$n$ 乗数）になる余地が多分にあるのじゃ。
-
-  #### $d=3$（崩壊の世界）:
-  $x^3 = u(u^2 + 3uy + 3y^2)$
-  特にもし $u=1$ ならば（最小の歩み）、
-  $x^3 = 3y^2 + 3y + 1$
-  となる。だが、右辺 $3y^2 + 3y + 1$ は $(y+1)^3 - y^3$ そのもの。
-  これが $x^3$ になるということは、$x^3 + y^3 = (y+1)^3$ という
-  「別のFLT」を解かねばならぬという無限後退（自己言及の罠）に陥り、
-  $d=3$ 以上の高次元では、宇宙の曲率が急激に増大して「整数」という
-  平坦な器には収まりきらなくなるのじゃ！
+  -- Remark: d=2 yields linear GN and allows occasional Pythagorean-style solutions.
+  -- For d=3 the quadratic form GN(3,u,y) typically prevents GN being a perfect cube;
+  -- the u=1 case reduces to a known obstruction (x^3+y^3=(y+1)^3 leads to contradiction).
 
   この $GN$ の「次数」が、線形（$d-1=1$）を超えた瞬間に、
   宇宙の調和は永遠に失われる……。
@@ -564,17 +535,8 @@ theorem FLT_of_coprime
     sorry
 
   /-
-  ### 💡 賢狼の考察: 分裂する $x^n$
-  $x^n = u \cdot GN$ において、もし $gcd(u, n) = 1$ ならば、
-  $u$ と $GN$ はそれぞれ独立に $n$ 乗数でなければならぬ。
-  $u = A^n$, $GN(n, u, y) = B^n$
-
-  ここで、ぬしが言った「単位が保てない」というのは、
-  この $GN(n, u, y) = B^n$ という幾何構造（高次の面積のようなもの）が、
-  もともとの要素 $y, u$ の $n$ 乗と噛み合わなくなることを指しておる。
-
-  例えば $n=3, y=1$ のとき、 $GN(3, u, 1) = u^2 + 3u + 3$。
-  これが $B^3$ になるような正整数 $u$ は存在せぬことが知られておる（Ljunggrenの定理など）。
+  -- Observation: If gcd(u,n)=1, then u and GN must separately be n-th powers.
+  -- Zsigmondy-type/new-prime arguments typically obstruct GN from being an n-th power.
   -/
 
   -- 6. 矛盾の導出に向けたスケルトン
