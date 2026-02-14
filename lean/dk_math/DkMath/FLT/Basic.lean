@@ -283,55 +283,97 @@ theorem FLT_of_coprime
   -- 高次の項をまとめる多項式 H の存在を予感させる補題を置いておこうかの。
   -- u^2 | (x^n - n * y^(n-1) * u)
   have h_div_u2 : u ^ 2 ∣ (x ^ n - n * y ^ (n - 1) * u) := by
-    -- use the `ℤ`-version of cosmic_id / Body so `DiffPow` (CommRing) lemmas apply cleanly
-    -- (1) lift to ℤ and apply `cosmic_id` (CommRing)
-    have hZ := CosmicFormulaBinom.cosmic_id n ((u + y : ℤ)) (y : ℤ)
-    -- unfold to get (u + y)^n - y^n = Body (over ℤ)
-    unfold Big Body Gap at hZ
-    -- (2) `BodyPow_factor` over ℤ gives (u+y)^n - y^n = u * diffPowSum(...)
-    have body_factZ := DkMath.Algebra.DiffPow.BodyPow_factor (x := (u : ℤ)) (u := (y : ℤ)) n
-    -- unfold `BodyPow` definition so `body_factZ` matches `(u+y)^n - y^n = u * diffPowSum ...`
-    unfold DkMath.Algebra.DiffPow.BodyPow at body_factZ
-    have hxZ : (u + y : ℤ) ^ n - (y : ℤ) ^ n = (u : ℤ) * DkMath.Algebra.DiffPow.diffPowSum ((u + y : ℤ)) (y : ℤ) n :=
-      body_factZ
-    -- (3) coerce back to ℕ and rewrite x^n using `h_body` (which is Nat-level BodyN)
-    have hx_nat : (x ^ n : ℤ) = (u + y : ℤ) ^ n - (y : ℤ) ^ n := by
-      -- use h_body and cosmic_id_csr at Nat level, then cast to ℤ
-      have h_csr_nat := cosmic_id_csr n u y (R := ℕ)
-      rw [← h_body] at h_csr_nat
-      unfold BigN GapN at h_csr_nat
-      norm_cast at h_csr_nat
-      exact eq_sub_of_add_eq h_csr_nat.symm
-    -- combine to express x^n - n*y^(n-1)*u as u * (diffPowSum - n*y^(n-1)) over ℤ
-    have tailZ : ((x ^ n : ℤ) - (n : ℤ) * (y : ℤ) ^ (n - 1) * (u : ℤ))
-      = (u : ℤ) * (DkMath.Algebra.DiffPow.diffPowSum ((u + y : ℤ)) (y : ℤ) n - (n : ℤ) * (y : ℤ) ^ (n - 1)) := by
-      rw [hx_nat, hxZ]; ring
-    -- show inner factor is divisible by u (use diffPowSum_sub_const_mul and pow_sub_pow_factor over ℤ)
-    have tail_divZ : (u : ℤ) ∣ (DkMath.Algebra.DiffPow.diffPowSum ((u + y : ℤ)) (y : ℤ) n - (n : ℤ) * (y : ℤ) ^ (n - 1)) := by
-      have hsumZ := DkMath.Algebra.DiffPow.diffPowSum_sub_const_mul ((u + y : ℤ)) (y : ℤ) n
-      rw [hsumZ]
-      apply Finset.dvd_sum
-      intro i hi
-      -- factor out y^i, then use pow_sub_pow_factor to exhibit a factor `u`
-      have term_eq : (u + y : ℤ) ^ (n - 1 - i) * (y : ℤ) ^ i - (y : ℤ) ^ (n - 1)
-        = (y : ℤ) ^ i * ((u + y : ℤ) ^ (n - 1 - i) - (y : ℤ) ^ (n - 1 - i)) := by ring
-      rw [term_eq]
-      have p := DkMath.Algebra.DiffPow.pow_sub_pow_factor ((u + y : ℤ)) (y : ℤ) (n - 1 - i)
-      -- convert term to u * (y^i * diffPowSum ...)
-      rw [p]
-      simp
-      -- provide explicit witness m := y^i * diffPowSum ...
-      use ( (y : ℤ) ^ i * DkMath.Algebra.DiffPow.diffPowSum ((u + y : ℤ)) (y : ℤ) (n - 1 - i) )
-      simp [mul_comm]
-    -- conclude integer divisibility and return to ℕ divisibility
-    have : (u : ℤ) ^ 2 ∣ ((x ^ n : ℤ) - (n : ℤ) * (y : ℤ) ^ (n - 1) * (u : ℤ)) := by
-      rw [tailZ]
-      obtain ⟨k, hk⟩ := tail_divZ
-      use k
-      -- u^2 * k = u * (u * k) and hk : inner = u * k
-      rw [hk]
+    -- x^n = (u+y)^n - y^n  (cosmic_id_csr と h_body を使う)
+    have hx_eq : x ^ n = (u + y) ^ n - y ^ n := by
+      have h_csr := cosmic_id_csr n u y (R := ℕ)
+      -- `cosmic_id_csr` 展開： (u+y)^n = BodyN n u y + y^n
+      unfold BigN GapN at h_csr
+      -- BodyN n u y を x^n に置き換えてから整理する（確実な方向で rw）
+      rw [← h_body] at h_csr
+      -- turn `x^n + y^n = (u + y)^n` into `x^n = (u+y)^n - y^n` using subtraction on `ℕ`
+      have h_sub := congrArg (fun t => t - y ^ n) h_csr.symm
+      simpa using h_sub
+
+    -- 展開して k≥2 の項のみを残す（各項に u^2 が含まれる）
+    have h_sum_binomial : (∑ m ∈ Finset.range (n + 1), u ^ m * y ^ (n - m) * (n.choose m)) = (u + y) ^ n := by
+      simpa [mul_assoc, mul_comm, mul_left_comm] using (add_pow u y n).symm
+
+    have sum_expr : x ^ n - n * y ^ (n - 1) * u =
+        ∑ k ∈ Finset.range (n - 1), (Nat.choose n (k + 2) : ℕ) * u ^ (k + 2) * y ^ (n - 2 - k) := by
+      rw [hx_eq, add_pow]
+
+      -- (u+y)^n - y^n - n*y^(n-1)*u を段階的に変形して k≥2 の和にする
+      calc
+        (∑ m ∈ Finset.range (n + 1),
+            u ^ m * y ^ (n - m) * (n.choose m))
+          - y ^ n - n * y ^ (n - 1) * u
+            =
+        (u + y) ^ n - y ^ n - n * y ^ (n - 1) * u := by
+          -- ここで “和 = (u+y)^n” を作って引き算全体に反映する
+          -- add_pow : (u + y)^n = ∑ m in range (n+1), choose n m * u^m * y^(n-m)
+          -- 形が違うので、mul の交換・結合で整えて simpa するのが典型
+          have h :
+              (∑ m ∈ Finset.range (n + 1),
+                  u ^ m * y ^ (n - m) * (n.choose m))
+                = (u + y) ^ n := by
+            -- add_pow の右辺は "choose * u^m * y^(n-m)" なので順序を入れ替える
+            -- Nat は可換なので mul_comm/mul_assoc で合わせられる
+            -- ※必要なら `by simpa [mul_assoc, mul_comm, mul_left_comm] using (add_pow u y n).symm`
+            simpa [mul_assoc, mul_comm, mul_left_comm] using (add_pow u y n).symm
+
+          -- h を引き算に反映
+          simp [h]
+
+        _ = ∑ k ∈ Finset.range (n - 1),
+              n.choose (k + 2) * u ^ (k + 2) * y ^ (n - 2 - k) := by
+          -- ここから先は続きの変形
+          -- sorry
+/-
+      have h :
+          (∑ m ∈ Finset.range (n + 1),
+              u ^ m * y ^ (n - m) * (n.choose m))
+            = (u + y) ^ n := by
+        simpa [mul_assoc, mul_comm, mul_left_comm] using (add_pow u y n).symm
+
+      -- ゴールの左辺の “最初の項” を h で置換してから calc
+      -- 例：`simp [h]` でゴールを書き換える
+      simp [h]  -- これで左辺が (u+y)^n - ... になるはず
+      -- ここから calc を (u+y)^n - ... で開始できる
+-/
+
+          -- ⊢ ∑ m ∈ Finset.range (n + 1), u ^ m * y ^ (n - m) * ↑(n.choose m) - y ^ n - n * y ^ (n - 1) * u =
+          --   ∑ k ∈ Finset.range (n - 1), n.choose (k + 2) * u ^ (k + 2) * y ^ (n - 2 - k)
+            -- ∑ m ∈ Finset.range (n + 1), u ^ m * y ^ (n - m) * ↑(n.choose m) - y ^ n - n * y ^ (n - 1) * u
+          calc
+          -- ⊢ (u + y) ^ n - y ^ n - n * y ^ (n - 1) * u = ∑ k ∈ Finset.range (n - 1), n.choose (k + 2) * u ^ (k + 2) * y ^ (n - 2 - k)
+            (u + y) ^ n - y ^ n - n * y ^ (n - 1) * u
+              = ∑ m ∈ Finset.range (n + 1), (Nat.choose n m : ℕ) * u ^ m * y ^ (n - m) - y ^ n - n * y ^ (n - 1) * u := by
+                simpa [mul_assoc, mul_comm, mul_left_comm]
+                  using congrArg (fun t => t - y ^ n - n * y ^ (n - 1) * u) (add_pow u y n)
+            _ = (y ^ n + ∑ k ∈ Finset.range n, (Nat.choose n (k + 1) : ℕ) * u ^ (k + 1) * y ^ (n - 1 - k)) - y ^ n - n * y ^ (n - 1) * u := by
+                rw [Finset.sum_range_succ']; simp [pow_zero, Nat.sub_sub]
+            _ = (∑ k ∈ Finset.range n, (Nat.choose n (k + 1) : ℕ) * u ^ (k + 1) * y ^ (n - 1 - k)) - n * y ^ (n - 1) * u := by simp [Nat.sub_sub]
+            _ = (n * y ^ (n - 1) * u + ∑ k ∈ Finset.range (n - 1), (Nat.choose n (k + 2) : ℕ) * u ^ (k + 2) * y ^ (n - 2 - k)) - n * y ^ (n - 1) * u := by
+                rw [Finset.sum_range_succ']; simp [pow_zero, Nat.sub_sub]
+            _ = ∑ k ∈ Finset.range (n - 1), (Nat.choose n (k + 2) : ℕ) * u ^ (k + 2) * y ^ (n - 2 - k) := by simp [Nat.sub_sub]
+
+      -- これで sum_expr が完成！あとは各項に u^2 が含まれることを示せば h_div_u2 の証明が完了するはずじゃ。
+      done
+
+    -- 各項に u^2 が含まれるので和も u^2 で割り切れる
+    rw [sum_expr]
+    apply Finset.dvd_sum
+    intro k hk
+    simp only [Finset.mem_range] at hk
+    -- 項の形は u^(k+2) * y^(n-2-k) なので u^2 divides it
+    have u_ne0 : u ≠ 0 := Nat.pos_iff_ne_zero.mp hu
+    have pow_dvd : u ^ 2 ∣ u ^ (k + 2) := by
+      use (u ^ k)
       ring
-    exact Int.ofNat_dvd.mpr this
+    -- give an explicit witness: u^(k+2) = (u^2) * u^k, so multiply by the remaining coefficient
+    have : n.choose (k + 2) * u ^ (k + 2) * y ^ (n - 2 - k) = (u ^ 2) * (n.choose (k + 2) * u ^ k * y ^ (n - 2 - k)) := by ring
+    rw [this]
+    use (n.choose (k + 2) * u ^ k * y ^ (n - 2 - k))
 
   /-
   ### 💡 賢狼の目撃: $d=2$ から $d=3$ への転換点（バランスの崩壊）
