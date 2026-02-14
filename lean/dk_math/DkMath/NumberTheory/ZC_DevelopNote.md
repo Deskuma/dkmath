@@ -2,6 +2,150 @@
 
 ## 開発ログ
 
+### 作業中
+
+うむ、ぬしよ。まず状況把握からじゃ。
+
+手元の `/mnt/data/ZsigmondyCyclotomic.lean` を見る限り、`sorry` は **16 個**残っておる（`grep` で拾えるやつだけでも）。そして、その中には
+
+* **「その補題、いまの流れだと使ってない（消して良い）」**
+* **「その `sorry` は“要らない”というより、仮定が足りなくて“証明できない”」**
+* **「その主張は数学的に強すぎて、一般には偽の可能性が高い」**
+
+が混ざっておる。ここを整理すると一気に“完成”に近づくぞ。
+
+---
+
+## 1) 残る `sorry` は「要らないもの」か？
+
+### A. ほぼ確実に **要らない（削除候補）**
+
+**(1) `not_dvd_diff_iff_not_modEq`（冒頭の補題）**
+このファイル内で **参照されていない**。しかも “条件を言い換える補助” なので、後で必要になったら復活でよい。
+→ いったん削除（または `TODO/` に隔離）で、`sorry` を2個減らせる。
+
+**(2) `example` ブロック（docstring 用）**
+`example := by sorry` はビルド警告の温床。
+→ “例” はコメントに落とすのが吉。
+
+**(3) `kummer_theorem_for_binomial_coeff`（ラッパ補題）**
+現状は「見つからないので `sorry`」。しかも下流で必須になってない。
+→ 削除か、`-- TODO: #check padicValNat_choose` のメモに格下げ。
+
+---
+
+### B. 「要らない」ではなく **“仮定が足りなくて証明不能”**（＝定理の形を直すべき）
+
+一番大事なのがこれじゃ：
+
+**`exists_primitive_prime_factor_hook` 内の**
+
+```lean
+have hpnd : ¬ d ∣ a - b := by sorry
+```
+
+これは一般には導けぬ。例：(a=5, b=2, d=3) だと (a-b=3) で (d \mid (a-b)) が成り立つ。
+つまり **この `sorry` は「要らない」のではなく「定理が強すぎる」** のじゃ。
+
+✅ 打開策（推奨）
+`hpnd : ¬ d ∣ a - b` を **仮定として引数に追加**して、層A（存在層）へ正しく戻す。
+
+さらに、同じ補題の最後：
+
+```lean
+· -- d が合成数の場合は TODO
+  sorry
+```
+
+これも「要らない」のではなく、「この lemma を prime d に限定するなら要らない」タイプ。
+✅ つまり **最初から `Nat.Prime d` を仮定に入れてしまえば `sorry` が消える**。
+
+---
+
+### C. 数学的に “強化しすぎ” の匂いが濃い（＝方針を変えるべき）
+
+`padicValNat q (a^d - b^d) = 1` を **常に保証する**路線は、かなり危険じゃ。
+
+理由は単純で、原始素因子（primitive prime divisor）であっても
+[ q^2 \mid (a^d-b^d) ]
+が起きる可能性は理論的に否定できん（“Wieferich 的”な現象）。
+つまり「原始性」から「付値=1」を一般に引き出すのは、別の強い定理が要るか、そもそも偽の可能性がある。
+
+なのでここは分岐じゃ：
+
+* **(現実的ルート)** まずは Zsigmondy の「存在・原始性」までを **`sorry なしで確定**
+* **(研究ルート)** `padicValNat = 1` は **追加条件つき**（例：`q ∤ d` だけでは足りないかもしれん）か、別定理として後回し
+
+---
+
+## 2) いま一番キレイに“完成”させる修正（層Aの確定）
+
+ぬしの現状コード資産（`exists_prime_divisor_not_dividing_diff_of_prime_exp`）に一番沿う形で、**`hook` を「正しい仮定」に直して層Aで閉じる**のが最短じゃ。
+
+```lean
+/-- 層A（存在層）：prime d ≥ 3 の原始素因子（差を割らない素因子）の存在 -/
+lemma exists_primitive_prime_factor_prime {a b d : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ a^d - b^d ∧ ¬ q ∣ a - b := by
+  exact exists_primitive_prime_factor_basic
+    (a := a) (b := b) (d := d)
+    hd_prime hd_ge hab_lt hb hab hpnd
+```
+
+これで `exists_primitive_prime_factor_hook` という “何でも版” はいったん捨てて良い。
+（必要になったら「Zsigmondy完全版」へ戻して復活すればよい。）
+
+---
+
+## 3) 次の作業提案（打開策つき）
+
+### ステップ1：層Aファイルを “No-sorry” で固定
+
+* 使ってない `not_dvd_diff_iff_not_modEq` を削除（または別ファイルへ隔離）
+* `hook` を上の `exists_primitive_prime_factor_prime` に置換
+* composite case は扱わず、最初から `Nat.Prime d` を仮定にする
+
+👉 これで「原始素因子の存在」を Lean 上で堅牢な部品として持てる。
+
+---
+
+### ステップ2：primitive（∀k<d で割らない）を “群論（ZMod）” で固める
+
+ぬしが前に進めてた「order で切る」ルートが最も筋が良い。
+つまり ( (a/b)) の位数が (d) であることを示し、そこから (k<d) では 1 にならぬ、という流れ。
+
+ここが固まると、Cyclotomic に接続しやすくなる（“(d) 次の原始根”＝“(\Phi_d) の根”）。
+
+---
+
+### ステップ3：Cyclotomic は「一般指数 d」へ行きたい時の本丸
+
+今の段階で Cyclotomic を無理に詰めると、`padicValNat=1` の誘惑で沼りやすい。
+
+おすすめは：
+
+* まずは **「primitive prime divisor ⇒ cyclotomic の因子」**（mod (q) 上）を作る
+* その後に一般指数 (d) の Zsigmondy（完全版）へ拡張
+
+---
+
+## 4) 結論：残る `sorry` は「要らない」のもあるが、“定理の形を直すべき”のが核心
+
+特に
+
+* `hpnd : ¬ d ∣ a - b` を内部で作る `sorry` は **不要ではなく不可能**
+* `padicValNat = 1` は **強化しすぎの可能性**（別レイヤへ隔離推奨）
+
+この2点を整理すると、ぬしの実装は一気に“研究用の美しい骨格”になるぞ。
+
+次はこの賢狼が相手になろう：
+**「層Aを no-sorry 化 → ZMod の order で primitive（∀k<d）確定」**
+ここまでを一本の Lean ファイルに“通る形”で整えるのが、次の一手じゃ。
+
+### 完了
+
 うむ、ぬしよ。**まずは「Cyclotomic に飛ぶ前の足場」を一気に固める** のが最短じゃ。結論から言うと、今の `exists_primitive_prime_factor_hook` は **いきなり `padicValNat = 1` を要求していて強すぎる**（一般には “原始素因子でも指数 2 以上” が起こり得る。いわゆる Wieferich 的な例外が混ざる）ので、最初の一歩はここを分離して設計し直すのが良いのじゃ。
 
 以下、「何から始める？」への賢狼のおすすめロードマップじゃ。

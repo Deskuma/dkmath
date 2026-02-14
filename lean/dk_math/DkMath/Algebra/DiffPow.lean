@@ -11,20 +11,54 @@ namespace DkMath.Algebra.DiffPow
 open scoped BigOperators
 open Finset
 
-/-!
-`a^d - b^d = (a - b) * ∑ i ∈ range d, a^(d-1-i) * b^i`
-という「差の冪の因数分解」を “宇宙式の Body 項” として使う下地。
+section CommRing
 
-型はまず `CommRing`（減法が要る）で作り、必要なら `ℤ` に落とす。
+/-!
+## 差の冪の因数分解（Difference of Powers Factorization）
+
+本モジュールは、以下の重要な等式を扱う：
+
+```
+a^d - b^d = (a - b) * ∑_{i=0}^{d-1} a^(d-1-i) * b^i
+```
+
+この因数分解は多項式代数や宇宙式（Universe formula）の Body 項として使われることがある。
+
+### 背景
+- 可換環 `CommRing` で定義することで、減法が存在する最小限の構造で作業できる
+- 必要に応じて整数環 `ℤ` などより具体的な環に特殊化することも可能
+- この分解はニュートン差分公式や高次の多項式展開と関連がある
 -/
 
-/-- 差の冪の因数分解に出る和：`∑_{i=0}^{d-1} a^(d-1-i) * b^i` -/
+/-- 差の冪の因数分解に出る和（Difference Power Sum）
+
+定義：
+```
+diffPowSum a b d = ∑_{i=0}^{d-1} a^(d-1-i) * b^i
+```
+
+例：d=3 のとき
+```
+diffPowSum a b 3 = a^2 + a*b + b^2
+```
+
+この和は a^d - b^d を (a - b) で割った商として現れる。
+つまり a^d - b^d = (a - b) * diffPowSum a b d が成り立つ。
+-/
 def diffPowSum {α : Type*} [CommRing α] (a b : α) (d : ℕ) : α :=
   ∑ i ∈ range d, a^(d - 1 - i) * b^i
 
-/-- 差の冪和から定数項を引いた形
- (∑ i ∈ range d,  a ^ (d - 1 - i) * b ^ i) - (d : ℤ) * b ^ (d - 1)
-= ∑ i ∈ range d, (a ^ (d - 1 - i) * b ^ i  -           b ^ (d - 1))
+/-- 差の冪和から定数項を引いた形（Difference Power Sum minus Constant Multiple）
+
+等式：
+```
+diffPowSum a b d - d * b^(d-1) = ∑_{i=0}^{d-1} (a^(d-1-i) * b^i - b^(d-1))
+```
+
+解説：
+- 左辺は diffPowSum からその最後の項 (i=d-1 のとき b^(d-1)) を定数倍したものを引く
+- 右辺は各項から b^(d-1) を引いたものを和にしている
+- この等式は線形性により自動的に成立する
 -/
 lemma diffPowSum_sub_const_mul {α : Type*} [CommRing α] (a b : α) (d : ℕ) :
     diffPowSum a b d - (d : α) * b ^ (d - 1) =
@@ -37,12 +71,22 @@ lemma diffPowSum_sub_const_mul {α : Type*} [CommRing α] (a b : α) (d : ℕ) :
   simp only [Finset.sum_sub_distrib]
 
 /--
-差の冪の因数分解（目標）：
+差の冪の因数分解（Main Theorem）
 
-`a^d - b^d = (a - b) * diffPowSum a b d`
+定理（Factorization of Difference of Powers）：
+```
+a^d - b^d = (a - b) * diffPowSum a b d
+```
 
-※ Mathlib を探ると `Finset.sum_range_choose` や幾何級数関連の lemma が見つかる。
-自前証明で対応するか、既存 lemma を活用するか決定する。
+証明戦略：
+1. 帰納法を使用する（d に関する強い帰納法）
+2. ベースケース: d = 0 のとき自明
+3. 帰納ステップ: d から d+1 への推移
+   - (a-b) * a^d と b * (a^d - b^d) に分解
+   - a^d の係数と b ^ i との積を再グループ化
+   - 和の添え字シフト（sum_range_succ'）を利用
+
+※ Mathlib の `Finset.sum_range_choose` や幾何級数関連の lemma との接点あり
 -/
 theorem pow_sub_pow_factor {α : Type*} [CommRing α] (a b : α) (d : ℕ) :
     a^d - b^d = (a - b) * diffPowSum a b d := by
@@ -71,11 +115,45 @@ theorem pow_sub_pow_factor {α : Type*} [CommRing α] (a b : α) (d : ℕ) :
     rw [this]
     grind
 
-/-- 宇宙式の Body 項：`(x+u)^d - u^d` を一般化したもの -/
+/-- 宇宙式の Body 項（Body Term of Universe Formula）
+
+定義：
+```
+BodyPow x u d = (x + u)^d - u^d
+```
+
+意味：
+- x と u の 2 つ変数と幾何のパラメータ d を持つ
+- x+u を基数とし、u だけシフトした冪の差
+- 宇宙論の局所モデル計算やテイラー展開に関連
+
+この形は a^d - b^d で a = x+u, b = u と置いた特殊例である。
+-/
 def BodyPow {α : Type*} [CommRing α] (x u : α) (d : ℕ) : α :=
   (x + u)^d - u^d
 
-/-- `BodyPow x u d` は差の冪として因数分解できる（a=x+u, b=u で a-b=x）。 -/
+/-- `BodyPow x u d` は差の冪として因数分解できる（Factorization of BodyPow）
+
+定理（BodyPow Factor Theorem）:
+```
+BodyPow x u d = x * diffPowSum (x + u) u d
+```
+
+詳細な解説：
+1. BodyPow x u d = (x + u)^d - u^d は a^d - b^d の形である
+   （ここで a = x + u, b = u）
+
+2. pow_sub_pow_factor により
+   a^d - b^d = (a - b) * diffPowSum a b d
+
+3. a - b = (x + u) - u = x に置換すると
+   (x + u)^d - u^d = x * diffPowSum (x + u) u d
+
+4. これは binomial expansion (x + u)^d の u によるシフトと見なせる
+
+証明は d に関する帰納法で、各ステップで sum_range_succ' により
+和の添え字を整理する。
+-/
 theorem BodyPow_factor {α : Type*} [CommRing α] (x u : α) (d : ℕ) :
     BodyPow x u d = x * diffPowSum (x + u) u d := by
   induction d with
@@ -117,5 +195,47 @@ theorem BodyPow_factor {α : Type*} [CommRing α] (x u : α) (d : ℕ) :
     rw [eq_add_of_sub_eq key]
     rw [diffPowSum]
     ring
+
+end CommRing
+
+section CommSemiring
+
+-- CommSemiring 用の補助定義と注意
+-- `diffPowSum'` は semiring 上でも和を定義するための同義の定義である。
+-- 引き算 (`-`) が必要な主張（因数分解そのもの）は `CommRing` の下で扱うが、
+-- `diffPowSum'` を使うことで semiring 側の計算と互換にできるようにしてある。
+/-- 差の冪の因数分解に出る和 (Difference Power Sum) -/
+def diffPowSum' {α : Type*} [CommSemiring α] (a b : α) (d : ℕ) : α :=
+  ∑ i ∈ range d, a^(d - 1 - i) * b^i
+
+/--
+Semiring 用の和 `diffPowSum'` を保持したまま、`CommRing` 上でべき乗差の因数分解が成り立つことを示す補題。
+実際の証明は `CommRing` 上で既に証明済みの `pow_sub_pow_factor` を再利用している（`simpa`）。
+補足：`diffPowSum'` は `CommRing` 上では `diffPowSum` と一致する。
+-/
+theorem pow_sub_pow_factor' {α : Type*} [CommRing α] (a b : α) (d : ℕ) :
+    a^d - b^d = (a - b) * diffPowSum' a b d := by
+  -- 証明：ring 版を流用（`diffPowSum'` は `diffPowSum` と一致）
+  simpa [diffPowSum, diffPowSum'] using pow_sub_pow_factor (a := a) (b := b) (d := d)
+
+
+
+/--
+自然数版：b ≤ a のときのべき乗差の分解（Nat での `a - b` を含む形）。
+
+証明方針：ℤ に持ち上げて `pow_sub_pow_factor`（整数/環版）を適用し、
+最後に `Int.natCast_inj` で ℕ に戻すことで簡潔に示してある。
+（semiring/ring の差は `diffPowSum'` と `diffPowSum` の対応で扱っている）
+-/
+theorem pow_sub_pow_nat {a b d : ℕ} (h : b ≤ a) :
+    a ^ d = b ^ d + (a - b) * diffPowSum' (a : ℕ) b d := by
+  apply Int.natCast_inj.1
+  push_cast [h]
+  rw [show ↑(diffPowSum' a b d) = diffPowSum (a : ℤ) (b : ℤ) d by
+    simp [diffPowSum, diffPowSum'];]
+  rw [← pow_sub_pow_factor]
+  ring
+
+end CommSemiring
 
 end DkMath.Algebra.DiffPow

@@ -149,8 +149,17 @@ theorem pow_sub_pos {a b : ℕ} {p : ℕ}
 
 /-- 目標の雛形：Body(x,u,d) は完全 d 乗にならない（d > 2）
 
-**証明構造（Zsigmondy フック使用）:**
-最後の `sorry` は `exists_primitive_prime_factor_hook` の実装が完了すれば消える。
+**証明構造（Zsigmondy 原始素因子定理使用）:**
+層A（存在層）の `exists_primitive_prime_factor_prime` を使用して原始素因子 q を得る。
+最終的な矛盾導出には層Bの性質（padicValNat q (a^d - b^d) ≤ 上界）が必要。
+
+**現在の実装状況:**
+- 層Aまで実装済み：原始素因子の存在を保証
+- 層B待ち：padicValNat の精密評価が必要（TODO）
+
+**必要な追加仮定:**
+- d が素数であること（または d > 2 から導く）
+- ¬ d ∣ x（または仮定として追加）
 -/
 theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
     (hd : 2 < d) (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime (x + u) u) :
@@ -168,7 +177,7 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
     rw [x_eq]
     exact key
 
-  -- (2) Zsigmondy フックを使用：原始素因子 q の存在
+  -- (2) Zsigmondy の原始素因子定理を使用：原始素因子 q の存在
   -- a = x + u > u = b （x > 0 より）、且つ coprime
   have hab_lt : b < a := by
     simp only [ha_def, hb_def]
@@ -176,8 +185,19 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
   have hb_pos : 0 < b := hu
   have hab : Nat.Coprime a b := hcop
 
-  obtain ⟨q, hq_prime, hq_div_pow, hq_ndiv_diff, hvad_eq_one⟩ :=
-    exists_primitive_prime_factor_hook hab_lt hb_pos hab hd
+  -- d が素数であることを確認
+  have hd_prime : Nat.Prime d := by
+    sorry -- TODO: d > 2 から d が素数であることを導くか、または仮定に追加
+  have hd_ge : 3 ≤ d := by omega
+
+  -- ¬ d ∣ a - b を示す（これは ¬ d ∣ x と同じ）
+  have hpnd : ¬ d ∣ a - b := by
+    have : a - b = x := by omega
+    rw [this]
+    sorry -- TODO: ¬ d ∣ x を示すか、仮定に追加
+
+  obtain ⟨q, hq_prime, hq_div_pow, hq_ndiv_diff⟩ :=
+    exists_primitive_prime_factor_prime hd_prime hd_ge hab_lt hb_pos hab hpnd
 
   -- q ∣ a^d - b^d かつ q ∤ a - b = x
   -- body_eq より a^d - b^d = x * Sd なので、q ∣ x * Sd
@@ -277,14 +297,16 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
   have hvad_eq : padicValNat q (a^d - b^d) = padicValNat q (t^d) := by
     rw [heq_nat]
 
-  -- フックから受け取った hvad_eq_one : padicValNat q (a^d - b^d) = 1 を使う
-  -- （この性質は Lifting the Exponent Lemma から導かれる）
+  -- 矛盾を導く：padicValNat q (a^d - b^d) の上界が必要
+  -- 層Bの性質（padicValNat q (a^d - b^d) = 1）が証明されれば完成
+  -- 現時点では層Aのみ実装されているため、この部分は TODO
 
-  -- 矛盾！
-  -- padicValNat q (t^d) = padicValNat q (a^d - b^d) = 1 (フックより)
-  -- しかし padicValNat q (t^d) ≥ d ≥ 3
-  -- したがって 1 ≥ 3 で矛盾
-  rw [hvad_eq] at hvad_eq_one
-  omega
+  -- TODO（層Bの実装待ち）:
+  -- padicValNat q (a^d - b^d) ≤ 上界 を示す
+  -- もし padicValNat q (a^d - b^d) = 1 が成り立てば：
+  --   hvad_eq より padicValNat q (t^d) = 1
+  --   しかし hvtd_ge より padicValNat q (t^d) ≥ d ≥ 3
+  --   したがって 1 ≥ 3 で矛盾
+  sorry
 
 end DkMath.NumberTheory.GcdNext

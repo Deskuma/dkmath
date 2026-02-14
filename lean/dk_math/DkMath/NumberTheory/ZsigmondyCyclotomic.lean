@@ -23,7 +23,7 @@ a^d - b^d は「原始素因子」を持つ：
 3. **Lucas/Kummer 定理**: 二項係数の p-adic valuation 評価 ✅ 導入完了
 4. **円分多項式**: square-free 性と評価（将来的な拡張）
 
-**完成した主要補題（no sorry!）:** 9つ 🎉
+**完成した主要補題（no sorry!）:** 8つ 🎉
 1. ✅ `pow_sub_pow_factor_cosmic`: ℤ 上の因数分解
 2. ✅ `pow_sub_pow_factor_cosmic_N`: ℕ 上の因数分解
 3. ✅ `padicValNat_of_primitive_prime_factor_via_G`: G への帰着
@@ -31,14 +31,11 @@ a^d - b^d は「原始素因子」を持つ：
 5. ✅ `G_three_explicit`: G 3 の明示的計算
 6. ✅ `padicValNat_binomial_coeff_three`: d = 3 の二項係数評価
 7. ✅ `padicValNat_G_three_coeffs_le_one`: G 3 の係数の性質
-8. ✅ `not_dvd_diff_iff_not_modEq`: 合同式の否定
-9. ✅ `prime_exp_not_dvd_diff_imp_primitive`: 群論による primitive 証明（NEW! 🔥）
+8. ✅ `prime_exp_not_dvd_diff_imp_primitive`: 群論による primitive 証明 🔥
 
-**残る sorry:** 4箇所（大物3つ、参考1つ）
+**残る sorry:** 2箇所（研究課題）
 - `squarefree_implies_padic_val_le_one`: 一般上界（G解析が必要）
-- `padicValNat_le_one_of_prime_divisor_case_three`: d=3最終証明（初等整数論）
-- `example`: docstring 用参考例
-- その他の補助的 sorry
+- `padicValNat_le_one_of_prime_divisor_case_three`: d=3最終証明（反例の存在により条件精査が必要）
 
 **現在のフォーカス:**
 d = 3 での完全証明（95% 完了、最終ステップのみ残る）
@@ -76,36 +73,7 @@ open DkMath.CosmicFormulaBinom  -- Cosmic Formula の G, cosmic_id を使用
 open Nat (choose)  -- 二項係数
 
 -- ========================================
--- § 1. 原始素因子の存在条件に関する補助補題
--- ========================================
-
-/-- d ∤ a - b の条件：合同式の否定による特徴づけ（整数係数版）
-
-**数学的意味（注意）:**
-Mathlib の `Nat.modEq_iff_dvd` は整数係数での可除性を返すため、
-ここでは (d : ℤ) ∣ (b : ℤ) - a を用いる形に合わせている。
-
-**この補題の利用場面:**
-Zsigmondy の原始素因子定理で「原始性」を保証するには、
-指数 d が差 a - b を割らないことが必要。
-合同式の否定として条件を記述できれば、
-具体的な数値例での検証が容易になる。
--/
-lemma not_dvd_diff_iff_not_modEq {a b d : ℕ} (_hd : 0 < d) (_hab : b ≤ a) :
-    ¬ ((d : ℤ) ∣ (b : ℤ) - a) ↔ ¬ (a ≡ b [MOD d]) := by
-  -- Mathlib の同値補題を直接利用（整数係数での表現に注意）
-  have h : (a ≡ b [MOD d]) ↔ (d : ℤ) ∣ (b : ℤ) - a := by
-    exact Nat.modEq_iff_dvd
-  constructor
-  · intro h_not_dvd h_mod
-    apply h_not_dvd
-    exact h.mp h_mod
-  · intro h_not_mod h_dvd
-    apply h_not_mod
-    exact h.mpr h_dvd
-
--- ========================================
--- § 2. Zsigmondy の原始素因子定理（層A：存在層）
+-- § 1. Zsigmondy の原始素因子定理（層A：存在層）
 -- ========================================
 
 /-- Zsigmondy の原始素因子定理（層A：存在層、基本版）
@@ -922,7 +890,7 @@ lemma squarefree_implies_padic_val_le_one (d a b q : ℕ)
   -- Step 3: G の構造解析（最も難しい部分、Lucas/Kummer の活用）⏳
   sorry  -- [SORRY-2: 一般上界、G 解析が本質的に難しい]
 
-/-- 原始素因子の p-adic 付値上界：d = 3 の特殊ケース（Cosmic Formula 版）
+/- 原始素因子の p-adic 付値上界：d = 3 の特殊ケース（Cosmic Formula 版）
 
 **数学的内容:**
 d = 3 の場合、Cosmic Formula により：
@@ -958,8 +926,11 @@ q^2 ∤ a^2 + ab + b^2 を示す必要がある。
 これは初等的な整数論で証明できる可能性があるが、技術的に難しい。
 将来の実装課題として残す。
 
-**注意:** これは参考例であり、実装は padicValNat_le_one_of_prime_divisor_case_three にて。
+**注意:** 実装は padicValNat_le_one_of_prime_divisor_case_three にて試みたが、
+反例（a=18, b=1 など）の存在により、条件の精査が必要。
 -/
+
+/- 参考例（コメントアウト）：
 example : ∀ (a b q : ℕ) (ha : 1 < a) (hb : 0 < b) (hab : Nat.Coprime a b)
     (hq_prime : Nat.Prime q)
     (hq_div : q ∣ a ^ 3 - b ^ 3) (hq_ndiv : ¬ q ∣ a - b),
@@ -968,7 +939,9 @@ example : ∀ (a b q : ℕ) (ha : 1 < a) (hb : 0 < b) (hab : Nat.Coprime a b)
   -- pow_sub_pow_factor_cosmic を使って因数分解
   -- padicValNat_of_primitive_prime_factor_via_G を使って帰着
   -- G_three_explicit を使って G の形を明示
-  sorry  -- [SORRY-4: docstring 用の参考例、実装は上記補題にて]
+  -- TODO: 反例の存在により、条件の見直しが必要
+  sorry
+-/
 
 /-- 補助: 素数 q が a^3 - b^3 を割り、かつ q が a - b を割らないならば
     q は a^2 + a b + b^2 を割る。  (簡潔版・d = 3 用)
@@ -1187,71 +1160,14 @@ lemma padicValNat_primitive_prime_factor_le_one {a b d q : ℕ}
 -- § 4. Zsigmondy の原始素因子定理（層B：精密層、TODO）
 -- ========================================
 
-/-- Zsigmondy の原始素因子定理のフック
+/-- Zsigmondy の原始素因子定理（層A：素数指数版、存在のみ保証） -/
+lemma exists_primitive_prime_factor_prime {a b : ℕ} {d : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ a^d - b^d ∧ ¬ q ∣ a - b := by
+  exact exists_primitive_prime_factor_basic hd_prime hd_ge hab_lt hb hab hpnd
 
-**TODO（別 PR で実装予定）:**
-Mathlib v4.26.0 には Zsigmondy の原始素因子定理の完全な形式化がまだ存在しない。
-将来的には円分多項式（Cyclotomic polynomial）経由で次のように実装する：
-- `Cyclotomic.dvd_pow_sub_pow`: Φ_d(a/b) ∣ a^d - b^d
-- 円分多項式の既約性と素因子の存在
-
-**代替実装案：**
-- 選択肢A: d = 3, 5 など小さいケースだけ初等的に証明
-- 選択肢B: Cyclotomic 理論を段階的に構築（重工事）
-- 選択肢C: 既存の Mathlib.NumberTheory.Cyclotomic.* を活用
-
-**数学的内容:**
-Zsigmondy の定理（1892）：
-a > b ≥ 1, gcd(a,b) = 1, d > 1 のとき、
-次の例外を除いて、a^d - b^d は「原始素因子」（primitive prime divisor）を持つ：
-- 例外1: a - b = 1 かつ d = 2
-- 例外2: a = 2, b = 1, d = 6
-原始素因子 q とは：q ∣ a^d - b^d かつ q ∤ a^k - b^k （∀k < d）を満たす素数。
-
-現在は軽量版（prime d ≥ 3）を優先実装。完全版は別 PR で。
-
-**強化版**: 原始素因子 q について padicValNat q (a^d - b^d) = 1 を保証し、
-完全冪判定に必要な付值情報を供給する。
--/
-lemma exists_primitive_prime_factor_hook {a b : ℕ} {d : ℕ}
-    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b) (hd : 2 < d) :
-    ∃ q : ℕ, Nat.Prime q ∧ q ∣ a^d - b^d ∧ ¬ q ∣ a - b ∧ padicValNat q (a^d - b^d) = 1 := by
-  -- まずは d が素数の場合に限定（軽量版）
-  by_cases hd_prime : Nat.Prime d
-  · -- d が素数の場合
-    have hp_ge : 3 ≤ d := by omega
-    -- ¬ d ∣ a - b を仮定
-    -- 注意: これは一般には証明できない（入力データ依存）
-    -- 具体的なケースや by_cases で分岐する必要がある
-    have hpnd : ¬ d ∣ a - b := by
-      sorry  -- [SORRY-5: ケースバイケース、一般証明不可]
-      -- d | a - b の場合は別の議論が必要
-      -- または具体的な a, b の値で示す
-
-    -- 層A から原始素因子 q を得る
-    obtain ⟨q, hq_prime, hq_div, hq_ndiv⟩ :=
-      exists_primitive_prime_factor_basic hd_prime hp_ge hab_lt hb hab hpnd
-
-    -- padicValNat q (a^d - b^d) = 1 を示す（下界と上界を組み合わせる）
-    have hvad : padicValNat q (a ^ d - b ^ d) = 1 := by
-      -- 下界：1 ≤ padicValNat q (a^d - b^d)
-      have h1 : 2 < d := hd
-      have hd_ge_one : 1 < d := by omega
-      have hge : 1 ≤ padicValNat q (a ^ d - b ^ d) :=
-        padicValNat_primitive_prime_factor_ge_one hab_lt hb hd_ge_one hq_prime hq_div
-
-      -- 上界：padicValNat q (a^d - b^d) ≤ 1
-      have hle : padicValNat q (a ^ d - b ^ d) ≤ 1 :=
-        padicValNat_primitive_prime_factor_le_one
-          hd_prime hp_ge hab_lt hb hab hpnd hq_prime hq_div hq_ndiv
-      -- 結論：1 ≤ x ∧ x ≤ 1 ⇒ x = 1
-      omega
-
-    exact ⟨q, hq_prime, hq_div, hq_ndiv, hvad⟩
-  · -- d が合成数の場合は TODO（別 PR）
-    -- 注意: 合成数の指数では、Zsigmondy の完全版が必要
-    -- 現在の実装は素数指数に限定（軽量版）
-    sorry  -- [SORRY-6: 合成数指数、将来の拡張課題]
 
 end DkMath.NumberTheory.GcdNext
 
