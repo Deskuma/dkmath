@@ -300,34 +300,37 @@ theorem FLT_of_coprime
 
     have sum_expr : x ^ n - n * y ^ (n - 1) * u =
         ∑ k ∈ Finset.range (n - 1), (Nat.choose n (k + 2) : ℕ) * u ^ (k + 2) * y ^ (n - 2 - k) := by
-      rw [hx_eq, add_pow]
+      -- replace x^n by (u+y)^n - y^n and expand the binomial in canonical order
+      rw [hx_eq]
+      simp [←h_sum_binomial]
+      -- peel off k = 0, then k = 1
+      rw [Finset.sum_range_succ']
+      simp [pow_zero, Nat.sub_sub]
+      -- reorder summands so `Finset.sum_range_succ'` matches syntactically
+      have reorder : ∑ k ∈ Finset.range n, (Nat.choose n (k + 1) : ℕ) * u ^ (k + 1) * y ^ (n - 1 - k)
+        = ∑ k ∈ Finset.range n, u ^ (k + 1) * y ^ (n - 1 - k) * (Nat.choose n (k + 1) : ℕ) := by
+        apply Finset.sum_congr rfl; intro k hk; ring
+      have reorder' :
+          (∑ k ∈ Finset.range n,
+              (Nat.choose n (k + 1) : ℕ) * u ^ (k + 1) * y ^ (n - (k + 1)))
+        =
+          (∑ k ∈ Finset.range n,
+              u ^ (k + 1) * y ^ (n - (k + 1)) * (Nat.choose n (k + 1) : ℕ)) := by
+        refine Finset.sum_congr rfl ?_
+        intro k hk
+        ring
 
-      -- (u+y)^n - y^n - n*y^(n-1)*u を段階的に変形して k≥2 の和にする
-      calc
-        (∑ m ∈ Finset.range (n + 1),
-            u ^ m * y ^ (n - m) * (n.choose m))
-          - y ^ n - n * y ^ (n - 1) * u
-            =
-        (u + y) ^ n - y ^ n - n * y ^ (n - 1) * u := by
-          -- ここで “和 = (u+y)^n” を作って引き算全体に反映する
-          -- add_pow : (u + y)^n = ∑ m in range (n+1), choose n m * u^m * y^(n-m)
-          -- 形が違うので、mul の交換・結合で整えて simpa するのが典型
-          have h :
-              (∑ m ∈ Finset.range (n + 1),
-                  u ^ m * y ^ (n - m) * (n.choose m))
-                = (u + y) ^ n := by
-            -- add_pow の右辺は "choose * u^m * y^(n-m)" なので順序を入れ替える
-            -- Nat は可換なので mul_comm/mul_assoc で合わせられる
-            -- ※必要なら `by simpa [mul_assoc, mul_comm, mul_left_comm] using (add_pow u y n).symm`
-            simpa [mul_assoc, mul_comm, mul_left_comm] using (add_pow u y n).symm
-
-          -- h を引き算に反映
-          simp [h]
-
-        _ = ∑ k ∈ Finset.range (n - 1),
-              n.choose (k + 2) * u ^ (k + 2) * y ^ (n - 2 - k) := by
-          -- ここから先は続きの変形
-          -- sorry
+      -- そのまま一致するので
+      -- rw [reorder'] が通る
+      rw [← reorder']
+      -- split the inner sum into its k=1 term and the remaining tail
+      have inner_split : ∑ k ∈ Finset.range n, (Nat.choose n (k + 1) : ℕ) * u ^ (k + 1) * y ^ (n - 1 - k)
+        = (Nat.choose n 1 : ℕ) * u * y ^ (n - 1) + ∑ k ∈ Finset.range (n - 1), (Nat.choose n (k + 2) : ℕ) * u ^ (k + 2) * y ^ (n - 2 - k) := by
+        rw [Finset.sum_range_succ']; simp [pow_zero]
+      rw [inner_split]
+      -- cancel the k=1 contribution with the `- n * y ^ (n - 1) * u` term
+      simp
+      ring
 /-
       have h :
           (∑ m ∈ Finset.range (n + 1),
@@ -341,6 +344,7 @@ theorem FLT_of_coprime
       -- ここから calc を (u+y)^n - ... で開始できる
 -/
 
+/-
           -- ⊢ ∑ m ∈ Finset.range (n + 1), u ^ m * y ^ (n - m) * ↑(n.choose m) - y ^ n - n * y ^ (n - 1) * u =
           --   ∑ k ∈ Finset.range (n - 1), n.choose (k + 2) * u ^ (k + 2) * y ^ (n - 2 - k)
             -- ∑ m ∈ Finset.range (n + 1), u ^ m * y ^ (n - m) * ↑(n.choose m) - y ^ n - n * y ^ (n - 1) * u
@@ -358,7 +362,8 @@ theorem FLT_of_coprime
             _ = ∑ k ∈ Finset.range (n - 1), (Nat.choose n (k + 2) : ℕ) * u ^ (k + 2) * y ^ (n - 2 - k) := by simp [Nat.sub_sub]
 
       -- これで sum_expr が完成！あとは各項に u^2 が含まれることを示せば h_div_u2 の証明が完了するはずじゃ。
-      done
+      -- done
+-/
 
     -- 各項に u^2 が含まれるので和も u^2 で割り切れる
     rw [sum_expr]
