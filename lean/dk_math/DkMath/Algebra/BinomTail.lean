@@ -1,4 +1,12 @@
 /-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+-- see: [FLT/Basic.lean](/lean/dk_math/DkMath/FLT/Basic.lean)
+
+/-
 BinomTail.lean — 二項展開の尾項（k≥2 部分）の共通補題群
 
 目的：`h_div_u2` のような "二項展開の m≥2 項は a^2 を因子に持つ" という主張を
