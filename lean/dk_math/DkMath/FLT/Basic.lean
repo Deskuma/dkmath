@@ -398,15 +398,37 @@ theorem FLT_of_coprime
 
       ring_nf
 
-      -- ⊢ n * u * y ^ (n - 1) + ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x) -
-      --     n * u * y ^ (n - 1) =
-      --   ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - (2 + x)) * n.choose (2 + x)
       set A : ℕ := n * u * y ^ (n - 1)
-      -- ⊢ A + ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x) - A =
-      --   ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - (2 + x)) * n.choose (2 + x)
-      apply Nat.add_right_cancel (n := A)
 
+      -- ゴール: A + S - A = T
+      -- まず左辺を S に簡約
+      have hAS : A + (∑ x ∈ Finset.range (n - 1),
+            u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x)) - A
+          =
+          (∑ x ∈ Finset.range (n - 1),
+            u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x)) := by
+        -- 「S + A - A = S」を作って、可換で並べ替えて使う
+        -- Nat.add_sub_cancel S A : S + A - A = S
+        -- 左は A + S - A なので、A+S を S+A にしてから発火させる
+        simpa [A, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using
+          (Nat.add_sub_cancel
+            (∑ x ∈ Finset.range (n - 1),
+              u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x))
+            A)
+
+      -- ゴール左辺を hAS で潰して S = T にする
+      -- （これで “例の指数違いだけ” のゴールに戻る）
+      -- ここが「あと一手」
+      -- ↓
+      -- simp [hAS] だと A が残ることがあるので A も展開しておく
+      -- simpa [A, hAS]
+      rw [hAS]
+      -- これでゴールは「指数違いだけ」の等式になっているはず
+
+      -- ⊢ ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x) =
+      --   ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - (2 + x)) * n.choose (2 + x)
       sorry
+      done
 
       -- intro x hx
       -- -- ここが核心： n - (2 + x) を n - 2 - x にする
