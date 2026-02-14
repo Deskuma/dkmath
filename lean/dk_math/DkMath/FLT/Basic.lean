@@ -397,7 +397,9 @@ theorem FLT_of_coprime
       --   ∑ x ∈ Finset.range (n - 1), n.choose (x + 2) * u ^ (x + 2) * y ^ (n - (2 + x))
 
       ring_nf
-
+      -- ⊢ n * u * y ^ (n - 1) + ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x) -
+      --     n * u * y ^ (n - 1) =
+      --   ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - (2 + x)) * n.choose (2 + x)
       set A : ℕ := n * u * y ^ (n - 1)
 
       -- ゴール: A + S - A = T
@@ -427,7 +429,14 @@ theorem FLT_of_coprime
 
       -- ⊢ ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x) =
       --   ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - (2 + x)) * n.choose (2 + x)
-      sorry
+      refine Finset.sum_congr rfl ?_
+      intro x hx
+      -- ここで指数だけを正規化
+      -- n - (2 + x) を n - 2 - x に
+      -- ⊢ u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x) = u ^ 2 * u ^ x * y ^ (n - (2 + x)) * n.choose (2 + x)
+      simp [Nat.sub_sub, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm,
+            Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
+
       done
 
       -- intro x hx
