@@ -20,6 +20,8 @@ BinomTail.lean — 二項展開の尾項（k≥2 部分）の共通補題群
 
 import Mathlib
 
+set_option linter.style.emptyLine false  -- 現在はコードを見やすくするために許可
+
 namespace DkMath.Algebra.BinomTail
 
 open scoped BigOperators
@@ -110,7 +112,8 @@ lemma add_pow_tail_exists [CommSemiring α] (a b : α) {n : ℕ} (hn : 2 ≤ n) 
 lemma binom_tail_nat_dvd (u y : ℕ) {n : ℕ} (hn : 2 ≤ n) :
     u ^ 2 ∣ ((u + y) ^ n - y ^ n - n * y ^ (n - 1) * u) := by
   -- expand (u+y)^n and peel off k=0,1 (then each remaining term has u^2)
-  have h_sum_binomial : (∑ m ∈ Finset.range (n + 1), u ^ m * y ^ (n - m) * (n.choose m)) = (u + y) ^ n := by
+  have h_sum_binomial :
+      (∑ m ∈ Finset.range (n + 1), u ^ m * y ^ (n - m) * (n.choose m)) = (u + y) ^ n := by
     simpa [mul_assoc, mul_comm, mul_left_comm] using (add_pow u y n).symm
 
   have sum_expr : (u + y) ^ n - y ^ n - n * y ^ (n - 1) * u =
@@ -140,8 +143,8 @@ lemma binom_tail_nat_dvd (u y : ℕ) {n : ℕ} (hn : 2 ≤ n) :
     rw [← reorder']
     -- done
 
-    -- ⊢ ∑ k ∈ Finset.range n, n.choose (k + 1) * u ^ (k + 1) * y ^ (n - (k + 1)) - n * y ^ (n - 1) * u =
-    --   ∑ x ∈ Finset.range (n - 1), n.choose (x + 2) * u ^ (x + 2) * y ^ (n - (2 + x))
+    -- ⊢ ∑ k ∈ range n, n.choose (k + 1) * u ^ (k + 1) * y ^ (n - (k + 1)) - n * y ^ (n - 1) * u =
+    --   ∑ x ∈ range (n - 1), n.choose (x + 2) * u ^ (x + 2) * y ^ (n - (2 + x))
 
     have inner_split :
         Finset.sum (Finset.range n) (fun k =>
@@ -198,26 +201,30 @@ lemma binom_tail_nat_dvd (u y : ℕ) {n : ℕ} (hn : 2 ≤ n) :
             n.choose (k + 2) * u ^ (k + 2) * y ^ (n - 2 - k)) - n * y ^ (n - 1) * u := by
             simp [inner_split]
 
-
-    -- ⊢ n.choose 1 * u * y ^ (n - 1) + ∑ k ∈ Finset.range (n - 1), n.choose (k + 2) * u ^ (k + 2) * y ^ (n - 2 - k) -
-    --     n * y ^ (n - 1) * u =
-    --   ∑ x ∈ Finset.range (n - 1), n.choose (x + 2) * u ^ (x + 2) * y ^ (n - (2 + x))
+    -- ⊢ n.choose 1 * u * y ^ (n - 1)
+    --   + ∑ k ∈ range (n - 1), n.choose (k + 2) * u ^ (k + 2) * y ^ (n - 2 - k)
+    --   - n * y ^ (n - 1) * u
+    -- = ∑ x ∈ range (n - 1), n.choose (x + 2) * u ^ (x + 2) * y ^ (n - (2 + x))
 
     -- cancel the k=1 contribution with the `- n * y ^ (n - 1) * u` term
-    simp
+    simp only [Nat.choose_one_right]  -- n.choose 1 = n
 
-    -- ⊢ n * u * y ^ (n - 1) + ∑ k ∈ Finset.range (n - 1), n.choose (k + 2) * u ^ (k + 2) * y ^ (n - 2 - k) -
-    --     n * y ^ (n - 1) * u =
-    --   ∑ x ∈ Finset.range (n - 1), n.choose (x + 2) * u ^ (x + 2) * y ^ (n - (2 + x))
+    -- ⊢ n * u * y ^ (n - 1)
+    --   + ∑ k ∈ range (n - 1), n.choose (k + 2) * u ^ (k + 2) * y ^ (n - 2 - k)
+    --   - n * y ^ (n - 1) * u
+    -- = ∑ x ∈ range (n - 1), n.choose (x + 2) * u ^ (x + 2) * y ^ (n - (2 + x))
 
     ring_nf
-    -- ⊢ n * u * y ^ (n - 1) + ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x) -
-    --     n * u * y ^ (n - 1) =
-    --   ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - (2 + x)) * n.choose (2 + x)
+    -- ⊢ n * u * y ^ (n - 1)
+    --   + ∑ x ∈ range (n - 1), u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x)
+    --   - n * u * y ^ (n - 1)
+    -- = ∑ x ∈ range (n - 1), u ^ 2 * u ^ x * y ^ (n - (2 + x)) * n.choose (2 + x)
+
     set A : ℕ := n * u * y ^ (n - 1)
 
--- ⊢ A + ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x) - A =
---   ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - (2 + x)) * n.choose (2 + x)
+    -- ⊢ A + ∑ x ∈ range (n - 1), u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x) - A =
+    --   ∑ x ∈ range (n - 1), u ^ 2 * u ^ x * y ^ (n - (2 + x)) * n.choose (2 + x)
+
     -- ゴール: A + S - A = T
     -- まず左辺を S に簡約
     have hAS : A + (∑ x ∈ Finset.range (n - 1),
@@ -256,96 +263,18 @@ lemma binom_tail_nat_dvd (u y : ℕ) {n : ℕ} (hn : 2 ≤ n) :
     -- simpa [A, hAS]
     rw [hAS]
     -- これでゴールは「指数違いだけ」の等式になっているはず
+    -- ⊢ ∑ x ∈ range (n - 1), u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x) =
+    --   ∑ x ∈ range (n - 1), u ^ 2 * u ^ x * y ^ (n - (2 + x)) * n.choose (2 + x)
 
-    -- ⊢ ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x) =
-    --   ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - (2 + x)) * n.choose (2 + x)
     refine Finset.sum_congr rfl ?_
     intro x hx
     -- ここで指数だけを正規化
     -- n - (2 + x) を n - 2 - x に
-    -- ⊢ u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x) = u ^ 2 * u ^ x * y ^ (n - (2 + x)) * n.choose (2 + x)
+    -- ⊢ u ^ 2 * u ^ x * y ^ (n -  2 - x ) * n.choose (2 + x)
+    -- = u ^ 2 * u ^ x * y ^ (n - (2 + x)) * n.choose (2 + x)
     simp [Nat.sub_sub]
-
-      -- goal closed by the `simp` above (no further tactic needed)
-
-      -- intro x hx
-      -- -- ここが核心： n - (2 + x) を n - 2 - x にする
-      -- simp [Nat.sub_sub, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm, Nat.mul_assoc]
--- done
-/-
-      have h :
-          (∑ m ∈ Finset.range (n + 1),
-              u ^ m * y ^ (n - m) * (n.choose m))
-            = (u + y) ^ n := by
-        simpa [mul_assoc, mul_comm, mul_left_comm] using (add_pow u y n).symm
-
-      -- ゴールの左辺の “最初の項” を h で置換してから calc
-      -- 例：`simp [h]` でゴールを書き換える
-      simp [h]  -- これで左辺が (u+y)^n - ... になるはず
-      -- ここから calc を (u+y)^n - ... で開始できる
--/
-
-/-
-          -- ⊢ ∑ m ∈ Finset.range (n + 1), u ^ m * y ^ (n - m) * ↑(n.choose m) - y ^ n - n * y ^ (n - 1) * u =
-          --   ∑ k ∈ Finset.range (n - 1), n.choose (k + 2) * u ^ (k + 2) * y ^ (n - 2 - k)
-            -- ∑ m ∈ Finset.range (n + 1), u ^ m * y ^ (n - m) * ↑(n.choose m) - y ^ n - n * y ^ (n - 1) * u
-          calc
-          -- ⊢ (u + y) ^ n - y ^ n - n * y ^ (n - 1) * u = ∑ k ∈ Finset.range (n - 1), n.choose (k + 2) * u ^ (k + 2) * y ^ (n - 2 - k)
-            (u + y) ^ n - y ^ n - n * y ^ (n - 1) * u
-              = ∑ m ∈ Finset.range (n + 1), (Nat.choose n m : ℕ) * u ^ m * y ^ (n - m) - y ^ n - n * y ^ (n - 1) * u := by
-                simpa [mul_assoc, mul_comm, mul_left_comm]
-                  using congrArg (fun t => t - y ^ n - n * y ^ (n - 1) * u) (add_pow u y n)
-            _ = (y ^ n + ∑ k ∈ Finset.range n, (Nat.choose n (k + 1) : ℕ) * u ^ (k + 1) * y ^ (n - 1 - k)) - y ^ n - n * y ^ (n - 1) * u := by
-                rw [Finset.sum_range_succ']; simp [pow_zero, Nat.sub_sub]
-            _ = (∑ k ∈ Finset.range n, (Nat.choose n (k + 1) : ℕ) * u ^ (k + 1) * y ^ (n - 1 - k)) - n * y ^ (n - 1) * u := by simp [Nat.sub_sub]
-            _ = (n * y ^ (n - 1) * u + ∑ k ∈ Finset.range (n - 1), (Nat.choose n (k + 2) : ℕ) * u ^ (k + 2) * y ^ (n - 2 - k)) - n * y ^ (n - 1) * u := by
-                rw [Finset.sum_range_succ']; simp [pow_zero, Nat.sub_sub]
-            _ = ∑ k ∈ Finset.range (n - 1), (Nat.choose n (k + 2) : ℕ) * u ^ (k + 2) * y ^ (n - 2 - k) := by simp [Nat.sub_sub]
-
-      -- これで sum_expr が完成！あとは各項に u^2 が含まれることを示せば h_div_u2 の証明が完了するはずじゃ。
-      -- done
--/
-
-
-  -- have sum_expr : (u + y) ^ n - y ^ n - n * y ^ (n - 1) * u
-  --     = ∑ k ∈ Finset.range (n - 1), (n.choose (k + 2) : ℕ) * u ^ (k + 2) * y ^ (n - 2 - k) := by
-  --   -- replace (u+y)^n by the binomial sum and separate out k=0,1
-  --   rw [h_sum_binomial.symm]
-  --   -- peel off m = 0 and m = 1
-  --   rw [Finset.sum_range_succ']
-  --   simp only [pow_zero, tsub_zero, one_mul, Nat.choose_zero_right, mul_one, add_tsub_cancel_right, Nat.sub_sub]
-  --   -- reorder and split as in Basic.lean
-  --   have reorder : ∑ k ∈ Finset.range n, (Nat.choose n (k + 1) : ℕ) * u ^ (k + 1) * y ^ (n - 1 - k)
-  --     = ∑ k ∈ Finset.range n, u ^ (k + 1) * y ^ (n - 1 - k) * (Nat.choose n (k + 1) : ℕ) := by
-  --     apply Finset.sum_congr rfl; intro k hk; ring
-
-  --   have rewrite_exp :
-  --       (∑ k ∈ Finset.range n,
-  --           u ^ (k + 1) * y ^ (n - (k + 1)) * (Nat.choose n (k + 1) : ℕ))
-  --     = (∑ k ∈ Finset.range n,
-  --           u ^ (k + 1) * y ^ (n -  1 - k ) * (Nat.choose n (k + 1) : ℕ)) := by
-  --     refine Finset.sum_congr rfl ?_
-  --     intro k hk
-  --     simp [Nat.sub_sub, Nat.add_comm]
-
-  --   rw [rewrite_exp, ← reorder]
-  --   have inner_split :
-  --       Finset.sum (Finset.range n) (fun k =>
-  --         (Nat.choose n (k + 1) : ℕ) * u ^ (k + 1) * y ^ (n - 1 - k))
-  --       = (Nat.choose n 1 : ℕ) * u * y ^ (n - 1)
-  --           + Finset.sum (Finset.range (n - 1)) (fun k =>
-  --               (Nat.choose n (k + 2) : ℕ) * u ^ (k + 2) * y ^ (n - 2 - k)) := by
-  --     classical
-  --     have hn1 : 1 ≤ n := le_trans (by decide : 1 ≤ 2) hn
-  --     simpa [Nat.sub_add_cancel hn1, Finset.sum_range_succ', pow_one, Nat.sub_zero,
-  --            Nat.add_assoc, Nat.add_comm, Nat.add_left_comm, Nat.sub_sub]
-  --       using (Finset.sum_range_succ' (f := fun k =>
-  --         (Nat.choose n (k + 1) : ℕ) * u ^ (k + 1) * y ^ (n - 1 - k)) (n := n - 1))
-  --   rw [inner_split]
-  --   simp
-  --   refine Nat.sub_eq_of_eq_add ?_
-  --   intro m hm
-  --   simp [Nat.sub_sub]
+    -- done
+    -- goal closed by the `simp` above (no further tactic needed)
 
   rw [sum_expr]
   apply Finset.dvd_sum
