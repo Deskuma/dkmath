@@ -290,10 +290,11 @@ theorem FLT_of_coprime
         ∑ k ∈ Finset.range (n - 1), (Nat.choose n (k + 2) : ℕ) * u ^ (k + 2) * y ^ (n - 2 - k) := by
       -- replace x^n by (u+y)^n - y^n and expand the binomial in canonical order
       rw [hx_eq]
-      simp [←h_sum_binomial]
+      simp only [← h_sum_binomial]
       -- peel off k = 0, then k = 1
       rw [Finset.sum_range_succ']
-      simp [pow_zero, Nat.sub_sub]
+      simp only [pow_zero, tsub_zero, one_mul, Nat.choose_zero_right, mul_one,
+        add_tsub_cancel_right, Nat.sub_sub]
       -- reorder summands so `Finset.sum_range_succ'` matches syntactically
       have reorder : ∑ k ∈ Finset.range n, (Nat.choose n (k + 1) : ℕ) * u ^ (k + 1) * y ^ (n - 1 - k)
         = ∑ k ∈ Finset.range n, u ^ (k + 1) * y ^ (n - 1 - k) * (Nat.choose n (k + 1) : ℕ) := by
@@ -356,7 +357,7 @@ theorem FLT_of_coprime
         intro k hk
         -- この1行で指数だけを変形
         -- n - (k+1) = n - 1 - k
-        simp [Nat.sub_sub, Nat.add_assoc, Nat.add_left_comm, Nat.add_comm]
+        simp only [Nat.sub_sub, Nat.add_comm]
 
       -- これでゴールを inner_split の形に寄せる
       -- (※ left side は "sum - ..." なので `rewrite_exp` を左側に当てる)
@@ -389,6 +390,8 @@ theorem FLT_of_coprime
       --   ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - (2 + x)) * n.choose (2 + x)
       set A : ℕ := n * u * y ^ (n - 1)
 
+-- ⊢ A + ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x) - A =
+--   ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - (2 + x)) * n.choose (2 + x)
       -- ゴール: A + S - A = T
       -- まず左辺を S に簡約
       have hAS : A + (∑ x ∈ Finset.range (n - 1),
@@ -399,11 +402,25 @@ theorem FLT_of_coprime
         -- 「S + A - A = S」を作って、可換で並べ替えて使う
         -- Nat.add_sub_cancel S A : S + A - A = S
         -- 左は A + S - A なので、A+S を S+A にしてから発火させる
+        -- Case 0: simple is best
+        omega
+        -- 以下でも通る例
+        /- Case 1:
+        ```lean
+        simp only [A]
+        exact
+          Nat.add_sub_self_left (n * u * y ^ (n - 1))
+            (∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x))
+        ```
+        -- Case 2: 非推奨な書き方でも通る (2026/02/15 13:10)
+        ```lean
         simpa [A, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using
           (Nat.add_sub_cancel
             (∑ x ∈ Finset.range (n - 1),
               u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x))
             A)
+        ```
+        -/
 
       -- ゴール左辺を hAS で潰して S = T にする
       -- （これで “例の指数違いだけ” のゴールに戻る）

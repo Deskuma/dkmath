@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import Mathlib
+-- import DkMath.Algebra.BinomTail
 
 namespace DkMath.Algebra.DiffPow
 
