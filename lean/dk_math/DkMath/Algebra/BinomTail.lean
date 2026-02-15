@@ -20,7 +20,7 @@ BinomTail.lean — 二項展開の尾項（k≥2 部分）の共通補題群
 
 import Mathlib
 
-namespace DkMath.Algebra
+namespace DkMath.Algebra.BinomTail
 
 open scoped BigOperators
 open Finset
@@ -29,48 +29,91 @@ section BinomTail
 
 variable {α : Type*}
 
-/-- 加法（CommSemiring）上の尾項表示（明示形）
-
+/- 加法（CommSemiring）上の尾項表示（明示形）
 `(a + b)^n - b^n - n * b^(n-1) * a = a^2 * H` を右辺の `H` を明示して返す。
 前提は `2 ≤ n`（m≥2 の項が存在するため）。 -/
-lemma add_pow_tail_expr {α : Type*} [CommSemiring α] (a b : α) {n : ℕ} (hn : 2 ≤ n) :
-    (a + b) ^ n - b ^ n - (n : α) * b ^ (n - 1) * a
-      = a ^ 2 * ∑ k ∈ Finset.range (n - 1), (n.choose (k + 2) : α) * a ^ k * b ^ (n - 2 - k) := by
-  -- 展開して m=0,m=1 を取り除き、残りを m↦k+2 で再索引
-  rw [add_pow]
-  -- (a+b)^n = ∑_{m=0}^n C(n,m) a^m b^{n-m}
-  have : (∑ m ∈ Finset.range (n + 1), (n.choose m : α) * a ^ m * b ^ (n - m)) - b ^ n - (n : α) * b ^ (n - 1) * a
-    = ∑ k ∈ Finset.range (n - 1), (n.choose (k + 2) : α) * a ^ (k + 2) * b ^ (n - 2 - k) := by
-    -- peel off m = 0 and m = 1 then reindex the tail m ↦ k+2
-    rw [Finset.sum_range_succ']
-    simp only [pow_zero, Nat.sub_zero]
-    rw [Finset.sum_range_succ']
-    simp only [pow_zero]
-    -- remaining tail m = 2..n corresponds to k = 0..n-2 via m = k+2
-    apply Finset.sum_congr rfl
-    intro m hm
-    simp only [Nat.sub_sub, Nat.add_comm]
-    rfl
-  simpa [mul_assoc, mul_comm, mul_left_comm] using this
-
-/-- 加法版（存在形）：`(a+b)^n = b^n + n*b^(n-1)*a + a^2 * H` を与える。-/
-lemma add_pow_tail_exists {α : Type*} [CommSemiring α] (a b : α) {n : ℕ} (hn : 2 ≤ n) :
+/-- 加法版（存在形）：`(a+b)^n = b^n + n*b^(n-1)*a + a^2 * H` を与える -/
+lemma add_pow_tail_exists [CommSemiring α] (a b : α) {n : ℕ} (hn : 2 ≤ n) :
     ∃ H : α, (a + b) ^ n = b ^ n + (n : α) * b ^ (n - 1) * a + a ^ 2 * H := by
-  use ∑ k ∈ Finset.range (n - 1), (n.choose (k + 2) : α) * a ^ k * b ^ (n - 2 - k)
-  rw [add_pow_tail_expr a b (hn)]
-  ring
+  -- witness: the explicit tail sum
+  let S := ∑ k ∈ Finset.range (n - 1), (n.choose (k + 2) : α) * a ^ k * b ^ (n - 2 - k)
+  use S
+  have sum_full := add_pow a b n
+  -- match the order used in `add_pow a b n` (a^k * b^(n-k) * choose)
+  let f := fun k => a ^ k * b ^ (n - k) * (n.choose k : α)
+  have h_split :
+    ∑ k ∈ Finset.range (n + 1), f k
+      = b ^ n + (n : α) * b ^ (n - 1) * a + ∑ k ∈ Finset.range (n - 1), f (k + 2) := by
+    -- split into k = 0,1 and k ≥ 2, then reindex the latter to range (n-1)
+    have h1 := Finset.sum_range_add_sum_Ico f (by linarith : 2 ≤ n + 1)
+    have h2 : ∑ k ∈ range 2, f k = b ^ n + (n : α) * b ^ (n - 1) * a := by
+      simp only [Finset.sum_range_succ, Finset.sum_range_zero]
+      simp [f, Nat.choose_zero_right, Nat.choose_one_right, Nat.cast_one, pow_zero, pow_one]
+      ring
+    have h3 : ∑ k ∈ Ico 2 (n + 1), f k = ∑ k ∈ range (n - 1), f (k + 2) := by
+      -- reindex k ↦ k - 2 from Ico 2 (n+1) to range (n-1)
+      apply Finset.sum_bij (fun (k : ℕ) _ => k - 2)
+      · -- ⊢ ∀ a ∈ Ico 2 (n + 1), a - 2 ∈ range (n - 1)
+        intros k hk
+        -- k ∈ Ico 2 (n+1) ↦ k-2 ∈ range (n-1)
+        simp only [Finset.mem_Ico] at hk
+        rcases hk with ⟨hk2, hk3⟩
+        -- k ≥ 2, k < n+1 ⇒ k-2 < n-1
+        have : k - 2 < n - 1 := by omega
+        exact mem_range.mpr this
+      · -- ⊢ ∀ a₁ ∈ Ico 2 (n + 1), ∀ a₂ ∈ Ico 2 (n + 1), a₁ - 2 = a₂ - 2 → a₁ = a₂
+        intros a₁ ha₁ a₂ ha₂ h_eq
+        -- a₁ - 2 = a₂ - 2 → a₁ = a₂
+        grind => instantiate only [= mem_Ico]
+      · -- ⊢ ∀ b ∈ range (n - 1), ∃ a, ∃ (_ : a ∈ Ico 2 (n + 1)), a - 2 = b
+        intros k hk
+        -- k ∈ range (n-1) ↦ k+2 ∈ Ico 2 (n+1)
+        simp only [Finset.mem_range] at hk
+        -- hk : k < n - 1
+        -- k ∈ range (n-1) ↦ k+2 ∈ Ico 2 (n+1)
+        -- 2 ≤ k+2, k+2 < n+1
+        have h1 : 2 ≤ k + 2 := by linarith
+        have h2 : k + 2 < n + 1 := by omega
+        simp only [Finset.mem_Ico]
+        use k + 2
+        use ⟨h1, h2⟩
+        rfl
+      · -- ⊢ ∀ a ∈ Ico 2 (n + 1), f a = f (a - 2 + 2)
+        intros a ha
+        -- ha : a ∈ Ico 2 (n+1), so ha : 2 ≤ a ∧ a < n+1
+        have h : a - 2 + 2 = a := by grind => instantiate only [= mem_Ico]
+        simp [h]
+        -- f (a) = f (a)
+    rw [h1.symm, h2, h3]
+  -- the `sum_full` uses the explicit summand while `h_split` was proved using `f`,
+  -- make them syntactically equal before rewriting
+  have h_sum_def : ∑ m ∈ Finset.range (n + 1), a ^ m * b ^ (n - m) * (n.choose m : α)
+                 = ∑ k ∈ Finset.range (n + 1), f k := by
+    simp [f]
+  rw [sum_full, h_sum_def, h_split]
+  simp only [f]
+  -- factor a^2 out of the tail sum to match the witness `S`'s shape
+  have tail_eq :
+    ∑ x ∈ range (n - 1), a ^ (x + 2) * b ^ (n - (x + 2)) * (n.choose (x + 2) : α)
+      = a ^ 2 * S := by
+    -- pointwise equality of summands after factoring `a^2`
+    have : ∑ x ∈ range (n - 1), a ^ (x + 2) * b ^ (n - (x + 2)) * (n.choose (x + 2) : α)
+      = ∑ x ∈ range (n - 1), a ^ 2 * (n.choose (x + 2) : α) * a ^ x * b ^ (n - 2 - x) := by
+      apply Finset.sum_congr rfl; intro x hx; simp [pow_add]; -- normalize a^(x+2)
+      -- rewrite the exponent n - (x + 2) to the form n - 2 - x before finishing by ring
+      rw [Nat.add_comm (n := x) (m := 2)]; rw [Nat.sub_sub]; ring
+    -- factor `a^2` out of the sum to match the witness `S`
+    rw [this]; rw [Finset.mul_sum]; congr 1; ext x; ring
+  rw [tail_eq]
 
-/-- Nat 上の割り切り版：`u^2 ∣ ( (u+y)^n - y^n - n*y^(n-1)*u )`。
-前提は `2 ≤ n`。-/
+/-- Nat 上の割り切り版：`u^2 ∣ ( (u+y)^n - y^n - n*y^(n-1)*u )` 前提は `2 ≤ n` -/
 lemma binom_tail_nat_dvd (u y : ℕ) {n : ℕ} (hn : 2 ≤ n) :
     u ^ 2 ∣ ((u + y) ^ n - y ^ n - n * y ^ (n - 1) * u) := by
-  -- 特殊化して右辺が u^2 * H であることを示す
-  have h := add_pow_tail_expr (u : ℕ) (y : ℕ) (hn)
-  rw [← h]
-  -- RHS = u^2 * (sum ...), 故に u^2 が割り切る
-  use (∑ k ∈ Finset.range (n - 1), (n.choose (k + 2) : ℕ) * u ^ k * y ^ (n - 2 - k))
-  ring
+  rcases add_pow_tail_exists u y hn with ⟨H, h⟩
+  -- from the explicit tail we get equality to `u^2 * H`, hence divisibility
+  rw [h]
+  sorry
 
 end BinomTail
 
-end DkMath.Algebra
+end DkMath.Algebra.BinomTail
