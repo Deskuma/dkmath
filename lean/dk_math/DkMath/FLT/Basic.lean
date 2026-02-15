@@ -8,6 +8,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Basic
 import DkMath.Algebra.DiffPow
+import DkMath.Algebra.BinomTail
 import DkMath.NumberTheory.GdcDivD
 import DkMath.NumberTheory.GcdNext
 import Mathlib.Algebra.Divisibility.Basic
