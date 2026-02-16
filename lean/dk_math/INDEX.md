@@ -2,7 +2,7 @@
 
 > 目的：リポジトリ全体を「何がどこにあるか」「どんな定理・補題が積み上がっているか」の観点で、**見出し/目次**として眺められる 1 枚 Markdown を作る。
 >
-> 注：nightly ブランチは `sorry` を含み得る（ビルドは通っている前提）。このドキュメントは **現状の“地図”** であり、証明完了度のラベル（✅/🚧/⚠️）は後で埋められるようにしてある。
+> 注：nightly ブランチは `sorry` を含み得る（ビルドは通っている前提）。このドキュメントは \*\*現状の“地図”\*\*であり、証明完了度のラベル（✅/🚧/⚠️）は後で埋められるようにしてある。
 
 ---
 
@@ -88,6 +88,109 @@
 
 ---
 
+## 3.11 理論依存グラフ（要約）
+
+ここでは **import 関係**（`import DkMath.*`）から、理論の積み上がりを「層」と「幹線」で眺める。 （※細部の全グラフは巨大になるので、まずは“重要な骨格”だけを描く。）
+
+### 3.11.1 最重要の幹線：FLT へ向かう一本道
+
+```mermaid
+graph LR
+  Basic[DkMath.Basic] --> DiffPow[DkMath.Algebra.DiffPow]
+  Basic --> BinomTail[DkMath.Algebra.BinomTail]
+  DiffPow --> GcdDiffPow[DkMath.NumberTheory.GcdDiffPow]
+  DiffPow --> GcdLemmas[DkMath.NumberTheory.GcdLemmas]
+  GcdDiffPow --> ZC[DkMath.NumberTheory.ZsigmondyCyclotomic]
+  BinomTail --> FLTBasic[DkMath.FLT.Basic]
+  DiffPow --> FLTBasic
+  GdcDivD[DkMath.NumberTheory.GdcDivD] --> ZC
+  ZC --> GcdNext[DkMath.NumberTheory.GcdNext]
+  GcdNext --> FLTBasic
+  ABCPadic[DkMath.ABC.PadicValNat] --> ZC
+  CFbinom[DkMath.CosmicFormula.CosmicFormulaBinom] --> ZC
+```
+
+- **読み方**：
+  - `DiffPow`（差の冪の因数分解）が、`gcd` 制御や Zsigmondy/Cyclotomic 足場へ流れ込む。
+  - その最終合流点が `FLT.Basic`（一般化 FLT の骨格）。
+  - `ZsigmondyCyclotomic` は「原始素因子で n 乗を拒否する」方向の主エンジン（未完部分が集中しがち）。
+
+### 3.11.2 もう一本の幹線：宇宙式（CosmicFormula）
+
+```mermaid
+graph LR
+  CellDim[DkMath.CellDim] --> CFDefs[DkMath.CosmicFormula.Defs]
+  CFDefs --> CFBasic[DkMath.CosmicFormula.CosmicFormulaBasic]
+  CFBasic --> CFDim[DkMath.CosmicFormula.CosmicFormulaDim]
+  CFDim --> CFbinom[DkMath.CosmicFormula.CosmicFormulaBinom]
+  CFBasic --> CFGeom[DkMath.CosmicFormula.CosmicFormulaGeom]
+  CFDim --> CFCell[DkMath.CosmicFormula.CosmicFormulaCellDim]
+  CFBasic --> CFTrom[DkMath.CosmicFormula.CosmicFormulaTrominoLink]
+```
+
+- **読み方**：
+  - `CellDim` → `Defs` が“幾何（セル次元）を数式へ流し込む入口”。
+  - `CosmicFormulaDim` / `Geom` / `CellDim` が、宇宙式の中核層。
+  - `CosmicFormulaBinom` が NumberTheory（Zsigmondy）側へ接続する。
+
+### 3.11.3 独立系の柱：RH / SilverRatio / Collatz / UnitCycle / DHNT
+
+```mermaid
+graph LR
+  %% SilverRatio / UniqueRep
+  Sqrt2[DkMath.SilverRatio.Sqrt2Lemmas] --> SRUnit[DkMath.SilverRatio.SilverRatioUnit]
+  Sqrt2 --> SRCircle[DkMath.SilverRatio.SilverRatioCircle]
+  Sqrt2 --> URS[DkMath.UniqueRepSimple]
+  URS --> UR[DkMath.UniqueRepresentation]
+
+  %% RH
+  Basic[DkMath.Basic] --> RH[DkMath.RH]
+  RHBasic[DkMath.RH.Basic] --> RH
+  RHDefs[DkMath.RH.Defs] --> RH
+  RHLem[DkMath.RH.Lemmas] --> RH
+  RHEZ[DkMath.RH.EulerZeta] --> RH
+  RHEZL[DkMath.RH.EulerZetaLemmas] --> RH
+  RHEZC[DkMath.RH.EulerZetaConvergence] --> RH
+
+  %% Collatz
+  CBase[DkMath.Collatz.Basic] --> CAcc[DkMath.Collatz.Accelerated]
+  CBase --> CShift[DkMath.Collatz.Shift]
+  CV2[DkMath.Collatz.V2] --> C2K26[DkMath.Collatz.Collatz2K26]
+
+  %% UnitCycle / DHNT
+  UCore[DkMath.UnitCycle.Core] --> URel[DkMath.UnitCycle.RelPolygon]
+  UCore --> UEx[DkMath.UnitCycle.Examples]
+  UCore --> UBridge[DkMath.UnitCycle.CosmicBridge]
+  UBridge --> CFBasic
+  UCore --> DHNTL[DkMath.DHNT.UnitNatLayers]
+  DHNTB[DkMath.DHNT.DHNT_Base] --> DHNTL
+```
+
+---
+
+## 3.12 （ダッシュボード）規模感と未完集中の目安
+
+- 定義/補題/定理の総数（抽出）: **819 件**（`def/lemma/theorem` 合計）
+- `sorry` の総数（抽出）: **54 件**
+
+### 3.12.1 件数が多い“高密度”モジュール（上位例）
+
+- `CosmicFormulaGeom`（60）
+- `CosmicFormulaDim`（55）
+- `RH.EulerZetaLemmas`（54）
+- `CosmicFormulaCellDim`（48）
+
+### 3.12.2 `sorry` が集中している“未完の要塞”（上位例）
+
+- `NumberTheory.ZsigmondyCyclotomic`（24）
+- `FLT.Basic`（14）
+- `FLT.PetalDetect`（3）
+- `NumberTheory.GcdNext`（3）
+
+（この分布は「本丸＝Zsigmondy/Cyclotomic を塞げば、FLT 側が一気に収束する」形に見える。）
+
+---
+
 ## 4. モジュール別：中身の見出し（現状把握）
 
 ここから下は「各モジュールが何を提供しているか」を見出し化する。
@@ -155,8 +258,7 @@
 
 ### 4.7 Cosmic Formula (`DkMath.CosmicFormula`)
 
-- **目的**：\(\text{Body} + \text{Gap} = \text{Big}\) 型の恒等式（宇宙式）を、
-  二項・多項・次元一般化・幾何（Cell/Polyomino）へ接続する。
+- **目的**：\(\text{Body} + \text{Gap} = \text{Big}\) 型の恒等式（宇宙式）を、 二項・多項・次元一般化・幾何（Cell/Polyomino）へ接続する。
 
 #### 4.7.1 サブモジュール（現状：import レベルの目次）
 
