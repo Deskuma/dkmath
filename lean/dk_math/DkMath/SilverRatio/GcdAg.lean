@@ -146,7 +146,20 @@ lemma gcd_even_add_two_eq_two (n : ℕ) : Nat.gcd (2 * n) (2 * n + 2) = 2 := by
 
 /-- Ag-gcd では偶数連続が互いに素 -/
 lemma gcdAg_even_add_two_eq_one (n : ℕ) : gcd_Ag (2 * n) (2 * n + 2) = 1 := by
-  sorry  -- TODO: Phase 1 - gcd n (n+1) = 1 の適切な補題を探す
+  unfold gcd_Ag
+  have hstep : 2 * n + 2 = 2 * (n + 1) := by omega
+  rw [π_Ag_even, hstep, π_Ag_even]
+  have hg1 : Nat.gcd n (n + 1) ∣ 1 := by
+    have h :=
+      Nat.dvd_sub
+        (Nat.gcd_dvd_right n (n + 1))
+        (Nat.gcd_dvd_left n (n + 1))
+    have hsub : (n + 1) - n = 1 := by omega
+    rw [hsub] at h
+    exact h
+  have hg2 : 1 ∣ Nat.gcd n (n + 1) := by
+    exact Nat.one_dvd (Nat.gcd n (n + 1))
+  exact Nat.dvd_antisymm hg1 hg2
 
 -- ========================================
 -- § 4. 補助補題（将来の拡張用）
