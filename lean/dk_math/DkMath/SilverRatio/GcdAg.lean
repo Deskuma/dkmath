@@ -179,9 +179,14 @@ lemma gcd_Ag_comm (a b : ℕ) : gcd_Ag a b = gcd_Ag b a := by
   unfold gcd_Ag
   exact Nat.gcd_comm (π_Ag a) (π_Ag b)
 
-/-- gcd_Ag ≤ gcd の関係 -/
-lemma gcd_Ag_le_gcd (a b : ℕ) : gcd_Ag a b ≤ Nat.gcd a b := by
+/-- Ag射影が正の場合、gcd_Ag は元の引数の最小値を超えない -/
+lemma gcd_Ag_le_min (a b : ℕ) (ha : 0 < π_Ag a) (hb : 0 < π_Ag b) :
+    gcd_Ag a b ≤ Nat.min a b := by
   unfold gcd_Ag
-  sorry  -- TODO: Phase 1 完成後に証明
+  have hleft : Nat.gcd (π_Ag a) (π_Ag b) ≤ a := by
+    exact le_trans (Nat.gcd_le_left (π_Ag b) ha) (π_Ag_le_self a)
+  have hright : Nat.gcd (π_Ag a) (π_Ag b) ≤ b := by
+    exact le_trans (Nat.gcd_le_right (π_Ag a) hb) (π_Ag_le_self b)
+  exact (Nat.le_min).2 ⟨hleft, hright⟩
 
 end DkMath.SilverRatio.GcdAg
