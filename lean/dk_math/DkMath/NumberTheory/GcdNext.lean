@@ -430,22 +430,33 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
   have hvad_eq : padicValNat q (a^d - b^d) = padicValNat q (t^d) := by
     rw [heq_nat]
 
-  -- 矛盾を導く：padicValNat q (a^d - b^d) の上界が必要
-  -- 層Bの性質（padicValNat q (a^d - b^d) = 1）が証明されれば完成
-  -- 現時点では層Aのみ実装されているため、この部分は TODO
+  -- ========================================
+  -- 矛盾導出：層B 補助補題を使用
+  -- ========================================
 
-  -- TODO（層B + GcdAg + PetalDetect 統合）:
-  -- padicValNat q (a^d - b^d) ≤ 上界 を示す
+  -- Phase 2 + Phase 3 + 層B の統合で padicValNat q (a^d - b^d) ≤ 1 を得る
+  -- 以下の補助補題が完成すれば、即座に矛盾が導出される：
+  --
+  -- padicValNat_upper_bound_integrated :
+  --   GcdAg 正規化 + PetalDetect φビット を前提して
+  --   padicValNat q (a^d - b^d) ≤ 1 を保証
   --
   -- 戦略：
-  -- 1. GcdAg 正規化で 2進ノイズを除去
-  -- 2. PetalDetect で (a+b) 核を排除
-  -- 3. Zsigmondy 層B で padicValNat q (a^d - b^d) ≤ 1 を得る
+  -- 1. GcdAg 正規化（Phase 2）で 2進ノイズを除去 → q ≠ 2
+  -- 2. PetalDetect φビット（Phase 3）で (a+b) 核を位相限定 → 半位相では (a+b) 排除
+  -- 3. 層B で Cosmic Formula による G 構造解析 → padicValNat q (a^d - b^d) ≤ 1
   --
-  -- もし padicValNat q (a^d - b^d) = 1 が成り立てば：
-  --   hvad_eq より padicValNat q (t^d) = 1
-  --   しかし hvtd_ge より padicValNat q (t^d) ≥ d ≥ 3
-  --   したがって 1 ≥ 3 で矛盾 ✅
+  -- 矛盾の導出：
+  -- もし padicValNat q (a^d - b^d) ≤ 1 ならば、hvad_eq より
+  --   padicValNat q (t^d) ≤ 1
+  -- しかし hvtd_eq と hvt_ge より
+  --   padicValNat q (t^d) = d * padicValNat q t ≥ d ≥ 3
+  -- したがって 1 ≥ 3 で矛盾！✅
+  --
+  -- TODO（層B の本格実装待ち）:
+  -- padicValNat_d3_upper_bound（d=3 での具体計算）
+  -- padicValNat_general_upper_bound（一般化）
+  -- padicValNat_upper_bound_integrated（最終統合）
   sorry
 
 /-! ### 6. 統合準備：GcdAg 正規化と PetalDetect 検出器
@@ -480,23 +491,86 @@ Body に吸い込まれないことを活用する。
 -- TODO: PetalDetect の φビット判定を使った素因子分類
 -- example (a b q : ℕ) : "q が (a+b) 由来" → "φ=1 側のみ" := by sorry
 
-/-! **Phase 4: 層B 精密評価への接続**
+/-! ### 7. Phase 4: 層B（精密層）— padicValNat 上界の証明
 
-ZsigmondyCyclotomic.lean の層B 補題を活用：
-- `padicValNat_of_primitive_prime_factor_via_G`: Cosmic Formula による帰着
-- `G_three_explicit`: d=3 での明示的計算
-- `squarefree_implies_padic_val_le_one`: 一般上界（研究中）
+**理論的背景:**
+Zsigmondy 定理の層A で原始素因子 q の存在が保証された後、
+層B では padicValNat q (結果) ≤ 1 という精密な上界を証明する。
+結果 = a の d 乗 - b の d 乗
 
-GcdAg と PetalDetect で前処理を行った後、
-層B で padicValNat q (a^d - b^d) ≤ 1 を確定する。
+**証明戦略:**
+1. Cosmic Formula による分解
+2. GcdAg 正規化で q ≠ 2
+3. PetalDetect φビット判定で (a+b) 位相を限定
+4. Lucas/Kummer 定理による二項係数評価
+5. 構造解析により上界確定
+
+**実装現況:**
+- ✅ Cosmic Formula との接続準備
+- 🚧 d=3 での具体計算（ZsigmondyCyclotomic.lean で部分実装）
+- ⏳ 一般化される d への拡張
+
+**鍵となる補題セット（Layer B）:**
 -/
 
--- TODO: 層B との最終接続
--- theorem padicValNat_upper_bound_via_layerB
---     {a b d q : ℕ} (hq_primitive : "q は原始素因子")
---     (h_Ag_normalized : "Ag正規化済み")
---     (h_petal_excluded : "(a+b)核は排除済み") :
---     padicValNat q (a^d - b^d) ≤ 1 := by
---   sorry
+/-- d=3 での上界補題
+
+Cosmic Formula と Lucas/Kummer 定理を組み合わせて、
+d=3 の場合に padicValNat q (a³ - b³) ≤ 1 を証明する。
+-/
+lemma padicValNat_d3_upper_bound {a b q : ℕ}
+    (hq : Nat.Prime q)
+    (hab_lt : b < a) (hab_coprime : Nat.Coprime a b)
+    (h_Ag : gcd_Ag a b = 1) -- Phase 2 正規化
+    (h_phi : Nat.Coprime (a + b) b) -- Phase 3 φビット判定
+    :
+    padicValNat q (a^3 - b^3) ≤ 1 := by
+  -- G_three_explicit から G の具体形を使用
+  -- 各係数の padicValNat を Kummer で評価
+  sorry  -- TODO: d=3 での具体計算
+
+/-- 一般的 d への上界補題
+
+より一般的な d に対する padicValNat 上界。
+現在は研究段階で、d=3, d=5 等の小さな素数 d で検証中。
+-/
+lemma padicValNat_general_upper_bound {a b d q : ℕ}
+    (hd : 3 ≤ d) (hd_prime : Nat.Prime d)
+    (hq : Nat.Prime q)
+    (hab_lt : b < a) (hab_coprime : Nat.Coprime a b)
+    (h_Ag : gcd_Ag a b = 1) -- GcdAg 正規化
+    (h_petal : Nat.Coprime (a + b) b) -- PetalDetect φビット
+    :
+    ∃ C : ℕ, padicValNat q (a^d - b^d) ≤ C := by
+  -- C は d に依存する定数（多くの場合 C = 1）
+  use 1
+  sorry  -- TODO: 一般化への道筋
+
+/-! ### 8. 層B との最終統合：body_not_perfect_pow の証明完成
+
+**現在の状況:**
+Phase 1a-3 の補助仮定を満たすとき、
+層B 補題により padicValNat q (a^d - b^d) ≤ 1 が得られる。
+
+これを body_not_perfect_pow で使用すれば、矛盾導出が完成する。
+-/
+
+/-- 層B + Phase 2,3 による統合上界
+
+GcdAg 正規化（Phase 2）と PetalDetect φビット（Phase 3）を前提として、
+層B の補助補題を統合する。
+-/
+lemma padicValNat_upper_bound_integrated {a b d q : ℕ}
+    (hd : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hq : Nat.Prime q)
+    (hab_lt : b < a) (hab_coprime : Nat.Coprime a b)
+    (h_Ag : gcd_Ag a b = 1) -- Phase 2
+    (h_petal : Nat.Coprime (a + b) b) -- Phase 3
+    :
+    padicValNat q (a^d - b^d) ≤ 1 := by
+  -- Phase 2 + Phase 3 + 層B の完全統合
+  -- h_Ag, h_petal で前処理完了
+  -- 層B 補題により上界確定
+  sorry  -- TODO: 層B 補題との接続完成
 
 end DkMath.NumberTheory.GcdNext
