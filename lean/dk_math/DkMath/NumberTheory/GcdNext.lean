@@ -17,12 +17,28 @@ open DkMath.Algebra.DiffPow
 open DkMath.NumberTheory.GcdDiffPow
 
 /-!
-## GcdNext-step lemma skeletons
+## GcdNext: Zsigmondy 原始素因子理論と FLT への統合層
 
-目的：
-1) 宇宙式の Body = 差の冪 の “特化形” を ready-made で使えるようにする
+**ファイルの位置づけ:**
+ZsigmondyCyclotomic.lean（層A・層B）→ GcdNext（統合層）→ FLT/Basic（応用層）
+
+**目的:**
+1) 宇宙式の Body = 差の冪 の "特化形" を ready-made で使えるようにする
 2) 「完全 d 乗」仮定を `padicValNat` / `factorization` 的な条件へ落とす
-3) Zsigmondy（原始素因子）が使える環境なら接続点を用意する
+3) Zsigmondy（原始素因子）層A・層Bを FLT へ接続する
+4) GcdAg 正規化（2進ノイズ除去）との統合準備
+5) PetalDetect（(a+b) 検出器）との統合準備
+
+**理論の流れ:**
+- **層A（存在層）**: ZsigmondyCyclotomic.lean で実装済み
+  - `exists_primitive_prime_factor_basic`: 原始素因子の存在保証
+  - `prime_exp_not_dvd_diff_imp_primitive`: 群論による primitive 証明
+- **層B（精密層）**: ZsigmondyCyclotomic.lean で部分実装（研究中）
+  - padicValNat q (a^d - b^d) ≤ 1 の評価
+  - GcdAg/PetalDetect による反例回避機構
+- **統合層（このファイル）**: 層A・層Bを組み合わせて FLT へ
+  - `body_not_perfect_pow`: 完全冪否定の主定理
+  - TODO: GcdAg正規化、PetalDetect検出器の活用
 -/
 
 /-! ### 0. Notation helpers -/
@@ -145,21 +161,45 @@ theorem pow_sub_pos {a b : ℕ} {p : ℕ}
   -- したがって 0 < a^p - b^p
   exact Nat.zero_lt_sub_of_lt han
 
-/-! ### 5. Main target skeleton: (x+u)^d - u^d is not a perfect d-th power (strategy stub) -/
+/-! ### 5. Main target: (x+u)^d - u^d is not a perfect d-th power
 
-/-- 目標の雛形：Body(x,u,d) は完全 d 乗にならない（d > 2）
+**統合戦略（Zsigmondy 層A・層B + GcdAg + PetalDetect）**
+-/
 
-**証明構造（Zsigmondy 原始素因子定理使用）:**
-層A（存在層）の `exists_primitive_prime_factor_prime` を使用して原始素因子 q を得る。
-最終的な矛盾導出には層Bの性質（padicValNat q (a^d - b^d) ≤ 上界）が必要。
+/-- 目標定理：Body(x,u,d) は完全 d 乗にならない（d > 2）
+
+**証明構造（3層統合）:**
+
+1. **層A（存在層）**: ZsigmondyCyclotomic.exists_primitive_prime_factor_basic
+   - 原始素因子 q の存在を保証
+   - q ∣ a^d - b^d かつ q ∤ a - b
+
+2. **層B（精密層）**: padicValNat 評価
+   - padicValNat q (a^d - b^d) ≤ 1 の上界
+   - GcdAg 正規化による 2進ノイズ除去
+   - PetalDetect による (a+b) 核の排除
+
+3. **矛盾導出**: t^d 仮定との衝突
+   - padicValNat q (t^d) = d * padicValNat q t ≥ d ≥ 3
+   - しかし padicValNat q (a^d - b^d) ≤ 1
+   - 矛盾！
 
 **現在の実装状況:**
-- 層Aまで実装済み：原始素因子の存在を保証
-- 層B待ち：padicValNat の精密評価が必要（TODO）
+- ✅ 層A実装済み：原始素因子の存在保証
+- ⏳ 層B部分実装：padicValNat 精密評価（研究中）
+- 🚧 統合準備：GcdAg/PetalDetect 接続（準備中）
 
 **必要な追加仮定:**
 - d が素数であること（または d > 2 から導く）
 - ¬ d ∣ x（または仮定として追加）
+- Ag正規化条件（2進位相の処理）
+- φビット構造（半位相 vs 完成位相）
+
+**統合ロードマップ:**
+1. Phase 1: 層A単独で基本形を確立 ← 現在ここ
+2. Phase 2: GcdAg 正規化の導入
+3. Phase 3: PetalDetect 検出器の導入
+4. Phase 4: 層B 精密評価の完成
 -/
 theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
     (hd : 2 < d) (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime (x + u) u) :
@@ -301,12 +341,69 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
   -- 層Bの性質（padicValNat q (a^d - b^d) = 1）が証明されれば完成
   -- 現時点では層Aのみ実装されているため、この部分は TODO
 
-  -- TODO（層Bの実装待ち）:
+  -- TODO（層B + GcdAg + PetalDetect 統合）:
   -- padicValNat q (a^d - b^d) ≤ 上界 を示す
+  --
+  -- 戦略：
+  -- 1. GcdAg 正規化で 2進ノイズを除去
+  -- 2. PetalDetect で (a+b) 核を排除
+  -- 3. Zsigmondy 層B で padicValNat q (a^d - b^d) ≤ 1 を得る
+  --
   -- もし padicValNat q (a^d - b^d) = 1 が成り立てば：
   --   hvad_eq より padicValNat q (t^d) = 1
   --   しかし hvtd_ge より padicValNat q (t^d) ≥ d ≥ 3
-  --   したがって 1 ≥ 3 で矛盾
+  --   したがって 1 ≥ 3 で矛盾 ✅
   sorry
+
+/-! ### 6. 統合準備：GcdAg 正規化と PetalDetect 検出器
+
+**Phase 2: GcdAg 正規化の導入**
+
+GcdAg.lean で定義された Ag射影 π_Ag と gcd_Ag を使用して、
+2進位相のノイズを除去する。
+
+例：gcd(2n, 2n+2) = 2 だが gcd_Ag(2n, 2n+2) = 1
+
+これにより「互いに素」条件が 2進ノイズに邪魔されなくなる。
+-/
+
+-- TODO: GcdAg 正規化を使った coprime 条件の強化
+-- example (a b : ℕ) : GcdAg.gcd_Ag a b = 1 → "本質的に互いに素" := by sorry
+
+/-! **Phase 3: PetalDetect 検出器の導入**
+
+PetalDetect.lean で定義された φビット構造（S0, S1）と
+(a+b) 検出器を使用して、半位相（φ=0）では核 (a+b) が
+Body に吸い込まれないことを活用する。
+
+主要補題：
+- `apb_dvd_S1`: (a+b) | S1 は自明
+- `apb_dvd_S0_iff_dvd_bsq`: (a+b) | S0 ⟺ (a+b) | b²
+- `apb_dvd_S0_implies_eq_one`: gcd(a,b)=1 ∧ (a+b)|S0 → a+b=1（ほぼ不可能）
+
+これにより padicValNat 評価で (a+b) 由来の素因子を排除できる。
+-/
+
+-- TODO: PetalDetect の φビット判定を使った素因子分類
+-- example (a b q : ℕ) : "q が (a+b) 由来" → "φ=1 側のみ" := by sorry
+
+/-! **Phase 4: 層B 精密評価への接続**
+
+ZsigmondyCyclotomic.lean の層B 補題を活用：
+- `padicValNat_of_primitive_prime_factor_via_G`: Cosmic Formula による帰着
+- `G_three_explicit`: d=3 での明示的計算
+- `squarefree_implies_padic_val_le_one`: 一般上界（研究中）
+
+GcdAg と PetalDetect で前処理を行った後、
+層B で padicValNat q (a^d - b^d) ≤ 1 を確定する。
+-/
+
+-- TODO: 層B との最終接続
+-- theorem padicValNat_upper_bound_via_layerB
+--     {a b d q : ℕ} (hq_primitive : "q は原始素因子")
+--     (h_Ag_normalized : "Ag正規化済み")
+--     (h_petal_excluded : "(a+b)核は排除済み") :
+--     padicValNat q (a^d - b^d) ≤ 1 := by
+--   sorry
 
 end DkMath.NumberTheory.GcdNext
