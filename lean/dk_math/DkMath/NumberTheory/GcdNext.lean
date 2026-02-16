@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.NumberTheory.ZsigmondyCyclotomic
 import DkMath.SilverRatio.GcdAg  -- Phase 2: 2進正規化
+import DkMath.FLT.PetalDetect  -- Phase 3: φビット構造・(a+b) 検出器
 
 set_option linter.style.emptyLine false
 
@@ -17,6 +18,7 @@ open DkMath.ABC
 open DkMath.Algebra.DiffPow
 open DkMath.NumberTheory.GcdDiffPow
 open DkMath.SilverRatio.GcdAg  -- Phase 2: GcdAg 正規化関数を使用
+open DkMath.FLT.PetalDetect  -- Phase 3: φビット構造を使用
 
 /-!
 ## GcdNext: Zsigmondy 原始素因子理論と FLT への統合層
@@ -184,7 +186,7 @@ lemma gcdAg_eq_one_imp_coprime_after_factor2 {a b : ℕ}
                   gcd_Ag a' b' = 1 := by
   -- a = 2^e_a * a', b = 2^e_b * b' と因数分解できる
   -- Ag-gcd は 2 進位相を落とすため、a' と b' は本質的に互いに素
-  sorry  -- TODO: Ag正規化による 2進因子の分離
+  sorry  -- TODO: Ag正規化による 2进因子の分離
 
 /-- GcdAg による正規化で互いに素条件が保持される
 
@@ -193,6 +195,64 @@ lemma gcdAg_eq_one_imp_coprime_after_factor2 {a b : ℕ}
 lemma coprime_of_gcdAg_eq_one {a b : ℕ}
     (h : gcd_Ag a b = 1) :
     gcd_Ag a b = 1 := h
+
+/-! ### 5b. Phase 3: PetalDetect φビット構造の補助補題 -/
+
+/-- φビット形式での x の表現（差の冪を S0/S1 の和として見る）
+
+**数学的内容:**
+x = a - b を Body の因数分解の差として扱う際、
+φビット構造（S0 vs S1）の観点から見ると：
+- S0(a, b) = a² + ab + b²（半位相）
+- S1(a, b) = (a+b)²（完成位相）
+
+この差は ab だけ：S1 - S0 = ab
+
+**応用:**
+padicValNat q (x * Sd) の評価で、
+(a+b) が S0 側に吸い込まれるか S1 側にしか現れないかを判定できる。
+-/
+lemma phi_bit_structure_diff (a b : ℕ) :
+    S1_nat a b = S0_nat a b + a * b := by
+  exact diff_kernel_nat a b
+
+/-- (a+b) が S0 を割ることができない条件
+
+**数学的内容:**
+gcd(a, b) = 1 の下で：
+(a+b) | S0(a, b) ⟺ (a+b) | b²
+
+だが、gcd(a+b, b) = 1 ならば：
+(a+b) ∤ S0(a, b)
+
+**応用:**
+半位相（φ=0）では (a+b) が Body kernel を割ることができず、
+したがって padicValNat q (a^d - b^d) の評価で (a+b) 由来の素因子は排除される。
+-/
+lemma apb_not_dvd_S0_coprime (a b : ℕ) (ha : 0 < a) (hb : 0 < b)
+    (hab : Nat.Coprime a b) (hapb : Nat.Coprime (a + b) b) :
+    ¬ (a + b) ∣ S0_nat a b := by
+  -- (a+b) | S0 ⟹ (a+b) | b² （apb_dvd_S0_iff_dvd_bsq）
+  -- gcd(a+b, b) = 1 なら (a+b) | b² ⟹ a+b = 1 （padicValNat 論法）
+  sorry  -- TODO: coprime 条件での (a+b) 排除
+
+/-- φビット判定：(a+b) はどの位相に現れるか
+
+**判定ルール:**
+- φ=1（完成位相）: (a+b) は S1(a, b) = (a+b)² に常に割り込む
+- φ=0（半位相）: (a+b) は S0(a, b) には一般には割り込まない（coprime 条件下）
+
+**応用:**
+これにより padicValNat 評価で、(a+b) 由来の素因子を
+特定位相に限定できる。
+-/
+lemma petal_phi_detection (a b : ℕ) (ha : 0 < a) (hb : 0 < b)
+    (hab : Nat.Coprime a b) :
+    ∃ φ : Bool,
+      (φ = true → (a + b) ∣ S1_nat a b) ∧
+      (φ = false → Nat.Coprime (a + b) b → ¬ (a + b) ∣ S0_nat a b) := by
+  use false
+  refine ⟨fun hfalse => apb_dvd_S1 a b, fun hfalse hapb => apb_not_dvd_S0_coprime a b ha hb hab hapb⟩
 
 /-! ### 6. Main target: (x+u)^d - u^d is not a perfect d-th power
 
