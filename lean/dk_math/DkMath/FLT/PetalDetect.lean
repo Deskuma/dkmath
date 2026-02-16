@@ -126,28 +126,28 @@ lemma apb_dvd_S1 (a b : ℕ) : (a + b) ∣ S1_nat a b := by
 /-- S0 での (a+b) 割り切り判定（合同評価）
 
 **証明の方針:**
-a ≡ -b (mod a+b) より：
-S0 = a² + ab + b² ≡ b² - b² + b² ≡ b² (mod a+b)
-
-したがって：
+S0 = a² + ab + b² = a(a+b) + b² より
 (a+b) | S0 ⟺ (a+b) | b²
+
+**代数的証明:**
+S0 = a² + ab + b² を展開し、a(a+b) の部分を分離する。
 -/
 lemma apb_dvd_S0_iff_dvd_bsq (a b : ℕ) (ha : 0 < a) (hb : 0 < b) :
     (a + b) ∣ S0_nat a b ↔ (a + b) ∣ b^2 := by
-  sorry  -- TODO: Phase 3 で実装
+  sorry  -- TODO: Phase 3 で Nat divisibility 補題を使って実装
 
 /-- gcd(a,b)=1 かつ (a+b)|S0 なら a+b=1（ほぼ不可能）
 
 **証明の方針:**
-1. (a+b) | S0 → (a+b) | b² (上の補題より)
-2. gcd(a,b)=1 → gcd(a+b, b) = 1（TODO: 別補題で証明）
+1. (a+b) | S0 → (a+b) | b² (apb_dvd_S0_iff_dvd_bsq より)
+2. gcd(a,b)=1 → gcd(a+b, b) = 1 (gcd_add_mul_self による)
 3. (a+b) | b² かつ gcd(a+b, b) = 1 → a+b | 1
 4. したがって a+b = 1
 -/
 lemma apb_dvd_S0_implies_eq_one (a b : ℕ) (ha : 0 < a) (hb : 0 < b)
     (hab : Nat.gcd a b = 1) (hdvd : (a + b) ∣ S0_nat a b) :
     a + b = 1 := by
-  sorry  -- TODO: Phase 3 で実装
+  sorry  -- TODO: Phase 3 で gcd/coprime 補題を整理してから実装
 
 -- ========================================
 -- § 4. Mathlib GeomSum 補題の活用（Phase 3.1）
@@ -188,9 +188,12 @@ lemma S1_comm (α : Type*) [CommRing α] (a b : α) : S1 α a b = S1 α b a := b
   ring
 
 /-- S0 ≤ S1 (ℕ版、a,b > 0 で) -/
-lemma S0_le_S1_nat (a b : ℕ) (ha : 0 < a) (hb : 0 < b) :
+lemma S0_le_S1_nat (a b : ℕ) (_ha : 0 < a) (_hb : 0 < b) :
     S0_nat a b ≤ S1_nat a b := by
   unfold S0_nat S1_nat
-  sorry  -- TODO: Phase 2 完成後に証明
+  -- S0 = a² + ab + b², S1 = (a+b)² = a² + 2ab + b²
+  -- S1 - S0 = ab ≥ 0
+  have h : (a + b)^2 = a^2 + a*b + b^2 + a*b := by ring
+  linarith [Nat.zero_le (a * b)]
 
 end DkMath.FLT.PetalDetect
