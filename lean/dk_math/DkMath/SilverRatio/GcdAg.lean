@@ -128,7 +128,21 @@ lemma gcd_Ag_even_odd_eq (a k : ℕ) : gcd_Ag a (2 * k) = gcd_Ag a (2 * k + 1) :
 
 /-- 偶数と次の偶数の gcd は 2 -/
 lemma gcd_even_add_two_eq_two (n : ℕ) : Nat.gcd (2 * n) (2 * n + 2) = 2 := by
-  sorry  -- TODO: Phase 1 - gcd n (n+1) = 1 の適切な補題を探す
+  have hg2 : Nat.gcd (2 * n) (2 * n + 2) ∣ 2 := by
+    have h :=
+      Nat.dvd_sub
+        (Nat.gcd_dvd_right (2 * n) (2 * n + 2))
+        (Nat.gcd_dvd_left (2 * n) (2 * n + 2))
+    have hsub : (2 * n + 2) - (2 * n) = 2 := by omega
+    rw [hsub] at h
+    exact h
+  have h2n : 2 ∣ 2 * n := by
+    exact dvd_mul_of_dvd_left (dvd_refl 2) n
+  have h2n2 : 2 ∣ 2 * n + 2 := by
+    exact Nat.dvd_add h2n (dvd_refl 2)
+  have h2g : 2 ∣ Nat.gcd (2 * n) (2 * n + 2) := by
+    exact Nat.dvd_gcd h2n h2n2
+  exact Nat.dvd_antisymm hg2 h2g
 
 /-- Ag-gcd では偶数連続が互いに素 -/
 lemma gcdAg_even_add_two_eq_one (n : ℕ) : gcd_Ag (2 * n) (2 * n + 2) = 1 := by
