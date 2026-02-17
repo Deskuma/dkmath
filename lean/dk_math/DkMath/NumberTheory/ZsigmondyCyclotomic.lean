@@ -883,12 +883,14 @@ lemma squarefree_implies_padic_val_le_one (d a b q : ℕ)
     (hd_prime : Nat.Prime d) (hb : 0 < b) (hab : Nat.Coprime a b)
     (hq_prime : Nat.Prime q) (hq_div : q ∣ a ^ d - b ^ d) :
     padicValNat q (a ^ d - b ^ d) ≤ 1 := by
-  -- TODO: 一般的な上界証明（G の構造解析が必要）
+  -- TODO: 一般的な上界証明（G の構造解析が必要）ワークスペース内の状況を整理して、戦略を見直す。
   -- Cosmic Formula 経由のアプローチ
   -- Step 1: べき乗差の因数分解（pow_sub_pow_factor_cosmic）✅
   -- Step 2: padicValNat の帰着（padicValNat_of_primitive_prime_factor_via_G）✅
   -- Step 3: G の構造解析（最も難しい部分、Lucas/Kummer の活用）⏳
   sorry  -- [SORRY-2: 一般上界、G 解析が本質的に難しい]
+
+-- ----------------------------------------------------------------------------
 
 /- 原始素因子の p-adic 付値上界：d = 3 の特殊ケース（Cosmic Formula 版）
 
@@ -930,6 +932,8 @@ q^2 ∤ a^2 + ab + b^2 を示す必要がある。
 反例（a=18, b=1 など）の存在により、条件の精査が必要。
 -/
 
+-- ----------------------------------------------------------------------------
+
 /- 参考例（コメントアウト）：
 example : ∀ (a b q : ℕ) (ha : 1 < a) (hb : 0 < b) (hab : Nat.Coprime a b)
     (hq_prime : Nat.Prime q)
@@ -942,6 +946,8 @@ example : ∀ (a b q : ℕ) (ha : 1 < a) (hb : 0 < b) (hab : Nat.Coprime a b)
   -- TODO: 反例の存在により、条件の見直しが必要
   sorry
 -/
+
+-- ----------------------------------------------------------------------------
 
 /-- 補助: 素数 q が a^3 - b^3 を割り、かつ q が a - b を割らないならば
     q は a^2 + a b + b^2 を割る。  (簡潔版・d = 3 用)
@@ -1080,6 +1086,8 @@ lemma padicValNat_le_one_of_prime_divisor_case_three {a b q : ℕ}
   -- Zsigmondy の「存在」を言うには十分じゃが「全ての q で付値 1」とはいかぬようじゃな。
   -- 構造を保つため、一旦ここで sorry としておくぞい。
   sorry  -- [SORRY-3: d=3 最終、反例 (18, 1) の存在により条件の精査が必要じゃ]
+
+-- ----------------------------------------------------------------------------
 
 -- ========================================
 -- § 4. 原始素因子の p-adic 付値に関する補題
