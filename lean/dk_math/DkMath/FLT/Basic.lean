@@ -351,7 +351,7 @@ theorem FLT_of_coprime
           ring
         exact GN3_one_not_cube hpos_xyz.2.1 ⟨x, hx3⟩
       · -- u > 1 の場合
-        -- ここは x3_div_u2 が必要（u^2 | x^3 を導いて矛盾へ）
+        have hu2_dvd_x3 : u ^ 2 ∣ x ^ 3 := x3_div_u2 x u y h_x3_val h1
         sorry
 
     · -- case 2: gcd(u, GN3)=3
