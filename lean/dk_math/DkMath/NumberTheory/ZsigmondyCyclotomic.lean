@@ -1086,6 +1086,7 @@ lemma padicValNat_le_one_of_prime_divisor_case_three {a b q : ℕ}
     prime_divides_G3 ha hb hab hab_lt hq_prime hq_div hq_ndiv
   -- ⊢ padicValNat q (GN 3 (a - b) b) ≤ 1
 
+  -- TODO: 以下の戦略に従い、主張を弱めて実装する。現主張は別補題として切り出す。
   -- 戦略（この補題を健全化するための最短方針）:
   -- 1. 主張を「任意の q で ≤ 1」から「原始素因子 q（ord_q(a/b)=3）に限定」に弱める。
   -- 2. その条件下で q ∣ Φ₃(a,b)=a^2+ab+b^2 かつ q ∤ (a-b) を使い、LTE/円分多項式の square-free 性へ接続する。
