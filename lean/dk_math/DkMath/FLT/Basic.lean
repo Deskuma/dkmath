@@ -193,10 +193,11 @@ theorem FLT_case_3 (x y z : ℕ) (hpos : 0 < x ∧ 0 < y ∧ 0 < z) (h_coprime :
 Cosmic Formula を用いた新しい証明
 $$
 \Large
-z^n = x\ G + y^n\\[16pt]
+z^d = x^d + y^d\\[16pt]
 \normalsize
-x^n = x\ G, \quad y^n = u^d, \quad z^n = (x+u)^d\\[4pt]
-x^{n-1} = G_{d-1}(x,u) = \frac{(x+u)^d - u^d}{x}\\[16pt]
+(x+u)^d = u^d + x G_{d-1}(x,u)\\[4pt]
+x^d = x\ G_{d-1}(x,u), \quad y^d = u^d, \quad z^d = (x+u)^d\\[4pt]
+x^{d-1} = G_{d-1}(x,u) = \frac{(x+u)^d - u^d}{x}\\[16pt]
 G_{d-1}(x,u) = \sum_{k=0}^{d-1} \binom{d}{k+1} x^k\ u^{d-1-k}
 $$
 -/
