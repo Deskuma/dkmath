@@ -255,7 +255,8 @@ lemma petal_phi_detection (a b : ℕ) (ha : 0 < a) (hb : 0 < b)
       (φ = true → (a + b) ∣ S1_nat a b) ∧
       (φ = false → Nat.Coprime (a + b) b → ¬ (a + b) ∣ S0_nat a b) := by
   use false
-  refine ⟨fun hfalse => apb_dvd_S1 a b, fun hfalse hapb => apb_not_dvd_S0_coprime a b ha hb hab hapb⟩
+  refine ⟨fun hfalse => apb_dvd_S1 a b, fun hfalse hapb
+                     => apb_not_dvd_S0_coprime a b ha hb hab hapb⟩
 
 /-! ### 6. Main target: (x+u)^d - u^d is not a perfect d-th power
 
