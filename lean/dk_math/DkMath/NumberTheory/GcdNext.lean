@@ -186,7 +186,10 @@ lemma gcdAg_eq_one_imp_coprime_after_factor2 {a b : ℕ}
                   gcd_Ag a' b' = 1 := by
   -- a = 2^e_a * a', b = 2^e_b * b' と因数分解できる
   -- Ag-gcd は 2 進位相を落とすため、a' と b' は本質的に互いに素
-  sorry  -- TODO: Ag正規化による 2進因子の分離
+  refine ⟨a, b, ?_⟩
+  refine ⟨?_, ?_, h⟩
+  · exact ⟨0, 0, by simp⟩
+  · sorry   -- TODO: a, b を 2 の冪で割ることで a', b' を定義し、互いに素性と gcd_Ag = 1 を示す
 
 /-- GcdAg による正規化で互いに素条件が保持される
 
