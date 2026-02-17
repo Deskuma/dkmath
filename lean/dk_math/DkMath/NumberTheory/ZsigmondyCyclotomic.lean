@@ -1086,6 +1086,7 @@ lemma padicValNat_le_one_of_prime_divisor_case_three {a b q : ℕ}
     prime_divides_G3 ha hb hab hab_lt hq_prime hq_div hq_ndiv
   -- ⊢ padicValNat q (GN 3 (a - b) b) ≤ 1
 
+  -- TODO: 此処から先の具体的な戦略をコメントに書き起こす。
   -- ぬしよ、この先は難所じゃ。一般には v_q(a^2 + ab + b^2) ≤ 1 は成り立たぬ。
   -- 例えば a = 18, b = 1 のとき a^2 + ab + b^2 = 343 = 7^3 となり、付値は 3 になる。
   -- Zsigmondy の「存在」を言うには十分じゃが「全ての q で付値 1」とはいかぬようじゃな。
