@@ -235,9 +235,18 @@ gcd(a, b) = 1 の下で：
 lemma apb_not_dvd_S0_coprime (a b : ℕ) (ha : 0 < a) (hb : 0 < b)
     (hab : Nat.Coprime a b) (hapb : Nat.Coprime (a + b) b) :
     ¬ (a + b) ∣ S0_nat a b := by
-  -- (a+b) | S0 ⟹ (a+b) | b² （apb_dvd_S0_iff_dvd_bsq）
-  -- gcd(a+b, b) = 1 なら (a+b) | b² ⟹ a+b = 1 （padicValNat 論法）
-  sorry  -- TODO: coprime 条件での (a+b) 排除
+  intro hS0
+  have _hapb_from_hab : Nat.Coprime (a + b) b := (Nat.coprime_add_self_left).2 hab
+  have hbsq : (a + b) ∣ b ^ 2 := (apb_dvd_S0_iff_dvd_bsq a b ha hb).1 hS0
+  have hapb_pow : Nat.Coprime (a + b) (b ^ 2) :=
+    (Nat.coprime_pow_right_iff (n := 2) (by decide) (a + b) b).2 hapb
+  have hone : a + b = 1 := Nat.eq_one_of_dvd_coprimes hapb_pow (dvd_refl (a + b)) hbsq
+  have htwo : 2 ≤ a + b := by
+    calc
+      2 = 1 + 1 := by rfl
+      _ ≤ a + b := Nat.add_le_add (Nat.succ_le_of_lt ha) (Nat.succ_le_of_lt hb)
+  have hne : a + b ≠ 1 := Nat.ne_of_gt (lt_of_lt_of_le (by decide : 1 < 2) htwo)
+  exact hne hone
 
 /-- φビット判定：(a+b) はどの位相に現れるか
 
