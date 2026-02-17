@@ -1037,10 +1037,10 @@ mod q^2 での議論：
 これが完成すれば、d = 3 での完全な Zsigmondy 定理が達成される！
 -/
 lemma padicValNat_le_one_of_prime_divisor_case_three {a b q : ℕ}
-    (ha : 1 < a) (hb : 0 < b) (hab : Nat.Coprime a b) (hab_lt : b < a)
+    (_ha : 1 < a) (_hb : 0 < b) (_hab : Nat.Coprime a b) (hab_lt : b < a)
     (hq_prime : Nat.Prime q)
-    (hq_div : q ∣ a ^ 3 - b ^ 3) (hq_ndiv : ¬ q ∣ a - b) :
-    padicValNat q (a ^ 3 - b ^ 3) ≤ 1 := by
+    (_hq_div : q ∣ a ^ 3 - b ^ 3) (hq_ndiv : ¬ q ∣ a - b) :
+    padicValNat q (a ^ 3 - b ^ 3) = padicValNat q (a ^ 2 + a * b + b ^ 2) := by
   -- b < a の仮定を受け取り、べき乗差の因数分解を適用する
   have hd : 0 < 3 := by norm_num
   have hfactor : a ^ 3 - b ^ 3 = (a - b) * GN 3 (a - b) b := pow_sub_pow_factor_cosmic_N hd hab_lt
@@ -1065,38 +1065,26 @@ lemma padicValNat_le_one_of_prime_divisor_case_three {a b q : ℕ}
     have : padicValNat q (a - b) = 0 := padicValNat.eq_zero_of_not_dvd hq_ndiv
     rw [this, zero_add] at hpadic
     exact hpadic
-  rw [hpadic_eq]
-  -- Lucas/Kummer 定理を使って GN 3 の各項の padicValNat を評価
-  have hG_coeffs := padicValNat_G_three_coeffs_le_one q hq_prime
-  -- 目標は padicValNat q (GN 3 (a - b) b) ≤ 1 を示すこと
-  apply Nat.le_one_iff_eq_zero_or_eq_one.mpr
-  -- ⊢ padicValNat q (GN 3 (a - b) b) = 0 ∨ padicValNat q (GN 3 (a - b) b) = 1
-  apply Nat.le_one_iff_eq_zero_or_eq_one.mp
-  -- ⊢ padicValNat q (GN 3 (a - b) b) ≤ 1
-  apply Nat.le_of_lt
-  -- ⊢ padicValNat q (GN 3 (a - b) b) < 1
-  -- ここで補題を使う必要がある：q | GN 3 (a - b) b かつ gcd(a, b) = 1 のとき q^2 ∤ GN 3 (a - b) b
   have hG_eq : GN 3 (a - b) b = a ^ 2 + a * b + b ^ 2 := by
     conv_rhs => rw [← Nat.sub_add_cancel hab_lt.le]
     rw [GN_three_explicit (a - b) b]
     ring
-  rw [hG_eq]
-  -- q | a^2 + ab + b^2 であることは既に示した lemma を使えば一撃じゃ。
-  have _hq_G : q ∣ a ^ 2 + a * b + b ^ 2 :=
-    prime_divides_G3 ha hb hab hab_lt hq_prime hq_div hq_ndiv
-  -- ⊢ padicValNat q (GN 3 (a - b) b) ≤ 1
+  calc
+    padicValNat q (a ^ 3 - b ^ 3) = padicValNat q (GN 3 (a - b) b) := hpadic_eq
+    _ = padicValNat q (a ^ 2 + a * b + b ^ 2) := by rw [hG_eq]
 
-  -- TODO: 以下の戦略に従い、主張を弱めて実装する。現主張は別補題として切り出す。
-  -- 戦略（この補題を健全化するための最短方針）:
-  -- 1. 主張を「任意の q で ≤ 1」から「原始素因子 q（ord_q(a/b)=3）に限定」に弱める。
-  -- 2. その条件下で q ∣ Φ₃(a,b)=a^2+ab+b^2 かつ q ∤ (a-b) を使い、LTE/円分多項式の square-free 性へ接続する。
-  -- 3. 既存の `padicValNat_primitive_prime_factor_ge_one` と組にし、最終的に v_q(a^3-b^3)=1 を別補題として切り出す。
-  -- Memo: これが完成すれば、d=3 の完全な Zsigmondy 定理が達成される！
-  -- ぬしよ、この先は難所じゃ。一般には v_q(a^2 + ab + b^2) ≤ 1 は成り立たぬ。
-  -- 例えば a = 18, b = 1 のとき a^2 + ab + b^2 = 343 = 7^3 となり、付値は 3 になる。
-  -- Zsigmondy の「存在」を言うには十分じゃが「全ての q で付値 1」とはいかぬようじゃな。
-  -- 構造を保つため、一旦ここで sorry としておくぞい。
-  sorry  -- [SORRY-3: d=3 最終、反例 (18, 1) の存在により条件の精査が必要じゃ]
+/-- d = 3 の上界主張を分離した版。
+
+`padicValNat q (a^2 + ab + b^2) ≤ 1` を仮定できる場合に、
+`padicValNat q (a^3 - b^3) ≤ 1` が従う。 -/
+lemma padicValNat_le_one_of_prime_divisor_case_three_strong {a b q : ℕ}
+    (ha : 1 < a) (hb : 0 < b) (hab : Nat.Coprime a b) (hab_lt : b < a)
+    (hq_prime : Nat.Prime q)
+    (hq_div : q ∣ a ^ 3 - b ^ 3) (hq_ndiv : ¬ q ∣ a - b)
+    (hPhi3_le : padicValNat q (a ^ 2 + a * b + b ^ 2) ≤ 1) :
+    padicValNat q (a ^ 3 - b ^ 3) ≤ 1 := by
+  simpa [padicValNat_le_one_of_prime_divisor_case_three ha hb hab hab_lt hq_prime hq_div hq_ndiv]
+    using hPhi3_le
 
 -- ----------------------------------------------------------------------------
 
