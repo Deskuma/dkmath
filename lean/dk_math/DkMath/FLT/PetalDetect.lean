@@ -162,7 +162,13 @@ lemma apb_dvd_S0_iff_dvd_bsq (a b : ℕ) (ha : 0 < a) (hb : 0 < b) :
 lemma apb_dvd_S0_implies_eq_one (a b : ℕ) (ha : 0 < a) (hb : 0 < b)
     (hab : Nat.gcd a b = 1) (hdvd : (a + b) ∣ S0_nat a b) :
     a + b = 1 := by
-  sorry  -- TODO: Phase 3 で gcd/coprime 補題を整理してから実装
+  have hbsq : (a + b) ∣ b ^ 2 := (apb_dvd_S0_iff_dvd_bsq a b ha hb).1 hdvd
+  have hab_coprime : Nat.Coprime a b := by
+    rwa [Nat.coprime_iff_gcd_eq_one]
+  have hapb_coprime : Nat.Coprime (a + b) b := (Nat.coprime_add_self_left).2 hab_coprime
+  have hapb_coprime_pow : Nat.Coprime (a + b) (b ^ 2) := by
+    exact (Nat.coprime_pow_right_iff (n := 2) (by decide) (a + b) b).2 hapb_coprime
+  exact Nat.eq_one_of_dvd_coprimes hapb_coprime_pow (dvd_refl (a + b)) hbsq
 
 -- ========================================
 -- § 4. Mathlib GeomSum 補題の活用（Phase 3.1）
