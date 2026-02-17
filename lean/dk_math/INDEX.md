@@ -163,29 +163,108 @@ graph TD
 
 ---
 
-### I-3-c. 原始素因子層（Zsigmondy 本体）
+### I-3-c. 原始素因子層（Zsigmondy 本体）— さらに分解
 
-モジュール：`NumberTheory.ZsigmondyCyclotomic`
+モジュール：`DkMath.NumberTheory.ZsigmondyCyclotomic`
 
-目標形（概念レベル）：
+ここは「Zsigmondy の心臓部」ゆえ、補題を **機能ブロック**に切り分けて管理する。
 
-- ある素数 p が a^n - b^n を割る
-- かつ p は k < n のとき a^k - b^k を割らない
+---
 
-依存：
+#### I-3-c1. 宇宙式コア（因数分解の“器”）
 
-- 差の冪分解
-- gcd 制御
-- 円分多項式的構造（将来）
+- `def cosmic_formula_one`
+- `def G`
+- `theorem cosmic_id`
+- `theorem Z_eq_zero`
+- `theorem exchange_symmetry`
+- `lemma pow_sub_pow_factor_cosmic`（ℤ 上の因数分解）
+- `lemma pow_sub_pow_factor_cosmic_N`（ℕ 上の因数分解）
 
-ここが：
+役割：
 
-- FLT の指数制限
-- 高次冪の排除
+- a^d - b^d = (a-b) \* G(a,b,d) の「G」を握る。
+- 以後の議論（primitive / p-adic / cyclotomic）は、ほぼこの器の上で回る。
 
-を直接担う層。
+---
 
-`sorry` が集中しているのもここ。
+#### I-3-c2. primitive（原始性）の抽出
+
+- `lemma exists_primitive_prime_factor_basic`
+- `lemma prime_exp_not_dvd_diff_imp_primitive`（群論・位数で primitive を出す）
+- `lemma exists_primitive_prime_factor_prime`
+
+役割：
+
+- 「ある素数 q が a^d - b^d を割る」だけでなく、 「k < d の差の冪を割らない」という **新規性**（primitive）を保証する。
+
+---
+
+#### I-3-c3. cyclotomic（円分多項式）ブロック
+
+- `lemma cyclotomic_dvd_pow_sub_one`
+- `lemma cyclotomic_squarefree`
+- `lemma cyclotomic_eval_divides`
+
+役割：
+
+- 一般 d の Zsigmondy を「円分多項式 Φ\_d」経由で実装するための足場。
+- squarefree 性は p-adic 上界（valuation ≤ 1）に直結しやすい。
+
+---
+
+#### I-3-c4. padicValNat（p-adic valuation）ブロック
+
+- `lemma padicValNat_factorization`
+- `lemma padicValNat_of_primitive_prime_factor_via_G`
+- `lemma padicValNat_primitive_prime_factor_ge_one`
+- `lemma padicValNat_primitive_prime_factor_le_one`
+- `lemma squarefree_implies_padic_val_le_one`（未完の可能性：上界一般）
+
+役割：
+
+- 原始素因子 q について v\_q(a^d - b^d) を 1 付近に押さえ、 「d 乗の形にならない」へ繋ぐ。
+
+---
+
+#### I-3-c5. 二項係数の p-adic（Lucas/Kummer）
+
+- `lemma lucas_theorem_for_binomial_coeff`
+- `lemma kummer_theorem_for_binomial_coeff`
+
+役割：
+
+- 二項係数の p-進評価を通じて、 G(a,b,d) の係数や項の割れ方を制御する。
+
+---
+
+#### I-3-c6. d = 3 の“特化エンジン”（明示計算）
+
+- `lemma G_three_explicit`
+- `lemma GN_three_explicit`
+- `lemma prime_divides_G3`
+- `lemma padicValNat_binomial_coeff_three`
+- `lemma padicValNat_G_three_coeffs_le_one`
+- `lemma padicValNat_le_one_of_prime_divisor_case_three`（未完の可能性：d=3最終）
+
+役割：
+
+- 一般論が重い部分を、d=3 で「明示計算」に落として閉じる。
+- FLT の具体指数（3,5,7…）を先に締める戦略にも使える。
+
+---
+
+#### I-3-c7. 例外ケース管理（Zsigmondy の“落とし穴”）
+
+Zsigmondy は「ほとんど常に」原始素因子が出るが、古典的に例外がある。 （例：よく知られた (a,b,n)=(2,1,6) 型など）
+
+このリポジトリの設計としては：
+
+- **例外条件の前提化**（`¬ d ∣ a - b` など）
+- **d=3 特化での反例検査**（具体値が紛れ込む場合の条件精査）
+- **squarefree/p-adic 上界が要る箇所**を「研究課題」として隔離
+
+…という方針で「本体ルート（FLTへ）」が塞がらないようにする。
 
 ---
 
