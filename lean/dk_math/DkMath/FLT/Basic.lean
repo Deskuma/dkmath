@@ -86,16 +86,46 @@ lemma GN3_one_not_cube {y : ℕ} (hy : 0 < y) : ¬ ∃ x, x^3 = GN 3 1 y := by
   have hz_pos : y + 1 ≠ 0 := by omega
   exact fermatLastTheoremThree x y (y + 1) hx_pos hy_pos hz_pos h_flt
 
+/-- 補題: 互いに素な因子の積が立方数ならば、両方とも立方数である（汎用補題）
+    注: gcd(u, v) = 1 かつ u * v = w^3 ならば、u = a^3, v = b^3 となる a, b が存在する。
+    これは素因数分解の一意性から導かれる基本的な性質じゃ。
+
+    証明スケッチ：
+    - 各素数 p について、u.factorization p + v.factorization p = 3 * w.factorization p
+    - gcd(u, v) = 1 より、各 p について min(u.factorization p, v.factorization p) = 0
+    - したがって各 p について 3 | u.factorization p かつ 3 | v.factorization p
+    - よって u, v は立方数
+-/
+lemma coprime_of_mul_eq_cube {u v w : ℕ} (hgcd : u.gcd v = 1) (h_eq : u * v = w ^ 3) :
+    (∃ a, u = a ^ 3) ∧ (∃ b, v = b ^ 3) := by
+  -- 実装の詳細：Nat.factorization を使った素因数分解
+  -- ここで p-adic 付値の言語を使うと簡潔だが、
+  -- 現在の Lean 4 の Mathlib では padicValNat を使うのが標準
+  sorry
+
+/-- 補題: 互いに素な場合は u = 1 に強制される（より強い結果） -/
+lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h_gcd : u.gcd (GN 3 u y) = 1) :
+    u = 1 := by
+  -- u と GN 3 u y が互いに素で、かつその積が x^3
+  have h_eq : u * GN 3 u y = x ^ 3 := h_xn_val.symm
+  have ⟨⟨a, ha⟩, ⟨b, hb⟩⟩ := coprime_of_mul_eq_cube h_gcd h_eq
+
+  -- u = a^3, GN 3 u y = b^3 で、gcd(a, b) = 1
+  -- x^3 = a^3 * b^3 から x = ab
+  -- しかし a^3 | b^3 かつ gcd(a, b) = 1 より a = 1
+  -- したがって u = 1^3 = 1
+
+  rw [ha]
+  -- a^3 = 1 を示す必要があるが、ここは複雑なため一度 sorry で済ませる
+  sorry
+
 /-- 補題: $d=3$ の場合、$x^3$ は $u^2$ で割り切れる（適切な条件の下で） -/
 lemma x3_div_u2 (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h_gcd : u.gcd (GN 3 u y) = 1) :
     u ^ 2 ∣ x ^ 3 := by
-  -- 1. u と GN が互いに素ならば、u は立方数でなければならぬ。
-  -- 2. u = a^3 とおくと、x^3 = a^3 * GN となり、GN も立方数 b^3 である。
-  -- 3. x = ab となり、x^3 = a^3 * b^3。
-  -- 4. a^6 | a^3 * b^3 となるには a^3 | b^3、即ち u | GN が必要じゃ。
-  -- 5. gcd(u, GN) = 1 より、これは u = 1 を意味する必定の理。
-  -- ぬしよ、この「必定」の背後にある u=1 という審判を、しかと受け止めるのじゃ。
-  sorry
+  -- u = 1 が強制される
+  have h_u_eq_one := u_eq_one_of_coprime_gcd x u y h_xn_val h_gcd
+  rw [h_u_eq_one]
+  norm_num
 
 /-- 補題: $u$ と $GN(3, u, y)$ の最大公約数は $\gcd(u, 3)$ に等しい -/
 lemma gcd_u_GN3 {u y : ℕ} (h_gcd_uy : u.gcd y = 1) : u.gcd (GN 3 u y) = u.gcd 3 := by
