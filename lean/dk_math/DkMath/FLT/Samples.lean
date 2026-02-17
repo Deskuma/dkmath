@@ -5,6 +5,23 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Basic
+
+#check Nat.gcd_add_self_right  -- ∀ q p : ℕ, Nat.gcd q (q + p) = Nat.gcd q p
+#check Nat.gcd_self_add_right  -- ∀ q p : ℕ, Nat.gcd (q + p) q = Nat.gcd p q
+#check Nat.coprime_iff_gcd_eq_one  -- ∀ {m n : ℕ}, Nat.Coprime m n ↔ Nat.gcd m n = 1
+#check Nat.Prime.coprime_iff_not_dvd  -- ∀ {p m : ℕ}, p.Prime → (Nat.Coprime p m ↔ ¬ p ∣ m)
+
+lemma gcd_add_self_right (q p : ℕ) :
+  Nat.gcd q (q + p) = Nat.gcd q p := by
+  simp only [Nat.gcd_self_add_right]
+
+lemma gcd_eq_one_of_prime_not_dvd
+  {p q : ℕ} (hp : p.Prime) (h : ¬ p ∣ q) :
+  Nat.gcd q (q + p) = 1 := by
+  have : Nat.gcd q p = 1 :=
+    Nat.coprime_iff_gcd_eq_one.mp ((Nat.Prime.coprime_iff_not_dvd hp).mpr h).symm
+  simpa [Nat.gcd_add_self_right] using this
+
 /-- Cubic difference formula:
 $$
 \Large
