@@ -112,7 +112,7 @@ lemma card_body_from_cosmic (d x u : ℕ) (hx : 0 < x) (hu : 0 < u) :
     これがスケール詐欺を禁止する
 -/
 lemma body_tileable_implies_card_thrice (d : ℕ) (x u : ℕ)
-    (hx : 0 < x) (hu : 0 < u)
+    (_hx : 0 < x) (_hu : 0 < u)
     (IsLTromino : Finset (Cell d) → Prop)
     (h_card : ∀ {t}, IsLTromino t → t.card = 3) :
     TileableByLTromino IsLTromino (Body d x u) →

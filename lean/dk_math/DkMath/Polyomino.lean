@@ -57,7 +57,7 @@ lemma card_biUnion_eq_sum_card_of_pairwise_disjoint
     {α : Type*} [DecidableEq α]
     {R : Finset α} {tiles : Finset (Finset α)}
     (hdis : (tiles : Set (Finset α)).Pairwise Disjoint)
-    (hsub : ∀ {t}, t ∈ tiles → t ⊆ R) :
+    (_hsub : ∀ {t}, t ∈ tiles → t ⊆ R) :
     (tiles.biUnion id).card = ∑ t ∈ tiles, t.card := by
   exact card_biUnion hdis
 
@@ -86,7 +86,7 @@ lemma tileableByLTromino_card_mul_three
     simp [mul_comm]
   -- まとめ
   calc
-    R.card = (tiles.biUnion id).card := by simpa [hcover]
+    R.card = (tiles.biUnion id).card := by simp [hcover]
     _ = ∑ t ∈ tiles, t.card := hsum
     _ = 3 * tiles.card := sum_eq
 
