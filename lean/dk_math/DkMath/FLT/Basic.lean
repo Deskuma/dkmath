@@ -304,32 +304,13 @@ theorem FLT_of_coprime
   -- 5. 幾何単位の不整合の具体的検討
   -- ぬしよ、ここで gcd(u, GN n u y) を調べてみようかの。
   -- まず gcd(u, y) = 1 であることを確認するぞい。
-  -- have h_gcd_u_y : Nat.gcd u y = 1 := by ... (上述の証明)
-  have : u.gcd y = 1 := h_gcd_u_y
 
-  have h_gcd_u_G : Nat.gcd u (GN n u y) = Nat.gcd u n := by
-    -- GN n u y = n*y^{n-1} + u * (何か) と書けることを使う。
-    -- gcd(u, n*y^{n-1} + u*K) = gcd(u, n*y^{n-1}) = gcd(u, n) （∵ gcd(u, y)=1）
-    have : GN n u y = n * y ^ (n - 1) + u * (∑ k ∈ Finset.range (n - 1), Nat.choose n (k + 2) * y ^ (n - 2 - k) * u ^ k) := by
-      unfold GN
-      simp only [Nat.cast_id]
-      refine (Nat.sub_eq_iff_eq_add ?_).mp ?_
-      · -- ⊢ u * ∑ k ∈ Finset.range (n - 1), n.choose (k + 2) * y ^ (n - 2 - k) * u ^ k ≤
-        -- ∑ x ∈ Finset.range n, n.choose (x + 1) * u ^ x * y ^ (n - 1 - x)omega
-        refine (Nat.le_div_iff_mul_le ?_).mp ?_
-        · sorry
-        · sorry
-      · -- ⊢ ∑ x ∈ Finset.range n, n.choose (x + 1) * u ^ x * y ^ (n - 1 - x) -
-        -- u * ∑ k ∈ Finset.range (n - 1), n.choose (k + 2) * y ^ (n - 2 - k) * u ^ k = n * y ^ (n - 1)
-        sorry
-    rw [this]
-    have h1 : u.gcd (n * y ^ (n - 1) + u * (∑ k ∈ Finset.range (n - 1), Nat.choose n (k + 2) * y ^ (n - 2 - k) * u ^ k))
-        = u.gcd (n * y ^ (n - 1)) := by
-      exact
-        Nat.gcd_add_mul_left_right u (n * y ^ (n - 1))
-          (∑ k ∈ Finset.range (n - 1), n.choose (k + 2) * y ^ (n - 2 - k) * u ^ k)
-    rw [h1]
-    sorry
+  -- 3. gcd(u, GN 3 u y) = gcd(u, 3)
+  have h_gcd_u_G : u.gcd (GN 3 u y) = u.gcd 3 := by
+    apply gcd_u_GN3
+    -- ここだけ：gcd(u,y)=1 を供給する
+    have : u.gcd y = 1 := h_gcd_u_y
+    exact this
 
   /-
   -- Observation: If gcd(u,n)=1, then u and GN must separately be n-th powers.
@@ -337,11 +318,42 @@ theorem FLT_of_coprime
   -/
 
   -- 6. 矛盾の導出に向けたスケルトン
-  -- (case 1) gcd(u, n) = 1 のとき
-  -- (case 2) gcd(u, n) = n のとき
-  -- いずれにせよ、Zsigmondy 原始素因子の存在が、$GN$ が「綺麗な $n$ 乗」になることを拒む。
+  -- まずは n = 3 の場合に限定して進める
+  -- （一般 n は後で Zsigmondy を使った別の証明へ）
+  by_cases hn3 : n = 3
+  · -- n = 3 の場合
+    subst hn3
 
-  sorry
+    -- x^3 = u * GN 3 u y に確定
+    have h_x3_val : x ^ 3 = u * GN 3 u y := h_xn_val
+
+    -- gcd(u, GN 3 u y) は 1 か 3
+    have h_gcd_cases : u.gcd (GN 3 u y) = 1 ∨ u.gcd (GN 3 u y) = 3 := by
+      have : u.gcd (GN 3 u y) = u.gcd 3 := h_gcd_u_G
+      -- TODO: あとは u.gcd 3 の値が 1 or 3 を示す
+      sorry
+
+    rcases h_gcd_cases with h1 | h3
+    · -- case 1: gcd(u, GN3)=1
+      by_cases hu1_case : u = 1
+      · -- u = 1 の場合
+        have hx3 : x ^ 3 = GN 3 1 y := by
+          rw [h_x3_val, hu1_case]
+          ring
+        exact GN3_one_not_cube hpos_xyz.2.1 ⟨x, hx3⟩
+      · -- u > 1 の場合
+        -- ここは x3_div_u2 が必要（u^2 | x^3 を導いて矛盾へ）
+        sorry
+
+    · -- case 2: gcd(u, GN3)=3
+      -- 3 を除いた互いに素部分で case 1 に還元
+      sorry
+
+  · -- n > 3 の場合
+    -- Zsigmondy 原始素因子を使った証明（後々実装）
+    sorry
+
+
 
 /-- 汎用版：gcd を自動で取り除き、原始解へ還元してから `FLT_of_coprime` を呼ぶ。 -/
 theorem FLT {x y z : ℕ} (n : ℕ) (hpos_xyz : 0 < x ∧ 0 < y ∧ 0 < z) (hn : 3 ≤ n)
