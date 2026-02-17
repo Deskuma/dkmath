@@ -538,9 +538,20 @@ lemma padicValNat_d3_upper_bound {a b q : ℕ}
     (h_phi : Nat.Coprime (a + b) b) -- Phase 3 φビット判定
     :
     padicValNat q (a^3 - b^3) ≤ 1 := by
-  -- G_three_explicit から G の具体形を使用
-  -- 各係数の padicValNat を Kummer で評価
-  sorry  -- TODO: d=3 での具体計算
+  by_cases hb0 : b = 0
+  · subst hb0
+    have ha1 : a = 1 := by
+      simpa [Nat.coprime_zero_right] using hab_coprime
+    subst ha1
+    simp
+  · have hb_pos : 0 < b := Nat.pos_of_ne_zero hb0
+    by_cases hq_div : q ∣ a ^ 3 - b ^ 3
+    · simpa using
+        (squarefree_implies_padic_val_le_one 3 a b q
+          (by decide : Nat.Prime 3) hb_pos hab_coprime hq hq_div)
+    · have hzero : padicValNat q (a ^ 3 - b ^ 3) = 0 := padicValNat.eq_zero_of_not_dvd hq_div
+      rw [hzero]
+      simp
 
 /-- 一般的 d への上界補題
 
