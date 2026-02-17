@@ -329,9 +329,18 @@ theorem FLT_of_coprime
 
     -- gcd(u, GN 3 u y) は 1 か 3
     have h_gcd_cases : u.gcd (GN 3 u y) = 1 ∨ u.gcd (GN 3 u y) = 3 := by
-      have : u.gcd (GN 3 u y) = u.gcd 3 := h_gcd_u_G
-      -- TODO: あとは u.gcd 3 の値が 1 or 3 を示す
-      sorry
+      have h_eq : u.gcd (GN 3 u y) = u.gcd 3 := h_gcd_u_G
+      have h13 : u.gcd 3 = 1 ∨ u.gcd 3 = 3 := by
+        exact (Nat.dvd_prime Nat.prime_three).mp (Nat.gcd_dvd_right u 3)
+      rcases h13 with h1 | h3
+      · left
+        calc
+          u.gcd (GN 3 u y) = u.gcd 3 := h_eq
+          _ = 1 := h1
+      · right
+        calc
+          u.gcd (GN 3 u y) = u.gcd 3 := h_eq
+          _ = 3 := h3
 
     rcases h_gcd_cases with h1 | h3
     · -- case 1: gcd(u, GN3)=1
