@@ -134,7 +134,22 @@ S0 = a² + ab + b² を展開し、a(a+b) の部分を分離する。
 -/
 lemma apb_dvd_S0_iff_dvd_bsq (a b : ℕ) (ha : 0 < a) (hb : 0 < b) :
     (a + b) ∣ S0_nat a b ↔ (a + b) ∣ b^2 := by
-  sorry  -- TODO: Phase 3 で Nat divisibility 補題を使って実装
+  have _ha : 0 < a := ha
+  have _hb : 0 < b := hb
+  have hEq : S0_nat a b = a * (a + b) + b ^ 2 := by
+    unfold S0_nat
+    ring
+  have hmul : (a + b) ∣ a * (a + b) := by
+    use a
+    ring
+  constructor
+  · intro hS0
+    have hsum : (a + b) ∣ a * (a + b) + b ^ 2 := by
+      simpa [hEq] using hS0
+    exact (Nat.dvd_add_right hmul).1 hsum
+  · intro hbsq
+    have hsum : (a + b) ∣ a * (a + b) + b ^ 2 := dvd_add hmul hbsq
+    simpa [hEq] using hsum
 
 /-- gcd(a,b)=1 かつ (a+b)|S0 なら a+b=1（ほぼ不可能）
 
