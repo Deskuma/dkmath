@@ -883,7 +883,12 @@ lemma squarefree_implies_padic_val_le_one (d a b q : ℕ)
     (hd_prime : Nat.Prime d) (hb : 0 < b) (hab : Nat.Coprime a b)
     (hq_prime : Nat.Prime q) (hq_div : q ∣ a ^ d - b ^ d) :
     padicValNat q (a ^ d - b ^ d) ≤ 1 := by
-  -- TODO: 一般的な上界証明（G の構造解析が必要）ワークスペース内の状況を整理して、戦略を見直す。
+  -- ワークスペース整理：以降の分岐で使う基本事実を先に抽出しておく
+  have hd_two_le : 2 ≤ d := hd_prime.two_le
+  have hq_ne_one : q ≠ 1 := hq_prime.ne_one
+  have hq_pos : 0 < q := hq_prime.pos
+  have hq_dvd : q ∣ a ^ d - b ^ d := hq_div
+  clear hb hab hq_div
   -- Cosmic Formula 経由のアプローチ
   -- Step 1: べき乗差の因数分解（pow_sub_pow_factor_cosmic）✅
   -- Step 2: padicValNat の帰着（padicValNat_of_primitive_prime_factor_via_G）✅
