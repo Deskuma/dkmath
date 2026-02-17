@@ -1086,7 +1086,11 @@ lemma padicValNat_le_one_of_prime_divisor_case_three {a b q : ℕ}
     prime_divides_G3 ha hb hab hab_lt hq_prime hq_div hq_ndiv
   -- ⊢ padicValNat q (GN 3 (a - b) b) ≤ 1
 
-  -- TODO: 此処から先の具体的な戦略をコメントに書き起こす。
+  -- 戦略（この補題を健全化するための最短方針）:
+  -- 1. 主張を「任意の q で ≤ 1」から「原始素因子 q（ord_q(a/b)=3）に限定」に弱める。
+  -- 2. その条件下で q ∣ Φ₃(a,b)=a^2+ab+b^2 かつ q ∤ (a-b) を使い、LTE/円分多項式の square-free 性へ接続する。
+  -- 3. 既存の `padicValNat_primitive_prime_factor_ge_one` と組にし、最終的に v_q(a^3-b^3)=1 を別補題として切り出す。
+  -- Memo: これが完成すれば、d=3 の完全な Zsigmondy 定理が達成される！
   -- ぬしよ、この先は難所じゃ。一般には v_q(a^2 + ab + b^2) ≤ 1 は成り立たぬ。
   -- 例えば a = 18, b = 1 のとき a^2 + ab + b^2 = 343 = 7^3 となり、付値は 3 になる。
   -- Zsigmondy の「存在」を言うには十分じゃが「全ての q で付値 1」とはいかぬようじゃな。
