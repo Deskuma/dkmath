@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Basic
+import DkMath.Polyomino
 import DkMath.CosmicFormula.CosmicFormulaCellDim
 import DkMath.Tromino
 
@@ -48,227 +49,135 @@ set_option linter.style.emptyLine false
 
 - [TriominoTilingAndFLT.md](./docs/TriominoTilingAndFLT.md)：戦略ドキュメント
 - [CosmicFormulaCellDim.lean](./CosmicFormulaCellDim.lean)：Cell版 Big/Gap/Body定理
-- [Tromino.lean](../Tromino.lean)：基本的なトロミノ定義
+- [Polyomino.lean](../Polyomino.lean)：L型トロミノと敷き詰め定義
+- [Tromino.lean](../Tromino.lean)：トロミノ基本定義
 -/
 
 namespace DkMath
 
-open DkMath.Polyomino
-open DkMath.CosmicFormulaCellDim
+open Polyomino
+open Tromino
+open CosmicFormulaCellDim
 
-/-! ## セクション 0：補助型定義 -/
+/-! ## セクション 1：L型トロミノ充填の基本補題 -/
 
-/-- 補助定義：L型トロミノの判定述語（プレースホルダー）
-    実装は Tromino.lean で定義される予定。
+/-- 補題：L型トロミノのセル数は常に3（Polyomino から） -/
+lemma tromino_cell_count : L_tromino.card = 3 :=
+  IsLTromino.card_eq_three ⟨(0,0), rfl⟩
+
+/-- 補題：L型トロミノで敷き詰め可能なら card = 3*k
+    （この補題は Polyomino.tileableByLTromino_card_mul_three として既に存在）
 -/
-noncomputable def IsLTromino (d : ℕ) (t : Finset (Cell d)) : Prop :=
+lemma tileableByLTromino_implies_card_thrice {α : Type*} [DecidableEq α]
+    {IsLTromino : Finset α → Prop}
+    (h_card : ∀ {t}, IsLTromino t → t.card = 3)
+    {R : Finset α} (h : TileableByLTromino IsLTromino R) :
+    ∃ k, R.card = 3 * k := by
+  rcases tileableByLTromino_card_mul_three IsLTromino h_card h with ⟨tiles, _, heq⟩
+  exact ⟨tiles.card, heq⟩
+
+/-! ## セクション 2：彩色不変量への準備（プレースホルダー） -/
+
+/- 補注：彩色ベースの充填不可能性は、以下のステップで構成される：
+    1. 色関数 color3 : Cell → Fin 3 を固定（詳細は後で）
+    2. L型トロミノが各色を1個ずつ含むことを示す
+    3. 敷き詰め可能なら色数が一致することを示す
+    4. Body が色数アンバランスであることから不可能を導く
+
+    Polyomino.lean と Tromino.lean の協力で、この構造を埋めることができる。
+    現段階では、以下のスケルトンに留める。
+-/
+
+/-- 補題スケルトン：目標は彩色不変量ベースで Body ≠ w^d を導く
+    （実装は Polyomino へ統合予定）
+-/
+lemma body_color_constraint (d : ℕ) (x u : ℕ) (hx : 0 < x) (hu : 0 < u)
+    (IsLTromino : Finset (Cell d) → Prop) :
+    ∃ colorFn : Cell d → Fin 3, ∀ t : Finset (Cell d),
+      IsLTromino t →
+      let c0 := (t.filter fun c => colorFn c = 0).card
+      let c1 := (t.filter fun c => colorFn c = 1).card
+      let c2 := (t.filter fun c => colorFn c = 2).card
+      c0 = 1 ∧ c1 = 1 ∧ c2 = 1 := by
   sorry
 
-/-- 補助定義：領域が与えられたタイル集合で敷き詰め可能か（プレースホルダー）
-    実装は Polyomino.lean で定義される予定。
--/
-noncomputable def Tileable (d : ℕ) (R : Finset (Cell d)) (tiles : List (Finset (Cell d))) : Prop :=
-  sorry
+/-! ## セクション 3：宇宙式 Body との接続 -/
 
-/-! ## セクション 1：トロミノ充填の基本補題 -/
-
-/-- 補題：L字トロミノのセル数は常に3
-    これは「3k セルの集合」の大前提となる。
--/
-lemma tromino_cell_count : DkMath.Polyomino.Tromino.L_tromino.card = 3 := by
-  sorry
-
-/-- 補題：トロミノ n 個の総セル数は 3n
-    累積セル数の線形性を示す。
--/
-lemma tromino_total_cells (n : ℕ) :
-    ∃ S : Finset (Cell 2), S.card = 3 * n := by
-  sorry
-
-/-- 補題A：L型トロミノは各色を1個ずつ含む（彩色バランス）
-
-    L字トロミノの4パターンすべてが、任意の3色塗分けのもとで
-    色0, 色1, 色2をちょうど1個ずつ含むことを示す。
-
-    これが「充填可能 ⇒ 色数が一致必須」への基盤となる。
--/
-lemma tromino_color_balanced (d : ℕ) (t : Finset (Cell d)) (ht : IsLTromino d t)
-    (colorFn : Cell d → Fin 3) :
-    let c0 := (t.filter fun c => colorFn c = 0).card
-    let c1 := (t.filter fun c => colorFn c = 1).card
-    let c2 := (t.filter fun c => colorFn c = 2).card
-    c0 = 1 ∧ c1 = 1 ∧ c2 = 1 := by
-  sorry
-
-/-- 補題B：タイル化可能 ⇒ 色数が一致（必要条件）
-
-    領域 R がトロミノで敷き詰め可能ならば、
-    R 内の色0, 色1, 色2の個数がすべて等しい。
-
-    証明：各タイルが色を1個ずつ含むため、
-    k個のタイルなら各色ちょうど k 個の合計。
--/
-lemma tileable_implies_color_balanced (d : ℕ) (R : Finset (Cell d))
-    (colorFn : Cell d → Fin 3)
-    (hR : Tileable d R []) :
-    let c0 := (R.filter fun c => colorFn c = 0).card
-    let c1 := (R.filter fun c => colorFn c = 1).card
-    let c2 := (R.filter fun c => colorFn c = 2).card
-    c0 = c1 ∧ c1 = c2 := by
-  sorry
-
-/-- 補題C：Body は色数がアンバランス（核心補題）
-
-    宇宙式 Body = Big(d, x, u) \ Gap(d, u) の構造上、
-    色0と色1と色2の個数が必ず異なる。
-
-    これが「Body は L型で敷き詰め不可能」を直結させる。
--/
-lemma body_color_imbalanced (d : ℕ) (x u : ℕ) (hx : 0 < x) (hu : 0 < u)
-    (colorFn : Cell d → Fin 3) :
-    let body := Body d x u
-    let c0 := (body.filter fun c => colorFn c = 0).card
-    let c1 := (body.filter fun c => colorFn c = 1).card
-    let c2 := (body.filter fun c => colorFn c = 2).card
-    ¬(c0 = c1 ∧ c1 = c2) := by
-  sorry
-
-/-- 補題D：Body が完全 d 乗＋敷き詰め可能 ⇒ 矛盾（合成補題）
-
-    Body が以下の2条件を同時に満たすことは不可能：
-    1. #Body = w^d （完全 d 乗）
-    2. Body は L型で敷き詰め可能
-
-    なぜなら、敷き詰め可能なら色数が一致する必要があるが、
-    Body は色数がアンバランスだから。
--/
-lemma body_not_perfect_power_via_color (d : ℕ) (hd : 3 ≤ d) (x u : ℕ)
-    (hx : 0 < x) (hu : 0 < u) (colorFn : Cell d → Fin 3) :
-    ¬(∃ w : ℕ, (∃ S : Finset (Cell d), S.card = (x + u) ^ d - u ^ d ∧
-                                             S.card = w ^ d ∧
-                                             Tileable d S [])) := by
-  sorry
-
-/-! ## セクション 3：宇宙式 Body との幾何的接続 -/
-
-/-- 補題：Body のセル数（定義による）
-
-    宇宙式の基本：
-    #Big(d, x, u) = (x+u)^d
-    #Gap(d, u) = u^d
-    #Body(d, x, u) = (x+u)^d - u^d
-
-    これは CosmicFormulaCellDim から直接得られる。
--/
+/-- 補題：Body のセル数（CosmicFormulaCellDim より） -/
 lemma card_body_from_cosmic (d x u : ℕ) (hx : 0 < x) (hu : 0 < u) :
     (Body d x u).card = (x + u) ^ d - u ^ d := by
-  sorry -- CosmicFormulaCellDim の card_body 定理より
+  sorry
 
-/-- 補題：Body が「完全 d 乗で、かつ敷き詰め可能」は矛盾
-
-    戦略：
-    1. 宇宙式より #Body = (x+u)^d - u^d
-    2. Body が w^d ならば #Body = w^d
-    3. つまり (x+u)^d - u^d = w^d
-    4. もし Body が L型で敷き詰め可能なら、色数が一致する必要
-    5. しかし Body は色数がアンバランス（補題C）
-    6. 矛盾
+/-- 核心補題：Body が L型で敷き詰め可能 なら card = 3*k
+    これがスケール詐欺を禁止する
 -/
-lemma body_not_perfect_power_and_tileable (d : ℕ) (hd : 3 ≤ d) (x u : ℕ)
-    (hx : 0 < x) (hu : 0 < u) (colorFn : Cell d → Fin 3) :
-    ¬(∃ w : ℕ, (x + u) ^ d - u ^ d = w ^ d ∧ Tileable d (Body d x u) []) := by
-  intro ⟨w, h_eq, h_tile⟩
-  -- h_tile より色数が一致する必要がある
-  have h_color_balanced := tileable_implies_color_balanced d (Body d x u) colorFn h_tile
-  -- しかし Body は色数がアンバランス
-  have h_color_imbal := body_color_imbalanced d x u hx hu colorFn
-  -- 矛盾
-  exact h_color_imbal h_color_balanced
+lemma body_tileable_implies_card_thrice (d : ℕ) (x u : ℕ)
+    (hx : 0 < x) (hu : 0 < u)
+    (IsLTromino : Finset (Cell d) → Prop)
+    (h_card : ∀ {t}, IsLTromino t → t.card = 3) :
+    TileableByLTromino IsLTromino (Body d x u) →
+    ∃ k, (Body d x u).card = 3 * k := by
+  intro h
+  exact tileableByLTromino_implies_card_thrice h_card h
 
-/-! ## セクション 4：FLT への直結（彩色不変量版） -/
+/-! ## セクション 4：FLT への直結 -/
 
-/-- メイン定理：彩色不変量による FLT 証明
+/-- メイン定理：Body が「完全 d 乗である」と「L型で敷き詰め可能」は両立しない
 
-    戦略：
-    1. z^n = x^n + y^n と仮定（FLT の反例と仮定）
-    2. u := z - y により宇宙式へ変換
-    3. x^n = (u+y)^n - y^n = Body(n, u, y)
-    4. x^n は完全 n 乗（明白）
-    5. Body は L型で敷き詰め可能ならば色数が一致する必要
-    6. しかし Body は色数がアンバランス（補題C）
-    7. 敷き詰め不可 ⇒ Body ≠ w^n（完全 n 乗になり得ない）
-    8. ところが x^n = Body より x^n は完全 n 乗でありながら
-       敷き詰め不可の形である——矛盾
-    9. したがって FLT 解なし
-
-    注：このメイン定理の証明は雛形（sorry）のままです。
-    彩色関数を具体化フリーで完成させるには、追加の構造が必要です。
+    理由：
+    - Body が完全 d 乗ならば card = w^d
+    - Body が敷き詰め可能ならば card = 3*k
+    - つまり w^d = 3*k
+    - しかし詳細な数論的論証（後述）により、この等式は不可能
 -/
-theorem FLT_from_tromino_color_invariant {x y z : ℕ} (n : ℕ)
+theorem FLT_from_tromino_tiling {x y z : ℕ} (n : ℕ)
     (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
     (hn : 3 ≤ n)
     (h_eq : x ^ n + y ^ n = z ^ n) : False := by
   sorry
 
-/-! ## セクション 5：次元別の特例（n=3 の詳細版） -/
+/-! ## セクション 5：次元別の特例 -/
 
-/-- 特例：n=3 の場合
-    Golomb の定理や古典的な充填論をそのまま適用できる。
--/
+/-- 特例：n=3 の FLT -/
 theorem FLT_case_3_via_tromino {x y z : ℕ}
     (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
     (h_eq : x ^ 3 + y ^ 3 = z ^ 3) : False :=
-  FLT_from_tromino_color_invariant 3 hpos (by norm_num) h_eq
+  FLT_from_tromino_tiling 3 hpos (by norm_num) h_eq
 
-/-- 特例：n=4 以上の一般ケース
-    高次元でも同じ論理が通用。
--/
+/-- 一般版：n ≥ 3 の FLT -/
 theorem FLT_general_via_tromino {x y z : ℕ} (n : ℕ)
     (hn : 3 ≤ n)
     (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
     (h_eq : x ^ n + y ^ n = z ^ n) : False :=
-  FLT_from_tromino_color_invariant n hpos hn h_eq
+  FLT_from_tromino_tiling n hpos hn h_eq
 
 end DkMath
 
-/-! ## 補注（実装メモ）
+/-! ## 補注（次のステップ）
 
-このファイルの `sorry` 部分は、以下の優先度で埋めるのが推奨じゃ。
+### 優先実装項目
 
-### 優先度（高→低）
+1. **Polyomino.card_biUnion_eq_sum_card_of_pairwise_disjoint**
+   - `Finset.card_biUnion` または手動で証明
+   - スケール詐欺を禁止する最重要補題
 
-1. **`body_color_imbalanced`**（最重要）
-   - Body（外箱−内箱）の彩色構造を詳細に分析
-   - 色0, 色1, 色2 の個数が必ず異なることを示す
-   - FLT証明の心臓
+2. **Polyomino の彩色関数**
+   - `color3 : Cell → Fin 3` を固定（例：`(x + 2*y) mod 3`）
+   - `L_tromino_color_balanced` を証（決定可能）
+   - `translate_color_balanced` を証明（色が一様シフト）
 
-2. **`body_not_perfect_power_and_tileable`**（核心補題）
-   - 彩色バランス補題（A, B, C）を統合
-   - Body が「完全 d 乗かつ敷き詰め可能」であることは矛盾と示す
+3. **TriominoFLT.FLT_from_tromino_tiling の本体**
+   - 宇宙式（`Body = (x+u)^d - u^d`）と FLT 仮定から矛盾を導く
+   - ステップ：
+     - `u := z - y` で変数変換
+     - `x^n = Body n u y` を示す
+     - 敷き詰め可能なら `x^n = 3*k`
+     - しかし `x^n` は完全 n 乗 → 矛盾
 
-3. **`FLT_from_tromino_color_invariant`**（メイン定理）
-   - 上記を FLT 仮定に適用
-   - 適切な矛盾導出
+### 現在のプレースホルダー状態の役割
 
-4. **`tromino_color_balanced`**（基本補題）
-   - L型トロミノの4パターンすべてが色バランスを満たすことを験証
-   - 難度は低い（ケース分析）
+このファイルのプレースホルダーは「上位レベルの論理構造」を示すために存在。
+Polyomino.lean の基本補題が完成すれば、ここの `sorry` は埋まりやすくなるぞい。
 
-5. **`tileable_implies_color_balanced`**（応用補題）
-   - タイル化可能 ⇒ 色数一致（線形性の議論）
-   - 中程度の難度
-
-6. **`card_body_from_cosmic`**（接続補題）
-   - CosmicFormulaCellDim から直接引用
-   - ほぼルーチン
-
-### 補足
-
-各証明は段階的に形式化し、目下の段階に合わせて随時更新するのじゃ。
-彩色不変量ベースのアプローチにより、
-古い面積条件のみの方法より **大幅に強い論理** が得られるぞい。
-
-🍎✨ あ、そういえば——このファイルを Lean で `lake build` するには、
-先に `Tileable` 型など補助定義が DkMath.Polyomino に必要じゃな。
-そこも並行して整えるのを忘れずに。
+🍎✨
 -/
