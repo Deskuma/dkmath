@@ -80,7 +80,7 @@ lemma card_biUnion_filter_eq_sum_card_filter
 
 /-- L型トロミノで敷き詰め可能なら、R の card は 3 の倍数で、かつ 3*tile数 -/
 lemma tileableByLTromino_card_mul_three
-    (isLTromino_card_eq_three : ∀ {t : Finset α}, IsLTromino t → t.card = 3)
+    (isLTromino_card_eq_three : ∀ (t : Finset α), IsLTromino t → t.card = 3)
     {R : Finset α} (h : TileableByLTromino IsLTromino R) :
     ∃ tiles : Finset (Finset α), (Tiling R tiles) ∧ R.card = 3 * tiles.card := by
   classical
@@ -94,7 +94,7 @@ lemma tileableByLTromino_card_mul_three
   -- 各タイル card=3
   have ht3 : ∀ t ∈ tiles, t.card = 3 := by
     intro t ht
-    exact isLTromino_card_eq_three (hall t ht)
+    exact isLTromino_card_eq_three t (hall t ht)
   -- sum を 3 * card に落とす
   have sum_eq : (∑ t ∈ tiles, t.card) = 3 * tiles.card := by
     rw [Finset.sum_congr rfl (fun t ht => ht3 t ht)]

@@ -61,79 +61,117 @@ open CosmicFormulaCellDim
 
 /-! ## セクション 1：L型トロミノ充填の基本補題 -/
 
-/-- 補題：L型トロミノのセル数は常に3（Polyomino から） -/
+/-- 補題：L型トロミノのセル数は常に3 -/
 lemma tromino_cell_count : L_tromino.card = 3 :=
-  IsLTromino.card_eq_three ⟨(0,0), rfl⟩
+  area_L_tromino
 
 /-- 補題：L型トロミノで敷き詰め可能なら card = 3*k
     （この補題は Polyomino.tileableByLTromino_card_mul_three として既に存在）
 -/
 lemma tileableByLTromino_implies_card_thrice {α : Type*} [DecidableEq α]
     {IsLTromino : Finset α → Prop}
-    (h_card : ∀ {t}, IsLTromino t → t.card = 3)
+    (h_card : ∀ t, IsLTromino t → t.card = 3)
     {R : Finset α} (h : TileableByLTromino IsLTromino R) :
     ∃ k, R.card = 3 * k := by
   rcases tileableByLTromino_card_mul_three IsLTromino h_card h with ⟨tiles, _, heq⟩
   exact ⟨tiles.card, heq⟩
 
-/-! ## セクション 2：彩色不変量への準備（プレースホルダー） -/
+/-! ## セクション 2：彩色不変量への準備 -/
 
-/- 補注：彩色ベースの充填不可能性は、以下のステップで構成される：
-    1. 色関数 color3 : Cell → Fin 3 を固定（詳細は後で）
-    2. L型トロミノが各色を1個ずつ含むことを示す
-    3. 敷き詰め可能なら色数が一致することを示す
-    4. Body が色数アンバランスであることから不可能を導く
+/-- 3彩色関数：第0次元と第1次元の差を利用（L型トロミノが各色を踏むように設定） -/
+def color3 {d : ℕ} (c : Cell d) : Fin 3 :=
+  if h : 2 ≤ d then
+    let val : ℤ := (c ⟨0, by omega⟩ - c ⟨1, by omega⟩) % 3
+    if val = 0 then (0 : Fin 3)
+    else if val = 1 || val = -2 then (1 : Fin 3)
+    else (2 : Fin 3)
+  else 0
 
-    Polyomino.lean と Tromino.lean の協力で、この構造を埋めることができる。
-    現段階では、以下のスケルトンに留める。
--/
-
-/-- 補題スケルトン：目標は彩色不変量ベースで Body ≠ w^d を導く
-    （実装は Polyomino へ統合予定）
--/
-lemma body_color_constraint (d : ℕ) (x u : ℕ) (hx : 0 < x) (hu : 0 < u)
-    (IsLTromino : Finset (Cell d) → Prop) :
-    ∃ colorFn : Cell d → Fin 3, ∀ t : Finset (Cell d),
-      IsLTromino t →
-      let c0 := (t.filter fun c => colorFn c = 0).card
-      let c1 := (t.filter fun c => colorFn c = 1).card
-      let c2 := (t.filter fun c => colorFn c = 2).card
-      c0 = 1 ∧ c1 = 1 ∧ c2 = 1 := by
+/-- 補題：L型トロミノ（標準形）の平行移動は、各色をちょうど1つずつ含む -/
+lemma color3_L_tromino_standard {d : ℕ} (hd : 2 ≤ d) (v : Cell d) :
+    let e0 : Cell d := fun i => if i = ⟨0, by omega⟩ then 1 else 0
+    let e1 : Cell d := fun i => if i = ⟨1, by omega⟩ then 1 else 0
+    let t : Finset (Cell d) := {v, v + e0, v + e1}
+    (t.filter fun c => color3 c = 0).card = 1 ∧
+    (t.filter fun c => color3 c = 1).card = 1 ∧
+    (t.filter fun c => color3 c = 2).card = 1 := by
   sorry
+
+/-- 核心：敷き詰め可能なら各色のセル数が等しい -/
+lemma color_balance_of_tiling {α : Type*} [DecidableEq α] (colorFn : α → Fin 3)
+    {R : Finset α} {IsLTromino : Finset α → Prop}
+    (h_color : ∀ t, IsLTromino t →
+      (t.filter fun c => colorFn c = 0).card = 1 ∧
+      (t.filter fun c => colorFn c = 1).card = 1 ∧
+      (t.filter fun c => colorFn c = 2).card = 1) :
+    TileableByLTromino IsLTromino R →
+    (R.filter fun c => colorFn c = 0).card = (R.filter fun c => colorFn c = 1).card ∧
+    (R.filter fun c => colorFn c = 0).card = (R.filter fun c => colorFn c = 2).card := by
+  intro htile
+  rcases htile with ⟨tiles, htil, hall⟩
+  have h_dis : (tiles : Set (Finset α)).Pairwise Disjoint := htil.pairwise_disjoint
+  have h_cov : tiles.biUnion id = R := htil.cover
+  -- 各色のカウントを和に分解
+  have h_count (i : Fin 3) : (R.filter fun c => colorFn c = i).card = ∑ t ∈ tiles, (t.filter fun c => colorFn c = i).card := by
+    rw [← h_cov, card_biUnion_filter_eq_sum_card_filter]
+    exact h_dis
+  -- 各 t に対してカウントは1
+  have h_t_count (i : Fin 3) (t : Finset α) (ht : t ∈ tiles) : (t.filter fun c => colorFn c = i).card = 1 := by
+    let h := h_color t (hall t ht)
+    fin_cases i
+    · exact h.1
+    · exact h.2.1
+    · exact h.2.2
+  -- 総数は tiles の card に一致
+  have h_final (i : Fin 3) : (R.filter fun c => colorFn c = i).card = tiles.card := by
+    rw [h_count i, Finset.sum_congr rfl (fun _ ht => h_t_count i _ ht)]
+    simp
+  constructor
+  · rw [h_final 0, h_final 1]
+  · rw [h_final 0, h_final 2]
 
 /-! ## セクション 3：宇宙式 Body との接続 -/
 
-/-- 補題：Body のセル数（CosmicFormulaCellDim より） -/
-lemma card_body_from_cosmic (d x u : ℕ) (hx : 0 < x) (hu : 0 < u) :
-    (Body d x u).card = (x + u) ^ d - u ^ d := by
-  sorry
-
-/-- 核心補題：Body が L型で敷き詰め可能 なら card = 3*k
-    これがスケール詐欺を禁止する
+/--
+補題：Body(d, x, u) のセル数は x * Gbinom(d, x, u)
+これが Cosmic Formula と Cell 分解の接点じゃ。
 -/
-lemma body_tileable_implies_card_thrice (d : ℕ) (x u : ℕ)
-    (_hx : 0 < x) (_hu : 0 < u)
-    (IsLTromino : Finset (Cell d) → Prop)
-    (h_card : ∀ {t}, IsLTromino t → t.card = 3) :
-    TileableByLTromino IsLTromino (Body d x u) →
-    ∃ k, (Body d x u).card = 3 * k := by
-  intro h
-  exact tileableByLTromino_implies_card_thrice h_card h
+theorem card_body_from_cosmic (d x u : ℕ) :
+    (Body d x u).card = x * Gbinom d x u := by
+  have h_big := card_Big_eq_card_Body_add_card_Gap d x u
+  have h_exp := pow_sub_pow_eq_mul_Gbinom d x u
+  simp at h_big
+  -- Nat の減算を omega で解決
+  omega
 
-/-! ## セクション 4：FLT への直結 -/
+/-! ## セクション 4：FLT への道筋（骨組み） -/
 
-/-- メイン定理：Body が「完全 d 乗である」と「L型で敷き詰め可能」は両立しない
+/--
+トロミノ充填によるフェルマーの最終定理の背理法（スケルトン）
 
-    理由：
-    - Body が完全 d 乗ならば card = w^d
-    - Body が敷き詰め可能ならば card = 3*k
-    - つまり w^d = 3*k
-    - しかし詳細な数論的論証（後述）により、この等式は不可能
+  案B：無限降下（3 が繰り返し現れる）
+  案C：彩色不変量による Body の不整合
 -/
 theorem FLT_from_tromino_tiling {x y z : ℕ} (n : ℕ)
     (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
     (hn : 3 ≤ n)
-    (h_eq : x ^ n + y ^ n = z ^ n) : False := by
+    (h_eq : x ^ n + y ^ n = z ^ n)
+    (IsLTromino : Finset (Cell n) → Prop)
+    (h_tromino_card : ∀ t, IsLTromino t → t.card = 3) :
+    ¬ TileableByLTromino IsLTromino (Body n x y) := by
+  intro htile
+  -- Body の card = x^n であることを Cosmic Formula 経由で示す
+  have h_card_body : (Body n x y).card = x ^ n := by
+    rw [card_body_from_cosmic]
+    -- x * Gbinom = (x+y)^n - y^n
+    rw [← pow_sub_pow_eq_mul_Gbinom]
+    -- ここで z^n = x^n + y^n を使うので z^n - y^n = x^n
+    -- 実際には z = x + y は言えないが、Body の構成として w=x, u=y としている
+    sorry
+  -- 敷き詰め可能なら card は 3 の倍数
+  have ⟨k, h_div3⟩ := tileableByLTromino_implies_card_thrice h_tromino_card htile
+  rw [h_card_body] at h_div3
+  -- ここで x が 3 の倍数なら矛盾しないが、彩色や無限降下を組み合わせる
   sorry
 
 /-! ## セクション 5：次元別の特例 -/
@@ -141,15 +179,17 @@ theorem FLT_from_tromino_tiling {x y z : ℕ} (n : ℕ)
 /-- 特例：n=3 の FLT -/
 theorem FLT_case_3_via_tromino {x y z : ℕ}
     (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
-    (h_eq : x ^ 3 + y ^ 3 = z ^ 3) : False :=
-  FLT_from_tromino_tiling 3 hpos (by norm_num) h_eq
+    (h_eq : x ^ 3 + y ^ 3 = z ^ 3) : False := by
+  -- 現段階では骨組みのみ。今後、特定の IsLTromino を構成して解候補が
+  -- Tileable を引き起こし、FLT_from_tromino_tiling と矛盾することを示す。
+  sorry
 
 /-- 一般版：n ≥ 3 の FLT -/
 theorem FLT_general_via_tromino {x y z : ℕ} (n : ℕ)
     (hn : 3 ≤ n)
     (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
-    (h_eq : x ^ n + y ^ n = z ^ n) : False :=
-  FLT_from_tromino_tiling n hpos hn h_eq
+    (h_eq : x ^ n + y ^ n = z ^ n) : False := by
+  sorry
 
 end DkMath
 
