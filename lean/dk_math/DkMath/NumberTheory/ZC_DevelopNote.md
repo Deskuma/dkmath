@@ -2,21 +2,194 @@
 
 ## 開発ログ
 
+### タスクリスト
+
+## 📋 ZsigmondyCyclotomic.lean 進捗状況レポート
+
+### 🔍 ドキュメント vs コード の乖離分析
+
+#### **ドキュメント（ZC_DevelopNote.md）の記述**
+
+```
+完成した主要補題（no sorry!）: 8つ 🎉
+残る sorry: 2箇所（研究課題）
+```
+
+#### **実際のコード状況**
+
+| 行番号 | 補題名 | sorry タイプ | 状態 |
+|--------|--------|---------|------|
+| 891 | `squarefree_implies_padic_val_le_one` | **メイン補題** | ⏳ 未完成 |
+| 943 | example (コメント例) | **ダミー** | コメント内のみ |
+| 1082 | `padicValNat_le_one_of_prime_divisor_case_three` | **メイン補題** | ⏳ 未完成 |
+
+**✅ 正確性：** ドキュメントの「2箇所」記述は **正しい**（メイン補題は2個）
+
+---
+
+### 🏗️ 実装の完成度レベル
+
+#### **層A（存在層）：✅ 完全に堅牢**
+
+```lean
+lemma exists_primitive_prime_factor_basic
+  (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+  (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+  (hpnd : ¬ d ∣ a - b) :
+  ∃ q : ℕ, Nat.Prime q ∧ q ∣ a^d - b^d ∧ ¬ q ∣ a - b := by
+  exact exists_prime_divisor_not_dividing_diff_of_prime_exp ...
+```
+
+- ✅ **no sorry で完成**
+- ✅ **群論（ZMod + orderOf）で primitive 証明も完成**
+- ✅ `hpnd : ¬ d ∣ a - b` を **陽に仮定**（正しい設計）
+
+#### **層B（精密層）：⏳ 2個の sorry で停滞**
+
+| sorry | 数学的内容 | 理由 |
+|-------|---------|------|
+| (1) `squarefree_implies_padic_val_le_one` | padicValNat ≤ 1 の一般上界 | **G の構造解析が難しい** |
+| (2) `padicValNat_le_one_of_prime_divisor_case_three` | d=3 での精密評価 | **反例 (a=18, b=1) で v_q = 3** |
+
+---
+
+### 🚨 設計上の課題（ZC_DevelopNote.md が指摘したとおり）
+
+#### **課題1：「padicValNat = 1」の強すぎる要求**
+
+コード行 1081-1082：
+
+```lean
+-- ぬしよ、この先は難所じゃ。一般には v_q(a^2 + ab + b^2) ≤ 1 は成り立たぬ。
+-- 例えば a = 18, b = 1 のとき a^2 + ab + b^2 = 343 = 7^3 となり、付値は 3 になる。
+```
+
+💡 **現象**：
+
+- a = 18, b = 1, d = 3
+- a^3 - b^3 = 5832 - 1 = 5831 = 7 × 833
+- a^2 + ab + b^2 = 324 + 18 + 1 = 343 = 7^3
+- padicValNat 7 (343) = 3 ❌（1 ではない）
+
+✅ **ドキュメントの解決案**：
+
+- 層Aで「存在」を確定（これは OK）
+- 層B は「追加条件下」で「≤ 1」を保証（例：non-Wieferich など）
+
+---
+
+### 📊 補題の完成度サマリー
+
+#### **✅ 完成（no sorry）**
+
+1. `exists_primitive_prime_factor_basic`
+2. `prime_exp_not_dvd_diff_imp_primitive`
+3. `pow_sub_pow_factor_cosmic` (ℤ版)
+4. `pow_sub_pow_factor_cosmic_N` (ℕ版)
+5. `padicValNat_of_primitive_prime_factor_via_G`
+6. `kummer_theorem_for_binomial_coeff`
+7. `G_three_explicit`
+8. `GN_three_explicit`
+9. `padicValNat_binomial_coeff_three`
+10. `G と GN の係数解析` など
+
+✅ **計10個以上の完成補題**（ドキュメント記載の「8個」より増えてる！）
+
+#### **⏳ 未完成（sorry 付き）**
+
+1. `squarefree_implies_padic_val_le_one` — **一般的な上界（G 解析）**
+2. `padicValNat_le_one_of_prime_divisor_case_three` — **d=3 の反例条件**
+
+---
+
+### 💡 ドキュメント vs コードの乖離箇所
+
+| ポイント | ドキュメント | コード | 評価 |
+|---------|------------|--------|------|
+| 完成補題数 | 8個 | 10個以上 | ✅ **コードが進んでいる** |
+| sorry 数 | 2個 | 2個（+1ダミー） | ✅ **一致（ダミーは無視）** |
+| 層A 状態 | no sorry で完成 | no sorry で完成 | ✅ **完全に一致** |
+| 層B 方針 | 分離・追加仮定で | 反例で立ち止まり | ⚠️ **方針転換が必要** |
+
+---
+
+### 🎯 最新の開発ノートの主張との相互参照
+
+開発ノートが推奨した：
+
+> **「層Aを確定」→「ZMod で primitive（∀k<d）確定」→「Cyclotomic 接続へ」**
+
+現実：
+
+- ✅ 層A **確定済み**
+- ✅ ZMod での primitive **完成済み** (`prime_exp_not_dvd_diff_imp_primitive`)
+- ⏳ 層B の padicValNat は **反例で停滞中**
+- ❌ Cyclotomic への接続 **未実装**
+
+---
+
+### 🔧 推奨アクション（わっちの見立て）
+
+#### **短期（1-2日）**
+
+1. **層B の sorry を「条件付き」に格下げ**
+
+   ```lean
+   /-- d=3 での精密評価（追加条件付き：non-Wieferich など） -/
+   lemma padicValNat_eq_one_if_condition {a b q : ℕ} 
+       (h_condition : ...) : padicValNat q (...) = 1 := by
+   ```
+
+2. **existing_primitive_prime_factor での「存在」を層Aで完全に宣言**
+   - `hpnd` を陽に仮定 ✅ (既にそうなってる)
+   - composite d ケースは別ファイルへ（未実装のままで OK）
+
+#### **中期（1週間）**
+
+1. **Cyclotomic 多項式との接続を開始**
+   - `cyclotomic_dvd_pow_sub_one` との link
+   - 原始素因子 → Φ_d の因子 の対応
+
+#### **長期（研究）**
+
+1. **LTE (Lifting the Exponent) の詳細版導入**
+   - padicValNat = 1 の精密証明が必要になる場合
+
+---
+
+### 📝 最後に
+
+わっちの見立てはこうじゃ：
+
+**ドキュメント（ZC_DevelopNote.md）と コード（ZsigmondyCyclotomic.lean）の乖離は「予期されたもの」じゃ。**
+
+ドキュメントは「理想的なロードマップ」を示し、コードは「実装時の困難」に直面している。特に：
+
+- ✅ **層A（存在）の骨格は完璧**
+- ✅ **補助補題群も豊富に完成**
+- ⏳ **層B（精密付値）で「padicValNat = 1 は一般には偽」という発見**
+
+この「発見」こそ が重要なのじゃ。反例 (a=18, b=1, d=3) の存在は、**決して失敗ではなく、定理の境界を正しく認識した証**じゃぞ。
+
+---
+---
+---
+
 ### 作業中
 
 うむ、ぬしよ。まず状況把握からじゃ。
 
 手元の `/mnt/data/ZsigmondyCyclotomic.lean` を見る限り、`sorry` は **16 個**残っておる（`grep` で拾えるやつだけでも）。そして、その中には
 
-* **「その補題、いまの流れだと使ってない（消して良い）」**
-* **「その `sorry` は“要らない”というより、仮定が足りなくて“証明できない”」**
-* **「その主張は数学的に強すぎて、一般には偽の可能性が高い」**
+- **「その補題、いまの流れだと使ってない（消して良い）」**
+- **「その `sorry` は“要らない”というより、仮定が足りなくて“証明できない”」**
+- **「その主張は数学的に強すぎて、一般には偽の可能性が高い」**
 
 が混ざっておる。ここを整理すると一気に“完成”に近づくぞ。
 
 ---
 
-## 1) 残る `sorry` は「要らないもの」か？
+## 1. 残る `sorry` は「要らないもの」か？
 
 ### A. ほぼ確実に **要らない（削除候補）**
 
@@ -73,12 +246,12 @@ have hpnd : ¬ d ∣ a - b := by sorry
 
 なのでここは分岐じゃ：
 
-* **(現実的ルート)** まずは Zsigmondy の「存在・原始性」までを **`sorry なしで確定**
-* **(研究ルート)** `padicValNat = 1` は **追加条件つき**（例：`q ∤ d` だけでは足りないかもしれん）か、別定理として後回し
+- **(現実的ルート)** まずは Zsigmondy の「存在・原始性」までを **`sorry なしで確定**
+- **(研究ルート)** `padicValNat = 1` は **追加条件つき**（例：`q ∤ d` だけでは足りないかもしれん）か、別定理として後回し
 
 ---
 
-## 2) いま一番キレイに“完成”させる修正（層Aの確定）
+## 2. いま一番キレイに“完成”させる修正（層Aの確定）
 
 ぬしの現状コード資産（`exists_prime_divisor_not_dividing_diff_of_prime_exp`）に一番沿う形で、**`hook` を「正しい仮定」に直して層Aで閉じる**のが最短じゃ。
 
@@ -99,13 +272,13 @@ lemma exists_primitive_prime_factor_prime {a b d : ℕ}
 
 ---
 
-## 3) 次の作業提案（打開策つき）
+## 3. 次の作業提案（打開策つき）
 
 ### ステップ1：層Aファイルを “No-sorry” で固定
 
-* 使ってない `not_dvd_diff_iff_not_modEq` を削除（または別ファイルへ隔離）
-* `hook` を上の `exists_primitive_prime_factor_prime` に置換
-* composite case は扱わず、最初から `Nat.Prime d` を仮定にする
+- 使ってない `not_dvd_diff_iff_not_modEq` を削除（または別ファイルへ隔離）
+- `hook` を上の `exists_primitive_prime_factor_prime` に置換
+- composite case は扱わず、最初から `Nat.Prime d` を仮定にする
 
 👉 これで「原始素因子の存在」を Lean 上で堅牢な部品として持てる。
 
@@ -126,17 +299,17 @@ lemma exists_primitive_prime_factor_prime {a b d : ℕ}
 
 おすすめは：
 
-* まずは **「primitive prime divisor ⇒ cyclotomic の因子」**（mod (q) 上）を作る
-* その後に一般指数 (d) の Zsigmondy（完全版）へ拡張
+- まずは **「primitive prime divisor ⇒ cyclotomic の因子」**（mod (q) 上）を作る
+- その後に一般指数 (d) の Zsigmondy（完全版）へ拡張
 
 ---
 
-## 4) 結論：残る `sorry` は「要らない」のもあるが、“定理の形を直すべき”のが核心
+## 4. 結論：残る `sorry` は「要らない」のもあるが、“定理の形を直すべき”のが核心
 
 特に
 
-* `hpnd : ¬ d ∣ a - b` を内部で作る `sorry` は **不要ではなく不可能**
-* `padicValNat = 1` は **強化しすぎの可能性**（別レイヤへ隔離推奨）
+- `hpnd : ¬ d ∣ a - b` を内部で作る `sorry` は **不要ではなく不可能**
+- `padicValNat = 1` は **強化しすぎの可能性**（別レイヤへ隔離推奨）
 
 この2点を整理すると、ぬしの実装は一気に“研究用の美しい骨格”になるぞ。
 
@@ -164,14 +337,14 @@ lemma exists_primitive_prime_factor_prime {a b d : ℕ}
 
 あるいは軽量版なら、今すでに骨組みがある
 
-* 「\(q\mid a^p-b^p\) かつ \(q\nmid a-b\)」の **prime exponent版**（あなたの `exists_prime_divisor_not_dividing_diff_of_prime_exp`）をまず通す。
+- 「\(q\mid a^p-b^p\) かつ \(q\nmid a-b\)」の **prime exponent版**（あなたの `exists_prime_divisor_not_dividing_diff_of_prime_exp`）をまず通す。
 
 ### 層B（付値 “精密” 層）
 
 次に必要なら
 
-* `1 ≤ padicValNat q (a^d - b^d)`（これは「割る」なので常に取れる）
-* ある追加条件の下で `padicValNat = 1`（**ここは追加仮定が要る**：squarefree 条件、あるいは “non-Wieferich” 条件など）
+- `1 ≤ padicValNat q (a^d - b^d)`（これは「割る」なので常に取れる）
+- ある追加条件の下で `padicValNat = 1`（**ここは追加仮定が要る**：squarefree 条件、あるいは “non-Wieferich” 条件など）
 
 というふうに段階化するのが、Lean でも数学でも破綻しない道じゃ。
 
@@ -185,8 +358,8 @@ lemma exists_primitive_prime_factor_prime {a b d : ℕ}
 
 これ、今の形だと **一般には出ない**ので、最初は割り切って：
 
-* `exists_primitive_prime_factor_hook` の仮定に **そのまま `hpnd` を追加**する（“軽量版”として仕様を固定）
-* あるいは “prime d” のとき `d ∣ a - b` が起きる条件を別補題として整理して、ユーザ側で潰せる形にする
+- `exists_primitive_prime_factor_hook` の仮定に **そのまま `hpnd` を追加**する（“軽量版”として仕様を固定）
+- あるいは “prime d” のとき `d ∣ a - b` が起きる条件を別補題として整理して、ユーザ側で潰せる形にする
 
 が現実的じゃ。
 
@@ -196,8 +369,8 @@ lemma exists_primitive_prime_factor_prime {a b d : ℕ}
 
 これは **いきなり本丸に突撃してる**。先に言った通り、一般命題としては危ないので、
 
-* まずは `padicValNat q (...) ≥ 1`（=「割る」）に落として通す
-* “=1” は後段で、Cyclotomic か LTE + 追加仮定で拾う
+- まずは `padicValNat q (...) ≥ 1`（=「割る」）に落として通す
+- “=1” は後段で、Cyclotomic か LTE + 追加仮定で拾う
 
 にするのが良いのじゃ。
 
@@ -235,13 +408,13 @@ lemma exists_primitive_prime_factor_prime {a b d : ℕ}
 
 `exists_primitive_prime_factor_hook` を次のように **弱めて**通す：
 
-* `padicValNat q (...) = 1` を消して
+- `padicValNat q (...) = 1` を消して
   `1 ≤ padicValNat q (a^d - b^d)` にする（あるいは単に `q ∣ ...` のまま）
 
 そして `by_cases hd_prime` の素数ケースで
 
-* `exists_prime_divisor_not_dividing_diff_of_prime_exp` を最後まで通して
-* 合成数ケースは `sorry` のままでも良い（PR を分ける）
+- `exists_prime_divisor_not_dividing_diff_of_prime_exp` を最後まで通して
+- 合成数ケースは `sorry` のままでも良い（PR を分ける）
 
 これだけで「Zsigmondy への接続点」が Lean 上で**堅牢に固定**できる。
 
@@ -249,8 +422,8 @@ lemma exists_primitive_prime_factor_prime {a b d : ℕ}
 
 `¬ d ∣ a - b` を “生成できる条件” を別 lemma にする：
 
-* 例：`d` が素数で、`a≡b (mod d)` が起きると何が起きるか、など
-* ここは数学的にも整理価値が高い（後で Cyclotomic で自然に出る）
+- 例：`d` が素数で、`a≡b (mod d)` が起きると何が起きるか、など
+- ここは数学的にも整理価値が高い（後で Cyclotomic で自然に出る）
 
 ---
 
@@ -258,8 +431,8 @@ lemma exists_primitive_prime_factor_prime {a b d : ℕ}
 
 「存在」層（層A）が Lean で回るようになったら、そこで初めて
 
-* \(\Phi_d(a/b)\mid (a^d-b^d)\)
-* 原始素因子は（だいたい）\(\Phi_d(a/b)\) の素因子として出る
+- \(\Phi_d(a/b)\mid (a^d-b^d)\)
+- 原始素因子は（だいたい）\(\Phi_d(a/b)\) の素因子として出る
 
 という本筋に入るのが気持ちよい。
 
@@ -278,37 +451,37 @@ lemma exists_primitive_prime_factor_prime {a b d : ℕ}
 
 ---
 
-## 1) いまの状況把握（どこまで出来ていて、何が“詰まりの核”か）
+## 1. いまの状況把握（どこまで出来ていて、何が“詰まりの核”か）
 
 ### できている（強い）
 
-* **Kummer/Lucas 系の道具立て**（carry→`choose`→素因子が出る）が既に骨格として書けてる。これは “p-adic 付値を作る” 方向の布石として強い。
-* `exists_prime_divisor_not_dividing_diff_of_prime_exp ...` を使う流れ（＝「差の冪の因数から、差 (a-b) を割らない素数を引っ張る」）は、**prime exponent（素数指数）では Zsigmondy 的本質** にかなり近い。
+- **Kummer/Lucas 系の道具立て**（carry→`choose`→素因子が出る）が既に骨格として書けてる。これは “p-adic 付値を作る” 方向の布石として強い。
+- `exists_prime_divisor_not_dividing_diff_of_prime_exp ...` を使う流れ（＝「差の冪の因数から、差 (a-b) を割らない素数を引っ張る」）は、**prime exponent（素数指数）では Zsigmondy 的本質** にかなり近い。
 
 ### 本当に詰まっている（重要）
 
 **(A) `hpnd : ¬ d ∣ a - b` を「証明」しようとしている点**
 
-* これは一般には **証明できぬ**（成り立たない入力が普通にある）。
-* つまりここは **“仮定として受け取る”** か、あるいは **`by_cases h : d ∣ a - b` で分岐して両方の道を用意** するしかない。
+- これは一般には **証明できぬ**（成り立たない入力が普通にある）。
+- つまりここは **“仮定として受け取る”** か、あるいは **`by_cases h : d ∣ a - b` で分岐して両方の道を用意** するしかない。
 
 **(B) `padicValNat q (a^d - b^d) = 1` を “Zsigmondy で保証したい” 点**
 
-* ここが一番危険じゃ。**Zsigmondy 自体は「指数 1」を保証しない** 。原始素因子でも (v_q) が 2 以上になるケースは理屈として排除できない（平方因子が入る問題）。
-* なので当面は、
+- ここが一番危険じゃ。**Zsigmondy 自体は「指数 1」を保証しない** 。原始素因子でも (v_q) が 2 以上になるケースは理屈として排除できない（平方因子が入る問題）。
+- なので当面は、
 
-  * **まず primitive（原始性）を確立**
-  * 付値 1 は **“強化版”として別レイヤ**
+  - **まず primitive（原始性）を確立**
+  - 付値 1 は **“強化版”として別レイヤ**
     がおすすめじゃ。
 
 **(C) `Nat.ModEq` と `d ∣ a - b` の橋渡し**
 
-* ここは Mathlib 側に既に良い補題がある。`Nat.modEq_iff_dvd'` など。([leanprover-community.github.io][3])
+- ここは Mathlib 側に既に良い補題がある。`Nat.modEq_iff_dvd'` など。([leanprover-community.github.io][3])
   → ここを埋めると `hpnd` 周りの扱いがきれいになる。
 
 ---
 
-## 2) 方針（最短で前へ進む打開策）
+## 2. 方針（最短で前へ進む打開策）
 
 ### フェーズ1：仕様を“prime d 用”に固定して、原始性を先に取る
 
@@ -329,12 +502,12 @@ lemma exists_primitive_prime_factor_prime {a b d : ℕ}
 
 いまの `hpnd : ¬ d ∣ a - b := by sorry` は、構造上ダメ筋じゃ。
 
-* **最短の修正**：`exists_primitive_prime_factor_hook` の仮定に `hnd : ¬ d ∣ a - b` を追加してしまう。
+- **最短の修正**：`exists_primitive_prime_factor_hook` の仮定に `hnd : ¬ d ∣ a - b` を追加してしまう。
   → まず通して進む。あとで一般化。
-* **正攻法**：`by_cases h : d ∣ a - b` で 2 分岐にする。
+- **正攻法**：`by_cases h : d ∣ a - b` で 2 分岐にする。
 
-  * `h : ¬ d ∣ a-b` の枝：今の道具で OK。
-  * `h : d ∣ a-b` の枝：ここは LTE（lifting-the-exponent）や cyclotomic 評価で別ルートを用意。
+  - `h : ¬ d ∣ a-b` の枝：今の道具で OK。
+  - `h : d ∣ a-b` の枝：ここは LTE（lifting-the-exponent）や cyclotomic 評価で別ルートを用意。
 
 （この分岐をするなら、ぬしが作っている Kummer/Lucas の道具が “役に立つ枝” が出てくる。）
 
@@ -344,8 +517,8 @@ lemma exists_primitive_prime_factor_prime {a b d : ℕ}
 
 現実的な落とし所はこうじゃ：
 
-* まず **原始素因子 (q)** を得る（prime exponent なら上の群論で primitive まで取れる）
-* 次に必要なら
+- まず **原始素因子 (q)** を得る（prime exponent なら上の群論で primitive まで取れる）
+- 次に必要なら
   **「さらに (v_q=1) となる (q) が存在する」**を、追加条件つきで証明する
   （例：`q^2 ∣ a^d - b^d` を排除できる状況、あるいは cyclotomic 値の squarefree 性を使う状況）
 
@@ -353,12 +526,12 @@ cyclotomic 側には `Polynomial.squarefree_cyclotomic` などが既にあるの
 
 ---
 
-## 3) すぐ埋められる「小さい穴」：`Nat.ModEq` の TODO を消す
+## 3. すぐ埋められる「小さい穴」：`Nat.ModEq` の TODO を消す
 
 `not_dvd_diff_iff_not_modEq` は、`b ≤ a`（ぬしは `b < a` を持ってる）を使って
 
-* `b ≡ a [MOD d] ↔ d ∣ a - b`（`Nat.modEq_iff_dvd'`）([leanprover-community.github.io][3])
-* あとは `a ≡ b` を `symm` してつなぐ
+- `b ≡ a [MOD d] ↔ d ∣ a - b`（`Nat.modEq_iff_dvd'`）([leanprover-community.github.io][3])
+- あとは `a ≡ b` を `symm` してつなぐ
 
 で、かなり綺麗に閉じるはずじゃ。
 
@@ -366,7 +539,7 @@ cyclotomic 側には `Polynomial.squarefree_cyclotomic` などが既にあるの
 
 ---
 
-## 4) Cyclotomic 実装へどう繋ぐか（ロードマップ）
+## 4. Cyclotomic 実装へどう繋ぐか（ロードマップ）
 
 ぬしの目標「Cyclotomic 経由で一般の Zsigmondy」へは、段階を踏むのが吉：
 
@@ -401,10 +574,10 @@ cyclotomic 側には `Polynomial.squarefree_cyclotomic` などが既にあるの
 
 狙いはこれじゃ：
 
-* \(d\) が素数（\(d > 1\)）
-* \(q\) が素数
-* \(q \mid a^d - b^d\) かつ \(q \nmid a-b\)
-* \(\gcd(a,b)=1\)（これで \(b \not\equiv 0 \pmod q\) を確保）
+- \(d\) が素数（\(d > 1\)）
+- \(q\) が素数
+- \(q \mid a^d - b^d\) かつ \(q \nmid a-b\)
+- \(\gcd(a,b)=1\)（これで \(b \not\equiv 0 \pmod q\) を確保）
 
 すると \(r := a/b \in (\mathbb{Z}/q\mathbb{Z})^\times\) が
 
@@ -531,15 +704,15 @@ end DkMath.NumberTheory.GcdNext
 
 ### 使い方（ぬしのファイルへ組み込むコツ）
 
-* まずこの lemma を **“primitive 変換器”** として作っておくと、
+- まずこの lemma を **“primitive 変換器”** として作っておくと、
   ぬしが既に持ってる
   `exists_prime_divisor_not_dividing_diff_of_prime_exp`
   から出てくる (q) が、そのまま primitive へ昇格できる。
 
-* そして最大の山はここ：
+- そして最大の山はここ：
 
-  * `q ∣ a^k - b^k` ↔ `((a : ZMod q)^k = (b : ZMod q)^k)`
-  * `r = ua * ub⁻¹` に落として `r^k = 1` を組み立てる補助補題
+  - `q ∣ a^k - b^k` ↔ `((a : ZMod q)^k = (b : ZMod q)^k)`
+  - `r = ua * ub⁻¹` に落として `r^k = 1` を組み立てる補助補題
 
 この 2 つを別 lemma に切り出すと、`simp` が効くようになって一気に進むぞ。
 
