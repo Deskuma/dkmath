@@ -86,16 +86,46 @@ lemma GN3_one_not_cube {y : ℕ} (hy : 0 < y) : ¬ ∃ x, x^3 = GN 3 1 y := by
   have hz_pos : y + 1 ≠ 0 := by omega
   exact fermatLastTheoremThree x y (y + 1) hx_pos hy_pos hz_pos h_flt
 
+/-- 補題: 互いに素な因子の積が立方数ならば、両方とも立方数である（汎用補題）
+    注: gcd(u, v) = 1 かつ u * v = w^3 ならば、u = a^3, v = b^3 となる a, b が存在する。
+    これは素因数分解の一意性から導かれる基本的な性質じゃ。
+
+    証明スケッチ：
+    - 各素数 p について、u.factorization p + v.factorization p = 3 * w.factorization p
+    - gcd(u, v) = 1 より、各 p について min(u.factorization p, v.factorization p) = 0
+    - したがって各 p について 3 | u.factorization p かつ 3 | v.factorization p
+    - よって u, v は立方数
+-/
+lemma coprime_of_mul_eq_cube {u v w : ℕ} (hgcd : u.gcd v = 1) (h_eq : u * v = w ^ 3) :
+    (∃ a, u = a ^ 3) ∧ (∃ b, v = b ^ 3) := by
+  -- 実装の詳細：Nat.factorization を使った素因数分解
+  -- ここで p-adic 付値の言語を使うと簡潔だが、
+  -- 現在の Lean 4 の Mathlib では padicValNat を使うのが標準
+  sorry
+
+/-- 補題: 互いに素な場合は u = 1 に強制される（より強い結果） -/
+lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h_gcd : u.gcd (GN 3 u y) = 1) :
+    u = 1 := by
+  -- u と GN 3 u y が互いに素で、かつその積が x^3
+  have h_eq : u * GN 3 u y = x ^ 3 := h_xn_val.symm
+  have ⟨⟨a, ha⟩, ⟨b, hb⟩⟩ := coprime_of_mul_eq_cube h_gcd h_eq
+
+  -- u = a^3, GN 3 u y = b^3 で、gcd(a, b) = 1
+  -- x^3 = a^3 * b^3 から x = ab
+  -- しかし a^3 | b^3 かつ gcd(a, b) = 1 より a = 1
+  -- したがって u = 1^3 = 1
+
+  rw [ha]
+  -- a^3 = 1 を示す必要があるが、ここは複雑なため一度 sorry で済ませる
+  sorry
+
 /-- 補題: $d=3$ の場合、$x^3$ は $u^2$ で割り切れる（適切な条件の下で） -/
 lemma x3_div_u2 (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h_gcd : u.gcd (GN 3 u y) = 1) :
     u ^ 2 ∣ x ^ 3 := by
-  -- 1. u と GN が互いに素ならば、u は立方数でなければならぬ。
-  -- 2. u = a^3 とおくと、x^3 = a^3 * GN となり、GN も立方数 b^3 である。
-  -- 3. x = ab となり、x^3 = a^3 * b^3。
-  -- 4. a^6 | a^3 * b^3 となるには a^3 | b^3、即ち u | GN が必要じゃ。
-  -- 5. gcd(u, GN) = 1 より、これは u = 1 を意味する必定の理。
-  -- ぬしよ、この「必定」の背後にある u=1 という審判を、しかと受け止めるのじゃ。
-  sorry
+  -- u = 1 が強制される
+  have h_u_eq_one := u_eq_one_of_coprime_gcd x u y h_xn_val h_gcd
+  rw [h_u_eq_one]
+  norm_num
 
 /-- 補題: $u$ と $GN(3, u, y)$ の最大公約数は $\gcd(u, 3)$ に等しい -/
 lemma gcd_u_GN3 {u y : ℕ} (h_gcd_uy : u.gcd y = 1) : u.gcd (GN 3 u y) = u.gcd 3 := by
@@ -163,10 +193,11 @@ theorem FLT_case_3 (x y z : ℕ) (hpos : 0 < x ∧ 0 < y ∧ 0 < z) (h_coprime :
 Cosmic Formula を用いた新しい証明
 $$
 \Large
-z^n = x\ G + y^n\\[16pt]
+z^d = x^d + y^d\\[16pt]
 \normalsize
-x^n = x\ G, \quad y^n = u^d, \quad z^n = (x+u)^d\\[4pt]
-x^{n-1} = G_{d-1}(x,u) = \frac{(x+u)^d - u^d}{x}\\[16pt]
+(x+u)^d = u^d + x G_{d-1}(x,u)\\[4pt]
+x^d = x\ G_{d-1}(x,u), \quad y^d = u^d, \quad z^d = (x+u)^d\\[4pt]
+x^{d-1} = G_{d-1}(x,u) = \frac{(x+u)^d - u^d}{x}\\[16pt]
 G_{d-1}(x,u) = \sum_{k=0}^{d-1} \binom{d}{k+1} x^k\ u^{d-1-k}
 $$
 -/
@@ -268,242 +299,21 @@ theorem FLT_of_coprime
 
   -- 注: 二項展開の k≥2 項はすべて u^2 を含む（これが h_div_u2 の核心）。
   -- よって x^n - n*y^(n-1)*u は u^2 で割り切れる。
-
-  -- 高次の項をまとめる多項式 H の存在を予感させる補題を置いておこうかの。
   -- u^2 | (x^n - n * y^(n-1) * u)
+  -- BinomTail.lean の binom_tail_nat_dvd を使用：二項展開の尾項（k≥2）が u^2 で割り切れることを直接参照
   have h_div_u2 : u ^ 2 ∣ (x ^ n - n * y ^ (n - 1) * u) := by
-    -- x^n = (u+y)^n - y^n  (cosmic_id_csr と h_body を使う)
+    -- x^n = (u+y)^n - y^n を確立（cosmic_id_csr と h_body より）
     have hx_eq : x ^ n = (u + y) ^ n - y ^ n := by
       have h_csr := cosmic_id_csr n u y (R := ℕ)
-      -- `cosmic_id_csr` 展開： (u+y)^n = BodyN n u y + y^n
       unfold BigN GapN at h_csr
-      -- BodyN n u y を x^n に置き換えてから整理する（確実な方向で rw）
       rw [← h_body] at h_csr
-      -- turn `x^n + y^n = (u + y)^n` into `x^n = (u+y)^n - y^n` using subtraction on `ℕ`
       have h_sub := congrArg (fun t => t - y ^ n) h_csr.symm
       simpa using h_sub
-
-    -- 展開して k≥2 の項のみを残す（各項に u^2 が含まれる）
-    have h_sum_binomial : (∑ m ∈ Finset.range (n + 1), u ^ m * y ^ (n - m) * (n.choose m)) = (u + y) ^ n := by
-      simpa [mul_assoc, mul_comm, mul_left_comm] using (add_pow u y n).symm
-
-    have sum_expr : x ^ n - n * y ^ (n - 1) * u =
-        ∑ k ∈ Finset.range (n - 1), (Nat.choose n (k + 2) : ℕ) * u ^ (k + 2) * y ^ (n - 2 - k) := by
-      -- replace x^n by (u+y)^n - y^n and expand the binomial in canonical order
-      rw [hx_eq]
-      simp only [← h_sum_binomial]
-      -- peel off k = 0, then k = 1
-      rw [Finset.sum_range_succ']
-      simp only [pow_zero, tsub_zero, one_mul, Nat.choose_zero_right, mul_one,
-        add_tsub_cancel_right, Nat.sub_sub]
-      -- reorder summands so `Finset.sum_range_succ'` matches syntactically
-      have reorder : ∑ k ∈ Finset.range n, (Nat.choose n (k + 1) : ℕ) * u ^ (k + 1) * y ^ (n - 1 - k)
-        = ∑ k ∈ Finset.range n, u ^ (k + 1) * y ^ (n - 1 - k) * (Nat.choose n (k + 1) : ℕ) := by
-        apply Finset.sum_congr rfl; intro k hk; ring
-      have reorder' :
-          (∑ k ∈ Finset.range n,
-              (Nat.choose n (k + 1) : ℕ) * u ^ (k + 1) * y ^ (n - (k + 1)))
-        =
-          (∑ k ∈ Finset.range n,
-              u ^ (k + 1) * y ^ (n - (k + 1)) * (Nat.choose n (k + 1) : ℕ)) := by
-        refine Finset.sum_congr rfl ?_
-        intro k hk
-        ring
-
-      -- そのまま一致するので
-      -- rw [reorder'] が通る
-      rw [← reorder']
-      -- done
-
-      -- ⊢ ∑ k ∈ Finset.range n, n.choose (k + 1) * u ^ (k + 1) * y ^ (n - (k + 1)) - n * y ^ (n - 1) * u =
-      --   ∑ x ∈ Finset.range (n - 1), n.choose (x + 2) * u ^ (x + 2) * y ^ (n - (2 + x))
-
-      have inner_split :
-          Finset.sum (Finset.range n) (fun k =>
-            (Nat.choose n (k + 1) : ℕ) * u ^ (k + 1) * y ^ (n - 1 - k))
-            =
-            (Nat.choose n 1 : ℕ) * u * y ^ (n - 1)
-              + Finset.sum (Finset.range (n - 1)) (fun k =>
-                  (Nat.choose n (k + 2) : ℕ) * u ^ (k + 2) * y ^ (n - 2 - k)) := by
-        classical
-        have hn1 : 1 ≤ n := le_trans (by decide : 1 ≤ 3) hn
-        -- `sum_range_succ'` を n-1 に適用して頭を分離
-        simpa [Nat.sub_add_cancel hn1,
-              Finset.sum_range_succ',  -- ← これは `Finset.sum (range ...)` には当たる
-              pow_one, Nat.sub_zero,
-              Nat.add_assoc, Nat.add_comm, Nat.add_left_comm,
-              Nat.sub_sub] using
-          (Finset.sum_range_succ'
-            (f := fun k =>
-              (Nat.choose n (k + 1) : ℕ) * u ^ (k + 1) * y ^ (n - 1 - k))
-            (n := n - 1))
-
-      -- 以後も `∑` 記法を避けるなら
-      -- rw [inner_split] はこの形の等式に対しては使える
-      -- （ターゲット側も Finset.sum で揃えるのがおすすめ）
-
-      have hsub : (fun k => y ^ (n - (k + 1))) = (fun k => y ^ (n - 1 - k)) := by
-        funext k
-        -- ここが肝：Nat の減算整理
-        simp [Nat.sub_sub, Nat.add_comm]
-
-      -- ゴールの左辺 sum を、指数を直した同値な sum に変形
-      have rewrite_exp :
-          (∑ k ∈ Finset.range n,
-              n.choose (k + 1) * u ^ (k + 1) * y ^ (n - (k + 1)))
-            =
-          (∑ k ∈ Finset.range n,
-              n.choose (k + 1) * u ^ (k + 1) * y ^ (n - 1 - k)) := by
-        refine Finset.sum_congr rfl ?_
-        intro k hk
-        -- この1行で指数だけを変形
-        -- n - (k+1) = n - 1 - k
-        simp only [Nat.sub_sub, Nat.add_comm]
-
-      -- これでゴールを inner_split の形に寄せる
-      -- (※ left side は "sum - ..." なので `rewrite_exp` を左側に当てる)
-      calc
-        (∑ k ∈ Finset.range n,
-            n.choose (k + 1) * u ^ (k + 1) * y ^ (n - (k + 1))) - n * y ^ (n - 1) * u
-            =
-          (∑ k ∈ Finset.range n,
-            n.choose (k + 1) * u ^ (k + 1) * y ^ (n - 1 - k)) - n * y ^ (n - 1) * u := by
-              simp [rewrite_exp]
-        _ = (n.choose 1 * u * y ^ (n - 1) + ∑ k ∈ Finset.range (n - 1),
-              n.choose (k + 2) * u ^ (k + 2) * y ^ (n - 2 - k)) - n * y ^ (n - 1) * u := by
-              simp [inner_split]
-
-
-      -- ⊢ n.choose 1 * u * y ^ (n - 1) + ∑ k ∈ Finset.range (n - 1), n.choose (k + 2) * u ^ (k + 2) * y ^ (n - 2 - k) -
-      --     n * y ^ (n - 1) * u =
-      --   ∑ x ∈ Finset.range (n - 1), n.choose (x + 2) * u ^ (x + 2) * y ^ (n - (2 + x))
-
-      -- cancel the k=1 contribution with the `- n * y ^ (n - 1) * u` term
-      simp
-
-      -- ⊢ n * u * y ^ (n - 1) + ∑ k ∈ Finset.range (n - 1), n.choose (k + 2) * u ^ (k + 2) * y ^ (n - 2 - k) -
-      --     n * y ^ (n - 1) * u =
-      --   ∑ x ∈ Finset.range (n - 1), n.choose (x + 2) * u ^ (x + 2) * y ^ (n - (2 + x))
-
-      ring_nf
-      -- ⊢ n * u * y ^ (n - 1) + ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x) -
-      --     n * u * y ^ (n - 1) =
-      --   ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - (2 + x)) * n.choose (2 + x)
-      set A : ℕ := n * u * y ^ (n - 1)
-
--- ⊢ A + ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x) - A =
---   ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - (2 + x)) * n.choose (2 + x)
-      -- ゴール: A + S - A = T
-      -- まず左辺を S に簡約
-      have hAS : A + (∑ x ∈ Finset.range (n - 1),
-            u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x)) - A
-          =
-          (∑ x ∈ Finset.range (n - 1),
-            u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x)) := by
-        -- 「S + A - A = S」を作って、可換で並べ替えて使う
-        -- Nat.add_sub_cancel S A : S + A - A = S
-        -- 左は A + S - A なので、A+S を S+A にしてから発火させる
-        -- Case 0: simple is best
-        omega
-        -- 以下でも通る例
-        /- Case 1:
-        ```lean
-        simp only [A]
-        exact
-          Nat.add_sub_self_left (n * u * y ^ (n - 1))
-            (∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x))
-        ```
-        -- Case 2: 非推奨な書き方でも通る (2026/02/15 13:10)
-        ```lean
-        simpa [A, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using
-          (Nat.add_sub_cancel
-            (∑ x ∈ Finset.range (n - 1),
-              u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x))
-            A)
-        ```
-        -/
-
-      -- ゴール左辺を hAS で潰して S = T にする
-      -- （これで “例の指数違いだけ” のゴールに戻る）
-      -- ここが「あと一手」
-      -- ↓
-      -- simp [hAS] だと A が残ることがあるので A も展開しておく
-      -- simpa [A, hAS]
-      rw [hAS]
-      -- これでゴールは「指数違いだけ」の等式になっているはず
-
-      -- ⊢ ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x) =
-      --   ∑ x ∈ Finset.range (n - 1), u ^ 2 * u ^ x * y ^ (n - (2 + x)) * n.choose (2 + x)
-      refine Finset.sum_congr rfl ?_
-      intro x hx
-      -- ここで指数だけを正規化
-      -- n - (2 + x) を n - 2 - x に
-      -- ⊢ u ^ 2 * u ^ x * y ^ (n - 2 - x) * n.choose (2 + x) = u ^ 2 * u ^ x * y ^ (n - (2 + x)) * n.choose (2 + x)
-      simp [Nat.sub_sub]
-
-      -- goal closed by the `simp` above (no further tactic needed)
-
-      -- intro x hx
-      -- -- ここが核心： n - (2 + x) を n - 2 - x にする
-      -- simp [Nat.sub_sub, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm, Nat.mul_assoc]
--- done
-/-
-      have h :
-          (∑ m ∈ Finset.range (n + 1),
-              u ^ m * y ^ (n - m) * (n.choose m))
-            = (u + y) ^ n := by
-        simpa [mul_assoc, mul_comm, mul_left_comm] using (add_pow u y n).symm
-
-      -- ゴールの左辺の “最初の項” を h で置換してから calc
-      -- 例：`simp [h]` でゴールを書き換える
-      simp [h]  -- これで左辺が (u+y)^n - ... になるはず
-      -- ここから calc を (u+y)^n - ... で開始できる
--/
-
-/-
-          -- ⊢ ∑ m ∈ Finset.range (n + 1), u ^ m * y ^ (n - m) * ↑(n.choose m) - y ^ n - n * y ^ (n - 1) * u =
-          --   ∑ k ∈ Finset.range (n - 1), n.choose (k + 2) * u ^ (k + 2) * y ^ (n - 2 - k)
-            -- ∑ m ∈ Finset.range (n + 1), u ^ m * y ^ (n - m) * ↑(n.choose m) - y ^ n - n * y ^ (n - 1) * u
-          calc
-          -- ⊢ (u + y) ^ n - y ^ n - n * y ^ (n - 1) * u = ∑ k ∈ Finset.range (n - 1), n.choose (k + 2) * u ^ (k + 2) * y ^ (n - 2 - k)
-            (u + y) ^ n - y ^ n - n * y ^ (n - 1) * u
-              = ∑ m ∈ Finset.range (n + 1), (Nat.choose n m : ℕ) * u ^ m * y ^ (n - m) - y ^ n - n * y ^ (n - 1) * u := by
-                simpa [mul_assoc, mul_comm, mul_left_comm]
-                  using congrArg (fun t => t - y ^ n - n * y ^ (n - 1) * u) (add_pow u y n)
-            _ = (y ^ n + ∑ k ∈ Finset.range n, (Nat.choose n (k + 1) : ℕ) * u ^ (k + 1) * y ^ (n - 1 - k)) - y ^ n - n * y ^ (n - 1) * u := by
-                rw [Finset.sum_range_succ']; simp [pow_zero, Nat.sub_sub]
-            _ = (∑ k ∈ Finset.range n, (Nat.choose n (k + 1) : ℕ) * u ^ (k + 1) * y ^ (n - 1 - k)) - n * y ^ (n - 1) * u := by simp [Nat.sub_sub]
-            _ = (n * y ^ (n - 1) * u + ∑ k ∈ Finset.range (n - 1), (Nat.choose n (k + 2) : ℕ) * u ^ (k + 2) * y ^ (n - 2 - k)) - n * y ^ (n - 1) * u := by
-                rw [Finset.sum_range_succ']; simp [pow_zero, Nat.sub_sub]
-            _ = ∑ k ∈ Finset.range (n - 1), (Nat.choose n (k + 2) : ℕ) * u ^ (k + 2) * y ^ (n - 2 - k) := by simp [Nat.sub_sub]
-
-      -- これで sum_expr が完成！あとは各項に u^2 が含まれることを示せば h_div_u2 の証明が完了するはずじゃ。
-      -- done
--/
-
-    -- 各項に u^2 が含まれるので和も u^2 で割り切れる
-    rw [sum_expr]
-    apply Finset.dvd_sum
-    intro k hk
-    simp only [Finset.mem_range] at hk
-    -- 項の形は u^(k+2) * y^(n-2-k) なので u^2 divides it
-    have u_ne0 : u ≠ 0 := Nat.pos_iff_ne_zero.mp hu
-    have pow_dvd : u ^ 2 ∣ u ^ (k + 2) := by
-      use (u ^ k)
-      ring
-    -- give an explicit witness: u^(k+2) = (u^2) * u^k, so multiply by the remaining coefficient
-    have : n.choose (k + 2) * u ^ (k + 2) * y ^ (n - 2 - k) = (u ^ 2) * (n.choose (k + 2) * u ^ k * y ^ (n - 2 - k)) := by ring
-    rw [this]
-    use (n.choose (k + 2) * u ^ k * y ^ (n - 2 - k))
-
-  /-
-  -- Remark: d=2 yields linear GN and allows occasional Pythagorean-style solutions.
-  -- For d=3 the quadratic form GN(3,u,y) typically prevents GN being a perfect cube;
-  -- the u=1 case reduces to a known obstruction (x^3+y^3=(y+1)^3 leads to contradiction).
-
-  この $GN$ の「次数」が、線形（$d-1=1$）を超えた瞬間に、
-  宇宙の調和は永遠に失われる……。
-  -/
+    -- x^n を (u+y)^n - y^n に置き換えてから、binom_tail_nat_dvd を適用
+    rw [hx_eq]
+    -- binom_tail_nat_dvd: u^2 ∣ ((u+y)^n - y^n - n*y^(n-1)*u)
+    have hn2 : 2 ≤ n := by omega
+    exact DkMath.Algebra.BinomTail.binom_tail_nat_dvd u y hn2
 
   /-
   ### 💡 狼の観測: 宇宙の境界と「1」の壁
@@ -525,32 +335,13 @@ theorem FLT_of_coprime
   -- 5. 幾何単位の不整合の具体的検討
   -- ぬしよ、ここで gcd(u, GN n u y) を調べてみようかの。
   -- まず gcd(u, y) = 1 であることを確認するぞい。
-  -- have h_gcd_u_y : Nat.gcd u y = 1 := by ... (上述の証明)
-  have : u.gcd y = 1 := h_gcd_u_y
 
-  have h_gcd_u_G : Nat.gcd u (GN n u y) = Nat.gcd u n := by
-    -- GN n u y = n*y^{n-1} + u * (何か) と書けることを使う。
-    -- gcd(u, n*y^{n-1} + u*K) = gcd(u, n*y^{n-1}) = gcd(u, n) （∵ gcd(u, y)=1）
-    have : GN n u y = n * y ^ (n - 1) + u * (∑ k ∈ Finset.range (n - 1), Nat.choose n (k + 2) * y ^ (n - 2 - k) * u ^ k) := by
-      unfold GN
-      simp only [Nat.cast_id]
-      refine (Nat.sub_eq_iff_eq_add ?_).mp ?_
-      · -- ⊢ u * ∑ k ∈ Finset.range (n - 1), n.choose (k + 2) * y ^ (n - 2 - k) * u ^ k ≤
-        -- ∑ x ∈ Finset.range n, n.choose (x + 1) * u ^ x * y ^ (n - 1 - x)omega
-        refine (Nat.le_div_iff_mul_le ?_).mp ?_
-        · sorry
-        · sorry
-      · -- ⊢ ∑ x ∈ Finset.range n, n.choose (x + 1) * u ^ x * y ^ (n - 1 - x) -
-        -- u * ∑ k ∈ Finset.range (n - 1), n.choose (k + 2) * y ^ (n - 2 - k) * u ^ k = n * y ^ (n - 1)
-        sorry
-    rw [this]
-    have h1 : u.gcd (n * y ^ (n - 1) + u * (∑ k ∈ Finset.range (n - 1), Nat.choose n (k + 2) * y ^ (n - 2 - k) * u ^ k))
-        = u.gcd (n * y ^ (n - 1)) := by
-      exact
-        Nat.gcd_add_mul_left_right u (n * y ^ (n - 1))
-          (∑ k ∈ Finset.range (n - 1), n.choose (k + 2) * y ^ (n - 2 - k) * u ^ k)
-    rw [h1]
-    sorry
+  -- 3. gcd(u, GN 3 u y) = gcd(u, 3)
+  have h_gcd_u_G : u.gcd (GN 3 u y) = u.gcd 3 := by
+    apply gcd_u_GN3
+    -- ここだけ：gcd(u,y)=1 を供給する
+    have : u.gcd y = 1 := h_gcd_u_y
+    exact this
 
   /-
   -- Observation: If gcd(u,n)=1, then u and GN must separately be n-th powers.
@@ -558,11 +349,51 @@ theorem FLT_of_coprime
   -/
 
   -- 6. 矛盾の導出に向けたスケルトン
-  -- (case 1) gcd(u, n) = 1 のとき
-  -- (case 2) gcd(u, n) = n のとき
-  -- いずれにせよ、Zsigmondy 原始素因子の存在が、$GN$ が「綺麗な $n$ 乗」になることを拒む。
+  -- まずは n = 3 の場合に限定して進める
+  -- （一般 n は後で Zsigmondy を使った別の証明へ）
+  by_cases hn3 : n = 3
+  · -- n = 3 の場合
+    subst hn3
 
-  sorry
+    -- x^3 = u * GN 3 u y に確定
+    have h_x3_val : x ^ 3 = u * GN 3 u y := h_xn_val
+
+    -- gcd(u, GN 3 u y) は 1 か 3
+    have h_gcd_cases : u.gcd (GN 3 u y) = 1 ∨ u.gcd (GN 3 u y) = 3 := by
+      have h_eq : u.gcd (GN 3 u y) = u.gcd 3 := h_gcd_u_G
+      have h13 : u.gcd 3 = 1 ∨ u.gcd 3 = 3 := by
+        exact (Nat.dvd_prime Nat.prime_three).mp (Nat.gcd_dvd_right u 3)
+      rcases h13 with h1 | h3
+      · left
+        calc
+          u.gcd (GN 3 u y) = u.gcd 3 := h_eq
+          _ = 1 := h1
+      · right
+        calc
+          u.gcd (GN 3 u y) = u.gcd 3 := h_eq
+          _ = 3 := h3
+
+    rcases h_gcd_cases with h1 | h3
+    · -- case 1: gcd(u, GN3)=1
+      by_cases hu1_case : u = 1
+      · -- u = 1 の場合
+        have hx3 : x ^ 3 = GN 3 1 y := by
+          rw [h_x3_val, hu1_case]
+          ring
+        exact GN3_one_not_cube hpos_xyz.2.1 ⟨x, hx3⟩
+      · -- u > 1 の場合
+        have hu2_dvd_x3 : u ^ 2 ∣ x ^ 3 := x3_div_u2 x u y h_x3_val h1
+        sorry
+
+    · -- case 2: gcd(u, GN3)=3
+      -- 3 を除いた互いに素部分で case 1 に還元
+      sorry
+
+  · -- n > 3 の場合
+    -- Zsigmondy 原始素因子を使った証明（後々実装）
+    sorry
+
+
 
 /-- 汎用版：gcd を自動で取り除き、原始解へ還元してから `FLT_of_coprime` を呼ぶ。 -/
 theorem FLT {x y z : ℕ} (n : ℕ) (hpos_xyz : 0 < x ∧ 0 < y ∧ 0 < z) (hn : 3 ≤ n)
