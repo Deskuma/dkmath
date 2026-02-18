@@ -5,11 +5,10 @@ set -euo pipefail
 LOG_DIR="logs"  # Directory to store logs data
 SUMMARY_REPORT_DIR="$LOG_DIR/summary_report"  # Directory to store final summary report
 REPORT_DIR="$LOG_DIR/reports"  # Directory to store generated reports archives
-DIFF_WORK_DIR="$LOG_DIR/diff_work"  # Directory to store diff work data
-ARCHIVE_NAME="__summary_report_data.tar.gz"
+ARCHIVE_NAME="$LOG_DIR/__summary_report_data.tar.gz"
 
 # Ensure directories exist
-mkdir -p "$LOG_DIR" "$SUMMARY_REPORT_DIR" "$DIFF_WORK_DIR" "$REPORT_DIR"
+mkdir -p "$LOG_DIR" "$SUMMARY_REPORT_DIR" "$REPORT_DIR"
 
 # Ensure required external commands are available
 require_cmd() {
@@ -28,32 +27,23 @@ else
   TREE_AVAILABLE=true
 fi
 
-# cleanup handler
-trap 'rm -rf "${DIFF_WORK_DIR}"/*' EXIT
+# cleanup handler — only remove generated __*.txt files (safe)
+# trap 'find "${DIFF_WORK_DIR}" -maxdepth 2 -type f -name "__*.txt" -delete || true' EXIT
 
 # clear old logs
-rm -f "$LOG_DIR"/__*.txt
+rm -f "$SUMMARY_REPORT_DIR"/__*.txt
 
 # rotate previous archive (if present) and keep archives in REPORT_DIR
-BACKUP_ARCHIVE_NAME="__summary_report_data_backup_$(date +%Y%m%d%H%M%S).tar.gz"
-if [ -f "$REPORT_DIR/$ARCHIVE_NAME" ]; then
-  mv "$REPORT_DIR/$ARCHIVE_NAME" "$REPORT_DIR/$BACKUP_ARCHIVE_NAME"
+BACKUP_ARCHIVE_NAME=$REPORT_DIR"/__summary_report_data_backup_$(date +%Y%m%d%H%M%S).tar.gz"
+if [ -f "$ARCHIVE_NAME" ]; then
+  mv "$ARCHIVE_NAME" "$BACKUP_ARCHIVE_NAME"
 fi
 
 # Create summary report data by extracting relevant information from the codebase
 
 # file tree
 ## project full tree (exclude .git, logs, .lake, etc.)
-find . \
-  -path './.git' -prune -o \
-  -path './logs' -prune -o \
-  -path './lean/dk_math/.lake' -prune -o \
-  -path './.github' -prune -o \
-  -path './.vscode' -prune -o \
-  -path './.pytest_cache' -prune -o \
-  -path './__pycache__' -prune -o \
-  -path './venv' -prune -o \
-  -type f -print | grep -vE '(\.pyc$|\.pyo$|__fig#|/__.*)' | sort | tee "$LOG_DIR/__project_find_files.txt"
+find . | grep -vE '(\.git|logs|^./lean/dk_math/.lake|\.github|\.vscode|\.pytest_cache|__pycache__|venv|.*\.pyc$|.*\.pyo$|__fig\#|/__.*)' | sort | tee "$LOG_DIR/__project_find_files.txt"
 
 if [ "$TREE_AVAILABLE" = true ]; then
   tree lean/dk_math/DkMath | tee "$SUMMARY_REPORT_DIR/__file_tree_in_dkmath.txt"
@@ -66,20 +56,14 @@ rg -n "^(theorem|lemma|def)\s+" lean/dk_math/DkMath -S -A5 -B2 --heading | tee "
 rg -n --type-add 'lean:*.lean' --type lean "\bsorry\b" -S -A5 -B5 --heading | tee "$SUMMARY_REPORT_DIR/__sorries.txt"
 rg -n "^import\s+" lean/dk_math/DkMath -S --heading | tee "$SUMMARY_REPORT_DIR/__imports.txt"
 
-# diff latest backup archive (if present) with current logs
-LATEST_BACKUP=$(ls -1t "$REPORT_DIR"/__summary_report_data_backup_*.tar.gz 2>/dev/null | head -n1 || true)
-if [ -n "$LATEST_BACKUP" ]; then
-  rm -rf "$DIFF_WORK_DIR"/*
-  mkdir -p "$DIFF_WORK_DIR"
-  tar -xzf "$LATEST_BACKUP" -C "$DIFF_WORK_DIR"
-  diff -r "$DIFF_WORK_DIR" "$SUMMARY_REPORT_DIR" | tee "$SUMMARY_REPORT_DIR/__diff_summary_report_data.txt" || true
-  rm -rf "$DIFF_WORK_DIR"/*
-else
-  echo "No previous summary report data tarball found. Skipping diff."
-fi
+# diff: compare the rotated BACKUP_ARCHIVE_NAME (if created) with the current summary_report
+# exclude .vscode
+git diff mark-summary-report | awk 'BEGIN {IGNORE_FLAG=0} /diff --git/{ if ($0 ~ /\.vscode/) {IGNORE_FLAG=1} else {IGNORE_FLAG=0} } !IGNORE_FLAG {print}' | tee "$SUMMARY_REPORT_DIR/__git_diff_summary_report.txt" || true
+# update the tag to mark the current summary report state
+git tag -d mark-summary-report && git tag mark-summary-report || true
 
-# archive the logs (saved in $REPORT_DIR to avoid self-inclusion)
-tar -czf "$REPORT_DIR/$ARCHIVE_NAME" -C "$LOG_DIR" .
+# archive the logs (saved in $LOG_DIR to avoid self-inclusion)
+tar -czf "$ARCHIVE_NAME" -C "$SUMMARY_REPORT_DIR" .
 
 # large files for review
 rg -n "^(theorem|lemma|def)\s+" lean/dk_math/DkMath -S -A5 -B2 | tee "$SUMMARY_REPORT_DIR/___theorems.txt"
