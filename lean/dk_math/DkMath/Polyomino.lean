@@ -61,6 +61,21 @@ lemma card_biUnion_eq_sum_card_of_pairwise_disjoint
     (tiles.biUnion id).card = ∑ t ∈ tiles, t.card := by
   exact card_biUnion hdis
 
+/-- 彩色フィルタ版：Pairwise Disjoint ならフィルタ後の card も和になる -/
+lemma card_biUnion_filter_eq_sum_card_filter
+    {α : Type*} [DecidableEq α] (P : α → Prop) [DecidablePred P]
+    {tiles : Finset (Finset α)}
+    (hdis : (tiles : Set (Finset α)).Pairwise Disjoint) :
+    ((tiles.biUnion id).filter P).card = ∑ t ∈ tiles, (t.filter P).card := by
+  -- biUnion と filter は交換可能：(∪ t).filter P = ∪ (t.filter P)
+  rw [filter_biUnion]
+  -- Finset.card_biUnion を適用
+  apply card_biUnion
+  intros t1 ht1 t2 ht2 hne
+  simp only [id_def]
+  apply Disjoint.mono (filter_subset _ _) (filter_subset _ _)
+  exact hdis ht1 ht2 hne
+
 /-! ## セクション 4：敷き詰め可能なら card = 3k -/
 
 /-- L型トロミノで敷き詰め可能なら、R の card は 3 の倍数で、かつ 3*tile数 -/
