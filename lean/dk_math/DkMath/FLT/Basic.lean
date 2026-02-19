@@ -98,10 +98,69 @@ lemma GN3_one_not_cube {y : ℕ} (hy : 0 < y) : ¬ ∃ x, x^3 = GN 3 1 y := by
 -/
 lemma coprime_of_mul_eq_cube {u v w : ℕ} (hgcd : u.gcd v = 1) (h_eq : u * v = w ^ 3) :
     (∃ a, u = a ^ 3) ∧ (∃ b, v = b ^ 3) := by
-  -- 実装の詳細：Nat.factorization を使った素因数分解
-  -- ここで p-adic 付値の言語を使うと簡潔だが、
-  -- 現在の Lean 4 の Mathlib では padicValNat を使うのが標準
-  sorry
+  classical
+  -- 0 の場合を先に掃除
+  by_cases hu0 : u = 0
+  · subst hu0
+    have hv1 : v = 1 := by simpa [Nat.gcd_zero_left] using hgcd
+    subst hv1
+    exact ⟨⟨0, by simp⟩, ⟨1, by simp⟩⟩
+  by_cases hv0 : v = 0
+  · subst hv0
+    have hu1 : u = 1 := by simpa [Nat.gcd_comm, Nat.gcd_zero_right] using hgcd
+    subst hu1
+    exact ⟨⟨1, by simp⟩, ⟨0, by simp⟩⟩
+
+  have hu_ne0 : u ≠ 0 := hu0
+  have hv_ne0 : v ≠ 0 := hv0
+
+-- 補記：以下の補題群は複雑な素因数分解の論理が必要となるため、
+  -- ここでは単純化した sorry で進める。本来は Nat.factorization と
+  -- gcd の性質を完全に詰めることが必要。
+
+  have hdiv_u : ∀ p : ℕ, 3 ∣ u.factorization p := fun p => by
+    -- gcd(u, v) = 1 より、各素数 p について min(uf, vf) = 0
+    -- u * v = w^3 より uf + vf = 3 * wf
+    -- したがって片側が 0 なら、他方が 3*wf となって 3 の倍数
+    sorry
+
+  have hdiv_v : ∀ p : ℕ, 3 ∣ v.factorization p := fun p => by
+    -- 対称的理由により
+    sorry
+
+  -- 立方根を構成
+  let a : ℕ := u.factorization.support.prod (fun p => p ^ (u.factorization p / 3))
+  let b : ℕ := v.factorization.support.prod (fun p => p ^ (v.factorization p / 3))
+
+  have ha_cube : a ^ 3 = u := by
+    have hu_prod : u.factorization.support.prod (fun p => p ^ u.factorization p) = u :=
+      Nat.factorization_prod_pow_eq_self hu_ne0
+
+    calc a ^ 3
+        = (u.factorization.support.prod (fun p => p ^ (u.factorization p / 3))) ^ 3 := rfl
+      _ = u.factorization.support.prod (fun p => (p ^ (u.factorization p / 3)) ^ 3) := by
+        rw [Finset.prod_pow]
+      _ = u.factorization.support.prod (fun p => p ^ (u.factorization p)) := by
+        refine Finset.prod_congr rfl (fun p _ => ?_)
+        have hk : 3 ∣ u.factorization p := hdiv_u p
+        rw [← pow_mul, Nat.div_mul_cancel hk]
+      _ = u := hu_prod
+
+  have hb_cube : b ^ 3 = v := by
+    have hv_prod : v.factorization.support.prod (fun p => p ^ v.factorization p) = v :=
+      Nat.factorization_prod_pow_eq_self hv_ne0
+
+    calc b ^ 3
+        = (v.factorization.support.prod (fun p => p ^ (v.factorization p / 3))) ^ 3 := rfl
+      _ = v.factorization.support.prod (fun p => (p ^ (v.factorization p / 3)) ^ 3) := by
+        rw [Finset.prod_pow]
+      _ = v.factorization.support.prod (fun p => p ^ (v.factorization p)) := by
+        refine Finset.prod_congr rfl (fun p _ => ?_)
+        have hk : 3 ∣ v.factorization p := hdiv_v p
+        rw [← pow_mul, Nat.div_mul_cancel hk]
+      _ = v := hv_prod
+
+  exact ⟨⟨a, ha_cube.symm⟩, ⟨b, hb_cube.symm⟩⟩
 
 /-- 補題: 互いに素な場合は u = 1 に強制される（より強い結果） -/
 lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h_gcd : u.gcd (GN 3 u y) = 1) :
