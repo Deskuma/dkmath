@@ -831,8 +831,8 @@ theorem FLT_of_coprime
           ring
         exact GN3_one_not_cube_use_FLT3 hpos_xyz.2.1 ⟨x, hx3⟩
       · -- u > 1 の場合
-        have hu2_dvd_x3 : u ^ 2 ∣ x ^ 3 := x3_div_u2 x u y h_x3_val h1
-        sorry  -- todo: ここは u > 1 かつ gcd(u, GN3)=1 のときの矛盾を導く部分。u^2 | x^3 であることを利用して、u と GN3 の構造をさらに分析し、最終的に矛盾を導く必要がある。
+        have hu1 : u = 1 := u_eq_one_of_coprime_gcd x u y h_x3_val h1
+        exact hu1_case hu1
 
     · -- case 2: gcd(u, GN3)=3
       -- 3 を除いた互いに素部分で case 1 に還元
