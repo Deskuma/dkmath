@@ -252,12 +252,11 @@ private lemma GN3_cube_lt_sq_plus_y_cube (a y : ℕ) (ha : 1 ≤ a) (hy : 1 ≤ 
   have ha' : (1 : ℤ) ≤ (a : ℤ) := by exact_mod_cast ha
   have hy' : (1 : ℤ) ≤ (y : ℤ) := by exact_mod_cast hy
   have hval : ((a ^ 3) ^ 2 + 3 * a ^ 3 * y + 3 * y ^ 2 : ℤ) =
-              (a : ℤ)^6 + 3 * a^3 * y + 3 * y^2 := by push_cast; ring
+              (a : ℤ)^6 + 3 * a^3 * y + 3 * y^2 := by ring
   have hval2 : ((a ^ 2 + y) ^ 3 : ℤ) = (a : ℤ)^6 + 3 * a^4 * y + 3 * a^2 * y^2 + y^3 := by
-    push_cast; ring
+    ring
   -- ℤ で直接不等式を証明
   zify
-  push_cast
   nlinarith [sq_nonneg ((a : ℤ) - 1), sq_nonneg ((a : ℤ)^2 - 1),
              mul_pos (show (0:ℤ) < (a:ℤ)^3 by positivity) (show (0:ℤ) < (y:ℤ) by linarith),
              mul_nonneg (show (0:ℤ) ≤ (a:ℤ) - 1 by linarith)
@@ -299,7 +298,6 @@ private lemma GN3_cube_not_cube_of_gt_one (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤
       have ha' : (2 : ℤ) ≤ (a : ℤ) := by exact_mod_cast ha
       have hy' : (1 : ℤ) ≤ (y : ℤ) := by exact_mod_cast hy
       zify
-      push_cast
       nlinarith [mul_pos (show (0:ℤ) < (a:ℤ)^3 by positivity) (show (0:ℤ) < (y:ℤ) by linarith)]
     exact (Nat.pow_lt_pow_iff_left (by norm_num)).mp h3
   -- b < a²+y （b³ < (a²+y)³ から）
@@ -309,7 +307,6 @@ private lemma GN3_cube_not_cube_of_gt_one (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤
       have ha' : (2 : ℤ) ≤ (a : ℤ) := by exact_mod_cast ha
       have hy' : (1 : ℤ) ≤ (y : ℤ) := by exact_mod_cast hy
       zify
-      push_cast
       nlinarith [sq_nonneg ((a : ℤ) - 1), sq_nonneg ((a : ℤ)^2 - 1),
                  mul_pos (show (0:ℤ) < (a:ℤ)^3 by positivity) (show (0:ℤ) < (y:ℤ) by linarith),
                  mul_nonneg (show (0:ℤ) ≤ (a:ℤ) - 1 by linarith) (show (0:ℤ) ≤ (y:ℤ) by linarith)]
@@ -376,8 +373,7 @@ lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h
       have hGN1 : GN 3 0 y = 1 := by
         have := h_gcd; rw [hu0, Nat.gcd_zero_left] at this; exact this
       rw [GN_quadratic] at hGN1
-      simp only [Nat.mul_zero, Nat.zero_add, ne_eq,
-                 OfNat.ofNat_ne_zero, not_false_eq_true] at hGN1
+      simp only [Nat.mul_zero] at hGN1
       -- hGN1 : 3 * y^2 = 1, y ≥ 1 より矛盾（3*1^2 = 3 ≠ 1）
       -- y ≥ 1 → y^2 ≥ 1 → 3*y^2 ≥ 3 だが hGN1 から 3*y^2 = 1 なので矛盾
       have h3 : 3 ≤ 3 * y ^ 2 := by
