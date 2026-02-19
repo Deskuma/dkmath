@@ -102,7 +102,7 @@ lemma color3_L_tromino_standard {d : ℕ} (hd : 2 ≤ d) (v : Cell d) :
     (t.filter fun c => color3 c = 0).card = 1 ∧
     (t.filter fun c => color3 c = 1).card = 1 ∧
     (t.filter fun c => color3 c = 2).card = 1 := by
-  sorry
+  sorry  -- todo: 色の定義に基づいて、L型トロミノの標準配置が各色をちょうど1つずつ含むことを証明
 /-- 核心：敷き詰め可能なら各色のセル数が等しい -/
 lemma color_balance_of_tiling {α : Type*} [DecidableEq α] (colorFn : α → Fin 3)
     {R : Finset α} {IsLTromino : Finset α → Prop}
@@ -142,7 +142,7 @@ lemma color_balance_of_box_3k {d : ℕ} (hd : 2 ≤ d) (n : Fin d → ℕ)
     let R := DkMath.CellDim.Box n
     (R.filter fun c => color3 c = 0).card = (R.filter fun c => color3 c = 1).card ∧
     (R.filter fun c => color3 c = 0).card = (R.filter fun c => color3 c = 2).card := by
-  sorry
+  sorry  -- todo: Box の定義に基づいて、最初か二番目の軸が 3 の倍数なら Box が色平衡であることを証明
 
 /-! ## セクション 3：宇宙式 Body との接続 -/
 
@@ -188,7 +188,7 @@ theorem FLT_from_tromino_tiling {x y z : ℕ} (n : ℕ)
     rw [h_div3]
     apply dvd_mul_right
   -- 同様の議論を y, z にも適用し、無限降下へ繋ぐのじゃ
-  sorry
+  sorry  -- todo: y, z にも同様の議論を適用し、無限降下へ繋ぐ
 
 /-! ## セクション 5：次元別の特例 -/
 
@@ -200,9 +200,9 @@ theorem FLT_case_3_via_tromino {x y z : ℕ}
   -- FLT 解の各変数が無限に 3 で割り切れるという無限降下法を想定
   have h3 : 3 ∣ x ∧ 3 ∣ y ∧ 3 ∣ z := by
     -- 詳細は FLT_from_tromino_tiling の完成を待つ
-    sorry
+    sorry  -- todo: FLT_from_tromino_tiling を完成させ、n=3 の場合に各変数が 3 で割り切れることを証明し、
   -- 無限降下により矛盾
-  sorry
+  sorry  -- todo: 無限降下の議論を完成させ、n=3 の場合に矛盾を導く
 
 /-- 一般版：n ≥ 3 の FLT -/
 theorem FLT_general_via_tromino {x y z : ℕ} (n : ℕ)
@@ -215,7 +215,7 @@ theorem FLT_general_via_tromino {x y z : ℕ} (n : ℕ)
   -- 3. 一方で x^n という値は、完全 n 次元立方体という「充填可能でバランスされた」領域の面積を
   --    宇宙式の構造（3+1=4）により、Body と等しくなければならない（はずだが矛盾する）。
   -- 4. この幾何学的形状の不整合が、FLT の解の非存在に繋がるのじゃ。
-  sorry
+  sorry  -- todo: 上記の戦略に基づいて、一般 n ≥ 3 の場合に矛盾を導く
 
 end DkMath
 
