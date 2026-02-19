@@ -81,13 +81,20 @@ lemma tileableByLTromino_implies_card_thrice {α : Type*} [DecidableEq α]
 /-- 3彩色関数：第0次元と第1次元の差を利用（L型トロミノが各色を踏むように設定） -/
 def color3 {d : ℕ} (c : Cell d) : Fin 3 :=
   if h : 2 ≤ d then
-    let val : ℤ := (c ⟨0, by omega⟩ - c ⟨1, by omega⟩) % 3
-    if val = 0 then (0 : Fin 3)
-    else if val = 1 || val = -2 then (1 : Fin 3)
-    else (2 : Fin 3)
+    let diff := c ⟨0, by omega⟩ - c ⟨1, by omega⟩
+    ⟨(diff % 3).toNat, by
+      have hnm : (3 : ℤ) ≠ 0 := by norm_num
+      have hpos : (0 : ℤ) < 3 := by norm_num
+      have h1 := Int.emod_nonneg diff hnm
+      have h2 := Int.emod_lt_of_pos diff hpos
+      zify [h1]
+      omega⟩
   else 0
 
-/-- 補題：L型トロミノ（標準形）の平行移動は、各色をちょうど1つずつ含む -/
+lemma color3_val {d : ℕ} (hd : 2 ≤ d) (c : Cell d) :
+    (color3 c).val = ((c ⟨0, by omega⟩ - c ⟨1, by omega⟩) % 3).toNat := by
+  simp [color3, hd]
+
 lemma color3_L_tromino_standard {d : ℕ} (hd : 2 ≤ d) (v : Cell d) :
     let e0 : Cell d := fun i => if i = ⟨0, by omega⟩ then 1 else 0
     let e1 : Cell d := fun i => if i = ⟨1, by omega⟩ then 1 else 0
@@ -95,8 +102,7 @@ lemma color3_L_tromino_standard {d : ℕ} (hd : 2 ≤ d) (v : Cell d) :
     (t.filter fun c => color3 c = 0).card = 1 ∧
     (t.filter fun c => color3 c = 1).card = 1 ∧
     (t.filter fun c => color3 c = 2).card = 1 := by
-  sorry
-
+  sorry  -- todo: 色の定義に基づいて、L型トロミノの標準配置が各色をちょうど1つずつ含むことを証明
 /-- 核心：敷き詰め可能なら各色のセル数が等しい -/
 lemma color_balance_of_tiling {α : Type*} [DecidableEq α] (colorFn : α → Fin 3)
     {R : Finset α} {IsLTromino : Finset α → Prop}
@@ -130,49 +136,59 @@ lemma color_balance_of_tiling {α : Type*} [DecidableEq α] (colorFn : α → Fi
   · rw [h_final 0, h_final 1]
   · rw [h_final 0, h_final 2]
 
+/-- 補題：最初か二番目の軸が 3 の倍数なら、Box は色平衡である -/
+lemma color_balance_of_box_3k {d : ℕ} (hd : 2 ≤ d) (n : Fin d → ℕ)
+    (h3 : 3 ∣ n ⟨0, by omega⟩ ∨ 3 ∣ n ⟨1, by omega⟩) :
+    let R := DkMath.CellDim.Box n
+    (R.filter fun c => color3 c = 0).card = (R.filter fun c => color3 c = 1).card ∧
+    (R.filter fun c => color3 c = 0).card = (R.filter fun c => color3 c = 2).card := by
+  sorry  -- todo: Box の定義に基づいて、最初か二番目の軸が 3 の倍数なら Box が色平衡であることを証明
+
 /-! ## セクション 3：宇宙式 Body との接続 -/
 
 /--
-補題：Body(d, x, u) のセル数は x * Gbinom(d, x, u)
+補題：Body(d, x, u) のセル数は x * Gbinom d x u
 これが Cosmic Formula と Cell 分解の接点じゃ。
 -/
 theorem card_body_from_cosmic (d x u : ℕ) :
     (Body d x u).card = x * Gbinom d x u := by
   have h_big := card_Big_eq_card_Body_add_card_Gap d x u
   have h_exp := pow_sub_pow_eq_mul_Gbinom d x u
-  simp at h_big
-  -- Nat の減算を omega で解決
+  simp [Big, Gap, constVec] at h_big
+  -- (x + u) ^ d = (Body d x u).card + u ^ d
+  have h_eq : (x + u) ^ d = (Body d x u).card + u ^ d := by
+    simpa [Fintype.card_pi, Finset.card_fin] using h_big
+  rw [← h_exp, h_eq]
   omega
-
-/-! ## セクション 4：FLT への道筋（骨組み） -/
 
 /--
 トロミノ充填によるフェルマーの最終定理の背理法（スケルトン）
-
-  案B：無限降下（3 が繰り返し現れる）
-  案C：彩色不変量による Body の不整合
 -/
 theorem FLT_from_tromino_tiling {x y z : ℕ} (n : ℕ)
     (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
     (hn : 3 ≤ n)
     (h_eq : x ^ n + y ^ n = z ^ n)
     (IsLTromino : Finset (Cell n) → Prop)
-    (h_tromino_card : ∀ t, IsLTromino t → t.card = 3) :
-    ¬ TileableByLTromino IsLTromino (Body n x y) := by
-  intro htile
-  -- Body の card = x^n であることを Cosmic Formula 経由で示す
-  have h_card_body : (Body n x y).card = x ^ n := by
-    rw [card_body_from_cosmic]
-    -- x * Gbinom = (x+y)^n - y^n
-    rw [← pow_sub_pow_eq_mul_Gbinom]
-    -- ここで z^n = x^n + y^n を使うので z^n - y^n = x^n
-    -- 実際には z = x + y は言えないが、Body の構成として w=x, u=y としている
-    sorry
-  -- 敷き詰め可能なら card は 3 の倍数
-  have ⟨k, h_div3⟩ := tileableByLTromino_implies_card_thrice h_tromino_card htile
-  rw [h_card_body] at h_div3
-  -- ここで x が 3 の倍数なら矛盾しないが、彩色や無限降下を組み合わせる
-  sorry
+    (h_tromino_card : ∀ t, IsLTromino t → t.card = 3)
+    (h_color : ∀ t, IsLTromino t →
+      (t.filter fun c => color3 c = 0).card = 1 ∧
+      (t.filter fun c => color3 c = 1).card = 1 ∧
+      (t.filter fun c => color3 c = 2).card = 1) :
+    (R : Finset (Cell n)) → R.card = x ^ n → ¬ TileableByLTromino IsLTromino R := by
+  intro R h_area h_tile
+  -- 敷き詰め可能なら各色のセル数が等しい
+  have h_balance := color_balance_of_tiling color3 h_color h_tile
+  -- 敷き詰め可能なら面積が 3 の倍数であることを要求する
+  have ⟨k, h_div3⟩ := tileableByLTromino_implies_card_thrice h_tromino_card h_tile
+  rw [h_area] at h_div3
+  -- h_div3 : x^n = 3 * k
+  have h3x : 3 ∣ x := by
+    have h_prime : Nat.Prime 3 := by norm_num
+    apply h_prime.dvd_of_dvd_pow
+    rw [h_div3]
+    apply dvd_mul_right
+  -- 同様の議論を y, z にも適用し、無限降下へ繋ぐのじゃ
+  sorry  -- todo: y, z にも同様の議論を適用し、無限降下へ繋ぐ
 
 /-! ## セクション 5：次元別の特例 -/
 
@@ -180,16 +196,26 @@ theorem FLT_from_tromino_tiling {x y z : ℕ} (n : ℕ)
 theorem FLT_case_3_via_tromino {x y z : ℕ}
     (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
     (h_eq : x ^ 3 + y ^ 3 = z ^ 3) : False := by
-  -- 現段階では骨組みのみ。今後、特定の IsLTromino を構成して解候補が
-  -- Tileable を引き起こし、FLT_from_tromino_tiling と矛盾することを示す。
-  sorry
+  -- ここでは「トロミノ充填可能ならば 3 の倍数」という性質から、
+  -- FLT 解の各変数が無限に 3 で割り切れるという無限降下法を想定
+  have h3 : 3 ∣ x ∧ 3 ∣ y ∧ 3 ∣ z := by
+    -- 詳細は FLT_from_tromino_tiling の完成を待つ
+    sorry  -- todo: FLT_from_tromino_tiling を完成させ、n=3 の場合に各変数が 3 で割り切れることを証明し、
+  -- 無限降下により矛盾
+  sorry  -- todo: 無限降下の議論を完成させ、n=3 の場合に矛盾を導く
 
 /-- 一般版：n ≥ 3 の FLT -/
 theorem FLT_general_via_tromino {x y z : ℕ} (n : ℕ)
     (hn : 3 ≤ n)
     (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
     (h_eq : x ^ n + y ^ n = z ^ n) : False := by
-  sorry
+  -- 戦略：
+  -- 1. z^n - y^n = x^n は宇宙式 Body(n, z-y, y) の面積。
+  -- 2. この Body は彩色不変量の計算により「アンバランス」であり、L型トロミノでは充填不可。
+  -- 3. 一方で x^n という値は、完全 n 次元立方体という「充填可能でバランスされた」領域の面積を
+  --    宇宙式の構造（3+1=4）により、Body と等しくなければならない（はずだが矛盾する）。
+  -- 4. この幾何学的形状の不整合が、FLT の解の非存在に繋がるのじゃ。
+  sorry  -- todo: 上記の戦略に基づいて、一般 n ≥ 3 の場合に矛盾を導く
 
 end DkMath
 

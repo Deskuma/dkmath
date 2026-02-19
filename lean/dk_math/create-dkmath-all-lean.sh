@@ -31,3 +31,9 @@ find . -type f -name '*.lean' ! -path './.lake/*' ! -path './.github/*' ! -path 
 && echo "Created: $OUTPUT_FILE" \
 && ls -l "$OUTPUT_FILE" \
 && wc -l "$OUTPUT_FILE"
+
+# gzip the output file to save space
+gzip -f "$OUTPUT_FILE" \
+&& echo "Compressed: $OUTPUT_FILE.gz" \
+&& ls -l "$OUTPUT_FILE.gz" \
+&& zcat "$OUTPUT_FILE.gz" | wc -l
