@@ -114,19 +114,75 @@ lemma coprime_of_mul_eq_cube {u v w : ℕ} (hgcd : u.gcd v = 1) (h_eq : u * v = 
   have hu_ne0 : u ≠ 0 := hu0
   have hv_ne0 : v ≠ 0 := hv0
 
--- 補記：以下の補題群は複雑な素因数分解の論理が必要となるため、
-  -- ここでは単純化した sorry で進める。本来は Nat.factorization と
-  -- gcd の性質を完全に詰めることが必要。
-
   have hdiv_u : ∀ p : ℕ, 3 ∣ u.factorization p := fun p => by
-    -- gcd(u, v) = 1 より、各素数 p について min(uf, vf) = 0
-    -- u * v = w^3 より uf + vf = 3 * wf
-    -- したがって片側が 0 なら、他方が 3*wf となって 3 の倍数
-    sorry
+    -- gcd(u,v)=1 から factorization の inf が 0
+    have h_inf : u.factorization ⊓ v.factorization = 0 := by
+      have h := Nat.factorization_gcd hu_ne0 hv_ne0
+      rw [hgcd] at h
+      simpa using h.symm
+
+    -- よって各 p で min(uf,vf)=0
+    have hmin : (u.factorization ⊓ v.factorization) p = 0 := by
+      rw [h_inf]
+      rfl
+
+    have h_or : u.factorization p = 0 ∨ v.factorization p = 0 := by
+      simp only [Finsupp.inf_apply] at hmin
+      omega
+
+    -- さらに u*v=w^3 から uf+vf = 3*wf
+    have hsum : u.factorization p + v.factorization p = 3 * w.factorization p := by
+      have hmul_p :
+          (u * v).factorization p = u.factorization p + v.factorization p := by
+        simp [Nat.factorization_mul hu_ne0 hv_ne0]
+      have hpow_p :
+          (w ^ 3).factorization p = 3 * w.factorization p := by
+        simp [Nat.factorization_pow w 3]
+      calc u.factorization p + v.factorization p
+          = (u * v).factorization p := hmul_p.symm
+        _ = (w ^ 3).factorization p := by rw [h_eq]
+        _ = 3 * w.factorization p := hpow_p
+
+    -- 片側が 0 なら他方は 3 の倍数
+    cases h_or with
+    | inl hup0 =>
+        simp [hup0]
+    | inr hvp0 =>
+        refine ⟨w.factorization p, ?_⟩
+        omega
 
   have hdiv_v : ∀ p : ℕ, 3 ∣ v.factorization p := fun p => by
-    -- 対称的理由により
-    sorry
+    have h_inf : u.factorization ⊓ v.factorization = 0 := by
+      have h := Nat.factorization_gcd hu_ne0 hv_ne0
+      rw [hgcd] at h
+      simpa using h.symm
+
+    have hmin : (u.factorization ⊓ v.factorization) p = 0 := by
+      rw [h_inf]
+      rfl
+
+    have h_or : u.factorization p = 0 ∨ v.factorization p = 0 := by
+      simp only [Finsupp.inf_apply] at hmin
+      omega
+
+    have hsum : u.factorization p + v.factorization p = 3 * w.factorization p := by
+      have hmul_p :
+          (u * v).factorization p = u.factorization p + v.factorization p := by
+        simp [Nat.factorization_mul hu_ne0 hv_ne0]
+      have hpow_p :
+          (w ^ 3).factorization p = 3 * w.factorization p := by
+        simp [Nat.factorization_pow w 3]
+      calc u.factorization p + v.factorization p
+          = (u * v).factorization p := hmul_p.symm
+        _ = (w ^ 3).factorization p := by rw [h_eq]
+        _ = 3 * w.factorization p := hpow_p
+
+    cases h_or with
+    | inl hup0 =>
+        refine ⟨w.factorization p, ?_⟩
+        omega
+    | inr hvp0 =>
+        simp [hvp0]
 
   -- 立方根を構成
   let a : ℕ := u.factorization.support.prod (fun p => p ^ (u.factorization p / 3))
