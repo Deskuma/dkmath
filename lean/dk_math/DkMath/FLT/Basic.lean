@@ -591,52 +591,7 @@ theorem FLT_case_3 (x y z : ℕ) (hpos : 0 < x ∧ 0 < y ∧ 0 < z) (h_coprime :
     exact GN3_one_not_cube_use_FLT3 hpos.2.1 ⟨x, hx3⟩
 
   · -- case 2: gcd(u, GN 3 u y) = 3
-    -- 3 | u かつ 3 | GN。u = 3u', GN = 3G' と置いて (3u') * (3G') = x^3
-    -- → 9 u' G' = x^3 → 3 | x → x = 3x'
-    -- → 27 x'^3 = 9 u' G' → 3 u' G' = x'^3
-    -- gcd(u', G') を調べて case 1 へ還元、または縮小版 FLT へ
-    -- ここでは gcd(u,3)=3 なので 3 | u。u = 3^k * u0 (gcd(u0,3)=1) の形で降下
-    have h3_dvd_u : 3 ∣ u := by
-      have := Nat.gcd_dvd_left u (GN 3 u y)
-      rw [h3] at this; exact this
-    have h3_dvd_GN : 3 ∣ GN 3 u y := by
-      have := Nat.gcd_dvd_right u (GN 3 u y)
-      rw [h3] at this; exact this
-    -- x^3 = u * GN、3 | u かつ 3 | GN → 9 | x^3 → 3 | x
-    obtain ⟨u', hu'⟩ := h3_dvd_u
-    obtain ⟨G', hG'⟩ := h3_dvd_GN
-    have h9_dvd_x3 : 9 ∣ x ^ 3 := by
-      -- x^3 = u * GN 3 u y = (3*u') * (3*G') = 9*(u'*G')
-      -- u は let u := z - y で定義されているため、直接 rw できない
-      -- u * GN 3 u y の値を計算して h_xn_val と組み合わせる
-      have hx3_eq : x ^ 3 = 9 * (u' * G') := by
-        -- u = 3u', GN 3 u y = 3G' より u * GN 3 u y = 9(u'*G')
-        have h_prod : u * GN 3 u y = 9 * (u' * G') := by
-          calc u * GN 3 u y = 3 * u' * GN 3 u y := by rw [hu']
-            _ = 3 * u' * (3 * G') := by rw [hG']
-            _ = 9 * (u' * G') := by ring
-        linarith [h_xn_val]
-      exact ⟨u' * G', hx3_eq⟩
-    -- 9 | x^3 → 3 | x（3 は素数、3^2 | x^3 → 3 | x）
-    have h3_dvd_x : 3 ∣ x := by
-      have hp : Nat.Prime 3 := Nat.prime_three
-      -- 3 | x^3 (9 | x^3 より)
-      have h3_dvd_x3 : 3 ∣ x ^ 3 := dvd_trans (by norm_num) h9_dvd_x3
-      exact hp.dvd_of_dvd_pow h3_dvd_x3
-    -- x = 3x'
-    obtain ⟨x', hx'⟩ := h3_dvd_x
-    -- x^3 = 27 x'^3 、u * GN = 9 u' G' → 27 x'^3 = 9 u' G' → 3 x'^3 = u' G'
-    have h_red : 3 * x' ^ 3 = u' * G' := by
-      -- x^3 = 9*(u'*G') かつ x^3 = 27*x'^3 → 9*(u'*G') = 27*x'^3 → 3*x'^3 = u'*G'
-      have heq9 : x ^ 3 = 9 * (u' * G') := by
-        have h_prod : u * GN 3 u y = 9 * (u' * G') := by
-          calc u * GN 3 u y = 3 * u' * GN 3 u y := by rw [hu']
-            _ = 3 * u' * (3 * G') := by rw [hG']
-            _ = 9 * (u' * G') := by ring
-        linarith [h_xn_val]
-      have hx3_cube : x ^ 3 = 27 * x' ^ 3 := by rw [hx']; ring
-      linarith
-    sorry  -- todo: ここは gcd(u', G') を調べて場合分けし、u' と G' のどちらかが 1 であることを示す必要がある。そうすれば case 1 に還元できる。
+    exact gcd_three_case_contra_template x u y h_xn_val h3
 
 /-- Fermat's Last Theorem (FLT)
 Cosmic Formula を用いた新しい証明
@@ -836,7 +791,7 @@ theorem FLT_of_coprime
 
     · -- case 2: gcd(u, GN3)=3
       -- 3 を除いた互いに素部分で case 1 に還元
-      sorry  -- todo: ここは gcd(u, GN3)=3 の場合の矛盾を導く部分。u と GN3 を 3 で割って、互いに素な部分を case 1 に還元する必要がある。
+      exact gcd_three_case_contra_template x u y h_x3_val h3
 
   · -- n > 3 の場合
     -- Zsigmondy 原始素因子を使った証明（後々実装）

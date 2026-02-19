@@ -124,6 +124,16 @@ lemma GN_zmod_ne_zero_of_dvd_x
   -- まとめ
   simpa [hchoose] using (mul_ne_zero hd0 hpow)
 
+/-- `n = 3` の `gcd(u, GN 3 u y) = 3` 分岐を処理するための共通補題テンプレート。
+
+`FLT_case_3` と `FLT_of_coprime` の双方から呼べる形で切り出しておき、
+実証明はここに一元化する。 -/
+lemma gcd_three_case_contra_template
+    (x u y : ℕ)
+    (h_x3 : x ^ 3 = u * GN 3 u y)
+    (h_gcd3 : u.gcd (GN 3 u y) = 3) : False := by
+  sorry
+
 /-- 指数整合の破綻（一般版）：
 `x^d = u*G` で `p ∤ G` なのに `d ∤ v_p(u)` なら矛盾。 -/
 lemma exponent_alignment_failure_of_val_not_dvd
