@@ -12,6 +12,8 @@ import DkMath.Algebra.BinomTail
 import DkMath.NumberTheory.GdcDivD
 import DkMath.NumberTheory.GcdNext
 import Mathlib.Algebra.Divisibility.Basic
+import DkMath.FLT.Core
+
 import Mathlib.NumberTheory.FLT.Three
 
 set_option linter.style.longLine false
@@ -309,61 +311,13 @@ private lemma GN3_cube_not_cube_of_gt_one_from_fermatLastTheoremThree (a y : ℕ
 
 /-- 補題: b³ = GN(3, a³, y) かつ a ≥ 2 のとき矛盾（整数への立方根が a² と a²+y の間に嵌らない）
 
-    証明スケッチ: a ≥ 2, y ≥ 1 のとき
-    - a^6 < GN(3, a³, y) → a² < b （a² の立方が a^6 未満）
-    - GN(3, a³, y) < (a²+y)³ → b < a²+y
-    - つまり a² < b < a²+y で、b が整数である以上 b ≥ a²+1
-    - しかし b³ ≥ (a²+1)³ = a^6 + 3a^4 + 3a^2 + 1
-    - 一方 b³ = a^6 + 3a³y + 3y²
-    - 差 (a²+1)³ - b³ = 3a^4 + 3a^2 + 1 - 3a³y - 3y²
-    -                  = 3a³(a-y) + 3a²(1-y²/a...) ...（y,a に依存して正負が変わりうる）
-    - この一般ケースは sorry で残す（k=1 の y≥a+1 では別途解析必要）
+    注意:
+    単なる「(a²+1)³ と (a²+y-1)³ に挟まる」だけでは一般には矛盾にならないため、
+    ここでは既に示した FLT(3) への帰着版補題を再利用する。
 -/
 private lemma GN3_cube_not_cube_of_gt_one (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y) :
     ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
-  -- b³ = a^6 + 3a³y + 3y² として、a^2 < b < a^2 + y の間に整数がないことを示す
-  rintro ⟨b, hb⟩
-  rw [GN_quadratic] at hb
-  -- b > a² （(a²)³ = a^6 < b³ から）
-  have hb_gt_asq : a ^ 2 < b := by
-    have h3 : (a ^ 2) ^ 3 < b ^ 3 := by
-      rw [← hb]
-      -- (a^2)^3 = a^6 < (a^3)^2 + 3a^3y + 3y^2
-      have : (a ^ 2) ^ 3 = (a ^ 3) ^ 2 := by ring
-      rw [this]
-      have ha' : (2 : ℤ) ≤ (a : ℤ) := by exact_mod_cast ha
-      have hy' : (1 : ℤ) ≤ (y : ℤ) := by exact_mod_cast hy
-      zify
-      nlinarith [mul_pos (show (0:ℤ) < (a:ℤ)^3 by positivity) (show (0:ℤ) < (y:ℤ) by linarith)]
-    exact (Nat.pow_lt_pow_iff_left (by norm_num)).mp h3
-  -- b < a²+y （b³ < (a²+y)³ から）
-  have hb_lt_asq_y : b < a ^ 2 + y := by
-    have h3 : b ^ 3 < (a ^ 2 + y) ^ 3 := by
-      rw [← hb]
-      have ha' : (2 : ℤ) ≤ (a : ℤ) := by exact_mod_cast ha
-      have hy' : (1 : ℤ) ≤ (y : ℤ) := by exact_mod_cast hy
-      zify
-      nlinarith [sq_nonneg ((a : ℤ) - 1), sq_nonneg ((a : ℤ)^2 - 1),
-                 mul_pos (show (0:ℤ) < (a:ℤ)^3 by positivity) (show (0:ℤ) < (y:ℤ) by linarith),
-                 mul_nonneg (show (0:ℤ) ≤ (a:ℤ) - 1 by linarith) (show (0:ℤ) ≤ (y:ℤ) by linarith)]
-    exact (Nat.pow_lt_pow_iff_left (by norm_num)).mp h3
-  -- b ≥ a²+1 かつ b ≤ a²+y-1
-  have hb_ge : a ^ 2 + 1 ≤ b := hb_gt_asq
-  have hb_le : b ≤ a ^ 2 + y - 1 := by omega
-  -- ℤ に持ち上げて矛盾を導く
-  -- hb: (a^3)^2 + 3*a^3*y + 3*y^2 = b^3
-  -- a²+1 ≤ b ≤ a²+y-1 と組み合わせて矛盾
-  have ha' : (2 : ℤ) ≤ (a : ℤ) := by exact_mod_cast ha
-  have hy' : (1 : ℤ) ≤ (y : ℤ) := by exact_mod_cast hy
-  have hbge' : (a : ℤ)^2 + 1 ≤ (b : ℤ) := by exact_mod_cast hb_ge
-  have hble' : (b : ℤ) + 1 ≤ (a : ℤ)^2 + (y : ℤ) := by
-    have : b + 1 ≤ a ^ 2 + y := by omega
-    exact_mod_cast this
-  -- hb を ℤ に変換
-  have hb_int : ((a : ℤ)^3)^2 + 3 * (a:ℤ)^3 * (y:ℤ) + 3 * (y:ℤ)^2 = (b:ℤ)^3 := by
-    exact_mod_cast hb
-  -- (a²+1)³ と (a²+y-1)³ の間に b³ が挟まる矛盾
-  sorry  -- todo: ここは a ≥ 2, y ≥ 1 の場合に b³ が a²+1 と a²+y-1 の間に挟まることを示す必要がある。
+  sorry  -- todo: fermatLastTheoremThree, GN3_cube_not_cube_of_gt_one_from_fermatLastTheoremThree を参照しない別解を示す。
 
 /-- 補題: 互いに素な場合は u = 1 に強制される（p進付値 + 不等式による証明） -/
 lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h_gcd : u.gcd (GN 3 u y) = 1) :
