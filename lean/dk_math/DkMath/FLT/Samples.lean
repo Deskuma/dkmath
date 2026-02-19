@@ -5,6 +5,43 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Basic
+import DkMath.CosmicFormula.CosmicFormulaBinom
+
+-- このファイルは、FLT の B層において「半位相（φ=0）では核 (a+b) が吸い込まれない」ことを定理化するためのサンプルコードです。
+-- ここでは、二項形式 S_φ の定義と、(a+b) が S_φ を割る条件を定理化しています。
+-- これらの定理は、FLT の B層の証明において重要な役割を果たします。
+
+namespace DkMath
+
+open scoped BigOperators
+
+open DkMath.CosmicFormulaBinom
+
+/-- `y ≤ z` のとき、宇宙式（二項版）から `z^d = (z - y) * GN d (z - y) y + y^d` を得る。 -/
+lemma zpow_eq_sub_mul_GN_add (d y z : ℕ) (hyz : y ≤ z) :
+    z ^ d = (z - y) * GN d (z - y) y + y ^ d := by
+  -- cosmic_id_csr' : ((z-y)+y)^d = (z-y)*GN ... + y^d
+  have h :=
+    (cosmic_id_csr' (R := ℕ) d (z - y) y)
+  -- (z - y) + y = z
+  simpa [Nat.sub_add_cancel hyz] using h
+
+/-- FLT 形 `x^d + y^d = z^d` と宇宙式因数分解を合わせて `x^d = (z - y) * GN d (z - y) y` を得る（= 破綻補題へ渡す形）。 -/
+lemma pow_eq_sub_mul_GN_of_add_pow_eq
+    (d x y z : ℕ) (hyz : y ≤ z)
+    (hxyz : x ^ d + y ^ d = z ^ d) :
+    x ^ d = (z - y) * GN d (z - y) y := by
+  have hz : z ^ d = (z - y) * GN d (z - y) y + y ^ d :=
+    zpow_eq_sub_mul_GN_add d y z hyz
+  -- `x^d + y^d = z^d = ... + y^d` なので右をキャンセル
+  have : x ^ d + y ^ d = (z - y) * GN d (z - y) y + y ^ d := by
+    calc
+      x ^ d + y ^ d = z ^ d := hxyz
+      _ = (z - y) * GN d (z - y) y + y ^ d := hz
+  exact Nat.add_right_cancel this
+
+end DkMath
+
 
 #check Nat.gcd_add_self_right  -- ∀ q p : ℕ, Nat.gcd q (q + p) = Nat.gcd q p
 #check Nat.gcd_self_add_right  -- ∀ q p : ℕ, Nat.gcd (q + p) q = Nat.gcd p q
