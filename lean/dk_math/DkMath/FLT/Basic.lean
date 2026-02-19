@@ -591,7 +591,12 @@ theorem FLT_case_3 (x y z : ℕ) (hpos : 0 < x ∧ 0 < y ∧ 0 < z) (h_coprime :
     exact GN3_one_not_cube_use_FLT3 hpos.2.1 ⟨x, hx3⟩
 
   · -- case 2: gcd(u, GN 3 u y) = 3
-    exact gcd_three_case_contra_template x u y h_xn_val h3
+    exact gcd_three_case_contra_template x u y
+      (Nat.ne_of_gt hpos.1)
+      (Nat.ne_of_gt hu)
+      (Nat.ne_of_gt hpos.2.1)
+      h_xn_val
+      h3
 
 /-- Fermat's Last Theorem (FLT)
 Cosmic Formula を用いた新しい証明
@@ -791,7 +796,12 @@ theorem FLT_of_coprime
 
     · -- case 2: gcd(u, GN3)=3
       -- 3 を除いた互いに素部分で case 1 に還元
-      exact gcd_three_case_contra_template x u y h_x3_val h3
+      exact gcd_three_case_contra_template x u y
+        (Nat.ne_of_gt hpos_xyz.1)
+        (Nat.ne_of_gt hu)
+        (Nat.ne_of_gt hpos_xyz.2.1)
+        h_x3_val
+        h3
 
   · -- n > 3 の場合
     -- Zsigmondy 原始素因子を使った証明（後々実装）

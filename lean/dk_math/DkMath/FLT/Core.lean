@@ -8,6 +8,7 @@ import DkMath.Basic
 import DkMath.CosmicFormula.CosmicFormulaBinom
 import DkMath.CosmicFormula.Gap
 import DkMath.ABC.PadicValNat
+import Mathlib.NumberTheory.FLT.Three
 
 set_option linter.style.longLine false
 
@@ -130,9 +131,22 @@ lemma GN_zmod_ne_zero_of_dvd_x
 実証明はここに一元化する。 -/
 lemma gcd_three_case_contra_template
     (x u y : ℕ)
+    (hx0 : x ≠ 0) (hu0 : u ≠ 0) (hy0 : y ≠ 0)
     (h_x3 : x ^ 3 = u * GN 3 u y)
-    (h_gcd3 : u.gcd (GN 3 u y) = 3) : False := by
-  sorry
+    (_h_gcd3 : u.gcd (GN 3 u y) = 3) : False := by
+  have h_big : (u + y) ^ 3 = u * GN 3 u y + y ^ 3 := by
+    simpa [DkMath.CosmicFormulaBinom.BigN,
+      DkMath.CosmicFormulaBinom.BodyN,
+      DkMath.CosmicFormulaBinom.GapN] using
+      (DkMath.CosmicFormulaBinom.cosmic_id_csr (R := ℕ) (d := 3) (x := u) (u := y))
+  have h_flt : x ^ 3 + y ^ 3 = (u + y) ^ 3 := by
+    calc
+      x ^ 3 + y ^ 3 = u * GN 3 u y + y ^ 3 := by simp [h_x3]
+      _ = (u + y) ^ 3 := by simpa using h_big.symm
+  have _hu0 : u ≠ 0 := hu0
+  have huz0 : u + y ≠ 0 := by
+    omega
+  exact fermatLastTheoremThree x y (u + y) hx0 hy0 huz0 h_flt
 
 /-- 指数整合の破綻（一般版）：
 `x^d = u*G` で `p ∤ G` なのに `d ∤ v_p(u)` なら矛盾。 -/
