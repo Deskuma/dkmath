@@ -5,9 +5,9 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Basic
-import DkMath.CosmicFormula.CosmicFormulaBinom
 -- import Mathlib
 -- import Mathlib.NumberTheory.Padics.PadicVal.Basic
+import DkMath.CosmicFormula.CosmicFormulaBinom
 
 namespace DkMath
 
