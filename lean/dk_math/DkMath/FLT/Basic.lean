@@ -11,6 +11,7 @@ import DkMath.Algebra.DiffPow
 import DkMath.Algebra.BinomTail
 import DkMath.NumberTheory.GdcDivD
 import DkMath.NumberTheory.GcdNext
+import DkMath.NumberTheory.ZsigmondyCyclotomic
 import Mathlib.Algebra.Divisibility.Basic
 import DkMath.FLT.Core
 
@@ -74,7 +75,7 @@ lemma GN_quadratic (u y : ℕ) : GN 3 u y = u ^ 2 + 3 * u * y + 3 * y ^ 2 := by
   ring
 
 /-- 補題: $u=1$ の場合、$GN(3, 1, y) = 3y^2 + 3y + 1$ は $y > 0$ で立方数になり得ない -/
-lemma GN3_one_not_cube {y : ℕ} (hy : 0 < y) : ¬ ∃ x, x^3 = GN 3 1 y := by
+lemma GN3_one_not_cube_use_FLT3 {y : ℕ} (hy : 0 < y) : ¬ ∃ x, x^3 = GN 3 1 y := by
   rw [GN_quadratic]
   rintro ⟨x, hx⟩
   -- x^3 = 3y^2 + 3y + 1
@@ -281,7 +282,7 @@ private lemma a6_lt_GN3_cube (a y : ℕ) (ha : 1 ≤ a) (hy : 1 ≤ y) :
     を作ると、a ≥ 2, y ≥ 1 より各項は非零で、
     `fermatLastTheoremThree` に反する。
 -/
-private lemma GN3_cube_not_cube_of_gt_one_from_fermatLastTheoremThree (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y) :
+private lemma GN3_cube_not_cube_of_gt_one_use_FLT3 (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y) :
     ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
   rintro ⟨b, hb⟩
   have hy_pos : 0 < y := by omega
@@ -309,15 +310,88 @@ private lemma GN3_cube_not_cube_of_gt_one_from_fermatLastTheoremThree (a y : ℕ
     hz_pos.ne'
     hsum
 
-/-- 補題: b³ = GN(3, a³, y) かつ a ≥ 2 のとき矛盾（整数への立方根が a² と a²+y の間に嵌らない）
+/-- 補題: b³ = GN(3, a³, y) かつ a ≥ 2 のとき矛盾（FLT(3) を直接参照しない版）
 
-    注意:
-    単なる「(a²+1)³ と (a²+y-1)³ に挟まる」だけでは一般には矛盾にならないため、
-    ここでは既に示した FLT(3) への帰着版補題を再利用する。
+    方針:
+    `(a^3 + y)^3 - y^3` の原始素因子 `q`（指数 3）を Zsigmondy で取り、
+    `padicValNat q` の上下界を比較して矛盾を導く。
 -/
-private lemma GN3_cube_not_cube_of_gt_one (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y) :
+private lemma GN3_cube_not_cube_of_gt_one
+    (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y)
+    (hcop : Nat.Coprime a y) (h3a : ¬ 3 ∣ a) :
     ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
-  sorry  -- todo: fermatLastTheoremThree, GN3_cube_not_cube_of_gt_one_from_fermatLastTheoremThree を参照しない別解を示す。
+  rintro ⟨b, hb⟩
+  have hy_pos : 0 < y := by omega
+  let A : ℕ := a ^ 3 + y
+  let B : ℕ := y
+  have hAB_lt : B < A := by
+    dsimp [A, B]
+    have hapos : 0 < a ^ 3 := by positivity
+    omega
+  have hcop_pow : Nat.Coprime (a ^ 3) y := Nat.Coprime.pow_left 3 hcop
+  have hAB_coprime : Nat.Coprime A B := by
+    dsimp [A, B]
+    exact (Nat.coprime_add_self_left).2 hcop_pow
+  have hpnd : ¬ 3 ∣ A - B := by
+    have hpow : ¬ 3 ∣ a ^ 3 := by
+      intro h
+      exact h3a (Nat.Prime.dvd_of_dvd_pow Nat.prime_three h)
+    simpa [A, B, Nat.add_sub_cancel] using hpow
+  rcases DkMath.NumberTheory.GcdNext.exists_primitive_prime_factor_prime
+      (a := A) (b := B) (d := 3)
+      Nat.prime_three (by norm_num) hAB_lt hy_pos hAB_coprime hpnd with
+      ⟨q, hq_prime, hq_div, hq_ndiv⟩
+  have hval_ge : 1 ≤ padicValNat q (A ^ 3 - B ^ 3) := by
+    exact DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_ge_one
+      hAB_lt hy_pos (by norm_num) hq_prime hq_div
+  have hval_le : padicValNat q (A ^ 3 - B ^ 3) ≤ 1 := by
+    exact DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one
+      (a := A) (b := B) (d := 3) (q := q)
+      Nat.prime_three (by norm_num) hAB_lt hy_pos hAB_coprime hpnd hq_prime hq_div hq_ndiv
+  have hval_diff : padicValNat q (A ^ 3 - B ^ 3) = 1 := le_antisymm hval_le hval_ge
+  let N : ℕ := GN 3 (A - B) B
+  have hfactor : A ^ 3 - B ^ 3 = (A - B) * N := by
+    simpa [N] using
+      (DkMath.NumberTheory.GcdNext.pow_sub_pow_factor_cosmic_N
+        (a := A) (b := B) (d := 3) (by norm_num) hAB_lt)
+  have hGN_pos : 0 < GN 3 (a ^ 3) y := by
+    rw [GN_quadratic]
+    positivity
+  have hb_ne0 : b ≠ 0 := by
+    intro hb0
+    have : GN 3 (a ^ 3) y = 0 := by simpa [hb0] using hb
+    exact (Nat.ne_of_gt hGN_pos) this
+  have hN_ne : N ≠ 0 := by
+    have hN_eq : N = GN 3 (a ^ 3) y := by
+      simp [N, A, B, Nat.add_sub_cancel]
+    rw [hN_eq, hb]
+    exact pow_ne_zero 3 hb_ne0
+  have hpadic_factor :
+      padicValNat q (A ^ 3 - B ^ 3) = padicValNat q (A - B) + padicValNat q N := by
+    exact DkMath.NumberTheory.GcdNext.padicValNat_factorization
+      (a := A) (b := B) (d := 3) (q := q) (N := N)
+      (by norm_num) hAB_lt hq_prime hfactor hN_ne
+  have hpadic_eqN : padicValNat q (A ^ 3 - B ^ 3) = padicValNat q N := by
+    have hzero : padicValNat q (A - B) = 0 := padicValNat.eq_zero_of_not_dvd hq_ndiv
+    rw [hzero, zero_add] at hpadic_factor
+    exact hpadic_factor
+  have hval_N : padicValNat q N = 1 := by
+    rw [← hpadic_eqN]
+    exact hval_diff
+  have hN_eq_cube : N = b ^ 3 := by
+    calc
+      N = GN 3 (A - B) B := rfl
+      _ = GN 3 (a ^ 3) y := by simp [A, B, Nat.add_sub_cancel]
+      _ = b ^ 3 := hb
+  letI : Fact (Nat.Prime q) := ⟨hq_prime⟩
+  have hpow : padicValNat q (b ^ 3) = 3 * padicValNat q b := by
+    simpa using (padicValNat.pow (p := q) (a := b) 3 hb_ne0)
+  have hval_mul3 : 3 * padicValNat q b = 1 := by
+    calc
+      3 * padicValNat q b = padicValNat q (b ^ 3) := by simpa [hpow]
+      _ = padicValNat q N := by simpa [hN_eq_cube]
+      _ = 1 := hval_N
+  omega
 
 /-- 補題: 互いに素な場合は u = 1 に強制される（p進付値 + 不等式による証明） -/
 lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h_gcd : u.gcd (GN 3 u y) = 1) :
@@ -379,9 +453,53 @@ lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h
         omega
 
       -- Step 4: GN(3, a^3, y) = b^3 は a ≥ 2, y ≥ 1 の場合に矛盾
+      -- まず h_gcd から a と y の互いに素性・3 ∤ a を回収する
+      have h_gcd_a : (a ^ 3).gcd (GN 3 (a ^ 3) y) = 1 := by
+        simpa [ha] using h_gcd
+      have h_gcd_sum :
+          (a ^ 3).gcd (∑ x ∈ Finset.range 3, Nat.choose 3 (x + 1) * (a ^ 3) ^ x * y ^ (2 - x)) = 1 := by
+        simpa [GN] using h_gcd_a
+      have hcop_ay : Nat.Coprime a y := by
+        rw [Nat.coprime_iff_gcd_eq_one]
+        apply Nat.eq_one_of_dvd_one
+        have hdiv_left : a.gcd y ∣ a ^ 3 := by
+          exact dvd_trans (Nat.gcd_dvd_left a y) (dvd_pow_self a (by decide : 3 ≠ 0))
+        have hdiv_right_poly : a.gcd y ∣ (a ^ 3) ^ 2 + 3 * a ^ 3 * y + 3 * y ^ 2 := by
+          have hda : a.gcd y ∣ a := Nat.gcd_dvd_left a y
+          have hdy : a.gcd y ∣ y := Nat.gcd_dvd_right a y
+          have hda3 : a.gcd y ∣ a ^ 3 := dvd_trans hda (dvd_pow_self a (by decide : 3 ≠ 0))
+          have hterm1 : a.gcd y ∣ (a ^ 3) ^ 2 := by
+            exact dvd_trans hda3 (dvd_pow_self (a ^ 3) (by decide : 2 ≠ 0))
+          have hterm2 : a.gcd y ∣ 3 * a ^ 3 * y := by
+            simpa [mul_assoc, mul_left_comm, mul_comm] using
+              (dvd_mul_of_dvd_right hdy (3 * a ^ 3))
+          have hterm3 : a.gcd y ∣ 3 * y ^ 2 := by
+            exact dvd_mul_of_dvd_right (dvd_trans hdy (dvd_pow_self y (by decide : 2 ≠ 0))) 3
+          exact dvd_add (dvd_add hterm1 hterm2) hterm3
+        have hdiv_right : a.gcd y ∣ GN 3 (a ^ 3) y := by
+          rw [GN_quadratic]
+          simpa [pow_mul, mul_assoc, mul_left_comm, mul_comm] using hdiv_right_poly
+        have hdiv_gcd : a.gcd y ∣ (a ^ 3).gcd (GN 3 (a ^ 3) y) := Nat.dvd_gcd hdiv_left hdiv_right
+        have : a.gcd y ∣ 1 := by simpa [h_gcd_sum] using hdiv_gcd
+        exact this
+      have h3a : ¬ 3 ∣ a := by
+        intro h3
+        have h3_left : 3 ∣ a ^ 3 := dvd_trans h3 (dvd_pow_self a (by decide : 3 ≠ 0))
+        have h3_right_poly : 3 ∣ (a ^ 3) ^ 2 + 3 * a ^ 3 * y + 3 * y ^ 2 := by
+          have hterm1 : 3 ∣ (a ^ 3) ^ 2 := dvd_trans h3_left (dvd_pow_self (a ^ 3) (by decide : 2 ≠ 0))
+          have hterm2 : 3 ∣ 3 * a ^ 3 * y := by
+            simpa [mul_assoc] using (dvd_mul_of_dvd_left (dvd_refl 3) (a ^ 3 * y))
+          have hterm3 : 3 ∣ 3 * y ^ 2 := by exact dvd_mul_of_dvd_left (dvd_refl 3) (y ^ 2)
+          exact dvd_add (dvd_add hterm1 hterm2) hterm3
+        have h3_right : 3 ∣ GN 3 (a ^ 3) y := by
+          rw [GN_quadratic]
+          simpa [pow_mul, mul_assoc, mul_left_comm, mul_comm] using h3_right_poly
+        have h3_gcd : 3 ∣ (a ^ 3).gcd (GN 3 (a ^ 3) y) := Nat.dvd_gcd h3_left h3_right
+        have : 3 ∣ 1 := by simpa [h_gcd_sum] using h3_gcd
+        omega
       -- u = a^3 を GN の引数として使う
       rw [ha] at hb
-      exact GN3_cube_not_cube_of_gt_one a y ha2 hy_pos ⟨b, hb⟩
+      exact GN3_cube_not_cube_of_gt_one a y ha2 hy_pos hcop_ay h3a ⟨b, hb⟩
 
 /-- 補題: $d=3$ の場合、$x^3$ は $u^2$ で割り切れる（適切な条件の下で） -/
 lemma x3_div_u2 (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h_gcd : u.gcd (GN 3 u y) = 1) :
@@ -459,7 +577,7 @@ theorem FLT_case_3 (x y z : ℕ) (hpos : 0 < x ∧ 0 < y ∧ 0 < z) (h_coprime :
     have hu1 : u = 1 := u_eq_one_of_coprime_gcd x u y h_xn_val h1
     -- u = 1 のとき x^3 = GN 3 1 y
     have hx3 : x ^ 3 = GN 3 1 y := by rw [h_xn_val, hu1, one_mul]
-    exact GN3_one_not_cube hpos.2.1 ⟨x, hx3⟩
+    exact GN3_one_not_cube_use_FLT3 hpos.2.1 ⟨x, hx3⟩
 
   · -- case 2: gcd(u, GN 3 u y) = 3
     -- 3 | u かつ 3 | GN。u = 3u', GN = 3G' と置いて (3u') * (3G') = x^3
@@ -700,7 +818,7 @@ theorem FLT_of_coprime
         have hx3 : x ^ 3 = GN 3 1 y := by
           rw [h_x3_val, hu1_case]
           ring
-        exact GN3_one_not_cube hpos_xyz.2.1 ⟨x, hx3⟩
+        exact GN3_one_not_cube_use_FLT3 hpos_xyz.2.1 ⟨x, hx3⟩
       · -- u > 1 の場合
         have hu2_dvd_x3 : u ^ 2 ∣ x ^ 3 := x3_div_u2 x u y h_x3_val h1
         sorry  -- todo: ここは u > 1 かつ gcd(u, GN3)=1 のときの矛盾を導く部分。u^2 | x^3 であることを利用して、u と GN3 の構造をさらに分析し、最終的に矛盾を導く必要がある。
