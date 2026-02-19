@@ -274,13 +274,17 @@ private lemma a6_lt_GN3_cube (a y : ℕ) (ha : 1 ≤ a) (hy : 1 ≤ y) :
   zify [show 1 ≤ a from ha, show 1 ≤ y from hy]
   nlinarith [mul_pos (show (0 : ℤ) < a^3 by positivity) (show (0 : ℤ) < y by omega)]
 
-/-- 補題: b³ = GN(3, a³, y) かつ a ≥ 2 のとき矛盾（整数への立方根が a² と a²+y の間に嵌らない）
+/-- 補題（比較用）: b³ = GN(3, a³, y) かつ a ≥ 2 のとき矛盾（FLT(3) 直参照）
 
     証明スケッチ:
     GN 3 (a^3) y = b^3 から
       (a*b)^3 + y^3 = (a^3 + y)^3
     を作ると、a ≥ 2, y ≥ 1 より各項は非零で、
     `fermatLastTheoremThree` に反する。
+
+    注:
+    本ファイルの本線は後続の `GN3_cube_not_cube_of_gt_one`（非依存版）であり、
+    この補題は比較検証・回帰確認のために残している。
 -/
 private lemma GN3_cube_not_cube_of_gt_one_use_FLT3 (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y) :
     ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
@@ -315,6 +319,10 @@ private lemma GN3_cube_not_cube_of_gt_one_use_FLT3 (a y : ℕ) (ha : 2 ≤ a) (h
     方針:
     `(a^3 + y)^3 - y^3` の原始素因子 `q`（指数 3）を Zsigmondy で取り、
     `padicValNat q` の上下界を比較して矛盾を導く。
+
+    成果:
+    ここで矛盾の源を「立方差の原始素因子の付値」として明示できたため、
+    FLT(3) の black-box 参照なしで、どの素因子・どの指数整合が破綻するかを追跡できる。
 -/
 private lemma GN3_cube_not_cube_of_gt_one
     (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y)
@@ -363,7 +371,7 @@ private lemma GN3_cube_not_cube_of_gt_one
     exact (Nat.ne_of_gt hGN_pos) this
   have hN_ne : N ≠ 0 := by
     have hN_eq : N = GN 3 (a ^ 3) y := by
-      simp [N, A, B, Nat.add_sub_cancel]
+      simp [N, A, B]
     rw [hN_eq, hb]
     exact pow_ne_zero 3 hb_ne0
   have hpadic_factor :
@@ -381,15 +389,15 @@ private lemma GN3_cube_not_cube_of_gt_one
   have hN_eq_cube : N = b ^ 3 := by
     calc
       N = GN 3 (A - B) B := rfl
-      _ = GN 3 (a ^ 3) y := by simp [A, B, Nat.add_sub_cancel]
+      _ = GN 3 (a ^ 3) y := by simp [A, B]
       _ = b ^ 3 := hb
   letI : Fact (Nat.Prime q) := ⟨hq_prime⟩
   have hpow : padicValNat q (b ^ 3) = 3 * padicValNat q b := by
     simpa using (padicValNat.pow (p := q) (a := b) 3 hb_ne0)
   have hval_mul3 : 3 * padicValNat q b = 1 := by
     calc
-      3 * padicValNat q b = padicValNat q (b ^ 3) := by simpa [hpow]
-      _ = padicValNat q N := by simpa [hN_eq_cube]
+      3 * padicValNat q b = padicValNat q (b ^ 3) := by simp [hpow]
+      _ = padicValNat q N := by simp [hN_eq_cube]
       _ = 1 := hval_N
   omega
 
@@ -488,14 +496,17 @@ lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h
         have h3_right_poly : 3 ∣ (a ^ 3) ^ 2 + 3 * a ^ 3 * y + 3 * y ^ 2 := by
           have hterm1 : 3 ∣ (a ^ 3) ^ 2 := dvd_trans h3_left (dvd_pow_self (a ^ 3) (by decide : 2 ≠ 0))
           have hterm2 : 3 ∣ 3 * a ^ 3 * y := by
-            simpa [mul_assoc] using (dvd_mul_of_dvd_left (dvd_refl 3) (a ^ 3 * y))
+            rw [mul_assoc]
+            exact dvd_mul_of_dvd_left (dvd_refl 3) (a ^ 3 * y)
           have hterm3 : 3 ∣ 3 * y ^ 2 := by exact dvd_mul_of_dvd_left (dvd_refl 3) (y ^ 2)
           exact dvd_add (dvd_add hterm1 hterm2) hterm3
         have h3_right : 3 ∣ GN 3 (a ^ 3) y := by
           rw [GN_quadratic]
           simpa [pow_mul, mul_assoc, mul_left_comm, mul_comm] using h3_right_poly
         have h3_gcd : 3 ∣ (a ^ 3).gcd (GN 3 (a ^ 3) y) := Nat.dvd_gcd h3_left h3_right
-        have : 3 ∣ 1 := by simpa [h_gcd_sum] using h3_gcd
+        have : 3 ∣ 1 := by
+          have h3_gcd' := h3_gcd
+          simp [h_gcd_sum] at h3_gcd'
         omega
       -- u = a^3 を GN の引数として使う
       rw [ha] at hb
