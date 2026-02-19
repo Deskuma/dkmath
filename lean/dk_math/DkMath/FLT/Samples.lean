@@ -40,8 +40,39 @@ lemma pow_eq_sub_mul_GN_of_add_pow_eq
       _ = (z - y) * GN d (z - y) y + y ^ d := hz
   exact Nat.add_right_cancel this
 
+open scoped BigOperators
+
+/-- 「ZMod に限らず」: `x = 0` なら `GN` は先頭項 `choose d 1 * u^(d-1)` に潰れる。 -/
+lemma GN_eq_head_of_x_eq_zero
+    {R : Type _} [CommSemiring R]
+    (d : ℕ) (hd : 1 ≤ d) (u : R) :
+    GN (R := R) d (0 : R) u = (Nat.choose d 1 : R) * u ^ (d - 1) := by
+  cases d with
+  | zero =>
+      cases (Nat.not_succ_le_zero 0 hd)
+  | succ d =>
+      -- `range (succ d)` を先頭 k=0 と残りに分解
+      unfold GN
+      rw [Finset.sum_range_succ']
+      -- k=0 項だけ残り、k≥1 項は `0^(k+1)=0` で全部消える
+      simp
+
+/-- ZMod 版：`p ∣ x` なら `x ≡ 0 (mod p)` なので `GN` が先頭項に潰れる。 -/
+lemma GN_zmod_eq_head_of_dvd
+    (p d x u : ℕ) (_hp : Nat.Prime p) (hd : 1 ≤ d) (hx : p ∣ x) :
+    GN (R := ZMod p) d (x : ZMod p) (u : ZMod p)
+      = (Nat.choose d 1 : ZMod p) * (u : ZMod p) ^ (d - 1) := by
+  have hx0 : (x : ZMod p) = 0 := by
+    rcases hx with ⟨k, rfl⟩
+    -- (p*k : ZMod p) = (p:ZMod p) * k = 0
+    simp
+  -- x を 0 に潰して上の一般補題へ
+  simpa [hx0] using (GN_eq_head_of_x_eq_zero (R := ZMod p) d hd (u := (u : ZMod p)))
+
 end DkMath
 
+
+-- －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
 
 #check Nat.gcd_add_self_right  -- ∀ q p : ℕ, Nat.gcd q (q + p) = Nat.gcd q p
 #check Nat.gcd_self_add_right  -- ∀ q p : ℕ, Nat.gcd (q + p) q = Nat.gcd p q
