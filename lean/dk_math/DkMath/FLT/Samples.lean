@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Basic
 
+-- －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+
 #check Nat.gcd_add_self_right  -- ∀ q p : ℕ, Nat.gcd q (q + p) = Nat.gcd q p
 #check Nat.gcd_self_add_right  -- ∀ q p : ℕ, Nat.gcd (q + p) q = Nat.gcd p q
 #check Nat.coprime_iff_gcd_eq_one  -- ∀ {m n : ℕ}, Nat.Coprime m n ↔ Nat.gcd m n = 1
