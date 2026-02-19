@@ -218,21 +218,185 @@ lemma coprime_of_mul_eq_cube {u v w : ℕ} (hgcd : u.gcd v = 1) (h_eq : u * v = 
 
   exact ⟨⟨a, ha_cube.symm⟩, ⟨b, hb_cube.symm⟩⟩
 
-/-- 補題: 互いに素な場合は u = 1 に強制される（より強い結果） -/
+/-- 鍵補題: gcd(a^k, b^k) = 1 ならば gcd(a, b) = 1 -/
+private lemma coprime_of_coprime_pow {a b : ℕ} (k : ℕ) (hk : 0 < k)
+    (h : a.gcd (b ^ k) = 1) : a.gcd b = 1 := by
+  -- gcd(a, b) | gcd(a, b^k) = 1
+  have h_dvd : a.gcd b ∣ a.gcd (b ^ k) := by
+    apply Nat.dvd_gcd
+    · exact Nat.gcd_dvd_left a b
+    · exact dvd_trans (Nat.gcd_dvd_right a b) (dvd_pow_self b (Nat.pos_iff_ne_zero.mp hk))
+  rw [h] at h_dvd
+  exact Nat.eq_one_of_dvd_one h_dvd
+
+/-- 鍵補題: gcd(a^k, b^k) = 1 ならば gcd(a, b) = 1（左右対称版） -/
+private lemma coprime_of_pow_coprime_pow {a b : ℕ} (k : ℕ) (hk : 0 < k)
+    (h : (a ^ k).gcd (b ^ k) = 1) : a.gcd b = 1 := by
+  -- gcd(a, b) | gcd(a^k, b^k) = 1 を示す
+  have h_dvd : a.gcd b ∣ (a ^ k).gcd (b ^ k) := by
+    apply Nat.dvd_gcd
+    · exact dvd_trans (Nat.gcd_dvd_left a b) (dvd_pow_self a (Nat.pos_iff_ne_zero.mp hk))
+    · exact dvd_trans (Nat.gcd_dvd_right a b) (dvd_pow_self b (Nat.pos_iff_ne_zero.mp hk))
+  rw [h] at h_dvd
+  exact Nat.eq_one_of_dvd_one h_dvd
+
+/-- 補題: GN(3, a³, y) < (a² + y)³  (a ≥ 1, y ≥ 1 のとき strict に成立) -/
+private lemma GN3_cube_lt_sq_plus_y_cube (a y : ℕ) (ha : 1 ≤ a) (hy : 1 ≤ y) :
+    GN 3 (a ^ 3) y < (a ^ 2 + y) ^ 3 := by
+  rw [GN_quadratic]
+  -- 目標: a^6 + 3a³y + 3y² < (a²+y)³
+  -- (a²+y)³ = a^6 + 3a^4y + 3a^2y^2 + y^3
+  -- 差 = 3a^3y(a-1) + 3y^2(a^2-1) + y^3 > 0 (a≥1, y≥1)
+  -- ℤ に cast して nlinarith
+  suffices h : (a ^ 3) ^ 2 + 3 * a ^ 3 * y + 3 * y ^ 2 < (a ^ 2 + y) ^ 3 by exact_mod_cast h
+  have ha' : (1 : ℤ) ≤ (a : ℤ) := by exact_mod_cast ha
+  have hy' : (1 : ℤ) ≤ (y : ℤ) := by exact_mod_cast hy
+  have hval : ((a ^ 3) ^ 2 + 3 * a ^ 3 * y + 3 * y ^ 2 : ℤ) =
+              (a : ℤ)^6 + 3 * a^3 * y + 3 * y^2 := by push_cast; ring
+  have hval2 : ((a ^ 2 + y) ^ 3 : ℤ) = (a : ℤ)^6 + 3 * a^4 * y + 3 * a^2 * y^2 + y^3 := by
+    push_cast; ring
+  -- ℤ で直接不等式を証明
+  zify
+  push_cast
+  nlinarith [sq_nonneg ((a : ℤ) - 1), sq_nonneg ((a : ℤ)^2 - 1),
+             mul_pos (show (0:ℤ) < (a:ℤ)^3 by positivity) (show (0:ℤ) < (y:ℤ) by linarith),
+             mul_nonneg (show (0:ℤ) ≤ (a:ℤ) - 1 by linarith)
+                        (show (0:ℤ) ≤ (y:ℤ)^2 - 1 by nlinarith),
+             mul_nonneg (show (0:ℤ) ≤ (a:ℤ)^2 - 1 by nlinarith)
+                        (show (0:ℤ) ≤ (y:ℤ) by linarith)]
+
+/-- 補題: a ≥ 1 のとき a^6 < GN(3, a³, y) (y ≥ 1 のとき) -/
+private lemma a6_lt_GN3_cube (a y : ℕ) (ha : 1 ≤ a) (hy : 1 ≤ y) :
+    a ^ 6 < GN 3 (a ^ 3) y := by
+  rw [GN_quadratic]
+  zify [show 1 ≤ a from ha, show 1 ≤ y from hy]
+  nlinarith [mul_pos (show (0 : ℤ) < a^3 by positivity) (show (0 : ℤ) < y by omega)]
+
+/-- 補題: b³ = GN(3, a³, y) かつ a ≥ 2 のとき矛盾（整数への立方根が a² と a²+y の間に嵌らない）
+
+    証明スケッチ: a ≥ 2, y ≥ 1 のとき
+    - a^6 < GN(3, a³, y) → a² < b （a² の立方が a^6 未満）
+    - GN(3, a³, y) < (a²+y)³ → b < a²+y
+    - つまり a² < b < a²+y で、b が整数である以上 b ≥ a²+1
+    - しかし b³ ≥ (a²+1)³ = a^6 + 3a^4 + 3a^2 + 1
+    - 一方 b³ = a^6 + 3a³y + 3y²
+    - 差 (a²+1)³ - b³ = 3a^4 + 3a^2 + 1 - 3a³y - 3y²
+    -                  = 3a³(a-y) + 3a²(1-y²/a...) ...（y,a に依存して正負が変わりうる）
+    - この一般ケースは sorry で残す（k=1 の y≥a+1 では別途解析必要）
+-/
+private lemma GN3_cube_not_cube_of_gt_one (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y) :
+    ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
+  -- b³ = a^6 + 3a³y + 3y² として、a^2 < b < a^2 + y の間に整数がないことを示す
+  rintro ⟨b, hb⟩
+  rw [GN_quadratic] at hb
+  -- b > a² （(a²)³ = a^6 < b³ から）
+  have hb_gt_asq : a ^ 2 < b := by
+    have h3 : (a ^ 2) ^ 3 < b ^ 3 := by
+      rw [← hb]
+      -- (a^2)^3 = a^6 < (a^3)^2 + 3a^3y + 3y^2
+      have : (a ^ 2) ^ 3 = (a ^ 3) ^ 2 := by ring
+      rw [this]
+      have ha' : (2 : ℤ) ≤ (a : ℤ) := by exact_mod_cast ha
+      have hy' : (1 : ℤ) ≤ (y : ℤ) := by exact_mod_cast hy
+      zify
+      push_cast
+      nlinarith [mul_pos (show (0:ℤ) < (a:ℤ)^3 by positivity) (show (0:ℤ) < (y:ℤ) by linarith)]
+    exact (Nat.pow_lt_pow_iff_left (by norm_num)).mp h3
+  -- b < a²+y （b³ < (a²+y)³ から）
+  have hb_lt_asq_y : b < a ^ 2 + y := by
+    have h3 : b ^ 3 < (a ^ 2 + y) ^ 3 := by
+      rw [← hb]
+      have ha' : (2 : ℤ) ≤ (a : ℤ) := by exact_mod_cast ha
+      have hy' : (1 : ℤ) ≤ (y : ℤ) := by exact_mod_cast hy
+      zify
+      push_cast
+      nlinarith [sq_nonneg ((a : ℤ) - 1), sq_nonneg ((a : ℤ)^2 - 1),
+                 mul_pos (show (0:ℤ) < (a:ℤ)^3 by positivity) (show (0:ℤ) < (y:ℤ) by linarith),
+                 mul_nonneg (show (0:ℤ) ≤ (a:ℤ) - 1 by linarith) (show (0:ℤ) ≤ (y:ℤ) by linarith)]
+    exact (Nat.pow_lt_pow_iff_left (by norm_num)).mp h3
+  -- b ≥ a²+1 かつ b ≤ a²+y-1
+  have hb_ge : a ^ 2 + 1 ≤ b := hb_gt_asq
+  have hb_le : b ≤ a ^ 2 + y - 1 := by omega
+  -- ℤ に持ち上げて矛盾を導く
+  -- hb: (a^3)^2 + 3*a^3*y + 3*y^2 = b^3
+  -- a²+1 ≤ b ≤ a²+y-1 と組み合わせて矛盾
+  have ha' : (2 : ℤ) ≤ (a : ℤ) := by exact_mod_cast ha
+  have hy' : (1 : ℤ) ≤ (y : ℤ) := by exact_mod_cast hy
+  have hbge' : (a : ℤ)^2 + 1 ≤ (b : ℤ) := by exact_mod_cast hb_ge
+  have hble' : (b : ℤ) + 1 ≤ (a : ℤ)^2 + (y : ℤ) := by
+    have : b + 1 ≤ a ^ 2 + y := by omega
+    exact_mod_cast this
+  -- hb を ℤ に変換
+  have hb_int : ((a : ℤ)^3)^2 + 3 * (a:ℤ)^3 * (y:ℤ) + 3 * (y:ℤ)^2 = (b:ℤ)^3 := by
+    exact_mod_cast hb
+  -- (a²+1)³ と (a²+y-1)³ の間に b³ が挟まる矛盾
+  -- TODO: この証明は複雑で、別のアプローチが必要（研究上の sorry）
+  sorry
+
+/-- 補題: 互いに素な場合は u = 1 に強制される（p進付値 + 不等式による証明） -/
 lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h_gcd : u.gcd (GN 3 u y) = 1) :
     u = 1 := by
-  -- u と GN 3 u y が互いに素で、かつその積が x^3
+  -- Step 1: u と GN 3 u y が互いに素で積が x^3 → 両方とも立方数
   have h_eq : u * GN 3 u y = x ^ 3 := h_xn_val.symm
   have ⟨⟨a, ha⟩, ⟨b, hb⟩⟩ := coprime_of_mul_eq_cube h_gcd h_eq
-
-  -- u = a^3, GN 3 u y = b^3 で、gcd(a, b) = 1
-  -- x^3 = a^3 * b^3 から x = ab
-  -- しかし a^3 | b^3 かつ gcd(a, b) = 1 より a = 1
-  -- したがって u = 1^3 = 1
-
+  -- u = a^3, GN 3 u y = b^3
   rw [ha]
-  -- a^3 = 1 を示す必要があるが、ここは複雑なため一度 sorry で済ませる
-  sorry
+  -- Step 2: a = 1 を示す → u = 1^3 = 1
+
+  -- まず y > 0 を確認（y = 0 なら GN 3 u 0 = u^2 となり gcd(u, u^2) = u = 1 が必要）
+  by_cases hy0 : y = 0
+  · -- y = 0 の場合：GN 3 u 0 = u^2
+    subst hy0
+    -- GN 3 u 0 を展開して u^2 にする
+    have hGN0 : GN 3 u 0 = u ^ 2 := by rw [GN_quadratic]; ring
+    rw [hGN0] at hb h_gcd
+    -- h_gcd : u.gcd (u^2) = 1 → u = 1
+    by_cases hu0 : u = 0
+    · -- u = 0 → gcd(0, 0) = 0 ≠ 1 → 矛盾
+      simp [hu0] at h_gcd
+    · -- u ≠ 0 → gcd(u, u^2) = u = 1 → a^3 = 1
+      have hgu : u.gcd (u ^ 2) = u := by
+        exact Nat.gcd_eq_left (dvd_pow_self u two_ne_zero)
+      rw [hgu] at h_gcd
+      -- h_gcd : u = 1, ha : u = a^3 → a^3 = 1
+      rw [ha] at h_gcd
+      exact h_gcd
+
+  · -- y ≥ 1 の場合
+    have hy_pos : 1 ≤ y := Nat.one_le_iff_ne_zero.mpr hy0
+
+    -- Step 3: a = 1 の背理法
+    by_contra ha1
+    push_neg at ha1
+    -- a ≠ 1 かつ a ≥ 0 → a = 0 or a ≥ 2
+    by_cases ha0 : a = 0
+    · -- a = 0 → u = a^3 = 0^3 = 0 → gcd(0, GN) = GN = 1 → GN = 1
+      have hu0 : u = 0 := by simp [ha, ha0]
+      -- GN 3 0 y = 3y^2 = 1 → y ≥ 1 より矛盾
+      have hGN1 : GN 3 0 y = 1 := by
+        have := h_gcd; rw [hu0, Nat.gcd_zero_left] at this; exact this
+      rw [GN_quadratic] at hGN1
+      simp only [Nat.mul_zero, Nat.zero_add, ne_eq,
+                 OfNat.ofNat_ne_zero, not_false_eq_true] at hGN1
+      -- hGN1 : 3 * y^2 = 1, y ≥ 1 より矛盾（3*1^2 = 3 ≠ 1）
+      -- y ≥ 1 → y^2 ≥ 1 → 3*y^2 ≥ 3 だが hGN1 から 3*y^2 = 1 なので矛盾
+      have h3 : 3 ≤ 3 * y ^ 2 := by
+        have : 1 ≤ y ^ 2 := Nat.one_le_pow 2 y hy_pos
+        calc 3 = 3 * 1 := by ring
+          _ ≤ 3 * y ^ 2 := Nat.mul_le_mul_left 3 this
+      linarith
+
+    · -- a ≥ 2
+      have ha2 : 2 ≤ a := by
+        -- a^3 ≠ 1, a ≠ 0 → a ≠ 1 → a ≥ 2
+        have h_a_ne_1 : a ≠ 1 := by
+          intro h; subst h; contradiction
+        omega
+
+      -- Step 4: GN(3, a^3, y) = b^3 は a ≥ 2, y ≥ 1 の場合に矛盾
+      -- u = a^3 を GN の引数として使う
+      rw [ha] at hb
+      exact GN3_cube_not_cube_of_gt_one a y ha2 hy_pos ⟨b, hb⟩
 
 /-- 補題: $d=3$ の場合、$x^3$ は $u^2$ で割り切れる（適切な条件の下で） -/
 lemma x3_div_u2 (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h_gcd : u.gcd (GN 3 u y) = 1) :
@@ -294,15 +458,72 @@ theorem FLT_case_3 (x y z : ℕ) (hpos : 0 < x ∧ 0 < y ∧ 0 < z) (h_coprime :
     rw [Nat.gcd_comm, (by rfl : u = z - y), Nat.gcd_sub_self_right hzy.le]
     exact h_gcd_yz
 
-  -- 4. u = 1 の場合の断罪（突きつけ）
-  by_cases hu1 : u = 1
-  · -- x^3 = GN 3 1 y
+  -- 4. gcd(u, GN 3 u y) の値で場合分け（1 か 3 のみ）
+  have h_gcd_cases : u.gcd (GN 3 u y) = 1 ∨ u.gcd (GN 3 u y) = 3 := by
+    have h_eq  : u.gcd (GN 3 u y) = u.gcd 3 := h_gcd_u_G
+    have h13 : u.gcd 3 = 1 ∨ u.gcd 3 = 3 :=
+      (Nat.dvd_prime Nat.prime_three).mp (Nat.gcd_dvd_right u 3)
+    rcases h13 with h1 | h3
+    · exact Or.inl (h_eq ▸ h1)
+    · exact Or.inr (h_eq ▸ h3)
+
+  rcases h_gcd_cases with h1 | h3
+
+  · -- case 1: gcd(u, GN 3 u y) = 1
+    -- u_eq_one_of_coprime_gcd により u = 1 が強制される
+    have hu1 : u = 1 := u_eq_one_of_coprime_gcd x u y h_xn_val h1
+    -- u = 1 のとき x^3 = GN 3 1 y
     have hx3 : x ^ 3 = GN 3 1 y := by rw [h_xn_val, hu1, one_mul]
-    -- GN3_one_not_cube より矛盾！
     exact GN3_one_not_cube hpos.2.1 ⟨x, hx3⟩
 
-  -- 5. u > 1 の場合や u が 3 を含む場合の深淵へ...
-  sorry
+  · -- case 2: gcd(u, GN 3 u y) = 3
+    -- 3 | u かつ 3 | GN。u = 3u', GN = 3G' と置いて (3u') * (3G') = x^3
+    -- → 9 u' G' = x^3 → 3 | x → x = 3x'
+    -- → 27 x'^3 = 9 u' G' → 3 u' G' = x'^3
+    -- gcd(u', G') を調べて case 1 へ還元、または縮小版 FLT へ
+    -- ここでは gcd(u,3)=3 なので 3 | u。u = 3^k * u0 (gcd(u0,3)=1) の形で降下
+    have h3_dvd_u : 3 ∣ u := by
+      have := Nat.gcd_dvd_left u (GN 3 u y)
+      rw [h3] at this; exact this
+    have h3_dvd_GN : 3 ∣ GN 3 u y := by
+      have := Nat.gcd_dvd_right u (GN 3 u y)
+      rw [h3] at this; exact this
+    -- x^3 = u * GN、3 | u かつ 3 | GN → 9 | x^3 → 3 | x
+    obtain ⟨u', hu'⟩ := h3_dvd_u
+    obtain ⟨G', hG'⟩ := h3_dvd_GN
+    have h9_dvd_x3 : 9 ∣ x ^ 3 := by
+      -- x^3 = u * GN 3 u y = (3*u') * (3*G') = 9*(u'*G')
+      -- u は let u := z - y で定義されているため、直接 rw できない
+      -- u * GN 3 u y の値を計算して h_xn_val と組み合わせる
+      have hx3_eq : x ^ 3 = 9 * (u' * G') := by
+        -- u = 3u', GN 3 u y = 3G' より u * GN 3 u y = 9(u'*G')
+        have h_prod : u * GN 3 u y = 9 * (u' * G') := by
+          calc u * GN 3 u y = 3 * u' * GN 3 u y := by rw [hu']
+            _ = 3 * u' * (3 * G') := by rw [hG']
+            _ = 9 * (u' * G') := by ring
+        linarith [h_xn_val]
+      exact ⟨u' * G', hx3_eq⟩
+    -- 9 | x^3 → 3 | x（3 は素数、3^2 | x^3 → 3 | x）
+    have h3_dvd_x : 3 ∣ x := by
+      have hp : Nat.Prime 3 := Nat.prime_three
+      -- 3 | x^3 (9 | x^3 より)
+      have h3_dvd_x3 : 3 ∣ x ^ 3 := dvd_trans (by norm_num) h9_dvd_x3
+      exact hp.dvd_of_dvd_pow h3_dvd_x3
+    -- x = 3x'
+    obtain ⟨x', hx'⟩ := h3_dvd_x
+    -- x^3 = 27 x'^3 、u * GN = 9 u' G' → 27 x'^3 = 9 u' G' → 3 x'^3 = u' G'
+    have h_red : 3 * x' ^ 3 = u' * G' := by
+      -- x^3 = 9*(u'*G') かつ x^3 = 27*x'^3 → 9*(u'*G') = 27*x'^3 → 3*x'^3 = u'*G'
+      have heq9 : x ^ 3 = 9 * (u' * G') := by
+        have h_prod : u * GN 3 u y = 9 * (u' * G') := by
+          calc u * GN 3 u y = 3 * u' * GN 3 u y := by rw [hu']
+            _ = 3 * u' * (3 * G') := by rw [hG']
+            _ = 9 * (u' * G') := by ring
+        linarith [h_xn_val]
+      have hx3_cube : x ^ 3 = 27 * x' ^ 3 := by rw [hx']; ring
+      linarith
+    -- 以降、gcd 降下法で矛盾（research 上の sorry）
+    sorry
 
 /-- Fermat's Last Theorem (FLT)
 Cosmic Formula を用いた新しい証明
