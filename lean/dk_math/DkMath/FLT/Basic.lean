@@ -327,8 +327,7 @@ private lemma GN3_cube_not_cube_of_gt_one (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤
   have hb_int : ((a : ℤ)^3)^2 + 3 * (a:ℤ)^3 * (y:ℤ) + 3 * (y:ℤ)^2 = (b:ℤ)^3 := by
     exact_mod_cast hb
   -- (a²+1)³ と (a²+y-1)³ の間に b³ が挟まる矛盾
-  -- TODO: この証明は複雑で、別のアプローチが必要（研究上の sorry）
-  sorry
+  sorry  -- todo: ここは a ≥ 2, y ≥ 1 の場合に b³ が a²+1 と a²+y-1 の間に挟まることを示す必要がある。
 
 /-- 補題: 互いに素な場合は u = 1 に強制される（p進付値 + 不等式による証明） -/
 lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h_gcd : u.gcd (GN 3 u y) = 1) :
@@ -518,8 +517,7 @@ theorem FLT_case_3 (x y z : ℕ) (hpos : 0 < x ∧ 0 < y ∧ 0 < z) (h_coprime :
         linarith [h_xn_val]
       have hx3_cube : x ^ 3 = 27 * x' ^ 3 := by rw [hx']; ring
       linarith
-    -- 以降、gcd 降下法で矛盾（research 上の sorry）
-    sorry
+    sorry  -- todo: ここは gcd(u', G') を調べて場合分けし、u' と G' のどちらかが 1 であることを示す必要がある。そうすれば case 1 に還元できる。
 
 /-- Fermat's Last Theorem (FLT)
 Cosmic Formula を用いた新しい証明
@@ -715,15 +713,15 @@ theorem FLT_of_coprime
         exact GN3_one_not_cube hpos_xyz.2.1 ⟨x, hx3⟩
       · -- u > 1 の場合
         have hu2_dvd_x3 : u ^ 2 ∣ x ^ 3 := x3_div_u2 x u y h_x3_val h1
-        sorry
+        sorry  -- todo: ここは u > 1 かつ gcd(u, GN3)=1 のときの矛盾を導く部分。u^2 | x^3 であることを利用して、u と GN3 の構造をさらに分析し、最終的に矛盾を導く必要がある。
 
     · -- case 2: gcd(u, GN3)=3
       -- 3 を除いた互いに素部分で case 1 に還元
-      sorry
+      sorry  -- todo: ここは gcd(u, GN3)=3 の場合の矛盾を導く部分。u と GN3 を 3 で割って、互いに素な部分を case 1 に還元する必要がある。
 
   · -- n > 3 の場合
     -- Zsigmondy 原始素因子を使った証明（後々実装）
-    sorry
+    sorry  -- todo: n > 3 の場合の証明。Zsigmondy 原始素因子の存在を利用して、GN n u y が n 乗になることができないことを示し、矛盾を導く必要がある。
 
 
 
