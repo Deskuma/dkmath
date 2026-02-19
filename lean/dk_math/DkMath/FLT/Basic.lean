@@ -273,6 +273,42 @@ private lemma a6_lt_GN3_cube (a y : ℕ) (ha : 1 ≤ a) (hy : 1 ≤ y) :
 
 /-- 補題: b³ = GN(3, a³, y) かつ a ≥ 2 のとき矛盾（整数への立方根が a² と a²+y の間に嵌らない）
 
+    証明スケッチ:
+    GN 3 (a^3) y = b^3 から
+      (a*b)^3 + y^3 = (a^3 + y)^3
+    を作ると、a ≥ 2, y ≥ 1 より各項は非零で、
+    `fermatLastTheoremThree` に反する。
+-/
+private lemma GN3_cube_not_cube_of_gt_one_from_fermatLastTheoremThree (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y) :
+    ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
+  rintro ⟨b, hb⟩
+  have hy_pos : 0 < y := by omega
+  have hGN_pos : 0 < GN 3 (a ^ 3) y := by
+    rw [GN_quadratic]
+    positivity
+  have hb_pos : 0 < b := by
+    have hb3_pos : 0 < b ^ 3 := by exact hb ▸ hGN_pos
+    exact Nat.pos_of_ne_zero (by
+      intro hb0
+      simp [hb0] at hb3_pos)
+  have ha0 : a ≠ 0 := by omega
+  have hsum : (a * b) ^ 3 + y ^ 3 = (a ^ 3 + y) ^ 3 := by
+    calc
+      (a * b) ^ 3 + y ^ 3
+          = a ^ 3 * b ^ 3 + y ^ 3 := by ring
+      _ = a ^ 3 * GN 3 (a ^ 3) y + y ^ 3 := by rw [hb]
+      _ = a ^ 3 * ((a ^ 3) ^ 2 + 3 * (a ^ 3) * y + 3 * y ^ 2) + y ^ 3 := by
+            rw [GN_quadratic]
+      _ = (a ^ 3 + y) ^ 3 := by ring
+  have hz_pos : 0 < a ^ 3 + y := by positivity
+  exact fermatLastTheoremThree (a * b) y (a ^ 3 + y)
+    (Nat.mul_ne_zero ha0 hb_pos.ne')
+    hy_pos.ne'
+    hz_pos.ne'
+    hsum
+
+/-- 補題: b³ = GN(3, a³, y) かつ a ≥ 2 のとき矛盾（整数への立方根が a² と a²+y の間に嵌らない）
+
     証明スケッチ: a ≥ 2, y ≥ 1 のとき
     - a^6 < GN(3, a³, y) → a² < b （a² の立方が a^6 未満）
     - GN(3, a³, y) < (a²+y)³ → b < a²+y
