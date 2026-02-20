@@ -167,39 +167,38 @@ theorem pow_sub_pos {a b : ℕ} {p : ℕ}
 
 /-! ### 5. Phase 2: GcdAg 正規化の補助補題 -/
 
-/-- Ag-gcd と通常の gcd の関係（互いに素性の強化）
+/-- GcdAg による奇数コア部分の互いに素性
 
 **数学的内容:**
-gcd_Ag(a, b) = 1 ならば、本質的に a と b は「2進位相で互いに素」である。
-
-通常の gcd(a, b) = 1 は 2 の共有を許すが、
-gcd_Ag(a, b) = 1 は 2 の共有さえも無視した真の互いに素性を保証する。
+gcd_Ag(a, b) = 1 ならば、a と b の奇数コア部分（2の冪を因数分解した残り）は
+互いに素であることを示唆する。
 
 **応用:**
-padicValNat 評価で q ≠ 2 に限定する際、
-GcdAg による前処理で 2 進ノイズを除外できる。
+奇数コア部分同士が互いに素なら、p ≠ 2 なる素数 p で両者を割ることはできない。
+これにより padicValNat q(...) 評価で q ≠ 2 に限定できる。
+
+**現在の実装:**
+gcd_Ag(a, b) = 1 という条件を前提として、下位層（層B）での padicValNat 評価へ渡す。
+詳細な奇数コア分解は、層B補助補題で処理される。
 -/
-lemma gcdAg_eq_one_imp_coprime_after_factor2 {a b : ℕ}
+lemma gcdAg_eq_one_imp_coprime_odd_part {a b : ℕ}
     (h : gcd_Ag a b = 1) :
-    ∃ a' b' : ℕ, (∃ e_a e_b : ℕ, a = 2^e_a * a' ∧ b = 2^e_b * b') ∧
-                  Nat.Coprime a' b' ∧
-                  gcd_Ag a' b' = 1 := by
-  -- a = 2^e_a * a', b = 2^e_b * b' と因数分解できる
-  -- Ag-gcd は 2 進位相を落とすため、a' と b' は本質的に互いに素
-  refine ⟨a, b, ?_⟩
-  refine ⟨?_, ?_, h⟩
-  · exact ⟨0, 0, by simp⟩
-  · sorry   -- TODO: a, b を 2 の冪で割ることで a', b' を定義し、互いに素性と gcd_Ag = 1 を示す
+    ∀ p : ℕ, Nat.Prime p → p ≠ 2 → ¬(p ∣ a ∧ p ∣ b) := by
+  -- gcd_Ag(a, b) = 1 は gcd(a/2, b/2) = 1 を意味する
+  -- p ≠ 2 なる素数で両者を割ることはできない（∵ 互除法の性質）
+  intro p hp hp_ne_two
+  -- これは層B補助補題での利用を想定したスタブ
+  sorry
 
-/-- GcdAg による正規化で互いに素条件が保持される
+/-! ### 5b. Phase 2/Phase 3 統合：GcdAg正規化と PetalDetect φビット構造
 
-通常の gcd ではなく gcd_Ag で互いに素を判定する場合の補助定理。
+**次のセクションで:**
+1. GcdAg正規化による「本質的互いに素性」の確立
+2. PetalDetect φビット判定の活用
+3. 層Bへの前処理フックの準備
 -/
-lemma coprime_of_gcdAg_eq_one {a b : ℕ}
-    (h : gcd_Ag a b = 1) :
-    gcd_Ag a b = 1 := h
 
-/-! ### 5b. Phase 3: PetalDetect φビット構造の補助補題 -/
+/-! ### 5c. PetalDetect φビット構造の補助補題 -/
 
 /-- φビット形式での x の表現（差の冪を S0/S1 の和として見る）
 
@@ -443,32 +442,21 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
     rw [heq_nat]
 
   -- ========================================
-  -- 矛盾導出：層B 補助補題を使用
+  -- 層B統合フック：padicValNat 上界評価
   -- ========================================
-
-  -- Phase 2 + Phase 3 + 層B の統合で padicValNat q (a^d - b^d) ≤ 1 を得る
-  -- 以下の補助補題が完成すれば、即座に矛盾が導出される：
   --
-  -- padicValNat_upper_bound_integrated :
-  --   GcdAg 正規化 + PetalDetect φビット を前提して
-  --   padicValNat q (a^d - b^d) ≤ 1 を保証
+  -- 以下が完成すれば、矛盾導出が直ちに完了する形：
   --
-  -- 戦略：
-  -- 1. GcdAg 正規化（Phase 2）で 2進ノイズを除去 → q ≠ 2
-  -- 2. PetalDetect φビット（Phase 3）で (a+b) 核を位相限定 → 半位相では (a+b) 排除
-  -- 3. 層B で Cosmic Formula による G 構造解析 → padicValNat q (a^d - b^d) ≤ 1
+  -- 命題：padicValNat q (a^d - b^d) ≤ 1  [← 層B補助補題から導出]
+  -- 対比：padicValNat q (t^d) ≥ d ≥ 3   [← 上記 hvtd_ge から導出]
+  -- 矛盾：hvad_eq より同じ値だが 1 ≥ 3 で矛盾！
   --
-  -- 矛盾の導出：
-  -- もし padicValNat q (a^d - b^d) ≤ 1 ならば、hvad_eq より
-  --   padicValNat q (t^d) ≤ 1
-  -- しかし hvtd_eq と hvt_ge より
-  --   padicValNat q (t^d) = d * padicValNat q t ≥ d ≥ 3
-  -- したがって 1 ≥ 3 で矛盾！✅
+  -- 層B補助補題の実装は、以下の手順で完成する：
+  -- 1. h_Ag : gcd_Ag a b = 1 から q ≠ 2 を導出
+  -- 2. h_petal : Nat.Coprime (a+b) b から φビット位相確定
+  -- 3. Cosmic Formula + Lucas/Kummer で padicValNat 上界
+  -- 4. 結果 ≤ 1 を確立
   --
-  -- TODO（層B の本格実装待ち）:
-  -- padicValNat_d3_upper_bound（d=3 での具体計算）
-  -- padicValNat_general_upper_bound（一般化）
-  -- padicValNat_upper_bound_integrated（最終統合）
   sorry
 
 /-! ### 6. 統合準備：GcdAg 正規化と PetalDetect 検出器
@@ -524,6 +512,43 @@ Zsigmondy 定理の層A で原始素因子 q の存在が保証された後、
 
 **鍵となる補題セット（Layer B）:**
 -/
+
+/-- 層B統合フック：GcdAg + PetalDetect による前処理後の上界評価
+
+**型シグネチャ:**
+- hd : d は素数
+- hd_ge : d ≥ 3
+- hq : q は素数
+- hab_lt, hab_coprime : a > b で互いに素
+- h_Ag（Phase 2）: gcd_Ag a b = 1
+- h_petal（Phase 3）: Nat.Coprime (a+b) b
+
+**戻り値:**
+- C : 上界定数
+- 証明：padicValNat q (a^d - b^d) ≤ C
+- 証明：C ≤ 1
+
+**実装方針:**
+層B本体がまだ研究中のため、ここは「上界存在」を返すスタブ。
+層B補題（d=3での具体計算など）が完成すれば、ここで統合される。
+-/
+lemma padicValNat_upper_bound_layer_b_stub {a b d q : ℕ}
+    (hd : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hq : Nat.Prime q)
+    (hab_lt : b < a) (hab_coprime : Nat.Coprime a b)
+    (h_Ag : gcd_Ag a b = 1)
+    (h_petal : Nat.Coprime (a + b) b)
+    :
+    ∃ C : ℕ, padicValNat q (a^d - b^d) ≤ C ∧ C ≤ 1 := by
+  -- 層B本体の実装待ち
+  -- 暫定：C = 1 と置いて、存在命題として返す
+  -- 本実装では：
+  -- 1. h_Ag から q ≠ 2 を導出
+  -- 2. h_petal から φビット位相確定
+  -- 3. Cosmic Formula による因数分解
+  -- 4. Lucas/Kummer 二項係数評価
+  -- 5. 上界確定 padicValNat q (a^d - b^d) ≤ 1
+  exact ⟨1, by sorry, by decide⟩
 
 /-- d=3 での上界補題
 
