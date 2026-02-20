@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMath.Basic
 import DkMath.NumberTheory.ZsigmondyCyclotomic
 import DkMath.SilverRatio.GcdAg  -- Phase 2: 2進正規化
 import DkMath.FLT.PetalDetect  -- Phase 3: φビット構造・(a+b) 検出器
@@ -182,20 +183,18 @@ gcd_Ag(a, b) = 1 ならば、a と b の奇数コア部分（2の冪を因数分
 gcd_Ag(a, b) = 1 という条件を前提として、下位層（層B）での padicValNat 評価へ渡す。
 詳細な奇数コア分解は、層B補助補題で処理される。
 -/
-lemma gcdAg_eq_one_imp_coprime_odd_part {a b : ℕ}
+/- π_Ag 後の互いに素性の確保
+
+`gcd_Ag a b = 1` ⟹ π_Ag a と π_Ag b が互いに素 (基本的同値性)
+-/
+lemma gcdAg_eq_one_imp_coprime_pi_ag {a b : ℕ}
     (h : gcd_Ag a b = 1) :
-    ∀ p : ℕ, Nat.Prime p → p ≠ 2 → ¬(p ∣ a ∧ p ∣ b) := by
-  -- 注意：現在の π_Ag 定義 (n := n/2) では、
-  -- a=b=3 のとき gcd_Ag(3,3)=1 だが p=3 が両方を割る。
-  -- つまり元の命題は「そのままだと偽」。
-  --
-  -- 修正案：
-  -- 1. π_Ag を oddPart (2^v_2(n) を完全に除去) に定義し直す
-  -- 2. または命題を「π_Ag a, π_Ag b」について言う形に差し替える
-  --
-  -- 当面は層B分離から除外して、研究フェーズで完成させる
-  intro p hp hp_ne_two
-  sorry  -- TODO: 層B本体で π_Ag の正確な定義と共に完成させる
+    Nat.Coprime (π_Ag a) (π_Ag b) := by
+  -- gcd_Ag の定義を展開
+  unfold gcd_Ag at h
+  -- Coprime ↔ gcd = 1 の同値性
+  rw [Nat.coprime_iff_gcd_eq_one]
+  exact h
 
 /-! ### 5b. Phase 2/Phase 3 統合：GcdAg正規化と PetalDetect φビット構造
 
@@ -458,13 +457,15 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
   -- 対比：padicValNat q (t^d) ≥ d ≥ 3   [← 上記 hvtd_ge から導出]
   -- 矛盾：hvad_eq より同じ値だが 1 ≥ 3 で矛盾！
   --
-  -- 層B補助補題の実装は、以下の手順で完成する：
-  -- 1. h_Ag : gcd_Ag a b = 1 から q ≠ 2 を導出
-  -- 2. h_petal : Nat.Coprime (a+b) b から φビット位相確定
-  -- 3. Cosmic Formula + Lucas/Kummer で padicValNat 上界
-  -- 4. 結果 ≤ 1 を確立
-  --
-  sorry
+  -- 層B補助補題の実装により、以下が得られれば直ちに完成：
+  -- padicValNat q (a^d - b^d) ≤ 1
+
+  have hpadic_bound : padicValNat q (a^d - b^d) ≤ 1 := by
+    -- 層B補助補題（研究中）から導出予定
+    sorry
+
+  -- 矛盾：padicValNat q (a^d - b^d) ≤ 1 だが ≥ d ≥ 3
+  omega
 
 /-! ### 6. 統合準備：GcdAg 正規化と PetalDetect 検出器
 
@@ -598,7 +599,10 @@ lemma padicValNat_s0_le_one_of_prime_ne_apb {a b q : ℕ}
     -- 注：古い S0_not_sq_divible_of_coprime は反例により偽と判定されたため廃止。
     -- 新しい prime_dvd_S0_coprime_imp_not_dvd_apb により q ∤ (a+b) を導き、
     -- 層Bの詳細分析により q^2 ∤ S0 を確立する。
-    sorry  -- TODO: 層B統合：q | S0 ∧ gcd(a,b)=1 ⟹ q^2 ∤ S0 の導出
+
+    -- 層B補助：S0_nat の素因子が平方で割らない
+    -- 実装は層B補助補題で予定
+    sorry
 
   -- padicValNat が 1 以上 2 未満なら 1 以下（初等的）
   have hval_le : padicValNat q (S0_nat a b) < 2 := by
@@ -755,14 +759,15 @@ lemma padicValNat_upper_bound_layer_b_stub {a b d q : ℕ}
     exact ⟨1, hbound, by decide⟩
   · -- d > 3 の場合（研究中）
     -- 一般化への展開: Lucas/Kummer + Cosmic Formula
-    -- 当面は存在命題として C = 1 を返す
-    -- 完全実装は層B本体でなされる
+    -- 完全実装は層B本体でなされる（研究中）
     exact ⟨1, by sorry, by decide⟩
 
 /-- 一般的 d への上界補題
 
 より一般的な d に対する padicValNat 上界。
 現在は研究段階で、d=3, d=5 等の小さな素数 d で検証中。
+
+実装は GcdNextLayerB.lean で提供される。
 -/
 lemma padicValNat_general_upper_bound {a b d q : ℕ}
     (hd : 3 ≤ d) (hd_prime : Nat.Prime d)
@@ -774,7 +779,9 @@ lemma padicValNat_general_upper_bound {a b d q : ℕ}
     ∃ C : ℕ, padicValNat q (a^d - b^d) ≤ C := by
   -- C は d に依存する定数（多くの場合 C = 1）
   use 1
-  sorry  -- TODO: 一般化への道筋
+  -- 一般化への展開: Lucas/Kummer + Cosmic Formula
+  -- 実装は層B補助補題で予定
+  sorry
 
 /-! ### 8. 層B との最終統合：body_not_perfect_pow の証明完成
 
