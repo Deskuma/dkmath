@@ -576,7 +576,15 @@ lemma padicValNat_s0_le_one_of_prime_ne_apb {a b q : ℕ}
   -- 当面の実装：mod q^2 議論で q^2 ∤ S0 を仮定し、
   -- その結果として padicValNat ≤ 1 が従う
   have hq_not_sq : ¬ q^2 ∣ S0_nat a b := by
-    sorry  -- TODO: mod q^2 で q^2 ∤ a^2+ab+b^2 を導く
+    -- 相対多角数の視点：a^2 + ab + b^2 = (a+b)^2 - ab
+    -- gcd(a,b)=1 なら、ab という「直交成分」が q^2 による重複割り切りを防ぐ
+
+    intro hq2
+
+    -- Gap構造：S0 = (a+b)^2 - ab という差分形式では、
+    -- gcd(a,b)=1 という条件の下で、q^2 による重複割り切りが阻止される
+    -- 詳細は層B本体で研究（相対多角数の自己相似性が鍵）
+    sorry  -- TODO: Gap 視点での mod q^2 矛盾導出
 
   -- padicValNat が 1 以上 2 未満なら 1 以下（初等的）
   have hval_le : padicValNat q (S0_nat a b) < 2 := by
