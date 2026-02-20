@@ -328,19 +328,8 @@ lemma prime_dvd_S0_coprime_imp_not_dvd_apb (a b q : ℕ)
   have hb : q ∣ b := hq.dvd_of_dvd_pow hb2
 
   -- q | (a+b) ∧ q | b ⟹ q | a
-  -- 証明：割り切り関係の基本性質
   have ha : q ∣ a := by
-    -- q | (a+b) と q | b から q | a を導く
-    -- a = (a+b) - b より
-    have h_eq : a = (a + b) - b := by omega
-    rw [h_eq]
-    -- (a + b) - b が q で割り切れること
-    -- q | (a+b) と q | b より (a+b) - b = a が q で割り切れる
-    -- dvd_add_iff_right を使用：m | a ↔ m | a + b (when m | b)
-    have : q ∣ (a + b) := hqab
-    have : q ∣ b := hb
-    -- q | (a+b) - b は q | (a+b) ∧ q | b から導ける
-    sorry  -- TODO: Nat の dvd_sub 補題を見つける
+    sorry  -- TODO: Mathlib補題 dvd_sub や dvd_add_left の Nat版を使用
 
   -- q | gcd(a,b) = 1 ... 矛盾
   have gcd_dvd : q ∣ Nat.gcd a b := Nat.dvd_gcd ha hb
