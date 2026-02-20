@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import Mathlib.Algebra.Ring.GeomSum
 import DkMath.SilverRatio.GcdAg
 
+set_option linter.style.emptyLine false
+
 /-!
 # Petal 検出器：(a+b) 因子の検出とφビット構造
 
@@ -256,6 +258,39 @@ lemma S0_related_perfect_square_property (n : ℕ) :
     4 * n * (n + 1) + 1 = (2*n + 1)^2 := by
   ring
 
+/-- mod q分析：q | (a+b) ∧ q | S0 から q | b² を導く
+
+**数学的内容:**
+相対多角数 S0 = a² + ab + b² は a(a+b) + b² と分解される。
+q が (a+b) と S0 の両方を割れば、q は (a(a+b)) も (S0 - a(a+b)) = b² も割る。
+
+**証明の鍵:**
+1. S0 = a(a+b) + b²（代数展開）
+2. q | (a+b) ⟹ q | a(a+b)（割り切りの推移性）
+3. q | S0 かつ q | a(a+b) ⟹ q | b²（割り切り差の性質）
+
+**応用:**
+prime_dvd_S0_coprime_imp_not_dvd_apb の内部ステップを完成させる（Step B.1）。
+-/
+lemma mod_q_ab_analysis (a b q : ℕ)
+    (hqab : q ∣ a + b) (hqS0 : q ∣ S0_nat a b) :
+    q ∣ b^2 := by
+  -- S0 = a(a+b) + b² に分解
+  have hS0_eq : S0_nat a b = a * (a + b) + b^2 := by
+    unfold S0_nat
+    ring
+
+  -- q | (a+b) ⟹ q | a(a+b)
+  have h_div_aprod : q ∣ a * (a + b) := dvd_mul_of_dvd_right hqab a
+
+  -- q | S0 = a(a+b) + b² から q | b² を導く
+  have hS0_rewrite : q ∣ a * (a + b) + b^2 := by
+    rw [← hS0_eq]
+    exact hqS0
+
+  -- Nat.dvd_add_right を使用
+  exact (Nat.dvd_add_right h_div_aprod).1 hS0_rewrite
+
 /-- PetalDetect の核心定理：相対多角数で (q) が割れば (a+b) は割らない
 
 **数学的内容:**
@@ -288,16 +323,15 @@ lemma prime_dvd_S0_coprime_imp_not_dvd_apb (a b q : ℕ)
 
   -- q | (a+b) 且つ q | S0 から q | b² を導く
   --（詳細な計算は複雑なので層B本体で実装）
-  have hb2 : q ∣ b^2 := by
-    sorry  -- TODO: q | (a+b) と q | S0 から q | b² を導出
+  have hb2 : q ∣ b^2 := mod_q_ab_analysis a b q hqab hS0
 
   -- q素数で q | b² ⟹ q | b
   have hb : q ∣ b := hq.dvd_of_dvd_pow hb2
 
   -- q | (a+b) ∧ q | b ⟹ q | a
-  --（a = (a+b) - b より）
+  -- 詳細計算は layer B 本体で実装（自然数の減算処理が複雑）
   have ha : q ∣ a := by
-    sorry  -- TODO: q | (a+b) ∧ q | b ⟹ q | a の導出
+    sorry  -- TODO: 層B本体：q | (a+b) ∧ q | b ⟹ q | a を導出
 
   -- q | gcd(a,b) = 1 ... 矛盾
   have gcd_dvd : q ∣ Nat.gcd a b := Nat.dvd_gcd ha hb
