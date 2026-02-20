@@ -4,7 +4,9 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMath.Basic
 import Mathlib.Algebra.Ring.GeomSum
+import Mathlib.NumberTheory.Padics.PadicVal.Basic
 import DkMath.SilverRatio.GcdAg
 
 set_option linter.style.emptyLine false
@@ -376,21 +378,10 @@ lemma padicValNat_le_one_of_not_sq_dvd (a b q : ℕ)
     (hq_not_sq : ¬ q^2 ∣ S0_nat a b) :
     padicValNat q (S0_nat a b) ≤ 1 := by
   -- q | S0 より padicValNat q (S0) ≥ 1
-  -- 背理法：padicValNat q (S0) ≥ 2 と仮定して矛盾を導く
-  by_contra h
-  push_neg at h
-
-  -- padicValNat q (S0) ≥ 2 という仮定から q² | S0 を導く
-  -- これは前提 hq_not_sq と矛盾する
-  have h_contra : q^2 ∣ S0_nat a b := by
-    -- padicValNat q n ≥ 2 ⟹ q² | n
-    -- Mathlib の padicValNat 理論により
-    -- q | S0 という既知の事実と padicValNat ≥ 2 から
-    -- q² | S0 を導出（詳細な変換はMathlibの補題を活用）
-    sorry  -- TODO: padicValNat.pow_dvd_iff か同等の補題を活用
-
-  -- 矛盾
-  exact hq_not_sq h_contra
+  -- q² ∤ S0 より padicValNat q (S0) < 2
+  -- したがって padicValNat q (S0) ≤ 1
+  sorry  -- TODO: Mathlibのone_le_padicValNat_of_dvdと
+          --       padicValNat_dvd_iffを使用して実装
 
 /-- Zsigmondy統合補題：原始素因子と相対多角数の関係
 
