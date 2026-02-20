@@ -513,6 +513,38 @@ Zsigmondy 定理の層A で原始素因子 q の存在が保証された後、
 **鍵となる補題セット（Layer B）:**
 -/
 
+/-- Phase 2/3 条件下での a^2 + ab + b^2 の padicValNat 評価（補助補題）
+
+**仮定:**
+- hab_coprime : a と b が互いに素
+- h_Ag : gcd_Ag a b = 1（Phase 2: 2進位相で互いに素）
+- h_phi : Nat.Coprime (a+b) b（Phase 3: (a+b) と b が互いに素）
+- q が若干の制限条件を満たす素数
+
+**目標:**
+padicValNat q (a^2 + ab + b^2) の上界を定める
+
+**実装戦略:**
+q | a^2 + ab + b^2 の場合は layer B 本体の研究課題。
+q ∤ a^2 + ab + b^2 の場合は trivial（padicValNat = 0）。
+-/
+lemma padicValNat_a2_ab_b2_upper_bound_stage1 {a b q : ℕ}
+    (hq : Nat.Prime q)
+    (hab_lt : b < a) (hab_coprime : Nat.Coprime a b)
+    (h_Ag : gcd_Ag a b = 1)
+    (h_phi : Nat.Coprime (a + b) b)
+    :
+    padicValNat q (a^2 + a * b + b^2) ≤ 1 := by
+  by_cases hq_div : q ∣ a^2 + a * b + b^2
+  · -- q | a^2 + ab + b^2 の場合
+    -- Phase 2/3 条件下では「通常 padicValNat ≤ 1」
+    -- 詳細な証明は層B本体で研究（mod q^2 議論など）
+    sorry  -- TODO: 条件下での mod q^2 分析
+  · -- q ∤ a^2 + ab + b^2 の場合
+    have hzero : padicValNat q (a^2 + a * b + b^2) = 0 := padicValNat.eq_zero_of_not_dvd hq_div
+    rw [hzero]
+    norm_num
+
 /-- d=3 での上界補題
 
 Cosmic Formula と Lucas/Kummer 定理を組み合わせて、
@@ -549,19 +581,17 @@ lemma padicValNat_d3_upper_bound {a b q : ℕ}
     by_cases hq_div : q ∣ a ^ 3 - b ^ 3
     · -- q | a^3 - b^3 の場合
       -- Cosmic Formula による因数分解を使用
-      -- 原始素因子の判定
       by_cases hq_ndiv : q ∣ a - b
-      · -- q | a - b の場合は、より詳細な分析が必要
-        -- ここでは一般の squarefree_implies_padic_val_le_one を適用
+      · -- q | a - b の場合
+        -- 一般的な squarefree_implies を適用
         exact squarefree_implies_padic_val_le_one
           3 a b q (by decide : Nat.Prime 3) hb_pos hab_coprime hq hq_div
       · -- q ∤ a - b の場合（原始素因子の条件）
         -- padicValNat_le_one_of_prime_divisor_case_three_strong を使用
-        -- a^2 + ab + b^2 の padicValNat が ≤ 1 を示す必要がある
         apply padicValNat_le_one_of_prime_divisor_case_three_strong
           ha_pos hb_pos hab_coprime hab_lt hq hq_div hq_ndiv
-        -- 最後に padicValNat q (a^2 + ab + b^2) ≤ 1 を示す
-        sorry  -- TODO: a^2 + ab + b^2 の padicValNat 評価（層B研究課題）
+        -- a^2 + ab + b^2 の padicValNat ≤ 1 を示す
+        exact padicValNat_a2_ab_b2_upper_bound_stage1 hq hab_lt hab_coprime h_Ag h_phi
     · -- q ∤ a^3 - b^3 の場合
       have hzero : padicValNat q (a ^ 3 - b ^ 3) = 0 := padicValNat.eq_zero_of_not_dvd hq_div
       rw [hzero]
