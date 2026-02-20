@@ -286,8 +286,12 @@ lemma S0_not_sq_divible_of_coprime (a b q : ℕ) (ha : 0 < a) (hb : 0 < b)
   have hS0_eq : S0_nat a b = (a + b)^2 - a * b := S0_as_diff a b
 
   -- Step 1: q ≠ (a+b) から q ∤ (a+b) を導く
+  -- （この補題の文脈では、q は Zsigmondy の原始素因子であり、
+  --   q | a^d - b^d ∧ q ∤ a-b という条件がある）
   have hq_not_dvd_apb : ¬ q ∣ a + b := by
-    sorry  -- TODO: q素数 ∧ q ≠ a+b → q ∤ a+b
+    -- 当面、層B本体での詳細分析を待つ
+    -- q が (a+b) を割るなら、特別な因子が必要
+    sorry  -- TODO: Zsigmondy条件 + q | S0 + q ≠ a+b from q ∤ a+b
 
   -- Step 2: q ∤ (a+b) より gcd(q, a+b) = 1
   have hq_coprime_apb : Nat.Coprime q (a + b) := by
@@ -308,15 +312,10 @@ lemma S0_not_sq_divible_of_coprime (a b q : ℕ) (ha : 0 < a) (hb : 0 < b)
       have : q ∣ a + b := h_q ▸ Nat.gcd_dvd_right q (a + b)
       exact hq_not_dvd_apb this
 
-  -- Step 3: q² | S0 と gcd(a,b)=1, gcd(q, a+b)=1 から矛盾
-  -- q² | (a+b)² - ab
-  -- q と (a+b) が互いに素なので、(a+b)² と ab の差が q² で割り切れるのは
-  -- 特殊な因子構造を要求する
-  --
-  -- 相対多角数の性質：
-  -- gcd(a,b)=1 ⟹ 4*S0 + 1 が平方数という性質がある
-  -- これが q² による重複割り切りと矛盾するはず
+  -- Step 3: 矛盾導出
+  -- q² | (a+b)² - ab かつ gcd(q, a+b) = 1, gcd(a,b) = 1 から
+  -- 相対多角数の平方判定により q² ∤ (a+b)² - ab が導出される
 
-  sorry  -- TODO: 相対多角数の平方判定による矛盾（q²割り切り分析）
+  sorry  -- TODO: 相対多角数の平方判定による矛盾
 
 end DkMath.FLT.PetalDetect
