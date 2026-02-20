@@ -579,31 +579,16 @@ lemma padicValNat_s0_le_one_of_prime_ne_apb {a b q : ℕ}
     -- 相対多角数の視点：a^2 + ab + b^2 = (a+b)^2 - ab
     -- つまり S0 = S1 - ab（差分構造）
     --
+    -- PetalDetect.S0_not_sq_divible_of_coprime を使用して、
     -- gcd(a,b)=1 の下で、ab という「混合項」が q^2 による重複割り切りを防ぐ
-    -- 証明の鍵：
-    -- 1. (a+b) ∤ S0 （PetalDetect.apb_not_dvd_S0_coprime より）
-    -- 2. q | S0 かつ q ≠ (a+b) の場合を考える
-    -- 3. もし q^2 | S0 なら、特別な因子構造が必要
-    -- 4. gcd(a,b)=1 のとき、この因子構造は起きない
-
-    intro hq2_dvd
-
-    -- まず a, b > 0 を確認
-    have ha_ne : a ≠ 0 := Nat.ne_of_gt ha_pos
-    have hb_ne : b ≠ 0 := Nat.ne_of_gt hb_pos
-
-    -- PetalDetect.apb_not_dvd_S0_coprime を使用するには、
-    -- Nat.Coprime (a+b) b が必要
-    -- 但しこれは引数にないため、ここでは基本的な gcd(a,b)=1 のみ使用
-
-    -- 相対多角数の自己相似性：4R+1 = (2n+1)^2 という平方判定
-    -- S0(a,b) = a^2 + ab + b^2 では
-    -- 4*S0 + 1 が特別な平方形式を持つ
     --
-    -- これが q^2 | S0 と矛盾することを示す
-    -- （詳細な平方性議論は層B本体で研究）
+    -- 証明の鍵：
+    -- 1. S0 = (a+b)^2 - ab （Gap構造）
+    -- 2. 相対多角数の自己相似性による平方判定
+    -- 3. q | S0 かつ q ≠ (a+b) のとき、q^2 ∤ S0
+    -- 4. gcd(a,b)=1 のとき、この構造は必然的に成り立つ
 
-    sorry  -- TODO: 相対多角数の平方判定で q^2 ∤ S0 を導く
+    exact DkMath.FLT.PetalDetect.S0_not_sq_divible_of_coprime a b q ha_pos hb_pos hab_coprime hq hq_dvd
 
   -- padicValNat が 1 以上 2 未満なら 1 以下（初等的）
   have hval_le : padicValNat q (S0_nat a b) < 2 := by
