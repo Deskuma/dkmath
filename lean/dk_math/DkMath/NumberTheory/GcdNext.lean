@@ -308,7 +308,8 @@ lemma petal_phi_detection (a b : ℕ) (ha : 0 < a) (hb : 0 < b)
 4. Phase 4: 層B 精密評価の完成
 -/
 theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
-    (hd : 2 < d) (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime (x + u) u) :
+    (hd : 2 < d) (hd_prime : Nat.Prime d) (hx : 0 < x) (hu : 0 < u)
+    (hcop : Nat.Coprime (x + u) u) (hpnd : ¬ d ∣ x) :
     ¬ ∃ t : ℕ, 0 < t ∧ (x+u)^d - u^d = t^d := by
   intro ⟨t, ht, heq⟩
 
@@ -331,19 +332,17 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
   have hb_pos : 0 < b := hu
   have hab : Nat.Coprime a b := hcop
 
-  -- d が素数であることを確認
-  have hd_prime : Nat.Prime d := by
-    sorry -- TODO: d > 2 から d が素数であることを導くか、または仮定に追加
+  -- d が素数であることが仮定で与えられた
   have hd_ge : 3 ≤ d := by omega
 
   -- ¬ d ∣ a - b を示す（これは ¬ d ∣ x と同じ）
-  have hpnd : ¬ d ∣ a - b := by
+  have hpnd_ab : ¬ d ∣ a - b := by
     have : a - b = x := by omega
     rw [this]
-    sorry -- TODO: ¬ d ∣ x を示すか、仮定に追加
+    exact hpnd
 
   obtain ⟨q, hq_prime, hq_div_pow, hq_ndiv_diff⟩ :=
-    exists_primitive_prime_factor_prime hd_prime hd_ge hab_lt hb_pos hab hpnd
+    exists_primitive_prime_factor_prime hd_prime hd_ge hab_lt hb_pos hab hpnd_ab
 
   -- q ∣ a^d - b^d かつ q ∤ a - b = x
   -- body_eq より a^d - b^d = x * Sd なので、q ∣ x * Sd
