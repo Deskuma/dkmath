@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Create: Combine all dkmath lean files into one file and save it as './logs/__dkmath-all.lean.txt'
-
+ROOT_LOGS_DIR="../../logs"
 LOGS_DIR="./logs"
 OUTPUT_FILE="$LOGS_DIR/__dkmath-all.lean.txt"
 
@@ -37,3 +37,7 @@ gzip -f "$OUTPUT_FILE" \
 && echo "Compressed: $OUTPUT_FILE.gz" \
 && ls -l "$OUTPUT_FILE.gz" \
 && zcat "$OUTPUT_FILE.gz" | wc -l
+
+# copy the gzipped file to the logs directory (if not already there)
+cp "$OUTPUT_FILE.gz" "$ROOT_LOGS_DIR/"
+echo "Copy: $OUTPUT_FILE.gz to $ROOT_LOGS_DIR/"

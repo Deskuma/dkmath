@@ -66,7 +66,9 @@ git tag -d mark-summary-report && git tag mark-summary-report || true
 tar -czf "$ARCHIVE_NAME" -C "$SUMMARY_REPORT_DIR" .
 
 # large files for review
-rg -n "^(theorem|lemma|def)\s+" lean/dk_math/DkMath -S -A5 -B2 | tee "$SUMMARY_REPORT_DIR/___theorems.txt"
-rg -n "^(theorem|lemma|def)\s+" lean/dk_math/DkMath -S -A5 -B5 --heading | rg -n "^[^:]+:" | tee "$SUMMARY_REPORT_DIR/___theorems-with-filename.txt"
+rg -n "^(theorem|lemma|def)\s+" lean/dk_math/DkMath -S -A5 -B2                             > "$SUMMARY_REPORT_DIR/___theorems.txt"
+rg -n "^(theorem|lemma|def)\s+" lean/dk_math/DkMath -S -A5 -B5 --heading | rg -n "^[^:]+:" > "$SUMMARY_REPORT_DIR/___theorems-with-filename.txt"
+
+echo "Summary report data created and archived successfully: $ARCHIVE_NAME"
 
 exit 0
