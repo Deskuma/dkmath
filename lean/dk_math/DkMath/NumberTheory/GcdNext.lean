@@ -185,11 +185,17 @@ gcd_Ag(a, b) = 1 という条件を前提として、下位層（層B）での p
 lemma gcdAg_eq_one_imp_coprime_odd_part {a b : ℕ}
     (h : gcd_Ag a b = 1) :
     ∀ p : ℕ, Nat.Prime p → p ≠ 2 → ¬(p ∣ a ∧ p ∣ b) := by
-  -- gcd_Ag(a, b) = 1 は gcd(a/2, b/2) = 1 を意味する
-  -- p ≠ 2 なる素数で両者を割ることはできない（∵ 互除法の性質）
+  -- 注意：現在の π_Ag 定義 (n := n/2) では、
+  -- a=b=3 のとき gcd_Ag(3,3)=1 だが p=3 が両方を割る。
+  -- つまり元の命題は「そのままだと偽」。
+  --
+  -- 修正案：
+  -- 1. π_Ag を oddPart (2^v_2(n) を完全に除去) に定義し直す
+  -- 2. または命題を「π_Ag a, π_Ag b」について言う形に差し替える
+  --
+  -- 当面は層B分離から除外して、研究フェーズで完成させる
   intro p hp hp_ne_two
-  -- これは層B補助補題での利用を想定したスタブ
-  sorry
+  sorry  -- TODO: 層B本体で π_Ag の正確な定義と共に完成させる
 
 /-! ### 5b. Phase 2/Phase 3 統合：GcdAg正規化と PetalDetect φビット構造
 
@@ -589,7 +595,10 @@ lemma padicValNat_s0_le_one_of_prime_ne_apb {a b q : ℕ}
     -- 3. q | S0 かつ q ≠ (a+b) のとき、q^2 ∤ S0
     -- 4. gcd(a,b)=1 のとき、この構造は必然的に成り立つ
 
-    exact DkMath.FLT.PetalDetect.S0_not_sq_divible_of_coprime a b q ha_pos hb_pos hab_coprime hq hq_dvd hq_ne_apb
+    -- 注：古い S0_not_sq_divible_of_coprime は反例により偽と判定されたため廃止。
+    -- 新しい prime_dvd_S0_coprime_imp_not_dvd_apb により q ∤ (a+b) を導き、
+    -- 層Bの詳細分析により q^2 ∤ S0 を確立する。
+    sorry  -- TODO: 層B統合：q | S0 ∧ gcd(a,b)=1 ⟹ q^2 ∤ S0 の導出
 
   -- padicValNat が 1 以上 2 未満なら 1 以下（初等的）
   have hval_le : padicValNat q (S0_nat a b) < 2 := by
