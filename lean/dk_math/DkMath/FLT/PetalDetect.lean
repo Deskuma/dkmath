@@ -326,9 +326,19 @@ lemma prime_dvd_S0_coprime_imp_not_dvd_apb (a b q : ℕ)
   have hb : q ∣ b := hq.dvd_of_dvd_pow hb2
 
   -- q | (a+b) ∧ q | b ⟹ q | a
-  -- 詳細計算は layer B 本体で実装（自然数の減算処理が複雑）
+  -- 証明：割り切り関係の基本性質
   have ha : q ∣ a := by
-    sorry  -- TODO: 層B本体：q | (a+b) ∧ q | b ⟹ q | a を導出
+    -- q | (a+b) と q | b から q | a を導く
+    -- a = (a+b) - b より
+    have h_eq : a = (a + b) - b := by omega
+    rw [h_eq]
+    -- (a + b) - b が q で割り切れること
+    -- q | (a+b) と q | b より (a+b) - b = a が q で割り切れる
+    -- dvd_add_iff_right を使用：m | a ↔ m | a + b (when m | b)
+    have : q ∣ (a + b) := hqab
+    have : q ∣ b := hb
+    -- q | (a+b) - b は q | (a+b) ∧ q | b から導ける
+    sorry  -- TODO: Nat の dvd_sub 補題を見つける
 
   -- q | gcd(a,b) = 1 ... 矛盾
   have gcd_dvd : q ∣ Nat.gcd a b := Nat.dvd_gcd ha hb
@@ -368,6 +378,7 @@ lemma padicValNat_le_one_of_not_sq_dvd (a b q : ℕ)
   -- q | S0 より padicValNat q (S0) ≥ 1
   have h_ge_one : 1 ≤ padicValNat q (S0_nat a b) := by
     -- q | n ⟹ 1 ≤ padicValNat q n (Mathlib)
+    -- 正確なMathlib補題名：padicValNat.one_le_iff_dvd か padicValNat.pos_of_dvd など
     sorry  -- TODO: Mathlib補題: padicValNat の割り切り条件
 
   -- q² ∤ S0 より padicValNat q (S0) < 2
@@ -377,7 +388,7 @@ lemma padicValNat_le_one_of_not_sq_dvd (a b q : ℕ)
     push_neg at h
     -- padicValNat ≥ 2 ⟹ q² | S0_nat a b
     have : q^2 ∣ S0_nat a b := by
-      -- padicValNat q n ≥ k ⟹ q^k | n (Mathlib)
+      -- 正確なMathlib補題名：padicValNat.le_iff_pow_dvd か padicValNat.dvd_iff_le_padicValNat など
       sorry  -- TODO: Mathlib補題: padicValNat と冪の割り切り
     -- q² | S0_nat a b は前提と矛盾
     exact hq_not_sq this
