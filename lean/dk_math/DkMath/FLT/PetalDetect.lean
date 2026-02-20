@@ -279,15 +279,12 @@ lemma mod_q_ab_analysis (a b q : ℕ)
   have hS0_eq : S0_nat a b = a * (a + b) + b^2 := by
     unfold S0_nat
     ring
-
   -- q | (a+b) ⟹ q | a(a+b)
   have h_div_aprod : q ∣ a * (a + b) := dvd_mul_of_dvd_right hqab a
-
   -- q | S0 = a(a+b) + b² から q | b² を導く
   have hS0_rewrite : q ∣ a * (a + b) + b^2 := by
     rw [← hS0_eq]
     exact hqS0
-
   -- Nat.dvd_add_right を使用
   exact (Nat.dvd_add_right h_div_aprod).1 hS0_rewrite
 
@@ -388,26 +385,56 @@ lemma padicValNat_le_one_of_not_sq_dvd (a b q : ℕ)
   -- 1 ≤ padicValNat < 2 ⟹ padicValNat ≤ 1
   omega
 
-/-- [層B補助補題プレースホルダー]
+/-- Zsigmondy統合補題：原始素因子と相対多角数の関係
+
+**数学的内容:**
+d が奇素数で d > 2 のとき、q が a^d - b^d を割り a-b を割らないなら、
+q は相対多角数 S0(a,b) = a² + ab + b² を「制御」する。
+
+特に gcd(a,b)=1 のとき、q ∤ a+b。
+
+**証明の鍵:**
+1. q は a^d - b^d の「新しい」素因子（Zsigmondy）
+2. → Φ_d(a/b) が既約因子を与える
+3. → q は (a-b, a, b, ...) 等では割らない
+4. → 特に q ∤ a+b （d > 2）
+
+**応用:**
+この補題は層AのZsigmondy原始素因子とブリッジし、
+「d のどの素因子も相対多角数の平方判定を破壊できない」ことを示す。
 
 **実装計画:**
 1. mod q 分析補題：q | S0 ⟹ (a+b)² ≡ ab (mod q)  ✅ (mod_q_ab_analysis)
 2. padicValNat 上界補題：q² ∤ S0 ⟹ padicValNat q (S0) ≤ 1  ✅ (padicValNat_le_one_of_not_sq_dvd)
-3. Zsigmondy統合補題：q | a^d - b^d ∧ q ∤ a-b ⟹ q ∤ a+b  🚧 (次のステップ)
+3. Zsigmondy統合補題：q | a^d - b^d ∧ q ∤ a-b ⟹ q ∤ a+b  🚧 (本補題)
 
-これらは層B本体で詳細に実装される予定。
-
-**現在の位置付け:**
-- PetalDetect.lean § 1-6：相対多角数の φビット構造と差分核 ✅
-- PetalDetect.lean § 7：層B補助補題 (B.1, B.2 実装済み) 🚧
-- GcdNext.lean：Zsigmondy + GcdAg + PetalDetect 統合 ✅
-- 層B本体：Lucas/Kummer 理論による padicValNat 精密評価
-
-**ロードマップ:**
-Phase 1（Phase 2/3）: PetalDetect 検出器の整備 ✅
-Phase 4: 層B詳細補題の実装（B.1, B.2 ✅ → B.3 🚧）
-Phase 5: d=3 FLT 完全形式化 ⏳
+**注:**
+現在実装中のバージョンは「sorryプレースホルダー」。
+正確な証明は円分多項式の因子分解理論を要するが、
+Mathlib の Cyclotomic 補題により段階的に構築可能。
 -/
+lemma zsigmondy_not_dvd_apb (a b q : ℕ) (d : ℕ)
+    (ha : 0 < a) (hb : 0 < b)
+    (hab : Nat.Coprime a b)
+    (hd : Nat.Prime d) (hd_gt : 2 < d)
+    (hq : Nat.Prime q) (hq_dvd_pow : q ∣ a ^ d - b ^ d)
+    (hq_ndiv_diff : ¬ q ∣ a - b) :
+    ¬ q ∣ a + b := by
+  -- Zsigmondy原始素因子の性質：
+  -- q | a^d - b^d かつ q ∤ a-b ⟹ q は a^d - b^d の「新しい」素因子
+  --
+  -- 相対多角数との関係：
+  -- a² + ab + b² = (a+b)² - ab
+  --               = Φ_1(a/b)² - ab（に関連）
+  --
+  -- d > 2, d素数のとき：
+  -- q が a+b を割れば、d次円分多項式Φ_d(a/b)の因子分解に矛盾
+
+  intro hq_dvd_apb
+
+  -- 矛盾を導く（層B本体での詳細分析待ち）
+  sorry  -- TODO: 円分多項式 Φ_d の因子分解による Zsigmondy統合
+
 example : True := by trivial
 
 end DkMath.FLT.PetalDetect
