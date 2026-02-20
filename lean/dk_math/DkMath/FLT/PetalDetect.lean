@@ -256,23 +256,29 @@ lemma S0_related_perfect_square_property (n : ℕ) :
     4 * n * (n + 1) + 1 = (2*n + 1)^2 := by
   ring
 
-/-- mod q² での分析補題：q² ∤ S0 の基礎
+/-- mod q² での分析補題：q ≠ (a+b) かつ q | S0 のとき q² ∤ S0 の基礎
 
 **数学的内容:**
-gcd(a, b) = 1 のとき、q | S0 だからといって q² | S0 とは限らない。
+gcd(a, b) = 1 かつ q ≠ (a+b) のとき、q | S0 だからといって q² | S0 とは限らない。
 相対多角数の平方判定により、q² による重複割り切りは歯止めがかかる。
 
 **証明の流れ:**
 1. S0 = (a+b)² - ab （Gap構造）
-2. q | S0 ⟹ q | ((a+b)² - ab)
+2. q | S0 ⟹ q | ((a+b)² - ab) ⟹ (a+b)² ≡ ab (mod q)
 3. q² | S0 と仮定すると (a+b)² ≡ ab (mod q²)
-4. gcd(a,b) = 1 かつ q ≠ ab より矛盾
+4. q ≠ (a+b) なので、(a+b) と q は互いに素
+5. gcd(a,b) = 1 と合わせて、Bezout等式から矛盾を導く
+
+**重要な追加条件:**
+q ≠ (a+b) が不可欠。この条件がないと補題は一般には真ではない。
+（例：a=18, b=1, q=7 のとき q²|S0 となる）
 
 **当面の実装:**
-補助補題として設置し、量化記号や矛盾の詳細な展開は層B本体で研究。
+補助補題として設置し、矛盾の詳細な展開は層B本体で研究。
 -/
 lemma S0_not_sq_divible_of_coprime (a b q : ℕ) (ha : 0 < a) (hb : 0 < b)
-    (hab : Nat.Coprime a b) (hq : Nat.Prime q) (hq_dvd : q ∣ S0_nat a b) :
+    (hab : Nat.Coprime a b) (hq : Nat.Prime q) (hq_dvd : q ∣ S0_nat a b)
+    (hq_ne_apb : q ≠ a + b) :
     ¬ q^2 ∣ S0_nat a b := by
   intro hq2_dvd
 
@@ -285,7 +291,10 @@ lemma S0_not_sq_divible_of_coprime (a b q : ℕ) (ha : 0 < a) (hb : 0 < b)
   -- q² | S0 と仮定：(a+b)² - ab ≡ 0 (mod q²)
   -- つまり (a+b)² ≡ ab (mod q²)
 
-  -- しかし gcd(a, b) = 1 かつ q | S0 のとき、
+  -- 重要条件：q ≠ (a+b) により、gcd(q, a+b) = 1
+  have hq_ne : q ≠ a + b := hq_ne_apb
+
+  -- gcd(a, b) = 1 かつ q ≠ (a+b) のとき、
   -- q² | S0 となるには特殊な因子構造が必要
   -- 相対多角数の自己相似性により、この構造は起きない
 

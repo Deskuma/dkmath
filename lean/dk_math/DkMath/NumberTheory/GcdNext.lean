@@ -9,6 +9,7 @@ import DkMath.SilverRatio.GcdAg  -- Phase 2: 2進正規化
 import DkMath.FLT.PetalDetect  -- Phase 3: φビット構造・(a+b) 検出器
 
 set_option linter.style.emptyLine false
+set_option linter.style.longLine false
 
 namespace DkMath.NumberTheory.GcdNext
 
@@ -588,7 +589,7 @@ lemma padicValNat_s0_le_one_of_prime_ne_apb {a b q : ℕ}
     -- 3. q | S0 かつ q ≠ (a+b) のとき、q^2 ∤ S0
     -- 4. gcd(a,b)=1 のとき、この構造は必然的に成り立つ
 
-    exact DkMath.FLT.PetalDetect.S0_not_sq_divible_of_coprime a b q ha_pos hb_pos hab_coprime hq hq_dvd
+    exact DkMath.FLT.PetalDetect.S0_not_sq_divible_of_coprime a b q ha_pos hb_pos hab_coprime hq hq_dvd hq_ne_apb
 
   -- padicValNat が 1 以上 2 未満なら 1 以下（初等的）
   have hval_le : padicValNat q (S0_nat a b) < 2 := by
@@ -615,6 +616,8 @@ lemma padicValNat_s0_le_one_of_prime_ne_apb {a b q : ℕ}
     exact hq_not_sq this
 
   omega
+
+#print axioms padicValNat_s0_le_one_of_prime_ne_apb
 
 /-- Phase 2/3 条件下での a^2 + ab + b^2 の padicValNat 評価（統合補題）
 
@@ -651,6 +654,8 @@ lemma padicValNat_a2_ab_b2_upper_bound_stage1 {a b q : ℕ}
     · have : padicValNat q (S0_nat a b) = 0 := padicValNat.eq_zero_of_not_dvd hq_dvd
       rw [this]
       norm_num
+
+#print axioms padicValNat_a2_ab_b2_upper_bound_stage1
 
 /-- d=3 での上界補題
 
@@ -703,6 +708,8 @@ lemma padicValNat_d3_upper_bound {a b q : ℕ}
       have hzero : padicValNat q (a ^ 3 - b ^ 3) = 0 := padicValNat.eq_zero_of_not_dvd hq_div
       rw [hzero]
       norm_num
+
+#print axioms padicValNat_d3_upper_bound
 
 /-- 層B統合フック：GcdAg + PetalDetect による前処理後の上界評価
 
