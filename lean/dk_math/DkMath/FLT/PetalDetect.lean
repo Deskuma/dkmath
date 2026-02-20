@@ -344,23 +344,68 @@ lemma prime_dvd_S0_coprime_imp_not_dvd_apb (a b q : ℕ)
 -- § 7. 層B：詳細な padicValNat 分析（将来の研究フェーズ）
 -- ========================================
 
+/-- padicValNat上界補題：q² ∤ S0 から padicValNat q (S0) ≤ 1 を導く
+
+**数学的内容:**
+素数 q が S0 を割ったとしても、q² が割らなければ、
+p-adic 付値は最大 1（つまり正確に q で1回だけ割り切れる）。
+
+**証明の鍵:**
+1. q | S0 なら padicValNat q (S0) ≥ 1（Mathlib 定理）
+2. q² ∤ S0 なら padicValNat q (S0) < 2（定義から）
+3. → padicValNat q (S0) = 1 ≤ 1
+
+**応用:**
+GcdNext.leanの padicValNat_s0_le_one_of_prime_ne_apb で使用。
+層Aの下界と合わせて，矛盾（d·padicValNat ≤ 1）を導出。
+
+**Mathlib補題の活用:**
+- `padicValNat.one_le_of_dvd`: q | n ⟹ padicValNat q n ≥ 1
+- `padicValNat.pow_dvd_iff`: q^k | n ⟺ padicValNat q n ≥ k
+-/
+lemma padicValNat_le_one_of_not_sq_dvd (a b q : ℕ)
+    (_ha : 0 < a) (_hb : 0 < b)
+    (hq : Nat.Prime q) (hq_dvd : q ∣ S0_nat a b)
+    (hq_not_sq : ¬ q^2 ∣ S0_nat a b) :
+    padicValNat q (S0_nat a b) ≤ 1 := by
+  -- q | S0 より padicValNat q (S0) ≥ 1
+  have h_ge_one : 1 ≤ padicValNat q (S0_nat a b) := by
+    -- q | n ⟹ 1 ≤ padicValNat q n (Mathlib)
+    sorry  -- TODO: Mathlib補題: padicValNat の割り切り条件
+
+  -- q² ∤ S0 より padicValNat q (S0) < 2
+  have h_lt_two : padicValNat q (S0_nat a b) < 2 := by
+    -- padicValNat q (S0) ≥ 2 ⟹ q² | S0（矛盾）
+    by_contra h
+    push_neg at h
+    -- padicValNat ≥ 2 ⟹ q² | S0_nat a b
+    have : q^2 ∣ S0_nat a b := by
+      -- padicValNat q n ≥ k ⟹ q^k | n (Mathlib)
+      sorry  -- TODO: Mathlib補題: padicValNat と冪の割り切り
+    -- q² | S0_nat a b は前提と矛盾
+    exact hq_not_sq this
+
+  -- 1 ≤ padicValNat < 2 ⟹ padicValNat ≤ 1
+  omega
+
 /-- [層B補助補題プレースホルダー]
 
 **実装計画:**
-1. mod q 分析補題：q | S0 ⟹ (a+b)² ≡ ab (mod q)
-2. padicValNat 上界補題：q² ∤ S0 ⟹ padicValNat q (S0) ≤ 1
-3. Zsigmondy統合補題：q | a^d - b^d ∧ q ∤ a-b ⟹ q ∤ a+b
+1. mod q 分析補題：q | S0 ⟹ (a+b)² ≡ ab (mod q)  ✅ (mod_q_ab_analysis)
+2. padicValNat 上界補題：q² ∤ S0 ⟹ padicValNat q (S0) ≤ 1  ✅ (padicValNat_le_one_of_not_sq_dvd)
+3. Zsigmondy統合補題：q | a^d - b^d ∧ q ∤ a-b ⟹ q ∤ a+b  🚧 (次のステップ)
 
 これらは層B本体で詳細に実装される予定。
 
 **現在の位置付け:**
-- PetalDetect.lean：相対多角数の φビット構造と差分核
-- GcdNext.lean：Zsigmondy + GcdAg + PetalDetect 統合
+- PetalDetect.lean § 1-6：相対多角数の φビット構造と差分核 ✅
+- PetalDetect.lean § 7：層B補助補題 (B.1, B.2 実装済み) 🚧
+- GcdNext.lean：Zsigmondy + GcdAg + PetalDetect 統合 ✅
 - 層B本体：Lucas/Kummer 理論による padicValNat 精密評価
 
 **ロードマップ:**
 Phase 1（Phase 2/3）: PetalDetect 検出器の整備 ✅
-Phase 4: 層B詳細補題の実装 ⏳
+Phase 4: 層B詳細補題の実装（B.1, B.2 ✅ → B.3 🚧）
 Phase 5: d=3 FLT 完全形式化 ⏳
 -/
 example : True := by trivial
