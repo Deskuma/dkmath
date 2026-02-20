@@ -318,4 +318,29 @@ lemma S0_not_sq_divible_of_coprime (a b q : ℕ) (ha : 0 < a) (hb : 0 < b)
 
   sorry  -- TODO: 相対多角数の平方判定による矛盾
 
+-- ========================================
+-- § 7. 層B：詳細な padicValNat 分析（将来の研究フェーズ）
+-- ========================================
+
+/-- [層B補助補題プレースホルダー]
+
+**実装計画:**
+1. mod q 分析補題：q | S0 ⟹ (a+b)² ≡ ab (mod q)
+2. padicValNat 上界補題：q² ∤ S0 ⟹ padicValNat q (S0) ≤ 1
+3. Zsigmondy統合補題：q | a^d - b^d ∧ q ∤ a-b ⟹ q ∤ a+b
+
+これらは層B本体で詳細に実装される予定。
+
+**現在の位置付け:**
+- PetalDetect.lean：相対多角数の φビット構造と差分核
+- GcdNext.lean：Zsigmondy + GcdAg + PetalDetect 統合
+- 層B本体：Lucas/Kummer 理論による padicValNat 精密評価
+
+**ロードマップ:**
+Phase 1（Phase 2/3）: PetalDetect 検出器の整備 ✅
+Phase 4: 層B詳細補題の実装 ⏳
+Phase 5: d=3 FLT 完全形式化 ⏳
+-/
+example : True := by trivial
+
 end DkMath.FLT.PetalDetect
