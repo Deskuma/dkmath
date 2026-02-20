@@ -590,9 +590,16 @@ lemma padicValNat_s0_le_one_of_prime_ne_apb {a b q : ℕ}
     -- v_q(S0) ≥ 2 より、S0 = q^2 * m という形になる（ある m について）
     -- 詳細な初等的証明は層B本体で。当面は q^2 | S0 を仮定して矛盾導く
     have : q^2 ∣ S0_nat a b := by
-      -- padicValNat.succ_iff や padicValNat.pow などから導出可能
-      -- 当面は古典的な性質 v_q(n) = k ⟺ q^k || n を仮定
-      sorry  -- TODO: Mathlib の padicValNat補題組み合わせで示す
+      -- padicValNat の相対多角数視点：v_q(n) ≥ k ⟺ q^k | n
+      -- Mathlib の padicValNat_le_iff_dvd (k ≤ padicValNat p n ↔ p^k ∣ n)
+      have hpow : padicValNat q (S0_nat a b) =
+        min (padicValNat q (S0_nat a b)) 1 +
+        max (padicValNat q (S0_nat a b) - 1) 0 :=
+        DkMath.ABC.padicValNat_split q (S0_nat a b)
+
+      -- v_q(S0) ≥ 2 より、2 ≤ padicValNat q (S0) が成立
+      rw [← DkMath.ABC.padicValNat_le_iff_dvd hq hS0_ne 2]
+      exact h
     exact hq_not_sq this
 
   omega
