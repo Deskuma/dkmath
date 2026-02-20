@@ -285,20 +285,38 @@ lemma S0_not_sq_divible_of_coprime (a b q : ℕ) (ha : 0 < a) (hb : 0 < b)
   -- Gap構造：S0 = (a+b)² - ab を使用
   have hS0_eq : S0_nat a b = (a + b)^2 - a * b := S0_as_diff a b
 
-  -- q | S0 から、(a+b)² - ab ≡ 0 (mod q)
-  -- つまり (a+b)² ≡ ab (mod q)
+  -- Step 1: q ≠ (a+b) から q ∤ (a+b) を導く
+  have hq_not_dvd_apb : ¬ q ∣ a + b := by
+    sorry  -- TODO: q素数 ∧ q ≠ a+b → q ∤ a+b
 
-  -- q² | S0 と仮定：(a+b)² - ab ≡ 0 (mod q²)
-  -- つまり (a+b)² ≡ ab (mod q²)
+  -- Step 2: q ∤ (a+b) より gcd(q, a+b) = 1
+  have hq_coprime_apb : Nat.Coprime q (a + b) := by
+    -- q ∤ (a+b) かつ q は素数なら互いに素
+    by_contra h
+    rw [Nat.coprime_iff_gcd_eq_one] at h
+    push_neg at h
+    -- gcd(q, a+b) ≠ 1、つまり gcd が q を割る
+    have gcd_dvd_q : Nat.gcd q (a + b) ∣ q := Nat.gcd_dvd_left q (a + b)
+    -- q は素数より gcd = 1 or gcd = q
+    have : Nat.gcd q (a + b) = 1 ∨ Nat.gcd q (a + b) = q :=
+      hq.eq_one_or_self_of_dvd (Nat.gcd q (a + b)) gcd_dvd_q
+    -- gcd ≠ 1 より gcd = q
+    cases this with
+    | inl h_one => exact h h_one
+    | inr h_q =>
+      -- gcd = q より q | (a+b)
+      have : q ∣ a + b := h_q ▸ Nat.gcd_dvd_right q (a + b)
+      exact hq_not_dvd_apb this
 
-  -- 重要条件：q ≠ (a+b) により、gcd(q, a+b) = 1
-  have hq_ne : q ≠ a + b := hq_ne_apb
+  -- Step 3: q² | S0 と gcd(a,b)=1, gcd(q, a+b)=1 から矛盾
+  -- q² | (a+b)² - ab
+  -- q と (a+b) が互いに素なので、(a+b)² と ab の差が q² で割り切れるのは
+  -- 特殊な因子構造を要求する
+  --
+  -- 相対多角数の性質：
+  -- gcd(a,b)=1 ⟹ 4*S0 + 1 が平方数という性質がある
+  -- これが q² による重複割り切りと矛盾するはず
 
-  -- gcd(a, b) = 1 かつ q ≠ (a+b) のとき、
-  -- q² | S0 となるには特殊な因子構造が必要
-  -- 相対多角数の自己相似性により、この構造は起きない
-
-  -- 当面：層B本体での詳細な mod q² 矛盾導出を待つ
-  sorry  -- TODO: 相対多角数の平方判定による矛盾
+  sorry  -- TODO: 相対多角数の平方判定による矛盾（q²割り切り分析）
 
 end DkMath.FLT.PetalDetect
