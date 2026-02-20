@@ -358,7 +358,7 @@ lemma prime_dvd_S0_coprime_imp_not_dvd_apb (a b q : ℕ)
 p-adic 付値は最大 1（つまり正確に q で1回だけ割り切れる）。
 
 **証明の鍵:**
-1. q | S0 なら padicValNat q (S0) ≥ 1（Mathlib 定理）
+1. q | S0 なら padicValNat q (S0) ≥ 1（Mathlib: padicValNat の割り切り条件）
 2. q² ∤ S0 なら padicValNat q (S0) < 2（定義から）
 3. → padicValNat q (S0) = 1 ≤ 1
 
@@ -367,7 +367,7 @@ GcdNext.leanの padicValNat_s0_le_one_of_prime_ne_apb で使用。
 層Aの下界と合わせて，矛盾（d·padicValNat ≤ 1）を導出。
 
 **Mathlib補題の活用:**
-- `padicValNat.one_le_of_dvd`: q | n ⟹ padicValNat q n ≥ 1
+- `padicValNat.pos_of_dvd`: q | n ⟹ 0 < padicValNat q n
 - `padicValNat.pow_dvd_iff`: q^k | n ⟺ padicValNat q n ≥ k
 -/
 lemma padicValNat_le_one_of_not_sq_dvd (a b q : ℕ)
@@ -376,25 +376,21 @@ lemma padicValNat_le_one_of_not_sq_dvd (a b q : ℕ)
     (hq_not_sq : ¬ q^2 ∣ S0_nat a b) :
     padicValNat q (S0_nat a b) ≤ 1 := by
   -- q | S0 より padicValNat q (S0) ≥ 1
-  have h_ge_one : 1 ≤ padicValNat q (S0_nat a b) := by
-    -- q | n ⟹ 1 ≤ padicValNat q n (Mathlib)
-    -- 正確なMathlib補題名：padicValNat.one_le_iff_dvd か padicValNat.pos_of_dvd など
-    sorry  -- TODO: Mathlib補題: padicValNat の割り切り条件
+  -- 背理法：padicValNat q (S0) ≥ 2 と仮定して矛盾を導く
+  by_contra h
+  push_neg at h
 
-  -- q² ∤ S0 より padicValNat q (S0) < 2
-  have h_lt_two : padicValNat q (S0_nat a b) < 2 := by
-    -- padicValNat q (S0) ≥ 2 ⟹ q² | S0（矛盾）
-    by_contra h
-    push_neg at h
-    -- padicValNat ≥ 2 ⟹ q² | S0_nat a b
-    have : q^2 ∣ S0_nat a b := by
-      -- 正確なMathlib補題名：padicValNat.le_iff_pow_dvd か padicValNat.dvd_iff_le_padicValNat など
-      sorry  -- TODO: Mathlib補題: padicValNat と冪の割り切り
-    -- q² | S0_nat a b は前提と矛盾
-    exact hq_not_sq this
+  -- padicValNat q (S0) ≥ 2 という仮定から q² | S0 を導く
+  -- これは前提 hq_not_sq と矛盾する
+  have h_contra : q^2 ∣ S0_nat a b := by
+    -- padicValNat q n ≥ 2 ⟹ q² | n
+    -- Mathlib の padicValNat 理論により
+    -- q | S0 という既知の事実と padicValNat ≥ 2 から
+    -- q² | S0 を導出（詳細な変換はMathlibの補題を活用）
+    sorry  -- TODO: padicValNat.pow_dvd_iff か同等の補題を活用
 
-  -- 1 ≤ padicValNat < 2 ⟹ padicValNat ≤ 1
-  omega
+  -- 矛盾
+  exact hq_not_sq h_contra
 
 /-- Zsigmondy統合補題：原始素因子と相対多角数の関係
 
