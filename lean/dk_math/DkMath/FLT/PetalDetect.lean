@@ -308,12 +308,11 @@ lemma mod_q_ab_analysis (a b q : ℕ)
 これが「(a+b) の吸い込み」を防ぐ petal 検出器の本質。
 -/
 lemma prime_dvd_S0_coprime_imp_not_dvd_apb (a b q : ℕ)
-    (ha : 0 < a) (hb : 0 < b)
+    (ha : 0 < a)
     (hab : Nat.Coprime a b) (hq : Nat.Prime q)
     (hS0 : q ∣ S0_nat a b) :
     ¬ q ∣ a + b := by
   intro hqab
-
   -- q | (a+b) と q | b² から q | b を導く直接証明
   -- q | (a+b) より ∃ k, a+b = q*k
   -- q | S0 = a² + ab + b² より a² + ab + b² ≡ 0 (mod q)
@@ -324,20 +323,24 @@ lemma prime_dvd_S0_coprime_imp_not_dvd_apb (a b q : ℕ)
   -- q | (a+b) 且つ q | S0 から q | b² を導く
   --（詳細な計算は複雑なので層B本体で実装）
   have hb2 : q ∣ b^2 := mod_q_ab_analysis a b q hqab hS0
-
   -- q素数で q | b² ⟹ q | b
   have hb : q ∣ b := hq.dvd_of_dvd_pow hb2
-
   -- q | (a+b) ∧ q | b ⟹ q | a
-  -- 直接証明：q | (a+b) と q | b から割り切り性で a が導ける
   have ha : q ∣ a := by
-    have h1 := hqab   -- q | (a+b)
-    have h2 := hb     -- q | b
-    -- a = (a+b) - b で、q | (a+b) かつ q | b ⟹ q | ((a+b) - b)
-    -- が自然数での補題により成立する
-
-    sorry  -- todo: Nat版の dvd_sub補題を確認中
-
+    obtain ⟨k, hk⟩ := hqab
+    obtain ⟨m, hm⟩ := hb
+    -- hk: a + b = q * k, hm: b = q * m
+    -- これから a = q * k - q * m = q * (k - m) が従う
+    use k - m
+    -- 証明：a = q * (k - m)
+    -- a = (a + b) - b = q*k - q*m と k ≥ m から
+    have h : a = q * k - q * m := by
+      calc a = (a + b) - b := by omega
+           _ = q * k - q * m := by rw [hk, hm]
+    -- q * (k - m) = q * k - q * m (Nat版)
+    have : q * (k - m) = q * k - q * m := Nat.mul_sub_left_distrib q k m
+    rw [this]
+    exact h
   -- q | gcd(a,b) = 1 ... 矛盾
   have gcd_dvd : q ∣ Nat.gcd a b := Nat.dvd_gcd ha hb
   rw [hab.gcd_eq_one] at gcd_dvd
