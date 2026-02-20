@@ -519,14 +519,21 @@ Zsigmondy 定理の層A で原始素因子 q の存在が保証された後、
 - hab_coprime : a と b が互いに素
 - h_Ag : gcd_Ag a b = 1（Phase 2: 2進位相で互いに素）
 - h_phi : Nat.Coprime (a+b) b（Phase 3: (a+b) と b が互いに素）
-- q が若干の制限条件を満たす素数
 
-**目標:**
-padicValNat q (a^2 + ab + b^2) の上界を定める
+**鍵となる既存補題（PetalDetect.leanより）:**
+- `apb_dvd_S0_iff_dvd_bsq`: (a+b) | S0 ⟺ (a+b) | b²
+- `apb_not_dvd_S0_coprime`: gcd(a,b)=1 ∧ Nat.Coprime(a+b,b) → ¬(a+b) | S0
 
-**実装戦略:**
-q | a^2 + ab + b^2 の場合は layer B 本体の研究課題。
-q ∤ a^2 + ab + b^2 の場合は trivial（padicValNat = 0）。
+**戦略:**
+h_phi : Nat.Coprime (a+b) b と hab_coprime : Nat.Coprime a b を組み合わせると、
+Phase 3 により apb_not_dvd_S0_coprime より (a+b) ∤ S0_nat a b が導出される。
+
+したがって、a^2 + ab + b^2（= S0_nat a b）における (a+b) 由来の padicValNat 要因は
+排除され、残るのは a, b 自身の素因子のみ。
+
+**実装:**
+- q ∤ S0 の場合：trivial
+- q | S0 の場合：q ≠ (a+b) か、または特殊条件下
 -/
 lemma padicValNat_a2_ab_b2_upper_bound_stage1 {a b q : ℕ}
     (hq : Nat.Prime q)
@@ -535,15 +542,40 @@ lemma padicValNat_a2_ab_b2_upper_bound_stage1 {a b q : ℕ}
     (h_phi : Nat.Coprime (a + b) b)
     :
     padicValNat q (a^2 + a * b + b^2) ≤ 1 := by
-  by_cases hq_div : q ∣ a^2 + a * b + b^2
-  · -- q | a^2 + ab + b^2 の場合
-    -- Phase 2/3 条件下では「通常 padicValNat ≤ 1」
-    -- 詳細な証明は層B本体で研究（mod q^2 議論など）
-    sorry  -- TODO: 条件下での mod q^2 分析
-  · -- q ∤ a^2 + ab + b^2 の場合
-    have hzero : padicValNat q (a^2 + a * b + b^2) = 0 := padicValNat.eq_zero_of_not_dvd hq_div
-    rw [hzero]
-    norm_num
+  -- S0_nat a b = a^2 + a * b + b^2 と交換可能
+  show padicValNat q (S0_nat a b) ≤ 1
+
+  -- b = 0 か b > 0 かで場合分け
+  by_cases hb0 : b = 0
+  · -- b = 0 の場合：a = 1（hab_coprime より）
+    subst hb0
+    have ha1 : a = 1 := by
+      simpa [Nat.coprime_zero_right] using hab_coprime
+    subst ha1
+    simp [S0_nat]
+  · -- b > 0 の場合
+    have hb_pos : 0 < b := Nat.pos_of_ne_zero hb0
+    have ha_pos : 0 < a := by omega
+
+    -- Phase 3 条件からapb_not_dvd_S0_coprimeを利用
+    have hapb_not_dvd_s0 : ¬ (a + b) ∣ S0_nat a b :=
+      apb_not_dvd_S0_coprime a b ha_pos hb_pos hab_coprime h_phi
+
+    -- q ∣ S0 か否かで場合分け
+    by_cases hq_dvd : q ∣ S0_nat a b
+    · -- q | a^2 + ab + b^2 の場合
+      -- q ≠ (a+b)（上記から）
+      have hq_ne_apb : q ≠ a + b := by
+        intro heq
+        subst heq
+        exact hapb_not_dvd_s0 hq_dvd
+
+      -- 詳細分析は層B本体で研究
+      sorry  -- TODO: q ≠ (a+b) 下での padicValNat 上界
+    · -- q ∤ a^2 + ab + b^2 の場合
+      have : padicValNat q (S0_nat a b) = 0 := padicValNat.eq_zero_of_not_dvd hq_dvd
+      rw [this]
+      norm_num
 
 /-- d=3 での上界補題
 
