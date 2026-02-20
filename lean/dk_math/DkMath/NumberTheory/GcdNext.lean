@@ -564,11 +564,38 @@ lemma padicValNat_s0_le_one_of_prime_ne_apb {a b q : ℕ}
   have hval_ge : 1 ≤ padicValNat q (S0_nat a b) :=
     DkMath.ABC.padicValNat_one_le_of_prime_dvd hq hS0_ne hq_dvd
 
-  -- q ≠ (a+b) という条件下で、a^3 - b^3 = (a-b) * S0 より
-  -- 原始素因子 q は exactly divides S0（q || S0）
-  -- つまり padicValNat_q(S0) = 1
-  -- 詳細な mod q^2 議論は層B本体で研究
-  sorry  -- TODO: mod q^2 議論で q^2 ∤ S0 を示す
+  -- q ≠ (a+b) という条件下で、古典的因数分解 a^3 - b^3 = (a-b)(a^2+ab+b^2) より
+  -- 原始素因子 q は exactly divides S0。
+  --
+  -- 初等的論理：
+  -- - padicValNat q (S0) ≥ 1（既知：hval_ge より q | S0）
+  -- - padicValNat q (S0) ≥ 2 ⟺ q^2 | S0
+  -- - gcd(a,b)=1 かつ q | S0 のとき、通常 q^2 ∤ S0
+  -- ⇒ padicValNat q (S0) = 1 すなわち ≤ 1
+  --
+  -- 当面の実装：mod q^2 議論で q^2 ∤ S0 を仮定し、
+  -- その結果として padicValNat ≤ 1 が従う
+  have hq_not_sq : ¬ q^2 ∣ S0_nat a b := by
+    sorry  -- TODO: mod q^2 で q^2 ∤ a^2+ab+b^2 を導く
+
+  -- padicValNat が 1 以上 2 未満なら 1 以下（初等的）
+  have hval_le : padicValNat q (S0_nat a b) < 2 := by
+    by_contra h
+    push_neg at h
+    -- padicValNat ≥ 2 なら q^2 | S0_nat a b
+    -- 初等的論理：padicValNat q n ≥ 2 ⟺ q | (n / q)（ほぼ）
+    -- あるいは padicValNat q (q^2 * m) = 2 + padicValNat q m
+    have hS0_ne : S0_nat a b ≠ 0 := by positivity
+
+    -- v_q(S0) ≥ 2 より、S0 = q^2 * m という形になる（ある m について）
+    -- 詳細な初等的証明は層B本体で。当面は q^2 | S0 を仮定して矛盾導く
+    have : q^2 ∣ S0_nat a b := by
+      -- padicValNat.succ_iff や padicValNat.pow などから導出可能
+      -- 当面は古典的な性質 v_q(n) = k ⟺ q^k || n を仮定
+      sorry  -- TODO: Mathlib の padicValNat補題組み合わせで示す
+    exact hq_not_sq this
+
+  omega
 
 /-- Phase 2/3 条件下での a^2 + ab + b^2 の padicValNat 評価（統合補題）
 
