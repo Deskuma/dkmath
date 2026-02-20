@@ -8,6 +8,7 @@ import DkMath.Basic
 import Mathlib.Algebra.Ring.GeomSum
 import Mathlib.NumberTheory.Padics.PadicVal.Basic
 import DkMath.SilverRatio.GcdAg
+import DkMath.NumberTheory.ZsigmondyCyclotomic
 
 set_option linter.style.emptyLine false
 
@@ -334,7 +335,8 @@ lemma prime_dvd_S0_coprime_imp_not_dvd_apb (a b q : ℕ)
     have h2 := hb     -- q | b
     -- a = (a+b) - b で、q | (a+b) かつ q | b ⟹ q | ((a+b) - b)
     -- が自然数での補題により成立する
-    sorry  -- Nat版の dvd_sub補題を確認中
+
+    sorry  -- todo: Nat版の dvd_sub補題を確認中
 
   -- q | gcd(a,b) = 1 ... 矛盾
   have gcd_dvd : q ∣ Nat.gcd a b := Nat.dvd_gcd ha hb
@@ -368,7 +370,7 @@ GcdNext.leanの padicValNat_s0_le_one_of_prime_ne_apb で使用。
 -/
 lemma padicValNat_le_one_of_not_sq_dvd (a b q : ℕ)
     (_ha : 0 < a) (_hb : 0 < b)
-    (hq : Nat.Prime q) (hq_dvd : q ∣ S0_nat a b)
+    (hq : Nat.Prime q)
     (hq_not_sq : ¬ q^2 ∣ S0_nat a b) :
     padicValNat q (S0_nat a b) ≤ 1 := by
   -- q | S0 より padicValNat q (S0) ≥ 1
@@ -418,49 +420,26 @@ q は相対多角数 S0(a,b) = a² + ab + b² を「制御」する。
 Mathlib の Cyclotomic 補題により段階的に構築可能。
 -/
 lemma zsigmondy_not_dvd_apb (a b q : ℕ) (d : ℕ)
-    (ha : 0 < a) (hb : 0 < b)
+    (hb : 0 < b)
     (hab : Nat.Coprime a b)
     (hd : Nat.Prime d) (hd_gt : 2 < d)
     (hq : Nat.Prime q) (hq_dvd_pow : q ∣ a ^ d - b ^ d)
     (hq_ndiv_diff : ¬ q ∣ a - b) :
     ¬ q ∣ a + b := by
-  -- **Zsigmondy統合定理**
-  --
-  -- 仮定：
-  --   1. q は素数
-  --   2. q | a^d - b^d （d次べき乗差を割る）
-  --   3. q ∤ a - b （最下位の因子は割らない → 「原始」）
-  --   4. d は素数で d > 2
-  --
-  -- 結論：q ∤ (a+b)
-  --
-  -- **証明の要点**
-  -- q が (a+b)を割ると仮定して矛盾を導く。
-  --
-  -- 背理法：q | (a+b) と仮定
-  -- → a ≡ -b (mod q)
-  -- → a^d ≡ (-b)^d ≡ (-1)^d · b^d (mod q)
-  --    （d 奇数だから (-1)^d = -1）
-  -- → a^d ≡ -b^d (mod q)
-  --
-  -- しかし q | a^d - b^d という条件から
-  -- a^d ≡ b^d (mod q) も必要。
-  --
-  -- 円分多項式 Φ_d(a/b) 理論により、
-  -- d が素数で d > 2 のとき、
-  -- 上記の両立は矛盾となる（d次円分多項式の既約性）。
-
   intro hq_dvd_apb
-
-  -- より詳細な実装は ZsigmondyCyclotomic.lean の以下補題を活用：
-  -- - `prime_exp_not_dvd_diff_imp_primitive`
-  -- - `cyclotomic_eval_divides`
-  -- - `cyclotomic_squarefree`
-  -- - `padicValNat_primitive_prime_factor_le_one`
-
-  sorry  -- TODO: 円分多項式 Φ_d による統合実装
-         --       ZsigmondyCyclotomic.lean との連携完成
-
-example : True := by trivial
+  have hba : b < a := by
+    by_contra h_not_lt
+    have hle : a ≤ b := Nat.not_lt.mp h_not_lt
+    have hzero : a - b = 0 := Nat.sub_eq_zero_of_le hle
+    exact hq_ndiv_diff (hzero ▸ dvd_zero q)
+  have h_not_dvd_sq :
+      ¬ q ∣ a ^ 2 - b ^ 2 :=
+    DkMath.NumberTheory.GcdNext.prime_exp_not_dvd_diff_imp_primitive
+      hd (lt_trans (by decide : 1 < 2) hd_gt) hq hab hba hb hq_dvd_pow hq_ndiv_diff
+      (k := 2) (by decide) hd_gt
+  have h_dvd_sq : q ∣ a ^ 2 - b ^ 2 := by
+    rw [Nat.sq_sub_sq]
+    exact dvd_mul_of_dvd_left hq_dvd_apb (a - b)
+  exact h_not_dvd_sq h_dvd_sq
 
 end DkMath.FLT.PetalDetect
