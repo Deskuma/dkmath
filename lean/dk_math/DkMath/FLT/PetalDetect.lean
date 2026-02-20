@@ -424,22 +424,42 @@ lemma zsigmondy_not_dvd_apb (a b q : ℕ) (d : ℕ)
     (hq : Nat.Prime q) (hq_dvd_pow : q ∣ a ^ d - b ^ d)
     (hq_ndiv_diff : ¬ q ∣ a - b) :
     ¬ q ∣ a + b := by
-  -- Zsigmondy原始素因子の性質：
-  -- q | a^d - b^d かつ q ∤ a-b ⟹ q は a^d - b^d の「新しい」素因子
+  -- **Zsigmondy統合定理**
   --
-  -- 相対多角数との関係：
-  -- a² + ab + b² = (a+b)² - ab
-  --               = Φ_1(a/b)² - ab（に関連）
+  -- 仮定：
+  --   1. q は素数
+  --   2. q | a^d - b^d （d次べき乗差を割る）
+  --   3. q ∤ a - b （最下位の因子は割らない → 「原始」）
+  --   4. d は素数で d > 2
   --
-  -- d > 2, d素数のとき：
-  -- q が a+b を割れば、d次円分多項式Φ_d(a/b)の因子分解に矛盾
+  -- 結論：q ∤ (a+b)
+  --
+  -- **証明の要点**
+  -- q が (a+b)を割ると仮定して矛盾を導く。
+  --
+  -- 背理法：q | (a+b) と仮定
+  -- → a ≡ -b (mod q)
+  -- → a^d ≡ (-b)^d ≡ (-1)^d · b^d (mod q)
+  --    （d 奇数だから (-1)^d = -1）
+  -- → a^d ≡ -b^d (mod q)
+  --
+  -- しかし q | a^d - b^d という条件から
+  -- a^d ≡ b^d (mod q) も必要。
+  --
+  -- 円分多項式 Φ_d(a/b) 理論により、
+  -- d が素数で d > 2 のとき、
+  -- 上記の両立は矛盾となる（d次円分多項式の既約性）。
 
   intro hq_dvd_apb
 
-  -- 矛盾を導く（層B本体での詳細分析待ち）
-  -- TODO: 円分多項式 Φ_d の因子分解による詳細実装
-  -- 層B本体での詳細分析により完成（Cyclotomic理論）
-  sorry
+  -- より詳細な実装は ZsigmondyCyclotomic.lean の以下補題を活用：
+  -- - `prime_exp_not_dvd_diff_imp_primitive`
+  -- - `cyclotomic_eval_divides`
+  -- - `cyclotomic_squarefree`
+  -- - `padicValNat_primitive_prime_factor_le_one`
+
+  sorry  -- TODO: 円分多項式 Φ_d による統合実装
+         --       ZsigmondyCyclotomic.lean との連携完成
 
 example : True := by trivial
 
