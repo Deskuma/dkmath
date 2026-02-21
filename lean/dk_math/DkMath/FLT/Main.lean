@@ -350,13 +350,34 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
         -- 代わりに「3が平方で割る」ことを示して矛盾導出
         have h_ab_pos : 0 < a - b := Nat.sub_pos_of_lt hab_lt
         have h_3pow_dvd : 9 ∣ a ^ 3 - b ^ 3 := by
-          -- 3 | (a-b) ⟹ 3 | (a^3 - b^3)（立方）
-          -- さらに 3^2 | (a^3 - b^3) を示せる
-          sorry  -- 層A補助：3の平方割り切り分析
+          rcases h3div with ⟨k, hk⟩
+          have ha_eq : a = 3 * k + b := by
+            calc
+              a = (a - b) + b := by
+                symm
+                exact Nat.sub_add_cancel hab_lt.le
+              _ = 3 * k + b := by rw [hk]
+          have h_factor : a ^ 3 - b ^ 3 = (a - b) * (a ^ 2 + a * b + b ^ 2) := by
+            have h_pow : b ^ 3 ≤ a ^ 3 := Nat.pow_le_pow_left (Nat.le_of_lt hab_lt) 3
+            zify [hab_lt, h_pow]
+            ring
+          have h_quad_dvd3 : 3 ∣ a ^ 2 + a * b + b ^ 2 := by
+            refine ⟨3 * k ^ 2 + 3 * k * b + b ^ 2, ?_⟩
+            calc
+              a ^ 2 + a * b + b ^ 2
+                  = (3 * k + b) ^ 2 + (3 * k + b) * b + b ^ 2 := by
+                      simp only [ha_eq]
+              _ = 3 * (3 * k ^ 2 + 3 * k * b + b ^ 2) := by ring
+          rcases h_quad_dvd3 with ⟨m, hm⟩
+          refine ⟨k * m, ?_⟩
+          calc
+            a ^ 3 - b ^ 3 = (a - b) * (a ^ 2 + a * b + b ^ 2) := h_factor
+            _ = (3 * k) * (3 * m) := by rw [hk, hm]
+            _ = 9 * (k * m) := by ring
 
         -- h_eq : a^3 + b^3 = c^3 から矛盾を導く
         -- この分岐は層Aの異なる分析が必要
-        sorry  -- 層A補助：3|a-b ケースの分析
+        sorry  -- todo: 層A補助：3|a-b ケースの分析
 
       · -- ケース2-2: ¬ 3 ∣ (a-b)（通常の Zsigmondy ケース）
         -- by_cases の分岐により h3div : ¬ 3 ∣ a - b が自動的に成立
