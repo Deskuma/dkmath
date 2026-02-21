@@ -120,8 +120,20 @@ lemma S0_not_sq_dvd_of_prime_dvd_and_not_dvd_apb {a b q : ℕ}
     (hS0_dvd : q ∣ S0_nat a b)
     (hq_not_apb : ¬ q ∣ a + b) :
     ¬ q ^ 2 ∣ S0_nat a b := by
-  -- 層B補助補題の詳細実装
-  sorry  -- 相対多角数の平方判定：Cosmic Formula + 互いに素性による矛盾導出
+  have hq_ne_apb : q ≠ a + b := by
+    intro h_eq
+    apply hq_not_apb
+    simp only [h_eq, dvd_refl]
+  have hval_le : padicValNat q (S0_nat a b) ≤ 1 :=
+    padicValNat_s0_le_one_of_prime_ne_apb hq ha_pos hb_pos hab_coprime hS0_dvd hq_ne_apb
+  have hS0_ne_zero : S0_nat a b ≠ 0 := by
+    unfold S0_nat
+    positivity
+  intro hq_sq
+  have hval_ge : 2 ≤ padicValNat q (S0_nat a b) := by
+    rw [DkMath.ABC.padicValNat_le_iff_dvd hq hS0_ne_zero 2]
+    exact hq_sq
+  omega
 
 /-- **層A下界補助補題：完全3乗仮定からのpadicValNat下界**
 
