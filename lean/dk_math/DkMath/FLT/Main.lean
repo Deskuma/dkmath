@@ -104,7 +104,8 @@ lemma exists_primitive_prime_factor_d3 {a b c : ℕ}
     exact Nat.mul_div_left (a - b) h_s0_pos
   have ha_pos : 0 < a := lt_trans hb ha
   have h_false : False := by
-    exact FLT_case_3 a b c ⟨ha_pos, hb, hc⟩ hab h_eq.symm
+    sorry  -- todo: Zsigmondy定理の適用：原始素因子 q の存在
+    -- これも使用してはならない → exact FLT_case_3 a b c ⟨ha_pos, hb, hc⟩ hab h_eq.symm
   exact False.elim h_false
 
 lemma exists_primitive_prime_factor_d3_use_FLT3 {a b c : ℕ}
