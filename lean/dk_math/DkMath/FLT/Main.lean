@@ -470,4 +470,6 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
   have : (3 : ℕ) ≤ 1 := le_trans h_lower h_upper
   omega
 
+#print axioms FLT_d3_by_padicValNat
+
 end DkMath.FLT
