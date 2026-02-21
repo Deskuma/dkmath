@@ -237,13 +237,12 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
       have h_le : 3 * padicValNat 2 a ≤ 1 + 3 * padicValNat 2 a :=
         Nat.le_add_left (3 * padicValNat 2 a) 1
       have h_mul_dvd : 3 ∣ 3 * padicValNat 2 a := by
-        simpa [Nat.mul_comm (3 : ℕ) (padicValNat 2 a)] using Nat.dvd_mul_left 3 (padicValNat 2 a)
+        simp [Nat.mul_comm (3 : ℕ) (padicValNat 2 a)] at *
       have h3_dvd_one : 3 ∣ 1 := by
         have h3_dvd_shift : 3 ∣ 1 + 3 * padicValNat 2 a - 3 * padicValNat 2 a := by
           apply Nat.dvd_sub h3_dvd_rhs h_mul_dvd
-        simpa [add_sub_cancel_left, Nat.mul_comm (padicValNat 2 a) 3] using h3_dvd_shift
+        simp only [add_tsub_cancel_right, Nat.dvd_one, OfNat.ofNat_ne_one] at h3_dvd_shift
       exact Nat.Prime.not_dvd_one Nat.prime_three h3_dvd_one
-      done
 
     · -- a > b の場合
       push_neg at hab_eq
