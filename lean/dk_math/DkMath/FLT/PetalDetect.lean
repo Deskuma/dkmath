@@ -102,6 +102,16 @@ def S0_nat (a b : ℕ) : ℕ := a^2 + a*b + b^2
 /-- ℕ 版の S1 -/
 def S1_nat (a b : ℕ) : ℕ := (a + b)^2
 
+-- Basic
+/-- S0 が 0 でないことの確認 -/
+lemma S0_ne_zero (a b : ℕ) (ha : 0 < a) : S0_nat a b ≠ 0 := by
+  unfold S0_nat
+  have ha : 0 < a := by omega
+  have h_pos : 0 < a^2 + a * b + b^2 := by
+    have ha2 : 0 < a ^ 2 := Nat.pow_pos ha
+    omega
+  exact Nat.ne_zero_of_lt h_pos
+
 -- ========================================
 -- § 2. 差分核の証明（Phase 2.2）
 -- ========================================
