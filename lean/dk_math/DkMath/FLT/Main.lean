@@ -158,17 +158,44 @@ lemma padicValNat_upper_bound_d3 {a b q : ℕ}
 
     exact this.resolve_left hq_ndiv_diff
 
+  -- **層B統合：PetalDetect補助補題を活用**
   have hq_not_apb : ¬ q ∣ a + b :=
     prime_dvd_S0_coprime_imp_not_dvd_apb a b q ha_pos hab_coprime hq hS0_dvd
 
-  -- **Step B.1/B.2/B.3: padicValNat精密評価**
-  -- 層B補助補題が完成すれば、以下のロジックで埋まる：
-  -- 1. q | S0 ∧ q ∤ (a+b) から q | (a²+ab+b²)
-  -- 2. 相対多角数の平方判定：q² ∤ S0
-  -- 3. Lucas/Kummer定理による v_q上界
+  -- **q² ∤ S0 を導く（相対多角数の性質）**
+  have hq_not_sq : ¬ q ^ 2 ∣ S0_nat a b := by
+    -- q|S0 ∧ q∤(a+b) ∧ gcd(a,b)=1 の条件下で
+    -- q² ∤ S0 が成り立つ（相対多角数の平方判定）
+    -- 詳細: mod_q_ab_analysis + padicValNat_le_one_of_not_sq_dvd の組み合わせ
+    sorry  -- PetalDetect層B平方判定の詳細
 
-  -- 当面、層B補助補題の完成を待つ
-  sorry  -- padicValNat上界補題（層B補助）が完成したら埋まる
+  -- **padicValNat上界：PetalDetect.padicValNat_le_one_of_not_sq_dvd を使用**
+  have hpadic_bound : padicValNat q (S0_nat a b) ≤ 1 :=
+    padicValNat_le_one_of_not_sq_dvd a b q ha_pos hb_pos hq hq_not_sq
+
+  -- **最終ステップ：padicValNat の乗法性により上界を導く**
+  have ha_minus_b_ne_zero : a - b ≠ 0 := Nat.sub_ne_zero_of_lt hab_lt
+  have hS0_ne_zero : S0_nat a b ≠ 0 := by
+    unfold S0_nat
+    have ha2_pos : 0 < a ^ 2 := by positivity
+    have hab_pos : 0 < a * b := by positivity
+    have hb2_pos : 0 < b ^ 2 := by positivity
+    omega
+
+  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  
+  have h_val_diff_zero : padicValNat q (a - b) = 0 :=
+    padicValNat.eq_zero_of_not_dvd hq_ndiv_diff
+
+  -- a³ - b³ = (a-b) * S0 から padicValNat の乗法性を使う
+  have h_val_mult : padicValNat q (a ^ 3 - b ^ 3) = 
+      padicValNat q (a - b) + padicValNat q (S0_nat a b) :=
+    congrArg (padicValNat q) h_fact ▸ padicValNat.mul ha_minus_b_ne_zero hS0_ne_zero
+
+  calc padicValNat q (a ^ 3 - b ^ 3)
+      = padicValNat q (a - b) + padicValNat q (S0_nat a b) := h_val_mult
+    _ = padicValNat q (S0_nat a b) := by simp [h_val_diff_zero]
+    _ ≤ 1 := hpadic_bound
 
 -- ========================================
 -- § 3. 矛盾導出（層A + 層B統合）
