@@ -8,8 +8,21 @@ import DkMath.Basic
 
 set_option linter.style.longLine false
 
-
 -- －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+
+/-- 例: a³ + b³ = c³ の場合、c の素因子 q で a³ - b³ を割り切るが a - b を割り切らないものが存在する（FLT(3) の必要条件の一部） -/
+example {a b c : ℕ}
+    (_hab : Nat.Coprime a b) (hb : 0 < b) (ha : b < a) (hc : 0 < c)
+    (h_eq : a ^ 3 + b ^ 3 = c ^ 3) :
+    ∃ q : ℕ,
+      Nat.Prime q ∧ q ∣ c ∧ q ≠ c ∧
+      q ∣ a ^ 3 - b ^ 3 ∧ ¬ q ∣ a - b := by
+  have ha_pos : 0 < a := lt_trans hb ha
+  have h_no_solution : a ^ 3 + b ^ 3 ≠ c ^ 3 :=
+    fermatLastTheoremThree a b c
+      (Nat.ne_of_gt ha_pos) (Nat.ne_of_gt hb) (Nat.ne_of_gt hc)
+  exact (h_no_solution h_eq).elim
+
 example (a b : ℤ) : a ^ 3 - b ^ 3 = (a - b) * (a ^ 2 + a * b + b ^ 2) := by ring_nf
 
 example (a b : ℕ) (h : b ≤ a) : a ^ 3 - b ^ 3 = (a - b) * (a ^ 2 + a * b + b ^ 2) := by
