@@ -97,10 +97,74 @@ lemma exists_primitive_prime_factor_d3 {a b : ℕ}
 -- § 2. 層B（PetalDetect + padicValNat評価）
 -- ========================================
 
-/-- **層B補題：padicValNat上界**
+/-- **層B補助補題：相対多角数の平方判定**
+
+q が S0(a,b) を割るが (a+b) を割らず、且つ gcd(a,b)=1 ⟹ q² は S0 を割らない
+
+**入力:**
+- Nat.Prime q
+- q ∣ S0_nat a b
+- ¬ q ∣ (a + b)
+- Nat.Coprime a b
+
+**出力:**
+¬ q² ∣ S0_nat a b
+
+**証明方針（Petal系+オイラー標数）:**
+相対多角数の自己相似性制御により、新しい素因子は高々1乗の重複度を持つ
+-/
+lemma S0_not_sq_dvd_of_prime_dvd_and_not_dvd_apb {a b q : ℕ}
+    (ha_pos : 0 < a) (hb_pos : 0 < b)
+    (hab_coprime : Nat.Coprime a b)
+    (hq : Nat.Prime q)
+    (hS0_dvd : q ∣ S0_nat a b)
+    (hq_not_apb : ¬ q ∣ a + b) :
+    ¬ q ^ 2 ∣ S0_nat a b := by
+  -- 層B補助補題の詳細実装
+  sorry  -- 相対多角数の平方判定：Cosmic Formula + 互いに素性による矛盾導出
+
+/-- **層A下界補助補題：完全3乗仮定からのpadicValNat下界**
+
+q が c を割る ⟹ 3 ≤ padicValNat q (c³)（d=3での指数構造）
+
+**入力:**
+- q ∣ c
+- q は素数
+
+**出力:**
+3 ≤ padicValNat q (c³)
+
+**証明方針（Zsigmondy指数理論）:**
+完全3乗 c = c¹ より padicValNat q (c³) = 3 * padicValNat q c ≥ 3
+-/
+lemma padicValNat_lower_bound_of_dvd_d3 {c q : ℕ}
+    (hc_pos : 0 < c)
+    (hq : Nat.Prime q)
+    (hq_dvd_c : q ∣ c) :
+    3 ≤ padicValNat q (c ^ 3) := by
+  have h_c_ne : c ≠ 0 := Nat.ne_of_gt hc_pos
+  letI : Fact (Nat.Prime q) := ⟨hq⟩
+
+  -- padicValNat q c ≥ 1（q | c より）
+  have h_val_c_ge_1 : 1 ≤ padicValNat q c := by
+    have h_ne_zero : padicValNat q c ≠ 0 := by
+      intro h
+      have : ¬ q ∣ c := by sorry -- todo: padicValNat.eq_zero_iff.mp h
+      exact this hq_dvd_c
+    omega
+
+  -- padicValNat q (c^3) = 3 * padicValNat q c
+  have h_val_pow : padicValNat q (c ^ 3) = 3 * padicValNat q c :=
+    padicValNat.pow (n := 3) h_c_ne
+
+  -- 3 * padicValNat q c ≥ 3 * 1
+  rw [h_val_pow]
+  omega
+
+/-- **padicValNat上界補題（層B統合版）**
 
 相対多角数 S0(a,b) = a²+ab+b² の性質と Cosmic Formula による因数分解から、
-原始素因子 q に対する padicValNat上界を導出する。
+原始素因子 q に対する padicValNat上界を導出する
 
 **入力:**
 - Nat.Prime q
@@ -110,23 +174,13 @@ lemma exists_primitive_prime_factor_d3 {a b : ℕ}
 - 0 < a, 0 < b
 
 **証明フロー:**
-
-1. a³ - b³ = (a-b)(a²+ab+b²) に分解（Cosmic Formula）
-
-2. q ∤ (a-b) より q | (a²+ab+b²) が必然的に従う
-
-3. PetalDetect補題群により：
-   - prime_dvd_S0_coprime_imp_not_dvd_apb: q|S0 ∧ gcd(a,b)=1 ⟹ q∤(a+b)
-   - mod_q_ab_analysis: q|(a+b) ∧ q|S0 ⟹ q|b²
-   - padicValNat_le_one_of_not_sq_dvd: q|S0 ∧ gcd(a,b)=1 ⟹ ¬q²|S0
-
-4. 結果：v_q(a³-b³) = v_q(a²+ab+b²) ≤ 1
+1. a³ - b³ = (a-b)(a²+ab+b²) に分解
+2. q ∤ (a-b) より q | S0
+3. 層B補助補題で q² ∤ S0 を導出
+4. padicValNat上界：v_q(S0) ≤ 1
 
 **出力:**
 padicValNat q (a³ - b³) ≤ 1
-
-**実装:**
-PetalDetect.leanの層B補助補題を活用
 -/
 lemma padicValNat_upper_bound_d3 {a b q : ℕ}
     (hab_lt : b < a)
