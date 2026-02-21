@@ -619,13 +619,9 @@ lemma padicValNat_a2_ab_b2_upper_bound_stage1 {a b q : ℕ}
     :
     padicValNat q (a^2 + a * b + b^2) ≤ 1 := by
   change padicValNat q (S0_nat a b) ≤ 1
-  have hS0_ne : S0_nat a b ≠ 0 := by
-    unfold S0_nat
-    have ha : 0 < a := by omega
-    have h_pos : 0 < a^2 + a * b + b^2 := by
-      have ha2 : 0 < a ^ 2 := Nat.pow_pos ha
-      omega
-    exact Nat.ne_zero_of_lt h_pos
+  -- hab_lt : b < a より 0 < a
+  have ha_pos : 0 < a := Nat.lt_of_le_of_lt (Nat.zero_le b) hab_lt
+  have hS0_ne : S0_nat a b ≠ 0 := S0_ne_zero a b ha_pos
   exact padicValNat_s0_le_one_of_not_sq_dvd hq hS0_ne hq_not_sq
 
 #print axioms padicValNat_a2_ab_b2_upper_bound_stage1
