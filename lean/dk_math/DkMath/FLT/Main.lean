@@ -89,18 +89,6 @@ lemma exists_primitive_prime_factor_d3 {a b : ℕ}
   -- （実装は ZsigmondyCyclotomic.leanで provide）
   sorry  -- 層A補助補題（Zsigmondy理論）が完成したら埋まる
 
-lemma exists_primitive_prime_factor_d3_use_FLT3 {a b c : ℕ}
-    (_hab : Nat.Coprime a b) (hb : 0 < b) (ha : b < a) (hc : 0 < c)
-    (h_eq : a ^ 3 + b ^ 3 = c ^ 3) :
-    ∃ q : ℕ,
-      Nat.Prime q ∧ q ∣ c ∧ q ≠ c ∧
-      q ∣ a ^ 3 - b ^ 3 ∧ ¬ q ∣ a - b := by
-  have ha_pos : 0 < a := lt_trans hb ha
-  have h_no_solution : a ^ 3 + b ^ 3 ≠ c ^ 3 :=
-    fermatLastTheoremThree a b c
-      (Nat.ne_of_gt ha_pos) (Nat.ne_of_gt hb) (Nat.ne_of_gt hc)
-  exact (h_no_solution h_eq).elim
-
 
 -- ========================================
 -- § 2. 層B（PetalDetect + padicValNat評価）
