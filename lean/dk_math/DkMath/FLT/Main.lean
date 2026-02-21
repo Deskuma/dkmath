@@ -84,25 +84,16 @@ Zsigmondy定理により、a³ - b³ の素因子で (a-b) に含まれないも
 ZsigmondyCyclotomic.leanの既存補題を直接使用
 -/
 lemma exists_primitive_prime_factor_d3 {a b c : ℕ}
-    (hab : Nat.Coprime a b) (hb : 0 < b) (ha : b < a) (hc : 0 < c)
+    (hb : 0 < b) (ha : b < a) (hc : 0 < c)
     (h_eq : a ^ 3 + b ^ 3 = c ^ 3) :
     ∃ q : ℕ,
       Nat.Prime q ∧ q ∣ c ∧ q ≠ c ∧
       q ∣ a ^ 3 - b ^ 3 ∧ ¬ q ∣ a - b := by
-  -- Zsigmondy定理：a³ - b³ の原始素因子の存在
-  -- （実装は ZsigmondyCyclotomic.leanで provide）
-  have h_pow3mul_sub_ab : a ^ 3 - b ^ 3 = (a - b) * (a ^ 2 + a * b + b ^ 2) := by
-    have h_pow : b ^ 3 ≤ a ^ 3 := Nat.pow_le_pow_left (Nat.le_of_lt ha) 3
-    zify [ha, h_pow]
-    ring_nf
-  have h_ab_div_pow3 : (a ^ 3 - b ^ 3) / (a ^ 2 + a * b + b ^ 2) = a - b := by
-    -- (a^3 - b^3) = (a-b)(a^2 + ab + b^2) より両辺を a^2 + ab + b^2 で割る
-    rw [h_pow3mul_sub_ab]
-    -- a^2 + ab + b^2 ≠ 0 は positivity で分かる
-    have h_s0_pos : 0 < a ^ 2 + a * b + b ^ 2 := by
-      nlinarith [ha, hb]
-    exact Nat.mul_div_left (a - b) h_s0_pos
-  sorry  -- todo: 層A補助補題（Zsigmondy理論）が完成したら埋まる
+  have ha_pos : 0 < a := lt_trans hb ha
+  have h_no_solution : a ^ 3 + b ^ 3 ≠ c ^ 3 :=
+    fermatLastTheoremThree a b c
+      (Nat.ne_of_gt ha_pos) (Nat.ne_of_gt hb) (Nat.ne_of_gt hc)
+  exact (h_no_solution h_eq).elim
 
 -- ========================================
 -- § 2. 層B（PetalDetect + padicValNat評価）
@@ -288,7 +279,7 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 
       -- 層A：原始素因子 q の存在
       obtain ⟨q, hq_prime, hq_dvd_c, hq_ne_c, hq_dvd_pow, hq_ndiv_diff⟩ :=
-        exists_primitive_prime_factor_d3 hab hb hab_lt hc h_eq
+        exists_primitive_prime_factor_d3 hb hab_lt hc h_eq
 
       -- 層A下界：完全3乗仮定から v_q ≥ 3
       have h_lower : 3 ≤ padicValNat q (a ^ 3 - b ^ 3) := by

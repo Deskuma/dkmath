@@ -9,10 +9,6 @@ import DkMath.Basic
 set_option linter.style.longLine false
 
 
-example (_a _b _c : ℕ) : True := by
-  trivial
-
-
 -- －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
 example (a b : ℤ) : a ^ 3 - b ^ 3 = (a - b) * (a ^ 2 + a * b + b ^ 2) := by ring_nf
 
@@ -25,6 +21,20 @@ example (a b : ℕ) (h : b ≤ a) : a ^ 3 = (a - b) * (a ^ 2 + a * b + b ^ 2) + 
   have h_pow : b ^ 3 ≤ a ^ 3 := Nat.pow_le_pow_left h 3
   zify [h, h_pow]
   ring_nf
+
+example (a b : ℕ) (ha : 0 < a) (hb : 0 < b) (ha : b < a) : True := by
+  have h_pow3mul_sub_ab : a ^ 3 - b ^ 3 = (a - b) * (a ^ 2 + a * b + b ^ 2) := by
+    have h_pow : b ^ 3 ≤ a ^ 3 := Nat.pow_le_pow_left (Nat.le_of_lt ha) 3
+    zify [ha, h_pow]
+    ring_nf
+  have h_ab_div_pow3 : (a ^ 3 - b ^ 3) / (a ^ 2 + a * b + b ^ 2) = a - b := by
+    -- (a^3 - b^3) = (a-b)(a^2 + ab + b^2) より両辺を a^2 + ab + b^2 で割る
+    rw [h_pow3mul_sub_ab]
+    -- a^2 + ab + b^2 ≠ 0 は positivity で分かる
+    have h_s0_pos : 0 < a ^ 2 + a * b + b ^ 2 := by
+      nlinarith [ha, hb]
+    exact Nat.mul_div_left (a - b) h_s0_pos
+  trivial
 
 
 #check Nat.gcd_add_self_right  -- ∀ q p : ℕ, Nat.gcd q (q + p) = Nat.gcd q p
