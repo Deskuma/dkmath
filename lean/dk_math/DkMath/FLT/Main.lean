@@ -91,7 +91,18 @@ lemma exists_primitive_prime_factor_d3 {a b c : ℕ}
       q ∣ a ^ 3 - b ^ 3 ∧ ¬ q ∣ a - b := by
   -- Zsigmondy定理：a³ - b³ の原始素因子の存在
   -- （実装は ZsigmondyCyclotomic.leanで provide）
-  sorry  -- 層A補助補題（Zsigmondy理論）が完成したら埋まる
+  have h_pow3mul_sub_ab : a ^ 3 - b ^ 3 = (a - b) * (a ^ 2 + a * b + b ^ 2) := by
+    have h_pow : b ^ 3 ≤ a ^ 3 := Nat.pow_le_pow_left (Nat.le_of_lt ha) 3
+    zify [ha, h_pow]
+    ring_nf
+  have h_ab_div_pow3 : (a ^ 3 - b ^ 3) / (a ^ 2 + a * b + b ^ 2) = a - b := by
+    -- (a^3 - b^3) = (a-b)(a^2 + ab + b^2) より両辺を a^2 + ab + b^2 で割る
+    rw [h_pow3mul_sub_ab]
+    -- a^2 + ab + b^2 ≠ 0 は positivity で分かる
+    have h_s0_pos : 0 < a ^ 2 + a * b + b ^ 2 := by
+      nlinarith [ha, hb]
+    exact Nat.mul_div_left (a - b) h_s0_pos
+  sorry  -- todo: 層A補助補題（Zsigmondy理論）が完成したら埋まる
 
 -- ========================================
 -- § 2. 層B（PetalDetect + padicValNat評価）
@@ -167,7 +178,7 @@ lemma padicValNat_upper_bound_d3 {a b q : ℕ}
     -- q|S0 ∧ q∤(a+b) ∧ gcd(a,b)=1 の条件下で
     -- q² ∤ S0 が成り立つ（相対多角数の平方判定）
     -- 詳細: mod_q_ab_analysis + padicValNat_le_one_of_not_sq_dvd の組み合わせ
-    sorry  -- PetalDetect層B平方判定の詳細
+    sorry  -- todo: PetalDetect層B平方判定の詳細
 
   -- **padicValNat上界：PetalDetect.padicValNat_le_one_of_not_sq_dvd を使用**
   have hpadic_bound : padicValNat q (S0_nat a b) ≤ 1 :=
@@ -183,12 +194,12 @@ lemma padicValNat_upper_bound_d3 {a b q : ℕ}
     omega
 
   letI : Fact (Nat.Prime q) := ⟨hq⟩
-  
+
   have h_val_diff_zero : padicValNat q (a - b) = 0 :=
     padicValNat.eq_zero_of_not_dvd hq_ndiv_diff
 
   -- a³ - b³ = (a-b) * S0 から padicValNat の乗法性を使う
-  have h_val_mult : padicValNat q (a ^ 3 - b ^ 3) = 
+  have h_val_mult : padicValNat q (a ^ 3 - b ^ 3) =
       padicValNat q (a - b) + padicValNat q (S0_nat a b) :=
     congrArg (padicValNat q) h_fact ▸ padicValNat.mul ha_minus_b_ne_zero hS0_ne_zero
 
@@ -285,7 +296,7 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
         -- a^3 | (a^3 - b^3) ⟹ v_q(a^3) ≤ v_q(a^3 - b^3)
         -- 完全3乗 c = a^3 + b^3 の仮定から下界が導ける
         -- （詳細は Zsigmondy層A本体で）
-        sorry  -- 層A下界補題
+        sorry  -- todo: 層A下界補題
 
       -- 層B上界：padicValNat評価
       have h_upper : padicValNat q (a ^ 3 - b ^ 3) ≤ 1 :=
