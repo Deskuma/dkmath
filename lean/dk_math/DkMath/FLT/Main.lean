@@ -406,7 +406,7 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
           -- 当ファイルでは層A形式化スケッチのため、
           -- 下界の具体的導出は次フェーズ（GcdNextLayerB.lean等）へ譲る。
           --
-          sorry  -- 層A下界：Zsigmondy指数理論の完全形式化待ち
+          sorry  -- todo: 層A下界：Zsigmondy指数理論の完全形式化待ち
 
         -- 層B上界：padicValNat評価
         have h_upper : padicValNat q (a ^ 3 - b ^ 3) ≤ 1 :=
