@@ -140,13 +140,14 @@ lemma padicValNat_upper_bound_d3 {a b q : ℕ}
   -- PetalDetect.prime_dvd_S0_coprime_imp_not_dvd_apb より
   -- q | S0(a,b) ∧ gcd(a,b)=1 ⟹ q ∤ (a+b)
 
-  have h_zero : a ^ 3 - b ^ 3 - (a - b) * (a ^ 2 + a * b + b ^ 2) = 0 := by
-    sorry
   have h_diff : a ^ 3 - b ^ 3 = (a - b) * (a ^ 2 + a * b + b ^ 2) := by
-    sorry
+    -- use sample proof from Samples/FLT.lean
+    have h_pow : b ^ 3 ≤ a ^ 3 := Nat.pow_le_pow_left (Nat.le_of_lt hab_lt) 3
+    zify [hab_lt, h_pow]
+    ring
   have h_fact : a ^ 3 - b ^ 3 = (a - b) * S0_nat a b := by
+    -- rewrite using definition of S0_nat and h_diff
     simpa [S0_nat] using h_diff
-
   have hS0_dvd : q ∣ S0_nat a b := by
     have hmul : q ∣ (a - b) * S0_nat a b := by
       -- hq_dvd : q ∣ a^3 - b^3 を因数分解で書き換え
