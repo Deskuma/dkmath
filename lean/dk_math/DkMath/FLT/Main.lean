@@ -62,6 +62,72 @@ open DkMath.ABC
 open DkMath.Algebra.DiffPow
 
 -- ========================================
+-- § 0. 新ルート補助補題（c³-b³=a³ による証明を分離）
+-- ========================================
+
+/-- **補助補題1：立方の差の恒等式**
+
+a³ + b³ = c³ から、c³ - b³ = a³ を導く補助補題。
+-/
+lemma cube_sub_eq_of_add_eq {a b c : ℕ} (h : a ^ 3 + b ^ 3 = c ^ 3) :
+    c ^ 3 - b ^ 3 = a ^ 3 := by
+  -- c³ = a³ + b³ に書き換えて (x+y)-y=x を適用
+  rw [← h]
+  omega
+
+/-- **補助補題2：互いに素性の遺伝**
+
+gcd(a,b)=1 かつ a³+b³=c³ なら gcd(c,b)=1。
+-/
+lemma coprime_cb_of_eq {a b c : ℕ} (hab : Nat.Coprime a b) (h : a ^ 3 + b ^ 3 = c ^ 3) :
+    Nat.Coprime c b := by
+  by_contra hnot
+  have hgcd_ne : Nat.gcd c b ≠ 1 := by
+    intro hg
+    apply hnot
+    exact (Nat.coprime_iff_gcd_eq_one).2 hg
+
+  -- gcd(c,b) を割る素数 p が存在
+  obtain ⟨p, hp, hp_dvd_g⟩ := Nat.exists_prime_and_dvd hgcd_ne
+  have hp_dvd_c : p ∣ c := dvd_trans hp_dvd_g (Nat.gcd_dvd_left c b)
+  have hp_dvd_b : p ∣ b := dvd_trans hp_dvd_g (Nat.gcd_dvd_right c b)
+
+  -- p | c³ かつ p | b³
+  have hp_dvd_c3 : p ∣ c^3 := dvd_trans hp_dvd_c (dvd_pow_self c (by decide : 3 ≠ 0))
+  have hp_dvd_b3 : p ∣ b^3 := dvd_trans hp_dvd_b (dvd_pow_self b (by decide : 3 ≠ 0))
+
+  -- c³ - b³ = a³ より p | a³
+  have hsub : c^3 - b^3 = a^3 := cube_sub_eq_of_add_eq h
+  have hp_dvd_sub : p ∣ c^3 - b^3 := Nat.dvd_sub hp_dvd_c3 hp_dvd_b3
+  have hp_dvd_a3 : p ∣ a^3 := by simpa [hsub] using hp_dvd_sub
+
+  -- p | a³ ∧ p 素数 ⟹ p | a
+  have hp_dvd_a : p ∣ a := hp.dvd_of_dvd_pow hp_dvd_a3
+
+  -- gcd(a,b) = 1 に矛盾
+  have hp_dvd_gab : p ∣ Nat.gcd a b := Nat.dvd_gcd hp_dvd_a hp_dvd_b
+  have : p ∣ 1 := by simpa [hab.gcd_eq_one] using hp_dvd_gab
+  exact hp.not_dvd_one this
+
+/-- **補助補題3：差の立方に存在する原始素因子（3|diff分岐含む）**
+
+c > b で gcd(c,b)=1 のとき、
+q | (c³-b³) ∧ q ∤ (c-b) を満たす素数 q が存在。
+
+このとき 3 | (c-b) の分岐も網羅。
+-/
+lemma exists_prime_factor_cube_diff {c b : ℕ}
+    (hbc : b < c) (hb : 0 < b) (hcop : Nat.Coprime c b) :
+    ∃ q, Nat.Prime q ∧ q ∣ c^3 - b^3 ∧ ¬ q ∣ c - b := by
+  -- NextWork.md の 3∣(c-b) 分岐を含む補題。
+  -- メイン定理はこの補題を使う形に切り替え済みで、
+  -- ここは分離して仕上げる。
+  have _hbc := hbc
+  have _hb := hb
+  have _hcop := hcop
+  sorry
+
+-- ========================================
 -- § 1. 層A（Zsigmondy原始素因子）
 -- ========================================
 
@@ -284,147 +350,31 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
   intro h_eq
 
-  -- 準備：a < b の場合は入れ替える
-  by_cases hab_cmp : b ≤ a
-  · -- a ≥ b の場合
-    by_cases hab_eq : a = b
-    · -- a = b の場合：2a³ = c³ から 3 進評価で矛盾
-      subst hab_eq
-      letI h_prime_two : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
-      have h_pow_eq : 2 * a ^ 3 = c ^ 3 := by
-        calc
-          2 * a ^ 3 = a ^ 3 + a ^ 3 := by simp [two_mul]
-                 _ = c ^ 3 := h_eq
-      have h_a_ne_zero : a ≠ 0 := Nat.ne_of_gt ha
-      have h_c_ne_zero : c ≠ 0 := Nat.ne_of_gt hc
-      have h_pow_c : padicValNat 2 (c ^ 3) = 3 * padicValNat 2 c :=
-        padicValNat.pow (p := 2) (a := c) 3 h_c_ne_zero
-      have h_pow_a : padicValNat 2 (a ^ 3) = 3 * padicValNat 2 a :=
-        padicValNat.pow (p := 2) (a := a) 3 h_a_ne_zero
-      have h2_ne_zero : 2 ≠ 0 := by decide
-      have h_a_pow_ne_zero : a ^ 3 ≠ 0 := pow_ne_zero 3 h_a_ne_zero
-      have h_mul_val : padicValNat 2 (2 * a ^ 3) =
-          padicValNat 2 2 + padicValNat 2 (a ^ 3) := by
-        simpa using padicValNat.mul (p := 2) (a := 2) (b := a ^ 3) h2_ne_zero h_a_pow_ne_zero
-      have h_even_one : padicValNat 2 (2 * 1) = 1 + padicValNat 2 1 :=
-        (padic_val_two_of_even 1).2 (by norm_num : 1 ≠ 0)
-      have h_one_odd : padicValNat 2 1 = 0 := padic_val_two_of_odd 0
-      have h2_val : padicValNat 2 2 = 1 := by
-        calc
-          padicValNat 2 2 = 1 + padicValNat 2 1 := h_even_one
-          _ = 1 := by simp [h_one_odd]
-      have h_tmp : padicValNat 2 (2 * a ^ 3) = padicValNat 2 2 + 3 * padicValNat 2 a := by
-        simp [h_mul_val, h_pow_a]
-      have h_rhs : padicValNat 2 (2 * a ^ 3) = 1 + 3 * padicValNat 2 a := by
-        calc
-          padicValNat 2 (2 * a ^ 3) = padicValNat 2 2 + 3 * padicValNat 2 a := h_tmp
-          _ = 1 + 3 * padicValNat 2 a := by rw [h2_val]
-      have h_val_eq : 3 * padicValNat 2 c = 1 + 3 * padicValNat 2 a := by
-        calc
-          3 * padicValNat 2 c = padicValNat 2 (c ^ 3) := Eq.symm h_pow_c
-          _ = padicValNat 2 (2 * a ^ 3) := by
-            have h_eq' : c ^ 3 = 2 * a ^ 3 := Eq.symm h_pow_eq
-            exact congrArg (padicValNat 2) h_eq'
-          _ = 1 + 3 * padicValNat 2 a := h_rhs
-      have h3_dvd_rhs : 3 ∣ 1 + 3 * padicValNat 2 a := by
-        have h3_dvd_left : 3 ∣ padicValNat 2 c * 3 := Nat.dvd_mul_left 3 (padicValNat 2 c)
-        simpa [h_val_eq, Nat.mul_comm (padicValNat 2 c) 3] using h3_dvd_left
-      have h_le : 3 * padicValNat 2 a ≤ 1 + 3 * padicValNat 2 a :=
-        Nat.le_add_left (3 * padicValNat 2 a) 1
-      have h_mul_dvd : 3 ∣ 3 * padicValNat 2 a := by
-        simp [Nat.mul_comm (3 : ℕ) (padicValNat 2 a)] at *
-      have h3_dvd_one : 3 ∣ 1 := by
-        have h3_dvd_shift : 3 ∣ 1 + 3 * padicValNat 2 a - 3 * padicValNat 2 a := by
-          apply Nat.dvd_sub h3_dvd_rhs h_mul_dvd
-        simp only [add_tsub_cancel_right, Nat.dvd_one, OfNat.ofNat_ne_one] at h3_dvd_shift
-      exact Nat.Prime.not_dvd_one Nat.prime_three h3_dvd_one
+  have hcop_cb : Nat.Coprime c b := coprime_cb_of_eq hab h_eq
+  have hbc : b < c := by
+    by_contra hbc_not
+    have hcb : c ≤ b := Nat.not_lt.mp hbc_not
+    have hc3_le : c ^ 3 ≤ b ^ 3 := Nat.pow_le_pow_left hcb 3
+    have hsum_le : a ^ 3 + b ^ 3 ≤ b ^ 3 := by simpa [h_eq] using hc3_le
+    have ha3_pos : 0 < a ^ 3 := by positivity
+    omega
 
-    · -- a > b の場合
-      push_neg at hab_eq
-      have hab_lt : b < a := Nat.lt_of_le_of_ne hab_cmp (Ne.symm hab_eq)
+  obtain ⟨q, hq_prime, hq_dvd_diff, hq_ndiv_diff⟩ :=
+    exists_prime_factor_cube_diff hbc hb hcop_cb
 
-      -- **分岐：3 ∣ (a-b) かどうか**
-      by_cases h3div : 3 ∣ a - b
-      · -- ケース2-1: 3 ∣ (a-b)
-        -- この場合、Zsigmondy層A補助補題が適用できない
-        -- 代わりに「3が平方で割る」ことを示して矛盾導出
-        have h_ab_pos : 0 < a - b := Nat.sub_pos_of_lt hab_lt
-        have h_3pow_dvd : 9 ∣ a ^ 3 - b ^ 3 := by
-          rcases h3div with ⟨k, hk⟩
-          have ha_eq : a = 3 * k + b := by
-            calc
-              a = (a - b) + b := by
-                symm
-                exact Nat.sub_add_cancel hab_lt.le
-              _ = 3 * k + b := by rw [hk]
-          have h_factor : a ^ 3 - b ^ 3 = (a - b) * (a ^ 2 + a * b + b ^ 2) := by
-            have h_pow : b ^ 3 ≤ a ^ 3 := Nat.pow_le_pow_left (Nat.le_of_lt hab_lt) 3
-            zify [hab_lt, h_pow]
-            ring
-          have h_quad_dvd3 : 3 ∣ a ^ 2 + a * b + b ^ 2 := by
-            refine ⟨3 * k ^ 2 + 3 * k * b + b ^ 2, ?_⟩
-            calc
-              a ^ 2 + a * b + b ^ 2
-                  = (3 * k + b) ^ 2 + (3 * k + b) * b + b ^ 2 := by
-                      simp only [ha_eq]
-              _ = 3 * (3 * k ^ 2 + 3 * k * b + b ^ 2) := by ring
-          rcases h_quad_dvd3 with ⟨m, hm⟩
-          refine ⟨k * m, ?_⟩
-          calc
-            a ^ 3 - b ^ 3 = (a - b) * (a ^ 2 + a * b + b ^ 2) := h_factor
-            _ = (3 * k) * (3 * m) := by rw [hk, hm]
-            _ = 9 * (k * m) := by ring
+  have hsub : c ^ 3 - b ^ 3 = a ^ 3 := cube_sub_eq_of_add_eq h_eq
+  have hq_dvd_a3 : q ∣ a ^ 3 := by simpa [hsub] using hq_dvd_diff
+  have hq_dvd_a : q ∣ a := hq_prime.dvd_of_dvd_pow hq_dvd_a3
 
-        -- h_eq : a^3 + b^3 = c^3 から矛盾を導く
-        -- この分岐は層Aの異なる分析が必要
-        sorry  -- todo: 層A補助：3|a-b ケースの分析
+  have h_lower_a3 : 3 ≤ padicValNat q (a ^ 3) :=
+    padicValNat_lower_bound_of_dvd_d3 ha hq_prime hq_dvd_a
+  have h_lower : 3 ≤ padicValNat q (c ^ 3 - b ^ 3) := by
+    simpa [hsub] using h_lower_a3
 
-      · -- ケース2-2: ¬ 3 ∣ (a-b)（通常の Zsigmondy ケース）
-        -- by_cases の分岐により h3div : ¬ 3 ∣ a - b が自動的に成立
+  have h_upper : padicValNat q (c ^ 3 - b ^ 3) ≤ 1 :=
+    padicValNat_upper_bound_d3 hbc hc hb hcop_cb hq_prime hq_dvd_diff hq_ndiv_diff
 
-        -- 層A：原始素因子 q の存在（Zsigmondy定理）
-        obtain ⟨q, hq_prime, hq_dvd_pow, hq_ndiv_diff⟩ :=
-          exists_primitive_prime_factor_d3 hab hb hab_lt h3div
-
-        -- 層A下界：完全3乗仮定から v_q ≥ 3
-        have h_lower : 3 ≤ padicValNat q (a ^ 3 - b ^ 3) := by
-          -- **Zsigmondy理論による下界：**
-          -- 原始素因子 q は「新しい」素因子であり、
-          -- d=3 での指数構造において高い重複度を持つ。
-          --
-          -- 証明メカニズム（層A本来の形式化時の詳細）：
-          -- 1. Zsigmondy定理: 原始素因子 q の存在（既に層A補助補題で確立）
-          -- 2. 指数の構造: 新しい素因子の "exponent of appearance" は d と関連
-          -- 3. a³ - b³ の padicValNat: v_q(a³ - b³) ≥ 1 は自動
-          -- 4. 完全3乗仮定 a³ + b³ = c³ を組み合わせると v_q ≥ 3 が導ける
-          --
-          -- 詳細実装はおそらく:
-          -- - Lifting the Exponent Lemma (LTE) の応用
-          -- - または Zsigmondy の exponent database
-          -- - または padicValNat の３乗構造分析
-          --
-          -- 当ファイルでは層A形式化スケッチのため、
-          -- 下界の具体的導出は次フェーズ（GcdNextLayerB.lean等）へ譲る。
-          --
-          sorry  -- todo: 層A下界：Zsigmondy指数理論の完全形式化待ち
-
-        -- 層B上界：padicValNat評価
-        have h_upper : padicValNat q (a ^ 3 - b ^ 3) ≤ 1 :=
-          padicValNat_upper_bound_d3 hab_lt ha hb hab hq_prime hq_dvd_pow hq_ndiv_diff
-
-        -- 矛盾：3 ≤ padicValNat ≤ 1
-        have h_bound : 3 ≤ 1 := le_trans h_lower h_upper
-        have h_contra : ¬ 3 ≤ 1 := Nat.not_le_of_lt (by norm_num : 1 < 3)
-        contradiction
-
-  · -- a < b の場合（b と a を入れ替えて再帰）
-    push_neg at hab_cmp
-    have h_eq_swap : b ^ 3 + a ^ 3 = c ^ 3 := by
-      calc b ^ 3 + a ^ 3 = a ^ 3 + b ^ 3 := by ring
-                       _ = c ^ 3 := h_eq
-    have hab_swap : Nat.Coprime b a := Nat.coprime_comm.mp hab
-    have : b ^ 3 + a ^ 3 ≠ c ^ 3 :=
-      FLT_d3_by_padicValNat hb ha hc hab_swap
-    exact this h_eq_swap
+  have : (3 : ℕ) ≤ 1 := le_trans h_lower h_upper
+  omega
 
 end DkMath.FLT
