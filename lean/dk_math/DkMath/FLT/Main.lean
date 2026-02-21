@@ -65,48 +65,29 @@ open DkMath.Algebra.DiffPow
 -- § 1. 層A（Zsigmondy原始素因子）
 -- ========================================
 
-/-- **層A補題：原始素因子の存在**
+/-- **層A補題：Zsigmondy原始素因子の存在**
 
 Zsigmondy定理により、a³ - b³ の素因子で (a-b) に含まれないものが存在する。
 
 **入力:**
 - gcd(a,b)=1
 - 0 < b < a
-- a³ - b³ > 1（非一般性）
 
 **出力:**
 存在するq : Prime で
-  q | (a³ - b³)
+  q ∣ (a³ - b³)
   ¬ q ∣ (a - b)
-  q ∣ c（完全3乗仮定時）
 
 **実装:**
-ZsigmondyCyclotomic.leanの既存補題を直接使用
+ZsigmondyCyclotomic.leanの既存補題から導出
 -/
-lemma exists_primitive_prime_factor_d3 {a b c : ℕ}
-    (hab : Nat.Coprime a b) (hb : 0 < b) (ha : b < a) (hc : 0 < c)
-    (h_eq : a ^ 3 + b ^ 3 = c ^ 3) :
+lemma exists_primitive_prime_factor_d3 {a b : ℕ}
+    (hab : Nat.Coprime a b) (hb : 0 < b) (ha : b < a) :
     ∃ q : ℕ,
-      Nat.Prime q ∧ q ∣ c ∧ q ≠ c ∧
-      q ∣ a ^ 3 - b ^ 3 ∧ ¬ q ∣ a - b := by
+      Nat.Prime q ∧ q ∣ a ^ 3 - b ^ 3 ∧ ¬ q ∣ a - b := by
   -- Zsigmondy定理：a³ - b³ の原始素因子の存在
   -- （実装は ZsigmondyCyclotomic.leanで provide）
-  have h_pow3mul_sub_ab : a ^ 3 - b ^ 3 = (a - b) * (a ^ 2 + a * b + b ^ 2) := by
-    have h_pow : b ^ 3 ≤ a ^ 3 := Nat.pow_le_pow_left (Nat.le_of_lt ha) 3
-    zify [ha, h_pow]
-    ring_nf
-  have h_ab_div_pow3 : (a ^ 3 - b ^ 3) / (a ^ 2 + a * b + b ^ 2) = a - b := by
-    -- (a^3 - b^3) = (a-b)(a^2 + ab + b^2) より両辺を a^2 + ab + b^2 で割る
-    rw [h_pow3mul_sub_ab]
-    -- a^2 + ab + b^2 ≠ 0 は positivity で分かる
-    have h_s0_pos : 0 < a ^ 2 + a * b + b ^ 2 := by
-      nlinarith [ha, hb]
-    exact Nat.mul_div_left (a - b) h_s0_pos
-  have ha_pos : 0 < a := lt_trans hb ha
-  have h_false : False := by
-    sorry  -- todo: Zsigmondy定理の適用：原始素因子 q の存在
-    -- これも使用してはならない → exact FLT_case_3 a b c ⟨ha_pos, hb, hc⟩ hab h_eq.symm
-  exact False.elim h_false
+  sorry  -- 層A補助補題（Zsigmondy理論）が完成したら埋まる
 
 lemma exists_primitive_prime_factor_d3_use_FLT3 {a b c : ℕ}
     (_hab : Nat.Coprime a b) (hb : 0 < b) (ha : b < a) (hc : 0 < c)
@@ -316,9 +297,9 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
       push_neg at hab_eq
       have hab_lt : b < a := Nat.lt_of_le_of_ne hab_cmp (Ne.symm hab_eq)
 
-      -- 層A：原始素因子 q の存在
-      obtain ⟨q, hq_prime, hq_dvd_c, hq_ne_c, hq_dvd_pow, hq_ndiv_diff⟩ :=
-        exists_primitive_prime_factor_d3 hab hb hab_lt hc h_eq
+      -- 層A：原始素因子 q の存在（Zsigmondy定理）
+      obtain ⟨q, hq_prime, hq_dvd_pow, hq_ndiv_diff⟩ :=
+        exists_primitive_prime_factor_d3 hab hb hab_lt
 
       -- 層A下界：完全3乗仮定から v_q ≥ 3
       have h_lower : 3 ≤ padicValNat q (a ^ 3 - b ^ 3) := by
