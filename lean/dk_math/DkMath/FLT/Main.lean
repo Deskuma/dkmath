@@ -129,7 +129,7 @@ lemma exists_prime_factor_cube_diff {c b : ℕ}
     have hc_eq : c = 3 * k + b := by
       calc
         c = (c - b) + b := (Nat.sub_add_cancel hbc.le).symm
-        _ = 3 * k + b := by simpa [hk]
+        _ = 3 * k + b := by simp only [hk]
 
     let m : ℕ := 3 * k ^ 2 + 3 * k * b + b ^ 2
 
@@ -146,17 +146,18 @@ lemma exists_prime_factor_cube_diff {c b : ℕ}
       have h3c : 3 ∣ c := by
         have : 3 ∣ (c - b) + b := dvd_add (by exact ⟨k, hk⟩) h3b
         simpa [Nat.sub_add_cancel hbc.le] using this
-      have : 3 ∣ Nat.gcd c b := Nat.dvd_gcd h3c h3b
-      have : 3 ∣ 1 := by simpa [hcop.gcd_eq_one] using this
-      exact Nat.prime_three.not_dvd_one this
+      have h3gcd : 3 ∣ Nat.gcd c b := Nat.dvd_gcd h3c h3b
+      have h3one : 3 ∣ 1 := by
+        simp only [hcop.gcd_eq_one, Nat.dvd_one, OfNat.ofNat_ne_one] at h3gcd
+      exact Nat.prime_three.not_dvd_one h3one
 
     have h3_ndvd_m : ¬ 3 ∣ m := by
       intro h3m
       have h3_dvd_t1 : 3 ∣ 3 * k ^ 2 := by
-        simpa [Nat.mul_comm] using (dvd_mul_left 3 (k ^ 2))
+        simp only [dvd_mul_right]
       have h3_dvd_t2 : 3 ∣ 3 * k * b := by
         have : 3 ∣ 3 * k := by
-          simpa [Nat.mul_comm] using (dvd_mul_left 3 k)
+          simp only [dvd_mul_right]
         exact dvd_mul_of_dvd_left this b
       have h3_dvd_sum12 : 3 ∣ 3 * k ^ 2 + 3 * k * b := dvd_add h3_dvd_t1 h3_dvd_t2
       have hm_eq : m = (3 * k ^ 2 + 3 * k * b) + b ^ 2 := by
