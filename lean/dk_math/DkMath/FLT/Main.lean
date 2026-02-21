@@ -6,7 +6,7 @@ Authors: D. and Wise Wolf.
 
 -- cid: 697d62b5-312c-83a8-a917-f4aca8fa80ca
 
-import DkMath.FLT.Basic
+-- no-import DkMath.FLT.Basic 依存しないように外す
 import DkMath.FLT.PetalDetect
 import DkMath.NumberTheory.GcdNext
 import DkMath.NumberTheory.ZsigmondyCyclotomic
