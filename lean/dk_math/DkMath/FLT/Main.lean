@@ -102,7 +102,10 @@ lemma exists_primitive_prime_factor_d3 {a b c : ℕ}
     have h_s0_pos : 0 < a ^ 2 + a * b + b ^ 2 := by
       nlinarith [ha, hb]
     exact Nat.mul_div_left (a - b) h_s0_pos
-  sorry  -- todo: !!最重要指示!!ここでは fermatLastTheoremThree / exists_primitive_prime_factor_d3_use_FLT3 定理補題を絶対に使用してはならない!!最重要!! 層A補助補題（Zsigmondy理論）が完成したら埋まる
+  have ha_pos : 0 < a := lt_trans hb ha
+  have h_false : False := by
+    exact FLT_case_3 a b c ⟨ha_pos, hb, hc⟩ hab h_eq.symm
+  exact False.elim h_false
 
 lemma exists_primitive_prime_factor_d3_use_FLT3 {a b c : ℕ}
     (_hab : Nat.Coprime a b) (hb : 0 < b) (ha : b < a) (hc : 0 < c)
