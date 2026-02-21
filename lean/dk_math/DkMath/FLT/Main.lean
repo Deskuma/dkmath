@@ -72,6 +72,7 @@ Zsigmondy定理により、a³ - b³ の素因子で (a-b) に含まれないも
 **入力:**
 - gcd(a,b)=1
 - 0 < b < a
+- ¬ 3 ∣ (a-b)（重要：分岐条件）
 
 **出力:**
 存在するq : Prime で
@@ -79,15 +80,17 @@ Zsigmondy定理により、a³ - b³ の素因子で (a-b) に含まれないも
   ¬ q ∣ (a - b)
 
 **実装:**
-ZsigmondyCyclotomic.leanの既存補題から導出
+ZsigmondyCyclotomic.leanの `exists_primitive_prime_factor_prime` を直接使用
 -/
 lemma exists_primitive_prime_factor_d3 {a b : ℕ}
-    (hab : Nat.Coprime a b) (hb : 0 < b) (ha : b < a) :
+    (hab : Nat.Coprime a b) (hb : 0 < b) (ha : b < a)
+    (hpnd : ¬ 3 ∣ a - b) :
     ∃ q : ℕ,
       Nat.Prime q ∧ q ∣ a ^ 3 - b ^ 3 ∧ ¬ q ∣ a - b := by
-  -- Zsigmondy定理：a³ - b³ の原始素因子の存在
-  -- （実装は ZsigmondyCyclotomic.leanで provide）
-  sorry  -- 層A補助補題（Zsigmondy理論）が完成したら埋まる
+  -- Zsigmondy定理 d=3 版：¬ 3 ∣ (a-b) の場合、a³ - b³ は新しい素因子を持つ
+  -- ZsigmondyCyclotomic.leanの exists_primitive_prime_factor_prime を使用
+  exact exists_primitive_prime_factor_prime Nat.prime_three
+    (by norm_num : 3 ≤ 3) ha hb hab hpnd
 
 
 -- ========================================
@@ -285,40 +288,58 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
       push_neg at hab_eq
       have hab_lt : b < a := Nat.lt_of_le_of_ne hab_cmp (Ne.symm hab_eq)
 
-      -- 層A：原始素因子 q の存在（Zsigmondy定理）
-      obtain ⟨q, hq_prime, hq_dvd_pow, hq_ndiv_diff⟩ :=
-        exists_primitive_prime_factor_d3 hab hb hab_lt
+      -- **分岐：3 ∣ (a-b) かどうか**
+      by_cases h3div : 3 ∣ a - b
+      · -- ケース2-1: 3 ∣ (a-b)
+        -- この場合、Zsigmondy層A補助補題が適用できない
+        -- 代わりに「3が平方で割る」ことを示して矛盾導出
+        have h_ab_pos : 0 < a - b := Nat.sub_pos_of_lt hab_lt
+        have h_3pow_dvd : 9 ∣ a ^ 3 - b ^ 3 := by
+          -- 3 | (a-b) ⟹ 3 | (a^3 - b^3)（立方）
+          -- さらに 3^2 | (a^3 - b^3) を示せる
+          sorry  -- 層A補助：3の平方割り切り分析
 
-      -- 層A下界：完全3乗仮定から v_q ≥ 3
-      have h_lower : 3 ≤ padicValNat q (a ^ 3 - b ^ 3) := by
-        -- **Zsigmondy理論による下界：**
-        -- 原始素因子 q は「新しい」素因子であり、
-        -- d=3 での指数構造において高い重複度を持つ。
-        --
-        -- 証明メカニズム（層A本来の形式化時の詳細）：
-        -- 1. Zsigmondy定理: 原始素因子 q の存在（既に層A補助補題で確立）
-        -- 2. 指数の構造: 新しい素因子の "exponent of appearance" は d と関連
-        -- 3. a³ - b³ の padicValNat: v_q(a³ - b³) ≥ 1 は自動
-        -- 4. 完全3乗仮定 a³ + b³ = c³ を組み合わせると v_q ≥ 3 が導ける
-        --
-        -- 詳細実装はおそらく:
-        -- - Lifting the Exponent Lemma (LTE) の応用
-        -- - または Zsigmondy の exponent database
-        -- - または padicValNat の３乗構造分析
-        --
-        -- 当ファイルでは層A形式化スケッチのため、
-        -- 下界の具体的導出は次フェーズ（GcdNextLayerB.lean等）へ譲る。
-        --
-        sorry  -- 層A下界：Zsigmondy指数理論の完全形式化待ち
+        -- h_eq : a^3 + b^3 = c^3 から矛盾を導く
+        -- この分岐は層Aの異なる分析が必要
+        sorry  -- 層A補助：3|a-b ケースの分析
 
-      -- 層B上界：padicValNat評価
-      have h_upper : padicValNat q (a ^ 3 - b ^ 3) ≤ 1 :=
-        padicValNat_upper_bound_d3 hab_lt ha hb hab hq_prime hq_dvd_pow hq_ndiv_diff
+      · -- ケース2-2: ¬ 3 ∣ (a-b)（通常の Zsigmondy ケース）
+        -- by_cases の分岐により h3div : ¬ 3 ∣ a - b が自動的に成立
 
-      -- 矛盾：3 ≤ padicValNat ≤ 1
-      have h_bound : 3 ≤ 1 := le_trans h_lower h_upper
-      have h_contra : ¬ 3 ≤ 1 := Nat.not_le_of_lt (by norm_num : 1 < 3)
-      contradiction
+        -- 層A：原始素因子 q の存在（Zsigmondy定理）
+        obtain ⟨q, hq_prime, hq_dvd_pow, hq_ndiv_diff⟩ :=
+          exists_primitive_prime_factor_d3 hab hb hab_lt h3div
+
+        -- 層A下界：完全3乗仮定から v_q ≥ 3
+        have h_lower : 3 ≤ padicValNat q (a ^ 3 - b ^ 3) := by
+          -- **Zsigmondy理論による下界：**
+          -- 原始素因子 q は「新しい」素因子であり、
+          -- d=3 での指数構造において高い重複度を持つ。
+          --
+          -- 証明メカニズム（層A本来の形式化時の詳細）：
+          -- 1. Zsigmondy定理: 原始素因子 q の存在（既に層A補助補題で確立）
+          -- 2. 指数の構造: 新しい素因子の "exponent of appearance" は d と関連
+          -- 3. a³ - b³ の padicValNat: v_q(a³ - b³) ≥ 1 は自動
+          -- 4. 完全3乗仮定 a³ + b³ = c³ を組み合わせると v_q ≥ 3 が導ける
+          --
+          -- 詳細実装はおそらく:
+          -- - Lifting the Exponent Lemma (LTE) の応用
+          -- - または Zsigmondy の exponent database
+          -- - または padicValNat の３乗構造分析
+          --
+          -- 当ファイルでは層A形式化スケッチのため、
+          -- 下界の具体的導出は次フェーズ（GcdNextLayerB.lean等）へ譲る。
+          --
+          sorry  -- 層A下界：Zsigmondy指数理論の完全形式化待ち
+
+        -- 層B上界：padicValNat評価
+        have h_upper : padicValNat q (a ^ 3 - b ^ 3) ≤ 1 :=
+          padicValNat_upper_bound_d3 hab_lt ha hb hab hq_prime hq_dvd_pow hq_ndiv_diff
+
+        -- 矛盾：3 ≤ padicValNat ≤ 1
+        have h_bound : 3 ≤ 1 := le_trans h_lower h_upper
+        have h_contra : ¬ 3 ≤ 1 := Nat.not_le_of_lt (by norm_num : 1 < 3)
+        contradiction
 
   · -- a < b の場合（b と a を入れ替えて再帰）
     push_neg at hab_cmp
