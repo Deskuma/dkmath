@@ -165,22 +165,23 @@ lemma padicValNat_upper_bound_d3 {a b q : ℕ}
   -- **q² ∤ S0 を導く（相対多角数の性質）**
   have hq_not_sq : ¬ q ^ 2 ∣ S0_nat a b := by
     -- **相対多角数の平方判定法：**
-    -- S0(a,b) = a² + ab + b² = a(a+b) + b²
+    -- S0(a,b) = a² + ab + b²
     --
-    -- 条件下 (q|S0, q∤(a+b), gcd(a,b)=1) では：
-    -- 1. q | S0 ∧ q ∤ (a+b) ⟹ q | b²（mod_q_ab_analysis）
-    -- 2. q | b² ∧ q素数 ⟹ q | b
-    -- 3. q | b ∧ gcd(a,b)=1 ⟹ q ∤ a
-    -- 4. したがって q² ∤ S0（平方で割らない）
+    -- 条件下 (q|S0, q∤(a+b), gcd(a,b)=1) では q²∤S0 が成り立つ。
     --
-    -- 詳細実装：
-    -- - PetalDetect.mod_q_ab_analysis: q|S0 から q|b² を導く
-    -- - padicValNat_le_one_of_not_sq_dvd: q²∤S0 の帰結
+    -- 証明スケッチ：
+    -- 1. q | S0 = a² + ab + b² から出発
+    -- 2. q ∤ (a+b) という条件を使う
+    -- 3. 仮に q² | S0 と仮定
+    -- 4. Cosmic Formula: S0 = a(a+b) + b²
+    -- 5. q² | (a(a+b) + b²) ∧ q | a(a+b) は矛盾を導く
+    --    （相対多角数の自己相似性）
     --
-    -- 当ファイルでは形式化スケッチのため、
-    -- 相対多角数モジュロ構造の詳細分析は層B本体へ譲る。
+    -- より厳密には Legendre/Hensel lift による
+    -- p-adic解析が必要だが、当ファイルでは形式化スケッチのため
+    -- PetalDetect層B本体の詳細証明に譲る。
     --
-    sorry  -- 層B平方判定：相対多角数の mod 議論待ち
+    sorry  -- 層B平方判定：相対多角数モジュロ構造の詳細分析待ち
 
   -- **padicValNat上界：PetalDetect.padicValNat_le_one_of_not_sq_dvd を使用**
   have hpadic_bound : padicValNat q (S0_nat a b) ≤ 1 :=
