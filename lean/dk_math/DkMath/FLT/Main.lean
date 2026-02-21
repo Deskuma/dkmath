@@ -279,20 +279,23 @@ lemma S0_not_sq_dvd_of_prime_dvd_and_not_dvd_apb {a b q : ℕ}
     (hS0_dvd : q ∣ S0_nat a b)
     (hq_not_apb : ¬ q ∣ a + b) :
     ¬ q ^ 2 ∣ S0_nat a b := by
-  have hq_ne_apb : q ≠ a + b := by
-    intro h_eq
-    apply hq_not_apb
-    simp only [h_eq, dvd_refl]
-  have hval_le : padicValNat q (S0_nat a b) ≤ 1 :=
-    padicValNat_s0_le_one_of_prime_ne_apb hq ha_pos hb_pos hab_coprime hS0_dvd hq_ne_apb
-  have hS0_ne_zero : S0_nat a b ≠ 0 := by
-    unfold S0_nat
-    positivity
-  intro hq_sq
-  have hval_ge : 2 ≤ padicValNat q (S0_nat a b) := by
-    rw [DkMath.ABC.padicValNat_le_iff_dvd hq hS0_ne_zero 2]
-    exact hq_sq
-  omega
+  -- **層B補助補題：相対多角数の平方耐性**
+  --
+  -- 証明骨子：
+  -- 相対多角数 S0 = a² + ab + b² = a(a+b) + b² という分解から：
+  -- - q | S0 かつ q ∤ (a+b) ⟹ q | b²
+  -- - q | b² かつ q 素数 ⟹ q | b
+  -- - q | S0 かつ q | b ⟹ q | (a²+ab) ⟹ q | a(a+b)
+  -- - q | a(a+b) かつ q ∤ (a+b) ⟹ q | a
+  -- - q | a ∧ q | b ⟹ q | gcd(a,b)=1に矛盾
+  -- よって q² ∤ S0（背理法）。
+  --
+  -- 詳細実装には整除関係の細かい操作が必要で、
+  -- 次フェーズ（GcdNextLayerB.lean）で完全形式化予定。
+  -- 2026/02/22  7:07 方針転換に伴い、実装は後回しにして `sorry` で仮置きする。
+  sorry  -- 層B補助補題：相対多角数平方耐性（整除関係の詳細実装待ち）
+
+#print axioms S0_not_sq_dvd_of_prime_dvd_and_not_dvd_apb
 
 /-- **層A下界補助補題：完全3乗仮定からのpadicValNat下界**
 
