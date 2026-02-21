@@ -539,7 +539,10 @@ lemma gcd_u_GN3 {u y : ℕ} (h_gcd_uy : u.gcd y = 1) : u.gcd (GN 3 u y) = u.gcd 
   exact this
 
 /-- メイン定理: フェルマーの最終定理 $n=3$ の場合 -/
-theorem FLT_case_3 (x y z : ℕ) (hpos : 0 < x ∧ 0 < y ∧ 0 < z) (h_coprime : Nat.gcd x y = 1) (h_body : z ^ 3 = x ^ 3 + y ^ 3) : False := by
+theorem FLT_case_3 (x y z : ℕ)
+  (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
+  (h_coprime : Nat.gcd x y = 1)
+  (h_body : z ^ 3 = x ^ 3 + y ^ 3) : False := by
   -- 1. 変数変換 u = z - y
   let u := z - y
   have hzy : y < z := by
@@ -602,7 +605,7 @@ theorem FLT_case_3 (x y z : ℕ) (hpos : 0 < x ∧ 0 < y ∧ 0 < z) (h_coprime :
       h_xn_val
       h3
 
-#print axioms FLT_case_3
+#print axioms FLT_case_3  -- NG: 2026/02/22  7:39 sorryAx
 
 /-- Fermat's Last Theorem (FLT)
 Cosmic Formula を用いた新しい証明
