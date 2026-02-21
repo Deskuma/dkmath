@@ -149,7 +149,11 @@ lemma padicValNat_lower_bound_of_dvd_d3 {c q : ℕ}
   have h_val_c_ge_1 : 1 ≤ padicValNat q c := by
     have h_ne_zero : padicValNat q c ≠ 0 := by
       intro h
-      have : ¬ q ∣ c := by sorry -- todo: padicValNat.eq_zero_iff.mp h
+      have : ¬ q ∣ c := by
+        rcases padicValNat.eq_zero_iff.mp h with hq1 | hc0 | hqndvd
+        · exact (hq.ne_one hq1).elim
+        · exact (h_c_ne hc0).elim
+        · exact hqndvd
       exact this hq_dvd_c
     omega
 
