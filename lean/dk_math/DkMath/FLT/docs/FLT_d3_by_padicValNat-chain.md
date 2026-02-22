@@ -106,11 +106,13 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 
 - 依存（Mathlib ✅️）
 
-  - ✅️tactic: `omega`
+  - ☑️tactic: `omega`（`rw [← h]` の後に `(x+y)-y=x` を解いて閉じる）
 
 - 検査
 
-  -
+  - ☑️ `omega` で閉じている（本体は Mathlib 側）
+
+-
 
 #### 1.4.4 `padicValNat_lower_bound_of_dvd_d3`（DB 8631）
 
@@ -150,10 +152,43 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 
 ---
 
-#### 1.5 補題
+#### 1.5 補題（Zsigmondy 軽量版の末端）
 
-- exists\_prime\_divisor\_not\_dividing\_diff\_of\_prime\_exp\
-  素数冪の場合の軽量版 Zsigmondy（prime p, p ≥ 3）
+##### 1.5.1 `exists_prime_divisor_not_dividing_diff_of_prime_exp`（DB 9818）
+
+- 役割：素数冪指数 `p`（prime, p ≥ 3）について、 `a^p - b^p` を割り、かつ `(a-b)` を割らない素因子 `q` を 1つ抽出する。
+
+- 形（要約）
+
+  - 入力：`hp : Nat.Prime p`, `3 ≤ p`, `b < a`, `0 < b`, `Nat.Coprime a b`, 追加仮定 `hpnd : ¬ p ∣ a - b`
+  - 出力：`∃ q, Nat.Prime q ∧ q ∣ a^p - b^p ∧ ¬ q ∣ a - b`
+
+- 証明スケルトン（DB 内のコメント通り）
+
+  1. `G := quotientPrimePow a b p = (a^p - b^p) / (a-b)` を置き、`1 < G` を示す（`quotientPrimePow_gt_one`）
+  2. `G ≠ 1` から `Nat.exists_prime_and_dvd` で `q | G` なる素数 q を取る ✅️
+  3. `a^p - b^p = (a-b) * G`（`pow_sub_pow_eq_diff_mul_quotient`）で `q | a^p - b^p` を得る
+  4. もし `q | (a-b)` なら、`q | G` と合わせて `q | gcd(a-b, diffPowSum ...)` を作る
+  5. `prime_dividing_gcd_divides_d`（GcdDiffPow）で `q | p` を得る
+  6. `p` は素数なので `q = p`、しかし `hpnd : ¬ p ∣ (a-b)` と矛盾
+
+- 依存（DkMath）
+
+  - `quotientPrimePow_gt_one`（DB 9716 付近）
+  - `pow_sub_pow_eq_diff_mul_quotient`（DB 9744 付近）
+  - `DkMath.Algebra.DiffPow.pow_sub_pow_factor`（Int 上の差の因数分解）
+  - `DkMath.NumberTheory.GcdDiffPow.prime_dividing_gcd_divides_d`（gcd から d を割る結論）
+
+- 依存（Mathlib ✅️）
+
+  - ✅️`Nat.exists_prime_and_dvd`
+  - ✅️`dvd_mul_of_dvd_right`, ✅️`Nat.pow_le_pow_left`
+  - ✅️`Int.gcd_dvd_left`, ✅️`Int.gcd_dvd_right`, ✅️`Nat.dvd_gcd`
+  - ✅️tactic: `omega`, `simp`, `norm_cast`, `ring`, `ring_nf`
+
+- 検査
+
+  -
 
 ## 2. “証明の流れ”を固定（監査用の骨格）
 
