@@ -894,6 +894,8 @@ theorem FLT {x y z : ℕ} (n : ℕ) (hpos_xyz : 0 < x ∧ 0 < y ∧ 0 < z) (hn :
   -- 最終的に原始解に還元して `FLT_of_coprime` を適用
   exact FLT_of_coprime n (And.intro hx'_pos (And.intro hy'_pos hz'_pos)) hn h_gcd_x'y' hxy'
 
+#print axioms FLT  -- NG: 2026/02/22  7:39 sorryAx
+
 end DkMath
 
 /- ## ロードマップ Note
