@@ -458,219 +458,144 @@ graph TD
 
 ---
 
-## 4. モジュール別：中身の見出し（現状把握）
+## 4. モジュール別ガイド（詳細は自動分析に委ねる）
 
-ここから下は「各モジュールが何を提供しているか」を見出し化する。
+> **方針変更（2026-02-22）**: 各モジュールの詳細リスト（補題名、定理一覧）は、
+> 手で管理する代わりに **サマリーレポート** に委ねる。
+> ここは「概説」と「参照先」のみを記載。
 
-### 4.1 `DkMath.Basic`
+### 4.1 補題・定理の自動索引
 
-- **用途**：全体の基本定義・ユーティリティ。
-- **TODO（後で追記）**：公開 API（`def`/`lemma`/`theorem` の目玉）
+以下をリポジトリ直下（またはGitHub Pages等）で常時更新：
 
-### 4.2 `DkMath.Samples`
+| ファイル | 内容 | 更新 |
+|---------|------|------|
+| `logs/summary_report/__theorems-heading.txt` | 補題/定理の見出し（全ファイル） | 自動 |
+| `logs/summary_report/___theorems-with-filename.txt` | 補題・定理と所属ファイル | 自動 |
+| `logs/summary_report/__sorries.txt` | `sorry` の位置と文脈 | 自動 |
+| `logs/summary_report/__imports.txt` | import グラフ | 自動 |
+| `logs/summary_report/__file_tree_in_dkmath.txt` | ファイル構成ツリー | 自動 |
 
-- **用途**：サンプル・実験的な定義／例。
-- **TODO**：代表例の列挙
-
----
-
-### 4.3 `DkMath.Algebra.DiffPow`
-
-- **主題**：「差の冪」
-  - 典型形：\(a^d - b^d\) を \((a-b)\) と和へ分解する。
-- **ここに置くと便利なもの**（例）：
-  - 因数分解コア（`a^d - b^d = (a-b) * G` 型）
-  - `CommSemiring` / `CommRing` での一般形
-- **TODO**：代表補題名の抜粋（grep で自動生成できる）
-
-### 4.4 `DkMath.NumberTheory.*`
-
-#### 4.4.1 `DkMath.NumberTheory.GcdDiffPow`
-
-- **主題**：\(\gcd\) と \(a^n-b^n\) の相互作用、差の冪の gcd 制御。
-
-#### 4.4.2 `DkMath.NumberTheory.GdcDivD`
-
-- **主題**：`gcd(a^d-b^d, a-b)` の性質など、指数 \(d\) との関係（`... ∣ d` 型の補題）。
-
-#### 4.4.3 `DkMath.NumberTheory.GcdNext`
-
-- **主題**：`gcd`・`rad`・原始素因子（Zsigmondy 方向）へ向かう橋。
-- **メモ**：この辺は Zsigmondy/Cyclotomic 連携の「足場」になりやすい。
+**使い方**：このINDEX.md で「概要」を把握した後、詳細は上記ファイルから検索。
 
 ---
 
-### 4.5 ABC 系 (`DkMath.ABC.*`)
+### 4.2 主要モジュール（紹介＆参照ガイド）
 
-#### 4.5.1 `DkMath.ABC.Basic`
+各モジュールの**詳細な補題リスト**は自動生成済みです。以下は概要のみ
 
-- **用途**：ABC 周りの基本語彙（`rad`、`padicVal`、補助定義など）。
+#### 代数系
 
-#### 4.5.2 `DkMath.ABC.PadicValNat`
+- `DkMath.Algebra.DiffPow`（差の冪）：詳細は `__theorems-heading.txt` 参照
+- `DkMath.Algebra.BinomTail`（二項尾項）：詳細は `__theorems-heading.txt` 参照
 
-- **用途**：`padicValNat` の使い方・周辺補題を固める。
+#### 数論系
 
-#### 4.5.3 `DkMath.ABC.CountPowersDividing2n1`
+- `DkMath.NumberTheory.GcdDiffPow`（gcd と冪差）
+- `DkMath.NumberTheory.ZsigmondyCyclotomic`（**原始素因子エンジン**）
+- `DkMath.NumberTheory.GcdNext`（橋渡し層、未完部分あり）
 
-- **用途**：`2^n-1` に対する「何回割れるか」系の計数。
-- **備考**：探索・実験・補題の収集が混ざりやすいので、後で整理候補。
+**未完情報**：`logs/summary_report/__sorries.txt` で sorry の位置を確認
 
----
+#### ABC・数値系
 
-### 4.6 Collatz (`DkMath.Collatz.Collatz2K26`)
+- `DkMath.ABC.PadicValNat`（p-adic 値評価）
+- `DkMath.ABC.Basic`
+- `DkMath.Collatz.Collatz2K26`
 
-- **用途**：コラッツ変換の特定パラメータ（`2K26`）に関する検証・補題。
+#### 幾何・組合せ系
 
----
+- `DkMath.CosmicFormula`（宇宙式全般）：階層構造は `__file_tree_in_dkmath.txt` 参照
+- `DkMath.Polyomino` / `DkMath.Tromino`：タイル・格子構造
+- `DkMath.CellDim`：セル次元
 
-### 4.7 Cosmic Formula (`DkMath.CosmicFormula`)
+#### 代数的独立柱
 
-- **目的**：\(\text{Body} + \text{Gap} = \text{Big}\) 型の恒等式（宇宙式）を、 二項・多項・次元一般化・幾何（Cell/Polyomino）へ接続する。
+- `DkMath.SilverRatio`（白銀比、√2）
+- `DkMath.UniqueRepresentation`（一意表現）
 
-#### 4.7.1 サブモジュール（現状：import レベルの目次）
+#### その他
 
-- `DkMath.CosmicFormula.Defs`
-- `DkMath.CosmicFormula.CosmicFormulaBasic`
-- `DkMath.CosmicFormula.CosmicFormulaLinear`
-- `DkMath.CosmicFormula.CosmicFormulaGeom`
-- `DkMath.CosmicFormula.CosmicFormulaDim`
-- `DkMath.CosmicFormula.CosmicFormulaBinom`
-- `DkMath.CosmicFormula.CosmicFormulaExp`
-- `DkMath.CosmicFormula.CosmicFormulaTrominoLink`
+- `DkMath.RH`（リーマン予想関連）
+- `DkMath.DHNT`（動的調和数論）
+- `DkMath.UnitCycle`（単位巡回）
 
-#### 4.7.2 README から拾える「定理カタログ（抜粋）」
+#### **FLT**（フェルマー最終定理）— 本丸
 
-（※ここは後で増やす。まず“見出し”として固定。）
-
-- `cosmic_formula_dim_theorem`
-- `cosmic_formula_cell_dim_intro`
-- `cosmic_formula_cell_dim_theorem`
-- `cosmic_formula_cell_dim_theorem'`
-- `cosmic_formula_cell_dim_theorem''`
-- `cosmic_formula_cell_dim_theorem'''`
-- `cosmic_formula_cell_dim_theorem''''`
+- **`DkMath.FLT.Main`** ✅ — **別解ルート（Zsigmondy + p-adic）**【2026-02-22 完成】
+- `DkMath.FLT.Basic` — 従来ルート
+- `DkMath.FLT.PetalDetect` — 多角数構造
+- `DkMath.FLT.GEisensteinBridge` — Eisenstein 多項式
 
 ---
 
-### 4.8 Polyomino / Tromino
+## 5. 自動分析ツール（実装済み）
 
-#### 4.8.1 `DkMath.Polyomino`
+このINDEX.mdの定形部分（補題リスト、ファイルツリーなど）は、
+以下の **自動生成スクリプト**によって定期的に更新されます。
 
-- **用途**：ポリオミノ一般・タイル・格子集合などの基礎（設計の置き場）。
-
-#### 4.8.2 `DkMath.PolyominoPrototype`
-
-- **用途**：試作・設計実験（後で本体へ取り込み）。
-
-#### 4.8.3 `DkMath.Tromino`
-
-- **用途**：トロミノ（L 型）を中心にした構造。
-
----
-
-### 4.9 Silver Ratio / Unique Representation
-
-#### 4.9.1 `DkMath.SilverRatio`（入口）
-
-- `DkMath.SilverRatio.Basic`
-- `DkMath.SilverRatio.Sqrt2Lemmas`
-- `DkMath.SilverRatio.SilverRatioUnit`
-- `DkMath.SilverRatio.SilverRatioCircle`
-
-#### 4.9.2 `DkMath.UniqueRepSimple`
-
-- **主題**：\(\mathbb{Q}(\sqrt{2})\) における表示の一意性。
-- **キー補題（実例）**
-  - `sqrt2_lin_indep_over_rat'`
-  - `unique_rep_in_Q_sqrt2`
-
-#### 4.9.3 `DkMath.UniqueRepresentation`
-
-- **用途**：上のファイル群をまとめた入口。
-
----
-
-### 4.10 DHNT (`DkMath.DHNT`)
-
-- import：
-  - `DkMath.DHNT.DHNT_Base`
-  - `DkMath.DHNT.UnitNatLayers`
-- **TODO**：公開 API 抜粋（現状はこの doc からは未抽出）
-
----
-
-### 4.11 RH (`DkMath.RH`)
-
-#### 4.11.1 ファイル構成
-
-- `DkMath.RH.Basic`（モジュール識別子・説明）
-- `DkMath.RH.Defs`（縦線パス、トルク、位相速度、アンラップなどの定義）
-- `DkMath.RH.Lemmas`（代数コアと同値変形）
-- `DkMath.RH.Theorems`（積分による位相アンラップの微分可能性など）
-- `DkMath.RH.EulerZeta`（Euler 積としての ζ の定義枠）
-- `DkMath.RH.EulerZetaLemmas`（magnitude の同値性・下界補題など）
-- `DkMath.RH.EulerZetaConvergence`（収束性の足場：σ>1 など）
-
-#### 4.11.2 代表的な補題（抜粋：見出しとして固定）
-
-- `denom_eq_normSq`
-- `im_div_eq_torque_div_normSq`
-- `driftFreeLocal_iff_im_div_eq_zero`
-- `phaseVel_eq_torque_div_normSq`
-- `driftFreeAt_iff_phaseVel_eq_zero`
-- `phaseUnwrap_hasDerivAt`
-
-EulerZeta 側（抜粋）
-
-- `eulerZetaFactor`
-- `eulerZeta`（無限積としての定義枠）
-- `eulerZetaFactorMag_eq_sqrt`
-- `norm_exp_sub_one_lower`
-- `eulerZetaFactorMag_bound_sigma_gt_one`
-
----
-
-### 4.12 UnitCycle (`DkMath.UnitCycle`)
-
-- **用途**：単位の巡回・周期構造（設計の置き場）。
-- **TODO**：公開 API 抜粋
-
----
-
-### 4.13 FLT (`DkMath.FLT`)
-
-- **目的**：FLT に絡む宇宙式的補題（差の冪・gcd 制御・原始素因子方向の足場）を集約。
-- 入口：`DkMath.FLT`
-
-#### 4.13.1 ファイル構成
-
-- `DkMath.FLT.Core` — 基本補題
-- `DkMath.FLT.Basic` — 従来ルート（Cosmic Formula + coprimality）
-- **`DkMath.FLT.Main`** ✅ — 別解ルート（Zsigmondy + p-adic evaluation）**2026-02-22 完成**
-- `DkMath.FLT.PetalDetect` — 相対多角数と平方非整除検出
-- `DkMath.FLT.GEisensteinBridge` — Eisenstein多項式と反例管理
-- `DkMath.FLT.Samples` — サンプル・テスト
-
-#### 4.13.2 新規：Main.lean による別解
-
-**Main.lean の特徴**：
-
-- Zsigmondy原始素因子（層A）と p-adic値評価（層B）を統合
-- 従来の Cosmic Formula + coprimality とは独立したプルーフルート
-- 8個の補助補題 → 1つのメイン定理へ
-- 補題チェーン、グラフ、マトリックスは docs/FLT_LEMMA_CHAIN.* に完全文書化
-
----
-
-## 5. （提案）この目次を“自動生成”する方法
-
-このドキュメントは手で整えられるようにしてあるが、定期的に更新するなら自動化が強い。
-
-### 5.1 まずは最小：ripgrep で一覧
+### 5.1 生成済みレポート（毎回更新）
 
 ```bash
-rg -n "^(theorem|lemma|def) " lean/dk_math/DkMath -S
+# repository root で実行
+./create-summary-report-data.sh
 ```
+
+生成ファイル（`logs/summary_report/`）：
+
+```
+__theorems-heading.txt          補題/定理の見出し（ALL）
+___theorems.txt                 補題コード片（ALL）
+___theorems-with-filename.txt   ファイル所属付き補題
+__sorries.txt                   sorry の位置と文脈
+__imports.txt                   import グラフ
+__file_tree_in_dkmath.txt       ファイル構成ツリー
+```
+
+### 5.2 参照方法
+
+このINDEX.mdで「詳細は __XXX.txt を参照」の指示後、
+実際には以下の方法で確認：
+
+```bash
+# 補題をモジュール別に検索
+grep "DkMath/NumberTheory" logs/summary_report/__theorems-heading.txt | head -20
+
+# sorry の箇所を確認
+grep -A3 "GcdNext.lean" logs/summary_report/__sorries.txt | head -20
+
+# ファイル構成を眺める
+cat logs/summary_report/__file_tree_in_dkmath.txt
+```
+
+### 5.3 スクリプト詳細（整備済み）
+
+シェルスクリプト `lean/dk_math/create-summary-report-data.sh` が以下を実装：
+
+- **定理ヘッダ抽出**：`rg "/" lean/dk_math/DkMath` の正規表現抽出
+- **sorryロケーション**：`grep "sorry"` で穴を特定
+- **importグラフ**：`grep "^import"` で依存関係
+- **ツリー出力**：`find + tree` でファイル構成
+
+---
+
+## 6. 次の編集ポイント（手書き部分）
+
+- ✅/🚧/⚠️ の進捗ラベルを各モジュールに付ける（`sorry` 有無もここで管理）。
+- 「宇宙式」「FLT」「ABC」「RH」を"論理の流れ"で再配置した 2nd 目次を作る。
+- README と実ファイルのズレ（例：Polyomino の分割構成）をこの地図で検知できるようにする。
+
+---
+
+## 付録：メモ欄
+
+- 命名規則と設計ルール（テンプレとして重要）
+- 新しい定理を追加した際の docstring テンプレ
+
+---
+
+**最後に**: このドキュメントは「**目次との参照**」設計です。  
+詳細は常に  `logs/summary_report/` を**真実の源泉**と見なしてください。🧠
 
 - `theorem|lemma|def` の行だけ拾える。
 - これをモジュール単位に整形して「見出し化」すると、かなり高品質な索引になる。
@@ -707,17 +632,3 @@ print("wrote docs/INDEX_AUTO.md")
 
 - まずは「名前だけ」の索引を吐く。
 - 次に、docstring 先頭（`/-- ... -/`）も抽出して 1 行概要を付ければ“辞書”になる。
-
----
-
-## 6. 次の編集ポイント（ここから先は手で整える場所）
-
-- ✅/🚧/⚠️ の進捗ラベルを各モジュールに付ける（`sorry` 有無もここで管理）。
-- 「宇宙式」「FLT」「ABC」「RH」を“論理の流れ”で再配置した 2nd 目次を作る。
-- README と実ファイルのズレ（例：Polyomino の分割構成）をこの地図で検知できるようにする。
-
----
-
-## 付録：メモ欄
-
-- TODO：ここに “命名規則” と “ディレクトリ設計ルール” を追加（テンプレとして使うなら強い）。
