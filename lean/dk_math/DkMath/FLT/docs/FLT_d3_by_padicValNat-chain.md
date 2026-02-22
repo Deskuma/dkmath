@@ -87,7 +87,7 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 
 - **分岐**：`by_cases h3 : 3 ∣ c - b`
 
-**(A) **``** ブランチ**
+**(A) ****\`\`**** ブランチ**
 
 - `c = 3*k + b` とおいて、
   - `m := 3*k^2 + 3*k*b + b^2`
@@ -97,7 +97,7 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
   - 因数分解：`c^3 - b^3 = (c-b)*S0_nat c b`（`zify` + `ring_nf`）
   - よって `q | (c^3-b^3)`
 
-**(B) **``** ブランチ**
+**(B) ****\`\`**** ブランチ**
 
 - `exists_primitive_prime_factor_prime Nat.prime_three ...` に丸投げ
   - ここが Zsigmondy/Cyclotomic 側への接続点
@@ -153,12 +153,12 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 
 ---
 
-## 5. 次の深掘りポイント（ここからが本番）
+## 4. “機械的”チェック手順（Lean 側での監査コマンド案）
 
-この定理の“独自性”は、**外部仮定** `hS0_not_sq` を「層Bの真相」として切り出している点。
+### 4.1 `sorry` 混入チェック（名前単位）
 
-- `hS0_not_sq` を **PetalDetect 側の定理**へ降ろして、仮定を消せるか？
-  - つまり「q | diff かつ q ∤ diffFactor なら `¬ q^2 | S0`」を、どの追加条件で真にできるか。
-  - 反例（a=18,b=1,q=7）の扱いが鍵。
+-
 
-（この“仮定の解消”ができれば、FLT d=3 の別解は完全自走になる。）
+### 4.2 定理の“使ってる仮定”監査
+
+-
