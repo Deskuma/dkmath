@@ -277,6 +277,7 @@ lemma exists_primitive_prime_factor_d3 {a b : ℕ}
 **出力:**
 ¬ q² ∣ S0_nat a b
 -/
+-- * not referenced in the main proof, but useful for isolating the non-square resistance condition * --
 lemma S0_not_sq_dvd_of_prime_dvd_and_not_dvd_apb {a b q : ℕ}
     (_ha_pos : 0 < a) (_hb_pos : 0 < b)
     (_hab_coprime : Nat.Coprime a b)
