@@ -175,6 +175,25 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 - 依存（DkMath）
 
   - `quotientPrimePow_gt_one`（DB 9716 付近）
+    - 依存補題（DB 9750–9811 より：主要なものを列挙）
+
+- DkMath 依存
+  - （なし：`quotientPrimePow_gt_one` 自体は Nat/Prime/不等式操作で閉じる）
+
+- Mathlib ✅️ 依存（主要）
+  - ✅️`Nat.sub_pos_of_lt`（`0 < a-b`）
+  - ✅️`Nat.ne_of_gt`（`a-b ≠ 0`）
+  - ✅️`Nat.Prime.two_le`, ✅️`Nat.Prime.one_lt`
+  - ✅️tactic `omega`（`1 < a` の導出）
+  - ✅️`pow_zero`, ✅️`Nat.pow_lt_pow_right`（`1 < a^(p-1)`）
+  - ✅️`Nat.succ_le_of_lt`（`2 ≤ a^(p-1)`）
+  - ✅️`Nat.le_div_iff_mul_le`（`m ≤ n/k ↔ m*k ≤ n`）
+  - ✅️`Nat.pow_le_pow_left`（`b^(p-1) ≤ a^(p-1)` 等）
+  - ✅️`Nat.mul_le_mul_right`, ✅️`Nat.mul_le_mul_left`
+  - ✅️`pow_succ`（`x^p = x^(p-1)*x`）
+  - ✅️`Nat.mul_sub_left_distrib`
+  - ✅️`Nat.sub_le_sub_left`
+  - ✅️`le_trans`, ✅️`Nat.lt_of_succ_le`（`2 ≤ G` から `1 < G`）
   - `pow_sub_pow_eq_diff_mul_quotient`（DB 9744 付近）
   - `DkMath.Algebra.DiffPow.pow_sub_pow_factor`（Int 上の差の因数分解）
   - `DkMath.NumberTheory.GcdDiffPow.prime_dividing_gcd_divides_d`（gcd から d を割る結論）
@@ -188,7 +207,8 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 
 - 検査
 
-  -
+  - ☑️ `#print axioms DkMath.NumberTheory.GcdDiffPow.exists_prime_divisor_not_dividing_diff_of_prime_exp` は
+    `[propext, Classical.choice, Quot.sound]` のみ（`sorryAx` なし）
 
 ## 2. “証明の流れ”を固定（監査用の骨格）
 
@@ -231,7 +251,7 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 
 - **分岐**：`by_cases h3 : 3 ∣ c - b`
 
-**(A) ****\`\`**** ブランチ**
+**(A) ****************\`\`**************** ブランチ**
 
 - `c = 3*k + b` とおいて、
   - `m := 3*k^2 + 3*k*b + b^2`
@@ -241,7 +261,7 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
   - 因数分解：`c^3 - b^3 = (c-b)*S0_nat c b`（`zify` + `ring_nf`）
   - よって `q | (c^3-b^3)`
 
-**(B) ****\`\`**** ブランチ**
+**(B) ****************\`\`**************** ブランチ**
 
 - `exists_primitive_prime_factor_prime Nat.prime_three ...` に丸投げ
   - ここが Zsigmondy/Cyclotomic 側への接続点
