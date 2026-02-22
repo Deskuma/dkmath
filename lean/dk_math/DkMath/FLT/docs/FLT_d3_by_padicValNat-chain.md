@@ -7,12 +7,11 @@
 ## 0. 健全性（ファイル整合）
 
 - **期待 SHA256**
-
   - `cef351d0e52cc87a2462b061fe7f2d31de08a72f6286ea12b129de1fc9897516`
 
 - **チェック項目**
-
-  -
+  - [x] `sha256sum __dkmath-all.lean.txt.gz` が期待値と一致（DB 健全）
+  - [x] `zcat` / `zgrep` が動作（展開・検索OK）
 
 ---
 
@@ -46,39 +45,46 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 
 ### 1.4 補題別（DB版：個別監査セクション）
 
-> 方針：Mathlib 由来で対処不能なものは ✅️ を付け、DkMath 側の論理だけを重点監査する。
+> 方針：この文書では **DkMath 自前の定理・補題**だけを追跡する（Mathlib 側の列挙はしない）。
+>
+> - ☑️ = no-sorry 確認済み（`#print axioms` で `sorryAx` なし、または明示的に確認済み）
+> - [ ] = 監査待ち（`#print axioms` で確認する）
 
 #### 1.4.1 `coprime_cb_of_eq`（DB 8407）
 
 - 役割：`Nat.Coprime a b` と `a^3+b^3=c^3` から `Nat.Coprime c b` を導く
 
 - 依存（DkMath）
+
   - ☑️`cube_sub_eq_of_add_eq`（DB 8397）
 
 - 検査
-  - [ ] `#print axioms coprime_cb_of_eq` に `sorryAx` が出ない
+
+  -
 
 #### 1.4.2 `exists_prime_factor_cube_diff`（DB 8444）
 
-- 役割：`b < c`, `0 < b`, `Nat.Coprime c b` から
-  `∃ q, Nat.Prime q ∧ q ∣ c^3 - b^3 ∧ ¬ q ∣ (c - b)`
+- 役割：`b < c`, `0 < b`, `Nat.Coprime c b` から `∃ q, Nat.Prime q ∧ q ∣ c^3 - b^3 ∧ ¬ q ∣ (c - b)`
 
 - 分岐：`by_cases h3 : 3 ∣ c - b`
 
 - 依存（DkMath）
+
   - ☑️`S0_nat`（定義）
   - ☑️`exists_primitive_prime_factor_prime`（Zsigmondy/Cyclotomic 側への橋）
     - ☑️`exists_primitive_prime_factor_basic`
       - ☑️`exists_prime_divisor_not_dividing_diff_of_prime_exp`（DB 9818）
 
 - 検査
-  - [ ] `#print axioms exists_prime_factor_cube_diff` に `sorryAx` が出ない
+
+  -
 
 #### 1.4.3 `cube_sub_eq_of_add_eq`（DB 8397）
 
 - 役割：`a^3+b^3=c^3` から `c^3-b^3=a^3` を導く
 
 - 検査
+
   - ☑️ `omega` で閉じている（`sorryAx` なし）
 
 #### 1.4.4 `padicValNat_lower_bound_of_dvd_d3`（DB 8631）
@@ -86,22 +92,25 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 - 役割：`q ∣ c` なら `3 ≤ padicValNat q (c^3)`
 
 - 依存（DkMath）
+
   - ☑️`DkMath.ABC.PadicValNat`（`padicValNat` 基盤）
 
 - 検査
-  - [ ] `#print axioms padicValNat_lower_bound_of_dvd_d3` に `sorryAx` が出ない
+
+  -
 
 #### 1.4.5 `padicValNat_upper_bound_d3`（DB 8680）
 
 - 役割：`¬ q^2 ∣ S0_nat c b` を入力として `padicValNat q (c^3-b^3) ≤ 1`
 
 - 依存（DkMath）
+
   - ☑️`padicValNat_le_one_of_not_sq_dvd`（DB 9178, PetalDetect）
   - ☑️`S0_nat`（定義）
 
 - 検査
-  - [ ] `#print axioms padicValNat_upper_bound_d3` に `sorryAx` が出ない
-  - [ ] `hS0_not_sq` がこの補題の入力にのみ使われている
+
+  -
 
 ---
 
@@ -109,30 +118,33 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 
 ##### 1.5.1 `exists_prime_divisor_not_dividing_diff_of_prime_exp`（DB 9818）
 
-- 役割：素数冪指数 `p`（prime, p ≥ 3）について、
-  `a^p - b^p` を割り、かつ `(a-b)` を割らない素因子 `q` を 1つ抽出する。
+- 役割：素数冪指数 `p`（prime, p ≥ 3）について、 `a^p - b^p` を割り、かつ `(a-b)` を割らない素因子 `q` を 1つ抽出する。
 
 - 入力（要約）
+
   - `hp : Nat.Prime p`, `3 ≤ p`, `b < a`, `0 < b`, `Nat.Coprime a b`, 追加仮定 `hpnd : ¬ p ∣ a - b`
 
 - 出力（要約）
+
   - `∃ q, Nat.Prime q ∧ q ∣ a^p - b^p ∧ ¬ q ∣ a - b`
 
 - 証明スケルトン（要約）
+
   1. `G := quotientPrimePow a b p` を置き `1 < G` を示す（`quotientPrimePow_gt_one`）
   2. `q ∣ G` なる素数 `q` を取り、`q ∣ a^p - b^p` を得る
   3. もし `q ∣ (a-b)` なら gcd 経由で `q ∣ p` を得て `q = p`
   4. `hpnd : ¬ p ∣ (a-b)` と矛盾
 
 - 依存（DkMath）
+
   - ☑️`quotientPrimePow_gt_one`
   - ☑️`pow_sub_pow_eq_diff_mul_quotient`
   - ☑️`DkMath.Algebra.DiffPow.pow_sub_pow_factor`
   - ☑️`DkMath.NumberTheory.GcdDiffPow.prime_dividing_gcd_divides_d`
 
 - 検査
-  - ☑️ `#print axioms DkMath.NumberTheory.GcdDiffPow.exists_prime_divisor_not_dividing_diff_of_prime_exp`
-    は `[propext, Classical.choice, Quot.sound]` のみ（`sorryAx` なし）
+
+  - ☑️ `#print axioms DkMath.NumberTheory.GcdDiffPow.exists_prime_divisor_not_dividing_diff_of_prime_exp` は `[propext, Classical.choice, Quot.sound]` のみ（`sorryAx` なし）
 
 ## 2. “証明の流れ”を固定（監査用の骨格）
 
@@ -151,83 +163,65 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 
 ---
 
-## 3. 依存ツリー（一次・二次）
+## 3. 自前（DkMath）定理・補題ツリー（距離と隔離のため）
 
-### 3.1 `coprime_cb_of_eq`（DB 8407）
+### 3.1 モジュール距離（Mathlib.FLT からの距離）
 
-- 目的：`Nat.Coprime a b` と `a^3+b^3=c^3` から `Nat.Coprime c b`
-- 主要依存：
-  - `cube_sub_eq_of_add_eq`（DB 8397）
-  - ✅️`Nat.exists_prime_and_dvd`（gcd≠1 → 素因子存在）
-  - ✅️`Nat.dvd_sub`（`p|c^3` と `p|b^3` から `p|(c^3-b^3)`）
-  - ✅️`Nat.Prime.dvd_of_dvd_pow`（`p|a^3 → p|a`）
-  - ✅️`Nat.dvd_gcd` + `hab.gcd_eq_one`
+- `./DkMath/FLT/Main.lean` は次を import（DkMath 側のみ記載）：
+  - `DkMath.FLT.PetalDetect`
+  - `DkMath.FLT.GEisensteinBridge`
+  - `DkMath.NumberTheory.GcdNext`
+  - `DkMath.NumberTheory.ZsigmondyCyclotomic`
+  - `DkMath.ABC.PadicValNat`
+  - `DkMath.Algebra.DiffPow`
 
-**検査項目**
+- ファイルコメントに「no-import `DkMath.FLT.Basic`（依存しないように外す）」が明記されている。
 
--
+- 追加監査（距離の定量化）：
+  - ☑️ DB 全体に `Mathlib.FLT` の import/参照が見当たらない（zgrep で 0 hit）
 
-### 3.2 `exists_prime_factor_cube_diff`（DB 8444）
+### 3.2 最短チェーン（DkMath 補題のみ）の木
 
-- 目的：`b < c` と `Nat.Coprime c b` から
+`FLT_d3_by_padicValNat` は **仮定 `hS0_not_sq` を前提**にした「仮定構築テスト定理」。
 
-  \(\exists q,\; \mathrm{Prime}\;q\;\land\; q\mid(c^3-b^3)\;\land\; \neg q\mid(c-b).\)
+```
+FLT_d3_by_padicValNat  (test; assumes hS0_not_sq)
+├─ coprime_cb_of_eq
+│  └─ cube_sub_eq_of_add_eq   ☑️
+├─ exists_prime_factor_cube_diff
+│  ├─ (3 ∣ c-b) branch (elementary)
+│  └─ (¬ 3 ∣ c-b) branch
+│     └─ exists_primitive_prime_factor_prime
+│        └─ exists_primitive_prime_factor_basic
+│           └─ exists_prime_divisor_not_dividing_diff_of_prime_exp   ☑️
+│              ├─ quotientPrimePow_gt_one
+│              ├─ pow_sub_pow_eq_diff_mul_quotient
+│              ├─ DiffPow.pow_sub_pow_factor
+│              └─ prime_dividing_gcd_divides_d
+├─ padicValNat_lower_bound_of_dvd_d3
+└─ padicValNat_upper_bound_d3
+   ├─ S0_nat (definition)
+   └─ padicValNat_le_one_of_not_sq_dvd
+```
 
-- **分岐**：`by_cases h3 : 3 ∣ c - b`
+### 3.3 sorry の隔離（最適化構成の指針）
 
-**(A) ****************\`\`**************** ブランチ**
+- この定理系は「層A（存在）＋層B（valuation 上界）＋矛盾導出」だが、
+  **このファイルで未解決なのは `hS0_not_sq` の構築だけ**。
 
-- `c = 3*k + b` とおいて、
-  - `m := 3*k^2 + 3*k*b + b^2`
-  - `S0_nat c b = 3*m` を明示（`ring`）
-  - `m>1` から `q | m` なる素数 `q` を取る
-  - `q ∤ (c-b)` を示す（`q|3k` から `q|3` or `q|k` を潰す）
-  - 因数分解：`c^3 - b^3 = (c-b)*S0_nat c b`（`zify` + `ring_nf`）
-  - よって `q | (c^3-b^3)`
+- したがって構成最適化は次の 2 分離が効く：
 
-**(B) ****************\`\`**************** ブランチ**
+1) **Test（仮定つき）を no-sorry のまま固定**
+   - `FLT_d3_by_padicValNat` は “仮定が与えられたら落ちる” を保証する土台。
 
-- `exists_primitive_prime_factor_prime Nat.prime_three ...` に丸投げ
-  - ここが Zsigmondy/Cyclotomic 側への接続点
+2) **仮定構築（`hS0_not_sq`）は別ファイルへ隔離**
+   - `GEisensteinBridge.lean` に「旧主張の反例」があるため、無条件定理にはできない。
+   - ここは「追加条件つき」「例外集合つき」「局所条件つき」で別途構築し、
+     うまく行くところだけを Test 側へ接続する。
 
-**検査項目**
-
--
-
-### 3.3 `padicValNat_lower_bound_of_dvd_d3`（DB 8631）
-
-- 目的：`q|c` なら \(3 \le v_q(c^3)\)
-- 主要依存：
-  - `padicValNat.pow`（`v_q(c^3) = 3 * v_q(c)`）
-  - `padicValNat.eq_zero_iff`（`v_q(c)=0` と `q∤c` の関係）
-
-**検査項目**
-
--
-
-### 3.4 `padicValNat_upper_bound_d3`（DB 8680）
-
-- 目的：仮定 `¬ q^2 ∣ S0_nat a b` から \(v_q(a^3-b^3)\le 1\)
-- 手順：
-  1. 因数分解 `a^3-b^3 = (a-b)*S0_nat a b`
-  2. `q ∤ (a-b)` かつ `q | (a^3-b^3)` から `q | S0`（`hq.dvd_mul.mp`）
-  3. 上界：`padicValNat_le_one_of_not_sq_dvd`（PetalDetect内）
-  4. `padicValNat.mul` と `padicValNat.eq_zero_of_not_dvd` を合わせる
-
-**検査項目**
-
--
-
-### 3.5 `padicValNat_le_one_of_not_sq_dvd`（DB 9178, PetalDetect）
-
-- 目的：`¬ q^2 ∣ S0` ⇒ `padicValNat q S0 ≤ 1`
-- 依存：`padicValNat_dvd_iff`（`2` での割り切りと valuation の同値）
-
-**検査項目**
-
--
-
----
+- Zsigmondy/Cyclotomic 側も同様に、
+  「層A（存在）」と「層B（付値 1 等の精密評価）」を分離し、
+  層B の sorry は層A の no-sorry を汚染しないようにする。
 
 ## 4. “機械的”チェック手順（Lean 側での監査コマンド案）
 
@@ -235,11 +229,13 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 
 ### 4.1 `sorry` 混入チェック（DkMath 補題のみ）
 
-- [x] `#print axioms FLT_d3_by_padicValNat` に `sorryAx` が出ない（DB内に出力あり：OK）
+- [x] `#print axioms FLT_d3_by_padicValNat`（`sorryAx` なし）
 - [ ] `#print axioms coprime_cb_of_eq`
 - [ ] `#print axioms exists_prime_factor_cube_diff`
+- [x] `#print axioms cube_sub_eq_of_add_eq`（☑️omega で閉じる／`sorryAx` なし扱い）
 - [ ] `#print axioms padicValNat_lower_bound_of_dvd_d3`
 - [ ] `#print axioms padicValNat_upper_bound_d3`
+- [ ] `#print axioms padicValNat_le_one_of_not_sq_dvd`
 - [x] `#print axioms DkMath.NumberTheory.GcdDiffPow.exists_prime_divisor_not_dividing_diff_of_prime_exp`
   は `[propext, Classical.choice, Quot.sound]` のみ（`sorryAx` なし）
 
