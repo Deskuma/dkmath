@@ -44,29 +44,116 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 - `padicValNat_upper_bound_d3`（DB 8680）
 - ✅️ほか：`Nat.pow_le_pow_left`, `Nat.sub_pos_of_lt`, `zify`, `ring_nf`, `omega`, `positivity` 等（主に Mathlib/tactic）
 
-### 1.4 補題別
+### 1.4 補題別（DB版：個別監査セクション）
 
-#### 1.4.1 `coprime_cb_of_eq` （DB 8407）
+> 方針：Mathlib 由来で対処不能なものは ✅️ を付け、DkMath 側の論理だけを重点監査する。
 
-- （依存補題）
+#### 1.4.1 `coprime_cb_of_eq`（DB 8407）
 
-#### 1.4.2 `exists_prime_factor_cube_diff`（DB 8444）
+- 役割：`Nat.Coprime a b` と `a^3+b^3=c^3` から `Nat.Coprime c b` を導く
 
-- （依存補題）
+- 依存（DkMath）
 
-#### 1.4.3 `cube_sub_eq_of_add_eq`（DB 8397）
+  - ☑️`cube_sub_eq_of_add_eq`（DB 8397）
 
-- （依存補題）
+- 依存（Mathlib ✅️）
 
-#### 1.4.4 `padicValNat_lower_bound_of_dvd_d3`（DB 8631）
+  - ✅️`Nat.exists_prime_and_dvd`（`gcd ≠ 1` なら素因子が取れる）
+  - ✅️`Nat.gcd_dvd_left`, ✅️`Nat.gcd_dvd_right`
+  - ✅️`dvd_pow_self`
+  - ✅️`Nat.dvd_sub`
+  - ✅️`Nat.Prime.dvd_of_dvd_pow`
+  - ✅️`Nat.dvd_gcd`
+  - ✅️`Nat.Prime.not_dvd_one`
+  - ✅️`Nat.coprime_iff_gcd_eq_one`
+  - ✅️tactic: `by_contra`, `simp`, `omega`
 
-- （依存補題）
+- 検査
 
-#### 1.4.5 `padicValNat_upper_bound_d3`（DB 8680）
+  -
 
-- （依存補題）
+#### 1.4.2 `exists_prime_factor_cube_diff`（DB 8444）
+
+- 役割：`b < c`, `0 < b`, `Nat.Coprime c b` から `∃ q, Nat.Prime q ∧ q ∣ c^3 - b^3 ∧ ¬ q ∣ (c - b)`
+
+- 分岐：`by_cases h3 : 3 ∣ c - b`
+
+- 依存（DkMath）
+
+  - ☑️S0\_nat（定義）\
+    def S0\_nat (a b : ℕ) : ℕ := a^2 + a\*b + b^2
+  - `exists_primitive_prime_factor_prime`（Zsigmondy/Cyclotomic 側への橋）
+    - exists\_primitive\_prime\_factor\_basic
+      - exists\_prime\_divisor\_not\_dividing\_diff\_of\_prime\_exp （本体）\
+        素数冪の場合の軽量版 Zsigmondy（prime p, p ≥ 3）\
+        ※詳細は 1.5 へ
+
+- 依存（Mathlib ✅️）
+
+  - ✅️`Nat.sub_pos_of_lt`, ✅️`Nat.pos_of_mul_pos_left`, ✅️`Nat.sub_add_cancel`
+  - ✅️`Nat.exists_prime_and_dvd`, ✅️`Nat.prime_three`
+  - ✅️`dvd_add`, ✅️`dvd_mul_of_dvd_left`, ✅️`dvd_mul_of_dvd_right`, ✅️`Nat.dvd_add_right`
+  - ✅️`Nat.prime_dvd_prime_iff_eq`, ✅️`Nat.Prime.dvd_mul`（`dvd_mul.mp`）
+  - ✅️tactic: `simp`, `ring`, `ring_nf`, `zify`, `norm_num`, `positivity`, `omega`
+
+- 検査
+
+  -
+
+#### 1.4.3 `cube_sub_eq_of_add_eq`（DB 8397）
+
+- 役割：`a^3+b^3=c^3` から `c^3-b^3=a^3` を導く
+
+- 依存（Mathlib ✅️）
+
+  - ✅️tactic: `omega`
+
+- 検査
+
+  -
+
+#### 1.4.4 `padicValNat_lower_bound_of_dvd_d3`（DB 8631）
+
+- 役割：`q ∣ c` なら `3 ≤ padicValNat q (c^3)`
+
+- 依存（DkMath）
+
+  - `DkMath.ABC.PadicValNat`（`padicValNat` 基盤）
+
+- 依存（Mathlib ✅️）
+
+  - ✅️`padicValNat.pow`（`padicValNat q (c^3) = 3 * padicValNat q c` の形）
+  - ✅️`padicValNat.eq_zero_iff` / `padicValNat.eq_zero_of_not_dvd` 相当
+  - ✅️tactic: `simp`, `omega` 等
+
+- 検査
+
+  -
+
+#### 1.4.5 `padicValNat_upper_bound_d3`（DB 8680）
+
+- 役割：`¬ q^2 ∣ S0_nat c b` を入力として `padicValNat q (c^3-b^3) ≤ 1`
+
+- 依存（DkMath）
+
+  - `padicValNat_le_one_of_not_sq_dvd`（DB 9178, PetalDetect）
+  - `S0_nat`（定義）
+
+- 依存（Mathlib ✅️）
+
+  - ✅️差の因数分解（Nat→Int への `zify` + `ring_nf`）
+  - ✅️tactic: `zify`, `ring_nf`, `simp`, `omega`
+
+- 検査
+
+  -
 
 ---
+
+#### 1.5 補題
+
+- exists\_prime\_divisor\_not\_dividing\_diff\_of\_prime\_exp\
+  素数冪の場合の軽量版 Zsigmondy（prime p, p ≥ 3）
 
 ## 2. “証明の流れ”を固定（監査用の骨格）
 
@@ -92,10 +179,10 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 - 目的：`Nat.Coprime a b` と `a^3+b^3=c^3` から `Nat.Coprime c b`
 - 主要依存：
   - `cube_sub_eq_of_add_eq`（DB 8397）
-  - `Nat.exists_prime_and_dvd`（gcd≠1 → 素因子存在）
-  - `Nat.dvd_sub`（`p|c^3` と `p|b^3` から `p|(c^3-b^3)`）
-  - `Nat.Prime.dvd_of_dvd_pow`（`p|a^3 → p|a`）
-  - `Nat.dvd_gcd` + `hab.gcd_eq_one`
+  - ✅️`Nat.exists_prime_and_dvd`（gcd≠1 → 素因子存在）
+  - ✅️`Nat.dvd_sub`（`p|c^3` と `p|b^3` から `p|(c^3-b^3)`）
+  - ✅️`Nat.Prime.dvd_of_dvd_pow`（`p|a^3 → p|a`）
+  - ✅️`Nat.dvd_gcd` + `hab.gcd_eq_one`
 
 **検査項目**
 
@@ -158,18 +245,6 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 - 依存：`padicValNat_dvd_iff`（`2` での割り切りと valuation の同値）
 
 **検査項目**
-
--
-
----
-
-## 4. “機械的”チェック手順（Lean 側での監査コマンド案）
-
-### 4.1 `sorry` 混入チェック（名前単位）
-
--
-
-### 4.2 定理の“使ってる仮定”監査
 
 -
 
