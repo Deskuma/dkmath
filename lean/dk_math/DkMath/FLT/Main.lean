@@ -417,12 +417,33 @@ lemma padicValNat_upper_bound_d3 {a b q : ℕ}
 
 /-- **メイン定理：別解による FLT d=3 証明**
 
-**証明戦略:**
-1. 層Aから原始素因子 q の存在
-2. 層Bから padicValNat上界 v_q ≤ 1
-3. 矛盾：完全3乗仮定からは v_q ≥ 3
+Zsigmondy原始素因子 + padicValNat評価による背理法：
+平方自由性仮定の下で、完全3乗仮定と矛盾を導出。
 
-**形式化:**
+**入力（仮定）:**
+- `ha : 0 < a`, `hb : 0 < b`, `hc : 0 < c` - 正の整数
+- `hab : Nat.Coprime a b` - a と b は互いに素
+- `hS0_not_sq : ∀ {q : ℕ}, Nat.Prime q → q ∣ c^3 - b^3 → ¬ q ∣ c - b → ¬ q² ∣ S0_nat c b`
+  - 相対多角数S0(c,b) = c²+cb+b² は各原始素因子 q に対して平方自由
+  - すなわち：q が c³-b³ を割り、かつ q が (c-b) を割らない任意の素数 q について、
+    q² は S0(c,b) を割らない
+
+**証明戦略（層統合）:**
+
+1. **層A（Zsigmondy原始素因子）**
+   - 存在補題により、q | (c³-b³) かつ ¬ q | (c-b) を満たす素数 q が存在
+
+2. **層B（padicValNat上界）**
+   - 仮定 hS0_not_sq から ¬ q² ∣ S0(c,b)
+   - padicValNat上界：v_q(c³-b³) ≤ 1
+
+3. **矛盾導出**
+   - 完全3乗仮定：q | a より v_q(a³-b³) ≥ 3
+   - 層B下界：v_q(c³-b³) = v_q(a³-b³)（cube_sub_eq_of_add_eq より）
+   - 矛盾：3 ≤ v_q(c³-b³) ≤ 1
+
+**出力（結論):**
+`a³ + b³ ≠ c³`（FLT d=3）
 -/
 theorem FLT_d3_by_padicValNat {a b c : ℕ}
     (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
