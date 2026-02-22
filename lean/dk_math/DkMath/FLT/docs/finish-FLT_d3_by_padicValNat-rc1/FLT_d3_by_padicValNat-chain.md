@@ -1,6 +1,8 @@
 # FLT\_d3\_by\_padicValNat：補題チェーン検証チェックリスト（\_\_dkmath-all.lean.txt.gz 内限定）
 
-> 対象データベース：`__dkmath-all.lean.txt.gz`
+> 対象データベース：`__dkmath-all.lean.txt.gz` = `finish-FLT_d3_by_padicValNat-rc1_dkmath-all.lean.txt.gz`
+> SHA256：`cef351d0e52cc87a2462b061fe7f2d31de08a72f6286ea12b129de1fc9897516`
+> ブランチ/タグ：`finish-FLT_d3_by_padicValNat-rc1` 2026/02/23  8:43
 
 ---
 
