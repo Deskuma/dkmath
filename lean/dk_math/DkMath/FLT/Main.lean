@@ -459,6 +459,7 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
   have : (3 : ℕ) ≤ 1 := le_trans h_lower h_upper
   omega
 
-#print axioms FLT_d3_by_padicValNat
+#print axioms FLT_d3_by_padicValNat  -- OK: 2026/02/22 10:02
+-- 'DkMath.FLT.FLT_d3_by_padicValNat' depends on axioms: [propext, Classical.choice, Quot.sound]
 
 end DkMath.FLT
