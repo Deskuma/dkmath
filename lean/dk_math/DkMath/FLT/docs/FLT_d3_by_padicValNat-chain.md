@@ -39,10 +39,32 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 - `coprime_cb_of_eq`  （DB 8407）
 - `exists_prime_factor_cube_diff`（DB 8444）
 - `cube_sub_eq_of_add_eq`（DB 8397）
-- `Nat.Prime.dvd_of_dvd_pow`（Mathlib）
+- ✅️`Nat.Prime.dvd_of_dvd_pow`（Mathlib）
 - `padicValNat_lower_bound_of_dvd_d3`（DB 8631）
 - `padicValNat_upper_bound_d3`（DB 8680）
-- ほか：`Nat.pow_le_pow_left`, `Nat.sub_pos_of_lt`, `zify`, `ring_nf`, `omega`, `positivity` 等（主に Mathlib/tactic）
+- ✅️ほか：`Nat.pow_le_pow_left`, `Nat.sub_pos_of_lt`, `zify`, `ring_nf`, `omega`, `positivity` 等（主に Mathlib/tactic）
+
+### 1.4 補題別
+
+#### 1.4.1 `coprime_cb_of_eq` （DB 8407）
+
+- （依存補題）
+
+#### 1.4.2 `exists_prime_factor_cube_diff`（DB 8444）
+
+- （依存補題）
+
+#### 1.4.3 `cube_sub_eq_of_add_eq`（DB 8397）
+
+- （依存補題）
+
+#### 1.4.4 `padicValNat_lower_bound_of_dvd_d3`（DB 8631）
+
+- （依存補題）
+
+#### 1.4.5 `padicValNat_upper_bound_d3`（DB 8680）
+
+- （依存補題）
 
 ---
 
