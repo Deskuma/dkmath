@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMath.FLT.GEisensteinBridge
 import DkMath.FLT.Main
 
 #print "file: DkMath.FLT.Main"
