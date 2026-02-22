@@ -8,6 +8,7 @@ Authors: D. and Wise Wolf.
 
 -- no-import DkMath.FLT.Basic 依存しないように外す
 import DkMath.FLT.PetalDetect
+import DkMath.FLT.GEisensteinBridge
 import DkMath.NumberTheory.GcdNext
 import DkMath.NumberTheory.ZsigmondyCyclotomic
 import DkMath.ABC.PadicValNat
@@ -256,44 +257,35 @@ lemma exists_primitive_prime_factor_d3 {a b : ℕ}
 -- § 2. 層B（PetalDetect + padicValNat評価）
 -- ========================================
 
-/-- **層B補助補題：相対多角数の平方判定**
+/-- **層B補助補題（条件付き）：相対多角数の平方判定**
 
-q が S0(a,b) を割るが (a+b) を割らず、且つ gcd(a,b)=1 ⟹ q² は S0 を割らない
+`¬ q² ∣ S0(a,b)` を外部条件として受け取る薄いラッパー。
+
+注:
+- 命題
+  `q ∣ S0(a,b) ∧ ¬ q ∣ (a+b) ∧ gcd(a,b)=1 → ¬ q² ∣ S0(a,b)`
+  は一般には偽（反例: `a=18, b=1, q=7`）。
+- 反例は `GEisensteinBridge.exists_counterexample_S0_square_resistance` を参照。
 
 **入力:**
 - Nat.Prime q
 - q ∣ S0_nat a b
 - ¬ q ∣ (a + b)
 - Nat.Coprime a b
+- ¬ q² ∣ S0_nat a b（追加条件）
 
 **出力:**
 ¬ q² ∣ S0_nat a b
-
-**証明方針（Petal系+オイラー標数）:**
-相対多角数の自己相似性制御により、新しい素因子は高々1乗の重複度を持つ
 -/
 lemma S0_not_sq_dvd_of_prime_dvd_and_not_dvd_apb {a b q : ℕ}
-    (ha_pos : 0 < a) (hb_pos : 0 < b)
-    (hab_coprime : Nat.Coprime a b)
-    (hq : Nat.Prime q)
-    (hS0_dvd : q ∣ S0_nat a b)
-    (hq_not_apb : ¬ q ∣ a + b) :
+    (_ha_pos : 0 < a) (_hb_pos : 0 < b)
+    (_hab_coprime : Nat.Coprime a b)
+    (_hq : Nat.Prime q)
+    (_hS0_dvd : q ∣ S0_nat a b)
+    (_hq_not_apb : ¬ q ∣ a + b)
+    (hq_not_sq : ¬ q ^ 2 ∣ S0_nat a b) :
     ¬ q ^ 2 ∣ S0_nat a b := by
-  -- **層B補助補題：相対多角数の平方耐性**
-  --
-  -- 証明骨子：
-  -- 相対多角数 S0 = a² + ab + b² = a(a+b) + b² という分解から：
-  -- - q | S0 かつ q ∤ (a+b) ⟹ q | b²
-  -- - q | b² かつ q 素数 ⟹ q | b
-  -- - q | S0 かつ q | b ⟹ q | (a²+ab) ⟹ q | a(a+b)
-  -- - q | a(a+b) かつ q ∤ (a+b) ⟹ q | a
-  -- - q | a ∧ q | b ⟹ q | gcd(a,b)=1に矛盾
-  -- よって q² ∤ S0（背理法）。
-  --
-  -- 詳細実装には整除関係の細かい操作が必要で、
-  -- 次フェーズ（GcdNextLayerB.lean）で完全形式化予定。
-  -- 2026/02/22  7:07 方針転換に伴い、実装は後回しにして `sorry` で仮置きする。
-  sorry  -- 層B補助補題：相対多角数平方耐性（整除関係の詳細実装待ち）
+  exact hq_not_sq
 
 #print axioms S0_not_sq_dvd_of_prime_dvd_and_not_dvd_apb
 
@@ -363,10 +355,10 @@ padicValNat q (a³ - b³) ≤ 1
 lemma padicValNat_upper_bound_d3 {a b q : ℕ}
     (hab_lt : b < a)
     (ha_pos : 0 < a) (hb_pos : 0 < b)
-    (hab_coprime : Nat.Coprime a b)
     (hq : Nat.Prime q)
     (hq_dvd : q ∣ a ^ 3 - b ^ 3)
-    (hq_ndiv_diff : ¬ q ∣ a - b) :
+    (hq_ndiv_diff : ¬ q ∣ a - b)
+    (hq_not_sq : ¬ q ^ 2 ∣ S0_nat a b) :
     padicValNat q (a ^ 3 - b ^ 3) ≤ 1 := by
   -- **Step B.0: (a+b)割り切り検出**
   -- PetalDetect.prime_dvd_S0_coprime_imp_not_dvd_apb より
@@ -389,15 +381,6 @@ lemma padicValNat_upper_bound_d3 {a b q : ℕ}
     have : q ∣ a - b ∨ q ∣ S0_nat a b := hq.dvd_mul.mp hmul
 
     exact this.resolve_left hq_ndiv_diff
-
-  -- **層B統合：PetalDetect補助補題を活用**
-  have hq_not_apb : ¬ q ∣ a + b :=
-    prime_dvd_S0_coprime_imp_not_dvd_apb a b q ha_pos hab_coprime hq hS0_dvd
-
-  -- **q² ∤ S0 を導く（相対多角数の性質）**
-  have hq_not_sq : ¬ q ^ 2 ∣ S0_nat a b := by
-    exact S0_not_sq_dvd_of_prime_dvd_and_not_dvd_apb
-      ha_pos hb_pos hab_coprime hq hS0_dvd hq_not_apb
 
   -- **padicValNat上界：PetalDetect.padicValNat_le_one_of_not_sq_dvd を使用**
   have hpadic_bound : padicValNat q (S0_nat a b) ≤ 1 :=
@@ -442,7 +425,9 @@ lemma padicValNat_upper_bound_d3 {a b q : ℕ}
 -/
 theorem FLT_d3_by_padicValNat {a b c : ℕ}
     (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
-    (hab : Nat.Coprime a b) :
+    (hab : Nat.Coprime a b)
+    (hS0_not_sq :
+      ∀ {q : ℕ}, Nat.Prime q → q ∣ c ^ 3 - b ^ 3 → ¬ q ∣ c - b → ¬ q ^ 2 ∣ S0_nat c b) :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
   intro h_eq
 
@@ -468,7 +453,8 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
     simpa [hsub] using h_lower_a3
 
   have h_upper : padicValNat q (c ^ 3 - b ^ 3) ≤ 1 :=
-    padicValNat_upper_bound_d3 hbc hc hb hcop_cb hq_prime hq_dvd_diff hq_ndiv_diff
+    padicValNat_upper_bound_d3 hbc hc hb hq_prime hq_dvd_diff hq_ndiv_diff
+      (hS0_not_sq hq_prime hq_dvd_diff hq_ndiv_diff)
 
   have : (3 : ℕ) ≤ 1 := le_trans h_lower h_upper
   omega
