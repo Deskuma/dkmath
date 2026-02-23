@@ -364,9 +364,9 @@ lemma padicValNat_upper_bound_d3 {a b q : ℕ}
     (hq_ndiv_diff : ¬ q ∣ a - b)
     (hq_not_sq : ¬ q ^ 2 ∣ S0_nat a b) :
     padicValNat q (a ^ 3 - b ^ 3) ≤ 1 := by
-  -- **Step B.0: (a+b)割り切り検出**
-  -- PetalDetect.prime_dvd_S0_coprime_imp_not_dvd_apb より
-  -- q | S0(a,b) ∧ gcd(a,b)=1 ⟹ q ∤ (a+b)
+  -- Core 統合: Binom -> Petal の橋補題を使って q | S0 を導出
+  have hS0_dvd : q ∣ S0_nat a b :=
+    prime_dvd_S0_via_cosmic_bridge hab_lt hq hq_dvd hq_ndiv_diff
 
   have h_diff : a ^ 3 - b ^ 3 = (a - b) * (a ^ 2 + a * b + b ^ 2) := by
     -- use sample proof from Samples/FLT.lean
@@ -376,15 +376,6 @@ lemma padicValNat_upper_bound_d3 {a b q : ℕ}
   have h_fact : a ^ 3 - b ^ 3 = (a - b) * S0_nat a b := by
     -- rewrite using definition of S0_nat and h_diff
     simpa [S0_nat] using h_diff
-  have hS0_dvd : q ∣ S0_nat a b := by
-    have hmul : q ∣ (a - b) * S0_nat a b := by
-      -- hq_dvd : q ∣ a^3 - b^3 を因数分解で書き換え
-      simpa [h_fact] using hq_dvd
-
-    -- prime の「積を割るならどっちか」を使う
-    have : q ∣ a - b ∨ q ∣ S0_nat a b := hq.dvd_mul.mp hmul
-
-    exact this.resolve_left hq_ndiv_diff
 
   -- **padicValNat上界：PetalDetect.padicValNat_le_one_of_not_sq_dvd を使用**
   have hpadic_bound : padicValNat q (S0_nat a b) ≤ 1 :=

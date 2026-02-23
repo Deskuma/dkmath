@@ -22,7 +22,7 @@ status: 作業中 - phase-02: x=c-b, u=b を代入して `Gx 3 x u = S0_nat c b`
    - `x=c-b, u=b` を代入し `Gx 3 x u = S0_nat c b` へ落とす橋補題を作る
    - ここで `NoSqOnS0` / `hS0_not_sq` に接続
 
-3. [ ] `Core`（FLT本線）
+3. [x] `Core`（FLT本線）
 
    - 上の橋補題を使って `padicValNat` の上界補題へ流す
 
@@ -73,6 +73,27 @@ status: 作業中 - phase-02: x=c-b, u=b を代入して `Gx 3 x u = S0_nat c b`
 
 ### 状態更新
 
-- [x] 1. `CosmicFormulaBinom`（代数核）
-- [x] 2. `PetalDetect`（d=3への射影）
-- [ ] 3. `Core`（FLT本線での上界補題への本格統合）
+1. ☑️ `CosmicFormulaBinom`（代数核）
+2. ☑️ `PetalDetect`（d=3への射影）
+3. 🚧 `Core`（FLT本線での上界補題への本格統合）
+
+## 2026-02-23 追記（phase-02: Core 統合）
+
+### 実施内容
+
+- 更新: `lean/dk_math/DkMath/FLT/Main.lean`
+  - `padicValNat_upper_bound_d3` 内での `q ∣ S0_nat a b` 導出を
+    手作業の因数分解経路から、`prime_dvd_S0_via_cosmic_bridge` 経由へ置換。
+  - これにより証明経路を
+    `CosmicFormulaBinom -> CosmicPetalBridge -> PetalDetect -> Main`
+    として統一。
+
+### 検証
+
+- `lake build DkMath.FLT.Main` 成功
+
+### 状態更新
+
+1. ☑️ `CosmicFormulaBinom`（代数核）
+2. ☑️ `PetalDetect`（d=3への射影）
+3. ☑️ `Core`（FLT本線）
