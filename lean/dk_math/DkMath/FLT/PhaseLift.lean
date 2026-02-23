@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.PetalDetect
 import DkMath.FLT.OctagonCore
 import DkMath.FLT.CosmicPetalBridge
+import DkMath.FLT.PetalCoreUnit
 import DkMath.Units.NPUnit
 
 namespace DkMath.FLT
@@ -46,6 +47,17 @@ lemma hasPhaseUnitInfrastructure : HasPhaseUnitInfrastructure := by
 -/
 def NoSqOnS0 (c b : ℕ) : Prop :=
   ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → ¬ q ^ 2 ∣ S0_nat c b
+
+/--
+phase-03-C の十分条件（skeleton）:
+非例外調和点 witness と `NoSqOnS0` の組。
+-/
+def NonExceptionalHarmonicOnS0 (c b : ℕ) : Prop :=
+  (∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u) ∧ NoSqOnS0 c b
+
+lemma NoSqOnS0_of_nonExceptionalHarmonic {c b : ℕ}
+    (h : NonExceptionalHarmonicOnS0 c b) : NoSqOnS0 c b := by
+  exact h.2
 
 /--
 `q ∣ (c^3-b^3)` かつ `q ∤ (c-b)` なら `q ∣ S0_nat c b`。

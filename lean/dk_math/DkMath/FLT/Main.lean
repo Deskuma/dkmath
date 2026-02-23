@@ -488,6 +488,17 @@ theorem FLT_d3_by_padicValNat_of_NoSqOnS0 {a b c : ℕ}
   exact hS0_not_sq_of_NoSqOnS0 (c := c) (b := b) hNoSq hq hq_dvd_diff hq_ndiv_diff
 
 /--
+phase-03-C: 非例外調和条件（skeleton）経由で `NoSqOnS0` を供給する版。
+-/
+theorem FLT_d3_by_padicValNat_of_nonExceptionalHarmonic {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hNH : NonExceptionalHarmonicOnS0 c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab
+    (NoSqOnS0_of_nonExceptionalHarmonic hNH)
+
+/--
 `CounterexamplePattern.classifyLift` を経由して `hS0_not_sq` を供給する版。
 -/
 theorem FLT_d3_by_padicValNat_of_classifyLift {a b c : ℕ}
