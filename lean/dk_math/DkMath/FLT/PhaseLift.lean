@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.PetalDetect
 import DkMath.FLT.OctagonCore
+import DkMath.FLT.CosmicPetalBridge
 
 namespace DkMath.FLT
 
@@ -58,7 +59,7 @@ lemma hS0_not_sq_of_NoSqOnS0 {c b : ℕ}
     have hdiff_zero : c - b = 0 := Nat.sub_eq_zero_of_le hcb
     exact hq_ndvd (hdiff_zero ▸ dvd_zero q)
   have hqS0 : q ∣ S0_nat c b :=
-    prime_dvd_S0_of_dvd_cube_sub_not_dvd_diff hbc hq hq_dvd hq_ndvd
+    prime_dvd_S0_via_cosmic_bridge hbc hq hq_dvd hq_ndvd
   exact hNoSq hq hqS0
 
 end DkMath.FLT
