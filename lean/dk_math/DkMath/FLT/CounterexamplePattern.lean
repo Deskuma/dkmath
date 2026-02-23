@@ -177,12 +177,8 @@ lemma primitivePrimeGate_of_PrimitiveOnS0 {c b q : ℕ}
     (hprim : PrimitiveOnS0 c b q) :
     primitivePrimeGate ({ c := c, b := b, q := q } : CounterexampleInput) := by
   rcases hprim with ⟨hq, hqS0, hq_ndvd⟩
-  have hdiff : c ^ 3 - b ^ 3 = (c - b) * (c ^ 2 + c * b + b ^ 2) := by
-    have h_pow : b ^ 3 ≤ c ^ 3 := Nat.pow_le_pow_left hbc.le 3
-    zify [hbc, h_pow]
-    ring_nf
-  have hfact : c ^ 3 - b ^ 3 = (c - b) * S0_nat c b := by
-    simpa [S0_nat] using hdiff
+  have hfact : c ^ 3 - b ^ 3 = (c - b) * S0_nat c b :=
+    cube_sub_eq_mul_sub_S0 hbc
   have hq_diff : q ∣ c ^ 3 - b ^ 3 := by
     rw [hfact]
     exact dvd_mul_of_dvd_right hqS0 (c - b)

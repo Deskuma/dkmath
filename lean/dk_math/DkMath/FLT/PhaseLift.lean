@@ -287,6 +287,18 @@ lemma NoSqOnS0_of_exceptThree_mod3_separated_harmonic {c b : ℕ}
       hHarm hSuppEx3 hNonLift hc_nz hb_nz hsep)
 
 /--
+`d=3` の標準因数分解:
+`c^3 - b^3 = (c-b) * S0_nat c b`。
+-/
+lemma cube_sub_eq_mul_sub_S0 {c b : ℕ} (hbc : b < c) :
+    c ^ 3 - b ^ 3 = (c - b) * S0_nat c b := by
+  have hdiff : c ^ 3 - b ^ 3 = (c - b) * (c ^ 2 + c * b + b ^ 2) := by
+    have h_pow : b ^ 3 ≤ c ^ 3 := Nat.pow_le_pow_left hbc.le 3
+    zify [hbc, h_pow]
+    ring_nf
+  simpa [S0_nat] using hdiff
+
+/--
 `q ∣ (c^3-b^3)` かつ `q ∤ (c-b)` なら `q ∣ S0_nat c b`。
 -/
 lemma prime_dvd_S0_of_dvd_cube_sub_not_dvd_diff {c b q : ℕ}
@@ -295,12 +307,8 @@ lemma prime_dvd_S0_of_dvd_cube_sub_not_dvd_diff {c b q : ℕ}
     (hq_dvd : q ∣ c ^ 3 - b ^ 3)
     (hq_ndvd : ¬ q ∣ c - b) :
     q ∣ S0_nat c b := by
-  have hdiff : c ^ 3 - b ^ 3 = (c - b) * (c ^ 2 + c * b + b ^ 2) := by
-    have h_pow : b ^ 3 ≤ c ^ 3 := Nat.pow_le_pow_left hbc.le 3
-    zify [hbc, h_pow]
-    ring_nf
-  have hfact : c ^ 3 - b ^ 3 = (c - b) * S0_nat c b := by
-    simpa [S0_nat] using hdiff
+  have hfact : c ^ 3 - b ^ 3 = (c - b) * S0_nat c b :=
+    cube_sub_eq_mul_sub_S0 hbc
   have hmul : q ∣ (c - b) * S0_nat c b := by
     simpa [hfact] using hq_dvd
   exact (hq.dvd_mul.mp hmul).resolve_left hq_ndvd

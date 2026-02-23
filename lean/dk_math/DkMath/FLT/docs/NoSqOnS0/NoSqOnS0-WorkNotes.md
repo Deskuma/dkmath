@@ -91,6 +91,24 @@ status: 作業中 - phase-05: 補題強化
   - `lake build DkMath.FLT.CounterexamplePattern` : OK
   - `lake build DkMath.FLT.Main` : OK
 
+- phase-05 追加ステップ（本流への昇格）
+  - `PhaseLift.lean` に共通補題を追加:
+    - `cube_sub_eq_mul_sub_S0`
+      - `c^3 - b^3 = (c-b) * S0_nat c b`
+      - 以後の本流証明で使う中心補題として集約。
+  - `prime_dvd_S0_of_dvd_cube_sub_not_dvd_diff` を
+    上記共通補題ベースへ差し替え（ローカル展開を除去）。
+  - `CounterexamplePattern.lean` の
+    `primitivePrimeGate_of_PrimitiveOnS0` も
+    `cube_sub_eq_mul_sub_S0` を直接利用する形へ差し替え。
+  - 位置づけ:
+    - 一般 two-gap 由来の接続補題を追加しただけでなく、
+      立方差→`S0` 因数分解の中核を `PhaseLift` に統合し、
+      `CounterexamplePattern` 側の本流導出がそれを参照する構造に昇格。
+
+- build（再確認）
+  - `lake build DkMath.FLT.Main` : OK
+
 - phase-05 追加ステップ（2 Gap 抽出 API の一般 `d` 版）
   - `CosmicFormulaBinom.lean` に以下を追加。
     - `two_gap_xy_factor`
