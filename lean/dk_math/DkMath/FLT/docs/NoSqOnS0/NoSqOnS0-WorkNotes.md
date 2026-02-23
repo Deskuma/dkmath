@@ -74,11 +74,11 @@ status: 作業中 - phase-04:
 
 ### 5. 実装順（最短）
 
-1. [ ] `PhaseLift`: `PrimitiveOnS0 / NonLiftableS0 / AllNonLiftableOnS0`
-2. [ ] `PhaseLift`: `NoSqOnS0_of_AllNonLiftableOnS0`
+1. [x] `PhaseLift`: `PrimitiveOnS0 / NonLiftableS0 / AllNonLiftableOnS0`
+2. [x] `PhaseLift`: `NoSqOnS0_of_AllNonLiftableOnS0`
 3. [ ] `PetalCoreUnit` or `CounterexamplePattern`: `NonExceptionalHarmonicOnS0 -> AllNonLiftableOnS0`（暫定版）
-4. [ ] `Main`: 派生定理を新ルートに差し替え
-5. [ ] build + WorkNotes更新
+4. [x] `Main`: 派生定理を新ルートに差し替え
+5. [x] build + WorkNotes更新
 
 ## 2026-02-26 作業ログ（現時点まとめ）
 
@@ -117,6 +117,21 @@ status: 作業中 - phase-04:
 
 - build（再確認）
   - `lake build DkMath.FLT.PhaseLift` : OK
+  - `lake build DkMath.FLT.Main` : OK
+
+- phase-04 実装ステップ（Main への入口定理追加）
+  - `Main.lean` に派生定理を追加:
+    - `FLT_d3_by_padicValNat_of_exceptThree_mod3_separated_harmonic`
+  - 入力:
+    - `hHarm`
+    - `hSuppEx3`
+    - `hNonLift`
+    - `c % 3 ≠ 0`, `b % 3 ≠ 0`, `c % 3 ≠ b % 3`
+  - 経路:
+    - `NoSqOnS0_of_exceptThree_mod3_separated_harmonic`
+      → `FLT_d3_by_padicValNat_of_NoSqOnS0`
+
+- build（再確認）
   - `lake build DkMath.FLT.Main` : OK
 
 - phase-04 実装ステップ（PetalCoreUnit/Harmonic 側の接続）
