@@ -51,6 +51,8 @@
 
 ## 3. 補題チェーン（Mermaid）
 
+この図は `docs/NoSqOnS0/NoSqOnS0-WorkNotes.md` と同一内容で同期管理します。
+
 ```mermaid
 graph LR
   A["CosmicFormulaBinom.two_gap_xy_factor*"] --> B["PhaseLift.two_gap_xy_dvd_cube_bridge"]

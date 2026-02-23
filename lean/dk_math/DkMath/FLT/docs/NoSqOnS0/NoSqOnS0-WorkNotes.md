@@ -48,3 +48,25 @@ phase-07（ドキュメント）
 
 - build（再確認）
   - ドキュメント更新のみ（ビルド対象の Lean ファイル変更なし）
+
+## 補題チェーン（Mermaid）
+
+README と同一内容を記録（更新時は両方を同期）。
+
+```mermaid
+graph LR
+  A["CosmicFormulaBinom.two_gap_xy_factor*"] --> B["PhaseLift.two_gap_xy_dvd_cube_bridge"]
+  C["CosmicPetalBridge.prime_dvd_S0_via_cosmic_bridge"] --> D["PhaseLift.prime_dvd_S0_of_dvd_cube_sub_not_dvd_diff"]
+  E["PhaseLift.cube_sub_eq_mul_sub_S0"] --> D
+  F["PhaseLift.exists_prime_factor_cube_diff_of_three_dvd_sub"] --> G["PhaseLift.exists_prime_factor_cube_diff"]
+  H["PhaseLift.exists_prime_factor_cube_diff_of_not_three_dvd_sub"] --> G
+  I["PhaseLift.padicValNat_lower_bound_of_dvd_d3"] --> J["Main.FLT_d3_by_padicValNat"]
+  K["PhaseLift.padicValNat_upper_bound_d3"] --> J
+  G --> J
+  L["PhaseLift.hS0_not_sq_of_NoSqOnS0"] --> M["Main.FLT_d3_by_padicValNat_of_NoSqOnS0"]
+  J --> M
+  N["PhaseLift.Phase6NoSqInput"] --> O["Main.FLT_d3_by_padicValNat_of_phase6NoSqInput"]
+  M --> O
+  P["CounterexamplePattern.classifyLift_impossible_family_of_harmonicEnvelope_NoSq"] --> Q["Main.FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport"]
+  M --> Q
+```
