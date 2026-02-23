@@ -34,15 +34,15 @@ status: 作業中 - phase-04:
 
 `PhaseLift.lean` に以下を追加。
 
-1. `PrimitiveOnS0 c b q`  
+1. [x] `PrimitiveOnS0 c b q`  
 
    - `Nat.Prime q ∧ q ∣ S0_nat c b ∧ ¬ q ∣ c-b`
 
-2. `NonLiftableS0 c b q`  
+2. [x] `NonLiftableS0 c b q`  
 
    - `PrimitiveOnS0 c b q -> ¬ q^2 ∣ S0_nat c b`
 
-3. `AllNonLiftableOnS0 c b`  
+3. [ ] `AllNonLiftableOnS0 c b`  
 
    - `∀ q, PrimitiveOnS0 c b q -> ¬ q^2 ∣ S0_nat c b`
 
@@ -56,10 +56,10 @@ status: 作業中 - phase-04:
 
 `PetalCoreUnit.lean` + `CounterexamplePattern.lean` で、
 
-1. `NonExceptionalHarmonicOnS0 -> AllNonLiftableOnS0`  
+1. [ ] `NonExceptionalHarmonicOnS0 -> AllNonLiftableOnS0`  
 のスケルトン補題を追加（最初は弱い仮定込みで良い）。
 
-2. `exceptional -> undecided` は実装済みなので、  
+2. [ ] `exceptional -> undecided` は実装済みなので、  
 `non-exceptional ∧ harmonic` 側で `impossible` に寄せる補題を増やす。
 
 ### 4. Main の接続先を差し替え
@@ -74,10 +74,31 @@ status: 作業中 - phase-04:
 
 ### 5. 実装順（最短）
 
-1. `PhaseLift`: `PrimitiveOnS0 / NonLiftableS0 / AllNonLiftableOnS0`
-2. `PhaseLift`: `NoSqOnS0_of_AllNonLiftableOnS0`
-3. `PetalCoreUnit` or `CounterexamplePattern`: `NonExceptionalHarmonicOnS0 -> AllNonLiftableOnS0`（暫定版）
-4. `Main`: 派生定理を新ルートに差し替え
-5. build + WorkNotes更新
+1. [ ] `PhaseLift`: `PrimitiveOnS0 / NonLiftableS0 / AllNonLiftableOnS0`
+2. [ ] `PhaseLift`: `NoSqOnS0_of_AllNonLiftableOnS0`
+3. [ ] `PetalCoreUnit` or `CounterexamplePattern`: `NonExceptionalHarmonicOnS0 -> AllNonLiftableOnS0`（暫定版）
+4. [ ] `Main`: 派生定理を新ルートに差し替え
+5. [ ] build + WorkNotes更新
 
 ## 2026-02-26 作業ログ（現時点まとめ）
+
+- `PhaseLift.lean`
+  - `PrimitiveOnS0`, `NonLiftableS0`, `AllNonLiftableOnS0` を追加。
+  - `NoSqOnS0_of_AllNonLiftableOnS0` を追加。
+  - `AllNonLiftableOnS0` は実装上、次の2条件の組にした。
+    - `q ∣ S0_nat c b` な素数は `q ∤ c-b`（primitive support）
+    - `PrimitiveOnS0 c b q -> ¬ q^2 ∣ S0_nat c b`（non-liftable）
+  - `NonExceptionalHarmonicOnS0` を `(... witness ...) ∧ AllNonLiftableOnS0 c b` に更新。
+  - `AllNonLiftableOnS0_of_nonExceptionalHarmonic` を追加。
+
+- `Main.lean`
+  - `FLT_d3_by_padicValNat_of_nonExceptionalHarmonic` を
+    `AllNonLiftableOnS0_of_nonExceptionalHarmonic`
+    → `NoSqOnS0_of_AllNonLiftableOnS0`
+    → `FLT_d3_by_padicValNat_of_NoSqOnS0`
+    の順で接続する形に差し替え。
+
+- build
+  - `lake build DkMath.FLT.PhaseLift` : OK
+  - `lake build DkMath.FLT.Main` : OK
+  - 既知 warning（`ZsigmondyCyclotomic`, `GcdNext` の `sorry` 由来）は継続。

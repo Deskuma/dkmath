@@ -52,12 +52,46 @@ def NoSqOnS0 (c b : ℕ) : Prop :=
 phase-03-C の十分条件（skeleton）:
 非例外調和点 witness と `NoSqOnS0` の組。
 -/
+def PrimitiveOnS0 (c b q : ℕ) : Prop :=
+  Nat.Prime q ∧ q ∣ S0_nat c b ∧ ¬ q ∣ c - b
+
+/--
+`PrimitiveOnS0` な素数は `S0` を二乗では持ち上げない。
+-/
+def NonLiftableS0 (c b q : ℕ) : Prop :=
+  PrimitiveOnS0 c b q → ¬ q ^ 2 ∣ S0_nat c b
+
+/--
+phase-04 の集約条件:
+- `S0` を割る素数はすべて primitive 条件を満たす
+- その primitive 素数はすべて non-liftable
+-/
+def AllNonLiftableOnS0 (c b : ℕ) : Prop :=
+  (∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → ¬ q ∣ c - b)
+    ∧ ∀ q : ℕ, NonLiftableS0 c b q
+
+lemma NoSqOnS0_of_AllNonLiftableOnS0 {c b : ℕ}
+    (hAll : AllNonLiftableOnS0 c b) : NoSqOnS0 c b := by
+  intro q hq hqS0
+  rcases hAll with ⟨hprimSupport, hnonlift⟩
+  have hq_ndvd : ¬ q ∣ c - b := hprimSupport hq hqS0
+  have hprim : PrimitiveOnS0 c b q := ⟨hq, hqS0, hq_ndvd⟩
+  exact hnonlift q hprim
+
+/--
+phase-03-C の十分条件（phase-04 更新）:
+非例外調和点 witness と `AllNonLiftableOnS0` の組。
+-/
 def NonExceptionalHarmonicOnS0 (c b : ℕ) : Prop :=
-  (∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u) ∧ NoSqOnS0 c b
+  (∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u) ∧ AllNonLiftableOnS0 c b
+
+lemma AllNonLiftableOnS0_of_nonExceptionalHarmonic {c b : ℕ}
+    (h : NonExceptionalHarmonicOnS0 c b) : AllNonLiftableOnS0 c b := by
+  exact h.2
 
 lemma NoSqOnS0_of_nonExceptionalHarmonic {c b : ℕ}
     (h : NonExceptionalHarmonicOnS0 c b) : NoSqOnS0 c b := by
-  exact h.2
+  exact NoSqOnS0_of_AllNonLiftableOnS0 (AllNonLiftableOnS0_of_nonExceptionalHarmonic h)
 
 /--
 `q ∣ (c^3-b^3)` かつ `q ∤ (c-b)` なら `q ∣ S0_nat c b`。
