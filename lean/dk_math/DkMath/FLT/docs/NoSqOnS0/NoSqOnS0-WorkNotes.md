@@ -35,7 +35,7 @@ phase-06（リファクタリング）として、以下の順で進めるのが
    - `Main` に残る局所補題を洗い出し
    - 移設先を `PhaseLift` / `CounterexamplePattern` に振り分けて移動
 
-4. [ ] `Main` の再配線
+4. [x] `Main` の再配線
 
    - `Main` は「入口定理 + 合成」だけに整理
    - 重複証明を削除し、共通補題参照に統一
@@ -80,6 +80,16 @@ phase-06（リファクタリング）として、以下の順で進めるのが
     共通補題参照へ統一。
   - 位置づけ:
     - phase-06 タスク 3（中間補題の移設）を実装として完了。
+
+- build（再確認）
+  - `lake build DkMath.FLT.Main` : OK
+
+- phase-06 実装ステップ（Main 再配線の追加整理）
+  - `Main.lean` から未使用の層Aラッパー補題を削除:
+    - `exists_primitive_prime_factor_d3`
+  - 同補題は `PhaseLift.lean` 側へ移して共通層に統一。
+  - 効果:
+    - `Main` には合成・導出本体のみを残し、分岐ラッパーを共通層へ寄せた。
 
 - build（再確認）
   - `lake build DkMath.FLT.Main` : OK

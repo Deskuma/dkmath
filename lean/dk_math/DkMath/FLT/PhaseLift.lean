@@ -442,6 +442,12 @@ lemma exists_prime_factor_cube_diff_of_not_three_dvd_sub {c b : ℕ}
   exact DkMath.NumberTheory.GcdNext.exists_primitive_prime_factor_prime
     Nat.prime_three (by norm_num : 3 ≤ 3) hbc hb hcop h3
 
+lemma exists_primitive_prime_factor_d3 {a b : ℕ}
+    (hab : Nat.Coprime a b) (hb : 0 < b) (ha : b < a)
+    (hpnd : ¬ 3 ∣ a - b) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ a ^ 3 - b ^ 3 ∧ ¬ q ∣ a - b := by
+  exact exists_prime_factor_cube_diff_of_not_three_dvd_sub ha hb hab hpnd
+
 /--
 `c > b` かつ `gcd(c,b)=1` のとき、
 `q ∣ (c^3-b^3)` かつ `q ∤ (c-b)` を満たす素数 `q` が存在。
