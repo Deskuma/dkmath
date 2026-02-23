@@ -42,7 +42,7 @@ status: 作業中 - phase-04:
 
    - `PrimitiveOnS0 c b q -> ¬ q^2 ∣ S0_nat c b`
 
-3. [ ] `AllNonLiftableOnS0 c b`  
+3. [x] `AllNonLiftableOnS0 c b`  
 
    - `∀ q, PrimitiveOnS0 c b q -> ¬ q^2 ∣ S0_nat c b`
 
@@ -127,6 +127,22 @@ status: 作業中 - phase-04:
   - 証明は `c % 3, b % 3 ∈ {1,2}` の有限分岐を `omega` で取り、
     `Nat.ModEq` の加法・乗法・冪閉性で `S0_nat c b ≡ 1 [MOD 3]` を導出。
     `3 ∣ S0` と合わせて `1 ≡ 0 [MOD 3]` の矛盾を作る。
+
+- build（再確認）
+  - `lake build DkMath.FLT.PhaseLift` : OK
+  - `lake build DkMath.FLT.Main` : OK
+
+- phase-04 接続ステップ（`¬ 3 ∣ S0` から `AllNonLiftableOnS0` へ）
+  - `PhaseLift.lean` に補助補題を追加:
+    - `AllNonLiftableOnS0_of_exceptThree_mod3_separated`
+  - 入力:
+    - `S0PrimeSupportExceptThree c b`
+    - `∀ q, NonLiftableS0 c b q`
+    - `c % 3 ≠ 0`, `b % 3 ≠ 0`, `c % 3 ≠ b % 3`
+  - 出力:
+    - `AllNonLiftableOnS0 c b`
+  - 内部で `not_three_dvd_S0_of_mod3_separated` を使って `h3free` を自動生成し、
+    `AllNonLiftableOnS0_of_exceptThree` に接続。
 
 - build（再確認）
   - `lake build DkMath.FLT.PhaseLift` : OK

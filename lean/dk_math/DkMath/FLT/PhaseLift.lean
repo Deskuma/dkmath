@@ -146,6 +146,21 @@ lemma AllNonLiftableOnS0_of_exceptThree {c b : ℕ}
   rcases h with ⟨hSuppEx3, hNonLift, h3free⟩
   refine ⟨allPrimeSupport_of_exceptThree hSuppEx3 h3free, hNonLift⟩
 
+/--
+`mod 3` 分離条件から `3` 例外を自動で埋めて
+`AllNonLiftableOnS0` へ接続する補助補題。
+-/
+lemma AllNonLiftableOnS0_of_exceptThree_mod3_separated {c b : ℕ}
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    AllNonLiftableOnS0 c b := by
+  have h3free : ¬ 3 ∣ S0_nat c b :=
+    not_three_dvd_S0_of_mod3_separated hc_nz hb_nz hsep
+  exact AllNonLiftableOnS0_of_exceptThree ⟨hSuppEx3, hNonLift, h3free⟩
+
 lemma NoSqOnS0_of_AllNonLiftableOnS0 {c b : ℕ}
     (hAll : AllNonLiftableOnS0 c b) : NoSqOnS0 c b := by
   intro q hq hqS0
