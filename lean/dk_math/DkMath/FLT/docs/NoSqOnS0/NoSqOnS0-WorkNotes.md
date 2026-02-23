@@ -1,6 +1,6 @@
 # No Square on S0 Work Notes
 
-status: 作業中 - phase-06: （計画中）
+status: 作業中 - phase-06: リファクタリング
 
 ## Index
 
@@ -13,3 +13,9 @@ status: 作業中 - phase-06: （計画中）
 [NoSqOnS0: phase-05](NoSqOnS0-WorkNotes-phase-05.md) -  `G_binom` API の d=3 強化、`hSuppEx3` 自動生成、Main 直結版の追加、2 Gap 抽出 API の一般 `d` 版、`NoSqOnS0` から分類器 impossible family への橋補題、`hClassPrim` から `hNonLiftAll` 生成の順で実装した。
 
 ## 課題
+
+- なし
+
+## 状況タスク
+
+- [ ] （計画中）
