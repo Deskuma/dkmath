@@ -21,6 +21,21 @@
    - `lean/dk_math/DkMath/FLT/OctagonCore.lean` に、点集合から得る位相ラベル（`sqrt2` 系/`sqrt3` 系）を返す定義を追加。
    - まずは「座標核→ラベル」の純代数化だけ実装。
 
+    ```note
+    最小実装としてはこの3点が安全です。
+
+    1. `OctagonCore` に判定用ラベル型を追加
+    - 例: `inductive PhaseLabel | sqrt2 | sqrt3 | mixed`
+
+    2. 点からラベルを返す入口定義を追加
+    - まずは座標で固定された点（`A..I`）に対して、決め打ちマップでよい
+
+    3. `PhaseLift` 側が使える述語を1つ用意
+    - 例: `isMixedPhasePoint : Point2 → Prop`
+
+    これで「幾何核 → 判定器入口」の配線ができます。
+    ```
+
 4. [ ] 反例抽出器を作る
 
    - 新規 `lean/dk_math/DkMath/FLT/CounterexamplePattern.lean` を作り、
