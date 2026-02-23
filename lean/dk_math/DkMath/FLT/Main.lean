@@ -10,6 +10,7 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.PetalDetect
 import DkMath.FLT.OctagonCore
 import DkMath.FLT.PhaseLift
+import DkMath.FLT.CounterexamplePattern
 import DkMath.FLT.GEisensteinBridge
 import DkMath.NumberTheory.GcdNext
 import DkMath.NumberTheory.ZsigmondyCyclotomic

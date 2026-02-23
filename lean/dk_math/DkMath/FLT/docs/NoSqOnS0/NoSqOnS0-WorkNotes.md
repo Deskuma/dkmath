@@ -36,7 +36,7 @@
     これで「幾何核 → 判定器入口」の配線ができます。
     ```
 
-4. [ ] 反例抽出器を作る
+4. [x] 反例抽出器を作る
 
    - 新規 `lean/dk_math/DkMath/FLT/CounterexamplePattern.lean` を作り、
    - 入力 `(c,b,q)` から `lift可能/不可能` を判定する述語を定義（証明は後段）。
@@ -113,10 +113,10 @@
   - このファイルを継続利用（時系列追記）
   - もしくは日付別ログを分割（必要になったら切替）
 
-
 ## 2026-02-23 追記（Step 3: OctagonCore を判定器入口に接続）
 
 ### 実施内容
+
 - `lean/dk_math/DkMath/FLT/OctagonCore.lean`
   - `PhaseLabel` を追加：`sqrt2 | sqrt3 | mixed | unknown`
   - 入口関数 `phaseLabelOfPoint : Point2 → PhaseLabel` を追加
@@ -135,8 +135,42 @@
     - `hasMixedPhaseWitness_octagonCore : HasMixedPhaseWitness`
 
 ### 検証
+
 - `lake build DkMath.FLT.OctagonCore` 成功
 - `lake build DkMath.FLT.Main` 成功
 
 ### チェック更新
+
 - [x] 3. `OctagonCore` を判定器の入口にする
+
+## 2026-02-23 追記（Step 4: 反例抽出器を追加）
+
+### 実施内容
+
+- 新規: `lean/dk_math/DkMath/FLT/CounterexamplePattern.lean`
+  - 入力構造体:
+    - `CounterexampleInput` (`c`, `b`, `q`)
+  - 判定ゲート:
+    - `primitivePrimeGate`
+    - `noSquareGate`
+    - `phaseGate`（現段階では `HasMixedPhaseWitness` を参照）
+  - 判定結果:
+    - `LiftStatus := possible | impossible | undecided`
+    - `classifyLift : CounterexampleInput → LiftStatus`
+  - 補題:
+    - `classifyLift_impossible_of_gates`
+    - `classifyLift_possible_of_primitive_and_sq`
+    - `classifyLift_undecided_of_not_primitive`
+
+- 接続:
+  - `lean/dk_math/DkMath/FLT/Main.lean` に
+    `import DkMath.FLT.CounterexamplePattern` を追加。
+
+### 検証
+
+- `lake build DkMath.FLT.CounterexamplePattern` 成功
+- `lake build DkMath.FLT.Main` 成功
+
+### チェック更新
+
+- [x] 4. 反例抽出器を作る
