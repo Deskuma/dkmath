@@ -36,6 +36,19 @@ def phaseGate (_x : CounterexampleInput) : Prop :=
   HasPhaseUnitInfrastructure
     ∧ ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u
 
+lemma phaseGate_of_harmonicEnvelope {x : CounterexampleInput}
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u) :
+    phaseGate x := by
+  exact ⟨hInfra, hHarm⟩
+
+lemma phaseGate_all_of_harmonicEnvelope
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u) :
+    ∀ x : CounterexampleInput, phaseGate x := by
+  intro x
+  exact phaseGate_of_harmonicEnvelope (x := x) hInfra hHarm
+
 lemma phaseGate_default (x : CounterexampleInput) : phaseGate x := by
   refine ⟨hasPhaseUnitInfrastructure, ?_⟩
   refine ⟨ofNP DkMath.zero, ?_⟩
@@ -127,5 +140,64 @@ lemma noSquareGate_of_classifyLift_impossible {x : CounterexampleInput}
       simp [classifyLift, hexc, hprim, hnosq]
     have : LiftStatus.possible = LiftStatus.impossible := hpossible.symm.trans hclass
     cases this
+
+/--
+`PrimitiveOnS0` から `primitivePrimeGate` への持ち上げ。
+-/
+lemma primitivePrimeGate_of_PrimitiveOnS0 {c b q : ℕ}
+    (hbc : b < c)
+    (hprim : PrimitiveOnS0 c b q) :
+    primitivePrimeGate ({ c := c, b := b, q := q } : CounterexampleInput) := by
+  rcases hprim with ⟨hq, hqS0, hq_ndvd⟩
+  have hdiff : c ^ 3 - b ^ 3 = (c - b) * (c ^ 2 + c * b + b ^ 2) := by
+    have h_pow : b ^ 3 ≤ c ^ 3 := Nat.pow_le_pow_left hbc.le 3
+    zify [hbc, h_pow]
+    ring_nf
+  have hfact : c ^ 3 - b ^ 3 = (c - b) * S0_nat c b := by
+    simpa [S0_nat] using hdiff
+  have hq_diff : q ∣ c ^ 3 - b ^ 3 := by
+    rw [hfact]
+    exact dvd_mul_of_dvd_right hqS0 (c - b)
+  exact ⟨hq, hq_diff, hq_ndvd⟩
+
+/--
+`classifyLift = impossible` が得られれば、対応する `q` は `NonLiftableS0` となる。
+-/
+lemma nonLiftableS0_of_classifyLift_impossible {c b q : ℕ}
+    (hbc : b < c)
+    (hclass :
+      classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible) :
+    NonLiftableS0 c b q := by
+  intro hprim
+  let x : CounterexampleInput := { c := c, b := b, q := q }
+  have hprimGate : primitivePrimeGate x := by
+    simpa [x] using primitivePrimeGate_of_PrimitiveOnS0 hbc hprim
+  have hnosq : noSquareGate x :=
+    noSquareGate_of_classifyLift_impossible hprimGate (by simpa [x] using hclass)
+  simpa [x, noSquareGate] using hnosq
+
+/--
+phase-04 接続補題:
+Harmonic witness と分類器の impossible 判定群から `AllNonLiftableOnS0` を作る。
+-/
+lemma allNonLiftableOnS0_of_harmonicClassifier {c b : ℕ}
+    (hbc : b < c)
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hClass :
+      ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+        classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    AllNonLiftableOnS0 c b := by
+  -- 位相入口は x 非依存なので、全入力に持ち上がる
+  have _hphaseAll : ∀ x : CounterexampleInput, phaseGate x :=
+    phaseGate_all_of_harmonicEnvelope hInfra hHarm
+  have hNonLift : ∀ q : ℕ, NonLiftableS0 c b q := by
+    intro q hprim
+    exact nonLiftableS0_of_classifyLift_impossible hbc (hClass hprim) hprim
+  exact AllNonLiftableOnS0_of_exceptThree_mod3_separated hSuppEx3 hNonLift hc_nz hb_nz hsep
 
 end DkMath.FLT

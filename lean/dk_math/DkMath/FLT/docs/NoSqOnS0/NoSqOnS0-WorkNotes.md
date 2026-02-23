@@ -56,7 +56,7 @@ status: 作業中 - phase-04:
 
 `PetalCoreUnit.lean` + `CounterexamplePattern.lean` で、
 
-1. [ ] `NonExceptionalHarmonicOnS0 -> AllNonLiftableOnS0`  
+1. [x] `NonExceptionalHarmonicOnS0 -> AllNonLiftableOnS0`（暫定接続）  
 のスケルトン補題を追加（最初は弱い仮定込みで良い）。
 
 2. [ ] `exceptional -> undecided` は実装済みなので、  
@@ -117,6 +117,23 @@ status: 作業中 - phase-04:
 
 - build（再確認）
   - `lake build DkMath.FLT.PhaseLift` : OK
+  - `lake build DkMath.FLT.Main` : OK
+
+- phase-04 実装ステップ（PetalCoreUnit/Harmonic 側の接続）
+  - `CounterexamplePattern.lean` に以下を追加。
+    - `phaseGate_of_harmonicEnvelope`
+    - `phaseGate_all_of_harmonicEnvelope`
+    - `primitivePrimeGate_of_PrimitiveOnS0`
+    - `nonLiftableS0_of_classifyLift_impossible`
+    - `allNonLiftableOnS0_of_harmonicClassifier`
+  - 役割:
+    - Harmonic witness（位相入口）を `phaseGate` に持ち上げる。
+    - `PrimitiveOnS0` を分類器入力 `primitivePrimeGate` に変換する。
+    - `classifyLift = impossible` を `NonLiftableS0` に落とす。
+    - これらを束ねて `AllNonLiftableOnS0_of_exceptThree_mod3_separated` へ接続する。
+
+- build（再確認）
+  - `lake build DkMath.FLT.CounterexamplePattern` : OK
   - `lake build DkMath.FLT.Main` : OK
 
 - phase-04 追加ステップ（`¬ 3 ∣ S0` の実装）
