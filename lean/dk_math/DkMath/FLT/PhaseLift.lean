@@ -10,10 +10,13 @@ import DkMath.FLT.CosmicPetalBridge
 import DkMath.CosmicFormula.CosmicFormulaBinom
 import DkMath.FLT.PetalCoreUnit
 import DkMath.Units.NPUnit
+import DkMath.NumberTheory.GcdNext
+import DkMath.ABC.PadicValNat
 
 namespace DkMath.FLT
 
 open DkMath.FLT.PetalDetect
+open DkMath.NumberTheory.GcdNext
 
 /--
 OctagonCore 由来の混合位相点が存在することを入口条件としてまとめる述語。
@@ -490,6 +493,80 @@ lemma two_gap_xy_dvd_cube_bridge {c b : ℕ}
       (c - b) * b ∣ (((c - b) + b) ^ (1 + 2) - (c - b) ^ (1 + 2) - b ^ (1 + 2)) :=
     DkMath.CosmicFormulaBinom.two_gap_xy_factor_nat_dvd 1 (c - b) b
   simpa [Nat.sub_add_cancel hbc] using hdiv
+
+/--
+`¬ q² ∣ S0(a,b)` をそのまま返す薄いラッパー。
+-/
+lemma S0_not_sq_dvd_of_prime_dvd_and_not_dvd_apb {a b q : ℕ}
+    (_ha_pos : 0 < a) (_hb_pos : 0 < b)
+    (_hab_coprime : Nat.Coprime a b)
+    (_hq : Nat.Prime q)
+    (_hS0_dvd : q ∣ S0_nat a b)
+    (_hq_not_apb : ¬ q ∣ a + b)
+    (hq_not_sq : ¬ q ^ 2 ∣ S0_nat a b) :
+    ¬ q ^ 2 ∣ S0_nat a b := by
+  exact hq_not_sq
+
+/--
+`q ∣ c` なら `3 ≤ padicValNat q (c^3)`。
+-/
+lemma padicValNat_lower_bound_of_dvd_d3 {c q : ℕ}
+    (hc_pos : 0 < c)
+    (hq : Nat.Prime q)
+    (hq_dvd_c : q ∣ c) :
+    3 ≤ padicValNat q (c ^ 3) := by
+  have h_c_ne : c ≠ 0 := Nat.ne_of_gt hc_pos
+  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  have h_val_c_ge_1 : 1 ≤ padicValNat q c := by
+    have h_ne_zero : padicValNat q c ≠ 0 := by
+      intro h
+      have : ¬ q ∣ c := by
+        rcases padicValNat.eq_zero_iff.mp h with hq1 | hc0 | hqndvd
+        · exact (hq.ne_one hq1).elim
+        · exact (h_c_ne hc0).elim
+        · exact hqndvd
+      exact this hq_dvd_c
+    omega
+  have h_val_pow : padicValNat q (c ^ 3) = 3 * padicValNat q c :=
+    padicValNat.pow (n := 3) h_c_ne
+  rw [h_val_pow]
+  omega
+
+/--
+`q ∣ (a^3-b^3)` かつ `q ∤ (a-b)` と `¬ q² ∣ S0(a,b)` から
+`padicValNat q (a^3-b^3) ≤ 1`。
+-/
+lemma padicValNat_upper_bound_d3 {a b q : ℕ}
+    (hab_lt : b < a)
+    (ha_pos : 0 < a) (hb_pos : 0 < b)
+    (hq : Nat.Prime q)
+    (hq_dvd : q ∣ a ^ 3 - b ^ 3)
+    (hq_ndiv_diff : ¬ q ∣ a - b)
+    (hq_not_sq : ¬ q ^ 2 ∣ S0_nat a b) :
+    padicValNat q (a ^ 3 - b ^ 3) ≤ 1 := by
+  have hS0_dvd : q ∣ S0_nat a b :=
+    prime_dvd_S0_via_cosmic_bridge hab_lt hq hq_dvd hq_ndiv_diff
+  have h_fact : a ^ 3 - b ^ 3 = (a - b) * S0_nat a b :=
+    cube_sub_eq_mul_sub_S0 hab_lt
+  have hpadic_bound : padicValNat q (S0_nat a b) ≤ 1 :=
+    padicValNat_le_one_of_not_sq_dvd a b q ha_pos hb_pos hq hq_not_sq
+  have ha_minus_b_ne_zero : a - b ≠ 0 := Nat.sub_ne_zero_of_lt hab_lt
+  have hS0_ne_zero : S0_nat a b ≠ 0 := by
+    unfold S0_nat
+    have ha2_pos : 0 < a ^ 2 := by positivity
+    have hab_pos : 0 < a * b := by positivity
+    have hb2_pos : 0 < b ^ 2 := by positivity
+    omega
+  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  have h_val_diff_zero : padicValNat q (a - b) = 0 :=
+    padicValNat.eq_zero_of_not_dvd hq_ndiv_diff
+  have h_val_mult : padicValNat q (a ^ 3 - b ^ 3) =
+      padicValNat q (a - b) + padicValNat q (S0_nat a b) :=
+    congrArg (padicValNat q) h_fact ▸ padicValNat.mul ha_minus_b_ne_zero hS0_ne_zero
+  calc padicValNat q (a ^ 3 - b ^ 3)
+      = padicValNat q (a - b) + padicValNat q (S0_nat a b) := h_val_mult
+    _ = padicValNat q (S0_nat a b) := by simp [h_val_diff_zero]
+    _ ≤ 1 := hpadic_bound
 
 /--
 `NoSqOnS0 c b` から `Main` で使う `hS0_not_sq` 形の仮定を作るブリッジ。

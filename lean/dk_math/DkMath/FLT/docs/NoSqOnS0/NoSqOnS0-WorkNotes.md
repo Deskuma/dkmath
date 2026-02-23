@@ -30,7 +30,7 @@ phase-06（リファクタリング）として、以下の順で進めるのが
    - `PhaseLift` に入力構造体（仮称 `Phase6Input`）を追加
    - 現在バラけている仮定群（`hHarm`, `hNoExcAll`, `coprime`, mod3 分離など）を束ねる
 
-3. [ ] 中間補題の移設
+3. [x] 中間補題の移設
 
    - `Main` に残る局所補題を洗い出し
    - 移設先を `PhaseLift` / `CounterexamplePattern` に振り分けて移動
@@ -64,6 +64,22 @@ phase-06（リファクタリング）として、以下の順で進めるのが
         既存 `...of_harmonicEnvelope_NoSq_coprimeSupport` へ接続する薄い合成定理。
   - 位置づけ:
     - `Main` の引数列を減らし、今後のリファクタリング先を固定。
+
+- build（再確認）
+  - `lake build DkMath.FLT.Main` : OK
+
+- phase-06 実装ステップ（中間補題の移設）
+  - `Main.lean` から `PhaseLift.lean` へ移設:
+    - `S0_not_sq_dvd_of_prime_dvd_and_not_dvd_apb`
+    - `padicValNat_lower_bound_of_dvd_d3`
+    - `padicValNat_upper_bound_d3`
+  - `PhaseLift` 側に追加 import:
+    - `DkMath.NumberTheory.GcdNext`
+    - `DkMath.ABC.PadicValNat`
+  - `Main` 側から上記補題定義ブロックを削除し、
+    共通補題参照へ統一。
+  - 位置づけ:
+    - phase-06 タスク 3（中間補題の移設）を実装として完了。
 
 - build（再確認）
   - `lake build DkMath.FLT.Main` : OK
