@@ -133,6 +133,21 @@ status: 作業中 - phase-05: 補題強化
 - build（再確認）
   - `lake build DkMath.FLT.Main` : OK
 
+- phase-05 追加ステップ（`3 ∣ (c-b)` 分岐の段階分解）
+  - `PhaseLift.lean` に新規追加:
+    - `exists_prime_factor_cube_diff_of_three_dvd_sub`
+      - 入力: `b<c`, `0<b`, `Coprime c b`, `3 ∣ c-b`
+      - 出力: `∃ q, Prime q ∧ q ∣ c^3-b^3 ∧ ¬ q ∣ c-b`
+  - `Main.lean` の `exists_prime_factor_cube_diff` は
+    `3 ∣ (c-b)` 分岐を上記補題呼び出し1行へ置換。
+  - 意味:
+    - 以前 `Main` に埋め込まれていた長い分岐証明を
+      `PhaseLift` の共通層へ移し、`Main` は分岐合流点に集中。
+
+- build（再確認）
+  - `lake build DkMath.FLT.PhaseLift` : OK
+  - `lake build DkMath.FLT.Main` : OK
+
 - phase-05 追加ステップ（2 Gap 抽出 API の一般 `d` 版）
   - `CosmicFormulaBinom.lean` に以下を追加。
     - `two_gap_xy_factor`
