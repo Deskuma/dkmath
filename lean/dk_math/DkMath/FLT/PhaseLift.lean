@@ -287,6 +287,38 @@ lemma NoSqOnS0_of_exceptThree_mod3_separated_harmonic {c b : ℕ}
       hHarm hSuppEx3 hNonLift hc_nz hb_nz hsep)
 
 /--
+`a^3 + b^3 = c^3` から `c^3 - b^3 = a^3` を得る。
+-/
+lemma cube_sub_eq_of_add_eq {a b c : ℕ} (h : a ^ 3 + b ^ 3 = c ^ 3) :
+    c ^ 3 - b ^ 3 = a ^ 3 := by
+  rw [← h]
+  omega
+
+/--
+`gcd(a,b)=1` かつ `a^3+b^3=c^3` なら `gcd(c,b)=1`。
+-/
+lemma coprime_cb_of_eq {a b c : ℕ}
+    (hab : Nat.Coprime a b) (h : a ^ 3 + b ^ 3 = c ^ 3) :
+    Nat.Coprime c b := by
+  by_contra hnot
+  have hgcd_ne : Nat.gcd c b ≠ 1 := by
+    intro hg
+    apply hnot
+    exact (Nat.coprime_iff_gcd_eq_one).2 hg
+  obtain ⟨p, hp, hp_dvd_g⟩ := Nat.exists_prime_and_dvd hgcd_ne
+  have hp_dvd_c : p ∣ c := dvd_trans hp_dvd_g (Nat.gcd_dvd_left c b)
+  have hp_dvd_b : p ∣ b := dvd_trans hp_dvd_g (Nat.gcd_dvd_right c b)
+  have hp_dvd_c3 : p ∣ c ^ 3 := dvd_trans hp_dvd_c (dvd_pow_self c (by decide : 3 ≠ 0))
+  have hp_dvd_b3 : p ∣ b ^ 3 := dvd_trans hp_dvd_b (dvd_pow_self b (by decide : 3 ≠ 0))
+  have hsub : c ^ 3 - b ^ 3 = a ^ 3 := cube_sub_eq_of_add_eq h
+  have hp_dvd_sub : p ∣ c ^ 3 - b ^ 3 := Nat.dvd_sub hp_dvd_c3 hp_dvd_b3
+  have hp_dvd_a3 : p ∣ a ^ 3 := by simpa [hsub] using hp_dvd_sub
+  have hp_dvd_a : p ∣ a := hp.dvd_of_dvd_pow hp_dvd_a3
+  have hp_dvd_gab : p ∣ Nat.gcd a b := Nat.dvd_gcd hp_dvd_a hp_dvd_b
+  have : p ∣ 1 := by simpa [hab.gcd_eq_one] using hp_dvd_gab
+  exact hp.not_dvd_one this
+
+/--
 `d=3` の標準因数分解:
 `c^3 - b^3 = (c-b) * S0_nat c b`。
 -/

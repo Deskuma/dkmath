@@ -122,6 +122,17 @@ status: 作業中 - phase-05: 補題強化
 - build（再確認）
   - `lake build DkMath.FLT.Main` : OK
 
+- phase-05 追加ステップ（局所導出の共通補題化）
+  - `Main.lean` 先頭にあった局所補助補題を `PhaseLift.lean` へ移設:
+    - `cube_sub_eq_of_add_eq`
+    - `coprime_cb_of_eq`
+  - `Main` 側は定義を持たず、`PhaseLift` の共通補題参照に統一。
+  - 位置づけ:
+    - `Main` の局所導出を減らし、証明チェーンの共通層を `PhaseLift` に寄せる方針を前進。
+
+- build（再確認）
+  - `lake build DkMath.FLT.Main` : OK
+
 - phase-05 追加ステップ（2 Gap 抽出 API の一般 `d` 版）
   - `CosmicFormulaBinom.lean` に以下を追加。
     - `two_gap_xy_factor`

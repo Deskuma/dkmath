@@ -66,54 +66,6 @@ open DkMath.NumberTheory.GcdNext
 open DkMath.ABC
 open DkMath.Algebra.DiffPow
 
--- ========================================
--- § 0. 新ルート補助補題（c³-b³=a³ による証明を分離）
--- ========================================
-
-/-- **補助補題1：立方の差の恒等式**
-
-a³ + b³ = c³ から、c³ - b³ = a³ を導く補助補題。
--/
-lemma cube_sub_eq_of_add_eq {a b c : ℕ} (h : a ^ 3 + b ^ 3 = c ^ 3) :
-    c ^ 3 - b ^ 3 = a ^ 3 := by
-  -- c³ = a³ + b³ に書き換えて (x+y)-y=x を適用
-  rw [← h]
-  omega
-
-/-- **補助補題2：互いに素性の遺伝**
-
-gcd(a,b)=1 かつ a³+b³=c³ なら gcd(c,b)=1。
--/
-lemma coprime_cb_of_eq {a b c : ℕ} (hab : Nat.Coprime a b) (h : a ^ 3 + b ^ 3 = c ^ 3) :
-    Nat.Coprime c b := by
-  by_contra hnot
-  have hgcd_ne : Nat.gcd c b ≠ 1 := by
-    intro hg
-    apply hnot
-    exact (Nat.coprime_iff_gcd_eq_one).2 hg
-
-  -- gcd(c,b) を割る素数 p が存在
-  obtain ⟨p, hp, hp_dvd_g⟩ := Nat.exists_prime_and_dvd hgcd_ne
-  have hp_dvd_c : p ∣ c := dvd_trans hp_dvd_g (Nat.gcd_dvd_left c b)
-  have hp_dvd_b : p ∣ b := dvd_trans hp_dvd_g (Nat.gcd_dvd_right c b)
-
-  -- p | c³ かつ p | b³
-  have hp_dvd_c3 : p ∣ c^3 := dvd_trans hp_dvd_c (dvd_pow_self c (by decide : 3 ≠ 0))
-  have hp_dvd_b3 : p ∣ b^3 := dvd_trans hp_dvd_b (dvd_pow_self b (by decide : 3 ≠ 0))
-
-  -- c³ - b³ = a³ より p | a³
-  have hsub : c^3 - b^3 = a^3 := cube_sub_eq_of_add_eq h
-  have hp_dvd_sub : p ∣ c^3 - b^3 := Nat.dvd_sub hp_dvd_c3 hp_dvd_b3
-  have hp_dvd_a3 : p ∣ a^3 := by simpa [hsub] using hp_dvd_sub
-
-  -- p | a³ ∧ p 素数 ⟹ p | a
-  have hp_dvd_a : p ∣ a := hp.dvd_of_dvd_pow hp_dvd_a3
-
-  -- gcd(a,b) = 1 に矛盾
-  have hp_dvd_gab : p ∣ Nat.gcd a b := Nat.dvd_gcd hp_dvd_a hp_dvd_b
-  have : p ∣ 1 := by simpa [hab.gcd_eq_one] using hp_dvd_gab
-  exact hp.not_dvd_one this
-
 /-- **補助補題3：差の立方に存在する原始素因子（3|diff分岐含む）**
 
 c > b で gcd(c,b)=1 のとき、
