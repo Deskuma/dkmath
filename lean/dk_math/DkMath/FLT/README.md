@@ -746,8 +746,6 @@ grep -n "sorry" DkMath/*.lean  # sorry が残っていないか
 
 ---
 
----
-
 ## Map
 
 ```mermaid
@@ -847,4 +845,4 @@ F3 --> A6
 **初版**: 2026年2月23日（全面改訂版）
 **前版**: 2026年2月11日（GCD理論）
 **メインブランチ**: `main`
-**開発ブランチ**: `dev/phase-04-finish-FLT-d3-260223`
+**開発ブランチ**: `dev/flt-refactoring-phase7-260224-v0` にて実施
