@@ -577,12 +577,12 @@ theorem gcd_divides_d {a b : ℤ} {d : ℕ} (hd : 1 ≤ d) (hab : Int.gcd a b = 
 
 | ファイル | 役割 | 行数 |
 |-----------|------|------|
-| [Main.lean](#) | 第2証明：Zsigmondy + padicValNat | ~575 |
-| [Basic.lean](#) | 第1証明：Cosmic Formula | ~968 |
-| [Core.lean](#) | 基本補題と因数分解 | ~300 |
-| [PetalDetect.lean](#) | 相対多角数の構造 | ~350 |
-| [CounterexamplePattern.lean](#) | 反例分類 | ~400 |
-| [GEisensteinBridge.lean](#) | Eisenstein応用 | ~250 |
+| [Main.lean](./Main.lean) | 第2証明：Zsigmondy + padicValNat | ~575 |
+| [Basic.lean](./Basic.lean) | 第1証明：Cosmic Formula | ~968 |
+| [Core.lean](./Core.lean) | 基本補題と因数分解 | ~300 |
+| [PetalDetect.lean](./PetalDetect.lean) | 相対多角数の構造 | ~350 |
+| [CounterexamplePattern.lean](./CounterexamplePattern.lean) | 反例分類 | ~400 |
+| [GEisensteinBridge.lean](./GEisensteinBridge.lean) | Eisenstein応用 | ~250 |
 
 ### 12.2 支援モジュール
 
@@ -745,6 +745,99 @@ grep -n "sorry" DkMath/*.lean  # sorry が残っていないか
 - **新しい手法使用時**: セクション 13「FAQ」に Q&A を追加
 
 ---
+
+---
+
+## Map
+
+```mermaid
+graph TD
+
+%% =========================
+%% Core engine (padicValNat route)
+%% =========================
+A[FLT_d3_by_padicValNat] --> A1[coprime_cb_of_eq]
+A --> A2[exists_prime_factor_cube_diff]
+A --> A3[cube_sub_eq_of_add_eq]
+A --> A4[padicValNat_lower_bound_of_dvd_d3]
+A --> A5[padicValNat_upper_bound_d3]
+A --> A6[hS0_not_sq : ¬ q^2 ∣ S0_nat c b]
+
+%% =========================
+%% Direct NoSqOnS0 -> hS0_not_sq -> core
+%% =========================
+B[FLT_d3_by_padicValNat_of_NoSqOnS0] --> A
+B --> B1[hS0_not_sq_of_NoSqOnS0]
+B1 --> A6
+
+%% =========================
+%% Route 1: nonExceptionalHarmonic
+%% =========================
+C[FLT_d3_by_padicValNat_of_nonExceptionalHarmonic] --> B
+C --> C1[AllNonLiftableOnS0_of_nonExceptionalHarmonic]
+C1 --> C2[NoSqOnS0_of_AllNonLiftableOnS0]
+C2 --> B
+
+%% =========================
+%% Route 2: ExceptThree + mod3 separated + harmonic witness
+%% =========================
+D[FLT_d3_by_padicValNat_of_exceptThree_mod3_separated_harmonic] --> B
+D --> D1[NoSqOnS0_of_exceptThree_mod3_separated_harmonic]
+D1 --> B
+D --> D2[S0PrimeSupportExceptThree c b]
+D --> D3[∀ q, NonLiftableS0 c b q]
+D --> D4[c%3≠0, b%3≠0, c%3≠b%3]
+D --> D5[∃ u: PetalCoreUnit, HarmonicPoint u ∧ ¬isExceptionalPhase u]
+D2 --> D1
+D3 --> D1
+D4 --> D1
+D5 --> D1
+
+%% =========================
+%% Route 3: harmonicEnvelope + nonLiftable family
+%% =========================
+E[FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable] --> B
+E --> E1[allNonLiftableOnS0_of_harmonicEnvelope_nonLiftable]
+E1 --> E2[NoSqOnS0_of_AllNonLiftableOnS0]
+E2 --> B
+E --> E3[hasPhaseUnitInfrastructure]
+E --> E4[∀ x: CounterexampleInput, ¬ exceptionalPhaseGate x]
+E --> E5[S0PrimeSupportExceptThree c b]
+E --> E6[∀ q, NonLiftableS0 c b q]
+E --> E7[c%3≠0, b%3≠0, c%3≠b%3]
+E --> E8[b < c]
+E3 --> E1
+E4 --> E1
+E5 --> E1
+E6 --> E1
+E7 --> E1
+E8 --> E1
+
+%% =========================
+%% Route 4: classifyLift -> noSquareGate -> hS0_not_sq -> core
+%% =========================
+F[FLT_d3_by_padicValNat_of_classifyLift] --> A
+F --> F1[classifyLift x = LiftStatus.impossible]
+F --> F2[primitivePrimeGate x]
+F1 --> F3[noSquareGate_of_classifyLift_impossible]
+F2 --> F3
+F3 --> A6
+```
+
+---
+
+### 図の読み方（最短の要点だけ）
+
+- **中心エンジン**は `FLT_d3_by_padicValNat`。ここは `hS0_not_sq`（= \(q^2 \nmid S0\)）が燃料。
+- `FLT_d3_by_padicValNat_of_NoSqOnS0` は **NoSqOnS0 → hS0_not_sq** を作ってエンジンへ流し込む“直結ホース”。
+- そこに入る“供給ルート”が少なくとも
+
+  - `of_nonExceptionalHarmonic`
+  - `of_exceptThree_mod3_separated_harmonic`
+  - `of_harmonicEnvelope_nonLiftable`
+  - `of_classifyLift`
+
+    の 4 本ある。
 
 ---
 
