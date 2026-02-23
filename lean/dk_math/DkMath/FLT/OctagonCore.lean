@@ -13,7 +13,7 @@ import Mathlib.Tactic
 「八角定理作図法」の座標核を固定するための最小モジュール。
 
 この段階では、標準配置の点定義と、`sqrt 2` に関する基本恒等式を
-no-sorry で置く。
+no-so#rry で置く。
 -/
 
 namespace DkMath.FLT
