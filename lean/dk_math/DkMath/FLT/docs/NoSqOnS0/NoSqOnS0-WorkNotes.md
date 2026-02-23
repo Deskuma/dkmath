@@ -164,3 +164,16 @@ status: 作業中 - phase-04:
 - build（再確認）
   - `lake build DkMath.FLT.PhaseLift` : OK
   - `lake build DkMath.FLT.Main` : OK
+
+- phase-04 実装ステップ（PhaseLift 側の入口補題化）
+  - `PhaseLift.lean` に以下を追加。
+    - `nonExceptionalHarmonicOnS0_of_allNonLiftable`
+    - `nonExceptionalHarmonicOnS0_of_exceptThree_mod3_separated`
+    - `NoSqOnS0_of_exceptThree_mod3_separated_harmonic`
+  - 役割:
+    - Harmonic witness + `AllNonLiftableOnS0` から `NonExceptionalHarmonicOnS0` を構成。
+    - `ExceptThree + mod3分離` 条件から `NonExceptionalHarmonicOnS0` / `NoSqOnS0` まで一気に到達。
+
+- build（再確認）
+  - `lake build DkMath.FLT.PhaseLift` : OK
+  - `lake build DkMath.FLT.Main` : OK

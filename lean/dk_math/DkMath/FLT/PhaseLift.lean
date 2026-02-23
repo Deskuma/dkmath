@@ -180,9 +180,46 @@ lemma AllNonLiftableOnS0_of_nonExceptionalHarmonic {c b : ℕ}
     (h : NonExceptionalHarmonicOnS0 c b) : AllNonLiftableOnS0 c b := by
   exact h.2
 
+lemma nonExceptionalHarmonicOnS0_of_allNonLiftable {c b : ℕ}
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hAll : AllNonLiftableOnS0 c b) :
+    NonExceptionalHarmonicOnS0 c b := by
+  exact ⟨hHarm, hAll⟩
+
+/--
+Harmonic witness と `mod 3` 分離条件つき `ExceptThree` 構成から
+`NonExceptionalHarmonicOnS0` を作る phase-04 入口補題。
+-/
+lemma nonExceptionalHarmonicOnS0_of_exceptThree_mod3_separated {c b : ℕ}
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    NonExceptionalHarmonicOnS0 c b := by
+  have hAll : AllNonLiftableOnS0 c b :=
+    AllNonLiftableOnS0_of_exceptThree_mod3_separated hSuppEx3 hNonLift hc_nz hb_nz hsep
+  exact nonExceptionalHarmonicOnS0_of_allNonLiftable hHarm hAll
+
 lemma NoSqOnS0_of_nonExceptionalHarmonic {c b : ℕ}
     (h : NonExceptionalHarmonicOnS0 c b) : NoSqOnS0 c b := by
   exact NoSqOnS0_of_AllNonLiftableOnS0 (AllNonLiftableOnS0_of_nonExceptionalHarmonic h)
+
+/--
+`ExceptThree` の phase-04 入口条件から直接 `NoSqOnS0` を得る。
+-/
+lemma NoSqOnS0_of_exceptThree_mod3_separated_harmonic {c b : ℕ}
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    NoSqOnS0 c b := by
+  exact NoSqOnS0_of_nonExceptionalHarmonic
+    (nonExceptionalHarmonicOnS0_of_exceptThree_mod3_separated
+      hHarm hSuppEx3 hNonLift hc_nz hb_nz hsep)
 
 /--
 `q ∣ (c^3-b^3)` かつ `q ∤ (c-b)` なら `q ∣ S0_nat c b`。
