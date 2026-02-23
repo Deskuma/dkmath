@@ -72,3 +72,19 @@ status: 作業中 - phase-05: 補題強化
 - build（再確認）
   - `lake build DkMath.CosmicFormula.CosmicFormulaBinom` : OK
   - `lake build DkMath.FLT.Main` : OK
+
+- phase-05 実装ステップ（`hSuppEx3` 自動生成ブリッジ）
+  - `PhaseLift.lean` に以下を追加。
+    - `prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three`
+      - 条件: `b ≤ c`, `Nat.Coprime c b`, `Nat.Prime q`, `q ∣ S0_nat c b`, `q ≠ 3`
+      - 結論: `¬ q ∣ c - b`
+    - `s0PrimeSupportExceptThree_of_coprime`
+      - 条件: `b ≤ c`, `Nat.Coprime c b`
+      - 結論: `S0PrimeSupportExceptThree c b`
+  - 位置づけ:
+    - phase-05 優先タスク 2（`hSuppEx3` の自動生成）を、
+      mod3 + gcd 制御を使って橋補題化。
+
+- build（再確認）
+  - `lake build DkMath.FLT.PhaseLift` : OK
+  - `lake build DkMath.FLT.Main` : OK

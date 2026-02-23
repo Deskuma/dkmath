@@ -78,6 +78,52 @@ def S0PrimeSupportExceptThree (c b : ℕ) : Prop :=
   ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → q ≠ 3 → ¬ q ∣ c - b
 
 /--
+`q ≠ 3` かつ `q ∣ S0(c,b)` と `gcd(c,b)=1` なら `q ∤ (c-b)`。
+（`b ≤ c` を仮定）
+-/
+lemma prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three {c b q : ℕ}
+    (hbc : b ≤ c)
+    (hcop : Nat.Coprime c b)
+    (hq : Nat.Prime q)
+    (hqS0 : q ∣ S0_nat c b)
+    (hq_ne3 : q ≠ 3) :
+    ¬ q ∣ c - b := by
+  intro hq_sub
+  have hcb_mod : c ≡ b [MOD q] := by
+    exact ((Nat.modEq_iff_dvd' hbc).2 hq_sub).symm
+  have hS0_mod3b2 : S0_nat c b ≡ 3 * b ^ 2 [MOD q] := by
+    have h1 : S0_nat c b ≡ b ^ 2 + b * b + b ^ 2 [MOD q] := by
+      unfold S0_nat
+      exact ((hcb_mod.pow 2).add (hcb_mod.mul Nat.ModEq.rfl)).add Nat.ModEq.rfl
+    have h2 : b ^ 2 + b * b + b ^ 2 = 3 * b ^ 2 := by
+      ring
+    exact h2 ▸ h1
+  have hS0_mod0 : S0_nat c b ≡ 0 [MOD q] := hqS0.modEq_zero_nat
+  have h3b2_mod0 : 3 * b ^ 2 ≡ 0 [MOD q] := hS0_mod3b2.symm.trans hS0_mod0
+  have hq_3b2 : q ∣ 3 * b ^ 2 := Nat.modEq_zero_iff_dvd.mp h3b2_mod0
+  rcases hq.dvd_mul.mp hq_3b2 with hq_three | hq_b2
+  · have hq_eq_three : q = 3 :=
+      (Nat.prime_dvd_prime_iff_eq hq Nat.prime_three).1 hq_three
+    exact hq_ne3 hq_eq_three
+  · have hq_b : q ∣ b := hq.dvd_of_dvd_pow hq_b2
+    have hb_mod0 : b ≡ 0 [MOD q] := hq_b.modEq_zero_nat
+    have hc_mod0 : c ≡ 0 [MOD q] := hcb_mod.trans hb_mod0
+    have hq_c : q ∣ c := Nat.modEq_zero_iff_dvd.mp hc_mod0
+    have hq_gcd : q ∣ Nat.gcd c b := Nat.dvd_gcd hq_c hq_b
+    have hq_one : q ∣ 1 := by simpa [hcop.gcd_eq_one] using hq_gcd
+    exact hq.not_dvd_one hq_one
+
+/--
+`hSuppEx3` の自動生成ブリッジ:
+`b ≤ c` と `gcd(c,b)=1` から `S0PrimeSupportExceptThree c b` を得る。
+-/
+lemma s0PrimeSupportExceptThree_of_coprime {c b : ℕ}
+    (hbc : b ≤ c) (hcop : Nat.Coprime c b) :
+    S0PrimeSupportExceptThree c b := by
+  intro q hq hqS0 hq_ne3
+  exact prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three hbc hcop hq hqS0 hq_ne3
+
+/--
 `c,b` がともに `mod 3` で非零、かつ同値類が異なるなら `3 ∤ S0_nat c b`。
 -/
 lemma not_three_dvd_S0_of_mod3_separated {c b : ℕ}
