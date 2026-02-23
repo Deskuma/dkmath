@@ -498,6 +498,9 @@ theorem FLT_d3_by_padicValNat_of_nonExceptionalHarmonic {a b c : ℕ}
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab
     (NoSqOnS0_of_nonExceptionalHarmonic hNH)
 
+#print axioms FLT_d3_by_padicValNat_of_nonExceptionalHarmonic  -- OK: 2026/02/23 12:08
+-- 'DkMath.FLT.FLT_d3_by_padicValNat_of_nonExceptionalHarmonic' depends on axioms: [propext, Classical.choice, Quot.sound]
+
 /--
 `CounterexamplePattern.classifyLift` を経由して `hS0_not_sq` を供給する版。
 -/
@@ -519,7 +522,7 @@ theorem FLT_d3_by_padicValNat_of_classifyLift {a b c : ℕ}
     noSquareGate_of_classifyLift_impossible hprim hcls
   simpa [x, noSquareGate] using hnosq
 
-#print axioms FLT_d3_by_padicValNat  -- OK: 2026/02/22 10:02
+#print axioms FLT_d3_by_padicValNat  -- OK: 2026/02/23 12:08
 -- 'DkMath.FLT.FLT_d3_by_padicValNat' depends on axioms: [propext, Classical.choice, Quot.sound]
 
 end DkMath.FLT
