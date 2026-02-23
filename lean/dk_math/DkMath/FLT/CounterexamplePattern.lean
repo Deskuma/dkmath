@@ -237,6 +237,28 @@ lemma classifyLift_impossible_family_of_harmonicNonExceptional_nonLiftable {c b 
     hbc (hsideAll q) hprim (hNonLiftAll q)
 
 /--
+`NoSqOnS0` と harmonic envelope 仮定から、
+primitive 因子に対する `classifyLift = impossible` family を作る。
+-/
+lemma classifyLift_impossible_family_of_harmonicEnvelope_NoSq {c b : ℕ}
+    (hbc : b < c)
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hNoSq : NoSqOnS0 c b) :
+    ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+      classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible := by
+  have hsideAll :
+      ∀ q : ℕ, HarmonicNonExceptionalSide ({ c := c, b := b, q := q } : CounterexampleInput) := by
+    intro q
+    exact harmonicNonExceptionalSide_of_envelope hInfra hHarm (hNoExcAll { c := c, b := b, q := q })
+  have hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q :=
+    nonLiftableS0_all_of_NoSqOnS0 hNoSq
+  intro q hprim
+  exact classifyLift_impossible_family_of_harmonicNonExceptional_nonLiftable
+    hbc hsideAll hNonLiftAll hprim
+
+/--
 phase-04 接続補題:
 Harmonic witness と分類器の impossible 判定群から `AllNonLiftableOnS0` を作る。
 -/

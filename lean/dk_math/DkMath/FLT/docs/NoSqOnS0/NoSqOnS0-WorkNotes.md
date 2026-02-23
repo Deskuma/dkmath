@@ -104,6 +104,26 @@ status: 作業中 - phase-05: 補題強化
 - build（再確認）
   - `lake build DkMath.FLT.Main` : OK
 
+- phase-05 追加ステップ（`NoSqOnS0` から分類器 impossible family へ）
+  - `PhaseLift.lean` に以下を追加。
+    - `nonLiftableS0_all_of_NoSqOnS0`
+      - 条件: `NoSqOnS0 c b`
+      - 結論: `∀ q, NonLiftableS0 c b q`
+    - `AllNonLiftableOnS0_of_NoSqOnS0_support`
+      - 条件: prime support 条件 + `NoSqOnS0 c b`
+      - 結論: `AllNonLiftableOnS0 c b`
+  - `CounterexamplePattern.lean` に以下を追加。
+    - `classifyLift_impossible_family_of_harmonicEnvelope_NoSq`
+      - 条件: `hInfra + hHarm + hNoExcAll + NoSqOnS0`
+      - 結論: `∀ q` primitive 上で `classifyLift = impossible`
+  - `Main.lean` に以下を追加。
+    - `FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport`
+      - `NoSqOnS0` から `hClassPrim` を自動生成して
+        `..._of_harmonicEnvelope_classify_coprimeSupport` へ接続。
+
+- build（再確認）
+  - `lake build DkMath.FLT.Main` : OK
+
 - phase-05 追加ステップ（`hClassPrim` から `hNonLiftAll` 生成）
   - `Main.lean` に派生定理を追加:
     - `FLT_d3_by_padicValNat_of_harmonicEnvelope_classify_coprimeSupport`

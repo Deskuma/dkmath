@@ -216,6 +216,24 @@ lemma NoSqOnS0_of_AllNonLiftableOnS0 {c b : ℕ}
   exact hnonlift q hprim
 
 /--
+`NoSqOnS0` から `q` 全域の non-liftable 条件を得る。
+-/
+lemma nonLiftableS0_all_of_NoSqOnS0 {c b : ℕ}
+    (hNoSq : NoSqOnS0 c b) :
+    ∀ q : ℕ, NonLiftableS0 c b q := by
+  intro q hprim
+  exact hNoSq hprim.1 hprim.2.1
+
+/--
+`NoSqOnS0` と support 条件から `AllNonLiftableOnS0` を作る。
+-/
+lemma AllNonLiftableOnS0_of_NoSqOnS0_support {c b : ℕ}
+    (hSupport : ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → ¬ q ∣ c - b)
+    (hNoSq : NoSqOnS0 c b) :
+    AllNonLiftableOnS0 c b := by
+  exact ⟨hSupport, nonLiftableS0_all_of_NoSqOnS0 hNoSq⟩
+
+/--
 phase-03-C の十分条件（phase-04 更新）:
 非例外調和点 witness と `AllNonLiftableOnS0` の組。
 -/

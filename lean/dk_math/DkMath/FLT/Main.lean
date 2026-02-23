@@ -596,6 +596,30 @@ theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_classify_coprimeSupport {a b c
   exact FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable_coprimeSupport
     ha hb hc hab hbc hcb_coprime hHarm hNoExcAll hNonLiftAll hc_nz hb_nz hsep
 
+/--
+phase-05: `NoSqOnS0` から classification impossible family を自動生成し、
+`harmonicEnvelope_classify_coprimeSupport` 版へ接続する。
+-/
+theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hNoSq : NoSqOnS0 c b)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hClassPrim :
+      ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+        classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible :=
+    classifyLift_impossible_family_of_harmonicEnvelope_NoSq
+      hbc hasPhaseUnitInfrastructure hHarm hNoExcAll hNoSq
+  exact FLT_d3_by_padicValNat_of_harmonicEnvelope_classify_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hHarm hNoExcAll hClassPrim hc_nz hb_nz hsep
+
 #print axioms FLT_d3_by_padicValNat_of_nonExceptionalHarmonic  -- OK: 2026/02/23 12:08
 -- 'DkMath.FLT.FLT_d3_by_padicValNat_of_nonExceptionalHarmonic' depends on axioms: [propext, Classical.choice, Quot.sound]
 
