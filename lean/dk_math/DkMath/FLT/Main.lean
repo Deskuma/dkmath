@@ -79,8 +79,7 @@ lemma exists_prime_factor_cube_diff {c b : ℕ}
   by_cases h3 : 3 ∣ c - b
   · exact exists_prime_factor_cube_diff_of_three_dvd_sub hbc hb hcop h3
 
-  · exact exists_primitive_prime_factor_prime Nat.prime_three
-      (by norm_num : 3 ≤ 3) hbc hb hcop h3
+  · exact exists_prime_factor_cube_diff_of_not_three_dvd_sub hbc hb hcop h3
 
 -- ========================================
 -- § 1. 層A（Zsigmondy原始素因子）
@@ -108,10 +107,7 @@ lemma exists_primitive_prime_factor_d3 {a b : ℕ}
     (hpnd : ¬ 3 ∣ a - b) :
     ∃ q : ℕ,
       Nat.Prime q ∧ q ∣ a ^ 3 - b ^ 3 ∧ ¬ q ∣ a - b := by
-  -- Zsigmondy定理 d=3 版：¬ 3 ∣ (a-b) の場合、a³ - b³ は新しい素因子を持つ
-  -- ZsigmondyCyclotomic.leanの exists_primitive_prime_factor_prime を使用
-  exact exists_primitive_prime_factor_prime Nat.prime_three
-    (by norm_num : 3 ≤ 3) ha hb hab hpnd
+  exact exists_prime_factor_cube_diff_of_not_three_dvd_sub ha hb hab hpnd
 
 
 -- ========================================

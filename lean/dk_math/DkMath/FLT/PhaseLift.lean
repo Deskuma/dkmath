@@ -412,6 +412,16 @@ lemma exists_prime_factor_cube_diff_of_three_dvd_sub {c b : ℕ}
   exact ⟨q, hq, hq_dvd_diff, hq_ndvd_diff⟩
 
 /--
+`¬ 3 ∣ (c-b)` 分岐専用:
+Zsigmondy の原始素因子存在をそのまま `d=3` に適用する。
+-/
+lemma exists_prime_factor_cube_diff_of_not_three_dvd_sub {c b : ℕ}
+    (hbc : b < c) (hb : 0 < b) (hcop : Nat.Coprime c b) (h3 : ¬ 3 ∣ c - b) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ c ^ 3 - b ^ 3 ∧ ¬ q ∣ c - b := by
+  exact DkMath.NumberTheory.GcdNext.exists_primitive_prime_factor_prime
+    Nat.prime_three (by norm_num : 3 ≤ 3) hbc hb hcop h3
+
+/--
 `d=3` の標準因数分解:
 `c^3 - b^3 = (c-b) * S0_nat c b`。
 -/
