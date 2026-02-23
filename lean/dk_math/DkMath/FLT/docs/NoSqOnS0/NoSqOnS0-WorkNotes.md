@@ -49,10 +49,10 @@ status: 作業中 - phase-05: 補題強化
 
 **次に実装すべき補題（優先順）**
 
-1. [ ] `CosmicFormulaBinom` 側に `add_pow_tail_u2`（Nat `dvd` 版まで）  
-2. [ ] `PhaseLift`/`CounterexamplePattern` 側で  
+1. [x] `CosmicFormulaBinom` 側に `add_pow_tail_u2`（Nat `dvd` 版まで）  
+2. [x] `PhaseLift`/`CounterexamplePattern` 側で  
    `hSuppEx3` を mod 3 補題から自動生成する橋補題  
-3. [ ] `Main` で  
+3. [x] `Main` で  
    `G_binom` API -> `hSuppEx3`/`hNonLiftAll` -> 既存 `...of_harmonicEnvelope_nonLiftable`  
    へ直結する定理を1本追加
 
@@ -87,4 +87,19 @@ status: 作業中 - phase-05: 補題強化
 
 - build（再確認）
   - `lake build DkMath.FLT.PhaseLift` : OK
+  - `lake build DkMath.FLT.Main` : OK
+
+- phase-05 実装ステップ（Main 直結版の追加）
+  - `Main.lean` に派生定理を追加:
+    - `FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable_coprimeSupport`
+  - 入力:
+    - 既存 `harmonicEnvelope_nonLiftable` 条件群
+    - 追加で `Nat.Coprime c b`
+  - 経路:
+    - `s0PrimeSupportExceptThree_of_coprime`
+      → `FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable`
+  - 意味:
+    - `hSuppEx3` を手で渡さず、`Coprime c b` から自動生成して Main へ直結。
+
+- build（再確認）
   - `lake build DkMath.FLT.Main` : OK
