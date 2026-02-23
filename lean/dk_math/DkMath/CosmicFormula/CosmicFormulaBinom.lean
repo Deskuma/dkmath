@@ -370,6 +370,36 @@ theorem add_pow_tail_u2_d3_nat_dvd (x u : ℕ) :
     _ = x ^ 2 * w := by
           simp
 
+/--
+2 Gap 抽出（d=3）:
+`(x+y)^3` から `x^3` と `y^3` を抜いた差は `x*y` を因子に持つ。
+-/
+theorem two_gap_xy_factor_d3 {R : Type _} [CommSemiring R] (x y : R) :
+    (x + y) ^ 3 = x ^ 3 + y ^ 3 + x * y * ((3 : R) * (x + y)) := by
+  ring
+
+/--
+2 Gap 抽出（d=3, Nat `dvd` 版）:
+`x*y ∣ ((x+y)^3 - x^3 - y^3)`。
+-/
+theorem two_gap_xy_factor_d3_nat_dvd (x y : ℕ) :
+    x * y ∣ ((x + y) ^ 3 - x ^ 3 - y ^ 3) := by
+  let w : ℕ := 3 * (x + y)
+  refine ⟨w, ?_⟩
+  have h :
+      (x + y) ^ 3 = x ^ 3 + y ^ 3 + x * y * w := by
+    simpa [w, Nat.add_assoc, Nat.add_left_comm, Nat.add_comm,
+      Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm]
+      using (two_gap_xy_factor_d3 (R := ℕ) x y)
+  calc
+    (x + y) ^ 3 - x ^ 3 - y ^ 3
+        = (x ^ 3 + (y ^ 3 + x * y * w) - x ^ 3) - y ^ 3 := by
+            simp [h, Nat.add_assoc]
+    _ = (y ^ 3 + x * y * w) - y ^ 3 := by
+          simp
+    _ = x * y * w := by
+          simp
+
 end CommSemiring
 
 end DkMath.CosmicFormulaBinom

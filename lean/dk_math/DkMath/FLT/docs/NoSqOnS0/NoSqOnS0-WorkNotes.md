@@ -104,6 +104,20 @@ status: 作業中 - phase-05: 補題強化
 - build（再確認）
   - `lake build DkMath.FLT.Main` : OK
 
+- phase-05 追加ステップ（2 Gap 抽出 API の d=3 導入）
+  - `CosmicFormulaBinom.lean` に以下を追加。
+    - `two_gap_xy_factor_d3`
+      - `(x+y)^3 = x^3 + y^3 + x*y*(3*(x+y))`
+      - 2-gap 差分が `xy` 因子を持つことの d=3 版。
+    - `two_gap_xy_factor_d3_nat_dvd`
+      - `x*y ∣ ((x+y)^3 - x^3 - y^3)`（Nat `dvd` 版）
+  - 位置づけ:
+    - `two_gap_xy_factor` の一般 `d` 版へ進む前の、実装可能・即利用の足場。
+
+- build（再確認）
+  - `lake build DkMath.CosmicFormula.CosmicFormulaBinom` : OK
+  - `lake build DkMath.FLT.Main` : OK
+
 - phase-05 追加ステップ（`NoSqOnS0` から分類器 impossible family へ）
   - `PhaseLift.lean` に以下を追加。
     - `nonLiftableS0_all_of_NoSqOnS0`
