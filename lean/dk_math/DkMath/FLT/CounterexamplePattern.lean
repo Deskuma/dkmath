@@ -61,6 +61,27 @@ lemma phaseGate_default (x : CounterexampleInput) : phaseGate x := by
 def exceptionalPhaseGate (_x : CounterexampleInput) : Prop :=
   ∃ u : PetalCoreUnit, HarmonicPoint u ∧ isExceptionalPhase u
 
+/--
+phase-04 で使う「非例外・調和側」判定。
+-/
+def HarmonicNonExceptionalSide (x : CounterexampleInput) : Prop :=
+  phaseGate x ∧ ¬ exceptionalPhaseGate x
+
+lemma harmonicNonExceptionalSide_of_envelope {x : CounterexampleInput}
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExc : ¬ exceptionalPhaseGate x) :
+    HarmonicNonExceptionalSide x := by
+  exact ⟨phaseGate_of_harmonicEnvelope hInfra hHarm, hNoExc⟩
+
+lemma harmonicNonExceptionalSide_all_of_envelope
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x) :
+    ∀ x : CounterexampleInput, HarmonicNonExceptionalSide x := by
+  intro x
+  exact harmonicNonExceptionalSide_of_envelope hInfra hHarm (hNoExcAll x)
+
 /-- `lift` 判定の現在値。 -/
 inductive LiftStatus where
   | possible
@@ -141,6 +162,13 @@ lemma noSquareGate_of_classifyLift_impossible {x : CounterexampleInput}
     have : LiftStatus.possible = LiftStatus.impossible := hpossible.symm.trans hclass
     cases this
 
+lemma classifyLift_impossible_of_harmonicNonExceptional {x : CounterexampleInput}
+    (hside : HarmonicNonExceptionalSide x)
+    (hprim : primitivePrimeGate x)
+    (hnosq : noSquareGate x) :
+    classifyLift x = LiftStatus.impossible := by
+  exact classifyLift_impossible_of_gates hside.2 hprim hnosq
+
 /--
 `PrimitiveOnS0` から `primitivePrimeGate` への持ち上げ。
 -/
@@ -177,6 +205,38 @@ lemma nonLiftableS0_of_classifyLift_impossible {c b q : ℕ}
   simpa [x, noSquareGate] using hnosq
 
 /--
+非例外・調和側の入力で、`PrimitiveOnS0` と `NonLiftableS0` から
+`classifyLift = impossible` を得るテンプレート。
+-/
+lemma classifyLift_impossible_of_harmonicNonExceptional_nonLiftable {c b q : ℕ}
+    (hbc : b < c)
+    (hside : HarmonicNonExceptionalSide ({ c := c, b := b, q := q } : CounterexampleInput))
+    (hprim : PrimitiveOnS0 c b q)
+    (hNonLift : NonLiftableS0 c b q) :
+    classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible := by
+  let x : CounterexampleInput := { c := c, b := b, q := q }
+  have hprimGate : primitivePrimeGate x := by
+    simpa [x] using primitivePrimeGate_of_PrimitiveOnS0 hbc hprim
+  have hnosq : noSquareGate x := by
+    exact hNonLift hprim
+  exact classifyLift_impossible_of_harmonicNonExceptional
+    (by simpa [x] using hside) hprimGate (by simpa [x] using hnosq)
+
+/--
+`q` 全域のテンプレート版。
+-/
+lemma classifyLift_impossible_family_of_harmonicNonExceptional_nonLiftable {c b : ℕ}
+    (hbc : b < c)
+    (hsideAll :
+      ∀ q : ℕ, HarmonicNonExceptionalSide ({ c := c, b := b, q := q } : CounterexampleInput))
+    (hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q) :
+    ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+      classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible := by
+  intro q hprim
+  exact classifyLift_impossible_of_harmonicNonExceptional_nonLiftable
+    hbc (hsideAll q) hprim (hNonLiftAll q)
+
+/--
 phase-04 接続補題:
 Harmonic witness と分類器の impossible 判定群から `AllNonLiftableOnS0` を作る。
 -/
@@ -199,5 +259,31 @@ lemma allNonLiftableOnS0_of_harmonicClassifier {c b : ℕ}
     intro q hprim
     exact nonLiftableS0_of_classifyLift_impossible hbc (hClass hprim) hprim
   exact AllNonLiftableOnS0_of_exceptThree_mod3_separated hSuppEx3 hNonLift hc_nz hb_nz hsep
+
+/--
+phase-04 接続補題（non-exceptional ∧ harmonic 側のテンプレート利用版）。
+-/
+lemma allNonLiftableOnS0_of_harmonicNonExceptional_nonLiftable {c b : ℕ}
+    (hbc : b < c)
+    (hsideAll :
+      ∀ q : ℕ, HarmonicNonExceptionalSide ({ c := c, b := b, q := q } : CounterexampleInput))
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    AllNonLiftableOnS0 c b := by
+  have hClass :
+      ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+        classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible :=
+    classifyLift_impossible_family_of_harmonicNonExceptional_nonLiftable hbc hsideAll hNonLiftAll
+  exact allNonLiftableOnS0_of_harmonicClassifier
+    hbc hasPhaseUnitInfrastructure
+    (by
+      -- `hsideAll` の 0 番目成分から位相 witness を回収する
+      have h0 : HarmonicNonExceptionalSide ({ c := c, b := b, q := 0 } : CounterexampleInput) :=
+        hsideAll 0
+      exact h0.1.2)
+    hSuppEx3 hClass hc_nz hb_nz hsep
 
 end DkMath.FLT

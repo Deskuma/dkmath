@@ -59,7 +59,7 @@ status: 作業中 - phase-04:
 1. [x] `NonExceptionalHarmonicOnS0 -> AllNonLiftableOnS0`（暫定接続）  
 のスケルトン補題を追加（最初は弱い仮定込みで良い）。
 
-2. [ ] `exceptional -> undecided` は実装済みなので、  
+2. [x] `exceptional -> undecided` は実装済みなので、  
 `non-exceptional ∧ harmonic` 側で `impossible` に寄せる補題を増やす。
 
 ### 4. Main の接続先を差し替え
@@ -191,4 +191,22 @@ status: 作業中 - phase-04:
 
 - build（再確認）
   - `lake build DkMath.FLT.PhaseLift` : OK
+  - `lake build DkMath.FLT.Main` : OK
+
+- phase-04 実装ステップ（`non-exceptional ∧ harmonic -> impossible` テンプレート化）
+  - `CounterexamplePattern.lean` に以下を追加。
+    - `HarmonicNonExceptionalSide`
+    - `harmonicNonExceptionalSide_of_envelope`
+    - `harmonicNonExceptionalSide_all_of_envelope`
+    - `classifyLift_impossible_of_harmonicNonExceptional`
+    - `classifyLift_impossible_of_harmonicNonExceptional_nonLiftable`
+    - `classifyLift_impossible_family_of_harmonicNonExceptional_nonLiftable`
+    - `allNonLiftableOnS0_of_harmonicNonExceptional_nonLiftable`
+  - 役割:
+    - 「非例外・調和側」を述語で固定し、
+      `PrimitiveOnS0 + NonLiftableS0` から `classifyLift = impossible` を機械的に生成する。
+    - 生成した impossible-family を `AllNonLiftableOnS0` 構築へ接続する。
+
+- build（再確認）
+  - `lake build DkMath.FLT.CounterexamplePattern` : OK
   - `lake build DkMath.FLT.Main` : OK
