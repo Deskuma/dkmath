@@ -57,3 +57,18 @@ status: 作業中 - phase-05: 補題強化
    へ直結する定理を1本追加
 
 ## 作業ログ 2026/02/23 20:42 より
+
+- phase-05 実装ステップ（G_binom API の d=3 強化）
+  - `CosmicFormulaBinom.lean` に以下を追加。
+    - `add_pow_gap_factor`
+      - `(x+u)^d = u^d + x * GN d x u`（1 Gap 抽出 API）
+    - `add_pow_tail_u2_d3`
+      - `(x+u)^3 = u^3 + 3*x*u^2 + x^2*(x+3*u)`（d=3 Tail の `x^2` 因子化）
+    - `add_pow_tail_u2_d3_nat_dvd`
+      - `x^2 ∣ ((x+u)^3 - u^3 - 3*x*u^2)`（Nat `dvd` 版）
+  - 位置づけ:
+    - phase-05 優先タスク 1（`add_pow_tail_u2` の Nat 版）を、まず d=3 で導入。
+
+- build（再確認）
+  - `lake build DkMath.CosmicFormula.CosmicFormulaBinom` : OK
+  - `lake build DkMath.FLT.Main` : OK

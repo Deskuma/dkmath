@@ -331,6 +331,45 @@ theorem cosmic_id_csr' {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
     simp only [Nat.choose_zero_right, Nat.cast_one, pow_zero, mul_one]
     ring
 
+/--
+Big-Gap（1 Gap 抽出版）:
+`(x+u)^d - u^d` は必ず `x` を因子に持つ（加法形）。
+-/
+theorem add_pow_gap_factor {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
+    (x + u) ^ d = u ^ d + x * GN d x u := by
+  simpa [add_comm, add_left_comm, add_assoc] using (cosmic_id_csr' (R := R) d x u)
+
+/--
+`d=3` の Tail は `u^2` ではなく（変数名を `x,u` に取っているため）`x^2` を因子に持つ。
+すなわち:
+`(x+u)^3 = u^3 + 3*x*u^2 + x^2*(x+3*u)`。
+-/
+theorem add_pow_tail_u2_d3 {R : Type _} [CommSemiring R] (x u : R) :
+    (x + u) ^ 3 = u ^ 3 + (3 : R) * x * u ^ 2 + x ^ 2 * (x + (3 : R) * u) := by
+  ring
+
+/--
+`Nat` 版の `d=3` Tail 割り切り:
+`x^2 ∣ ((x+u)^3 - u^3 - 3*x*u^2)`。
+-/
+theorem add_pow_tail_u2_d3_nat_dvd (x u : ℕ) :
+    x ^ 2 ∣ ((x + u) ^ 3 - u ^ 3 - 3 * x * u ^ 2) := by
+  let w : ℕ := x + 3 * u
+  refine ⟨w, ?_⟩
+  have h :
+      (x + u) ^ 3 = u ^ 3 + (3 : ℕ) * x * u ^ 2 + x ^ 2 * w := by
+    simpa [w, Nat.add_assoc, Nat.add_left_comm, Nat.add_comm,
+      Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm]
+      using (add_pow_tail_u2_d3 (R := ℕ) x u)
+  calc
+    (x + u) ^ 3 - u ^ 3 - 3 * x * u ^ 2
+        = (u ^ 3 + (3 * x * u ^ 2 + x ^ 2 * w) - u ^ 3) - 3 * x * u ^ 2 := by
+            simp [h, Nat.add_assoc]
+    _ = (3 * x * u ^ 2 + x ^ 2 * w) - 3 * x * u ^ 2 := by
+          simp
+    _ = x ^ 2 * w := by
+          simp
+
 end CommSemiring
 
 end DkMath.CosmicFormulaBinom
