@@ -1,6 +1,6 @@
 # No Square on S0 Work Notes
 
-status: 作業中 - phase-05:
+status: 作業中 - phase-06: リファクタリング
 
 ## Index
 
@@ -10,20 +10,12 @@ status: 作業中 - phase-05:
 [NoSqOnS0: phase-02](NoSqOnS0-WorkNotes-phase-02.md) -  x=c-b, u=b を代入して `Gx 3 x u = S0_nat c b` へ落とす橋補題を作った。
 [NoSqOnS0: phase-03](NoSqOnS0-WorkNotes-phase-03.md) -  定義を固める → 判定器を実質化 → 十分条件の構築の順で実装した。
 [NoSqOnS0: phase-04](NoSqOnS0-WorkNotes-phase-04.md) -  例外素数3の分離を追加して、`hHarm` + `hNoExcAll` + `hSuppEx3` + `hNonLiftAll` + mod3分離 から `AllNonLiftableOnS0` を構成するルートを作った。
+[NoSqOnS0: phase-05](NoSqOnS0-WorkNotes-phase-05.md) -  `G_binom` API の d=3 強化、`hSuppEx3` 自動生成、Main 直結版の追加、2 Gap 抽出 API の一般 `d` 版、`NoSqOnS0` から分類器 impossible family への橋補題、`hClassPrim` から `hNonLiftAll` 生成の順で実装した。
 
-## 状況（研究課題）
+## 課題
 
-- 現状は  
-  `harmonicEnvelope_nonLiftable仮定群 -> NoSqOnS0 -> FLT_d3...`  
-  という**十分条件チェーン**。
-- `NoSqOnS0 -> harmonicEnvelope_nonLiftable仮定群` は未構築で、一般には難しい。
+- なし
 
-なので、あなたの「`4` から `3+1` を一意復元できない」比喩は正確です。
+## 状況タスク
 
-一点だけ補正すると:
-
-- `NoSqOnS0` と `a^3+b^3≠c^3` は同値ではなく、今は `NoSqOnS0` を使った**証明戦略上の強い仮定**です。
-- つまり「`NoSqOnS0` を示せば FLT_d3 が出る」は真ですが、逆はこの枠組みでは要求していません。
-
-次の実務的な研究対象としては、まさにあなたの言う `G` 多項式側です。  
-特に「`hSuppEx3` と `hNonLiftAll` を `G` 側の構造補題から直接生成できるか」が次の核心です。
+- [ ] （計画中）
