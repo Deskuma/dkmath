@@ -286,4 +286,27 @@ lemma allNonLiftableOnS0_of_harmonicNonExceptional_nonLiftable {c b : ℕ}
       exact h0.1.2)
     hSuppEx3 hClass hc_nz hb_nz hsep
 
+/--
+phase-04 接続補題（envelope 入力版）:
+`hsideAll` を外部で組み立てずに
+`hInfra + hHarm + hNoExcAll + hNonLiftAll` から `AllNonLiftableOnS0` を作る。
+-/
+lemma allNonLiftableOnS0_of_harmonicEnvelope_nonLiftable {c b : ℕ}
+    (hbc : b < c)
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    AllNonLiftableOnS0 c b := by
+  have hsideAll :
+      ∀ q : ℕ, HarmonicNonExceptionalSide ({ c := c, b := b, q := q } : CounterexampleInput) := by
+    intro q
+    exact harmonicNonExceptionalSide_of_envelope hInfra hHarm (hNoExcAll { c := c, b := b, q := q })
+  exact allNonLiftableOnS0_of_harmonicNonExceptional_nonLiftable
+    hbc hsideAll hSuppEx3 hNonLiftAll hc_nz hb_nz hsep
+
 end DkMath.FLT

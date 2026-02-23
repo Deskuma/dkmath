@@ -210,3 +210,20 @@ status: 作業中 - phase-04:
 - build（再確認）
   - `lake build DkMath.FLT.CounterexamplePattern` : OK
   - `lake build DkMath.FLT.Main` : OK
+
+- phase-04 追加ステップ（envelope 入力での `AllNonLiftableOnS0` 構成）
+  - `CounterexamplePattern.lean` に補助補題を追加:
+    - `allNonLiftableOnS0_of_harmonicEnvelope_nonLiftable`
+  - 入力:
+    - `hInfra`, `hHarm`, `hNoExcAll`
+    - `hSuppEx3`, `hNonLiftAll`
+    - `c % 3 ≠ 0`, `b % 3 ≠ 0`, `c % 3 ≠ b % 3`
+  - 出力:
+    - `AllNonLiftableOnS0 c b`
+  - 役割:
+    - `hsideAll` を外で組み立てずに、
+      envelope 条件から `non-exceptional ∧ harmonic -> impossible` テンプレートへ直結する。
+
+- build（再確認）
+  - `lake build DkMath.FLT.CounterexamplePattern` : OK
+  - `lake build DkMath.FLT.Main` : OK
