@@ -422,6 +422,18 @@ lemma exists_prime_factor_cube_diff_of_not_three_dvd_sub {c b : ℕ}
     Nat.prime_three (by norm_num : 3 ≤ 3) hbc hb hcop h3
 
 /--
+`c > b` かつ `gcd(c,b)=1` のとき、
+`q ∣ (c^3-b^3)` かつ `q ∤ (c-b)` を満たす素数 `q` が存在。
+`3 ∣ (c-b)` / `¬ 3 ∣ (c-b)` の両分岐を内包した共通補題。
+-/
+lemma exists_prime_factor_cube_diff {c b : ℕ}
+    (hbc : b < c) (hb : 0 < b) (hcop : Nat.Coprime c b) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ c ^ 3 - b ^ 3 ∧ ¬ q ∣ c - b := by
+  by_cases h3 : 3 ∣ c - b
+  · exact exists_prime_factor_cube_diff_of_three_dvd_sub hbc hb hcop h3
+  · exact exists_prime_factor_cube_diff_of_not_three_dvd_sub hbc hb hcop h3
+
+/--
 `d=3` の標準因数分解:
 `c^3 - b^3 = (c-b) * S0_nat c b`。
 -/

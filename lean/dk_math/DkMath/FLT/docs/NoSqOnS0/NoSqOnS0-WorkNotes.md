@@ -163,6 +163,20 @@ status: 作業中 - phase-05: 補題強化
 - build（再確認）
   - `lake build DkMath.FLT.Main` : OK
 
+- phase-05 追加ステップ（`exists_prime_factor_cube_diff` 本体の移設）
+  - `PhaseLift.lean` に共通補題として追加:
+    - `exists_prime_factor_cube_diff`
+      - `3 ∣ (c-b)` / `¬ 3 ∣ (c-b)` の分岐を内包し、
+        既存の分岐専用補題2本をディスパッチする統合版。
+  - `Main.lean` から同名補題の本体定義を削除。
+    - 以後、`Main` は `PhaseLift.exists_prime_factor_cube_diff` を直接参照。
+  - 意味:
+    - 分岐補題だけでなく、分岐合流点そのものも `PhaseLift` へ移り、
+      `Main` の局所導出がさらに薄くなった。
+
+- build（再確認）
+  - `lake build DkMath.FLT.Main` : OK
+
 - phase-05 追加ステップ（2 Gap 抽出 API の一般 `d` 版）
   - `CosmicFormulaBinom.lean` に以下を追加。
     - `two_gap_xy_factor`

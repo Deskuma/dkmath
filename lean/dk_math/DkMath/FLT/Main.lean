@@ -66,21 +66,6 @@ open DkMath.NumberTheory.GcdNext
 open DkMath.ABC
 open DkMath.Algebra.DiffPow
 
-/-- **補助補題3：差の立方に存在する原始素因子（3|diff分岐含む）**
-
-c > b で gcd(c,b)=1 のとき、
-q | (c³-b³) ∧ q ∤ (c-b) を満たす素数 q が存在。
-
-このとき 3 | (c-b) の分岐も網羅。
--/
-lemma exists_prime_factor_cube_diff {c b : ℕ}
-    (hbc : b < c) (hb : 0 < b) (hcop : Nat.Coprime c b) :
-    ∃ q, Nat.Prime q ∧ q ∣ c^3 - b^3 ∧ ¬ q ∣ c - b := by
-  by_cases h3 : 3 ∣ c - b
-  · exact exists_prime_factor_cube_diff_of_three_dvd_sub hbc hb hcop h3
-
-  · exact exists_prime_factor_cube_diff_of_not_three_dvd_sub hbc hb hcop h3
-
 -- ========================================
 -- § 1. 層A（Zsigmondy原始素因子）
 -- ========================================
