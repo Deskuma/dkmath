@@ -8,6 +8,9 @@ Authors: D. and Wise Wolf.
 
 -- no-import DkMath.FLT.Basic 依存しないように外す
 import DkMath.FLT.PetalDetect
+import DkMath.FLT.OctagonCore
+import DkMath.FLT.PhaseLift
+import DkMath.FLT.CounterexamplePattern
 import DkMath.FLT.GEisensteinBridge
 import DkMath.NumberTheory.GcdNext
 import DkMath.NumberTheory.ZsigmondyCyclotomic
@@ -361,9 +364,9 @@ lemma padicValNat_upper_bound_d3 {a b q : ℕ}
     (hq_ndiv_diff : ¬ q ∣ a - b)
     (hq_not_sq : ¬ q ^ 2 ∣ S0_nat a b) :
     padicValNat q (a ^ 3 - b ^ 3) ≤ 1 := by
-  -- **Step B.0: (a+b)割り切り検出**
-  -- PetalDetect.prime_dvd_S0_coprime_imp_not_dvd_apb より
-  -- q | S0(a,b) ∧ gcd(a,b)=1 ⟹ q ∤ (a+b)
+  -- Core 統合: Binom -> Petal の橋補題を使って q | S0 を導出
+  have hS0_dvd : q ∣ S0_nat a b :=
+    prime_dvd_S0_via_cosmic_bridge hab_lt hq hq_dvd hq_ndiv_diff
 
   have h_diff : a ^ 3 - b ^ 3 = (a - b) * (a ^ 2 + a * b + b ^ 2) := by
     -- use sample proof from Samples/FLT.lean
@@ -373,15 +376,6 @@ lemma padicValNat_upper_bound_d3 {a b q : ℕ}
   have h_fact : a ^ 3 - b ^ 3 = (a - b) * S0_nat a b := by
     -- rewrite using definition of S0_nat and h_diff
     simpa [S0_nat] using h_diff
-  have hS0_dvd : q ∣ S0_nat a b := by
-    have hmul : q ∣ (a - b) * S0_nat a b := by
-      -- hq_dvd : q ∣ a^3 - b^3 を因数分解で書き換え
-      simpa [h_fact] using hq_dvd
-
-    -- prime の「積を割るならどっちか」を使う
-    have : q ∣ a - b ∨ q ∣ S0_nat a b := hq.dvd_mul.mp hmul
-
-    exact this.resolve_left hq_ndiv_diff
 
   -- **padicValNat上界：PetalDetect.padicValNat_le_one_of_not_sq_dvd を使用**
   have hpadic_bound : padicValNat q (S0_nat a b) ≤ 1 :=
@@ -481,7 +475,100 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
   have : (3 : ℕ) ≤ 1 := le_trans h_lower h_upper
   omega
 
-#print axioms FLT_d3_by_padicValNat  -- OK: 2026/02/22 10:02
+/--
+`NoSqOnS0 c b` を入力にした `FLT_d3_by_padicValNat` の派生版。
+-/
+theorem FLT_d3_by_padicValNat_of_NoSqOnS0 {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hNoSq : NoSqOnS0 c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  apply FLT_d3_by_padicValNat ha hb hc hab
+  intro q hq hq_dvd_diff hq_ndiv_diff
+  exact hS0_not_sq_of_NoSqOnS0 (c := c) (b := b) hNoSq hq hq_dvd_diff hq_ndiv_diff
+
+/--
+phase-04: 非例外調和条件（skeleton）から
+`AllNonLiftableOnS0` -> `NoSqOnS0` を経由して供給する版。
+-/
+theorem FLT_d3_by_padicValNat_of_nonExceptionalHarmonic {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hNH : NonExceptionalHarmonicOnS0 c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hAll : AllNonLiftableOnS0 c b :=
+    AllNonLiftableOnS0_of_nonExceptionalHarmonic hNH
+  have hNoSq : NoSqOnS0 c b := NoSqOnS0_of_AllNonLiftableOnS0 hAll
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab
+    hNoSq
+
+/--
+phase-04: `ExceptThree + mod3分離 + harmonic witness` から
+`NoSqOnS0` を経由して供給する版。
+-/
+theorem FLT_d3_by_padicValNat_of_exceptThree_mod3_separated_harmonic {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_exceptThree_mod3_separated_harmonic
+      hHarm hSuppEx3 hNonLift hc_nz hb_nz hsep
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+phase-04: `harmonic envelope + nonLiftable family` から
+`AllNonLiftableOnS0` を経由して供給する版。
+-/
+theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hAll : AllNonLiftableOnS0 c b :=
+    allNonLiftableOnS0_of_harmonicEnvelope_nonLiftable hbc
+      hasPhaseUnitInfrastructure hHarm hNoExcAll
+      hSuppEx3 hNonLiftAll hc_nz hb_nz hsep
+  have hNoSq : NoSqOnS0 c b := NoSqOnS0_of_AllNonLiftableOnS0 hAll
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+#print axioms FLT_d3_by_padicValNat_of_nonExceptionalHarmonic  -- OK: 2026/02/23 12:08
+-- 'DkMath.FLT.FLT_d3_by_padicValNat_of_nonExceptionalHarmonic' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+/--
+`CounterexamplePattern.classifyLift` を経由して `hS0_not_sq` を供給する版。
+-/
+theorem FLT_d3_by_padicValNat_of_classifyLift {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hClassify :
+      ∀ {q : ℕ}, Nat.Prime q → q ∣ c ^ 3 - b ^ 3 → ¬ q ∣ c - b →
+        classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  apply FLT_d3_by_padicValNat ha hb hc hab
+  intro q hq hq_dvd_diff hq_ndiv_diff
+  let x : CounterexampleInput := { c := c, b := b, q := q }
+  have hprim : primitivePrimeGate x := by
+    exact ⟨hq, hq_dvd_diff, hq_ndiv_diff⟩
+  have hcls : classifyLift x = LiftStatus.impossible := by
+    simpa [x] using hClassify hq hq_dvd_diff hq_ndiv_diff
+  have hnosq : noSquareGate x :=
+    noSquareGate_of_classifyLift_impossible hprim hcls
+  simpa [x, noSquareGate] using hnosq
+
+#print axioms FLT_d3_by_padicValNat  -- OK: 2026/02/23 12:08
 -- 'DkMath.FLT.FLT_d3_by_padicValNat' depends on axioms: [propext, Classical.choice, Quot.sound]
 
 end DkMath.FLT
