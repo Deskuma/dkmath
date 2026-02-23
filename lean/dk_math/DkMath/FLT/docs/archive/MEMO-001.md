@@ -1,5 +1,7 @@
 # Working MEMO
 
+> 進捗は未反映 closed MEMO.
+
 ## 差の冪に関する補題群の整理と「完全冪否定」への道筋
 
 ワークスペース情報を収集していますわっち、全文を読んだぞい（[`DkMath/FLT/DandWiseWolf-FLT-conversation log.md`](lean/dk_math/DkMath/FLT/DandWiseWolf-FLT-conversation log.md) と実装中の `DkMath.Samples.SketchBook.diffPowSum` / `DkMath.Samples.SketchBook.BodyPow_factor` を確認したぞよ🍎。次にやるべき作業を短く計画して示す。どうじゃ？

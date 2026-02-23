@@ -65,8 +65,20 @@ git tag -d mark-summary-report && git tag mark-summary-report || true
 # archive the logs (saved in $LOG_DIR to avoid self-inclusion)
 tar -czf "$ARCHIVE_NAME" -C "$SUMMARY_REPORT_DIR" .
 
+# sha256 checksum of the archive for integrity verification
+ARCHIVE_CHECKSUM=$(sha256sum "$ARCHIVE_NAME" | awk '{print $1}')
+echo "Archive created: $ARCHIVE_NAME"
+echo "SHA256 Checksum: $ARCHIVE_CHECKSUM"
+
+# store the checksum in a file for later verification
+CHECKSUM_FILE="$REPORT_DIR/__summary_report_data.tar.gz.sha256"
+echo "$ARCHIVE_CHECKSUM  $ARCHIVE_NAME" > "$CHECKSUM_FILE"
+echo "Checksum saved to: $CHECKSUM_FILE"
+
 # large files for review
-rg -n "^(theorem|lemma|def)\s+" lean/dk_math/DkMath -S -A5 -B2 | tee "$SUMMARY_REPORT_DIR/___theorems.txt"
-rg -n "^(theorem|lemma|def)\s+" lean/dk_math/DkMath -S -A5 -B5 --heading | rg -n "^[^:]+:" | tee "$SUMMARY_REPORT_DIR/___theorems-with-filename.txt"
+rg -n "^(theorem|lemma|def)\s+" lean/dk_math/DkMath -S -A5 -B2                             > "$SUMMARY_REPORT_DIR/___theorems.txt"
+rg -n "^(theorem|lemma|def)\s+" lean/dk_math/DkMath -S -A5 -B5 --heading | rg -n "^[^:]+:" > "$SUMMARY_REPORT_DIR/___theorems-with-filename.txt"
+
+echo "Summary report data created and archived successfully: $ARCHIVE_NAME"
 
 exit 0
