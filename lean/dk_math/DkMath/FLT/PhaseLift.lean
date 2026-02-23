@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.PetalDetect
 import DkMath.FLT.OctagonCore
 import DkMath.FLT.CosmicPetalBridge
+import DkMath.CosmicFormula.CosmicFormulaBinom
 import DkMath.FLT.PetalCoreUnit
 import DkMath.Units.NPUnit
 
@@ -303,6 +304,19 @@ lemma prime_dvd_S0_of_dvd_cube_sub_not_dvd_diff {c b q : ℕ}
   have hmul : q ∣ (c - b) * S0_nat c b := by
     simpa [hfact] using hq_dvd
   exact (hq.dvd_mul.mp hmul).resolve_left hq_ndvd
+
+/--
+一般 `two_gap_xy_factor`（Nat `dvd` 版）から得る d=3 橋補題:
+`x=c-b, y=b` とおくと `(c-b)*b` は
+`c^3 - (c-b)^3 - b^3` を割る。
+-/
+lemma two_gap_xy_dvd_cube_bridge {c b : ℕ}
+    (hbc : b ≤ c) :
+    (c - b) * b ∣ c ^ 3 - (c - b) ^ 3 - b ^ 3 := by
+  have hdiv :
+      (c - b) * b ∣ (((c - b) + b) ^ (1 + 2) - (c - b) ^ (1 + 2) - b ^ (1 + 2)) :=
+    DkMath.CosmicFormulaBinom.two_gap_xy_factor_nat_dvd 1 (c - b) b
+  simpa [Nat.sub_add_cancel hbc] using hdiv
 
 /--
 `NoSqOnS0 c b` から `Main` で使う `hS0_not_sq` 形の仮定を作るブリッジ。

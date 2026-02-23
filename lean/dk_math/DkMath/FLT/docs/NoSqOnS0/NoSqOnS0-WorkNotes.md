@@ -73,6 +73,24 @@ status: 作業中 - phase-05: 補題強化
   - `lake build DkMath.CosmicFormula.CosmicFormulaBinom` : OK
   - `lake build DkMath.FLT.Main` : OK
 
+- phase-05 追加ステップ（一般 two-gap の FLT 側接続）
+  - `PhaseLift.lean` に追加:
+    - `two_gap_xy_dvd_cube_bridge`
+      - 一般 API `two_gap_xy_factor_nat_dvd`（`d=1`）を使い、
+        `x=c-b, y=b` で
+        `(c-b)*b ∣ c^3 - (c-b)^3 - b^3`
+        を供給する橋補題。
+  - `CounterexamplePattern.lean` に追加:
+    - `two_gap_xy_dvd_cube_bridge_for_input`
+      - 上記橋補題を Counterexample 入力側で再利用するための補助補題。
+  - 位置づけ:
+    - `CosmicFormulaBinom` の一般 `two_gap` API が
+      `PhaseLift/CounterexamplePattern` 側の補題導出に接続された。
+
+- build（再確認）
+  - `lake build DkMath.FLT.CounterexamplePattern` : OK
+  - `lake build DkMath.FLT.Main` : OK
+
 - phase-05 追加ステップ（2 Gap 抽出 API の一般 `d` 版）
   - `CosmicFormulaBinom.lean` に以下を追加。
     - `two_gap_xy_factor`

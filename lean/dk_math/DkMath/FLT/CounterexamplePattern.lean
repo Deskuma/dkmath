@@ -189,6 +189,14 @@ lemma primitivePrimeGate_of_PrimitiveOnS0 {c b q : ℕ}
   exact ⟨hq, hq_diff, hq_ndvd⟩
 
 /--
+`PhaseLift.two_gap_xy_dvd_cube_bridge` を Counterexample 入力側へ持ち上げる補助補題。
+-/
+lemma two_gap_xy_dvd_cube_bridge_for_input {c b : ℕ}
+    (hbc : b < c) :
+    (c - b) * b ∣ c ^ 3 - (c - b) ^ 3 - b ^ 3 := by
+  exact two_gap_xy_dvd_cube_bridge hbc.le
+
+/--
 `classifyLift = impossible` が得られれば、対応する `q` は `NonLiftableS0` となる。
 -/
 lemma nonLiftableS0_of_classifyLift_impossible {c b q : ℕ}
