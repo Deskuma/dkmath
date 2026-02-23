@@ -203,3 +203,38 @@
 ### チェック更新
 
 - [x] 5. `Main` 接続
+
+---
+
+> この実装により、残る課題は依然として「`NoSqOnS0` をどう構築するか」ですが、少なくとも「`hS0_not_sq` を直接仮定する形」からは脱却できました。
+> 次は `NoSqOnS0` の十分条件を段階化して、位相条件や最小反例条件と組み合わせて構築する方針で進める予定です。
+
+---
+
+現時点で残っている依存条件は、実質この3層です。
+
+1. **定理入力として残る仮定**
+
+- `FLT_d3_by_padicValNat` は依然として
+  `hS0_not_sq` が必要です（`lean/dk_math/DkMath/FLT/Main.lean:451`）。
+- `FLT_d3_by_padicValNat_of_NoSqOnS0` は
+  `hNoSq : NoSqOnS0 c b` が必要（`lean/dk_math/DkMath/FLT/Main.lean:490`）。
+- `FLT_d3_by_padicValNat_of_classifyLift` は
+  `hClassify : classifyLift ... = impossible` を各 `q` で要求（`lean/dk_math/DkMath/FLT/Main.lean:502`）。
+
+1. **判定器側で未解決の本質依存**
+
+- `classifyLift` は現状 `noSquareGate` を直接参照する設計なので、
+  本質的には「`¬ q^2 ∣ S0` をどう供給するか」が未解決のままです
+  （`lean/dk_math/DkMath/FLT/CounterexamplePattern.lean:51`）。
+- `phaseGate` は定義済みですが、まだ `classifyLift` に実質組み込まれていません
+  （`lean/dk_math/DkMath/FLT/CounterexamplePattern.lean:34`）。
+
+1. **公理・基盤依存**
+
+- 主要定理は `sorryAx` には依存していませんが、
+  依存公理は `[propext, Classical.choice, Quot.sound]` が残っています（`#print axioms`確認済み）。
+- リポジトリ全体としては `ZsigmondyCyclotomic` / `GcdNext` に `sorry` は残存（ただし今回の3定理の公理依存に `sorryAx` は出ていない）。
+
+要するに、次に消すべき依存は
+**`hNoSq` / `hClassify` を外部仮定でなく内部定理化する部分**です。
