@@ -8,6 +8,7 @@ Authors: D. and Wise Wolf.
 
 -- no-import DkMath.FLT.Basic 依存しないように外す
 import DkMath.FLT.PetalDetect
+import DkMath.FLT.OctagonCore
 import DkMath.FLT.GEisensteinBridge
 import DkMath.NumberTheory.GcdNext
 import DkMath.NumberTheory.ZsigmondyCyclotomic
