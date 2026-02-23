@@ -81,4 +81,20 @@ lemma classifyLift_undecided_of_not_primitive {x : CounterexampleInput}
   classical
   simp [classifyLift, hprim]
 
+/--
+`primitivePrimeGate` が成り立つ入力で `classifyLift = impossible` なら、
+`noSquareGate` が成り立つ。
+-/
+lemma noSquareGate_of_classifyLift_impossible {x : CounterexampleInput}
+    (hprim : primitivePrimeGate x)
+    (hclass : classifyLift x = LiftStatus.impossible) :
+    noSquareGate x := by
+  classical
+  by_cases hnosq : noSquareGate x
+  · exact hnosq
+  · have hpossible : classifyLift x = LiftStatus.possible := by
+      simp [classifyLift, hprim, hnosq]
+    have : LiftStatus.possible = LiftStatus.impossible := hpossible.symm.trans hclass
+    cases this
+
 end DkMath.FLT

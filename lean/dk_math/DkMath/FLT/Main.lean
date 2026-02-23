@@ -496,6 +496,27 @@ theorem FLT_d3_by_padicValNat_of_NoSqOnS0 {a b c : ℕ}
   intro q hq hq_dvd_diff hq_ndiv_diff
   exact hS0_not_sq_of_NoSqOnS0 (c := c) (b := b) hNoSq hq hq_dvd_diff hq_ndiv_diff
 
+/--
+`CounterexamplePattern.classifyLift` を経由して `hS0_not_sq` を供給する版。
+-/
+theorem FLT_d3_by_padicValNat_of_classifyLift {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hClassify :
+      ∀ {q : ℕ}, Nat.Prime q → q ∣ c ^ 3 - b ^ 3 → ¬ q ∣ c - b →
+        classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  apply FLT_d3_by_padicValNat ha hb hc hab
+  intro q hq hq_dvd_diff hq_ndiv_diff
+  let x : CounterexampleInput := { c := c, b := b, q := q }
+  have hprim : primitivePrimeGate x := by
+    exact ⟨hq, hq_dvd_diff, hq_ndiv_diff⟩
+  have hcls : classifyLift x = LiftStatus.impossible := by
+    simpa [x] using hClassify hq hq_dvd_diff hq_ndiv_diff
+  have hnosq : noSquareGate x :=
+    noSquareGate_of_classifyLift_impossible hprim hcls
+  simpa [x, noSquareGate] using hnosq
+
 #print axioms FLT_d3_by_padicValNat  -- OK: 2026/02/22 10:02
 -- 'DkMath.FLT.FLT_d3_by_padicValNat' depends on axioms: [propext, Classical.choice, Quot.sound]
 

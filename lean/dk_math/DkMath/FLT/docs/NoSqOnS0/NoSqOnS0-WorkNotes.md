@@ -41,7 +41,7 @@
    - 新規 `lean/dk_math/DkMath/FLT/CounterexamplePattern.lean` を作り、
    - 入力 `(c,b,q)` から `lift可能/不可能` を判定する述語を定義（証明は後段）。
 
-5. [ ] `Main` 接続
+5. [x] `Main` 接続
 
    - `lean/dk_math/DkMath/FLT/Main.lean` で `hS0_not_sq` を直接受ける版を残し、
    - 追加で「判定器経由版」定理を並列実装して置換準備。
@@ -174,3 +174,32 @@
 ### チェック更新
 
 - [x] 4. 反例抽出器を作る
+
+## 2026-02-23 追記（Step 5: Main 接続を実装）
+
+### 実施内容
+
+- `lean/dk_math/DkMath/FLT/CounterexamplePattern.lean`
+  - 追加補題:
+    - `noSquareGate_of_classifyLift_impossible`
+      - `primitivePrimeGate` が成り立つ入力で
+        `classifyLift = LiftStatus.impossible` なら
+        `noSquareGate` を回収できる。
+
+- `lean/dk_math/DkMath/FLT/Main.lean`
+  - 判定器経由版定理を追加:
+    - `FLT_d3_by_padicValNat_of_classifyLift`
+  - 仮定:
+    - 各 `q` について
+      `classifyLift {c,b,q} = LiftStatus.impossible`
+      を供給すると、既存の
+      `FLT_d3_by_padicValNat` に接続して結論を得る。
+
+### 検証
+
+- `lake build DkMath.FLT.CounterexamplePattern` 成功
+- `lake build DkMath.FLT.Main` 成功
+
+### チェック更新
+
+- [x] 5. `Main` 接続
