@@ -6,7 +6,49 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Basic
 
+set_option linter.style.longLine false
+
 -- －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+
+/-- 例: a³ + b³ = c³ の場合、c の素因子 q で a³ - b³ を割り切るが a - b を割り切らないものが存在する（FLT(3) の必要条件の一部） -/
+example {a b c : ℕ}
+    (_hab : Nat.Coprime a b) (hb : 0 < b) (ha : b < a) (hc : 0 < c)
+    (h_eq : a ^ 3 + b ^ 3 = c ^ 3) :
+    ∃ q : ℕ,
+      Nat.Prime q ∧ q ∣ c ∧ q ≠ c ∧
+      q ∣ a ^ 3 - b ^ 3 ∧ ¬ q ∣ a - b := by
+  have ha_pos : 0 < a := lt_trans hb ha
+  have h_no_solution : a ^ 3 + b ^ 3 ≠ c ^ 3 :=
+    fermatLastTheoremThree a b c
+      (Nat.ne_of_gt ha_pos) (Nat.ne_of_gt hb) (Nat.ne_of_gt hc)
+  exact (h_no_solution h_eq).elim
+
+example (a b : ℤ) : a ^ 3 - b ^ 3 = (a - b) * (a ^ 2 + a * b + b ^ 2) := by ring_nf
+
+example (a b : ℕ) (h : b ≤ a) : a ^ 3 - b ^ 3 = (a - b) * (a ^ 2 + a * b + b ^ 2) := by
+  have h_pow : b ^ 3 ≤ a ^ 3 := Nat.pow_le_pow_left h 3
+  zify [h, h_pow]
+  ring_nf
+
+example (a b : ℕ) (h : b ≤ a) : a ^ 3 = (a - b) * (a ^ 2 + a * b + b ^ 2) + b ^ 3 := by
+  have h_pow : b ^ 3 ≤ a ^ 3 := Nat.pow_le_pow_left h 3
+  zify [h, h_pow]
+  ring_nf
+
+example (a b : ℕ) (ha : 0 < a) (hb : 0 < b) (ha : b < a) : True := by
+  have h_pow3mul_sub_ab : a ^ 3 - b ^ 3 = (a - b) * (a ^ 2 + a * b + b ^ 2) := by
+    have h_pow : b ^ 3 ≤ a ^ 3 := Nat.pow_le_pow_left (Nat.le_of_lt ha) 3
+    zify [ha, h_pow]
+    ring_nf
+  have h_ab_div_pow3 : (a ^ 3 - b ^ 3) / (a ^ 2 + a * b + b ^ 2) = a - b := by
+    -- (a^3 - b^3) = (a-b)(a^2 + ab + b^2) より両辺を a^2 + ab + b^2 で割る
+    rw [h_pow3mul_sub_ab]
+    -- a^2 + ab + b^2 ≠ 0 は positivity で分かる
+    have h_s0_pos : 0 < a ^ 2 + a * b + b ^ 2 := by
+      nlinarith [ha, hb]
+    exact Nat.mul_div_left (a - b) h_s0_pos
+  trivial
+
 
 #check Nat.gcd_add_self_right  -- ∀ q p : ℕ, Nat.gcd q (q + p) = Nat.gcd q p
 #check Nat.gcd_self_add_right  -- ∀ q p : ℕ, Nat.gcd (q + p) q = Nat.gcd p q
@@ -69,20 +111,7 @@ def x3pow (x : ℕ) : ℕ := x ^ 3
 #eval x3sub 5 6  -- 91
 #eval x3pow 5    -- 125
 
-example {x} (y z : ℕ) : x ^ 3 = (z - y) * (z ^ 2 + z * y + y ^ 2) + 1 := by
-  refine (Nat.Prime.pow_eq_iff ?_).mpr ?_
-  /-
-  case refine_1
-  x y z : ℕ
-  ⊢ Nat.Prime ((z - y) * (z ^ 2 + z * y + y ^ 2))
-
-  case refine_2
-  x y z : ℕ
-  ⊢ x = (z - y) * (z ^ 2 + z * y + y ^ 2) ∧ 3 = 1
-  -/
-  · sorry
-  · sorry
-
+/-- 真の立方差公式：z^3 - y^3 = (z - y)(z^2 + zy + y^2) -/
 example (y z : ℕ) (h : y ≤ z) : z^3 - y^3 = (z - y) * (z^2 + z * y + y^2) := by
   have h_pow : y^3 ≤ z^3 := Nat.pow_le_pow_left h 3
   zify [h, h_pow]

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Create: Combine all dkmath lean files into one file and save it as './logs/__dkmath-all.lean.txt'
-
+ROOT_LOGS_DIR="../../logs"
 LOGS_DIR="./logs"
 OUTPUT_FILE="$LOGS_DIR/__dkmath-all.lean.txt"
 
@@ -37,3 +37,18 @@ gzip -f "$OUTPUT_FILE" \
 && echo "Compressed: $OUTPUT_FILE.gz" \
 && ls -l "$OUTPUT_FILE.gz" \
 && zcat "$OUTPUT_FILE.gz" | wc -l
+
+# calc sha256 checksum of the gzipped file for integrity verification
+SHA256_CHECKSUM=$(sha256sum "$OUTPUT_FILE.gz" | awk '{print $1}')
+echo "SHA256 Checksum: $SHA256_CHECKSUM"
+
+# store the checksum in a file for later verification
+CHECKSUM_FILE="$LOGS_DIR/__dkmath-all.lean.txt.gz.sha256"
+echo "$SHA256_CHECKSUM  $OUTPUT_FILE.gz" > "$CHECKSUM_FILE"
+echo "Checksum saved to: $CHECKSUM_FILE"
+
+# copy the gzipped file to the logs directory (if not already there)
+cp "$OUTPUT_FILE.gz" "$ROOT_LOGS_DIR/"
+cp "$CHECKSUM_FILE" "$ROOT_LOGS_DIR/"
+echo "Copy: $OUTPUT_FILE.gz to $ROOT_LOGS_DIR/"
+echo "Copy: $CHECKSUM_FILE to $ROOT_LOGS_DIR/"

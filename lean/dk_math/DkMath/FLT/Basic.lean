@@ -89,6 +89,8 @@ lemma GN3_one_not_cube_use_FLT3 {y : ℕ} (hy : 0 < y) : ¬ ∃ x, x^3 = GN 3 1 
   have hz_pos : y + 1 ≠ 0 := by omega
   exact fermatLastTheoremThree x y (y + 1) hx_pos hy_pos hz_pos h_flt
 
+#print axioms GN3_one_not_cube_use_FLT3  -- OK: 2026/02/22  6:59
+
 /-- 補題: 互いに素な因子の積が立方数ならば、両方とも立方数である（汎用補題）
     注: gcd(u, v) = 1 かつ u * v = w^3 ならば、u = a^3, v = b^3 となる a, b が存在する。
     これは素因数分解の一意性から導かれる基本的な性質じゃ。
@@ -314,6 +316,8 @@ private lemma GN3_cube_not_cube_of_gt_one_use_FLT3 (a y : ℕ) (ha : 2 ≤ a) (h
     hz_pos.ne'
     hsum
 
+#print axioms GN3_cube_not_cube_of_gt_one_use_FLT3  -- OK: 2026/02/22  7:03
+
 /-- 補題: b³ = GN(3, a³, y) かつ a ≥ 2 のとき矛盾（FLT(3) を直接参照しない版）
 
     方針:
@@ -535,7 +539,10 @@ lemma gcd_u_GN3 {u y : ℕ} (h_gcd_uy : u.gcd y = 1) : u.gcd (GN 3 u y) = u.gcd 
   exact this
 
 /-- メイン定理: フェルマーの最終定理 $n=3$ の場合 -/
-theorem FLT_case_3 (x y z : ℕ) (hpos : 0 < x ∧ 0 < y ∧ 0 < z) (h_coprime : Nat.gcd x y = 1) (h_body : z ^ 3 = x ^ 3 + y ^ 3) : False := by
+theorem FLT_case_3 (x y z : ℕ)
+  (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
+  (h_coprime : Nat.gcd x y = 1)
+  (h_body : z ^ 3 = x ^ 3 + y ^ 3) : False := by
   -- 1. 変数変換 u = z - y
   let u := z - y
   have hzy : y < z := by
@@ -597,6 +604,8 @@ theorem FLT_case_3 (x y z : ℕ) (hpos : 0 < x ∧ 0 < y ∧ 0 < z) (h_coprime :
       (Nat.ne_of_gt hpos.2.1)
       h_xn_val
       h3
+
+#print axioms FLT_case_3  -- NG: 2026/02/22  7:39 sorryAx
 
 /-- Fermat's Last Theorem (FLT)
 Cosmic Formula を用いた新しい証明
@@ -884,6 +893,8 @@ theorem FLT {x y z : ℕ} (n : ℕ) (hpos_xyz : 0 < x ∧ 0 < y ∧ 0 < z) (hn :
 
   -- 最終的に原始解に還元して `FLT_of_coprime` を適用
   exact FLT_of_coprime n (And.intro hx'_pos (And.intro hy'_pos hz'_pos)) hn h_gcd_x'y' hxy'
+
+#print axioms FLT  -- NG: 2026/02/22  7:39 sorryAx
 
 end DkMath
 
