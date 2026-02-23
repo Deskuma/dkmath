@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.PetalDetect
 import DkMath.FLT.OctagonCore
 import DkMath.FLT.CosmicPetalBridge
+import DkMath.Units.NPUnit
 
 namespace DkMath.FLT
 
@@ -20,6 +21,25 @@ def HasMixedPhaseWitness : Prop :=
 
 lemma hasMixedPhaseWitness_octagonCore : HasMixedPhaseWitness := by
   exact ⟨I, mixedPoint_I⟩
+
+/--
+`NPUnit` 側の half-step（`succ` で 1/2 進む）証拠。
+-/
+def HasNPHalfStepWitness : Prop :=
+  ∃ u : DkMath.NP, DkMath.val (DkMath.succ u) = DkMath.val u + (1 / 2 : ℚ)
+
+lemma hasNPHalfStepWitness_npunit : HasNPHalfStepWitness := by
+  refine ⟨DkMath.zero, ?_⟩
+  simpa using DkMath.val_succ DkMath.zero
+
+/--
+判定器で使う位相インフラ（幾何側 witness と単位側 witness の組）。
+-/
+def HasPhaseUnitInfrastructure : Prop :=
+  HasMixedPhaseWitness ∧ HasNPHalfStepWitness
+
+lemma hasPhaseUnitInfrastructure : HasPhaseUnitInfrastructure := by
+  exact ⟨hasMixedPhaseWitness_octagonCore, hasNPHalfStepWitness_npunit⟩
 
 /--
 `S0_nat c b` の素因子が二乗で刺さらないことをまとめた条件。

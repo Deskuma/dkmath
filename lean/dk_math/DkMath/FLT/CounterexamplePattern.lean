@@ -32,7 +32,10 @@ def noSquareGate (x : CounterexampleInput) : Prop :=
 
 /-- OctagonCore 由来の位相ゲート（現段階では存在証明のみ使用）。 -/
 def phaseGate (_x : CounterexampleInput) : Prop :=
-  HasMixedPhaseWitness
+  HasPhaseUnitInfrastructure
+
+lemma phaseGate_default (x : CounterexampleInput) : phaseGate x := by
+  exact hasPhaseUnitInfrastructure
 
 /-- `lift` 判定の現在値。 -/
 inductive LiftStatus where
