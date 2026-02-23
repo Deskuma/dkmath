@@ -41,6 +41,13 @@ lemma phaseGate_default (x : CounterexampleInput) : phaseGate x := by
   refine ⟨ofNP DkMath.zero, ?_⟩
   exact ⟨harmonicPoint_ofNP DkMath.zero, notExceptional_ofNP_zero⟩
 
+/--
+例外相ゲート（phase-03 skeleton）:
+例外相の調和点 witness が存在する場合。
+-/
+def exceptionalPhaseGate (_x : CounterexampleInput) : Prop :=
+  ∃ u : PetalCoreUnit, HarmonicPoint u ∧ isExceptionalPhase u
+
 /-- `lift` 判定の現在値。 -/
 inductive LiftStatus where
   | possible
@@ -57,19 +64,23 @@ inductive LiftStatus where
 -/
 noncomputable def classifyLift (x : CounterexampleInput) : LiftStatus := by
   classical
-  exact if hprim : primitivePrimeGate x then
+  exact if hexc : exceptionalPhaseGate x then
+    LiftStatus.undecided
+  else if hprim : primitivePrimeGate x then
     if hnosq : noSquareGate x then LiftStatus.impossible else LiftStatus.possible
   else
     LiftStatus.undecided
 
 lemma classifyLift_impossible_of_gates {x : CounterexampleInput}
+    (hexc : ¬ exceptionalPhaseGate x)
     (hprim : primitivePrimeGate x)
     (hnosq : noSquareGate x) :
     classifyLift x = LiftStatus.impossible := by
   classical
-  simp [classifyLift, hprim, hnosq]
+  simp [classifyLift, hexc, hprim, hnosq]
 
 lemma classifyLift_possible_of_primitive_and_sq {x : CounterexampleInput}
+    (hexc : ¬ exceptionalPhaseGate x)
     (hprim : primitivePrimeGate x)
     (hsq : x.q ^ 2 ∣ S0_nat x.c x.b) :
     classifyLift x = LiftStatus.possible := by
@@ -80,13 +91,20 @@ lemma classifyLift_possible_of_primitive_and_sq {x : CounterexampleInput}
   have hnosq' : (if h : noSquareGate x then LiftStatus.impossible else LiftStatus.possible)
       = LiftStatus.possible := by
     simp [hnosq]
-  simp [classifyLift, hprim, hnosq']
+  simp [classifyLift, hexc, hprim, hnosq']
 
 lemma classifyLift_undecided_of_not_primitive {x : CounterexampleInput}
+    (hexc : ¬ exceptionalPhaseGate x)
     (hprim : ¬ primitivePrimeGate x) :
     classifyLift x = LiftStatus.undecided := by
   classical
-  simp [classifyLift, hprim]
+  simp [classifyLift, hexc, hprim]
+
+lemma classifyLift_undecided_of_exceptional {x : CounterexampleInput}
+    (hexc : exceptionalPhaseGate x) :
+    classifyLift x = LiftStatus.undecided := by
+  classical
+  simp [classifyLift, hexc]
 
 /--
 `primitivePrimeGate` が成り立つ入力で `classifyLift = impossible` なら、
@@ -97,10 +115,16 @@ lemma noSquareGate_of_classifyLift_impossible {x : CounterexampleInput}
     (hclass : classifyLift x = LiftStatus.impossible) :
     noSquareGate x := by
   classical
+  have hexc : ¬ exceptionalPhaseGate x := by
+    intro hexc
+    have hundec : classifyLift x = LiftStatus.undecided := by
+      simp [classifyLift, hexc]
+    have : LiftStatus.undecided = LiftStatus.impossible := hundec.symm.trans hclass
+    cases this
   by_cases hnosq : noSquareGate x
   · exact hnosq
   · have hpossible : classifyLift x = LiftStatus.possible := by
-      simp [classifyLift, hprim, hnosq]
+      simp [classifyLift, hexc, hprim, hnosq]
     have : LiftStatus.possible = LiftStatus.impossible := hpossible.symm.trans hclass
     cases this
 
