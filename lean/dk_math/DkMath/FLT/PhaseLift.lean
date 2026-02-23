@@ -50,6 +50,19 @@ def NoSqOnS0 (c b : ℕ) : Prop :=
   ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → ¬ q ^ 2 ∣ S0_nat c b
 
 /--
+phase-06: `Main` の入口仮定を圧縮するための入力束。
+`NoSqOnS0` ルートで必要な幾何・数論条件をまとめる。
+-/
+structure Phase6NoSqInput (c b : ℕ) where
+  hbc : b < c
+  hcb_coprime : Nat.Coprime c b
+  hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u
+  hNoSq : NoSqOnS0 c b
+  hc_nz : c % 3 ≠ 0
+  hb_nz : b % 3 ≠ 0
+  hsep : c % 3 ≠ b % 3
+
+/--
 phase-03-C の十分条件（skeleton）:
 非例外調和点 witness と `NoSqOnS0` の組。
 -/
@@ -123,6 +136,11 @@ lemma s0PrimeSupportExceptThree_of_coprime {c b : ℕ}
     S0PrimeSupportExceptThree c b := by
   intro q hq hqS0 hq_ne3
   exact prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three hbc hcop hq hqS0 hq_ne3
+
+lemma phase6_s0PrimeSupportExceptThree {c b : ℕ}
+    (h : Phase6NoSqInput c b) :
+    S0PrimeSupportExceptThree c b := by
+  exact s0PrimeSupportExceptThree_of_coprime h.hbc.le h.hcb_coprime
 
 /--
 `c,b` がともに `mod 3` で非零、かつ同値類が異なるなら `3 ∤ S0_nat c b`。

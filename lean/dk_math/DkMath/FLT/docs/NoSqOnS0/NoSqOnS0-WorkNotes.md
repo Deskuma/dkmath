@@ -20,12 +20,12 @@ status: 作業中 - phase-06: リファクタリング branch: `dev/flt-refactor
 
 phase-06（リファクタリング）として、以下の順で進めるのが最短です。
 
-1. [ ] 目標定義の固定
+1. [x] 目標定義の固定
 
    - `NoSqOnS0-WorkNotes.md` に phase-06 のゴールを明記
    - ゴール: 「`Main` は合成のみ、導出は `PhaseLift/CounterexamplePattern` へ集約」
 
-2. [ ] 仮定インターフェースの圧縮
+2. [x] 仮定インターフェースの圧縮
 
    - `PhaseLift` に入力構造体（仮称 `Phase6Input`）を追加
    - 現在バラけている仮定群（`hHarm`, `hNoExcAll`, `coprime`, mod3 分離など）を束ねる
@@ -40,10 +40,30 @@ phase-06（リファクタリング）として、以下の順で進めるのが
    - `Main` は「入口定理 + 合成」だけに整理
    - 重複証明を削除し、共通補題参照に統一
 
-5. [ ] 検証と記録
+5. [x] 検証と記録
 
    - `lake build DkMath.FLT.Main`
    - `NoSqOnS0-WorkNotes.md` に phase-06 作業ログ追記
    - 補題チェーン（Mermaid）が必要なら更新
 
 ## 作業ログ 2026/02/24  4:52 より
+
+- phase-06 実装ステップ（仮定インターフェース圧縮: v0）
+  - `PhaseLift.lean` に追加:
+    - `Phase6NoSqInput (c b : ℕ)`
+      - `hbc`, `hcb_coprime`, `hHarm`, `hNoSq`, `hc_nz`, `hb_nz`, `hsep` を束ねる構造体。
+    - `phase6_s0PrimeSupportExceptThree`
+      - `Phase6NoSqInput` から `S0PrimeSupportExceptThree c b` を復元する補助。
+  - 位置づけ:
+    - `Main` の入口仮定を段階的に圧縮する phase-06 の初手。
+
+- phase-06 実装ステップ（`Main` 入口定理の追加）
+  - `Main.lean` に追加:
+    - `FLT_d3_by_padicValNat_of_phase6NoSqInput`
+      - `Phase6NoSqInput c b` + `hNoExcAll` を入力に、
+        既存 `...of_harmonicEnvelope_NoSq_coprimeSupport` へ接続する薄い合成定理。
+  - 位置づけ:
+    - `Main` の引数列を減らし、今後のリファクタリング先を固定。
+
+- build（再確認）
+  - `lake build DkMath.FLT.Main` : OK
