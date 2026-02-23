@@ -73,6 +73,21 @@ status: 作業中 - phase-05: 補題強化
   - `lake build DkMath.CosmicFormula.CosmicFormulaBinom` : OK
   - `lake build DkMath.FLT.Main` : OK
 
+- phase-05 追加ステップ（2 Gap 抽出 API の一般 `d` 版）
+  - `CosmicFormulaBinom.lean` に以下を追加。
+    - `two_gap_xy_factor`
+      - `(x+y)^(d+2)` から `x^(d+2), y^(d+2)` を抜いた差が `x*y` 因子を持つ一般版。
+    - `two_gap_xy_factor_nat_dvd`
+      - `x*y ∣ ((x+y)^(d+2) - x^(d+2) - y^(d+2))`（Nat `dvd` 版）。
+    - `two_gap_xy_factor_of_two_le`
+      - `2 ≤ d` 形のラッパー（`d+2` 形を通常の `d` 表記に接続）。
+  - 位置づけ:
+    - phase-05 の `two_gap_xy_factor` を一般化して、`G_binom` 最小 API を実質充足。
+
+- build（再確認）
+  - `lake build DkMath.CosmicFormula.CosmicFormulaBinom` : OK
+  - `lake build DkMath.FLT.Main` : OK
+
 - phase-05 実装ステップ（`hSuppEx3` 自動生成ブリッジ）
   - `PhaseLift.lean` に以下を追加。
     - `prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three`
