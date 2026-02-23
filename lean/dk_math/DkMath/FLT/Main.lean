@@ -60,6 +60,7 @@ set_option linter.style.emptyLine false
 
 namespace DkMath.FLT
 
+open scoped BigOperators
 open DkMath.FLT.PetalDetect
 open DkMath.NumberTheory.GcdNext
 open DkMath.ABC
@@ -487,6 +488,9 @@ theorem FLT_d3_by_padicValNat_of_NoSqOnS0 {a b c : ℕ}
   intro q hq hq_dvd_diff hq_ndiv_diff
   exact hS0_not_sq_of_NoSqOnS0 (c := c) (b := b) hNoSq hq hq_dvd_diff hq_ndiv_diff
 
+#print axioms FLT_d3_by_padicValNat_of_NoSqOnS0  -- OK: 2026/02/23 15:47
+-- 'DkMath.FLT.FLT_d3_by_padicValNat_of_NoSqOnS0' depends on axioms: [propext, Classical.choice, Quot.sound]
+
 /--
 phase-04: 非例外調和条件（skeleton）から
 `AllNonLiftableOnS0` -> `NoSqOnS0` を経由して供給する版。
@@ -520,6 +524,9 @@ theorem FLT_d3_by_padicValNat_of_exceptThree_mod3_separated_harmonic {a b c : �
     NoSqOnS0_of_exceptThree_mod3_separated_harmonic
       hHarm hSuppEx3 hNonLift hc_nz hb_nz hsep
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+#print axioms FLT_d3_by_padicValNat_of_exceptThree_mod3_separated_harmonic  -- OK: 2026/02/23 15:36
+-- 'DkMath.FLT.FLT_d3_by_padicValNat_of_exceptThree_mod3_separated_harmonic' depends on axioms: [propext, Classical.choice, Quot.sound]
 
 /--
 phase-04: `harmonic envelope + nonLiftable family` から
@@ -570,5 +577,32 @@ theorem FLT_d3_by_padicValNat_of_classifyLift {a b c : ℕ}
 
 #print axioms FLT_d3_by_padicValNat  -- OK: 2026/02/23 12:08
 -- 'DkMath.FLT.FLT_d3_by_padicValNat' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+/-- FLT_d3_by_padicValNat_of_NoSqOnS0 と FLT_d3_by_padicValNat は等価である -/
+example
+  {a b c : ℕ}
+  (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+  (hab : Nat.Coprime a b)
+  (hNoSq : NoSqOnS0 c b) :
+  FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq =
+    let hS0_not_sq : ∀ {q : ℕ}, Nat.Prime q → q ∣ c ^ 3 - b ^ 3 → ¬ q ∣ c - b → ¬ q ^ 2 ∣ S0_nat c b :=
+      (fun hq hq_dvd_diff hq_ndiv_diff => hS0_not_sq_of_NoSqOnS0 (c := c) (b := b) hNoSq hq hq_dvd_diff hq_ndiv_diff)
+    FLT_d3_by_padicValNat ha hb hc hab hS0_not_sq := by rfl
+
+/-- `FLT_d3_by_padicValNat_of_NoSqOnS0` は `FLT_d3_by_padicValNat` に
+`hS0_not_sq_of_NoSqOnS0` を差し込んだものと定義的に同一。 -/
+lemma FLT_d3_by_padicValNat_of_NoSqOnS0_eq
+  {a b c : ℕ}
+  (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+  (hab : Nat.Coprime a b)
+  (hNoSq : NoSqOnS0 c b) :
+  FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+    =
+    (let hS0_not_sq :
+        ∀ {q : ℕ}, Nat.Prime q → q ∣ c ^ 3 - b ^ 3 → ¬ q ∣ c - b → ¬ q ^ 2 ∣ S0_nat c b :=
+        fun hq hq_dvd_diff hq_ndiv_diff =>
+          hS0_not_sq_of_NoSqOnS0 (c := c) (b := b) hNoSq hq hq_dvd_diff hq_ndiv_diff;
+     FLT_d3_by_padicValNat ha hb hc hab hS0_not_sq) := by
+  rfl
 
 end DkMath.FLT
