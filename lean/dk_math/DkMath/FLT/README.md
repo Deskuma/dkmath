@@ -49,7 +49,27 @@
 3. `AllNonLiftableOnS0` / `NoSqOnS0`
 4. `Main` の派生定理へ接続
 
-## 3. 現在の入口（phase-06）
+## 3. 補題チェーン（Mermaid）
+
+```mermaid
+graph LR
+  A["CosmicFormulaBinom.two_gap_xy_factor*"] --> B["PhaseLift.two_gap_xy_dvd_cube_bridge"]
+  C["CosmicPetalBridge.prime_dvd_S0_via_cosmic_bridge"] --> D["PhaseLift.prime_dvd_S0_of_dvd_cube_sub_not_dvd_diff"]
+  E["PhaseLift.cube_sub_eq_mul_sub_S0"] --> D
+  F["PhaseLift.exists_prime_factor_cube_diff_of_three_dvd_sub"] --> G["PhaseLift.exists_prime_factor_cube_diff"]
+  H["PhaseLift.exists_prime_factor_cube_diff_of_not_three_dvd_sub"] --> G
+  I["PhaseLift.padicValNat_lower_bound_of_dvd_d3"] --> J["Main.FLT_d3_by_padicValNat"]
+  K["PhaseLift.padicValNat_upper_bound_d3"] --> J
+  G --> J
+  L["PhaseLift.hS0_not_sq_of_NoSqOnS0"] --> M["Main.FLT_d3_by_padicValNat_of_NoSqOnS0"]
+  J --> M
+  N["PhaseLift.Phase6NoSqInput"] --> O["Main.FLT_d3_by_padicValNat_of_phase6NoSqInput"]
+  M --> O
+  P["CounterexamplePattern.classifyLift_impossible_family_of_harmonicEnvelope_NoSq"] --> Q["Main.FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport"]
+  M --> Q
+```
+
+## 4. 現在の入口（phase-06）
 
 `Main` の実用入口としては次を推奨します。
 
@@ -60,7 +80,7 @@
   - `FLT_d3_by_padicValNat_of_phase6NoSqInput`
   - `Phase6NoSqInput` に `hbc`, `coprime`, `hHarm`, `hNoSq`, mod3 条件を束ねる
 
-## 4. 作業ログ
+## 5. 作業ログ
 
 最新の作業ログ・タスク状態は以下を参照してください。
 
@@ -68,7 +88,7 @@
 
 phase ごとのスナップショットは `docs/NoSqOnS0/NoSqOnS0-WorkNotes-phase-*.md` にあります。
 
-## 5. メンテ方針
+## 6. メンテ方針
 
 - 新しい導出補題は原則 `PhaseLift` / `CounterexamplePattern` に追加する
 - `Main` には局所証明を増やさず、合成定理の追加に限定する
