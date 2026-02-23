@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.PhaseLift
+import DkMath.FLT.PetalCoreUnit
 
 namespace DkMath.FLT
 
@@ -33,9 +34,12 @@ def noSquareGate (x : CounterexampleInput) : Prop :=
 /-- OctagonCore 由来の位相ゲート（現段階では存在証明のみ使用）。 -/
 def phaseGate (_x : CounterexampleInput) : Prop :=
   HasPhaseUnitInfrastructure
+    ∧ ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u
 
 lemma phaseGate_default (x : CounterexampleInput) : phaseGate x := by
-  exact hasPhaseUnitInfrastructure
+  refine ⟨hasPhaseUnitInfrastructure, ?_⟩
+  refine ⟨ofNP DkMath.zero, ?_⟩
+  exact ⟨harmonicPoint_ofNP DkMath.zero, notExceptional_ofNP_zero⟩
 
 /-- `lift` 判定の現在値。 -/
 inductive LiftStatus where
