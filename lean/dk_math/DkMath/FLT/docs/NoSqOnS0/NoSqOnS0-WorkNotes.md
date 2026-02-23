@@ -244,3 +244,24 @@ status: 作業中 - phase-04:
 
 - build（再確認）
   - `lake build DkMath.FLT.Main` : OK
+
+## 補題チェーン構造
+
+```mermaid
+graph TD
+  A[hInfra + hHarm + hNoExcAll] --> B[HarmonicNonExceptionalSide]
+  C[hSuppEx3 + hNonLiftAll + mod3分離] --> D[AllNonLiftableOnS0]
+  B --> E[classifyLift = impossible family]
+  E --> D
+
+  D --> F[NoSqOnS0]
+  F --> G[FLT_d3_by_padicValNat_of_NoSqOnS0]
+  G --> H[a^3 + b^3 ≠ c^3]
+
+  I[NoSqOnS0_of_exceptThree_mod3_separated_harmonic] --> F
+  J[allNonLiftableOnS0_of_harmonicEnvelope_nonLiftable] --> D
+  K[FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable] --> H
+
+  J --> K
+  F --> K
+```
