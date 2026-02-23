@@ -70,6 +70,40 @@ def AllNonLiftableOnS0 (c b : ℕ) : Prop :=
   (∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → ¬ q ∣ c - b)
     ∧ ∀ q : ℕ, NonLiftableS0 c b q
 
+/--
+`q = 3` を除いた素因子では `c-b` を割らない、という support 条件。
+`q = 3` は別途 `¬ 3 ∣ S0_nat c b` などで扱う。
+-/
+def S0PrimeSupportExceptThree (c b : ℕ) : Prop :=
+  ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → q ≠ 3 → ¬ q ∣ c - b
+
+/--
+`q = 3` 例外を除去できると、通常の support 条件へ戻せる。
+-/
+lemma allPrimeSupport_of_exceptThree {c b : ℕ}
+    (hSupp : S0PrimeSupportExceptThree c b)
+    (h3free : ¬ 3 ∣ S0_nat c b) :
+    ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → ¬ q ∣ c - b := by
+  intro q hq hqS0
+  by_cases hq3 : q = 3
+  · intro hqdiff
+    have h3S0 : 3 ∣ S0_nat c b := by simpa [hq3] using hqS0
+    exact h3free h3S0
+  · exact hSupp hq hqS0 hq3
+
+/--
+phase-04 補助集約:
+`q=3` 例外分離版の support + non-liftable + `3` 非出現 から
+`AllNonLiftableOnS0` を構成する。
+-/
+def AllNonLiftableOnS0ExceptThree (c b : ℕ) : Prop :=
+  S0PrimeSupportExceptThree c b ∧ (∀ q : ℕ, NonLiftableS0 c b q) ∧ ¬ 3 ∣ S0_nat c b
+
+lemma AllNonLiftableOnS0_of_exceptThree {c b : ℕ}
+    (h : AllNonLiftableOnS0ExceptThree c b) : AllNonLiftableOnS0 c b := by
+  rcases h with ⟨hSuppEx3, hNonLift, h3free⟩
+  refine ⟨allPrimeSupport_of_exceptThree hSuppEx3 h3free, hNonLift⟩
+
 lemma NoSqOnS0_of_AllNonLiftableOnS0 {c b : ℕ}
     (hAll : AllNonLiftableOnS0 c b) : NoSqOnS0 c b := by
   intro q hq hqS0

@@ -102,3 +102,19 @@ status: 作業中 - phase-04:
   - `lake build DkMath.FLT.PhaseLift` : OK
   - `lake build DkMath.FLT.Main` : OK
   - 既知 warning（`ZsigmondyCyclotomic`, `GcdNext` の `sorry` 由来）は継続。
+
+- phase-04 追加ステップ（例外素数 3 の分離）
+  - `PhaseLift.lean` に以下を追加。
+    - `S0PrimeSupportExceptThree`:
+      `q ≠ 3` の素因子について `q ∣ S0_nat c b -> ¬ q ∣ c-b` を要求する述語。
+    - `allPrimeSupport_of_exceptThree`:
+      `S0PrimeSupportExceptThree` と `¬ 3 ∣ S0_nat c b` から通常の support
+      `∀ q prime, q ∣ S0 -> ¬ q ∣ c-b` を復元。
+    - `AllNonLiftableOnS0ExceptThree`:
+      （例外3分離 support）∧（non-liftable 全域）∧（`3` 非出現）
+    - `AllNonLiftableOnS0_of_exceptThree`:
+      上記から `AllNonLiftableOnS0` を構成。
+
+- build（再確認）
+  - `lake build DkMath.FLT.PhaseLift` : OK
+  - `lake build DkMath.FLT.Main` : OK
