@@ -177,16 +177,20 @@ lemma primitivePrimeGate_of_PrimitiveOnS0 {c b q : ℕ}
     (hprim : PrimitiveOnS0 c b q) :
     primitivePrimeGate ({ c := c, b := b, q := q } : CounterexampleInput) := by
   rcases hprim with ⟨hq, hqS0, hq_ndvd⟩
-  have hdiff : c ^ 3 - b ^ 3 = (c - b) * (c ^ 2 + c * b + b ^ 2) := by
-    have h_pow : b ^ 3 ≤ c ^ 3 := Nat.pow_le_pow_left hbc.le 3
-    zify [hbc, h_pow]
-    ring_nf
-  have hfact : c ^ 3 - b ^ 3 = (c - b) * S0_nat c b := by
-    simpa [S0_nat] using hdiff
+  have hfact : c ^ 3 - b ^ 3 = (c - b) * S0_nat c b :=
+    cube_sub_eq_mul_sub_S0 hbc
   have hq_diff : q ∣ c ^ 3 - b ^ 3 := by
     rw [hfact]
     exact dvd_mul_of_dvd_right hqS0 (c - b)
   exact ⟨hq, hq_diff, hq_ndvd⟩
+
+/--
+`PhaseLift.two_gap_xy_dvd_cube_bridge` を Counterexample 入力側へ持ち上げる補助補題。
+-/
+lemma two_gap_xy_dvd_cube_bridge_for_input {c b : ℕ}
+    (hbc : b < c) :
+    (c - b) * b ∣ c ^ 3 - (c - b) ^ 3 - b ^ 3 := by
+  exact two_gap_xy_dvd_cube_bridge hbc.le
 
 /--
 `classifyLift = impossible` が得られれば、対応する `q` は `NonLiftableS0` となる。
@@ -235,6 +239,28 @@ lemma classifyLift_impossible_family_of_harmonicNonExceptional_nonLiftable {c b 
   intro q hprim
   exact classifyLift_impossible_of_harmonicNonExceptional_nonLiftable
     hbc (hsideAll q) hprim (hNonLiftAll q)
+
+/--
+`NoSqOnS0` と harmonic envelope 仮定から、
+primitive 因子に対する `classifyLift = impossible` family を作る。
+-/
+lemma classifyLift_impossible_family_of_harmonicEnvelope_NoSq {c b : ℕ}
+    (hbc : b < c)
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hNoSq : NoSqOnS0 c b) :
+    ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+      classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible := by
+  have hsideAll :
+      ∀ q : ℕ, HarmonicNonExceptionalSide ({ c := c, b := b, q := q } : CounterexampleInput) := by
+    intro q
+    exact harmonicNonExceptionalSide_of_envelope hInfra hHarm (hNoExcAll { c := c, b := b, q := q })
+  have hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q :=
+    nonLiftableS0_all_of_NoSqOnS0 hNoSq
+  intro q hprim
+  exact classifyLift_impossible_family_of_harmonicNonExceptional_nonLiftable
+    hbc hsideAll hNonLiftAll hprim
 
 /--
 phase-04 接続補題:

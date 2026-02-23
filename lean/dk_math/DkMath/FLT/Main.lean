@@ -67,165 +67,6 @@ open DkMath.ABC
 open DkMath.Algebra.DiffPow
 
 -- ========================================
--- § 0. 新ルート補助補題（c³-b³=a³ による証明を分離）
--- ========================================
-
-/-- **補助補題1：立方の差の恒等式**
-
-a³ + b³ = c³ から、c³ - b³ = a³ を導く補助補題。
--/
-lemma cube_sub_eq_of_add_eq {a b c : ℕ} (h : a ^ 3 + b ^ 3 = c ^ 3) :
-    c ^ 3 - b ^ 3 = a ^ 3 := by
-  -- c³ = a³ + b³ に書き換えて (x+y)-y=x を適用
-  rw [← h]
-  omega
-
-/-- **補助補題2：互いに素性の遺伝**
-
-gcd(a,b)=1 かつ a³+b³=c³ なら gcd(c,b)=1。
--/
-lemma coprime_cb_of_eq {a b c : ℕ} (hab : Nat.Coprime a b) (h : a ^ 3 + b ^ 3 = c ^ 3) :
-    Nat.Coprime c b := by
-  by_contra hnot
-  have hgcd_ne : Nat.gcd c b ≠ 1 := by
-    intro hg
-    apply hnot
-    exact (Nat.coprime_iff_gcd_eq_one).2 hg
-
-  -- gcd(c,b) を割る素数 p が存在
-  obtain ⟨p, hp, hp_dvd_g⟩ := Nat.exists_prime_and_dvd hgcd_ne
-  have hp_dvd_c : p ∣ c := dvd_trans hp_dvd_g (Nat.gcd_dvd_left c b)
-  have hp_dvd_b : p ∣ b := dvd_trans hp_dvd_g (Nat.gcd_dvd_right c b)
-
-  -- p | c³ かつ p | b³
-  have hp_dvd_c3 : p ∣ c^3 := dvd_trans hp_dvd_c (dvd_pow_self c (by decide : 3 ≠ 0))
-  have hp_dvd_b3 : p ∣ b^3 := dvd_trans hp_dvd_b (dvd_pow_self b (by decide : 3 ≠ 0))
-
-  -- c³ - b³ = a³ より p | a³
-  have hsub : c^3 - b^3 = a^3 := cube_sub_eq_of_add_eq h
-  have hp_dvd_sub : p ∣ c^3 - b^3 := Nat.dvd_sub hp_dvd_c3 hp_dvd_b3
-  have hp_dvd_a3 : p ∣ a^3 := by simpa [hsub] using hp_dvd_sub
-
-  -- p | a³ ∧ p 素数 ⟹ p | a
-  have hp_dvd_a : p ∣ a := hp.dvd_of_dvd_pow hp_dvd_a3
-
-  -- gcd(a,b) = 1 に矛盾
-  have hp_dvd_gab : p ∣ Nat.gcd a b := Nat.dvd_gcd hp_dvd_a hp_dvd_b
-  have : p ∣ 1 := by simpa [hab.gcd_eq_one] using hp_dvd_gab
-  exact hp.not_dvd_one this
-
-/-- **補助補題3：差の立方に存在する原始素因子（3|diff分岐含む）**
-
-c > b で gcd(c,b)=1 のとき、
-q | (c³-b³) ∧ q ∤ (c-b) を満たす素数 q が存在。
-
-このとき 3 | (c-b) の分岐も網羅。
--/
-lemma exists_prime_factor_cube_diff {c b : ℕ}
-    (hbc : b < c) (hb : 0 < b) (hcop : Nat.Coprime c b) :
-    ∃ q, Nat.Prime q ∧ q ∣ c^3 - b^3 ∧ ¬ q ∣ c - b := by
-  by_cases h3 : 3 ∣ c - b
-  · rcases h3 with ⟨k, hk⟩
-    have hdiff_pos : 0 < c - b := Nat.sub_pos_of_lt hbc
-    have hk_pos : 0 < k := by
-      have : 0 < 3 * k := by simpa [hk] using hdiff_pos
-      exact Nat.pos_of_mul_pos_left this
-
-    have hc_eq : c = 3 * k + b := by
-      calc
-        c = (c - b) + b := (Nat.sub_add_cancel hbc.le).symm
-        _ = 3 * k + b := by simp only [hk]
-
-    let m : ℕ := 3 * k ^ 2 + 3 * k * b + b ^ 2
-
-    have hm_gt1 : 1 < m := by
-      have hk2_pos : 0 < k ^ 2 := by positivity
-      have hb2_pos : 0 < b ^ 2 := by positivity
-      dsimp [m]
-      omega
-
-    obtain ⟨q, hq, hq_dvd_m⟩ := Nat.exists_prime_and_dvd (Nat.ne_of_gt hm_gt1)
-
-    have h3_ndvd_b : ¬ 3 ∣ b := by
-      intro h3b
-      have h3c : 3 ∣ c := by
-        have : 3 ∣ (c - b) + b := dvd_add (by exact ⟨k, hk⟩) h3b
-        simpa [Nat.sub_add_cancel hbc.le] using this
-      have h3gcd : 3 ∣ Nat.gcd c b := Nat.dvd_gcd h3c h3b
-      have h3one : 3 ∣ 1 := by
-        simp only [hcop.gcd_eq_one, Nat.dvd_one, OfNat.ofNat_ne_one] at h3gcd
-      exact Nat.prime_three.not_dvd_one h3one
-
-    have h3_ndvd_m : ¬ 3 ∣ m := by
-      intro h3m
-      have h3_dvd_t1 : 3 ∣ 3 * k ^ 2 := by
-        simp only [dvd_mul_right]
-      have h3_dvd_t2 : 3 ∣ 3 * k * b := by
-        have : 3 ∣ 3 * k := by
-          simp only [dvd_mul_right]
-        exact dvd_mul_of_dvd_left this b
-      have h3_dvd_sum12 : 3 ∣ 3 * k ^ 2 + 3 * k * b := dvd_add h3_dvd_t1 h3_dvd_t2
-      have hm_eq : m = (3 * k ^ 2 + 3 * k * b) + b ^ 2 := by
-        rfl
-      have h3_dvd_b2 : 3 ∣ b ^ 2 := by
-        exact (Nat.dvd_add_right h3_dvd_sum12).1 (by simpa [hm_eq] using h3m)
-      have h3b : 3 ∣ b := Nat.prime_three.dvd_of_dvd_pow h3_dvd_b2
-      exact h3_ndvd_b h3b
-
-    have hq_ndvd_three : ¬ q ∣ 3 := by
-      intro hq3
-      have hq_eq3 : q = 3 := (Nat.prime_dvd_prime_iff_eq hq Nat.prime_three).1 hq3
-      exact h3_ndvd_m (hq_eq3 ▸ hq_dvd_m)
-
-    have hq_ndvd_k : ¬ q ∣ k := by
-      intro hqk
-      have hm_eq : m = k * (3 * k + 3 * b) + b ^ 2 := by
-        dsimp [m]
-        ring
-      have hq_dvd_prod : q ∣ k * (3 * k + 3 * b) := dvd_mul_of_dvd_left hqk _
-      have hq_dvd_b2 : q ∣ b ^ 2 := by
-        exact (Nat.dvd_add_right hq_dvd_prod).1 (by simpa [hm_eq] using hq_dvd_m)
-      have hq_dvd_b : q ∣ b := hq.dvd_of_dvd_pow hq_dvd_b2
-      have hq_dvd_c : q ∣ c := by
-        have hq_dvd_3k : q ∣ 3 * k := dvd_mul_of_dvd_right hqk 3
-        have : q ∣ 3 * k + b := dvd_add hq_dvd_3k hq_dvd_b
-        simpa [hc_eq] using this
-      have : q ∣ Nat.gcd c b := Nat.dvd_gcd hq_dvd_c hq_dvd_b
-      have : q ∣ 1 := by simpa [hcop.gcd_eq_one] using this
-      exact hq.not_dvd_one this
-
-    have hq_ndvd_diff : ¬ q ∣ c - b := by
-      intro hqd
-      have hq_dvd_3k : q ∣ 3 * k := by simpa [hk] using hqd
-      rcases hq.dvd_mul.mp hq_dvd_3k with hq3 | hqk
-      · exact hq_ndvd_three hq3
-      · exact hq_ndvd_k hqk
-
-    have hS0 : S0_nat c b = 3 * m := by
-      unfold S0_nat
-      dsimp [m]
-      rw [hc_eq]
-      ring
-    have hq_dvd_S0 : q ∣ S0_nat c b := by
-      have : q ∣ 3 * m := dvd_mul_of_dvd_right hq_dvd_m 3
-      simpa [hS0] using this
-
-    have hdiff : c ^ 3 - b ^ 3 = (c - b) * (c ^ 2 + c * b + b ^ 2) := by
-      have h_pow : b ^ 3 ≤ c ^ 3 := Nat.pow_le_pow_left hbc.le 3
-      zify [hbc, h_pow]
-      ring_nf
-    have hfact : c ^ 3 - b ^ 3 = (c - b) * S0_nat c b := by
-      simpa [S0_nat] using hdiff
-    have hq_dvd_diff : q ∣ c ^ 3 - b ^ 3 := by
-      rw [hfact]
-      exact dvd_mul_of_dvd_right hq_dvd_S0 (c - b)
-
-    exact ⟨q, hq, hq_dvd_diff, hq_ndvd_diff⟩
-
-  · exact exists_primitive_prime_factor_prime Nat.prime_three
-      (by norm_num : 3 ≤ 3) hbc hb hcop h3
-
--- ========================================
 -- § 1. 層A（Zsigmondy原始素因子）
 -- ========================================
 
@@ -251,10 +92,7 @@ lemma exists_primitive_prime_factor_d3 {a b : ℕ}
     (hpnd : ¬ 3 ∣ a - b) :
     ∃ q : ℕ,
       Nat.Prime q ∧ q ∣ a ^ 3 - b ^ 3 ∧ ¬ q ∣ a - b := by
-  -- Zsigmondy定理 d=3 版：¬ 3 ∣ (a-b) の場合、a³ - b³ は新しい素因子を持つ
-  -- ZsigmondyCyclotomic.leanの exists_primitive_prime_factor_prime を使用
-  exact exists_primitive_prime_factor_prime Nat.prime_three
-    (by norm_num : 3 ≤ 3) ha hb hab hpnd
+  exact exists_prime_factor_cube_diff_of_not_three_dvd_sub ha hb hab hpnd
 
 
 -- ========================================
@@ -369,14 +207,8 @@ lemma padicValNat_upper_bound_d3 {a b q : ℕ}
   have hS0_dvd : q ∣ S0_nat a b :=
     prime_dvd_S0_via_cosmic_bridge hab_lt hq hq_dvd hq_ndiv_diff
 
-  have h_diff : a ^ 3 - b ^ 3 = (a - b) * (a ^ 2 + a * b + b ^ 2) := by
-    -- use sample proof from Samples/FLT.lean
-    have h_pow : b ^ 3 ≤ a ^ 3 := Nat.pow_le_pow_left (Nat.le_of_lt hab_lt) 3
-    zify [hab_lt, h_pow]
-    ring
-  have h_fact : a ^ 3 - b ^ 3 = (a - b) * S0_nat a b := by
-    -- rewrite using definition of S0_nat and h_diff
-    simpa [S0_nat] using h_diff
+  have h_fact : a ^ 3 - b ^ 3 = (a - b) * S0_nat a b :=
+    cube_sub_eq_mul_sub_S0 hab_lt
 
   -- **padicValNat上界：PetalDetect.padicValNat_le_one_of_not_sq_dvd を使用**
   have hpadic_bound : padicValNat q (S0_nat a b) ≤ 1 :=
@@ -550,6 +382,75 @@ theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable {a b c : ℕ}
       hSuppEx3 hNonLiftAll hc_nz hb_nz hsep
   have hNoSq : NoSqOnS0 c b := NoSqOnS0_of_AllNonLiftableOnS0 hAll
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+phase-05: `hSuppEx3` を `Coprime c b` から自動生成して
+`harmonicEnvelope_nonLiftable` 版へ接続する。
+-/
+theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable_coprimeSupport {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hSuppEx3 : S0PrimeSupportExceptThree c b :=
+    s0PrimeSupportExceptThree_of_coprime hbc.le hcb_coprime
+  exact FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable
+    ha hb hc hab hbc hHarm hNoExcAll hSuppEx3 hNonLiftAll hc_nz hb_nz hsep
+
+/--
+phase-05: `classifyLift = impossible` family から `hNonLiftAll` を生成して
+`harmonicEnvelope_nonLiftable_coprimeSupport` 版へ接続する。
+-/
+theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_classify_coprimeSupport {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hClassPrim :
+      ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+        classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q := by
+    intro q hprim
+    exact nonLiftableS0_of_classifyLift_impossible hbc (hClassPrim hprim) hprim
+  exact FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hHarm hNoExcAll hNonLiftAll hc_nz hb_nz hsep
+
+/--
+phase-05: `NoSqOnS0` から classification impossible family を自動生成し、
+`harmonicEnvelope_classify_coprimeSupport` 版へ接続する。
+-/
+theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hNoSq : NoSqOnS0 c b)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hClassPrim :
+      ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+        classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible :=
+    classifyLift_impossible_family_of_harmonicEnvelope_NoSq
+      hbc hasPhaseUnitInfrastructure hHarm hNoExcAll hNoSq
+  exact FLT_d3_by_padicValNat_of_harmonicEnvelope_classify_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hHarm hNoExcAll hClassPrim hc_nz hb_nz hsep
 
 #print axioms FLT_d3_by_padicValNat_of_nonExceptionalHarmonic  -- OK: 2026/02/23 12:08
 -- 'DkMath.FLT.FLT_d3_by_padicValNat_of_nonExceptionalHarmonic' depends on axioms: [propext, Classical.choice, Quot.sound]

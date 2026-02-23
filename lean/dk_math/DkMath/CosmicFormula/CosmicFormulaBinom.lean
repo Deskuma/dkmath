@@ -331,6 +331,167 @@ theorem cosmic_id_csr' {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
     simp only [Nat.choose_zero_right, Nat.cast_one, pow_zero, mul_one]
     ring
 
+/--
+Big-Gap（1 Gap 抽出版）:
+`(x+u)^d - u^d` は必ず `x` を因子に持つ（加法形）。
+-/
+theorem add_pow_gap_factor {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
+    (x + u) ^ d = u ^ d + x * GN d x u := by
+  simpa [add_comm, add_left_comm, add_assoc] using (cosmic_id_csr' (R := R) d x u)
+
+/--
+`d=3` の Tail は `u^2` ではなく（変数名を `x,u` に取っているため）`x^2` を因子に持つ。
+すなわち:
+`(x+u)^3 = u^3 + 3*x*u^2 + x^2*(x+3*u)`。
+-/
+theorem add_pow_tail_u2_d3 {R : Type _} [CommSemiring R] (x u : R) :
+    (x + u) ^ 3 = u ^ 3 + (3 : R) * x * u ^ 2 + x ^ 2 * (x + (3 : R) * u) := by
+  ring
+
+/--
+`Nat` 版の `d=3` Tail 割り切り:
+`x^2 ∣ ((x+u)^3 - u^3 - 3*x*u^2)`。
+-/
+theorem add_pow_tail_u2_d3_nat_dvd (x u : ℕ) :
+    x ^ 2 ∣ ((x + u) ^ 3 - u ^ 3 - 3 * x * u ^ 2) := by
+  let w : ℕ := x + 3 * u
+  refine ⟨w, ?_⟩
+  have h :
+      (x + u) ^ 3 = u ^ 3 + (3 : ℕ) * x * u ^ 2 + x ^ 2 * w := by
+    simpa [w, Nat.add_assoc, Nat.add_left_comm, Nat.add_comm,
+      Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm]
+      using (add_pow_tail_u2_d3 (R := ℕ) x u)
+  calc
+    (x + u) ^ 3 - u ^ 3 - 3 * x * u ^ 2
+        = (u ^ 3 + (3 * x * u ^ 2 + x ^ 2 * w) - u ^ 3) - 3 * x * u ^ 2 := by
+            simp [h, Nat.add_assoc]
+    _ = (3 * x * u ^ 2 + x ^ 2 * w) - 3 * x * u ^ 2 := by
+          simp
+    _ = x ^ 2 * w := by
+          simp
+
+/--
+2 Gap 抽出（d=3）:
+`(x+y)^3` から `x^3` と `y^3` を抜いた差は `x*y` を因子に持つ。
+-/
+theorem two_gap_xy_factor_d3 {R : Type _} [CommSemiring R] (x y : R) :
+    (x + y) ^ 3 = x ^ 3 + y ^ 3 + x * y * ((3 : R) * (x + y)) := by
+  ring
+
+/--
+2 Gap 抽出（d=3, Nat `dvd` 版）:
+`x*y ∣ ((x+y)^3 - x^3 - y^3)`。
+-/
+theorem two_gap_xy_factor_d3_nat_dvd (x y : ℕ) :
+    x * y ∣ ((x + y) ^ 3 - x ^ 3 - y ^ 3) := by
+  let w : ℕ := 3 * (x + y)
+  refine ⟨w, ?_⟩
+  have h :
+      (x + y) ^ 3 = x ^ 3 + y ^ 3 + x * y * w := by
+    simpa [w, Nat.add_assoc, Nat.add_left_comm, Nat.add_comm,
+      Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm]
+      using (two_gap_xy_factor_d3 (R := ℕ) x y)
+  calc
+    (x + y) ^ 3 - x ^ 3 - y ^ 3
+        = (x ^ 3 + (y ^ 3 + x * y * w) - x ^ 3) - y ^ 3 := by
+            simp [h, Nat.add_assoc]
+    _ = (y ^ 3 + x * y * w) - y ^ 3 := by
+          simp
+    _ = x * y * w := by
+          simp
+
+/--
+2 Gap 抽出（一般版, `d+2` 形）:
+`(x+y)^(d+2)` から `x^(d+2)` と `y^(d+2)` を抜いた差は `x*y` を因子に持つ。
+-/
+theorem two_gap_xy_factor {R : Type _} [CommSemiring R] (d : ℕ) (x y : R) :
+    (x + y) ^ (d + 2)
+      = x ^ (d + 2) + y ^ (d + 2)
+        + x * y
+            * (∑ k ∈ Finset.range (d + 1),
+                (Nat.choose (d + 2) (k + 1) : R) * x ^ k * y ^ (d - k)) := by
+  rw [add_pow]
+  have hsplit0 :
+      (∑ k ∈ Finset.range (d + 3),
+        x ^ k * y ^ (d + 2 - k) * (Nat.choose (d + 2) k : R))
+      =
+      x ^ 0 * y ^ (d + 2) * (Nat.choose (d + 2) 0 : R)
+        + ∑ k ∈ Finset.range (d + 2),
+            x ^ (k + 1) * y ^ (d + 1 - k) * (Nat.choose (d + 2) (k + 1) : R) := by
+    rw [Finset.sum_range_succ']
+    simp only [pow_zero, Nat.sub_zero]
+    rw [add_comm]
+    congr 1
+    apply Finset.sum_congr rfl
+    intro k hk
+    congr 2
+    have hk' : k < d + 2 := Finset.mem_range.mp hk
+    have h2 : d + 2 - (k + 1) = d + 1 - k := by omega
+    rw [h2]
+  have hsplit1 :
+      (∑ k ∈ Finset.range (d + 2),
+        x ^ (k + 1) * y ^ (d + 1 - k) * (Nat.choose (d + 2) (k + 1) : R))
+      =
+      (∑ k ∈ Finset.range (d + 1),
+        x ^ (k + 1) * y ^ (d + 1 - k) * (Nat.choose (d + 2) (k + 1) : R))
+      + x ^ (d + 2) * y ^ 0 * (Nat.choose (d + 2) (d + 2) : R) := by
+    rw [Finset.sum_range_succ]
+    simp
+  have hfactor :
+      (∑ k ∈ Finset.range (d + 1),
+        x ^ (k + 1) * y ^ (d + 1 - k) * (Nat.choose (d + 2) (k + 1) : R))
+      =
+      x * y
+        * (∑ k ∈ Finset.range (d + 1),
+            (Nat.choose (d + 2) (k + 1) : R) * x ^ k * y ^ (d - k)) := by
+    rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro k hk
+    have hk' : k < d + 1 := Finset.mem_range.mp hk
+    have hy' : d + 1 - k = Nat.succ (d - k) := by omega
+    rw [pow_succ, hy', pow_succ]
+    ring
+  rw [hsplit0, hsplit1, hfactor]
+  simp [Nat.choose_zero_right, Nat.choose_self]
+  ring
+
+/--
+2 Gap 抽出（一般版, Nat `dvd` 版, `d+2` 形）:
+`x*y ∣ ((x+y)^(d+2) - x^(d+2) - y^(d+2))`。
+-/
+theorem two_gap_xy_factor_nat_dvd (d x y : ℕ) :
+    x * y ∣ ((x + y) ^ (d + 2) - x ^ (d + 2) - y ^ (d + 2)) := by
+  let w : ℕ :=
+    ∑ k ∈ Finset.range (d + 1),
+      (Nat.choose (d + 2) (k + 1) : ℕ) * x ^ k * y ^ (d - k)
+  refine ⟨w, ?_⟩
+  have h :
+      (x + y) ^ (d + 2)
+        = x ^ (d + 2) + y ^ (d + 2) + x * y * w := by
+    simpa [w] using (two_gap_xy_factor (R := ℕ) d x y)
+  calc
+    (x + y) ^ (d + 2) - x ^ (d + 2) - y ^ (d + 2)
+        = (x ^ (d + 2) + (y ^ (d + 2) + x * y * w) - x ^ (d + 2)) - y ^ (d + 2) := by
+            simp [h, Nat.add_assoc]
+    _ = (y ^ (d + 2) + x * y * w) - y ^ (d + 2) := by
+          simp
+    _ = x * y * w := by
+          simp
+
+/--
+`2 ≤ d` 形のラッパー版。
+-/
+theorem two_gap_xy_factor_of_two_le {R : Type _} [CommSemiring R]
+    {d : ℕ} (hd : 2 ≤ d) (x y : R) :
+    (x + y) ^ d
+      = x ^ d + y ^ d
+        + x * y
+            * (∑ k ∈ Finset.range (d - 1),
+                (Nat.choose d (k + 1) : R) * x ^ k * y ^ (d - 2 - k)) := by
+  rcases Nat.exists_eq_add_of_le hd with ⟨n, rfl⟩
+  simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm]
+    using (two_gap_xy_factor (R := R) n x y)
+
 end CommSemiring
 
 end DkMath.CosmicFormulaBinom

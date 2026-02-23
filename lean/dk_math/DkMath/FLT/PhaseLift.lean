@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.PetalDetect
 import DkMath.FLT.OctagonCore
 import DkMath.FLT.CosmicPetalBridge
+import DkMath.CosmicFormula.CosmicFormulaBinom
 import DkMath.FLT.PetalCoreUnit
 import DkMath.Units.NPUnit
 
@@ -76,6 +77,52 @@ def AllNonLiftableOnS0 (c b : ℕ) : Prop :=
 -/
 def S0PrimeSupportExceptThree (c b : ℕ) : Prop :=
   ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → q ≠ 3 → ¬ q ∣ c - b
+
+/--
+`q ≠ 3` かつ `q ∣ S0(c,b)` と `gcd(c,b)=1` なら `q ∤ (c-b)`。
+（`b ≤ c` を仮定）
+-/
+lemma prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three {c b q : ℕ}
+    (hbc : b ≤ c)
+    (hcop : Nat.Coprime c b)
+    (hq : Nat.Prime q)
+    (hqS0 : q ∣ S0_nat c b)
+    (hq_ne3 : q ≠ 3) :
+    ¬ q ∣ c - b := by
+  intro hq_sub
+  have hcb_mod : c ≡ b [MOD q] := by
+    exact ((Nat.modEq_iff_dvd' hbc).2 hq_sub).symm
+  have hS0_mod3b2 : S0_nat c b ≡ 3 * b ^ 2 [MOD q] := by
+    have h1 : S0_nat c b ≡ b ^ 2 + b * b + b ^ 2 [MOD q] := by
+      unfold S0_nat
+      exact ((hcb_mod.pow 2).add (hcb_mod.mul Nat.ModEq.rfl)).add Nat.ModEq.rfl
+    have h2 : b ^ 2 + b * b + b ^ 2 = 3 * b ^ 2 := by
+      ring
+    exact h2 ▸ h1
+  have hS0_mod0 : S0_nat c b ≡ 0 [MOD q] := hqS0.modEq_zero_nat
+  have h3b2_mod0 : 3 * b ^ 2 ≡ 0 [MOD q] := hS0_mod3b2.symm.trans hS0_mod0
+  have hq_3b2 : q ∣ 3 * b ^ 2 := Nat.modEq_zero_iff_dvd.mp h3b2_mod0
+  rcases hq.dvd_mul.mp hq_3b2 with hq_three | hq_b2
+  · have hq_eq_three : q = 3 :=
+      (Nat.prime_dvd_prime_iff_eq hq Nat.prime_three).1 hq_three
+    exact hq_ne3 hq_eq_three
+  · have hq_b : q ∣ b := hq.dvd_of_dvd_pow hq_b2
+    have hb_mod0 : b ≡ 0 [MOD q] := hq_b.modEq_zero_nat
+    have hc_mod0 : c ≡ 0 [MOD q] := hcb_mod.trans hb_mod0
+    have hq_c : q ∣ c := Nat.modEq_zero_iff_dvd.mp hc_mod0
+    have hq_gcd : q ∣ Nat.gcd c b := Nat.dvd_gcd hq_c hq_b
+    have hq_one : q ∣ 1 := by simpa [hcop.gcd_eq_one] using hq_gcd
+    exact hq.not_dvd_one hq_one
+
+/--
+`hSuppEx3` の自動生成ブリッジ:
+`b ≤ c` と `gcd(c,b)=1` から `S0PrimeSupportExceptThree c b` を得る。
+-/
+lemma s0PrimeSupportExceptThree_of_coprime {c b : ℕ}
+    (hbc : b ≤ c) (hcop : Nat.Coprime c b) :
+    S0PrimeSupportExceptThree c b := by
+  intro q hq hqS0 hq_ne3
+  exact prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three hbc hcop hq hqS0 hq_ne3
 
 /--
 `c,b` がともに `mod 3` で非零、かつ同値類が異なるなら `3 ∤ S0_nat c b`。
@@ -170,6 +217,24 @@ lemma NoSqOnS0_of_AllNonLiftableOnS0 {c b : ℕ}
   exact hnonlift q hprim
 
 /--
+`NoSqOnS0` から `q` 全域の non-liftable 条件を得る。
+-/
+lemma nonLiftableS0_all_of_NoSqOnS0 {c b : ℕ}
+    (hNoSq : NoSqOnS0 c b) :
+    ∀ q : ℕ, NonLiftableS0 c b q := by
+  intro q hprim
+  exact hNoSq hprim.1 hprim.2.1
+
+/--
+`NoSqOnS0` と support 条件から `AllNonLiftableOnS0` を作る。
+-/
+lemma AllNonLiftableOnS0_of_NoSqOnS0_support {c b : ℕ}
+    (hSupport : ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → ¬ q ∣ c - b)
+    (hNoSq : NoSqOnS0 c b) :
+    AllNonLiftableOnS0 c b := by
+  exact ⟨hSupport, nonLiftableS0_all_of_NoSqOnS0 hNoSq⟩
+
+/--
 phase-03-C の十分条件（phase-04 更新）:
 非例外調和点 witness と `AllNonLiftableOnS0` の組。
 -/
@@ -222,6 +287,165 @@ lemma NoSqOnS0_of_exceptThree_mod3_separated_harmonic {c b : ℕ}
       hHarm hSuppEx3 hNonLift hc_nz hb_nz hsep)
 
 /--
+`a^3 + b^3 = c^3` から `c^3 - b^3 = a^3` を得る。
+-/
+lemma cube_sub_eq_of_add_eq {a b c : ℕ} (h : a ^ 3 + b ^ 3 = c ^ 3) :
+    c ^ 3 - b ^ 3 = a ^ 3 := by
+  rw [← h]
+  omega
+
+/--
+`gcd(a,b)=1` かつ `a^3+b^3=c^3` なら `gcd(c,b)=1`。
+-/
+lemma coprime_cb_of_eq {a b c : ℕ}
+    (hab : Nat.Coprime a b) (h : a ^ 3 + b ^ 3 = c ^ 3) :
+    Nat.Coprime c b := by
+  by_contra hnot
+  have hgcd_ne : Nat.gcd c b ≠ 1 := by
+    intro hg
+    apply hnot
+    exact (Nat.coprime_iff_gcd_eq_one).2 hg
+  obtain ⟨p, hp, hp_dvd_g⟩ := Nat.exists_prime_and_dvd hgcd_ne
+  have hp_dvd_c : p ∣ c := dvd_trans hp_dvd_g (Nat.gcd_dvd_left c b)
+  have hp_dvd_b : p ∣ b := dvd_trans hp_dvd_g (Nat.gcd_dvd_right c b)
+  have hp_dvd_c3 : p ∣ c ^ 3 := dvd_trans hp_dvd_c (dvd_pow_self c (by decide : 3 ≠ 0))
+  have hp_dvd_b3 : p ∣ b ^ 3 := dvd_trans hp_dvd_b (dvd_pow_self b (by decide : 3 ≠ 0))
+  have hsub : c ^ 3 - b ^ 3 = a ^ 3 := cube_sub_eq_of_add_eq h
+  have hp_dvd_sub : p ∣ c ^ 3 - b ^ 3 := Nat.dvd_sub hp_dvd_c3 hp_dvd_b3
+  have hp_dvd_a3 : p ∣ a ^ 3 := by simpa [hsub] using hp_dvd_sub
+  have hp_dvd_a : p ∣ a := hp.dvd_of_dvd_pow hp_dvd_a3
+  have hp_dvd_gab : p ∣ Nat.gcd a b := Nat.dvd_gcd hp_dvd_a hp_dvd_b
+  have : p ∣ 1 := by simpa [hab.gcd_eq_one] using hp_dvd_gab
+  exact hp.not_dvd_one this
+
+/--
+`3 ∣ (c-b)` 分岐専用:
+`b < c`, `0 < b`, `Nat.Coprime c b`, `3 ∣ c-b` から
+`q ∣ (c^3-b^3)` かつ `q ∤ (c-b)` を満たす素数 `q` が存在する。
+-/
+lemma exists_prime_factor_cube_diff_of_three_dvd_sub {c b : ℕ}
+    (hbc : b < c) (hb : 0 < b) (hcop : Nat.Coprime c b) (h3 : 3 ∣ c - b) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ c ^ 3 - b ^ 3 ∧ ¬ q ∣ c - b := by
+  rcases h3 with ⟨k, hk⟩
+  have hdiff_pos : 0 < c - b := Nat.sub_pos_of_lt hbc
+  have hk_pos : 0 < k := by
+    have : 0 < 3 * k := by simpa [hk] using hdiff_pos
+    exact Nat.pos_of_mul_pos_left this
+  have hc_eq : c = 3 * k + b := by
+    calc
+      c = (c - b) + b := (Nat.sub_add_cancel hbc.le).symm
+      _ = 3 * k + b := by simp only [hk]
+  let m : ℕ := 3 * k ^ 2 + 3 * k * b + b ^ 2
+  have hm_gt1 : 1 < m := by
+    have hk2_pos : 0 < k ^ 2 := by positivity
+    have hb2_pos : 0 < b ^ 2 := by positivity
+    dsimp [m]
+    omega
+  obtain ⟨q, hq, hq_dvd_m⟩ := Nat.exists_prime_and_dvd (Nat.ne_of_gt hm_gt1)
+  have h3_ndvd_b : ¬ 3 ∣ b := by
+    intro h3b
+    have h3c : 3 ∣ c := by
+      have : 3 ∣ (c - b) + b := dvd_add (by exact ⟨k, hk⟩) h3b
+      simpa [Nat.sub_add_cancel hbc.le] using this
+    have h3gcd : 3 ∣ Nat.gcd c b := Nat.dvd_gcd h3c h3b
+    have h3one : 3 ∣ 1 := by
+      simp only [hcop.gcd_eq_one, Nat.dvd_one, OfNat.ofNat_ne_one] at h3gcd
+    exact Nat.prime_three.not_dvd_one h3one
+  have h3_ndvd_m : ¬ 3 ∣ m := by
+    intro h3m
+    have h3_dvd_t1 : 3 ∣ 3 * k ^ 2 := by
+      simp only [dvd_mul_right]
+    have h3_dvd_t2 : 3 ∣ 3 * k * b := by
+      have : 3 ∣ 3 * k := by
+        simp only [dvd_mul_right]
+      exact dvd_mul_of_dvd_left this b
+    have h3_dvd_sum12 : 3 ∣ 3 * k ^ 2 + 3 * k * b := dvd_add h3_dvd_t1 h3_dvd_t2
+    have hm_eq : m = (3 * k ^ 2 + 3 * k * b) + b ^ 2 := by
+      rfl
+    have h3_dvd_b2 : 3 ∣ b ^ 2 := by
+      exact (Nat.dvd_add_right h3_dvd_sum12).1 (by simpa [hm_eq] using h3m)
+    have h3b : 3 ∣ b := Nat.prime_three.dvd_of_dvd_pow h3_dvd_b2
+    exact h3_ndvd_b h3b
+  have hq_ndvd_three : ¬ q ∣ 3 := by
+    intro hq3
+    have hq_eq3 : q = 3 := (Nat.prime_dvd_prime_iff_eq hq Nat.prime_three).1 hq3
+    exact h3_ndvd_m (hq_eq3 ▸ hq_dvd_m)
+  have hq_ndvd_k : ¬ q ∣ k := by
+    intro hqk
+    have hm_eq : m = k * (3 * k + 3 * b) + b ^ 2 := by
+      dsimp [m]
+      ring
+    have hq_dvd_prod : q ∣ k * (3 * k + 3 * b) := dvd_mul_of_dvd_left hqk _
+    have hq_dvd_b2 : q ∣ b ^ 2 := by
+      exact (Nat.dvd_add_right hq_dvd_prod).1 (by simpa [hm_eq] using hq_dvd_m)
+    have hq_dvd_b : q ∣ b := hq.dvd_of_dvd_pow hq_dvd_b2
+    have hq_dvd_c : q ∣ c := by
+      have hq_dvd_3k : q ∣ 3 * k := dvd_mul_of_dvd_right hqk 3
+      have : q ∣ 3 * k + b := dvd_add hq_dvd_3k hq_dvd_b
+      simpa [hc_eq] using this
+    have : q ∣ Nat.gcd c b := Nat.dvd_gcd hq_dvd_c hq_dvd_b
+    have : q ∣ 1 := by simpa [hcop.gcd_eq_one] using this
+    exact hq.not_dvd_one this
+  have hq_ndvd_diff : ¬ q ∣ c - b := by
+    intro hqd
+    have hq_dvd_3k : q ∣ 3 * k := by simpa [hk] using hqd
+    rcases hq.dvd_mul.mp hq_dvd_3k with hq3 | hqk
+    · exact hq_ndvd_three hq3
+    · exact hq_ndvd_k hqk
+  have hS0 : S0_nat c b = 3 * m := by
+    unfold S0_nat
+    dsimp [m]
+    rw [hc_eq]
+    ring
+  have hq_dvd_S0 : q ∣ S0_nat c b := by
+    have : q ∣ 3 * m := dvd_mul_of_dvd_right hq_dvd_m 3
+    simpa [hS0] using this
+  have hdiff : c ^ 3 - b ^ 3 = (c - b) * (c ^ 2 + c * b + b ^ 2) := by
+    have h_pow : b ^ 3 ≤ c ^ 3 := Nat.pow_le_pow_left hbc.le 3
+    zify [hbc, h_pow]
+    ring_nf
+  have hfact : c ^ 3 - b ^ 3 = (c - b) * S0_nat c b := by
+    simpa [S0_nat] using hdiff
+  have hq_dvd_diff : q ∣ c ^ 3 - b ^ 3 := by
+    rw [hfact]
+    exact dvd_mul_of_dvd_right hq_dvd_S0 (c - b)
+  exact ⟨q, hq, hq_dvd_diff, hq_ndvd_diff⟩
+
+/--
+`¬ 3 ∣ (c-b)` 分岐専用:
+Zsigmondy の原始素因子存在をそのまま `d=3` に適用する。
+-/
+lemma exists_prime_factor_cube_diff_of_not_three_dvd_sub {c b : ℕ}
+    (hbc : b < c) (hb : 0 < b) (hcop : Nat.Coprime c b) (h3 : ¬ 3 ∣ c - b) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ c ^ 3 - b ^ 3 ∧ ¬ q ∣ c - b := by
+  exact DkMath.NumberTheory.GcdNext.exists_primitive_prime_factor_prime
+    Nat.prime_three (by norm_num : 3 ≤ 3) hbc hb hcop h3
+
+/--
+`c > b` かつ `gcd(c,b)=1` のとき、
+`q ∣ (c^3-b^3)` かつ `q ∤ (c-b)` を満たす素数 `q` が存在。
+`3 ∣ (c-b)` / `¬ 3 ∣ (c-b)` の両分岐を内包した共通補題。
+-/
+lemma exists_prime_factor_cube_diff {c b : ℕ}
+    (hbc : b < c) (hb : 0 < b) (hcop : Nat.Coprime c b) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ c ^ 3 - b ^ 3 ∧ ¬ q ∣ c - b := by
+  by_cases h3 : 3 ∣ c - b
+  · exact exists_prime_factor_cube_diff_of_three_dvd_sub hbc hb hcop h3
+  · exact exists_prime_factor_cube_diff_of_not_three_dvd_sub hbc hb hcop h3
+
+/--
+`d=3` の標準因数分解:
+`c^3 - b^3 = (c-b) * S0_nat c b`。
+-/
+lemma cube_sub_eq_mul_sub_S0 {c b : ℕ} (hbc : b < c) :
+    c ^ 3 - b ^ 3 = (c - b) * S0_nat c b := by
+  have hdiff : c ^ 3 - b ^ 3 = (c - b) * (c ^ 2 + c * b + b ^ 2) := by
+    have h_pow : b ^ 3 ≤ c ^ 3 := Nat.pow_le_pow_left hbc.le 3
+    zify [hbc, h_pow]
+    ring_nf
+  simpa [S0_nat] using hdiff
+
+/--
 `q ∣ (c^3-b^3)` かつ `q ∤ (c-b)` なら `q ∣ S0_nat c b`。
 -/
 lemma prime_dvd_S0_of_dvd_cube_sub_not_dvd_diff {c b q : ℕ}
@@ -230,15 +454,24 @@ lemma prime_dvd_S0_of_dvd_cube_sub_not_dvd_diff {c b q : ℕ}
     (hq_dvd : q ∣ c ^ 3 - b ^ 3)
     (hq_ndvd : ¬ q ∣ c - b) :
     q ∣ S0_nat c b := by
-  have hdiff : c ^ 3 - b ^ 3 = (c - b) * (c ^ 2 + c * b + b ^ 2) := by
-    have h_pow : b ^ 3 ≤ c ^ 3 := Nat.pow_le_pow_left hbc.le 3
-    zify [hbc, h_pow]
-    ring_nf
-  have hfact : c ^ 3 - b ^ 3 = (c - b) * S0_nat c b := by
-    simpa [S0_nat] using hdiff
+  have hfact : c ^ 3 - b ^ 3 = (c - b) * S0_nat c b :=
+    cube_sub_eq_mul_sub_S0 hbc
   have hmul : q ∣ (c - b) * S0_nat c b := by
     simpa [hfact] using hq_dvd
   exact (hq.dvd_mul.mp hmul).resolve_left hq_ndvd
+
+/--
+一般 `two_gap_xy_factor`（Nat `dvd` 版）から得る d=3 橋補題:
+`x=c-b, y=b` とおくと `(c-b)*b` は
+`c^3 - (c-b)^3 - b^3` を割る。
+-/
+lemma two_gap_xy_dvd_cube_bridge {c b : ℕ}
+    (hbc : b ≤ c) :
+    (c - b) * b ∣ c ^ 3 - (c - b) ^ 3 - b ^ 3 := by
+  have hdiv :
+      (c - b) * b ∣ (((c - b) + b) ^ (1 + 2) - (c - b) ^ (1 + 2) - b ^ (1 + 2)) :=
+    DkMath.CosmicFormulaBinom.two_gap_xy_factor_nat_dvd 1 (c - b) b
+  simpa [Nat.sub_add_cancel hbc] using hdiv
 
 /--
 `NoSqOnS0 c b` から `Main` で使う `hS0_not_sq` 形の仮定を作るブリッジ。
