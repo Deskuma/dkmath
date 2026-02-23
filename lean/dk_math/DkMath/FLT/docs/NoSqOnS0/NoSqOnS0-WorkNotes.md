@@ -76,7 +76,7 @@ status: 作業中 - phase-04:
 
 1. [x] `PhaseLift`: `PrimitiveOnS0 / NonLiftableS0 / AllNonLiftableOnS0`
 2. [x] `PhaseLift`: `NoSqOnS0_of_AllNonLiftableOnS0`
-3. [ ] `PetalCoreUnit` or `CounterexamplePattern`: `NonExceptionalHarmonicOnS0 -> AllNonLiftableOnS0`（暫定版）
+3. [x] `PetalCoreUnit` or `CounterexamplePattern`: `NonExceptionalHarmonicOnS0 -> AllNonLiftableOnS0`（暫定版）
 4. [x] `Main`: 派生定理を新ルートに差し替え
 5. [x] build + WorkNotes更新
 
@@ -226,4 +226,21 @@ status: 作業中 - phase-04:
 
 - build（再確認）
   - `lake build DkMath.FLT.CounterexamplePattern` : OK
+  - `lake build DkMath.FLT.Main` : OK
+
+- phase-04 追加ステップ（Main への envelope 入口接続）
+  - `Main.lean` に派生定理を追加:
+    - `FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable`
+  - 入力:
+    - `hbc`
+    - `hHarm`
+    - `hNoExcAll`
+    - `hSuppEx3`, `hNonLiftAll`
+    - `c % 3 ≠ 0`, `b % 3 ≠ 0`, `c % 3 ≠ b % 3`
+  - 経路:
+    - `allNonLiftableOnS0_of_harmonicEnvelope_nonLiftable`
+      → `NoSqOnS0_of_AllNonLiftableOnS0`
+      → `FLT_d3_by_padicValNat_of_NoSqOnS0`
+
+- build（再確認）
   - `lake build DkMath.FLT.Main` : OK
