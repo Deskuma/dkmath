@@ -109,6 +109,19 @@ status: 作業中 - phase-05: 補題強化
 - build（再確認）
   - `lake build DkMath.FLT.Main` : OK
 
+- phase-05 追加ステップ（Main 側の一本化）
+  - `Main.lean` の重複していた立方差因数分解のローカル証明を削減し、
+    `cube_sub_eq_mul_sub_S0`（`PhaseLift`）参照へ統一。
+  - 置換箇所:
+    - `exists_primitive_prime_factor_d3` 内の `hfact`
+    - `padicValNat_upper_bound_d3` 内の `h_fact`
+  - 意味:
+    - `CounterexamplePattern` だけでなく `Main` も同一中核補題を参照する形に揃い、
+      立方差→`S0` 因数分解の導出チェーンが実質一本化された。
+
+- build（再確認）
+  - `lake build DkMath.FLT.Main` : OK
+
 - phase-05 追加ステップ（2 Gap 抽出 API の一般 `d` 版）
   - `CosmicFormulaBinom.lean` に以下を追加。
     - `two_gap_xy_factor`

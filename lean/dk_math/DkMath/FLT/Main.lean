@@ -210,12 +210,8 @@ lemma exists_prime_factor_cube_diff {c b : ℕ}
       have : q ∣ 3 * m := dvd_mul_of_dvd_right hq_dvd_m 3
       simpa [hS0] using this
 
-    have hdiff : c ^ 3 - b ^ 3 = (c - b) * (c ^ 2 + c * b + b ^ 2) := by
-      have h_pow : b ^ 3 ≤ c ^ 3 := Nat.pow_le_pow_left hbc.le 3
-      zify [hbc, h_pow]
-      ring_nf
-    have hfact : c ^ 3 - b ^ 3 = (c - b) * S0_nat c b := by
-      simpa [S0_nat] using hdiff
+    have hfact : c ^ 3 - b ^ 3 = (c - b) * S0_nat c b :=
+      cube_sub_eq_mul_sub_S0 hbc
     have hq_dvd_diff : q ∣ c ^ 3 - b ^ 3 := by
       rw [hfact]
       exact dvd_mul_of_dvd_right hq_dvd_S0 (c - b)
@@ -369,14 +365,8 @@ lemma padicValNat_upper_bound_d3 {a b q : ℕ}
   have hS0_dvd : q ∣ S0_nat a b :=
     prime_dvd_S0_via_cosmic_bridge hab_lt hq hq_dvd hq_ndiv_diff
 
-  have h_diff : a ^ 3 - b ^ 3 = (a - b) * (a ^ 2 + a * b + b ^ 2) := by
-    -- use sample proof from Samples/FLT.lean
-    have h_pow : b ^ 3 ≤ a ^ 3 := Nat.pow_le_pow_left (Nat.le_of_lt hab_lt) 3
-    zify [hab_lt, h_pow]
-    ring
-  have h_fact : a ^ 3 - b ^ 3 = (a - b) * S0_nat a b := by
-    -- rewrite using definition of S0_nat and h_diff
-    simpa [S0_nat] using h_diff
+  have h_fact : a ^ 3 - b ^ 3 = (a - b) * S0_nat a b :=
+    cube_sub_eq_mul_sub_S0 hab_lt
 
   -- **padicValNat上界：PetalDetect.padicValNat_le_one_of_not_sq_dvd を使用**
   have hpadic_bound : padicValNat q (S0_nat a b) ≤ 1 :=
