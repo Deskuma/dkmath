@@ -78,6 +78,48 @@ def S0PrimeSupportExceptThree (c b : ℕ) : Prop :=
   ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → q ≠ 3 → ¬ q ∣ c - b
 
 /--
+`c,b` がともに `mod 3` で非零、かつ同値類が異なるなら `3 ∤ S0_nat c b`。
+-/
+lemma not_three_dvd_S0_of_mod3_separated {c b : ℕ}
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    ¬ 3 ∣ S0_nat c b := by
+  have hc_lt : c % 3 < 3 := Nat.mod_lt _ (by decide)
+  have hb_lt : b % 3 < 3 := Nat.mod_lt _ (by decide)
+  have hc_cases : c % 3 = 1 ∨ c % 3 = 2 := by omega
+  have hb_cases : b % 3 = 1 ∨ b % 3 = 2 := by omega
+  rcases hc_cases with hc1 | hc2
+  · rcases hb_cases with hb1 | hb2
+    · exfalso
+      exact hsep (by simp [hc1, hb1])
+    · intro h3S0
+      have hc_mod1 : c ≡ 1 [MOD 3] := by simpa [Nat.ModEq] using hc1
+      have hb_mod2 : b ≡ 2 [MOD 3] := by simpa [Nat.ModEq] using hb2
+      have hS0_mod_const : S0_nat c b ≡ (1 ^ 2 + 1 * 2 + 2 ^ 2) [MOD 3] := by
+        unfold S0_nat
+        exact ((hc_mod1.pow 2).add (hc_mod1.mul hb_mod2)).add (hb_mod2.pow 2)
+      have hconst : ((1 ^ 2 + 1 * 2 + 2 ^ 2 : ℕ) ≡ 1 [MOD 3]) := by decide
+      have hS0_mod1 : S0_nat c b ≡ 1 [MOD 3] := hS0_mod_const.trans hconst
+      have hS0_mod0 : S0_nat c b ≡ 0 [MOD 3] := h3S0.modEq_zero_nat
+      have h10 : (1 : ℕ) ≡ 0 [MOD 3] := hS0_mod1.symm.trans hS0_mod0
+      norm_num [Nat.ModEq] at h10
+  · rcases hb_cases with hb1 | hb2
+    · intro h3S0
+      have hc_mod2 : c ≡ 2 [MOD 3] := by simpa [Nat.ModEq] using hc2
+      have hb_mod1 : b ≡ 1 [MOD 3] := by simpa [Nat.ModEq] using hb1
+      have hS0_mod_const : S0_nat c b ≡ (2 ^ 2 + 2 * 1 + 1 ^ 2) [MOD 3] := by
+        unfold S0_nat
+        exact ((hc_mod2.pow 2).add (hc_mod2.mul hb_mod1)).add (hb_mod1.pow 2)
+      have hconst : ((2 ^ 2 + 2 * 1 + 1 ^ 2 : ℕ) ≡ 1 [MOD 3]) := by decide
+      have hS0_mod1 : S0_nat c b ≡ 1 [MOD 3] := hS0_mod_const.trans hconst
+      have hS0_mod0 : S0_nat c b ≡ 0 [MOD 3] := h3S0.modEq_zero_nat
+      have h10 : (1 : ℕ) ≡ 0 [MOD 3] := hS0_mod1.symm.trans hS0_mod0
+      norm_num [Nat.ModEq] at h10
+    · exfalso
+      exact hsep (by simp [hc2, hb2])
+
+/--
 `q = 3` 例外を除去できると、通常の support 条件へ戻せる。
 -/
 lemma allPrimeSupport_of_exceptThree {c b : ℕ}

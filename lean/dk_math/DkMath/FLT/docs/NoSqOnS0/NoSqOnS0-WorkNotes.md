@@ -118,3 +118,16 @@ status: 作業中 - phase-04:
 - build（再確認）
   - `lake build DkMath.FLT.PhaseLift` : OK
   - `lake build DkMath.FLT.Main` : OK
+
+- phase-04 追加ステップ（`¬ 3 ∣ S0` の実装）
+  - `PhaseLift.lean` に補題を追加:
+    - `not_three_dvd_S0_of_mod3_separated`
+      - 仮定: `c % 3 ≠ 0`, `b % 3 ≠ 0`, `c % 3 ≠ b % 3`
+      - 結論: `¬ 3 ∣ S0_nat c b`
+  - 証明は `c % 3, b % 3 ∈ {1,2}` の有限分岐を `omega` で取り、
+    `Nat.ModEq` の加法・乗法・冪閉性で `S0_nat c b ≡ 1 [MOD 3]` を導出。
+    `3 ∣ S0` と合わせて `1 ≡ 0 [MOD 3]` の矛盾を作る。
+
+- build（再確認）
+  - `lake build DkMath.FLT.PhaseLift` : OK
+  - `lake build DkMath.FLT.Main` : OK
