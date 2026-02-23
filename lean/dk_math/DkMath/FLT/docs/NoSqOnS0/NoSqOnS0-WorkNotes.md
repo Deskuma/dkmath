@@ -103,3 +103,18 @@ status: 作業中 - phase-05: 補題強化
 
 - build（再確認）
   - `lake build DkMath.FLT.Main` : OK
+
+- phase-05 追加ステップ（`hClassPrim` から `hNonLiftAll` 生成）
+  - `Main.lean` に派生定理を追加:
+    - `FLT_d3_by_padicValNat_of_harmonicEnvelope_classify_coprimeSupport`
+  - 入力:
+    - `hClassPrim : ∀ q, PrimitiveOnS0 c b q -> classifyLift(...) = impossible`
+    - 既存の `harmonicEnvelope_*_coprimeSupport` 条件群
+  - 経路:
+    - `nonLiftableS0_of_classifyLift_impossible` で `hNonLiftAll` を生成
+      → `FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable_coprimeSupport`
+  - 意味:
+    - `hNonLiftAll` を直接与えず、分類器 impossible family から供給可能にした。
+
+- build（再確認）
+  - `lake build DkMath.FLT.Main` : OK
