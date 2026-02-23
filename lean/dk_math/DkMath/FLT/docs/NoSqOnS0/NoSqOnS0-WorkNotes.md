@@ -16,7 +16,7 @@
    - `NoSqOnS0 -> hS0_not_sq` の変換補題を追加。
    - これで「仮定の供給源」を差し替え可能にする。
 
-3. [ ] `OctagonCore` を判定器の入口にする
+3. [x] `OctagonCore` を判定器の入口にする
 
    - `lean/dk_math/DkMath/FLT/OctagonCore.lean` に、点集合から得る位相ラベル（`sqrt2` 系/`sqrt3` 系）を返す定義を追加。
    - まずは「座標核→ラベル」の純代数化だけ実装。
@@ -112,3 +112,31 @@
 - 候補：
   - このファイルを継続利用（時系列追記）
   - もしくは日付別ログを分割（必要になったら切替）
+
+
+## 2026-02-23 追記（Step 3: OctagonCore を判定器入口に接続）
+
+### 実施内容
+- `lean/dk_math/DkMath/FLT/OctagonCore.lean`
+  - `PhaseLabel` を追加：`sqrt2 | sqrt3 | mixed | unknown`
+  - 入口関数 `phaseLabelOfPoint : Point2 → PhaseLabel` を追加
+    - まず `I` を `mixed` 判定
+    - 次に `E/F/G` を `sqrt2` 判定
+    - それ以外 `unknown`
+  - 入口述語 `isMixedPhasePoint : Point2 → Prop` を追加
+  - 補題追加：
+    - `phaseLabel_I : phaseLabelOfPoint I = PhaseLabel.mixed`
+    - `mixedPoint_I : isMixedPhasePoint I`
+
+- `lean/dk_math/DkMath/FLT/PhaseLift.lean`
+  - `import DkMath.FLT.OctagonCore` を追加
+  - 判定器フック述語を追加：
+    - `HasMixedPhaseWitness : Prop := ∃ p : Point2, isMixedPhasePoint p`
+    - `hasMixedPhaseWitness_octagonCore : HasMixedPhaseWitness`
+
+### 検証
+- `lake build DkMath.FLT.OctagonCore` 成功
+- `lake build DkMath.FLT.Main` 成功
+
+### チェック更新
+- [x] 3. `OctagonCore` を判定器の入口にする

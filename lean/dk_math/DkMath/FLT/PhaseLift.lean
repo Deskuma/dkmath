@@ -5,10 +5,20 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.PetalDetect
+import DkMath.FLT.OctagonCore
 
 namespace DkMath.FLT
 
 open DkMath.FLT.PetalDetect
+
+/--
+OctagonCore 由来の混合位相点が存在することを入口条件としてまとめる述語。
+-/
+def HasMixedPhaseWitness : Prop :=
+  ∃ p : Point2, isMixedPhasePoint p
+
+lemma hasMixedPhaseWitness_octagonCore : HasMixedPhaseWitness := by
+  exact ⟨I, mixedPoint_I⟩
 
 /--
 `S0_nat c b` の素因子が二乗で刺さらないことをまとめた条件。
