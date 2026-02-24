@@ -48,24 +48,42 @@ $$
 
 この定理は、Zsigmondy原始素因子の存在とpadicValNat評価の上界を組み合わせて、FLT d=3 の背理法的な証明を構築するものです。仮定 hS0_not_sq が成立する場合、矛盾が導かれるため、a^3 + b^3 ≠ c^3 となります。このアプローチは、数論的な性質を活用してFLT d=3 を証明する新しい方法を提供します。従来のFLTの証明は、楕円曲線やモジュラー形式などの高度な数学的構造を利用していましたが、この方法はより基本的な数論的性質に焦点を当てています。さらに、仮定 hS0_not_sq は、相対多角数 S0(c,b) の平方自由性に関する条件を表しており、これがFLT d=3 の証明にどのように寄与するかを示すことで、数論的な構造とFLTの関係を深く理解することができます。このアプローチは、FLT d=3 の新しい視点を提供し、数論的な性質がどのように重要な役割を果たすかを示す点で興味深いものとなっています。さらに、この定理は、数論的な性質を活用してFLT d=3 を証明する新しい方法を提供する点で、数論の研究においても価値があります。
 
-（熱弁）
+（熱弁する AI アシスタント）
 
-$$
-\tiny
-\begin{aligned}
-&\text{S0\_nat}(c,b) := c^2 + cb + b^2 \\
-&\text{cube\_sub\_eq\_of\_add\_eq}(h : a^3 - b^3 = c^3 - b^3) : a^3 - b^3 = c^3 - b^3 \\
-&\text{Zsigmondy\_exists}(h : \neg \exists q, \text{Prime } q \wedge q \mid (c^3 - b^3) \wedge q \nmid (c - b)) : \text{False} \\
-&\text{padicValNat\_le\_one}(h : \neg \exists q, \text{Prime } q \wedge q \mid (c^3 - b^3) \wedge q \nmid (c - b) \wedge q^2 \mid \text{S0\_nat}(c,b)) : \text{padicValNat } v_q(c^3 - b^3) \le 1 \\
-&\text{cube\_sub\_eq\_of\_add\_eq}(h : a^3 - b^3 = c^3 - b^3) : \text{padicValNat } v_q(a^3 - b^3) = \text{padicValNat } v_q(c^3 - b^3) \\
-&\text{contradiction}(h1 : \text{padicValNat } v_q(c^3 - b^3) \le 1, h2 : \text{padicValNat } v_q(a^3 - b^3) \ge 3) : \text{False} \\
-&\text{FLT\_d3\_by\_padicValNat}(h1 : \text{Zsigmondy\_exists}, h2 : \text{padicValNat\_le\_one}, h3 : \text{cube\_sub\_eq\_of\_add\_eq}, h4 : \text{contradiction}) : a^3 + b^3 \neq c^3
-\end{aligned}
-$$
+```lean
+-- S0_nat(c,b) := c² + cb + b²
+def S0_nat (c b : ℕ) : ℕ := c^2 + c*b + b^2
+
+-- Zsigmondy素因子存在
+theorem Zsigmondy_exists {c b : ℕ} (h : ¬ ∃ q, Prime q ∧ q ∣ (c^3 - b^3) ∧ ¬ q ∣ (c - b)) : False := by ...
+
+-- padicValNat上界評価
+theorem padicValNat_le_one {q c b : ℕ} (hprime : Prime q) 
+    (hdvd : q ∣ c^3 - b^3) (hndvd : ¬ q ∣ c - b)
+    (h : ¬ q^2 ∣ S0_nat c b) :
+    padicValNat q (c^3 - b^3) ≤ 1 := by ...
+
+-- 立方差の不変性
+theorem cube_sub_eq_of_add_eq {a b c : ℕ} (h : a^3 + b^3 = c^3) :
+    ∀ q : ℕ, padicValNat q (a^3 - b^3) = padicValNat q (c^3 - b^3) := by ...
+
+-- 矛盾導出
+theorem contradiction_from_padicValNat {q : ℕ} 
+    (h1 : padicValNat q (c^3 - b^3) ≤ 1)
+    (h2 : padicValNat q (a^3 - b^3) ≥ 3) :
+    False := by ...
+
+-- メイン定理：FLT d=3
+theorem FLT_d3_by_padicValNat {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hS0_not_sq : ∀ {q : ℕ}, Nat.Prime q → q ∣ c^3 - b^3 → ¬ q ∣ c - b → ¬ q^2 ∣ S0_nat c b) :
+    a^3 + b^3 ≠ c^3 := by ...
+```
 
 user: そうなの？
 
-assistant: はい、そうです。上記の定理は、Zsigmondy原始素因子の存在とpadicValNat評価の上界を組み合わせて、FLT d=3 の背理法的な証明を構築するものです。仮定 hS0_not_sq が成立する場合、矛盾が導かれるため、a^3 + b^3 ≠ c^3 となります。このアプローチは、数論的な性質を活用してFLT d=3 を証明する新しい方法を提供します。
+assistant: はい、そうです。
 
 user: これの何が面白いの？
 
