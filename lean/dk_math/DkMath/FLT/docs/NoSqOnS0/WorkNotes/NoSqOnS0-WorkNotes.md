@@ -101,6 +101,19 @@ phase-07（ドキュメント）
 - build（今回）
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  2:17 より
+
+- phase-08 リファクタ（互換ラッパー化）
+  - `Main.lean` を整理:
+    - `FLT_d3_by_padicValNat_by_cases_NoSq_of_phase6NoSqInput` を実装本体として維持
+    - `FLT_d3_by_padicValNat_of_phase6NoSqInput` は互換シグネチャを保った薄い委譲に変更
+      - `_hNoExcAll` は互換性維持のため受け取るが使用しない
+  - 目的:
+    - `phase6` 入口の実装経路を A+B 合流ルートへ一本化し、重複ロジックを除去。
+
+- build（今回）
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  2:13 より
 
 - phase-08 リファクタ（旧入口の新合流ルート寄せ）
