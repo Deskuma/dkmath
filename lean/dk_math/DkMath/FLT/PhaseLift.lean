@@ -52,6 +52,20 @@ lemma hasPhaseUnitInfrastructure : HasPhaseUnitInfrastructure := by
 def NoSqOnS0 (c b : ℕ) : Prop :=
   ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → ¬ q ^ 2 ∣ S0_nat c b
 
+lemma not_NoSqOnS0_iff_exists_sq_factor {c b : ℕ} :
+    ¬ NoSqOnS0 c b ↔
+      ∃ q : ℕ, Nat.Prime q ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b := by
+  classical
+  constructor
+  · intro hNoSq
+    by_contra hnone
+    apply hNoSq
+    intro q hq hqS0 hq2
+    exact hnone ⟨q, hq, hqS0, hq2⟩
+  · intro hsq hNoSq
+    rcases hsq with ⟨q, hq, hqS0, hq2⟩
+    exact (hNoSq hq hqS0) hq2
+
 /--
 phase-06: `Main` の入口仮定を圧縮するための入力束。
 `NoSqOnS0` ルートで必要な幾何・数論条件をまとめる。

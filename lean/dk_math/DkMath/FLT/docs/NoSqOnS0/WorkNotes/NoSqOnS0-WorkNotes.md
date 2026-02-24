@@ -59,3 +59,13 @@ phase-07（ドキュメント）
 これができると、B 判定器の入口が完全に安定します。  
 
 ## 作業ログ 2026/02/25  1:49 より
+
+- phase-08 実装ステップ（補集合正規形の導入）
+  - `PhaseLift.lean` に追加:
+    - `not_NoSqOnS0_iff_exists_sq_factor`
+      - `¬ NoSqOnS0 c b ↔ ∃ q, Nat.Prime q ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b`
+  - 位置づけ:
+    - B ルート（`¬ NoSqOnS0` 側）の入口を存在形で固定。
+
+- build（再確認）
+  - `lake build DkMath.FLT.Main` : OK
