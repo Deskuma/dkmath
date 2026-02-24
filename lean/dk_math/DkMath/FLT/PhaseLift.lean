@@ -81,7 +81,7 @@ lemma exists_sq_factor_split_three {c b : ℕ}
 phase-06: `Main` の入口仮定を圧縮するための入力束。
 `NoSqOnS0` ルートで必要な幾何・数論条件をまとめる。
 -/
-structure Phase6NoSqInput (c b : ℕ) where
+structure NoSqInput (c b : ℕ) where
   hbc : b < c
   hcb_coprime : Nat.Coprime c b
   hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u
@@ -187,8 +187,8 @@ lemma s0PrimeSupportExceptThree_of_coprime {c b : ℕ}
   intro q hq hqS0 hq_ne3
   exact prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three hbc hcop hq hqS0 hq_ne3
 
-lemma phase6_s0PrimeSupportExceptThree {c b : ℕ}
-    (h : Phase6NoSqInput c b) :
+lemma s0PrimeSupportExceptThree_of_NoSqInput {c b : ℕ}
+    (h : NoSqInput c b) :
     S0PrimeSupportExceptThree c b := by
   exact s0PrimeSupportExceptThree_of_coprime h.hbc.le h.hcb_coprime
 

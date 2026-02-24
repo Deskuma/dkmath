@@ -101,6 +101,26 @@ phase-07（ドキュメント）
 - build（今回）
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  2:28 より
+
+- API 命名整理（`phase6` 用語の除去）
+  - `PhaseLift.lean`
+    - `structure Phase6NoSqInput` → `structure NoSqInput`
+    - `phase6_s0PrimeSupportExceptThree` → `s0PrimeSupportExceptThree_of_NoSqInput`
+  - `Main.lean`
+    - `FLT_d3_by_padicValNat_by_cases_NoSq_of_phase6NoSqInput`
+      → `FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqInput`
+    - `FLT_d3_by_padicValNat_of_phase6NoSqInput`
+      → `FLT_d3_by_padicValNat_of_NoSqInput`
+  - 互換マーク・非推奨注記は追加せず、そのまま新名称へ移行。
+
+- ドキュメント更新
+  - `FLT/README.md` の公開入口名・Mermaid ノード名を新名称へ更新
+  - README タイトルから phase 表記を削除
+
+- build（今回）
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  2:17 より
 
 - phase-08 リファクタ（互換ラッパー化）
