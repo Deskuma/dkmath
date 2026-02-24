@@ -26,7 +26,7 @@ status: 作業中 - phase-10: 完全証明への道
 
 ## A. 封印解除レポート
 
-賢狼が `FLT3StandAloneNC.lean.gz` を開いて中身を読んだぞ。結論から言うと、これは **「FLT の (n=3) 版」** を、`Mathlib.FLT`（あの本丸定理）を呼ばずに、
+結論から言うと、これは **「FLT の (n=3) 版」** を、`Mathlib.FLT`（あの本丸定理）を呼ばずに、
 
 \[
 a^3 + b^3 = c^3 ;\Rightarrow; \text{矛盾}
