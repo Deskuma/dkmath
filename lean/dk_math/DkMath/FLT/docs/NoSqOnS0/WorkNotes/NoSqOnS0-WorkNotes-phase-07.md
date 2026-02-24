@@ -36,7 +36,7 @@ phase-07（ドキュメント）
   - 内容を以下へ更新:
     - モジュール責務（`Main` / `PhaseLift` / `CounterexamplePattern`）
     - 推奨導線（`NoSqOnS0` / classify）
-    - phase-06 入口（`Phase6NoSqInput`）
+    - phase-06 入口（`NoSqInput`）
     - メンテ方針
 
 - phase-07 実装ステップ（Mermaid 図の再生成）
@@ -65,7 +65,7 @@ graph LR
   G --> J
   L["PhaseLift.hS0_not_sq_of_NoSqOnS0"] --> M["Main.FLT_d3_by_padicValNat_of_NoSqOnS0"]
   J --> M
-  N["PhaseLift.Phase6NoSqInput"] --> O["Main.FLT_d3_by_padicValNat_of_phase6NoSqInput"]
+  N["PhaseLift.NoSqInput"] --> O["Main.FLT_d3_by_padicValNat_of_NoSqInput"]
   M --> O
   P["CounterexamplePattern.classifyLift_impossible_family_of_harmonicEnvelope_NoSq"] --> Q["Main.FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport"]
   M --> Q
