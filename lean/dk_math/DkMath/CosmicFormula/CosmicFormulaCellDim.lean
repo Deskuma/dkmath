@@ -643,7 +643,7 @@ lemma card_filter_gt_fin (d : ℕ) (i : Fin d) :
   have h_le_card : (Finset.univ.filter (· ≤ i)).card = i.val + 1 := by
     simpa [s_le, t_le, Finset.card_range] using h_card_le
   -- 全体 d 個から j ≤ i (i+1 個) を除いた残りが j > i
-  have h_split := Finset.filter_card_add_filter_neg_card_eq_card
+  have h_split := Finset.card_filter_add_card_filter_not
     (s := (Finset.univ : Finset (Fin d))) (p := fun j => j ≤ i)
   have h_split' :
       (Finset.univ.filter (· ≤ i)).card + (Finset.univ.filter fun j => ¬ j ≤ i).card = d := by

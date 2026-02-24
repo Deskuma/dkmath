@@ -154,7 +154,8 @@ theorem card_body_from_cosmic (d x u : ℕ) :
     (Body d x u).card = x * Gbinom d x u := by
   have h_big := card_Big_eq_card_Body_add_card_Gap d x u
   have h_exp := pow_sub_pow_eq_mul_Gbinom d x u
-  simp [Big, Gap, constVec] at h_big
+  simp only [Big, CellDim.card_Box, constVec, Finset.card_pi, Finset.card_range, Finset.prod_const,
+    Finset.card_univ, Fintype.card_fin, Gap] at h_big
   -- (x + u) ^ d = (Body d x u).card + u ^ d
   have h_eq : (x + u) ^ d = (Body d x u).card + u ^ d := by
     simpa [Fintype.card_pi, Finset.card_fin] using h_big
