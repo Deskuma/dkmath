@@ -1,0 +1,273 @@
+# No Square on S0 Work Notes
+
+status: 完了 - phase-05: 補題強化
+
+## Index
+
+※以前の作業は以下、アーカイブログへ移しました。
+
+[NoSqOnS0: phase-01](NoSqOnS0-WorkNotes-phase-01.md) - `hS0_not_sq` を `NoSqOnS0` に置換可能な構造にした。
+[NoSqOnS0: phase-02](NoSqOnS0-WorkNotes-phase-02.md) -  x=c-b, u=b を代入して `Gx 3 x u = S0_nat c b` へ落とす橋補題を作った。
+[NoSqOnS0: phase-03](NoSqOnS0-WorkNotes-phase-03.md) -  定義を固める → 判定器を実質化 → 十分条件の構築の順で実装した。
+[NoSqOnS0: phase-04](NoSqOnS0-WorkNotes-phase-04.md) -  例外素数3の分離を追加して、`hHarm` + `hNoExcAll` + `hSuppEx3` + `hNonLiftAll` + mod3分離 から `AllNonLiftableOnS0` を構成するルートを作った。
+
+## 研究課題
+
+- 現状は  
+  `harmonicEnvelope_nonLiftable仮定群 -> NoSqOnS0 -> FLT_d3...`  
+  という**十分条件チェーン**。
+- `NoSqOnS0 -> harmonicEnvelope_nonLiftable仮定群` は未構築で、一般には難しい。
+
+なので、あなたの「`4` から `3+1` を一意復元できない」比喩は正確です。
+
+一点だけ補正すると:
+
+- `NoSqOnS0` と `a^3+b^3≠c^3` は同値ではなく、今は `NoSqOnS0` を使った**証明戦略上の強い仮定**です。
+- つまり「`NoSqOnS0` を示せば FLT_d3 が出る」は真ですが、逆はこの枠組みでは要求していません。
+
+次の実務的な研究対象としては、まさにあなたの言う `G` 多項式側です。  
+特に「`hSuppEx3` と `hNonLiftAll` を `G` 側の構造補題から直接生成できるか」が次の核心です。
+
+## 状況
+
+**得られたヒント（要点）**
+
+1. `G_binom` 側の最小 API は3本で十分  
+
+   - `add_pow_gap_factor`（1 Gap 抽出）  
+   - `add_pow_tail_u2`（Boundary 抽出後に `u^2`）  
+   - `two_gap_xy_factor`（2 Gap 抽出で `xy`）
+
+2. `S0` 側は mod 3 と gcd で押す方針が有効  
+
+   - `S0 = (c-b)^2 + 3bc`  
+   - `S0 ≡ (c-b)^2 [MOD 3]`  
+   - `3 ∣ S0 -> 3 ∣ (c-b)` 系（門前払い）
+
+3. 逆向き（`NoSqOnS0` から構造復元）は狙わず、  
+   「構造 -> `NoSqOnS0`」の十分条件ルートを強化するのが現実的。
+
+**次に実装すべき補題（優先順）**
+
+1. [x] `CosmicFormulaBinom` 側に `add_pow_tail_u2`（Nat `dvd` 版まで）  
+2. [x] `PhaseLift`/`CounterexamplePattern` 側で  
+   `hSuppEx3` を mod 3 補題から自動生成する橋補題  
+3. [x] `Main` で  
+   `G_binom` API -> `hSuppEx3`/`hNonLiftAll` -> 既存 `...of_harmonicEnvelope_nonLiftable`  
+   へ直結する定理を1本追加
+
+## 作業ログ 2026/02/23 20:42 より
+
+- phase-05 実装ステップ（G_binom API の d=3 強化）
+  - `CosmicFormulaBinom.lean` に以下を追加。
+    - `add_pow_gap_factor`
+      - `(x+u)^d = u^d + x * GN d x u`（1 Gap 抽出 API）
+    - `add_pow_tail_u2_d3`
+      - `(x+u)^3 = u^3 + 3*x*u^2 + x^2*(x+3*u)`（d=3 Tail の `x^2` 因子化）
+    - `add_pow_tail_u2_d3_nat_dvd`
+      - `x^2 ∣ ((x+u)^3 - u^3 - 3*x*u^2)`（Nat `dvd` 版）
+  - 位置づけ:
+    - phase-05 優先タスク 1（`add_pow_tail_u2` の Nat 版）を、まず d=3 で導入。
+
+- build（再確認）
+  - `lake build DkMath.CosmicFormula.CosmicFormulaBinom` : OK
+  - `lake build DkMath.FLT.Main` : OK
+
+- phase-05 追加ステップ（一般 two-gap の FLT 側接続）
+  - `PhaseLift.lean` に追加:
+    - `two_gap_xy_dvd_cube_bridge`
+      - 一般 API `two_gap_xy_factor_nat_dvd`（`d=1`）を使い、
+        `x=c-b, y=b` で
+        `(c-b)*b ∣ c^3 - (c-b)^3 - b^3`
+        を供給する橋補題。
+  - `CounterexamplePattern.lean` に追加:
+    - `two_gap_xy_dvd_cube_bridge_for_input`
+      - 上記橋補題を Counterexample 入力側で再利用するための補助補題。
+  - 位置づけ:
+    - `CosmicFormulaBinom` の一般 `two_gap` API が
+      `PhaseLift/CounterexamplePattern` 側の補題導出に接続された。
+
+- build（再確認）
+  - `lake build DkMath.FLT.CounterexamplePattern` : OK
+  - `lake build DkMath.FLT.Main` : OK
+
+- phase-05 追加ステップ（本流への昇格）
+  - `PhaseLift.lean` に共通補題を追加:
+    - `cube_sub_eq_mul_sub_S0`
+      - `c^3 - b^3 = (c-b) * S0_nat c b`
+      - 以後の本流証明で使う中心補題として集約。
+  - `prime_dvd_S0_of_dvd_cube_sub_not_dvd_diff` を
+    上記共通補題ベースへ差し替え（ローカル展開を除去）。
+  - `CounterexamplePattern.lean` の
+    `primitivePrimeGate_of_PrimitiveOnS0` も
+    `cube_sub_eq_mul_sub_S0` を直接利用する形へ差し替え。
+  - 位置づけ:
+    - 一般 two-gap 由来の接続補題を追加しただけでなく、
+      立方差→`S0` 因数分解の中核を `PhaseLift` に統合し、
+      `CounterexamplePattern` 側の本流導出がそれを参照する構造に昇格。
+
+- build（再確認）
+  - `lake build DkMath.FLT.Main` : OK
+
+- phase-05 追加ステップ（Main 側の一本化）
+  - `Main.lean` の重複していた立方差因数分解のローカル証明を削減し、
+    `cube_sub_eq_mul_sub_S0`（`PhaseLift`）参照へ統一。
+  - 置換箇所:
+    - `exists_primitive_prime_factor_d3` 内の `hfact`
+    - `padicValNat_upper_bound_d3` 内の `h_fact`
+  - 意味:
+    - `CounterexamplePattern` だけでなく `Main` も同一中核補題を参照する形に揃い、
+      立方差→`S0` 因数分解の導出チェーンが実質一本化された。
+
+- build（再確認）
+  - `lake build DkMath.FLT.Main` : OK
+
+- phase-05 追加ステップ（局所導出の共通補題化）
+  - `Main.lean` 先頭にあった局所補助補題を `PhaseLift.lean` へ移設:
+    - `cube_sub_eq_of_add_eq`
+    - `coprime_cb_of_eq`
+  - `Main` 側は定義を持たず、`PhaseLift` の共通補題参照に統一。
+  - 位置づけ:
+    - `Main` の局所導出を減らし、証明チェーンの共通層を `PhaseLift` に寄せる方針を前進。
+
+- build（再確認）
+  - `lake build DkMath.FLT.Main` : OK
+
+- phase-05 追加ステップ（`3 ∣ (c-b)` 分岐の段階分解）
+  - `PhaseLift.lean` に新規追加:
+    - `exists_prime_factor_cube_diff_of_three_dvd_sub`
+      - 入力: `b<c`, `0<b`, `Coprime c b`, `3 ∣ c-b`
+      - 出力: `∃ q, Prime q ∧ q ∣ c^3-b^3 ∧ ¬ q ∣ c-b`
+  - `Main.lean` の `exists_prime_factor_cube_diff` は
+    `3 ∣ (c-b)` 分岐を上記補題呼び出し1行へ置換。
+  - 意味:
+    - 以前 `Main` に埋め込まれていた長い分岐証明を
+      `PhaseLift` の共通層へ移し、`Main` は分岐合流点に集中。
+
+- build（再確認）
+  - `lake build DkMath.FLT.PhaseLift` : OK
+  - `lake build DkMath.FLT.Main` : OK
+
+- phase-05 追加ステップ（`¬ 3 ∣ (c-b)` 分岐の共通化）
+  - `PhaseLift.lean` に新規追加:
+    - `exists_prime_factor_cube_diff_of_not_three_dvd_sub`
+      - Zsigmondy の `exists_primitive_prime_factor_prime` を
+        `d=3` へ適用する共通補題。
+  - `Main.lean` 側の置換:
+    - `exists_prime_factor_cube_diff` の `¬ 3 ∣ (c-b)` 分岐を上記補題へ置換。
+    - `exists_primitive_prime_factor_d3` も同補題経由に統一。
+  - 意味:
+    - `exists_prime_factor_cube_diff` の両分岐（`3 ∣` / `¬ 3 ∣`）が
+      ともに `PhaseLift` 側の共通補題へ移り、`Main` は分岐ディスパッチのみになった。
+
+- build（再確認）
+  - `lake build DkMath.FLT.Main` : OK
+
+- phase-05 追加ステップ（`exists_prime_factor_cube_diff` 本体の移設）
+  - `PhaseLift.lean` に共通補題として追加:
+    - `exists_prime_factor_cube_diff`
+      - `3 ∣ (c-b)` / `¬ 3 ∣ (c-b)` の分岐を内包し、
+        既存の分岐専用補題2本をディスパッチする統合版。
+  - `Main.lean` から同名補題の本体定義を削除。
+    - 以後、`Main` は `PhaseLift.exists_prime_factor_cube_diff` を直接参照。
+  - 意味:
+    - 分岐補題だけでなく、分岐合流点そのものも `PhaseLift` へ移り、
+      `Main` の局所導出がさらに薄くなった。
+
+- build（再確認）
+  - `lake build DkMath.FLT.Main` : OK
+
+- phase-05 追加ステップ（2 Gap 抽出 API の一般 `d` 版）
+  - `CosmicFormulaBinom.lean` に以下を追加。
+    - `two_gap_xy_factor`
+      - `(x+y)^(d+2)` から `x^(d+2), y^(d+2)` を抜いた差が `x*y` 因子を持つ一般版。
+    - `two_gap_xy_factor_nat_dvd`
+      - `x*y ∣ ((x+y)^(d+2) - x^(d+2) - y^(d+2))`（Nat `dvd` 版）。
+    - `two_gap_xy_factor_of_two_le`
+      - `2 ≤ d` 形のラッパー（`d+2` 形を通常の `d` 表記に接続）。
+  - 位置づけ:
+    - phase-05 の `two_gap_xy_factor` を一般化して、`G_binom` 最小 API を実質充足。
+
+- build（再確認）
+  - `lake build DkMath.CosmicFormula.CosmicFormulaBinom` : OK
+  - `lake build DkMath.FLT.Main` : OK
+
+- phase-05 実装ステップ（`hSuppEx3` 自動生成ブリッジ）
+  - `PhaseLift.lean` に以下を追加。
+    - `prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three`
+      - 条件: `b ≤ c`, `Nat.Coprime c b`, `Nat.Prime q`, `q ∣ S0_nat c b`, `q ≠ 3`
+      - 結論: `¬ q ∣ c - b`
+    - `s0PrimeSupportExceptThree_of_coprime`
+      - 条件: `b ≤ c`, `Nat.Coprime c b`
+      - 結論: `S0PrimeSupportExceptThree c b`
+  - 位置づけ:
+    - phase-05 優先タスク 2（`hSuppEx3` の自動生成）を、
+      mod3 + gcd 制御を使って橋補題化。
+
+- build（再確認）
+  - `lake build DkMath.FLT.PhaseLift` : OK
+  - `lake build DkMath.FLT.Main` : OK
+
+- phase-05 実装ステップ（Main 直結版の追加）
+  - `Main.lean` に派生定理を追加:
+    - `FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable_coprimeSupport`
+  - 入力:
+    - 既存 `harmonicEnvelope_nonLiftable` 条件群
+    - 追加で `Nat.Coprime c b`
+  - 経路:
+    - `s0PrimeSupportExceptThree_of_coprime`
+      → `FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable`
+  - 意味:
+    - `hSuppEx3` を手で渡さず、`Coprime c b` から自動生成して Main へ直結。
+
+- build（再確認）
+  - `lake build DkMath.FLT.Main` : OK
+
+- phase-05 追加ステップ（2 Gap 抽出 API の d=3 導入）
+  - `CosmicFormulaBinom.lean` に以下を追加。
+    - `two_gap_xy_factor_d3`
+      - `(x+y)^3 = x^3 + y^3 + x*y*(3*(x+y))`
+      - 2-gap 差分が `xy` 因子を持つことの d=3 版。
+    - `two_gap_xy_factor_d3_nat_dvd`
+      - `x*y ∣ ((x+y)^3 - x^3 - y^3)`（Nat `dvd` 版）
+  - 位置づけ:
+    - `two_gap_xy_factor` の一般 `d` 版へ進む前の、実装可能・即利用の足場。
+
+- build（再確認）
+  - `lake build DkMath.CosmicFormula.CosmicFormulaBinom` : OK
+  - `lake build DkMath.FLT.Main` : OK
+
+- phase-05 追加ステップ（`NoSqOnS0` から分類器 impossible family へ）
+  - `PhaseLift.lean` に以下を追加。
+    - `nonLiftableS0_all_of_NoSqOnS0`
+      - 条件: `NoSqOnS0 c b`
+      - 結論: `∀ q, NonLiftableS0 c b q`
+    - `AllNonLiftableOnS0_of_NoSqOnS0_support`
+      - 条件: prime support 条件 + `NoSqOnS0 c b`
+      - 結論: `AllNonLiftableOnS0 c b`
+  - `CounterexamplePattern.lean` に以下を追加。
+    - `classifyLift_impossible_family_of_harmonicEnvelope_NoSq`
+      - 条件: `hInfra + hHarm + hNoExcAll + NoSqOnS0`
+      - 結論: `∀ q` primitive 上で `classifyLift = impossible`
+  - `Main.lean` に以下を追加。
+    - `FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport`
+      - `NoSqOnS0` から `hClassPrim` を自動生成して
+        `..._of_harmonicEnvelope_classify_coprimeSupport` へ接続。
+
+- build（再確認）
+  - `lake build DkMath.FLT.Main` : OK
+
+- phase-05 追加ステップ（`hClassPrim` から `hNonLiftAll` 生成）
+  - `Main.lean` に派生定理を追加:
+    - `FLT_d3_by_padicValNat_of_harmonicEnvelope_classify_coprimeSupport`
+  - 入力:
+    - `hClassPrim : ∀ q, PrimitiveOnS0 c b q -> classifyLift(...) = impossible`
+    - 既存の `harmonicEnvelope_*_coprimeSupport` 条件群
+  - 経路:
+    - `nonLiftableS0_of_classifyLift_impossible` で `hNonLiftAll` を生成
+      → `FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable_coprimeSupport`
+  - 意味:
+    - `hNonLiftAll` を直接与えず、分類器 impossible family から供給可能にした。
+
+- build（再確認）
+  - `lake build DkMath.FLT.Main` : OK
