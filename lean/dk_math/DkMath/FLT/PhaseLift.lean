@@ -234,6 +234,28 @@ lemma not_three_dvd_S0_of_mod3_separated {c b : ℕ}
     · exfalso
       exact hsep (by simp [hc2, hb2])
 
+lemma three_sq_not_dvd_of_mod3_separated {c b : ℕ}
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    ¬ 3 ^ 2 ∣ S0_nat c b := by
+  intro h9
+  have h3S0 : 3 ∣ S0_nat c b := by
+    exact dvd_trans (by decide : 3 ∣ 3 ^ 2) h9
+  exact (not_three_dvd_S0_of_mod3_separated hc_nz hb_nz hsep) h3S0
+
+lemma NoSqOnS0_of_support_nonLiftable_mod3_separated {c b : ℕ}
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    NoSqOnS0 c b := by
+  by_contra hNoSq_false
+  have h9 : 3 ^ 2 ∣ S0_nat c b :=
+    three_sq_dvd_of_not_NoSqOnS0_of_support_nonLiftable hNoSq_false hSuppEx3 hNonLift
+  exact (three_sq_not_dvd_of_mod3_separated hc_nz hb_nz hsep) h9
+
 /--
 `q = 3` 例外を除去できると、通常の support 条件へ戻せる。
 -/

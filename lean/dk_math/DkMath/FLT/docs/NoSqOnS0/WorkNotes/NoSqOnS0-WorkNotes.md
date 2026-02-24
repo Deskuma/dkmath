@@ -85,6 +85,37 @@ phase-07（ドキュメント）
 - build（今回）
   - `lake build DkMath.FLT.PhaseLift` : OK
 
+## 作業ログ 2026/02/25  2:04 より
+
+- phase-08 実装ステップ（Main 接続）
+  - `Main.lean` に追加:
+    - `FLT_d3_by_padicValNat_of_support_nonLiftable_mod3_separated`
+      - 入力:
+        - `hSuppEx3 : S0PrimeSupportExceptThree c b`
+        - `hNonLift : ∀ q, NonLiftableS0 c b q`
+        - `mod3` 分離 (`hc_nz`, `hb_nz`, `hsep`)
+      - 流れ:
+        - `NoSqOnS0_of_support_nonLiftable_mod3_separated` で `NoSqOnS0` を回復
+        - 既存 `FLT_d3_by_padicValNat_of_NoSqOnS0` へ接続
+
+- build（今回）
+  - `lake build DkMath.FLT.Main` : OK
+
+## 作業ログ 2026/02/25  2:03 より
+
+- phase-08 実装ステップ（`q=3` 側 obstruction）
+  - `PhaseLift.lean` に追加:
+    - `three_sq_not_dvd_of_mod3_separated`
+      - `c,b` が `mod 3` で非零かつ分離なら `¬ (3^2 ∣ S0_nat c b)` を示す。
+    - `NoSqOnS0_of_support_nonLiftable_mod3_separated`
+      - `hSuppEx3 + hNonLift + mod3 分離` から `NoSqOnS0 c b` を直接回復。
+      - 証明は `¬ NoSq` を仮定して `three_sq_dvd_of_not_NoSqOnS0_of_support_nonLiftable` で `3^2 ∣ S0` を得て矛盾。
+  - 位置づけ:
+    - B ルートの残差（`3` 側）を `mod3` 条件で閉じる橋を追加。
+
+- build（今回）
+  - `lake build DkMath.FLT.PhaseLift` : OK
+
 ## 作業ログ 2026/02/25  2:01 より
 
 - phase-08 実装ステップ（`q≠3` 側の既存資産接続）
