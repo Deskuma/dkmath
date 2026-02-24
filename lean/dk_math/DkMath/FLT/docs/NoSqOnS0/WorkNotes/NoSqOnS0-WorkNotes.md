@@ -101,6 +101,21 @@ phase-07（ドキュメント）
 - build（今回）
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  2:13 より
+
+- phase-08 リファクタ（旧入口の新合流ルート寄せ）
+  - `Main.lean` の既存定理を更新:
+    - `FLT_d3_by_padicValNat_of_phase6NoSqInput`
+      - 旧: `...of_harmonicEnvelope_NoSq_coprimeSupport` へ接続
+      - 新: `phase6_s0PrimeSupportExceptThree` / `nonLiftableS0_all_of_NoSqOnS0` で材料を作り、
+        `FLT_d3_by_padicValNat_by_cases_NoSq` へ接続
+      - 互換シグネチャ維持のため `hNoExcAll` は残す（実装上は未使用）
+  - 効果:
+    - phase6 系の入口も A+B 合流ルートへ統一。
+
+- build（今回）
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  2:10 より
 
 - phase-08 実装ステップ（API 一本化ラッパー）
