@@ -960,7 +960,8 @@ example : ∀ (a b q : ℕ) (ha : 1 < a) (hb : 0 < b) (hab : Nat.Coprime a b)
     これは pow_sub_pow_factor_cosmic_N と素数の割り算性から直ちに従う。
 -/
 lemma prime_divides_G3 {a b q : ℕ}
-    (ha : 1 < a) (hb : 0 < b) (hab : Nat.Coprime a b) (hab_lt : b < a)
+    -- (ha : 1 < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hab_lt : b < a)
     (hq_prime : Nat.Prime q)
     (hq_div : q ∣ a ^ 3 - b ^ 3) (hq_ndiv : ¬ q ∣ a - b) :
     q ∣ a ^ 2 + a * b + b ^ 2 := by
