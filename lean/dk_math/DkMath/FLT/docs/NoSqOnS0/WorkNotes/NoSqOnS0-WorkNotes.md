@@ -1,6 +1,6 @@
 # No Square on S0 Work Notes
 
-status: 作業中 - phase-09:
+status: 作業中 - phase-10: 完全証明への道
 
 ## Index
 
@@ -14,138 +14,175 @@ status: 作業中 - phase-09:
 [NoSqOnS0: phase-06](NoSqOnS0-WorkNotes-phase-06.md)
 [NoSqOnS0: phase-07](NoSqOnS0-WorkNotes-phase-07.md)
 [NoSqOnS0: phase-08](NoSqOnS0-WorkNotes-phase-08.md)
+[NoSqOnS0: phase-09](NoSqOnS0-WorkNotes-phase-09.md)
 
 ## 課題
 
-- [x] なし
+- [ ] 仮定の証明
+  - [ ] `NonLiftableS0` の証明（下降法）
+  - [ ] \(3^2\) が \(S0\) を割らないことの証明（coprime だけで落ちるはず）
 
 ## 状況タスク
 
-phase-09
+## A. 封印解除レポート
 
-## 実装方針
+賢狼が `FLT3StandAloneNC.lean.gz` を開いて中身を読んだぞ。結論から言うと、これは **「FLT の (n=3) 版」** を、`Mathlib.FLT`（あの本丸定理）を呼ばずに、
 
-評価！レビューしてもらった。
+\[
+a^3 + b^3 = c^3 ;\Rightarrow; \text{矛盾}
+\]
 
-===
+へ持っていく「自前ルートの骨組み」がちゃんと入っておる。
 
-うむ！これは **詰め** どころか、かなり “封鎖線” が出来てきたのう。貼ってくれた追加分、構造としてめちゃくちゃ良い。ポイントを短く、しかし鋭く診断するぞえ。
-
-## 1. いま何が達成されたか
-
-### 1.1. 「補集合の判定器」を実装しておる
-
-`by_cases hNoSq : NoSqOnS0 c b` を置いて、
-
-- `hNoSq` が真なら従来ルートで FLT を返す
-- `hNoSq` が偽なら、
-  `¬NoSq → ∃q (q^2|S0)` を作り、
-  それを `q=3` と `q≠3` に割り、
-  `q≠3` は `SupportExceptThree + NonLiftable` で潰し、
-  結局 `3^2|S0` を引きずり出して、
-  `mod3 separated` で `¬ 3|S0` を出して矛盾
-
-この流れが `NoSqOnS0_of_support_nonLiftable_mod3_separated` にまとまっており、**補集合を A 側へ押し戻す** 形に成功しておる。
-つまり “別判定器が必要” という話は、少なくともこの入力セットの範囲では **かなり縮んだ**。
-
-## 2. 最高に良いところ（設計として勝ってる）
-
-### 2.1. `not_NoSqOnS0_iff_exists_sq_factor` が核
-
-これがあると「NoSq が壊れる」という情報が、具体的な反例 (q) に落ちる。補集合の地図が描ける。偉い。
-
-### 2.2. “q=3 のみが生き残る” を Lean で定理化した
-
-`three_sq_dvd_of_not_NoSqOnS0_of_support_nonLiftable` がまさにそれ。
-これは、後で例外処理や最終合流を書く時の **要石** になる。
-
-### 2.3. 入口の “入力構造体” `NoSqInput`
-
-これ、実務的に強い。仮定を散らさず “束” に閉じ込めたので、後から
-
-- `NoSqInput` を生成する補題
-- `NoSqInput` を弱めた `NoSqInputLite`
-
-などの拡張がやりやすくなる。
-
-## 3. ただし、ここに1つ “論理のほつれ” がある（重要）
-
-お主の `NoSqInput` に
-
-```lean
-hNoSq : NoSqOnS0 c b
-```
-
-が入っておるのに、最後で
-
-```lean
-by_cases hNoSq : NoSqOnS0 c b
-```
-
-と分岐しておる。
-
-この分岐は **`hIn.hNoSq` がある時点で片側が決まってしまう**。つまり、
-
-- `FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqInput` は実質、常に “真側” を通る
-- 偽側（補集合処理）は、この `NoSqInput` からは **到達不能**
-
-これは「間違い」ではない。だが、設計目的が
-
-> 「NoSq が成り立たないケースも別ルートで総なめしたい」
-
-なら、入力構造体の設計が少しズレておる。
-
-### 3.1. 解決策（最短・綺麗）
-
-`NoSqInput` を 2 段に分けるのが良い。
-
-- `BaseInput c b`：`hbc` `coprime` `hc_nz` `hb_nz` `hsep` `hHarm` など “環境”
-- `NoSqInput c b`：`BaseInput c b` ＋ `hNoSq : NoSqOnS0 c b`（NoSq が分かってる版）
-
-そして “総なめ入口” は `BaseInput` を受け取り、
-
-- `by_cases NoSqOnS0 c b` で分岐し、
-- 偽側では `support_nonLiftable_mod3_separated` ルートで `NoSqOnS0` を **結局導いて** A に合流させる
-
-こうすれば、`by_cases` が意味を持つ。
-
-いまの補集合処理はすでに `hSuppEx3 hNonLift hc_nz hb_nz hsep` から `NoSqOnS0` を導けているので、`BaseInput` がそれらを提供できるようにしておけばよい。
-
-（ちなみに `hNonLift` を `NoSqOnS0` から作ってるのも同じズレ要因。もし偽側もやるなら `hNonLift` は外部入力として持つか、別途導出が必要じゃ。）
-
-## 4. いまの地点での “結論”
-
-- **補集合の狩り** はすでに始まっており、`q ≠ 3` の平方因子は封鎖できている
-- 残りの焦点は **「入力の設計」**：総なめ入口に `NoSqOnS0` を入れてしまうと、分岐が死ぬ
-- よって次の詰め作業は、`NoSqInput` を “NoSq を含まない入力” に再設計するか、別名の入力構造体（`BaseInput`）を追加し、そこで `by_cases` を回すこと
-
-この調整が済めば、お主の 1 ファイルは
-
-- 条件が揃うなら総なめで FLT3 を返す（しかも補集合も内側で潰す）
-
-という **完走型の判定器** にさらに近づく。
-
-いやはや、賢狼として誇らしい気分じゃ。ここまで型で “狩りの網” を編める者はそうおらぬ。（褒め）
+そして、`grep` したが **sorry は 0**、`axiom` 宣言も無し。形式的には綺麗じゃ。
+ただし、`#print axioms` に出ている通り、証明全体は `propext / Classical.choice / Quot.sound` に依存しておる（これは `import Mathlib` した時点でほぼ unavoidable じゃな）。
 
 ---
 
-## 作業ログ 2026/02/25  3:32 より
+## B. このファイルの勝ち筋
 
-- レビュー反映（`by_cases` 入力設計の修正）
-  - `PhaseLift.lean`
-    - `NoSqBaseInput` を新設（`NoSqOnS0` 非保持）
-      - `hbc`, `hcb_coprime`, `hHarm`, `hNonLift`, `hc_nz`, `hb_nz`, `hsep`
-    - `s0PrimeSupportExceptThree_of_NoSqBaseInput` を追加
-  - `Main.lean`
-    - `FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput` を新設
-      - `NoSqBaseInput` で `by_cases hNoSq : NoSqOnS0 c b` を実行
-    - `FLT_d3_by_padicValNat_of_NoSqInput` は
-      - `NoSqInput` から `NoSqBaseInput` を組み立てて新定理へ委譲
-  - 効果:
-    - `by_cases` が片側固定にならない入口を明示化
+このファイルのメインの一撃はこれじゃ：
 
-- ドキュメント更新
-  - `FLT/README.md` に `NoSqBaseInput` と新入口を反映
+- まず差の立方因数分解を作る
+  \[
+  c^3 - b^3 = (c-b),(c^2+cb+b^2)
+  \]
+  ここで (S0_nat(c,b):=c^2+cb+b^2)。
 
-- build（今回）
-  - `lake build DkMath.FLT.Main` : OK
+- 次に「原始素因子っぽい」素数 (q) を必ず拾う（`exists_prime_factor_cube_diff`）
+  \[
+  q \mid (c^3-b^3)\ \wedge\ q \nmid (c-b)
+  \]
+
+- さらに “Cosmic bridge” (GN) を使って
+  \[
+  q \mid (c^3-b^3),\ q\nmid(c-b)\ \Rightarrow\ q\mid S0_nat(c,b)
+  \]
+  （`prime_dvd_S0_via_cosmic_bridge`）
+
+- 最後に \(p\)-進評価（`padicValNat`）で上下から挟み撃ちする：
+
+  - 下界：\(q\mid a \Rightarrow 3 \le v_q(a^3)\)
+  - 上界：ある条件があれば \(v_q(c^3-b^3)\le 1\)
+
+この「\(3 \le \cdots \le 1\)」の挟み撃ちが決まれば勝ち、という設計じゃ。
+
+---
+
+## C. 抜け穴の正体
+
+ここが **抜け穴** じゃ。ズバリ：
+
+### C.1. クリティカル仮定が “外部入力” になっている
+
+決定打の上界 \( \le 1\) を出すところで、次の仮定が必要になっておる：
+
+```lean
+(hS0_not_sq :
+  ∀ {q : ℕ}, Nat.Prime q →
+    q ∣ c ^ 3 - b ^ 3 → ¬ q ∣ c - b → ¬ q ^ 2 ∣ S0_nat c b)
+```
+
+要するに、
+
+\[
+q \mid S0_nat(c,b)\ \wedge\ q\nmid(c-b)\ \Rightarrow\ q^2 \nmid S0_nat(c,b)
+\]
+
+を「証明せずに要求」しておる。
+この仮定が入ると `padicValNat_upper_bound_d3` が通って、最後の矛盾が完成する仕組みじゃ。
+
+### C.2. しかも `NoSqOnS0` は一般には偽
+
+ファイル内でも `NoSqOnS0` を導入して仮定を言い換えておるが、これは一般には成り立たぬ。
+反例は有名で、ぬしが以前触れておったやつ：
+
+\[
+18^2 + 18\cdot 1 + 1^2 = 343 = 7^3
+\]
+
+つまり \(S0_nat(18,1)\) は \(7^2\) で割れる。
+だから `NoSqOnS0` を “無条件公理” にする道は塞がっておる。ここは正直で良い設計じゃ（嘘を混ぜてない）。
+
+---
+
+## D. 完全証明への道
+
+このファイルは「最後の鍵穴」まで彫れておる。鍵そのものはまだ鍛造中、という状態じゃな。
+で、その “鍵” を作る現実的ルートは 2 本ある。
+
+---
+
+### D.1. ルート1. 下降法で `NonLiftableS0` を実証する
+
+ファイル内の用語で言えば、欲しいのはこれ：
+
+\[
+\text{PrimitiveOnS0}(c,b,q)\ \Rightarrow\ \neg(q^2 \mid S0_nat(c,b))
+\]
+
+これを “最小反例” 仮定のもとで示し、もし \(q^2\mid S0\) なら **より小さい反例** を構成して矛盾、が王道じゃ。
+
+Lean 的には、だいたいこういう形の核が要る：
+
+```lean
+-- 最小の反例 (a,b,c) を仮定し、
+-- q^2 | S0 から、より小さい (a',b',c') を構成して矛盾
+theorem nonLiftableS0_of_minCounterexample
+  {a b c q : ℕ} :
+  -- (1) a^3 + b^3 = c^3, gcd 条件, 最小性
+  -- (2) PrimitiveOnS0 c b q
+  -- (3) q^2 ∣ S0_nat c b
+  False := by
+  ...
+```
+
+この “下降ステップの構成” には、結局 **アイゼンシュタイン整数 \(\mathbb{Z}[\omega]\)**（あるいは同等の因数分解構造）が効く。
+ぬしの `GEisensteinBridge` 構想は、まさにここに刺さる。
+
+---
+
+### D.2. ルート2. 3 の扱いを先に完全整理して仮定を減らす
+
+ファイル後半は「mod 3 分離（`hsep`）」で \(3\) を退けておるが、ここはもっと強く削れる可能性が高い。
+
+実験的に調べると（賢狼が機械で小範囲探索した）、
+
+- \(\gcd(c,b)=1\) なら \(9 \mid (c^2+cb+b^2)\) は **起きない** っぽい
+
+実際、数論的にも自然じゃ。
+\(3 \mid (c^2+cb+b^2)\) なら \(c\equiv b\pmod 3\)。そこで \(c=b+3k\) とおくと
+
+\[
+c^2+cb+b^2 = 3,(b^2+3bk+3k^2)
+\]
+
+\(\gcd(c,b)=1\) なら \(3\nmid b\) だから、括弧の中は \( \not\equiv 0\pmod 3\) で、結局 \(9\) は割らない。
+つまり **「mod3 分離」なしで \(3^2\) を禁止できる**。
+
+Lean に落とすなら、こういう補題が “効く削岩機” になる：
+
+```lean
+lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
+    (hcop : Nat.Coprime c b) :
+    ¬ 3^2 ∣ S0_nat c b := by
+  -- 3 | S0 -> c ≡ b [MOD 3]
+  -- c=b+3k とおいて S0=3*(...) を示し、(...) が 3 で割れないを言う
+  ...
+```
+
+これが入ると、後半の `hc_nz hb_nz hsep` まわりはかなり痩せる。
+“鍵の鍛造” と並行で、証明木を **軽量化** できるぞ。
+
+---
+
+## E. まとめ
+
+このファイルの核心はこうじゃ：
+
+- 「原始素因子 \(q\) を拾って \(v_q\) で挟み撃ち」は **勝てる形** になっている
+- ただし上界側に **非自明な鍵**（`hS0_not_sq` / `NonLiftableS0`）が残っている
+- その鍵は、だいたい **下降法（＝lift を許すと小さい反例が作れる）** を形式化すれば鍛造できる
+- 追加で、\(3^2\) 排除は `mod3 分離` より強く **coprime だけで落ちる** 可能性が高い（証明木のダイエット案件じゃ）
+
+賢狼の目から見ても、ここまで彫れているのは立派じゃ。あとは「下降ステップ」を Lean の歯車に噛ませるだけ…という、いちばん美味しいところが残っておる。
