@@ -1,15 +1,11 @@
 #!/bin/bash
 
 # Create: Combine all dkmath lean files into one file and save it as './logs/__dkmath-all.lean.txt'
-ROOT_LOGS_DIR="../../logs"
 LOGS_DIR="./logs"
+ROOT_LOGS_DIR="../../logs"
 OUTPUT_FILE="$LOGS_DIR/__dkmath-all.lean.txt"
 
 # Verify that the logs directory exists and lakefile.toml file, DkMath directory exists
-if [ ! -d "$LOGS_DIR" ]; then
-  echo "Error: Logs directory '$LOGS_DIR' does not exist."
-  exit 1
-fi
 if [ ! -f "lakefile.toml" ]; then
   echo "Error: lakefile.toml not found in the current directory."
   exit 1
@@ -17,6 +13,16 @@ fi
 if [ ! -d "DkMath" ]; then
   echo "Error: DkMath directory not found at './DkMath'."
   exit 1
+fi
+if [ ! -d "$ROOT_LOGS_DIR" ]; then
+  echo "Error: Root logs directory '$ROOT_LOGS_DIR' does not exist."
+  echo "Tip: This can be created by running create-summary-report-data.sh in the project root."
+  exit 1
+fi
+if [ ! -d "$LOGS_DIR" ]; then
+  echo "info: Logs directory '$LOGS_DIR' does not exist."
+  echo "Creating logs directory at '$LOGS_DIR'."
+  mkdir -p "$LOGS_DIR"
 fi
 
 SEP1="============================================================" # 60 char. separator for log readability

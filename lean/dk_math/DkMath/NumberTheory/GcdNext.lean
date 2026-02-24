@@ -526,7 +526,7 @@ GcdAg.lean で定義された Ag射影 π_Ag と gcd_Ag を使用して、
 -/
 
 -- TODO: GcdAg 正規化を使った coprime 条件の強化
--- example (a b : ℕ) : GcdAg.gcd_Ag a b = 1 → "本質的に互いに素" := by sorry
+-- example (a b : ℕ) : GcdAg.gcd_Ag a b = 1 → "本質的に互いに素" := by so#rry
 
 /-! **Phase 3: PetalDetect 検出器の導入**
 
@@ -543,7 +543,7 @@ Body に吸い込まれないことを活用する。
 -/
 
 -- TODO: PetalDetect の φビット判定を使った素因子分類
--- example (a b q : ℕ) : "q が (a+b) 由来" → "φ=1 側のみ" := by sorry
+-- example (a b q : ℕ) : "q が (a+b) 由来" → "φ=1 側のみ" := by so#rry
 
 /-! ### 7. Phase 4: 層B（精密層）— padicValNat 上界の証明
 

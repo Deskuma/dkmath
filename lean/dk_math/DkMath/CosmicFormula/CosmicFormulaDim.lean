@@ -415,7 +415,7 @@ theorem volume_ball_fin_even_center_invariant (m : ℕ) (hm : m ≥ 1)
 2. `IsEmpty` なら `volume = Measure.dirac 0`（`PiLp.volume_euclideanSpace_eq_dirac`）
 3. `dirac 0 univ = 1`（`Measure.dirac_apply_of_mem`）
 
-これにより **axiom も sorry も使わず** 完全証明が得られる。
+これにより **axiom も so#rry も使わず** 完全証明が得られる。
 -/
 
 theorem volume_univ_fin0 :

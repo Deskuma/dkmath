@@ -24,8 +24,8 @@ set_option linter.style.emptyLine false
 - 結論：n ∣ d
 - 依存する Mathlib の性質：`Nat.gcd_eq_left_iff_dvd` (gcd n d = n ⟺ n ∣ d)
 
-⚠️ **残る `sorry`**
-最後の `sorry` は、以下の複雑な部分の形式化が必要：
+⚠️ **残る `so#rry`**
+最後の `so#rry` は、以下の複雑な部分の形式化が必要：
 ```
 gcd n d = n を示す
 ├─ n の最小素因子による分解 (n = minFac(n) * m)
@@ -203,7 +203,7 @@ lemma prime_pow_dividing_gcd_divides_d_pow {p k : ℕ} (hp : Nat.Prime p)
 /-
 lemma nat_dvd_of_all_prime_factors_dvd {n d : ℕ}
     (h : ∀ p : ℕ, Nat.Prime p → p ∣ n → p ∣ d) (d_pos : 0 < d) : n ∣ d := by
-  sorry
+  so#rry
 -/
 
 

@@ -605,7 +605,7 @@ theorem FLT_case_3 (x y z : ℕ)
       h_xn_val
       h3
 
-#print axioms FLT_case_3  -- NG: 2026/02/22  7:39 sorryAx
+#print axioms FLT_case_3  -- NG: 2026/02/22  7:39 so#rryAx
 
 /-- Fermat's Last Theorem (FLT)
 Cosmic Formula を用いた新しい証明
@@ -894,17 +894,17 @@ theorem FLT {x y z : ℕ} (n : ℕ) (hpos_xyz : 0 < x ∧ 0 < y ∧ 0 < z) (hn :
   -- 最終的に原始解に還元して `FLT_of_coprime` を適用
   exact FLT_of_coprime n (And.intro hx'_pos (And.intro hy'_pos hz'_pos)) hn h_gcd_x'y' hxy'
 
-#print axioms FLT  -- NG: 2026/02/22  7:39 sorryAx
+#print axioms FLT  -- NG: 2026/02/22  7:39 so#rryAx
 
 end DkMath
 
 /- ## ロードマップ Note
 
-### sorry 優先度
+### so#rry 優先度
 
-#### 概要 — 残る `sorry` の優先度を出したぞい 🍎
+#### 概要 — 残る `so#rry` の優先度を出したぞい 🍎
 
-下位から上位へ要約すると、まず「今すぐ片付けられる簡単な `sorry`」を潰し、次に「FLT の本筋を塞ぐ重要 `sorry`」、最後に「研究的に難しい補題群」を順に潰すのが効率的じゃ。
+下位から上位へ要約すると、まず「今すぐ片付けられる簡単な `so#rry`」を潰し、次に「FLT の本筋を塞ぐ重要 `so#rry`」、最後に「研究的に難しい補題群」を順に潰すのが効率的じゃ。
 
 ---
 
@@ -929,7 +929,7 @@ end DkMath
    - 難度・工数：中（代数的因数分解＋素因子議論、半日〜1日）。
    - 推奨対応：GN の因子解析＋既存の gcd 補題を活用して形式化。
 
-4. 高優先（研究的） — Zsigmondy / Cyclotomic 関連の残り `sorry`（ZsigmondyCyclotomic.lean 等）
+4. 高優先（研究的） — Zsigmondy / Cyclotomic 関連の残り `so#rry`（ZsigmondyCyclotomic.lean 等）
    - 役割：GN が新しい原始素因子を持つことを与える主要補題群（一般 n を弾く）
    - なぜ重要か：任意 n の一般証明で最も強力なツール。
    - 難度・工数：高（理論的整理と複数補題の形式化、数日〜数週間）
@@ -940,7 +940,7 @@ end DkMath
    - 難度・工数：中〜高（補題間の依存が複雑）
    - 推奨対応：Zsigmondy と並行で段階的に整備。
 
-6. 低優先 — ドキュメント／例示用の `sorry`（docs, examples, Collatz など）
+6. 低優先 — ドキュメント／例示用の `so#rry`（docs, examples, Collatz など）
    - 役割：ビルドには影響するが、FLT 本筋とは独立。
    - 推奨対応：最後にまとめて片付ける。
 
@@ -951,7 +951,7 @@ end DkMath
 2. x3_div_u2 を実装 → 続けて FLT_case_3 の u>1 分岐を完成。
 3. 小〜中の gcd 補題を整備（`gcd_u_GN3` 等は既に良い）
 4. Zsigmondy の残件（大物）を段階的に形式化（主要補題→応用）
-5. 残りのドキュメント/例の `sorry` を掃除
+5. 残りのドキュメント/例の `so#rry` を掃除
 
 ---
 
@@ -963,5 +963,5 @@ end DkMath
 
 どうするかの？
 - まず「h_div_u2」を片づけてよいかの？（即実装してビルドを回す）🍪
-- あるいは別の `sorry` を優先したいかの？
+- あるいは別の `so#rry` を優先したいかの？
 -/
