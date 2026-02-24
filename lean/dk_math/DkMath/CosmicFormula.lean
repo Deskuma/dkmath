@@ -6,7 +6,6 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 import DkMath.CosmicFormula.Basic  -- Cosmic Formula Basics
-import DkMath.CosmicFormula.TriominoFLT  -- Tromino-based FLT Proof
 
 #print "file: DkMath.CosmicFormula"
 

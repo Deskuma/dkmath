@@ -12,6 +12,7 @@ import DkMath.Algebra.BinomTail
 import DkMath.NumberTheory.GdcDivD
 import DkMath.NumberTheory.GcdNext
 import DkMath.NumberTheory.ZsigmondyCyclotomic
+import DkMath.NumberTheory.ZsigmondyCyclotomicResearch
 import Mathlib.Algebra.Divisibility.Basic
 import DkMath.FLT.Core
 
