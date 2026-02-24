@@ -101,6 +101,20 @@ phase-07（ドキュメント）
 - build（今回）
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  2:10 より
+
+- phase-08 実装ステップ（API 一本化ラッパー）
+  - `Main.lean` に追加:
+    - `FLT_d3_by_padicValNat_by_cases_NoSq_of_phase6NoSqInput`
+      - `Phase6NoSqInput` から `phase6_s0PrimeSupportExceptThree` で `hSuppEx3` を生成
+      - `nonLiftableS0_all_of_NoSqOnS0 hP6.hNoSq` で `hNonLift` を生成
+      - `FLT_d3_by_padicValNat_by_cases_NoSq` へ直結
+  - 位置づけ:
+    - phase-06 入力束から A+B 合流ルートへ、`hNoExcAll` 非依存で接続。
+
+- build（今回）
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  2:06 より
 
 - phase-08 実装ステップ（A+B 合流定理）

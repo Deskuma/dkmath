@@ -338,6 +338,22 @@ theorem FLT_d3_by_padicValNat_of_phase6NoSqInput {a b c : ℕ}
     ha hb hc hab hP6.hbc hP6.hcb_coprime hP6.hHarm hNoExcAll
     hP6.hNoSq hP6.hc_nz hP6.hb_nz hP6.hsep
 
+/--
+phase-08: `Phase6NoSqInput` から A+B 合流定理へ直結する薄いラッパー。
+`hNoExcAll` 非依存で、`hSuppEx3` と `hNonLift` は入力束から自動生成する。
+-/
+theorem FLT_d3_by_padicValNat_by_cases_NoSq_of_phase6NoSqInput {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hP6 : Phase6NoSqInput c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hSuppEx3 : S0PrimeSupportExceptThree c b :=
+    phase6_s0PrimeSupportExceptThree hP6
+  have hNonLift : ∀ q : ℕ, NonLiftableS0 c b q :=
+    nonLiftableS0_all_of_NoSqOnS0 hP6.hNoSq
+  exact FLT_d3_by_padicValNat_by_cases_NoSq
+    ha hb hc hab hSuppEx3 hNonLift hP6.hc_nz hP6.hb_nz hP6.hsep
+
 #print axioms FLT_d3_by_padicValNat_of_nonExceptionalHarmonic  -- OK: 2026/02/23 12:08
 -- 'DkMath.FLT.FLT_d3_by_padicValNat_of_nonExceptionalHarmonic' depends on axioms: [propext, Classical.choice, Quot.sound]
 
