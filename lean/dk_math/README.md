@@ -17,6 +17,8 @@ presented by D. and Wise Wolf
     - 宇宙式 (Cosmic Formula)
     - ポリオミノ (Polyomino)
     - 単位と量の理論 (Units and Quantities Theory)
+    - FLT（フェルマーの最終定理）関連 (FLT-related)
+    - Collatz予想関連 (Collatz-related)
 
 ## ファイル
 
@@ -37,6 +39,22 @@ presented by D. and Wise Wolf
   - 宇宙式とトロミノ構造の接続定理 [CosmicFormulaTrominoLink](./DkMath/CosmicFormula/CosmicFormulaTrominoLink.lean)
 - 基本定義とユーティリティ [Basic](./DkMath/Basic.lean)
 - サンプル定理と例 [Samples](./DkMath/Samples.lean)
+- 数学未解決問題（解決済み難問も含む）
+  - フェルマーの最終定理（FLT）関連 [FLT](./DkMath/FLT.lean)
+  - Collatz予想関連 [Collatz](./DkMath/Collatz/Collatz2K26.lean)
+- 研究ノート（未整理のアイデアや証明のスケッチ）
+
+## ビルド
+
+- Lean 4 をインストール後、プロジェクトルートで `lake build` を実行してください。
+- または `./lean-build.sh` を使用して、ビルドとドキュメント生成を一括で行うこともできます。（※現在は、ドキュメントは生成されません）
+
+### Research ビルド
+
+- 研究ビルド（未完成の定理やアイデアを含む）は `lake build DkMath.Research` または `./lean-build.sh DkMath.Research` で行います。
+- これらは、本流からは外されています。補題・定理に sorry を含みます。
+- ファイル名は `*Research.lean` で終わるものが対象です。
+- 完成され次第、本流の `*.lean` ファイルに統合される予定です。
 
 ## ドキュメント
 
