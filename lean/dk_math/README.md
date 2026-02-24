@@ -48,7 +48,13 @@ presented by D. and Wise Wolf
 
 - Lean 4 をインストール後、プロジェクトルートで `lake build` を実行してください。
 - または `./lean-build.sh` を使用して、ビルドとドキュメント生成を一括で行うこともできます。（※現在は、ドキュメントは生成されません）
+
+### Research ビルド
+
 - 研究ビルド（未完成の定理やアイデアを含む）は `lake build DkMath.Research` または `./lean-build.sh DkMath.Research` で行います。
+- これらは、本流からは外されています。補題・定理に sorry を含みます。
+- ファイル名は `*Research.lean` で終わるものが対象です。
+- 完成され次第、本流の `*.lean` ファイルに統合される予定です。
 
 ## ドキュメント
 

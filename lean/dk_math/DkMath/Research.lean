@@ -5,6 +5,8 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.GcdNextResearch
+import DkMath.NumberTheory.ZsigmondyCyclotomicResearch
+import DkMath.CosmicFormula.TriominoFLTResearch
 
 set_option linter.style.emptyLine false
 set_option linter.style.longLine false

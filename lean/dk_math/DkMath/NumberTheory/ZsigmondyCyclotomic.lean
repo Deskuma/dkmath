@@ -832,7 +832,7 @@ lemma cyclotomic_eval_divides (d a b : ℕ) (_hd : 0 < d) (_hb : 0 < b) :
   use 1
   simp
 
-/-- 円分多項式の square-free 性から素因数の重複度へ（Cosmic Formula 経由の翻訳補題）
+/- 円分多項式の square-free 性から素因数の重複度へ（Cosmic Formula 経由の翻訳補題）
 
 **数学的内容:**
 Φ_d が体 ℚ 上で square-free で、q が Φ_d(a/b) の素因数なら、
@@ -879,21 +879,10 @@ G d x u = Σ_{k=0}^{d-1} C(d, k+1) x^k u^{d-1-k}
 これは Zsigmondy 理論の「本丸」じゃ。
 d = 3, 5, 7 と具体例を積み重ねてパターンを見つける戦略が現実的。
 -/
-lemma squarefree_implies_padic_val_le_one (d a b q : ℕ)
-    (hd_prime : Nat.Prime d) (hb : 0 < b) (hab : Nat.Coprime a b)
-    (hq_prime : Nat.Prime q) (hq_div : q ∣ a ^ d - b ^ d) :
-    padicValNat q (a ^ d - b ^ d) ≤ 1 := by
-  -- ワークスペース整理：以降の分岐で使う基本事実を先に抽出しておく
-  have hd_two_le : 2 ≤ d := hd_prime.two_le
-  have hq_ne_one : q ≠ 1 := hq_prime.ne_one
-  have hq_pos : 0 < q := hq_prime.pos
-  have hq_dvd : q ∣ a ^ d - b ^ d := hq_div
-  clear hb hab hq_div
-  -- Cosmic Formula 経由のアプローチ
-  -- Step 1: べき乗差の因数分解（pow_sub_pow_factor_cosmic）✅
-  -- Step 2: padicValNat の帰着（padicValNat_of_primitive_prime_factor_via_G）✅
-  -- Step 3: G の構造解析（最も難しい部分、Lucas/Kummer の活用）⏳
-  sorry  -- [so#rry-2: 一般上界、G 解析が本質的に難しい]
+/-!
+研究中の一般上界補題 `squarefree_implies_padic_val_le_one` は
+`DkMath.NumberTheory.ZsigmondyCyclotomicResearch` に移動。
+-/
 
 -- ----------------------------------------------------------------------------
 
@@ -1118,7 +1107,7 @@ lemma padicValNat_primitive_prime_factor_ge_one {a b d q : ℕ}
   -- padicValNat_one_le_of_prime_dvd を適用
   exact padicValNat_one_le_of_prime_dvd hq_prime hne hq_div
 
-/-- 原始素因子の p-adic 付値の上界（円分多項式経由）
+/- 原始素因子の p-adic 付値の上界（円分多項式経由）
 
 **数学的内容:**
 q が a^d - b^d の原始素因子で、d が素数のとき、
@@ -1152,17 +1141,10 @@ q が Φ_d(a/b) の素因数なら、q の a^d - b^d における重複度も 1
 3. ⏳ square-free → padicValNat ≤ 1 の橋渡し補題
 4. ⏳ 完全な証明の構築
 -/
-lemma padicValNat_primitive_prime_factor_le_one {a b d q : ℕ}
-    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
-    (_hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
-    (_hpnd : ¬ d ∣ a - b)
-    (hq_prime : Nat.Prime q)
-    (hq_div : q ∣ a ^ d - b ^ d) (_hq_ndiv : ¬ q ∣ a - b) :
-    padicValNat q (a ^ d - b ^ d) ≤ 1 := by
-  -- 方針：円分多項式の square-free 性を活用した証明
-  -- Step 1: 補助補題を使う（現時点では so#rry 付き）
-  have _hd_pos : 0 < d := Nat.zero_lt_of_lt (by omega : 2 < d)
-  exact squarefree_implies_padic_val_le_one d a b q hd_prime hb hab hq_prime hq_div
+/-!
+研究中の上界補題 `padicValNat_primitive_prime_factor_le_one` は
+`DkMath.NumberTheory.ZsigmondyCyclotomicResearch` に移動。
+-/
 
 -- ========================================
 -- § 4. Zsigmondy の原始素因子定理（層B：精密層、TODO）
