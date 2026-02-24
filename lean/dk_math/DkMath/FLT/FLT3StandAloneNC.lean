@@ -928,3 +928,173 @@ theorem FLT_d3_by_padicValNat_of_exceptThree_mod3_separated_harmonic {a b c : �
 
 #print axioms FLT_d3_by_padicValNat_of_exceptThree_mod3_separated_harmonic  -- OK: 2026/02/25  1:32
 -- 'FLT_d3_by_padicValNat_of_exceptThree_mod3_separated_harmonic' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+structure NoSqInput (c b : ℕ) where
+  hbc : b < c
+  hcb_coprime : Nat.Coprime c b
+  hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u
+  hNoSq : NoSqOnS0 c b
+  hc_nz : c % 3 ≠ 0
+  hb_nz : b % 3 ≠ 0
+  hsep : c % 3 ≠ b % 3
+
+lemma prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three {c b q : ℕ}
+    (hbc : b ≤ c)
+    (hcop : Nat.Coprime c b)
+    (hq : Nat.Prime q)
+    (hqS0 : q ∣ S0_nat c b)
+    (hq_ne3 : q ≠ 3) :
+    ¬ q ∣ c - b := by
+  intro hq_sub
+  have hcb_mod : c ≡ b [MOD q] := by
+    exact ((Nat.modEq_iff_dvd' hbc).2 hq_sub).symm
+  have hS0_mod3b2 : S0_nat c b ≡ 3 * b ^ 2 [MOD q] := by
+    have h1 : S0_nat c b ≡ b ^ 2 + b * b + b ^ 2 [MOD q] := by
+      unfold S0_nat
+      exact ((hcb_mod.pow 2).add (hcb_mod.mul Nat.ModEq.rfl)).add Nat.ModEq.rfl
+    have h2 : b ^ 2 + b * b + b ^ 2 = 3 * b ^ 2 := by
+      ring
+    exact h2 ▸ h1
+  have hS0_mod0 : S0_nat c b ≡ 0 [MOD q] := hqS0.modEq_zero_nat
+  have h3b2_mod0 : 3 * b ^ 2 ≡ 0 [MOD q] := hS0_mod3b2.symm.trans hS0_mod0
+  have hq_3b2 : q ∣ 3 * b ^ 2 := Nat.modEq_zero_iff_dvd.mp h3b2_mod0
+  rcases hq.dvd_mul.mp hq_3b2 with hq_three | hq_b2
+  · have hq_eq_three : q = 3 :=
+      (Nat.prime_dvd_prime_iff_eq hq Nat.prime_three).1 hq_three
+    exact hq_ne3 hq_eq_three
+  · have hq_b : q ∣ b := hq.dvd_of_dvd_pow hq_b2
+    have hb_mod0 : b ≡ 0 [MOD q] := hq_b.modEq_zero_nat
+    have hc_mod0 : c ≡ 0 [MOD q] := hcb_mod.trans hb_mod0
+    have hq_c : q ∣ c := Nat.modEq_zero_iff_dvd.mp hc_mod0
+    have hq_gcd : q ∣ Nat.gcd c b := Nat.dvd_gcd hq_c hq_b
+    have hq_one : q ∣ 1 := by simpa [hcop.gcd_eq_one] using hq_gcd
+    exact hq.not_dvd_one hq_one
+
+lemma s0PrimeSupportExceptThree_of_coprime {c b : ℕ}
+    (hbc : b ≤ c) (hcop : Nat.Coprime c b) :
+    S0PrimeSupportExceptThree c b := by
+  intro q hq hqS0 hq_ne3
+  exact prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three hbc hcop hq hqS0 hq_ne3
+
+lemma s0PrimeSupportExceptThree_of_NoSqInput {c b : ℕ}
+    (h : NoSqInput c b) :
+    S0PrimeSupportExceptThree c b := by
+  exact s0PrimeSupportExceptThree_of_coprime h.hbc.le h.hcb_coprime
+
+lemma nonLiftableS0_all_of_NoSqOnS0 {c b : ℕ}
+    (hNoSq : NoSqOnS0 c b) :
+    ∀ q : ℕ, NonLiftableS0 c b q := by
+  intro q hprim
+  exact hNoSq hprim.1 hprim.2.1
+
+lemma not_NoSqOnS0_iff_exists_sq_factor {c b : ℕ} :
+    ¬ NoSqOnS0 c b ↔
+      ∃ q : ℕ, Nat.Prime q ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b := by
+  classical
+  constructor
+  · intro hNoSq
+    by_contra hnone
+    apply hNoSq
+    intro q hq hqS0 hq2
+    exact hnone ⟨q, hq, hqS0, hq2⟩
+  · intro hsq hNoSq
+    rcases hsq with ⟨q, hq, hqS0, hq2⟩
+    exact (hNoSq hq hqS0) hq2
+
+lemma exists_sq_factor_split_three {c b : ℕ}
+    (hsq : ∃ q : ℕ, Nat.Prime q ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b) :
+    (3 ^ 2 ∣ S0_nat c b) ∨
+      ∃ q : ℕ, Nat.Prime q ∧ q ≠ 3 ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b := by
+  rcases hsq with ⟨q, hq, hqS0, hq2⟩
+  by_cases hq3 : q = 3
+  · left
+    simpa [hq3] using hq2
+  · right
+    exact ⟨q, hq, hq3, hqS0, hq2⟩
+
+lemma not_exists_sq_factor_ne_three_of_support_nonLiftable {c b : ℕ}
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q) :
+    ¬ ∃ q : ℕ, Nat.Prime q ∧ q ≠ 3 ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b := by
+  intro hne3
+  rcases hne3 with ⟨q, hq, hq_ne3, hqS0, hq2⟩
+  have hq_ndvd_diff : ¬ q ∣ c - b := hSuppEx3 hq hqS0 hq_ne3
+  have hPrim : PrimitiveOnS0 c b q := ⟨hq, hqS0, hq_ndvd_diff⟩
+  exact (hNonLift q hPrim) hq2
+
+lemma three_sq_dvd_of_not_NoSqOnS0_of_support_nonLiftable {c b : ℕ}
+    (hNoSq_false : ¬ NoSqOnS0 c b)
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q) :
+    3 ^ 2 ∣ S0_nat c b := by
+  have hsq : ∃ q : ℕ, Nat.Prime q ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b :=
+    (not_NoSqOnS0_iff_exists_sq_factor).1 hNoSq_false
+  rcases exists_sq_factor_split_three hsq with h3 | hne3
+  · exact h3
+  · exfalso
+    exact (not_exists_sq_factor_ne_three_of_support_nonLiftable hSuppEx3 hNonLift) hne3
+
+lemma three_sq_not_dvd_of_mod3_separated {c b : ℕ}
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    ¬ 3 ^ 2 ∣ S0_nat c b := by
+  intro h9
+  have h3S0 : 3 ∣ S0_nat c b := by
+    exact dvd_trans (by decide : 3 ∣ 3 ^ 2) h9
+  exact (not_three_dvd_S0_of_mod3_separated hc_nz hb_nz hsep) h3S0
+
+lemma NoSqOnS0_of_support_nonLiftable_mod3_separated {c b : ℕ}
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    NoSqOnS0 c b := by
+  by_contra hNoSq_false
+  have h9 : 3 ^ 2 ∣ S0_nat c b :=
+    three_sq_dvd_of_not_NoSqOnS0_of_support_nonLiftable hNoSq_false hSuppEx3 hNonLift
+  exact (three_sq_not_dvd_of_mod3_separated hc_nz hb_nz hsep) h9
+
+theorem FLT_d3_by_padicValNat_of_support_nonLiftable_mod3_separated {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_support_nonLiftable_mod3_separated
+      hSuppEx3 hNonLift hc_nz hb_nz hsep
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+theorem FLT_d3_by_padicValNat_by_cases_NoSq {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  by_cases hNoSq : NoSqOnS0 c b
+  · exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+  · exact FLT_d3_by_padicValNat_of_support_nonLiftable_mod3_separated
+      ha hb hc hab hSuppEx3 hNonLift hc_nz hb_nz hsep
+
+theorem FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqInput {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hIn : NoSqInput c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hSuppEx3 : S0PrimeSupportExceptThree c b :=
+    s0PrimeSupportExceptThree_of_NoSqInput hIn
+  have hNonLift : ∀ q : ℕ, NonLiftableS0 c b q :=
+    nonLiftableS0_all_of_NoSqOnS0 hIn.hNoSq
+  exact FLT_d3_by_padicValNat_by_cases_NoSq
+    ha hb hc hab hSuppEx3 hNonLift hIn.hc_nz hIn.hb_nz hIn.hsep
+
+#print axioms FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqInput  -- OK: 2026/02/25  1:33
+-- 'FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqInput' depends on axioms: [propext, Classical.choice, Quot.sound]
