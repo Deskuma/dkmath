@@ -48,19 +48,21 @@ phase-06（リファクタリング）として、以下の順で進めるのが
 
 ## 作業ログ 2026/02/24  4:52 より
 
+> Phase6NoSqInput → NoSqInput へのリファクタリングを完了し、`Main` の入口定理も `NoSqInput` を仮定する形に書き換えました。
+
 - phase-06 実装ステップ（仮定インターフェース圧縮: v0）
   - `PhaseLift.lean` に追加:
-    - `Phase6NoSqInput (c b : ℕ)`
+    - `NoSqInput (c b : ℕ)`
       - `hbc`, `hcb_coprime`, `hHarm`, `hNoSq`, `hc_nz`, `hb_nz`, `hsep` を束ねる構造体。
     - `phase6_s0PrimeSupportExceptThree`
-      - `Phase6NoSqInput` から `S0PrimeSupportExceptThree c b` を復元する補助。
+      - `NoSqInput` から `S0PrimeSupportExceptThree c b` を復元する補助。
   - 位置づけ:
     - `Main` の入口仮定を段階的に圧縮する phase-06 の初手。
 
 - phase-06 実装ステップ（`Main` 入口定理の追加）
   - `Main.lean` に追加:
-    - `FLT_d3_by_padicValNat_of_phase6NoSqInput`
-      - `Phase6NoSqInput c b` + `hNoExcAll` を入力に、
+    - `FLT_d3_by_padicValNat_of_NoSqInput`
+      - `NoSqInput c b` + `hNoExcAll` を入力に、
         既存 `...of_harmonicEnvelope_NoSq_coprimeSupport` へ接続する薄い合成定理。
   - 位置づけ:
     - `Main` の引数列を減らし、今後のリファクタリング先を固定。

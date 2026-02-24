@@ -1,4 +1,4 @@
-# DkMath.FLT README (phase-06)
+# DkMath.FLT README
 
 このディレクトリは、`d=3` 向けの FLT 補題チェーンを Lean で管理するための実装群です。
 現行方針は次の通りです。
@@ -15,14 +15,14 @@
     - `FLT_d3_by_padicValNat`
     - `FLT_d3_by_padicValNat_of_NoSqOnS0`
     - `FLT_d3_by_padicValNat_of_harmonicEnvelope_*`
-    - `FLT_d3_by_padicValNat_of_phase6NoSqInput`
+    - `FLT_d3_by_padicValNat_of_NoSqInput`
 
 - `PhaseLift.lean`
   - 共通導出補題の中核。
   - `NoSqOnS0` / `AllNonLiftableOnS0` / support 条件 / mod3 分離補題。
   - 立方差・原始素因子存在・padic 上下界など、`Main` が依存する下位補題を集約。
-  - phase-06 入口束:
-    - `Phase6NoSqInput`
+  - 入口束:
+    - `NoSqInput`
 
 - `CounterexamplePattern.lean`
   - `classifyLift` を中心にした反例パターン分類。
@@ -40,7 +40,7 @@
 
 1. `NoSqOnS0 c b` を供給
 2. `hS0_not_sq_of_NoSqOnS0` で `FLT_d3_by_padicValNat` の仮定形へ変換
-3. `Main` の派生定理（`...of_NoSqOnS0` / `...of_phase6NoSqInput`）へ接続
+3. `Main` の派生定理（`...of_NoSqOnS0` / `...of_NoSqInput`）へ接続
 
 分類器を使う導線では以下を利用します。
 
@@ -65,7 +65,7 @@ graph LR
   G --> J
   L["PhaseLift.hS0_not_sq_of_NoSqOnS0"] --> M["Main.FLT_d3_by_padicValNat_of_NoSqOnS0"]
   J --> M
-  N["PhaseLift.Phase6NoSqInput"] --> O["Main.FLT_d3_by_padicValNat_of_phase6NoSqInput"]
+  N["PhaseLift.NoSqInput"] --> O["Main.FLT_d3_by_padicValNat_of_NoSqInput"]
   M --> O
   P["CounterexamplePattern.classifyLift_impossible_family_of_harmonicEnvelope_NoSq"] --> Q["Main.FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport"]
   M --> Q
@@ -79,8 +79,8 @@ graph LR
   - `FLT_d3_by_padicValNat_of_NoSqOnS0`
 
 - 構造入口（仮定圧縮版）:
-  - `FLT_d3_by_padicValNat_of_phase6NoSqInput`
-  - `Phase6NoSqInput` に `hbc`, `coprime`, `hHarm`, `hNoSq`, mod3 条件を束ねる
+  - `FLT_d3_by_padicValNat_of_NoSqInput`
+  - `NoSqInput` に `hbc`, `coprime`, `hHarm`, `hNoSq`, mod3 条件を束ねる
 
 ## 5. 作業ログ
 

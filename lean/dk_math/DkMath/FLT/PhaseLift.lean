@@ -52,11 +52,36 @@ lemma hasPhaseUnitInfrastructure : HasPhaseUnitInfrastructure := by
 def NoSqOnS0 (c b : ℕ) : Prop :=
   ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → ¬ q ^ 2 ∣ S0_nat c b
 
+lemma not_NoSqOnS0_iff_exists_sq_factor {c b : ℕ} :
+    ¬ NoSqOnS0 c b ↔
+      ∃ q : ℕ, Nat.Prime q ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b := by
+  classical
+  constructor
+  · intro hNoSq
+    by_contra hnone
+    apply hNoSq
+    intro q hq hqS0 hq2
+    exact hnone ⟨q, hq, hqS0, hq2⟩
+  · intro hsq hNoSq
+    rcases hsq with ⟨q, hq, hqS0, hq2⟩
+    exact (hNoSq hq hqS0) hq2
+
+lemma exists_sq_factor_split_three {c b : ℕ}
+    (hsq : ∃ q : ℕ, Nat.Prime q ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b) :
+    (3 ^ 2 ∣ S0_nat c b) ∨
+      ∃ q : ℕ, Nat.Prime q ∧ q ≠ 3 ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b := by
+  rcases hsq with ⟨q, hq, hqS0, hq2⟩
+  by_cases hq3 : q = 3
+  · left
+    simpa [hq3] using hq2
+  · right
+    exact ⟨q, hq, hq3, hqS0, hq2⟩
+
 /--
 phase-06: `Main` の入口仮定を圧縮するための入力束。
 `NoSqOnS0` ルートで必要な幾何・数論条件をまとめる。
 -/
-structure Phase6NoSqInput (c b : ℕ) where
+structure NoSqInput (c b : ℕ) where
   hbc : b < c
   hcb_coprime : Nat.Coprime c b
   hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u
@@ -93,6 +118,28 @@ def AllNonLiftableOnS0 (c b : ℕ) : Prop :=
 -/
 def S0PrimeSupportExceptThree (c b : ℕ) : Prop :=
   ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → q ≠ 3 → ¬ q ∣ c - b
+
+lemma not_exists_sq_factor_ne_three_of_support_nonLiftable {c b : ℕ}
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q) :
+    ¬ ∃ q : ℕ, Nat.Prime q ∧ q ≠ 3 ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b := by
+  intro hne3
+  rcases hne3 with ⟨q, hq, hq_ne3, hqS0, hq2⟩
+  have hq_ndvd_diff : ¬ q ∣ c - b := hSuppEx3 hq hqS0 hq_ne3
+  have hPrim : PrimitiveOnS0 c b q := ⟨hq, hqS0, hq_ndvd_diff⟩
+  exact (hNonLift q hPrim) hq2
+
+lemma three_sq_dvd_of_not_NoSqOnS0_of_support_nonLiftable {c b : ℕ}
+    (hNoSq_false : ¬ NoSqOnS0 c b)
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q) :
+    3 ^ 2 ∣ S0_nat c b := by
+  have hsq : ∃ q : ℕ, Nat.Prime q ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b :=
+    (not_NoSqOnS0_iff_exists_sq_factor).1 hNoSq_false
+  rcases exists_sq_factor_split_three hsq with h3 | hne3
+  · exact h3
+  · exfalso
+    exact (not_exists_sq_factor_ne_three_of_support_nonLiftable hSuppEx3 hNonLift) hne3
 
 /--
 `q ≠ 3` かつ `q ∣ S0(c,b)` と `gcd(c,b)=1` なら `q ∤ (c-b)`。
@@ -140,8 +187,8 @@ lemma s0PrimeSupportExceptThree_of_coprime {c b : ℕ}
   intro q hq hqS0 hq_ne3
   exact prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three hbc hcop hq hqS0 hq_ne3
 
-lemma phase6_s0PrimeSupportExceptThree {c b : ℕ}
-    (h : Phase6NoSqInput c b) :
+lemma s0PrimeSupportExceptThree_of_NoSqInput {c b : ℕ}
+    (h : NoSqInput c b) :
     S0PrimeSupportExceptThree c b := by
   exact s0PrimeSupportExceptThree_of_coprime h.hbc.le h.hcb_coprime
 
@@ -186,6 +233,28 @@ lemma not_three_dvd_S0_of_mod3_separated {c b : ℕ}
       norm_num [Nat.ModEq] at h10
     · exfalso
       exact hsep (by simp [hc2, hb2])
+
+lemma three_sq_not_dvd_of_mod3_separated {c b : ℕ}
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    ¬ 3 ^ 2 ∣ S0_nat c b := by
+  intro h9
+  have h3S0 : 3 ∣ S0_nat c b := by
+    exact dvd_trans (by decide : 3 ∣ 3 ^ 2) h9
+  exact (not_three_dvd_S0_of_mod3_separated hc_nz hb_nz hsep) h3S0
+
+lemma NoSqOnS0_of_support_nonLiftable_mod3_separated {c b : ℕ}
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    NoSqOnS0 c b := by
+  by_contra hNoSq_false
+  have h9 : 3 ^ 2 ∣ S0_nat c b :=
+    three_sq_dvd_of_not_NoSqOnS0_of_support_nonLiftable hNoSq_false hSuppEx3 hNonLift
+  exact (three_sq_not_dvd_of_mod3_separated hc_nz hb_nz hsep) h9
 
 /--
 `q = 3` 例外を除去できると、通常の support 条件へ戻せる。
