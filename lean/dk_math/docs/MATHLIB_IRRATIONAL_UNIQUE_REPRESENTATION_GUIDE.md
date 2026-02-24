@@ -1,7 +1,7 @@
 # Lean 4 Mathlib における無理数型による一意表現証明：完全ガイド
 
-**作成日**: 2026-01-28  
-**著者**: 賢狼ホロ  
+**作成日**: 2026-01-28
+**著者**: 賢狼ホロ
 **状態**: 研究完了、実装例付属
 
 ---
@@ -91,11 +91,11 @@ Step 1: 差を取る
   (a - c) + (b - d)·√2 = 0
 
 Step 2: b - d に対して場合分け
-  
+
   Case A: b - d = 0
     Then a - c = 0 も成立
     ∴ a = c ∧ b = d ✓
-  
+
   Case B: b - d ≠ 0
     Then √2 = -(a - c)/(b - d)
     But RHS ∈ ℚ (有理数)
@@ -110,13 +110,13 @@ theorem sqrt2_lin_indep_over_rat (a b c d : ℚ) :
     (a : ℝ) + (b : ℝ) * sqrt2 = (c : ℝ) + (d : ℝ) * sqrt2 →
     a = c ∧ b = d := by
   intro h
-  
+
   -- Step 1: 差を取る
   have key : ((a - c) : ℝ) + ((b - d) : ℝ) * sqrt2 = 0 := by
     have := h
     show ((a - c) : ℝ) + ((b - d) : ℝ) * sqrt2 = 0
     nlinarith [h]
-  
+
   -- Step 2: 場合分け
   by_cases hbd : b = d
   · -- Case A: b = d
@@ -125,7 +125,7 @@ theorem sqrt2_lin_indep_over_rat (a b c d : ℚ) :
       have : (↑(a - c) : ℝ) = ↑(0 : ℚ) := by simp [this]
       exact Rat.cast_injective this
     exact ⟨by linarith [this], hbd⟩
-  
+
   · -- Case B: b ≠ d ⟹ 矛盾
     -- (細部は省略、有理性から無理性への矛盾を導く)
     sorry
@@ -200,7 +200,7 @@ theorem unique_rep_in_Q_sqrt2 (x : ℝ) (hx : InQAdjSqrt2 x) :
 
 ```lean4
 -- イメージ（Mathlib に存在すべき補題）
-theorem sqrt2_minpoly : 
+theorem sqrt2_minpoly :
     MinPoly ℚ sqrt2 = X^2 - 2
 ```
 
