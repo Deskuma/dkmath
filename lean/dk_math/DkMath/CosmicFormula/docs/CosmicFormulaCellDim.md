@@ -1,6 +1,6 @@
 # 無次元化された宇宙式
 
-Lean Code: [CosmicFormulaCellDim](./CosmicFormulaCellDim.lean)
+Lean Code: [CosmicFormulaCellDim](../CosmicFormulaCellDim.lean#L1)
 
 ## README / 論文向け
 
