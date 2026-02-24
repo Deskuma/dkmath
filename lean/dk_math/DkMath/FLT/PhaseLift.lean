@@ -119,6 +119,28 @@ def AllNonLiftableOnS0 (c b : ℕ) : Prop :=
 def S0PrimeSupportExceptThree (c b : ℕ) : Prop :=
   ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → q ≠ 3 → ¬ q ∣ c - b
 
+lemma not_exists_sq_factor_ne_three_of_support_nonLiftable {c b : ℕ}
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q) :
+    ¬ ∃ q : ℕ, Nat.Prime q ∧ q ≠ 3 ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b := by
+  intro hne3
+  rcases hne3 with ⟨q, hq, hq_ne3, hqS0, hq2⟩
+  have hq_ndvd_diff : ¬ q ∣ c - b := hSuppEx3 hq hqS0 hq_ne3
+  have hPrim : PrimitiveOnS0 c b q := ⟨hq, hqS0, hq_ndvd_diff⟩
+  exact (hNonLift q hPrim) hq2
+
+lemma three_sq_dvd_of_not_NoSqOnS0_of_support_nonLiftable {c b : ℕ}
+    (hNoSq_false : ¬ NoSqOnS0 c b)
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q) :
+    3 ^ 2 ∣ S0_nat c b := by
+  have hsq : ∃ q : ℕ, Nat.Prime q ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b :=
+    (not_NoSqOnS0_iff_exists_sq_factor).1 hNoSq_false
+  rcases exists_sq_factor_split_three hsq with h3 | hne3
+  · exact h3
+  · exfalso
+    exact (not_exists_sq_factor_ne_three_of_support_nonLiftable hSuppEx3 hNonLift) hne3
+
 /--
 `q ≠ 3` かつ `q ∣ S0(c,b)` と `gcd(c,b)=1` なら `q ∤ (c-b)`。
 （`b ≤ c` を仮定）

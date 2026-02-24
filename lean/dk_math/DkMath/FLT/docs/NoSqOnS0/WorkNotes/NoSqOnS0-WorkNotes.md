@@ -84,3 +84,19 @@ phase-07（ドキュメント）
 
 - build（今回）
   - `lake build DkMath.FLT.PhaseLift` : OK
+
+## 作業ログ 2026/02/25  2:01 より
+
+- phase-08 実装ステップ（`q≠3` 側の既存資産接続）
+  - `PhaseLift.lean` に追加:
+    - `not_exists_sq_factor_ne_three_of_support_nonLiftable`
+      - `S0PrimeSupportExceptThree c b` と `∀ q, NonLiftableS0 c b q` があれば、
+        `q ≠ 3` で `q^2 ∣ S0_nat c b` となる証人は存在しないことを示す。
+    - `three_sq_dvd_of_not_NoSqOnS0_of_support_nonLiftable`
+      - `¬ NoSqOnS0 c b` を `exists_sq_factor_split_three` で分解し、
+        `q≠3` 分岐を上補題で排除して `3^2 ∣ S0_nat c b` を抽出。
+  - 位置づけ:
+    - B ルートで「補集合は実質 `3` 側だけ残る」を Lean 上で明示化。
+
+- build（今回）
+  - `lake build DkMath.FLT.PhaseLift` : OK
