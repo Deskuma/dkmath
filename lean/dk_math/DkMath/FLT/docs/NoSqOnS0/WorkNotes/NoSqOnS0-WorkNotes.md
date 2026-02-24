@@ -69,3 +69,18 @@ phase-07（ドキュメント）
 
 - build（再確認）
   - `lake build DkMath.FLT.Main` : OK
+
+## 作業ログ 2026/02/25  1:56 より
+
+- phase-08 実装ステップ（`q=3 / q≠3` 分解）
+  - `PhaseLift.lean` に追加:
+    - `exists_sq_factor_split_three`
+      - 入力:
+        - `∃ q, Nat.Prime q ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b`
+      - 出力:
+        - `(3 ^ 2 ∣ S0_nat c b) ∨ ∃ q, Nat.Prime q ∧ q ≠ 3 ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b`
+  - 実装内容:
+    - 証人 `q` を取り、`by_cases hq3 : q = 3` で左右へ分岐するだけの正規分解を定義。
+
+- build（今回）
+  - `lake build DkMath.FLT.PhaseLift` : OK

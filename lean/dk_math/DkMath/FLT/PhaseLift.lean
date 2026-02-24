@@ -66,6 +66,17 @@ lemma not_NoSqOnS0_iff_exists_sq_factor {c b : ℕ} :
     rcases hsq with ⟨q, hq, hqS0, hq2⟩
     exact (hNoSq hq hqS0) hq2
 
+lemma exists_sq_factor_split_three {c b : ℕ}
+    (hsq : ∃ q : ℕ, Nat.Prime q ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b) :
+    (3 ^ 2 ∣ S0_nat c b) ∨
+      ∃ q : ℕ, Nat.Prime q ∧ q ≠ 3 ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b := by
+  rcases hsq with ⟨q, hq, hqS0, hq2⟩
+  by_cases hq3 : q = 3
+  · left
+    simpa [hq3] using hq2
+  · right
+    exact ⟨q, hq, hq3, hqS0, hq2⟩
+
 /--
 phase-06: `Main` の入口仮定を圧縮するための入力束。
 `NoSqOnS0` ルートで必要な幾何・数論条件をまとめる。
