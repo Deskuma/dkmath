@@ -275,7 +275,7 @@ lemma petal_phi_detection (a b : ℕ) (ha : 0 < a) (hb : 0 < b)
 
 /-! ### 6. Research Notes Moved -/
 
-/- 
+/-
 研究中の一般 d 向け統合ブロック（`body_not_perfect_pow`、層Bスタブ等）は
 `DkMath.NumberTheory.GcdNextResearch` に移動。
 本ファイルは、他モジュールで再利用される基礎補題群のみを保持する。
