@@ -8,6 +8,8 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 
+set_option linter.style.longLine false
+
 #print "DkMath.FLT.FLT3StandAloneNC"
 
 def diffPowSum {α : Type*} [CommRing α] (a b : α) (d : ℕ) : α :=
@@ -711,3 +713,218 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 
 #print axioms FLT_d3_by_padicValNat  -- OK: 2026/02/25  0:35
 -- 'FLT_d3_by_padicValNat' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+def NoSqOnS0 (c b : ℕ) : Prop :=
+  ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → ¬ q ^ 2 ∣ S0_nat c b
+
+lemma hS0_not_sq_of_NoSqOnS0 {c b : ℕ}
+    (hNoSq : NoSqOnS0 c b) :
+    ∀ {q : ℕ}, Nat.Prime q → q ∣ c ^ 3 - b ^ 3 → ¬ q ∣ c - b → ¬ q ^ 2 ∣ S0_nat c b := by
+  intro q hq hq_dvd hq_ndvd
+  have hbc : b < c := by
+    by_contra hbc_not
+    have hcb : c ≤ b := Nat.not_lt.mp hbc_not
+    have hdiff_zero : c - b = 0 := Nat.sub_eq_zero_of_le hcb
+    exact hq_ndvd (hdiff_zero ▸ dvd_zero q)
+  have hqS0 : q ∣ S0_nat c b :=
+    prime_dvd_S0_via_cosmic_bridge hbc hq hq_dvd hq_ndvd
+  exact hNoSq hq hqS0
+
+theorem FLT_d3_by_padicValNat_of_NoSqOnS0 {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hNoSq : NoSqOnS0 c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  apply FLT_d3_by_padicValNat ha hb hc hab
+  intro q hq hq_dvd_diff hq_ndiv_diff
+  exact hS0_not_sq_of_NoSqOnS0 (c := c) (b := b) hNoSq hq hq_dvd_diff hq_ndiv_diff
+
+#print axioms FLT_d3_by_padicValNat_of_NoSqOnS0  -- OK: 2026/02/25  1:27
+-- 'FLT_d3_by_padicValNat_of_NoSqOnS0' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+abbrev PeriodIndex := ℕ
+
+structure NP where
+  n : ℤ
+  p : Bool
+deriving DecidableEq, Repr
+
+structure PetalCoreUnit where
+  base : NP
+deriving DecidableEq, Repr
+
+def succ : NP → NP
+  | ⟨n, false⟩ => ⟨n, true⟩
+  | ⟨n, true⟩  => ⟨n + 1, false⟩
+
+def coreSucc (u : PetalCoreUnit) : PetalCoreUnit :=
+  ⟨succ u.base⟩
+
+def HarmonicPoint (u : PetalCoreUnit) : Prop :=
+  ∃ k : PeriodIndex, 0 < k ∧ (Nat.iterate coreSucc (2 * k) u).base.p = u.base.p
+
+def isExceptionalPhase (u : PetalCoreUnit) : Prop :=
+  u.base.p = true
+
+def PrimitiveOnS0 (c b q : ℕ) : Prop :=
+  Nat.Prime q ∧ q ∣ S0_nat c b ∧ ¬ q ∣ c - b
+
+def NonLiftableS0 (c b q : ℕ) : Prop :=
+  PrimitiveOnS0 c b q → ¬ q ^ 2 ∣ S0_nat c b
+
+def AllNonLiftableOnS0 (c b : ℕ) : Prop :=
+  (∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → ¬ q ∣ c - b)
+    ∧ ∀ q : ℕ, NonLiftableS0 c b q
+
+def NonExceptionalHarmonicOnS0 (c b : ℕ) : Prop :=
+  (∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u) ∧ AllNonLiftableOnS0 c b
+
+lemma AllNonLiftableOnS0_of_nonExceptionalHarmonic {c b : ℕ}
+    (h : NonExceptionalHarmonicOnS0 c b) : AllNonLiftableOnS0 c b := by
+  exact h.2
+
+lemma NoSqOnS0_of_AllNonLiftableOnS0 {c b : ℕ}
+    (hAll : AllNonLiftableOnS0 c b) : NoSqOnS0 c b := by
+  intro q hq hqS0
+  rcases hAll with ⟨hprimSupport, hnonlift⟩
+  have hq_ndvd : ¬ q ∣ c - b := hprimSupport hq hqS0
+  have hprim : PrimitiveOnS0 c b q := ⟨hq, hqS0, hq_ndvd⟩
+  exact hnonlift q hprim
+
+theorem FLT_d3_by_padicValNat_of_nonExceptionalHarmonic {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hNH : NonExceptionalHarmonicOnS0 c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hAll : AllNonLiftableOnS0 c b :=
+    AllNonLiftableOnS0_of_nonExceptionalHarmonic hNH
+  have hNoSq : NoSqOnS0 c b := NoSqOnS0_of_AllNonLiftableOnS0 hAll
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab
+    hNoSq
+
+#print axioms FLT_d3_by_padicValNat_of_nonExceptionalHarmonic  -- OK: 2026/02/25  1:26
+-- 'FLT_d3_by_padicValNat_of_nonExceptionalHarmonic' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+def S0PrimeSupportExceptThree (c b : ℕ) : Prop :=
+  ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → q ≠ 3 → ¬ q ∣ c - b
+
+lemma NoSqOnS0_of_nonExceptionalHarmonic {c b : ℕ}
+    (h : NonExceptionalHarmonicOnS0 c b) : NoSqOnS0 c b := by
+  exact NoSqOnS0_of_AllNonLiftableOnS0 (AllNonLiftableOnS0_of_nonExceptionalHarmonic h)
+
+lemma not_three_dvd_S0_of_mod3_separated {c b : ℕ}
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    ¬ 3 ∣ S0_nat c b := by
+  have hc_lt : c % 3 < 3 := Nat.mod_lt _ (by decide)
+  have hb_lt : b % 3 < 3 := Nat.mod_lt _ (by decide)
+  have hc_cases : c % 3 = 1 ∨ c % 3 = 2 := by omega
+  have hb_cases : b % 3 = 1 ∨ b % 3 = 2 := by omega
+  rcases hc_cases with hc1 | hc2
+  · rcases hb_cases with hb1 | hb2
+    · exfalso
+      exact hsep (by simp [hc1, hb1])
+    · intro h3S0
+      have hc_mod1 : c ≡ 1 [MOD 3] := by simpa [Nat.ModEq] using hc1
+      have hb_mod2 : b ≡ 2 [MOD 3] := by simpa [Nat.ModEq] using hb2
+      have hS0_mod_const : S0_nat c b ≡ (1 ^ 2 + 1 * 2 + 2 ^ 2) [MOD 3] := by
+        unfold S0_nat
+        exact ((hc_mod1.pow 2).add (hc_mod1.mul hb_mod2)).add (hb_mod2.pow 2)
+      have hconst : ((1 ^ 2 + 1 * 2 + 2 ^ 2 : ℕ) ≡ 1 [MOD 3]) := by decide
+      have hS0_mod1 : S0_nat c b ≡ 1 [MOD 3] := hS0_mod_const.trans hconst
+      have hS0_mod0 : S0_nat c b ≡ 0 [MOD 3] := h3S0.modEq_zero_nat
+      have h10 : (1 : ℕ) ≡ 0 [MOD 3] := hS0_mod1.symm.trans hS0_mod0
+      norm_num [Nat.ModEq] at h10
+  · rcases hb_cases with hb1 | hb2
+    · intro h3S0
+      have hc_mod2 : c ≡ 2 [MOD 3] := by simpa [Nat.ModEq] using hc2
+      have hb_mod1 : b ≡ 1 [MOD 3] := by simpa [Nat.ModEq] using hb1
+      have hS0_mod_const : S0_nat c b ≡ (2 ^ 2 + 2 * 1 + 1 ^ 2) [MOD 3] := by
+        unfold S0_nat
+        exact ((hc_mod2.pow 2).add (hc_mod2.mul hb_mod1)).add (hb_mod1.pow 2)
+      have hconst : ((2 ^ 2 + 2 * 1 + 1 ^ 2 : ℕ) ≡ 1 [MOD 3]) := by decide
+      have hS0_mod1 : S0_nat c b ≡ 1 [MOD 3] := hS0_mod_const.trans hconst
+      have hS0_mod0 : S0_nat c b ≡ 0 [MOD 3] := h3S0.modEq_zero_nat
+      have h10 : (1 : ℕ) ≡ 0 [MOD 3] := hS0_mod1.symm.trans hS0_mod0
+      norm_num [Nat.ModEq] at h10
+    · exfalso
+      exact hsep (by simp [hc2, hb2])
+
+def AllNonLiftableOnS0ExceptThree (c b : ℕ) : Prop :=
+  S0PrimeSupportExceptThree c b ∧ (∀ q : ℕ, NonLiftableS0 c b q) ∧ ¬ 3 ∣ S0_nat c b
+
+lemma allPrimeSupport_of_exceptThree {c b : ℕ}
+    (hSupp : S0PrimeSupportExceptThree c b)
+    (h3free : ¬ 3 ∣ S0_nat c b) :
+    ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → ¬ q ∣ c - b := by
+  intro q hq hqS0
+  by_cases hq3 : q = 3
+  · intro hqdiff
+    have h3S0 : 3 ∣ S0_nat c b := by simpa [hq3] using hqS0
+    exact h3free h3S0
+  · exact hSupp hq hqS0 hq3
+
+lemma AllNonLiftableOnS0_of_exceptThree {c b : ℕ}
+    (h : AllNonLiftableOnS0ExceptThree c b) : AllNonLiftableOnS0 c b := by
+  rcases h with ⟨hSuppEx3, hNonLift, h3free⟩
+  refine ⟨allPrimeSupport_of_exceptThree hSuppEx3 h3free, hNonLift⟩
+
+lemma AllNonLiftableOnS0_of_exceptThree_mod3_separated {c b : ℕ}
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    AllNonLiftableOnS0 c b := by
+  have h3free : ¬ 3 ∣ S0_nat c b :=
+    not_three_dvd_S0_of_mod3_separated hc_nz hb_nz hsep
+  exact AllNonLiftableOnS0_of_exceptThree ⟨hSuppEx3, hNonLift, h3free⟩
+
+lemma nonExceptionalHarmonicOnS0_of_allNonLiftable {c b : ℕ}
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hAll : AllNonLiftableOnS0 c b) :
+    NonExceptionalHarmonicOnS0 c b := by
+  exact ⟨hHarm, hAll⟩
+
+lemma nonExceptionalHarmonicOnS0_of_exceptThree_mod3_separated {c b : ℕ}
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    NonExceptionalHarmonicOnS0 c b := by
+  have hAll : AllNonLiftableOnS0 c b :=
+    AllNonLiftableOnS0_of_exceptThree_mod3_separated hSuppEx3 hNonLift hc_nz hb_nz hsep
+  exact nonExceptionalHarmonicOnS0_of_allNonLiftable hHarm hAll
+
+lemma NoSqOnS0_of_exceptThree_mod3_separated_harmonic {c b : ℕ}
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    NoSqOnS0 c b := by
+  exact NoSqOnS0_of_nonExceptionalHarmonic
+    (nonExceptionalHarmonicOnS0_of_exceptThree_mod3_separated
+      hHarm hSuppEx3 hNonLift hc_nz hb_nz hsep)
+
+theorem FLT_d3_by_padicValNat_of_exceptThree_mod3_separated_harmonic {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_exceptThree_mod3_separated_harmonic
+      hHarm hSuppEx3 hNonLift hc_nz hb_nz hsep
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+#print axioms FLT_d3_by_padicValNat_of_exceptThree_mod3_separated_harmonic  -- OK: 2026/02/25  1:32
+-- 'FLT_d3_by_padicValNat_of_exceptThree_mod3_separated_harmonic' depends on axioms: [propext, Classical.choice, Quot.sound]
