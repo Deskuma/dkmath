@@ -101,6 +101,20 @@ phase-07（ドキュメント）
 - build（今回）
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  2:06 より
+
+- phase-08 実装ステップ（A+B 合流定理）
+  - `Main.lean` に追加:
+    - `FLT_d3_by_padicValNat_by_cases_NoSq`
+      - `by_cases hNoSq : NoSqOnS0 c b` で分岐
+      - A 側: `FLT_d3_by_padicValNat_of_NoSqOnS0`
+      - B 側: `FLT_d3_by_padicValNat_of_support_nonLiftable_mod3_separated`
+  - 位置づけ:
+    - `NoSqOnS0` を中心にした入口合流を、定理として明示化。
+
+- build（今回）
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  2:03 より
 
 - phase-08 実装ステップ（`q=3` 側 obstruction）

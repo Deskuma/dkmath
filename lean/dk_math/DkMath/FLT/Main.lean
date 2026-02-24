@@ -210,6 +210,25 @@ theorem FLT_d3_by_padicValNat_of_support_nonLiftable_mod3_separated {a b c : ℕ
       hSuppEx3 hNonLift hc_nz hb_nz hsep
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
 
+/--
+phase-08: `NoSqOnS0` を分岐軸にした A+B 合流版。
+- A: `NoSqOnS0 c b` なら `...of_NoSqOnS0`
+- B: `¬ NoSqOnS0 c b` でも `hSuppEx3 + hNonLift + mod3分離` から供給可能
+-/
+theorem FLT_d3_by_padicValNat_by_cases_NoSq {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  by_cases hNoSq : NoSqOnS0 c b
+  · exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+  · exact FLT_d3_by_padicValNat_of_support_nonLiftable_mod3_separated
+      ha hb hc hab hSuppEx3 hNonLift hc_nz hb_nz hsep
+
 #print axioms FLT_d3_by_padicValNat_of_exceptThree_mod3_separated_harmonic  -- OK: 2026/02/23 15:36
 -- 'DkMath.FLT.FLT_d3_by_padicValNat_of_exceptThree_mod3_separated_harmonic' depends on axioms: [propext, Classical.choice, Quot.sound]
 
