@@ -78,19 +78,6 @@ lemma exists_sq_factor_split_three {c b : ℕ}
     exact ⟨q, hq, hq3, hqS0, hq2⟩
 
 /--
-phase-06: `Main` の入口仮定を圧縮するための入力束。
-`NoSqOnS0` ルートで必要な幾何・数論条件をまとめる。
--/
-structure NoSqInput (c b : ℕ) where
-  hbc : b < c
-  hcb_coprime : Nat.Coprime c b
-  hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u
-  hNoSq : NoSqOnS0 c b
-  hc_nz : c % 3 ≠ 0
-  hb_nz : b % 3 ≠ 0
-  hsep : c % 3 ≠ b % 3
-
-/--
 phase-03-C の十分条件（skeleton）:
 非例外調和点 witness と `NoSqOnS0` の組。
 -/
@@ -102,6 +89,30 @@ def PrimitiveOnS0 (c b q : ℕ) : Prop :=
 -/
 def NonLiftableS0 (c b q : ℕ) : Prop :=
   PrimitiveOnS0 c b q → ¬ q ^ 2 ∣ S0_nat c b
+
+/--
+`NoSq` 合流ルートの基底入力束。
+-/
+structure NoSqBaseInput (c b : ℕ) where
+  hbc : b < c
+  hcb_coprime : Nat.Coprime c b
+  hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u
+  hNonLift : ∀ q : ℕ, NonLiftableS0 c b q
+  hc_nz : c % 3 ≠ 0
+  hb_nz : b % 3 ≠ 0
+  hsep : c % 3 ≠ b % 3
+
+/--
+`NoSqOnS0` が既知の場合の入力束。
+-/
+structure NoSqInput (c b : ℕ) where
+  hbc : b < c
+  hcb_coprime : Nat.Coprime c b
+  hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u
+  hNoSq : NoSqOnS0 c b
+  hc_nz : c % 3 ≠ 0
+  hb_nz : b % 3 ≠ 0
+  hsep : c % 3 ≠ b % 3
 
 /--
 phase-04 の集約条件:
@@ -189,6 +200,11 @@ lemma s0PrimeSupportExceptThree_of_coprime {c b : ℕ}
 
 lemma s0PrimeSupportExceptThree_of_NoSqInput {c b : ℕ}
     (h : NoSqInput c b) :
+    S0PrimeSupportExceptThree c b := by
+  exact s0PrimeSupportExceptThree_of_coprime h.hbc.le h.hcb_coprime
+
+lemma s0PrimeSupportExceptThree_of_NoSqBaseInput {c b : ℕ}
+    (h : NoSqBaseInput c b) :
     S0PrimeSupportExceptThree c b := by
   exact s0PrimeSupportExceptThree_of_coprime h.hbc.le h.hcb_coprime
 

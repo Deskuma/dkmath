@@ -14,6 +14,7 @@
   - 主要入口:
     - `FLT_d3_by_padicValNat`
     - `FLT_d3_by_padicValNat_of_NoSqOnS0`
+    - `FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput`
     - `FLT_d3_by_padicValNat_of_harmonicEnvelope_*`
     - `FLT_d3_by_padicValNat_of_NoSqInput`
 
@@ -22,6 +23,7 @@
   - `NoSqOnS0` / `AllNonLiftableOnS0` / support 条件 / mod3 分離補題。
   - 立方差・原始素因子存在・padic 上下界など、`Main` が依存する下位補題を集約。
   - 入口束:
+    - `NoSqBaseInput`
     - `NoSqInput`
 
 - `CounterexamplePattern.lean`
@@ -79,6 +81,8 @@ graph LR
   - `FLT_d3_by_padicValNat_of_NoSqOnS0`
 
 - 構造入口（仮定圧縮版）:
+  - `FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput`
+  - `NoSqBaseInput` に `hbc`, `coprime`, `hNonLift`, mod3 条件を束ねる
   - `FLT_d3_by_padicValNat_of_NoSqInput`
   - `NoSqInput` に `hbc`, `coprime`, `hHarm`, `hNoSq`, mod3 条件を束ねる
 
