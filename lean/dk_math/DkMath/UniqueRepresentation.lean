@@ -256,7 +256,7 @@ theorem RatAdjSqrt2_mul (x y : ℝ) (hx : x ∈ RatAdjSqrt2) (hy : y ∈ RatAdjS
     have h_irrat : Irrational sqrt2 := sqrt2_irrational
     exfalso
     -- Now use h_irrat to show rational_expr ∉ ℚ
-    sorry
+    so#rry
   ```
 
   Pattern 2: Using linear independence
