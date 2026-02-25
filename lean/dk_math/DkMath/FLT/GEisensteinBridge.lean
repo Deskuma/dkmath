@@ -579,6 +579,34 @@ lemma measure_lt_of_isStep {s t : NumberTheoryDescentState}
     (h : IsStep s t) :
     measure t < measure s := h
 
+/-- 数論降下の次状態関数。 -/
+abbrev StepFunction : Type := NumberTheoryDescentState → NumberTheoryDescentState
+
+/-- 次状態関数が測度を厳密減少させる条件。 -/
+def StepDecreases (next : StepFunction) : Prop :=
+  ∀ s : NumberTheoryDescentState, IsStep s (next s)
+
+/--
+`next` が測度を厳密減少させるなら、`StepExists` は直ちに得られる。
+-/
+lemma stepExists_of_stepFunction (next : StepFunction)
+    (hdec : StepDecreases next) :
+    StepExists := by
+  intro s
+  exact ⟨next s, hdec s⟩
+
+/--
+phase-11 本実装向けの数論ステップ仕様。
+`next` とその厳密減少証明をひとまとめにする。
+-/
+structure StepSpec where
+  next : StepFunction
+  decreases : StepDecreases next
+
+/-- `StepSpec` から `StepExists` を得る。 -/
+lemma stepExists_of_spec (spec : StepSpec) : StepExists := by
+  exact stepExists_of_stepFunction spec.next spec.decreases
+
 end NumberTheoryDescentState
 
 /--
