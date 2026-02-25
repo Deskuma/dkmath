@@ -259,3 +259,16 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 
 - build
   - `lake build DkMath.FLT.Main` : OK
+
+## 作業ログ 2026/02/25  10:18
+
+- phase-10 実装（`NoSqInput` の軽量化）
+  - `PhaseLift.lean`
+    - `NoSqInput` から `mod3` 分離フィールド
+      - `hc_nz`, `hb_nz`, `hsep`
+      を除去
+  - `README.md`
+    - `NoSqInput` 説明から `mod3` 条件を削除
+
+- build
+  - `lake build DkMath.FLT.Main` : OK

@@ -107,9 +107,6 @@ structure NoSqInput (c b : ℕ) where
   hcb_coprime : Nat.Coprime c b
   hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u
   hNoSq : NoSqOnS0 c b
-  hc_nz : c % 3 ≠ 0
-  hb_nz : b % 3 ≠ 0
-  hsep : c % 3 ≠ b % 3
 
 /--
 phase-04 の集約条件:
