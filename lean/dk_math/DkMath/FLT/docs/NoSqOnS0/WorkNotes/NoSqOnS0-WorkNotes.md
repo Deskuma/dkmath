@@ -272,3 +272,19 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 
 - build
   - `lake build DkMath.FLT.Main` : OK
+
+## 作業ログ 2026/02/25  10:29
+
+- phase-10 実装（`by_cases` 合流本体の `coprime` 化）
+  - `Main.lean`
+    - `FLT_d3_by_padicValNat_by_cases_NoSq` の入力を簡約:
+      - 旧: `hSuppEx3 + hNonLift + mod3分離`
+      - 新: `b ≤ c + Nat.Coprime c b + hNonLift`
+    - 偽側分岐を
+      - `FLT_d3_by_padicValNat_of_support_nonLiftable_coprime`
+      へ接続（`mod3` 依存を除去）
+    - `FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput` は
+      新しい `by_cases` 本体へ直接接続
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
