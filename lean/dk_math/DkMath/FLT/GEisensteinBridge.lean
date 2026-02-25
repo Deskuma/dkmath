@@ -513,6 +513,15 @@ noncomputable def numberTheoryReduce_of_step {c b : ℕ}
   primitiveSquareReduce_of_step hStep
 
 /--
+数論系 `reduce` の最小実装（phase-11 first concrete）。
+現段階では `step` を通じて `reduce` を供給する。
+-/
+noncomputable def numberTheoryReduce_basic {c b : ℕ}
+    (hStep : PrimitiveSquareDescentStep c b) :
+    NumberTheoryReduce c b :=
+  numberTheoryReduce_of_step hStep
+
+/--
 数論系 `step` から `PrimitiveSquareDescentEngine` を生成する。
 -/
 noncomputable def numberTheoryEngine_of_step {c b : ℕ}
@@ -527,6 +536,14 @@ def numberTheoryEngine_of_reduce {c b : ℕ}
     (reduceNT : NumberTheoryReduce c b) :
     PrimitiveSquareDescentEngine c b :=
   primitiveSquareDescentEngine_of_reduce reduceNT
+
+/--
+`numberTheoryReduce_basic` から engine を得る補助定義。
+-/
+noncomputable def numberTheoryEngine_basic {c b : ℕ}
+    (hStep : PrimitiveSquareDescentStep c b) :
+    PrimitiveSquareDescentEngine c b :=
+  numberTheoryEngine_of_reduce (numberTheoryReduce_basic hStep)
 
 /--
 下降エンジンから `PrimitiveSquareDescentStep` 条件を回収する。

@@ -243,3 +243,19 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（数論 first concrete）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `numberTheoryReduce_basic`（`step -> reduce` の最小実装名）
+  2. `numberTheoryEngine_basic`
+  3. `FLT_d3_by_padicValNat_of_numberTheoryReduce_basic_coprimeSupport_direct`
+- 意図:
+  - 数論側の実体実装ポイントを `numberTheoryReduce_basic` に固定。
+  - 今後はこの定義の中身を「本物の局所縮小補題」に差し替えるだけで前進可能。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。

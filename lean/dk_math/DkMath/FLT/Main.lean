@@ -474,6 +474,19 @@ theorem FLT_d3_by_padicValNat_of_numberTheoryStep_coprimeSupport_direct {a b c :
     ha hb hc hab hbc hcb_coprime (numberTheoryReduce_of_step hStep)
 
 /--
+数論系最小実装（`numberTheoryReduce_basic`）を使う入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryReduce_basic_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hStep : PrimitiveSquareDescentStep c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_numberTheoryReduce_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime (numberTheoryReduce_basic hStep)
+
+/--
 GEisenstein 下降法コア述語を直接受ける入口。
 -/
 theorem FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport {a b c : ℕ}
