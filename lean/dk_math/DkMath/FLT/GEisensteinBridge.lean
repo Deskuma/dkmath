@@ -413,6 +413,73 @@ lemma primitiveSizedCandidate_measure_step_le {c b : ℕ}
   exact Nat.le_of_lt (GEisensteinPrimitiveSizedCandidate.step_decreases s hs)
 
 /--
+`PrimitiveOnS0` な素数で平方持ち上げが起きる witness。
+phase-11 ではこの witness 集合を下降法で空にする。
+-/
+def PrimitiveSquareWitness (c b : ℕ) : Prop :=
+  ∃ q : ℕ, PrimitiveOnS0 c b q ∧ q ^ 2 ∣ S0_nat c b
+
+/--
+`PrimitiveOnS0` な平方持ち上げ witness を、より小さい `q` へ送る strict descent 条件。
+-/
+def PrimitiveSquareDescentStep (c b : ℕ) : Prop :=
+  ∀ {q : ℕ}, PrimitiveOnS0 c b q → q ^ 2 ∣ S0_nat c b →
+    ∃ q' : ℕ, PrimitiveOnS0 c b q' ∧ q' ^ 2 ∣ S0_nat c b ∧ q' < q
+
+/--
+strict descent 条件があるなら、`PrimitiveOnS0` 上の平方持ち上げ witness は存在しない。
+（最小反例 `q0` を取り、strict descent で `q' < q0` を得て矛盾）
+-/
+lemma not_primitiveSquareWitness_of_descentStep {c b : ℕ}
+    (hStep : PrimitiveSquareDescentStep c b) :
+    ¬ PrimitiveSquareWitness c b := by
+  classical
+  intro hWitness
+  let q0 : ℕ := Nat.find hWitness
+  have hq0 : PrimitiveOnS0 c b q0 ∧ q0 ^ 2 ∣ S0_nat c b := by
+    simpa [q0] using (Nat.find_spec hWitness)
+  have hq0_min :
+      ∀ q : ℕ, PrimitiveOnS0 c b q ∧ q ^ 2 ∣ S0_nat c b → q0 ≤ q := by
+    intro q hq
+    simpa [q0] using (Nat.find_min' hWitness hq)
+  rcases hStep (q := q0) hq0.1 hq0.2 with ⟨q1, hq1Prim, hq1Sq, hq1Lt⟩
+  have hq0_le_q1 : q0 ≤ q1 := hq0_min q1 ⟨hq1Prim, hq1Sq⟩
+  exact (Nat.not_lt_of_ge hq0_le_q1) hq1Lt
+
+/--
+strict descent 条件から `q` 全域の `NonLiftableS0` family を回収する。
+-/
+lemma nonLiftableS0_family_of_descentStep {c b : ℕ}
+    (hStep : PrimitiveSquareDescentStep c b) :
+    ∀ q : ℕ, NonLiftableS0 c b q := by
+  intro q hPrim hqSq
+  have hWitness : PrimitiveSquareWitness c b := ⟨q, hPrim, hqSq⟩
+  exact (not_primitiveSquareWitness_of_descentStep hStep) hWitness
+
+/--
+phase-11 接続補題:
+`harmonic envelope` と `strict descent` から
+`DescentClassifyImpossibleOnPrimitive` を構成する。
+-/
+lemma descentClassifyImpossibleOnPrimitive_of_harmonicEnvelope_descentStep {c b : ℕ}
+    (hbc : b < c)
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hStep : PrimitiveSquareDescentStep c b) :
+    DescentClassifyImpossibleOnPrimitive c b := by
+  have hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q :=
+    nonLiftableS0_family_of_descentStep hStep
+  have hsideAll :
+      ∀ q : ℕ, HarmonicNonExceptionalSide ({ c := c, b := b, q := q } : CounterexampleInput) := by
+    intro q
+    exact harmonicNonExceptionalSide_of_envelope hInfra hHarm
+      (hNoExcAll { c := c, b := b, q := q })
+  intro q hPrim
+  exact classifyLift_impossible_family_of_harmonicNonExceptional_nonLiftable
+    hbc hsideAll hNonLiftAll hPrim
+
+/--
 GEisenstein 層で供給する下降法コア。
 `classifyImpossible` に加えて、将来拡張用の descent frame を持つ。
 -/
@@ -527,6 +594,21 @@ lemma descentClassifyImpossibleOnPrimitive_via_GEisenstein {c b : ℕ}
     (hCore := GEisensteinDescentCore_of_descentClassify
       (descentClassifyImpossibleOnPrimitive_of_harmonicEnvelope_NoSq
         hbc hInfra hHarm hNoExcAll hNoSq))
+
+/--
+phase-11 版 bridge:
+`NoSqOnS0` 仮定なしで、`strict descent` を入口にして
+`DescentClassifyImpossibleOnPrimitive` を構成する。
+-/
+lemma descentClassifyImpossibleOnPrimitive_via_GEisenstein_descentStep {c b : ℕ}
+    (hbc : b < c)
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hStep : PrimitiveSquareDescentStep c b) :
+    DescentClassifyImpossibleOnPrimitive c b := by
+  exact descentClassifyImpossibleOnPrimitive_of_harmonicEnvelope_descentStep
+    hbc hInfra hHarm hNoExcAll hStep
 
 /-- 旧層Bの平方耐性主張が一般には成り立たないことの具体反例。 -/
 theorem exists_counterexample_S0_square_resistance :

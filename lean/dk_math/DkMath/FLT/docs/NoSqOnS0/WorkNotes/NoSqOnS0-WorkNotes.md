@@ -100,3 +100,22 @@ theorem nonLiftableS0_of_minCounterexample
 - 直近の着手点（次コミット）:
   - `GEisensteinBridge.lean` に phase-11 用の state/measure スケルトン補題を追加する。
   - 既存 `primitiveSized` の `pred` 減少は「停止性 API」として残し、実体降下補題は別名前空間で段階追加する。
+
+### 2026-02-25 phase-11 実装開始（strict descent スケルトン投入）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- `GEisensteinBridge` 追加:
+  1. `PrimitiveSquareWitness`
+  2. `PrimitiveSquareDescentStep`
+  3. `not_primitiveSquareWitness_of_descentStep`（最小反例 `Nat.find` + strict 減少で矛盾）
+  4. `nonLiftableS0_family_of_descentStep`
+  5. `descentClassifyImpossibleOnPrimitive_of_harmonicEnvelope_descentStep`
+  6. `descentClassifyImpossibleOnPrimitive_via_GEisenstein_descentStep`
+- `Main` 追加入口:
+  - `FLT_d3_by_padicValNat_of_harmonicEnvelope_descentStep_coprimeSupport`
+  - 役割: `NoSq` を仮定せず、`PrimitiveSquareDescentStep` から `descentClassify` を生成して既存入口へ接続。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功（対象2モジュール build OK）。
