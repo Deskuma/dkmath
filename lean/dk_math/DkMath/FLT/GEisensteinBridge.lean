@@ -61,6 +61,53 @@ structure GEisensteinDescentFrame (c b : ℕ) where
   step : (s : State) → measure s > 0 → State
   step_decreases : ∀ (s : State) (hs : measure s > 0), measure (step s hs) < measure s
 
+namespace GEisensteinDescentFrame
+
+/--
+下降ステップの有界反復。
+`measure = 0` に到達したらその場で停止する。
+-/
+def descend {c b : ℕ} (F : GEisensteinDescentFrame c b) :
+    F.State → ℕ → F.State
+  | s, 0 => s
+  | s, n + 1 =>
+      if hs : F.measure s > 0 then
+        descend F (F.step s hs) n
+      else
+        s
+
+/--
+任意回数反復しても、測度は初期値を超えない。
+-/
+lemma measure_descend_le {c b : ℕ} (F : GEisensteinDescentFrame c b) :
+    ∀ (s : F.State) (n : ℕ), F.measure (descend F s n) ≤ F.measure s := by
+  intro s n
+  induction n generalizing s with
+  | zero =>
+      simp [descend]
+  | succ n ih =>
+      by_cases hs : F.measure s > 0
+      · have hstep : F.measure (F.step s hs) < F.measure s := F.step_decreases s hs
+        have hrec : F.measure (descend F (F.step s hs) n) ≤ F.measure (F.step s hs) :=
+          ih (F.step s hs)
+        have hdesc :
+            F.measure (descend F s (n + 1)) = F.measure (descend F (F.step s hs) n) := by
+          simp [descend, hs]
+        rw [hdesc]
+        exact Nat.le_trans hrec (Nat.le_of_lt hstep)
+      · simp [descend, hs]
+
+/--
+1-step 反復で `measure > 0` なら厳密減少。
+-/
+lemma measure_descend_one_lt_of_pos {c b : ℕ}
+    (F : GEisensteinDescentFrame c b)
+    (s : F.State) (hs : F.measure s > 0) :
+    F.measure (descend F s 1) < F.measure s := by
+  simpa [descend, hs] using F.step_decreases s hs
+
+end GEisensteinDescentFrame
+
 /--
 下降法枠の最小実装（空状態）。
 現在のブリッジ層では、この枠を保持して API を先行固定する。

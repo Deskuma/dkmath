@@ -61,6 +61,11 @@
     - `primitiveSizedCandidate_measure_le_S0_step`
     - `primitiveSizedCandidate_measure_step_le`
     により、`step` 後も上界・単調減少が維持されることを確認済み。
+  - 反復インターフェース:
+    - `GEisensteinDescentFrame.descend`
+    - `GEisensteinDescentFrame.measure_descend_le`
+    - `GEisensteinDescentFrame.measure_descend_one_lt_of_pos`
+    により、well-founded 接続用の反復骨格を確立。
 
 - `CosmicFormula/CosmicFormulaBinom.lean`
   - `add_pow_gap_factor`, `add_pow_tail_u2_*`, `two_gap_xy_factor*` を提供。

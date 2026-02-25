@@ -636,6 +636,26 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  12:47
+
+- phase-10 実装（well-founded 接続用の反復骨格）
+  - `GEisensteinBridge.lean`
+    - `namespace GEisensteinDescentFrame` を追加
+    - 追加:
+      - `descend`（有界反復、`measure=0` で停止）
+      - `measure_descend_le`
+        - 任意反復後も `measure` は初期値以下
+      - `measure_descend_one_lt_of_pos`
+        - 1-step かつ `measure>0` で厳密減少
+    - 目的:
+      - 各具体 frame に依存しない反復インターフェースを先に固定し、
+        後続の well-founded 議論を共通化する。
+  - `README.md`
+    - 反復インターフェース節を追記
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）
