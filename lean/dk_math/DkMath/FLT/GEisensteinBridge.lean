@@ -465,6 +465,31 @@ def primitiveSquareDescentEngine_of_reduce {c b : ℕ}
     exact (PrimitiveSquareReduction.toStep (reduce hPrim hSq))
 
 /--
+`PrimitiveSquareDescentStep` から、局所縮小関数 `reduce` を直接取り出す。
+phase-11 の最小実装として、まずこの形で `reduce` API を実運用できる。
+-/
+noncomputable def primitiveSquareReduce_of_step {c b : ℕ}
+    (hStep : PrimitiveSquareDescentStep c b) :
+    ∀ {q : ℕ}, PrimitiveOnS0 c b q → q ^ 2 ∣ S0_nat c b →
+      PrimitiveSquareReduction c b q := by
+  classical
+  intro q hPrim hSq
+  let w : ∃ q' : ℕ, PrimitiveOnS0 c b q' ∧ q' ^ 2 ∣ S0_nat c b ∧ q' < q :=
+    hStep hPrim hSq
+  refine ⟨Classical.choose w, ?_, ?_, ?_⟩
+  · exact (Classical.choose_spec w).1
+  · exact (Classical.choose_spec w).2.1
+  · exact (Classical.choose_spec w).2.2
+
+/--
+`PrimitiveSquareDescentStep` から engine を組み立てる最小コンストラクタ。
+-/
+noncomputable def primitiveSquareDescentEngine_of_step {c b : ℕ}
+    (hStep : PrimitiveSquareDescentStep c b) :
+    PrimitiveSquareDescentEngine c b := by
+  exact primitiveSquareDescentEngine_of_reduce (primitiveSquareReduce_of_step hStep)
+
+/--
 下降エンジンから `PrimitiveSquareDescentStep` 条件を回収する。
 -/
 lemma primitiveSquareDescentStep_of_engine {c b : ℕ}

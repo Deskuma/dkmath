@@ -189,3 +189,21 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（タスク1: reduce 最小実装）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `primitiveSquareReduce_of_step` (`noncomputable`)
+  2. `primitiveSquareDescentEngine_of_step` (`noncomputable`)
+  3. `FLT_d3_by_padicValNat_of_step_via_reduce_coprimeSupport_direct`
+- 意図:
+  - 「`step` しかない状態」から `reduce` API を即時生成できることを実装で確認。
+  - `reduce` 直結入口が実運用可能であることを明示。
+- 備考:
+  - `Exists` から `PrimitiveSquareReduction` を作るため `Classical.choose` を使用（`noncomputable`）。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。

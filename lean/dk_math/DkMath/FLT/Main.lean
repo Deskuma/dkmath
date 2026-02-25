@@ -418,6 +418,21 @@ theorem FLT_d3_by_padicValNat_of_reduce_coprimeSupport_direct {a b c : ℕ}
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
 
 /--
+phase-11 最小 reduce 実装確認:
+`step` から `reduce` を生成して、reduce 直結入口へ流す。
+-/
+theorem FLT_d3_by_padicValNat_of_step_via_reduce_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hStep : PrimitiveSquareDescentStep c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_reduce_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime
+    (primitiveSquareReduce_of_step hStep)
+
+/--
 GEisenstein 下降法コア述語を直接受ける入口。
 -/
 theorem FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport {a b c : ℕ}
