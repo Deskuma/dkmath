@@ -699,3 +699,14 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 
   have : (3 : ℕ) ≤ 1 := le_trans h_lower h_upper
   omega
+
+-- ----------------------------------------------------------------------------
+
+theorem FLT_d3_by_padicValNat_of_NoSqOnS0 {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hNoSq : NoSqOnS0 c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  apply FLT_d3_by_padicValNat ha hb hc hab
+  intro q hq hq_dvd_diff hq_ndiv_diff
+  exact hS0_not_sq_of_NoSqOnS0 (c := c) (b := b) hNoSq hq hq_dvd_diff hq_ndiv_diff
