@@ -306,13 +306,42 @@ def main():
         help="Find and extract definitions by identifier name (static grep fallback).",
         nargs="?",
     )
+    parser.add_argument(
+        "--insert-ident",
+        dest="insert_ident",
+        help="Identifier to insert into a target file (uses static search to find snippet).",
+        nargs="?",
+    )
+    parser.add_argument(
+        "--insert-target",
+        dest="insert_target",
+        help="Target file path to insert into.",
+        nargs="?",
+    )
+    parser.add_argument(
+        "--insert-line",
+        dest="insert_line",
+        type=int,
+        help="Line number to insert before (1-based).",
+        nargs="?",
+    )
+    parser.add_argument(
+        "--dry-run",
+        dest="dry_run",
+        action="store_true",
+        help="Show unified diff instead of writing changes.",
+    )
     args = parser.parse_args()
     if not os.path.isfile(args.input):
         print(f"Error: Input file {args.input} does not exist.")
         sys.exit(1)
     # If --find-name was provided, run a static search for the named definition
     if args.find_name:
-        root = find_project_root(Path(args.input).resolve().parent)
+        try:
+            root = find_project_root(Path(args.input).resolve().parent)
+        except FileNotFoundError:
+            # fallback for standalone/temp directories used in tests
+            root = Path(args.input).resolve().parent
         defs = find_definitions_by_name(root, args.find_name)
         # Write simple markdown with found definitions
         out_path = Path(args.output)
@@ -329,6 +358,50 @@ def main():
         print(f"Found {len(defs)} definitions for {args.find_name} -> {out_path}")
     else:
         extract_definitions(args.input, args.output, args.short)
+
+    # Insert ident workflow: find snippet and insert into target file
+    if args.insert_ident and args.insert_target:
+        try:
+            root = find_project_root(Path(args.input).resolve().parent)
+        except FileNotFoundError:
+            root = Path(args.input).resolve().parent
+        defs = find_definitions_by_name(root, args.insert_ident)
+        if not defs:
+            print(f"No definitions found for {args.insert_ident}")
+            sys.exit(2)
+        # pick first match (caller can refine by giving specific source file later)
+        chosen = defs[0]
+        target = Path(args.insert_target)
+        if not target.exists():
+            print(f"Target file {target} not found")
+            sys.exit(2)
+        snippet = chosen["snippet"]
+        insert_line = args.insert_line or 1
+        new_contents, patch = insert_snippet_into_text(
+            target.read_text(encoding="utf-8"), snippet, insert_line
+        )
+        if args.dry_run:
+            print(patch)
+        else:
+            out_path = target.with_suffix(target.suffix + ".inserted")
+            out_path.write_text(new_contents, encoding="utf-8")
+            print(f"Wrote inserted file to {out_path}")
+
+
+def insert_snippet_into_text(orig_text: str, snippet: str, insert_line: int):
+    """Return (new_text, unified_diff_str) after inserting `snippet` before `insert_line` (1-based)."""
+    import difflib
+
+    lines = orig_text.splitlines(keepends=True)
+    idx = max(0, min(len(lines), insert_line - 1))
+    snippet_lines = [l + "\n" for l in snippet.splitlines()]
+    new_lines = lines[:idx] + snippet_lines + lines[idx:]
+    new_text = "".join(new_lines)
+    diff = difflib.unified_diff(
+        lines, new_lines, fromfile="orig", tofile="new", lineterm=""
+    )
+    patch = "\n".join(diff)
+    return new_text, patch
 
 
 def find_definitions_by_name(root: Path, name: str):
