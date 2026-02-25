@@ -936,6 +936,76 @@ theorem FLT_d3_by_padicValNat_of_support_nonLiftable_coprime {a b c : ℕ}
     NoSqOnS0_of_support_nonLiftable_coprime hbc hcb_coprime hNonLift
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
 
+/-- NP number: integer coordinate + phase bit (front/back). -/
+structure NP where
+  n : ℤ
+  p : Bool
+deriving DecidableEq, Repr
+
+/-- Front point N_n. -/
+def N (n : ℤ) : NP := ⟨n, false⟩
+
+/-- Back point P_n (represents n + 1/2). -/
+def P (n : ℤ) : NP := ⟨n, true⟩
+
+/-- Origin is the front point N_0. -/
+def zero : NP := N 0
+
+/-- Half-step is the back point P_0. -/
+def half : NP := P 0
+
+/-- Successor: N_n → P_n,  P_n → N_{n+1}. -/
+def succ : NP → NP
+  | ⟨n, false⟩ => ⟨n, true⟩
+  | ⟨n, true⟩  => ⟨n + 1, false⟩
+
+/-- Concrete value embedding into ℚ: val(n,p) = n + p/2. -/
+def val (x : NP) : ℚ :=
+  (x.n : ℚ) + (if x.p then (1/2 : ℚ) else 0)
+
+structure PetalCoreUnit where
+  base : NP
+deriving DecidableEq, Repr
+
+/-- PetalCoreUnit の `succ`（NP 側の `succ` を継承）。 -/
+def coreSucc (u : PetalCoreUnit) : PetalCoreUnit :=
+  ⟨succ u.base⟩
+
+/--
+調和点（skeleton）:
+偶数回の `succ` で位相ビットを保存する観測点。
+-/
+def HarmonicPoint (u : PetalCoreUnit) : Prop :=
+  ∃ k : ℕ, 0 < k ∧ (Nat.iterate coreSucc (2 * k) u).base.p = u.base.p
+
+/--
+例外位相（skeleton）:
+ここでは簡易に back-phase (`p = true`) を例外相として置く。
+-/
+def isExceptionalPhase (u : PetalCoreUnit) : Prop :=
+  u.base.p = true
+
+/--
+`NoSq` 合流ルートの基底入力束。
+-/
+structure NoSqBaseInput (c b : ℕ) where
+  hbc : b < c
+  hcb_coprime : Nat.Coprime c b
+  hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u
+  hNonLift : ∀ q : ℕ, NonLiftableS0 c b q
+
+theorem FLT_d3_by_padicValNat_by_cases_NoSq {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b ≤ c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  by_cases hNoSq : NoSqOnS0 c b
+  · exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+  · exact FLT_d3_by_padicValNat_of_support_nonLiftable_coprime
+      ha hb hc hab hbc hcb_coprime hNonLift
+
 /--
 `hNonLiftAll` と `coprime(c,b)` から直接供給する共通入口。
 -/
