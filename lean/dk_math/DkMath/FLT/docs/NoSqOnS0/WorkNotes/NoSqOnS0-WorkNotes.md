@@ -365,3 +365,40 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（固定 `(c,b)` 版の IsStepCore 実体化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+- 変更内容:
+  1. `NumberTheoryDescentOn.nextOfReduction` を追加
+  2. `NumberTheoryDescentOn.IsStepCore` を追加（`PrimitiveSquareReduction` 由来の遷移のみ許可）
+  3. `NumberTheoryDescentOn.IsStep := IsStepCore ∧ measure減少` に変更
+  4. `core_of_isStep`, `measure_lt_of_isStep`, `isStep_of_reduction` を追加
+  5. `false_of_state_of_stepExists` を `measure_lt_of_isStep` 経由に修正
+  6. `stepFunction_of_localReduce` / `stepDecreases_of_localReduce` を `nextOfReduction` と `isStep_of_reduction` ベースへ更新
+- 意図:
+  - fixed `(c,b)` ルートでも「正当遷移 + 測度減少」の2層構造を明示し、
+    `StepExists` の前提を reduction 由来の仕様に固定。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（step/reduce から StepExistsOn へのアダプタ追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `numberTheoryLocalReduceOn_of_step`
+  2. `numberTheoryLocalReduceOn_of_reduce`
+  3. `numberTheoryStepExistsOn_of_step`
+  4. `numberTheoryStepExistsOn_of_reduce`
+  5. `FLT_d3_by_padicValNat_of_numberTheoryStepOn_coprimeSupport_direct`
+  6. `FLT_d3_by_padicValNat_of_numberTheoryReduceOn_coprimeSupport_direct`
+- 意図:
+  - `PrimitiveSquareDescentStep` / `NumberTheoryReduce` から、固定 `(c,b)` 版 `StepExistsOn` へ一段で接続。
+  - local 降下仕様ルートを `Main` の公開入口として直接使えるようにした。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。

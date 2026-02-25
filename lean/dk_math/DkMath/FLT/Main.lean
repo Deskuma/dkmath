@@ -501,7 +501,67 @@ theorem FLT_d3_by_padicValNat_of_numberTheoryStepExists_coprimeSupport_direct {a
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
 
 /--
-数論ローカル降下入力 (`LocalReduce`) から `StepExists` を経由して接続する入口。
+固定 `(c,b)` の数論状態遷移仕様 `StepExists` から接続する入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryStepExistsOn_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hex : NumberTheoryDescentOn.StepExists c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_numberTheoryStepExistsOn_coprime hex hbc hcb_coprime
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+固定 `(c,b)` の数論 `step` から、`StepExistsOn` 経由で接続する入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryStepOn_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hStep : PrimitiveSquareDescentStep c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hex : NumberTheoryDescentOn.StepExists c b :=
+    numberTheoryStepExistsOn_of_step hStep
+  exact FLT_d3_by_padicValNat_of_numberTheoryStepExistsOn_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime hex
+
+/--
+固定 `(c,b)` の数論 `reduce` から、`StepExistsOn` 経由で接続する入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryReduceOn_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (reduceNT : NumberTheoryReduce c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hex : NumberTheoryDescentOn.StepExists c b :=
+    numberTheoryStepExistsOn_of_reduce reduceNT
+  exact FLT_d3_by_padicValNat_of_numberTheoryStepExistsOn_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime hex
+
+/--
+固定 `(c,b)` の数論ローカル降下入力 (`LocalReduce`) から接続する入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryLocalReduceOn_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (reduce : NumberTheoryDescentOn.LocalReduce c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hex : NumberTheoryDescentOn.StepExists c b :=
+    NumberTheoryDescentOn.stepExists_of_localReduce reduce
+  exact FLT_d3_by_padicValNat_of_numberTheoryStepExistsOn_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime hex
+
+/--
+互換入口:
+旧 global 版 `LocalReduce` を受ける場合は従来の global `StepExists` 入口に委譲する。
 -/
 theorem FLT_d3_by_padicValNat_of_numberTheoryLocalReduce_coprimeSupport_direct {a b c : ℕ}
     (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)

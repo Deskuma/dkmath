@@ -712,6 +712,177 @@ lemma not_nonempty_of_stepExists (hex : StepExists) :
 
 end NumberTheoryDescentState
 
+/-
+固定 `(c,b)` 上での数論降下状態。
+global 版より前提を狭くし、ローカルに降下仕様を扱う。
+-/
+namespace NumberTheoryDescentOn
+
+structure State (c b : ℕ) where
+  q : ℕ
+  hbc : b < c
+  hcop : Nat.Coprime c b
+  hPrim : PrimitiveOnS0 c b q
+  hSq : q ^ 2 ∣ S0_nat c b
+
+/-- 局所降下の測度: `q`。 -/
+def measure {c b : ℕ} (s : State c b) : ℕ := s.q
+
+/--
+`PrimitiveSquareReduction` から次状態を組み立てる（固定 `(c,b)` 版）。
+-/
+def nextOfReduction {c b : ℕ} (s : State c b)
+    (red : PrimitiveSquareReduction c b s.q) :
+    State c b :=
+  { q := red.q'
+    hbc := s.hbc
+    hcop := s.hcop
+    hPrim := red.hPrim
+    hSq := red.hSq }
+
+/--
+局所降下ステップの中核条件（固定 `(c,b)` 版）。
+`t` が `s` の `PrimitiveSquareReduction` から生成されることを要求する。
+-/
+def IsStepCore {c b : ℕ} (s t : State c b) : Prop :=
+  ∃ red : PrimitiveSquareReduction c b s.q, t = nextOfReduction s red
+
+/-- 局所降下ステップ（固定 `(c,b)` 版）。 -/
+def IsStep {c b : ℕ} (s t : State c b) : Prop :=
+  IsStepCore s t ∧ measure t < measure s
+
+/-- 固定 `(c,b)` での降下ステップ存在性。 -/
+def StepExists (c b : ℕ) : Prop :=
+  ∀ s : State c b, ∃ t : State c b, IsStep s t
+
+/-- `IsStep` から `Core` 条件を取り出す。 -/
+lemma core_of_isStep {c b : ℕ} {s t : State c b}
+    (h : IsStep s t) :
+    IsStepCore s t := h.1
+
+/-- `IsStep` から測度減少を取り出す。 -/
+lemma measure_lt_of_isStep {c b : ℕ} {s t : State c b}
+    (h : IsStep s t) :
+    measure t < measure s := h.2
+
+/-- `PrimitiveSquareReduction` から `IsStep` を作る（固定 `(c,b)` 版）。 -/
+lemma isStep_of_reduction {c b : ℕ} (s : State c b)
+    (red : PrimitiveSquareReduction c b s.q) :
+    IsStep s (nextOfReduction s red) := by
+  refine ⟨⟨red, rfl⟩, ?_⟩
+  simpa [measure, nextOfReduction] using red.hlt
+
+/-- 局所降下の次状態関数。 -/
+abbrev StepFunction (c b : ℕ) : Type := State c b → State c b
+
+/-- 次状態関数が測度を厳密減少させる条件。 -/
+def StepDecreases {c b : ℕ} (next : StepFunction c b) : Prop :=
+  ∀ s : State c b, IsStep s (next s)
+
+/-- `next` が測度を厳密減少させるなら `StepExists`。 -/
+lemma stepExists_of_stepFunction {c b : ℕ}
+    (next : StepFunction c b)
+    (hdec : StepDecreases next) :
+    StepExists c b := by
+  intro s
+  exact ⟨next s, hdec s⟩
+
+/-- 固定 `(c,b)` での `StepSpec`。 -/
+structure StepSpec (c b : ℕ) where
+  next : StepFunction c b
+  decreases : StepDecreases next
+
+/-- `StepSpec` から `StepExists`。 -/
+lemma stepExists_of_spec {c b : ℕ} (spec : StepSpec c b) :
+    StepExists c b := by
+  exact stepExists_of_stepFunction spec.next spec.decreases
+
+/--
+`StepExists` が成り立つと、任意状態は矛盾する（固定 `(c,b)` 版）。
+-/
+lemma false_of_state_of_stepExists {c b : ℕ}
+    (hex : StepExists c b)
+    (s : State c b) :
+    False := by
+  have hmain : ∀ n : ℕ, ∀ s : State c b, measure s = n → False := by
+    intro n
+    induction n using Nat.strong_induction_on with
+    | h n ih =>
+        intro s hs
+        rcases hex s with ⟨t, ht⟩
+        have ht' : measure t < n := by
+          simpa [hs] using (measure_lt_of_isStep ht)
+        exact ih (measure t) ht' t rfl
+  exact hmain (measure s) s rfl
+
+/-- `StepExists` が成り立つなら局所状態は存在しない。 -/
+lemma not_nonempty_of_stepExists {c b : ℕ}
+    (hex : StepExists c b) :
+    ¬ Nonempty (State c b) := by
+  intro hs
+  rcases hs with ⟨s⟩
+  exact false_of_state_of_stepExists hex s
+
+/-- 固定 `(c,b)` 上のローカル `reduce` 入力。 -/
+abbrev LocalReduce (c b : ℕ) :=
+  ∀ s : State c b, PrimitiveSquareReduction c b s.q
+
+/-- ローカル `reduce` から次状態関数を作る。 -/
+def stepFunction_of_localReduce {c b : ℕ}
+    (reduce : LocalReduce c b) : StepFunction c b :=
+  fun s => nextOfReduction s (reduce s)
+
+/-- ローカル `reduce` は測度厳密減少を与える。 -/
+lemma stepDecreases_of_localReduce {c b : ℕ}
+    (reduce : LocalReduce c b) :
+    StepDecreases (stepFunction_of_localReduce reduce) := by
+  intro s
+  exact isStep_of_reduction s (reduce s)
+
+/-- ローカル `reduce` から `StepExists`。 -/
+lemma stepExists_of_localReduce {c b : ℕ}
+    (reduce : LocalReduce c b) :
+    StepExists c b := by
+  exact stepExists_of_stepFunction
+    (stepFunction_of_localReduce reduce)
+    (stepDecreases_of_localReduce reduce)
+
+end NumberTheoryDescentOn
+
+/--
+`PrimitiveSquareDescentStep` から、固定 `(c,b)` 版 `LocalReduce` を作る。
+-/
+noncomputable def numberTheoryLocalReduceOn_of_step {c b : ℕ}
+    (hStep : PrimitiveSquareDescentStep c b) :
+    NumberTheoryDescentOn.LocalReduce c b :=
+  fun s => (numberTheoryReduce_of_step hStep) s.hPrim s.hSq
+
+/--
+`NumberTheoryReduce` から、固定 `(c,b)` 版 `LocalReduce` を作る。
+-/
+def numberTheoryLocalReduceOn_of_reduce {c b : ℕ}
+    (reduceNT : NumberTheoryReduce c b) :
+    NumberTheoryDescentOn.LocalReduce c b :=
+  fun s => reduceNT s.hPrim s.hSq
+
+/--
+`PrimitiveSquareDescentStep` から、固定 `(c,b)` 版 `StepExists` を得る。
+-/
+lemma numberTheoryStepExistsOn_of_step {c b : ℕ}
+    (hStep : PrimitiveSquareDescentStep c b) :
+    NumberTheoryDescentOn.StepExists c b := by
+  exact NumberTheoryDescentOn.stepExists_of_localReduce
+    (numberTheoryLocalReduceOn_of_step hStep)
+
+/--
+`NumberTheoryReduce` から、固定 `(c,b)` 版 `StepExists` を得る。
+-/
+lemma numberTheoryStepExistsOn_of_reduce {c b : ℕ}
+    (reduceNT : NumberTheoryReduce c b) :
+    NumberTheoryDescentOn.StepExists c b := by
+  exact NumberTheoryDescentOn.stepExists_of_localReduce
+    (numberTheoryLocalReduceOn_of_reduce reduceNT)
+
 /--
 下降エンジンから `PrimitiveSquareDescentStep` 条件を回収する。
 -/
@@ -890,6 +1061,55 @@ lemma NoSqOnS0_of_numberTheoryStepExists_coprime {c b : ℕ}
     nonLiftableS0_family_of_numberTheoryStepExists hex hbc hcop
   intro q hq hqS0
   exact NoSqOnS0_of_support_nonLiftable_coprime hbc.le hcop hNonLift hq hqS0
+
+/--
+固定 `(c,b)` の `StepExists` から、固定 `q` の `NonLiftableS0` を得る。
+-/
+lemma nonLiftableS0_of_numberTheoryStepExistsOn {c b q : ℕ}
+    (hex : NumberTheoryDescentOn.StepExists c b)
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b) :
+    NonLiftableS0 c b q := by
+  intro hPrim hSq
+  exact NumberTheoryDescentOn.false_of_state_of_stepExists hex
+    ⟨q, hbc, hcop, hPrim, hSq⟩
+
+/--
+固定 `(c,b)` の `StepExists` から `NonLiftableS0` family を得る。
+-/
+lemma nonLiftableS0_family_of_numberTheoryStepExistsOn {c b : ℕ}
+    (hex : NumberTheoryDescentOn.StepExists c b)
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b) :
+    ∀ q : ℕ, NonLiftableS0 c b q := by
+  intro q
+  exact nonLiftableS0_of_numberTheoryStepExistsOn (c := c) (b := b) (q := q) hex hbc hcop
+
+/--
+固定 `(c,b)` の `StepExists` と `coprime(c,b)` から `NoSqOnS0` を回復する。
+-/
+lemma NoSqOnS0_of_numberTheoryStepExistsOn_coprime {c b : ℕ}
+    (hex : NumberTheoryDescentOn.StepExists c b)
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b) :
+    NoSqOnS0 c b := by
+  have hNonLift : ∀ q : ℕ, NonLiftableS0 c b q :=
+    nonLiftableS0_family_of_numberTheoryStepExistsOn hex hbc hcop
+  intro q hq hqS0
+  exact NoSqOnS0_of_support_nonLiftable_coprime hbc.le hcop hNonLift hq hqS0
+
+/--
+固定 `(c,b)` の `LocalReduce` から `NoSqOnS0` を回復する。
+-/
+lemma NoSqOnS0_of_numberTheoryLocalReduceOn_coprime {c b : ℕ}
+    (reduce : NumberTheoryDescentOn.LocalReduce c b)
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b) :
+    NoSqOnS0 c b := by
+  have hex : NumberTheoryDescentOn.StepExists c b :=
+    NumberTheoryDescentOn.stepExists_of_localReduce reduce
+  intro q hq hqS0
+  exact NoSqOnS0_of_numberTheoryStepExistsOn_coprime hex hbc hcop hq hqS0
 
 /--
 phase-11 接続補題:
