@@ -7,7 +7,6 @@ Authors: D. and Wise Wolf.
 -- cid: 697d62b5-312c-83a8-a917-f4aca8fa80ca
 
 import Mathlib
-import DkMath.Units.NPUnit
 
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
@@ -909,6 +908,7 @@ lemma s0PrimeSupportExceptThree_of_coprime {c b : ℕ}
   intro q hq hqS0 hq_ne3
   exact prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three hbc hcop hq hqS0 hq_ne3
 
+
 lemma NoSqOnS0_of_support_nonLiftable_coprime {c b : ℕ}
     (hbc : b ≤ c)
     (hcop : Nat.Coprime c b)
@@ -949,3 +949,11 @@ theorem FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport {a b c : ℕ}
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
   exact FLT_d3_by_padicValNat_of_support_nonLiftable_coprime
     ha hb hc hab hbc.le hcb_coprime hNonLiftAll
+
+theorem FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hIn : NoSqBaseInput c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_by_cases_NoSq
+    ha hb hc hab hIn.hbc.le hIn.hcb_coprime hIn.hNonLift
