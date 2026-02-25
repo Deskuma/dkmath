@@ -778,6 +778,22 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  13:15
+
+- phase-10 実装（停止到達情報を受け取る `Main` 補助版）
+  - `Main.lean`
+    - 追加:
+      - `FLT_d3_by_padicValNat_of_GEisensteinCore_with_reachability_coprimeSupport`
+    - 仕様:
+      - `hGECore` に加えて
+        `∀ s, ∃ n, measure(descend s n)=0` を受け取る
+      - 現段階では `core` 版へ委譲（将来拡張の受け口）
+  - `README.md`
+    - 主要入口リストに上記定理を追記
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）

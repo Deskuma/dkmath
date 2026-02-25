@@ -360,6 +360,25 @@ theorem FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport {a b c : ℕ}
     ha hb hc hab hbc hcb_coprime hDescentClass
 
 /--
+`GEisensteinCore` に加えて停止到達情報を受け取る補助版。
+現段階では `core` 版に委譲し、到達情報は将来拡張の受け口として保持する。
+-/
+theorem FLT_d3_by_padicValNat_of_GEisensteinCore_with_reachability_coprimeSupport
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hGECore : GEisensteinDescentCore c b)
+    (_hReach :
+      ∀ s : hGECore.frame.State,
+        ∃ n : ℕ,
+          hGECore.frame.measure (GEisensteinDescentFrame.descend hGECore.frame s n) = 0) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hGECore
+
+/--
 `GEisensteinDescentCore` から、任意初期状態での停止到達（`measure = 0`）を取り出す API。
 -/
 theorem GEisenstein_descent_reaches_zero_of_core {c b : ℕ}
