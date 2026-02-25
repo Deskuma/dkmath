@@ -78,6 +78,20 @@ def emptyGEisensteinDescentFrame (c b : ℕ) : GEisensteinDescentFrame c b where
     cases s
 
 /--
+非空状態を持つトイ下降フレーム。
+`State = ℕ`, `measure = id`, `step = pred`。
+-/
+def toyNatGEisensteinDescentFrame (c b : ℕ) : GEisensteinDescentFrame c b where
+  State := ℕ
+  measure := id
+  step := by
+    intro s hs
+    exact Nat.pred s
+  step_decreases := by
+    intro s hs
+    simpa using Nat.pred_lt (Nat.ne_of_gt hs)
+
+/--
 GEisenstein 層で供給する下降法コア。
 `classifyImpossible` に加えて、将来拡張用の descent frame を持つ。
 -/
@@ -98,10 +112,21 @@ lemma descentClassifyImpossibleOnPrimitive_of_GEisensteinCore {c b : ℕ}
 /--
 既存の `DescentClassifyImpossibleOnPrimitive` から GEisenstein コアを作る。
 -/
+def GEisensteinDescentCore_of_descentClassify_withFrame {c b : ℕ}
+    (hDescent : DescentClassifyImpossibleOnPrimitive c b)
+    (hFrame : GEisensteinDescentFrame c b) :
+    GEisensteinDescentCore c b := by
+  exact ⟨hDescent, hFrame⟩
+
+/--
+既存の `DescentClassifyImpossibleOnPrimitive` から GEisenstein コアを作る。
+フレームは暫定的に `empty` を採用する。
+-/
 def GEisensteinDescentCore_of_descentClassify {c b : ℕ}
     (hDescent : DescentClassifyImpossibleOnPrimitive c b) :
     GEisensteinDescentCore c b := by
-  exact ⟨hDescent, emptyGEisensteinDescentFrame c b⟩
+  exact GEisensteinDescentCore_of_descentClassify_withFrame
+    hDescent (emptyGEisensteinDescentFrame c b)
 
 /--
 GEisenstein 層から下降法インターフェースへ接続する橋。
