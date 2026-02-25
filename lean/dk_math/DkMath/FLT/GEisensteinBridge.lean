@@ -55,10 +55,37 @@ lemma GN3_sub_eq_eisensteinNorm_shift (a b : ℕ) (hab : b ≤ a) :
 GEisenstein 層で供給する下降法コア。
 将来はこの構造体に追加データ（縮小写像・単調減少証明など）を積む。
 -/
-structure GEisensteinDescentCore (c b : ℕ) : Prop where
+structure GEisensteinDescentFrame (c b : ℕ) where
+  State : Type
+  measure : State → ℕ
+  step : State → State
+  step_decreases : ∀ s : State, measure (step s) < measure s
+
+/--
+下降法枠の最小実装（空状態）。
+現在のブリッジ層では、この枠を保持して API を先行固定する。
+-/
+def emptyGEisensteinDescentFrame (c b : ℕ) : GEisensteinDescentFrame c b where
+  State := PEmpty
+  measure := by
+    intro s
+    cases s
+  step := by
+    intro s
+    cases s
+  step_decreases := by
+    intro s
+    cases s
+
+/--
+GEisenstein 層で供給する下降法コア。
+`classifyImpossible` に加えて、将来拡張用の descent frame を持つ。
+-/
+structure GEisensteinDescentCore (c b : ℕ) where
   classifyImpossible :
     ∀ {q : ℕ}, PrimitiveOnS0 c b q →
       classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible
+  frame : GEisensteinDescentFrame c b
 
 /--
 GEisenstein 下降法コアから `descent` インターフェースへ戻す。
@@ -71,10 +98,10 @@ lemma descentClassifyImpossibleOnPrimitive_of_GEisensteinCore {c b : ℕ}
 /--
 既存の `DescentClassifyImpossibleOnPrimitive` から GEisenstein コアを作る。
 -/
-lemma GEisensteinDescentCore_of_descentClassify {c b : ℕ}
+def GEisensteinDescentCore_of_descentClassify {c b : ℕ}
     (hDescent : DescentClassifyImpossibleOnPrimitive c b) :
     GEisensteinDescentCore c b := by
-  exact ⟨hDescent⟩
+  exact ⟨hDescent, emptyGEisensteinDescentFrame c b⟩
 
 /--
 GEisenstein 層から下降法インターフェースへ接続する橋。

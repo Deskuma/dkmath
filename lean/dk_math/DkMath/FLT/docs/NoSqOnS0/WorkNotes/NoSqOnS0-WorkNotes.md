@@ -416,6 +416,31 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  11:44
+
+- phase-10 実装（GEisenstein 下降法フレーム枠の追加）
+  - `GEisensteinBridge.lean`
+    - 追加:
+      - `GEisensteinDescentFrame`
+        - `State`, `measure`, `step`, `step_decreases`
+      - `emptyGEisensteinDescentFrame`
+        - 空状態 (`PEmpty`) の最小実装
+    - 変更:
+      - `GEisensteinDescentCore` に `frame` フィールドを追加
+      - `GEisensteinDescentCore_of_descentClassify` を `def` として追加
+        （既存 classify 供給から frame 付き core を構成）
+  - `README.md`
+    - `GEisensteinDescentFrame` の説明を追記
+
+- 位置づけ
+  - 下降法の具体実装（非空状態・縮小写像）は未投入。
+  - ただし `frame` を先に型固定したので、
+    今後は `empty` を実データ実装へ置換するだけで
+    既存 API を崩さず進められる。
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）
