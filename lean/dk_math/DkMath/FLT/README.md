@@ -73,6 +73,8 @@
     - `GEisensteinDescentCore.measure_descend_eq_zero_of_step_pred`
     - `GEisensteinDescentCore.exists_descend_measure_eq_zero_of_step_pred`
     により、`GEisensteinDescentCore` から停止到達を直接取り出せる。
+  - `GEisensteinDescentCore` は `step_pred` をフィールド化済み。
+    停止補題呼び出し時に追加仮定が不要な API へ更新。
 
 - `CosmicFormula/CosmicFormulaBinom.lean`
   - `add_pow_gap_factor`, `add_pow_tail_u2_*`, `two_gap_xy_factor*` を提供。

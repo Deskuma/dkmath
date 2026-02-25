@@ -407,32 +407,31 @@ structure GEisensteinDescentCore (c b : ℕ) where
     ∀ {q : ℕ}, PrimitiveOnS0 c b q →
       classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible
   frame : GEisensteinDescentFrame c b
+  step_pred :
+    ∀ (s : frame.State) (hs : frame.measure s > 0),
+      frame.measure (frame.step s hs) = Nat.pred (frame.measure s)
 
 /--
 コアに載っている frame が `pred` 型の縮小を満たすとき、
 任意状態は `measure` 回の反復で測度 0 に到達する。
 -/
 lemma GEisensteinDescentCore.measure_descend_eq_zero_of_step_pred {c b : ℕ}
-    (hCore : GEisensteinDescentCore c b)
-    (hpred : ∀ (s : hCore.frame.State) (hs : hCore.frame.measure s > 0),
-      hCore.frame.measure (hCore.frame.step s hs) = Nat.pred (hCore.frame.measure s)) :
+    (hCore : GEisensteinDescentCore c b) :
     ∀ s : hCore.frame.State,
       hCore.frame.measure
         (GEisensteinDescentFrame.descend hCore.frame s (hCore.frame.measure s)) = 0 := by
-  exact GEisensteinDescentFrame.measure_descend_eq_zero_of_step_pred hCore.frame hpred
+  exact GEisensteinDescentFrame.measure_descend_eq_zero_of_step_pred hCore.frame hCore.step_pred
 
 /--
 停止到達の存在版（回数 `n` の存在）。
 -/
 lemma GEisensteinDescentCore.exists_descend_measure_eq_zero_of_step_pred {c b : ℕ}
     (hCore : GEisensteinDescentCore c b)
-    (hpred : ∀ (s : hCore.frame.State) (hs : hCore.frame.measure s > 0),
-      hCore.frame.measure (hCore.frame.step s hs) = Nat.pred (hCore.frame.measure s))
     (s : hCore.frame.State) :
     ∃ n : ℕ,
       hCore.frame.measure (GEisensteinDescentFrame.descend hCore.frame s n) = 0 := by
   refine ⟨hCore.frame.measure s, ?_⟩
-  exact GEisensteinDescentCore.measure_descend_eq_zero_of_step_pred hCore hpred s
+  exact GEisensteinDescentCore.measure_descend_eq_zero_of_step_pred hCore s
 
 /--
 GEisenstein 下降法コアから `descent` インターフェースへ戻す。
@@ -447,9 +446,11 @@ lemma descentClassifyImpossibleOnPrimitive_of_GEisensteinCore {c b : ℕ}
 -/
 def GEisensteinDescentCore_of_descentClassify_withFrame {c b : ℕ}
     (hDescent : DescentClassifyImpossibleOnPrimitive c b)
-    (hFrame : GEisensteinDescentFrame c b) :
+    (hFrame : GEisensteinDescentFrame c b)
+    (hFrameStepPred : ∀ (s : hFrame.State) (hs : hFrame.measure s > 0),
+      hFrame.measure (hFrame.step s hs) = Nat.pred (hFrame.measure s)) :
     GEisensteinDescentCore c b := by
-  exact ⟨hDescent, hFrame⟩
+  exact ⟨hDescent, hFrame, hFrameStepPred⟩
 
 /--
 既存の `DescentClassifyImpossibleOnPrimitive` から GEisenstein コアを作る。
@@ -460,6 +461,9 @@ def GEisensteinDescentCore_of_descentClassify {c b : ℕ}
     GEisensteinDescentCore c b := by
   exact GEisensteinDescentCore_of_descentClassify_withFrame
     hDescent (emptyGEisensteinDescentFrame c b)
+    (by
+      intro s hs
+      cases s)
 
 /--
 GEisenstein 層から下降法インターフェースへ接続する橋。

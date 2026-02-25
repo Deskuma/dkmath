@@ -692,6 +692,27 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  13:06
+
+- phase-10 実装（`GEisensteinDescentCore` に `step_pred` を内包）
+  - `GEisensteinBridge.lean`
+    - `GEisensteinDescentCore` を拡張:
+      - 新フィールド `step_pred`
+    - 停止補題を更新:
+      - `GEisensteinDescentCore.measure_descend_eq_zero_of_step_pred`
+      - `GEisensteinDescentCore.exists_descend_measure_eq_zero_of_step_pred`
+      が外部仮定不要で利用可能に
+    - コンストラクタ更新:
+      - `GEisensteinDescentCore_of_descentClassify_withFrame` に
+        `hFrameStepPred` 引数を追加
+      - 既定コンストラクタ `...of_descentClassify` は
+        `empty` frame 用の `step_pred` を内部供給
+  - `README.md`
+    - `step_pred` フィールド化と API 更新を追記
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）
