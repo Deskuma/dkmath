@@ -370,7 +370,7 @@ theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport {a b c : â
     :
     a ^ 3 + b ^ 3 â‰  c ^ 3 := by
   have hDescentClass : DescentClassifyImpossibleOnPrimitive c b :=
-    descentClassifyImpossibleOnPrimitive_of_harmonicEnvelope_NoSq
+    descentClassifyImpossibleOnPrimitive_via_GEisenstein
       hbc hasPhaseUnitInfrastructure hHarm hNoExcAll hNoSq
   exact FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport
     ha hb hc hab hbc hcb_coprime hDescentClass

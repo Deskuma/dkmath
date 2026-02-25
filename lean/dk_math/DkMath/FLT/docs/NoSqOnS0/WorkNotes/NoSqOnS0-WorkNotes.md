@@ -334,6 +334,34 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  11:25
+
+- phase-10 実装（GEisensteinBridge へ descent 接続点を移管）
+  - `GEisensteinBridge.lean`
+    - 追加:
+      - `descentClassifyImpossibleOnPrimitive_via_GEisenstein`
+        - 入力:
+          - `hbc`
+          - `hInfra`
+          - `hHarm`
+          - `hNoExcAll`
+          - `hNoSq`
+        - 出力:
+          - `DescentClassifyImpossibleOnPrimitive c b`
+    - 位置づけ:
+      - 下降法の本体実装は未投入だが、
+        GEisenstein 層を経由した `descent` インターフェース供給点を確立。
+  - `Main.lean`
+    - `FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport` 内の
+      `hDescentClass` 供給を
+      `descentClassifyImpossibleOnPrimitive_via_GEisenstein` 経由へ変更。
+  - `README.md`
+    - `GEisensteinBridge` の責務に
+      `DescentClassifyImpossibleOnPrimitive` への接続点を追記。
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）

@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.PetalDetect
+import DkMath.FLT.CounterexamplePattern
 import DkMath.NumberTheory.ZsigmondyCyclotomic
 import DkMath.CosmicFormula.CosmicFormulaBinom
 
@@ -49,6 +50,20 @@ lemma GN3_sub_eq_S0 (a b : ℕ) (hab : b ≤ a) :
 lemma GN3_sub_eq_eisensteinNorm_shift (a b : ℕ) (hab : b ≤ a) :
     GN 3 (a - b) b = eisensteinNormNat (a + b) b := by
   rw [GN3_sub_eq_S0 a b hab, S0_eq_eisensteinNorm_shift]
+
+/--
+GEisenstein 層から下降法インターフェースへ接続する橋。
+現段階では `NoSq + harmonic envelope` 供給版を再公開する。
+-/
+lemma descentClassifyImpossibleOnPrimitive_via_GEisenstein {c b : ℕ}
+    (hbc : b < c)
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hNoSq : NoSqOnS0 c b) :
+    DescentClassifyImpossibleOnPrimitive c b := by
+  exact descentClassifyImpossibleOnPrimitive_of_harmonicEnvelope_NoSq
+    hbc hInfra hHarm hNoExcAll hNoSq
 
 /-- 旧層Bの平方耐性主張が一般には成り立たないことの具体反例。 -/
 theorem exists_counterexample_S0_square_resistance :
