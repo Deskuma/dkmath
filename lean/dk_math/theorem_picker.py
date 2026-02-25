@@ -44,7 +44,9 @@ class LeanLspClient:
             stderr_output = ""
             if self.proc.stderr is not None:
                 try:
-                    stderr_output = self.proc.stderr.read().decode("utf-8", errors="replace")
+                    stderr_output = self.proc.stderr.read().decode(
+                        "utf-8", errors="replace"
+                    )
                 except Exception:
                     stderr_output = ""
             msg = (
@@ -298,11 +300,306 @@ def main():
         action="store_true",
         help="Truncate after the first `by` block and replace with `...`.",
     )
+    parser.add_argument(
+        "--find-name",
+        dest="find_name",
+        help="Find and extract definitions by identifier name (static grep fallback).",
+        nargs="?",
+    )
+    parser.add_argument(
+        "--insert-ident",
+        dest="insert_ident",
+        help="Identifier to insert into a target file (uses static search to find snippet).",
+        nargs="?",
+    )
+    parser.add_argument(
+        "--insert-target",
+        dest="insert_target",
+        help="Target file path to insert into.",
+        nargs="?",
+    )
+    parser.add_argument(
+        "--insert-line",
+        dest="insert_line",
+        type=int,
+        help="Line number to insert before (1-based).",
+        nargs="?",
+    )
+    parser.add_argument(
+        "--dry-run",
+        dest="dry_run",
+        action="store_true",
+        help="Show unified diff instead of writing changes.",
+    )
+    parser.add_argument(
+        "--select-index",
+        dest="select_index",
+        type=int,
+        help="If multiple candidates found, select this zero-based index automatically.",
+        nargs="?",
+    )
+    parser.add_argument(
+        "--interactive",
+        dest="interactive",
+        action="store_true",
+        help="When multiple candidates found, prompt interactively to select one (requires TTY).",
+    )
+    parser.add_argument(
+        "--insert-names",
+        dest="insert_names",
+        help="Comma-separated list of identifiers to insert in order under the given pattern.",
+        nargs="?",
+    )
+    parser.add_argument(
+        "--insert-after-pattern",
+        dest="insert_after_pattern",
+        help="Insert the snippets immediately after the first line matching this pattern (regex).",
+        nargs="?",
+    )
     args = parser.parse_args()
     if not os.path.isfile(args.input):
         print(f"Error: Input file {args.input} does not exist.")
         sys.exit(1)
-    extract_definitions(args.input, args.output, args.short)
+    # If --find-name was provided, run a static search for the named definition
+    if args.find_name:
+        try:
+            root = find_project_root(Path(args.input).resolve().parent)
+        except FileNotFoundError:
+            # fallback for standalone/temp directories used in tests
+            root = Path(args.input).resolve().parent
+        defs = find_definitions_by_name(root, args.find_name)
+        # Write simple markdown with found definitions
+        out_path = Path(args.output)
+        with open(out_path, "w", encoding="utf-8") as f:
+            f.write("# Found definitions\n\n")
+            f.write(f"## {args.find_name}\n\n")
+            if not defs:
+                f.write("No definitions found.\n")
+            for item in defs:
+                f.write(f"### {item['ident']} ({item['file']})\n\n")
+                f.write("```lean\n")
+                f.write(item["snippet"].rstrip() + "\n")
+                f.write("```\n\n")
+        print(f"Found {len(defs)} definitions for {args.find_name} -> {out_path}")
+    else:
+        extract_definitions(args.input, args.output, args.short)
+
+    # Batch-insert workflow: insert multiple idents in order under a pattern
+    if args.insert_names and args.insert_target:
+        try:
+            root = find_project_root(Path(args.input).resolve().parent)
+        except FileNotFoundError:
+            root = Path(args.input).resolve().parent
+        names = [n.strip() for n in args.insert_names.split(",") if n.strip()]
+        if not names:
+            print("No names provided for --insert-names")
+            sys.exit(2)
+        defs_list = []
+        for name in names:
+            defs = find_definitions_by_name(root, name)
+            if not defs:
+                print(f"No definitions found for {name}")
+                sys.exit(2)
+            # choose first match by default
+            defs_list.append(defs[0])
+        target = Path(args.insert_target)
+        if not target.exists():
+            print(f"Target file {target} not found")
+            sys.exit(2)
+        # find insertion line: default use provided --insert-line or pattern
+        insert_line = args.insert_line
+        if args.insert_after_pattern:
+            pat = re.compile(args.insert_after_pattern)
+            text = target.read_text(encoding="utf-8")
+            lines = text.splitlines()
+            found = False
+            for i, L in enumerate(lines):
+                if pat.search(L):
+                    insert_line = i + 2  # insert after this line (1-based)
+                    found = True
+                    break
+            if not found:
+                print(f"Pattern not found: {args.insert_after_pattern}")
+                sys.exit(2)
+        insert_line = insert_line or 1
+        # build combined snippet in the given order, ensure one blank line between items
+        combined = []
+        for d in defs_list:
+            s = d.get("snippet", "").rstrip()
+            if s:
+                combined.append(s)
+        combined_text = "\n\n".join(combined) + "\n"
+        new_contents, patch = insert_snippet_into_text(
+            target.read_text(encoding="utf-8"), combined_text, insert_line
+        )
+        if args.dry_run:
+            print(patch)
+        else:
+            out_path = target.with_suffix(target.suffix + ".inserted")
+            out_path.write_text(new_contents, encoding="utf-8")
+            print(f"Wrote inserted file to {out_path}")
+
+    # Insert ident workflow: find snippet and insert into target file
+    if args.insert_ident and args.insert_target:
+        try:
+            root = find_project_root(Path(args.input).resolve().parent)
+        except FileNotFoundError:
+            root = Path(args.input).resolve().parent
+        defs = find_definitions_by_name(root, args.insert_ident)
+        if not defs:
+            print(f"No definitions found for {args.insert_ident}")
+            sys.exit(2)
+        # multiple-candidate handling: print JSON list and allow selection
+        if len(defs) > 1:
+            # prepare summary list
+            summary = []
+            for i, d in enumerate(defs):
+                summary.append(
+                    {
+                        "index": i,
+                        "file": d.get("file"),
+                        "ident": d.get("ident"),
+                        "preview": (
+                            d.get("snippet", "").splitlines()[0]
+                            if d.get("snippet")
+                            else ""
+                        ),
+                    }
+                )
+            # always print JSON summary for caller
+            print("Found multiple candidates:")
+            print(json.dumps(summary, indent=2, ensure_ascii=False))
+            chosen = None
+            # if select_index provided, use it
+            if args.select_index is not None:
+                si = args.select_index
+                if 0 <= si < len(defs):
+                    chosen = defs[si]
+                else:
+                    print(f"--select-index {si} out of range, using first candidate")
+                    chosen = defs[0]
+            # interactive prompt if requested and stdin is a TTY
+            elif args.interactive and sys.stdin.isatty():
+                try:
+                    sel = input(
+                        f"Select candidate index [0-{len(defs)-1}] (enter to choose 0): "
+                    )
+                    if sel.strip() == "":
+                        chosen = defs[0]
+                    else:
+                        sel_i = int(sel.strip())
+                        if 0 <= sel_i < len(defs):
+                            chosen = defs[sel_i]
+                        else:
+                            print("Invalid selection, using first candidate")
+                            chosen = defs[0]
+                except Exception:
+                    print("Interactive selection failed, using first candidate")
+                    chosen = defs[0]
+            else:
+                # non-interactive default: pick first
+                chosen = defs[0]
+        else:
+            chosen = defs[0]
+        target = Path(args.insert_target)
+        if not target.exists():
+            print(f"Target file {target} not found")
+            sys.exit(2)
+        snippet = chosen["snippet"]
+        insert_line = args.insert_line or 1
+        new_contents, patch = insert_snippet_into_text(
+            target.read_text(encoding="utf-8"), snippet, insert_line
+        )
+        if args.dry_run:
+            print(patch)
+        else:
+            out_path = target.with_suffix(target.suffix + ".inserted")
+            out_path.write_text(new_contents, encoding="utf-8")
+            print(f"Wrote inserted file to {out_path}")
+
+
+def insert_snippet_into_text(orig_text: str, snippet: str, insert_line: int):
+    """Return (new_text, unified_diff_str) after inserting `snippet` before `insert_line` (1-based)."""
+    import difflib
+
+    lines = orig_text.splitlines(keepends=True)
+    idx = max(0, min(len(lines), insert_line - 1))
+    # Build snippet lines with ensured trailing newlines
+    raw_snip_lines = [l + "\n" for l in snippet.splitlines()]
+
+    # Determine whether there's already a blank line before insertion point
+    need_blank_before = True
+    if idx > 0 and lines[idx - 1].strip() == "":
+        need_blank_before = False
+
+    # Determine whether there's already a blank line after insertion point
+    need_blank_after = True
+    if idx < len(lines) and lines[idx].strip() == "":
+        need_blank_after = False
+
+    snippet_lines = []
+    if need_blank_before:
+        snippet_lines.append("\n")
+    snippet_lines.extend(raw_snip_lines)
+    if need_blank_after:
+        snippet_lines.append("\n")
+
+    new_lines = lines[:idx] + snippet_lines + lines[idx:]
+    new_text = "".join(new_lines)
+    diff = difflib.unified_diff(
+        lines, new_lines, fromfile="orig", tofile="new", lineterm=""
+    )
+    patch = "\n".join(diff)
+    return new_text, patch
+
+
+def find_definitions_by_name(root: Path, name: str):
+    """Static search: look for definitions/lemmas/theorems named `name` under root.
+
+    This is a simple fallback using text search; it returns a list of dicts with
+    keys: file, ident, snippet.
+    """
+    import re
+
+    pattern = re.compile(
+        r"^(?:@[\w\[\] :]+\s*)*(def|lemma|theorem)\s+" + re.escape(name) + r"\b"
+    )
+    results = []
+    for p in root.rglob("*.lean"):
+        try:
+            text = p.read_text(encoding="utf-8")
+        except Exception:
+            continue
+        lines = text.splitlines()
+        for i, line in enumerate(lines):
+            if pattern.search(line):
+                # extract snippet: from this line until next blank line followed by a non-indented top-level start
+                start = i
+                end = i + 1
+                while end < len(lines):
+                    # stop at a blank line followed by a top-level keyword
+                    if lines[end].strip() == "":
+                        # lookahead
+                        if end + 1 < len(lines) and re.match(
+                            r"^[a-zA-Z@]", lines[end + 1]
+                        ):
+                            break
+                    # also stop if next line looks like another top-level declaration
+                    if re.match(
+                        r"^(def|lemma|theorem|structure|inductive|class)\b", lines[end]
+                    ):
+                        break
+                    end += 1
+                snippet = "\n".join(lines[start:end])
+                results.append(
+                    {
+                        "file": str(p.relative_to(root)),
+                        "ident": name,
+                        "snippet": snippet,
+                    }
+                )
+                break
+    return results
 
 
 if __name__ == "__main__":
