@@ -24,6 +24,37 @@ status: 作業中 - phase-10: 完全証明への道
 
 ## 状況タスク
 
+**現状評価**
+
+- [x] 1. 補集合処理は既に成立しています。  
+  `¬NoSq → ∃q, q^2|S0 → (q=3)∨(q≠3)` の分解と `q≠3` 側の封鎖は実装済みです（`lean/dk_math/DkMath/FLT/PhaseLift.lean:55`, `lean/dk_math/DkMath/FLT/PhaseLift.lean:143`）。
+- [x] 2. 合流入口もあります。  
+  `by_cases NoSqOnS0` の合流本体は `lean/dk_math/DkMath/FLT/Main.lean:221`、基底入力版は `lean/dk_math/DkMath/FLT/Main.lean:334`。
+- [ ] 3. 未充足の本丸は `NonLiftableS0` の自動生成です。  
+  今は `hNonLift` を入力で受けるか、`NoSq` から逆算しています。
+
+**phase-10 攻略法（本命）**
+
+- [ ] 1. `3` の最終整理を先に終わらせる。  
+  目標補題: `Nat.Coprime c b -> ¬ 3^2 ∣ S0_nat c b`（mod3 分離仮定なし）。  
+  これで `NoSqBaseInput` から `hc_nz/hb_nz/hsep` を外せる可能性が高いです。
+- [ ] 2. `q≠3` の `NonLiftableS0` を「分類器 impossible」経由で機械化する。  
+  既存の変換器 `nonLiftableS0_of_classifyLift_impossible`（`lean/dk_math/DkMath/FLT/CounterexamplePattern.lean:198`）を使い、足りないのは  
+  `PrimitiveOnS0 -> classifyLift = impossible` の供給です。
+- [ ] 3. 上の供給を下降法（または同等の反例縮小）で埋める。  
+  `GEisensteinBridge` はまだ導入段階（`lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`）なので、ここが最大工数です。
+- [ ] 4. 最終入口を `NoSqBaseInput` 一発に統合。  
+  `lean/dk_math/DkMath/FLT/Main.lean:334` を最終公開入口にし、他はラッパーに寄せる。
+
+**保険ルート**
+
+- [ ] 1. 「まず完全定理を公開したい」なら、既存 `Basic` 系（`FLT_case_3`, `FLT`）への橋定理を先に立てる。  
+- [ ] 2. その後に phase-10 本命（下降法）を段階置換する。
+
+この方針なら、短期で前進しつつ、最終的に“仮定なし NonLiftable”へ到達できます。  
+
+## 状況
+
 ## A. 封印解除レポート
 
 結論から言うと、これは **「FLT の (n=3) 版」** を、`Mathlib.FLT`（あの本丸定理）を呼ばずに、
