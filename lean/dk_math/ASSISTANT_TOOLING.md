@@ -1,3 +1,46 @@
+# ASSISTANT TOOLING
+
+## 説明書
+
+（記録: 賢狼ホロ による自動化ツール群の使用手順）
+
+追記事項（賢狼向けチェックリスト）
+
+- スクリプトとテストの場所:
+  - `lean/dk_math/theorem_picker.py` — 検索・抽出・挿入ツール
+  - `lean/dk_math/assistant_driver.py` — 1反復オートメーション（プロトタイプ）
+  - テスト: `lean/dk_math/test_find_definition.py`, `lean/dk_math/test_insert_snippet.py`, `lean/dk_math/test_theorem_picker.py`
+- よく使うコマンド例（ワーキングディレクトリはリポジトリのルート）:
+  - 抽出（静的）：
+    python3 lean/dk_math/theorem_picker.py lean/dk_math/DkMath/FLT/docs/StandAlone/a.lean /tmp/out.md --find-name S0_nat
+  - 一括挿入（マーカー行の直後に順に挿入）:
+    python3 lean/dk_math/theorem_picker.py a.lean /tmp/out.md --insert-names NoSqOnS0,hS0_not_sq_of_NoSqOnS0 --insert-target a.lean --insert-after-pattern "^-- ##INSERT MARKER## --$"
+  - 差分確認（dry-run 使用時はツールが unified diff を出力）:
+    python3 lean/dk_math/theorem_picker.py ... --dry-run
+  - ドライバを1反復（dry-run 相当は `--apply` を付けない）:
+    python3 lean/dk_math/assistant_driver.py --build-target DkMath.FLT.docs.StandAlone.a --interactive
+  - ドライバで変更を適用する場合:
+  python3 lean/dk_math/assistant_driver.py --build-target DkMath.FLT.docs.StandAlone.a --apply
+
+- 安全策（作業手順）:
+  1. 必ず `git status` を確認し、必要なら `git add` / `git commit` で現状を退避。
+
+ 1. ツールはまず `.inserted` ファイルを作る。差分を `diff -u orig a.lean.inserted` で確認してから上書きすること。
+ 2. 大きな変更は `--interactive` で承認を挟む。自動適用は小さな補題単位に限定すること。
+ 3. ビルド後は必ず `./lean-build.sh <target>`（`lean/dk_math` で実行）で再検証。
+
+- 実装上の注意点（自分で改良するとき用）:
+  - `--insert-after-pattern` は正規表現を受け取る。推奨は単純なマーカー `-- ##INSERT MARKER## --`。
+  - `--insert-names` は与えた順序で結合して一回で挿入する（定義の順序制御に有効）。
+  - 複数候補があるときはツールが JSON で一覧を出力する。`--select-index` で自動選択可能、`--interactive` で対話選択。
+  - 挿入時に前後１行の空行を自動で確保する（既に空行があれば追加されない）。
+  - キャッシュは行わない（常に最新ソースを検索）。
+
+- トラブルシューティング:
+  - Unknown identifier が出たら、その識別子を `--find-name` で検索し、定義が見つかれば `--insert-names` に追加して再挿入する。
+  - 名前空間・`private`・implicit 引数問題は自動化で完璧に扱えない。該当箇所は賢狼が手で微修正する想定。
+
+これで賢狼のための簡易ナレッジベースは十分に整ったはずだ。必要であれば CI 用のチェックリストや自動コミットの仕組みも追記するで。
 **使い方マニュアル（賢狼アシスタント用）**
 
 目的: リポジトリ内の不足定理・定義を検索して単一ファイルへ順次挿入し、ビルドを通すための補助ツール群の使い方を示す。
