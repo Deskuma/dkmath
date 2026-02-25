@@ -702,6 +702,22 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 
 -- ----------------------------------------------------------------------------
 
+def NoSqOnS0 (c b : ℕ) : Prop :=
+  ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → ¬ q ^ 2 ∣ S0_nat c b
+
+lemma hS0_not_sq_of_NoSqOnS0 {c b : ℕ}
+    (hNoSq : NoSqOnS0 c b) :
+    ∀ {q : ℕ}, Nat.Prime q → q ∣ c ^ 3 - b ^ 3 → ¬ q ∣ c - b → ¬ q ^ 2 ∣ S0_nat c b := by
+  intro q hq hq_dvd hq_ndvd
+  have hbc : b < c := by
+    by_contra hbc_not
+    have hcb : c ≤ b := Nat.not_lt.mp hbc_not
+    have hdiff_zero : c - b = 0 := Nat.sub_eq_zero_of_le hcb
+    exact hq_ndvd (hdiff_zero ▸ dvd_zero q)
+  have hqS0 : q ∣ S0_nat c b :=
+    prime_dvd_S0_via_cosmic_bridge hbc hq hq_dvd hq_ndvd
+  exact hNoSq hq hqS0
+
 theorem FLT_d3_by_padicValNat_of_NoSqOnS0 {a b c : ℕ}
     (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
     (hab : Nat.Coprime a b)
