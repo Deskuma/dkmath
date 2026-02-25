@@ -266,5 +266,10 @@
         "MD040": false,
         "MD060": false
     },
-    "markdownlint.customRules": []
+    "markdownlint.customRules": [],
+    "chat.tools.terminal.autoApprove": {
+        "./run_assistant_driver.sh": true,
+        "./lean-build.sh": true,
+        "bash lean-build.sh": false
+    }
 }

@@ -10,7 +10,16 @@ import Mathlib
 
 set_option linter.style.longLine false
 
-#print "DkMath.FLT.FLT3StandAloneNC"
+#print "DkMath.FLT.docs.StandAlone.FLT3#StandAlone-NC"
+
+/-!
+# FLT - Fermat's Last Theorem - Stand-alone lemmas for the case n=3, no coprimality assumptions
+-----------------------------------------------------------------------------------------------
+    Note:
+        This lemma set is a formalization file for single-file builds only.
+        It is forbidden to import or be imported (except by Mathlib).
+-----------------------------------------------------------------------------------------------
+-/
 
 def diffPowSum {α : Type*} [CommRing α] (a b : α) (d : ℕ) : α :=
   ∑ i ∈ Finset.range d, a^(d - 1 - i) * b^i

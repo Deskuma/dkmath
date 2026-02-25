@@ -1,6 +1,6 @@
 # No Square on S0 Work Notes
 
-status: 作業中 - phase-09:
+status: 作業中 - phase-11: 完全証明への道（下降法で `NonLiftableS0` を実証する）
 
 ## Index
 
@@ -14,13 +14,89 @@ status: 作業中 - phase-09:
 [NoSqOnS0: phase-06](NoSqOnS0-WorkNotes-phase-06.md)
 [NoSqOnS0: phase-07](NoSqOnS0-WorkNotes-phase-07.md)
 [NoSqOnS0: phase-08](NoSqOnS0-WorkNotes-phase-08.md)
+[NoSqOnS0: phase-09](NoSqOnS0-WorkNotes-phase-09.md)
+[NoSqOnS0: phase-10](NoSqOnS0-WorkNotes-phase-10.md)
 
 ## 課題
 
-- [x] なし
+- [ ] 仮定の証明
+  - [ ] `NonLiftableS0` の証明（下降法）
+  - [x] ただし、`GEisensteinBridge` の `descent` インターフェースは実装済み。
 
 ## 状況タスク
 
-phase-09
+**現状評価**
 
-## 実装方針
+- [ ] 3. 未充足の本丸は `NonLiftableS0` の自動生成です。  
+  今は `hNonLift` を入力で受けるか、`NoSq` から逆算しています。
+
+**phase-10 攻略法（本命）**
+
+- [ ] 3. 上の供給を下降法（または同等の反例縮小）で埋める。  
+  `GEisensteinBridge` はまだ導入段階（`lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`）なので、ここが最大工数です。
+- [ ] 4. 最終入口を `NoSqBaseInput` 一発に統合。  
+  `lean/dk_math/DkMath/FLT/Main.lean:334` を最終公開入口にし、他はラッパーに寄せる。
+
+**保険ルート**
+
+- [ ] 1. 「まず完全定理を公開したい」なら、既存 `Basic` 系（`FLT_case_3`, `FLT`）への橋定理を先に立てる。  
+- [ ] 2. その後に phase-11 本命（下降法）を段階置換する。
+
+この方針なら、短期で前進しつつ、最終的に“仮定なし NonLiftable”へ到達できます。  
+
+## 状況
+
+### D.1. ルート1. 下降法で `NonLiftableS0` を実証する
+
+ファイル内の用語で言えば、欲しいのはこれ：
+
+\[
+\text{PrimitiveOnS0}(c,b,q)\ \Rightarrow\ \neg(q^2 \mid S0_nat(c,b))
+\]
+
+これを “最小反例” 仮定のもとで示し、もし \(q^2\mid S0\) なら **より小さい反例** を構成して矛盾、が王道じゃ。
+
+Lean 的には、だいたいこういう形の核が要る：
+
+```lean
+-- 最小の反例 (a,b,c) を仮定し、
+-- q^2 | S0 から、より小さい (a',b',c') を構成して矛盾
+theorem nonLiftableS0_of_minCounterexample
+  {a b c q : ℕ} :
+  -- (1) a^3 + b^3 = c^3, gcd 条件, 最小性
+  -- (2) PrimitiveOnS0 c b q
+  -- (3) q^2 ∣ S0_nat c b
+  False := by
+  ...
+```
+
+この “下降ステップの構成” には、結局 **アイゼンシュタイン整数 \(\mathbb{Z}[\omega]\)**（あるいは同等の因数分解構造）が効く。
+ぬしの `GEisensteinBridge` 構想は、まさにここに刺さる。
+
+---
+
+## 資料
+
+[議事録](../../discussion-infinite-descent.md)
+
+## 作業ログ
+
+### 2026-02-25 phase-11 方針固め（議事録反映）
+
+- 読了資料:
+  - `lean/dk_math/DkMath/FLT/docs/discussion-infinite-descent.md`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 現在の到達点:
+  - `GEisensteinBridge` に下降フレーム（`measure` / `step` / `step_pred`）と停止到達 API は実装済み。
+  - `Main` への接続（`..._of_descentClassify_...`, `..._of_GEisensteinCore_...`）は実装済み。
+  - ただし `DescentClassifyImpossibleOnPrimitive` の中身は、まだ `NoSq` 系供給に依存している。
+- phase-11 の本丸（未充足）:
+  - `PrimitiveOnS0 c b q -> ¬ q^2 ∣ S0_nat c b` を、外部 `hNonLift` 仮定なしで供給する下降法コアを作る。
+- 実装方針（確定）:
+  1. `GEisensteinBridge` に「最小反例/測度」インターフェースを追加し、`measure` の厳密減少を証明可能形で固定する。
+  2. `PrimitiveOnS0` を保持する状態から、`q^2 ∣ S0` 仮定時により小さい候補へ落とす `step` 補題群を分離実装する。
+  3. 最小反例矛盾 (`wellFounded` / 最小元原理) から `DescentClassifyImpossibleOnPrimitive` を生成する。
+  4. 既存 `nonLiftableS0_family_of_descentClassify` に接続し、`Main` 公開入口は差し替えなしで完成させる。
+- 直近の着手点（次コミット）:
+  - `GEisensteinBridge.lean` に phase-11 用の state/measure スケルトン補題を追加する。
+  - 既存 `primitiveSized` の `pred` 減少は「停止性 API」として残し、実体降下補題は別名前空間で段階追加する。
