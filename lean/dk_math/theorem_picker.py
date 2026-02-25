@@ -569,8 +569,11 @@ def find_definitions_by_name(root: Path, name: str):
     """
     import re
 
+    # also detect structures, inductives, classes etc.
     pattern = re.compile(
-        r"^(?:@[\w\[\] :]+\s*)*(def|lemma|theorem)\s+" + re.escape(name) + r"\b"
+        r"^(?:@[\w\[\] :]+\s*)*(def|lemma|theorem|structure|inductive|class)\s+"
+        + re.escape(name)
+        + r"\b"
     )
     results = []
     for p in root.rglob("*.lean"):
