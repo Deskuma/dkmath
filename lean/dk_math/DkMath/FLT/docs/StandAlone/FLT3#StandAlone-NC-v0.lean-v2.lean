@@ -8,12 +8,11 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 
-set_option linter.style.longLine false
-set_option linter.style.emptyLine false
-set_option linter.unusedTactic false
+set_option linter.style.longLine true
+set_option linter.style.emptyLine true
+set_option linter.unusedTactic true
 
--- open Finset
-open scoped BigOperators
+-- open scoped BigOperators
 
 #print "DkMath.FLT.docs.StandAlone.FLT3#StandAlone-NC"
 
@@ -206,12 +205,9 @@ theorem pow_sub_pow_factor {α : Type*} [CommRing α] (a b : α) (d : ℕ) :
     rw [eq2, ih]
     have : diffPowSum a b (d + 1) = a^d + b * diffPowSum a b d := by
       unfold diffPowSum
-      -- split the 0-th term and shift the rest (use sum_range_succ' to get f 0 + ∑ f (i+1))
       rw [Finset.sum_range_succ']
-      -- show the tail sum equals b * the shifted sum
       have tail_eq : ∑ k ∈ Finset.range d, a ^ (d + 1 - 1 - (k + 1)) * b ^ (k + 1) =
                      b * ∑ i ∈ Finset.range d, a ^ (d - 1 - i) * b ^ i := by
-        -- move the `b` inside the sum so `sum_congr` can match summands
         rw [Finset.mul_sum]
         apply Finset.sum_congr rfl
         intro i hi
@@ -225,41 +221,31 @@ theorem prime_dividing_gcd_divides_d {p : ℕ} (hp : p.Prime) {a b : ℤ} {d : �
     (hab : Int.gcd a b = 1)
     (hpdiv : (p : ℤ) ∣ Int.gcd (a - b) (diffPowSum a b d)) :
     (p : ℕ) ∣ d := by
-  -- let pp be the integer prime
   let pp : ℤ := p
-  -- from hpdiv and gcd divisibility, pp divides a - b and S := diffPowSum a b d
   have g_dvd_left := Int.gcd_dvd_left (a - b) (diffPowSum a b d)
   have g_dvd_right := Int.gcd_dvd_right (a - b) (diffPowSum a b d)
   have pp_dvd_ab : pp ∣ (a - b) := by
     apply Int.dvd_trans hpdiv g_dvd_left
   have pp_dvd_S : pp ∣ diffPowSum a b d := by
     apply Int.dvd_trans hpdiv g_dvd_right
-  -- Let S := diffPowSum a b d for brevity
   let S := diffPowSum a b d
-  -- Show (a - b) divides S - d * b^(d-1):
-  -- S - d*b^(d-1) = ∑_{i=0}^{d-1} (a^{d-1-i} b^i - b^{d-1})
   have S_minus_eq : S - (d : ℤ) * b ^ (d - 1)
     = ∑ i ∈ Finset.range d, (a ^ (d - 1 - i) * b ^ i - b ^ (d - 1)) := by
-    -- expand the definition of S and rewrite the constant sum
-    -- diffPowSum_sub_const_mul
     change (∑ i ∈ Finset.range d, a ^ (d - 1 - i) * b ^ i) - (d : ℤ) * b ^ (d - 1)
       = ∑ i ∈ Finset.range d, (a ^ (d - 1 - i) * b ^ i - b ^ (d - 1))
     have : (d : ℤ) * b ^ (d - 1) = ∑ i ∈ Finset.range d, b ^ (d - 1) := by
       simp [Finset.sum_const, Finset.card_range]
     rw [this]
     simp only [Finset.sum_sub_distrib]
-  -- each term a^(m) - b^(m) is divisible by a - b
   have term_div : ∀ i ∈ Finset.range d, (a - b) ∣ (a ^ (d - 1 - i) - b ^ (d - 1 - i)) := by
     intro i hi
     have eq := pow_sub_pow_factor (a := a) (b := b) (d := d - 1 - i)
     rw [eq]
     simp only [dvd_mul_right]
-  -- multiply by b^i to get divisibility of each summand and sum up
   have : (a - b) ∣ (S - (d : ℤ) * b ^ (d - 1)) := by
     rw [S_minus_eq]
     apply Finset.dvd_sum
     intro i hi
-    -- b^i * (a^{m} - b^{m}) is divisible by a - b
     have hterm := term_div i hi
     have hle : i ≤ d - 1 := by
       have hlt : i < d := by exact Finset.mem_range.mp hi
@@ -275,31 +261,22 @@ theorem prime_dividing_gcd_divides_d {p : ℕ} (hp : p.Prime) {a b : ℤ} {d : �
     rw [heq]
     have hmul := dvd_mul_of_dvd_left hterm (b ^ i)
     simpa [mul_comm] using hmul
-  -- since pp divides a-b and S, subtracting shows pp divides d * b^(d-1)
   have pp_dvd_d_mul_bpow : pp ∣ (d : ℤ) * b ^ (d - 1) := by
-    -- pp divides S and pp divides S - d*b^(d-1), therefore pp divides their difference d*b^(d-1)
     have pp_div_Sminus : pp ∣ (S - (d : ℤ) * b ^ (d - 1)) := by
       apply Int.dvd_trans pp_dvd_ab
       exact this
-    -- simplify the subtraction to get d*b^(d-1)
     have hsub := Int.dvd_sub pp_dvd_S pp_div_Sminus
     have eq : (d : ℤ) * b ^ (d - 1) = S - (S - (d : ℤ) * b ^ (d - 1)) := by ring
     rw [eq]
     exact hsub
-  -- show pp cannot divide b (otherwise divides a as well, contradicting gcd a b = 1)
   have pp_not_dvd_b : ¬ pp ∣ b := by
     intro h
-    -- if pp ∣ b and pp ∣ a - b then pp ∣ a
     have pa : pp ∣ a := by simpa using Int.dvd_add pp_dvd_ab h
-    -- from pa and h we obtain a natural-number divisibility p ∣ gcd a b
     have gg_nat : p ∣ Int.gcd a b := Int.dvd_gcd pa h
-    -- hence p divides 1 (since gcd a b = 1), contradiction with primality
     have : p ∣ 1 := by rwa [hab] at gg_nat
     exact hp.not_dvd_one this
-  -- convert integer divisibility to nat-level and use primality: p ∣ d * b.natAbs^(d-1)
   have nat_mul_dvd : (p : ℕ) ∣ d * (b.natAbs ^ (d - 1)) := by
     rcases pp_dvd_d_mul_bpow with ⟨k, hk⟩
-    -- take absolute values of both sides and simplify stepwise
     have habs := congrArg Int.natAbs hk
     have eq1 : p * k.natAbs = Int.natAbs (d * b ^ (d - 1)) := by
       calc
@@ -323,12 +300,9 @@ theorem prime_dividing_gcd_divides_d {p : ℕ} (hp : p.Prime) {a b : ℤ} {d : �
         _ = d * (b.natAbs ^ (d - 1)) := eq2
     use k.natAbs
     simp [eq]
-  -- since p is prime, p ∣ d or p ∣ b.natAbs^(d-1);
-  -- the latter implies p ∣ b (contradiction), so p ∣ d
   have : (p : ℕ) ∣ d := by
     rcases (hp.dvd_mul.mp nat_mul_dvd) with (pd | pbpow)
     · exact pd
-    -- helper: prime divides power => prime divides base (simple induction)
     have prime_divides_pow : ∀ n, (p : ℕ) ∣ (b.natAbs ^ n) → (p : ℕ) ∣ b.natAbs := by
       intro n
       induction n with
@@ -340,11 +314,8 @@ theorem prime_dividing_gcd_divides_d {p : ℕ} (hp : p.Prime) {a b : ℤ} {d : �
         rcases hd with (h1 | h2)
         · exact ih h1
         · exact h2
-        done
-    · -- derive p ∣ b.natAbs from p ∣ b.natAbs^(d-1)
-      have pb : (p : ℕ) ∣ b.natAbs := by
+    · have pb : (p : ℕ) ∣ b.natAbs := by
         exact prime_divides_pow (d - 1) pbpow
-      -- pb : p ∣ b.natAbs, derive pp ∣ b as integer then contradiction
       rcases pb with ⟨m, hm⟩
       let bm : ℤ := (b.sign : ℤ) * (m : ℤ)
       have h1 := (Int.sign_mul_natAbs b).symm
@@ -355,16 +326,11 @@ theorem prime_dividing_gcd_divides_d {p : ℕ} (hp : p.Prime) {a b : ℤ} {d : �
             have : ↑(p * m) = pp * (m : ℤ) := by simp [pp]
             rw [this]
             ring
-            done
-      -- derive contradiction pp ∣ b
       have : b = pp * bm := by rw [h1, h2]
       have pp_div_b : pp ∣ b := by use bm
       have : False := pp_not_dvd_b pp_div_b
       contradiction -- finish ok
-      done
-  -- done: (p : ℕ) ∣ d
   exact this
-  done
 
 lemma pow_sub_pow_eq_diff_mul_quotient {a b p : ℕ}
     (_hp : Nat.Prime p) (ha : b < a) :
@@ -406,13 +372,10 @@ lemma exists_prime_divisor_not_dividing_diff_of_prime_exp
       simp only [Int.gcd_eq_natAbs]
       have : Nat.gcd a b = 1 := hab
       simp [this]
-    -- (a-b) * quotientPrimePow a b p = a^p - b^p
     have heq_mul : (a - b) * quotientPrimePow a b p = a^p - b^p :=
       (pow_sub_pow_eq_diff_mul_quotient hp ha).symm
-    -- a^p - b^p = (a-b) * diffPowSum a b p (ℤ)
     have key_int : (a : ℤ)^p - (b : ℤ)^p = ((a : ℤ) - (b : ℤ)) * diffPowSum (a : ℤ) (b : ℤ) p :=
       pow_sub_pow_factor (a : ℤ) (b : ℤ) p
-    -- quotientPrimePow a b p と diffPowSum (a : ℤ) (b : ℤ) p の関係を導く
     have hab_le : b ≤ a := Nat.le_of_lt ha
     have hab_pow : b^p ≤ a^p := Nat.pow_le_pow_left hab_le p
     have quot_eq_sum : (quotientPrimePow a b p : ℤ) = diffPowSum (a : ℤ) (b : ℤ) p := by
@@ -424,47 +387,36 @@ lemma exists_prime_divisor_not_dividing_diff_of_prime_exp
       simp only [Nat.cast_mul] at heq_cast
       rw [h1, h2] at heq_cast
       rw [key_int] at heq_cast
-      -- ((a : ℤ) - (b : ℤ)) * ↑(quotientPrimePow a b p) = ((a : ℤ) - (b : ℤ)) * diffPowSum ...
       have hab_ne_zero : (a : ℤ) - (b : ℤ) ≠ 0 := by omega
       exact (mul_right_inj' hab_ne_zero).mp heq_cast
-    -- q ∣ quotientPrimePow より q ∣ diffPowSum (ℤ)
     have q_div_sum : (q : ℤ) ∣ diffPowSum (a : ℤ) (b : ℤ) p := by
       rw [← quot_eq_sum]
       exact Int.ofNat_dvd.mpr hq_div_G
-    -- q ∣ a - b (ℤ)
     have q_div_diff_int : (q : ℤ) ∣ ((a : ℤ) - (b : ℤ)) := by
       have : (a : ℤ) - (b : ℤ) = ↑(a - b) := by omega
       rw [this]
       exact Int.ofNat_dvd.mpr hq_div_diff
-    -- q  gcd(a-b, diffPowSum) を導く
     have hgcd_div : (q : ℤ) ∣ ↑(Int.gcd ((a : ℤ) - (b : ℤ)) (diffPowSum (a : ℤ) (b : ℤ) p)) := by
-      -- より簡潔な証明：q | x かつ q | y ならば q | gcd(x,y)
       apply Int.ofNat_dvd.mpr
       apply Nat.dvd_gcd
-      · -- q ∣ (a - b).natAbs を示す
-        have : ((a : ℤ) - (b : ℤ)).natAbs = a - b := by
+      · have : ((a : ℤ) - (b : ℤ)).natAbs = a - b := by
           have heq : (a : ℤ) - (b : ℤ) = ↑(a - b) := by omega
           simp [heq]
         rw [this]
         exact hq_div_diff
-      · -- q ∣ (diffPowSum ...).natAbs を示す
-        -- diffPowSum (a : ℤ) (b : ℤ) p = quotientPrimePow a b p (as ℤ)
-        have : diffPowSum (a : ℤ) (b : ℤ) p = (quotientPrimePow a b p : ℤ) := quot_eq_sum.symm
+      · have : diffPowSum (a : ℤ) (b : ℤ) p = (quotientPrimePow a b p : ℤ) := quot_eq_sum.symm
         rw [this]
         have : ((quotientPrimePow a b p : ℤ)).natAbs = quotientPrimePow a b p := by
           norm_cast
         rw [this]
         exact hq_div_G
-    -- prime_dividing_gcd_divides_d より q ∣ p
     have hq_div_p : (q : ℕ) ∣ p := by
       exact prime_dividing_gcd_divides_d hq_prime hab_int hgcd_div
-    -- q, p はどちらも素数で q ∣ p なので q = p
     have hq_eq_p : q = p := by
       have := hp.eq_one_or_self_of_dvd q hq_div_p
       rcases this with h1 | h2
       · exact absurd h1 hq_prime.ne_one
       · exact h2
-    -- しかし hpnd : ¬ p ∣ a - b と hq_div_diff : q ∣ a - b および q = p から矛盾
     rw [hq_eq_p] at hq_div_diff
     exact hpnd hq_div_diff
 
@@ -473,7 +425,6 @@ lemma exists_primitive_prime_factor_basic {a b d : ℕ}
     (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
     (hpnd : ¬ d ∣ a - b) :
     ∃ q : ℕ, Nat.Prime q ∧ q ∣ a^d - b^d ∧ ¬ q ∣ a - b := by
-  -- GcdDiffPow の補題を直接使う
   exact exists_prime_divisor_not_dividing_diff_of_prime_exp hd_prime hd_ge hab_lt hb hab hpnd
 
 lemma exists_primitive_prime_factor_prime {a b : ℕ} {d : ℕ}
@@ -548,8 +499,6 @@ theorem cosmic_id_csr' {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
   rw [h1, h2]
   simp only [Nat.choose_zero_right, Nat.cast_one, pow_zero, mul_one]
   ring
-
-/- GN definition and cosmic identity (CommSemiring) -/
 
 lemma sub_eq_mul_GN (d x u : ℕ) :
     (x + u) ^ d - u ^ d = x * GN d x u := by
@@ -671,7 +620,6 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
       ∀ {q : ℕ}, Nat.Prime q → q ∣ c ^ 3 - b ^ 3 → ¬ q ∣ c - b → ¬ q ^ 2 ∣ S0_nat c b) :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
   intro h_eq
-
   have hcop_cb : Nat.Coprime c b := coprime_cb_of_eq hab h_eq
   have hbc : b < c := by
     by_contra hbc_not
@@ -680,27 +628,20 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
     have hsum_le : a ^ 3 + b ^ 3 ≤ b ^ 3 := by simpa [h_eq] using hc3_le
     have ha3_pos : 0 < a ^ 3 := by positivity
     omega
-
   obtain ⟨q, hq_prime, hq_dvd_diff, hq_ndiv_diff⟩ :=
     exists_prime_factor_cube_diff hbc hb hcop_cb
-
   have hsub : c ^ 3 - b ^ 3 = a ^ 3 := cube_sub_eq_of_add_eq h_eq
   have hq_dvd_a3 : q ∣ a ^ 3 := by simpa [hsub] using hq_dvd_diff
   have hq_dvd_a : q ∣ a := hq_prime.dvd_of_dvd_pow hq_dvd_a3
-
   have h_lower_a3 : 3 ≤ padicValNat q (a ^ 3) :=
     padicValNat_lower_bound_of_dvd_d3 ha hq_prime hq_dvd_a
   have h_lower : 3 ≤ padicValNat q (c ^ 3 - b ^ 3) := by
     simpa [hsub] using h_lower_a3
-
   have h_upper : padicValNat q (c ^ 3 - b ^ 3) ≤ 1 :=
     padicValNat_upper_bound_d3 hbc hc hb hq_prime hq_dvd_diff hq_ndiv_diff
       (hS0_not_sq hq_prime hq_dvd_diff hq_ndiv_diff)
-
   have : (3 : ℕ) ≤ 1 := le_trans h_lower h_upper
   omega
-
--- ----------------------------------------------------------------------------
 
 def NoSqOnS0 (c b : ℕ) : Prop :=
   ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → ¬ q ^ 2 ∣ S0_nat c b
@@ -729,10 +670,6 @@ theorem FLT_d3_by_padicValNat_of_NoSqOnS0 {a b c : ℕ}
 
 def PrimitiveOnS0 (c b q : ℕ) : Prop :=
   Nat.Prime q ∧ q ∣ S0_nat c b ∧ ¬ q ∣ c - b
-
-/--
-`PrimitiveOnS0` な素数は `S0` を二乗では持ち上げない。
--/
 
 def S0PrimeSupportExceptThree (c b : ℕ) : Prop :=
   ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → q ≠ 3 → ¬ q ∣ c - b
@@ -812,11 +749,6 @@ lemma exists_sq_factor_split_three {c b : ℕ}
   · right
     exact ⟨q, hq, hq3, hqS0, hq2⟩
 
-/--
-phase-03-C の十分条件（skeleton）:
-非例外調和点 witness と `NoSqOnS0` の組。
--/
-
 lemma prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three {c b q : ℕ}
     (hbc : b ≤ c)
     (hcop : Nat.Coprime c b)
@@ -849,11 +781,6 @@ lemma prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three {c b q : ℕ}
     have hq_one : q ∣ 1 := by simpa [hcop.gcd_eq_one] using hq_gcd
     exact hq.not_dvd_one hq_one
 
-/--
-`hSuppEx3` の自動生成ブリッジ:
-`b ≤ c` と `gcd(c,b)=1` から `S0PrimeSupportExceptThree c b` を得る。
--/
-
 lemma not_NoSqOnS0_iff_exists_sq_factor {c b : ℕ} :
     ¬ NoSqOnS0 c b ↔
       ∃ q : ℕ, Nat.Prime q ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b := by
@@ -870,10 +797,6 @@ lemma not_NoSqOnS0_iff_exists_sq_factor {c b : ℕ} :
 
 def NonLiftableS0 (c b q : ℕ) : Prop :=
   PrimitiveOnS0 c b q → ¬ q ^ 2 ∣ S0_nat c b
-
-/--
-`NoSq` 合流ルートの基底入力束。
--/
 
 lemma not_exists_sq_factor_ne_three_of_support_nonLiftable {c b : ℕ}
     (hSuppEx3 : S0PrimeSupportExceptThree c b)
@@ -897,16 +820,12 @@ lemma three_sq_dvd_of_not_NoSqOnS0_of_support_nonLiftable {c b : ℕ}
   · exfalso
     exact (not_exists_sq_factor_ne_three_of_support_nonLiftable hSuppEx3 hNonLift) hne3
 
-/--
-`q ≠ 3` かつ `q ∣ S0(c,b)` と `gcd(c,b)=1` なら `q ∤ (c-b)`。
-（`b ≤ c` を仮定）
--/
-
 lemma s0PrimeSupportExceptThree_of_coprime {c b : ℕ}
     (hbc : b ≤ c) (hcop : Nat.Coprime c b) :
     S0PrimeSupportExceptThree c b := by
   intro q hq hqS0 hq_ne3
   exact prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three hbc hcop hq hqS0 hq_ne3
+
 
 lemma NoSqOnS0_of_support_nonLiftable_coprime {c b : ℕ}
     (hbc : b ≤ c)
@@ -920,10 +839,6 @@ lemma NoSqOnS0_of_support_nonLiftable_coprime {c b : ℕ}
     three_sq_dvd_of_not_NoSqOnS0_of_support_nonLiftable hNoSq_false hSuppEx3 hNonLift
   exact (three_sq_not_dvd_S0_of_coprime hbc hcop) h9
 
-/--
-`q = 3` 例外を除去できると、通常の support 条件へ戻せる。
--/
-
 theorem FLT_d3_by_padicValNat_of_support_nonLiftable_coprime {a b c : ℕ}
     (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
     (hab : Nat.Coprime a b)
@@ -935,9 +850,56 @@ theorem FLT_d3_by_padicValNat_of_support_nonLiftable_coprime {a b c : ℕ}
     NoSqOnS0_of_support_nonLiftable_coprime hbc hcb_coprime hNonLift
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
 
-/--
-`hNonLiftAll` と `coprime(c,b)` から直接供給する共通入口。
--/
+structure NP where
+  n : ℤ
+  p : Bool
+deriving DecidableEq, Repr
+
+def N (n : ℤ) : NP := ⟨n, false⟩
+
+def P (n : ℤ) : NP := ⟨n, true⟩
+
+def zero : NP := N 0
+
+def half : NP := P 0
+
+def succ : NP → NP
+  | ⟨n, false⟩ => ⟨n, true⟩
+  | ⟨n, true⟩  => ⟨n + 1, false⟩
+
+def val (x : NP) : ℚ :=
+  (x.n : ℚ) + (if x.p then (1/2 : ℚ) else 0)
+
+structure PetalCoreUnit where
+  base : NP
+deriving DecidableEq, Repr
+
+def coreSucc (u : PetalCoreUnit) : PetalCoreUnit :=
+  ⟨succ u.base⟩
+
+def HarmonicPoint (u : PetalCoreUnit) : Prop :=
+  ∃ k : ℕ, 0 < k ∧ (Nat.iterate coreSucc (2 * k) u).base.p = u.base.p
+
+def isExceptionalPhase (u : PetalCoreUnit) : Prop :=
+  u.base.p = true
+
+structure NoSqBaseInput (c b : ℕ) where
+  hbc : b < c
+  hcb_coprime : Nat.Coprime c b
+  hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u
+  hNonLift : ∀ q : ℕ, NonLiftableS0 c b q
+
+theorem FLT_d3_by_padicValNat_by_cases_NoSq {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b ≤ c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  by_cases hNoSq : NoSqOnS0 c b
+  · exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+  · exact FLT_d3_by_padicValNat_of_support_nonLiftable_coprime
+      ha hb hc hab hbc hcb_coprime hNonLift
 
 theorem FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport {a b c : ℕ}
     (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
@@ -948,3 +910,791 @@ theorem FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport {a b c : ℕ}
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
   exact FLT_d3_by_padicValNat_of_support_nonLiftable_coprime
     ha hb hc hab hbc.le hcb_coprime hNonLiftAll
+
+theorem FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hIn : NoSqBaseInput c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_by_cases_NoSq
+    ha hb hc hab hIn.hbc.le hIn.hcb_coprime hIn.hNonLift
+
+structure CounterexampleInput where
+  c : ℕ
+  b : ℕ
+  q : ℕ
+
+def primitivePrimeGate (x : CounterexampleInput) : Prop :=
+  Nat.Prime x.q ∧ x.q ∣ x.c ^ 3 - x.b ^ 3 ∧ ¬ x.q ∣ x.c - x.b
+
+def noSquareGate (x : CounterexampleInput) : Prop :=
+  ¬ x.q ^ 2 ∣ S0_nat x.c x.b
+
+def exceptionalPhaseGate (_x : CounterexampleInput) : Prop :=
+  ∃ u : PetalCoreUnit, HarmonicPoint u ∧ isExceptionalPhase u
+
+inductive LiftStatus where
+  | possible
+  | impossible
+  | undecided
+  deriving DecidableEq, Repr
+
+noncomputable def classifyLift (x : CounterexampleInput) : LiftStatus := by
+  classical
+  exact if hexc : exceptionalPhaseGate x then
+    LiftStatus.undecided
+  else if hprim : primitivePrimeGate x then
+    if hnosq : noSquareGate x then LiftStatus.impossible else LiftStatus.possible
+  else
+    LiftStatus.undecided
+
+lemma primitivePrimeGate_of_PrimitiveOnS0 {c b q : ℕ}
+    (hbc : b < c)
+    (hprim : PrimitiveOnS0 c b q) :
+    primitivePrimeGate ({ c := c, b := b, q := q } : CounterexampleInput) := by
+  rcases hprim with ⟨hq, hqS0, hq_ndvd⟩
+  have hfact : c ^ 3 - b ^ 3 = (c - b) * S0_nat c b :=
+    cube_sub_eq_mul_sub_S0 hbc
+  have hq_diff : q ∣ c ^ 3 - b ^ 3 := by
+    rw [hfact]
+    exact dvd_mul_of_dvd_right hqS0 (c - b)
+  exact ⟨hq, hq_diff, hq_ndvd⟩
+
+lemma noSquareGate_of_classifyLift_impossible {x : CounterexampleInput}
+    (hprim : primitivePrimeGate x)
+    (hclass : classifyLift x = LiftStatus.impossible) :
+    noSquareGate x := by
+  classical
+  have hexc : ¬ exceptionalPhaseGate x := by
+    intro hexc
+    have hundec : classifyLift x = LiftStatus.undecided := by
+      simp [classifyLift, hexc]
+    have : LiftStatus.undecided = LiftStatus.impossible := hundec.symm.trans hclass
+    cases this
+  by_cases hnosq : noSquareGate x
+  · exact hnosq
+  · have hpossible : classifyLift x = LiftStatus.possible := by
+      simp [classifyLift, hexc, hprim, hnosq]
+    have : LiftStatus.possible = LiftStatus.impossible := hpossible.symm.trans hclass
+    cases this
+
+lemma nonLiftableS0_of_classifyLift_impossible {c b q : ℕ}
+    (hbc : b < c)
+    (hclass :
+      classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible) :
+    NonLiftableS0 c b q := by
+  intro hprim
+  let x : CounterexampleInput := { c := c, b := b, q := q }
+  have hprimGate : primitivePrimeGate x := by
+    simpa [x] using primitivePrimeGate_of_PrimitiveOnS0 hbc hprim
+  have hnosq : noSquareGate x :=
+    noSquareGate_of_classifyLift_impossible hprimGate (by simpa [x] using hclass)
+  simpa [x, noSquareGate] using hnosq
+
+lemma nonLiftableS0_family_of_classifyLift_impossible {c b : ℕ}
+    (hbc : b < c)
+    (hClass :
+      ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+        classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible) :
+    ∀ q : ℕ, NonLiftableS0 c b q := by
+  intro q hprim
+  exact nonLiftableS0_of_classifyLift_impossible hbc (hClass hprim) hprim
+
+theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_classify_coprimeSupport {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hClassPrim :
+      ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+        classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible)
+    :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q :=
+    nonLiftableS0_family_of_classifyLift_impossible hbc hClassPrim
+  exact FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hNonLiftAll
+
+def AllNonLiftableOnS0 (c b : ℕ) : Prop :=
+  (∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → ¬ q ∣ c - b)
+    ∧ ∀ q : ℕ, NonLiftableS0 c b q
+
+abbrev Point2 := ℝ × ℝ
+
+noncomputable section
+
+inductive PhaseLabel where
+  | sqrt2
+  | sqrt3
+  | mixed
+  | unknown
+  deriving DecidableEq, Repr
+
+def A : Point2 := (0, 0)
+def B : Point2 := (1, 0)
+def C : Point2 := (1, 1)
+def D : Point2 := (0, 1)
+
+def E : Point2 := (1 / Real.sqrt 2, 1 / Real.sqrt 2)
+def F : Point2 := (0, Real.sqrt 2)
+def G : Point2 := (-1 / Real.sqrt 2, 1 / Real.sqrt 2)
+
+def O : Point2 := ((Real.sqrt 2 - 1) / 2, 1 / 2)
+def I : Point2 := (Real.sqrt 2 - 1, 1)
+
+def phaseLabelOfPoint (p : Point2) : PhaseLabel :=
+  if p = I then PhaseLabel.mixed
+  else if p = E ∨ p = F ∨ p = G then PhaseLabel.sqrt2
+  else PhaseLabel.unknown
+
+def isMixedPhasePoint (p : Point2) : Prop :=
+  phaseLabelOfPoint p = PhaseLabel.mixed
+
+lemma phaseLabel_I : phaseLabelOfPoint I = PhaseLabel.mixed := by
+  simp [phaseLabelOfPoint]
+
+lemma mixedPoint_I : isMixedPhasePoint I := by
+  simpa [isMixedPhasePoint] using phaseLabel_I
+
+def HasMixedPhaseWitness : Prop :=
+  ∃ p : Point2, isMixedPhasePoint p
+
+def HasNPHalfStepWitness : Prop :=
+  ∃ u : NP, val (succ u) = val u + (1 / 2 : ℚ)
+
+def HasPhaseUnitInfrastructure : Prop :=
+  HasMixedPhaseWitness ∧ HasNPHalfStepWitness
+
+def phaseGate (_x : CounterexampleInput) : Prop :=
+  HasPhaseUnitInfrastructure
+    ∧ ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u
+
+lemma phaseGate_of_harmonicEnvelope {x : CounterexampleInput}
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u) :
+    phaseGate x := by
+  exact ⟨hInfra, hHarm⟩
+
+def HarmonicNonExceptionalSide (x : CounterexampleInput) : Prop :=
+  phaseGate x ∧ ¬ exceptionalPhaseGate x
+
+lemma classifyLift_impossible_of_gates {x : CounterexampleInput}
+    (hexc : ¬ exceptionalPhaseGate x)
+    (hprim : primitivePrimeGate x)
+    (hnosq : noSquareGate x) :
+    classifyLift x = LiftStatus.impossible := by
+  classical
+  simp [classifyLift, hexc, hprim, hnosq]
+
+lemma classifyLift_impossible_of_harmonicNonExceptional {x : CounterexampleInput}
+    (hside : HarmonicNonExceptionalSide x)
+    (hprim : primitivePrimeGate x)
+    (hnosq : noSquareGate x) :
+    classifyLift x = LiftStatus.impossible := by
+  exact classifyLift_impossible_of_gates hside.2 hprim hnosq
+
+lemma classifyLift_impossible_of_harmonicNonExceptional_nonLiftable {c b q : ℕ}
+    (hbc : b < c)
+    (hside : HarmonicNonExceptionalSide ({ c := c, b := b, q := q } : CounterexampleInput))
+    (hprim : PrimitiveOnS0 c b q)
+    (hNonLift : NonLiftableS0 c b q) :
+    classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible := by
+  let x : CounterexampleInput := { c := c, b := b, q := q }
+  have hprimGate : primitivePrimeGate x := by
+    simpa [x] using primitivePrimeGate_of_PrimitiveOnS0 hbc hprim
+  have hnosq : noSquareGate x := by
+    exact hNonLift hprim
+  exact classifyLift_impossible_of_harmonicNonExceptional
+    (by simpa [x] using hside) hprimGate (by simpa [x] using hnosq)
+
+lemma classifyLift_impossible_family_of_harmonicNonExceptional_nonLiftable {c b : ℕ}
+    (hbc : b < c)
+    (hsideAll :
+      ∀ q : ℕ, HarmonicNonExceptionalSide ({ c := c, b := b, q := q } : CounterexampleInput))
+    (hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q) :
+    ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+      classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible := by
+  intro q hprim
+  exact classifyLift_impossible_of_harmonicNonExceptional_nonLiftable
+    hbc (hsideAll q) hprim (hNonLiftAll q)
+
+lemma phaseGate_all_of_harmonicEnvelope
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u) :
+    ∀ x : CounterexampleInput, phaseGate x := by
+  intro x
+  exact phaseGate_of_harmonicEnvelope (x := x) hInfra hHarm
+
+lemma not_three_dvd_S0_of_mod3_separated {c b : ℕ}
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    ¬ 3 ∣ S0_nat c b := by
+  have hc_lt : c % 3 < 3 := Nat.mod_lt _ (by decide)
+  have hb_lt : b % 3 < 3 := Nat.mod_lt _ (by decide)
+  have hc_cases : c % 3 = 1 ∨ c % 3 = 2 := by omega
+  have hb_cases : b % 3 = 1 ∨ b % 3 = 2 := by omega
+  rcases hc_cases with hc1 | hc2
+  · rcases hb_cases with hb1 | hb2
+    · exfalso
+      exact hsep (by simp [hc1, hb1])
+    · intro h3S0
+      have hc_mod1 : c ≡ 1 [MOD 3] := by simpa [Nat.ModEq] using hc1
+      have hb_mod2 : b ≡ 2 [MOD 3] := by simpa [Nat.ModEq] using hb2
+      have hS0_mod_const : S0_nat c b ≡ (1 ^ 2 + 1 * 2 + 2 ^ 2) [MOD 3] := by
+        unfold S0_nat
+        exact ((hc_mod1.pow 2).add (hc_mod1.mul hb_mod2)).add (hb_mod2.pow 2)
+      have hconst : ((1 ^ 2 + 1 * 2 + 2 ^ 2 : ℕ) ≡ 1 [MOD 3]) := by decide
+      have hS0_mod1 : S0_nat c b ≡ 1 [MOD 3] := hS0_mod_const.trans hconst
+      have hS0_mod0 : S0_nat c b ≡ 0 [MOD 3] := h3S0.modEq_zero_nat
+      have h10 : (1 : ℕ) ≡ 0 [MOD 3] := hS0_mod1.symm.trans hS0_mod0
+      norm_num [Nat.ModEq] at h10
+  · rcases hb_cases with hb1 | hb2
+    · intro h3S0
+      have hc_mod2 : c ≡ 2 [MOD 3] := by simpa [Nat.ModEq] using hc2
+      have hb_mod1 : b ≡ 1 [MOD 3] := by simpa [Nat.ModEq] using hb1
+      have hS0_mod_const : S0_nat c b ≡ (2 ^ 2 + 2 * 1 + 1 ^ 2) [MOD 3] := by
+        unfold S0_nat
+        exact ((hc_mod2.pow 2).add (hc_mod2.mul hb_mod1)).add (hb_mod1.pow 2)
+      have hconst : ((2 ^ 2 + 2 * 1 + 1 ^ 2 : ℕ) ≡ 1 [MOD 3]) := by decide
+      have hS0_mod1 : S0_nat c b ≡ 1 [MOD 3] := hS0_mod_const.trans hconst
+      have hS0_mod0 : S0_nat c b ≡ 0 [MOD 3] := h3S0.modEq_zero_nat
+      have h10 : (1 : ℕ) ≡ 0 [MOD 3] := hS0_mod1.symm.trans hS0_mod0
+      norm_num [Nat.ModEq] at h10
+    · exfalso
+      exact hsep (by simp [hc2, hb2])
+
+def AllNonLiftableOnS0ExceptThree (c b : ℕ) : Prop :=
+  S0PrimeSupportExceptThree c b ∧ (∀ q : ℕ, NonLiftableS0 c b q) ∧ ¬ 3 ∣ S0_nat c b
+
+lemma allPrimeSupport_of_exceptThree {c b : ℕ}
+    (hSupp : S0PrimeSupportExceptThree c b)
+    (h3free : ¬ 3 ∣ S0_nat c b) :
+    ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → ¬ q ∣ c - b := by
+  intro q hq hqS0
+  by_cases hq3 : q = 3
+  · intro hqdiff
+    have h3S0 : 3 ∣ S0_nat c b := by simpa [hq3] using hqS0
+    exact h3free h3S0
+  · exact hSupp hq hqS0 hq3
+
+lemma AllNonLiftableOnS0_of_exceptThree {c b : ℕ}
+    (h : AllNonLiftableOnS0ExceptThree c b) : AllNonLiftableOnS0 c b := by
+  rcases h with ⟨hSuppEx3, hNonLift, h3free⟩
+  refine ⟨allPrimeSupport_of_exceptThree hSuppEx3 h3free, hNonLift⟩
+
+lemma AllNonLiftableOnS0_of_exceptThree_mod3_separated {c b : ℕ}
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    AllNonLiftableOnS0 c b := by
+  have h3free : ¬ 3 ∣ S0_nat c b :=
+    not_three_dvd_S0_of_mod3_separated hc_nz hb_nz hsep
+  exact AllNonLiftableOnS0_of_exceptThree ⟨hSuppEx3, hNonLift, h3free⟩
+
+lemma hasMixedPhaseWitness_octagonCore : HasMixedPhaseWitness := by
+  exact ⟨I, mixedPoint_I⟩
+
+lemma val_succ (x : NP) : val (succ x) = val x + (1/2 : ℚ) := by
+  cases x with
+  | mk n p =>
+    cases p
+    · simp [succ, val]
+    · simp [succ, val]; ring
+
+lemma hasNPHalfStepWitness_npunit : HasNPHalfStepWitness := by
+  refine ⟨zero, ?_⟩
+  simpa using val_succ zero
+
+lemma allNonLiftableOnS0_of_harmonicClassifier {c b : ℕ}
+    (hbc : b < c)
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hClass :
+      ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+        classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    AllNonLiftableOnS0 c b := by
+  have _hphaseAll : ∀ x : CounterexampleInput, phaseGate x :=
+    phaseGate_all_of_harmonicEnvelope hInfra hHarm
+  have hNonLift : ∀ q : ℕ, NonLiftableS0 c b q := by
+    intro q hprim
+    exact nonLiftableS0_of_classifyLift_impossible hbc (hClass hprim) hprim
+  exact AllNonLiftableOnS0_of_exceptThree_mod3_separated hSuppEx3 hNonLift hc_nz hb_nz hsep
+
+lemma harmonicNonExceptionalSide_of_envelope {x : CounterexampleInput}
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExc : ¬ exceptionalPhaseGate x) :
+    HarmonicNonExceptionalSide x := by
+  exact ⟨phaseGate_of_harmonicEnvelope hInfra hHarm, hNoExc⟩
+
+lemma hasPhaseUnitInfrastructure : HasPhaseUnitInfrastructure := by
+  exact ⟨hasMixedPhaseWitness_octagonCore, hasNPHalfStepWitness_npunit⟩
+
+lemma allNonLiftableOnS0_of_harmonicNonExceptional_nonLiftable {c b : ℕ}
+    (hbc : b < c)
+    (hsideAll :
+      ∀ q : ℕ, HarmonicNonExceptionalSide ({ c := c, b := b, q := q } : CounterexampleInput))
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    AllNonLiftableOnS0 c b := by
+  have hClass :
+      ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+        classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible :=
+    classifyLift_impossible_family_of_harmonicNonExceptional_nonLiftable hbc hsideAll hNonLiftAll
+  exact allNonLiftableOnS0_of_harmonicClassifier
+    hbc hasPhaseUnitInfrastructure
+    (by
+      have h0 : HarmonicNonExceptionalSide ({ c := c, b := b, q := 0 } : CounterexampleInput) :=
+        hsideAll 0
+      exact h0.1.2)
+    hSuppEx3 hClass hc_nz hb_nz hsep
+
+lemma allNonLiftableOnS0_of_harmonicEnvelope_nonLiftable {c b : ℕ}
+    (hbc : b < c)
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    AllNonLiftableOnS0 c b := by
+  have hsideAll :
+      ∀ q : ℕ, HarmonicNonExceptionalSide ({ c := c, b := b, q := q } : CounterexampleInput) := by
+    intro q
+    exact harmonicNonExceptionalSide_of_envelope hInfra hHarm (hNoExcAll { c := c, b := b, q := q })
+  exact allNonLiftableOnS0_of_harmonicNonExceptional_nonLiftable
+    hbc hsideAll hSuppEx3 hNonLiftAll hc_nz hb_nz hsep
+
+lemma NoSqOnS0_of_AllNonLiftableOnS0 {c b : ℕ}
+    (hAll : AllNonLiftableOnS0 c b) : NoSqOnS0 c b := by
+  intro q hq hqS0
+  rcases hAll with ⟨hprimSupport, hnonlift⟩
+  have hq_ndvd : ¬ q ∣ c - b := hprimSupport hq hqS0
+  have hprim : PrimitiveOnS0 c b q := ⟨hq, hqS0, hq_ndvd⟩
+  exact hnonlift q hprim
+
+theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hAll : AllNonLiftableOnS0 c b :=
+    allNonLiftableOnS0_of_harmonicEnvelope_nonLiftable hbc
+      hasPhaseUnitInfrastructure hHarm hNoExcAll
+      hSuppEx3 hNonLiftAll hc_nz hb_nz hsep
+  have hNoSq : NoSqOnS0 c b := NoSqOnS0_of_AllNonLiftableOnS0 hAll
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable_coprimeSupport {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hNonLiftAll
+
+structure GEisensteinDescentFrame (c b : ℕ) where
+  State : Type
+  measure : State → ℕ
+  step : (s : State) → measure s > 0 → State
+  step_decreases : ∀ (s : State) (hs : measure s > 0), measure (step s hs) < measure s
+
+structure GEisensteinDescentCore (c b : ℕ) where
+  classifyImpossible :
+    ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+      classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible
+  frame : GEisensteinDescentFrame c b
+  step_pred :
+    ∀ (s : frame.State) (hs : frame.measure s > 0),
+      frame.measure (frame.step s hs) = Nat.pred (frame.measure s)
+
+def DescentClassifyImpossibleOnPrimitive (c b : ℕ) : Prop :=
+  ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+    classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible
+
+def GEisensteinDescentCore_of_descentClassify_withFrame {c b : ℕ}
+    (hDescent : DescentClassifyImpossibleOnPrimitive c b)
+    (hFrame : GEisensteinDescentFrame c b)
+    (hFrameStepPred : ∀ (s : hFrame.State) (hs : hFrame.measure s > 0),
+      hFrame.measure (hFrame.step s hs) = Nat.pred (hFrame.measure s)) :
+    GEisensteinDescentCore c b := by
+  exact ⟨hDescent, hFrame, hFrameStepPred⟩
+
+def emptyGEisensteinDescentFrame (c b : ℕ) : GEisensteinDescentFrame c b where
+  State := PEmpty
+  measure := by
+    intro s
+    cases s
+  step := by
+    intro s hs
+    cases s
+  step_decreases := by
+    intro s hs
+    cases s
+
+def GEisensteinDescentCore_of_descentClassify {c b : ℕ}
+    (hDescent : DescentClassifyImpossibleOnPrimitive c b) :
+    GEisensteinDescentCore c b := by
+  exact GEisensteinDescentCore_of_descentClassify_withFrame
+    hDescent (emptyGEisensteinDescentFrame c b)
+    (by
+      intro s hs
+      cases s)
+
+lemma descentClassifyImpossibleOnPrimitive_of_GEisensteinCore {c b : ℕ}
+    (hCore : GEisensteinDescentCore c b) :
+    DescentClassifyImpossibleOnPrimitive c b := by
+  exact hCore.classifyImpossible
+
+lemma descentClassifyImpossibleOnPrimitive_of_classifyFamily {c b : ℕ}
+    (hClass :
+      ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+        classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible) :
+    DescentClassifyImpossibleOnPrimitive c b := by
+  exact hClass
+
+lemma nonLiftableS0_all_of_NoSqOnS0 {c b : ℕ}
+    (hNoSq : NoSqOnS0 c b) :
+    ∀ q : ℕ, NonLiftableS0 c b q := by
+  intro q hprim
+  exact hNoSq hprim.1 hprim.2.1
+
+lemma classifyLift_impossible_family_of_harmonicEnvelope_NoSq {c b : ℕ}
+    (hbc : b < c)
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hNoSq : NoSqOnS0 c b) :
+    ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+      classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible := by
+  have hsideAll :
+      ∀ q : ℕ, HarmonicNonExceptionalSide ({ c := c, b := b, q := q } : CounterexampleInput) := by
+    intro q
+    exact harmonicNonExceptionalSide_of_envelope hInfra hHarm (hNoExcAll { c := c, b := b, q := q })
+  have hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q :=
+    nonLiftableS0_all_of_NoSqOnS0 hNoSq
+  intro q hprim
+  exact classifyLift_impossible_family_of_harmonicNonExceptional_nonLiftable
+    hbc hsideAll hNonLiftAll hprim
+
+lemma descentClassifyImpossibleOnPrimitive_of_harmonicEnvelope_NoSq {c b : ℕ}
+    (hbc : b < c)
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hNoSq : NoSqOnS0 c b) :
+    DescentClassifyImpossibleOnPrimitive c b := by
+  exact descentClassifyImpossibleOnPrimitive_of_classifyFamily
+    (classifyLift_impossible_family_of_harmonicEnvelope_NoSq
+      hbc hInfra hHarm hNoExcAll hNoSq)
+
+lemma descentClassifyImpossibleOnPrimitive_via_GEisenstein {c b : ℕ}
+    (hbc : b < c)
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hNoSq : NoSqOnS0 c b) :
+    DescentClassifyImpossibleOnPrimitive c b := by
+  exact descentClassifyImpossibleOnPrimitive_of_GEisensteinCore
+    (hCore := GEisensteinDescentCore_of_descentClassify
+      (descentClassifyImpossibleOnPrimitive_of_harmonicEnvelope_NoSq
+        hbc hInfra hHarm hNoExcAll hNoSq))
+
+def GEisensteinDescentFrame.descend {c b : ℕ} (F : GEisensteinDescentFrame c b) :
+    F.State → ℕ → F.State
+  | s, 0 => s
+  | s, n + 1 =>
+      if hs : F.measure s > 0 then
+        descend F (F.step s hs) n
+      else
+        s
+
+lemma GEisensteinDescentFrame.measure_descend_eq_zero_of_step_pred {c b : ℕ}
+    (F : GEisensteinDescentFrame c b)
+    (hpred : ∀ (s : F.State) (hs : F.measure s > 0),
+      F.measure (F.step s hs) = Nat.pred (F.measure s)) :
+    ∀ s : F.State, F.measure (descend F s (F.measure s)) = 0 := by
+  have hmain :
+      ∀ n : ℕ, ∀ s : F.State, F.measure s = n → F.measure (descend F s n) = 0 := by
+    intro n
+    induction n with
+    | zero =>
+        intro s hs
+        simpa [descend] using hs
+    | succ n ih =>
+        intro s hsEq
+        have hsPos : F.measure s > 0 := by omega
+        have hdesc :
+            F.measure (descend F s (n + 1)) =
+              F.measure (descend F (F.step s hsPos) n) := by
+          simp [descend, hsPos]
+        rw [hdesc]
+        have hstepEq : F.measure (F.step s hsPos) = n := by
+          calc
+            F.measure (F.step s hsPos) = Nat.pred (F.measure s) := hpred s hsPos
+            _ = n := by simp [hsEq]
+        exact ih (F.step s hsPos) hstepEq
+  intro s
+  exact hmain (F.measure s) s rfl
+
+lemma GEisensteinDescentCore.measure_descend_eq_zero_of_step_pred {c b : ℕ}
+    (hCore : GEisensteinDescentCore c b) :
+    ∀ s : hCore.frame.State,
+      hCore.frame.measure
+        (GEisensteinDescentFrame.descend hCore.frame s (hCore.frame.measure s)) = 0 := by
+  exact GEisensteinDescentFrame.measure_descend_eq_zero_of_step_pred hCore.frame hCore.step_pred
+
+lemma GEisensteinDescentCore.exists_descend_measure_eq_zero_of_step_pred {c b : ℕ}
+    (hCore : GEisensteinDescentCore c b)
+    (s : hCore.frame.State) :
+    ∃ n : ℕ,
+      hCore.frame.measure (GEisensteinDescentFrame.descend hCore.frame s n) = 0 := by
+  refine ⟨hCore.frame.measure s, ?_⟩
+  exact GEisensteinDescentCore.measure_descend_eq_zero_of_step_pred hCore s
+
+lemma nonLiftableS0_family_of_descentClassify {c b : ℕ}
+    (hbc : b < c)
+    (hDescent : DescentClassifyImpossibleOnPrimitive c b) :
+    ∀ q : ℕ, NonLiftableS0 c b q := by
+  exact nonLiftableS0_family_of_classifyLift_impossible hbc hDescent
+
+theorem FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hDescentClass : DescentClassifyImpossibleOnPrimitive c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q :=
+    nonLiftableS0_family_of_descentClassify hbc hDescentClass
+  exact FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hNonLiftAll
+
+theorem FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hGECore : GEisensteinDescentCore c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hDescentClass : DescentClassifyImpossibleOnPrimitive c b :=
+    descentClassifyImpossibleOnPrimitive_of_GEisensteinCore hGECore
+  exact FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hDescentClass
+
+theorem FLT_d3_by_padicValNat_of_GEisensteinCore_with_reachability_coprimeSupport
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hGECore : GEisensteinDescentCore c b)
+    (_hReach :
+      ∀ s : hGECore.frame.State,
+        ∃ n : ℕ,
+          hGECore.frame.measure (GEisensteinDescentFrame.descend hGECore.frame s n) = 0) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hGECore
+
+theorem FLT_d3_by_padicValNat_of_GEisensteinCore_via_reachability_coprimeSupport
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hGECore : GEisensteinDescentCore c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hReach :
+      ∀ s : hGECore.frame.State,
+        ∃ n : ℕ,
+          hGECore.frame.measure (GEisensteinDescentFrame.descend hGECore.frame s n) = 0 := by
+    intro s
+    exact GEisensteinDescentCore.exists_descend_measure_eq_zero_of_step_pred hGECore s
+  exact FLT_d3_by_padicValNat_of_GEisensteinCore_with_reachability_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hGECore hReach
+
+theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hNoSq : NoSqOnS0 c b)
+    :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hGECore : GEisensteinDescentCore c b := by
+    exact GEisensteinDescentCore_of_descentClassify
+      (descentClassifyImpossibleOnPrimitive_via_GEisenstein
+        hbc hasPhaseUnitInfrastructure hHarm hNoExcAll hNoSq)
+  exact FLT_d3_by_padicValNat_of_GEisensteinCore_via_reachability_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hGECore
+
+theorem GEisenstein_descent_reaches_zero_of_core {c b : ℕ}
+    (hCore : GEisensteinDescentCore c b)
+    (s : hCore.frame.State) :
+    ∃ n : ℕ,
+      hCore.frame.measure (GEisensteinDescentFrame.descend hCore.frame s n) = 0 := by
+  exact GEisensteinDescentCore.exists_descend_measure_eq_zero_of_step_pred hCore s
+
+structure GEisensteinPrimitiveSizedCandidate (c b : ℕ) where
+  q : ℕ
+  hPrim : PrimitiveOnS0 c b q
+  size : ℕ
+  hsize : size ≤ q
+
+def GEisensteinPrimitiveSizedCandidate.measure {c b : ℕ}
+    (s : GEisensteinPrimitiveSizedCandidate c b) : ℕ := s.size
+
+def GEisensteinPrimitiveSizedCandidate.step {c b : ℕ}
+    (s : GEisensteinPrimitiveSizedCandidate c b)
+    (_hs : GEisensteinPrimitiveSizedCandidate.measure s > 0) :
+    GEisensteinPrimitiveSizedCandidate c b :=
+  { q := s.q
+    hPrim := s.hPrim
+    size := Nat.pred s.size
+    hsize := by
+      exact Nat.le_trans (Nat.pred_le _) s.hsize }
+
+lemma GEisensteinPrimitiveSizedCandidate.step_decreases {c b : ℕ}
+    (s : GEisensteinPrimitiveSizedCandidate c b)
+    (hs : GEisensteinPrimitiveSizedCandidate.measure s > 0) :
+    GEisensteinPrimitiveSizedCandidate.measure (GEisensteinPrimitiveSizedCandidate.step s hs) <
+      GEisensteinPrimitiveSizedCandidate.measure s := by
+  simpa [GEisensteinPrimitiveSizedCandidate.measure, GEisensteinPrimitiveSizedCandidate.step]
+    using Nat.pred_lt (Nat.ne_of_gt hs)
+
+def primitiveSizedCandidateGEisensteinDescentFrame (c b : ℕ) : GEisensteinDescentFrame c b where
+  State := GEisensteinPrimitiveSizedCandidate c b
+  measure := GEisensteinPrimitiveSizedCandidate.measure
+  step := GEisensteinPrimitiveSizedCandidate.step
+  step_decreases := GEisensteinPrimitiveSizedCandidate.step_decreases
+
+def GEisensteinPrimitiveSizedCandidate.ofPrimitiveWithSize {c b q : ℕ}
+    (hPrim : PrimitiveOnS0 c b q) (size : ℕ) (hsize : size ≤ q) :
+    GEisensteinPrimitiveSizedCandidate c b :=
+  { q := q, hPrim := hPrim, size := size, hsize := hsize }
+
+lemma primitiveSizedCandidate_frame_step_pred (c b : ℕ) :
+    ∀ (s : (primitiveSizedCandidateGEisensteinDescentFrame c b).State)
+      (hs : (primitiveSizedCandidateGEisensteinDescentFrame c b).measure s > 0),
+      (primitiveSizedCandidateGEisensteinDescentFrame c b).measure
+        ((primitiveSizedCandidateGEisensteinDescentFrame c b).step s hs)
+        = Nat.pred ((primitiveSizedCandidateGEisensteinDescentFrame c b).measure s) := by
+  intro s hs
+  simp [primitiveSizedCandidateGEisensteinDescentFrame,
+    GEisensteinPrimitiveSizedCandidate.measure,
+    GEisensteinPrimitiveSizedCandidate.step]
+
+def GEisensteinDescentCore_of_descentClassify_primitiveSized {c b : ℕ}
+    (hDescent : DescentClassifyImpossibleOnPrimitive c b) :
+    GEisensteinDescentCore c b := by
+  exact GEisensteinDescentCore_of_descentClassify_withFrame
+    hDescent (primitiveSizedCandidateGEisensteinDescentFrame c b)
+    (primitiveSizedCandidate_frame_step_pred c b)
+
+lemma exists_descend_measure_eq_zero_of_descentClassify_primitiveSized
+    {c b q : ℕ}
+    (hDescent : DescentClassifyImpossibleOnPrimitive c b)
+    (hPrim : PrimitiveOnS0 c b q)
+    (size : ℕ)
+    (hsize : size ≤ q) :
+    ∃ n : ℕ,
+      (primitiveSizedCandidateGEisensteinDescentFrame c b).measure
+        (GEisensteinDescentFrame.descend
+          (primitiveSizedCandidateGEisensteinDescentFrame c b)
+          (GEisensteinPrimitiveSizedCandidate.ofPrimitiveWithSize hPrim size hsize)
+          n) = 0 := by
+  let hCore : GEisensteinDescentCore c b :=
+    GEisensteinDescentCore_of_descentClassify_primitiveSized hDescent
+  let s0 : hCore.frame.State :=
+    GEisensteinPrimitiveSizedCandidate.ofPrimitiveWithSize hPrim size hsize
+  simpa [hCore, s0] using
+    GEisensteinDescentCore.exists_descend_measure_eq_zero_of_step_pred hCore s0
+
+theorem GEisenstein_descent_reaches_zero_of_descentClassify_primitiveSized
+    {c b q size : ℕ}
+    (hDescent : DescentClassifyImpossibleOnPrimitive c b)
+    (hPrim : PrimitiveOnS0 c b q)
+    (hsize : size ≤ q) :
+    ∃ n : ℕ,
+      (primitiveSizedCandidateGEisensteinDescentFrame c b).measure
+        (GEisensteinDescentFrame.descend
+          (primitiveSizedCandidateGEisensteinDescentFrame c b)
+          (GEisensteinPrimitiveSizedCandidate.ofPrimitiveWithSize hPrim size hsize)
+          n) = 0 := by
+  exact exists_descend_measure_eq_zero_of_descentClassify_primitiveSized
+    hDescent hPrim size hsize
+
+structure DescentBaseInput (c b : ℕ) where
+  hbc : b < c
+  hcb_coprime : Nat.Coprime c b
+  hDescentClass : DescentClassifyImpossibleOnPrimitive c b
+
+theorem FLT_d3_by_padicValNat_of_DescentBaseInput {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hIn : DescentBaseInput c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport
+    ha hb hc hab hIn.hbc hIn.hcb_coprime hIn.hDescentClass
+
+structure NoSqInput (c b : ℕ) where
+  hbc : b < c
+  hcb_coprime : Nat.Coprime c b
+  hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u
+  hNoSq : NoSqOnS0 c b
+
+theorem FLT_d3_by_padicValNat_of_NoSqInput {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hIn : NoSqInput c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hBase : NoSqBaseInput c b := {
+    hbc := hIn.hbc
+    hcb_coprime := hIn.hcb_coprime
+    hHarm := hIn.hHarm
+    hNonLift := nonLiftableS0_all_of_NoSqOnS0 hIn.hNoSq
+  }
+  exact FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput
+    ha hb hc hab hBase
+
+/-
+#print axioms FLT_d3_by_padicValNat
+#print axioms FLT_d3_by_padicValNat_of_NoSqOnS0
+#print axioms FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport
+#print axioms FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput
+#print axioms FLT_d3_by_padicValNat_of_harmonicEnvelope_classify_coprimeSupport
+#print axioms FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable
+#print axioms FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable_coprimeSupport
+#print axioms FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport
+#print axioms FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport
+#print axioms FLT_d3_by_padicValNat_of_GEisensteinCore_with_reachability_coprimeSupport
+#print axioms FLT_d3_by_padicValNat_of_GEisensteinCore_via_reachability_coprimeSupport
+#print axioms GEisenstein_descent_reaches_zero_of_core
+#print axioms GEisenstein_descent_reaches_zero_of_descentClassify_primitiveSized
+#print axioms FLT_d3_by_padicValNat_of_DescentBaseInput
+#print axioms FLT_d3_by_padicValNat_of_NoSqInput
+-/

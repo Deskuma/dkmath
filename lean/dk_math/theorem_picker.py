@@ -429,7 +429,8 @@ def main():
             name = d.get("ident")
             # skip if target already defines this ident (avoid duplicates)
             pattern = re.compile(
-                rf"^(?:@[\w\[\] :]+\s*)*(def|lemma|theorem)\s+{re.escape(name)}\b", re.M
+                rf"^(?:@[\w\[\] :]+\s*)*(abbrev|def|lemma|theorem|structure|inductive|class)\s+{re.escape(name)}\b",
+                re.M,
             )
             if pattern.search(target_text):
                 continue
@@ -569,8 +570,11 @@ def find_definitions_by_name(root: Path, name: str):
     """
     import re
 
+    # also detect structures, inductives, classes etc.
     pattern = re.compile(
-        r"^(?:@[\w\[\] :]+\s*)*(def|lemma|theorem)\s+" + re.escape(name) + r"\b"
+        r"^(?:@[\w\[\] :]+\s*)*(abbrev|def|lemma|theorem|structure|inductive|class)\s+"
+        + re.escape(name)
+        + r"\b"
     )
     results = []
     for p in root.rglob("*.lean"):
@@ -594,7 +598,8 @@ def find_definitions_by_name(root: Path, name: str):
                             break
                     # also stop if next line looks like another top-level declaration
                     if re.match(
-                        r"^(def|lemma|theorem|structure|inductive|class)\b", lines[end]
+                        r"^(abbrev|def|lemma|theorem|structure|inductive|class)\b",
+                        lines[end],
                     ):
                         break
                     end += 1

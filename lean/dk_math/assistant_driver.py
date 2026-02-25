@@ -216,6 +216,10 @@ def main(argv=None):
             if not ufile.is_absolute():
                 ufile = root / u["file"].strip()
             defs = find_definitions_by_name(root, u["ident"])
+            # fallback: if no candidates, try short name after last dot (e.g., DkMath.NP -> NP)
+            if not defs and "." in u["ident"]:
+                short = u["ident"].split(".")[-1]
+                defs = find_definitions_by_name(root, short)
             if not defs:
                 reports.append(
                     {"ident": u["ident"], "ok": False, "reason": "no_candidates"}
