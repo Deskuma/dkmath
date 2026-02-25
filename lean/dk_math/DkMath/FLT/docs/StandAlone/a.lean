@@ -8,12 +8,11 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 
-set_option linter.style.longLine false
-set_option linter.style.emptyLine false
-set_option linter.unusedTactic false
+set_option linter.style.longLine true
+set_option linter.style.emptyLine true
+set_option linter.unusedTactic true
 
--- open Finset
-open scoped BigOperators
+-- open scoped BigOperators
 
 #print "DkMath.FLT.docs.StandAlone.FLT3#StandAlone-NC"
 
@@ -621,7 +620,6 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
       ∀ {q : ℕ}, Nat.Prime q → q ∣ c ^ 3 - b ^ 3 → ¬ q ∣ c - b → ¬ q ^ 2 ∣ S0_nat c b) :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
   intro h_eq
-
   have hcop_cb : Nat.Coprime c b := coprime_cb_of_eq hab h_eq
   have hbc : b < c := by
     by_contra hbc_not
@@ -630,23 +628,18 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
     have hsum_le : a ^ 3 + b ^ 3 ≤ b ^ 3 := by simpa [h_eq] using hc3_le
     have ha3_pos : 0 < a ^ 3 := by positivity
     omega
-
   obtain ⟨q, hq_prime, hq_dvd_diff, hq_ndiv_diff⟩ :=
     exists_prime_factor_cube_diff hbc hb hcop_cb
-
   have hsub : c ^ 3 - b ^ 3 = a ^ 3 := cube_sub_eq_of_add_eq h_eq
   have hq_dvd_a3 : q ∣ a ^ 3 := by simpa [hsub] using hq_dvd_diff
   have hq_dvd_a : q ∣ a := hq_prime.dvd_of_dvd_pow hq_dvd_a3
-
   have h_lower_a3 : 3 ≤ padicValNat q (a ^ 3) :=
     padicValNat_lower_bound_of_dvd_d3 ha hq_prime hq_dvd_a
   have h_lower : 3 ≤ padicValNat q (c ^ 3 - b ^ 3) := by
     simpa [hsub] using h_lower_a3
-
   have h_upper : padicValNat q (c ^ 3 - b ^ 3) ≤ 1 :=
     padicValNat_upper_bound_d3 hbc hc hb hq_prime hq_dvd_diff hq_ndiv_diff
       (hS0_not_sq hq_prime hq_dvd_diff hq_ndiv_diff)
-
   have : (3 : ℕ) ≤ 1 := le_trans h_lower h_upper
   omega
 
@@ -1654,3 +1647,36 @@ theorem GEisenstein_descent_reaches_zero_of_descentClassify_primitiveSized
           n) = 0 := by
   exact exists_descend_measure_eq_zero_of_descentClassify_primitiveSized
     hDescent hPrim size hsize
+
+structure DescentBaseInput (c b : ℕ) where
+  hbc : b < c
+  hcb_coprime : Nat.Coprime c b
+  hDescentClass : DescentClassifyImpossibleOnPrimitive c b
+
+theorem FLT_d3_by_padicValNat_of_DescentBaseInput {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hIn : DescentBaseInput c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport
+    ha hb hc hab hIn.hbc hIn.hcb_coprime hIn.hDescentClass
+
+structure NoSqInput (c b : ℕ) where
+  hbc : b < c
+  hcb_coprime : Nat.Coprime c b
+  hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u
+  hNoSq : NoSqOnS0 c b
+
+theorem FLT_d3_by_padicValNat_of_NoSqInput {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hIn : NoSqInput c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hBase : NoSqBaseInput c b := {
+    hbc := hIn.hbc
+    hcb_coprime := hIn.hcb_coprime
+    hHarm := hIn.hHarm
+    hNonLift := nonLiftableS0_all_of_NoSqOnS0 hIn.hNoSq
+  }
+  exact FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput
+    ha hb hc hab hBase
