@@ -490,6 +490,29 @@ def GEisensteinDescentCore_of_descentClassify_primitiveSized {c b : ℕ}
     (primitiveSizedCandidate_frame_step_pred c b)
 
 /--
+`primitiveSized` 非empty core を使った停止到達橋補題。
+`PrimitiveOnS0` を持つ初期状態から、有限反復で測度 0 に到達する。
+-/
+lemma exists_descend_measure_eq_zero_of_descentClassify_primitiveSized
+    {c b q : ℕ}
+    (hDescent : DescentClassifyImpossibleOnPrimitive c b)
+    (hPrim : PrimitiveOnS0 c b q)
+    (size : ℕ)
+    (hsize : size ≤ q) :
+    ∃ n : ℕ,
+      (primitiveSizedCandidateGEisensteinDescentFrame c b).measure
+        (GEisensteinDescentFrame.descend
+          (primitiveSizedCandidateGEisensteinDescentFrame c b)
+          (GEisensteinPrimitiveSizedCandidate.ofPrimitiveWithSize hPrim size hsize)
+          n) = 0 := by
+  let hCore : GEisensteinDescentCore c b :=
+    GEisensteinDescentCore_of_descentClassify_primitiveSized hDescent
+  let s0 : hCore.frame.State :=
+    GEisensteinPrimitiveSizedCandidate.ofPrimitiveWithSize hPrim size hsize
+  simpa [hCore, s0] using
+    GEisensteinDescentCore.exists_descend_measure_eq_zero_of_step_pred hCore s0
+
+/--
 GEisenstein 層から下降法インターフェースへ接続する橋。
 現段階では `NoSq + harmonic envelope` 供給版を再公開する。
 -/

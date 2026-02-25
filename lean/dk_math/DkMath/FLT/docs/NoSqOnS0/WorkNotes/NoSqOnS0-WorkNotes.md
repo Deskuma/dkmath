@@ -736,6 +736,28 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  13:10
+
+- phase-10 実装（non-empty core から停止到達を直接抽出）
+  - `GEisensteinBridge.lean`
+    - 追加:
+      - `exists_descend_measure_eq_zero_of_descentClassify_primitiveSized`
+    - 入力:
+      - `DescentClassifyImpossibleOnPrimitive c b`
+      - `PrimitiveOnS0 c b q`
+      - 初期 `size` と `size ≤ q`
+    - 出力:
+      - `primitiveSized` frame の反復で `measure = 0` 到達する `n` の存在
+    - 実装:
+      - `GEisensteinDescentCore_of_descentClassify_primitiveSized` と
+        `GEisensteinDescentCore.exists_descend_measure_eq_zero_of_step_pred`
+        を接続
+  - `README.md`
+    - 橋補題として追記
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）

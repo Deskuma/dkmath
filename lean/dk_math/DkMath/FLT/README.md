@@ -79,6 +79,9 @@
     - `primitiveSizedCandidate_frame_step_pred`
     - `GEisensteinDescentCore_of_descentClassify_primitiveSized`
     により、`primitiveSized` frame を載せた core を直接構成可能。
+  - 橋補題:
+    - `exists_descend_measure_eq_zero_of_descentClassify_primitiveSized`
+    により、`PrimitiveOnS0` 初期状態から停止到達 (`measure = 0`) を直接抽出可能。
 
 - `CosmicFormula/CosmicFormulaBinom.lean`
   - `add_pow_gap_factor`, `add_pow_tail_u2_*`, `two_gap_xy_factor*` を提供。
