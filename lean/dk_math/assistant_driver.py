@@ -177,6 +177,13 @@ def main(argv=None):
     parser.add_argument(
         "--apply", action="store_true", help="Write inserted file instead of dry-run"
     )
+    parser.add_argument(
+        "--insert-line",
+        dest="insert_line",
+        type=int,
+        help="Optional: force insert at this 1-based line number in target files.",
+        nargs="?",
+    )
     args = parser.parse_args(argv)
 
     try:
@@ -232,7 +239,40 @@ def main(argv=None):
                 )
                 continue
             snippet = chosen.get("snippet", "")
-            insert_line = u.get("line", 1)
+            # determine insertion line:
+            insert_line = None
+            # 1) user-specified override
+            if args.insert_line is not None:
+                insert_line = args.insert_line
+            else:
+                # 2) look for explicit marker in file
+                marker_re = _re.compile(r"^--\s*##INSERT MARKER##\s*--$", _re.M)
+                m = marker_re.search(ttext)
+                if m:
+                    # insert after marker line
+                    # compute line number (1-based)
+                    marker_pos = m.start()
+                    preceding = ttext[:marker_pos].splitlines(keepends=True)
+                    insert_line = len(preceding) + 2
+                else:
+                    # 3) fallback: find nearest top-level declaration above the error line
+                    lines = ttext.splitlines(keepends=True)
+                    err_idx = max(0, min(len(lines), u.get("line", 1) - 1))
+                    decl_re = _re.compile(
+                        r"^(def|lemma|theorem|structure|inductive|class)\b"
+                    )
+                    found_idx = None
+                    i = err_idx - 1
+                    while i >= 0:
+                        if decl_re.match(lines[i].lstrip()):
+                            found_idx = i
+                            break
+                        i -= 1
+                    if found_idx is not None:
+                        insert_line = found_idx + 1
+                    else:
+                        insert_line = 1
+
             new_text, patch = insert_snippet_into_text(ttext, snippet, insert_line)
             outp = ufile.with_suffix(ufile.suffix + ".inserted")
             outp.write_text(new_text, encoding="utf-8")
