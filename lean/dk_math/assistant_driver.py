@@ -33,7 +33,8 @@ UNKNOWN_RE = re.compile(
 
 
 def run_build(root: Path, build_target: str = None) -> subprocess.CompletedProcess:
-    build_dir = root / "lean" / "dk_math"
+    # Prefer running from the script's own directory (lean/dk_math)
+    build_dir = Path(__file__).resolve().parent
     cmd = ["./lean-build.sh"]
     if build_target:
         cmd.append(build_target)
@@ -178,31 +179,74 @@ def main(argv=None):
     )
     args = parser.parse_args(argv)
 
-    root = find_project_root(Path(__file__).resolve().parent.parent)
+    try:
+        root = find_project_root(Path(__file__).resolve().parent.parent)
+    except FileNotFoundError:
+        try:
+            root = find_project_root(Path.cwd())
+        except FileNotFoundError:
+            root = Path.cwd()
     print(f"Project root: {root}")
-    proc = run_build(root, args.build_target)
-    if proc.returncode == 0:
-        print("Build succeeded — nothing to do.")
-        return 0
-    unknowns = parse_unknowns(proc)
-    if not unknowns:
-        print("No Unknown identifier errors found in build output.")
-        print("Build stderr:\n", proc.stderr)
-        return 2
+    # Iterative loop: attempt up to N iterations to resolve Unknown identifier errors
+    MAX_ITERS = 10
+    for it in range(1, MAX_ITERS + 1):
+        print(f"Iteration {it}: running build...")
+        proc = run_build(root, args.build_target)
+        if proc.returncode == 0:
+            print("Build succeeded — nothing to do.")
+            return 0
+        unknowns = parse_unknowns(proc)
+        if not unknowns:
+            print("No Unknown identifier errors found in build output.")
+            print(proc.stderr)
+            return 2
 
-    reports = []
-    for u in unknowns:
-        rep = insert_and_report(
-            root,
-            u,
-            select_index=args.select_index,
-            interactive=args.interactive,
-            apply=args.apply,
-        )
-        reports.append(rep)
+        reports = []
+        any_inserted = False
+        for u in unknowns:
+            print(f"Handling unknown: {u['ident']} (at {u['file']}:{u['line']})")
+            ufile = Path(u["file"])
+            if not ufile.is_absolute():
+                ufile = root / u["file"]
+            defs = find_definitions_by_name(root, u["ident"])
+            if not defs:
+                reports.append(
+                    {"ident": u["ident"], "ok": False, "reason": "no_candidates"}
+                )
+                continue
+            chosen = None
+            if args.select_index is not None and 0 <= args.select_index < len(defs):
+                chosen = defs[args.select_index]
+            else:
+                chosen = defs[0]
+            ttext = ufile.read_text(encoding="utf-8") if ufile.exists() else ""
+            import re as _re
 
-    print("Iteration report:\n", json.dumps(reports, indent=2, ensure_ascii=False))
-    return 0
+            if _re.search(
+                rf"^(?:@[\w\[\] :]+\s*)*(def|lemma|theorem)\s+{_re.escape(u['ident'])}\b",
+                ttext,
+                _re.M,
+            ):
+                reports.append(
+                    {"ident": u["ident"], "ok": False, "reason": "already_present"}
+                )
+                continue
+            snippet = chosen.get("snippet", "")
+            insert_line = u.get("line", 1)
+            new_text, patch = insert_snippet_into_text(ttext, snippet, insert_line)
+            outp = ufile.with_suffix(ufile.suffix + ".inserted")
+            outp.write_text(new_text, encoding="utf-8")
+            outp.replace(ufile)
+            any_inserted = True
+            reports.append({"ident": u["ident"], "ok": True, "applied_to": str(ufile)})
+
+        print("Iteration report:\n", json.dumps(reports, indent=2, ensure_ascii=False))
+        if not any_inserted:
+            print("No inserts performed in this iteration; stopping.")
+            return 3
+
+    print(f"Reached max iterations ({MAX_ITERS}). Stopping.")
+    return 4
 
 
 if __name__ == "__main__":
