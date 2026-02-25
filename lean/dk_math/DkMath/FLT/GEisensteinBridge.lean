@@ -436,6 +436,35 @@ structure PrimitiveSquareDescentEngine (c b : ℕ) where
       {q' : ℕ // PrimitiveOnS0 c b q' ∧ q' ^ 2 ∣ S0_nat c b ∧ q' < q}
 
 /--
+`q` 固定の 1-step 縮小証明をまとめたレコード。
+具体実装ではこのレコードを与える補題を `q` ごとに構成していく。
+-/
+structure PrimitiveSquareReduction (c b q : ℕ) where
+  q' : ℕ
+  hPrim : PrimitiveOnS0 c b q'
+  hSq : q' ^ 2 ∣ S0_nat c b
+  hlt : q' < q
+
+/--
+`PrimitiveSquareReduction` から engine の `step` 形式へ変換する。
+-/
+def PrimitiveSquareReduction.toStep {c b q : ℕ}
+    (r : PrimitiveSquareReduction c b q) :
+    {q' : ℕ // PrimitiveOnS0 c b q' ∧ q' ^ 2 ∣ S0_nat c b ∧ q' < q} :=
+  ⟨r.q', r.hPrim, r.hSq, r.hlt⟩
+
+/--
+局所縮小関数 `reduce` から engine を組み立てるコンストラクタ。
+-/
+def primitiveSquareDescentEngine_of_reduce {c b : ℕ}
+    (reduce : ∀ {q : ℕ}, PrimitiveOnS0 c b q → q ^ 2 ∣ S0_nat c b →
+      PrimitiveSquareReduction c b q) :
+    PrimitiveSquareDescentEngine c b where
+  step := by
+    intro q hPrim hSq
+    exact (PrimitiveSquareReduction.toStep (reduce hPrim hSq))
+
+/--
 下降エンジンから `PrimitiveSquareDescentStep` 条件を回収する。
 -/
 lemma primitiveSquareDescentStep_of_engine {c b : ℕ}
@@ -444,6 +473,16 @@ lemma primitiveSquareDescentStep_of_engine {c b : ℕ}
   intro q hPrim hSq
   rcases hEngine.step hPrim hSq with ⟨q', hq'⟩
   exact ⟨q', hq'.1, hq'.2.1, hq'.2.2⟩
+
+/--
+局所縮小関数 `reduce` から、直接 `PrimitiveSquareDescentStep` を得る補助補題。
+-/
+lemma primitiveSquareDescentStep_of_reduce {c b : ℕ}
+    (reduce : ∀ {q : ℕ}, PrimitiveOnS0 c b q → q ^ 2 ∣ S0_nat c b →
+      PrimitiveSquareReduction c b q) :
+    PrimitiveSquareDescentStep c b := by
+  exact primitiveSquareDescentStep_of_engine
+    (primitiveSquareDescentEngine_of_reduce reduce)
 
 /--
 strict descent 条件があるなら、`PrimitiveOnS0` 上の平方持ち上げ witness は存在しない。

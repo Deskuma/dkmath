@@ -153,3 +153,20 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（step 実装前の API 整備）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+- 追加内容:
+  1. `PrimitiveSquareReduction`（`q` 固定の1-step縮小証明レコード）
+  2. `PrimitiveSquareReduction.toStep`
+  3. `primitiveSquareDescentEngine_of_reduce`
+  4. `primitiveSquareDescentStep_of_reduce`
+- 意図:
+  - 今後は「`reduce` 補題（局所縮小）」を証明するだけで
+    `PrimitiveSquareDescentEngine` / `PrimitiveSquareDescentStep` へ自動接続できる形にした。
+  - これで `step` の具体実装を数学補題へ分離して進められる。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。
