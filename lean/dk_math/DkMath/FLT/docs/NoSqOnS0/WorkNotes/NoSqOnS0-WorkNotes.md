@@ -135,3 +135,21 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（NoSq 直結ルート追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `NoSqOnS0_of_descentStep_coprime`
+  2. `NoSqOnS0_of_descentEngine_coprime`
+  3. `FLT_d3_by_padicValNat_of_descentStep_coprimeSupport_direct`
+  4. `FLT_d3_by_padicValNat_of_descentEngine_coprimeSupport_direct`
+- 意図:
+  - harmonic envelope を経由せず、
+    `strict descent (+ coprime)` から直接 `NoSqOnS0` を回復して
+    既存 `FLT_d3_by_padicValNat_of_NoSqOnS0` へ接続できる導線を確保。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。

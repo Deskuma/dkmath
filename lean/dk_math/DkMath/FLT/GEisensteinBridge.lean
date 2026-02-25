@@ -484,6 +484,30 @@ lemma nonLiftableS0_family_of_descentEngine {c b : ℕ}
   exact nonLiftableS0_family_of_descentStep (primitiveSquareDescentStep_of_engine hEngine)
 
 /--
+`strict descent` と `coprime(c,b)` から `NoSqOnS0` を直接回復する。
+-/
+lemma NoSqOnS0_of_descentStep_coprime {c b : ℕ}
+    (hbc : b ≤ c)
+    (hcop : Nat.Coprime c b)
+    (hStep : PrimitiveSquareDescentStep c b) :
+    NoSqOnS0 c b := by
+  have hNonLift : ∀ q : ℕ, NonLiftableS0 c b q :=
+    nonLiftableS0_family_of_descentStep hStep
+  intro q hq hqS0
+  exact NoSqOnS0_of_support_nonLiftable_coprime hbc hcop hNonLift hq hqS0
+
+/--
+`descent engine` と `coprime(c,b)` から `NoSqOnS0` を直接回復する。
+-/
+lemma NoSqOnS0_of_descentEngine_coprime {c b : ℕ}
+    (hbc : b ≤ c)
+    (hcop : Nat.Coprime c b)
+    (hEngine : PrimitiveSquareDescentEngine c b) :
+    NoSqOnS0 c b := by
+  exact NoSqOnS0_of_descentStep_coprime hbc hcop
+    (primitiveSquareDescentStep_of_engine hEngine)
+
+/--
 phase-11 接続補題:
 `harmonic envelope` と `strict descent` から
 `DescentClassifyImpossibleOnPrimitive` を構成する。
