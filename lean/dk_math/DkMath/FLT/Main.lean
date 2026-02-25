@@ -524,10 +524,11 @@ theorem FLT_d3_by_padicValNat_of_numberTheoryStepOn_coprimeSupport_direct {a b c
     (hcb_coprime : Nat.Coprime c b)
     (hStep : PrimitiveSquareDescentStep c b) :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
-  have hex : NumberTheoryDescentOn.StepExists c b :=
-    numberTheoryStepExistsOn_of_step hStep
-  exact FLT_d3_by_padicValNat_of_numberTheoryStepExistsOn_coprimeSupport_direct
-    ha hb hc hab hbc hcb_coprime hex
+  have ker : NumberTheoryDescentOn.ReductionKernel c b :=
+    numberTheoryKernel_of_step hStep
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_numberTheoryKernel_coprime ker hbc hcb_coprime
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
 
 /--
 固定 `(c,b)` の数論 `reduce` から、`StepExistsOn` 経由で接続する入口。
@@ -539,10 +540,11 @@ theorem FLT_d3_by_padicValNat_of_numberTheoryReduceOn_coprimeSupport_direct {a b
     (hcb_coprime : Nat.Coprime c b)
     (reduceNT : NumberTheoryReduce c b) :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
-  have hex : NumberTheoryDescentOn.StepExists c b :=
-    numberTheoryStepExistsOn_of_reduce reduceNT
-  exact FLT_d3_by_padicValNat_of_numberTheoryStepExistsOn_coprimeSupport_direct
-    ha hb hc hab hbc hcb_coprime hex
+  have ker : NumberTheoryDescentOn.ReductionKernel c b :=
+    numberTheoryKernel_of_reduce reduceNT
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_numberTheoryKernel_coprime ker hbc hcb_coprime
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
 
 /--
 固定 `(c,b)` の数論 `ReductionKernel` から、`StepExistsOn` 経由で接続する入口。
@@ -554,10 +556,9 @@ theorem FLT_d3_by_padicValNat_of_numberTheoryKernel_coprimeSupport_direct {a b c
     (hcb_coprime : Nat.Coprime c b)
     (ker : NumberTheoryDescentOn.ReductionKernel c b) :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
-  have hex : NumberTheoryDescentOn.StepExists c b :=
-    numberTheoryStepExistsOn_of_kernel ker
-  exact FLT_d3_by_padicValNat_of_numberTheoryStepExistsOn_coprimeSupport_direct
-    ha hb hc hab hbc hcb_coprime hex
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_numberTheoryKernel_coprime ker hbc hcb_coprime
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
 
 /--
 固定 `(c,b)` の数論ローカル降下入力 (`LocalReduce`) から接続する入口。
@@ -569,10 +570,11 @@ theorem FLT_d3_by_padicValNat_of_numberTheoryLocalReduceOn_coprimeSupport_direct
     (hcb_coprime : Nat.Coprime c b)
     (reduce : NumberTheoryDescentOn.LocalReduce c b) :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
-  have hex : NumberTheoryDescentOn.StepExists c b :=
-    NumberTheoryDescentOn.stepExists_of_localReduce reduce
-  exact FLT_d3_by_padicValNat_of_numberTheoryStepExistsOn_coprimeSupport_direct
-    ha hb hc hab hbc hcb_coprime hex
+  have ker : NumberTheoryDescentOn.ReductionKernel c b :=
+    NumberTheoryDescentOn.kernel_of_localReduce hbc hcb_coprime reduce
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_numberTheoryKernel_coprime ker hbc hcb_coprime
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
 
 /--
 互換入口:

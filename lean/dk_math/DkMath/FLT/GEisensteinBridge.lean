@@ -877,6 +877,28 @@ def localReduce_of_kernel {c b : ℕ}
       hSq := ker.preserves_sq s.hPrim s.hSq
       hlt := ker.decreases s.hPrim s.hSq }
 
+/--
+固定 `(c,b)` とその不変量 `hbc/hcop` があるとき、
+`LocalReduce` から `ReductionKernel` を作れる。
+-/
+def kernel_of_localReduce {c b : ℕ}
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b)
+    (reduce : LocalReduce c b) :
+    ReductionKernel c b where
+  nextQ := by
+    intro q hPrim hSq
+    exact (reduce ⟨q, hbc, hcop, hPrim, hSq⟩).q'
+  preserves_prim := by
+    intro q hPrim hSq
+    exact (reduce ⟨q, hbc, hcop, hPrim, hSq⟩).hPrim
+  preserves_sq := by
+    intro q hPrim hSq
+    exact (reduce ⟨q, hbc, hcop, hPrim, hSq⟩).hSq
+  decreases := by
+    intro q hPrim hSq
+    exact (reduce ⟨q, hbc, hcop, hPrim, hSq⟩).hlt
+
 /-- `ReductionKernel` から `StepExists` を得る。 -/
 lemma stepExists_of_kernel {c b : ℕ}
     (ker : ReductionKernel c b) :
@@ -1168,6 +1190,19 @@ lemma NoSqOnS0_of_numberTheoryStepExistsOn_coprime {c b : ℕ}
   exact NoSqOnS0_of_support_nonLiftable_coprime hbc.le hcop hNonLift hq hqS0
 
 /--
+固定 `(c,b)` の `ReductionKernel` と `coprime(c,b)` から `NoSqOnS0` を回復する。
+-/
+lemma NoSqOnS0_of_numberTheoryKernel_coprime {c b : ℕ}
+    (ker : NumberTheoryDescentOn.ReductionKernel c b)
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b) :
+    NoSqOnS0 c b := by
+  have hex : NumberTheoryDescentOn.StepExists c b :=
+    numberTheoryStepExistsOn_of_kernel ker
+  intro q hq hqS0
+  exact NoSqOnS0_of_numberTheoryStepExistsOn_coprime hex hbc hcop hq hqS0
+
+/--
 固定 `(c,b)` の `LocalReduce` から `NoSqOnS0` を回復する。
 -/
 lemma NoSqOnS0_of_numberTheoryLocalReduceOn_coprime {c b : ℕ}
@@ -1175,10 +1210,10 @@ lemma NoSqOnS0_of_numberTheoryLocalReduceOn_coprime {c b : ℕ}
     (hbc : b < c)
     (hcop : Nat.Coprime c b) :
     NoSqOnS0 c b := by
-  have hex : NumberTheoryDescentOn.StepExists c b :=
-    NumberTheoryDescentOn.stepExists_of_localReduce reduce
+  have ker : NumberTheoryDescentOn.ReductionKernel c b :=
+    NumberTheoryDescentOn.kernel_of_localReduce hbc hcop reduce
   intro q hq hqS0
-  exact NoSqOnS0_of_numberTheoryStepExistsOn_coprime hex hbc hcop hq hqS0
+  exact NoSqOnS0_of_numberTheoryKernel_coprime ker hbc hcop hq hqS0
 
 /--
 phase-11 接続補題:

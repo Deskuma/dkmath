@@ -440,3 +440,20 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（Kernel 中心ルートへ一本化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加/変更内容:
+  1. `NumberTheoryDescentOn.kernel_of_localReduce` を追加（`hbc/hcop` 前提付き）
+  2. `NoSqOnS0_of_numberTheoryKernel_coprime` を追加
+  3. `NoSqOnS0_of_numberTheoryLocalReduceOn_coprime` を kernel 経由へ変更
+  4. `Main` の local 入口群（`StepOn/ReduceOn/LocalReduceOn/Kernel`）を kernel 中心の NoSq 回復に統一
+- 意図:
+  - `StepExistsOn` を直接露出させるのではなく、`ReductionKernel` を主入口にして導線を単純化。
+  - 実数論実装は kernel の4フィールドを埋めればよい、という設計を明示。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。
