@@ -109,11 +109,11 @@ def insert_and_report(
     interactive: bool = False,
     apply: bool = False,
 ):
-    file = unknown["file"]
+    file = unknown["file"].strip()
     line = unknown["line"]
     ident = unknown["ident"]
     # resolve file path relative to root if not absolute
-    fpath = Path(file)
+    fpath = Path(file.strip())
     if not fpath.is_file():
         # try relative to root
         candidate = root / file
@@ -212,9 +212,9 @@ def main(argv=None):
         any_inserted = False
         for u in unknowns:
             print(f"Handling unknown: {u['ident']} (at {u['file']}:{u['line']})")
-            ufile = Path(u["file"])
+            ufile = Path(u["file"].strip())
             if not ufile.is_absolute():
-                ufile = root / u["file"]
+                ufile = root / u["file"].strip()
             defs = find_definitions_by_name(root, u["ident"])
             if not defs:
                 reports.append(
@@ -229,15 +229,6 @@ def main(argv=None):
             ttext = ufile.read_text(encoding="utf-8") if ufile.exists() else ""
             import re as _re
 
-            if _re.search(
-                rf"^(?:@[\w\[\] :]+\s*)*(def|lemma|theorem)\s+{_re.escape(u['ident'])}\b",
-                ttext,
-                _re.M,
-            ):
-                reports.append(
-                    {"ident": u["ident"], "ok": False, "reason": "already_present"}
-                )
-                continue
             snippet = chosen.get("snippet", "")
             # determine insertion line:
             insert_line = None
@@ -272,6 +263,46 @@ def main(argv=None):
                         insert_line = found_idx + 1
                     else:
                         insert_line = 1
+
+            # check for existing definition in the file
+            mdef = _re.search(
+                rf"^(?:@[\w\[\] :]+\s*)*(def|lemma|theorem)\s+{_re.escape(u['ident'])}\b",
+                ttext,
+                _re.M,
+            )
+            if mdef:
+                def_pos = mdef.start()
+                def_line = ttext[:def_pos].count("\n") + 1
+                if def_line > insert_line:
+                    # move the existing block earlier
+                    decl_re = _re.compile(
+                        r"^(def|lemma|theorem|structure|inductive|class)\b", _re.M
+                    )
+                    next_m = decl_re.search(ttext, mdef.end())
+                    end_pos = next_m.start() if next_m else len(ttext)
+                    ttext_removed = ttext[: mdef.start()] + ttext[end_pos:]
+                    new_text, patch = insert_snippet_into_text(
+                        ttext_removed, snippet, insert_line
+                    )
+                    outp = ufile.with_suffix(ufile.suffix + ".inserted")
+                    outp.write_text(new_text, encoding="utf-8")
+                    outp.replace(ufile)
+                    any_inserted = True
+                    reports.append(
+                        {
+                            "ident": u["ident"],
+                            "ok": True,
+                            "action": "moved",
+                            "from_line": def_line,
+                            "to_line": insert_line,
+                        }
+                    )
+                    continue
+                else:
+                    reports.append(
+                        {"ident": u["ident"], "ok": False, "reason": "already_present"}
+                    )
+                    continue
 
             new_text, patch = insert_snippet_into_text(ttext, snippet, insert_line)
             outp = ufile.with_suffix(ufile.suffix + ".inserted")
