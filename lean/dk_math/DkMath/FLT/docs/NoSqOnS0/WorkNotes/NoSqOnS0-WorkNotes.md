@@ -259,3 +259,20 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（状態付き数論降下スケルトン）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+- 追加内容:
+  1. `NumberTheoryDescentState`（`c,b,q` と `Primitive/Sq` 証拠を保持）
+  2. `NumberTheoryDescentState.measure`（暫定: `c+b+q`）
+  3. `NumberTheoryDescentState.IsStep`
+  4. `NumberTheoryDescentState.StepExists`（次状態存在性の型を確定）
+  5. `NumberTheoryDescentState.measure_lt_of_isStep`
+- 意図:
+  - 固定 `(c,b)` API から、実際の反例縮小を表す状態遷移 API へ展開する準備。
+  - 次段で `StepExists` を埋める局所数論補題（`step_exists/preserves/decreases`）へ進む。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。

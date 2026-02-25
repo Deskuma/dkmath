@@ -546,6 +546,42 @@ noncomputable def numberTheoryEngine_basic {c b : ℕ}
   numberTheoryEngine_of_reduce (numberTheoryReduce_basic hStep)
 
 /--
+phase-11 本実装に向けた数論側の状態。
+`c,b,q` を状態として持ち、`PrimitiveOnS0` と平方持ち上げ witness を同時に保持する。
+-/
+structure NumberTheoryDescentState where
+  c : ℕ
+  b : ℕ
+  q : ℕ
+  hbc : b < c
+  hcop : Nat.Coprime c b
+  hPrim : PrimitiveOnS0 c b q
+  hSq : q ^ 2 ∣ S0_nat c b
+
+namespace NumberTheoryDescentState
+
+/-- 数論降下で使う暫定測度（第1版）: `c + b + q`。 -/
+def measure (s : NumberTheoryDescentState) : ℕ := s.c + s.b + s.q
+
+/--
+次状態 `t` が `s` からの数論降下ステップであることを表す関係。
+本実装ではこの関係に具体的な構成条件を追加していく。
+-/
+def IsStep (s t : NumberTheoryDescentState) : Prop :=
+  measure t < measure s
+
+/-- phase-11 の最初の固定点: 降下ステップ存在性の型。 -/
+def StepExists : Prop :=
+  ∀ s : NumberTheoryDescentState, ∃ t : NumberTheoryDescentState, IsStep s t
+
+/-- 降下ステップは測度を厳密減少させる。 -/
+lemma measure_lt_of_isStep {s t : NumberTheoryDescentState}
+    (h : IsStep s t) :
+    measure t < measure s := h
+
+end NumberTheoryDescentState
+
+/--
 下降エンジンから `PrimitiveSquareDescentStep` 条件を回収する。
 -/
 lemma primitiveSquareDescentStep_of_engine {c b : ℕ}
