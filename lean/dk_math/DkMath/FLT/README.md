@@ -44,6 +44,7 @@
   - `GEisensteinDescentFrame` で縮小写像枠を保持。
     - `step` は `measure s > 0` のときのみ要求する設計（終端状態を許容）。
   - `toyNatGEisensteinDescentFrame` により、非空状態での型運用を確認済み。
+  - `candidateGEisensteinDescentFrame` により、反例候補レコード状態での運用を確認済み。
 
 - `CosmicFormula/CosmicFormulaBinom.lean`
   - `add_pow_gap_factor`, `add_pow_tail_u2_*`, `two_gap_xy_factor*` を提供。

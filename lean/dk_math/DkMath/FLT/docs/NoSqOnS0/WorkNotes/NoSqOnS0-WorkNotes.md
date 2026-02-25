@@ -488,6 +488,33 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  11:54
+
+- phase-10 実装（反例候補レコード状態の下降フレーム追加）
+  - `GEisensteinBridge.lean`
+    - 追加:
+      - `GEisensteinCandidate`（最小状態: `q`）
+      - `GEisensteinCandidate.measure`
+      - `GEisensteinCandidate.step`
+      - `GEisensteinCandidate.step_decreases`
+      - `candidateGEisensteinDescentFrame`
+        - `State := GEisensteinCandidate`
+        - `measure := q`
+        - `step := pred`（`measure>0` 前提）
+    - 微修正:
+      - `GEisensteinCandidate.step` の未使用引数を `_hs` 化（linter 対応）
+  - `README.md`
+    - `candidateGEisensteinDescentFrame` を追記
+
+- 位置づけ
+  - 下降フレームが「裸の `ℕ`」だけでなく、反例候補レコード状態でも
+    そのまま動くことを確認。
+  - 次段はこの `GEisensteinCandidate` に
+    `PrimitiveOnS0` などの整合証拠を段階追加していく。
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）

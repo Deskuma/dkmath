@@ -92,6 +92,38 @@ def toyNatGEisensteinDescentFrame (c b : ℕ) : GEisensteinDescentFrame c b wher
     simpa using Nat.pred_lt (Nat.ne_of_gt hs)
 
 /--
+GEisenstein 下降で扱う反例候補の最小状態。
+将来はここに `(a,b,c)` 側の情報や整合条件を追加する。
+-/
+structure GEisensteinCandidate where
+  q : ℕ
+
+/-- 反例候補の測度（暫定: `q`）。 -/
+def GEisensteinCandidate.measure (s : GEisensteinCandidate) : ℕ := s.q
+
+/-- 反例候補の 1-step 縮小（暫定: `q := pred q`）。 -/
+def GEisensteinCandidate.step (s : GEisensteinCandidate)
+    (_hs : GEisensteinCandidate.measure s > 0) : GEisensteinCandidate :=
+  { q := Nat.pred s.q }
+
+lemma GEisensteinCandidate.step_decreases (s : GEisensteinCandidate)
+    (hs : GEisensteinCandidate.measure s > 0) :
+    GEisensteinCandidate.measure (GEisensteinCandidate.step s hs) <
+      GEisensteinCandidate.measure s := by
+  simpa [GEisensteinCandidate.measure, GEisensteinCandidate.step]
+    using Nat.pred_lt (Nat.ne_of_gt hs)
+
+/--
+反例候補レコードを使う暫定下降フレーム。
+`toyNat` より本実装に近い状態表現。
+-/
+def candidateGEisensteinDescentFrame (c b : ℕ) : GEisensteinDescentFrame c b where
+  State := GEisensteinCandidate
+  measure := GEisensteinCandidate.measure
+  step := GEisensteinCandidate.step
+  step_decreases := GEisensteinCandidate.step_decreases
+
+/--
 GEisenstein 層で供給する下降法コア。
 `classifyImpossible` に加えて、将来拡張用の descent frame を持つ。
 -/
