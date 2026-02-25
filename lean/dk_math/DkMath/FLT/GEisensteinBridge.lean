@@ -505,6 +505,30 @@ abbrev TrominoReduce (c b : ℕ) :=
     PrimitiveSquareReduction c b q
 
 /--
+数論系 `step` から `NumberTheoryReduce` を生成する。
+-/
+noncomputable def numberTheoryReduce_of_step {c b : ℕ}
+    (hStep : PrimitiveSquareDescentStep c b) :
+    NumberTheoryReduce c b :=
+  primitiveSquareReduce_of_step hStep
+
+/--
+数論系 `step` から `PrimitiveSquareDescentEngine` を生成する。
+-/
+noncomputable def numberTheoryEngine_of_step {c b : ℕ}
+    (hStep : PrimitiveSquareDescentStep c b) :
+    PrimitiveSquareDescentEngine c b :=
+  primitiveSquareDescentEngine_of_step hStep
+
+/--
+数論系 `reduce` から `PrimitiveSquareDescentEngine` を生成する。
+-/
+def numberTheoryEngine_of_reduce {c b : ℕ}
+    (reduceNT : NumberTheoryReduce c b) :
+    PrimitiveSquareDescentEngine c b :=
+  primitiveSquareDescentEngine_of_reduce reduceNT
+
+/--
 下降エンジンから `PrimitiveSquareDescentStep` 条件を回収する。
 -/
 lemma primitiveSquareDescentStep_of_engine {c b : ℕ}

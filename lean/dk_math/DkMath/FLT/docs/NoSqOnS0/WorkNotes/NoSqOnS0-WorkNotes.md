@@ -226,3 +226,20 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（数論ルート固定）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `numberTheoryReduce_of_step`
+  2. `numberTheoryEngine_of_step`
+  3. `numberTheoryEngine_of_reduce`
+  4. `FLT_d3_by_padicValNat_of_numberTheoryStep_coprimeSupport_direct`
+- 意図:
+  - 「数論で進める」方針を API 名称と入口で固定。
+  - 今後の実体補題は `NumberTheoryReduce` へ直接供給すればよい状態にした。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。
