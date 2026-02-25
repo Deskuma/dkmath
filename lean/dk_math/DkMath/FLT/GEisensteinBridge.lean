@@ -505,6 +505,25 @@ lemma not_primitiveSquareWitness_of_descentStep {c b : ℕ}
   exact (Nat.not_lt_of_ge hq0_le_q1) hq1Lt
 
 /--
+下降エンジン入力版: `PrimitiveOnS0` 上の平方持ち上げ witness は存在しない。
+-/
+lemma not_primitiveSquareWitness_of_descentEngine {c b : ℕ}
+    (hEngine : PrimitiveSquareDescentEngine c b) :
+    ¬ PrimitiveSquareWitness c b := by
+  exact not_primitiveSquareWitness_of_descentStep
+    (primitiveSquareDescentStep_of_engine hEngine)
+
+/--
+局所縮小関数 `reduce` 入力版: `PrimitiveOnS0` 上の平方持ち上げ witness は存在しない。
+-/
+lemma not_primitiveSquareWitness_of_reduce {c b : ℕ}
+    (reduce : ∀ {q : ℕ}, PrimitiveOnS0 c b q → q ^ 2 ∣ S0_nat c b →
+      PrimitiveSquareReduction c b q) :
+    ¬ PrimitiveSquareWitness c b := by
+  exact not_primitiveSquareWitness_of_descentStep
+    (primitiveSquareDescentStep_of_reduce reduce)
+
+/--
 strict descent 条件から `q` 全域の `NonLiftableS0` family を回収する。
 -/
 lemma nonLiftableS0_family_of_descentStep {c b : ℕ}
@@ -521,6 +540,16 @@ lemma nonLiftableS0_family_of_descentEngine {c b : ℕ}
     (hEngine : PrimitiveSquareDescentEngine c b) :
     ∀ q : ℕ, NonLiftableS0 c b q := by
   exact nonLiftableS0_family_of_descentStep (primitiveSquareDescentStep_of_engine hEngine)
+
+/--
+局所縮小関数 `reduce` 入力版: `q` 全域の `NonLiftableS0` family を回収する。
+-/
+lemma nonLiftableS0_family_of_reduce {c b : ℕ}
+    (reduce : ∀ {q : ℕ}, PrimitiveOnS0 c b q → q ^ 2 ∣ S0_nat c b →
+      PrimitiveSquareReduction c b q) :
+    ∀ q : ℕ, NonLiftableS0 c b q := by
+  exact nonLiftableS0_family_of_descentStep
+    (primitiveSquareDescentStep_of_reduce reduce)
 
 /--
 `strict descent` と `coprime(c,b)` から `NoSqOnS0` を直接回復する。
@@ -545,6 +574,18 @@ lemma NoSqOnS0_of_descentEngine_coprime {c b : ℕ}
     NoSqOnS0 c b := by
   exact NoSqOnS0_of_descentStep_coprime hbc hcop
     (primitiveSquareDescentStep_of_engine hEngine)
+
+/--
+局所縮小関数 `reduce` 入力版: `NoSqOnS0` を直接回復する。
+-/
+lemma NoSqOnS0_of_reduce_coprime {c b : ℕ}
+    (hbc : b ≤ c)
+    (hcop : Nat.Coprime c b)
+    (reduce : ∀ {q : ℕ}, PrimitiveOnS0 c b q → q ^ 2 ∣ S0_nat c b →
+      PrimitiveSquareReduction c b q) :
+    NoSqOnS0 c b := by
+  exact NoSqOnS0_of_descentStep_coprime hbc hcop
+    (primitiveSquareDescentStep_of_reduce reduce)
 
 /--
 phase-11 接続補題:

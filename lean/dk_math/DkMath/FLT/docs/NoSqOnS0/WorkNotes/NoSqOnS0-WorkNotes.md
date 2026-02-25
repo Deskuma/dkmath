@@ -170,3 +170,22 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（API 実用性の刺し検証）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `not_primitiveSquareWitness_of_descentEngine`
+  2. `not_primitiveSquareWitness_of_reduce`
+  3. `nonLiftableS0_family_of_reduce`
+  4. `NoSqOnS0_of_reduce_coprime`
+  5. `FLT_d3_by_padicValNat_of_reduce_coprimeSupport_direct`
+- 意図:
+  - 同じ終点（`NoSqOnS0` / FLT 入口）に対して
+    `step` / `engine` / `reduce` の3入力形式を揃え、差し替え可能性を確認。
+  - 今後は数学側で `reduce` 補題を作れば、`Main` 直結まで追加作業なしで到達できる。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。
