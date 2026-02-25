@@ -288,3 +288,21 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 
 - build
   - `lake build DkMath.FLT.Main` : OK
+
+## 作業ログ 2026/02/25  10:35
+
+- phase-10 リファクタ（`*_coprimeSupport` ルートの一本化）
+  - `Main.lean`
+    - 新規:
+      - `FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport`
+        - `hNonLiftAll + (b<c) + coprime(c,b)` だけで供給する共通入口
+    - 既存整理:
+      - `FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable_coprimeSupport`
+      - `FLT_d3_by_padicValNat_of_harmonicEnvelope_classify_coprimeSupport`
+      を実質的に上記共通入口へ委譲
+      （`mod3` 関連引数は互換のため受け取るのみ）
+  - `README.md`
+    - 主要入口に `FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport` を追加
+
+- build
+  - `lake build DkMath.FLT.Main` : OK

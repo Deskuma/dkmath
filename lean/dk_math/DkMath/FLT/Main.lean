@@ -229,6 +229,19 @@ theorem FLT_d3_by_padicValNat_of_support_nonLiftable_coprime {a b c : ℕ}
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
 
 /--
+`hNonLiftAll` と `coprime(c,b)` から直接供給する共通入口。
+-/
+theorem FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_support_nonLiftable_coprime
+    ha hb hc hab hbc.le hcb_coprime hNonLiftAll
+
+/--
 phase-08: `NoSqOnS0` を分岐軸にした A+B 合流版。
 - A: `NoSqOnS0 c b` なら `...of_NoSqOnS0`
 - B: `¬ NoSqOnS0 c b` でも `coprime(c,b) + hNonLift` から供給可能
@@ -280,17 +293,15 @@ theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable_coprimeSupport {a 
     (hab : Nat.Coprime a b)
     (hbc : b < c)
     (hcb_coprime : Nat.Coprime c b)
-    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
-    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (_hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (_hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
     (hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q)
-    (hc_nz : c % 3 ≠ 0)
-    (hb_nz : b % 3 ≠ 0)
-    (hsep : c % 3 ≠ b % 3) :
+    (_hc_nz : c % 3 ≠ 0)
+    (_hb_nz : b % 3 ≠ 0)
+    (_hsep : c % 3 ≠ b % 3) :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
-  have hSuppEx3 : S0PrimeSupportExceptThree c b :=
-    s0PrimeSupportExceptThree_of_coprime hbc.le hcb_coprime
-  exact FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable
-    ha hb hc hab hbc hHarm hNoExcAll hSuppEx3 hNonLiftAll hc_nz hb_nz hsep
+  exact FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hNonLiftAll
 
 /--
 phase-05: `classifyLift = impossible` family から `hNonLiftAll` を生成して
@@ -301,20 +312,20 @@ theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_classify_coprimeSupport {a b c
     (hab : Nat.Coprime a b)
     (hbc : b < c)
     (hcb_coprime : Nat.Coprime c b)
-    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
-    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (_hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (_hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
     (hClassPrim :
       ∀ {q : ℕ}, PrimitiveOnS0 c b q →
         classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible)
-    (hc_nz : c % 3 ≠ 0)
-    (hb_nz : b % 3 ≠ 0)
-    (hsep : c % 3 ≠ b % 3) :
+    (_hc_nz : c % 3 ≠ 0)
+    (_hb_nz : b % 3 ≠ 0)
+    (_hsep : c % 3 ≠ b % 3) :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
   have hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q := by
     intro q hprim
     exact nonLiftableS0_of_classifyLift_impossible hbc (hClassPrim hprim) hprim
-  exact FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable_coprimeSupport
-    ha hb hc hab hbc hcb_coprime hHarm hNoExcAll hNonLiftAll hc_nz hb_nz hsep
+  exact FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hNonLiftAll
 
 /--
 phase-05: `NoSqOnS0` から classification impossible family を自動生成し、
