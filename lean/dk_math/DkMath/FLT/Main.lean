@@ -66,6 +66,14 @@ open DkMath.NumberTheory.GcdNext
 open DkMath.ABC
 open DkMath.Algebra.DiffPow
 
+/--
+`descent` 側から最終入口へ接続するための仮定束。
+-/
+structure DescentBaseInput (c b : ℕ) where
+  hbc : b < c
+  hcb_coprime : Nat.Coprime c b
+  hDescentClass : DescentClassifyImpossibleOnPrimitive c b
+
 -- ========================================
 -- § 1. 層A（Zsigmondy原始素因子）
 -- ========================================
@@ -335,6 +343,17 @@ theorem FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport {a b c : ℕ}
     nonLiftableS0_family_of_descentClassify hbc hDescentClass
   exact FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport
     ha hb hc hab hbc hcb_coprime hNonLiftAll
+
+/--
+`DescentBaseInput` を入口にした薄いラッパー。
+-/
+theorem FLT_d3_by_padicValNat_of_DescentBaseInput {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hIn : DescentBaseInput c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport
+    ha hb hc hab hIn.hbc hIn.hcb_coprime hIn.hDescentClass
 
 /--
 phase-05: `NoSqOnS0` から classification impossible family を自動生成し、

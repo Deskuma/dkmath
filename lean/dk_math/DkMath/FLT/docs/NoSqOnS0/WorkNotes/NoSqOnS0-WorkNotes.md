@@ -312,6 +312,28 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  11:12
+
+- phase-10 実装（descent 入口の入力束追加）
+  - `Main.lean`
+    - 追加:
+      - `DescentBaseInput (c b : ℕ)`
+        - `hbc : b < c`
+        - `hcb_coprime : Nat.Coprime c b`
+        - `hDescentClass : DescentClassifyImpossibleOnPrimitive c b`
+      - `FLT_d3_by_padicValNat_of_DescentBaseInput`
+        - `DescentBaseInput` を受けて
+          `FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport` へ接続
+  - `README.md`
+    - `Main` の主要入口に `FLT_d3_by_padicValNat_of_DescentBaseInput` を追記
+
+- 位置づけ
+  - 下降法実装側は、`DescentBaseInput` ひとつを組み立てれば
+    `Main` の最終入口へ即接続できる形になった。
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）
