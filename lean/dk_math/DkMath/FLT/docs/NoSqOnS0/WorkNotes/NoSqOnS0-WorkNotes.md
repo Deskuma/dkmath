@@ -207,3 +207,22 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（タスク2: reduce 候補 2系統の刺し）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `NumberTheoryReduce`（`reduce` 候補の数論系別名）
+  2. `TrominoReduce`（`reduce` 候補の幾何系別名）
+  3. `NoSqOnS0_of_numberTheoryReduce_coprime`
+  4. `NoSqOnS0_of_trominoReduce_coprime`
+  5. `FLT_d3_by_padicValNat_of_numberTheoryReduce_coprimeSupport_direct`
+  6. `FLT_d3_by_padicValNat_of_trominoReduce_coprimeSupport_direct`
+- 意図:
+  - 同一 API 上で `reduce` の供給源だけを2系統に分けて差し替えられるかを確認。
+  - 将来、数論側 `reduce` とトロミノ側 `reduce` を並行開発して同じ入口に接続可能。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。

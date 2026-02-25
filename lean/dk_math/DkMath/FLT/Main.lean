@@ -433,6 +433,32 @@ theorem FLT_d3_by_padicValNat_of_step_via_reduce_coprimeSupport_direct {a b c : 
     (primitiveSquareReduce_of_step hStep)
 
 /--
+`reduce` 候補（数論系）を直接刺す入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryReduce_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (reduceNT : NumberTheoryReduce c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_reduce_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime reduceNT
+
+/--
+`reduce` 候補（トロミノ/幾何系）を直接刺す入口。
+-/
+theorem FLT_d3_by_padicValNat_of_trominoReduce_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (reduceGeom : TrominoReduce c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_reduce_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime reduceGeom
+
+/--
 GEisenstein 下降法コア述語を直接受ける入口。
 -/
 theorem FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport {a b c : ℕ}

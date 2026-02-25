@@ -490,6 +490,21 @@ noncomputable def primitiveSquareDescentEngine_of_step {c b : ℕ}
   exact primitiveSquareDescentEngine_of_reduce (primitiveSquareReduce_of_step hStep)
 
 /--
+`reduce` 候補（数論系）を表す別名。
+-/
+abbrev NumberTheoryReduce (c b : ℕ) :=
+  ∀ {q : ℕ}, PrimitiveOnS0 c b q → q ^ 2 ∣ S0_nat c b →
+    PrimitiveSquareReduction c b q
+
+/--
+`reduce` 候補（トロミノ/幾何系）を表す別名。
+現時点では型は同じで、証明供給源のみを分離する。
+-/
+abbrev TrominoReduce (c b : ℕ) :=
+  ∀ {q : ℕ}, PrimitiveOnS0 c b q → q ^ 2 ∣ S0_nat c b →
+    PrimitiveSquareReduction c b q
+
+/--
 下降エンジンから `PrimitiveSquareDescentStep` 条件を回収する。
 -/
 lemma primitiveSquareDescentStep_of_engine {c b : ℕ}
@@ -611,6 +626,26 @@ lemma NoSqOnS0_of_reduce_coprime {c b : ℕ}
     NoSqOnS0 c b := by
   exact NoSqOnS0_of_descentStep_coprime hbc hcop
     (primitiveSquareDescentStep_of_reduce reduce)
+
+/--
+数論系 `reduce` 候補から `NoSqOnS0` を回復する。
+-/
+lemma NoSqOnS0_of_numberTheoryReduce_coprime {c b : ℕ}
+    (hbc : b ≤ c)
+    (hcop : Nat.Coprime c b)
+    (reduceNT : NumberTheoryReduce c b) :
+    NoSqOnS0 c b := by
+  exact NoSqOnS0_of_reduce_coprime hbc hcop reduceNT
+
+/--
+トロミノ/幾何系 `reduce` 候補から `NoSqOnS0` を回復する。
+-/
+lemma NoSqOnS0_of_trominoReduce_coprime {c b : ℕ}
+    (hbc : b ≤ c)
+    (hcop : Nat.Coprime c b)
+    (reduceGeom : TrominoReduce c b) :
+    NoSqOnS0 c b := by
+  exact NoSqOnS0_of_reduce_coprime hbc hcop reduceGeom
 
 /--
 phase-11 接続補題:
