@@ -344,6 +344,18 @@ def main():
         action="store_true",
         help="When multiple candidates found, prompt interactively to select one (requires TTY).",
     )
+    parser.add_argument(
+        "--insert-names",
+        dest="insert_names",
+        help="Comma-separated list of identifiers to insert in order under the given pattern.",
+        nargs="?",
+    )
+    parser.add_argument(
+        "--insert-after-pattern",
+        dest="insert_after_pattern",
+        help="Insert the snippets immediately after the first line matching this pattern (regex).",
+        nargs="?",
+    )
     args = parser.parse_args()
     if not os.path.isfile(args.input):
         print(f"Error: Input file {args.input} does not exist.")
@@ -371,6 +383,61 @@ def main():
         print(f"Found {len(defs)} definitions for {args.find_name} -> {out_path}")
     else:
         extract_definitions(args.input, args.output, args.short)
+
+    # Batch-insert workflow: insert multiple idents in order under a pattern
+    if args.insert_names and args.insert_target:
+        try:
+            root = find_project_root(Path(args.input).resolve().parent)
+        except FileNotFoundError:
+            root = Path(args.input).resolve().parent
+        names = [n.strip() for n in args.insert_names.split(",") if n.strip()]
+        if not names:
+            print("No names provided for --insert-names")
+            sys.exit(2)
+        defs_list = []
+        for name in names:
+            defs = find_definitions_by_name(root, name)
+            if not defs:
+                print(f"No definitions found for {name}")
+                sys.exit(2)
+            # choose first match by default
+            defs_list.append(defs[0])
+        target = Path(args.insert_target)
+        if not target.exists():
+            print(f"Target file {target} not found")
+            sys.exit(2)
+        # find insertion line: default use provided --insert-line or pattern
+        insert_line = args.insert_line
+        if args.insert_after_pattern:
+            pat = re.compile(args.insert_after_pattern)
+            text = target.read_text(encoding="utf-8")
+            lines = text.splitlines()
+            found = False
+            for i, L in enumerate(lines):
+                if pat.search(L):
+                    insert_line = i + 2  # insert after this line (1-based)
+                    found = True
+                    break
+            if not found:
+                print(f"Pattern not found: {args.insert_after_pattern}")
+                sys.exit(2)
+        insert_line = insert_line or 1
+        # build combined snippet in the given order, ensure one blank line between items
+        combined = []
+        for d in defs_list:
+            s = d.get("snippet", "").rstrip()
+            if s:
+                combined.append(s)
+        combined_text = "\n\n".join(combined) + "\n"
+        new_contents, patch = insert_snippet_into_text(
+            target.read_text(encoding="utf-8"), combined_text, insert_line
+        )
+        if args.dry_run:
+            print(patch)
+        else:
+            out_path = target.with_suffix(target.suffix + ".inserted")
+            out_path.write_text(new_contents, encoding="utf-8")
+            print(f"Wrote inserted file to {out_path}")
 
     # Insert ident workflow: find snippet and insert into target file
     if args.insert_ident and args.insert_target:
