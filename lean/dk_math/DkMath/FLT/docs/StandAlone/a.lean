@@ -206,12 +206,9 @@ theorem pow_sub_pow_factor {α : Type*} [CommRing α] (a b : α) (d : ℕ) :
     rw [eq2, ih]
     have : diffPowSum a b (d + 1) = a^d + b * diffPowSum a b d := by
       unfold diffPowSum
-      -- split the 0-th term and shift the rest (use sum_range_succ' to get f 0 + ∑ f (i+1))
       rw [Finset.sum_range_succ']
-      -- show the tail sum equals b * the shifted sum
       have tail_eq : ∑ k ∈ Finset.range d, a ^ (d + 1 - 1 - (k + 1)) * b ^ (k + 1) =
                      b * ∑ i ∈ Finset.range d, a ^ (d - 1 - i) * b ^ i := by
-        -- move the `b` inside the sum so `sum_congr` can match summands
         rw [Finset.mul_sum]
         apply Finset.sum_congr rfl
         intro i hi
@@ -225,41 +222,31 @@ theorem prime_dividing_gcd_divides_d {p : ℕ} (hp : p.Prime) {a b : ℤ} {d : �
     (hab : Int.gcd a b = 1)
     (hpdiv : (p : ℤ) ∣ Int.gcd (a - b) (diffPowSum a b d)) :
     (p : ℕ) ∣ d := by
-  -- let pp be the integer prime
   let pp : ℤ := p
-  -- from hpdiv and gcd divisibility, pp divides a - b and S := diffPowSum a b d
   have g_dvd_left := Int.gcd_dvd_left (a - b) (diffPowSum a b d)
   have g_dvd_right := Int.gcd_dvd_right (a - b) (diffPowSum a b d)
   have pp_dvd_ab : pp ∣ (a - b) := by
     apply Int.dvd_trans hpdiv g_dvd_left
   have pp_dvd_S : pp ∣ diffPowSum a b d := by
     apply Int.dvd_trans hpdiv g_dvd_right
-  -- Let S := diffPowSum a b d for brevity
   let S := diffPowSum a b d
-  -- Show (a - b) divides S - d * b^(d-1):
-  -- S - d*b^(d-1) = ∑_{i=0}^{d-1} (a^{d-1-i} b^i - b^{d-1})
   have S_minus_eq : S - (d : ℤ) * b ^ (d - 1)
     = ∑ i ∈ Finset.range d, (a ^ (d - 1 - i) * b ^ i - b ^ (d - 1)) := by
-    -- expand the definition of S and rewrite the constant sum
-    -- diffPowSum_sub_const_mul
     change (∑ i ∈ Finset.range d, a ^ (d - 1 - i) * b ^ i) - (d : ℤ) * b ^ (d - 1)
       = ∑ i ∈ Finset.range d, (a ^ (d - 1 - i) * b ^ i - b ^ (d - 1))
     have : (d : ℤ) * b ^ (d - 1) = ∑ i ∈ Finset.range d, b ^ (d - 1) := by
       simp [Finset.sum_const, Finset.card_range]
     rw [this]
     simp only [Finset.sum_sub_distrib]
-  -- each term a^(m) - b^(m) is divisible by a - b
   have term_div : ∀ i ∈ Finset.range d, (a - b) ∣ (a ^ (d - 1 - i) - b ^ (d - 1 - i)) := by
     intro i hi
     have eq := pow_sub_pow_factor (a := a) (b := b) (d := d - 1 - i)
     rw [eq]
     simp only [dvd_mul_right]
-  -- multiply by b^i to get divisibility of each summand and sum up
   have : (a - b) ∣ (S - (d : ℤ) * b ^ (d - 1)) := by
     rw [S_minus_eq]
     apply Finset.dvd_sum
     intro i hi
-    -- b^i * (a^{m} - b^{m}) is divisible by a - b
     have hterm := term_div i hi
     have hle : i ≤ d - 1 := by
       have hlt : i < d := by exact Finset.mem_range.mp hi
@@ -275,31 +262,22 @@ theorem prime_dividing_gcd_divides_d {p : ℕ} (hp : p.Prime) {a b : ℤ} {d : �
     rw [heq]
     have hmul := dvd_mul_of_dvd_left hterm (b ^ i)
     simpa [mul_comm] using hmul
-  -- since pp divides a-b and S, subtracting shows pp divides d * b^(d-1)
   have pp_dvd_d_mul_bpow : pp ∣ (d : ℤ) * b ^ (d - 1) := by
-    -- pp divides S and pp divides S - d*b^(d-1), therefore pp divides their difference d*b^(d-1)
     have pp_div_Sminus : pp ∣ (S - (d : ℤ) * b ^ (d - 1)) := by
       apply Int.dvd_trans pp_dvd_ab
       exact this
-    -- simplify the subtraction to get d*b^(d-1)
     have hsub := Int.dvd_sub pp_dvd_S pp_div_Sminus
     have eq : (d : ℤ) * b ^ (d - 1) = S - (S - (d : ℤ) * b ^ (d - 1)) := by ring
     rw [eq]
     exact hsub
-  -- show pp cannot divide b (otherwise divides a as well, contradicting gcd a b = 1)
   have pp_not_dvd_b : ¬ pp ∣ b := by
     intro h
-    -- if pp ∣ b and pp ∣ a - b then pp ∣ a
     have pa : pp ∣ a := by simpa using Int.dvd_add pp_dvd_ab h
-    -- from pa and h we obtain a natural-number divisibility p ∣ gcd a b
     have gg_nat : p ∣ Int.gcd a b := Int.dvd_gcd pa h
-    -- hence p divides 1 (since gcd a b = 1), contradiction with primality
     have : p ∣ 1 := by rwa [hab] at gg_nat
     exact hp.not_dvd_one this
-  -- convert integer divisibility to nat-level and use primality: p ∣ d * b.natAbs^(d-1)
   have nat_mul_dvd : (p : ℕ) ∣ d * (b.natAbs ^ (d - 1)) := by
     rcases pp_dvd_d_mul_bpow with ⟨k, hk⟩
-    -- take absolute values of both sides and simplify stepwise
     have habs := congrArg Int.natAbs hk
     have eq1 : p * k.natAbs = Int.natAbs (d * b ^ (d - 1)) := by
       calc
@@ -323,12 +301,9 @@ theorem prime_dividing_gcd_divides_d {p : ℕ} (hp : p.Prime) {a b : ℤ} {d : �
         _ = d * (b.natAbs ^ (d - 1)) := eq2
     use k.natAbs
     simp [eq]
-  -- since p is prime, p ∣ d or p ∣ b.natAbs^(d-1);
-  -- the latter implies p ∣ b (contradiction), so p ∣ d
   have : (p : ℕ) ∣ d := by
     rcases (hp.dvd_mul.mp nat_mul_dvd) with (pd | pbpow)
     · exact pd
-    -- helper: prime divides power => prime divides base (simple induction)
     have prime_divides_pow : ∀ n, (p : ℕ) ∣ (b.natAbs ^ n) → (p : ℕ) ∣ b.natAbs := by
       intro n
       induction n with
@@ -340,11 +315,8 @@ theorem prime_dividing_gcd_divides_d {p : ℕ} (hp : p.Prime) {a b : ℤ} {d : �
         rcases hd with (h1 | h2)
         · exact ih h1
         · exact h2
-        done
-    · -- derive p ∣ b.natAbs from p ∣ b.natAbs^(d-1)
-      have pb : (p : ℕ) ∣ b.natAbs := by
+    · have pb : (p : ℕ) ∣ b.natAbs := by
         exact prime_divides_pow (d - 1) pbpow
-      -- pb : p ∣ b.natAbs, derive pp ∣ b as integer then contradiction
       rcases pb with ⟨m, hm⟩
       let bm : ℤ := (b.sign : ℤ) * (m : ℤ)
       have h1 := (Int.sign_mul_natAbs b).symm
@@ -355,16 +327,11 @@ theorem prime_dividing_gcd_divides_d {p : ℕ} (hp : p.Prime) {a b : ℤ} {d : �
             have : ↑(p * m) = pp * (m : ℤ) := by simp [pp]
             rw [this]
             ring
-            done
-      -- derive contradiction pp ∣ b
       have : b = pp * bm := by rw [h1, h2]
       have pp_div_b : pp ∣ b := by use bm
       have : False := pp_not_dvd_b pp_div_b
       contradiction -- finish ok
-      done
-  -- done: (p : ℕ) ∣ d
   exact this
-  done
 
 lemma pow_sub_pow_eq_diff_mul_quotient {a b p : ℕ}
     (_hp : Nat.Prime p) (ha : b < a) :
@@ -406,13 +373,10 @@ lemma exists_prime_divisor_not_dividing_diff_of_prime_exp
       simp only [Int.gcd_eq_natAbs]
       have : Nat.gcd a b = 1 := hab
       simp [this]
-    -- (a-b) * quotientPrimePow a b p = a^p - b^p
     have heq_mul : (a - b) * quotientPrimePow a b p = a^p - b^p :=
       (pow_sub_pow_eq_diff_mul_quotient hp ha).symm
-    -- a^p - b^p = (a-b) * diffPowSum a b p (ℤ)
     have key_int : (a : ℤ)^p - (b : ℤ)^p = ((a : ℤ) - (b : ℤ)) * diffPowSum (a : ℤ) (b : ℤ) p :=
       pow_sub_pow_factor (a : ℤ) (b : ℤ) p
-    -- quotientPrimePow a b p と diffPowSum (a : ℤ) (b : ℤ) p の関係を導く
     have hab_le : b ≤ a := Nat.le_of_lt ha
     have hab_pow : b^p ≤ a^p := Nat.pow_le_pow_left hab_le p
     have quot_eq_sum : (quotientPrimePow a b p : ℤ) = diffPowSum (a : ℤ) (b : ℤ) p := by
@@ -424,21 +388,16 @@ lemma exists_prime_divisor_not_dividing_diff_of_prime_exp
       simp only [Nat.cast_mul] at heq_cast
       rw [h1, h2] at heq_cast
       rw [key_int] at heq_cast
-      -- ((a : ℤ) - (b : ℤ)) * ↑(quotientPrimePow a b p) = ((a : ℤ) - (b : ℤ)) * diffPowSum ...
       have hab_ne_zero : (a : ℤ) - (b : ℤ) ≠ 0 := by omega
       exact (mul_right_inj' hab_ne_zero).mp heq_cast
-    -- q ∣ quotientPrimePow より q ∣ diffPowSum (ℤ)
     have q_div_sum : (q : ℤ) ∣ diffPowSum (a : ℤ) (b : ℤ) p := by
       rw [← quot_eq_sum]
       exact Int.ofNat_dvd.mpr hq_div_G
-    -- q ∣ a - b (ℤ)
     have q_div_diff_int : (q : ℤ) ∣ ((a : ℤ) - (b : ℤ)) := by
       have : (a : ℤ) - (b : ℤ) = ↑(a - b) := by omega
       rw [this]
       exact Int.ofNat_dvd.mpr hq_div_diff
-    -- q  gcd(a-b, diffPowSum) を導く
     have hgcd_div : (q : ℤ) ∣ ↑(Int.gcd ((a : ℤ) - (b : ℤ)) (diffPowSum (a : ℤ) (b : ℤ) p)) := by
-      -- より簡潔な証明：q | x かつ q | y ならば q | gcd(x,y)
       apply Int.ofNat_dvd.mpr
       apply Nat.dvd_gcd
       · -- q ∣ (a - b).natAbs を示す
@@ -448,23 +407,19 @@ lemma exists_prime_divisor_not_dividing_diff_of_prime_exp
         rw [this]
         exact hq_div_diff
       · -- q ∣ (diffPowSum ...).natAbs を示す
-        -- diffPowSum (a : ℤ) (b : ℤ) p = quotientPrimePow a b p (as ℤ)
         have : diffPowSum (a : ℤ) (b : ℤ) p = (quotientPrimePow a b p : ℤ) := quot_eq_sum.symm
         rw [this]
         have : ((quotientPrimePow a b p : ℤ)).natAbs = quotientPrimePow a b p := by
           norm_cast
         rw [this]
         exact hq_div_G
-    -- prime_dividing_gcd_divides_d より q ∣ p
     have hq_div_p : (q : ℕ) ∣ p := by
       exact prime_dividing_gcd_divides_d hq_prime hab_int hgcd_div
-    -- q, p はどちらも素数で q ∣ p なので q = p
     have hq_eq_p : q = p := by
       have := hp.eq_one_or_self_of_dvd q hq_div_p
       rcases this with h1 | h2
       · exact absurd h1 hq_prime.ne_one
       · exact h2
-    -- しかし hpnd : ¬ p ∣ a - b と hq_div_diff : q ∣ a - b および q = p から矛盾
     rw [hq_eq_p] at hq_div_diff
     exact hpnd hq_div_diff
 
@@ -473,7 +428,6 @@ lemma exists_primitive_prime_factor_basic {a b d : ℕ}
     (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
     (hpnd : ¬ d ∣ a - b) :
     ∃ q : ℕ, Nat.Prime q ∧ q ∣ a^d - b^d ∧ ¬ q ∣ a - b := by
-  -- GcdDiffPow の補題を直接使う
   exact exists_prime_divisor_not_dividing_diff_of_prime_exp hd_prime hd_ge hab_lt hb hab hpnd
 
 lemma exists_primitive_prime_factor_prime {a b : ℕ} {d : ℕ}
@@ -548,8 +502,6 @@ theorem cosmic_id_csr' {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
   rw [h1, h2]
   simp only [Nat.choose_zero_right, Nat.cast_one, pow_zero, mul_one]
   ring
-
-/- GN definition and cosmic identity (CommSemiring) -/
 
 lemma sub_eq_mul_GN (d x u : ℕ) :
     (x + u) ^ d - u ^ d = x * GN d x u := by
@@ -700,8 +652,6 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
   have : (3 : ℕ) ≤ 1 := le_trans h_lower h_upper
   omega
 
--- ----------------------------------------------------------------------------
-
 def NoSqOnS0 (c b : ℕ) : Prop :=
   ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → ¬ q ^ 2 ∣ S0_nat c b
 
@@ -729,10 +679,6 @@ theorem FLT_d3_by_padicValNat_of_NoSqOnS0 {a b c : ℕ}
 
 def PrimitiveOnS0 (c b q : ℕ) : Prop :=
   Nat.Prime q ∧ q ∣ S0_nat c b ∧ ¬ q ∣ c - b
-
-/--
-`PrimitiveOnS0` な素数は `S0` を二乗では持ち上げない。
--/
 
 def S0PrimeSupportExceptThree (c b : ℕ) : Prop :=
   ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → q ≠ 3 → ¬ q ∣ c - b
@@ -812,11 +758,6 @@ lemma exists_sq_factor_split_three {c b : ℕ}
   · right
     exact ⟨q, hq, hq3, hqS0, hq2⟩
 
-/--
-phase-03-C の十分条件（skeleton）:
-非例外調和点 witness と `NoSqOnS0` の組。
--/
-
 lemma prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three {c b q : ℕ}
     (hbc : b ≤ c)
     (hcop : Nat.Coprime c b)
@@ -849,11 +790,6 @@ lemma prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three {c b q : ℕ}
     have hq_one : q ∣ 1 := by simpa [hcop.gcd_eq_one] using hq_gcd
     exact hq.not_dvd_one hq_one
 
-/--
-`hSuppEx3` の自動生成ブリッジ:
-`b ≤ c` と `gcd(c,b)=1` から `S0PrimeSupportExceptThree c b` を得る。
--/
-
 lemma not_NoSqOnS0_iff_exists_sq_factor {c b : ℕ} :
     ¬ NoSqOnS0 c b ↔
       ∃ q : ℕ, Nat.Prime q ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b := by
@@ -870,10 +806,6 @@ lemma not_NoSqOnS0_iff_exists_sq_factor {c b : ℕ} :
 
 def NonLiftableS0 (c b q : ℕ) : Prop :=
   PrimitiveOnS0 c b q → ¬ q ^ 2 ∣ S0_nat c b
-
-/--
-`NoSq` 合流ルートの基底入力束。
--/
 
 lemma not_exists_sq_factor_ne_three_of_support_nonLiftable {c b : ℕ}
     (hSuppEx3 : S0PrimeSupportExceptThree c b)
@@ -897,11 +829,6 @@ lemma three_sq_dvd_of_not_NoSqOnS0_of_support_nonLiftable {c b : ℕ}
   · exfalso
     exact (not_exists_sq_factor_ne_three_of_support_nonLiftable hSuppEx3 hNonLift) hne3
 
-/--
-`q ≠ 3` かつ `q ∣ S0(c,b)` と `gcd(c,b)=1` なら `q ∤ (c-b)`。
-（`b ≤ c` を仮定）
--/
-
 lemma s0PrimeSupportExceptThree_of_coprime {c b : ℕ}
     (hbc : b ≤ c) (hcop : Nat.Coprime c b) :
     S0PrimeSupportExceptThree c b := by
@@ -921,10 +848,6 @@ lemma NoSqOnS0_of_support_nonLiftable_coprime {c b : ℕ}
     three_sq_dvd_of_not_NoSqOnS0_of_support_nonLiftable hNoSq_false hSuppEx3 hNonLift
   exact (three_sq_not_dvd_S0_of_coprime hbc hcop) h9
 
-/--
-`q = 3` 例外を除去できると、通常の support 条件へ戻せる。
--/
-
 theorem FLT_d3_by_padicValNat_of_support_nonLiftable_coprime {a b c : ℕ}
     (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
     (hab : Nat.Coprime a b)
@@ -936,30 +859,23 @@ theorem FLT_d3_by_padicValNat_of_support_nonLiftable_coprime {a b c : ℕ}
     NoSqOnS0_of_support_nonLiftable_coprime hbc hcb_coprime hNonLift
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
 
-/-- NP number: integer coordinate + phase bit (front/back). -/
 structure NP where
   n : ℤ
   p : Bool
 deriving DecidableEq, Repr
 
-/-- Front point N_n. -/
 def N (n : ℤ) : NP := ⟨n, false⟩
 
-/-- Back point P_n (represents n + 1/2). -/
 def P (n : ℤ) : NP := ⟨n, true⟩
 
-/-- Origin is the front point N_0. -/
 def zero : NP := N 0
 
-/-- Half-step is the back point P_0. -/
 def half : NP := P 0
 
-/-- Successor: N_n → P_n,  P_n → N_{n+1}. -/
 def succ : NP → NP
   | ⟨n, false⟩ => ⟨n, true⟩
   | ⟨n, true⟩  => ⟨n + 1, false⟩
 
-/-- Concrete value embedding into ℚ: val(n,p) = n + p/2. -/
 def val (x : NP) : ℚ :=
   (x.n : ℚ) + (if x.p then (1/2 : ℚ) else 0)
 
@@ -967,27 +883,15 @@ structure PetalCoreUnit where
   base : NP
 deriving DecidableEq, Repr
 
-/-- PetalCoreUnit の `succ`（NP 側の `succ` を継承）。 -/
 def coreSucc (u : PetalCoreUnit) : PetalCoreUnit :=
   ⟨succ u.base⟩
 
-/--
-調和点（skeleton）:
-偶数回の `succ` で位相ビットを保存する観測点。
--/
 def HarmonicPoint (u : PetalCoreUnit) : Prop :=
   ∃ k : ℕ, 0 < k ∧ (Nat.iterate coreSucc (2 * k) u).base.p = u.base.p
 
-/--
-例外位相（skeleton）:
-ここでは簡易に back-phase (`p = true`) を例外相として置く。
--/
 def isExceptionalPhase (u : PetalCoreUnit) : Prop :=
   u.base.p = true
 
-/--
-`NoSq` 合流ルートの基底入力束。
--/
 structure NoSqBaseInput (c b : ℕ) where
   hbc : b < c
   hcb_coprime : Nat.Coprime c b
@@ -1005,10 +909,6 @@ theorem FLT_d3_by_padicValNat_by_cases_NoSq {a b c : ℕ}
   · exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
   · exact FLT_d3_by_padicValNat_of_support_nonLiftable_coprime
       ha hb hc hab hbc hcb_coprime hNonLift
-
-/--
-`hNonLiftAll` と `coprime(c,b)` から直接供給する共通入口。
--/
 
 theorem FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport {a b c : ℕ}
     (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
