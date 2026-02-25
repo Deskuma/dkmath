@@ -848,6 +848,24 @@ lemma stepExists_of_localReduce {c b : ℕ}
     (stepDecreases_of_localReduce reduce)
 
 /--
+`IsStep s t` から、`s` を始点とする `PrimitiveSquareReduction` を再構成する。
+`hlt` は `IsStep` の測度減少成分から復元する。
+-/
+noncomputable def reduction_of_isStep {c b : ℕ} {s t : State c b}
+    (h : IsStep s t) :
+    PrimitiveSquareReduction c b s.q := by
+  let hcore : IsStepCore s t := h.1
+  let red : PrimitiveSquareReduction c b s.q := Classical.choose hcore
+  let hred : t = nextOfReduction s red := Classical.choose_spec hcore
+  refine
+    { q' := red.q'
+      hPrim := red.hPrim
+      hSq := red.hSq
+      hlt := ?_ }
+  have hlt_meas : measure t < measure s := h.2
+  simpa [measure, nextOfReduction, hred] using hlt_meas
+
+/--
 `StepExists`（固定 `(c,b)`）から `LocalReduce` を（選択公理で）構成する。
 -/
 noncomputable def localReduce_of_stepExists {c b : ℕ}
@@ -856,8 +874,7 @@ noncomputable def localReduce_of_stepExists {c b : ℕ}
   intro s
   let t : State c b := Classical.choose (hex s)
   let ht : IsStep s t := Classical.choose_spec (hex s)
-  let hcore : IsStepCore s t := core_of_isStep ht
-  exact Classical.choose hcore
+  exact reduction_of_isStep ht
 
 /--
 `StepExists` と `LocalReduce` の同値（固定 `(c,b)` 版）。

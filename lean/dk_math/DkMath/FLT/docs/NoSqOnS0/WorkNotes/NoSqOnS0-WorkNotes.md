@@ -476,3 +476,20 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（`localReduce_of_stepExists` の防御的強化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+- 追加内容:
+  1. `NumberTheoryDescentOn.reduction_of_isStep`
+     - `IsStep` から `PrimitiveSquareReduction` を再構成
+     - `hlt` は `IsStep` の測度減少成分から再構成
+  2. `localReduce_of_stepExists` を `reduction_of_isStep` 経由へ変更
+- 意図:
+  - `IsStepCore` から取り出した reduction の `hlt` を暗黙依存にせず、
+    `IsStep` の第2成分（measure 減少）に明示的に結び付ける。
+  - 将来 `IsStepCore` の内容を変更した場合の頑健性を上げる。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。
