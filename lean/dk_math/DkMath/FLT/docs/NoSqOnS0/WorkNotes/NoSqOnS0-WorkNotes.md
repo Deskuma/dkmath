@@ -794,6 +794,25 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  13:18
+
+- phase-10 実装（利用パス一本化ラッパー）
+  - `Main.lean`
+    - 追加:
+      - `FLT_d3_by_padicValNat_of_GEisensteinCore_via_reachability_coprimeSupport`
+    - 内容:
+      - `hGECore` から
+        `GEisensteinDescentCore.exists_descend_measure_eq_zero_of_step_pred`
+        で reachability を生成し、
+        `...of_GEisensteinCore_with_reachability...` へ委譲
+    - 意図:
+      - 利用者視点で「core だけ渡せば reachability 経由も使う」導線を統一
+  - `README.md`
+    - 主要公開面に上記ラッパーを追記
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）

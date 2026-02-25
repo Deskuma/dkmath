@@ -19,6 +19,7 @@
     - `FLT_d3_by_padicValNat_of_harmonicEnvelope_*`
     - `FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport`
     - `FLT_d3_by_padicValNat_of_GEisensteinCore_with_reachability_coprimeSupport`
+    - `FLT_d3_by_padicValNat_of_GEisensteinCore_via_reachability_coprimeSupport`
     - `GEisenstein_descent_reaches_zero_of_core`
     - `GEisenstein_descent_reaches_zero_of_descentClassify_primitiveSized`
     - `FLT_d3_by_padicValNat_of_DescentBaseInput`
