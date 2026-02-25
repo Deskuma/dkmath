@@ -927,3 +927,18 @@ theorem FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput {a b c : ℕ}
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
   exact FLT_d3_by_padicValNat_by_cases_NoSq
     ha hb hc hab hIn.hbc.le hIn.hcb_coprime hIn.hNonLift
+
+theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_classify_coprimeSupport {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hClassPrim :
+      ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+        classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible)
+    :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q :=
+    nonLiftableS0_family_of_classifyLift_impossible hbc hClassPrim
+  exact FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hNonLiftAll
