@@ -354,6 +354,24 @@ theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_descentStep_coprimeSupport {a 
     ha hb hc hab hbc hcb_coprime hDescentClass
 
 /--
+phase-11 入口（engine 入力版）:
+strict descent を構造体で受け取り、既存入口へ接続する。
+-/
+theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_descentEngine_coprimeSupport {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hEngine : PrimitiveSquareDescentEngine c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_harmonicEnvelope_descentStep_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hInfra hHarm hNoExcAll
+    (primitiveSquareDescentStep_of_engine hEngine)
+
+/--
 GEisenstein 下降法コア述語を直接受ける入口。
 -/
 theorem FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport {a b c : ℕ}
