@@ -360,6 +360,33 @@ theorem FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport {a b c : ℕ}
     ha hb hc hab hbc hcb_coprime hDescentClass
 
 /--
+`GEisensteinDescentCore` から、任意初期状態での停止到達（`measure = 0`）を取り出す API。
+-/
+theorem GEisenstein_descent_reaches_zero_of_core {c b : ℕ}
+    (hCore : GEisensteinDescentCore c b)
+    (s : hCore.frame.State) :
+    ∃ n : ℕ,
+      hCore.frame.measure (GEisensteinDescentFrame.descend hCore.frame s n) = 0 := by
+  exact GEisensteinDescentCore.exists_descend_measure_eq_zero_of_step_pred hCore s
+
+/--
+`primitiveSized` 非empty core 橋の公開 API 版。
+-/
+theorem GEisenstein_descent_reaches_zero_of_descentClassify_primitiveSized
+    {c b q size : ℕ}
+    (hDescent : DescentClassifyImpossibleOnPrimitive c b)
+    (hPrim : PrimitiveOnS0 c b q)
+    (hsize : size ≤ q) :
+    ∃ n : ℕ,
+      (primitiveSizedCandidateGEisensteinDescentFrame c b).measure
+        (GEisensteinDescentFrame.descend
+          (primitiveSizedCandidateGEisensteinDescentFrame c b)
+          (GEisensteinPrimitiveSizedCandidate.ofPrimitiveWithSize hPrim size hsize)
+          n) = 0 := by
+  exact exists_descend_measure_eq_zero_of_descentClassify_primitiveSized
+    hDescent hPrim size hsize
+
+/--
 `DescentBaseInput` を入口にした薄いラッパー。
 -/
 theorem FLT_d3_by_padicValNat_of_DescentBaseInput {a b c : ℕ}

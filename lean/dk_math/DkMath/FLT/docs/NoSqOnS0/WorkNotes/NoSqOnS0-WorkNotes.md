@@ -758,6 +758,26 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  13:13
+
+- phase-10 実装（停止到達 API を `Main` に公開）
+  - `Main.lean`
+    - 追加:
+      - `GEisenstein_descent_reaches_zero_of_core`
+        - 任意 `GEisensteinDescentCore` と初期状態から
+          `measure = 0` 到達の `n` を返す
+      - `GEisenstein_descent_reaches_zero_of_descentClassify_primitiveSized`
+        - `DescentClassifyImpossibleOnPrimitive + PrimitiveOnS0 + size≤q` から
+          `primitiveSized` frame での停止到達を返す
+    - 目的:
+      - 停止補題を `GEisensteinBridge` の内部補題で終わらせず、
+        公開層 (`Main`) で直接利用できる API に昇格
+  - `README.md`
+    - `Main` の主要公開面に上記2定理を追記
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）
