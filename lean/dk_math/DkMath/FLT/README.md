@@ -17,6 +17,7 @@
     - `FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport`
     - `FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput`
     - `FLT_d3_by_padicValNat_of_harmonicEnvelope_*`
+    - `FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport`
     - `FLT_d3_by_padicValNat_of_DescentBaseInput`
     - `FLT_d3_by_padicValNat_of_NoSqInput`
 

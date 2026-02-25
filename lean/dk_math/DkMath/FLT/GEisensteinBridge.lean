@@ -52,6 +52,21 @@ lemma GN3_sub_eq_eisensteinNorm_shift (a b : ℕ) (hab : b ≤ a) :
   rw [GN3_sub_eq_S0 a b hab, S0_eq_eisensteinNorm_shift]
 
 /--
+GEisenstein 層で将来供給する下降法コア述語。
+現段階では `DescentClassifyImpossibleOnPrimitive` の薄い別名。
+-/
+def GEisensteinDescentCore (c b : ℕ) : Prop :=
+  DescentClassifyImpossibleOnPrimitive c b
+
+/--
+GEisenstein 下降法コアから `descent` インターフェースへ戻す。
+-/
+lemma descentClassifyImpossibleOnPrimitive_of_GEisensteinCore {c b : ℕ}
+    (hCore : GEisensteinDescentCore c b) :
+    DescentClassifyImpossibleOnPrimitive c b := by
+  exact hCore
+
+/--
 GEisenstein 層から下降法インターフェースへ接続する橋。
 現段階では `NoSq + harmonic envelope` 供給版を再公開する。
 -/
@@ -62,8 +77,10 @@ lemma descentClassifyImpossibleOnPrimitive_via_GEisenstein {c b : ℕ}
     (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
     (hNoSq : NoSqOnS0 c b) :
     DescentClassifyImpossibleOnPrimitive c b := by
-  exact descentClassifyImpossibleOnPrimitive_of_harmonicEnvelope_NoSq
-    hbc hInfra hHarm hNoExcAll hNoSq
+  exact descentClassifyImpossibleOnPrimitive_of_GEisensteinCore
+    (hCore := by
+      exact descentClassifyImpossibleOnPrimitive_of_harmonicEnvelope_NoSq
+        hbc hInfra hHarm hNoExcAll hNoSq)
 
 /-- 旧層Bの平方耐性主張が一般には成り立たないことの具体反例。 -/
 theorem exists_counterexample_S0_square_resistance :

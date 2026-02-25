@@ -362,6 +362,33 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  11:34
+
+- phase-10 実装（GEisenstein コア述語の導入）
+  - `GEisensteinBridge.lean`
+    - 追加:
+      - `GEisensteinDescentCore (c b : ℕ) : Prop`
+        - 現段階では `DescentClassifyImpossibleOnPrimitive` の別名
+      - `descentClassifyImpossibleOnPrimitive_of_GEisensteinCore`
+    - `descentClassifyImpossibleOnPrimitive_via_GEisenstein` を
+      上記コア述語経由の形へ更新
+  - `Main.lean`
+    - 追加:
+      - `FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport`
+        - `GEisensteinDescentCore` を直接受ける入口
+    - `FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport` を
+      `GEisensteinCore` 入口経由へ切り替え
+  - `README.md`
+    - 主要入口に `FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport` を追記
+
+- 位置づけ
+  - `Main` が `GEisenstein` 層のコア述語を直接受けられる形になった。
+  - 今後は `GEisensteinDescentCore` の中身を強化（NoSq 依存の除去）すれば、
+    既存の最終入口は変更せずに前進できる。
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）

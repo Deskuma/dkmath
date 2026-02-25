@@ -345,6 +345,21 @@ theorem FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport {a b c : ℕ}
     ha hb hc hab hbc hcb_coprime hNonLiftAll
 
 /--
+GEisenstein 下降法コア述語を直接受ける入口。
+-/
+theorem FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hGECore : GEisensteinDescentCore c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hDescentClass : DescentClassifyImpossibleOnPrimitive c b :=
+    descentClassifyImpossibleOnPrimitive_of_GEisensteinCore hGECore
+  exact FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hDescentClass
+
+/--
 `DescentBaseInput` を入口にした薄いラッパー。
 -/
 theorem FLT_d3_by_padicValNat_of_DescentBaseInput {a b c : ℕ}
@@ -369,11 +384,11 @@ theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport {a b c : �
     (hNoSq : NoSqOnS0 c b)
     :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
-  have hDescentClass : DescentClassifyImpossibleOnPrimitive c b :=
-    descentClassifyImpossibleOnPrimitive_via_GEisenstein
+  have hGECore : GEisensteinDescentCore c b := by
+    exact descentClassifyImpossibleOnPrimitive_via_GEisenstein
       hbc hasPhaseUnitInfrastructure hHarm hNoExcAll hNoSq
-  exact FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport
-    ha hb hc hab hbc hcb_coprime hDescentClass
+  exact FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hGECore
 
 /--
 `NoSqBaseInput` から A+B 合流定理へ直結する薄いラッパー。
