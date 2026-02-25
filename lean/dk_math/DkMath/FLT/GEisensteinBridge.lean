@@ -260,6 +260,37 @@ lemma primitiveSizedCandidate_measure_le_S0 {c b : ℕ}
   exact Nat.le_trans s.hsize hq_le
 
 /--
+`step` 後も `size ≤ q` 不変量は保持される（構造体フィールド経由）。
+-/
+lemma GEisensteinPrimitiveSizedCandidate.hsize_step {c b : ℕ}
+    (s : GEisensteinPrimitiveSizedCandidate c b)
+    (hs : GEisensteinPrimitiveSizedCandidate.measure s > 0) :
+    (GEisensteinPrimitiveSizedCandidate.step s hs).size ≤
+      (GEisensteinPrimitiveSizedCandidate.step s hs).q := by
+  simpa [GEisensteinPrimitiveSizedCandidate.step]
+    using (GEisensteinPrimitiveSizedCandidate.step s hs).hsize
+
+/--
+`step` 後も測度上界 `measure ≤ S0_nat c b` は保持される。
+-/
+lemma primitiveSizedCandidate_measure_le_S0_step {c b : ℕ}
+    (s : GEisensteinPrimitiveSizedCandidate c b)
+    (hs : GEisensteinPrimitiveSizedCandidate.measure s > 0) :
+    GEisensteinPrimitiveSizedCandidate.measure (GEisensteinPrimitiveSizedCandidate.step s hs) ≤
+      S0_nat c b := by
+  exact primitiveSizedCandidate_measure_le_S0 (GEisensteinPrimitiveSizedCandidate.step s hs)
+
+/--
+`step` は厳密減少なので、弱単調性 `measure(step) ≤ measure` も成り立つ。
+-/
+lemma primitiveSizedCandidate_measure_step_le {c b : ℕ}
+    (s : GEisensteinPrimitiveSizedCandidate c b)
+    (hs : GEisensteinPrimitiveSizedCandidate.measure s > 0) :
+    GEisensteinPrimitiveSizedCandidate.measure (GEisensteinPrimitiveSizedCandidate.step s hs) ≤
+      GEisensteinPrimitiveSizedCandidate.measure s := by
+  exact Nat.le_of_lt (GEisensteinPrimitiveSizedCandidate.step_decreases s hs)
+
+/--
 GEisenstein 層で供給する下降法コア。
 `classifyImpossible` に加えて、将来拡張用の descent frame を持つ。
 -/

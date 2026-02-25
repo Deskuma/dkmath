@@ -616,6 +616,26 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  12:45
+
+- phase-10 実装（step 後の不変量レイヤ）
+  - `GEisensteinBridge.lean`
+    - 追加補題:
+      - `GEisensteinPrimitiveSizedCandidate.hsize_step`
+        - `size ≤ q` の step 後保持
+      - `primitiveSizedCandidate_measure_le_S0_step`
+        - `measure(step s) ≤ S0_nat c b`
+      - `primitiveSizedCandidate_measure_step_le`
+        - `measure(step s) ≤ measure s`
+    - 効果:
+      - 下降フレームに必要な「上界保持」と「弱単調減少」を補題として分離。
+      - 次段の well-founded 接続へ使える形に整理。
+  - `README.md`
+    - 不変量補題セットを追記
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）

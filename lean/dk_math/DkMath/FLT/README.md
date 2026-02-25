@@ -56,6 +56,11 @@
     - `q_le_S0_nat_of_PrimitiveOnS0`
     - `primitiveSizedCandidate_measure_le_S0`
     により、`size` 測度を `S0_nat` 上界へ接続済み。
+  - 不変量補題:
+    - `GEisensteinPrimitiveSizedCandidate.hsize_step`
+    - `primitiveSizedCandidate_measure_le_S0_step`
+    - `primitiveSizedCandidate_measure_step_le`
+    により、`step` 後も上界・単調減少が維持されることを確認済み。
 
 - `CosmicFormula/CosmicFormulaBinom.lean`
   - `add_pow_gap_factor`, `add_pow_tail_u2_*`, `two_gap_xy_factor*` を提供。
