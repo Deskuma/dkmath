@@ -65,7 +65,10 @@
     - `GEisensteinDescentFrame.descend`
     - `GEisensteinDescentFrame.measure_descend_le`
     - `GEisensteinDescentFrame.measure_descend_one_lt_of_pos`
+    - `GEisensteinDescentFrame.measure_descend_eq_zero_of_step_pred`
     により、well-founded 接続用の反復骨格を確立。
+    - 具体化: `toyNat_measure_descend_eq_zero`,
+      `primitiveSized_measure_descend_eq_zero`
 
 - `CosmicFormula/CosmicFormulaBinom.lean`
   - `add_pow_gap_factor`, `add_pow_tail_u2_*`, `two_gap_xy_factor*` を提供。

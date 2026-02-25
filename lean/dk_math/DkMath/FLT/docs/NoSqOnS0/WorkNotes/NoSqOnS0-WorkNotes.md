@@ -656,6 +656,25 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  12:55
+
+- phase-10 実装（`measure` 回反復で 0 到達）
+  - `GEisensteinBridge.lean`
+    - `namespace GEisensteinDescentFrame` に追加:
+      - `measure_descend_eq_zero_of_step_pred`
+        - 仮定:
+          - `measure(step s hs) = pred (measure s)`
+        - 結論:
+          - `measure (descend s (measure s)) = 0`
+    - 具体適用:
+      - `toyNat_measure_descend_eq_zero`
+      - `primitiveSized_measure_descend_eq_zero`
+  - 実装整理:
+    - linter 警告 3件（unnecessary `simpa`, unused simp args）を解消
+
+- build
+  - `lake build DkMath.FLT.Main` : OK（新規警告なし）
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）

@@ -106,6 +106,37 @@ lemma measure_descend_one_lt_of_pos {c b : ℕ}
     F.measure (descend F s 1) < F.measure s := by
   simpa [descend, hs] using F.step_decreases s hs
 
+/--
+`step` が測度を `pred` にするフレームでは、`measure s` 回の反復で測度 0 に到達する。
+-/
+lemma measure_descend_eq_zero_of_step_pred {c b : ℕ}
+    (F : GEisensteinDescentFrame c b)
+    (hpred : ∀ (s : F.State) (hs : F.measure s > 0),
+      F.measure (F.step s hs) = Nat.pred (F.measure s)) :
+    ∀ s : F.State, F.measure (descend F s (F.measure s)) = 0 := by
+  have hmain :
+      ∀ n : ℕ, ∀ s : F.State, F.measure s = n → F.measure (descend F s n) = 0 := by
+    intro n
+    induction n with
+    | zero =>
+        intro s hs
+        simpa [descend] using hs
+    | succ n ih =>
+        intro s hsEq
+        have hsPos : F.measure s > 0 := by omega
+        have hdesc :
+            F.measure (descend F s (n + 1)) =
+              F.measure (descend F (F.step s hsPos) n) := by
+          simp [descend, hsPos]
+        rw [hdesc]
+        have hstepEq : F.measure (F.step s hsPos) = n := by
+          calc
+            F.measure (F.step s hsPos) = Nat.pred (F.measure s) := hpred s hsPos
+            _ = n := by simp [hsEq]
+        exact ih (F.step s hsPos) hstepEq
+  intro s
+  exact hmain (F.measure s) s rfl
+
 end GEisensteinDescentFrame
 
 /--
@@ -270,6 +301,36 @@ def primitiveSizedCandidateGEisensteinDescentFrame (c b : ℕ) : GEisensteinDesc
   measure := GEisensteinPrimitiveSizedCandidate.measure
   step := GEisensteinPrimitiveSizedCandidate.step
   step_decreases := GEisensteinPrimitiveSizedCandidate.step_decreases
+
+/-- `toyNat` フレームは `measure` 回の反復で測度 0 に到達する。 -/
+lemma toyNat_measure_descend_eq_zero (c b : ℕ) :
+    ∀ n : ℕ,
+      (toyNatGEisensteinDescentFrame c b).measure
+        (GEisensteinDescentFrame.descend (toyNatGEisensteinDescentFrame c b) n
+          ((toyNatGEisensteinDescentFrame c b).measure n)) = 0 := by
+  intro n
+  exact GEisensteinDescentFrame.measure_descend_eq_zero_of_step_pred
+    (F := toyNatGEisensteinDescentFrame c b)
+    (hpred := by
+      intro s hs
+      simp [toyNatGEisensteinDescentFrame])
+    n
+
+/-- `primitiveSized` フレームは `measure` 回の反復で測度 0 に到達する。 -/
+lemma primitiveSized_measure_descend_eq_zero (c b : ℕ) :
+    ∀ s : GEisensteinPrimitiveSizedCandidate c b,
+      (primitiveSizedCandidateGEisensteinDescentFrame c b).measure
+        (GEisensteinDescentFrame.descend (primitiveSizedCandidateGEisensteinDescentFrame c b) s
+          ((primitiveSizedCandidateGEisensteinDescentFrame c b).measure s)) = 0 := by
+  intro s
+  exact GEisensteinDescentFrame.measure_descend_eq_zero_of_step_pred
+    (F := primitiveSizedCandidateGEisensteinDescentFrame c b)
+    (hpred := by
+      intro t ht
+      simp [primitiveSizedCandidateGEisensteinDescentFrame,
+        GEisensteinPrimitiveSizedCandidate.measure,
+        GEisensteinPrimitiveSizedCandidate.step])
+    s
 
 /--
 `PrimitiveOnS0` なら `S0_nat c b ≠ 0`。
