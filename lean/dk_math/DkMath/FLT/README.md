@@ -49,6 +49,8 @@
       `PrimitiveOnS0` 等の証拠を段階注入できる。
   - `primitiveCandidateGEisensteinDescentFrame` により、
     `PrimitiveOnS0` 証拠を保持したまま `fuel` で下降する型を確認済み。
+  - `primitiveSizedCandidateGEisensteinDescentFrame` により、
+    `size ≤ q` 不変量つき測度での下降を確認済み。
 
 - `CosmicFormula/CosmicFormulaBinom.lean`
   - `add_pow_gap_factor`, `add_pow_tail_u2_*`, `two_gap_xy_factor*` を提供。

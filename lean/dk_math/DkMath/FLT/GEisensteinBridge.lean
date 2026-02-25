@@ -174,6 +174,57 @@ def primitiveCandidateGEisensteinDescentFrame (c b : ℕ) : GEisensteinDescentFr
   step_decreases := GEisensteinPrimitiveCandidate.step_decreases
 
 /--
+`PrimitiveOnS0` 証拠保持に加えて、候補サイズ `size` を明示する状態。
+`size ≤ q` を不変量として保持する。
+-/
+structure GEisensteinPrimitiveSizedCandidate (c b : ℕ) where
+  q : ℕ
+  hPrim : PrimitiveOnS0 c b q
+  size : ℕ
+  hsize : size ≤ q
+
+/-- 証拠つき候補から初期サイズを与えて構成する。 -/
+def GEisensteinPrimitiveSizedCandidate.ofPrimitiveWithSize {c b q : ℕ}
+    (hPrim : PrimitiveOnS0 c b q) (size : ℕ) (hsize : size ≤ q) :
+    GEisensteinPrimitiveSizedCandidate c b :=
+  { q := q, hPrim := hPrim, size := size, hsize := hsize }
+
+/-- sized 候補の測度は `size`。 -/
+def GEisensteinPrimitiveSizedCandidate.measure {c b : ℕ}
+    (s : GEisensteinPrimitiveSizedCandidate c b) : ℕ := s.size
+
+/--
+sized 候補の 1-step 縮小（`size := pred size`）。
+`q`, `hPrim`, `size ≤ q` は保持。
+-/
+def GEisensteinPrimitiveSizedCandidate.step {c b : ℕ}
+    (s : GEisensteinPrimitiveSizedCandidate c b)
+    (_hs : GEisensteinPrimitiveSizedCandidate.measure s > 0) :
+    GEisensteinPrimitiveSizedCandidate c b :=
+  { q := s.q
+    hPrim := s.hPrim
+    size := Nat.pred s.size
+    hsize := by
+      exact Nat.le_trans (Nat.pred_le _) s.hsize }
+
+lemma GEisensteinPrimitiveSizedCandidate.step_decreases {c b : ℕ}
+    (s : GEisensteinPrimitiveSizedCandidate c b)
+    (hs : GEisensteinPrimitiveSizedCandidate.measure s > 0) :
+    GEisensteinPrimitiveSizedCandidate.measure (GEisensteinPrimitiveSizedCandidate.step s hs) <
+      GEisensteinPrimitiveSizedCandidate.measure s := by
+  simpa [GEisensteinPrimitiveSizedCandidate.measure, GEisensteinPrimitiveSizedCandidate.step]
+    using Nat.pred_lt (Nat.ne_of_gt hs)
+
+/--
+候補サイズ `size` を測度に使う証拠保持型の下降フレーム。
+-/
+def primitiveSizedCandidateGEisensteinDescentFrame (c b : ℕ) : GEisensteinDescentFrame c b where
+  State := GEisensteinPrimitiveSizedCandidate c b
+  measure := GEisensteinPrimitiveSizedCandidate.measure
+  step := GEisensteinPrimitiveSizedCandidate.step
+  step_decreases := GEisensteinPrimitiveSizedCandidate.step_decreases
+
+/--
 GEisenstein 層で供給する下降法コア。
 `classifyImpossible` に加えて、将来拡張用の descent frame を持つ。
 -/

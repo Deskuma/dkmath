@@ -568,6 +568,31 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  12:32
+
+- phase-10 実装（`size ≤ q` 不変量つき測度）
+  - `GEisensteinBridge.lean`
+    - 追加:
+      - `GEisensteinPrimitiveSizedCandidate`
+        - `q`, `hPrim`, `size`, `hsize : size ≤ q`
+      - `GEisensteinPrimitiveSizedCandidate.ofPrimitiveWithSize`
+      - `GEisensteinPrimitiveSizedCandidate.measure`（`size`）
+      - `GEisensteinPrimitiveSizedCandidate.step`（`size := pred size`）
+      - `GEisensteinPrimitiveSizedCandidate.step_decreases`
+      - `primitiveSizedCandidateGEisensteinDescentFrame`
+    - 目的:
+      - 暫定 `fuel` ではなく、候補状態に付随する `size` 測度へ前進。
+      - `size ≤ q` を不変量として保持できる型を先に確立。
+  - `README.md`
+    - `primitiveSizedCandidateGEisensteinDescentFrame` を追記
+
+- 位置づけ
+  - 下降測度の設計が「外付け fuel」から「状態内サイズ」へ移行。
+  - 次段は `size` の定義自体を実候補の算術量へ接続する補題化。
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）
