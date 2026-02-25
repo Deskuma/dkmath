@@ -455,7 +455,7 @@ theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport {a b c : â
     exact GEisensteinDescentCore_of_descentClassify
       (descentClassifyImpossibleOnPrimitive_via_GEisenstein
         hbc hasPhaseUnitInfrastructure hHarm hNoExcAll hNoSq)
-  exact FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport
+  exact FLT_d3_by_padicValNat_of_GEisensteinCore_via_reachability_coprimeSupport
     ha hb hc hab hbc hcb_coprime hGECore
 
 /--

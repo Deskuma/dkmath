@@ -813,6 +813,20 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  13:21
+
+- phase-10 実装（`harmonicEnvelope_NoSq` 導線の GEisensteinCore 統一）
+  - `Main.lean`
+    - `FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport` の終端接続を変更:
+      - 旧: `...of_GEisensteinCore_coprimeSupport`
+      - 新: `...of_GEisensteinCore_via_reachability_coprimeSupport`
+    - 効果:
+      - `harmonicEnvelope_NoSq` 導線も reachability 受け口経由に統一
+      - `GEisensteinCore` 系の利用パスが一本化
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）
