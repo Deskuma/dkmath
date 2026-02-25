@@ -628,6 +628,31 @@ lemma stepExists_iff_exists_stepSpec : StepExists ↔ Nonempty StepSpec := by
     rcases hs with ⟨spec⟩
     exact stepExists_of_spec spec
 
+/--
+`StepExists` が成り立つと、任意状態は矛盾する。
+（測度 `measure : ℕ` に関する強い帰納法）
+-/
+lemma false_of_state_of_stepExists (hex : StepExists)
+    (s : NumberTheoryDescentState) :
+    False := by
+  have hmain : ∀ n : ℕ, ∀ s : NumberTheoryDescentState, measure s = n → False := by
+    intro n
+    induction n using Nat.strong_induction_on with
+    | h n ih =>
+        intro s hs
+        rcases hex s with ⟨t, ht⟩
+        have ht' : measure t < n := by
+          simpa [IsStep, hs] using ht
+        exact ih (measure t) ht' t rfl
+  exact hmain (measure s) s rfl
+
+/-- `StepExists` が成り立つなら、状態は存在しない。 -/
+lemma not_nonempty_of_stepExists (hex : StepExists) :
+    ¬ Nonempty NumberTheoryDescentState := by
+  intro hs
+  rcases hs with ⟨s⟩
+  exact false_of_state_of_stepExists hex s
+
 end NumberTheoryDescentState
 
 /--
@@ -772,6 +797,42 @@ lemma NoSqOnS0_of_trominoReduce_coprime {c b : ℕ}
     (reduceGeom : TrominoReduce c b) :
     NoSqOnS0 c b := by
   exact NoSqOnS0_of_reduce_coprime hbc hcop reduceGeom
+
+/--
+状態遷移仕様 `StepExists`（global）から、固定 `c,b,q` での `NonLiftableS0` を得る。
+-/
+lemma nonLiftableS0_of_numberTheoryStepExists {c b q : ℕ}
+    (hex : NumberTheoryDescentState.StepExists)
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b) :
+    NonLiftableS0 c b q := by
+  intro hPrim hSq
+  exact NumberTheoryDescentState.false_of_state_of_stepExists hex
+    ⟨c, b, q, hbc, hcop, hPrim, hSq⟩
+
+/--
+`StepExists`（global）から、固定 `c,b` 上の `NonLiftableS0` family を得る。
+-/
+lemma nonLiftableS0_family_of_numberTheoryStepExists {c b : ℕ}
+    (hex : NumberTheoryDescentState.StepExists)
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b) :
+    ∀ q : ℕ, NonLiftableS0 c b q := by
+  intro q
+  exact nonLiftableS0_of_numberTheoryStepExists (c := c) (b := b) (q := q) hex hbc hcop
+
+/--
+`StepExists`（global）と `coprime(c,b)` から `NoSqOnS0` を回復する。
+-/
+lemma NoSqOnS0_of_numberTheoryStepExists_coprime {c b : ℕ}
+    (hex : NumberTheoryDescentState.StepExists)
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b) :
+    NoSqOnS0 c b := by
+  have hNonLift : ∀ q : ℕ, NonLiftableS0 c b q :=
+    nonLiftableS0_family_of_numberTheoryStepExists hex hbc hcop
+  intro q hq hqS0
+  exact NoSqOnS0_of_support_nonLiftable_coprime hbc.le hcop hNonLift hq hqS0
 
 /--
 phase-11 接続補題:

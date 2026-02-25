@@ -487,6 +487,20 @@ theorem FLT_d3_by_padicValNat_of_numberTheoryReduce_basic_coprimeSupport_direct 
     ha hb hc hab hbc hcb_coprime (numberTheoryReduce_basic hStep)
 
 /--
+数論状態遷移仕様 `StepExists`（global）から直接接続する入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryStepExists_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hex : NumberTheoryDescentState.StepExists) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_numberTheoryStepExists_coprime hex hbc hcb_coprime
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
 GEisenstein 下降法コア述語を直接受ける入口。
 -/
 theorem FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport {a b c : ℕ}

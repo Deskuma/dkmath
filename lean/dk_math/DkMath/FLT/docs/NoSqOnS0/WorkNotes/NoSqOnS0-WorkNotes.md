@@ -307,3 +307,22 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（StepExists から NonLiftable/NoSq 接続）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `NumberTheoryDescentState.false_of_state_of_stepExists`
+  2. `NumberTheoryDescentState.not_nonempty_of_stepExists`
+  3. `nonLiftableS0_of_numberTheoryStepExists`
+  4. `nonLiftableS0_family_of_numberTheoryStepExists`
+  5. `NoSqOnS0_of_numberTheoryStepExists_coprime`
+  6. `FLT_d3_by_padicValNat_of_numberTheoryStepExists_coprimeSupport_direct`
+- 意図:
+  - 状態遷移仕様 `StepExists`（global）から、既存ルート `NonLiftable -> NoSq -> FLT` へ接続。
+  - 次段の実装では `StepSpec.next` を具体化すれば、この入口をそのまま利用できる。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。
