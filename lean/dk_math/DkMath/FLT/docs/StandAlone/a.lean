@@ -928,30 +928,16 @@ theorem FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput {a b c : ℕ}
   exact FLT_d3_by_padicValNat_by_cases_NoSq
     ha hb hc hab hIn.hbc.le hIn.hcb_coprime hIn.hNonLift
 
--- ##INSERT MARKER## --
-
 structure CounterexampleInput where
   c : ℕ
   b : ℕ
   q : ℕ
 
-/--
-原始素因子ゲート:
-`q` が差の立方を割り、境界差を割らない。
--/
-
 def primitivePrimeGate (x : CounterexampleInput) : Prop :=
   Nat.Prime x.q ∧ x.q ∣ x.c ^ 3 - x.b ^ 3 ∧ ¬ x.q ∣ x.c - x.b
 
-/--
-square 回避ゲート:
-`q^2` が `S0_nat c b` を割らない。
--/
-
 def noSquareGate (x : CounterexampleInput) : Prop :=
   ¬ x.q ^ 2 ∣ S0_nat x.c x.b
-
-/-- OctagonCore 由来の位相ゲート（現段階では存在証明のみ使用）。 -/
 
 def exceptionalPhaseGate (_x : CounterexampleInput) : Prop :=
   ∃ u : PetalCoreUnit, HarmonicPoint u ∧ isExceptionalPhase u
@@ -962,13 +948,6 @@ inductive LiftStatus where
   | undecided
   deriving DecidableEq, Repr
 
-/--
-反例抽出器の最小判定器。
-
-- `primitivePrimeGate` が閉じない場合は `undecided`
-- 閉じていて `noSquareGate` が成り立つなら `impossible`
-- 閉じていて `noSquareGate` が崩れるなら `possible`
--/
 noncomputable def classifyLift (x : CounterexampleInput) : LiftStatus := by
   classical
   exact if hexc : exceptionalPhaseGate x then
@@ -989,10 +968,6 @@ lemma primitivePrimeGate_of_PrimitiveOnS0 {c b q : ℕ}
     rw [hfact]
     exact dvd_mul_of_dvd_right hqS0 (c - b)
   exact ⟨hq, hq_diff, hq_ndvd⟩
-
-/--
-`PhaseLift.two_gap_xy_dvd_cube_bridge` を Counterexample 入力側へ持ち上げる補助補題。
--/
 
 lemma noSquareGate_of_classifyLift_impossible {x : CounterexampleInput}
     (hprim : primitivePrimeGate x)
@@ -1025,11 +1000,6 @@ lemma nonLiftableS0_of_classifyLift_impossible {c b q : ℕ}
     noSquareGate_of_classifyLift_impossible hprimGate (by simpa [x] using hclass)
   simpa [x, noSquareGate] using hnosq
 
-/--
-`PrimitiveOnS0` 上での `classifyLift = impossible` family から、
-`q` 全域の `NonLiftableS0` family を生成する。
--/
-
 lemma nonLiftableS0_family_of_classifyLift_impossible {c b : ℕ}
     (hbc : b < c)
     (hClass :
@@ -1038,11 +1008,6 @@ lemma nonLiftableS0_family_of_classifyLift_impossible {c b : ℕ}
     ∀ q : ℕ, NonLiftableS0 c b q := by
   intro q hprim
   exact nonLiftableS0_of_classifyLift_impossible hbc (hClass hprim) hprim
-
-/--
-下降法側で最終的に供給したい判定器インターフェース。
-`PrimitiveOnS0` を満たす各 `q` で `classifyLift = impossible` を与える。
--/
 
 theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_classify_coprimeSupport {a b c : ℕ}
     (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
@@ -1058,3 +1023,22 @@ theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_classify_coprimeSupport {a b c
     nonLiftableS0_family_of_classifyLift_impossible hbc hClassPrim
   exact FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport
     ha hb hc hab hbc hcb_coprime hNonLiftAll
+
+theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q)
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hAll : AllNonLiftableOnS0 c b :=
+    allNonLiftableOnS0_of_harmonicEnvelope_nonLiftable hbc
+      hasPhaseUnitInfrastructure hHarm hNoExcAll
+      hSuppEx3 hNonLiftAll hc_nz hb_nz hsep
+  have hNoSq : NoSqOnS0 c b := NoSqOnS0_of_AllNonLiftableOnS0 hAll
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
