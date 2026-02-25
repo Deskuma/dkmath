@@ -320,6 +320,23 @@ theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_classify_coprimeSupport {a b c
     ha hb hc hab hbc hcb_coprime hNonLiftAll
 
 /--
+phase-10 橋渡し入口:
+下降法側から `PrimitiveOnS0 -> classifyLift = impossible` を供給できれば、
+`NonLiftable` 経由で FLT 入口に接続できる。
+-/
+theorem FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hDescentClass : DescentClassifyImpossibleOnPrimitive c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q :=
+    nonLiftableS0_family_of_descentClassify hbc hDescentClass
+  exact FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hNonLiftAll
+
+/--
 phase-05: `NoSqOnS0` から classification impossible family を自動生成し、
 `harmonicEnvelope_classify_coprimeSupport` 版へ接続する。
 -/

@@ -80,6 +80,7 @@ graph LR
 
 - 最小入口:
   - `FLT_d3_by_padicValNat_of_NoSqOnS0`
+  - `FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport`
 
 - 構造入口（仮定圧縮版）:
   - `FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput`

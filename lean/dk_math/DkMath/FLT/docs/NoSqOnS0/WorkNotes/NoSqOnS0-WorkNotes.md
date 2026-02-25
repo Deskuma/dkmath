@@ -261,6 +261,32 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  11:02
+
+- phase-10 実装（下降法の標準インターフェース化）
+  - `CounterexamplePattern.lean`
+    - 追加:
+      - `DescentClassifyImpossibleOnPrimitive (c b : ℕ) : Prop`
+        - 形: `∀ {q}, PrimitiveOnS0 c b q -> classifyLift ... = impossible`
+      - `nonLiftableS0_family_of_descentClassify`
+        - 上記インターフェースから `∀ q, NonLiftableS0 c b q` を回収
+  - `Main.lean`
+    - 追加:
+      - `FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport`
+        - 下降法側が `DescentClassifyImpossibleOnPrimitive c b` を供給すれば、
+          `NonLiftable` を経由して既存の `coprimeSupport` 入口へ接続
+  - `README.md`
+    - 主要入口に `FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport` を追記
+
+- 位置づけ
+  - 下降法そのもの（`hDescentClass` の中身）は未実装。
+  - ただし、証明完成時の接続先 API は固定化できたので、
+    今後は `DescentClassifyImpossibleOnPrimitive` の供給補題を埋めるだけで
+    `Main` へ直結可能。
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）
