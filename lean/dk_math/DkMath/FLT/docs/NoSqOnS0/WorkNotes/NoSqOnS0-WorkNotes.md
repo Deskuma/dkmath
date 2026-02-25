@@ -713,6 +713,29 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  13:08
+
+- phase-10 実装（非empty frame を載せた core 具体化）
+  - `GEisensteinBridge.lean`
+    - 追加:
+      - `primitiveSizedCandidate_frame_step_pred`
+        - `primitiveSizedCandidateGEisensteinDescentFrame` が
+          `step_pred` 条件を満たすことを明示
+      - `GEisensteinDescentCore_of_descentClassify_primitiveSized`
+        - `DescentClassifyImpossibleOnPrimitive` から
+          `primitiveSized` frame 搭載 core を直接構成
+  - `README.md`
+    - 非empty core 具体化の項目を追記
+
+- 位置づけ
+  - これまでの `empty` frame core に加えて、
+    不変量付き候補状態を持つ non-empty core を正式化。
+  - 次段で、この core から停止到達補題を
+    `Main` 入口に橋渡しする準備が整った。
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）

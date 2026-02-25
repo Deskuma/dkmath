@@ -302,6 +302,20 @@ def primitiveSizedCandidateGEisensteinDescentFrame (c b : ℕ) : GEisensteinDesc
   step := GEisensteinPrimitiveSizedCandidate.step
   step_decreases := GEisensteinPrimitiveSizedCandidate.step_decreases
 
+/--
+`primitiveSized` フレームの `step_pred` 版。
+-/
+lemma primitiveSizedCandidate_frame_step_pred (c b : ℕ) :
+    ∀ (s : (primitiveSizedCandidateGEisensteinDescentFrame c b).State)
+      (hs : (primitiveSizedCandidateGEisensteinDescentFrame c b).measure s > 0),
+      (primitiveSizedCandidateGEisensteinDescentFrame c b).measure
+        ((primitiveSizedCandidateGEisensteinDescentFrame c b).step s hs)
+        = Nat.pred ((primitiveSizedCandidateGEisensteinDescentFrame c b).measure s) := by
+  intro s hs
+  simp [primitiveSizedCandidateGEisensteinDescentFrame,
+    GEisensteinPrimitiveSizedCandidate.measure,
+    GEisensteinPrimitiveSizedCandidate.step]
+
 /-- `toyNat` フレームは `measure` 回の反復で測度 0 に到達する。 -/
 lemma toyNat_measure_descend_eq_zero (c b : ℕ) :
     ∀ n : ℕ,
@@ -464,6 +478,16 @@ def GEisensteinDescentCore_of_descentClassify {c b : ℕ}
     (by
       intro s hs
       cases s)
+
+/--
+`primitiveSized` フレームを使う非empty版 core コンストラクタ。
+-/
+def GEisensteinDescentCore_of_descentClassify_primitiveSized {c b : ℕ}
+    (hDescent : DescentClassifyImpossibleOnPrimitive c b) :
+    GEisensteinDescentCore c b := by
+  exact GEisensteinDescentCore_of_descentClassify_withFrame
+    hDescent (primitiveSizedCandidateGEisensteinDescentFrame c b)
+    (primitiveSizedCandidate_frame_step_pred c b)
 
 /--
 GEisenstein 層から下降法インターフェースへ接続する橋。

@@ -75,6 +75,10 @@
     により、`GEisensteinDescentCore` から停止到達を直接取り出せる。
   - `GEisensteinDescentCore` は `step_pred` をフィールド化済み。
     停止補題呼び出し時に追加仮定が不要な API へ更新。
+  - 非empty core 具体化:
+    - `primitiveSizedCandidate_frame_step_pred`
+    - `GEisensteinDescentCore_of_descentClassify_primitiveSized`
+    により、`primitiveSized` frame を載せた core を直接構成可能。
 
 - `CosmicFormula/CosmicFormulaBinom.lean`
   - `add_pow_gap_factor`, `add_pow_tail_u2_*`, `two_gap_xy_factor*` を提供。
