@@ -515,6 +515,32 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  12:21
+
+- phase-10 実装（`GEisensteinCandidate` に証拠スロットを追加）
+  - `GEisensteinBridge.lean`
+    - `GEisensteinCandidate` を拡張:
+      - `q : ℕ`
+      - `primEvidence : Prop`
+      - `hPrimEvidence : primEvidence`
+    - 追加:
+      - `GEisensteinCandidate.ofPrimitive`
+        - `PrimitiveOnS0 c b q` から候補を構成
+    - 更新:
+      - `GEisensteinCandidate.step` は
+        `primEvidence := True` へ遷移する暫定仕様
+        （縮小ステップで証拠保持を要求しない）
+  - `README.md`
+    - `primEvidence` スロットの意図を追記
+
+- 補足
+  - 一度 `Option (PrimitiveOnS0 ...)` 方式を試したが、
+    Lean の sort 制約で不適合（`Prop` を `Option` に直接載せられない）。
+  - `primEvidence : Prop` 方式に修正して build を通した。
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）

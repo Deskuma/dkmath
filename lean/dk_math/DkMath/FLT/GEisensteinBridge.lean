@@ -92,21 +92,31 @@ def toyNatGEisensteinDescentFrame (c b : ℕ) : GEisensteinDescentFrame c b wher
     simpa using Nat.pred_lt (Nat.ne_of_gt hs)
 
 /--
-GEisenstein 下降で扱う反例候補の最小状態。
-将来はここに `(a,b,c)` 側の情報や整合条件を追加する。
+GEisenstein 下降で扱う反例候補状態。
+`prim?` は `PrimitiveOnS0 c b q` 証拠の保持スロット（保持できない段で `none` を許容）。
 -/
-structure GEisensteinCandidate where
+structure GEisensteinCandidate (c b : ℕ) where
   q : ℕ
+  primEvidence : Prop
+  hPrimEvidence : primEvidence
+
+/-- `PrimitiveOnS0` 証拠つき候補のコンストラクタ。 -/
+def GEisensteinCandidate.ofPrimitive {c b q : ℕ}
+    (hPrim : PrimitiveOnS0 c b q) : GEisensteinCandidate c b :=
+  { q := q, primEvidence := PrimitiveOnS0 c b q, hPrimEvidence := hPrim }
 
 /-- 反例候補の測度（暫定: `q`）。 -/
-def GEisensteinCandidate.measure (s : GEisensteinCandidate) : ℕ := s.q
+def GEisensteinCandidate.measure {c b : ℕ} (s : GEisensteinCandidate c b) : ℕ := s.q
 
-/-- 反例候補の 1-step 縮小（暫定: `q := pred q`）。 -/
-def GEisensteinCandidate.step (s : GEisensteinCandidate)
-    (_hs : GEisensteinCandidate.measure s > 0) : GEisensteinCandidate :=
-  { q := Nat.pred s.q }
+/--
+反例候補の 1-step 縮小（暫定: `q := pred q`）。
+この段階では primitive 証拠の保存は要求せず、`prim? := none` とする。
+-/
+def GEisensteinCandidate.step {c b : ℕ} (s : GEisensteinCandidate c b)
+    (_hs : GEisensteinCandidate.measure s > 0) : GEisensteinCandidate c b :=
+  { q := Nat.pred s.q, primEvidence := True, hPrimEvidence := trivial }
 
-lemma GEisensteinCandidate.step_decreases (s : GEisensteinCandidate)
+lemma GEisensteinCandidate.step_decreases {c b : ℕ} (s : GEisensteinCandidate c b)
     (hs : GEisensteinCandidate.measure s > 0) :
     GEisensteinCandidate.measure (GEisensteinCandidate.step s hs) <
       GEisensteinCandidate.measure s := by
@@ -118,7 +128,7 @@ lemma GEisensteinCandidate.step_decreases (s : GEisensteinCandidate)
 `toyNat` より本実装に近い状態表現。
 -/
 def candidateGEisensteinDescentFrame (c b : ℕ) : GEisensteinDescentFrame c b where
-  State := GEisensteinCandidate
+  State := GEisensteinCandidate c b
   measure := GEisensteinCandidate.measure
   step := GEisensteinCandidate.step
   step_decreases := GEisensteinCandidate.step_decreases
