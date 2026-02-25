@@ -1310,3 +1310,251 @@ theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable {a b c : ℕ}
       hSuppEx3 hNonLiftAll hc_nz hb_nz hsep
   have hNoSq : NoSqOnS0 c b := NoSqOnS0_of_AllNonLiftableOnS0 hAll
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable_coprimeSupport {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hNonLiftAll
+
+structure GEisensteinDescentFrame (c b : ℕ) where
+  State : Type
+  measure : State → ℕ
+  step : (s : State) → measure s > 0 → State
+  step_decreases : ∀ (s : State) (hs : measure s > 0), measure (step s hs) < measure s
+
+structure GEisensteinDescentCore (c b : ℕ) where
+  classifyImpossible :
+    ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+      classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible
+  frame : GEisensteinDescentFrame c b
+  step_pred :
+    ∀ (s : frame.State) (hs : frame.measure s > 0),
+      frame.measure (frame.step s hs) = Nat.pred (frame.measure s)
+
+def DescentClassifyImpossibleOnPrimitive (c b : ℕ) : Prop :=
+  ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+    classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible
+
+def GEisensteinDescentCore_of_descentClassify_withFrame {c b : ℕ}
+    (hDescent : DescentClassifyImpossibleOnPrimitive c b)
+    (hFrame : GEisensteinDescentFrame c b)
+    (hFrameStepPred : ∀ (s : hFrame.State) (hs : hFrame.measure s > 0),
+      hFrame.measure (hFrame.step s hs) = Nat.pred (hFrame.measure s)) :
+    GEisensteinDescentCore c b := by
+  exact ⟨hDescent, hFrame, hFrameStepPred⟩
+
+def emptyGEisensteinDescentFrame (c b : ℕ) : GEisensteinDescentFrame c b where
+  State := PEmpty
+  measure := by
+    intro s
+    cases s
+  step := by
+    intro s hs
+    cases s
+  step_decreases := by
+    intro s hs
+    cases s
+
+def GEisensteinDescentCore_of_descentClassify {c b : ℕ}
+    (hDescent : DescentClassifyImpossibleOnPrimitive c b) :
+    GEisensteinDescentCore c b := by
+  exact GEisensteinDescentCore_of_descentClassify_withFrame
+    hDescent (emptyGEisensteinDescentFrame c b)
+    (by
+      intro s hs
+      cases s)
+
+lemma descentClassifyImpossibleOnPrimitive_of_GEisensteinCore {c b : ℕ}
+    (hCore : GEisensteinDescentCore c b) :
+    DescentClassifyImpossibleOnPrimitive c b := by
+  exact hCore.classifyImpossible
+
+lemma descentClassifyImpossibleOnPrimitive_of_classifyFamily {c b : ℕ}
+    (hClass :
+      ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+        classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible) :
+    DescentClassifyImpossibleOnPrimitive c b := by
+  exact hClass
+
+lemma nonLiftableS0_all_of_NoSqOnS0 {c b : ℕ}
+    (hNoSq : NoSqOnS0 c b) :
+    ∀ q : ℕ, NonLiftableS0 c b q := by
+  intro q hprim
+  exact hNoSq hprim.1 hprim.2.1
+
+lemma classifyLift_impossible_family_of_harmonicEnvelope_NoSq {c b : ℕ}
+    (hbc : b < c)
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hNoSq : NoSqOnS0 c b) :
+    ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+      classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible := by
+  have hsideAll :
+      ∀ q : ℕ, HarmonicNonExceptionalSide ({ c := c, b := b, q := q } : CounterexampleInput) := by
+    intro q
+    exact harmonicNonExceptionalSide_of_envelope hInfra hHarm (hNoExcAll { c := c, b := b, q := q })
+  have hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q :=
+    nonLiftableS0_all_of_NoSqOnS0 hNoSq
+  intro q hprim
+  exact classifyLift_impossible_family_of_harmonicNonExceptional_nonLiftable
+    hbc hsideAll hNonLiftAll hprim
+
+lemma descentClassifyImpossibleOnPrimitive_of_harmonicEnvelope_NoSq {c b : ℕ}
+    (hbc : b < c)
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hNoSq : NoSqOnS0 c b) :
+    DescentClassifyImpossibleOnPrimitive c b := by
+  exact descentClassifyImpossibleOnPrimitive_of_classifyFamily
+    (classifyLift_impossible_family_of_harmonicEnvelope_NoSq
+      hbc hInfra hHarm hNoExcAll hNoSq)
+
+lemma descentClassifyImpossibleOnPrimitive_via_GEisenstein {c b : ℕ}
+    (hbc : b < c)
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hNoSq : NoSqOnS0 c b) :
+    DescentClassifyImpossibleOnPrimitive c b := by
+  exact descentClassifyImpossibleOnPrimitive_of_GEisensteinCore
+    (hCore := GEisensteinDescentCore_of_descentClassify
+      (descentClassifyImpossibleOnPrimitive_of_harmonicEnvelope_NoSq
+        hbc hInfra hHarm hNoExcAll hNoSq))
+
+def GEisensteinDescentFrame.descend {c b : ℕ} (F : GEisensteinDescentFrame c b) :
+    F.State → ℕ → F.State
+  | s, 0 => s
+  | s, n + 1 =>
+      if hs : F.measure s > 0 then
+        descend F (F.step s hs) n
+      else
+        s
+
+lemma GEisensteinDescentFrame.measure_descend_eq_zero_of_step_pred {c b : ℕ}
+    (F : GEisensteinDescentFrame c b)
+    (hpred : ∀ (s : F.State) (hs : F.measure s > 0),
+      F.measure (F.step s hs) = Nat.pred (F.measure s)) :
+    ∀ s : F.State, F.measure (descend F s (F.measure s)) = 0 := by
+  have hmain :
+      ∀ n : ℕ, ∀ s : F.State, F.measure s = n → F.measure (descend F s n) = 0 := by
+    intro n
+    induction n with
+    | zero =>
+        intro s hs
+        simpa [descend] using hs
+    | succ n ih =>
+        intro s hsEq
+        have hsPos : F.measure s > 0 := by omega
+        have hdesc :
+            F.measure (descend F s (n + 1)) =
+              F.measure (descend F (F.step s hsPos) n) := by
+          simp [descend, hsPos]
+        rw [hdesc]
+        have hstepEq : F.measure (F.step s hsPos) = n := by
+          calc
+            F.measure (F.step s hsPos) = Nat.pred (F.measure s) := hpred s hsPos
+            _ = n := by simp [hsEq]
+        exact ih (F.step s hsPos) hstepEq
+  intro s
+  exact hmain (F.measure s) s rfl
+
+lemma GEisensteinDescentCore.measure_descend_eq_zero_of_step_pred {c b : ℕ}
+    (hCore : GEisensteinDescentCore c b) :
+    ∀ s : hCore.frame.State,
+      hCore.frame.measure
+        (GEisensteinDescentFrame.descend hCore.frame s (hCore.frame.measure s)) = 0 := by
+  exact GEisensteinDescentFrame.measure_descend_eq_zero_of_step_pred hCore.frame hCore.step_pred
+
+lemma GEisensteinDescentCore.exists_descend_measure_eq_zero_of_step_pred {c b : ℕ}
+    (hCore : GEisensteinDescentCore c b)
+    (s : hCore.frame.State) :
+    ∃ n : ℕ,
+      hCore.frame.measure (GEisensteinDescentFrame.descend hCore.frame s n) = 0 := by
+  refine ⟨hCore.frame.measure s, ?_⟩
+  exact GEisensteinDescentCore.measure_descend_eq_zero_of_step_pred hCore s
+
+lemma nonLiftableS0_family_of_descentClassify {c b : ℕ}
+    (hbc : b < c)
+    (hDescent : DescentClassifyImpossibleOnPrimitive c b) :
+    ∀ q : ℕ, NonLiftableS0 c b q := by
+  exact nonLiftableS0_family_of_classifyLift_impossible hbc hDescent
+
+theorem FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hDescentClass : DescentClassifyImpossibleOnPrimitive c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q :=
+    nonLiftableS0_family_of_descentClassify hbc hDescentClass
+  exact FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hNonLiftAll
+
+theorem FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hGECore : GEisensteinDescentCore c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hDescentClass : DescentClassifyImpossibleOnPrimitive c b :=
+    descentClassifyImpossibleOnPrimitive_of_GEisensteinCore hGECore
+  exact FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hDescentClass
+
+theorem FLT_d3_by_padicValNat_of_GEisensteinCore_with_reachability_coprimeSupport
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hGECore : GEisensteinDescentCore c b)
+    (_hReach :
+      ∀ s : hGECore.frame.State,
+        ∃ n : ℕ,
+          hGECore.frame.measure (GEisensteinDescentFrame.descend hGECore.frame s n) = 0) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hGECore
+
+theorem FLT_d3_by_padicValNat_of_GEisensteinCore_via_reachability_coprimeSupport
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hGECore : GEisensteinDescentCore c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hReach :
+      ∀ s : hGECore.frame.State,
+        ∃ n : ℕ,
+          hGECore.frame.measure (GEisensteinDescentFrame.descend hGECore.frame s n) = 0 := by
+    intro s
+    exact GEisensteinDescentCore.exists_descend_measure_eq_zero_of_step_pred hGECore s
+  exact FLT_d3_by_padicValNat_of_GEisensteinCore_with_reachability_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hGECore hReach
+
+theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hNoSq : NoSqOnS0 c b)
+    :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hGECore : GEisensteinDescentCore c b := by
+    exact GEisensteinDescentCore_of_descentClassify
+      (descentClassifyImpossibleOnPrimitive_via_GEisenstein
+        hbc hasPhaseUnitInfrastructure hHarm hNoExcAll hNoSq)
+  exact FLT_d3_by_padicValNat_of_GEisensteinCore_via_reachability_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hGECore
