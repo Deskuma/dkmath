@@ -241,3 +241,21 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 
 - build
   - `lake build DkMath.FLT.Main` : OK
+
+## 作業ログ 2026/02/25  10:14
+
+- phase-10 実装（基底入力の軽量化）
+  - `PhaseLift.lean`
+    - `NoSqBaseInput` から `mod3` 分離フィールド
+      - `hc_nz`, `hb_nz`, `hsep`
+      を除去
+  - `Main.lean`
+    - `FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput` を
+      `FLT_d3_by_padicValNat_of_support_nonLiftable_coprime` 経由へ切り替え
+      （`mod3` 分離仮定なし）
+    - `FLT_d3_by_padicValNat_of_NoSqInput` は更新済み `NoSqBaseInput` を構成して委譲
+  - `README.md`
+    - `NoSqBaseInput` の説明から `mod3` 条件を削除
+
+- build
+  - `lake build DkMath.FLT.Main` : OK

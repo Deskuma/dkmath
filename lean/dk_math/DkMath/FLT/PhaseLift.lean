@@ -98,9 +98,6 @@ structure NoSqBaseInput (c b : ℕ) where
   hcb_coprime : Nat.Coprime c b
   hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u
   hNonLift : ∀ q : ℕ, NonLiftableS0 c b q
-  hc_nz : c % 3 ≠ 0
-  hb_nz : b % 3 ≠ 0
-  hsep : c % 3 ≠ b % 3
 
 /--
 `NoSqOnS0` が既知の場合の入力束。

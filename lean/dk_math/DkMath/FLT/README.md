@@ -82,7 +82,7 @@ graph LR
 
 - 構造入口（仮定圧縮版）:
   - `FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput`
-  - `NoSqBaseInput` に `hbc`, `coprime`, `hNonLift`, mod3 条件を束ねる
+  - `NoSqBaseInput` に `hbc`, `coprime`, `hNonLift` を束ねる
   - `FLT_d3_by_padicValNat_of_NoSqInput`
   - `NoSqInput` に `hbc`, `coprime`, `hHarm`, `hNoSq`, mod3 条件を束ねる
 
