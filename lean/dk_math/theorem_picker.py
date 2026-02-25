@@ -44,7 +44,9 @@ class LeanLspClient:
             stderr_output = ""
             if self.proc.stderr is not None:
                 try:
-                    stderr_output = self.proc.stderr.read().decode("utf-8", errors="replace")
+                    stderr_output = self.proc.stderr.read().decode(
+                        "utf-8", errors="replace"
+                    )
                 except Exception:
                     stderr_output = ""
             msg = (
@@ -298,11 +300,84 @@ def main():
         action="store_true",
         help="Truncate after the first `by` block and replace with `...`.",
     )
+    parser.add_argument(
+        "--find-name",
+        dest="find_name",
+        help="Find and extract definitions by identifier name (static grep fallback).",
+        nargs="?",
+    )
     args = parser.parse_args()
     if not os.path.isfile(args.input):
         print(f"Error: Input file {args.input} does not exist.")
         sys.exit(1)
-    extract_definitions(args.input, args.output, args.short)
+    # If --find-name was provided, run a static search for the named definition
+    if args.find_name:
+        root = find_project_root(Path(args.input).resolve().parent)
+        defs = find_definitions_by_name(root, args.find_name)
+        # Write simple markdown with found definitions
+        out_path = Path(args.output)
+        with open(out_path, "w", encoding="utf-8") as f:
+            f.write("# Found definitions\n\n")
+            f.write(f"## {args.find_name}\n\n")
+            if not defs:
+                f.write("No definitions found.\n")
+            for item in defs:
+                f.write(f"### {item['ident']} ({item['file']})\n\n")
+                f.write("```lean\n")
+                f.write(item["snippet"].rstrip() + "\n")
+                f.write("```\n\n")
+        print(f"Found {len(defs)} definitions for {args.find_name} -> {out_path}")
+    else:
+        extract_definitions(args.input, args.output, args.short)
+
+
+def find_definitions_by_name(root: Path, name: str):
+    """Static search: look for definitions/lemmas/theorems named `name` under root.
+
+    This is a simple fallback using text search; it returns a list of dicts with
+    keys: file, ident, snippet.
+    """
+    import re
+
+    pattern = re.compile(
+        r"^(?:@[\w\[\] :]+\s*)*(def|lemma|theorem)\s+" + re.escape(name) + r"\b"
+    )
+    results = []
+    for p in root.rglob("*.lean"):
+        try:
+            text = p.read_text(encoding="utf-8")
+        except Exception:
+            continue
+        lines = text.splitlines()
+        for i, line in enumerate(lines):
+            if pattern.search(line):
+                # extract snippet: from this line until next blank line followed by a non-indented top-level start
+                start = i
+                end = i + 1
+                while end < len(lines):
+                    # stop at a blank line followed by a top-level keyword
+                    if lines[end].strip() == "":
+                        # lookahead
+                        if end + 1 < len(lines) and re.match(
+                            r"^[a-zA-Z@]", lines[end + 1]
+                        ):
+                            break
+                    # also stop if next line looks like another top-level declaration
+                    if re.match(
+                        r"^(def|lemma|theorem|structure|inductive|class)\b", lines[end]
+                    ):
+                        break
+                    end += 1
+                snippet = "\n".join(lines[start:end])
+                results.append(
+                    {
+                        "file": str(p.relative_to(root)),
+                        "ident": name,
+                        "snippet": snippet,
+                    }
+                )
+                break
+    return results
 
 
 if __name__ == "__main__":
