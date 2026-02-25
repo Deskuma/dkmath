@@ -134,6 +134,46 @@ def candidateGEisensteinDescentFrame (c b : ℕ) : GEisensteinDescentFrame c b w
   step_decreases := GEisensteinCandidate.step_decreases
 
 /--
+`PrimitiveOnS0` 証拠を保持し続ける候補状態。
+`q` は固定し、下降は `fuel` を減らして表現する。
+-/
+structure GEisensteinPrimitiveCandidate (c b : ℕ) where
+  q : ℕ
+  hPrim : PrimitiveOnS0 c b q
+  fuel : ℕ
+
+/-- 証拠保持型候補の測度（`fuel`）。 -/
+def GEisensteinPrimitiveCandidate.measure {c b : ℕ}
+    (s : GEisensteinPrimitiveCandidate c b) : ℕ := s.fuel
+
+/--
+証拠保持型候補の 1-step 縮小（`fuel := pred fuel`）。
+`q` と `hPrim` は保存する。
+-/
+def GEisensteinPrimitiveCandidate.step {c b : ℕ}
+    (s : GEisensteinPrimitiveCandidate c b)
+    (_hs : GEisensteinPrimitiveCandidate.measure s > 0) :
+    GEisensteinPrimitiveCandidate c b :=
+  { q := s.q, hPrim := s.hPrim, fuel := Nat.pred s.fuel }
+
+lemma GEisensteinPrimitiveCandidate.step_decreases {c b : ℕ}
+    (s : GEisensteinPrimitiveCandidate c b)
+    (hs : GEisensteinPrimitiveCandidate.measure s > 0) :
+    GEisensteinPrimitiveCandidate.measure (GEisensteinPrimitiveCandidate.step s hs) <
+      GEisensteinPrimitiveCandidate.measure s := by
+  simpa [GEisensteinPrimitiveCandidate.measure, GEisensteinPrimitiveCandidate.step]
+    using Nat.pred_lt (Nat.ne_of_gt hs)
+
+/--
+`PrimitiveOnS0` 証拠保持型の下降フレーム。
+-/
+def primitiveCandidateGEisensteinDescentFrame (c b : ℕ) : GEisensteinDescentFrame c b where
+  State := GEisensteinPrimitiveCandidate c b
+  measure := GEisensteinPrimitiveCandidate.measure
+  step := GEisensteinPrimitiveCandidate.step
+  step_decreases := GEisensteinPrimitiveCandidate.step_decreases
+
+/--
 GEisenstein 層で供給する下降法コア。
 `classifyImpossible` に加えて、将来拡張用の descent frame を持つ。
 -/

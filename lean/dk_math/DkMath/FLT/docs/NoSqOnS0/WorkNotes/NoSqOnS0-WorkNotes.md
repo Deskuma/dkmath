@@ -541,6 +541,33 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  12:27
+
+- phase-10 実装（`PrimitiveOnS0` 証拠保持型の下降フレーム）
+  - `GEisensteinBridge.lean`
+    - 追加:
+      - `GEisensteinPrimitiveCandidate`
+        - `q : ℕ`
+        - `hPrim : PrimitiveOnS0 c b q`
+        - `fuel : ℕ`
+      - `GEisensteinPrimitiveCandidate.measure`
+      - `GEisensteinPrimitiveCandidate.step`
+      - `GEisensteinPrimitiveCandidate.step_decreases`
+      - `primitiveCandidateGEisensteinDescentFrame`
+    - 仕様:
+      - `q` と `hPrim` は保持
+      - 下降は `fuel := pred fuel` で表現
+  - `README.md`
+    - `primitiveCandidateGEisensteinDescentFrame` を追記
+
+- 位置づけ
+  - `PrimitiveOnS0` 証拠を step 後も保持できる状態表現を確立。
+  - 実際の下降法では `fuel` の代わりに
+    実候補から誘導される測度へ置換する予定。
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）
