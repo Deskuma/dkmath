@@ -409,6 +409,32 @@ structure GEisensteinDescentCore (c b : ℕ) where
   frame : GEisensteinDescentFrame c b
 
 /--
+コアに載っている frame が `pred` 型の縮小を満たすとき、
+任意状態は `measure` 回の反復で測度 0 に到達する。
+-/
+lemma GEisensteinDescentCore.measure_descend_eq_zero_of_step_pred {c b : ℕ}
+    (hCore : GEisensteinDescentCore c b)
+    (hpred : ∀ (s : hCore.frame.State) (hs : hCore.frame.measure s > 0),
+      hCore.frame.measure (hCore.frame.step s hs) = Nat.pred (hCore.frame.measure s)) :
+    ∀ s : hCore.frame.State,
+      hCore.frame.measure
+        (GEisensteinDescentFrame.descend hCore.frame s (hCore.frame.measure s)) = 0 := by
+  exact GEisensteinDescentFrame.measure_descend_eq_zero_of_step_pred hCore.frame hpred
+
+/--
+停止到達の存在版（回数 `n` の存在）。
+-/
+lemma GEisensteinDescentCore.exists_descend_measure_eq_zero_of_step_pred {c b : ℕ}
+    (hCore : GEisensteinDescentCore c b)
+    (hpred : ∀ (s : hCore.frame.State) (hs : hCore.frame.measure s > 0),
+      hCore.frame.measure (hCore.frame.step s hs) = Nat.pred (hCore.frame.measure s))
+    (s : hCore.frame.State) :
+    ∃ n : ℕ,
+      hCore.frame.measure (GEisensteinDescentFrame.descend hCore.frame s n) = 0 := by
+  refine ⟨hCore.frame.measure s, ?_⟩
+  exact GEisensteinDescentCore.measure_descend_eq_zero_of_step_pred hCore hpred s
+
+/--
 GEisenstein 下降法コアから `descent` インターフェースへ戻す。
 -/
 lemma descentClassifyImpossibleOnPrimitive_of_GEisensteinCore {c b : ℕ}

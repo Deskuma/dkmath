@@ -675,6 +675,23 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK（新規警告なし）
 
+## 作業ログ 2026/02/25  13:02
+
+- phase-10 実装（停止補題を `GEisensteinDescentCore` へ引き上げ）
+  - `GEisensteinBridge.lean`
+    - 追加:
+      - `GEisensteinDescentCore.measure_descend_eq_zero_of_step_pred`
+      - `GEisensteinDescentCore.exists_descend_measure_eq_zero_of_step_pred`
+    - 効果:
+      - `frame` 側の pred 型縮小仮定があれば、
+        core から直接「有限反復で測度 0 到達」を抽出可能。
+      - 停止主張が frame レイヤから core レイヤへ昇格。
+  - `README.md`
+    - core 接続補題として追記
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）

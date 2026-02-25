@@ -69,6 +69,10 @@
     により、well-founded 接続用の反復骨格を確立。
     - 具体化: `toyNat_measure_descend_eq_zero`,
       `primitiveSized_measure_descend_eq_zero`
+  - コア接続補題:
+    - `GEisensteinDescentCore.measure_descend_eq_zero_of_step_pred`
+    - `GEisensteinDescentCore.exists_descend_measure_eq_zero_of_step_pred`
+    により、`GEisensteinDescentCore` から停止到達を直接取り出せる。
 
 - `CosmicFormula/CosmicFormulaBinom.lean`
   - `add_pow_gap_factor`, `add_pow_tail_u2_*`, `two_gap_xy_factor*` を提供。
