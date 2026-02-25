@@ -389,6 +389,33 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  11:41
+
+- phase-10 実装（GEisenstein コア述語の構造体化）
+  - `GEisensteinBridge.lean`
+    - 変更:
+      - `GEisensteinDescentCore` を単なる別名から `structure` 化
+        - フィールド: `classifyImpossible`
+      - 追加:
+        - `GEisensteinDescentCore_of_descentClassify`
+        - `descentClassifyImpossibleOnPrimitive_of_GEisensteinCore`
+      - `descentClassifyImpossibleOnPrimitive_via_GEisenstein` は
+        構造体経由で `descent` インターフェースへ戻す形に更新
+  - `Main.lean`
+    - `FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport` で
+      `GEisensteinDescentCore_of_descentClassify` を使って
+      `GEisensteinDescentCore` を構成する形に更新
+  - `README.md`
+    - `GEisensteinDescentCore` が段階拡張可能なコアであることを追記
+
+- 位置づけ
+  - 下降法の本体（縮小写像・well-founded 降下）は未実装。
+  - ただしコアを `structure` 化したことで、
+    将来の追加証拠を破壊的変更なしで積める状態になった。
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）

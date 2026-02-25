@@ -52,11 +52,13 @@ lemma GN3_sub_eq_eisensteinNorm_shift (a b : ℕ) (hab : b ≤ a) :
   rw [GN3_sub_eq_S0 a b hab, S0_eq_eisensteinNorm_shift]
 
 /--
-GEisenstein 層で将来供給する下降法コア述語。
-現段階では `DescentClassifyImpossibleOnPrimitive` の薄い別名。
+GEisenstein 層で供給する下降法コア。
+将来はこの構造体に追加データ（縮小写像・単調減少証明など）を積む。
 -/
-def GEisensteinDescentCore (c b : ℕ) : Prop :=
-  DescentClassifyImpossibleOnPrimitive c b
+structure GEisensteinDescentCore (c b : ℕ) : Prop where
+  classifyImpossible :
+    ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+      classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible
 
 /--
 GEisenstein 下降法コアから `descent` インターフェースへ戻す。
@@ -64,7 +66,15 @@ GEisenstein 下降法コアから `descent` インターフェースへ戻す。
 lemma descentClassifyImpossibleOnPrimitive_of_GEisensteinCore {c b : ℕ}
     (hCore : GEisensteinDescentCore c b) :
     DescentClassifyImpossibleOnPrimitive c b := by
-  exact hCore
+  exact hCore.classifyImpossible
+
+/--
+既存の `DescentClassifyImpossibleOnPrimitive` から GEisenstein コアを作る。
+-/
+lemma GEisensteinDescentCore_of_descentClassify {c b : ℕ}
+    (hDescent : DescentClassifyImpossibleOnPrimitive c b) :
+    GEisensteinDescentCore c b := by
+  exact ⟨hDescent⟩
 
 /--
 GEisenstein 層から下降法インターフェースへ接続する橋。
@@ -78,9 +88,9 @@ lemma descentClassifyImpossibleOnPrimitive_via_GEisenstein {c b : ℕ}
     (hNoSq : NoSqOnS0 c b) :
     DescentClassifyImpossibleOnPrimitive c b := by
   exact descentClassifyImpossibleOnPrimitive_of_GEisensteinCore
-    (hCore := by
-      exact descentClassifyImpossibleOnPrimitive_of_harmonicEnvelope_NoSq
-        hbc hInfra hHarm hNoExcAll hNoSq)
+    (hCore := GEisensteinDescentCore_of_descentClassify
+      (descentClassifyImpossibleOnPrimitive_of_harmonicEnvelope_NoSq
+        hbc hInfra hHarm hNoExcAll hNoSq))
 
 /-- 旧層Bの平方耐性主張が一般には成り立たないことの具体反例。 -/
 theorem exists_counterexample_S0_square_resistance :

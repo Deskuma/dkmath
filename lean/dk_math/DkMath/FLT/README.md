@@ -40,6 +40,7 @@
   - Eisenstein ノルム同型の橋補題。
   - `descent` 側インターフェース
     `DescentClassifyImpossibleOnPrimitive` への接続点を提供。
+  - `GEisensteinDescentCore` 構造体で下降法コアを段階拡張可能。
 
 - `CosmicFormula/CosmicFormulaBinom.lean`
   - `add_pow_gap_factor`, `add_pow_tail_u2_*`, `two_gap_xy_factor*` を提供。
