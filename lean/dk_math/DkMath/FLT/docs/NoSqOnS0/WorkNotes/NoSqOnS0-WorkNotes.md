@@ -293,3 +293,17 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（StepExists と StepSpec の往復）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+- 追加内容:
+  1. `NumberTheoryDescentState.spec_of_stepExists`（`StepExists -> StepSpec`）
+  2. `NumberTheoryDescentState.stepExists_iff_exists_stepSpec`
+- 意図:
+  - `StepExists` を直接扱うルートと `StepSpec` 仕様オブジェクトルートを等価化。
+  - 次段で `next` 実装を差し込む際、どちらの形でも利用可能にした。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。

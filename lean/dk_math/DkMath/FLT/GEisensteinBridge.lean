@@ -607,6 +607,27 @@ structure StepSpec where
 lemma stepExists_of_spec (spec : StepSpec) : StepExists := by
   exact stepExists_of_stepFunction spec.next spec.decreases
 
+/--
+`StepExists` から `StepSpec` を（選択公理で）構成する。
+本実装の局所構成が揃うまでの間、仕様オブジェクト経由で接続できる。
+-/
+noncomputable def spec_of_stepExists (hex : StepExists) : StepSpec where
+  next := fun s => Classical.choose (hex s)
+  decreases := by
+    intro s
+    exact (Classical.choose_spec (hex s))
+
+/--
+`StepExists` と `StepSpec` の同値（仕様化レイヤー）。
+-/
+lemma stepExists_iff_exists_stepSpec : StepExists ↔ Nonempty StepSpec := by
+  constructor
+  · intro hex
+    exact ⟨spec_of_stepExists hex⟩
+  · intro hs
+    rcases hs with ⟨spec⟩
+    exact stepExists_of_spec spec
+
 end NumberTheoryDescentState
 
 /--
