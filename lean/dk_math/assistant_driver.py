@@ -33,7 +33,8 @@ UNKNOWN_RE = re.compile(
 
 
 def run_build(root: Path, build_target: str = None) -> subprocess.CompletedProcess:
-    build_dir = root / "lean" / "dk_math"
+    # Prefer running from the script's own directory (lean/dk_math)
+    build_dir = Path(__file__).resolve().parent
     cmd = ["./lean-build.sh"]
     if build_target:
         cmd.append(build_target)
@@ -47,7 +48,7 @@ def parse_unknowns(build_proc: subprocess.CompletedProcess) -> List[Dict[str, An
     for m in UNKNOWN_RE.finditer(out):
         matches.append(
             {
-                "file": m.group("file"),
+                "file": m.group("file").strip(),
                 "line": int(m.group("line")),
                 "col": int(m.group("col")),
                 "ident": m.group("ident"),
@@ -108,11 +109,11 @@ def insert_and_report(
     interactive: bool = False,
     apply: bool = False,
 ):
-    file = unknown["file"]
+    file = unknown["file"].strip()
     line = unknown["line"]
     ident = unknown["ident"]
     # resolve file path relative to root if not absolute
-    fpath = Path(file)
+    fpath = Path(file.strip())
     if not fpath.is_file():
         # try relative to root
         candidate = root / file
@@ -176,33 +177,147 @@ def main(argv=None):
     parser.add_argument(
         "--apply", action="store_true", help="Write inserted file instead of dry-run"
     )
+    parser.add_argument(
+        "--insert-line",
+        dest="insert_line",
+        type=int,
+        help="Optional: force insert at this 1-based line number in target files.",
+        nargs="?",
+    )
     args = parser.parse_args(argv)
 
-    root = find_project_root(Path(__file__).resolve().parent.parent)
+    try:
+        root = find_project_root(Path(__file__).resolve().parent.parent)
+    except FileNotFoundError:
+        try:
+            root = find_project_root(Path.cwd())
+        except FileNotFoundError:
+            root = Path.cwd()
     print(f"Project root: {root}")
-    proc = run_build(root, args.build_target)
-    if proc.returncode == 0:
-        print("Build succeeded — nothing to do.")
-        return 0
-    unknowns = parse_unknowns(proc)
-    if not unknowns:
-        print("No Unknown identifier errors found in build output.")
-        print("Build stderr:\n", proc.stderr)
-        return 2
+    # Iterative loop: attempt up to N iterations to resolve Unknown identifier errors
+    MAX_ITERS = 10
+    for it in range(1, MAX_ITERS + 1):
+        print(f"Iteration {it}: running build...")
+        proc = run_build(root, args.build_target)
+        if proc.returncode == 0:
+            print("Build succeeded — nothing to do.")
+            return 0
+        unknowns = parse_unknowns(proc)
+        if not unknowns:
+            print("No Unknown identifier errors found in build output.")
+            print(proc.stderr)
+            return 2
 
-    reports = []
-    for u in unknowns:
-        rep = insert_and_report(
-            root,
-            u,
-            select_index=args.select_index,
-            interactive=args.interactive,
-            apply=args.apply,
-        )
-        reports.append(rep)
+        reports = []
+        any_inserted = False
+        for u in unknowns:
+            print(f"Handling unknown: {u['ident']} (at {u['file']}:{u['line']})")
+            ufile = Path(u["file"].strip())
+            if not ufile.is_absolute():
+                ufile = root / u["file"].strip()
+            defs = find_definitions_by_name(root, u["ident"])
+            if not defs:
+                reports.append(
+                    {"ident": u["ident"], "ok": False, "reason": "no_candidates"}
+                )
+                continue
+            chosen = None
+            if args.select_index is not None and 0 <= args.select_index < len(defs):
+                chosen = defs[args.select_index]
+            else:
+                chosen = defs[0]
+            ttext = ufile.read_text(encoding="utf-8") if ufile.exists() else ""
+            import re as _re
 
-    print("Iteration report:\n", json.dumps(reports, indent=2, ensure_ascii=False))
-    return 0
+            snippet = chosen.get("snippet", "")
+            # determine insertion line:
+            insert_line = None
+            # 1) user-specified override
+            if args.insert_line is not None:
+                insert_line = args.insert_line
+            else:
+                # 2) look for explicit marker in file
+                marker_re = _re.compile(r"^--\s*##INSERT MARKER##\s*--$", _re.M)
+                m = marker_re.search(ttext)
+                if m:
+                    # insert after marker line
+                    # compute line number (1-based)
+                    marker_pos = m.start()
+                    preceding = ttext[:marker_pos].splitlines(keepends=True)
+                    insert_line = len(preceding) + 2
+                else:
+                    # 3) fallback: find nearest top-level declaration above the error line
+                    lines = ttext.splitlines(keepends=True)
+                    err_idx = max(0, min(len(lines), u.get("line", 1) - 1))
+                    decl_re = _re.compile(
+                        r"^(def|lemma|theorem|structure|inductive|class)\b"
+                    )
+                    found_idx = None
+                    i = err_idx - 1
+                    while i >= 0:
+                        if decl_re.match(lines[i].lstrip()):
+                            found_idx = i
+                            break
+                        i -= 1
+                    if found_idx is not None:
+                        insert_line = found_idx + 1
+                    else:
+                        insert_line = 1
+
+            # check for existing definition in the file
+            mdef = _re.search(
+                rf"^(?:@[\w\[\] :]+\s*)*(def|lemma|theorem)\s+{_re.escape(u['ident'])}\b",
+                ttext,
+                _re.M,
+            )
+            if mdef:
+                def_pos = mdef.start()
+                def_line = ttext[:def_pos].count("\n") + 1
+                if def_line > insert_line:
+                    # move the existing block earlier
+                    decl_re = _re.compile(
+                        r"^(def|lemma|theorem|structure|inductive|class)\b", _re.M
+                    )
+                    next_m = decl_re.search(ttext, mdef.end())
+                    end_pos = next_m.start() if next_m else len(ttext)
+                    ttext_removed = ttext[: mdef.start()] + ttext[end_pos:]
+                    new_text, patch = insert_snippet_into_text(
+                        ttext_removed, snippet, insert_line
+                    )
+                    outp = ufile.with_suffix(ufile.suffix + ".inserted")
+                    outp.write_text(new_text, encoding="utf-8")
+                    outp.replace(ufile)
+                    any_inserted = True
+                    reports.append(
+                        {
+                            "ident": u["ident"],
+                            "ok": True,
+                            "action": "moved",
+                            "from_line": def_line,
+                            "to_line": insert_line,
+                        }
+                    )
+                    continue
+                else:
+                    reports.append(
+                        {"ident": u["ident"], "ok": False, "reason": "already_present"}
+                    )
+                    continue
+
+            new_text, patch = insert_snippet_into_text(ttext, snippet, insert_line)
+            outp = ufile.with_suffix(ufile.suffix + ".inserted")
+            outp.write_text(new_text, encoding="utf-8")
+            outp.replace(ufile)
+            any_inserted = True
+            reports.append({"ident": u["ident"], "ok": True, "applied_to": str(ufile)})
+
+        print("Iteration report:\n", json.dumps(reports, indent=2, ensure_ascii=False))
+        if not any_inserted:
+            print("No inserts performed in this iteration; stopping.")
+            return 3
+
+    print(f"Reached max iterations ({MAX_ITERS}). Stopping.")
+    return 4
 
 
 if __name__ == "__main__":

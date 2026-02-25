@@ -1,5 +1,7 @@
 # ASSISTANT TOOLING
 
+（補足ドキュメントは本体に統合済み。詳細は下部の「コマンド例」以下を参照のこと。）
+
 ## 説明書
 
 （記録: 賢狼ホロ による自動化ツール群の使用手順）
@@ -66,19 +68,43 @@
   - 機能: 1反復の自動化（ビルド→未定義識別子抽出→候補検索→挿入（dry-run/適用）→報告）
   - 主なオプション: `--build-target`, `--select-index`, `--interactive`, `--apply`
 
-標準ワークフロー（手動・安全志向）
+標準ワークフロー（自律挿入を優先した安全志向）
 
-1. まず現状を Git に保持（ブランチやコミット）。既に作業ブランチ上なら不要。
-2. `--find-name` で候補を検索し、候補一覧（JSON/markdown）を確認する。
-3. `--insert-names` と `--insert-after-pattern` を使って、所定のコメント行（簡潔なマーカーを推奨） の下へ順に挿入する。
+わっちは今や、ぬしが何もしなくとも補題を自律的に挿入できるようになった。以下が現行の安全なワークフローじゃ。
 
-- 推奨マーカー（ファイル内に1行だけ置く）: `-- ##INSERT MARKER## --`
-- 例: `python theorem_picker.py a.lean /tmp/out.md --insert-names NoSqOnS0,hS0_not_sq_of_NoSqOnS0 --insert-target a.lean --insert-after-pattern "^-- ##INSERT MARKER## --$"`
-- この簡潔なマーカーを使うと正規表現を意識せず挿入位置が安定する。
+1. まず現状を Git に保持（`git status` → 必要なら `git switch -c <branch>`）。
+2. （任意）ファイル内に明示的な挿入マーカーを置きたい場合は `-- ##INSERT MARKER## --` を配置できる。だが必須ではない。
+3. アシスタントを走らせる：`assistant_driver.py`（または `run_assistant_driver.sh`）でビルド→発見→挿入ループを実行する。
 
-1. `--dry-run` で差分を確認し、問題なければファイルを上書きする（スクリプトは `.inserted` を作るので手動で上書きするか `cp` で反映する）。
-2. `./lean-build.sh <target>` を走らせ、エラーを確認する。
-3. 未解決の識別子があれば手順 2 に戻るか、`assistant_driver.py` で1反復自動化を実行する。
+- アシスタントの挿入位置優先順:
+    1. ユーザが `--insert-line N` を指定した場合はその行（1-based）に挿入する。
+    2. ファイルに `-- ##INSERT MARKER## --` が存在すれば、その直後に挿入する。
+    3. 上記が無ければ、ビルドエラー箇所の近傍から最も適当なトップレベル宣言を探し、その手前（あるいは直後）に挿入する自動推定を行う。
+
+1. 挿入方式:
+
+- デフォルトは「自動適用（`--apply`）」だが、安全に運用するなら `--apply` を外して dry-run を確認する。dry-run 時は `.inserted` ファイルが生成され、差分を手で確認できる。
+
+1. アシスタントは既にファイル内に定義が存在する場合、その定義が使用箇所より後ろにあると判定すれば自動で前方へ移動（切り取り→挿入）して依存順を修正できる。
+
+注意事項:
+
+- 自動挿入は便利じゃが、`namespace`、`private`、implicit 引数、ローカル構造など特殊な文脈では手作業が必要になりうる。大きな構造変更が予想される場合は `--interactive` を使うか、まず dry-run で差分を確認すること。
+- `lean-build.sh` は現在、実際の lake の終了コードをそのまま返すようにしてある。外部スクリプトはこの終了コードで failure を検出できるはずじゃ。
+
+コマンド例（実行しやすいラッパーを推奨）:
+
+```
+cd lean/dk_math
+# 自律運用（AI が挿入位置を決める）
+./run_assistant_driver.sh --build-target DkMath.FLT.docs.StandAlone.a --apply
+
+# 挿入行を明示する（強制）
+./run_assistant_driver.sh --build-target DkMath.FLT.docs.StandAlone.a --apply --insert-line 720
+
+# dry-run（差分を出力して確認）
+./run_assistant_driver.sh --build-target DkMath.FLT.docs.StandAlone.a
+```
 
 自動化のガイドライン（安全策）
 

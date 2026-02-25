@@ -424,7 +424,15 @@ def main():
         insert_line = insert_line or 1
         # build combined snippet in the given order, ensure one blank line between items
         combined = []
+        target_text = target.read_text(encoding="utf-8")
         for d in defs_list:
+            name = d.get("ident")
+            # skip if target already defines this ident (avoid duplicates)
+            pattern = re.compile(
+                rf"^(?:@[\w\[\] :]+\s*)*(def|lemma|theorem)\s+{re.escape(name)}\b", re.M
+            )
+            if pattern.search(target_text):
+                continue
             s = d.get("snippet", "").rstrip()
             if s:
                 combined.append(s)
