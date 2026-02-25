@@ -727,6 +727,218 @@ theorem FLT_d3_by_padicValNat_of_NoSqOnS0 {a b c : ℕ}
   intro q hq hq_dvd_diff hq_ndiv_diff
   exact hS0_not_sq_of_NoSqOnS0 (c := c) (b := b) hNoSq hq hq_dvd_diff hq_ndiv_diff
 
+def PrimitiveOnS0 (c b q : ℕ) : Prop :=
+  Nat.Prime q ∧ q ∣ S0_nat c b ∧ ¬ q ∣ c - b
+
+/--
+`PrimitiveOnS0` な素数は `S0` を二乗では持ち上げない。
+-/
+
+def S0PrimeSupportExceptThree (c b : ℕ) : Prop :=
+  ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → q ≠ 3 → ¬ q ∣ c - b
+
+lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
+    (hbc : b ≤ c)
+    (hcop : Nat.Coprime c b) :
+    ¬ 3 ^ 2 ∣ S0_nat c b := by
+  intro h9
+  have h3S0 : 3 ∣ S0_nat c b := by
+    exact dvd_trans (by decide : 3 ∣ 3 ^ 2) h9
+  let x : ℕ := c - b
+  have hx : c = x + b := by
+    dsimp [x]
+    exact (Nat.sub_add_cancel hbc).symm
+  have hS0_eq_x : S0_nat c b = x ^ 2 + 3 * x * b + 3 * b ^ 2 := by
+    rw [hx]
+    unfold S0_nat
+    ring
+  have h3x2 : 3 ∣ x ^ 2 := by
+    have hsum : 3 ∣ x ^ 2 + 3 * x * b + 3 * b ^ 2 := by
+      simpa [hS0_eq_x] using h3S0
+    have hrest : 3 ∣ 3 * x * b + 3 * b ^ 2 := by
+      have h1 : 3 ∣ 3 * x * b := dvd_mul_of_dvd_left (dvd_mul_right 3 x) b
+      have h2 : 3 ∣ 3 * b ^ 2 := dvd_mul_right 3 (b ^ 2)
+      exact dvd_add h1 h2
+    have hsum' : 3 ∣ x ^ 2 + (3 * x * b + 3 * b ^ 2) := by
+      simpa [Nat.add_assoc] using hsum
+    have hsum'' : 3 ∣ (3 * x * b + 3 * b ^ 2) + x ^ 2 := by
+      simpa [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using hsum'
+    exact (Nat.dvd_add_right hrest).1 hsum''
+  have h3_sub : 3 ∣ c - b := by
+    have h3x : 3 ∣ x := Nat.prime_three.dvd_of_dvd_pow h3x2
+    simpa [x] using h3x
+  rcases h3_sub with ⟨k, hk⟩
+  have hc_eq : c = 3 * k + b := by
+    calc
+      c = (c - b) + b := (Nat.sub_add_cancel hbc).symm
+      _ = 3 * k + b := by simp [hk]
+  have hS0_eq_3mul : S0_nat c b = 3 * (b ^ 2 + 3 * k * b + 3 * k ^ 2) := by
+    rw [hc_eq]
+    unfold S0_nat
+    ring
+  have h3_inner : 3 ∣ b ^ 2 + 3 * k * b + 3 * k ^ 2 := by
+    have hmul : 3 * 3 ∣ 3 * (b ^ 2 + 3 * k * b + 3 * k ^ 2) := by
+      simpa [pow_two, hS0_eq_3mul, Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm] using h9
+    exact Nat.dvd_of_mul_dvd_mul_left (by decide : 0 < 3) hmul
+  have h3_rest : 3 ∣ 3 * k * b + 3 * k ^ 2 := by
+    have h1 : 3 ∣ 3 * k * b := dvd_mul_of_dvd_left (dvd_mul_right 3 k) b
+    have h2 : 3 ∣ 3 * k ^ 2 := dvd_mul_right 3 (k ^ 2)
+    exact dvd_add h1 h2
+  have h3_b2 : 3 ∣ b ^ 2 := by
+    have h3_inner' : 3 ∣ b ^ 2 + (3 * k * b + 3 * k ^ 2) := by
+      simpa [Nat.add_assoc] using h3_inner
+    have h3_inner'' : 3 ∣ (3 * k * b + 3 * k ^ 2) + b ^ 2 := by
+      simpa [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using h3_inner'
+    exact (Nat.dvd_add_right h3_rest).1 h3_inner''
+  have h3_b : 3 ∣ b := Nat.prime_three.dvd_of_dvd_pow h3_b2
+  have h3_sub' : 3 ∣ c - b := ⟨k, hk⟩
+  have h3_c : 3 ∣ c := by
+    have : 3 ∣ (c - b) + b := dvd_add h3_sub' h3_b
+    simpa [Nat.sub_add_cancel hbc] using this
+  have h3_gcd : 3 ∣ Nat.gcd c b := Nat.dvd_gcd h3_c h3_b
+  have h3_one : 3 ∣ 1 := by
+    rw [← hcop.gcd_eq_one]
+    exact h3_gcd
+  exact Nat.prime_three.not_dvd_one h3_one
+
+lemma exists_sq_factor_split_three {c b : ℕ}
+    (hsq : ∃ q : ℕ, Nat.Prime q ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b) :
+    (3 ^ 2 ∣ S0_nat c b) ∨
+      ∃ q : ℕ, Nat.Prime q ∧ q ≠ 3 ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b := by
+  rcases hsq with ⟨q, hq, hqS0, hq2⟩
+  by_cases hq3 : q = 3
+  · left
+    simpa [hq3] using hq2
+  · right
+    exact ⟨q, hq, hq3, hqS0, hq2⟩
+
+/--
+phase-03-C の十分条件（skeleton）:
+非例外調和点 witness と `NoSqOnS0` の組。
+-/
+
+lemma prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three {c b q : ℕ}
+    (hbc : b ≤ c)
+    (hcop : Nat.Coprime c b)
+    (hq : Nat.Prime q)
+    (hqS0 : q ∣ S0_nat c b)
+    (hq_ne3 : q ≠ 3) :
+    ¬ q ∣ c - b := by
+  intro hq_sub
+  have hcb_mod : c ≡ b [MOD q] := by
+    exact ((Nat.modEq_iff_dvd' hbc).2 hq_sub).symm
+  have hS0_mod3b2 : S0_nat c b ≡ 3 * b ^ 2 [MOD q] := by
+    have h1 : S0_nat c b ≡ b ^ 2 + b * b + b ^ 2 [MOD q] := by
+      unfold S0_nat
+      exact ((hcb_mod.pow 2).add (hcb_mod.mul Nat.ModEq.rfl)).add Nat.ModEq.rfl
+    have h2 : b ^ 2 + b * b + b ^ 2 = 3 * b ^ 2 := by
+      ring
+    exact h2 ▸ h1
+  have hS0_mod0 : S0_nat c b ≡ 0 [MOD q] := hqS0.modEq_zero_nat
+  have h3b2_mod0 : 3 * b ^ 2 ≡ 0 [MOD q] := hS0_mod3b2.symm.trans hS0_mod0
+  have hq_3b2 : q ∣ 3 * b ^ 2 := Nat.modEq_zero_iff_dvd.mp h3b2_mod0
+  rcases hq.dvd_mul.mp hq_3b2 with hq_three | hq_b2
+  · have hq_eq_three : q = 3 :=
+      (Nat.prime_dvd_prime_iff_eq hq Nat.prime_three).1 hq_three
+    exact hq_ne3 hq_eq_three
+  · have hq_b : q ∣ b := hq.dvd_of_dvd_pow hq_b2
+    have hb_mod0 : b ≡ 0 [MOD q] := hq_b.modEq_zero_nat
+    have hc_mod0 : c ≡ 0 [MOD q] := hcb_mod.trans hb_mod0
+    have hq_c : q ∣ c := Nat.modEq_zero_iff_dvd.mp hc_mod0
+    have hq_gcd : q ∣ Nat.gcd c b := Nat.dvd_gcd hq_c hq_b
+    have hq_one : q ∣ 1 := by simpa [hcop.gcd_eq_one] using hq_gcd
+    exact hq.not_dvd_one hq_one
+
+/--
+`hSuppEx3` の自動生成ブリッジ:
+`b ≤ c` と `gcd(c,b)=1` から `S0PrimeSupportExceptThree c b` を得る。
+-/
+
+lemma not_NoSqOnS0_iff_exists_sq_factor {c b : ℕ} :
+    ¬ NoSqOnS0 c b ↔
+      ∃ q : ℕ, Nat.Prime q ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b := by
+  classical
+  constructor
+  · intro hNoSq
+    by_contra hnone
+    apply hNoSq
+    intro q hq hqS0 hq2
+    exact hnone ⟨q, hq, hqS0, hq2⟩
+  · intro hsq hNoSq
+    rcases hsq with ⟨q, hq, hqS0, hq2⟩
+    exact (hNoSq hq hqS0) hq2
+
+def NonLiftableS0 (c b q : ℕ) : Prop :=
+  PrimitiveOnS0 c b q → ¬ q ^ 2 ∣ S0_nat c b
+
+/--
+`NoSq` 合流ルートの基底入力束。
+-/
+
+lemma not_exists_sq_factor_ne_three_of_support_nonLiftable {c b : ℕ}
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q) :
+    ¬ ∃ q : ℕ, Nat.Prime q ∧ q ≠ 3 ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b := by
+  intro hne3
+  rcases hne3 with ⟨q, hq, hq_ne3, hqS0, hq2⟩
+  have hq_ndvd_diff : ¬ q ∣ c - b := hSuppEx3 hq hqS0 hq_ne3
+  have hPrim : PrimitiveOnS0 c b q := ⟨hq, hqS0, hq_ndvd_diff⟩
+  exact (hNonLift q hPrim) hq2
+
+lemma three_sq_dvd_of_not_NoSqOnS0_of_support_nonLiftable {c b : ℕ}
+    (hNoSq_false : ¬ NoSqOnS0 c b)
+    (hSuppEx3 : S0PrimeSupportExceptThree c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q) :
+    3 ^ 2 ∣ S0_nat c b := by
+  have hsq : ∃ q : ℕ, Nat.Prime q ∧ q ∣ S0_nat c b ∧ q ^ 2 ∣ S0_nat c b :=
+    (not_NoSqOnS0_iff_exists_sq_factor).1 hNoSq_false
+  rcases exists_sq_factor_split_three hsq with h3 | hne3
+  · exact h3
+  · exfalso
+    exact (not_exists_sq_factor_ne_three_of_support_nonLiftable hSuppEx3 hNonLift) hne3
+
+/--
+`q ≠ 3` かつ `q ∣ S0(c,b)` と `gcd(c,b)=1` なら `q ∤ (c-b)`。
+（`b ≤ c` を仮定）
+-/
+
+lemma s0PrimeSupportExceptThree_of_coprime {c b : ℕ}
+    (hbc : b ≤ c) (hcop : Nat.Coprime c b) :
+    S0PrimeSupportExceptThree c b := by
+  intro q hq hqS0 hq_ne3
+  exact prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three hbc hcop hq hqS0 hq_ne3
+
+lemma NoSqOnS0_of_support_nonLiftable_coprime {c b : ℕ}
+    (hbc : b ≤ c)
+    (hcop : Nat.Coprime c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q) :
+    NoSqOnS0 c b := by
+  by_contra hNoSq_false
+  have hSuppEx3 : S0PrimeSupportExceptThree c b :=
+    s0PrimeSupportExceptThree_of_coprime hbc hcop
+  have h9 : 3 ^ 2 ∣ S0_nat c b :=
+    three_sq_dvd_of_not_NoSqOnS0_of_support_nonLiftable hNoSq_false hSuppEx3 hNonLift
+  exact (three_sq_not_dvd_S0_of_coprime hbc hcop) h9
+
+/--
+`q = 3` 例外を除去できると、通常の support 条件へ戻せる。
+-/
+
+theorem FLT_d3_by_padicValNat_of_support_nonLiftable_coprime {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b ≤ c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_support_nonLiftable_coprime hbc hcb_coprime hNonLift
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+`hNonLiftAll` と `coprime(c,b)` から直接供給する共通入口。
+-/
+
 theorem FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport {a b c : ℕ}
     (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
     (hab : Nat.Coprime a b)
