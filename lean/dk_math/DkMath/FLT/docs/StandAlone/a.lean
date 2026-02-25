@@ -400,14 +400,12 @@ lemma exists_prime_divisor_not_dividing_diff_of_prime_exp
     have hgcd_div : (q : ℤ) ∣ ↑(Int.gcd ((a : ℤ) - (b : ℤ)) (diffPowSum (a : ℤ) (b : ℤ) p)) := by
       apply Int.ofNat_dvd.mpr
       apply Nat.dvd_gcd
-      · -- q ∣ (a - b).natAbs を示す
-        have : ((a : ℤ) - (b : ℤ)).natAbs = a - b := by
+      · have : ((a : ℤ) - (b : ℤ)).natAbs = a - b := by
           have heq : (a : ℤ) - (b : ℤ) = ↑(a - b) := by omega
           simp [heq]
         rw [this]
         exact hq_div_diff
-      · -- q ∣ (diffPowSum ...).natAbs を示す
-        have : diffPowSum (a : ℤ) (b : ℤ) p = (quotientPrimePow a b p : ℤ) := quot_eq_sum.symm
+      · have : diffPowSum (a : ℤ) (b : ℤ) p = (quotientPrimePow a b p : ℤ) := quot_eq_sum.symm
         rw [this]
         have : ((quotientPrimePow a b p : ℤ)).natAbs = quotientPrimePow a b p := by
           norm_cast
@@ -1024,28 +1022,55 @@ theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_classify_coprimeSupport {a b c
   exact FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport
     ha hb hc hab hbc hcb_coprime hNonLiftAll
 
--- ##INSERT MARKER## --
-
 def AllNonLiftableOnS0 (c b : ℕ) : Prop :=
   (∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → ¬ q ∣ c - b)
     ∧ ∀ q : ℕ, NonLiftableS0 c b q
 
-/--
-`q = 3` を除いた素因子では `c-b` を割らない、という support 条件。
-`q = 3` は別途 `¬ 3 ∣ S0_nat c b` などで扱う。
--/
+abbrev Point2 := ℝ × ℝ
 
--- ##INSERT MARKER 2## --
+noncomputable section
 
--- ##INSERT MARKER 3## --
+inductive PhaseLabel where
+  | sqrt2
+  | sqrt3
+  | mixed
+  | unknown
+  deriving DecidableEq, Repr
 
--- ##INSERT MARKER 3A## --
+def A : Point2 := (0, 0)
+def B : Point2 := (1, 0)
+def C : Point2 := (1, 1)
+def D : Point2 := (0, 1)
+
+def E : Point2 := (1 / Real.sqrt 2, 1 / Real.sqrt 2)
+def F : Point2 := (0, Real.sqrt 2)
+def G : Point2 := (-1 / Real.sqrt 2, 1 / Real.sqrt 2)
+
+def O : Point2 := ((Real.sqrt 2 - 1) / 2, 1 / 2)
+def I : Point2 := (Real.sqrt 2 - 1, 1)
+
+def phaseLabelOfPoint (p : Point2) : PhaseLabel :=
+  if p = I then PhaseLabel.mixed
+  else if p = E ∨ p = F ∨ p = G then PhaseLabel.sqrt2
+  else PhaseLabel.unknown
+
+def isMixedPhasePoint (p : Point2) : Prop :=
+  phaseLabelOfPoint p = PhaseLabel.mixed
+
+lemma phaseLabel_I : phaseLabelOfPoint I = PhaseLabel.mixed := by
+  simp [phaseLabelOfPoint]
+
+lemma mixedPoint_I : isMixedPhasePoint I := by
+  simpa [isMixedPhasePoint] using phaseLabel_I
 
 def HasMixedPhaseWitness : Prop :=
   ∃ p : Point2, isMixedPhasePoint p
 
 def HasNPHalfStepWitness : Prop :=
-  ∃ u : DkMath.NP, DkMath.val (DkMath.succ u) = DkMath.val u + (1 / 2 : ℚ)
+  ∃ u : NP, val (succ u) = val u + (1 / 2 : ℚ)
+
+def HasPhaseUnitInfrastructure : Prop :=
+  HasMixedPhaseWitness ∧ HasNPHalfStepWitness
 
 def phaseGate (_x : CounterexampleInput) : Prop :=
   HasPhaseUnitInfrastructure
@@ -1056,6 +1081,38 @@ lemma phaseGate_of_harmonicEnvelope {x : CounterexampleInput}
     (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u) :
     phaseGate x := by
   exact ⟨hInfra, hHarm⟩
+
+def HarmonicNonExceptionalSide (x : CounterexampleInput) : Prop :=
+  phaseGate x ∧ ¬ exceptionalPhaseGate x
+
+lemma classifyLift_impossible_of_gates {x : CounterexampleInput}
+    (hexc : ¬ exceptionalPhaseGate x)
+    (hprim : primitivePrimeGate x)
+    (hnosq : noSquareGate x) :
+    classifyLift x = LiftStatus.impossible := by
+  classical
+  simp [classifyLift, hexc, hprim, hnosq]
+
+lemma classifyLift_impossible_of_harmonicNonExceptional {x : CounterexampleInput}
+    (hside : HarmonicNonExceptionalSide x)
+    (hprim : primitivePrimeGate x)
+    (hnosq : noSquareGate x) :
+    classifyLift x = LiftStatus.impossible := by
+  exact classifyLift_impossible_of_gates hside.2 hprim hnosq
+
+lemma classifyLift_impossible_of_harmonicNonExceptional_nonLiftable {c b q : ℕ}
+    (hbc : b < c)
+    (hside : HarmonicNonExceptionalSide ({ c := c, b := b, q := q } : CounterexampleInput))
+    (hprim : PrimitiveOnS0 c b q)
+    (hNonLift : NonLiftableS0 c b q) :
+    classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible := by
+  let x : CounterexampleInput := { c := c, b := b, q := q }
+  have hprimGate : primitivePrimeGate x := by
+    simpa [x] using primitivePrimeGate_of_PrimitiveOnS0 hbc hprim
+  have hnosq : noSquareGate x := by
+    exact hNonLift hprim
+  exact classifyLift_impossible_of_harmonicNonExceptional
+    (by simpa [x] using hside) hprimGate (by simpa [x] using hnosq)
 
 lemma classifyLift_impossible_family_of_harmonicNonExceptional_nonLiftable {c b : ℕ}
     (hbc : b < c)
@@ -1068,19 +1125,70 @@ lemma classifyLift_impossible_family_of_harmonicNonExceptional_nonLiftable {c b 
   exact classifyLift_impossible_of_harmonicNonExceptional_nonLiftable
     hbc (hsideAll q) hprim (hNonLiftAll q)
 
-/--
-`NoSqOnS0` と harmonic envelope 仮定から、
-primitive 因子に対する `classifyLift = impossible` family を作る。
--/
-
--- ##INSERT MARKER 5## --
-
 lemma phaseGate_all_of_harmonicEnvelope
     (hInfra : HasPhaseUnitInfrastructure)
     (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u) :
     ∀ x : CounterexampleInput, phaseGate x := by
   intro x
   exact phaseGate_of_harmonicEnvelope (x := x) hInfra hHarm
+
+lemma not_three_dvd_S0_of_mod3_separated {c b : ℕ}
+    (hc_nz : c % 3 ≠ 0)
+    (hb_nz : b % 3 ≠ 0)
+    (hsep : c % 3 ≠ b % 3) :
+    ¬ 3 ∣ S0_nat c b := by
+  have hc_lt : c % 3 < 3 := Nat.mod_lt _ (by decide)
+  have hb_lt : b % 3 < 3 := Nat.mod_lt _ (by decide)
+  have hc_cases : c % 3 = 1 ∨ c % 3 = 2 := by omega
+  have hb_cases : b % 3 = 1 ∨ b % 3 = 2 := by omega
+  rcases hc_cases with hc1 | hc2
+  · rcases hb_cases with hb1 | hb2
+    · exfalso
+      exact hsep (by simp [hc1, hb1])
+    · intro h3S0
+      have hc_mod1 : c ≡ 1 [MOD 3] := by simpa [Nat.ModEq] using hc1
+      have hb_mod2 : b ≡ 2 [MOD 3] := by simpa [Nat.ModEq] using hb2
+      have hS0_mod_const : S0_nat c b ≡ (1 ^ 2 + 1 * 2 + 2 ^ 2) [MOD 3] := by
+        unfold S0_nat
+        exact ((hc_mod1.pow 2).add (hc_mod1.mul hb_mod2)).add (hb_mod2.pow 2)
+      have hconst : ((1 ^ 2 + 1 * 2 + 2 ^ 2 : ℕ) ≡ 1 [MOD 3]) := by decide
+      have hS0_mod1 : S0_nat c b ≡ 1 [MOD 3] := hS0_mod_const.trans hconst
+      have hS0_mod0 : S0_nat c b ≡ 0 [MOD 3] := h3S0.modEq_zero_nat
+      have h10 : (1 : ℕ) ≡ 0 [MOD 3] := hS0_mod1.symm.trans hS0_mod0
+      norm_num [Nat.ModEq] at h10
+  · rcases hb_cases with hb1 | hb2
+    · intro h3S0
+      have hc_mod2 : c ≡ 2 [MOD 3] := by simpa [Nat.ModEq] using hc2
+      have hb_mod1 : b ≡ 1 [MOD 3] := by simpa [Nat.ModEq] using hb1
+      have hS0_mod_const : S0_nat c b ≡ (2 ^ 2 + 2 * 1 + 1 ^ 2) [MOD 3] := by
+        unfold S0_nat
+        exact ((hc_mod2.pow 2).add (hc_mod2.mul hb_mod1)).add (hb_mod1.pow 2)
+      have hconst : ((2 ^ 2 + 2 * 1 + 1 ^ 2 : ℕ) ≡ 1 [MOD 3]) := by decide
+      have hS0_mod1 : S0_nat c b ≡ 1 [MOD 3] := hS0_mod_const.trans hconst
+      have hS0_mod0 : S0_nat c b ≡ 0 [MOD 3] := h3S0.modEq_zero_nat
+      have h10 : (1 : ℕ) ≡ 0 [MOD 3] := hS0_mod1.symm.trans hS0_mod0
+      norm_num [Nat.ModEq] at h10
+    · exfalso
+      exact hsep (by simp [hc2, hb2])
+
+def AllNonLiftableOnS0ExceptThree (c b : ℕ) : Prop :=
+  S0PrimeSupportExceptThree c b ∧ (∀ q : ℕ, NonLiftableS0 c b q) ∧ ¬ 3 ∣ S0_nat c b
+
+lemma allPrimeSupport_of_exceptThree {c b : ℕ}
+    (hSupp : S0PrimeSupportExceptThree c b)
+    (h3free : ¬ 3 ∣ S0_nat c b) :
+    ∀ {q : ℕ}, Nat.Prime q → q ∣ S0_nat c b → ¬ q ∣ c - b := by
+  intro q hq hqS0
+  by_cases hq3 : q = 3
+  · intro hqdiff
+    have h3S0 : 3 ∣ S0_nat c b := by simpa [hq3] using hqS0
+    exact h3free h3S0
+  · exact hSupp hq hqS0 hq3
+
+lemma AllNonLiftableOnS0_of_exceptThree {c b : ℕ}
+    (h : AllNonLiftableOnS0ExceptThree c b) : AllNonLiftableOnS0 c b := by
+  rcases h with ⟨hSuppEx3, hNonLift, h3free⟩
+  refine ⟨allPrimeSupport_of_exceptThree hSuppEx3 h3free, hNonLift⟩
 
 lemma AllNonLiftableOnS0_of_exceptThree_mod3_separated {c b : ℕ}
     (hSuppEx3 : S0PrimeSupportExceptThree c b)
@@ -1096,17 +1204,16 @@ lemma AllNonLiftableOnS0_of_exceptThree_mod3_separated {c b : ℕ}
 lemma hasMixedPhaseWitness_octagonCore : HasMixedPhaseWitness := by
   exact ⟨I, mixedPoint_I⟩
 
-/--
-`NPUnit` 側の half-step（`succ` で 1/2 進む）証拠。
--/
+lemma val_succ (x : NP) : val (succ x) = val x + (1/2 : ℚ) := by
+  cases x with
+  | mk n p =>
+    cases p
+    · simp [succ, val]
+    · simp [succ, val]; ring
 
 lemma hasNPHalfStepWitness_npunit : HasNPHalfStepWitness := by
-  refine ⟨DkMath.zero, ?_⟩
-  simpa using DkMath.val_succ DkMath.zero
-
-/--
-判定器で使う位相インフラ（幾何側 witness と単位側 witness の組）。
--/
+  refine ⟨zero, ?_⟩
+  simpa using val_succ zero
 
 lemma allNonLiftableOnS0_of_harmonicClassifier {c b : ℕ}
     (hbc : b < c)
@@ -1120,23 +1227,12 @@ lemma allNonLiftableOnS0_of_harmonicClassifier {c b : ℕ}
     (hb_nz : b % 3 ≠ 0)
     (hsep : c % 3 ≠ b % 3) :
     AllNonLiftableOnS0 c b := by
-  -- 位相入口は x 非依存なので、全入力に持ち上がる
   have _hphaseAll : ∀ x : CounterexampleInput, phaseGate x :=
     phaseGate_all_of_harmonicEnvelope hInfra hHarm
   have hNonLift : ∀ q : ℕ, NonLiftableS0 c b q := by
     intro q hprim
     exact nonLiftableS0_of_classifyLift_impossible hbc (hClass hprim) hprim
   exact AllNonLiftableOnS0_of_exceptThree_mod3_separated hSuppEx3 hNonLift hc_nz hb_nz hsep
-
-/--
-phase-04 接続補題（non-exceptional ∧ harmonic 側のテンプレート利用版）。
--/
-
-def HasPhaseUnitInfrastructure : Prop :=
-  HasMixedPhaseWitness ∧ HasNPHalfStepWitness
-
-def HarmonicNonExceptionalSide (x : CounterexampleInput) : Prop :=
-  phaseGate x ∧ ¬ exceptionalPhaseGate x
 
 lemma harmonicNonExceptionalSide_of_envelope {x : CounterexampleInput}
     (hInfra : HasPhaseUnitInfrastructure)
@@ -1145,14 +1241,8 @@ lemma harmonicNonExceptionalSide_of_envelope {x : CounterexampleInput}
     HarmonicNonExceptionalSide x := by
   exact ⟨phaseGate_of_harmonicEnvelope hInfra hHarm, hNoExc⟩
 
--- ##INSERT MARKER 4## --
-
 lemma hasPhaseUnitInfrastructure : HasPhaseUnitInfrastructure := by
   exact ⟨hasMixedPhaseWitness_octagonCore, hasNPHalfStepWitness_npunit⟩
-
-/--
-`S0_nat c b` の素因子が二乗で刺さらないことをまとめた条件。
--/
 
 lemma allNonLiftableOnS0_of_harmonicNonExceptional_nonLiftable {c b : ℕ}
     (hbc : b < c)
@@ -1171,17 +1261,10 @@ lemma allNonLiftableOnS0_of_harmonicNonExceptional_nonLiftable {c b : ℕ}
   exact allNonLiftableOnS0_of_harmonicClassifier
     hbc hasPhaseUnitInfrastructure
     (by
-      -- `hsideAll` の 0 番目成分から位相 witness を回収する
       have h0 : HarmonicNonExceptionalSide ({ c := c, b := b, q := 0 } : CounterexampleInput) :=
         hsideAll 0
       exact h0.1.2)
     hSuppEx3 hClass hc_nz hb_nz hsep
-
-/--
-phase-04 接続補題（envelope 入力版）:
-`hsideAll` を外部で組み立てずに
-`hInfra + hHarm + hNoExcAll + hNonLiftAll` から `AllNonLiftableOnS0` を作る。
--/
 
 lemma allNonLiftableOnS0_of_harmonicEnvelope_nonLiftable {c b : ℕ}
     (hbc : b < c)
@@ -1208,10 +1291,6 @@ lemma NoSqOnS0_of_AllNonLiftableOnS0 {c b : ℕ}
   have hq_ndvd : ¬ q ∣ c - b := hprimSupport hq hqS0
   have hprim : PrimitiveOnS0 c b q := ⟨hq, hqS0, hq_ndvd⟩
   exact hnonlift q hprim
-
-/--
-`NoSqOnS0` から `q` 全域の non-liftable 条件を得る。
--/
 
 theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable {a b c : ℕ}
     (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
