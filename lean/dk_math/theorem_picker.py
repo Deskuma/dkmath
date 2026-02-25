@@ -331,6 +331,19 @@ def main():
         action="store_true",
         help="Show unified diff instead of writing changes.",
     )
+    parser.add_argument(
+        "--select-index",
+        dest="select_index",
+        type=int,
+        help="If multiple candidates found, select this zero-based index automatically.",
+        nargs="?",
+    )
+    parser.add_argument(
+        "--interactive",
+        dest="interactive",
+        action="store_true",
+        help="When multiple candidates found, prompt interactively to select one (requires TTY).",
+    )
     args = parser.parse_args()
     if not os.path.isfile(args.input):
         print(f"Error: Input file {args.input} does not exist.")
@@ -369,8 +382,58 @@ def main():
         if not defs:
             print(f"No definitions found for {args.insert_ident}")
             sys.exit(2)
-        # pick first match (caller can refine by giving specific source file later)
-        chosen = defs[0]
+        # multiple-candidate handling: print JSON list and allow selection
+        if len(defs) > 1:
+            # prepare summary list
+            summary = []
+            for i, d in enumerate(defs):
+                summary.append(
+                    {
+                        "index": i,
+                        "file": d.get("file"),
+                        "ident": d.get("ident"),
+                        "preview": (
+                            d.get("snippet", "").splitlines()[0]
+                            if d.get("snippet")
+                            else ""
+                        ),
+                    }
+                )
+            # always print JSON summary for caller
+            print("Found multiple candidates:")
+            print(json.dumps(summary, indent=2, ensure_ascii=False))
+            chosen = None
+            # if select_index provided, use it
+            if args.select_index is not None:
+                si = args.select_index
+                if 0 <= si < len(defs):
+                    chosen = defs[si]
+                else:
+                    print(f"--select-index {si} out of range, using first candidate")
+                    chosen = defs[0]
+            # interactive prompt if requested and stdin is a TTY
+            elif args.interactive and sys.stdin.isatty():
+                try:
+                    sel = input(
+                        f"Select candidate index [0-{len(defs)-1}] (enter to choose 0): "
+                    )
+                    if sel.strip() == "":
+                        chosen = defs[0]
+                    else:
+                        sel_i = int(sel.strip())
+                        if 0 <= sel_i < len(defs):
+                            chosen = defs[sel_i]
+                        else:
+                            print("Invalid selection, using first candidate")
+                            chosen = defs[0]
+                except Exception:
+                    print("Interactive selection failed, using first candidate")
+                    chosen = defs[0]
+            else:
+                # non-interactive default: pick first
+                chosen = defs[0]
+        else:
+            chosen = defs[0]
         target = Path(args.insert_target)
         if not target.exists():
             print(f"Target file {target} not found")
