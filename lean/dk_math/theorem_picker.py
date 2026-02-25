@@ -457,7 +457,26 @@ def insert_snippet_into_text(orig_text: str, snippet: str, insert_line: int):
 
     lines = orig_text.splitlines(keepends=True)
     idx = max(0, min(len(lines), insert_line - 1))
-    snippet_lines = [l + "\n" for l in snippet.splitlines()]
+    # Build snippet lines with ensured trailing newlines
+    raw_snip_lines = [l + "\n" for l in snippet.splitlines()]
+
+    # Determine whether there's already a blank line before insertion point
+    need_blank_before = True
+    if idx > 0 and lines[idx - 1].strip() == "":
+        need_blank_before = False
+
+    # Determine whether there's already a blank line after insertion point
+    need_blank_after = True
+    if idx < len(lines) and lines[idx].strip() == "":
+        need_blank_after = False
+
+    snippet_lines = []
+    if need_blank_before:
+        snippet_lines.append("\n")
+    snippet_lines.extend(raw_snip_lines)
+    if need_blank_after:
+        snippet_lines.append("\n")
+
     new_lines = lines[:idx] + snippet_lines + lines[idx:]
     new_text = "".join(new_lines)
     diff = difflib.unified_diff(
