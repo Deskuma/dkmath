@@ -314,9 +314,8 @@ theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_classify_coprimeSupport {a b c
         classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible)
     :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
-  have hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q := by
-    intro q hprim
-    exact nonLiftableS0_of_classifyLift_impossible hbc (hClassPrim hprim) hprim
+  have hNonLiftAll : ∀ q : ℕ, NonLiftableS0 c b q :=
+    nonLiftableS0_family_of_classifyLift_impossible hbc hClassPrim
   exact FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport
     ha hb hc hab hbc hcb_coprime hNonLiftAll
 

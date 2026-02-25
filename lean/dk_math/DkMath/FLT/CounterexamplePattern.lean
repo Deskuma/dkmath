@@ -209,6 +209,19 @@ lemma nonLiftableS0_of_classifyLift_impossible {c b q : ℕ}
   simpa [x, noSquareGate] using hnosq
 
 /--
+`PrimitiveOnS0` 上での `classifyLift = impossible` family から、
+`q` 全域の `NonLiftableS0` family を生成する。
+-/
+lemma nonLiftableS0_family_of_classifyLift_impossible {c b : ℕ}
+    (hbc : b < c)
+    (hClass :
+      ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+        classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible) :
+    ∀ q : ℕ, NonLiftableS0 c b q := by
+  intro q hprim
+  exact nonLiftableS0_of_classifyLift_impossible hbc (hClass hprim) hprim
+
+/--
 非例外・調和側の入力で、`PrimitiveOnS0` と `NonLiftableS0` から
 `classifyLift = impossible` を得るテンプレート。
 -/

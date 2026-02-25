@@ -20,7 +20,7 @@ status: 作業中 - phase-10: 完全証明への道
 
 - [ ] 仮定の証明
   - [ ] `NonLiftableS0` の証明（下降法）
-  - [ ] \(3^2\) が \(S0\) を割らないことの証明（coprime だけで落ちるはず）
+  - [x] \(3^2\) が \(S0\) を割らないことの証明（coprime だけで落ちるはず）
 
 ## 状況タスク
 
@@ -35,10 +35,10 @@ status: 作業中 - phase-10: 完全証明への道
 
 **phase-10 攻略法（本命）**
 
-- [ ] 1. `3` の最終整理を先に終わらせる。  
+- [x] 1. `3` の最終整理を先に終わらせる。  
   目標補題: `Nat.Coprime c b -> ¬ 3^2 ∣ S0_nat c b`（mod3 分離仮定なし）。  
   これで `NoSqBaseInput` から `hc_nz/hb_nz/hsep` を外せる可能性が高いです。
-- [ ] 2. `q≠3` の `NonLiftableS0` を「分類器 impossible」経由で機械化する。  
+- [x] 2. `q≠3` の `NonLiftableS0` を「分類器 impossible」経由で機械化する。  
   既存の変換器 `nonLiftableS0_of_classifyLift_impossible`（`lean/dk_math/DkMath/FLT/CounterexamplePattern.lean:198`）を使い、足りないのは  
   `PrimitiveOnS0 -> classifyLift = impossible` の供給です。
 - [ ] 3. 上の供給を下降法（または同等の反例縮小）で埋める。  
@@ -238,6 +238,25 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
   - `Main.lean` に追加:
     - `FLT_d3_by_padicValNat_of_support_nonLiftable_coprime`
       - `mod3` 分離仮定なしで `NoSq` ルートへ供給する入口
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
+## 作業ログ 2026/02/25  10:59
+
+- phase-10 実装（`classify impossible` から `NonLiftable` 全域を共通補題化）
+  - `CounterexamplePattern.lean`
+    - 追加:
+      - `nonLiftableS0_family_of_classifyLift_impossible`
+        - 入力:
+          - `hbc : b < c`
+          - `hClass : ∀ {q}, PrimitiveOnS0 c b q -> classifyLift ... = impossible`
+        - 出力:
+          - `∀ q, NonLiftableS0 c b q`
+  - `Main.lean`
+    - `FLT_d3_by_padicValNat_of_harmonicEnvelope_classify_coprimeSupport` の局所導出
+      (`intro q` で作っていた `hNonLiftAll`) を
+      上記共通補題へ置換
 
 - build
   - `lake build DkMath.FLT.Main` : OK
