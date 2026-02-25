@@ -225,6 +225,41 @@ def primitiveSizedCandidateGEisensteinDescentFrame (c b : ℕ) : GEisensteinDesc
   step_decreases := GEisensteinPrimitiveSizedCandidate.step_decreases
 
 /--
+`PrimitiveOnS0` なら `S0_nat c b ≠ 0`。
+（`S0=0` なら `c=b=0` となり `q ∣ c-b` に矛盾）
+-/
+lemma S0_nat_ne_zero_of_PrimitiveOnS0 {c b q : ℕ}
+    (hPrim : PrimitiveOnS0 c b q) :
+    S0_nat c b ≠ 0 := by
+  intro hS0
+  have hsum : (c ^ 2 + c * b) + b ^ 2 = 0 := by
+    simpa [S0_nat, Nat.add_assoc] using hS0
+  have hb2_eq0 : b ^ 2 = 0 := Nat.eq_zero_of_add_eq_zero_left hsum
+  have hcb_eq0 : c ^ 2 + c * b = 0 := Nat.eq_zero_of_add_eq_zero_right hsum
+  have hc2_eq0 : c ^ 2 = 0 := Nat.eq_zero_of_add_eq_zero_right hcb_eq0
+  have hc0 : c = 0 := (Nat.pow_eq_zero.mp hc2_eq0).1
+  have hb0 : b = 0 := (Nat.pow_eq_zero.mp hb2_eq0).1
+  have hq_dvd_diff : q ∣ c - b := by simp [hc0, hb0]
+  exact hPrim.2.2 hq_dvd_diff
+
+/-- `PrimitiveOnS0` な `q` は `S0_nat c b` 以下。 -/
+lemma q_le_S0_nat_of_PrimitiveOnS0 {c b q : ℕ}
+    (hPrim : PrimitiveOnS0 c b q) :
+    q ≤ S0_nat c b := by
+  have hS0_pos : 0 < S0_nat c b :=
+    Nat.pos_of_ne_zero (S0_nat_ne_zero_of_PrimitiveOnS0 hPrim)
+  exact Nat.le_of_dvd hS0_pos hPrim.2.1
+
+/--
+`size ≤ q` 不変量つき候補の測度は、`S0_nat c b` でも上から抑えられる。
+-/
+lemma primitiveSizedCandidate_measure_le_S0 {c b : ℕ}
+    (s : GEisensteinPrimitiveSizedCandidate c b) :
+    GEisensteinPrimitiveSizedCandidate.measure s ≤ S0_nat c b := by
+  have hq_le : s.q ≤ S0_nat c b := q_le_S0_nat_of_PrimitiveOnS0 s.hPrim
+  exact Nat.le_trans s.hsize hq_le
+
+/--
 GEisenstein 層で供給する下降法コア。
 `classifyImpossible` に加えて、将来拡張用の descent frame を持つ。
 -/

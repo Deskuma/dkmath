@@ -51,6 +51,11 @@
     `PrimitiveOnS0` 証拠を保持したまま `fuel` で下降する型を確認済み。
   - `primitiveSizedCandidateGEisensteinDescentFrame` により、
     `size ≤ q` 不変量つき測度での下降を確認済み。
+  - 接続補題:
+    - `S0_nat_ne_zero_of_PrimitiveOnS0`
+    - `q_le_S0_nat_of_PrimitiveOnS0`
+    - `primitiveSizedCandidate_measure_le_S0`
+    により、`size` 測度を `S0_nat` 上界へ接続済み。
 
 - `CosmicFormula/CosmicFormulaBinom.lean`
   - `add_pow_gap_factor`, `add_pow_tail_u2_*`, `two_gap_xy_factor*` を提供。

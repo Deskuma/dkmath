@@ -593,6 +593,29 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  12:38
+
+- phase-10 実装（`size` 測度を `S0_nat` 上界へ接続）
+  - `GEisensteinBridge.lean`
+    - 追加補題:
+      - `S0_nat_ne_zero_of_PrimitiveOnS0`
+      - `q_le_S0_nat_of_PrimitiveOnS0`
+      - `primitiveSizedCandidate_measure_le_S0`
+    - 効果:
+      - `PrimitiveOnS0` を持つ候補について
+        `size ≤ q ≤ S0_nat c b` を導けるようになった。
+      - 測度 `size` が算術量 `S0_nat` で上から抑えられる。
+  - `README.md`
+    - 上記 3 補題を接続補題として追記
+
+- 実装メモ
+  - `S0=0` の場合分けは
+    `Nat.eq_zero_of_add_eq_zero_left/right` と `Nat.pow_eq_zero` で整理。
+  - 一度失敗した補題実装は修正済み（現在 build clean）。
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）
