@@ -350,13 +350,11 @@ theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport {a b c : �
     (hNoSq : NoSqOnS0 c b)
     :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
-  have hClassPrim :
-      ∀ {q : ℕ}, PrimitiveOnS0 c b q →
-        classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible :=
-    classifyLift_impossible_family_of_harmonicEnvelope_NoSq
+  have hDescentClass : DescentClassifyImpossibleOnPrimitive c b :=
+    descentClassifyImpossibleOnPrimitive_of_harmonicEnvelope_NoSq
       hbc hasPhaseUnitInfrastructure hHarm hNoExcAll hNoSq
-  exact FLT_d3_by_padicValNat_of_harmonicEnvelope_classify_coprimeSupport
-    ha hb hc hab hbc hcb_coprime hClassPrim
+  exact FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hDescentClass
 
 /--
 `NoSqBaseInput` から A+B 合流定理へ直結する薄いラッパー。

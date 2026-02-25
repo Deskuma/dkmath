@@ -287,6 +287,31 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  11:07
+
+- phase-10 実装（descent インターフェースの実導線接続）
+  - `CounterexamplePattern.lean`
+    - 追加:
+      - `descentClassifyImpossibleOnPrimitive_of_classifyFamily`
+        - 既存の classify family を `DescentClassifyImpossibleOnPrimitive` へ昇格
+      - `descentClassifyImpossibleOnPrimitive_of_harmonicEnvelope_NoSq`
+        - `NoSq + harmonic envelope` から
+          `DescentClassifyImpossibleOnPrimitive c b` を生成
+  - `Main.lean`
+    - `FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport` を
+      直接 `descent` 入口へ接続:
+      - `hDescentClass` を生成
+      - `FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport` へ委譲
+
+- 位置づけ
+  - 既存の `NoSq -> classify -> NonLiftable` 導線を、
+    `NoSq -> descentInterface -> NonLiftable` に置換。
+  - 将来、`hDescentClass` を本物の下降法で供給した際の
+    接続先が既に `Main` で稼働している状態に更新。
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）

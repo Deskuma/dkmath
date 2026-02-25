@@ -230,6 +230,16 @@ def DescentClassifyImpossibleOnPrimitive (c b : ℕ) : Prop :=
     classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible
 
 /--
+既存の classify family から下降法インターフェースへ持ち上げる。
+-/
+lemma descentClassifyImpossibleOnPrimitive_of_classifyFamily {c b : ℕ}
+    (hClass :
+      ∀ {q : ℕ}, PrimitiveOnS0 c b q →
+        classifyLift ({ c := c, b := b, q := q } : CounterexampleInput) = LiftStatus.impossible) :
+    DescentClassifyImpossibleOnPrimitive c b := by
+  exact hClass
+
+/--
 下降法インターフェースから `q` 全域の `NonLiftableS0` を回収する。
 -/
 lemma nonLiftableS0_family_of_descentClassify {c b : ℕ}
@@ -291,6 +301,20 @@ lemma classifyLift_impossible_family_of_harmonicEnvelope_NoSq {c b : ℕ}
   intro q hprim
   exact classifyLift_impossible_family_of_harmonicNonExceptional_nonLiftable
     hbc hsideAll hNonLiftAll hprim
+
+/--
+`NoSq` + harmonic envelope から下降法インターフェースを生成する。
+-/
+lemma descentClassifyImpossibleOnPrimitive_of_harmonicEnvelope_NoSq {c b : ℕ}
+    (hbc : b < c)
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hNoSq : NoSqOnS0 c b) :
+    DescentClassifyImpossibleOnPrimitive c b := by
+  exact descentClassifyImpossibleOnPrimitive_of_classifyFamily
+    (classifyLift_impossible_family_of_harmonicEnvelope_NoSq
+      hbc hInfra hHarm hNoExcAll hNoSq)
 
 /--
 phase-04 接続補題:
