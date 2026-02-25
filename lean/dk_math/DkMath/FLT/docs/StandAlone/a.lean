@@ -1680,3 +1680,21 @@ theorem FLT_d3_by_padicValNat_of_NoSqInput {a b c : ℕ}
   }
   exact FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput
     ha hb hc hab hBase
+
+/-
+#print axioms FLT_d3_by_padicValNat
+#print axioms FLT_d3_by_padicValNat_of_NoSqOnS0
+#print axioms FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport
+#print axioms FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput
+#print axioms FLT_d3_by_padicValNat_of_harmonicEnvelope_classify_coprimeSupport
+#print axioms FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable
+#print axioms FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable_coprimeSupport
+#print axioms FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport
+#print axioms FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport
+#print axioms FLT_d3_by_padicValNat_of_GEisensteinCore_with_reachability_coprimeSupport
+#print axioms FLT_d3_by_padicValNat_of_GEisensteinCore_via_reachability_coprimeSupport
+#print axioms GEisenstein_descent_reaches_zero_of_core
+#print axioms GEisenstein_descent_reaches_zero_of_descentClassify_primitiveSized
+#print axioms FLT_d3_by_padicValNat_of_DescentBaseInput
+#print axioms FLT_d3_by_padicValNat_of_NoSqInput
+-/
