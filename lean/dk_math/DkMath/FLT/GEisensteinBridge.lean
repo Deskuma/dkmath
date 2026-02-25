@@ -560,24 +560,36 @@ structure NumberTheoryDescentState where
 
 namespace NumberTheoryDescentState
 
-/-- 数論降下で使う暫定測度（第1版）: `c + b + q`。 -/
-def measure (s : NumberTheoryDescentState) : ℕ := s.c + s.b + s.q
+/-- 数論降下で使う測度（第2版）: `q`。 -/
+def measure (s : NumberTheoryDescentState) : ℕ := s.q
+
+/--
+数論降下の中核条件（構成の正当性）。
+現段階では `c,b` が保存されることを要求する。
+-/
+def IsStepCore (s t : NumberTheoryDescentState) : Prop :=
+  t.c = s.c ∧ t.b = s.b
 
 /--
 次状態 `t` が `s` からの数論降下ステップであることを表す関係。
 本実装ではこの関係に具体的な構成条件を追加していく。
 -/
 def IsStep (s t : NumberTheoryDescentState) : Prop :=
-  measure t < measure s
+  IsStepCore s t ∧ measure t < measure s
 
 /-- phase-11 の最初の固定点: 降下ステップ存在性の型。 -/
 def StepExists : Prop :=
   ∀ s : NumberTheoryDescentState, ∃ t : NumberTheoryDescentState, IsStep s t
 
+/-- `IsStep` から `Core 条件` を取り出す。 -/
+lemma core_of_isStep {s t : NumberTheoryDescentState}
+    (h : IsStep s t) :
+    IsStepCore s t := h.1
+
 /-- 降下ステップは測度を厳密減少させる。 -/
 lemma measure_lt_of_isStep {s t : NumberTheoryDescentState}
     (h : IsStep s t) :
-    measure t < measure s := h
+    measure t < measure s := h.2
 
 /-- 数論降下の次状態関数。 -/
 abbrev StepFunction : Type := NumberTheoryDescentState → NumberTheoryDescentState
@@ -642,7 +654,7 @@ lemma false_of_state_of_stepExists (hex : StepExists)
         intro s hs
         rcases hex s with ⟨t, ht⟩
         have ht' : measure t < n := by
-          simpa [IsStep, hs] using ht
+          simpa [hs] using (measure_lt_of_isStep ht)
         exact ih (measure t) ht' t rfl
   exact hmain (measure s) s rfl
 

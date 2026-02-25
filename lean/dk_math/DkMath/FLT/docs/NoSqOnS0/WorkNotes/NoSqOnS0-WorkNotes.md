@@ -326,3 +326,20 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（降下仕様の健全化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+- 変更内容:
+  1. `NumberTheoryDescentState.measure` を `c+b+q` から `q` へ変更
+  2. `NumberTheoryDescentState.IsStepCore` を追加（現段階は `c,b` 保存）
+  3. `NumberTheoryDescentState.IsStep := IsStepCore ∧ measure減少` へ強化
+  4. `core_of_isStep`, `measure_lt_of_isStep` を整備
+  5. `false_of_state_of_stepExists` の減少抽出を `measure_lt_of_isStep` 経由に修正
+- 意図:
+  - 「正当な遷移条件 + 測度減少」の2層構造に修正し、降下仕様を明示化。
+  - 測度軸を `q` に統一して、`PrimitiveSquareReduction.hlt : q' < q` と整合させる。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。
