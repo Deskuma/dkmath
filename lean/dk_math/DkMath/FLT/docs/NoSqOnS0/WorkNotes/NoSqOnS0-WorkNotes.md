@@ -343,3 +343,25 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（LocalReduce 連結）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `NumberTheoryDescentState.nextOfReduction`
+  2. `NumberTheoryDescentState.isStep_of_reduction`
+  3. `NumberTheoryDescentState.LocalReduce`
+  4. `NumberTheoryDescentState.stepFunction_of_localReduce`
+  5. `NumberTheoryDescentState.stepDecreases_of_localReduce`
+  6. `NumberTheoryDescentState.stepSpec_of_localReduce`
+  7. `NumberTheoryDescentState.stepExists_of_localReduce`
+  8. `FLT_d3_by_padicValNat_of_numberTheoryLocalReduce_coprimeSupport_direct`
+- 意図:
+  - 局所縮小データ `LocalReduce` を与えると、
+    `StepExists -> NonLiftable -> NoSq -> FLT` が機械的に接続される構成を完成。
+  - 次段は `LocalReduce` の実体（数論補題）を埋めるだけ。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。

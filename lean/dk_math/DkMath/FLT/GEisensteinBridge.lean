@@ -564,11 +564,26 @@ namespace NumberTheoryDescentState
 def measure (s : NumberTheoryDescentState) : ℕ := s.q
 
 /--
+`PrimitiveSquareReduction` から次状態を組み立てる。
+`c,b` とその付随証明は保持し、`q` を `q'` に更新する。
+-/
+def nextOfReduction (s : NumberTheoryDescentState)
+    (red : PrimitiveSquareReduction s.c s.b s.q) :
+    NumberTheoryDescentState :=
+  { c := s.c
+    b := s.b
+    q := red.q'
+    hbc := s.hbc
+    hcop := s.hcop
+    hPrim := red.hPrim
+    hSq := red.hSq }
+
+/--
 数論降下の中核条件（構成の正当性）。
-現段階では `c,b` が保存されることを要求する。
+`t` がある `PrimitiveSquareReduction` から生成された状態であることを要求する。
 -/
 def IsStepCore (s t : NumberTheoryDescentState) : Prop :=
-  t.c = s.c ∧ t.b = s.b
+  ∃ red : PrimitiveSquareReduction s.c s.b s.q, t = nextOfReduction s red
 
 /--
 次状態 `t` が `s` からの数論降下ステップであることを表す関係。
@@ -590,6 +605,13 @@ lemma core_of_isStep {s t : NumberTheoryDescentState}
 lemma measure_lt_of_isStep {s t : NumberTheoryDescentState}
     (h : IsStep s t) :
     measure t < measure s := h.2
+
+/-- `PrimitiveSquareReduction` から `IsStep` を作る。 -/
+lemma isStep_of_reduction (s : NumberTheoryDescentState)
+    (red : PrimitiveSquareReduction s.c s.b s.q) :
+    IsStep s (nextOfReduction s red) := by
+  refine ⟨⟨red, rfl⟩, ?_⟩
+  simpa [measure, nextOfReduction] using red.hlt
 
 /-- 数論降下の次状態関数。 -/
 abbrev StepFunction : Type := NumberTheoryDescentState → NumberTheoryDescentState
@@ -618,6 +640,29 @@ structure StepSpec where
 /-- `StepSpec` から `StepExists` を得る。 -/
 lemma stepExists_of_spec (spec : StepSpec) : StepExists := by
   exact stepExists_of_stepFunction spec.next spec.decreases
+
+/-- 全状態で reduction を与えるローカル降下入力。 -/
+abbrev LocalReduce : Type :=
+  ∀ s : NumberTheoryDescentState, PrimitiveSquareReduction s.c s.b s.q
+
+/-- `LocalReduce` から次状態関数を作る。 -/
+def stepFunction_of_localReduce (reduce : LocalReduce) : StepFunction :=
+  fun s => nextOfReduction s (reduce s)
+
+/-- `LocalReduce` は `StepDecreases` を満たす。 -/
+lemma stepDecreases_of_localReduce (reduce : LocalReduce) :
+    StepDecreases (stepFunction_of_localReduce reduce) := by
+  intro s
+  exact isStep_of_reduction s (reduce s)
+
+/-- `LocalReduce` から `StepSpec` を作る。 -/
+def stepSpec_of_localReduce (reduce : LocalReduce) : StepSpec where
+  next := stepFunction_of_localReduce reduce
+  decreases := stepDecreases_of_localReduce reduce
+
+/-- `LocalReduce` から `StepExists` を得る。 -/
+lemma stepExists_of_localReduce (reduce : LocalReduce) : StepExists := by
+  exact stepExists_of_spec (stepSpec_of_localReduce reduce)
 
 /--
 `StepExists` から `StepSpec` を（選択公理で）構成する。

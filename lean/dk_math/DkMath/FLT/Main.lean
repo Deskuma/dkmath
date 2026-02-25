@@ -501,6 +501,21 @@ theorem FLT_d3_by_padicValNat_of_numberTheoryStepExists_coprimeSupport_direct {a
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
 
 /--
+数論ローカル降下入力 (`LocalReduce`) から `StepExists` を経由して接続する入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryLocalReduce_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (reduce : NumberTheoryDescentState.LocalReduce) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hex : NumberTheoryDescentState.StepExists :=
+    NumberTheoryDescentState.stepExists_of_localReduce reduce
+  exact FLT_d3_by_padicValNat_of_numberTheoryStepExists_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime hex
+
+/--
 GEisenstein 下降法コア述語を直接受ける入口。
 -/
 theorem FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport {a b c : ℕ}
