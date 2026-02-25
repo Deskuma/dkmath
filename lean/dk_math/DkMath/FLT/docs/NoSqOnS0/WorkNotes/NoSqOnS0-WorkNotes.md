@@ -441,6 +441,28 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  11:47
+
+- phase-10 実装（descent frame の実用化）
+  - `GEisensteinBridge.lean`
+    - `GEisensteinDescentFrame` の定義を更新:
+      - 旧: `step : State -> State`（常に減少要求）
+      - 新: `step : (s : State) -> measure s > 0 -> State`
+      - 新: `step_decreases` も `measure s > 0` 前提つき
+    - 目的:
+      - 終端状態（`measure = 0`）を自然に表現できるようにする。
+      - 非空の将来実装でも矛盾なく下降フレームを構築可能にする。
+    - `emptyGEisensteinDescentFrame` は新シグネチャに追随。
+  - `README.md`
+    - `step` が `measure>0` 条件付きであることを明記
+
+- 位置づけ
+  - これで frame 定義は「常に次状態を持つ」強すぎる制約を外し、
+    実際の well-founded 下降（終端あり）を実装できる型になった。
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:53
 
 - phase-10 API 整理（`coprimeSupport` 系の最小仮定化）

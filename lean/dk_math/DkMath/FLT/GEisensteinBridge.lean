@@ -58,8 +58,8 @@ GEisenstein 層で供給する下降法コア。
 structure GEisensteinDescentFrame (c b : ℕ) where
   State : Type
   measure : State → ℕ
-  step : State → State
-  step_decreases : ∀ s : State, measure (step s) < measure s
+  step : (s : State) → measure s > 0 → State
+  step_decreases : ∀ (s : State) (hs : measure s > 0), measure (step s hs) < measure s
 
 /--
 下降法枠の最小実装（空状態）。
@@ -71,10 +71,10 @@ def emptyGEisensteinDescentFrame (c b : ℕ) : GEisensteinDescentFrame c b where
     intro s
     cases s
   step := by
-    intro s
+    intro s hs
     cases s
   step_decreases := by
-    intro s
+    intro s hs
     cases s
 
 /--

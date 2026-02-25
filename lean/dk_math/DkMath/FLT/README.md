@@ -41,7 +41,8 @@
   - `descent` 側インターフェース
     `DescentClassifyImpossibleOnPrimitive` への接続点を提供。
   - `GEisensteinDescentCore` 構造体で下降法コアを段階拡張可能。
-  - `GEisensteinDescentFrame` で縮小写像枠を保持（現状は空状態実装）。
+  - `GEisensteinDescentFrame` で縮小写像枠を保持。
+    - `step` は `measure s > 0` のときのみ要求する設計（終端状態を許容）。
 
 - `CosmicFormula/CosmicFormulaBinom.lean`
   - `add_pow_gap_factor`, `add_pow_tail_u2_*`, `two_gap_xy_factor*` を提供。
