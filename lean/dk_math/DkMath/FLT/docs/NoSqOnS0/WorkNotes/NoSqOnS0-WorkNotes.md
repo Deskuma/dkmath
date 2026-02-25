@@ -80,3 +80,23 @@ theorem nonLiftableS0_of_minCounterexample
 [議事録](../../discussion-infinite-descent.md)
 
 ## 作業ログ
+
+### 2026-02-25 phase-11 方針固め（議事録反映）
+
+- 読了資料:
+  - `lean/dk_math/DkMath/FLT/docs/discussion-infinite-descent.md`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 現在の到達点:
+  - `GEisensteinBridge` に下降フレーム（`measure` / `step` / `step_pred`）と停止到達 API は実装済み。
+  - `Main` への接続（`..._of_descentClassify_...`, `..._of_GEisensteinCore_...`）は実装済み。
+  - ただし `DescentClassifyImpossibleOnPrimitive` の中身は、まだ `NoSq` 系供給に依存している。
+- phase-11 の本丸（未充足）:
+  - `PrimitiveOnS0 c b q -> ¬ q^2 ∣ S0_nat c b` を、外部 `hNonLift` 仮定なしで供給する下降法コアを作る。
+- 実装方針（確定）:
+  1. `GEisensteinBridge` に「最小反例/測度」インターフェースを追加し、`measure` の厳密減少を証明可能形で固定する。
+  2. `PrimitiveOnS0` を保持する状態から、`q^2 ∣ S0` 仮定時により小さい候補へ落とす `step` 補題群を分離実装する。
+  3. 最小反例矛盾 (`wellFounded` / 最小元原理) から `DescentClassifyImpossibleOnPrimitive` を生成する。
+  4. 既存 `nonLiftableS0_family_of_descentClassify` に接続し、`Main` 公開入口は差し替えなしで完成させる。
+- 直近の着手点（次コミット）:
+  - `GEisensteinBridge.lean` に phase-11 用の state/measure スケルトン補題を追加する。
+  - 既存 `primitiveSized` の `pred` 減少は「停止性 API」として残し、実体降下補題は別名前空間で段階追加する。
