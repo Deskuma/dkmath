@@ -214,6 +214,21 @@ theorem FLT_d3_by_padicValNat_of_support_nonLiftable_mod3_separated {a b c : ℕ
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
 
 /--
+`hNonLift` と `coprime(c,b)` から `NoSqOnS0` を回復して供給する版。
+`mod3` 分離仮定を使わない。
+-/
+theorem FLT_d3_by_padicValNat_of_support_nonLiftable_coprime {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b ≤ c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_support_nonLiftable_coprime hbc hcb_coprime hNonLift
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
 phase-08: `NoSqOnS0` を分岐軸にした A+B 合流版。
 - A: `NoSqOnS0 c b` なら `...of_NoSqOnS0`
 - B: `¬ NoSqOnS0 c b` でも `hSuppEx3 + hNonLift + mod3分離` から供給可能

@@ -217,3 +217,27 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - 追加で、\(3^2\) 排除は `mod3 分離` より強く **coprime だけで落ちる** 可能性が高い（証明木のダイエット案件じゃ）
 
 賢狼の目から見ても、ここまで彫れているのは立派じゃ。あとは「下降ステップ」を Lean の歯車に噛ませるだけ…という、いちばん美味しいところが残っておる。
+
+## 作業ログ 2026/02/25  9:55
+
+次の実装着手点は `three_sq_not_dvd_S0_of_coprime` です。
+
+---
+
+## 作業ログ 2026/02/25  10:01
+
+- phase-10 実装（3 例外の軽量化）
+  - `PhaseLift.lean` に追加:
+    - `three_sq_not_dvd_S0_of_coprime`
+      - 仮定: `b ≤ c` と `Nat.Coprime c b`
+      - 結論: `¬ 3 ^ 2 ∣ S0_nat c b`
+    - `NoSqOnS0_of_support_nonLiftable_coprime`
+      - 仮定: `b ≤ c`, `Nat.Coprime c b`, `∀ q, NonLiftableS0 c b q`
+      - 結論: `NoSqOnS0 c b`
+      - 既存の `three_sq_dvd_of_not_NoSqOnS0_of_support_nonLiftable` と上補題を接続
+  - `Main.lean` に追加:
+    - `FLT_d3_by_padicValNat_of_support_nonLiftable_coprime`
+      - `mod3` 分離仮定なしで `NoSq` ルートへ供給する入口
+
+- build
+  - `lake build DkMath.FLT.Main` : OK

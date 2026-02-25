@@ -260,6 +260,68 @@ lemma three_sq_not_dvd_of_mod3_separated {c b : ℕ}
     exact dvd_trans (by decide : 3 ∣ 3 ^ 2) h9
   exact (not_three_dvd_S0_of_mod3_separated hc_nz hb_nz hsep) h3S0
 
+lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
+    (hbc : b ≤ c)
+    (hcop : Nat.Coprime c b) :
+    ¬ 3 ^ 2 ∣ S0_nat c b := by
+  intro h9
+  have h3S0 : 3 ∣ S0_nat c b := by
+    exact dvd_trans (by decide : 3 ∣ 3 ^ 2) h9
+  let x : ℕ := c - b
+  have hx : c = x + b := by
+    dsimp [x]
+    exact (Nat.sub_add_cancel hbc).symm
+  have hS0_eq_x : S0_nat c b = x ^ 2 + 3 * x * b + 3 * b ^ 2 := by
+    rw [hx]
+    unfold S0_nat
+    ring
+  have h3x2 : 3 ∣ x ^ 2 := by
+    have hsum : 3 ∣ x ^ 2 + 3 * x * b + 3 * b ^ 2 := by
+      simpa [hS0_eq_x] using h3S0
+    have hrest : 3 ∣ 3 * x * b + 3 * b ^ 2 := by
+      have h1 : 3 ∣ 3 * x * b := dvd_mul_of_dvd_left (dvd_mul_right 3 x) b
+      have h2 : 3 ∣ 3 * b ^ 2 := dvd_mul_right 3 (b ^ 2)
+      exact dvd_add h1 h2
+    have hsum' : 3 ∣ x ^ 2 + (3 * x * b + 3 * b ^ 2) := by
+      simpa [Nat.add_assoc] using hsum
+    have hsum'' : 3 ∣ (3 * x * b + 3 * b ^ 2) + x ^ 2 := by
+      simpa [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using hsum'
+    exact (Nat.dvd_add_right hrest).1 hsum''
+  have h3_sub : 3 ∣ c - b := by
+    have h3x : 3 ∣ x := Nat.prime_three.dvd_of_dvd_pow h3x2
+    simpa [x] using h3x
+  rcases h3_sub with ⟨k, hk⟩
+  have hc_eq : c = 3 * k + b := by
+    calc
+      c = (c - b) + b := (Nat.sub_add_cancel hbc).symm
+      _ = 3 * k + b := by simpa [hk]
+  have hS0_eq_3mul : S0_nat c b = 3 * (b ^ 2 + 3 * k * b + 3 * k ^ 2) := by
+    rw [hc_eq]
+    unfold S0_nat
+    ring
+  have h3_inner : 3 ∣ b ^ 2 + 3 * k * b + 3 * k ^ 2 := by
+    have hmul : 3 * 3 ∣ 3 * (b ^ 2 + 3 * k * b + 3 * k ^ 2) := by
+      simpa [pow_two, hS0_eq_3mul, Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm] using h9
+    exact Nat.dvd_of_mul_dvd_mul_left (by decide : 0 < 3) hmul
+  have h3_rest : 3 ∣ 3 * k * b + 3 * k ^ 2 := by
+    have h1 : 3 ∣ 3 * k * b := dvd_mul_of_dvd_left (dvd_mul_right 3 k) b
+    have h2 : 3 ∣ 3 * k ^ 2 := dvd_mul_right 3 (k ^ 2)
+    exact dvd_add h1 h2
+  have h3_b2 : 3 ∣ b ^ 2 := by
+    have h3_inner' : 3 ∣ b ^ 2 + (3 * k * b + 3 * k ^ 2) := by
+      simpa [Nat.add_assoc] using h3_inner
+    have h3_inner'' : 3 ∣ (3 * k * b + 3 * k ^ 2) + b ^ 2 := by
+      simpa [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using h3_inner'
+    exact (Nat.dvd_add_right h3_rest).1 h3_inner''
+  have h3_b : 3 ∣ b := Nat.prime_three.dvd_of_dvd_pow h3_b2
+  have h3_sub' : 3 ∣ c - b := ⟨k, hk⟩
+  have h3_c : 3 ∣ c := by
+    have : 3 ∣ (c - b) + b := dvd_add h3_sub' h3_b
+    simpa [Nat.sub_add_cancel hbc] using this
+  have h3_gcd : 3 ∣ Nat.gcd c b := Nat.dvd_gcd h3_c h3_b
+  have h3_one : 3 ∣ 1 := by simpa [hcop.gcd_eq_one] using h3_gcd
+  exact Nat.prime_three.not_dvd_one h3_one
+
 lemma NoSqOnS0_of_support_nonLiftable_mod3_separated {c b : ℕ}
     (hSuppEx3 : S0PrimeSupportExceptThree c b)
     (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q)
@@ -271,6 +333,18 @@ lemma NoSqOnS0_of_support_nonLiftable_mod3_separated {c b : ℕ}
   have h9 : 3 ^ 2 ∣ S0_nat c b :=
     three_sq_dvd_of_not_NoSqOnS0_of_support_nonLiftable hNoSq_false hSuppEx3 hNonLift
   exact (three_sq_not_dvd_of_mod3_separated hc_nz hb_nz hsep) h9
+
+lemma NoSqOnS0_of_support_nonLiftable_coprime {c b : ℕ}
+    (hbc : b ≤ c)
+    (hcop : Nat.Coprime c b)
+    (hNonLift : ∀ q : ℕ, NonLiftableS0 c b q) :
+    NoSqOnS0 c b := by
+  by_contra hNoSq_false
+  have hSuppEx3 : S0PrimeSupportExceptThree c b :=
+    s0PrimeSupportExceptThree_of_coprime hbc hcop
+  have h9 : 3 ^ 2 ∣ S0_nat c b :=
+    three_sq_dvd_of_not_NoSqOnS0_of_support_nonLiftable hNoSq_false hSuppEx3 hNonLift
+  exact (three_sq_not_dvd_S0_of_coprime hbc hcop) h9
 
 /--
 `q = 3` 例外を除去できると、通常の support 条件へ戻せる。
