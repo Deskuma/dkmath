@@ -457,3 +457,22 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（StepExists と LocalReduce/Kernel の同値化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `NumberTheoryDescentOn.localReduce_of_stepExists`（`Classical.choose`）
+  2. `NumberTheoryDescentOn.stepExists_iff_nonempty_localReduce`
+  3. `NumberTheoryDescentOn.stepExists_iff_nonempty_kernel`（`hbc/hcop` 前提）
+  4. `Main` に `FLT_d3_by_padicValNat_of_numberTheoryHasKernel_coprimeSupport_direct`
+- 変更内容:
+  1. `StepOn/ReduceOn/LocalReduceOn` 入口は kernel 中心の `NoSq` 回復へ統一済み
+- 意図:
+  - 「次状態存在仕様」「local reduce」「kernel 存在」を相互変換できる形にして、
+    今後の数論本体で `Nonempty (ReductionKernel c b)` を示すだけでも Main 入口へ接続可能にした。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。

@@ -848,6 +848,30 @@ lemma stepExists_of_localReduce {c b : ℕ}
     (stepDecreases_of_localReduce reduce)
 
 /--
+`StepExists`（固定 `(c,b)`）から `LocalReduce` を（選択公理で）構成する。
+-/
+noncomputable def localReduce_of_stepExists {c b : ℕ}
+    (hex : StepExists c b) :
+    LocalReduce c b := by
+  intro s
+  let t : State c b := Classical.choose (hex s)
+  let ht : IsStep s t := Classical.choose_spec (hex s)
+  let hcore : IsStepCore s t := core_of_isStep ht
+  exact Classical.choose hcore
+
+/--
+`StepExists` と `LocalReduce` の同値（固定 `(c,b)` 版）。
+-/
+lemma stepExists_iff_nonempty_localReduce {c b : ℕ} :
+    StepExists c b ↔ Nonempty (LocalReduce c b) := by
+  constructor
+  · intro hex
+    exact ⟨localReduce_of_stepExists hex⟩
+  · intro hreduce
+    rcases hreduce with ⟨reduce⟩
+    exact stepExists_of_localReduce reduce
+
+/--
 固定 `(c,b)` の数論局所縮小カーネル。
 `nextQ` と、primitive/平方因子の保存、および strict 減少を1束にする。
 -/
@@ -898,6 +922,22 @@ def kernel_of_localReduce {c b : ℕ}
   decreases := by
     intro q hPrim hSq
     exact (reduce ⟨q, hbc, hcop, hPrim, hSq⟩).hlt
+
+/--
+`StepExists` と `ReductionKernel` の同値（固定 `(c,b)` 版）。
+`StepExists -> kernel` 方向では、`hbc/hcop` を使って `LocalReduce` を kernel 化する。
+-/
+lemma stepExists_iff_nonempty_kernel {c b : ℕ}
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b) :
+    StepExists c b ↔ Nonempty (ReductionKernel c b) := by
+  constructor
+  · intro hex
+    let reduce : LocalReduce c b := localReduce_of_stepExists hex
+    exact ⟨kernel_of_localReduce hbc hcop reduce⟩
+  · intro hker
+    rcases hker with ⟨ker⟩
+    exact stepExists_of_localReduce (localReduce_of_kernel ker)
 
 /-- `ReductionKernel` から `StepExists` を得る。 -/
 lemma stepExists_of_kernel {c b : ℕ}
