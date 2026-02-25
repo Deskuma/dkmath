@@ -48,7 +48,7 @@ def parse_unknowns(build_proc: subprocess.CompletedProcess) -> List[Dict[str, An
     for m in UNKNOWN_RE.finditer(out):
         matches.append(
             {
-                "file": m.group("file"),
+                "file": m.group("file").strip(),
                 "line": int(m.group("line")),
                 "col": int(m.group("col")),
                 "ident": m.group("ident"),
