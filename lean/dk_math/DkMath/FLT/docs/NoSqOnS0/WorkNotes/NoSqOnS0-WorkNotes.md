@@ -242,6 +242,26 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
 - build
   - `lake build DkMath.FLT.Main` : OK
 
+## 作業ログ 2026/02/25  10:53
+
+- phase-10 API 整理（`coprimeSupport` 系の最小仮定化）
+  - `Main.lean`
+    - `FLT_d3_by_padicValNat_of_harmonicEnvelope_nonLiftable_coprimeSupport`
+      - 未使用だった `hHarm / hNoExcAll / mod3` 引数を削除
+    - `FLT_d3_by_padicValNat_of_harmonicEnvelope_classify_coprimeSupport`
+      - 未使用だった `hHarm / hNoExcAll / mod3` 引数を削除
+    - `FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport`
+      - `mod3` 引数を削除し、上記 classify 版への接続を簡約
+    - `FLT_d3_by_padicValNat_of_NoSqInput`
+      - 未使用の `_hNoExcAll` 引数を削除
+  - `PhaseLift.lean`
+    - `three_sq_not_dvd_S0_of_coprime` 周辺の不要 `simpa` 警告を解消（証明内容は不変）
+  - `README.md`
+    - `*_coprimeSupport` 系が `mod3` 分離引数なしの最小入口であることを追記
+
+- build
+  - `lake build DkMath.FLT.Main` : OK
+
 ## 作業ログ 2026/02/25  10:14
 
 - phase-10 実装（基底入力の軽量化）

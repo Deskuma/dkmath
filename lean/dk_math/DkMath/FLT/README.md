@@ -86,6 +86,7 @@ graph LR
   - `NoSqBaseInput` に `hbc`, `coprime`, `hNonLift` を束ねる
   - `FLT_d3_by_padicValNat_of_NoSqInput`
   - `NoSqInput` に `hbc`, `coprime`, `hHarm`, `hNoSq` を束ねる
+  - `*_coprimeSupport` 系は最小仮定版に整理済み（`mod3` 分離引数なし）
 
 ## 5. 作業ログ
 

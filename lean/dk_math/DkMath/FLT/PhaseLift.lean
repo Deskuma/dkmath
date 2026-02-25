@@ -288,7 +288,7 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
   have hc_eq : c = 3 * k + b := by
     calc
       c = (c - b) + b := (Nat.sub_add_cancel hbc).symm
-      _ = 3 * k + b := by simpa [hk]
+      _ = 3 * k + b := by simp [hk]
   have hS0_eq_3mul : S0_nat c b = 3 * (b ^ 2 + 3 * k * b + 3 * k ^ 2) := by
     rw [hc_eq]
     unfold S0_nat
@@ -313,7 +313,9 @@ lemma three_sq_not_dvd_S0_of_coprime {c b : ℕ}
     have : 3 ∣ (c - b) + b := dvd_add h3_sub' h3_b
     simpa [Nat.sub_add_cancel hbc] using this
   have h3_gcd : 3 ∣ Nat.gcd c b := Nat.dvd_gcd h3_c h3_b
-  have h3_one : 3 ∣ 1 := by simpa [hcop.gcd_eq_one] using h3_gcd
+  have h3_one : 3 ∣ 1 := by
+    rw [← hcop.gcd_eq_one]
+    exact h3_gcd
   exact Nat.prime_three.not_dvd_one h3_one
 
 lemma NoSqOnS0_of_support_nonLiftable_mod3_separated {c b : ℕ}
