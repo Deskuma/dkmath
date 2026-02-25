@@ -545,6 +545,21 @@ theorem FLT_d3_by_padicValNat_of_numberTheoryReduceOn_coprimeSupport_direct {a b
     ha hb hc hab hbc hcb_coprime hex
 
 /--
+固定 `(c,b)` の数論 `ReductionKernel` から、`StepExistsOn` 経由で接続する入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryKernel_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (ker : NumberTheoryDescentOn.ReductionKernel c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hex : NumberTheoryDescentOn.StepExists c b :=
+    numberTheoryStepExistsOn_of_kernel ker
+  exact FLT_d3_by_padicValNat_of_numberTheoryStepExistsOn_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime hex
+
+/--
 固定 `(c,b)` の数論ローカル降下入力 (`LocalReduce`) から接続する入口。
 -/
 theorem FLT_d3_by_padicValNat_of_numberTheoryLocalReduceOn_coprimeSupport_direct {a b c : ℕ}

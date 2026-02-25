@@ -847,6 +847,42 @@ lemma stepExists_of_localReduce {c b : ℕ}
     (stepFunction_of_localReduce reduce)
     (stepDecreases_of_localReduce reduce)
 
+/--
+固定 `(c,b)` の数論局所縮小カーネル。
+`nextQ` と、primitive/平方因子の保存、および strict 減少を1束にする。
+-/
+structure ReductionKernel (c b : ℕ) where
+  nextQ :
+    ∀ {q : ℕ}, PrimitiveOnS0 c b q → q ^ 2 ∣ S0_nat c b → ℕ
+  preserves_prim :
+    ∀ {q : ℕ} (hPrim : PrimitiveOnS0 c b q) (hSq : q ^ 2 ∣ S0_nat c b),
+      PrimitiveOnS0 c b (nextQ hPrim hSq)
+  preserves_sq :
+    ∀ {q : ℕ} (hPrim : PrimitiveOnS0 c b q) (hSq : q ^ 2 ∣ S0_nat c b),
+      (nextQ hPrim hSq) ^ 2 ∣ S0_nat c b
+  decreases :
+    ∀ {q : ℕ} (hPrim : PrimitiveOnS0 c b q) (hSq : q ^ 2 ∣ S0_nat c b),
+      nextQ hPrim hSq < q
+
+/--
+`ReductionKernel` から固定 `(c,b)` 版 `LocalReduce` を構成する。
+-/
+def localReduce_of_kernel {c b : ℕ}
+    (ker : ReductionKernel c b) :
+    LocalReduce c b := by
+  intro s
+  refine
+    { q' := ker.nextQ s.hPrim s.hSq
+      hPrim := ker.preserves_prim s.hPrim s.hSq
+      hSq := ker.preserves_sq s.hPrim s.hSq
+      hlt := ker.decreases s.hPrim s.hSq }
+
+/-- `ReductionKernel` から `StepExists` を得る。 -/
+lemma stepExists_of_kernel {c b : ℕ}
+    (ker : ReductionKernel c b) :
+    StepExists c b := by
+  exact stepExists_of_localReduce (localReduce_of_kernel ker)
+
 end NumberTheoryDescentOn
 
 /--
@@ -866,13 +902,38 @@ def numberTheoryLocalReduceOn_of_reduce {c b : ℕ}
   fun s => reduceNT s.hPrim s.hSq
 
 /--
+`NumberTheoryReduce` から固定 `(c,b)` の `ReductionKernel` を作る。
+-/
+def numberTheoryKernel_of_reduce {c b : ℕ}
+    (reduceNT : NumberTheoryReduce c b) :
+    NumberTheoryDescentOn.ReductionKernel c b where
+  nextQ := fun hPrim hSq => (reduceNT hPrim hSq).q'
+  preserves_prim := by
+    intro q hPrim hSq
+    exact (reduceNT hPrim hSq).hPrim
+  preserves_sq := by
+    intro q hPrim hSq
+    exact (reduceNT hPrim hSq).hSq
+  decreases := by
+    intro q hPrim hSq
+    exact (reduceNT hPrim hSq).hlt
+
+/--
+`PrimitiveSquareDescentStep` から固定 `(c,b)` の `ReductionKernel` を作る。
+-/
+noncomputable def numberTheoryKernel_of_step {c b : ℕ}
+    (hStep : PrimitiveSquareDescentStep c b) :
+    NumberTheoryDescentOn.ReductionKernel c b :=
+  numberTheoryKernel_of_reduce (numberTheoryReduce_of_step hStep)
+
+/--
 `PrimitiveSquareDescentStep` から、固定 `(c,b)` 版 `StepExists` を得る。
 -/
 lemma numberTheoryStepExistsOn_of_step {c b : ℕ}
     (hStep : PrimitiveSquareDescentStep c b) :
     NumberTheoryDescentOn.StepExists c b := by
-  exact NumberTheoryDescentOn.stepExists_of_localReduce
-    (numberTheoryLocalReduceOn_of_step hStep)
+  exact NumberTheoryDescentOn.stepExists_of_kernel
+    (numberTheoryKernel_of_step hStep)
 
 /--
 `NumberTheoryReduce` から、固定 `(c,b)` 版 `StepExists` を得る。
@@ -880,8 +941,16 @@ lemma numberTheoryStepExistsOn_of_step {c b : ℕ}
 lemma numberTheoryStepExistsOn_of_reduce {c b : ℕ}
     (reduceNT : NumberTheoryReduce c b) :
     NumberTheoryDescentOn.StepExists c b := by
-  exact NumberTheoryDescentOn.stepExists_of_localReduce
-    (numberTheoryLocalReduceOn_of_reduce reduceNT)
+  exact NumberTheoryDescentOn.stepExists_of_kernel
+    (numberTheoryKernel_of_reduce reduceNT)
+
+/--
+固定 `(c,b)` の `ReductionKernel` から `StepExistsOn` を得る。
+-/
+lemma numberTheoryStepExistsOn_of_kernel {c b : ℕ}
+    (ker : NumberTheoryDescentOn.ReductionKernel c b) :
+    NumberTheoryDescentOn.StepExists c b := by
+  exact NumberTheoryDescentOn.stepExists_of_kernel ker
 
 /--
 下降エンジンから `PrimitiveSquareDescentStep` 条件を回収する。

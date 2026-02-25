@@ -402,3 +402,41 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（ReductionKernel 導入: 実体補題3本の受け口）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `NumberTheoryDescentOn.ReductionKernel`
+     - `nextQ`
+     - `preserves_prim`
+     - `preserves_sq`
+     - `decreases`
+  2. `NumberTheoryDescentOn.localReduce_of_kernel`
+  3. `NumberTheoryDescentOn.stepExists_of_kernel`
+  4. `numberTheoryStepExistsOn_of_kernel`
+  5. `FLT_d3_by_padicValNat_of_numberTheoryKernel_coprimeSupport_direct`
+- 意図:
+  - 数論本体を「次候補構成 / primitive保存 / 平方因子保存 / strict減少」の3+1補題として独立実装可能にする。
+  - `ReductionKernel` を1つ与えれば `LocalReduce -> StepExistsOn -> NoSq -> FLT` に自動接続できるようにした。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（既存 step/reduce から ReductionKernel へ寄せる）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+- 追加内容:
+  1. `numberTheoryKernel_of_reduce`
+  2. `numberTheoryKernel_of_step`
+  3. `numberTheoryStepExistsOn_of_step` を kernel 経由へ切替
+  4. `numberTheoryStepExistsOn_of_reduce` を kernel 経由へ切替
+- 意図:
+  - 新設 `ReductionKernel` を中心に据え、既存の `step/reduce` 入力も同じ経路 (`kernel -> StepExistsOn`) に統一。
+  - 今後の本実装は kernel の4フィールドを埋めることに集中できる状態にした。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。
