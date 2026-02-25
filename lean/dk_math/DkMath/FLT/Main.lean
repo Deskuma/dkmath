@@ -148,9 +148,6 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
   have : (3 : ℕ) ≤ 1 := le_trans h_lower h_upper
   omega
 
-#print axioms FLT_d3_by_padicValNat  -- OK: 2026/02/24  6:27
--- 'DkMath.FLT.FLT_d3_by_padicValNat' depends on axioms: [propext, Classical.choice, Quot.sound]
-
 /--
 `NoSqOnS0 c b` を入力にした `FLT_d3_by_padicValNat` の派生版。
 -/
@@ -162,9 +159,6 @@ theorem FLT_d3_by_padicValNat_of_NoSqOnS0 {a b c : ℕ}
   apply FLT_d3_by_padicValNat ha hb hc hab
   intro q hq hq_dvd_diff hq_ndiv_diff
   exact hS0_not_sq_of_NoSqOnS0 (c := c) (b := b) hNoSq hq hq_dvd_diff hq_ndiv_diff
-
-#print axioms FLT_d3_by_padicValNat_of_NoSqOnS0  -- OK: 2026/02/23 15:47
--- 'DkMath.FLT.FLT_d3_by_padicValNat_of_NoSqOnS0' depends on axioms: [propext, Classical.choice, Quot.sound]
 
 /--
 phase-04: 非例外調和条件（skeleton）から
@@ -180,9 +174,6 @@ theorem FLT_d3_by_padicValNat_of_nonExceptionalHarmonic {a b c : ℕ}
   have hNoSq : NoSqOnS0 c b := NoSqOnS0_of_AllNonLiftableOnS0 hAll
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab
     hNoSq
-
-#print axioms FLT_d3_by_padicValNat_of_nonExceptionalHarmonic  -- OK: 2026/02/23 12:08
--- 'DkMath.FLT.FLT_d3_by_padicValNat_of_nonExceptionalHarmonic' depends on axioms: [propext, Classical.choice, Quot.sound]
 
 /--
 phase-04: `ExceptThree + mod3分離 + harmonic witness` から
@@ -267,9 +258,6 @@ theorem FLT_d3_by_padicValNat_by_cases_NoSq {a b c : ℕ}
   · exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
   · exact FLT_d3_by_padicValNat_of_support_nonLiftable_coprime
       ha hb hc hab hbc hcb_coprime hNonLift
-
-#print axioms FLT_d3_by_padicValNat_of_exceptThree_mod3_separated_harmonic  -- OK: 2026/02/23 15:36
--- 'DkMath.FLT.FLT_d3_by_padicValNat_of_exceptThree_mod3_separated_harmonic' depends on axioms: [propext, Classical.choice, Quot.sound]
 
 /--
 phase-04: `harmonic envelope + nonLiftable family` から
@@ -508,9 +496,6 @@ theorem FLT_d3_by_padicValNat_of_classifyLift {a b c : ℕ}
   have hnosq : noSquareGate x :=
     noSquareGate_of_classifyLift_impossible hprim hcls
   simpa [x, noSquareGate] using hnosq
-
-#print axioms FLT_d3_by_padicValNat  -- OK: 2026/02/23 12:08
--- 'DkMath.FLT.FLT_d3_by_padicValNat' depends on axioms: [propext, Classical.choice, Quot.sound]
 
 /-- FLT_d3_by_padicValNat_of_NoSqOnS0 と FLT_d3_by_padicValNat は等価である -/
 example
