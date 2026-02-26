@@ -454,3 +454,33 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
   - 結果: 成功（残る warning は linter 提案 + FLT スケルトンの `sorry` のみ）。
+
+### 2026-02-26 phase-12 継続（`FLT_case_3_via_tromino` を Mathlib で閉じる）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `Mathlib.NumberTheory.FLT.Three` を import
+  2. `FLT_case_3_via_tromino` を `fermatLastTheoremThree` で実装（`sorry` 2件削除）
+- 結果:
+  - `TriominoFLT.lean` の残 `sorry` は 2件（`FLT_from_tromino_tiling` と `FLT_general_via_tromino`）
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（残る warning は linter 提案 + `sorry` 2件）。
+
+### 2026-02-26 phase-12 継続（`n=3` 分岐を先行確定）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `FLT_from_tromino_tiling` に `n = 3 ∨ 4 ≤ n` の分岐を追加
+  2. `n = 3` 側は `fermatLastTheoremThree` で即閉じ
+  3. 未実装 `sorry` を `n ≥ 4` 側に限定
+  4. `FLT_general_via_tromino` も同様に `n=3` 側は `FLT_case_3_via_tromino` で閉じる形に整理
+- 意図:
+  - フェーズ12の未実装領域を「高指数 (`n ≥ 4`) 専用」に切り分け、次段実装の境界を明確化。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（残る `sorry` は高指数側 2件のみ）。

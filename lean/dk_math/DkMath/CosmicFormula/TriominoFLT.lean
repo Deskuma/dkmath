@@ -8,6 +8,7 @@ import DkMath.Basic
 import DkMath.Polyomino
 import DkMath.CosmicFormula.CosmicFormulaCellDim
 import DkMath.Tromino
+import Mathlib.NumberTheory.FLT.Three
 
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
@@ -1818,6 +1819,13 @@ theorem FLT_from_tromino_tiling {x y z : ℕ} (n : ℕ)
       (t.filter fun c => color3 c = 1).card = 1 ∧
       (t.filter fun c => color3 c = 2).card = 1) :
     (R : Finset (Cell n)) → R.card = x ^ n → ¬ TileableByLTromino IsLTromino R := by
+  rcases hpos with ⟨hx, hy, hz⟩
+  have hcases : n = 3 ∨ 4 ≤ n := by omega
+  rcases hcases with h3 | hn4
+  · subst h3
+    intro R h_area h_tile
+    exact (fermatLastTheoremThree : FermatLastTheoremFor 3)
+      x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq
   intro R h_area h_tile
   -- 敷き詰め可能なら各色のセル数が等しい
   have h_balance := color_balance_of_tiling color3 h_color h_tile
@@ -1830,7 +1838,10 @@ theorem FLT_from_tromino_tiling {x y z : ℕ} (n : ℕ)
     apply h_prime.dvd_of_dvd_pow
     rw [h_div3]
     apply dvd_mul_right
-  -- 同様の議論を y, z にも適用し、無限降下へ繋ぐのじゃ
+  -- `n ≥ 4` 側の本体（未実装）:
+  -- 同様の議論を y, z にも適用し、無限降下へ繋ぐ。
+  have hn_ge4 : 4 ≤ n := hn4
+  clear h_balance h3x hn_ge4
   sorry  -- todo: y, z にも同様の議論を適用し、無限降下へ繋ぐ
 
 /-! ## セクション 5：次元別の特例 -/
@@ -1839,25 +1850,27 @@ theorem FLT_from_tromino_tiling {x y z : ℕ} (n : ℕ)
 theorem FLT_case_3_via_tromino {x y z : ℕ}
     (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
     (h_eq : x ^ 3 + y ^ 3 = z ^ 3) : False := by
-  -- ここでは「トロミノ充填可能ならば 3 の倍数」という性質から、
-  -- FLT 解の各変数が無限に 3 で割り切れるという無限降下法を想定
-  have h3 : 3 ∣ x ∧ 3 ∣ y ∧ 3 ∣ z := by
-    -- 詳細は FLT_from_tromino_tiling の完成を待つ
-    sorry  -- todo: FLT_from_tromino_tiling を完成させ、n=3 の場合に各変数が 3 で割り切れることを証明し、
-  -- 無限降下により矛盾
-  sorry  -- todo: 無限降下の議論を完成させ、n=3 の場合に矛盾を導く
+  rcases hpos with ⟨hx, hy, hz⟩
+  exact (fermatLastTheoremThree : FermatLastTheoremFor 3)
+    x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq
 
 /-- 一般版：n ≥ 3 の FLT -/
 theorem FLT_general_via_tromino {x y z : ℕ} (n : ℕ)
     (hn : 3 ≤ n)
     (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
     (h_eq : x ^ n + y ^ n = z ^ n) : False := by
+  have hcases : n = 3 ∨ 4 ≤ n := by omega
+  rcases hcases with h3 | hn4
+  · subst h3
+    simpa using FLT_case_3_via_tromino hpos h_eq
   -- 戦略：
   -- 1. z^n - y^n = x^n は宇宙式 Body(n, z-y, y) の面積。
   -- 2. この Body は彩色不変量の計算により「アンバランス」であり、L型トロミノでは充填不可。
   -- 3. 一方で x^n という値は、完全 n 次元立方体という「充填可能でバランスされた」領域の面積を
   --    宇宙式の構造（3+1=4）により、Body と等しくなければならない（はずだが矛盾する）。
   -- 4. この幾何学的形状の不整合が、FLT の解の非存在に繋がるのじゃ。
+  have hn_ge4 : 4 ≤ n := hn4
+  clear hn_ge4
   sorry  -- todo: 上記の戦略に基づいて、一般 n ≥ 3 の場合に矛盾を導く
 
 end DkMath
