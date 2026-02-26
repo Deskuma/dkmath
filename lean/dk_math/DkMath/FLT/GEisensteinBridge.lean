@@ -1390,6 +1390,84 @@ lemma NoSqOnS0_of_numberTheoryHasLocalReduceFamily {c b : ℕ}
   exact NoSqOnS0_of_numberTheoryHasKernel_coprime hker hbc hcop hq hqS0
 
 /--
+`hasStep` family から `hasKernel` family を作る。
+-/
+def numberTheoryHasKernelFamily_of_hasStep
+    (hasStep :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        PrimitiveSquareDescentStep c b) :
+    ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+      Nonempty (NumberTheoryDescentOn.ReductionKernel c b) := by
+  intro c b hbc hcop
+  exact numberTheoryHasKernel_of_step (hasStep hbc hcop)
+
+/--
+`hasReduce` family から `hasKernel` family を作る。
+-/
+def numberTheoryHasKernelFamily_of_hasReduce
+    (hasReduce :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        NumberTheoryReduce c b) :
+    ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+      Nonempty (NumberTheoryDescentOn.ReductionKernel c b) := by
+  intro c b hbc hcop
+  exact numberTheoryHasKernel_of_reduce (hasReduce hbc hcop)
+
+/--
+`hasStepExists` family から `hasKernel` family を作る。
+-/
+def numberTheoryHasKernelFamily_of_hasStepExists
+    (hasStepExists :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        NumberTheoryDescentOn.StepExists c b) :
+    ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+      Nonempty (NumberTheoryDescentOn.ReductionKernel c b) := by
+  intro c b hbc hcop
+  exact numberTheoryHasKernel_of_stepExistsOn hbc hcop (hasStepExists hbc hcop)
+
+/--
+`hasLocalReduce` family から `hasKernel` family を作る。
+-/
+def numberTheoryHasKernelFamily_of_hasLocalReduce
+    (hasLocalReduce :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        NumberTheoryDescentOn.LocalReduce c b) :
+    ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+      Nonempty (NumberTheoryDescentOn.ReductionKernel c b) := by
+  intro c b hbc hcop
+  exact numberTheoryHasKernel_of_localReduce hbc hcop (hasLocalReduce hbc hcop)
+
+/--
+`hasKernel` family から `hasReduce` family を作る。
+-/
+noncomputable def numberTheoryHasReduceFamily_of_hasKernel
+    (hasKernel :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        Nonempty (NumberTheoryDescentOn.ReductionKernel c b)) :
+    ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+      NumberTheoryReduce c b := by
+  intro c b hbc hcop
+  let ker : NumberTheoryDescentOn.ReductionKernel c b := Classical.choice (hasKernel hbc hcop)
+  intro q hPrim hSq
+  exact (NumberTheoryDescentOn.localReduce_of_kernel ker)
+    ⟨q, hbc, hcop, hPrim, hSq⟩
+
+/--
+`hasKernel` family から `hasStep` family を作る。
+-/
+noncomputable def numberTheoryHasStepFamily_of_hasKernel
+    (hasKernel :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        Nonempty (NumberTheoryDescentOn.ReductionKernel c b)) :
+    ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+      PrimitiveSquareDescentStep c b := by
+  intro c b hbc hcop
+  intro q hPrim hSq
+  let red : PrimitiveSquareReduction c b q :=
+    (numberTheoryHasReduceFamily_of_hasKernel hasKernel hbc hcop) hPrim hSq
+  exact ⟨red.q', red.hPrim, red.hSq, red.hlt⟩
+
+/--
 phase-11 本実装ターゲット:
 固定 `(c,b)` ごとに `ReductionKernel` を供給する数論 provider。
 -/

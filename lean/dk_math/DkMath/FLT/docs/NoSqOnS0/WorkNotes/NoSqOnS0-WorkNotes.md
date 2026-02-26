@@ -693,3 +693,21 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（family 変換関数を追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+- 追加内容:
+  1. `numberTheoryHasKernelFamily_of_hasStep`
+  2. `numberTheoryHasKernelFamily_of_hasReduce`
+  3. `numberTheoryHasKernelFamily_of_hasStepExists`
+  4. `numberTheoryHasKernelFamily_of_hasLocalReduce`
+  5. `numberTheoryHasReduceFamily_of_hasKernel`
+  6. `numberTheoryHasStepFamily_of_hasKernel`
+- 意図:
+  - provider 構造体を介さず、family 関数仮定同士を直接変換できる API を追加。
+  - 今後の数論本体では、証明しやすい family 形（step/reduce/stepExists/localReduce/kernel）を選び、最後に必要形へ寄せられる。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功（`GEisensteinBridge` に `intro` 形の提案 warning 1件のみ）。
