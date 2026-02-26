@@ -1112,6 +1112,94 @@ lemma card_filter_image_piCons_axis1_univErase {d : ℕ} (hd : 2 ≤ d)
       (haxis0 := axis0_mem_univ_erase_axis1 hd)
       (u := u) (b := b) (k := k))
 
+/-- `axis0` で `Finset.pi` を分解した形。 -/
+lemma pi_insert_axis0_univErase {d : ℕ} (hd : 2 ≤ d) (n : Fin d → ℕ) :
+    Finset.pi (insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)))
+      (fun i => Finset.range (n i))
+      =
+    (Finset.range (n (axis0 hd))).biUnion
+      (fun b =>
+        ((Finset.pi ((Finset.univ : Finset (Fin d)).erase (axis0 hd))
+          (fun i => Finset.range (n i))).image
+          (Finset.Pi.cons ((Finset.univ : Finset (Fin d)).erase (axis0 hd)) (axis0 hd) b))) := by
+  rw [Finset.pi_insert
+    (s := ((Finset.univ : Finset (Fin d)).erase (axis0 hd)))
+    (t := fun i => Finset.range (n i))
+    (a := axis0 hd)
+    (ha := by simp)]
+  ext f
+  simp
+
+/-- `axis1` で `Finset.pi` を分解した形。 -/
+lemma pi_insert_axis1_univErase {d : ℕ} (hd : 2 ≤ d) (n : Fin d → ℕ) :
+    Finset.pi (insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)))
+      (fun i => Finset.range (n i))
+      =
+    (Finset.range (n (axis1 hd))).biUnion
+      (fun b =>
+        ((Finset.pi ((Finset.univ : Finset (Fin d)).erase (axis1 hd))
+          (fun i => Finset.range (n i))).image
+          (Finset.Pi.cons ((Finset.univ : Finset (Fin d)).erase (axis1 hd)) (axis1 hd) b))) := by
+  rw [Finset.pi_insert
+    (s := ((Finset.univ : Finset (Fin d)).erase (axis1 hd)))
+    (t := fun i => Finset.range (n i))
+    (a := axis1 hd)
+    (ha := by simp)]
+  ext f
+  simp
+
+/-- `axis0` 分解後の filter card は `b` ごとの和へ分解できる。 -/
+lemma card_filter_pi_insert_axis0_eq_sum {d : ℕ} (hd : 2 ≤ d) (n : Fin d → ℕ)
+    (P : (∀ i ∈ insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)), ℕ) → Prop)
+    [DecidablePred P] :
+    ((Finset.pi
+      (insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)))
+      (fun i => Finset.range (n i))).filter P).card
+      =
+    ∑ b ∈ Finset.range (n (axis0 hd)),
+      ((((Finset.pi ((Finset.univ : Finset (Fin d)).erase (axis0 hd))
+        (fun i => Finset.range (n i))).image
+        (Finset.Pi.cons ((Finset.univ : Finset (Fin d)).erase (axis0 hd)) (axis0 hd) b)).filter P).card) := by
+  rw [pi_insert_axis0_univErase hd n]
+  simpa using
+    (card_biUnion_filter_eq_sum_card_filter_indexed
+      (P := P)
+      (s := Finset.range (n (axis0 hd)))
+      (f := fun b =>
+        ((Finset.pi ((Finset.univ : Finset (Fin d)).erase (axis0 hd))
+          (fun i => Finset.range (n i))).image
+          (Finset.Pi.cons ((Finset.univ : Finset (Fin d)).erase (axis0 hd)) (axis0 hd) b)))
+      (hdis := pairwiseDisjoint_image_piCons
+        (u := Finset.pi ((Finset.univ : Finset (Fin d)).erase (axis0 hd))
+          (fun i => Finset.range (n i)))
+        (m := n (axis0 hd))))
+
+/-- `axis1` 分解後の filter card は `b` ごとの和へ分解できる。 -/
+lemma card_filter_pi_insert_axis1_eq_sum {d : ℕ} (hd : 2 ≤ d) (n : Fin d → ℕ)
+    (P : (∀ i ∈ insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)), ℕ) → Prop)
+    [DecidablePred P] :
+    ((Finset.pi
+      (insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)))
+      (fun i => Finset.range (n i))).filter P).card
+      =
+    ∑ b ∈ Finset.range (n (axis1 hd)),
+      ((((Finset.pi ((Finset.univ : Finset (Fin d)).erase (axis1 hd))
+        (fun i => Finset.range (n i))).image
+        (Finset.Pi.cons ((Finset.univ : Finset (Fin d)).erase (axis1 hd)) (axis1 hd) b)).filter P).card) := by
+  rw [pi_insert_axis1_univErase hd n]
+  simpa using
+    (card_biUnion_filter_eq_sum_card_filter_indexed
+      (P := P)
+      (s := Finset.range (n (axis1 hd)))
+      (f := fun b =>
+        ((Finset.pi ((Finset.univ : Finset (Fin d)).erase (axis1 hd))
+          (fun i => Finset.range (n i))).image
+          (Finset.Pi.cons ((Finset.univ : Finset (Fin d)).erase (axis1 hd)) (axis1 hd) b)))
+      (hdis := pairwiseDisjoint_image_piCons
+        (u := Finset.pi ((Finset.univ : Finset (Fin d)).erase (axis1 hd))
+          (fun i => Finset.range (n i)))
+        (m := n (axis1 hd))))
+
 /-- `pi` 側要素を `Cell` へ埋めたときの `color3` の `val` 展開。 -/
 lemma color3_val_of_pi {d : ℕ} (hd : 2 ≤ d)
     (f : ∀ i ∈ (Finset.univ : Finset (Fin d)), ℕ) :
@@ -1327,13 +1415,374 @@ lemma color_balance_of_box_3k {d : ℕ} (hd : 2 ≤ d) (n : Fin d → ℕ)
           (card_filter_pi_univ_eq_insertErase_axis1 hd n hIns1
             (fun f =>
               ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 2))
-      -- TODO: `h3` に応じて `insert/erase` 側へ落とし、
-      -- `card_filter_image_piCons_axis*_univErase` と
-      -- `card_filter_range_mod3_eq_of_dvd` を使って `hs_mod` を閉じる。
-      clear hAxis0_toInsert0 hAxis1_toInsert0 hAxis2_toInsert0
-      clear hAxis0_toInsert1 hAxis1_toInsert1 hAxis2_toInsert1
-      clear hIns0 hIns1
-      sorry
+      rcases h3 with h30 | h31
+      · let u0 : Finset (∀ i ∈ ((Finset.univ : Finset (Fin d)).erase (axis0 hd)), ℕ) :=
+          Finset.pi ((Finset.univ : Finset (Fin d)).erase (axis0 hd)) (fun i => Finset.range (n i))
+        let predIns0 : ℕ →
+            (∀ i ∈ insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)), ℕ) → Prop :=
+          fun k f =>
+            ((((f (axis0 hd)
+                (Finset.mem_insert_self (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd))) : ℕ) : ℤ)
+              - ((f (axis1 hd)
+                  (Finset.mem_insert_of_mem (axis1_mem_univ_erase_axis0 hd)) : ℕ) : ℤ)) % 3).toNat = k
+        have hTransport0 (k : ℕ) :
+            ((Finset.pi
+              (insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)))
+              (fun i => Finset.range (n i))).filter
+                (fun f =>
+                  ((((piCoord ((piFunEquiv hIns0) f) (axis0 hd) : ℤ)
+                    - (piCoord ((piFunEquiv hIns0) f) (axis1 hd) : ℤ)) % 3).toNat) = k)).card
+              =
+            ((Finset.pi
+              (insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)))
+              (fun i => Finset.range (n i))).filter (predIns0 k)).card := by
+          refine congrArg Finset.card ?_
+          ext f
+          simp [predIns0, piCoord_piFunEquiv_insert0_axis0, piCoord_piFunEquiv_insert0_axis1]
+        have hCount0 (k : ℕ) :
+            ((Finset.pi
+              (insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)))
+              (fun i => Finset.range (n i))).filter (predIns0 k)).card
+              =
+            ∑ b ∈ Finset.range (n (axis0 hd)),
+              (((u0.image
+                (Finset.Pi.cons ((Finset.univ : Finset (Fin d)).erase (axis0 hd)) (axis0 hd) b)).filter
+                  (predIns0 k)).card) := by
+          simpa [u0] using
+            (card_filter_pi_insert_axis0_eq_sum
+              (hd := hd) (n := n) (P := predIns0 k))
+        have hFiber0 (k : ℕ) :
+            (∑ b ∈ Finset.range (n (axis0 hd)),
+              (((u0.image
+                (Finset.Pi.cons ((Finset.univ : Finset (Fin d)).erase (axis0 hd)) (axis0 hd) b)).filter
+                  (predIns0 k)).card))
+              =
+            (∑ b ∈ Finset.range (n (axis0 hd)),
+              (u0.filter
+                (fun f =>
+                  (((b : ℤ)
+                    - (f (axis1 hd) (axis1_mem_univ_erase_axis0 hd) : ℤ)) % 3).toNat = k)).card) := by
+          refine Finset.sum_congr rfl ?_
+          intro b hb
+          simpa [u0, predIns0] using
+            (card_filter_image_piCons_axis0_univErase (hd := hd) (u := u0) (b := b) (k := k))
+        have hSum01 :
+            (∑ b ∈ Finset.range (n (axis0 hd)),
+              (u0.filter
+                (fun f =>
+                  (((b : ℤ)
+                    - (f (axis1 hd) (axis1_mem_univ_erase_axis0 hd) : ℤ)) % 3).toNat = 0)).card)
+              =
+            (∑ b ∈ Finset.range (n (axis0 hd)),
+              (u0.filter
+                (fun f =>
+                  (((b : ℤ)
+                    - (f (axis1 hd) (axis1_mem_univ_erase_axis0 hd) : ℤ)) % 3).toNat = 1)).card) := by
+          simpa [u0] using
+            (sum_card_filter_sub_mod3_toNat_eq_of_dvd
+              (m := n (axis0 hd))
+              (u := u0)
+              (c := fun f => f (axis1 hd) (axis1_mem_univ_erase_axis0 hd))
+              (k₁ := 0) (k₂ := 1) h30 (by decide) (by decide))
+        have hSum02 :
+            (∑ b ∈ Finset.range (n (axis0 hd)),
+              (u0.filter
+                (fun f =>
+                  (((b : ℤ)
+                    - (f (axis1 hd) (axis1_mem_univ_erase_axis0 hd) : ℤ)) % 3).toNat = 0)).card)
+              =
+            (∑ b ∈ Finset.range (n (axis0 hd)),
+              (u0.filter
+                (fun f =>
+                  (((b : ℤ)
+                    - (f (axis1 hd) (axis1_mem_univ_erase_axis0 hd) : ℤ)) % 3).toNat = 2)).card) := by
+          simpa [u0] using
+            (sum_card_filter_sub_mod3_toNat_eq_of_dvd
+              (m := n (axis0 hd))
+              (u := u0)
+              (c := fun f => f (axis1 hd) (axis1_mem_univ_erase_axis0 hd))
+              (k₁ := 0) (k₂ := 2) h30 (by decide) (by decide))
+        constructor
+        · calc
+            (s.filter
+              (fun f =>
+                ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 0)).card
+                =
+              ((Finset.pi
+                (insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)))
+                (fun i => Finset.range (n i))).filter
+                  (fun f =>
+                    ((((piCoord ((piFunEquiv hIns0) f) (axis0 hd) : ℤ)
+                      - (piCoord ((piFunEquiv hIns0) f) (axis1 hd) : ℤ)) % 3).toNat) = 0)).card :=
+                hAxis0_toInsert0
+            _ = ((Finset.pi
+                (insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)))
+                (fun i => Finset.range (n i))).filter (predIns0 0)).card := hTransport0 0
+            _ = ∑ b ∈ Finset.range (n (axis0 hd)),
+                (((u0.image
+                  (Finset.Pi.cons ((Finset.univ : Finset (Fin d)).erase (axis0 hd)) (axis0 hd) b)).filter
+                    (predIns0 0)).card) := hCount0 0
+            _ = ∑ b ∈ Finset.range (n (axis0 hd)),
+                (u0.filter
+                  (fun f =>
+                    (((b : ℤ)
+                      - (f (axis1 hd) (axis1_mem_univ_erase_axis0 hd) : ℤ)) % 3).toNat = 0)).card := hFiber0 0
+            _ = ∑ b ∈ Finset.range (n (axis0 hd)),
+                (u0.filter
+                  (fun f =>
+                    (((b : ℤ)
+                      - (f (axis1 hd) (axis1_mem_univ_erase_axis0 hd) : ℤ)) % 3).toNat = 1)).card := hSum01
+            _ = ∑ b ∈ Finset.range (n (axis0 hd)),
+                (((u0.image
+                  (Finset.Pi.cons ((Finset.univ : Finset (Fin d)).erase (axis0 hd)) (axis0 hd) b)).filter
+                    (predIns0 1)).card) := (hFiber0 1).symm
+            _ = ((Finset.pi
+                (insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)))
+                (fun i => Finset.range (n i))).filter (predIns0 1)).card := (hCount0 1).symm
+            _ = ((Finset.pi
+                (insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)))
+                (fun i => Finset.range (n i))).filter
+                  (fun f =>
+                    ((((piCoord ((piFunEquiv hIns0) f) (axis0 hd) : ℤ)
+                      - (piCoord ((piFunEquiv hIns0) f) (axis1 hd) : ℤ)) % 3).toNat) = 1)).card :=
+                (hTransport0 1).symm
+            _ =
+              (s.filter
+                (fun f =>
+                  ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 1)).card :=
+                hAxis1_toInsert0.symm
+        · calc
+            (s.filter
+              (fun f =>
+                ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 0)).card
+                =
+              ((Finset.pi
+                (insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)))
+                (fun i => Finset.range (n i))).filter
+                  (fun f =>
+                    ((((piCoord ((piFunEquiv hIns0) f) (axis0 hd) : ℤ)
+                      - (piCoord ((piFunEquiv hIns0) f) (axis1 hd) : ℤ)) % 3).toNat) = 0)).card :=
+                hAxis0_toInsert0
+            _ = ((Finset.pi
+                (insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)))
+                (fun i => Finset.range (n i))).filter (predIns0 0)).card := hTransport0 0
+            _ = ∑ b ∈ Finset.range (n (axis0 hd)),
+                (((u0.image
+                  (Finset.Pi.cons ((Finset.univ : Finset (Fin d)).erase (axis0 hd)) (axis0 hd) b)).filter
+                    (predIns0 0)).card) := hCount0 0
+            _ = ∑ b ∈ Finset.range (n (axis0 hd)),
+                (u0.filter
+                  (fun f =>
+                    (((b : ℤ)
+                      - (f (axis1 hd) (axis1_mem_univ_erase_axis0 hd) : ℤ)) % 3).toNat = 0)).card := hFiber0 0
+            _ = ∑ b ∈ Finset.range (n (axis0 hd)),
+                (u0.filter
+                  (fun f =>
+                    (((b : ℤ)
+                      - (f (axis1 hd) (axis1_mem_univ_erase_axis0 hd) : ℤ)) % 3).toNat = 2)).card := hSum02
+            _ = ∑ b ∈ Finset.range (n (axis0 hd)),
+                (((u0.image
+                  (Finset.Pi.cons ((Finset.univ : Finset (Fin d)).erase (axis0 hd)) (axis0 hd) b)).filter
+                    (predIns0 2)).card) := (hFiber0 2).symm
+            _ = ((Finset.pi
+                (insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)))
+                (fun i => Finset.range (n i))).filter (predIns0 2)).card := (hCount0 2).symm
+            _ = ((Finset.pi
+                (insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)))
+                (fun i => Finset.range (n i))).filter
+                  (fun f =>
+                    ((((piCoord ((piFunEquiv hIns0) f) (axis0 hd) : ℤ)
+                      - (piCoord ((piFunEquiv hIns0) f) (axis1 hd) : ℤ)) % 3).toNat) = 2)).card :=
+                (hTransport0 2).symm
+            _ =
+              (s.filter
+                (fun f =>
+                  ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 2)).card :=
+                hAxis2_toInsert0.symm
+      · let u1 : Finset (∀ i ∈ ((Finset.univ : Finset (Fin d)).erase (axis1 hd)), ℕ) :=
+          Finset.pi ((Finset.univ : Finset (Fin d)).erase (axis1 hd)) (fun i => Finset.range (n i))
+        let predIns1 : ℕ →
+            (∀ i ∈ insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)), ℕ) → Prop :=
+          fun k f =>
+            ((((f (axis0 hd)
+                (Finset.mem_insert_of_mem (axis0_mem_univ_erase_axis1 hd)) : ℕ) : ℤ)
+              - ((f (axis1 hd)
+                  (Finset.mem_insert_self (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd))) : ℕ) : ℤ))
+                % 3).toNat = k
+        have hTransport1 (k : ℕ) :
+            ((Finset.pi
+              (insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)))
+              (fun i => Finset.range (n i))).filter
+                (fun f =>
+                  ((((piCoord ((piFunEquiv hIns1) f) (axis0 hd) : ℤ)
+                    - (piCoord ((piFunEquiv hIns1) f) (axis1 hd) : ℤ)) % 3).toNat) = k)).card
+              =
+            ((Finset.pi
+              (insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)))
+              (fun i => Finset.range (n i))).filter (predIns1 k)).card := by
+          refine congrArg Finset.card ?_
+          ext f
+          simp [predIns1, piCoord_piFunEquiv_insert1_axis0, piCoord_piFunEquiv_insert1_axis1]
+        have hCount1 (k : ℕ) :
+            ((Finset.pi
+              (insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)))
+              (fun i => Finset.range (n i))).filter (predIns1 k)).card
+              =
+            ∑ b ∈ Finset.range (n (axis1 hd)),
+              (((u1.image
+                (Finset.Pi.cons ((Finset.univ : Finset (Fin d)).erase (axis1 hd)) (axis1 hd) b)).filter
+                  (predIns1 k)).card) := by
+          simpa [u1] using
+            (card_filter_pi_insert_axis1_eq_sum
+              (hd := hd) (n := n) (P := predIns1 k))
+        have hFiber1 (k : ℕ) :
+            (∑ b ∈ Finset.range (n (axis1 hd)),
+              (((u1.image
+                (Finset.Pi.cons ((Finset.univ : Finset (Fin d)).erase (axis1 hd)) (axis1 hd) b)).filter
+                  (predIns1 k)).card))
+              =
+            (∑ b ∈ Finset.range (n (axis1 hd)),
+              (u1.filter
+                (fun f =>
+                  (((f (axis0 hd) (axis0_mem_univ_erase_axis1 hd) : ℤ)
+                    - (b : ℤ)) % 3).toNat = k)).card) := by
+          refine Finset.sum_congr rfl ?_
+          intro b hb
+          simpa [u1, predIns1] using
+            (card_filter_image_piCons_axis1_univErase (hd := hd) (u := u1) (b := b) (k := k))
+        have hSum01 :
+            (∑ b ∈ Finset.range (n (axis1 hd)),
+              (u1.filter
+                (fun f =>
+                  (((f (axis0 hd) (axis0_mem_univ_erase_axis1 hd) : ℤ)
+                    - (b : ℤ)) % 3).toNat = 0)).card)
+              =
+            (∑ b ∈ Finset.range (n (axis1 hd)),
+              (u1.filter
+                (fun f =>
+                  (((f (axis0 hd) (axis0_mem_univ_erase_axis1 hd) : ℤ)
+                    - (b : ℤ)) % 3).toNat = 1)).card) := by
+          simpa [u1] using
+            (sum_card_filter_sub_rev_mod3_toNat_eq_of_dvd
+              (m := n (axis1 hd))
+              (u := u1)
+              (c := fun f => f (axis0 hd) (axis0_mem_univ_erase_axis1 hd))
+              (k₁ := 0) (k₂ := 1) h31 (by decide) (by decide))
+        have hSum02 :
+            (∑ b ∈ Finset.range (n (axis1 hd)),
+              (u1.filter
+                (fun f =>
+                  (((f (axis0 hd) (axis0_mem_univ_erase_axis1 hd) : ℤ)
+                    - (b : ℤ)) % 3).toNat = 0)).card)
+              =
+            (∑ b ∈ Finset.range (n (axis1 hd)),
+              (u1.filter
+                (fun f =>
+                  (((f (axis0 hd) (axis0_mem_univ_erase_axis1 hd) : ℤ)
+                    - (b : ℤ)) % 3).toNat = 2)).card) := by
+          simpa [u1] using
+            (sum_card_filter_sub_rev_mod3_toNat_eq_of_dvd
+              (m := n (axis1 hd))
+              (u := u1)
+              (c := fun f => f (axis0 hd) (axis0_mem_univ_erase_axis1 hd))
+              (k₁ := 0) (k₂ := 2) h31 (by decide) (by decide))
+        constructor
+        · calc
+            (s.filter
+              (fun f =>
+                ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 0)).card
+                =
+              ((Finset.pi
+                (insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)))
+                (fun i => Finset.range (n i))).filter
+                  (fun f =>
+                    ((((piCoord ((piFunEquiv hIns1) f) (axis0 hd) : ℤ)
+                      - (piCoord ((piFunEquiv hIns1) f) (axis1 hd) : ℤ)) % 3).toNat) = 0)).card :=
+                hAxis0_toInsert1
+            _ = ((Finset.pi
+                (insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)))
+                (fun i => Finset.range (n i))).filter (predIns1 0)).card := hTransport1 0
+            _ = ∑ b ∈ Finset.range (n (axis1 hd)),
+                (((u1.image
+                  (Finset.Pi.cons ((Finset.univ : Finset (Fin d)).erase (axis1 hd)) (axis1 hd) b)).filter
+                    (predIns1 0)).card) := hCount1 0
+            _ = ∑ b ∈ Finset.range (n (axis1 hd)),
+                (u1.filter
+                  (fun f =>
+                    (((f (axis0 hd) (axis0_mem_univ_erase_axis1 hd) : ℤ)
+                      - (b : ℤ)) % 3).toNat = 0)).card := hFiber1 0
+            _ = ∑ b ∈ Finset.range (n (axis1 hd)),
+                (u1.filter
+                  (fun f =>
+                    (((f (axis0 hd) (axis0_mem_univ_erase_axis1 hd) : ℤ)
+                      - (b : ℤ)) % 3).toNat = 1)).card := hSum01
+            _ = ∑ b ∈ Finset.range (n (axis1 hd)),
+                (((u1.image
+                  (Finset.Pi.cons ((Finset.univ : Finset (Fin d)).erase (axis1 hd)) (axis1 hd) b)).filter
+                    (predIns1 1)).card) := (hFiber1 1).symm
+            _ = ((Finset.pi
+                (insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)))
+                (fun i => Finset.range (n i))).filter (predIns1 1)).card := (hCount1 1).symm
+            _ = ((Finset.pi
+                (insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)))
+                (fun i => Finset.range (n i))).filter
+                  (fun f =>
+                    ((((piCoord ((piFunEquiv hIns1) f) (axis0 hd) : ℤ)
+                      - (piCoord ((piFunEquiv hIns1) f) (axis1 hd) : ℤ)) % 3).toNat) = 1)).card :=
+                (hTransport1 1).symm
+            _ =
+              (s.filter
+                (fun f =>
+                  ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 1)).card :=
+                hAxis1_toInsert1.symm
+        · calc
+            (s.filter
+              (fun f =>
+                ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 0)).card
+                =
+              ((Finset.pi
+                (insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)))
+                (fun i => Finset.range (n i))).filter
+                  (fun f =>
+                    ((((piCoord ((piFunEquiv hIns1) f) (axis0 hd) : ℤ)
+                      - (piCoord ((piFunEquiv hIns1) f) (axis1 hd) : ℤ)) % 3).toNat) = 0)).card :=
+                hAxis0_toInsert1
+            _ = ((Finset.pi
+                (insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)))
+                (fun i => Finset.range (n i))).filter (predIns1 0)).card := hTransport1 0
+            _ = ∑ b ∈ Finset.range (n (axis1 hd)),
+                (((u1.image
+                  (Finset.Pi.cons ((Finset.univ : Finset (Fin d)).erase (axis1 hd)) (axis1 hd) b)).filter
+                    (predIns1 0)).card) := hCount1 0
+            _ = ∑ b ∈ Finset.range (n (axis1 hd)),
+                (u1.filter
+                  (fun f =>
+                    (((f (axis0 hd) (axis0_mem_univ_erase_axis1 hd) : ℤ)
+                      - (b : ℤ)) % 3).toNat = 0)).card := hFiber1 0
+            _ = ∑ b ∈ Finset.range (n (axis1 hd)),
+                (u1.filter
+                  (fun f =>
+                    (((f (axis0 hd) (axis0_mem_univ_erase_axis1 hd) : ℤ)
+                      - (b : ℤ)) % 3).toNat = 2)).card := hSum02
+            _ = ∑ b ∈ Finset.range (n (axis1 hd)),
+                (((u1.image
+                  (Finset.Pi.cons ((Finset.univ : Finset (Fin d)).erase (axis1 hd)) (axis1 hd) b)).filter
+                    (predIns1 2)).card) := (hFiber1 2).symm
+            _ = ((Finset.pi
+                (insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)))
+                (fun i => Finset.range (n i))).filter (predIns1 2)).card := (hCount1 2).symm
+            _ = ((Finset.pi
+                (insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)))
+                (fun i => Finset.range (n i))).filter
+                  (fun f =>
+                    ((((piCoord ((piFunEquiv hIns1) f) (axis0 hd) : ℤ)
+                      - (piCoord ((piFunEquiv hIns1) f) (axis1 hd) : ℤ)) % 3).toNat) = 2)).card :=
+                (hTransport1 2).symm
+            _ =
+              (s.filter
+                (fun f =>
+                  ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 2)).card :=
+                hAxis2_toInsert1.symm
     exact ⟨by simpa [hs0, hs1] using hs_mod.1, by simpa [hs0, hs2] using hs_mod.2⟩
   exact ⟨by simpa [hR0, hR1] using hs.1, by simpa [hR0, hR2] using hs.2⟩
 

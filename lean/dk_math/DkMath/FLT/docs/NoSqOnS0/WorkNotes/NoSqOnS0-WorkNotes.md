@@ -419,3 +419,38 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
   - 結果: 成功（残る warning は `sorry` と linter 提案）。
+
+### 2026-02-26 phase-12 継続（`hs_mod` の axis0 分岐を復元）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `pi_insert_axis0_univErase` / `pi_insert_axis1_univErase` を `Finset.pi_insert` 経由で安定化
+  2. `h3` 分岐のうち `3 ∣ n (axis0)` 側を実装し、`hs_mod` の 2本の等式を導出
+  3. `3 ∣ n (axis1)` 側は `sorry` のまま残置（次段で実装）
+- 意図:
+  - 先行追加した補助補題（`card_filter_pi_insert_axis0_eq_sum`、`card_filter_image_piCons_axis0_univErase`、
+    `sum_card_filter_sub_mod3_toNat_eq_of_dvd`）が実際に `hs_mod` 本体で使えることを確認。
+  - 一括実装ではなく、`axis0` / `axis1` を段階分割する方針で進める。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（残る warning は `sorry` と linter 提案）。
+
+### 2026-02-26 phase-12 継続（`hs_mod` の axis1 分岐も実装）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `h3` の `3 ∣ n (axis1)` 側を `u1/predIns1` で実装
+  2. `card_filter_pi_insert_axis1_eq_sum`
+     `card_filter_image_piCons_axis1_univErase`
+     `sum_card_filter_sub_rev_mod3_toNat_eq_of_dvd`
+     を接続して `hs_mod` の 2本の等式を閉じた
+- 結果:
+  - `color_balance_of_box_3k` 内の `hs_mod` は `sorry` なしで成立
+  - `TriominoFLT.lean` の残 `sorry` は最終 FLT スケルトン部のみ
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（残る warning は linter 提案 + FLT スケルトンの `sorry` のみ）。
