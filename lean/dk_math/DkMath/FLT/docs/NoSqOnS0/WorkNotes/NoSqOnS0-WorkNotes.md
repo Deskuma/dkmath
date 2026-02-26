@@ -598,3 +598,22 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（`StepExistsProvider` 変換追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `NumberTheoryStepExistsProvider`
+  2. `numberTheoryKernelProvider_of_stepExistsProvider`
+  3. `numberTheoryReduceProvider_of_stepExistsProvider`
+  4. `numberTheoryStepProvider_of_stepExistsProvider`
+  5. `NoSqOnS0_of_numberTheoryStepExistsProvider`
+  6. `FLT_d3_by_padicValNat_of_numberTheoryStepExistsProvider_coprimeSupport_direct`
+- 意図:
+  - `StepExistsOn` を先に構成する流儀でも、`Reduce/Step/Kernel` provider 系へ昇格できるようにした。
+  - 具体実装の起点をさらに柔軟化。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。

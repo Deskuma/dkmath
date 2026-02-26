@@ -1326,6 +1326,14 @@ structure NumberTheoryKernelProvider where
       Nonempty (NumberTheoryDescentOn.ReductionKernel c b)
 
 /--
+固定 `(c,b)` ごとに `StepExistsOn` を供給する数論 provider。
+-/
+structure NumberTheoryStepExistsProvider where
+  hasStepExists :
+    ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+      NumberTheoryDescentOn.StepExists c b
+
+/--
 固定 `(c,b)` ごとに `NumberTheoryReduce` を供給する数論 provider。
 -/
 structure NumberTheoryReduceProvider where
@@ -1341,6 +1349,42 @@ structure NumberTheoryStepProvider where
   hasStep :
     ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
       PrimitiveSquareDescentStep c b
+
+/--
+`NumberTheoryStepExistsProvider` から `NumberTheoryKernelProvider` を得る。
+-/
+def numberTheoryKernelProvider_of_stepExistsProvider
+    (provExists : NumberTheoryStepExistsProvider) :
+    NumberTheoryKernelProvider where
+  hasKernel := by
+    intro c b hbc hcop
+    exact numberTheoryHasKernel_of_stepExistsOn hbc hcop
+      (provExists.hasStepExists hbc hcop)
+
+/--
+`NumberTheoryStepExistsProvider` から `NumberTheoryReduceProvider` を得る。
+-/
+noncomputable def numberTheoryReduceProvider_of_stepExistsProvider
+    (provExists : NumberTheoryStepExistsProvider) :
+    NumberTheoryReduceProvider where
+  hasReduce := by
+    intro c b hbc hcop
+    let reduceLocal : NumberTheoryDescentOn.LocalReduce c b :=
+      NumberTheoryDescentOn.localReduce_of_stepExists
+        (provExists.hasStepExists hbc hcop)
+    intro q hPrim hSq
+    exact reduceLocal ⟨q, hbc, hcop, hPrim, hSq⟩
+
+/--
+`NumberTheoryStepExistsProvider` から `NumberTheoryStepProvider` を得る。
+-/
+noncomputable def numberTheoryStepProvider_of_stepExistsProvider
+    (provExists : NumberTheoryStepExistsProvider) :
+    NumberTheoryStepProvider where
+  hasStep := by
+    intro c b hbc hcop
+    exact primitiveSquareDescentStep_of_reduce
+      ((numberTheoryReduceProvider_of_stepExistsProvider provExists).hasReduce hbc hcop)
 
 /--
 `NumberTheoryStepProvider` から `NumberTheoryReduceProvider` を得る。
@@ -1440,6 +1484,20 @@ lemma NoSqOnS0_of_numberTheoryReduceProvider {c b : ℕ}
     NoSqOnS0 c b := by
   have hker : Nonempty (NumberTheoryDescentOn.ReductionKernel c b) :=
     numberTheoryHasKernel_of_reduce (provReduce.hasReduce hbc hcop)
+  intro q hq hqS0
+  exact NoSqOnS0_of_numberTheoryHasKernel_coprime hker hbc hcop hq hqS0
+
+/--
+`NumberTheoryStepExistsProvider` から `NoSqOnS0` を回復する。
+-/
+lemma NoSqOnS0_of_numberTheoryStepExistsProvider {c b : ℕ}
+    (provExists : NumberTheoryStepExistsProvider)
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b) :
+    NoSqOnS0 c b := by
+  have hker : Nonempty (NumberTheoryDescentOn.ReductionKernel c b) :=
+    numberTheoryHasKernel_of_stepExistsOn hbc hcop
+      (provExists.hasStepExists hbc hcop)
   intro q hq hqS0
   exact NoSqOnS0_of_numberTheoryHasKernel_coprime hker hbc hcop hq hqS0
 
