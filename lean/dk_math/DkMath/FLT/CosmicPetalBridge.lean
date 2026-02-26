@@ -41,6 +41,39 @@ lemma prime_dvd_GN_of_dvd_sub_not_dvd_left {d x u q : ℕ}
 `x = c-b`, `u = b` を代入した d=3 の橋:
 `GN 3 (c-b) b = S0_nat c b`。
 -/
+/-
+NOTE: 将来エラーで引っかかる可能性があるため、`GN 3 (c-b) b` を `S0_nat c b` に置き換えるのは避けるべきである。
+参照先: prime_dvd_S0_via_cosmic_bridge
+
+---
+
+MathlibDemo.lean:530:36
+Tactic state
+1 goal
+c b : ℕ
+hbc : b < c
+⊢ GN 3 (c - b) b = S0_nat c b
+Messages (1)
+MathlibDemo.lean:530:35
+
+unsolved goals
+c b : ℕ
+hbc : b < c
+⊢ ↑c * ↑b * Nat.rawCast 1 + ↑c ^ 2 + ↑b ^ 2 * Nat.rawCast 1 = ↑c * ↑b + ↑c ^ 2 + ↑b ^ 2
+
+All Messages (2)
+MathlibDemo.lean:17:0
+
+DkMath.FLT.docs.StandAlone.FLT3#StandAlone-NC
+
+MathlibDemo.lean:530:35
+
+unsolved goals
+c b : ℕ
+hbc : b < c
+⊢ ↑c * ↑b * Nat.rawCast 1 + ↑c ^ 2 + ↑b ^ 2 * Nat.rawCast 1 = ↑c * ↑b + ↑c ^ 2 + ↑b ^ 2
+---
+-/
 lemma GN_three_sub_eq_S0_nat {c b : ℕ} (hbc : b < c) :
     GN 3 (c - b) b = S0_nat c b := by
   rw [GN_three_explicit (c - b) b]
