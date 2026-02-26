@@ -657,3 +657,18 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（family 直結入口の対称化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `FLT_d3_by_padicValNat_of_numberTheoryHasReduceFamily_coprimeSupport_direct`
+  2. `FLT_d3_by_padicValNat_of_numberTheoryHasStepExistsFamily_coprimeSupport_direct`
+  3. `FLT_d3_by_padicValNat_of_numberTheoryHasLocalReduceFamily_coprimeSupport_direct`
+- 意図:
+  - 既存 `HasKernelFamily/HasStepFamily` と同じ粒度で、`reduce/stepExists/localReduce` family も Main 直結入口を用意。
+  - 数論側の実装は provider 構造体を直接組み立てなくても、family 関数仮定だけで FLT 入口へ接続可能にした。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.Main DkMath.FLT.GEisensteinBridge`
+  - 結果: 成功。
