@@ -729,3 +729,22 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功（`GEisensteinBridge` に `intro` 形の提案 warning 1件のみ）。
+
+### 2026-02-26 phase-11 継続（`hasNoSqFamily` 入口を追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `numberTheoryHasNonLiftableFamily_of_hasNoSqFamily`
+  2. `numberTheoryHasStepFamily_of_hasNoSqFamily`
+  3. `numberTheoryHasKernelFamily_of_hasNoSqFamily`
+  4. `NoSqOnS0_of_numberTheoryHasNoSqFamily`
+  5. `FLT_d3_by_padicValNat_of_numberTheoryHasNoSqFamily_coprimeSupport_direct`
+- 意図:
+  - `NoSqOnS0` を family で供給できる場合の最短入口を追加。
+  - 既存の `hasNoSq -> hasNonLiftable -> hasStep/hasKernel` 変換を型として明示し、
+    後段の数論実装で証明しやすい入口から差し込めるようにした。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功（`GEisensteinBridge` に `intro` 形の提案 warning 1件のみ）。

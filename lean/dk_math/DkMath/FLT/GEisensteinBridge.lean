@@ -1493,6 +1493,54 @@ def numberTheoryHasKernelFamily_of_nonLiftableFamily
     (numberTheoryHasStepFamily_of_nonLiftableFamily hasNonLift)
 
 /--
+`hasNoSq` family から `hasNonLiftable` family を作る。
+-/
+def numberTheoryHasNonLiftableFamily_of_hasNoSqFamily
+    (hasNoSq :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        NoSqOnS0 c b) :
+    ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+      ∀ q : ℕ, NonLiftableS0 c b q := by
+  intro c b hbc hcop q
+  exact nonLiftableS0_all_of_NoSqOnS0 (hasNoSq hbc hcop) q
+
+/--
+`hasNoSq` family から `hasStep` family を作る。
+-/
+def numberTheoryHasStepFamily_of_hasNoSqFamily
+    (hasNoSq :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        NoSqOnS0 c b) :
+    ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+      PrimitiveSquareDescentStep c b :=
+  numberTheoryHasStepFamily_of_nonLiftableFamily
+    (numberTheoryHasNonLiftableFamily_of_hasNoSqFamily hasNoSq)
+
+/--
+`hasNoSq` family から `hasKernel` family を作る。
+-/
+def numberTheoryHasKernelFamily_of_hasNoSqFamily
+    (hasNoSq :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        NoSqOnS0 c b) :
+    ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+      Nonempty (NumberTheoryDescentOn.ReductionKernel c b) :=
+  numberTheoryHasKernelFamily_of_nonLiftableFamily
+    (numberTheoryHasNonLiftableFamily_of_hasNoSqFamily hasNoSq)
+
+/--
+`hasNoSq` family 仮定から、固定 `(c,b)` の `NoSqOnS0` を取り出す。
+-/
+lemma NoSqOnS0_of_numberTheoryHasNoSqFamily {c b : ℕ}
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b)
+    (hasNoSq :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        NoSqOnS0 c b) :
+    NoSqOnS0 c b :=
+  hasNoSq hbc hcop
+
+/--
 `hasNonLiftable` family 仮定から、固定 `(c,b)` の `NoSqOnS0` を回復する。
 -/
 lemma NoSqOnS0_of_numberTheoryHasNonLiftableFamily {c b : ℕ}
