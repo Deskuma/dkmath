@@ -617,3 +617,23 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（`LocalReduceProvider` 追加と変換拡張）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `NumberTheoryLocalReduceProvider`
+  2. `numberTheoryStepExistsProvider_of_localReduceProvider`
+  3. `numberTheoryKernelProvider_of_localReduceProvider`
+  4. `numberTheoryReduceProvider_of_localReduceProvider`
+  5. `numberTheoryStepProvider_of_localReduceProvider`
+  6. `NoSqOnS0_of_numberTheoryLocalReduceProvider`
+  7. `FLT_d3_by_padicValNat_of_numberTheoryLocalReduceProvider_coprimeSupport_direct`
+- 意図:
+  - 実装本体を `LocalReduce` 供給で書きたい場合にも、そのまま全 provider 系へ昇格可能にした。
+  - `StepExists/LocalReduce/Reduce/Step/Kernel` の全入口間で相互接続できる状態を完成。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。

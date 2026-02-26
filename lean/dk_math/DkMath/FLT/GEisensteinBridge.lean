@@ -1334,6 +1334,14 @@ structure NumberTheoryStepExistsProvider where
       NumberTheoryDescentOn.StepExists c b
 
 /--
+固定 `(c,b)` ごとに `LocalReduce` を供給する数論 provider。
+-/
+structure NumberTheoryLocalReduceProvider where
+  hasLocalReduce :
+    ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+      NumberTheoryDescentOn.LocalReduce c b
+
+/--
 固定 `(c,b)` ごとに `NumberTheoryReduce` を供給する数論 provider。
 -/
 structure NumberTheoryReduceProvider where
@@ -1349,6 +1357,52 @@ structure NumberTheoryStepProvider where
   hasStep :
     ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
       PrimitiveSquareDescentStep c b
+
+/--
+`NumberTheoryLocalReduceProvider` から `NumberTheoryStepExistsProvider` を得る。
+-/
+def numberTheoryStepExistsProvider_of_localReduceProvider
+    (provLocal : NumberTheoryLocalReduceProvider) :
+    NumberTheoryStepExistsProvider where
+  hasStepExists := by
+    intro c b hbc hcop
+    exact NumberTheoryDescentOn.stepExists_of_localReduce
+      (provLocal.hasLocalReduce hbc hcop)
+
+/--
+`NumberTheoryLocalReduceProvider` から `NumberTheoryKernelProvider` を得る。
+-/
+def numberTheoryKernelProvider_of_localReduceProvider
+    (provLocal : NumberTheoryLocalReduceProvider) :
+    NumberTheoryKernelProvider where
+  hasKernel := by
+    intro c b hbc hcop
+    exact numberTheoryHasKernel_of_localReduce hbc hcop
+      (provLocal.hasLocalReduce hbc hcop)
+
+/--
+`NumberTheoryLocalReduceProvider` から `NumberTheoryReduceProvider` を得る。
+-/
+def numberTheoryReduceProvider_of_localReduceProvider
+    (provLocal : NumberTheoryLocalReduceProvider) :
+    NumberTheoryReduceProvider where
+  hasReduce := by
+    intro c b hbc hcop
+    let reduceLocal : NumberTheoryDescentOn.LocalReduce c b :=
+      provLocal.hasLocalReduce hbc hcop
+    intro q hPrim hSq
+    exact reduceLocal ⟨q, hbc, hcop, hPrim, hSq⟩
+
+/--
+`NumberTheoryLocalReduceProvider` から `NumberTheoryStepProvider` を得る。
+-/
+def numberTheoryStepProvider_of_localReduceProvider
+    (provLocal : NumberTheoryLocalReduceProvider) :
+    NumberTheoryStepProvider where
+  hasStep := by
+    intro c b hbc hcop
+    exact primitiveSquareDescentStep_of_reduce
+      ((numberTheoryReduceProvider_of_localReduceProvider provLocal).hasReduce hbc hcop)
 
 /--
 `NumberTheoryStepExistsProvider` から `NumberTheoryKernelProvider` を得る。
@@ -1498,6 +1552,20 @@ lemma NoSqOnS0_of_numberTheoryStepExistsProvider {c b : ℕ}
   have hker : Nonempty (NumberTheoryDescentOn.ReductionKernel c b) :=
     numberTheoryHasKernel_of_stepExistsOn hbc hcop
       (provExists.hasStepExists hbc hcop)
+  intro q hq hqS0
+  exact NoSqOnS0_of_numberTheoryHasKernel_coprime hker hbc hcop hq hqS0
+
+/--
+`NumberTheoryLocalReduceProvider` から `NoSqOnS0` を回復する。
+-/
+lemma NoSqOnS0_of_numberTheoryLocalReduceProvider {c b : ℕ}
+    (provLocal : NumberTheoryLocalReduceProvider)
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b) :
+    NoSqOnS0 c b := by
+  have hker : Nonempty (NumberTheoryDescentOn.ReductionKernel c b) :=
+    numberTheoryHasKernel_of_localReduce hbc hcop
+      (provLocal.hasLocalReduce hbc hcop)
   intro q hq hqS0
   exact NoSqOnS0_of_numberTheoryHasKernel_coprime hker hbc hcop hq hqS0
 
