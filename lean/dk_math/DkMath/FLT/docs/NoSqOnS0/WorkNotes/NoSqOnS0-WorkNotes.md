@@ -130,3 +130,22 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT DkMath.FLT.Main`
   - 結果: 成功（`TriominoFLT` の既存 `sorry` warning は継続）。
+
+### 2026-02-26 phase-12 継続（`color3_L_tromino_standard` 前段 helper 実装）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+- 追加内容:
+  1. `axis0` / `axis1`
+  2. `basis0` / `basis1`
+  3. `axis0_ne_axis1`
+  4. `cell_ne_add_basis0`, `cell_ne_add_basis1`, `add_basis0_ne_add_basis1`
+  5. `diff_add_basis0`, `diff_add_basis1`
+  6. `color3_val_add_basis0`, `color3_val_add_basis1`
+- 意図:
+  - `color3_L_tromino_standard` を直接一気に証明せず、
+    相異性と mod-3 シフトを独立補題として先に固定。
+  - 次段で 3点 Finset の色カウント本体へ合流する。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（`TriominoFLT` の既存 `sorry` warning は継続）。

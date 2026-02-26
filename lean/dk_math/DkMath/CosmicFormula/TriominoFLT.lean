@@ -95,6 +95,100 @@ lemma color3_val {d : ℕ} (hd : 2 ≤ d) (c : Cell d) :
     (color3 c).val = ((c ⟨0, by omega⟩ - c ⟨1, by omega⟩) % 3).toNat := by
   simp [color3, hd]
 
+/-- `d ≥ 2` のときの第0軸。 -/
+def axis0 {d : ℕ} (hd : 2 ≤ d) : Fin d := ⟨0, by omega⟩
+
+/-- `d ≥ 2` のときの第1軸。 -/
+def axis1 {d : ℕ} (hd : 2 ≤ d) : Fin d := ⟨1, by omega⟩
+
+/-- 第0軸方向の単位セル。 -/
+def basis0 {d : ℕ} (hd : 2 ≤ d) : Cell d := fun i => if i = axis0 hd then 1 else 0
+
+/-- 第1軸方向の単位セル。 -/
+def basis1 {d : ℕ} (hd : 2 ≤ d) : Cell d := fun i => if i = axis1 hd then 1 else 0
+
+lemma axis0_ne_axis1 {d : ℕ} (hd : 2 ≤ d) : axis0 hd ≠ axis1 hd := by
+  intro h
+  have hval : (0 : ℕ) = 1 := by
+    simpa [axis0, axis1] using congrArg Fin.val h
+  omega
+
+lemma cell_ne_add_basis0 {d : ℕ} (hd : 2 ≤ d) (v : Cell d) :
+    v ≠ v + basis0 hd := by
+  intro h
+  have h0 := congrArg (fun c => c (axis0 hd)) h
+  change v (axis0 hd) = v (axis0 hd) + basis0 hd (axis0 hd) at h0
+  have hb00 : basis0 hd (axis0 hd) = 1 := by simp [basis0]
+  have : (v (axis0 hd) : ℤ) = v (axis0 hd) + 1 := by
+    simp [hb00] at h0
+  linarith
+
+lemma cell_ne_add_basis1 {d : ℕ} (hd : 2 ≤ d) (v : Cell d) :
+    v ≠ v + basis1 hd := by
+  intro h
+  have h1 := congrArg (fun c => c (axis1 hd)) h
+  change v (axis1 hd) = v (axis1 hd) + basis1 hd (axis1 hd) at h1
+  have hb11 : basis1 hd (axis1 hd) = 1 := by simp [basis1]
+  have : (v (axis1 hd) : ℤ) = v (axis1 hd) + 1 := by
+    simp [hb11] at h1
+  linarith
+
+lemma add_basis0_ne_add_basis1 {d : ℕ} (hd : 2 ≤ d) (v : Cell d) :
+    v + basis0 hd ≠ v + basis1 hd := by
+  intro h
+  have h0 := congrArg (fun c => c (axis0 hd)) h
+  change v (axis0 hd) + basis0 hd (axis0 hd) = v (axis0 hd) + basis1 hd (axis0 hd) at h0
+  have hb00 : basis0 hd (axis0 hd) = 1 := by simp [basis0]
+  have hb10 : basis1 hd (axis0 hd) = 0 := by
+    simp [basis1, axis0_ne_axis1 hd]
+  have : (v (axis0 hd) : ℤ) + 1 = v (axis0 hd) := by
+    simp [hb00, hb10] at h0
+  linarith
+
+lemma diff_add_basis0 {d : ℕ} (hd : 2 ≤ d) (v : Cell d) :
+    (v + basis0 hd) (axis0 hd) - (v + basis0 hd) (axis1 hd)
+      = (v (axis0 hd) - v (axis1 hd)) + 1 := by
+  change (v (axis0 hd) + basis0 hd (axis0 hd)) - (v (axis1 hd) + basis0 hd (axis1 hd))
+      = (v (axis0 hd) - v (axis1 hd)) + 1
+  have hb00 : basis0 hd (axis0 hd) = 1 := by simp [basis0]
+  have h10 : axis1 hd ≠ axis0 hd := (axis0_ne_axis1 hd).symm
+  have hb01 : basis0 hd (axis1 hd) = 0 := by
+    simp [basis0, h10]
+  rw [hb00, hb01]
+  ring
+
+lemma diff_add_basis1 {d : ℕ} (hd : 2 ≤ d) (v : Cell d) :
+    (v + basis1 hd) (axis0 hd) - (v + basis1 hd) (axis1 hd)
+      = (v (axis0 hd) - v (axis1 hd)) - 1 := by
+  change (v (axis0 hd) + basis1 hd (axis0 hd)) - (v (axis1 hd) + basis1 hd (axis1 hd))
+      = (v (axis0 hd) - v (axis1 hd)) - 1
+  have h01 : axis0 hd ≠ axis1 hd := axis0_ne_axis1 hd
+  have hb10 : basis1 hd (axis0 hd) = 0 := by
+    simp [basis1, h01]
+  have hb11 : basis1 hd (axis1 hd) = 1 := by simp [basis1]
+  rw [hb10, hb11]
+  ring
+
+lemma color3_val_add_basis0 {d : ℕ} (hd : 2 ≤ d) (v : Cell d) :
+    (color3 (v + basis0 hd)).val
+      = (((v (axis0 hd) - v (axis1 hd) + 1) % 3).toNat) := by
+  calc
+    (color3 (v + basis0 hd)).val
+        = ((((v + basis0 hd) (axis0 hd) - (v + basis0 hd) (axis1 hd)) % 3).toNat) := by
+            simpa [axis0, axis1] using color3_val hd (v + basis0 hd)
+    _ = (((v (axis0 hd) - v (axis1 hd) + 1) % 3).toNat) := by
+          simp [diff_add_basis0 hd v]
+
+lemma color3_val_add_basis1 {d : ℕ} (hd : 2 ≤ d) (v : Cell d) :
+    (color3 (v + basis1 hd)).val
+      = (((v (axis0 hd) - v (axis1 hd) - 1) % 3).toNat) := by
+  calc
+    (color3 (v + basis1 hd)).val
+        = ((((v + basis1 hd) (axis0 hd) - (v + basis1 hd) (axis1 hd)) % 3).toNat) := by
+            simpa [axis0, axis1] using color3_val hd (v + basis1 hd)
+    _ = (((v (axis0 hd) - v (axis1 hd) - 1) % 3).toNat) := by
+          simp [diff_add_basis1 hd v]
+
 lemma color3_L_tromino_standard {d : ℕ} (hd : 2 ≤ d) (v : Cell d) :
     let e0 : Cell d := fun i => if i = ⟨0, by omega⟩ then 1 else 0
     let e1 : Cell d := fun i => if i = ⟨1, by omega⟩ then 1 else 0
