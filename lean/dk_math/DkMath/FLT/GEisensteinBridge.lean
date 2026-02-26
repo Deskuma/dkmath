@@ -1326,6 +1326,38 @@ structure NumberTheoryKernelProvider where
       Nonempty (NumberTheoryDescentOn.ReductionKernel c b)
 
 /--
+固定 `(c,b)` ごとに `PrimitiveSquareDescentStep` を供給する数論 provider。
+`KernelProvider` より弱い実装目標として用意する。
+-/
+structure NumberTheoryStepProvider where
+  hasStep :
+    ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+      PrimitiveSquareDescentStep c b
+
+/--
+`NumberTheoryStepProvider` から `NumberTheoryKernelProvider` を得る。
+-/
+def numberTheoryKernelProvider_of_stepProvider
+    (provStep : NumberTheoryStepProvider) :
+    NumberTheoryKernelProvider where
+  hasKernel := by
+    intro c b hbc hcop
+    exact numberTheoryHasKernel_of_step (provStep.hasStep hbc hcop)
+
+/--
+`NumberTheoryStepProvider` から `NoSqOnS0` を回復する。
+-/
+lemma NoSqOnS0_of_numberTheoryStepProvider {c b : ℕ}
+    (provStep : NumberTheoryStepProvider)
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b) :
+    NoSqOnS0 c b := by
+  have hker : Nonempty (NumberTheoryDescentOn.ReductionKernel c b) :=
+    numberTheoryHasKernel_of_step (provStep.hasStep hbc hcop)
+  intro q hq hqS0
+  exact NoSqOnS0_of_numberTheoryHasKernel_coprime hker hbc hcop hq hqS0
+
+/--
 `NumberTheoryKernelProvider` から `NoSqOnS0` を回復する。
 -/
 lemma NoSqOnS0_of_numberTheoryKernelProvider {c b : ℕ}
@@ -1333,8 +1365,9 @@ lemma NoSqOnS0_of_numberTheoryKernelProvider {c b : ℕ}
     (hbc : b < c)
     (hcop : Nat.Coprime c b) :
     NoSqOnS0 c b := by
+  intro q hq hqS0
   exact NoSqOnS0_of_numberTheoryHasKernel_coprime
-    (prov.hasKernel hbc hcop) hbc hcop
+    (prov.hasKernel hbc hcop) hbc hcop hq hqS0
 
 /--
 固定 `(c,b)` の `LocalReduce` から `NoSqOnS0` を回復する。
