@@ -336,3 +336,42 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
   - 結果: 成功（残る warning は `sorry` のみ）。
+
+### 2026-02-26 phase-12 継続（`pi` 型運搬の橋補題）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `piFunEquiv`
+  2. `map_pi_eq_pi_of_eq`
+  3. `card_filter_pi_univ_eq_insertErase_axis0`
+  4. `card_filter_pi_univ_eq_insertErase_axis1`
+- 意図:
+  - `hs_mod` 実装で必要な
+    `pi(univ)` と `pi(insert axis (erase axis))` 間の依存関数型ギャップを埋める。
+  - まず card/filter レベルで `univ` 側を `insert/erase` 側へ運搬可能にした。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（残る warning は `sorry` と軽微 linter 提案のみ）。
+
+### 2026-02-26 phase-12 継続（`hs_mod` 内部を `insert/erase` へ運搬）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `hs_mod` の `sorry` 直前で、`hIns0/hIns1` を導入。
+  2. residue `0/1/2` それぞれについて、
+     `s = pi(univ)` 側の filter card を
+     `pi(insert axis (erase axis))` 側へ運搬する等式群
+     (`hAxis*_toInsert0`, `hAxis*_toInsert1`) を実装。
+  3. TODO コメントを更新し、次段で使う補題を明示:
+     `card_filter_image_piCons_axis*_univErase`,
+     `card_filter_range_mod3_eq_of_dvd`。
+- 意図:
+  - `hs_mod` 本体の未解決部分を「実際のカウント処理」だけに縮約。
+  - 依存型の型差（`univ` vs `insert/erase`）は前処理で解消済み。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（残る warning は `sorry` と linter 提案のみ）。

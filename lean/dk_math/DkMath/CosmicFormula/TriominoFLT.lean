@@ -522,6 +522,92 @@ lemma axis0_mem_univ_erase_axis1 {d : ℕ} (hd : 2 ≤ d) :
   refine Finset.mem_erase.mpr ?_
   exact ⟨axis0_ne_axis1 hd, Finset.mem_univ _⟩
 
+/-- 添字有限集合の等式で `Finset.pi` の関数型を運搬する同値。 -/
+def piFunEquiv {d : ℕ} {s t : Finset (Fin d)} (h : s = t) :
+    (∀ i ∈ s, ℕ) ≃ (∀ i ∈ t, ℕ) := by
+  cases h
+  exact Equiv.refl _
+
+/-- `piFunEquiv` で写すと `Finset.pi` 自体も一致する。 -/
+lemma map_pi_eq_pi_of_eq {d : ℕ} {s t : Finset (Fin d)} (h : s = t) (n : Fin d → ℕ) :
+    ((Finset.pi s (fun i => Finset.range (n i))).map (piFunEquiv h).toEmbedding)
+      = Finset.pi t (fun i => Finset.range (n i)) := by
+  cases h
+  simp [piFunEquiv]
+
+/-- `univ` と `insert(axis0, erase axis0)` の `pi` 上 filter card を運搬で一致させる。 -/
+lemma card_filter_pi_univ_eq_insertErase_axis0 {d : ℕ} (hd : 2 ≤ d) (n : Fin d → ℕ)
+    (hIns :
+      insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd))
+        = (Finset.univ : Finset (Fin d)))
+    (P : (∀ i ∈ (Finset.univ : Finset (Fin d)), ℕ) → Prop)
+    [DecidablePred P] :
+    let sU := Finset.pi (Finset.univ : Finset (Fin d)) (fun i => Finset.range (n i))
+    let sI := Finset.pi (insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)))
+      (fun i => Finset.range (n i))
+    (sU.filter P).card
+      =
+    (sI.filter
+      (fun f => P ((piFunEquiv hIns) f))).card := by
+  classical
+  dsimp
+  let emb :
+      (∀ i ∈ insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)), ℕ) ↪
+        (∀ i ∈ (Finset.univ : Finset (Fin d)), ℕ) :=
+    (piFunEquiv hIns).toEmbedding
+  let sI := Finset.pi (insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)))
+    (fun i => Finset.range (n i))
+  let sU := Finset.pi (Finset.univ : Finset (Fin d)) (fun i => Finset.range (n i))
+  have hMap : sI.map emb = sU := by
+    simpa [sI, sU, emb, hIns] using (map_pi_eq_pi_of_eq hIns n)
+  have hFilterMap :
+      ((sI.filter (fun f => P (emb f))).map emb) = ((sI.map emb).filter P) := by
+    simpa [Function.comp, emb] using
+      (Finset.filter_map (s := sI) (f := emb) (p := P)).symm
+  calc
+    (sU.filter P).card = ((sI.map emb).filter P).card := by simp [hMap]
+    _ = ((sI.filter (fun f => P (emb f))).map emb).card := by
+          simp [hFilterMap]
+    _ = (sI.filter (fun f => P (emb f))).card := by
+          simpa [Finset.map_eq_image, emb] using
+            (Finset.card_map (s := sI.filter (fun f => P (emb f))) emb)
+
+/-- `univ` と `insert(axis1, erase axis1)` の `pi` 上 filter card を運搬で一致させる。 -/
+lemma card_filter_pi_univ_eq_insertErase_axis1 {d : ℕ} (hd : 2 ≤ d) (n : Fin d → ℕ)
+    (hIns :
+      insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd))
+        = (Finset.univ : Finset (Fin d)))
+    (P : (∀ i ∈ (Finset.univ : Finset (Fin d)), ℕ) → Prop)
+    [DecidablePred P] :
+    let sU := Finset.pi (Finset.univ : Finset (Fin d)) (fun i => Finset.range (n i))
+    let sI := Finset.pi (insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)))
+      (fun i => Finset.range (n i))
+    (sU.filter P).card
+      =
+    (sI.filter (fun f => P ((piFunEquiv hIns) f))).card := by
+        classical
+        dsimp
+        let emb :
+            (∀ i ∈ insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)), ℕ) ↪
+              (∀ i ∈ (Finset.univ : Finset (Fin d)), ℕ) :=
+          (piFunEquiv hIns).toEmbedding
+        let sI := Finset.pi (insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)))
+          (fun i => Finset.range (n i))
+        let sU := Finset.pi (Finset.univ : Finset (Fin d)) (fun i => Finset.range (n i))
+        have hMap : sI.map emb = sU := by
+          simpa [sI, sU, emb, hIns] using (map_pi_eq_pi_of_eq hIns n)
+        have hFilterMap :
+            ((sI.filter (fun f => P (emb f))).map emb) = ((sI.map emb).filter P) := by
+          simpa [Function.comp, emb] using
+            (Finset.filter_map (s := sI) (f := emb) (p := P)).symm
+        calc
+          (sU.filter P).card = ((sI.map emb).filter P).card := by simp [hMap]
+          _ = ((sI.filter (fun f => P (emb f))).map emb).card := by
+                simp [hFilterMap]
+              _ = (sI.filter (fun f => P (emb f))).card := by
+                    simpa [Finset.map_eq_image, emb] using
+                      (Finset.card_map (s := sI.filter (fun f => P (emb f))) emb)
+
 /-- 異なる `b` で作る `Pi.cons` 像は互いに交わらない。 -/
 lemma disjoint_image_piCons_of_ne {d : ℕ}
     {s : Finset (Fin d)} {a : Fin d}
@@ -975,6 +1061,110 @@ lemma color_balance_of_box_3k {d : ℕ} (hd : 2 ≤ d) (n : Fin d → ℕ)
         (s.filter
           (fun f =>
             ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 2)).card := by
+      have hIns0 :
+          insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd))
+            = (Finset.univ : Finset (Fin d)) := by
+        simp [Finset.insert_erase (Finset.mem_univ (axis0 hd))]
+      have hIns1 :
+          insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd))
+            = (Finset.univ : Finset (Fin d)) := by
+        simp [Finset.insert_erase (Finset.mem_univ (axis1 hd))]
+      have hAxis0_toInsert0 :
+          (s.filter
+            (fun f =>
+              ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 0)).card
+            =
+          ((Finset.pi
+            (insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)))
+            (fun i => Finset.range (n i))).filter
+              (fun f =>
+                ((((piCoord ((piFunEquiv hIns0) f) (axis0 hd) : ℤ)
+                  - (piCoord ((piFunEquiv hIns0) f) (axis1 hd) : ℤ)) % 3).toNat) = 0)).card := by
+        simpa [s] using
+          (card_filter_pi_univ_eq_insertErase_axis0 hd n hIns0
+            (fun f =>
+              ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 0))
+      have hAxis1_toInsert0 :
+          (s.filter
+            (fun f =>
+              ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 1)).card
+            =
+          ((Finset.pi
+            (insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)))
+            (fun i => Finset.range (n i))).filter
+              (fun f =>
+                ((((piCoord ((piFunEquiv hIns0) f) (axis0 hd) : ℤ)
+                  - (piCoord ((piFunEquiv hIns0) f) (axis1 hd) : ℤ)) % 3).toNat) = 1)).card := by
+        simpa [s] using
+          (card_filter_pi_univ_eq_insertErase_axis0 hd n hIns0
+            (fun f =>
+              ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 1))
+      have hAxis2_toInsert0 :
+          (s.filter
+            (fun f =>
+              ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 2)).card
+            =
+          ((Finset.pi
+            (insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)))
+            (fun i => Finset.range (n i))).filter
+              (fun f =>
+                ((((piCoord ((piFunEquiv hIns0) f) (axis0 hd) : ℤ)
+                  - (piCoord ((piFunEquiv hIns0) f) (axis1 hd) : ℤ)) % 3).toNat) = 2)).card := by
+        simpa [s] using
+          (card_filter_pi_univ_eq_insertErase_axis0 hd n hIns0
+            (fun f =>
+              ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 2))
+      have hAxis0_toInsert1 :
+          (s.filter
+            (fun f =>
+              ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 0)).card
+            =
+          ((Finset.pi
+            (insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)))
+            (fun i => Finset.range (n i))).filter
+              (fun f =>
+                ((((piCoord ((piFunEquiv hIns1) f) (axis0 hd) : ℤ)
+                  - (piCoord ((piFunEquiv hIns1) f) (axis1 hd) : ℤ)) % 3).toNat) = 0)).card := by
+        simpa [s] using
+          (card_filter_pi_univ_eq_insertErase_axis1 hd n hIns1
+            (fun f =>
+              ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 0))
+      have hAxis1_toInsert1 :
+          (s.filter
+            (fun f =>
+              ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 1)).card
+            =
+          ((Finset.pi
+            (insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)))
+            (fun i => Finset.range (n i))).filter
+              (fun f =>
+                ((((piCoord ((piFunEquiv hIns1) f) (axis0 hd) : ℤ)
+                  - (piCoord ((piFunEquiv hIns1) f) (axis1 hd) : ℤ)) % 3).toNat) = 1)).card := by
+        simpa [s] using
+          (card_filter_pi_univ_eq_insertErase_axis1 hd n hIns1
+            (fun f =>
+              ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 1))
+      have hAxis2_toInsert1 :
+          (s.filter
+            (fun f =>
+              ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 2)).card
+            =
+          ((Finset.pi
+            (insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)))
+            (fun i => Finset.range (n i))).filter
+              (fun f =>
+                ((((piCoord ((piFunEquiv hIns1) f) (axis0 hd) : ℤ)
+                  - (piCoord ((piFunEquiv hIns1) f) (axis1 hd) : ℤ)) % 3).toNat) = 2)).card := by
+        simpa [s] using
+          (card_filter_pi_univ_eq_insertErase_axis1 hd n hIns1
+            (fun f =>
+              ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 2))
+      -- TODO: `h3` に応じて `insert/erase` 側へ落とし、
+      -- `card_filter_image_piCons_axis*_univErase` と
+      -- `card_filter_range_mod3_eq_of_dvd` を使って `hs_mod` を閉じる。
+      clear hAxis0_toInsert0 hAxis1_toInsert0 hAxis2_toInsert0
+      clear hAxis0_toInsert1 hAxis1_toInsert1 hAxis2_toInsert1
+      clear hIns0 hIns1
       sorry
     exact ⟨by simpa [hs0, hs1] using hs_mod.1, by simpa [hs0, hs2] using hs_mod.2⟩
   exact ⟨by simpa [hR0, hR1] using hs.1, by simpa [hR0, hR2] using hs.2⟩
