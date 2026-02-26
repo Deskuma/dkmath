@@ -1326,6 +1326,14 @@ structure NumberTheoryKernelProvider where
       Nonempty (NumberTheoryDescentOn.ReductionKernel c b)
 
 /--
+固定 `(c,b)` ごとに `NumberTheoryReduce` を供給する数論 provider。
+-/
+structure NumberTheoryReduceProvider where
+  hasReduce :
+    ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+      NumberTheoryReduce c b
+
+/--
 固定 `(c,b)` ごとに `PrimitiveSquareDescentStep` を供給する数論 provider。
 `KernelProvider` より弱い実装目標として用意する。
 -/
@@ -1333,6 +1341,26 @@ structure NumberTheoryStepProvider where
   hasStep :
     ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
       PrimitiveSquareDescentStep c b
+
+/--
+`NumberTheoryReduceProvider` から `NumberTheoryStepProvider` を得る。
+-/
+def numberTheoryStepProvider_of_reduceProvider
+    (provReduce : NumberTheoryReduceProvider) :
+    NumberTheoryStepProvider where
+  hasStep := by
+    intro c b hbc hcop
+    exact primitiveSquareDescentStep_of_reduce (provReduce.hasReduce hbc hcop)
+
+/--
+`NumberTheoryReduceProvider` から `NumberTheoryKernelProvider` を得る。
+-/
+def numberTheoryKernelProvider_of_reduceProvider
+    (provReduce : NumberTheoryReduceProvider) :
+    NumberTheoryKernelProvider where
+  hasKernel := by
+    intro c b hbc hcop
+    exact numberTheoryHasKernel_of_reduce (provReduce.hasReduce hbc hcop)
 
 /--
 `NumberTheoryStepProvider` から `NumberTheoryKernelProvider` を得る。
@@ -1354,6 +1382,19 @@ lemma NoSqOnS0_of_numberTheoryStepProvider {c b : ℕ}
     NoSqOnS0 c b := by
   have hker : Nonempty (NumberTheoryDescentOn.ReductionKernel c b) :=
     numberTheoryHasKernel_of_step (provStep.hasStep hbc hcop)
+  intro q hq hqS0
+  exact NoSqOnS0_of_numberTheoryHasKernel_coprime hker hbc hcop hq hqS0
+
+/--
+`NumberTheoryReduceProvider` から `NoSqOnS0` を回復する。
+-/
+lemma NoSqOnS0_of_numberTheoryReduceProvider {c b : ℕ}
+    (provReduce : NumberTheoryReduceProvider)
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b) :
+    NoSqOnS0 c b := by
+  have hker : Nonempty (NumberTheoryDescentOn.ReductionKernel c b) :=
+    numberTheoryHasKernel_of_reduce (provReduce.hasReduce hbc hcop)
   intro q hq hqS0
   exact NoSqOnS0_of_numberTheoryHasKernel_coprime hker hbc hcop hq hqS0
 

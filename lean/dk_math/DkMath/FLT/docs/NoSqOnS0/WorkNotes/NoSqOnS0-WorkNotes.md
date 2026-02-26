@@ -562,3 +562,21 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（`ReduceProvider` 導入）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `NumberTheoryReduceProvider`
+  2. `numberTheoryStepProvider_of_reduceProvider`
+  3. `numberTheoryKernelProvider_of_reduceProvider`
+  4. `NoSqOnS0_of_numberTheoryReduceProvider`
+  5. `FLT_d3_by_padicValNat_of_numberTheoryReduceProvider_coprimeSupport_direct`
+- 意図:
+  - 数論本体を `NumberTheoryReduce` 形で実装したい場合でも、
+    `ReduceProvider -> StepProvider/KernelProvider -> NoSq -> FLT` の経路へ即接続できるようにした。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。
