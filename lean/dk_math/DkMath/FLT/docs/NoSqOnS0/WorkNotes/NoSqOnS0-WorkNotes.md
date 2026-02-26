@@ -394,3 +394,28 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
   - 結果: 成功（残る warning は `sorry` と linter 提案のみ）。
+
+### 2026-02-26 phase-12 継続（`hs_mod` 向け補助補題を先行追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `card_biUnion_filter_eq_sum_card_filter_indexed`
+  2. `sum_card_filter_swap`
+  3. `sum_card_filter_sub_mod3_toNat_eq_of_dvd`
+  4. `sub_rev_toNat_eq_iff_mod`
+  5. `card_filter_range_sub_rev_mod3_toNat_eq_of_dvd`
+  6. `sum_card_filter_sub_rev_mod3_toNat_eq_of_dvd`
+- 意図:
+  - `hs_mod` の本体で必要になる
+    「biUnion の card 分解」「二重和の交換」「(b-c)/(c-b) mod3 の residue 非依存」
+    を独立補題として先に確定。
+- 実装メモ:
+  - `hs_mod` への一括統合（`by_cases h3` 本体化）は、
+    依存型の `DecidableEq`/`simp` 展開と heartbeat 超過で不安定だったため、
+    本体は一旦 `sorry` のままに戻し、補助補題のみ保持。
+  - 次回は `axis0` 分岐だけを小さく切って段階的に再接続する方針。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（残る warning は `sorry` と linter 提案）。
