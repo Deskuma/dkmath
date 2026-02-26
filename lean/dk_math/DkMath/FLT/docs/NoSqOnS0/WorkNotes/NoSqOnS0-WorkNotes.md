@@ -484,3 +484,18 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
   - 結果: 成功（残る `sorry` は高指数側 2件のみ）。
+
+### 2026-02-26 phase-12 方針明記（`fermatLastTheoremThree` 依存は暫定）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 方針（明文化）:
+  1. `Mathlib.NumberTheory.FLT.Three` の利用は、phase-12 の `sorry` 削減を優先するための暫定ブリッジ。
+  2. 研究目標は Triomino/Cosmic 側の独立証明であり、将来これが完成した時点で当該依存を除去する。
+  3. 置換対象は `FLT_from_tromino_tiling` の `n=3` 分岐と `FLT_case_3_via_tromino`。
+- 追記内容:
+  - 上記方針を `TriominoFLT.lean` 内に `NOTE [Temporary Mathlib FLT3 bridge]` として明記。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功。

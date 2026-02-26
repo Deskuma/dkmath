@@ -8,6 +8,14 @@ import DkMath.Basic
 import DkMath.Polyomino
 import DkMath.CosmicFormula.CosmicFormulaCellDim
 import DkMath.Tromino
+
+/-
+NOTE [Temporary Mathlib FLT3 bridge]:
+- このファイルでの `Mathlib.NumberTheory.FLT.Three` 参照は「暫定」。
+- 目的は phase-12 時点で `n=3` 分岐を閉じ、`sorry` を高指数側へ隔離すること。
+- 将来、Triomino/Cosmic 側の独立証明（`n=3` を含む）を実装後、
+  `fermatLastTheoremThree` 依存は除去して置換する。
+-/
 import Mathlib.NumberTheory.FLT.Three
 
 set_option linter.style.longLine false
@@ -1824,6 +1832,8 @@ theorem FLT_from_tromino_tiling {x y z : ℕ} (n : ℕ)
   rcases hcases with h3 | hn4
   · subst h3
     intro R h_area h_tile
+    -- NOTE [Temporary Mathlib FLT3 bridge]:
+    -- 独立実装完成までの暫定接続。将来ここは Triomino/Cosmic 系証明へ置換する。
     exact (fermatLastTheoremThree : FermatLastTheoremFor 3)
       x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq
   intro R h_area h_tile
@@ -1851,6 +1861,8 @@ theorem FLT_case_3_via_tromino {x y z : ℕ}
     (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
     (h_eq : x ^ 3 + y ^ 3 = z ^ 3) : False := by
   rcases hpos with ⟨hx, hy, hz⟩
+  -- NOTE [Temporary Mathlib FLT3 bridge]:
+  -- `n=3` の独立証明が Triomino 側で完成した時点で本呼び出しを除去する。
   exact (fermatLastTheoremThree : FermatLastTheoremFor 3)
     x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq
 
