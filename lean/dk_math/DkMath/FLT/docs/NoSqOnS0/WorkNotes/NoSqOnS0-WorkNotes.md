@@ -264,3 +264,38 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
   - 結果: 成功（残る warning は `sorry` のみ）。
+
+### 2026-02-26 phase-12 継続（`hs_mod` 実装準備：fiber disjoint 補題）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `disjoint_image_piCons_of_ne`
+  2. `pairwiseDisjoint_image_piCons`
+- 意図:
+  - `Finset.pi` を軸座標ごとの fibers に分解したとき、
+    `card_biUnion` を適用するための pairwise disjoint 条件を先に固定。
+  - `hs_mod` 本体で `range (n axis)` 上の `biUnion` カウントへ進む基礎を準備。
+- 補足:
+  - `pi_insert` の `univ` 直接版は dependent index の型同型（`insert ... = univ`）で
+    証明項が重くなるため、今回は導入を見送り、先に disjoint 側を確定した。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（残る warning は `sorry` のみ）。
+
+### 2026-02-26 phase-12 継続（`hs_mod` 実装準備：`Pi.cons` 後の差分 mod3 展開）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `diffMod3_toNat_piCons_axis0`
+  2. `diffMod3_toNat_piCons_axis1`
+- 意図:
+  - `pi_insert` 分解後の fiber 内で、
+    `((x0 - x1) % 3).toNat` を `b` と残り座標の式へ直接落とせるようにした。
+  - `hs_mod` で必要な「固定 tail に対する 1次元 range カウント」へ接続しやすくした。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（残る warning は `sorry` のみ）。

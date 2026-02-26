@@ -522,6 +522,74 @@ lemma axis0_mem_univ_erase_axis1 {d : ℕ} (hd : 2 ≤ d) :
   refine Finset.mem_erase.mpr ?_
   exact ⟨axis0_ne_axis1 hd, Finset.mem_univ _⟩
 
+/-- 異なる `b` で作る `Pi.cons` 像は互いに交わらない。 -/
+lemma disjoint_image_piCons_of_ne {d : ℕ}
+    {s : Finset (Fin d)} {a : Fin d}
+    (u : Finset (∀ i ∈ s, ℕ))
+    {b₁ b₂ : ℕ} (hbb : b₁ ≠ b₂) :
+    Disjoint (u.image (Finset.Pi.cons s a b₁))
+      (u.image (Finset.Pi.cons s a b₂)) := by
+  refine Finset.disjoint_left.mpr ?_
+  intro x hx1 hx2
+  rcases Finset.mem_image.mp hx1 with ⟨f1, hf1, rfl⟩
+  rcases Finset.mem_image.mp hx2 with ⟨f2, hf2, hEq⟩
+  have hval := congrArg (fun g => g a (Finset.mem_insert_self a s)) hEq
+  have : b₂ = b₁ := by simpa using hval
+  exact hbb this.symm
+
+/-- `b` ごとの `Pi.cons` fiber は pairwise disjoint。 -/
+lemma pairwiseDisjoint_image_piCons {d : ℕ}
+    {s : Finset (Fin d)} {a : Fin d}
+    (u : Finset (∀ i ∈ s, ℕ)) (m : ℕ) :
+    ((Finset.range m : Finset ℕ) : Set ℕ).PairwiseDisjoint
+      (fun b => u.image (Finset.Pi.cons s a b)) := by
+  intro b hb b' hb' hne
+  exact disjoint_image_piCons_of_ne u hne
+
+/-- `axis0` を `Pi.cons` したときの差分 mod 3 展開。 -/
+lemma diffMod3_toNat_piCons_axis0 {d : ℕ} (hd : 2 ≤ d)
+    {s : Finset (Fin d)} (haxis1 : axis1 hd ∈ s)
+    (b : ℕ) (f : ∀ i ∈ s, ℕ) :
+    ((((piCoordOn (Finset.Pi.cons s (axis0 hd) b f) (axis0 hd)
+        (Finset.mem_insert_self (axis0 hd) s) : ℕ) : ℤ)
+      - ((piCoordOn (Finset.Pi.cons s (axis0 hd) b f) (axis1 hd)
+          (Finset.mem_insert_of_mem haxis1) : ℕ) : ℤ)) % 3).toNat
+      = (((b : ℤ) - (f (axis1 hd) haxis1 : ℤ)) % 3).toNat := by
+  have h0 :
+      piCoordOn (Finset.Pi.cons s (axis0 hd) b f) (axis0 hd)
+        (Finset.mem_insert_self (axis0 hd) s) = b := by
+    simp [piCoordOn]
+  have h1 :
+      piCoordOn (Finset.Pi.cons s (axis0 hd) b f) (axis1 hd)
+        (Finset.mem_insert_of_mem haxis1) = f (axis1 hd) haxis1 := by
+    simpa [piCoordOn] using
+      (piCoordOn_cons_ne (a := axis0 hd) (i := axis1 hd)
+        (ha := axis0_ne_axis1 hd) (b := b) (f := f)
+        (h := Finset.mem_insert_of_mem haxis1))
+  simp [h0, h1]
+
+/-- `axis1` を `Pi.cons` したときの差分 mod 3 展開。 -/
+lemma diffMod3_toNat_piCons_axis1 {d : ℕ} (hd : 2 ≤ d)
+    {s : Finset (Fin d)} (haxis0 : axis0 hd ∈ s)
+    (b : ℕ) (f : ∀ i ∈ s, ℕ) :
+    ((((piCoordOn (Finset.Pi.cons s (axis1 hd) b f) (axis0 hd)
+        (Finset.mem_insert_of_mem haxis0) : ℕ) : ℤ)
+      - ((piCoordOn (Finset.Pi.cons s (axis1 hd) b f) (axis1 hd)
+          (Finset.mem_insert_self (axis1 hd) s) : ℕ) : ℤ)) % 3).toNat
+      = (((f (axis0 hd) haxis0 : ℤ) - (b : ℤ)) % 3).toNat := by
+  have h0 :
+      piCoordOn (Finset.Pi.cons s (axis1 hd) b f) (axis0 hd)
+        (Finset.mem_insert_of_mem haxis0) = f (axis0 hd) haxis0 := by
+    simpa [piCoordOn] using
+      (piCoordOn_cons_ne (a := axis1 hd) (i := axis0 hd)
+        (ha := (axis0_ne_axis1 hd).symm) (b := b) (f := f)
+        (h := Finset.mem_insert_of_mem haxis0))
+  have h1 :
+      piCoordOn (Finset.Pi.cons s (axis1 hd) b f) (axis1 hd)
+        (Finset.mem_insert_self (axis1 hd) s) = b := by
+    simp [piCoordOn]
+  simp [h0, h1]
+
 /-- `Finset.pi` 側要素の座標値（`Finset.univ` 証明を補った形）。 -/
 def piCoord {d : ℕ}
     (f : ∀ i ∈ (Finset.univ : Finset (Fin d)), ℕ) (i : Fin d) : ℕ :=
