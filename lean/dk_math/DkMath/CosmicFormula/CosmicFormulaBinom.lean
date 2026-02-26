@@ -214,11 +214,11 @@ theorem f_eq_pow_sub {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
 /-- 無次元版: R の定義 -/
 def R (d : ℕ) (x u : ℝ) : ℝ := (x + u) ^ d - u ^ d - (Nat.choose d 1 : ℝ) * x * u ^ (d - 1)
 
-#eval R 3 2 1  -- 20
-#eval R 4 2 1  -- 72
-#eval R 5 2 1  -- 232
-#eval R 6 2 1  -- 716
-#print "verify: 20, 72, 232, 716 -- これは f_d(2;1) の値で、d=3,4,5,6 に対応"
+-- #eval R 3 2 1  -- 20
+-- #eval R 4 2 1  -- 72
+-- #eval R 5 2 1  -- 232
+-- #eval R 6 2 1  -- 716
+-- #print "verify: 20, 72, 232, 716 -- これは f_d(2;1) の値で、d=3,4,5,6 に対応"
 
 /-- f は無次元宇宙式の関係式に等しい -/
 theorem f_eq_relation {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
