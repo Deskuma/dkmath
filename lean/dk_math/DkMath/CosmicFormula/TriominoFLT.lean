@@ -102,7 +102,7 @@ lemma color3_L_tromino_standard {d : ℕ} (hd : 2 ≤ d) (v : Cell d) :
     (t.filter fun c => color3 c = 0).card = 1 ∧
     (t.filter fun c => color3 c = 1).card = 1 ∧
     (t.filter fun c => color3 c = 2).card = 1 := by
-  sorry  -- todo: 色の定義に基づいて、L型トロミノの標準配置が各色をちょうど1つずつ含むことを証明
+  sorry  -- phase-12: helper lemmas (distinctness / mod-3 shift) を先に分解実装してから本体を再導入
 /-- 核心：敷き詰め可能なら各色のセル数が等しい -/
 lemma color_balance_of_tiling {α : Type*} [DecidableEq α] (colorFn : α → Fin 3)
     {R : Finset α} {IsLTromino : Finset α → Prop}

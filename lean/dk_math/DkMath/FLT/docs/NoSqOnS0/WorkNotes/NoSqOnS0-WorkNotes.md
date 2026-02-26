@@ -114,3 +114,19 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.Main DkMath.FLT.GEisensteinBridge`
   - 結果: 成功（`GEisensteinBridge` に `intro` 形の提案 warning 1件のみ）。
+
+### 2026-02-26 phase-12 継続（Triomino 最初の `sorry` 着手と分解方針確定）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+- 実施内容:
+  1. `color3_L_tromino_standard` の直接証明を試行し、
+     「相異性証明」「mod 3 シフト計算」「3要素 Finset の色カウント」の3ブロック分解が必要であることを確認。
+  2. いったんビルド安定性を優先し、本補題は `sorry` のまま維持（コメントを phase-12 方針に更新）。
+- 次の実装方針:
+  1. 相異性補題（`v`, `v+e0`, `v+e1` が pairwise distinct）を独立補題化
+  2. `color3` の `+e0/+e1` での剰余シフト補題を独立補題化
+  3. 上記2系統を合流して `color3_L_tromino_standard` を再度実装
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT DkMath.FLT.Main`
+  - 結果: 成功（`TriominoFLT` の既存 `sorry` warning は継続）。
