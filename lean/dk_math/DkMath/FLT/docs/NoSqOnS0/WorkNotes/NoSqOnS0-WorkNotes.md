@@ -517,3 +517,21 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
   - 結果: 成功（残 `sorry` は高指数側 2件のみ）。
+
+### 2026-02-26 phase-12 継続（高指数未解決を単一核へ集約）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `FLT_highExponent_core_pending` を新設
+     - 前提: `4 ≤ n`, `¬ 3 ∣ n`, `¬ 4 ∣ n`, `hpos`, `h_eq`
+     - 現段階で唯一の `sorry` をこの補題に集約
+  2. `FLT_from_tromino_tiling` の高指数未実装箇所を上記核補題呼び出しへ置換
+  3. `FLT_general_via_tromino` の未実装箇所も同じ核補題呼び出しへ置換
+- 意図:
+  - 未解決点を1箇所へ集約し、今後の実装対象を明確化。
+  - 「局所に散った `sorry`」から「核補題1本」に移行し、レビュー負荷を下げる。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（`sorry` は `FLT_highExponent_core_pending` の1件のみ）。

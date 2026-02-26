@@ -1815,6 +1815,22 @@ theorem card_body_from_cosmic (d x u : ℕ) :
   omega
 
 /--
+高指数側（`n ≥ 4` かつ `¬ 3 ∣ n` かつ `¬ 4 ∣ n`）の未解決核。
+
+NOTE:
+- ここが phase-12 時点の単一 TODO。
+- `FLT_from_tromino_tiling` / `FLT_general_via_tromino` はこの核補題へ接続済み。
+-/
+lemma FLT_highExponent_core_pending {x y z n : ℕ}
+    (hn_ge4 : 4 ≤ n)
+    (h3n_not : ¬ 3 ∣ n)
+    (h4n_not : ¬ 4 ∣ n)
+    (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
+    (h_eq : x ^ n + y ^ n = z ^ n) : False := by
+  clear hn_ge4 h3n_not h4n_not hpos h_eq
+  sorry  -- todo: 高指数（`¬3∣n ∧ ¬4∣n`）本体の矛盾導出をここへ実装
+
+/--
 トロミノ充填によるフェルマーの最終定理の背理法（スケルトン）
 -/
 theorem FLT_from_tromino_tiling {x y z : ℕ} (n : ℕ)
@@ -1846,24 +1862,12 @@ theorem FLT_from_tromino_tiling {x y z : ℕ} (n : ℕ)
   · have hflt : FermatLastTheoremFor n :=
       FermatLastTheoremFor.mono h4n fermatLastTheoremFour
     exact (hflt x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq).elim
-  -- 敷き詰め可能なら各色のセル数が等しい
-  have h_balance := color_balance_of_tiling color3 h_color h_tile
-  -- 敷き詰め可能なら面積が 3 の倍数であることを要求する
-  have ⟨k, h_div3⟩ := tileableByLTromino_implies_card_thrice h_tromino_card h_tile
-  rw [h_area] at h_div3
-  -- h_div3 : x^n = 3 * k
-  have h3x : 3 ∣ x := by
-    have h_prime : Nat.Prime 3 := by norm_num
-    apply h_prime.dvd_of_dvd_pow
-    rw [h_div3]
-    apply dvd_mul_right
-  -- `n ≥ 4` 側の本体（未実装）:
-  -- 同様の議論を y, z にも適用し、無限降下へ繋ぐ。
   have hn_ge4 : 4 ≤ n := hn4
   have h3n_not : ¬ 3 ∣ n := h3n
   have h4n_not : ¬ 4 ∣ n := h4n
-  clear h_balance h3x hn_ge4 h3n_not h4n_not
-  sorry  -- todo: y, z にも同様の議論を適用し、無限降下へ繋ぐ
+  -- NOTE:
+  -- 現段階では高指数核補題へ接続（最終的には tiling 側の局所補題で置換予定）。
+  exact (FLT_highExponent_core_pending hn_ge4 h3n_not h4n_not ⟨hx, hy, hz⟩ h_eq).elim
 
 /-! ## セクション 5：次元別の特例 -/
 
@@ -1904,8 +1908,7 @@ theorem FLT_general_via_tromino {x y z : ℕ} (n : ℕ)
   have hn_ge4 : 4 ≤ n := hn4
   have h3n_not : ¬ 3 ∣ n := h3n
   have h4n_not : ¬ 4 ∣ n := h4n
-  clear hn_ge4 h3n_not h4n_not
-  sorry  -- todo: 上記の戦略に基づいて、一般 n ≥ 3 の場合に矛盾を導く
+  exact FLT_highExponent_core_pending hn_ge4 h3n_not h4n_not ⟨hx, hy, hz⟩ h_eq
 
 end DkMath
 
