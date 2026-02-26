@@ -580,3 +580,21 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（Provider 変換の完備化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `numberTheoryReduceProvider_of_stepProvider`
+  2. `numberTheoryReduce_of_hasKernel`（`hbc/hcop` + `Nonempty kernel` から `NumberTheoryReduce`）
+  3. `numberTheoryReduceProvider_of_kernelProvider`
+  4. `numberTheoryStepProvider_of_kernelProvider`
+  5. `FLT_d3_by_padicValNat_of_numberTheoryReduceProvider_coprimeSupport_direct`
+- 意図:
+  - `Reduce/Step/Kernel` の provider 間を相互変換可能にして、
+    数論本体の実装起点をどの型で書いても最終入口へ接続できる状態にした。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。

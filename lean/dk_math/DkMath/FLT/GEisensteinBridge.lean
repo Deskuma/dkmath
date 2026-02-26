@@ -1343,6 +1343,16 @@ structure NumberTheoryStepProvider where
       PrimitiveSquareDescentStep c b
 
 /--
+`NumberTheoryStepProvider` から `NumberTheoryReduceProvider` を得る。
+-/
+noncomputable def numberTheoryReduceProvider_of_stepProvider
+    (provStep : NumberTheoryStepProvider) :
+    NumberTheoryReduceProvider where
+  hasReduce := by
+    intro c b hbc hcop
+    exact numberTheoryReduce_of_step (provStep.hasStep hbc hcop)
+
+/--
 `NumberTheoryReduceProvider` から `NumberTheoryStepProvider` を得る。
 -/
 def numberTheoryStepProvider_of_reduceProvider
@@ -1361,6 +1371,41 @@ def numberTheoryKernelProvider_of_reduceProvider
   hasKernel := by
     intro c b hbc hcop
     exact numberTheoryHasKernel_of_reduce (provReduce.hasReduce hbc hcop)
+
+/--
+固定 `(c,b)` の `ReductionKernel` 存在（`hbc/hcop` 付き）から
+`NumberTheoryReduce c b` を（選択公理で）構成する。
+-/
+noncomputable def numberTheoryReduce_of_hasKernel {c b : ℕ}
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b)
+    (hker : Nonempty (NumberTheoryDescentOn.ReductionKernel c b)) :
+    NumberTheoryReduce c b := by
+  let ker : NumberTheoryDescentOn.ReductionKernel c b := Classical.choice hker
+  intro q hPrim hSq
+  exact (NumberTheoryDescentOn.localReduce_of_kernel ker)
+    ⟨q, hbc, hcop, hPrim, hSq⟩
+
+/--
+`NumberTheoryKernelProvider` から `NumberTheoryReduceProvider` を得る。
+-/
+noncomputable def numberTheoryReduceProvider_of_kernelProvider
+    (provKernel : NumberTheoryKernelProvider) :
+    NumberTheoryReduceProvider where
+  hasReduce := by
+    intro c b hbc hcop
+    exact numberTheoryReduce_of_hasKernel hbc hcop (provKernel.hasKernel hbc hcop)
+
+/--
+`NumberTheoryKernelProvider` から `NumberTheoryStepProvider` を得る。
+-/
+noncomputable def numberTheoryStepProvider_of_kernelProvider
+    (provKernel : NumberTheoryKernelProvider) :
+    NumberTheoryStepProvider where
+  hasStep := by
+    intro c b hbc hcop
+    exact primitiveSquareDescentStep_of_reduce
+      (numberTheoryReduce_of_hasKernel hbc hcop (provKernel.hasKernel hbc hcop))
 
 /--
 `NumberTheoryStepProvider` から `NumberTheoryKernelProvider` を得る。
