@@ -252,7 +252,7 @@ lemma color3_add_basis1 {d : ℕ} (hd : 2 ≤ d) (v : Cell d) :
     simpa [axis0, axis1] using color3_val_add_basis1 hd v
   have hmod_minus : ((diff - 1) % 3) = ((r + 2) % 3) := by
     calc
-      ((diff - 1) % 3) = ((diff + (-1)) % 3) := by ring
+      ((diff - 1) % 3) = ((diff + (-1)) % 3) := by ring_nf
       _ = (((diff % 3) + ((-1) % 3)) % 3) := by
         simpa using Int.add_emod diff (-1) 3
       _ = ((r + 2) % 3) := by
@@ -491,6 +491,66 @@ lemma card_filter_Box_eq_card_filter_pi {d : ℕ}
   rw [Finset.filter_map, Finset.card_map]
   rfl
 
+/-- `Finset.pi` 側要素の座標値（`Finset.univ` 証明を補った形）。 -/
+def piCoord {d : ℕ}
+    (f : ∀ i ∈ (Finset.univ : Finset (Fin d)), ℕ) (i : Fin d) : ℕ :=
+  f i (Finset.mem_univ i)
+
+/-- `pi` 側要素を `Cell` へ埋めたときの `color3` の `val` 展開。 -/
+lemma color3_val_of_pi {d : ℕ} (hd : 2 ≤ d)
+    (f : ∀ i ∈ (Finset.univ : Finset (Fin d)), ℕ) :
+    (color3 (((DkMath.CellDim.piToFunEmb d).trans (DkMath.CellDim.ofNatCellEmb d)) f)).val
+      = ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) := by
+  simpa [piCoord, axis0, axis1] using
+    color3_val hd (((DkMath.CellDim.piToFunEmb d).trans (DkMath.CellDim.ofNatCellEmb d)) f)
+
+/-- `pi` 側での `color3 = k` filter card を、座標差 mod3 条件へ変換。 -/
+lemma card_filter_color3_eq_piCoord {d : ℕ} (hd : 2 ≤ d)
+    (s : Finset (∀ i ∈ (Finset.univ : Finset (Fin d)), ℕ)) (k : Fin 3) :
+    (s.filter
+      (fun f => color3 (((DkMath.CellDim.piToFunEmb d).trans (DkMath.CellDim.ofNatCellEmb d)) f) = k)).card
+      = (s.filter
+          (fun f =>
+            ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = k.val)).card := by
+  have hPred :
+      ∀ f : ∀ i ∈ (Finset.univ : Finset (Fin d)), ℕ,
+        color3 (((DkMath.CellDim.piToFunEmb d).trans (DkMath.CellDim.ofNatCellEmb d)) f) = k
+          ↔ ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = k.val := by
+    intro f
+    constructor
+    · intro hk
+      have hv : (color3 (((DkMath.CellDim.piToFunEmb d).trans (DkMath.CellDim.ofNatCellEmb d)) f)).val = k.val :=
+        congrArg Fin.val hk
+      calc
+        ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat)
+            = (color3 (((DkMath.CellDim.piToFunEmb d).trans (DkMath.CellDim.ofNatCellEmb d)) f)).val := by
+              symm
+              exact color3_val_of_pi hd f
+        _ = k.val := hv
+    · intro hv
+      apply Fin.ext
+      calc
+        (color3 (((DkMath.CellDim.piToFunEmb d).trans (DkMath.CellDim.ofNatCellEmb d)) f)).val
+            = ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) := by
+              exact color3_val_of_pi hd f
+        _ = k.val := hv
+  have hEq :
+      (s.filter
+        (fun f => color3 (((DkMath.CellDim.piToFunEmb d).trans (DkMath.CellDim.ofNatCellEmb d)) f) = k))
+      =
+      (s.filter
+        (fun f =>
+          ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = k.val)) := by
+    ext f
+    constructor
+    · intro hf
+      rcases Finset.mem_filter.mp hf with ⟨hfs, hk⟩
+      exact Finset.mem_filter.mpr ⟨hfs, (hPred f).1 hk⟩
+    · intro hf
+      rcases Finset.mem_filter.mp hf with ⟨hfs, hv⟩
+      exact Finset.mem_filter.mpr ⟨hfs, (hPred f).2 hv⟩
+  exact congrArg Finset.card hEq
+
 /-- 補題：最初か二番目の軸が 3 の倍数なら、Box は色平衡である -/
 lemma color_balance_of_box_3k {d : ℕ} (hd : 2 ≤ d) (n : Fin d → ℕ)
     (h3 : 3 ∣ n ⟨0, by omega⟩ ∨ 3 ∣ n ⟨1, by omega⟩) :
@@ -517,9 +577,44 @@ lemma color_balance_of_box_3k {d : ℕ} (hd : 2 ≤ d) (n : Fin d → ℕ)
   have hs :
       (s.filter fun f => color3 (e f) = 0).card = (s.filter fun f => color3 (e f) = 1).card ∧
       (s.filter fun f => color3 (e f) = 0).card = (s.filter fun f => color3 (e f) = 2).card := by
+    have hs0 :
+        (s.filter fun f => color3 (e f) = 0).card
+          = (s.filter
+              (fun f =>
+                ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 0)).card := by
+      simpa [s, e] using card_filter_color3_eq_piCoord hd s (0 : Fin 3)
+    have hs1 :
+        (s.filter fun f => color3 (e f) = 1).card
+          = (s.filter
+              (fun f =>
+                ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 1)).card := by
+      simpa [s, e] using card_filter_color3_eq_piCoord hd s (1 : Fin 3)
+    have hs2 :
+        (s.filter fun f => color3 (e f) = 2).card
+          = (s.filter
+              (fun f =>
+                ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 2)).card := by
+      simpa [s, e] using card_filter_color3_eq_piCoord hd s (2 : Fin 3)
     -- TODO: axis0 / axis1 が 3 の倍数のどちらかという仮定 `h3` を使って、
     -- `s` 上の mod-3 residue カウントへ落として示す。
-    sorry
+    have hs_mod :
+        (s.filter
+          (fun f =>
+            ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 0)).card
+          =
+        (s.filter
+          (fun f =>
+            ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 1)).card
+          ∧
+        (s.filter
+          (fun f =>
+            ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 0)).card
+          =
+        (s.filter
+          (fun f =>
+            ((((piCoord f (axis0 hd) : ℤ) - (piCoord f (axis1 hd) : ℤ)) % 3).toNat) = 2)).card := by
+      sorry
+    exact ⟨by simpa [hs0, hs1] using hs_mod.1, by simpa [hs0, hs2] using hs_mod.2⟩
   exact ⟨by simpa [hR0, hR1] using hs.1, by simpa [hR0, hR2] using hs.2⟩
 
 /-! ## セクション 3：宇宙式 Body との接続 -/

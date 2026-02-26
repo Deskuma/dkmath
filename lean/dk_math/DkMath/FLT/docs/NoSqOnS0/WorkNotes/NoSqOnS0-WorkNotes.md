@@ -226,3 +226,21 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
   - 結果: 成功（`color_balance_of_box_3k` の中核 `hs` が未解決）。
+
+### 2026-02-26 phase-12 継続（`card_filter_color3_eq_piCoord` の型向き修正）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `card_filter_color3_eq_piCoord` の `hPred` で、
+     `simpa` 依存だった双方向変換を `calc` で明示化。
+  2. `color3_val_of_pi` を向き付きで使い、
+     `color3 = k` と `toNat = k.val` の橋を安定化。
+  3. `color3_add_basis1` 内の `ring` を `ring_nf` へ置換（linter 提案反映）。
+- 結果:
+  - `line 524/527` で発生していた型不一致エラーを解消。
+  - `color_balance_of_box_3k` の未解決は `hs_mod` 本体のみに集約。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（残る warning は `sorry` のみ）。
