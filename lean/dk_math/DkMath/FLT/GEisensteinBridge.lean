@@ -1317,6 +1317,26 @@ lemma NoSqOnS0_of_numberTheoryHasKernel_coprime {c b : ℕ}
   exact NoSqOnS0_of_numberTheoryKernel_coprime ker hbc hcop hq hqS0
 
 /--
+phase-11 本実装ターゲット:
+固定 `(c,b)` ごとに `ReductionKernel` を供給する数論 provider。
+-/
+structure NumberTheoryKernelProvider where
+  hasKernel :
+    ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+      Nonempty (NumberTheoryDescentOn.ReductionKernel c b)
+
+/--
+`NumberTheoryKernelProvider` から `NoSqOnS0` を回復する。
+-/
+lemma NoSqOnS0_of_numberTheoryKernelProvider {c b : ℕ}
+    (prov : NumberTheoryKernelProvider)
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b) :
+    NoSqOnS0 c b := by
+  exact NoSqOnS0_of_numberTheoryHasKernel_coprime
+    (prov.hasKernel hbc hcop) hbc hcop
+
+/--
 固定 `(c,b)` の `LocalReduce` から `NoSqOnS0` を回復する。
 -/
 lemma NoSqOnS0_of_numberTheoryLocalReduceOn_coprime {c b : ℕ}

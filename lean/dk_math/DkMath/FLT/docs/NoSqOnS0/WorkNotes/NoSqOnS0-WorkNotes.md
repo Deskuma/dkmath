@@ -529,3 +529,19 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（実装ターゲットとして `KernelProvider` を明文化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `NumberTheoryKernelProvider`（全 `(c,b)` で kernel を供給）
+  2. `NoSqOnS0_of_numberTheoryKernelProvider`
+  3. `FLT_d3_by_padicValNat_of_numberTheoryKernelProvider_coprimeSupport_direct`
+- 意図:
+  - phase-11 本実装の到達点を「kernel を全 `(c,b)` で供給できること」として型で固定。
+  - 以後は provider の中身（具体数論補題）を実装すれば、そのまま Main 入口へ接続できる。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。

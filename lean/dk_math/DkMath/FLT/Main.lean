@@ -575,6 +575,20 @@ theorem FLT_d3_by_padicValNat_of_numberTheoryHasKernel_coprimeSupport_direct {a 
     ha hb hc hab hbc hcb_coprime ker
 
 /--
+数論 kernel provider（全 `(c,b)` 供給）から接続する入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryKernelProvider_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (prov : NumberTheoryKernelProvider) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_numberTheoryKernelProvider prov hbc hcb_coprime
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
 固定 `(c,b)` の数論ローカル降下入力 (`LocalReduce`) から接続する入口。
 -/
 theorem FLT_d3_by_padicValNat_of_numberTheoryLocalReduceOn_coprimeSupport_direct {a b c : ℕ}
