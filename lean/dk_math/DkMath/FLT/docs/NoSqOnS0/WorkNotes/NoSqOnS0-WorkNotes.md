@@ -375,3 +375,22 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
   - 結果: 成功（残る warning は `sorry` と linter 提案のみ）。
+
+### 2026-02-26 phase-12 継続（mod3 条件変換補題の追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `sub_toNat_eq_iff_mod`
+  2. `card_filter_range_sub_mod3_toNat_eq_of_dvd`
+- 意図:
+  - `hs_mod` で扱っている
+    `((((b:ℤ) - (c:ℤ)) % 3).toNat) = k` を
+    `Nat` 側の mod 条件へ直接落とせるようにした。
+  - `3 ∣ m` のとき、上記条件で絞った `range m` の card が
+    `k ∈ {0,1,2}` で不変であることを、既存の
+    `card_filter_range_mod3_eq_of_dvd` へ接続可能にした。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（残る warning は `sorry` と linter 提案のみ）。

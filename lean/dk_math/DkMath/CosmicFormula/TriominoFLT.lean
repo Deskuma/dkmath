@@ -477,6 +477,22 @@ lemma card_filter_range_mod3_eq_of_dvd (m v₁ v₂ : ℕ) (hm : 3 ∣ m) :
   rw [card_filter_range_mod3_eq_div_of_dvd m v₁ hm,
       card_filter_range_mod3_eq_div_of_dvd m v₂ hm]
 
+/-- `k < 3` のとき、`((b - c) mod 3).toNat = k` は `Nat` 側の mod 条件と同値。 -/
+lemma sub_toNat_eq_iff_mod (b c k : ℕ) (hk : k < 3) :
+    ((((b : ℤ) - (c : ℤ)) % 3).toNat = k) ↔ b % 3 = (c + k) % 3 := by
+  omega
+
+/-- `3 ∣ m` なら、`((b - c) mod 3).toNat = k` での `range m` の card は `k<3` の範囲で不変。 -/
+lemma card_filter_range_sub_mod3_toNat_eq_of_dvd (m c k₁ k₂ : ℕ)
+    (hm : 3 ∣ m) (hk₁ : k₁ < 3) (hk₂ : k₂ < 3) :
+    ((Finset.range m).filter
+      (fun b : ℕ => ((((b : ℤ) - (c : ℤ)) % 3).toNat) = k₁)).card
+      =
+    ((Finset.range m).filter
+      (fun b : ℕ => ((((b : ℤ) - (c : ℤ)) % 3).toNat) = k₂)).card := by
+  simpa [Nat.ModEq, sub_toNat_eq_iff_mod, hk₁, hk₂] using
+    (card_filter_range_mod3_eq_of_dvd m (c + k₁) (c + k₂) hm)
+
 /-- `Box` 上の filter card を、`Finset.pi` 側の filter card に引き戻す。 -/
 lemma card_filter_Box_eq_card_filter_pi {d : ℕ}
     (n : Fin d → ℕ) (P : Cell d → Prop) [DecidablePred P] :
@@ -495,6 +511,11 @@ lemma card_filter_Box_eq_card_filter_pi {d : ℕ}
 def piCoordOn {d : ℕ} {s : Finset (Fin d)}
     (f : ∀ i ∈ s, ℕ) (i : Fin d) (hi : i ∈ s) : ℕ :=
   f i hi
+
+/-- `Finset.pi` 側要素の座標値（`Finset.univ` 証明を補った形）。 -/
+def piCoord {d : ℕ}
+    (f : ∀ i ∈ (Finset.univ : Finset (Fin d)), ℕ) (i : Fin d) : ℕ :=
+  piCoordOn f i (Finset.mem_univ i)
 
 /-- `Pi.cons` した関数の挿入軸座標。 -/
 @[simp] lemma piCoordOn_cons_same {d : ℕ} {s : Finset (Fin d)}
@@ -534,6 +555,70 @@ lemma map_pi_eq_pi_of_eq {d : ℕ} {s t : Finset (Fin d)} (h : s = t) (n : Fin d
       = Finset.pi t (fun i => Finset.range (n i)) := by
   cases h
   simp [piFunEquiv]
+
+/-- `piFunEquiv` で運搬した座標値は、証明引数を除けば同じ値。 -/
+lemma piCoordOn_piFunEquiv {d : ℕ} {s t : Finset (Fin d)} (h : s = t)
+    (f : ∀ i ∈ s, ℕ) (i : Fin d)
+    (hi : i ∈ s) (hit : i ∈ t) :
+    piCoordOn ((piFunEquiv h) f) i hit = f i hi := by
+  cases h
+  change f i hit = f i hi
+  simp only
+/-- `hIns0` 運搬後の `axis0` 座標は元の `axis0` 座標に一致。 -/
+lemma piCoord_piFunEquiv_insert0_axis0 {d : ℕ} (hd : 2 ≤ d)
+    (hIns0 :
+      insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd))
+        = (Finset.univ : Finset (Fin d)))
+    (f : ∀ i ∈ insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)), ℕ) :
+    piCoord ((piFunEquiv hIns0) f) (axis0 hd)
+      =
+    f (axis0 hd) (Finset.mem_insert_self (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd))) := by
+  unfold piCoord
+  exact piCoordOn_piFunEquiv hIns0 f (axis0 hd)
+    (Finset.mem_insert_self (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)))
+    (Finset.mem_univ (axis0 hd))
+
+/-- `hIns0` 運搬後の `axis1` 座標は元の `axis1` 座標に一致。 -/
+lemma piCoord_piFunEquiv_insert0_axis1 {d : ℕ} (hd : 2 ≤ d)
+    (hIns0 :
+      insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd))
+        = (Finset.univ : Finset (Fin d)))
+    (f : ∀ i ∈ insert (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd)), ℕ) :
+    piCoord ((piFunEquiv hIns0) f) (axis1 hd)
+      =
+    f (axis1 hd) (Finset.mem_insert_of_mem (axis1_mem_univ_erase_axis0 hd)) := by
+  unfold piCoord
+  exact piCoordOn_piFunEquiv hIns0 f (axis1 hd)
+    (Finset.mem_insert_of_mem (axis1_mem_univ_erase_axis0 hd))
+    (Finset.mem_univ (axis1 hd))
+
+/-- `hIns1` 運搬後の `axis0` 座標は元の `axis0` 座標に一致。 -/
+lemma piCoord_piFunEquiv_insert1_axis0 {d : ℕ} (hd : 2 ≤ d)
+    (hIns1 :
+      insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd))
+        = (Finset.univ : Finset (Fin d)))
+    (f : ∀ i ∈ insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)), ℕ) :
+    piCoord ((piFunEquiv hIns1) f) (axis0 hd)
+      =
+    f (axis0 hd) (Finset.mem_insert_of_mem (axis0_mem_univ_erase_axis1 hd)) := by
+  unfold piCoord
+  exact piCoordOn_piFunEquiv hIns1 f (axis0 hd)
+    (Finset.mem_insert_of_mem (axis0_mem_univ_erase_axis1 hd))
+    (Finset.mem_univ (axis0 hd))
+
+/-- `hIns1` 運搬後の `axis1` 座標は元の `axis1` 座標に一致。 -/
+lemma piCoord_piFunEquiv_insert1_axis1 {d : ℕ} (hd : 2 ≤ d)
+    (hIns1 :
+      insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd))
+        = (Finset.univ : Finset (Fin d)))
+    (f : ∀ i ∈ insert (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)), ℕ) :
+    piCoord ((piFunEquiv hIns1) f) (axis1 hd)
+      =
+    f (axis1 hd) (Finset.mem_insert_self (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd))) := by
+  unfold piCoord
+  exact piCoordOn_piFunEquiv hIns1 f (axis1 hd)
+    (Finset.mem_insert_self (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd)))
+    (Finset.mem_univ (axis1 hd))
 
 /-- `univ` と `insert(axis0, erase axis0)` の `pi` 上 filter card を運搬で一致させる。 -/
 lemma card_filter_pi_univ_eq_insertErase_axis0 {d : ℕ} (hd : 2 ≤ d) (n : Fin d → ℕ)
@@ -938,11 +1023,6 @@ lemma card_filter_image_piCons_axis1_univErase {d : ℕ} (hd : 2 ≤ d)
       (ha := by simp)
       (haxis0 := axis0_mem_univ_erase_axis1 hd)
       (u := u) (b := b) (k := k))
-
-/-- `Finset.pi` 側要素の座標値（`Finset.univ` 証明を補った形）。 -/
-def piCoord {d : ℕ}
-    (f : ∀ i ∈ (Finset.univ : Finset (Fin d)), ℕ) (i : Fin d) : ℕ :=
-  piCoordOn f i (Finset.mem_univ i)
 
 /-- `pi` 側要素を `Cell` へ埋めたときの `color3` の `val` 展開。 -/
 lemma color3_val_of_pi {d : ℕ} (hd : 2 ≤ d)
