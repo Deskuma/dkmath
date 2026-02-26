@@ -499,3 +499,21 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
   - 結果: 成功。
+
+### 2026-02-26 phase-12 継続（`3 ∣ n` / `4 ∣ n` 分岐を先に封鎖）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `Mathlib.NumberTheory.FLT.Four` を追加 import
+  2. `FLT_from_tromino_tiling` に `3 ∣ n` / `4 ∣ n` の即時矛盾分岐を追加
+     （`FermatLastTheoremFor.mono` + `fermatLastTheoremThree/Four`）
+  3. `FLT_general_via_tromino` も同様に `3 ∣ n` / `4 ∣ n` を先に処理
+  4. 未実装領域を `¬3∣n ∧ ¬4∣n` 側に限定
+- 方針注記更新:
+  - `Temporary Mathlib FLT3 bridge` を `FLT3/4` 暫定依存に拡張して明記。
+  - 将来、Triomino/Cosmic 側の独立証明完成後に `fermatLastTheoremThree/Four` 依存を除去する方針を維持。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（残 `sorry` は高指数側 2件のみ）。

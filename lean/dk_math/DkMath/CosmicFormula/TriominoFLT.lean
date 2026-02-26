@@ -11,12 +11,13 @@ import DkMath.Tromino
 
 /-
 NOTE [Temporary Mathlib FLT3 bridge]:
-- このファイルでの `Mathlib.NumberTheory.FLT.Three` 参照は「暫定」。
+- このファイルでの `Mathlib.NumberTheory.FLT.Three/Four` 参照は「暫定」。
 - 目的は phase-12 時点で `n=3` 分岐を閉じ、`sorry` を高指数側へ隔離すること。
-- 将来、Triomino/Cosmic 側の独立証明（`n=3` を含む）を実装後、
-  `fermatLastTheoremThree` 依存は除去して置換する。
+- 将来、Triomino/Cosmic 側の独立証明（`n=3,4` を含む）を実装後、
+  `fermatLastTheoremThree` / `fermatLastTheoremFour` 依存は除去して置換する。
 -/
 import Mathlib.NumberTheory.FLT.Three
+import Mathlib.NumberTheory.FLT.Four
 
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
@@ -1837,6 +1838,14 @@ theorem FLT_from_tromino_tiling {x y z : ℕ} (n : ℕ)
     exact (fermatLastTheoremThree : FermatLastTheoremFor 3)
       x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq
   intro R h_area h_tile
+  by_cases h3n : 3 ∣ n
+  · have hflt : FermatLastTheoremFor n :=
+      FermatLastTheoremFor.mono h3n fermatLastTheoremThree
+    exact (hflt x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq).elim
+  by_cases h4n : 4 ∣ n
+  · have hflt : FermatLastTheoremFor n :=
+      FermatLastTheoremFor.mono h4n fermatLastTheoremFour
+    exact (hflt x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq).elim
   -- 敷き詰め可能なら各色のセル数が等しい
   have h_balance := color_balance_of_tiling color3 h_color h_tile
   -- 敷き詰め可能なら面積が 3 の倍数であることを要求する
@@ -1851,7 +1860,9 @@ theorem FLT_from_tromino_tiling {x y z : ℕ} (n : ℕ)
   -- `n ≥ 4` 側の本体（未実装）:
   -- 同様の議論を y, z にも適用し、無限降下へ繋ぐ。
   have hn_ge4 : 4 ≤ n := hn4
-  clear h_balance h3x hn_ge4
+  have h3n_not : ¬ 3 ∣ n := h3n
+  have h4n_not : ¬ 4 ∣ n := h4n
+  clear h_balance h3x hn_ge4 h3n_not h4n_not
   sorry  -- todo: y, z にも同様の議論を適用し、無限降下へ繋ぐ
 
 /-! ## セクション 5：次元別の特例 -/
@@ -1875,6 +1886,15 @@ theorem FLT_general_via_tromino {x y z : ℕ} (n : ℕ)
   rcases hcases with h3 | hn4
   · subst h3
     simpa using FLT_case_3_via_tromino hpos h_eq
+  rcases hpos with ⟨hx, hy, hz⟩
+  by_cases h3n : 3 ∣ n
+  · have hflt : FermatLastTheoremFor n :=
+      FermatLastTheoremFor.mono h3n fermatLastTheoremThree
+    exact hflt x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq
+  by_cases h4n : 4 ∣ n
+  · have hflt : FermatLastTheoremFor n :=
+      FermatLastTheoremFor.mono h4n fermatLastTheoremFour
+    exact hflt x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq
   -- 戦略：
   -- 1. z^n - y^n = x^n は宇宙式 Body(n, z-y, y) の面積。
   -- 2. この Body は彩色不変量の計算により「アンバランス」であり、L型トロミノでは充填不可。
@@ -1882,7 +1902,9 @@ theorem FLT_general_via_tromino {x y z : ℕ} (n : ℕ)
   --    宇宙式の構造（3+1=4）により、Body と等しくなければならない（はずだが矛盾する）。
   -- 4. この幾何学的形状の不整合が、FLT の解の非存在に繋がるのじゃ。
   have hn_ge4 : 4 ≤ n := hn4
-  clear hn_ge4
+  have h3n_not : ¬ 3 ∣ n := h3n
+  have h4n_not : ¬ 4 ∣ n := h4n
+  clear hn_ge4 h3n_not h4n_not
   sorry  -- todo: 上記の戦略に基づいて、一般 n ≥ 3 の場合に矛盾を導く
 
 end DkMath
