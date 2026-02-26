@@ -191,3 +191,20 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
   - 結果: 成功（既存 linter warning は継続）。
+
+### 2026-02-26 phase-12 継続（`Box` 色平衡向け 1次元 mod3 カウント補題）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `count_mod3_eq_div_of_dvd`
+  2. `card_filter_range_mod3_eq_div_of_dvd`
+  3. `card_filter_range_mod3_eq_of_dvd`
+- 意図:
+  - `color_balance_of_box_3k` の本体で必要になる
+    「`3 ∣ m` なら `range m` の各剰余類（mod 3）個数が一致」を先に固定。
+  - `Nat.count_modEq_card` を使って `m / 3` へ正規化する形に統一。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（残る `sorry` は `color_balance_of_box_3k` と FLT 骨格定理群）。

@@ -457,6 +457,26 @@ lemma color_balance_of_tiling {α : Type*} [DecidableEq α] (colorFn : α → Fi
   · rw [h_final 0, h_final 1]
   · rw [h_final 0, h_final 2]
 
+/-- `3 ∣ m` なら、`[0,m)` における各剰余類（mod 3）の個数は `m / 3`。 -/
+lemma count_mod3_eq_div_of_dvd (m v : ℕ) (hm : 3 ∣ m) :
+    m.count (fun x => x ≡ v [MOD 3]) = m / 3 := by
+  have h3pos : 0 < 3 := by decide
+  rw [Nat.count_modEq_card (b := m) (r := 3) (v := v) h3pos]
+  have hm0 : m % 3 = 0 := Nat.mod_eq_zero_of_dvd hm
+  simp [hm0]
+
+/-- `3 ∣ m` なら、`range m` を mod 3 で絞った card は `m / 3`。 -/
+lemma card_filter_range_mod3_eq_div_of_dvd (m v : ℕ) (hm : 3 ∣ m) :
+    ((Finset.range m).filter fun x => x ≡ v [MOD 3]).card = m / 3 := by
+  simpa [Nat.count_eq_card_filter_range] using count_mod3_eq_div_of_dvd m v hm
+
+/-- `3 ∣ m` なら、`range m` における任意2剰余類の個数は等しい。 -/
+lemma card_filter_range_mod3_eq_of_dvd (m v₁ v₂ : ℕ) (hm : 3 ∣ m) :
+    ((Finset.range m).filter fun x => x ≡ v₁ [MOD 3]).card
+      = ((Finset.range m).filter fun x => x ≡ v₂ [MOD 3]).card := by
+  rw [card_filter_range_mod3_eq_div_of_dvd m v₁ hm,
+      card_filter_range_mod3_eq_div_of_dvd m v₂ hm]
+
 /-- 補題：最初か二番目の軸が 3 の倍数なら、Box は色平衡である -/
 lemma color_balance_of_box_3k {d : ℕ} (hd : 2 ≤ d) (n : Fin d → ℕ)
     (h3 : 3 ∣ n ⟨0, by omega⟩ ∨ 3 ∣ n ⟨1, by omega⟩) :
