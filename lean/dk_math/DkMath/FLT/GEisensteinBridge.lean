@@ -1468,6 +1468,44 @@ noncomputable def numberTheoryHasStepFamily_of_hasKernel
   exact ⟨red.q', red.hPrim, red.hSq, red.hlt⟩
 
 /--
+`hasNonLiftable` family から `hasStep` family を作る。
+各 `(c,b,q)` で平方持ち上げが起きないため、`PrimitiveSquareDescentStep` は空前提で成立する。
+-/
+def numberTheoryHasStepFamily_of_nonLiftableFamily
+    (hasNonLift :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        ∀ q : ℕ, NonLiftableS0 c b q) :
+    ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+      PrimitiveSquareDescentStep c b := by
+  intro c b hbc hcop q hPrim hSq
+  exact False.elim (hasNonLift hbc hcop q hPrim hSq)
+
+/--
+`hasNonLiftable` family から `hasKernel` family を作る。
+-/
+def numberTheoryHasKernelFamily_of_nonLiftableFamily
+    (hasNonLift :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        ∀ q : ℕ, NonLiftableS0 c b q) :
+    ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+      Nonempty (NumberTheoryDescentOn.ReductionKernel c b) :=
+  numberTheoryHasKernelFamily_of_hasStep
+    (numberTheoryHasStepFamily_of_nonLiftableFamily hasNonLift)
+
+/--
+`hasNonLiftable` family 仮定から、固定 `(c,b)` の `NoSqOnS0` を回復する。
+-/
+lemma NoSqOnS0_of_numberTheoryHasNonLiftableFamily {c b : ℕ}
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b)
+    (hasNonLift :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        ∀ q : ℕ, NonLiftableS0 c b q) :
+    NoSqOnS0 c b := by
+  exact NoSqOnS0_of_numberTheoryHasStepFamily hbc hcop
+    (numberTheoryHasStepFamily_of_nonLiftableFamily hasNonLift)
+
+/--
 phase-11 本実装ターゲット:
 固定 `(c,b)` ごとに `ReductionKernel` を供給する数論 provider。
 -/

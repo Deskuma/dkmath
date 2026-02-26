@@ -732,6 +732,23 @@ theorem FLT_d3_by_padicValNat_of_numberTheoryHasLocalReduceFamily_coprimeSupport
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
 
 /--
+数論 nonLiftable family（全 `(c,b,q)` で `NonLiftableS0`）を直接受ける入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryHasNonLiftableFamily_coprimeSupport_direct
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hasNonLift :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        ∀ q : ℕ, NonLiftableS0 c b q) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_numberTheoryHasNonLiftableFamily hbc hcb_coprime hasNonLift
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
 固定 `(c,b)` の数論ローカル降下入力 (`LocalReduce`) から接続する入口。
 -/
 theorem FLT_d3_by_padicValNat_of_numberTheoryLocalReduceOn_coprimeSupport_direct {a b c : ℕ}

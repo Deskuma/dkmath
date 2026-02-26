@@ -711,3 +711,21 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功（`GEisensteinBridge` に `intro` 形の提案 warning 1件のみ）。
+
+### 2026-02-26 phase-11 継続（`hasNonLiftableFamily` 直結ルート追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `numberTheoryHasStepFamily_of_nonLiftableFamily`
+  2. `numberTheoryHasKernelFamily_of_nonLiftableFamily`
+  3. `NoSqOnS0_of_numberTheoryHasNonLiftableFamily`
+  4. `FLT_d3_by_padicValNat_of_numberTheoryHasNonLiftableFamily_coprimeSupport_direct`
+- 意図:
+  - 「全 `(c,b,q)` で `NonLiftableS0`」を直接受ける最短ルートを追加。
+  - `hasNonLiftableFamily -> hasStepFamily -> NoSqOnS0 -> Main` の導線を明示し、
+    数論本体でまず non-liftable family を示す作業計画に直結。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功（`GEisensteinBridge` に `intro` 形の提案 warning 1件のみ）。
