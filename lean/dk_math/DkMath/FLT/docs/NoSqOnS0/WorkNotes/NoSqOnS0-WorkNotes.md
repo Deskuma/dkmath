@@ -637,3 +637,23 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（Provider 構築関数と family 直結入口）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `numberTheoryKernelProvider_of_hasKernel`
+  2. `numberTheoryStepExistsProvider_of_hasStepExists`
+  3. `numberTheoryLocalReduceProvider_of_hasLocalReduce`
+  4. `numberTheoryReduceProvider_of_hasReduce`
+  5. `numberTheoryStepProvider_of_hasStep`
+  6. `FLT_d3_by_padicValNat_of_numberTheoryHasKernelFamily_coprimeSupport_direct`
+  7. `FLT_d3_by_padicValNat_of_numberTheoryHasStepFamily_coprimeSupport_direct`
+- 意図:
+  - structure を都度手書きせず、`hasKernel/hasStep` などの関数仮定から provider を即構築できるようにした。
+  - Main 入口に family 直受け口を追加し、数論本体の実装側は「全 `(c,b)` での供給関数」を証明すれば接続できる形にした。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。

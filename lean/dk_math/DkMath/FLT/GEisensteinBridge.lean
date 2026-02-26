@@ -1359,6 +1359,66 @@ structure NumberTheoryStepProvider where
       PrimitiveSquareDescentStep c b
 
 /--
+`hasKernel` 関数から `NumberTheoryKernelProvider` を作る。
+-/
+def numberTheoryKernelProvider_of_hasKernel
+    (hasKernel :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        Nonempty (NumberTheoryDescentOn.ReductionKernel c b)) :
+    NumberTheoryKernelProvider where
+  hasKernel := by
+    intro c b hbc hcop
+    exact hasKernel hbc hcop
+
+/--
+`hasStepExists` 関数から `NumberTheoryStepExistsProvider` を作る。
+-/
+def numberTheoryStepExistsProvider_of_hasStepExists
+    (hasStepExists :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        NumberTheoryDescentOn.StepExists c b) :
+    NumberTheoryStepExistsProvider where
+  hasStepExists := by
+    intro c b hbc hcop
+    exact hasStepExists hbc hcop
+
+/--
+`hasLocalReduce` 関数から `NumberTheoryLocalReduceProvider` を作る。
+-/
+def numberTheoryLocalReduceProvider_of_hasLocalReduce
+    (hasLocalReduce :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        NumberTheoryDescentOn.LocalReduce c b) :
+    NumberTheoryLocalReduceProvider where
+  hasLocalReduce := by
+    intro c b hbc hcop
+    exact hasLocalReduce hbc hcop
+
+/--
+`hasReduce` 関数から `NumberTheoryReduceProvider` を作る。
+-/
+def numberTheoryReduceProvider_of_hasReduce
+    (hasReduce :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        NumberTheoryReduce c b) :
+    NumberTheoryReduceProvider where
+  hasReduce := by
+    intro c b hbc hcop
+    exact hasReduce hbc hcop
+
+/--
+`hasStep` 関数から `NumberTheoryStepProvider` を作る。
+-/
+def numberTheoryStepProvider_of_hasStep
+    (hasStep :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        PrimitiveSquareDescentStep c b) :
+    NumberTheoryStepProvider where
+  hasStep := by
+    intro c b hbc hcop
+    exact hasStep hbc hcop
+
+/--
 `NumberTheoryLocalReduceProvider` から `NumberTheoryStepExistsProvider` を得る。
 -/
 def numberTheoryStepExistsProvider_of_localReduceProvider

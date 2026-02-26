@@ -589,6 +589,23 @@ theorem FLT_d3_by_padicValNat_of_numberTheoryKernelProvider_coprimeSupport_direc
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
 
 /--
+数論 kernel family（全 `(c,b)` で `ReductionKernel` 存在）を直接受ける入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryHasKernelFamily_coprimeSupport_direct
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hasKernel :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        Nonempty (NumberTheoryDescentOn.ReductionKernel c b)) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_numberTheoryKernelProvider_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime
+    (numberTheoryKernelProvider_of_hasKernel hasKernel)
+
+/--
 数論 step provider（全 `(c,b)` で `PrimitiveSquareDescentStep` 供給）から接続する入口。
 -/
 theorem FLT_d3_by_padicValNat_of_numberTheoryStepProvider_coprimeSupport_direct {a b c : ℕ}
@@ -601,6 +618,23 @@ theorem FLT_d3_by_padicValNat_of_numberTheoryStepProvider_coprimeSupport_direct 
   have hNoSq : NoSqOnS0 c b :=
     NoSqOnS0_of_numberTheoryStepProvider provStep hbc hcb_coprime
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+数論 step family（全 `(c,b)` で `PrimitiveSquareDescentStep` 供給）を直接受ける入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryHasStepFamily_coprimeSupport_direct
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hasStep :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        PrimitiveSquareDescentStep c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_numberTheoryStepProvider_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime
+    (numberTheoryStepProvider_of_hasStep hasStep)
 
 /--
 数論 reduce provider（全 `(c,b)` で `NumberTheoryReduce` 供給）から接続する入口。
