@@ -512,3 +512,20 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（`StepExistsOn` と `HasKernel` の往復補題）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `numberTheoryHasKernel_of_stepExistsOn`
+  2. `numberTheoryStepExistsOn_of_hasKernel`
+- 変更内容:
+  1. `FLT_d3_by_padicValNat_of_numberTheoryStepExistsOn_coprimeSupport_direct` を `HasKernel` 経由で `NoSq` 回復する形に統一
+- 意図:
+  - 入力が `StepExistsOn` でも `HasKernel` でも相互変換できることを明示し、
+    入口層の概念を `HasKernel` 中心に揃えた。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。

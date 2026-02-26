@@ -1032,6 +1032,25 @@ lemma numberTheoryStepExistsOn_of_kernel {c b : ℕ}
   exact NumberTheoryDescentOn.stepExists_of_kernel ker
 
 /--
+固定 `(c,b)` の `StepExistsOn` から `ReductionKernel` 存在を得る。
+-/
+lemma numberTheoryHasKernel_of_stepExistsOn {c b : ℕ}
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b)
+    (hex : NumberTheoryDescentOn.StepExists c b) :
+    Nonempty (NumberTheoryDescentOn.ReductionKernel c b) := by
+  exact (NumberTheoryDescentOn.stepExists_iff_nonempty_kernel hbc hcop).1 hex
+
+/--
+固定 `(c,b)` の `ReductionKernel` 存在から `StepExistsOn` を得る。
+-/
+lemma numberTheoryStepExistsOn_of_hasKernel {c b : ℕ}
+    (hker : Nonempty (NumberTheoryDescentOn.ReductionKernel c b)) :
+    NumberTheoryDescentOn.StepExists c b := by
+  rcases hker with ⟨ker⟩
+  exact numberTheoryStepExistsOn_of_kernel ker
+
+/--
 `PrimitiveSquareDescentStep` から固定 `(c,b)` の `ReductionKernel` 存在を得る。
 -/
 lemma numberTheoryHasKernel_of_step {c b : ℕ}

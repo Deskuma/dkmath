@@ -510,8 +510,10 @@ theorem FLT_d3_by_padicValNat_of_numberTheoryStepExistsOn_coprimeSupport_direct 
     (hcb_coprime : Nat.Coprime c b)
     (hex : NumberTheoryDescentOn.StepExists c b) :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
-  have hNoSq : NoSqOnS0 c b :=
-    NoSqOnS0_of_numberTheoryStepExistsOn_coprime hex hbc hcb_coprime
+  have hNoSq : NoSqOnS0 c b := by
+    exact NoSqOnS0_of_numberTheoryHasKernel_coprime
+      (numberTheoryHasKernel_of_stepExistsOn hbc hcb_coprime hex)
+      hbc hcb_coprime
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
 
 /--
