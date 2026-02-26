@@ -808,6 +808,51 @@ lemma card_filter_image_piCons_axis1 {d : ℕ} (hd : 2 ≤ d)
                 simpa [hcoord] using hf
             exact congrArg Finset.card hPredEq
 
+/-- `axis0` 分解（`s = univ.erase axis0`）専用の `card_filter_image_piCons_axis0`。 -/
+lemma card_filter_image_piCons_axis0_univErase {d : ℕ} (hd : 2 ≤ d)
+    (u : Finset (∀ i ∈ ((Finset.univ : Finset (Fin d)).erase (axis0 hd)), ℕ))
+    (b k : ℕ) :
+    ((u.image (Finset.Pi.cons ((Finset.univ : Finset (Fin d)).erase (axis0 hd)) (axis0 hd) b)).filter
+      (fun g =>
+        ((((g (axis0 hd)
+            (Finset.mem_insert_self (axis0 hd) ((Finset.univ : Finset (Fin d)).erase (axis0 hd))) : ℕ) : ℤ)
+          - ((g (axis1 hd)
+              (Finset.mem_insert_of_mem (axis1_mem_univ_erase_axis0 hd)) : ℕ) : ℤ)) % 3).toNat = k)).card
+      =
+    (u.filter
+      (fun f =>
+        (((b : ℤ)
+          - (f (axis1 hd) (axis1_mem_univ_erase_axis0 hd) : ℤ)) % 3).toNat = k)).card := by
+  simpa using
+    (card_filter_image_piCons_axis0 (hd := hd)
+      (s := ((Finset.univ : Finset (Fin d)).erase (axis0 hd)))
+      (ha := by simp)
+      (haxis1 := axis1_mem_univ_erase_axis0 hd)
+      (u := u) (b := b) (k := k))
+
+/-- `axis1` 分解（`s = univ.erase axis1`）専用の `card_filter_image_piCons_axis1`。 -/
+lemma card_filter_image_piCons_axis1_univErase {d : ℕ} (hd : 2 ≤ d)
+    (u : Finset (∀ i ∈ ((Finset.univ : Finset (Fin d)).erase (axis1 hd)), ℕ))
+    (b k : ℕ) :
+    ((u.image (Finset.Pi.cons ((Finset.univ : Finset (Fin d)).erase (axis1 hd)) (axis1 hd) b)).filter
+      (fun g =>
+        ((((g (axis0 hd)
+            (Finset.mem_insert_of_mem (axis0_mem_univ_erase_axis1 hd)) : ℕ) : ℤ)
+          - ((g (axis1 hd)
+              (Finset.mem_insert_self (axis1 hd) ((Finset.univ : Finset (Fin d)).erase (axis1 hd))) : ℕ) : ℤ))
+            % 3).toNat = k)).card
+      =
+    (u.filter
+      (fun f =>
+        (((f (axis0 hd) (axis0_mem_univ_erase_axis1 hd) : ℤ)
+          - (b : ℤ)) % 3).toNat = k)).card := by
+  simpa using
+    (card_filter_image_piCons_axis1 (hd := hd)
+      (s := ((Finset.univ : Finset (Fin d)).erase (axis1 hd)))
+      (ha := by simp)
+      (haxis0 := axis0_mem_univ_erase_axis1 hd)
+      (u := u) (b := b) (k := k))
+
 /-- `Finset.pi` 側要素の座標値（`Finset.univ` 証明を補った形）。 -/
 def piCoord {d : ℕ}
     (f : ∀ i ∈ (Finset.univ : Finset (Fin d)), ℕ) (i : Fin d) : ℕ :=

@@ -319,3 +319,20 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
   - 結果: 成功（残る warning は `sorry` のみ）。
+
+### 2026-02-26 phase-12 継続（`hs_mod` 実装準備：`univ.erase axis` 専用ラッパ）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `card_filter_image_piCons_axis0_univErase`
+  2. `card_filter_image_piCons_axis1_univErase`
+- 意図:
+  - `hs_mod` の本体で毎回必要になる
+    `ha : axis ∉ s` / `haxis : otherAxis ∈ s` の証明を内部化し、
+    `s = univ.erase axis` 固定の用途で直接使えるようにした。
+  - 本体の `simpa` 量を減らして、`axis0/axis1` 分岐実装を短くする。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（残る warning は `sorry` のみ）。
