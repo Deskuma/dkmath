@@ -244,3 +244,23 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
   - 結果: 成功（残る warning は `sorry` のみ）。
+
+### 2026-02-26 phase-12 継続（`hs_mod` 実装準備：`Pi.cons` 座標補題）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `piCoordOn`
+  2. `piCoordOn_cons_same`
+  3. `piCoordOn_cons_ne`
+  4. `axis1_mem_univ_erase_axis0`
+  5. `axis0_mem_univ_erase_axis1`
+- 変更内容:
+  1. `piCoord` を `piCoordOn` の特殊化として再定義（意味は同一）。
+- 意図:
+  - `Finset.pi` 分解 (`pi_insert`) 後に `Pi.cons` で構成した関数の軸座標を
+    直接展開できる形を用意し、`hs_mod` の case 実装を進めやすくした。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（残る warning は `sorry` のみ）。

@@ -492,9 +492,40 @@ lemma card_filter_Box_eq_card_filter_pi {d : ℕ}
   rfl
 
 /-- `Finset.pi` 側要素の座標値（`Finset.univ` 証明を補った形）。 -/
+def piCoordOn {d : ℕ} {s : Finset (Fin d)}
+    (f : ∀ i ∈ s, ℕ) (i : Fin d) (hi : i ∈ s) : ℕ :=
+  f i hi
+
+/-- `Pi.cons` した関数の挿入軸座標。 -/
+@[simp] lemma piCoordOn_cons_same {d : ℕ} {s : Finset (Fin d)}
+    (a : Fin d) (b : ℕ) (f : ∀ i ∈ s, ℕ) (h : a ∈ insert a s) :
+    piCoordOn (Finset.Pi.cons s a b f) a h = b := by
+  simp [piCoordOn]
+
+/-- `Pi.cons` した関数の非挿入軸座標。 -/
+@[simp] lemma piCoordOn_cons_ne {d : ℕ} {s : Finset (Fin d)}
+    (a i : Fin d) (ha : a ≠ i) (b : ℕ) (f : ∀ j ∈ s, ℕ)
+    (h : i ∈ insert a s) :
+    piCoordOn (Finset.Pi.cons s a b f) i h
+      = f i ((Finset.mem_insert.mp h).resolve_left ha.symm) := by
+  simp [piCoordOn, Finset.Pi.cons_ne, ha]
+
+/-- `axis0` を除いた添字集合には `axis1` が含まれる。 -/
+lemma axis1_mem_univ_erase_axis0 {d : ℕ} (hd : 2 ≤ d) :
+    axis1 hd ∈ ((Finset.univ : Finset (Fin d)).erase (axis0 hd)) := by
+  refine Finset.mem_erase.mpr ?_
+  exact ⟨(axis0_ne_axis1 hd).symm, Finset.mem_univ _⟩
+
+/-- `axis1` を除いた添字集合には `axis0` が含まれる。 -/
+lemma axis0_mem_univ_erase_axis1 {d : ℕ} (hd : 2 ≤ d) :
+    axis0 hd ∈ ((Finset.univ : Finset (Fin d)).erase (axis1 hd)) := by
+  refine Finset.mem_erase.mpr ?_
+  exact ⟨axis0_ne_axis1 hd, Finset.mem_univ _⟩
+
+/-- `Finset.pi` 側要素の座標値（`Finset.univ` 証明を補った形）。 -/
 def piCoord {d : ℕ}
     (f : ∀ i ∈ (Finset.univ : Finset (Fin d)), ℕ) (i : Fin d) : ℕ :=
-  f i (Finset.mem_univ i)
+  piCoordOn f i (Finset.mem_univ i)
 
 /-- `pi` 側要素を `Cell` へ埋めたときの `color3` の `val` 展開。 -/
 lemma color3_val_of_pi {d : ℕ} (hd : 2 ≤ d)
