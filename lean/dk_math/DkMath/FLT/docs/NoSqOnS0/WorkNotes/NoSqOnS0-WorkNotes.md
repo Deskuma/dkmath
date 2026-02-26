@@ -149,3 +149,45 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
   - 結果: 成功（`TriominoFLT` の既存 `sorry` warning は継続）。
+
+### 2026-02-26 phase-12 継続（`color3` シフト補題を Fin 3 等式へ昇格）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `color3_add_basis0`（`color3 (v + basis0 hd) = color3 v + 1`）
+  2. `color3_add_basis1`（`color3 (v + basis1 hd) = color3 v + 2`）
+- 試行内容:
+  1. `color3_L_tromino_standard` を `basis0/basis1` ベースで実装し、
+     `filter` の card 証明まで接続を試行。
+  2. ただし `filter` membership の同値を `simp` だけで閉じる段階で未解決が残るため、
+     本体は一旦 `sorry` に戻してビルド健全性を維持。
+- 次段の実装ポイント:
+  1. `t = {v, v+basis0, v+basis1}` 上の membership 同値
+     `((c ∈ t) ∧ color3 c = k) ↔ ...` を色ごとに補題化
+  2. その補題を `color3_L_tromino_standard` へ適用して `sorry` 解消
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（`color3_L_tromino_standard` ほか既存 `sorry` warning は継続）。
+
+### 2026-02-26 phase-12 継続（`color3_L_tromino_standard` の `sorry` 解消）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `mem_three_color0_iff`
+  2. `mem_three_color1_iff`
+  3. `mem_three_color2_iff`
+- 実装内容:
+  1. `color3_L_tromino_standard` を `basis0/basis1` で定式化し、
+     `color3_add_basis0/1` による 3 色の巡回をケース分解で確定。
+  2. `filter` の membership 同値を上記 3 補題へ切り出し、
+     `filter = singleton` を `ext` で示して各 card=1 を証明。
+- 結果:
+  - `color3_L_tromino_standard` の `sorry` を除去。
+  - 残る `sorry` は `color_balance_of_box_3k` と FLT 骨格定理群。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（既存 linter warning は継続）。

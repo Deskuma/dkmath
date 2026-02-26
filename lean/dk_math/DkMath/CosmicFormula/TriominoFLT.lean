@@ -189,14 +189,241 @@ lemma color3_val_add_basis1 {d : ℕ} (hd : 2 ≤ d) (v : Cell d) :
     _ = (((v (axis0 hd) - v (axis1 hd) - 1) % 3).toNat) := by
           simp [diff_add_basis1 hd v]
 
+lemma color3_add_basis0 {d : ℕ} (hd : 2 ≤ d) (v : Cell d) :
+    color3 (v + basis0 hd) = color3 v + 1 := by
+  let diff : ℤ := v (axis0 hd) - v (axis1 hd)
+  let r : ℤ := diff % 3
+  have hr_nonneg : 0 ≤ r := by
+    have h3nz : (3 : ℤ) ≠ 0 := by norm_num
+    simpa [r] using Int.emod_nonneg diff h3nz
+  have hr_lt : r < 3 := by
+    have h3pos : (0 : ℤ) < 3 := by norm_num
+    simpa [r] using Int.emod_lt_of_pos diff h3pos
+  have hr_cases : r = 0 ∨ r = 1 ∨ r = 2 := by omega
+  have hv_val : (color3 v).val = r.toNat := by
+    simpa [axis0, axis1, diff, r] using color3_val hd v
+  have hvp_val_diff : (color3 (v + basis0 hd)).val = (((diff + 1) % 3).toNat) := by
+    simpa [axis0, axis1] using color3_val_add_basis0 hd v
+  have hmod_plus : ((diff + 1) % 3) = ((r + 1) % 3) := by
+    calc
+      ((diff + 1) % 3) = (((diff % 3) + (1 % 3)) % 3) := by
+        simp [Int.add_emod]
+      _ = ((r + 1) % 3) := by simp [r]
+  have hvp_val : (color3 (v + basis0 hd)).val = (((r + 1) % 3).toNat) := by
+    rw [hvp_val_diff, hmod_plus]
+  rcases hr_cases with hr0 | hr12
+  · have hv0 : color3 v = 0 := by
+      apply Fin.ext
+      simp [hv_val, hr0]
+    have hvp1 : color3 (v + basis0 hd) = 1 := by
+      apply Fin.ext
+      simp [hvp_val, hr0]
+    simp [hv0, hvp1]
+  · rcases hr12 with hr1 | hr2
+    · have hv1 : color3 v = 1 := by
+        apply Fin.ext
+        simp [hv_val, hr1]
+      have hvp2 : color3 (v + basis0 hd) = 2 := by
+        apply Fin.ext
+        simp [hvp_val, hr1]
+      simp [hv1, hvp2]
+    · have hv2 : color3 v = 2 := by
+        apply Fin.ext
+        simp [hv_val, hr2]
+      have hvp0 : color3 (v + basis0 hd) = 0 := by
+        apply Fin.ext
+        simp [hvp_val, hr2]
+      simp [hv2, hvp0]
+
+lemma color3_add_basis1 {d : ℕ} (hd : 2 ≤ d) (v : Cell d) :
+    color3 (v + basis1 hd) = color3 v + 2 := by
+  let diff : ℤ := v (axis0 hd) - v (axis1 hd)
+  let r : ℤ := diff % 3
+  have hr_nonneg : 0 ≤ r := by
+    have h3nz : (3 : ℤ) ≠ 0 := by norm_num
+    simpa [r] using Int.emod_nonneg diff h3nz
+  have hr_lt : r < 3 := by
+    have h3pos : (0 : ℤ) < 3 := by norm_num
+    simpa [r] using Int.emod_lt_of_pos diff h3pos
+  have hr_cases : r = 0 ∨ r = 1 ∨ r = 2 := by omega
+  have hv_val : (color3 v).val = r.toNat := by
+    simpa [axis0, axis1, diff, r] using color3_val hd v
+  have hvm_val_diff : (color3 (v + basis1 hd)).val = (((diff - 1) % 3).toNat) := by
+    simpa [axis0, axis1] using color3_val_add_basis1 hd v
+  have hmod_minus : ((diff - 1) % 3) = ((r + 2) % 3) := by
+    calc
+      ((diff - 1) % 3) = ((diff + (-1)) % 3) := by ring
+      _ = (((diff % 3) + ((-1) % 3)) % 3) := by
+        simpa using Int.add_emod diff (-1) 3
+      _ = ((r + 2) % 3) := by
+        norm_num [r]
+  have hvm_val : (color3 (v + basis1 hd)).val = (((r + 2) % 3).toNat) := by
+    rw [hvm_val_diff, hmod_minus]
+  rcases hr_cases with hr0 | hr12
+  · have hv0 : color3 v = 0 := by
+      apply Fin.ext
+      simp [hv_val, hr0]
+    have hvm2 : color3 (v + basis1 hd) = 2 := by
+      apply Fin.ext
+      simp [hvm_val, hr0]
+    simp [hv0, hvm2]
+  · rcases hr12 with hr1 | hr2
+    · have hv1 : color3 v = 1 := by
+        apply Fin.ext
+        simp [hv_val, hr1]
+      have hvm0 : color3 (v + basis1 hd) = 0 := by
+        apply Fin.ext
+        simp [hvm_val, hr1]
+      simp [hv1, hvm0]
+    · have hv2 : color3 v = 2 := by
+        apply Fin.ext
+        simp [hv_val, hr2]
+      have hvm1 : color3 (v + basis1 hd) = 1 := by
+        apply Fin.ext
+        simp [hvm_val, hr2]
+      simp [hv2, hvm1]
+
+lemma mem_three_color0_iff {α : Type*} (f : α → Fin 3) (u0 u1 u2 x : α)
+    (h0 : f u0 = 0) (h1 : f u1 = 1) (h2 : f u2 = 2) :
+    ((x = u0 ∨ x = u1 ∨ x = u2) ∧ f x = 0) ↔ x = u0 := by
+  constructor
+  · intro hx
+    rcases hx with ⟨hx, hfx⟩
+    rcases hx with rfl | hx
+    · rfl
+    · rcases hx with rfl | rfl
+      · exfalso
+        have : (1 : Fin 3) = 0 := by simp [h1] at hfx
+        exact (by decide : (1 : Fin 3) ≠ 0) this
+      · exfalso
+        have : (2 : Fin 3) = 0 := by simp [h2] at hfx
+        exact (by decide : (2 : Fin 3) ≠ 0) this
+  · intro hx
+    subst hx
+    exact ⟨Or.inl rfl, h0⟩
+
+lemma mem_three_color1_iff {α : Type*} (f : α → Fin 3) (u0 u1 u2 x : α)
+    (h0 : f u0 = 0) (h1 : f u1 = 1) (h2 : f u2 = 2) :
+    ((x = u0 ∨ x = u1 ∨ x = u2) ∧ f x = 1) ↔ x = u1 := by
+  constructor
+  · intro hx
+    rcases hx with ⟨hx, hfx⟩
+    rcases hx with rfl | hx
+    · exfalso
+      have : (0 : Fin 3) = 1 := by simp [h0] at hfx
+      exact (by decide : (0 : Fin 3) ≠ 1) this
+    · rcases hx with rfl | rfl
+      · rfl
+      · exfalso
+        have : (2 : Fin 3) = 1 := by simp [h2] at hfx
+        exact (by decide : (2 : Fin 3) ≠ 1) this
+  · intro hx
+    subst hx
+    exact ⟨Or.inr (Or.inl rfl), h1⟩
+
+lemma mem_three_color2_iff {α : Type*} (f : α → Fin 3) (u0 u1 u2 x : α)
+    (h0 : f u0 = 0) (h1 : f u1 = 1) (h2 : f u2 = 2) :
+    ((x = u0 ∨ x = u1 ∨ x = u2) ∧ f x = 2) ↔ x = u2 := by
+  constructor
+  · intro hx
+    rcases hx with ⟨hx, hfx⟩
+    rcases hx with rfl | hx
+    · exfalso
+      have : (0 : Fin 3) = 2 := by simp [h0] at hfx
+      exact (by decide : (0 : Fin 3) ≠ 2) this
+    · rcases hx with rfl | rfl
+      · exfalso
+        have : (1 : Fin 3) = 2 := by simp [h1] at hfx
+        exact (by decide : (1 : Fin 3) ≠ 2) this
+      · rfl
+  · intro hx
+    subst hx
+    exact ⟨Or.inr (Or.inr rfl), h2⟩
+
 lemma color3_L_tromino_standard {d : ℕ} (hd : 2 ≤ d) (v : Cell d) :
-    let e0 : Cell d := fun i => if i = ⟨0, by omega⟩ then 1 else 0
-    let e1 : Cell d := fun i => if i = ⟨1, by omega⟩ then 1 else 0
+    let e0 : Cell d := basis0 hd
+    let e1 : Cell d := basis1 hd
     let t : Finset (Cell d) := {v, v + e0, v + e1}
     (t.filter fun c => color3 c = 0).card = 1 ∧
     (t.filter fun c => color3 c = 1).card = 1 ∧
     (t.filter fun c => color3 c = 2).card = 1 := by
-  sorry  -- phase-12: helper lemmas (distinctness / mod-3 shift) を先に分解実装してから本体を再導入
+  classical
+  dsimp
+  let t : Finset (Cell d) := ({v, v + basis0 hd, v + basis1 hd} : Finset (Cell d))
+  change (t.filter fun c => color3 c = 0).card = 1 ∧
+      (t.filter fun c => color3 c = 1).card = 1 ∧
+      (t.filter fun c => color3 c = 2).card = 1
+  have hcol0 : color3 (v + basis0 hd) = color3 v + 1 := color3_add_basis0 hd v
+  have hcol1 : color3 (v + basis1 hd) = color3 v + 2 := color3_add_basis1 hd v
+  have hk_cases : (color3 v).val = 0 ∨ (color3 v).val = 1 ∨ (color3 v).val = 2 := by
+    have hlt : (color3 v).val < 3 := (color3 v).isLt
+    omega
+  rcases hk_cases with hk0 | hk12
+  · have hc0 : color3 v = 0 := by
+      apply Fin.ext
+      simpa using hk0
+    have hc1 : color3 (v + basis0 hd) = 1 := by simpa [hc0] using hcol0
+    have hc2 : color3 (v + basis1 hd) = 2 := by simpa [hc0] using hcol1
+    have hF0 : (t.filter fun c => color3 c = 0) = ({v} : Finset (Cell d)) := by
+      ext c
+      simpa [t] using
+        (mem_three_color0_iff color3 v (v + basis0 hd) (v + basis1 hd) c hc0 hc1 hc2)
+    have hF1 : (t.filter fun c => color3 c = 1) = ({v + basis0 hd} : Finset (Cell d)) := by
+      ext c
+      simpa [t] using
+        (mem_three_color1_iff color3 v (v + basis0 hd) (v + basis1 hd) c hc0 hc1 hc2)
+    have hF2 : (t.filter fun c => color3 c = 2) = ({v + basis1 hd} : Finset (Cell d)) := by
+      ext c
+      simpa [t] using
+        (mem_three_color2_iff color3 v (v + basis0 hd) (v + basis1 hd) c hc0 hc1 hc2)
+    refine ⟨?_, ?_, ?_⟩
+    · simp [hF0]
+    · simp [hF1]
+    · simp [hF2]
+  · rcases hk12 with hk1 | hk2
+    · have hc0 : color3 v = 1 := by
+        apply Fin.ext
+        simpa using hk1
+      have hc1 : color3 (v + basis0 hd) = 2 := by simpa [hc0] using hcol0
+      have hc2 : color3 (v + basis1 hd) = 0 := by simpa [hc0] using hcol1
+      have hF0 : (t.filter fun c => color3 c = 0) = ({v + basis1 hd} : Finset (Cell d)) := by
+        ext c
+        simpa [t, or_assoc, or_left_comm, or_comm] using
+          (mem_three_color0_iff color3 (v + basis1 hd) v (v + basis0 hd) c hc2 hc0 hc1)
+      have hF1 : (t.filter fun c => color3 c = 1) = ({v} : Finset (Cell d)) := by
+        ext c
+        simpa [t, or_assoc, or_left_comm, or_comm] using
+          (mem_three_color1_iff color3 (v + basis1 hd) v (v + basis0 hd) c hc2 hc0 hc1)
+      have hF2 : (t.filter fun c => color3 c = 2) = ({v + basis0 hd} : Finset (Cell d)) := by
+        ext c
+        simpa [t, or_assoc, or_left_comm, or_comm] using
+          (mem_three_color2_iff color3 (v + basis1 hd) v (v + basis0 hd) c hc2 hc0 hc1)
+      refine ⟨?_, ?_, ?_⟩
+      · simp [hF0]
+      · simp [hF1]
+      · simp [hF2]
+    · have hc0 : color3 v = 2 := by
+        apply Fin.ext
+        simpa using hk2
+      have hc1 : color3 (v + basis0 hd) = 0 := by simpa [hc0] using hcol0
+      have hc2 : color3 (v + basis1 hd) = 1 := by simpa [hc0] using hcol1
+      have hF0 : (t.filter fun c => color3 c = 0) = ({v + basis0 hd} : Finset (Cell d)) := by
+        ext c
+        simpa [t, or_assoc, or_left_comm, or_comm] using
+          (mem_three_color0_iff color3 (v + basis0 hd) (v + basis1 hd) v c hc1 hc2 hc0)
+      have hF1 : (t.filter fun c => color3 c = 1) = ({v + basis1 hd} : Finset (Cell d)) := by
+        ext c
+        simpa [t, or_assoc, or_left_comm, or_comm] using
+          (mem_three_color1_iff color3 (v + basis0 hd) (v + basis1 hd) v c hc1 hc2 hc0)
+      have hF2 : (t.filter fun c => color3 c = 2) = ({v} : Finset (Cell d)) := by
+        ext c
+        simpa [t, or_assoc, or_left_comm, or_comm] using
+          (mem_three_color2_iff color3 (v + basis0 hd) (v + basis1 hd) v c hc1 hc2 hc0)
+      refine ⟨?_, ?_, ?_⟩
+      · simp [hF0]
+      · simp [hF1]
+      · simp [hF2]
+
 /-- 核心：敷き詰め可能なら各色のセル数が等しい -/
 lemma color_balance_of_tiling {α : Type*} [DecidableEq α] (colorFn : α → Fin 3)
     {R : Finset α} {IsLTromino : Finset α → Prop}
