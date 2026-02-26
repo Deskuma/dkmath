@@ -99,3 +99,18 @@ theorem nonLiftableS0_of_minCounterexample
 ### 2026-02-26 phase-12 方針固め
 
 現状は `TriominoFLT.lean` に `sorry` が残っているので、まず 1→2→3 の順で埋めるのが必要です。
+
+### 2026-02-26 phase-12 開始（Triomino 接続入口を Main に追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `FLT_d3_by_padicValNat_of_triominoHasNoSqFamily_coprimeSupport_direct`
+  2. `FLT_d3_by_padicValNat_of_triominoHasNonLiftableFamily_coprimeSupport_direct`
+- 意図:
+  - `TriominoFLT` 側で `hasNoSq` / `hasNonLiftable` family 補題が完成したら、
+    既存数論APIへ即時接続できる専用入口を先に固定。
+  - phase-12 の実体補題（トロミノ側 `sorry` 解消）作業を Main 側の変更なしで進められるようにした。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.Main DkMath.FLT.GEisensteinBridge`
+  - 結果: 成功（`GEisensteinBridge` に `intro` 形の提案 warning 1件のみ）。

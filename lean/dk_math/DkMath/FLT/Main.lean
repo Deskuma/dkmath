@@ -766,6 +766,39 @@ theorem FLT_d3_by_padicValNat_of_numberTheoryHasNoSqFamily_coprimeSupport_direct
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
 
 /--
+トロミノ系 `NoSq` family（全 `(c,b)`）から接続する入口。
+`TriominoFLT` 側で `hasNoSq` を構成したら、この入口にそのまま接続する。
+-/
+theorem FLT_d3_by_padicValNat_of_triominoHasNoSqFamily_coprimeSupport_direct
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hasNoSqTriomino :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        NoSqOnS0 c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_numberTheoryHasNoSqFamily_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime hasNoSqTriomino
+
+/--
+トロミノ系 `NonLiftable` family（全 `(c,b,q)`）から接続する入口。
+-/
+theorem FLT_d3_by_padicValNat_of_triominoHasNonLiftableFamily_coprimeSupport_direct
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hasNonLiftTriomino :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        ∀ q : ℕ, NonLiftableS0 c b q) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_numberTheoryHasNonLiftableFamily_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime hasNonLiftTriomino
+
+/--
 固定 `(c,b)` の数論ローカル降下入力 (`LocalReduce`) から接続する入口。
 -/
 theorem FLT_d3_by_padicValNat_of_numberTheoryLocalReduceOn_coprimeSupport_direct {a b c : ℕ}
