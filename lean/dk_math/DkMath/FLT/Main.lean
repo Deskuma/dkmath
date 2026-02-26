@@ -524,10 +524,9 @@ theorem FLT_d3_by_padicValNat_of_numberTheoryStepOn_coprimeSupport_direct {a b c
     (hcb_coprime : Nat.Coprime c b)
     (hStep : PrimitiveSquareDescentStep c b) :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
-  have ker : NumberTheoryDescentOn.ReductionKernel c b :=
-    numberTheoryKernel_of_step hStep
-  have hNoSq : NoSqOnS0 c b :=
-    NoSqOnS0_of_numberTheoryKernel_coprime ker hbc hcb_coprime
+  have hNoSq : NoSqOnS0 c b := by
+    exact NoSqOnS0_of_numberTheoryHasKernel_coprime
+      (numberTheoryHasKernel_of_step hStep) hbc hcb_coprime
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
 
 /--
@@ -540,10 +539,9 @@ theorem FLT_d3_by_padicValNat_of_numberTheoryReduceOn_coprimeSupport_direct {a b
     (hcb_coprime : Nat.Coprime c b)
     (reduceNT : NumberTheoryReduce c b) :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
-  have ker : NumberTheoryDescentOn.ReductionKernel c b :=
-    numberTheoryKernel_of_reduce reduceNT
-  have hNoSq : NoSqOnS0 c b :=
-    NoSqOnS0_of_numberTheoryKernel_coprime ker hbc hcb_coprime
+  have hNoSq : NoSqOnS0 c b := by
+    exact NoSqOnS0_of_numberTheoryHasKernel_coprime
+      (numberTheoryHasKernel_of_reduce reduceNT) hbc hcb_coprime
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
 
 /--
@@ -556,8 +554,8 @@ theorem FLT_d3_by_padicValNat_of_numberTheoryKernel_coprimeSupport_direct {a b c
     (hcb_coprime : Nat.Coprime c b)
     (ker : NumberTheoryDescentOn.ReductionKernel c b) :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
-  have hNoSq : NoSqOnS0 c b :=
-    NoSqOnS0_of_numberTheoryKernel_coprime ker hbc hcb_coprime
+  have hNoSq : NoSqOnS0 c b := by
+    exact NoSqOnS0_of_numberTheoryHasKernel_coprime ⟨ker⟩ hbc hcb_coprime
   exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
 
 /--
@@ -584,11 +582,9 @@ theorem FLT_d3_by_padicValNat_of_numberTheoryLocalReduceOn_coprimeSupport_direct
     (hcb_coprime : Nat.Coprime c b)
     (reduce : NumberTheoryDescentOn.LocalReduce c b) :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
-  have ker : NumberTheoryDescentOn.ReductionKernel c b :=
-    NumberTheoryDescentOn.kernel_of_localReduce hbc hcb_coprime reduce
-  have hNoSq : NoSqOnS0 c b :=
-    NoSqOnS0_of_numberTheoryKernel_coprime ker hbc hcb_coprime
-  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+  exact FLT_d3_by_padicValNat_of_numberTheoryHasKernel_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime
+    (numberTheoryHasKernel_of_localReduce hbc hcb_coprime reduce)
 
 /--
 互換入口:

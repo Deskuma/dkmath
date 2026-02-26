@@ -493,3 +493,22 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（HasKernel 補題層の追加と Main 委譲整理）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `numberTheoryHasKernel_of_step`
+  2. `numberTheoryHasKernel_of_reduce`
+  3. `numberTheoryHasKernel_of_localReduce`
+  4. `NoSqOnS0_of_numberTheoryHasKernel_coprime`
+- 変更内容:
+  1. `Main` の `StepOn/ReduceOn/Kernel/LocalReduceOn` 入口を `HasKernel` ベースの `NoSq` 回復に寄せて重複を削減
+- 意図:
+  - 実装本体側は `Nonempty (ReductionKernel c b)` を供給することに集中し、
+    入口側は統一された回復補題を使う構造へ整理。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。

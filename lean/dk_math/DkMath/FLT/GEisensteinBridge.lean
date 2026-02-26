@@ -1032,6 +1032,32 @@ lemma numberTheoryStepExistsOn_of_kernel {c b : ℕ}
   exact NumberTheoryDescentOn.stepExists_of_kernel ker
 
 /--
+`PrimitiveSquareDescentStep` から固定 `(c,b)` の `ReductionKernel` 存在を得る。
+-/
+lemma numberTheoryHasKernel_of_step {c b : ℕ}
+    (hStep : PrimitiveSquareDescentStep c b) :
+    Nonempty (NumberTheoryDescentOn.ReductionKernel c b) := by
+  exact ⟨numberTheoryKernel_of_step hStep⟩
+
+/--
+`NumberTheoryReduce` から固定 `(c,b)` の `ReductionKernel` 存在を得る。
+-/
+lemma numberTheoryHasKernel_of_reduce {c b : ℕ}
+    (reduceNT : NumberTheoryReduce c b) :
+    Nonempty (NumberTheoryDescentOn.ReductionKernel c b) := by
+  exact ⟨numberTheoryKernel_of_reduce reduceNT⟩
+
+/--
+`LocalReduce` と `hbc/hcop` から固定 `(c,b)` の `ReductionKernel` 存在を得る。
+-/
+lemma numberTheoryHasKernel_of_localReduce {c b : ℕ}
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b)
+    (reduce : NumberTheoryDescentOn.LocalReduce c b) :
+    Nonempty (NumberTheoryDescentOn.ReductionKernel c b) := by
+  exact ⟨NumberTheoryDescentOn.kernel_of_localReduce hbc hcop reduce⟩
+
+/--
 下降エンジンから `PrimitiveSquareDescentStep` 条件を回収する。
 -/
 lemma primitiveSquareDescentStep_of_engine {c b : ℕ}
@@ -1258,6 +1284,18 @@ lemma NoSqOnS0_of_numberTheoryKernel_coprime {c b : ℕ}
     numberTheoryStepExistsOn_of_kernel ker
   intro q hq hqS0
   exact NoSqOnS0_of_numberTheoryStepExistsOn_coprime hex hbc hcop hq hqS0
+
+/--
+固定 `(c,b)` の数論 kernel の存在と `coprime(c,b)` から `NoSqOnS0` を回復する。
+-/
+lemma NoSqOnS0_of_numberTheoryHasKernel_coprime {c b : ℕ}
+    (hker : Nonempty (NumberTheoryDescentOn.ReductionKernel c b))
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b) :
+    NoSqOnS0 c b := by
+  rcases hker with ⟨ker⟩
+  intro q hq hqS0
+  exact NoSqOnS0_of_numberTheoryKernel_coprime ker hbc hcop hq hqS0
 
 /--
 固定 `(c,b)` の `LocalReduce` から `NoSqOnS0` を回復する。
