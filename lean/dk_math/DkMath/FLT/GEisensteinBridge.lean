@@ -1317,6 +1317,79 @@ lemma NoSqOnS0_of_numberTheoryHasKernel_coprime {c b : ℕ}
   exact NoSqOnS0_of_numberTheoryKernel_coprime ker hbc hcop hq hqS0
 
 /--
+`hasKernel` family 仮定から、固定 `(c,b)` の `NoSqOnS0` を回復する。
+-/
+lemma NoSqOnS0_of_numberTheoryHasKernelFamily {c b : ℕ}
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b)
+    (hasKernel :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        Nonempty (NumberTheoryDescentOn.ReductionKernel c b)) :
+    NoSqOnS0 c b := by
+  exact NoSqOnS0_of_numberTheoryHasKernel_coprime
+    (hasKernel hbc hcop) hbc hcop
+
+/--
+`hasStep` family 仮定から、固定 `(c,b)` の `NoSqOnS0` を回復する。
+-/
+lemma NoSqOnS0_of_numberTheoryHasStepFamily {c b : ℕ}
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b)
+    (hasStep :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        PrimitiveSquareDescentStep c b) :
+    NoSqOnS0 c b := by
+  have hker : Nonempty (NumberTheoryDescentOn.ReductionKernel c b) :=
+    numberTheoryHasKernel_of_step (hasStep hbc hcop)
+  intro q hq hqS0
+  exact NoSqOnS0_of_numberTheoryHasKernel_coprime hker hbc hcop hq hqS0
+
+/--
+`hasReduce` family 仮定から、固定 `(c,b)` の `NoSqOnS0` を回復する。
+-/
+lemma NoSqOnS0_of_numberTheoryHasReduceFamily {c b : ℕ}
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b)
+    (hasReduce :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        NumberTheoryReduce c b) :
+    NoSqOnS0 c b := by
+  have hker : Nonempty (NumberTheoryDescentOn.ReductionKernel c b) :=
+    numberTheoryHasKernel_of_reduce (hasReduce hbc hcop)
+  intro q hq hqS0
+  exact NoSqOnS0_of_numberTheoryHasKernel_coprime hker hbc hcop hq hqS0
+
+/--
+`hasStepExists` family 仮定から、固定 `(c,b)` の `NoSqOnS0` を回復する。
+-/
+lemma NoSqOnS0_of_numberTheoryHasStepExistsFamily {c b : ℕ}
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b)
+    (hasStepExists :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        NumberTheoryDescentOn.StepExists c b) :
+    NoSqOnS0 c b := by
+  have hker : Nonempty (NumberTheoryDescentOn.ReductionKernel c b) :=
+    numberTheoryHasKernel_of_stepExistsOn hbc hcop (hasStepExists hbc hcop)
+  intro q hq hqS0
+  exact NoSqOnS0_of_numberTheoryHasKernel_coprime hker hbc hcop hq hqS0
+
+/--
+`hasLocalReduce` family 仮定から、固定 `(c,b)` の `NoSqOnS0` を回復する。
+-/
+lemma NoSqOnS0_of_numberTheoryHasLocalReduceFamily {c b : ℕ}
+    (hbc : b < c)
+    (hcop : Nat.Coprime c b)
+    (hasLocalReduce :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        NumberTheoryDescentOn.LocalReduce c b) :
+    NoSqOnS0 c b := by
+  have hker : Nonempty (NumberTheoryDescentOn.ReductionKernel c b) :=
+    numberTheoryHasKernel_of_localReduce hbc hcop (hasLocalReduce hbc hcop)
+  intro q hq hqS0
+  exact NoSqOnS0_of_numberTheoryHasKernel_coprime hker hbc hcop hq hqS0
+
+/--
 phase-11 本実装ターゲット:
 固定 `(c,b)` ごとに `ReductionKernel` を供給する数論 provider。
 -/

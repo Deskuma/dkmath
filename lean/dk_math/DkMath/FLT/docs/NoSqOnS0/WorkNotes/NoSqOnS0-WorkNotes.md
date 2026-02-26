@@ -672,3 +672,24 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.Main DkMath.FLT.GEisensteinBridge`
   - 結果: 成功。
+
+### 2026-02-26 phase-11 継続（family から NoSq 回復補題を追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`
+  - `lean/dk_math/DkMath/FLT/Main.lean`
+- 追加内容:
+  1. `NoSqOnS0_of_numberTheoryHasKernelFamily`
+  2. `NoSqOnS0_of_numberTheoryHasStepFamily`
+  3. `NoSqOnS0_of_numberTheoryHasReduceFamily`
+  4. `NoSqOnS0_of_numberTheoryHasStepExistsFamily`
+  5. `NoSqOnS0_of_numberTheoryHasLocalReduceFamily`
+- 変更内容:
+  1. `Main` の family 直結入口（`HasKernel/HasStep/HasReduce/HasStepExists/HasLocalReduce`）を、
+     provider 経由ではなく上記 `NoSq` 回復補題へ直接接続する形に整理。
+- 意図:
+  - family 仮定を入力したときの本質が `NoSqOnS0` 回復であることを明文化。
+  - 入口層の依存を簡潔化し、将来の差し替え時に provider 変換の読解コストを下げる。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 結果: 成功。
