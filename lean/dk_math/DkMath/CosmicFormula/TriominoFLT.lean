@@ -477,13 +477,50 @@ lemma card_filter_range_mod3_eq_of_dvd (m v₁ v₂ : ℕ) (hm : 3 ∣ m) :
   rw [card_filter_range_mod3_eq_div_of_dvd m v₁ hm,
       card_filter_range_mod3_eq_div_of_dvd m v₂ hm]
 
+/-- `Box` 上の filter card を、`Finset.pi` 側の filter card に引き戻す。 -/
+lemma card_filter_Box_eq_card_filter_pi {d : ℕ}
+    (n : Fin d → ℕ) (P : Cell d → Prop) [DecidablePred P] :
+    let s := Finset.pi (Finset.univ : Finset (Fin d)) (fun i => Finset.range (n i))
+    let e := ((DkMath.CellDim.piToFunEmb d).trans (DkMath.CellDim.ofNatCellEmb d))
+    ((DkMath.CellDim.Box n).filter P).card = (s.filter fun f => P (e f)).card := by
+  classical
+  dsimp
+  let s := Finset.pi (Finset.univ : Finset (Fin d)) (fun i => Finset.range (n i))
+  let e := ((DkMath.CellDim.piToFunEmb d).trans (DkMath.CellDim.ofNatCellEmb d))
+  change (((s.map e).filter P).card = _)
+  rw [Finset.filter_map, Finset.card_map]
+  rfl
+
 /-- 補題：最初か二番目の軸が 3 の倍数なら、Box は色平衡である -/
 lemma color_balance_of_box_3k {d : ℕ} (hd : 2 ≤ d) (n : Fin d → ℕ)
     (h3 : 3 ∣ n ⟨0, by omega⟩ ∨ 3 ∣ n ⟨1, by omega⟩) :
     let R := DkMath.CellDim.Box n
     (R.filter fun c => color3 c = 0).card = (R.filter fun c => color3 c = 1).card ∧
     (R.filter fun c => color3 c = 0).card = (R.filter fun c => color3 c = 2).card := by
-  sorry  -- todo: Box の定義に基づいて、最初か二番目の軸が 3 の倍数なら Box が色平衡であることを証明
+  classical
+  dsimp
+  let s := Finset.pi (Finset.univ : Finset (Fin d)) (fun i => Finset.range (n i))
+  let e := ((DkMath.CellDim.piToFunEmb d).trans (DkMath.CellDim.ofNatCellEmb d))
+  have hR0 :
+      ((DkMath.CellDim.Box n).filter fun c => color3 c = 0).card
+        = (s.filter fun f => color3 (e f) = 0).card := by
+    simpa [s, e] using card_filter_Box_eq_card_filter_pi n (fun c => color3 c = 0)
+  have hR1 :
+      ((DkMath.CellDim.Box n).filter fun c => color3 c = 1).card
+        = (s.filter fun f => color3 (e f) = 1).card := by
+    simpa [s, e] using card_filter_Box_eq_card_filter_pi n (fun c => color3 c = 1)
+  have hR2 :
+      ((DkMath.CellDim.Box n).filter fun c => color3 c = 2).card
+        = (s.filter fun f => color3 (e f) = 2).card := by
+    simpa [s, e] using card_filter_Box_eq_card_filter_pi n (fun c => color3 c = 2)
+  -- 残りは `s`（`Finset.pi`）上の色カウント等式へ帰着。
+  have hs :
+      (s.filter fun f => color3 (e f) = 0).card = (s.filter fun f => color3 (e f) = 1).card ∧
+      (s.filter fun f => color3 (e f) = 0).card = (s.filter fun f => color3 (e f) = 2).card := by
+    -- TODO: axis0 / axis1 が 3 の倍数のどちらかという仮定 `h3` を使って、
+    -- `s` 上の mod-3 residue カウントへ落として示す。
+    sorry
+  exact ⟨by simpa [hR0, hR1] using hs.1, by simpa [hR0, hR2] using hs.2⟩
 
 /-! ## セクション 3：宇宙式 Body との接続 -/
 

@@ -208,3 +208,21 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
   - 結果: 成功（残る `sorry` は `color_balance_of_box_3k` と FLT 骨格定理群）。
+
+### 2026-02-26 phase-12 継続（`color_balance_of_box_3k` の目標を `pi` 側へ正規化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `card_filter_Box_eq_card_filter_pi`
+- 変更内容:
+  1. `color_balance_of_box_3k` を
+     `Box` 上の色カウントから `s = Finset.pi ...` 上の色カウントへ帰着する形に更新。
+  2. `hs`（`s` 上の本体カウント等式）1点へ `sorry` を集約。
+- 意図:
+  - `Cell` 側の map/embedding 展開を毎回追わず、
+    次段の証明を純粋に `pi` 上の座標カウント問題として進めるため。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（`color_balance_of_box_3k` の中核 `hs` が未解決）。
