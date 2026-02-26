@@ -299,3 +299,23 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
   - 結果: 成功（残る warning は `sorry` のみ）。
+
+### 2026-02-26 phase-12 継続（`hs_mod` 実装準備：fiber filter card 正規化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `card_filter_image_piCons_axis0`
+  2. `card_filter_image_piCons_axis1`
+- 変更内容:
+  1. `Pi.cons_injective` が必要とする非包含条件を補題仮定として明示
+     (`axis0 ∉ s` / `axis1 ∉ s`)。
+  2. `filter_map` + `card_map` で image 側 filter card を tail 側 filter card へ正規化。
+  3. 末尾の述語同値は `piCoordOn_cons_ne` で座標値を書き換える形に整理。
+- 意図:
+  - `hs_mod` 本体で `Finset.pi` を軸固定 fibers に分解した後、
+    各 fiber のカウントを 1次元 mod3 カウントへ直接落とせるようにする。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（残る warning は `sorry` のみ）。

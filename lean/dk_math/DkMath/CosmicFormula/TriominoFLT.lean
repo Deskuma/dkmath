@@ -590,6 +590,224 @@ lemma diffMod3_toNat_piCons_axis1 {d : ℕ} (hd : 2 ≤ d)
     simp [piCoordOn]
   simp [h0, h1]
 
+/-- `axis0`-fiber での filter card を tail 側条件へ戻す。 -/
+lemma card_filter_image_piCons_axis0 {d : ℕ} (hd : 2 ≤ d)
+    {s : Finset (Fin d)} (ha : axis0 hd ∉ s) (haxis1 : axis1 hd ∈ s)
+    (u : Finset (∀ i ∈ s, ℕ)) (b k : ℕ) :
+    ((u.image (Finset.Pi.cons s (axis0 hd) b)).filter
+      (fun g =>
+        ((((g (axis0 hd) (Finset.mem_insert_self (axis0 hd) s) : ℕ) : ℤ)
+          - ((g (axis1 hd) (Finset.mem_insert_of_mem haxis1) : ℕ) : ℤ)) % 3).toNat = k)).card
+      =
+    (u.filter
+      (fun f => (((b : ℤ) - (f (axis1 hd) haxis1 : ℤ)) % 3).toNat = k)).card := by
+  classical
+  let emb : (∀ i ∈ s, ℕ) ↪ (∀ i ∈ insert (axis0 hd) s, ℕ) :=
+    ⟨Finset.Pi.cons s (axis0 hd) b, Finset.Pi.cons_injective ha⟩
+  have hFilter :
+      ((u.image (Finset.Pi.cons s (axis0 hd) b)).filter
+        (fun g =>
+          ((((g (axis0 hd) (Finset.mem_insert_self (axis0 hd) s) : ℕ) : ℤ)
+            - ((g (axis1 hd) (Finset.mem_insert_of_mem haxis1) : ℕ) : ℤ)) % 3).toNat = k))
+      =
+      (u.filter
+        (fun f =>
+          ((((piCoordOn (Finset.Pi.cons s (axis0 hd) b f) (axis0 hd)
+              (Finset.mem_insert_self (axis0 hd) s) : ℕ) : ℤ)
+            - ((piCoordOn (Finset.Pi.cons s (axis0 hd) b f) (axis1 hd)
+                (Finset.mem_insert_of_mem haxis1) : ℕ) : ℤ)) % 3).toNat = k)).image
+          (Finset.Pi.cons s (axis0 hd) b) := by
+    simpa [emb, Finset.map_eq_image] using
+      (Finset.filter_map (s := u) (f := emb)
+        (p := fun g =>
+          ((((g (axis0 hd) (Finset.mem_insert_self (axis0 hd) s) : ℕ) : ℤ)
+            - ((g (axis1 hd) (Finset.mem_insert_of_mem haxis1) : ℕ) : ℤ)) % 3).toNat = k))
+  have hMapCard :
+      ((u.filter
+        (fun f =>
+          ((((piCoordOn (Finset.Pi.cons s (axis0 hd) b f) (axis0 hd)
+              (Finset.mem_insert_self (axis0 hd) s) : ℕ) : ℤ)
+            - ((piCoordOn (Finset.Pi.cons s (axis0 hd) b f) (axis1 hd)
+                (Finset.mem_insert_of_mem haxis1) : ℕ) : ℤ)) % 3).toNat = k)).image
+          (Finset.Pi.cons s (axis0 hd) b)).card
+      =
+      (u.filter
+        (fun f =>
+          ((((piCoordOn (Finset.Pi.cons s (axis0 hd) b f) (axis0 hd)
+              (Finset.mem_insert_self (axis0 hd) s) : ℕ) : ℤ)
+            - ((piCoordOn (Finset.Pi.cons s (axis0 hd) b f) (axis1 hd)
+                (Finset.mem_insert_of_mem haxis1) : ℕ) : ℤ)) % 3).toNat = k)).card := by
+    simpa [Finset.map_eq_image, emb] using
+      (Finset.card_map (s :=
+        u.filter
+          (fun f =>
+            ((((piCoordOn (Finset.Pi.cons s (axis0 hd) b f) (axis0 hd)
+                (Finset.mem_insert_self (axis0 hd) s) : ℕ) : ℤ)
+              - ((piCoordOn (Finset.Pi.cons s (axis0 hd) b f) (axis1 hd)
+                  (Finset.mem_insert_of_mem haxis1) : ℕ) : ℤ)) % 3).toNat = k)) emb)
+  calc
+    ((u.image (Finset.Pi.cons s (axis0 hd) b)).filter
+      (fun g =>
+        ((((g (axis0 hd) (Finset.mem_insert_self (axis0 hd) s) : ℕ) : ℤ)
+          - ((g (axis1 hd) (Finset.mem_insert_of_mem haxis1) : ℕ) : ℤ)) % 3).toNat = k)).card
+        =
+      ((u.filter
+        (fun f =>
+          ((((piCoordOn (Finset.Pi.cons s (axis0 hd) b f) (axis0 hd)
+              (Finset.mem_insert_self (axis0 hd) s) : ℕ) : ℤ)
+            - ((piCoordOn (Finset.Pi.cons s (axis0 hd) b f) (axis1 hd)
+                (Finset.mem_insert_of_mem haxis1) : ℕ) : ℤ)) % 3).toNat = k)).image
+          (Finset.Pi.cons s (axis0 hd) b)).card := by
+            simp [hFilter]
+    _ = (u.filter
+          (fun f =>
+            ((((piCoordOn (Finset.Pi.cons s (axis0 hd) b f) (axis0 hd)
+                (Finset.mem_insert_self (axis0 hd) s) : ℕ) : ℤ)
+              - ((piCoordOn (Finset.Pi.cons s (axis0 hd) b f) (axis1 hd)
+                  (Finset.mem_insert_of_mem haxis1) : ℕ) : ℤ)) % 3).toNat = k)).card := hMapCard
+    _ = (u.filter
+          (fun f => (((b : ℤ) - (f (axis1 hd) haxis1 : ℤ)) % 3).toNat = k)).card := by
+            have hPredEq :
+                (u.filter
+                  (fun f =>
+                    ((((piCoordOn (Finset.Pi.cons s (axis0 hd) b f) (axis0 hd)
+                        (Finset.mem_insert_self (axis0 hd) s) : ℕ) : ℤ)
+                      - ((piCoordOn (Finset.Pi.cons s (axis0 hd) b f) (axis1 hd)
+                          (Finset.mem_insert_of_mem haxis1) : ℕ) : ℤ)) % 3).toNat = k))
+                =
+                (u.filter
+                  (fun f => (((b : ℤ) - (f (axis1 hd) haxis1 : ℤ)) % 3).toNat = k)) := by
+              ext f
+              constructor
+              · intro hf
+                have hcoord :
+                    piCoordOn (Finset.Pi.cons s (axis0 hd) b f) (axis1 hd)
+                      (Finset.mem_insert_of_mem haxis1) = f (axis1 hd) haxis1 := by
+                  simpa [piCoordOn] using
+                    (piCoordOn_cons_ne (a := axis0 hd) (i := axis1 hd)
+                      (ha := axis0_ne_axis1 hd) (b := b) (f := f)
+                      (h := Finset.mem_insert_of_mem haxis1))
+                simpa [hcoord] using hf
+              · intro hf
+                have hcoord :
+                    piCoordOn (Finset.Pi.cons s (axis0 hd) b f) (axis1 hd)
+                      (Finset.mem_insert_of_mem haxis1) = f (axis1 hd) haxis1 := by
+                  simpa [piCoordOn] using
+                    (piCoordOn_cons_ne (a := axis0 hd) (i := axis1 hd)
+                      (ha := axis0_ne_axis1 hd) (b := b) (f := f)
+                      (h := Finset.mem_insert_of_mem haxis1))
+                simpa [hcoord] using hf
+            exact congrArg Finset.card hPredEq
+
+/-- `axis1`-fiber での filter card を tail 側条件へ戻す。 -/
+lemma card_filter_image_piCons_axis1 {d : ℕ} (hd : 2 ≤ d)
+    {s : Finset (Fin d)} (ha : axis1 hd ∉ s) (haxis0 : axis0 hd ∈ s)
+    (u : Finset (∀ i ∈ s, ℕ)) (b k : ℕ) :
+    ((u.image (Finset.Pi.cons s (axis1 hd) b)).filter
+      (fun g =>
+        ((((g (axis0 hd) (Finset.mem_insert_of_mem haxis0) : ℕ) : ℤ)
+          - ((g (axis1 hd) (Finset.mem_insert_self (axis1 hd) s) : ℕ) : ℤ)) % 3).toNat = k)).card
+      =
+    (u.filter
+      (fun f => (((f (axis0 hd) haxis0 : ℤ) - (b : ℤ)) % 3).toNat = k)).card := by
+  classical
+  let emb : (∀ i ∈ s, ℕ) ↪ (∀ i ∈ insert (axis1 hd) s, ℕ) :=
+    ⟨Finset.Pi.cons s (axis1 hd) b, Finset.Pi.cons_injective ha⟩
+  have hFilter :
+      ((u.image (Finset.Pi.cons s (axis1 hd) b)).filter
+        (fun g =>
+          ((((g (axis0 hd) (Finset.mem_insert_of_mem haxis0) : ℕ) : ℤ)
+            - ((g (axis1 hd) (Finset.mem_insert_self (axis1 hd) s) : ℕ) : ℤ)) % 3).toNat = k))
+      =
+      (u.filter
+        (fun f =>
+          ((((piCoordOn (Finset.Pi.cons s (axis1 hd) b f) (axis0 hd)
+              (Finset.mem_insert_of_mem haxis0) : ℕ) : ℤ)
+            - ((piCoordOn (Finset.Pi.cons s (axis1 hd) b f) (axis1 hd)
+                (Finset.mem_insert_self (axis1 hd) s) : ℕ) : ℤ)) % 3).toNat = k)).image
+          (Finset.Pi.cons s (axis1 hd) b) := by
+    simpa [emb, Finset.map_eq_image] using
+      (Finset.filter_map (s := u) (f := emb)
+        (p := fun g =>
+          ((((g (axis0 hd) (Finset.mem_insert_of_mem haxis0) : ℕ) : ℤ)
+            - ((g (axis1 hd) (Finset.mem_insert_self (axis1 hd) s) : ℕ) : ℤ)) % 3).toNat = k))
+  have hMapCard :
+      ((u.filter
+        (fun f =>
+          ((((piCoordOn (Finset.Pi.cons s (axis1 hd) b f) (axis0 hd)
+              (Finset.mem_insert_of_mem haxis0) : ℕ) : ℤ)
+            - ((piCoordOn (Finset.Pi.cons s (axis1 hd) b f) (axis1 hd)
+                (Finset.mem_insert_self (axis1 hd) s) : ℕ) : ℤ)) % 3).toNat = k)).image
+          (Finset.Pi.cons s (axis1 hd) b)).card
+      =
+      (u.filter
+        (fun f =>
+          ((((piCoordOn (Finset.Pi.cons s (axis1 hd) b f) (axis0 hd)
+              (Finset.mem_insert_of_mem haxis0) : ℕ) : ℤ)
+            - ((piCoordOn (Finset.Pi.cons s (axis1 hd) b f) (axis1 hd)
+                (Finset.mem_insert_self (axis1 hd) s) : ℕ) : ℤ)) % 3).toNat = k)).card := by
+    simpa [Finset.map_eq_image, emb] using
+      (Finset.card_map (s :=
+        u.filter
+          (fun f =>
+            ((((piCoordOn (Finset.Pi.cons s (axis1 hd) b f) (axis0 hd)
+                (Finset.mem_insert_of_mem haxis0) : ℕ) : ℤ)
+              - ((piCoordOn (Finset.Pi.cons s (axis1 hd) b f) (axis1 hd)
+                  (Finset.mem_insert_self (axis1 hd) s) : ℕ) : ℤ)) % 3).toNat = k)) emb)
+  calc
+    ((u.image (Finset.Pi.cons s (axis1 hd) b)).filter
+      (fun g =>
+        ((((g (axis0 hd) (Finset.mem_insert_of_mem haxis0) : ℕ) : ℤ)
+          - ((g (axis1 hd) (Finset.mem_insert_self (axis1 hd) s) : ℕ) : ℤ)) % 3).toNat = k)).card
+        =
+      ((u.filter
+        (fun f =>
+          ((((piCoordOn (Finset.Pi.cons s (axis1 hd) b f) (axis0 hd)
+              (Finset.mem_insert_of_mem haxis0) : ℕ) : ℤ)
+            - ((piCoordOn (Finset.Pi.cons s (axis1 hd) b f) (axis1 hd)
+                (Finset.mem_insert_self (axis1 hd) s) : ℕ) : ℤ)) % 3).toNat = k)).image
+          (Finset.Pi.cons s (axis1 hd) b)).card := by
+            simp [hFilter]
+    _ = (u.filter
+          (fun f =>
+            ((((piCoordOn (Finset.Pi.cons s (axis1 hd) b f) (axis0 hd)
+                (Finset.mem_insert_of_mem haxis0) : ℕ) : ℤ)
+              - ((piCoordOn (Finset.Pi.cons s (axis1 hd) b f) (axis1 hd)
+                  (Finset.mem_insert_self (axis1 hd) s) : ℕ) : ℤ)) % 3).toNat = k)).card := hMapCard
+    _ = (u.filter
+          (fun f => (((f (axis0 hd) haxis0 : ℤ) - (b : ℤ)) % 3).toNat = k)).card := by
+            have hPredEq :
+                (u.filter
+                  (fun f =>
+                    ((((piCoordOn (Finset.Pi.cons s (axis1 hd) b f) (axis0 hd)
+                        (Finset.mem_insert_of_mem haxis0) : ℕ) : ℤ)
+                      - ((piCoordOn (Finset.Pi.cons s (axis1 hd) b f) (axis1 hd)
+                          (Finset.mem_insert_self (axis1 hd) s) : ℕ) : ℤ)) % 3).toNat = k))
+                =
+                (u.filter
+                  (fun f => (((f (axis0 hd) haxis0 : ℤ) - (b : ℤ)) % 3).toNat = k)) := by
+              ext f
+              constructor
+              · intro hf
+                have hcoord :
+                    piCoordOn (Finset.Pi.cons s (axis1 hd) b f) (axis0 hd)
+                      (Finset.mem_insert_of_mem haxis0) = f (axis0 hd) haxis0 := by
+                  simpa [piCoordOn] using
+                    (piCoordOn_cons_ne (a := axis1 hd) (i := axis0 hd)
+                      (ha := (axis0_ne_axis1 hd).symm) (b := b) (f := f)
+                      (h := Finset.mem_insert_of_mem haxis0))
+                simpa [hcoord] using hf
+              · intro hf
+                have hcoord :
+                    piCoordOn (Finset.Pi.cons s (axis1 hd) b f) (axis0 hd)
+                      (Finset.mem_insert_of_mem haxis0) = f (axis0 hd) haxis0 := by
+                  simpa [piCoordOn] using
+                    (piCoordOn_cons_ne (a := axis1 hd) (i := axis0 hd)
+                      (ha := (axis0_ne_axis1 hd).symm) (b := b) (f := f)
+                      (h := Finset.mem_insert_of_mem haxis0))
+                simpa [hcoord] using hf
+            exact congrArg Finset.card hPredEq
+
 /-- `Finset.pi` 側要素の座標値（`Finset.univ` 証明を補った形）。 -/
 def piCoord {d : ℕ}
     (f : ∀ i ∈ (Finset.univ : Finset (Fin d)), ℕ) (i : Fin d) : ℕ :=
