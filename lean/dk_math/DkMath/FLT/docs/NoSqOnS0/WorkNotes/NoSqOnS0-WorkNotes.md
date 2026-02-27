@@ -535,3 +535,25 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
   - 結果: 成功（`sorry` は `FLT_highExponent_core_pending` の1件のみ）。
+
+### 2026-02-26 phase-12 継続（高指数核を「素数指数供給」へ還元）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `exists_prime_factor_ne_two_three_of_highExponent`
+     - `4 ≤ n`, `¬3∣n`, `¬4∣n` から
+       `∃ p, Prime p ∧ p∣n ∧ p≠2 ∧ p≠3` を導出
+  2. `FLT_highExponent_core_of_primeProvider`
+     - 「`p≠2,3` 素数指数での FLT 供給」から高指数核を閉じる還元補題
+- 変更内容:
+  1. `FLT_highExponent_core_pending` を上記還元補題経由の最小 TODO に再構成
+     - 残タスクを「`hprimeFLT` を Triomino/Cosmic 側で構成すること」と明示
+- 意図:
+  - 未解決点の内容を「証明対象（高指数核）そのもの」から
+    「必要な供給（`p≠2,3` 素数指数 FLT）」へ明確に分離。
+  - 次段で `hprimeFLT` を実装するためのインターフェースを固定。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
+  - 結果: 成功（`sorry` は `FLT_highExponent_core_pending` の1件のみ）。

@@ -1815,6 +1815,75 @@ theorem card_body_from_cosmic (d x u : ℕ) :
   omega
 
 /--
+`n ≥ 4`, `¬ 3 ∣ n`, `¬ 4 ∣ n` なら、`n` は `2,3` 以外の素因子を持つ。
+-/
+lemma exists_prime_factor_ne_two_three_of_highExponent
+    {n : ℕ}
+    (hn_ge4 : 4 ≤ n)
+    (h3n_not : ¬ 3 ∣ n)
+    (h4n_not : ¬ 4 ∣ n) :
+    ∃ p : ℕ, Nat.Prime p ∧ p ∣ n ∧ p ≠ 2 ∧ p ≠ 3 := by
+  by_cases h2n : 2 ∣ n
+  · rcases h2n with ⟨m, hm⟩
+    have hm_ge2 : 2 ≤ m := by
+      have hn_ge2 : 2 ≤ n := le_trans (by decide : 2 ≤ 4) hn_ge4
+      rw [hm] at hn_ge2
+      omega
+    have hm_ne1 : m ≠ 1 := by omega
+    have hm_not_dvd2 : ¬ 2 ∣ m := by
+      intro h2m
+      rcases h2m with ⟨k, hk⟩
+      apply h4n_not
+      refine ⟨k, ?_⟩
+      rw [hm, hk]
+      ring
+    rcases Nat.exists_prime_and_dvd hm_ne1 with ⟨p, hpprime, hpdvdm⟩
+    have hmdvdn : m ∣ n := by
+      refine ⟨2, ?_⟩
+      omega
+    have hpdvdn : p ∣ n := dvd_trans hpdvdm hmdvdn
+    have hp_ne2 : p ≠ 2 := by
+      intro hp2
+      apply hm_not_dvd2
+      simpa [hp2] using hpdvdm
+    have hp_ne3 : p ≠ 3 := by
+      intro hp3
+      apply h3n_not
+      simpa [hp3] using hpdvdn
+    exact ⟨p, hpprime, hpdvdn, hp_ne2, hp_ne3⟩
+  · have hn_ne1 : n ≠ 1 := by omega
+    rcases Nat.exists_prime_and_dvd hn_ne1 with ⟨p, hpprime, hpdvdn⟩
+    have hp_ne2 : p ≠ 2 := by
+      intro hp2
+      apply h2n
+      simpa [hp2] using hpdvdn
+    have hp_ne3 : p ≠ 3 := by
+      intro hp3
+      apply h3n_not
+      simpa [hp3] using hpdvdn
+    exact ⟨p, hpprime, hpdvdn, hp_ne2, hp_ne3⟩
+
+/--
+高指数核を「`2,3` 以外の素因子指数での FLT 供給」に還元する補題。
+-/
+lemma FLT_highExponent_core_of_primeProvider {x y z n : ℕ}
+    (hn_ge4 : 4 ≤ n)
+    (h3n_not : ¬ 3 ∣ n)
+    (h4n_not : ¬ 4 ∣ n)
+    (hprimeFLT :
+      ∀ p : ℕ, Nat.Prime p → p ∣ n → p ≠ 2 → p ≠ 3 → FermatLastTheoremFor p)
+    (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
+    (h_eq : x ^ n + y ^ n = z ^ n) : False := by
+  rcases exists_prime_factor_ne_two_three_of_highExponent hn_ge4 h3n_not h4n_not with
+    ⟨p, hpprime, hpdvdn, hp_ne2, hp_ne3⟩
+  have hflt_p : FermatLastTheoremFor p :=
+    hprimeFLT p hpprime hpdvdn hp_ne2 hp_ne3
+  have hflt_n : FermatLastTheoremFor n :=
+    FermatLastTheoremFor.mono hpdvdn hflt_p
+  rcases hpos with ⟨hx, hy, hz⟩
+  exact hflt_n x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq
+
+/--
 高指数側（`n ≥ 4` かつ `¬ 3 ∣ n` かつ `¬ 4 ∣ n`）の未解決核。
 
 NOTE:
@@ -1827,8 +1896,16 @@ lemma FLT_highExponent_core_pending {x y z n : ℕ}
     (h4n_not : ¬ 4 ∣ n)
     (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
     (h_eq : x ^ n + y ^ n = z ^ n) : False := by
-  clear hn_ge4 h3n_not h4n_not hpos h_eq
-  sorry  -- todo: 高指数（`¬3∣n ∧ ¬4∣n`）本体の矛盾導出をここへ実装
+  -- TODO:
+  -- `hprimeFLT`（`p ≠ 2,3` の素数指数に対する FLT 供給）を
+  -- Triomino/Cosmic 側の独立証明で構成する。
+  have hneed :
+      (∀ p : ℕ, Nat.Prime p → p ∣ n → p ≠ 2 → p ≠ 3 → FermatLastTheoremFor p) → False := by
+    intro hprimeFLT
+    exact FLT_highExponent_core_of_primeProvider
+      hn_ge4 h3n_not h4n_not hprimeFLT hpos h_eq
+  clear hneed
+  sorry
 
 /--
 トロミノ充填によるフェルマーの最終定理の背理法（スケルトン）
