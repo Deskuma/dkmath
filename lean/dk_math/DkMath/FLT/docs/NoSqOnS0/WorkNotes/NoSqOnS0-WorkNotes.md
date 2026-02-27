@@ -381,3 +381,28 @@ status: 作業中 - phase-13: 完全証明への道（）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.MathlibBridge.FLT34 DkMath.CosmicFormula.TriominoFLT DkMath.FLT.TriominoMainBridge DkMath.FLT.TriominoPrimeProvider`
   - 結果: 成功（既存 warning: `TriominoFLT` の `sorry` 1件は継続）。
+
+### 2026-02-27 phase-13 継続（`PrimeProvider/TriominoCosmic` の staging 追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmic.lean`（新規）
+  - `lean/dk_math/DkMath/FLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `PrimeGe5FLTProvider`
+  2. `prime_ge_five_of_prime_ne_two_ne_three`
+  3. `triominoCosmic_globalProvider_of_primeGe5`
+  4. `triominoPrimeProvider_of_primeGe5`
+- 意図:
+  - まだ `FLT_prime_ge5` 本体は未実装のまま、
+    「`p ≥ 5` の素数指数 FLT 供給さえ得られれば、既存の global provider API に接続できる」
+    という枠を先に確定。
+  - 残る本質的な作業を `PrimeGe5FLTProvider` の実装へ集中させる。
+- 構造方針:
+  - この段階の staging モジュールは `TriominoFLT` にまだ依存しない。
+    先に配線だけを固定し、数学本体を後から差し込む。
+- 併せて実施:
+  - `DkMath/FLT.lean` に `import DkMath.FLT.PrimeProvider.TriominoCosmic` を追加
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmic DkMath.FLT`
+  - 結果: 成功（既存 warning: `TriominoFLT` の `sorry` 1件は継続）。

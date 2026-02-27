@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.GEisensteinBridge
 import DkMath.FLT.Main
 import DkMath.FLT.PrimeProviderCore
+import DkMath.FLT.PrimeProvider.TriominoCosmic
 import DkMath.FLT.TriominoPrimeProvider
 
 #print "file: DkMath.FLT.Main"
