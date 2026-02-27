@@ -186,3 +186,27 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5`
   - 結果: 成功。
+
+### 2026-02-27 phase-14 継続（TODO-2 の本丸を隔離モジュールへ分離）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean`
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `TriominoCosmicGapInvariant` を `GapNotIsPowTarget` への alias に変更
+     - 定義重複をなくし、意味だけを docstring に残す形へ整理
+- 追加内容:
+  1. 新規モジュール `DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  2. `triominoCosmicGapInvariant : TriominoCosmicGapInvariant`
+- 意図:
+  - `TriominoCosmicPrimeGe5` は staging として清潔に保ち、
+    `TODO-2` の本丸証明だけを別ファイルへ隔離。
+  - 研究中の未解決点（`sorry`）を 1 ファイル 1 定理に閉じ込める。
+- 実装メモ:
+  - 新規ファイルはまだ公開面へは載せていない。
+  - `triominoCosmicGapInvariant` 本体は未実装で、現時点では
+    `hpack.gap_pos` / `hpack.gap_coprime_right` を取り出した位置で `sorry` 1 件。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5 DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（`TriominoCosmicGapInvariant.lean` に `sorry` warning 1 件）。
