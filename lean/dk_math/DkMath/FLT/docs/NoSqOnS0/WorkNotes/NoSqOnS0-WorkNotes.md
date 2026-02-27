@@ -209,3 +209,23 @@ status: 作業中 - phase-13: 完全証明への道（）
   - 結果: 成功（`TriominoFLT` の `sorry` 1件は継続）。
 
 ## 作業ログ
+
+### 2026-02-27 phase-13 継続（TriominoPrimeProvider の入口拡張）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/TriominoPrimeProvider.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `FLT_general_via_oddPrimes`
+  2. `FLT_d3_via_oddPrimes`
+  3. `FLT_d3_by_padicValNat_via_triominoPrimeProvider_coprimeSupport_direct`
+  4. `FLT_d3_by_padicValNat_via_fermatLastTheorem_coprimeSupport_direct`
+  5. `FLT_d3_by_padicValNat_via_oddPrimes_coprimeSupport_direct`
+- 意図:
+  - `TriominoPrimeProvider` を「general/d3 結論」だけでなく、
+    `Main` で使っている coprime-support 形の引数セットからも直接呼べる API に拡張。
+  - 研究側で仮定供給（`FermatLastTheorem` / odd-primes）を切り替えても、
+    呼び出し側の形をほぼ固定できるようにした。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.TriominoPrimeProvider`
+  - 結果: 成功（既存 warning: `TriominoFLT` の `sorry` 1件は継続）。

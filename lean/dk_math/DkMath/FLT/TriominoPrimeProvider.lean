@@ -95,4 +95,73 @@ theorem FLT_d3_via_fermatLastTheorem
     (a := a) (b := b) (c := c)
     (triominoPrimeProvider_of_fermatLastTheorem hFLT) ha hb hc
 
+/--
+odd prime 指数供給から一般指数版（`n ≥ 3`）を得る。
+-/
+theorem FLT_general_via_oddPrimes
+    {x y z n : ℕ}
+    (hprimes : ∀ p : ℕ, Nat.Prime p → Odd p → FermatLastTheoremFor p)
+    (hn : 3 ≤ n)
+    (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
+    (h_eq : x ^ n + y ^ n = z ^ n) : False := by
+  exact FLT_general_via_triominoPrimeProvider
+    (x := x) (y := y) (z := z) (n := n)
+    (triominoPrimeProvider_of_oddPrimes hprimes) hn hpos h_eq
+
+/--
+odd prime 指数供給から `d=3` 版を得る。
+-/
+theorem FLT_d3_via_oddPrimes
+    {a b c : ℕ}
+    (hprimes : ∀ p : ℕ, Nat.Prime p → Odd p → FermatLastTheoremFor p)
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_via_triominoPrimeProvider
+    (a := a) (b := b) (c := c)
+    (triominoPrimeProvider_of_oddPrimes hprimes) ha hb hc
+
+/--
+`Main` の coprime-support 入口と同じ引数形で、
+Triomino provider から `d=3` を返すラッパ。
+-/
+theorem FLT_d3_by_padicValNat_via_triominoPrimeProvider_coprimeSupport_direct
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (_hab : Nat.Coprime a b)
+    (_hbc : b < c)
+    (_hcb_coprime : Nat.Coprime c b)
+    (hprov : TriominoPrimeProvider) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_via_triominoPrimeProvider (a := a) (b := b) (c := c) hprov ha hb hc
+
+/--
+`FermatLastTheorem` 仮定から、coprime-support 形の `d=3` 入口を得る。
+-/
+theorem FLT_d3_by_padicValNat_via_fermatLastTheorem_coprimeSupport_direct
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hFLT : FermatLastTheorem) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_via_triominoPrimeProvider_coprimeSupport_direct
+    (a := a) (b := b) (c := c) ha hb hc hab hbc hcb_coprime
+    (triominoPrimeProvider_of_fermatLastTheorem hFLT)
+
+/--
+odd prime 指数供給から、coprime-support 形の `d=3` 入口を得る。
+-/
+theorem FLT_d3_by_padicValNat_via_oddPrimes_coprimeSupport_direct
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hprimes : ∀ p : ℕ, Nat.Prime p → Odd p → FermatLastTheoremFor p) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_via_triominoPrimeProvider_coprimeSupport_direct
+    (a := a) (b := b) (c := c) ha hb hc hab hbc hcb_coprime
+    (triominoPrimeProvider_of_oddPrimes hprimes)
+
 end DkMath.FLT
