@@ -466,3 +466,19 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は `noSqOnGN_of_primitivePrime_impl` の `sorry` 1件のみ）。
+
+### 2026-02-27 phase-14 継続（残る穴を `AllNonLiftableOnGN` family へ昇格）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `PrimitiveOnGN` / `NonLiftableGN` / `AllNonLiftableOnGN` を追加
+  2. Branch B 合成 `noSqPrimeOnGN_when_p_not_dvd_u_of_specs` の第2入力を、点ごとの `NoSqOnGN_of_primitivePrime` ではなく、pack 由来の `AllNonLiftableOnGN` family に変更
+  3. 未解決点を `allNonLiftableOnGN_fromCounterexample_impl` へ移動
+- 意図:
+  - 残りの `sorry` を、単発の `q^2 ∤ GN` ではなく、プロジェクト既存の `NonLiftable` 系語彙に沿った family 供給へ寄せる。
+  - これにより、今後は `Triomino/Cosmic` 側の `NonLiftable / NoSq / classify impossible` 理論をそのまま接続しやすくした。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は `allNonLiftableOnGN_fromCounterexample_impl` の `sorry` 1件のみ）。
