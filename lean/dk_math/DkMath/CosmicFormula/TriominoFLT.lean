@@ -9,16 +9,15 @@ import DkMath.Polyomino
 import DkMath.CosmicFormula.CosmicFormulaCellDim
 import DkMath.Tromino
 import DkMath.FLT.PrimeProviderCore
+import DkMath.FLT.MathlibBridge.FLT34
 
 /-
 NOTE [Temporary Mathlib FLT3 bridge]:
-- このファイルでの `Mathlib.NumberTheory.FLT.Three/Four` 参照は「暫定」。
+- このファイルでの `DkMath.FLT.FLT3_core/FLT4_core` 参照は「暫定」。
 - 目的は phase-12 時点で `n=3` 分岐を閉じ、`sorry` を高指数側へ隔離すること。
 - 将来、Triomino/Cosmic 側の独立証明（`n=3,4` を含む）を実装後、
-  `fermatLastTheoremThree` / `fermatLastTheoremFour` 依存は除去して置換する。
+  `DkMath.FLT.MathlibBridge.FLT34` 依存は除去して置換する。
 -/
-import Mathlib.NumberTheory.FLT.Three
-import Mathlib.NumberTheory.FLT.Four
 
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
@@ -1969,16 +1968,16 @@ theorem FLT_from_tromino_tiling {x y z : ℕ} (n : ℕ)
     intro R h_area h_tile
     -- NOTE [Temporary Mathlib FLT3 bridge]:
     -- 独立実装完成までの暫定接続。将来ここは Triomino/Cosmic 系証明へ置換する。
-    exact (fermatLastTheoremThree : FermatLastTheoremFor 3)
+    exact (DkMath.FLT.FLT3_core : FermatLastTheoremFor 3)
       x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq
   intro R h_area h_tile
   by_cases h3n : 3 ∣ n
   · have hflt : FermatLastTheoremFor n :=
-      FermatLastTheoremFor.mono h3n fermatLastTheoremThree
+      FermatLastTheoremFor.mono h3n DkMath.FLT.FLT3_core
     exact (hflt x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq).elim
   by_cases h4n : 4 ∣ n
   · have hflt : FermatLastTheoremFor n :=
-      FermatLastTheoremFor.mono h4n fermatLastTheoremFour
+      FermatLastTheoremFor.mono h4n DkMath.FLT.FLT4_core
     exact (hflt x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq).elim
   have hn_ge4 : 4 ≤ n := hn4
   have h3n_not : ¬ 3 ∣ n := h3n
@@ -2008,16 +2007,16 @@ theorem FLT_from_tromino_tiling_of_primeProvider {x y z : ℕ} (n : ℕ)
   rcases hcases with h3 | hn4
   · subst h3
     intro R h_area h_tile
-    exact (fermatLastTheoremThree : FermatLastTheoremFor 3)
+    exact (DkMath.FLT.FLT3_core : FermatLastTheoremFor 3)
       x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq
   intro R h_area h_tile
   by_cases h3n : 3 ∣ n
   · have hflt : FermatLastTheoremFor n :=
-      FermatLastTheoremFor.mono h3n fermatLastTheoremThree
+      FermatLastTheoremFor.mono h3n DkMath.FLT.FLT3_core
     exact (hflt x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq).elim
   by_cases h4n : 4 ∣ n
   · have hflt : FermatLastTheoremFor n :=
-      FermatLastTheoremFor.mono h4n fermatLastTheoremFour
+      FermatLastTheoremFor.mono h4n DkMath.FLT.FLT4_core
     exact (hflt x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq).elim
   have hn_ge4 : 4 ≤ n := hn4
   have h3n_not : ¬ 3 ∣ n := h3n
@@ -2034,7 +2033,7 @@ theorem FLT_case_3_via_tromino {x y z : ℕ}
   rcases hpos with ⟨hx, hy, hz⟩
   -- NOTE [Temporary Mathlib FLT3 bridge]:
   -- `n=3` の独立証明が Triomino 側で完成した時点で本呼び出しを除去する。
-  exact (fermatLastTheoremThree : FermatLastTheoremFor 3)
+  exact (DkMath.FLT.FLT3_core : FermatLastTheoremFor 3)
     x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq
 
 /-- 一般版：n ≥ 3 の FLT -/
@@ -2049,11 +2048,11 @@ theorem FLT_general_via_tromino {x y z : ℕ} (n : ℕ)
   rcases hpos with ⟨hx, hy, hz⟩
   by_cases h3n : 3 ∣ n
   · have hflt : FermatLastTheoremFor n :=
-      FermatLastTheoremFor.mono h3n fermatLastTheoremThree
+      FermatLastTheoremFor.mono h3n DkMath.FLT.FLT3_core
     exact hflt x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq
   by_cases h4n : 4 ∣ n
   · have hflt : FermatLastTheoremFor n :=
-      FermatLastTheoremFor.mono h4n fermatLastTheoremFour
+      FermatLastTheoremFor.mono h4n DkMath.FLT.FLT4_core
     exact hflt x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq
   -- 戦略：
   -- 1. z^n - y^n = x^n は宇宙式 Body(n, z-y, y) の面積。
@@ -2082,11 +2081,11 @@ theorem FLT_general_via_tromino_of_primeProvider {x y z : ℕ} (n : ℕ)
   rcases hpos with ⟨hx, hy, hz⟩
   by_cases h3n : 3 ∣ n
   · have hflt : FermatLastTheoremFor n :=
-      FermatLastTheoremFor.mono h3n fermatLastTheoremThree
+      FermatLastTheoremFor.mono h3n DkMath.FLT.FLT3_core
     exact hflt x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq
   by_cases h4n : 4 ∣ n
   · have hflt : FermatLastTheoremFor n :=
-      FermatLastTheoremFor.mono h4n fermatLastTheoremFour
+      FermatLastTheoremFor.mono h4n DkMath.FLT.FLT4_core
     exact hflt x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq
   have hn_ge4 : 4 ≤ n := hn4
   have h3n_not : ¬ 3 ∣ n := h3n

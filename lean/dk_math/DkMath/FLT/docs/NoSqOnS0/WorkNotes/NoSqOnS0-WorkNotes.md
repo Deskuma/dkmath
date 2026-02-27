@@ -354,3 +354,30 @@ status: 作業中 - phase-13: 完全証明への道（）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProviderCore DkMath.CosmicFormula.TriominoFLT DkMath.FLT.TriominoMainBridge DkMath.FLT.TriominoPrimeProvider DkMath.FLT`
   - 結果: 成功（既存 warning: `TriominoFLT` の `sorry` 1件は継続）。
+
+### 2026-02-27 phase-13 継続（`MathlibBridge/FLT34` へ暫定依存を隔離）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/MathlibBridge/FLT34.lean`（新規）
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `DkMath.FLT.FLT3_core`
+  2. `DkMath.FLT.FLT4_core`
+- 変更内容:
+  1. `Mathlib.NumberTheory.FLT.Three/Four` の import を
+     `TriominoFLT.lean` から除去
+  2. `TriominoFLT.lean` は `import DkMath.FLT.MathlibBridge.FLT34` へ置換
+  3. `fermatLastTheoremThree/Four` の直接参照を、
+     `DkMath.FLT.FLT3_core/FLT4_core` へ全面置換
+- 意図:
+  - Mathlib 依存の `n=3,4` 暫定供給を 1 ファイルへ集約し、
+    将来の独立証明置換を 1 箇所差し替えで済む形に整理。
+  - `TriominoFLT` からは Mathlib の定理名を消し、
+    「橋の定理名だけを知る」構造へ移行。
+- 公開面ポリシー:
+  - `DkMath/FLT.lean` にはまだ載せない。
+    まずは `TriominoFLT` 専用の内部隔離層として運用する。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.MathlibBridge.FLT34 DkMath.CosmicFormula.TriominoFLT DkMath.FLT.TriominoMainBridge DkMath.FLT.TriominoPrimeProvider`
+  - 結果: 成功（既存 warning: `TriominoFLT` の `sorry` 1件は継続）。
