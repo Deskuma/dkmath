@@ -41,6 +41,45 @@ abbrev TriominoWieferichLiftExclusion : Prop :=
   ∀ {p x y z q : ℕ}, PrimeGe5CounterexamplePack p x y z →
     WieferichLift p y z q -> False
 
+/-- prime-ge5 反例パックに最小性（`z` 最小）を付加した版。 -/
+abbrev MinimalPrimeGe5CounterexamplePack (p x y z : ℕ) : Prop :=
+  PrimeGe5CounterexamplePack p x y z ∧
+  ∀ {x' y' z' : ℕ}, PrimeGe5CounterexamplePack p x' y' z' -> z' < z -> False
+
+/-- Wieferich lift が起きたら、より小さい反例を構成できるという下降仕様。 -/
+abbrev WieferichDescent : Prop :=
+  ∀ {p x y z q : ℕ}, PrimeGe5CounterexamplePack p x y z ->
+    WieferichLift p y z q ->
+    ∃ x' y' z' : ℕ, PrimeGe5CounterexamplePack p x' y' z' ∧ z' < z
+
+/--
+Wieferich lift を起こす反例があれば、その中から `z` 最小のものを選べるという選択仕様。
+-/
+abbrev MinimalWieferichLiftSelection : Prop :=
+  ∀ {p x y z q : ℕ}, PrimeGe5CounterexamplePack p x y z ->
+    WieferichLift p y z q ->
+    ∃ x₀ y₀ z₀ q₀ : ℕ,
+      MinimalPrimeGe5CounterexamplePack p x₀ y₀ z₀ ∧ WieferichLift p y₀ z₀ q₀
+
+/-- 最小反例と下降仕様があれば、その最小反例では Wieferich lift は起きえない。 -/
+theorem wieferichLiftExclusion_of_descent_on_minimal
+    (hDesc : WieferichDescent) :
+    ∀ {p x y z q : ℕ}, MinimalPrimeGe5CounterexamplePack p x y z ->
+      WieferichLift p y z q -> False := by
+  intro p x y z q hMin hLift
+  rcases hMin with ⟨hpack, hmin⟩
+  rcases hDesc hpack hLift with ⟨x', y', z', hpack', hz'lt⟩
+  exact hmin hpack' hz'lt
+
+/-- 最小反例選択と下降仕様があれば、全ての反例文脈で Wieferich lift を排除できる。 -/
+theorem wieferichLiftExclusion_of_selection_and_descent
+    (hSelect : MinimalWieferichLiftSelection)
+    (hDesc : WieferichDescent) :
+    TriominoWieferichLiftExclusion := by
+  intro p x y z q hpack hLift
+  rcases hSelect hpack hLift with ⟨x₀, y₀, z₀, q₀, hMin, hLift₀⟩
+  exact wieferichLiftExclusion_of_descent_on_minimal hDesc hMin hLift₀
+
 /-- `WieferichLift` の排除があれば、`TriominoNoWieferichBridge` は直ちに従う。 -/
 theorem triominoNoWieferichBridge_of_wieferichLiftExclusion
     (hExcl : TriominoWieferichLiftExclusion) :
@@ -75,18 +114,28 @@ theorem triominoCosmicNonLiftableGNBridge_of_noWieferich
   exact (hNW hpack hqP hq_dvd_diff hq_not_dvd_gap) hq2_dvd_diff
 
 /--
+Triomino/Cosmic 側が最終的に供給すべき「最小反例選択 + 下降」のカーネル。
+-/
+abbrev TriominoWieferichLiftKernel : Prop :=
+  MinimalWieferichLiftSelection ∧ WieferichDescent
+
+/--
 一般 `GN` nonlift bridge の本丸インターフェイス。
 
-現時点では、`Triomino/Cosmic` 側の no-`sorry` 一般理論は未実装のため、
-未解決点をこの 1 定理に隔離する。
+現時点では、最後の未解決点を「最小反例選択 + 下降」カーネルに隔離する。
 -/
-theorem triominoWieferichLiftExclusion_impl : TriominoWieferichLiftExclusion := by
-  intro p x y z q hpack hLift
+theorem triominoWieferichLiftKernel_impl : TriominoWieferichLiftKernel := by
   -- TODO:
-  -- prime-ge5 の反例文脈で、Wieferich 型 lift は起きない。
-  -- ここは将来的に「WieferichLift -> より小さい反例」を構成する
-  -- 下降補題から閉じる想定。
+  -- 1. Wieferich lift を起こす反例から `z` 最小のものを選ぶ。
+  -- 2. その最小反例で Wieferich lift が起きたなら、より小さい反例を構成する。
+  -- この 2 段（最小反例選択 + 下降）が、最後の未解決カーネル。
   sorry
+
+/-- 現段階の `TriominoWieferichLiftExclusion` は、最小反例選択と下降のカーネルへ委譲する。 -/
+theorem triominoWieferichLiftExclusion_impl : TriominoWieferichLiftExclusion := by
+  exact wieferichLiftExclusion_of_selection_and_descent
+    triominoWieferichLiftKernel_impl.1
+    triominoWieferichLiftKernel_impl.2
 
 /-- 現段階の `TriominoNoWieferichBridge` 実装は、Wieferich lift 排除ブリッジへ委譲する。 -/
 theorem triominoNoWieferichBridge_impl : TriominoNoWieferichBridge := by

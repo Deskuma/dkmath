@@ -539,3 +539,27 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGN.lean` の `triominoWieferichLiftExclusion_impl` の `sorry` 1件のみ）。
+
+### 2026-02-27 phase-14 継続（最後の穴を「最小反例選択 + 下降」カーネルへ圧縮）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGN.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `MinimalPrimeGe5CounterexamplePack`
+  2. `WieferichDescent`
+  3. `MinimalWieferichLiftSelection`
+  4. `wieferichLiftExclusion_of_descent_on_minimal`
+  5. `wieferichLiftExclusion_of_selection_and_descent`
+  6. `TriominoWieferichLiftKernel`
+  7. `triominoWieferichLiftKernel_impl`（残る未解決点）
+- 変更内容:
+  1. `triominoWieferichLiftExclusion_impl` は `triominoWieferichLiftKernel_impl` から no-`sorry` で導出する形へ整理
+- 意図:
+  - 最後の `sorry` を、単に `WieferichLift` を否定する命題ではなく、
+    「最小反例を選べる」+「Wieferich lift からより小さい反例を作れる」
+    という下降法の本体カーネルに押し込めた。
+  - 以後の新規理論追加は、このカーネルを埋めることに集中できる。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGN.lean` の `triominoWieferichLiftKernel_impl` の `sorry` 1件のみ）。
