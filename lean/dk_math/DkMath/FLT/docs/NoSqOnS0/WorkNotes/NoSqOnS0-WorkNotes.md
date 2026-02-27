@@ -482,3 +482,21 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は `allNonLiftableOnGN_fromCounterexample_impl` の `sorry` 1件のみ）。
+
+### 2026-02-27 phase-14 継続（一般 `GN` nonlift bridge を型として固定）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `TriominoCosmicNonLiftableGNBridge` を追加
+  2. `allNonLiftableOnGN_fromCounterexample_impl` の型を上記 bridge alias に統一
+  3. `triominoCosmicNoPowOnGN_of_nonLiftableGNBridge` を追加し、`NoPowOnGN` 側の配線を no-`sorry` で分離
+  4. `triominoCosmicNoPowOnGN` は bridge 実装を差し込む薄いラッパへ整理
+- 技術的所見:
+  - `CosmicPetalBridge` の既存 no-`sorry` 橋は `GN 3 (c-b) b = S0_nat c b` の d=3 専用。
+  - 一般 `p ≥ 5` の `GN p (z-y) y` を S0/Phase 側に落とす既存 no-`sorry` 橋は、現行本体コードには見当たらない。
+  - したがって残る未解決点は「general GN nonlift bridge をどう供給するか」の 1 点に正しく集約されている。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は `allNonLiftableOnGN_fromCounterexample_impl` の `sorry` 1件のみ）。
