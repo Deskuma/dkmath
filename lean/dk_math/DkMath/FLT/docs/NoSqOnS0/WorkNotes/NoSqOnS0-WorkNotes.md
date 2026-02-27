@@ -564,6 +564,27 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGN.lean` の `triominoWieferichLiftKernel_impl` の `sorry` 1件のみ）。
 
+### 2026-02-27 phase-14 継続（Branch B 専用 lift 供給を no-`sorry` 化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGN.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `CounterexampleHasWieferichLiftB`
+  2. `WieferichDescentB`
+  3. `counterexampleHasWieferichLiftB_impl`
+- 意図:
+  - 「反例から lift を作る」部分を、実際に Branch B（`¬ p ∣ (z - y)`）でしか使わない領域へ切り出した。
+  - 既存の `exists_primitive_prime_factor_prime` と `z^p - y^p = x^p` だけで、Branch B の lift 供給は no-`sorry` で閉じることを確認した。
+- 技術メモ:
+  - この時点では、既存の `MinimalWieferichLiftSelection` は「全反例上の最小化」になっているため、
+    `CounterexampleHasWieferichLiftB` をそのままカーネルへ差し替えると、最小反例選択の対象集合と整合しない。
+  - 次段では、`¬ p ∣ (z - y)` を保つ最小化（または Branch B 専用の `WieferichLiftExclusion`）へ整理した上で、
+    残る `sorry` を `descent` 側だけに押し込む必要がある。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGN.lean` の `triominoWieferichLiftKernel_impl` の `sorry` 1件のみ）。
+
 ### 2026-02-27 phase-14 継続（最小反例選択を no-`sorry` 化）
 
 - 変更ファイル:

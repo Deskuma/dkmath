@@ -51,9 +51,22 @@ abbrev CounterexampleHasWieferichLift : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z ->
     ∃ q : ℕ, WieferichLift p y z q
 
+/-- Branch B 専用: `¬ p ∣ (z - y)` の領域なら Wieferich lift を 1 つ取り出せる。 -/
+abbrev CounterexampleHasWieferichLiftB : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z ->
+    ¬ p ∣ (z - y) ->
+    ∃ q : ℕ, WieferichLift p y z q
+
 /-- Wieferich lift が起きたら、より小さい反例を構成できるという下降仕様。 -/
 abbrev WieferichDescent : Prop :=
   ∀ {p x y z q : ℕ}, PrimeGe5CounterexamplePack p x y z ->
+    WieferichLift p y z q ->
+    ∃ x' y' z' : ℕ, PrimeGe5CounterexamplePack p x' y' z' ∧ z' < z
+
+/-- Branch B 専用: `¬ p ∣ (z - y)` の領域での下降仕様。 -/
+abbrev WieferichDescentB : Prop :=
+  ∀ {p x y z q : ℕ}, PrimeGe5CounterexamplePack p x y z ->
+    ¬ p ∣ (z - y) ->
     WieferichLift p y z q ->
     ∃ x' y' z' : ℕ, PrimeGe5CounterexamplePack p x' y' z' ∧ z' < z
 
@@ -158,6 +171,47 @@ theorem wieferichLiftExclusion_of_liftExists_and_descent
   exact wieferichLiftExclusion_of_selection_and_descent
     (minimalWieferichLiftSelection_of_liftExists hLiftAll)
     hDesc
+
+/--
+Branch B のみを見れば、反例パックからの Wieferich lift 供給は no-`sorry` で閉じる。
+
+`¬ p ∣ (z - y)` のもとで Zsigmondy の原始素因子 `q` を取り、
+`z^p - y^p = x^p` を使って `q^2 ∣ z^p - y^p` を付加する。
+-/
+theorem counterexampleHasWieferichLiftB_impl :
+    CounterexampleHasWieferichLiftB := by
+  intro p x y z hpack hp_not_dvd_gap
+  have hyz_coprime : Nat.Coprime z y := by
+    exact (coprime_right_of_add_pow_eq_pow hpack.hp hpack.hxy hpack.hEq).symm
+  rcases exists_primitive_prime_factor_prime
+      (a := z) (b := y) (d := p)
+      hpack.hp
+      (le_trans (by decide : 3 ≤ 5) hpack.hp5)
+      hpack.hyz_lt
+      hpack.y_pos
+      hyz_coprime
+      hp_not_dvd_gap with
+    ⟨q, hqP, hq_dvd_diff, hq_not_dvd_gap⟩
+  have hyz_pow : y ^ p ≤ z ^ p := by
+    exact Nat.pow_le_pow_left hpack.hyz p
+  have hdiff : z ^ p - y ^ p = x ^ p := by
+    have hcancel : z ^ p - y ^ p + y ^ p = x ^ p + y ^ p := by
+      rw [Nat.sub_add_cancel hyz_pow, hpack.hEq]
+    exact Nat.add_right_cancel hcancel
+  have hq_dvd_xpow : q ∣ x ^ p := by
+    simpa [hdiff] using hq_dvd_diff
+  have hq_dvd_x : q ∣ x := hqP.dvd_of_dvd_pow hq_dvd_xpow
+  have hp_ge_two : 2 ≤ p := by
+    exact le_trans (by decide : 2 ≤ 5) hpack.hp5
+  have hq2_dvd_qp : q ^ 2 ∣ q ^ p := by
+    exact pow_dvd_pow q hp_ge_two
+  have hqp_dvd_xp : q ^ p ∣ x ^ p := by
+    exact pow_dvd_pow_of_dvd hq_dvd_x p
+  have hq2_dvd_xpow : q ^ 2 ∣ x ^ p := by
+    exact dvd_trans hq2_dvd_qp hqp_dvd_xp
+  have hq2_dvd_diff : q ^ 2 ∣ z ^ p - y ^ p := by
+    simpa [hdiff] using hq2_dvd_xpow
+  exact ⟨q, hqP, hq_dvd_diff, hq_not_dvd_gap, hq2_dvd_diff⟩
 
 /--
 一般 `GN` nonlift bridge の本丸インターフェイス。
