@@ -115,6 +115,7 @@ def AllNonLiftableOnGN (p u y : ℕ) : Prop :=
 /- `TriominoNoWieferichBridge` から押し戻した最終入力仕様。 -/
 abbrev TriominoCosmicNonLiftableGNBridge : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ¬ p ∣ (z - y) ->
     AllNonLiftableOnGN p (z - y) y
 
 /-- Branch A / B の 2 分岐仕様が揃えば、`NoPowOnGN` は合成できる。 -/
@@ -241,6 +242,7 @@ theorem noSqPrimeOnGN_when_p_dvd_u_impl :
 theorem noSqPrimeOnGN_when_p_not_dvd_u_of_specs
     (hPrim : PrimitivePrime_fromCounterexample)
     (hAll : ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      ¬ p ∣ (z - y) ->
       AllNonLiftableOnGN p (z - y) y) :
     NoSqPrimeOnGN_when_p_not_dvd_u := by
   intro p x y z hpack hp_not_dvd_u
@@ -257,7 +259,7 @@ theorem noSqPrimeOnGN_when_p_not_dvd_u_of_specs
         Nat.choose p (x + 1) * (z - y) ^ x * y ^ (p - 1 - x)) at hq_dvd_GN_raw
     simpa [GN] using hq_dvd_GN_raw
   have hq2_not : ¬ q ^ 2 ∣ GN p (z - y) y := by
-    exact (hAll hpack q) ⟨hqP, hq_dvd_GN, hq_not_dvd_u⟩
+    exact (hAll hpack hp_not_dvd_u q) ⟨hqP, hq_dvd_GN, hq_not_dvd_u⟩
   exact ⟨q, hqP, hq_dvd_GN, hq2_not⟩
 
 /-- Branch B の前半: prime-ge5 反例パックから Zsigmondy 原始素因子を取り出す。 -/

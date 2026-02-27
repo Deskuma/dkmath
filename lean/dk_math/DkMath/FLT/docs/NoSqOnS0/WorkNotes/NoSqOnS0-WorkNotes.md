@@ -604,3 +604,28 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGN.lean` の `triominoWieferichLiftKernel_impl` の `sorry` 1件のみ）。
+
+### 2026-02-27 phase-14 継続（Branch B 最小化へ切替、`descent` だけを残す）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGN.lean`
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `TriominoNoWieferichBridge` を Branch B（`¬ p ∣ (z - y)`）前提付きに弱化
+  2. `TriominoWieferichLiftExclusion` を Branch B 前提付きに弱化
+  3. `MinimalPrimeGe5CounterexamplePackB` を追加
+  4. `minimalPrimeGe5CounterexampleSelectionB_impl` を no-`sorry` で実装
+  5. `MinimalWieferichLiftSelection` を Branch B 最小化へ切替
+  6. `WieferichDescentB` の結論を `¬ p ∣ (z' - y')` 保存付きに強化
+  7. `TriominoWieferichLiftKernel` を `CounterexampleHasWieferichLiftB ∧ WieferichDescentB` に切替
+  8. `triominoWieferichLiftKernel_impl` は no-`sorry` で
+     `⟨counterexampleHasWieferichLiftB_impl, triominoWieferichDescent_impl⟩`
+     へ整理
+  9. `TriominoCosmicNonLiftableGNBridge` も Branch B 前提付きに弱化
+- 意図:
+  - lift 供給・最小反例選択・排除の対象集合をすべて Branch B に一致させた。
+  - その結果、残る未解決点を本当に `WieferichDescentB`（=`triominoWieferichDescent_impl`）1 本へ押し込めた。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGN.lean` の `triominoWieferichDescent_impl` の `sorry` 1件のみ）。
