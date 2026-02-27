@@ -11,6 +11,8 @@ set_option linter.style.emptyLine false
 
 namespace DkMath.FLT
 
+open DkMath.CosmicFormulaBinom
+
 /-!
 # Triomino/Cosmic Gap Invariant
 
@@ -19,13 +21,56 @@ namespace DkMath.FLT
 研究中の本丸を閉じ込める。
 -/
 
+/-- `x^p = u * GN p u y` と `u = t^p` から、`GN p u y` も `p` 乗に落ちる。 -/
+lemma exists_eq_pow_of_gap_eq_pow
+    {p x y u t : ℕ}
+    (hp : Nat.Prime p)
+    (hu_pos : 0 < u)
+    (hxpow : x ^ p = u * GN p u y)
+    (htu : u = t ^ p) :
+    ∃ s : ℕ, GN p u y = s ^ p := by
+  have ht_pow_dvd : t ^ p ∣ x ^ p := by
+    refine ⟨GN p u y, ?_⟩
+    calc
+      x ^ p = u * GN p u y := hxpow
+      _ = t ^ p * GN p u y := by simp [htu]
+  have ht_ne_zero : t ≠ 0 := by
+    intro ht0
+    have hu_zero : u = 0 := by
+      calc
+        u = t ^ p := htu
+        _ = 0 := by simp [ht0, hp.ne_zero]
+    exact (Nat.ne_of_gt hu_pos) hu_zero
+  have ht_pos : 0 < t := Nat.pos_of_ne_zero ht_ne_zero
+  have ht_dvd_x : t ∣ x :=
+    (Nat.pow_dvd_pow_iff hp.ne_zero).1 ht_pow_dvd
+  rcases ht_dvd_x with ⟨s, hsx⟩
+  have hxpow' : (t * s) ^ p = u * GN p u y := by
+    simpa [hsx] using hxpow
+  have hmul : t ^ p * s ^ p = t ^ p * GN p u y := by
+    calc
+      t ^ p * s ^ p = (t * s) ^ p := by rw [Nat.mul_pow]
+      _ = u * GN p u y := hxpow'
+      _ = t ^ p * GN p u y := by simp [htu]
+  have hs_eq : s ^ p = GN p u y :=
+    Nat.eq_of_mul_eq_mul_left (Nat.pow_pos ht_pos) hmul
+  exact ⟨s, hs_eq.symm⟩
+
 /--
-Triomino/Cosmic 本丸:
-primitive 反例パックがあるなら gap は `p` 乗になれない。
+Triomino/Cosmic 側で最終的に供給すべき Body 不変量。
+`gap` そのものではなく `GN` 側の「p 乗になれなさ」に責務を移す。
+-/
+abbrev TriominoCosmicBodyInvariant : Prop :=
+  ∀ {p x y z : ℕ}, PrimeCounterexamplePack p x y z →
+    ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p
+
+/--
+Triomino/Cosmic 本丸（Body 版）:
+primitive 反例パックがあるなら `GN p (z - y) y` は `p` 乗になれない。
 
 現時点では本体未実装。`TODO-2` の未解決点をこのファイル 1 箇所へ隔離する。
 -/
-theorem triominoCosmicGapInvariant : TriominoCosmicGapInvariant := by
+theorem triominoCosmicBodyInvariant : TriominoCosmicBodyInvariant := by
   intro p x y z hpack
   let u : ℕ := hpack.gap
   have hu_pos : 0 < u := by
@@ -37,5 +82,31 @@ theorem triominoCosmicGapInvariant : TriominoCosmicGapInvariant := by
       (pow_eq_sub_mul_GN_of_add_pow_eq p x y z hpack.hyz hpack.hEq)
   clear hu_pos hcop_uy hxpow
   sorry
+
+/--
+Body 不変量があれば、gap 不変量は自動で得られる。
+`u = t^p` なら `GN` も `p` 乗へ落ちるため、Body 側で矛盾が出る。
+-/
+theorem gapInvariant_of_bodyInvariant
+    (hBody : TriominoCosmicBodyInvariant) :
+    TriominoCosmicGapInvariant := by
+  intro p x y z hpack
+  let u : ℕ := hpack.gap
+  have hu_pos : 0 < u := by
+    simpa [u] using hpack.gap_pos
+  have hxpow := by
+    simpa [u, PrimeCounterexamplePack.gap] using
+      (pow_eq_sub_mul_GN_of_add_pow_eq p x y z hpack.hyz hpack.hEq)
+  intro hgap
+  rcases hgap with ⟨t, htu⟩
+  rcases exists_eq_pow_of_gap_eq_pow hpack.hp hu_pos hxpow htu with ⟨s, hs⟩
+  exact hBody hpack ⟨s, by simpa using hs⟩
+
+/--
+Triomino/Cosmic 本丸:
+primitive 反例パックがあるなら gap は `p` 乗になれない。
+-/
+theorem triominoCosmicGapInvariant : TriominoCosmicGapInvariant := by
+  exact gapInvariant_of_bodyInvariant triominoCosmicBodyInvariant
 
 end DkMath.FLT

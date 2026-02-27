@@ -234,3 +234,31 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（`TriominoCosmicGapInvariant.lean` に `sorry` warning 1 件）。
+
+### 2026-02-27 phase-14 継続（`gap` から `GN` へ責務移動）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `exists_eq_pow_of_gap_eq_pow`
+     - `x^p = u * GN p u y` と `u = t^p` から `∃ s, GN p u y = s^p`
+  2. `TriominoCosmicBodyInvariant`
+  3. `triominoCosmicBodyInvariant`
+  4. `gapInvariant_of_bodyInvariant`
+- 変更内容:
+  1. `triominoCosmicGapInvariant` は
+     `gapInvariant_of_bodyInvariant triominoCosmicBodyInvariant`
+     へ委譲する形に変更
+- 意図:
+  - 「gap が p 乗でない」を直接示すのではなく、
+    `u = t^p` なら `GN` も `p` 乗へ落ちる、という純算術縮約を先に確定。
+  - これにより、隔離室の未解決点を
+    「Body (`GN`) が p 乗になれない」
+    という本丸 1 点へさらに圧縮。
+- 到達点:
+  - `sorry` は `triominoCosmicBodyInvariant` の 1 件だけに維持。
+  - `triominoCosmicGapInvariant` 自体は、既に `sorry` なしの薄い合成定理になった。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（`TriominoCosmicGapInvariant.lean` に `sorry` warning 1 件）。
