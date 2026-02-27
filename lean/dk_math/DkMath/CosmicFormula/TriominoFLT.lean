@@ -1911,6 +1911,34 @@ lemma FLT_highExponent_core_of_provider {x y z n : ℕ}
     hn_ge4 h3n_not h4n_not hprimeFLT hpos h_eq
 
 /--
+`PrimeExponentFLTProvider n` が与えられれば、`pending` 核は直ちに閉じる。
+-/
+lemma FLT_highExponent_core_pending_of_primeProvider {x y z n : ℕ}
+    (hn_ge4 : 4 ≤ n)
+    (h3n_not : ¬ 3 ∣ n)
+    (h4n_not : ¬ 4 ∣ n)
+    (hprimeFLT : PrimeExponentFLTProvider n)
+    (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
+    (h_eq : x ^ n + y ^ n = z ^ n) : False := by
+  exact FLT_highExponent_core_of_provider
+    hn_ge4 h3n_not h4n_not hprimeFLT hpos h_eq
+
+/--
+グローバル供給があれば、`pending` 核は直ちに閉じる。
+-/
+lemma FLT_highExponent_core_pending_of_globalProvider {x y z n : ℕ}
+    (hn_ge4 : 4 ≤ n)
+    (h3n_not : ¬ 3 ∣ n)
+    (h4n_not : ¬ 4 ∣ n)
+    (hglobal : GlobalPrimeExponentFLTProvider)
+    (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
+    (h_eq : x ^ n + y ^ n = z ^ n) : False := by
+  exact FLT_highExponent_core_pending_of_primeProvider
+    hn_ge4 h3n_not h4n_not
+    (primeExponentFLTProvider_of_global (n := n) hglobal)
+    hpos h_eq
+
+/--
 高指数側（`n ≥ 4` かつ `¬ 3 ∣ n` かつ `¬ 4 ∣ n`）の未解決核。
 
 NOTE:

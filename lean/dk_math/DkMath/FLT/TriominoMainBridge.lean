@@ -59,4 +59,16 @@ theorem FLT_d3_by_padicValNat_via_triominoHasNonLiftableFamily_coprimeSupport_di
   exact FLT_d3_by_padicValNat_of_triominoHasNonLiftableFamily_coprimeSupport_direct
     ha hb hc hab hbc hcb_coprime hasNonLiftTriomino
 
+/--
+`TriominoFLT` の確定版 API（global prime provider 版）への橋渡し。
+`Main` 接続口ではなく、Triomino 側の完成度確認用に提供する。
+-/
+theorem FLT_general_via_triominoGlobalProvider
+    {x y z n : ℕ}
+    (hglobal : DkMath.GlobalPrimeExponentFLTProvider)
+    (hn : 3 ≤ n)
+    (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
+    (h_eq : x ^ n + y ^ n = z ^ n) : False := by
+  exact DkMath.FLT_general_via_tromino_of_globalPrimeProvider n hglobal hn hpos h_eq
+
 end DkMath.FLT
