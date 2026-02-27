@@ -287,3 +287,31 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5 DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（`TriominoCosmicGapInvariant.lean` に `sorry` warning 1 件）。
+
+### 2026-02-27 phase-14 継続（`NoPowOnGN` 仕様へ分解）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `NoPowOnGN_fromCounterexample`
+  2. `not_isPow_of_exists_prime_dvd_not_dvd_sq`
+  3. `bodyInvariant_of_NoPowOnGN`
+  4. `triominoCosmicNoPowOnGN`
+- 変更内容:
+  1. `triominoCosmicBodyInvariant` は
+     `bodyInvariant_of_NoPowOnGN triominoCosmicNoPowOnGN`
+     へ委譲する形へ変更
+- 意図:
+  - `BodyInvariant` を直接証明するのではなく、
+    まず「`GN` に平方止まりの素因子が入る」という最小入力仕様 `NoPowOnGN_fromCounterexample`
+    に分解。
+  - `p ≥ 5` のもとで `q ∣ GN` かつ `¬ q^2 ∣ GN` なら `GN` は `p` 乗になれない、
+    という薄い一般補題を経由して `BodyInvariant` を得る構造にした。
+- 到達点:
+  - 隔離室の未解決点は、`triominoCosmicNoPowOnGN` の 1 件だけ。
+  - `gap` 側でも `Body` 側でもなく、
+    「反例から `GN` に平方止まりの素因子を供給できるか」という仕様供給 1 点へ収束。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（`TriominoCosmicGapInvariant.lean` に `sorry` warning 1 件）。

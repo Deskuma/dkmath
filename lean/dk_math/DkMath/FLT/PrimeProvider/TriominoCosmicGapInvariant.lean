@@ -65,12 +65,45 @@ abbrev TriominoCosmicBodyInvariant : Prop :=
     ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p
 
 /--
-Triomino/Cosmic 本丸（Body 版）:
-primitive 反例パックがあるなら `GN p (z - y) y` は `p` 乗になれない。
+`GN` が `p` 乗でないことを示すための最小入力仕様:
+ある素数 `q` が `GN` を割るが、`q^2` は割らない。
+-/
+abbrev NoPowOnGN_fromCounterexample : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ GN p (z - y) y ∧ ¬ q ^ 2 ∣ GN p (z - y) y
+
+/-- `p ≥ 5` のもと、`q ∣ N` かつ `q^2 ∤ N` があれば、`N` は `p` 乗になれない。 -/
+lemma not_isPow_of_exists_prime_dvd_not_dvd_sq
+    {p N : ℕ} (hp5 : 5 ≤ p)
+    (h : ∃ q : ℕ, Nat.Prime q ∧ q ∣ N ∧ ¬ q ^ 2 ∣ N) :
+    ¬ ∃ s : ℕ, N = s ^ p := by
+  rintro ⟨s, rfl⟩
+  rcases h with ⟨q, hqP, hqDvd, hq2Not⟩
+  have hq_dvd_s : q ∣ s :=
+    hqP.dvd_of_dvd_pow (by simpa using hqDvd)
+  have hqpow : q ^ p ∣ s ^ p :=
+    pow_dvd_pow_of_dvd hq_dvd_s p
+  have hp2 : 2 ≤ p := le_trans (by decide : 2 ≤ 5) hp5
+  have hq2_dvd_qp : q ^ 2 ∣ q ^ p :=
+    pow_dvd_pow q hp2
+  have hq2 : q ^ 2 ∣ s ^ p :=
+    dvd_trans hq2_dvd_qp hqpow
+  exact hq2Not hq2
+
+/-- `NoPowOnGN` 仕様があれば、Body 不変量はただちに得られる。 -/
+theorem bodyInvariant_of_NoPowOnGN
+    (hNoPow : NoPowOnGN_fromCounterexample) :
+    TriominoCosmicBodyInvariant := by
+  intro p x y z hpack
+  exact not_isPow_of_exists_prime_dvd_not_dvd_sq hpack.hp5 (hNoPow hpack)
+
+/--
+Triomino/Cosmic 本丸（NoPowOnGN 版）:
+primitive 反例パックから、`GN p (z - y) y` に「平方止まりの素因子」が入る。
 
 現時点では本体未実装。`TODO-2` の未解決点をこのファイル 1 箇所へ隔離する。
 -/
-theorem triominoCosmicBodyInvariant : TriominoCosmicBodyInvariant := by
+theorem triominoCosmicNoPowOnGN : NoPowOnGN_fromCounterexample := by
   intro p x y z hpack
   let u : ℕ := hpack.gap
   have hu_pos : 0 < u := by
@@ -82,6 +115,10 @@ theorem triominoCosmicBodyInvariant : TriominoCosmicBodyInvariant := by
       (pow_eq_sub_mul_GN_of_add_pow_eq p x y z hpack.hyz hpack.hEq)
   clear hu_pos hcop_uy hxpow
   sorry
+
+/-- Triomino/Cosmic 本丸（Body 版）は、`NoPowOnGN` 仕様から得る。 -/
+theorem triominoCosmicBodyInvariant : TriominoCosmicBodyInvariant := by
+  exact bodyInvariant_of_NoPowOnGN triominoCosmicNoPowOnGN
 
 /--
 Body 不変量があれば、gap 不変量は自動で得られる。
