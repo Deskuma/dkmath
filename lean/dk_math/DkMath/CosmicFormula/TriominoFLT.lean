@@ -1863,6 +1863,21 @@ lemma exists_prime_factor_ne_two_three_of_highExponent
       simpa [hp3] using hpdvdn
     exact ⟨p, hpprime, hpdvdn, hp_ne2, hp_ne3⟩
 
+/-- 高指数核で要求する「`n` に対する素数指数 FLT 供給」の型。 -/
+abbrev PrimeExponentFLTProvider (n : ℕ) : Prop :=
+  ∀ p : ℕ, Nat.Prime p → p ∣ n → p ≠ 2 → p ≠ 3 → FermatLastTheoremFor p
+
+/-- グローバル版（`p ≠ 2,3` の全素数に対する供給）。 -/
+abbrev GlobalPrimeExponentFLTProvider : Prop :=
+  ∀ p : ℕ, Nat.Prime p → p ≠ 2 → p ≠ 3 → FermatLastTheoremFor p
+
+/-- グローバル供給から、固定 `n` の供給へ落とす。 -/
+lemma primeExponentFLTProvider_of_global {n : ℕ}
+    (hglobal : GlobalPrimeExponentFLTProvider) :
+    PrimeExponentFLTProvider n := by
+  intro p hpprime hpdvdn hp_ne2 hp_ne3
+  exact hglobal p hpprime hp_ne2 hp_ne3
+
 /--
 高指数核を「`2,3` 以外の素因子指数での FLT 供給」に還元する補題。
 -/
@@ -1870,8 +1885,7 @@ lemma FLT_highExponent_core_of_primeProvider {x y z n : ℕ}
     (hn_ge4 : 4 ≤ n)
     (h3n_not : ¬ 3 ∣ n)
     (h4n_not : ¬ 4 ∣ n)
-    (hprimeFLT :
-      ∀ p : ℕ, Nat.Prime p → p ∣ n → p ≠ 2 → p ≠ 3 → FermatLastTheoremFor p)
+    (hprimeFLT : PrimeExponentFLTProvider n)
     (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
     (h_eq : x ^ n + y ^ n = z ^ n) : False := by
   rcases exists_prime_factor_ne_two_three_of_highExponent hn_ge4 h3n_not h4n_not with
@@ -1882,6 +1896,19 @@ lemma FLT_highExponent_core_of_primeProvider {x y z n : ℕ}
     FermatLastTheoremFor.mono hpdvdn hflt_p
   rcases hpos with ⟨hx, hy, hz⟩
   exact hflt_n x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq
+
+/--
+`PrimeExponentFLTProvider n` が与えられた場合の高指数核（`sorry` なし版）。
+-/
+lemma FLT_highExponent_core_of_provider {x y z n : ℕ}
+    (hn_ge4 : 4 ≤ n)
+    (h3n_not : ¬ 3 ∣ n)
+    (h4n_not : ¬ 4 ∣ n)
+    (hprimeFLT : PrimeExponentFLTProvider n)
+    (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
+    (h_eq : x ^ n + y ^ n = z ^ n) : False := by
+  exact FLT_highExponent_core_of_primeProvider
+    hn_ge4 h3n_not h4n_not hprimeFLT hpos h_eq
 
 /--
 高指数側（`n ≥ 4` かつ `¬ 3 ∣ n` かつ `¬ 4 ∣ n`）の未解決核。
@@ -1900,9 +1927,9 @@ lemma FLT_highExponent_core_pending {x y z n : ℕ}
   -- `hprimeFLT`（`p ≠ 2,3` の素数指数に対する FLT 供給）を
   -- Triomino/Cosmic 側の独立証明で構成する。
   have hneed :
-      (∀ p : ℕ, Nat.Prime p → p ∣ n → p ≠ 2 → p ≠ 3 → FermatLastTheoremFor p) → False := by
+      PrimeExponentFLTProvider n → False := by
     intro hprimeFLT
-    exact FLT_highExponent_core_of_primeProvider
+    exact FLT_highExponent_core_of_provider
       hn_ge4 h3n_not h4n_not hprimeFLT hpos h_eq
   clear hneed
   sorry
@@ -1946,6 +1973,44 @@ theorem FLT_from_tromino_tiling {x y z : ℕ} (n : ℕ)
   -- 現段階では高指数核補題へ接続（最終的には tiling 側の局所補題で置換予定）。
   exact (FLT_highExponent_core_pending hn_ge4 h3n_not h4n_not ⟨hx, hy, hz⟩ h_eq).elim
 
+/--
+`PrimeExponentFLTProvider n` を外部から受ける確定版。
+`FLT_from_tromino_tiling` の `sorry` 部分を使わずに閉じる。
+-/
+theorem FLT_from_tromino_tiling_of_primeProvider {x y z : ℕ} (n : ℕ)
+    (hprimeFLT : PrimeExponentFLTProvider n)
+    (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
+    (hn : 3 ≤ n)
+    (h_eq : x ^ n + y ^ n = z ^ n)
+    (IsLTromino : Finset (Cell n) → Prop)
+    (h_tromino_card : ∀ t, IsLTromino t → t.card = 3)
+    (h_color : ∀ t, IsLTromino t →
+      (t.filter fun c => color3 c = 0).card = 1 ∧
+      (t.filter fun c => color3 c = 1).card = 1 ∧
+      (t.filter fun c => color3 c = 2).card = 1) :
+    (R : Finset (Cell n)) → R.card = x ^ n → ¬ TileableByLTromino IsLTromino R := by
+  rcases hpos with ⟨hx, hy, hz⟩
+  have hcases : n = 3 ∨ 4 ≤ n := by omega
+  rcases hcases with h3 | hn4
+  · subst h3
+    intro R h_area h_tile
+    exact (fermatLastTheoremThree : FermatLastTheoremFor 3)
+      x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq
+  intro R h_area h_tile
+  by_cases h3n : 3 ∣ n
+  · have hflt : FermatLastTheoremFor n :=
+      FermatLastTheoremFor.mono h3n fermatLastTheoremThree
+    exact (hflt x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq).elim
+  by_cases h4n : 4 ∣ n
+  · have hflt : FermatLastTheoremFor n :=
+      FermatLastTheoremFor.mono h4n fermatLastTheoremFour
+    exact (hflt x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq).elim
+  have hn_ge4 : 4 ≤ n := hn4
+  have h3n_not : ¬ 3 ∣ n := h3n
+  have h4n_not : ¬ 4 ∣ n := h4n
+  exact (FLT_highExponent_core_of_provider
+    hn_ge4 h3n_not h4n_not hprimeFLT ⟨hx, hy, hz⟩ h_eq).elim
+
 /-! ## セクション 5：次元別の特例 -/
 
 /-- 特例：n=3 の FLT -/
@@ -1986,6 +2051,44 @@ theorem FLT_general_via_tromino {x y z : ℕ} (n : ℕ)
   have h3n_not : ¬ 3 ∣ n := h3n
   have h4n_not : ¬ 4 ∣ n := h4n
   exact FLT_highExponent_core_pending hn_ge4 h3n_not h4n_not ⟨hx, hy, hz⟩ h_eq
+
+/--
+`PrimeExponentFLTProvider n` を外部から受ける確定版。
+`FLT_general_via_tromino` の `sorry` 部分を使わずに閉じる。
+-/
+theorem FLT_general_via_tromino_of_primeProvider {x y z : ℕ} (n : ℕ)
+    (hprimeFLT : PrimeExponentFLTProvider n)
+    (hn : 3 ≤ n)
+    (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
+    (h_eq : x ^ n + y ^ n = z ^ n) : False := by
+  have hcases : n = 3 ∨ 4 ≤ n := by omega
+  rcases hcases with h3 | hn4
+  · subst h3
+    simpa using FLT_case_3_via_tromino hpos h_eq
+  rcases hpos with ⟨hx, hy, hz⟩
+  by_cases h3n : 3 ∣ n
+  · have hflt : FermatLastTheoremFor n :=
+      FermatLastTheoremFor.mono h3n fermatLastTheoremThree
+    exact hflt x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq
+  by_cases h4n : 4 ∣ n
+  · have hflt : FermatLastTheoremFor n :=
+      FermatLastTheoremFor.mono h4n fermatLastTheoremFour
+    exact hflt x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq
+  have hn_ge4 : 4 ≤ n := hn4
+  have h3n_not : ¬ 3 ∣ n := h3n
+  have h4n_not : ¬ 4 ∣ n := h4n
+  exact FLT_highExponent_core_of_provider hn_ge4 h3n_not h4n_not hprimeFLT ⟨hx, hy, hz⟩ h_eq
+
+/--
+グローバル供給（`p ≠ 2,3` の全素数）からの確定版。
+-/
+theorem FLT_general_via_tromino_of_globalPrimeProvider {x y z : ℕ} (n : ℕ)
+    (hglobal : GlobalPrimeExponentFLTProvider)
+    (hn : 3 ≤ n)
+    (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
+    (h_eq : x ^ n + y ^ n = z ^ n) : False := by
+  exact FLT_general_via_tromino_of_primeProvider n
+    (primeExponentFLTProvider_of_global (n := n) hglobal) hn hpos h_eq
 
 end DkMath
 

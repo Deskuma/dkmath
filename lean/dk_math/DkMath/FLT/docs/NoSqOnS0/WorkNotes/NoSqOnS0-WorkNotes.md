@@ -126,4 +126,26 @@ status: 作業中 - phase-13: 完全証明への道（）
   2. `TriominoMainBridge.lean` から `Main` 入口へ具体供給で到達する定理がある
   3. `lake build DkMath.FLT.TriominoMainBridge DkMath.CosmicFormula.TriominoFLT DkMath.FLT.Main` が通る
 
+### 2026-02-27 phase-13 継続（prime provider 受入れの確定版 API 追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `PrimeExponentFLTProvider` / `GlobalPrimeExponentFLTProvider`
+  2. `primeExponentFLTProvider_of_global`
+  3. `FLT_highExponent_core_of_provider`（`sorry` なし）
+  4. `FLT_from_tromino_tiling_of_primeProvider`（`sorry` なし）
+  5. `FLT_general_via_tromino_of_primeProvider`（`sorry` なし）
+  6. `FLT_general_via_tromino_of_globalPrimeProvider`（`sorry` なし）
+- 意図:
+  - 既存の `..._pending`（単一 `sorry`）を残しつつ、
+    供給があれば即座に使える確定版 API を先に公開。
+  - bridge 側や外部モジュールから段階的に接続しやすい形へ整理。
+- 現在の `sorry` 状態:
+  - `TriominoFLT.lean` の `sorry` は引き続き `FLT_highExponent_core_pending` の1件のみ。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT DkMath.FLT.TriominoMainBridge`
+  - 結果: 成功。
+
 ## 作業ログ
