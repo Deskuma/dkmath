@@ -563,3 +563,23 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGN.lean` の `triominoWieferichLiftKernel_impl` の `sorry` 1件のみ）。
+
+### 2026-02-27 phase-14 継続（最小反例選択を no-`sorry` 化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGN.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `CounterexampleHasWieferichLift`
+  2. `minimalPrimeGe5CounterexampleSelection_impl`
+  3. `minimalWieferichLiftSelection_of_liftExists`
+  4. `wieferichLiftExclusion_of_liftExists_and_descent`
+- 変更内容:
+  1. `TriominoWieferichLiftKernel` を `CounterexampleHasWieferichLift ∧ WieferichDescent` に変更
+  2. `triominoWieferichLiftExclusion_impl` は `liftExists + descent` から no-`sorry` で導出する形へ整理
+- 意図:
+  - 最小反例の「選択」は整列順序だけで no-`sorry` で閉じる部分として切り離し、
+    残る未解決点を「反例から lift を作る」+「lift から下降する」の 2 段カーネルへ縮小した。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGN.lean` の `triominoWieferichLiftKernel_impl` の `sorry` 1件のみ）。

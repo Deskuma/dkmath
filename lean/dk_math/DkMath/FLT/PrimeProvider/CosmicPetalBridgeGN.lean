@@ -46,6 +46,11 @@ abbrev MinimalPrimeGe5CounterexamplePack (p x y z : ℕ) : Prop :=
   PrimeGe5CounterexamplePack p x y z ∧
   ∀ {x' y' z' : ℕ}, PrimeGe5CounterexamplePack p x' y' z' -> z' < z -> False
 
+/-- 任意の prime-ge5 反例パックから Wieferich lift を 1 つ取り出せる、という入力仕様。 -/
+abbrev CounterexampleHasWieferichLift : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z ->
+    ∃ q : ℕ, WieferichLift p y z q
+
 /-- Wieferich lift が起きたら、より小さい反例を構成できるという下降仕様。 -/
 abbrev WieferichDescent : Prop :=
   ∀ {p x y z q : ℕ}, PrimeGe5CounterexamplePack p x y z ->
@@ -60,6 +65,32 @@ abbrev MinimalWieferichLiftSelection : Prop :=
     WieferichLift p y z q ->
     ∃ x₀ y₀ z₀ q₀ : ℕ,
       MinimalPrimeGe5CounterexamplePack p x₀ y₀ z₀ ∧ WieferichLift p y₀ z₀ q₀
+
+/-- 任意の反例パックから、`z` 最小の反例パックを no-`sorry` で選べる。 -/
+theorem minimalPrimeGe5CounterexampleSelection_impl :
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z ->
+      ∃ x₀ y₀ z₀ : ℕ, MinimalPrimeGe5CounterexamplePack p x₀ y₀ z₀ := by
+  classical
+  intro p x y z hpack
+  let P : ℕ → Prop := fun z₀ => ∃ x₀ y₀ : ℕ, PrimeGe5CounterexamplePack p x₀ y₀ z₀
+  have hExists : ∃ z₀ : ℕ, P z₀ := ⟨z, x, y, hpack⟩
+  let z₀ := Nat.find hExists
+  have hz₀ : P z₀ := Nat.find_spec hExists
+  rcases hz₀ with ⟨x₀, y₀, hpack₀⟩
+  refine ⟨x₀, y₀, z₀, hpack₀, ?_⟩
+  intro x' y' z' hpack' hz'lt
+  have hz₀_le : z₀ ≤ z' := by
+    simpa [z₀] using (Nat.find_min' hExists ⟨x', y', hpack'⟩)
+  exact (not_le_of_gt hz'lt) hz₀_le
+
+/-- `反例 => lift` が供給されれば、最小反例 + lift の選択仕様は no-`sorry` で得られる。 -/
+theorem minimalWieferichLiftSelection_of_liftExists
+    (hLiftAll : CounterexampleHasWieferichLift) :
+    MinimalWieferichLiftSelection := by
+  intro p x y z q hpack _hLift
+  rcases minimalPrimeGe5CounterexampleSelection_impl hpack with ⟨x₀, y₀, z₀, hMin⟩
+  rcases hLiftAll hMin.1 with ⟨q₀, hLift₀⟩
+  exact ⟨x₀, y₀, z₀, q₀, hMin, hLift₀⟩
 
 /-- 最小反例と下降仕様があれば、その最小反例では Wieferich lift は起きえない。 -/
 theorem wieferichLiftExclusion_of_descent_on_minimal
@@ -117,7 +148,16 @@ theorem triominoCosmicNonLiftableGNBridge_of_noWieferich
 Triomino/Cosmic 側が最終的に供給すべき「最小反例選択 + 下降」のカーネル。
 -/
 abbrev TriominoWieferichLiftKernel : Prop :=
-  MinimalWieferichLiftSelection ∧ WieferichDescent
+  CounterexampleHasWieferichLift ∧ WieferichDescent
+
+/-- `反例 => lift` と下降仕様があれば、Wieferich lift 排除は no-`sorry` で従う。 -/
+theorem wieferichLiftExclusion_of_liftExists_and_descent
+    (hLiftAll : CounterexampleHasWieferichLift)
+    (hDesc : WieferichDescent) :
+    TriominoWieferichLiftExclusion := by
+  exact wieferichLiftExclusion_of_selection_and_descent
+    (minimalWieferichLiftSelection_of_liftExists hLiftAll)
+    hDesc
 
 /--
 一般 `GN` nonlift bridge の本丸インターフェイス。
@@ -133,7 +173,7 @@ theorem triominoWieferichLiftKernel_impl : TriominoWieferichLiftKernel := by
 
 /-- 現段階の `TriominoWieferichLiftExclusion` は、最小反例選択と下降のカーネルへ委譲する。 -/
 theorem triominoWieferichLiftExclusion_impl : TriominoWieferichLiftExclusion := by
-  exact wieferichLiftExclusion_of_selection_and_descent
+  exact wieferichLiftExclusion_of_liftExists_and_descent
     triominoWieferichLiftKernel_impl.1
     triominoWieferichLiftKernel_impl.2
 
