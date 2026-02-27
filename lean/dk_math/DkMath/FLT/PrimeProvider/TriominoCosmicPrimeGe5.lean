@@ -104,6 +104,40 @@ lemma exists_primeFactor_factorization_not_dvd_of_not_isPow
   rcases hsup with ⟨_, hqPrime, hqDvd⟩
   exact ⟨q, hqPrime, hqDvd, hq⟩
 
+/-- `Nat.Prime q` のもとで `padicValNat q u` は `u.factorization q` と一致する。 -/
+lemma padicValNat_eq_factorization {q u : ℕ} (hq : Nat.Prime q) (hu0 : u ≠ 0) :
+    padicValNat q u = u.factorization q := by
+  classical
+  haveI : Fact q.Prime := ⟨hq⟩
+  apply Nat.le_antisymm
+  · have hdiv : q ^ padicValNat q u ∣ u := by
+      simpa using (pow_padicValNat_dvd (p := q) (n := u))
+    exact (hq.pow_dvd_iff_le_factorization hu0).1 hdiv
+  · have hdiv : q ^ u.factorization q ∣ u :=
+      (hq.pow_dvd_iff_le_factorization hu0).2 le_rfl
+    exact (@padicValNat_dvd_iff_le q (Fact.mk hq) u (u.factorization q) hu0).1 hdiv
+
+/-- factorization 版の `¬ p ∣ ...` を `padicValNat` 版へ運ぶ薄い橋。 -/
+lemma not_dvd_padicValNat_of_not_dvd_factorization
+    {p q u : ℕ} (hq : Nat.Prime q) (hu0 : u ≠ 0)
+    (h : ¬ p ∣ u.factorization q) :
+    ¬ p ∣ padicValNat q u := by
+  have hEq : padicValNat q u = u.factorization q :=
+    padicValNat_eq_factorization (q := q) (u := u) hq hu0
+  simpa [hEq] using h
+
+/-- TODO-1 の最終形：`padicValNat` 版。 -/
+lemma exists_primeFactor_val_not_dvd_of_not_isPow
+    {u p : ℕ} (hu0 : u ≠ 0) (hp0 : 0 < p)
+    (hnot : ¬ ∃ t : ℕ, u = t ^ p) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ u ∧ ¬ p ∣ padicValNat q u := by
+  rcases exists_primeFactor_factorization_not_dvd_of_not_isPow
+      (u := u) (p := p) hu0 hp0 hnot with
+    ⟨q, hqPrime, hqDvd, hNot⟩
+  refine ⟨q, hqPrime, hqDvd, ?_⟩
+  exact not_dvd_padicValNat_of_not_dvd_factorization
+    (p := p) (q := q) (u := u) hqPrime hu0 hNot
+
 /-!
 ## 実装ロードマップ（順序固定）
 

@@ -82,3 +82,21 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5`
   - 結果: 成功。
+
+### 2026-02-27 phase-14 継続（TODO-1 を `padicValNat` 版まで接続）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `padicValNat_eq_factorization`
+  2. `not_dvd_padicValNat_of_not_dvd_factorization`
+  3. `exists_primeFactor_val_not_dvd_of_not_isPow`
+- 意図:
+  - factorization 版で確定した TODO-1 の核を、
+    `exponent_alignment_failure_of_val_not_dvd` にそのまま渡せる
+    `padicValNat` 版まで薄く接続。
+  - これで TODO-1 は「最終使用形」まで閉じた。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5`
+  - 結果: 成功。
