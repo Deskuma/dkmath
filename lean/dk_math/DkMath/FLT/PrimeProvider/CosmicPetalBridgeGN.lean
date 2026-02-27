@@ -1,4 +1,4 @@
-/- 
+/-
 Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
 Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
@@ -222,7 +222,10 @@ theorem triominoWieferichLiftKernel_impl : TriominoWieferichLiftKernel := by
   -- TODO:
   -- 1. Wieferich lift を起こす反例から `z` 最小のものを選ぶ。
   -- 2. その最小反例で Wieferich lift が起きたなら、より小さい反例を構成する。
-  -- この 2 段（最小反例選択 + 下降）が、最後の未解決カーネル。
+  -- この 2 段（最小反例選択 + 下降）が、最後の未解決カーネル（無限降下法の本質部分）。
+  -- [TODO] : 現在の `thm/flt-infinite-descent-260225-v1` ブランチにおける最大の優先課題。
+  --          仮定から確実に「より小さな反例」が構築できることを、整礎帰納法等を用いて
+  --          矛盾へ導く論理構造を明示的に実装する必要がある。
   sorry
 
 /-- 現段階の `TriominoWieferichLiftExclusion` は、最小反例選択と下降のカーネルへ委譲する。 -/

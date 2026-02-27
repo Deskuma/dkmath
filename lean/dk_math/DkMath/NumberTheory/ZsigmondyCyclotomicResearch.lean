@@ -1,4 +1,4 @@
-/- 
+/-
 Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
 Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
@@ -20,7 +20,10 @@ lemma squarefree_implies_padic_val_le_one (d a b q : ℕ)
   have hq_pos : 0 < q := hq_prime.pos
   have hq_dvd : q ∣ a ^ d - b ^ d := hq_div
   clear hb hab hq_div
-  sorry  -- [so#rry-2: 一般上界、G 解析が本質的に難しい]
+  -- [TODO] 一般的な q に対する padicValNat 上界（G解析）。
+  --        Zsigmondy 原始素因子の性質や、Mathlib の Squarefree 性などを用いて
+  --        上界を 1 に抑える証明。細かい定式化が未完のため sorry としている。
+  sorry
 
 lemma padicValNat_primitive_prime_factor_le_one {a b d q : ℕ}
     (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
@@ -33,4 +36,3 @@ lemma padicValNat_primitive_prime_factor_le_one {a b d q : ℕ}
   exact squarefree_implies_padic_val_le_one d a b q hd_prime hb hab hq_prime hq_div
 
 end DkMath.NumberTheory.GcdNext
-

@@ -1945,6 +1945,10 @@ lemma FLT_highExponent_core_pending {x y z n : ℕ}
     exact FLT_highExponent_core_of_provider
       hn_ge4 h3n_not h4n_not hprimeFLT hpos h_eq
   clear hneed
+  -- [TODO] p ≥ 5 の素数指数に対する FLT の高指数ケースの隔離箇所。
+  --        現在は n=3（Triomino）についてはフェーズごとの証明が完了しているものの、
+  --        p ≥ 5 に対しては Cosmic Formula の次元拡張と p-adic 構造の複雑化を
+  --        自前で解決する（`PrimeExponentFLTProvider n` の構成）まで保留中の状態。
   sorry
 
 /--

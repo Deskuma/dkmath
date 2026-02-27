@@ -814,8 +814,12 @@ theorem FLT_of_coprime
         h3
 
   · -- n > 3 の場合
-    -- Zsigmondy 原始素因子を使った証明（後々実装）
-    sorry  -- todo: n > 3 の場合の証明。Zsigmondy 原始素因子の存在を利用して、GN n u y が n 乗になることができないことを示し、矛盾を導く必要がある。
+    -- Zsigmondy 原始素因子などを利用した証明の隔離箇所。
+    -- [TODO] : 現在は n=3 の分岐のみが機能しており、n > 3 に関しては
+    --          `PrimeExponentFLTProvider n` 等の機構を別途呼び出して処理する方針。
+    --          あるいは Zsigmondy 原始素因子の存在から GN n u y が n 乗数に
+    --          なることが矛盾することを直接導く（Phase 4 以降）。
+    sorry
 
 
 
