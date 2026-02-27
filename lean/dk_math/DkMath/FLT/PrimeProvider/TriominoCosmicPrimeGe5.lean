@@ -213,11 +213,39 @@ lemma gap_coprime_right {p x y z : ℕ} (h : PrimeCounterexamplePack p x y z) :
 end PrimeCounterexamplePack
 
 /--
+`TODO-2` 以降で使う、prime-ge5 専用の primitive 反例入力束。
+`p = 2, 3` を排除し、Body/Gap 不変量が真になりうる領域へ制限する。
+-/
+structure PrimeGe5CounterexamplePack (p x y z : ℕ) : Prop
+    extends PrimeCounterexamplePack p x y z where
+  hp5 : 5 ≤ p
+
+namespace PrimeGe5CounterexamplePack
+
+/-- 差（gap）`u := z - y`。 -/
+def gap {p x y z : ℕ} (h : PrimeGe5CounterexamplePack p x y z) : ℕ :=
+  h.toPrimeCounterexamplePack.gap
+
+/-- `gap` は正。 -/
+lemma gap_pos {p x y z : ℕ} (h : PrimeGe5CounterexamplePack p x y z) :
+    0 < h.gap := by
+  simpa [PrimeGe5CounterexamplePack.gap] using
+    h.toPrimeCounterexamplePack.gap_pos
+
+/-- `gap` と `y` は互いに素。 -/
+lemma gap_coprime_right {p x y z : ℕ} (h : PrimeGe5CounterexamplePack p x y z) :
+    Nat.Coprime h.gap y := by
+  simpa [PrimeGe5CounterexamplePack.gap] using
+    h.toPrimeCounterexamplePack.gap_coprime_right
+
+end PrimeGe5CounterexamplePack
+
+/--
 TODO-2 の目標型:
-primitive 反例パックから、差 `z - y` が `p` 乗になれないことを供給する。
+prime-ge5 反例パックから、差 `z - y` が `p` 乗になれないことを供給する。
 -/
 abbrev GapNotIsPowTarget : Prop :=
-  ∀ {p x y z : ℕ}, PrimeCounterexamplePack p x y z → ¬ ∃ t : ℕ, (z - y) = t ^ p
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z → ¬ ∃ t : ℕ, (z - y) = t ^ p
 
 /--
 Triomino/Cosmic 側で最終的に供給すべき本丸インターフェイス。

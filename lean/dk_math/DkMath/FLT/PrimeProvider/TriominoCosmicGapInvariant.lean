@@ -61,7 +61,7 @@ Triomino/Cosmic 側で最終的に供給すべき Body 不変量。
 `gap` そのものではなく `GN` 側の「p 乗になれなさ」に責務を移す。
 -/
 abbrev TriominoCosmicBodyInvariant : Prop :=
-  ∀ {p x y z : ℕ}, PrimeCounterexamplePack p x y z →
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
     ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p
 
 /--
@@ -78,7 +78,7 @@ theorem triominoCosmicBodyInvariant : TriominoCosmicBodyInvariant := by
   have hcop_uy : Nat.Coprime u y := by
     simpa [u] using hpack.gap_coprime_right
   have hxpow := by
-    simpa [u, PrimeCounterexamplePack.gap] using
+    simpa [u, PrimeGe5CounterexamplePack.gap] using
       (pow_eq_sub_mul_GN_of_add_pow_eq p x y z hpack.hyz hpack.hEq)
   clear hu_pos hcop_uy hxpow
   sorry
@@ -95,7 +95,7 @@ theorem gapInvariant_of_bodyInvariant
   have hu_pos : 0 < u := by
     simpa [u] using hpack.gap_pos
   have hxpow := by
-    simpa [u, PrimeCounterexamplePack.gap] using
+    simpa [u, PrimeGe5CounterexamplePack.gap] using
       (pow_eq_sub_mul_GN_of_add_pow_eq p x y z hpack.hyz hpack.hEq)
   intro hgap
   rcases hgap with ⟨t, htu⟩

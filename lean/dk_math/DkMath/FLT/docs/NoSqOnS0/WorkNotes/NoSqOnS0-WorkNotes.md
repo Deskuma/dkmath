@@ -262,3 +262,28 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（`TriominoCosmicGapInvariant.lean` に `sorry` warning 1 件）。
+
+### 2026-02-27 phase-14 継続（`p ≥ 5` の安全柵を TODO-2 系へ追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean`
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `PrimeGe5CounterexamplePack`
+  2. `PrimeGe5CounterexamplePack.gap`
+  3. `PrimeGe5CounterexamplePack.gap_pos`
+  4. `PrimeGe5CounterexamplePack.gap_coprime_right`
+- 変更内容:
+  1. `GapNotIsPowTarget` を `PrimeGe5CounterexamplePack` ベースへ変更
+  2. `TriominoCosmicBodyInvariant` も `PrimeGe5CounterexamplePack` ベースへ変更
+- 意図:
+  - `p = 2, 3` を TODO-2 / BodyInvariant の入力領域から除外し、
+    命題が真になりうる world へ制限。
+  - `PrimeCounterexamplePack` はそのまま残し、prime-ge5 専用の追加柵だけを別構造体で載せた。
+- 到達点:
+  - `TODO-2` 系の未解決点は引き続き `triominoCosmicBodyInvariant` の 1 件だけ。
+  - しかもその命題は、`p = 2, 3` の自明な反例世界を含まない形に安全化済み。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5 DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（`TriominoCosmicGapInvariant.lean` に `sorry` warning 1 件）。
