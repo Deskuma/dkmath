@@ -238,6 +238,22 @@ lemma gap_coprime_right {p x y z : ℕ} (h : PrimeGe5CounterexamplePack p x y z)
   simpa [PrimeGe5CounterexamplePack.gap] using
     h.toPrimeCounterexamplePack.gap_coprime_right
 
+/-- FLT 反例形から `x^p = gap * GN p gap y` を回収する。 -/
+lemma xpow_eq_gap_mul_GN {p x y z : ℕ} (h : PrimeGe5CounterexamplePack p x y z) :
+    x ^ p = h.gap * DkMath.CosmicFormulaBinom.GN p h.gap y := by
+  simpa [PrimeGe5CounterexamplePack.gap] using
+    (pow_eq_sub_mul_GN_of_add_pow_eq p x y z h.hyz h.hEq)
+
+/-- `p ∣ gap` なら、`gap ⟂ y` より `p ∤ y`。 -/
+lemma prime_not_dvd_right_of_prime_dvd_gap
+    {p x y z : ℕ} (h : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ h.gap) :
+    ¬ p ∣ y := by
+  intro hp_dvd_y
+  have hnot : ¬ Nat.Coprime h.gap y :=
+    Nat.not_coprime_of_dvd_of_dvd (Nat.Prime.one_lt h.hp) hp_dvd_gap hp_dvd_y
+  exact hnot h.gap_coprime_right
+
 end PrimeGe5CounterexamplePack
 
 /--

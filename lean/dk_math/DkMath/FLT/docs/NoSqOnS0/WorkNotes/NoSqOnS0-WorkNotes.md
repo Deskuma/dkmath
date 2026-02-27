@@ -340,3 +340,27 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（`TriominoCosmicGapInvariant.lean` に `sorry` warning 1 件）。
+
+### 2026-02-27 phase-14 継続（Branch A 向け補助を先行固定）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `PrimeGe5CounterexamplePack.xpow_eq_gap_mul_GN`
+  2. `PrimeGe5CounterexamplePack.prime_not_dvd_right_of_prime_dvd_gap`
+- 意図:
+  - Branch A（`p ∣ (z-y)`）で毎回必要になる
+    `x^p = gap * GN p gap y`
+    と
+    `p ∣ gap -> p ∤ y`
+    を pack 側メソッドとして先に固定。
+  - `triominoCosmicNoPowOnGN` の Branch A 実装時に、
+    反例 pack から必要な前処理をそのまま呼び出せるようにした。
+- 実装メモ:
+  - `GN` は `DkMath.CosmicFormulaBinom.GN` で完全修飾。
+  - `p ∤ y` は `Nat.not_coprime_of_dvd_of_dvd` を使って
+    `gap ⟂ y` から反証で回収。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5 DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は `TriominoCosmicGapInvariant.lean` の `sorry` 1 件のみ）。
