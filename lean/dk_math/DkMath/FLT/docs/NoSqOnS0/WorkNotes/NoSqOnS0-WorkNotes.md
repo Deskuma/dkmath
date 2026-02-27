@@ -62,3 +62,23 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5`
   - 結果: 成功。
+
+### 2026-02-27 phase-14 継続（TODO-1 の factorization 版を実装）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `exists_eq_pow_of_factorization_dvd`（private）
+     - 素因数分解の指数がすべて `p` の倍数なら、`p` 乗根を明示構成
+  2. `exists_primeFactor_factorization_not_dvd_of_not_isPow`
+     - `u` が `p` 乗でないなら、
+       ある素因子 `q` で `¬ p ∣ u.factorization q` を取り出す
+- 意図:
+  - `FLT_prime_ge5` 骨格の TODO-1 を、
+    `padicValNat` へ行く前の最も独立した核（factorization 版）として確定。
+  - 次段で `padicValNat q u = u.factorization q` 系の既存補題を使って、
+    `¬ p ∣ padicValNat q u` へ接続しやすくした。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5`
+  - 結果: 成功。

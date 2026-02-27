@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.PrimeProvider.TriominoCosmic
 import DkMath.FLT.Core
+import DkMath.Basic.Nat
 
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
@@ -23,6 +24,8 @@ set_option linter.style.emptyLine false
 -/
 
 namespace DkMath.FLT
+
+open scoped BigOperators
 
 /--
 残る本質ターゲット:
@@ -50,6 +53,56 @@ theorem triominoPrimeProvider_of_FLTPrimeGe5
     (hprimeGe5 : FLTPrimeGe5Target) :
     TriominoPrimeProvider := by
   exact triominoPrimeProvider_of_primeGe5 hprimeGe5
+
+/-- 「素因数分解の指数がすべて `p` の倍数」なら、`p` 乗根を素朴に構成できる。 -/
+private lemma exists_eq_pow_of_factorization_dvd
+    {u p : ℕ} (hu0 : u ≠ 0) (_hp0 : 0 < p)
+    (hdiv : ∀ q : ℕ, p ∣ u.factorization q) :
+    ∃ t : ℕ, u = t ^ p := by
+  classical
+  let t : ℕ := u.factorization.support.prod (fun q => q ^ (u.factorization q / p))
+  refine ⟨t, ?_⟩
+  have hu_prod :
+      u.factorization.support.prod (fun q => q ^ u.factorization q) = u :=
+    Nat.factorization_prod_pow_eq_self hu0
+  have ht : t ^ p = u := by
+    calc
+      t ^ p
+          = (u.factorization.support.prod (fun q => q ^ (u.factorization q / p))) ^ p := rfl
+      _ = u.factorization.support.prod (fun q => (q ^ (u.factorization q / p)) ^ p) := by
+          rw [Finset.prod_pow]
+      _ = u.factorization.support.prod (fun q => q ^ (u.factorization q)) := by
+          refine Finset.prod_congr rfl (fun q _ => ?_)
+          have hq : p ∣ u.factorization q := hdiv q
+          rw [← pow_mul, Nat.div_mul_cancel hq]
+      _ = u := hu_prod
+  exact ht.symm
+
+/--
+TODO-1（純算術・核）:
+`u` が `p` 乗でないなら、ある素因子 `q` で「指数が `p` の倍数でない」が起きる。
+-/
+lemma exists_primeFactor_factorization_not_dvd_of_not_isPow
+    {u p : ℕ} (hu0 : u ≠ 0) (hp0 : 0 < p)
+    (hnot : ¬ ∃ t : ℕ, u = t ^ p) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ u ∧ ¬ p ∣ u.factorization q := by
+  classical
+  have hnotAll : ¬ (∀ q : ℕ, p ∣ u.factorization q) := by
+    intro hall
+    rcases exists_eq_pow_of_factorization_dvd (u := u) (p := p) hu0 hp0 hall with ⟨t, ht⟩
+    exact hnot ⟨t, ht⟩
+  rcases not_forall.mp hnotAll with ⟨q, hq⟩
+  have hq_ne0 : u.factorization q ≠ 0 := by
+    intro h0
+    have : p ∣ u.factorization q := by
+      simp [h0]
+    exact hq this
+  have hq_mem : q ∈ u.factorization.support := by
+    rw [Finsupp.mem_support_iff]
+    exact hq_ne0
+  have hsup := (DkMath.Basic.Nat.mem_support_factorization_iff (n := u) (p := q)).1 hq_mem
+  rcases hsup with ⟨_, hqPrime, hqDvd⟩
+  exact ⟨q, hqPrime, hqDvd, hq⟩
 
 /-!
 ## 実装ロードマップ（順序固定）
