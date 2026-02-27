@@ -557,3 +557,33 @@ theorem nonLiftableS0_of_minCounterexample
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT`
   - 結果: 成功（`sorry` は `FLT_highExponent_core_pending` の1件のみ）。
+
+### 2026-02-26 ここからの実装計画（phase-13 以降）
+
+- 現在地:
+  1. `TriominoFLT.lean` の `sorry` は `FLT_highExponent_core_pending` の1件に集約済み。
+  2. 未解決の実体は「`hprimeFLT`（`p ≠ 2,3` 素数指数 FLT 供給）」の構成。
+  3. `FLT3/4` は暫定ブリッジとして利用中（将来除去方針は維持）。
+
+- 実装方針（順序固定）:
+  1. **インターフェース固定**
+     - `hprimeFLT` の要求形（`∀ p, Prime p → p∣n → p≠2 → p≠3 → FermatLastTheoremFor p`）を
+       高指数核の唯一の入口として維持。
+     - 目的: 以降の実装を「供給構築」に限定し、核本体の再変更を避ける。
+  2. **供給の段階実装（仮説分解）**
+     - `hprimeFLT` を一気に作らず、次の局所補題へ分割:
+       - (a) 素数指数 `p` の場合の幾何条件（色不変量/タイル不可能性）
+       - (b) (a) から `FermatLastTheoremFor p` への接続
+     - 目的: 各補題の責務を分離し、失敗箇所を局所化。
+  3. **最終接続**
+     - 分割補題を束ねて `hprimeFLT` を定義し、`FLT_highExponent_core_pending` を置換。
+     - 目的: `TriominoFLT.lean` の `sorry` をゼロ化。
+  4. **暫定依存の整理**
+     - 高指数側が閉じた後、`fermatLastTheoremThree/Four` の暫定参照を
+       Triomino/Cosmic 独立証明に順次置換。
+
+- 完了条件（DoD）:
+  1. `TriominoFLT.lean` に `sorry` がない。
+  2. `FLT_highExponent_core_pending` が実装済み（または不要化）。
+  3. `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT` が成功。
+  4. 暫定依存の残有無をコメントとログに明示。
