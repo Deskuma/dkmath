@@ -138,6 +138,17 @@ lemma exists_primeFactor_val_not_dvd_of_not_isPow
   exact not_dvd_padicValNat_of_not_dvd_factorization
     (p := p) (q := q) (u := u) hqPrime hu0 hNot
 
+/--
+TODO-3 の最薄部:
+`y ≤ z` かつ `Nat.Coprime y z` なら、差 `z - y` と `y` も互いに素。
+-/
+lemma coprime_sub_of_coprime
+    {y z : ℕ} (hyz : y ≤ z) (hcop : Nat.Coprime y z) :
+    Nat.Coprime (z - y) y := by
+  have hy_sub : Nat.Coprime y (z - y) :=
+    (Nat.coprime_sub_self_right hyz).2 hcop
+  simpa [Nat.coprime_comm] using hy_sub
+
 /-!
 ## 実装ロードマップ（順序固定）
 

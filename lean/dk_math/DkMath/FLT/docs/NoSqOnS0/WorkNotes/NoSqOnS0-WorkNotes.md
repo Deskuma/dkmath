@@ -100,3 +100,21 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5`
   - 結果: 成功。
+
+### 2026-02-27 phase-14 継続（TODO-3 の最薄部を固定）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `coprime_sub_of_coprime`
+     - `y ≤ z` かつ `Nat.Coprime y z` から `Nat.Coprime (z - y) y`
+- 意図:
+  - TODO-3 のうち、最も独立して進められる「差の gcd 不変」部分を先に確定。
+  - これで、反例から `Nat.Coprime y z` さえ得られれば、
+    `u := z - y` に対する `Nat.Coprime u y` は即座に回収できる。
+- 実装メモ:
+  - `Nat.coprime_sub_self_right` を利用し、gcd 手計算を避けて最短で固定。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5`
+  - 結果: 成功。
