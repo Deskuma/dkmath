@@ -313,3 +313,44 @@ status: 作業中 - phase-13: 完全証明への道（）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.TriominoMainBridge DkMath.FLT.TriominoPrimeProvider`
   - 結果: 成功（既存 warning: `TriominoFLT` の `sorry` 1件は継続）。
+
+### 2026-02-27 phase-13 継続（`PrimeProviderCore` 切り出し）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProviderCore.lean`（新規）
+  - `lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean`
+  - `lean/dk_math/DkMath/FLT/TriominoMainBridge.lean`
+  - `lean/dk_math/DkMath/FLT/TriominoPrimeProvider.lean`
+  - `lean/dk_math/DkMath/FLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容（Core）:
+  1. `DkMath.PrimeExponentFLTProvider`
+  2. `DkMath.GlobalPrimeExponentFLTProvider`
+  3. `DkMath.primeExponentFLTProvider_of_global`
+  4. `DkMath.FLT.TriominoPrimeProvider`
+  5. `DkMath.FLT.triominoPrimeProvider_of_fermatLastTheorem`
+  6. `DkMath.FLT.triominoPrimeProvider_of_oddPrimes`
+- 変更内容:
+  1. `TriominoFLT.lean` から provider 型定義と `..._of_global` を除去し、
+     `PrimeProviderCore` を import
+  2. `TriominoMainBridge.lean` は `PrimeProviderCore` を直接 import
+  3. `TriominoPrimeProvider.lean` から alias / 仮定変換の実体定義を除去し、
+     `PrimeProviderCore` を直接 import
+  4. `DkMath/FLT.lean` に `import DkMath.FLT.PrimeProviderCore` を追加
+- 意図:
+  - provider の「型・alias・仮定変換」だけを薄い共有層へ分離。
+  - `TriominoMainBridge` と `TriominoPrimeProvider` が互いではなく
+    `PrimeProviderCore` を共有依存先にする構造へ移行。
+  - これにより、依存循環リスクをコメント規約だけでなく構造でも抑制。
+- 依存グラフ（更新後）:
+  1. `PrimeProviderCore`
+  2. `TriominoMainBridge` -> `PrimeProviderCore`
+  3. `TriominoPrimeProvider` -> `PrimeProviderCore`, `TriominoMainBridge`
+- 次段計画:
+  1. `MathlibBridge/FLT34.lean` 相当の隔離層を新設し、
+     `fermatLastTheoremThree/Four` 暫定依存を 1 箇所へ集約
+  2. その後、`TriominoFLT` の残る `sorry` 1件に対する
+     global provider 実供給の数学本体へ戻る
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProviderCore DkMath.CosmicFormula.TriominoFLT DkMath.FLT.TriominoMainBridge DkMath.FLT.TriominoPrimeProvider DkMath.FLT`
+  - 結果: 成功（既存 warning: `TriominoFLT` の `sorry` 1件は継続）。

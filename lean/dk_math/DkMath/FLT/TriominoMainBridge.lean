@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMath.FLT.PrimeProviderCore
 import DkMath.FLT.Main
 import DkMath.CosmicFormula.TriominoFLT
 

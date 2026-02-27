@@ -8,6 +8,7 @@ import DkMath.Basic
 import DkMath.Polyomino
 import DkMath.CosmicFormula.CosmicFormulaCellDim
 import DkMath.Tromino
+import DkMath.FLT.PrimeProviderCore
 
 /-
 NOTE [Temporary Mathlib FLT3 bridge]:
@@ -1862,21 +1863,6 @@ lemma exists_prime_factor_ne_two_three_of_highExponent
       apply h3n_not
       simpa [hp3] using hpdvdn
     exact ⟨p, hpprime, hpdvdn, hp_ne2, hp_ne3⟩
-
-/-- 高指数核で要求する「`n` に対する素数指数 FLT 供給」の型。 -/
-abbrev PrimeExponentFLTProvider (n : ℕ) : Prop :=
-  ∀ p : ℕ, Nat.Prime p → p ∣ n → p ≠ 2 → p ≠ 3 → FermatLastTheoremFor p
-
-/-- グローバル版（`p ≠ 2,3` の全素数に対する供給）。 -/
-abbrev GlobalPrimeExponentFLTProvider : Prop :=
-  ∀ p : ℕ, Nat.Prime p → p ≠ 2 → p ≠ 3 → FermatLastTheoremFor p
-
-/-- グローバル供給から、固定 `n` の供給へ落とす。 -/
-lemma primeExponentFLTProvider_of_global {n : ℕ}
-    (hglobal : GlobalPrimeExponentFLTProvider) :
-    PrimeExponentFLTProvider n := by
-  intro p hpprime hpdvdn hp_ne2 hp_ne3
-  exact hglobal p hpprime hp_ne2 hp_ne3
 
 /--
 高指数核を「`2,3` 以外の素因子指数での FLT 供給」に還元する補題。
