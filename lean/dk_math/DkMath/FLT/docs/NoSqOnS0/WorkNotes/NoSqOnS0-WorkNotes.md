@@ -263,3 +263,53 @@ status: 作業中 - phase-13: 完全証明への道（）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.TriominoPrimeProvider`
   - 結果: 成功（既存 warning: `TriominoFLT` の `sorry` 1件は継続）。
+
+### 2026-02-27 phase-13 継続（責務境界コメントの固定）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/TriominoPrimeProvider.lean`
+  - `lean/dk_math/DkMath/FLT/TriominoMainBridge.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `TriominoPrimeProvider` 冒頭コメントに、
+     「alias / 仮定変換 / 公開入口に専念」「`d=3` は Bridge へ委譲」を明記
+  2. `TriominoMainBridge` 冒頭コメントに、
+     「将来も `TriominoPrimeProvider` を import しない」方針を明記
+  3. 両ファイルの `..._coprimeSupport_direct` docstring に、
+     coprime-support 仮定が「呼び出し形の整合のため」で本体証明では未使用であることを明記
+- 意図:
+  - API 名だけを見ると誤解しやすい責務境界を、コメントレベルで固定。
+  - 将来の循環依存リスクを、実装規約として先に明文化。
+- 次段計画:
+  1. `PrimeProviderCore.lean` 相当の薄い共有層を切り出し、
+     provider alias / 仮定変換を `TriominoMainBridge` から分離する
+  2. `TriominoFLT` 内の Mathlib 暫定ブリッジ（`fermatLastTheoremThree/Four`）を
+     別モジュールへ隔離し、後で剥がしやすくする
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.TriominoMainBridge DkMath.FLT.TriominoPrimeProvider`
+  - 結果: 成功（既存 warning: `TriominoFLT` の `sorry` 1件は継続）。
+
+### 2026-02-27 phase-13 継続（名前でも「引数形合わせ」を明示）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/TriominoPrimeProvider.lean`
+  - `lean/dk_math/DkMath/FLT/TriominoMainBridge.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `TriominoPrimeProvider` 冒頭コメントに、
+     `TriominoMainBridge` との非対称依存規約
+     （「本ファイルは import してよいが、逆方向は不可」）を明記
+  2. `TriominoPrimeProvider.lean`
+     - `FLT_d3_via_triominoPrimeProvider_with_coprimeSupport_args`
+     - `FLT_d3_via_fermatLastTheorem_with_coprimeSupport_args`
+     - `FLT_d3_via_oddPrimes_with_coprimeSupport_args`
+  3. `TriominoMainBridge.lean`
+     - `FLT_d3_via_triominoGlobalProvider_with_coprimeSupport_args`
+- 意図:
+  - docstring を読まなくても、API 名だけで
+    「これは coprime-support 仮定を使う証明ではなく、引数形を揃えるラッパ」
+    と分かる補助入口を追加。
+  - 既存名は残し、破壊的変更なしで公開面を整理。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.TriominoMainBridge DkMath.FLT.TriominoPrimeProvider`
+  - 結果: 成功（既存 warning: `TriominoFLT` の `sorry` 1件は継続）。

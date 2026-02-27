@@ -14,6 +14,12 @@ set_option linter.style.emptyLine false
 
 `GlobalPrimeExponentFLTProvider` を受け取り、
 Triomino 側の確定版 API（bridge 公開）から FLT 結論を得る入口。
+
+責務:
+- 本ファイルは alias / 仮定変換 / 公開入口の整理に専念する。
+- `d=3` の最終委譲先は `DkMath.FLT.TriominoMainBridge` 側に一本化する。
+- 本ファイルは `TriominoMainBridge` を import してよいが、
+  `TriominoMainBridge` 側からは import させない（依存は常に片方向）。
 -/
 
 namespace DkMath.FLT
@@ -121,6 +127,8 @@ theorem FLT_d3_via_oddPrimes
 /--
 `Main` の coprime-support 入口と同じ引数形で、
 Triomino provider から `d=3` を返すラッパ。
+`_hab/_hbc/_hcb_coprime` は、`Main` 系 API と同形で呼べるように受けるだけで、
+本体証明では使用しない。
 -/
 theorem FLT_d3_by_padicValNat_via_triominoPrimeProvider_coprimeSupport_direct
     {a b c : ℕ}
@@ -134,7 +142,22 @@ theorem FLT_d3_by_padicValNat_via_triominoPrimeProvider_coprimeSupport_direct
     (a := a) (b := b) (c := c) ha hb hc _hab _hbc _hcb_coprime hprov
 
 /--
+`..._coprimeSupport_direct` が「引数形合わせ」であることを名前でも明示した別名。
+-/
+theorem FLT_d3_via_triominoPrimeProvider_with_coprimeSupport_args
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hprov : TriominoPrimeProvider) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_via_triominoPrimeProvider_coprimeSupport_direct
+    (a := a) (b := b) (c := c) ha hb hc hab hbc hcb_coprime hprov
+
+/--
 `FermatLastTheorem` 仮定から、coprime-support 形の `d=3` 入口を得る。
+ここでも coprime-support 仮定は「呼び出し形の整合」のために受けている。
 -/
 theorem FLT_d3_by_padicValNat_via_fermatLastTheorem_coprimeSupport_direct
     {a b c : ℕ}
@@ -149,7 +172,22 @@ theorem FLT_d3_by_padicValNat_via_fermatLastTheorem_coprimeSupport_direct
     (triominoPrimeProvider_of_fermatLastTheorem hFLT)
 
 /--
+`FermatLastTheorem` 仮定版の、名前で「引数形合わせ」を示す別名。
+-/
+theorem FLT_d3_via_fermatLastTheorem_with_coprimeSupport_args
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hFLT : FermatLastTheorem) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_via_fermatLastTheorem_coprimeSupport_direct
+    (a := a) (b := b) (c := c) ha hb hc hab hbc hcb_coprime hFLT
+
+/--
 odd prime 指数供給から、coprime-support 形の `d=3` 入口を得る。
+ここでも coprime-support 仮定は「呼び出し形の整合」のために受けている。
 -/
 theorem FLT_d3_by_padicValNat_via_oddPrimes_coprimeSupport_direct
     {a b c : ℕ}
@@ -162,5 +200,19 @@ theorem FLT_d3_by_padicValNat_via_oddPrimes_coprimeSupport_direct
   exact FLT_d3_by_padicValNat_via_triominoPrimeProvider_coprimeSupport_direct
     (a := a) (b := b) (c := c) ha hb hc hab hbc hcb_coprime
     (triominoPrimeProvider_of_oddPrimes hprimes)
+
+/--
+odd prime 仮定版の、名前で「引数形合わせ」を示す別名。
+-/
+theorem FLT_d3_via_oddPrimes_with_coprimeSupport_args
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hprimes : ∀ p : ℕ, Nat.Prime p → Odd p → FermatLastTheoremFor p) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_via_oddPrimes_coprimeSupport_direct
+    (a := a) (b := b) (c := c) ha hb hc hab hbc hcb_coprime hprimes
 
 end DkMath.FLT

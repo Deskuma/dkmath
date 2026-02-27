@@ -19,6 +19,8 @@ set_option linter.style.emptyLine false
 注意:
 - `Main` 本体は変更しない（依存方向固定のため）。
 - 本ファイルは橋渡し専用。
+- 将来も `TriominoPrimeProvider` を import しない。
+  provider の alias / 仮定変換は別層へ置き、依存循環を避ける。
 -/
 
 namespace DkMath.FLT
@@ -88,6 +90,8 @@ theorem FLT_d3_via_triominoGlobalProvider
 /--
 `Main` の coprime-support 入口と同じ引数形で、
 global prime provider を直接受ける `d=3` ラッパ。
+`_hab/_hbc/_hcb_coprime` は、`Main` 系 API と同形で呼べるように受けるだけで、
+本体証明では使用しない。
 -/
 theorem FLT_d3_by_padicValNat_via_triominoGlobalProvider_coprimeSupport_direct
     {a b c : ℕ}
@@ -99,5 +103,19 @@ theorem FLT_d3_by_padicValNat_via_triominoGlobalProvider_coprimeSupport_direct
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
   exact FLT_d3_via_triominoGlobalProvider
     (a := a) (b := b) (c := c) hglobal ha hb hc
+
+/--
+`..._coprimeSupport_direct` が「引数形合わせ」であることを名前でも明示した別名。
+-/
+theorem FLT_d3_via_triominoGlobalProvider_with_coprimeSupport_args
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hglobal : DkMath.GlobalPrimeExponentFLTProvider) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_via_triominoGlobalProvider_coprimeSupport_direct
+    (a := a) (b := b) (c := c) ha hb hc hab hbc hcb_coprime hglobal
 
 end DkMath.FLT
