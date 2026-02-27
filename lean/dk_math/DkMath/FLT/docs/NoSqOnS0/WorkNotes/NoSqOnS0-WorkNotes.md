@@ -364,3 +364,31 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5 DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は `TriominoCosmicGapInvariant.lean` の `sorry` 1 件のみ）。
+
+### 2026-02-27 phase-14 継続（Branch A を実装し、未解決を Branch B 専用へ縮小）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `noSqPrimeOnGN_when_p_dvd_u_impl`
+- 変更内容:
+  1. `triominoCosmicNoPowOnGN` は Branch A を `noSqPrimeOnGN_when_p_dvd_u_impl` へ委譲
+  2. 残る `sorry` は Branch B (`NoSqPrimeOnGN_when_p_not_dvd_u`) のみ
+- 実装メモ:
+  - Branch A は `q := p` を採用。
+  - `GN p (z-y) y` を head/tail に分解し、
+    `A = p * y^(p-1)` と
+    `B = Σ_{k≥1}` を分離。
+  - `p ∣ (z-y)` から `p^2 ∣ B` を `k = 1` と `k ≥ 2` に場合分けして証明。
+  - `p ∤ y` は `PrimeGe5CounterexamplePack.prime_not_dvd_right_of_prime_dvd_gap` を再利用。
+  - `¬ p^2 ∣ A` と `p^2 ∣ B` から `¬ p^2 ∣ A + B` を出し、
+    `q ∣ GN` かつ `¬ q^2 ∣ GN` を確定。
+- 到達点:
+  - `TriominoCosmicGapInvariant.lean` の未解決点は
+    `triominoCosmicNoPowOnGN` 内の Branch B 用 `sorry` 1 件だけ。
+  - 以後の探索対象は `¬ p ∣ (z-y)` 側の
+    `GN` に平方止まりの素因子を入れる既存理論（Zsigmondy / NonLiftable / NoSq）へ限定された。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（`TriominoCosmicGapInvariant.lean` に `sorry` warning 1 件のみ）。

@@ -12,6 +12,7 @@ set_option linter.style.emptyLine false
 namespace DkMath.FLT
 
 open DkMath.CosmicFormulaBinom
+open scoped BigOperators
 
 /-!
 # Triomino/Cosmic Gap Invariant
@@ -119,6 +120,91 @@ theorem bodyInvariant_of_NoPowOnGN
   intro p x y z hpack
   exact not_isPow_of_exists_prime_dvd_not_dvd_sq hpack.hp5 (hNoPow hpack)
 
+/-- Branch A（`p ∣ gap`）は、`q := p` と `GN` の head/tail 分解で閉じる。 -/
+theorem noSqPrimeOnGN_when_p_dvd_u_impl :
+    NoSqPrimeOnGN_when_p_dvd_u := by
+  intro p x y z hpack hp_dvd_u
+  let u : ℕ := z - y
+  let N : ℕ := GN p u y
+  let A : ℕ := p * y ^ (p - 1)
+  let B : ℕ := Finset.sum ((Finset.range p).erase 0) (fun k =>
+    (Nat.choose p (k + 1) : ℕ) * u ^ k * y ^ (p - 1 - k))
+  have hp_pos : 0 < p := hpack.hp.pos
+  have hp_not_dvd_y : ¬ p ∣ y := by
+    simpa [u, PrimeGe5CounterexamplePack.gap] using
+      hpack.prime_not_dvd_right_of_prime_dvd_gap hp_dvd_u
+  have hsplitBA : B + A = N := by
+    let f : ℕ → ℕ := fun k =>
+      (Nat.choose p (k + 1) : ℕ) * (z - y) ^ k * y ^ (p - 1 - k)
+    have hsum :
+        Finset.sum ((Finset.range p).erase 0) f + f 0 = Finset.sum (Finset.range p) f := by
+      simpa using
+        (Finset.sum_erase_add (s := Finset.range p) (f := f) (a := 0)
+          (by simpa using hp_pos))
+    unfold N A B u
+    simpa [f, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using hsum
+  have hsplit : N = A + B := by
+    simpa [Nat.add_comm] using hsplitBA.symm
+  have hB_sq : p ^ 2 ∣ B := by
+    unfold B
+    refine Finset.dvd_sum ?_
+    intro k hk
+    have hk_mem : k ∈ Finset.range p := by
+      exact Finset.mem_of_mem_erase hk
+    have hk_lt : k < p := Finset.mem_range.mp hk_mem
+    have hk_ne_zero : k ≠ 0 := Finset.mem_erase.mp hk |>.1
+    by_cases hk_one : k = 1
+    · have hchoose : p ∣ Nat.choose p (k + 1) := by
+        rw [hk_one]
+        apply hpack.hp.dvd_choose_self
+        · decide
+        · exact lt_of_lt_of_le (by decide : 2 < 5) hpack.hp5
+      have hp_dvd_uk : p ∣ u ^ k := by
+        simpa [hk_one] using hp_dvd_u
+      have hprefix : p ^ 2 ∣ (Nat.choose p (k + 1) : ℕ) * u ^ k := by
+        simpa [pow_two] using Nat.mul_dvd_mul hchoose hp_dvd_uk
+      have hmul : p ^ 2 ∣ ((Nat.choose p (k + 1) : ℕ) * u ^ k) * y ^ (p - 1 - k) :=
+        dvd_mul_of_dvd_left hprefix _
+      simpa [Nat.mul_assoc] using hmul
+    · have hk_ge_two : 2 ≤ k := by omega
+      have hpp_dvd_u2 : p ^ 2 ∣ u ^ 2 := by
+        simpa [pow_two] using Nat.mul_dvd_mul hp_dvd_u hp_dvd_u
+      have hpp_dvd_uk : p ^ 2 ∣ u ^ k :=
+        dvd_trans hpp_dvd_u2 (pow_dvd_pow u hk_ge_two)
+      have hprefix : p ^ 2 ∣ (Nat.choose p (k + 1) : ℕ) * u ^ k :=
+        dvd_mul_of_dvd_right hpp_dvd_uk _
+      have hmul : p ^ 2 ∣ ((Nat.choose p (k + 1) : ℕ) * u ^ k) * y ^ (p - 1 - k) :=
+        dvd_mul_of_dvd_left hprefix _
+      simpa [Nat.mul_assoc] using hmul
+  have hA_not_sq : ¬ p ^ 2 ∣ A := by
+    intro hA_sq
+    have hp_dvd_ypow : p ∣ y ^ (p - 1) := by
+      have hmul : p * p ∣ p * y ^ (p - 1) := by
+        simpa [A, pow_two] using hA_sq
+      exact Nat.dvd_of_mul_dvd_mul_left hp_pos hmul
+    exact hp_not_dvd_y (hpack.hp.dvd_of_dvd_pow hp_dvd_ypow)
+  refine ⟨p, hpack.hp, ?_, ?_⟩
+  · have hp_dvd_A : p ∣ A := by
+      unfold A
+      exact dvd_mul_right p (y ^ (p - 1))
+    have hp_dvd_B : p ∣ B := by
+      have hB_sq' : p * p ∣ B := by
+        simpa [pow_two] using hB_sq
+      exact dvd_trans (dvd_mul_right p p) hB_sq'
+    have hp_dvd_N : p ∣ N := by
+      simpa [hsplit] using (Nat.dvd_add hp_dvd_A hp_dvd_B)
+    simpa [N, u] using hp_dvd_N
+  · intro hN_sq
+    have hA_sq : p ^ 2 ∣ A := by
+      have hN_sq' : p ^ 2 ∣ N := by
+        simpa [N, u] using hN_sq
+      have hAB_sq : p ^ 2 ∣ A + B := by
+        simpa [hsplit] using hN_sq'
+      have hBA_sq : p ^ 2 ∣ B + A := by
+        simpa [Nat.add_comm] using hAB_sq
+      exact (Nat.dvd_add_right hB_sq).1 hBA_sq
+    exact hA_not_sq hA_sq
+
 /--
 Triomino/Cosmic 本丸（NoPowOnGN 版）:
 primitive 反例パックから、`GN p (z - y) y` に「平方止まりの素因子」が入る。
@@ -126,11 +212,16 @@ primitive 反例パックから、`GN p (z - y) y` に「平方止まりの素�
 現時点では本体未実装。`TODO-2` の未解決点をこのファイル 1 箇所へ隔離する。
 -/
 theorem triominoCosmicNoPowOnGN : NoPowOnGN_fromCounterexample := by
-  -- TODO:
-  -- 1. `NoSqPrimeOnGN_when_p_dvd_u` を自前（binom 展開）で閉じる
-  -- 2. `NoSqPrimeOnGN_when_p_not_dvd_u` を Zsigmondy / NonLiftable 系から供給
-  -- 3. `noPowOnGN_of_branches` で合成
-  sorry
+  have hA : NoSqPrimeOnGN_when_p_dvd_u :=
+    noSqPrimeOnGN_when_p_dvd_u_impl
+  have hB : NoSqPrimeOnGN_when_p_not_dvd_u := by
+    -- TODO:
+    -- `¬ p ∣ gap` 側は、Zsigmondy / NonLiftable / NoSq 系から
+    -- `∃ q, Prime q ∧ q ∣ GN ∧ ¬ q^2 ∣ GN` を供給する。
+    intro p x y z hpack hp_not_dvd_u
+    sorry
+  intro p x y z hpack
+  exact noPowOnGN_of_branches hA hB hpack
 
 /-- Triomino/Cosmic 本丸（Body 版）は、`NoPowOnGN` 仕様から得る。 -/
 theorem triominoCosmicBodyInvariant : TriominoCosmicBodyInvariant := by
