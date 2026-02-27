@@ -180,6 +180,45 @@ lemma coprime_right_of_add_pow_eq_pow
     Nat.not_coprime_of_dvd_of_dvd (Nat.Prime.one_lt hqPrime) hq_dvd_x hq_dvd_y
   exact hnot hxy
 
+/--
+`FLT_prime_ge5` で扱う primitive 反例の標準入力束。
+`TODO-2` / `TODO-3` の仮定を 1 箇所へ固定する。
+-/
+structure PrimeCounterexamplePack (p x y z : ℕ) : Prop where
+  hp : Nat.Prime p
+  hxy : Nat.Coprime x y
+  hyz : y ≤ z
+  hyz_lt : y < z
+  hEq : x ^ p + y ^ p = z ^ p
+
+namespace PrimeCounterexamplePack
+
+/-- 差（gap）`u := z - y`。 -/
+def gap {p x y z : ℕ} (_h : PrimeCounterexamplePack p x y z) : ℕ :=
+  z - y
+
+/-- `gap` は正。 -/
+lemma gap_pos {p x y z : ℕ} (h : PrimeCounterexamplePack p x y z) :
+    0 < h.gap := by
+  exact Nat.sub_pos_of_lt h.hyz_lt
+
+/-- `gap` と `y` は互いに素。`TODO-3` の完成版。 -/
+lemma gap_coprime_right {p x y z : ℕ} (h : PrimeCounterexamplePack p x y z) :
+    Nat.Coprime h.gap y := by
+  have hyz_coprime : Nat.Coprime y z :=
+    coprime_right_of_add_pow_eq_pow h.hp h.hxy h.hEq
+  simpa [PrimeCounterexamplePack.gap] using
+    (coprime_sub_of_coprime h.hyz hyz_coprime)
+
+end PrimeCounterexamplePack
+
+/--
+TODO-2 の目標型:
+primitive 反例パックから、差 `z - y` が `p` 乗になれないことを供給する。
+-/
+abbrev GapNotIsPowTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeCounterexamplePack p x y z → ¬ ∃ t : ℕ, (z - y) = t ^ p
+
 /-!
 ## 実装ロードマップ（順序固定）
 

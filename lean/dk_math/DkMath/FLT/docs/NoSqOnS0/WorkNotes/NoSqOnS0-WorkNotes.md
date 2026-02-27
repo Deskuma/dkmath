@@ -140,3 +140,27 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5`
   - 結果: 成功。
+
+### 2026-02-27 phase-14 継続（TODO-2 の入力束を参照順込みで固定）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `PrimeCounterexamplePack`
+  2. `PrimeCounterexamplePack.gap`
+  3. `PrimeCounterexamplePack.gap_pos`
+  4. `PrimeCounterexamplePack.gap_coprime_right`
+  5. `GapNotIsPowTarget`
+- 意図:
+  - TODO-2 で使う primitive 反例の入力束を 1 箇所へ固定。
+  - `TODO-3` で整備した `coprime_right_of_add_pow_eq_pow` と
+    `coprime_sub_of_coprime` をそのまま再利用し、
+    差 `u := z - y` の positivity / coprime 条件を束側メソッドとして回収できるようにした。
+- 実装メモ:
+  - 初回追加では参照順が逆でビルドが壊れたため、
+    `PrimeCounterexamplePack` ブロックを TODO-3 補題群の後ろへ移動。
+  - 数学内容は増やさず、定義順だけを整えて staging を復旧。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5`
+  - 結果: 成功。
