@@ -65,10 +65,8 @@ theorem FLT_d3_via_triominoPrimeProvider
     (hprov : TriominoPrimeProvider)
     (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
-  intro hEq
-  exact FLT_general_via_triominoPrimeProvider
-    (x := a) (y := b) (z := c) (n := 3)
-    hprov (by decide) ⟨ha, hb, hc⟩ hEq
+  exact FLT_d3_via_triominoGlobalProvider
+    (a := a) (b := b) (c := c) hprov ha hb hc
 
 /--
 `FermatLastTheorem` 仮定から一般指数版（`n ≥ 3`）を得る。
@@ -132,7 +130,8 @@ theorem FLT_d3_by_padicValNat_via_triominoPrimeProvider_coprimeSupport_direct
     (_hcb_coprime : Nat.Coprime c b)
     (hprov : TriominoPrimeProvider) :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
-  exact FLT_d3_via_triominoPrimeProvider (a := a) (b := b) (c := c) hprov ha hb hc
+  exact FLT_d3_by_padicValNat_via_triominoGlobalProvider_coprimeSupport_direct
+    (a := a) (b := b) (c := c) ha hb hc _hab _hbc _hcb_coprime hprov
 
 /--
 `FermatLastTheorem` 仮定から、coprime-support 形の `d=3` 入口を得る。

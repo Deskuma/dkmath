@@ -71,4 +71,33 @@ theorem FLT_general_via_triominoGlobalProvider
     (h_eq : x ^ n + y ^ n = z ^ n) : False := by
   exact DkMath.FLT_general_via_tromino_of_globalPrimeProvider n hglobal hn hpos h_eq
 
+/--
+global prime provider を直接受ける `d=3` 版。
+`Main` の family 接続とは独立した、Triomino 側確定版 API の橋渡し。
+-/
+theorem FLT_d3_via_triominoGlobalProvider
+    {a b c : ℕ}
+    (hglobal : DkMath.GlobalPrimeExponentFLTProvider)
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  intro hEq
+  exact FLT_general_via_triominoGlobalProvider
+    (x := a) (y := b) (z := c) (n := 3)
+    hglobal (by decide) ⟨ha, hb, hc⟩ hEq
+
+/--
+`Main` の coprime-support 入口と同じ引数形で、
+global prime provider を直接受ける `d=3` ラッパ。
+-/
+theorem FLT_d3_by_padicValNat_via_triominoGlobalProvider_coprimeSupport_direct
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (_hab : Nat.Coprime a b)
+    (_hbc : b < c)
+    (_hcb_coprime : Nat.Coprime c b)
+    (hglobal : DkMath.GlobalPrimeExponentFLTProvider) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_via_triominoGlobalProvider
+    (a := a) (b := b) (c := c) hglobal ha hb hc
+
 end DkMath.FLT

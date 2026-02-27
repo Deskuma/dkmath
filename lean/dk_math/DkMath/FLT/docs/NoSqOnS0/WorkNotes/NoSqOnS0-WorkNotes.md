@@ -229,3 +229,37 @@ status: 作業中 - phase-13: 完全証明への道（）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.TriominoPrimeProvider`
   - 結果: 成功（既存 warning: `TriominoFLT` の `sorry` 1件は継続）。
+
+### 2026-02-27 phase-13 継続（TriominoMainBridge の provider 直受け追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/TriominoMainBridge.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `FLT_d3_via_triominoGlobalProvider`
+  2. `FLT_d3_by_padicValNat_via_triominoGlobalProvider_coprimeSupport_direct`
+- 意図:
+  - bridge 側でも family 経由だけでなく、
+    `GlobalPrimeExponentFLTProvider` を直接受ける d=3 導線を公開。
+  - `TriominoPrimeProvider` 側の alias API と役割を揃えつつ、
+    依存循環なしに「基底 provider 直受け」の入口を保持。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.TriominoMainBridge DkMath.FLT.TriominoPrimeProvider`
+  - 結果: 成功（既存 warning: `TriominoFLT` の `sorry` 1件は継続）。
+
+### 2026-02-27 phase-13 継続（provider 系 d=3 ラッパの委譲整理）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/TriominoPrimeProvider.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `FLT_d3_via_triominoPrimeProvider` を `TriominoMainBridge` の
+     `FLT_d3_via_triominoGlobalProvider` へ委譲
+  2. `FLT_d3_by_padicValNat_via_triominoPrimeProvider_coprimeSupport_direct` を
+     `FLT_d3_by_padicValNat_via_triominoGlobalProvider_coprimeSupport_direct` へ委譲
+- 意図:
+  - d=3 の provider 直受け実装を bridge 側に一本化し、
+    `TriominoPrimeProvider` 側は alias / 仮定変換 / 公開面に集中させる。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.TriominoPrimeProvider`
+  - 結果: 成功（既存 warning: `TriominoFLT` の `sorry` 1件は継続）。
