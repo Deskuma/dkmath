@@ -149,6 +149,37 @@ lemma coprime_sub_of_coprime
     (Nat.coprime_sub_self_right hyz).2 hcop
   simpa [Nat.coprime_comm] using hy_sub
 
+/--
+TODO-3 の残り:
+`x^p + y^p = z^p` と `Nat.Coprime x y` から `Nat.Coprime y z` を回収する。
+-/
+lemma coprime_right_of_add_pow_eq_pow
+    {p x y z : ℕ}
+    (hp : Nat.Prime p)
+    (hxy : Nat.Coprime x y)
+    (hEq : x ^ p + y ^ p = z ^ p) :
+    Nat.Coprime y z := by
+  refine (Nat.coprime_iff_gcd_eq_one).2 ?_
+  by_contra hg1
+  have hg_ne1 : Nat.gcd y z ≠ 1 := by
+    simpa using hg1
+  rcases Nat.exists_prime_and_dvd (n := Nat.gcd y z) hg_ne1 with ⟨q, hqPrime, hq_dvd_g⟩
+  have hq_dvd_y : q ∣ y := dvd_trans hq_dvd_g (Nat.gcd_dvd_left y z)
+  have hq_dvd_z : q ∣ z := dvd_trans hq_dvd_g (Nat.gcd_dvd_right y z)
+  have hq_dvd_yp : q ∣ y ^ p :=
+    dvd_trans hq_dvd_y (dvd_pow_self y hp.ne_zero)
+  have hq_dvd_zp : q ∣ z ^ p :=
+    dvd_trans hq_dvd_z (dvd_pow_self z hp.ne_zero)
+  have hq_dvd_sum : q ∣ x ^ p + y ^ p := by
+    rw [hEq]
+    exact hq_dvd_zp
+  have hq_dvd_xp : q ∣ x ^ p := by
+    exact (Nat.dvd_add_left hq_dvd_yp).1 hq_dvd_sum
+  have hq_dvd_x : q ∣ x := hqPrime.dvd_of_dvd_pow hq_dvd_xp
+  have hnot : ¬ Nat.Coprime x y :=
+    Nat.not_coprime_of_dvd_of_dvd (Nat.Prime.one_lt hqPrime) hq_dvd_x hq_dvd_y
+  exact hnot hxy
+
 /-!
 ## 実装ロードマップ（順序固定）
 

@@ -118,3 +118,25 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5`
   - 結果: 成功。
+
+### 2026-02-27 phase-14 継続（TODO-3 の残り 1 ピースを実装）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `coprime_right_of_add_pow_eq_pow`
+     - `Nat.Coprime x y` と `x ^ p + y ^ p = z ^ p` から `Nat.Coprime y z`
+- 意図:
+  - TODO-3 の残りである「反例から `Nat.Coprime y z` を回収」を対偶で固定。
+  - `g := Nat.gcd y z` に素因子 `q` があれば、
+    `q ∣ y`, `q ∣ z`, したがって `q ∣ y^p`, `q ∣ z^p` から
+    `q ∣ x^p`、さらに `q ∣ x` を導き、`Nat.Coprime x y` と矛盾。
+- 到達点:
+  - `coprime_right_of_add_pow_eq_pow` と
+    既存の `coprime_sub_of_coprime` を組み合わせれば、
+    反例から `u := z - y` に対する `Nat.Coprime u y` が回収できる。
+  - これで TODO-3 は実質完了。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5`
+  - 結果: 成功。
