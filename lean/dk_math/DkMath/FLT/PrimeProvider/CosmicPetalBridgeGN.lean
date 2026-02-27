@@ -27,6 +27,27 @@ abbrev TriominoNoWieferichBridge : Prop :=
     Nat.Prime q → q ∣ (z ^ p - y ^ p) → ¬ q ∣ (z - y) →
     ¬ q ^ 2 ∣ (z ^ p - y ^ p)
 
+/-- 反例文脈での Wieferich 型 lift（原始素因子が 2 段刺さる）を表す。 -/
+def WieferichLift (p y z q : ℕ) : Prop :=
+  Nat.Prime q ∧ q ∣ (z ^ p - y ^ p) ∧ ¬ q ∣ (z - y) ∧ q ^ 2 ∣ (z ^ p - y ^ p)
+
+/--
+Triomino/Cosmic 側が最終的に供給すべき「Wieferich lift は反例文脈で起きない」橋。
+
+将来的には、`WieferichLift` からより小さな反例を構成する下降補題を経由して
+この命題を示すことを想定する。
+-/
+abbrev TriominoWieferichLiftExclusion : Prop :=
+  ∀ {p x y z q : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    WieferichLift p y z q -> False
+
+/-- `WieferichLift` の排除があれば、`TriominoNoWieferichBridge` は直ちに従う。 -/
+theorem triominoNoWieferichBridge_of_wieferichLiftExclusion
+    (hExcl : TriominoWieferichLiftExclusion) :
+    TriominoNoWieferichBridge := by
+  intro p x y z q hpack hqP hq_dvd_diff hq_not_dvd_gap hq2_dvd_diff
+  exact hExcl hpack ⟨hqP, hq_dvd_diff, hq_not_dvd_gap, hq2_dvd_diff⟩
+
 /--
 `TriominoNoWieferichBridge` が供給されれば、一般 `GN` の nonlift family は no-`sorry` で得られる。
 
@@ -59,12 +80,17 @@ theorem triominoCosmicNonLiftableGNBridge_of_noWieferich
 現時点では、`Triomino/Cosmic` 側の no-`sorry` 一般理論は未実装のため、
 未解決点をこの 1 定理に隔離する。
 -/
-theorem triominoNoWieferichBridge_impl : TriominoNoWieferichBridge := by
-  intro p x y z q hpack hqP hq_dvd_diff hq_not_dvd_gap
+theorem triominoWieferichLiftExclusion_impl : TriominoWieferichLiftExclusion := by
+  intro p x y z q hpack hLift
   -- TODO:
-  -- prime-ge5 の反例文脈で、原始素因子 `q` は `(z^p - y^p)` に 2 段持ち上がらない
-  -- （Wieferich 型例外が起きない）ことを、
-  -- Triomino / Cosmic / Phase / NonLiftable の理論から供給する。
+  -- prime-ge5 の反例文脈で、Wieferich 型 lift は起きない。
+  -- ここは将来的に「WieferichLift -> より小さい反例」を構成する
+  -- 下降補題から閉じる想定。
   sorry
+
+/-- 現段階の `TriominoNoWieferichBridge` 実装は、Wieferich lift 排除ブリッジへ委譲する。 -/
+theorem triominoNoWieferichBridge_impl : TriominoNoWieferichBridge := by
+  exact triominoNoWieferichBridge_of_wieferichLiftExclusion
+    triominoWieferichLiftExclusion_impl
 
 end DkMath.FLT

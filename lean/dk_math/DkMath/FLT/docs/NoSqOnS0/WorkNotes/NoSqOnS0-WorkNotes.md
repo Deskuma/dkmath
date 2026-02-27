@@ -520,3 +520,22 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGN.lean` の `triominoNoWieferichBridge_impl` の `sorry` 1件のみ）。
+
+### 2026-02-27 phase-14 継続（最後の穴を `WieferichLift` 排除へさらに圧縮）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGN.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `WieferichLift`
+  2. `TriominoWieferichLiftExclusion`
+  3. `triominoNoWieferichBridge_of_wieferichLiftExclusion`
+  4. `triominoWieferichLiftExclusion_impl`（残る未解決点）
+- 変更内容:
+  1. `triominoNoWieferichBridge_impl` は `triominoWieferichLiftExclusion_impl` から no-`sorry` で導出する形へ整理
+- 意図:
+  - 最後の `sorry` を、単なる divisibility 命題ではなく「反例文脈で Wieferich lift が起きない」という、より本質的な下降法コアへ押し込んだ。
+  - 次に追加すべき新規理論は、`WieferichLift -> より小さい反例` を構成する下降補題の系統であることがコード上で明示された。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGN.lean` の `triominoWieferichLiftExclusion_impl` の `sorry` 1件のみ）。
