@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5
 import DkMath.FLT.CosmicPetalBridge
+import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN
 
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
@@ -111,14 +112,7 @@ def NonLiftableGN (p u y q : ℕ) : Prop :=
 def AllNonLiftableOnGN (p u y : ℕ) : Prop :=
   ∀ q : ℕ, NonLiftableGN p u y q
 
-/--
-Triomino/Cosmic 側が最終的に供給すべき「一般 `GN` の nonlift family」。
-
-注意:
-- `CosmicPetalBridge` の既存 no-`sorry` 橋は `GN 3 (c-b) b = S0_nat c b` に限られる。
-- 一般 `p ≥ 5` の `GN p (z-y) y` を S0/Phase 側へ落とす橋は、現時点では未実装。
-- したがって、残る本丸はこの family 供給 1 点に集約される。
--/
+/- `TriominoNoWieferichBridge` から押し戻した最終入力仕様。 -/
 abbrev TriominoCosmicNonLiftableGNBridge : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
     AllNonLiftableOnGN p (z - y) y
@@ -289,13 +283,8 @@ prime-ge5 反例パックから `AllNonLiftableOnGN` を供給する本丸イン
 -/
 theorem allNonLiftableOnGN_fromCounterexample_impl :
     TriominoCosmicNonLiftableGNBridge := by
-  intro p x y z hpack q hPrim
-  -- TODO:
-  -- Triomino/Cosmic 側の NonLiftable / NoSq / classify impossible から、
-  -- `PrimitiveOnGN p (z - y) y q -> ¬ q^2 ∣ GN p (z - y) y`
-  -- を供給する。
-  rcases hPrim with ⟨hqP, hq_dvd_GN, hq_not_dvd_gap⟩
-  sorry
+  exact triominoCosmicNonLiftableGNBridge_of_noWieferich
+    triominoNoWieferichBridge_impl
 
 /-- 一般 `GN` の nonlift family が供給されれば、`NoPowOnGN` は no-`sorry` で閉じる。 -/
 theorem triominoCosmicNoPowOnGN_of_nonLiftableGNBridge
