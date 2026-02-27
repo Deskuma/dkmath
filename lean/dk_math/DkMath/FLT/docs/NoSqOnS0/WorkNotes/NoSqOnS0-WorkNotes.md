@@ -170,4 +170,42 @@ status: 作業中 - phase-13: 完全証明への道（）
   - 実行: `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT DkMath.FLT.TriominoMainBridge`
   - 結果: 成功。
 
+### 2026-02-27 phase-13 継続（TriominoPrimeProvider モジュール追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/TriominoPrimeProvider.lean`（新規）
+  - `lean/dk_math/DkMath/FLT.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `TriominoPrimeProvider := GlobalPrimeExponentFLTProvider`
+  2. `FLT_general_via_triominoPrimeProvider`
+  3. `FLT_d3_via_triominoPrimeProvider`
+- 意図:
+  - `sorry` 本体は後回しのまま、
+    「provider 入力 -> Triomino bridge 経由で FLT 結論」の使用入口を独立モジュールとして固定。
+  - 外部実験・検証時に bridge/本体へ直接依存せず呼び出せる導線を確保。
+- 併せて実施:
+  - `DkMath/FLT.lean` に `import DkMath.FLT.TriominoPrimeProvider` を追加（公開面へ反映）。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.TriominoPrimeProvider DkMath.FLT`
+  - 結果: 成功（既存 warning / `TriominoFLT` の `sorry` 1件は継続）。
+
+### 2026-02-27 phase-13 継続（`FermatLastTheorem` 仮定から provider を生成）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/TriominoPrimeProvider.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoPrimeProvider_of_fermatLastTheorem`
+  2. `triominoPrimeProvider_of_oddPrimes`
+     - `FermatLastTheorem.of_odd_primes` 経由
+  3. `FLT_general_via_fermatLastTheorem`
+  4. `FLT_d3_via_fermatLastTheorem`
+- 意図:
+  - 供給モジュールを「ただの alias」から「仮定 -> provider 生成器」へ拡張。
+  - 将来の独立証明置換前でも、仮定を与えて end-to-end を動かせる実験導線を強化。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.TriominoPrimeProvider DkMath.FLT.TriominoMainBridge`
+  - 結果: 成功（`TriominoFLT` の `sorry` 1件は継続）。
+
 ## 作業ログ
