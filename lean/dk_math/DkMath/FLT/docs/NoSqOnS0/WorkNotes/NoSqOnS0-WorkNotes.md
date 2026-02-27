@@ -451,3 +451,18 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（`TriominoCosmicGapInvariant.lean` に `sorry` warning 1 件のみ）。
+
+### 2026-02-27 phase-14 継続（Branch B の未解決点を名前付き定理へ隔離）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. Branch B 後半の匿名 `sorry` を `noSqOnGN_of_primitivePrime_impl` へ切り出し
+  2. `triominoCosmicNoPowOnGN` は `primitivePrime_fromCounterexample_impl` と `noSqOnGN_of_primitivePrime_impl` の合成に整理
+- 意図:
+  - いま残っている未解決点を「一般 prime-ge5 で `q ∣ GN ∧ ¬ q ∣ u -> ¬ q^2 ∣ GN` を供給する定理」へ明示的に固定。
+  - `GcdNextResearch` の `sorry` 付き研究補題へ依存せず、未証明箇所をこのファイル 1 定理に閉じ込める。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は `noSqOnGN_of_primitivePrime_impl` の `sorry` 1件のみ）。

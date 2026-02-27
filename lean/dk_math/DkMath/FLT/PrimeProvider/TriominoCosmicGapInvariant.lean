@@ -239,6 +239,38 @@ theorem noSqPrimeOnGN_when_p_not_dvd_u_of_specs
     simpa [GN] using hq_dvd_GN_raw
   exact ⟨q, hqP, hq_dvd_GN, hNoSq hqP hq_dvd_GN hq_not_dvd_u⟩
 
+/-- Branch B の前半: prime-ge5 反例パックから Zsigmondy 原始素因子を取り出す。 -/
+theorem primitivePrime_fromCounterexample_impl :
+    PrimitivePrime_fromCounterexample := by
+  intro p x y z hpack hp_not_dvd_u
+  have hyz_coprime : Nat.Coprime z y := by
+    exact (coprime_right_of_add_pow_eq_pow hpack.hp hpack.hxy hpack.hEq).symm
+  exact DkMath.NumberTheory.GcdNext.exists_primitive_prime_factor_prime
+    (a := z) (b := y) (d := p)
+    hpack.hp
+    (le_trans (by decide : 3 ≤ 5) hpack.hp5)
+    hpack.hyz_lt
+    hpack.y_pos
+    hyz_coprime
+    hp_not_dvd_u
+
+/--
+Branch B の後半:
+原始素因子 `q` が `GN p u y` に入ったとき、
+`q^2 ∤ GN p u y` を供給する本丸インターフェイス。
+
+現時点では、コードベース本体に一般 `p ≥ 5` 用の no-`sorry` 補題がまだ無い。
+`GcdNextResearch` 側には対応する研究中補題があるが、そこ自体が `sorry` を含むため、
+ここでは依存させず、未解決点をこの 1 定理に隔離する。
+-/
+theorem noSqOnGN_of_primitivePrime_impl : NoSqOnGN_of_primitivePrime := by
+  intro p y u q hqP hq_dvd_GN hq_not_dvd_u
+  -- TODO:
+  -- 一般 prime-ge5 用の
+  --   q ∣ GN p u y ∧ ¬ q ∣ u -> ¬ q^2 ∣ GN p u y
+  -- を、NonLiftable / NoSq / ZsigmondyCyclotomic の no-`sorry` 層から供給する。
+  sorry
+
 /--
 Triomino/Cosmic 本丸（NoPowOnGN 版）:
 primitive 反例パックから、`GN p (z - y) y` に「平方止まりの素因子」が入る。
@@ -249,11 +281,7 @@ theorem triominoCosmicNoPowOnGN : NoPowOnGN_fromCounterexample := by
   have hA : NoSqPrimeOnGN_when_p_dvd_u :=
     noSqPrimeOnGN_when_p_dvd_u_impl
   have hBspec : PrimitivePrime_fromCounterexample ∧ NoSqOnGN_of_primitivePrime := by
-    -- TODO:
-    -- Branch B はさらに 2 段:
-    -- 1. Zsigmondy 等で原始素因子 `q` を取る
-    -- 2. NonLiftable / NoSq で `¬ q^2 ∣ GN` を供給する
-    sorry
+    exact ⟨primitivePrime_fromCounterexample_impl, noSqOnGN_of_primitivePrime_impl⟩
   have hB : NoSqPrimeOnGN_when_p_not_dvd_u :=
     noSqPrimeOnGN_when_p_not_dvd_u_of_specs hBspec.1 hBspec.2
   intro p x y z hpack
