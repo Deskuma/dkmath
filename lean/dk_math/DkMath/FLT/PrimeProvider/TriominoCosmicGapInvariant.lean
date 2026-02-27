@@ -27,8 +27,15 @@ primitive 反例パックがあるなら gap は `p` 乗になれない。
 -/
 theorem triominoCosmicGapInvariant : TriominoCosmicGapInvariant := by
   intro p x y z hpack
-  have _hu_pos : 0 < hpack.gap := hpack.gap_pos
-  have _hcop_uy : Nat.Coprime hpack.gap y := hpack.gap_coprime_right
+  let u : ℕ := hpack.gap
+  have hu_pos : 0 < u := by
+    simpa [u] using hpack.gap_pos
+  have hcop_uy : Nat.Coprime u y := by
+    simpa [u] using hpack.gap_coprime_right
+  have hxpow := by
+    simpa [u, PrimeCounterexamplePack.gap] using
+      (pow_eq_sub_mul_GN_of_add_pow_eq p x y z hpack.hyz hpack.hEq)
+  clear hu_pos hcop_uy hxpow
   sorry
 
 end DkMath.FLT

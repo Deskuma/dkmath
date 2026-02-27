@@ -210,3 +210,27 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5 DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（`TriominoCosmicGapInvariant.lean` に `sorry` warning 1 件）。
+
+### 2026-02-27 phase-14 継続（隔離室の `sorry` を既存補題接続の直前まで縮小）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 探索結果:
+  - `TriominoFLT` / `FLT` 周辺を `gap`, `isPow`, `GN`, `NoSq`, `NonLift` で探索したが、
+    現時点で「`PrimeCounterexamplePack -> ¬ ∃ t, (z - y) = t ^ p`」を
+    そのまま返す既存コード補題は未発見。
+  - 一方で `DkMath.FLT.Core.pow_eq_sub_mul_GN_of_add_pow_eq` は既に存在し、
+    gap への変数変換と Cosmic Formula 側への接続にそのまま使えることを確認。
+- 変更内容:
+  1. `u := hpack.gap`
+  2. `hu_pos : 0 < u`
+  3. `hcop_uy : Nat.Coprime u y`
+  4. `hxpow : x ^ p = u * GN p u y`
+     - `pow_eq_sub_mul_GN_of_add_pow_eq` から `simpa` で取得
+- 意図:
+  - 隔離室の `sorry` を「Triomino/Cosmic 固有の不変量へ接続する最後の 1 点」だけに絞る。
+  - 数論側の前処理（gap の positivity / coprime / Cosmic factorization）は既存補題で確定。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（`TriominoCosmicGapInvariant.lean` に `sorry` warning 1 件）。
