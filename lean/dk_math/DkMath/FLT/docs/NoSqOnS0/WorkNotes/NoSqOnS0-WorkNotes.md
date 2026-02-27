@@ -97,4 +97,33 @@ status: 作業中 - phase-13: 完全証明への道（）
   1. Bridge から `Main` の triomino 接続口へ実際に到達すること。
   2. `Main` 側既存 API（line 772 / 788）を変更せず接続できること。
 
+### 2026-02-27 phase-13 着手（Bridge モジュール実装）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/TriominoMainBridge.lean`（新規）
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 実装内容:
+  1. `TriominoHasNoSqFamily` / `TriominoHasNonLiftableFamily` を bridge 側で型別名化
+  2. `FLT_d3_by_padicValNat_via_triominoHasNoSqFamily_coprimeSupport_direct`
+  3. `FLT_d3_by_padicValNat_via_triominoHasNonLiftableFamily_coprimeSupport_direct`
+  4. 上記 2 定理は `Main` の既存接続口（line 772 / 788）へ委譲
+- 接続方針への適合:
+  - `Main.lean` は無変更（依存方向固定）。
+  - `TriominoFLT` と `Main` の同時 import は bridge モジュールに限定。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.TriominoMainBridge`
+  - 結果: 成功（`TriominoFLT` の既存 warning / `sorry` 1件は継続）。
+
+### 2026-02-27 phase-13 次ステップ（接続完了まで）
+
+- 次に実施すること:
+  1. `TriominoFLT` 側で `FLT_highExponent_core_pending` を完了し、`hprimeFLT` 供給を構成
+  2. bridge の入力 `TriominoHasNoSqFamily` か `TriominoHasNonLiftableFamily` を
+     Triomino 定理群から具体的に生成する補題を追加
+  3. bridge 経由で `FLT_d3_by_padicValNat...` の end-to-end 呼び出し例を 1 本作成
+- 完了判定:
+  1. `TriominoFLT.lean` の `sorry` が 0
+  2. `TriominoMainBridge.lean` から `Main` 入口へ具体供給で到達する定理がある
+  3. `lake build DkMath.FLT.TriominoMainBridge DkMath.CosmicFormula.TriominoFLT DkMath.FLT.Main` が通る
+
 ## 作業ログ
