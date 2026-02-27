@@ -392,3 +392,33 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（`TriominoCosmicGapInvariant.lean` に `sorry` warning 1 件のみ）。
+
+### 2026-02-27 phase-14 継続（Branch B を 2 段仕様へ分解）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `PrimitivePrime_fromCounterexample`
+  2. `NoSqOnGN_of_primitivePrime`
+  3. `noSqPrimeOnGN_when_p_not_dvd_u_of_specs`
+- 変更内容:
+  1. `TriominoCosmicGapInvariant.lean` に `import DkMath.FLT.CosmicPetalBridge`
+  2. `triominoCosmicNoPowOnGN` の Branch B は、
+     `PrimitivePrime_fromCounterexample ∧ NoSqOnGN_of_primitivePrime`
+     の 1 束仕様 `hBspec` に委譲する形へ変更
+- 意図:
+  - Branch B（`¬ p ∣ gap`）を
+    「原始素因子の取得」と「原始素因子の深刺し禁止」の 2 段に明示分解。
+  - `q ∣ GN` への橋は、既存の `prime_dvd_GN_of_dvd_sub_not_dvd_left` に固定。
+  - 未解決点は 1 個のまま維持しつつ、残る `sorry` の意味を
+    「Zsigmondy 出力 + NoSq/NonLiftable 入力の束をどう供給するか」
+    まで狭めた。
+- 到達点:
+  - `triominoCosmicNoPowOnGN` の `sorry` は 1 件のまま。
+  - ただし Branch B の具体実装は、
+    `PrimitivePrime_fromCounterexample` と `NoSqOnGN_of_primitivePrime`
+    をどこから供給するか、という完全に局所な問題へ分離された。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（`TriominoCosmicGapInvariant.lean` に `sorry` warning 1 件のみ）。
