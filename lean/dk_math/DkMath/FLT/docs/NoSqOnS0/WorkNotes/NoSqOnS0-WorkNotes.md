@@ -393,6 +393,35 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（`TriominoCosmicGapInvariant.lean` に `sorry` warning 1 件のみ）。
 
+### 2026-02-27 phase-14 継続（PrimeGe5 pack に非零条件を追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `PrimeGe5CounterexamplePack` に
+     - `hx0 : x ≠ 0`
+     - `hy0 : y ≠ 0`
+     - `hz0 : z ≠ 0`
+     を追加
+  2. 補助メソッド
+     - `PrimeGe5CounterexamplePack.x_pos`
+     - `PrimeGe5CounterexamplePack.y_pos`
+     - `PrimeGe5CounterexamplePack.z_pos`
+     を追加
+- 意図:
+  - Branch B で Zsigmondy 系 API に接続する際に必要な `0 < y`（および必要なら `0 < x`, `0 < z`）を、
+    pack から直接回収できるようにするため。
+  - `y = 0` のような仕様外ケースを `PrimeGe5CounterexamplePack` の定義段階で排除し、
+    `PrimitivePrime_fromCounterexample` の前提不足を構造的に解消する。
+- 到達点:
+  - `TriominoCosmicGapInvariant.lean` 側の唯一の `sorry` はそのまま 1 件。
+  - ただし残る `hBspec` のうち、
+    Zsigmondy 側の `PrimitivePrime_fromCounterexample` を既存定理へ接続する前提は揃った。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5 DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（`TriominoCosmicGapInvariant.lean` に `sorry` warning 1 件のみ）。
+
 ### 2026-02-27 phase-14 継続（Branch B を 2 段仕様へ分解）
 
 - 変更ファイル:

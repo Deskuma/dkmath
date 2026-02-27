@@ -215,10 +215,14 @@ end PrimeCounterexamplePack
 /--
 `TODO-2` 以降で使う、prime-ge5 専用の primitive 反例入力束。
 `p = 2, 3` を排除し、Body/Gap 不変量が真になりうる領域へ制限する。
+さらに、Zsigmondy 系の入口に必要な非零条件もここで固定する。
 -/
 structure PrimeGe5CounterexamplePack (p x y z : ℕ) : Prop
     extends PrimeCounterexamplePack p x y z where
   hp5 : 5 ≤ p
+  hx0 : x ≠ 0
+  hy0 : y ≠ 0
+  hz0 : z ≠ 0
 
 namespace PrimeGe5CounterexamplePack
 
@@ -253,6 +257,21 @@ lemma prime_not_dvd_right_of_prime_dvd_gap
   have hnot : ¬ Nat.Coprime h.gap y :=
     Nat.not_coprime_of_dvd_of_dvd (Nat.Prime.one_lt h.hp) hp_dvd_gap hp_dvd_y
   exact hnot h.gap_coprime_right
+
+/-- `x ≠ 0` から `0 < x` を回収する。 -/
+lemma x_pos {p x y z : ℕ} (h : PrimeGe5CounterexamplePack p x y z) :
+    0 < x :=
+  Nat.pos_of_ne_zero h.hx0
+
+/-- `y ≠ 0` から `0 < y` を回収する。 -/
+lemma y_pos {p x y z : ℕ} (h : PrimeGe5CounterexamplePack p x y z) :
+    0 < y :=
+  Nat.pos_of_ne_zero h.hy0
+
+/-- `z ≠ 0` から `0 < z` を回収する。 -/
+lemma z_pos {p x y z : ℕ} (h : PrimeGe5CounterexamplePack p x y z) :
+    0 < z :=
+  Nat.pos_of_ne_zero h.hz0
 
 end PrimeGe5CounterexamplePack
 
