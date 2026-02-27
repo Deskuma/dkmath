@@ -40,3 +40,25 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 ## 計画
 
 ## 作業ログ
+
+### 2026-02-27 phase-14 継続（`TriominoCosmicPrimeGe5` 作業用モジュール追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean`（新規）
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `FLTPrimeGe5Target := PrimeGe5FLTProvider`
+  2. `triominoCosmic_globalProvider_of_FLTPrimeGe5`
+  3. `triominoPrimeProvider_of_FLTPrimeGe5`
+  4. `FLT_prime_ge5` 実装に向けた TODO 順序・最終ターゲットを module doc/comment で固定
+- 意図:
+  - `TriominoCosmic.lean` の staging 層を `sorry` なしのまま保ちつつ、
+    `FLT_prime_ge5` 本体を育てる専用の作業場所を別ファイルへ確保。
+  - 未完成定理本体はまだ置かず、ターゲットの型と補題分解順だけを
+    Lean ファイルとして参照可能な形にした。
+- 公開面ポリシー:
+  - まだ `DkMath/FLT.lean` には載せない。
+    実装が進むまでは内部作業用モジュールとして保持する。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5`
+  - 結果: 成功。
