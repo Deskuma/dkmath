@@ -164,3 +164,25 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5`
   - 結果: 成功。
+
+### 2026-02-27 phase-14 継続（TODO-2 を invariant 接続口へ 2 段化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `TriominoCosmicGapInvariant`
+  2. `gap_not_isPow_of_counterexample`
+- 意図:
+  - `GapNotIsPowTarget` を直接埋めるのではなく、
+    Triomino/Cosmic 側が最終的に供給すべき「gap は p 乗になれない」命題を
+    先に名前で固定。
+  - `TriominoCosmicPrimeGe5` 側は薄い変換だけを持ち、
+    本丸の証明は別モジュールへ隔離しやすい構造にした。
+- 到達点:
+  - TODO-2 の未解決点は
+    `TriominoCosmicGapInvariant` をどこでどう証明するか、
+    という一点にさらに明確化された。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5`
+  - 結果: 成功。
