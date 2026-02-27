@@ -315,3 +315,28 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（`TriominoCosmicGapInvariant.lean` に `sorry` warning 1 件）。
+
+### 2026-02-27 phase-14 継続（`triominoCosmicNoPowOnGN` を 2 分岐仕様へ展開）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `NoSqPrimeOnGN_when_p_dvd_u`
+  2. `NoSqPrimeOnGN_when_p_not_dvd_u`
+  3. `noPowOnGN_of_branches`
+- 変更内容:
+  1. `triominoCosmicNoPowOnGN` に
+     「Branch A を binom 展開で閉じる / Branch B を Zsigmondy・NonLiftable で供給する」
+     という TODO コメントを明記
+- 意図:
+  - 最後の未解決点を、`p ∣ (z-y)` と `¬ p ∣ (z-y)` の 2 分岐へさらに分解。
+  - どちらの branch も `∃ q, Prime q ∧ q ∣ GN ∧ ¬ q^2 ∣ GN` を返す同型仕様に揃え、
+    `noPowOnGN_of_branches` で合成できる形を先に固定。
+- 到達点:
+  - `sorry` は引き続き `triominoCosmicNoPowOnGN` の 1 件だけ。
+  - ただし次の具体作業は
+    Branch A（`p ∣ u`）か Branch B（`¬ p ∣ u`）のどちらか一方だけを個別に埋めればよい状態まで整理された。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（`TriominoCosmicGapInvariant.lean` に `sorry` warning 1 件）。
