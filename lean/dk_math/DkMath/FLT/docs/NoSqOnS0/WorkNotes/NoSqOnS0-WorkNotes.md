@@ -1135,3 +1135,31 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTraceB_kernel` の `sorry` 1件のみ）。
+
+### 2026-02-28 phase-14 継続（`EqSeedTraceB_kernel` を `Nums / Eq / Inv` の named kernel へ内部分割）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkKernelEqSeedTraceCoreB_kernel`
+  2. `triominoWieferichShrinkKernelNumsCoreB_kernel`
+  3. `triominoWieferichShrinkKernelEq_of_nums_core`
+  4. `triominoWieferichShrinkKernelInv_of_nums_core`
+- 変更内容:
+  1. 旧 `triominoWieferichShrinkKernelEqSeedTraceB_kernel` の本体を
+     `triominoWieferichShrinkKernelEqSeedTraceCoreB_kernel` へ移し、
+     唯一の `sorry` を最深部の eq-side core に再配置
+  2. `triominoWieferichShrinkKernelEqSeedTraceB_kernel` は
+     `Nums / Eq / Inv` の named kernel を束ねる glue に変更
+  3. `triominoWieferichShrinkKernelEqSeedCoreB_kernel` は
+     引き続き `EqSeedTraceB_kernel.toSeed` を返す薄い glue を維持
+- 意図:
+  - eq-side helper の内部にも切断面を作り、
+    残る穴を「最深部の等式側 core」に固定したまま
+    `Nums`・`Eq`・`Inv` の責務を名前付きで分離する。
+  - 次段で `Nums` や `Inv` を no-`sorry` 化し、
+    最終的な穴を `Eq` 側の式変形だけに寄せるための足場を作る。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTraceCoreB_kernel` の `sorry` 1件のみ）。

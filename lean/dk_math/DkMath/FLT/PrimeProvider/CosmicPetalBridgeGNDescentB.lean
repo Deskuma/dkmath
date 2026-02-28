@@ -418,11 +418,11 @@ structure TriominoWieferichShrinkKernelInvTraceB
   hInv : TriominoWieferichShrinkWitnessInvB p x y z q s.n.x' s.n.y' s.n.z'
 
 /--
-Triomino/Cosmic 固有の等式側 trace 生成 kernel（本丸）。
+Triomino/Cosmic 固有の等式側 trace 生成 core（本丸）。
 
-最後の未解決点は、この eq-side trace をどう作るかに隔離する。
+最後の未解決点は、この eq-side trace core をどう作るかに隔離する。
 -/
-def triominoWieferichShrinkKernelEqSeedTraceB_kernel
+def triominoWieferichShrinkKernelEqSeedTraceCoreB_kernel
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
@@ -440,6 +440,104 @@ def triominoWieferichShrinkKernelEqSeedTraceB_kernel
   let _ := hq_not_dvd_gap
   let _ := hqpow_dvd_GN
   sorry
+
+/--
+canonical eq-side trace core から `Nums` 部分だけを回収する。
+
+eq-side trace の「数値生成」切断面。
+-/
+def triominoWieferichShrinkKernelNumsCoreB_kernel
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkKernelNumsB p x y z q :=
+  (triominoWieferichShrinkKernelEqSeedTraceCoreB_kernel
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).s.n
+
+/-- canonical eq-side trace core から `Eq` witness を回収する。 -/
+theorem triominoWieferichShrinkKernelEq_of_nums_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkWitnessEqB
+      p x y z q
+      (triominoWieferichShrinkKernelNumsCoreB_kernel
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x'
+      (triominoWieferichShrinkKernelNumsCoreB_kernel
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y'
+      (triominoWieferichShrinkKernelNumsCoreB_kernel
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' := by
+  let c : TriominoWieferichShrinkKernelCoreB p x y z q :=
+    triominoWieferichShrinkKernelEqSeedTraceCoreB_kernel
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  simpa [triominoWieferichShrinkKernelNumsCoreB_kernel, c] using c.s.hEq
+
+/-- canonical eq-side trace core から `Inv` witness を回収する。 -/
+theorem triominoWieferichShrinkKernelInv_of_nums_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkWitnessInvB
+      p x y z q
+      (triominoWieferichShrinkKernelNumsCoreB_kernel
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x'
+      (triominoWieferichShrinkKernelNumsCoreB_kernel
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y'
+      (triominoWieferichShrinkKernelNumsCoreB_kernel
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' := by
+  let c : TriominoWieferichShrinkKernelCoreB p x y z q :=
+    triominoWieferichShrinkKernelEqSeedTraceCoreB_kernel
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  simpa [triominoWieferichShrinkKernelNumsCoreB_kernel, c] using c.hInv
+
+/--
+Triomino/Cosmic 固有の等式側 trace 生成 kernel（glue）。
+
+`Nums / Eq / Inv` の named kernel を束ね直すだけに保つ。
+-/
+def triominoWieferichShrinkKernelEqSeedTraceB_kernel
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkKernelCoreB p x y z q := by
+  let n : TriominoWieferichShrinkKernelNumsB p x y z q :=
+    triominoWieferichShrinkKernelNumsCoreB_kernel
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  have hEq :
+      TriominoWieferichShrinkWitnessEqB p x y z q n.x' n.y' n.z' := by
+    simpa [n] using
+      triominoWieferichShrinkKernelEq_of_nums_core
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  have hInv :
+      TriominoWieferichShrinkWitnessInvB p x y z q n.x' n.y' n.z' := by
+    simpa [n] using
+      triominoWieferichShrinkKernelInv_of_nums_core
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  exact ⟨⟨n, hEq⟩, hInv⟩
 
 /--
 Triomino/Cosmic 固有の等式側 seed 生成 core（glue）。
