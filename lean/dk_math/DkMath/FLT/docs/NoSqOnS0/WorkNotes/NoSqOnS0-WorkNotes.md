@@ -798,3 +798,23 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkXYZCertB_impl` の `sorry` 1件のみ）。
+
+### 2026-02-28 phase-14 継続（`XYZCertB` のコア呼び出しを 1 回に固定）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkXYZB_of_core`
+  2. `triominoWieferichShrink_hzlt_of_core`
+  3. `triominoWieferichShrink_hpB'_of_core`
+  4. `triominoWieferichShrink_witness_of_core`
+- 変更内容:
+  1. `triominoWieferichShrinkNumsB_impl` は `XYZCertB_impl` を 1 回だけ呼び、
+     以後は `of_core` 投影から `t / hzlt / hpB' / hW` を回収する形に変更
+- 意図:
+  - 同じ core を重複して再評価する形を避け、
+    以後の証明項肥大と書換えコストを抑える。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkXYZCertB_impl` の `sorry` 1件のみ）。

@@ -265,6 +265,34 @@ def triominoWieferichShrinkXYZCertB_impl
   sorry
 
 /-- `XYZ + Cert` 束から、候補 triple だけを取り出す。 -/
+def triominoWieferichShrinkXYZB_of_core
+    {p x y z q : ℕ}
+    (s : TriominoWieferichShrinkXYZCertB p x y z q) :
+    TriominoWieferichShrinkXYZB p x y z q :=
+  s.t
+
+/-- core 値から strict 減少を回収する。 -/
+theorem triominoWieferichShrink_hzlt_of_core
+    {p x y z q : ℕ}
+    (s : TriominoWieferichShrinkXYZCertB p x y z q) :
+    s.t.z' < z :=
+  s.hc.hzlt
+
+/-- core 値から Branch B 条件保存を回収する。 -/
+theorem triominoWieferichShrink_hpB'_of_core
+    {p x y z q : ℕ}
+    (s : TriominoWieferichShrinkXYZCertB p x y z q) :
+    ¬ p ∣ (s.t.z' - s.t.y') :=
+  s.hc.hpB'
+
+/-- core 値から witness を回収する。 -/
+theorem triominoWieferichShrink_witness_of_core
+    {p x y z q : ℕ}
+    (s : TriominoWieferichShrinkXYZCertB p x y z q) :
+    TriominoWieferichShrinkWitnessB p x y z q s.t.x' s.t.y' s.t.z' :=
+  s.hc.hW
+
+/-- `XYZ + Cert` 束から、候補 triple だけを取り出す。 -/
 def triominoWieferichShrinkXYZB_impl
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
@@ -273,9 +301,10 @@ def triominoWieferichShrinkXYZB_impl
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichShrinkXYZB p x y z q :=
-  (triominoWieferichShrinkXYZCertB_impl
-    (p := p) (x := x) (y := y) (z := z) (q := q)
-    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).t
+  triominoWieferichShrinkXYZB_of_core
+    (triominoWieferichShrinkXYZCertB_impl
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN)
 
 /-- canonical shrink candidate の strict 減少。 -/
 theorem triominoWieferichShrink_hzlt
@@ -288,9 +317,10 @@ theorem triominoWieferichShrink_hzlt
     (triominoWieferichShrinkXYZB_impl
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' < z :=
-  (triominoWieferichShrinkXYZCertB_impl
-    (p := p) (x := x) (y := y) (z := z) (q := q)
-    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).hc.hzlt
+  triominoWieferichShrink_hzlt_of_core
+    (triominoWieferichShrinkXYZCertB_impl
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN)
 
 /-- canonical shrink candidate は Branch B 条件を保つ。 -/
 theorem triominoWieferichShrink_hpB'
@@ -308,9 +338,10 @@ theorem triominoWieferichShrink_hpB'
         (triominoWieferichShrinkXYZB_impl
           (p := p) (x := x) (y := y) (z := z) (q := q)
           hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y') :=
-  (triominoWieferichShrinkXYZCertB_impl
-    (p := p) (x := x) (y := y) (z := z) (q := q)
-    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).hc.hpB'
+  triominoWieferichShrink_hpB'_of_core
+    (triominoWieferichShrinkXYZCertB_impl
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN)
 
 /-- canonical shrink candidate に対する witness 回収。 -/
 theorem triominoWieferichShrink_witness
@@ -331,9 +362,10 @@ theorem triominoWieferichShrink_witness
       (triominoWieferichShrinkXYZB_impl
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' :=
-  (triominoWieferichShrinkXYZCertB_impl
-    (p := p) (x := x) (y := y) (z := z) (q := q)
-    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).hc.hW
+  triominoWieferichShrink_witness_of_core
+    (triominoWieferichShrinkXYZCertB_impl
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN)
 
 /-- `Nums` の生成は、`XYZ + Cert` からの glue に寄せる。 -/
 def triominoWieferichShrinkNumsB_impl
@@ -344,20 +376,24 @@ def triominoWieferichShrinkNumsB_impl
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichShrinkNumsB p x y z q := by
-  let t : TriominoWieferichShrinkXYZB p x y z q :=
-    triominoWieferichShrinkXYZB_impl
+  let s : TriominoWieferichShrinkXYZCertB p x y z q :=
+    triominoWieferichShrinkXYZCertB_impl
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  let t : TriominoWieferichShrinkXYZB p x y z q :=
+    triominoWieferichShrinkXYZB_of_core s
   have hc : TriominoWieferichShrinkCertB p x y z q t :=
-    { hzlt := triominoWieferichShrink_hzlt
-        (p := p) (x := x) (y := y) (z := z) (q := q)
-        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-      hpB' := triominoWieferichShrink_hpB'
-        (p := p) (x := x) (y := y) (z := z) (q := q)
-        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-      hW := triominoWieferichShrink_witness
-        (p := p) (x := x) (y := y) (z := z) (q := q)
-        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN }
+    by
+      refine
+        { hzlt := ?_
+          hpB' := ?_
+          hW := ?_ }
+      · simpa [t, triominoWieferichShrinkXYZB_of_core] using
+          triominoWieferichShrink_hzlt_of_core s
+      · simpa [t, triominoWieferichShrinkXYZB_of_core] using
+          triominoWieferichShrink_hpB'_of_core s
+      · simpa [t, triominoWieferichShrinkXYZB_of_core] using
+          triominoWieferichShrink_witness_of_core s
   exact triominoWieferichShrinkNumsB_of_XYZ_Cert t hc
 
 /--
