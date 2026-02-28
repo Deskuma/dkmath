@@ -261,11 +261,11 @@ theorem triominoWieferichDescent_impl_of_core
   exact hCore hpack hData
 
 /--
-Triomino/Cosmic 固有の縮小候補データ生成（本丸）。
+Triomino/Cosmic 固有の縮小候補データ生成コア（本丸）。
 
-最後の未解決点は、この `XYZ + Trace` をどう作るかに隔離する。
+最後の未解決点は、この `XYZ + Trace` コアをどう作るかに隔離する。
 -/
-def triominoWieferichShrinkXYZTraceB_impl
+def triominoWieferichShrinkXYZTraceB_core
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
@@ -284,6 +284,61 @@ def triominoWieferichShrinkXYZTraceB_impl
   let _ := hq_not_dvd_gap
   let _ := hqpow_dvd_GN
   sorry
+
+/-- `(XYZ + Trace)` コアから `XYZ` 候補だけを回収する。 -/
+def triominoWieferichShrinkXYZB_impl_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkXYZB p x y z q :=
+  (triominoWieferichShrinkXYZTraceB_core
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).1
+
+/-- `(XYZ + Trace)` コアから trace を回収する。 -/
+theorem triominoWieferichShrinkTraceB_impl_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkTraceB p x y z q
+      (triominoWieferichShrinkXYZB_impl_core
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN) :=
+  (triominoWieferichShrinkXYZTraceB_core
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).2
+
+/--
+Triomino/Cosmic 固有の縮小候補データ生成（glue）。
+
+`XYZ` と `Trace` の回収を束ねて `XYZ + Trace` へ再構成する。
+-/
+def triominoWieferichShrinkXYZTraceB_impl
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    { t : TriominoWieferichShrinkXYZB p x y z q //
+      TriominoWieferichShrinkTraceB p x y z q t } := by
+  let t : TriominoWieferichShrinkXYZB p x y z q :=
+    triominoWieferichShrinkXYZB_impl_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  have htr :
+      TriominoWieferichShrinkTraceB p x y z q t := by
+    simpa [t, triominoWieferichShrinkXYZB_impl_core] using
+      triominoWieferichShrinkTraceB_impl_core
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  exact ⟨t, htr⟩
 
 /-- `XYZ + Trace` から `XYZ + Cert` 束へ戻す glue。 -/
 def triominoWieferichShrinkXYZCertB_impl
