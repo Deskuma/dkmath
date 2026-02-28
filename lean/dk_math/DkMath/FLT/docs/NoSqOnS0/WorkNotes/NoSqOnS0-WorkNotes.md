@@ -667,3 +667,22 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichDescentCoreB_impl` の `sorry` 1件のみ）。
+
+### 2026-02-27 phase-14 継続（step / core 分離、最後の `sorry` を step へ移動）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `TriominoWieferichDescentResultB`
+  2. `TriominoWieferichDescentStepB`
+  3. `triominoWieferichDescentCoreB_of_step`
+  4. `triominoWieferichDescentStepB_impl`
+- 変更内容:
+  1. `triominoWieferichDescentCoreB_impl` は `step` から回収する配線へ変更
+- 意図:
+  - 縮小器の「成果物の形」と「step 実装」を明示し、
+    最後の未解決点を `triominoWieferichDescentStepB_impl` 1 箇所に移した。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichDescentStepB_impl` の `sorry` 1件のみ）。

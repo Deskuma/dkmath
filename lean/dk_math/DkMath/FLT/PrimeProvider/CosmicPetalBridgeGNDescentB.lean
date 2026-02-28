@@ -1,4 +1,4 @@
-/- 
+/-
 Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
 Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
@@ -59,6 +59,28 @@ theorem wieferichDescentDataB_of_pack
   exact ⟨hqP, hpB, hq_not_dvd_gap, hdiff_eq, hqpow_dvd_diff, hfactor, hqpow_dvd_GN⟩
 
 /--
+Branch B 縮小の成果物。
+
+`z` を strictly に減らしつつ、prime-ge5 反例パックと Branch B 条件を保った次状態を表す。
+-/
+structure TriominoWieferichDescentResultB (p z : ℕ) : Prop where
+  x' y' z' : ℕ
+  hpack' : PrimeGe5CounterexamplePack p x' y' z'
+  hpB' : ¬ p ∣ (z' - y')
+  hzlt : z' < z
+
+/--
+第2層の最小核: Triomino/Cosmic 固有の縮小器 step。
+
+純算術データから、次の反例候補を `Result` 構造体として返すだけにする。
+-/
+abbrev TriominoWieferichDescentStepB : Prop :=
+  ∀ {p x y z q : ℕ},
+    PrimeGe5CounterexamplePack p x y z →
+    WieferichDescentDataB p x y z q →
+    TriominoWieferichDescentResultB p z
+
+/--
 第2層: Triomino/Cosmic 固有の縮小器コア。
 
 `q^p ∣ GN` まで整備済みの純算術データから、Branch B 条件を保ったより小さい反例を返す。
@@ -69,6 +91,14 @@ abbrev TriominoWieferichDescentCoreB : Prop :=
     WieferichDescentDataB p x y z q →
     ∃ x' y' z' : ℕ,
       PrimeGe5CounterexamplePack p x' y' z' ∧ ¬ p ∣ (z' - y') ∧ z' < z
+
+/-- `step` 形式の縮小器があれば、`∃` 形式の core へ戻せる。 -/
+theorem triominoWieferichDescentCoreB_of_step
+    (hStep : TriominoWieferichDescentStepB) :
+    TriominoWieferichDescentCoreB := by
+  intro p x y z q hpack hData
+  rcases hStep hpack hData with ⟨x', y', z', hpack', hpB', hzlt⟩
+  exact ⟨x', y', z', hpack', hpB', hzlt⟩
 
 /-- 純算術データ抽出と縮小器コアを合成すると、Branch B の下降仕様になる。 -/
 theorem triominoWieferichDescent_impl_of_core
@@ -82,13 +112,18 @@ theorem triominoWieferichDescent_impl_of_core
 /--
 Triomino/Cosmic 固有の縮小器コア。
 
-現時点では、最後の未解決点をこの 1 定理に隔離する。
+現時点では、最後の未解決点を `step` 実装 1 箇所へ落とし込み、この定理自体は配線に保つ。
 -/
-theorem triominoWieferichDescentCoreB_impl : TriominoWieferichDescentCoreB := by
+theorem triominoWieferichDescentStepB_impl : TriominoWieferichDescentStepB := by
   -- TODO:
   -- `WieferichDescentDataB` に含まれる `q^p ∣ GN p (z - y) y` を使い、
-  -- Triomino/Cosmic の縮小操作で `z' < z` の新しい反例を構成する。
+  -- Triomino/Cosmic の縮小操作で `z' < z` の新しい反例候補を構成する。
   sorry
+
+/-- `step` 実装から `core` を回収する。 -/
+theorem triominoWieferichDescentCoreB_impl : TriominoWieferichDescentCoreB := by
+  exact triominoWieferichDescentCoreB_of_step
+    triominoWieferichDescentStepB_impl
 
 /--
 Branch B の下降法本体。
