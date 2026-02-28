@@ -1191,3 +1191,30 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-01 phase-14 継続（`Nums / Eq / Inv` の投影版を `_of_pack` に退避）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkKernelNums_of_pack`
+  2. `triominoWieferichShrinkKernelEq_of_nums_of_pack`
+  3. `triominoWieferichShrinkKernelInv_of_nums_of_pack`
+- 変更内容:
+  1. hidden pack 依存の投影版 `Nums / Eq / Inv` core を `_of_pack` 名へ退避
+  2. 公開側の
+     `triominoWieferichShrinkKernelNumsCoreB_kernel`、
+     `triominoWieferichShrinkKernelEq_of_nums_core`、
+     `triominoWieferichShrinkKernelInv_of_nums_core`
+     は、新設した `_of_pack` 版への wrapper に変更
+  3. visible glue（`EqSeedTraceCoreB_kernel` 以降）は
+     引き続き公開側の 3 つだけを見る形を維持
+- 意図:
+  - 依存反転のための名前を先に確保し、
+    次段で `Nums` と `Inv` を独立実装へ差し替えるレールを敷く。
+  - 現時点では挙動を変えず、
+    「表側は新しい kernel 枠だけを見る」構図を固定する。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
