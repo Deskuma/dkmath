@@ -872,3 +872,23 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkXYZTraceB_kernel` の `sorry` 1件のみ）。
+
+### 2026-02-28 phase-14 継続（`XYZ` に `ctor` を埋め込み、`Trace_core` を回収化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `TriominoWieferichShrinkCtorB`
+  2. `triominoWieferichShrinkXYZ_kernel`
+- 変更内容:
+  1. `TriominoWieferichShrinkXYZB` に `ctor` を追加
+  2. `triominoWieferichShrinkTrace_core` は `t.ctor` から `Trace` を回収する形へ変更
+  3. `triominoWieferichShrinkXYZTraceB_kernel` を廃止し、
+     `triominoWieferichShrinkXYZ_core` は `XYZ_kernel` の単純委譲へ変更
+- 意図:
+  - `Trace` 側の責務を「回収」に落とし、
+    最後の未解決点を `XYZ` 生成 kernel（= 縮小変換の構成そのもの）へ寄せた。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkXYZ_kernel` の `sorry` 1件のみ）。

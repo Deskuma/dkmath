@@ -86,11 +86,23 @@ structure TriominoWieferichShrinkWitnessB
   hy0' : y' ≠ 0
   hz0' : z' ≠ 0
 
+/--
+縮小 triple に埋め込む構成の痕跡。
+
+`XYZ` だけから `Trace` を回収できるよう、strict 減少・Branch B 維持・witness を保持する。
+-/
+structure TriominoWieferichShrinkCtorB
+    (p x y z q x' y' z' : ℕ) : Prop where
+  hzlt : z' < z
+  hpB' : ¬ p ∣ (z' - y')
+  hW : TriominoWieferichShrinkWitnessB p x y z q x' y' z'
+
 /-- まずは縮小候補の数値 triple だけを与える層。 -/
 structure TriominoWieferichShrinkXYZB (p x y z q : ℕ) where
   x' : ℕ
   y' : ℕ
   z' : ℕ
+  ctor : TriominoWieferichShrinkCtorB p x y z q x' y' z'
 
 /-- 生成した triple に対する縮小の証明材料。 -/
 structure TriominoWieferichShrinkCertB
@@ -261,22 +273,21 @@ theorem triominoWieferichDescent_impl_of_core
   exact hCore hpack hData
 
 /--
-Triomino/Cosmic 固有の縮小候補データ生成 kernel（本丸）。
+Triomino/Cosmic 固有の縮小候補 `XYZ` 生成 kernel（本丸）。
 
-最後の未解決点は、この `XYZ + Trace` kernel をどう作るかに隔離する。
+最後の未解決点は、この `XYZ` とその `ctor` をどう作るかに隔離する。
 -/
-def triominoWieferichShrinkXYZTraceB_kernel
+def triominoWieferichShrinkXYZ_kernel
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
     (hqP : Nat.Prime q)
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
-    { t : TriominoWieferichShrinkXYZB p x y z q //
-      TriominoWieferichShrinkTraceB p x y z q t } := by
+    TriominoWieferichShrinkXYZB p x y z q := by
   -- TODO:
   -- `q^p ∣ GN p (z - y) y` と `¬ q ∣ (z - y)` を使い、
-  -- Triomino/Cosmic の縮小操作で `(x', y', z')` と trace を同時に構成する。
+  -- Triomino/Cosmic の縮小操作で `(x', y', z')` と `ctor` を同時に構成する。
   let _u : ℕ := z - y
   let _ := hpack
   let _ := hpB
@@ -294,9 +305,9 @@ def triominoWieferichShrinkXYZ_core
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichShrinkXYZB p x y z q :=
-  (triominoWieferichShrinkXYZTraceB_kernel
+  triominoWieferichShrinkXYZ_kernel
     (p := p) (x := x) (y := y) (z := z) (q := q)
-    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).1
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /-- kernel から canonical `XYZ` に対する trace を回収する。 -/
 theorem triominoWieferichShrinkTrace_core
@@ -309,10 +320,16 @@ theorem triominoWieferichShrinkTrace_core
     TriominoWieferichShrinkTraceB p x y z q
       (triominoWieferichShrinkXYZ_core
         (p := p) (x := x) (y := y) (z := z) (q := q)
-        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN) :=
-  (triominoWieferichShrinkXYZTraceB_kernel
-    (p := p) (x := x) (y := y) (z := z) (q := q)
-    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).2
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN) := by
+  let t : TriominoWieferichShrinkXYZB p x y z q :=
+    triominoWieferichShrinkXYZ_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  refine
+    { hzlt := t.ctor.hzlt
+      hpB' := t.ctor.hpB'
+      hW := ?_ }
+  simpa [t] using t.ctor.hW
 
 /--
 Triomino/Cosmic 固有の縮小候補データ生成 core（glue）。
