@@ -448,6 +448,31 @@ def triominoWieferichShrinkKernelEqSeedB_kernel
     (p := p) (x := x) (y := y) (z := z) (q := q)
     hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).toSeed
 
+/-- canonical seed であることが分かっている seed から `Inv` witness を回収する。 -/
+theorem triominoWieferichShrinkKernelInv_of_seed_core'
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y)
+    (s : TriominoWieferichShrinkKernelSeedB p x y z q)
+    (hs :
+      s =
+        triominoWieferichShrinkKernelEqSeedB_kernel
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN) :
+    TriominoWieferichShrinkWitnessInvB p x y z q s.n.x' s.n.y' s.n.z' := by
+  subst hs
+  let c : TriominoWieferichShrinkKernelCoreB p x y z q :=
+    triominoWieferichShrinkKernelEqSeedCoreB_kernel
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  simpa
+      [triominoWieferichShrinkKernelEqSeedB_kernel,
+        TriominoWieferichShrinkKernelCoreB.toSeed, c] using
+    c.hInv
+
 /-- canonical eq-side seed から `Inv` witness を回収する。 -/
 theorem triominoWieferichShrinkKernelInv_of_seed_core
     {p x y z q : ℕ}
@@ -467,14 +492,14 @@ theorem triominoWieferichShrinkKernelInv_of_seed_core
       (triominoWieferichShrinkKernelEqSeedB_kernel
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).n.z' := by
-  let c : TriominoWieferichShrinkKernelCoreB p x y z q :=
-    triominoWieferichShrinkKernelEqSeedCoreB_kernel
+  let s : TriominoWieferichShrinkKernelSeedB p x y z q :=
+    triominoWieferichShrinkKernelEqSeedB_kernel
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  simpa
-      [triominoWieferichShrinkKernelEqSeedB_kernel,
-        TriominoWieferichShrinkKernelCoreB.toSeed, c] using
-    c.hInv
+  simpa [s] using
+    triominoWieferichShrinkKernelInv_of_seed_core'
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN s rfl
 
 /--
 Triomino/Cosmic 固有の縮小候補内部 core 生成 kernel（glue）。
@@ -495,10 +520,10 @@ def triominoWieferichShrinkKernelCoreB_kernel
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   have hInv :
       TriominoWieferichShrinkWitnessInvB p x y z q s.n.x' s.n.y' s.n.z' := by
-    simpa [s] using
-      triominoWieferichShrinkKernelInv_of_seed_core
+    exact
+      triominoWieferichShrinkKernelInv_of_seed_core'
         (p := p) (x := x) (y := y) (z := z) (q := q)
-        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN s rfl
   exact ⟨s, hInv⟩
 
 /-- canonical internal seed から `KernelSeed` を回収する。 -/
@@ -595,10 +620,14 @@ theorem triominoWieferichShrinkKernelInv_of_seed
       (triominoWieferichShrinkKernelSeedB_kernel
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).n.z' := by
-  simpa [triominoWieferichShrinkKernelSeedB_kernel] using
-    triominoWieferichShrinkKernelInv_of_seed_core
+  let s : TriominoWieferichShrinkKernelSeedB p x y z q :=
+    triominoWieferichShrinkKernelSeedB_kernel
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  simpa [triominoWieferichShrinkKernelSeedB_kernel, s] using
+    triominoWieferichShrinkKernelInv_of_seed_core'
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN s rfl
 
 /-- canonical `Nums` から `Inv` witness を回収する。 -/
 theorem triominoWieferichShrinkKernelInv_of_nums
@@ -643,10 +672,10 @@ def triominoWieferichShrinkKernelDataB_kernel
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   have hInv :
       TriominoWieferichShrinkWitnessInvB p x y z q s.n.x' s.n.y' s.n.z' := by
-    simpa [s] using
-      triominoWieferichShrinkKernelInv_of_seed
+    simpa [triominoWieferichShrinkKernelSeedB_kernel, s] using
+      triominoWieferichShrinkKernelInv_of_seed_core'
         (p := p) (x := x) (y := y) (z := z) (q := q)
-        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN s rfl
   exact s.toData hInv
 
 /--

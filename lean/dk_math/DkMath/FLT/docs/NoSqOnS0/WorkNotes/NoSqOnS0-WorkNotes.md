@@ -1044,3 +1044,32 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedCoreB_kernel` の `sorry` 1件のみ）。
+
+### 2026-02-28 phase-14 継続（`Inv_of_seed_core` に seed 引数版を追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkKernelInv_of_seed_core'`
+- 変更内容:
+  1. `triominoWieferichShrinkKernelInv_of_seed_core'` を、
+     `s : KernelSeedB` と
+     `s = triominoWieferichShrinkKernelEqSeedB_kernel ...`
+     という canonicality 証明を受ける形で追加
+  2. `triominoWieferichShrinkKernelInv_of_seed_core` は
+     上記 seed 引数版を呼ぶ wrapper に変更
+  3. `triominoWieferichShrinkKernelCoreB_kernel` は
+     ローカル `s` に対して `Inv_of_seed_core' ... s rfl` を使う形に変更
+  4. `triominoWieferichShrinkKernelInv_of_seed` と
+     `triominoWieferichShrinkKernelDataB_kernel` も、
+     既に束ねた `s` を `Inv_of_seed_core'` へ渡す形に変更
+- 意図:
+  - `Inv` 回収のインターフェースを「先に得た seed を使う」形へ寄せ、
+    外側の glue で同じ seed を再束縛しやすくする。
+  - まだ一般の seed だけでは `Inv` を証明できないため、
+    当面は canonicality 証明付きの seed 引数版として整理し、
+    将来 `Inv` の独立補題へ差し替える足場を作る。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedCoreB_kernel` の `sorry` 1件のみ）。
