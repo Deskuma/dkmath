@@ -362,7 +362,15 @@ structure TriominoWieferichShrinkKernelNumsB (p x y z q : ℕ) where
 structure TriominoWieferichShrinkKernelSeedB (p x y z q : ℕ) where
   n : TriominoWieferichShrinkKernelNumsB p x y z q
   hEq : TriominoWieferichShrinkWitnessEqB p x y z q n.x' n.y' n.z'
-  hInv : TriominoWieferichShrinkWitnessInvB p x y z q n.x' n.y' n.z'
+
+/--
+`KernelSeedB` の上に `Inv` witness を載せた内部 core 束。
+
+`hInv` を seed から切り離し、必要な箇所だけで回収できるようにする。
+-/
+structure TriominoWieferichShrinkKernelCoreB (p x y z q : ℕ) where
+  s : TriominoWieferichShrinkKernelSeedB p x y z q
+  hInv : TriominoWieferichShrinkWitnessInvB p x y z q s.n.x' s.n.y' s.n.z'
 
 /-- 内部 data から `Nums` 部分を取り出す。 -/
 def TriominoWieferichShrinkKernelDataB.toNums
@@ -375,10 +383,11 @@ def TriominoWieferichShrinkKernelDataB.toNums
     hzlt := d.hzlt
     hpB' := d.hpB' }
 
-/-- 内部 seed から `KernelData` へ戻す。 -/
+/-- 内部 seed と `Inv` witness から `KernelData` へ戻す。 -/
 def TriominoWieferichShrinkKernelSeedB.toData
     {p x y z q : ℕ}
-    (s : TriominoWieferichShrinkKernelSeedB p x y z q) :
+    (s : TriominoWieferichShrinkKernelSeedB p x y z q)
+    (hInv : TriominoWieferichShrinkWitnessInvB p x y z q s.n.x' s.n.y' s.n.z') :
     TriominoWieferichShrinkKernelDataB p x y z q :=
   { x' := s.n.x'
     y' := s.n.y'
@@ -386,24 +395,38 @@ def TriominoWieferichShrinkKernelSeedB.toData
     hzlt := s.n.hzlt
     hpB' := s.n.hpB'
     hEq := s.hEq
-    hInv := s.hInv }
+    hInv := hInv }
+
+/-- 内部 core 束から `KernelSeed` を取り出す。 -/
+def TriominoWieferichShrinkKernelCoreB.toSeed
+    {p x y z q : ℕ}
+    (c : TriominoWieferichShrinkKernelCoreB p x y z q) :
+    TriominoWieferichShrinkKernelSeedB p x y z q :=
+  c.s
+
+/-- 内部 core 束から `KernelData` へ戻す。 -/
+def TriominoWieferichShrinkKernelCoreB.toData
+    {p x y z q : ℕ}
+    (c : TriominoWieferichShrinkKernelCoreB p x y z q) :
+    TriominoWieferichShrinkKernelDataB p x y z q :=
+  c.s.toData c.hInv
 
 /--
-Triomino/Cosmic 固有の縮小候補内部 seed 生成 kernel（本丸）。
+Triomino/Cosmic 固有の縮小候補内部 core 生成 kernel（本丸）。
 
-最後の未解決点は、この seed をどう作るかに隔離する。
+最後の未解決点は、この core 束をどう作るかに隔離する。
 -/
-def triominoWieferichShrinkKernelSeedB_kernel
+def triominoWieferichShrinkKernelCoreB_kernel
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
     (hqP : Nat.Prime q)
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
-    TriominoWieferichShrinkKernelSeedB p x y z q := by
+    TriominoWieferichShrinkKernelCoreB p x y z q := by
   -- TODO:
   -- `q^p ∣ GN p (z - y) y` と `¬ q ∣ (z - y)` を使い、
-  -- Triomino/Cosmic の縮小操作で `Nums` と、その上の `Eq / Inv` witness を構成する。
+  -- Triomino/Cosmic の縮小操作で seed（`Nums + Eq`）と `Inv` witness を構成する。
   let _u : ℕ := z - y
   let _ := hpack
   let _ := hpB
@@ -411,6 +434,19 @@ def triominoWieferichShrinkKernelSeedB_kernel
   let _ := hq_not_dvd_gap
   let _ := hqpow_dvd_GN
   sorry
+
+/-- canonical internal core から `KernelSeed` を回収する。 -/
+def triominoWieferichShrinkKernelSeedB_kernel
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkKernelSeedB p x y z q :=
+  (triominoWieferichShrinkKernelCoreB_kernel
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).toSeed
 
 /-- canonical internal seed から `Nums` 部分だけを回収する。 -/
 def triominoWieferichShrinkKernelNumsB_kernel
@@ -424,6 +460,31 @@ def triominoWieferichShrinkKernelNumsB_kernel
   (triominoWieferichShrinkKernelSeedB_kernel
     (p := p) (x := x) (y := y) (z := z) (q := q)
     hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).n
+
+/-- canonical internal seed から `Eq` witness を回収する。 -/
+theorem triominoWieferichShrinkKernelEq_of_seed
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkWitnessEqB
+      p x y z q
+      (triominoWieferichShrinkKernelSeedB_kernel
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).n.x'
+      (triominoWieferichShrinkKernelSeedB_kernel
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).n.y'
+      (triominoWieferichShrinkKernelSeedB_kernel
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).n.z' := by
+  let s : TriominoWieferichShrinkKernelSeedB p x y z q :=
+    triominoWieferichShrinkKernelSeedB_kernel
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  simpa [s] using s.hEq
 
 /-- canonical `Nums` から `Eq` witness を回収する。 -/
 theorem triominoWieferichShrinkKernelEq_of_nums
@@ -444,11 +505,38 @@ theorem triominoWieferichShrinkKernelEq_of_nums
       (triominoWieferichShrinkKernelNumsB_kernel
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' := by
-  let s : TriominoWieferichShrinkKernelSeedB p x y z q :=
-    triominoWieferichShrinkKernelSeedB_kernel
+  simpa [triominoWieferichShrinkKernelNumsB_kernel] using
+    triominoWieferichShrinkKernelEq_of_seed
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  simpa [triominoWieferichShrinkKernelNumsB_kernel, s] using s.hEq
+
+/-- canonical internal seed から `Inv` witness を回収する。 -/
+theorem triominoWieferichShrinkKernelInv_of_seed
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkWitnessInvB
+      p x y z q
+      (triominoWieferichShrinkKernelSeedB_kernel
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).n.x'
+      (triominoWieferichShrinkKernelSeedB_kernel
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).n.y'
+      (triominoWieferichShrinkKernelSeedB_kernel
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).n.z' := by
+  let c : TriominoWieferichShrinkKernelCoreB p x y z q :=
+    triominoWieferichShrinkKernelCoreB_kernel
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  simpa
+      [triominoWieferichShrinkKernelSeedB_kernel,
+        TriominoWieferichShrinkKernelCoreB.toSeed, c] using
+    c.hInv
 
 /-- canonical `Nums` から `Inv` witness を回収する。 -/
 theorem triominoWieferichShrinkKernelInv_of_nums
@@ -469,11 +557,10 @@ theorem triominoWieferichShrinkKernelInv_of_nums
       (triominoWieferichShrinkKernelNumsB_kernel
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' := by
-  let s : TriominoWieferichShrinkKernelSeedB p x y z q :=
-    triominoWieferichShrinkKernelSeedB_kernel
+  simpa [triominoWieferichShrinkKernelNumsB_kernel] using
+    triominoWieferichShrinkKernelInv_of_seed
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  simpa [triominoWieferichShrinkKernelNumsB_kernel, s] using s.hInv
 
 /--
 Triomino/Cosmic 固有の縮小候補内部データ生成 kernel（glue）。
@@ -488,10 +575,17 @@ def triominoWieferichShrinkKernelDataB_kernel
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichShrinkKernelDataB p x y z q := by
-  exact
-    (triominoWieferichShrinkKernelSeedB_kernel
+  let s : TriominoWieferichShrinkKernelSeedB p x y z q :=
+    triominoWieferichShrinkKernelSeedB_kernel
       (p := p) (x := x) (y := y) (z := z) (q := q)
-      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).toData
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  have hInv :
+      TriominoWieferichShrinkWitnessInvB p x y z q s.n.x' s.n.y' s.n.z' := by
+    simpa [s] using
+      triominoWieferichShrinkKernelInv_of_seed
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  exact s.toData hInv
 
 /--
 Triomino/Cosmic 固有の縮小候補 `XYZ` 生成 kernel（glue）。

@@ -969,3 +969,51 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelSeedB_kernel` の `sorry` 1件のみ）。
+
+### 2026-02-28 phase-14 継続（`hInv` を seed から切り離し、内部 core 束へ退避）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `TriominoWieferichShrinkKernelCoreB`
+  2. `TriominoWieferichShrinkKernelCoreB.toSeed`
+  3. `TriominoWieferichShrinkKernelCoreB.toData`
+  4. `triominoWieferichShrinkKernelCoreB_kernel`
+- 変更内容:
+  1. `TriominoWieferichShrinkKernelSeedB` から `hInv` を削除し、seed は `n : KernelNumsB` と `hEq` だけを持つ形へ変更
+  2. `TriominoWieferichShrinkKernelSeedB.toData` は `hInv` を外部引数で受け取る形へ変更
+  3. `triominoWieferichShrinkKernelSeedB_kernel` は `KernelCoreB_kernel` から seed を回収する glue に変更
+  4. `triominoWieferichShrinkKernelInv_of_nums` は `KernelCoreB_kernel` から `hInv` を回収する投影に変更
+  5. `triominoWieferichShrinkKernelDataB_kernel` は `KernelCoreB.toData` の完全委譲へ変更
+- 意図:
+  - `hInv` を seed の責務から外し、
+    seed 自体を「数値生成 + 等式保持」に寄せた切断面として読めるようにする。
+  - 残る未解決点を `KernelCoreB_kernel` に集約しつつ、
+    以後 `Inv` を seed と独立に補題化できる形に地盤を整える。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelCoreB_kernel` の `sorry` 1件のみ）。
+
+### 2026-02-28 phase-14 継続（seed レベルの `Eq / Inv` 回収面を明示化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkKernelEq_of_seed`
+  2. `triominoWieferichShrinkKernelInv_of_seed`
+- 変更内容:
+  1. `triominoWieferichShrinkKernelEq_of_nums` は `Eq_of_seed` の `Nums` 版 wrapper に変更
+  2. `triominoWieferichShrinkKernelInv_of_nums` は `Inv_of_seed` の `Nums` 版 wrapper に変更
+  3. `triominoWieferichShrinkKernelDataB_kernel` は
+     `KernelCoreB.toData` 直呼びをやめ、
+     `KernelSeedB_kernel` と `triominoWieferichShrinkKernelInv_of_seed` を束ねる glue に変更
+- 意図:
+  - `Eq` と `Inv` の回収インターフェースをどちらも seed レベルで揃え、
+    将来 `Eq` 側・`Inv` 側を独立に差し替えやすい形へ整理する。
+  - `KernelDataB_kernel` から core 直依存を外し、
+    公開面では `Seed + Inv` の二段回収だけが見える状態にする。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelCoreB_kernel` の `sorry` 1件のみ）。
