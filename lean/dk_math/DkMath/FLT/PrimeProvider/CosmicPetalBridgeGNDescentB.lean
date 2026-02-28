@@ -264,6 +264,77 @@ def triominoWieferichShrinkXYZCertB_impl
   let _ := hqpow_dvd_GN
   sorry
 
+/-- `XYZ + Cert` 束から、候補 triple だけを取り出す。 -/
+def triominoWieferichShrinkXYZB_impl
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkXYZB p x y z q :=
+  (triominoWieferichShrinkXYZCertB_impl
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).t
+
+/-- canonical shrink candidate の strict 減少。 -/
+theorem triominoWieferichShrink_hzlt
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    (triominoWieferichShrinkXYZB_impl
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' < z :=
+  (triominoWieferichShrinkXYZCertB_impl
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).hc.hzlt
+
+/-- canonical shrink candidate は Branch B 条件を保つ。 -/
+theorem triominoWieferichShrink_hpB'
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    ¬ p ∣
+      ((triominoWieferichShrinkXYZB_impl
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z'
+        -
+        (triominoWieferichShrinkXYZB_impl
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y') :=
+  (triominoWieferichShrinkXYZCertB_impl
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).hc.hpB'
+
+/-- canonical shrink candidate に対する witness 回収。 -/
+theorem triominoWieferichShrink_witness
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkWitnessB
+      p x y z q
+      (triominoWieferichShrinkXYZB_impl
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x'
+      (triominoWieferichShrinkXYZB_impl
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y'
+      (triominoWieferichShrinkXYZB_impl
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' :=
+  (triominoWieferichShrinkXYZCertB_impl
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).hc.hW
+
 /-- `Nums` の生成は、`XYZ + Cert` からの glue に寄せる。 -/
 def triominoWieferichShrinkNumsB_impl
     {p x y z q : ℕ}
@@ -273,11 +344,20 @@ def triominoWieferichShrinkNumsB_impl
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichShrinkNumsB p x y z q := by
-  let s : TriominoWieferichShrinkXYZCertB p x y z q :=
-    triominoWieferichShrinkXYZCertB_impl
+  let t : TriominoWieferichShrinkXYZB p x y z q :=
+    triominoWieferichShrinkXYZB_impl
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  rcases s with ⟨t, hc⟩
+  have hc : TriominoWieferichShrinkCertB p x y z q t :=
+    { hzlt := triominoWieferichShrink_hzlt
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+      hpB' := triominoWieferichShrink_hpB'
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+      hW := triominoWieferichShrink_witness
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN }
   exact triominoWieferichShrinkNumsB_of_XYZ_Cert t hc
 
 /--

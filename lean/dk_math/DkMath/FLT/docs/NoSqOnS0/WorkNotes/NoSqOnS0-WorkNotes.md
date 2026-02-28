@@ -778,3 +778,23 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkXYZCertB_impl` の `sorry` 1件のみ）。
+
+### 2026-02-28 phase-14 継続（`XYZ / hzlt / hpB' / witness` 投影レイヤ追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkXYZB_impl`
+  2. `triominoWieferichShrink_hzlt`
+  3. `triominoWieferichShrink_hpB'`
+  4. `triominoWieferichShrink_witness`
+- 変更内容:
+  1. `triominoWieferichShrinkNumsB_impl` は上記 4 段の投影を束ねる glue に変更
+- 意図:
+  - `XYZCertB_impl` の単一コアを維持したまま、
+    `XYZ` 生成・減少・Branch B 維持・witness 回収の名前付き切断面を用意し、
+    今後の局所補題化を進めやすくした。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkXYZCertB_impl` の `sorry` 1件のみ）。
