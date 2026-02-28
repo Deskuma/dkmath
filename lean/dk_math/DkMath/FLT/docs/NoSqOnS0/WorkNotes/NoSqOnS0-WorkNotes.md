@@ -1163,3 +1163,31 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTraceCoreB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-01 phase-14 継続（最深部を hidden pack に落とし、`EqSeedTraceCoreB_kernel` を glue 化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkKernelEqSeedTracePackB_kernel`
+- 変更内容:
+  1. 旧 `triominoWieferichShrinkKernelEqSeedTraceCoreB_kernel` の本体を
+     `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` へ移し、
+     唯一の `sorry` を hidden pack に再配置
+  2. `triominoWieferichShrinkKernelNumsCoreB_kernel`、
+     `triominoWieferichShrinkKernelEq_of_nums_core`、
+     `triominoWieferichShrinkKernelInv_of_nums_core` は
+     hidden pack からの投影へ切り替え
+  3. 新しい `triominoWieferichShrinkKernelEqSeedTraceCoreB_kernel` は
+     上記 `Nums / Eq / Inv` の named kernel を束ねる visible glue に変更
+  4. `triominoWieferichShrinkKernelEqSeedTraceB_kernel` は
+     `EqSeedTraceCoreB_kernel` の完全委譲へ変更
+- 意図:
+  - visible な `EqSeedTraceCoreB_kernel` を配線専用にして、
+    表側の責務分離をさらに明確にする。
+  - `Nums / Eq / Inv` の公開切断面を維持したまま、
+    残る未解決点を hidden pack 1 箇所へ押し下げる。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
