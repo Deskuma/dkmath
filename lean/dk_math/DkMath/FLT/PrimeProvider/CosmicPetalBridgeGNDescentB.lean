@@ -63,8 +63,10 @@ Branch B 縮小の成果物。
 
 `z` を strictly に減らしつつ、prime-ge5 反例パックと Branch B 条件を保った次状態を表す。
 -/
-structure TriominoWieferichDescentResultB (p z : ℕ) : Prop where
-  x' y' z' : ℕ
+structure TriominoWieferichDescentResultB (p z : ℕ) where
+  x' : ℕ
+  y' : ℕ
+  z' : ℕ
   hpack' : PrimeGe5CounterexamplePack p x' y' z'
   hpB' : ¬ p ∣ (z' - y')
   hzlt : z' < z
@@ -74,7 +76,7 @@ structure TriominoWieferichDescentResultB (p z : ℕ) : Prop where
 
 純算術データから、次の反例候補を `Result` 構造体として返すだけにする。
 -/
-abbrev TriominoWieferichDescentStepB : Prop :=
+abbrev TriominoWieferichDescentStepB : Type :=
   ∀ {p x y z q : ℕ},
     PrimeGe5CounterexamplePack p x y z →
     WieferichDescentDataB p x y z q →
@@ -110,15 +112,42 @@ theorem triominoWieferichDescent_impl_of_core
   exact hCore hpack hData
 
 /--
-Triomino/Cosmic 固有の縮小器コア。
+Triomino/Cosmic 固有の縮小器（本丸）。
 
-現時点では、最後の未解決点を `step` 実装 1 箇所へ落とし込み、この定理自体は配線に保つ。
+現時点では、最後の未解決点をこの 1 定理に隔離する。
 -/
-theorem triominoWieferichDescentStepB_impl : TriominoWieferichDescentStepB := by
+def triominoWieferichShrinkB
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichDescentResultB p z := by
   -- TODO:
-  -- `WieferichDescentDataB` に含まれる `q^p ∣ GN p (z - y) y` を使い、
+  -- `q^p ∣ GN p (z - y) y` と `¬ q ∣ (z - y)` を使い、
   -- Triomino/Cosmic の縮小操作で `z' < z` の新しい反例候補を構成する。
+  -- `hpack` と `hpB` は再パック化・Branch B 維持のために保持している。
+  let _u : ℕ := z - y
+  let _ := hpack
+  let _ := hpB
+  let _ := hqP
+  let _ := hq_not_dvd_gap
+  let _ := hqpow_dvd_GN
   sorry
+
+/--
+`step` 実装は、データ抽出済みの項目を縮小器へ渡すだけの glue に保つ。
+-/
+def triominoWieferichDescentStepB_impl : TriominoWieferichDescentStepB := by
+  intro p x y z q hpack hData
+  exact triominoWieferichShrinkB
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack
+    hData.hpB
+    hData.hqP
+    hData.hq_not_dvd_gap
+    hData.hqpow_dvd_GN
 
 /-- `step` 実装から `core` を回収する。 -/
 theorem triominoWieferichDescentCoreB_impl : TriominoWieferichDescentCoreB := by
