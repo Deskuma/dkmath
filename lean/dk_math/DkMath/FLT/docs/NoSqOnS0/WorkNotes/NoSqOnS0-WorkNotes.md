@@ -705,3 +705,26 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkB` の `sorry` 1件のみ）。
+
+### 2026-02-28 phase-14 継続（`candidate / repack / result` 分離）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `TriominoWieferichShrinkCandB`
+  2. `TriominoWieferichShrinkCandB.toPack`
+  3. `TriominoWieferichShrinkCandB.toResult`
+  4. `triominoWieferichShrinkCandB_impl`
+- 変更内容:
+  1. `triominoWieferichShrinkB` は候補生成から `Result` へ落とす配線に変更
+  2. `step / core / glue` は維持したまま、最後の未解決点を候補生成へ再移動
+- 意図:
+  - 縮小器を
+    「候補生成（本丸）」
+    「反例パック再構成」
+    「最終 result 化」
+    に分け、`sorry` を `triominoWieferichShrinkCandB_impl` 1 箇所へ押し込めた。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkCandB_impl` の `sorry` 1件のみ）。

@@ -72,6 +72,57 @@ structure TriominoWieferichDescentResultB (p z : ℕ) where
   hzlt : z' < z
 
 /--
+shrink の候補生成成果物。
+
+ここでは「数値」だけでなく、再パック化を no-`sorry` で行うための証明材料まで保持する。
+-/
+structure TriominoWieferichShrinkCandB (p z : ℕ) where
+  x' : ℕ
+  y' : ℕ
+  z' : ℕ
+  hEq' : x' ^ p + y' ^ p = z' ^ p
+  hyz' : y' ≤ z'
+  hyzLt : y' < z'
+  hxy' : Nat.Coprime x' y'
+  hx0' : x' ≠ 0
+  hy0' : y' ≠ 0
+  hz0' : z' ≠ 0
+  hpB' : ¬ p ∣ (z' - y')
+  hzlt : z' < z
+
+/-- 候補から prime-ge5 反例パックを組み直す。 -/
+def TriominoWieferichShrinkCandB.toPack
+    {p z : ℕ}
+    (hp5 : 5 ≤ p)
+    (hp : Nat.Prime p)
+    (c : TriominoWieferichShrinkCandB p z) :
+    PrimeGe5CounterexamplePack p c.x' c.y' c.z' :=
+  { toPrimeCounterexamplePack :=
+      { hp := hp
+        hxy := c.hxy'
+        hyz := c.hyz'
+        hyz_lt := c.hyzLt
+        hEq := c.hEq' }
+    hp5 := hp5
+    hx0 := c.hx0'
+    hy0 := c.hy0'
+    hz0 := c.hz0' }
+
+/-- 候補を最終的な Branch B 縮小結果へ変換する。 -/
+def TriominoWieferichShrinkCandB.toResult
+    {p z : ℕ}
+    (hp5 : 5 ≤ p)
+    (hp : Nat.Prime p)
+    (c : TriominoWieferichShrinkCandB p z) :
+    TriominoWieferichDescentResultB p z :=
+  { x' := c.x'
+    y' := c.y'
+    z' := c.z'
+    hpack' := c.toPack hp5 hp
+    hpB' := c.hpB'
+    hzlt := c.hzlt }
+
+/--
 第2層の最小核: Triomino/Cosmic 固有の縮小器 step。
 
 純算術データから、次の反例候補を `Result` 構造体として返すだけにする。
@@ -114,7 +165,30 @@ theorem triominoWieferichDescent_impl_of_core
 /--
 Triomino/Cosmic 固有の縮小器（本丸）。
 
-現時点では、最後の未解決点をこの 1 定理に隔離する。
+現時点では、最後の未解決点を候補生成 `triominoWieferichShrinkCandB_impl` に隔離し、
+この定理自体は配線だけに保つ。
+-/
+def triominoWieferichShrinkCandB_impl
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkCandB p z := by
+  -- TODO:
+  -- `q^p ∣ GN p (z - y) y` と `¬ q ∣ (z - y)` を使い、
+  -- Triomino/Cosmic の縮小操作で `z' < z` の候補と証明材料を構成する。
+  let _u : ℕ := z - y
+  let _ := hpack
+  let _ := hpB
+  let _ := hqP
+  let _ := hq_not_dvd_gap
+  let _ := hqpow_dvd_GN
+  sorry
+
+/--
+Triomino/Cosmic 固有の縮小器（配線）。
 -/
 def triominoWieferichShrinkB
     {p x y z q : ℕ}
@@ -124,17 +198,11 @@ def triominoWieferichShrinkB
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichDescentResultB p z := by
-  -- TODO:
-  -- `q^p ∣ GN p (z - y) y` と `¬ q ∣ (z - y)` を使い、
-  -- Triomino/Cosmic の縮小操作で `z' < z` の新しい反例候補を構成する。
-  -- `hpack` と `hpB` は再パック化・Branch B 維持のために保持している。
-  let _u : ℕ := z - y
-  let _ := hpack
-  let _ := hpB
-  let _ := hqP
-  let _ := hq_not_dvd_gap
-  let _ := hqpow_dvd_GN
-  sorry
+  let c : TriominoWieferichShrinkCandB p z :=
+    triominoWieferichShrinkCandB_impl
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  exact c.toResult hpack.hp5 hpack.hp
 
 /--
 `step` 実装は、データ抽出済みの項目を縮小器へ渡すだけの glue に保つ。
