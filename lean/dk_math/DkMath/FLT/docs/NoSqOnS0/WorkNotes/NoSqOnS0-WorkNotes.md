@@ -1102,3 +1102,36 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedCoreB_kernel` の `sorry` 1件のみ）。
+
+### 2026-02-28 phase-14 継続（`EqSeedCoreB_kernel` を `KernelSeedB` 直返しに変更）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkKernelEqSeedTraceB_kernel`
+- 変更内容:
+  1. `TriominoWieferichShrinkKernelInvTraceB` は
+     `core + hs` を持つ形から、`hInv` だけを運ぶ最小 trace に変更
+  2. 旧 `triominoWieferichShrinkKernelEqSeedCoreB_kernel` の本体を
+     `triominoWieferichShrinkKernelEqSeedTraceB_kernel` へ移し、
+     唯一の `sorry` を eq-side trace helper に再配置
+  3. `triominoWieferichShrinkKernelEqSeedCoreB_kernel` は
+     `KernelCoreB` 直返しをやめ、
+     `EqSeedTraceB_kernel.toSeed` による `KernelSeedB` の glue に変更
+  4. `triominoWieferichShrinkKernelEqSeedB_kernel` は
+     `EqSeedCoreB_kernel` の完全委譲に変更
+  5. `triominoWieferichShrinkKernelInv_of_seed_core'` は
+     `exact tr.hInv` で閉じる形へ簡約
+  6. `triominoWieferichShrinkKernelCoreB_kernel`、
+     `triominoWieferichShrinkKernelInv_of_seed`、
+     `triominoWieferichShrinkKernelDataB_kernel` は
+     `c.hInv` を `InvTrace.hInv` へ詰め替えて使う glue に変更
+- 意図:
+  - `EqSeedCoreB_kernel` の返り値を `Nums + Eq` に固定し、
+    返り値の型だけ見れば「等式側 seed を作る場所」だと読める形へ寄せる。
+  - `InvTrace` を本来の役割である「`Inv` を運ぶ最小追加データ」に縮め、
+    将来 `Inv` の独立補題化へ差し替えやすくする。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTraceB_kernel` の `sorry` 1件のみ）。
