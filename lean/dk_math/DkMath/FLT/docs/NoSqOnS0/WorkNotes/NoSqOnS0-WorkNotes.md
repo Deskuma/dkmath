@@ -818,3 +818,21 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkXYZCertB_impl` の `sorry` 1件のみ）。
+
+### 2026-02-28 phase-14 継続（`XYZ + Trace` 導入、`XYZCertB_impl` を glue 化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `TriominoWieferichShrinkTraceB`
+  2. `triominoWieferichShrinkXYZCertB_of_trace`
+  3. `triominoWieferichShrinkXYZTraceB_impl`
+- 変更内容:
+  1. `triominoWieferichShrinkXYZCertB_impl` は `XYZ + Trace -> XYZ + Cert` の再梱包 glue に変更
+- 意図:
+  - `XYZCertB_impl` 自体を配線化し、
+    最後の未解決点を `triominoWieferichShrinkXYZTraceB_impl` 1 箇所へ移した。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkXYZTraceB_impl` の `sorry` 1件のみ）。

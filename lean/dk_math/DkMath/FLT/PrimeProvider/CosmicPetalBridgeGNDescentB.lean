@@ -100,6 +100,14 @@ structure TriominoWieferichShrinkCertB
   hpB' : ¬ p ∣ (t.z' - t.y')
   hW : TriominoWieferichShrinkWitnessB p x y z q t.x' t.y' t.z'
 
+/-- `XYZ` から `Cert` を回収するための縮小 trace。 -/
+structure TriominoWieferichShrinkTraceB
+    (p x y z q : ℕ)
+    (t : TriominoWieferichShrinkXYZB p x y z q) : Prop where
+  hzlt : t.z' < z
+  hpB' : ¬ p ∣ (t.z' - t.y')
+  hW : TriominoWieferichShrinkWitnessB p x y z q t.x' t.y' t.z'
+
 /--
 縮小候補の「数値」と、その候補を正当化する証明材料。
 
@@ -117,6 +125,18 @@ structure TriominoWieferichShrinkNumsB (p x y z q : ℕ) where
 structure TriominoWieferichShrinkXYZCertB (p x y z q : ℕ) where
   t : TriominoWieferichShrinkXYZB p x y z q
   hc : TriominoWieferichShrinkCertB p x y z q t
+
+/-- trace を `XYZ + Cert` 束へ再梱包する。 -/
+def triominoWieferichShrinkXYZCertB_of_trace
+    {p x y z q : ℕ}
+    (t : TriominoWieferichShrinkXYZB p x y z q)
+    (htr : TriominoWieferichShrinkTraceB p x y z q t) :
+    TriominoWieferichShrinkXYZCertB p x y z q :=
+  { t := t
+    hc :=
+      { hzlt := htr.hzlt
+        hpB' := htr.hpB'
+        hW := htr.hW } }
 
 /--
 shrink の候補生成成果物。
@@ -243,8 +263,29 @@ theorem triominoWieferichDescent_impl_of_core
 /--
 Triomino/Cosmic 固有の縮小候補データ生成（本丸）。
 
-最後の未解決点は、この `XYZ + Cert` 束をどう作るかに隔離する。
+最後の未解決点は、この `XYZ + Trace` をどう作るかに隔離する。
 -/
+def triominoWieferichShrinkXYZTraceB_impl
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    { t : TriominoWieferichShrinkXYZB p x y z q //
+      TriominoWieferichShrinkTraceB p x y z q t } := by
+  -- TODO:
+  -- `q^p ∣ GN p (z - y) y` と `¬ q ∣ (z - y)` を使い、
+  -- Triomino/Cosmic の縮小操作で `(x', y', z')` と trace を同時に構成する。
+  let _u : ℕ := z - y
+  let _ := hpack
+  let _ := hpB
+  let _ := hqP
+  let _ := hq_not_dvd_gap
+  let _ := hqpow_dvd_GN
+  sorry
+
+/-- `XYZ + Trace` から `XYZ + Cert` 束へ戻す glue。 -/
 def triominoWieferichShrinkXYZCertB_impl
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
@@ -253,16 +294,13 @@ def triominoWieferichShrinkXYZCertB_impl
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichShrinkXYZCertB p x y z q := by
-  -- TODO:
-  -- `q^p ∣ GN p (z - y) y` と `¬ q ∣ (z - y)` を使い、
-  -- Triomino/Cosmic の縮小操作で `(x', y', z')` と証明材料を同時に構成する。
-  let _u : ℕ := z - y
-  let _ := hpack
-  let _ := hpB
-  let _ := hqP
-  let _ := hq_not_dvd_gap
-  let _ := hqpow_dvd_GN
-  sorry
+  let s :
+      { t : TriominoWieferichShrinkXYZB p x y z q //
+        TriominoWieferichShrinkTraceB p x y z q t } :=
+    triominoWieferichShrinkXYZTraceB_impl
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  exact triominoWieferichShrinkXYZCertB_of_trace s.1 s.2
 
 /-- `XYZ + Cert` 束から、候補 triple だけを取り出す。 -/
 def triominoWieferichShrinkXYZB_of_core
