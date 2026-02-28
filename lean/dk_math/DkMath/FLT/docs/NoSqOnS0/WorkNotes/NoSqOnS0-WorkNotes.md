@@ -1073,3 +1073,32 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedCoreB_kernel` の `sorry` 1件のみ）。
+
+### 2026-02-28 phase-14 継続（`InvTrace` を導入し、canonicality 等式を構造体へ退避）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `TriominoWieferichShrinkKernelInvTraceB`
+- 変更内容:
+  1. `triominoWieferichShrinkKernelInv_of_seed_core'` の最終引数を、
+     `hs : s = canonical seed` から
+     `tr : TriominoWieferichShrinkKernelInvTraceB ... s`
+     へ変更
+  2. `triominoWieferichShrinkKernelInv_of_seed_core` は
+     `let c; let s; let tr := { core := c, hs := rfl }`
+     を束ねて seed 引数版を呼ぶ wrapper に変更
+  3. `triominoWieferichShrinkKernelCoreB_kernel`、
+     `triominoWieferichShrinkKernelInv_of_seed`、
+     `triominoWieferichShrinkKernelDataB_kernel` は
+     いずれも `let c; let s; let tr` の 1 回評価パターンで
+     `Inv_of_seed_core'` を呼ぶ形に変更
+- 意図:
+  - canonicality の等式を裸で持ち回らず、
+    「この seed はこの core から来た」という最小 trace に閉じ込める。
+  - 外側の glue をすべて `c / s / tr` の同型パターンへ揃え、
+    二重評価と証明項の重複を抑える。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedCoreB_kernel` の `sorry` 1件のみ）。
