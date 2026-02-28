@@ -629,3 +629,21 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGN.lean` の `triominoWieferichDescent_impl` の `sorry` 1件のみ）。
+
+### 2026-02-27 phase-14 継続（descent を別ファイルへ隔離）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNCore.lean`
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGN.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `CosmicPetalBridgeGNCore.lean` を新設し、Branch B の配線・最小化・lift 供給を移設
+  2. `CosmicPetalBridgeGNDescentB.lean` を新設し、`triominoWieferichDescent_impl` を隔離
+  3. `CosmicPetalBridgeGN.lean` を wrapper 化し、最終 3 定理のみを配線
+- 意図:
+  - `CosmicPetalBridgeGN.lean` 自体を完全に配線専用へ戻し、
+    最後の未解決点を `CosmicPetalBridgeGNDescentB.lean` の 1 定理へ閉じ込めた。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNCore DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichDescent_impl` の `sorry` 1件のみ）。
