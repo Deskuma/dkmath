@@ -892,3 +892,55 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkXYZ_kernel` の `sorry` 1件のみ）。
+
+### 2026-02-28 phase-14 継続（`Witness` を `Eq / Inv` に分割し、`XYZ_kernel` を glue 化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `TriominoWieferichShrinkWitnessEqB`
+  2. `TriominoWieferichShrinkWitnessInvB`
+  3. `TriominoWieferichShrinkWitnessB.toEq`
+  4. `TriominoWieferichShrinkWitnessB.toInv`
+  5. `TriominoWieferichShrinkWitnessB.ofEqInv`
+  6. `TriominoWieferichShrinkCtorB.hW`
+  7. `TriominoWieferichShrinkKernelDataB`
+  8. `triominoWieferichShrinkKernelDataB_kernel`
+- 変更内容:
+  1. `TriominoWieferichShrinkCtorB` の witness 保持を `hW` 直持ちから `hEq / hInv` の 2 分割へ変更
+  2. `triominoWieferichShrinkXYZ_kernel` は `KernelData -> XYZ + ctor` の再束ね直しだけを行う glue に変更
+  3. `triominoWieferichShrinkTrace_core` は `t.ctor.hW` から完全 witness を回収するだけの形へ簡約
+- 意図:
+  - witness のうち「等式と順序」と「不変量」を型レベルで切り離し、
+    最後の未解決点を将来的に `Eq` 側へ集中させやすい形に整える。
+  - `XYZ_kernel` 自体を配線化し、縮小変換の本丸を
+    `triominoWieferichShrinkKernelDataB_kernel` 1 箇所へさらに圧縮する。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelDataB_kernel` の `sorry` 1件のみ）。
+
+### 2026-02-28 phase-14 継続（`KernelDataB` に `Nums / Eq / Inv` の切断面を追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `TriominoWieferichShrinkKernelNumsB`
+  2. `TriominoWieferichShrinkKernelDataB.toNums`
+  3. `triominoWieferichShrinkKernelSeedB_kernel`
+  4. `triominoWieferichShrinkKernelNumsB_kernel`
+  5. `triominoWieferichShrinkKernelEq_of_nums`
+  6. `triominoWieferichShrinkKernelInv_of_nums`
+- 変更内容:
+  1. `triominoWieferichShrinkKernelDataB_kernel` は canonical `Nums / Eq / Inv` を束ね直す glue に変更
+  2. 既存の未解決本体は `triominoWieferichShrinkKernelSeedB_kernel` へ移し、
+     `KernelDataB_kernel` 本体からは `sorry` を除去
+- 意図:
+  - `KernelDataB` の中に `Nums` の独立した切断面を作り、
+    以後 `Eq` と `Inv` を別々に強化できる地盤を先に整える。
+  - `Eq_of_nums` / `Inv_of_nums` を canonical projection にしておくことで、
+    次段でどちらに未解決点を寄せるかを選べる状態へ近づける。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelSeedB_kernel` の `sorry` 1件のみ）。
