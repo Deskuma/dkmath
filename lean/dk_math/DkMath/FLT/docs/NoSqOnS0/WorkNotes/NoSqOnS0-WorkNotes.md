@@ -944,3 +944,28 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelSeedB_kernel` の `sorry` 1件のみ）。
+
+### 2026-02-28 phase-14 継続（`KernelSeedB` を `Nums + Eq + Inv` の束へ再整形）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `TriominoWieferichShrinkKernelSeedB`
+  2. `TriominoWieferichShrinkKernelSeedB.toData`
+- 変更内容:
+  1. `triominoWieferichShrinkKernelSeedB_kernel` の返り値を `KernelDataB` 直返しから、
+     `n : KernelNumsB` と `hEq / hInv` を持つ `KernelSeedB` へ変更
+  2. `triominoWieferichShrinkKernelNumsB_kernel` は `KernelSeedB.n` の単純投影に変更
+  3. `triominoWieferichShrinkKernelEq_of_nums` / `triominoWieferichShrinkKernelInv_of_nums` は
+     `KernelSeedB` からの witness 回収へ整理
+  4. `triominoWieferichShrinkKernelDataB_kernel` は `KernelSeedB.toData` の完全委譲へ変更
+- 意図:
+  - seed 自体の形を `Nums` と `Eq / Inv` に明示分解し、
+    残る本丸が「どの数値を作り、その上にどの witness を載せるか」という一点だと
+    型で読める状態にする。
+  - `KernelDataB_kernel` を完全 glue 化し、今後の局所化対象を
+    `KernelSeedB_kernel` だけに固定する。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelSeedB_kernel` の `sorry` 1件のみ）。
