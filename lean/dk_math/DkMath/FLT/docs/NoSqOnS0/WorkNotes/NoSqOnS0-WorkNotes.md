@@ -1017,3 +1017,30 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelCoreB_kernel` の `sorry` 1件のみ）。
+
+### 2026-02-28 phase-14 継続（`KernelCoreB_kernel` を `EqSeedCore + Inv_of_seed_core` へ分割）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkKernelEqSeedCoreB_kernel`
+  2. `triominoWieferichShrinkKernelEqSeedB_kernel`
+  3. `triominoWieferichShrinkKernelInv_of_seed_core`
+- 変更内容:
+  1. 旧 `triominoWieferichShrinkKernelCoreB_kernel` の本体を
+     `triominoWieferichShrinkKernelEqSeedCoreB_kernel` へ移し、唯一の `sorry` を eq-side helper に再配置
+  2. `triominoWieferichShrinkKernelCoreB_kernel` は
+     `EqSeedB_kernel` と `Inv_of_seed_core` を束ねる glue に変更
+  3. `triominoWieferichShrinkKernelSeedB_kernel` は
+     `KernelCoreB` 経由ではなく `EqSeedB_kernel` の完全委譲に変更
+  4. `triominoWieferichShrinkKernelInv_of_seed` は
+     `Inv_of_seed_core` の wrapper に変更
+- 意図:
+  - `KernelCoreB_kernel` 自体から未解決点を外し、
+    core の責務を完全に「束ね直し」に限定する。
+  - 残る本丸を eq-side helper 名の下へ移し、
+    次段で `Eq` 側へさらに寄せる導線を明示する。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedCoreB_kernel` の `sorry` 1件のみ）。
