@@ -86,6 +86,20 @@ structure TriominoWieferichShrinkWitnessB
   hy0' : y' ≠ 0
   hz0' : z' ≠ 0
 
+/-- まずは縮小候補の数値 triple だけを与える層。 -/
+structure TriominoWieferichShrinkXYZB (p x y z q : ℕ) where
+  x' : ℕ
+  y' : ℕ
+  z' : ℕ
+
+/-- 生成した triple に対する縮小の証明材料。 -/
+structure TriominoWieferichShrinkCertB
+    (p x y z q : ℕ)
+    (t : TriominoWieferichShrinkXYZB p x y z q) : Prop where
+  hzlt : t.z' < z
+  hpB' : ¬ p ∣ (t.z' - t.y')
+  hW : TriominoWieferichShrinkWitnessB p x y z q t.x' t.y' t.z'
+
 /--
 縮小候補の「数値」と、その候補を正当化する証明材料。
 
@@ -98,6 +112,11 @@ structure TriominoWieferichShrinkNumsB (p x y z q : ℕ) where
   hzlt : z' < z
   hpB' : ¬ p ∣ (z' - y')
   hW : TriominoWieferichShrinkWitnessB p x y z q x' y' z'
+
+/-- `XYZ` と `Cert` を 1 束にした shrink 候補生成の核。 -/
+structure TriominoWieferichShrinkXYZCertB (p x y z q : ℕ) where
+  t : TriominoWieferichShrinkXYZB p x y z q
+  hc : TriominoWieferichShrinkCertB p x y z q t
 
 /--
 shrink の候補生成成果物。
@@ -168,6 +187,19 @@ def triominoWieferichShrinkCandB_of_nums
     hpB' := n.hpB'
     hzlt := n.hzlt }
 
+/-- `XYZ` と `Cert` から `Nums` へ戻す glue。 -/
+def triominoWieferichShrinkNumsB_of_XYZ_Cert
+    {p x y z q : ℕ}
+    (t : TriominoWieferichShrinkXYZB p x y z q)
+    (hc : TriominoWieferichShrinkCertB p x y z q t) :
+    TriominoWieferichShrinkNumsB p x y z q :=
+  { x' := t.x'
+    y' := t.y'
+    z' := t.z'
+    hzlt := hc.hzlt
+    hpB' := hc.hpB'
+    hW := hc.hW }
+
 /--
 第2層の最小核: Triomino/Cosmic 固有の縮小器 step。
 
@@ -211,8 +243,28 @@ theorem triominoWieferichDescent_impl_of_core
 /--
 Triomino/Cosmic 固有の縮小候補データ生成（本丸）。
 
-最後の未解決点は、この候補データ `Nums` をどう作るかに隔離する。
+最後の未解決点は、この `XYZ + Cert` 束をどう作るかに隔離する。
 -/
+def triominoWieferichShrinkXYZCertB_impl
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkXYZCertB p x y z q := by
+  -- TODO:
+  -- `q^p ∣ GN p (z - y) y` と `¬ q ∣ (z - y)` を使い、
+  -- Triomino/Cosmic の縮小操作で `(x', y', z')` と証明材料を同時に構成する。
+  let _u : ℕ := z - y
+  let _ := hpack
+  let _ := hpB
+  let _ := hqP
+  let _ := hq_not_dvd_gap
+  let _ := hqpow_dvd_GN
+  sorry
+
+/-- `Nums` の生成は、`XYZ + Cert` からの glue に寄せる。 -/
 def triominoWieferichShrinkNumsB_impl
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
@@ -221,16 +273,12 @@ def triominoWieferichShrinkNumsB_impl
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichShrinkNumsB p x y z q := by
-  -- TODO:
-  -- `q^p ∣ GN p (z - y) y` と `¬ q ∣ (z - y)` を使い、
-  -- Triomino/Cosmic の縮小操作で `x' y' z'` と証明材料を構成する。
-  let _u : ℕ := z - y
-  let _ := hpack
-  let _ := hpB
-  let _ := hqP
-  let _ := hq_not_dvd_gap
-  let _ := hqpow_dvd_GN
-  sorry
+  let s : TriominoWieferichShrinkXYZCertB p x y z q :=
+    triominoWieferichShrinkXYZCertB_impl
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  rcases s with ⟨t, hc⟩
+  exact triominoWieferichShrinkNumsB_of_XYZ_Cert t hc
 
 /--
 Triomino/Cosmic 固有の縮小候補（配線）。

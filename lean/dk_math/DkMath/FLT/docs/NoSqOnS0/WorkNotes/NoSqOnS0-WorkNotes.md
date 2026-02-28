@@ -751,3 +751,30 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkNumsB_impl` の `sorry` 1件のみ）。
+
+### 2026-02-28 phase-14 継続（`XYZ / Cert / glue` 分離）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `TriominoWieferichShrinkXYZB`
+  2. `TriominoWieferichShrinkCertB`
+  3. `TriominoWieferichShrinkXYZCertB`
+  4. `triominoWieferichShrinkNumsB_of_XYZ_Cert`
+  5. `triominoWieferichShrinkXYZCertB_impl`
+- 変更内容:
+  1. `triominoWieferichShrinkNumsB_impl` は `XYZ + Cert -> Nums` の glue に変更
+  2. `triominoWieferichShrinkCandB_impl` は `Nums -> Cand` の glue を維持
+  3. `triominoWieferichShrinkB` は `Cand -> Result` の glue を維持
+- 意図:
+  - shrink の内部を
+    「XYZ 生成」
+    「Cert 付与」
+    「Nums 化」
+    「Cand 化」
+    「Result 化」
+    の多層 glue に分け、最後の未解決点を `triominoWieferichShrinkXYZCertB_impl` 1 箇所へさらに圧縮した。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkXYZCertB_impl` の `sorry` 1件のみ）。
