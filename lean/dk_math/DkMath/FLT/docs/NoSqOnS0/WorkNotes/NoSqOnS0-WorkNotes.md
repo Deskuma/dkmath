@@ -647,3 +647,23 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNCore DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichDescent_impl` の `sorry` 1件のみ）。
+
+### 2026-02-27 phase-14 継続（descent を二層化、純算術データ抽出を no-`sorry` 化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `WieferichDescentDataB`
+  2. `wieferichDescentDataB_of_pack`
+  3. `TriominoWieferichDescentCoreB`
+  4. `triominoWieferichDescent_impl_of_core`
+  5. `triominoWieferichDescentCoreB_impl`
+- 変更内容:
+  1. `triominoWieferichDescent_impl` は `triominoWieferichDescentCoreB_impl` への wrapper に変更
+- 意図:
+  - `WieferichLift` から純算術で取れるデータ（特に `q^p ∣ GN p (z - y) y`）を no-`sorry` で固定し、
+    最後の未解決点を「Triomino/Cosmic 固有の縮小器 core」1 定理へさらに圧縮した。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichDescentCoreB_impl` の `sorry` 1件のみ）。
