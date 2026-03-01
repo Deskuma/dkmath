@@ -37,7 +37,7 @@ so downstream proofs can reuse them. We avoid referencing any
 project-specific `S_heavy` here: the lemmas only require the
 elementwise condition `p ^ 3 > X` which is available at call sites.
 -/
-private lemma ceil_div_le_one_of_p3_gt_X {X p : ℕ} (hp3 : p ^ 3 > X) :
+lemma ceil_div_le_one_of_p3_gt_X {X p : ℕ} (hp3 : p ^ 3 > X) :
   ⌈(X : ℝ) / (p ^ 3 : ℝ)⌉₊ ≤ 1 := by
   -- Cast the nat-inequality to the reals and divide both sides by p^3 > 0.
   have h_real : (X : ℝ) < (p ^ 3 : ℝ) := by exact_mod_cast hp3
@@ -48,7 +48,7 @@ private lemma ceil_div_le_one_of_p3_gt_X {X p : ℕ} (hp3 : p ^ 3 > X) :
   have hle_cast : (X : ℝ) / (p ^ 3 : ℝ) ≤ (↑(1 : ℕ) : ℝ) := by simpa [Nat.cast_one] using hle
   exact Nat.ceil_le.mpr hle_cast
 
-private lemma term_le_four_of_p3_gt_X {X p : ℕ} (hp3 : p ^ 3 > X) :
+lemma term_le_four_of_p3_gt_X {X p : ℕ} (hp3 : p ^ 3 > X) :
   (2 * ⌈(X : ℝ) / (p ^ 3 : ℝ)⌉₊ + 2) ≤ 4 := by
   have h := ceil_div_le_one_of_p3_gt_X hp3
   calc
@@ -59,7 +59,7 @@ private lemma term_le_four_of_p3_gt_X {X p : ℕ} (hp3 : p ^ 3 > X) :
     _ = 4 := by norm_num
 
 -- Arithmetic lemma: For X ≥ 1, we have ⌈X/4⌉ ≥ 1, hence 2*⌈X/4⌉+2 ≥ 4
-private lemma four_le_two_ceil_quarter_add_two {X : ℕ} (hX : X ≥ 1) :
+lemma four_le_two_ceil_quarter_add_two {X : ℕ} (hX : X ≥ 1) :
   4 ≤ 2 * ⌈(X : ℝ) / 4⌉₊ + 2 := by
   -- Since X ≥ 1 we have (X/4) > 0, so its ceiling is at least 1
   have hpos : 0 < X := by
@@ -83,7 +83,7 @@ private lemma four_le_two_ceil_quarter_add_two {X : ℕ} (hX : X ≥ 1) :
 
 -- Budget allocation lemma: B * ⌈f/(B+1)⌉ ≤ ⌈f⌉ for B=4 and f ≥ 20
 -- This ensures that B*K_heavy ≤ K_full in the budget split strategy
-private lemma B_mul_ceil_div_le_ceil_of_large (f : ℝ) (hf : f ≥ 20) :
+lemma B_mul_ceil_div_le_ceil_of_large (f : ℝ) (hf : f ≥ 20) :
   4 * ⌈f / 5⌉₊ ≤ ⌈f⌉₊ := by
   -- Strategy: For f ≥ 20, show 4*⌈f/5⌉ ≤ ⌈f⌉
   -- Key: ⌈f/5⌉ < f/5 + 1, so 4*⌈f/5⌉ < 4*(f/5 + 1) = 4f/5 + 4
@@ -101,7 +101,7 @@ private lemma B_mul_ceil_div_le_ceil_of_large (f : ℝ) (hf : f ≥ 20) :
 
 -- Eventually, X^(3/4+ε') ≥ 20 for any ε' > 0
 -- This is used to apply B_mul_ceil_div_le_ceil_of_large in the budget allocation
-private lemma eventually_pow_ge_twenty (ε' : ℝ) (hε' : 0 < ε') :
+lemma eventually_pow_ge_twenty (ε' : ℝ) (hε' : 0 < ε') :
   ∀ᶠ X : ℕ in atTop, (X : ℝ)^(3/4 + ε') ≥ 20 := by
   -- Strategy: X^(3/4+ε') is monotone increasing and unbounded, so eventually ≥ 20
   -- For X ≥ 100, we have X^(3/4+ε') ≥ 100^(3/4+ε') and 100^(3/4) ≈ 31.6 > 20
