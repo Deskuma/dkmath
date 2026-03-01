@@ -707,6 +707,29 @@ theorem triominoWieferichShrink_hz0_of_hpB'
     simp [hz0]
   exact hpB' hdiv
 
+/-- `z' - y' = z - y` が分かれば、元の Branch B 条件を移送できる。 -/
+theorem triominoWieferichShrink_hpB'_of_eq_gap
+    {p y z y' z' : ℕ}
+    (hpB : ¬ p ∣ (z - y))
+    (hgap : z' - y' = z - y) :
+    ¬ p ∣ (z' - y') := by
+  intro hpB'
+  apply hpB
+  simpa [hgap] using hpB'
+
+/-- `z' = z / q` が分かれば、`Nat.div_lt_self` で strict 減少を回収できる。 -/
+theorem triominoWieferichShrink_hzlt_of_eq_div
+    {z q z' : ℕ}
+    (hz0 : z ≠ 0)
+    (hqP : Nat.Prime q)
+    (hz' : z' = z / q) :
+    z' < z := by
+  have hz_pos : 0 < z := Nat.pos_of_ne_zero hz0
+  have hq_gt1 : 1 < q := Nat.Prime.one_lt hqP
+  calc
+    z' = z / q := hz'
+    _ < z := Nat.div_lt_self hz_pos hq_gt1
+
 /-- `y' = y` が分かれば、元の反例パックから `y' ≠ 0` を回収できる。 -/
 theorem triominoWieferichShrink_hy0_of_eq_y
     {p x y z : ℕ}
@@ -742,6 +765,171 @@ theorem triominoWieferichShrinkNumsInvCandidate_hy0_of_eq_core
   exact
     triominoWieferichShrink_hy0_of_eq_y
       (p := p) (x := x) (y := y) (z := z) hpack hy'
+
+/--
+公開 `CandidateB_kernel` に対して `z' - y' = z - y` が示せれば、
+`hpB'` を回収できる。
+
+独立候補で gap を保つ時の最短ルートとして使う。
+-/
+theorem triominoWieferichShrinkNumsInvCandidate_hpB'_of_eq_gap_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y)
+    (hgap :
+      (triominoWieferichShrinkNumsInvCandidateB_kernel
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' -
+      (triominoWieferichShrinkNumsInvCandidateB_kernel
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y' =
+      z - y) :
+    ¬ p ∣
+      ((triominoWieferichShrinkNumsInvCandidateB_kernel
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' -
+        (triominoWieferichShrinkNumsInvCandidateB_kernel
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y') := by
+  let _ := hpack
+  let _ := hqP
+  let _ := hq_not_dvd_gap
+  let _ := hqpow_dvd_GN
+  exact triominoWieferichShrink_hpB'_of_eq_gap hpB hgap
+
+/--
+公開 `CandidateB_kernel` に対して `z' = z / q` が示せれば、
+strict 減少 `z' < z` を回収できる。
+
+独立候補で `z' := z / q` を採る時の最短ルートとして使う。
+-/
+theorem triominoWieferichShrinkNumsInvCandidate_hzlt_of_eq_div_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y)
+    (hz' :
+      (triominoWieferichShrinkNumsInvCandidateB_kernel
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' =
+      z / q) :
+    (triominoWieferichShrinkNumsInvCandidateB_kernel
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' < z := by
+  let _ := hpB
+  let _ := hq_not_dvd_gap
+  let _ := hqpow_dvd_GN
+  exact
+    triominoWieferichShrink_hzlt_of_eq_div
+      (z := z) (q := q)
+      hpack.hz0 hqP hz'
+
+/-- `Spec_of_kernel` 用に `hzlt` を先行回収する pack 依存 helper。 -/
+theorem triominoWieferichShrinkNumsInvCandidate_hzlt_of_pack
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    (triominoWieferichShrinkNumsInvCandidateB_kernel
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' < z := by
+  let c : TriominoWieferichShrinkNumsInvCandidateB p x y z q :=
+    triominoWieferichShrinkNumsInvCandidateB_kernel
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  let r0 : TriominoWieferichShrinkNumsInvRecipeB p x y z q :=
+    triominoWieferichShrinkNumsInvRecipe_of_pack
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  simpa
+    [c, triominoWieferichShrinkNumsInvCandidateB_kernel,
+      triominoWieferichShrinkNumsInvCandidate_of_pack, r0] using r0.hzlt
+
+/--
+`Spec_of_kernel` 用に `hzlt` を回収する公開 core helper。
+
+現時点では pack 依存版への委譲に留め、次段の独立化ではここだけ差し替える。
+-/
+theorem triominoWieferichShrinkNumsInvCandidate_hzlt_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    (triominoWieferichShrinkNumsInvCandidateB_kernel
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' < z := by
+  let c : TriominoWieferichShrinkNumsInvCandidateB p x y z q :=
+    triominoWieferichShrinkNumsInvCandidateB_kernel
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  simpa [c] using
+    triominoWieferichShrinkNumsInvCandidate_hzlt_of_pack
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/-- `Spec_of_kernel` 用に `hpB'` を先行回収する pack 依存 helper。 -/
+theorem triominoWieferichShrinkNumsInvCandidate_hpB'_of_pack
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    ¬ p ∣
+      ((triominoWieferichShrinkNumsInvCandidateB_kernel
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' -
+        (triominoWieferichShrinkNumsInvCandidateB_kernel
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y') := by
+  let c : TriominoWieferichShrinkNumsInvCandidateB p x y z q :=
+    triominoWieferichShrinkNumsInvCandidateB_kernel
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  let r0 : TriominoWieferichShrinkNumsInvRecipeB p x y z q :=
+    triominoWieferichShrinkNumsInvRecipe_of_pack
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  simpa
+    [c, triominoWieferichShrinkNumsInvCandidateB_kernel,
+      triominoWieferichShrinkNumsInvCandidate_of_pack, r0] using r0.hpB'
+
+/--
+`Spec_of_kernel` 用に `hpB'` を回収する公開 core helper。
+
+現時点では pack 依存版への委譲に留め、次段の独立化ではここだけ差し替える。
+-/
+theorem triominoWieferichShrinkNumsInvCandidate_hpB'_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    ¬ p ∣
+      ((triominoWieferichShrinkNumsInvCandidateB_kernel
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' -
+        (triominoWieferichShrinkNumsInvCandidateB_kernel
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y') := by
+  let c : TriominoWieferichShrinkNumsInvCandidateB p x y z q :=
+    triominoWieferichShrinkNumsInvCandidateB_kernel
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  simpa [c] using
+    triominoWieferichShrinkNumsInvCandidate_hpB'_of_pack
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /-- `Spec_of_kernel` 用に `hxy'` を先行回収する pack 依存 helper。 -/
 theorem triominoWieferichShrinkNumsInvCandidate_hxy_of_pack
@@ -1167,18 +1355,16 @@ theorem triominoWieferichShrinkNumsInvCandidateSpec_of_kernel
     triominoWieferichShrinkNumsInvCandidateB_kernel
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  let r0 : TriominoWieferichShrinkNumsInvRecipeB p x y z q :=
-    triominoWieferichShrinkNumsInvRecipe_of_pack
-      (p := p) (x := x) (y := y) (z := z) (q := q)
-      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   have hzlt : c.z' < z := by
-    simpa
-      [c, triominoWieferichShrinkNumsInvCandidateB_kernel,
-        triominoWieferichShrinkNumsInvCandidate_of_pack, r0] using r0.hzlt
+    simpa [c] using
+      triominoWieferichShrinkNumsInvCandidate_hzlt_core
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   have hpB' : ¬ p ∣ (c.z' - c.y') := by
-    simpa
-      [c, triominoWieferichShrinkNumsInvCandidateB_kernel,
-        triominoWieferichShrinkNumsInvCandidate_of_pack, r0] using r0.hpB'
+    simpa [c] using
+      triominoWieferichShrinkNumsInvCandidate_hpB'_core
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   have hInv : TriominoWieferichShrinkWitnessInvB p x y z q c.x' c.y' c.z' := by
     simpa [c] using
       triominoWieferichShrinkNumsInvCandidateInvCore_of_kernel

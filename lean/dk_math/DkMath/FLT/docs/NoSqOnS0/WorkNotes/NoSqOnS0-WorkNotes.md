@@ -1627,3 +1627,35 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-01 phase-14 継続（`hzlt / hpB'` も helper-localize）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkNumsInvCandidate_hzlt_of_pack`
+  2. `triominoWieferichShrinkNumsInvCandidate_hzlt_core`
+  3. `triominoWieferichShrinkNumsInvCandidate_hpB'_of_pack`
+  4. `triominoWieferichShrinkNumsInvCandidate_hpB'_core`
+- 変更内容:
+  1. `hzlt` と `hpB'` についても、
+     `hInv` 系 helper と同じく
+     「pack 依存 backend」+「公開 wrapper」の二層を追加
+  2. `triominoWieferichShrinkNumsInvCandidateSpec_of_kernel` から
+     `r0 := triominoWieferichShrinkNumsInvRecipe_of_pack ...` の
+     直参照を除去
+  3. `Spec_of_kernel` は
+     `triominoWieferichShrinkNumsInvCandidate_hzlt_core` と
+     `triominoWieferichShrinkNumsInvCandidate_hpB'_core` を呼ぶだけの形へ変更
+- 意図:
+  - `Spec_of_kernel` から backend 直参照を消し、
+    pack 依存を helper-localize する。
+  - 次段で `CandidateB_kernel` の候補式を差し替える際に、
+    `hzlt_core` / `hpB'_core` だけを独立実装へ置換すれば済む状態へ寄せる。
+  - ただちに `CandidateB_kernel` を変えると
+    `Eq_of_nums_core` の pack bridge まで同時に崩れるため、
+    先に `Spec` 側の依存面を局所化して変更範囲を絞る。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
