@@ -14,5 +14,8 @@ tar cvzf __snapshot-dk_math-lean-code-$DTM.tar.gz \
     --exclude='./**/.pytest_cache' \
     --exclude='./**/__pycache__/' \
     --exclude='./**/__*' \
+    --exclude='./**/*.png' \
+    --exclude='./**/*.jpg' \
+    --exclude='./**/*.zip' \
     ./dk_math
 sha256sum __snapshot-dk_math-lean-code-$DTM.tar.gz > __snapshot-dk_math-lean-code-$DTM.tar.gz.sha256
