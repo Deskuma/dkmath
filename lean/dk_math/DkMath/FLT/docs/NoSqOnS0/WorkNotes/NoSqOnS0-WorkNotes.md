@@ -1470,3 +1470,93 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-01 phase-14 継続（`hInv` の残り 3 フィールドを named helper へ分離）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkNumsInvCandidate_hxy_core`
+  2. `triominoWieferichShrinkNumsInvCandidate_hx0_core`
+  3. `triominoWieferichShrinkNumsInvCandidate_hy0_core`
+  4. `triominoWieferichShrinkNumsInvCandidateInvCore_of_kernel`
+- 変更内容:
+  1. `hInv` の残り backend 依存フィールド
+     `hxy' / hx0' / hy0'` を、
+     それぞれ独立した named helper として切り出し
+  2. `hpB'` から `hz0'` を作る既存補題
+     `triominoWieferichShrink_hz0_of_hpB'` と合わせて、
+     `TriominoWieferichShrinkWitnessInvB` 全体を組む
+     `triominoWieferichShrinkNumsInvCandidateInvCore_of_kernel`
+     を追加
+  3. `triominoWieferichShrinkNumsInvCandidateSpec_of_kernel` は
+     `hInv` を直接組み立てる代わりに、
+     上記 `InvCore_of_kernel` を呼ぶだけの形へ変更
+- 意図:
+  - 次段で `hy0'` → `hx0'` → `hxy'` を順に独立実装へ差し替える際に、
+    `Spec_of_kernel` 本体を触らず、
+    該当 helper だけを置換できるようにする。
+  - `hInv` の依存剥離をフィールド単位へさらに押し進め、
+    backend 参照の局所化を徹底する。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-01 phase-14 継続（`hy0_core` の独立化に向けた差し替え点を固定）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrink_hy0_of_eq_y`
+  2. `triominoWieferichShrinkNumsInvCandidate_hy0_of_pack`
+- 変更内容:
+  1. `y' = y` が示せれば
+     元の `hpack.hy0` から `y' ≠ 0` を回収できる
+     汎用補題 `triominoWieferichShrink_hy0_of_eq_y` を追加
+  2. 既存の pack 依存な `hy0'` 回収本体は
+     `triominoWieferichShrinkNumsInvCandidate_hy0_of_pack` へ退避
+  3. 公開の `triominoWieferichShrinkNumsInvCandidate_hy0_core` は
+     上記 `_of_pack` 版への wrapper に変更し、
+     次段でこの wrapper 本体だけ差し替えればよい形に整理
+- 意図:
+  - 次に `CandidateB_kernel` の独立候補で `y' := y`（あるいはそれに近い形）
+    を入れた時に、
+    `hy0_core` だけを `triominoWieferichShrink_hy0_of_eq_y`
+    ベースへ置換できるようにする。
+  - `hInv` の 3 フィールドのうち、
+    もっとも軽い `hy0'` から差し替えを始めるためのレールを先に敷く。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-01 phase-14 継続（`hy0_core` の独立ルートを先行追加し、`InvCore` を `let c` 化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkNumsInvCandidate_hy0_of_eq_core`
+- 変更内容:
+  1. 公開 `CandidateB_kernel` に対して
+     `y' = y` が示せれば `hy0'` を直ちに回収できる
+     `triominoWieferichShrinkNumsInvCandidate_hy0_of_eq_core` を追加
+  2. `triominoWieferichShrinkNumsInvCandidate_hy0_core` は
+     `let c := CandidateB_kernel ...` を先に束ね、
+     `hy0_of_pack` から `simpa [c]` で回収する形へ整理
+  3. `triominoWieferichShrinkNumsInvCandidateInvCore_of_kernel` も
+     `let c := CandidateB_kernel ...` と
+     `have hpB'' : ¬ p ∣ (c.z' - c.y')` を先に置き、
+     `hxy' / hx0' / hy0'` は `simpa [c]` で各 helper から回収、
+     `hz0'` は `triominoWieferichShrink_hz0_of_hpB'` に渡す形へ整理
+- 意図:
+  - 将来 `CandidateB_kernel` を `y' := y` を持つ独立候補へ差し替えた時に、
+    `hy0_core` 本体だけを
+    `triominoWieferichShrinkNumsInvCandidate_hy0_of_eq_core`
+    経由へ即座に切り替えられるようにする。
+  - `InvCore_of_kernel` の巨大展開を抑え、
+    以後の独立化で `simp` の爆発を避けやすくする。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
