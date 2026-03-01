@@ -1357,3 +1357,34 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-01 phase-14 継続（`CandidateSpecB` を導入し、候補の証明責務を 1 定理へ集約）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `TriominoWieferichShrinkNumsInvCandidateSpecB`
+  2. `triominoWieferichShrinkNumsInvCandidateSpec_of_kernel`
+- 変更内容:
+  1. `TriominoWieferichShrinkNumsInvCandidateB` に対して
+     `hzlt / hpB' / hInv` を束ねる `Prop` 構造体
+     `TriominoWieferichShrinkNumsInvCandidateSpecB` を追加
+  2. `_of_pack` backend 由来の証明回収は
+     `triominoWieferichShrinkNumsInvCandidateSpec_of_kernel`
+     1 本へ集約
+  3. `triominoWieferichShrinkNumsInvCandidate_exists` は
+     `CandidateB_kernel` と上記 `Spec` を束ねるだけの薄い包装に変更
+  4. `triominoWieferichShrinkNumsInvCandidate_hzlt` /
+     `triominoWieferichShrinkNumsInvCandidate_hpB'` /
+     `triominoWieferichShrinkNumsInvCandidate_hInv`
+     は、`Spec_of_kernel` の射影へ変更
+- 意図:
+  - 独立 shrink 実装へ差し替える時の置換点を
+    `triominoWieferichShrinkNumsInvCandidateSpec_of_kernel` 1 箇所へ固定し、
+    helper・存在定理・`RecipeB_kernel` の配線を以後触らずに済むようにする。
+  - `CandidateB_kernel` 自体は computable のまま保ちつつ、
+    証明責務だけを `Spec` 側へ押し込める。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
