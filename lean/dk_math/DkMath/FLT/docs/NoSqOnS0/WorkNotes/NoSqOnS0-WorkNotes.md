@@ -1296,3 +1296,64 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-01 phase-14 継続（数値候補 helper を分離し、`RecipeB_kernel` の backend 参照を剥離）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `TriominoWieferichShrinkNumsInvCandidateB`
+  2. `triominoWieferichShrinkNumsInvCandidate_of_pack`
+  3. `triominoWieferichShrinkNumsInvCandidateB_kernel`
+  4. `triominoWieferichShrinkNumsInvCandidate_hzlt`
+  5. `triominoWieferichShrinkNumsInvCandidate_hpB'`
+  6. `triominoWieferichShrinkNumsInvCandidate_hInv`
+- 変更内容:
+  1. `NumsInvRecipe` とは別に、
+     `x' / y' / z'` だけを表す `NumsInvCandidateB` を追加
+  2. 現在の `_of_pack` backend からは
+     まず `Candidate` を引き出す helper を通す形に変更
+  3. `hzlt / hpB' / hInv` は
+     `Candidate` に対する個別 helper として回収するように整理
+  4. `triominoWieferichShrinkNumsInvRecipeB_kernel` 本体は
+     `CandidateB_kernel` と上記 3 helper を呼ぶだけに変更し、
+     直接 `r0` backend を束ねない形へ変更
+- 意図:
+  - 将来 `triominoWieferichShrinkNumsInvCandidateB_kernel` の中身を
+    独立 shrink の候補生成へ差し替える時に、
+    `RecipeB_kernel` 本体から backend 依存を切り離したまま進められるようにする。
+  - 候補生成と `hzlt / hpB' / hInv` の責務を別 helper に分け、
+    置換対象をさらに局所化する。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-01 phase-14 継続（`Candidate_exists` を追加し、独立候補の存在面を先行分離）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkNumsInvCandidate_exists`
+- 変更内容:
+  1. `TriominoWieferichShrinkNumsInvCandidateB` について、
+     `hzlt / hpB' / hInv` を備えた候補の存在を返す
+     `triominoWieferichShrinkNumsInvCandidate_exists` を追加
+  2. 現時点では `_of_pack` backend を witness に使って
+     上記存在定理を閉じる形に留め、
+     将来の独立 shrink 実装を差し込む数学の受け皿を先に確保
+  3. 一度 `CandidateB_kernel := Classical.choose ...` への切替も試したが、
+     このファイルの定義鎖が広く computable なため
+     noncomputable 連鎖が発生したので採用せず、
+     `CandidateB_kernel` 自体は引き続き computable wrapper に戻した
+- 意図:
+  - `CandidateB_kernel` の実装戦略とは独立に、
+    「独立 shrink 候補が存在する」という数学本体を
+    別定理へ先に押し出しておく。
+  - 将来、周辺定義を noncomputable 化するか、
+    あるいは computable な選択手段へ置換するかの判断を
+    後回しにしつつ、候補生成の証明面だけ先に育てられるようにする。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
