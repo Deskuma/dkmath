@@ -1560,3 +1560,40 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-01 phase-14 継続（`hx0` / `hxy` も独立ルートを先行追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrink_hx0_of_eq_mul_right`
+  2. `triominoWieferichShrink_hxy_of_eq_mul_eq_y`
+  3. `triominoWieferichShrinkNumsInvCandidate_hx0_of_eq_mul_core`
+  4. `triominoWieferichShrinkNumsInvCandidate_hxy_of_eq_mul_eq_core`
+  5. `triominoWieferichShrinkNumsInvCandidate_hx0_of_pack`
+  6. `triominoWieferichShrinkNumsInvCandidate_hxy_of_pack`
+- 変更内容:
+  1. `x = q * x'` から `x ≠ 0 -> x' ≠ 0` を回収する一般補題
+     `triominoWieferichShrink_hx0_of_eq_mul_right` を追加
+  2. `x = q * x'` と `y' = y` から
+     元の `Nat.Coprime x y` を `Nat.Coprime x' y'` へ引き戻す一般補題
+     `triominoWieferichShrink_hxy_of_eq_mul_eq_y` を追加
+  3. 公開 `CandidateB_kernel` 向けに、
+     上記一般補題をそのまま使う
+     `hx0_of_eq_mul_core` / `hxy_of_eq_mul_eq_core` を追加
+  4. 既存の pack 依存な `hx0' / hxy'` 回収本体は
+     `_of_pack` へ退避
+  5. 公開の `hx0_core` / `hxy_core` は
+     `let c := CandidateB_kernel ...` を置いた wrapper に変更し、
+     次段で wrapper 本体だけ差し替えればよい形へ整理
+- 意図:
+  - `hy0` と同じく、`hx0` と `hxy` も
+    「pack 退避」「公開 wrapper」「独立ルート」の三層構造へ揃え、
+    helper を順に独立実装へ置換できるようにする。
+  - 将来 `CandidateB_kernel` が
+    `x = q * x'` と `y' = y` を満たす独立候補に変わった時に、
+    `hx0_core` / `hxy_core` を 1 補題呼び出しへ即座に切り替えられるようにする。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
