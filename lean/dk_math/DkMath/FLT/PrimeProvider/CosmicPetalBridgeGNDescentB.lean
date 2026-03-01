@@ -694,6 +694,20 @@ theorem triominoWieferichShrink_q_not_dvd_y
   exact hnot hpack.hxy
 
 /--
+`hpB' : ¬ p ∣ (z' - y')` から、`z' ≠ 0` を回収する。
+
+`Nat` では `0 - y' = 0` なので、`z' = 0` はただちに `p ∣ (z' - y')` を与える。
+-/
+theorem triominoWieferichShrink_hz0_of_hpB'
+    {p y' z' : ℕ}
+    (hpB' : ¬ p ∣ (z' - y')) :
+    z' ≠ 0 := by
+  intro hz0
+  have hdiv : p ∣ (z' - y') := by
+    simp [hz0]
+  exact hpB' hdiv
+
+/--
 公開 `CandidateB_kernel` が満たす `Nums + Inv` 仕様。
 
 現時点では `_of_pack` backend から回収するが、
@@ -711,23 +725,41 @@ theorem triominoWieferichShrinkNumsInvCandidateSpec_of_kernel
       (triominoWieferichShrinkNumsInvCandidateB_kernel
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN) := by
+  let c : TriominoWieferichShrinkNumsInvCandidateB p x y z q :=
+    triominoWieferichShrinkNumsInvCandidateB_kernel
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   let r0 : TriominoWieferichShrinkNumsInvRecipeB p x y z q :=
     triominoWieferichShrinkNumsInvRecipe_of_pack
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  refine
-    { hzlt := ?_
-      hpB' := ?_
-      hInv := ?_ }
-  · simpa
-      [triominoWieferichShrinkNumsInvCandidateB_kernel,
+  have hzlt : c.z' < z := by
+    simpa
+      [c, triominoWieferichShrinkNumsInvCandidateB_kernel,
         triominoWieferichShrinkNumsInvCandidate_of_pack, r0] using r0.hzlt
-  · simpa
-      [triominoWieferichShrinkNumsInvCandidateB_kernel,
+  have hpB' : ¬ p ∣ (c.z' - c.y') := by
+    simpa
+      [c, triominoWieferichShrinkNumsInvCandidateB_kernel,
         triominoWieferichShrinkNumsInvCandidate_of_pack, r0] using r0.hpB'
-  · simpa
-      [triominoWieferichShrinkNumsInvCandidateB_kernel,
-        triominoWieferichShrinkNumsInvCandidate_of_pack, r0] using r0.hInv
+  have hInv : TriominoWieferichShrinkWitnessInvB p x y z q c.x' c.y' c.z' := by
+    refine
+      { hxy' := ?_
+        hx0' := ?_
+        hy0' := ?_
+        hz0' := ?_ }
+    · simpa
+        [c, triominoWieferichShrinkNumsInvCandidateB_kernel,
+          triominoWieferichShrinkNumsInvCandidate_of_pack, r0] using r0.hInv.hxy'
+    · simpa
+        [c, triominoWieferichShrinkNumsInvCandidateB_kernel,
+          triominoWieferichShrinkNumsInvCandidate_of_pack, r0] using r0.hInv.hx0'
+    · simpa
+        [c, triominoWieferichShrinkNumsInvCandidateB_kernel,
+          triominoWieferichShrinkNumsInvCandidate_of_pack, r0] using r0.hInv.hy0'
+    · exact
+        triominoWieferichShrink_hz0_of_hpB'
+          (p := p) (y' := c.y') (z' := c.z') hpB'
+  exact { hzlt := hzlt, hpB' := hpB', hInv := hInv }
 
 /--
 独立 shrink による数値候補の存在。

@@ -1442,3 +1442,31 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-01 phase-14 継続（`Spec_of_kernel` の `hInv` を部分的に backend 非依存化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrink_hz0_of_hpB'`
+- 変更内容:
+  1. `hpB' : ¬ p ∣ (z' - y')` から `z' ≠ 0` を直ちに回収する
+     汎用補題 `triominoWieferichShrink_hz0_of_hpB'` を追加
+  2. `triominoWieferichShrinkNumsInvCandidateSpec_of_kernel` は
+     `let c := CandidateB_kernel ...` を先に束ね、
+     `hzlt` と `hpB'` を個別 `have` に分離
+  3. 同定義内の `hInv` は構造体フィールドごとに組み立て直し、
+     `hxy' / hx0' / hy0'` は当面 `_of_pack` 由来のまま回収しつつ、
+     `hz0'` だけは新補題により `hpB'` から独立に導出する形へ変更
+  4. あわせて `triominoWieferichShrink_hz0_of_hpB'` のシグネチャを最小化し、
+     `unnecessarySimpa` / `unusedVariables` 系の linter warning を除去
+- 意図:
+  - `Spec_of_kernel` の `hInv` を段階的に独立化し、
+    まずは `hz0'` を backend 非依存へ切り出すことで、
+    次段で `hx0' / hy0' / hxy'` を順に独立化しやすくする。
+  - 補題の責務を小さく分け、
+    `Spec_of_kernel` を「前処理」「`hpB'`」「`hInv` 組み立て」に分割する。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
