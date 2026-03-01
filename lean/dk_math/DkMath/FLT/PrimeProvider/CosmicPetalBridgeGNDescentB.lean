@@ -518,18 +518,50 @@ structure TriominoWieferichShrinkNumsInvCoreB (p x y z q : ℕ) where
   hInv : TriominoWieferichShrinkWitnessInvB p x y z q n.x' n.y' n.z'
 
 /--
-独立実装へ差し替えるための `Nums + Inv` kernel 枠。
+独立実装の「生成結果」だけを持つレシピ。
 
-現時点では `_of_pack` 投影版を束ねるだけに留める。
+まずはここに縮小ロジックを閉じ込め、`NumsInvCoreB` 側は梱包だけに保つ。
 -/
-def triominoWieferichShrinkNumsInvCoreB_kernel
+structure TriominoWieferichShrinkNumsInvRecipeB (p x y z q : ℕ) where
+  x' : ℕ
+  y' : ℕ
+  z' : ℕ
+  hzlt : z' < z
+  hpB' : ¬ p ∣ (z' - y')
+  hInv : TriominoWieferichShrinkWitnessInvB p x y z q x' y' z'
+
+/-- `Recipe` から `KernelNums` を梱包する。 -/
+def TriominoWieferichShrinkNumsInvRecipeB.toNums
+    {p x y z q : ℕ}
+    (r : TriominoWieferichShrinkNumsInvRecipeB p x y z q) :
+    TriominoWieferichShrinkKernelNumsB p x y z q :=
+  { x' := r.x'
+    y' := r.y'
+    z' := r.z'
+    hzlt := r.hzlt
+    hpB' := r.hpB' }
+
+/-- `Recipe` から `NumsInvCore` を梱包する。 -/
+def TriominoWieferichShrinkNumsInvRecipeB.toCore
+    {p x y z q : ℕ}
+    (r : TriominoWieferichShrinkNumsInvRecipeB p x y z q) :
+    TriominoWieferichShrinkNumsInvCoreB p x y z q := by
+  refine { n := r.toNums, hInv := ?_ }
+  simpa [TriominoWieferichShrinkNumsInvRecipeB.toNums] using r.hInv
+
+/--
+独立実装へ差し替えるための `Nums + Inv` レシピ kernel。
+
+現時点では `_of_pack` 投影版の結果を並べ直すだけに留める。
+-/
+def triominoWieferichShrinkNumsInvRecipe_of_pack
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
     (hqP : Nat.Prime q)
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
-    TriominoWieferichShrinkNumsInvCoreB p x y z q := by
+    TriominoWieferichShrinkNumsInvRecipeB p x y z q := by
   let n : TriominoWieferichShrinkKernelNumsB p x y z q :=
     triominoWieferichShrinkKernelNums_of_pack
       (p := p) (x := x) (y := y) (z := z) (q := q)
@@ -540,7 +572,47 @@ def triominoWieferichShrinkNumsInvCoreB_kernel
       triominoWieferichShrinkKernelInv_of_nums_of_pack
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  exact ⟨n, hInv⟩
+  exact
+    { x' := n.x'
+      y' := n.y'
+      z' := n.z'
+      hzlt := n.hzlt
+      hpB' := n.hpB'
+      hInv := hInv }
+
+/--
+独立実装へ差し替えるための `Nums + Inv` レシピ kernel。
+
+現時点では `triominoWieferichShrinkNumsInvRecipe_of_pack` への委譲に留める。
+-/
+def triominoWieferichShrinkNumsInvRecipeB_kernel
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkNumsInvRecipeB p x y z q :=
+  triominoWieferichShrinkNumsInvRecipe_of_pack
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/--
+独立実装へ差し替えるための `Nums + Inv` kernel 枠。
+
+現時点では `Recipe` を `NumsInvCoreB` へ梱包するだけに留める。
+-/
+def triominoWieferichShrinkNumsInvCoreB_kernel
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkNumsInvCoreB p x y z q :=
+  (triominoWieferichShrinkNumsInvRecipeB_kernel
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).toCore
 
 /--
 独立実装へ差し替えるための `Nums` kernel 枠。

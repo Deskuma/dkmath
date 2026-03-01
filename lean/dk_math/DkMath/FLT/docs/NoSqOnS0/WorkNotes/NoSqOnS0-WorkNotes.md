@@ -1244,3 +1244,31 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-01 phase-14 継続（`NumsInvRecipe` を公開差し替え点として安定化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `TriominoWieferichShrinkNumsInvRecipeB.toNums`
+  2. `TriominoWieferichShrinkNumsInvRecipeB.toCore`
+  3. `triominoWieferichShrinkNumsInvRecipe_of_pack`
+- 変更内容:
+  1. `TriominoWieferichShrinkNumsInvRecipeB` から
+     `KernelNumsB` / `NumsInvCoreB` への梱包を専用メソッドへ分離
+  2. 既存の pack 依存レシピ本体は
+     `triominoWieferichShrinkNumsInvRecipe_of_pack` へ退避
+  3. 公開の `triominoWieferichShrinkNumsInvRecipeB_kernel` は
+     上記 `_of_pack` 版への委譲に変更し、
+     `triominoWieferichShrinkNumsInvCoreB_kernel` は
+     `Recipe.toCore` を呼ぶだけの安定した梱包層に整理
+- 意図:
+  - 将来 `triominoWieferichShrinkNumsInvRecipeB_kernel` の中身を
+    本当の独立 shrink 実装へ差し替える時に、
+    公開 API 側の配線を一切触らず済むようにする。
+  - 生成部（recipe）と梱包部（`toNums` / `toCore`）を分離し、
+    数値候補・不変量・公開 kernel の責務境界を明確にする。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
