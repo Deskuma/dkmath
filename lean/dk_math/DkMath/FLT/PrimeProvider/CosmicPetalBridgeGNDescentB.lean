@@ -509,6 +509,40 @@ theorem triominoWieferichShrinkKernelInv_of_nums_of_pack
   simpa [triominoWieferichShrinkKernelNums_of_pack, c] using c.hInv
 
 /--
+独立実装へ差し替えるための最小核。
+
+`Nums` と `Inv` を同一ソースから供給し、後段の差し替えで数値のズレを防ぐ。
+-/
+structure TriominoWieferichShrinkNumsInvCoreB (p x y z q : ℕ) where
+  n : TriominoWieferichShrinkKernelNumsB p x y z q
+  hInv : TriominoWieferichShrinkWitnessInvB p x y z q n.x' n.y' n.z'
+
+/--
+独立実装へ差し替えるための `Nums + Inv` kernel 枠。
+
+現時点では `_of_pack` 投影版を束ねるだけに留める。
+-/
+def triominoWieferichShrinkNumsInvCoreB_kernel
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkNumsInvCoreB p x y z q := by
+  let n : TriominoWieferichShrinkKernelNumsB p x y z q :=
+    triominoWieferichShrinkKernelNums_of_pack
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  have hInv :
+      TriominoWieferichShrinkWitnessInvB p x y z q n.x' n.y' n.z' := by
+    simpa [n] using
+      triominoWieferichShrinkKernelInv_of_nums_of_pack
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  exact ⟨n, hInv⟩
+
+/--
 独立実装へ差し替えるための `Nums` kernel 枠。
 
 現時点では `_of_pack` 投影版への委譲に留める。
@@ -521,9 +555,9 @@ def triominoWieferichShrinkKernelNumsCoreB_kernel
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichShrinkKernelNumsB p x y z q :=
-  triominoWieferichShrinkKernelNums_of_pack
+  (triominoWieferichShrinkNumsInvCoreB_kernel
     (p := p) (x := x) (y := y) (z := z) (q := q)
-    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).n
 
 /--
 独立実装へ差し替えるための `Eq` kernel 枠。
@@ -576,10 +610,11 @@ theorem triominoWieferichShrinkKernelInv_of_nums_core
       (triominoWieferichShrinkKernelNumsCoreB_kernel
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' := by
-  simpa [triominoWieferichShrinkKernelNumsCoreB_kernel] using
-    triominoWieferichShrinkKernelInv_of_nums_of_pack
+  let core : TriominoWieferichShrinkNumsInvCoreB p x y z q :=
+    triominoWieferichShrinkNumsInvCoreB_kernel
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  simpa [triominoWieferichShrinkKernelNumsCoreB_kernel, core] using core.hInv
 
 /--
 Triomino/Cosmic 固有の等式側 trace 生成 core（glue）。

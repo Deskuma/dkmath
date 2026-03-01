@@ -1218,3 +1218,29 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-01 phase-14 継続（`Nums + Inv` を同一ソースから供給する核を追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `TriominoWieferichShrinkNumsInvCoreB`
+  2. `triominoWieferichShrinkNumsInvCoreB_kernel`
+- 変更内容:
+  1. `triominoWieferichShrinkNumsInvCoreB_kernel` を新設し、
+     現時点では `_of_pack` 投影版の `n` と `hInv` を 1 束にまとめる形で実装
+  2. `triominoWieferichShrinkKernelNumsCoreB_kernel` は
+     上記 core の `.n` を返す形に変更
+  3. `triominoWieferichShrinkKernelInv_of_nums_core` は
+     同じ `NumsInvCoreB` を `let core := ...` で 1 回だけ束縛し、
+     `simpa [core] using core.hInv` で回収する形に変更
+- 意図:
+  - `Nums` と `Inv` が将来独立実装へ差し替わる時にも、
+    かならず同じ `x' y' z'` を見るように足場を固定する。
+  - 次段で `triominoWieferichShrinkNumsInvCoreB_kernel` の中身だけを
+    本当の独立実装へ差し替えれば、
+    公開 `Nums` / `Inv` の依存反転を崩さず進められるようにする。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
