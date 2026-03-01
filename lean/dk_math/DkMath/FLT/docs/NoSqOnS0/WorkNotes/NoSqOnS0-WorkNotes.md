@@ -1597,3 +1597,33 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-01 phase-14 継続（`x' = x / q` ルートを先行追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkNumsInvCandidate_hx0_of_div_core`
+  2. `triominoWieferichShrinkNumsInvCandidate_hxy_of_div_eq_core`
+- 変更内容:
+  1. `q ∣ x` と `x' = x / q` から
+     `x = q * x'` を `Nat.mul_div_cancel'` で回収し、
+     既存の `hx0_of_eq_mul_core` に渡して `hx0'` を得る
+     `triominoWieferichShrinkNumsInvCandidate_hx0_of_div_core` を追加
+  2. 同じ `x = q * x'` と `y' = y` を使い、
+     既存の `hxy_of_eq_mul_eq_core` に渡して `Nat.Coprime x' y'` を得る
+     `triominoWieferichShrinkNumsInvCandidate_hxy_of_div_eq_core` を追加
+  3. 途中の等式変形で `unnecessarySimpa` が出た箇所は
+     `simpa` から `simp` へ落として linter warning を除去
+- 意図:
+  - 将来 `CandidateB_kernel` を
+    `x' := x / q`, `y' := y`
+    を持つ独立候補へ差し替えた時に、
+    `hx0_core` / `hxy_core` を
+    既存の “eq-mul ルート” へ即座に接続できるようにする。
+  - `CandidateB_kernel` の候補式変更に先立って、
+    `x / q` を使う独立実装ルートを証明側へ先に敷く。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
