@@ -583,7 +583,8 @@ def triominoWieferichShrinkNumsInvRecipe_of_pack
 /--
 独立実装へ差し替えるための `Nums + Inv` レシピ kernel。
 
-現時点では `triominoWieferichShrinkNumsInvRecipe_of_pack` への委譲に留める。
+現時点では `triominoWieferichShrinkNumsInvRecipe_of_pack` を backend として使うが、
+公開側の骨組みは「候補の定義」と「証明の束ね」を先に固定しておく。
 -/
 def triominoWieferichShrinkNumsInvRecipeB_kernel
     {p x y z q : ℕ}
@@ -592,10 +593,28 @@ def triominoWieferichShrinkNumsInvRecipeB_kernel
     (hqP : Nat.Prime q)
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
-    TriominoWieferichShrinkNumsInvRecipeB p x y z q :=
-  triominoWieferichShrinkNumsInvRecipe_of_pack
-    (p := p) (x := x) (y := y) (z := z) (q := q)
-    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+    TriominoWieferichShrinkNumsInvRecipeB p x y z q := by
+  let r0 : TriominoWieferichShrinkNumsInvRecipeB p x y z q :=
+    triominoWieferichShrinkNumsInvRecipe_of_pack
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  let x' : ℕ := r0.x'
+  let y' : ℕ := r0.y'
+  let z' : ℕ := r0.z'
+  have hzlt : z' < z := by
+    simpa [x', y', z'] using r0.hzlt
+  have hpB' : ¬ p ∣ (z' - y') := by
+    simpa [x', y', z'] using r0.hpB'
+  have hInv :
+      TriominoWieferichShrinkWitnessInvB p x y z q x' y' z' := by
+    simpa [x', y', z'] using r0.hInv
+  exact
+    { x' := x'
+      y' := y'
+      z' := z'
+      hzlt := hzlt
+      hpB' := hpB'
+      hInv := hInv }
 
 /--
 独立実装へ差し替えるための `Nums + Inv` kernel 枠。

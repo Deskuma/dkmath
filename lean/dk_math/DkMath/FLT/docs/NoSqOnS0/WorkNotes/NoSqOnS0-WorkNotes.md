@@ -1272,3 +1272,27 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-01 phase-14 継続（`NumsInvRecipeB_kernel` の公開骨組みを固定）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `triominoWieferichShrinkNumsInvRecipeB_kernel` を
+     単純な `_of_pack` 委譲から `by` ブロックへ変更
+  2. backend の `r0` を 1 回だけ束ねたうえで、
+     `x' / y' / z'` の候補定義と
+     `hzlt / hpB' / hInv` の各証明を別 `have` に分離
+  3. 最後に `TriominoWieferichShrinkNumsInvRecipeB` を
+     明示的に束ねる形へ変更
+- 意図:
+  - 将来 `triominoWieferichShrinkNumsInvRecipeB_kernel` の中身を
+    本当の独立 shrink 実装へ差し替える時に、
+    「候補の定義」と「証明の束ね」の責務を
+    そのまま保ったまま中身だけ置換できるようにする。
+  - 現時点では挙動を変えず、
+    `Nums + Inv` 独立実装の受け皿となる公開骨組みだけを先に固定する。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
