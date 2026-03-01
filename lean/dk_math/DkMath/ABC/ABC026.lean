@@ -32,7 +32,7 @@ open MeasureTheory ProbabilityTheory
 This file contains the final assembly of the ABC conjecture proof,
 focusing on the analytic and structural components that are fully formalized.
 -/
-private noncomputable def K_of (γ : ℝ) : ℕ := 2 + (Nat.ceil γ : ℕ)
+noncomputable def K_of (γ : ℝ) : ℕ := 2 + (Nat.ceil γ : ℕ)
 
 
 /--
@@ -41,7 +41,7 @@ private noncomputable def K_of (γ : ℝ) : ℕ := 2 + (Nat.ceil γ : ℕ)
 ここで `K_of γ` は `γ` に依存する関数です（詳細は定義を参照）。
 この関数は非計算的（`noncomputable`）であり、主に解析的な数論の文脈で用いられます。
 -/
-private noncomputable def S_heavy_def (γ : ℝ) (X : ℕ) : Finset ℕ :=
+noncomputable def S_heavy_def (γ : ℝ) (X : ℕ) : Finset ℕ :=
   (Finset.range (X + 2)).filter fun p => p.Prime ∧ p ^ (K_of γ) ≤ X + 1
 
 
@@ -56,7 +56,7 @@ private noncomputable def S_heavy_def (γ : ℝ) (X : ℕ) : Finset ℕ :=
 
 この補題は、`S_heavy_def` の定義に基づき、べき乗条件から集合への包含を導きます。
 -/
-private lemma mem_S_heavy_of_pow_le {γ : ℝ} {X p : ℕ} (hp : p.Prime) (hpow : p ^ (K_of γ) ≤ X + 1) :
+lemma mem_S_heavy_of_pow_le {γ : ℝ} {X p : ℕ} (hp : p.Prime) (hpow : p ^ (K_of γ) ≤ X + 1) :
   p ∈ S_heavy_def γ X := by
   dsimp [S_heavy_def]
   -- p is prime so p ≥ 2; K_of γ ≥ 2, hence p ≤ p ^ (K_of γ). Combine with hpow.
@@ -81,7 +81,7 @@ private lemma mem_S_heavy_of_pow_le {γ : ℝ} {X p : ℕ} (hp : p.Prime) (hpow 
 `S_heavy_subset_range` 補題は、実数 `γ` と自然数 `X` に対して、`S_heavy_def γ X` で定義される有限集合が `Finset.range (X + 2)` の部分集合であることを示します。
 この補題は、`S_heavy_def` の構成要素が `0` から `X + 1` までの範囲に含まれることを保証します。
 -/
-private lemma S_heavy_subset_range (γ : ℝ) (X : ℕ) :
+lemma S_heavy_subset_range (γ : ℝ) (X : ℕ) :
   (S_heavy_def γ X : Finset ℕ) ⊆ Finset.range (X + 2) := by
   intro p hp
   simp only [S_heavy_def, Finset.mem_filter, Finset.mem_range] at hp
@@ -97,7 +97,7 @@ private lemma S_heavy_subset_range (γ : ℝ) (X : ℕ) :
 を示します。
 この補題は、`S_heavy_def` で定義される集合が、要素数の上限と素数性を満たすことを保証します。
 -/
-private lemma S_heavy_basic (γ : ℝ) (X : ℕ) :
+lemma S_heavy_basic (γ : ℝ) (X : ℕ) :
   ∃ S : Finset ℕ, S = S_heavy_def γ X ∧ S.card ≤ (X + 2) ∧ (∀ p ∈ S, p.Prime) := by
   let S := S_heavy_def γ X
   use S
@@ -123,7 +123,7 @@ private lemma S_heavy_basic (γ : ℝ) (X : ℕ) :
 ある自然数 `n` が存在し、`n ≤ X` かつ `(n * (n + 1)).factorization p ≥ K_of γ` を満たすことを主張します。
 この補題は、`S_heavy_def` の定義に基づき、`p` の因数分解に関する下限を与えるものです。
 -/
-private lemma witness_n_for_S_heavy {γ : ℝ} {X p : ℕ} (h : p ∈ S_heavy_def γ X) :
+lemma witness_n_for_S_heavy {γ : ℝ} {X p : ℕ} (h : p ∈ S_heavy_def γ X) :
   ∃ n, n ≤ X ∧ (n * (n + 1)).factorization p ≥ K_of γ := by
   -- Unpack membership: p.Prime and p ^ (K_of γ) ≤ X + 1
   rcases Finset.mem_filter.1 h with ⟨_, ⟨hp, hpow⟩⟩
