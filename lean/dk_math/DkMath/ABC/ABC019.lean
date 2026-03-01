@@ -229,7 +229,7 @@ lemma markov_card_bound
         apply div_le_div_of_nonneg_right h_calc; positivity
 
 -- Basic telescoping lemma: ∑_{k=1}^m (f k - f(k-1)) = f m - f 0
-private lemma sum_Icc_telescope (m : ℕ) (f : ℕ → ℝ) :
+lemma sum_Icc_telescope (m : ℕ) (f : ℕ → ℝ) :
   Finset.sum (Finset.Icc 1 m) (fun k => f k - f (k-1)) = f m - f 0 := by
   by_cases hm : m = 0
   · simp [hm]
