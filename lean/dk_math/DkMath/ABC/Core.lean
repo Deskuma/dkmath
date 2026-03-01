@@ -479,6 +479,32 @@ lemma rad_le {n : ℕ} (hn : n ≠ 0) : rad n ≤ n := by
     exact Nat.le_mul_of_pos_right _ hk_pos
   exact hrad_le_n
 
+/- ============================================================================
+     3. squarefree / squarefull controls
+   ============================================================================ -/
+
+
+/-- mathlib 標準を ℕ にエイリアス（再利用を最大化） -/
+/-
+An element of a monoid is squarefree if the only squares that
+divide it are the squares of units.
+
+def Squarefree [Monoid R] (r : R) : Prop :=
+  ∀ x : R, x * x ∣ r → IsUnit x
+-/
+-- #check Squarefree -- mathlib の定義を確認
+-- Squarefree.{u_1} {R : Type u_1} [Monoid R] (r : R) : Prop
+abbrev squarefree (n : ℕ) : Prop := Squarefree n
+
+/-- squarefull: すべての素因子が指数 ≥ 2 -/
+def squarefull (n : ℕ) : Prop :=
+  ∀ p, p.Prime → p ∣ n → p^2 ∣ n
+
+-- #eval squarefree 6  -- true
+-- #eval squarefree 9  -- false
+-- #eval squarefree 12 -- false
+-- #eval squarefree 30 -- true
+
 end ABC
 
 -- ------------------------------------------------------------------------------------------------------------------------------------
