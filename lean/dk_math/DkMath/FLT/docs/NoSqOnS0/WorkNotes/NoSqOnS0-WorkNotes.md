@@ -1415,3 +1415,30 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-01 phase-14 継続（独立 shrink の前処理として `q ∣ x` / `q ∤ y` を追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrink_q_dvd_x`
+  2. `triominoWieferichShrink_q_not_dvd_y`
+- 変更内容:
+  1. `PrimeGe5CounterexamplePack.xpow_eq_gap_mul_GN` と
+     `hqpow_dvd_GN : q^p ∣ GN p (z - y) y` から、
+     `q ∣ x` を回収する補題
+     `triominoWieferichShrink_q_dvd_x` を追加
+  2. 上記 `q ∣ x` と元の `hpack.hxy : Nat.Coprime x y` から、
+     `q ∤ y` を回収する補題
+     `triominoWieferichShrink_q_not_dvd_y` を追加
+- 意図:
+  - 次段で `triominoWieferichShrinkNumsInvCandidateSpec_of_kernel`
+    を独立 shrink の実証へ置き換える際に、
+    `hInv`（とくに非零・互いに素）の前処理として必要になる
+    `q` の整除情報を先に独立補題として固定する。
+  - 候補式に依存しない純算術部分を先に切り出し、
+    `Spec_of_kernel` 本体の差し替えを軽くする。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。

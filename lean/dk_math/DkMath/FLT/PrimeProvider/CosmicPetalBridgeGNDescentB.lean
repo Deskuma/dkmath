@@ -644,6 +644,56 @@ def triominoWieferichShrinkNumsInvCandidateB_kernel
     hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /--
+`q^p ∣ GN p (z - y) y` から、`q ∣ x` を回収する。
+
+後で独立 shrink の `Inv` を組む際の前処理として使う。
+-/
+theorem triominoWieferichShrink_q_dvd_x
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    q ∣ x := by
+  let _ := hpB
+  let _ := hq_not_dvd_gap
+  have hp_pos : 0 < p := hpack.hp.pos
+  have hq_dvd_qpow : q ∣ q ^ p := by
+    simpa using (pow_dvd_pow q (Nat.succ_le_of_lt hp_pos) : q ^ 1 ∣ q ^ p)
+  have hq_dvd_GN : q ∣ GN p (z - y) y := by
+    exact dvd_trans hq_dvd_qpow hqpow_dvd_GN
+  have hxpow : x ^ p = (z - y) * GN p (z - y) y := by
+    simpa [PrimeGe5CounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
+  have hq_dvd_xpow : q ∣ x ^ p := by
+    have hq_dvd_rhs : q ∣ (z - y) * GN p (z - y) y := by
+      exact dvd_mul_of_dvd_right hq_dvd_GN (z - y)
+    simpa [hxpow] using hq_dvd_rhs
+  exact hqP.dvd_of_dvd_pow hq_dvd_xpow
+
+/--
+`q ∣ x` と元の互いに素条件から、`q ∤ y` を回収する。
+
+後で独立 shrink の `Inv` を組む際の前処理として使う。
+-/
+theorem triominoWieferichShrink_q_not_dvd_y
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    ¬ q ∣ y := by
+  intro hq_dvd_y
+  have hq_dvd_x : q ∣ x :=
+    triominoWieferichShrink_q_dvd_x
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  have hnot : ¬ Nat.Coprime x y :=
+    Nat.not_coprime_of_dvd_of_dvd (Nat.Prime.one_lt hqP) hq_dvd_x hq_dvd_y
+  exact hnot hpack.hxy
+
+/--
 公開 `CandidateB_kernel` が満たす `Nums + Inv` 仕様。
 
 現時点では `_of_pack` backend から回収するが、
