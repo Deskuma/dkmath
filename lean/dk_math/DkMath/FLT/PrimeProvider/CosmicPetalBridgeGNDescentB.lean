@@ -544,6 +544,19 @@ structure TriominoWieferichShrinkNumsInvCandidateSpecB
   hpB' : ¬ p ∣ (c.z' - c.y')
   hInv : TriominoWieferichShrinkWitnessInvB p x y z q c.x' c.y' c.z'
 
+/-- `Candidate + Spec` から `Recipe` を復元する。 -/
+def TriominoWieferichShrinkNumsInvRecipeB.ofCandidateSpec
+    {p x y z q : ℕ}
+    (c : TriominoWieferichShrinkNumsInvCandidateB p x y z q)
+    (hs : TriominoWieferichShrinkNumsInvCandidateSpecB p x y z q c) :
+    TriominoWieferichShrinkNumsInvRecipeB p x y z q :=
+  { x' := c.x'
+    y' := c.y'
+    z' := c.z'
+    hzlt := hs.hzlt
+    hpB' := hs.hpB'
+    hInv := hs.hInv }
+
 /-- `Recipe` から `KernelNums` を梱包する。 -/
 def TriominoWieferichShrinkNumsInvRecipeB.toNums
     {p x y z q : ℕ}
@@ -752,8 +765,8 @@ theorem triominoWieferichShrinkNumsInvCandidate_hInv
 /--
 独立実装へ差し替えるための `Nums + Inv` レシピ kernel。
 
-現時点では `triominoWieferichShrinkNumsInvRecipe_of_pack` を backend として使うが、
-公開側の骨組みは「候補の定義」と「証明の束ね」を先に固定しておく。
+現時点では `CandidateB_kernel + Spec_of_kernel` の包装に留め、
+公開側の束ねはこの 2 点だけを見るように保つ。
 -/
 def triominoWieferichShrinkNumsInvRecipeB_kernel
     {p x y z q : ℕ}
@@ -767,32 +780,11 @@ def triominoWieferichShrinkNumsInvRecipeB_kernel
     triominoWieferichShrinkNumsInvCandidateB_kernel
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  let x' : ℕ := c.x'
-  let y' : ℕ := c.y'
-  let z' : ℕ := c.z'
-  have hzlt : z' < z := by
-    simpa [c, x', y', z'] using
-      triominoWieferichShrinkNumsInvCandidate_hzlt
-        (p := p) (x := x) (y := y) (z := z) (q := q)
-        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  have hpB' : ¬ p ∣ (z' - y') := by
-    simpa [c, x', y', z'] using
-      triominoWieferichShrinkNumsInvCandidate_hpB'
-        (p := p) (x := x) (y := y) (z := z) (q := q)
-        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  have hInv :
-      TriominoWieferichShrinkWitnessInvB p x y z q x' y' z' := by
-    simpa [c, x', y', z'] using
-      triominoWieferichShrinkNumsInvCandidate_hInv
-        (p := p) (x := x) (y := y) (z := z) (q := q)
-        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  exact
-    { x' := x'
-      y' := y'
-      z' := z'
-      hzlt := hzlt
-      hpB' := hpB'
-      hInv := hInv }
+  let hs : TriominoWieferichShrinkNumsInvCandidateSpecB p x y z q c :=
+    triominoWieferichShrinkNumsInvCandidateSpec_of_kernel
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  exact TriominoWieferichShrinkNumsInvRecipeB.ofCandidateSpec c hs
 
 /--
 独立実装へ差し替えるための `Nums + Inv` kernel 枠。

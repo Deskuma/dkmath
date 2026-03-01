@@ -1388,3 +1388,30 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-01 phase-14 継続（`RecipeB_kernel` も `Candidate + Spec` の包装へ統一）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `TriominoWieferichShrinkNumsInvRecipeB.ofCandidateSpec`
+- 変更内容:
+  1. `TriominoWieferichShrinkNumsInvCandidateB` と
+     `TriominoWieferichShrinkNumsInvCandidateSpecB` から
+     `TriominoWieferichShrinkNumsInvRecipeB` を復元する
+     `ofCandidateSpec` を追加
+  2. `triominoWieferichShrinkNumsInvRecipeB_kernel` は
+     `CandidateB_kernel` と `CandidateSpec_of_kernel` を受け、
+     `ofCandidateSpec` で梱包するだけの薄い層へ変更
+- 意図:
+  - `RecipeB_kernel` 側も
+    `CandidateB_kernel + CandidateSpec_of_kernel`
+    だけを見る構図に揃え、
+    将来の独立 shrink 実装差し替えで
+    `Recipe` 側の束ねロジックを一切触らずに済むようにする。
+  - 公開の `Nums + Inv` パイプライン全体を
+    「候補生成」と「仕様証明」の 2 本柱へ完全に揃える。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
