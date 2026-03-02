@@ -1798,3 +1798,38 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-03 phase-14 継続（`Eq` を `hEq' + hx0'` から再構成）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkWitnessEq_of_eq_and_hx0`
+- 変更内容:
+  1. `triominoWieferichShrinkKernelEq_of_nums_core`
+- 意図:
+  - shadow triple 用の独立 `Eq` 実装で、
+    `hyz' / hyzLt` を transport せずに
+    `hEq' : x'^p + y'^p = z'^p`
+    と `hx0' : x' ≠ 0`
+    だけから再構成できる形へ寄せた。
+  - これにより、`Eq` 側の真の数学負担を `hEq'` 1本へさらに圧縮した。
+- 実装メモ:
+  - `x' ≠ 0` から `0 < x'`、さらに `0 < x'^p` を作り、
+    `y'^p < x'^p + y'^p = z'^p` を得る。
+  - `z' ≤ y'` を仮定すると `z'^p ≤ y'^p` となって矛盾するので、
+    `y' < z'` を回収し、`y' ≤ z'` はそこから従わせた。
+  - `triominoWieferichShrinkKernelEq_of_nums_core` は
+    もはや `hyz_core / hyzLt_core` に依存せず、
+    `hEq_core` と `hx0_core` だけから `WitnessEq` を組む。
+- 効果:
+  - `CandidateB_kernel` を将来差し替えたとき、
+    `Eq` 側で本質的に作り直す必要があるのは `hEq'` だけになった。
+  - `hyz_core / hyzLt_core` は依然 helper として残すが、
+    公開 `Eq_of_nums_core` の依存からは外れた。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。

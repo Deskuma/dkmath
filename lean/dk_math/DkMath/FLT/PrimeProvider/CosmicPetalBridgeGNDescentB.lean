@@ -78,6 +78,34 @@ structure TriominoWieferichShrinkWitnessEqB
   hyz' : y' ≤ z'
   hyzLt : y' < z'
 
+/--
+`x'^p + y'^p = z'^p` と `x' ≠ 0` から、`y' < z'` と `y' ≤ z'` を回収する。
+
+shadow triple 用に `hEq'` だけを独立実装したい段で、`Eq` witness の残り 2 フィールドを
+transport なしで再構成するための補助補題。
+-/
+theorem triominoWieferichShrinkWitnessEq_of_eq_and_hx0
+    {p x y z q x' y' z' : ℕ}
+    (hx0' : x' ≠ 0)
+    (hEq' : x' ^ p + y' ^ p = z' ^ p) :
+    TriominoWieferichShrinkWitnessEqB p x y z q x' y' z' := by
+  have hxpos : 0 < x' := Nat.pos_of_ne_zero hx0'
+  have hxpow_pos : 0 < x' ^ p := by
+    apply Nat.pow_pos
+    exact hxpos
+  have hy_pow_lt_hz_pow : y' ^ p < z' ^ p := by
+    have : y' ^ p < x' ^ p + y' ^ p := Nat.lt_add_of_pos_left hxpow_pos
+    simpa [hEq'] using this
+  have hyzLt : y' < z' := by
+    by_contra hyz_ge
+    have hzy : z' ≤ y' := le_of_not_gt hyz_ge
+    have hz_pow_le_hy_pow : z' ^ p ≤ y' ^ p := Nat.pow_le_pow_left hzy p
+    exact (not_le_of_gt hy_pow_lt_hz_pow) hz_pow_le_hy_pow
+  exact
+    { hEq' := hEq'
+      hyz' := le_of_lt hyzLt
+      hyzLt := hyzLt }
+
 /-- witness の「不変量」部分（互いに素・非零）。 -/
 structure TriominoWieferichShrinkWitnessInvB
     (p x y z q x' y' z' : ℕ) : Prop where
@@ -2066,19 +2094,17 @@ theorem triominoWieferichShrinkKernelEq_of_nums_core
       triominoWieferichShrinkNumsInvCandidate_hEq_core
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  have hyz' : c.y' ≤ c.z' := by
+  have hx0' : c.x' ≠ 0 := by
     simpa [c] using
-      triominoWieferichShrinkNumsInvCandidate_hyz_core
-        (p := p) (x := x) (y := y) (z := z) (q := q)
-        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  have hyzLt : c.y' < c.z' := by
-    simpa [c] using
-      triominoWieferichShrinkNumsInvCandidate_hyzLt_core
+      triominoWieferichShrinkNumsInvCandidate_hx0_core
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   have hEq :
       TriominoWieferichShrinkWitnessEqB p x y z q c.x' c.y' c.z' := by
-    exact { hEq' := hEq', hyz' := hyz', hyzLt := hyzLt }
+    exact
+      triominoWieferichShrinkWitnessEq_of_eq_and_hx0
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hx0' hEq'
   simpa
       [triominoWieferichShrinkKernelNumsCoreB_kernel,
         triominoWieferichShrinkNumsInvCoreB_kernel,
