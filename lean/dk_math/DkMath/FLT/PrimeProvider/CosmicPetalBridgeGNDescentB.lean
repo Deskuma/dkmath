@@ -2087,14 +2087,20 @@ theorem triominoWieferichShrinkNumsInvCandidate_hxy_core
       (triominoWieferichShrinkNumsInvCandidateB_kernel
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y' := by
-  let c : TriominoWieferichShrinkNumsInvCandidateB p x y z q :=
-    triominoWieferichShrinkNumsInvCandidateB_kernel
+  let hL :
+      TriominoWieferichShrinkNumsInvCandidateLinkSpecB
+        p x y z q
+        (triominoWieferichShrinkNumsInvCandidateB_kernel
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN) :=
+    triominoWieferichShrinkNumsInvCandidateLinkSpec_of_kernel
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  simpa [c] using
-    triominoWieferichShrinkNumsInvCandidate_hxy_of_pack
+  exact
+    triominoWieferichShrinkNumsInvCandidate_hxy_of_eq_mul_eq_core
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+      hL.hxMul hL.hyEq
 
 /-- `Spec_of_kernel` 用に `hx0'` を先行回収する pack 依存 helper。 -/
 theorem triominoWieferichShrinkNumsInvCandidate_hx0_of_pack
@@ -2134,14 +2140,20 @@ theorem triominoWieferichShrinkNumsInvCandidate_hx0_core
     (triominoWieferichShrinkNumsInvCandidateB_kernel
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x' ≠ 0 := by
-  let c : TriominoWieferichShrinkNumsInvCandidateB p x y z q :=
-    triominoWieferichShrinkNumsInvCandidateB_kernel
+  let hL :
+      TriominoWieferichShrinkNumsInvCandidateLinkSpecB
+        p x y z q
+        (triominoWieferichShrinkNumsInvCandidateB_kernel
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN) :=
+    triominoWieferichShrinkNumsInvCandidateLinkSpec_of_kernel
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  simpa [c] using
-    triominoWieferichShrinkNumsInvCandidate_hx0_of_pack
+  exact
+    triominoWieferichShrinkNumsInvCandidate_hx0_of_eq_mul_core
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+      hL.hxMul
 
 /-- `Spec_of_kernel` 用に `hy0'` を先行回収する pack 依存 helper。 -/
 theorem triominoWieferichShrinkNumsInvCandidate_hy0_of_pack
@@ -2181,14 +2193,20 @@ theorem triominoWieferichShrinkNumsInvCandidate_hy0_core
     (triominoWieferichShrinkNumsInvCandidateB_kernel
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y' ≠ 0 := by
-  let c : TriominoWieferichShrinkNumsInvCandidateB p x y z q :=
-    triominoWieferichShrinkNumsInvCandidateB_kernel
+  let hL :
+      TriominoWieferichShrinkNumsInvCandidateLinkSpecB
+        p x y z q
+        (triominoWieferichShrinkNumsInvCandidateB_kernel
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN) :=
+    triominoWieferichShrinkNumsInvCandidateLinkSpec_of_kernel
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  simpa [c] using
-    triominoWieferichShrinkNumsInvCandidate_hy0_of_pack
+  exact
+    triominoWieferichShrinkNumsInvCandidate_hy0_of_eq_core
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+      hL.hyEq
 
 /-- `Spec_of_kernel` 用の `Inv` 構成 core helper。 -/
 theorem triominoWieferichShrinkNumsInvCandidateInvCore_of_kernel

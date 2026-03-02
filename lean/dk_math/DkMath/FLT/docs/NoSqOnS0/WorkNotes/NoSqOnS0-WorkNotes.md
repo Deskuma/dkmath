@@ -1987,3 +1987,38 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-03 phase-14 継続（`Inv` core を `LinkSpec` 経由へ切替）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `triominoWieferichShrinkNumsInvCandidate_hxy_core`
+  2. `triominoWieferichShrinkNumsInvCandidate_hx0_core`
+  3. `triominoWieferichShrinkNumsInvCandidate_hy0_core`
+- 意図:
+  - `hInv` の opaque な `_of_pack` 投影に依存していた 3 本を、
+    `TriominoWieferichShrinkNumsInvCandidateLinkSpec_of_kernel` と
+    既存の独立核補題
+    (`..._hxy_of_eq_mul_eq_core`, `..._hx0_of_eq_mul_core`, `..._hy0_of_eq_core`)
+    だけで回る形へ置き換えた。
+  - これで `Inv` 側は、public `CandidateB_kernel` の
+    `hxMul / hyEq` が保たれる限り、backend の `hInv` 実体に依存しなくなった。
+- 実装メモ:
+  - 3 本とも、まず `hL := triominoWieferichShrinkNumsInvCandidateLinkSpec_of_kernel ...`
+    を置き、そこから
+    - `hL.hxMul`
+    - `hL.hyEq`
+    を既存 core 補題へ流すだけの形にした。
+  - 既存の `*_of_pack` helper は残しており、切替は public core helper の参照面だけに留めた。
+- 効果:
+  - public `CandidateB_kernel` を shadow へ差し替える前段として、
+    `Inv` 側の依存はさらに軽くなった。
+  - 今後 `CandidateB_kernel` の数値候補を動かしても、`Inv` 側で壊れる可能性があるのは
+    `LinkSpec_of_kernel` の供給だけになった。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
