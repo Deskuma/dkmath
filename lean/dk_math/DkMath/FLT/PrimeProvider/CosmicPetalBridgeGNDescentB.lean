@@ -1089,22 +1089,83 @@ theorem triominoWieferichShrinkNumsInvCandidateEqCore_of_kernel
     triominoWieferichShrinkNumsInvCandidateB_kernel
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  let cs : TriominoWieferichShrinkNumsInvCandidateB p x y z q :=
+    triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  let hL :
+      TriominoWieferichShrinkNumsInvCandidateLinkSpecB
+        p x y z q
+        (triominoWieferichShrinkNumsInvCandidateB_kernel
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN) :=
+    triominoWieferichShrinkNumsInvCandidateLinkSpec_of_kernel
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  have hxdiv :
+      (@triominoWieferichShrinkNumsInvCandidate_of_pack p x y z q
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x' = x / q := by
+    exact
+      triominoWieferichShrinkNumsInvCandidate_hxdiv_via_trace_of_pack
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  have hy' :
+      (@triominoWieferichShrinkNumsInvCandidate_of_pack p x y z q
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y' = y := by
+    exact
+      triominoWieferichShrinkNumsInvCandidate_hy_eq_of_pack
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  have hfields :
+      (@triominoWieferichShrinkNumsInvCandidate_of_pack p x y z q
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x' = cs.x'
+        ∧
+      (@triominoWieferichShrinkNumsInvCandidate_of_pack p x y z q
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y' = cs.y'
+        ∧
+      (@triominoWieferichShrinkNumsInvCandidate_of_pack p x y z q
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' = cs.z' := by
+    exact
+      triominoWieferichShrinkNumsInvCandidate_of_pack_shadow_fields_of_eq
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN hxdiv hy'
+  rcases hfields with ⟨hx, hy, hz⟩
+  have hxc : c.x' = cs.x' := by
+    simpa [c, triominoWieferichShrinkNumsInvCandidateB_kernel] using hx
+  have hyc : c.y' = cs.y' := by
+    simpa [c, triominoWieferichShrinkNumsInvCandidateB_kernel] using hy
+  have hzc : c.z' = cs.z' := by
+    simpa [c, triominoWieferichShrinkNumsInvCandidateB_kernel] using hz
   have hEq' : c.x' ^ p + c.y' ^ p = c.z' ^ p := by
-    simpa [c] using
-      triominoWieferichShrinkNumsInvCandidate_hEq_of_pack
-        (p := p) (x := x) (y := y) (z := z) (q := q)
-        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  have hyz' : c.y' ≤ c.z' := by
-    simpa [c] using
-      triominoWieferichShrinkNumsInvCandidate_hyz_of_pack
-        (p := p) (x := x) (y := y) (z := z) (q := q)
-        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  have hyzLt : c.y' < c.z' := by
-    simpa [c] using
-      triominoWieferichShrinkNumsInvCandidate_hyzLt_of_pack
-        (p := p) (x := x) (y := y) (z := z) (q := q)
-        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  exact { hEq' := hEq', hyz' := hyz', hyzLt := hyzLt }
+    have hShadow :
+        cs.x' ^ p + cs.y' ^ p = cs.z' ^ p := by
+      have hEqb :
+          (@triominoWieferichShrinkNumsInvCandidate_of_pack p x y z q
+            hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x' ^ p
+            +
+            (@triominoWieferichShrinkNumsInvCandidate_of_pack p x y z q
+              hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y' ^ p
+            =
+            (@triominoWieferichShrinkNumsInvCandidate_of_pack p x y z q
+              hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' ^ p := by
+        exact
+          triominoWieferichShrinkNumsInvCandidate_hEq_of_pack
+            (p := p) (x := x) (y := y) (z := z) (q := q)
+            hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+      rw [← hz, ← hy, ← hx]
+      exact hEqb
+    rw [hxc, hyc, hzc]
+    exact hShadow
+  have hx0' : c.x' ≠ 0 := by
+    intro hx0
+    apply hpack.hx0
+    calc
+      x = q * c.x' := hL.hxMul
+      _ = 0 := by simp [hx0]
+  exact
+    triominoWieferichShrinkWitnessEq_of_eq_and_hx0
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hx0' hEq'
 
 /-- `CandidateB_kernel` 用に `hEq'` を回収する公開 core helper。 -/
 theorem triominoWieferichShrinkNumsInvCandidate_hEq_core
