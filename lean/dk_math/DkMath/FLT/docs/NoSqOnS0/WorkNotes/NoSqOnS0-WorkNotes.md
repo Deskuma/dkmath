@@ -2101,3 +2101,83 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-03 phase-14 継続（public `CandidateB_kernel` を shadow 候補へ切替）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `triominoWieferichShrinkNumsInvCandidateB_kernel`
+  2. `triominoWieferichShrinkNumsInvCandidateLinkSpec_of_kernel`
+  3. `triominoWieferichShrinkNumsInvCandidateEq_of_pack`
+  4. `triominoWieferichShrinkNumsInvCandidateEqCore_of_kernel`
+  5. `triominoWieferichShrinkNumsInvCandidate_hzlt_of_pack`
+  6. `triominoWieferichShrinkNumsInvCandidate_hzlt_core`
+  7. `triominoWieferichShrinkNumsInvCandidate_hpB'_of_pack`
+  8. `triominoWieferichShrinkNumsInvCandidate_hpB'_core`
+  9. `triominoWieferichShrinkNumsInvCandidate_hxy_of_pack`
+  10. `triominoWieferichShrinkNumsInvCandidate_hx0_of_pack`
+  11. `triominoWieferichShrinkNumsInvCandidate_hy0_of_pack`
+  12. `triominoWieferichShrinkNumsInvCandidate_hEq_shadow_of_pack`
+  13. `triominoWieferichShrinkKernelEqSeedTraceCoreB_kernel`
+- 意図:
+  - public `CandidateB_kernel` を
+    `x' := x / q`, `y' := y`, `z' := backend z'`
+    の shadow 候補へ切り替えた。
+  - それに伴い、`Inv / Eq / Spec` の各 helper を
+    「backend の性質を shadow に運び、最後に current kernel へ戻す」
+    形へ寄せ、差し替え後も外側配線が壊れないようにした。
+- 実装メモ:
+  - `LinkSpec_of_kernel` は、もう `_of_pack` への単純 `simpa` ではなく、
+    `LinkSpec_of_pack` と
+    `triominoWieferichShrinkNumsInvCandidate_of_pack_shadow_fields_of_kernel`
+    から `hxMul / hyEq` を current kernel へ transport する。
+  - `Eq_of_pack` / `EqCore_of_kernel` は、`hEq'` を
+    backend 側から fieldwise rewrite で current kernel に運び、
+    `triominoWieferichShrinkWitnessEq_of_eq_and_hx0`
+    で `hyz' / hyzLt` を再構成する流儀に統一した。
+  - `hzlt_of_pack` / `hpB'_of_pack` は、backend の性質を一度 shadow 候補へ移し、
+    `hzlt_core` / `hpB'_core` はそこから current kernel に戻す形へ変更した。
+  - `Inv` の pack helper (`hxy_of_pack` / `hx0_of_pack` / `hy0_of_pack`) も、
+    opaque backend の `hInv` 投影をやめ、`LinkSpec_of_kernel` の
+    `hxMul / hyEq` から独立に再構成する形へ揃えた。
+  - `hEq_shadow_of_pack` は、current kernel がすでに shadow 候補であるため、
+    backend→shadow transport をやめ、現行 kernel の `hEq_of_pack` を
+    直接使う薄い wrapper に簡約した。
+  - `triominoWieferichShrinkKernelEqSeedTraceCoreB_kernel` も、
+    `c.hxMul / c.hyEq` ではなく current `CandidateB_kernel` の
+    `LinkSpec_of_kernel` から `hxMul / hyEq` を回収する形に更新した。
+- 効果:
+  - public `CandidateB_kernel` の数値候補は、ついに shadow 形へ切り替わった。
+  - `Inv` は `LinkSpec` 依存、`Eq` は gate + shadow-first、`Spec` も shadow-first の構図を維持したまま、公開候補を更新できた。
+  - 残る不確定要素は引き続き `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件に閉じている。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-03 phase-14 継続（current-path から不要な pack-kernel 参照を除去）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `triominoWieferichShrinkKernelEqSeedTraceCoreB_kernel`
+- 意図:
+  - current-path の glue から、`triominoWieferichShrinkKernelEqSeedTracePackB_kernel` への未使用参照を 1 本除去し、
+    main path の `sorry` 依存を少しでも薄くする。
+- 実装メモ:
+  - `triominoWieferichShrinkKernelEqSeedTraceCoreB_kernel` 冒頭の
+    `let c := triominoWieferichShrinkKernelEqSeedTracePackB_kernel ...`
+    は、実際には以後使われていなかったため削除した。
+  - 現在の `EqSeedTraceCoreB_kernel` は
+    `NumsCore / EqCore / InvCore / LinkSpec_of_kernel`
+    だけで構成される。
+- 効果:
+  - 残る `sorry` 自体は変わらないが、少なくとも current-path の glue は
+    `pack-kernel` を直接参照しない構造へ一段寄った。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
