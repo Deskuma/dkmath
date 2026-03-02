@@ -1659,3 +1659,33 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-02 phase-14 継続（`Eq_of_nums_core` も helper-localize）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkNumsInvCandidateEq_of_pack`
+  2. `triominoWieferichShrinkNumsInvCandidate_hEq_of_pack`
+  3. `triominoWieferichShrinkNumsInvCandidate_hyz_of_pack`
+  4. `triominoWieferichShrinkNumsInvCandidate_hyzLt_of_pack`
+  5. `triominoWieferichShrinkNumsInvCandidateEqCore_of_kernel`
+- 変更内容:
+  1. `CandidateB_kernel` 向けの `Eq` backend を pack 依存 helper に退避
+  2. `hEq' / hyz' / hyzLt` の field helper を追加し、
+     将来 `CandidateB_kernel` 差し替え時の transport を helper 側へ局所化
+  3. `triominoWieferichShrinkKernelEq_of_nums_core` は
+     直接 `_of_pack` へ `simpa` する形をやめ、
+     `NumsInvCandidateEqCore_of_kernel` 経由の wrapper へ変更
+- 意図:
+  - `InvCore_of_kernel` と同じ流儀で `Eq` 側も helper-localize し、
+    `CandidateB_kernel` を将来差し替える際に
+    `Eq_of_nums_core` の壊れ方を `EqCore_of_kernel` まわりへ閉じ込める。
+  - `Spec_of_kernel` と同様に、公開側は薄皮を維持しつつ、
+    transport の変更点を小さく保つ。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
