@@ -2181,3 +2181,34 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-03 phase-14 継続（current-path の `hxMul / hyEq` 投影を追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `triominoWieferichShrinkKernel_hxmul_of_core_path`
+  2. `triominoWieferichShrinkKernel_hy_eq_of_core_path`
+- 意図:
+  - 既存の early `_of_pack` 投影は定義順の都合で legacy なまま残しつつ、
+    current-path (`KernelCoreB_kernel -> KernelNumsB_kernel`) から
+    `hxMul / hyEq` を直接見る投影を追加しておく。
+  - これにより、後続の整理や将来の置換で
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel`
+    を経由しない参照面を増やせる。
+- 実装メモ:
+  - どちらも `c := triominoWieferichShrinkKernelCoreB_kernel ...` を置き、
+    `c.hxMul / c.hyEq` を
+    `KernelNumsB_kernel = c.s.n`
+    へ `simpa` で投影するだけの薄い定理にした。
+  - 既存の `_of_pack` 投影は前方参照制約があるため、そのまま維持した。
+- 効果:
+  - すぐに既存呼び出しを置き換えてはいないが、current-path から
+    `hxMul / hyEq` を直接見られる正規投影ができた。
+  - main path と legacy path の境界がさらに明確になった。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。

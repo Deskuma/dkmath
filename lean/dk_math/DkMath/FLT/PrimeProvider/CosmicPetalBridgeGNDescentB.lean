@@ -3007,6 +3007,56 @@ def triominoWieferichShrinkKernelNumsB_kernel
     (p := p) (x := x) (y := y) (z := z) (q := q)
     hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).n
 
+/-- current-path から `x = q * x'` を回収する投影版。 -/
+theorem triominoWieferichShrinkKernel_hxmul_of_core_path
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    x =
+      q *
+        (triominoWieferichShrinkKernelNumsB_kernel
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x' := by
+  let c : TriominoWieferichShrinkKernelCoreB p x y z q :=
+    triominoWieferichShrinkKernelCoreB_kernel
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  simpa
+      [triominoWieferichShrinkKernelNumsB_kernel,
+        triominoWieferichShrinkKernelSeedB_kernel,
+        triominoWieferichShrinkKernelEqSeedB_kernel,
+        triominoWieferichShrinkKernelEqSeedCoreB_kernel,
+        triominoWieferichShrinkKernelEqSeedTraceB_kernel,
+        TriominoWieferichShrinkKernelCoreB.toSeed, c]
+    using c.hxMul
+
+/-- current-path から `y' = y` を回収する投影版。 -/
+theorem triominoWieferichShrinkKernel_hy_eq_of_core_path
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    (triominoWieferichShrinkKernelNumsB_kernel
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y' = y := by
+  let c : TriominoWieferichShrinkKernelCoreB p x y z q :=
+    triominoWieferichShrinkKernelCoreB_kernel
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  simpa
+      [triominoWieferichShrinkKernelNumsB_kernel,
+        triominoWieferichShrinkKernelSeedB_kernel,
+        triominoWieferichShrinkKernelEqSeedB_kernel,
+        triominoWieferichShrinkKernelEqSeedCoreB_kernel,
+        triominoWieferichShrinkKernelEqSeedTraceB_kernel,
+        TriominoWieferichShrinkKernelCoreB.toSeed, c]
+    using c.hyEq
+
 /-- canonical internal seed から `Eq` witness を回収する。 -/
 theorem triominoWieferichShrinkKernelEq_of_seed
     {p x y z q : ℕ}
