@@ -1689,3 +1689,26 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-02 phase-14 継続（`EqCore_of_kernel` を field-level wrapper まで分解）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkNumsInvCandidate_hEq_core`
+  2. `triominoWieferichShrinkNumsInvCandidate_hyz_core`
+  3. `triominoWieferichShrinkNumsInvCandidate_hyzLt_core`
+- 変更内容:
+  1. `triominoWieferichShrinkKernelEq_of_nums_core` は
+     `EqCore_of_kernel` を丸ごと参照する形をやめ、
+     `hEq_core / hyz_core / hyzLt_core` の field-level wrapper から
+     `TriominoWieferichShrinkWitnessEqB` を再構成する形へ変更
+- 意図:
+  - `Eq` 側も `Inv` 側と同じく
+    「field helper -> core helper -> wrapper」の三層へ揃え、
+    将来 `CandidateB_kernel` を差し替えた時の破損点を
+    `hEq_core / hyz_core / hyzLt_core` にさらに局所化する。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
