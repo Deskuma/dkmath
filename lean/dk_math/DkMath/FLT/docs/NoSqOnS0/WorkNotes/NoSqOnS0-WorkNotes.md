@@ -1690,6 +1690,38 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
 
+## 2026-03-03 phase-14 継続（Spec 側も shadow-first に寄せる）
+
+- 変更ファイル:
+  - `DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+- 追加:
+  - `triominoWieferichShrinkNumsInvCandidate_of_pack_shadow_fields_of_kernel`
+- 更新:
+  1. `triominoWieferichShrinkNumsInvCandidateEqCore_of_kernel`
+  2. `triominoWieferichShrinkNumsInvCandidate_hzlt_core`
+  3. `triominoWieferichShrinkNumsInvCandidate_hpB'_core`
+- 意図:
+  - `_of_pack` backend と shadow 候補の fieldwise 一致を、
+    trace 経由の `hxdiv / hy'` 供給付き helper に一本化した。
+  - `EqCore_of_kernel` は、個別に `hxdiv / hy'` を組み立てず、
+    `..._of_pack_shadow_fields_of_kernel` から shadow への一致を回収する形に簡素化した。
+  - `hzlt_core / hpB'_core` も pack 直結の `simpa` 委譲をやめ、
+    backend の性質を一度 shadow 側へ運んでから current kernel へ rewrite する
+    shadow-first ルートへ切り替えた。
+- 実装メモ:
+  - `hzlt_core` は `Recipe_of_pack.hzlt` から backend の `< z` を作り、
+    `z'` の一致だけで shadow/current へ運んだ。
+  - `hpB'_core` は `Recipe_of_pack.hpB'` から backend の `¬ p ∣ (z' - y')` を作り、
+    `y' / z'` の一致で shadow へ運んだ後、current kernel へ戻した。
+  - `hpB'_core` の transport は `simpa` 一発では通らず、
+    いったん `hp_div` を current `c` 側に正規化してから shadow 側へ移す形に直した。
+- 効果:
+  - `Spec` 側も `Eq` と同じく、shadow-first の一本化された transport ルートに揃った。
+  - `CandidateB_kernel` 差し替え時に壊れる場所は、さらに `Spec` helper 群に閉じた。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
 ### 2026-03-02 phase-14 継続（`EqCore_of_kernel` を field-level wrapper まで分解）
 
 - 変更ファイル:
