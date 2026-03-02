@@ -610,6 +610,13 @@ structure TriominoWieferichShrinkNumsInvCandidateSpecB
   hpB' : ¬ p ∣ (c.z' - c.y')
   hInv : TriominoWieferichShrinkWitnessInvB p x y z q c.x' c.y' c.z'
 
+/-- `Candidate` が元の `(x, y)` とどう繋がっているかをまとめる link 仕様。 -/
+structure TriominoWieferichShrinkNumsInvCandidateLinkSpecB
+    (p x y z q : ℕ)
+    (c : TriominoWieferichShrinkNumsInvCandidateB p x y z q) : Prop where
+  hxMul : x = q * c.x'
+  hyEq : c.y' = y
+
 /-- `Candidate + Spec` から `Recipe` を復元する。 -/
 def TriominoWieferichShrinkNumsInvRecipeB.ofCandidateSpec
     {p x y z q : ℕ}
@@ -738,6 +745,28 @@ theorem triominoWieferichShrinkNumsInvCandidate_hy_eq_of_pack
     triominoWieferichShrinkKernel_hy_eq_of_pack
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/-- `_of_pack` backend から `hxMul / hyEq` を 1 本に束ねて回収する。 -/
+theorem triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkNumsInvCandidateLinkSpecB
+      p x y z q
+      (@triominoWieferichShrinkNumsInvCandidate_of_pack p x y z q
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN) := by
+  refine ⟨?_, ?_⟩
+  · simpa using
+      triominoWieferichShrinkNumsInvCandidate_hxmul_of_pack
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  · simpa using
+      triominoWieferichShrinkNumsInvCandidate_hy_eq_of_pack
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /--
 `_of_pack` backend の `hxMul` から `x' = x / q` を回収する。
@@ -917,6 +946,22 @@ def triominoWieferichShrinkNumsInvCandidateB_kernel
   triominoWieferichShrinkNumsInvCandidate_of_pack
     (p := p) (x := x) (y := y) (z := z) (q := q)
     hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/-- public `CandidateB_kernel` 用の link 仕様。現時点では `_of_pack` backend から回収する。 -/
+theorem triominoWieferichShrinkNumsInvCandidateLinkSpec_of_kernel
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkNumsInvCandidateLinkSpecB p x y z q
+      (@triominoWieferichShrinkNumsInvCandidateB_kernel p x y z q
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN) := by
+  simpa [triominoWieferichShrinkNumsInvCandidateB_kernel] using
+    triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /-- `CandidateB_kernel` 用に `Eq` を先行回収する pack 依存 helper。 -/
 theorem triominoWieferichShrinkNumsInvCandidateEq_of_pack

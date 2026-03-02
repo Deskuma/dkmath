@@ -1954,3 +1954,36 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-03 phase-14 継続（`CandidateB` の `LinkSpec` を追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `TriominoWieferichShrinkNumsInvCandidateLinkSpecB`
+  2. `triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack`
+  3. `triominoWieferichShrinkNumsInvCandidateLinkSpec_of_kernel`
+- 意図:
+  - `CandidateSpecB` はそのままにして、
+    `hxMul / hyEq` の供給路だけを別仕様へ 1 本化した。
+  - 以後、public `CandidateB_kernel` について
+    `x = q * x'`, `y' = y`
+    を参照したいときは `LinkSpec` だけを見ればよくなる。
+- 実装メモ:
+  - `LinkSpec_of_pack` は既存の
+    `triominoWieferichShrinkNumsInvCandidate_hxmul_of_pack`
+    と
+    `triominoWieferichShrinkNumsInvCandidate_hy_eq_of_pack`
+    を単純に束ねる。
+  - `LinkSpec_of_kernel` は `triominoWieferichShrinkNumsInvCandidateB_kernel` が
+    現状 `_of_pack` への委譲であることを `simpa` で使う薄い wrapper。
+  - 追加位置は定義順に合わせ、`LinkSpec_of_kernel` は public kernel 定義の後ろへ置いた。
+- 効果:
+  - `hxMul / hyEq` を参照する将来の helper は、個別 projection を直接見る必要がなくなった。
+  - public `CandidateB` 側へのリンク露出が 1 箇所に集約され、shadow 差し替え前の staging が軽くなった。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
