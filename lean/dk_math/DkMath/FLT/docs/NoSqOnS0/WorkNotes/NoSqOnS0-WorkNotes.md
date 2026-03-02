@@ -1712,3 +1712,27 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-02 phase-14 継続（`CandidateB_kernel` 差し替え前の影候補を追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow`
+  2. `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_x`
+  3. `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_y`
+  4. `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_z`
+- 意図:
+  - 公開 `CandidateB_kernel` をまだ切り替えずに、
+    次段で採用したい
+    `x' := x / q`, `y' := y`
+    の候補形を先に独立定義として固定する。
+  - `z'` は当面 `_of_pack` backend の値を流用し、
+    `Eq / hzlt / hpB'` 側 helper の追随先を先に観察できるようにする。
+  - これにより、最終的な差し替えは
+    `CandidateB_kernel := ..._div_eq_shadow`
+    の一行変更に近づける。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。

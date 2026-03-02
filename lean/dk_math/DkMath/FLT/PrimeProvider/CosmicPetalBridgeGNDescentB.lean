@@ -626,6 +626,76 @@ def triominoWieferichShrinkNumsInvCandidate_of_pack
       z' := r0.z' }
 
 /--
+次段の差し替え用に、`x' := x / q`, `y' := y` を先に固定した影候補。
+
+`z'` はまだ `_of_pack` backend の値を流用し、`Eq/Spec` 側が新候補へ追随できるまで
+公開 `CandidateB_kernel` は切り替えない。
+-/
+def triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkNumsInvCandidateB p x y z q := by
+  let c : TriominoWieferichShrinkNumsInvCandidateB p x y z q :=
+    triominoWieferichShrinkNumsInvCandidate_of_pack
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  exact
+    { x' := x / q
+      y' := y
+      z' := c.z' }
+
+/-- 影候補では `x' = x / q` が definitionally fixed。 -/
+@[simp] theorem triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_x
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x' = x / q := by
+  simp [triominoWieferichShrinkNumsInvCandidate_div_eq_shadow]
+
+/-- 影候補では `y' = y` が definitionally fixed。 -/
+@[simp] theorem triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_y
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y' = y := by
+  simp [triominoWieferichShrinkNumsInvCandidate_div_eq_shadow]
+
+/--
+影候補では `z'` だけ `_of_pack` backend を流用する。
+
+公開 kernel を差し替える前に、`hzlt / hpB' / Eq` の helper をこの値へ追随させる。
+-/
+@[simp] theorem triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_z
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z'
+      =
+    (triominoWieferichShrinkNumsInvCandidate_of_pack
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' := by
+  simp [triominoWieferichShrinkNumsInvCandidate_div_eq_shadow]
+
+/--
 独立実装へ差し替えるための数値候補 kernel。
 
 現時点では計算可能性を保つため、
@@ -936,6 +1006,21 @@ theorem triominoWieferichShrink_hpB'_of_eq_gap
   apply hpB
   simpa [hgap] using hpB'
 
+/--
+`z - y = k * (z' - y')` が分かれば、元の Branch B 条件を移送できる。
+
+係数 `k` に条件は要らず、`p ∣ (z' - y')` なら自動的に `p ∣ k * (z' - y')` となる。
+-/
+theorem triominoWieferichShrink_hpB'_of_eq_mul_gap
+    {p y z y' z' k : ℕ}
+    (hpB : ¬ p ∣ (z - y))
+    (hgap : z - y = k * (z' - y')) :
+    ¬ p ∣ (z' - y') := by
+  intro hpB'
+  have hdiv : p ∣ k * (z' - y') := dvd_mul_of_dvd_right hpB' k
+  apply hpB
+  simpa [hgap] using hdiv
+
 /-- `z' = z / q` が分かれば、`Nat.div_lt_self` で strict 減少を回収できる。 -/
 theorem triominoWieferichShrink_hzlt_of_eq_div
     {z q z' : ℕ}
@@ -1018,6 +1103,41 @@ theorem triominoWieferichShrinkNumsInvCandidate_hpB'_of_eq_gap_core
   let _ := hq_not_dvd_gap
   let _ := hqpow_dvd_GN
   exact triominoWieferichShrink_hpB'_of_eq_gap hpB hgap
+
+/--
+公開 `CandidateB_kernel` に対して `z - y = k * (z' - y')` が示せれば、
+`hpB'` を回収できる。
+
+将来 gap 保存ではなく「一定係数で縮む gap」を採る時の独立ルートとして使う。
+-/
+theorem triominoWieferichShrinkNumsInvCandidate_hpB'_of_eq_mul_core
+    {p x y z q k : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y)
+    (hgap :
+      z - y =
+        k *
+          ((triominoWieferichShrinkNumsInvCandidateB_kernel
+              (p := p) (x := x) (y := y) (z := z) (q := q)
+              hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' -
+            (triominoWieferichShrinkNumsInvCandidateB_kernel
+              (p := p) (x := x) (y := y) (z := z) (q := q)
+              hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y')) :
+    ¬ p ∣
+      ((triominoWieferichShrinkNumsInvCandidateB_kernel
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' -
+        (triominoWieferichShrinkNumsInvCandidateB_kernel
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y') := by
+  let _ := hpack
+  let _ := hqP
+  let _ := hq_not_dvd_gap
+  let _ := hqpow_dvd_GN
+  exact triominoWieferichShrink_hpB'_of_eq_mul_gap hpB hgap
 
 /--
 公開 `CandidateB_kernel` に対して `z' = z / q` が示せれば、
