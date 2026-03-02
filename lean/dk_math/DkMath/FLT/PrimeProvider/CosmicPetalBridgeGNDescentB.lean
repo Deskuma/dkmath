@@ -1495,6 +1495,136 @@ theorem triominoWieferichShrinkNumsInvCandidate_hxy_of_div_eq_core
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN hxmul hy'
 
 /--
+影候補 `div_eq_shadow` では `y' = y` が definitionally 固定されているので、
+`hy0'` は独立ルートで即座に回収できる。
+-/
+theorem triominoWieferichShrinkNumsInvCandidate_hy0_shadow_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y' ≠ 0 := by
+  have hy' :
+      (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y' = y := by
+    simp [triominoWieferichShrinkNumsInvCandidate_div_eq_shadow]
+  exact
+    triominoWieferichShrink_hy0_of_eq_y
+      (p := p) (x := x) (y := y) (z := z) hpack hy'
+
+/--
+影候補 `div_eq_shadow` では `x' = x / q` が definitionally 固定されているので、
+`q ∣ x` から `hx0'` を独立ルートで回収できる。
+-/
+theorem triominoWieferichShrinkNumsInvCandidate_hx0_shadow_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x' ≠ 0 := by
+  have hxq : q ∣ x :=
+    triominoWieferichShrink_q_dvd_x
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  have hxdiv :
+      (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x' = x / q := by
+    simp [triominoWieferichShrinkNumsInvCandidate_div_eq_shadow]
+  have hxmul :
+      x =
+        q *
+          (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
+            (p := p) (x := x) (y := y) (z := z) (q := q)
+            hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x' := by
+    calc
+      x = q * (x / q) := by
+        simpa using (Nat.mul_div_cancel' hxq).symm
+      _ =
+          q *
+            (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
+              (p := p) (x := x) (y := y) (z := z) (q := q)
+              hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x' := by
+        simp
+  exact
+    triominoWieferichShrink_hx0_of_eq_mul_right
+      (x := x) (q := q)
+      (x' :=
+        (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x')
+      hpack.hx0 hxmul
+
+/--
+影候補 `div_eq_shadow` では `x' = x / q`, `y' = y` が definitionally 固定されているので、
+`Nat.Coprime x' y'` も独立ルートで回収できる。
+-/
+theorem triominoWieferichShrinkNumsInvCandidate_hxy_shadow_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    Nat.Coprime
+      (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x'
+      (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y' := by
+  have hxq : q ∣ x :=
+    triominoWieferichShrink_q_dvd_x
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  have hxdiv :
+      (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x' = x / q := by
+    simp [triominoWieferichShrinkNumsInvCandidate_div_eq_shadow]
+  have hy' :
+      (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y' = y := by
+    simp [triominoWieferichShrinkNumsInvCandidate_div_eq_shadow]
+  have hxmul :
+      x =
+        q *
+          (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
+            (p := p) (x := x) (y := y) (z := z) (q := q)
+            hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x' := by
+    calc
+      x = q * (x / q) := by
+        simpa using (Nat.mul_div_cancel' hxq).symm
+      _ =
+          q *
+            (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
+              (p := p) (x := x) (y := y) (z := z) (q := q)
+              hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x' := by
+        simp
+  exact
+    triominoWieferichShrink_hxy_of_eq_mul_eq_y
+      (x := x) (y := y) (q := q)
+      (x' :=
+        (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x')
+      (y' :=
+        (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y')
+      hpack.hxy hxmul hy'
+
+/--
 `Spec_of_kernel` 用に `hxy'` を回収する公開 core helper。
 
 現時点では pack 依存版への委譲に留め、次段の独立化ではここだけ差し替える。

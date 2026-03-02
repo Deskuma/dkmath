@@ -1736,3 +1736,26 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-02 phase-14 継続（shadow 向け `Inv` helper を先行追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkNumsInvCandidate_hy0_shadow_core`
+  2. `triominoWieferichShrinkNumsInvCandidate_hx0_shadow_core`
+  3. `triominoWieferichShrinkNumsInvCandidate_hxy_shadow_core`
+- 意図:
+  - 公開 `CandidateB_kernel` はまだ据え置きのまま、
+    影候補 `div_eq_shadow` に対して `hy0 / hx0 / hxy` が
+    独立ルートで落ちることを先に確定する。
+  - 次段で public kernel を shadow へ差し替える際、
+    `InvCore_of_kernel` 側は参照の差し替えだけで追随できる状態に近づける。
+- 実装メモ:
+  - `hy0` は `y' = y` を `simp` で回収して `triominoWieferichShrink_hy0_of_eq_y` へ接続。
+  - `hx0 / hxy` は `q ∣ x` から `x = q * (x / q)` を作り、
+    `x' = x / q`, `y' = y` の shadow 定義へ接続する形。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
