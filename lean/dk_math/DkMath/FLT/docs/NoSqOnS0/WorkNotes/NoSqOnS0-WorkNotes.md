@@ -2212,3 +2212,33 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-03 phase-14 継続（`LinkSpec_of_kernel` を pure route に切替）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `triominoWieferichShrinkNumsInvCandidateLinkSpec_of_kernel`
+- 意図:
+  - shadow kernel になった現状では、`LinkSpec_of_kernel` はもはや `_of_pack` backend からの transport に依存しなくてよい。
+  - `hxMul / hyEq` を、public `CandidateB_kernel` の算術と定義展開だけで供給する形へ切り替え、依存をさらに軽くする。
+- 実装メモ:
+  - `hxMul` は
+    - `q^p ∣ GN` から `q ∣ x` を局所に再構成し、
+    - `Nat.mul_div_cancel'`
+    - shadow 定義 (`x' := x / q`)
+    を使って `x = q * c.x'` を直接示した。
+  - `hyEq` は shadow 定義 (`y' := y`) を `simp` で回収した。
+  - これにより、`LinkSpec_of_kernel` は
+    - `LinkSpec_of_pack`
+    - `of_pack_shadow_fields_of_kernel`
+    を参照しない pure route になった。
+- 効果:
+  - `Inv` 側の core helper 群が依存する `LinkSpec_of_kernel` は、opaque backend transport から切り離された。
+  - public `CandidateB_kernel` の外側では、`hxMul / hyEq` は now current kernel だけを見れば足りる。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
