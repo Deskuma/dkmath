@@ -1833,3 +1833,38 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-03 phase-14 継続（gate 付き shadow `Eq` を追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkNumsInvCandidate_hEq_shadow_of_pack`
+  2. `triominoWieferichShrinkNumsInvCandidateEq_shadow_of_pack`
+- 意図:
+  - 現段階では `_of_pack` backend の `x' / y'` は opaque で、
+    `x' = x / q`, `y' = y` は自動では出ない。
+  - そこで、将来 `hxdiv / hy'` が供給できた瞬間に、
+    backend の `hEq'` を shadow triple へ運んで
+    shadow `Eq` witness を即座に起動できる “gate 付き” ルートを先に敷いた。
+- 実装メモ:
+  - `triominoWieferichShrinkNumsInvCandidate_hEq_shadow_of_pack` は、
+    backend の `hEq'` を `triominoWieferichShrinkNumsInvCandidate_hEq_of_pack` から取り出し、
+    `triominoWieferichShrinkNumsInvCandidate_of_pack_shadow_fields_of_eq` の fieldwise gate
+    (`x' / y' / z'` 一致) を使って shadow 側へ rewrite する。
+  - `simp` での全体 rewrite は再帰が深くなりやすかったため、
+    最終段は `rw [← hz, ← hy, ← hx]` の順で明示的に backend 側へ戻して `hEqb` を適用した。
+  - `triominoWieferichShrinkNumsInvCandidateEq_shadow_of_pack` は、
+    `hx0'` を `triominoWieferichShrinkNumsInvCandidate_hx0_shadow_core` から回収し、
+    `triominoWieferichShrinkWitnessEq_of_eq_and_hx0` で `Eq` witness を完成する。
+- 効果:
+  - まだ public `CandidateB_kernel` は据え置きのままでも、
+    `hxdiv / hy'` さえ後から取り出せれば shadow `Eq` まで一気に配線できる状態になった。
+  - つまり、shadow 差し替え前の判定フェーズと、差し替え後の `Eq` 追随の間に
+    “橋” が一本追加された形。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
