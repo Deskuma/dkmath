@@ -1780,9 +1780,19 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - 実装メモ:
   - 構造体の等値そのものではなく、fieldwise 一致（3 本の equality）の conjunction に落とした。
   - `z'` は shadow が backend 流用なので `.symm` で即回収。
-  - `kernel` ではなく `_of_pack` を対象にしておき、将来は
-    `simpa [triominoWieferichShrinkNumsInvCandidateB_kernel]`
-    で public kernel 側へ持ち上げられる。
+  - `kernel` ではなく `_of_pack` を対象にした。
+    `CandidateB_kernel` への public wrapper も検討したが、
+    定義順の都合で前方参照になり、現段階では実益が薄いため見送った。
+    まずは `_of_pack` backend について
+    `x' = x / q` と `y' = y`
+    が実際に示せるかを判定する用途に限定する。
+- 判断:
+  - `triominoWieferichShrinkKernelNums_of_pack` は
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel`（残る唯一の `sorry`）の投影なので、
+    `_of_pack` backend の `x' / y'` は現時点では opaque。
+  - したがって、public `CandidateB_kernel` を shadow へ差し替える前に、
+    まず `_of_pack` backend 側で `hxdiv / hy'` が本当に証明できるかを確認する必要がある。
+    ここが通らなければ、差し替えは単なる refactor ではなく数学内容の更新になる。
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
