@@ -1759,3 +1759,32 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-02 phase-14 継続（shadow 差し替え前の fieldwise gate を追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkNumsInvCandidate_of_pack_shadow_fields_of_eq`
+- 意図:
+  - 無条件の `kernel = shadow` は、現状の backend が `sorry` を含むため
+    そのまま証明対象にすると依存型の等値で不安定になりやすい。
+  - 代わりに、
+    `x' = x / q` と `y' = y`
+    が示せた場合に、
+    `_of_pack` backend と `div_eq_shadow` が
+    `x' / y' / z'` の 3 フィールドで一致することを示す “gate” を追加した。
+  - これにより、public kernel 差し替え前に
+    「本当に同じ triple を見ているか」を helper レベルで判定できる。
+- 実装メモ:
+  - 構造体の等値そのものではなく、fieldwise 一致（3 本の equality）の conjunction に落とした。
+  - `z'` は shadow が backend 流用なので `.symm` で即回収。
+  - `kernel` ではなく `_of_pack` を対象にしておき、将来は
+    `simpa [triominoWieferichShrinkNumsInvCandidateB_kernel]`
+    で public kernel 側へ持ち上げられる。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。

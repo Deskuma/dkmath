@@ -696,6 +696,58 @@ def triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
   simp [triominoWieferichShrinkNumsInvCandidate_div_eq_shadow]
 
 /--
+`_of_pack` backend について `x' = x / q`, `y' = y` が示せれば、
+影候補 `div_eq_shadow` と 3 フィールドが一致する。
+
+構造体の等値そのものではなく fieldwise 一致に留め、差し替え前の安全確認に使う。
+前提の `hxdiv / hy'` は現状の backend からはまだ自動では出ない。
+-/
+theorem triominoWieferichShrinkNumsInvCandidate_of_pack_shadow_fields_of_eq
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y)
+    (hxdiv :
+      (@triominoWieferichShrinkNumsInvCandidate_of_pack p x y z q
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x' = x / q)
+    (hy' :
+      (@triominoWieferichShrinkNumsInvCandidate_of_pack p x y z q
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y' = y) :
+    ((@triominoWieferichShrinkNumsInvCandidate_of_pack p x y z q
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x'
+        =
+      (@triominoWieferichShrinkNumsInvCandidate_div_eq_shadow p x y z q
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x')
+    ∧
+    ((@triominoWieferichShrinkNumsInvCandidate_of_pack p x y z q
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y'
+        =
+      (@triominoWieferichShrinkNumsInvCandidate_div_eq_shadow p x y z q
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y')
+    ∧
+    ((@triominoWieferichShrinkNumsInvCandidate_of_pack p x y z q
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z'
+        =
+      (@triominoWieferichShrinkNumsInvCandidate_div_eq_shadow p x y z q
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z') := by
+  constructor
+  · exact hxdiv.trans
+      (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_x
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).symm
+  constructor
+  · exact hy'.trans
+      (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_y
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).symm
+  · exact
+      (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_z
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).symm
+
+/--
 独立実装へ差し替えるための数値候補 kernel。
 
 現時点では計算可能性を保つため、
