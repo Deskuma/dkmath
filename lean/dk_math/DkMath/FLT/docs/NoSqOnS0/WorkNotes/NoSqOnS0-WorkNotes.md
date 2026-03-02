@@ -1906,3 +1906,51 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-03 phase-14 継続（kernel interface に `hxMul / hyEq` を追加）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `TriominoWieferichShrinkKernelCoreB` に
+     - `hxMul : x = q * s.n.x'`
+     - `hyEq : s.n.y' = y`
+     を追加
+  2. 上記 2 フィールドを
+     - `triominoWieferichShrinkKernelEqSeedTraceCoreB_kernel`
+     - `triominoWieferichShrinkKernelCoreB_kernel`
+     で透過させるよう更新
+  3. backend からの projection helper を追加
+     - `triominoWieferichShrinkKernel_hxmul_of_pack`
+     - `triominoWieferichShrinkKernel_hy_eq_of_pack`
+  4. candidate レベルの helper を追加
+     - `triominoWieferichShrinkNumsInvCandidate_hxmul_of_pack`
+     - `triominoWieferichShrinkNumsInvCandidate_hy_eq_of_pack`
+     - `triominoWieferichShrinkNumsInvCandidate_hxdiv_via_trace_of_pack`
+  5. gate を仮定なしで起動する wrapper を追加
+     - `triominoWieferichShrinkNumsInvCandidate_hEq_shadow_via_trace_of_pack`
+     - `triominoWieferichShrinkNumsInvCandidateEq_shadow_via_trace_of_pack`
+- 意図:
+  - `_of_pack` backend の `x' / y'` は、唯一の `sorry` の投影なので opaque。
+  - そのため、外側から定義展開で `x' = x / q` や `y' = y` を取り出す代わりに、
+    それらのリンク命題を kernel interface 自体に昇格させた。
+  - これで、既存の gate 付き shadow `Eq` ルートを
+    “仮定付きの橋” から “trace を介して起動できる橋” へ格上げした。
+- 実装メモ:
+  - `hxMul` は `x' = x / q` よりも自然なリンクとして保持し、
+    `triominoWieferichShrinkNumsInvCandidate_hxdiv_via_trace_of_pack` で必要時に `x / q` 形へ変換する。
+  - `hyEq` はそのまま projection で外に出し、shadow `Eq` 側へ直接渡せる形にした。
+  - 変更は interface の拡張だけで、唯一の `sorry`
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel`
+    自体の数理は触っていない。
+- 効果:
+  - `hxMul / hyEq` が opaque backend の外側へ出たので、
+    shadow `Eq` は trace wrapper 経由で起動可能になった。
+  - 以後の作業は、public `CandidateB_kernel` 差し替え前でも
+    “リンク命題が使えるかどうか” を helper 群で試せる。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
