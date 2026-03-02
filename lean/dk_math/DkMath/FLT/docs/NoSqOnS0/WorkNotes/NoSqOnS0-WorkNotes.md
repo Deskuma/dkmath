@@ -1868,3 +1868,41 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-03 phase-14 継続（shadow `Eq` の gate を接続）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 追加内容:
+  1. `triominoWieferichShrinkNumsInvCandidate_hEq_shadow_of_pack`
+  2. `triominoWieferichShrinkNumsInvCandidateEq_shadow_of_pack`
+- 意図:
+  - `Candidate_of_pack` backend の `x' / y'` は依然 opaque だが、
+    将来 `hxdiv : x' = x / q` と `hy' : y' = y` が取り出せた瞬間に、
+    backend の `hEq'` を shadow triple へ運び、
+    shadow 側の `Eq` witness を即時に起動できるようにした。
+  - つまり、shadow 差し替え前の “判定フェーズ” と
+    shadow 差し替え後の “Eq 追随” の間に、gate 付きの接続橋を追加した。
+- 実装メモ:
+  - `triominoWieferichShrinkNumsInvCandidate_hEq_shadow_of_pack` は、
+    `triominoWieferichShrinkNumsInvCandidate_hEq_of_pack` から backend の `hEq'` を取得し、
+    `triominoWieferichShrinkNumsInvCandidate_of_pack_shadow_fields_of_eq`
+    で得た `x' / y' / z'` の fieldwise 一致を用いて shadow 側へ移送する。
+  - `simpa` での一括 rewrite は recursion depth に当たりやすかったため、
+    最終段は `rw [← hz, ← hy, ← hx]` で backend 側へ戻して `hEqb` を刺す形に安定化した。
+  - `triominoWieferichShrinkNumsInvCandidateEq_shadow_of_pack` は、
+    `hx0'` を `triominoWieferichShrinkNumsInvCandidate_hx0_shadow_core` から回収し、
+    `triominoWieferichShrinkWitnessEq_of_eq_and_hx0` で `Eq` witness を完成する。
+  - 追加位置は前方参照を避けるため、
+    `triominoWieferichShrinkNumsInvCandidate_hx0_shadow_core` など既存 helper の後ろへ置いた。
+- 効果:
+  - まだ public `CandidateB_kernel` は据え置きのままでも、
+    `hxdiv / hy'` を kernel の仕様として外へ出せた瞬間に、
+    shadow 側の `Eq` を独立 route で完成できる。
+  - これにより、shadow 差し替えの前提条件が “helper で使える形” に固定された。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
