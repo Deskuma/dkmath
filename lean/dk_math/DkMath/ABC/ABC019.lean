@@ -188,8 +188,7 @@ lemma log_twoTail_le_excess_sum (c : ℕ) (hc : c ≠ 0) :
   have h_support : c.primeFactors = c.factorization.support := by
     ext p
     simp [Nat.support_factorization, Nat.mem_primeFactors, ne_eq]
-  rw [h_eq]
-  rw [h_support]
+  exact ge_of_eq (id (Eq.symm h_eq))
 
 /- ### Probability-free Chernoff Machinery
 
