@@ -652,11 +652,8 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core
     let _ := hq_not_dvd_gap
     let _ := hqpow_dvd_GN
     sorry
-  let z' := hzCore.1
-  have hzCore_spec := hzCore.2
-  have hzlt : z' < z := hzCore_spec.1
-  have hpB' : ¬ p ∣ (z' - y) := hzCore_spec.2.1
-  have hEq' : (x / q) ^ p + y ^ p = z' ^ p := hzCore_spec.2.2
+  rcases hzCore with ⟨z', hzSpec⟩
+  rcases hzSpec with ⟨hzlt, hpB', hEq'⟩
   exact
     { z' := z'
       hzlt := hzlt
