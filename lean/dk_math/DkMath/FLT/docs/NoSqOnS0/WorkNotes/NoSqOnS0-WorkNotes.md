@@ -23,22 +23,43 @@ status: 作業中 - phase-15: 完全証明への道 (CosmicPetalBridgeGNNoWiefer
 
 ## 課題
 
-- [ ] 仮定の証明
-  - [ ] `NonLiftableS0` の証明（下降法）
-  - [x] ただし、`GEisensteinBridge` の `descent` インターフェースは実装済み。
+- [ ] phase-15 の深い数学核
+  - [ ] `CosmicPetalBridgeGNNoWieferich.lean` の
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+    を実装する
+  - [ ] 具体的には、`TriominoNoWieferichBridge` を
+    Branch B 文脈で供給する
+- [x] phase-14 の配線整理
+  - [x] `CosmicPetalBridgeGNDescentB.lean` は glue / bridge 側へ整理済み
+  - [x] 残る `sorry` は phase-15 用の別ファイルへ隔離済み
 
 ## 状況タスク
 
 - 完了条件（DoD）:
-  - [ ] 1. `TriominoFLT.lean` に `sorry` がない。
-  - [ ] 2. `FLT_highExponent_core_pending` が実装済み（または不要化）。
-  - [ ] 3. `cd lean/dk_math && lake build DkMath.CosmicFormula.TriominoFLT` が成功。
-  - [ ] 4. 暫定依存の残有無をコメントとログに明示。
+  - [ ] 1. `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
+    に `sorry` がない
+  - [ ] 2. `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+    が warning なしで成功
+  - [ ] 3. `CosmicPetalBridgeGNDescentB.lean` は phase-15 でも no-`sorry` の配線側として維持される
+  - [ ] 4. phase-15 の研究核と、その依存方針をログに明示
 - 受け入れ条件:
-  - [ ] 1. Bridge から `Main` の triomino 接続口へ実際に到達すること。
-  - [ ] 2. `Main` 側既存 API（line 772 / 788）を変更せず接続できること。
+  - [ ] 1. Branch B descent ルートが `TriominoNoWieferichBridge` の供給だけで閉じること
+  - [ ] 2. `CosmicPetalBridgeGN.lean` / `TriominoCosmicGapInvariant.lean` の公開配線を変更せずに接続できること
+  - [ ] 3. 新補題・試行錯誤は `CosmicPetalBridgeGNNoWieferich.lean` に局所化されること
 
 ## 計画
+
+- 直近の主戦場:
+  - `CosmicPetalBridgeGNNoWieferich.lean`
+- 現在の唯一の未解決点:
+  - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+- 直近の探索候補:
+  - primitive prime + valuation (`padicValNat = 1`)
+  - non-liftable / no-Wieferich bridge の既存 spine への接続
+  - 必要なら上の存在命題をさらに Prop-level の補題へ分解
+- 非目標（当面）:
+  - `CosmicPetalBridgeGNDescentB.lean` の外壁 refactor 継続
+  - explicit な `z'` 構成の再導入
 
 ## 作業ログ
 
