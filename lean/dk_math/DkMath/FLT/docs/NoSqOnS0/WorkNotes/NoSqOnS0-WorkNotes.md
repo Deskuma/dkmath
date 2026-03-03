@@ -2242,3 +2242,31 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+
+### 2026-03-03 phase-14 継続（最後の `sorry` を `Seed + links` へ薄化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `TriominoWieferichShrinkKernelSeedLinkB` を追加
+  2. `triominoWieferichShrinkKernelInv_of_nums_from_links` を追加
+  3. `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の返り値を
+     `KernelCoreB` から `KernelSeedLinkB` へ変更
+  4. `_of_pack` 系投影 (`Nums / Eq / Inv / hxMul / hyEq`) を新しい薄い返り値へ追随
+- 意図:
+  - 最後の `sorry` が直接抱えていた `Inv` witness を外へ追い出し、
+    数学 kernel の責務を `Seed (Nums + Eq) + links (hxMul / hyEq)` のみに縮小する。
+  - `Inv` は外側の pack 条件と `hxMul / hyEq` から再構成できるので、
+    本丸の未解決点をさらに細くする。
+- 実装メモ:
+  - `KernelInv_of_nums_of_pack` は、もう `pack-kernel.hInv` を参照しない。
+  - 代わりに `triominoWieferichShrinkKernelInv_of_nums_from_links` で
+    `KernelNums + hxMul + hyEq` から `hxy' / hx0' / hy0' / hz0'` を局所再構成する。
+  - `KernelEqSeedTraceCoreB_kernel` など後段の core/glue は、そのまま full `KernelCoreB` を組み直す。
+- 効果:
+  - 最後の `sorry` は依然 1 件だが、抱える責務は以前より軽い。
+  - current-path から見たとき、`Inv` は既に “派生物” になった。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
