@@ -26,7 +26,7 @@ set_option linter.style.emptyLine false
   - This theorem uses only the implication bridge proved as a theorem, not the equivalence axiom.
 
 Author: D. and Wise Wolf
-Version: 2025/09/29  3:59 2nd-open
+Version: 2026/03/03 18:45 3rd public preview
 
 **
 Unproven, unorganized, unoptimized

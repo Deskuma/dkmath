@@ -7,7 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.Basic  -- Basic Definitions and Utilities
 import DkMath.Samples  -- Sample Theorems and Examples
 -- ABC: abc Conjecture Module
-import DkMath.ABC.Basic  -- ABC Conjecture Basics
+import DkMath.ABC  -- ABC Conjecture Module
 import DkMath.ABC.PadicValNat  -- ABC: p-adic Valuation on Natural Numbers
 import DkMath.ABC.CountPowersDividing2n1  -- ABC: Counting Powers Dividing 2n+1
 -- Collatz Module (2026 Cartography Research)
