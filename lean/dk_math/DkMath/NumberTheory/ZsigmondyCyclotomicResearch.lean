@@ -11,6 +11,48 @@ set_option linter.style.emptyLine false
 
 namespace DkMath.NumberTheory.GcdNext
 
+
+namespace DkMath.NumberTheory.GcdNext
+
+-- -------------- --
+-- ※反例を明示化 --
+-- -------------- --
+
+/-- 反例: d=3, a=5, b=3, q=7 で `padicValNat q (a^d - b^d) ≤ 1` は成り立たない。 -/
+lemma counterexample_padicValNat_diff_le_one :
+    ¬ (padicValNat 7 (5 ^ 3 - 3 ^ 3) ≤ 1) := by
+  have hdiff_ne0 : (5 ^ 3 - 3 ^ 3 : ℕ) ≠ 0 := by
+    decide
+  have hq2_dvd : (7 : ℕ) ^ 2 ∣ (5 ^ 3 - 3 ^ 3) := by
+    -- 5^3 - 3^3 = 98 = 2 * 7^2
+    decide
+  have h2_le : 2 ≤ padicValNat 7 (5 ^ 3 - 3 ^ 3) := by
+    exact
+      (@padicValNat_dvd_iff_le 7 (Fact.mk (by decide : Nat.Prime 7))
+          (5 ^ 3 - 3 ^ 3) 2 hdiff_ne0).1 hq2_dvd
+  intro hle
+  have : (2 : ℕ) ≤ 1 := le_trans h2_le hle
+  exact (by decide : ¬ ((2 : ℕ) ≤ 1)) this
+
+/-- よって `squarefree_implies_padic_val_le_one` の現 statement は一般には偽。 -/
+lemma squarefree_implies_padic_val_le_one_is_false :
+    ¬ (∀ d a b q : ℕ,
+        Nat.Prime d → 0 < b → Nat.Coprime a b →
+        Nat.Prime q → q ∣ a ^ d - b ^ d →
+        padicValNat q (a ^ d - b ^ d) ≤ 1) := by
+  intro h
+  have h' :
+      padicValNat 7 (5 ^ 3 - 3 ^ 3) ≤ 1 := by
+    have hd : Nat.Prime 3 := by decide
+    have hb : 0 < (3 : ℕ) := by decide
+    have hab : Nat.Coprime 5 3 := by decide
+    have hq : Nat.Prime 7 := by decide
+    have hdiv : (7 : ℕ) ∣ 5 ^ 3 - 3 ^ 3 := by decide
+    exact h 3 5 3 7 hd hb hab hq hdiv
+  exact counterexample_padicValNat_diff_le_one h'
+
+end DkMath.NumberTheory.GcdNext
+
 /--
 Research placeholder.
 
