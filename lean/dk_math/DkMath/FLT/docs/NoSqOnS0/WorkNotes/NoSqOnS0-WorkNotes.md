@@ -320,3 +320,27 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `2 ≤ d`, `x,u > 0` のとき `(x + u)^d` は `x^d + u^d` に一致せず、しかも真に大きいことを、`CosmicFormulaBinom` の語彙で直接参照できるようにした。
 - これは phase-15 の主核ではないが、`G / GN` のような中間層が必要であることをコード上で言い表す補助道具として整備した。
 - 確認: `cd lean/dk_math && lake env lean DkMath/CosmicFormula/CosmicFormulaBinom.lean` 成功。
+
+## 2026-03-04 phase-15 継続（NoWieferich に squarefree-GN の正直な入口を追加）
+
+- 更新:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
+
+- 追加:
+  - `DkMath.FLT.triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le_one_of_squarefree_GN_core`
+  - `DkMath.FLT.triominoNoWieferichBridge_of_squarefree_GN`
+
+- 内容:
+  - `Squarefree (GN p (z - y) y)` を仮定すれば、research 側の true な stronger theorem
+    `DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_of_squarefree_G`
+    を直接使って
+    `padicValNat q (z ^ p - y ^ p) ≤ 1`
+    が得られる入口を追加した。
+  - これにより、phase-15 の不足仮定はコード上で明示的になった。
+    いま欠けているのは一般定理の証明ではなく、
+    `Squarefree (GN ...)` をどこで供給するか、という設計上の次段だけである。
+
+- 確認:
+  - `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich`
+  - どちらも成功。残る warning は `DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:69` の false placeholder 1 件のみ。

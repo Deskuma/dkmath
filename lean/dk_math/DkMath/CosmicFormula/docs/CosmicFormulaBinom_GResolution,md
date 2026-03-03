@@ -2072,3 +2072,16 @@ x^2 \cdot GN_{u,v}(a,b)
   - `GN d x u` は少なくとも 1
   - 従って `GN` は非退化
   を Nat 上で直接参照できる。
+
+- 段階分解 (`G_t` / `GN`) への接続:
+  - `BigN` を端点 2 項へ直落としできないことは
+    `bigN_ne_xpow_add_gapN_nat_of_two_le` / `xpow_add_gapN_lt_bigN_nat_of_two_le`
+    で直接参照できる。
+  - したがって、`G_t` から `GN` へ至る中間層は「混合項の保持層」として必須。
+- `GN` の単調性については、現時点では full monotonicity は未整備だが、
+  まず使える比較として
+  - `xpow_lt_bodyN_nat_of_two_le`
+  - `bodyN_pos_nat_of_two_le`
+  - `GN_ne_zero_nat_of_two_le`
+  - `one_le_GN_nat_of_two_le`
+  があり、下界・非退化性はコード上で直接参照できる。

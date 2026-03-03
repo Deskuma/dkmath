@@ -62,6 +62,27 @@ Branch B の primitive prime 文脈では、`z^p - y^p` の `q`-進付値は
 
 `q ∤ (z - y)` により、差の因数分解の左因子の付値が 0 になるため。
 -/
+theorem triominoWieferichShrink_GN_ne_zero_core
+    {p x y z q : ℕ} (hpack : PrimeGe5CounterexamplePack p x y z)
+    (_hpB : ¬ p ∣ (z - y))
+    (_hqP : Nat.Prime q)
+    (_hq_dvd_diff : q ∣ (z ^ p - y ^ p))
+    (_hq_not_dvd_gap : ¬ q ∣ (z - y)) :
+    GN p (z - y) y ≠ 0 := by
+  have hgap_pos : 0 < z - y := Nat.sub_pos_of_lt hpack.hyz_lt
+  exact
+    GN_ne_zero_nat_of_two_le
+      (d := p) (x := z - y) (u := y)
+      (le_trans (by decide : 2 ≤ 5) hpack.hp5)
+      hgap_pos
+      hpack.y_pos
+
+/--
+Branch B の primitive prime 文脈では、`z^p - y^p` の `q`-進付値は
+`GN p (z - y) y` の `q`-進付値と一致する。
+
+`q ∤ (z - y)` により、差の因数分解の左因子の付値が 0 になるため。
+-/
 theorem triominoWieferichShrink_padicValNat_diff_eq_GN_core
     {p x y z q : ℕ} (hpack : PrimeGe5CounterexamplePack p x y z)
     (_hpB : ¬ p ∣ (z - y))
@@ -77,10 +98,9 @@ theorem triominoWieferichShrink_padicValNat_diff_eq_GN_core
     simpa using
       DkMath.NumberTheory.GcdNext.pow_sub_pow_factor_cosmic_N
         hpack.hp.pos hpack.hyz_lt
-  have hGN_ne : GN p (z - y) y ≠ 0 := by
-    intro hGN0
-    rw [hfactor, hGN0, mul_zero] at hdiff_ne0
-    exact hdiff_ne0 rfl
+  have hGN_ne : GN p (z - y) y ≠ 0 :=
+    triominoWieferichShrink_GN_ne_zero_core
+      hpack _hpB hqP _hq_dvd_diff hq_not_dvd_gap
   have hpadic :=
     DkMath.NumberTheory.GcdNext.padicValNat_factorization
       hpack.hp.pos hpack.hyz_lt hqP hfactor hGN_ne
@@ -116,6 +136,53 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le
       hqP
       hq_dvd_diff
       hq_not_dvd_gap
+
+/--
+Honest phase-15 bridge under the explicit hypothesis that the cyclotomic factor is squarefree.
+
+This is the usable statement-repair target behind the old false placeholder:
+if `GN p (z - y) y` is squarefree, the primitive-prime valuation bound follows.
+-/
+theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le_one_of_squarefree_GN_core :
+    ∀ {p x y z q : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      ¬ p ∣ (z - y) →
+      Nat.Prime q → q ∣ (z ^ p - y ^ p) → ¬ q ∣ (z - y) →
+      Squarefree (GN p (z - y) y) →
+      padicValNat q (z ^ p - y ^ p) ≤ 1 := by
+  intro p x y z q hpack hpB hqP hq_dvd_diff hq_not_dvd_gap hG_sq
+  have hzy_coprime : Nat.Coprime z y := by
+    exact (coprime_right_of_add_pow_eq_pow hpack.hp hpack.hxy hpack.hEq).symm
+  exact
+    DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_of_squarefree_G
+      (a := z) (b := y) (d := p) (q := q)
+      hpack.hp
+      (le_trans (by decide : 3 ≤ 5) hpack.hp5)
+      hpack.hyz_lt
+      hpack.y_pos
+      hzy_coprime
+      hpB
+      hqP
+      hq_dvd_diff
+      hq_not_dvd_gap
+      hG_sq
+
+/--
+If the cyclotomic factor is squarefree in the primitive-prime branch, the phase-15 NoWieferich
+bridge closes without touching the false global placeholder.
+-/
+theorem triominoNoWieferichBridge_of_squarefree_GN
+    (hSq :
+      ∀ {p x y z q : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ p ∣ (z - y) →
+        Nat.Prime q → q ∣ (z ^ p - y ^ p) → ¬ q ∣ (z - y) →
+        Squarefree (GN p (z - y) y)) :
+    TriominoNoWieferichBridge := by
+  refine triominoNoWieferichBridge_of_padicValNat_le_one ?_
+  intro p x y z q hpack hp_not_dvd_gap hqP hq_dvd_diff hq_not_dvd_gap
+  exact
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le_one_of_squarefree_GN_core
+      hpack hp_not_dvd_gap hqP hq_dvd_diff hq_not_dvd_gap
+      (hSq hpack hp_not_dvd_gap hqP hq_dvd_diff hq_not_dvd_gap)
 
 /--
 `padicValNat q (GN p (z - y) y) ≤ 1` が供給できれば、
