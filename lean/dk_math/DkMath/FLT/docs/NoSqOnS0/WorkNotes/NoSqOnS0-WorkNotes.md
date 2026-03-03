@@ -426,3 +426,57 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 結果: 成功（`unnecessary simpa` lint が 3 件、`sorry` warning は 1 件）
+
+### 2026-03-03 phase-14 継続（route 1 を `Type` 側へ昇格）
+
+- 対象:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+- 追加:
+  - `triominoWieferichShrink_pow_root_of_factorization_dvd_core`
+  - `triominoWieferichShrink_pow_root_of_factorization_dvd_spec`
+  - `TriominoWieferichShrinkGapGNPthPowersDataB`
+  - `triominoWieferichShrink_gap_GN_are_pth_powers_data_core`
+  - `TriominoWieferichShrinkGapGNPowDataB` を直接返す
+    `triominoWieferichShrink_xdiv_eq_mul_of_gap_GN_powers_data_core`
+  - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_from_gap_GN_powers_core`
+- 内容:
+  1. 以前の route 1 は `∃` を返していたため、`candidateZ_data : Type` へ直接流せなかった
+  2. そこで、factorization から作る p 乗根を「存在」ではなく
+     明示関数 `pow_root_of_factorization_dvd_core` に切り出した
+  3. `gap = u^p`, `GN = v^p`, `GN = (q * v1)^p`, `x / q = u * v1`
+     をすべて `Type` 側の structure として返すように変更した
+  4. その結果、最後の `sorry` は
+     `candidateZ_data` 全体ではなく、
+     `u / v1` data を受け取って `z' / hzlt / hpB' / hEq'` を作る
+     より狭い core に移った
+- 結果:
+  - `Prop -> Type` の制限は解消
+  - route 1 は「補助定理」ではなく、最後の核に直接食い込む `Type` data になった
+  - 残る `sorry` は 1 件のまま
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（warning は `declaration uses sorry` 1 件のみ）
+
+### 2026-03-03 phase-14 継続（route 1 を Prop 側矛盾 kernel へ移送）
+
+- 対象:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+- 追加:
+  - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noPowGN_core`
+- 変更:
+  - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_from_gap_GN_powers_core`
+    は、`d.hGNq : GN p (z - y) y = (q * v1) ^ p` を
+    `noPowGN_core : ¬ ∃ v, GN p (z - y) y = v ^ p` にぶつけて `False` を作り、
+    `False.elim` で `Type` の値を返す glue に変更
+- 内容:
+  1. route 1 で `GN = (q * v1)^p` までは `Type` 側 data で取れている
+  2. `candidateZ_data : Type` を直接構成する代わりに、Prop 側で矛盾を作れば
+     `propRecLargeElim` を踏まずに `False.elim` で任意の `Type` を返せる
+  3. そのため、残る本丸を `GN` が `p` 乗になれないという Prop kernel に押し込めた
+- 結果:
+  - `Type` 側の最後の穴は消え、残る `sorry` は Prop 側の
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noPowGN_core` 1件だけに移動
+- ビルド確認:
+  - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - 結果: 成功（warning は `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noPowGN_core` の `sorry` 1件のみ）
