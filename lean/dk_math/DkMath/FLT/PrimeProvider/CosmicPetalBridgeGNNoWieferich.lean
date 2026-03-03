@@ -41,7 +41,6 @@ theorem triominoNoWieferichBridge_of_padicValNat_le_one
         padicValNat q (z ^ p - y ^ p) ≤ 1) :
     TriominoNoWieferichBridge := by
   intro p x y z q hpack hp_not_dvd_gap hqP hq_dvd_diff hq_not_dvd_gap
-  have hpow_pos : 0 < p := hpack.hp.pos
   have hdiff_ne0 : z ^ p - y ^ p ≠ 0 := by
     have hyz_pow_lt : y ^ p < z ^ p := by
       exact Nat.pow_lt_pow_left hpack.hyz_lt hpack.hp.ne_zero
@@ -85,6 +84,19 @@ theorem triominoWieferichShrink_padicValNat_diff_eq_GN_core
   simpa [hzero] using hpadic
 
 /--
+phase-15 の最小研究核（diff 版）:
+primitive prime divisor 文脈で `z^p - y^p` の `q`-進付値が高々 1 であることを示す。
+
+この形は既存の primitive-prime valuation 補題と最も直接に一致する。
+-/
+theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le_one_of_primitivePrime_core :
+    ∀ {p x y z q : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      ¬ p ∣ (z - y) →
+      Nat.Prime q → q ∣ (z ^ p - y ^ p) → ¬ q ∣ (z - y) →
+      padicValNat q (z ^ p - y ^ p) ≤ 1 := by
+  sorry
+
+/--
 `padicValNat q (GN p (z - y) y) ≤ 1` が供給できれば、
 `padicValNat q (z^p - y^p) ≤ 1` は no-`sorry` で従う。
 -/
@@ -93,7 +105,17 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_GN_le_o
       ¬ p ∣ (z - y) →
       Nat.Prime q → q ∣ (z ^ p - y ^ p) → ¬ q ∣ (z - y) →
       padicValNat q (GN p (z - y) y) ≤ 1 := by
-  sorry
+  intro p x y z q hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
+  have hdiff_le :
+      padicValNat q (z ^ p - y ^ p) ≤ 1 :=
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le_one_of_primitivePrime_core
+      hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
+  have hEq :
+      padicValNat q (z ^ p - y ^ p) = padicValNat q (GN p (z - y) y) :=
+    triominoWieferichShrink_padicValNat_diff_eq_GN_core
+      hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
+  rw [← hEq]
+  exact hdiff_le
 
 /--
 phase-15 の最小研究核:
