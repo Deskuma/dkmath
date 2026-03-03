@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNCore
+import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich
 
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
@@ -1192,16 +1193,6 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_primitivePrime_on_d
       hpack.y_pos
       hyz_coprime
       hpB
-
-/--
-Branch B 文脈で使う NoWieferich bridge の最終供給点。
-
-プロジェクト全体の設計に合わせ、深い核は
-`TriominoNoWieferichBridge` として 1 箇所へ隔離する。
--/
-theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core :
-    TriominoNoWieferichBridge := by
-  sorry
 
 /--
 NoWieferich bridge があれば、Branch B 文脈で `GN p (z - y) y` に平方で割れない素因子が存在する。

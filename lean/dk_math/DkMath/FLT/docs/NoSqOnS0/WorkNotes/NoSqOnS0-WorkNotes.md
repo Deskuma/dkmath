@@ -604,3 +604,20 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - 結果: 成功（warning は `noWieferich_core` の `sorry` 1件のみ）
+
+### 2026-03-04 phase-15 準備（NoWieferich 核を別ファイルへ移設）
+
+- 対象:
+  - 新規: `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
+  - 更新: `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+- 変更:
+  - 残る唯一の `sorry` である
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+    を、新規ファイル `CosmicPetalBridgeGNNoWieferich.lean` へ移設
+  - `CosmicPetalBridgeGNDescentB.lean` は新規ファイルを import し、
+    Branch B の glue / bridge 側に専念する形へ整理
+- 内容:
+  1. `CosmicPetalBridgeGNDescentB.lean` は phase-14 の配線整理を保持したまま、研究対象の深い核だけを phase-15 用の別室へ分離した
+  2. これにより、今後の新補題追加や試行錯誤は
+     `CosmicPetalBridgeGNNoWieferich.lean`
+     に局所化できる
