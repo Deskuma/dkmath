@@ -424,6 +424,32 @@ structure TriominoWieferichShrinkKernelNumsEqLinkB (p x y z q : ℕ) where
   hyEq : n.y' = y
 
 /--
+`z_core` が最終的に必要とする候補 `z'` と、その trace を束ねた最小データ。
+
+ここでは「どの候補を採るか」は固定せず、非循環に供給できる
+`x' / y' / z'` とその `hzlt / links / Eq` だけを要求する。
+-/
+structure TriominoWieferichShrinkKernelCandidateZDataB (p x y z q : ℕ) where
+  x' : ℕ
+  y' : ℕ
+  z' : ℕ
+  hzlt : z' < z
+  hxdiv : x' = x / q
+  hyEq : y' = y
+  hpB' : ¬ p ∣ (z' - y)
+  hEq' : (x / q) ^ p + y ^ p = z' ^ p
+
+/-- `candidateZ` 用データから最終の `Subtype` を組む薄い包装。 -/
+def TriominoWieferichShrinkKernelCandidateZDataB.toSubtype
+    {p x y z q : ℕ}
+    (d : TriominoWieferichShrinkKernelCandidateZDataB p x y z q) :
+    { z' : ℕ //
+      z' < z
+        ∧ ¬ p ∣ (z' - y)
+        ∧ (x / q) ^ p + y ^ p = z' ^ p } :=
+  ⟨d.z', ⟨d.hzlt, ⟨d.hpB', d.hEq'⟩⟩⟩
+
+/--
 shadow 方針で固定した `x' := x / q`, `y' := y` のもとで、
 最後の数学 kernel が返すべき最小物。
 
@@ -700,6 +726,27 @@ Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
 
 最後の未解決点は、この `z' + hEq'` をどう作るかに押し込める。
 -/
+def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkKernelCandidateZDataB p x y z q := by
+  let _ := hpack
+  let _ := hpB
+  let _ := hqP
+  let _ := hq_not_dvd_gap
+  let _ := hqpow_dvd_GN
+  sorry
+
+/--
+Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
+
+最後の未解決点は、適切な候補 `c` と
+`hzlt / hxdiv / hyEq / hpB' / hEq'` をどう同時に供給するかに押し込める。
+-/
 def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
@@ -711,12 +758,11 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ
       z' < z
         ∧ ¬ p ∣ (z' - y)
         ∧ (x / q) ^ p + y ^ p = z' ^ p } := by
-  let _ := hpack
-  let _ := hpB
-  let _ := hqP
-  let _ := hq_not_dvd_gap
-  let _ := hqpow_dvd_GN
-  sorry
+  let d : TriominoWieferichShrinkKernelCandidateZDataB p x y z q :=
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  exact d.toSubtype
 
 /--
 Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。

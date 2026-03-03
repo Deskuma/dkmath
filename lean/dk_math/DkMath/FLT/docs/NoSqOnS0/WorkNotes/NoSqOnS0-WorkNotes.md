@@ -295,33 +295,42 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。
 
-### 2026-03-03 phase-14 継続（候補B固定をやめ、generic `candidateZ` 存在核へ戻す）
+### 2026-03-03 phase-14 継続（候補B固定をやめ、generic `candidateZData` へ一段圧縮）
 
 - 変更ファイル:
   - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
 - 変更内容:
   1. 候補B固定の残差をやめ、
-     `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ`
-     として generic な存在核に戻した
+     `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data`
+     を追加した
   2. 返り値は
-     `{ z' // z' < z ∧ ¬ p ∣ (z' - y) ∧ (x / q)^p + y^p = z'^p }`
-     の `Subtype` に固定した
-  3. `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` は、
-     この generic 存在核をそのまま受け取って record へ梱包する glue にした
+     - `x' / y' / z'`
+     - `hzlt`
+     - `hxdiv`
+     - `hyEq`
+     - `hpB'`
+     - `hEq'`
+     を持つ最小データ構造
+     `TriominoWieferichShrinkKernelCandidateZDataB`
+     に固定した
+  3. `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ` は
+     `candidateZ_data.toSubtype` の glue に変更した
+  4. `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` は、
+     `candidateZ` をそのまま受け取って record へ梱包する glue に保った
 - 意図:
-  - 候補B `z' := z - y` は `hzlt` は通るが `hEq'` が成立しにくく、
-    false な候補に `sorry` を固定し続ける価値が薄い
-  - そこで「適切な `z'` が存在する」という generic 核へ戻し、
-    次に既存 shrink candidate や別候補へ差し替える余地を確保する
+  - false な候補Bに `sorry` を固定し続けず、
+    「適切な triple と trace を供給する」最小 kernel に戻す
+  - 今後、非循環の shrink candidate や新しい explicit 候補を採る場合も、
+    差し替える位置を `candidateZ_data` 1 箇所に固定する
 - 効果:
   - 残る `sorry` は 1 件のまま維持
   - ただし warning の位置は
-    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ`
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data`
     に固定された
-  - `z_core` 自体は no-`sorry` の glue になった
+  - `candidateZ` と `z_core` は no-`sorry` の glue になった
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
-  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ` の `sorry` 1件のみ）。
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data` の `sorry` 1件のみ）。
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
-  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ` の `sorry` 1件のみ）。
+  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data` の `sorry` 1件のみ）。
