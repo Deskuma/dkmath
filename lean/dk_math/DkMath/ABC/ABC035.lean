@@ -53,7 +53,8 @@ lemma chernoff_single_prime_explicit'
   obtain ⟨C0, rfl, hC0_pos, hbound0⟩ :=
     chernoff_single_prime_uniform hp3 γ hγ t0 ht0_pos ht0_le
   -- return the fixed constant const_C (=5) and re-use the bound produced by the uniform lemma
-  use const_C
+  exact chernoff_single_prime_uniform hp3 γ hγ t0 ht0_pos ht0_le
+
 -- -------------------------------------------------------
 
 open Classical in
