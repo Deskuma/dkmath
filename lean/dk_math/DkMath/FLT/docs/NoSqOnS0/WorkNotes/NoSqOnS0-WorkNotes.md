@@ -2328,3 +2328,26 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。
+
+### 2026-03-03 phase-14 継続（`x = q * (x / q)` も core helper に共通化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `triominoWieferichShrink_x_eq_q_mul_div_core` を追加
+  2. `TriominoWieferichShrinkKernelZEqB.toNumsEqLink` の `hxMul` 導出を `..._x_eq_q_mul_div_core` へ置換
+  3. `triominoWieferichShrinkNumsInvCandidateLinkSpec_of_kernel` の `hxMul` 導出を `..._x_eq_q_mul_div_core` へ置換
+- 意図:
+  - `q ∣ x` の次に必ず使う `x = q * (x / q)` の算術 glue を一本化し、
+    最後の `z_core` でも同じ導出を再利用できるようにする。
+  - `z_core` の責務を、`z'` とその 3 条件 (`hzlt / hpB' / hEq'`) にさらに集中させる。
+- 効果:
+  - `LinkSpec_of_kernel` と `toNumsEqLink` の純算術は、
+    `q ∣ x` に続く割り算正規化まで共有 helper で処理するようになった。
+  - `z_core` 側で `hxMul` を使う必要が出ても、既存 helper を呼ぶだけで済む。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。

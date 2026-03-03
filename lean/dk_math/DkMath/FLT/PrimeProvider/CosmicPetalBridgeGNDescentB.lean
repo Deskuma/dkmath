@@ -463,6 +463,25 @@ theorem triominoWieferichShrink_q_dvd_x_core
     simpa [hxpow] using hq_dvd_rhs
   exact hqP.dvd_of_dvd_pow hq_dvd_xpow
 
+/--
+`q^p ∣ GN p (z - y) y` から、`x = q * (x / q)` を回収する早期補助。
+
+`q ∣ x` の直後に必ず使う割り算正規化を、複数の core で共有する。
+-/
+theorem triominoWieferichShrink_x_eq_q_mul_div_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    x = q * (x / q) := by
+  have hxq : q ∣ x :=
+    triominoWieferichShrink_q_dvd_x_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  simpa using (Nat.mul_div_cancel' hxq).symm
+
 /-- 内部 data から `Nums` 部分を取り出す。 -/
 def TriominoWieferichShrinkKernelDataB.toNums
     {p x y z q : ℕ}
@@ -588,12 +607,11 @@ def TriominoWieferichShrinkKernelZEqB.toNumsEqLink
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y)
     (d : TriominoWieferichShrinkKernelZEqB p x y z q) :
     TriominoWieferichShrinkKernelNumsEqLinkB p x y z q := by
-  have hq_dvd_x : q ∣ x :=
-    triominoWieferichShrink_q_dvd_x_core
-      (p := p) (x := x) (y := y) (z := z) (q := q)
-      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   have hxMul : x = q * (x / q) := by
-    simpa using (Nat.mul_div_cancel' hq_dvd_x).symm
+    exact
+      triominoWieferichShrink_x_eq_q_mul_div_core
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   exact
     { n :=
         { x' := x / q
@@ -1195,11 +1213,10 @@ theorem triominoWieferichShrinkNumsInvCandidateLinkSpec_of_kernel
   refine ⟨?_, ?_⟩
   · calc
       x = q * (x / q) := by
-        have hxq : q ∣ x :=
-          triominoWieferichShrink_q_dvd_x_core
+        exact
+          triominoWieferichShrink_x_eq_q_mul_div_core
             (p := p) (x := x) (y := y) (z := z) (q := q)
             hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-        simpa using (Nat.mul_div_cancel' hxq).symm
       _ =
           q *
             (@triominoWieferichShrinkNumsInvCandidateB_kernel p x y z q
