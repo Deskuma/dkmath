@@ -363,3 +363,33 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
     `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data` の `sorry` 1件）
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功
+
+### 2026-03-03 phase-14 継続（route 1: `gap` と `GN` の p 乗化まで前進）
+
+- 対象:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+- 追加:
+  - `triominoWieferichShrink_exists_eq_pow_of_factorization_dvd_core`（private）
+  - `triominoWieferichShrink_gap_GN_are_pth_powers_core`
+- 内容:
+  1. `n.factorization` の各指数がすべて `p` の倍数なら `n = t^p` を与える補題を、
+     このファイル内の private helper として追加した
+  2. `gap ⟂ GN` と `x^p = gap * GN` から、
+     factorization を使って `gap` と `GN` がそれぞれ `p` 乗であることを示す補助定理を追加した
+- 意図:
+  - reviewer の route 1（gcd spine -> coprime product -> 各因子が p 乗）を、
+    非循環な補助定理として一度通しておく
+  - `candidateZ_data` を explicit な `z'` で殴る前に、
+    矛盾ルートがどこまで進むかを確認する
+- 結果:
+  - route 1 は `gap` と `GN` の `p` 乗化までは通る
+  - ただし現時点では、このファイルから非循環に呼べる `NoPow` / `GapNotIsPow` 側へは
+    まだ接続していないため、`candidateZ_data` は直接閉じない
+  - 残る `sorry` は
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data`
+    の 1件のまま
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（`unnecessary simpa` lint が 3 件、`sorry` warning は 1 件）
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功

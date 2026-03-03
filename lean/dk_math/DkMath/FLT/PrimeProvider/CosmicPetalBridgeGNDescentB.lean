@@ -639,6 +639,132 @@ theorem triominoWieferichShrink_gap_coprime_GN_core
   have hr_eq_p : r = p := (Nat.prime_dvd_prime_iff_eq hrP hpack.hp).1 hr_dvd_p
   exact hpB (by simpa [hr_eq_p] using hr_gap)
 
+private lemma triominoWieferichShrink_exists_eq_pow_of_factorization_dvd_core
+    {n p : ℕ} (hn0 : n ≠ 0)
+    (hdiv : ∀ r : ℕ, p ∣ n.factorization r) :
+    ∃ t : ℕ, n = t ^ p := by
+  classical
+  let t : ℕ := n.factorization.support.prod (fun r => r ^ (n.factorization r / p))
+  refine ⟨t, ?_⟩
+  have hn_prod :
+      n.factorization.support.prod (fun r => r ^ n.factorization r) = n :=
+    Nat.factorization_prod_pow_eq_self hn0
+  calc
+    n = n.factorization.support.prod (fun r => r ^ n.factorization r) := by
+      exact hn_prod.symm
+    _ = n.factorization.support.prod (fun r => r ^ ((n.factorization r / p) * p)) := by
+      refine Finset.prod_congr rfl (fun r _ => ?_)
+      have hr : p ∣ n.factorization r := hdiv r
+      rw [Nat.div_mul_cancel hr]
+    _ = n.factorization.support.prod (fun r => (r ^ (n.factorization r / p)) ^ p) := by
+      refine Finset.prod_congr rfl (fun r _ => ?_)
+      rw [pow_mul]
+    _ = (n.factorization.support.prod (fun r => r ^ (n.factorization r / p))) ^ p := by
+      rw [Finset.prod_pow]
+    _ = t ^ p := rfl
+
+/--
+Branch B 文脈では `x^p = gap * GN` かつ `gap ⟂ GN` なので、
+`gap` と `GN` はそれぞれ `p` 乗になる。
+
+これは `candidateZ_data` を explicit な `z'` で殴る代わりに、
+矛盾ルートを試すための最小補助定理。
+-/
+theorem triominoWieferichShrink_gap_GN_are_pth_powers_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    ∃ u v : ℕ, (z - y) = u ^ p ∧ GN p (z - y) y = v ^ p := by
+  classical
+  let gap : ℕ := z - y
+  let body : ℕ := GN p (z - y) y
+  have hgap0 : gap ≠ 0 := by
+    exact Nat.ne_of_gt (Nat.sub_pos_of_lt hpack.hyz_lt)
+  have hbody0 : body ≠ 0 := by
+    intro h0
+    have hxpow : x ^ p = gap * body := by
+      simpa [gap, body] using hpack.xpow_eq_gap_mul_GN
+    apply (pow_ne_zero p hpack.hx0)
+    calc
+      x ^ p = gap * body := hxpow
+      _ = 0 := by simp [h0]
+  have hcop : Nat.Coprime gap body := by
+    simpa [gap, body] using
+      triominoWieferichShrink_gap_coprime_GN_core
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  have hgcd : Nat.gcd gap body = 1 := (Nat.coprime_iff_gcd_eq_one).1 hcop
+  have hgap_body_eq : gap * body = x ^ p := by
+    simpa [gap, body] using hpack.xpow_eq_gap_mul_GN.symm
+  have hdiv_gap : ∀ r : ℕ, p ∣ gap.factorization r := by
+    intro r
+    have h_inf : gap.factorization ⊓ body.factorization = 0 := by
+      have h := Nat.factorization_gcd hgap0 hbody0
+      rw [hgcd] at h
+      simpa using h.symm
+    have hmin : (gap.factorization ⊓ body.factorization) r = 0 := by
+      rw [h_inf]
+      rfl
+    have h_or : gap.factorization r = 0 ∨ body.factorization r = 0 := by
+      simp only [Finsupp.inf_apply] at hmin
+      omega
+    have hsum : gap.factorization r + body.factorization r = p * x.factorization r := by
+      have hmul :
+          (gap * body).factorization r = gap.factorization r + body.factorization r := by
+        simp [Nat.factorization_mul hgap0 hbody0]
+      have hpow :
+          (x ^ p).factorization r = p * x.factorization r := by
+        simp [Nat.factorization_pow x p]
+      calc
+        gap.factorization r + body.factorization r = (gap * body).factorization r := hmul.symm
+        _ = (x ^ p).factorization r := by simpa [hgap_body_eq]
+        _ = p * x.factorization r := hpow
+    cases h_or with
+    | inl hgap_zero =>
+        simp [hgap_zero]
+    | inr hbody_zero =>
+        refine ⟨x.factorization r, ?_⟩
+        omega
+  have hdiv_body : ∀ r : ℕ, p ∣ body.factorization r := by
+    intro r
+    have h_inf : gap.factorization ⊓ body.factorization = 0 := by
+      have h := Nat.factorization_gcd hgap0 hbody0
+      rw [hgcd] at h
+      simpa using h.symm
+    have hmin : (gap.factorization ⊓ body.factorization) r = 0 := by
+      rw [h_inf]
+      rfl
+    have h_or : gap.factorization r = 0 ∨ body.factorization r = 0 := by
+      simp only [Finsupp.inf_apply] at hmin
+      omega
+    have hsum : gap.factorization r + body.factorization r = p * x.factorization r := by
+      have hmul :
+          (gap * body).factorization r = gap.factorization r + body.factorization r := by
+        simp [Nat.factorization_mul hgap0 hbody0]
+      have hpow :
+          (x ^ p).factorization r = p * x.factorization r := by
+        simp [Nat.factorization_pow x p]
+      calc
+        gap.factorization r + body.factorization r = (gap * body).factorization r := hmul.symm
+        _ = (x ^ p).factorization r := by simpa [hgap_body_eq]
+        _ = p * x.factorization r := hpow
+    cases h_or with
+    | inl hgap_zero =>
+        refine ⟨x.factorization r, ?_⟩
+        omega
+    | inr hbody_zero =>
+        simp [hbody_zero]
+  rcases
+      triominoWieferichShrink_exists_eq_pow_of_factorization_dvd_core
+        (n := gap) (p := p) hgap0 hdiv_gap with ⟨u, hu⟩
+  rcases
+      triominoWieferichShrink_exists_eq_pow_of_factorization_dvd_core
+        (n := body) (p := p) hbody0 hdiv_body with ⟨v, hv⟩
+  exact ⟨u, v, hu, hv⟩
+
 /--
 `x = q * (x / q)` と `x ≠ 0` から、shadow 固定の `x / q` も非零になる。
 
