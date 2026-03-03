@@ -700,14 +700,17 @@ Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
 
 最後の未解決点は、この `z' + hEq'` をどう作るかに押し込める。
 -/
-theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateB
+def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
     (hqP : Nat.Prime q)
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
-    ¬ p ∣ ((z - y) - y) ∧ (x / q) ^ p + y ^ p = (z - y) ^ p := by
+    { z' : ℕ //
+      z' < z
+        ∧ ¬ p ∣ (z' - y)
+        ∧ (x / q) ^ p + y ^ p = z' ^ p } := by
   let _ := hpack
   let _ := hpB
   let _ := hqP
@@ -718,8 +721,8 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateB
 /--
 Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
 
-最後の未解決点は、候補 B `z' := z - y` に対して
-`hpB'` と `hEq'` をどう同時に満たすかに押し込める。
+最後の未解決点は、適切な `z'` を 1 つ構成して
+`hzlt / hpB' / hEq'` を同時に満たすことに押し込める。
 -/
 def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core
     {p x y z q : ℕ}
@@ -734,56 +737,10 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core
         z' < z
           ∧ ¬ p ∣ (z' - y)
           ∧ (x / q) ^ p + y ^ p = z' ^ p } := by
-    have hq_dvd_x : q ∣ x := by
-      exact
-        triominoWieferichShrink_q_dvd_x_core
-          (p := p) (x := x) (y := y) (z := z) (q := q)
-          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-    have hxMul : x = q * (x / q) := by
-      exact
-        triominoWieferichShrink_x_eq_q_mul_div_core
-          (p := p) (x := x) (y := y) (z := z) (q := q)
-          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-    have hq_not_dvd_z : ¬ q ∣ z := by
-      intro hq_dvd_z
-      have hp_pos : 0 < p := hpack.hp.pos
-      have hq_dvd_qpow : q ∣ q ^ p := dvd_pow_self _ hp_pos.ne'
-      have hqpow_dvd_xpow : q ^ p ∣ x ^ p := by
-        exact pow_dvd_pow_of_dvd hq_dvd_x p
-      have hq_dvd_xpow : q ∣ x ^ p := dvd_trans hq_dvd_qpow hqpow_dvd_xpow
-      have hqpow_dvd_zpow : q ^ p ∣ z ^ p := by
-        exact pow_dvd_pow_of_dvd hq_dvd_z p
-      have hq_dvd_zpow : q ∣ z ^ p := dvd_trans hq_dvd_qpow hqpow_dvd_zpow
-      have hq_dvd_ypow : q ∣ y ^ p := by
-        have hq_dvd_sum : q ∣ x ^ p + y ^ p := by
-          simpa [hpack.hEq] using hq_dvd_zpow
-        have hq_dvd_sub : q ∣ (x ^ p + y ^ p) - x ^ p := by
-          exact Nat.dvd_sub hq_dvd_sum hq_dvd_xpow
-        simpa [Nat.add_sub_cancel_left] using hq_dvd_sub
-      have hq_dvd_y : q ∣ y := hqP.dvd_of_dvd_pow hq_dvd_ypow
-      exact hq_not_dvd_gap (Nat.dvd_sub hq_dvd_z hq_dvd_y)
-    let z' : ℕ := z - y
-    refine ⟨z', ?_⟩
-    -- 候補 A `z' := z / q` は `q ∣ z` を要求するが、
-    -- primitive 条件から `q ∤ z` が出るので先に棄却する。
-    --
-    -- そこで候補 B:
-    --   z' := z - y
-    -- を次の本命として固定し、その上で
-    --   z' < z
-    --   ¬ p ∣ (z' - y)
-    --   (x / q)^p + y^p = z'^p
-    -- を同時に詰める。
-    have hzlt : z' < z := by
-      simpa [z'] using Nat.sub_lt (Nat.pos_of_ne_zero hpack.hz0) (Nat.pos_of_ne_zero hpack.hy0)
-    have hCandB :
-        ¬ p ∣ ((z - y) - y) ∧ (x / q) ^ p + y ^ p = (z - y) ^ p := by
-      exact
-        triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateB
-          (p := p) (x := x) (y := y) (z := z) (q := q)
-          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-    rcases hCandB with ⟨hpB', hEq'⟩
-    exact ⟨hzlt, hpB', hEq'⟩
+    exact
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   rcases hzCore with ⟨z', hzSpec⟩
   rcases hzSpec with ⟨hzlt, hpB', hEq'⟩
   exact

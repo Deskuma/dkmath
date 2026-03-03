@@ -295,36 +295,33 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。
 
-### 2026-03-03 phase-14 継続（候補B `z' := z - y` の残差を専用定理へ圧縮）
+### 2026-03-03 phase-14 継続（候補B固定をやめ、generic `candidateZ` 存在核へ戻す）
 
 - 変更ファイル:
   - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
 - 変更内容:
-  1. 候補B専用の残差を
-     `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateB`
-     として切り出した
-  2. 目標を
-     - `¬ p ∣ ((z - y) - y)`
-     - `(x / q)^p + y^p = (z - y)^p`
-     の 2 条件に固定した
-  3. `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` 自体は
-     候補Bの `z' := z - y` と `hzlt` を組み、
-     上の専用定理から `hpB' / hEq'` を受け取る glue にした
+  1. 候補B固定の残差をやめ、
+     `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ`
+     として generic な存在核に戻した
+  2. 返り値は
+     `{ z' // z' < z ∧ ¬ p ∣ (z' - y) ∧ (x / q)^p + y^p = z'^p }`
+     の `Subtype` に固定した
+  3. `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` は、
+     この generic 存在核をそのまま受け取って record へ梱包する glue にした
 - 意図:
-  - `z_core` の存在ゴール全体を直接 `sorry` にせず、
-    候補Bが本当に示すべき数学だけを明示的な専用定理に押し込める
-  - 候補Bが外れた場合でも、差し替えるべき位置を 1 箇所に固定する
+  - 候補B `z' := z - y` は `hzlt` は通るが `hEq'` が成立しにくく、
+    false な候補に `sorry` を固定し続ける価値が薄い
+  - そこで「適切な `z'` が存在する」という generic 核へ戻し、
+    次に既存 shrink candidate や別候補へ差し替える余地を確保する
 - 効果:
   - 残る `sorry` は 1 件のまま維持
   - ただし warning の位置は
-    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core`
-    から
-    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateB`
-    へ移った
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ`
+    に固定された
   - `z_core` 自体は no-`sorry` の glue になった
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
-  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateB` の `sorry` 1件のみ）。
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ` の `sorry` 1件のみ）。
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
-  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateB` の `sorry` 1件のみ）。
+  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ` の `sorry` 1件のみ）。
