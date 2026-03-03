@@ -54,6 +54,17 @@ lemma chernoff_single_prime_explicit'
     chernoff_single_prime_uniform hp3 γ hγ t0 ht0_pos ht0_le
   -- return the fixed constant const_C (=5) and re-use the bound produced by the uniform lemma
   use const_C
+  -- we now need to prove: C = const_C ∧ 0 < C ∧ ∀ X ≥ const_X, ...
+  refine And.intro ?hCeq ?hRest
+  · -- C = const_C
+    rfl
+  · -- 0 < C ∧ ∀ X ≥ const_X, ...
+    refine And.intro ?hCpos ?hBound
+    · -- positivity of C
+      exact hC0_pos
+    · -- the bound, directly reusing the one from the uniform lemma
+      intro X hX
+      simpa using hbound0 X hX
 -- -------------------------------------------------------
 
 open Classical in
