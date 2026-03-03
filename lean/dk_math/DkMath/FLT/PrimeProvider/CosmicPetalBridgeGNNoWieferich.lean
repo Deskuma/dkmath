@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNCore
+import DkMath.NumberTheory.ZsigmondyCyclotomicResearch
 
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
@@ -94,7 +95,21 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le
       ¬ p ∣ (z - y) →
       Nat.Prime q → q ∣ (z ^ p - y ^ p) → ¬ q ∣ (z - y) →
       padicValNat q (z ^ p - y ^ p) ≤ 1 := by
-  sorry
+  intro p x y z q hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
+  have hzy_coprime : Nat.Coprime z y := by
+    exact (coprime_right_of_add_pow_eq_pow hpack.hp hpack.hxy hpack.hEq).symm
+  exact
+    DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one
+      (a := z) (b := y) (d := p) (q := q)
+      hpack.hp
+      (le_trans (by decide : 3 ≤ 5) hpack.hp5)
+      hpack.hyz_lt
+      hpack.y_pos
+      hzy_coprime
+      hpB
+      hqP
+      hq_dvd_diff
+      hq_not_dvd_gap
 
 /--
 `padicValNat q (GN p (z - y) y) ≤ 1` が供給できれば、
