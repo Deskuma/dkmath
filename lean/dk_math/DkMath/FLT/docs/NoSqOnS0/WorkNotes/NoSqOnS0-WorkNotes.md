@@ -1,6 +1,6 @@
 # No Square on S0 Work Notes
 
-status: 作業中 - phase-15: 完全証明への道 (CosmicPetalBridgeGNNoWieferich: triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core)
+status: 作業中 - phase-15: valuation spine の深い核 (ZsigmondyCyclotomicResearch: squarefree_implies_padic_val_le_one)
 
 ## Index
 
@@ -23,42 +23,51 @@ status: 作業中 - phase-15: 完全証明への道 (CosmicPetalBridgeGNNoWiefer
 
 ## 課題
 
-- [ ] phase-15 の深い数学核
-  - [ ] `CosmicPetalBridgeGNNoWieferich.lean` の
-    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+- [ ] phase-15 の深い数学核（research spine）
+  - [ ] `lean/dk_math/DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean` の
+    `DkMath.NumberTheory.GcdNext.squarefree_implies_padic_val_le_one`
     を実装する
-  - [ ] 具体的には、`TriominoNoWieferichBridge` を
-    Branch B 文脈で供給する
-- [x] phase-14 の配線整理
-  - [x] `CosmicPetalBridgeGNDescentB.lean` は glue / bridge 側へ整理済み
-  - [x] 残る `sorry` は phase-15 用の別ファイルへ隔離済み
+  - [ ] その結果として
+    `DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one`
+    経由の valuation spine を no-`sorry` 化する
+- [x] phase-15 の local bridge 接続
+  - [x] `CosmicPetalBridgeGNNoWieferich.lean` は local `sorry` を持たず、
+    valuation spine への委譲だけで閉じる
+  - [x] `CosmicPetalBridgeGNDescentB.lean` / `CosmicPetalBridgeGN.lean` /
+    `TriominoCosmicGapInvariant.lean` の公開配線は維持済み
 
 ## 状況タスク
 
 - 完了条件（DoD）:
-  - [ ] 1. `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
-    に `sorry` がない
-  - [ ] 2. `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - [x] 1. `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
+    に local `sorry` がない
+  - [ ] 2. `lean/dk_math/DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean`
+    の `squarefree_implies_padic_val_le_one` に `sorry` がない
+  - [ ] 3. `cd lean/dk_math && lake build DkMath.NumberTheory.ZsigmondyCyclotomicResearch DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
     が warning なしで成功
-  - [ ] 3. `CosmicPetalBridgeGNDescentB.lean` は phase-15 でも no-`sorry` の配線側として維持される
-  - [ ] 4. phase-15 の研究核と、その依存方針をログに明示
+  - [x] 4. `CosmicPetalBridgeGNDescentB.lean` は phase-15 でも no-`sorry` の配線側として維持される
+  - [x] 5. phase-15 の研究核と、その依存方針をログに明示
 - 受け入れ条件:
-  - [ ] 1. Branch B descent ルートが `TriominoNoWieferichBridge` の供給だけで閉じること
-  - [ ] 2. `CosmicPetalBridgeGN.lean` / `TriominoCosmicGapInvariant.lean` の公開配線を変更せずに接続できること
-  - [ ] 3. 新補題・試行錯誤は `CosmicPetalBridgeGNNoWieferich.lean` に局所化されること
+  - [x] 1. Branch B descent ルートが `TriominoNoWieferichBridge` の供給だけで閉じること
+  - [x] 2. `CosmicPetalBridgeGN.lean` / `TriominoCosmicGapInvariant.lean` の公開配線を変更せずに接続できること
+  - [ ] 3. 新補題・試行錯誤は実質的に
+    `ZsigmondyCyclotomicResearch.lean` の valuation spine
+    （必要ならその薄い wrapper として `CosmicPetalBridgeGNNoWieferich.lean`）
+    に局所化されること
 
 ## 計画
 
 - 直近の主戦場:
-  - `CosmicPetalBridgeGNNoWieferich.lean`
+  - `lean/dk_math/DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean`
 - 現在の唯一の未解決点:
-  - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+  - `DkMath.NumberTheory.GcdNext.squarefree_implies_padic_val_le_one`
 - 直近の探索候補:
-  - primitive prime + valuation (`padicValNat = 1`)
-  - non-liftable / no-Wieferich bridge の既存 spine への接続
-  - 必要なら上の存在命題をさらに Prop-level の補題へ分解
+  - primitive prime divisor の valuation を 1 に抑える既存 squarefree / separability spine
+  - `padicValNat_dvd_iff_le` を介した `¬ q^2 ∣ ...` との往復を補助補題化
+  - `ZsigmondyCyclotomic.lean` / `DiffPow.lean` 側の squarefree・primitive prime 補題の再利用
 - 非目標（当面）:
   - `CosmicPetalBridgeGNDescentB.lean` の外壁 refactor 継続
+  - `CosmicPetalBridgeGNNoWieferich.lean` に新しい深い数学核を戻すこと
   - explicit な `z'` 構成の再導入
 
 ## 作業ログ
@@ -212,3 +221,33 @@ status: 作業中 - phase-15: 完全証明への道 (CosmicPetalBridgeGNNoWiefer
   - したがって phase-15 では、
     「既存 valuation spine をここへどう接続するか」
     だけに集中できる。
+
+## 2026-03-04 phase-15 継続（local no-`sorry` 化、残核は research spine へ移動）
+
+- 更新: `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
+  - `import DkMath.NumberTheory.ZsigmondyCyclotomicResearch`
+    を追加
+  - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le_one_of_primitivePrime_core`
+    を、local `sorry` ではなく
+    `DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one`
+    への委譲に変更
+
+- 確認:
+  - `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - いずれも成功
+
+- 現在の warning:
+  - `lean/dk_math/DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:14`
+  - `DkMath.NumberTheory.GcdNext.squarefree_implies_padic_val_le_one`
+  - `declaration uses sorry` 1件のみ
+
+- 意味:
+  - `CosmicPetalBridgeGNNoWieferich.lean` は local `sorry` を持たない、純粋な bridge / wrapper になった
+  - phase-15 の未解決数学は、`NoWieferich` 側の局所 stub ではなく、
+    valuation spine の根である
+    `squarefree_implies_padic_val_le_one`
+    に移った
+  - 以後の研究対象は、実質
+    `ZsigmondyCyclotomicResearch.lean`
+    の squarefree / valuation コアである
