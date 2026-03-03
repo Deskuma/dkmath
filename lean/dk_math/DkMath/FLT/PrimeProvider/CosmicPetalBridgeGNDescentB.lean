@@ -579,7 +579,7 @@ theorem triominoWieferichShrink_gap_gcd_GN_dvd_p_int
     exact (Nat.coprime_iff_gcd_eq_one).1 (by simpa [Nat.coprime_comm] using hcop_yz)
   have hab : Int.gcd (z : ℤ) (y : ℤ) = 1 := by
     rw [Int.gcd_eq_natAbs]
-    simpa [hgcd_zy]
+    simp [hgcd_zy]
   have hp1 : 1 ≤ p := Nat.succ_le_of_lt hpack.hp.pos
   have hSd :
       Int.gcd (((z - y : ℕ) : ℤ)) (DkMath.Algebra.DiffPow.diffPowSum (z : ℤ) (y : ℤ) p) ∣ p := by
@@ -720,7 +720,7 @@ theorem triominoWieferichShrink_gap_GN_are_pth_powers_core
         simp [Nat.factorization_pow x p]
       calc
         gap.factorization r + body.factorization r = (gap * body).factorization r := hmul.symm
-        _ = (x ^ p).factorization r := by simpa [hgap_body_eq]
+        _ = (x ^ p).factorization r := by simp [hgap_body_eq]
         _ = p * x.factorization r := hpow
     cases h_or with
     | inl hgap_zero =>
@@ -749,7 +749,7 @@ theorem triominoWieferichShrink_gap_GN_are_pth_powers_core
         simp [Nat.factorization_pow x p]
       calc
         gap.factorization r + body.factorization r = (gap * body).factorization r := hmul.symm
-        _ = (x ^ p).factorization r := by simpa [hgap_body_eq]
+        _ = (x ^ p).factorization r := by simp [hgap_body_eq]
         _ = p * x.factorization r := hpow
     cases h_or with
     | inl hgap_zero =>
@@ -764,6 +764,96 @@ theorem triominoWieferichShrink_gap_GN_are_pth_powers_core
       triominoWieferichShrink_exists_eq_pow_of_factorization_dvd_core
         (n := body) (p := p) hbody0 hdiv_body with ⟨v, hv⟩
   exact ⟨u, v, hu, hv⟩
+
+/--
+route 1 の補助:
+`GN p (z-y) y` が `p` 乗で、かつ `q^p ∣ GN` なら、
+その `p` 乗根は `q` を因子にもつ。したがって `GN = (q * v1)^p`。
+-/
+theorem triominoWieferichShrink_GN_eq_q_mul_pow_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    ∃ v1 : ℕ, GN p (z - y) y = (q * v1) ^ p := by
+  rcases
+      triominoWieferichShrink_gap_GN_are_pth_powers_core
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN with
+    ⟨_u, v, _hu, hv⟩
+  have hqpow_dvd_vpow : q ^ p ∣ v ^ p := by
+    rw [← hv]
+    exact hqpow_dvd_GN
+  have hq_dvd_vpow : q ∣ v ^ p := by
+    have hq_dvd_qpow : q ∣ q ^ p := by
+      exact dvd_pow (dvd_refl q) hpack.hp.ne_zero
+    exact dvd_trans hq_dvd_qpow hqpow_dvd_vpow
+  have hq_dvd_v : q ∣ v := hqP.dvd_of_dvd_pow hq_dvd_vpow
+  rcases hq_dvd_v with ⟨v1, hv1⟩
+  refine ⟨v1, ?_⟩
+  calc
+    GN p (z - y) y = v ^ p := hv
+    _ = (q * v1) ^ p := by rw [hv1]
+
+/--
+route 1 の補助:
+`gap = u^p` と `GN = (q*v1)^p` の分解から、
+`x / q = u * v1` まで落とす。
+-/
+theorem triominoWieferichShrink_xdiv_eq_mul_of_gap_GN_powers_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    ∃ u v1 : ℕ,
+      (z - y) = u ^ p
+        ∧ GN p (z - y) y = (q * v1) ^ p
+        ∧ x / q = u * v1 := by
+  rcases
+      triominoWieferichShrink_gap_GN_are_pth_powers_core
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN with
+    ⟨u, v, hu, hv⟩
+  have hqpow_dvd_vpow : q ^ p ∣ v ^ p := by
+    rw [← hv]
+    exact hqpow_dvd_GN
+  have hq_dvd_vpow : q ∣ v ^ p := by
+    have hq_dvd_qpow : q ∣ q ^ p := by
+      exact dvd_pow (dvd_refl q) hpack.hp.ne_zero
+    exact dvd_trans hq_dvd_qpow hqpow_dvd_vpow
+  have hq_dvd_v : q ∣ v := hqP.dvd_of_dvd_pow hq_dvd_vpow
+  rcases hq_dvd_v with ⟨v1, hv1⟩
+  have hGNq : GN p (z - y) y = (q * v1) ^ p := by
+    calc
+      GN p (z - y) y = v ^ p := hv
+      _ = (q * v1) ^ p := by rw [hv1]
+  have hxMul : x = q * (x / q) :=
+    triominoWieferichShrink_x_eq_q_mul_div_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  have hgap_body :
+      x ^ p = (z - y) * GN p (z - y) y := by
+    simpa [PrimeGe5CounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
+  have hpow_eq : (q * (x / q)) ^ p = (q * (u * v1)) ^ p := by
+    calc
+      (q * (x / q)) ^ p = x ^ p := by rw [← hxMul]
+      _ = (z - y) * GN p (z - y) y := hgap_body
+      _ = (z - y) * (q * v1) ^ p := by rw [hGNq]
+      _ = u ^ p * (q * v1) ^ p := by rw [hu]
+      _ = (u * (q * v1)) ^ p := by
+        exact (Nat.mul_pow u (q * v1) p).symm
+      _ = (q * (u * v1)) ^ p := by
+        congr 1
+        ac_rfl
+  have hmul_eq : q * (x / q) = q * (u * v1) := by
+    exact (Nat.pow_left_injective hpack.hp.ne_zero) hpow_eq
+  have hxdiv_eq : x / q = u * v1 := by
+    exact Nat.eq_of_mul_eq_mul_left hqP.pos hmul_eq
+  exact ⟨u, v1, hu, hGNq, hxdiv_eq⟩
 
 /--
 `x = q * (x / q)` と `x ≠ 0` から、shadow 固定の `x / q` も非零になる。
@@ -981,7 +1071,11 @@ def TriominoWieferichShrinkKernelZEqB.toNumsEqLink
 /--
 Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
 
-最後の未解決点は、この `z' + hEq'` をどう作るかに押し込める。
+route 1 で `gap = u^p`, `GN = (q*v1)^p`, `x/q = u*v1`
+までは純算術に切り出せたが、`∃`-形式の証人をそのまま `Type` 側へ流すと
+`Prop` から `Type` への elimination 制限に当たる。
+
+現時点では、この `candidateZ_data` 自体を最後の `Type`-値の穴として保持する。
 -/
 def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data
     {p x y z q : ℕ}

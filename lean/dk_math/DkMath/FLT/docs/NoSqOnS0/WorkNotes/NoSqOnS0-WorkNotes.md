@@ -393,3 +393,36 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 結果: 成功（`unnecessary simpa` lint が 3 件、`sorry` warning は 1 件）
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功
+
+### 2026-03-03 phase-14 継続（route 1: `x / q = u * v1` まで延長、ただし `Prop -> Type` 制限で止まる）
+
+- 対象:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+- 追加:
+  - `triominoWieferichShrink_GN_eq_q_mul_pow_core`
+  - `triominoWieferichShrink_xdiv_eq_mul_of_gap_GN_powers_core`
+- 内容:
+  1. `GN = v^p` と `q^p ∣ GN` から `q ∣ v` を引き、`GN = (q * v1)^p` を与える補助定理を追加
+  2. `gap = u^p` と合わせて、`x = q * (x / q)` および `x^p = gap * GN` から
+     `x / q = u * v1` まで落とす補助定理を追加
+- 結果:
+  - route 1 は
+    - `gap = u^p`
+    - `GN = (q * v1)^p`
+    - `x / q = u * v1`
+    までは非循環に通った
+  - ただし、この `∃ u v1, ...` は `Prop` の存在であり、
+    `candidateZ_data : Type` を埋めるためにそのまま `rcases` すると
+    Lean の `Prop -> Type` elimination 制限に当たる
+  - そのため、`candidateZ_data` への直接流用は一旦撤回し、
+    route 1 の補助定理だけを保持する形に戻した
+- 失敗メモ:
+  - 一度 `candidateZ_data` を route 1 の `∃` から組み立てようとしたが、
+    `Exists.casesOn` は `Prop` から `Type` へは降ろせず、`nested.lean.propRecLargeElim` で停止した
+  - この失敗で、
+    「route 1 の純算術成果は有効だが、最後の `Type`-値の穴へ流すには
+    さらに `Type` 側の data へ昇格させる必要がある」
+    ことが確定した
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（`unnecessary simpa` lint が 3 件、`sorry` warning は 1 件）
