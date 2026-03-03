@@ -310,3 +310,13 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
     「どの追加仮定を downstream が受け入れるか」
     を決めて、
     local bridge をこの true な stronger theorem へ繋ぎ替える設計判断に移った
+
+### 2026-03-04 phase-15 補助（BinomTail を CosmicFormulaBinom へ接続）
+- `DkMath/Algebra/BinomTail.lean` の mixed-term positivity 補題を `DkMath/CosmicFormula/CosmicFormulaBinom.lean` に接続。
+- 追加:
+  - `add_pow_ne_sum_pows_nat_of_two_le_binom`
+  - `add_pow_gt_sum_pows_nat_of_two_le_binom`
+- 内容:
+  - `2 ≤ d`, `x,u > 0` のとき `(x + u)^d` は `x^d + u^d` に一致せず、しかも真に大きいことを、`CosmicFormulaBinom` の語彙で直接参照できるようにした。
+- これは phase-15 の主核ではないが、`G / GN` のような中間層が必要であることをコード上で言い表す補助道具として整備した。
+- 確認: `cd lean/dk_math && lake env lean DkMath/CosmicFormula/CosmicFormulaBinom.lean` 成功。

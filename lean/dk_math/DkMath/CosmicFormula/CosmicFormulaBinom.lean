@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import Mathlib
+import DkMath.Algebra.BinomTail
 import DkMath.CosmicFormula.CosmicFormulaDim  -- Cosmic Formula Dimensionality
 
 #print "file: DkMath.CosmicFormula.CosmicFormulaBinom"
@@ -491,6 +492,26 @@ theorem two_gap_xy_factor_of_two_le {R : Type _} [CommSemiring R]
   rcases Nat.exists_eq_add_of_le hd with ⟨n, rfl⟩
   simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm]
     using (two_gap_xy_factor (R := R) n x y)
+
+/--
+Nat 上で `2 ≤ d` かつ `x,u > 0` なら、`(x+u)^d` は端点の 2 項
+`x ^ d + u ^ d` に一致しない。
+
+言い換えると、`(x+u)^d` には必ず正の混合項が残るため、
+`x^d + u^d` 型を扱うには `G` / `GN` のような中間層が必要になる。
+-/
+theorem add_pow_ne_sum_pows_nat_of_two_le_binom {d x u : ℕ}
+    (hd : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) :
+    (x + u) ^ d ≠ x ^ d + u ^ d := by
+  simpa using DkMath.Algebra.BinomTail.add_pow_ne_sum_pows_nat_of_two_le x u hd hx hu
+
+/--
+Nat 上で `2 ≤ d` かつ `x,u > 0` なら、`(x+u)^d` は端点の 2 項和より真に大きい。
+-/
+theorem add_pow_gt_sum_pows_nat_of_two_le_binom {d x u : ℕ}
+    (hd : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) :
+    x ^ d + u ^ d < (x + u) ^ d := by
+  simpa using DkMath.Algebra.BinomTail.add_pow_gt_sum_pows_nat_of_two_le x u hd hx hu
 
 end CommSemiring
 
