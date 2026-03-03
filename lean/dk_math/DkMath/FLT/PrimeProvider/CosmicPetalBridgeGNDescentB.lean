@@ -509,6 +509,137 @@ theorem triominoWieferichShrink_x_eq_q_mul_div_core
   simpa using (Nat.mul_div_cancel' hxq).symm
 
 /--
+`GN p (z-y) y` は、整数環では差の冪和 `Sd z y p` と一致する。
+
+これは gcd ルートで `gcd_specialized_divides_d` を `GN` へ接続するための橋。
+-/
+theorem triominoWieferichShrink_int_GN_eq_Sd_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    GN p (((z - y : ℕ) : ℤ)) (y : ℤ) = DkMath.Algebra.DiffPow.diffPowSum (z : ℤ) (y : ℤ) p := by
+  let _ := hpB
+  let _ := hqP
+  let _ := hq_not_dvd_gap
+  let _ := hqpow_dvd_GN
+  have hp_pos : 0 < p := hpack.hp.pos
+  have hGN_nat : z ^ p - y ^ p = (z - y) * GN p (z - y) y := by
+    simpa using pow_sub_pow_factor_cosmic_N hp_pos hpack.hyz_lt
+  have hyz_pow : y ^ p ≤ z ^ p := by
+    exact Nat.pow_le_pow_left hpack.hyz p
+  have hGN_int :
+      (z : ℤ) ^ p - (y : ℤ) ^ p =
+        (((z - y : ℕ) : ℤ) * GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) := by
+    calc
+      (z : ℤ) ^ p - (y : ℤ) ^ p = (↑(z ^ p) : ℤ) - ↑(y ^ p) := by
+        simp [Nat.cast_pow]
+      _ = ((z ^ p - y ^ p : ℕ) : ℤ) := by
+        rw [← Nat.cast_sub hyz_pow]
+      _ = (((z - y) * GN p (z - y) y : ℕ) : ℤ) := by
+        rw [hGN_nat]
+      _ = (((z - y : ℕ) : ℤ) * GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) := by
+        simp [GN]
+  have hSd :
+      (z : ℤ) ^ p - (y : ℤ) ^ p =
+        (((z - y : ℕ) : ℤ) * DkMath.Algebra.DiffPow.diffPowSum (z : ℤ) (y : ℤ) p) := by
+    simpa [Int.ofNat_sub hpack.hyz] using
+      (DkMath.Algebra.DiffPow.pow_sub_pow_factor
+        (a := (z : ℤ)) (b := (y : ℤ)) (d := p))
+  have hgap_ne0 : (((z - y : ℕ) : ℤ)) ≠ 0 := by
+    exact_mod_cast (Nat.ne_of_gt (Nat.sub_pos_of_lt hpack.hyz_lt))
+  have hmul :
+      (((z - y : ℕ) : ℤ) * GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) =
+        (((z - y : ℕ) : ℤ) * DkMath.Algebra.DiffPow.diffPowSum (z : ℤ) (y : ℤ) p) := by
+    rw [← hGN_int, hSd]
+  exact Int.eq_of_mul_eq_mul_left hgap_ne0 hmul
+
+/--
+primitive な Branch B 文脈では、`gcd (z-y, GN p (z-y) y)` は整数環で `p` を割る。
+
+まずは `Int.gcd` 版で押さえ、必要なら下流で `Nat.gcd` 版へ落とす。
+-/
+theorem triominoWieferichShrink_gap_gcd_GN_dvd_p_int
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    Int.gcd (((z - y : ℕ) : ℤ)) (GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) ∣ p := by
+  let _ := hpB
+  let _ := hqP
+  let _ := hq_not_dvd_gap
+  let _ := hqpow_dvd_GN
+  have hcop_yz : Nat.Coprime y z := by
+    exact coprime_right_of_add_pow_eq_pow hpack.hp hpack.hxy hpack.hEq
+  have hgcd_zy : Nat.gcd z y = 1 := by
+    exact (Nat.coprime_iff_gcd_eq_one).1 (by simpa [Nat.coprime_comm] using hcop_yz)
+  have hab : Int.gcd (z : ℤ) (y : ℤ) = 1 := by
+    rw [Int.gcd_eq_natAbs]
+    simpa [hgcd_zy]
+  have hp1 : 1 ≤ p := Nat.succ_le_of_lt hpack.hp.pos
+  have hSd :
+      Int.gcd (((z - y : ℕ) : ℤ)) (DkMath.Algebra.DiffPow.diffPowSum (z : ℤ) (y : ℤ) p) ∣ p := by
+    simpa [Int.ofNat_sub hpack.hyz] using
+      (DkMath.NumberTheory.GcdDiffPow.gcd_divides_d
+        (a := (z : ℤ)) (b := (y : ℤ)) (d := p) hp1 hab)
+  have hGN_eq_Sd :
+      GN p (((z - y : ℕ) : ℤ)) (y : ℤ) = DkMath.Algebra.DiffPow.diffPowSum (z : ℤ) (y : ℤ) p := by
+    exact
+      triominoWieferichShrink_int_GN_eq_Sd_core
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  change Int.gcd (((z - y : ℕ) : ℤ)) (GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) ∣ p
+  rw [hGN_eq_Sd]
+  exact hSd
+
+/--
+Branch B 文脈では `gap = z - y` と `GN p gap y` は互いに素になる。
+
+`gcd(gap, GN) ∣ p` と `p ∤ gap` を組み合わせ、共通素因子があれば `p` 自身になって
+`hpB` に矛盾する、という形で押す。
+-/
+theorem triominoWieferichShrink_gap_coprime_GN_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    Nat.Coprime (z - y) (GN p (z - y) y) := by
+  let _ := hqP
+  let _ := hq_not_dvd_gap
+  let _ := hqpow_dvd_GN
+  refine (Nat.coprime_iff_gcd_eq_one).2 ?_
+  by_contra hg1
+  have hg_ne1 : Nat.gcd (z - y) (GN p (z - y) y) ≠ 1 := by
+    simpa using hg1
+  rcases Nat.exists_prime_and_dvd hg_ne1 with ⟨r, hrP, hr_gcd⟩
+  have hr_gap : r ∣ (z - y) := dvd_trans hr_gcd (Nat.gcd_dvd_left (z - y) (GN p (z - y) y))
+  have hr_GN : r ∣ GN p (z - y) y := dvd_trans hr_gcd (Nat.gcd_dvd_right (z - y) (GN p (z - y) y))
+  have hr_gap_int : (r : ℤ) ∣ (((z - y : ℕ) : ℤ)) := by
+    exact_mod_cast hr_gap
+  have hr_GN_cast : (r : ℤ) ∣ ((GN p (z - y) y : ℕ) : ℤ) := by
+    exact_mod_cast hr_GN
+  have hr_GN_int : (r : ℤ) ∣ GN p (((z - y : ℕ) : ℤ)) (y : ℤ) := by
+    simpa [GN] using hr_GN_cast
+  have hr_gcd_int :
+      r ∣ Int.gcd (((z - y : ℕ) : ℤ)) (GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) := by
+    exact Int.dvd_gcd hr_gap_int hr_GN_int
+  have hgapgcd_dvd_p :
+      Int.gcd (((z - y : ℕ) : ℤ)) (GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) ∣ p := by
+    exact
+      triominoWieferichShrink_gap_gcd_GN_dvd_p_int
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  have hr_dvd_p : r ∣ p := dvd_trans hr_gcd_int hgapgcd_dvd_p
+  have hr_eq_p : r = p := (Nat.prime_dvd_prime_iff_eq hrP hpack.hp).1 hr_dvd_p
+  exact hpB (by simpa [hr_eq_p] using hr_gap)
+
+/--
 `x = q * (x / q)` と `x ≠ 0` から、shadow 固定の `x / q` も非零になる。
 
 `z_core` 内で `(x / q)^p` の正値を使う前処理を共通化する。

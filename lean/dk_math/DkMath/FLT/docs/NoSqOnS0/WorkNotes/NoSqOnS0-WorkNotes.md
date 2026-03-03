@@ -334,3 +334,32 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data` の `sorry` 1件のみ）。
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data` の `sorry` 1件のみ）。
+
+### 2026-03-03 phase-14 継続（gcd spine: `gap ⟂ GN` を非循環で確立）
+
+- 対象:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+- 追加:
+  - `triominoWieferichShrink_gap_coprime_GN_core`
+- 内容:
+  1. 既に追加済みの
+     `triominoWieferichShrink_gap_gcd_GN_dvd_p_int`
+     を直接使い、
+     `gcd (z-y, GN p (z-y) y) ∣ p` と `hpB : ¬ p ∣ (z-y)` から
+     `Nat.Coprime (z-y) (GN p (z-y) y)` を導く補題を追加した
+  2. 実装は、`Nat.gcd` の非自明性から共通素因子 `r` を取り、
+     `r ∣ gap`, `r ∣ GN` を `Int.gcd` 側へ持ち上げ、
+     `r ∣ p`、したがって `r = p` に帰着して `hpB` に矛盾させる形にした
+- 意図:
+  - `candidateZ_data` を explicit な `z'` 構成で殴る前に、
+    Branch B の非循環な gcd spine を core helper として固める
+  - ここから先、`gap * GN = x^p` と組み合わせた別ルート（coprime 分解 / 矛盾ルート）を試す足場にする
+- 結果:
+  - `candidateZ_data` の `sorry` はそのまま 1件
+  - ただし、`gap ⟂ GN` をこのファイル内で循環なしに使えるようになった
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（warning は `unnecessarySimpa` 1件と
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data` の `sorry` 1件）
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功
