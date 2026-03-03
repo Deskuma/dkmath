@@ -280,3 +280,33 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
     という research task に変わった
   - 以後の作業は、`ZsigmondyCyclotomicResearch.lean` で
     squarefree / primitive-prime / valuation のどの条件が最小で必要かを詰める
+
+## 2026-03-04 phase-15 継続（true な stronger theorem を Research に追加）
+
+- 更新:
+  - `lean/dk_math/DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean`
+
+- 追加:
+  - `DkMath.NumberTheory.GcdNext.padicValNat_le_one_of_squarefree`
+  - `DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_of_squarefree_G`
+
+- 内容:
+  - 偽である一般 placeholder
+    `squarefree_implies_padic_val_le_one`
+    はそのまま残しつつ、
+    実際に真である stronger theorem を別名で追加した
+  - `padicValNat_le_one_of_squarefree` は
+    `Squarefree n` と `n ≠ 0` から
+    `padicValNat q n ≤ 1`
+    を返す純算術の橋
+  - `padicValNat_primitive_prime_factor_le_one_of_squarefree_G` は
+    primitive-prime 文脈に
+    `Squarefree (GN d (a - b) b)`
+    を足すことで、`padicValNat q (a ^ d - b ^ d) ≤ 1` を返す
+
+- 意味:
+  - phase-15 の research は、もう「偽な一般定理を埋める」ことではない
+  - これからは
+    「どの追加仮定を downstream が受け入れるか」
+    を決めて、
+    local bridge をこの true な stronger theorem へ繋ぎ替える設計判断に移った
