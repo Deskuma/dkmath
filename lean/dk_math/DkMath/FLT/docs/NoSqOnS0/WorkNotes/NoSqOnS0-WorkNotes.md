@@ -79,3 +79,54 @@ status: 作業中 - phase-15: 完全証明への道 (CosmicPetalBridgeGNNoWiefer
   2. これにより、今後の新補題追加や試行錯誤は
      `CosmicPetalBridgeGNNoWieferich.lean`
      に局所化できる
+
+### 2026-03-04 phase-15 継続（NoWieferich は合成だけで閉じる）
+
+- 対象:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+- 変更:
+  - `CosmicPetalBridgeGNNoWieferich.lean` では、`TriominoNoWieferichBridge` を
+    直接 `sorry` で置くのをやめた
+  - 代わりに
+    `triominoNoWieferichBridge_of_descent (hDesc : WieferichDescentB)`
+    を定義し、
+    Core にある no-`sorry` 合成
+    (`counterexampleHasWieferichLiftB_impl`,
+    `wieferichLiftExclusion_of_liftExists_and_descent`,
+    `triominoNoWieferichBridge_of_wieferichLiftExclusion`)
+    だけで閉じる形に変更
+  - `CosmicPetalBridgeGNDescentB.lean` 側には、
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+    を thin wrapper として戻し、
+    `triominoNoWieferichBridge_of_descent triominoWieferichDescent_impl`
+    に委譲
+- 内容:
+  1. phase-15 の「深い数学核」と見ていた `NoWieferich` は、現時点の依存関係では
+     追加研究なしの最終合成で閉じることが判明した
+  2. これにより、`NoWieferich.lean` / `DescentB.lean` から `sorry` は消える見込みになった
+
+### 2026-03-04 phase-15 継続（定義順制約を確認し、NoWieferich stub は維持）
+
+- 対象:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+- 確認:
+  - `triominoNoWieferichBridge_of_descent (hDesc : WieferichDescentB)` は
+    Core の no-`sorry` 合成だけで実装できる
+  - ただし `DescentB` 内の no-arg 利用箇所はファイル前半にあり、
+    `triominoWieferichDescent_impl`（ファイル末尾）を使う no-arg 定理を
+    その位置で供給することは、現行の定義順ではできない
+- 対応:
+  1. `CosmicPetalBridgeGNNoWieferich.lean` に
+     `triominoNoWieferichBridge_of_descent`
+     を追加（no-`sorry`）
+  2. `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+     は phase-15 の stub として維持
+  3. `DescentB` 側は local な no-arg 再定義を置かず、
+     import した stub をそのまま使う形に戻した
+  4. あわせて
+     `triominoWieferichDescent_impl`
+     は
+     `triominoWieferichDescent_impl_of_core triominoWieferichDescentCoreB_impl`
+     と明示適用へ修正

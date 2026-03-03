@@ -4443,7 +4443,6 @@ Branch B の下降法本体。
 このファイルだけが、一般 `GN` 降下の新規理論（縮小器）を保持する隔離室。
 -/
 theorem triominoWieferichDescent_impl : WieferichDescentB := by
-  exact triominoWieferichDescent_impl_of_core
-    triominoWieferichDescentCoreB_impl
+  exact triominoWieferichDescent_impl_of_core triominoWieferichDescentCoreB_impl
 
 end DkMath.FLT
