@@ -482,6 +482,78 @@ theorem triominoWieferichShrink_x_eq_q_mul_div_core
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   simpa using (Nat.mul_div_cancel' hxq).symm
 
+/--
+`x = q * (x / q)` と `x ≠ 0` から、shadow 固定の `x / q` も非零になる。
+
+`z_core` 内で `(x / q)^p` の正値を使う前処理を共通化する。
+-/
+theorem triominoWieferichShrink_xdiv_ne_zero_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    x / q ≠ 0 := by
+  intro hxdiv0
+  apply hpack.hx0
+  calc
+    x = q * (x / q) := by
+      exact
+        triominoWieferichShrink_x_eq_q_mul_div_core
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+    _ = 0 := by simp [hxdiv0]
+
+/--
+`x / q` は nonzero なので、候補式比較で使う `(x / q)^p` も正になる。
+-/
+theorem triominoWieferichShrink_xdiv_pow_pos_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    0 < (x / q) ^ p := by
+  have hxdiv_pos : 0 < x / q := by
+    exact Nat.pos_of_ne_zero <|
+      triominoWieferichShrink_xdiv_ne_zero_core
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  exact Nat.pow_pos hxdiv_pos
+
+/--
+元の反例等式を shadow 固定の `x / q` へ正規化した形。
+
+`z_core` で `z'^p < z^p` を比較するときの基準式として使う。
+-/
+theorem triominoWieferichShrink_zpow_eq_ypow_add_qpow_mul_xdivpow_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    z ^ p = y ^ p + q ^ p * (x / q) ^ p := by
+  have hxMul : x = q * (x / q) := by
+    exact
+      triominoWieferichShrink_x_eq_q_mul_div_core
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  calc
+    z ^ p = x ^ p + y ^ p := by
+      simpa [Nat.add_comm] using hpack.hEq.symm
+    _ = (q * (x / q)) ^ p + y ^ p := by
+      have hxpow : x ^ p = (q * (x / q)) ^ p := by
+        nth_rewrite 1 [hxMul]
+        rfl
+      simp [hxpow]
+    _ = q ^ p * (x / q) ^ p + y ^ p := by
+      simp [Nat.mul_pow]
+    _ = y ^ p + q ^ p * (x / q) ^ p := by
+      ac_rfl
+
 /-- 内部 data から `Nums` 部分を取り出す。 -/
 def TriominoWieferichShrinkKernelDataB.toNums
     {p x y z q : ℕ}

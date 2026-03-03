@@ -265,3 +265,32 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。
+
+### 2026-03-03 phase-14 継続（`z_core` 前処理の算術を core helper 化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `z_core` で後から使う算術前処理を helper に切り出した
+     - `triominoWieferichShrink_xdiv_ne_zero_core`
+     - `triominoWieferichShrink_xdiv_pow_pos_core`
+     - `triominoWieferichShrink_zpow_eq_ypow_add_qpow_mul_xdivpow_core`
+  2. `x = q * (x / q)` から
+     `x / q ≠ 0` と `(x / q)^p > 0` を回収する前処理を固定した
+  3. 元の反例等式を
+     `z^p = y^p + q^p * (x / q)^p`
+     の shadow 固定形へ正規化する helper を追加した
+- 意図:
+  - `z_core` の候補比較（特に `hzlt` を `z'^p < z^p` で落とすルート）で
+    毎回必要になる算術 glue を本体から追い出す
+  - 候補Bが詰まった場合でも、次候補で再利用できる前処理を先に共通化しておく
+- 効果:
+  - 残る `sorry` は 1 件のまま維持
+  - `z_core` の外側で使う算術は `x = q * (x / q)` の周辺まで共有化され、
+    本体はより直接に `z' / hpB' / hEq'` の比較へ集中できる形になった
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。
