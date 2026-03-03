@@ -341,6 +341,30 @@ theorem add_pow_gap_factor {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
   simpa [add_comm, add_left_comm, add_assoc] using (cosmic_id_csr' (R := R) d x u)
 
 /--
+Nat 上で `2 ≤ d` かつ `x,u > 0` なら、`BigN d x u` は端点の 2 項
+`x ^ d + GapN d u` に一致しない。
+
+これは `BigN` に必ず正の混合項が残ることの、`GN` 側語彙での直接版。
+-/
+theorem bigN_ne_xpow_add_gapN_nat_of_two_le {d x u : ℕ}
+    (hd : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) :
+    BigN d x u ≠ x ^ d + GapN d u := by
+  simpa [BigN, GapN] using
+    DkMath.Algebra.BinomTail.add_pow_ne_sum_pows_nat_of_two_le x u hd hx hu
+
+/--
+Nat 上で `2 ≤ d` かつ `x,u > 0` なら、`BigN d x u` は端点の 2 項和より真に大きい。
+
+したがって、`BigN` を端点 2 項だけで表そうとする試みは失敗し、
+混合項を保持する `GN` のような中間層が必要になる。
+-/
+theorem xpow_add_gapN_lt_bigN_nat_of_two_le {d x u : ℕ}
+    (hd : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) :
+    x ^ d + GapN d u < BigN d x u := by
+  simpa [BigN, GapN] using
+    DkMath.Algebra.BinomTail.add_pow_gt_sum_pows_nat_of_two_le x u hd hx hu
+
+/--
 `d=3` の Tail は `u^2` ではなく（変数名を `x,u` に取っているため）`x^2` を因子に持つ。
 すなわち:
 `(x+u)^3 = u^3 + 3*x*u^2 + x^2*(x+3*u)`。

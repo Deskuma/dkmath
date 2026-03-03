@@ -2039,3 +2039,25 @@ x^2 \cdot GN_{u,v}(a,b)
 
 この順で行けば、ぬしの「GN 構造の解像度上げ」は、
 議論の比喩ではなく **Lean 上の補題群** として素直に育つ。
+
+---
+
+## 実装接続メモ（2026-03-04）
+
+`DkMath/CosmicFormula/CosmicFormulaBinom.lean` に、混合項の正性を直接参照する Nat 補題を追加した。
+
+- `bigN_ne_xpow_add_gapN_nat_of_two_le`
+- `xpow_add_gapN_lt_bigN_nat_of_two_le`
+
+意味:
+
+- `2 ≤ d`, `x,u > 0` なら `(x + u)^d` は `x^d + u^d` に一致しない。
+- しかも `x^d + u^d < (x + u)^d`。
+- よって `BigN d x u` は端点 2 項だけでは表せず、正の混合項を保持する中間層 `GN` が必要になる。
+
+この接続は、`GResolution` 側で
+
+- 「`Big` を端点 2 項へ直落としする候補は混合項で棄却される」
+- 「`G_t` / `GN` の解像度層が必要」
+
+という説明を、コード上の参照先つきで言えるようにするためのもの。
