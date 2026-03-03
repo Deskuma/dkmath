@@ -130,3 +130,26 @@ status: 作業中 - phase-15: 完全証明への道 (CosmicPetalBridgeGNNoWiefer
      は
      `triominoWieferichDescent_impl_of_core triominoWieferichDescentCoreB_impl`
      と明示適用へ修正
+## 2026-03-04 phase-15 継続（NoWieferich stub を valuation 上界へ分解）
+
+- 更新: `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
+  - `triominoNoWieferichBridge_of_padicValNat_le_one`
+    - `padicValNat q (z^p - y^p) ≤ 1` から `TriominoNoWieferichBridge` を作る no-`sorry` glue を追加
+  - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_le_one_core`
+    - phase-15 の最小研究核として追加
+  - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+    - 直接 `sorry` を持つ形をやめ、上の valuation 上界補題へ委譲する薄い殻に変更
+
+- 確認:
+  - `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - いずれも成功
+
+- 現在の唯一の `sorry`:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
+  - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_le_one_core`
+
+- 意味:
+  - phase-15 の研究核は、`TriominoNoWieferichBridge` 全体ではなく
+    「primitive prime divisor 文脈で `padicValNat q (z^p - y^p) ≤ 1` をどう供給するか」
+    というより小さい Prop-level の上界補題に圧縮された。
