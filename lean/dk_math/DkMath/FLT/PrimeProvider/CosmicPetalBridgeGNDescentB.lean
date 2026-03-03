@@ -700,6 +700,27 @@ Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
 
 最後の未解決点は、この `z' + hEq'` をどう作るかに押し込める。
 -/
+theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateB
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    ¬ p ∣ ((z - y) - y) ∧ (x / q) ^ p + y ^ p = (z - y) ^ p := by
+  let _ := hpack
+  let _ := hpB
+  let _ := hqP
+  let _ := hq_not_dvd_gap
+  let _ := hqpow_dvd_GN
+  sorry
+
+/--
+Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
+
+最後の未解決点は、候補 B `z' := z - y` に対して
+`hpB'` と `hEq'` をどう同時に満たすかに押し込める。
+-/
 def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
@@ -753,15 +774,16 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core
     --   ¬ p ∣ (z' - y)
     --   (x / q)^p + y^p = z'^p
     -- を同時に詰める。
-    let _u : ℕ := z - y
-    let _ := hq_dvd_x
-    let _ := hxMul
-    let _ := hq_not_dvd_z
     have hzlt : z' < z := by
       simpa [z'] using Nat.sub_lt (Nat.pos_of_ne_zero hpack.hz0) (Nat.pos_of_ne_zero hpack.hy0)
-    refine ⟨hzlt, ?_⟩
-    let _ := hzlt
-    sorry
+    have hCandB :
+        ¬ p ∣ ((z - y) - y) ∧ (x / q) ^ p + y ^ p = (z - y) ^ p := by
+      exact
+        triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateB
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+    rcases hCandB with ⟨hpB', hEq'⟩
+    exact ⟨hzlt, hpB', hEq'⟩
   rcases hzCore with ⟨z', hzSpec⟩
   rcases hzSpec with ⟨hzlt, hpB', hEq'⟩
   exact
