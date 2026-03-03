@@ -36,8 +36,16 @@ lemma abc_c_pos {a b c : ℕ} (hrel : a + b = c)
     (_hnb : ¬Bad_ε c γ_values) :
     1 ≤ c := by
   by_contra h
-  -- ¬(1 ≤ c) implies c ≤ 0, hence c = 0
-  have hc0 : c = 0 := Nat.eq_zero_of_le_zero (le_of_not_gt h)
+  -- ¬(1 ≤ c) implies c = 0 for natural numbers
+  have hc0 : c = 0 := by
+    cases c with
+    | zero =>
+        rfl
+    | succ c' =>
+        -- In this case we have 1 ≤ succ c', contradicting h : ¬ (1 ≤ c)
+        have : 1 ≤ Nat.succ c' := by
+          exact Nat.succ_le_succ (Nat.zero_le _)
+        exact False.elim (h this)
   have hab0 : a = 0 ∧ b = 0 := by
     rw [hc0] at hrel
     exact Nat.add_eq_zero_iff.mp hrel
