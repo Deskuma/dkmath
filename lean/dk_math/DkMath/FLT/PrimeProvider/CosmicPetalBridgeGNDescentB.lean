@@ -636,17 +636,32 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichShrinkKernelZEqB p x y z q := by
-  -- TODO:
-  -- `q^p ∣ GN p (z - y) y` と `¬ q ∣ (z - y)` を使い、
-  -- Triomino/Cosmic の縮小操作で `z'` と
-  -- `(x / q)^p + y^p = z'^p` を構成する。
-  let _u : ℕ := z - y
-  let _ := hpack
-  let _ := hpB
-  let _ := hqP
-  let _ := hq_not_dvd_gap
-  let _ := hqpow_dvd_GN
-  sorry
+  have hzCore :
+      { z' : ℕ //
+        z' < z
+          ∧ ¬ p ∣ (z' - y)
+          ∧ (x / q) ^ p + y ^ p = z' ^ p } := by
+    -- TODO:
+    -- `q^p ∣ GN p (z - y) y` と `¬ q ∣ (z - y)` を使い、
+    -- Triomino/Cosmic の縮小操作で `z'` と
+    -- `(x / q)^p + y^p = z'^p` を同時に構成する。
+    let _u : ℕ := z - y
+    let _ := hpack
+    let _ := hpB
+    let _ := hqP
+    let _ := hq_not_dvd_gap
+    let _ := hqpow_dvd_GN
+    sorry
+  let z' := hzCore.1
+  have hzCore_spec := hzCore.2
+  have hzlt : z' < z := hzCore_spec.1
+  have hpB' : ¬ p ∣ (z' - y) := hzCore_spec.2.1
+  have hEq' : (x / q) ^ p + y ^ p = z' ^ p := hzCore_spec.2.2
+  exact
+    { z' := z'
+      hzlt := hzlt
+      hpB' := hpB'
+      hEq' := hEq' }
 
 /--
 Triomino/Cosmic 固有の等式側 trace 生成 pack（本丸）。

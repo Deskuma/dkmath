@@ -2351,3 +2351,36 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。
+
+### 2026-03-03 phase-14 継続（`z_core` を単一の存在ゴールへ圧縮）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` を
+     直接 `sorry` を置く形から、
+     `Subtype` で
+     `z' < z ∧ ¬ p ∣ (z' - y) ∧ (x / q)^p + y^p = z'^p`
+     をまとめて返す単一ゴールへ変更
+  2. その `Subtype` から `z' / hzlt / hpB' / hEq'` を投影して
+     `TriominoWieferichShrinkKernelZEqB` を構成する glue に整理
+- 実装メモ:
+  - いったん `Exists` + `Classical.choose` へ寄せる案を試したが、
+    `noncomputable` 連鎖が下流定義全体へ波及して不適切だった。
+  - そのため、`sorry` を `Type` の値として保持できる `Subtype` に戻した。
+- 意図:
+  - `z_core` の残る数学を
+    「`z'` とその 3 条件を同時構成する」
+    という 1 つの存在問題へ明確化する。
+  - 外側の record glue は完全に固定し、今後の詰めをこの存在ゴールだけに集中させる。
+- 効果:
+  - 残る `sorry` は 1 件のまま維持。
+  - `z_core` の内部責務が、候補 `z'` と
+    `hzlt / hpB' / hEq'`
+    の同時構成にさらに明示的に圧縮された。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。
