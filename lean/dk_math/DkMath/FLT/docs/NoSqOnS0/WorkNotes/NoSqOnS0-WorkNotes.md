@@ -540,3 +540,37 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - 結果: 成功（warning は `primitivePrime_not_sq_dvd_GN_core` の `sorry` 1件のみ）
+
+### 2026-03-04 phase-14 継続（primitive prime の「任意」版を撤回し、存在版へ修正）
+
+- 対象:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+- 問題認識:
+  - 以前の
+    `primitivePrime_not_sq_dvd_GN_core`
+    は「任意の primitive prime divisor が `GN` に二乗では入らない」という形だった
+  - しかし Branch B 文脈では、`q^p ∣ GN` を与えている `q` 自身が primitive prime divisor の形を満たし得るため、
+    任意版は一般には偽になり得る
+- 修正:
+  - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrimitivePrime_not_sq_dvd_GN_core`
+    を追加
+  - 最後の未解決点を
+    「二乗で入らない primitive prime divisor が存在する」
+    という **存在版** に差し替えた
+  - `existsPrime_dvd_GN_not_sq_core` は
+    1. その primitive prime を取得
+    2. `prime_dvd_GN_of_dvd_sub_not_dvd_left` で `GN` へ橋渡し
+    する glue に変更
+- 内容:
+  1. 最後の `sorry` の命題を、偽になり得る “任意版” から、整合的な “存在版” に修正
+  2. これで最後の核は
+     「適切な primitive prime divisor を選び、その prime は `GN` に二乗で入らない」
+     の一点に集中した
+- 結果:
+  - 残る `sorry` は
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrimitivePrime_not_sq_dvd_GN_core`
+    1件のみ
+- ビルド確認:
+  - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - 結果: 成功（warning は `existsPrimitivePrime_not_sq_dvd_GN_core` の `sorry` 1件のみ）

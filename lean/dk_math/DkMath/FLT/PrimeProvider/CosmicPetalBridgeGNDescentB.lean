@@ -1194,26 +1194,24 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_primitivePrime_on_d
       hpB
 
 /--
-Branch B 文脈で、primitive prime divisor は `GN p (z - y) y` に二乗では入らない。
+Branch B 文脈で、`GN p (z - y) y` に二乗では入らない primitive prime divisor が存在する。
 
 最後の square-free 性の本丸をこの 1 箇所へ隔離する。
 -/
-theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_primitivePrime_not_sq_dvd_GN_core
-    {p x y z q r : ℕ}
+theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrimitivePrime_not_sq_dvd_GN_core
+    {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
     (_hqP : Nat.Prime q)
     (_hq_not_dvd_gap : ¬ q ∣ (z - y))
-    (_hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y)
-    (hrP : Nat.Prime r)
-    (hr_dvd_diff : r ∣ z ^ p - y ^ p)
-    (hr_not_dvd_gap : ¬ r ∣ (z - y)) :
-    ¬ r ^ 2 ∣ GN p (z - y) y := by
+    (_hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    ∃ r : ℕ,
+      Nat.Prime r
+        ∧ r ∣ z ^ p - y ^ p
+        ∧ ¬ r ∣ (z - y)
+        ∧ ¬ r ^ 2 ∣ GN p (z - y) y := by
   let _ := hpack
   let _ := hpB
-  let _ := hrP
-  let _ := hr_dvd_diff
-  let _ := hr_not_dvd_gap
   sorry
 
 /--
@@ -1230,10 +1228,10 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     ∃ r : ℕ, Nat.Prime r ∧ r ∣ GN p (z - y) y ∧ ¬ r ^ 2 ∣ GN p (z - y) y := by
   rcases
-      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_primitivePrime_on_diff_core
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrimitivePrime_not_sq_dvd_GN_core
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN with
-    ⟨r, hrP, hr_dvd_diff, hr_not_dvd_gap⟩
+    ⟨r, hrP, hr_dvd_diff, hr_not_dvd_gap, hr_not_sq⟩
   have hr_dvd_sub : r ∣ ((z - y) + y) ^ p - y ^ p := by
     simpa [Nat.sub_add_cancel hpack.hyz] using hr_dvd_diff
   have hr_dvd_GN : r ∣ GN p (z - y) y := by
@@ -1241,12 +1239,6 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_
       prime_dvd_GN_of_dvd_sub_not_dvd_left
         (d := p) (x := z - y) (u := y) (q := r)
         hrP hr_dvd_sub hr_not_dvd_gap
-  have hr_not_sq : ¬ r ^ 2 ∣ GN p (z - y) y := by
-    exact
-      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_primitivePrime_not_sq_dvd_GN_core
-        (p := p) (x := x) (y := y) (z := z) (q := q) (r := r)
-        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-        hrP hr_dvd_diff hr_not_dvd_gap
   exact ⟨r, hrP, hr_dvd_GN, hr_not_sq⟩
 
 /--
