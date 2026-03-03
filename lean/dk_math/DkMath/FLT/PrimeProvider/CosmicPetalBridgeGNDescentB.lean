@@ -1169,6 +1169,54 @@ lemma triominoWieferichShrink_not_exists_pow_of_exists_prime_dvd_not_dvd_sq
   exact hr_not_sq hr2_dvd_vpow
 
 /--
+Branch B 文脈で、`z^p - y^p` の primitive prime divisor を 1 つ取る。
+
+最後の square-free 性はここでは要求せず、別の Prop kernel に隔離する。
+-/
+theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_primitivePrime_on_diff_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (_hqP : Nat.Prime q)
+    (_hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (_hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    ∃ r : ℕ, Nat.Prime r ∧ r ∣ z ^ p - y ^ p ∧ ¬ r ∣ (z - y) := by
+  have hyz_coprime : Nat.Coprime z y := by
+    exact (coprime_right_of_add_pow_eq_pow hpack.hp hpack.hxy hpack.hEq).symm
+  exact
+    exists_primitive_prime_factor_prime
+      (a := z) (b := y) (d := p)
+      hpack.hp
+      (le_trans (by decide : 3 ≤ 5) hpack.hp5)
+      hpack.hyz_lt
+      hpack.y_pos
+      hyz_coprime
+      hpB
+
+/--
+Branch B 文脈で、primitive prime divisor は `GN p (z - y) y` に二乗では入らない。
+
+最後の square-free 性の本丸をこの 1 箇所へ隔離する。
+-/
+theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_primitivePrime_not_sq_dvd_GN_core
+    {p x y z q r : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (_hqP : Nat.Prime q)
+    (_hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (_hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y)
+    (hrP : Nat.Prime r)
+    (hr_dvd_diff : r ∣ z ^ p - y ^ p)
+    (hr_not_dvd_gap : ¬ r ∣ (z - y)) :
+    ¬ r ^ 2 ∣ GN p (z - y) y := by
+  let _ := hpack
+  let _ := hpB
+  let _ := hrP
+  let _ := hr_dvd_diff
+  let _ := hr_not_dvd_gap
+  sorry
+
+/--
 `GN p (z - y) y` に平方で割れない素因子が存在する、という route 1 の最小矛盾源。
 
 これが供給できれば、`GN` が `p` 乗になれないことは純算術で落ちる。
@@ -1181,12 +1229,25 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     ∃ r : ℕ, Nat.Prime r ∧ r ∣ GN p (z - y) y ∧ ¬ r ^ 2 ∣ GN p (z - y) y := by
-  let _ := hpack
-  let _ := hpB
-  let _ := hqP
-  let _ := hq_not_dvd_gap
-  let _ := hqpow_dvd_GN
-  sorry
+  rcases
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_primitivePrime_on_diff_core
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN with
+    ⟨r, hrP, hr_dvd_diff, hr_not_dvd_gap⟩
+  have hr_dvd_sub : r ∣ ((z - y) + y) ^ p - y ^ p := by
+    simpa [Nat.sub_add_cancel hpack.hyz] using hr_dvd_diff
+  have hr_dvd_GN : r ∣ GN p (z - y) y := by
+    exact
+      prime_dvd_GN_of_dvd_sub_not_dvd_left
+        (d := p) (x := z - y) (u := y) (q := r)
+        hrP hr_dvd_sub hr_not_dvd_gap
+  have hr_not_sq : ¬ r ^ 2 ∣ GN p (z - y) y := by
+    exact
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_primitivePrime_not_sq_dvd_GN_core
+        (p := p) (x := x) (y := y) (z := z) (q := q) (r := r)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+        hrP hr_dvd_diff hr_not_dvd_gap
+  exact ⟨r, hrP, hr_dvd_GN, hr_not_sq⟩
 
 /--
 `GN p (z - y) y` が `p` 乗になれない、という route 1 の矛盾源。

@@ -510,3 +510,33 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - 結果: 成功（warning は `existsPrime_dvd_GN_not_sq_core` の `sorry` 1件のみ）
+
+### 2026-03-03 phase-14 継続（primitive prime → not square on GN へ再分解）
+
+- 対象:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+- 追加:
+  - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_primitivePrime_on_diff_core`
+  - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_primitivePrime_not_sq_dvd_GN_core`
+- 変更:
+  - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_core`
+    は、
+    1. Branch B の primitive prime divisor を `z^p - y^p` 上で取得
+    2. `prime_dvd_GN_of_dvd_sub_not_dvd_left` で `GN` へ橋渡し
+    3. 最後の `¬ r^2 ∣ GN` だけを
+       `primitivePrime_not_sq_dvd_GN_core` に委譲
+    する glue に変更
+- 内容:
+  1. 「`GN` に平方で割れない素因子がある」という存在命題を、そのまま最後の穴にし続けるのをやめた
+  2. 代わりに、より細い命題
+     「primitive prime divisor は `GN` に二乗では入らない」
+     を最後の `sorry` にした
+  3. これで残る数学コアは、primitive prime の valuation / non-liftable の 1 点にさらに集中した
+- 結果:
+  - 残る `sorry` は
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_primitivePrime_not_sq_dvd_GN_core`
+    1件のみ
+- ビルド確認:
+  - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - 結果: 成功（warning は `primitivePrime_not_sq_dvd_GN_core` の `sorry` 1件のみ）
