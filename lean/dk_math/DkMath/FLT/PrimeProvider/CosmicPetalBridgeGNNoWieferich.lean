@@ -11,6 +11,8 @@ set_option linter.style.emptyLine false
 
 namespace DkMath.FLT
 
+open DkMath.CosmicFormulaBinom
+
 /--
 Branch B の lift 抽出と下降仕様が揃えば、NoWieferich bridge は直ちに従う。
 
@@ -51,6 +53,49 @@ theorem triominoNoWieferichBridge_of_padicValNat_le_one
     hVal hpack hp_not_dvd_gap hqP hq_dvd_diff hq_not_dvd_gap
 
 /--
+Branch B の primitive prime 文脈では、`z^p - y^p` の `q`-進付値は
+`GN p (z - y) y` の `q`-進付値と一致する。
+
+`q ∤ (z - y)` により、差の因数分解の左因子の付値が 0 になるため。
+-/
+theorem triominoWieferichShrink_padicValNat_diff_eq_GN_core
+    {p x y z q : ℕ} (hpack : PrimeGe5CounterexamplePack p x y z)
+    (_hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (_hq_dvd_diff : q ∣ (z ^ p - y ^ p))
+    (hq_not_dvd_gap : ¬ q ∣ (z - y)) :
+    padicValNat q (z ^ p - y ^ p) = padicValNat q (GN p (z - y) y) := by
+  have hdiff_ne0 : z ^ p - y ^ p ≠ 0 := by
+    have hyz_pow_lt : y ^ p < z ^ p := by
+      exact Nat.pow_lt_pow_left hpack.hyz_lt hpack.hp.ne_zero
+    exact Nat.sub_ne_zero_of_lt hyz_pow_lt
+  have hfactor : z ^ p - y ^ p = (z - y) * GN p (z - y) y := by
+    simpa using
+      DkMath.NumberTheory.GcdNext.pow_sub_pow_factor_cosmic_N
+        hpack.hp.pos hpack.hyz_lt
+  have hGN_ne : GN p (z - y) y ≠ 0 := by
+    intro hGN0
+    rw [hfactor, hGN0, mul_zero] at hdiff_ne0
+    exact hdiff_ne0 rfl
+  have hpadic :=
+    DkMath.NumberTheory.GcdNext.padicValNat_factorization
+      hpack.hp.pos hpack.hyz_lt hqP hfactor hGN_ne
+  have hzero : padicValNat q (z - y) = 0 := by
+    exact padicValNat.eq_zero_of_not_dvd hq_not_dvd_gap
+  simpa [hzero] using hpadic
+
+/--
+`padicValNat q (GN p (z - y) y) ≤ 1` が供給できれば、
+`padicValNat q (z^p - y^p) ≤ 1` は no-`sorry` で従う。
+-/
+theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_GN_le_one_core :
+    ∀ {p x y z q : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      ¬ p ∣ (z - y) →
+      Nat.Prime q → q ∣ (z ^ p - y ^ p) → ¬ q ∣ (z - y) →
+      padicValNat q (GN p (z - y) y) ≤ 1 := by
+  sorry
+
+/--
 phase-15 の最小研究核:
 反例文脈で primitive prime divisor の `padicValNat` が高々 1 であることを示す。
 -/
@@ -59,7 +104,12 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_le_one_
       ¬ p ∣ (z - y) →
       Nat.Prime q → q ∣ (z ^ p - y ^ p) → ¬ q ∣ (z - y) →
       padicValNat q (z ^ p - y ^ p) ≤ 1 := by
-  sorry
+  intro p x y z q hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
+  exact
+    (triominoWieferichShrink_padicValNat_diff_eq_GN_core
+      hpack hpB hqP hq_dvd_diff hq_not_dvd_gap).trans_le <|
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_GN_le_one_core
+        hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
 
 /--
 Branch B 文脈で使う NoWieferich bridge の最終供給点。
