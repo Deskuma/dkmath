@@ -11,6 +11,15 @@ set_option linter.style.emptyLine false
 
 namespace DkMath.NumberTheory.GcdNext
 
+/--
+Research placeholder.
+
+This statement is currently known to be too strong as written: there are counterexamples to
+the naive global implication "squarefree-like input implies `padicValNat ≤ 1`" in this level of
+generality. It is intentionally kept as a single research stub so phase-15 callers can point to
+one place while the final statement is repaired (typically by strengthening hypotheses or by
+replacing this with a more precise primitive-prime valuation theorem).
+-/
 lemma squarefree_implies_padic_val_le_one (d a b q : ℕ)
     (hd_prime : Nat.Prime d) (hb : 0 < b) (hab : Nat.Coprime a b)
     (hq_prime : Nat.Prime q) (hq_div : q ∣ a ^ d - b ^ d) :
@@ -20,11 +29,17 @@ lemma squarefree_implies_padic_val_le_one (d a b q : ℕ)
   have hq_pos : 0 < q := hq_prime.pos
   have hq_dvd : q ∣ a ^ d - b ^ d := hq_div
   clear hb hab hq_div
-  -- [TODO] 一般的な q に対する padicValNat 上界（G解析）。
-  --        Zsigmondy 原始素因子の性質や、Mathlib の Squarefree 性などを用いて
-  --        上界を 1 に抑える証明。細かい定式化が未完のため sorry としている。
+  -- [TODO] この命題は現状の一般形では強すぎ、反例がある。
+  --        ここでやるべきことは「証明を埋める」ことではなく、必要な仮定を足すか、
+  --        primitive-prime valuation のより精密な定理へ置き換えて statement を修正すること。
   sorry
 
+/--
+Thin wrapper used by phase-15 bridge code.
+
+This currently delegates to `squarefree_implies_padic_val_le_one`, so the real unresolved work is
+statement repair in that theorem rather than local bridge construction.
+-/
 lemma padicValNat_primitive_prime_factor_le_one {a b d q : ℕ}
     (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
     (_hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)

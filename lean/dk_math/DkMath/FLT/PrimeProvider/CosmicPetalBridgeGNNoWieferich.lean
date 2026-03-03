@@ -33,6 +33,10 @@ theorem triominoNoWieferichBridge_of_descent
 `padicValNat q (z^p - y^p) ≤ 1` が一様に供給できれば、NoWieferich bridge は直ちに従う。
 
 phase-15 では、最後の研究核をこの valuation 上界へ押し込める。
+ただし現時点では、この上界は
+`DkMath.NumberTheory.GcdNext.squarefree_implies_padic_val_le_one`
+という research placeholder に委譲しており、実際の未解決は local bridge ではなく
+その statement repair 側にある。
 -/
 theorem triominoNoWieferichBridge_of_padicValNat_le_one
     (hVal :
@@ -89,6 +93,8 @@ phase-15 の最小研究核（diff 版）:
 primitive prime divisor 文脈で `z^p - y^p` の `q`-進付値が高々 1 であることを示す。
 
 この形は既存の primitive-prime valuation 補題と最も直接に一致する。
+ただし現行の供給源は research file の placeholder なので、ここで新しい深い数学を
+足すのではなく、上流の statement repair を待つのが正しい。
 -/
 theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le_one_of_primitivePrime_core :
     ∀ {p x y z q : ℕ}, PrimeGe5CounterexamplePack p x y z →
