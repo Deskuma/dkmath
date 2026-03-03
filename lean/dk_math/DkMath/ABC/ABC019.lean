@@ -90,16 +90,12 @@ lemma sqTail_le_sqPart (n : ℕ) : (sqTail n : ℝ) ≤ (sqPart n : ℝ) := by
   by_cases hn : n = 0
   · simp [hn, sqTail, sqPart]
   -- n ≠ 0: use decompositions c = sqTail * rad and c = oddPart * evenPart^2
-  have h_sqTail_mul_rad := nat_eq_sqTail_mul_rad_real n (by contrapose! hn; exact hn)
-  have h_decomp := decomp_oddPart_evenPart_real n (by contrapose! hn; exact hn)
-  -- (sqTail * rad) = (oddPart * evenPart^2)
-  have h_mul := Eq.trans h_sqTail_mul_rad.symm h_decomp
-  -- rad > 0 so we can divide both sides
-  have hrad_pos : 0 < (rad n : ℝ) := rad_pos_real n
   -- From decompositions: sqTail * rad = oddPart * evenPart^2
   have h_mul : (sqTail n : ℝ) * (rad n : ℝ) = (oddPart n : ℝ) * (evenPart n : ℝ) ^ 2 := by
-    calc (sqTail n : ℝ) * (rad n : ℝ) = (n : ℝ) := by rw [nat_eq_sqTail_mul_rad_real n (by contrapose! hn; exact hn)]
-    _ = (oddPart n : ℝ) * (evenPart n : ℝ) ^ 2 := by rw [decomp_oddPart_evenPart_real n (by contrapose! hn; exact hn)]
+    calc (sqTail n : ℝ) * (rad n : ℝ) = (n : ℝ) := by rw [nat_eq_sqTail_mul_rad_real n hn]
+    _ = (oddPart n : ℝ) * (evenPart n : ℝ) ^ 2 := by rw [decomp_oddPart_evenPart_real n hn]
+  -- rad > 0 so we can divide both sides
+  have hrad_pos : 0 < (rad n : ℝ) := rad_pos_real n
   -- oddPart ≤ rad on ℝ, multiply both sides by evenPart^2 ≥ 0
   have h_odd_le_rad := oddPart_le_rad n
   have h_even_sq_nonneg : 0 ≤ (evenPart n : ℝ) ^ 2 := by apply pow_two_nonneg
@@ -124,7 +120,7 @@ lemma c_le_sqPart_mul_rad (n : ℕ) : (n : ℝ) ≤ (rad n : ℝ) * (sqPart n : 
   · simp [hn]
   -- Use factorization: n = (rad n) * ∏ p ^ (2*(v_p/2)) * piSqRad? but simpler: exponents decomp
   -- We have n = rad n * sqTail n and sqTail n ≤ sqPart n by previous lemma
-  have h := nat_eq_sqTail_mul_rad_real n (by contrapose! hn; exact hn)
+  have h := nat_eq_sqTail_mul_rad_real n hn
   -- h : (n : ℝ) = (sqTail n : ℝ) * (rad n : ℝ)
   rw [h]
   -- rewrite goal RHS to (sqPart n) * (rad n) so we can apply mul_le_mul_of_nonneg_right
