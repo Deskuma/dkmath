@@ -1147,6 +1147,48 @@ def TriominoWieferichShrinkKernelZEqB.toNumsEqLink
       hyEq := rfl }
 
 /--
+`N` に平方で割れない素因子が 1 つでもあれば、`N` は `p` 乗になれない。
+
+`p ≥ 2` だけを使う純算術補題なので、`GN` 専用の矛盾源構成から分離しておく。
+-/
+lemma triominoWieferichShrink_not_exists_pow_of_exists_prime_dvd_not_dvd_sq
+    {p N : ℕ} (hp2 : 2 ≤ p)
+    (h :
+      ∃ r : ℕ, Nat.Prime r ∧ r ∣ N ∧ ¬ r ^ 2 ∣ N) :
+    ¬ ∃ v : ℕ, N = v ^ p := by
+  intro hpow
+  rcases hpow with ⟨v, rfl⟩
+  rcases h with ⟨r, hrP, hr_dvd, hr_not_sq⟩
+  have hr_dvd_v : r ∣ v := hrP.dvd_of_dvd_pow hr_dvd
+  have hr2_dvd_vpow : r ^ 2 ∣ v ^ p := by
+    have hr2_dvd_rpow : r ^ 2 ∣ r ^ p := by
+      exact pow_dvd_pow r hp2
+    have hrpow_dvd_vpow : r ^ p ∣ v ^ p := by
+      exact pow_dvd_pow_of_dvd hr_dvd_v p
+    exact dvd_trans hr2_dvd_rpow hrpow_dvd_vpow
+  exact hr_not_sq hr2_dvd_vpow
+
+/--
+`GN p (z - y) y` に平方で割れない素因子が存在する、という route 1 の最小矛盾源。
+
+これが供給できれば、`GN` が `p` 乗になれないことは純算術で落ちる。
+-/
+theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    ∃ r : ℕ, Nat.Prime r ∧ r ∣ GN p (z - y) y ∧ ¬ r ^ 2 ∣ GN p (z - y) y := by
+  let _ := hpack
+  let _ := hpB
+  let _ := hqP
+  let _ := hq_not_dvd_gap
+  let _ := hqpow_dvd_GN
+  sorry
+
+/--
 `GN p (z - y) y` が `p` 乗になれない、という route 1 の矛盾源。
 
 `candidateZ_data` を直接 `Type` で構成する代わりに、Prop 側で矛盾を作れれば
@@ -1160,12 +1202,12 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noPowGN_core
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     ¬ ∃ v : ℕ, GN p (z - y) y = v ^ p := by
-  let _ := hpack
-  let _ := hpB
-  let _ := hqP
-  let _ := hq_not_dvd_gap
-  let _ := hqpow_dvd_GN
-  sorry
+  have hp2 : 2 ≤ p := le_trans (by decide : 2 ≤ 5) hpack.hp5
+  exact
+    triominoWieferichShrink_not_exists_pow_of_exists_prime_dvd_not_dvd_sq hp2 <|
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_core
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /--
 Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。

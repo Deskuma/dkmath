@@ -480,3 +480,33 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - 結果: 成功（warning は `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noPowGN_core` の `sorry` 1件のみ）
+
+### 2026-03-03 phase-14 継続（平方非整性ルートへ最終穴を再圧縮）
+
+- 対象:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+- 追加:
+  - `triominoWieferichShrink_not_exists_pow_of_exists_prime_dvd_not_dvd_sq`
+  - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_core`
+- 変更:
+  - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noPowGN_core`
+    は、`GN` の平方で割れない素因子の存在を受け取り、
+    純算術補題 `triominoWieferichShrink_not_exists_pow_of_exists_prime_dvd_not_dvd_sq`
+    で `¬ ∃ v, GN p (z - y) y = v ^ p` を落とす glue に変更
+- 内容:
+  1. `GN` が `p` 乗でないことを直接 `sorry` にするのをやめた
+  2. 代わりに、「`GN` に平方で割れない素因子がある」というより狭い Prop kernel を
+     最後の未解決点にした
+  3. これで残る穴は “NoPow” 全体ではなく、
+     `existsPrime_dvd_GN_not_sq` の供給 1 点だけになった
+- 失敗メモ:
+  - 最初は `Nat.pow_dvd_pow_of_dvd` を使っていたが、この環境には無くビルド失敗
+  - `pow_dvd_pow r hp2` に置き換えて解消
+- 結果:
+  - 残る `sorry` は
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_core`
+    1件のみ
+- ビルド確認:
+  - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - 結果: 成功（warning は `existsPrime_dvd_GN_not_sq_core` の `sorry` 1件のみ）
