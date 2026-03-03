@@ -641,16 +641,54 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core
         z' < z
           ∧ ¬ p ∣ (z' - y)
           ∧ (x / q) ^ p + y ^ p = z' ^ p } := by
-    -- TODO:
-    -- `q^p ∣ GN p (z - y) y` と `¬ q ∣ (z - y)` を使い、
-    -- Triomino/Cosmic の縮小操作で `z'` と
-    -- `(x / q)^p + y^p = z'^p` を同時に構成する。
+    have hq_dvd_x : q ∣ x := by
+      exact
+        triominoWieferichShrink_q_dvd_x_core
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+    have hxMul : x = q * (x / q) := by
+      exact
+        triominoWieferichShrink_x_eq_q_mul_div_core
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+    have hq_not_dvd_z : ¬ q ∣ z := by
+      intro hq_dvd_z
+      have hp_pos : 0 < p := hpack.hp.pos
+      have hq_dvd_qpow : q ∣ q ^ p := dvd_pow_self _ hp_pos.ne'
+      have hqpow_dvd_xpow : q ^ p ∣ x ^ p := by
+        exact pow_dvd_pow_of_dvd hq_dvd_x p
+      have hq_dvd_xpow : q ∣ x ^ p := dvd_trans hq_dvd_qpow hqpow_dvd_xpow
+      have hqpow_dvd_zpow : q ^ p ∣ z ^ p := by
+        exact pow_dvd_pow_of_dvd hq_dvd_z p
+      have hq_dvd_zpow : q ∣ z ^ p := dvd_trans hq_dvd_qpow hqpow_dvd_zpow
+      have hq_dvd_ypow : q ∣ y ^ p := by
+        have hq_dvd_sum : q ∣ x ^ p + y ^ p := by
+          simpa [hpack.hEq] using hq_dvd_zpow
+        have hq_dvd_sub : q ∣ (x ^ p + y ^ p) - x ^ p := by
+          exact Nat.dvd_sub hq_dvd_sum hq_dvd_xpow
+        simpa [Nat.add_sub_cancel_left] using hq_dvd_sub
+      have hq_dvd_y : q ∣ y := hqP.dvd_of_dvd_pow hq_dvd_ypow
+      exact hq_not_dvd_gap (Nat.dvd_sub hq_dvd_z hq_dvd_y)
+    let z' : ℕ := z - y
+    refine ⟨z', ?_⟩
+    -- 候補 A `z' := z / q` は `q ∣ z` を要求するが、
+    -- primitive 条件から `q ∤ z` が出るので先に棄却する。
+    --
+    -- そこで候補 B:
+    --   z' := z - y
+    -- を次の本命として固定し、その上で
+    --   z' < z
+    --   ¬ p ∣ (z' - y)
+    --   (x / q)^p + y^p = z'^p
+    -- を同時に詰める。
     let _u : ℕ := z - y
-    let _ := hpack
-    let _ := hpB
-    let _ := hqP
-    let _ := hq_not_dvd_gap
-    let _ := hqpow_dvd_GN
+    let _ := hq_dvd_x
+    let _ := hxMul
+    let _ := hq_not_dvd_z
+    have hzlt : z' < z := by
+      simpa [z'] using Nat.sub_lt (Nat.pos_of_ne_zero hpack.hz0) (Nat.pos_of_ne_zero hpack.hy0)
+    refine ⟨hzlt, ?_⟩
+    let _ := hzlt
     sorry
   rcases hzCore with ⟨z', hzSpec⟩
   rcases hzSpec with ⟨hzlt, hpB', hEq'⟩
@@ -1569,6 +1607,41 @@ theorem triominoWieferichShrink_q_not_dvd_y
   have hnot : ¬ Nat.Coprime x y :=
     Nat.not_coprime_of_dvd_of_dvd (Nat.Prime.one_lt hqP) hq_dvd_x hq_dvd_y
   exact hnot hpack.hxy
+
+/--
+`q ∣ z` は primitive 条件 `q ∤ (z - y)` と両立しない。
+
+候補 A `z' := z / q` を先に試す際の失敗理由を補題化しておく。
+-/
+theorem triominoWieferichShrink_q_not_dvd_z
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    ¬ q ∣ z := by
+  intro hq_dvd_z
+  have hq_dvd_x : q ∣ x :=
+    triominoWieferichShrink_q_dvd_x
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  have hp_pos : 0 < p := hpack.hp.pos
+  have hq_dvd_qpow : q ∣ q ^ p := dvd_pow_self _ hp_pos.ne'
+  have hqpow_dvd_xpow : q ^ p ∣ x ^ p := by
+    exact pow_dvd_pow_of_dvd hq_dvd_x p
+  have hq_dvd_xpow : q ∣ x ^ p := dvd_trans hq_dvd_qpow hqpow_dvd_xpow
+  have hqpow_dvd_zpow : q ^ p ∣ z ^ p := by
+    exact pow_dvd_pow_of_dvd hq_dvd_z p
+  have hq_dvd_zpow : q ∣ z ^ p := dvd_trans hq_dvd_qpow hqpow_dvd_zpow
+  have hq_dvd_ypow : q ∣ y ^ p := by
+    have hq_dvd_sum : q ∣ x ^ p + y ^ p := by
+      simpa [hpack.hEq] using hq_dvd_zpow
+    have hq_dvd_sub : q ∣ (x ^ p + y ^ p) - x ^ p := by
+      exact Nat.dvd_sub hq_dvd_sum hq_dvd_xpow
+    simpa [Nat.add_sub_cancel_left] using hq_dvd_sub
+  have hq_dvd_y : q ∣ y := hqP.dvd_of_dvd_pow hq_dvd_ypow
+  exact hq_not_dvd_gap (Nat.dvd_sub hq_dvd_z hq_dvd_y)
 
 /--
 `hpB' : ¬ p ∣ (z' - y')` から、`z' ≠ 0` を回収する。

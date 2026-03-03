@@ -209,3 +209,59 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。
+
+### 2026-03-03 phase-14 継続（候補Aを棄却し、`z_core` を候補Bへ切替）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `triominoWieferichShrink_q_not_dvd_z` を追加
+     - primitive 条件 `q ∤ (z - y)` のもとでは `q ∤ z` を示す
+     - したがって候補A `z' := z / q` は数学的に自然候補として使えないことを明文化
+  2. `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の内部候補を
+     - 候補A `z' := z / q`
+     から
+     - 候補B `z' := z - y`
+     へ切り替えた
+  3. `z_core` 内のコメントも、
+     - 候補Aは `q ∤ z` で先に棄却
+     - 候補Bを次の本命として詰める
+     という方針に更新した
+- 意図:
+  - 候補Aの失敗をコード上の補題として残し、同じ検討を繰り返さないようにする
+  - 残る `sorry` を、次の実験候補（gap ベースの候補B）に対する数学本体へ素直に向ける
+- 効果:
+  - 残る `sorry` は 1 件のまま維持
+  - ただし、その中身は「候補Aを試す」段を終え、候補Bを直接詰める状態になった
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。
+
+### 2026-03-03 phase-14 継続（候補Bで `hzlt` を先行実装）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. 候補B `z' := z - y` のもとで、
+     `Nat.sub_lt` と `hpack.hz0 / hpack.hy0` から
+     `hzlt : z' < z`
+     を `z_core` 内で先に実装した
+  2. その結果、`z_core` に残る未解決は
+     - `hpB' : ¬ p ∣ (z' - y)`
+     - `hEq' : (x / q)^p + y^p = z'^p`
+     を与える後半の conjunction にさらに縮んだ
+- 意図:
+  - 候補Bで確実に先に落とせる純算術部分を先行して片付け、
+    残る `sorry` を本当に必要な数学（Branch B 条件と等式）へ絞る
+- 効果:
+  - 残る `sorry` は 1 件のまま維持
+  - ただし、その責務は候補Bに対する `hpB' + hEq'` へさらに圧縮された
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。
