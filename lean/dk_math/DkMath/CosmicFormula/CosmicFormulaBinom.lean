@@ -10,6 +10,8 @@ import DkMath.CosmicFormula.CosmicFormulaDim  -- Cosmic Formula Dimensionality
 
 #print "file: DkMath.CosmicFormula.CosmicFormulaBinom"
 
+set_option linter.style.longLine false
+
 /-! ## 無次元宇宙式 Basic Dimless Cosmic Formula
 
 ### 一般化: 無次元宇宙式（d 次元完成）
@@ -363,6 +365,55 @@ theorem xpow_add_gapN_lt_bigN_nat_of_two_le {d x u : ℕ}
     x ^ d + GapN d u < BigN d x u := by
   simpa [BigN, GapN] using
     DkMath.Algebra.BinomTail.add_pow_gt_sum_pows_nat_of_two_le x u hd hx hu
+
+/--
+Nat 上で `2 ≤ d` かつ `x,u > 0` なら、`BodyN d x u = x * GN d x u` は
+端点冪 `x ^ d` より真に大きい。
+
+これは `BigN = GapN + BodyN` と混合項の正性から直ちに従う。
+-/
+theorem xpow_lt_bodyN_nat_of_two_le {d x u : ℕ}
+    (hd : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) :
+    x ^ d < BodyN d x u := by
+  have hlt : x ^ d + GapN d u < GapN d u + BodyN d x u := by
+    simpa [BigN, add_pow_gap_factor, add_comm, add_left_comm, add_assoc] using
+      xpow_add_gapN_lt_bigN_nat_of_two_le (d := d) (x := x) (u := u) hd hx hu
+  have hlt' : GapN d u + x ^ d < GapN d u + BodyN d x u := by
+    simpa [add_comm, add_left_comm, add_assoc] using hlt
+  omega
+
+/--
+Nat 上で `2 ≤ d` かつ `x,u > 0` なら、`BodyN d x u` は正である。
+-/
+theorem bodyN_pos_nat_of_two_le {d x u : ℕ}
+    (hd : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) :
+    0 < BodyN d x u := by
+  have hxpow_pos : 0 < x ^ d := Nat.pow_pos hx
+  exact lt_trans hxpow_pos (xpow_lt_bodyN_nat_of_two_le (d := d) (x := x) (u := u) hd hx hu)
+
+/--
+Nat 上で `2 ≤ d` かつ `x,u > 0` なら、`GN d x u` は 0 でない。
+
+`BodyN = x * GN` が正なので、`GN = 0` はあり得ない。
+-/
+theorem GN_ne_zero_nat_of_two_le {d x u : ℕ}
+    (hd : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) :
+    GN d x u ≠ 0 := by
+  have hbody_pos : 0 < BodyN d x u :=
+    bodyN_pos_nat_of_two_le (d := d) (x := x) (u := u) hd hx hu
+  intro hGN
+  have : BodyN d x u = 0 := by
+    rw [BodyN, hGN]
+    simp
+  omega
+
+/--
+Nat 上で `2 ≤ d` かつ `x,u > 0` なら、`GN d x u` は少なくとも 1。
+-/
+theorem one_le_GN_nat_of_two_le {d x u : ℕ}
+    (hd : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) :
+    1 ≤ GN d x u := by
+  exact Nat.succ_le_of_lt (Nat.pos_of_ne_zero (GN_ne_zero_nat_of_two_le (d := d) (x := x) (u := u) hd hx hu))
 
 /--
 `d=3` の Tail は `u^2` ではなく（変数名を `x,u` に取っているため）`x^2` を因子に持つ。

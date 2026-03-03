@@ -2061,3 +2061,14 @@ x^2 \cdot GN_{u,v}(a,b)
 - 「`G_t` / `GN` の解像度層が必要」
 
 という説明を、コード上の参照先つきで言えるようにするためのもの。
+
+- さらに `CosmicFormulaBinom.lean` 側で `GN` 比較補題も追加済み:
+  - `xpow_lt_bodyN_nat_of_two_le`
+  - `bodyN_pos_nat_of_two_le`
+  - `GN_ne_zero_nat_of_two_le`
+  - `one_le_GN_nat_of_two_le`
+- これにより、`2 ≤ d`, `x,u > 0` の下で
+  - `BodyN d x u = x * GN d x u` は端点冪 `x^d` より大きい
+  - `GN d x u` は少なくとも 1
+  - 従って `GN` は非退化
+  を Nat 上で直接参照できる。
