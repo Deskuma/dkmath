@@ -1,6 +1,6 @@
 /-
-Copyright (c) 2025 D. and Wise Wolf. All rights reserved.
-Released under Apache 2.0 license as described in the file LICENSE.
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
@@ -28,8 +28,8 @@ end ABC
 
 /- ----------------------------------------------------------------------------
 /-
-Copyright (c) 2025 D. and Wise Wolf. All rights reserved.
-Released under Apache 2.0 license as described in the file LICENSE.
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
