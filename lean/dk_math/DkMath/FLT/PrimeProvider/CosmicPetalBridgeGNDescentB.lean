@@ -412,6 +412,17 @@ structure TriominoWieferichShrinkKernelSeedLinkB (p x y z q : ℕ) where
   hxMul : x = q * s.n.x'
   hyEq : s.n.y' = y
 
+/--
+最後の数学 kernel が返すべき最小物。
+
+`Eq` witness 全体ではなく `hEq'` だけを要求し、`hyz / hyzLt` は外で再構成する。
+-/
+structure TriominoWieferichShrinkKernelNumsEqLinkB (p x y z q : ℕ) where
+  n : TriominoWieferichShrinkKernelNumsB p x y z q
+  hEq' : n.x' ^ p + n.y' ^ p = n.z' ^ p
+  hxMul : x = q * n.x'
+  hyEq : n.y' = y
+
 /-- 内部 data から `Nums` 部分を取り出す。 -/
 def TriominoWieferichShrinkKernelDataB.toNums
     {p x y z q : ℕ}
@@ -498,9 +509,57 @@ theorem triominoWieferichShrinkKernelInv_of_nums_from_links
     simp [hz0']
 
 /--
+`Nums + hEq' + links` から `Seed + links` を梱包する。
+
+最後の `sorry` は `hEq'` まででよく、`Eq` witness は外で再構成する。
+-/
+def TriominoWieferichShrinkKernelNumsEqLinkB.toSeedLink
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (d : TriominoWieferichShrinkKernelNumsEqLinkB p x y z q) :
+    TriominoWieferichShrinkKernelSeedLinkB p x y z q := by
+  have hx0' : d.n.x' ≠ 0 := by
+    intro hx0'
+    apply hpack.hx0
+    calc
+      x = q * d.n.x' := d.hxMul
+      _ = 0 := by simp [hx0']
+  have hEq :
+      TriominoWieferichShrinkWitnessEqB p x y z q d.n.x' d.n.y' d.n.z' := by
+    exact
+      triominoWieferichShrinkWitnessEq_of_eq_and_hx0
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hx0' d.hEq'
+  exact ⟨⟨d.n, hEq⟩, d.hxMul, d.hyEq⟩
+
+/--
+Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
+
+最後の未解決点は、この `Nums + hEq' + links` をどう作るかに押し込める。
+-/
+def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkKernelNumsEqLinkB p x y z q := by
+  -- TODO:
+  -- `q^p ∣ GN p (z - y) y` と `¬ q ∣ (z - y)` を使い、
+  -- Triomino/Cosmic の縮小操作で `Nums + hEq' + links` を構成する。
+  let _u : ℕ := z - y
+  let _ := hpack
+  let _ := hpB
+  let _ := hqP
+  let _ := hq_not_dvd_gap
+  let _ := hqpow_dvd_GN
+  sorry
+
+/--
 Triomino/Cosmic 固有の等式側 trace 生成 pack（本丸）。
 
-最後の未解決点は、この eq-side pack をどう作るかに隔離する。
+最小核から `Eq` witness を再構成して `Seed + links` へ梱包する。
 -/
 def triominoWieferichShrinkKernelEqSeedTracePackB_kernel
     {p x y z q : ℕ}
@@ -510,16 +569,11 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichShrinkKernelSeedLinkB p x y z q := by
-  -- TODO:
-  -- `q^p ∣ GN p (z - y) y` と `¬ q ∣ (z - y)` を使い、
-  -- Triomino/Cosmic の縮小操作で seed（`Nums + Eq`）と links（`hxMul / hyEq`）を構成する。
-  let _u : ℕ := z - y
-  let _ := hpack
-  let _ := hpB
-  let _ := hqP
-  let _ := hq_not_dvd_gap
-  let _ := hqpow_dvd_GN
-  sorry
+  let d : TriominoWieferichShrinkKernelNumsEqLinkB p x y z q :=
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  exact d.toSeedLink hpack
 
 /--
 canonical eq-side trace pack から `Nums` 部分だけを回収する。

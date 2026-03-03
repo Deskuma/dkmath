@@ -2269,4 +2269,36 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - current-path から見たとき、`Inv` は既に “派生物” になった。
 - ビルド確認:
   - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
-  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件のみ）。
+  - 結果: 成功（当初は残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` の `sorry` 1件）。
+
+### 2026-03-03 phase-14 継続（最後の `sorry` を `Nums + hEq' + links` へさらに薄化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `TriominoWieferichShrinkKernelNumsEqLinkB` を追加
+  2. `TriominoWieferichShrinkKernelNumsEqLinkB.toSeedLink` を追加
+  3. `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_core` を追加
+  4. `triominoWieferichShrinkKernelEqSeedTracePackB_kernel` を
+     `kernel_core -> toSeedLink` の glue に変更
+- 意図:
+  - 最後の未解決点から `Eq` witness 全体をさらに外へ押し出し、
+    `Nums + hEq' + links (hxMul / hyEq)` だけを本丸に残す。
+  - `hyz / hyzLt` は既存の
+    `triominoWieferichShrinkWitnessEq_of_eq_and_hx0`
+    で再構成する。
+- 実装メモ:
+  - `toSeedLink` では `hx0'` を `hpack.hx0` と `hxMul` から局所再構成し、
+    そこから `Eq` witness を生成する。
+  - これにより、最後の `sorry` は `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_core` に移動した。
+- 効果:
+  - `pack-kernel` 自体は glue 化され、最後の未解決点はさらに細い内部 core へ隔離された。
+  - 残る数学コアは
+    `Nums + hEq' + hxMul + hyEq`
+    の構成だけになった。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_core` の `sorry` 1件のみ）。
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_core` の `sorry` 1件のみ）。
