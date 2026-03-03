@@ -190,6 +190,7 @@ lemma log_twoTail_le_excess_sum (c : ℕ) (hc : c ≠ 0) :
     simp [Nat.support_factorization, Nat.mem_primeFactors, ne_eq]
   rw [h_eq]
   rw [h_support]
+  exact le_rfl
 
 /- ### Probability-free Chernoff Machinery
 
