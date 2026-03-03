@@ -574,3 +574,33 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
   - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - 結果: 成功（warning は `existsPrimitivePrime_not_sq_dvd_GN_core` の `sorry` 1件のみ）
+
+### 2026-03-04 phase-14 継続（NoWieferich bridge へ設計回帰）
+
+- 対象:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+- 変更:
+  - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core :
+      TriominoNoWieferichBridge`
+    を追加し、最後の未解決点を既存設計の bridge 仕様へ戻した
+  - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_of_noWieferich`
+    を追加
+    - primitive prime divisor を `z^p - y^p` 上で取得
+    - `prime_dvd_GN_of_dvd_sub_not_dvd_left` で `GN` へ橋渡し
+    - `triominoCosmicNonLiftableGNBridge_of_noWieferich` で `¬ r^2 ∣ GN` を取得
+  - `existsPrime_dvd_GN_not_sq_core` は上の noWieferich 版を使う glue に変更
+- 内容:
+  1. 「適切な primitive prime が存在して二乗で入らない」という局所命題よりも、
+     プロジェクト全体ですでに採用している
+     `TriominoNoWieferichBridge`
+     を最後の核にした方が設計整合性が高い
+  2. これにより、最後の `sorry` は “primitive prime の選び方” ではなく、
+     既存の deep kernel と同型の NoWieferich bridge 1 点へ戻った
+- 結果:
+  - 残る `sorry` は
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+    1件のみ
+- ビルド確認:
+  - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - 結果: 成功（warning は `noWieferich_core` の `sorry` 1件のみ）

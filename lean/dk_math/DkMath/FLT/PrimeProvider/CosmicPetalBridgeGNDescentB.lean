@@ -1194,25 +1194,50 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_primitivePrime_on_d
       hpB
 
 /--
-Branch B 文脈で、`GN p (z - y) y` に二乗では入らない primitive prime divisor が存在する。
+Branch B 文脈で使う NoWieferich bridge の最終供給点。
 
-最後の square-free 性の本丸をこの 1 箇所へ隔離する。
+プロジェクト全体の設計に合わせ、深い核は
+`TriominoNoWieferichBridge` として 1 箇所へ隔離する。
 -/
-theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrimitivePrime_not_sq_dvd_GN_core
+theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core :
+    TriominoNoWieferichBridge := by
+  sorry
+
+/--
+NoWieferich bridge があれば、Branch B 文脈で `GN p (z - y) y` に平方で割れない素因子が存在する。
+-/
+theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_of_noWieferich
+    (hNW : TriominoNoWieferichBridge)
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
-    (_hqP : Nat.Prime q)
-    (_hq_not_dvd_gap : ¬ q ∣ (z - y))
-    (_hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
-    ∃ r : ℕ,
-      Nat.Prime r
-        ∧ r ∣ z ^ p - y ^ p
-        ∧ ¬ r ∣ (z - y)
-        ∧ ¬ r ^ 2 ∣ GN p (z - y) y := by
-  let _ := hpack
-  let _ := hpB
-  sorry
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    ∃ r : ℕ, Nat.Prime r ∧ r ∣ GN p (z - y) y ∧ ¬ r ^ 2 ∣ GN p (z - y) y := by
+  rcases
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_primitivePrime_on_diff_core
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN with
+    ⟨r, hrP, hr_dvd_diff, hr_not_dvd_gap⟩
+  have hr_dvd_sub : r ∣ ((z - y) + y) ^ p - y ^ p := by
+    simpa [Nat.sub_add_cancel hpack.hyz] using hr_dvd_diff
+  have hr_dvd_GN : r ∣ GN p (z - y) y := by
+    exact
+      prime_dvd_GN_of_dvd_sub_not_dvd_left
+        (d := p) (x := z - y) (u := y) (q := r)
+        hrP hr_dvd_sub hr_not_dvd_gap
+  have hNonLift :
+      ∀ q : ℕ,
+        (Nat.Prime q ∧ q ∣ GN p (z - y) y ∧ ¬ q ∣ (z - y)) ->
+        ¬ q ^ 2 ∣ GN p (z - y) y := by
+    exact
+      triominoCosmicNonLiftableGNBridge_of_noWieferich hNW
+        (p := p) (x := x) (y := y) (z := z)
+        hpack hpB
+  have hr_not_sq : ¬ r ^ 2 ∣ GN p (z - y) y := by
+    exact (hNonLift r) ⟨hrP, hr_dvd_GN, hr_not_dvd_gap⟩
+  exact ⟨r, hrP, hr_dvd_GN, hr_not_sq⟩
 
 /--
 `GN p (z - y) y` に平方で割れない素因子が存在する、という route 1 の最小矛盾源。
@@ -1227,19 +1252,10 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     ∃ r : ℕ, Nat.Prime r ∧ r ∣ GN p (z - y) y ∧ ¬ r ^ 2 ∣ GN p (z - y) y := by
-  rcases
-      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrimitivePrime_not_sq_dvd_GN_core
-        (p := p) (x := x) (y := y) (z := z) (q := q)
-        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN with
-    ⟨r, hrP, hr_dvd_diff, hr_not_dvd_gap, hr_not_sq⟩
-  have hr_dvd_sub : r ∣ ((z - y) + y) ^ p - y ^ p := by
-    simpa [Nat.sub_add_cancel hpack.hyz] using hr_dvd_diff
-  have hr_dvd_GN : r ∣ GN p (z - y) y := by
-    exact
-      prime_dvd_GN_of_dvd_sub_not_dvd_left
-        (d := p) (x := z - y) (u := y) (q := r)
-        hrP hr_dvd_sub hr_not_dvd_gap
-  exact ⟨r, hrP, hr_dvd_GN, hr_not_sq⟩
+  exact
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_of_noWieferich
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /--
 `GN p (z - y) y` が `p` 乗になれない、という route 1 の矛盾源。
