@@ -2302,3 +2302,29 @@ status: 作業中 - phase-14: 完全証明への道（pending 除去）
   - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_core` の `sorry` 1件のみ）。
   - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
   - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_core` の `sorry` 1件のみ）。
+
+### 2026-03-03 phase-14 継続（`q ∣ x` 導出を早期 helper へ共通化）
+
+- 変更ファイル:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - `lean/dk_math/DkMath/FLT/docs/NoSqOnS0/WorkNotes/NoSqOnS0-WorkNotes.md`
+- 変更内容:
+  1. `triominoWieferichShrink_q_dvd_x_core` を追加
+  2. `TriominoWieferichShrinkKernelZEqB.toNumsEqLink` の `q ∣ x` 導出を `..._q_dvd_x_core` へ置換
+  3. `triominoWieferichShrinkNumsInvCandidateLinkSpec_of_kernel` の `hxMul` 導出を `..._q_dvd_x_core` へ置換
+  4. 既存 `triominoWieferichShrink_q_dvd_x` は `..._q_dvd_x_core` への thin wrapper に変更
+- 意図:
+  - `q^p ∣ GN` から `q ∣ x` を出す純算術を 1 箇所へ集約し、
+    `LinkSpec_of_kernel` と `toNumsEqLink` の重複を消す。
+  - 最後の `sorry` の外側で使う arithmetic link を、さらに安定させる。
+- 実装メモ:
+  - `q ∣ q^p` は `pow_dvd_pow` ではなく `dvd_pow (dvd_refl q) hpack.hp.ne_zero` に切替。
+  - `Inv_of_nums_from_links` には `z' = 0 -> p ∣ (z' - y)` の `Nat` 由来の流れを説明するコメントを追加。
+- 効果:
+  - `LinkSpec_of_kernel` は current shadow kernel の pure arithmetic により `hxMul / hyEq` を供給し続ける。
+  - `toNumsEqLink` も同じ早期 helper を使うため、純算術の変更点が一本化された。
+- ビルド確認:
+  - 実行: `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 結果: 成功（残る warning は `CosmicPetalBridgeGNDescentB.lean` の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。
+  - 実行: `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 結果: 成功（残る warning は同じく `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core` の `sorry` 1件のみ）。
