@@ -344,3 +344,22 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich`
   - どちらも成功。残る warning は `DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:69` の false placeholder 1 件のみ。
+
+## 2026-03-04 phase-15 継続（Squarefree(GN) を bridge 仕様として型へ切り出し）
+
+- 更新:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
+
+- 追加:
+  - `DkMath.FLT.TriominoSquarefreeGNBridge`
+
+- 内容:
+  - `Squarefree (GN p (z - y) y)` を、ad hoc な追加仮定ではなく
+    phase-15 の honest bridge 仕様として `Prop` に切り出した。
+  - `triominoNoWieferichBridge_of_squarefree_GN` は、この新しい bridge 仕様を受ければ
+    false な一般 placeholder を経由せずに no-`sorry` で閉じる。
+  - これで phase-15 の不足仮定は「どの条件が要るか」が型で固定された。
+
+- 確認:
+  - `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
+  - 成功。
