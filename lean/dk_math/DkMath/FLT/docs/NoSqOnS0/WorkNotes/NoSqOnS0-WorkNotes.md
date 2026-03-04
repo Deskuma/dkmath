@@ -320,6 +320,7 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
     local bridge をこの true な stronger theorem へ繋ぎ替える設計判断に移った
 
 ### 2026-03-04 phase-15 補助（BinomTail を CosmicFormulaBinom へ接続）
+
 - `DkMath/Algebra/BinomTail.lean` の mixed-term positivity 補題を `DkMath/CosmicFormula/CosmicFormulaBinom.lean` に接続。
 - 追加:
   - `add_pow_ne_sum_pows_nat_of_two_le_binom`
@@ -558,3 +559,85 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
     `squarefree_implies_padic_val_le_one`
     （`declaration uses sorry`）
     のみ。
+
+## 2026-03-05 phase-15 継続（偽 NoLift spine を降格し、squarefree ルートへ切り戻し）
+
+- 更新:
+  - 新規: `lean/dk_math/DkMath/NumberTheory/ZsigmondyCyclotomicSquarefree.lean`
+  - 更新: `lean/dk_math/DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean`
+  - 更新: `lean/dk_math/DkMath/NumberTheory/ZsigmondyCyclotomicNoLift.lean`
+  - 更新: `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoSquarefreeGNBridgeProviderImpl.lean`
+  - 更新: `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
+  - 新規: `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferichResearch.lean`
+  - 更新: `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - 真である squarefree 系補題
+    `padicValNat_le_one_of_squarefree`
+    と
+    `padicValNat_primitive_prime_factor_le_one_of_squarefree_G`
+    を、新規常設ファイル
+    `ZsigmondyCyclotomicSquarefree.lean`
+    へ切り出した。
+  - `ZsigmondyCyclotomicResearch.lean` には偽 placeholder
+    `squarefree_implies_padic_val_le_one`
+    と、その research wrapper だけを残し、true な squarefree 補題は持たせない形へ整理した。
+  - `ZsigmondyCyclotomicNoLift.lean` は、もはや常設 spine ではなく、
+    「primitive-prime 仮定だけでは `¬ q^2 ∣ GN` は言えない」
+    ことを示す反例墓標
+    `noLift_GN_of_primitive_prime_factor_is_false`
+    へ差し替えた。
+  - `TriominoSquarefreeGNBridgeProviderImpl.lean` では、concrete な
+    `triominoNoLiftGNBridgeProvider_impl`
+    を廃止し、
+    `TriominoSquarefreeGNBridgeProvider` から
+    `TriominoNoLiftGNBridge`
+    / `TriominoNoWieferichBridge`
+    を派生させる薄い定理だけを残した。
+  - `CosmicPetalBridgeGNNoWieferich.lean` から research import を外し、
+    true な glue と squarefree ルートだけを permanent 側に残した。
+  - false wrapper に依存する kernel
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_*`
+    は、新規
+    `CosmicPetalBridgeGNNoWieferichResearch.lean`
+    へ移動した。
+  - `CosmicPetalBridgeGNDescentB.lean` は、その research-side kernel を明示 import する形へ変更し、
+    permanent glue と research kernel の境界を import graph 上でも見えるようにした。
+
+- 失敗例 / 制約:
+  - 反例
+    `(d, a, b, q) = (3, 5, 3, 7)`
+    で
+    `a^3 - b^3 = 98`,
+    `q ∤ (a - b) = 2`,
+    かつ
+    `GN 3 (a - b) b = GN 3 2 3 = 49`
+    なので
+    `7^2 ∣ GN 3 2 3`
+    が成り立つ。
+  - したがって、
+    「primitive-prime 仮定だけで `¬ q^2 ∣ GN`」
+    という常設命題は偽であり、
+    ここを `sorry` で埋める方向は破綻している。
+  - 今回の切り戻しで permanent な `CosmicPetalBridgeGNNoWieferich.lean`
+    自体の Research 依存は外れたが、
+    `CosmicPetalBridgeGNDescentB.lean`
+    は新しい
+    `CosmicPetalBridgeGNNoWieferichResearch.lean`
+    を経由して、なお Research に依存する。
+  - つまり「true glue の常設化」は完了したが、
+    「本流の descent ルートから Research を完全に切る」には、
+    concrete な squarefree provider を供給するか、
+    もしくは descent 入口そのものをパラメータ化する追加設計がまだ必要。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree DkMath.NumberTheory.ZsigmondyCyclotomicResearch DkMath.NumberTheory.ZsigmondyCyclotomicNoLift`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProviderImpl`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - すべて成功。
+  - warning は
+    `lean/dk_math/DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean`
+    の
+    `squarefree_implies_padic_val_le_one`
+    に由来する `declaration uses sorry`
+    が research 側に 1 件残るのみ。

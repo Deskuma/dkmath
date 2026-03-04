@@ -5,7 +5,6 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProvider
-import DkMath.NumberTheory.ZsigmondyCyclotomicNoLift
 
 namespace DkMath.FLT
 
@@ -26,29 +25,12 @@ abbrev TriominoNoLiftGNBridgeProviderImplTarget : Prop :=
   TriominoNoLiftGNBridgeProvider
 
 /--
-phase-15 の本命実装室。
-
-ここで `¬ q^2 ∣ GN ...` を直接供給する provider を育てる。
-実装本体は `NumberTheory` 側の常設 spine へ委譲し、ここは組み立てだけを担う。
+squarefree provider 実装が与えられれば、honest no-lift bridge は既存の薄い橋で回収できる。
 -/
-def triominoNoLiftGNBridgeProvider_impl :
-    TriominoNoLiftGNBridgeProvider := by
-  refine ⟨?_⟩
-  intro p x y z q hpack hp_not_dvd_gap hqP hq_dvd_diff hq_not_dvd_gap
-  have hzy_coprime : Nat.Coprime z y := by
-    exact (coprime_right_of_add_pow_eq_pow hpack.hp hpack.hxy hpack.hEq).symm
-  exact
-    DkMath.NumberTheory.GcdNext.noLift_GN_of_primitive_prime_factor
-      (a := z) (b := y) (d := p) (q := q)
-      hpack.hp
-      (le_trans (by decide : 3 ≤ 5) hpack.hp5)
-      hpack.hyz_lt
-      (Nat.pos_of_ne_zero hpack.hy0)
-      hzy_coprime
-      hp_not_dvd_gap
-      hqP
-      hq_dvd_diff
-      hq_not_dvd_gap
+theorem triominoNoLiftGNBridge_of_provider_impl
+    (P : TriominoSquarefreeGNBridgeProviderImplTarget) :
+    TriominoNoLiftGNBridge := by
+  exact triominoNoLiftGNBridge_of_squarefree_GN P.hSq
 
 /--
 Provider 実装が与えられれば、本流の NoWieferich bridge へは既存の注入で到達する。
@@ -70,11 +52,12 @@ theorem triominoNoWieferichBridge_of_noLift_provider_impl
 /--
 phase-15 の正規入口。
 
-実装室では `¬ q^2 ∣ GN ...` を直接供給する provider を本命とし、
-そこから本流の `TriominoNoWieferichBridge` へ直に注入する。
+実装室は concrete な `NoLift` provider を仮定せず、
+squarefree provider から honest bridge を派生させる構成だけを保持する。
 -/
-def triominoNoWieferichBridge_impl : TriominoNoWieferichBridge := by
-  exact triominoNoWieferichBridge_of_not_sq_GN
-    triominoNoLiftGNBridgeProvider_impl.hNoLift
+theorem triominoNoWieferichBridge_impl
+    (P : TriominoSquarefreeGNBridgeProviderImplTarget) :
+    TriominoNoWieferichBridge := by
+  exact triominoNoWieferichBridge_of_provider_impl P
 
 end DkMath.FLT
