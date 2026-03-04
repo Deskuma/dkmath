@@ -62,7 +62,7 @@ phase-15 の正規入口。
 そこから本流の `TriominoNoWieferichBridge` へ直に注入する。
 -/
 def triominoNoWieferichBridge_impl : TriominoNoWieferichBridge := by
-  exact triominoNoWieferichBridge_of_noLift_provider
-    triominoNoLiftGNBridgeProvider_impl
+  exact triominoNoWieferichBridge_of_not_sq_GN
+    triominoNoLiftGNBridgeProvider_impl.hNoLift
 
 end DkMath.FLT
