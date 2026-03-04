@@ -745,3 +745,38 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - 成功。
   - 新規 warning はなし（既存の `GEisensteinBridge.lean` の style 提案のみ）。
+
+## 2026-03-05 phase-15 継続（DescentBaseInput.hDescentClass の canonical source を確定）
+
+- 更新:
+  - `Main.lean`
+
+- 内容:
+  - `DescentBaseInput.hDescentClass` の正規供給源を
+    `GEisensteinDescentCore c b`
+    に確定した。
+  - その判断をコードへ落とすため、
+    `DescentBaseInput.ofGEisensteinCore`
+    を追加した。
+  - この constructor は
+    `descentClassifyImpossibleOnPrimitive_of_GEisensteinCore`
+    を用いて、
+    `GEisenstein` 側の descent kernel から
+    `DescentBaseInput` を組み立てる。
+  - `FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport`
+    もこの constructor を経由する形へ整理し、
+    `GEisensteinCore -> DescentBaseInput -> descentClassify`
+    という正規ルートをコード上で明示した。
+
+- 判断:
+  - `PrimitiveSquareDescentStep` / `PrimitiveSquareDescentEngine` は
+    `hDescentClass` を生む前段の生成器としては有用だが、
+    停止到達や frame 情報まで持つ「kernel」としては
+    `GEisensteinDescentCore` の方が豊富で安定している。
+  - したがって、`DescentBaseInput` に何かを注入する最終点は
+    `GEisensteinDescentCore`
+    とみなすのが自然。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - 成功。

@@ -78,6 +78,21 @@ structure DescentBaseInput (c b : ℕ) where
   hcb_coprime : Nat.Coprime c b
   hDescentClass : DescentClassifyImpossibleOnPrimitive c b
 
+/--
+`GEisensteinDescentCore` から `DescentBaseInput` を組み立てる canonical constructor。
+
+`DescentBaseInput.hDescentClass` は、今後はこの constructor を経由して
+`GEisenstein` 側の descent kernel から供給するのを標準ルートとみなす。
+-/
+def DescentBaseInput.ofGEisensteinCore {c b : ℕ}
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hCore : GEisensteinDescentCore c b) :
+    DescentBaseInput c b where
+  hbc := hbc
+  hcb_coprime := hcb_coprime
+  hDescentClass := descentClassifyImpossibleOnPrimitive_of_GEisensteinCore hCore
+
 -- ========================================
 -- § 1. 層A（Zsigmondy原始素因子）
 -- ========================================
@@ -870,10 +885,10 @@ theorem FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport {a b c : ℕ}
     (hcb_coprime : Nat.Coprime c b)
     (hGECore : GEisensteinDescentCore c b) :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
-  have hDescentClass : DescentClassifyImpossibleOnPrimitive c b :=
-    descentClassifyImpossibleOnPrimitive_of_GEisensteinCore hGECore
+  let hIn : DescentBaseInput c b :=
+    DescentBaseInput.ofGEisensteinCore hbc hcb_coprime hGECore
   exact FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport
-    ha hb hc hab hbc hcb_coprime hDescentClass
+    ha hb hc hab hIn.hbc hIn.hcb_coprime hIn.hDescentClass
 
 /--
 `GEisensteinCore` に加えて停止到達情報を受け取る補助版。
