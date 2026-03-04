@@ -641,3 +641,30 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
     `squarefree_implies_padic_val_le_one`
     に由来する `declaration uses sorry`
     が research 側に 1 件残るのみ。
+
+## ~~2026-03-05 phase-15 継続（Basic.lean の d=3 private 補題から Research 参照を除去）~~
+
+- 更新:
+  - `Basic.lean`
+
+- 内容:
+  - `GN3_cube_not_cube_of_gt_one` が
+    `padicValNat_primitive_prime_factor_le_one`
+    を経由していたため、`ZsigmondyCyclotomicResearch.lean` への import を引いていた。
+  - この private 補題は `d = 3` 固定であり、しかも同ファイル内に
+    `GN3_cube_not_cube_of_gt_one_use_FLT3`
+    という安全な比較用補題が既にあるため、
+    実装をその補題への委譲へ差し替えた。
+  - これにより `Basic.lean` から
+    `ZsigmondyCyclotomicResearch.lean`
+    の import を除去した。
+
+- 判断:
+  - `ZsigmondyCyclotomic.lean` にある `d = 3` 専用の
+    `padicValNat_le_one_of_prime_divisor_case_three`
+    は、現状では「差の付値 = 二次式の付値」までしか返さず、
+    そのままでは `≤ 1` の上界にはならない。
+  - よって今回の用途では、無理に valuation ルートを維持するより、
+    既に存在する FLT(3) 比較補題へ戻す方が安全で、依存切断の目的にも一致する。
+
+- ※ これは、ロールバックを行った（ユーザー）
