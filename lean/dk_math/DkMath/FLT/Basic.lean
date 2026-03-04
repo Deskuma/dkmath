@@ -329,6 +329,7 @@ private lemma GN3_cube_not_cube_of_gt_one_use_FLT3 (a y : ℕ) (ha : 2 ≤ a) (h
     ここで矛盾の源を「立方差の原始素因子の付値」として明示できたため、
     FLT(3) の black-box 参照なしで、どの素因子・どの指数整合が破綻するかを追跡できる。
 -/
+-- #### 注意: 現状まだ不完全証明ですが、FLT(3) 参照なしで証明できる見込み。
 private lemma GN3_cube_not_cube_of_gt_one
     (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y)
     (hcop : Nat.Coprime a y) (h3a : ¬ 3 ∣ a) :
@@ -358,7 +359,7 @@ private lemma GN3_cube_not_cube_of_gt_one
     exact DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_ge_one
       hAB_lt hy_pos (by norm_num) hq_prime hq_div
   have hval_le : padicValNat q (A ^ 3 - B ^ 3) ≤ 1 := by
-    exact DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one
+    exact DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one -- ※偽命題とリンク
       (a := A) (b := B) (d := 3) (q := q)
       Nat.prime_three (by norm_num) hAB_lt hy_pos hAB_coprime hpnd hq_prime hq_div hq_ndiv
   have hval_diff : padicValNat q (A ^ 3 - B ^ 3) = 1 := le_antisymm hval_le hval_ge
@@ -405,6 +406,10 @@ private lemma GN3_cube_not_cube_of_gt_one
       _ = padicValNat q N := by simp [hN_eq_cube]
       _ = 1 := hval_N
   omega
+
+#print axioms GN3_cube_not_cube_of_gt_one  -- NG: 2026/03/05  1:17
+-- lean/dk_math/DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean を参照しており
+-- その中の偽命題を利用しているため、この補題はまだ FLT(3) を直接参照しない完全独立な証明にはなっていない。
 
 /-- 補題: 互いに素な場合は u = 1 に強制される（p進付値 + 不等式による証明） -/
 lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h_gcd : u.gcd (GN 3 u y) = 1) :
@@ -814,8 +819,12 @@ theorem FLT_of_coprime
         h3
 
   · -- n > 3 の場合
-    -- Zsigmondy 原始素因子を使った証明（後々実装）
-    sorry  -- todo: n > 3 の場合の証明。Zsigmondy 原始素因子の存在を利用して、GN n u y が n 乗になることができないことを示し、矛盾を導く必要がある。
+    -- Zsigmondy 原始素因子などを利用した証明の隔離箇所。
+    -- [TODO] : 現在は n=3 の分岐のみが機能しており、n > 3 に関しては
+    --          `PrimeExponentFLTProvider n` 等の機構を別途呼び出して処理する方針。
+    --          あるいは Zsigmondy 原始素因子の存在から GN n u y が n 乗数に
+    --          なることが矛盾することを直接導く（Phase 4 以降）。
+    sorry
 
 
 

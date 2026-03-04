@@ -333,6 +333,502 @@ theorem FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport {a b c : ℕ}
     ha hb hc hab hbc hcb_coprime hNonLiftAll
 
 /--
+phase-11 入口:
+`PrimitiveOnS0` 上の strict descent ステップを与え、
+`NoSq` 仮定なしで `descentClassify` へ接続する。
+-/
+theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_descentStep_coprimeSupport {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hStep : PrimitiveSquareDescentStep c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hDescentClass : DescentClassifyImpossibleOnPrimitive c b :=
+    descentClassifyImpossibleOnPrimitive_of_harmonicEnvelope_descentStep
+      hbc hInfra hHarm hNoExcAll hStep
+  exact FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hDescentClass
+
+/--
+phase-11 直結入口:
+`strict descent + coprime(c,b)` から `NoSqOnS0` を回復して接続する。
+-/
+theorem FLT_d3_by_padicValNat_of_descentStep_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hStep : PrimitiveSquareDescentStep c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_descentStep_coprime hbc.le hcb_coprime hStep
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+phase-11 入口（engine 入力版）:
+strict descent を構造体で受け取り、既存入口へ接続する。
+-/
+theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_descentEngine_coprimeSupport {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hEngine : PrimitiveSquareDescentEngine c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_harmonicEnvelope_descentStep_coprimeSupport
+    ha hb hc hab hbc hcb_coprime hInfra hHarm hNoExcAll
+    (primitiveSquareDescentStep_of_engine hEngine)
+
+/--
+phase-11 直結入口（engine 版）:
+`descent engine + coprime(c,b)` から `NoSqOnS0` を回復して接続する。
+-/
+theorem FLT_d3_by_padicValNat_of_descentEngine_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hEngine : PrimitiveSquareDescentEngine c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_descentEngine_coprime hbc.le hcb_coprime hEngine
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+phase-11 直結入口（reduce 版）:
+局所縮小関数 `reduce` から `NoSqOnS0` を回復して接続する。
+-/
+theorem FLT_d3_by_padicValNat_of_reduce_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (reduce : ∀ {q : ℕ}, PrimitiveOnS0 c b q → q ^ 2 ∣ S0_nat c b →
+      PrimitiveSquareReduction c b q) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_reduce_coprime hbc.le hcb_coprime reduce
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+phase-11 最小 reduce 実装確認:
+`step` から `reduce` を生成して、reduce 直結入口へ流す。
+-/
+theorem FLT_d3_by_padicValNat_of_step_via_reduce_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hStep : PrimitiveSquareDescentStep c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_reduce_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime
+    (primitiveSquareReduce_of_step hStep)
+
+/--
+`reduce` 候補（数論系）を直接刺す入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryReduce_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (reduceNT : NumberTheoryReduce c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_reduce_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime reduceNT
+
+/--
+`reduce` 候補（トロミノ/幾何系）を直接刺す入口。
+-/
+theorem FLT_d3_by_padicValNat_of_trominoReduce_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (reduceGeom : TrominoReduce c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_reduce_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime reduceGeom
+
+/--
+数論系ルート専用入口:
+`PrimitiveSquareDescentStep` を数論 `reduce` として解釈し、
+`numberTheoryReduce` 直結入口へ接続する。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryStep_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hStep : PrimitiveSquareDescentStep c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_numberTheoryReduce_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime (numberTheoryReduce_of_step hStep)
+
+/--
+数論系最小実装（`numberTheoryReduce_basic`）を使う入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryReduce_basic_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hStep : PrimitiveSquareDescentStep c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_numberTheoryReduce_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime (numberTheoryReduce_basic hStep)
+
+/--
+数論状態遷移仕様 `StepExists`（global）から直接接続する入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryStepExists_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hex : NumberTheoryDescentState.StepExists) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_numberTheoryStepExists_coprime hex hbc hcb_coprime
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+固定 `(c,b)` の数論状態遷移仕様 `StepExists` から接続する入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryStepExistsOn_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hex : NumberTheoryDescentOn.StepExists c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b := by
+    exact NoSqOnS0_of_numberTheoryHasKernel_coprime
+      (numberTheoryHasKernel_of_stepExistsOn hbc hcb_coprime hex)
+      hbc hcb_coprime
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+固定 `(c,b)` の数論 `step` から、`StepExistsOn` 経由で接続する入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryStepOn_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hStep : PrimitiveSquareDescentStep c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b := by
+    exact NoSqOnS0_of_numberTheoryHasKernel_coprime
+      (numberTheoryHasKernel_of_step hStep) hbc hcb_coprime
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+固定 `(c,b)` の数論 `reduce` から、`StepExistsOn` 経由で接続する入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryReduceOn_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (reduceNT : NumberTheoryReduce c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b := by
+    exact NoSqOnS0_of_numberTheoryHasKernel_coprime
+      (numberTheoryHasKernel_of_reduce reduceNT) hbc hcb_coprime
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+固定 `(c,b)` の数論 `ReductionKernel` から、`StepExistsOn` 経由で接続する入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryKernel_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (ker : NumberTheoryDescentOn.ReductionKernel c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b := by
+    exact NoSqOnS0_of_numberTheoryHasKernel_coprime ⟨ker⟩ hbc hcb_coprime
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+固定 `(c,b)` の数論 kernel の存在だけを受ける入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryHasKernel_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hker : Nonempty (NumberTheoryDescentOn.ReductionKernel c b)) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  rcases hker with ⟨ker⟩
+  exact FLT_d3_by_padicValNat_of_numberTheoryKernel_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime ker
+
+/--
+数論 kernel provider（全 `(c,b)` 供給）から接続する入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryKernelProvider_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (prov : NumberTheoryKernelProvider) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_numberTheoryKernelProvider prov hbc hcb_coprime
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+数論 kernel family（全 `(c,b)` で `ReductionKernel` 存在）を直接受ける入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryHasKernelFamily_coprimeSupport_direct
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hasKernel :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        Nonempty (NumberTheoryDescentOn.ReductionKernel c b)) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_numberTheoryHasKernelFamily hbc hcb_coprime hasKernel
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+数論 step provider（全 `(c,b)` で `PrimitiveSquareDescentStep` 供給）から接続する入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryStepProvider_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (provStep : NumberTheoryStepProvider) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_numberTheoryStepProvider provStep hbc hcb_coprime
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+数論 step family（全 `(c,b)` で `PrimitiveSquareDescentStep` 供給）を直接受ける入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryHasStepFamily_coprimeSupport_direct
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hasStep :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        PrimitiveSquareDescentStep c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_numberTheoryHasStepFamily hbc hcb_coprime hasStep
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+数論 reduce provider（全 `(c,b)` で `NumberTheoryReduce` 供給）から接続する入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryReduceProvider_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (provReduce : NumberTheoryReduceProvider) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_numberTheoryReduceProvider provReduce hbc hcb_coprime
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+数論 reduce family（全 `(c,b)` で `NumberTheoryReduce` 供給）を直接受ける入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryHasReduceFamily_coprimeSupport_direct
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hasReduce :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        NumberTheoryReduce c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_numberTheoryHasReduceFamily hbc hcb_coprime hasReduce
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+数論 stepExists provider（全 `(c,b)` で `StepExistsOn` 供給）から接続する入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryStepExistsProvider_coprimeSupport_direct
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (provExists : NumberTheoryStepExistsProvider) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_numberTheoryStepExistsProvider provExists hbc hcb_coprime
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+数論 stepExists family（全 `(c,b)` で `StepExistsOn` 供給）を直接受ける入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryHasStepExistsFamily_coprimeSupport_direct
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hasStepExists :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        NumberTheoryDescentOn.StepExists c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_numberTheoryHasStepExistsFamily hbc hcb_coprime hasStepExists
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+数論 localReduce provider（全 `(c,b)` で `LocalReduce` 供給）から接続する入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryLocalReduceProvider_coprimeSupport_direct
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (provLocal : NumberTheoryLocalReduceProvider) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_numberTheoryLocalReduceProvider provLocal hbc hcb_coprime
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+数論 localReduce family（全 `(c,b)` で `LocalReduce` 供給）を直接受ける入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryHasLocalReduceFamily_coprimeSupport_direct
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hasLocalReduce :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        NumberTheoryDescentOn.LocalReduce c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_numberTheoryHasLocalReduceFamily hbc hcb_coprime hasLocalReduce
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+数論 nonLiftable family（全 `(c,b,q)` で `NonLiftableS0`）を直接受ける入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryHasNonLiftableFamily_coprimeSupport_direct
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hasNonLift :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        ∀ q : ℕ, NonLiftableS0 c b q) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_numberTheoryHasNonLiftableFamily hbc hcb_coprime hasNonLift
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+数論 NoSq family（全 `(c,b)` で `NoSqOnS0`）を直接受ける入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryHasNoSqFamily_coprimeSupport_direct
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hasNoSq :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        NoSqOnS0 c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hNoSq : NoSqOnS0 c b :=
+    NoSqOnS0_of_numberTheoryHasNoSqFamily hbc hcb_coprime hasNoSq
+  exact FLT_d3_by_padicValNat_of_NoSqOnS0 ha hb hc hab hNoSq
+
+/--
+トロミノ系 `NoSq` family（全 `(c,b)`）から接続する入口。
+`TriominoFLT` 側で `hasNoSq` を構成したら、この入口にそのまま接続する。
+-/
+theorem FLT_d3_by_padicValNat_of_triominoHasNoSqFamily_coprimeSupport_direct
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hasNoSqTriomino :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        NoSqOnS0 c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_numberTheoryHasNoSqFamily_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime hasNoSqTriomino
+
+/--
+トロミノ系 `NonLiftable` family（全 `(c,b,q)`）から接続する入口。
+-/
+theorem FLT_d3_by_padicValNat_of_triominoHasNonLiftableFamily_coprimeSupport_direct
+    {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (hasNonLiftTriomino :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        ∀ q : ℕ, NonLiftableS0 c b q) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_numberTheoryHasNonLiftableFamily_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime hasNonLiftTriomino
+
+/--
+固定 `(c,b)` の数論ローカル降下入力 (`LocalReduce`) から接続する入口。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryLocalReduceOn_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (reduce : NumberTheoryDescentOn.LocalReduce c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_numberTheoryHasKernel_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime
+    (numberTheoryHasKernel_of_localReduce hbc hcb_coprime reduce)
+
+/--
+互換入口:
+旧 global 版 `LocalReduce` を受ける場合は従来の global `StepExists` 入口に委譲する。
+-/
+theorem FLT_d3_by_padicValNat_of_numberTheoryLocalReduce_coprimeSupport_direct {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (reduce : NumberTheoryDescentState.LocalReduce) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  have hex : NumberTheoryDescentState.StepExists :=
+    NumberTheoryDescentState.stepExists_of_localReduce reduce
+  exact FLT_d3_by_padicValNat_of_numberTheoryStepExists_coprimeSupport_direct
+    ha hb hc hab hbc hcb_coprime hex
+
+/--
 GEisenstein 下降法コア述語を直接受ける入口。
 -/
 theorem FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport {a b c : ℕ}
