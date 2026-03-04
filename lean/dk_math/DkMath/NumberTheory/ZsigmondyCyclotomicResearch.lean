@@ -16,6 +16,20 @@ namespace DkMath.NumberTheory.GcdNext
 
 namespace DkMath.NumberTheory.GcdNext
 
+-- Research の残骸名を「真」に修正（squarefree 仮定を追加）
+lemma squarefree_implies_padic_val_le_one (d a b q : ℕ)
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b)
+    (hq_prime : Nat.Prime q)
+    (hq_div : q ∣ a ^ d - b ^ d) (hq_ndiv : ¬ q ∣ a - b)
+    (hG_sq : Squarefree (GN d (a - b) b)) :
+    padicValNat q (a ^ d - b ^ d) ≤ 1 := by
+  exact
+    padicValNat_primitive_prime_factor_le_one_of_squarefree_G
+      (a := a) (b := b) (d := d) (q := q)
+      hd_prime hd_ge hab_lt hb hab hpnd hq_prime hq_div hq_ndiv hG_sq
+
 -- -------------- --
 -- ※反例を明示化 --
 -- -------------- --
