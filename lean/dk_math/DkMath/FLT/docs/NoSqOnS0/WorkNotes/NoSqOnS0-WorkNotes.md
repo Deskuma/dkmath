@@ -745,6 +745,39 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - 成功。
 
+## 2026-03-05 phase-15 継続（GEisensteinBaseInput を返す provider interface を追加）
+
+- 更新:
+  - `Main.lean`
+
+- 内容:
+  - `GEisensteinBaseInputProvider` を追加した。
+  - 仕様は
+    `∀ {c b}, b < c → Nat.Coprime c b → GEisensteinBaseInput c b`
+    を返す最小 provider。
+  - あわせて
+    `geisensteinBaseInputProvider_of_coreFamily`
+    を追加し、
+    `GEisensteinDescentCore` family からこの provider を組み立てられるようにした。
+  - 公開側の thin wrapper として
+    `FLT_d3_by_padicValNat_of_GEisensteinBaseInputProvider`
+    も追加し、
+    `provider -> GEisensteinBaseInput -> FLT`
+    の一本道を作った。
+
+- 判断:
+  - これで `Main` の公開入口は
+    - 値レベル: `GEisensteinBaseInput`
+    - family レベル: `GEisensteinBaseInputProvider`
+    の 2 段で受けられる。
+  - 今後 provider 実装室を作るなら、まず `GEisensteinDescentCore` family を供給し、
+    そこから `geisensteinBaseInputProvider_of_coreFamily`
+    を通して `Main` に刺すのが標準ルートになる。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - 成功。
+
 ## 2026-03-05 phase-15 継続（PrimitiveSquareDescentEngine から GEisensteinDescentCore への正規 constructor を明示）
 
 - 更新:

@@ -79,6 +79,31 @@ structure GEisensteinBaseInput (c b : ℕ) where
   hCore : GEisensteinDescentCore c b
 
 /--
+固定 `(c,b)` ごとに `GEisensteinBaseInput` を供給する provider。
+
+`Main` の公開側では、この provider から `GEisensteinBaseInput` を受け取って
+canonical entry へ流すのを標準ルートとする。
+-/
+structure GEisensteinBaseInputProvider where
+  hasBaseInput :
+    ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+      GEisensteinBaseInput c b
+
+/--
+`GEisensteinDescentCore` family から `GEisensteinBaseInputProvider` を作る。
+-/
+def geisensteinBaseInputProvider_of_coreFamily
+    (hasCore :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        GEisensteinDescentCore c b) :
+    GEisensteinBaseInputProvider where
+  hasBaseInput hbc hcb_coprime := {
+    hbc := hbc
+    hcb_coprime := hcb_coprime
+    hCore := hasCore hbc hcb_coprime
+  }
+
+/--
 `descentClassify` だけを使う下流定理へ接続するための最小内部 bundle。
 
 公開入口は `GEisensteinBaseInput` 側へ寄せ、こちらは内部の compatibility layer として扱う。
@@ -1017,6 +1042,19 @@ theorem FLT_d3_by_padicValNat_of_GEisensteinBaseInput {a b c : ℕ}
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
   exact FLT_d3_by_padicValNat_of_DescentBaseInput
     ha hb hc hab hIn.toDescentBaseInput
+
+/--
+`GEisensteinBaseInputProvider` から公開 canonical entry へ接続する。
+-/
+theorem FLT_d3_by_padicValNat_of_GEisensteinBaseInputProvider {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hbc : b < c)
+    (hcb_coprime : Nat.Coprime c b)
+    (prov : GEisensteinBaseInputProvider) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_GEisensteinBaseInput
+    ha hb hc hab (prov.hasBaseInput hbc hcb_coprime)
 
 /--
 phase-05: `NoSqOnS0` から classification impossible family を自動生成し、
