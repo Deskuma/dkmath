@@ -67,11 +67,21 @@ open DkMath.ABC
 open DkMath.Algebra.DiffPow
 
 /--
-`descent` 側から最終入口へ接続するための仮定束。
+`GEisenstein` 側の descent kernel を `Main` の公開入口へ渡すための仮定束。
 
-`Main` 内ではこれを descent 系の canonical input bundle とみなし、
-最終的な公開入口 `FLT_d3_by_padicValNat_of_DescentBaseInput` は
+`Main` 内ではこれを `GEisenstein` 系の public canonical input bundle とみなし、
+最終的な公開入口 `FLT_d3_by_padicValNat_of_GEisensteinBaseInput` は
 この構造体だけを受け取る。
+-/
+structure GEisensteinBaseInput (c b : ℕ) where
+  hbc : b < c
+  hcb_coprime : Nat.Coprime c b
+  hCore : GEisensteinDescentCore c b
+
+/--
+`descentClassify` だけを使う下流定理へ接続するための最小内部 bundle。
+
+公開入口は `GEisensteinBaseInput` 側へ寄せ、こちらは内部の compatibility layer として扱う。
 -/
 structure DescentBaseInput (c b : ℕ) where
   hbc : b < c
@@ -79,7 +89,17 @@ structure DescentBaseInput (c b : ℕ) where
   hDescentClass : DescentClassifyImpossibleOnPrimitive c b
 
 /--
-`GEisensteinDescentCore` から `DescentBaseInput` を組み立てる canonical constructor。
+`GEisensteinBaseInput` から、最小の `descentClassify` 束を回収する内部変換。
+-/
+def GEisensteinBaseInput.toDescentBaseInput {c b : ℕ}
+    (hIn : GEisensteinBaseInput c b) :
+    DescentBaseInput c b where
+  hbc := hIn.hbc
+  hcb_coprime := hIn.hcb_coprime
+  hDescentClass := descentClassifyImpossibleOnPrimitive_of_GEisensteinCore hIn.hCore
+
+/--
+`GEisensteinDescentCore` から `DescentBaseInput` を組み立てる内部 constructor。
 
 `DescentBaseInput.hDescentClass` は、今後はこの constructor を経由して
 `GEisenstein` 側の descent kernel から供給するのを標準ルートとみなす。
@@ -88,10 +108,8 @@ def DescentBaseInput.ofGEisensteinCore {c b : ℕ}
     (hbc : b < c)
     (hcb_coprime : Nat.Coprime c b)
     (hCore : GEisensteinDescentCore c b) :
-    DescentBaseInput c b where
-  hbc := hbc
-  hcb_coprime := hcb_coprime
-  hDescentClass := descentClassifyImpossibleOnPrimitive_of_GEisensteinCore hCore
+    DescentBaseInput c b := by
+  exact (GEisensteinBaseInput.mk hbc hcb_coprime hCore).toDescentBaseInput
 
 -- ========================================
 -- § 1. 層A（Zsigmondy原始素因子）
@@ -389,10 +407,13 @@ theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_descentStep_coprimeSupport {a 
   let hCore : GEisensteinDescentCore c b :=
     GEisensteinDescentCore_of_harmonicEnvelope_descentStep
       hbc hInfra hHarm hNoExcAll hStep
-  let hIn : DescentBaseInput c b :=
-    DescentBaseInput.ofGEisensteinCore hbc hcb_coprime hCore
+  let hIn : GEisensteinBaseInput c b := {
+    hbc := hbc
+    hcb_coprime := hcb_coprime
+    hCore := hCore
+  }
   exact FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport
-    ha hb hc hab hIn.hbc hIn.hcb_coprime hIn.hDescentClass
+    ha hb hc hab hIn.hbc hIn.hcb_coprime hIn.toDescentBaseInput.hDescentClass
 
 /--
 phase-11 直結入口:
@@ -426,10 +447,13 @@ theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_descentEngine_coprimeSupport {
   let hCore : GEisensteinDescentCore c b :=
     GEisensteinDescentCore_of_harmonicEnvelope_descentEngine
       hbc hInfra hHarm hNoExcAll hEngine
-  let hIn : DescentBaseInput c b :=
-    DescentBaseInput.ofGEisensteinCore hbc hcb_coprime hCore
+  let hIn : GEisensteinBaseInput c b := {
+    hbc := hbc
+    hcb_coprime := hcb_coprime
+    hCore := hCore
+  }
   exact FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport
-    ha hb hc hab hIn.hbc hIn.hcb_coprime hIn.hDescentClass
+    ha hb hc hab hIn.hbc hIn.hcb_coprime hIn.toDescentBaseInput.hDescentClass
 
 /--
 phase-11 直結入口（engine 版）:
@@ -891,10 +915,13 @@ theorem FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport {a b c : ℕ}
     (hcb_coprime : Nat.Coprime c b)
     (hGECore : GEisensteinDescentCore c b) :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
-  let hIn : DescentBaseInput c b :=
-    DescentBaseInput.ofGEisensteinCore hbc hcb_coprime hGECore
+  let hIn : GEisensteinBaseInput c b := {
+    hbc := hbc
+    hcb_coprime := hcb_coprime
+    hCore := hGECore
+  }
   exact FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport
-    ha hb hc hab hIn.hbc hIn.hcb_coprime hIn.hDescentClass
+    ha hb hc hab hIn.hbc hIn.hcb_coprime hIn.toDescentBaseInput.hDescentClass
 
 /--
 `GEisensteinCore` に加えて停止到達情報を受け取る補助版。
@@ -966,9 +993,8 @@ theorem GEisenstein_descent_reaches_zero_of_descentClassify_primitiveSized
 /--
 `DescentBaseInput` を入口にした薄いラッパー。
 
-descent 系の public canonical entry。
-本件で「どの仮定を証明しに行くか」を追うときの基準点は、この定理の
-入力束 `DescentBaseInput` である。
+`descentClassify` だけを持つ内部 compatibility entry。
+公開の canonical entry は後段の `FLT_d3_by_padicValNat_of_GEisensteinBaseInput` とする。
 -/
 theorem FLT_d3_by_padicValNat_of_DescentBaseInput {a b c : ℕ}
     (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
@@ -977,6 +1003,20 @@ theorem FLT_d3_by_padicValNat_of_DescentBaseInput {a b c : ℕ}
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
   exact FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport
     ha hb hc hab hIn.hbc hIn.hcb_coprime hIn.hDescentClass
+
+/--
+`GEisensteinBaseInput` を入口にした public canonical entry。
+
+本件で「どの仮定を証明しに行くか」を追うときの基準点は、この定理の
+入力束 `GEisensteinBaseInput` である。
+-/
+theorem FLT_d3_by_padicValNat_of_GEisensteinBaseInput {a b c : ℕ}
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hab : Nat.Coprime a b)
+    (hIn : GEisensteinBaseInput c b) :
+    a ^ 3 + b ^ 3 ≠ c ^ 3 := by
+  exact FLT_d3_by_padicValNat_of_DescentBaseInput
+    ha hb hc hab hIn.toDescentBaseInput
 
 /--
 phase-05: `NoSqOnS0` から classification impossible family を自動生成し、

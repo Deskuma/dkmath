@@ -781,6 +781,42 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
 - 確認:
   - `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
   - 成功（既存の `GEisensteinBridge.lean` style 提案 warning のみ）。
+
+## 2026-03-05 phase-15 継続（GEisensteinBaseInput を新設し、Main の公開入口を移す）
+
+- 更新:
+  - `Main.lean`
+
+- 内容:
+  - 新しく `GEisensteinBaseInput` を追加した。
+    - `hbc : b < c`
+    - `hcb_coprime : Nat.Coprime c b`
+    - `hCore : GEisensteinDescentCore c b`
+  - これにより、`Main` の公開側で受け取るべき bundle を
+    「`descentClassify` だけの最小束」ではなく
+    「`GEisenstein` kernel そのものを含む束」に引き上げた。
+  - `DescentBaseInput` は残すが、役割を内部 compatibility layer に下げた。
+  - 変換 `GEisensteinBaseInput.toDescentBaseInput` を追加し、
+    下流の `descentClassify` ベース定理へはこの内部変換で接続する。
+  - 公開 canonical entry として
+    `FLT_d3_by_padicValNat_of_GEisensteinBaseInput`
+    を追加した。
+  - 既存の
+    `FLT_d3_by_padicValNat_of_DescentBaseInput`
+    は内部 compatibility entry というコメントに変更した。
+  - step/engine 入口や `GEisensteinCore` 入口のローカル bundle も、
+    `DescentBaseInput` ではなく `GEisensteinBaseInput` を先に作る形へ寄せた。
+
+- 判断:
+  - これで `Main` の「公開入口として何を供給すべきか」が
+    `GEisensteinDescentCore` を含む bundle に固定された。
+  - 以後は `hDescentClass` 単体ではなく、
+    `GEisensteinBaseInput` をどの provider / kernel から組み立てるか、
+    という設計で前へ進める。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - 成功。
   - 新規 warning はなし（既存の `GEisensteinBridge.lean` の style 提案のみ）。
 
 ## 2026-03-05 phase-15 継続（DescentBaseInput.hDescentClass の canonical source を確定）
