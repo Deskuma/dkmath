@@ -25,6 +25,20 @@ abbrev TriominoNoLiftGNBridgeProviderImplTarget : Prop :=
   TriominoNoLiftGNBridgeProvider
 
 /--
+phase-15 の本命実装室。
+
+ここで `¬ q^2 ∣ GN ...` を直接供給する provider を育てる。
+現時点では研究 stub として保持し、本流配線にはまだ差し込まない。
+-/
+def triominoNoLiftGNBridgeProvider_impl :
+    TriominoNoLiftGNBridgeProvider := by
+  refine ⟨?_⟩
+  intro p x y z q hpack hp_not_dvd_gap hqP hq_dvd_diff hq_not_dvd_gap
+  -- phase-15 の研究核:
+  -- primitive-prime 文脈で `¬ q^2 ∣ GN p (z - y) y` を供給する。
+  sorry
+
+/--
 Provider 実装が与えられれば、本流の NoWieferich bridge へは既存の注入で到達する。
 -/
 theorem triominoNoWieferichBridge_of_provider_impl

@@ -445,3 +445,23 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
 - 確認:
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProvider DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProviderImpl`
   - 成功（既知の warning は `ZsigmondyCyclotomicResearch.lean` の false placeholder のみ）。
+
+## 2026-03-04 phase-15 継続（NoLift provider 実装室に研究 stub を追加）
+
+- 更新:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoSquarefreeGNBridgeProviderImpl.lean`
+
+- 追加:
+  - `DkMath.FLT.triominoNoLiftGNBridgeProvider_impl`
+
+- 内容:
+  - phase-15 の実際の研究対象を、PrimeProvider 層の実装室ファイルに明示的な stub として追加した。
+  - 型は `TriominoNoLiftGNBridgeProvider` で、
+    primitive-prime 文脈から `¬ q^2 ∣ GN p (z - y) y` を直接供給する provider をここで育てる。
+  - これにより、研究核の場所は `CosmicPetalBridgeGNNoWieferich.lean` の bridge 仕様ではなく、
+    `TriominoSquarefreeGNBridgeProviderImpl.lean` の provider 実装 stub へ明確に移った。
+
+- 注意:
+  - この stub は `by sorry` を含むため、phase-15 の新しい warning の所在になる。
+  - 既存の false placeholder (`ZsigmondyCyclotomicResearch.lean`) とは別に、
+    Provider 実装室の未解決点を明示する意図で追加した。
