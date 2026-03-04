@@ -382,3 +382,21 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - phase-15 の設計は「Research を直接下流へ繋ぎ続ける」ことではなく、
     PrimeProvider 層で honest bridge を受ける / 供給する形へ収束させる。
   - Research 側の補題は、sorry 解決後に適切な常設モジュールへ統合する前提で扱う。
+
+## 2026-03-04 phase-15 継続（PrimeProvider 層に Squarefree-GN 供給者の器を追加）
+
+- 新規:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoSquarefreeGNBridgeProvider.lean`
+
+- 追加:
+  - `DkMath.FLT.TriominoSquarefreeGNBridgeProvider`
+  - `DkMath.FLT.triominoNoWieferichBridge_of_provider`
+
+- 内容:
+  - `TriominoSquarefreeGNBridge` を PrimeProvider 層の契約として受けるための最小 provider 構造体を新設した。
+  - これにより、「供給者は PrimeProvider 層に置く」という役割分担がコード上でも明示された。
+  - `CosmicPetalBridgeGNNoWieferich.lean` は受け口、`TriominoSquarefreeGNBridgeProvider.lean` は供給者の器、という分離になった。
+
+- 確認:
+  - `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/TriominoSquarefreeGNBridgeProvider.lean`
+  - 成功。
