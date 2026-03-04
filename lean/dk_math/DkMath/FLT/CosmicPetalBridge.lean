@@ -26,6 +26,22 @@ lemma sub_eq_mul_GN (d x u : ℕ) :
   omega
 
 /--
+差の冪版:
+`z^d - y^d = (z-y) * GN d (z-y) y`。
+
+`z < y` の場合も、Nat の切り捨て減算により両辺とも 0 になる。
+-/
+lemma sub_pow_eq_mul_GN (d z y : ℕ) :
+    z ^ d - y ^ d = (z - y) * GN d (z - y) y := by
+  by_cases hyz : y ≤ z
+  · simpa [Nat.sub_add_cancel hyz] using sub_eq_mul_GN d (z - y) y
+  · have hzy : z ≤ y := Nat.le_of_not_ge hyz
+    have hpow : z ^ d ≤ y ^ d := Nat.pow_le_pow_left hzy d
+    have hdiff0 : z ^ d - y ^ d = 0 := Nat.sub_eq_zero_of_le hpow
+    have hgap0 : z - y = 0 := Nat.sub_eq_zero_of_le hzy
+    simp [hdiff0, hgap0]
+
+/--
 `q ∣ ((x+u)^d - u^d)` かつ `q ∤ x` なら `q ∣ GN d x u`。
 -/
 lemma prime_dvd_GN_of_dvd_sub_not_dvd_left {d x u q : ℕ}
@@ -35,6 +51,18 @@ lemma prime_dvd_GN_of_dvd_sub_not_dvd_left {d x u q : ℕ}
     q ∣ GN d x u := by
   have hmul : q ∣ x * GN d x u := by
     simpa [sub_eq_mul_GN d x u] using hq_dvd
+  exact (hq.dvd_mul.mp hmul).resolve_left hq_ndvd
+
+/--
+`q ∣ (z^d - y^d)` かつ `q ∤ (z-y)` なら `q ∣ GN d (z-y) y`。
+-/
+lemma dvd_GN_of_dvd_sub_pow {d z y q : ℕ}
+    (hq : Nat.Prime q)
+    (hq_dvd : q ∣ z ^ d - y ^ d)
+    (hq_ndvd : ¬ q ∣ (z - y)) :
+    q ∣ GN d (z - y) y := by
+  have hmul : q ∣ (z - y) * GN d (z - y) y := by
+    simpa [sub_pow_eq_mul_GN d z y] using hq_dvd
   exact (hq.dvd_mul.mp hmul).resolve_left hq_ndvd
 
 /--

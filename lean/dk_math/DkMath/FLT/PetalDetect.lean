@@ -112,6 +112,55 @@ lemma S0_ne_zero (a b : ℕ) (ha : 0 < a) : S0_nat a b ≠ 0 := by
     omega
   exact Nat.ne_zero_of_lt h_pos
 
+/-- 半位相核: `2 * S0 = (a+b)^2 + a^2 + b^2`（Ring 版）。 -/
+lemma two_mul_S0 (α : Type*) [CommRing α] (a b : α) :
+    (2 : α) * S0 α a b = (a + b) ^ 2 + a ^ 2 + b ^ 2 := by
+  unfold S0
+  ring
+
+/-- 半位相核: `2 * S0_nat = (a+b)^2 + a^2 + b^2`（ℕ 版）。 -/
+lemma two_mul_S0_nat (a b : ℕ) :
+    2 * S0_nat a b = (a + b) ^ 2 + a ^ 2 + b ^ 2 := by
+  unfold S0_nat
+  ring
+
+/-- 平方数の mod 4 は 0 か 1 のみ。 -/
+lemma sq_mod4 (n : ℕ) : n ^ 2 % 4 = 0 ∨ n ^ 2 % 4 = 1 := by
+  have hm : n ^ 2 % 4 = ((n % 4) * (n % 4)) % 4 := by
+    simp [pow_two, Nat.mul_mod]
+  have hlt : n % 4 < 4 := Nat.mod_lt _ (by decide)
+  interval_cases h : n % 4
+  · left
+    simp [hm]
+  · right
+    simp [hm]
+  · left
+    simp [hm]
+  · right
+    simp [hm]
+
+/-- `n ≡ 3 [MOD 4]` なら `n` は平方数でない。 -/
+lemma not_square_of_mod4_eq3 {n : ℕ} (h : n % 4 = 3) : ¬ ∃ q, q ^ 2 = n := by
+  intro hsq
+  rcases hsq with ⟨q, rfl⟩
+  rcases sq_mod4 q with h0 | h1 <;> omega
+
+/-- `a ≡ b ≡ 1 [MOD 4]` なら `S0_nat a b ≡ 3 [MOD 4]`。 -/
+lemma S0_mod4_eq3_of_congr1 {a b : ℕ}
+    (ha : a % 4 = 1) (hb : b % 4 = 1) :
+    S0_nat a b % 4 = 3 := by
+  have hS0 :
+      S0_nat a b % 4 =
+        (((a % 4) * (a % 4)) % 4 + ((a % 4) * (b % 4)) % 4 + ((b % 4) * (b % 4)) % 4) % 4 := by
+    simp [S0_nat, pow_two, Nat.add_mod, Nat.mul_mod]
+  rw [hS0, ha, hb]
+
+/-- `a ≡ b ≡ 1 [MOD 4]` なら `S0_nat a b` は平方数でない。 -/
+lemma S0_not_square_of_congr1 {a b : ℕ}
+    (ha : a % 4 = 1) (hb : b % 4 = 1) :
+    ¬ ∃ q, q ^ 2 = S0_nat a b := by
+  exact not_square_of_mod4_eq3 (S0_mod4_eq3_of_congr1 ha hb)
+
 -- ========================================
 -- § 2. 差分核の証明（Phase 2.2）
 -- ========================================

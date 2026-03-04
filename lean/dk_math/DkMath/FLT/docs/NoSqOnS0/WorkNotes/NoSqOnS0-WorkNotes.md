@@ -465,3 +465,27 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - この stub は `by sorry` を含むため、phase-15 の新しい warning の所在になる。
   - 既存の false placeholder (`ZsigmondyCyclotomicResearch.lean`) とは別に、
     Provider 実装室の未解決点を明示する意図で追加した。
+
+## 2026-03-04 phase-15 継続（squarefree から no-lift への薄い橋を追加）
+
+- 更新:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
+
+- 追加:
+  - `DkMath.FLT.NoLift`
+  - `DkMath.FLT.noLift_of_squarefree`
+  - `DkMath.FLT.triominoNoLiftGNBridge_of_squarefree_GN`
+
+- 内容:
+  - `NoLift (q, X) := ¬ q^2 ∣ X` を phase-15 の最小 no-lift 語彙として追加した。
+  - squarefree な非零自然数から直ちに `NoLift` が従う一般補題 `noLift_of_squarefree` を追加した。
+  - これを使って、強い仮定 `TriominoSquarefreeGNBridge` から弱い本命仮定
+    `TriominoNoLiftGNBridge` を直接得る薄い橋
+    `triominoNoLiftGNBridge_of_squarefree_GN` を追加した。
+  - `triominoNoWieferichBridge_of_squarefree_GN` は、内部でこの薄い橋を経由して
+    `triominoNoWieferichBridge_of_not_sq_GN` に流すだけの形へ整理した。
+
+- 確認:
+  - `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich`
+  - 成功（既知の warning は `ZsigmondyCyclotomicResearch.lean` の false placeholder のみ）。
