@@ -709,3 +709,39 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - 成功。
   - 追加 warning は解消済み。
   - 依然として research warning は `ZsigmondyCyclotomicResearch.lean` の既知 1 件のみ。
+
+## 2026-03-05 phase-15 継続（Main.lean の入口整理と section 分割）
+
+- 更新:
+  - `Main.lean`
+
+- 内容:
+  - `Main.lean` に section を導入し、公開定理群を以下の責務で分割した。
+    - `CoreRoute`
+    - `NoSqRecoveryAdapters`
+    - `DescentAdapters`
+    - `ProviderCompatibility`
+    - `DescentBridgeAdapters`
+    - `CompatibilityInputs`
+    - `DefinitionalEqualities`
+  - 併せて、次の 4 点を canonical entry としてコメントで明示した。
+    - `DescentBaseInput`
+    - `FLT_d3_by_padicValNat_of_NoSqOnS0`
+    - `FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport`
+    - `FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport`
+    - `FLT_d3_by_padicValNat_of_DescentBaseInput`
+  - これにより、「いま何を証明しているか」を
+    `DescentBaseInput.hDescentClass` をどこから供給するか、
+    という一点に追いやすくした。
+
+- 判断:
+  - いまの `Main.lean` は theorem 自体は多いが、多くは最終的に
+    `FLT_d3_by_padicValNat_of_NoSqOnS0`
+    へ流し込む薄い adapter である。
+  - 先に区画整理しておくことで、
+    本筋の証明対象（descent 系の canonical input をどう満たすか）が追いやすくなる。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - 成功。
+  - 新規 warning はなし（既存の `GEisensteinBridge.lean` の style 提案のみ）。
