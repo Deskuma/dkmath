@@ -23,16 +23,21 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
 
 ## 課題
 
-- [ ] phase-15 の深い数学核（research spine）
+- [ ] phase-15 の供給者実装（PrimeProvider 層）
+  - [ ] `DkMath.FLT.TriominoSquarefreeGNBridge` を PrimeProvider 層でどこが供給するか確定する
+  - [ ] その供給から
+    `DkMath.FLT.triominoNoWieferichBridge_of_squarefree_GN`
+    を使って `TriominoNoWieferichBridge` を本流で閉じる
+- [ ] 研究補題の整理（本流ではない）
   - [ ] `lean/dk_math/DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean` の
+    false placeholder
     `DkMath.NumberTheory.GcdNext.squarefree_implies_padic_val_le_one`
-    の statement を修正する（現状の一般形は反例があり強すぎる）
-  - [ ] その結果として
-    `DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one`
-    を正しい statement へ差し替え、valuation spine を no-`sorry` 化する
+    は statement repair / 移設対象として管理する
+  - [ ] `DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one`
+    は将来、適切な常設モジュールへ統合される正しい theorem に差し替える
 - [x] phase-15 の local bridge 接続
   - [x] `CosmicPetalBridgeGNNoWieferich.lean` は local `sorry` を持たず、
-    valuation spine への委譲だけで閉じる
+    bridge 仕様の受け口だけを持つ
   - [x] `CosmicPetalBridgeGNDescentB.lean` / `CosmicPetalBridgeGN.lean` /
     `TriominoCosmicGapInvariant.lean` の公開配線は維持済み
 
@@ -41,37 +46,40 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
 - 完了条件（DoD）:
   - [x] 1. `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
     に local `sorry` がない
-  - [ ] 2. `lean/dk_math/DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean`
-    の `squarefree_implies_padic_val_le_one`
-    を削除または正しい statement に置き換え、その結果 `sorry` がない
+  - [ ] 2. `DkMath.FLT.TriominoSquarefreeGNBridge` の供給者が PrimeProvider 層で確定し、
+    `TriominoNoWieferichBridge` が false placeholder を経由せずに閉じる
   - [ ] 3. `cd lean/dk_math && lake build DkMath.NumberTheory.ZsigmondyCyclotomicResearch DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
     が warning なしで成功
   - [x] 4. `CosmicPetalBridgeGNDescentB.lean` は phase-15 でも no-`sorry` の配線側として維持される
-  - [x] 5. phase-15 の研究核と、その依存方針をログに明示
+  - [x] 5. phase-15 の bridge 仕様と、Research が本流ではないことをログに明示
 - 受け入れ条件:
   - [x] 1. Branch B descent ルートが `TriominoNoWieferichBridge` の供給だけで閉じること
   - [x] 2. `CosmicPetalBridgeGN.lean` / `TriominoCosmicGapInvariant.lean` の公開配線を変更せずに接続できること
-  - [ ] 3. 新補題・試行錯誤は実質的に
-    `ZsigmondyCyclotomicResearch.lean` の valuation spine
-    （必要ならその薄い wrapper として `CosmicPetalBridgeGNNoWieferich.lean`）
-    に局所化されること
+  - [ ] 3. 新補題・試行錯誤は
+    PrimeProvider 層の bridge 供給者に局所化され、
+    `ZsigmondyCyclotomicResearch.lean` は一時的な proving ground としてのみ参照されること
 
 ## 計画
 
 - 直近の主戦場:
-  - `lean/dk_math/DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean`
-- 現在の唯一の未解決点:
-  - `DkMath.NumberTheory.GcdNext.squarefree_implies_padic_val_le_one`
-    （現状の命題は反例があり、証明ではなく statement repair が必要）
+  - PrimeProvider 層で `DkMath.FLT.TriominoSquarefreeGNBridge` の供給者をどう置くか
+- 現在の設計上の不足点:
+  - 本流が必要とする honest 条件は
+    `Squarefree (GN p (z - y) y)`
+    であり、これは
+    `DkMath.FLT.TriominoSquarefreeGNBridge`
+    として型に切り出し済み
 - 直近の探索候補:
-  - primitive prime divisor の valuation を 1 に抑える、より狭い正しい statement への置換
-  - `padicValNat_dvd_iff_le` を介した `¬ q^2 ∣ ...` との往復を補助補題化
-  - `ZsigmondyCyclotomic.lean` / `DiffPow.lean` 側の squarefree・primitive prime 補題の再利用
+  - `TriominoSquarefreeGNBridge` を PrimeProvider 層の新しい bridge 仮定として受けるか、
+    既存の PrimeProvider 理論から導くかの確定
+  - `padicValNat_primitive_prime_factor_le_one_of_squarefree_G` への接続を本流へ昇格させる薄い補題の整備
+  - `ZsigmondyCyclotomicResearch.lean` 上の true stronger theorem を、解決後にどの常設モジュールへ統合するかの見取り図を保つ
 - 非目標（当面）:
   - `CosmicPetalBridgeGNDescentB.lean` の外壁 refactor 継続
   - `CosmicPetalBridgeGNNoWieferich.lean` に新しい深い数学核を戻すこと
   - explicit な `z'` 構成の再導入
   - 反例がある現行 statement をそのまま証明しようとすること
+  - Research ファイルを本流の恒久的な供給者とみなすこと
 
 ## 作業ログ
 
@@ -363,3 +371,14 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
 - 確認:
   - `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
   - 成功。
+
+## 2026-03-04 phase-15 継続（PrimeProvider が供給者、Research は proving ground と明記）
+
+- 方針更新:
+  - `DkMath.FLT.TriominoSquarefreeGNBridge` の供給者は PrimeProvider 層に置く。
+  - `ZsigmondyCyclotomicResearch.lean` は、false placeholder の洗い替えと true stronger theorem の試作を行う proving ground であり、本流の恒久的な供給者とはみなさない。
+
+- 意味:
+  - phase-15 の設計は「Research を直接下流へ繋ぎ続ける」ことではなく、
+    PrimeProvider 層で honest bridge を受ける / 供給する形へ収束させる。
+  - Research 側の補題は、sorry 解決後に適切な常設モジュールへ統合する前提で扱う。
