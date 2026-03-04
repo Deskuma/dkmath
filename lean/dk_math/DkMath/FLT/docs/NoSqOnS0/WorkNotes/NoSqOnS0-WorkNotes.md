@@ -513,3 +513,48 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich`
   - 成功（既知の warning は `ZsigmondyCyclotomicResearch.lean` の false placeholder のみ）。
+
+## 2026-03-04 phase-15 継続（NoLift spine を常設化し provider stub を解消）
+
+- 更新:
+  - 新規: `lean/dk_math/DkMath/NumberTheory/ZsigmondyCyclotomicNoLift.lean`
+  - 更新: `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoSquarefreeGNBridgeProviderImpl.lean`
+
+- 追加:
+  - `DkMath.NumberTheory.GcdNext.noLift_GN_of_primitive_prime_factor`
+
+- 内容:
+  - primitive-prime branch の標準仮定から
+    `¬ q ^ 2 ∣ GN d (a - b) b`
+    を直接返す常設 spine を `NumberTheory` 側へ新設した。
+  - 証明は
+    `padicValNat_primitive_prime_factor_le_one`
+    と
+    `padicValNat_factorization`
+    を使って `padicValNat q (GN ...) ≤ 1` に落とし、
+    そこから `q^2 ∤ GN` を引く形に固定した。
+  - `triominoNoLiftGNBridgeProvider_impl` は local `sorry` をやめ、
+    反例 pack から必要な `Nat.Coprime z y` だけを組み立てて、
+    新しい `NumberTheory` spine を呼ぶ薄い provider に変更した。
+
+- 失敗例 / 設計差分:
+  - 当初は「Branch B pack から `NoWieferichCondition` を抽出し、
+    `NoWieferich => NoLift` をそのまま provider に差し込む」形を試した。
+  - しかし現行の
+    `PrimeGe5CounterexamplePack`
+    と
+    `triominoNoLiftGNBridgeProvider_impl`
+    の引数には、その種の `NoWieferich` 条件を取り出せる field が存在しない。
+  - そのため、入力シグネチャを壊さずに済む現実的な落とし所として、
+    「primitive-prime 仮定そのものから直接 `NoLift` を返す」常設 spine に切り替えた。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.NumberTheory.ZsigmondyCyclotomicNoLift DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProviderImpl`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 成功。
+  - 残る warning は既知の
+    `lean/dk_math/DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean`
+    の
+    `squarefree_implies_padic_val_le_one`
+    （`declaration uses sorry`）
+    のみ。

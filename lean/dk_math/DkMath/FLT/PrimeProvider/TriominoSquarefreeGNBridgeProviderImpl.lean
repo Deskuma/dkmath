@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProvider
+import DkMath.NumberTheory.ZsigmondyCyclotomicNoLift
 
 namespace DkMath.FLT
 
@@ -28,15 +29,26 @@ abbrev TriominoNoLiftGNBridgeProviderImplTarget : Prop :=
 phase-15 の本命実装室。
 
 ここで `¬ q^2 ∣ GN ...` を直接供給する provider を育てる。
-現時点では研究 stub として保持し、本流配線にはまだ差し込まない。
+実装本体は `NumberTheory` 側の常設 spine へ委譲し、ここは組み立てだけを担う。
 -/
 def triominoNoLiftGNBridgeProvider_impl :
     TriominoNoLiftGNBridgeProvider := by
   refine ⟨?_⟩
   intro p x y z q hpack hp_not_dvd_gap hqP hq_dvd_diff hq_not_dvd_gap
-  -- phase-15 の研究核:
-  -- primitive-prime 文脈で `¬ q^2 ∣ GN p (z - y) y` を供給する。
-  sorry
+  have hzy_coprime : Nat.Coprime z y := by
+    exact (coprime_right_of_add_pow_eq_pow hpack.hp hpack.hxy hpack.hEq).symm
+  exact
+    DkMath.NumberTheory.GcdNext.noLift_GN_of_primitive_prime_factor
+      (a := z) (b := y) (d := p) (q := q)
+      hpack.hp
+      (le_trans (by decide : 3 ≤ 5) hpack.hp5)
+      hpack.hyz_lt
+      (Nat.pos_of_ne_zero hpack.hy0)
+      hzy_coprime
+      hp_not_dvd_gap
+      hqP
+      hq_dvd_diff
+      hq_not_dvd_gap
 
 /--
 Provider 実装が与えられれば、本流の NoWieferich bridge へは既存の注入で到達する。
