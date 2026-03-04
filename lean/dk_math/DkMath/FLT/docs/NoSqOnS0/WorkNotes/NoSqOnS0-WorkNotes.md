@@ -418,3 +418,30 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
 - 確認:
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProvider DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProviderImpl`
   - 成功（既知の warning は `ZsigmondyCyclotomicResearch.lean` の false placeholder のみ）。
+
+## 2026-03-04 phase-15 継続（`¬ q^2 ∣ GN` をより弱い honest bridge として追加）
+
+- 更新:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean`
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoSquarefreeGNBridgeProvider.lean`
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoSquarefreeGNBridgeProviderImpl.lean`
+
+- 追加:
+  - `DkMath.FLT.TriominoNoLiftGNBridge`
+  - `DkMath.FLT.triominoNoWieferichBridge_of_not_sq_GN`
+  - `DkMath.FLT.TriominoNoLiftGNBridgeProvider`
+  - `DkMath.FLT.triominoNoWieferichBridge_of_noLift_provider`
+  - `DkMath.FLT.TriominoNoLiftGNBridgeProviderImplTarget`
+  - `DkMath.FLT.triominoNoWieferichBridge_of_noLift_provider_impl`
+
+- 内容:
+  - `Squarefree (GN ...)` より弱い、phase-15 が本質的に欲しい最小条件
+    `¬ q ^ 2 ∣ GN p (z - y) y`
+    を direct bridge として型に切り出した。
+  - `triominoNoWieferichBridge_of_squarefree_GN` は、この direct bridge を経由して閉じるように整理した。
+  - PrimeProvider 層でも、squarefree 版に加えて no-lift 版 provider を追加し、
+    供給者の器と実装室の両方で受けられるようにした。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProvider DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProviderImpl`
+  - 成功（既知の warning は `ZsigmondyCyclotomicResearch.lean` の false placeholder のみ）。

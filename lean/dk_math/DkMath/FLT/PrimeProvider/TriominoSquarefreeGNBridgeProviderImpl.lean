@@ -19,11 +19,26 @@ abbrev TriominoSquarefreeGNBridgeProviderImplTarget : Prop :=
   TriominoSquarefreeGNBridgeProvider
 
 /--
+`¬ q^2 ∣ GN ...` を直接供給する provider の phase-15 実装室 target。
+-/
+abbrev TriominoNoLiftGNBridgeProviderImplTarget : Prop :=
+  TriominoNoLiftGNBridgeProvider
+
+/--
 Provider 実装が与えられれば、本流の NoWieferich bridge へは既存の注入で到達する。
 -/
 theorem triominoNoWieferichBridge_of_provider_impl
     (P : TriominoSquarefreeGNBridgeProviderImplTarget) :
     TriominoNoWieferichBridge := by
   exact triominoNoWieferichBridge_of_provider P
+
+/--
+より弱い honest bridge (`¬ q^2 ∣ GN ...`) を供給する provider 実装が与えられれば、
+本流の NoWieferich bridge へ到達する。
+-/
+theorem triominoNoWieferichBridge_of_noLift_provider_impl
+    (P : TriominoNoLiftGNBridgeProviderImplTarget) :
+    TriominoNoWieferichBridge := by
+  exact triominoNoWieferichBridge_of_noLift_provider P
 
 end DkMath.FLT

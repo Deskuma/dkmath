@@ -167,6 +167,46 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le
       hG_sq
 
 /--
+Phase-15 のさらに弱い honest bridge 仕様:
+primitive-prime branch で、対象の `q` について `GN p (z - y) y` に 2 段 lift が起きないことだけを供給する。
+
+`Squarefree (GN ...)` は十分条件だが、この命題は phase-15 が本質的に欲しい最小条件である。
+-/
+abbrev TriominoNoLiftGNBridge : Prop :=
+  ∀ {p x y z q : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ¬ p ∣ (z - y) →
+    Nat.Prime q -> q ∣ (z ^ p - y ^ p) -> ¬ q ∣ (z - y) ->
+    ¬ q ^ 2 ∣ GN p (z - y) y
+
+/--
+If the primitive-prime branch supplies the direct non-lift condition `¬ q^2 ∣ GN`,
+the phase-15 NoWieferich bridge closes without requiring full squarefreeness.
+-/
+theorem triominoNoWieferichBridge_of_not_sq_GN
+    (hNoLift : TriominoNoLiftGNBridge) :
+    TriominoNoWieferichBridge := by
+  intro p x y z q hpack hp_not_dvd_gap hqP hq_dvd_diff hq_not_dvd_gap hq2_dvd_diff
+  have hGN_ne : GN p (z - y) y ≠ 0 :=
+    triominoWieferichShrink_GN_ne_zero_core
+      hpack hp_not_dvd_gap hqP hq_dvd_diff hq_not_dvd_gap
+  have hEq :
+      padicValNat q (z ^ p - y ^ p) = padicValNat q (GN p (z - y) y) :=
+    triominoWieferichShrink_padicValNat_diff_eq_GN_core
+      hpack hp_not_dvd_gap hqP hq_dvd_diff hq_not_dvd_gap
+  have h2_le_diff : 2 ≤ padicValNat q (z ^ p - y ^ p) := by
+    exact (@padicValNat_dvd_iff_le q (Fact.mk hqP) (z ^ p - y ^ p) 2
+      (by
+        have hyz_pow_lt : y ^ p < z ^ p := by
+          exact Nat.pow_lt_pow_left hpack.hyz_lt hpack.hp.ne_zero
+        exact Nat.sub_ne_zero_of_lt hyz_pow_lt)).1 hq2_dvd_diff
+  have h2_le_GN : 2 ≤ padicValNat q (GN p (z - y) y) := by
+    rw [← hEq]
+    exact h2_le_diff
+  have hq2_dvd_GN : q ^ 2 ∣ GN p (z - y) y := by
+    exact (@padicValNat_dvd_iff_le q (Fact.mk hqP) (GN p (z - y) y) 2 hGN_ne).2 h2_le_GN
+  exact (hNoLift hpack hp_not_dvd_gap hqP hq_dvd_diff hq_not_dvd_gap) hq2_dvd_GN
+
+/--
 Phase-15 の honest bridge 仕様:
 primitive-prime branch で cyclotomic factor `GN p (z - y) y` が squarefree であることを供給する。
 
@@ -185,12 +225,27 @@ bridge closes without touching the false global placeholder.
 theorem triominoNoWieferichBridge_of_squarefree_GN
     (hSq : TriominoSquarefreeGNBridge) :
     TriominoNoWieferichBridge := by
-  refine triominoNoWieferichBridge_of_padicValNat_le_one ?_
+  refine triominoNoWieferichBridge_of_not_sq_GN ?_
   intro p x y z q hpack hp_not_dvd_gap hqP hq_dvd_diff hq_not_dvd_gap
-  exact
+  have hVal :
+      padicValNat q (z ^ p - y ^ p) ≤ 1 :=
     triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le_one_of_squarefree_GN_core
       hpack hp_not_dvd_gap hqP hq_dvd_diff hq_not_dvd_gap
       (hSq hpack hp_not_dvd_gap hqP hq_dvd_diff hq_not_dvd_gap)
+  have hGN_ne : GN p (z - y) y ≠ 0 :=
+    triominoWieferichShrink_GN_ne_zero_core
+      hpack hp_not_dvd_gap hqP hq_dvd_diff hq_not_dvd_gap
+  have hEq :
+      padicValNat q (z ^ p - y ^ p) = padicValNat q (GN p (z - y) y) :=
+    triominoWieferichShrink_padicValNat_diff_eq_GN_core
+      hpack hp_not_dvd_gap hqP hq_dvd_diff hq_not_dvd_gap
+  intro hq2_dvd_GN
+  have h2_le_GN : 2 ≤ padicValNat q (GN p (z - y) y) := by
+    exact (@padicValNat_dvd_iff_le q (Fact.mk hqP) (GN p (z - y) y) 2 hGN_ne).1 hq2_dvd_GN
+  have h2_le_diff : 2 ≤ padicValNat q (z ^ p - y ^ p) := by
+    rw [hEq]
+    exact h2_le_GN
+  exact (not_le_of_gt h2_le_diff) hVal
 
 /--
 `padicValNat q (GN p (z - y) y) ≤ 1` が供給できれば、
