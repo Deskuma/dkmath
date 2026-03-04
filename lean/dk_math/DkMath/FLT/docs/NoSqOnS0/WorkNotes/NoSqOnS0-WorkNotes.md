@@ -400,3 +400,21 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
 - 確認:
   - `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/TriominoSquarefreeGNBridgeProvider.lean`
   - 成功。
+
+## 2026-03-04 phase-15 継続（PrimeProvider 供給者の実装室を追加）
+
+- 新規:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoSquarefreeGNBridgeProviderImpl.lean`
+
+- 追加:
+  - `DkMath.FLT.TriominoSquarefreeGNBridgeProviderImplTarget`
+  - `DkMath.FLT.triominoNoWieferichBridge_of_provider_impl`
+
+- 内容:
+  - PrimeProvider 層の契約 (`TriominoSquarefreeGNBridgeProvider`) に対する phase-15 の実装室を追加した。
+  - 現時点では実装室は `Prop` target を受ける薄い wrapper に留め、本流には差し込まない。
+  - これにより、供給者の「器」と「実装の試行錯誤の場」が分離された。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProvider DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProviderImpl`
+  - 成功（既知の warning は `ZsigmondyCyclotomicResearch.lean` の false placeholder のみ）。
