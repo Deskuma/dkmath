@@ -1230,11 +1230,14 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_
     exact (hNonLift r) ⟨hrP, hr_dvd_GN, hr_not_dvd_gap⟩
   exact ⟨r, hrP, hr_dvd_GN, hr_not_sq⟩
 
+section NoLiftKernel
+
 /--
 `GN p (z - y) y` に平方で割れない素因子が存在する、という route 1 の最小矛盾源。
 
 これが供給できれば、`GN` が `p` 乗になれないことは純算術で落ちる。
 -/
+
 theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_core
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
@@ -4444,5 +4447,7 @@ Branch B の下降法本体。
 -/
 theorem triominoWieferichDescent_impl : WieferichDescentB := by
   exact triominoWieferichDescent_impl_of_core triominoWieferichDescentCoreB_impl
+
+end NoLiftKernel
 
 end DkMath.FLT

@@ -668,3 +668,44 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
     既に存在する FLT(3) 比較補題へ戻す方が安全で、依存切断の目的にも一致する。
 
 - ※ これは、ロールバックを行った（ユーザー）
+
+## 2026-03-05 phase-15 継続（DescentB の kernel 注入を試行し、上位 interface の整理だけ先行）
+
+- 更新:
+  - `CosmicPetalBridgeGN.lean`
+  - `CosmicPetalBridgeGNDescentB.lean`
+  - `TriominoCosmicGapInvariant.lean`
+
+- 内容:
+  - `CosmicPetalBridgeGNDescentB.lean` について、
+    `TriominoNoLiftGNBridge` を section 変数として広域に注入し、
+    Branch B の descent kernel を research import から切り離す案を実装試行した。
+  - しかしこの方法だと、中腹の `Candidate` 系補題
+    （特に `triominoWieferichShrinkNumsInvCandidate_of_pack`
+    / `triominoWieferichShrinkNumsInvCandidateB_kernel` 周辺）
+    まで仮定が連鎖し、以後の多数の theorem/def の型が一斉に変化して崩れた。
+  - したがって、今回の時点では `CosmicPetalBridgeGNDescentB.lean` の完全注入化は見送り、
+    research kernel import を使う従来形へ戻した。
+  - その代わり、`CosmicPetalBridgeGN.lean` では
+    `TriominoWieferichBranchBridge` を `hNoLift` 1 本だけの最小 interface に縮めた。
+  - 現状の `triominoWieferichLiftKernel_impl` / `triominoWieferichLiftExclusion_impl`
+    は Branch B descent の no-arg 実装を使うので、
+    lift 側はまだ `hNoLift` からは組み上がっていない。
+  - `triominoNoWieferichBridge_impl` は引き続き `hNoLift` から構成する。
+  - `TriominoCosmicGapInvariant.lean` 側は既に `hNoLift` 側しか使っていないため、
+    上位 signature の変更だけで整合した。
+
+- 判断:
+  - `DescentB` の本体を truly parameterized にするには、
+    単に theorem 1 本へ引数を足すだけでは足りず、
+    少なくとも `CandidateB_kernel` 以降の長い suffix を
+    明示的に引数 threading する再設計が必要。
+  - つまり「kernel を引数化して research import を断つ」は正しい方向だが、
+    現ファイル構造では 1 回の薄い patch では閉じない。
+  - 先に interface を最小化し、descent 側は別途まとまった refactor として切るのが安全。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 成功。
+  - 追加 warning は解消済み。
+  - 依然として research warning は `ZsigmondyCyclotomicResearch.lean` の既知 1 件のみ。
