@@ -744,6 +744,43 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
 - 確認:
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - 成功。
+
+## 2026-03-05 phase-15 継続（PrimitiveSquareDescentEngine から GEisensteinDescentCore への正規 constructor を明示）
+
+- 更新:
+  - `GEisensteinBridge.lean`
+  - `Main.lean`
+
+- 内容:
+  - `GEisensteinBridge.lean` に、次の constructor を追加した。
+    - `GEisensteinDescentCore_of_harmonicEnvelope_descentStep`
+    - `GEisensteinDescentCore_of_harmonicEnvelope_descentEngine`
+  - どちらも最終的には
+    `GEisensteinDescentCore_of_descentClassify_primitiveSized`
+    へ流し込み、
+    `primitiveSized` frame つきの nonempty core を作る。
+  - これにより、`PrimitiveSquareDescentStep` / `PrimitiveSquareDescentEngine`
+    は「前段の生成器」、`GEisensteinDescentCore`
+    は「最終 kernel」という役割分担が明確になった。
+  - `Main.lean` の
+    `FLT_d3_by_padicValNat_of_harmonicEnvelope_descentStep_coprimeSupport`
+    と
+    `FLT_d3_by_padicValNat_of_harmonicEnvelope_descentEngine_coprimeSupport`
+    も、この new core constructor を使って
+    `DescentBaseInput.ofGEisensteinCore`
+    を組み立てる形へ変更した。
+
+- 判断:
+  - `hDescentClass` の供給路を「step/engine から直接 classify を作る」形のままにしておくより、
+    いったん `GEisensteinDescentCore` に昇格させてから
+    `DescentBaseInput` を構成する方が、今後の kernel 注入・provider 化と整合する。
+  - 特に `primitiveSized` frame を持つ core を標準にしたことで、
+    `classifyImpossible` だけの薄い殻ではなく、
+    停止到達 API を含む kernel として使える。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 成功（既存の `GEisensteinBridge.lean` style 提案 warning のみ）。
   - 新規 warning はなし（既存の `GEisensteinBridge.lean` の style 提案のみ）。
 
 ## 2026-03-05 phase-15 継続（DescentBaseInput.hDescentClass の canonical source を確定）

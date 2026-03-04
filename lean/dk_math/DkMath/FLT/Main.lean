@@ -374,7 +374,7 @@ theorem FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport {a b c : ℕ}
 /--
 phase-11 入口:
 `PrimitiveOnS0` 上の strict descent ステップを与え、
-`NoSq` 仮定なしで `descentClassify` へ接続する。
+`NoSq` 仮定なしで `GEisenstein` kernel を組み立てて接続する。
 -/
 theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_descentStep_coprimeSupport {a b c : ℕ}
     (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
@@ -386,11 +386,13 @@ theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_descentStep_coprimeSupport {a 
     (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
     (hStep : PrimitiveSquareDescentStep c b) :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
-  have hDescentClass : DescentClassifyImpossibleOnPrimitive c b :=
-    descentClassifyImpossibleOnPrimitive_of_harmonicEnvelope_descentStep
+  let hCore : GEisensteinDescentCore c b :=
+    GEisensteinDescentCore_of_harmonicEnvelope_descentStep
       hbc hInfra hHarm hNoExcAll hStep
+  let hIn : DescentBaseInput c b :=
+    DescentBaseInput.ofGEisensteinCore hbc hcb_coprime hCore
   exact FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport
-    ha hb hc hab hbc hcb_coprime hDescentClass
+    ha hb hc hab hIn.hbc hIn.hcb_coprime hIn.hDescentClass
 
 /--
 phase-11 直結入口:
@@ -409,7 +411,7 @@ theorem FLT_d3_by_padicValNat_of_descentStep_coprimeSupport_direct {a b c : ℕ}
 
 /--
 phase-11 入口（engine 入力版）:
-strict descent を構造体で受け取り、既存入口へ接続する。
+strict descent を構造体で受け取り、`GEisenstein` kernel 経由で接続する。
 -/
 theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_descentEngine_coprimeSupport {a b c : ℕ}
     (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
@@ -421,9 +423,13 @@ theorem FLT_d3_by_padicValNat_of_harmonicEnvelope_descentEngine_coprimeSupport {
     (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
     (hEngine : PrimitiveSquareDescentEngine c b) :
     a ^ 3 + b ^ 3 ≠ c ^ 3 := by
-  exact FLT_d3_by_padicValNat_of_harmonicEnvelope_descentStep_coprimeSupport
-    ha hb hc hab hbc hcb_coprime hInfra hHarm hNoExcAll
-    (primitiveSquareDescentStep_of_engine hEngine)
+  let hCore : GEisensteinDescentCore c b :=
+    GEisensteinDescentCore_of_harmonicEnvelope_descentEngine
+      hbc hInfra hHarm hNoExcAll hEngine
+  let hIn : DescentBaseInput c b :=
+    DescentBaseInput.ofGEisensteinCore hbc hcb_coprime hCore
+  exact FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport
+    ha hb hc hab hIn.hbc hIn.hcb_coprime hIn.hDescentClass
 
 /--
 phase-11 直結入口（engine 版）:

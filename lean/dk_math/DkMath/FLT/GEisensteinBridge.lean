@@ -2005,6 +2005,37 @@ def GEisensteinDescentCore_of_descentClassify_primitiveSized {c b : ℕ}
     (primitiveSizedCandidate_frame_step_pred c b)
 
 /--
+phase-15 canonical constructor（step 版）:
+`harmonic envelope + strict descent step` から、`primitiveSized` frame つきの
+`GEisensteinDescentCore` を組み立てる。
+-/
+def GEisensteinDescentCore_of_harmonicEnvelope_descentStep {c b : ℕ}
+    (hbc : b < c)
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hStep : PrimitiveSquareDescentStep c b) :
+    GEisensteinDescentCore c b := by
+  exact GEisensteinDescentCore_of_descentClassify_primitiveSized
+    (descentClassifyImpossibleOnPrimitive_of_harmonicEnvelope_descentStep
+      hbc hInfra hHarm hNoExcAll hStep)
+
+/--
+phase-15 canonical constructor（engine 版）:
+`harmonic envelope + descent engine` から、`GEisenstein` 側の descent kernel を
+直接組み立てる。
+-/
+def GEisensteinDescentCore_of_harmonicEnvelope_descentEngine {c b : ℕ}
+    (hbc : b < c)
+    (hInfra : HasPhaseUnitInfrastructure)
+    (hHarm : ∃ u : PetalCoreUnit, HarmonicPoint u ∧ ¬ isExceptionalPhase u)
+    (hNoExcAll : ∀ x : CounterexampleInput, ¬ exceptionalPhaseGate x)
+    (hEngine : PrimitiveSquareDescentEngine c b) :
+    GEisensteinDescentCore c b := by
+  exact GEisensteinDescentCore_of_harmonicEnvelope_descentStep
+    hbc hInfra hHarm hNoExcAll (primitiveSquareDescentStep_of_engine hEngine)
+
+/--
 `primitiveSized` 非empty core を使った停止到達橋補題。
 `PrimitiveOnS0` を持つ初期状態から、有限反復で測度 0 に到達する。
 -/
