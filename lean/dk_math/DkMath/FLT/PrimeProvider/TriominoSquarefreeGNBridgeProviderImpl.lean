@@ -55,4 +55,14 @@ theorem triominoNoWieferichBridge_of_noLift_provider_impl
     TriominoNoWieferichBridge := by
   exact triominoNoWieferichBridge_of_noLift_provider P
 
+/--
+phase-15 の正規入口。
+
+実装室では `¬ q^2 ∣ GN ...` を直接供給する provider を本命とし、
+そこから本流の `TriominoNoWieferichBridge` へ直に注入する。
+-/
+def triominoNoWieferichBridge_impl : TriominoNoWieferichBridge := by
+  exact triominoNoWieferichBridge_of_noLift_provider
+    triominoNoLiftGNBridgeProvider_impl
+
 end DkMath.FLT

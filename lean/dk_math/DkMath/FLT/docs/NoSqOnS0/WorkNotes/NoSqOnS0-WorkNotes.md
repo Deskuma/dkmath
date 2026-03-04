@@ -466,6 +466,30 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - 既存の false placeholder (`ZsigmondyCyclotomicResearch.lean`) とは別に、
     Provider 実装室の未解決点を明示する意図で追加した。
 
+## 2026-03-04 phase-15 継続（NoLift provider 実装室を正規入口に揃えた）
+
+- 更新:
+  - `lean/dk_math/DkMath/FLT/PrimeProvider/TriominoSquarefreeGNBridgeProviderImpl.lean`
+
+- 追加:
+  - `DkMath.FLT.triominoNoWieferichBridge_impl`
+
+- 内容:
+  - 実装室では `¬ q^2 ∣ GN ...` を直接供給する `triominoNoLiftGNBridgeProvider_impl` を本命とし、
+    そこから本流の `TriominoNoWieferichBridge` へ直接注入する
+    `triominoNoWieferichBridge_impl` を追加した。
+  - これにより、phase-15 の研究対象は
+    `triominoNoLiftGNBridgeProvider_impl`
+    ただ一箇所であることが、実装室ファイル内でも明確になった。
+
+- 確認:
+  - `cd lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/TriominoSquarefreeGNBridgeProviderImpl.lean`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProviderImpl`
+  - 成功。warning は
+    - `TriominoSquarefreeGNBridgeProviderImpl.lean` の研究 stub
+    - `ZsigmondyCyclotomicResearch.lean` の既知 false placeholder
+    のみ。
+
 ## 2026-03-04 phase-15 継続（squarefree から no-lift への薄い橋を追加）
 
 - 更新:
