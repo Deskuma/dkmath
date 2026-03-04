@@ -153,7 +153,7 @@ lemma S0_mod4_eq3_of_congr1 {a b : ℕ}
       S0_nat a b % 4 =
         (((a % 4) * (a % 4)) % 4 + ((a % 4) * (b % 4)) % 4 + ((b % 4) * (b % 4)) % 4) % 4 := by
     simp [S0_nat, pow_two, Nat.add_mod, Nat.mul_mod]
-  rw [hS0, ha, hb]
+  simp [hS0, ha, hb]
 
 /-- `a ≡ b ≡ 1 [MOD 4]` なら `S0_nat a b` は平方数でない。 -/
 lemma S0_not_square_of_congr1 {a b : ℕ}
