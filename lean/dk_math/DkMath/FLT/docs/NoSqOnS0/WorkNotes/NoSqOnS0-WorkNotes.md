@@ -745,6 +745,47 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - 成功。
 
+## 2026-03-06 phase-15 継続（DescentB に局所 NoLift 束を追加）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - Branch B の固定 `q` 用最小データ束を追加:
+    - `structure BranchBLocalNoLift (p y z q : ℕ) : Prop`
+    - fields:
+      - `hq_prime : Nat.Prime q`
+      - `hq_dvd_diff : q ∣ z ^ p - y ^ p`
+      - `hq_not_dvd_gap : ¬ q ∣ (z - y)`
+      - `hNoLift : ¬ q ^ 2 ∣ GN p (z - y) y`
+  - `branchBLocalNoLift_of_noWieferich` を追加し、
+    `TriominoNoWieferichBridge` から
+    `∃ r, BranchBLocalNoLift p y z r` を返すようにした。
+  - kernel 直結ラッパーとして
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_localNoLift_core`
+    を追加。
+    - 入力: existing kernel コンテキスト
+    - 出力: `∃ r, BranchBLocalNoLift p y z r`
+  - 既存の
+    `..._existsPrime_dvd_GN_not_sq_of_noWieferich`
+    と
+    `..._existsPrime_dvd_GN_not_sq_core`
+    は、この新しい local bundle 経由の実装に差し替えた。
+
+- 判断:
+  - `Basic` 側を不変に保ったまま、
+    descent 側で「固定した `q` の局所 NoLift」を返す供給点を先に実装。
+  - これで方針B移行時の接続先が明示された。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - 成功。
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - 成功。
+  - 既存 warning のみ:
+    - `DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:81:6: declaration uses sorry`
+    - `DkMath/FLT/GEisensteinBridge.lean:1464:2: Try this: intro ...`
+
 ## 2026-03-06 phase-15 継続（差し替え点固定: `NoLift -> padicValNat ≤ 1` 補助の導入）
 
 - 更新:

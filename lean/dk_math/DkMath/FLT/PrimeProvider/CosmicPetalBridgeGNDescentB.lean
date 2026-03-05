@@ -1195,9 +1195,18 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_primitivePrime_on_d
       hpB
 
 /--
-NoWieferich bridge があれば、Branch B 文脈で `GN p (z - y) y` に平方で割れない素因子が存在する。
+Branch B: 固定した `q` に対する局所 NoLift 束（最小）。
 -/
-theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_of_noWieferich
+structure BranchBLocalNoLift (p y z q : ℕ) : Prop where
+  hq_prime : Nat.Prime q
+  hq_dvd_diff : q ∣ z ^ p - y ^ p
+  hq_not_dvd_gap : ¬ q ∣ (z - y)
+  hNoLift : ¬ q ^ 2 ∣ GN p (z - y) y
+
+/--
+NoWieferich bridge があれば、Branch B 文脈で固定 `q` の局所 NoLift 束を返せる。
+-/
+theorem branchBLocalNoLift_of_noWieferich
     (hNW : TriominoNoWieferichBridge)
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
@@ -1205,7 +1214,7 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_
     (hqP : Nat.Prime q)
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
-    ∃ r : ℕ, Nat.Prime r ∧ r ∣ GN p (z - y) y ∧ ¬ r ^ 2 ∣ GN p (z - y) y := by
+    ∃ r : ℕ, BranchBLocalNoLift p y z r := by
   rcases
       triominoWieferichShrinkKernelEqSeedTracePackB_kernel_primitivePrime_on_diff_core
         (p := p) (x := x) (y := y) (z := z) (q := q)
@@ -1226,9 +1235,32 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_
       triominoCosmicNonLiftableGNBridge_of_noWieferich hNW
         (p := p) (x := x) (y := y) (z := z)
         hpack hpB
-  have hr_not_sq : ¬ r ^ 2 ∣ GN p (z - y) y := by
+  have hr_noLift : ¬ r ^ 2 ∣ GN p (z - y) y := by
     exact (hNonLift r) ⟨hrP, hr_dvd_GN, hr_not_dvd_gap⟩
-  exact ⟨r, hrP, hr_dvd_GN, hr_not_sq⟩
+  exact ⟨r, ⟨hrP, hr_dvd_diff, hr_not_dvd_gap, hr_noLift⟩⟩
+
+/--
+NoWieferich bridge があれば、Branch B 文脈で `GN p (z - y) y` に平方で割れない素因子が存在する。
+-/
+theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_of_noWieferich
+    (hNW : TriominoNoWieferichBridge)
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    ∃ r : ℕ, Nat.Prime r ∧ r ∣ GN p (z - y) y ∧ ¬ r ^ 2 ∣ GN p (z - y) y := by
+  rcases branchBLocalNoLift_of_noWieferich hNW hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN with
+    ⟨r, hLocal⟩
+  have hr_dvd_sub : r ∣ ((z - y) + y) ^ p - y ^ p := by
+    simpa [Nat.sub_add_cancel hpack.hyz] using hLocal.hq_dvd_diff
+  have hr_dvd_GN : r ∣ GN p (z - y) y := by
+    exact
+      prime_dvd_GN_of_dvd_sub_not_dvd_left
+        (d := p) (x := z - y) (u := y) (q := r)
+        hLocal.hq_prime hr_dvd_sub hLocal.hq_not_dvd_gap
+  exact ⟨r, hLocal.hq_prime, hr_dvd_GN, hLocal.hNoLift⟩
 
 section NoLiftKernel
 
@@ -1237,6 +1269,18 @@ section NoLiftKernel
 
 これが供給できれば、`GN` が `p` 乗になれないことは純算術で落ちる。
 -/
+theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_localNoLift_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    ∃ r : ℕ, BranchBLocalNoLift p y z r := by
+  exact
+    branchBLocalNoLift_of_noWieferich
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_core
     {p x y z q : ℕ}
@@ -1246,10 +1290,19 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     ∃ r : ℕ, Nat.Prime r ∧ r ∣ GN p (z - y) y ∧ ¬ r ^ 2 ∣ GN p (z - y) y := by
-  exact
-    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_of_noWieferich
-      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
-      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  rcases
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_localNoLift_core
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN with
+    ⟨r, hLocal⟩
+  have hr_dvd_sub : r ∣ ((z - y) + y) ^ p - y ^ p := by
+    simpa [Nat.sub_add_cancel hpack.hyz] using hLocal.hq_dvd_diff
+  have hr_dvd_GN : r ∣ GN p (z - y) y := by
+    exact
+      prime_dvd_GN_of_dvd_sub_not_dvd_left
+        (d := p) (x := z - y) (u := y) (q := r)
+        hLocal.hq_prime hr_dvd_sub hLocal.hq_not_dvd_gap
+  exact ⟨r, hLocal.hq_prime, hr_dvd_GN, hLocal.hNoLift⟩
 
 /--
 `GN p (z - y) y` が `p` 乗になれない、という route 1 の矛盾源。
