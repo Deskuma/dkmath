@@ -2036,6 +2036,39 @@ def GEisensteinDescentCore_of_harmonicEnvelope_descentEngine {c b : ℕ}
     hbc hInfra hHarm hNoExcAll (primitiveSquareDescentStep_of_engine hEngine)
 
 /--
+`Main` 側の公開入口へ渡す最小入力束。
+
+`GEisenstein` kernel を保持したまま渡すことで、下流は
+`descentClassify` だけでなく frame/到達性 API も利用できる。
+-/
+structure GEisensteinBaseInput (c b : ℕ) where
+  hbc : b < c
+  hcb_coprime : Nat.Coprime c b
+  hCore : GEisensteinDescentCore c b
+
+/--
+固定 `(c,b)` ごとに `GEisensteinBaseInput` を供給する provider。
+-/
+structure GEisensteinBaseInputProvider where
+  hasBaseInput :
+    ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+      GEisensteinBaseInput c b
+
+/--
+`GEisensteinDescentCore` family から `GEisensteinBaseInputProvider` を作る。
+-/
+def geisensteinBaseInputProvider_of_coreFamily
+    (hasCore :
+      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
+        GEisensteinDescentCore c b) :
+    GEisensteinBaseInputProvider where
+  hasBaseInput hbc hcb_coprime := {
+    hbc := hbc
+    hcb_coprime := hcb_coprime
+    hCore := hasCore hbc hcb_coprime
+  }
+
+/--
 `primitiveSized` 非empty core を使った停止到達橋補題。
 `PrimitiveOnS0` を持つ初期状態から、有限反復で測度 0 に到達する。
 -/

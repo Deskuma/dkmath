@@ -67,43 +67,6 @@ open DkMath.ABC
 open DkMath.Algebra.DiffPow
 
 /--
-`GEisenstein` 側の descent kernel を `Main` の公開入口へ渡すための仮定束。
-
-`Main` 内ではこれを `GEisenstein` 系の public canonical input bundle とみなし、
-最終的な公開入口 `FLT_d3_by_padicValNat_of_GEisensteinBaseInput` は
-この構造体だけを受け取る。
--/
-structure GEisensteinBaseInput (c b : ℕ) where
-  hbc : b < c
-  hcb_coprime : Nat.Coprime c b
-  hCore : GEisensteinDescentCore c b
-
-/--
-固定 `(c,b)` ごとに `GEisensteinBaseInput` を供給する provider。
-
-`Main` の公開側では、この provider から `GEisensteinBaseInput` を受け取って
-canonical entry へ流すのを標準ルートとする。
--/
-structure GEisensteinBaseInputProvider where
-  hasBaseInput :
-    ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
-      GEisensteinBaseInput c b
-
-/--
-`GEisensteinDescentCore` family から `GEisensteinBaseInputProvider` を作る。
--/
-def geisensteinBaseInputProvider_of_coreFamily
-    (hasCore :
-      ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
-        GEisensteinDescentCore c b) :
-    GEisensteinBaseInputProvider where
-  hasBaseInput hbc hcb_coprime := {
-    hbc := hbc
-    hcb_coprime := hcb_coprime
-    hCore := hasCore hbc hcb_coprime
-  }
-
-/--
 `descentClassify` だけを使う下流定理へ接続するための最小内部 bundle。
 
 公開入口は `GEisensteinBaseInput` 側へ寄せ、こちらは内部の compatibility layer として扱う。

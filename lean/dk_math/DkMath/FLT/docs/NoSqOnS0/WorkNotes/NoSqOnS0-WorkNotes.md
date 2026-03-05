@@ -745,6 +745,32 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - 成功。
 
+## 2026-03-05 phase-15 継続（GEisensteinBaseInput provider interface を GEisensteinBridge 側へ移設）
+
+- 更新:
+  - `GEisensteinBridge.lean`
+  - `Main.lean`
+
+- 内容:
+  - 先に `Main.lean` に置いていた
+    - `GEisensteinBaseInput`
+    - `GEisensteinBaseInputProvider`
+    - `geisensteinBaseInputProvider_of_coreFamily`
+    を `GEisensteinBridge.lean` へ移設した。
+  - `GEisensteinBridge` 側では `GEisensteinDescentCore` 直後に定義し、
+    bridge 層の provider 群と同じ責務領域に揃えた。
+  - `Main.lean` では重複定義を削除し、import 経由でそのまま利用する形に変更した。
+  - これで `GEisensteinBaseInput` 系の interface は `Main` ではなく
+    `GEisensteinBridge` が唯一の定義元になった。
+
+- 判断:
+  - provider interface の責務（kernel family の供給仕様）は bridge 層に置く方が依存方向が素直。
+  - `Main` は「受けるだけ」の公開入口モジュールとして薄く保てる。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 成功（既存の `GEisensteinBridge.lean` style 提案 warning のみ）。
+
 ## 2026-03-05 phase-15 継続（GEisensteinBaseInput を返す provider interface を追加）
 
 - 更新:
