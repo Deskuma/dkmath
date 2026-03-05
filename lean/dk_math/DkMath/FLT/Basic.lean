@@ -394,26 +394,20 @@ private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
     exact DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_of_squarefree_G
       (a := A) (b := B) (d := 3) (q := q)
       Nat.prime_three (by norm_num) hAB_lt hy_pos hAB_coprime hpnd hq_prime hq_div hq_ndiv hSqAB
-  have hval_diff : padicValNat q (A ^ 3 - B ^ 3) = 1 := le_antisymm hval_le hval_ge
   let N : ℕ := GN 3 (A - B) B
   have hfactor : A ^ 3 - B ^ 3 = (A - B) * N := by
     simpa [N] using
       (DkMath.NumberTheory.GcdNext.pow_sub_pow_factor_cosmic_N
         (a := A) (b := B) (d := 3) (by norm_num) hAB_lt)
-  have _hq_dvd_N : q ∣ N := by
+  have hq_dvd_N : q ∣ N := by
     simpa [N] using hq_dvd_GN
   have hGN_pos : 0 < GN 3 (a ^ 3) y := by
     rw [GN_quadratic]
     positivity
-  have hb_ne0 : b ≠ 0 := by
-    intro hb0
-    have : GN 3 (a ^ 3) y = 0 := by simpa [hb0] using hb
-    exact (Nat.ne_of_gt hGN_pos) this
+  have hN_pos : 0 < N := by
+    simpa [N, A, B, Nat.add_sub_cancel] using hGN_pos
   have hN_ne : N ≠ 0 := by
-    have hN_eq : N = GN 3 (a ^ 3) y := by
-      simp [N, A, B]
-    rw [hN_eq, hb]
-    exact pow_ne_zero 3 hb_ne0
+    exact Nat.ne_of_gt hN_pos
   have hpadic_factor :
       padicValNat q (A ^ 3 - B ^ 3) = padicValNat q (A - B) + padicValNat q N := by
     exact DkMath.NumberTheory.GcdNext.padicValNat_factorization
@@ -423,15 +417,23 @@ private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
     have hzero : padicValNat q (A - B) = 0 := padicValNat.eq_zero_of_not_dvd hq_ndiv
     rw [hzero, zero_add] at hpadic_factor
     exact hpadic_factor
-  have hval_N : padicValNat q N = 1 := by
+  have hval_N_ge : 1 ≤ padicValNat q N := by
+    exact DkMath.ABC.padicValNat_one_le_of_prime_dvd hq_prime hN_ne hq_dvd_N
+  have hval_N_le : padicValNat q N ≤ 1 := by
     rw [← hpadic_eqN]
-    exact hval_diff
+    exact hval_le
+  have hval_N : padicValNat q N = 1 := by
+    exact le_antisymm hval_N_le hval_N_ge
   have hN_eq_cube : N = b ^ 3 := by
     calc
       N = GN 3 (A - B) B := rfl
       _ = GN 3 (a ^ 3) y := by simp [A, B]
       _ = b ^ 3 := hb
   letI : Fact (Nat.Prime q) := ⟨hq_prime⟩
+  have hb_ne0 : b ≠ 0 := by
+    intro hb0
+    have : N = 0 := by simpa [hN_eq_cube, hb0]
+    exact hN_ne this
   have hpow : padicValNat q (b ^ 3) = 3 * padicValNat q b := by
     simpa using (padicValNat.pow (p := q) (a := b) 3 hb_ne0)
   have hval_mul3 : 3 * padicValNat q b = 1 := by

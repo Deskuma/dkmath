@@ -1074,6 +1074,13 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
     の堅い形で実装。
   - `GN3_cube_not_cube_of_gt_one_of_squarefree` 内の
     primitive prime 抽出部分をこの補助補題経由へ差し替えた。
+  - さらに整理として、
+    `hN_pos : 0 < N` を `hGN_pos` から
+    `simpa [N, A, B, Nat.add_sub_cancel]` で導出し、
+    `hN_ne : N ≠ 0` は `Nat.ne_of_gt hN_pos` で取得する形に統一。
+  - `hq_dvd_GN` は `hq_dvd_N : q ∣ N` に受け渡し、
+    `hval_N_ge : 1 ≤ padicValNat q N` の導出に実使用
+    （`DkMath.ABC.padicValNat_one_le_of_prime_dvd`）。
 
 - 備考:
   - 共有スニペット案にあった
@@ -1083,7 +1090,7 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
     - `hN_ne` を `Nat.pos_of_dvd_of_pos hq_dvd_N hq_prime.pos` で出そうとしたが、
       方向が合わず（`q ∣ N` からは直接 `0 < N` を出せない）型不一致で失敗。
     - `hN_ne` は一旦元の `hb : GN ... = b^3` 経由へ戻し、
-      `hq_dvd_GN` は `_hq_dvd_N` として保持する形に修正。
+      `hq_dvd_GN` は `hq_dvd_N` として保持する形に修正。
 
 - 確認:
   - `cd lean/dk_math && lake build DkMath.FLT.Basic`
