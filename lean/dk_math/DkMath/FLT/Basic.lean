@@ -286,7 +286,7 @@ private lemma a6_lt_GN3_cube (a y : ℕ) (ha : 1 ≤ a) (hy : 1 ≤ y) :
     `fermatLastTheoremThree` に反する。
 
     注:
-    本線は `GN3_cube_not_cube_of_gt_one_of_squarefree`（非依存版）であり、
+    本線は `GN3_cube_not_cube_of_gt_one_of_provider`（非依存版）であり、
     この補題は fallback の比較検証・回帰確認用として残している。
 -/
 private lemma GN3_cube_not_cube_of_gt_one_use_FLT3 (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y) :
@@ -365,20 +365,16 @@ private lemma padicValNat_le_one_of_noLift
     exact (@padicValNat_dvd_iff_le q (Fact.mk hq_prime) N 2 hN_ne).2 h2_le
   exact hNoLift hq2_dvd
 
-/-- 補題: b³ = GN(3, a³, y), a ≥ 2 かつ `Squarefree (GN 3 (a^3) y)` なら矛盾
+/-- 補題: b³ = GN(3, a³, y), a ≥ 2 のとき NoLift provider があれば矛盾
 
     方針:
     `(a^3 + y)^3 - y^3` の原始素因子 `q`（指数 3）を Zsigmondy で取り、
     `padicValNat q` の上下界を比較して矛盾を導く。
-
-    補足:
-    上界 `padicValNat ≤ 1` は無条件では偽になるため、
-    `Squarefree (GN ...)` を明示仮定として受ける。
 -/
-private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
+private lemma GN3_cube_not_cube_of_gt_one_of_provider_core
     (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y)
     (hcop : Nat.Coprime a y) (h3a : ¬ 3 ∣ a)
-    (hSq : Squarefree (GN 3 (a ^ 3) y)) :
+    (hProv : DkMath.FLT.GN3NoLiftProvider a y) :
     ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
   rintro ⟨b, hb⟩
   have hy_pos : 0 < y := by omega
@@ -425,25 +421,13 @@ private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
     have hzero : padicValNat q (A - B) = 0 := padicValNat.eq_zero_of_not_dvd hq_ndiv
     rw [hzero, zero_add] at hpadic_factor
     exact hpadic_factor
-  have hProvSq : DkMath.FLT.GN3NoLiftProvider a y := by
-    refine ⟨?_⟩
-    intro r hr_prime _hr_not_dvd_a3 hr_dvd_GN
-    have hGN_ne : GN 3 (a ^ 3) y ≠ 0 := Nat.ne_of_gt hGN_pos
-    have hval_GN_le_sq : padicValNat r (GN 3 (a ^ 3) y) ≤ 1 := by
-      exact DkMath.NumberTheory.GcdNext.padicValNat_le_one_of_squarefree hr_prime hGN_ne hSq
-    intro hr2_dvd_GN
-    have h2_le : 2 ≤ padicValNat r (GN 3 (a ^ 3) y) := by
-      exact
-        (@padicValNat_dvd_iff_le r (Fact.mk hr_prime) (GN 3 (a ^ 3) y) 2 hGN_ne).1
-          hr2_dvd_GN
-    exact (not_le_of_gt h2_le) hval_GN_le_sq
   have hq_not_dvd_a3 : ¬ q ∣ a ^ 3 := by
     simpa [A, B, Nat.add_sub_cancel] using hq_ndiv
   have hq_dvd_GN_a3 : q ∣ GN 3 (a ^ 3) y := by
     simpa [N, A, B, Nat.add_sub_cancel] using hq_dvd_N
   have hNoLift_N : ¬ q ^ 2 ∣ N := by
     have hNoLift_GN_a3 : ¬ q ^ 2 ∣ GN 3 (a ^ 3) y := by
-      exact hProvSq.noLift_GN3 hq_prime hq_not_dvd_a3 hq_dvd_GN_a3
+      exact hProv.noLift_GN3 hq_prime hq_not_dvd_a3 hq_dvd_GN_a3
     simpa [N, A, B, Nat.add_sub_cancel] using hNoLift_GN_a3
   have hval_N_ge : 1 ≤ padicValNat q N := by
     exact DkMath.ABC.padicValNat_one_le_of_prime_dvd hq_prime hN_ne hq_dvd_N
@@ -470,6 +454,39 @@ private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
       _ = 1 := hval_N
   omega
 
+/-- 補題: squarefree 仮定から provider を作って本線へ委譲する wrapper。 -/
+private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
+    (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y)
+    (hcop : Nat.Coprime a y) (h3a : ¬ 3 ∣ a)
+    (hSq : Squarefree (GN 3 (a ^ 3) y)) :
+    ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
+  have hProvSq : DkMath.FLT.GN3NoLiftProvider a y := by
+    refine ⟨?_⟩
+    intro q hq_prime _hq_not_dvd_a3 _hq_dvd_GN
+    have hGN_pos : 0 < GN 3 (a ^ 3) y := by
+      rw [GN_quadratic]
+      positivity
+    have hGN_ne : GN 3 (a ^ 3) y ≠ 0 := Nat.ne_of_gt hGN_pos
+    have hval_GN_le_sq : padicValNat q (GN 3 (a ^ 3) y) ≤ 1 := by
+      exact DkMath.NumberTheory.GcdNext.padicValNat_le_one_of_squarefree hq_prime hGN_ne hSq
+    intro hq2_dvd_GN
+    have h2_le : 2 ≤ padicValNat q (GN 3 (a ^ 3) y) := by
+      exact
+        (@padicValNat_dvd_iff_le q (Fact.mk hq_prime) (GN 3 (a ^ 3) y) 2 hGN_ne).1
+          hq2_dvd_GN
+    exact (not_le_of_gt h2_le) hval_GN_le_sq
+  exact GN3_cube_not_cube_of_gt_one_of_provider_core a y ha hy hcop h3a hProvSq
+
+/-- 本線: NoLift provider を受け取って `GN 3 (a^3) y` が立方数になれないことを示す。 -/
+lemma GN3_cube_not_cube_of_gt_one_of_provider
+    (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y)
+    (hcop : Nat.Coprime a y) (h3a : ¬ 3 ∣ a)
+    (hProv : DkMath.FLT.GN3NoLiftProvider a y) :
+    ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
+  exact GN3_cube_not_cube_of_gt_one_of_provider_core a y ha hy hcop h3a hProv
+
+#print axioms GN3_cube_not_cube_of_gt_one_of_provider_core  -- OK: no Research link 2026/03/05
+#print axioms GN3_cube_not_cube_of_gt_one_of_provider  -- OK: no Research link 2026/03/05
 #print axioms GN3_cube_not_cube_of_gt_one_of_squarefree  -- OK: no Research link 2026/03/05
 
 /-- 暫定 fallback 入口。squarefree 未供給の呼び出しは FLT(3) 参照へ明示的に落とす。 -/

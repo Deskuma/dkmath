@@ -1248,3 +1248,23 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - すべて成功。
+
+## 2026-03-06 phase-15 継続（Basic の GN3 補題を provider 本線 + squarefree wrapper に二層化）
+
+- 更新:
+  - `Basic.lean`
+
+- 内容:
+  - `GN3_cube_not_cube_of_gt_one_of_provider_core` を private core として確立。
+    - valuation spine 本体はこの core に集約。
+    - `hNoLift_N` は `GN3NoLiftProvider` から供給する形に固定。
+  - `GN3_cube_not_cube_of_gt_one_of_squarefree` は
+    squarefree から `GN3NoLiftProvider` を作る薄い wrapper へ変更。
+  - `GN3_cube_not_cube_of_gt_one_of_provider` を public 入口として追加。
+    - これで PrimeProvider / kernel 側が provider を注入して本線を呼べる口ができた。
+  - FLT3 fallback 補題は比較用として維持（本線は provider 入口）。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Basic`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
