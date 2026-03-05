@@ -19,3 +19,6 @@ tar cvzf __snapshot-dk_math-lean-code-$DTM.tar.gz \
     --exclude='./**/*.zip' \
     ./dk_math
 sha256sum __snapshot-dk_math-lean-code-$DTM.tar.gz > __snapshot-dk_math-lean-code-$DTM.tar.gz.sha256
+
+ls -l __snapshot-dk_math-lean-code-$DTM.tar.gz
+ls -l __snapshot-dk_math-lean-code-$DTM.tar.gz.sha256

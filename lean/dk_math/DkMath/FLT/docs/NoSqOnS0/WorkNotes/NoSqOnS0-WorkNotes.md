@@ -709,3 +709,288 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - 成功。
   - 追加 warning は解消済み。
   - 依然として research warning は `ZsigmondyCyclotomicResearch.lean` の既知 1 件のみ。
+
+## 2026-03-05 phase-15 継続（Main.lean の入口整理と section 分割）
+
+- 更新:
+  - `Main.lean`
+
+- 内容:
+  - `Main.lean` に section を導入し、公開定理群を以下の責務で分割した。
+    - `CoreRoute`
+    - `NoSqRecoveryAdapters`
+    - `DescentAdapters`
+    - `ProviderCompatibility`
+    - `DescentBridgeAdapters`
+    - `CompatibilityInputs`
+    - `DefinitionalEqualities`
+  - 併せて、次の 4 点を canonical entry としてコメントで明示した。
+    - `DescentBaseInput`
+    - `FLT_d3_by_padicValNat_of_NoSqOnS0`
+    - `FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport`
+    - `FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport`
+    - `FLT_d3_by_padicValNat_of_DescentBaseInput`
+  - これにより、「いま何を証明しているか」を
+    `DescentBaseInput.hDescentClass` をどこから供給するか、
+    という一点に追いやすくした。
+
+- 判断:
+  - いまの `Main.lean` は theorem 自体は多いが、多くは最終的に
+    `FLT_d3_by_padicValNat_of_NoSqOnS0`
+    へ流し込む薄い adapter である。
+  - 先に区画整理しておくことで、
+    本筋の証明対象（descent 系の canonical input をどう満たすか）が追いやすくなる。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - 成功。
+
+## 2026-03-05 phase-15 継続（GEisensteinBaseInput provider interface を GEisensteinBridge 側へ移設）
+
+- 更新:
+  - `GEisensteinBridge.lean`
+  - `Main.lean`
+
+- 内容:
+  - 先に `Main.lean` に置いていた
+    - `GEisensteinBaseInput`
+    - `GEisensteinBaseInputProvider`
+    - `geisensteinBaseInputProvider_of_coreFamily`
+    を `GEisensteinBridge.lean` へ移設した。
+  - `GEisensteinBridge` 側では `GEisensteinDescentCore` 直後に定義し、
+    bridge 層の provider 群と同じ責務領域に揃えた。
+  - `Main.lean` では重複定義を削除し、import 経由でそのまま利用する形に変更した。
+  - これで `GEisensteinBaseInput` 系の interface は `Main` ではなく
+    `GEisensteinBridge` が唯一の定義元になった。
+
+- 判断:
+  - provider interface の責務（kernel family の供給仕様）は bridge 層に置く方が依存方向が素直。
+  - `Main` は「受けるだけ」の公開入口モジュールとして薄く保てる。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 成功（既存の `GEisensteinBridge.lean` style 提案 warning のみ）。
+
+## 2026-03-05 phase-15 継続（GEisensteinBaseInput を返す provider interface を追加）
+
+- 更新:
+  - `Main.lean`
+
+- 内容:
+  - `GEisensteinBaseInputProvider` を追加した。
+  - 仕様は
+    `∀ {c b}, b < c → Nat.Coprime c b → GEisensteinBaseInput c b`
+    を返す最小 provider。
+  - あわせて
+    `geisensteinBaseInputProvider_of_coreFamily`
+    を追加し、
+    `GEisensteinDescentCore` family からこの provider を組み立てられるようにした。
+  - 公開側の thin wrapper として
+    `FLT_d3_by_padicValNat_of_GEisensteinBaseInputProvider`
+    も追加し、
+    `provider -> GEisensteinBaseInput -> FLT`
+    の一本道を作った。
+
+- 判断:
+  - これで `Main` の公開入口は
+    - 値レベル: `GEisensteinBaseInput`
+    - family レベル: `GEisensteinBaseInputProvider`
+    の 2 段で受けられる。
+  - 今後 provider 実装室を作るなら、まず `GEisensteinDescentCore` family を供給し、
+    そこから `geisensteinBaseInputProvider_of_coreFamily`
+    を通して `Main` に刺すのが標準ルートになる。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - 成功。
+
+## 2026-03-05 phase-15 継続（PrimitiveSquareDescentEngine から GEisensteinDescentCore への正規 constructor を明示）
+
+- 更新:
+  - `GEisensteinBridge.lean`
+  - `Main.lean`
+
+- 内容:
+  - `GEisensteinBridge.lean` に、次の constructor を追加した。
+    - `GEisensteinDescentCore_of_harmonicEnvelope_descentStep`
+    - `GEisensteinDescentCore_of_harmonicEnvelope_descentEngine`
+  - どちらも最終的には
+    `GEisensteinDescentCore_of_descentClassify_primitiveSized`
+    へ流し込み、
+    `primitiveSized` frame つきの nonempty core を作る。
+  - これにより、`PrimitiveSquareDescentStep` / `PrimitiveSquareDescentEngine`
+    は「前段の生成器」、`GEisensteinDescentCore`
+    は「最終 kernel」という役割分担が明確になった。
+  - `Main.lean` の
+    `FLT_d3_by_padicValNat_of_harmonicEnvelope_descentStep_coprimeSupport`
+    と
+    `FLT_d3_by_padicValNat_of_harmonicEnvelope_descentEngine_coprimeSupport`
+    も、この new core constructor を使って
+    `DescentBaseInput.ofGEisensteinCore`
+    を組み立てる形へ変更した。
+
+- 判断:
+  - `hDescentClass` の供給路を「step/engine から直接 classify を作る」形のままにしておくより、
+    いったん `GEisensteinDescentCore` に昇格させてから
+    `DescentBaseInput` を構成する方が、今後の kernel 注入・provider 化と整合する。
+  - 特に `primitiveSized` frame を持つ core を標準にしたことで、
+    `classifyImpossible` だけの薄い殻ではなく、
+    停止到達 API を含む kernel として使える。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.GEisensteinBridge DkMath.FLT.Main`
+  - 成功（既存の `GEisensteinBridge.lean` style 提案 warning のみ）。
+
+## 2026-03-05 phase-15 継続（GEisensteinBaseInput を新設し、Main の公開入口を移す）
+
+- 更新:
+  - `Main.lean`
+
+- 内容:
+  - 新しく `GEisensteinBaseInput` を追加した。
+    - `hbc : b < c`
+    - `hcb_coprime : Nat.Coprime c b`
+    - `hCore : GEisensteinDescentCore c b`
+  - これにより、`Main` の公開側で受け取るべき bundle を
+    「`descentClassify` だけの最小束」ではなく
+    「`GEisenstein` kernel そのものを含む束」に引き上げた。
+  - `DescentBaseInput` は残すが、役割を内部 compatibility layer に下げた。
+  - 変換 `GEisensteinBaseInput.toDescentBaseInput` を追加し、
+    下流の `descentClassify` ベース定理へはこの内部変換で接続する。
+  - 公開 canonical entry として
+    `FLT_d3_by_padicValNat_of_GEisensteinBaseInput`
+    を追加した。
+  - 既存の
+    `FLT_d3_by_padicValNat_of_DescentBaseInput`
+    は内部 compatibility entry というコメントに変更した。
+  - step/engine 入口や `GEisensteinCore` 入口のローカル bundle も、
+    `DescentBaseInput` ではなく `GEisensteinBaseInput` を先に作る形へ寄せた。
+
+- 判断:
+  - これで `Main` の「公開入口として何を供給すべきか」が
+    `GEisensteinDescentCore` を含む bundle に固定された。
+  - 以後は `hDescentClass` 単体ではなく、
+    `GEisensteinBaseInput` をどの provider / kernel から組み立てるか、
+    という設計で前へ進める。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - 成功。
+  - 新規 warning はなし（既存の `GEisensteinBridge.lean` の style 提案のみ）。
+
+## 2026-03-05 phase-15 継続（DescentBaseInput.hDescentClass の canonical source を確定）
+
+- 更新:
+  - `Main.lean`
+
+- 内容:
+  - `DescentBaseInput.hDescentClass` の正規供給源を
+    `GEisensteinDescentCore c b`
+    に確定した。
+  - その判断をコードへ落とすため、
+    `DescentBaseInput.ofGEisensteinCore`
+    を追加した。
+  - この constructor は
+    `descentClassifyImpossibleOnPrimitive_of_GEisensteinCore`
+    を用いて、
+    `GEisenstein` 側の descent kernel から
+    `DescentBaseInput` を組み立てる。
+  - `FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport`
+    もこの constructor を経由する形へ整理し、
+    `GEisensteinCore -> DescentBaseInput -> descentClassify`
+    という正規ルートをコード上で明示した。
+
+- 判断:
+  - `PrimitiveSquareDescentStep` / `PrimitiveSquareDescentEngine` は
+    `hDescentClass` を生む前段の生成器としては有用だが、
+    停止到達や frame 情報まで持つ「kernel」としては
+    `GEisensteinDescentCore` の方が豊富で安定している。
+  - したがって、`DescentBaseInput` に何かを注入する最終点は
+    `GEisensteinDescentCore`
+    とみなすのが自然。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - 成功。
+
+## 2026-03-05 phase-15 継続（`Basic` の偽命題リンク置換の可否調査）
+
+- 更新:
+  - `Basic.lean`
+  - `ZsigmondyCyclotomicSquarefree.lean`
+  - `ZsigmondyCyclotomicResearch.lean`
+
+- 調査対象:
+  - `Basic.lean` の `GN3_cube_not_cube_of_gt_one` 内で使っている
+    `padicValNat_primitive_prime_factor_le_one`
+    （`ZsigmondyCyclotomicResearch.lean` 側定義）を
+    `padicValNat_primitive_prime_factor_le_one_of_squarefree_G`
+    に置換できるか。
+
+- 結果:
+  - **現状の `Basic` 単体文脈では置換不能**。
+  - 置換先補題は追加仮定
+    `Squarefree (GN 3 (A - B) B)` を要求するが、
+    `GN3_cube_not_cube_of_gt_one` の入力
+    (`a ≥ 2`, `y ≥ 1`, `Nat.Coprime a y`, `¬ 3 ∣ a`) から
+    この squarefree を供給する既存補題がワークスペース内に見当たらない。
+  - `Squarefree (GN ...)` を直接生成する既存ルートは
+    PrimeProvider/Bridge 層（`CosmicPetalBridgeGNNoWieferich.lean` まわり）であり、
+    `Basic.lean` のこの private lemma 呼び出し経路には接続されていない。
+
+- 失敗例（探索時の反例メモ）:
+  - `A=a^3+y`, `B=y` 形でも、primitive 条件 `q ∣ A^3-B^3`, `q ∤ A-B` だけでは
+    `v_q(A^3-B^3) ≤ 1` は成り立たない実例が多数出る。
+  - 例:
+    - `(a,y,q) = (2,29,7)` で `v_7((a^3+y)^3-y^3)=2`
+    - `(a,y,q) = (10,33,31)` で `v_31((a^3+y)^3-y^3)=3`
+  - したがって「偽命題の単純置換」は不可で、
+    `Squarefree` 供給を設計に追加しない限り、
+    `Basic` の当該ブロックだけを安全に差し替えることはできない。
+
+- 方針メモ:
+  - `Basic` を non-FLT3 ルートのまま維持するなら、
+    次段で必要なのは「`GN3_cube_not_cube_of_gt_one` に対する `Squarefree` 供給路の新設」。
+  - 供給路を置かない場合、当該 private lemma は引き続き
+    research 補題依存のまま残る。
+
+## 2026-03-05 phase-15 継続（`Basic` 偽命題リンクの仮定付き切り離し実装）
+
+- 更新:
+  - `Basic.lean`
+
+- 内容:
+  - `GN3_cube_not_cube_of_gt_one` の non-FLT3 ルートを、
+    `Squarefree` 仮定つきの新補題
+    `GN3_cube_not_cube_of_gt_one_of_squarefree`
+    として分離した。
+  - 新補題では `hval_le` を偽命題
+    `padicValNat_primitive_prime_factor_le_one`
+    ではなく、
+    `padicValNat_primitive_prime_factor_le_one_of_squarefree_G`
+    で構成するように変更。
+  - `hSq : Squarefree (GN 3 (a ^ 3) y)` から
+    `Squarefree (GN 3 (A - B) B)` への変換を
+    `simpa [A, B]` で供給して適用。
+  - `Basic.lean` の import から
+    `ZsigmondyCyclotomicResearch.lean` を削除し、
+    `ZsigmondyCyclotomicSquarefree.lean` を直接 import。
+  - 既存シグネチャ互換のため、旧名
+    `GN3_cube_not_cube_of_gt_one`
+    は暫定 wrapper として残し、
+    現時点では `GN3_cube_not_cube_of_gt_one_use_FLT3` に接続。
+
+- 結果:
+  - `Basic.lean` から
+    - `ZsigmondyCyclotomicResearch.lean`
+    - `padicValNat_primitive_prime_factor_le_one`
+    への参照は消滅。
+  - ただし、旧シグネチャ側は squarefree 供給が未接続のため、
+    互換 wrapper で FLT3 経由を維持（設計上の未完点として残置）。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Basic`
+  - 成功。
+  - 既存 warning:
+    - `DkMath/FLT/Basic.lean:635:8: declaration uses sorry`
+    - （今回差分による新規 warning ではない）
