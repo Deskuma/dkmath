@@ -745,6 +745,30 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - 成功。
 
+## 2026-03-06 phase-15 継続（valuation spine 整形: `hN_pos` 統一と下界を `hq_dvd_N` 直結）
+
+- 更新:
+  - `Basic.lean`
+
+- 内容:
+  - `GN3_cube_not_cube_of_gt_one_of_squarefree` 内で、
+    `hq_dvd_GN` を `hq_dvd_N : q ∣ N` として保持し、
+    `hval_N_ge` を
+    `DkMath.ABC.padicValNat_one_le_of_prime_dvd hq_prime hN_ne hq_dvd_N`
+    で直接構成する形に整理。
+  - `hN_ne` は `hN_pos` から一元的に作る形へ統一。
+    `hN_pos` は `hGN_pos` から
+    `simpa [N, A, B, Nat.add_sub_cancel]` で導出。
+  - 併せて `unnecessarySimpa` 指摘箇所（`hb_ne0` 内）を
+    `simpa` から `simp` へ変更して warning を解消。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Basic`
+  - 成功。
+  - `Basic.lean` の `unnecessarySimpa` warning は解消。
+  - 残る既存 warning:
+    - `DkMath/FLT/Basic.lean:669:8: declaration uses sorry`
+
 ## 2026-03-06 phase-15 継続（方針B: NoLift 依存を配線から外し、最小反例+下降へ切替）
 
 - 更新:

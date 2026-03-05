@@ -432,7 +432,7 @@ private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
   letI : Fact (Nat.Prime q) := ⟨hq_prime⟩
   have hb_ne0 : b ≠ 0 := by
     intro hb0
-    have : N = 0 := by simpa [hN_eq_cube, hb0]
+    have : N = 0 := by simp [hN_eq_cube, hb0]
     exact hN_ne this
   have hpow : padicValNat q (b ^ 3) = 3 * padicValNat q b := by
     simpa using (padicValNat.pow (p := q) (a := b) 3 hb_ne0)
