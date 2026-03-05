@@ -319,6 +319,38 @@ private lemma GN3_cube_not_cube_of_gt_one_use_FLT3 (a y : ℕ) (ha : 2 ≤ a) (h
 
 #print axioms GN3_cube_not_cube_of_gt_one_use_FLT3  -- OK: 2026/02/22  7:03
 
+/-
+`q` を 1 本だけ抜く（Zsigmondy で primitive prime factor を取り出し、
+`A^3 - B^3 = (A-B) * GN 3 (A-B) B` から `q ∣ GN ...` を押し出す）最小スニペット。
+-/
+private lemma pick_primitive_q_data_GN3
+    (A B : ℕ)
+    (hAB_lt : B < A) (hB_pos : 0 < B)
+    (hAB_coprime : Nat.Coprime A B)
+    (hpnd : ¬ 3 ∣ A - B) :
+    ∃ q : ℕ,
+      Nat.Prime q ∧
+      q ∣ A ^ 3 - B ^ 3 ∧
+      ¬ q ∣ A - B ∧
+      q ∣ GN 3 (A - B) B := by
+  rcases DkMath.NumberTheory.GcdNext.exists_primitive_prime_factor_prime
+      (a := A) (b := B) (d := 3)
+      Nat.prime_three (by norm_num) hAB_lt hB_pos hAB_coprime hpnd with
+    ⟨q, hq_prime, hq_div, hq_ndiv⟩
+  refine ⟨q, hq_prime, hq_div, hq_ndiv, ?_⟩
+  have hfactor : A ^ 3 - B ^ 3 = (A - B) * GN 3 (A - B) B := by
+    simpa using
+      (DkMath.NumberTheory.GcdNext.pow_sub_pow_factor_cosmic_N
+        (a := A) (b := B) (d := 3) (by norm_num) hAB_lt)
+  have hq_dvd_mul : q ∣ (A - B) * GN 3 (A - B) B := by
+    rw [← hfactor]
+    exact hq_div
+  have hcop : Nat.Coprime q (A - B) :=
+    (Nat.Prime.coprime_iff_not_dvd hq_prime).2 hq_ndiv
+  exact Nat.Coprime.dvd_of_dvd_mul_left hcop hq_dvd_mul
+
+#print axioms pick_primitive_q_data_GN3  -- OK: no Research link 2026/03/06  1:24
+
 /-- 補題: b³ = GN(3, a³, y), a ≥ 2 かつ `Squarefree (GN 3 (a^3) y)` なら矛盾
 
     方針:
@@ -351,10 +383,8 @@ private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
       intro h
       exact h3a (Nat.Prime.dvd_of_dvd_pow Nat.prime_three h)
     simpa [A, B, Nat.add_sub_cancel] using hpow
-  rcases DkMath.NumberTheory.GcdNext.exists_primitive_prime_factor_prime
-      (a := A) (b := B) (d := 3)
-      Nat.prime_three (by norm_num) hAB_lt hy_pos hAB_coprime hpnd with
-      ⟨q, hq_prime, hq_div, hq_ndiv⟩
+  rcases pick_primitive_q_data_GN3 A B hAB_lt hy_pos hAB_coprime hpnd with
+    ⟨q, hq_prime, hq_div, hq_ndiv, _hq_dvd_GN⟩
   have hval_ge : 1 ≤ padicValNat q (A ^ 3 - B ^ 3) := by
     exact DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_ge_one -- OK
       hAB_lt hy_pos (by norm_num) hq_prime hq_div

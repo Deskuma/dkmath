@@ -1056,3 +1056,32 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - 既存 warning:
     - `DkMath/FLT/Basic.lean:635:8: declaration uses sorry`
     - （今回差分による新規 warning ではない）
+
+## 2026-03-06 phase-15 継続（`q` 一本固定スニペットの導入）
+
+- 更新:
+  - `Basic.lean`
+
+- 内容:
+  - `pick_primitive_q_data_GN3` を private 補助補題として追加。
+  - 返り値は次の4点をまとめて返す形にした。
+    - `hq_prime : Nat.Prime q`
+    - `hq_div : q ∣ A^3 - B^3`
+    - `hq_ndiv : ¬ q ∣ A - B`
+    - `hq_dvd_GN : q ∣ GN 3 (A - B) B`
+  - `hq_dvd_mul` の導出は
+    `rw [← hfactor]; exact hq_div`
+    の堅い形で実装。
+  - `GN3_cube_not_cube_of_gt_one_of_squarefree` 内の
+    primitive prime 抽出部分をこの補助補題経由へ差し替えた。
+
+- 備考:
+  - 共有スニペット案にあった
+    `exists_primitive_prime_factor_prime` 呼び出しの余分な `(by norm_num)` 1 個は、
+    現行シグネチャに合わせて削除して反映。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Basic`
+  - 成功。
+  - 既存 warning:
+    - `DkMath/FLT/Basic.lean:663:8: declaration uses sorry`
