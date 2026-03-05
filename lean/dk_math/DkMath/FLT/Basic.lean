@@ -351,6 +351,20 @@ private lemma pick_primitive_q_data_GN3
 
 #print axioms pick_primitive_q_data_GN3  -- OK: no Research link 2026/03/06  1:24
 
+/-- `¬ q^2 ∣ N` から `padicValNat q N ≤ 1` を得る汎用補助。 -/
+private lemma padicValNat_le_one_of_noLift
+    {q N : ℕ}
+    (hq_prime : Nat.Prime q)
+    (hN_ne : N ≠ 0)
+    (hNoLift : ¬ q ^ 2 ∣ N) :
+    padicValNat q N ≤ 1 := by
+  by_contra h_not_le
+  have h2_le : 2 ≤ padicValNat q N := by
+    omega
+  have hq2_dvd : q ^ 2 ∣ N := by
+    exact (@padicValNat_dvd_iff_le q (Fact.mk hq_prime) N 2 hN_ne).2 h2_le
+  exact hNoLift hq2_dvd
+
 /-- 補題: b³ = GN(3, a³, y), a ≥ 2 かつ `Squarefree (GN 3 (a^3) y)` なら矛盾
 
     方針:
@@ -388,12 +402,6 @@ private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
   have hval_ge : 1 ≤ padicValNat q (A ^ 3 - B ^ 3) := by
     exact DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_ge_one -- OK
       hAB_lt hy_pos (by norm_num) hq_prime hq_div
-  have hSqAB : Squarefree (GN 3 (A - B) B) := by
-    simpa [A, B] using hSq
-  have hval_le : padicValNat q (A ^ 3 - B ^ 3) ≤ 1 := by
-    exact DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_of_squarefree_G
-      (a := A) (b := B) (d := 3) (q := q)
-      Nat.prime_three (by norm_num) hAB_lt hy_pos hAB_coprime hpnd hq_prime hq_div hq_ndiv hSqAB
   let N : ℕ := GN 3 (A - B) B
   have hfactor : A ^ 3 - B ^ 3 = (A - B) * N := by
     simpa [N] using
@@ -417,11 +425,19 @@ private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
     have hzero : padicValNat q (A - B) = 0 := padicValNat.eq_zero_of_not_dvd hq_ndiv
     rw [hzero, zero_add] at hpadic_factor
     exact hpadic_factor
+  have hSqN : Squarefree N := by
+    simpa [N, A, B] using hSq
+  have hNoLift_N : ¬ q ^ 2 ∣ N := by
+    have hval_N_le_sq : padicValNat q N ≤ 1 := by
+      exact DkMath.NumberTheory.GcdNext.padicValNat_le_one_of_squarefree hq_prime hN_ne hSqN
+    intro hq2_dvd
+    have h2_le : 2 ≤ padicValNat q N := by
+      exact (@padicValNat_dvd_iff_le q (Fact.mk hq_prime) N 2 hN_ne).1 hq2_dvd
+    exact (not_le_of_gt h2_le) hval_N_le_sq
   have hval_N_ge : 1 ≤ padicValNat q N := by
     exact DkMath.ABC.padicValNat_one_le_of_prime_dvd hq_prime hN_ne hq_dvd_N
   have hval_N_le : padicValNat q N ≤ 1 := by
-    rw [← hpadic_eqN]
-    exact hval_le
+    exact padicValNat_le_one_of_noLift hq_prime hN_ne hNoLift_N
   have hval_N : padicValNat q N = 1 := by
     exact le_antisymm hval_N_le hval_N_ge
   have hN_eq_cube : N = b ^ 3 := by

@@ -745,6 +745,29 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - 成功。
 
+## 2026-03-06 phase-15 継続（差し替え点固定: `NoLift -> padicValNat ≤ 1` 補助の導入）
+
+- 更新:
+  - `Basic.lean`
+
+- 内容:
+  - private 補助
+    `padicValNat_le_one_of_noLift` を追加。
+    - 入力: `Nat.Prime q`, `N ≠ 0`, `¬ q^2 ∣ N`
+    - 出力: `padicValNat q N ≤ 1`
+  - `GN3_cube_not_cube_of_gt_one_of_squarefree` では、
+    上界構築を次の2段へ分離した。
+    - 現在の供給源（squarefree）から `hNoLift_N : ¬ q^2 ∣ N` を作る
+    - 上界化は `padicValNat_le_one_of_noLift hq_prime hN_ne hNoLift_N`
+  - これで将来の方針B移行時は、
+    差し替え点が「`hNoLift_N` の供給」1箇所に固定される形になった。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Basic`
+  - 成功。
+  - 残る既存 warning:
+    - `DkMath/FLT/Basic.lean:685:8: declaration uses sorry`
+
 ## 2026-03-06 phase-15 継続（valuation spine 整形: `hN_pos` 統一と下界を `hq_dvd_N` 直結）
 
 - 更新:
