@@ -286,8 +286,8 @@ private lemma a6_lt_GN3_cube (a y : ℕ) (ha : 1 ≤ a) (hy : 1 ≤ y) :
     `fermatLastTheoremThree` に反する。
 
     注:
-    本ファイルの本線は後続の `GN3_cube_not_cube_of_gt_one`（非依存版）であり、
-    この補題は比較検証・回帰確認のために残している。
+    本線は `GN3_cube_not_cube_of_gt_one_of_squarefree`（非依存版）であり、
+    この補題は fallback の比較検証・回帰確認用として残している。
 -/
 private lemma GN3_cube_not_cube_of_gt_one_use_FLT3 (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y) :
     ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
@@ -411,8 +411,8 @@ private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
 
 #print axioms GN3_cube_not_cube_of_gt_one_of_squarefree  -- OK: no Research link 2026/03/05
 
-/-- 互換用の入口。現状の一般仮定では squarefree 供給が無いので、比較用 FLT(3) 版へ落とす。 -/
-private lemma GN3_cube_not_cube_of_gt_one
+/-- 暫定 fallback 入口。squarefree 未供給の呼び出しは FLT(3) 参照へ明示的に落とす。 -/
+private lemma GN3_cube_not_cube_of_gt_one_fallback_use_FLT3
     (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y)
     (_hcop : Nat.Coprime a y) (_h3a : ¬ 3 ∣ a) :
     ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
@@ -527,7 +527,7 @@ lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h
         omega
       -- u = a^3 を GN の引数として使う
       rw [ha] at hb
-      exact GN3_cube_not_cube_of_gt_one a y ha2 hy_pos hcop_ay h3a ⟨b, hb⟩
+      exact GN3_cube_not_cube_of_gt_one_fallback_use_FLT3 a y ha2 hy_pos hcop_ay h3a ⟨b, hb⟩
 
 /-- 補題: $d=3$ の場合、$x^3$ は $u^2$ で割り切れる（適切な条件の下で） -/
 lemma x3_div_u2 (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h_gcd : u.gcd (GN 3 u y) = 1) :

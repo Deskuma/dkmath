@@ -745,6 +745,33 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - 成功。
 
+## 2026-03-05 phase-15 継続（`FLT3` fallback の明示隔離）
+
+- 更新:
+  - `Basic.lean`
+
+- 内容:
+  - fallback の責務を名前で明示するため、
+    旧互換入口を
+    `GN3_cube_not_cube_of_gt_one_fallback_use_FLT3`
+    に改名した。
+  - 呼び出し側（`u_eq_one_of_coprime_gcd` 内）も同名へ接続し、
+    squarefree 非供給パスが「FLT3 fallback である」ことを
+    コード上で判読可能にした。
+  - あわせて `GN3_cube_not_cube_of_gt_one_use_FLT3` のコメントを更新し、
+    本線が `GN3_cube_not_cube_of_gt_one_of_squarefree` であることを明示した。
+
+- 結果:
+  - fallback 経路が private 名称と呼び出し点の両方で露出し、
+    非依存本線（squarefree 版）との混線を避けやすくなった。
+  - 証明内容そのもの（論理）は不変で、責務分離のみを実施。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Basic`
+  - 成功。
+  - 既存 warning:
+    - `DkMath/FLT/Basic.lean:635:8: declaration uses sorry`
+
 ## 2026-03-05 phase-15 継続（GEisensteinBaseInput provider interface を GEisensteinBridge 側へ移設）
 
 - 更新:
