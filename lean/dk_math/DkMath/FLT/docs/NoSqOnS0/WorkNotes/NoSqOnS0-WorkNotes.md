@@ -1216,3 +1216,35 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - どちらも成功。
+
+## 2026-03-06 phase-15 継続（GN3 NoLift 最小インターフェイスを導入して Basic 差し替え点を固定）
+
+- 更新:
+  - `Core.lean`
+  - `Basic.lean`
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `Core.lean` に `DkMath.FLT.GN3NoLiftProvider (a y)` を追加。
+    - `q ∣ GN 3 (a^3) y` と `¬ q ∣ a^3` から `¬ q^2 ∣ GN 3 (a^3) y` を供給する最小契約。
+  - `Basic.lean` の
+    `GN3_cube_not_cube_of_gt_one_of_squarefree` 内で
+    `hNoLift_N` 生成を provider 呼び出しへ差し替え。
+    - 既存の squarefree 証明は、局所 provider `hProvSq` を作ってそこへ閉じ込めた。
+    - valuation spine の下流 (`padicValNat_le_one_of_noLift`) は無変更。
+  - `CosmicPetalBridgeGNDescentB.lean` に
+    `gn3NoLiftProvider_of_noWieferich` を追加。
+    - `PrimeGe5CounterexamplePack 3 x y (a^3+y)` と NoWieferich bridge から
+      `GN3NoLiftProvider a y` を構成できる形にした。
+
+- 失敗例:
+  - `Core.lean` の新 interface で `GN` を短名のまま書いたところ、
+    `namespace DkMath.FLT` では `Unknown identifier GN` でビルド失敗。
+  - `DkMath.CosmicFormulaBinom.GN` へ完全修飾して解消。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Core`
+  - `cd lean/dk_math && lake build DkMath.FLT.Basic`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - すべて成功。

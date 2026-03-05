@@ -425,15 +425,26 @@ private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
     have hzero : padicValNat q (A - B) = 0 := padicValNat.eq_zero_of_not_dvd hq_ndiv
     rw [hzero, zero_add] at hpadic_factor
     exact hpadic_factor
-  have hSqN : Squarefree N := by
-    simpa [N, A, B] using hSq
+  have hProvSq : DkMath.FLT.GN3NoLiftProvider a y := by
+    refine ⟨?_⟩
+    intro r hr_prime _hr_not_dvd_a3 hr_dvd_GN
+    have hGN_ne : GN 3 (a ^ 3) y ≠ 0 := Nat.ne_of_gt hGN_pos
+    have hval_GN_le_sq : padicValNat r (GN 3 (a ^ 3) y) ≤ 1 := by
+      exact DkMath.NumberTheory.GcdNext.padicValNat_le_one_of_squarefree hr_prime hGN_ne hSq
+    intro hr2_dvd_GN
+    have h2_le : 2 ≤ padicValNat r (GN 3 (a ^ 3) y) := by
+      exact
+        (@padicValNat_dvd_iff_le r (Fact.mk hr_prime) (GN 3 (a ^ 3) y) 2 hGN_ne).1
+          hr2_dvd_GN
+    exact (not_le_of_gt h2_le) hval_GN_le_sq
+  have hq_not_dvd_a3 : ¬ q ∣ a ^ 3 := by
+    simpa [A, B, Nat.add_sub_cancel] using hq_ndiv
+  have hq_dvd_GN_a3 : q ∣ GN 3 (a ^ 3) y := by
+    simpa [N, A, B, Nat.add_sub_cancel] using hq_dvd_N
   have hNoLift_N : ¬ q ^ 2 ∣ N := by
-    have hval_N_le_sq : padicValNat q N ≤ 1 := by
-      exact DkMath.NumberTheory.GcdNext.padicValNat_le_one_of_squarefree hq_prime hN_ne hSqN
-    intro hq2_dvd
-    have h2_le : 2 ≤ padicValNat q N := by
-      exact (@padicValNat_dvd_iff_le q (Fact.mk hq_prime) N 2 hN_ne).1 hq2_dvd
-    exact (not_le_of_gt h2_le) hval_N_le_sq
+    have hNoLift_GN_a3 : ¬ q ^ 2 ∣ GN 3 (a ^ 3) y := by
+      exact hProvSq.noLift_GN3 hq_prime hq_not_dvd_a3 hq_dvd_GN_a3
+    simpa [N, A, B, Nat.add_sub_cancel] using hNoLift_GN_a3
   have hval_N_ge : 1 ≤ padicValNat q N := by
     exact DkMath.ABC.padicValNat_one_le_of_prime_dvd hq_prime hN_ne hq_dvd_N
   have hval_N_le : padicValNat q N ≤ 1 := by

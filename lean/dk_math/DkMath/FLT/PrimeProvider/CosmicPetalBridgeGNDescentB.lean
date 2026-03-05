@@ -1273,6 +1273,29 @@ theorem branchBLocalNoLift_GN3_of_noWieferich
       hNW hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN_gap
 
 /--
+`NoWieferich` bridge から、`Basic` の GN3 spine が直接使える供給インターフェイスを得る。
+-/
+theorem gn3NoLiftProvider_of_noWieferich
+    (hNW : TriominoNoWieferichBridge)
+    {x a y : ℕ}
+    (hpack : PrimeGe5CounterexamplePack 3 x y (a ^ 3 + y))
+    (h3_not_dvd_a3 : ¬ 3 ∣ a ^ 3) :
+    DkMath.FLT.GN3NoLiftProvider a y := by
+  refine ⟨?_⟩
+  intro q hqP hq_not_dvd_a3 hq_dvd_GN_a3
+  have hpB : ¬ 3 ∣ ((a ^ 3 + y) - y) := by
+    simpa [Nat.add_sub_cancel] using h3_not_dvd_a3
+  have hq_not_dvd_gap : ¬ q ∣ ((a ^ 3 + y) - y) := by
+    simpa [Nat.add_sub_cancel] using hq_not_dvd_a3
+  have hq_dvd_GN_gap : q ∣ GN 3 ((a ^ 3 + y) - y) y := by
+    simpa [Nat.add_sub_cancel] using hq_dvd_GN_a3
+  have hNoLift_gap : ¬ q ^ 2 ∣ GN 3 ((a ^ 3 + y) - y) y := by
+    exact
+      (triominoCosmicNonLiftableGNBridge_of_noWieferich hNW hpack hpB q)
+        ⟨hqP, hq_dvd_GN_gap, hq_not_dvd_gap⟩
+  simpa [Nat.add_sub_cancel] using hNoLift_gap
+
+/--
 NoWieferich bridge があれば、Branch B 文脈で `GN p (z - y) y` に平方で割れない素因子が存在する。
 -/
 theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_of_noWieferich
