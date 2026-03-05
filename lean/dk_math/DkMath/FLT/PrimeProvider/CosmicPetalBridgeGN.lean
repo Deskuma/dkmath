@@ -15,39 +15,44 @@ namespace DkMath.FLT
 /--
 phase-15 の分岐契約。
 
-非-Wieferich 側の `NoLift` を受け取れば、Wieferich 側の Branch B 下降は
-`CosmicPetalBridgeGNDescentB` で組み立てる。
+Wieferich 側の Branch B 下降仕様を受ける最小契約。
 -/
 abbrev TriominoWieferichLiftBridge : Prop :=
   WieferichDescentB
 
 /--
-NoLift / Lift の二分岐をまとめて受け取る最小インターフェイス。
+方針B（最小反例 + 下降）で使う最小インターフェイス。
+
+`NoLift` は global bridge として要求せず、
+`WieferichDescentB` のみを受け取る。
 -/
 structure TriominoWieferichBranchBridge where
-  hNoLift : TriominoNoLiftGNBridge
+  hDescent : TriominoWieferichLiftBridge
 
 /--
 一般 `GN` nonlift bridge の本丸インターフェイス。
 
-`lift` 供給は core 側で no-`sorry` 化済み。残る `descent` のみを
+`lift` 供給は core 側で no-`sorry` 化済み。残る `descent` を
 `CosmicPetalBridgeGNDescentB` に隔離し、このファイルは配線専用に保つ。
 -/
 theorem triominoWieferichLiftKernel_impl
+    (hBranch : TriominoWieferichBranchBridge)
     : TriominoWieferichLiftKernel := by
-  exact ⟨counterexampleHasWieferichLiftB_impl, triominoWieferichDescent_impl⟩
+  exact ⟨counterexampleHasWieferichLiftB_impl, hBranch.hDescent⟩
 
 /-- 現段階の `TriominoWieferichLiftExclusion` は、最小反例選択と下降のカーネルへ委譲する。 -/
 theorem triominoWieferichLiftExclusion_impl
+    (hBranch : TriominoWieferichBranchBridge)
     : TriominoWieferichLiftExclusion := by
   exact wieferichLiftExclusion_of_liftExists_and_descent
-    triominoWieferichLiftKernel_impl.1
-    triominoWieferichLiftKernel_impl.2
+    (triominoWieferichLiftKernel_impl hBranch).1
+    (triominoWieferichLiftKernel_impl hBranch).2
 
 /-- 現段階の `TriominoNoWieferichBridge` 実装は、Wieferich lift 排除ブリッジへ委譲する。 -/
 theorem triominoNoWieferichBridge_impl
     (hBranch : TriominoWieferichBranchBridge) :
     TriominoNoWieferichBridge := by
-  exact triominoNoWieferichBridge_of_not_sq_GN hBranch.hNoLift
+  exact triominoNoWieferichBridge_of_wieferichLiftExclusion
+    (triominoWieferichLiftExclusion_impl hBranch)
 
 end DkMath.FLT

@@ -745,6 +745,41 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - 成功。
 
+## 2026-03-06 phase-15 継続（方針B: NoLift 依存を配線から外し、最小反例+下降へ切替）
+
+- 更新:
+  - `CosmicPetalBridgeGN.lean`
+
+- 内容:
+  - `TriominoWieferichBranchBridge` の入力契約を
+    `hNoLift : TriominoNoLiftGNBridge`
+    から
+    `hDescent : TriominoWieferichLiftBridge`（= `WieferichDescentB`）
+    に変更。
+  - `triominoWieferichLiftKernel_impl` は
+    `counterexampleHasWieferichLiftB_impl` と `hBranch.hDescent` を合成する形に変更。
+  - `triominoWieferichLiftExclusion_impl` は branch 引数を受け取り、
+    `wieferichLiftExclusion_of_liftExists_and_descent` へ接続。
+  - `triominoNoWieferichBridge_impl` は
+    `triominoNoWieferichBridge_of_not_sq_GN hBranch.hNoLift`
+    から、
+    `triominoNoWieferichBridge_of_wieferichLiftExclusion (triominoWieferichLiftExclusion_impl hBranch)`
+    に切替。
+  - コメントも方針B（最小反例 + 下降）に合わせて更新。
+
+- 結果:
+  - 本丸配線で `NoLift` の global 供給を要求しない形に移行。
+  - `NoWieferich` は「lift exists + descent + minimal selection」経路で閉じる構成へ統一。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 成功。
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - 成功。
+  - 既存 warning のみ:
+    - `DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:81:6: declaration uses sorry`
+    - `DkMath/FLT/GEisensteinBridge.lean:1464:2: Try this: intro ...`
+
 ## 2026-03-05 phase-15 継続（`FLT3` fallback の明示隔離）
 
 - 更新:
