@@ -12,7 +12,7 @@ import DkMath.Algebra.BinomTail
 import DkMath.NumberTheory.GdcDivD
 import DkMath.NumberTheory.GcdNext
 import DkMath.NumberTheory.ZsigmondyCyclotomic
-import DkMath.NumberTheory.ZsigmondyCyclotomicResearch
+import DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
 import Mathlib.Algebra.Divisibility.Basic
 import DkMath.FLT.Core
 
@@ -319,20 +319,20 @@ private lemma GN3_cube_not_cube_of_gt_one_use_FLT3 (a y : ℕ) (ha : 2 ≤ a) (h
 
 #print axioms GN3_cube_not_cube_of_gt_one_use_FLT3  -- OK: 2026/02/22  7:03
 
-/-- 補題: b³ = GN(3, a³, y) かつ a ≥ 2 のとき矛盾（FLT(3) を直接参照しない版）
+/-- 補題: b³ = GN(3, a³, y), a ≥ 2 かつ `Squarefree (GN 3 (a^3) y)` なら矛盾
 
     方針:
     `(a^3 + y)^3 - y^3` の原始素因子 `q`（指数 3）を Zsigmondy で取り、
     `padicValNat q` の上下界を比較して矛盾を導く。
 
-    成果:
-    ここで矛盾の源を「立方差の原始素因子の付値」として明示できたため、
-    FLT(3) の black-box 参照なしで、どの素因子・どの指数整合が破綻するかを追跡できる。
+    補足:
+    上界 `padicValNat ≤ 1` は無条件では偽になるため、
+    `Squarefree (GN ...)` を明示仮定として受ける。
 -/
--- #### 注意: 現状まだ不完全証明ですが、FLT(3) 参照なしで証明できる見込み。
-private lemma GN3_cube_not_cube_of_gt_one
+private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
     (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y)
-    (hcop : Nat.Coprime a y) (h3a : ¬ 3 ∣ a) :
+    (hcop : Nat.Coprime a y) (h3a : ¬ 3 ∣ a)
+    (hSq : Squarefree (GN 3 (a ^ 3) y)) :
     ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
   rintro ⟨b, hb⟩
   have hy_pos : 0 < y := by omega
@@ -358,10 +358,12 @@ private lemma GN3_cube_not_cube_of_gt_one
   have hval_ge : 1 ≤ padicValNat q (A ^ 3 - B ^ 3) := by
     exact DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_ge_one -- OK
       hAB_lt hy_pos (by norm_num) hq_prime hq_div
+  have hSqAB : Squarefree (GN 3 (A - B) B) := by
+    simpa [A, B] using hSq
   have hval_le : padicValNat q (A ^ 3 - B ^ 3) ≤ 1 := by
-    exact DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one -- ※偽命題とリンク
+    exact DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_of_squarefree_G
       (a := A) (b := B) (d := 3) (q := q)
-      Nat.prime_three (by norm_num) hAB_lt hy_pos hAB_coprime hpnd hq_prime hq_div hq_ndiv
+      Nat.prime_three (by norm_num) hAB_lt hy_pos hAB_coprime hpnd hq_prime hq_div hq_ndiv hSqAB
   have hval_diff : padicValNat q (A ^ 3 - B ^ 3) = 1 := le_antisymm hval_le hval_ge
   let N : ℕ := GN 3 (A - B) B
   have hfactor : A ^ 3 - B ^ 3 = (A - B) * N := by
@@ -407,9 +409,14 @@ private lemma GN3_cube_not_cube_of_gt_one
       _ = 1 := hval_N
   omega
 
-#print axioms GN3_cube_not_cube_of_gt_one  -- NG: 2026/03/05  1:17
--- lean/dk_math/DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean を参照しており
--- その中の偽命題を利用しているため、この補題はまだ FLT(3) を直接参照しない完全独立な証明にはなっていない。
+#print axioms GN3_cube_not_cube_of_gt_one_of_squarefree  -- OK: no Research link 2026/03/05
+
+/-- 互換用の入口。現状の一般仮定では squarefree 供給が無いので、比較用 FLT(3) 版へ落とす。 -/
+private lemma GN3_cube_not_cube_of_gt_one
+    (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y)
+    (_hcop : Nat.Coprime a y) (_h3a : ¬ 3 ∣ a) :
+    ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
+  exact GN3_cube_not_cube_of_gt_one_use_FLT3 a y ha hy
 
 /-- 補題: 互いに素な場合は u = 1 に強制される（p進付値 + 不等式による証明） -/
 lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h_gcd : u.gcd (GN 3 u y) = 1) :

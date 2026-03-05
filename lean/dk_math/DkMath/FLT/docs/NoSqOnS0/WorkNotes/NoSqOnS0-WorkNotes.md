@@ -953,3 +953,44 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
     次段で必要なのは「`GN3_cube_not_cube_of_gt_one` に対する `Squarefree` 供給路の新設」。
   - 供給路を置かない場合、当該 private lemma は引き続き
     research 補題依存のまま残る。
+
+## 2026-03-05 phase-15 継続（`Basic` 偽命題リンクの仮定付き切り離し実装）
+
+- 更新:
+  - `Basic.lean`
+
+- 内容:
+  - `GN3_cube_not_cube_of_gt_one` の non-FLT3 ルートを、
+    `Squarefree` 仮定つきの新補題
+    `GN3_cube_not_cube_of_gt_one_of_squarefree`
+    として分離した。
+  - 新補題では `hval_le` を偽命題
+    `padicValNat_primitive_prime_factor_le_one`
+    ではなく、
+    `padicValNat_primitive_prime_factor_le_one_of_squarefree_G`
+    で構成するように変更。
+  - `hSq : Squarefree (GN 3 (a ^ 3) y)` から
+    `Squarefree (GN 3 (A - B) B)` への変換を
+    `simpa [A, B]` で供給して適用。
+  - `Basic.lean` の import から
+    `ZsigmondyCyclotomicResearch.lean` を削除し、
+    `ZsigmondyCyclotomicSquarefree.lean` を直接 import。
+  - 既存シグネチャ互換のため、旧名
+    `GN3_cube_not_cube_of_gt_one`
+    は暫定 wrapper として残し、
+    現時点では `GN3_cube_not_cube_of_gt_one_use_FLT3` に接続。
+
+- 結果:
+  - `Basic.lean` から
+    - `ZsigmondyCyclotomicResearch.lean`
+    - `padicValNat_primitive_prime_factor_le_one`
+    への参照は消滅。
+  - ただし、旧シグネチャ側は squarefree 供給が未接続のため、
+    互換 wrapper で FLT3 経由を維持（設計上の未完点として残置）。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Basic`
+  - 成功。
+  - 既存 warning:
+    - `DkMath/FLT/Basic.lean:635:8: declaration uses sorry`
+    - （今回差分による新規 warning ではない）
