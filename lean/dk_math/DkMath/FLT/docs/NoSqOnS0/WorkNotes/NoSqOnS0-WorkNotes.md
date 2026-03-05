@@ -912,3 +912,44 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
 - 確認:
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - 成功。
+
+## 2026-03-05 phase-15 継続（`Basic` の偽命題リンク置換の可否調査）
+
+- 更新:
+  - `Basic.lean`
+  - `ZsigmondyCyclotomicSquarefree.lean`
+  - `ZsigmondyCyclotomicResearch.lean`
+
+- 調査対象:
+  - `Basic.lean` の `GN3_cube_not_cube_of_gt_one` 内で使っている
+    `padicValNat_primitive_prime_factor_le_one`
+    （`ZsigmondyCyclotomicResearch.lean` 側定義）を
+    `padicValNat_primitive_prime_factor_le_one_of_squarefree_G`
+    に置換できるか。
+
+- 結果:
+  - **現状の `Basic` 単体文脈では置換不能**。
+  - 置換先補題は追加仮定
+    `Squarefree (GN 3 (A - B) B)` を要求するが、
+    `GN3_cube_not_cube_of_gt_one` の入力
+    (`a ≥ 2`, `y ≥ 1`, `Nat.Coprime a y`, `¬ 3 ∣ a`) から
+    この squarefree を供給する既存補題がワークスペース内に見当たらない。
+  - `Squarefree (GN ...)` を直接生成する既存ルートは
+    PrimeProvider/Bridge 層（`CosmicPetalBridgeGNNoWieferich.lean` まわり）であり、
+    `Basic.lean` のこの private lemma 呼び出し経路には接続されていない。
+
+- 失敗例（探索時の反例メモ）:
+  - `A=a^3+y`, `B=y` 形でも、primitive 条件 `q ∣ A^3-B^3`, `q ∤ A-B` だけでは
+    `v_q(A^3-B^3) ≤ 1` は成り立たない実例が多数出る。
+  - 例:
+    - `(a,y,q) = (2,29,7)` で `v_7((a^3+y)^3-y^3)=2`
+    - `(a,y,q) = (10,33,31)` で `v_31((a^3+y)^3-y^3)=3`
+  - したがって「偽命題の単純置換」は不可で、
+    `Squarefree` 供給を設計に追加しない限り、
+    `Basic` の当該ブロックだけを安全に差し替えることはできない。
+
+- 方針メモ:
+  - `Basic` を non-FLT3 ルートのまま維持するなら、
+    次段で必要なのは「`GN3_cube_not_cube_of_gt_one` に対する `Squarefree` 供給路の新設」。
+  - 供給路を置かない場合、当該 private lemma は引き続き
+    research 補題依存のまま残る。
