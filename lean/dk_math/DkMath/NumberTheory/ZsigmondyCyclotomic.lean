@@ -1107,6 +1107,8 @@ lemma padicValNat_primitive_prime_factor_ge_one {a b d q : ℕ}
   -- padicValNat_one_le_of_prime_dvd を適用
   exact padicValNat_one_le_of_prime_dvd hq_prime hne hq_div
 
+#print axioms padicValNat_primitive_prime_factor_ge_one  -- OK: no axioms 2026/03/05 15:48
+
 /- 原始素因子の p-adic 付値の上界（円分多項式経由）
 
 **数学的内容:**

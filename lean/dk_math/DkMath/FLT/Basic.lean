@@ -356,7 +356,7 @@ private lemma GN3_cube_not_cube_of_gt_one
       Nat.prime_three (by norm_num) hAB_lt hy_pos hAB_coprime hpnd with
       ⟨q, hq_prime, hq_div, hq_ndiv⟩
   have hval_ge : 1 ≤ padicValNat q (A ^ 3 - B ^ 3) := by
-    exact DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_ge_one
+    exact DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_ge_one -- OK
       hAB_lt hy_pos (by norm_num) hq_prime hq_div
   have hval_le : padicValNat q (A ^ 3 - B ^ 3) ≤ 1 := by
     exact DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one -- ※偽命題とリンク
