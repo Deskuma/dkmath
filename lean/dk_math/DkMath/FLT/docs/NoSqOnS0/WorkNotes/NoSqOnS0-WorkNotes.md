@@ -1185,3 +1185,34 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - 成功。
   - 既存 warning:
     - `DkMath/FLT/Basic.lean:663:8: declaration uses sorry`
+
+## 2026-03-06 phase-15 継続（DescentB の局所 NoLift 供給口を GN3 形へ pullback）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `BranchBLocalNoLift` から `Basic` 側の `N := GN 3 (a^3) y` に直接刺せるよう、
+    次の pullback 補題を追加:
+    - `branchBLocalNoLift_pullback_GN3`
+      - 入力: `BranchBLocalNoLift 3 y (a ^ 3 + y) q`
+      - 出力: `¬ q ^ 2 ∣ GN 3 (a ^ 3) y`
+      - 実装: `simpa [Nat.add_sub_cancel]` で gap 形を吸収
+  - あわせて、`a^3` 形の入力から Branch B 局所束を返す薄い供給定理を追加:
+    - `branchBLocalNoLift_GN3_of_noWieferich`
+      - `h3_not_dvd_a3 : ¬ 3 ∣ a^3`
+      - `hq_not_dvd_a3 : ¬ q ∣ a^3`
+      - `hqpow_dvd_GN_a3 : q^3 ∣ GN 3 (a^3) y`
+      を受け、内部で gap 形へ `simpa [Nat.add_sub_cancel]` 変換して
+      `branchBLocalNoLift_of_noWieferich` に接続。
+
+- 失敗例:
+  - 初回実装で `branchBLocalNoLift_GN3_of_noWieferich` を
+    `branchBLocalNoLift_of_noWieferich` より前に置いたため、
+    `Unknown identifier branchBLocalNoLift_of_noWieferich` でビルド失敗。
+  - 対処として定理定義順を後ろへ移動し、再ビルドで解消。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。

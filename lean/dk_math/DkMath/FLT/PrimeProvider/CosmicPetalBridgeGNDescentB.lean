@@ -1204,6 +1204,16 @@ structure BranchBLocalNoLift (p y z q : ℕ) : Prop where
   hNoLift : ¬ q ^ 2 ∣ GN p (z - y) y
 
 /--
+`p = 3, z = a^3 + y` の同型に落とした pullback。
+`Basic` 側の `N := GN 3 (a^3) y` へそのまま刺さる形。
+-/
+theorem branchBLocalNoLift_pullback_GN3
+    {a y q : ℕ}
+    (hLocal : BranchBLocalNoLift 3 y (a ^ 3 + y) q) :
+    ¬ q ^ 2 ∣ GN 3 (a ^ 3) y := by
+  simpa [Nat.add_sub_cancel] using hLocal.hNoLift
+
+/--
 NoWieferich bridge があれば、Branch B 文脈で固定 `q` の局所 NoLift 束を返せる。
 -/
 theorem branchBLocalNoLift_of_noWieferich
@@ -1238,6 +1248,29 @@ theorem branchBLocalNoLift_of_noWieferich
   have hr_noLift : ¬ r ^ 2 ∣ GN p (z - y) y := by
     exact (hNonLift r) ⟨hrP, hr_dvd_GN, hr_not_dvd_gap⟩
   exact ⟨r, ⟨hrP, hr_dvd_diff, hr_not_dvd_gap, hr_noLift⟩⟩
+
+/--
+`p = 3, z = a^3 + y` の形に限定した局所 NoLift 供給。
+入力は `a^3` 形で受け取り、内部で Branch B の gap 形へ合わせる。
+-/
+theorem branchBLocalNoLift_GN3_of_noWieferich
+    (hNW : TriominoNoWieferichBridge)
+    {x a y q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack 3 x y (a ^ 3 + y))
+    (h3_not_dvd_a3 : ¬ 3 ∣ a ^ 3)
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_a3 : ¬ q ∣ a ^ 3)
+    (hqpow_dvd_GN_a3 : q ^ 3 ∣ GN 3 (a ^ 3) y) :
+    ∃ r : ℕ, BranchBLocalNoLift 3 y (a ^ 3 + y) r := by
+  have hpB : ¬ 3 ∣ ((a ^ 3 + y) - y) := by
+    simpa [Nat.add_sub_cancel] using h3_not_dvd_a3
+  have hq_not_dvd_gap : ¬ q ∣ ((a ^ 3 + y) - y) := by
+    simpa [Nat.add_sub_cancel] using hq_not_dvd_a3
+  have hqpow_dvd_GN_gap : q ^ 3 ∣ GN 3 ((a ^ 3 + y) - y) y := by
+    simpa [Nat.add_sub_cancel] using hqpow_dvd_GN_a3
+  exact
+    branchBLocalNoLift_of_noWieferich
+      hNW hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN_gap
 
 /--
 NoWieferich bridge があれば、Branch B 文脈で `GN p (z - y) y` に平方で割れない素因子が存在する。
