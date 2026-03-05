@@ -384,7 +384,7 @@ private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
       exact h3a (Nat.Prime.dvd_of_dvd_pow Nat.prime_three h)
     simpa [A, B, Nat.add_sub_cancel] using hpow
   rcases pick_primitive_q_data_GN3 A B hAB_lt hy_pos hAB_coprime hpnd with
-    ⟨q, hq_prime, hq_div, hq_ndiv, _hq_dvd_GN⟩
+    ⟨q, hq_prime, hq_div, hq_ndiv, hq_dvd_GN⟩
   have hval_ge : 1 ≤ padicValNat q (A ^ 3 - B ^ 3) := by
     exact DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_ge_one -- OK
       hAB_lt hy_pos (by norm_num) hq_prime hq_div
@@ -400,6 +400,8 @@ private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
     simpa [N] using
       (DkMath.NumberTheory.GcdNext.pow_sub_pow_factor_cosmic_N
         (a := A) (b := B) (d := 3) (by norm_num) hAB_lt)
+  have _hq_dvd_N : q ∣ N := by
+    simpa [N] using hq_dvd_GN
   have hGN_pos : 0 < GN 3 (a ^ 3) y := by
     rw [GN_quadratic]
     positivity

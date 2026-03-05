@@ -1079,6 +1079,11 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - 共有スニペット案にあった
     `exists_primitive_prime_factor_prime` 呼び出しの余分な `(by norm_num)` 1 個は、
     現行シグネチャに合わせて削除して反映。
+  - 失敗例:
+    - `hN_ne` を `Nat.pos_of_dvd_of_pos hq_dvd_N hq_prime.pos` で出そうとしたが、
+      方向が合わず（`q ∣ N` からは直接 `0 < N` を出せない）型不一致で失敗。
+    - `hN_ne` は一旦元の `hb : GN ... = b^3` 経由へ戻し、
+      `hq_dvd_GN` は `_hq_dvd_N` として保持する形に修正。
 
 - 確認:
   - `cd lean/dk_math && lake build DkMath.FLT.Basic`
