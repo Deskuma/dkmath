@@ -28,6 +28,18 @@ abbrev TriominoNoWieferichBridge : Prop :=
     Nat.Prime q → q ∣ (z ^ p - y ^ p) → ¬ q ∣ (z - y) →
     ¬ q ^ 2 ∣ (z ^ p - y ^ p)
 
+/--
+`p = 3` 専用の NoWieferich bridge。
+
+`PrimeGe5CounterexamplePack` では `p = 3` が到達不能なため、
+FLT3 実パスに刺す入口は別契約として分離する。
+-/
+abbrev TriominoNoWieferichBridge3 : Prop :=
+  ∀ {x y z q : ℕ}, PrimeCounterexamplePack 3 x y z →
+    ¬ 3 ∣ (z - y) →
+    Nat.Prime q → q ∣ (z ^ 3 - y ^ 3) → ¬ q ∣ (z - y) →
+    ¬ q ^ 2 ∣ (z ^ 3 - y ^ 3)
+
 /-- 反例文脈での Wieferich 型 lift（原始素因子が 2 段刺さる）を表す。 -/
 def WieferichLift (p y z q : ℕ) : Prop :=
   Nat.Prime q ∧ q ∣ (z ^ p - y ^ p) ∧ ¬ q ∣ (z - y) ∧ q ^ 2 ∣ (z ^ p - y ^ p)
@@ -185,6 +197,29 @@ theorem triominoCosmicNonLiftableGNBridge_of_noWieferich
     rw [hfactor]
     exact dvd_mul_of_dvd_right hq2_dvd_GN (z - y)
   exact (hNW hpack hp_not_dvd_gap hqP hq_dvd_diff hq_not_dvd_gap) hq2_dvd_diff
+
+/--
+`p = 3` 専用: `TriominoNoWieferichBridge3` から `GN` 側 no-lift を引き戻す。
+-/
+theorem triominoCosmicNonLiftableGN3Bridge_of_noWieferich3
+    (hNW3 : TriominoNoWieferichBridge3) :
+  ∀ {x y z : ℕ}, PrimeCounterexamplePack 3 x y z →
+      ¬ 3 ∣ (z - y) ->
+      ∀ q : ℕ,
+        (Nat.Prime q ∧ q ∣ GN 3 (z - y) y ∧ ¬ q ∣ (z - y)) ->
+        ¬ q ^ 2 ∣ GN 3 (z - y) y := by
+  intro x y z hpack h3_not_dvd_gap q hPrim
+  rcases hPrim with ⟨hqP, hq_dvd_GN, hq_not_dvd_gap⟩
+  have hfactor : z ^ 3 - y ^ 3 = (z - y) * GN 3 (z - y) y := by
+    simpa using pow_sub_pow_factor_cosmic_N (a := z) (b := y) (d := 3) (by norm_num) hpack.hyz_lt
+  have hq_dvd_diff : q ∣ z ^ 3 - y ^ 3 := by
+    rw [hfactor]
+    exact dvd_mul_of_dvd_right hq_dvd_GN (z - y)
+  intro hq2_dvd_GN
+  have hq2_dvd_diff : q ^ 2 ∣ z ^ 3 - y ^ 3 := by
+    rw [hfactor]
+    exact dvd_mul_of_dvd_right hq2_dvd_GN (z - y)
+  exact (hNW3 hpack h3_not_dvd_gap hqP hq_dvd_diff hq_not_dvd_gap) hq2_dvd_diff
 
 /--
 Triomino/Cosmic 側が最終的に供給すべき「最小反例選択 + 下降」のカーネル。

@@ -1217,6 +1217,43 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - どちらも成功。
 
+## 2026-03-06 phase-15 継続（GN3 経路を `PrimeCounterexamplePack 3` 実パスへ接続）
+
+- 更新:
+  - `CosmicPetalBridgeGNCore.lean`
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `Core` に `TriominoNoWieferichBridge3` を追加。
+    - `PrimeGe5CounterexamplePack` とは分離し、`PrimeCounterexamplePack 3` 専用の
+      NoWieferich 契約として定義。
+  - `Core` に `triominoCosmicNonLiftableGN3Bridge_of_noWieferich3` を追加。
+    - `p=3` 固定で `z^3 - y^3 = (z-y) * GN 3 (z-y) y` を使い、
+      差側 no-lift から GN 側 no-lift を引き戻す橋を常設化。
+  - `DescentB` の GN3 専用定理群の入力を非空文脈へ修正:
+    - `branchBLocalNoLift_GN3_of_noWieferich`
+    - `gn3NoLiftProvider_of_noWieferich`
+    - `kernel_route_gn3_not_cube_of_noWieferich`
+    - いずれも `PrimeGe5CounterexamplePack 3 ...` から
+      `PrimeCounterexamplePack 3 ...` へ置換し、
+      `TriominoNoWieferichBridge3` を受け取る形へ変更。
+  - これにより、GN3 provider 経路は「型だけ通る到達不能枝」ではなく、
+    `p=3` を許す実文脈で適用可能な契約に整列した。
+
+- 失敗例:
+  - `branchBLocalNoLift_GN3_of_noWieferich` で旧実装のまま
+    `branchBLocalNoLift_of_noWieferich` を再利用しようとすると、
+    必要入力が `PrimeGe5CounterexamplePack` のため型が合わず失敗。
+  - 対処として GN3 専用に直接
+    `hq_dvd_diff`（因数分解から）と `hNoLift`（`...noWieferich3` から）を構成し、
+    `r := q` で束を返す形へ変更。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNCore`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - すべて成功。
+
 ## 2026-03-06 phase-15 継続（candidateZ の矛盾生成点へ GN3 provider 経路を差し込み）
 
 - 更新:

@@ -1255,9 +1255,9 @@ theorem branchBLocalNoLift_of_noWieferich
 入力は `a^3` 形で受け取り、内部で Branch B の gap 形へ合わせる。
 -/
 theorem branchBLocalNoLift_GN3_of_noWieferich
-    (hNW : TriominoNoWieferichBridge)
+    (hNW3 : TriominoNoWieferichBridge3)
     {x a y q : ℕ}
-    (hpack : PrimeGe5CounterexamplePack 3 x y (a ^ 3 + y))
+    (hpack : PrimeCounterexamplePack 3 x y (a ^ 3 + y))
     (h3_not_dvd_a3 : ¬ 3 ∣ a ^ 3)
     (hqP : Nat.Prime q)
     (hq_not_dvd_a3 : ¬ q ∣ a ^ 3)
@@ -1267,19 +1267,31 @@ theorem branchBLocalNoLift_GN3_of_noWieferich
     simpa [Nat.add_sub_cancel] using h3_not_dvd_a3
   have hq_not_dvd_gap : ¬ q ∣ ((a ^ 3 + y) - y) := by
     simpa [Nat.add_sub_cancel] using hq_not_dvd_a3
-  have hqpow_dvd_GN_gap : q ^ 3 ∣ GN 3 ((a ^ 3 + y) - y) y := by
-    simpa [Nat.add_sub_cancel] using hqpow_dvd_GN_a3
-  exact
-    branchBLocalNoLift_of_noWieferich
-      hNW hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN_gap
+  have hq_dvd_GN_a3 : q ∣ GN 3 (a ^ 3) y := by
+    exact dvd_trans (dvd_pow_self q (by decide : 3 ≠ 0)) hqpow_dvd_GN_a3
+  have hq_dvd_GN_gap : q ∣ GN 3 ((a ^ 3 + y) - y) y := by
+    simpa [Nat.add_sub_cancel] using hq_dvd_GN_a3
+  have hNoLift_gap : ¬ q ^ 2 ∣ GN 3 ((a ^ 3 + y) - y) y := by
+    exact
+      (triominoCosmicNonLiftableGN3Bridge_of_noWieferich3 hNW3 hpack hpB q)
+        ⟨hqP, hq_dvd_GN_gap, hq_not_dvd_gap⟩
+  have hfactor :
+      (a ^ 3 + y) ^ 3 - y ^ 3 = ((a ^ 3 + y) - y) * GN 3 ((a ^ 3 + y) - y) y := by
+    simpa using
+      (pow_sub_pow_factor_cosmic_N
+        (a := a ^ 3 + y) (b := y) (d := 3) (by norm_num) hpack.hyz_lt)
+  have hq_dvd_diff : q ∣ (a ^ 3 + y) ^ 3 - y ^ 3 := by
+    rw [hfactor]
+    exact dvd_mul_of_dvd_right hq_dvd_GN_gap ((a ^ 3 + y) - y)
+  exact ⟨q, ⟨hqP, hq_dvd_diff, hq_not_dvd_gap, hNoLift_gap⟩⟩
 
 /--
 `NoWieferich` bridge から、`Basic` の GN3 spine が直接使える供給インターフェイスを得る。
 -/
 theorem gn3NoLiftProvider_of_noWieferich
-    (hNW : TriominoNoWieferichBridge)
+    (hNW3 : TriominoNoWieferichBridge3)
     {x a y : ℕ}
-    (hpack : PrimeGe5CounterexamplePack 3 x y (a ^ 3 + y))
+    (hpack : PrimeCounterexamplePack 3 x y (a ^ 3 + y))
     (h3_not_dvd_a3 : ¬ 3 ∣ a ^ 3) :
     DkMath.FLT.GN3NoLiftProvider a y := by
   refine ⟨?_⟩
@@ -1292,7 +1304,7 @@ theorem gn3NoLiftProvider_of_noWieferich
     simpa [Nat.add_sub_cancel] using hq_dvd_GN_a3
   have hNoLift_gap : ¬ q ^ 2 ∣ GN 3 ((a ^ 3 + y) - y) y := by
     exact
-      (triominoCosmicNonLiftableGNBridge_of_noWieferich hNW hpack hpB q)
+      (triominoCosmicNonLiftableGN3Bridge_of_noWieferich3 hNW3 hpack hpB q)
         ⟨hqP, hq_dvd_GN_gap, hq_not_dvd_gap⟩
   simpa [Nat.add_sub_cancel] using hNoLift_gap
 
@@ -1301,9 +1313,9 @@ Kernel 側で `NoWieferich -> GN3NoLiftProvider` を作り、
 `Basic` の provider 入口へそのまま流し込む最短ルート。
 -/
 theorem kernel_route_gn3_not_cube_of_noWieferich
-    (hNW : TriominoNoWieferichBridge)
+    (hNW3 : TriominoNoWieferichBridge3)
     {x a y : ℕ}
-    (hpack : PrimeGe5CounterexamplePack 3 x y (a ^ 3 + y))
+    (hpack : PrimeCounterexamplePack 3 x y (a ^ 3 + y))
     (ha : 2 ≤ a)
     (hy : 1 ≤ y)
     (hcop : Nat.Coprime a y)
@@ -1315,7 +1327,7 @@ theorem kernel_route_gn3_not_cube_of_noWieferich
       exact dvd_trans h3 (dvd_pow_self a (by decide : 3 ≠ 0))
     exact h3_not_dvd_a3 h3_dvd_a3
   have hProv : DkMath.FLT.GN3NoLiftProvider a y :=
-    gn3NoLiftProvider_of_noWieferich hNW hpack h3_not_dvd_a3
+    gn3NoLiftProvider_of_noWieferich hNW3 hpack h3_not_dvd_a3
   exact DkMath.GN3_cube_not_cube_of_gt_one_of_provider a y ha hy hcop h3a hProv
 
 /--
