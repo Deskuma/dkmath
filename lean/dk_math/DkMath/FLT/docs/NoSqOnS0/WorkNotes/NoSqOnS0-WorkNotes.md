@@ -1415,3 +1415,40 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - どちらも成功。
+
+## 2026-03-07 phase-15 継続（FLT3 実分岐への差し込み準備: `hGN_cube` 変換ラッパー）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - 新規定理を追加:
+    - `FLT3_from_pack_gapCube_and_noWieferich3_of_mulCube`
+      - 入力:
+        - `hpack : PrimeCounterexamplePack 3 x y z`
+        - `hgap : z - y = a^3`
+        - `hGNq : GN 3 (z - y) y = (q * v1)^3`
+      - 処理:
+        - `hGNq` と `hgap` から `hGN_cube : ∃ b, GN 3 (a^3) y = b^3` を構成
+        - 既存の `FLT3_from_pack_gapCube_and_noWieferich3` に注入
+      - 目的:
+        - 呼び出し側で毎回 `∃ b` 包装を書く必要をなくし、
+          `GN = (q * v1)^3` 形の枝から 1 行で矛盾化できるようにする。
+
+- 調査結果（実パス探索）:
+  - `PrimeCounterexamplePack 3` を直接使う箇所は現時点で
+    `CosmicPetalBridgeGNCore.lean` / `CosmicPetalBridgeGNDescentB.lean` に限定。
+  - `hgap : z - y = a^3` と `GN 3 ... = _^3` を同時に持つ既存呼び出し点は未接続。
+  - したがって次の実作業は、
+    FLT3 側でこの 2 つが揃う枝（またはそこへ transport できる枝）へ
+    `FLT3_from_pack_gapCube_and_noWieferich3_of_mulCube` を差し込む配線。
+
+- 失敗例:
+  - 最初のビルドでプロジェクト root を 1 階層誤り
+    (`/home/deskuma/develop/lean/dkmath` で `lakefile` 不在)。
+  - `workdir` を `lean/dk_math` へ修正して解消。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
