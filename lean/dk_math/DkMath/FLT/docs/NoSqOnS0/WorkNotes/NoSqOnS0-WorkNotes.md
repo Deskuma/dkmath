@@ -1254,6 +1254,36 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - すべて成功。
 
+## 2026-03-07 phase-15 継続（FLT3 実パス入口: `z = a^3 + y` transport helper を追加）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `primeCounterexamplePack3_of_eq` を追加。
+    - 入力: `hpos`, `h_coprime`, `h_body : z^3 = x^3 + y^3`, `hz : z = a^3 + y`
+    - 出力: `PrimeCounterexamplePack 3 x y (a^3 + y)`
+    - 目的: GN3 kernel が要求する pack への transport を 1 本化。
+  - `FLT3_from_gapCube_and_noWieferich3` を追加。
+    - 入力: `hNW3`, `hgap : z - y = a^3`, `hGN_cube : ∃ b, GN 3 (a^3) y = b^3` など
+    - 処理:
+      1. `hgap` + `hzy` から `hz : z = a^3 + y` を再構成
+      2. `primeCounterexamplePack3_of_eq` で `hpack3` を構成
+      3. `hpack3.gap_coprime_right` と `Nat.coprime_pow_left_iff` から `Nat.Coprime a y` を回収
+      4. `kernel_route_gn3_not_cube_of_noWieferich` へ注入して `hGN_cube` を矛盾化
+  - これで「`gap cube witness` を持つ FLT3 分岐 -> GN3 provider kernel」への
+    実パス入口が 1 本できた。
+
+- 失敗例:
+  - 初回実装で `Nat.pow_pos hpos.left 3` と書いたが、この環境の型では
+    `Nat.pow_pos` は指数引数を取らずエラー。
+  - `Nat.pow_pos hpos.left` へ修正して解消。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
 ## 2026-03-06 phase-15 継続（candidateZ の矛盾生成点へ GN3 provider 経路を差し込み）
 
 - 更新:

@@ -1331,6 +1331,70 @@ theorem kernel_route_gn3_not_cube_of_noWieferich
   exact DkMath.GN3_cube_not_cube_of_gt_one_of_provider a y ha hy hcop h3a hProv
 
 /--
+FLT3 形 `z^3 = x^3 + y^3` と `z = a^3 + y` から、
+GN3 kernel が要求する `PrimeCounterexamplePack 3 x y (a^3 + y)` を組み立てる。
+-/
+theorem primeCounterexamplePack3_of_eq
+    {x y z a : ℕ}
+    (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
+    (h_coprime : Nat.gcd x y = 1)
+    (h_body : z ^ 3 = x ^ 3 + y ^ 3)
+    (hz : z = a ^ 3 + y) :
+    PrimeCounterexamplePack 3 x y (a ^ 3 + y) := by
+  have hzy : y < z := by
+    have : y ^ 3 < x ^ 3 + y ^ 3 := Nat.lt_add_of_pos_left (Nat.pow_pos hpos.1)
+    rw [← h_body] at this
+    exact (Nat.pow_lt_pow_iff_left (by norm_num)).mp this
+  refine
+    { hp := Nat.prime_three
+      hxy := ?_
+      hyz := ?_
+      hyz_lt := ?_
+      hEq := ?_ }
+  · rw [Nat.coprime_iff_gcd_eq_one, h_coprime]
+  · exact Nat.le_add_left _ _
+  · simpa [hz] using hzy
+  · have hEq0 : x ^ 3 + y ^ 3 = z ^ 3 := by
+      simpa using h_body.symm
+    simpa [hz] using hEq0
+
+/--
+`z - y = a^3` が与えられる FLT3 分岐では、
+NoWieferich3 bridge を経由して GN3-cube 仮定を直接矛盾化できる。
+-/
+theorem FLT3_from_gapCube_and_noWieferich3
+    {x y z a : ℕ}
+    (hNW3 : TriominoNoWieferichBridge3)
+    (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
+    (h_coprime : Nat.gcd x y = 1)
+    (h_body : z ^ 3 = x ^ 3 + y ^ 3)
+    (hgap : z - y = a ^ 3)
+    (ha : 2 ≤ a)
+    (h3_not_dvd_a3 : ¬ 3 ∣ a ^ 3)
+    (hGN_cube : ∃ b, GN 3 (a ^ 3) y = b ^ 3) :
+    False := by
+  have hzy : y < z := by
+    have : y ^ 3 < x ^ 3 + y ^ 3 := Nat.lt_add_of_pos_left (Nat.pow_pos hpos.1)
+    rw [← h_body] at this
+    exact (Nat.pow_lt_pow_iff_left (by norm_num)).mp this
+  have hz : z = a ^ 3 + y := by
+    calc
+      z = (z - y) + y := (Nat.sub_add_cancel hzy.le).symm
+      _ = a ^ 3 + y := by simp [hgap]
+  have hpack3 : PrimeCounterexamplePack 3 x y (a ^ 3 + y) :=
+    primeCounterexamplePack3_of_eq hpos h_coprime h_body hz
+  have hy : 1 ≤ y := Nat.succ_le_of_lt hpos.2.1
+  have hcop_a3y : Nat.Coprime (a ^ 3) y := by
+    simpa [PrimeCounterexamplePack.gap, Nat.add_sub_cancel] using
+      PrimeCounterexamplePack.gap_coprime_right hpack3
+  have hcop : Nat.Coprime a y := by
+    exact (Nat.coprime_pow_left_iff (by norm_num) a y).1 hcop_a3y
+  exact
+    (kernel_route_gn3_not_cube_of_noWieferich
+      hNW3 (x := x) (a := a) (y := y)
+      hpack3 ha hy hcop h3_not_dvd_a3) hGN_cube
+
+/--
 NoWieferich bridge があれば、Branch B 文脈で `GN p (z - y) y` に平方で割れない素因子が存在する。
 -/
 theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_of_noWieferich
