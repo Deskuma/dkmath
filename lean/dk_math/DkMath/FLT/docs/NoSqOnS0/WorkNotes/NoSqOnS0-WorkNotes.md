@@ -1613,3 +1613,38 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - どちらも成功。
+
+## 2026-03-07 phase-15 継続（一般化閉路: `p=3 / p≥5` dispatcher と pack 昇格補題を追加）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - 新規補題:
+    - `primeGe5CounterexamplePack_of_pack`
+      - `PrimeCounterexamplePack p x y z` + `hy : 1 ≤ y` + `hp5 : 5 ≤ p`
+        から `PrimeGe5CounterexamplePack p x y z` を構成。
+      - `hx0` は `x=0` を仮定して `y^p = z^p` を導き、
+        `Nat.pow_left_injective` と `hyz_lt` で矛盾化。
+  - 新規 dispatcher:
+    - `triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferich`
+      - 入力:
+        - `hNW3 : TriominoNoWieferichBridge3`
+        - `hNW5 : TriominoNoWieferichBridge`
+        - `hpack : PrimeCounterexamplePack p x y z`
+        - `hy, hp2, hpB, hqP, hq_not_dvd_gap, hqpow_dvd_GN, d, ha`
+      - 分岐:
+        - `p = 3` は GN3 spine (`...contradiction_of_noWieferich3_hpB`) へ
+        - `p ≠ 3` は `hp2` と prime 性から `5 ≤ p` を導いて Ge5 spine へ
+
+- 失敗例:
+  - `primeGe5CounterexamplePack_of_pack` 初版で
+    `Nat.zero_pow` の条件型を `p ≠ 0` と誤って渡し失敗。
+    - 修正: `0 ^ p + ...` を一段受け、`Nat.zero_pow hpack.hp.pos` で整理。
+  - dispatcher 初版を参照先より前に置いてしまい、前方参照で失敗。
+    - 修正: 宣言順を後ろへ移動し解消。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。

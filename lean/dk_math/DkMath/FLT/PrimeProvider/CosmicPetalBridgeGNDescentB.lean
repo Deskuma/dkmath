@@ -1477,6 +1477,33 @@ theorem FLT3_from_pack_gapGNPowData_and_noWieferich3
       (hGNq := d.hGNq)
 
 /--
+`PrimeCounterexamplePack` を `PrimeGe5CounterexamplePack` へ昇格する補助。
+
+`hy : 1 ≤ y` と `hp5 : 5 ≤ p` から、`PrimeGe5` が要求する非零条件を回収する。
+-/
+theorem primeGe5CounterexamplePack_of_pack
+    {p x y z : ℕ}
+    (hpack : PrimeCounterexamplePack p x y z)
+    (hy : 1 ≤ y)
+    (hp5 : 5 ≤ p) :
+    PrimeGe5CounterexamplePack p x y z := by
+  refine
+    { toPrimeCounterexamplePack := hpack
+      hp5 := hp5
+      hx0 := ?_
+      hy0 := ?_
+      hz0 := ?_ }
+  · intro hx0
+    have hEq0' : 0 ^ p + y ^ p = z ^ p := by
+      simpa [hx0] using hpack.hEq
+    have hEq0 : y ^ p = z ^ p := by
+      simpa [Nat.zero_pow hpack.hp.pos, zero_add] using hEq0'
+    have hy_eq_z : y = z := (Nat.pow_left_injective hpack.hp.ne_zero) hEq0
+    exact (Nat.ne_of_lt hpack.hyz_lt) hy_eq_z
+  · exact Nat.ne_of_gt (Nat.succ_le_iff.mp hy)
+  · exact Nat.ne_of_gt (lt_trans (Nat.succ_le_iff.mp hy) hpack.hyz_lt)
+
+/--
 NoWieferich bridge があれば、Branch B 文脈で `GN p (z - y) y` に平方で割れない素因子が存在する。
 -/
 theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_of_noWieferich
@@ -1704,6 +1731,58 @@ def triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_of_noWieferich3_hpB
     triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_data_of_noWieferich3_hpB
       hNW3 hpack hy hpB d ha
   exact cd.toSubtype
+
+/--
+`p = 3` spine と `p ≥ 5` spine を 1 本へ束ねる dispatcher。
+
+- `p = 3` なら GN3 no-Wieferich 経路で即矛盾。
+- `p ≠ 3` なら prime odd (`p ≠ 2`) から `p ≥ 5` を得て Ge5 経路で矛盾。
+-/
+theorem triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferich
+    (hNW3 : TriominoNoWieferichBridge3)
+    (hNW5 : TriominoNoWieferichBridge)
+    {p x y z q : ℕ}
+    (hpack : PrimeCounterexamplePack p x y z)
+    (hy : 1 ≤ y)
+    (hp2 : p ≠ 2)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y)
+    (d : TriominoWieferichShrinkGapGNPowDataB p x y z q)
+    (ha : 2 ≤ d.u) :
+    False := by
+  by_cases hp3 : p = 3
+  · subst hp3
+    exact
+      triominoWieferichShrinkKernelEqSeedTracePack3_contradiction_of_noWieferich3_hpB
+        hNW3 hpack hy hpB d ha
+  · have hp5 : 5 ≤ p := by
+      have hpge2 : 2 ≤ p := hpack.hp.two_le
+      by_contra hp5_not
+      have hlt5 : p < 5 := Nat.lt_of_not_ge hp5_not
+      have hcases : p = 2 ∨ p = 3 ∨ p = 4 := by
+        omega
+      rcases hcases with hp2' | hp3' | hp4'
+      · exact hp2 hp2'
+      · exact hp3 hp3'
+      · have hp4prime : Nat.Prime 4 := by simpa [hp4'] using hpack.hp
+        exact (by decide : ¬ Nat.Prime 4) hp4prime
+    let hpack5 : PrimeGe5CounterexamplePack p x y z :=
+      primeGe5CounterexamplePack_of_pack hpack hy hp5
+    have hp2_le : 2 ≤ p := le_trans (by decide : 2 ≤ 5) hp5
+    have hExistsPrime :
+        ∃ r : ℕ, Nat.Prime r ∧ r ∣ GN p (z - y) y ∧ ¬ r ^ 2 ∣ GN p (z - y) y := by
+      exact
+        triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_of_noWieferich
+          hNW5
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack5 hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+    have hNoPowGN : ¬ ∃ v : ℕ, GN p (z - y) y = v ^ p := by
+      exact
+        triominoWieferichShrink_not_exists_pow_of_exists_prime_dvd_not_dvd_sq
+          hp2_le hExistsPrime
+    exact hNoPowGN ⟨q * d.v1, by simpa using d.hGNq⟩
 
 /--
 Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
