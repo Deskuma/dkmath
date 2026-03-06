@@ -1539,3 +1539,26 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - どちらも成功。
+
+## 2026-03-07 phase-15 継続（`hpB` から `¬ 3 ∣ d.u^3` を自動回収する FLT3 ラッパーを追加）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - 新規定義を追加:
+    - `triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_data_of_noWieferich3_hpB`
+    - `triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_of_noWieferich3_hpB`
+  - どちらも `hpB : ¬ 3 ∣ (z - y)` と `d.hgap : z - y = d.u^3` から
+    `¬ 3 ∣ d.u^3` を内部で回収して既存ラッパーへ委譲。
+  - 目的:
+    - 呼び出し側で `h3_not_dvd_u3` を明示生成する手間を減らし、
+      既存の Branch B 形（`hpB` 保持）から FLT3 入口へ差し込みやすくする。
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。

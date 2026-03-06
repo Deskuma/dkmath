@@ -1646,6 +1646,48 @@ def triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_of_noWieferich3
   exact cd.toSubtype
 
 /--
+FLT3 専用（`hpB` 版）:
+`hpB : ¬ 3 ∣ (z - y)` と `d.hgap : z - y = d.u^3` から
+`¬ 3 ∣ d.u^3` を回収して `candidateZ_data` を返す。
+-/
+def triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_data_of_noWieferich3_hpB
+    {x y z q : ℕ}
+    (hNW3 : TriominoNoWieferichBridge3)
+    (hpack : PrimeCounterexamplePack 3 x y z)
+    (hy : 1 ≤ y)
+    (hpB : ¬ 3 ∣ (z - y))
+    (d : TriominoWieferichShrinkGapGNPowDataB 3 x y z q)
+    (ha : 2 ≤ d.u) :
+    TriominoWieferichShrinkKernelCandidateZDataB 3 x y z q := by
+  have h3_not_dvd_u3 : ¬ 3 ∣ d.u ^ 3 := by
+    intro h3
+    exact hpB (by simpa [d.hgap] using h3)
+  exact
+    triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_data_of_noWieferich3
+      hNW3 hpack hy d ha h3_not_dvd_u3
+
+/--
+FLT3 専用（`hpB` 版）:
+`candidateZ` 形を直接返す薄い包装。
+-/
+def triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_of_noWieferich3_hpB
+    {x y z q : ℕ}
+    (hNW3 : TriominoNoWieferichBridge3)
+    (hpack : PrimeCounterexamplePack 3 x y z)
+    (hy : 1 ≤ y)
+    (hpB : ¬ 3 ∣ (z - y))
+    (d : TriominoWieferichShrinkGapGNPowDataB 3 x y z q)
+    (ha : 2 ≤ d.u) :
+    { z' : ℕ //
+      z' < z
+        ∧ ¬ 3 ∣ (z' - y)
+        ∧ (x / q) ^ 3 + y ^ 3 = z' ^ 3 } := by
+  let cd : TriominoWieferichShrinkKernelCandidateZDataB 3 x y z q :=
+    triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_data_of_noWieferich3_hpB
+      hNW3 hpack hy hpB d ha
+  exact cd.toSubtype
+
+/--
 Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
 
 route 1 の `u / v1` data までは外で取り、最後の穴をさらに狭い core に押し込める。
