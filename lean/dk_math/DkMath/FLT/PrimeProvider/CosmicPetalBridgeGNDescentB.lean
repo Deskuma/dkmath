@@ -1646,6 +1646,25 @@ def triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_of_noWieferich3
   exact cd.toSubtype
 
 /--
+FLT3 専用: `GapGNPowDataB 3` を持つ分岐をその場で閉じる即矛盾定理（`hpB` 版）。
+-/
+theorem triominoWieferichShrinkKernelEqSeedTracePack3_contradiction_of_noWieferich3_hpB
+    {x y z q : ℕ}
+    (hNW3 : TriominoNoWieferichBridge3)
+    (hpack : PrimeCounterexamplePack 3 x y z)
+    (hy : 1 ≤ y)
+    (hpB : ¬ 3 ∣ (z - y))
+    (d : TriominoWieferichShrinkGapGNPowDataB 3 x y z q)
+    (ha : 2 ≤ d.u) :
+    False := by
+  have h3_not_dvd_u3 : ¬ 3 ∣ d.u ^ 3 := by
+    intro h3
+    exact hpB (by simpa [d.hgap] using h3)
+  exact
+    FLT3_from_pack_gapGNPowData_and_noWieferich3
+      hNW3 hpack hy d ha h3_not_dvd_u3
+
+/--
 FLT3 専用（`hpB` 版）:
 `hpB : ¬ 3 ∣ (z - y)` と `d.hgap : z - y = d.u^3` から
 `¬ 3 ∣ d.u^3` を回収して `candidateZ_data` を返す。
@@ -1659,12 +1678,11 @@ def triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_data_of_noWieferich
     (d : TriominoWieferichShrinkGapGNPowDataB 3 x y z q)
     (ha : 2 ≤ d.u) :
     TriominoWieferichShrinkKernelCandidateZDataB 3 x y z q := by
-  have h3_not_dvd_u3 : ¬ 3 ∣ d.u ^ 3 := by
-    intro h3
-    exact hpB (by simpa [d.hgap] using h3)
-  exact
-    triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_from_gap_GN_powers_of_noWieferich3
-      hNW3 hpack hy d ha h3_not_dvd_u3
+  have hFalse : False := by
+    exact
+      triominoWieferichShrinkKernelEqSeedTracePack3_contradiction_of_noWieferich3_hpB
+        hNW3 hpack hy hpB d ha
+  exact False.elim hFalse
 
 /--
 FLT3 専用（`hpB` 版）:

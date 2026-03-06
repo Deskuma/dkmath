@@ -1583,3 +1583,33 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - どちらも成功。
+
+## 2026-03-07 phase-15 継続（攻め案: `p=3` 即矛盾定理を追加し `_hpB` 末尾を差し替え）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - 新規定理を追加:
+    - `triominoWieferichShrinkKernelEqSeedTracePack3_contradiction_of_noWieferich3_hpB`
+      - 入力:
+        - `hNW3, hpack, hy, hpB, d, ha`
+      - 出力:
+        - `False`
+      - 役割:
+        - `hpB` と `d.hgap` から `¬ 3 ∣ d.u^3` を内部回収し、
+          `FLT3_from_pack_gapGNPowData_and_noWieferich3` へ直結する
+          `p=3` 専用の即矛盾入口を固定。
+  - 置換:
+    - `triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_data_of_noWieferich3_hpB`
+      の末尾を、
+      旧ルート（`h3_not_dvd_u3` を作って core 呼び出し）から
+      新しい即矛盾定理呼び出し + `False.elim` へ置換。
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
