@@ -1217,6 +1217,69 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - どちらも成功。
 
+## 2026-03-06 phase-15 継続（candidateZ の矛盾生成点へ GN3 provider 経路を差し込み）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_from_gap_GN_powers_core`
+    の `hFalse` 生成を二分岐化。
+    - `p = 3` 分岐:
+      - `a := d.u` を固定。
+      - `kernel_route_gn3_not_cube_of_noWieferich` を呼び、
+        `¬ ∃ b, GN 3 (d.u^3) y = b^3` を作る。
+      - `d.hGNq` を `GN 3 (d.u^3) y = (q*d.v1)^3` へ変換して矛盾化。
+    - `p ≠ 3` 分岐:
+      - 従来どおり `...noPowGN_core` の route 1 を利用。
+  - これで一般核の矛盾生成点に GN3 provider 経路が実際に刺さる構図へ更新。
+
+- 失敗例:
+  - 初回実装では `p = 3` 分岐で `ha : 2 ≤ d.u` を通常導出しようとして破綻。
+    - `d.u = 1` を `hpB` だけでは排除できず、前提設計と不一致。
+  - 分岐は `hpack3.hp5 : 5 ≤ 3` からの `False` を使って
+    `ha` / `hcop` を供給する形に整理して解消。
+  - 途中で `Nat.dvd_pow_of_dvd` へ置換を試したが、この環境では未定義で失敗。
+    `dvd_pow_self` へ戻して安定化。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
+## 2026-03-06 phase-15 継続（candidateZ の矛盾生成点へ GN3 provider 経路を差し込み）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_from_gap_GN_powers_core`
+    の矛盾生成 (`hFalse`) を二分岐化。
+    - `p = 3` 分岐:
+      - `a := d.u` を固定。
+      - `kernel_route_gn3_not_cube_of_noWieferich` を使って
+        `¬ ∃ b, GN 3 (d.u^3) y = b^3` を生成。
+      - `d.hGNq` を `GN 3 (d.u^3) y = (q*d.v1)^3` へ同型変換して矛盾化。
+    - `p ≠ 3` 分岐:
+      - 従来の route 1
+        `...noPowGN_core -> hNoPowGN ⟨q*d.v1, d.hGNq⟩`
+        を維持。
+  - これで「一般核の矛盾生成点」に GN3 provider 経路が実際に刺さった。
+
+- 失敗例:
+  - 当初、`p = 3` 分岐で `ha : 2 ≤ d.u` を通常導出しようとして破綻。
+    - `d.u = 1` ケースを `hpB` で排除できず設計不一致。
+  - 当該分岐は `PrimeGe5CounterexamplePack 3 ...` の不可能性
+    （`hpack3.hp5 : 5 ≤ 3`）から `False` を取って
+    `ha` / `hcop` を供給する形に整理。
+  - 途中で `Nat.dvd_pow_of_dvd` への置換を試したが、
+    この環境では定数未解決で失敗。`dvd_pow_self` へ復帰。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
 ## 2026-03-06 phase-15 継続（GN3 NoLift 最小インターフェイスを導入して Basic 差し替え点を固定）
 
 - 更新:
