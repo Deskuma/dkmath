@@ -1217,6 +1217,30 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - どちらも成功。
 
+## 2026-03-07 phase-15 継続（FLT3 実分岐に刺しやすい `PrimeCounterexamplePack 3` 直受け入口を追加）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `FLT3_from_pack_gapCube_and_noWieferich3` を追加。
+    - 入力: `hpack : PrimeCounterexamplePack 3 x y z`, `hy`, `hgap`, `hGN_cube` など
+    - 目的: 実分岐がすでに `PrimeCounterexamplePack 3 ...` を持つ場合に、
+      transport 補題 `primeCounterexamplePack3_of_eq` を経由した GN3 provider kernel 呼び出しを
+      そのまま適用できるようにする。
+  - 内部では `hpack.hyz_lt` と `hy` から `hpos` を組み立て、
+    既存の `FLT3_from_gapCube_and_noWieferich3` へ委譲。
+
+- 失敗例:
+  - 初回実装で `by_contra hx0` の `hx0` をそのまま `simpa [hx0]` に使って失敗。
+    - `hx0` の型は `¬ 0 < x` であり `x = 0` ではないため。
+  - `hx_eq0 : x = 0 := Nat.eq_zero_of_not_pos hx0` を挟んで解消。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
 ## 2026-03-06 phase-15 継続（GN3 経路を `PrimeCounterexamplePack 3` 実パスへ接続）
 
 - 更新:

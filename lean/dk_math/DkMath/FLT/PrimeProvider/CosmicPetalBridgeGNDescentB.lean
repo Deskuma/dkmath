@@ -1395,6 +1395,39 @@ theorem FLT3_from_gapCube_and_noWieferich3
       hpack3 ha hy hcop h3_not_dvd_a3) hGN_cube
 
 /--
+`PrimeCounterexamplePack 3` を直接受け取る実パス入口。
+
+`hgap : z - y = a^3` を持つ FLT3 分岐で、`hGN_cube` を
+GN3 provider kernel へ注入して矛盾化する。
+-/
+theorem FLT3_from_pack_gapCube_and_noWieferich3
+    {x y z a : ℕ}
+    (hNW3 : TriominoNoWieferichBridge3)
+    (hpack : PrimeCounterexamplePack 3 x y z)
+    (hy : 1 ≤ y)
+    (hgap : z - y = a ^ 3)
+    (ha : 2 ≤ a)
+    (h3_not_dvd_a3 : ¬ 3 ∣ a ^ 3)
+    (hGN_cube : ∃ b, GN 3 (a ^ 3) y = b ^ 3) :
+    False := by
+  have hy_pos : 0 < y := Nat.succ_le_iff.mp hy
+  have hz_pos : 0 < z := lt_trans hy_pos hpack.hyz_lt
+  have hx_pos : 0 < x := by
+    by_contra hx0
+    have hx_eq0 : x = 0 := Nat.eq_zero_of_not_pos hx0
+    have hEq0 : y ^ 3 = z ^ 3 := by
+      simpa [hx_eq0] using hpack.hEq
+    have hyz_pow_lt : y ^ 3 < z ^ 3 := by
+      exact (Nat.pow_lt_pow_iff_left (by norm_num)).2 hpack.hyz_lt
+    exact (ne_of_lt hyz_pow_lt) hEq0
+  have h_coprime : Nat.gcd x y = 1 := (Nat.coprime_iff_gcd_eq_one).1 hpack.hxy
+  have h_body : z ^ 3 = x ^ 3 + y ^ 3 := hpack.hEq.symm
+  exact
+    FLT3_from_gapCube_and_noWieferich3
+      hNW3 ⟨hx_pos, hy_pos, hz_pos⟩ h_coprime h_body
+      hgap ha h3_not_dvd_a3 hGN_cube
+
+/--
 NoWieferich bridge があれば、Branch B 文脈で `GN p (z - y) y` に平方で割れない素因子が存在する。
 -/
 theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_of_noWieferich
