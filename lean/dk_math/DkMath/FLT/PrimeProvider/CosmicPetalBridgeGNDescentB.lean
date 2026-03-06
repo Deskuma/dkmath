@@ -1419,40 +1419,13 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_from_gap_GN_
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y)
     (d : TriominoWieferichShrinkGapGNPowDataB p x y z q) :
     TriominoWieferichShrinkKernelCandidateZDataB p x y z q := by
-  have hFalse : False := by
-    by_cases hp3 : p = 3
-    · subst hp3
-      have hz_eq : z = d.u ^ 3 + y := by
-        calc
-          z = (z - y) + y := (Nat.sub_add_cancel hpack.hyz).symm
-          _ = d.u ^ 3 + y := by simp [d.hgap]
-      have hpack3 : PrimeGe5CounterexamplePack 3 x y (d.u ^ 3 + y) := by
-        simpa [hz_eq] using hpack
-      have hImpossible : False := by
-        have hp5_3 : 5 ≤ 3 := by
-          simpa using hpack3.hp5
-        omega
-      have hy : 1 ≤ y := Nat.succ_le_of_lt hpack.y_pos
-      have ha : 2 ≤ d.u := False.elim hImpossible
-      have hcop : Nat.Coprime d.u y := False.elim hImpossible
-      have h3_not_dvd_u3 : ¬ 3 ∣ d.u ^ 3 := by
-        simpa [PrimeGe5CounterexamplePack.gap, d.hgap] using hpB
-      have hNoCube : ¬ ∃ b, GN 3 (d.u ^ 3) y = b ^ 3 := by
-        exact
-          kernel_route_gn3_not_cube_of_noWieferich
-            triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
-            (x := x) (a := d.u) (y := y)
-            hpack3 ha hy hcop h3_not_dvd_u3
-      have hGNq3 : GN 3 (d.u ^ 3) y = (q * d.v1) ^ 3 := by
-        simpa [d.hgap] using d.hGNq
-      exact hNoCube ⟨q * d.v1, hGNq3⟩
-    · have hNoPowGN :
-          ¬ ∃ v : ℕ, GN p (z - y) y = v ^ p := by
-        exact
-          triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noPowGN_core
-            (p := p) (x := x) (y := y) (z := z) (q := q)
-            hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-      exact hNoPowGN ⟨q * d.v1, d.hGNq⟩
+  have hNoPowGN :
+      ¬ ∃ v : ℕ, GN p (z - y) y = v ^ p := by
+    exact
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noPowGN_core
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  have hFalse : False := hNoPowGN ⟨q * d.v1, d.hGNq⟩
   exact False.elim hFalse
 
 /--
