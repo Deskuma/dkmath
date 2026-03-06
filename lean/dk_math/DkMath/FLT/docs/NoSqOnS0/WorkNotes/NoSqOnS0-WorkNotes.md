@@ -1481,3 +1481,32 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - どちらも成功。
+
+## 2026-03-07 phase-15 継続（`GapGNPowDataB` から candidateZ core へ FLT3 専用差し替え口を追加）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - 新規定義を追加:
+    - `triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_from_gap_GN_powers_of_noWieferich3`
+      - 入力:
+        - `hpack : PrimeCounterexamplePack 3 x y z`
+        - `d : TriominoWieferichShrinkGapGNPowDataB 3 x y z q`
+        - `hy : 1 ≤ y`
+        - `ha : 2 ≤ d.u`
+        - `h3_not_dvd_u3 : ¬ 3 ∣ d.u ^ 3`
+      - 処理:
+        - `FLT3_from_pack_gapGNPowData_and_noWieferich3` で即矛盾化
+        - `False.elim` で `TriominoWieferichShrinkKernelCandidateZDataB 3 x y z q` を返す
+      - 目的:
+        - 既存の一般 `PrimeGe5` 本丸（`noPowGN_core`）はそのまま保持しつつ、
+          `p=3` 実分岐側だけを新 GN3 spine へ差し替えるための入口を明示する。
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。

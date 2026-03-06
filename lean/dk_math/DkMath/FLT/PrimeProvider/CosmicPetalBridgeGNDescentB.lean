@@ -1587,6 +1587,27 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_from_gap_GN_
   exact False.elim hFalse
 
 /--
+FLT3 専用: `GapGNPowDataB 3` を受け取り、
+no-Wieferich3 経路で即座に矛盾化して `candidateZ` data を返す薄い core。
+
+`PrimeGe5` 本丸（一般 `p`）には触れず、`p = 3` 実分岐の差し替え口だけを用意する。
+-/
+def triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_from_gap_GN_powers_of_noWieferich3
+    {x y z q : ℕ}
+    (hNW3 : TriominoNoWieferichBridge3)
+    (hpack : PrimeCounterexamplePack 3 x y z)
+    (hy : 1 ≤ y)
+    (d : TriominoWieferichShrinkGapGNPowDataB 3 x y z q)
+    (ha : 2 ≤ d.u)
+    (h3_not_dvd_u3 : ¬ 3 ∣ d.u ^ 3) :
+    TriominoWieferichShrinkKernelCandidateZDataB 3 x y z q := by
+  have hFalse : False := by
+    exact
+      FLT3_from_pack_gapGNPowData_and_noWieferich3
+        hNW3 hpack hy d ha h3_not_dvd_u3
+  exact False.elim hFalse
+
+/--
 Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
 
 route 1 の `u / v1` data までは外で取り、最後の穴をさらに狭い core に押し込める。
