@@ -1510,3 +1510,32 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - どちらも成功。
+
+## 2026-03-07 phase-15 継続（FLT3 用 `candidateZ_data/candidateZ` ラッパーを追加）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - 新規定義を追加:
+    - `triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_data_of_noWieferich3`
+      - `GapGNPowDataB 3` と `hNW3` から `candidateZ_data` を返す薄い包装。
+      - 内部で
+        `triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_from_gap_GN_powers_of_noWieferich3`
+        を直接呼ぶ。
+    - `triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_of_noWieferich3`
+      - 上記 data を `toSubtype` して、既存 `candidateZ` 形
+        `{ z' // z' < z ∧ ¬ 3 ∣ (z' - y) ∧ (x / q)^3 + y^3 = z'^3 }`
+        を返す。
+  - 目的:
+    - 「`p=3` 実分岐で実際に呼ぶ位置」を
+      `candidateZ_data / candidateZ` と同型の入口で固定する。
+    - 一般 `PrimeGe5` 本丸は未変更のまま温存。
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
