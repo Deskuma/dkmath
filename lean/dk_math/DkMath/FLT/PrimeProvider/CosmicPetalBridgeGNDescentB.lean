@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNCore
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch
+import DkMath.FLT.Basic
 
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
@@ -1294,6 +1295,28 @@ theorem gn3NoLiftProvider_of_noWieferich
       (triominoCosmicNonLiftableGNBridge_of_noWieferich hNW hpack hpB q)
         ⟨hqP, hq_dvd_GN_gap, hq_not_dvd_gap⟩
   simpa [Nat.add_sub_cancel] using hNoLift_gap
+
+/--
+Kernel 側で `NoWieferich -> GN3NoLiftProvider` を作り、
+`Basic` の provider 入口へそのまま流し込む最短ルート。
+-/
+theorem kernel_route_gn3_not_cube_of_noWieferich
+    (hNW : TriominoNoWieferichBridge)
+    {x a y : ℕ}
+    (hpack : PrimeGe5CounterexamplePack 3 x y (a ^ 3 + y))
+    (ha : 2 ≤ a)
+    (hy : 1 ≤ y)
+    (hcop : Nat.Coprime a y)
+    (h3_not_dvd_a3 : ¬ 3 ∣ a ^ 3) :
+    ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
+  have h3a : ¬ 3 ∣ a := by
+    intro h3
+    have h3_dvd_a3 : 3 ∣ a ^ 3 := by
+      exact dvd_trans h3 (dvd_pow_self a (by decide : 3 ≠ 0))
+    exact h3_not_dvd_a3 h3_dvd_a3
+  have hProv : DkMath.FLT.GN3NoLiftProvider a y :=
+    gn3NoLiftProvider_of_noWieferich hNW hpack h3_not_dvd_a3
+  exact DkMath.GN3_cube_not_cube_of_gt_one_of_provider a y ha hy hcop h3a hProv
 
 /--
 NoWieferich bridge があれば、Branch B 文脈で `GN p (z - y) y` に平方で割れない素因子が存在する。

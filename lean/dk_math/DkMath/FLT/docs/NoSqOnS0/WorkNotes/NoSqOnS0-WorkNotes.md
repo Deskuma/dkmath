@@ -1268,3 +1268,33 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.Basic`
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - どちらも成功。
+
+## 2026-03-06 phase-15 継続（kernel 側で provider 経路を 1 本貫通）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `import Basic.lean` を追加し、PrimeProvider 側から
+    `GN3_cube_not_cube_of_gt_one_of_provider` を直接呼べるようにした。
+  - 新規定理を追加:
+    - `kernel_route_gn3_not_cube_of_noWieferich`
+      - 入力: `hNW`, `hpack : PrimeGe5CounterexamplePack 3 x y (a^3+y)`,
+        `ha`, `hy`, `hcop`, `h3_not_dvd_a3`
+      - 処理:
+        1. `gn3NoLiftProvider_of_noWieferich` で `GN3NoLiftProvider a y` を生成
+        2. `Basic` の public 入口 `GN3_cube_not_cube_of_gt_one_of_provider` へ注入
+      - 結果: `¬ ∃ b, GN 3 (a^3) y = b^3`
+  - これで「squarefree fallback なし」の provider 注入経路が
+    kernel 側に 1 本成立した。
+
+- 失敗例:
+  - `h3a` 生成で `dvd_pow h3 3` を使ったところ型不一致
+    （`numerals are data ... expected proposition`）で失敗。
+  - `dvd_pow_self` を使う形に修正して解消:
+    `h3_dvd_a3 : 3 ∣ a^3 := dvd_trans h3 (dvd_pow_self a (by decide : 3 ≠ 0))`
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
