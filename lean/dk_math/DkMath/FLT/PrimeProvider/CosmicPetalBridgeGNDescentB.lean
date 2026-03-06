@@ -1663,7 +1663,7 @@ def triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_data_of_noWieferich
     intro h3
     exact hpB (by simpa [d.hgap] using h3)
   exact
-    triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_data_of_noWieferich3
+    triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_from_gap_GN_powers_of_noWieferich3
       hNW3 hpack hy d ha h3_not_dvd_u3
 
 /--

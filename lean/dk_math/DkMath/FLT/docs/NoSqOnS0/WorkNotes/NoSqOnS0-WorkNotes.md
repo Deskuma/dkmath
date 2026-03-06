@@ -1562,3 +1562,24 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - どちらも成功。
+
+## 2026-03-07 phase-15 継続（実置換: `_hpB` ラッパーを旧経由から新 core 直呼びへ）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_data_of_noWieferich3_hpB`
+    の本体を置換。
+    - 旧: `...candidateZ_data_of_noWieferich3`（旧経由）へ委譲
+    - 新: `...candidateZ_from_gap_GN_powers_of_noWieferich3`（新 core）を直接呼ぶ
+  - これにより、`hpB` 版ラッパーは中間層に依存せず、
+    FLT3 no-Wieferich spine へ直接接続される。
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
