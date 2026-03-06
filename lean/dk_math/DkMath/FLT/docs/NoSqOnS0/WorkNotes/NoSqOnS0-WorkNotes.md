@@ -1217,6 +1217,35 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - どちらも成功。
 
+## 2026-03-07 phase-15 継続（GapGNPowDataB を FLT3 ラッパーへ直結）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - 新規定理を追加:
+    - `FLT3_from_pack_gapGNPowData_and_noWieferich3`
+      - 入力:
+        - `hpack : PrimeCounterexamplePack 3 x y z`
+        - `d : TriominoWieferichShrinkGapGNPowDataB 3 x y z q`
+        - `ha : 2 ≤ d.u`
+        - `h3_not_dvd_u3 : ¬ 3 ∣ d.u ^ 3`
+      - 処理:
+        - `d.hgap` / `d.hGNq` をそのまま
+          `FLT3_from_pack_gapCube_and_noWieferich3_of_mulCube`
+          へ渡して矛盾化
+      - 目的:
+        - 853–936 行帯の `GapGNPowDataB` 系データから、
+          追加整形なしで FLT3 実パス入口へ流し込める接続点を固定。
+
+- 失敗例:
+  - なし（型合わせのみで通過）。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
 ## 2026-03-07 phase-15 継続（FLT3 実分岐に刺しやすい `PrimeCounterexamplePack 3` 直受け入口を追加）
 
 - 更新:

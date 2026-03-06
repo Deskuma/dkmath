@@ -1451,6 +1451,32 @@ theorem FLT3_from_pack_gapCube_and_noWieferich3_of_mulCube
       hNW3 hpack hy hgap ha h3_not_dvd_a3 hGN_cube
 
 /--
+`GapGNPowDataB`（`hgap / hGNq`）をそのまま受け取り、
+FLT3 用 no-Wieferich 入口へ接続する薄いラッパー。
+-/
+theorem FLT3_from_pack_gapGNPowData_and_noWieferich3
+    {x y z q : ℕ}
+    (hNW3 : TriominoNoWieferichBridge3)
+    (hpack : PrimeCounterexamplePack 3 x y z)
+    (hy : 1 ≤ y)
+    (d : TriominoWieferichShrinkGapGNPowDataB 3 x y z q)
+    (ha : 2 ≤ d.u)
+    (h3_not_dvd_u3 : ¬ 3 ∣ d.u ^ 3) :
+    False := by
+  exact
+    FLT3_from_pack_gapCube_and_noWieferich3_of_mulCube
+      (hNW3 := hNW3)
+      (hpack := hpack)
+      (hy := hy)
+      (a := d.u)
+      (q := q)
+      (v1 := d.v1)
+      (hgap := d.hgap)
+      (ha := ha)
+      (h3_not_dvd_a3 := h3_not_dvd_u3)
+      (hGNq := d.hGNq)
+
+/--
 NoWieferich bridge があれば、Branch B 文脈で `GN p (z - y) y` に平方で割れない素因子が存在する。
 -/
 theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_of_noWieferich
