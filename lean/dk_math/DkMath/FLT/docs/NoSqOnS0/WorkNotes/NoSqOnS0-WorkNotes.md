@@ -2437,3 +2437,27 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
 
 ### 状態
 - 「なぜ `p≥3` で閉じないか」を指す主定理文がコード上で直接参照可能になった。
+
+## 2026-03-08: 平方世界 vs 高冪世界の比較原理を固定
+
+### 目的
+- 数学芯を明文化する比較定理を追加し、
+  `p=2` と `p≥3` の分解構造差をコード上で直接参照できるようにする。
+
+### 実施
+- `CosmicPetalBridgeGNDescentB.lean` に以下を追加:
+  - `triominoSquareWorld_gap_mul_sum`
+  - `triominoHigherWorld_gap_mul_GN`
+  - `triominoSquareVsHigher_gap_body_comparison`
+
+### 失敗と復旧
+- 初回実装で `p=2` 側を `pow_sub_pow_factor_cosmic_N` + `GN_linear` で処理したが、
+  補題の返り型が `GN` ではなく和表示だったため型不一致で失敗。
+- `Nat.sq_sub_sq` ベースへ差し替えて復旧。
+
+### 検証
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
+
+### 状態
+- 「同格分解（平方世界）」と「異格分解（高冪世界）」の比較が
+  定理名で直接追える状態になった。

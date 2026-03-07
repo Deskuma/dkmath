@@ -1581,6 +1581,49 @@ theorem triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferic
           hp2_le hExistsPrime
     exact hNoPowGN ⟨q * d.v1, by simpa using d.hGNq⟩
 
+section DecompositionComparison
+
+/--
+平方世界 (`p = 2`) は差の分解が同格（線形×線形）で閉じる。
+-/
+theorem triominoSquareWorld_gap_mul_sum
+    {y z : ℕ}
+    (_hyz_lt : y < z) :
+    z ^ 2 - y ^ 2 = (z - y) * (z + y) := by
+  calc
+    z ^ 2 - y ^ 2 = (z + y) * (z - y) := by
+      rw [Nat.sq_sub_sq]
+    _ = (z - y) * (z + y) := by
+      rw [Nat.mul_comm]
+
+/--
+高冪世界 (`p ≥ 3`) は差の分解が異格（線形 gap × 非線形 body）へ裂ける。
+-/
+theorem triominoHigherWorld_gap_mul_GN
+    {p y z : ℕ}
+    (hp3 : 3 ≤ p)
+    (hyz_lt : y < z) :
+    z ^ p - y ^ p = (z - y) * GN p (z - y) y := by
+  have hp_pos : 0 < p := lt_of_lt_of_le (by decide : 0 < 3) hp3
+  simpa using
+    (pow_sub_pow_factor_cosmic_N (a := z) (b := y) (d := p) hp_pos hyz_lt)
+
+/--
+比較原理:
+`p = 2` では同格分解 `(z-y)*(z+y)`、`p ≥ 3` では異格分解 `(z-y)*GN ...` となる。
+-/
+theorem triominoSquareVsHigher_gap_body_comparison
+    {y z : ℕ}
+    (hyz_lt : y < z) :
+    z ^ 2 - y ^ 2 = (z - y) * (z + y) ∧
+      ∀ {p : ℕ}, 3 ≤ p → z ^ p - y ^ p = (z - y) * GN p (z - y) y := by
+  refine ⟨?_, ?_⟩
+  · exact triominoSquareWorld_gap_mul_sum hyz_lt
+  · intro p hp3
+    exact triominoHigherWorld_gap_mul_GN hp3 hyz_lt
+
+end DecompositionComparison
+
 section NoLiftKernel
 
 /--
