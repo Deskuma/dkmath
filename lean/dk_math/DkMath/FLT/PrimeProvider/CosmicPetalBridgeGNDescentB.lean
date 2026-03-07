@@ -1982,6 +1982,28 @@ theorem triominoHigherPower_nonClosure_principle_of_branchB
         hNW5 hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /--
+世界の分岐定理（Branch B 文脈）:
+平方世界 (`p = 2`) では同格分解 `(z-y)*(z+y)` が成立する一方、
+高冪世界 (`p ≥ 5`) では `gap*GN` 分解かつ body は `p` 乗閉包しない。
+-/
+theorem triominoPowerWorld_bifurcation_of_branchB
+    {p x y z q : ℕ}
+    (hNW5 : TriominoNoWieferichBridge)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    z ^ 2 - y ^ 2 = (z - y) * (z + y) ∧
+      (z ^ p - y ^ p = (z - y) * GN p (z - y) y ∧
+        ¬ ∃ v : ℕ, GN p (z - y) y = v ^ p) := by
+  refine ⟨?_, ?_⟩
+  · exact triominoSquareWorld_gap_mul_sum hpack.hyz_lt
+  · exact
+      triominoHigherPower_nonClosure_principle_of_branchB
+        hNW5 hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/--
 Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
 
 route 1 の `u / v1` data までは外で取り、最後の穴をさらに狭い core に押し込める。

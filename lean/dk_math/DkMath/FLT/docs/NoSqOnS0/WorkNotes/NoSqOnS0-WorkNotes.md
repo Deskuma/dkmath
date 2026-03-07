@@ -2484,3 +2484,26 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
 ### 状態
 - Branch B 側で「分解（gap×body）+ body 非 `p` 乗閉包」を
   1 本の定理名で参照できるようになった。
+
+## 2026-03-08: 世界の分岐定理（Branch B）を追加
+
+### 目的
+- `p=2` と `p≥5` の世界差を、同一文脈で一息に読める総括定理として固定する。
+
+### 実施
+- `CosmicPetalBridgeGNDescentB.lean` に
+  `triominoPowerWorld_bifurcation_of_branchB` を追加。
+- 内容:
+  - 平方世界: `z^2 - y^2 = (z - y) * (z + y)`
+  - 高冪世界（Branch B）: `z^p - y^p = (z - y) * GN ...` かつ `GN ... ≠ v^p`
+  を同時に返す。
+
+### 失敗と復旧
+- 失敗なし。
+
+### 検証
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
+
+### 状態
+- 「平方世界の同格閉包」と「高冪世界の非閉包」を
+  1 本の定理名で対比参照できる状態になった。
