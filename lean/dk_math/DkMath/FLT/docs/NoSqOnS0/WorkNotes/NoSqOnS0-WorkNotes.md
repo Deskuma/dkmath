@@ -1870,3 +1870,37 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - どちらも成功。
+
+## 2026-03-07 phase-15 継続（fixed injection wrapper の一部を quarantine ファイルへ移設）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+  - `CosmicPetalBridgeGNDescentBQuarantine.lean`
+
+- 内容:
+  - `CosmicPetalBridgeGNDescentB.lean` から、以下の fixed injection wrapper を削除:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data_of_noWieferich_core`
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_of_noWieferich_core`
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core_of_noWieferich_core`
+    - `triominoWieferichDescent_impl_of_noWieferich_core`
+    - `triominoWieferichDescent_impl`
+  - 新規 `CosmicPetalBridgeGNDescentBQuarantine.lean` を追加し、上記 wrapper を移設。
+  - clean 側 (`CosmicPetalBridgeGNDescentB.lean`) には
+    - `...candidateZ_data`
+    - `...candidateZ`
+    - `...kernel_z_core`
+    - `...kernel_clean`
+    - `triominoWieferichDescent_impl_clean`
+    を残し、quarantine 側は fixed injection 名義のみ保持する形に変更。
+
+- 失敗例:
+  - `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine` 初回実行で失敗。
+    - エラー: `Unknown identifier GN`
+    - 原因: 新規 quarantine ファイルに `open DkMath.CosmicFormulaBinom` が無かった。
+    - 対処: `CosmicPetalBridgeGNDescentBQuarantine.lean` に `open DkMath.CosmicFormulaBinom` を追加して解消。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功。
