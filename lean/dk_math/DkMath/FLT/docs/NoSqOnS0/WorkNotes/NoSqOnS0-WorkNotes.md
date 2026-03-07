@@ -1957,6 +1957,39 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
   - すべて成功。
 
+## 2026-03-07 phase-15 継続（LinkSpec/Shadow/CandidateEq 帯の clean API 追加）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `hxdiv` を clean/wrapper 2 層化:
+    - `triominoWieferichShrinkNumsInvCandidate_hxdiv_via_trace_of_pack_clean`
+    - `triominoWieferichShrinkNumsInvCandidate_hxdiv_via_trace_of_pack`（fixed injection wrapper）
+  - `div_eq_shadow` 帯を clean/wrapper 2 層化:
+    - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_clean`
+    - `..._div_eq_shadow`（wrapper）
+    - `..._div_eq_shadow_clean_x/y/z` を追加（wrapper 版 `x/y/z` は維持）
+  - `LinkSpec` 消費帯へ clean API を追加:
+    - `triominoWieferichShrinkNumsInvCandidate_of_pack_shadow_fields_of_eq_clean`
+    - `triominoWieferichShrinkNumsInvCandidate_of_pack_shadow_fields_of_kernel_clean`
+    - `triominoWieferichShrinkNumsInvCandidateB_kernel_clean`
+    - `triominoWieferichShrinkNumsInvCandidateLinkSpec_of_kernel_clean`
+    - `triominoWieferichShrinkNumsInvCandidateEq_of_pack_clean`
+    - `triominoWieferichShrinkNumsInvCandidate_hEq_of_pack_clean`
+    - `triominoWieferichShrinkNumsInvCandidate_hyz_of_pack_clean`
+    - `triominoWieferichShrinkNumsInvCandidate_hyzLt_of_pack_clean`
+  - 既存 no-arg 名は互換維持（wrapper/既存定理のまま）。
+
+- 失敗例:
+  - なし（今回の変更範囲では build 失敗なし）。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功。
+
 ## 2026-03-07 phase-15 継続（`kernel` 層の追放試行と切り戻し）
 
 - 更新:
