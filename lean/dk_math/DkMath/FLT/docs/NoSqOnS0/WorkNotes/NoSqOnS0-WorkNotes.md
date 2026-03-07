@@ -2221,3 +2221,52 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
   - すべて成功。
+
+## 2026-03-07 phase-15 継続（3 本追放 + 失敗復旧）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+  - `CosmicPetalBridgeGNDescentBQuarantine.lean`
+
+- 内容:
+  - 先に `DescentB` のビルド失敗を復旧:
+    - `No goals to be solved`（`hxdiv` 証明末尾の余分 `simpa`）を削除。
+    - 削除済み wrapper 参照
+      `triominoWieferichShrinkNumsInvCandidate_hxdiv_via_trace_of_pack`
+      / `..._hy_eq_of_pack`
+      を、`LinkSpec_of_pack` からの直接再構成へ置換。
+  - その後、次バッチとして 3 本を `DescentB` から削除し `Quarantine` に移設:
+    - `triominoWieferichShrinkKernelNums_of_pack`
+    - `triominoWieferichShrinkKernelEq_of_nums_of_pack`
+    - `triominoWieferichShrinkNumsInvRecipe_of_pack`
+  - `DescentB` 側は `*_clean` へ切替:
+    - `triominoWieferichShrinkKernelInv_of_nums_of_pack_clean`
+    - `triominoWieferichShrinkKernel_hxmul_of_pack_clean`
+    - `triominoWieferichShrinkKernel_hy_eq_of_pack_clean`
+    - `triominoWieferichShrinkNumsInvCandidateEq_of_pack`
+    - `triominoWieferichShrinkNumsInvCandidateEqCore_of_kernel`
+    - `hzlt/hpB'` 回収帯の `r0` 生成と `simpa` を
+      `triominoWieferichShrinkNumsInvRecipe_of_pack_clean` ベースへ置換。
+  - 既定 bridge を 1 点に集約:
+    - `private def triominoWieferichNoWieferichBridge_default`
+
+- 失敗例:
+  - 途中状態で `DescentB` が以下で失敗:
+    - `No goals to be solved`
+    - `Unknown identifier triominoWieferichShrinkNumsInvCandidate_hxdiv_via_trace_of_pack`
+    - `Unknown identifier triominoWieferichShrinkNumsInvCandidate_hy_eq_of_pack`
+  - 原因:
+    - wrapper 除去後の参照残りと、`calc` 後の余剰行。
+  - 対応:
+    - 上記 3 箇所を局所修正し、ビルド復旧のうえで移設作業を続行。
+
+- 効果:
+  - `DescentB.lean` 内の
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+    直参照を 9 箇所 → 7 箇所へ削減。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功（既知 warning のみ）。
