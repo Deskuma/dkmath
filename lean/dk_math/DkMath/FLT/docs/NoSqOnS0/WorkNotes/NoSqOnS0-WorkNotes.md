@@ -1791,3 +1791,41 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - どちらも成功。
+
+## 2026-03-07 phase-15 継続（`z_core` を clean 本体 + 固定注入 wrapper に分離）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `z_core` clean 化:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core`
+      に `(hNW5 : TriominoNoWieferichBridge)` を追加。
+    - 本体は `...candidateZ` clean 版を呼ぶだけに整理。
+  - 固定注入 wrapper:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core_of_noWieferich_core`
+      を追加し、research 側 no-Wieferich core の注入を隔離。
+  - 外側配線:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel`
+      は `..._z_core_of_noWieferich_core` を呼ぶ形に更新（既存挙動維持）。
+
+- axioms 点検:
+  - clean:
+    - `#print axioms triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core`
+      - `propext, Classical.choice, Quot.sound`
+  - 汚染隔離先:
+    - `#print axioms ...kernel_z_core_of_noWieferich_core`
+      - `sorryAx` あり
+  - 伝播確認:
+    - `#print axioms ...kernel`
+      - `sorryAx` あり
+    - `#print axioms triominoWieferichDescent_impl`
+      - `sorryAx` あり
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。

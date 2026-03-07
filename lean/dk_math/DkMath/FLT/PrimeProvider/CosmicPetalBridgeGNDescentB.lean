@@ -1969,6 +1969,7 @@ Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
 -/
 def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core
     {p x y z q : ℕ}
+    (hNW5 : TriominoNoWieferichBridge)
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
     (hqP : Nat.Prime q)
@@ -1981,8 +1982,9 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core
           ∧ ¬ p ∣ (z' - y)
           ∧ (x / q) ^ p + y ^ p = z' ^ p } := by
     exact
-      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_of_noWieferich_core
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ
         (p := p) (x := x) (y := y) (z := z) (q := q)
+        hNW5
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   rcases hzCore with ⟨z', hzSpec⟩
   rcases hzSpec with ⟨hzlt, hpB', hEq'⟩
@@ -1991,6 +1993,25 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core
       hzlt := hzlt
       hpB' := hpB'
       hEq' := hEq' }
+
+/--
+`z_core` の固定注入 wrapper。
+
+clean 本体 `...kernel_z_core` へ research 側 no-Wieferich core を注入する隔離層。
+-/
+def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core_of_noWieferich_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkKernelZEqB p x y z q := by
+  exact
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /--
 Triomino/Cosmic 固有の等式側 trace 生成 pack（本丸）。
@@ -2006,7 +2027,7 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichShrinkKernelSeedLinkB p x y z q := by
   let dz : TriominoWieferichShrinkKernelZEqB p x y z q :=
-    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core_of_noWieferich_core
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   let d : TriominoWieferichShrinkKernelNumsEqLinkB p x y z q :=
