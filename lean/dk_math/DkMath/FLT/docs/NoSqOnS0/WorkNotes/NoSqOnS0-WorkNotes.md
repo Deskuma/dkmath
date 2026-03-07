@@ -1648,3 +1648,37 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - どちらも成功。
+
+## 2026-03-07 phase-15 継続（本線置換: `candidateZ_from_gap_GN_powers_core` を dispatcher 呼び出しへ差し替え）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - 追加:
+    - `triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferich_gate3`
+      - `p=3` 分岐で必要な `hNW3`/`ha` を gate (`p = 3 -> ...`) で受ける dispatcher。
+      - `p≠3` 分岐は Ge5 spine をそのまま実行。
+  - 置換:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_from_gap_GN_powers_core`
+      の旧末尾
+      - `hNoPowGN` を作って `hNoPowGN ⟨q * d.v1, d.hGNq⟩`
+      を廃止し、
+      - `...contradiction_of_noWieferich_gate3` 呼び出し + `False.elim`
+      へ差し替え。
+    - `PrimeGe5` 文脈なので `p=3` gate は
+      `hpack.hp5` と `p=3` の矛盾から `False.elim` で供給。
+  - 整理:
+    - 既存 `triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferich`
+      は新 gate dispatcher を呼ぶ薄い wrapper に更新。
+
+- 失敗例:
+  - `hpack.hp.ne_two` を使って `hp2 : p ≠ 2` を作ろうとして型不一致で失敗。
+    - 修正: `hpack.hp5` から `2 < p` を導き `Nat.ne_of_gt` で `hp2` を構成。
+  - `omega` だけで `hp2` を出す試行が失敗。
+    - 修正: 上記の明示的な不等式導出へ変更。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。

@@ -1526,6 +1526,61 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_
         hLocal.hq_prime hr_dvd_sub hLocal.hq_not_dvd_gap
   exact ⟨r, hLocal.hq_prime, hr_dvd_GN, hLocal.hNoLift⟩
 
+/--
+`p = 3` spine と `p ≥ 5` spine を 1 本へ束ねる dispatcher（`p = 3` gate 版）。
+
+- `p = 3` の分岐で必要な `hNW3` と `ha` は gate (`p = 3 -> ...`) 経由で供給する。
+- `p ≠ 3` の分岐では gate は使われず、`hNW5` のみで Ge5 spine を実行する。
+-/
+theorem triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferich_gate3
+    {p x y z q : ℕ}
+    (hNW3_of_eq3 : p = 3 → TriominoNoWieferichBridge3)
+    (hNW5 : TriominoNoWieferichBridge)
+    (hpack : PrimeCounterexamplePack p x y z)
+    (hy : 1 ≤ y)
+    (hp2 : p ≠ 2)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y)
+    (d : TriominoWieferichShrinkGapGNPowDataB p x y z q)
+    (ha_of_eq3 : p = 3 → 2 ≤ d.u) :
+    False := by
+  by_cases hp3 : p = 3
+  · subst hp3
+    have h3_not_dvd_u3 : ¬ 3 ∣ d.u ^ 3 := by
+      intro h3
+      exact hpB (by simpa [d.hgap] using h3)
+    exact
+      FLT3_from_pack_gapGNPowData_and_noWieferich3
+        (hNW3_of_eq3 rfl) hpack hy d (ha_of_eq3 rfl) h3_not_dvd_u3
+  · have hp5 : 5 ≤ p := by
+      have hpge2 : 2 ≤ p := hpack.hp.two_le
+      by_contra hp5_not
+      have hlt5 : p < 5 := Nat.lt_of_not_ge hp5_not
+      have hcases : p = 2 ∨ p = 3 ∨ p = 4 := by
+        omega
+      rcases hcases with hp2' | hp3' | hp4'
+      · exact hp2 hp2'
+      · exact hp3 hp3'
+      · have hp4prime : Nat.Prime 4 := by simpa [hp4'] using hpack.hp
+        exact (by decide : ¬ Nat.Prime 4) hp4prime
+    let hpack5 : PrimeGe5CounterexamplePack p x y z :=
+      primeGe5CounterexamplePack_of_pack hpack hy hp5
+    have hp2_le : 2 ≤ p := le_trans (by decide : 2 ≤ 5) hp5
+    have hExistsPrime :
+        ∃ r : ℕ, Nat.Prime r ∧ r ∣ GN p (z - y) y ∧ ¬ r ^ 2 ∣ GN p (z - y) y := by
+      exact
+        triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_of_noWieferich
+          hNW5
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack5 hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+    have hNoPowGN : ¬ ∃ v : ℕ, GN p (z - y) y = v ^ p := by
+      exact
+        triominoWieferichShrink_not_exists_pow_of_exists_prime_dvd_not_dvd_sq
+          hp2_le hExistsPrime
+    exact hNoPowGN ⟨q * d.v1, by simpa using d.hGNq⟩
+
 section NoLiftKernel
 
 /--
@@ -1604,13 +1659,36 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_from_gap_GN_
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y)
     (d : TriominoWieferichShrinkGapGNPowDataB p x y z q) :
     TriominoWieferichShrinkKernelCandidateZDataB p x y z q := by
-  have hNoPowGN :
-      ¬ ∃ v : ℕ, GN p (z - y) y = v ^ p := by
+  have hy : 1 ≤ y := Nat.succ_le_of_lt hpack.y_pos
+  have hp2 : p ≠ 2 := by
+    have hp2_lt : 2 < p := lt_of_lt_of_le (by decide : 2 < 5) hpack.hp5
+    exact Nat.ne_of_gt hp2_lt
+  have hp3_false : p = 3 → False := by
+    intro hp3
+    have h53 : (5 : ℕ) ≤ 3 := by
+      simpa [hp3] using hpack.hp5
+    omega
+  have hNW3_of_eq3 : p = 3 → TriominoNoWieferichBridge3 := by
+    intro hp3
+    exact False.elim (hp3_false hp3)
+  have ha_of_eq3 : p = 3 → 2 ≤ d.u := by
+    intro hp3
+    exact False.elim (hp3_false hp3)
+  have hFalse : False := by
     exact
-      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noPowGN_core
+      triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferich_gate3
         (p := p) (x := x) (y := y) (z := z) (q := q)
-        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  have hFalse : False := hNoPowGN ⟨q * d.v1, d.hGNq⟩
+        hNW3_of_eq3
+        triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+        hpack.toPrimeCounterexamplePack
+        hy
+        hp2
+        hpB
+        hqP
+        hq_not_dvd_gap
+        hqpow_dvd_GN
+        d
+        ha_of_eq3
   exact False.elim hFalse
 
 /--
@@ -1752,37 +1830,20 @@ theorem triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferic
     (d : TriominoWieferichShrinkGapGNPowDataB p x y z q)
     (ha : 2 ≤ d.u) :
     False := by
-  by_cases hp3 : p = 3
-  · subst hp3
-    exact
-      triominoWieferichShrinkKernelEqSeedTracePack3_contradiction_of_noWieferich3_hpB
-        hNW3 hpack hy hpB d ha
-  · have hp5 : 5 ≤ p := by
-      have hpge2 : 2 ≤ p := hpack.hp.two_le
-      by_contra hp5_not
-      have hlt5 : p < 5 := Nat.lt_of_not_ge hp5_not
-      have hcases : p = 2 ∨ p = 3 ∨ p = 4 := by
-        omega
-      rcases hcases with hp2' | hp3' | hp4'
-      · exact hp2 hp2'
-      · exact hp3 hp3'
-      · have hp4prime : Nat.Prime 4 := by simpa [hp4'] using hpack.hp
-        exact (by decide : ¬ Nat.Prime 4) hp4prime
-    let hpack5 : PrimeGe5CounterexamplePack p x y z :=
-      primeGe5CounterexamplePack_of_pack hpack hy hp5
-    have hp2_le : 2 ≤ p := le_trans (by decide : 2 ≤ 5) hp5
-    have hExistsPrime :
-        ∃ r : ℕ, Nat.Prime r ∧ r ∣ GN p (z - y) y ∧ ¬ r ^ 2 ∣ GN p (z - y) y := by
-      exact
-        triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_of_noWieferich
-          hNW5
-          (p := p) (x := x) (y := y) (z := z) (q := q)
-          hpack5 hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-    have hNoPowGN : ¬ ∃ v : ℕ, GN p (z - y) y = v ^ p := by
-      exact
-        triominoWieferichShrink_not_exists_pow_of_exists_prime_dvd_not_dvd_sq
-          hp2_le hExistsPrime
-    exact hNoPowGN ⟨q * d.v1, by simpa using d.hGNq⟩
+  exact
+    triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferich_gate3
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      (fun _ => hNW3)
+      hNW5
+      hpack
+      hy
+      hp2
+      hpB
+      hqP
+      hq_not_dvd_gap
+      hqpow_dvd_GN
+      d
+      (fun _ => ha)
 
 /--
 Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
