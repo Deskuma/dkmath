@@ -1904,3 +1904,35 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
   - すべて成功。
+
+## 2026-03-07 phase-15 継続（`kernel` 層の追放試行と切り戻し）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+  - `CosmicPetalBridgeGNDescentBQuarantine.lean`
+
+- 内容:
+  - quarantine 側へ追加:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_of_noWieferich_core`
+      （fixed injection wrapper）
+  - clean 側（`DescentB.lean`）で
+    - `CosmicPetalBridgeGNNoWieferichResearch` import を外し、
+      `hNW5_default` 引数化で本線 clean 化を試行。
+
+- 失敗例:
+  - `hNW5_default` の暗黙伝播が `kernel` 下流に広く伝播し、
+    `Type mismatch` が多数発生（`kernel` 投影群と下流 glue 群で連鎖）。
+  - 試行時点では build 失敗。
+
+- 対処:
+  - 破綻を避けるため、`DescentB.lean` は直前の安定形へ切り戻し。
+    - `Research` import は復帰。
+    - `kernel` 下流の no-arg 配線は維持。
+  - 一方で quarantine への
+    `...kernel_of_noWieferich_core` 追加は保持。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功。

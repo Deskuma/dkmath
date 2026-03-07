@@ -73,6 +73,22 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core_of_noWieferich_c
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /--
+`kernel` の固定注入 wrapper（quarantine）。
+-/
+def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_of_noWieferich_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkKernelSeedLinkB p x y z q := by
+  exact
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/--
 Branch B の下降法本体（固定注入 wrapper）。
 -/
 theorem triominoWieferichDescent_impl_of_noWieferich_core : WieferichDescentB := by

@@ -1975,11 +1975,11 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_clean
   exact d.toSeedLink hpack
 
 /--
-`kernel` の固定注入 wrapper。
+Triomino/Cosmic 固有の等式側 trace 生成 pack（本丸）。
 
-clean 本体 `...kernel_clean` へ research 側 no-Wieferich core を注入する隔離層。
+公開名は clean 本体への薄い委譲に保つ。
 -/
-def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_of_noWieferich_core
+def triominoWieferichShrinkKernelEqSeedTracePackB_kernel
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
@@ -1991,24 +1991,6 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_of_noWieferich_core
     triominoWieferichShrinkKernelEqSeedTracePackB_kernel_clean
       (p := p) (x := x) (y := y) (z := z) (q := q)
       triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
-      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-
-/--
-Triomino/Cosmic 固有の等式側 trace 生成 pack（本丸）。
-
-公開名は固定注入 wrapper として保ち、clean 本体は `...kernel_clean` へ分離する。
--/
-def triominoWieferichShrinkKernelEqSeedTracePackB_kernel
-    {p x y z q : ℕ}
-    (hpack : PrimeGe5CounterexamplePack p x y z)
-    (hpB : ¬ p ∣ (z - y))
-    (hqP : Nat.Prime q)
-    (hq_not_dvd_gap : ¬ q ∣ (z - y))
-    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
-    TriominoWieferichShrinkKernelSeedLinkB p x y z q := by
-  exact
-    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_of_noWieferich_core
-      (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /--
