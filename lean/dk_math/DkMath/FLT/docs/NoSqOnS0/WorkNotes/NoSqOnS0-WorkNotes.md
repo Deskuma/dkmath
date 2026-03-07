@@ -2157,3 +2157,31 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
   - いずれも成功。
+
+## 2026-03-07 phase-15 継続（18 箇所一括刈りの試行と切り戻し）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `kernel_noWieferich_core` の直参照 18 箇所を一括で `hNW5_default` 化し、
+    `DescentB` から `NoWieferichResearch` import を外す試行を実施。
+  - 併せて `localNoLift_core / existsPrime_dvd_GN_not_sq_core / noPowGN_core` を
+    `hNW5` 引数付きに更新。
+
+- 失敗例:
+  - 一括 `hNW5_default` 化により、`*_clean` 群まで section 変数が伝播して
+    implicit lambda 由来の型崩れが大量発生（`Type mismatch` 多発）。
+  - この状態では `DescentB` build 不可。
+
+- 対処:
+  - 一括 `hNW5_default` 化は切り戻し、ビルド可能な安定形へ復帰。
+  - `localNoLift_core` 系の `hNW5` 引数化のみ保持。
+  - 結果として `kernel_noWieferich_core` 直参照は
+    18 箇所 → 17 箇所に減少（`localNoLift_core` 由来 1 箇所を除去）。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功（既知 warning のみ）。

@@ -1590,6 +1590,7 @@ section NoLiftKernel
 -/
 theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_localNoLift_core
     {p x y z q : ℕ}
+    (hNW5 : TriominoNoWieferichBridge)
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
     (hqP : Nat.Prime q)
@@ -1598,11 +1599,12 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_localNoLift_core
     ∃ r : ℕ, BranchBLocalNoLift p y z r := by
   exact
     branchBLocalNoLift_of_noWieferich
-      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      hNW5
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_core
     {p x y z q : ℕ}
+    (hNW5 : TriominoNoWieferichBridge)
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
     (hqP : Nat.Prime q)
@@ -1611,6 +1613,7 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_
     ∃ r : ℕ, Nat.Prime r ∧ r ∣ GN p (z - y) y ∧ ¬ r ^ 2 ∣ GN p (z - y) y := by
   rcases
       triominoWieferichShrinkKernelEqSeedTracePackB_kernel_localNoLift_core
+        hNW5
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN with
     ⟨r, hLocal⟩
@@ -1631,6 +1634,7 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_
 -/
 theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noPowGN_core
     {p x y z q : ℕ}
+    (hNW5 : TriominoNoWieferichBridge)
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
     (hqP : Nat.Prime q)
@@ -1641,6 +1645,7 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noPowGN_core
   exact
     triominoWieferichShrink_not_exists_pow_of_exists_prime_dvd_not_dvd_sq hp2 <|
       triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_core
+        hNW5
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
