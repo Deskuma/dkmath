@@ -1747,3 +1747,47 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - どちらも成功。
+
+## 2026-03-07 phase-15 継続（`candidateZ_data` / `candidateZ` を clean 本体 + 固定注入 wrapper に分離）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `candidateZ_data` を clean 化:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data`
+      に `(hNW5 : TriominoNoWieferichBridge)` 引数を追加。
+    - 固定注入版を
+      `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data_of_noWieferich_core`
+      として分離。
+  - `candidateZ` を clean 化:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ`
+      に `(hNW5 : TriominoNoWieferichBridge)` 引数を追加。
+    - 固定注入版を
+      `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_of_noWieferich_core`
+      として分離。
+  - 外側配線:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core`
+      は fixed 注入 wrapper
+      `...candidateZ_of_noWieferich_core`
+      を呼ぶ形へ更新（既存挙動を維持）。
+
+- axioms 点検:
+  - clean:
+    - `#print axioms triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data`
+      - `propext, Classical.choice, Quot.sound`
+    - `#print axioms triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ`
+      - `propext, Classical.choice, Quot.sound`
+  - 汚染隔離先:
+    - `#print axioms ...candidateZ_data_of_noWieferich_core`
+      - `sorryAx` あり
+    - `#print axioms ...candidateZ_of_noWieferich_core`
+      - `sorryAx` あり
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。

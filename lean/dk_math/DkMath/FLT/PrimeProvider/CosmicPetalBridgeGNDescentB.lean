@@ -1877,6 +1877,7 @@ route 1 の `u / v1` data までは外で取り、最後の穴をさらに狭い
 -/
 def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data
     {p x y z q : ℕ}
+    (hNW5 : TriominoNoWieferichBridge)
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
     (hqP : Nat.Prime q)
@@ -1890,8 +1891,28 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data
   exact
     triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_from_gap_GN_powers_core
       (p := p) (x := x) (y := y) (z := z) (q := q)
-      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      hNW5
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN d
+
+/--
+`candidateZ_data` の固定注入 wrapper。
+
+research 側 no-Wieferich core をここでだけ注入し、
+本体 `...candidateZ_data` は clean な引数化 API として保つ。
+-/
+def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data_of_noWieferich_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkKernelCandidateZDataB p x y z q := by
+  exact
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /--
 Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
@@ -1901,6 +1922,7 @@ Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
 -/
 def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ
     {p x y z q : ℕ}
+    (hNW5 : TriominoNoWieferichBridge)
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
     (hqP : Nat.Prime q)
@@ -1913,8 +1935,31 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ
   let d : TriominoWieferichShrinkKernelCandidateZDataB p x y z q :=
     triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data
       (p := p) (x := x) (y := y) (z := z) (q := q)
+      hNW5
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   exact d.toSubtype
+
+/--
+`candidateZ` の固定注入 wrapper。
+
+`candidateZ_data` と同様に、research 側 no-Wieferich core の注入点をここへ隔離する。
+-/
+def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_of_noWieferich_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    { z' : ℕ //
+      z' < z
+        ∧ ¬ p ∣ (z' - y)
+        ∧ (x / q) ^ p + y ^ p = z' ^ p } := by
+  exact
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /--
 Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
@@ -1936,7 +1981,7 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core
           ∧ ¬ p ∣ (z' - y)
           ∧ (x / q) ^ p + y ^ p = z' ^ p } := by
     exact
-      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_of_noWieferich_core
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   rcases hzCore with ⟨z', hzSpec⟩
