@@ -25,3 +25,6 @@ fi
 echo "🔍 Checking build results..."
 echo "  see: __build.log:1"
 echo ${result_msg}
+
+# Exit with lake's exit code so callers (scripts) can detect failure
+exit ${build_exit_code}

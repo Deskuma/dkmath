@@ -1,4 +1,4 @@
-# DkMath.FLT README (phase-06)
+# DkMath.FLT README
 
 このディレクトリは、`d=3` 向けの FLT 補題チェーンを Lean で管理するための実装群です。
 現行方針は次の通りです。
@@ -14,15 +14,24 @@
   - 主要入口:
     - `FLT_d3_by_padicValNat`
     - `FLT_d3_by_padicValNat_of_NoSqOnS0`
+    - `FLT_d3_by_padicValNat_of_nonLiftable_coprimeSupport`
+    - `FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput`
     - `FLT_d3_by_padicValNat_of_harmonicEnvelope_*`
-    - `FLT_d3_by_padicValNat_of_phase6NoSqInput`
+    - `FLT_d3_by_padicValNat_of_GEisensteinCore_coprimeSupport`
+    - `FLT_d3_by_padicValNat_of_GEisensteinCore_with_reachability_coprimeSupport`
+    - `FLT_d3_by_padicValNat_of_GEisensteinCore_via_reachability_coprimeSupport`
+    - `GEisenstein_descent_reaches_zero_of_core`
+    - `GEisenstein_descent_reaches_zero_of_descentClassify_primitiveSized`
+    - `FLT_d3_by_padicValNat_of_DescentBaseInput`
+    - `FLT_d3_by_padicValNat_of_NoSqInput`
 
 - `PhaseLift.lean`
   - 共通導出補題の中核。
   - `NoSqOnS0` / `AllNonLiftableOnS0` / support 条件 / mod3 分離補題。
   - 立方差・原始素因子存在・padic 上下界など、`Main` が依存する下位補題を集約。
-  - phase-06 入口束:
-    - `Phase6NoSqInput`
+  - 入口束:
+    - `NoSqBaseInput`
+    - `NoSqInput`
 
 - `CounterexamplePattern.lean`
   - `classifyLift` を中心にした反例パターン分類。
@@ -30,6 +39,53 @@
 
 - `CosmicPetalBridge.lean`
   - `CosmicFormulaBinom` と `S0_nat` をつなぐ橋補題。
+
+- `GEisensteinBridge.lean`
+  - Eisenstein ノルム同型の橋補題。
+  - `descent` 側インターフェース
+    `DescentClassifyImpossibleOnPrimitive` への接続点を提供。
+  - `GEisensteinDescentCore` 構造体で下降法コアを段階拡張可能。
+  - `GEisensteinDescentFrame` で縮小写像枠を保持。
+    - `step` は `measure s > 0` のときのみ要求する設計（終端状態を許容）。
+  - `toyNatGEisensteinDescentFrame` により、非空状態での型運用を確認済み。
+  - `candidateGEisensteinDescentFrame` により、反例候補レコード状態での運用を確認済み。
+    - `GEisensteinCandidate` は `primEvidence : Prop` スロットを持ち、
+      `PrimitiveOnS0` 等の証拠を段階注入できる。
+  - `primitiveCandidateGEisensteinDescentFrame` により、
+    `PrimitiveOnS0` 証拠を保持したまま `fuel` で下降する型を確認済み。
+  - `primitiveSizedCandidateGEisensteinDescentFrame` により、
+    `size ≤ q` 不変量つき測度での下降を確認済み。
+  - 接続補題:
+    - `S0_nat_ne_zero_of_PrimitiveOnS0`
+    - `q_le_S0_nat_of_PrimitiveOnS0`
+    - `primitiveSizedCandidate_measure_le_S0`
+    により、`size` 測度を `S0_nat` 上界へ接続済み。
+  - 不変量補題:
+    - `GEisensteinPrimitiveSizedCandidate.hsize_step`
+    - `primitiveSizedCandidate_measure_le_S0_step`
+    - `primitiveSizedCandidate_measure_step_le`
+    により、`step` 後も上界・単調減少が維持されることを確認済み。
+  - 反復インターフェース:
+    - `GEisensteinDescentFrame.descend`
+    - `GEisensteinDescentFrame.measure_descend_le`
+    - `GEisensteinDescentFrame.measure_descend_one_lt_of_pos`
+    - `GEisensteinDescentFrame.measure_descend_eq_zero_of_step_pred`
+    により、well-founded 接続用の反復骨格を確立。
+    - 具体化: `toyNat_measure_descend_eq_zero`,
+      `primitiveSized_measure_descend_eq_zero`
+  - コア接続補題:
+    - `GEisensteinDescentCore.measure_descend_eq_zero_of_step_pred`
+    - `GEisensteinDescentCore.exists_descend_measure_eq_zero_of_step_pred`
+    により、`GEisensteinDescentCore` から停止到達を直接取り出せる。
+  - `GEisensteinDescentCore` は `step_pred` をフィールド化済み。
+    停止補題呼び出し時に追加仮定が不要な API へ更新。
+  - 非empty core 具体化:
+    - `primitiveSizedCandidate_frame_step_pred`
+    - `GEisensteinDescentCore_of_descentClassify_primitiveSized`
+    により、`primitiveSized` frame を載せた core を直接構成可能。
+  - 橋補題:
+    - `exists_descend_measure_eq_zero_of_descentClassify_primitiveSized`
+    により、`PrimitiveOnS0` 初期状態から停止到達 (`measure = 0`) を直接抽出可能。
 
 - `CosmicFormula/CosmicFormulaBinom.lean`
   - `add_pow_gap_factor`, `add_pow_tail_u2_*`, `two_gap_xy_factor*` を提供。
@@ -40,7 +96,7 @@
 
 1. `NoSqOnS0 c b` を供給
 2. `hS0_not_sq_of_NoSqOnS0` で `FLT_d3_by_padicValNat` の仮定形へ変換
-3. `Main` の派生定理（`...of_NoSqOnS0` / `...of_phase6NoSqInput`）へ接続
+3. `Main` の派生定理（`...of_NoSqOnS0` / `...of_NoSqInput`）へ接続
 
 分類器を使う導線では以下を利用します。
 
@@ -65,7 +121,7 @@ graph LR
   G --> J
   L["PhaseLift.hS0_not_sq_of_NoSqOnS0"] --> M["Main.FLT_d3_by_padicValNat_of_NoSqOnS0"]
   J --> M
-  N["PhaseLift.Phase6NoSqInput"] --> O["Main.FLT_d3_by_padicValNat_of_phase6NoSqInput"]
+  N["PhaseLift.NoSqInput"] --> O["Main.FLT_d3_by_padicValNat_of_NoSqInput"]
   M --> O
   P["CounterexamplePattern.classifyLift_impossible_family_of_harmonicEnvelope_NoSq"] --> Q["Main.FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport"]
   M --> Q
@@ -77,10 +133,14 @@ graph LR
 
 - 最小入口:
   - `FLT_d3_by_padicValNat_of_NoSqOnS0`
+  - `FLT_d3_by_padicValNat_of_descentClassify_coprimeSupport`
 
 - 構造入口（仮定圧縮版）:
-  - `FLT_d3_by_padicValNat_of_phase6NoSqInput`
-  - `Phase6NoSqInput` に `hbc`, `coprime`, `hHarm`, `hNoSq`, mod3 条件を束ねる
+  - `FLT_d3_by_padicValNat_by_cases_NoSq_of_NoSqBaseInput`
+  - `NoSqBaseInput` に `hbc`, `coprime`, `hNonLift` を束ねる
+  - `FLT_d3_by_padicValNat_of_NoSqInput`
+  - `NoSqInput` に `hbc`, `coprime`, `hHarm`, `hNoSq` を束ねる
+  - `*_coprimeSupport` 系は最小仮定版に整理済み（`mod3` 分離引数なし）
 
 ## 5. 作業ログ
 

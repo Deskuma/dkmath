@@ -5,9 +5,12 @@ Authors: D. and Wise Wolf.
 -/
 
 import Mathlib
+import DkMath.Algebra.BinomTail
 import DkMath.CosmicFormula.CosmicFormulaDim  -- Cosmic Formula Dimensionality
 
 #print "file: DkMath.CosmicFormula.CosmicFormulaBinom"
+
+set_option linter.style.longLine false
 
 /-! ## 無次元宇宙式 Basic Dimless Cosmic Formula
 
@@ -214,11 +217,11 @@ theorem f_eq_pow_sub {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
 /-- 無次元版: R の定義 -/
 def R (d : ℕ) (x u : ℝ) : ℝ := (x + u) ^ d - u ^ d - (Nat.choose d 1 : ℝ) * x * u ^ (d - 1)
 
-#eval R 3 2 1  -- 20
-#eval R 4 2 1  -- 72
-#eval R 5 2 1  -- 232
-#eval R 6 2 1  -- 716
-#print "verify: 20, 72, 232, 716 -- これは f_d(2;1) の値で、d=3,4,5,6 に対応"
+-- #eval R 3 2 1  -- 20
+-- #eval R 4 2 1  -- 72
+-- #eval R 5 2 1  -- 232
+-- #eval R 6 2 1  -- 716
+-- #print "verify: 20, 72, 232, 716 -- これは f_d(2;1) の値で、d=3,4,5,6 に対応"
 
 /-- f は無次元宇宙式の関係式に等しい -/
 theorem f_eq_relation {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
@@ -338,6 +341,79 @@ Big-Gap（1 Gap 抽出版）:
 theorem add_pow_gap_factor {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
     (x + u) ^ d = u ^ d + x * GN d x u := by
   simpa [add_comm, add_left_comm, add_assoc] using (cosmic_id_csr' (R := R) d x u)
+
+/--
+Nat 上で `2 ≤ d` かつ `x,u > 0` なら、`BigN d x u` は端点の 2 項
+`x ^ d + GapN d u` に一致しない。
+
+これは `BigN` に必ず正の混合項が残ることの、`GN` 側語彙での直接版。
+-/
+theorem bigN_ne_xpow_add_gapN_nat_of_two_le {d x u : ℕ}
+    (hd : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) :
+    BigN d x u ≠ x ^ d + GapN d u := by
+  simpa [BigN, GapN] using
+    DkMath.Algebra.BinomTail.add_pow_ne_sum_pows_nat_of_two_le x u hd hx hu
+
+/--
+Nat 上で `2 ≤ d` かつ `x,u > 0` なら、`BigN d x u` は端点の 2 項和より真に大きい。
+
+したがって、`BigN` を端点 2 項だけで表そうとする試みは失敗し、
+混合項を保持する `GN` のような中間層が必要になる。
+-/
+theorem xpow_add_gapN_lt_bigN_nat_of_two_le {d x u : ℕ}
+    (hd : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) :
+    x ^ d + GapN d u < BigN d x u := by
+  simpa [BigN, GapN] using
+    DkMath.Algebra.BinomTail.add_pow_gt_sum_pows_nat_of_two_le x u hd hx hu
+
+/--
+Nat 上で `2 ≤ d` かつ `x,u > 0` なら、`BodyN d x u = x * GN d x u` は
+端点冪 `x ^ d` より真に大きい。
+
+これは `BigN = GapN + BodyN` と混合項の正性から直ちに従う。
+-/
+theorem xpow_lt_bodyN_nat_of_two_le {d x u : ℕ}
+    (hd : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) :
+    x ^ d < BodyN d x u := by
+  have hlt : x ^ d + GapN d u < GapN d u + BodyN d x u := by
+    simpa [BigN, add_pow_gap_factor, add_comm, add_left_comm, add_assoc] using
+      xpow_add_gapN_lt_bigN_nat_of_two_le (d := d) (x := x) (u := u) hd hx hu
+  have hlt' : GapN d u + x ^ d < GapN d u + BodyN d x u := by
+    simpa [add_comm, add_left_comm, add_assoc] using hlt
+  omega
+
+/--
+Nat 上で `2 ≤ d` かつ `x,u > 0` なら、`BodyN d x u` は正である。
+-/
+theorem bodyN_pos_nat_of_two_le {d x u : ℕ}
+    (hd : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) :
+    0 < BodyN d x u := by
+  have hxpow_pos : 0 < x ^ d := Nat.pow_pos hx
+  exact lt_trans hxpow_pos (xpow_lt_bodyN_nat_of_two_le (d := d) (x := x) (u := u) hd hx hu)
+
+/--
+Nat 上で `2 ≤ d` かつ `x,u > 0` なら、`GN d x u` は 0 でない。
+
+`BodyN = x * GN` が正なので、`GN = 0` はあり得ない。
+-/
+theorem GN_ne_zero_nat_of_two_le {d x u : ℕ}
+    (hd : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) :
+    GN d x u ≠ 0 := by
+  have hbody_pos : 0 < BodyN d x u :=
+    bodyN_pos_nat_of_two_le (d := d) (x := x) (u := u) hd hx hu
+  intro hGN
+  have : BodyN d x u = 0 := by
+    rw [BodyN, hGN]
+    simp
+  omega
+
+/--
+Nat 上で `2 ≤ d` かつ `x,u > 0` なら、`GN d x u` は少なくとも 1。
+-/
+theorem one_le_GN_nat_of_two_le {d x u : ℕ}
+    (hd : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) :
+    1 ≤ GN d x u := by
+  exact Nat.succ_le_of_lt (Nat.pos_of_ne_zero (GN_ne_zero_nat_of_two_le (d := d) (x := x) (u := u) hd hx hu))
 
 /--
 `d=3` の Tail は `u^2` ではなく（変数名を `x,u` に取っているため）`x^2` を因子に持つ。
@@ -491,6 +567,26 @@ theorem two_gap_xy_factor_of_two_le {R : Type _} [CommSemiring R]
   rcases Nat.exists_eq_add_of_le hd with ⟨n, rfl⟩
   simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm]
     using (two_gap_xy_factor (R := R) n x y)
+
+/--
+Nat 上で `2 ≤ d` かつ `x,u > 0` なら、`(x+u)^d` は端点の 2 項
+`x ^ d + u ^ d` に一致しない。
+
+言い換えると、`(x+u)^d` には必ず正の混合項が残るため、
+`x^d + u^d` 型を扱うには `G` / `GN` のような中間層が必要になる。
+-/
+theorem add_pow_ne_sum_pows_nat_of_two_le_binom {d x u : ℕ}
+    (hd : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) :
+    (x + u) ^ d ≠ x ^ d + u ^ d := by
+  simpa using DkMath.Algebra.BinomTail.add_pow_ne_sum_pows_nat_of_two_le x u hd hx hu
+
+/--
+Nat 上で `2 ≤ d` かつ `x,u > 0` なら、`(x+u)^d` は端点の 2 項和より真に大きい。
+-/
+theorem add_pow_gt_sum_pows_nat_of_two_le_binom {d x u : ℕ}
+    (hd : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) :
+    x ^ d + u ^ d < (x + u) ^ d := by
+  simpa using DkMath.Algebra.BinomTail.add_pow_gt_sum_pows_nat_of_two_le x u hd hx hu
 
 end CommSemiring
 

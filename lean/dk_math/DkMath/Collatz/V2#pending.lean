@@ -30,6 +30,8 @@ namespace DkMath.Collatz
 /- odd multiplier does not affect v2 -/
 lemma v2_mul_of_odd_left (a b : ℕ) (ha : a % 2 = 1) (hb : 0 < b) :
   v2 (a * b) = v2 b := by
+  -- [TODO] Mathlib の `padicValNat 2` の性質へマッピングすれば容易に証明可能。
+  --        現在は Collatz プロトタイプ構築を優先して sorry としている。
   sorry
 
 /- Multiplicative property: v₂(a * b) = v₂(a) + v₂(b).
@@ -38,6 +40,8 @@ lemma v2_mul_of_odd_left (a b : ℕ) (ha : a % 2 = 1) (hb : 0 < b) :
 -/
 theorem v2_mul (a b : ℕ) (ha : 0 < a) (hb : 0 < b) :
   v2 (a * b) = v2 a + v2 b := by
+  -- [TODO] こちらも `padicValNat` の積の性質 `padicValNat_mul` 等で対処可能。
+  --        独自定義 `v2` と Mathlib との接続を整えるフェーズで埋める。
   sorry
 
 end DkMath.Collatz

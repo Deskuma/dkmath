@@ -22,7 +22,7 @@ graph LR
   G --> J
   L["PhaseLift.hS0_not_sq_of_NoSqOnS0"] --> M["Main.FLT_d3_by_padicValNat_of_NoSqOnS0"]
   J --> M
-  N["PhaseLift.Phase6NoSqInput"] --> O["Main.FLT_d3_by_padicValNat_of_phase6NoSqInput"]
+  N["PhaseLift.NoSqInput"] --> O["Main.FLT_d3_by_padicValNat_of_NoSqInput"]
   M --> O
   P["CounterexamplePattern.classifyLift_impossible_family_of_harmonicEnvelope_NoSq"] --> Q["Main.FLT_d3_by_padicValNat_of_harmonicEnvelope_NoSq_coprimeSupport"]
   M --> Q
@@ -181,10 +181,10 @@ Mermaid の中心：
 
 という定理の形に出来る。主張が分離されておるのが強い。
 
-## 入口2：Phase6NoSqInput（N → O）
+## 入口2：NoSqInput（N → O）
 
-- \(N\): `PhaseLift.Phase6NoSqInput`
-- \(O\): `Main.FLT_d3_by_padicValNat_of_phase6NoSqInput`
+- \(N\): `PhaseLift.NoSqInput`  # 旧: `PhaseLift.Phase6NoSqInput`
+- \(O\): `Main.FLT_d3_by_padicValNat_of_NoSqInput`
 
 これは「位相分類（phase6）により NoSq を保証する」ルート。
 同じ結論へ違う“宇宙観”で入れる。

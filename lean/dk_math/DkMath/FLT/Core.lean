@@ -95,6 +95,24 @@ lemma GN_zmod_eq_head_of_dvd
 
 end DkMath
 
+namespace DkMath.FLT
+
+/--
+`Basic` の GN3 valuation spine が要求する最小 NoLift 供給インターフェイス。
+
+`a, y` を固定した文脈で、任意の素数 `q` について
+`q ∣ GN 3 (a^3) y` かつ `q ∤ a^3` なら `q^2 ∤ GN 3 (a^3) y` を返す。
+-/
+structure GN3NoLiftProvider (a y : ℕ) : Prop where
+  noLift_GN3 :
+    ∀ {q : ℕ},
+      Nat.Prime q ->
+      ¬ q ∣ a ^ 3 ->
+      q ∣ DkMath.CosmicFormulaBinom.GN 3 (a ^ 3) y ->
+      ¬ q ^ 2 ∣ DkMath.CosmicFormulaBinom.GN 3 (a ^ 3) y
+
+end DkMath.FLT
+
 -- －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
 
 namespace DkMath
