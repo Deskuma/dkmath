@@ -2185,3 +2185,39 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
   - すべて成功（既知 warning のみ）。
+
+## 2026-03-07 phase-15 継続（縦一列 4 本の Quarantine 追放）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+  - `CosmicPetalBridgeGNDescentBQuarantine.lean`
+
+- 内容:
+  - `kernel/of_pack` 帯から、参照密度が最小の no-arg wrapper 4 本を
+    `DescentB` から削除し、`Quarantine` へ同名で移設:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel`
+    - `triominoWieferichShrinkKernelInv_of_nums_of_pack`
+    - `triominoWieferichShrinkKernel_hxmul_of_pack`
+    - `triominoWieferichShrinkKernel_hy_eq_of_pack`
+  - `Quarantine` 側で
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_of_noWieferich_core`
+    が前方参照で落ちないよう、`...kernel_clean` 直呼びに調整。
+
+- 失敗例:
+  - 初回移設で `Quarantine` にて
+    `Unknown identifier triominoWieferichShrinkKernelEqSeedTracePackB_kernel`
+    （定義順）を踏んだ。
+  - 修正:
+    - `...kernel_of_noWieferich_core` を `...kernel_clean` 直呼びへ変更して解消。
+
+- 効果:
+  - `DescentB.lean` 内の
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+    直参照が 17 箇所 → 12 箇所へ減少。
+  - `NoWieferichResearch` import は未除去（残 12 箇所のため）。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功。
