@@ -454,6 +454,34 @@ def triominoWieferichShrinkB
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
+/-- `_of_pack` backend から数値候補だけを取り出す（quarantine）。 -/
+def triominoWieferichShrinkNumsInvCandidate_of_pack
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkNumsInvCandidateB p x y z q :=
+  triominoWieferichShrinkNumsInvCandidate_of_pack_clean
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/-- 影候補 `x' := x / q`, `y' := y`（quarantine）。 -/
+def triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkNumsInvCandidateB p x y z q :=
+  triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_clean
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
 /-- `_of_pack` backend から `hxMul / hyEq` を 1 本に束ねて回収する（quarantine）。 -/
 theorem triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack
     {p x y z q : ℕ}

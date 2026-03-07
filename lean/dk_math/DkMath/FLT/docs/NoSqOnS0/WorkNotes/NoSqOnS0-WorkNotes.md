@@ -2381,3 +2381,35 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
 
 ### 状態
 - `DescentB` 内で上記4名の no-arg 名は 0 件。
+## 2026-03-08: NumsInvCandidate 本体2本の移送（of_pack / div_eq_shadow）
+
+### 目的
+- 次バッチ対象 2 本を `DescentB` から外し、`Quarantine` 側へ移送:
+  - `triominoWieferichShrinkNumsInvCandidate_of_pack`
+  - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow`
+
+### 実施
+- `CosmicPetalBridgeGNDescentBQuarantine.lean` に上記 2 本の同名 wrapper を追加（fixed injection）。
+- `CosmicPetalBridgeGNDescentB.lean` から上記 2 本の no-arg 本体を削除。
+- `DescentB` 側には局所集約として
+  - `triominoWieferichShrinkNumsInvCandidate_of_pack_default`
+  - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_default`
+  を追加し、内部参照を `*_clean + default` 系へ統一。
+
+### 失敗と復旧
+- 一括置換直後に `simp` 引数へ関数項が混入し、`Invalid simp theorem` 多発。
+  - 対応: 長い部分適用式を `*_default` abbrev へ集約して解消。
+- 続いて 2 箇所で `x / q = ... ∨ q = 0` 未解決が発生。
+  - 対応: 該当箇所を `simp [hxdiv]` に変更して解消。
+- その後 linter 警告（`unnecessarySimpa`, `unusedSimpArgs`）が出たため、`simp` / `simp [hxdiv]` へ最終整形。
+
+### 検証
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine` : OK
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN` : OK
+
+### 状態
+- `DescentB` 内で以下 2 名の no-arg 定義参照は 0 件:
+  - `triominoWieferichShrinkNumsInvCandidate_of_pack`
+  - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow`
+- `DescentB` 内の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core` 直参照は継続して 0 件。
