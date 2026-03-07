@@ -2045,3 +2045,38 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
   - すべて成功。
+
+## 2026-03-07 phase-15 継続（InvCore / Spec / Recipe / Core 帯の clean 追加）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `InvCore / Spec / Recipe / Core` 帯へ `hNW5` 注入の clean 群を追加:
+    - `triominoWieferichShrinkNumsInvCandidate_hxy/hx0/hy0/hzlt/hpB'_core_clean`
+    - `triominoWieferichShrinkNumsInvCandidateInvCore_of_kernel_clean`
+    - `triominoWieferichShrinkNumsInvCandidateSpec_of_kernel_clean`
+    - `triominoWieferichShrinkNumsInvCandidate_exists/hzlt/hpB'/hInv_clean`
+    - `triominoWieferichShrinkNumsInvRecipeB_kernel_clean`
+    - `triominoWieferichShrinkNumsInvCoreB_kernel_clean`
+    - `triominoWieferichShrinkKernelNumsCoreB_kernel_clean`
+    - `triominoWieferichShrinkKernelEq/Inv_of_nums_core_clean`
+    - `triominoWieferichShrinkKernelEqSeedTrace/Core/Seed/Nums` clean 系
+    - `triominoWieferichShrinkKernelCoreB_kernel_clean`
+    - `triominoWieferichShrinkKernel_hxmul/hy_eq_of_core_path_clean`
+    - `triominoWieferichShrinkKernelEq/Inv_of_seed/nums_clean`
+  - 既存 no-arg 公開名は互換のため据え置き（wrapper 層は未追放）。
+
+- 失敗例:
+  - 1件発生:
+    - `triominoWieferichShrinkNumsInvCandidate_hx0_core_clean` 内で
+      `simp [hx0]` が `q = 0 ∨ c.x' = 0` を閉じられず build 失敗。
+    - 修正:
+      `have hc0 : c.x' = 0 := by simpa [c] using hx0` を挟み、
+      `simp [hc0]` へ変更して解消。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功。
