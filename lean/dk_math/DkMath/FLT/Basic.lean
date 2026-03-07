@@ -286,8 +286,8 @@ private lemma a6_lt_GN3_cube (a y : ℕ) (ha : 1 ≤ a) (hy : 1 ≤ y) :
     `fermatLastTheoremThree` に反する。
 
     注:
-    本ファイルの本線は後続の `GN3_cube_not_cube_of_gt_one`（非依存版）であり、
-    この補題は比較検証・回帰確認のために残している。
+    本線は `GN3_cube_not_cube_of_gt_one_of_provider`（非依存版）であり、
+    この補題は fallback の比較検証・回帰確認用として残している。
 -/
 private lemma GN3_cube_not_cube_of_gt_one_use_FLT3 (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y) :
     ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
@@ -319,20 +319,62 @@ private lemma GN3_cube_not_cube_of_gt_one_use_FLT3 (a y : ℕ) (ha : 2 ≤ a) (h
 
 #print axioms GN3_cube_not_cube_of_gt_one_use_FLT3  -- OK: 2026/02/22  7:03
 
-/-- 補題: b³ = GN(3, a³, y), a ≥ 2 かつ `Squarefree (GN 3 (a^3) y)` なら矛盾
+/-
+`q` を 1 本だけ抜く（Zsigmondy で primitive prime factor を取り出し、
+`A^3 - B^3 = (A-B) * GN 3 (A-B) B` から `q ∣ GN ...` を押し出す）最小スニペット。
+-/
+private lemma pick_primitive_q_data_GN3
+    (A B : ℕ)
+    (hAB_lt : B < A) (hB_pos : 0 < B)
+    (hAB_coprime : Nat.Coprime A B)
+    (hpnd : ¬ 3 ∣ A - B) :
+    ∃ q : ℕ,
+      Nat.Prime q ∧
+      q ∣ A ^ 3 - B ^ 3 ∧
+      ¬ q ∣ A - B ∧
+      q ∣ GN 3 (A - B) B := by
+  rcases DkMath.NumberTheory.GcdNext.exists_primitive_prime_factor_prime
+      (a := A) (b := B) (d := 3)
+      Nat.prime_three (by norm_num) hAB_lt hB_pos hAB_coprime hpnd with
+    ⟨q, hq_prime, hq_div, hq_ndiv⟩
+  refine ⟨q, hq_prime, hq_div, hq_ndiv, ?_⟩
+  have hfactor : A ^ 3 - B ^ 3 = (A - B) * GN 3 (A - B) B := by
+    simpa using
+      (DkMath.NumberTheory.GcdNext.pow_sub_pow_factor_cosmic_N
+        (a := A) (b := B) (d := 3) (by norm_num) hAB_lt)
+  have hq_dvd_mul : q ∣ (A - B) * GN 3 (A - B) B := by
+    rw [← hfactor]
+    exact hq_div
+  have hcop : Nat.Coprime q (A - B) :=
+    (Nat.Prime.coprime_iff_not_dvd hq_prime).2 hq_ndiv
+  exact Nat.Coprime.dvd_of_dvd_mul_left hcop hq_dvd_mul
+
+#print axioms pick_primitive_q_data_GN3  -- OK: no Research link 2026/03/06  1:24
+
+/-- `¬ q^2 ∣ N` から `padicValNat q N ≤ 1` を得る汎用補助。 -/
+private lemma padicValNat_le_one_of_noLift
+    {q N : ℕ}
+    (hq_prime : Nat.Prime q)
+    (hN_ne : N ≠ 0)
+    (hNoLift : ¬ q ^ 2 ∣ N) :
+    padicValNat q N ≤ 1 := by
+  by_contra h_not_le
+  have h2_le : 2 ≤ padicValNat q N := by
+    omega
+  have hq2_dvd : q ^ 2 ∣ N := by
+    exact (@padicValNat_dvd_iff_le q (Fact.mk hq_prime) N 2 hN_ne).2 h2_le
+  exact hNoLift hq2_dvd
+
+/-- 補題: b³ = GN(3, a³, y), a ≥ 2 のとき NoLift provider があれば矛盾
 
     方針:
     `(a^3 + y)^3 - y^3` の原始素因子 `q`（指数 3）を Zsigmondy で取り、
     `padicValNat q` の上下界を比較して矛盾を導く。
-
-    補足:
-    上界 `padicValNat ≤ 1` は無条件では偽になるため、
-    `Squarefree (GN ...)` を明示仮定として受ける。
 -/
-private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
+private lemma GN3_cube_not_cube_of_gt_one_of_provider_core
     (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y)
     (hcop : Nat.Coprime a y) (h3a : ¬ 3 ∣ a)
-    (hSq : Squarefree (GN 3 (a ^ 3) y)) :
+    (hProv : DkMath.FLT.GN3NoLiftProvider a y) :
     ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
   rintro ⟨b, hb⟩
   have hy_pos : 0 < y := by omega
@@ -351,37 +393,25 @@ private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
       intro h
       exact h3a (Nat.Prime.dvd_of_dvd_pow Nat.prime_three h)
     simpa [A, B, Nat.add_sub_cancel] using hpow
-  rcases DkMath.NumberTheory.GcdNext.exists_primitive_prime_factor_prime
-      (a := A) (b := B) (d := 3)
-      Nat.prime_three (by norm_num) hAB_lt hy_pos hAB_coprime hpnd with
-      ⟨q, hq_prime, hq_div, hq_ndiv⟩
+  rcases pick_primitive_q_data_GN3 A B hAB_lt hy_pos hAB_coprime hpnd with
+    ⟨q, hq_prime, hq_div, hq_ndiv, hq_dvd_GN⟩
   have hval_ge : 1 ≤ padicValNat q (A ^ 3 - B ^ 3) := by
     exact DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_ge_one -- OK
       hAB_lt hy_pos (by norm_num) hq_prime hq_div
-  have hSqAB : Squarefree (GN 3 (A - B) B) := by
-    simpa [A, B] using hSq
-  have hval_le : padicValNat q (A ^ 3 - B ^ 3) ≤ 1 := by
-    exact DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_of_squarefree_G
-      (a := A) (b := B) (d := 3) (q := q)
-      Nat.prime_three (by norm_num) hAB_lt hy_pos hAB_coprime hpnd hq_prime hq_div hq_ndiv hSqAB
-  have hval_diff : padicValNat q (A ^ 3 - B ^ 3) = 1 := le_antisymm hval_le hval_ge
   let N : ℕ := GN 3 (A - B) B
   have hfactor : A ^ 3 - B ^ 3 = (A - B) * N := by
     simpa [N] using
       (DkMath.NumberTheory.GcdNext.pow_sub_pow_factor_cosmic_N
         (a := A) (b := B) (d := 3) (by norm_num) hAB_lt)
+  have hq_dvd_N : q ∣ N := by
+    simpa [N] using hq_dvd_GN
   have hGN_pos : 0 < GN 3 (a ^ 3) y := by
     rw [GN_quadratic]
     positivity
-  have hb_ne0 : b ≠ 0 := by
-    intro hb0
-    have : GN 3 (a ^ 3) y = 0 := by simpa [hb0] using hb
-    exact (Nat.ne_of_gt hGN_pos) this
+  have hN_pos : 0 < N := by
+    simpa [N, A, B, Nat.add_sub_cancel] using hGN_pos
   have hN_ne : N ≠ 0 := by
-    have hN_eq : N = GN 3 (a ^ 3) y := by
-      simp [N, A, B]
-    rw [hN_eq, hb]
-    exact pow_ne_zero 3 hb_ne0
+    exact Nat.ne_of_gt hN_pos
   have hpadic_factor :
       padicValNat q (A ^ 3 - B ^ 3) = padicValNat q (A - B) + padicValNat q N := by
     exact DkMath.NumberTheory.GcdNext.padicValNat_factorization
@@ -391,15 +421,30 @@ private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
     have hzero : padicValNat q (A - B) = 0 := padicValNat.eq_zero_of_not_dvd hq_ndiv
     rw [hzero, zero_add] at hpadic_factor
     exact hpadic_factor
+  have hq_not_dvd_a3 : ¬ q ∣ a ^ 3 := by
+    simpa [A, B, Nat.add_sub_cancel] using hq_ndiv
+  have hq_dvd_GN_a3 : q ∣ GN 3 (a ^ 3) y := by
+    simpa [N, A, B, Nat.add_sub_cancel] using hq_dvd_N
+  have hNoLift_N : ¬ q ^ 2 ∣ N := by
+    have hNoLift_GN_a3 : ¬ q ^ 2 ∣ GN 3 (a ^ 3) y := by
+      exact hProv.noLift_GN3 hq_prime hq_not_dvd_a3 hq_dvd_GN_a3
+    simpa [N, A, B, Nat.add_sub_cancel] using hNoLift_GN_a3
+  have hval_N_ge : 1 ≤ padicValNat q N := by
+    exact DkMath.ABC.padicValNat_one_le_of_prime_dvd hq_prime hN_ne hq_dvd_N
+  have hval_N_le : padicValNat q N ≤ 1 := by
+    exact padicValNat_le_one_of_noLift hq_prime hN_ne hNoLift_N
   have hval_N : padicValNat q N = 1 := by
-    rw [← hpadic_eqN]
-    exact hval_diff
+    exact le_antisymm hval_N_le hval_N_ge
   have hN_eq_cube : N = b ^ 3 := by
     calc
       N = GN 3 (A - B) B := rfl
       _ = GN 3 (a ^ 3) y := by simp [A, B]
       _ = b ^ 3 := hb
   letI : Fact (Nat.Prime q) := ⟨hq_prime⟩
+  have hb_ne0 : b ≠ 0 := by
+    intro hb0
+    have : N = 0 := by simp [hN_eq_cube, hb0]
+    exact hN_ne this
   have hpow : padicValNat q (b ^ 3) = 3 * padicValNat q b := by
     simpa using (padicValNat.pow (p := q) (a := b) 3 hb_ne0)
   have hval_mul3 : 3 * padicValNat q b = 1 := by
@@ -409,10 +454,43 @@ private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
       _ = 1 := hval_N
   omega
 
+/-- 補題: squarefree 仮定から provider を作って本線へ委譲する wrapper。 -/
+private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
+    (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y)
+    (hcop : Nat.Coprime a y) (h3a : ¬ 3 ∣ a)
+    (hSq : Squarefree (GN 3 (a ^ 3) y)) :
+    ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
+  have hProvSq : DkMath.FLT.GN3NoLiftProvider a y := by
+    refine ⟨?_⟩
+    intro q hq_prime _hq_not_dvd_a3 _hq_dvd_GN
+    have hGN_pos : 0 < GN 3 (a ^ 3) y := by
+      rw [GN_quadratic]
+      positivity
+    have hGN_ne : GN 3 (a ^ 3) y ≠ 0 := Nat.ne_of_gt hGN_pos
+    have hval_GN_le_sq : padicValNat q (GN 3 (a ^ 3) y) ≤ 1 := by
+      exact DkMath.NumberTheory.GcdNext.padicValNat_le_one_of_squarefree hq_prime hGN_ne hSq
+    intro hq2_dvd_GN
+    have h2_le : 2 ≤ padicValNat q (GN 3 (a ^ 3) y) := by
+      exact
+        (@padicValNat_dvd_iff_le q (Fact.mk hq_prime) (GN 3 (a ^ 3) y) 2 hGN_ne).1
+          hq2_dvd_GN
+    exact (not_le_of_gt h2_le) hval_GN_le_sq
+  exact GN3_cube_not_cube_of_gt_one_of_provider_core a y ha hy hcop h3a hProvSq
+
+/-- 本線: NoLift provider を受け取って `GN 3 (a^3) y` が立方数になれないことを示す。 -/
+lemma GN3_cube_not_cube_of_gt_one_of_provider
+    (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y)
+    (hcop : Nat.Coprime a y) (h3a : ¬ 3 ∣ a)
+    (hProv : DkMath.FLT.GN3NoLiftProvider a y) :
+    ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
+  exact GN3_cube_not_cube_of_gt_one_of_provider_core a y ha hy hcop h3a hProv
+
+#print axioms GN3_cube_not_cube_of_gt_one_of_provider_core  -- OK: no Research link 2026/03/05
+#print axioms GN3_cube_not_cube_of_gt_one_of_provider  -- OK: no Research link 2026/03/05
 #print axioms GN3_cube_not_cube_of_gt_one_of_squarefree  -- OK: no Research link 2026/03/05
 
-/-- 互換用の入口。現状の一般仮定では squarefree 供給が無いので、比較用 FLT(3) 版へ落とす。 -/
-private lemma GN3_cube_not_cube_of_gt_one
+/-- 暫定 fallback 入口。squarefree 未供給の呼び出しは FLT(3) 参照へ明示的に落とす。 -/
+private lemma GN3_cube_not_cube_of_gt_one_fallback_use_FLT3
     (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y)
     (_hcop : Nat.Coprime a y) (_h3a : ¬ 3 ∣ a) :
     ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
@@ -527,7 +605,7 @@ lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h
         omega
       -- u = a^3 を GN の引数として使う
       rw [ha] at hb
-      exact GN3_cube_not_cube_of_gt_one a y ha2 hy_pos hcop_ay h3a ⟨b, hb⟩
+      exact GN3_cube_not_cube_of_gt_one_fallback_use_FLT3 a y ha2 hy_pos hcop_ay h3a ⟨b, hb⟩
 
 /-- 補題: $d=3$ の場合、$x^3$ は $u^2$ で割り切れる（適切な条件の下で） -/
 lemma x3_div_u2 (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h_gcd : u.gcd (GN 3 u y) = 1) :

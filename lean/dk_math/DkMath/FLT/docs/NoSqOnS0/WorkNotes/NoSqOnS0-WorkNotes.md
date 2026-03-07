@@ -745,6 +745,156 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - 成功。
 
+## 2026-03-06 phase-15 継続（DescentB に局所 NoLift 束を追加）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - Branch B の固定 `q` 用最小データ束を追加:
+    - `structure BranchBLocalNoLift (p y z q : ℕ) : Prop`
+    - fields:
+      - `hq_prime : Nat.Prime q`
+      - `hq_dvd_diff : q ∣ z ^ p - y ^ p`
+      - `hq_not_dvd_gap : ¬ q ∣ (z - y)`
+      - `hNoLift : ¬ q ^ 2 ∣ GN p (z - y) y`
+  - `branchBLocalNoLift_of_noWieferich` を追加し、
+    `TriominoNoWieferichBridge` から
+    `∃ r, BranchBLocalNoLift p y z r` を返すようにした。
+  - kernel 直結ラッパーとして
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_localNoLift_core`
+    を追加。
+    - 入力: existing kernel コンテキスト
+    - 出力: `∃ r, BranchBLocalNoLift p y z r`
+  - 既存の
+    `..._existsPrime_dvd_GN_not_sq_of_noWieferich`
+    と
+    `..._existsPrime_dvd_GN_not_sq_core`
+    は、この新しい local bundle 経由の実装に差し替えた。
+
+- 判断:
+  - `Basic` 側を不変に保ったまま、
+    descent 側で「固定した `q` の局所 NoLift」を返す供給点を先に実装。
+  - これで方針B移行時の接続先が明示された。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - 成功。
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - 成功。
+  - 既存 warning のみ:
+    - `DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:81:6: declaration uses sorry`
+    - `DkMath/FLT/GEisensteinBridge.lean:1464:2: Try this: intro ...`
+
+## 2026-03-06 phase-15 継続（差し替え点固定: `NoLift -> padicValNat ≤ 1` 補助の導入）
+
+- 更新:
+  - `Basic.lean`
+
+- 内容:
+  - private 補助
+    `padicValNat_le_one_of_noLift` を追加。
+    - 入力: `Nat.Prime q`, `N ≠ 0`, `¬ q^2 ∣ N`
+    - 出力: `padicValNat q N ≤ 1`
+  - `GN3_cube_not_cube_of_gt_one_of_squarefree` では、
+    上界構築を次の2段へ分離した。
+    - 現在の供給源（squarefree）から `hNoLift_N : ¬ q^2 ∣ N` を作る
+    - 上界化は `padicValNat_le_one_of_noLift hq_prime hN_ne hNoLift_N`
+  - これで将来の方針B移行時は、
+    差し替え点が「`hNoLift_N` の供給」1箇所に固定される形になった。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Basic`
+  - 成功。
+  - 残る既存 warning:
+    - `DkMath/FLT/Basic.lean:685:8: declaration uses sorry`
+
+## 2026-03-06 phase-15 継続（valuation spine 整形: `hN_pos` 統一と下界を `hq_dvd_N` 直結）
+
+- 更新:
+  - `Basic.lean`
+
+- 内容:
+  - `GN3_cube_not_cube_of_gt_one_of_squarefree` 内で、
+    `hq_dvd_GN` を `hq_dvd_N : q ∣ N` として保持し、
+    `hval_N_ge` を
+    `DkMath.ABC.padicValNat_one_le_of_prime_dvd hq_prime hN_ne hq_dvd_N`
+    で直接構成する形に整理。
+  - `hN_ne` は `hN_pos` から一元的に作る形へ統一。
+    `hN_pos` は `hGN_pos` から
+    `simpa [N, A, B, Nat.add_sub_cancel]` で導出。
+  - 併せて `unnecessarySimpa` 指摘箇所（`hb_ne0` 内）を
+    `simpa` から `simp` へ変更して warning を解消。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Basic`
+  - 成功。
+  - `Basic.lean` の `unnecessarySimpa` warning は解消。
+  - 残る既存 warning:
+    - `DkMath/FLT/Basic.lean:669:8: declaration uses sorry`
+
+## 2026-03-06 phase-15 継続（方針B: NoLift 依存を配線から外し、最小反例+下降へ切替）
+
+- 更新:
+  - `CosmicPetalBridgeGN.lean`
+
+- 内容:
+  - `TriominoWieferichBranchBridge` の入力契約を
+    `hNoLift : TriominoNoLiftGNBridge`
+    から
+    `hDescent : TriominoWieferichLiftBridge`（= `WieferichDescentB`）
+    に変更。
+  - `triominoWieferichLiftKernel_impl` は
+    `counterexampleHasWieferichLiftB_impl` と `hBranch.hDescent` を合成する形に変更。
+  - `triominoWieferichLiftExclusion_impl` は branch 引数を受け取り、
+    `wieferichLiftExclusion_of_liftExists_and_descent` へ接続。
+  - `triominoNoWieferichBridge_impl` は
+    `triominoNoWieferichBridge_of_not_sq_GN hBranch.hNoLift`
+    から、
+    `triominoNoWieferichBridge_of_wieferichLiftExclusion (triominoWieferichLiftExclusion_impl hBranch)`
+    に切替。
+  - コメントも方針B（最小反例 + 下降）に合わせて更新。
+
+- 結果:
+  - 本丸配線で `NoLift` の global 供給を要求しない形に移行。
+  - `NoWieferich` は「lift exists + descent + minimal selection」経路で閉じる構成へ統一。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+  - 成功。
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - 成功。
+  - 既存 warning のみ:
+    - `DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:81:6: declaration uses sorry`
+    - `DkMath/FLT/GEisensteinBridge.lean:1464:2: Try this: intro ...`
+
+## 2026-03-05 phase-15 継続（`FLT3` fallback の明示隔離）
+
+- 更新:
+  - `Basic.lean`
+
+- 内容:
+  - fallback の責務を名前で明示するため、
+    旧互換入口を
+    `GN3_cube_not_cube_of_gt_one_fallback_use_FLT3`
+    に改名した。
+  - 呼び出し側（`u_eq_one_of_coprime_gcd` 内）も同名へ接続し、
+    squarefree 非供給パスが「FLT3 fallback である」ことを
+    コード上で判読可能にした。
+  - あわせて `GN3_cube_not_cube_of_gt_one_use_FLT3` のコメントを更新し、
+    本線が `GN3_cube_not_cube_of_gt_one_of_squarefree` であることを明示した。
+
+- 結果:
+  - fallback 経路が private 名称と呼び出し点の両方で露出し、
+    非依存本線（squarefree 版）との混線を避けやすくなった。
+  - 証明内容そのもの（論理）は不変で、責務分離のみを実施。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Basic`
+  - 成功。
+  - 既存 warning:
+    - `DkMath/FLT/Basic.lean:635:8: declaration uses sorry`
+
 ## 2026-03-05 phase-15 継続（GEisensteinBaseInput provider interface を GEisensteinBridge 側へ移設）
 
 - 更新:
@@ -994,3 +1144,1272 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - 既存 warning:
     - `DkMath/FLT/Basic.lean:635:8: declaration uses sorry`
     - （今回差分による新規 warning ではない）
+
+## 2026-03-06 phase-15 継続（`q` 一本固定スニペットの導入）
+
+- 更新:
+  - `Basic.lean`
+
+- 内容:
+  - `pick_primitive_q_data_GN3` を private 補助補題として追加。
+  - 返り値は次の4点をまとめて返す形にした。
+    - `hq_prime : Nat.Prime q`
+    - `hq_div : q ∣ A^3 - B^3`
+    - `hq_ndiv : ¬ q ∣ A - B`
+    - `hq_dvd_GN : q ∣ GN 3 (A - B) B`
+  - `hq_dvd_mul` の導出は
+    `rw [← hfactor]; exact hq_div`
+    の堅い形で実装。
+  - `GN3_cube_not_cube_of_gt_one_of_squarefree` 内の
+    primitive prime 抽出部分をこの補助補題経由へ差し替えた。
+  - さらに整理として、
+    `hN_pos : 0 < N` を `hGN_pos` から
+    `simpa [N, A, B, Nat.add_sub_cancel]` で導出し、
+    `hN_ne : N ≠ 0` は `Nat.ne_of_gt hN_pos` で取得する形に統一。
+  - `hq_dvd_GN` は `hq_dvd_N : q ∣ N` に受け渡し、
+    `hval_N_ge : 1 ≤ padicValNat q N` の導出に実使用
+    （`DkMath.ABC.padicValNat_one_le_of_prime_dvd`）。
+
+- 備考:
+  - 共有スニペット案にあった
+    `exists_primitive_prime_factor_prime` 呼び出しの余分な `(by norm_num)` 1 個は、
+    現行シグネチャに合わせて削除して反映。
+  - 失敗例:
+    - `hN_ne` を `Nat.pos_of_dvd_of_pos hq_dvd_N hq_prime.pos` で出そうとしたが、
+      方向が合わず（`q ∣ N` からは直接 `0 < N` を出せない）型不一致で失敗。
+    - `hN_ne` は一旦元の `hb : GN ... = b^3` 経由へ戻し、
+      `hq_dvd_GN` は `hq_dvd_N` として保持する形に修正。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Basic`
+  - 成功。
+  - 既存 warning:
+    - `DkMath/FLT/Basic.lean:663:8: declaration uses sorry`
+
+## 2026-03-06 phase-15 継続（DescentB の局所 NoLift 供給口を GN3 形へ pullback）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `BranchBLocalNoLift` から `Basic` 側の `N := GN 3 (a^3) y` に直接刺せるよう、
+    次の pullback 補題を追加:
+    - `branchBLocalNoLift_pullback_GN3`
+      - 入力: `BranchBLocalNoLift 3 y (a ^ 3 + y) q`
+      - 出力: `¬ q ^ 2 ∣ GN 3 (a ^ 3) y`
+      - 実装: `simpa [Nat.add_sub_cancel]` で gap 形を吸収
+  - あわせて、`a^3` 形の入力から Branch B 局所束を返す薄い供給定理を追加:
+    - `branchBLocalNoLift_GN3_of_noWieferich`
+      - `h3_not_dvd_a3 : ¬ 3 ∣ a^3`
+      - `hq_not_dvd_a3 : ¬ q ∣ a^3`
+      - `hqpow_dvd_GN_a3 : q^3 ∣ GN 3 (a^3) y`
+      を受け、内部で gap 形へ `simpa [Nat.add_sub_cancel]` 変換して
+      `branchBLocalNoLift_of_noWieferich` に接続。
+
+- 失敗例:
+  - 初回実装で `branchBLocalNoLift_GN3_of_noWieferich` を
+    `branchBLocalNoLift_of_noWieferich` より前に置いたため、
+    `Unknown identifier branchBLocalNoLift_of_noWieferich` でビルド失敗。
+  - 対処として定理定義順を後ろへ移動し、再ビルドで解消。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
+## 2026-03-07 phase-15 継続（GapGNPowDataB を FLT3 ラッパーへ直結）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - 新規定理を追加:
+    - `FLT3_from_pack_gapGNPowData_and_noWieferich3`
+      - 入力:
+        - `hpack : PrimeCounterexamplePack 3 x y z`
+        - `d : TriominoWieferichShrinkGapGNPowDataB 3 x y z q`
+        - `ha : 2 ≤ d.u`
+        - `h3_not_dvd_u3 : ¬ 3 ∣ d.u ^ 3`
+      - 処理:
+        - `d.hgap` / `d.hGNq` をそのまま
+          `FLT3_from_pack_gapCube_and_noWieferich3_of_mulCube`
+          へ渡して矛盾化
+      - 目的:
+        - 853–936 行帯の `GapGNPowDataB` 系データから、
+          追加整形なしで FLT3 実パス入口へ流し込める接続点を固定。
+
+- 失敗例:
+  - なし（型合わせのみで通過）。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
+## 2026-03-07 phase-15 継続（FLT3 実分岐に刺しやすい `PrimeCounterexamplePack 3` 直受け入口を追加）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `FLT3_from_pack_gapCube_and_noWieferich3` を追加。
+    - 入力: `hpack : PrimeCounterexamplePack 3 x y z`, `hy`, `hgap`, `hGN_cube` など
+    - 目的: 実分岐がすでに `PrimeCounterexamplePack 3 ...` を持つ場合に、
+      transport 補題 `primeCounterexamplePack3_of_eq` を経由した GN3 provider kernel 呼び出しを
+      そのまま適用できるようにする。
+  - 内部では `hpack.hyz_lt` と `hy` から `hpos` を組み立て、
+    既存の `FLT3_from_gapCube_and_noWieferich3` へ委譲。
+
+- 失敗例:
+  - 初回実装で `by_contra hx0` の `hx0` をそのまま `simpa [hx0]` に使って失敗。
+    - `hx0` の型は `¬ 0 < x` であり `x = 0` ではないため。
+  - `hx_eq0 : x = 0 := Nat.eq_zero_of_not_pos hx0` を挟んで解消。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
+## 2026-03-06 phase-15 継続（GN3 経路を `PrimeCounterexamplePack 3` 実パスへ接続）
+
+- 更新:
+  - `CosmicPetalBridgeGNCore.lean`
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `Core` に `TriominoNoWieferichBridge3` を追加。
+    - `PrimeGe5CounterexamplePack` とは分離し、`PrimeCounterexamplePack 3` 専用の
+      NoWieferich 契約として定義。
+  - `Core` に `triominoCosmicNonLiftableGN3Bridge_of_noWieferich3` を追加。
+    - `p=3` 固定で `z^3 - y^3 = (z-y) * GN 3 (z-y) y` を使い、
+      差側 no-lift から GN 側 no-lift を引き戻す橋を常設化。
+  - `DescentB` の GN3 専用定理群の入力を非空文脈へ修正:
+    - `branchBLocalNoLift_GN3_of_noWieferich`
+    - `gn3NoLiftProvider_of_noWieferich`
+    - `kernel_route_gn3_not_cube_of_noWieferich`
+    - いずれも `PrimeGe5CounterexamplePack 3 ...` から
+      `PrimeCounterexamplePack 3 ...` へ置換し、
+      `TriominoNoWieferichBridge3` を受け取る形へ変更。
+  - これにより、GN3 provider 経路は「型だけ通る到達不能枝」ではなく、
+    `p=3` を許す実文脈で適用可能な契約に整列した。
+
+- 失敗例:
+  - `branchBLocalNoLift_GN3_of_noWieferich` で旧実装のまま
+    `branchBLocalNoLift_of_noWieferich` を再利用しようとすると、
+    必要入力が `PrimeGe5CounterexamplePack` のため型が合わず失敗。
+  - 対処として GN3 専用に直接
+    `hq_dvd_diff`（因数分解から）と `hNoLift`（`...noWieferich3` から）を構成し、
+    `r := q` で束を返す形へ変更。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNCore`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - すべて成功。
+
+## 2026-03-07 phase-15 継続（FLT3 実パス入口: `z = a^3 + y` transport helper を追加）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `primeCounterexamplePack3_of_eq` を追加。
+    - 入力: `hpos`, `h_coprime`, `h_body : z^3 = x^3 + y^3`, `hz : z = a^3 + y`
+    - 出力: `PrimeCounterexamplePack 3 x y (a^3 + y)`
+    - 目的: GN3 kernel が要求する pack への transport を 1 本化。
+  - `FLT3_from_gapCube_and_noWieferich3` を追加。
+    - 入力: `hNW3`, `hgap : z - y = a^3`, `hGN_cube : ∃ b, GN 3 (a^3) y = b^3` など
+    - 処理:
+      1. `hgap` + `hzy` から `hz : z = a^3 + y` を再構成
+      2. `primeCounterexamplePack3_of_eq` で `hpack3` を構成
+      3. `hpack3.gap_coprime_right` と `Nat.coprime_pow_left_iff` から `Nat.Coprime a y` を回収
+      4. `kernel_route_gn3_not_cube_of_noWieferich` へ注入して `hGN_cube` を矛盾化
+  - これで「`gap cube witness` を持つ FLT3 分岐 -> GN3 provider kernel」への
+    実パス入口が 1 本できた。
+
+- 失敗例:
+  - 初回実装で `Nat.pow_pos hpos.left 3` と書いたが、この環境の型では
+    `Nat.pow_pos` は指数引数を取らずエラー。
+  - `Nat.pow_pos hpos.left` へ修正して解消。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
+## 2026-03-06 phase-15 継続（candidateZ の矛盾生成点へ GN3 provider 経路を差し込み）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_from_gap_GN_powers_core`
+    の矛盾生成を再整理。
+    - `PrimeGe5CounterexamplePack` 文脈では `p = 3` 分岐は到達不能であることを確認。
+    - `by_cases hp3 : p = 3` を削除し、常に
+      `...noPowGN_core -> hNoPowGN ⟨q*d.v1, d.hGNq⟩`
+      で矛盾を作る形に修正。
+  - 到達不能分岐へ GN3 provider 経路を差し込んでいた誤りを除去し、
+    候補点 `candidateZ` は `p ≥ 5` 専用核として意味どおりに戻した。
+
+- 失敗例:
+  - `p = 3` 分岐で `hpack3.hp5 : 5 ≤ 3` から `False` を作って
+    `ha` / `hcop` を `False.elim` 供給する実装は、型は通るが到達不能分岐であり
+    「実パスで GN3 provider を使う」目的を満たさないと判明。
+  - 同見出し節が重複していたため、今回一本化。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
+## 2026-03-06 phase-15 継続（GN3 NoLift 最小インターフェイスを導入して Basic 差し替え点を固定）
+
+- 更新:
+  - `Core.lean`
+  - `Basic.lean`
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `Core.lean` に `DkMath.FLT.GN3NoLiftProvider (a y)` を追加。
+    - `q ∣ GN 3 (a^3) y` と `¬ q ∣ a^3` から `¬ q^2 ∣ GN 3 (a^3) y` を供給する最小契約。
+  - `Basic.lean` の
+    `GN3_cube_not_cube_of_gt_one_of_squarefree` 内で
+    `hNoLift_N` 生成を provider 呼び出しへ差し替え。
+    - 既存の squarefree 証明は、局所 provider `hProvSq` を作ってそこへ閉じ込めた。
+    - valuation spine の下流 (`padicValNat_le_one_of_noLift`) は無変更。
+  - `CosmicPetalBridgeGNDescentB.lean` に
+    `gn3NoLiftProvider_of_noWieferich` を追加。
+    - `PrimeGe5CounterexamplePack 3 x y (a^3+y)` と NoWieferich bridge から
+      `GN3NoLiftProvider a y` を構成できる形にした。
+
+- 失敗例:
+  - `Core.lean` の新 interface で `GN` を短名のまま書いたところ、
+    `namespace DkMath.FLT` では `Unknown identifier GN` でビルド失敗。
+  - `DkMath.CosmicFormulaBinom.GN` へ完全修飾して解消。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Core`
+  - `cd lean/dk_math && lake build DkMath.FLT.Basic`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - すべて成功。
+
+## 2026-03-06 phase-15 継続（Basic の GN3 補題を provider 本線 + squarefree wrapper に二層化）
+
+- 更新:
+  - `Basic.lean`
+
+- 内容:
+  - `GN3_cube_not_cube_of_gt_one_of_provider_core` を private core として確立。
+    - valuation spine 本体はこの core に集約。
+    - `hNoLift_N` は `GN3NoLiftProvider` から供給する形に固定。
+  - `GN3_cube_not_cube_of_gt_one_of_squarefree` は
+    squarefree から `GN3NoLiftProvider` を作る薄い wrapper へ変更。
+  - `GN3_cube_not_cube_of_gt_one_of_provider` を public 入口として追加。
+    - これで PrimeProvider / kernel 側が provider を注入して本線を呼べる口ができた。
+  - FLT3 fallback 補題は比較用として維持（本線は provider 入口）。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.Basic`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
+## 2026-03-06 phase-15 継続（kernel 側で provider 経路を 1 本貫通）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `import Basic.lean` を追加し、PrimeProvider 側から
+    `GN3_cube_not_cube_of_gt_one_of_provider` を直接呼べるようにした。
+  - 新規定理を追加:
+    - `kernel_route_gn3_not_cube_of_noWieferich`
+      - 入力: `hNW`, `hpack : PrimeGe5CounterexamplePack 3 x y (a^3+y)`,
+        `ha`, `hy`, `hcop`, `h3_not_dvd_a3`
+      - 処理:
+        1. `gn3NoLiftProvider_of_noWieferich` で `GN3NoLiftProvider a y` を生成
+        2. `Basic` の public 入口 `GN3_cube_not_cube_of_gt_one_of_provider` へ注入
+      - 結果: `¬ ∃ b, GN 3 (a^3) y = b^3`
+  - これで「squarefree fallback なし」の provider 注入経路が
+    kernel 側に 1 本成立した。
+
+- 失敗例:
+  - `h3a` 生成で `dvd_pow h3 3` を使ったところ型不一致
+    （`numerals are data ... expected proposition`）で失敗。
+  - `dvd_pow_self` を使う形に修正して解消:
+    `h3_dvd_a3 : 3 ∣ a^3 := dvd_trans h3 (dvd_pow_self a (by decide : 3 ≠ 0))`
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
+## 2026-03-07 phase-15 継続（FLT3 実分岐への差し込み準備: `hGN_cube` 変換ラッパー）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - 新規定理を追加:
+    - `FLT3_from_pack_gapCube_and_noWieferich3_of_mulCube`
+      - 入力:
+        - `hpack : PrimeCounterexamplePack 3 x y z`
+        - `hgap : z - y = a^3`
+        - `hGNq : GN 3 (z - y) y = (q * v1)^3`
+      - 処理:
+        - `hGNq` と `hgap` から `hGN_cube : ∃ b, GN 3 (a^3) y = b^3` を構成
+        - 既存の `FLT3_from_pack_gapCube_and_noWieferich3` に注入
+      - 目的:
+        - 呼び出し側で毎回 `∃ b` 包装を書く必要をなくし、
+          `GN = (q * v1)^3` 形の枝から 1 行で矛盾化できるようにする。
+
+- 調査結果（実パス探索）:
+  - `PrimeCounterexamplePack 3` を直接使う箇所は現時点で
+    `CosmicPetalBridgeGNCore.lean` / `CosmicPetalBridgeGNDescentB.lean` に限定。
+  - `hgap : z - y = a^3` と `GN 3 ... = _^3` を同時に持つ既存呼び出し点は未接続。
+  - したがって次の実作業は、
+    FLT3 側でこの 2 つが揃う枝（またはそこへ transport できる枝）へ
+    `FLT3_from_pack_gapCube_and_noWieferich3_of_mulCube` を差し込む配線。
+
+- 失敗例:
+  - 最初のビルドでプロジェクト root を 1 階層誤り
+    (`/home/deskuma/develop/lean/dkmath` で `lakefile` 不在)。
+  - `workdir` を `lean/dk_math` へ修正して解消。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
+## 2026-03-07 phase-15 継続（`GapGNPowDataB` から candidateZ core へ FLT3 専用差し替え口を追加）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - 新規定義を追加:
+    - `triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_from_gap_GN_powers_of_noWieferich3`
+      - 入力:
+        - `hpack : PrimeCounterexamplePack 3 x y z`
+        - `d : TriominoWieferichShrinkGapGNPowDataB 3 x y z q`
+        - `hy : 1 ≤ y`
+        - `ha : 2 ≤ d.u`
+        - `h3_not_dvd_u3 : ¬ 3 ∣ d.u ^ 3`
+      - 処理:
+        - `FLT3_from_pack_gapGNPowData_and_noWieferich3` で即矛盾化
+        - `False.elim` で `TriominoWieferichShrinkKernelCandidateZDataB 3 x y z q` を返す
+      - 目的:
+        - 既存の一般 `PrimeGe5` 本丸（`noPowGN_core`）はそのまま保持しつつ、
+          `p=3` 実分岐側だけを新 GN3 spine へ差し替えるための入口を明示する。
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
+## 2026-03-07 phase-15 継続（FLT3 用 `candidateZ_data/candidateZ` ラッパーを追加）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - 新規定義を追加:
+    - `triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_data_of_noWieferich3`
+      - `GapGNPowDataB 3` と `hNW3` から `candidateZ_data` を返す薄い包装。
+      - 内部で
+        `triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_from_gap_GN_powers_of_noWieferich3`
+        を直接呼ぶ。
+    - `triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_of_noWieferich3`
+      - 上記 data を `toSubtype` して、既存 `candidateZ` 形
+        `{ z' // z' < z ∧ ¬ 3 ∣ (z' - y) ∧ (x / q)^3 + y^3 = z'^3 }`
+        を返す。
+  - 目的:
+    - 「`p=3` 実分岐で実際に呼ぶ位置」を
+      `candidateZ_data / candidateZ` と同型の入口で固定する。
+    - 一般 `PrimeGe5` 本丸は未変更のまま温存。
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
+## 2026-03-07 phase-15 継続（`hpB` から `¬ 3 ∣ d.u^3` を自動回収する FLT3 ラッパーを追加）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - 新規定義を追加:
+    - `triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_data_of_noWieferich3_hpB`
+    - `triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_of_noWieferich3_hpB`
+  - どちらも `hpB : ¬ 3 ∣ (z - y)` と `d.hgap : z - y = d.u^3` から
+    `¬ 3 ∣ d.u^3` を内部で回収して既存ラッパーへ委譲。
+  - 目的:
+    - 呼び出し側で `h3_not_dvd_u3` を明示生成する手間を減らし、
+      既存の Branch B 形（`hpB` 保持）から FLT3 入口へ差し込みやすくする。
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
+## 2026-03-07 phase-15 継続（実置換: `_hpB` ラッパーを旧経由から新 core 直呼びへ）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_data_of_noWieferich3_hpB`
+    の本体を置換。
+    - 旧: `...candidateZ_data_of_noWieferich3`（旧経由）へ委譲
+    - 新: `...candidateZ_from_gap_GN_powers_of_noWieferich3`（新 core）を直接呼ぶ
+  - これにより、`hpB` 版ラッパーは中間層に依存せず、
+    FLT3 no-Wieferich spine へ直接接続される。
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
+## 2026-03-07 phase-15 継続（攻め案: `p=3` 即矛盾定理を追加し `_hpB` 末尾を差し替え）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - 新規定理を追加:
+    - `triominoWieferichShrinkKernelEqSeedTracePack3_contradiction_of_noWieferich3_hpB`
+      - 入力:
+        - `hNW3, hpack, hy, hpB, d, ha`
+      - 出力:
+        - `False`
+      - 役割:
+        - `hpB` と `d.hgap` から `¬ 3 ∣ d.u^3` を内部回収し、
+          `FLT3_from_pack_gapGNPowData_and_noWieferich3` へ直結する
+          `p=3` 専用の即矛盾入口を固定。
+  - 置換:
+    - `triominoWieferichShrinkKernelEqSeedTracePack3_candidateZ_data_of_noWieferich3_hpB`
+      の末尾を、
+      旧ルート（`h3_not_dvd_u3` を作って core 呼び出し）から
+      新しい即矛盾定理呼び出し + `False.elim` へ置換。
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
+## 2026-03-07 phase-15 継続（一般化閉路: `p=3 / p≥5` dispatcher と pack 昇格補題を追加）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - 新規補題:
+    - `primeGe5CounterexamplePack_of_pack`
+      - `PrimeCounterexamplePack p x y z` + `hy : 1 ≤ y` + `hp5 : 5 ≤ p`
+        から `PrimeGe5CounterexamplePack p x y z` を構成。
+      - `hx0` は `x=0` を仮定して `y^p = z^p` を導き、
+        `Nat.pow_left_injective` と `hyz_lt` で矛盾化。
+  - 新規 dispatcher:
+    - `triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferich`
+      - 入力:
+        - `hNW3 : TriominoNoWieferichBridge3`
+        - `hNW5 : TriominoNoWieferichBridge`
+        - `hpack : PrimeCounterexamplePack p x y z`
+        - `hy, hp2, hpB, hqP, hq_not_dvd_gap, hqpow_dvd_GN, d, ha`
+      - 分岐:
+        - `p = 3` は GN3 spine (`...contradiction_of_noWieferich3_hpB`) へ
+        - `p ≠ 3` は `hp2` と prime 性から `5 ≤ p` を導いて Ge5 spine へ
+
+- 失敗例:
+  - `primeGe5CounterexamplePack_of_pack` 初版で
+    `Nat.zero_pow` の条件型を `p ≠ 0` と誤って渡し失敗。
+    - 修正: `0 ^ p + ...` を一段受け、`Nat.zero_pow hpack.hp.pos` で整理。
+  - dispatcher 初版を参照先より前に置いてしまい、前方参照で失敗。
+    - 修正: 宣言順を後ろへ移動し解消。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
+## 2026-03-07 phase-15 継続（本線置換: `candidateZ_from_gap_GN_powers_core` を dispatcher 呼び出しへ差し替え）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - 追加:
+    - `triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferich_gate3`
+      - `p=3` 分岐で必要な `hNW3`/`ha` を gate (`p = 3 -> ...`) で受ける dispatcher。
+      - `p≠3` 分岐は Ge5 spine をそのまま実行。
+  - 置換:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_from_gap_GN_powers_core`
+      の旧末尾
+      - `hNoPowGN` を作って `hNoPowGN ⟨q * d.v1, d.hGNq⟩`
+      を廃止し、
+      - `...contradiction_of_noWieferich_gate3` 呼び出し + `False.elim`
+      へ差し替え。
+    - `PrimeGe5` 文脈なので `p=3` gate は
+      `hpack.hp5` と `p=3` の矛盾から `False.elim` で供給。
+  - 整理:
+    - 既存 `triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferich`
+      は新 gate dispatcher を呼ぶ薄い wrapper に更新。
+
+- 失敗例:
+  - `hpack.hp.ne_two` を使って `hp2 : p ≠ 2` を作ろうとして型不一致で失敗。
+    - 修正: `hpack.hp5` から `2 < p` を導き `Nat.ne_of_gt` で `hp2` を構成。
+  - `omega` だけで `hp2` を出す試行が失敗。
+    - 修正: 上記の明示的な不等式導出へ変更。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
+## 2026-03-07 phase-15 継続（閉路固定: 残存確認 + axioms 点検 + `GapGNPowDataB` 不可能定理を追加）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - 残存確認:
+    - `rg -n "hNoPowGN|noPowGN_core|q \\* d\\.v1|d\\.hGNq" DkMath/FLT/PrimeProvider`
+    - 旧 `hNoPowGN ⟨q * d.v1, d.hGNq⟩` 形は
+      `...contradiction_of_noWieferich_gate3` 内（Ge5 分岐の内部ローカル）にのみ残存。
+      `candidateZ_from_gap_GN_powers_core` 末尾は dispatcher 呼び出しに置換済み。
+  - axioms 点検:
+    - `#print axioms triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferich`
+      - `propext, Classical.choice, Quot.sound`
+    - `#print axioms triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_from_gap_GN_powers_core`
+      - `propext, sorryAx, Classical.choice, Quot.sound`
+    - `#print axioms kernel_route_gn3_not_cube_of_noWieferich`
+      - `propext, Classical.choice, Quot.sound`
+    - `#print axioms GN3_cube_not_cube_of_gt_one_of_provider`
+      - `propext, Classical.choice, Quot.sound`
+  - 追加:
+    - `triominoWieferichShrinkGapGNPowData_impossible_of_noWieferich`
+      - `GapGNPowDataB` と dispatcher 前提から直接 `False` を返す最終定理。
+      - 本体は
+        `triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferich`
+        への薄い委譲のみ。
+
+- 失敗例:
+  - なし（追加分）。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
+## 2026-03-07 phase-15 継続（`candidateZ_from_gap_GN_powers_core` の `sorryAx` 污染源を局所化し切り離し）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `#print axioms` 追跡で汚染源を特定:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+      が `sorryAx` を保持。
+    - `...contradiction_of_noWieferich_gate3` は clean。
+  - 対処:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_from_gap_GN_powers_core`
+      を `hNW5 : TriominoNoWieferichBridge` 引数化。
+    - 本体内部で固定 core を直参照せず、受け取った `hNW5` を dispatcher へ渡す形に変更。
+    - 既存配線 (`...candidateZ_data`) では従来どおり
+      `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+      を注入して挙動を維持。
+  - 結果:
+    - `#print axioms triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_from_gap_GN_powers_core`
+      から `sorryAx` が消滅（clean 化）。
+    - 一方 `...candidateZ_data` は固定注入を行うため `sorryAx` が残存（汚染位置の局所化が完了）。
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
+## 2026-03-07 phase-15 継続（`candidateZ_data` / `candidateZ` を clean 本体 + 固定注入 wrapper に分離）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `candidateZ_data` を clean 化:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data`
+      に `(hNW5 : TriominoNoWieferichBridge)` 引数を追加。
+    - 固定注入版を
+      `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data_of_noWieferich_core`
+      として分離。
+  - `candidateZ` を clean 化:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ`
+      に `(hNW5 : TriominoNoWieferichBridge)` 引数を追加。
+    - 固定注入版を
+      `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_of_noWieferich_core`
+      として分離。
+  - 外側配線:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core`
+      は fixed 注入 wrapper
+      `...candidateZ_of_noWieferich_core`
+      を呼ぶ形へ更新（既存挙動を維持）。
+
+- axioms 点検:
+  - clean:
+    - `#print axioms triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data`
+      - `propext, Classical.choice, Quot.sound`
+    - `#print axioms triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ`
+      - `propext, Classical.choice, Quot.sound`
+  - 汚染隔離先:
+    - `#print axioms ...candidateZ_data_of_noWieferich_core`
+      - `sorryAx` あり
+    - `#print axioms ...candidateZ_of_noWieferich_core`
+      - `sorryAx` あり
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
+## 2026-03-07 phase-15 継続（`z_core` を clean 本体 + 固定注入 wrapper に分離）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `z_core` clean 化:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core`
+      に `(hNW5 : TriominoNoWieferichBridge)` を追加。
+    - 本体は `...candidateZ` clean 版を呼ぶだけに整理。
+  - 固定注入 wrapper:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core_of_noWieferich_core`
+      を追加し、research 側 no-Wieferich core の注入を隔離。
+  - 外側配線:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel`
+      は `..._z_core_of_noWieferich_core` を呼ぶ形に更新（既存挙動維持）。
+
+- axioms 点検:
+  - clean:
+    - `#print axioms triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core`
+      - `propext, Classical.choice, Quot.sound`
+  - 汚染隔離先:
+    - `#print axioms ...kernel_z_core_of_noWieferich_core`
+      - `sorryAx` あり
+  - 伝播確認:
+    - `#print axioms ...kernel`
+      - `sorryAx` あり
+    - `#print axioms triominoWieferichDescent_impl`
+      - `sorryAx` あり
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
+## 2026-03-07 phase-15 継続（`kernel` と `descent_impl` を clean 本体 + 固定注入 wrapper に分離）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `kernel` clean 化:
+    - 追加: `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_clean`
+      - `(hNW5 : TriominoNoWieferichBridge)` を受ける clean 本体。
+    - 追加: `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_of_noWieferich_core`
+      - fixed injection wrapper。
+    - 更新: 公開名 `...kernel`
+      - wrapper 呼び出しへ整理。
+  - `descent_impl` clean 化:
+    - 追加: `triominoWieferichDescent_impl_clean`
+      - `hStep : TriominoWieferichDescentStepB` を受ける clean 本体。
+    - 追加: `triominoWieferichDescent_impl_of_noWieferich_core`
+      - fixed injection wrapper（`triominoWieferichDescentStepB_impl` を注入）。
+    - 更新: 公開名 `triominoWieferichDescent_impl`
+      - wrapper 呼び出しへ整理。
+
+- axioms 点検:
+  - clean:
+    - `#print axioms triominoWieferichShrinkKernelEqSeedTracePackB_kernel_clean`
+      - `propext, Classical.choice, Quot.sound`
+    - `#print axioms triominoWieferichDescent_impl_clean`
+      - `propext, Classical.choice, Quot.sound`
+  - 汚染隔離先:
+    - `#print axioms triominoWieferichShrinkKernelEqSeedTracePackB_kernel`
+      - `sorryAx` あり
+    - `#print axioms triominoWieferichDescent_impl`
+      - `sorryAx` あり
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
+
+## 2026-03-07 phase-15 継続（fixed injection wrapper の一部を quarantine ファイルへ移設）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+  - `CosmicPetalBridgeGNDescentBQuarantine.lean`
+
+- 内容:
+  - `CosmicPetalBridgeGNDescentB.lean` から、以下の fixed injection wrapper を削除:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data_of_noWieferich_core`
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_of_noWieferich_core`
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core_of_noWieferich_core`
+    - `triominoWieferichDescent_impl_of_noWieferich_core`
+    - `triominoWieferichDescent_impl`
+  - 新規 `CosmicPetalBridgeGNDescentBQuarantine.lean` を追加し、上記 wrapper を移設。
+  - clean 側 (`CosmicPetalBridgeGNDescentB.lean`) には
+    - `...candidateZ_data`
+    - `...candidateZ`
+    - `...kernel_z_core`
+    - `...kernel_clean`
+    - `triominoWieferichDescent_impl_clean`
+    を残し、quarantine 側は fixed injection 名義のみ保持する形に変更。
+
+- 失敗例:
+  - `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine` 初回実行で失敗。
+    - エラー: `Unknown identifier GN`
+    - 原因: 新規 quarantine ファイルに `open DkMath.CosmicFormulaBinom` が無かった。
+    - 対処: `CosmicPetalBridgeGNDescentBQuarantine.lean` に `open DkMath.CosmicFormulaBinom` を追加して解消。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功。
+
+## 2026-03-07 phase-15 継続（`kernel` 直下 consumer の追加 clean 化）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `triominoWieferichShrinkKernelInv_of_nums_of_pack` を 2 層化:
+    - clean 本体:
+      - `triominoWieferichShrinkKernelInv_of_nums_of_pack_clean (hNW5 : TriominoNoWieferichBridge)`
+    - 固定注入 wrapper:
+      - `triominoWieferichShrinkKernelInv_of_nums_of_pack`
+        （`triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core` を注入）
+  - clean 本体は `...kernel_clean` / `...Nums_of_pack_clean` 経由に変更し、
+    `kernel` 直下 consumer を 1 本だけ外側へ押し出した。
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - どちらも成功。
+
+## 2026-03-07 phase-15 継続（projection fan をまとめて clean 化）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `kernel` 直下の projection fan を `hNW5` 引数で一括 2 層化:
+    - `triominoWieferichShrinkKernel_hxmul_of_pack_clean` / wrapper
+    - `triominoWieferichShrinkKernel_hy_eq_of_pack_clean` / wrapper
+    - `triominoWieferichShrinkNumsInvRecipe_of_pack_clean` / wrapper
+    - `triominoWieferichShrinkNumsInvCandidate_of_pack_clean` / wrapper
+    - `triominoWieferichShrinkNumsInvCandidate_hxmul_of_pack_clean` / wrapper
+    - `triominoWieferichShrinkNumsInvCandidate_hy_eq_of_pack_clean` / wrapper
+    - `triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack_clean` / wrapper
+  - 既存 no-arg 名は fixed injection wrapper として維持し、呼び出し互換は保持。
+
+- 失敗例:
+  - 初回ビルドで `implicit lambda` 由来の型不一致が発生。
+    - 発生箇所: `@triominoWieferichShrinkNumsInvCandidate_of_pack_clean ...` 呼び出し
+    - 症状: `p : ℕ` が bridge 引数位置に解釈される型崩れ
+  - 対処:
+    - `@` 呼び出しをやめ、`(hNW5 := hNW5)` を含む named argument 形式へ統一して解消。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功。
+
+## 2026-03-07 phase-15 継続（LinkSpec/Shadow/CandidateEq 帯の clean API 追加）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `hxdiv` を clean/wrapper 2 層化:
+    - `triominoWieferichShrinkNumsInvCandidate_hxdiv_via_trace_of_pack_clean`
+    - `triominoWieferichShrinkNumsInvCandidate_hxdiv_via_trace_of_pack`（fixed injection wrapper）
+  - `div_eq_shadow` 帯を clean/wrapper 2 層化:
+    - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_clean`
+    - `..._div_eq_shadow`（wrapper）
+    - `..._div_eq_shadow_clean_x/y/z` を追加（wrapper 版 `x/y/z` は維持）
+  - `LinkSpec` 消費帯へ clean API を追加:
+    - `triominoWieferichShrinkNumsInvCandidate_of_pack_shadow_fields_of_eq_clean`
+    - `triominoWieferichShrinkNumsInvCandidate_of_pack_shadow_fields_of_kernel_clean`
+    - `triominoWieferichShrinkNumsInvCandidateB_kernel_clean`
+    - `triominoWieferichShrinkNumsInvCandidateLinkSpec_of_kernel_clean`
+    - `triominoWieferichShrinkNumsInvCandidateEq_of_pack_clean`
+    - `triominoWieferichShrinkNumsInvCandidate_hEq_of_pack_clean`
+    - `triominoWieferichShrinkNumsInvCandidate_hyz_of_pack_clean`
+    - `triominoWieferichShrinkNumsInvCandidate_hyzLt_of_pack_clean`
+  - 既存 no-arg 名は互換維持（wrapper/既存定理のまま）。
+
+- 失敗例:
+  - なし（今回の変更範囲では build 失敗なし）。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功。
+
+## 2026-03-07 phase-15 継続（CandidateEqCore 帯の clean 化）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `CandidateEqCore` 帯に clean 版を追加:
+    - `triominoWieferichShrinkNumsInvCandidateEqCore_of_kernel_clean`
+    - `triominoWieferichShrinkNumsInvCandidate_hEq_core_clean`
+    - `triominoWieferichShrinkNumsInvCandidate_hyz_core_clean`
+    - `triominoWieferichShrinkNumsInvCandidate_hyzLt_core_clean`
+  - これらは既に追加済みの clean 群（`...of_pack_clean`, `...LinkSpec_of_kernel_clean`,
+    `...of_pack_shadow_fields_of_kernel_clean`, `...KernelNums_of_pack_clean`）から直接構成。
+  - 既存 no-arg 名（non-clean 定理）は互換維持のためそのまま残置。
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功。
+
+## 2026-03-07 phase-15 継続（`kernel` 層の追放試行と切り戻し）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+  - `CosmicPetalBridgeGNDescentBQuarantine.lean`
+
+- 内容:
+  - quarantine 側へ追加:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_of_noWieferich_core`
+      （fixed injection wrapper）
+  - clean 側（`DescentB.lean`）で
+    - `CosmicPetalBridgeGNNoWieferichResearch` import を外し、
+      `hNW5_default` 引数化で本線 clean 化を試行。
+
+- 失敗例:
+  - `hNW5_default` の暗黙伝播が `kernel` 下流に広く伝播し、
+    `Type mismatch` が多数発生（`kernel` 投影群と下流 glue 群で連鎖）。
+  - 試行時点では build 失敗。
+
+- 対処:
+  - 破綻を避けるため、`DescentB.lean` は直前の安定形へ切り戻し。
+    - `Research` import は復帰。
+    - `kernel` 下流の no-arg 配線は維持。
+  - 一方で quarantine への
+    `...kernel_of_noWieferich_core` 追加は保持。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功。
+
+## 2026-03-07 phase-15 継続（InvCore / Spec / Recipe / Core 帯の clean 追加）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `InvCore / Spec / Recipe / Core` 帯へ `hNW5` 注入の clean 群を追加:
+    - `triominoWieferichShrinkNumsInvCandidate_hxy/hx0/hy0/hzlt/hpB'_core_clean`
+    - `triominoWieferichShrinkNumsInvCandidateInvCore_of_kernel_clean`
+    - `triominoWieferichShrinkNumsInvCandidateSpec_of_kernel_clean`
+    - `triominoWieferichShrinkNumsInvCandidate_exists/hzlt/hpB'/hInv_clean`
+    - `triominoWieferichShrinkNumsInvRecipeB_kernel_clean`
+    - `triominoWieferichShrinkNumsInvCoreB_kernel_clean`
+    - `triominoWieferichShrinkKernelNumsCoreB_kernel_clean`
+    - `triominoWieferichShrinkKernelEq/Inv_of_nums_core_clean`
+    - `triominoWieferichShrinkKernelEqSeedTrace/Core/Seed/Nums` clean 系
+    - `triominoWieferichShrinkKernelCoreB_kernel_clean`
+    - `triominoWieferichShrinkKernel_hxmul/hy_eq_of_core_path_clean`
+    - `triominoWieferichShrinkKernelEq/Inv_of_seed/nums_clean`
+  - 既存 no-arg 公開名は互換のため据え置き（wrapper 層は未追放）。
+
+- 失敗例:
+  - 1件発生:
+    - `triominoWieferichShrinkNumsInvCandidate_hx0_core_clean` 内で
+      `simp [hx0]` が `q = 0 ∨ c.x' = 0` を閉じられず build 失敗。
+    - 修正:
+      `have hc0 : c.x' = 0 := by simpa [c] using hx0` を挟み、
+      `simp [hc0]` へ変更して解消。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功。
+
+## 2026-03-07 phase-15 継続（KernelData / XYZ / Trace consumer 本体の clean 化）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `KernelData / XYZ / Trace` 帯を clean 本体 + no-arg wrapper 構造へ更新:
+    - `triominoWieferichShrinkKernelDataB_kernel_clean`
+    - `triominoWieferichShrinkXYZ_kernel_clean`
+    - `triominoWieferichShrinkXYZ_core_clean`
+    - `triominoWieferichShrinkTrace_core_clean`
+    - `triominoWieferichShrinkXYZTraceB_core_clean`
+    - `triominoWieferichShrinkXYZTraceB_impl_clean`
+    - `triominoWieferichShrinkXYZCertB_impl_clean`
+    - `triominoWieferichShrinkXYZB_impl_clean`
+    - `triominoWieferichShrink_hzlt/hpB'/witness_clean`
+    - `triominoWieferichShrinkNumsB_impl_clean`
+    - `triominoWieferichShrinkCandB_impl_clean`
+    - `triominoWieferichShrinkB_clean`
+    - `triominoWieferichDescentStepB_impl_clean`
+    - `triominoWieferichDescentCoreB_impl_clean`
+  - 既存 no-arg 名は互換維持:
+    - no-arg 側は
+      `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+      を注入する wrapper へ更新。
+  - 方針:
+    - helper 追加ではなく、consumer 本体を clean core 経由へ差し替え。
+    - 旧配線を保持しつつ clean 本線を上位へ延伸。
+
+- 失敗例:
+  - なし（今回の差分で新規 build 失敗なし）。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功。
+
+## 2026-03-07 phase-15 継続（Quarantine 側 wrapper 群の補完）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentBQuarantine.lean`
+
+- 内容:
+  - `DescentB` 側から外した no-arg wrapper 群を `Quarantine` に補完:
+    - `triominoWieferichShrinkKernelDataB_kernel`
+    - `triominoWieferichShrinkXYZ_kernel`
+    - `triominoWieferichShrinkXYZ_core`
+    - `triominoWieferichShrinkTrace_core`
+    - `triominoWieferichShrinkXYZTraceB_core`
+    - `triominoWieferichShrinkXYZTraceB_impl`
+    - `triominoWieferichShrinkXYZCertB_impl`
+    - `triominoWieferichShrinkXYZB_impl`
+    - `triominoWieferichShrink_hzlt`
+    - `triominoWieferichShrink_hpB'`
+    - `triominoWieferichShrink_witness`
+    - `triominoWieferichShrinkNumsB_impl`
+    - `triominoWieferichShrinkCandB_impl`
+    - `triominoWieferichShrinkB`
+    - `triominoWieferichDescentStepB_impl`
+    - `triominoWieferichDescentCoreB_impl`
+  - `triominoWieferichDescent_impl_of_noWieferich_core` が参照する
+    `triominoWieferichDescentStepB_impl` を Quarantine 側に復元し、
+    `DescentBQuarantine` 単体 build を復旧。
+
+- 失敗例:
+  - `DescentB.lean` からの `CosmicPetalBridgeGNNoWieferichResearch` import 除去は未達。
+  - 原因:
+    - `DescentB.lean` 内に `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+      直参照が 18 箇所残存（`kernel` / `of_pack` 帯）。
+    - これらを clean 引数化または Quarantine 追放する追加段が必要。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - いずれも成功。
+
+## 2026-03-07 phase-15 継続（18 箇所一括刈りの試行と切り戻し）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `kernel_noWieferich_core` の直参照 18 箇所を一括で `hNW5_default` 化し、
+    `DescentB` から `NoWieferichResearch` import を外す試行を実施。
+  - 併せて `localNoLift_core / existsPrime_dvd_GN_not_sq_core / noPowGN_core` を
+    `hNW5` 引数付きに更新。
+
+- 失敗例:
+  - 一括 `hNW5_default` 化により、`*_clean` 群まで section 変数が伝播して
+    implicit lambda 由来の型崩れが大量発生（`Type mismatch` 多発）。
+  - この状態では `DescentB` build 不可。
+
+- 対処:
+  - 一括 `hNW5_default` 化は切り戻し、ビルド可能な安定形へ復帰。
+  - `localNoLift_core` 系の `hNW5` 引数化のみ保持。
+  - 結果として `kernel_noWieferich_core` 直参照は
+    18 箇所 → 17 箇所に減少（`localNoLift_core` 由来 1 箇所を除去）。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功（既知 warning のみ）。
+
+## 2026-03-07 phase-15 継続（縦一列 4 本の Quarantine 追放）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+  - `CosmicPetalBridgeGNDescentBQuarantine.lean`
+
+- 内容:
+  - `kernel/of_pack` 帯から、参照密度が最小の no-arg wrapper 4 本を
+    `DescentB` から削除し、`Quarantine` へ同名で移設:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel`
+    - `triominoWieferichShrinkKernelInv_of_nums_of_pack`
+    - `triominoWieferichShrinkKernel_hxmul_of_pack`
+    - `triominoWieferichShrinkKernel_hy_eq_of_pack`
+  - `Quarantine` 側で
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_of_noWieferich_core`
+    が前方参照で落ちないよう、`...kernel_clean` 直呼びに調整。
+
+- 失敗例:
+  - 初回移設で `Quarantine` にて
+    `Unknown identifier triominoWieferichShrinkKernelEqSeedTracePackB_kernel`
+    （定義順）を踏んだ。
+  - 修正:
+    - `...kernel_of_noWieferich_core` を `...kernel_clean` 直呼びへ変更して解消。
+
+- 効果:
+  - `DescentB.lean` 内の
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+    直参照が 17 箇所 → 12 箇所へ減少。
+  - `NoWieferichResearch` import は未除去（残 12 箇所のため）。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功。
+
+## 2026-03-07 phase-15 継続（3 本追放 + 失敗復旧）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+  - `CosmicPetalBridgeGNDescentBQuarantine.lean`
+
+- 内容:
+  - 先に `DescentB` のビルド失敗を復旧:
+    - `No goals to be solved`（`hxdiv` 証明末尾の余分 `simpa`）を削除。
+    - 削除済み wrapper 参照
+      `triominoWieferichShrinkNumsInvCandidate_hxdiv_via_trace_of_pack`
+      / `..._hy_eq_of_pack`
+      を、`LinkSpec_of_pack` からの直接再構成へ置換。
+  - その後、次バッチとして 3 本を `DescentB` から削除し `Quarantine` に移設:
+    - `triominoWieferichShrinkKernelNums_of_pack`
+    - `triominoWieferichShrinkKernelEq_of_nums_of_pack`
+    - `triominoWieferichShrinkNumsInvRecipe_of_pack`
+  - `DescentB` 側は `*_clean` へ切替:
+    - `triominoWieferichShrinkKernelInv_of_nums_of_pack_clean`
+    - `triominoWieferichShrinkKernel_hxmul_of_pack_clean`
+    - `triominoWieferichShrinkKernel_hy_eq_of_pack_clean`
+    - `triominoWieferichShrinkNumsInvCandidateEq_of_pack`
+    - `triominoWieferichShrinkNumsInvCandidateEqCore_of_kernel`
+    - `hzlt/hpB'` 回収帯の `r0` 生成と `simpa` を
+      `triominoWieferichShrinkNumsInvRecipe_of_pack_clean` ベースへ置換。
+  - 既定 bridge を 1 点に集約:
+    - `private def triominoWieferichNoWieferichBridge_default`
+
+- 失敗例:
+  - 途中状態で `DescentB` が以下で失敗:
+    - `No goals to be solved`
+    - `Unknown identifier triominoWieferichShrinkNumsInvCandidate_hxdiv_via_trace_of_pack`
+    - `Unknown identifier triominoWieferichShrinkNumsInvCandidate_hy_eq_of_pack`
+  - 原因:
+    - wrapper 除去後の参照残りと、`calc` 後の余剰行。
+  - 対応:
+    - 上記 3 箇所を局所修正し、ビルド復旧のうえで移設作業を続行。
+
+- 効果:
+  - `DescentB.lean` 内の
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+    直参照を 9 箇所 → 7 箇所へ削減。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功（既知 warning のみ）。
+
+## 2026-03-07 phase-15 継続（NumsInvCandidate クラスター集約）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `NumsInvCandidate` クラスターの fixed injection wrapper 6 本を、
+    `kernel_noWieferich_core` 直注入から
+    `triominoWieferichNoWieferichBridge_default` 経由へ切替:
+    - `triominoWieferichShrinkNumsInvCandidate_of_pack`
+    - `triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack`
+    - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow`
+    - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_x`
+    - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_y`
+    - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_z`
+  - 既存 clean 本体 (`*_clean`) は不変更で、no-arg 側のみ配線を差し替え。
+
+- 効果:
+  - `DescentB.lean` 内の
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+    直参照を 7 箇所 → 1 箇所へ削減（残りは default 定義点のみ）。
+
+- 失敗例:
+  - なし（このバッチは型崩れなしで通過）。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功（既知 warning のみ）。
+
+## 2026-03-07 phase-15 継続（default 分離で DescentB 直汚染 0）
+
+- 更新:
+  - `CosmicPetalBridgeGNNoWieferichDefault.lean`（新規）
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `DescentB` 内の最終汚染点だった
+    `triominoWieferichNoWieferichBridge_default` を専用モジュールへ分離。
+  - 新規ファイル `CosmicPetalBridgeGNNoWieferichDefault.lean` に
+    fixed injection (`...kernel_noWieferich_core`) を 1 点集約。
+  - `DescentB` は
+    `import CosmicPetalBridgeGNNoWieferichResearch` を削除し、
+    `import CosmicPetalBridgeGNNoWieferichDefault` へ切替。
+  - 併せて `DescentB` 内の private default 定義を削除。
+
+- 効果:
+  - `DescentB.lean` 内で
+    - `CosmicPetalBridgeGNNoWieferichResearch` 直 import: 0 件
+    - `...kernel_noWieferich_core` 直参照: 0 件
+  - 汚染注入点は `CosmicPetalBridgeGNNoWieferichDefault.lean` に隔離。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功（既知 warning のみ）。
+## 2026-03-07: NumsInvCandidate no-arg 4本の Quarantine 移送（小バッチ）
+
+### 目的
+- `DescentB` 側の no-arg 薄 wrapper をさらに外へ押し、`*_clean` 利用へ寄せる。
+- 対象は 4 本：
+  - `triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack`
+  - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_x`
+  - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_y`
+  - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_z`
+
+### 実施
+- `CosmicPetalBridgeGNDescentB.lean` から上記 4 本を削除。
+- 同名 wrapper を `CosmicPetalBridgeGNDescentBQuarantine.lean` に追加（fixed injection）。
+- `DescentB` 内の参照を `*_clean + triominoWieferichNoWieferichBridge_default` に置換。
+
+### 失敗と復旧
+- 初回ビルドで 2 箇所失敗（`unsolved goals`）。
+  - 原因：`div_eq_shadow_x/y/z` wrapper 除去で `simp` の書き換えが弱くなり、`x / q = ... ∨ q = 0` が残留。
+  - 対応：該当 2 箇所を `simp [hxdiv]`（明示書き換え）へ変更して復旧。
+- 復旧後、`DescentB` / `Quarantine` / `CosmicPetalBridgeGN` を再ビルドし通過。
+
+### 検証
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine` : OK
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN` : OK
+
+### 現在地
+- no-arg wrapper を 4 本追加で Quarantine 側へ移送完了。
+- `DescentB` は同クラスターで `*_clean` 呼び出し主体にさらに寄った。
+## 2026-03-08: NumsInvCandidate no-arg 追加搬出（4本）
+
+### 実施
+- `DescentB` から no-arg 4本を除去:
+  - `triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack`
+  - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_x`
+  - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_y`
+  - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_z`
+- 同名 wrapper を `Quarantine` へ移設。
+- `DescentB` 内の参照を `*_clean + triominoWieferichNoWieferichBridge_default` に差し替え。
+
+### 失敗と復旧
+- 2箇所で `unsolved goals`（`x / q = ... ∨ q = 0`）発生。
+- 原因は `simp` が旧 wrapper 由来の書き換えに依存していたため。
+- `simp [hxdiv]` へ修正して復旧。
+
+### 検証
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine` : OK
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN` : OK
+
+### 状態
+- `DescentB` 内で上記4名の no-arg 名は 0 件。
+## 2026-03-08: NumsInvCandidate 本体2本の移送（of_pack / div_eq_shadow）
+
+### 目的
+- 次バッチ対象 2 本を `DescentB` から外し、`Quarantine` 側へ移送:
+  - `triominoWieferichShrinkNumsInvCandidate_of_pack`
+  - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow`
+
+### 実施
+- `CosmicPetalBridgeGNDescentBQuarantine.lean` に上記 2 本の同名 wrapper を追加（fixed injection）。
+- `CosmicPetalBridgeGNDescentB.lean` から上記 2 本の no-arg 本体を削除。
+- `DescentB` 側には局所集約として
+  - `triominoWieferichShrinkNumsInvCandidate_of_pack_default`
+  - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_default`
+  を追加し、内部参照を `*_clean + default` 系へ統一。
+
+### 失敗と復旧
+- 一括置換直後に `simp` 引数へ関数項が混入し、`Invalid simp theorem` 多発。
+  - 対応: 長い部分適用式を `*_default` abbrev へ集約して解消。
+- 続いて 2 箇所で `x / q = ... ∨ q = 0` 未解決が発生。
+  - 対応: 該当箇所を `simp [hxdiv]` に変更して解消。
+- その後 linter 警告（`unnecessarySimpa`, `unusedSimpArgs`）が出たため、`simp` / `simp [hxdiv]` へ最終整形。
+
+### 検証
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine` : OK
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN` : OK
+
+### 状態
+- `DescentB` 内で以下 2 名の no-arg 定義参照は 0 件:
+  - `triominoWieferichShrinkNumsInvCandidate_of_pack`
+  - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow`
+- `DescentB` 内の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core` 直参照は継続して 0 件。
