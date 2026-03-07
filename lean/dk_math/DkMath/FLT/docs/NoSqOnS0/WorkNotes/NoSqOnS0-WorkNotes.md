@@ -2080,3 +2080,41 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
   - すべて成功。
+
+## 2026-03-07 phase-15 継続（KernelData / XYZ / Trace consumer 本体の clean 化）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `KernelData / XYZ / Trace` 帯を clean 本体 + no-arg wrapper 構造へ更新:
+    - `triominoWieferichShrinkKernelDataB_kernel_clean`
+    - `triominoWieferichShrinkXYZ_kernel_clean`
+    - `triominoWieferichShrinkXYZ_core_clean`
+    - `triominoWieferichShrinkTrace_core_clean`
+    - `triominoWieferichShrinkXYZTraceB_core_clean`
+    - `triominoWieferichShrinkXYZTraceB_impl_clean`
+    - `triominoWieferichShrinkXYZCertB_impl_clean`
+    - `triominoWieferichShrinkXYZB_impl_clean`
+    - `triominoWieferichShrink_hzlt/hpB'/witness_clean`
+    - `triominoWieferichShrinkNumsB_impl_clean`
+    - `triominoWieferichShrinkCandB_impl_clean`
+    - `triominoWieferichShrinkB_clean`
+    - `triominoWieferichDescentStepB_impl_clean`
+    - `triominoWieferichDescentCoreB_impl_clean`
+  - 既存 no-arg 名は互換維持:
+    - no-arg 側は
+      `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+      を注入する wrapper へ更新。
+  - 方針:
+    - helper 追加ではなく、consumer 本体を clean core 経由へ差し替え。
+    - 旧配線を保持しつつ clean 本線を上位へ延伸。
+
+- 失敗例:
+  - なし（今回の差分で新規 build 失敗なし）。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功。

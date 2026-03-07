@@ -6510,7 +6510,8 @@ Triomino/Cosmic 固有の縮小候補内部データ生成 kernel（glue）。
 
 canonical `Nums / Eq / Inv` を束ね直すだけに保つ。
 -/
-def triominoWieferichShrinkKernelDataB_kernel
+def triominoWieferichShrinkKernelDataB_kernel_clean
+    (hNW5 : TriominoNoWieferichBridge)
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
@@ -6519,7 +6520,8 @@ def triominoWieferichShrinkKernelDataB_kernel
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichShrinkKernelDataB p x y z q := by
   let c : TriominoWieferichShrinkKernelCoreB p x y z q :=
-    triominoWieferichShrinkKernelCoreB_kernel
+    triominoWieferichShrinkKernelCoreB_kernel_clean
+      hNW5
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   let s : TriominoWieferichShrinkKernelSeedB p x y z q := c.s
@@ -6533,12 +6535,26 @@ def triominoWieferichShrinkKernelDataB_kernel
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN s tr
   exact s.toData hInv
 
+def triominoWieferichShrinkKernelDataB_kernel
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkKernelDataB p x y z q :=
+  triominoWieferichShrinkKernelDataB_kernel_clean
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
 /--
 Triomino/Cosmic 固有の縮小候補 `XYZ` 生成 kernel（glue）。
 
 内部 data を `XYZ + ctor` へ束ね直すだけに保つ。
 -/
-def triominoWieferichShrinkXYZ_kernel
+def triominoWieferichShrinkXYZ_kernel_clean
+    (hNW5 : TriominoNoWieferichBridge)
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
@@ -6547,7 +6563,8 @@ def triominoWieferichShrinkXYZ_kernel
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichShrinkXYZB p x y z q := by
   let d : TriominoWieferichShrinkKernelDataB p x y z q :=
-    triominoWieferichShrinkKernelDataB_kernel
+    triominoWieferichShrinkKernelDataB_kernel_clean
+      hNW5
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   exact
@@ -6560,7 +6577,34 @@ def triominoWieferichShrinkXYZ_kernel
           hEq := d.hEq
           hInv := d.hInv } }
 
+def triominoWieferichShrinkXYZ_kernel
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkXYZB p x y z q :=
+  triominoWieferichShrinkXYZ_kernel_clean
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
 /-- kernel から `XYZ` 候補だけを回収する。 -/
+def triominoWieferichShrinkXYZ_core_clean
+    (hNW5 : TriominoNoWieferichBridge)
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkXYZB p x y z q :=
+  triominoWieferichShrinkXYZ_kernel_clean
+    hNW5
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
 def triominoWieferichShrinkXYZ_core
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
@@ -6569,11 +6613,35 @@ def triominoWieferichShrinkXYZ_core
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichShrinkXYZB p x y z q :=
-  triominoWieferichShrinkXYZ_kernel
+  triominoWieferichShrinkXYZ_core_clean
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
     (p := p) (x := x) (y := y) (z := z) (q := q)
     hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /-- kernel から canonical `XYZ` に対する trace を回収する。 -/
+theorem triominoWieferichShrinkTrace_core_clean
+    (hNW5 : TriominoNoWieferichBridge)
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkTraceB p x y z q
+      (triominoWieferichShrinkXYZ_core_clean
+        hNW5
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN) := by
+  let t : TriominoWieferichShrinkXYZB p x y z q :=
+    triominoWieferichShrinkXYZ_core_clean
+      hNW5
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  refine
+    { hzlt := t.ctor.hzlt
+      hpB' := t.ctor.hpB'
+      hW := t.ctor.hW }
+
 theorem triominoWieferichShrinkTrace_core
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
@@ -6585,20 +6653,41 @@ theorem triominoWieferichShrinkTrace_core
       (triominoWieferichShrinkXYZ_core
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN) := by
-  let t : TriominoWieferichShrinkXYZB p x y z q :=
-    triominoWieferichShrinkXYZ_core
+  simpa [triominoWieferichShrinkXYZ_core] using
+    triominoWieferichShrinkTrace_core_clean
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  refine
-    { hzlt := t.ctor.hzlt
-      hpB' := t.ctor.hpB'
-      hW := t.ctor.hW }
 
 /--
 Triomino/Cosmic 固有の縮小候補データ生成 core（glue）。
 
 `XYZ` と `Trace` の回収を束ねて `XYZ + Trace` へ再構成する。
 -/
+def triominoWieferichShrinkXYZTraceB_core_clean
+    (hNW5 : TriominoNoWieferichBridge)
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    { t : TriominoWieferichShrinkXYZB p x y z q //
+      TriominoWieferichShrinkTraceB p x y z q t } := by
+  let t : TriominoWieferichShrinkXYZB p x y z q :=
+    triominoWieferichShrinkXYZ_core_clean
+      hNW5
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  have htr :
+      TriominoWieferichShrinkTraceB p x y z q t := by
+    simpa [t, triominoWieferichShrinkXYZ_core_clean] using
+      triominoWieferichShrinkTrace_core_clean
+        hNW5
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  exact ⟨t, htr⟩
+
 def triominoWieferichShrinkXYZTraceB_core
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
@@ -6607,24 +6696,32 @@ def triominoWieferichShrinkXYZTraceB_core
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     { t : TriominoWieferichShrinkXYZB p x y z q //
-      TriominoWieferichShrinkTraceB p x y z q t } := by
-  let t : TriominoWieferichShrinkXYZB p x y z q :=
-    triominoWieferichShrinkXYZ_core
-      (p := p) (x := x) (y := y) (z := z) (q := q)
-      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  have htr :
-      TriominoWieferichShrinkTraceB p x y z q t := by
-    simpa [t, triominoWieferichShrinkXYZ_core] using
-      triominoWieferichShrinkTrace_core
-        (p := p) (x := x) (y := y) (z := z) (q := q)
-        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  exact ⟨t, htr⟩
+      TriominoWieferichShrinkTraceB p x y z q t } :=
+  triominoWieferichShrinkXYZTraceB_core_clean
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /--
 Triomino/Cosmic 固有の縮小候補データ生成（glue）。
 
 `XYZ` と `Trace` の回収を束ねて `XYZ + Trace` へ再構成する。
 -/
+def triominoWieferichShrinkXYZTraceB_impl_clean
+    (hNW5 : TriominoNoWieferichBridge)
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    { t : TriominoWieferichShrinkXYZB p x y z q //
+      TriominoWieferichShrinkTraceB p x y z q t } :=
+  triominoWieferichShrinkXYZTraceB_core_clean
+    hNW5
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
 def triominoWieferichShrinkXYZTraceB_impl
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
@@ -6633,21 +6730,15 @@ def triominoWieferichShrinkXYZTraceB_impl
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     { t : TriominoWieferichShrinkXYZB p x y z q //
-      TriominoWieferichShrinkTraceB p x y z q t } := by
-  let t : TriominoWieferichShrinkXYZB p x y z q :=
-    triominoWieferichShrinkXYZ_core
-      (p := p) (x := x) (y := y) (z := z) (q := q)
-      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  have htr :
-      TriominoWieferichShrinkTraceB p x y z q t := by
-    simpa [t, triominoWieferichShrinkXYZ_core] using
-      triominoWieferichShrinkTrace_core
-        (p := p) (x := x) (y := y) (z := z) (q := q)
-        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  exact ⟨t, htr⟩
+      TriominoWieferichShrinkTraceB p x y z q t } :=
+  triominoWieferichShrinkXYZTraceB_impl_clean
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /-- `XYZ + Trace` から `XYZ + Cert` 束へ戻す glue。 -/
-def triominoWieferichShrinkXYZCertB_impl
+def triominoWieferichShrinkXYZCertB_impl_clean
+    (hNW5 : TriominoNoWieferichBridge)
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
@@ -6658,10 +6749,24 @@ def triominoWieferichShrinkXYZCertB_impl
   let s :
       { t : TriominoWieferichShrinkXYZB p x y z q //
         TriominoWieferichShrinkTraceB p x y z q t } :=
-    triominoWieferichShrinkXYZTraceB_impl
+    triominoWieferichShrinkXYZTraceB_impl_clean
+      hNW5
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   exact triominoWieferichShrinkXYZCertB_of_trace s.1 s.2
+
+def triominoWieferichShrinkXYZCertB_impl
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkXYZCertB p x y z q :=
+  triominoWieferichShrinkXYZCertB_impl_clean
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /-- `XYZ + Cert` 束から、候補 triple だけを取り出す。 -/
 def triominoWieferichShrinkXYZB_of_core
@@ -6692,7 +6797,8 @@ theorem triominoWieferichShrink_witness_of_core
   s.hc.hW
 
 /-- `XYZ + Cert` 束から、候補 triple だけを取り出す。 -/
-def triominoWieferichShrinkXYZB_impl
+def triominoWieferichShrinkXYZB_impl_clean
+    (hNW5 : TriominoNoWieferichBridge)
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
@@ -6701,11 +6807,43 @@ def triominoWieferichShrinkXYZB_impl
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichShrinkXYZB p x y z q :=
   triominoWieferichShrinkXYZB_of_core
-    (triominoWieferichShrinkXYZCertB_impl
+    (triominoWieferichShrinkXYZCertB_impl_clean
+      hNW5
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN)
 
+def triominoWieferichShrinkXYZB_impl
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkXYZB p x y z q :=
+  triominoWieferichShrinkXYZB_impl_clean
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
 /-- canonical shrink candidate の strict 減少。 -/
+theorem triominoWieferichShrink_hzlt_clean
+    (hNW5 : TriominoNoWieferichBridge)
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    (triominoWieferichShrinkXYZB_impl_clean
+      hNW5
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' < z :=
+  triominoWieferichShrink_hzlt_of_core
+    (triominoWieferichShrinkXYZCertB_impl_clean
+      hNW5
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN)
+
 theorem triominoWieferichShrink_hzlt
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
@@ -6716,12 +6854,36 @@ theorem triominoWieferichShrink_hzlt
     (triominoWieferichShrinkXYZB_impl
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' < z :=
-  triominoWieferichShrink_hzlt_of_core
-    (triominoWieferichShrinkXYZCertB_impl
+  triominoWieferichShrink_hzlt_clean
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/-- canonical shrink candidate は Branch B 条件を保つ。 -/
+theorem triominoWieferichShrink_hpB'_clean
+    (hNW5 : TriominoNoWieferichBridge)
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    ¬ p ∣
+      ((triominoWieferichShrinkXYZB_impl_clean
+          hNW5
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z'
+        -
+        (triominoWieferichShrinkXYZB_impl_clean
+          hNW5
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y') :=
+  triominoWieferichShrink_hpB'_of_core
+    (triominoWieferichShrinkXYZCertB_impl_clean
+      hNW5
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN)
 
-/-- canonical shrink candidate は Branch B 条件を保つ。 -/
 theorem triominoWieferichShrink_hpB'
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
@@ -6737,12 +6899,40 @@ theorem triominoWieferichShrink_hpB'
         (triominoWieferichShrinkXYZB_impl
           (p := p) (x := x) (y := y) (z := z) (q := q)
           hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y') :=
-  triominoWieferichShrink_hpB'_of_core
-    (triominoWieferichShrinkXYZCertB_impl
+  triominoWieferichShrink_hpB'_clean
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/-- canonical shrink candidate に対する witness 回収。 -/
+theorem triominoWieferichShrink_witness_clean
+    (hNW5 : TriominoNoWieferichBridge)
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkWitnessB
+      p x y z q
+      (triominoWieferichShrinkXYZB_impl_clean
+        hNW5
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x'
+      (triominoWieferichShrinkXYZB_impl_clean
+        hNW5
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y'
+      (triominoWieferichShrinkXYZB_impl_clean
+        hNW5
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' :=
+  triominoWieferichShrink_witness_of_core
+    (triominoWieferichShrinkXYZCertB_impl_clean
+      hNW5
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN)
 
-/-- canonical shrink candidate に対する witness 回収。 -/
 theorem triominoWieferichShrink_witness
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
@@ -6761,13 +6951,14 @@ theorem triominoWieferichShrink_witness
       (triominoWieferichShrinkXYZB_impl
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' :=
-  triominoWieferichShrink_witness_of_core
-    (triominoWieferichShrinkXYZCertB_impl
-      (p := p) (x := x) (y := y) (z := z) (q := q)
-      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN)
+  triominoWieferichShrink_witness_clean
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /-- `Nums` の生成は、`XYZ + Cert` からの glue に寄せる。 -/
-def triominoWieferichShrinkNumsB_impl
+def triominoWieferichShrinkNumsB_impl_clean
+    (hNW5 : TriominoNoWieferichBridge)
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
@@ -6776,29 +6967,43 @@ def triominoWieferichShrinkNumsB_impl
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichShrinkNumsB p x y z q := by
   let s : TriominoWieferichShrinkXYZCertB p x y z q :=
-    triominoWieferichShrinkXYZCertB_impl
+    triominoWieferichShrinkXYZCertB_impl_clean
+      hNW5
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   let t : TriominoWieferichShrinkXYZB p x y z q :=
     triominoWieferichShrinkXYZB_of_core s
-  have hc : TriominoWieferichShrinkCertB p x y z q t :=
-    by
-      refine
-        { hzlt := ?_
-          hpB' := ?_
-          hW := ?_ }
-      · simpa [t, triominoWieferichShrinkXYZB_of_core] using
-          triominoWieferichShrink_hzlt_of_core s
-      · simpa [t, triominoWieferichShrinkXYZB_of_core] using
-          triominoWieferichShrink_hpB'_of_core s
-      · simpa [t, triominoWieferichShrinkXYZB_of_core] using
-          triominoWieferichShrink_witness_of_core s
+  have hc : TriominoWieferichShrinkCertB p x y z q t := by
+    refine
+      { hzlt := ?_
+        hpB' := ?_
+        hW := ?_ }
+    · simpa [t, triominoWieferichShrinkXYZB_of_core] using
+        triominoWieferichShrink_hzlt_of_core s
+    · simpa [t, triominoWieferichShrinkXYZB_of_core] using
+        triominoWieferichShrink_hpB'_of_core s
+    · simpa [t, triominoWieferichShrinkXYZB_of_core] using
+        triominoWieferichShrink_witness_of_core s
   exact triominoWieferichShrinkNumsB_of_XYZ_Cert t hc
+
+def triominoWieferichShrinkNumsB_impl
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkNumsB p x y z q :=
+  triominoWieferichShrinkNumsB_impl_clean
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /--
 Triomino/Cosmic 固有の縮小候補（配線）。
 -/
-def triominoWieferichShrinkCandB_impl
+def triominoWieferichShrinkCandB_impl_clean
+    (hNW5 : TriominoNoWieferichBridge)
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
@@ -6807,15 +7012,30 @@ def triominoWieferichShrinkCandB_impl
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichShrinkCandB p z := by
   let n : TriominoWieferichShrinkNumsB p x y z q :=
-    triominoWieferichShrinkNumsB_impl
+    triominoWieferichShrinkNumsB_impl_clean
+      hNW5
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   exact triominoWieferichShrinkCandB_of_nums n
 
+def triominoWieferichShrinkCandB_impl
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkCandB p z :=
+  triominoWieferichShrinkCandB_impl_clean
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
 /--
 Triomino/Cosmic 固有の縮小器（配線）。
 -/
-def triominoWieferichShrinkB
+def triominoWieferichShrinkB_clean
+    (hNW5 : TriominoNoWieferichBridge)
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
@@ -6824,17 +7044,34 @@ def triominoWieferichShrinkB
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichDescentResultB p z := by
   let c : TriominoWieferichShrinkCandB p z :=
-    triominoWieferichShrinkCandB_impl
+    triominoWieferichShrinkCandB_impl_clean
+      hNW5
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   exact c.toResult hpack.hp5 hpack.hp
 
+def triominoWieferichShrinkB
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichDescentResultB p z :=
+  triominoWieferichShrinkB_clean
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+    (p := p) (x := x) (y := y) (z := z) (q := q)
+    hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
 /--
 `step` 実装は、データ抽出済みの項目を縮小器へ渡すだけの glue に保つ。
 -/
-def triominoWieferichDescentStepB_impl : TriominoWieferichDescentStepB := by
+def triominoWieferichDescentStepB_impl_clean
+    (hNW5 : TriominoNoWieferichBridge) :
+    TriominoWieferichDescentStepB := by
   intro p x y z q hpack hData
-  exact triominoWieferichShrinkB
+  exact triominoWieferichShrinkB_clean
+    hNW5
     (p := p) (x := x) (y := y) (z := z) (q := q)
     hpack
     hData.hpB
@@ -6842,10 +7079,20 @@ def triominoWieferichDescentStepB_impl : TriominoWieferichDescentStepB := by
     hData.hq_not_dvd_gap
     hData.hqpow_dvd_GN
 
+def triominoWieferichDescentStepB_impl : TriominoWieferichDescentStepB := by
+  exact triominoWieferichDescentStepB_impl_clean
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+
 /-- `step` 実装から `core` を回収する。 -/
-theorem triominoWieferichDescentCoreB_impl : TriominoWieferichDescentCoreB := by
+theorem triominoWieferichDescentCoreB_impl_clean
+    (hNW5 : TriominoNoWieferichBridge) :
+    TriominoWieferichDescentCoreB := by
   exact triominoWieferichDescentCoreB_of_step
-    triominoWieferichDescentStepB_impl
+    (triominoWieferichDescentStepB_impl_clean hNW5)
+
+theorem triominoWieferichDescentCoreB_impl : TriominoWieferichDescentCoreB := by
+  exact triominoWieferichDescentCoreB_impl_clean
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
 
 /--
 Branch B の下降法本体（clean 版）。
