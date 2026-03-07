@@ -1846,6 +1846,30 @@ theorem triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferic
       (fun _ => ha)
 
 /--
+`GapGNPowDataB` は no-Wieferich dispatcher 条件下で存在不能。
+
+`p = 3` / `p ≥ 5` の分岐は dispatcher 側へ一本化し、
+この定理は「data が来た時点で矛盾」という最終形だけを露出する。
+-/
+theorem triominoWieferichShrinkGapGNPowData_impossible_of_noWieferich
+    (hNW3 : TriominoNoWieferichBridge3)
+    (hNW5 : TriominoNoWieferichBridge)
+    {p x y z q : ℕ}
+    (hpack : PrimeCounterexamplePack p x y z)
+    (hy : 1 ≤ y)
+    (hp2 : p ≠ 2)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y)
+    (d : TriominoWieferichShrinkGapGNPowDataB p x y z q)
+    (ha : 2 ≤ d.u) :
+    False := by
+  exact
+    triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferich
+      hNW3 hNW5 hpack hy hp2 hpB hqP hq_not_dvd_gap hqpow_dvd_GN d ha
+
+/--
 Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
 
 route 1 の `u / v1` data までは外で取り、最後の穴をさらに狭い core に押し込める。

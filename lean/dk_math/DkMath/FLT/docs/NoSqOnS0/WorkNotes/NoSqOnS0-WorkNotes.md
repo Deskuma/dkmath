@@ -1682,3 +1682,38 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - どちらも成功。
+
+## 2026-03-07 phase-15 継続（閉路固定: 残存確認 + axioms 点検 + `GapGNPowDataB` 不可能定理を追加）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - 残存確認:
+    - `rg -n "hNoPowGN|noPowGN_core|q \\* d\\.v1|d\\.hGNq" DkMath/FLT/PrimeProvider`
+    - 旧 `hNoPowGN ⟨q * d.v1, d.hGNq⟩` 形は
+      `...contradiction_of_noWieferich_gate3` 内（Ge5 分岐の内部ローカル）にのみ残存。
+      `candidateZ_from_gap_GN_powers_core` 末尾は dispatcher 呼び出しに置換済み。
+  - axioms 点検:
+    - `#print axioms triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferich`
+      - `propext, Classical.choice, Quot.sound`
+    - `#print axioms triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_from_gap_GN_powers_core`
+      - `propext, sorryAx, Classical.choice, Quot.sound`
+    - `#print axioms kernel_route_gn3_not_cube_of_noWieferich`
+      - `propext, Classical.choice, Quot.sound`
+    - `#print axioms GN3_cube_not_cube_of_gt_one_of_provider`
+      - `propext, Classical.choice, Quot.sound`
+  - 追加:
+    - `triominoWieferichShrinkGapGNPowData_impossible_of_noWieferich`
+      - `GapGNPowDataB` と dispatcher 前提から直接 `False` を返す最終定理。
+      - 本体は
+        `triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferich`
+        への薄い委譲のみ。
+
+- 失敗例:
+  - なし（追加分）。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
