@@ -2301,3 +2301,31 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
   - すべて成功（既知 warning のみ）。
+
+## 2026-03-07 phase-15 継続（default 分離で DescentB 直汚染 0）
+
+- 更新:
+  - `CosmicPetalBridgeGNNoWieferichDefault.lean`（新規）
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `DescentB` 内の最終汚染点だった
+    `triominoWieferichNoWieferichBridge_default` を専用モジュールへ分離。
+  - 新規ファイル `CosmicPetalBridgeGNNoWieferichDefault.lean` に
+    fixed injection (`...kernel_noWieferich_core`) を 1 点集約。
+  - `DescentB` は
+    `import CosmicPetalBridgeGNNoWieferichResearch` を削除し、
+    `import CosmicPetalBridgeGNNoWieferichDefault` へ切替。
+  - 併せて `DescentB` 内の private default 定義を削除。
+
+- 効果:
+  - `DescentB.lean` 内で
+    - `CosmicPetalBridgeGNNoWieferichResearch` 直 import: 0 件
+    - `...kernel_noWieferich_core` 直参照: 0 件
+  - 汚染注入点は `CosmicPetalBridgeGNNoWieferichDefault.lean` に隔離。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功（既知 warning のみ）。

@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNCore
-import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch
+import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichDefault
 import DkMath.FLT.Basic
 
 set_option linter.style.longLine false
@@ -1978,11 +1978,6 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_clean
   let d : TriominoWieferichShrinkKernelNumsEqLinkB p x y z q :=
     dz.toNumsEqLink hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
   exact d.toSeedLink hpack
-
-/-- clean 本体内で使う既定 no-Wieferich bridge（固定注入は最小 1 点に集約）。 -/
-private def triominoWieferichNoWieferichBridge_default :
-    TriominoNoWieferichBridge :=
-  triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
 
 /--
 canonical eq-side trace pack から `Nums` 部分だけを回収する。
