@@ -1905,6 +1905,29 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
   - すべて成功。
 
+## 2026-03-07 phase-15 継続（`kernel` 直下 consumer の追加 clean 化）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `triominoWieferichShrinkKernelInv_of_nums_of_pack` を 2 層化:
+    - clean 本体:
+      - `triominoWieferichShrinkKernelInv_of_nums_of_pack_clean (hNW5 : TriominoNoWieferichBridge)`
+    - 固定注入 wrapper:
+      - `triominoWieferichShrinkKernelInv_of_nums_of_pack`
+        （`triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core` を注入）
+  - clean 本体は `...kernel_clean` / `...Nums_of_pack_clean` 経由に変更し、
+    `kernel` 直下 consumer を 1 本だけ外側へ押し出した。
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - どちらも成功。
+
 ## 2026-03-07 phase-15 継続（`kernel` 層の追放試行と切り戻し）
 
 - 更新:
