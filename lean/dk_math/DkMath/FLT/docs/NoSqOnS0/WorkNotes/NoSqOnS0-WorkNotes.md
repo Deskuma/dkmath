@@ -1990,6 +1990,30 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
   - すべて成功。
 
+## 2026-03-07 phase-15 継続（CandidateEqCore 帯の clean 化）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `CandidateEqCore` 帯に clean 版を追加:
+    - `triominoWieferichShrinkNumsInvCandidateEqCore_of_kernel_clean`
+    - `triominoWieferichShrinkNumsInvCandidate_hEq_core_clean`
+    - `triominoWieferichShrinkNumsInvCandidate_hyz_core_clean`
+    - `triominoWieferichShrinkNumsInvCandidate_hyzLt_core_clean`
+  - これらは既に追加済みの clean 群（`...of_pack_clean`, `...LinkSpec_of_kernel_clean`,
+    `...of_pack_shadow_fields_of_kernel_clean`, `...KernelNums_of_pack_clean`）から直接構成。
+  - 既存 no-arg 名（non-clean 定理）は互換維持のためそのまま残置。
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功。
+
 ## 2026-03-07 phase-15 継続（`kernel` 層の追放試行と切り戻し）
 
 - 更新:
