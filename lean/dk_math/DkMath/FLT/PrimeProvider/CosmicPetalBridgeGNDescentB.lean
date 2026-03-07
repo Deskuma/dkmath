@@ -1652,6 +1652,7 @@ route 1 の `Type`-側 data（`u / v1`）は外で取り、
 -/
 def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_from_gap_GN_powers_core
     {p x y z q : ℕ}
+    (hNW5 : TriominoNoWieferichBridge)
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hpB : ¬ p ∣ (z - y))
     (hqP : Nat.Prime q)
@@ -1679,7 +1680,7 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_from_gap_GN_
       triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferich_gate3
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hNW3_of_eq3
-        triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+        hNW5
         hpack.toPrimeCounterexamplePack
         hy
         hp2
@@ -1889,6 +1890,7 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_data
   exact
     triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_from_gap_GN_powers_core
       (p := p) (x := x) (y := y) (z := z) (q := q)
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN d
 
 /--

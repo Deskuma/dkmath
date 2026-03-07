@@ -1717,3 +1717,33 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - どちらも成功。
+
+## 2026-03-07 phase-15 継続（`candidateZ_from_gap_GN_powers_core` の `sorryAx` 污染源を局所化し切り離し）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `#print axioms` 追跡で汚染源を特定:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+      が `sorryAx` を保持。
+    - `...contradiction_of_noWieferich_gate3` は clean。
+  - 対処:
+    - `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_from_gap_GN_powers_core`
+      を `hNW5 : TriominoNoWieferichBridge` 引数化。
+    - 本体内部で固定 core を直参照せず、受け取った `hNW5` を dispatcher へ渡す形に変更。
+    - 既存配線 (`...candidateZ_data`) では従来どおり
+      `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+      を注入して挙動を維持。
+  - 結果:
+    - `#print axioms triominoWieferichShrinkKernelEqSeedTracePackB_kernel_candidateZ_from_gap_GN_powers_core`
+      から `sorryAx` が消滅（clean 化）。
+    - 一方 `...candidateZ_data` は固定注入を行うため `sorryAx` が残存（汚染位置の局所化が完了）。
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
