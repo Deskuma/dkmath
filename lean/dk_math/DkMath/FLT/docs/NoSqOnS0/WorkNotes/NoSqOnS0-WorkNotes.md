@@ -1928,6 +1928,35 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
   - どちらも成功。
 
+## 2026-03-07 phase-15 継続（projection fan をまとめて clean 化）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `kernel` 直下の projection fan を `hNW5` 引数で一括 2 層化:
+    - `triominoWieferichShrinkKernel_hxmul_of_pack_clean` / wrapper
+    - `triominoWieferichShrinkKernel_hy_eq_of_pack_clean` / wrapper
+    - `triominoWieferichShrinkNumsInvRecipe_of_pack_clean` / wrapper
+    - `triominoWieferichShrinkNumsInvCandidate_of_pack_clean` / wrapper
+    - `triominoWieferichShrinkNumsInvCandidate_hxmul_of_pack_clean` / wrapper
+    - `triominoWieferichShrinkNumsInvCandidate_hy_eq_of_pack_clean` / wrapper
+    - `triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack_clean` / wrapper
+  - 既存 no-arg 名は fixed injection wrapper として維持し、呼び出し互換は保持。
+
+- 失敗例:
+  - 初回ビルドで `implicit lambda` 由来の型不一致が発生。
+    - 発生箇所: `@triominoWieferichShrinkNumsInvCandidate_of_pack_clean ...` 呼び出し
+    - 症状: `p : ℕ` が bridge 引数位置に解釈される型崩れ
+  - 対処:
+    - `@` 呼び出しをやめ、`(hNW5 := hNW5)` を含む named argument 形式へ統一して解消。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功。
+
 ## 2026-03-07 phase-15 継続（`kernel` 層の追放試行と切り戻し）
 
 - 更新:
