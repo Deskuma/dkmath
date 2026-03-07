@@ -2249,7 +2249,7 @@ def triominoWieferichShrinkNumsInvCandidate_of_pack
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichShrinkNumsInvCandidateB p x y z q :=
   triominoWieferichShrinkNumsInvCandidate_of_pack_clean
-    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+    triominoWieferichNoWieferichBridge_default
     (p := p) (x := x) (y := y) (z := z) (q := q)
     hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
@@ -2354,7 +2354,7 @@ theorem triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN) := by
   exact
     triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack_clean
-      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      triominoWieferichNoWieferichBridge_default
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
@@ -2444,7 +2444,7 @@ def triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichShrinkNumsInvCandidateB p x y z q :=
   triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_clean
-    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+    triominoWieferichNoWieferichBridge_default
     (p := p) (x := x) (y := y) (z := z) (q := q)
     hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
@@ -2476,7 +2476,7 @@ def triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x' = x / q := by
   exact
     triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_clean_x
-      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      triominoWieferichNoWieferichBridge_default
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
@@ -2508,7 +2508,7 @@ def triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y' = y := by
   exact
     triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_clean_y
-      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      triominoWieferichNoWieferichBridge_default
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
@@ -2553,7 +2553,7 @@ def triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' := by
   exact
     triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_clean_z
-      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      triominoWieferichNoWieferichBridge_default
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 

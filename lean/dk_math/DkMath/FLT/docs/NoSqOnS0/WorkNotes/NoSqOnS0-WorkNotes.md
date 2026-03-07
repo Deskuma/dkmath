@@ -2270,3 +2270,34 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
   - すべて成功（既知 warning のみ）。
+
+## 2026-03-07 phase-15 継続（NumsInvCandidate クラスター集約）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `NumsInvCandidate` クラスターの fixed injection wrapper 6 本を、
+    `kernel_noWieferich_core` 直注入から
+    `triominoWieferichNoWieferichBridge_default` 経由へ切替:
+    - `triominoWieferichShrinkNumsInvCandidate_of_pack`
+    - `triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack`
+    - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow`
+    - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_x`
+    - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_y`
+    - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_z`
+  - 既存 clean 本体 (`*_clean`) は不変更で、no-arg 側のみ配線を差し替え。
+
+- 効果:
+  - `DescentB.lean` 内の
+    `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+    直参照を 7 箇所 → 1 箇所へ削減（残りは default 定義点のみ）。
+
+- 失敗例:
+  - なし（このバッチは型崩れなしで通過）。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - すべて成功（既知 warning のみ）。
