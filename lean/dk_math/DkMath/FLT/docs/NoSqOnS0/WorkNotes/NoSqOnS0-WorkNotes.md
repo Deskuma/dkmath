@@ -2358,3 +2358,26 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
 ### 現在地
 - no-arg wrapper を 4 本追加で Quarantine 側へ移送完了。
 - `DescentB` は同クラスターで `*_clean` 呼び出し主体にさらに寄った。
+## 2026-03-08: NumsInvCandidate no-arg 追加搬出（4本）
+
+### 実施
+- `DescentB` から no-arg 4本を除去:
+  - `triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack`
+  - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_x`
+  - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_y`
+  - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_z`
+- 同名 wrapper を `Quarantine` へ移設。
+- `DescentB` 内の参照を `*_clean + triominoWieferichNoWieferichBridge_default` に差し替え。
+
+### 失敗と復旧
+- 2箇所で `unsolved goals`（`x / q = ... ∨ q = 0`）発生。
+- 原因は `simp` が旧 wrapper 由来の書き換えに依存していたため。
+- `simp [hxdiv]` へ修正して復旧。
+
+### 検証
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine` : OK
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN` : OK
+
+### 状態
+- `DescentB` 内で上記4名の no-arg 名は 0 件。
