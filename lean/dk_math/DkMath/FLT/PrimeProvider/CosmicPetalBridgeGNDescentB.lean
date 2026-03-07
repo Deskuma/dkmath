@@ -2018,6 +2018,47 @@ Triomino/Cosmic 固有の等式側 trace 生成 pack（本丸）。
 
 最小核から `Eq` witness を再構成して `Seed + links` へ梱包する。
 -/
+def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_clean
+    {p x y z q : ℕ}
+    (hNW5 : TriominoNoWieferichBridge)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkKernelSeedLinkB p x y z q := by
+  let dz : TriominoWieferichShrinkKernelZEqB p x y z q :=
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hNW5 hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  let d : TriominoWieferichShrinkKernelNumsEqLinkB p x y z q :=
+    dz.toNumsEqLink hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  exact d.toSeedLink hpack
+
+/--
+`kernel` の固定注入 wrapper。
+
+clean 本体 `...kernel_clean` へ research 側 no-Wieferich core を注入する隔離層。
+-/
+def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_of_noWieferich_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkKernelSeedLinkB p x y z q := by
+  exact
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_clean
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/--
+Triomino/Cosmic 固有の等式側 trace 生成 pack（本丸）。
+
+公開名は固定注入 wrapper として保ち、clean 本体は `...kernel_clean` へ分離する。
+-/
 def triominoWieferichShrinkKernelEqSeedTracePackB_kernel
     {p x y z q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
@@ -2026,13 +2067,10 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel
     (hq_not_dvd_gap : ¬ q ∣ (z - y))
     (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
     TriominoWieferichShrinkKernelSeedLinkB p x y z q := by
-  let dz : TriominoWieferichShrinkKernelZEqB p x y z q :=
-    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_z_core_of_noWieferich_core
+  exact
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_of_noWieferich_core
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  let d : TriominoWieferichShrinkKernelNumsEqLinkB p x y z q :=
-    dz.toNumsEqLink hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  exact d.toSeedLink hpack
 
 /--
 canonical eq-side trace pack から `Nums` 部分だけを回収する。
@@ -5081,12 +5119,34 @@ theorem triominoWieferichDescentCoreB_impl : TriominoWieferichDescentCoreB := by
     triominoWieferichDescentStepB_impl
 
 /--
-Branch B の下降法本体。
+Branch B の下降法本体（clean 版）。
+
+`step` 実装を引数で受け、`core` へ持ち上げて下降法仕様へ接続する。
+固定注入は行わない。
+-/
+theorem triominoWieferichDescent_impl_clean
+    (hStep : TriominoWieferichDescentStepB) :
+    WieferichDescentB := by
+  exact
+    triominoWieferichDescent_impl_of_core
+      (triominoWieferichDescentCoreB_of_step hStep)
+
+/--
+Branch B の下降法本体（固定注入 wrapper）。
 
 このファイルだけが、一般 `GN` 降下の新規理論（縮小器）を保持する隔離室。
 -/
+theorem triominoWieferichDescent_impl_of_noWieferich_core : WieferichDescentB := by
+  exact triominoWieferichDescent_impl_clean triominoWieferichDescentStepB_impl
+
+/--
+Branch B の下降法本体（公開名）。
+
+公開名は固定注入 wrapper として保ち、clean 本体は
+`triominoWieferichDescent_impl_clean` へ分離する。
+-/
 theorem triominoWieferichDescent_impl : WieferichDescentB := by
-  exact triominoWieferichDescent_impl_of_core triominoWieferichDescentCoreB_impl
+  exact triominoWieferichDescent_impl_of_noWieferich_core
 
 end NoLiftKernel
 

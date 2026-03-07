@@ -1829,3 +1829,44 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - `cd lean/dk_math && lake build DkMath.FLT.Main`
   - どちらも成功。
+
+## 2026-03-07 phase-15 継続（`kernel` と `descent_impl` を clean 本体 + 固定注入 wrapper に分離）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentB.lean`
+
+- 内容:
+  - `kernel` clean 化:
+    - 追加: `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_clean`
+      - `(hNW5 : TriominoNoWieferichBridge)` を受ける clean 本体。
+    - 追加: `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_of_noWieferich_core`
+      - fixed injection wrapper。
+    - 更新: 公開名 `...kernel`
+      - wrapper 呼び出しへ整理。
+  - `descent_impl` clean 化:
+    - 追加: `triominoWieferichDescent_impl_clean`
+      - `hStep : TriominoWieferichDescentStepB` を受ける clean 本体。
+    - 追加: `triominoWieferichDescent_impl_of_noWieferich_core`
+      - fixed injection wrapper（`triominoWieferichDescentStepB_impl` を注入）。
+    - 更新: 公開名 `triominoWieferichDescent_impl`
+      - wrapper 呼び出しへ整理。
+
+- axioms 点検:
+  - clean:
+    - `#print axioms triominoWieferichShrinkKernelEqSeedTracePackB_kernel_clean`
+      - `propext, Classical.choice, Quot.sound`
+    - `#print axioms triominoWieferichDescent_impl_clean`
+      - `propext, Classical.choice, Quot.sound`
+  - 汚染隔離先:
+    - `#print axioms triominoWieferichShrinkKernelEqSeedTracePackB_kernel`
+      - `sorryAx` あり
+    - `#print axioms triominoWieferichDescent_impl`
+      - `sorryAx` あり
+
+- 失敗例:
+  - なし。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - `cd lean/dk_math && lake build DkMath.FLT.Main`
+  - どちらも成功。
