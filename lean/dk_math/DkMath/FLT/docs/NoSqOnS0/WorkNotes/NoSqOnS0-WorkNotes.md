@@ -2413,3 +2413,27 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `triominoWieferichShrinkNumsInvCandidate_of_pack`
   - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow`
 - `DescentB` 内の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core` 直参照は継続して 0 件。
+
+## 2026-03-08: 数学芯の主定理文を固定（gap/body 非閉包）
+
+### 目的
+- リファクタリング中心から数学芯中心へ移るため、
+  既存 core を「主定理名」で固定する。
+
+### 実施
+- `CosmicPetalBridgeGNDescentB.lean` に主定理名を追加:
+  - `triominoGapBody_nonPPowerClosed_of_branchB`
+    - 内容: Branch B (`p ≥ 5` 側) で `GN p (z-y) y` は `p` 乗になれない。
+    - 既存 `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noPowGN_core` を明示名で再公開。
+  - `triominoGapBody_selfSimilarity_breaks_of_noWieferich`
+    - 内容: odd prime dispatcher (`p=3 / p≥5`) 下で gap/body 縮小 data は矛盾へ落ちる。
+    - 既存 `triominoWieferichShrinkGapGNPowData_impossible_of_noWieferich` を明示名で再公開。
+
+### 失敗と復旧
+- 失敗なし（追加は既存定理への thin alias のみ）。
+
+### 検証
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
+
+### 状態
+- 「なぜ `p≥3` で閉じないか」を指す主定理文がコード上で直接参照可能になった。

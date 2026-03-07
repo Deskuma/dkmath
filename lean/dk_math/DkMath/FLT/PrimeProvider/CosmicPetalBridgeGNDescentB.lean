@@ -1650,6 +1650,24 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noPowGN_core
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /--
+数学芯（Branch B, `p ≥ 5` 側）:
+`x^p = (z-y) * GN p (z-y) y` の状況で primitive 分岐が立つと、
+`GN p (z-y) y` は `p` 乗閉包を保てない（`p` 乗になれない）。
+-/
+theorem triominoGapBody_nonPPowerClosed_of_branchB
+    {p x y z q : ℕ}
+    (hNW5 : TriominoNoWieferichBridge)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    ¬ ∃ v : ℕ, GN p (z - y) y = v ^ p := by
+  exact
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noPowGN_core
+      hNW5 hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/--
 Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
 
 route 1 の `Type`-側 data（`u / v1`）は外で取り、
@@ -1873,6 +1891,29 @@ theorem triominoWieferichShrinkGapGNPowData_impossible_of_noWieferich
     False := by
   exact
     triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferich
+      hNW3 hNW5 hpack hy hp2 hpB hqP hq_not_dvd_gap hqpow_dvd_GN d ha
+
+/--
+数学芯（奇素数指数 `p ≥ 3`）:
+`p = 3` / `p ≥ 5` の dispatcher を通すと、
+gap/body から作る縮小 data は自己相似に閉じず、最終的に矛盾へ落ちる。
+-/
+theorem triominoGapBody_selfSimilarity_breaks_of_noWieferich
+    (hNW3 : TriominoNoWieferichBridge3)
+    (hNW5 : TriominoNoWieferichBridge)
+    {p x y z q : ℕ}
+    (hpack : PrimeCounterexamplePack p x y z)
+    (hy : 1 ≤ y)
+    (hp2 : p ≠ 2)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y)
+    (d : TriominoWieferichShrinkGapGNPowDataB p x y z q)
+    (ha : 2 ≤ d.u) :
+    False := by
+  exact
+    triominoWieferichShrinkGapGNPowData_impossible_of_noWieferich
       hNW3 hNW5 hpack hy hp2 hpB hqP hq_not_dvd_gap hqpow_dvd_GN d ha
 
 /--
