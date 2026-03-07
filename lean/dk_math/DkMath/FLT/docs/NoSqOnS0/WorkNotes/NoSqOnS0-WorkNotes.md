@@ -2118,3 +2118,42 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
   - すべて成功。
+
+## 2026-03-07 phase-15 継続（Quarantine 側 wrapper 群の補完）
+
+- 更新:
+  - `CosmicPetalBridgeGNDescentBQuarantine.lean`
+
+- 内容:
+  - `DescentB` 側から外した no-arg wrapper 群を `Quarantine` に補完:
+    - `triominoWieferichShrinkKernelDataB_kernel`
+    - `triominoWieferichShrinkXYZ_kernel`
+    - `triominoWieferichShrinkXYZ_core`
+    - `triominoWieferichShrinkTrace_core`
+    - `triominoWieferichShrinkXYZTraceB_core`
+    - `triominoWieferichShrinkXYZTraceB_impl`
+    - `triominoWieferichShrinkXYZCertB_impl`
+    - `triominoWieferichShrinkXYZB_impl`
+    - `triominoWieferichShrink_hzlt`
+    - `triominoWieferichShrink_hpB'`
+    - `triominoWieferichShrink_witness`
+    - `triominoWieferichShrinkNumsB_impl`
+    - `triominoWieferichShrinkCandB_impl`
+    - `triominoWieferichShrinkB`
+    - `triominoWieferichDescentStepB_impl`
+    - `triominoWieferichDescentCoreB_impl`
+  - `triominoWieferichDescent_impl_of_noWieferich_core` が参照する
+    `triominoWieferichDescentStepB_impl` を Quarantine 側に復元し、
+    `DescentBQuarantine` 単体 build を復旧。
+
+- 失敗例:
+  - `DescentB.lean` からの `CosmicPetalBridgeGNNoWieferichResearch` import 除去は未達。
+  - 原因:
+    - `DescentB.lean` 内に `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+      直参照が 18 箇所残存（`kernel` / `of_pack` 帯）。
+    - これらを clean 引数化または Quarantine 追放する追加段が必要。
+
+- 確認:
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
+  - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
+  - いずれも成功。

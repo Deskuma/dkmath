@@ -88,6 +88,250 @@ def triominoWieferichShrinkKernelEqSeedTracePackB_kernel_of_noWieferich_core
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
+/-- `KernelData` 固定注入 wrapper（quarantine）。 -/
+def triominoWieferichShrinkKernelDataB_kernel
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkKernelDataB p x y z q := by
+  exact
+    triominoWieferichShrinkKernelDataB_kernel_clean
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/-- `XYZ_kernel` 固定注入 wrapper（quarantine）。 -/
+def triominoWieferichShrinkXYZ_kernel
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkXYZB p x y z q := by
+  exact
+    triominoWieferichShrinkXYZ_kernel_clean
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/-- `XYZ_core` 固定注入 wrapper（quarantine）。 -/
+def triominoWieferichShrinkXYZ_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkXYZB p x y z q := by
+  exact
+    triominoWieferichShrinkXYZ_core_clean
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/-- `Trace_core` 固定注入 wrapper（quarantine）。 -/
+theorem triominoWieferichShrinkTrace_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkTraceB p x y z q
+      (triominoWieferichShrinkXYZ_core
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN) := by
+  exact
+    triominoWieferichShrinkTrace_core_clean
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/-- `XYZTraceB_core` 固定注入 wrapper（quarantine）。 -/
+def triominoWieferichShrinkXYZTraceB_core
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    { t : TriominoWieferichShrinkXYZB p x y z q //
+      TriominoWieferichShrinkTraceB p x y z q t } := by
+  exact
+    triominoWieferichShrinkXYZTraceB_core_clean
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/-- `XYZTraceB_impl` 固定注入 wrapper（quarantine）。 -/
+def triominoWieferichShrinkXYZTraceB_impl
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    { t : TriominoWieferichShrinkXYZB p x y z q //
+      TriominoWieferichShrinkTraceB p x y z q t } := by
+  exact
+    triominoWieferichShrinkXYZTraceB_impl_clean
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/-- `XYZCertB_impl` 固定注入 wrapper（quarantine）。 -/
+def triominoWieferichShrinkXYZCertB_impl
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkXYZCertB p x y z q := by
+  exact
+    triominoWieferichShrinkXYZCertB_impl_clean
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/-- `XYZB_impl` 固定注入 wrapper（quarantine）。 -/
+def triominoWieferichShrinkXYZB_impl
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkXYZB p x y z q := by
+  exact
+    triominoWieferichShrinkXYZB_impl_clean
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/-- strict 減少の固定注入 wrapper（quarantine）。 -/
+theorem triominoWieferichShrink_hzlt
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    (triominoWieferichShrinkXYZB_impl
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' < z := by
+  exact
+    triominoWieferichShrink_hzlt_clean
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/-- Branch B 保存の固定注入 wrapper（quarantine）。 -/
+theorem triominoWieferichShrink_hpB'
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    ¬ p ∣
+      ((triominoWieferichShrinkXYZB_impl
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z'
+        -
+        (triominoWieferichShrinkXYZB_impl
+          (p := p) (x := x) (y := y) (z := z) (q := q)
+          hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y') := by
+  exact
+    triominoWieferichShrink_hpB'_clean
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/-- witness 回収の固定注入 wrapper（quarantine）。 -/
+theorem triominoWieferichShrink_witness
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkWitnessB
+      p x y z q
+      (triominoWieferichShrinkXYZB_impl
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x'
+      (triominoWieferichShrinkXYZB_impl
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y'
+      (triominoWieferichShrinkXYZB_impl
+        (p := p) (x := x) (y := y) (z := z) (q := q)
+        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' := by
+  exact
+    triominoWieferichShrink_witness_clean
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/-- `NumsB_impl` 固定注入 wrapper（quarantine）。 -/
+def triominoWieferichShrinkNumsB_impl
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkNumsB p x y z q := by
+  exact
+    triominoWieferichShrinkNumsB_impl_clean
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/-- `CandB_impl` 固定注入 wrapper（quarantine）。 -/
+def triominoWieferichShrinkCandB_impl
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichShrinkCandB p z := by
+  exact
+    triominoWieferichShrinkCandB_impl_clean
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/-- `ShrinkB` 固定注入 wrapper（quarantine）。 -/
+def triominoWieferichShrinkB
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    TriominoWieferichDescentResultB p z := by
+  exact
+    triominoWieferichShrinkB_clean
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/-- `DescentStep` 固定注入 wrapper（quarantine）。 -/
+def triominoWieferichDescentStepB_impl : TriominoWieferichDescentStepB := by
+  exact
+    triominoWieferichDescentStepB_impl_clean
+      triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core
+
+/-- `DescentCore` 固定注入 wrapper（quarantine）。 -/
+theorem triominoWieferichDescentCoreB_impl : TriominoWieferichDescentCoreB := by
+  exact triominoWieferichDescentCoreB_of_step triominoWieferichDescentStepB_impl
+
 /--
 Branch B の下降法本体（固定注入 wrapper）。
 -/
