@@ -2004,6 +2004,26 @@ theorem triominoPowerWorld_bifurcation_of_branchB
         hNW5 hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /--
+Square-closure exception theorem（Branch B 文脈）:
+平方世界の同格閉包 `(z-y)*(z+y)` は成り立つが、
+高冪側 body `GN p (z-y) y` は `p` 乗閉包しない。
+-/
+theorem triominoSquareClosure_exception_of_branchB
+    {p x y z q : ℕ}
+    (hNW5 : TriominoNoWieferichBridge)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    z ^ 2 - y ^ 2 = (z - y) * (z + y) ∧
+      ¬ ∃ v : ℕ, GN p (z - y) y = v ^ p := by
+  have hBif :=
+    triominoPowerWorld_bifurcation_of_branchB
+      hNW5 hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  exact ⟨hBif.1, hBif.2.2⟩
+
+/--
 Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
 
 route 1 の `u / v1` data までは外で取り、最後の穴をさらに狭い core に押し込める。

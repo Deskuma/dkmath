@@ -2507,3 +2507,25 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
 ### 状態
 - 「平方世界の同格閉包」と「高冪世界の非閉包」を
   1 本の定理名で対比参照できる状態になった。
+
+## 2026-03-08: square-closure exception 総文を追加
+
+### 目的
+- 「`p=2` だけが閉包例外」という読みを、Branch B 文脈で直接参照できるようにする。
+
+### 実施
+- `CosmicPetalBridgeGNDescentB.lean` に
+  `triominoSquareClosure_exception_of_branchB` を追加。
+- `triominoPowerWorld_bifurcation_of_branchB` の射影として
+  - 平方世界の同格分解
+  - 高冪 body の非 `p` 乗閉包
+  を 1 本で返す形に固定。
+
+### 失敗と復旧
+- 失敗なし。
+
+### 検証
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
+
+### 状態
+- 「平方世界の例外性」を主文として直接参照可能になった。
