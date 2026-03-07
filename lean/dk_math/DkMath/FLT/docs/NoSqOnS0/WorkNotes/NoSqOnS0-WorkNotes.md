@@ -2329,3 +2329,32 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
   - すべて成功（既知 warning のみ）。
+## 2026-03-07: NumsInvCandidate no-arg 4本の Quarantine 移送（小バッチ）
+
+### 目的
+- `DescentB` 側の no-arg 薄 wrapper をさらに外へ押し、`*_clean` 利用へ寄せる。
+- 対象は 4 本：
+  - `triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack`
+  - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_x`
+  - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_y`
+  - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_z`
+
+### 実施
+- `CosmicPetalBridgeGNDescentB.lean` から上記 4 本を削除。
+- 同名 wrapper を `CosmicPetalBridgeGNDescentBQuarantine.lean` に追加（fixed injection）。
+- `DescentB` 内の参照を `*_clean + triominoWieferichNoWieferichBridge_default` に置換。
+
+### 失敗と復旧
+- 初回ビルドで 2 箇所失敗（`unsolved goals`）。
+  - 原因：`div_eq_shadow_x/y/z` wrapper 除去で `simp` の書き換えが弱くなり、`x / q = ... ∨ q = 0` が残留。
+  - 対応：該当 2 箇所を `simp [hxdiv]`（明示書き換え）へ変更して復旧。
+- 復旧後、`DescentB` / `Quarantine` / `CosmicPetalBridgeGN` を再ビルドし通過。
+
+### 検証
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine` : OK
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN` : OK
+
+### 現在地
+- no-arg wrapper を 4 本追加で Quarantine 側へ移送完了。
+- `DescentB` は同クラスターで `*_clean` 呼び出し主体にさらに寄った。

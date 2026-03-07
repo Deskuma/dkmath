@@ -2335,24 +2335,6 @@ theorem triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack_clean
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
-/-- `_of_pack` backend から `hxMul / hyEq` を 1 本に束ねて回収する（固定注入 wrapper）。 -/
-theorem triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack
-    {p x y z q : ℕ}
-    (hpack : PrimeGe5CounterexamplePack p x y z)
-    (hpB : ¬ p ∣ (z - y))
-    (hqP : Nat.Prime q)
-    (hq_not_dvd_gap : ¬ q ∣ (z - y))
-    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
-    TriominoWieferichShrinkNumsInvCandidateLinkSpecB
-      p x y z q
-      (@triominoWieferichShrinkNumsInvCandidate_of_pack p x y z q
-        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN) := by
-  exact
-    triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack_clean
-      triominoWieferichNoWieferichBridge_default
-      (p := p) (x := x) (y := y) (z := z) (q := q)
-      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-
 /--
 `_of_pack` backend の `hxMul` から `x' = x / q` を回収する。
 
@@ -2458,23 +2440,6 @@ def triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x' = x / q := by
   simp [triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_clean]
 
-/-- 影候補では `x' = x / q` が definitionally fixed（fixed injection wrapper）。 -/
-@[simp] theorem triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_x
-    {p x y z q : ℕ}
-    (hpack : PrimeGe5CounterexamplePack p x y z)
-    (hpB : ¬ p ∣ (z - y))
-    (hqP : Nat.Prime q)
-    (hq_not_dvd_gap : ¬ q ∣ (z - y))
-    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
-    (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
-      (p := p) (x := x) (y := y) (z := z) (q := q)
-      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x' = x / q := by
-  exact
-    triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_clean_x
-      triominoWieferichNoWieferichBridge_default
-      (p := p) (x := x) (y := y) (z := z) (q := q)
-      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-
 /-- 影候補では `y' = y` が definitionally fixed（clean）。 -/
 @[simp] theorem triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_clean_y
     (hNW5 : TriominoNoWieferichBridge)
@@ -2489,23 +2454,6 @@ def triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y' = y := by
   simp [triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_clean]
-
-/-- 影候補では `y' = y` が definitionally fixed（fixed injection wrapper）。 -/
-@[simp] theorem triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_y
-    {p x y z q : ℕ}
-    (hpack : PrimeGe5CounterexamplePack p x y z)
-    (hpB : ¬ p ∣ (z - y))
-    (hqP : Nat.Prime q)
-    (hq_not_dvd_gap : ¬ q ∣ (z - y))
-    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
-    (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
-      (p := p) (x := x) (y := y) (z := z) (q := q)
-      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).y' = y := by
-  exact
-    triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_clean_y
-      triominoWieferichNoWieferichBridge_default
-      (p := p) (x := x) (y := y) (z := z) (q := q)
-      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /--
 影候補では `z'` だけ `_of_pack` backend を流用する。
@@ -2530,27 +2478,6 @@ def triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
       (p := p) (x := x) (y := y) (z := z) (q := q)
       hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' := by
   simp [triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_clean]
-
-/-- 影候補では `z'` だけ `_of_pack` backend を流用する（fixed injection wrapper）。 -/
-@[simp] theorem triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_z
-    {p x y z q : ℕ}
-    (hpack : PrimeGe5CounterexamplePack p x y z)
-    (hpB : ¬ p ∣ (z - y))
-    (hqP : Nat.Prime q)
-    (hq_not_dvd_gap : ¬ q ∣ (z - y))
-    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
-    (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
-      (p := p) (x := x) (y := y) (z := z) (q := q)
-      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z'
-      =
-    (triominoWieferichShrinkNumsInvCandidate_of_pack
-      (p := p) (x := x) (y := y) (z := z) (q := q)
-      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z' := by
-  exact
-    triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_clean_z
-      triominoWieferichNoWieferichBridge_default
-      (p := p) (x := x) (y := y) (z := z) (q := q)
-      hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /--
 `_of_pack` backend について `x' = x / q`, `y' = y` が示せれば、
@@ -2591,16 +2518,19 @@ theorem triominoWieferichShrinkNumsInvCandidate_of_pack_shadow_fields_of_eq
           hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).z') := by
   constructor
   · exact hxdiv.trans
-      (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_x
+      (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_clean_x
+        triominoWieferichNoWieferichBridge_default
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).symm
   constructor
   · exact hy'.trans
-      (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_y
+      (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_clean_y
+        triominoWieferichNoWieferichBridge_default
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).symm
   · exact
-      (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_z
+      (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_clean_z
+        triominoWieferichNoWieferichBridge_default
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).symm
 
@@ -2642,7 +2572,8 @@ theorem triominoWieferichShrinkNumsInvCandidate_of_pack_shadow_fields_of_kernel
     have hlink :
         TriominoWieferichShrinkNumsInvCandidateLinkSpecB p x y z q c := by
       simpa [c] using
-        triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack
+        triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack_clean
+          triominoWieferichNoWieferichBridge_default
           (p := p) (x := x) (y := y) (z := z) (q := q)
           hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
     have hqpos : 0 < q := hqP.pos
@@ -2661,7 +2592,8 @@ theorem triominoWieferichShrinkNumsInvCandidate_of_pack_shadow_fields_of_kernel
     have hlink :
         TriominoWieferichShrinkNumsInvCandidateLinkSpecB p x y z q c := by
       simpa [c] using
-        triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack
+        triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack_clean
+          triominoWieferichNoWieferichBridge_default
           (p := p) (x := x) (y := y) (z := z) (q := q)
           hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
     simpa [c] using hlink.hyEq
@@ -4327,7 +4259,7 @@ theorem triominoWieferichShrinkNumsInvCandidate_hx0_shadow_core
             (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
               (p := p) (x := x) (y := y) (z := z) (q := q)
               hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x' := by
-        simp
+        simp [hxdiv]
   exact
     triominoWieferichShrink_hx0_of_eq_mul_right
       (x := x) (q := q)
@@ -4383,7 +4315,7 @@ theorem triominoWieferichShrinkNumsInvCandidate_hxy_shadow_core
             (triominoWieferichShrinkNumsInvCandidate_div_eq_shadow
               (p := p) (x := x) (y := y) (z := z) (q := q)
               hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN).x' := by
-        simp
+        simp [hxdiv]
   exact
     triominoWieferichShrink_hxy_of_eq_mul_eq_y
       (x := x) (y := y) (q := q)
@@ -4525,7 +4457,8 @@ theorem triominoWieferichShrinkNumsInvCandidate_hEq_shadow_via_trace_of_pack
     have hlink :
         TriominoWieferichShrinkNumsInvCandidateLinkSpecB p x y z q c := by
       simpa [c] using
-        triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack
+        triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack_clean
+          triominoWieferichNoWieferichBridge_default
           (p := p) (x := x) (y := y) (z := z) (q := q)
           hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
     have hqpos : 0 < q := hqP.pos
@@ -4544,7 +4477,8 @@ theorem triominoWieferichShrinkNumsInvCandidate_hEq_shadow_via_trace_of_pack
     have hlink :
         TriominoWieferichShrinkNumsInvCandidateLinkSpecB p x y z q c := by
       simpa [c] using
-        triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack
+        triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack_clean
+          triominoWieferichNoWieferichBridge_default
           (p := p) (x := x) (y := y) (z := z) (q := q)
           hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
     simpa [c] using hlink.hyEq
@@ -4585,7 +4519,8 @@ theorem triominoWieferichShrinkNumsInvCandidateEq_shadow_via_trace_of_pack
     have hlink :
         TriominoWieferichShrinkNumsInvCandidateLinkSpecB p x y z q c := by
       simpa [c] using
-        triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack
+        triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack_clean
+          triominoWieferichNoWieferichBridge_default
           (p := p) (x := x) (y := y) (z := z) (q := q)
           hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
     have hqpos : 0 < q := hqP.pos
@@ -4604,7 +4539,8 @@ theorem triominoWieferichShrinkNumsInvCandidateEq_shadow_via_trace_of_pack
     have hlink :
         TriominoWieferichShrinkNumsInvCandidateLinkSpecB p x y z q c := by
       simpa [c] using
-        triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack
+        triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack_clean
+          triominoWieferichNoWieferichBridge_default
           (p := p) (x := x) (y := y) (z := z) (q := q)
           hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
     simpa [c] using hlink.hyEq
