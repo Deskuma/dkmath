@@ -1960,6 +1960,28 @@ theorem triominoGapBody_selfSimilarity_breaks_of_noWieferich
       hNW3 hNW5 hpack hy hp2 hpB hqP hq_not_dvd_gap hqpow_dvd_GN d ha
 
 /--
+Higher-power non-closure principle（Branch B 側）:
+`p ≥ 5` 文脈では、差分解の body `GN p (z-y) y` は `p` 乗閉包を持たない。
+同時に、差分解そのものは `(z-y) * GN ...` 形へ裂ける。
+-/
+theorem triominoHigherPower_nonClosure_principle_of_branchB
+    {p x y z q : ℕ}
+    (hNW5 : TriominoNoWieferichBridge)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    z ^ p - y ^ p = (z - y) * GN p (z - y) y ∧
+      ¬ ∃ v : ℕ, GN p (z - y) y = v ^ p := by
+  have hp3 : 3 ≤ p := le_trans (by decide : 3 ≤ 5) hpack.hp5
+  refine ⟨?_, ?_⟩
+  · exact triominoHigherWorld_gap_mul_GN hp3 hpack.hyz_lt
+  · exact
+      triominoGapBody_nonPPowerClosed_of_branchB
+        hNW5 hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/--
 Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
 
 route 1 の `u / v1` data までは外で取り、最後の穴をさらに狭い core に押し込める。

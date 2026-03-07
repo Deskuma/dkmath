@@ -2461,3 +2461,26 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
 ### 状態
 - 「同格分解（平方世界）」と「異格分解（高冪世界）」の比較が
   定理名で直接追える状態になった。
+
+## 2026-03-08: Higher-power non-closure 主文の追加
+
+### 目的
+- 比較原理と no-closure を 1 本の主文に束ねる。
+
+### 実施
+- `CosmicPetalBridgeGNDescentB.lean` に
+  `triominoHigherPower_nonClosure_principle_of_branchB` を追加。
+- 内容は既存の
+  - `triominoHigherWorld_gap_mul_GN`
+  - `triominoGapBody_nonPPowerClosed_of_branchB`
+  を合成した thin theorem。
+
+### 失敗と復旧
+- 失敗なし。
+
+### 検証
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
+
+### 状態
+- Branch B 側で「分解（gap×body）+ body 非 `p` 乗閉包」を
+  1 本の定理名で参照できるようになった。
