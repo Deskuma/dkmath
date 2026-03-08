@@ -2413,3 +2413,119 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `triominoWieferichShrinkNumsInvCandidate_of_pack`
   - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow`
 - `DescentB` 内の `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core` 直参照は継続して 0 件。
+
+## 2026-03-08: 数学芯の主定理文を固定（gap/body 非閉包）
+
+### 目的
+- リファクタリング中心から数学芯中心へ移るため、
+  既存 core を「主定理名」で固定する。
+
+### 実施
+- `CosmicPetalBridgeGNDescentB.lean` に主定理名を追加:
+  - `triominoGapBody_nonPPowerClosed_of_branchB`
+    - 内容: Branch B (`p ≥ 5` 側) で `GN p (z-y) y` は `p` 乗になれない。
+    - 既存 `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noPowGN_core` を明示名で再公開。
+  - `triominoGapBody_selfSimilarity_breaks_of_noWieferich`
+    - 内容: odd prime dispatcher (`p=3 / p≥5`) 下で gap/body 縮小 data は矛盾へ落ちる。
+    - 既存 `triominoWieferichShrinkGapGNPowData_impossible_of_noWieferich` を明示名で再公開。
+
+### 失敗と復旧
+- 失敗なし（追加は既存定理への thin alias のみ）。
+
+### 検証
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
+
+### 状態
+- 「なぜ `p≥3` で閉じないか」を指す主定理文がコード上で直接参照可能になった。
+
+## 2026-03-08: 平方世界 vs 高冪世界の比較原理を固定
+
+### 目的
+- 数学芯を明文化する比較定理を追加し、
+  `p=2` と `p≥3` の分解構造差をコード上で直接参照できるようにする。
+
+### 実施
+- `CosmicPetalBridgeGNDescentB.lean` に以下を追加:
+  - `triominoSquareWorld_gap_mul_sum`
+  - `triominoHigherWorld_gap_mul_GN`
+  - `triominoSquareVsHigher_gap_body_comparison`
+
+### 失敗と復旧
+- 初回実装で `p=2` 側を `pow_sub_pow_factor_cosmic_N` + `GN_linear` で処理したが、
+  補題の返り型が `GN` ではなく和表示だったため型不一致で失敗。
+- `Nat.sq_sub_sq` ベースへ差し替えて復旧。
+
+### 検証
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
+
+### 状態
+- 「同格分解（平方世界）」と「異格分解（高冪世界）」の比較が
+  定理名で直接追える状態になった。
+
+## 2026-03-08: Higher-power non-closure 主文の追加
+
+### 目的
+- 比較原理と no-closure を 1 本の主文に束ねる。
+
+### 実施
+- `CosmicPetalBridgeGNDescentB.lean` に
+  `triominoHigherPower_nonClosure_principle_of_branchB` を追加。
+- 内容は既存の
+  - `triominoHigherWorld_gap_mul_GN`
+  - `triominoGapBody_nonPPowerClosed_of_branchB`
+  を合成した thin theorem。
+
+### 失敗と復旧
+- 失敗なし。
+
+### 検証
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
+
+### 状態
+- Branch B 側で「分解（gap×body）+ body 非 `p` 乗閉包」を
+  1 本の定理名で参照できるようになった。
+
+## 2026-03-08: 世界の分岐定理（Branch B）を追加
+
+### 目的
+- `p=2` と `p≥5` の世界差を、同一文脈で一息に読める総括定理として固定する。
+
+### 実施
+- `CosmicPetalBridgeGNDescentB.lean` に
+  `triominoPowerWorld_bifurcation_of_branchB` を追加。
+- 内容:
+  - 平方世界: `z^2 - y^2 = (z - y) * (z + y)`
+  - 高冪世界（Branch B）: `z^p - y^p = (z - y) * GN ...` かつ `GN ... ≠ v^p`
+  を同時に返す。
+
+### 失敗と復旧
+- 失敗なし。
+
+### 検証
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
+
+### 状態
+- 「平方世界の同格閉包」と「高冪世界の非閉包」を
+  1 本の定理名で対比参照できる状態になった。
+
+## 2026-03-08: square-closure exception 総文を追加
+
+### 目的
+- 「`p=2` だけが閉包例外」という読みを、Branch B 文脈で直接参照できるようにする。
+
+### 実施
+- `CosmicPetalBridgeGNDescentB.lean` に
+  `triominoSquareClosure_exception_of_branchB` を追加。
+- `triominoPowerWorld_bifurcation_of_branchB` の射影として
+  - 平方世界の同格分解
+  - 高冪 body の非 `p` 乗閉包
+  を 1 本で返す形に固定。
+
+### 失敗と復旧
+- 失敗なし。
+
+### 検証
+- `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
+
+### 状態
+- 「平方世界の例外性」を主文として直接参照可能になった。

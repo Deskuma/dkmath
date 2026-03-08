@@ -1581,6 +1581,49 @@ theorem triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferic
           hp2_le hExistsPrime
     exact hNoPowGN ⟨q * d.v1, by simpa using d.hGNq⟩
 
+section DecompositionComparison
+
+/--
+平方世界 (`p = 2`) は差の分解が同格（線形×線形）で閉じる。
+-/
+theorem triominoSquareWorld_gap_mul_sum
+    {y z : ℕ}
+    (_hyz_lt : y < z) :
+    z ^ 2 - y ^ 2 = (z - y) * (z + y) := by
+  calc
+    z ^ 2 - y ^ 2 = (z + y) * (z - y) := by
+      rw [Nat.sq_sub_sq]
+    _ = (z - y) * (z + y) := by
+      rw [Nat.mul_comm]
+
+/--
+高冪世界 (`p ≥ 3`) は差の分解が異格（線形 gap × 非線形 body）へ裂ける。
+-/
+theorem triominoHigherWorld_gap_mul_GN
+    {p y z : ℕ}
+    (hp3 : 3 ≤ p)
+    (hyz_lt : y < z) :
+    z ^ p - y ^ p = (z - y) * GN p (z - y) y := by
+  have hp_pos : 0 < p := lt_of_lt_of_le (by decide : 0 < 3) hp3
+  simpa using
+    (pow_sub_pow_factor_cosmic_N (a := z) (b := y) (d := p) hp_pos hyz_lt)
+
+/--
+比較原理:
+`p = 2` では同格分解 `(z-y)*(z+y)`、`p ≥ 3` では異格分解 `(z-y)*GN ...` となる。
+-/
+theorem triominoSquareVsHigher_gap_body_comparison
+    {y z : ℕ}
+    (hyz_lt : y < z) :
+    z ^ 2 - y ^ 2 = (z - y) * (z + y) ∧
+      ∀ {p : ℕ}, 3 ≤ p → z ^ p - y ^ p = (z - y) * GN p (z - y) y := by
+  refine ⟨?_, ?_⟩
+  · exact triominoSquareWorld_gap_mul_sum hyz_lt
+  · intro p hp3
+    exact triominoHigherWorld_gap_mul_GN hp3 hyz_lt
+
+end DecompositionComparison
+
 section NoLiftKernel
 
 /--
@@ -1648,6 +1691,24 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noPowGN_core
         hNW5
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/--
+数学芯（Branch B, `p ≥ 5` 側）:
+`x^p = (z-y) * GN p (z-y) y` の状況で primitive 分岐が立つと、
+`GN p (z-y) y` は `p` 乗閉包を保てない（`p` 乗になれない）。
+-/
+theorem triominoGapBody_nonPPowerClosed_of_branchB
+    {p x y z q : ℕ}
+    (hNW5 : TriominoNoWieferichBridge)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    ¬ ∃ v : ℕ, GN p (z - y) y = v ^ p := by
+  exact
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noPowGN_core
+      hNW5 hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
 
 /--
 Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
@@ -1874,6 +1935,93 @@ theorem triominoWieferichShrinkGapGNPowData_impossible_of_noWieferich
   exact
     triominoWieferichShrinkKernelEqSeedTracePack_contradiction_of_noWieferich
       hNW3 hNW5 hpack hy hp2 hpB hqP hq_not_dvd_gap hqpow_dvd_GN d ha
+
+/--
+数学芯（奇素数指数 `p ≥ 3`）:
+`p = 3` / `p ≥ 5` の dispatcher を通すと、
+gap/body から作る縮小 data は自己相似に閉じず、最終的に矛盾へ落ちる。
+-/
+theorem triominoGapBody_selfSimilarity_breaks_of_noWieferich
+    (hNW3 : TriominoNoWieferichBridge3)
+    (hNW5 : TriominoNoWieferichBridge)
+    {p x y z q : ℕ}
+    (hpack : PrimeCounterexamplePack p x y z)
+    (hy : 1 ≤ y)
+    (hp2 : p ≠ 2)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y)
+    (d : TriominoWieferichShrinkGapGNPowDataB p x y z q)
+    (ha : 2 ≤ d.u) :
+    False := by
+  exact
+    triominoWieferichShrinkGapGNPowData_impossible_of_noWieferich
+      hNW3 hNW5 hpack hy hp2 hpB hqP hq_not_dvd_gap hqpow_dvd_GN d ha
+
+/--
+Higher-power non-closure principle（Branch B 側）:
+`p ≥ 5` 文脈では、差分解の body `GN p (z-y) y` は `p` 乗閉包を持たない。
+同時に、差分解そのものは `(z-y) * GN ...` 形へ裂ける。
+-/
+theorem triominoHigherPower_nonClosure_principle_of_branchB
+    {p x y z q : ℕ}
+    (hNW5 : TriominoNoWieferichBridge)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    z ^ p - y ^ p = (z - y) * GN p (z - y) y ∧
+      ¬ ∃ v : ℕ, GN p (z - y) y = v ^ p := by
+  have hp3 : 3 ≤ p := le_trans (by decide : 3 ≤ 5) hpack.hp5
+  refine ⟨?_, ?_⟩
+  · exact triominoHigherWorld_gap_mul_GN hp3 hpack.hyz_lt
+  · exact
+      triominoGapBody_nonPPowerClosed_of_branchB
+        hNW5 hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/--
+世界の分岐定理（Branch B 文脈）:
+平方世界 (`p = 2`) では同格分解 `(z-y)*(z+y)` が成立する一方、
+高冪世界 (`p ≥ 5`) では `gap*GN` 分解かつ body は `p` 乗閉包しない。
+-/
+theorem triominoPowerWorld_bifurcation_of_branchB
+    {p x y z q : ℕ}
+    (hNW5 : TriominoNoWieferichBridge)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    z ^ 2 - y ^ 2 = (z - y) * (z + y) ∧
+      (z ^ p - y ^ p = (z - y) * GN p (z - y) y ∧
+        ¬ ∃ v : ℕ, GN p (z - y) y = v ^ p) := by
+  refine ⟨?_, ?_⟩
+  · exact triominoSquareWorld_gap_mul_sum hpack.hyz_lt
+  · exact
+      triominoHigherPower_nonClosure_principle_of_branchB
+        hNW5 hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+
+/--
+Square-closure exception theorem（Branch B 文脈）:
+平方世界の同格閉包 `(z-y)*(z+y)` は成り立つが、
+高冪側 body `GN p (z-y) y` は `p` 乗閉包しない。
+-/
+theorem triominoSquareClosure_exception_of_branchB
+    {p x y z q : ℕ}
+    (hNW5 : TriominoNoWieferichBridge)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hpB : ¬ p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y))
+    (hqpow_dvd_GN : q ^ p ∣ GN p (z - y) y) :
+    z ^ 2 - y ^ 2 = (z - y) * (z + y) ∧
+      ¬ ∃ v : ℕ, GN p (z - y) y = v ^ p := by
+  have hBif :=
+    triominoPowerWorld_bifurcation_of_branchB
+      hNW5 hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
+  exact ⟨hBif.1, hBif.2.2⟩
 
 /--
 Triomino/Cosmic 固有の等式側 trace 生成 pack の最小核（本丸）。
