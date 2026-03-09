@@ -128,6 +128,19 @@
 - コメント
 - 今回の差し替えで、`FLT.Basic` は `gcd_u_GN3` のローカル所有者ではなく利用者になった。責務分離としてはこの形が自然。
 
+### 2026/03/10 02:00
+
+- 実施内容
+- `FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean` に埋まっていた一般 gcd/GN 補題の核を `DkMath/NumberTheory/Gcd/GN.lean` へ引き上げた。具体的には、`GN p (z - y) y` の整数版が `diffPowSum z y p` に一致する補題と、`Int.gcd(gap, GN) ∣ p` の一般補題を `NumberTheory` 側へ追加した。
+- 結果
+- `DkMath.NumberTheory.Gcd.gn_sub_eq_sd_int` と `DkMath.NumberTheory.Gcd.gcd_gap_GN_dvd_exp_int` を新設し、`CosmicPetalBridgeGNDescentB` 側の `triominoWieferichShrink_int_GN_eq_Sd_core` と `triominoWieferichShrink_gap_gcd_GN_dvd_p_int` は wrapper 化できた。これで gcd/GN の一般骨格は `PrimeProvider` ではなく `NumberTheory` 側から参照できる。
+- 失敗内容
+- なし。
+- 次の予定
+- `CosmicPetalBridgeGNDescentB` の coprime 化補題も、一般部分と FLT 文脈部分をさらに分離できるか確認する。
+- コメント
+- 今回の引き上げで、「一般 gcd/GN 理論」と「FLT 反例パック由来の coprime 条件供給」が分離された。整理の方向としてはかなり良い。
+
 ---
 
 ## テンプレート

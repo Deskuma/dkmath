@@ -26,6 +26,57 @@ theorem gcd_boundary_sd_divides_exp_int
     Int.gcd x (Sd (x + u) u d) ∣ d := by
   simpa using DkMath.NumberTheory.GcdNext.gcd_specialized_divides_d x u d hd hcop
 
+/-- `gap = z - y` と置くと、整数環の `GN` は差の冪和 `Sd z y p` と一致する。 -/
+theorem gn_sub_eq_sd_int
+    {p z y : ℕ} (hp : 0 < p) (hyz : y < z) :
+    DkMath.CosmicFormulaBinom.GN p (((z - y : ℕ) : ℤ)) (y : ℤ) =
+      DkMath.Algebra.DiffPow.diffPowSum (z : ℤ) (y : ℤ) p := by
+  have hGN_nat : z ^ p - y ^ p = (z - y) * DkMath.CosmicFormulaBinom.GN p (z - y) y := by
+    simpa using DkMath.NumberTheory.GcdNext.pow_sub_pow_factor_cosmic_N hp hyz
+  have hyz_pow : y ^ p ≤ z ^ p := by
+    exact Nat.pow_le_pow_left (Nat.le_of_lt hyz) p
+  have hGN_int :
+      (z : ℤ) ^ p - (y : ℤ) ^ p =
+        (((z - y : ℕ) : ℤ) * DkMath.CosmicFormulaBinom.GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) := by
+    calc
+      (z : ℤ) ^ p - (y : ℤ) ^ p = (↑(z ^ p) : ℤ) - ↑(y ^ p) := by
+        simp [Nat.cast_pow]
+      _ = ((z ^ p - y ^ p : ℕ) : ℤ) := by
+        rw [← Nat.cast_sub hyz_pow]
+      _ = (((z - y) * DkMath.CosmicFormulaBinom.GN p (z - y) y : ℕ) : ℤ) := by
+        rw [hGN_nat]
+      _ = (((z - y : ℕ) : ℤ) *
+            DkMath.CosmicFormulaBinom.GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) := by
+        simp [DkMath.CosmicFormulaBinom.GN]
+  have hSd :
+      (z : ℤ) ^ p - (y : ℤ) ^ p =
+        (((z - y : ℕ) : ℤ) * DkMath.Algebra.DiffPow.diffPowSum (z : ℤ) (y : ℤ) p) := by
+    simpa [Int.ofNat_sub (Nat.le_of_lt hyz)] using
+      (DkMath.Algebra.DiffPow.pow_sub_pow_factor (a := (z : ℤ)) (b := (y : ℤ)) (d := p))
+  have hgap_ne0 : (((z - y : ℕ) : ℤ)) ≠ 0 := by
+    exact_mod_cast (Nat.ne_of_gt (Nat.sub_pos_of_lt hyz))
+  have hmul :
+      (((z - y : ℕ) : ℤ) * DkMath.CosmicFormulaBinom.GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) =
+        (((z - y : ℕ) : ℤ) * DkMath.Algebra.DiffPow.diffPowSum (z : ℤ) (y : ℤ) p) := by
+    rw [← hGN_int, hSd]
+  exact Int.eq_of_mul_eq_mul_left hgap_ne0 hmul
+
+/-- `z` と `y` が互いに素なら、`gcd(z - y, GN p (z - y) y)` は `p` を割る。 -/
+theorem gcd_gap_GN_dvd_exp_int
+    {p z y : ℕ} (hp1 : 1 ≤ p) (hyz : y < z) (hcop : Nat.Coprime z y) :
+    Int.gcd (((z - y : ℕ) : ℤ))
+      (DkMath.CosmicFormulaBinom.GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) ∣ p := by
+  have hgcd_zy : Nat.gcd z y = 1 := (Nat.coprime_iff_gcd_eq_one).1 hcop
+  have hab : Int.gcd (z : ℤ) (y : ℤ) = 1 := by
+    rw [Int.gcd_eq_natAbs]
+    simp [hgcd_zy]
+  have hSd :
+      Int.gcd (((z - y : ℕ) : ℤ)) (DkMath.Algebra.DiffPow.diffPowSum (z : ℤ) (y : ℤ) p) ∣ p := by
+    simpa [Int.ofNat_sub (Nat.le_of_lt hyz)] using
+      (DkMath.NumberTheory.GcdDiffPow.gcd_divides_d (a := (z : ℤ)) (b := (y : ℤ)) (d := p) hp1 hab)
+  rw [gn_sub_eq_sd_int hp1 hyz]
+  exact hSd
+
 /-- `d = 3` では `gcd(x, GN 3 x u)` は `gcd(x, 3)` に等しい。 -/
 theorem gcd_boundary_GN_three_eq_gcd_boundary_three
     {x u : ℕ} (hcop : Nat.Coprime x u) :

@@ -527,36 +527,7 @@ theorem triominoWieferichShrink_int_GN_eq_Sd_core
   let _ := hqP
   let _ := hq_not_dvd_gap
   let _ := hqpow_dvd_GN
-  have hp_pos : 0 < p := hpack.hp.pos
-  have hGN_nat : z ^ p - y ^ p = (z - y) * GN p (z - y) y := by
-    simpa using pow_sub_pow_factor_cosmic_N hp_pos hpack.hyz_lt
-  have hyz_pow : y ^ p ≤ z ^ p := by
-    exact Nat.pow_le_pow_left hpack.hyz p
-  have hGN_int :
-      (z : ℤ) ^ p - (y : ℤ) ^ p =
-        (((z - y : ℕ) : ℤ) * GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) := by
-    calc
-      (z : ℤ) ^ p - (y : ℤ) ^ p = (↑(z ^ p) : ℤ) - ↑(y ^ p) := by
-        simp [Nat.cast_pow]
-      _ = ((z ^ p - y ^ p : ℕ) : ℤ) := by
-        rw [← Nat.cast_sub hyz_pow]
-      _ = (((z - y) * GN p (z - y) y : ℕ) : ℤ) := by
-        rw [hGN_nat]
-      _ = (((z - y : ℕ) : ℤ) * GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) := by
-        simp [GN]
-  have hSd :
-      (z : ℤ) ^ p - (y : ℤ) ^ p =
-        (((z - y : ℕ) : ℤ) * DkMath.Algebra.DiffPow.diffPowSum (z : ℤ) (y : ℤ) p) := by
-    simpa [Int.ofNat_sub hpack.hyz] using
-      (DkMath.Algebra.DiffPow.pow_sub_pow_factor
-        (a := (z : ℤ)) (b := (y : ℤ)) (d := p))
-  have hgap_ne0 : (((z - y : ℕ) : ℤ)) ≠ 0 := by
-    exact_mod_cast (Nat.ne_of_gt (Nat.sub_pos_of_lt hpack.hyz_lt))
-  have hmul :
-      (((z - y : ℕ) : ℤ) * GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) =
-        (((z - y : ℕ) : ℤ) * DkMath.Algebra.DiffPow.diffPowSum (z : ℤ) (y : ℤ) p) := by
-    rw [← hGN_int, hSd]
-  exact Int.eq_of_mul_eq_mul_left hgap_ne0 hmul
+  exact DkMath.NumberTheory.Gcd.gn_sub_eq_sd_int hpack.hp.pos hpack.hyz_lt
 
 /--
 primitive な Branch B 文脈では、`gcd (z-y, GN p (z-y) y)` は整数環で `p` を割る。
@@ -575,28 +546,10 @@ theorem triominoWieferichShrink_gap_gcd_GN_dvd_p_int
   let _ := hqP
   let _ := hq_not_dvd_gap
   let _ := hqpow_dvd_GN
-  have hcop_yz : Nat.Coprime y z := by
-    exact coprime_right_of_add_pow_eq_pow hpack.hp hpack.hxy hpack.hEq
-  have hgcd_zy : Nat.gcd z y = 1 := by
-    exact (Nat.coprime_iff_gcd_eq_one).1 (by simpa [Nat.coprime_comm] using hcop_yz)
-  have hab : Int.gcd (z : ℤ) (y : ℤ) = 1 := by
-    rw [Int.gcd_eq_natAbs]
-    simp [hgcd_zy]
-  have hp1 : 1 ≤ p := Nat.succ_le_of_lt hpack.hp.pos
-  have hSd :
-      Int.gcd (((z - y : ℕ) : ℤ)) (DkMath.Algebra.DiffPow.diffPowSum (z : ℤ) (y : ℤ) p) ∣ p := by
-    simpa [Int.ofNat_sub hpack.hyz] using
-      (DkMath.NumberTheory.GcdDiffPow.gcd_divides_d
-        (a := (z : ℤ)) (b := (y : ℤ)) (d := p) hp1 hab)
-  have hGN_eq_Sd :
-      GN p (((z - y : ℕ) : ℤ)) (y : ℤ) = DkMath.Algebra.DiffPow.diffPowSum (z : ℤ) (y : ℤ) p := by
-    exact
-      triominoWieferichShrink_int_GN_eq_Sd_core
-        (p := p) (x := x) (y := y) (z := z) (q := q)
-        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  change Int.gcd (((z - y : ℕ) : ℤ)) (GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) ∣ p
-  rw [hGN_eq_Sd]
-  exact hSd
+  have hcop_yz : Nat.Coprime z y := by
+    exact (coprime_right_of_add_pow_eq_pow hpack.hp hpack.hxy hpack.hEq).symm
+  exact DkMath.NumberTheory.Gcd.gcd_gap_GN_dvd_exp_int
+    (hp1 := Nat.succ_le_of_lt hpack.hp.pos) (hyz := hpack.hyz_lt) (hcop := hcop_yz)
 
 /--
 Branch B 文脈では `gap = z - y` と `GN p gap y` は互いに素になる。
