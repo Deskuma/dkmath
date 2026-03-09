@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.CosmicFormula.CosmicFormulaBinom
 import DkMath.FLT.PetalDetect
 import DkMath.NumberTheory.ZsigmondyCyclotomic
+import DkMath.Zsigmondy
 
 namespace DkMath.FLT
 
@@ -119,16 +120,13 @@ lemma prime_dvd_S0_via_cosmic_bridge {c b q : ℕ}
     (hq_dvd : q ∣ c ^ 3 - b ^ 3)
     (hq_ndvd : ¬ q ∣ c - b) :
     q ∣ S0_nat c b := by
-  have hq_dvd_sub : q ∣ ((c - b) + b) ^ 3 - b ^ 3 := by
-    simpa [Nat.sub_add_cancel hbc.le] using hq_dvd
-  have hq_dvd_GN_raw : q ∣ GN 3 (c - b) b := by
-    exact prime_dvd_GN_of_dvd_sub_not_dvd_left
-      (d := 3) hq hq_dvd_sub hq_ndvd
+  have hgap_pos : 0 < c - b := Nat.sub_pos_of_lt hbc
+  have hq_dvd_body : q ∣ DkMath.Zsigmondy.BodyN (c - b) b 3 := by
+    simpa [DkMath.Zsigmondy.BodyN, Nat.sub_add_cancel hbc.le] using hq_dvd
   have hq_dvd_GN : q ∣ GN 3 (c - b) b := by
-    change q ∣
-      (∑ x ∈ Finset.range 3,
-        Nat.choose 3 (x + 1) * (c - b) ^ x * b ^ (2 - x)) at hq_dvd_GN_raw
-    simpa [GN] using hq_dvd_GN_raw
+    simpa using
+      (DkMath.Zsigmondy.prime_dvd_body_three_of_not_dvd_boundary_imp_dvd_GN
+        (x := c - b) (u := b) hgap_pos hq hq_dvd_body hq_ndvd)
   have hGN_eq : GN 3 (c - b) b = S0_nat c b := GN_three_sub_eq_S0_nat hbc
   rw [hGN_eq] at hq_dvd_GN
   exact hq_dvd_GN

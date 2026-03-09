@@ -37,6 +37,19 @@
 - コメント
 - 今回の接続で、`Zsigmondy` 側で整えた語彙と FLT 側の実利用箇所が実際に一本につながった。
 
+### 2026/03/09 23:47
+
+- 実施内容
+- `FLT/CosmicPetalBridge.lean` の `prime_dvd_S0_via_cosmic_bridge` を、`DkMath.Zsigmondy.prime_dvd_body_three_of_not_dvd_boundary_imp_dvd_GN` を使う形へ置き換えた。あわせて `FLT/PrimeProvider/CosmicPetalBridgeGNCore.lean` にも同型の差し替え箇所があるか確認した。
+- 結果
+- `q ∣ c^3 - b^3` かつ `q ∤ (c - b)` から `q ∣ GN 3 (c - b) b` へ落とす部分を、`BodyN (c - b) b 3` を経由して `Zsigmondy` 側 API に寄せた。`CosmicPetalBridgeGNCore.lean` は現状 `q ∣ GN` を前提にもらって `diff` 側へ戻す流れが中心で、今回の `diff -> GN` 補題を直接差し込む箇所はなかった。
+- 失敗内容
+- なし。
+- 次の予定
+- `FLT` 側でまだ `prime_dvd_GN_of_dvd_sub_not_dvd_left` を直接使っている箇所を整理し、`d = 3` の specialized bridge に寄せられる部分と、一般 `d` のまま残すべき部分を切り分ける。
+- コメント
+- `lake build DkMath.FLT.CosmicPetalBridge` と `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNCore` は通過した。今回の置換で `CosmicPetalBridge` は `Zsigmondy` 側の新 API を実利用する形になった。
+
 ---
 
 ## テンプレート
