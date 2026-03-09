@@ -1231,13 +1231,11 @@ theorem branchBLocalNoLift_of_noWieferich
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN with
     ⟨r, hrP, hr_dvd_diff, hr_not_dvd_gap⟩
-  have hr_dvd_sub : r ∣ ((z - y) + y) ^ p - y ^ p := by
-    simpa [Nat.sub_add_cancel hpack.hyz] using hr_dvd_diff
   have hr_dvd_GN : r ∣ GN p (z - y) y := by
     exact
-      prime_dvd_GN_of_dvd_sub_not_dvd_left
-        (d := p) (x := z - y) (u := y) (q := r)
-        hrP hr_dvd_sub hr_not_dvd_gap
+      dvd_GN_of_dvd_sub_pow
+        (d := p) (z := z) (y := y) (q := r)
+        hrP hr_dvd_diff hr_not_dvd_gap
   have hNonLift :
       ∀ q : ℕ,
         (Nat.Prime q ∧ q ∣ GN p (z - y) y ∧ ¬ q ∣ (z - y)) ->
@@ -1517,13 +1515,11 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_
     ∃ r : ℕ, Nat.Prime r ∧ r ∣ GN p (z - y) y ∧ ¬ r ^ 2 ∣ GN p (z - y) y := by
   rcases branchBLocalNoLift_of_noWieferich hNW hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN with
     ⟨r, hLocal⟩
-  have hr_dvd_sub : r ∣ ((z - y) + y) ^ p - y ^ p := by
-    simpa [Nat.sub_add_cancel hpack.hyz] using hLocal.hq_dvd_diff
   have hr_dvd_GN : r ∣ GN p (z - y) y := by
     exact
-      prime_dvd_GN_of_dvd_sub_not_dvd_left
-        (d := p) (x := z - y) (u := y) (q := r)
-        hLocal.hq_prime hr_dvd_sub hLocal.hq_not_dvd_gap
+      dvd_GN_of_dvd_sub_pow
+        (d := p) (z := z) (y := y) (q := r)
+        hLocal.hq_prime hLocal.hq_dvd_diff hLocal.hq_not_dvd_gap
   exact ⟨r, hLocal.hq_prime, hr_dvd_GN, hLocal.hNoLift⟩
 
 /--
@@ -1660,13 +1656,11 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_
         (p := p) (x := x) (y := y) (z := z) (q := q)
         hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN with
     ⟨r, hLocal⟩
-  have hr_dvd_sub : r ∣ ((z - y) + y) ^ p - y ^ p := by
-    simpa [Nat.sub_add_cancel hpack.hyz] using hLocal.hq_dvd_diff
   have hr_dvd_GN : r ∣ GN p (z - y) y := by
     exact
-      prime_dvd_GN_of_dvd_sub_not_dvd_left
-        (d := p) (x := z - y) (u := y) (q := r)
-        hLocal.hq_prime hr_dvd_sub hLocal.hq_not_dvd_gap
+      dvd_GN_of_dvd_sub_pow
+        (d := p) (z := z) (y := y) (q := r)
+        hLocal.hq_prime hLocal.hq_dvd_diff hLocal.hq_not_dvd_gap
   exact ⟨r, hLocal.hq_prime, hr_dvd_GN, hLocal.hNoLift⟩
 
 /--
