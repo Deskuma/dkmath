@@ -76,6 +76,84 @@
 - コメント
 - 一般 `d` の `dvd_GN_of_dvd_sub_pow` 自体は純粋な因数分解補題として残し、`d = 3` だけ `Zsigmondy` 由来を別名で明示する構成にした。
 
+### 2026/03/10 00:41
+
+- 実施内容
+- `gcd` と `GN` の整備に入る前の事前調査として、説明メモ `What_is_the_reason_why_GN_becomes_the_center_of_Zsigmondy.md` と `Zsigmondy-GcdGN.md` を確認し、既存 Lean 実装の `gcd` 系補題を横断検索した。
+- 結果
+- 一般骨格は既にある。`GcdDiffPow.gcd_divides_d` が整数環で `gcd(a-b, diffPowSum a b d) ∣ d` を与え、`GcdNext.gcd_specialized_divides_d` がこれを `a := x + u, b := u` に specialized している。`FLT/Basic.lean` には `gcd_u_GN3 : gcd(u, GN 3 u y) = gcd(u, 3)` が既にあり、`FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean` には一般 `p` の gap/GN に対する `Int.gcd ... ∣ p` と coprime 化の橋が既に入っている。未整備なのは、これらを `DkMath.Zsigmondy` / `GN` 語彙で再編した薄い接続層と、`Nat` 側で使いやすい名前の補題群。
+- 失敗内容
+- なし。
+- 次の予定
+- `GcdGN.lean` を新規作成するか `DkMath.Zsigmondy` に section を足し、まず `Int` 側で `gcd(x, KernelZ x u d) ∣ d`、次に `Nat` 側で `d = 3` の `gcd(x, GN 3 x u)` 明示版、最後に `Nat.Coprime x u -> gcd(x, GN 3 x u) ∣ 3` までを正規 API として切り出す。
+- コメント
+- 実装難度は「一般 `Int` は低め、一般 `Nat` は減法とキャストで中程度、`d = 3` 特化は低め」。次の一手としては、まず `d = 3` 特化と `Int` 側 specialized wrapper を揃えるのが最も効率が良い。
+
+### 2026/03/10 01:37
+
+- 実施内容
+- `NumberTheory` 側の `gcd` 補題を集約する入口として、`DkMath/NumberTheory/Gcd.lean` 配下の API スケルトンを整備した。`Gcd/Basic.lean` を基礎再 export 層にし、新たに `Gcd/GN.lean` を追加して `GN` specialization の集約先を用意した。
+- 結果
+- `DkMath.NumberTheory.Gcd` から `Gcd.Basic` と `Gcd.GN` を引く構成になり、今後は「点在補題 -> Gcd/GN 系 -> Gcd.lean API」という形で集中化を進められる状態になった。まだ theorem の再命名や wrapper 追加はしていないが、集約先の名前と import 経路は確定した。
+- 失敗内容
+- 新設した `Gcd/GN.lean` の先頭コメントを C 風コメントで書いてしまい、初回ビルドで `unexpected token '/'` が出た。Lean コメント `/- ... -/` に直して解消した。
+- 次の予定
+- `Gcd.GN` に `gcd_specialized_divides_d` や `gcd_u_GN3` 相当の正規 API を順次移し、下流からはこの層を参照するように寄せる。
+- コメント
+- 先に import 経路だけ固めると、その後の theorem 移送や alias 追加を小分けで進めやすい。今回は大きな移動はせず、再 export の骨組みだけを先に立てた。
+
+### 2026/03/10 01:41
+
+- 実施内容
+- `DkMath/NumberTheory/Gcd/GN.lean` に、`gcd_specialized_divides_d` と `gcd_u_GN3` 系を正規 API として薄く追加した。
+- 結果
+- 一般 `Int` 側の wrapper として `gcd_boundary_sd_divides_exp_int` を追加した。`d = 3` の `Nat` 側には `gcd_boundary_GN_three_eq_gcd_boundary_three`, `gcd_boundary_GN_three_dvd_three`, `coprime_boundary_GN_three_of_coprime_of_not_dvd_three` を追加し、今後は `GN` 視点の gcd 議論を `DkMath.NumberTheory.Gcd.GN` から参照できるようにした。
+- 失敗内容
+- 初回実装では `GN` を `GcdNext` 名前空間の識別子として直接参照してしまい、完全修飾が必要だった。また `coprime_boundary_GN_three_of_coprime_of_not_dvd_three` の最後の書き換えも `rw` / `simpa` の当て方を調整する必要があった。修正後に `lake build DkMath.NumberTheory.Gcd.GN` と `lake build DkMath.NumberTheory.Gcd` は通過した。
+- 次の予定
+- 下流の `FLT.Basic` などで使っている局所補題を、この新しい `Gcd.GN` API へ順次寄せる。
+- コメント
+- `gcd_u_GN3` そのものは `FLT.Basic` に残したままでも、今後の参照先は `NumberTheory/Gcd/GN.lean` に寄せられる状態になった。後続のリファクタリングでは、重複補題の統合と命名整理を行う。
+
+### 2026/03/10 01:47
+
+- 実施内容
+- `FLT/Basic.lean` で使っていた局所補題 `gcd_u_GN3` の参照を、新設した `DkMath.NumberTheory.Gcd.GN` API へ差し替えた。あわせて `FLT/Basic.lean` 内の重複定義 `gcd_u_GN3` を削除した。
+- 結果
+- `FLT.Basic` は `DkMath.NumberTheory.Gcd.gcd_boundary_GN_three_eq_gcd_boundary_three` を直接呼ぶ形になり、`gcd(u, GN 3 u y) = gcd(u, 3)` の根拠が `NumberTheory` 側の集中化された API に揃った。
+- 失敗内容
+- なし。
+- 次の予定
+- ほかの `FLT` 系ファイルでも、局所の gcd 補題や再証明を `DkMath.NumberTheory.Gcd.GN` へ寄せられる箇所がないか確認する。
+- コメント
+- 今回の差し替えで、`FLT.Basic` は `gcd_u_GN3` のローカル所有者ではなく利用者になった。責務分離としてはこの形が自然。
+
+### 2026/03/10 02:00
+
+- 実施内容
+- `FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean` に埋まっていた一般 gcd/GN 補題の核を `DkMath/NumberTheory/Gcd/GN.lean` へ引き上げた。具体的には、`GN p (z - y) y` の整数版が `diffPowSum z y p` に一致する補題と、`Int.gcd(gap, GN) ∣ p` の一般補題を `NumberTheory` 側へ追加した。
+- 結果
+- `DkMath.NumberTheory.Gcd.gn_sub_eq_sd_int` と `DkMath.NumberTheory.Gcd.gcd_gap_GN_dvd_exp_int` を新設し、`CosmicPetalBridgeGNDescentB` 側の `triominoWieferichShrink_int_GN_eq_Sd_core` と `triominoWieferichShrink_gap_gcd_GN_dvd_p_int` は wrapper 化できた。これで gcd/GN の一般骨格は `PrimeProvider` ではなく `NumberTheory` 側から参照できる。
+- 失敗内容
+- なし。
+- 次の予定
+- `CosmicPetalBridgeGNDescentB` の coprime 化補題も、一般部分と FLT 文脈部分をさらに分離できるか確認する。
+- コメント
+- 今回の引き上げで、「一般 gcd/GN 理論」と「FLT 反例パック由来の coprime 条件供給」が分離された。整理の方向としてはかなり良い。
+
+### 2026/03/10 02:01
+
+- 実施内容
+- `CosmicPetalBridgeGNDescentB.lean` に残っていた coprime 化補題の一般部分を `DkMath/NumberTheory/Gcd/GN.lean` へ引き上げた。
+- 結果
+- `DkMath.NumberTheory.Gcd.coprime_gap_GN_of_not_dvd_exp_prime` を追加し、`z` と `y` が互いに素、`p` が素数、かつ `p ∤ (z - y)` なら `Nat.Coprime (z - y) (GN p (z - y) y)` を直接返せるようにした。`triominoWieferichShrink_gap_coprime_GN_core` は、反例パックから必要条件を供給する wrapper に簡約された。
+- 失敗内容
+- なし。
+- 次の予定
+- `PrimeProvider` 側でまだ `NumberTheory` へ引き上げられる一般補題が残っていないか確認する。特に gcd/valuation 境界の一般部を再点検する。
+- コメント
+- これで `CosmicPetalBridgeGNDescentB` の gcd ルートは、「一般理論は `NumberTheory/Gcd/GN`、FLT 文脈は条件供給」というかなり自然な分割になった。
+
 ---
 
 ## テンプレート
