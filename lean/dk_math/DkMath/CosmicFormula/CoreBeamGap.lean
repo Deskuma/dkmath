@@ -23,9 +23,9 @@ $$
 ここで：
 - `Core d x := x^d` は左端の純冪
 - `Gap d u := u^d` は右端の純冪
-- `Beam d x u := GN d x u` は中間結合項
+- `Beam d x u` は両端純冪を除いた中間項の総和
 
-既存の `BigN`, `BodyN`, `GapN`, `GN` との関係を補題で明示します。
+既存の `BigN`, `BodyN`, `GapN`, `GN` とは橋渡し補題で関係を明示します。
 
 -/
 
@@ -46,8 +46,12 @@ def Core (d : ℕ) (x : R) : R := x ^ d
 /-- Right endpoint power: Gap -/
 def Gap (d : ℕ) (u : R) : R := u ^ d
 
-/-- Middle interaction term: Beam (identical to GN) -/
-def Beam (d : ℕ) (x u : R) : R := GN d x u
+/-- Middle interaction term: Beam, the sum of all non-endpoint binomial terms. -/
+def Beam (d : ℕ) (x u : R) : R :=
+  match d with
+  | 0 => 0
+  | n + 1 =>
+      ∑ k ∈ Finset.range n, (Nat.choose (n + 1) (k + 1) : R) * x ^ (k + 1) * u ^ (n - k)
 
 /-- Full structure: Big (identical to BigN) -/
 def Big (d : ℕ) (x u : R) : R := BigN d x u
@@ -55,11 +59,6 @@ def Big (d : ℕ) (x u : R) : R := BigN d x u
 -- ============================================================================
 -- Correspondence with existing definitions
 -- ============================================================================
-
-/-- Beam equals GN by definition -/
-@[simp]
-lemma beam_eq_GN (d : ℕ) (x u : R) :
-    Beam d x u = GN d x u := rfl
 
 /-- Big equals BigN by definition -/
 @[simp]
@@ -71,6 +70,29 @@ lemma big_eq_BigN (d : ℕ) (x u : R) :
 lemma gap_eq_GapN (d : ℕ) (u : R) :
     Gap d u = GapN d u := rfl
 
+/-- For positive degree, `BodyN` splits as the left endpoint power plus the middle Beam. -/
+theorem body_eq_core_add_beam {d : ℕ} (hd : 0 < d) (x u : R) :
+    BodyN d x u = Core d x + Beam d x u := by
+  cases d with
+  | zero =>
+      cases Nat.lt_asymm hd hd
+  | succ n =>
+      unfold BodyN GN Core Beam
+      simp only
+      rw [Finset.mul_sum, Finset.sum_range_succ]
+      have hsum :
+          ∑ k ∈ Finset.range n, x * ((Nat.choose (n + 1) (k + 1) : R) * x ^ k * u ^ (n + 1 - 1 - k)) =
+            ∑ k ∈ Finset.range n, (Nat.choose (n + 1) (k + 1) : R) * x ^ (k + 1) * u ^ (n - k) := by
+        apply Finset.sum_congr rfl
+        intro k hk
+        have hk' : k < n := Finset.mem_range.mp hk
+        have hsub : n + 1 - 1 - k = n - k := by
+          omega
+        rw [hsub]
+        ring
+      rw [hsum]
+      simp [pow_succ', add_comm]
+
 -- ============================================================================
 -- Main decomposition theorems
 -- ============================================================================
@@ -78,20 +100,17 @@ lemma gap_eq_GapN (d : ℕ) (u : R) :
 /-- Central theorem: Big = Core + Beam + Gap
 This is the fundamental decomposition of the binomial expansion
 into three layers: left endpoint, middle interaction, and right endpoint. -/
-theorem big_eq_core_beam_gap (d : ℕ) (x u : R) :
-    Big d x u = Core d x + Beam d x u + Gap d u := by
-  unfold Big BigN Core Beam Gap
-  -- From cosmic_id_csr': (x+u)^d = x*GN d x u + u^d
-  -- And BodyN d x u = x * GN d x u
-  -- And GN d x u ≡ Beam d x u
-  -- Therefore: Big = Core + Beam + Gap follows from rearrangement
-  sorry
-
-/-- Equivalence: Big = Body + Gap -/
 theorem big_eq_body_add_gap (d : ℕ) (x u : R) :
     Big d x u = BodyN d x u + Gap d u := by
   simp only [Big, BigN, Gap]
   exact cosmic_id_csr d x u
+
+/-- Central theorem for positive degree: Big = Core + Beam + Gap
+This is the fundamental decomposition of the binomial expansion
+into three layers: left endpoint, middle interaction, and right endpoint. -/
+theorem big_eq_core_beam_gap {d : ℕ} (hd : 0 < d) (x u : R) :
+    Big d x u = Core d x + Beam d x u + Gap d u := by
+  rw [big_eq_body_add_gap, body_eq_core_add_beam hd]
 
 -- ============================================================================
 -- Inequality lemmas (Natural numbers)
