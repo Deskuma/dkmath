@@ -22,13 +22,42 @@ def BodyZ (x u : ℤ) (d : ℕ) : ℤ := BodyPow x u d
 /-- Cosmic Body over naturals: the shifted power difference `(x + u)^d - u^d`. -/
 def BodyN (x u : ℕ) (d : ℕ) : ℕ := (x + u) ^ d - u ^ d
 
+/-- Natural-number kernel specialized to `a = x + u`, `b = u`. -/
+def KernelN (x u : ℕ) (d : ℕ) : ℕ := diffPowSum' (x + u) u d
+
 /-- The DiffPow kernel specialized to `a = x + u`, `b = u`. -/
 def KernelZ (x u : ℤ) (d : ℕ) : ℤ := diffPowSum (x + u) u d
+
+/-- A primitive prime divisor of `a^n - b^n`. -/
+def PrimitivePrimeDivisor (a b n q : ℕ) : Prop :=
+  Nat.Prime q ∧ q ∣ a ^ n - b ^ n ∧ ∀ m : ℕ, 0 < m → m < n → ¬ q ∣ a ^ m - b ^ m
 
 /-- Over `ℤ`, the cosmic body factors through the boundary `x`. -/
 theorem body_eq_boundary_mul_kernel_int (x u : ℤ) (d : ℕ) :
     BodyZ x u d = x * KernelZ x u d := by
   simpa [BodyZ, KernelZ, BodyPow] using BodyPow_factor x u d
+
+/-- Over `ℕ`, the cosmic body factors through the boundary `x`. -/
+theorem body_eq_boundary_mul_kernel_nat (x u d : ℕ) :
+    BodyN x u d = x * KernelN x u d := by
+  have hpow :
+      (x + u) ^ d = u ^ d + x * KernelN x u d := by
+    simpa [KernelN, Nat.add_comm, Nat.add_left_comm, Nat.add_assoc, Nat.add_sub_cancel_left] using
+      (pow_sub_pow_nat (a := x + u) (b := u) (d := d) (Nat.le_add_left u x))
+  have hu_le : u ^ d ≤ (x + u) ^ d := Nat.pow_le_pow_left (Nat.le_add_left u x) d
+  unfold BodyN
+  omega
+
+/-- If a prime divides the body but not the boundary, it must divide the kernel. -/
+theorem prime_dvd_body_of_not_dvd_boundary_imp_dvd_kernel
+    {x u d q : ℕ}
+    (hq : Nat.Prime q)
+    (hbody : q ∣ BodyN x u d)
+    (hndiv : ¬ q ∣ x) :
+    q ∣ KernelN x u d := by
+  rw [body_eq_boundary_mul_kernel_nat] at hbody
+  have hcop : Nat.Coprime q x := (Nat.Prime.coprime_iff_not_dvd hq).2 hndiv
+  exact Nat.Coprime.dvd_of_dvd_mul_left hcop hbody
 
 /-- For positive `x`, the cubic body is exactly `x * GN 3 x u`. -/
 theorem body_three_eq_boundary_mul_GN_nat (x u : ℕ) (hx : 0 < x) :
@@ -84,6 +113,36 @@ theorem exists_primitive_prime_factor_body_nat {x u d : ℕ}
   refine ⟨q, hq_prime, ?_, ?_⟩
   · simpa [BodyN] using hq_body
   · simpa [Nat.add_sub_cancel_left] using hq_x
+
+/-- Prime-exponent Zsigmondy packaged as a primitive-prime-divisor existence theorem. -/
+theorem exists_primitivePrimeDivisor_prime_exp {a b d : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hnd : ¬ d ∣ a - b) :
+    ∃ q, PrimitivePrimeDivisor a b d q := by
+  obtain ⟨q, hq_prime, hq_div, hq_ndiv⟩ :=
+    DkMath.NumberTheory.GcdNext.exists_primitive_prime_factor_prime
+      hd_prime hd_ge hab_lt hb hab hnd
+  have hd_gt_one : 1 < d := by
+    omega
+  refine ⟨q, hq_prime, hq_div, ?_⟩
+  intro m hm_pos hm_lt
+  exact DkMath.NumberTheory.GcdNext.prime_exp_not_dvd_diff_imp_primitive
+    hd_prime hd_gt_one hq_prime hab hab_lt hb hq_div hq_ndiv hm_pos hm_lt
+
+/-- Specialized primitive-prime-divisor existence for the cosmic body. -/
+theorem exists_primitivePrimeDivisor_body_nat {x u d : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u)
+    (hcop : Nat.Coprime (x + u) u)
+    (hnd : ¬ d ∣ x) :
+    ∃ q, PrimitivePrimeDivisor (x + u) u d q := by
+  have hlt : u < x + u := by
+    omega
+  simpa [Nat.add_sub_cancel_left] using
+    (exists_primitivePrimeDivisor_prime_exp
+      (a := x + u) (b := u) (d := d) hd_prime hd_ge hlt hu hcop
+      (by simpa [Nat.add_sub_cancel_left] using hnd))
 
 /-- A primitive prime divisor of the body stays primitive for every lower exponent. -/
 theorem primitive_prime_factor_body_nat {x u d q : ℕ}
