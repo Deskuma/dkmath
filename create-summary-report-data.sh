@@ -71,7 +71,7 @@ echo "Archive created: $ARCHIVE_NAME"
 echo "SHA256 Checksum: $ARCHIVE_CHECKSUM"
 
 # store the checksum in a file for later verification
-CHECKSUM_FILE="$REPORT_DIR/__summary_report_data.tar.gz.sha256"
+CHECKSUM_FILE="$LOG_DIR/__summary_report_data.tar.gz.sha256"
 echo "$ARCHIVE_CHECKSUM  $ARCHIVE_NAME" > "$CHECKSUM_FILE"
 echo "Checksum saved to: $CHECKSUM_FILE"
 
