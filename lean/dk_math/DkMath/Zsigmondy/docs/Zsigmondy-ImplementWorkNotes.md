@@ -102,6 +102,19 @@
 - コメント
 - 先に import 経路だけ固めると、その後の theorem 移送や alias 追加を小分けで進めやすい。今回は大きな移動はせず、再 export の骨組みだけを先に立てた。
 
+### 2026/03/10 01:41
+
+- 実施内容
+- `DkMath/NumberTheory/Gcd/GN.lean` に、`gcd_specialized_divides_d` と `gcd_u_GN3` 系を正規 API として薄く追加した。
+- 結果
+- 一般 `Int` 側の wrapper として `gcd_boundary_sd_divides_exp_int` を追加した。`d = 3` の `Nat` 側には `gcd_boundary_GN_three_eq_gcd_boundary_three`, `gcd_boundary_GN_three_dvd_three`, `coprime_boundary_GN_three_of_coprime_of_not_dvd_three` を追加し、今後は `GN` 視点の gcd 議論を `DkMath.NumberTheory.Gcd.GN` から参照できるようにした。
+- 失敗内容
+- 初回実装では `GN` を `GcdNext` 名前空間の識別子として直接参照してしまい、完全修飾が必要だった。また `coprime_boundary_GN_three_of_coprime_of_not_dvd_three` の最後の書き換えも `rw` / `simpa` の当て方を調整する必要があった。修正後に `lake build DkMath.NumberTheory.Gcd.GN` と `lake build DkMath.NumberTheory.Gcd` は通過した。
+- 次の予定
+- 下流の `FLT.Basic` などで使っている局所補題を、この新しい `Gcd.GN` API へ順次寄せる。
+- コメント
+- `gcd_u_GN3` そのものは `FLT.Basic` に残したままでも、今後の参照先は `NumberTheory/Gcd/GN.lean` に寄せられる状態になった。後続のリファクタリングでは、重複補題の統合と命名整理を行う。
+
 ---
 
 ## テンプレート
