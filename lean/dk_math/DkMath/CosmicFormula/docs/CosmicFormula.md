@@ -511,6 +511,13 @@ theorem exchange_symmetry {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
     \binom{d}{k} = \binom{d}{d-k}
     $$
 
+4. 対称性
+
+    $$
+    \Large
+    Y_x(x,u) = Y_u(u,x)
+    $$
+
 を用いると、上記２つの差は互いに入れ替え可能であることが分かります。
 
 つまり、総体は、
