@@ -77,6 +77,39 @@ theorem gcd_gap_GN_dvd_exp_int
   rw [gn_sub_eq_sd_int hp1 hyz]
   exact hSd
 
+/-- `z` と `y` が互いに素で `p` が gap を割らなければ、`gap` と `GN` は互いに素。 -/
+theorem coprime_gap_GN_of_not_dvd_exp_prime
+    {p z y : ℕ} (hp : Nat.Prime p) (hyz : y < z) (hcop : Nat.Coprime z y)
+    (hp_gap : ¬ p ∣ (z - y)) :
+    Nat.Coprime (z - y) (DkMath.CosmicFormulaBinom.GN p (z - y) y) := by
+  refine (Nat.coprime_iff_gcd_eq_one).2 ?_
+  by_contra hg1
+  have hg_ne1 : Nat.gcd (z - y) (DkMath.CosmicFormulaBinom.GN p (z - y) y) ≠ 1 := by
+    simpa using hg1
+  rcases Nat.exists_prime_and_dvd hg_ne1 with ⟨r, hrP, hr_gcd⟩
+  have hr_gap : r ∣ (z - y) := by
+    exact dvd_trans hr_gcd (Nat.gcd_dvd_left (z - y) (DkMath.CosmicFormulaBinom.GN p (z - y) y))
+  have hr_GN : r ∣ DkMath.CosmicFormulaBinom.GN p (z - y) y := by
+    exact dvd_trans hr_gcd (Nat.gcd_dvd_right (z - y) (DkMath.CosmicFormulaBinom.GN p (z - y) y))
+  have hr_gap_int : (r : ℤ) ∣ (((z - y : ℕ) : ℤ)) := by
+    exact_mod_cast hr_gap
+  have hr_GN_cast : (r : ℤ) ∣ ((DkMath.CosmicFormulaBinom.GN p (z - y) y : ℕ) : ℤ) := by
+    exact_mod_cast hr_GN
+  have hr_GN_int :
+      (r : ℤ) ∣ DkMath.CosmicFormulaBinom.GN p (((z - y : ℕ) : ℤ)) (y : ℤ) := by
+    simpa [DkMath.CosmicFormulaBinom.GN] using hr_GN_cast
+  have hr_gcd_int :
+      r ∣ Int.gcd (((z - y : ℕ) : ℤ))
+        (DkMath.CosmicFormulaBinom.GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) := by
+    exact Int.dvd_gcd hr_gap_int hr_GN_int
+  have hgapgcd_dvd_p :
+      Int.gcd (((z - y : ℕ) : ℤ))
+        (DkMath.CosmicFormulaBinom.GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) ∣ p := by
+    exact gcd_gap_GN_dvd_exp_int (hp1 := Nat.succ_le_of_lt hp.pos) (hyz := hyz) (hcop := hcop)
+  have hr_dvd_p : r ∣ p := dvd_trans hr_gcd_int hgapgcd_dvd_p
+  have hr_eq_p : r = p := (Nat.prime_dvd_prime_iff_eq hrP hp).1 hr_dvd_p
+  exact hp_gap (by simpa [hr_eq_p] using hr_gap)
+
 /-- `d = 3` では `gcd(x, GN 3 x u)` は `gcd(x, 3)` に等しい。 -/
 theorem gcd_boundary_GN_three_eq_gcd_boundary_three
     {x u : ℕ} (hcop : Nat.Coprime x u) :

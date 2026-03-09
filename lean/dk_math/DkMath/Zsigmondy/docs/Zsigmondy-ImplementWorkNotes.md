@@ -141,6 +141,19 @@
 - コメント
 - 今回の引き上げで、「一般 gcd/GN 理論」と「FLT 反例パック由来の coprime 条件供給」が分離された。整理の方向としてはかなり良い。
 
+### 2026/03/10 02:01
+
+- 実施内容
+- `CosmicPetalBridgeGNDescentB.lean` に残っていた coprime 化補題の一般部分を `DkMath/NumberTheory/Gcd/GN.lean` へ引き上げた。
+- 結果
+- `DkMath.NumberTheory.Gcd.coprime_gap_GN_of_not_dvd_exp_prime` を追加し、`z` と `y` が互いに素、`p` が素数、かつ `p ∤ (z - y)` なら `Nat.Coprime (z - y) (GN p (z - y) y)` を直接返せるようにした。`triominoWieferichShrink_gap_coprime_GN_core` は、反例パックから必要条件を供給する wrapper に簡約された。
+- 失敗内容
+- なし。
+- 次の予定
+- `PrimeProvider` 側でまだ `NumberTheory` へ引き上げられる一般補題が残っていないか確認する。特に gcd/valuation 境界の一般部を再点検する。
+- コメント
+- これで `CosmicPetalBridgeGNDescentB` の gcd ルートは、「一般理論は `NumberTheory/Gcd/GN`、FLT 文脈は条件供給」というかなり自然な分割になった。
+
 ---
 
 ## テンプレート

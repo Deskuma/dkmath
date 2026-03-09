@@ -568,31 +568,10 @@ theorem triominoWieferichShrink_gap_coprime_GN_core
   let _ := hqP
   let _ := hq_not_dvd_gap
   let _ := hqpow_dvd_GN
-  refine (Nat.coprime_iff_gcd_eq_one).2 ?_
-  by_contra hg1
-  have hg_ne1 : Nat.gcd (z - y) (GN p (z - y) y) ≠ 1 := by
-    simpa using hg1
-  rcases Nat.exists_prime_and_dvd hg_ne1 with ⟨r, hrP, hr_gcd⟩
-  have hr_gap : r ∣ (z - y) := dvd_trans hr_gcd (Nat.gcd_dvd_left (z - y) (GN p (z - y) y))
-  have hr_GN : r ∣ GN p (z - y) y := dvd_trans hr_gcd (Nat.gcd_dvd_right (z - y) (GN p (z - y) y))
-  have hr_gap_int : (r : ℤ) ∣ (((z - y : ℕ) : ℤ)) := by
-    exact_mod_cast hr_gap
-  have hr_GN_cast : (r : ℤ) ∣ ((GN p (z - y) y : ℕ) : ℤ) := by
-    exact_mod_cast hr_GN
-  have hr_GN_int : (r : ℤ) ∣ GN p (((z - y : ℕ) : ℤ)) (y : ℤ) := by
-    simpa [GN] using hr_GN_cast
-  have hr_gcd_int :
-      r ∣ Int.gcd (((z - y : ℕ) : ℤ)) (GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) := by
-    exact Int.dvd_gcd hr_gap_int hr_GN_int
-  have hgapgcd_dvd_p :
-      Int.gcd (((z - y : ℕ) : ℤ)) (GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) ∣ p := by
-    exact
-      triominoWieferichShrink_gap_gcd_GN_dvd_p_int
-        (p := p) (x := x) (y := y) (z := z) (q := q)
-        hpack hpB hqP hq_not_dvd_gap hqpow_dvd_GN
-  have hr_dvd_p : r ∣ p := dvd_trans hr_gcd_int hgapgcd_dvd_p
-  have hr_eq_p : r = p := (Nat.prime_dvd_prime_iff_eq hrP hpack.hp).1 hr_dvd_p
-  exact hpB (by simpa [hr_eq_p] using hr_gap)
+  have hcop_yz : Nat.Coprime z y := by
+    exact (coprime_right_of_add_pow_eq_pow hpack.hp hpack.hxy hpack.hEq).symm
+  exact DkMath.NumberTheory.Gcd.coprime_gap_GN_of_not_dvd_exp_prime
+    (hp := hpack.hp) (hyz := hpack.hyz_lt) (hcop := hcop_yz) (hp_gap := hpB)
 
 private def triominoWieferichShrink_pow_root_of_factorization_dvd_core
     (n p : ℕ) : ℕ :=
