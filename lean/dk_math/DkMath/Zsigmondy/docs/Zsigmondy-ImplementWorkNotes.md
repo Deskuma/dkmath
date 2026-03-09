@@ -63,6 +63,19 @@
 - コメント
 - 一般 `p` の箇所は `Zsigmondy` の `Body -> GN` をまだ直接は使えないため、`dvd_GN_of_dvd_sub_pow` を正面 API にした。`d = 3` については `Zsigmondy` との接続を補題としてそばに固定した。
 
+### 2026/03/10 00:12
+
+- 実施内容
+- `CosmicPetalBridge.lean` の `dvd_GN_of_dvd_sub_pow` の近くに、`d = 3` specialized 版が `DkMath.Zsigmondy` 由来であることを示す補題を追加し、下流の `prime_dvd_S0_via_cosmic_bridge` もそれを経由する形に寄せた。
+- 結果
+- `dvd_GN_of_dvd_sub_cube_via_zsigmondy` を追加し、`q ∣ z^3 - y^3` かつ `q ∤ (z - y)` から `q ∣ GN 3 (z - y) y` への橋が、`BodyN (z - y) y 3` と `prime_dvd_body_three_of_not_dvd_boundary_imp_dvd_GN` を通ることがコード上で見えるようになった。
+- 失敗内容
+- なし。
+- 次の予定
+- `d = 3` 専用の FLT ルートで、この新しい `via_zsigmondy` 補題を説明用 API として使うべき箇所が他にないか確認する。
+- コメント
+- 一般 `d` の `dvd_GN_of_dvd_sub_pow` 自体は純粋な因数分解補題として残し、`d = 3` だけ `Zsigmondy` 由来を別名で明示する構成にした。
+
 ---
 
 ## テンプレート

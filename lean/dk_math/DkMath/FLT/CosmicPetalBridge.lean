@@ -83,6 +83,23 @@ lemma dvd_GN_of_dvd_sub_pow {d z y q : ℕ}
   exact (hq.dvd_mul.mp hmul).resolve_left hq_ndvd
 
 /--
+`d = 3` の場合、`dvd_GN_of_dvd_sub_pow` は
+`DkMath.Zsigmondy` の Body -> GN bridge からも読める。
+-/
+lemma dvd_GN_of_dvd_sub_cube_via_zsigmondy {z y q : ℕ}
+    (hyz : y < z)
+    (hq : Nat.Prime q)
+    (hq_dvd : q ∣ z ^ 3 - y ^ 3)
+    (hq_ndvd : ¬ q ∣ (z - y)) :
+    q ∣ GN 3 (z - y) y := by
+  have hgap_pos : 0 < z - y := Nat.sub_pos_of_lt hyz
+  have hq_dvd_body : q ∣ DkMath.Zsigmondy.BodyN (z - y) y 3 := by
+    simpa [DkMath.Zsigmondy.BodyN, Nat.sub_add_cancel hyz.le] using hq_dvd
+  simpa using
+    (DkMath.Zsigmondy.prime_dvd_body_three_of_not_dvd_boundary_imp_dvd_GN
+      (x := z - y) (u := y) hgap_pos hq hq_dvd_body hq_ndvd)
+
+/--
 `x = c-b`, `u = b` を代入した d=3 の橋:
 `GN 3 (c-b) b = S0_nat c b`。
 -/
@@ -136,13 +153,8 @@ lemma prime_dvd_S0_via_cosmic_bridge {c b q : ℕ}
     (hq_dvd : q ∣ c ^ 3 - b ^ 3)
     (hq_ndvd : ¬ q ∣ c - b) :
     q ∣ S0_nat c b := by
-  have hgap_pos : 0 < c - b := Nat.sub_pos_of_lt hbc
-  have hq_dvd_body : q ∣ DkMath.Zsigmondy.BodyN (c - b) b 3 := by
-    simpa [DkMath.Zsigmondy.BodyN, Nat.sub_add_cancel hbc.le] using hq_dvd
   have hq_dvd_GN : q ∣ GN 3 (c - b) b := by
-    simpa using
-      (DkMath.Zsigmondy.prime_dvd_body_three_of_not_dvd_boundary_imp_dvd_GN
-        (x := c - b) (u := b) hgap_pos hq hq_dvd_body hq_ndvd)
+    exact dvd_GN_of_dvd_sub_cube_via_zsigmondy hbc hq hq_dvd hq_ndvd
   have hGN_eq : GN 3 (c - b) b = S0_nat c b := GN_three_sub_eq_S0_nat hbc
   rw [hGN_eq] at hq_dvd_GN
   exact hq_dvd_GN
