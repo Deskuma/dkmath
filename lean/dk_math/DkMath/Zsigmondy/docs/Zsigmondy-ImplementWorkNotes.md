@@ -115,6 +115,19 @@
 - コメント
 - `gcd_u_GN3` そのものは `FLT.Basic` に残したままでも、今後の参照先は `NumberTheory/Gcd/GN.lean` に寄せられる状態になった。後続のリファクタリングでは、重複補題の統合と命名整理を行う。
 
+### 2026/03/10 01:47
+
+- 実施内容
+- `FLT/Basic.lean` で使っていた局所補題 `gcd_u_GN3` の参照を、新設した `DkMath.NumberTheory.Gcd.GN` API へ差し替えた。あわせて `FLT/Basic.lean` 内の重複定義 `gcd_u_GN3` を削除した。
+- 結果
+- `FLT.Basic` は `DkMath.NumberTheory.Gcd.gcd_boundary_GN_three_eq_gcd_boundary_three` を直接呼ぶ形になり、`gcd(u, GN 3 u y) = gcd(u, 3)` の根拠が `NumberTheory` 側の集中化された API に揃った。
+- 失敗内容
+- なし。
+- 次の予定
+- ほかの `FLT` 系ファイルでも、局所の gcd 補題や再証明を `DkMath.NumberTheory.Gcd.GN` へ寄せられる箇所がないか確認する。
+- コメント
+- 今回の差し替えで、`FLT.Basic` は `gcd_u_GN3` のローカル所有者ではなく利用者になった。責務分離としてはこの形が自然。
+
 ---
 
 ## テンプレート

@@ -10,6 +10,7 @@ import DkMath.Basic
 import DkMath.Algebra.DiffPow
 import DkMath.Algebra.BinomTail
 import DkMath.NumberTheory.GdcDivD
+import DkMath.NumberTheory.Gcd
 import DkMath.NumberTheory.GcdNext
 import DkMath.NumberTheory.ZsigmondyCyclotomic
 import DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
@@ -631,20 +632,6 @@ lemma x3_div_u2 (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h_gcd : u.gcd (
   rw [h_u_eq_one]
   norm_num
 
-/-- 補題: $u$ と $GN(3, u, y)$ の最大公約数は $\gcd(u, 3)$ に等しい -/
-lemma gcd_u_GN3 {u y : ℕ} (h_gcd_uy : u.gcd y = 1) : u.gcd (GN 3 u y) = u.gcd 3 := by
-  rw [GN_quadratic]
-  -- u.gcd (u^2 + 3uy + 3y^2) = u.gcd (3y^2)
-  have h1 : u.gcd (u ^ 2 + 3 * u * y + 3 * y ^ 2) = u.gcd (3 * y ^ 2) := by
-    have : u ^ 2 + 3 * u * y + 3 * y ^ 2 = 3 * y ^ 2 + (u + 3 * y) * u := by ring
-    rw [this, Nat.gcd_add_mul_right_right]
-  rw [h1]
-  -- u.gcd (3 * y^2) = u.gcd 3 (∵ gcd(u, y) = 1)
-  have h_coprime : u.Coprime (y ^ 2) := Nat.Coprime.pow_right 2 h_gcd_uy
-  have : u.gcd (3 * y ^ 2) = u.gcd 3 := by
-    rw [Nat.gcd_comm, h_coprime.symm.gcd_mul_right_cancel, Nat.gcd_comm]
-  exact this
-
 /-- メイン定理: フェルマーの最終定理 $n=3$ の場合 -/
 theorem FLT_case_3 (x y z : ℕ)
   (hpos : 0 < x ∧ 0 < y ∧ 0 < z)
@@ -670,8 +657,6 @@ theorem FLT_case_3 (x y z : ℕ)
 
   -- 3. gcd(u, GN 3 u y) = gcd(u, 3)
   have h_gcd_u_G : u.gcd (GN 3 u y) = u.gcd 3 := by
-    apply gcd_u_GN3
-    -- gcd(u, y) = 1 の証明
     have h_gcd_yz : y.gcd z = 1 := by
       let d := y.gcd z
       have hd_y : d ∣ y := y.gcd_dvd_left z
@@ -683,8 +668,11 @@ theorem FLT_case_3 (x y z : ℕ)
       have hd_gcd : d ∣ x.gcd y := Nat.dvd_gcd hd_x hd_y
       rw [h_coprime] at hd_gcd
       exact Nat.eq_one_of_dvd_one hd_gcd
-    rw [Nat.gcd_comm, (by rfl : u = z - y), Nat.gcd_sub_self_right hzy.le]
-    exact h_gcd_yz
+    have hcop_uy : Nat.Coprime u y := by
+      rw [Nat.coprime_iff_gcd_eq_one]
+      rw [Nat.gcd_comm, (by rfl : u = z - y), Nat.gcd_sub_self_right hzy.le]
+      exact h_gcd_yz
+    exact DkMath.NumberTheory.Gcd.gcd_boundary_GN_three_eq_gcd_boundary_three hcop_uy
 
   -- 4. gcd(u, GN 3 u y) の値で場合分け（1 か 3 のみ）
   have h_gcd_cases : u.gcd (GN 3 u y) = 1 ∨ u.gcd (GN 3 u y) = 3 := by
@@ -863,10 +851,10 @@ theorem FLT_of_coprime
 
   -- 3. gcd(u, GN 3 u y) = gcd(u, 3)
   have h_gcd_u_G : u.gcd (GN 3 u y) = u.gcd 3 := by
-    apply gcd_u_GN3
-    -- ここだけ：gcd(u,y)=1 を供給する
-    have : u.gcd y = 1 := h_gcd_u_y
-    exact this
+    have hcop_uy : Nat.Coprime u y := by
+      rw [Nat.coprime_iff_gcd_eq_one]
+      exact h_gcd_u_y
+    exact DkMath.NumberTheory.Gcd.gcd_boundary_GN_three_eq_gcd_boundary_three hcop_uy
 
   /-
   -- Observation: If gcd(u,n)=1, then u and GN must separately be n-th powers.
