@@ -1,10 +1,11 @@
-/- 
+/-
 Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
 Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Algebra.DiffPow
+import DkMath.CosmicFormula.CoreBeamGap
 import DkMath.NumberTheory.ZsigmondyCyclotomic
 
 #print "file: DkMath.Zsigmondy"
@@ -28,6 +29,45 @@ def KernelZ (x u : ℤ) (d : ℕ) : ℤ := diffPowSum (x + u) u d
 theorem body_eq_boundary_mul_kernel_int (x u : ℤ) (d : ℕ) :
     BodyZ x u d = x * KernelZ x u d := by
   simpa [BodyZ, KernelZ, BodyPow] using BodyPow_factor x u d
+
+/-- For positive `x`, the cubic body is exactly `x * GN 3 x u`. -/
+theorem body_three_eq_boundary_mul_GN_nat (x u : ℕ) (hx : 0 < x) :
+    BodyN x u 3 = x * DkMath.CosmicFormulaBinom.GN 3 x u := by
+  have hlt : u < x + u := by
+    omega
+  simpa [BodyN, Nat.add_sub_cancel_left] using
+    (DkMath.NumberTheory.GcdNext.pow_sub_pow_factor_cosmic_N
+      (a := x + u) (b := u) (d := 3) (by norm_num) hlt)
+
+/-- The cubic beam is the sum of the two mixed terms. -/
+theorem beam_three_explicit_nat (x u : ℕ) :
+    DkMath.CosmicFormula.CoreBeamGap.Beam 3 x u = 3 * x ^ 2 * u + 3 * x * u ^ 2 := by
+  unfold DkMath.CosmicFormula.CoreBeamGap.Beam
+  simp only [Finset.sum_range_succ, Finset.sum_range_zero]
+  norm_num
+  ring
+
+/-- For positive `x`, the cubic body splits into core plus beam. -/
+theorem body_three_eq_core_add_beam_nat (x u : ℕ) (hx : 0 < x) :
+    BodyN x u 3 = x ^ 3 + DkMath.CosmicFormula.CoreBeamGap.Beam 3 x u := by
+  calc
+    BodyN x u 3 = x * DkMath.CosmicFormulaBinom.GN 3 x u :=
+      body_three_eq_boundary_mul_GN_nat x u hx
+    _ = x ^ 3 + DkMath.CosmicFormula.CoreBeamGap.Beam 3 x u := by
+      simpa [DkMath.CosmicFormulaBinom.BodyN, DkMath.CosmicFormula.CoreBeamGap.Core] using
+        (DkMath.CosmicFormula.CoreBeamGap.body_eq_core_add_beam
+          (R := ℕ) (d := 3) (by norm_num) x u)
+
+/-- The cubic body written with the explicit cubic `GN` polynomial. -/
+theorem body_three_eq_boundary_mul_GN_explicit_nat (x u : ℕ) (hx : 0 < x) :
+    BodyN x u 3 = x * (x ^ 2 + 3 * x * u + 3 * u ^ 2) := by
+  rw [body_three_eq_boundary_mul_GN_nat x u hx,
+    DkMath.NumberTheory.GcdNext.GN_three_explicit]
+
+/-- The cubic body written as core plus the explicit beam. -/
+theorem body_three_eq_core_add_beam_explicit_nat (x u : ℕ) (hx : 0 < x) :
+    BodyN x u 3 = x ^ 3 + (3 * x ^ 2 * u + 3 * x * u ^ 2) := by
+  rw [body_three_eq_core_add_beam_nat x u hx, beam_three_explicit_nat]
 
 /-- Over `ℕ`, a primitive prime divisor exists for the cosmic body. -/
 theorem exists_primitive_prime_factor_body_nat {x u d : ℕ}
