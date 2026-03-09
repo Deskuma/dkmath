@@ -89,6 +89,19 @@
 - コメント
 - 実装難度は「一般 `Int` は低め、一般 `Nat` は減法とキャストで中程度、`d = 3` 特化は低め」。次の一手としては、まず `d = 3` 特化と `Int` 側 specialized wrapper を揃えるのが最も効率が良い。
 
+### 2026/03/10 01:37
+
+- 実施内容
+- `NumberTheory` 側の `gcd` 補題を集約する入口として、`DkMath/NumberTheory/Gcd.lean` 配下の API スケルトンを整備した。`Gcd/Basic.lean` を基礎再 export 層にし、新たに `Gcd/GN.lean` を追加して `GN` specialization の集約先を用意した。
+- 結果
+- `DkMath.NumberTheory.Gcd` から `Gcd.Basic` と `Gcd.GN` を引く構成になり、今後は「点在補題 -> Gcd/GN 系 -> Gcd.lean API」という形で集中化を進められる状態になった。まだ theorem の再命名や wrapper 追加はしていないが、集約先の名前と import 経路は確定した。
+- 失敗内容
+- 新設した `Gcd/GN.lean` の先頭コメントを C 風コメントで書いてしまい、初回ビルドで `unexpected token '/'` が出た。Lean コメント `/- ... -/` に直して解消した。
+- 次の予定
+- `Gcd.GN` に `gcd_specialized_divides_d` や `gcd_u_GN3` 相当の正規 API を順次移し、下流からはこの層を参照するように寄せる。
+- コメント
+- 先に import 経路だけ固めると、その後の theorem 移送や alias 追加を小分けで進めやすい。今回は大きな移動はせず、再 export の骨組みだけを先に立てた。
+
 ---
 
 ## テンプレート
