@@ -23,6 +23,24 @@
 - reviewer 提案の 4C にあった Beam 版補題は、仮定のままだと一般に成立しないため採用しない方針にした。
 - `lake build DkMath.Zsigmondy` と `lake build DkMath` で今回の追加分が通ることを確認した。既存の別ファイル由来 warning は残存している。
 
+### 2026/03/09 23:20
+
+- 実施内容
+- `FLT/Basic.lean` の `pick_primitive_q_data_GN3` を、新設した `DkMath.Zsigmondy` API 経由へ接続する作業を実施した。
+- 結果
+- `exists_primitivePrimeDivisor_body_nat` と `primitivePrimeDivisor_body_three_imp_dvd_GN` を使う形へ置き換え、FLT 側の「primitive prime を取って GN へ落とす」流れを `Zsigmondy` 側の標準補題へ寄せた。
+- 失敗内容
+- 初回の書き換えでは `x := A - B`, `u := B` への specialized rewrite が足りず、`BodyN x u 3 = A^3 - B^3` と `Coprime (x + u) u` の型合わせでビルドが落ちた。
+- `x + u = A` を明示補題として立てて修正し、再ビルドで解消した。
+- 次の予定
+- FLT 側の他の hand-rolled な `q ∣ diff-of-powers -> q ∣ GN` 部分も同様に `DkMath.Zsigmondy` API へ寄せる。
+- コメント
+- 今回の接続で、`Zsigmondy` 側で整えた語彙と FLT 側の実利用箇所が実際に一本につながった。
+
+---
+
+## テンプレート
+
 今後、作業のたびに、この記録長に
 
 ```md
@@ -36,5 +54,3 @@
 ```
 
 を書いて記録。
-
-## 作業ログ
