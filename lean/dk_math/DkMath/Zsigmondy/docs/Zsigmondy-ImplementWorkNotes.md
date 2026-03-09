@@ -76,6 +76,19 @@
 - コメント
 - 一般 `d` の `dvd_GN_of_dvd_sub_pow` 自体は純粋な因数分解補題として残し、`d = 3` だけ `Zsigmondy` 由来を別名で明示する構成にした。
 
+### 2026/03/10 00:41
+
+- 実施内容
+- `gcd` と `GN` の整備に入る前の事前調査として、説明メモ `What_is_the_reason_why_GN_becomes_the_center_of_Zsigmondy.md` と `Zsigmondy-GcdGN.md` を確認し、既存 Lean 実装の `gcd` 系補題を横断検索した。
+- 結果
+- 一般骨格は既にある。`GcdDiffPow.gcd_divides_d` が整数環で `gcd(a-b, diffPowSum a b d) ∣ d` を与え、`GcdNext.gcd_specialized_divides_d` がこれを `a := x + u, b := u` に specialized している。`FLT/Basic.lean` には `gcd_u_GN3 : gcd(u, GN 3 u y) = gcd(u, 3)` が既にあり、`FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean` には一般 `p` の gap/GN に対する `Int.gcd ... ∣ p` と coprime 化の橋が既に入っている。未整備なのは、これらを `DkMath.Zsigmondy` / `GN` 語彙で再編した薄い接続層と、`Nat` 側で使いやすい名前の補題群。
+- 失敗内容
+- なし。
+- 次の予定
+- `GcdGN.lean` を新規作成するか `DkMath.Zsigmondy` に section を足し、まず `Int` 側で `gcd(x, KernelZ x u d) ∣ d`、次に `Nat` 側で `d = 3` の `gcd(x, GN 3 x u)` 明示版、最後に `Nat.Coprime x u -> gcd(x, GN 3 x u) ∣ 3` までを正規 API として切り出す。
+- コメント
+- 実装難度は「一般 `Int` は低め、一般 `Nat` は減法とキャストで中程度、`d = 3` 特化は低め」。次の一手としては、まず `d = 3` 特化と `Int` 側 specialized wrapper を揃えるのが最も効率が良い。
+
 ---
 
 ## テンプレート
