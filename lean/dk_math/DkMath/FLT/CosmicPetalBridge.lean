@@ -55,6 +55,22 @@ lemma prime_dvd_GN_of_dvd_sub_not_dvd_left {d x u q : ℕ}
   exact (hq.dvd_mul.mp hmul).resolve_left hq_ndvd
 
 /--
+`d = 3` の場合、`prime_dvd_GN_of_dvd_sub_not_dvd_left` は
+`DkMath.Zsigmondy` の Body -> GN bridge からも読める。
+-/
+lemma prime_dvd_GN_three_of_dvd_sub_not_dvd_left_via_zsigmondy {x u q : ℕ}
+    (hx : 0 < x)
+    (hq : Nat.Prime q)
+    (hq_dvd : q ∣ (x + u) ^ 3 - u ^ 3)
+    (hq_ndvd : ¬ q ∣ x) :
+    q ∣ GN 3 x u := by
+  have hq_dvd_body : q ∣ DkMath.Zsigmondy.BodyN x u 3 := by
+    simpa [DkMath.Zsigmondy.BodyN] using hq_dvd
+  simpa using
+    (DkMath.Zsigmondy.prime_dvd_body_three_of_not_dvd_boundary_imp_dvd_GN
+      (x := x) (u := u) hx hq hq_dvd_body hq_ndvd)
+
+/--
 `q ∣ (z^d - y^d)` かつ `q ∤ (z-y)` なら `q ∣ GN d (z-y) y`。
 -/
 lemma dvd_GN_of_dvd_sub_pow {d z y q : ℕ}

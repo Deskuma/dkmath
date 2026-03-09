@@ -50,6 +50,19 @@
 - コメント
 - `lake build DkMath.FLT.CosmicPetalBridge` と `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNCore` は通過した。今回の置換で `CosmicPetalBridge` は `Zsigmondy` 側の新 API を実利用する形になった。
 
+### 2026/03/09 23:59
+
+- 実施内容
+- `FLT/PrimeProvider` 側に残っていた `prime_dvd_GN_of_dvd_sub_not_dvd_left` 参照を整理し、`z^d - y^d` 形の入力から直接 `GN d (z - y) y` を返す `dvd_GN_of_dvd_sub_pow` に置き換えた。あわせて `CosmicPetalBridge.lean` に `d = 3` の `Zsigmondy` 接続補題を追加した。
+- 結果
+- `TriominoCosmicGapInvariant.lean` と `CosmicPetalBridgeGNDescentB.lean` では、いったん `((z - y) + y)^p - y^p` に組み替える補助ステップが不要になった。`CosmicPetalBridge.lean` 側には、一般補題の `d = 3` specialized 版が `DkMath.Zsigmondy.prime_dvd_body_three_of_not_dvd_boundary_imp_dvd_GN` から従うことを明示する補題を追加した。
+- 失敗内容
+- なし。
+- 次の予定
+- `FLT` 側で `d = 3` の specialized bridge をさらに使える箇所がないか確認し、一般 `p` と立方専用ルートの境界を整理する。
+- コメント
+- 一般 `p` の箇所は `Zsigmondy` の `Body -> GN` をまだ直接は使えないため、`dvd_GN_of_dvd_sub_pow` を正面 API にした。`d = 3` については `Zsigmondy` との接続を補題としてそばに固定した。
+
 ---
 
 ## テンプレート
