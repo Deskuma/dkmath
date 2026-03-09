@@ -496,13 +496,13 @@ theorem exchange_symmetry {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
 1. $x^d$ を差し引いた形
 
     $$
-    Y = W - x^d = \sum_{k=1}^{d} \binom{d}{k}\ u^k\ x^{d-k}
+    Y_x = W - x^d = \sum_{k=1}^{d} \binom{d}{k}\ u^k\ x^{d-k}
     $$
 
 2. $u^d$ を差し引いた形
 
     $$
-    Y = W - u^d = \sum_{k=1}^{d} \binom{d}{k}\ x^k\ u^{d-k}
+    Y_u = W - u^d = \sum_{k=1}^{d} \binom{d}{k}\ x^k\ u^{d-k}
     $$
 
 3. 二項係数の対称性（パスカルの三角形の根拠）
@@ -517,7 +517,7 @@ theorem exchange_symmetry {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
 
 $$
 \begin{align*}
-W = (x+u)^d &= x^d + Y = u^d + Y \\[8pt]
+W = (x+u)^d &= x^d + Y_x = u^d + Y_u \\[8pt]
 &= x^d + \sum_{k=1}^{d} \binom{d}{k}\ u^k\ x^{d-k} \\[4pt]
 &= u^d + \sum_{k=1}^{d} \binom{d}{k}\ x^k\ u^{d-k} \\[16pt]
 &= \sum_{k=0}^{d} \binom{d}{k}\ x^k\ u^{d-k}
