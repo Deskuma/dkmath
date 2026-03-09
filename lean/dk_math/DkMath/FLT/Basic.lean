@@ -13,6 +13,7 @@ import DkMath.NumberTheory.GdcDivD
 import DkMath.NumberTheory.GcdNext
 import DkMath.NumberTheory.ZsigmondyCyclotomic
 import DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
+import DkMath.Zsigmondy
 import Mathlib.Algebra.Divisibility.Basic
 import DkMath.FLT.Core
 
@@ -333,21 +334,36 @@ private lemma pick_primitive_q_data_GN3
       q ∣ A ^ 3 - B ^ 3 ∧
       ¬ q ∣ A - B ∧
       q ∣ GN 3 (A - B) B := by
-  rcases DkMath.NumberTheory.GcdNext.exists_primitive_prime_factor_prime
-      (a := A) (b := B) (d := 3)
-      Nat.prime_three (by norm_num) hAB_lt hB_pos hAB_coprime hpnd with
-    ⟨q, hq_prime, hq_div, hq_ndiv⟩
-  refine ⟨q, hq_prime, hq_div, hq_ndiv, ?_⟩
-  have hfactor : A ^ 3 - B ^ 3 = (A - B) * GN 3 (A - B) B := by
-    simpa using
-      (DkMath.NumberTheory.GcdNext.pow_sub_pow_factor_cosmic_N
-        (a := A) (b := B) (d := 3) (by norm_num) hAB_lt)
-  have hq_dvd_mul : q ∣ (A - B) * GN 3 (A - B) B := by
-    rw [← hfactor]
-    exact hq_div
-  have hcop : Nat.Coprime q (A - B) :=
-    (Nat.Prime.coprime_iff_not_dvd hq_prime).2 hq_ndiv
-  exact Nat.Coprime.dvd_of_dvd_mul_left hcop hq_dvd_mul
+  let x := A - B
+  let u := B
+  have hx_pos : 0 < x := by
+    dsimp [x]
+    exact Nat.sub_pos_of_lt hAB_lt
+  have hxu : x + u = A := by
+    dsimp [x, u]
+    exact Nat.sub_add_cancel (Nat.le_of_lt hAB_lt)
+  have hcop_xu : Nat.Coprime (x + u) u := by
+    dsimp [u]
+    rw [hxu]
+    exact hAB_coprime
+  have hbody_eq : DkMath.Zsigmondy.BodyN x u 3 = A ^ 3 - B ^ 3 := by
+    dsimp [DkMath.Zsigmondy.BodyN, u]
+    rw [hxu]
+  obtain ⟨q, hprim⟩ :=
+    DkMath.Zsigmondy.exists_primitivePrimeDivisor_body_nat
+      (x := x) (u := u) (d := 3) Nat.prime_three (by norm_num) hx_pos hB_pos hcop_xu hpnd
+  refine ⟨q, hprim.prime, ?_, ?_, ?_⟩
+  · have hq_div_body : q ∣ DkMath.Zsigmondy.BodyN x u 3 := hprim.dvd
+    rw [hbody_eq] at hq_div_body
+    exact hq_div_body
+  · have hq_ndiv_x : ¬ q ∣ x := by
+      have hq_ndiv_lower : ¬ q ∣ (x + u) ^ 1 - u ^ 1 := by
+        exact hprim.not_dvd_lower (by norm_num) (by norm_num)
+      simpa [DkMath.Zsigmondy.BodyN] using hq_ndiv_lower
+    simpa [x] using hq_ndiv_x
+  · simpa [x, u] using
+      (DkMath.Zsigmondy.primitivePrimeDivisor_body_three_imp_dvd_GN
+        (x := x) (u := u) hx_pos hprim)
 
 #print axioms pick_primitive_q_data_GN3  -- OK: no Research link 2026/03/06  1:24
 

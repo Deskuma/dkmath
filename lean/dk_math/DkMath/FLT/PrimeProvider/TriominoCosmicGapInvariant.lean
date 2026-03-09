@@ -247,12 +247,10 @@ theorem noSqPrimeOnGN_when_p_not_dvd_u_of_specs
     NoSqPrimeOnGN_when_p_not_dvd_u := by
   intro p x y z hpack hp_not_dvd_u
   rcases hPrim hpack hp_not_dvd_u with ⟨q, hqP, hq_dvd_diff, hq_not_dvd_u⟩
-  have hq_dvd_sub : q ∣ ((z - y) + y) ^ p - y ^ p := by
-    simpa [Nat.sub_add_cancel hpack.hyz] using hq_dvd_diff
   have hq_dvd_GN_raw : q ∣ GN p (z - y) y := by
-    exact prime_dvd_GN_of_dvd_sub_not_dvd_left
-      (d := p) (x := z - y) (u := y) (q := q)
-      hqP hq_dvd_sub hq_not_dvd_u
+    exact dvd_GN_of_dvd_sub_pow
+      (d := p) (z := z) (y := y) (q := q)
+      hqP hq_dvd_diff hq_not_dvd_u
   have hq_dvd_GN : q ∣ GN p (z - y) y := by
     change q ∣
       (∑ x ∈ Finset.range p,
