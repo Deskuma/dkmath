@@ -402,6 +402,20 @@ abbrev GapPowFromPrimeGe5Counterexample_branchA_factorization : Prop :=
     ∀ q : ℕ, p ∣ (z - y).factorization q
 
 /--
+Branch A 因数分解指数仕様の concrete 実装。
+
+現時点では `FLT_prime_ge5` による反例排除から `False.elim` で供給する。
+-/
+theorem gapPowFromPrimeGe5Counterexample_branchA_factorization_impl :
+    GapPowFromPrimeGe5Counterexample_branchA_factorization := by
+  intro p x y z hpack hp_dvd_gap q
+  have hNo : x ^ p + y ^ p ≠ z ^ p :=
+    FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
+  exact False.elim (hNo hpack.hEq)
+
+#print axioms gapPowFromPrimeGe5Counterexample_branchA_factorization_impl  -- NG: so#rryAx, use DkMath.FLT
+
+/--
 Branch A の因数分解指数条件が供給されれば、`gap = t^p` は no-`so#rry` で従う。
 -/
 theorem gapPowFromPrimeGe5Counterexample_branchA_of_factorization
