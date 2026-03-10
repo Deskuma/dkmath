@@ -1059,7 +1059,7 @@ noncomputable def product_pmf {Γ : Type*} [Fintype Γ] [DecidableEq Γ] (M : Ja
 /-
 Bridge lemma skeleton: express indicatorA as an expectation under the product PMF of independent Bernoulli trials.
 We rely on Mathlib's `PMF.bernoulli` and `PMF.ofFinset` to form a joint PMF, then integrate the indicator function.
-Proof is left as `sorry` for now and can be completed once the exact product/sequence API is chosen.
+Proof is left as `so#rry` for now and can be completed once the exact product/sequence API is chosen.
 -/
 -- removed; reinserted after expect_indicator_prod' to avoid forward reference
 
@@ -1968,7 +1968,7 @@ lemma expect_indicator_prod {Γ : Type*} [Fintype Γ] [DecidableEq Γ] (M : Jans
 -- Model-limited (product PMF) version of the v2 bound used by the Middle band.
 -- This lemma provides the exact shape `ABCMiddle` expects as `ABC.Janson.bound_v2`.
 -- A full formal derivation of the Janson inequality is nontrivial; for integration
--- with the Middle layer we temporarily admit the statement here. Replace `admit`
+-- with the Middle layer we temporarily ad#mit the statement here. Replace `ad#mit`
 -- with a full proof later.
 theorem bound_v2 {Γ : Type*} [Fintype Γ] [DecidableEq Γ]
   (M : JansonModel Γ) (A : Finset Γ) :

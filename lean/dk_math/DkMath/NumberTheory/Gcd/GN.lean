@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.NumberTheory.Gcd.Basic
 import DkMath.NumberTheory.GcdNext
+import DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
 
 /-!
 # DkMath.NumberTheory.Gcd.GN
@@ -109,6 +110,42 @@ theorem coprime_gap_GN_of_not_dvd_exp_prime
   have hr_dvd_p : r ∣ p := dvd_trans hr_gcd_int hgapgcd_dvd_p
   have hr_eq_p : r = p := (Nat.prime_dvd_prime_iff_eq hrP hp).1 hr_dvd_p
   exact hp_gap (by simpa [hr_eq_p] using hr_gap)
+
+/-- `q ∤ gap` なら、差の冪の `q`-進付値は `GN` 側の `q`-進付値と一致する。 -/
+theorem padicValNat_sub_pow_eq_padicValNat_GN_of_not_dvd_gap
+    {p z y q : ℕ} (hp2 : 2 ≤ p) (hyz : y < z) (hy : 0 < y)
+    (hqP : Nat.Prime q) (hq_not_dvd_gap : ¬ q ∣ (z - y)) :
+    padicValNat q (z ^ p - y ^ p) =
+      padicValNat q (DkMath.CosmicFormulaBinom.GN p (z - y) y) := by
+  have hp_pos : 0 < p := lt_of_lt_of_le (by decide : 0 < 2) hp2
+  have hdiff_ne0 : z ^ p - y ^ p ≠ 0 := by
+    have hyz_pow_lt : y ^ p < z ^ p := by
+      exact Nat.pow_lt_pow_left hyz (Nat.ne_of_gt hp_pos)
+    exact Nat.sub_ne_zero_of_lt hyz_pow_lt
+  have hfactor :
+      z ^ p - y ^ p = (z - y) * DkMath.CosmicFormulaBinom.GN p (z - y) y := by
+    simpa using DkMath.NumberTheory.GcdNext.pow_sub_pow_factor_cosmic_N
+      hp_pos hyz
+  have hGN_ne : DkMath.CosmicFormulaBinom.GN p (z - y) y ≠ 0 := by
+    exact DkMath.CosmicFormulaBinom.GN_ne_zero_nat_of_two_le
+      (d := p) (x := z - y) (u := y) hp2 (Nat.sub_pos_of_lt hyz) hy
+  have hpadic :=
+    DkMath.NumberTheory.GcdNext.padicValNat_factorization
+      hp_pos hyz hqP hfactor hGN_ne
+  have hzero : padicValNat q (z - y) = 0 := by
+    exact padicValNat.eq_zero_of_not_dvd hq_not_dvd_gap
+  simpa [hzero] using hpadic
+
+/-- Squarefree な非零自然数は、任意の素数 `q` に対して 2 段 lift を持たない。 -/
+theorem not_sq_dvd_of_squarefree {q X : ℕ}
+    (hqP : Nat.Prime q) (hX_ne : X ≠ 0) (hSq : Squarefree X) :
+    ¬ q ^ 2 ∣ X := by
+  intro hq2_dvd
+  have hVal : padicValNat q X ≤ 1 :=
+    DkMath.NumberTheory.GcdNext.padicValNat_le_one_of_squarefree hqP hX_ne hSq
+  have h2_le : 2 ≤ padicValNat q X := by
+    exact (@padicValNat_dvd_iff_le q (Fact.mk hqP) X 2 hX_ne).1 hq2_dvd
+  exact (not_le_of_gt h2_le) hVal
 
 /-- `d = 3` では `gcd(x, GN 3 x u)` は `gcd(x, 3)` に等しい。 -/
 theorem gcd_boundary_GN_three_eq_gcd_boundary_three

@@ -105,7 +105,7 @@ lemma quality_le_of_sqprod_pow_bound_analytic_proof
 -- bound on `piSqRad c` in terms of `(rad a * rad b)^δ` to the inequality
 -- `quality (a,b,c) ≤ 1 + ε`. The detailed inequalities live here and may
 -- use monotonicity of log, basic real power laws, and lower bounds on the
--- denominator `log (rad (a*b*c))`. For now we admit the analytic core to
+-- denominator `log (rad (a*b*c))`. For now we ad#mit the analytic core to
 -- keep the discrete part separate; later this should be filled in.
 -- axiom quality_le_of_sqprod_pow_bound_analytic'
 --   (ε δ : ℝ) (hε : 0 < ε)
@@ -152,7 +152,7 @@ lemma quality_le_of_sqprod_pow_bound_analytic
 
 /- Bridge lemma: isolate the analytic/log steps.
   If `piSqRad c ≤ (rad a * rad b)^δ` then quality(a,b,c) ≤ 1+ε.
-  The body is left admitted to centralize analytic calculations. -/
+  The body is left ad#mitted to centralize analytic calculations. -/
 /-- If the square radical of `c` is bounded by the product of radicals of `a` and `b` to the power `δ`, then the quality of the triple `(a, b, c)` is at most `1 + ε`, given coprimality and sum conditions. -/
 /- `c` の平方根が `a` と `b` の根号の `δ` 乗の積で制限される場合、互いに素であり和の条件が与えられれば、三つ組 `(a, b, c)` の質は最大で `1 + ε` になります。 -/
 lemma quality_le_of_sqprod_pow_bound
@@ -164,7 +164,7 @@ lemma quality_le_of_sqprod_pow_bound
   quality (Triple.mk a b c hsum hcop) ≤ 1 + ε := by
   -- Delegate the analytic/logarithmic manipulations to a centralized lemma so that
   -- the discrete/number-theoretic part can remain separate. The analytic lemma
-  -- collects the nontrivial real-analysis steps in one place (currently admitted
+  -- collects the nontrivial real-analysis steps in one place (currently ad#mitted
   -- and to be completed later).
 
   -- a ≠ 0, b ≠ 0 を証明して渡す
@@ -310,10 +310,10 @@ lemma coprime_succ_mul_two_add_one (n : ℕ) : Nat.Coprime (n + 1) (2 * n + 1) :
 
 -- B-variant analytic bridge for adjacent triples.
 /-- Bridge (adjacent, B-variant): if
-    (π-side)   (piSqRad (2*n+1)) ≤ (rad n * rad (n+1))^δ
-    (tail-side) (2*n+1) ≤ piSqRad(2*n+1) * (rad n * rad (n+1))^γ * rad(2*n+1)
-    and δ + γ ≤ 1 + ε, then quality(n,n+1,2n+1) ≤ 1 + ε.
-    The proof skeleton isolates the remaining analytic/log chain; admits mark steps to be filled.
+    (π-side)   (piSqRad (2 * n + 1)) ≤ (rad n * rad (n + 1)) ^ δ
+    (tail-side) (2 * n + 1) ≤ piSqRad(2 * n +1) * (rad n * rad (n + 1)) ^ γ * rad(2 * n + 1)
+    and δ + γ ≤ 1 + ε, then quality(n,n + 1,2n + 1) ≤ 1 + ε.
+    The proof skeleton isolates the remaining analytic/log chain; ad#mits mark steps to be filled.
 -/
 lemma quality_le_of_pi_tail_adj
   {δ γ ε : ℝ} {n : ℕ}

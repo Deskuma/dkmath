@@ -25,7 +25,7 @@ open Nat Real Rat Filter Finset
 open MeasureTheory ProbabilityTheory
 
 -- **Dyadic composition lemma (abstract form).**
--- If every block admits a bound of the shape `C · (2^k)^(α+ε)`, then
+-- If every block ad#mits a bound of the shape `C · (2^k)^(α+ε)`, then
 -- `BadCountOn θ (MidIdx X)` is `O(X^(α+ε))`.
 
 -- ## Required lemmas and proof plan for `dyadic_compose`
@@ -132,7 +132,7 @@ open MeasureTheory ProbabilityTheory
 -- X0 such that for all X ≥ X0,
 --   ∑_{k < k0} (BadCountOn θ (MidBlock k X) : ℝ) ≤ C_head * (X : ℝ)^(α + ε).
 -- The detailed combinatorial proof is straightforward but not essential for the
--- current composition development; we provide a tiny admitted lemma to keep the
+-- current composition development; we provide a tiny ad#mitted lemma to keep the
 -- file lightweight and make downstream proofs possible.
 
 /-

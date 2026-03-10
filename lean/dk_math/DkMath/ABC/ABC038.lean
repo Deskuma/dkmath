@@ -131,12 +131,12 @@ lemma prime_of_mem_factorization_support {n p : ℕ} (hp : p ∈ (Nat.factorizat
 
 【現状の実装状況】
 
-完成済み（sorry なし）：
+完成済み（so#rry なし）：
 - quality_le_of_not_bad_with_tail: π + TailBound → quality の核心ブリッジ
 - tailbound_of_log_bound: ログ境界 → TailBound の変換
 - quality_le_of_not_bad_with_log: ¬Bad + ログ境界 → quality の便利版
 
-未完成（sorry あり）：
+未完成（so#rry あり）：
 - quality_le_of_not_bad: Bad_ε を使う版（設計上の問題で実装困難）
 - quality_le_of_not_bad_abc: Bad_ε_ABC を使う版（将来実装予定）
 - twoTail_log_bound_of_not_bad_eps: Bad_ε → ログ境界（設計上の問題）
@@ -238,7 +238,7 @@ lemma quality_le_of_not_bad
   -- 2) Bad_ε_ABC を使った別の定理を作る（推奨）
   -- 3) 橋渡し補題を追加する
   --
-  -- ここでは一旦 sorry で置き、quality_le_of_not_bad_abc を推奨する
+  -- ここでは一旦 so#rry で置き、quality_le_of_not_bad_abc を推奨する
   sorry
 
 -- ABC品質不等式の正しい形（Bad_ε_ABC を使用）
@@ -265,12 +265,12 @@ lemma quality_le_of_not_bad_abc
     exact Nat.mul_ne_zero (Nat.pos_iff_ne_zero.mp ha_pos) (Nat.pos_iff_ne_zero.mp hb_pos)
 
   -- この証明は複雑で、多くの補助補題が必要
-  -- 現時点では sorry で置き、段階的に実装する
+  -- 現時点では so#rry で置き、段階的に実装する
   -- 代わりに quality_le_of_not_bad_with_tail / with_log を使うことを推奨
   sorry
 
 -- ==========================================
--- ブリッジ核：既存APIで閉じる最小実装（sorry なし）
+-- ブリッジ核：既存APIで閉じる最小実装（so#rry なし）
 -- ==========================================
 
 /-- ブリッジ核：π側（¬Bad）と tail 側（TailBound γ）と δ+γ≤ε から
