@@ -1061,10 +1061,28 @@ theorem branchAShrinkWitnessToDescent_via_FLT :
     BranchAShrinkWitnessToDescentTarget :=
   branchAShapeValueToRefuter_via_FLT
 
+/--
+`shrinkWitness -> descent` の実装入口。
+
+現時点では `via_FLT` を束ねるが、最終 clean 置換点はこの定理 1 本に集約する。
+-/
+theorem branchAShrinkWitnessToDescent_math :
+    BranchAShrinkWitnessToDescentTarget :=
+  branchAShrinkWitnessToDescent_via_FLT
+
+/--
+`shape-value -> descent` の実装入口（shrink 分解版）。
+-/
+theorem branchAShapeValueToDescent_impl :
+    BranchAShapeValueToDescentTarget :=
+  branchAShapeValueToDescent_of_shrink
+    branchAShapeValueToShrinkWitness_via_FLT
+    branchAShrinkWitnessToDescent_math
+
 /-- `BranchAShapeValueToRefuterTarget` の実装入口。 -/
 theorem branchAShapeValueToRefuter_impl :
     BranchAShapeValueToRefuterTarget :=
-  branchAShapeValueToRefuter_of_descent branchAShapeValueToDescent_via_FLT
+  branchAShapeValueToRefuter_of_descent branchAShapeValueToDescent_impl
 
 /--
 `shape-value -> descent` の clean 契約を外部注入して
