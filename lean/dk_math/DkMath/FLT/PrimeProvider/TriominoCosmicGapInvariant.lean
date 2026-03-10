@@ -895,6 +895,20 @@ abbrev BranchAShapeValueToRefuterTarget : Prop :=
     False
 
 /--
+Branch A の値域 shape を既存 shrink/descent 契約へ送る中間仕様。
+
+現時点では `False` 出力と同型だが、将来は descent データ出力へ拡張可能な命名として残す。
+-/
+abbrev BranchAShapeValueToDescentTarget : Prop :=
+  BranchAShapeValueToRefuterTarget
+
+/-- `shape-value -> descent` 仕様から `shape-value -> refuter` を得る薄い橋。 -/
+theorem branchAShapeValueToRefuter_of_descent
+    (hDescent : BranchAShapeValueToDescentTarget) :
+    BranchAShapeValueToRefuterTarget :=
+  hDescent
+
+/--
 Branch A の shape-factorization から値域 shape へ送るローカル変換仕様。
 -/
 abbrev BranchAShapeFactorizationToValueTarget : Prop :=
@@ -1001,10 +1015,15 @@ theorem branchAShapeValueToRefuter_via_FLT :
     FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
   exact hNo hpack.hEq
 
+/-- `shape-value -> descent` 仕様の暫定 concrete 実装（via FLT）。 -/
+theorem branchAShapeValueToDescent_via_FLT :
+    BranchAShapeValueToDescentTarget :=
+  branchAShapeValueToRefuter_via_FLT
+
 /-- `BranchAShapeValueToRefuterTarget` の実装入口。 -/
 theorem branchAShapeValueToRefuter_impl :
     BranchAShapeValueToRefuterTarget :=
-  branchAShapeValueToRefuter_via_FLT
+  branchAShapeValueToRefuter_of_descent branchAShapeValueToDescent_via_FLT
 
 /--
 Branch A の shape-factorization から refuter へ送る 1-pack kernel 仕様。
