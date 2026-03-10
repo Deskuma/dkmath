@@ -956,6 +956,25 @@ abbrev BranchAShrinkWitnessToDescentTarget : Prop :=
   BranchAShapeValueToRefuterTarget
 
 /--
+Branch A の witness 直受け最終 kernel。
+
+`hpack + hp_dvd_gap + ht` から `False` を導く一点集中の仕様。
+-/
+abbrev BranchAShapeWitnessKernelTarget : Prop :=
+  ∀ {p x y z t : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    (z - y = p ^ (p - 1) * t ^ p) →
+    False
+
+/-- witness 直受け kernel から `shrinkWitness -> descent` を得る薄い橋。 -/
+theorem branchAShrinkWitnessToDescent_of_kernel
+    (hK : BranchAShapeWitnessKernelTarget) :
+    BranchAShrinkWitnessToDescentTarget := by
+  intro p x y z hpack hp_dvd_gap hShape
+  rcases hShape with ⟨t, ht⟩
+  exact hK hpack hp_dvd_gap ht
+
+/--
 `shape-value -> shrinkWitness` と `shrinkWitness -> descent` が揃えば
 `shape-value -> descent` を得る。
 -/
@@ -1095,6 +1114,14 @@ theorem branchAShrinkWitnessToDescent_via_FLT :
     BranchAShrinkWitnessToDescentTarget :=
   branchAShapeValueToRefuter_via_FLT
 
+/-- witness 直受け kernel の暫定 concrete 実装（via FLT）。 -/
+theorem branchAShapeWitnessKernel_via_FLT :
+    BranchAShapeWitnessKernelTarget := by
+  intro p x y z t hpack hp_dvd_gap ht
+  have hNo : x ^ p + y ^ p ≠ z ^ p :=
+    FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
+  exact hNo hpack.hEq
+
 /--
 `shrinkWitness -> descent` の実装入口。
 
@@ -1102,7 +1129,8 @@ theorem branchAShrinkWitnessToDescent_via_FLT :
 -/
 theorem branchAShrinkWitnessToDescent_math :
     BranchAShrinkWitnessToDescentTarget :=
-  branchAShrinkWitnessToDescent_via_FLT
+  branchAShrinkWitnessToDescent_of_kernel
+    branchAShapeWitnessKernel_via_FLT
 
 /--
 `shape-value -> descent` の実装入口（shrink 分解版）。
