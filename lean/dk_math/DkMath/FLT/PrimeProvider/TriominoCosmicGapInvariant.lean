@@ -554,6 +554,56 @@ abbrev GapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p : Prop :=
     p ∣ (z - y) →
     ∀ q : ℕ, q ≠ p → p ∣ (z - y).factorization q
 
+/--
+Branch A の `q ≠ p` 側で必要な核仕様。
+
+`u := z - y` に対し、`q` が素数で `q ≠ p` かつ `q ∣ u` なら `q ∤ GN p u y`。
+-/
+abbrev GapNePNoSharedPrimeOnGN_branchA : Prop :=
+  ∀ {p x y z q : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    Nat.Prime q → q ≠ p → q ∣ (z - y) →
+    ¬ q ∣ GN p (z - y) y
+
+/--
+`GapNePNoSharedPrimeOnGN_branchA` が供給されれば、`q ≠ p` 側 factorization 指数条件が得られる。
+-/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_of_noShared
+    (hNoShared : GapNePNoSharedPrimeOnGN_branchA) :
+    GapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p := by
+  intro p x y z hpack hp_dvd_gap q hqp
+  let u : ℕ := z - y
+  let N : ℕ := GN p u y
+  have hxpow : x ^ p = u * N := by
+    simpa [u, N, PrimeGe5CounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
+  have hu0 : u ≠ 0 := Nat.ne_of_gt (Nat.sub_pos_of_lt hpack.hyz_lt)
+  have hN0 : N ≠ 0 := by
+    intro hN0
+    have hx0pow : x ^ p = 0 := by simpa [hN0] using hxpow
+    have hx0 : x = 0 := (Nat.pow_eq_zero.mp hx0pow).1
+    exact hpack.hx0 hx0
+  by_cases hqU : q ∣ u
+  · by_cases hqP : Nat.Prime q
+    · have hq_not_dvd_N : ¬ q ∣ N := by
+        simpa [u, N] using hNoShared hpack hp_dvd_gap hqP hqp hqU
+      have hNfac0 : N.factorization q = 0 := Nat.factorization_eq_zero_of_not_dvd hq_not_dvd_N
+      have hmulq : (u * N).factorization q = u.factorization q + N.factorization q := by
+        simpa using congrArg (fun f => f q) (Nat.factorization_mul hu0 hN0)
+      have hpowq : (x ^ p).factorization q = p * x.factorization q := by
+        simp [Nat.factorization_pow]
+      have huq : u.factorization q = p * x.factorization q := by
+        calc
+          u.factorization q = u.factorization q + 0 := by simp
+          _ = u.factorization q + N.factorization q := by simp [hNfac0]
+          _ = (u * N).factorization q := by symm; exact hmulq
+          _ = (x ^ p).factorization q := by simp [hxpow]
+          _ = p * x.factorization q := hpowq
+      exact ⟨x.factorization q, by simpa [huq, Nat.mul_comm]⟩
+    · have hfac0 : u.factorization q = 0 := Nat.factorization_eq_zero_of_not_prime u hqP
+      exact ⟨0, by simp [u, hfac0]⟩
+  · have hfac0 : u.factorization q = 0 := Nat.factorization_eq_zero_of_not_dvd hqU
+    exact ⟨0, by simp [u, hfac0]⟩
+
 /-- Branch A shape-factorization の `q = p` 側だけを切り出した仕様。 -/
 abbrev GapShapeFromPrimeGe5Counterexample_branchA_factorization_p : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
@@ -625,7 +675,7 @@ theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_math :
     simpa [u, N] using p_dvd_GN_and_not_sq_when_p_dvd_gap hpack hp_dvd_gap
   have hN0 : N ≠ 0 := by
     intro hN0
-    exact hGN.2 (by simpa [hN0])
+    exact hGN.2 (by simp [hN0])
   have hu0 : u ≠ 0 := by
     exact Nat.ne_of_gt (Nat.sub_pos_of_lt hpack.hyz_lt)
   have hNval : padicValNat p N = 1 :=
