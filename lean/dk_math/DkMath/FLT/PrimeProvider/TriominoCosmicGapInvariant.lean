@@ -417,6 +417,36 @@ theorem gapPowFromPrimeGe5Counterexample_branchA_of_factorization
     (hFac hpack hp_dvd_gap)
 
 /--
+Branch A で `gap = t^p` が供給されれば、`gap` の全素因子指数は `p` の倍数になる。
+-/
+theorem gapPowFromPrimeGe5Counterexample_branchA_factorization_of_gapPow
+    (hA : GapPowFromPrimeGe5Counterexample_branchA) :
+    GapPowFromPrimeGe5Counterexample_branchA_factorization := by
+  intro p x y z hpack hp_dvd_gap q
+  rcases hA hpack hp_dvd_gap with ⟨t, ht⟩
+  have hp0 : 0 < p := hpack.hp.pos
+  have hgap_ne0 : (z - y) ≠ 0 := Nat.ne_of_gt (Nat.sub_pos_of_lt hpack.hyz_lt)
+  have ht_ne0 : t ≠ 0 := by
+    intro ht0
+    apply hgap_ne0
+    calc
+      z - y = t ^ p := ht
+      _ = 0 := by simp [ht0, hpack.hp.ne_zero]
+  have hfac : (z - y).factorization q = p * t.factorization q := by
+    calc
+      (z - y).factorization q = (t ^ p).factorization q := by simpa [ht]
+      _ = p * t.factorization q := by simp [Nat.factorization_pow, ht_ne0]
+  exact ⟨t.factorization q, by simpa [hfac, Nat.mul_comm]⟩
+
+/-- Branch A では、`gap` の `p` 乗化仕様と因数分解指数仕様は同値。 -/
+theorem gapPowFromPrimeGe5Counterexample_branchA_iff_factorization :
+    GapPowFromPrimeGe5Counterexample_branchA ↔
+      GapPowFromPrimeGe5Counterexample_branchA_factorization := by
+  constructor
+  · exact gapPowFromPrimeGe5Counterexample_branchA_factorization_of_gapPow
+  · exact gapPowFromPrimeGe5Counterexample_branchA_of_factorization
+
+/--
 反例排除仕様があれば、Branch A の gap-pow は `False.elim` で回収できる。
 
 理論核としては弱いが、導線検証や API 接続の最小補助として有用。
