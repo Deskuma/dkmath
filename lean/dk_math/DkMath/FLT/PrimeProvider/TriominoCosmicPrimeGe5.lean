@@ -475,6 +475,29 @@ theorem primeGe5CounterexampleNormalizer_impl :
       hz0 := Nat.ne_of_gt hz_pos }
 
 /--
+concrete normalizer 実装を使う版。
+残る実装責務を gap 側仕様 (`hNotPow` / `hGapPow`) へ限定する。
+-/
+theorem FLTPrimeGe5Target_of_gap_specs_with_normalizer_impl
+    (hNotPow : GapNotIsPowTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_normalizer_and_gap_specs
+    primeGe5CounterexampleNormalizer_impl
+    hNotPow
+    hGapPow
+
+/--
+concrete normalizer 実装を使う `FLT_prime_ge5` spec 版。
+-/
+theorem FLT_prime_ge5_of_gap_specs_with_normalizer_impl
+    (hNotPow : GapNotIsPowTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget)
+    (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
+    FermatLastTheoremFor p := by
+  exact (FLTPrimeGe5Target_of_gap_specs_with_normalizer_impl hNotPow hGapPow) p hp hp5
+
+/--
 `default` 供給を使わず、spec 3 本から直接 global provider を得る no-`so#rry` 回避ルート。
 -/
 theorem triominoCosmic_globalProvider_of_specs
