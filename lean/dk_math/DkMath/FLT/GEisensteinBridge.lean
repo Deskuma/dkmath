@@ -1461,8 +1461,7 @@ noncomputable def numberTheoryHasStepFamily_of_hasKernel
         Nonempty (NumberTheoryDescentOn.ReductionKernel c b)) :
     ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
       PrimitiveSquareDescentStep c b := by
-  intro c b hbc hcop
-  intro q hPrim hSq
+  intro c b hbc hcop q hPrim hSq
   let red : PrimitiveSquareReduction c b q :=
     (numberTheoryHasReduceFamily_of_hasKernel hasKernel hbc hcop) hPrim hSq
   exact ⟨red.q', red.hPrim, red.hSq, red.hlt⟩
