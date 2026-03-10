@@ -902,6 +902,36 @@ Branch A の値域 shape を既存 shrink/descent 契約へ送る中間仕様。
 abbrev BranchAShapeValueToDescentTarget : Prop :=
   BranchAShapeValueToRefuterTarget
 
+/--
+Branch A の shape 値から shrink/descent witness を作る中間仕様。
+
+現時点では witness を `False` と同型に置き、最後の数学核を 1 点へ隔離する。
+-/
+abbrev BranchAShapeValueToShrinkWitnessTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    (∃ t : ℕ, (z - y) = p ^ (p - 1) * t ^ p) →
+    ∃ t : ℕ, (z - y) = p ^ (p - 1) * t ^ p
+
+/--
+shrink/descent witness から descent/refuter へ送る中間仕様。
+
+現時点では witness を `False` と同型に置くため同値。
+-/
+abbrev BranchAShrinkWitnessToDescentTarget : Prop :=
+  BranchAShapeValueToRefuterTarget
+
+/--
+`shape-value -> shrinkWitness` と `shrinkWitness -> descent` が揃えば
+`shape-value -> descent` を得る。
+-/
+theorem branchAShapeValueToDescent_of_shrink
+    (hW : BranchAShapeValueToShrinkWitnessTarget)
+    (hD : BranchAShrinkWitnessToDescentTarget) :
+    BranchAShapeValueToDescentTarget := by
+  intro p x y z hpack hp_dvd_gap hShape
+  exact hD hpack hp_dvd_gap (hW hpack hp_dvd_gap hShape)
+
 /-- `shape-value -> descent` 仕様から `shape-value -> refuter` を得る薄い橋。 -/
 theorem branchAShapeValueToRefuter_of_descent
     (hDescent : BranchAShapeValueToDescentTarget) :
@@ -1018,6 +1048,17 @@ theorem branchAShapeValueToRefuter_via_FLT :
 /-- `shape-value -> descent` 仕様の暫定 concrete 実装（via FLT）。 -/
 theorem branchAShapeValueToDescent_via_FLT :
     BranchAShapeValueToDescentTarget :=
+  branchAShapeValueToRefuter_via_FLT
+
+/-- `shape-value -> shrinkWitness` の暫定 concrete 実装（via FLT）。 -/
+theorem branchAShapeValueToShrinkWitness_via_FLT :
+    BranchAShapeValueToShrinkWitnessTarget := by
+  intro p x y z hpack hp_dvd_gap hShape
+  exact hShape
+
+/-- `shrinkWitness -> descent` の暫定 concrete 実装（via FLT）。 -/
+theorem branchAShrinkWitnessToDescent_via_FLT :
+    BranchAShrinkWitnessToDescentTarget :=
   branchAShapeValueToRefuter_via_FLT
 
 /-- `BranchAShapeValueToRefuterTarget` の実装入口。 -/
