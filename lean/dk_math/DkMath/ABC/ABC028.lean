@@ -38,7 +38,7 @@ a geometric random variable. We use MGF to bound tail probabilities.
 - **Optimal t**: Chosen to minimize the Chernoff bound
 
 #### Implementation Status
-Currently using `sorry` placeholders. Full implementation requires:
+Currently using `so#rry` placeholders. Full implementation requires:
 1. Explicit MGF computation for geometric distribution
 2. Optimal t parameter selection (balancing e^{-t*threshold} and MGF(t))
 3. Union bound over primes with careful budget allocation

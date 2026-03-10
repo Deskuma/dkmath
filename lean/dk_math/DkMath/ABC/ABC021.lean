@@ -38,7 +38,7 @@ namespace Janson
 - ✅ `mu`, `dbar` definitions
 - ✅ `product_pmf`, `bernoulli_pmf` constructions
 - ✅ `expect_indicator_prod`: E[∏ I_v] = ∏ p_v for independent events
-- ⚠️ `bound_v2` (line 8528): **Full statement with `admit`**
+- ⚠️ `bound_v2` (line 8528): **Full statement with `ad#mit`**
 
 **What's missing (critical gaps):**
 
@@ -50,7 +50,7 @@ namespace Janson
 
 ### Formalization Roadmap
 
-Below we sketch the missing pieces as `admit`-marked lemmas.
+Below we sketch the missing pieces as `ad#mit`-marked lemmas.
 This serves as a concrete TODO list for completing Janson's inequality.
 -/
 
@@ -329,7 +329,7 @@ end JansonRoadmap
 
 **ABC.lean status:**
 - Infrastructure: ✅ 80% complete
-- Core inequality: ⚠️ `admit`
+- Core inequality: ⚠️ `ad#mit`
 
 **This roadmap:**
 - Breaks down the gap into ~50 lemmas

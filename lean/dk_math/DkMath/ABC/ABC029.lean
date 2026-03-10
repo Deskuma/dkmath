@@ -129,7 +129,7 @@ lemma chernoff_light_primes_sum_bound
 
   -- Step 3: it remains to show U * X * card P_light ≤ K_chernoff (as reals).
   -- This is where dyadic+Abel + prime-count estimates are required; keep
-  -- this numeric estimate as an admit for now to localize the heavy analysis.
+  -- this numeric estimate as an ad#mit for now to localize the heavy analysis.
   have h_card_numeric : (U * (X : ℝ) * (Finset.card P_light : ℝ)) ≤ (K_chernoff : ℝ) := by
     -- TODO: implement dyadic partition, partial summation and prime-count bounds
     admit
@@ -173,7 +173,7 @@ lemma dyadic_block_card_le_primes_upto {P : Finset ℕ} {k : ℕ}
   exact Finset.card_le_card hsub
 
 /- Partition skeleton: sum over P can be written as sum over dyadic blocks
-  (We leave the final existence-of-k step admitted for now.) -/
+  (We leave the final existence-of-k step ad#mitted for now.) -/
 lemma dyadic_partition_skeleton {P : Finset ℕ} {α : Type} [AddCommMonoid α]
   (f : ℕ → α) (Xbound : ℕ)
   (hP_range : ∀ p ∈ P, 1 ≤ p ∧ (p : ℕ) < 2 ^ (Xbound + 1)) :
@@ -449,10 +449,10 @@ lemma dyadic_block_sum_crude
     _ = Cmax * (dyadic_block P k).card * (2 ^ k : ℝ) ^ (-s) := by
           ring
 
--- Skeleton analytic lemmas (admitted for now)
+-- Skeleton analytic lemmas (ad#mitted for now)
 --   - `chernoff_light_primes_sum_bound` : dyadic + Abel summation yields real-valued bound
 --   - `union_card_le_expected_sum` : union bound converts per-prime expected counts to integer count
 -- (Analytic summation lemmas removed for now; analytic content will be
--- inlined as local admits to avoid top-level `sorry` declarations.)
+-- inlined as local ad#mits to avoid top-level `so#rry` declarations.)
 
 end ABC

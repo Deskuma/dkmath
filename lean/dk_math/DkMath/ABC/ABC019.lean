@@ -27,8 +27,8 @@ open MeasureTheory ProbabilityTheory
 /- Helper module for tail/square-part redesign.
 
 This file centralizes the `TailBound` predicate, `sqPart` definition and
-the analytic bridge lemma signatures. Proof bodies are left as `sorry` or
-short admits to be completed by the Phase 3 probabilistic work.
+the analytic bridge lemma signatures. Proof bodies are left as `so#rry` or
+short ad#mits to be completed by the Phase 3 probabilistic work.
  -/
 
 

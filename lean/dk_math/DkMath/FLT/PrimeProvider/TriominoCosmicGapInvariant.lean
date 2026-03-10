@@ -278,7 +278,7 @@ theorem primitivePrime_fromCounterexample_impl :
 /--
 prime-ge5 反例パックから `AllNonLiftableOnGN` を供給する本丸インターフェイス。
 
-現時点では、一般 `p ≥ 5` 用の no-`sorry` family 供給がコードベース本体に無いため、
+現時点では、一般 `p ≥ 5` 用の no-`so#rry` family 供給がコードベース本体に無いため、
 未解決点をこの 1 定理に隔離する。
 -/
 theorem allNonLiftableOnGN_fromCounterexample_impl :
@@ -288,7 +288,7 @@ theorem allNonLiftableOnGN_fromCounterexample_impl :
   exact triominoCosmicNonLiftableGNBridge_of_noWieferich
     (triominoNoWieferichBridge_impl hBranch)
 
-/-- 一般 `GN` の nonlift family が供給されれば、`NoPowOnGN` は no-`sorry` で閉じる。 -/
+/-- 一般 `GN` の nonlift family が供給されれば、`NoPowOnGN` は no-`so#rry` で閉じる。 -/
 theorem triominoCosmicNoPowOnGN_of_nonLiftableGNBridge
     (hBridge : TriominoCosmicNonLiftableGNBridge) :
     NoPowOnGN_fromCounterexample := by

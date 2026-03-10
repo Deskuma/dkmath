@@ -241,7 +241,7 @@ lemma adjacent_quality_le_density_one
     -- Strategy: Use decidability of squarefree to split cases
     have hX_pos : 0 < X := Nat.zero_lt_of_lt hge1
     -- γ > 0 follows from hγ_pos in outer scope (proven from ε > δ)
-    -- No need for local sorry since we strengthened the theorem assumption
+    -- No need for local so#rry since we strengthened the theorem assumption
     have hab_ne : X * (X+1) ≠ 0 := Nat.mul_ne_zero (Nat.pos_iff_ne_zero.mp hX_pos) (by omega)
     by_cases hsf : Squarefree (2*X+1)
     · -- Squarefree case: use helper lemma
@@ -303,7 +303,7 @@ lemma adjacent_quality_le_density_one
         -- version) from the probabilistic / Chernoff analysis developed in
         -- Step (3) of `union_bound_chernoff`. That analytic estimate is
         -- substantial and is deferred (see TODOs around `union_bound_chernoff`).
-        -- Keep this `sorry` as an explicit placeholder: replace it later by the
+        -- Keep this `so#rry` as an explicit placeholder: replace it later by the
         -- twoTail eventual bound (or by a corrected polynomial estimate derived
         -- from that work).
         sorry  -- TODO: fill from twoTail_log_bound_adjacent_density_one (deferred)
@@ -407,7 +407,7 @@ lemma adjacent_quality_le_ae_alt
     --   (a) Tightening the density-one bound by optimizing parameters, or
     --   (b) Showing that finitely many exceptions can be absorbed, or
     --   (c) Using a continuity/limiting argument as ε → δ⁻
-    -- For now, we admit this refinement step
+    -- For now, we ad#mit this refinement step
     sorry  -- TODO: Refine ε ≤ δ case via parameter optimization or limiting argument
 
 end ABC

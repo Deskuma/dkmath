@@ -347,7 +347,7 @@ lemma twoTail_log_bound_adjacent_density_one
       -- Difficulty: ~200-400 lines of Lean code (PNT lookup, series manipulation, real analysis)
       -- Timeline: Medium-term task (Working-Note.md 中期タスク)
       --
-      -- For now, defer to sorry (keeps h_per_prime Step 2 results intact)
+      -- For now, defer to so#rry (keeps h_per_prime Step 2 results intact)
       let B : ℕ := 4
       let K_full := ⌈(X : ℝ)^(3/4 + ε')⌉₊
       let K_heavy := ⌈(X : ℝ)^(3/4 + ε') / (B + 1)⌉₊
@@ -366,15 +366,15 @@ lemma twoTail_log_bound_adjacent_density_one
       /- Central analytic summation lemma (skeleton):
          For the finite set P_light and totalized functions t_of_total, C_of_total,
          bound the weighted sum by K_chernoff (as a real). The full proof uses
-         dyadic partition + Abel partial summation and will replace this admit.
+         dyadic partition + Abel partial summation and will replace this ad#mit.
       -/
       have hsum_le : (Finset.sum P_light (fun p => C_of_total p * (X : ℝ) * (p : ℝ) ^ (-(t_of_total p * γ_p p))))
         ≤ (K_chernoff : ℝ) := by
-        -- TODO: Replace this admit with full dyadic+Abel implementation.
-        -- For now, keep a local admit so callers can be wired and we can
+        -- TODO: Replace this ad#mit with full dyadic+Abel implementation.
+        -- For now, keep a local ad#mit so callers can be wired and we can
         -- iteratively refine this lemma.
         admit
-      -- Convert real inequality to nat/card bound via union bound (admitted here)
+      -- Convert real inequality to nat/card bound via union bound (ad#mitted here)
       have h_union_bound : ((Finset.filter (fun n => n ≤ X ∧
             (Finset.sum ((2*n+1).factorization.support)
               fun p => ((((2*n+1).factorization p) - 2 : ℕ) : ℝ) * Real.log (p : ℝ)) > γ * Real.log (rad (n*(n+1)) : ℝ))
@@ -382,7 +382,7 @@ lemma twoTail_log_bound_adjacent_density_one
             ≤ (Finset.sum P_light (fun p => C_of_total p * (X : ℝ) * (p : ℝ) ^ (-(t_of_total p * γ_p p)))) := by
         -- Union bound: the expected number of violations is bounded by the sum
         -- of per-prime Chernoff expectations; the detailed proof will be
-        -- expanded later. Admit for now to keep structure.
+        -- expanded later. Ad#mit for now to keep structure.
         admit
       -- Combine the real-valued bounds and cast back to nat inequality
       have h_real_le : ((Finset.filter (fun n => n ≤ X ∧
@@ -621,7 +621,7 @@ lemma twoTail_log_bound_adjacent_density_one
    This lemma implements the dyadic partition of primes p up to X^(1/3),
    applies a partial summation (Abel) argument on each dyadic block, and
    sums the resulting bounds. The fine-grained analytic estimates are left
-   as admits/comments to be expanded; the skeleton ensures the overall
+   as ad#mits/comments to be expanded; the skeleton ensures the overall
    structure and types are correct so callers can reference it.
 -/
 
