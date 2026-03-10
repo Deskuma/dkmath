@@ -894,6 +894,40 @@ abbrev BranchAShapeValueToRefuterTarget : Prop :=
     (∃ t : ℕ, (z - y) = p ^ (p - 1) * t ^ p) →
     False
 
+/-- Branch A の shape witness から `t > 0` を回収する基本補助。 -/
+lemma branchAShapeWitness_t_pos
+    {p x y z t : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (ht : z - y = p ^ (p - 1) * t ^ p) :
+    0 < t := by
+  have hgap_pos : 0 < z - y := Nat.sub_pos_of_lt hpack.hyz_lt
+  have ht_ne0 : t ≠ 0 := by
+    intro ht0
+    have hgap_zero : z - y = 0 := by
+      calc
+        z - y = p ^ (p - 1) * t ^ p := ht
+        _ = 0 := by simp [ht0, hpack.hp.ne_zero]
+    exact (Nat.ne_of_gt hgap_pos) hgap_zero
+  exact Nat.pos_of_ne_zero ht_ne0
+
+/-- Branch A の shape witness から `p^(p-1) ∣ z-y` を回収する基本補助。 -/
+lemma branchAShapeWitness_powPred_dvd_gap
+  {p y z t : ℕ}
+    (ht : z - y = p ^ (p - 1) * t ^ p) :
+    p ^ (p - 1) ∣ (z - y) := by
+  refine ⟨t ^ p, ?_⟩
+  simpa [Nat.mul_comm] using ht
+
+/--
+もし Branch A 側 refuter が先に得られていれば、shape-value から descent へは直ちに落ちる。
+（外部契約接続のための薄い補助）
+-/
+theorem branchAShapeValueToDescent_of_branchARefuter
+    (hA : BranchARefuterTarget) :
+  BranchAShapeValueToRefuterTarget := by
+  intro p x y z hpack hp_dvd_gap hShape
+  exact hA hpack hp_dvd_gap
+
 /--
 Branch A の値域 shape を既存 shrink/descent 契約へ送る中間仕様。
 
