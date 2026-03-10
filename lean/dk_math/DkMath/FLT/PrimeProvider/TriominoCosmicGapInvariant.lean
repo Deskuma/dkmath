@@ -1026,6 +1026,15 @@ theorem branchAShapeValueToRefuter_impl :
   branchAShapeValueToRefuter_of_descent branchAShapeValueToDescent_via_FLT
 
 /--
+`shape-value -> descent` の clean 契約を外部注入して
+`shape-value -> refuter` を得る実装入口。
+-/
+theorem branchAShapeValueToRefuter_of_descent_impl
+    (hDescent : BranchAShapeValueToDescentTarget) :
+    BranchAShapeValueToRefuterTarget :=
+  branchAShapeValueToRefuter_of_descent hDescent
+
+/--
 Branch A の shape-factorization から refuter へ送る 1-pack kernel 仕様。
 
 終盤の数学核を 1 定理へ固定するための中間仕様。
@@ -1144,6 +1153,20 @@ theorem FLTPrimeGe5Target_branch_split_mainline :
       gapPowFromPrimeGe5Counterexample_branchB_impl)
     branchAShapeValueTarget_impl
     branchAShapeValueToRefuter_impl
+
+/--
+最終仮橋 (`branchAShapeValueToDescent_via_FLT`) を使わない clean 起動版。
+`shape-value -> descent` の実体が供給されれば、そのまま mainline を起動できる。
+-/
+theorem FLTPrimeGe5Target_branch_split_mainline_of_descent
+    (hDescent : BranchAShapeValueToDescentTarget) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_branch_split_shapeValue_and_refuter_with_normalizer_impl
+    branchAShapeFactorizationTarget_impl
+    (branchBRefuter_of_gapPow_and_defaultNotPow
+      gapPowFromPrimeGe5Counterexample_branchB_impl)
+    branchAShapeValueTarget_impl
+    (branchAShapeValueToRefuter_of_descent_impl hDescent)
 
 /--
 Branch A で `gap = t^p` が供給されれば、`gap` の全素因子指数は `p` の倍数になる。
