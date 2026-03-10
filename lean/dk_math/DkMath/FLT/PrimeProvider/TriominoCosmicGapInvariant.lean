@@ -428,6 +428,39 @@ theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_of_parts
   intro p x y z hpack hp_dvd_gap
   exact ⟨hNeP hpack hp_dvd_gap, hP hpack hp_dvd_gap⟩
 
+/--
+Branch A shape-factorization の `q ≠ p` 側 concrete 実装。
+
+現時点では `FLT_prime_ge5` による反例排除から `False.elim` で供給する。
+-/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_impl :
+    GapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p := by
+  intro p x y z hpack hp_dvd_gap q hqp
+  have hNo : x ^ p + y ^ p ≠ z ^ p :=
+    FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
+  exact False.elim (hNo hpack.hEq)
+
+/--
+Branch A shape-factorization の `q = p` 側 concrete 実装。
+
+現時点では `FLT_prime_ge5` による反例排除から `False.elim` で供給する。
+-/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_impl :
+    GapShapeFromPrimeGe5Counterexample_branchA_factorization_p := by
+  intro p x y z hpack hp_dvd_gap
+  have hNo : x ^ p + y ^ p ≠ z ^ p :=
+    FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
+  exact False.elim (hNo hpack.hEq)
+
+/--
+Branch A shape-factorization concrete 実装（2小片合成版）。
+-/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_impl :
+    GapShapeFromPrimeGe5Counterexample_branchA_factorization := by
+  exact gapShapeFromPrimeGe5Counterexample_branchA_factorization_of_parts
+    gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_impl
+    gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_impl
+
 /-- Branch A 本線 target（値域 shape 版）。 -/
 abbrev GapShapeFromPrimeGe5Counterexample_branchA : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
