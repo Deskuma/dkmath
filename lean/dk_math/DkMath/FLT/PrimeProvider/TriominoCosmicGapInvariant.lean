@@ -1079,6 +1079,20 @@ theorem branchAShapeValueToDescent_impl :
     branchAShapeValueToShrinkWitness_via_FLT
     branchAShrinkWitnessToDescent_math
 
+/--
+`shrinkWitness -> descent` の clean 契約を外部注入して
+`shape-value -> descent` を得る実装入口。
+
+この定理により、最後の置換点は
+`BranchAShrinkWitnessToDescentTarget` の実体 1 本へ固定される。
+-/
+theorem branchAShapeValueToDescent_of_shrinkWitness_impl
+    (hSD : BranchAShrinkWitnessToDescentTarget) :
+    BranchAShapeValueToDescentTarget :=
+  branchAShapeValueToDescent_of_shrink
+    branchAShapeValueToShrinkWitness_via_FLT
+    hSD
+
 /-- `BranchAShapeValueToRefuterTarget` の実装入口。 -/
 theorem branchAShapeValueToRefuter_impl :
     BranchAShapeValueToRefuterTarget :=
@@ -1092,6 +1106,16 @@ theorem branchAShapeValueToRefuter_of_descent_impl
     (hDescent : BranchAShapeValueToDescentTarget) :
     BranchAShapeValueToRefuterTarget :=
   branchAShapeValueToRefuter_of_descent hDescent
+
+/--
+`shrinkWitness -> descent` を外部注入して
+`shape-value -> refuter` を得る実装入口。
+-/
+theorem branchAShapeValueToRefuter_of_shrinkWitness_impl
+    (hSD : BranchAShrinkWitnessToDescentTarget) :
+    BranchAShapeValueToRefuterTarget :=
+  branchAShapeValueToRefuter_of_descent_impl
+    (branchAShapeValueToDescent_of_shrinkWitness_impl hSD)
 
 /--
 Branch A の shape-factorization から refuter へ送る 1-pack kernel 仕様。
@@ -1226,6 +1250,15 @@ theorem FLTPrimeGe5Target_branch_split_mainline_of_descent
       gapPowFromPrimeGe5Counterexample_branchB_impl)
     branchAShapeValueTarget_impl
     (branchAShapeValueToRefuter_of_descent_impl hDescent)
+
+/--
+最終一点 (`BranchAShrinkWitnessToDescentTarget`) を埋めれば起動できる clean mainline。
+-/
+theorem FLTPrimeGe5Target_branch_split_mainline_of_shrinkWitness
+    (hSD : BranchAShrinkWitnessToDescentTarget) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_branch_split_mainline_of_descent
+    (branchAShapeValueToDescent_of_shrinkWitness_impl hSD)
 
 /--
 Branch A で `gap = t^p` が供給されれば、`gap` の全素因子指数は `p` の倍数になる。
