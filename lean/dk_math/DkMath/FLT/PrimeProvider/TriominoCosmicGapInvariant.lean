@@ -876,6 +876,35 @@ theorem branchAShapeFactorizationTarget_impl :
   gapShapeFromPrimeGe5Counterexample_branchA_factorization_impl
 
 /--
+Branch A の値域 shape 出口。
+
+factorization 形を値の形 `z - y = p^(p-1) * t^p` へ落とした段を表す。
+-/
+abbrev BranchAShapeValueTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ∃ t : ℕ, (z - y) = p ^ (p - 1) * t ^ p
+
+/--
+Branch A の値域 shape から refuter へ送る終盤仕様。
+-/
+abbrev BranchAShapeValueToRefuterTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    (∃ t : ℕ, (z - y) = p ^ (p - 1) * t ^ p) →
+    False
+
+/--
+Branch A の shape-factorization から値域 shape へ送るローカル変換仕様。
+-/
+abbrev BranchAShapeFactorizationToValueTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ((∀ q : ℕ, q ≠ p → p ∣ (z - y).factorization q) ∧
+      ∃ m : ℕ, (z - y).factorization p = (p - 1) + p * m) →
+    ∃ t : ℕ, (z - y) = p ^ (p - 1) * t ^ p
+
+/--
 Branch A の shape-factorization から refuter へ送る 1-pack kernel 仕様。
 
 終盤の数学核を 1 定理へ固定するための中間仕様。
@@ -895,6 +924,17 @@ theorem branchAShapeToRefuter_of_kernel
     BranchAShapeFactorizationTarget → BranchARefuterTarget := by
   intro hShape p x y z hpack hp_dvd_gap
   exact hK hpack hp_dvd_gap (hShape hpack hp_dvd_gap)
+
+/--
+`shape-factorization -> shape-value` と `shape-value -> refuter` が揃えば、
+`shape-factorization -> refuter`（kernel）を得る。
+-/
+theorem branchAShapeToRefuter_of_value
+    (hValue : BranchAShapeFactorizationToValueTarget)
+    (hRefuteValue : BranchAShapeValueToRefuterTarget) :
+    BranchAShapeToRefuterTarget := by
+  intro p x y z hpack hp_dvd_gap hShapeFac
+  exact hRefuteValue hpack hp_dvd_gap (hValue hpack hp_dvd_gap hShapeFac)
 
 /-- Branch A/B の 2 終着仕様が揃えば、反例排除仕様が得られる。 -/
 theorem primeGe5CounterexampleRefuter_of_branch_split
@@ -954,6 +994,20 @@ theorem FLTPrimeGe5Target_of_branch_split_shapeKernel_and_refuter_with_normalize
     FLTPrimeGe5Target := by
   exact FLTPrimeGe5Target_of_branch_split_shape_and_refuter_with_normalizer_impl
     hAShape hB (branchAShapeToRefuter_of_kernel hK)
+
+/--
+3層 mainline:
+Branch A は `shape-factorization -> shape-value -> refuter` の順に送り、
+Branch B refuter と合成して `FLTPrimeGe5Target` へ接続する。
+-/
+theorem FLTPrimeGe5Target_of_branch_split_shapeValue_and_refuter_with_normalizer_impl
+    (hAShape : BranchAShapeFactorizationTarget)
+    (hB : BranchBRefuterTarget)
+    (hValue : BranchAShapeFactorizationToValueTarget)
+    (hRefuteValue : BranchAShapeValueToRefuterTarget) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_branch_split_shapeKernel_and_refuter_with_normalizer_impl
+    hAShape hB (branchAShapeToRefuter_of_value hValue hRefuteValue)
 
 /--
 Branch A で `gap = t^p` が供給されれば、`gap` の全素因子指数は `p` の倍数になる。
