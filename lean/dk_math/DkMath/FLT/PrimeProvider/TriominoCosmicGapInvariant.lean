@@ -392,4 +392,26 @@ theorem FLT_prime_ge5_of_normalizer_and_gapPow_default
     FermatLastTheoremFor p := by
   exact (FLTPrimeGe5Target_of_normalizer_and_gapPow_default hNorm hGapPow) p hp hp5
 
+/--
+`FLT_prime_ge5` 本体（`Basic.FLT` 経由）を使わず、
+normalizer + gap-pow(default gap-not-pow) から global provider へ直結する回避ルート。
+-/
+theorem triominoCosmic_globalProvider_of_normalizer_and_gapPow_default
+    (hNorm : PrimeGe5CounterexampleNormalizerTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget) :
+    GlobalPrimeExponentFLTProvider := by
+  exact triominoCosmic_globalProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_normalizer_and_gapPow_default hNorm hGapPow)
+
+/--
+`FLT_prime_ge5` 本体（`Basic.FLT` 経由）を使わず、
+normalizer + gap-pow(default gap-not-pow) から Triomino provider へ直結する回避ルート。
+-/
+theorem triominoPrimeProvider_of_normalizer_and_gapPow_default
+    (hNorm : PrimeGe5CounterexampleNormalizerTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget) :
+    TriominoPrimeProvider := by
+  exact triominoPrimeProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_normalizer_and_gapPow_default hNorm hGapPow)
+
 end DkMath.FLT

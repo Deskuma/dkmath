@@ -389,6 +389,32 @@ theorem FLT_prime_ge5_of_specs
     FermatLastTheoremFor p := by
   exact (FLTPrimeGe5Target_of_normalizer_and_gap_specs hNorm hNotPow hGapPow) p hp hp5
 
+/--
+`default` 供給を使わず、spec 3 本から直接 global provider を得る no-`so#rry` 回避ルート。
+-/
+theorem triominoCosmic_globalProvider_of_specs
+    (hNorm : PrimeGe5CounterexampleNormalizerTarget)
+    (hNotPow : GapNotIsPowTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget) :
+    GlobalPrimeExponentFLTProvider := by
+  exact triominoCosmic_globalProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_normalizer_and_gap_specs hNorm hNotPow hGapPow)
+
+#print axioms triominoCosmic_globalProvider_of_specs  -- OK: no-`so#rryAx`
+
+/--
+`default` 供給を使わず、spec 3 本から直接 Triomino provider を得る no-`so#rry` 回避ルート。
+-/
+theorem triominoPrimeProvider_of_specs
+    (hNorm : PrimeGe5CounterexampleNormalizerTarget)
+    (hNotPow : GapNotIsPowTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget) :
+    TriominoPrimeProvider := by
+  exact triominoPrimeProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_normalizer_and_gap_specs hNorm hNotPow hGapPow)
+
+#print axioms triominoPrimeProvider_of_specs  -- OK: no-`so#rryAx`
+
 /-- `p ≥ 5` の素数指数に対する FLT 供給。 -/
 theorem FLT_prime_ge5 (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
     FermatLastTheoremFor p := by
