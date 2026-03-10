@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.PrimeProvider.TriominoCosmic
 import DkMath.FLT.Core
+import DkMath.FLT.Basic
 import DkMath.Basic.Nat
 
 set_option linter.style.longLine false
@@ -387,6 +388,16 @@ theorem FLT_prime_ge5_of_specs
     (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
     FermatLastTheoremFor p := by
   exact (FLTPrimeGe5Target_of_normalizer_and_gap_specs hNorm hNotPow hGapPow) p hp hp5
+
+/-- `p ≥ 5` の素数指数に対する FLT 供給。 -/
+theorem FLT_prime_ge5 (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
+    FermatLastTheoremFor p := by
+  intro a b c ha hb hc hEq
+  have _hp_pos : 0 < p := hp.pos
+  have hpos : 0 < a ∧ 0 < b ∧ 0 < c :=
+    ⟨Nat.pos_of_ne_zero ha, Nat.pos_of_ne_zero hb, Nat.pos_of_ne_zero hc⟩
+  have hp3 : 3 ≤ p := le_trans (by decide : 3 ≤ 5) hp5
+  exact DkMath.FLT (x := a) (y := b) (z := c) p hpos hp3 hEq
 
 /-!
 ## 実装ロードマップ（順序固定）
