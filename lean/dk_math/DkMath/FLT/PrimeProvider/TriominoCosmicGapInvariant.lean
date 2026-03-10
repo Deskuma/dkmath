@@ -438,17 +438,6 @@ theorem gapPowFromPrimeGe5Counterexample_branchA_factorization_of_gapPow
       _ = p * t.factorization q := by simp [Nat.factorization_pow]
   exact ⟨t.factorization q, by simp [hfac]⟩
 
-theorem gapPowFromPrimeGe5Counterexample_branchA_factorization_of_gapPow'
-    (hA : GapPowFromPrimeGe5Counterexample_branchA) :
-    GapPowFromPrimeGe5Counterexample_branchA_factorization := by
-  intro p x y z hpack hp_dvd_gap q
-  rcases hA hpack hp_dvd_gap with ⟨t, ht⟩
-  have hfac : (z - y).factorization q = p * t.factorization q := by
-    calc
-      (z - y).factorization q = (t ^ p).factorization q := by simp [ht]
-      _ = p * t.factorization q := by simp [Nat.factorization_pow]
-  exact ⟨t.factorization q, by simp [hfac]⟩
-
 /-- Branch A では、`gap` の `p` 乗化仕様と因数分解指数仕様は同値。 -/
 theorem gapPowFromPrimeGe5Counterexample_branchA_iff_factorization :
     GapPowFromPrimeGe5Counterexample_branchA ↔
@@ -585,6 +574,51 @@ theorem triominoPrimeProvider_of_branchA_with_normalizer_and_notPow
     TriominoPrimeProvider := by
   exact triominoPrimeProvider_of_FLTPrimeGe5
     (FLTPrimeGe5Target_of_branchA_with_normalizer_and_notPow hNotPow hA)
+
+/--
+Branch A の因数分解仕様を直接使う clean 版。
+`hNotPow` と concrete normalizer 実装だけで `FLTPrimeGe5Target` へ接続する。
+-/
+theorem FLTPrimeGe5Target_of_branchA_factorization_with_normalizer_and_notPow
+    (hNotPow : GapNotIsPowTarget)
+    (hFac : GapPowFromPrimeGe5Counterexample_branchA_factorization) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_gap_specs_with_normalizer_impl
+    hNotPow
+    (gapPowFromPrimeGe5Counterexample_target_of_branchA_factorization hFac)
+
+/--
+Branch A の因数分解仕様を直接使う clean 版の `FLT_prime_ge5`。
+-/
+theorem FLT_prime_ge5_of_branchA_factorization_with_normalizer_and_notPow
+    (hNotPow : GapNotIsPowTarget)
+    (hFac : GapPowFromPrimeGe5Counterexample_branchA_factorization)
+    (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
+    FermatLastTheoremFor p := by
+  exact (FLTPrimeGe5Target_of_branchA_factorization_with_normalizer_and_notPow hNotPow hFac)
+    p hp hp5
+
+/--
+Branch A の因数分解仕様を直接使う clean 版。
+`FLT_prime_ge5` 本体を通さず global provider へ直結する。
+-/
+theorem triominoCosmic_globalProvider_of_branchA_factorization_with_normalizer_and_notPow
+    (hNotPow : GapNotIsPowTarget)
+    (hFac : GapPowFromPrimeGe5Counterexample_branchA_factorization) :
+    GlobalPrimeExponentFLTProvider := by
+  exact triominoCosmic_globalProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_branchA_factorization_with_normalizer_and_notPow hNotPow hFac)
+
+/--
+Branch A の因数分解仕様を直接使う clean 版。
+`FLT_prime_ge5` 本体を通さず Triomino provider へ直結する。
+-/
+theorem triominoPrimeProvider_of_branchA_factorization_with_normalizer_and_notPow
+    (hNotPow : GapNotIsPowTarget)
+    (hFac : GapPowFromPrimeGe5Counterexample_branchA_factorization) :
+    TriominoPrimeProvider := by
+  exact triominoPrimeProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_branchA_factorization_with_normalizer_and_notPow hNotPow hFac)
 
 /--
 default の gap-not-isPow 供給を使って、残り 2 本（normalizer / gap-pow）から
