@@ -416,6 +416,28 @@ theorem gapPowFromPrimeGe5Counterexample_branchA_of_factorization
     hgap_ne0 hp0
     (hFac hpack hp_dvd_gap)
 
+/--
+反例排除仕様があれば、Branch A の gap-pow は `False.elim` で回収できる。
+
+理論核としては弱いが、導線検証や API 接続の最小補助として有用。
+-/
+theorem gapPowFromPrimeGe5Counterexample_branchA_of_refuter
+    (hRefute : PrimeGe5CounterexampleRefuterTarget) :
+    GapPowFromPrimeGe5Counterexample_branchA := by
+  intro p x y z hpack hp_dvd_gap
+  exact False.elim (hRefute hpack)
+
+/--
+Branch A の因数分解仕様が供給されれば、全域 `GapPowFromPrimeGe5CounterexampleTarget` を得る。
+-/
+theorem gapPowFromPrimeGe5Counterexample_target_of_branchA_factorization
+    (hFac : GapPowFromPrimeGe5Counterexample_branchA_factorization) :
+    GapPowFromPrimeGe5CounterexampleTarget := by
+  intro p x y z hpack
+  by_cases hpB : p ∣ (z - y)
+  · exact (gapPowFromPrimeGe5Counterexample_branchA_of_factorization hFac) hpack hpB
+  · exact gapPowFromPrimeGe5Counterexample_branchB_impl hpack hpB
+
 /-- Branch A/B の 2 分岐仕様が揃えば、全域 `GapPowFromPrimeGe5CounterexampleTarget` が得られる。 -/
 theorem gapPowFromPrimeGe5Counterexample_of_branches
     (hA : GapPowFromPrimeGe5Counterexample_branchA) :
