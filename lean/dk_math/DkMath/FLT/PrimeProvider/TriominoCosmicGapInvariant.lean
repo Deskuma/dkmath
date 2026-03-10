@@ -438,6 +438,17 @@ theorem gapPowFromPrimeGe5Counterexample_branchA_factorization_of_gapPow
       _ = p * t.factorization q := by simp [Nat.factorization_pow, ht_ne0]
   exact ⟨t.factorization q, by simpa [hfac, Nat.mul_comm]⟩
 
+theorem gapPowFromPrimeGe5Counterexample_branchA_factorization_of_gapPow'
+    (hA : GapPowFromPrimeGe5Counterexample_branchA) :
+    GapPowFromPrimeGe5Counterexample_branchA_factorization := by
+  intro p x y z hpack hp_dvd_gap q
+  rcases hA hpack hp_dvd_gap with ⟨t, ht⟩
+  have hfac : (z - y).factorization q = p * t.factorization q := by
+    calc
+      (z - y).factorization q = (t ^ p).factorization q := by simp [ht]
+      _ = p * t.factorization q := by simp [Nat.factorization_pow]
+  exact ⟨t.factorization q, by simp [hfac]⟩
+
 /-- Branch A では、`gap` の `p` 乗化仕様と因数分解指数仕様は同値。 -/
 theorem gapPowFromPrimeGe5Counterexample_branchA_iff_factorization :
     GapPowFromPrimeGe5Counterexample_branchA ↔
