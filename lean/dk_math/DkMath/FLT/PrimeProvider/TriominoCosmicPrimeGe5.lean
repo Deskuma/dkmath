@@ -322,6 +322,27 @@ abbrev PrimeGe5CounterexampleRefuterTarget : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z → False
 
 /--
+`PrimeGe5CounterexamplePack` から gap が `p` 乗になることを回収する仕様。
+
+`GapNotIsPowTarget` と合成すれば即座に反例排除 (`False`) が出るため、
+実装上の残穴を 1 命題に集約するための補助ターゲット。
+-/
+abbrev GapPowFromPrimeGe5CounterexampleTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∃ t : ℕ, (z - y) = t ^ p
+
+/--
+`GapNotIsPowTarget` と `GapPowFromPrimeGe5CounterexampleTarget` の合成で、
+反例排除仕様 `PrimeGe5CounterexampleRefuterTarget` が得られる。
+-/
+theorem primeGe5CounterexampleRefuter_of_gap_specs
+    (hNotPow : GapNotIsPowTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget) :
+    PrimeGe5CounterexampleRefuterTarget := by
+  intro p x y z hpack
+  exact (hNotPow hpack) (hGapPow hpack)
+
+/--
 正規化仕様と反例排除仕様が揃えば、`p ≥ 5` 素数指数の FLT 供給は得られる。
 
 この定理により、`FLT_prime_ge5` 本体は
@@ -334,6 +355,24 @@ theorem FLTPrimeGe5Target_of_normalizer_and_refuter
   intro p hp hp5 a b c ha hb hc hEq
   rcases hNorm hp hp5 ha hb hc hEq with ⟨x, y, z, hpack⟩
   exact hRefute hpack
+
+/--
+正規化仕様 + gap 仕様 2 本（not-isPow / isPow）から `FLTPrimeGe5Target` を得る合成版。
+
+`FLT_prime_ge5` 実装時には、
+1. 正規化 (`hNorm`)
+2. gap の `p` 乗化 (`hGapPow`)
+3. gap の非 `p` 乗 (`hNotPow`)
+の 3 点を埋めれば足りる。
+-/
+theorem FLTPrimeGe5Target_of_normalizer_and_gap_specs
+    (hNorm : PrimeGe5CounterexampleNormalizerTarget)
+    (hNotPow : GapNotIsPowTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_normalizer_and_refuter
+    hNorm
+    (primeGe5CounterexampleRefuter_of_gap_specs hNotPow hGapPow)
 
 /-!
 ## 実装ロードマップ（順序固定）
