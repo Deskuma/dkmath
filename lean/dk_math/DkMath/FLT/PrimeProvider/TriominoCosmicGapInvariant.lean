@@ -862,6 +862,19 @@ abbrev BranchBRefuterTarget : Prop :=
     ¬ p ∣ (z - y) →
     False
 
+/--
+Branch A の mainline 出口（shape-factorization 版）。
+
+`False` へ急がず、まず Branch A の自然出力を保持する。
+-/
+abbrev BranchAShapeFactorizationTarget : Prop :=
+  GapShapeFromPrimeGe5Counterexample_branchA_factorization
+
+/-- Branch A shape-factorization 出口の concrete 実装。 -/
+theorem branchAShapeFactorizationTarget_impl :
+    BranchAShapeFactorizationTarget :=
+  gapShapeFromPrimeGe5Counterexample_branchA_factorization_impl
+
 /-- Branch A/B の 2 終着仕様が揃えば、反例排除仕様が得られる。 -/
 theorem primeGe5CounterexampleRefuter_of_branch_split
     (hA : BranchARefuterTarget)
@@ -894,6 +907,20 @@ theorem FLTPrimeGe5Target_of_branch_split_refuter_with_normalizer_impl
   exact FLTPrimeGe5Target_of_normalizer_and_refuter
     primeGe5CounterexampleNormalizer_impl
     (primeGe5CounterexampleRefuter_of_branch_split hA hB)
+
+/--
+2層 mainline:
+Branch A は shape 出口、Branch B は refuter 出口を取り、
+`shape -> refuter` 橋を外部注入して `FLTPrimeGe5Target` へ接続する。
+-/
+theorem FLTPrimeGe5Target_of_branch_split_shape_and_refuter_with_normalizer_impl
+    (hAShape : BranchAShapeFactorizationTarget)
+    (hB : BranchBRefuterTarget)
+    (hShapeToRefuter : BranchAShapeFactorizationTarget → BranchARefuterTarget) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_branch_split_refuter_with_normalizer_impl
+    (hShapeToRefuter hAShape)
+    hB
 
 /--
 Branch A で `gap = t^p` が供給されれば、`gap` の全素因子指数は `p` の倍数になる。
