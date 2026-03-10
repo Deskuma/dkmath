@@ -367,4 +367,29 @@ theorem gapNotIsPowTarget_default :
     GapNotIsPowTarget := by
   exact gap_not_isPow_of_counterexample triominoCosmicGapInvariant_default
 
+/--
+default の gap-not-isPow 供給を使って、残り 2 本（normalizer / gap-pow）から
+`FLTPrimeGe5Target` を得る接合定理。
+-/
+theorem FLTPrimeGe5Target_of_normalizer_and_gapPow_default
+    (hNorm : PrimeGe5CounterexampleNormalizerTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_normalizer_and_gap_specs
+    hNorm
+    gapNotIsPowTarget_default
+    hGapPow
+
+/--
+default の gap-not-isPow 供給を使う `FLT_prime_ge5` 実装版。
+
+残る実装責務は normalizer と gap-pow 仕様の 2 本だけ。
+-/
+theorem FLT_prime_ge5_of_normalizer_and_gapPow_default
+    (hNorm : PrimeGe5CounterexampleNormalizerTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget)
+    (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
+    FermatLastTheoremFor p := by
+  exact (FLTPrimeGe5Target_of_normalizer_and_gapPow_default hNorm hGapPow) p hp hp5
+
 end DkMath.FLT

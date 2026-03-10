@@ -374,6 +374,20 @@ theorem FLTPrimeGe5Target_of_normalizer_and_gap_specs
     hNorm
     (primeGe5CounterexampleRefuter_of_gap_specs hNotPow hGapPow)
 
+/--
+spec 3 本（normalizer / gap-not-pow / gap-pow）を受け取る `FLT_prime_ge5` 実装版。
+
+無仮定版の `FLT_prime_ge5` 本体は、この定理へ渡す spec を
+Triomino/Cosmic 側で供給できた時点で 1 行で閉じられる。
+-/
+theorem FLT_prime_ge5_of_specs
+    (hNorm : PrimeGe5CounterexampleNormalizerTarget)
+    (hNotPow : GapNotIsPowTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget)
+    (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
+    FermatLastTheoremFor p := by
+  exact (FLTPrimeGe5Target_of_normalizer_and_gap_specs hNorm hNotPow hGapPow) p hp hp5
+
 /-!
 ## 実装ロードマップ（順序固定）
 
