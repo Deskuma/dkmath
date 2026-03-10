@@ -299,6 +299,42 @@ theorem gap_not_isPow_of_counterexample
   intro p x y z hpack
   exact hTri hpack
 
+/--
+`FermatLastTheoremFor p` へ接続するための正規化仕様。
+
+非自明解 `a^p + b^p = c^p` から、Triomino/Cosmic 側が扱う
+`PrimeGe5CounterexamplePack` を 1 つ構成できることを要求する。
+-/
+abbrev PrimeGe5CounterexampleNormalizerTarget : Prop :=
+  ∀ {p a b c : ℕ},
+    Nat.Prime p → 5 ≤ p →
+    a ≠ 0 → b ≠ 0 → c ≠ 0 →
+    a ^ p + b ^ p = c ^ p →
+    ∃ x y z : ℕ, PrimeGe5CounterexamplePack p x y z
+
+/--
+`PrimeGe5CounterexamplePack` を直接排除できることを要求する最小仕様。
+
+`TODO-2` 系の最終到達点を `FermatLastTheoremFor p` へ接続する際の
+最後の穴を 1 つの命題として固定する。
+-/
+abbrev PrimeGe5CounterexampleRefuterTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z → False
+
+/--
+正規化仕様と反例排除仕様が揃えば、`p ≥ 5` 素数指数の FLT 供給は得られる。
+
+この定理により、`FLT_prime_ge5` 本体は
+「正規化の実装」と「反例排除の実装」を埋めるだけへ還元される。
+-/
+theorem FLTPrimeGe5Target_of_normalizer_and_refuter
+    (hNorm : PrimeGe5CounterexampleNormalizerTarget)
+    (hRefute : PrimeGe5CounterexampleRefuterTarget) :
+    FLTPrimeGe5Target := by
+  intro p hp hp5 a b c ha hb hc hEq
+  rcases hNorm hp hp5 ha hb hc hEq with ⟨x, y, z, hpack⟩
+  exact hRefute hpack
+
 /-!
 ## 実装ロードマップ（順序固定）
 
