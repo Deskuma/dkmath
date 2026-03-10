@@ -386,6 +386,21 @@ theorem gapPowFromPrimeGe5Counterexample_branchB_impl :
     ⟨u, _v, hu, _hv⟩
   exact ⟨u, hu⟩
 
+/-- Branch A（`p ∣ z - y`）で gap の `p` 乗化を供給するための入力仕様。 -/
+abbrev GapPowFromPrimeGe5Counterexample_branchA : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ∃ t : ℕ, (z - y) = t ^ p
+
+/-- Branch A/B の 2 分岐仕様が揃えば、全域 `GapPowFromPrimeGe5CounterexampleTarget` が得られる。 -/
+theorem gapPowFromPrimeGe5Counterexample_of_branches
+    (hA : GapPowFromPrimeGe5Counterexample_branchA) :
+    GapPowFromPrimeGe5CounterexampleTarget := by
+  intro p x y z hpack
+  by_cases hpB : p ∣ (z - y)
+  · exact hA hpack hpB
+  · exact gapPowFromPrimeGe5Counterexample_branchB_impl hpack hpB
+
 /--
 default の gap-not-isPow 供給を使って、残り 2 本（normalizer / gap-pow）から
 `FLTPrimeGe5Target` を得る接合定理。
