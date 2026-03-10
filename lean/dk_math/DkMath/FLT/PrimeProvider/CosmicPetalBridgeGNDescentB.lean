@@ -239,7 +239,7 @@ def triominoWieferichShrinkXYZCertB_of_trace
 /--
 shrink の候補生成成果物。
 
-ここでは「数値」だけでなく、再パック化を no-`sorry` で行うための証明材料まで保持する。
+ここでは「数値」だけでなく、再パック化を no-`so#rry` で行うための証明材料まで保持する。
 -/
 structure TriominoWieferichShrinkCandB (p z : ℕ) where
   x' : ℕ
@@ -407,7 +407,7 @@ structure TriominoWieferichShrinkKernelCoreB (p x y z q : ℕ) where
 /--
 `KernelSeedB` に `hxMul / hyEq` だけを載せた薄い bundle。
 
-最後の `sorry` には `Inv` を要求せず、`Seed + links` だけを構成させる。
+最後の `so#rry` には `Inv` を要求せず、`Seed + links` だけを構成させる。
 -/
 structure TriominoWieferichShrinkKernelSeedLinkB (p x y z q : ℕ) where
   s : TriominoWieferichShrinkKernelSeedB p x y z q
@@ -1028,7 +1028,7 @@ theorem triominoWieferichShrinkKernelInv_of_nums_from_links
 /--
 `Nums + hEq' + links` から `Seed + links` を梱包する。
 
-最後の `sorry` は `hEq'` まででよく、`Eq` witness は外で再構成する。
+最後の `so#rry` は `hEq'` まででよく、`Eq` witness は外で再構成する。
 -/
 def TriominoWieferichShrinkKernelNumsEqLinkB.toSeedLink
     {p x y z q : ℕ}

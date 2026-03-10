@@ -75,7 +75,7 @@ lemma twoTail_log_bound_of_not_bad_eps
         ∑ excess_p(c) · log p ≤ ∑ γ_p · log p
         各素数 p について excess_p(c) ≤ γ_p を使う
 
-        【課題】現在のステップ(2)は sorry が残る。理由：
+        【課題】現在のステップ(2)は so#rry が残る。理由：
         - Bad_ε は Vp p n = padicValNat p (2*n+1) を使う（Chernoff 用）
         - twoTail は padicValNat p c を使う（ABC 品質不等式用）
         - これらは異なる量なので、直接の変換が困難
@@ -176,7 +176,7 @@ lemma twoTail_log_bound_of_not_bad_eps_budget
     --    padicValNat p (2*c+1) と padicValNat p c の関係を示す
     --    ただし、一般的な関係式は存在しない（上の例参照）
     --
-    -- 現時点では sorry で置き、将来の作業として残す
+    -- 現時点では so#rry で置き、将来の作業として残す
     sorry
     -- (3) 予算集約でしめる
   exact le_trans h1 (le_trans h2 h_budget)

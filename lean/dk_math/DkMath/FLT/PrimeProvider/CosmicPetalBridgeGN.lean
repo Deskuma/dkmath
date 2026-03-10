@@ -1,4 +1,4 @@
-/- 
+/-
 Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
 Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
@@ -32,7 +32,7 @@ structure TriominoWieferichBranchBridge where
 /--
 一般 `GN` nonlift bridge の本丸インターフェイス。
 
-`lift` 供給は core 側で no-`sorry` 化済み。残る `descent` を
+`lift` 供給は core 側で no-`so#rry` 化済み。残る `descent` を
 `CosmicPetalBridgeGNDescentB` に隔離し、このファイルは配線専用に保つ。
 -/
 theorem triominoWieferichLiftKernel_impl

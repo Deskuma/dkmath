@@ -498,7 +498,7 @@ lemma padicValNat_upper_bound_layer_b_stub {a b d q : ℕ}
     --
     -- [TODO] d ≥ 5 向けの一般化された上界評価。
     --        具体的な一般化は GcdNextLayerB/Phase 4.2 として別タスクで
-    --        自前の定式化を進める必要があるため、現在はスタブとして sorry としている。
+    --        自前の定式化を進める必要があるため、現在はスタブとして so#rry としている。
     sorry
 
 /-- 一般的 d への上界補題

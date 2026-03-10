@@ -17,7 +17,7 @@ set_option linter.style.emptyLine false
 `PrimeGe5FLTProvider` の本体実装を育てるための作業用モジュール。
 
 方針:
-- ここでは `sorry` を導入しない。
+- ここでは `so#rry` を導入しない。
 - 未完成な定理本体はまだ置かず、ターゲットの型と補題分解順だけを固定する。
 - 実装が進んだら、このファイルで不足補題を順次定理化し、
   最後に `FLT_prime_ge5` を実装する。

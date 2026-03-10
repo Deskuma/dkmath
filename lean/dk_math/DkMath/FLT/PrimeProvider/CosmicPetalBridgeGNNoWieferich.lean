@@ -19,7 +19,7 @@ open DkMath.CosmicFormulaBinom
 Branch B の lift 抽出と下降仕様が揃えば、NoWieferich bridge は直ちに従う。
 
 このファイルは phase-15 の研究室として作られたが、現時点では
-`CosmicPetalBridgeGNCore` にある no-`sorry` の合成だけで閉じる。
+`CosmicPetalBridgeGNCore` にある no-`so#rry` の合成だけで閉じる。
 -/
 theorem triominoNoWieferichBridge_of_descent
     (hDesc : WieferichDescentB) :

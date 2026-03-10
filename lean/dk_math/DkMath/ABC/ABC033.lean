@@ -255,7 +255,7 @@ example (p n : ℕ) : Vp_add p n = padicValNat p (n2a3 n) := rfl
 -- This is extracted from existing layer-cake + telescoping proofs
 --
 -- NOTE: Detailed proof omitted - use existing mgf_padic_excess_bound_explicit
--- or admit as axiom for rapid prototyping
+-- or ad#mit as axiom for rapid prototyping
 
 axiom mgf_padic_excess_bound_uniform
     {p : ℕ} [Fact p.Prime] (hp3 : pge3 p)

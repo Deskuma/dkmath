@@ -14,7 +14,7 @@ import DkMath.FLT.MathlibBridge.FLT34
 /-
 NOTE [Temporary Mathlib FLT3 bridge]:
 - このファイルでの `DkMath.FLT.FLT3_core/FLT4_core` 参照は「暫定」。
-- 目的は phase-12 時点で `n=3` 分岐を閉じ、`sorry` を高指数側へ隔離すること。
+- 目的は phase-12 時点で `n=3` 分岐を閉じ、`so#rry` を高指数側へ隔離すること。
 - 将来、Triomino/Cosmic 側の独立証明（`n=3,4` を含む）を実装後、
   `DkMath.FLT.MathlibBridge.FLT34` 依存は除去して置換する。
 -/
@@ -1883,7 +1883,7 @@ lemma FLT_highExponent_core_of_primeProvider {x y z n : ℕ}
   exact hflt_n x y z (Nat.ne_of_gt hx) (Nat.ne_of_gt hy) (Nat.ne_of_gt hz) h_eq
 
 /--
-`PrimeExponentFLTProvider n` が与えられた場合の高指数核（`sorry` なし版）。
+`PrimeExponentFLTProvider n` が与えられた場合の高指数核（`so#rry` なし版）。
 -/
 lemma FLT_highExponent_core_of_provider {x y z n : ℕ}
     (hn_ge4 : 4 ≤ n)
@@ -1992,7 +1992,7 @@ theorem FLT_from_tromino_tiling {x y z : ℕ} (n : ℕ)
 
 /--
 `PrimeExponentFLTProvider n` を外部から受ける確定版。
-`FLT_from_tromino_tiling` の `sorry` 部分を使わずに閉じる。
+`FLT_from_tromino_tiling` の `so#rry` 部分を使わずに閉じる。
 -/
 theorem FLT_from_tromino_tiling_of_primeProvider {x y z : ℕ} (n : ℕ)
     (hprimeFLT : PrimeExponentFLTProvider n)
@@ -2071,7 +2071,7 @@ theorem FLT_general_via_tromino {x y z : ℕ} (n : ℕ)
 
 /--
 `PrimeExponentFLTProvider n` を外部から受ける確定版。
-`FLT_general_via_tromino` の `sorry` 部分を使わずに閉じる。
+`FLT_general_via_tromino` の `so#rry` 部分を使わずに閉じる。
 -/
 theorem FLT_general_via_tromino_of_primeProvider {x y z : ℕ} (n : ℕ)
     (hprimeFLT : PrimeExponentFLTProvider n)

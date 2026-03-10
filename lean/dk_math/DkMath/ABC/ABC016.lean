@@ -578,7 +578,7 @@ lemma succ_le_two_mul_add_one (n : ℕ) : n + 1 ≤ 2*n + 1 :=
 
 /-- Adjacent triple version: From `¬ is_bad_a δ (2n+1) (n+1) n`,
     directly derive `piSqRad (2n+1) ≤ (rad n * rad (n+1))^δ`.
-    This is the "middle link of the π-chain" (index-aligned, no admit). -/
+    This is the "middle link of the π-chain" (index-aligned, no ad#mit). -/
 lemma piSqRad_adjacent_le_of_not_is_bad_a'
   {δ : ℝ} {n : ℕ}
   (h : ¬ is_bad_a δ (2*n+1) (n+1) n) :
@@ -611,7 +611,7 @@ lemma piSqRad_adjacent_le_of_not_is_bad_a {δ : ℝ} {X : ℕ}
     (h : ¬ is_bad_a δ (2 * X + 1) (X + 1) X) :
     (piSqRad (2 * X + 1) : ℝ) ≤ (rad (X * (X + 1)) : ℝ) ^ δ := by
   -- Use the index-aligned helper `piSqRad_adjacent_le_of_not_is_bad_a'` which
-  -- already handles the adjacent triple case (no admits).
+  -- already handles the adjacent triple case (no ad#mits).
   have hbound := piSqRad_adjacent_le_of_not_is_bad_a' (δ := δ) (n := X) h
   -- rad multiplicativity for coprime consecutive integers
   have hrad_eq : rad (X * (X + 1)) = rad X * rad (X + 1) := rad_mul_coprime' (coprime_succ X)
