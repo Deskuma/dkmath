@@ -429,9 +429,9 @@ theorem primeGe5CounterexampleNormalizer_impl :
     have : 0 < g * z := by simpa [hc_mul] using Nat.pos_of_ne_zero hc
     exact Nat.pos_of_mul_pos_left this
   have hxy_eq : x ^ p + y ^ p = z ^ p := by
-    have ha_pow : a ^ p = g ^ p * x ^ p := by simpa [ha_mul, Nat.mul_pow]
-    have hb_pow : b ^ p = g ^ p * y ^ p := by simpa [hb_mul, Nat.mul_pow]
-    have hc_pow : c ^ p = g ^ p * z ^ p := by simpa [hc_mul, Nat.mul_pow]
+    have ha_pow : a ^ p = g ^ p * x ^ p := by simp [ha_mul, Nat.mul_pow]
+    have hb_pow : b ^ p = g ^ p * y ^ p := by simp [hb_mul, Nat.mul_pow]
+    have hc_pow : c ^ p = g ^ p * z ^ p := by simp [hc_mul, Nat.mul_pow]
     have hmul : g ^ p * (x ^ p + y ^ p) = g ^ p * z ^ p := by
       calc
         g ^ p * (x ^ p + y ^ p) = g ^ p * x ^ p + g ^ p * y ^ p := by rw [Nat.mul_add]
@@ -446,7 +446,7 @@ theorem primeGe5CounterexampleNormalizer_impl :
     have h_eq_mul : g = g * Nat.gcd x y := by
       calc
         g = Nat.gcd a b := by rfl
-        _ = Nat.gcd (g * x) (g * y) := by simpa [ha_mul, hb_mul]
+        _ = Nat.gcd (g * x) (g * y) := by simp [ha_mul, hb_mul]
         _ = g * Nat.gcd x y := h_gcd_mul
     have h_gcd_xy : Nat.gcd x y = 1 := by
       have h1 : g * Nat.gcd x y = g * 1 := by
