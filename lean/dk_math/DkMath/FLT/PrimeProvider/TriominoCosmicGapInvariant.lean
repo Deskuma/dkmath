@@ -435,8 +435,8 @@ theorem gapPowFromPrimeGe5Counterexample_branchA_factorization_of_gapPow
   have hfac : (z - y).factorization q = p * t.factorization q := by
     calc
       (z - y).factorization q = (t ^ p).factorization q := by simp [ht]
-      _ = p * t.factorization q := by simp [Nat.factorization_pow, ht_ne0]
-  exact ⟨t.factorization q, by simp [hfac, Nat.mul_comm]⟩
+      _ = p * t.factorization q := by simp [Nat.factorization_pow]
+  exact ⟨t.factorization q, by simp [hfac]⟩
 
 theorem gapPowFromPrimeGe5Counterexample_branchA_factorization_of_gapPow'
     (hA : GapPowFromPrimeGe5Counterexample_branchA) :
