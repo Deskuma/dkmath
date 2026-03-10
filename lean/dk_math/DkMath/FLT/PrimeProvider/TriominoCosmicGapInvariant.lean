@@ -299,6 +299,87 @@ theorem noSqPrimeOnGN_when_p_dvd_u_impl :
       exact (Nat.dvd_add_right hB_sq).1 hBA_sq
     exact hA_not_sq hA_sq
 
+/--
+Branch A では、`N := GN p (z - y) y` に対して `p ∣ N` かつ `¬ p^2 ∣ N` が成り立つ。
+-/
+theorem p_dvd_GN_and_not_sq_when_p_dvd_gap
+    {p x y z : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y)) :
+    p ∣ GN p (z - y) y ∧ ¬ p ^ 2 ∣ GN p (z - y) y := by
+  let u : ℕ := z - y
+  let N : ℕ := GN p u y
+  let A : ℕ := p * y ^ (p - 1)
+  let B : ℕ := Finset.sum ((Finset.range p).erase 0) (fun k =>
+    (Nat.choose p (k + 1) : ℕ) * u ^ k * y ^ (p - 1 - k))
+  have hp_pos : 0 < p := hpack.hp.pos
+  have hp_not_dvd_y : ¬ p ∣ y := by
+    simpa [u, PrimeGe5CounterexamplePack.gap] using
+      hpack.prime_not_dvd_right_of_prime_dvd_gap hp_dvd_gap
+  have hsplitBA : B + A = N := by
+    let f : ℕ → ℕ := fun k =>
+      (Nat.choose p (k + 1) : ℕ) * (z - y) ^ k * y ^ (p - 1 - k)
+    have hsum :
+        Finset.sum ((Finset.range p).erase 0) f + f 0 = Finset.sum (Finset.range p) f := by
+      simpa using
+        (Finset.sum_erase_add (s := Finset.range p) (f := f) (a := 0)
+          (by simpa using hp_pos))
+    unfold N A B u
+    simpa [f, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using hsum
+  have hsplit : N = A + B := by
+    simpa [Nat.add_comm] using hsplitBA.symm
+  have hB_sq : p ^ 2 ∣ B := by
+    unfold B
+    refine Finset.dvd_sum ?_
+    intro k hk
+    have hk_mem : k ∈ Finset.range p := Finset.mem_of_mem_erase hk
+    have hk_ne_zero : k ≠ 0 := (Finset.mem_erase.mp hk).1
+    by_cases hk_one : k = 1
+    · have hchoose : p ∣ Nat.choose p (k + 1) := by
+        rw [hk_one]
+        apply hpack.hp.dvd_choose_self
+        · decide
+        · exact lt_of_lt_of_le (by decide : 2 < 5) hpack.hp5
+      have hp_dvd_uk : p ∣ u ^ k := by simpa [hk_one] using hp_dvd_gap
+      have hprefix : p ^ 2 ∣ (Nat.choose p (k + 1) : ℕ) * u ^ k := by
+        simpa [pow_two] using Nat.mul_dvd_mul hchoose hp_dvd_uk
+      have hmul : p ^ 2 ∣ ((Nat.choose p (k + 1) : ℕ) * u ^ k) * y ^ (p - 1 - k) :=
+        dvd_mul_of_dvd_left hprefix _
+      simpa [Nat.mul_assoc] using hmul
+    · have hk_ge_two : 2 ≤ k := by omega
+      have hpp_dvd_u2 : p ^ 2 ∣ u ^ 2 := by
+        simpa [pow_two] using Nat.mul_dvd_mul hp_dvd_gap hp_dvd_gap
+      have hpp_dvd_uk : p ^ 2 ∣ u ^ k :=
+        dvd_trans hpp_dvd_u2 (pow_dvd_pow u hk_ge_two)
+      have hprefix : p ^ 2 ∣ (Nat.choose p (k + 1) : ℕ) * u ^ k :=
+        dvd_mul_of_dvd_right hpp_dvd_uk _
+      have hmul : p ^ 2 ∣ ((Nat.choose p (k + 1) : ℕ) * u ^ k) * y ^ (p - 1 - k) :=
+        dvd_mul_of_dvd_left hprefix _
+      simpa [Nat.mul_assoc] using hmul
+  have hp_dvd_N : p ∣ N := by
+    have hp_dvd_A : p ∣ A := by
+      unfold A
+      exact dvd_mul_right p (y ^ (p - 1))
+    have hp_dvd_B : p ∣ B := by
+      have hB_sq' : p * p ∣ B := by simpa [pow_two] using hB_sq
+      exact dvd_trans (dvd_mul_right p p) hB_sq'
+    simpa [hsplit] using (Nat.dvd_add hp_dvd_A hp_dvd_B)
+  have hA_not_sq : ¬ p ^ 2 ∣ A := by
+    intro hA_sq
+    have hp_dvd_ypow : p ∣ y ^ (p - 1) := by
+      have hmul : p * p ∣ p * y ^ (p - 1) := by
+        simpa [A, pow_two] using hA_sq
+      exact Nat.dvd_of_mul_dvd_mul_left hp_pos hmul
+    exact hp_not_dvd_y (hpack.hp.dvd_of_dvd_pow hp_dvd_ypow)
+  have hp2_not_dvd_N : ¬ p ^ 2 ∣ N := by
+    intro hN_sq
+    have hA_sq : p ^ 2 ∣ A := by
+      have hAB_sq : p ^ 2 ∣ A + B := by simpa [hsplit] using hN_sq
+      have hBA_sq : p ^ 2 ∣ B + A := by simpa [Nat.add_comm] using hAB_sq
+      exact (Nat.dvd_add_right hB_sq).1 hBA_sq
+    exact hA_not_sq hA_sq
+  simpa [u, N] using And.intro hp_dvd_N hp2_not_dvd_N
+
 /-- Branch B は「原始素因子の取得」と「深刺し禁止」の 2 仕様から合成できる。 -/
 theorem noSqPrimeOnGN_when_p_not_dvd_u_of_specs
     (hPrim : PrimitivePrime_fromCounterexample)
@@ -531,6 +612,36 @@ theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_of_padicValNa
     _ = (p - 1) + p * m := hm
 
 /--
+Branch A shape-factorization の `q = p` 側 clean 実装（valuation 計算版）。
+-/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_math :
+    GapShapeFromPrimeGe5Counterexample_branchA_factorization_p := by
+  intro p x y z hpack hp_dvd_gap
+  let u : ℕ := z - y
+  let N : ℕ := GN p u y
+  have hxpow : x ^ p = u * N := by
+    simpa [u, N, PrimeGe5CounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
+  have hGN : p ∣ N ∧ ¬ p ^ 2 ∣ N := by
+    simpa [u, N] using p_dvd_GN_and_not_sq_when_p_dvd_gap hpack hp_dvd_gap
+  have hN0 : N ≠ 0 := by
+    intro hN0
+    exact hGN.2 (by simpa [hN0])
+  have hu0 : u ≠ 0 := by
+    exact Nat.ne_of_gt (Nat.sub_pos_of_lt hpack.hyz_lt)
+  have hNval : padicValNat p N = 1 :=
+    padicValNat_eq_one_of_dvd_not_sq hpack.hp hGN.1 hGN.2
+  have hVal : ∃ m : ℕ, padicValNat p u = (p - 1) + p * m := by
+    exact padicValNat_gap_shape_of_mul_eq_pow
+      (hp := hpack.hp)
+      (hx0 := hpack.hx0)
+      (hu0 := hu0)
+      (hN0 := hN0)
+      (hEq := hxpow)
+      (hNval := hNval)
+  simpa [u] using gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_of_padicValNat
+    hpack hVal
+
+/--
 Branch A shape-factorization concrete 実装（2小片合成版）。
 -/
 theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_impl :
@@ -547,7 +658,7 @@ theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_impl :
 /-- 互換エイリアス（旧名）。 -/
 theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_impl :
     GapShapeFromPrimeGe5Counterexample_branchA_factorization_p :=
-  gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_via_FLT
+  gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_math
 
 /-- Branch A 本線 target（値域 shape 版）。 -/
 abbrev GapShapeFromPrimeGe5Counterexample_branchA : Prop :=
