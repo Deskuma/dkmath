@@ -153,6 +153,67 @@ theorem bodyInvariant_of_NoPowOnGN
   intro p x y z hpack
   exact not_isPow_of_exists_prime_dvd_not_dvd_sq hpack.hp5 (hNoPow hpack)
 
+/-- `p ∣ n` かつ `¬ p^2 ∣ n` なら `padicValNat p n = 1`。 -/
+lemma padicValNat_eq_one_of_dvd_not_sq
+    {p n : ℕ} (hp : Nat.Prime p)
+    (hpd : p ∣ n) (hpsq : ¬ p ^ 2 ∣ n) :
+    padicValNat p n = 1 := by
+  have hnz : n ≠ 0 := by
+    intro hn0
+    apply hpsq
+    simp [hn0]
+  have hge : 1 ≤ padicValNat p n :=
+    DkMath.ABC.padicValNat_one_le_of_prime_dvd hp hnz hpd
+  have hle : padicValNat p n ≤ 1 := by
+    by_contra hnot
+    have h2 : 2 ≤ padicValNat p n := by omega
+    have hsq : p ^ 2 ∣ n :=
+      (@padicValNat_dvd_iff_le p (Fact.mk hp) n 2 hnz).2 h2
+    exact hpsq hsq
+  exact le_antisymm hle hge
+
+/--
+`x^p = u * N` かつ `padicValNat p N = 1` から、`u` の `p`-進指数形を回収する。
+-/
+lemma padicValNat_gap_shape_of_mul_eq_pow
+    {p x u N : ℕ}
+    (hp : Nat.Prime p)
+    (hx0 : x ≠ 0)
+    (hu0 : u ≠ 0)
+    (hN0 : N ≠ 0)
+    (hEq : x ^ p = u * N)
+    (hNval : padicValNat p N = 1) :
+    ∃ m : ℕ, padicValNat p u = (p - 1) + p * m := by
+  letI : Fact (Nat.Prime p) := ⟨hp⟩
+  have hpow : padicValNat p (x ^ p) = p * padicValNat p x := by
+    simpa using (padicValNat.pow (p := p) (a := x) p hx0)
+  have hmul : padicValNat p (u * N) = padicValNat p u + padicValNat p N := by
+    simpa using (padicValNat.mul (p := p) hu0 hN0)
+  have hvalEq : p * padicValNat p x = padicValNat p u + 1 := by
+    calc
+      p * padicValNat p x = padicValNat p (x ^ p) := hpow.symm
+      _ = padicValNat p (u * N) := by simp [hEq]
+      _ = padicValNat p u + padicValNat p N := hmul
+      _ = padicValNat p u + 1 := by simp [hNval]
+  have hx_pos : 0 < padicValNat p x := by
+    have : 0 < p * padicValNat p x := by
+      rw [hvalEq]
+      exact Nat.succ_pos _
+    exact Nat.pos_of_mul_pos_left this
+  have hvu : padicValNat p u = p * padicValNat p x - 1 := by
+    exact Nat.eq_sub_of_add_eq hvalEq.symm
+  refine ⟨padicValNat p x - 1, ?_⟩
+  have hx_decomp : (padicValNat p x - 1) + 1 = padicValNat p x := by
+    exact Nat.sub_add_cancel (Nat.succ_le_of_lt hx_pos)
+  calc
+    padicValNat p u = p * padicValNat p x - 1 := hvu
+    _ = p * ((padicValNat p x - 1) + 1) - 1 := by simp [hx_decomp]
+    _ = (p * (padicValNat p x - 1) + p) - 1 := by simp [Nat.mul_add]
+    _ = p * (padicValNat p x - 1) + (p - 1) := by
+      have hp_ge1 : 1 ≤ p := Nat.succ_le_of_lt hp.pos
+      simp [Nat.add_sub_assoc hp_ge1]
+    _ = (p - 1) + p * (padicValNat p x - 1) := by ac_rfl
+
 /-- Branch A（`p ∣ gap`）は、`q := p` と `GN` の head/tail 分解で閉じる。 -/
 theorem noSqPrimeOnGN_when_p_dvd_u_impl :
     NoSqPrimeOnGN_when_p_dvd_u := by
