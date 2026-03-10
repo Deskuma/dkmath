@@ -56,7 +56,7 @@ theorem triominoPrimeProvider_of_FLTPrimeGe5
   exact triominoPrimeProvider_of_primeGe5 hprimeGe5
 
 /-- 「素因数分解の指数がすべて `p` の倍数」なら、`p` 乗根を素朴に構成できる。 -/
-private lemma exists_eq_pow_of_factorization_dvd
+lemma exists_eq_pow_of_factorization_dvd
     {u p : ℕ} (hu0 : u ≠ 0) (_hp0 : 0 < p)
     (hdiv : ∀ q : ℕ, p ∣ u.factorization q) :
     ∃ t : ℕ, u = t ^ p := by

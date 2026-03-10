@@ -392,6 +392,30 @@ abbrev GapPowFromPrimeGe5Counterexample_branchA : Prop :=
     p ∣ (z - y) →
     ∃ t : ℕ, (z - y) = t ^ p
 
+/--
+Branch A の `gap` が `p` 乗になることを、`gap` の全素因子指数が `p` の倍数という
+因数分解条件へ還元した入力仕様。
+-/
+abbrev GapPowFromPrimeGe5Counterexample_branchA_factorization : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ∀ q : ℕ, p ∣ (z - y).factorization q
+
+/--
+Branch A の因数分解指数条件が供給されれば、`gap = t^p` は no-`so#rry` で従う。
+-/
+theorem gapPowFromPrimeGe5Counterexample_branchA_of_factorization
+    (hFac : GapPowFromPrimeGe5Counterexample_branchA_factorization) :
+    GapPowFromPrimeGe5Counterexample_branchA := by
+  intro p x y z hpack hp_dvd_gap
+  have hp0 : 0 < p := hpack.hp.pos
+  have hgap_ne0 : (z - y) ≠ 0 := by
+    exact Nat.ne_of_gt (Nat.sub_pos_of_lt hpack.hyz_lt)
+  exact exists_eq_pow_of_factorization_dvd
+    (u := z - y) (p := p)
+    hgap_ne0 hp0
+    (hFac hpack hp_dvd_gap)
+
 /-- Branch A/B の 2 分岐仕様が揃えば、全域 `GapPowFromPrimeGe5CounterexampleTarget` が得られる。 -/
 theorem gapPowFromPrimeGe5Counterexample_of_branches
     (hA : GapPowFromPrimeGe5Counterexample_branchA) :
