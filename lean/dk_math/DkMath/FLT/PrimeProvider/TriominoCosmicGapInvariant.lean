@@ -469,6 +469,24 @@ theorem gapPowFromPrimeGe5Counterexample_branchA_of_refuter
   exact False.elim (hRefute hpack)
 
 /--
+反例排除仕様があれば、Branch A の因数分解指数仕様も vacuous に供給できる。
+-/
+theorem gapPowFromPrimeGe5Counterexample_branchA_factorization_of_refuter
+    (hRefute : PrimeGe5CounterexampleRefuterTarget) :
+    GapPowFromPrimeGe5Counterexample_branchA_factorization := by
+  intro p x y z hpack hp_dvd_gap q
+  exact False.elim (hRefute hpack)
+
+/--
+反例排除仕様があれば、全域 `GapPowFromPrimeGe5CounterexampleTarget` を直接供給できる。
+-/
+theorem gapPowFromPrimeGe5Counterexample_target_of_refuter
+    (hRefute : PrimeGe5CounterexampleRefuterTarget) :
+    GapPowFromPrimeGe5CounterexampleTarget := by
+  intro p x y z hpack
+  exact False.elim (hRefute hpack)
+
+/--
 Branch A の因数分解仕様が供給されれば、全域 `GapPowFromPrimeGe5CounterexampleTarget` を得る。
 -/
 theorem gapPowFromPrimeGe5Counterexample_target_of_branchA_factorization
