@@ -154,6 +154,19 @@
 - コメント
 - これで `CosmicPetalBridgeGNDescentB` の gcd ルートは、「一般理論は `NumberTheory/Gcd/GN`、FLT 文脈は条件供給」というかなり自然な分割になった。
 
+### 2026/03/10 12:23
+
+- 実施内容
+- `PrimeProvider` 側にまだ `NumberTheory` へ引き上げられる一般補題が残っていないか、`gcd` と `valuation` の観点から再点検した。
+- 結果
+- 次の有力候補は `CosmicPetalBridgeGNNoWieferich.lean` の `triominoWieferichShrink_padicValNat_diff_eq_GN_core`。これは本質的に「`q ∤ gap` なら `padicValNat q (diff) = padicValNat q (GN)`」という一般補題で、反例パック依存は `hyz_lt` と `p` の正性供給に過ぎない。もう一つは同ファイルの `noLift_of_squarefree` で、これは完全に pack 非依存な一般 valuation 補題なので `NumberTheory` 側へ移してよい。一方、`triominoNoLiftGNBridge_of_squarefree_GN` や `triominoNoWieferichBridge_of_not_sq_GN` は provider/bridge 契約そのものなので `PrimeProvider` 側に残すのが自然。
+- 失敗内容
+- なし。
+- 次の予定
+- まず `padicValNat_diff_eq_GN_core` を `NumberTheory/Gcd/GN.lean` か `GcdNext` 系へ引き上げ、その後 `noLift_of_squarefree` の配置先を `NumberTheory` 側へ寄せる。
+- コメント
+- いまの `PrimeProvider` に残る一般部は、`gcd` よりむしろ `padicValNat` / squarefree の橋に集中している。次の整理フェーズは valuation 側が本命。
+
 ---
 
 ## テンプレート
