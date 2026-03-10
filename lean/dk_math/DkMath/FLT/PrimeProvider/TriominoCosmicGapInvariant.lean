@@ -313,11 +313,21 @@ theorem triominoCosmicNoPowOnGN
   exact triominoCosmicNoPowOnGN_of_nonLiftableGNBridge
     (allNonLiftableOnGN_fromCounterexample_impl hBranch)
 
+/-- 既定の Branch bridge 注入から得る、引数なし版の `NoPowOnGN`。 -/
+theorem triominoCosmicNoPowOnGN_default :
+    NoPowOnGN_fromCounterexample := by
+  exact triominoCosmicNoPowOnGN triominoWieferichBranchBridge_default
+
 /-- Triomino/Cosmic 本丸（Body 版）は、`NoPowOnGN` 仕様から得る。 -/
 theorem triominoCosmicBodyInvariant
     (hBranch : TriominoWieferichBranchBridge) :
     TriominoCosmicBodyInvariant := by
   exact bodyInvariant_of_NoPowOnGN (triominoCosmicNoPowOnGN hBranch)
+
+/-- 既定の Branch bridge 注入から得る、引数なし版の Body invariant。 -/
+theorem triominoCosmicBodyInvariant_default :
+    TriominoCosmicBodyInvariant := by
+  exact bodyInvariant_of_NoPowOnGN triominoCosmicNoPowOnGN_default
 
 /--
 Body 不変量があれば、gap 不変量は自動で得られる。
@@ -350,7 +360,7 @@ theorem triominoCosmicGapInvariant
 /-- 既定の Branch bridge 注入から得る、引数なし版の gap invariant。 -/
 theorem triominoCosmicGapInvariant_default :
     TriominoCosmicGapInvariant := by
-  exact triominoCosmicGapInvariant triominoWieferichBranchBridge_default
+  exact gapInvariant_of_bodyInvariant triominoCosmicBodyInvariant_default
 
 /-- 既定の gap invariant から `GapNotIsPowTarget` を得る薄い接続。 -/
 theorem gapNotIsPowTarget_default :

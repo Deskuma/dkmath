@@ -61,4 +61,9 @@ theorem triominoWieferichBranchBridge_default :
     TriominoWieferichBranchBridge := by
   exact ⟨triominoWieferichDescent_impl⟩
 
+/-- 既定の Branch bridge から得る、引数なし版の NoWieferich bridge。 -/
+theorem triominoNoWieferichBridge_default :
+    TriominoNoWieferichBridge := by
+  exact triominoNoWieferichBridge_impl triominoWieferichBranchBridge_default
+
 end DkMath.FLT
