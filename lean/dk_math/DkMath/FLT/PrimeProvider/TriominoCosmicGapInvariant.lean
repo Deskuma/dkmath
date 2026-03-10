@@ -566,6 +566,35 @@ abbrev GapNePNoSharedPrimeOnGN_branchA : Prop :=
     ¬ q ∣ GN p (z - y) y
 
 /--
+Branch A の `q ≠ p` 側本丸:
+`q ∣ gap` かつ `q ≠ p` なら `q ∤ GN p gap y`。
+-/
+theorem gapNePNoSharedPrimeOnGN_branchA_math :
+    GapNePNoSharedPrimeOnGN_branchA := by
+  intro p x y z q hpack hp_dvd_gap hqP hqp hq_gap hq_GN
+  have hcop_yz : Nat.Coprime z y := by
+    exact (coprime_right_of_add_pow_eq_pow hpack.hp hpack.hxy hpack.hEq).symm
+  have hq_gap_int : (q : ℤ) ∣ (((z - y : ℕ) : ℤ)) := by
+    exact_mod_cast hq_gap
+  have hq_GN_cast : (q : ℤ) ∣ ((GN p (z - y) y : ℕ) : ℤ) := by
+    exact_mod_cast hq_GN
+  have hq_GN_int :
+      (q : ℤ) ∣ GN p (((z - y : ℕ) : ℤ)) (y : ℤ) := by
+    simpa [GN] using hq_GN_cast
+  have hq_gcd_int :
+      q ∣ Int.gcd (((z - y : ℕ) : ℤ))
+        (GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) := by
+    exact Int.dvd_gcd hq_gap_int hq_GN_int
+  have hgapgcd_dvd_p :
+      Int.gcd (((z - y : ℕ) : ℤ))
+        (GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) ∣ p := by
+    exact DkMath.NumberTheory.Gcd.gcd_gap_GN_dvd_exp_int
+      (hp1 := Nat.succ_le_of_lt hpack.hp.pos) (hyz := hpack.hyz_lt) (hcop := hcop_yz)
+  have hq_dvd_p : q ∣ p := dvd_trans hq_gcd_int hgapgcd_dvd_p
+  have hq_eq_p : q = p := (Nat.prime_dvd_prime_iff_eq hqP hpack.hp).1 hq_dvd_p
+  exact hqp hq_eq_p
+
+/--
 `GapNePNoSharedPrimeOnGN_branchA` が供給されれば、`q ≠ p` 側 factorization 指数条件が得られる。
 -/
 theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_of_noShared
@@ -691,24 +720,25 @@ theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_math :
   simpa [u] using gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_of_padicValNat
     hpack hVal
 
+/-- 互換エイリアス（旧名）。 -/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_impl :
+    GapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p :=
+  gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_of_noShared
+    gapNePNoSharedPrimeOnGN_branchA_math
+
+/-- 互換エイリアス（旧名）。 -/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_impl :
+    GapShapeFromPrimeGe5Counterexample_branchA_factorization_p :=
+  gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_math
+
 /--
 Branch A shape-factorization concrete 実装（2小片合成版）。
 -/
 theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_impl :
     GapShapeFromPrimeGe5Counterexample_branchA_factorization := by
   exact gapShapeFromPrimeGe5Counterexample_branchA_factorization_of_parts
-    gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_via_FLT
-    gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_via_FLT
-
-/-- 互換エイリアス（旧名）。 -/
-theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_impl :
-    GapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p :=
-  gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_via_FLT
-
-/-- 互換エイリアス（旧名）。 -/
-theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_impl :
-    GapShapeFromPrimeGe5Counterexample_branchA_factorization_p :=
-  gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_math
+    gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_impl
+    gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_impl
 
 /-- Branch A 本線 target（値域 shape 版）。 -/
 abbrev GapShapeFromPrimeGe5Counterexample_branchA : Prop :=
