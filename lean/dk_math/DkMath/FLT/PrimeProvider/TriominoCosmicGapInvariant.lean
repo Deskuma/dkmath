@@ -430,6 +430,20 @@ theorem gapPowFromPrimeGe5Counterexample_branchA_of_factorization
     hgap_ne0 hp0
     (hFac hpack hp_dvd_gap)
 
+/-- Branch A gap-pow の concrete 実装。 -/
+theorem gapPowFromPrimeGe5Counterexample_branchA_impl :
+    GapPowFromPrimeGe5Counterexample_branchA := by
+  exact gapPowFromPrimeGe5Counterexample_branchA_of_factorization
+    gapPowFromPrimeGe5Counterexample_branchA_factorization_impl
+
+/-- 全域 `GapPowFromPrimeGe5CounterexampleTarget` の concrete 実装。 -/
+theorem gapPowFromPrimeGe5Counterexample_target_impl :
+    GapPowFromPrimeGe5CounterexampleTarget := by
+  intro p x y z hpack
+  by_cases hpB : p ∣ (z - y)
+  · exact gapPowFromPrimeGe5Counterexample_branchA_impl hpack hpB
+  · exact gapPowFromPrimeGe5Counterexample_branchB_impl hpack hpB
+
 /--
 Branch A で `gap = t^p` が供給されれば、`gap` の全素因子指数は `p` の倍数になる。
 -/
