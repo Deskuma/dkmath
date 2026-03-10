@@ -368,6 +368,25 @@ theorem gapNotIsPowTarget_default :
   exact gap_not_isPow_of_counterexample triominoCosmicGapInvariant_default
 
 /--
+`¬ p ∣ (z - y)`（Branch B）では、反例パックから gap の `p` 乗化を concrete に回収できる。
+
+`GapPowFromPrimeGe5CounterexampleTarget` 全域実装のうち、Branch B 側を担う実装。
+-/
+theorem gapPowFromPrimeGe5Counterexample_branchB_impl :
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      ¬ p ∣ (z - y) →
+      ∃ t : ℕ, (z - y) = t ^ p := by
+  intro p x y z hpack hpB
+  rcases counterexampleHasWieferichLiftB_impl hpack hpB with ⟨q, hLift⟩
+  have hData : WieferichDescentDataB p x y z q :=
+    wieferichDescentDataB_of_pack hpack hpB hLift
+  rcases triominoWieferichShrink_gap_GN_are_pth_powers_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hData.hqP hData.hq_not_dvd_gap hData.hqpow_dvd_GN with
+    ⟨u, _v, hu, _hv⟩
+  exact ⟨u, hu⟩
+
+/--
 default の gap-not-isPow 供給を使って、残り 2 本（normalizer / gap-pow）から
 `FLTPrimeGe5Target` を得る接合定理。
 -/

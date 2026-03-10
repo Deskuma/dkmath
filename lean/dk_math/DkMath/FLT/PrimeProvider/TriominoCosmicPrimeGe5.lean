@@ -390,6 +390,91 @@ theorem FLT_prime_ge5_of_specs
   exact (FLTPrimeGe5Target_of_normalizer_and_gap_specs hNorm hNotPow hGapPow) p hp hp5
 
 /--
+非自明解を `gcd` 正規化して `PrimeGe5CounterexamplePack` へ落とす concrete 実装。
+-/
+theorem primeGe5CounterexampleNormalizer_impl :
+    PrimeGe5CounterexampleNormalizerTarget := by
+  intro p a b c hp hp5 ha hb hc hEq
+  let g : ℕ := Nat.gcd a b
+  let x : ℕ := a / g
+  let y : ℕ := b / g
+  let z : ℕ := c / g
+  have g_dvd_a : g ∣ a := Nat.gcd_dvd_left a b
+  have g_dvd_b : g ∣ b := Nat.gcd_dvd_right a b
+  have g_pos : 0 < g := by
+    simpa [g] using Nat.gcd_pos_of_pos_left b (Nat.pos_of_ne_zero ha)
+  have g_ne_zero : g ≠ 0 := Nat.ne_of_gt g_pos
+  have gpow_dvd_sum : g ^ p ∣ a ^ p + b ^ p := by
+    refine Nat.dvd_add ?_ ?_
+    · exact pow_dvd_pow_of_dvd g_dvd_a p
+    · exact pow_dvd_pow_of_dvd g_dvd_b p
+  have gpow_dvd_cpow : g ^ p ∣ c ^ p := by
+    simpa [hEq] using gpow_dvd_sum
+  have p_ne_zero : p ≠ 0 := hp.ne_zero
+  have g_dvd_c : g ∣ c :=
+    (Nat.pow_dvd_pow_iff p_ne_zero).1 gpow_dvd_cpow
+  have ha_mul : a = g * x := by
+    exact (Nat.mul_div_cancel' g_dvd_a).symm
+  have hb_mul : b = g * y := by
+    exact (Nat.mul_div_cancel' g_dvd_b).symm
+  have hc_mul : c = g * z := by
+    exact (Nat.mul_div_cancel' g_dvd_c).symm
+  have hx_pos : 0 < x := by
+    have : 0 < g * x := by simpa [ha_mul] using Nat.pos_of_ne_zero ha
+    exact Nat.pos_of_mul_pos_left this
+  have hy_pos : 0 < y := by
+    have : 0 < g * y := by simpa [hb_mul] using Nat.pos_of_ne_zero hb
+    exact Nat.pos_of_mul_pos_left this
+  have hz_pos : 0 < z := by
+    have : 0 < g * z := by simpa [hc_mul] using Nat.pos_of_ne_zero hc
+    exact Nat.pos_of_mul_pos_left this
+  have hxy_eq : x ^ p + y ^ p = z ^ p := by
+    have ha_pow : a ^ p = g ^ p * x ^ p := by simpa [ha_mul, Nat.mul_pow]
+    have hb_pow : b ^ p = g ^ p * y ^ p := by simpa [hb_mul, Nat.mul_pow]
+    have hc_pow : c ^ p = g ^ p * z ^ p := by simpa [hc_mul, Nat.mul_pow]
+    have hmul : g ^ p * (x ^ p + y ^ p) = g ^ p * z ^ p := by
+      calc
+        g ^ p * (x ^ p + y ^ p) = g ^ p * x ^ p + g ^ p * y ^ p := by rw [Nat.mul_add]
+        _ = a ^ p + b ^ p := by rw [ha_pow, hb_pow]
+        _ = c ^ p := hEq
+        _ = g ^ p * z ^ p := hc_pow
+    have gpow_pos : 0 < g ^ p := Nat.pow_pos g_pos
+    exact Nat.mul_left_cancel gpow_pos hmul
+  have hxy_coprime : Nat.Coprime x y := by
+    have h_gcd_mul : Nat.gcd (g * x) (g * y) = g * Nat.gcd x y :=
+      Nat.gcd_mul_left g x y
+    have h_eq_mul : g = g * Nat.gcd x y := by
+      calc
+        g = Nat.gcd a b := by rfl
+        _ = Nat.gcd (g * x) (g * y) := by simpa [ha_mul, hb_mul]
+        _ = g * Nat.gcd x y := h_gcd_mul
+    have h_gcd_xy : Nat.gcd x y = 1 := by
+      have h1 : g * Nat.gcd x y = g * 1 := by
+        calc
+          g * Nat.gcd x y = g := h_eq_mul.symm
+          _ = g * 1 := by simp
+      exact Nat.eq_of_mul_eq_mul_left g_pos h1
+    exact (Nat.coprime_iff_gcd_eq_one).2 h_gcd_xy
+  have hyz_lt : y < z := by
+    have hy_pow_lt : y ^ p < z ^ p := by
+      calc
+        y ^ p < x ^ p + y ^ p := Nat.lt_add_of_pos_left (Nat.pow_pos hx_pos)
+        _ = z ^ p := hxy_eq
+    exact (Nat.pow_lt_pow_iff_left p_ne_zero).1 hy_pow_lt
+  refine ⟨x, y, z, ?_⟩
+  refine
+    { toPrimeCounterexamplePack :=
+        { hp := hp
+          hxy := hxy_coprime
+          hyz := le_of_lt hyz_lt
+          hyz_lt := hyz_lt
+          hEq := hxy_eq }
+      hp5 := hp5
+      hx0 := Nat.ne_of_gt hx_pos
+      hy0 := Nat.ne_of_gt hy_pos
+      hz0 := Nat.ne_of_gt hz_pos }
+
+/--
 `default` 供給を使わず、spec 3 本から直接 global provider を得る no-`so#rry` 回避ルート。
 -/
 theorem triominoCosmic_globalProvider_of_specs
