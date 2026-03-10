@@ -393,6 +393,35 @@ abbrev GapPowFromPrimeGe5Counterexample_branchA : Prop :=
     ∃ t : ℕ, (z - y) = t ^ p
 
 /--
+Branch A 本線 target（shape 版）。
+
+`u := z - y` について
+- `q ≠ p` 側の指数は `p` の倍数
+- `q = p` 側の指数は `(p - 1) + p * m` 形
+を要求する。
+-/
+abbrev GapShapeFromPrimeGe5Counterexample_branchA_factorization : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    (∀ q : ℕ, q ≠ p → p ∣ (z - y).factorization q) ∧
+    ∃ m : ℕ, (z - y).factorization p = (p - 1) + p * m
+
+/-- Branch A 本線 target（値域 shape 版）。 -/
+abbrev GapShapeFromPrimeGe5Counterexample_branchA : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ∃ t : ℕ, (z - y) = p ^ (p - 1) * t ^ p
+
+/--
+Branch A shape 版から legacy の Branch A gapPow 仕様へ戻す橋（可換化用）。
+-/
+abbrev GapPowFromBranchAShapeBridge : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    (∃ t : ℕ, (z - y) = p ^ (p - 1) * t ^ p) →
+    ∃ s : ℕ, (z - y) = s ^ p
+
+/--
 Branch A の `gap` が `p` 乗になることを、`gap` の全素因子指数が `p` の倍数という
 因数分解条件へ還元した入力仕様。
 -/
@@ -400,6 +429,35 @@ abbrev GapPowFromPrimeGe5Counterexample_branchA_factorization : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
     p ∣ (z - y) →
     ∀ q : ℕ, p ∣ (z - y).factorization q
+
+/--
+反例排除仕様があれば、Branch A の shape-factorization 仕様は vacuous に供給できる。
+-/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_of_refuter
+    (hRefute : PrimeGe5CounterexampleRefuterTarget) :
+    GapShapeFromPrimeGe5Counterexample_branchA_factorization := by
+  intro p x y z hpack hp_dvd_gap
+  exact False.elim (hRefute hpack)
+
+/--
+反例排除仕様があれば、Branch A の shape 仕様は vacuous に供給できる。
+-/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_of_refuter
+    (hRefute : PrimeGe5CounterexampleRefuterTarget) :
+    GapShapeFromPrimeGe5Counterexample_branchA := by
+  intro p x y z hpack hp_dvd_gap
+  exact False.elim (hRefute hpack)
+
+/--
+shape 版を legacy gapPow 版へ落とす一般橋。
+shape から pure `p` 乗へ落とす数学核は `hBridge` として明示注入する。
+-/
+theorem gapPowFromPrimeGe5Counterexample_branchA_of_shape
+    (hShape : GapShapeFromPrimeGe5Counterexample_branchA)
+    (hBridge : GapPowFromBranchAShapeBridge) :
+    GapPowFromPrimeGe5Counterexample_branchA := by
+  intro p x y z hpack hp_dvd_gap
+  exact hBridge hpack hp_dvd_gap (hShape hpack hp_dvd_gap)
 
 /--
 Branch A 因数分解指数仕様の concrete 実装。
@@ -505,6 +563,18 @@ theorem gapPowFromPrimeGe5Counterexample_target_of_branchA_factorization
   intro p x y z hpack
   by_cases hpB : p ∣ (z - y)
   · exact (gapPowFromPrimeGe5Counterexample_branchA_of_factorization hFac) hpack hpB
+  · exact gapPowFromPrimeGe5Counterexample_branchB_impl hpack hpB
+
+/--
+Branch A shape 仕様 + shape→gapPow 橋が供給されれば、全域 `GapPow` が得られる。
+-/
+theorem gapPowFromPrimeGe5Counterexample_target_of_branchA_shape
+    (hShape : GapShapeFromPrimeGe5Counterexample_branchA)
+    (hBridge : GapPowFromBranchAShapeBridge) :
+    GapPowFromPrimeGe5CounterexampleTarget := by
+  intro p x y z hpack
+  by_cases hpB : p ∣ (z - y)
+  · exact (gapPowFromPrimeGe5Counterexample_branchA_of_shape hShape hBridge) hpack hpB
   · exact gapPowFromPrimeGe5Counterexample_branchB_impl hpack hpB
 
 /-- Branch A/B の 2 分岐仕様が揃えば、全域 `GapPowFromPrimeGe5CounterexampleTarget` が得られる。 -/
