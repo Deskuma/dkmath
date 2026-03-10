@@ -167,6 +167,19 @@
 - コメント
 - いまの `PrimeProvider` に残る一般部は、`gcd` よりむしろ `padicValNat` / squarefree の橋に集中している。次の整理フェーズは valuation 側が本命。
 
+### 2026/03/10 12:31
+
+- 実施内容
+- `CosmicPetalBridgeGNNoWieferich.lean` に残っていた 2 本の一般 valuation 補題を `NumberTheory/Gcd/GN.lean` 側へ移した。対象は `triominoWieferichShrink_padicValNat_diff_eq_GN_core` と `noLift_of_squarefree`。
+- 結果
+- `DkMath.NumberTheory.Gcd.padicValNat_sub_pow_eq_padicValNat_GN_of_not_dvd_gap` を追加し、`q ∤ gap` のとき `padicValNat q (z^p - y^p) = padicValNat q (GN p gap y)` を一般形で言えるようにした。さらに `DkMath.NumberTheory.Gcd.not_sq_dvd_of_squarefree` を追加し、squarefree から `¬ q^2 ∣ X` を返す一般補題を `NumberTheory` 側へ配置した。`PrimeProvider` 側の既存定理は wrapper / 直接利用に置き換えた。
+- 失敗内容
+- なし。
+- 次の予定
+- `CosmicPetalBridgeGNNoWieferichResearch.lean` 側でも、新しい `NumberTheory` 補題を直接参照できる箇所があるか確認する。
+- コメント
+- これで `PrimeProvider` に残る一般部はさらに減り、valuation の橋も `NumberTheory/Gcd/GN.lean` へ集まり始めた。`GN` についての gcd/valuation 接続層としてかなり形が見えてきた。
+
 ---
 
 ## テンプレート

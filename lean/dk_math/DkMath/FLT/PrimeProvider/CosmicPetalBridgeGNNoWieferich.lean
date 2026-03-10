@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNCore
+import DkMath.NumberTheory.Gcd
 import DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
 
 set_option linter.style.longLine false
@@ -86,23 +87,9 @@ theorem triominoWieferichShrink_padicValNat_diff_eq_GN_core
     (_hq_dvd_diff : q ∣ (z ^ p - y ^ p))
     (hq_not_dvd_gap : ¬ q ∣ (z - y)) :
     padicValNat q (z ^ p - y ^ p) = padicValNat q (GN p (z - y) y) := by
-  have hdiff_ne0 : z ^ p - y ^ p ≠ 0 := by
-    have hyz_pow_lt : y ^ p < z ^ p := by
-      exact Nat.pow_lt_pow_left hpack.hyz_lt hpack.hp.ne_zero
-    exact Nat.sub_ne_zero_of_lt hyz_pow_lt
-  have hfactor : z ^ p - y ^ p = (z - y) * GN p (z - y) y := by
-    simpa using
-      DkMath.NumberTheory.GcdNext.pow_sub_pow_factor_cosmic_N
-        hpack.hp.pos hpack.hyz_lt
-  have hGN_ne : GN p (z - y) y ≠ 0 :=
-    triominoWieferichShrink_GN_ne_zero_core
-      hpack _hpB hqP _hq_dvd_diff hq_not_dvd_gap
-  have hpadic :=
-    DkMath.NumberTheory.GcdNext.padicValNat_factorization
-      hpack.hp.pos hpack.hyz_lt hqP hfactor hGN_ne
-  have hzero : padicValNat q (z - y) = 0 := by
-    exact padicValNat.eq_zero_of_not_dvd hq_not_dvd_gap
-  simpa [hzero] using hpadic
+  exact DkMath.NumberTheory.Gcd.padicValNat_sub_pow_eq_padicValNat_GN_of_not_dvd_gap
+    (hp2 := le_trans (by decide : 2 ≤ 5) hpack.hp5)
+    (hyz := hpack.hyz_lt) (hy := hpack.y_pos) (hqP := hqP) (hq_not_dvd_gap := hq_not_dvd_gap)
 
 /--
 Honest phase-15 bridge under the explicit hypothesis that the cyclotomic factor is squarefree.
@@ -140,19 +127,6 @@ primitive-prime branch で、対象の `q` について `GN p (z - y) y` に 2 �
 `Squarefree (GN ...)` は十分条件だが、この命題は phase-15 が本質的に欲しい最小条件である。
 -/
 abbrev NoLift (q X : ℕ) : Prop := ¬ q ^ 2 ∣ X
-
-/--
-Squarefree な非零自然数は、任意の素数 `q` に対して 2 段 lift を持たない。
--/
-theorem noLift_of_squarefree {q X : ℕ}
-    (hqP : Nat.Prime q) (hX_ne : X ≠ 0) (hSq : Squarefree X) :
-    NoLift q X := by
-  intro hq2_dvd
-  have hVal : padicValNat q X ≤ 1 :=
-    DkMath.NumberTheory.GcdNext.padicValNat_le_one_of_squarefree hqP hX_ne hSq
-  have h2_le : 2 ≤ padicValNat q X := by
-    exact (@padicValNat_dvd_iff_le q (Fact.mk hqP) X 2 hX_ne).1 hq2_dvd
-  exact (not_le_of_gt h2_le) hVal
 
 /--
 Phase-15 のさらに弱い honest bridge 仕様:
@@ -217,7 +191,7 @@ theorem triominoNoLiftGNBridge_of_squarefree_GN
   have hGN_ne : GN p (z - y) y ≠ 0 :=
     triominoWieferichShrink_GN_ne_zero_core
       hpack hp_not_dvd_gap hqP hq_dvd_diff hq_not_dvd_gap
-  exact noLift_of_squarefree hqP hGN_ne
+  exact DkMath.NumberTheory.Gcd.not_sq_dvd_of_squarefree hqP hGN_ne
     (hSq hpack hp_not_dvd_gap hqP hq_dvd_diff hq_not_dvd_gap)
 
 /--
