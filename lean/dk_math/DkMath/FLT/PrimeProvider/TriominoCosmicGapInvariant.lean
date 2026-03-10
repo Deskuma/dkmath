@@ -433,7 +433,7 @@ Branch A shape-factorization の `q ≠ p` 側 concrete 実装。
 
 現時点では `FLT_prime_ge5` による反例排除から `False.elim` で供給する。
 -/
-theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_impl :
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_via_FLT :
     GapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p := by
   intro p x y z hpack hp_dvd_gap q hqp
   have hNo : x ^ p + y ^ p ≠ z ^ p :=
@@ -445,7 +445,7 @@ Branch A shape-factorization の `q = p` 側 concrete 実装。
 
 現時点では `FLT_prime_ge5` による反例排除から `False.elim` で供給する。
 -/
-theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_impl :
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_via_FLT :
     GapShapeFromPrimeGe5Counterexample_branchA_factorization_p := by
   intro p x y z hpack hp_dvd_gap
   have hNo : x ^ p + y ^ p ≠ z ^ p :=
@@ -453,13 +453,40 @@ theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_impl :
   exact False.elim (hNo hpack.hEq)
 
 /--
+`q = p` 側の valuation 結論を factorization 形へ持ち上げる補助。
+-/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_of_padicValNat
+    {p x y z : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hVal : ∃ m : ℕ, padicValNat p (z - y) = (p - 1) + p * m) :
+    ∃ m : ℕ, (z - y).factorization p = (p - 1) + p * m := by
+  have hgap_ne0 : (z - y) ≠ 0 := Nat.ne_of_gt (Nat.sub_pos_of_lt hpack.hyz_lt)
+  rcases hVal with ⟨m, hm⟩
+  refine ⟨m, ?_⟩
+  calc
+    (z - y).factorization p = padicValNat p (z - y) := by
+      symm
+      exact padicValNat_eq_factorization hpack.hp hgap_ne0
+    _ = (p - 1) + p * m := hm
+
+/--
 Branch A shape-factorization concrete 実装（2小片合成版）。
 -/
 theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_impl :
     GapShapeFromPrimeGe5Counterexample_branchA_factorization := by
   exact gapShapeFromPrimeGe5Counterexample_branchA_factorization_of_parts
-    gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_impl
-    gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_impl
+    gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_via_FLT
+    gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_via_FLT
+
+/-- 互換エイリアス（旧名）。 -/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_impl :
+    GapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p :=
+  gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_via_FLT
+
+/-- 互換エイリアス（旧名）。 -/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_impl :
+    GapShapeFromPrimeGe5Counterexample_branchA_factorization_p :=
+  gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_via_FLT
 
 /-- Branch A 本線 target（値域 shape 版）。 -/
 abbrev GapShapeFromPrimeGe5Counterexample_branchA : Prop :=
