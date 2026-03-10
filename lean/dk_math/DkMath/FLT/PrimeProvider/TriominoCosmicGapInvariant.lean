@@ -402,6 +402,86 @@ theorem gapPowFromPrimeGe5Counterexample_of_branches
   · exact gapPowFromPrimeGe5Counterexample_branchB_impl hpack hpB
 
 /--
+Branch A 仮定が供給されれば、concrete normalizer 実装と default gap-not-isPow で
+`FLTPrimeGe5Target` を構成できる。
+-/
+theorem FLTPrimeGe5Target_of_branchA_with_normalizer_impl
+    (hA : GapPowFromPrimeGe5Counterexample_branchA) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_gap_specs_with_normalizer_impl
+    gapNotIsPowTarget_default
+    (gapPowFromPrimeGe5Counterexample_of_branches hA)
+
+/--
+Branch A 仮定が供給されれば、`p ≥ 5` 素数指数の FLT を concrete に返せる。
+-/
+theorem FLT_prime_ge5_of_branchA_with_normalizer_impl
+    (hA : GapPowFromPrimeGe5Counterexample_branchA)
+    (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
+    FermatLastTheoremFor p := by
+  exact (FLTPrimeGe5Target_of_branchA_with_normalizer_impl hA) p hp hp5
+
+/--
+Branch A 仮定が供給されれば、`FLT_prime_ge5` 本体を通さず global provider へ直結できる。
+-/
+theorem triominoCosmic_globalProvider_of_branchA_with_normalizer_impl
+    (hA : GapPowFromPrimeGe5Counterexample_branchA) :
+    GlobalPrimeExponentFLTProvider := by
+  exact triominoCosmic_globalProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_branchA_with_normalizer_impl hA)
+
+/--
+Branch A 仮定が供給されれば、`FLT_prime_ge5` 本体を通さず Triomino provider へ直結できる。
+-/
+theorem triominoPrimeProvider_of_branchA_with_normalizer_impl
+    (hA : GapPowFromPrimeGe5Counterexample_branchA) :
+    TriominoPrimeProvider := by
+  exact triominoPrimeProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_branchA_with_normalizer_impl hA)
+
+/--
+`hNotPow` を外部入力にした clean 版。
+Branch A 仮定が供給されれば、default 依存なしで `FLTPrimeGe5Target` を構成できる。
+-/
+theorem FLTPrimeGe5Target_of_branchA_with_normalizer_and_notPow
+    (hNotPow : GapNotIsPowTarget)
+    (hA : GapPowFromPrimeGe5Counterexample_branchA) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_gap_specs_with_normalizer_impl
+    hNotPow
+    (gapPowFromPrimeGe5Counterexample_of_branches hA)
+
+/-- `hNotPow` を外部入力にした clean 版の `FLT_prime_ge5`。 -/
+theorem FLT_prime_ge5_of_branchA_with_normalizer_and_notPow
+    (hNotPow : GapNotIsPowTarget)
+    (hA : GapPowFromPrimeGe5Counterexample_branchA)
+    (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
+    FermatLastTheoremFor p := by
+  exact (FLTPrimeGe5Target_of_branchA_with_normalizer_and_notPow hNotPow hA) p hp hp5
+
+/--
+`hNotPow` を外部入力にした clean 版。
+Branch A 仮定が供給されれば、`FLT_prime_ge5` 本体を通さず global provider へ直結できる。
+-/
+theorem triominoCosmic_globalProvider_of_branchA_with_normalizer_and_notPow
+    (hNotPow : GapNotIsPowTarget)
+    (hA : GapPowFromPrimeGe5Counterexample_branchA) :
+    GlobalPrimeExponentFLTProvider := by
+  exact triominoCosmic_globalProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_branchA_with_normalizer_and_notPow hNotPow hA)
+
+/--
+`hNotPow` を外部入力にした clean 版。
+Branch A 仮定が供給されれば、`FLT_prime_ge5` 本体を通さず Triomino provider へ直結できる。
+-/
+theorem triominoPrimeProvider_of_branchA_with_normalizer_and_notPow
+    (hNotPow : GapNotIsPowTarget)
+    (hA : GapPowFromPrimeGe5Counterexample_branchA) :
+    TriominoPrimeProvider := by
+  exact triominoPrimeProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_branchA_with_normalizer_and_notPow hNotPow hA)
+
+/--
 default の gap-not-isPow 供給を使って、残り 2 本（normalizer / gap-pow）から
 `FLTPrimeGe5Target` を得る接合定理。
 -/
