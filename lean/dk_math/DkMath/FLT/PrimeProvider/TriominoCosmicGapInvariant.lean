@@ -748,6 +748,10 @@ abbrev GapShapeFromPrimeGe5Counterexample_branchA : Prop :=
 
 /--
 Branch A shape 版から legacy の Branch A gapPow 仕様へ戻す橋（可換化用）。
+
+注意: これは互換/実験層の橋であり、本線の数学核としては使わない。
+Branch A の自然出力は `p^(p-1) * t^p` 形（shape）であり、
+一般には pure `p` 乗 (`s^p`) へ落ちない。
 -/
 abbrev GapPowFromBranchAShapeBridge : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
@@ -835,6 +839,61 @@ theorem gapPowFromPrimeGe5Counterexample_target_impl :
   by_cases hpB : p ∣ (z - y)
   · exact gapPowFromPrimeGe5Counterexample_branchA_impl hpack hpB
   · exact gapPowFromPrimeGe5Counterexample_branchB_impl hpack hpB
+
+/-!
+## Branch-Split Mainline (shape-preserving)
+
+Branch A は shape 出力を保持したまま別出口へ送り、
+Branch B は gap-not-pow と pure-gap-pow の衝突で処理する。
+
+この節は、legacy な Branch A -> pure-gap-pow 橋に依存しない
+mainline 接続を与える。
+-/
+
+/-- Branch A 側の終着仕様（shape 系から導く専用出口）。 -/
+abbrev BranchARefuterTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    False
+
+/-- Branch B 側の終着仕様（pure-gap-pow と gap-not-pow の衝突出口）。 -/
+abbrev BranchBRefuterTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ¬ p ∣ (z - y) →
+    False
+
+/-- Branch A/B の 2 終着仕様が揃えば、反例排除仕様が得られる。 -/
+theorem primeGe5CounterexampleRefuter_of_branch_split
+    (hA : BranchARefuterTarget)
+    (hB : BranchBRefuterTarget) :
+    PrimeGe5CounterexampleRefuterTarget := by
+  intro p x y z hpack
+  by_cases hpB : p ∣ (z - y)
+  · exact hA hpack hpB
+  · exact hB hpack hpB
+
+/--
+Branch B concrete (`gap = t^p`) と default の gap-not-pow から、
+Branch B 側終着仕様を得る。
+-/
+theorem branchBRefuter_of_gapPow_and_defaultNotPow
+    (hGapPowB : ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      ¬ p ∣ (z - y) → ∃ t : ℕ, (z - y) = t ^ p) :
+    BranchBRefuterTarget := by
+  intro p x y z hpack hpB
+  exact (gapNotIsPowTarget_default hpack) (hGapPowB hpack hpB)
+
+/--
+shape-preserving mainline:
+Branch A/B 分岐終着仕様から `FLTPrimeGe5Target` へ接続する。
+-/
+theorem FLTPrimeGe5Target_of_branch_split_refuter_with_normalizer_impl
+    (hA : BranchARefuterTarget)
+    (hB : BranchBRefuterTarget) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_normalizer_and_refuter
+    primeGe5CounterexampleNormalizer_impl
+    (primeGe5CounterexampleRefuter_of_branch_split hA hB)
 
 /--
 Branch A で `gap = t^p` が供給されれば、`gap` の全素因子指数は `p` の倍数になる。
