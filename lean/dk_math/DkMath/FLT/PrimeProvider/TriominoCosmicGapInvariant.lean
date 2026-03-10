@@ -406,6 +406,28 @@ abbrev GapShapeFromPrimeGe5Counterexample_branchA_factorization : Prop :=
     (∀ q : ℕ, q ≠ p → p ∣ (z - y).factorization q) ∧
     ∃ m : ℕ, (z - y).factorization p = (p - 1) + p * m
 
+/-- Branch A shape-factorization の `q ≠ p` 側だけを切り出した仕様。 -/
+abbrev GapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ∀ q : ℕ, q ≠ p → p ∣ (z - y).factorization q
+
+/-- Branch A shape-factorization の `q = p` 側だけを切り出した仕様。 -/
+abbrev GapShapeFromPrimeGe5Counterexample_branchA_factorization_p : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ∃ m : ℕ, (z - y).factorization p = (p - 1) + p * m
+
+/--
+Branch A shape-factorization は、`q ≠ p` 側と `q = p` 側の 2 仕様を合成して得られる。
+-/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_of_parts
+    (hNeP : GapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p)
+    (hP : GapShapeFromPrimeGe5Counterexample_branchA_factorization_p) :
+    GapShapeFromPrimeGe5Counterexample_branchA_factorization := by
+  intro p x y z hpack hp_dvd_gap
+  exact ⟨hNeP hpack hp_dvd_gap, hP hpack hp_dvd_gap⟩
+
 /-- Branch A 本線 target（値域 shape 版）。 -/
 abbrev GapShapeFromPrimeGe5Counterexample_branchA : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
