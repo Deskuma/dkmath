@@ -905,6 +905,40 @@ abbrev BranchAShapeFactorizationToValueTarget : Prop :=
     ∃ t : ℕ, (z - y) = p ^ (p - 1) * t ^ p
 
 /--
+`BranchAShapeFactorizationToValueTarget` の暫定 concrete 実装（via FLT）。
+
+最終的には factorization 再構成で置換する。
+-/
+theorem branchAShapeValueTarget_via_FLT :
+    BranchAShapeFactorizationToValueTarget := by
+  intro p x y z hpack hp_dvd_gap hShapeFac
+  have hNo : x ^ p + y ^ p ≠ z ^ p :=
+    FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
+  exact False.elim (hNo hpack.hEq)
+
+/-- `BranchAShapeFactorizationToValueTarget` の実装入口。 -/
+theorem branchAShapeValueTarget_impl :
+    BranchAShapeFactorizationToValueTarget :=
+  branchAShapeValueTarget_via_FLT
+
+/--
+`BranchAShapeValueToRefuterTarget` の暫定 concrete 実装（via FLT）。
+
+最終的には shape 値の意味付け（descent/shrink 等）で置換する。
+-/
+theorem branchAShapeValueToRefuter_via_FLT :
+    BranchAShapeValueToRefuterTarget := by
+  intro p x y z hpack hp_dvd_gap hShapeValue
+  have hNo : x ^ p + y ^ p ≠ z ^ p :=
+    FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
+  exact hNo hpack.hEq
+
+/-- `BranchAShapeValueToRefuterTarget` の実装入口。 -/
+theorem branchAShapeValueToRefuter_impl :
+    BranchAShapeValueToRefuterTarget :=
+  branchAShapeValueToRefuter_via_FLT
+
+/--
 Branch A の shape-factorization から refuter へ送る 1-pack kernel 仕様。
 
 終盤の数学核を 1 定理へ固定するための中間仕様。
@@ -1008,6 +1042,21 @@ theorem FLTPrimeGe5Target_of_branch_split_shapeValue_and_refuter_with_normalizer
     FLTPrimeGe5Target := by
   exact FLTPrimeGe5Target_of_branch_split_shapeKernel_and_refuter_with_normalizer_impl
     hAShape hB (branchAShapeToRefuter_of_value hValue hRefuteValue)
+
+/--
+Branch-split mainline の起動定理（現行 concrete 実装接続版）。
+
+注意: Branch A の value/refuter 実装は現時点では via FLT であり、
+最終的には clean 数学核へ置換する。
+-/
+theorem FLTPrimeGe5Target_branch_split_mainline :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_branch_split_shapeValue_and_refuter_with_normalizer_impl
+    branchAShapeFactorizationTarget_impl
+    (branchBRefuter_of_gapPow_and_defaultNotPow
+      gapPowFromPrimeGe5Counterexample_branchB_impl)
+    branchAShapeValueTarget_impl
+    branchAShapeValueToRefuter_impl
 
 /--
 Branch A で `gap = t^p` が供給されれば、`gap` の全素因子指数は `p` の倍数になる。
