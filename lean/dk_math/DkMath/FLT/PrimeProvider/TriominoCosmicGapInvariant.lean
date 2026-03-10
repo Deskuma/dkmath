@@ -875,6 +875,27 @@ theorem branchAShapeFactorizationTarget_impl :
     BranchAShapeFactorizationTarget :=
   gapShapeFromPrimeGe5Counterexample_branchA_factorization_impl
 
+/--
+Branch A の shape-factorization から refuter へ送る 1-pack kernel 仕様。
+
+終盤の数学核を 1 定理へ固定するための中間仕様。
+-/
+abbrev BranchAShapeToRefuterTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ((∀ q : ℕ, q ≠ p → p ∣ (z - y).factorization q) ∧
+      ∃ m : ℕ, (z - y).factorization p = (p - 1) + p * m) →
+    False
+
+/--
+1-pack kernel があれば、Branch A の shape 出口を Branch A refuter 出口へ持ち上げられる。
+-/
+theorem branchAShapeToRefuter_of_kernel
+    (hK : BranchAShapeToRefuterTarget) :
+    BranchAShapeFactorizationTarget → BranchARefuterTarget := by
+  intro hShape p x y z hpack hp_dvd_gap
+  exact hK hpack hp_dvd_gap (hShape hpack hp_dvd_gap)
+
 /-- Branch A/B の 2 終着仕様が揃えば、反例排除仕様が得られる。 -/
 theorem primeGe5CounterexampleRefuter_of_branch_split
     (hA : BranchARefuterTarget)
@@ -921,6 +942,18 @@ theorem FLTPrimeGe5Target_of_branch_split_shape_and_refuter_with_normalizer_impl
   exact FLTPrimeGe5Target_of_branch_split_refuter_with_normalizer_impl
     (hShapeToRefuter hAShape)
     hB
+
+/--
+2層 mainline の kernel 版。
+`BranchAShapeToRefuterTarget` が与えられれば、shape 出口から refuter 出口への橋は自動生成できる。
+-/
+theorem FLTPrimeGe5Target_of_branch_split_shapeKernel_and_refuter_with_normalizer_impl
+    (hAShape : BranchAShapeFactorizationTarget)
+    (hB : BranchBRefuterTarget)
+    (hK : BranchAShapeToRefuterTarget) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_branch_split_shape_and_refuter_with_normalizer_impl
+    hAShape hB (branchAShapeToRefuter_of_kernel hK)
 
 /--
 Branch A で `gap = t^p` が供給されれば、`gap` の全素因子指数は `p` の倍数になる。
