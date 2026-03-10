@@ -347,4 +347,14 @@ theorem triominoCosmicGapInvariant
     TriominoCosmicGapInvariant := by
   exact gapInvariant_of_bodyInvariant (triominoCosmicBodyInvariant hBranch)
 
+/-- 既定の Branch bridge 注入から得る、引数なし版の gap invariant。 -/
+theorem triominoCosmicGapInvariant_default :
+    TriominoCosmicGapInvariant := by
+  exact triominoCosmicGapInvariant triominoWieferichBranchBridge_default
+
+/-- 既定の gap invariant から `GapNotIsPowTarget` を得る薄い接続。 -/
+theorem gapNotIsPowTarget_default :
+    GapNotIsPowTarget := by
+  exact gap_not_isPow_of_counterexample triominoCosmicGapInvariant_default
+
 end DkMath.FLT

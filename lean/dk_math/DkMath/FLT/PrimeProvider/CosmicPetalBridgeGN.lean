@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNCore
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB
+import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine
 
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
@@ -54,5 +55,10 @@ theorem triominoNoWieferichBridge_impl
     TriominoNoWieferichBridge := by
   exact triominoNoWieferichBridge_of_wieferichLiftExclusion
     (triominoWieferichLiftExclusion_impl hBranch)
+
+/-- 既定の Branch bridge。`DescentB` の公開 wrapper を最小契約へ注入する。 -/
+theorem triominoWieferichBranchBridge_default :
+    TriominoWieferichBranchBridge := by
+  exact ⟨triominoWieferichDescent_impl⟩
 
 end DkMath.FLT
