@@ -916,10 +916,78 @@ theorem branchAShapeValueTarget_via_FLT :
     FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
   exact False.elim (hNo hpack.hEq)
 
+/--
+`BranchAShapeFactorizationToValueTarget` の clean 実装（factorization 再構成版）。
+-/
+theorem branchAShapeValueTarget_math :
+    BranchAShapeFactorizationToValueTarget := by
+  intro p x y z hpack hp_dvd_gap hShapeFac
+  rcases hShapeFac with ⟨hNe, hpPart⟩
+  rcases hpPart with ⟨m, hm⟩
+  let u : ℕ := z - y
+  let d : ℕ := p ^ (p - 1)
+  have hu_pos : 0 < u := by
+    simpa [u] using Nat.sub_pos_of_lt hpack.hyz_lt
+  have hu0 : u ≠ 0 := Nat.ne_of_gt hu_pos
+  have hle : p - 1 ≤ u.factorization p := by
+    rw [hm]
+    exact Nat.le_add_right (p - 1) (p * m)
+  have hdvd_u : d ∣ u := by
+    unfold d
+    exact (hpack.hp.pow_dvd_iff_le_factorization hu0).2 hle
+  have hd_pos : 0 < d := by
+    unfold d
+    exact Nat.pow_pos hpack.hp.pos
+  let w : ℕ := u / d
+  have hw_pos : 0 < w := Nat.div_pos (Nat.le_of_dvd hu_pos hdvd_u) hd_pos
+  have hw0 : w ≠ 0 := Nat.ne_of_gt hw_pos
+  have hfac_div : w.factorization = u.factorization - d.factorization := by
+    simpa [w] using Nat.factorization_div hdvd_u
+  have hall_w : ∀ q : ℕ, p ∣ w.factorization q := by
+    intro q
+    by_cases hq_eq : q = p
+    · have hd_fac_p : d.factorization p = p - 1 := by
+        unfold d
+        simp? [hpack.hp.factorization]
+      have hm_u : u.factorization p = (p - 1) + p * m := by
+        simpa [u] using hm
+      have hw_fac_p : w.factorization p = p * m := by
+        calc
+          w.factorization p = u.factorization p - d.factorization p := by
+            simpa using congrArg (fun f => f p) hfac_div
+          _ = ((p - 1) + p * m) - (p - 1) := by simp [hm_u, hd_fac_p]
+          _ = p * m := by omega
+      exact ⟨m, by simp [hq_eq, hw_fac_p]⟩
+    · by_cases hqP : Nat.Prime q
+      · have hd_fac_q : d.factorization q = 0 := by
+          unfold d
+          rw [Nat.Prime.factorization_pow hpack.hp]
+          simp [hq_eq]
+        have hw_fac_q : w.factorization q = u.factorization q := by
+          calc
+            w.factorization q = u.factorization q - d.factorization q := by
+              simpa using congrArg (fun f => f q) hfac_div
+            _ = u.factorization q := by simp [hd_fac_q]
+        rcases hNe q hq_eq with ⟨k, hk⟩
+        exact ⟨k, by simpa [hw_fac_q, hk]⟩
+      · have hw_fac0 : w.factorization q = 0 := Nat.factorization_eq_zero_of_not_prime w hqP
+        exact ⟨0, by simp [hw_fac0]⟩
+  rcases exists_eq_pow_of_factorization_dvd
+      (u := w) (p := p) hw0 hpack.hp.pos hall_w with ⟨t, ht⟩
+  have hu_mul : u = d * w := by
+    have hw_mul : w * d = u := by
+      simpa [w] using Nat.div_mul_cancel hdvd_u
+    simpa [Nat.mul_comm] using hw_mul.symm
+  refine ⟨t, ?_⟩
+  calc
+    z - y = u := by rfl
+    _ = d * w := hu_mul
+    _ = p ^ (p - 1) * t ^ p := by simp [d, ht]
+
 /-- `BranchAShapeFactorizationToValueTarget` の実装入口。 -/
 theorem branchAShapeValueTarget_impl :
     BranchAShapeFactorizationToValueTarget :=
-  branchAShapeValueTarget_via_FLT
+  branchAShapeValueTarget_math
 
 /--
 `BranchAShapeValueToRefuterTarget` の暫定 concrete 実装（via FLT）。
