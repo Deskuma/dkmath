@@ -1165,16 +1165,29 @@ theorem branchAShapeWitnessKernel_via_FLT :
   exact hNo hpack.hEq
 
 /--
+既存 descent 契約入力を受けて refute する実装本体。
+
+現時点では `via_FLT` ベースだが、最終 clean 置換点はこの定理 1 本に集約する。
+-/
+theorem existingDescentRefuter_math
+    : ∀ {p x y z t : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        p ∣ (z - y) →
+        BranchAShapeWitnessDescentInput p x y z t →
+        False := by
+  intro p x y z t hpack _hp_dvd_gap _hInput
+  have hNo : x ^ p + y ^ p ≠ z ^ p :=
+    FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
+  exact hNo hpack.hEq
+
+/--
 witness 直受け kernel の実装本体。
 
 現時点では `via_FLT` を束ねるが、最終 clean 置換点はこの定理 1 本に集約する。
 -/
 theorem branchAShapeWitnessKernel_math :
     BranchAShapeWitnessKernelTarget :=
-by
-  intro p x y z t hpack hp_dvd_gap ht
-  let _hCore := branchAShapeWitness_to_descent_input_core hpack hp_dvd_gap ht
-  exact branchAShapeWitnessKernel_via_FLT hpack hp_dvd_gap ht
+  branchAShapeWitnessKernel_of_existingDescentRefuter
+    existingDescentRefuter_math
 
 /-- witness 直受け kernel の実装入口。 -/
 theorem branchAShapeWitnessKernel_impl :
