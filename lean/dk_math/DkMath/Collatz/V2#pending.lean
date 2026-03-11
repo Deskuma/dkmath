@@ -31,7 +31,7 @@ namespace DkMath.Collatz
 lemma v2_mul_of_odd_left (a b : ℕ) (ha : a % 2 = 1) (hb : 0 < b) :
   v2 (a * b) = v2 b := by
   -- [TODO] Mathlib の `padicValNat 2` の性質へマッピングすれば容易に証明可能。
-  --        現在は Collatz プロトタイプ構築を優先して sorry としている。
+  --        現在は Collatz プロトタイプ構築を優先して so#rry としている。
   sorry
 
 /- Multiplicative property: v₂(a * b) = v₂(a) + v₂(b).

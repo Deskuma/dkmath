@@ -29,7 +29,7 @@ open MeasureTheory ProbabilityTheory
 /- ABCSkeletons.lean
   Skeletons for the ABC framework
 
-  sorry / axioms serving as placeholders for key lemmas and theorems in the ABC project.
+  so#rry / axioms serving as placeholders for key lemmas and theorems in the ABC project.
   TODO: replace with actual proofs
 -/
 
@@ -38,8 +38,8 @@ open MeasureTheory ProbabilityTheory
 
 /- Helper lemmas to improve readability and reuse -/
 
-/- Placeholder: previously we admitted a global coprimality axiom and an equality
-   between a finset-card expression and `adjKBadCount`.  Instead of admitting
+/- Placeholder: previously we ad#mitted a global coprimality axiom and an equality
+   between a finset-card expression and `adjKBadCount`.  Instead of ad#mitting
    these, provide a small constructive unfolding lemma for `adjKBadCount` so
    downstream code can work with the concrete `Finset.filter` form (the
    exact predicate used by `adjKBadCount` is the `BadPair` predicate over
@@ -54,7 +54,7 @@ theorem adjKBadCount_unfold {δ : ℝ} {k X : ℕ} (h : ¬ X ≤ k) :
 
 
 /-- k-diagonal triple: (n, n+k, 2n+k)
-  AdjK admit の証明スケルトン
+  AdjK ad#mit の証明スケルトン
   AdjK を実際に証明し定義する場所
   証明が完了したらこれを AdjK に置換する
 -/
@@ -109,7 +109,7 @@ The intended workflow is:
 1. Use these lemma names and the documented API in the downstream proofs (for example the
    middle-band dyadic-sum -> global bound argument).
 2. Iteratively refine the statements (add precise measure-theoretic hypotheses) and replace
-   `sorry` by complete proofs — either by reusing Mathlib building blocks (MGF / Chernoff /
+   `so#rry` by complete proofs — either by reusing Mathlib building blocks (MGF / Chernoff /
    Hoeffding / Azuma) or by formalizing a small, project-specific Janson/Suen argument.
 
 Notes on notation used below (informal):

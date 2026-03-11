@@ -153,6 +153,67 @@ theorem bodyInvariant_of_NoPowOnGN
   intro p x y z hpack
   exact not_isPow_of_exists_prime_dvd_not_dvd_sq hpack.hp5 (hNoPow hpack)
 
+/-- `p ∣ n` かつ `¬ p^2 ∣ n` なら `padicValNat p n = 1`。 -/
+lemma padicValNat_eq_one_of_dvd_not_sq
+    {p n : ℕ} (hp : Nat.Prime p)
+    (hpd : p ∣ n) (hpsq : ¬ p ^ 2 ∣ n) :
+    padicValNat p n = 1 := by
+  have hnz : n ≠ 0 := by
+    intro hn0
+    apply hpsq
+    simp [hn0]
+  have hge : 1 ≤ padicValNat p n :=
+    DkMath.ABC.padicValNat_one_le_of_prime_dvd hp hnz hpd
+  have hle : padicValNat p n ≤ 1 := by
+    by_contra hnot
+    have h2 : 2 ≤ padicValNat p n := by omega
+    have hsq : p ^ 2 ∣ n :=
+      (@padicValNat_dvd_iff_le p (Fact.mk hp) n 2 hnz).2 h2
+    exact hpsq hsq
+  exact le_antisymm hle hge
+
+/--
+`x^p = u * N` かつ `padicValNat p N = 1` から、`u` の `p`-進指数形を回収する。
+-/
+lemma padicValNat_gap_shape_of_mul_eq_pow
+    {p x u N : ℕ}
+    (hp : Nat.Prime p)
+    (hx0 : x ≠ 0)
+    (hu0 : u ≠ 0)
+    (hN0 : N ≠ 0)
+    (hEq : x ^ p = u * N)
+    (hNval : padicValNat p N = 1) :
+    ∃ m : ℕ, padicValNat p u = (p - 1) + p * m := by
+  letI : Fact (Nat.Prime p) := ⟨hp⟩
+  have hpow : padicValNat p (x ^ p) = p * padicValNat p x := by
+    simpa using (padicValNat.pow (p := p) (a := x) p hx0)
+  have hmul : padicValNat p (u * N) = padicValNat p u + padicValNat p N := by
+    simpa using (padicValNat.mul (p := p) hu0 hN0)
+  have hvalEq : p * padicValNat p x = padicValNat p u + 1 := by
+    calc
+      p * padicValNat p x = padicValNat p (x ^ p) := hpow.symm
+      _ = padicValNat p (u * N) := by simp [hEq]
+      _ = padicValNat p u + padicValNat p N := hmul
+      _ = padicValNat p u + 1 := by simp [hNval]
+  have hx_pos : 0 < padicValNat p x := by
+    have : 0 < p * padicValNat p x := by
+      rw [hvalEq]
+      exact Nat.succ_pos _
+    exact Nat.pos_of_mul_pos_left this
+  have hvu : padicValNat p u = p * padicValNat p x - 1 := by
+    exact Nat.eq_sub_of_add_eq hvalEq.symm
+  refine ⟨padicValNat p x - 1, ?_⟩
+  have hx_decomp : (padicValNat p x - 1) + 1 = padicValNat p x := by
+    exact Nat.sub_add_cancel (Nat.succ_le_of_lt hx_pos)
+  calc
+    padicValNat p u = p * padicValNat p x - 1 := hvu
+    _ = p * ((padicValNat p x - 1) + 1) - 1 := by simp [hx_decomp]
+    _ = (p * (padicValNat p x - 1) + p) - 1 := by simp [Nat.mul_add]
+    _ = p * (padicValNat p x - 1) + (p - 1) := by
+      have hp_ge1 : 1 ≤ p := Nat.succ_le_of_lt hp.pos
+      simp [Nat.add_sub_assoc hp_ge1]
+    _ = (p - 1) + p * (padicValNat p x - 1) := by ac_rfl
+
 /-- Branch A（`p ∣ gap`）は、`q := p` と `GN` の head/tail 分解で閉じる。 -/
 theorem noSqPrimeOnGN_when_p_dvd_u_impl :
     NoSqPrimeOnGN_when_p_dvd_u := by
@@ -238,6 +299,87 @@ theorem noSqPrimeOnGN_when_p_dvd_u_impl :
       exact (Nat.dvd_add_right hB_sq).1 hBA_sq
     exact hA_not_sq hA_sq
 
+/--
+Branch A では、`N := GN p (z - y) y` に対して `p ∣ N` かつ `¬ p^2 ∣ N` が成り立つ。
+-/
+theorem p_dvd_GN_and_not_sq_when_p_dvd_gap
+    {p x y z : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y)) :
+    p ∣ GN p (z - y) y ∧ ¬ p ^ 2 ∣ GN p (z - y) y := by
+  let u : ℕ := z - y
+  let N : ℕ := GN p u y
+  let A : ℕ := p * y ^ (p - 1)
+  let B : ℕ := Finset.sum ((Finset.range p).erase 0) (fun k =>
+    (Nat.choose p (k + 1) : ℕ) * u ^ k * y ^ (p - 1 - k))
+  have hp_pos : 0 < p := hpack.hp.pos
+  have hp_not_dvd_y : ¬ p ∣ y := by
+    simpa [u, PrimeGe5CounterexamplePack.gap] using
+      hpack.prime_not_dvd_right_of_prime_dvd_gap hp_dvd_gap
+  have hsplitBA : B + A = N := by
+    let f : ℕ → ℕ := fun k =>
+      (Nat.choose p (k + 1) : ℕ) * (z - y) ^ k * y ^ (p - 1 - k)
+    have hsum :
+        Finset.sum ((Finset.range p).erase 0) f + f 0 = Finset.sum (Finset.range p) f := by
+      simpa using
+        (Finset.sum_erase_add (s := Finset.range p) (f := f) (a := 0)
+          (by simpa using hp_pos))
+    unfold N A B u
+    simpa [f, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using hsum
+  have hsplit : N = A + B := by
+    simpa [Nat.add_comm] using hsplitBA.symm
+  have hB_sq : p ^ 2 ∣ B := by
+    unfold B
+    refine Finset.dvd_sum ?_
+    intro k hk
+    have hk_mem : k ∈ Finset.range p := Finset.mem_of_mem_erase hk
+    have hk_ne_zero : k ≠ 0 := (Finset.mem_erase.mp hk).1
+    by_cases hk_one : k = 1
+    · have hchoose : p ∣ Nat.choose p (k + 1) := by
+        rw [hk_one]
+        apply hpack.hp.dvd_choose_self
+        · decide
+        · exact lt_of_lt_of_le (by decide : 2 < 5) hpack.hp5
+      have hp_dvd_uk : p ∣ u ^ k := by simpa [hk_one] using hp_dvd_gap
+      have hprefix : p ^ 2 ∣ (Nat.choose p (k + 1) : ℕ) * u ^ k := by
+        simpa [pow_two] using Nat.mul_dvd_mul hchoose hp_dvd_uk
+      have hmul : p ^ 2 ∣ ((Nat.choose p (k + 1) : ℕ) * u ^ k) * y ^ (p - 1 - k) :=
+        dvd_mul_of_dvd_left hprefix _
+      simpa [Nat.mul_assoc] using hmul
+    · have hk_ge_two : 2 ≤ k := by omega
+      have hpp_dvd_u2 : p ^ 2 ∣ u ^ 2 := by
+        simpa [pow_two] using Nat.mul_dvd_mul hp_dvd_gap hp_dvd_gap
+      have hpp_dvd_uk : p ^ 2 ∣ u ^ k :=
+        dvd_trans hpp_dvd_u2 (pow_dvd_pow u hk_ge_two)
+      have hprefix : p ^ 2 ∣ (Nat.choose p (k + 1) : ℕ) * u ^ k :=
+        dvd_mul_of_dvd_right hpp_dvd_uk _
+      have hmul : p ^ 2 ∣ ((Nat.choose p (k + 1) : ℕ) * u ^ k) * y ^ (p - 1 - k) :=
+        dvd_mul_of_dvd_left hprefix _
+      simpa [Nat.mul_assoc] using hmul
+  have hp_dvd_N : p ∣ N := by
+    have hp_dvd_A : p ∣ A := by
+      unfold A
+      exact dvd_mul_right p (y ^ (p - 1))
+    have hp_dvd_B : p ∣ B := by
+      have hB_sq' : p * p ∣ B := by simpa [pow_two] using hB_sq
+      exact dvd_trans (dvd_mul_right p p) hB_sq'
+    simpa [hsplit] using (Nat.dvd_add hp_dvd_A hp_dvd_B)
+  have hA_not_sq : ¬ p ^ 2 ∣ A := by
+    intro hA_sq
+    have hp_dvd_ypow : p ∣ y ^ (p - 1) := by
+      have hmul : p * p ∣ p * y ^ (p - 1) := by
+        simpa [A, pow_two] using hA_sq
+      exact Nat.dvd_of_mul_dvd_mul_left hp_pos hmul
+    exact hp_not_dvd_y (hpack.hp.dvd_of_dvd_pow hp_dvd_ypow)
+  have hp2_not_dvd_N : ¬ p ^ 2 ∣ N := by
+    intro hN_sq
+    have hA_sq : p ^ 2 ∣ A := by
+      have hAB_sq : p ^ 2 ∣ A + B := by simpa [hsplit] using hN_sq
+      have hBA_sq : p ^ 2 ∣ B + A := by simpa [Nat.add_comm] using hAB_sq
+      exact (Nat.dvd_add_right hB_sq).1 hBA_sq
+    exact hA_not_sq hA_sq
+  simpa [u, N] using And.intro hp_dvd_N hp2_not_dvd_N
+
 /-- Branch B は「原始素因子の取得」と「深刺し禁止」の 2 仕様から合成できる。 -/
 theorem noSqPrimeOnGN_when_p_not_dvd_u_of_specs
     (hPrim : PrimitivePrime_fromCounterexample)
@@ -278,7 +420,7 @@ theorem primitivePrime_fromCounterexample_impl :
 /--
 prime-ge5 反例パックから `AllNonLiftableOnGN` を供給する本丸インターフェイス。
 
-現時点では、一般 `p ≥ 5` 用の no-`sorry` family 供給がコードベース本体に無いため、
+現時点では、一般 `p ≥ 5` 用の no-`so#rry` family 供給がコードベース本体に無いため、
 未解決点をこの 1 定理に隔離する。
 -/
 theorem allNonLiftableOnGN_fromCounterexample_impl :
@@ -288,7 +430,7 @@ theorem allNonLiftableOnGN_fromCounterexample_impl :
   exact triominoCosmicNonLiftableGNBridge_of_noWieferich
     (triominoNoWieferichBridge_impl hBranch)
 
-/-- 一般 `GN` の nonlift family が供給されれば、`NoPowOnGN` は no-`sorry` で閉じる。 -/
+/-- 一般 `GN` の nonlift family が供給されれば、`NoPowOnGN` は no-`so#rry` で閉じる。 -/
 theorem triominoCosmicNoPowOnGN_of_nonLiftableGNBridge
     (hBridge : TriominoCosmicNonLiftableGNBridge) :
     NoPowOnGN_fromCounterexample := by
@@ -313,11 +455,21 @@ theorem triominoCosmicNoPowOnGN
   exact triominoCosmicNoPowOnGN_of_nonLiftableGNBridge
     (allNonLiftableOnGN_fromCounterexample_impl hBranch)
 
+/-- 既定の Branch bridge 注入から得る、引数なし版の `NoPowOnGN`。 -/
+theorem triominoCosmicNoPowOnGN_default :
+    NoPowOnGN_fromCounterexample := by
+  exact triominoCosmicNoPowOnGN triominoWieferichBranchBridge_default
+
 /-- Triomino/Cosmic 本丸（Body 版）は、`NoPowOnGN` 仕様から得る。 -/
 theorem triominoCosmicBodyInvariant
     (hBranch : TriominoWieferichBranchBridge) :
     TriominoCosmicBodyInvariant := by
   exact bodyInvariant_of_NoPowOnGN (triominoCosmicNoPowOnGN hBranch)
+
+/-- 既定の Branch bridge 注入から得る、引数なし版の Body invariant。 -/
+theorem triominoCosmicBodyInvariant_default :
+    TriominoCosmicBodyInvariant := by
+  exact bodyInvariant_of_NoPowOnGN triominoCosmicNoPowOnGN_default
 
 /--
 Body 不変量があれば、gap 不変量は自動で得られる。
@@ -346,5 +498,1284 @@ theorem triominoCosmicGapInvariant
     (hBranch : TriominoWieferichBranchBridge) :
     TriominoCosmicGapInvariant := by
   exact gapInvariant_of_bodyInvariant (triominoCosmicBodyInvariant hBranch)
+
+/-- 既定の Branch bridge 注入から得る、引数なし版の gap invariant。 -/
+theorem triominoCosmicGapInvariant_default :
+    TriominoCosmicGapInvariant := by
+  exact gapInvariant_of_bodyInvariant triominoCosmicBodyInvariant_default
+
+/-- 既定の gap invariant から `GapNotIsPowTarget` を得る薄い接続。 -/
+theorem gapNotIsPowTarget_default :
+    GapNotIsPowTarget := by
+  exact gap_not_isPow_of_counterexample triominoCosmicGapInvariant_default
+
+/--
+`¬ p ∣ (z - y)`（Branch B）では、反例パックから gap の `p` 乗化を concrete に回収できる。
+
+`GapPowFromPrimeGe5CounterexampleTarget` 全域実装のうち、Branch B 側を担う実装。
+-/
+theorem gapPowFromPrimeGe5Counterexample_branchB_impl :
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      ¬ p ∣ (z - y) →
+      ∃ t : ℕ, (z - y) = t ^ p := by
+  intro p x y z hpack hpB
+  rcases counterexampleHasWieferichLiftB_impl hpack hpB with ⟨q, hLift⟩
+  have hData : WieferichDescentDataB p x y z q :=
+    wieferichDescentDataB_of_pack hpack hpB hLift
+  rcases triominoWieferichShrink_gap_GN_are_pth_powers_core
+      (p := p) (x := x) (y := y) (z := z) (q := q)
+      hpack hpB hData.hqP hData.hq_not_dvd_gap hData.hqpow_dvd_GN with
+    ⟨u, _v, hu, _hv⟩
+  exact ⟨u, hu⟩
+
+/-- Branch A（`p ∣ z - y`）で gap の `p` 乗化を供給するための入力仕様。 -/
+abbrev GapPowFromPrimeGe5Counterexample_branchA : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ∃ t : ℕ, (z - y) = t ^ p
+
+/--
+Branch A 本線 target（shape 版）。
+
+`u := z - y` について
+- `q ≠ p` 側の指数は `p` の倍数
+- `q = p` 側の指数は `(p - 1) + p * m` 形
+を要求する。
+-/
+abbrev GapShapeFromPrimeGe5Counterexample_branchA_factorization : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    (∀ q : ℕ, q ≠ p → p ∣ (z - y).factorization q) ∧
+    ∃ m : ℕ, (z - y).factorization p = (p - 1) + p * m
+
+/-- Branch A shape-factorization の `q ≠ p` 側だけを切り出した仕様。 -/
+abbrev GapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ∀ q : ℕ, q ≠ p → p ∣ (z - y).factorization q
+
+/--
+Branch A の `q ≠ p` 側で必要な核仕様。
+
+`u := z - y` に対し、`q` が素数で `q ≠ p` かつ `q ∣ u` なら `q ∤ GN p u y`。
+-/
+abbrev GapNePNoSharedPrimeOnGN_branchA : Prop :=
+  ∀ {p x y z q : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    Nat.Prime q → q ≠ p → q ∣ (z - y) →
+    ¬ q ∣ GN p (z - y) y
+
+/--
+Branch A の `q ≠ p` 側本丸:
+`q ∣ gap` かつ `q ≠ p` なら `q ∤ GN p gap y`。
+-/
+theorem gapNePNoSharedPrimeOnGN_branchA_math :
+    GapNePNoSharedPrimeOnGN_branchA := by
+  intro p x y z q hpack hp_dvd_gap hqP hqp hq_gap hq_GN
+  have hcop_yz : Nat.Coprime z y := by
+    exact (coprime_right_of_add_pow_eq_pow hpack.hp hpack.hxy hpack.hEq).symm
+  have hq_gap_int : (q : ℤ) ∣ (((z - y : ℕ) : ℤ)) := by
+    exact_mod_cast hq_gap
+  have hq_GN_cast : (q : ℤ) ∣ ((GN p (z - y) y : ℕ) : ℤ) := by
+    exact_mod_cast hq_GN
+  have hq_GN_int :
+      (q : ℤ) ∣ GN p (((z - y : ℕ) : ℤ)) (y : ℤ) := by
+    simpa [GN] using hq_GN_cast
+  have hq_gcd_int :
+      q ∣ Int.gcd (((z - y : ℕ) : ℤ))
+        (GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) := by
+    exact Int.dvd_gcd hq_gap_int hq_GN_int
+  have hgapgcd_dvd_p :
+      Int.gcd (((z - y : ℕ) : ℤ))
+        (GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) ∣ p := by
+    exact DkMath.NumberTheory.Gcd.gcd_gap_GN_dvd_exp_int
+      (hp1 := Nat.succ_le_of_lt hpack.hp.pos) (hyz := hpack.hyz_lt) (hcop := hcop_yz)
+  have hq_dvd_p : q ∣ p := dvd_trans hq_gcd_int hgapgcd_dvd_p
+  have hq_eq_p : q = p := (Nat.prime_dvd_prime_iff_eq hqP hpack.hp).1 hq_dvd_p
+  exact hqp hq_eq_p
+
+/--
+`GapNePNoSharedPrimeOnGN_branchA` が供給されれば、`q ≠ p` 側 factorization 指数条件が得られる。
+-/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_of_noShared
+    (hNoShared : GapNePNoSharedPrimeOnGN_branchA) :
+    GapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p := by
+  intro p x y z hpack hp_dvd_gap q hqp
+  let u : ℕ := z - y
+  let N : ℕ := GN p u y
+  have hxpow : x ^ p = u * N := by
+    simpa [u, N, PrimeGe5CounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
+  have hu0 : u ≠ 0 := Nat.ne_of_gt (Nat.sub_pos_of_lt hpack.hyz_lt)
+  have hN0 : N ≠ 0 := by
+    intro hN0
+    have hx0pow : x ^ p = 0 := by simpa [hN0] using hxpow
+    have hx0 : x = 0 := (Nat.pow_eq_zero.mp hx0pow).1
+    exact hpack.hx0 hx0
+  by_cases hqU : q ∣ u
+  · by_cases hqP : Nat.Prime q
+    · have hq_not_dvd_N : ¬ q ∣ N := by
+        simpa [u, N] using hNoShared hpack hp_dvd_gap hqP hqp hqU
+      have hNfac0 : N.factorization q = 0 := Nat.factorization_eq_zero_of_not_dvd hq_not_dvd_N
+      have hmulq : (u * N).factorization q = u.factorization q + N.factorization q := by
+        simpa using congrArg (fun f => f q) (Nat.factorization_mul hu0 hN0)
+      have hpowq : (x ^ p).factorization q = p * x.factorization q := by
+        simp [Nat.factorization_pow]
+      have huq : u.factorization q = p * x.factorization q := by
+        calc
+          u.factorization q = u.factorization q + 0 := by simp
+          _ = u.factorization q + N.factorization q := by simp [hNfac0]
+          _ = (u * N).factorization q := by symm; exact hmulq
+          _ = (x ^ p).factorization q := by simp [hxpow]
+          _ = p * x.factorization q := hpowq
+      exact ⟨x.factorization q, by simpa [huq, Nat.mul_comm]⟩
+    · have hfac0 : u.factorization q = 0 := Nat.factorization_eq_zero_of_not_prime u hqP
+      exact ⟨0, by simp [u, hfac0]⟩
+  · have hfac0 : u.factorization q = 0 := Nat.factorization_eq_zero_of_not_dvd hqU
+    exact ⟨0, by simp [u, hfac0]⟩
+
+/-- Branch A shape-factorization の `q = p` 側だけを切り出した仕様。 -/
+abbrev GapShapeFromPrimeGe5Counterexample_branchA_factorization_p : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ∃ m : ℕ, (z - y).factorization p = (p - 1) + p * m
+
+/--
+Branch A shape-factorization は、`q ≠ p` 側と `q = p` 側の 2 仕様を合成して得られる。
+-/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_of_parts
+    (hNeP : GapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p)
+    (hP : GapShapeFromPrimeGe5Counterexample_branchA_factorization_p) :
+    GapShapeFromPrimeGe5Counterexample_branchA_factorization := by
+  intro p x y z hpack hp_dvd_gap
+  exact ⟨hNeP hpack hp_dvd_gap, hP hpack hp_dvd_gap⟩
+
+/--
+Branch A shape-factorization の `q ≠ p` 側 concrete 実装。
+
+現時点では `FLT_prime_ge5` による反例排除から `False.elim` で供給する。
+-/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_via_FLT :
+    GapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p := by
+  intro p x y z hpack hp_dvd_gap q hqp
+  have hNo : x ^ p + y ^ p ≠ z ^ p :=
+    FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
+  exact False.elim (hNo hpack.hEq)
+
+/--
+Branch A shape-factorization の `q = p` 側 concrete 実装。
+
+現時点では `FLT_prime_ge5` による反例排除から `False.elim` で供給する。
+-/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_via_FLT :
+    GapShapeFromPrimeGe5Counterexample_branchA_factorization_p := by
+  intro p x y z hpack hp_dvd_gap
+  have hNo : x ^ p + y ^ p ≠ z ^ p :=
+    FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
+  exact False.elim (hNo hpack.hEq)
+
+/--
+`q = p` 側の valuation 結論を factorization 形へ持ち上げる補助。
+-/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_of_padicValNat
+    {p x y z : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hVal : ∃ m : ℕ, padicValNat p (z - y) = (p - 1) + p * m) :
+    ∃ m : ℕ, (z - y).factorization p = (p - 1) + p * m := by
+  have hgap_ne0 : (z - y) ≠ 0 := Nat.ne_of_gt (Nat.sub_pos_of_lt hpack.hyz_lt)
+  rcases hVal with ⟨m, hm⟩
+  refine ⟨m, ?_⟩
+  calc
+    (z - y).factorization p = padicValNat p (z - y) := by
+      symm
+      exact padicValNat_eq_factorization hpack.hp hgap_ne0
+    _ = (p - 1) + p * m := hm
+
+/--
+Branch A shape-factorization の `q = p` 側 clean 実装（valuation 計算版）。
+-/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_math :
+    GapShapeFromPrimeGe5Counterexample_branchA_factorization_p := by
+  intro p x y z hpack hp_dvd_gap
+  let u : ℕ := z - y
+  let N : ℕ := GN p u y
+  have hxpow : x ^ p = u * N := by
+    simpa [u, N, PrimeGe5CounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
+  have hGN : p ∣ N ∧ ¬ p ^ 2 ∣ N := by
+    simpa [u, N] using p_dvd_GN_and_not_sq_when_p_dvd_gap hpack hp_dvd_gap
+  have hN0 : N ≠ 0 := by
+    intro hN0
+    exact hGN.2 (by simp [hN0])
+  have hu0 : u ≠ 0 := by
+    exact Nat.ne_of_gt (Nat.sub_pos_of_lt hpack.hyz_lt)
+  have hNval : padicValNat p N = 1 :=
+    padicValNat_eq_one_of_dvd_not_sq hpack.hp hGN.1 hGN.2
+  have hVal : ∃ m : ℕ, padicValNat p u = (p - 1) + p * m := by
+    exact padicValNat_gap_shape_of_mul_eq_pow
+      (hp := hpack.hp)
+      (hx0 := hpack.hx0)
+      (hu0 := hu0)
+      (hN0 := hN0)
+      (hEq := hxpow)
+      (hNval := hNval)
+  simpa [u] using gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_of_padicValNat
+    hpack hVal
+
+/-- 互換エイリアス（旧名）。 -/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_impl :
+    GapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p :=
+  gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_of_noShared
+    gapNePNoSharedPrimeOnGN_branchA_math
+
+/-- 互換エイリアス（旧名）。 -/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_impl :
+    GapShapeFromPrimeGe5Counterexample_branchA_factorization_p :=
+  gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_math
+
+/--
+Branch A shape-factorization concrete 実装（2小片合成版）。
+-/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_impl :
+    GapShapeFromPrimeGe5Counterexample_branchA_factorization := by
+  exact gapShapeFromPrimeGe5Counterexample_branchA_factorization_of_parts
+    gapShapeFromPrimeGe5Counterexample_branchA_factorization_ne_p_impl
+    gapShapeFromPrimeGe5Counterexample_branchA_factorization_p_impl
+
+/-- Branch A 本線 target（値域 shape 版）。 -/
+abbrev GapShapeFromPrimeGe5Counterexample_branchA : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ∃ t : ℕ, (z - y) = p ^ (p - 1) * t ^ p
+
+/--
+Branch A shape 版から legacy の Branch A gapPow 仕様へ戻す橋（可換化用）。
+
+注意: これは互換/実験層の橋であり、本線の数学核としては使わない。
+Branch A の自然出力は `p^(p-1) * t^p` 形（shape）であり、
+一般には pure `p` 乗 (`s^p`) へ落ちない。
+-/
+abbrev GapPowFromBranchAShapeBridge : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    (∃ t : ℕ, (z - y) = p ^ (p - 1) * t ^ p) →
+    ∃ s : ℕ, (z - y) = s ^ p
+
+/--
+Branch A の `gap` が `p` 乗になることを、`gap` の全素因子指数が `p` の倍数という
+因数分解条件へ還元した入力仕様。
+-/
+abbrev GapPowFromPrimeGe5Counterexample_branchA_factorization : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ∀ q : ℕ, p ∣ (z - y).factorization q
+
+/--
+反例排除仕様があれば、Branch A の shape-factorization 仕様は vacuous に供給できる。
+-/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_factorization_of_refuter
+    (hRefute : PrimeGe5CounterexampleRefuterTarget) :
+    GapShapeFromPrimeGe5Counterexample_branchA_factorization := by
+  intro p x y z hpack hp_dvd_gap
+  exact False.elim (hRefute hpack)
+
+/--
+反例排除仕様があれば、Branch A の shape 仕様は vacuous に供給できる。
+-/
+theorem gapShapeFromPrimeGe5Counterexample_branchA_of_refuter
+    (hRefute : PrimeGe5CounterexampleRefuterTarget) :
+    GapShapeFromPrimeGe5Counterexample_branchA := by
+  intro p x y z hpack hp_dvd_gap
+  exact False.elim (hRefute hpack)
+
+/--
+shape 版を legacy gapPow 版へ落とす一般橋。
+shape から pure `p` 乗へ落とす数学核は `hBridge` として明示注入する。
+-/
+theorem gapPowFromPrimeGe5Counterexample_branchA_of_shape
+    (hShape : GapShapeFromPrimeGe5Counterexample_branchA)
+    (hBridge : GapPowFromBranchAShapeBridge) :
+    GapPowFromPrimeGe5Counterexample_branchA := by
+  intro p x y z hpack hp_dvd_gap
+  exact hBridge hpack hp_dvd_gap (hShape hpack hp_dvd_gap)
+
+/--
+Branch A 因数分解指数仕様の concrete 実装。
+
+現時点では `FLT_prime_ge5` による反例排除から `False.elim` で供給する。
+-/
+theorem gapPowFromPrimeGe5Counterexample_branchA_factorization_impl :
+    GapPowFromPrimeGe5Counterexample_branchA_factorization := by
+  intro p x y z hpack hp_dvd_gap q
+  have hNo : x ^ p + y ^ p ≠ z ^ p :=
+    FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
+  exact False.elim (hNo hpack.hEq)
+
+#print axioms gapPowFromPrimeGe5Counterexample_branchA_factorization_impl  -- NG: so#rryAx, use DkMath.FLT
+
+/--
+Branch A の因数分解指数条件が供給されれば、`gap = t^p` は no-`so#rry` で従う。
+-/
+theorem gapPowFromPrimeGe5Counterexample_branchA_of_factorization
+    (hFac : GapPowFromPrimeGe5Counterexample_branchA_factorization) :
+    GapPowFromPrimeGe5Counterexample_branchA := by
+  intro p x y z hpack hp_dvd_gap
+  have hp0 : 0 < p := hpack.hp.pos
+  have hgap_ne0 : (z - y) ≠ 0 := by
+    exact Nat.ne_of_gt (Nat.sub_pos_of_lt hpack.hyz_lt)
+  exact exists_eq_pow_of_factorization_dvd
+    (u := z - y) (p := p)
+    hgap_ne0 hp0
+    (hFac hpack hp_dvd_gap)
+
+/-- Branch A gap-pow の concrete 実装。 -/
+theorem gapPowFromPrimeGe5Counterexample_branchA_impl :
+    GapPowFromPrimeGe5Counterexample_branchA := by
+  exact gapPowFromPrimeGe5Counterexample_branchA_of_factorization
+    gapPowFromPrimeGe5Counterexample_branchA_factorization_impl
+
+/-- 全域 `GapPowFromPrimeGe5CounterexampleTarget` の concrete 実装。 -/
+theorem gapPowFromPrimeGe5Counterexample_target_impl :
+    GapPowFromPrimeGe5CounterexampleTarget := by
+  intro p x y z hpack
+  by_cases hpB : p ∣ (z - y)
+  · exact gapPowFromPrimeGe5Counterexample_branchA_impl hpack hpB
+  · exact gapPowFromPrimeGe5Counterexample_branchB_impl hpack hpB
+
+/-!
+## Branch-Split Mainline (shape-preserving)
+
+Branch A は shape 出力を保持したまま別出口へ送り、
+Branch B は gap-not-pow と pure-gap-pow の衝突で処理する。
+
+この節は、legacy な Branch A -> pure-gap-pow 橋に依存しない
+mainline 接続を与える。
+-/
+
+/-- Branch A 側の終着仕様（shape 系から導く専用出口）。 -/
+abbrev BranchARefuterTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    False
+
+/-- Branch B 側の終着仕様（pure-gap-pow と gap-not-pow の衝突出口）。 -/
+abbrev BranchBRefuterTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ¬ p ∣ (z - y) →
+    False
+
+/--
+Branch A の mainline 出口（shape-factorization 版）。
+
+`False` へ急がず、まず Branch A の自然出力を保持する。
+-/
+abbrev BranchAShapeFactorizationTarget : Prop :=
+  GapShapeFromPrimeGe5Counterexample_branchA_factorization
+
+/-- Branch A shape-factorization 出口の concrete 実装。 -/
+theorem branchAShapeFactorizationTarget_impl :
+    BranchAShapeFactorizationTarget :=
+  gapShapeFromPrimeGe5Counterexample_branchA_factorization_impl
+
+/--
+Branch A の値域 shape 出口。
+
+factorization 形を値の形 `z - y = p^(p-1) * t^p` へ落とした段を表す。
+-/
+abbrev BranchAShapeValueTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ∃ t : ℕ, (z - y) = p ^ (p - 1) * t ^ p
+
+/--
+Branch A の値域 shape から refuter へ送る終盤仕様。
+-/
+abbrev BranchAShapeValueToRefuterTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    (∃ t : ℕ, (z - y) = p ^ (p - 1) * t ^ p) →
+    False
+
+/-- Branch A の shape witness から `t > 0` を回収する基本補助。 -/
+lemma branchAShapeWitness_t_pos
+    {p x y z t : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (ht : z - y = p ^ (p - 1) * t ^ p) :
+    0 < t := by
+  have hgap_pos : 0 < z - y := Nat.sub_pos_of_lt hpack.hyz_lt
+  have ht_ne0 : t ≠ 0 := by
+    intro ht0
+    have hgap_zero : z - y = 0 := by
+      calc
+        z - y = p ^ (p - 1) * t ^ p := ht
+        _ = 0 := by simp [ht0, hpack.hp.ne_zero]
+    exact (Nat.ne_of_gt hgap_pos) hgap_zero
+  exact Nat.pos_of_ne_zero ht_ne0
+
+/-- Branch A の shape witness から `p^(p-1) ∣ z-y` を回収する基本補助。 -/
+lemma branchAShapeWitness_powPred_dvd_gap
+  {p y z t : ℕ}
+    (ht : z - y = p ^ (p - 1) * t ^ p) :
+    p ^ (p - 1) ∣ (z - y) := by
+  refine ⟨t ^ p, ?_⟩
+  simpa [Nat.mul_comm] using ht
+
+/--
+Branch A の shape witness を既存 descent 入口へ送るための薄い core 入力。
+
+現時点では `t` の正性と `p^(p-1) ∣ gap` をまとめて返す。
+-/
+lemma branchAShapeWitness_to_descent_input_core
+    {p x y z t : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+  (_hp_dvd_gap : p ∣ (z - y))
+    (ht : z - y = p ^ (p - 1) * t ^ p) :
+    0 < t ∧ p ^ (p - 1) ∣ (z - y) := by
+  refine ⟨branchAShapeWitness_t_pos hpack ht, branchAShapeWitness_powPred_dvd_gap ht⟩
+
+/-- Branch A shape witness から既存 descent 契約へ渡す最小入力。 -/
+structure BranchAShapeWitnessDescentInput (p x y z t : ℕ) : Prop where
+  tPos : 0 < t
+  powPredDvdGap : p ^ (p - 1) ∣ (z - y)
+  gapShape : z - y = p ^ (p - 1) * t ^ p
+
+/-- `ht` から既存 descent 入力を組み立てる薄い変換。 -/
+theorem branchAShapeWitness_to_existing_descent_input
+    {p x y z t : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (ht : z - y = p ^ (p - 1) * t ^ p) :
+    BranchAShapeWitnessDescentInput p x y z t := by
+  rcases branchAShapeWitness_to_descent_input_core hpack hp_dvd_gap ht with ⟨htPos, hPowDvd⟩
+  exact ⟨htPos, hPowDvd, ht⟩
+
+/--
+もし Branch A 側 refuter が先に得られていれば、shape-value から descent へは直ちに落ちる。
+（外部契約接続のための薄い補助）
+-/
+theorem branchAShapeValueToDescent_of_branchARefuter
+    (hA : BranchARefuterTarget) :
+  BranchAShapeValueToRefuterTarget := by
+  intro p x y z hpack hp_dvd_gap hShape
+  exact hA hpack hp_dvd_gap
+
+/--
+Branch A の値域 shape を既存 shrink/descent 契約へ送る中間仕様。
+
+現時点では `False` 出力と同型だが、将来は descent データ出力へ拡張可能な命名として残す。
+-/
+abbrev BranchAShapeValueToDescentTarget : Prop :=
+  BranchAShapeValueToRefuterTarget
+
+/--
+Branch A の shape 値から shrink/descent witness を作る中間仕様。
+
+現時点では witness を `False` と同型に置き、最後の数学核を 1 点へ隔離する。
+-/
+abbrev BranchAShapeValueToShrinkWitnessTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    (∃ t : ℕ, (z - y) = p ^ (p - 1) * t ^ p) →
+    ∃ t : ℕ, (z - y) = p ^ (p - 1) * t ^ p
+
+/--
+shrink/descent witness から descent/refuter へ送る中間仕様。
+
+現時点では witness を `False` と同型に置くため同値。
+-/
+abbrev BranchAShrinkWitnessToDescentTarget : Prop :=
+  BranchAShapeValueToRefuterTarget
+
+/--
+Branch A の witness 直受け最終 kernel。
+
+`hpack + hp_dvd_gap + ht` から `False` を導く一点集中の仕様。
+-/
+abbrev BranchAShapeWitnessKernelTarget : Prop :=
+  ∀ {p x y z t : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    (z - y = p ^ (p - 1) * t ^ p) →
+    False
+
+/-- witness 直受け kernel から `shrinkWitness -> descent` を得る薄い橋。 -/
+theorem branchAShrinkWitnessToDescent_of_kernel
+    (hK : BranchAShapeWitnessKernelTarget) :
+    BranchAShrinkWitnessToDescentTarget := by
+  intro p x y z hpack hp_dvd_gap hShape
+  rcases hShape with ⟨t, ht⟩
+  exact hK hpack hp_dvd_gap ht
+
+/--
+既存 descent 入力を refute できる契約があれば、witness kernel が得られる。
+-/
+theorem branchAShapeWitnessKernel_of_existingDescentRefuter
+    (hRef : ∀ {p x y z t : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      p ∣ (z - y) →
+      BranchAShapeWitnessDescentInput p x y z t →
+      False) :
+    BranchAShapeWitnessKernelTarget := by
+  intro p x y z t hpack hp_dvd_gap ht
+  exact hRef hpack hp_dvd_gap
+    (branchAShapeWitness_to_existing_descent_input hpack hp_dvd_gap ht)
+
+/--
+`shape-value -> shrinkWitness` と `shrinkWitness -> descent` が揃えば
+`shape-value -> descent` を得る。
+-/
+theorem branchAShapeValueToDescent_of_shrink
+    (hW : BranchAShapeValueToShrinkWitnessTarget)
+    (hD : BranchAShrinkWitnessToDescentTarget) :
+    BranchAShapeValueToDescentTarget := by
+  intro p x y z hpack hp_dvd_gap hShape
+  exact hD hpack hp_dvd_gap (hW hpack hp_dvd_gap hShape)
+
+/-- `shape-value -> descent` 仕様から `shape-value -> refuter` を得る薄い橋。 -/
+theorem branchAShapeValueToRefuter_of_descent
+    (hDescent : BranchAShapeValueToDescentTarget) :
+    BranchAShapeValueToRefuterTarget :=
+  hDescent
+
+/--
+Branch A の shape-factorization から値域 shape へ送るローカル変換仕様。
+-/
+abbrev BranchAShapeFactorizationToValueTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ((∀ q : ℕ, q ≠ p → p ∣ (z - y).factorization q) ∧
+      ∃ m : ℕ, (z - y).factorization p = (p - 1) + p * m) →
+    ∃ t : ℕ, (z - y) = p ^ (p - 1) * t ^ p
+
+/--
+`BranchAShapeFactorizationToValueTarget` の暫定 concrete 実装（via FLT）。
+
+最終的には factorization 再構成で置換する。
+-/
+theorem branchAShapeValueTarget_via_FLT :
+    BranchAShapeFactorizationToValueTarget := by
+  intro p x y z hpack hp_dvd_gap hShapeFac
+  have hNo : x ^ p + y ^ p ≠ z ^ p :=
+    FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
+  exact False.elim (hNo hpack.hEq)
+
+/--
+`BranchAShapeFactorizationToValueTarget` の clean 実装（factorization 再構成版）。
+-/
+theorem branchAShapeValueTarget_math :
+    BranchAShapeFactorizationToValueTarget := by
+  intro p x y z hpack hp_dvd_gap hShapeFac
+  rcases hShapeFac with ⟨hNe, hpPart⟩
+  rcases hpPart with ⟨m, hm⟩
+  let u : ℕ := z - y
+  let d : ℕ := p ^ (p - 1)
+  have hu_pos : 0 < u := by
+    simpa [u] using Nat.sub_pos_of_lt hpack.hyz_lt
+  have hu0 : u ≠ 0 := Nat.ne_of_gt hu_pos
+  have hle : p - 1 ≤ u.factorization p := by
+    rw [hm]
+    exact Nat.le_add_right (p - 1) (p * m)
+  have hdvd_u : d ∣ u := by
+    unfold d
+    exact (hpack.hp.pow_dvd_iff_le_factorization hu0).2 hle
+  have hd_pos : 0 < d := by
+    unfold d
+    exact Nat.pow_pos hpack.hp.pos
+  let w : ℕ := u / d
+  have hw_pos : 0 < w := Nat.div_pos (Nat.le_of_dvd hu_pos hdvd_u) hd_pos
+  have hw0 : w ≠ 0 := Nat.ne_of_gt hw_pos
+  have hfac_div : w.factorization = u.factorization - d.factorization := by
+    simpa [w] using Nat.factorization_div hdvd_u
+  have hall_w : ∀ q : ℕ, p ∣ w.factorization q := by
+    intro q
+    by_cases hq_eq : q = p
+    · have hd_fac_p : d.factorization p = p - 1 := by
+        unfold d
+        simp? [hpack.hp.factorization]
+      have hm_u : u.factorization p = (p - 1) + p * m := by
+        simpa [u] using hm
+      have hw_fac_p : w.factorization p = p * m := by
+        calc
+          w.factorization p = u.factorization p - d.factorization p := by
+            simpa using congrArg (fun f => f p) hfac_div
+          _ = ((p - 1) + p * m) - (p - 1) := by simp [hm_u, hd_fac_p]
+          _ = p * m := by omega
+      exact ⟨m, by simp [hq_eq, hw_fac_p]⟩
+    · by_cases hqP : Nat.Prime q
+      · have hd_fac_q : d.factorization q = 0 := by
+          unfold d
+          rw [Nat.Prime.factorization_pow hpack.hp]
+          simp [hq_eq]
+        have hw_fac_q : w.factorization q = u.factorization q := by
+          calc
+            w.factorization q = u.factorization q - d.factorization q := by
+              simpa using congrArg (fun f => f q) hfac_div
+            _ = u.factorization q := by simp [hd_fac_q]
+        rcases hNe q hq_eq with ⟨k, hk⟩
+        exact ⟨k, by simpa [hw_fac_q, hk]⟩
+      · have hw_fac0 : w.factorization q = 0 := Nat.factorization_eq_zero_of_not_prime w hqP
+        exact ⟨0, by simp [hw_fac0]⟩
+  rcases exists_eq_pow_of_factorization_dvd
+      (u := w) (p := p) hw0 hpack.hp.pos hall_w with ⟨t, ht⟩
+  have hu_mul : u = d * w := by
+    have hw_mul : w * d = u := by
+      simpa [w] using Nat.div_mul_cancel hdvd_u
+    simpa [Nat.mul_comm] using hw_mul.symm
+  refine ⟨t, ?_⟩
+  calc
+    z - y = u := by rfl
+    _ = d * w := hu_mul
+    _ = p ^ (p - 1) * t ^ p := by simp [d, ht]
+
+/-- `BranchAShapeFactorizationToValueTarget` の実装入口。 -/
+theorem branchAShapeValueTarget_impl :
+    BranchAShapeFactorizationToValueTarget :=
+  branchAShapeValueTarget_math
+
+/--
+`BranchAShapeValueToRefuterTarget` の暫定 concrete 実装（via FLT）。
+
+最終的には shape 値の意味付け（descent/shrink 等）で置換する。
+-/
+theorem branchAShapeValueToRefuter_via_FLT :
+    BranchAShapeValueToRefuterTarget := by
+  intro p x y z hpack hp_dvd_gap hShapeValue
+  have hNo : x ^ p + y ^ p ≠ z ^ p :=
+    FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
+  exact hNo hpack.hEq
+
+/-- `shape-value -> descent` 仕様の暫定 concrete 実装（via FLT）。 -/
+theorem branchAShapeValueToDescent_via_FLT :
+    BranchAShapeValueToDescentTarget :=
+  branchAShapeValueToRefuter_via_FLT
+
+/-- `shape-value -> shrinkWitness` の暫定 concrete 実装（via FLT）。 -/
+theorem branchAShapeValueToShrinkWitness_via_FLT :
+    BranchAShapeValueToShrinkWitnessTarget := by
+  intro p x y z hpack hp_dvd_gap hShape
+  exact hShape
+
+/-- `shrinkWitness -> descent` の暫定 concrete 実装（via FLT）。 -/
+theorem branchAShrinkWitnessToDescent_via_FLT :
+    BranchAShrinkWitnessToDescentTarget :=
+  branchAShapeValueToRefuter_via_FLT
+
+/-- witness 直受け kernel の暫定 concrete 実装（via FLT）。 -/
+theorem branchAShapeWitnessKernel_via_FLT :
+    BranchAShapeWitnessKernelTarget := by
+  intro p x y z t hpack hp_dvd_gap ht
+  have hNo : x ^ p + y ^ p ≠ z ^ p :=
+    FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
+  exact hNo hpack.hEq
+
+/-- Branch A witness から `False` を返す既存 descent 契約の抽象ターゲット。 -/
+abbrev ExistingDescentRefuterTarget : Prop :=
+  ∀ {p x y z t : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    BranchAShapeWitnessDescentInput p x y z t →
+    False
+
+/--
+Branch A の shape witness を refute する専用 descent 契約ターゲット。
+
+`existingDescentRefuter_math` の最終差し替え先をこの契約 1 本に固定する。
+-/
+abbrev BranchAShapeWitnessDescentContractTarget : Prop :=
+  ExistingDescentRefuterTarget
+
+/-- 既存 descent 契約を注入して利用する薄い橋。 -/
+theorem existingDescentRefuter_of_target
+  (hRef : ExistingDescentRefuterTarget)
+    : ∀ {p x y z t : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        p ∣ (z - y) →
+        BranchAShapeWitnessDescentInput p x y z t →
+    False := hRef
+
+/-- Branch A witness から既存契約へ渡す adapter 入力型。 -/
+abbrev ExistingDescentContractInput (p x y z t : ℕ) : Prop :=
+  BranchAShapeWitnessDescentInput p x y z t
+
+/-- Branch A witness 入力を既存契約入力へ変換する薄い adapter。 -/
+theorem branchAShapeWitnessDescentInput_to_existing_contract
+    {p x y z t : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hInput : BranchAShapeWitnessDescentInput p x y z t) :
+    ExistingDescentContractInput p x y z t := by
+  let _ := hpack
+  let _ := hp_dvd_gap
+  exact hInput
+
+/-- 既存契約入力を refute する契約（最終差し替え口）。 -/
+abbrev ExistingDescentContractRefuterTarget : Prop :=
+  ∀ {p x y z t : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ExistingDescentContractInput p x y z t →
+    False
+
+/--
+既存契約（raw 入力）を受ける最小 refuter 契約。
+
+将来の clean 置換では、この契約 1 本を差し替えるだけでよい。
+-/
+abbrev ExistingDescentRawRefuterTarget : Prop :=
+  ∀ {p x y z t : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ExistingDescentContractInput p x y z t →
+    False
+
+/-- raw refuter 契約を `ExistingDescentContractRefuterTarget` へ持ち上げる薄い橋。 -/
+theorem existingDescentContractRefuter_of_raw
+    (hRaw : ExistingDescentRawRefuterTarget) :
+    ExistingDescentContractRefuterTarget :=
+  hRaw
+
+/--
+既存 descent 契約入力を受けて refute する暫定 concrete 実装（via FLT）。
+-/
+theorem existingDescentRefuter_via_FLT
+  : ∀ {p x y z t : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    BranchAShapeWitnessDescentInput p x y z t →
+    False := by
+  intro p x y z t hpack _hp_dvd_gap _hInput
+  have hNo : x ^ p + y ^ p ≠ z ^ p :=
+    FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
+  exact hNo hpack.hEq
+
+/-- 既存契約入力を refute する暫定 concrete 実装（via FLT）。 -/
+theorem existingDescentContractRefuter_via_FLT :
+  ExistingDescentRawRefuterTarget := by
+  intro p x y z t hpack hp_dvd_gap hC
+  exact existingDescentRefuter_via_FLT hpack hp_dvd_gap hC
+
+/--
+`ExistingDescentRawRefuterTarget` の実装本体。
+
+現時点では `via_FLT` を束ねるが、最終 clean 置換点はこの定理 1 本に集約する。
+-/
+theorem existingDescentRawRefuter_math :
+    ExistingDescentRawRefuterTarget :=
+  existingDescentContractRefuter_via_FLT
+
+/-- `ExistingDescentRawRefuterTarget` の実装入口。 -/
+theorem existingDescentRawRefuter_impl :
+    ExistingDescentRawRefuterTarget :=
+  existingDescentRawRefuter_math
+
+/--
+既存契約入力を refute する実装本体。
+
+現時点では `via_FLT` を束ねるが、最終 clean 置換点はこの定理 1 本に集約する。
+-/
+theorem existingDescentContractRefuter_math :
+    ExistingDescentContractRefuterTarget :=
+  existingDescentContractRefuter_of_raw existingDescentRawRefuter_impl
+
+/-- 既存契約入力を refute する実装入口。 -/
+theorem existingDescentContractRefuter_impl :
+    ExistingDescentContractRefuterTarget :=
+  existingDescentContractRefuter_math
+
+/-- Branch A 専用 descent 契約の暫定 concrete 実装（via FLT）。 -/
+theorem branchAShapeWitnessDescentContract_via_FLT :
+    BranchAShapeWitnessDescentContractTarget :=
+  existingDescentRefuter_via_FLT
+
+/--
+Branch A 専用 descent 契約の実装本体。
+
+現時点では `via_FLT` を束ねるが、最終 clean 置換点はこの定理 1 本に集約する。
+-/
+theorem branchAShapeWitnessDescentContract_math :
+    BranchAShapeWitnessDescentContractTarget := by
+  intro p x y z t hpack hp_dvd_gap hInput
+  let hC : ExistingDescentContractInput p x y z t :=
+    branchAShapeWitnessDescentInput_to_existing_contract hpack hp_dvd_gap hInput
+  exact existingDescentContractRefuter_impl hpack hp_dvd_gap hC
+
+/-- Branch A 専用 descent 契約の実装入口。 -/
+theorem branchAShapeWitnessDescentContract_impl :
+    BranchAShapeWitnessDescentContractTarget :=
+  branchAShapeWitnessDescentContract_math
+
+/--
+既存 descent 契約入力を受けて refute する実装本体。
+
+最終 clean 置換点はこの定理 1 本。
+-/
+theorem existingDescentRefuter_math
+  : ∀ {p x y z t : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    BranchAShapeWitnessDescentInput p x y z t →
+    False :=
+  existingDescentRefuter_of_target branchAShapeWitnessDescentContract_impl
+
+/--
+witness 直受け kernel の実装本体。
+
+現時点では `via_FLT` を束ねるが、最終 clean 置換点はこの定理 1 本に集約する。
+-/
+theorem branchAShapeWitnessKernel_math :
+    BranchAShapeWitnessKernelTarget :=
+  branchAShapeWitnessKernel_of_existingDescentRefuter
+    existingDescentRefuter_math
+
+/-- witness 直受け kernel の実装入口。 -/
+theorem branchAShapeWitnessKernel_impl :
+    BranchAShapeWitnessKernelTarget :=
+  branchAShapeWitnessKernel_math
+
+/--
+`shrinkWitness -> descent` の実装入口。
+
+現時点では `via_FLT` を束ねるが、最終 clean 置換点はこの定理 1 本に集約する。
+-/
+theorem branchAShrinkWitnessToDescent_math :
+    BranchAShrinkWitnessToDescentTarget :=
+  branchAShrinkWitnessToDescent_of_kernel
+    branchAShapeWitnessKernel_impl
+
+/--
+`shape-value -> descent` の実装入口（shrink 分解版）。
+-/
+theorem branchAShapeValueToDescent_impl :
+    BranchAShapeValueToDescentTarget :=
+  branchAShapeValueToDescent_of_shrink
+    branchAShapeValueToShrinkWitness_via_FLT
+    branchAShrinkWitnessToDescent_math
+
+/--
+`shrinkWitness -> descent` の clean 契約を外部注入して
+`shape-value -> descent` を得る実装入口。
+
+この定理により、最後の置換点は
+`BranchAShrinkWitnessToDescentTarget` の実体 1 本へ固定される。
+-/
+theorem branchAShapeValueToDescent_of_shrinkWitness_impl
+    (hSD : BranchAShrinkWitnessToDescentTarget) :
+    BranchAShapeValueToDescentTarget :=
+  branchAShapeValueToDescent_of_shrink
+    branchAShapeValueToShrinkWitness_via_FLT
+    hSD
+
+/-- `BranchAShapeValueToRefuterTarget` の実装入口。 -/
+theorem branchAShapeValueToRefuter_impl :
+    BranchAShapeValueToRefuterTarget :=
+  branchAShapeValueToRefuter_of_descent branchAShapeValueToDescent_impl
+
+/--
+`shape-value -> descent` の clean 契約を外部注入して
+`shape-value -> refuter` を得る実装入口。
+-/
+theorem branchAShapeValueToRefuter_of_descent_impl
+    (hDescent : BranchAShapeValueToDescentTarget) :
+    BranchAShapeValueToRefuterTarget :=
+  branchAShapeValueToRefuter_of_descent hDescent
+
+/--
+`shrinkWitness -> descent` を外部注入して
+`shape-value -> refuter` を得る実装入口。
+-/
+theorem branchAShapeValueToRefuter_of_shrinkWitness_impl
+    (hSD : BranchAShrinkWitnessToDescentTarget) :
+    BranchAShapeValueToRefuterTarget :=
+  branchAShapeValueToRefuter_of_descent_impl
+    (branchAShapeValueToDescent_of_shrinkWitness_impl hSD)
+
+/--
+Branch A の shape-factorization から refuter へ送る 1-pack kernel 仕様。
+
+終盤の数学核を 1 定理へ固定するための中間仕様。
+-/
+abbrev BranchAShapeToRefuterTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ((∀ q : ℕ, q ≠ p → p ∣ (z - y).factorization q) ∧
+      ∃ m : ℕ, (z - y).factorization p = (p - 1) + p * m) →
+    False
+
+/--
+1-pack kernel があれば、Branch A の shape 出口を Branch A refuter 出口へ持ち上げられる。
+-/
+theorem branchAShapeToRefuter_of_kernel
+    (hK : BranchAShapeToRefuterTarget) :
+    BranchAShapeFactorizationTarget → BranchARefuterTarget := by
+  intro hShape p x y z hpack hp_dvd_gap
+  exact hK hpack hp_dvd_gap (hShape hpack hp_dvd_gap)
+
+/--
+`shape-factorization -> shape-value` と `shape-value -> refuter` が揃えば、
+`shape-factorization -> refuter`（kernel）を得る。
+-/
+theorem branchAShapeToRefuter_of_value
+    (hValue : BranchAShapeFactorizationToValueTarget)
+    (hRefuteValue : BranchAShapeValueToRefuterTarget) :
+    BranchAShapeToRefuterTarget := by
+  intro p x y z hpack hp_dvd_gap hShapeFac
+  exact hRefuteValue hpack hp_dvd_gap (hValue hpack hp_dvd_gap hShapeFac)
+
+/-- Branch A/B の 2 終着仕様が揃えば、反例排除仕様が得られる。 -/
+theorem primeGe5CounterexampleRefuter_of_branch_split
+    (hA : BranchARefuterTarget)
+    (hB : BranchBRefuterTarget) :
+    PrimeGe5CounterexampleRefuterTarget := by
+  intro p x y z hpack
+  by_cases hpB : p ∣ (z - y)
+  · exact hA hpack hpB
+  · exact hB hpack hpB
+
+/--
+Branch B concrete (`gap = t^p`) と default の gap-not-pow から、
+Branch B 側終着仕様を得る。
+-/
+theorem branchBRefuter_of_gapPow_and_defaultNotPow
+    (hGapPowB : ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      ¬ p ∣ (z - y) → ∃ t : ℕ, (z - y) = t ^ p) :
+    BranchBRefuterTarget := by
+  intro p x y z hpack hpB
+  exact (gapNotIsPowTarget_default hpack) (hGapPowB hpack hpB)
+
+/--
+shape-preserving mainline:
+Branch A/B 分岐終着仕様から `FLTPrimeGe5Target` へ接続する。
+-/
+theorem FLTPrimeGe5Target_of_branch_split_refuter_with_normalizer_impl
+    (hA : BranchARefuterTarget)
+    (hB : BranchBRefuterTarget) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_normalizer_and_refuter
+    primeGe5CounterexampleNormalizer_impl
+    (primeGe5CounterexampleRefuter_of_branch_split hA hB)
+
+/--
+2層 mainline:
+Branch A は shape 出口、Branch B は refuter 出口を取り、
+`shape -> refuter` 橋を外部注入して `FLTPrimeGe5Target` へ接続する。
+-/
+theorem FLTPrimeGe5Target_of_branch_split_shape_and_refuter_with_normalizer_impl
+    (hAShape : BranchAShapeFactorizationTarget)
+    (hB : BranchBRefuterTarget)
+    (hShapeToRefuter : BranchAShapeFactorizationTarget → BranchARefuterTarget) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_branch_split_refuter_with_normalizer_impl
+    (hShapeToRefuter hAShape)
+    hB
+
+/--
+2層 mainline の kernel 版。
+`BranchAShapeToRefuterTarget` が与えられれば、shape 出口から refuter 出口への橋は自動生成できる。
+-/
+theorem FLTPrimeGe5Target_of_branch_split_shapeKernel_and_refuter_with_normalizer_impl
+    (hAShape : BranchAShapeFactorizationTarget)
+    (hB : BranchBRefuterTarget)
+    (hK : BranchAShapeToRefuterTarget) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_branch_split_shape_and_refuter_with_normalizer_impl
+    hAShape hB (branchAShapeToRefuter_of_kernel hK)
+
+/--
+3層 mainline:
+Branch A は `shape-factorization -> shape-value -> refuter` の順に送り、
+Branch B refuter と合成して `FLTPrimeGe5Target` へ接続する。
+-/
+theorem FLTPrimeGe5Target_of_branch_split_shapeValue_and_refuter_with_normalizer_impl
+    (hAShape : BranchAShapeFactorizationTarget)
+    (hB : BranchBRefuterTarget)
+    (hValue : BranchAShapeFactorizationToValueTarget)
+    (hRefuteValue : BranchAShapeValueToRefuterTarget) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_branch_split_shapeKernel_and_refuter_with_normalizer_impl
+    hAShape hB (branchAShapeToRefuter_of_value hValue hRefuteValue)
+
+/--
+Branch-split mainline の起動定理（現行 concrete 実装接続版）。
+
+注意: Branch A の value/refuter 実装は現時点では via FLT であり、
+最終的には clean 数学核へ置換する。
+-/
+theorem FLTPrimeGe5Target_branch_split_mainline :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_branch_split_shapeValue_and_refuter_with_normalizer_impl
+    branchAShapeFactorizationTarget_impl
+    (branchBRefuter_of_gapPow_and_defaultNotPow
+      gapPowFromPrimeGe5Counterexample_branchB_impl)
+    branchAShapeValueTarget_impl
+    branchAShapeValueToRefuter_impl
+
+/--
+最終仮橋 (`branchAShapeValueToDescent_via_FLT`) を使わない clean 起動版。
+`shape-value -> descent` の実体が供給されれば、そのまま mainline を起動できる。
+-/
+theorem FLTPrimeGe5Target_branch_split_mainline_of_descent
+    (hDescent : BranchAShapeValueToDescentTarget) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_branch_split_shapeValue_and_refuter_with_normalizer_impl
+    branchAShapeFactorizationTarget_impl
+    (branchBRefuter_of_gapPow_and_defaultNotPow
+      gapPowFromPrimeGe5Counterexample_branchB_impl)
+    branchAShapeValueTarget_impl
+    (branchAShapeValueToRefuter_of_descent_impl hDescent)
+
+/--
+最終一点 (`BranchAShrinkWitnessToDescentTarget`) を埋めれば起動できる clean mainline。
+-/
+theorem FLTPrimeGe5Target_branch_split_mainline_of_shrinkWitness
+    (hSD : BranchAShrinkWitnessToDescentTarget) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_branch_split_mainline_of_descent
+    (branchAShapeValueToDescent_of_shrinkWitness_impl hSD)
+
+/--
+Branch A で `gap = t^p` が供給されれば、`gap` の全素因子指数は `p` の倍数になる。
+-/
+theorem gapPowFromPrimeGe5Counterexample_branchA_factorization_of_gapPow
+    (hA : GapPowFromPrimeGe5Counterexample_branchA) :
+    GapPowFromPrimeGe5Counterexample_branchA_factorization := by
+  intro p x y z hpack hp_dvd_gap q
+  rcases hA hpack hp_dvd_gap with ⟨t, ht⟩
+  have hfac : (z - y).factorization q = p * t.factorization q := by
+    calc
+      (z - y).factorization q = (t ^ p).factorization q := by simp [ht]
+      _ = p * t.factorization q := by simp [Nat.factorization_pow]
+  exact ⟨t.factorization q, by simp [hfac]⟩
+
+
+/-- Branch A では、`gap` の `p` 乗化仕様と因数分解指数仕様は同値。 -/
+theorem gapPowFromPrimeGe5Counterexample_branchA_iff_factorization :
+    GapPowFromPrimeGe5Counterexample_branchA ↔
+      GapPowFromPrimeGe5Counterexample_branchA_factorization := by
+  constructor
+  · exact gapPowFromPrimeGe5Counterexample_branchA_factorization_of_gapPow
+  · exact gapPowFromPrimeGe5Counterexample_branchA_of_factorization
+
+/--
+反例排除仕様があれば、Branch A の gap-pow は `False.elim` で回収できる。
+
+理論核としては弱いが、導線検証や API 接続の最小補助として有用。
+-/
+theorem gapPowFromPrimeGe5Counterexample_branchA_of_refuter
+    (hRefute : PrimeGe5CounterexampleRefuterTarget) :
+    GapPowFromPrimeGe5Counterexample_branchA := by
+  intro p x y z hpack hp_dvd_gap
+  exact False.elim (hRefute hpack)
+
+/--
+反例排除仕様があれば、Branch A の因数分解指数仕様も vacuous に供給できる。
+-/
+theorem gapPowFromPrimeGe5Counterexample_branchA_factorization_of_refuter
+    (hRefute : PrimeGe5CounterexampleRefuterTarget) :
+    GapPowFromPrimeGe5Counterexample_branchA_factorization := by
+  intro p x y z hpack hp_dvd_gap q
+  exact False.elim (hRefute hpack)
+
+/--
+反例排除仕様があれば、全域 `GapPowFromPrimeGe5CounterexampleTarget` を直接供給できる。
+-/
+theorem gapPowFromPrimeGe5Counterexample_target_of_refuter
+    (hRefute : PrimeGe5CounterexampleRefuterTarget) :
+    GapPowFromPrimeGe5CounterexampleTarget := by
+  intro p x y z hpack
+  exact False.elim (hRefute hpack)
+
+/--
+Branch A の因数分解仕様が供給されれば、全域 `GapPowFromPrimeGe5CounterexampleTarget` を得る。
+-/
+theorem gapPowFromPrimeGe5Counterexample_target_of_branchA_factorization
+    (hFac : GapPowFromPrimeGe5Counterexample_branchA_factorization) :
+    GapPowFromPrimeGe5CounterexampleTarget := by
+  intro p x y z hpack
+  by_cases hpB : p ∣ (z - y)
+  · exact (gapPowFromPrimeGe5Counterexample_branchA_of_factorization hFac) hpack hpB
+  · exact gapPowFromPrimeGe5Counterexample_branchB_impl hpack hpB
+
+/--
+Branch A shape 仕様 + shape→gapPow 橋が供給されれば、全域 `GapPow` が得られる。
+-/
+theorem gapPowFromPrimeGe5Counterexample_target_of_branchA_shape
+    (hShape : GapShapeFromPrimeGe5Counterexample_branchA)
+    (hBridge : GapPowFromBranchAShapeBridge) :
+    GapPowFromPrimeGe5CounterexampleTarget := by
+  intro p x y z hpack
+  by_cases hpB : p ∣ (z - y)
+  · exact (gapPowFromPrimeGe5Counterexample_branchA_of_shape hShape hBridge) hpack hpB
+  · exact gapPowFromPrimeGe5Counterexample_branchB_impl hpack hpB
+
+/-- Branch A/B の 2 分岐仕様が揃えば、全域 `GapPowFromPrimeGe5CounterexampleTarget` が得られる。 -/
+theorem gapPowFromPrimeGe5Counterexample_of_branches
+    (hA : GapPowFromPrimeGe5Counterexample_branchA) :
+    GapPowFromPrimeGe5CounterexampleTarget := by
+  intro p x y z hpack
+  by_cases hpB : p ∣ (z - y)
+  · exact hA hpack hpB
+  · exact gapPowFromPrimeGe5Counterexample_branchB_impl hpack hpB
+
+/--
+Branch A 仮定が供給されれば、concrete normalizer 実装と default gap-not-isPow で
+`FLTPrimeGe5Target` を構成できる。
+-/
+theorem FLTPrimeGe5Target_of_branchA_with_normalizer_impl
+    (hA : GapPowFromPrimeGe5Counterexample_branchA) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_gap_specs_with_normalizer_impl
+    gapNotIsPowTarget_default
+    (gapPowFromPrimeGe5Counterexample_of_branches hA)
+
+/--
+Branch A 仮定が供給されれば、`p ≥ 5` 素数指数の FLT を concrete に返せる。
+-/
+theorem FLT_prime_ge5_of_branchA_with_normalizer_impl
+    (hA : GapPowFromPrimeGe5Counterexample_branchA)
+    (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
+    FermatLastTheoremFor p := by
+  exact (FLTPrimeGe5Target_of_branchA_with_normalizer_impl hA) p hp hp5
+
+/--
+Branch A 仮定が供給されれば、`FLT_prime_ge5` 本体を通さず global provider へ直結できる。
+-/
+theorem triominoCosmic_globalProvider_of_branchA_with_normalizer_impl
+    (hA : GapPowFromPrimeGe5Counterexample_branchA) :
+    GlobalPrimeExponentFLTProvider := by
+  exact triominoCosmic_globalProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_branchA_with_normalizer_impl hA)
+
+/--
+Branch A 仮定が供給されれば、`FLT_prime_ge5` 本体を通さず Triomino provider へ直結できる。
+-/
+theorem triominoPrimeProvider_of_branchA_with_normalizer_impl
+    (hA : GapPowFromPrimeGe5Counterexample_branchA) :
+    TriominoPrimeProvider := by
+  exact triominoPrimeProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_branchA_with_normalizer_impl hA)
+
+/--
+`hNotPow` を外部入力にした clean 版。
+Branch A 仮定が供給されれば、default 依存なしで `FLTPrimeGe5Target` を構成できる。
+-/
+theorem FLTPrimeGe5Target_of_branchA_with_normalizer_and_notPow
+    (hNotPow : GapNotIsPowTarget)
+    (hA : GapPowFromPrimeGe5Counterexample_branchA) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_gap_specs_with_normalizer_impl
+    hNotPow
+    (gapPowFromPrimeGe5Counterexample_of_branches hA)
+
+/-- `hNotPow` を外部入力にした clean 版の `FLT_prime_ge5`。 -/
+theorem FLT_prime_ge5_of_branchA_with_normalizer_and_notPow
+    (hNotPow : GapNotIsPowTarget)
+    (hA : GapPowFromPrimeGe5Counterexample_branchA)
+    (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
+    FermatLastTheoremFor p := by
+  exact (FLTPrimeGe5Target_of_branchA_with_normalizer_and_notPow hNotPow hA) p hp hp5
+
+/--
+`hNotPow` を外部入力にした clean 版。
+Branch A 仮定が供給されれば、`FLT_prime_ge5` 本体を通さず global provider へ直結できる。
+-/
+theorem triominoCosmic_globalProvider_of_branchA_with_normalizer_and_notPow
+    (hNotPow : GapNotIsPowTarget)
+    (hA : GapPowFromPrimeGe5Counterexample_branchA) :
+    GlobalPrimeExponentFLTProvider := by
+  exact triominoCosmic_globalProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_branchA_with_normalizer_and_notPow hNotPow hA)
+
+/--
+`hNotPow` を外部入力にした clean 版。
+Branch A 仮定が供給されれば、`FLT_prime_ge5` 本体を通さず Triomino provider へ直結できる。
+-/
+theorem triominoPrimeProvider_of_branchA_with_normalizer_and_notPow
+    (hNotPow : GapNotIsPowTarget)
+    (hA : GapPowFromPrimeGe5Counterexample_branchA) :
+    TriominoPrimeProvider := by
+  exact triominoPrimeProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_branchA_with_normalizer_and_notPow hNotPow hA)
+
+/--
+Branch A の因数分解仕様を直接使う clean 版。
+`hNotPow` と concrete normalizer 実装だけで `FLTPrimeGe5Target` へ接続する。
+-/
+theorem FLTPrimeGe5Target_of_branchA_factorization_with_normalizer_and_notPow
+    (hNotPow : GapNotIsPowTarget)
+    (hFac : GapPowFromPrimeGe5Counterexample_branchA_factorization) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_gap_specs_with_normalizer_impl
+    hNotPow
+    (gapPowFromPrimeGe5Counterexample_target_of_branchA_factorization hFac)
+
+/--
+Branch A の因数分解仕様を直接使う clean 版の `FLT_prime_ge5`。
+-/
+theorem FLT_prime_ge5_of_branchA_factorization_with_normalizer_and_notPow
+    (hNotPow : GapNotIsPowTarget)
+    (hFac : GapPowFromPrimeGe5Counterexample_branchA_factorization)
+    (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
+    FermatLastTheoremFor p := by
+  exact (FLTPrimeGe5Target_of_branchA_factorization_with_normalizer_and_notPow hNotPow hFac)
+    p hp hp5
+
+/--
+Branch A の因数分解仕様を直接使う clean 版。
+`FLT_prime_ge5` 本体を通さず global provider へ直結する。
+-/
+theorem triominoCosmic_globalProvider_of_branchA_factorization_with_normalizer_and_notPow
+    (hNotPow : GapNotIsPowTarget)
+    (hFac : GapPowFromPrimeGe5Counterexample_branchA_factorization) :
+    GlobalPrimeExponentFLTProvider := by
+  exact triominoCosmic_globalProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_branchA_factorization_with_normalizer_and_notPow hNotPow hFac)
+
+/--
+Branch A の因数分解仕様を直接使う clean 版。
+`FLT_prime_ge5` 本体を通さず Triomino provider へ直結する。
+-/
+theorem triominoPrimeProvider_of_branchA_factorization_with_normalizer_and_notPow
+    (hNotPow : GapNotIsPowTarget)
+    (hFac : GapPowFromPrimeGe5Counterexample_branchA_factorization) :
+    TriominoPrimeProvider := by
+  exact triominoPrimeProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_branchA_factorization_with_normalizer_and_notPow hNotPow hFac)
+
+/--
+default の gap-not-isPow 供給を使って、残り 2 本（normalizer / gap-pow）から
+`FLTPrimeGe5Target` を得る接合定理。
+-/
+theorem FLTPrimeGe5Target_of_normalizer_and_gapPow_default
+    (hNorm : PrimeGe5CounterexampleNormalizerTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_normalizer_and_gap_specs
+    hNorm
+    gapNotIsPowTarget_default
+    hGapPow
+
+/--
+default の gap-not-isPow 供給を使う `FLT_prime_ge5` 実装版。
+
+残る実装責務は normalizer と gap-pow 仕様の 2 本だけ。
+-/
+theorem FLT_prime_ge5_of_normalizer_and_gapPow_default
+    (hNorm : PrimeGe5CounterexampleNormalizerTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget)
+    (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
+    FermatLastTheoremFor p := by
+  exact (FLTPrimeGe5Target_of_normalizer_and_gapPow_default hNorm hGapPow) p hp hp5
+
+/--
+`FLT_prime_ge5` 本体（`Basic.FLT` 経由）を使わず、
+normalizer + gap-pow(default gap-not-pow) から global provider へ直結する回避ルート。
+-/
+theorem triominoCosmic_globalProvider_of_normalizer_and_gapPow_default
+    (hNorm : PrimeGe5CounterexampleNormalizerTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget) :
+    GlobalPrimeExponentFLTProvider := by
+  exact triominoCosmic_globalProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_normalizer_and_gapPow_default hNorm hGapPow)
+
+/--
+`FLT_prime_ge5` 本体（`Basic.FLT` 経由）を使わず、
+normalizer + gap-pow(default gap-not-pow) から Triomino provider へ直結する回避ルート。
+-/
+theorem triominoPrimeProvider_of_normalizer_and_gapPow_default
+    (hNorm : PrimeGe5CounterexampleNormalizerTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget) :
+    TriominoPrimeProvider := by
+  exact triominoPrimeProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_normalizer_and_gapPow_default hNorm hGapPow)
 
 end DkMath.FLT

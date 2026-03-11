@@ -1,4 +1,4 @@
-/- 
+/-
 Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
 Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNCore
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB
+import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine
 
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
@@ -32,7 +33,7 @@ structure TriominoWieferichBranchBridge where
 /--
 一般 `GN` nonlift bridge の本丸インターフェイス。
 
-`lift` 供給は core 側で no-`sorry` 化済み。残る `descent` を
+`lift` 供給は core 側で no-`so#rry` 化済み。残る `descent` を
 `CosmicPetalBridgeGNDescentB` に隔離し、このファイルは配線専用に保つ。
 -/
 theorem triominoWieferichLiftKernel_impl
@@ -54,5 +55,15 @@ theorem triominoNoWieferichBridge_impl
     TriominoNoWieferichBridge := by
   exact triominoNoWieferichBridge_of_wieferichLiftExclusion
     (triominoWieferichLiftExclusion_impl hBranch)
+
+/-- 既定の Branch bridge。`DescentB` の公開 wrapper を最小契約へ注入する。 -/
+theorem triominoWieferichBranchBridge_default :
+    TriominoWieferichBranchBridge := by
+  exact ⟨triominoWieferichDescent_impl⟩
+
+/-- 既定の Branch bridge から得る、引数なし版の NoWieferich bridge。 -/
+theorem triominoNoWieferichBridge_default :
+    TriominoNoWieferichBridge := by
+  exact triominoNoWieferichBridge_impl triominoWieferichBranchBridge_default
 
 end DkMath.FLT

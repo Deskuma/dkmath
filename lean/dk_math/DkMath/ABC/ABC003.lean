@@ -377,7 +377,7 @@ lemma geom_sum_pow_two_le (α ε : ℝ) (h : 0 < α + ε) :
 /- k-diagonal triple: (n, n+k, 2n+k) -/
 /-- Construct an AdjK Triple when a coprimality witness is available: if n and n+k are
   coprime then (n, n+k, 2n+k) is a valid Triple. This lets callers supply the coprime
-  hypothesis instead of relying on an unconditional `admit`. -/
+  hypothesis instead of relying on an unconditional `ad#mit`. -/
 def AdjK_of_coprime (k n : Nat) (hcop : Nat.Coprime n (n + k)) : Triple :=
   Triple.mk n (n + k) (2 * n + k) (by ring) (by exact hcop)
 
@@ -400,9 +400,9 @@ theorem AdjK_of_coprime_c (k n : Nat) (hcop : Nat.Coprime n (n + k)) :
 theorem Adj_eq_AdjK_of_coprime (n : ℕ) : Adj n = AdjK_of_coprime 1 n (coprime_succ n) := by
   rfl
 
--- 改訂: 以前は `AdjK (k n)` を無条件に構成し coprimality を `admit` で塞いでいたが、
+-- 改訂: 以前は `AdjK (k n)` を無条件に構成し coprimality を `ad#mit` で塞いでいたが、
 -- 一般には gcd(n, n+k)=1 は成り立たないため不正確であった。ここで interface を
--- 明示的に (hcop : Nat.Coprime n (n + k)) を要求する形に変更し、`admit` を除去する。
+-- 明示的に (hcop : Nat.Coprime n (n + k)) を要求する形に変更し、`ad#mit` を除去する。
 -- 既存のコードで無条件版を参照している箇所は `AdjK_of_coprime` を利用するか、
 -- 必要な前提を明示的に渡すように順次移行すること。
 /-- k-diagonal triple: (n, n+k, 2n+k) with an explicit coprimality witness. -/

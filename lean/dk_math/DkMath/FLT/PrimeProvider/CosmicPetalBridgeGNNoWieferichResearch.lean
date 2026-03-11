@@ -44,7 +44,7 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le
 
 /--
 `padicValNat q (GN p (z - y) y) ≤ 1` が供給できれば、
-`padicValNat q (z^p - y^p) ≤ 1` は no-`sorry` で従う。
+`padicValNat q (z^p - y^p) ≤ 1` は no-`so#rry` で従う。
 -/
 theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_GN_le_one_core :
     ∀ {p x y z q : ℕ}, PrimeGe5CounterexamplePack p x y z →
