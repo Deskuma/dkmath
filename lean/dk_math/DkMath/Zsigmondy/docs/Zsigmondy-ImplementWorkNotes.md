@@ -180,6 +180,19 @@
 - コメント
 - これで `PrimeProvider` に残る一般部はさらに減り、valuation の橋も `NumberTheory/Gcd/GN.lean` へ集まり始めた。`GN` についての gcd/valuation 接続層としてかなり形が見えてきた。
 
+### 2026/03/11 03:10
+
+- 実施内容
+- `FLT_of_coprime` の最後の `sorry` を、いまの `Zsigmondy` / `GN` / `PrimeProvider` 基盤だけで直接解消できる段階か調査した。`FLT/Basic.lean`、`Zsigmondy.lean`、`NumberTheory/GcdNextResearch.lean`、`FLT/PrimeProvider` 各ファイルの到達点を突き合わせた。
+- 結果
+- `d = 3` については既に `primitive prime -> GN 3` の橋が安定しており `FLT` 側でも利用済みだが、一般 `n ≥ 5` について「Zsigmondy 原始素因子の存在から `GN n u y` が `n` 乗数であることに直接矛盾する」を mainline API だけで閉じる補題はまだ揃っていない。最も近いのは `NumberTheory/GcdNextResearch.lean` の `body_not_perfect_pow` だが、これは Research 側にあり、そのまま `FLT_of_coprime` の安定実装にはまだ使っていない。現状の安定ルートは `PrimeProvider` 側の `NoPowOnGN_fromCounterexample` などを経由する構成。
+- 失敗内容
+- なし。
+- 次の予定
+- 直接ルートを狙うなら `body_not_perfect_pow` 相当を Research から昇格させて `GN` / `BodyN` API に落とす。実装優先なら `FLT_of_coprime` はまず既存 `PrimeProvider` ルートへ接続して埋める。
+- コメント
+- つまり「数学的にはかなり近い」が、「この `sorry` を今すぐ Zsigmondy だけで素直に埋める」段階にはまだ一歩足りない。先に stable theorem を 1 本増やすか、既存 provider を受けるかの二択。
+
 ---
 
 ## テンプレート

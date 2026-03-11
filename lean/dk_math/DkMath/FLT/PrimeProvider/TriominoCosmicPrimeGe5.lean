@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.PrimeProvider.TriominoCosmic
 import DkMath.FLT.Core
+import DkMath.FLT.Basic
 import DkMath.Basic.Nat
 
 set_option linter.style.longLine false
@@ -55,7 +56,7 @@ theorem triominoPrimeProvider_of_FLTPrimeGe5
   exact triominoPrimeProvider_of_primeGe5 hprimeGe5
 
 /-- 「素因数分解の指数がすべて `p` の倍数」なら、`p` 乗根を素朴に構成できる。 -/
-private lemma exists_eq_pow_of_factorization_dvd
+lemma exists_eq_pow_of_factorization_dvd
     {u p : ℕ} (hu0 : u ≠ 0) (_hp0 : 0 < p)
     (hdiv : ∀ q : ℕ, p ∣ u.factorization q) :
     ∃ t : ℕ, u = t ^ p := by
@@ -298,6 +299,241 @@ theorem gap_not_isPow_of_counterexample
     GapNotIsPowTarget := by
   intro p x y z hpack
   exact hTri hpack
+
+/--
+`FermatLastTheoremFor p` へ接続するための正規化仕様。
+
+非自明解 `a^p + b^p = c^p` から、Triomino/Cosmic 側が扱う
+`PrimeGe5CounterexamplePack` を 1 つ構成できることを要求する。
+-/
+abbrev PrimeGe5CounterexampleNormalizerTarget : Prop :=
+  ∀ {p a b c : ℕ},
+    Nat.Prime p → 5 ≤ p →
+    a ≠ 0 → b ≠ 0 → c ≠ 0 →
+    a ^ p + b ^ p = c ^ p →
+    ∃ x y z : ℕ, PrimeGe5CounterexamplePack p x y z
+
+/--
+`PrimeGe5CounterexamplePack` を直接排除できることを要求する最小仕様。
+
+`TODO-2` 系の最終到達点を `FermatLastTheoremFor p` へ接続する際の
+最後の穴を 1 つの命題として固定する。
+-/
+abbrev PrimeGe5CounterexampleRefuterTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z → False
+
+/--
+`PrimeGe5CounterexamplePack` から gap が `p` 乗になることを回収する仕様。
+
+`GapNotIsPowTarget` と合成すれば即座に反例排除 (`False`) が出るため、
+実装上の残穴を 1 命題に集約するための補助ターゲット。
+-/
+abbrev GapPowFromPrimeGe5CounterexampleTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∃ t : ℕ, (z - y) = t ^ p
+
+/--
+`GapNotIsPowTarget` と `GapPowFromPrimeGe5CounterexampleTarget` の合成で、
+反例排除仕様 `PrimeGe5CounterexampleRefuterTarget` が得られる。
+-/
+theorem primeGe5CounterexampleRefuter_of_gap_specs
+    (hNotPow : GapNotIsPowTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget) :
+    PrimeGe5CounterexampleRefuterTarget := by
+  intro p x y z hpack
+  exact (hNotPow hpack) (hGapPow hpack)
+
+/--
+正規化仕様と反例排除仕様が揃えば、`p ≥ 5` 素数指数の FLT 供給は得られる。
+
+この定理により、`FLT_prime_ge5` 本体は
+「正規化の実装」と「反例排除の実装」を埋めるだけへ還元される。
+-/
+theorem FLTPrimeGe5Target_of_normalizer_and_refuter
+    (hNorm : PrimeGe5CounterexampleNormalizerTarget)
+    (hRefute : PrimeGe5CounterexampleRefuterTarget) :
+    FLTPrimeGe5Target := by
+  intro p hp hp5 a b c ha hb hc hEq
+  rcases hNorm hp hp5 ha hb hc hEq with ⟨x, y, z, hpack⟩
+  exact hRefute hpack
+
+/--
+正規化仕様 + gap 仕様 2 本（not-isPow / isPow）から `FLTPrimeGe5Target` を得る合成版。
+
+`FLT_prime_ge5` 実装時には、
+1. 正規化 (`hNorm`)
+2. gap の `p` 乗化 (`hGapPow`)
+3. gap の非 `p` 乗 (`hNotPow`)
+の 3 点を埋めれば足りる。
+-/
+theorem FLTPrimeGe5Target_of_normalizer_and_gap_specs
+    (hNorm : PrimeGe5CounterexampleNormalizerTarget)
+    (hNotPow : GapNotIsPowTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_normalizer_and_refuter
+    hNorm
+    (primeGe5CounterexampleRefuter_of_gap_specs hNotPow hGapPow)
+
+/--
+spec 3 本（normalizer / gap-not-pow / gap-pow）を受け取る `FLT_prime_ge5` 実装版。
+
+無仮定版の `FLT_prime_ge5` 本体は、この定理へ渡す spec を
+Triomino/Cosmic 側で供給できた時点で 1 行で閉じられる。
+-/
+theorem FLT_prime_ge5_of_specs
+    (hNorm : PrimeGe5CounterexampleNormalizerTarget)
+    (hNotPow : GapNotIsPowTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget)
+    (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
+    FermatLastTheoremFor p := by
+  exact (FLTPrimeGe5Target_of_normalizer_and_gap_specs hNorm hNotPow hGapPow) p hp hp5
+
+/--
+非自明解を `gcd` 正規化して `PrimeGe5CounterexamplePack` へ落とす concrete 実装。
+-/
+theorem primeGe5CounterexampleNormalizer_impl :
+    PrimeGe5CounterexampleNormalizerTarget := by
+  intro p a b c hp hp5 ha hb hc hEq
+  let g : ℕ := Nat.gcd a b
+  let x : ℕ := a / g
+  let y : ℕ := b / g
+  let z : ℕ := c / g
+  have g_dvd_a : g ∣ a := Nat.gcd_dvd_left a b
+  have g_dvd_b : g ∣ b := Nat.gcd_dvd_right a b
+  have g_pos : 0 < g := by
+    simpa [g] using Nat.gcd_pos_of_pos_left b (Nat.pos_of_ne_zero ha)
+  have g_ne_zero : g ≠ 0 := Nat.ne_of_gt g_pos
+  have gpow_dvd_sum : g ^ p ∣ a ^ p + b ^ p := by
+    refine Nat.dvd_add ?_ ?_
+    · exact pow_dvd_pow_of_dvd g_dvd_a p
+    · exact pow_dvd_pow_of_dvd g_dvd_b p
+  have gpow_dvd_cpow : g ^ p ∣ c ^ p := by
+    simpa [hEq] using gpow_dvd_sum
+  have p_ne_zero : p ≠ 0 := hp.ne_zero
+  have g_dvd_c : g ∣ c :=
+    (Nat.pow_dvd_pow_iff p_ne_zero).1 gpow_dvd_cpow
+  have ha_mul : a = g * x := by
+    exact (Nat.mul_div_cancel' g_dvd_a).symm
+  have hb_mul : b = g * y := by
+    exact (Nat.mul_div_cancel' g_dvd_b).symm
+  have hc_mul : c = g * z := by
+    exact (Nat.mul_div_cancel' g_dvd_c).symm
+  have hx_pos : 0 < x := by
+    have : 0 < g * x := by simpa [ha_mul] using Nat.pos_of_ne_zero ha
+    exact Nat.pos_of_mul_pos_left this
+  have hy_pos : 0 < y := by
+    have : 0 < g * y := by simpa [hb_mul] using Nat.pos_of_ne_zero hb
+    exact Nat.pos_of_mul_pos_left this
+  have hz_pos : 0 < z := by
+    have : 0 < g * z := by simpa [hc_mul] using Nat.pos_of_ne_zero hc
+    exact Nat.pos_of_mul_pos_left this
+  have hxy_eq : x ^ p + y ^ p = z ^ p := by
+    have ha_pow : a ^ p = g ^ p * x ^ p := by simp [ha_mul, Nat.mul_pow]
+    have hb_pow : b ^ p = g ^ p * y ^ p := by simp [hb_mul, Nat.mul_pow]
+    have hc_pow : c ^ p = g ^ p * z ^ p := by simp [hc_mul, Nat.mul_pow]
+    have hmul : g ^ p * (x ^ p + y ^ p) = g ^ p * z ^ p := by
+      calc
+        g ^ p * (x ^ p + y ^ p) = g ^ p * x ^ p + g ^ p * y ^ p := by rw [Nat.mul_add]
+        _ = a ^ p + b ^ p := by rw [ha_pow, hb_pow]
+        _ = c ^ p := hEq
+        _ = g ^ p * z ^ p := hc_pow
+    have gpow_pos : 0 < g ^ p := Nat.pow_pos g_pos
+    exact Nat.mul_left_cancel gpow_pos hmul
+  have hxy_coprime : Nat.Coprime x y := by
+    have h_gcd_mul : Nat.gcd (g * x) (g * y) = g * Nat.gcd x y :=
+      Nat.gcd_mul_left g x y
+    have h_eq_mul : g = g * Nat.gcd x y := by
+      calc
+        g = Nat.gcd a b := by rfl
+        _ = Nat.gcd (g * x) (g * y) := by simp [ha_mul, hb_mul]
+        _ = g * Nat.gcd x y := h_gcd_mul
+    have h_gcd_xy : Nat.gcd x y = 1 := by
+      have h1 : g * Nat.gcd x y = g * 1 := by
+        calc
+          g * Nat.gcd x y = g := h_eq_mul.symm
+          _ = g * 1 := by simp
+      exact Nat.eq_of_mul_eq_mul_left g_pos h1
+    exact (Nat.coprime_iff_gcd_eq_one).2 h_gcd_xy
+  have hyz_lt : y < z := by
+    have hy_pow_lt : y ^ p < z ^ p := by
+      calc
+        y ^ p < x ^ p + y ^ p := Nat.lt_add_of_pos_left (Nat.pow_pos hx_pos)
+        _ = z ^ p := hxy_eq
+    exact (Nat.pow_lt_pow_iff_left p_ne_zero).1 hy_pow_lt
+  refine ⟨x, y, z, ?_⟩
+  refine
+    { toPrimeCounterexamplePack :=
+        { hp := hp
+          hxy := hxy_coprime
+          hyz := le_of_lt hyz_lt
+          hyz_lt := hyz_lt
+          hEq := hxy_eq }
+      hp5 := hp5
+      hx0 := Nat.ne_of_gt hx_pos
+      hy0 := Nat.ne_of_gt hy_pos
+      hz0 := Nat.ne_of_gt hz_pos }
+
+/--
+concrete normalizer 実装を使う版。
+残る実装責務を gap 側仕様 (`hNotPow` / `hGapPow`) へ限定する。
+-/
+theorem FLTPrimeGe5Target_of_gap_specs_with_normalizer_impl
+    (hNotPow : GapNotIsPowTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_normalizer_and_gap_specs
+    primeGe5CounterexampleNormalizer_impl
+    hNotPow
+    hGapPow
+
+/--
+concrete normalizer 実装を使う `FLT_prime_ge5` spec 版。
+-/
+theorem FLT_prime_ge5_of_gap_specs_with_normalizer_impl
+    (hNotPow : GapNotIsPowTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget)
+    (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
+    FermatLastTheoremFor p := by
+  exact (FLTPrimeGe5Target_of_gap_specs_with_normalizer_impl hNotPow hGapPow) p hp hp5
+
+/--
+`default` 供給を使わず、spec 3 本から直接 global provider を得る no-`so#rry` 回避ルート。
+-/
+theorem triominoCosmic_globalProvider_of_specs
+    (hNorm : PrimeGe5CounterexampleNormalizerTarget)
+    (hNotPow : GapNotIsPowTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget) :
+    GlobalPrimeExponentFLTProvider := by
+  exact triominoCosmic_globalProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_normalizer_and_gap_specs hNorm hNotPow hGapPow)
+
+#print axioms triominoCosmic_globalProvider_of_specs  -- OK: no-`so#rryAx`
+
+/--
+`default` 供給を使わず、spec 3 本から直接 Triomino provider を得る no-`so#rry` 回避ルート。
+-/
+theorem triominoPrimeProvider_of_specs
+    (hNorm : PrimeGe5CounterexampleNormalizerTarget)
+    (hNotPow : GapNotIsPowTarget)
+    (hGapPow : GapPowFromPrimeGe5CounterexampleTarget) :
+    TriominoPrimeProvider := by
+  exact triominoPrimeProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_normalizer_and_gap_specs hNorm hNotPow hGapPow)
+
+#print axioms triominoPrimeProvider_of_specs  -- OK: no-`so#rryAx`
+
+/-- `p ≥ 5` の素数指数に対する FLT 供給。 -/
+theorem FLT_prime_ge5 (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
+    FermatLastTheoremFor p := by
+  intro a b c ha hb hc hEq
+  have _hp_pos : 0 < p := hp.pos
+  have hpos : 0 < a ∧ 0 < b ∧ 0 < c :=
+    ⟨Nat.pos_of_ne_zero ha, Nat.pos_of_ne_zero hb, Nat.pos_of_ne_zero hc⟩
+  have hp3 : 3 ≤ p := le_trans (by decide : 3 ≤ 5) hp5
+  exact DkMath.FLT (x := a) (y := b) (z := c) p hpos hp3 hEq
+
+#print axioms FLT_prime_ge5  -- NG so#rryAx connection root
 
 /-!
 ## 実装ロードマップ（順序固定）
