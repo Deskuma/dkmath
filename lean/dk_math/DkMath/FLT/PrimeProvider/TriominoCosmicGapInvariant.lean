@@ -1228,6 +1228,20 @@ theorem existingDescentContractRefuter_via_FLT :
   intro p x y z t hpack hp_dvd_gap hC
   exact existingDescentRefuter_via_FLT hpack hp_dvd_gap hC
 
+/--
+既存契約入力を refute する実装本体。
+
+現時点では `via_FLT` を束ねるが、最終 clean 置換点はこの定理 1 本に集約する。
+-/
+theorem existingDescentContractRefuter_math :
+    ExistingDescentContractRefuterTarget :=
+  existingDescentContractRefuter_via_FLT
+
+/-- 既存契約入力を refute する実装入口。 -/
+theorem existingDescentContractRefuter_impl :
+    ExistingDescentContractRefuterTarget :=
+  existingDescentContractRefuter_math
+
 /-- Branch A 専用 descent 契約の暫定 concrete 実装（via FLT）。 -/
 theorem branchAShapeWitnessDescentContract_via_FLT :
     BranchAShapeWitnessDescentContractTarget :=
@@ -1243,7 +1257,7 @@ theorem branchAShapeWitnessDescentContract_math :
   intro p x y z t hpack hp_dvd_gap hInput
   let hC : ExistingDescentContractInput p x y z t :=
     branchAShapeWitnessDescentInput_to_existing_contract hpack hp_dvd_gap hInput
-  exact existingDescentContractRefuter_via_FLT hpack hp_dvd_gap hC
+  exact existingDescentContractRefuter_impl hpack hp_dvd_gap hC
 
 /-- Branch A 専用 descent 契約の実装入口。 -/
 theorem branchAShapeWitnessDescentContract_impl :
