@@ -931,6 +931,22 @@ lemma branchAShapeWitness_to_descent_input_core
     0 < t ∧ p ^ (p - 1) ∣ (z - y) := by
   refine ⟨branchAShapeWitness_t_pos hpack ht, branchAShapeWitness_powPred_dvd_gap ht⟩
 
+/-- Branch A shape witness から既存 descent 契約へ渡す最小入力。 -/
+structure BranchAShapeWitnessDescentInput (p x y z t : ℕ) : Prop where
+  tPos : 0 < t
+  powPredDvdGap : p ^ (p - 1) ∣ (z - y)
+  gapShape : z - y = p ^ (p - 1) * t ^ p
+
+/-- `ht` から既存 descent 入力を組み立てる薄い変換。 -/
+theorem branchAShapeWitness_to_existing_descent_input
+    {p x y z t : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (ht : z - y = p ^ (p - 1) * t ^ p) :
+    BranchAShapeWitnessDescentInput p x y z t := by
+  rcases branchAShapeWitness_to_descent_input_core hpack hp_dvd_gap ht with ⟨htPos, hPowDvd⟩
+  exact ⟨htPos, hPowDvd, ht⟩
+
 /--
 もし Branch A 側 refuter が先に得られていれば、shape-value から descent へは直ちに落ちる。
 （外部契約接続のための薄い補助）
@@ -986,6 +1002,19 @@ theorem branchAShrinkWitnessToDescent_of_kernel
   intro p x y z hpack hp_dvd_gap hShape
   rcases hShape with ⟨t, ht⟩
   exact hK hpack hp_dvd_gap ht
+
+/--
+既存 descent 入力を refute できる契約があれば、witness kernel が得られる。
+-/
+theorem branchAShapeWitnessKernel_of_existingDescentRefuter
+    (hRef : ∀ {p x y z t : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      p ∣ (z - y) →
+      BranchAShapeWitnessDescentInput p x y z t →
+      False) :
+    BranchAShapeWitnessKernelTarget := by
+  intro p x y z t hpack hp_dvd_gap ht
+  exact hRef hpack hp_dvd_gap
+    (branchAShapeWitness_to_existing_descent_input hpack hp_dvd_gap ht)
 
 /--
 `shape-value -> shrinkWitness` と `shrinkWitness -> descent` が揃えば
