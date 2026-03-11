@@ -1187,6 +1187,28 @@ theorem existingDescentRefuter_of_target
         BranchAShapeWitnessDescentInput p x y z t →
     False := hRef
 
+/-- Branch A witness から既存契約へ渡す adapter 入力型。 -/
+abbrev ExistingDescentContractInput (p x y z t : ℕ) : Prop :=
+  BranchAShapeWitnessDescentInput p x y z t
+
+/-- Branch A witness 入力を既存契約入力へ変換する薄い adapter。 -/
+theorem branchAShapeWitnessDescentInput_to_existing_contract
+    {p x y z t : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hInput : BranchAShapeWitnessDescentInput p x y z t) :
+    ExistingDescentContractInput p x y z t := by
+  let _ := hpack
+  let _ := hp_dvd_gap
+  exact hInput
+
+/-- 既存契約入力を refute する契約（最終差し替え口）。 -/
+abbrev ExistingDescentContractRefuterTarget : Prop :=
+  ∀ {p x y z t : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ExistingDescentContractInput p x y z t →
+    False
+
 /--
 既存 descent 契約入力を受けて refute する暫定 concrete 実装（via FLT）。
 -/
@@ -1200,6 +1222,12 @@ theorem existingDescentRefuter_via_FLT
     FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
   exact hNo hpack.hEq
 
+/-- 既存契約入力を refute する暫定 concrete 実装（via FLT）。 -/
+theorem existingDescentContractRefuter_via_FLT :
+    ExistingDescentContractRefuterTarget := by
+  intro p x y z t hpack hp_dvd_gap hC
+  exact existingDescentRefuter_via_FLT hpack hp_dvd_gap hC
+
 /-- Branch A 専用 descent 契約の暫定 concrete 実装（via FLT）。 -/
 theorem branchAShapeWitnessDescentContract_via_FLT :
     BranchAShapeWitnessDescentContractTarget :=
@@ -1211,8 +1239,11 @@ Branch A 専用 descent 契約の実装本体。
 現時点では `via_FLT` を束ねるが、最終 clean 置換点はこの定理 1 本に集約する。
 -/
 theorem branchAShapeWitnessDescentContract_math :
-    BranchAShapeWitnessDescentContractTarget :=
-  branchAShapeWitnessDescentContract_via_FLT
+    BranchAShapeWitnessDescentContractTarget := by
+  intro p x y z t hpack hp_dvd_gap hInput
+  let hC : ExistingDescentContractInput p x y z t :=
+    branchAShapeWitnessDescentInput_to_existing_contract hpack hp_dvd_gap hInput
+  exact existingDescentContractRefuter_via_FLT hpack hp_dvd_gap hC
 
 /-- Branch A 専用 descent 契約の実装入口。 -/
 theorem branchAShapeWitnessDescentContract_impl :
