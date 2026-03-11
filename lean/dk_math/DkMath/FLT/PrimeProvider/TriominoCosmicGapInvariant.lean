@@ -1164,20 +1164,45 @@ theorem branchAShapeWitnessKernel_via_FLT :
     FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
   exact hNo hpack.hEq
 
-/--
-既存 descent 契約入力を受けて refute する実装本体。
+/-- Branch A witness から `False` を返す既存 descent 契約の抽象ターゲット。 -/
+abbrev ExistingDescentRefuterTarget : Prop :=
+  ∀ {p x y z t : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    BranchAShapeWitnessDescentInput p x y z t →
+    False
 
-現時点では `via_FLT` ベースだが、最終 clean 置換点はこの定理 1 本に集約する。
--/
-theorem existingDescentRefuter_math
+/-- 既存 descent 契約を注入して利用する薄い橋。 -/
+theorem existingDescentRefuter_of_target
+  (hRef : ExistingDescentRefuterTarget)
     : ∀ {p x y z t : ℕ}, PrimeGe5CounterexamplePack p x y z →
         p ∣ (z - y) →
         BranchAShapeWitnessDescentInput p x y z t →
-        False := by
+    False := hRef
+
+/--
+既存 descent 契約入力を受けて refute する暫定 concrete 実装（via FLT）。
+-/
+theorem existingDescentRefuter_via_FLT
+  : ∀ {p x y z t : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    BranchAShapeWitnessDescentInput p x y z t →
+    False := by
   intro p x y z t hpack _hp_dvd_gap _hInput
   have hNo : x ^ p + y ^ p ≠ z ^ p :=
     FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
   exact hNo hpack.hEq
+
+/--
+既存 descent 契約入力を受けて refute する実装本体。
+
+最終 clean 置換点はこの定理 1 本。
+-/
+theorem existingDescentRefuter_math
+  : ∀ {p x y z t : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    BranchAShapeWitnessDescentInput p x y z t →
+    False :=
+  existingDescentRefuter_of_target existingDescentRefuter_via_FLT
 
 /--
 witness 直受け kernel の実装本体。
