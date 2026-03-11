@@ -1,11 +1,12 @@
 #!/bin/bash
 
 DTM=$(date +%y%m%d-%H%M)
+TAR_FILE=__snapshot-dk_math-lean-code-$DTM.tar.gz
 
 # dk_math ディレクトリを tar.gz 形式で圧縮する
 # .lake と .github .git ディレクトリを除外する
 # 各ディレクトリ内のドットファイルも除外する
-tar cvzf __snapshot-dk_math-lean-code-$DTM.tar.gz \
+tar cvzf $TAR_FILE \
     --exclude='./dk_math/.lake' \
     --exclude='./dk_math/.vscode' \
     --exclude='./dk_math/.github' \
@@ -18,7 +19,10 @@ tar cvzf __snapshot-dk_math-lean-code-$DTM.tar.gz \
     --exclude='./**/*.jpg' \
     --exclude='./**/*.zip' \
     ./dk_math
-sha256sum __snapshot-dk_math-lean-code-$DTM.tar.gz > __snapshot-dk_math-lean-code-$DTM.tar.gz.sha256
+sha256sum $TAR_FILE > $TAR_FILE.sha256
 
-ls -l __snapshot-dk_math-lean-code-$DTM.tar.gz
-ls -l __snapshot-dk_math-lean-code-$DTM.tar.gz.sha256
+# git に tag 付けする (Lightweight tag)
+git tag "$TAR_FILE" -m "Snapshot of dk_math lean code at $DTM"
+
+ls -l $TAR_FILE
+ls -l $TAR_FILE.sha256
