@@ -1210,6 +1210,23 @@ abbrev ExistingDescentContractRefuterTarget : Prop :=
     False
 
 /--
+既存契約（raw 入力）を受ける最小 refuter 契約。
+
+将来の clean 置換では、この契約 1 本を差し替えるだけでよい。
+-/
+abbrev ExistingDescentRawRefuterTarget : Prop :=
+  ∀ {p x y z t : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ExistingDescentContractInput p x y z t →
+    False
+
+/-- raw refuter 契約を `ExistingDescentContractRefuterTarget` へ持ち上げる薄い橋。 -/
+theorem existingDescentContractRefuter_of_raw
+    (hRaw : ExistingDescentRawRefuterTarget) :
+    ExistingDescentContractRefuterTarget :=
+  hRaw
+
+/--
 既存 descent 契約入力を受けて refute する暫定 concrete 実装（via FLT）。
 -/
 theorem existingDescentRefuter_via_FLT
@@ -1224,7 +1241,7 @@ theorem existingDescentRefuter_via_FLT
 
 /-- 既存契約入力を refute する暫定 concrete 実装（via FLT）。 -/
 theorem existingDescentContractRefuter_via_FLT :
-    ExistingDescentContractRefuterTarget := by
+  ExistingDescentRawRefuterTarget := by
   intro p x y z t hpack hp_dvd_gap hC
   exact existingDescentRefuter_via_FLT hpack hp_dvd_gap hC
 
@@ -1235,7 +1252,7 @@ theorem existingDescentContractRefuter_via_FLT :
 -/
 theorem existingDescentContractRefuter_math :
     ExistingDescentContractRefuterTarget :=
-  existingDescentContractRefuter_via_FLT
+  existingDescentContractRefuter_of_raw existingDescentContractRefuter_via_FLT
 
 /-- 既存契約入力を refute する実装入口。 -/
 theorem existingDescentContractRefuter_impl :
