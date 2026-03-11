@@ -1123,6 +1123,20 @@ theorem branchAShapeWitnessKernel_via_FLT :
   exact hNo hpack.hEq
 
 /--
+witness 直受け kernel の実装本体。
+
+現時点では `via_FLT` を束ねるが、最終 clean 置換点はこの定理 1 本に集約する。
+-/
+theorem branchAShapeWitnessKernel_math :
+    BranchAShapeWitnessKernelTarget :=
+  branchAShapeWitnessKernel_via_FLT
+
+/-- witness 直受け kernel の実装入口。 -/
+theorem branchAShapeWitnessKernel_impl :
+    BranchAShapeWitnessKernelTarget :=
+  branchAShapeWitnessKernel_math
+
+/--
 `shrinkWitness -> descent` の実装入口。
 
 現時点では `via_FLT` を束ねるが、最終 clean 置換点はこの定理 1 本に集約する。
@@ -1130,7 +1144,7 @@ theorem branchAShapeWitnessKernel_via_FLT :
 theorem branchAShrinkWitnessToDescent_math :
     BranchAShrinkWitnessToDescentTarget :=
   branchAShrinkWitnessToDescent_of_kernel
-    branchAShapeWitnessKernel_via_FLT
+    branchAShapeWitnessKernel_impl
 
 /--
 `shape-value -> descent` の実装入口（shrink 分解版）。
