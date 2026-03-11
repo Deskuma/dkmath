@@ -919,6 +919,19 @@ lemma branchAShapeWitness_powPred_dvd_gap
   simpa [Nat.mul_comm] using ht
 
 /--
+Branch A の shape witness を既存 descent 入口へ送るための薄い core 入力。
+
+現時点では `t` の正性と `p^(p-1) ∣ gap` をまとめて返す。
+-/
+lemma branchAShapeWitness_to_descent_input_core
+    {p x y z t : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+  (_hp_dvd_gap : p ∣ (z - y))
+    (ht : z - y = p ^ (p - 1) * t ^ p) :
+    0 < t ∧ p ^ (p - 1) ∣ (z - y) := by
+  refine ⟨branchAShapeWitness_t_pos hpack ht, branchAShapeWitness_powPred_dvd_gap ht⟩
+
+/--
 もし Branch A 側 refuter が先に得られていれば、shape-value から descent へは直ちに落ちる。
 （外部契約接続のための薄い補助）
 -/
@@ -1129,7 +1142,10 @@ witness 直受け kernel の実装本体。
 -/
 theorem branchAShapeWitnessKernel_math :
     BranchAShapeWitnessKernelTarget :=
-  branchAShapeWitnessKernel_via_FLT
+by
+  intro p x y z t hpack hp_dvd_gap ht
+  let _hCore := branchAShapeWitness_to_descent_input_core hpack hp_dvd_gap ht
+  exact branchAShapeWitnessKernel_via_FLT hpack hp_dvd_gap ht
 
 /-- witness 直受け kernel の実装入口。 -/
 theorem branchAShapeWitnessKernel_impl :
