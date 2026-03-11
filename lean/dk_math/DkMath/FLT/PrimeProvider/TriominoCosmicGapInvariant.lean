@@ -1246,13 +1246,27 @@ theorem existingDescentContractRefuter_via_FLT :
   exact existingDescentRefuter_via_FLT hpack hp_dvd_gap hC
 
 /--
+`ExistingDescentRawRefuterTarget` の実装本体。
+
+現時点では `via_FLT` を束ねるが、最終 clean 置換点はこの定理 1 本に集約する。
+-/
+theorem existingDescentRawRefuter_math :
+    ExistingDescentRawRefuterTarget :=
+  existingDescentContractRefuter_via_FLT
+
+/-- `ExistingDescentRawRefuterTarget` の実装入口。 -/
+theorem existingDescentRawRefuter_impl :
+    ExistingDescentRawRefuterTarget :=
+  existingDescentRawRefuter_math
+
+/--
 既存契約入力を refute する実装本体。
 
 現時点では `via_FLT` を束ねるが、最終 clean 置換点はこの定理 1 本に集約する。
 -/
 theorem existingDescentContractRefuter_math :
     ExistingDescentContractRefuterTarget :=
-  existingDescentContractRefuter_of_raw existingDescentContractRefuter_via_FLT
+  existingDescentContractRefuter_of_raw existingDescentRawRefuter_impl
 
 /-- 既存契約入力を refute する実装入口。 -/
 theorem existingDescentContractRefuter_impl :
