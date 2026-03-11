@@ -1171,6 +1171,14 @@ abbrev ExistingDescentRefuterTarget : Prop :=
     BranchAShapeWitnessDescentInput p x y z t →
     False
 
+/--
+Branch A の shape witness を refute する専用 descent 契約ターゲット。
+
+`existingDescentRefuter_math` の最終差し替え先をこの契約 1 本に固定する。
+-/
+abbrev BranchAShapeWitnessDescentContractTarget : Prop :=
+  ExistingDescentRefuterTarget
+
 /-- 既存 descent 契約を注入して利用する薄い橋。 -/
 theorem existingDescentRefuter_of_target
   (hRef : ExistingDescentRefuterTarget)
@@ -1192,6 +1200,16 @@ theorem existingDescentRefuter_via_FLT
     FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
   exact hNo hpack.hEq
 
+/-- Branch A 専用 descent 契約の暫定 concrete 実装（via FLT）。 -/
+theorem branchAShapeWitnessDescentContract_via_FLT :
+    BranchAShapeWitnessDescentContractTarget :=
+  existingDescentRefuter_via_FLT
+
+/-- Branch A 専用 descent 契約の実装入口。 -/
+theorem branchAShapeWitnessDescentContract_impl :
+    BranchAShapeWitnessDescentContractTarget :=
+  branchAShapeWitnessDescentContract_via_FLT
+
 /--
 既存 descent 契約入力を受けて refute する実装本体。
 
@@ -1202,7 +1220,7 @@ theorem existingDescentRefuter_math
     p ∣ (z - y) →
     BranchAShapeWitnessDescentInput p x y z t →
     False :=
-  existingDescentRefuter_of_target existingDescentRefuter_via_FLT
+  existingDescentRefuter_of_target branchAShapeWitnessDescentContract_impl
 
 /--
 witness 直受け kernel の実装本体。
