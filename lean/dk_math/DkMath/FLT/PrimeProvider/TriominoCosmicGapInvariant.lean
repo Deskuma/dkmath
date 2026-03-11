@@ -1205,10 +1205,19 @@ theorem branchAShapeWitnessDescentContract_via_FLT :
     BranchAShapeWitnessDescentContractTarget :=
   existingDescentRefuter_via_FLT
 
+/--
+Branch A 専用 descent 契約の実装本体。
+
+現時点では `via_FLT` を束ねるが、最終 clean 置換点はこの定理 1 本に集約する。
+-/
+theorem branchAShapeWitnessDescentContract_math :
+    BranchAShapeWitnessDescentContractTarget :=
+  branchAShapeWitnessDescentContract_via_FLT
+
 /-- Branch A 専用 descent 契約の実装入口。 -/
 theorem branchAShapeWitnessDescentContract_impl :
     BranchAShapeWitnessDescentContractTarget :=
-  branchAShapeWitnessDescentContract_via_FLT
+  branchAShapeWitnessDescentContract_math
 
 /--
 既存 descent 契約入力を受けて refute する実装本体。
