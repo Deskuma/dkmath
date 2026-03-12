@@ -348,3 +348,36 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-G1 として、`eulerZetaFactorPhaseVelFinite` の明示式
      （`∑_{p∈S} (log p - eulerZetaPhaseVelLocal p)`）を
      停留補題群へ接続する整理補題を追加する。
+
+### 日時: 2026/03/12 23:21 JST: Phase RH-G1 を実装（明示和形への正規化）
+
+1. 目的: RH-F 系の停留補題群で使っている
+   `eulerZetaFactorPhaseVelFinite` を明示和形
+   `∑_{p∈S}(log p - eulerZetaPhaseVelLocal p)` に統一し、
+   観測量を直接読める形へ整理する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/EulerZetaLemmas.lean`
+   - 追加補題:
+     - `eulerZetaFactorPhaseVelFinite_eq_sum_log_sub_phaseVelLocal`
+     - `driftFreeAt_eulerZetaFinite_onVertical_iff_sum_log_sub_phaseVelLocal_eq_zero`
+     - `stationaryAt_eulerZetaFinite_onVertical_iff_sum_log_sub_phaseVelLocal_eq_zero`
+   - 数学的要点:
+     - RH-E1 の局所式
+       `phaseVel_eulerZetaFactorVerticalExp_eq_log_sub_phaseVelLocal`
+       を `Finset.sum_congr` で有限和へ持ち上げ。
+     - RH-F1/F2 の同値補題を上記明示和へ rewrite し、
+       `driftFreeAt` / `stationaryAt` を同一の和零化条件に正規化。
+   - 検証:
+     - `lake build DkMath.RH.EulerZetaLemmas`
+     - `lake build DkMath.RH`
+     ともに成功。
+3. 結論: 停留判定 API が「抽象和」から「明示和」へ正規化され、
+   HOPC-RH の観測量解釈と downstream 利用（数値評価・比較）がしやすくなった。
+4. 失敗事例: なし（初回実装でビルド通過）。
+5. 備考:
+   - 前提は一貫して `p ∈ S` での `w_p(t) ≠ 0` を使用。
+   - 既存補題の再利用中心で、定義変更や互換性破壊はなし。
+6. 次の課題:
+   - RH-G2 として、`nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff` も
+     明示和形（`sum_log_sub = 0 ∧ phaseCurv ≠ 0`）へ揃える補題を追加する。

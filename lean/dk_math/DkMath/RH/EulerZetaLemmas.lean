@@ -967,4 +967,54 @@ lemma nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff
     exact hnd.mpr ⟨(driftFreeAt_eulerZetaFinite_onVertical_iff_factor_sum_eq_zero
       (S := S) (σ := σ) (t := t) hS_ne).mpr hsum0, hcurv⟩
 
+/--
+`eulerZetaFactorPhaseVelFinite` の明示式。
+
+`S` 内で `w_p(t) ≠ 0` なら
+`∑ phaseVel(factor_p) = ∑ (log p - phaseVel(w_p))`。
+-/
+lemma eulerZetaFactorPhaseVelFinite_eq_sum_log_sub_phaseVelLocal
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    eulerZetaFactorPhaseVelFinite (S := S) σ t
+      =
+      ∑ p ∈ S, (Real.log (p.1 : ℝ) - eulerZetaPhaseVelLocal p.1 σ t) := by
+  unfold eulerZetaFactorPhaseVelFinite
+  refine Finset.sum_congr rfl ?_
+  intro p hp
+  exact phaseVel_eulerZetaFactorVerticalExp_eq_log_sub_phaseVelLocal
+    (p := p.1) (σ := σ) (t := t) (hS_ne p hp)
+
+/--
+`eulerZetaFinite_onVertical` のドリフト消失条件（明示和版）。
+
+`S` 内で `w_p(t) ≠ 0` なら、
+`driftFreeAt` は `∑_{p∈S} (log p - phaseVel(w_p)) = 0` と同値。
+-/
+lemma driftFreeAt_eulerZetaFinite_onVertical_iff_sum_log_sub_phaseVelLocal_eq_zero
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.driftFreeAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ↔
+      (∑ p ∈ S, (Real.log (p.1 : ℝ) - eulerZetaPhaseVelLocal p.1 σ t)) = 0 := by
+  rw [← eulerZetaFactorPhaseVelFinite_eq_sum_log_sub_phaseVelLocal
+    (S := S) (σ := σ) (t := t) hS_ne]
+  exact driftFreeAt_eulerZetaFinite_onVertical_iff_factor_sum_eq_zero
+    (S := S) (σ := σ) (t := t) hS_ne
+
+/--
+`eulerZetaFinite_onVertical` の停留条件（明示和版）。
+
+`S` 内で `w_p(t) ≠ 0` なら、
+`stationaryAt` は `∑_{p∈S} (log p - phaseVel(w_p)) = 0` と同値。
+-/
+lemma stationaryAt_eulerZetaFinite_onVertical_iff_sum_log_sub_phaseVelLocal_eq_zero
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.stationaryAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ↔
+      (∑ p ∈ S, (Real.log (p.1 : ℝ) - eulerZetaPhaseVelLocal p.1 σ t)) = 0 := by
+  rw [← eulerZetaFactorPhaseVelFinite_eq_sum_log_sub_phaseVelLocal
+    (S := S) (σ := σ) (t := t) hS_ne]
+  exact stationaryAt_eulerZetaFinite_onVertical_iff_factor_sum_eq_zero
+    (S := S) (σ := σ) (t := t) hS_ne
+
 end DkMath.RH.EulerZeta
