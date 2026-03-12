@@ -293,7 +293,7 @@ lemma quality_le_of_not_bad_with_tail
 lemma tailbound_of_log_bound
     {a b c : ℕ} {γ : ℝ}
     (ha_pos : 0 < a) (hb_pos : 0 < b) (hsum : a + b = c)
-    (Hlog : Real.log (ABC.twoTail c : ℝ) ≤ γ * Real.log (ABC.rad (a*b) : ℝ)) :
+    (Hlog : Real.log (ABC.twoTail c : ℝ) ≤ γ * Real.log (ABC.rad (a * b) : ℝ)) :
   ABC.TailBound γ a b c := by
   -- a*b ≠ 0, c ≠ 0 を用意
   have hab0 : a * b ≠ 0 := Nat.mul_ne_zero (Nat.pos_iff_ne_zero.mp ha_pos) (Nat.pos_iff_ne_zero.mp hb_pos)
