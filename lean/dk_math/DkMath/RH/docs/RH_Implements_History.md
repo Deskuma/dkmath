@@ -603,3 +603,28 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-J1 として、OP-002（非零前提の管理 API）から着手し、
      `w_p ≠ 0` 前提を束ねる finite-set wrapper 補題を
      `EulerZetaLemmas.lean` に追加する。
+
+### 日時: 2026/03/13 02:36 JST: Phase RH-J1 を実装（非零前提 finite-set wrapper）
+
+1. 目的: OP-002 に対応し、`∀ p ∈ S, w_p ≠ 0` 前提から
+   有限積非零を都度再構成する重複を解消する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/EulerZetaLemmas.lean`
+   - 追加補題:
+     - `eulerZetaExpSubOneFinite_ne_zero_of_ne`
+     - `eulerZetaFactorVerticalExpFinite_ne_zero_of_ne`
+   - 既存補題の置換:
+     - `phaseVel_eulerZetaExpSubOneFinite_eq_sum`
+     - `phaseVel_eulerZetaFactorVerticalExpFinite_eq_sum`
+     - `eulerZetaFinite_onVertical_ne_zero_of_ne`
+     で手書き `Finset.prod_ne_zero_iff` ブロックを wrapper 呼び出しへ差し替え。
+3. 結論: 非零前提の管理が補題レベルで正規化され、
+   以後の停留/位相速度補題で前提処理の再利用性が向上した。
+4. 失敗事例: なし（初回実装でビルド通過）。
+5. 備考:
+   - 既存 API の外部シグネチャ変更はなし。
+   - 変更は証明本体の重複削減と読みやすさ改善が中心。
+6. 次の課題:
+   - RH-J2 として、OP-003（CFBRC 連携の実定理）に着手し、
+     `hopcPrimeContributionSum` 判定へ落とす最小 bridge 補題（1本）を設計する。

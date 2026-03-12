@@ -598,6 +598,16 @@ lemma phaseVel_eulerZetaExpSubOneFinite_insert
       (g := fun u : ℝ => eulerZetaExpSubOneFinite (S := S) σ u)
       (t := t) hd_p hd_S hp_ne hS_ne)
 
+/-- `S` 上で `w_p(t) ≠ 0` なら、その有限積も非零。 -/
+lemma eulerZetaExpSubOneFinite_ne_zero_of_ne
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    eulerZetaExpSubOneFinite (S := S) σ t ≠ 0 := by
+  unfold eulerZetaExpSubOneFinite
+  exact (Finset.prod_ne_zero_iff).2 (by
+    intro p hp
+    exact hS_ne p hp)
+
 /--
 有限積版の積→和補題（本体）。
 
@@ -623,10 +633,8 @@ lemma phaseVel_eulerZetaExpSubOneFinite_eq_sum
       exact hS_ne q (Finset.mem_insert_of_mem hq)
     have hprod_ne :
         eulerZetaExpSubOneFinite (S := S) σ t ≠ 0 := by
-      unfold eulerZetaExpSubOneFinite
-      refine (Finset.prod_ne_zero_iff).2 ?_
-      intro q hq
-      exact hS_ne' q hq
+      exact eulerZetaExpSubOneFinite_ne_zero_of_ne
+        (S := S) (σ := σ) (t := t) hS_ne'
     have h_insert :=
       phaseVel_eulerZetaExpSubOneFinite_insert
         (p := p) (S := S) (σ := σ) (t := t) hp hp_ne hprod_ne
@@ -666,6 +674,17 @@ lemma eulerZetaFactorVerticalExp_ne_zero
     eulerZetaFactorVerticalExp p σ t ≠ 0 := by
   unfold eulerZetaFactorVerticalExp
   exact div_ne_zero (Complex.exp_ne_zero _) hw_ne
+
+/-- `S` 上で `w_p(t) ≠ 0` なら、exp 形 Euler 因子有限積は非零。 -/
+lemma eulerZetaFactorVerticalExpFinite_ne_zero_of_ne
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    eulerZetaFactorVerticalExpFinite (S := S) σ t ≠ 0 := by
+  unfold eulerZetaFactorVerticalExpFinite
+  exact (Finset.prod_ne_zero_iff).2 (by
+    intro p hp
+    exact eulerZetaFactorVerticalExp_ne_zero
+      (p := p.1) (σ := σ) (t := t) (hS_ne p hp))
 
 /-- `exp((σ+it)log p)` の位相速度は `log p`。 -/
 lemma phaseVel_exp_vertical_mul_log_p_eq_log
@@ -792,10 +811,8 @@ lemma phaseVel_eulerZetaFactorVerticalExpFinite_eq_sum
       exact hS_ne q (Finset.mem_insert_of_mem hq)
     have hprod_ne :
         eulerZetaFactorVerticalExpFinite (S := S) σ t ≠ 0 := by
-      unfold eulerZetaFactorVerticalExpFinite
-      refine (Finset.prod_ne_zero_iff).2 ?_
-      intro q hq
-      exact eulerZetaFactorVerticalExp_ne_zero (p := q.1) (σ := σ) (t := t) (hS_ne' q hq)
+      exact eulerZetaFactorVerticalExpFinite_ne_zero_of_ne
+        (S := S) (σ := σ) (t := t) hS_ne'
     have hmul :
       (fun u : ℝ => eulerZetaFactorVerticalExpFinite (S := insert p S) σ u) =
       (fun u : ℝ => eulerZetaFactorVerticalExp p.1 σ u *
@@ -888,10 +905,8 @@ lemma eulerZetaFinite_onVertical_ne_zero_of_ne
     (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
     eulerZetaFinite_onVertical S σ t ≠ 0 := by
   rw [eulerZetaFinite_onVertical_eq_factorVerticalExpFinite (S := S) (σ := σ) (t := t)]
-  unfold eulerZetaFactorVerticalExpFinite
-  exact (Finset.prod_ne_zero_iff).2 (by
-    intro p hp
-    exact eulerZetaFactorVerticalExp_ne_zero (p := p.1) (σ := σ) (t := t) (hS_ne p hp))
+  exact eulerZetaFactorVerticalExpFinite_ne_zero_of_ne
+    (S := S) (σ := σ) (t := t) hS_ne
 
 /--
 `eulerZetaFinite_onVertical` に対する停留同値。
