@@ -533,4 +533,112 @@ lemma eulerZetaPhaseVelLocal_eq_phaseVel_formula
   simpa [eulerZetaPhaseVelLocal] using
     (phaseVel_eulerZeta_exp_s_log_p_sub_one_eq (p := p) (σ := σ) (t := t))
 
+-- ============================================================================
+-- 14. HOPC-RH: 有限積の位相速度を局所寄与和へ落とす（RH-D2）
+-- ============================================================================
+
+/-- 空集合での `w_p` 有限積は 1。 -/
+@[simp] lemma eulerZetaExpSubOneFinite_empty (σ t : ℝ) :
+    eulerZetaExpSubOneFinite (S := (∅ : Finset {p // Nat.Prime p})) σ t = 1 := by
+  simp [eulerZetaExpSubOneFinite]
+
+/-- `insert` による `w_p` 有限積の再帰展開。 -/
+lemma eulerZetaExpSubOneFinite_insert
+    (p : {p // Nat.Prime p}) (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hp : p ∉ S) :
+    eulerZetaExpSubOneFinite (S := insert p S) σ t =
+      eulerZeta_exp_s_log_p_sub_one p.1 σ t *
+        eulerZetaExpSubOneFinite (S := S) σ t := by
+  simp [eulerZetaExpSubOneFinite, hp]
+
+/-- `w_p` 有限積は各点で微分可能。 -/
+lemma differentiableAt_eulerZetaExpSubOneFinite
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ) :
+    DifferentiableAt ℝ (fun u : ℝ => eulerZetaExpSubOneFinite S σ u) t := by
+  classical
+  induction S using Finset.induction_on with
+  | empty =>
+      simp [eulerZetaExpSubOneFinite]
+  | @insert p S hp ih =>
+      have hd_p :
+          DifferentiableAt ℝ (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p.1 σ u) t :=
+        (hasDerivAt_eulerZeta_exp_s_log_p_sub_one (p := p.1) (σ := σ) (t := t)).differentiableAt
+      simpa [eulerZetaExpSubOneFinite, hp] using hd_p.mul ih
+
+/--
+`insert` 1ステップ版の積→和補題。
+
+`w_p` 有限積で 0 除算が起きない点では、位相速度は 1 因子ぶん加法分解できる。
+-/
+lemma phaseVel_eulerZetaExpSubOneFinite_insert
+    (p : {p // Nat.Prime p}) (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hp : p ∉ S)
+    (hp_ne : eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hS_ne : eulerZetaExpSubOneFinite (S := S) σ t ≠ 0) :
+    DkMath.RH.phaseVel
+        (fun u : ℝ => eulerZetaExpSubOneFinite (S := insert p S) σ u) t =
+      eulerZetaPhaseVelLocal p.1 σ t +
+        DkMath.RH.phaseVel (fun u : ℝ => eulerZetaExpSubOneFinite (S := S) σ u) t := by
+  have hmul :
+      (fun u : ℝ => eulerZetaExpSubOneFinite (S := insert p S) σ u) =
+      (fun u : ℝ =>
+        eulerZeta_exp_s_log_p_sub_one p.1 σ u * eulerZetaExpSubOneFinite (S := S) σ u) := by
+    funext u
+    simp [eulerZetaExpSubOneFinite, hp]
+  rw [hmul]
+  have hd_p :
+      DifferentiableAt ℝ (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p.1 σ u) t :=
+    (hasDerivAt_eulerZeta_exp_s_log_p_sub_one (p := p.1) (σ := σ) (t := t)).differentiableAt
+  have hd_S :
+      DifferentiableAt ℝ (fun u : ℝ => eulerZetaExpSubOneFinite (S := S) σ u) t :=
+    differentiableAt_eulerZetaExpSubOneFinite (S := S) (σ := σ) (t := t)
+  simpa [eulerZetaPhaseVelLocal] using
+    (DkMath.RH.phaseVel_mul
+      (f := fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p.1 σ u)
+      (g := fun u : ℝ => eulerZetaExpSubOneFinite (S := S) σ u)
+      (t := t) hd_p hd_S hp_ne hS_ne)
+
+/--
+有限積版の積→和補題（本体）。
+
+`S` 内の各素数因子で `w_p(t) ≠ 0` が成り立つとき、
+`w_p` 有限積の位相速度は局所位相速度寄与の有限和に一致する。
+-/
+lemma phaseVel_eulerZetaExpSubOneFinite_eq_sum
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne :
+      ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.phaseVel (fun u : ℝ => eulerZetaExpSubOneFinite (S := S) σ u) t =
+      eulerZetaPhaseVelFinite (S := S) σ t := by
+  classical
+  revert hS_ne
+  refine Finset.induction_on S ?h0 ?hstep
+  · intro _
+    simp [eulerZetaExpSubOneFinite, eulerZetaPhaseVelFinite, DkMath.RH.phaseVel]
+  · intro p S hp ih hS_ne
+    have hp_ne : eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0 :=
+      hS_ne p (Finset.mem_insert_self p S)
+    have hS_ne' : ∀ q ∈ S, eulerZeta_exp_s_log_p_sub_one q.1 σ t ≠ 0 := by
+      intro q hq
+      exact hS_ne q (Finset.mem_insert_of_mem hq)
+    have hprod_ne :
+        eulerZetaExpSubOneFinite (S := S) σ t ≠ 0 := by
+      unfold eulerZetaExpSubOneFinite
+      refine (Finset.prod_ne_zero_iff).2 ?_
+      intro q hq
+      exact hS_ne' q hq
+    have h_insert :=
+      phaseVel_eulerZetaExpSubOneFinite_insert
+        (p := p) (S := S) (σ := σ) (t := t) hp hp_ne hprod_ne
+    calc
+      DkMath.RH.phaseVel
+          (fun u : ℝ => eulerZetaExpSubOneFinite (S := insert p S) σ u) t
+          = eulerZetaPhaseVelLocal p.1 σ t +
+              DkMath.RH.phaseVel (fun u : ℝ => eulerZetaExpSubOneFinite (S := S) σ u) t := h_insert
+      _ = eulerZetaPhaseVelLocal p.1 σ t + eulerZetaPhaseVelFinite (S := S) σ t := by
+          rw [ih hS_ne']
+      _ = eulerZetaPhaseVelFinite (S := insert p S) σ t := by
+          symm
+          exact eulerZetaPhaseVelFinite_insert (p := p) (S := S) (σ := σ) (t := t) hp
+
 end DkMath.RH.EulerZeta

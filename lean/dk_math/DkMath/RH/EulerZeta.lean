@@ -111,6 +111,11 @@ noncomputable def eulerZetaMagFinite
     (S : Finset {p // Nat.Prime p}) (σ t : ℝ) : ℝ :=
   ∏ p ∈ S, eulerZetaFactorMag p.1 σ t
 
+/-- `w_p(t) = exp((σ+it)log p)-1` の有限積（位相観測の母体）。 -/
+noncomputable def eulerZetaExpSubOneFinite
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ) : ℂ :=
+  ∏ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t
+
 /--
 素数 `p` に対する局所位相速度寄与。
 

@@ -97,6 +97,28 @@ lemma phaseVel_eq_im_mul_conj_div_normSq (f : ℝ → ℂ) (t : ℝ) :
   -- 既存補題 + torque_eq_im_mul_conj
   simp [phaseVel_eq_torque_div_normSq, torque_eq_im_mul_conj]
 
+/--
+位相速度の積法則。
+
+`f(t), g(t) ≠ 0` の下で
+`phaseVel (f*g) = phaseVel f + phaseVel g`。
+-/
+lemma phaseVel_mul
+    (f g : ℝ → ℂ) (t : ℝ)
+    (hf : DifferentiableAt ℝ f t) (hg : DifferentiableAt ℝ g t)
+    (hf0 : f t ≠ 0) (hg0 : g t ≠ 0) :
+    phaseVel (fun u => f u * g u) t = phaseVel f t + phaseVel g t := by
+  unfold phaseVel
+  have hderiv :
+      deriv (fun u => f u * g u) t = deriv f t * g t + f t * deriv g t := by
+    simpa using deriv_mul hf hg
+  rw [hderiv]
+  have hdiv :
+      (deriv f t * g t + f t * deriv g t) / (f t * g t) =
+        deriv f t / f t + deriv g t / g t := by
+    field_simp [hf0, hg0]
+  rw [hdiv, Complex.add_im]
+
 -- ----------------------------------------------------------------------------
 
 /-- 局所ドリフト消失と位相速度ゼロの同値性 -/

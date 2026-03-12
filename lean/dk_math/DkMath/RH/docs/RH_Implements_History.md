@@ -162,3 +162,43 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - Phase RH-D2 として、有限 Euler 積の位相速度が
      局所位相速度和へ落ちる補題（積→和）を追加する。
+
+### 日時: 2026/03/12 22:22 JST: Phase RH-D2 を実装（有限積の位相速度 積→和）
+
+1. 目的: RH-D1 で定義した有限観測量に対し、
+   「有限積の位相速度 = 局所位相速度寄与の和」を Lean 補題として確立する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/EulerZeta.lean`
+     - `DkMath/RH/Lemmas.lean`
+     - `DkMath/RH/EulerZetaLemmas.lean`
+   - 新規定義（`EulerZeta.lean`）:
+     - `eulerZetaExpSubOneFinite`（`w_p` の有限積）
+   - 新規補題（`Lemmas.lean`）:
+     - `phaseVel_mul`
+       （`f(t), g(t) ≠ 0` 下で `phaseVel(f*g)=phaseVel f + phaseVel g`）
+   - 新規補題（`EulerZetaLemmas.lean`）:
+     - `eulerZetaExpSubOneFinite_empty`
+     - `eulerZetaExpSubOneFinite_insert`
+     - `differentiableAt_eulerZetaExpSubOneFinite`
+     - `phaseVel_eulerZetaExpSubOneFinite_insert`
+     - `phaseVel_eulerZetaExpSubOneFinite_eq_sum`
+   - 数学的要点:
+     - `phaseVel` の積法則を 1-step（insert）で適用し、
+       `Finset` 帰納で有限積全体へ拡張。
+     - 各因子の非零条件 `w_p(t) ≠ 0` を仮定して 0 除算を回避。
+   - 検証:
+     - `lake build DkMath.RH.EulerZetaLemmas`
+     - `lake build DkMath.RH`
+     ともに成功。
+3. 結論: RH-D2 の主目的（積→和補題）が成立し、
+   有限 Euler 積の位相観測を prime-local 和表示へ落とせる状態になった。
+4. 失敗事例:
+   - 初回実装で `DifferentiableAt.finset_prod` の関数形整合が崩れ、型不一致が発生。
+   - 微分可能性補題を `Finset` 帰納で直接構成して解消。
+5. 備考:
+   - 今回の積→和は `w_p` 有限積に対する位相速度版。
+   - 次段で `eulerZetaFinite`（因子本体）側への接続を追加可能。
+6. 次の課題:
+   - Phase RH-E1 として、`eulerZetaFinite` 側の位相速度接続
+     （必要な非零条件を整理した上での積→和）を検討する。
