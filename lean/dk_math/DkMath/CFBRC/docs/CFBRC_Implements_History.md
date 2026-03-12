@@ -356,3 +356,28 @@
    - 高位 API は Nat valuation の文脈（`Coprime x u`, `Prime q`, side 境界の除法）に合わせて設計。
 6. 次の課題:
    - 必要なら同様の side 指定 API を divisibility / primitive-prime existence 側にも拡張する。
+
+### 日時: 2026/03/12 17:17 JST: docstring 整備（第1弾: Basic / CyclotomicProduct）
+
+1. 目的: `DkMath.CFBRC` の定理・補題について、数学的意味が追える docstring を順次付与する。
+2. 内容:
+   - `DkMath.CFBRC.Basic` の主要補題へ説明を追加:
+     - prime cyclotomic との同一化
+     - core の漸化式
+     - Cosmic Formula 型恒等式
+     - `GN` 同一化・除法同値・差冪分解・素数除法帰結
+   - `DkMath.CFBRC.CyclotomicProduct` の主要補題へ説明を追加:
+     - `cyclotomicDegreeSum` と次数和評価
+     - 幾何和から core への接続
+     - general `u` の global product bridge
+     - `GN` への complete identification
+   - 既存コード本体は不変更（コメント追加のみ）。
+   - `lake build DkMath.CFBRC.Basic` / `lake build DkMath.CFBRC.CyclotomicProduct` /
+     `lake build DkMath.CFBRC` 成功。
+3. 結論: CFBRC の中心補題群に数学的 docstring が入り、定理の位置づけ・使い所を追いやすくなった。
+4. 失敗事例: 特になし（コメント追加のみでビルド安定）。
+5. 備考:
+   - 次段では `Bridge` 側の既存 docstring も粒度を揃えて統一する予定。
+6. 次の課題:
+   - `Bridge.lean` の docstring を「前提・結論・接続先」のフォーマットで統一し、
+     side 指定高位 API の利用例を短く補う。

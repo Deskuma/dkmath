@@ -139,9 +139,17 @@ theorem cyclotomicShiftedEval_eq_cyclotomicEval_div_mul_pow
   simp [cyclotomicEval, Polynomial.eval₂_eq_eval_map] at hmain ⊢
   simpa using hmain
 
+/--
+`d` の真性因子側（`m>1`）での円分次数和
+`∑_{m|d,m>1} deg(Φ_m)` を表す補助定義。
+-/
 @[simp] def cyclotomicDegreeSum (d : ℕ) : ℕ :=
   ∑ m ∈ d.divisors.erase 1, (Polynomial.cyclotomic m ℤ).natDegree
 
+/--
+`∑_{m|d, m>1} deg(Φ_m) = d - 1`。
+`deg(Φ_m)=φ(m)` と `∑_{m|d} φ(m)=d`、および `φ(1)=1` を合わせた次数和評価。
+-/
 theorem cyclotomicDegreeSum_eq_pred {d : ℕ} (hd : 0 < d) :
     cyclotomicDegreeSum d = d - 1 := by
   have hdeg :
@@ -165,6 +173,10 @@ theorem cyclotomicDegreeSum_eq_pred {d : ℕ} (hd : 0 < d) :
   unfold cyclotomicDegreeSum
   rw [Finset.sum_congr rfl hdeg, hsum_erase]
 
+/--
+`u ≠ 0` のとき、比 `((x+u)/u)` の幾何和に `u^(d-1)` を掛けると
+`cyclotomicPrimeCore d x u` に一致する。
+-/
 theorem geomSum_div_mul_pow_eq_cyclotomicPrimeCore
     {R : Type _} [Field R] {d : ℕ} (x u : R) (hu : u ≠ 0) :
     (∑ i ∈ Finset.range d, ((x + u) / u) ^ i) * u ^ (d - 1) = cyclotomicPrimeCore d x u := by
@@ -184,6 +196,11 @@ theorem geomSum_div_mul_pow_eq_cyclotomicPrimeCore
     _ = (x + u) ^ i * u ^ (d - 1 - i) := by
       rw [pow_sub₀ u hu hi_le]
 
+/--
+general `u` の divisors product を、
+比 `((x+u)/u)` の幾何和と次数和冪 `u^cyclotomicDegreeSum d`
+の積として表す global bridge。
+-/
 theorem cyclotomicDivisorsProductShifted_eq_geomSum_div_mul_powDegreeSum
     {R : Type _} [Field R] {d : ℕ} (hd : 0 < d) (x u : R) (hu : u ≠ 0) :
     cyclotomicDivisorsProductShifted d x u =
@@ -199,6 +216,10 @@ theorem cyclotomicDivisorsProductShifted_eq_geomSum_div_mul_powDegreeSum
   rw [hprod, Finset.prod_mul_distrib]
   rw [prod_cyclotomicEval_eq_geomSum hd ((x + u) / u), Finset.prod_pow_eq_pow_sum]
 
+/--
+`u ≠ 0` の下で、general-`d` divisors product shifted は
+`cyclotomicPrimeCore d x u` と一致する。
+-/
 theorem cyclotomicDivisorsProductShifted_eq_cyclotomicPrimeCore
     {R : Type _} [Field R] {d : ℕ} (hd : 0 < d) (x u : R) (hu : u ≠ 0) :
     cyclotomicDivisorsProductShifted d x u = cyclotomicPrimeCore d x u := by
@@ -206,6 +227,10 @@ theorem cyclotomicDivisorsProductShifted_eq_cyclotomicPrimeCore
   rw [cyclotomicDegreeSum_eq_pred hd]
   simpa using geomSum_div_mul_pow_eq_cyclotomicPrimeCore (d := d) x u hu
 
+/--
+`u ≠ 0` かつ `x ≠ 0` での complete identification:
+general-`d` divisors product shifted は `GN d x u` と一致する。
+-/
 theorem cyclotomicDivisorsProductShifted_eq_GN_of_ne_zero
     {R : Type _} [Field R] {d : ℕ} (hd : 0 < d)
     {x u : R} (hx : x ≠ 0) (hu : u ≠ 0) :
