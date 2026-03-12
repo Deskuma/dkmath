@@ -400,6 +400,8 @@ GN の再展開・係数比較に突っ込むのは最後の手段とする。
    `Nat.Prime p` を仮定したときの
    「`cyclotomicPrimeCore` = prime cyclotomic の shifted homogeneous evaluation」
    を補題化する。
+   - 2026/03/12 実装完了
+     (`cyclotomicPrimeCore_eq_shiftedHomEval_cyclotomic_of_prime`)。
 3. Phase C（次）:
    `DkMath.CFBRC.*` から Zsigmondy / valuation 層へ import 依存を追加し、
    除法同値補題を再利用 API として露出する。

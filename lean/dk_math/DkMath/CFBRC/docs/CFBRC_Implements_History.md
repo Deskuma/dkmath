@@ -53,3 +53,23 @@
 6. 次の課題:
    - `Nat.Prime p` を仮定した円分多項式（`Φ_p(T)=∑T^k`）との意味づけ補題を追加する。
    - `DkMath.CFBRC` を入口にした上位 bridge（Zsigmondy / valuation 層）へ接続する。
+
+### 日時: 2026/03/12 15:18 JST: Phase B を実装（prime cyclotomic の shifted homogeneous evaluation 補題）
+
+1. 目的: `Nat.Prime p` 仮定の下で、`cyclotomicPrimeCore` を prime cyclotomic の shifted homogeneous evaluation として明示する。
+2. 内容:
+   - `DkMath.CFBRC.Basic` に `cyclotomicShiftedHomEval` を追加:
+     - `∑_{k=0}^{p-1} coeff(Φ,k) * (x+u)^k * u^(p-1-k)` を定義。
+   - `cyclotomicPrimeCore_eq_shiftedHomEval_cyclotomic_of_prime` を追加:
+     - `hp : Nat.Prime p` から `Polynomial.cyclotomic_prime` を使い、
+       `coeff(Φ_p,k)=1 (k<p)` を導出して core との一致を証明。
+   - `lake build DkMath.CFBRC.Basic` でビルド成功を確認。
+3. 結論: Phase B 要件
+   「`cyclotomicPrimeCore` = prime cyclotomic の shifted homogeneous evaluation」
+   を Lean 補題として実装完了。
+4. 失敗事例: 大きな失敗なし。既存の Prime 連結 API と競合せずに導入できた。
+5. 備考:
+   - `cyclotomicShiftedHomEval` は `Polynomial ℤ` を受ける一般形なので、
+     今後は prime case 以外の比較補題へも流用可能。
+6. 次の課題:
+   - `DkMath.CFBRC.*` から Zsigmondy / valuation 層への API 接続を進める。
