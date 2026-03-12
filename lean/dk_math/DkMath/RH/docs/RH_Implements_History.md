@@ -751,3 +751,24 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-L1 として、`DkMath/RH/README.md` の import 例に
      `DkMath.RH.CFBRCBridge` 利用例を追加し、
      CFBRC 連携の最小起動手順を明示する。
+
+### 日時: 2026/03/13 03:05 JST: Phase RH-L1 を実装（README import 例の bridge 追加）
+
+1. 目的: CFBRC 連携を使う最小起動手順をトップ README で明示し、
+   `RH.CFBRCBridge` の導入を即座に再現できるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/README.md`
+   - 追記項目:
+     - `CFBRC 連携 bridge まで使う場合` セクション
+     - `import DkMath.RH.CFBRCBridge`
+     - `open DkMath.RH.EulerZeta`
+3. 結論: README の import 例だけで
+   RH 単体利用と CFBRC 連携利用の両方を起動できる構成になった。
+4. 失敗事例: なし（ドキュメント追記のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+   - bridge の仮定セット詳細は `RH-CFBRC-Discussion.md` を参照。
+6. 次の課題:
+   - RH-L2 として、`DkMath/RH/docs/README.md` にも同等の import 例を追記し、
+     README 間の利用手順を完全同期する。

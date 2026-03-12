@@ -72,6 +72,14 @@ import DkMath.RH.EulerZeta
 import DkMath.RH.EulerZetaLemmas
 ```
 
+CFBRC 連携 bridge まで使う場合:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+```
+
 ## 注意
 
 - 本層は「観測器 API の整備」を主目的とし、RH の完全証明を主張しません。
