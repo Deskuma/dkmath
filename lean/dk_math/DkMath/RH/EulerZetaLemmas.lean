@@ -8,8 +8,10 @@ import Mathlib.Analysis.PSeries
 
 import DkMath.RH.Defs
 import DkMath.RH.EulerZeta
+import DkMath.RH.Lemmas
 
---cid: 696f0dea-ce88-8322-9d20-8ce524dcd533
+-- cid: 696f0dea-ce88-8322-9d20-8ce524dcd533
+-- cid: 69b29c85-0a0c-83a7-aa18-c44fbc8c3399
 
 -- ============================================================================
 
@@ -325,5 +327,82 @@ theorem summable_one_div_prime_rpow_sigma (σ : ℝ) (hσ : 1 < σ) :
     rfl
   rw [this]
   exact Summable.comp_injective h_nat h_inj
+
+-- ============================================================================
+-- 11. HOPC-RH: 単一素数因子 `w_p` の位相 API（RH-B1）
+-- ============================================================================
+
+/--
+`g_p(t) := vertical σ t * log p` の `t` 微分。
+
+`vertical σ t = σ + i t` なので `d/dt` は `i`、
+よって `g_p` の導関数は `i * log p` になる。
+-/
+lemma hasDerivAt_vertical_mul_log_p
+    (p : ℕ) (σ t : ℝ) :
+    HasDerivAt
+      (fun u : ℝ => vertical σ u * (Real.log (p : ℝ) : ℂ))
+      (Complex.I * (Real.log (p : ℝ) : ℂ)) t := by
+  have hvertical : HasDerivAt (fun u : ℝ => vertical σ u) Complex.I t := by
+    simpa [vertical, one_mul] using
+      ((((hasDerivAt_id (t : ℂ)).mul_const Complex.I).comp_ofReal).const_add (σ : ℂ))
+  simpa [mul_assoc] using hvertical.mul_const (Real.log (p : ℝ) : ℂ)
+
+/--
+`w_p(t) = exp((σ+it)log p) - 1` の `t` 微分。
+
+連鎖律より
+`w_p'(t) = exp((σ+it)log p) * (i * log p)`。
+-/
+lemma hasDerivAt_eulerZeta_exp_s_log_p_sub_one
+    (p : ℕ) (σ t : ℝ) :
+    HasDerivAt
+      (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u)
+      (Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) *
+        (Complex.I * (Real.log (p : ℝ) : ℂ))) t := by
+  unfold eulerZeta_exp_s_log_p_sub_one
+  have hinner :=
+    hasDerivAt_vertical_mul_log_p (p := p) (σ := σ) (t := t)
+  simpa [mul_comm, mul_left_comm, mul_assoc] using
+    ((Complex.hasDerivAt_exp
+      (vertical σ t * (Real.log (p : ℝ) : ℂ))).comp t hinner).sub_const (1 : ℂ)
+
+/--
+`w_p` の導関数の `deriv` 版。
+-/
+lemma deriv_eulerZeta_exp_s_log_p_sub_one
+    (p : ℕ) (σ t : ℝ) :
+    deriv (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t =
+      Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) *
+        (Complex.I * (Real.log (p : ℝ) : ℂ)) :=
+  (hasDerivAt_eulerZeta_exp_s_log_p_sub_one (p := p) (σ := σ) (t := t)).deriv
+
+/--
+`w_p` に対する位相速度の明示式。
+
+`phaseVel f t = Im(f'(t)/f(t))` に `f = w_p` を代入した形。
+-/
+lemma phaseVel_eulerZeta_exp_s_log_p_sub_one_eq
+    (p : ℕ) (σ t : ℝ) :
+    DkMath.RH.phaseVel (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t =
+      (((Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) *
+          (Complex.I * (Real.log (p : ℝ) : ℂ))) /
+        (eulerZeta_exp_s_log_p_sub_one p σ t)).im) := by
+  simp [DkMath.RH.phaseVel, deriv_eulerZeta_exp_s_log_p_sub_one]
+
+/--
+`w_p(t) ≠ 0` の下で、`driftFreeAt` と `phaseVel = 0` は同値。
+
+HOPC-RH では停留条件の入口として使う。
+-/
+lemma driftFreeAt_eulerZeta_exp_s_log_p_sub_one_iff_phaseVel_eq_zero
+    (p : ℕ) (σ t : ℝ)
+    (hw_ne : eulerZeta_exp_s_log_p_sub_one p σ t ≠ 0) :
+    DkMath.RH.driftFreeAt (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t ↔
+      DkMath.RH.phaseVel (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t = 0 := by
+  simpa using
+    (DkMath.RH.driftFreeAt_iff_phaseVel_eq_zero
+      (f := fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u)
+      (t := t) hw_ne)
 
 end DkMath.RH.EulerZeta

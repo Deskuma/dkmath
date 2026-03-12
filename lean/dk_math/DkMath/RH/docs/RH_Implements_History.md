@@ -53,3 +53,37 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `w_p` の導関数補題
      - `phaseVel` を `w_p` へ適用した明示式補題
      - `driftFreeAt` との接続補題
+
+### 日時: 2026/03/12 21:28 JST: Phase RH-B1 を実装（単一素数因子 `w_p` の位相 API）
+
+1. 目的: HOPC-RH 優先度 B に沿って、単一素数因子
+   `w_p(t) = exp((σ+it)log p) - 1` の位相観測を Lean 補題として直接使える形にする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/EulerZetaLemmas.lean`
+   - 依存追加:
+     - `import DkMath.RH.Lemmas`（`driftFreeAt ↔ phaseVel=0` 再利用）
+   - 追加補題:
+     - `hasDerivAt_vertical_mul_log_p`
+     - `hasDerivAt_eulerZeta_exp_s_log_p_sub_one`
+     - `deriv_eulerZeta_exp_s_log_p_sub_one`
+     - `phaseVel_eulerZeta_exp_s_log_p_sub_one_eq`
+     - `driftFreeAt_eulerZeta_exp_s_log_p_sub_one_iff_phaseVel_eq_zero`
+   - 数学的要点:
+     - 連鎖律で `w_p'(t) = exp((σ+it)log p) * (i*log p)` を確立
+     - `phaseVel f t = Im(f'(t)/f(t))` に `f = w_p` を代入して明示式化
+     - `w_p(t) ≠ 0` 前提で停留条件 API（`driftFreeAt`）へ接続
+   - 検証:
+     - `lake build DkMath.RH.EulerZetaLemmas`
+     - `lake build DkMath.RH`
+     ともに成功。
+3. 結論: HOPC-RH の「単一素数因子位相 API」が成立し、
+   次段（曲率 API / 有限 Euler 積観測量）へ進むための最小核を確保できた。
+4. 失敗事例:
+   - 初回実装で `hasDerivAt_ofReal` 識別子が環境に存在せず失敗。
+   - `((hasDerivAt_id (t : ℂ)).mul_const ...).comp_ofReal` へ置換して解消。
+5. 備考:
+   - 停留同値補題は `w_p(t) ≠ 0` を仮定した形で公開（枝問題回避方針と整合）。
+6. 次の課題:
+   - Phase RH-C1 として `phaseVel` の 2 次情報（曲率様量）を定義し、
+     `w_p` に対する導関数補題を追加する。
