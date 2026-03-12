@@ -863,3 +863,57 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-N2 として、`hlift` の仮定を分解して
      `hS_ne` 供給部分と `hopcPrimeContributionSum=0` 供給部分を
      個別 wrapper 化し、small finite-set bridge の再利用性を上げる。
+
+### 日時: 2026/03/13 03:20 JST: Phase RH-N2 を実装（`hlift` 分解版 bridge 追加）
+
+1. 目的: RH-N1 の `hlift` 一括仮定を分解し、
+   非零前提と寄与総和ゼロ前提を別々に再利用できる API へ整理する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+   - 追加補題:
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_split`
+       （`hS_lift` と `hsum_lift` を分離した small finite-set bridge）
+   - 互換対応:
+     - 既存 `exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local`
+       は残し、従来の `hlift` 一括入力を受ける wrapper として維持。
+3. 結論: small finite-set bridge の仮定設計が分離され、
+   翻訳レイヤで `w_r ≠ 0` と `hopcPrimeContributionSum=0` を独立供給できる形になった。
+4. 失敗事例:
+   - 初回実装で wrapper から split 補題を先行参照し、
+     `Unknown identifier` が発生。
+   - wrapper 本体を直接証明へ戻して forward reference を解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N3 として、`BoundarySide` と対応づけた finite-set 向け高位 API
+     （left/right 共通インターフェース）を検討し、
+     CFBRC 側 boundary 正規化 wrapper と接続する。
+
+### 日時: 2026/03/13 03:23 JST: Phase RH-N3 を実装（`BoundarySide` 高位 API 公開）
+
+1. 目的: RH 側 bridge でも left/right 境界を統一的に扱えるよう、
+   `BoundarySide` パラメータ付きの高位 API を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+   - 追加補題:
+     - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_local`
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split`
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local`
+   - 設計:
+     - `right` は既存 bridge へ直接委譲。
+     - `left` は `(x,u)` を `(u,x)` に入れ替えて既存 bridge を再利用。
+3. 結論: singleton と small finite-set の両方で、
+   boundary 側の前提を 1 つの API 群で受けられるようになった。
+4. 失敗事例:
+   - 初回実装は `match side` 依存型引数の適用で型不一致が発生。
+   - `cases side` による左右分岐 + 既存補題委譲へ変更して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N4 として、`BoundarySide` 高位 API の利用例を
+     `RH/docs/RH-CFBRC-Discussion.md` と `RH/README.md` に反映し、
+     実利用時の仮定テンプレート（`hS_lift`/`hsum_lift`）を明示する。

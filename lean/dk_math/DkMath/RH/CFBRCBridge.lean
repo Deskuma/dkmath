@@ -139,8 +139,194 @@ theorem exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local
       (d := d) (x := x) (u := u) hd_prime hd_ge hx hu hcop hpnd with
     ⟨q, hqP, hq_dvd, hq_not_dvd_x, _hprim⟩
   let p : {q // Nat.Prime q} := ⟨q, hqP⟩
-  rcases hlift p hq_dvd hq_not_dvd_x with ⟨hS_ne, hsum0⟩
+  have hS_ne :
+      ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 :=
+    (hlift p hq_dvd hq_not_dvd_x).1
+  have hsum0 :
+      hopcPrimeContributionSum (S := insert p S) σ t = 0 :=
+    (hlift p hq_dvd hq_not_dvd_x).2
   exact ⟨p, stationaryAt_insert_of_hopcPrimeContributionSum_eq_zero
     (S := S) (p := p) (hS_ne := hS_ne) (hsum0 := hsum0)⟩
+
+/--
+RH-N2: `hlift` を分解した small finite-set bridge。
+
+`insert p S` 上の非零前提供給 (`hS_lift`) と寄与総和ゼロ供給 (`hsum_lift`) を
+個別に受け取り、停留点存在へ落とす。
+-/
+theorem exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_split
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : ¬ d ∣ x)
+    (hS_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ ((x + u) ^ d - u ^ d) → ¬ p.1 ∣ x →
+          ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0)
+    (hsum_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ ((x + u) ^ d - u ^ d) → ¬ p.1 ∣ x →
+          hopcPrimeContributionSum (S := insert p S) σ t = 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  rcases DkMath.CFBRC.exists_primitive_prime_factor_sub_pow_of_prime_exp_boundary_of_coprime
+      (d := d) (x := x) (u := u) hd_prime hd_ge hx hu hcop hpnd with
+    ⟨q, hqP, hq_dvd, hq_not_dvd_x, _hprim⟩
+  let p : {q // Nat.Prime q} := ⟨q, hqP⟩
+  have hS_ne :
+      ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 :=
+    hS_lift p hq_dvd hq_not_dvd_x
+  have hsum0 :
+      hopcPrimeContributionSum (S := insert p S) σ t = 0 :=
+    hsum_lift p hq_dvd hq_not_dvd_x
+  exact ⟨p, stationaryAt_insert_of_hopcPrimeContributionSum_eq_zero
+    (S := S) (p := p) (hS_ne := hS_ne) (hsum0 := hsum0)⟩
+
+/--
+RH-N3: `BoundarySide` 統一版の singleton local bridge。
+
+`side` が `right/left` のどちらでも、対応する境界差分
+`boundaryDiffPow side d x u` の primitive prime existence から
+singleton 観測器の停留点存在へ接続する。
+-/
+theorem exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_local
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hwnz :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hhopc_local0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ =>
+          eulerZetaFinite_onVertical ({p} : Finset {q // Nat.Prime q}) σ v) t := by
+  cases side with
+  | right =>
+      simpa [DkMath.CFBRC.boundaryDiffPow] using
+        (exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge_of_local
+          (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd hwnz hhopc_local0)
+  | left =>
+      simpa [DkMath.CFBRC.boundaryDiffPow, Nat.add_comm] using
+        (exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge_of_local
+          (d := d) (x := u) (u := x) (σ := σ) (t := t)
+          hd_prime hd_ge hu hx hcop.symm hpnd
+          (fun p hq_dvd hq_not_dvd_u =>
+            hwnz p (by simpa [DkMath.CFBRC.boundaryDiffPow, Nat.add_comm] using hq_dvd)
+              hq_not_dvd_u)
+          (fun p hq_dvd hq_not_dvd_u =>
+            hhopc_local0 p
+              (by simpa [DkMath.CFBRC.boundaryDiffPow, Nat.add_comm] using hq_dvd)
+              hq_not_dvd_u))
+
+/--
+RH-N3: `BoundarySide` 統一版の small finite-set bridge（split 仮定）。
+
+`insert p S` 上の非零前提供給と寄与総和ゼロ供給を分離したまま、
+左右境界を `side` 引数で共通化する。
+-/
+theorem exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hS_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0)
+    (hsum_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          hopcPrimeContributionSum (S := insert p S) σ t = 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  cases side with
+  | right =>
+      simpa [DkMath.CFBRC.boundaryDiffPow] using
+        (exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_split
+          (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd hS_lift hsum_lift)
+  | left =>
+      simpa [DkMath.CFBRC.boundaryDiffPow, Nat.add_comm] using
+        (exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_split
+          (S := S) (d := d) (x := u) (u := x) (σ := σ) (t := t)
+          hd_prime hd_ge hu hx hcop.symm hpnd
+          (fun p hq_dvd hq_not_dvd_u =>
+            hS_lift p
+              (by simpa [DkMath.CFBRC.boundaryDiffPow, Nat.add_comm] using hq_dvd)
+              hq_not_dvd_u)
+          (fun p hq_dvd hq_not_dvd_u =>
+            hsum_lift p
+              (by simpa [DkMath.CFBRC.boundaryDiffPow, Nat.add_comm] using hq_dvd)
+              hq_not_dvd_u))
+
+/--
+RH-N3: `BoundarySide` 統一版の small finite-set bridge（一括 `hlift` 入力）。
+
+split 版 API への互換 wrapper。
+-/
+theorem exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hlift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          (∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0) ∧
+          hopcPrimeContributionSum (S := insert p S) σ t = 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  cases side with
+  | right =>
+      simpa [DkMath.CFBRC.boundaryDiffPow] using
+        (exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local
+          (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd hlift)
+  | left =>
+      simpa [DkMath.CFBRC.boundaryDiffPow, Nat.add_comm] using
+        (exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local
+          (S := S) (d := d) (x := u) (u := x) (σ := σ) (t := t)
+          hd_prime hd_ge hu hx hcop.symm hpnd
+          (fun p hq_dvd hq_not_dvd_u =>
+            hlift p
+              (by simpa [DkMath.CFBRC.boundaryDiffPow, Nat.add_comm] using hq_dvd)
+              hq_not_dvd_u))
 
 end DkMath.RH.EulerZeta
