@@ -107,6 +107,22 @@ theorem cyclotomicDivisorsProductShifted_one_eq_cyclotomicPrimeCore
   rw [cyclotomicDivisorsProductShifted_one_eq_geomSum hd]
   rw [cyclotomicPrimeCore_one_eq_geomSum]
 
+/--
+`u = 1` 断面での complete identification:
+general-`d` divisors product shifted は `GN d x 1` と一致する。
+-/
+theorem cyclotomicDivisorsProductShifted_one_eq_GN
+    {R : Type _} [Field R] {d : ℕ} (hd : 0 < d) {x : R} (hx : x ≠ 0) :
+    cyclotomicDivisorsProductShifted d x 1 = GN d x 1 := by
+  have hcore :
+      cyclotomicDivisorsProductShifted d x 1 = cyclotomicPrimeCore d x 1 :=
+    cyclotomicDivisorsProductShifted_one_eq_cyclotomicPrimeCore (R := R) hd x
+  have hmul : x * cyclotomicPrimeCore d x 1 = x * GN d x 1 :=
+    mul_cyclotomicPrimeCore_eq_mul_GN (R := R) d x 1
+  have hcoreGN : cyclotomicPrimeCore d x 1 = GN d x 1 := by
+    exact mul_left_cancel₀ hx hmul
+  exact hcore.trans hcoreGN
+
 end
 
 end DkMath.CFBRC
