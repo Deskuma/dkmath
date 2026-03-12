@@ -15,6 +15,7 @@
 - 実装トップ: `DkMath/RH.lean`
 - 詳細解説（長文）: `DkMath/RH/docs/README.md`
 - 方針文書: `DkMath/RH/docs/HOPC-RH.txt`
+- ロードマップ: `DkMath/RH/docs/HOPC-RH-Roadmap.md`
 - CFBRC 連携議論: `DkMath/RH/docs/RH-CFBRC-Discussion.md`
 - 実装履歴: `DkMath/RH/docs/RH_Implements_History.md`
 

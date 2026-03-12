@@ -523,3 +523,28 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-I2 として、`HOPC-RH.txt` の優先度 A/E に沿って
      `HOPC-RH-Roadmap.md`（1枚設計図）を新規作成する。
+
+### 日時: 2026/03/13 00:32 JST: Phase RH-I2 を実装（HOPC-RH-Roadmap を新規作成）
+
+1. 目的: `HOPC-RH.txt` の優先度 E に対応し、
+   RH 実装の進捗と次段タスクを 1 枚で把握できる設計図を作る。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`（新規）
+     - `DkMath/RH/README.md`（ロードマップ導線追加）
+     - `DkMath/RH/docs/README.md`（ロードマップ参照追記）
+   - ロードマップ構成:
+     - 目的
+     - 実装レイヤ
+     - フェーズ A〜I の状態（完了/未完）
+     - 次段候補（Glossary / OpenProblems / finite→infinite 接続）
+3. 結論: HOPC-RH の実装計画が文書化され、
+   方針文書 (`HOPC-RH.txt`) と実装履歴 (`RH_Implements_History.md`) の中間導線が整った。
+4. 失敗事例: なし（ドキュメント追加・更新のみ）。
+5. 備考:
+   - `.lean` 実装の変更はなし。
+   - RH 直下 README と docs README の両方からロードマップへ到達可能。
+6. 次の課題:
+   - RH-I3 として、`HOPC-RH-Glossary.md` を新規作成し、
+     `phaseVel`, `driftFreeAt`, `stationaryAt`, `hopcPrimeContributionSum` など
+     現行公開語彙の定義域・依存関係を簡潔に整理する。
