@@ -628,3 +628,32 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-J2 として、OP-003（CFBRC 連携の実定理）に着手し、
      `hopcPrimeContributionSum` 判定へ落とす最小 bridge 補題（1本）を設計する。
+
+### 日時: 2026/03/13 02:47 JST: Phase RH-J2 を実装（CFBRC 連携の最小 bridge）
+
+1. 目的: OP-003 の最小着手として、CFBRC 側 primitive-prime existence と
+   RH 側 `hopcPrimeContributionSum` 判定を 1 本の補題で接続する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`（新規）
+     - `DkMath/RH.lean`（`import DkMath.RH.CFBRCBridge` 追加）
+     - `DkMath/RH/README.md`（`CFBRCBridge.lean` 反映）
+   - 新規補題:
+     - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge`
+   - 補題の役割:
+     - CFBRC の
+       `exists_primitive_prime_factor_sub_pow_of_prime_exp_boundary_of_coprime`
+       で得た素数を singleton 観測器へ載せ、
+       翻訳仮定（`hwnz`, `hhopc0`）の下で RH 側 `stationaryAt` 存在へ落とす。
+3. 結論: CFBRC→RH の「実定理」最小形が成立し、
+   prime existence から HOPC 停留判定へ接続する具体的導線を提供できた。
+4. 失敗事例:
+   - 新規ファイル先頭コメントを module doc 形式にしたため import 位置エラーが発生。
+   - 通常コメントへ修正して解消。
+5. 備考:
+   - 本 bridge は翻訳仮定つき（`hwnz`, `hhopc0`）の最小接続版。
+   - CFBRC 本体へ依存するコードは `CFBRCBridge.lean` に隔離。
+6. 次の課題:
+   - RH-J3 として、RH-J2 の翻訳仮定を弱めるため
+     singleton で再利用可能な `hS_ne` / `hopcPrimeContributionSum=0` 供給 wrapper を
+     `EulerZetaLemmas.lean` 側に追加する。

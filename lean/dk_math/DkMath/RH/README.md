@@ -41,8 +41,10 @@
     HOPC 寄与総和の同値
 - `EulerZetaConvergence.lean`
   - `σ > 1` での magnitude 無限積収束と正値
+- `CFBRCBridge.lean`
+  - CFBRC の primitive-prime existence から RH 側 singleton 停留判定へ接続する bridge
 
-## 主要 API（RH-H1 時点）
+## 主要 API（RH-J2 時点）
 
 - HOPC 観測量:
   - `hopcPrimeLocalContribution p σ t`
