@@ -294,3 +294,29 @@ see: [HOPC-RH](HOPC-RH.txt)
 > - それらの総和としての零点候補
 
 > という観点で整理する方法論である。
+
+### Implementation Bridge (RH-H1/H2)
+
+CFBRC 側から RH 側を参照する際の、現行公開 API の最短導線:
+
+- 定義:
+  - `hopcPrimeLocalContribution`
+  - `hopcPrimeContributionSum`
+  - file: `DkMath/RH/EulerZeta.lean`
+- 同一化補題:
+  - `eulerZetaFactorPhaseVelFinite_eq_hopcPrimeContributionSum`
+  - file: `DkMath/RH/EulerZetaLemmas.lean`
+- 停留判定:
+  - `driftFreeAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero`
+  - `stationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero`
+  - `nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum`
+  - file: `DkMath/RH/EulerZetaLemmas.lean`
+
+対応する読み順:
+
+1. `hopcPrimeLocalContribution` / `hopcPrimeContributionSum`（観測量名）
+2. `...eq_hopcPrimeContributionSum`（既存位相速度和との同一化）
+3. `driftFreeAt` / `stationaryAt` / `nondegenerateStationaryAt` の同値補題
+
+これで CFBRC 側の「prime-local contribution language」から、
+RH 側の停留・曲率 API へ直接接続できる。

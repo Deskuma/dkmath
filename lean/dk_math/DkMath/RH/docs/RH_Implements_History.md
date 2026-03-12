@@ -476,3 +476,27 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-H2 として、`RH-CFBRC-Discussion.md` に
      `hopcPrimeContributionSum` 系 API 参照断面を追加し、
      文書側から実装へジャンプできる目次を整備する。
+
+### 日時: 2026/03/13 00:27 JST: Phase RH-H2 を実装（Discussion 文書の API 導線固定）
+
+1. 目的: `RH-CFBRC-Discussion.md` から実装 API へ直接辿れる参照断面を追加し、
+   議論文書と Lean 実装名の往復導線を固定する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+   - 追加断面:
+     - `Implementation Bridge (RH-H1/H2)`
+   - 記載項目:
+     - HOPC 公開定義（`hopcPrimeLocalContribution`, `hopcPrimeContributionSum`）
+     - 同一化補題（`eulerZetaFactorPhaseVelFinite_eq_hopcPrimeContributionSum`）
+     - 停留/非退化停留同値補題
+     - 推奨読み順（定義 → 同一化 → 判定補題）
+3. 結論: RH-CFBRC 議論文書に実装ジャンプ導線が入り、
+   CFBRC 側から RH 側 API を引く際の参照コストを削減できた。
+4. 失敗事例: なし（ドキュメント追記のみ）。
+5. 備考:
+   - 内容は RH-H1 で公開済み API の整理であり、新しい数学命題は追加していない。
+   - 実装本体（`.lean`）には変更なし。
+6. 次の課題:
+   - RH-I1 として、`DkMath/RH/docs/README.md` の「現状 API」節も
+     HOPC 公開名に同期し、重複記述を避けた文書構成へ整える。
