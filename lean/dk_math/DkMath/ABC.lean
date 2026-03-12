@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC.Main
 
+set_option linter.style.longLine false
+
 /-! == a+b=c =======================
     **       abc conjecture       **
     ========== c=sqTail(c)*rad(c) == -/

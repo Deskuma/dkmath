@@ -515,9 +515,8 @@ lemma card_biUnion_filter_eq_sum_card_filter_indexed
   exact Disjoint.mono (Finset.filter_subset _ _) (Finset.filter_subset _ _) (hdis hi hj hne)
 
 /-- 二重 filter-card 和の添字交換。 -/
-lemma sum_card_filter_swap {α β : Type*} [DecidableEq α] [DecidableEq β]
+lemma sum_card_filter_swap {α β : Type*}
     (A : Finset α) (B : Finset β) (P : α → β → Prop)
-    [∀ a, DecidablePred (P a)]
     [∀ b, DecidablePred (fun a => P a b)] :
     (∑ a ∈ A, (B.filter (fun b => P a b)).card)
       =
@@ -527,18 +526,18 @@ lemma sum_card_filter_swap {α β : Type*} [DecidableEq α] [DecidableEq β]
         = (∑ a ∈ A, ∑ b ∈ B, if P a b then 1 else 0) := by
             refine Finset.sum_congr rfl ?_
             intro a ha
-            simpa using (Finset.card_filter (fun b => P a b) B)
+            simp only [Finset.card_filter]
     _ = (∑ b ∈ B, ∑ a ∈ A, if P a b then 1 else 0) := by
           exact Finset.sum_comm
     _ = (∑ b ∈ B, (A.filter (fun a => P a b)).card) := by
           refine Finset.sum_congr rfl ?_
           intro b hb
           symm
-          simpa using (Finset.card_filter (fun a => P a b) A)
+          simp only [Finset.card_filter]
 
 /-- `((b-c) mod 3).toNat` 条件の filter-card 和は、`3 ∣ m` なら residue に依らない。 -/
 lemma sum_card_filter_sub_mod3_toNat_eq_of_dvd
-    {γ : Type*} [DecidableEq γ]
+    {γ : Type*}
     (m : ℕ) (u : Finset γ) (c : γ → ℕ) (k₁ k₂ : ℕ)
     (hm : 3 ∣ m) (hk₁ : k₁ < 3) (hk₂ : k₂ < 3) :
     (∑ b ∈ Finset.range m,
@@ -574,7 +573,7 @@ lemma card_filter_range_sub_rev_mod3_toNat_eq_of_dvd (m c k₁ k₂ : ℕ)
 
 /-- `((c-b) mod 3).toNat` 条件の filter-card 和は、`3 ∣ m` なら residue に依らない。 -/
 lemma sum_card_filter_sub_rev_mod3_toNat_eq_of_dvd
-    {γ : Type*} [DecidableEq γ]
+    {γ : Type*}
     (m : ℕ) (u : Finset γ) (c : γ → ℕ) (k₁ k₂ : ℕ)
     (hm : 3 ∣ m) (hk₁ : k₁ < 3) (hk₂ : k₂ < 3) :
     (∑ b ∈ Finset.range m,
