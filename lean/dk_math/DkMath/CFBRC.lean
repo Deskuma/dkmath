@@ -6,5 +6,6 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Basic
 import DkMath.CFBRC.Basic
+import DkMath.CFBRC.Bridge
 
 /-! # CFBRC: Cosmic Formula Binomial Real Complex -/
