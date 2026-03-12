@@ -815,3 +815,27 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-M2 として、`HOPC-RH-Roadmap.md` に
      OP-001/OP-003 の短期実装順（next sprint）を明記し、
      コード実装フェーズへ戻る優先線を固定する。
+
+### 日時: 2026/03/13 03:10 JST: Phase RH-M2 を実装（Roadmap に next sprint を明記）
+
+1. 目的: 文書整備フェーズから実装フェーズへ戻る優先線を固定し、
+   OP-001/OP-003 の実行順を明確化する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+   - 追加内容:
+     - `Next Sprint（短期実装順）` セクション
+     - 実装順:
+       1. OP-003（CFBRC bridge 拡張）先行
+       2. OP-001（finite→infinite 接続）後続
+     - 先行理由（橋の具体化を先に進めることで観測量設計軸を固定）
+3. 結論: 次スプリントの着手順が文書化され、
+   実装計画の判断が都度ブレない状態になった。
+4. 失敗事例: なし（ドキュメント追記のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+   - OP-002/OP-005 は継続運用とし、短期優先からは外した。
+6. 次の課題:
+   - RH-N1 として、OP-003 先行方針に沿い
+     singleton bridge（J2/J3）を small finite-set へ一般化する
+     API スケッチを `CFBRCBridge.lean` に追加する。

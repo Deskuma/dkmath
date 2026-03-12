@@ -110,3 +110,20 @@ Lean 実装ロードマップを 1 枚で管理するための文書。
 - CFBRC 連携議論: `RH-CFBRC-Discussion.md`
 - 詳細解説: `README.md`
 - 実装履歴: `RH_Implements_History.md`
+
+## Next Sprint（短期実装順）
+
+次スプリントは OP-003 を先行し、OP-001 を後続で詰める。
+
+1. OP-003（CFBRC 連携の実定理）を先行
+   - 目標: RH-J2/J3 bridge を「翻訳仮定つき存在補題」から
+     再利用しやすい bridge API へ段階拡張
+   - 具体: singleton から small finite-set への持ち上げを最初の到達点にする
+2. OP-001（finite→infinite 接続）を後続
+   - 目標: `hopcPrimeContributionSum` の極限接続条件（収束/極限交換）を整理
+   - 具体: まずは条件列挙と補題インタフェース設計を先に固定する
+
+理由:
+
+- OP-003 を先に進めると、CFBRC→RH の実橋が太くなり、
+  OP-001 で必要な観測量設計の優先軸が明確になるため。
