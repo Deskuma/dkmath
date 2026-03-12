@@ -58,6 +58,26 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
   - ドキュメント更新チェックリスト（最小運用）
 - 優先度: 低
 
+### OP-005 チェックリスト v1（最小運用）
+
+更新時に、次を上から順に確認する。
+
+1. `.lean` 追加/改名/削除があるか
+   - `DkMath/RH/README.md` の「ファイル構成（実装）」を更新
+   - 必要なら `DkMath/RH.lean` の import を更新
+2. 公開 API（定義/補題名）が増減したか
+   - `DkMath/RH/README.md` の「主要 API」を更新
+   - `DkMath/RH/docs/README.md` の「現状 API」を更新
+   - `DkMath/RH/docs/HOPC-RH-Glossary.md` に語彙を追加
+3. CFBRC 連携 API/bridge が増減したか
+   - `DkMath/RH/docs/RH-CFBRC-Discussion.md` の
+     `Implementation Bridge` / `Bridge Usage` を更新
+4. フェーズ状態や次段計画が変わったか
+   - `DkMath/RH/docs/HOPC-RH-Roadmap.md` のフェーズ状態を更新
+   - `DkMath/RH/docs/HOPC-RH-OpenProblems.md` の優先度・状態を更新
+5. すべての作業で履歴を記録したか
+   - `DkMath/RH/docs/RH_Implements_History.md` にテンプレート形式で追記
+
 ## 参照
 
 - 方針: `HOPC-RH.txt`

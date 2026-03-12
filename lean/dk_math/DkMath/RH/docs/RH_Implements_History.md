@@ -794,3 +794,24 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-M1 として、`DkMath/RH/docs/HOPC-RH-OpenProblems.md` の OP-005 に対応し、
      文書更新チェックリスト（README/Roadmap/Glossary/OpenProblems/Discussion/History）
      を追記する。
+
+### 日時: 2026/03/13 03:09 JST: Phase RH-M1 を実装（OP-005 チェックリスト追加）
+
+1. 目的: OP-005 の「文書同期ルール」を抽象記述から運用可能な手順へ落とし、
+   更新漏れを定常的に減らす。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 追加内容:
+     - `OP-005 チェックリスト v1（最小運用）`
+     - 判定軸 5 項目（`.lean` 構成、公開 API、CFBRC bridge、Roadmap/OpenProblems 状態、History 記録）
+3. 結論: 文書同期の更新順序が固定され、
+   RH ドキュメント群の整合を保つ運用基準が明文化された。
+4. 失敗事例: なし（ドキュメント追記のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+   - チェックリストは最小版であり、必要に応じて項目追加可能。
+6. 次の課題:
+   - RH-M2 として、`HOPC-RH-Roadmap.md` に
+     OP-001/OP-003 の短期実装順（next sprint）を明記し、
+     コード実装フェーズへ戻る優先線を固定する。
