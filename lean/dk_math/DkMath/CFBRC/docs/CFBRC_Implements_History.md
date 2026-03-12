@@ -178,3 +178,34 @@
    - general `u` の global product = `GN(d,x,u)` は引き続き次段で拡張する。
 6. 次の課題:
    - general `u` の global bridge を仕上げ、`GN(d,x,w)` 一般形へ拡張する。
+
+### 日時: 2026/03/12 16:24 JST: general `u` の global bridge を実装し、`GN(d,x,w)` 一般形へ拡張
+
+1. 目的: `Homog(Φ_m)(X,Y)` の factor-level 接続を global product へ持ち上げ、`GN(d,x,w)` 一般形へ橋渡しする。
+2. 内容:
+   - `DkMath.CFBRC.CyclotomicProduct` に general `u` 用の橋渡し補題を追加:
+     - `cyclotomicShiftedEval_eq_cyclotomicEval_div_mul_pow`
+     - `cyclotomicDegreeSum_eq_pred`
+     - `geomSum_div_mul_pow_eq_cyclotomicPrimeCore`
+     - `cyclotomicDivisorsProductShifted_eq_geomSum_div_mul_powDegreeSum`
+     - `cyclotomicDivisorsProductShifted_eq_cyclotomicPrimeCore`
+     - `cyclotomicDivisorsProductShifted_eq_GN_of_ne_zero`
+   - 主要要点:
+     - 各因子で `eval_homogenize` を使い
+       `cyclotomicShiftedEval m x u = cyclotomicEval m ((x+u)/u) * u^(deg Φ_m)` を確立。
+     - divisor 上の次数和を `∑_{m|d, m≠1} φ(m) = d-1` に還元。
+     - `u ≠ 0` の下で product 側の `u^(d-1)` 因子を集約し、
+       幾何級数側と `cyclotomicPrimeCore d x u` を同一化。
+     - 既存 `mul_cyclotomicPrimeCore_eq_mul_GN` と左消去により
+       `cyclotomicDivisorsProductShifted d x u = GN d x u` を導出。
+   - `lake build DkMath.CFBRC.CyclotomicProduct` / `lake build DkMath.CFBRC` の成功を確認。
+3. 結論: `u=1` 断面に限らず、`u ≠ 0` で general `d` global bridge から `GN(d,x,w)` 一般形への完全同一化が成立した。
+4. 失敗事例:
+   - `Finset.sum_erase_add` の加算順（`sum + f a`）と目標（`f a + sum`）の不一致で一度失敗。
+   - `simpa [add_comm, add_left_comm, add_assoc]` で解消。
+5. 備考:
+   - 本補題は `[Field R]` と `u ≠ 0` を仮定している。
+   - `u = 0` 境界は別ケースとして切り出して扱う設計を維持。
+6. 次の課題:
+   - `cyclotomicDivisorsProductShifted_eq_GN_of_ne_zero` を
+     CFBRC 公開 API（`Bridge` 側）へ再輸出し、valuation 連携の一般 `u` 版を追加する。
