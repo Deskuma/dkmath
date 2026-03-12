@@ -136,3 +136,26 @@
    - 今回は kickoff として `u=1` の橋を先に固定し、一般 `u` の完全斉次橋は次ステップで拡張する。
 6. 次の課題:
    - `Homog(Φ_m)(X,Y)` の一般 `u` 接続を導入し、`GN(d,x,w)` 側への完全橋渡しを実装する。
+
+### 日時: 2026/03/12 16:06 JST: `Homog(Φ_m)(X,Y)` の一般 `u` 接続（factor-level）を導入
+
+1. 目的: general `u` 接続を導入するため、shifted evaluator を同次化評価へ寄せる。
+2. 内容:
+   - `DkMath.CFBRC.CyclotomicProduct` の `cyclotomicShiftedEval` を
+     `Polynomial.homogenize` の評価として再定義。
+   - `cyclotomicShiftedEval_one_eq_cyclotomicEval_add_one` を
+     `Polynomial.eval_homogenize` に基づく証明へ更新。
+   - 既存の `u=1` product bridge
+     (`cyclotomicDivisorsProductShifted_one_eq_geomSum`,
+      `cyclotomicDivisorsProductShifted_one_eq_cyclotomicPrimeCore`)
+     が新定義の下でも成立することを確認。
+   - `lake build DkMath.CFBRC.CyclotomicProduct` / `lake build DkMath.CFBRC` 成功。
+3. 結論: `Homog(Φ_m)(X,Y)` の一般 `u` 局所接続（factor-level）は導入完了。
+4. 失敗事例:
+   - 初期案で general `d` global bridge（product 側）を同時に進めたが、
+     補題依存が重く安定ビルドを崩したため、段階実装へ切り替えた。
+5. 備考:
+   - 今回は安定性優先で factor-level にスコープを絞り、
+     global bridge は次作業へ分離した。
+6. 次の課題:
+   - general `d` での global product と `GN(d,x,w)` の完全同一化補題を実装する。

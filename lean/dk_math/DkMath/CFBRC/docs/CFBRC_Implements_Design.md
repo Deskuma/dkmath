@@ -430,6 +430,12 @@ GN の再展開・係数比較に突っ込むのは最後の手段とする。
        `prod_cyclotomicEval_eq_geomSum`（divisors product bridge）を実装。
      - shifted 側は `u=1` の接続
        `cyclotomicDivisorsProductShifted_one_eq_cyclotomicPrimeCore` まで実装。
+   - 2026/03/12 追加更新:
+     - `cyclotomicShiftedEval` を `homogenize` 評価（`Homog(Φ_m)(X,Y)`）として再定義。
+     - `cyclotomicShiftedEval_one_eq_cyclotomicEval_add_one` を
+       `Polynomial.eval_homogenize` で接続。
+     - これにより一般 `u` の局所接続（factor-level）は導入済み。
+     - ただし general `d` の **global product = GN(d,x,w)** 完全同一化は未完（次ステップ）。
    - 非スコープ:
      - squarefree / valuation の一般次数強化
      - PrimeProvider 最終統合
