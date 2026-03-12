@@ -286,3 +286,32 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-F1 として、`eulerZetaFinite_onVertical` の停留 (`driftFreeAt`) 条件と
      有限和 API の零化条件 (`= 0`) の同値補題を追加する。
+
+### 日時: 2026/03/12 23:01 JST: Phase RH-F1 を実装（`driftFreeAt` と有限和零化の同値）
+
+1. 目的: RH-E2 の位相速度和表示を `driftFreeAt` 判定へ接続し、
+   停留条件を「有限局所寄与和 = 0」で直接扱える高位 API を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/EulerZetaLemmas.lean`
+   - 追加補題:
+     - `eulerZetaFinite_onVertical_ne_zero_of_ne`
+     - `driftFreeAt_eulerZetaFinite_onVertical_iff_factor_sum_eq_zero`
+   - 数学的要点:
+     - 各 `p ∈ S` で `w_p(t) ≠ 0` を仮定し、有限積の非零性を `Finset.prod_ne_zero_iff` で導出。
+     - 一般補題 `driftFreeAt_iff_phaseVel_eq_zero` と
+       RH-E2 の `phaseVel_eulerZetaFinite_onVertical_eq_factor_sum` を合成して
+       `driftFreeAt ↔ eulerZetaFactorPhaseVelFinite = 0` を確立。
+   - 検証:
+     - `lake build DkMath.RH.EulerZetaLemmas`
+     - `lake build DkMath.RH`
+     ともに成功。
+3. 結論: `eulerZetaFinite_onVertical` の停留判定が
+   finite Euler 観測量（局所寄与和）へ完全に還元され、HOPC-RH の可観測条件として利用可能になった。
+4. 失敗事例: なし（初回実装でビルド通過）。
+5. 備考:
+   - 非零前提はこれまでと同様に `w_p(t) ≠ 0` で統一。
+   - 枝問題を導入せず、既存の `phaseVel` 骨格内で停留条件を扱う設計を維持。
+6. 次の課題:
+   - RH-F2 として、`stationaryAt` / `nondegenerateStationaryAt` への写像補題を
+     `eulerZetaFinite_onVertical` について追加する。

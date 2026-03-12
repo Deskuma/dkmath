@@ -882,4 +882,37 @@ lemma phaseVel_eulerZetaFinite_onVertical_eq_factor_sum
   rw [hfun]
   exact phaseVel_eulerZetaFactorVerticalExpFinite_eq_sum (S := S) (σ := σ) (t := t) hS_ne
 
+/-- `w_p(t) ≠ 0` が各素数で成り立てば、有限 Euler 積本体も `t` で非零。 -/
+lemma eulerZetaFinite_onVertical_ne_zero_of_ne
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    eulerZetaFinite_onVertical S σ t ≠ 0 := by
+  rw [eulerZetaFinite_onVertical_eq_factorVerticalExpFinite (S := S) (σ := σ) (t := t)]
+  unfold eulerZetaFactorVerticalExpFinite
+  exact (Finset.prod_ne_zero_iff).2 (by
+    intro p hp
+    exact eulerZetaFactorVerticalExp_ne_zero (p := p.1) (σ := σ) (t := t) (hS_ne p hp))
+
+/--
+`eulerZetaFinite_onVertical` に対する停留同値。
+
+`S` 内の全素数で `w_p(t) ≠ 0` の下、
+`driftFreeAt` は `eulerZetaFactorPhaseVelFinite = 0` と同値。
+-/
+lemma driftFreeAt_eulerZetaFinite_onVertical_iff_factor_sum_eq_zero
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.driftFreeAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ↔
+      eulerZetaFactorPhaseVelFinite (S := S) σ t = 0 := by
+  have hz :
+      eulerZetaFinite_onVertical S σ t ≠ 0 :=
+    eulerZetaFinite_onVertical_ne_zero_of_ne (S := S) (σ := σ) (t := t) hS_ne
+  have hphase :
+      DkMath.RH.phaseVel (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t =
+        eulerZetaFactorPhaseVelFinite (S := S) σ t :=
+    phaseVel_eulerZetaFinite_onVertical_eq_factor_sum (S := S) (σ := σ) (t := t) hS_ne
+  simpa [hphase] using
+    (DkMath.RH.driftFreeAt_iff_phaseVel_eq_zero
+      (f := fun u : ℝ => eulerZetaFinite_onVertical S σ u) (t := t) hz)
+
 end DkMath.RH.EulerZeta
