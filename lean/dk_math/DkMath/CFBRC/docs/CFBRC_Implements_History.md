@@ -483,3 +483,29 @@
    - 既存の `triomino*` bridge 群を壊さず、`d=3` 向け補助 API として追記した。
 6. 次の課題:
    - 必要なら同様の wrapper を `boundary` 高位 API（`BoundarySide`）へ揃えて公開する。
+
+### 日時: 2026/03/12 20:45 JST: `BoundarySide` 高位 API へ同型 wrapper を追加公開
+
+1. 目的: 右/左個別の valuation bridge と同じ粒度で、`BoundarySide` 側にも
+   「gap 非除法前提」と「前提正規化（coprime + boundary 除法）」の二層 API を揃える。
+2. 内容:
+   - `DkMath/CFBRC/Bridge.lean` に高位 API を追加:
+     - `padicValNat_boundaryDiffPow_eq_boundaryGN_of_not_dvd_gap`
+     - `padicValNat_boundaryDiffPow_eq_boundaryCyclotomicPrimeCore_of_not_dvd_gap`
+   - 既存の `..._of_coprime_of_dvd_boundary` 2本を整理:
+     - `Nat.Coprime x u` と境界除法（`q ∣ u` or `q ∣ x`）から gap 非除法を導出
+     - 新しい `..._of_not_dvd_gap` 高位 API へ委譲する構成へ変更
+   - 左境界は変数入替え（`x ↔ u`）で既存右境界 bridge を再利用。
+   - 検証:
+     - `lake build DkMath.CFBRC.Bridge`
+     - `lake build DkMath.CFBRC`
+     ともに成功。
+3. 結論: `BoundarySide` 公開 API が
+   - 直接適用層（`not_dvd_gap`）
+   - 前提正規化層（`coprime + dvd_boundary`）
+   の二層で統一され、利用導線が右/左対称に揃った。
+4. 失敗事例: 特になし（既存 API との後方互換を保ったまま拡張できた）。
+5. 備考:
+   - 今回は valuation bridge を対象に統一。`boundary` 側の存在論 API は未追加。
+6. 次の課題:
+   - 必要なら `BoundarySide` に対応した存在論（primitive prime existence）高位 API も検討する。

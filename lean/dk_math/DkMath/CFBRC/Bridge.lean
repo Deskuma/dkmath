@@ -312,9 +312,68 @@ theorem padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_coprime_of_dvd
 /--
 高位 API（GN 版, side 指定）。
 
+`BoundarySide` と gap 非除法前提
+`match side with | right => ¬ q ∣ x | left => ¬ q ∣ u`
+を受け取り、左右個別の `..._of_not_dvd_boundary` を一つの入口に統合する。
+-/
+theorem padicValNat_boundaryDiffPow_eq_boundaryGN_of_not_dvd_gap
+    (side : BoundarySide) {d x u q : ℕ}
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : match side with
+      | .right => ¬ q ∣ x
+      | .left => ¬ q ∣ u) :
+    padicValNat q (boundaryDiffPow side d x u) =
+      padicValNat q (boundaryGN side d x u) := by
+  cases side with
+  | right =>
+      simpa [boundaryDiffPow, boundaryGN] using
+        (padicValNat_sub_pow_eq_padicValNat_GN_of_not_dvd_boundary
+          (d := d) (x := x) (u := u) (q := q) hd2 hx hu hqP hq_not_dvd_gap)
+  | left =>
+      have hswap :
+          padicValNat q ((u + x) ^ d - x ^ d) =
+            padicValNat q (GN d u x) :=
+        padicValNat_sub_pow_eq_padicValNat_GN_of_not_dvd_boundary
+          (d := d) (x := u) (u := x) (q := q) hd2 hu hx hqP hq_not_dvd_gap
+      simpa [boundaryDiffPow, boundaryGN, Nat.add_comm] using hswap
+
+/--
+高位 API（core 版, side 指定）。
+
+`BoundarySide` と gap 非除法前提
+`match side with | right => ¬ q ∣ x | left => ¬ q ∣ u`
+を受け取り、左右個別の core valuation bridge を一つの入口に統合する。
+-/
+theorem padicValNat_boundaryDiffPow_eq_boundaryCyclotomicPrimeCore_of_not_dvd_gap
+    (side : BoundarySide) {d x u q : ℕ}
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
+    (hqP : Nat.Prime q)
+    (hq_not_dvd_gap : match side with
+      | .right => ¬ q ∣ x
+      | .left => ¬ q ∣ u) :
+    padicValNat q (boundaryDiffPow side d x u) =
+      padicValNat q (boundaryCyclotomicPrimeCore side d x u) := by
+  cases side with
+  | right =>
+      simpa [boundaryDiffPow, boundaryCyclotomicPrimeCore] using
+        (padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_not_dvd_boundary
+          (p := d) (x := x) (u := u) (q := q) hd2 hx hu hqP hq_not_dvd_gap)
+  | left =>
+      have hswap :
+          padicValNat q ((u + x) ^ d - x ^ d) =
+            padicValNat q (cyclotomicPrimeCore d u x) :=
+        padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_not_dvd_boundary
+          (p := d) (x := u) (u := x) (q := q) hd2 hu hx hqP hq_not_dvd_gap
+      simpa [boundaryDiffPow, boundaryCyclotomicPrimeCore, Nat.add_comm] using hswap
+
+/--
+高位 API（GN 版, side 指定）。
+
 `BoundarySide` と境界除法前提
 `match side with | right => q ∣ u | left => q ∣ x`
-を受け取り、左右個別 wrapper を一つの入口に統合する。
+を受け取り、`Nat.Coprime x u` から gap 非除法へ正規化して
+`padicValNat_boundaryDiffPow_eq_boundaryGN_of_not_dvd_gap` に接続する。
 -/
 theorem padicValNat_boundaryDiffPow_eq_boundaryGN_of_coprime_of_dvd_boundary
     (side : BoundarySide) {d x u q : ℕ}
@@ -327,19 +386,29 @@ theorem padicValNat_boundaryDiffPow_eq_boundaryGN_of_coprime_of_dvd_boundary
       padicValNat q (boundaryGN side d x u) := by
   cases side with
   | right =>
-      simpa [boundaryDiffPow, boundaryGN] using
-        (padicValNat_sub_pow_eq_padicValNat_GN_of_coprime_of_dvd_right
-          (d := d) (x := x) (u := u) (q := q) hd2 hx hu hcop hqP hq_dvd_boundary)
+      have hq_not_dvd_gap : ¬ q ∣ x := by
+        intro hq_dvd_x
+        have hq_dvd_gcd : q ∣ Nat.gcd x u := Nat.dvd_gcd hq_dvd_x hq_dvd_boundary
+        rw [hcop.gcd_eq_one] at hq_dvd_gcd
+        exact Nat.Prime.not_dvd_one hqP hq_dvd_gcd
+      exact padicValNat_boundaryDiffPow_eq_boundaryGN_of_not_dvd_gap
+        (.right) (d := d) (x := x) (u := u) (q := q) hd2 hx hu hqP hq_not_dvd_gap
   | left =>
-      simpa [boundaryDiffPow, boundaryGN] using
-        (padicValNat_sub_pow_eq_padicValNat_GN_of_coprime_of_dvd_left
-          (d := d) (x := x) (u := u) (q := q) hd2 hx hu hcop hqP hq_dvd_boundary)
+      have hq_not_dvd_gap : ¬ q ∣ u := by
+        intro hq_dvd_u
+        have hq_dvd_gcd : q ∣ Nat.gcd x u := Nat.dvd_gcd hq_dvd_boundary hq_dvd_u
+        rw [hcop.gcd_eq_one] at hq_dvd_gcd
+        exact Nat.Prime.not_dvd_one hqP hq_dvd_gcd
+      exact padicValNat_boundaryDiffPow_eq_boundaryGN_of_not_dvd_gap
+        (.left) (d := d) (x := x) (u := u) (q := q) hd2 hx hu hqP hq_not_dvd_gap
 
 /--
 高位 API（core 版, side 指定）。
 
 `BoundarySide` と境界除法前提を受け取り、
-`boundaryDiffPow` から `boundaryCyclotomicPrimeCore` への valuation 接続を統一提供する。
+`Nat.Coprime x u` から gap 非除法へ正規化して
+`padicValNat_boundaryDiffPow_eq_boundaryCyclotomicPrimeCore_of_not_dvd_gap`
+に接続する。
 -/
 theorem padicValNat_boundaryDiffPow_eq_boundaryCyclotomicPrimeCore_of_coprime_of_dvd_boundary
     (side : BoundarySide) {d x u q : ℕ}
@@ -352,12 +421,20 @@ theorem padicValNat_boundaryDiffPow_eq_boundaryCyclotomicPrimeCore_of_coprime_of
       padicValNat q (boundaryCyclotomicPrimeCore side d x u) := by
   cases side with
   | right =>
-      simpa [boundaryDiffPow, boundaryCyclotomicPrimeCore] using
-        (padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_coprime_of_dvd_right
-          (p := d) (x := x) (u := u) (q := q) hd2 hx hu hcop hqP hq_dvd_boundary)
+      have hq_not_dvd_gap : ¬ q ∣ x := by
+        intro hq_dvd_x
+        have hq_dvd_gcd : q ∣ Nat.gcd x u := Nat.dvd_gcd hq_dvd_x hq_dvd_boundary
+        rw [hcop.gcd_eq_one] at hq_dvd_gcd
+        exact Nat.Prime.not_dvd_one hqP hq_dvd_gcd
+      exact padicValNat_boundaryDiffPow_eq_boundaryCyclotomicPrimeCore_of_not_dvd_gap
+        (.right) (d := d) (x := x) (u := u) (q := q) hd2 hx hu hqP hq_not_dvd_gap
   | left =>
-      simpa [boundaryDiffPow, boundaryCyclotomicPrimeCore] using
-        (padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_coprime_of_dvd_left
-          (p := d) (x := x) (u := u) (q := q) hd2 hx hu hcop hqP hq_dvd_boundary)
+      have hq_not_dvd_gap : ¬ q ∣ u := by
+        intro hq_dvd_u
+        have hq_dvd_gcd : q ∣ Nat.gcd x u := Nat.dvd_gcd hq_dvd_boundary hq_dvd_u
+        rw [hcop.gcd_eq_one] at hq_dvd_gcd
+        exact Nat.Prime.not_dvd_one hqP hq_dvd_gcd
+      exact padicValNat_boundaryDiffPow_eq_boundaryCyclotomicPrimeCore_of_not_dvd_gap
+        (.left) (d := d) (x := x) (u := u) (q := q) hd2 hx hu hqP hq_not_dvd_gap
 
 end DkMath.CFBRC
