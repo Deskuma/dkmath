@@ -159,3 +159,22 @@
      global bridge は次作業へ分離した。
 6. 次の課題:
    - general `d` での global product と `GN(d,x,w)` の完全同一化補題を実装する。
+
+### 日時: 2026/03/12 16:10 JST: `GN(d,x,w)` 完全同一化補題を実装（`u=1` 断面）
+
+1. 目的: 要求された `GN(d,x,w)` への complete identification を、現行スコープで厳密に実装する。
+2. 内容:
+   - `DkMath.CFBRC.CyclotomicProduct` に
+     `cyclotomicDivisorsProductShifted_one_eq_GN` を追加。
+   - 証明構成:
+     - `cyclotomicDivisorsProductShifted_one_eq_cyclotomicPrimeCore`
+     - `mul_cyclotomicPrimeCore_eq_mul_GN`
+     - `x ≠ 0` による左消去
+   - `lake build DkMath.CFBRC.CyclotomicProduct` / `lake build DkMath.CFBRC` 成功。
+3. 結論: general `d` の divisors product shifted は、`u=1` 断面で `GN d x 1` と完全同一化できた。
+4. 失敗事例: 特になし（追加補題は一発でビルド通過）。
+5. 備考:
+   - 現時点の「完全同一化」は `u=1` 断面で完了。
+   - general `u` の global product = `GN(d,x,u)` は引き続き次段で拡張する。
+6. 次の課題:
+   - general `u` の global bridge を仕上げ、`GN(d,x,w)` 一般形へ拡張する。
