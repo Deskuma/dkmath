@@ -320,3 +320,44 @@ CFBRC 側から RH 側を参照する際の、現行公開 API の最短導線:
 
 これで CFBRC 側の「prime-local contribution language」から、
 RH 側の停留・曲率 API へ直接接続できる。
+
+### Bridge Usage (RH-J2/J3)
+
+`DkMath.RH.CFBRCBridge` には、CFBRC primitive-prime existence から
+RH 側 singleton 停留判定へ落とす補題が 2 系統ある。
+
+- global 仮定版（J2）:
+  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge`
+  - 翻訳仮定として `hopcPrimeContributionSum ({p}) = 0` を要求
+- local 仮定版（J3）:
+  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge_of_local`
+  - 翻訳仮定として `hopcPrimeLocalContribution p = 0` を要求
+
+使い分けの目安:
+
+- 既に RH 側で sum 形式に統一している場合は global 仮定版
+- 素数ごとの局所評価を直接供給したい場合は local 仮定版
+
+最小 import:
+
+```lean
+import DkMath.RH.CFBRCBridge
+```
+
+利用イメージ（local 仮定版）:
+
+```lean
+open DkMath.RH.EulerZeta
+
+-- hq_dvd / hq_not_dvd_x が CFBRC 側から供給される想定
+have hlocal0 : hopcPrimeLocalContribution q σ t = 0 := by
+  -- provider 側で供給
+  sorry
+
+-- 結果は singleton 観測器の stationaryAt
+have hstat :
+    DkMath.RH.stationaryAt
+      (fun v : ℝ => eulerZetaFinite_onVertical ({⟨q, hqP⟩} : Finset {r // Nat.Prime r}) σ v) t := by
+  -- `..._of_local` で導出
+  sorry
+```

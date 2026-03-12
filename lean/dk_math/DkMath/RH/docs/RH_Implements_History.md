@@ -683,3 +683,27 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-J4 として、RH-J2/J3 bridge の利用例を
      `RH/docs/RH-CFBRC-Discussion.md` に短いコード断面で追加し、
      仮定セット（global 版 / local 版）の使い分けを明記する。
+
+### 日時: 2026/03/13 03:01 JST: Phase RH-J4 を実装（bridge 利用例の文書化）
+
+1. 目的: RH-J2/J3 で追加した bridge の使い分けを明文化し、
+   CFBRC 側ユーザーが仮定セット（global/local）を選びやすくする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+   - 追加断面:
+     - `Bridge Usage (RH-J2/J3)`
+   - 記載項目:
+     - global 仮定版 / local 仮定版の補題名
+     - 使い分け指針
+     - 最小 import
+     - local 仮定版の短い利用イメージ（Lean 断面）
+3. 結論: bridge 補題の実運用入口が文書上で可視化され、
+   CFBRC→RH 連携の導入コストが低下した。
+4. 失敗事例: なし（ドキュメント追記のみ）。
+5. 備考:
+   - 実装本体（`.lean`）への変更はなし。
+   - コード断面は `provider` 側の仮定供給を `sorry` で示す説明用サンプル。
+6. 次の課題:
+   - RH-K1 として、`RH/README.md` にも RH-J2/J3 bridge の項目を追記し、
+     実装トップ README から CFBRC 連携入口を直接辿れるようにする。
