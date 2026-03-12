@@ -32,6 +32,8 @@ import DkMath.RH  -- RH: Riemann Hypothesis Module
 import DkMath.UnitCycle  -- Unit Cycle Basics
 -- FLT: Fermat's Last Theorem Module
 import DkMath.FLT  -- FLT: Fermat's Last Theorem Module
+-- CFBRC: Cosmic Formula Binomial Real Complex -/
+import DkMath.CFBRC  -- CFBRC: Cosmic Formula Binomial Real Complex
 
 -- >|---|-----------|------------------|-------------------|-------------------|----------|---------
 
