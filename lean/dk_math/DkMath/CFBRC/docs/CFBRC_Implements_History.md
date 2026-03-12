@@ -92,3 +92,22 @@
    - 本フェーズは「橋渡し層の追加」に徹し、既存の数論証明本体（Zsigmondy / valuation）は改変していない。
 6. 次の課題:
    - Phase D（general `d` product 版へ進むかの設計判断）を開始する。
+
+### 日時: 2026/03/12 15:26 JST: Phase D 評価と分岐判断（general `d` product 版への進行判定）
+
+1. 目的: `CFBRC_Discussion.md` のロードマップに照らし、general `d` product 版へ進むかを技術的に評価して分岐を確定する。
+2. 内容:
+   - 評価基準を整理:
+     - prime core の exact bridge 完了（Phase A/B）
+     - Zsigmondy / valuation 層への API 接続完了（Phase C）
+     - `CFBRC_Discussion.md` の最終判定（prime の次は general `d` product）との整合
+   - 分岐案を比較:
+     - GO: general `d` の代数橋を先行実装
+     - HOLD: valuation / squarefree 完了まで保留
+   - 設計書へ分岐判断と次スコープを反映。
+3. 結論: Branch D-GO を採用。general `d` の product 版へ進む。
+4. 失敗事例: 実装エラーはなし（本作業は評価と意思決定の文書化）。
+5. 備考:
+   - 今回の決定は「代数橋は valuation 未完と独立に前進可能」という整理に基づく。
+6. 次の課題:
+   - general `d` 向けに `Homog(Φ_m)(X,Y)` 評価器と divisors product bridge の実装を開始する。

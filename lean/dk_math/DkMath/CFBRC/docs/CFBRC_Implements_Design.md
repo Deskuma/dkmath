@@ -411,3 +411,19 @@ GN の再展開・係数比較に突っ込むのは最後の手段とする。
 4. Phase D（次）:
    `CFBRC_Discussion.md` のロードマップに沿って、
    一般次数（general `d`）の product 版に進むかを評価して分岐判断する。
+   - 2026/03/12 評価結果:
+     - 進行条件は充足（Phase A/B/C 完了、`CFBRC` から valuation bridge まで接続済み）。
+     - `CFBRC_Discussion.md` の最終判定とも整合し、次は general `d` product 版が妥当。
+   - 分岐判断（Decision）: **GO**
+     - Branch D-GO（採用）:
+       general `d` の algebraic product bridge を Lean で実装する。
+     - Branch D-HOLD（不採用）:
+       valuation / squarefree 未完を理由に general `d` を保留する。
+       （理由: 現段階では代数橋は独立に前進可能で、保留メリットが小さい）
+   - D-GO の実装スコープ（次フェーズ）:
+     1. `Homog(Φ_m)(X,Y)` の評価器を最小定義。
+     2. `((X^d - Y^d)/(X-Y))` に対応する divisors product 版の橋渡し補題を実装。
+     3. `X := x+w`, `Y := w` 代入で `GN(d,x,w)` 側へ接続する。
+   - 非スコープ:
+     - squarefree / valuation の一般次数強化
+     - PrimeProvider 最終統合
