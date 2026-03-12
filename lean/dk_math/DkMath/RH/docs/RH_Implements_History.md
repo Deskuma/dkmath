@@ -315,3 +315,36 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-F2 として、`stationaryAt` / `nondegenerateStationaryAt` への写像補題を
      `eulerZetaFinite_onVertical` について追加する。
+
+### 日時: 2026/03/12 23:11 JST: Phase RH-F2 を実装（停留・非退化停留の高位 API）
+
+1. 目的: RH-F1 の `driftFreeAt ↔ finite-sum=0` を基盤に、
+   `stationaryAt` と `nondegenerateStationaryAt` で同じ判定を使える高位補題を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/EulerZetaLemmas.lean`
+   - 追加補題:
+     - `stationaryAt_eulerZetaFinite_onVertical_iff_factor_sum_eq_zero`
+     - `nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff`
+   - 数学的要点:
+     - 一般補題 `driftFreeAt_iff_stationaryAt` と RH-F1 の同値補題を合成し、
+       停留条件を局所寄与和の零化へ還元。
+     - 一般補題
+       `nondegenerateStationaryAt_iff_driftFreeAt_and_phaseCurv_ne_zero` を適用し、
+       非退化停留を
+       「局所寄与和 = 0 かつ `phaseCurv ≠ 0`」へ分解。
+   - 検証:
+     - `lake build DkMath.RH.EulerZetaLemmas`
+     - `lake build DkMath.RH`
+     ともに成功。
+3. 結論: `eulerZetaFinite_onVertical` に対して
+   停留/非退化停留の判定 API が有限局所寄与和ベースで統一され、
+   HOPC-RH 観測器としての利用性が向上した。
+4. 失敗事例: なし（初回実装でビルド通過）。
+5. 備考:
+   - 非零前提は引き続き `w_p(t) ≠ 0`（`p ∈ S`）で統一。
+   - 曲率は既存定義 `phaseCurv` をそのまま利用し、追加の解析仮定は導入していない。
+6. 次の課題:
+   - RH-G1 として、`eulerZetaFactorPhaseVelFinite` の明示式
+     （`∑_{p∈S} (log p - eulerZetaPhaseVelLocal p)`）を
+     停留補題群へ接続する整理補題を追加する。

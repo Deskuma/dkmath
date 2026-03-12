@@ -915,4 +915,56 @@ lemma driftFreeAt_eulerZetaFinite_onVertical_iff_factor_sum_eq_zero
     (DkMath.RH.driftFreeAt_iff_phaseVel_eq_zero
       (f := fun u : ℝ => eulerZetaFinite_onVertical S σ u) (t := t) hz)
 
+/--
+`eulerZetaFinite_onVertical` の停留条件は有限局所寄与和の零化と同値。
+-/
+lemma stationaryAt_eulerZetaFinite_onVertical_iff_factor_sum_eq_zero
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.stationaryAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ↔
+      eulerZetaFactorPhaseVelFinite (S := S) σ t = 0 := by
+  have hz :
+      eulerZetaFinite_onVertical S σ t ≠ 0 :=
+    eulerZetaFinite_onVertical_ne_zero_of_ne (S := S) (σ := σ) (t := t) hS_ne
+  have hsd :
+      DkMath.RH.stationaryAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ↔
+        DkMath.RH.driftFreeAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t := by
+    symm
+    exact DkMath.RH.driftFreeAt_iff_stationaryAt
+      (f := fun u : ℝ => eulerZetaFinite_onVertical S σ u) (t := t) hz
+  exact hsd.trans
+    (driftFreeAt_eulerZetaFinite_onVertical_iff_factor_sum_eq_zero
+      (S := S) (σ := σ) (t := t) hS_ne)
+
+/--
+`eulerZetaFinite_onVertical` の非退化停留条件。
+
+停留（有限局所寄与和の零化）と位相曲率非零の組へ分解される。
+-/
+lemma nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.nondegenerateStationaryAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t
+      ↔
+      eulerZetaFactorPhaseVelFinite (S := S) σ t = 0 ∧
+        DkMath.RH.phaseCurv (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ≠ 0 := by
+  have hz :
+      eulerZetaFinite_onVertical S σ t ≠ 0 :=
+    eulerZetaFinite_onVertical_ne_zero_of_ne (S := S) (σ := σ) (t := t) hS_ne
+  have hnd :
+      DkMath.RH.nondegenerateStationaryAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ↔
+        DkMath.RH.driftFreeAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ∧
+          DkMath.RH.phaseCurv (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ≠ 0 :=
+    DkMath.RH.nondegenerateStationaryAt_iff_driftFreeAt_and_phaseCurv_ne_zero
+      (f := fun u : ℝ => eulerZetaFinite_onVertical S σ u) (t := t) hz
+  constructor
+  · intro h
+    rcases hnd.mp h with ⟨hdrift, hcurv⟩
+    exact ⟨(driftFreeAt_eulerZetaFinite_onVertical_iff_factor_sum_eq_zero
+      (S := S) (σ := σ) (t := t) hS_ne).mp hdrift, hcurv⟩
+  · intro h
+    rcases h with ⟨hsum0, hcurv⟩
+    exact hnd.mpr ⟨(driftFreeAt_eulerZetaFinite_onVertical_iff_factor_sum_eq_zero
+      (S := S) (σ := σ) (t := t) hS_ne).mpr hsum0, hcurv⟩
+
 end DkMath.RH.EulerZeta
