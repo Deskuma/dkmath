@@ -509,3 +509,34 @@
    - 今回は valuation bridge を対象に統一。`boundary` 側の存在論 API は未追加。
 6. 次の課題:
    - 必要なら `BoundarySide` に対応した存在論（primitive prime existence）高位 API も検討する。
+
+### 日時: 2026/03/12 20:58 JST: `BoundarySide` 対応の存在論（primitive prime existence）高位 API を追加
+
+1. 目的: valuation だけでなく存在論（`∃ q`）も `BoundarySide` で左右統一し、
+   `right/left` それぞれを単一入口から利用できるようにする。
+2. 内容:
+   - `DkMath/CFBRC/Bridge.lean` に以下を追加:
+     - `exists_primitive_prime_factor_boundaryDiffPow_of_prime_exp_boundary_of_coprime`
+     - `exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime`
+   - API 仕様:
+     - 入力: `side`, `Nat.Prime d`, `3 ≤ d`, `0 < x`, `0 < u`, `Nat.Coprime x u`,
+       および side 依存の gap 条件（`right: ¬ d ∣ x`, `left: ¬ d ∣ u`）
+     - 出力: side 指定の差分式 / core を割る primitive prime `q` と、
+       `0 < k < d` に対する低次差分非除法（side 指定）を返す。
+   - 実装方針:
+     - `right` は既存の `_of_coprime` existence API へ直接委譲。
+     - `left` は `x,u` を入れ替えて既存 API を再利用し、
+       `Nat.add_comm` で差分式を side 形へ戻す。
+   - 検証:
+     - `lake build DkMath.CFBRC.Bridge`
+     - `lake build DkMath.CFBRC`
+     ともに成功。
+3. 結論: `BoundarySide` 高位 API が valuation 層だけでなく存在論層でも揃い、
+   CFBRC 公開導線の左右対称性が強化された。
+4. 失敗事例:
+   - 追加した theorem 名が長く style warning を出したため、
+     core 版の公開名を短縮（`...boundaryCore...`）して解消。
+5. 備考:
+   - primitive 条件は `boundaryDiffPow side k x u` で統一して返す。
+6. 次の課題:
+   - 必要なら `BoundarySide` 版の no-lift / squarefree provider 接続も同様に追加する。

@@ -178,6 +178,72 @@ side 指定に応じた `cyclotomicPrimeCore` 接続先。
   | .left => cyclotomicPrimeCore d u x
 
 /--
+`BoundarySide` で統一した primitive prime existence（差分形）。
+
+`side` に応じて gap 条件
+`right: ¬ d ∣ x`, `left: ¬ d ∣ u`
+を受け取り、`boundaryDiffPow side d x u` を割る原始素因子 `q` を返す。
+primitive 条件（`0 < k < d` で低次差分を割らない）も side 指定の差分式で返す。
+-/
+theorem exists_primitive_prime_factor_boundaryDiffPow_of_prime_exp_boundary_of_coprime
+    (side : BoundarySide) {d x u : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ boundaryDiffPow side d x u ∧
+      (match side with
+        | .right => ¬ q ∣ x
+        | .left => ¬ q ∣ u) ∧
+      (∀ {k : ℕ}, 0 < k → k < d → ¬ q ∣ boundaryDiffPow side k x u) := by
+  cases side with
+  | right =>
+      simpa [boundaryDiffPow] using
+        (exists_primitive_prime_factor_sub_pow_of_prime_exp_boundary_of_coprime
+          (d := d) (x := x) (u := u) hd_prime hd_ge hx hu hcop hpnd)
+  | left =>
+      rcases exists_primitive_prime_factor_sub_pow_of_prime_exp_boundary_of_coprime
+          (d := d) (x := u) (u := x) hd_prime hd_ge hu hx hcop.symm hpnd with
+        ⟨q, hqP, hq_dvd, hq_not_dvd_gap, hprim⟩
+      refine ⟨q, hqP, ?_, hq_not_dvd_gap, ?_⟩
+      · simpa [boundaryDiffPow, Nat.add_comm] using hq_dvd
+      · intro k hk0 hkd
+        simpa [boundaryDiffPow, Nat.add_comm] using (hprim hk0 hkd)
+
+/--
+`BoundarySide` で統一した primitive prime existence（core 形）。
+
+`boundaryCyclotomicPrimeCore side d x u` を割る原始素因子 `q` を返す。
+primitive 条件は side 指定の差分式で返す。
+-/
+theorem exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime
+    (side : BoundarySide) {d x u : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ boundaryCyclotomicPrimeCore side d x u ∧
+      (match side with
+        | .right => ¬ q ∣ x
+        | .left => ¬ q ∣ u) ∧
+      (∀ {k : ℕ}, 0 < k → k < d → ¬ q ∣ boundaryDiffPow side k x u) := by
+  cases side with
+  | right =>
+      simpa [boundaryCyclotomicPrimeCore, boundaryDiffPow] using
+        (exists_primitive_prime_factor_dvd_cyclotomicPrimeCore_of_prime_exp_boundary_of_coprime
+          (d := d) (x := x) (u := u) hd_prime hd_ge hx hu hcop hpnd)
+  | left =>
+      rcases exists_primitive_prime_factor_dvd_cyclotomicPrimeCore_of_prime_exp_boundary_of_coprime
+          (d := d) (x := u) (u := x) hd_prime hd_ge hu hx hcop.symm hpnd with
+        ⟨q, hqP, hq_dvd_core, hq_not_dvd_gap, hprim⟩
+      refine ⟨q, hqP, ?_, hq_not_dvd_gap, ?_⟩
+      · simpa [boundaryCyclotomicPrimeCore] using hq_dvd_core
+      · intro k hk0 hkd
+        simpa [boundaryDiffPow, Nat.add_comm] using (hprim hk0 hkd)
+
+/--
 valuation bridge（GN 版, 右境界）。
 
 前提 `q ∤ x` の下で
