@@ -133,6 +133,24 @@ theorem padicValNat_sub_pow_eq_padicValNat_GN_of_not_dvd_boundary
   simpa [Nat.add_sub_cancel_left] using hval_gap
 
 /--
+valuation の前提正規化 wrapper:
+`hcop : Nat.Coprime x u` と `q ∣ u` から `q ∤ x` を導いて GN 版 valuation bridge を適用する。
+-/
+theorem padicValNat_sub_pow_eq_padicValNat_GN_of_coprime_of_dvd_right
+    {d x u q : ℕ}
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
+    (hcop : Nat.Coprime x u) (hqP : Nat.Prime q) (hq_dvd_u : q ∣ u) :
+    padicValNat q ((x + u) ^ d - u ^ d) =
+      padicValNat q (GN d x u) := by
+  have hq_not_dvd_x : ¬ q ∣ x := by
+    intro hq_dvd_x
+    have hq_dvd_gcd : q ∣ Nat.gcd x u := Nat.dvd_gcd hq_dvd_x hq_dvd_u
+    rw [hcop.gcd_eq_one] at hq_dvd_gcd
+    exact Nat.Prime.not_dvd_one hqP hq_dvd_gcd
+  exact padicValNat_sub_pow_eq_padicValNat_GN_of_not_dvd_boundary
+    (d := d) (x := x) (u := u) (q := q) hd2 hx hu hqP hq_not_dvd_x
+
+/--
 valuation bridge:
 `q ∤ x` のとき、`(x+u)^p - u^p` の `q`-進付値は `cyclotomicPrimeCore p x u` のそれに一致。
 -/
@@ -152,5 +170,23 @@ theorem padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_not_dvd_bounda
     padicValNat q ((x + u) ^ p - u ^ p) = padicValNat q (GN p x u) := hval_GN
     _ = padicValNat q (cyclotomicPrimeCore p x u) := by
       rw [hcore_eq_GN]
+
+/--
+valuation の前提正規化 wrapper:
+`hcop : Nat.Coprime x u` と `q ∣ u` から `q ∤ x` を導いて core 版 valuation bridge を適用する。
+-/
+theorem padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_coprime_of_dvd_right
+    {p x u q : ℕ}
+    (hp2 : 2 ≤ p) (hx : 0 < x) (hu : 0 < u)
+    (hcop : Nat.Coprime x u) (hqP : Nat.Prime q) (hq_dvd_u : q ∣ u) :
+    padicValNat q ((x + u) ^ p - u ^ p) =
+      padicValNat q (cyclotomicPrimeCore p x u) := by
+  have hq_not_dvd_x : ¬ q ∣ x := by
+    intro hq_dvd_x
+    have hq_dvd_gcd : q ∣ Nat.gcd x u := Nat.dvd_gcd hq_dvd_x hq_dvd_u
+    rw [hcop.gcd_eq_one] at hq_dvd_gcd
+    exact Nat.Prime.not_dvd_one hqP hq_dvd_gcd
+  exact padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_not_dvd_boundary
+    (p := p) (x := x) (u := u) (q := q) hp2 hx hu hqP hq_not_dvd_x
 
 end DkMath.CFBRC

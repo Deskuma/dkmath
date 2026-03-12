@@ -285,3 +285,25 @@
    - `hx : 0 < x` は引き続き必要（`u < x + u` の導出に使用）。
 6. 次の課題:
    - `valuation` 側にも同様の「前提正規化 wrapper」が必要なら追加する。
+
+### 日時: 2026/03/12 16:59 JST: valuation 側の前提正規化 wrapper を追加
+
+1. 目的: valuation 連携でも `Bridge` 利用時の前提を自然化し、`q ∤ x` を毎回手で導かずに済む API を追加する。
+2. 内容:
+   - `DkMath.CFBRC.Bridge` に以下を追加:
+     - `padicValNat_sub_pow_eq_padicValNat_GN_of_coprime_of_dvd_right`
+     - `padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_coprime_of_dvd_right`
+   - どちらも前提:
+     - `hcop : Nat.Coprime x u`
+     - `hqP : Nat.Prime q`
+     - `hq_dvd_u : q ∣ u`
+   - 内部で
+     `q ∣ x -> q ∣ gcd x u -> q ∣ 1` による矛盾から `¬ q ∣ x` を導出し、
+     既存の `..._of_not_dvd_boundary` 補題へ委譲。
+   - `lake build DkMath.CFBRC.Bridge` / `lake build DkMath.CFBRC` 成功。
+3. 結論: valuation 側でも「前提正規化 wrapper」が追加され、`Coprime x u` と `q ∣ u` から直接 bridge 補題を呼べるようになった。
+4. 失敗事例: 特になし（wrapper 追加のみでビルド安定）。
+5. 備考:
+   - 今回は `q ∣ u` ケース向けの正規化。`q ∣ x` 側は対称版が必要なら別途追加可能。
+6. 次の課題:
+   - 必要なら対称版（`q ∣ x` から `¬ q ∣ u` を導く wrapper）も追加する。
