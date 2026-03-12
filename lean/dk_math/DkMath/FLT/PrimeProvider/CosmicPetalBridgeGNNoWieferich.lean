@@ -204,4 +204,56 @@ theorem triominoNoWieferichBridge_of_squarefree_GN
   exact triominoNoWieferichBridge_of_not_sq_GN <|
     triominoNoLiftGNBridge_of_squarefree_GN hSq
 
+/--
+PrimeProvider 側 no-lift 仮定（`GN 3 (c-b) b`）から
+`Main` が要求する `hS0_not_sq` 形へ移す wrapper。
+
+実体は `hS0_not_sq_of_noLift_cyclotomicPrimeCore_d3` への薄い接続で、
+`cyclotomicPrimeCore = GN`（`x = c-b > 0`）を使って no-lift 仮定を移し替える。
+-/
+lemma hS0_not_sq_of_noLift_GN_d3 {c b : ℕ}
+    (hNoLiftGN :
+      ∀ {q : ℕ}, Nat.Prime q → q ∣ c ^ 3 - b ^ 3 → ¬ q ∣ c - b →
+        ¬ q ^ 2 ∣ GN 3 (c - b) b) :
+    ∀ {q : ℕ}, Nat.Prime q → q ∣ c ^ 3 - b ^ 3 → ¬ q ∣ c - b →
+      ¬ q ^ 2 ∣ DkMath.FLT.PetalDetect.S0_nat c b := by
+  have hNoLiftCore :
+      ∀ {q : ℕ}, Nat.Prime q → q ∣ c ^ 3 - b ^ 3 → ¬ q ∣ c - b →
+        ¬ q ^ 2 ∣ DkMath.CFBRC.cyclotomicPrimeCore 3 (c - b) b := by
+    intro q hq hq_dvd hq_ndvd
+    have hbc : b < c := by
+      by_contra hbc_not
+      have hcb : c ≤ b := Nat.not_lt.mp hbc_not
+      have hdiff_zero : c - b = 0 := Nat.sub_eq_zero_of_le hcb
+      exact hq_ndvd (hdiff_zero ▸ dvd_zero q)
+    have hx : 0 < c - b := Nat.sub_pos_of_lt hbc
+    have hcore_eq_GN :
+        DkMath.CFBRC.cyclotomicPrimeCore 3 (c - b) b = GN 3 (c - b) b :=
+      DkMath.CFBRC.cyclotomicPrimeCore_eq_GN_nat
+        (p := 3) (x := c - b) (u := b) hx
+    intro hq2_core
+    have hq2_gn : q ^ 2 ∣ GN 3 (c - b) b := by
+      rw [← hcore_eq_GN]
+      exact hq2_core
+    exact (hNoLiftGN hq hq_dvd hq_ndvd) hq2_gn
+  intro q hq hq_dvd hq_ndvd
+  exact (hS0_not_sq_of_noLift_cyclotomicPrimeCore_d3
+    (c := c) (b := b) hNoLiftCore) hq hq_dvd hq_ndvd
+
+/--
+PrimeProvider 側 squarefree 仮定（`GN 3 (c-b) b`）から
+`hS0_not_sq` を得る wrapper。
+
+`Squarefree` から `¬ q^2 ∣ GN` を引き出して
+`hS0_not_sq_of_noLift_GN_d3` に渡すだけの glue。
+-/
+lemma hS0_not_sq_of_squarefree_GN_d3 {c b : ℕ}
+    (hSq : Squarefree (GN 3 (c - b) b))
+    (hGN_ne : GN 3 (c - b) b ≠ 0) :
+    ∀ {q : ℕ}, Nat.Prime q → q ∣ c ^ 3 - b ^ 3 → ¬ q ∣ c - b →
+      ¬ q ^ 2 ∣ DkMath.FLT.PetalDetect.S0_nat c b := by
+  apply hS0_not_sq_of_noLift_GN_d3 (c := c) (b := b)
+  intro q hq _hq_dvd _hq_ndvd
+  exact DkMath.NumberTheory.Gcd.not_sq_dvd_of_squarefree hq hGN_ne hSq
+
 end DkMath.FLT
