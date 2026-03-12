@@ -59,4 +59,41 @@ theorem exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge
         (hhopc0 p hq_dvd hq_not_dvd_x)
   exact ⟨p, hstat⟩
 
+/--
+RH-J3: local 仮定版 bridge。
+
+`hopcPrimeContributionSum` ではなく `hopcPrimeLocalContribution` を仮定し、
+singleton wrapper で停留へ落とす。
+-/
+theorem exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge_of_local
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : ¬ d ∣ x)
+    (hwnz :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ ((x + u) ^ d - u ^ d) → ¬ p.1 ∣ x →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hhopc_local0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ ((x + u) ^ d - u ^ d) → ¬ p.1 ∣ x →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ =>
+          eulerZetaFinite_onVertical ({p} : Finset {q // Nat.Prime q}) σ v) t := by
+  rcases DkMath.CFBRC.exists_primitive_prime_factor_sub_pow_of_prime_exp_boundary_of_coprime
+      (d := d) (x := x) (u := u) hd_prime hd_ge hx hu hcop hpnd with
+    ⟨q, hqP, hq_dvd, hq_not_dvd_x, _hprim⟩
+  let p : {q // Nat.Prime q} := ⟨q, hqP⟩
+  have hp_ne :
+      eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0 :=
+    hwnz p hq_dvd hq_not_dvd_x
+  have hlocal0 :
+      hopcPrimeLocalContribution p.1 σ t = 0 :=
+    hhopc_local0 p hq_dvd hq_not_dvd_x
+  exact ⟨p,
+    stationaryAt_eulerZetaFinite_onVertical_singleton_of_hopcPrimeLocalContribution_eq_zero
+      (p := p) (σ := σ) (t := t) hp_ne hlocal0⟩
+
 end DkMath.RH.EulerZeta

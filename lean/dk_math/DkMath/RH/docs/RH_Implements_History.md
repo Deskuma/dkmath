@@ -657,3 +657,29 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-J3 として、RH-J2 の翻訳仮定を弱めるため
      singleton で再利用可能な `hS_ne` / `hopcPrimeContributionSum=0` 供給 wrapper を
      `EulerZetaLemmas.lean` 側に追加する。
+
+### 日時: 2026/03/13 02:55 JST: Phase RH-J3 を実装（singleton wrapper と local 仮定版 bridge）
+
+1. 目的: RH-J2 bridge の翻訳仮定を弱めるため、
+   singleton 観測器で再利用可能な wrapper を RH 側へ追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/EulerZetaLemmas.lean`
+     - `DkMath/RH/CFBRCBridge.lean`
+   - 追加補題（`EulerZetaLemmas.lean`）:
+     - `eulerZeta_exp_s_log_p_sub_one_ne_zero_on_singleton`
+     - `hopcPrimeContributionSum_singleton`
+     - `stationaryAt_eulerZetaFinite_onVertical_singleton_of_hopcPrimeLocalContribution_eq_zero`
+   - 追加補題（`CFBRCBridge.lean`）:
+     - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge_of_local`
+       （`hopcPrimeContributionSum=0` ではなく `hopcPrimeLocalContribution=0` を仮定）
+3. 結論: singleton での前提供給が補題化され、
+   CFBRC→RH bridge に対する翻訳仮定を local 版へ弱化できた。
+4. 失敗事例: なし（最終的に全ビルド通過）。
+5. 備考:
+   - 既存の RH-J2 補題は互換のため維持。
+   - local 版 bridge は RH 側 wrapper を再利用して構成。
+6. 次の課題:
+   - RH-J4 として、RH-J2/J3 bridge の利用例を
+     `RH/docs/RH-CFBRC-Discussion.md` に短いコード断面で追加し、
+     仮定セット（global 版 / local 版）の使い分けを明記する。

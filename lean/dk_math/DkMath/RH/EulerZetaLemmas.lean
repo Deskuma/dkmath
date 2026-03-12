@@ -1121,4 +1121,42 @@ lemma nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContribu
   exact nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff_sum_log_sub_phaseVelLocal
     (S := S) (σ := σ) (t := t) hS_ne
 
+/-- singleton 集合での `w_p ≠ 0` 前提供給 wrapper。 -/
+lemma eulerZeta_exp_s_log_p_sub_one_ne_zero_on_singleton
+    (p : {q // Nat.Prime q}) (σ t : ℝ)
+    (hp_ne : eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    ∀ r ∈ ({p} : Finset {q // Nat.Prime q}),
+      eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 := by
+  intro r hr
+  have hrp : r = p := Finset.mem_singleton.mp hr
+  simpa [hrp] using hp_ne
+
+/-- singleton 集合では HOPC 寄与総和は局所寄与に簡約される。 -/
+@[simp] lemma hopcPrimeContributionSum_singleton
+    (p : {q // Nat.Prime q}) (σ t : ℝ) :
+    hopcPrimeContributionSum (S := ({p} : Finset {q // Nat.Prime q})) σ t =
+      hopcPrimeLocalContribution p.1 σ t := by
+  simp [hopcPrimeContributionSum]
+
+/--
+singleton 観測器版の停留判定 wrapper（local 寄与ゼロ仮定）。
+
+`w_p(σ,t) ≠ 0` と `hopcPrimeLocalContribution p σ t = 0` から
+`stationaryAt` を得る。
+-/
+lemma stationaryAt_eulerZetaFinite_onVertical_singleton_of_hopcPrimeLocalContribution_eq_zero
+    (p : {q // Nat.Prime q}) (σ t : ℝ)
+    (hp_ne : eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hlocal0 : hopcPrimeLocalContribution p.1 σ t = 0) :
+    DkMath.RH.stationaryAt
+      (fun v : ℝ => eulerZetaFinite_onVertical ({p} : Finset {q // Nat.Prime q}) σ v) t := by
+  have hS_ne :
+      ∀ r ∈ ({p} : Finset {q // Nat.Prime q}),
+        eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 :=
+    eulerZeta_exp_s_log_p_sub_one_ne_zero_on_singleton (p := p) (σ := σ) (t := t) hp_ne
+  exact
+    (stationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero
+      (S := ({p} : Finset {q // Nat.Prime q})) (σ := σ) (t := t) hS_ne).2
+      (by simpa using hlocal0)
+
 end DkMath.RH.EulerZeta
