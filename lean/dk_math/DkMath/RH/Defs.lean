@@ -40,6 +40,18 @@ noncomputable def phaseUnwrap (f : ℝ → ℂ) (t0 θ0 : ℝ) (t : ℝ) : ℝ :
 def driftFreeAt (f : ℝ → ℂ) (t : ℝ) : Prop :=
   driftFreeLocal (f t) (deriv f t)
 
+/-- 位相曲率（2 次情報）: phaseVel の t 微分 -/
+noncomputable def phaseCurv (f : ℝ → ℂ) (t : ℝ) : ℝ :=
+  deriv (phaseVel f) t
+
+/-- 位相停留点: 位相速度が 0 になる点 -/
+def stationaryAt (f : ℝ → ℂ) (t : ℝ) : Prop :=
+  phaseVel f t = 0
+
+/-- 非退化停留点: 位相停留かつ位相曲率が非零 -/
+def nondegenerateStationaryAt (f : ℝ → ℂ) (t : ℝ) : Prop :=
+  stationaryAt f t ∧ phaseCurv f t ≠ 0
+
 end DkMath.RH
 
 -- ----------------------------------------------------------------------------

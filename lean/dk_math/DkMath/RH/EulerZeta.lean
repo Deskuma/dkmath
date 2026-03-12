@@ -17,6 +17,7 @@ namespace DkMath.RH.EulerZeta
 
 open DkMath.Basic
 open scoped Real
+open scoped BigOperators
 open Complex
 
 /-
@@ -93,7 +94,77 @@ noncomputable def eulerZetaPhase (p : ℕ) (σ t : ℝ) : ℝ :=
   Complex.arg (eulerZeta_exp_s_log_p_sub_one p σ t)
 
 -- ============================================================================
--- 4. 収束性の述語
+-- 4. 有限 Euler 積（HOPC-RH 観測量）
+-- ============================================================================
+
+/-- 有限素数集合で切った Euler-zeta 因子の複素積。 -/
+noncomputable def eulerZetaFinite (S : Finset {p // Nat.Prime p}) (s : ℂ) : ℂ :=
+  ∏ p ∈ S, eulerZetaFactor p.1 s
+
+/-- 縦線上の有限 Euler 積。 -/
+noncomputable def eulerZetaFinite_onVertical
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ) : ℂ :=
+  eulerZetaFinite S (vertical σ t)
+
+/-- magnitude 因子の有限積（観測用）。 -/
+noncomputable def eulerZetaMagFinite
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ) : ℝ :=
+  ∏ p ∈ S, eulerZetaFactorMag p.1 σ t
+
+/-- `w_p(t) = exp((σ+it)log p)-1` の有限積（位相観測の母体）。 -/
+noncomputable def eulerZetaExpSubOneFinite
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ) : ℂ :=
+  ∏ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t
+
+/-- 縦線上 Euler 因子の exp 形（`exp / (exp-1)`）。 -/
+noncomputable def eulerZetaFactorVerticalExp (p : ℕ) (σ t : ℝ) : ℂ :=
+  Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) /
+    eulerZeta_exp_s_log_p_sub_one p σ t
+
+/-- exp 形 Euler 因子の有限積。 -/
+noncomputable def eulerZetaFactorVerticalExpFinite
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ) : ℂ :=
+  ∏ p ∈ S, eulerZetaFactorVerticalExp p.1 σ t
+
+/--
+素数 `p` に対する局所位相速度寄与。
+
+`w_p(t) = exp((σ+it)log p) - 1` に `phaseVel` を適用した値。
+-/
+noncomputable def eulerZetaPhaseVelLocal (p : ℕ) (σ t : ℝ) : ℝ :=
+  DkMath.RH.phaseVel (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t
+
+/-- 有限素数集合に対する局所位相速度寄与の和。 -/
+noncomputable def eulerZetaPhaseVelFinite
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ) : ℝ :=
+  ∑ p ∈ S, eulerZetaPhaseVelLocal p.1 σ t
+
+/-- exp 形 Euler 因子の局所位相速度寄与。 -/
+noncomputable def eulerZetaFactorPhaseVelLocal (p : ℕ) (σ t : ℝ) : ℝ :=
+  DkMath.RH.phaseVel (fun u : ℝ => eulerZetaFactorVerticalExp p σ u) t
+
+/-- exp 形 Euler 因子の有限位相速度和。 -/
+noncomputable def eulerZetaFactorPhaseVelFinite
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ) : ℝ :=
+  ∑ p ∈ S, eulerZetaFactorPhaseVelLocal p.1 σ t
+
+/--
+HOPC-RH における素数 `p` の局所位相寄与。
+
+`log p - phaseVel(w_p)` を 1 つの観測量として束ねた名前。
+-/
+noncomputable def hopcPrimeLocalContribution (p : ℕ) (σ t : ℝ) : ℝ :=
+  Real.log (p : ℝ) - eulerZetaPhaseVelLocal p σ t
+
+/--
+HOPC-RH の有限素数集合に対する局所位相寄与総和。
+-/
+noncomputable def hopcPrimeContributionSum
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ) : ℝ :=
+  ∑ p ∈ S, hopcPrimeLocalContribution p.1 σ t
+
+-- ============================================================================
+-- 5. 収束性の述語
 -- ============================================================================
 
 /-- magnitude 版の "Euler-zeta" が収束するという述語

@@ -1,0 +1,129 @@
+# HOPC-RH Roadmap
+
+`#HOPC-RH`（Holo Orthogonal Phase–Curvature method）の
+Lean 実装ロードマップを 1 枚で管理するための文書。
+
+## 目的
+
+- RH の即時証明主張ではなく、観測器 API を段階的に整備する。
+- prime-local contribution 言語で CFBRC と接続できる構成を維持する。
+- `arg` の枝問題を避け、`phaseVel` / `phaseUnwrap` 中心で進める。
+
+## 実装レイヤ
+
+1. 位相ドリフト骨格
+2. 単一素数因子 API
+3. 曲率 API
+4. 有限 Euler 積観測 API
+5. HOPC 公開名（CFBRC 連携）API
+6. docs / glossary / open problems
+
+## フェーズと状態
+
+### A. 用語・基礎定義
+
+- 目標:
+  - `phaseVel`, `driftFreeAt`, `phaseCurv` 等の基礎語彙を固定
+- 状態: 完了
+- 主ファイル:
+  - `DkMath/RH/Defs.lean`
+  - `DkMath/RH/Lemmas.lean`
+
+### B. 単一素数因子解析
+
+- 目標:
+  - `w_p(t) = exp((σ+it)log p) - 1` の導関数・位相速度補題
+- 状態: 完了
+- 主ファイル:
+  - `DkMath/RH/EulerZetaLemmas.lean`
+
+### C. 曲率（2 次情報）
+
+- 目標:
+  - `phaseCurv` と停留・非退化停留 API
+- 状態: 完了
+- 主ファイル:
+  - `DkMath/RH/Defs.lean`
+  - `DkMath/RH/Lemmas.lean`
+  - `DkMath/RH/EulerZetaLemmas.lean`
+
+### D. 有限 Euler 積（積→和）
+
+- 目標:
+  - 有限積の位相速度を局所寄与有限和へ落とす
+- 状態: 完了
+- 主ファイル:
+  - `DkMath/RH/EulerZeta.lean`
+  - `DkMath/RH/Lemmas.lean`
+  - `DkMath/RH/EulerZetaLemmas.lean`
+
+### E. `eulerZetaFinite_onVertical` 本体接続
+
+- 目標:
+  - 本体側でも停留/非退化停留を有限寄与和で判定
+- 状態: 完了
+- 主ファイル:
+  - `DkMath/RH/EulerZetaLemmas.lean`
+
+### F. 明示和への正規化
+
+- 目標:
+  - `∑ (log p - phaseVel(w_p))` 形へ API を統一
+- 状態: 完了
+- 主ファイル:
+  - `DkMath/RH/EulerZetaLemmas.lean`
+
+### G. HOPC 公開名（CFBRC 導線）
+
+- 目標:
+  - `hopcPrimeLocalContribution`
+  - `hopcPrimeContributionSum`
+  - 停留判定 wrapper の公開
+- 状態: 完了
+- 主ファイル:
+  - `DkMath/RH/EulerZeta.lean`
+  - `DkMath/RH/EulerZetaLemmas.lean`
+
+### H. 文書同期（Discussion / README）
+
+- 目標:
+  - 議論文書から実装 API へ直接ジャンプ可能にする
+- 状態: 完了
+- 主ファイル:
+  - `DkMath/RH/README.md`
+  - `DkMath/RH/docs/README.md`
+  - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+
+### I. 次段（未完）
+
+- 目標候補:
+  - `HOPC-RH-Glossary.md`（用語集, 作成済み）
+  - `HOPC-RH-OpenProblems.md`（未解決タスク, 作成済み）
+  - finite から infinite への接続条件整理（収束・非零・停留の整合）
+- 状態: 一部完了（Glossary/OpenProblems 完了）
+
+## 参照導線
+
+- 方針本文: `HOPC-RH.txt`
+- 用語集: `HOPC-RH-Glossary.md`
+- 未解決タスク: `HOPC-RH-OpenProblems.md`
+- CFBRC 連携議論: `RH-CFBRC-Discussion.md`
+- 詳細解説: `README.md`
+- 実装履歴: `RH_Implements_History.md`
+
+## Next Sprint（短期実装順）
+
+次スプリントは OP-003 を先行し、OP-001 を後続で詰める。
+
+1. OP-003（CFBRC 連携の実定理）を先行
+   - 目標: RH-J2/J3 bridge を「翻訳仮定つき存在補題」から
+     再利用しやすい bridge API へ段階拡張
+   - 具体: singleton から small finite-set への持ち上げを最初の到達点にする
+2. OP-001（finite→infinite 接続）を後続
+   - 目標: `hopcPrimeContributionSum` の極限接続条件（収束/極限交換）を整理
+   - 具体: まずは条件列挙と補題インタフェース設計を先に固定する
+
+理由:
+
+- OP-003 を先に進めると、CFBRC→RH の実橋が太くなり、
+  OP-001 で必要な観測量設計の優先軸が明確になるため。

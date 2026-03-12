@@ -1,0 +1,203 @@
+# HOPC-RH: Holo Orthogonal Phase–Curvature method for RH
+
+ここでの目的は、一般のリーマン予想をいきなり証明したと主張することではありません。
+目的は、#HOPC-RH という研究方針を Lean 上で明確な定義・補題・定理・実験計画へ落とし込むことです。
+
+========================
+1. HOPC-RH の作業定義
+========================
+
+HOPC-RH = Holo Orthogonal Phase–Curvature method
+日本語では「偏角直交・停留・曲率法」と呼ぶ。
+
+このタグの意味は、ゼータや Euler 因子の prime-local な寄与を、
+単なる複素数評価ではなく
+
+- 位相速度
+- 位相の停留
+- 曲率
+- 局所寄与の干渉
+- それらの総和としての零点候補
+
+という観点で整理する方法論である。
+
+HOPC-RH は、現在の `DkMath.RH` 実装においては
+「位相ドリフト骨格」と「EulerZeta の magnitude / phase 分離」
+を中心に進める。
+
+========================
+2. 現在の RH 実装の理解
+========================
+
+Codex はまず、現行実装を次のように理解せよ。
+
+A. 位相ドリフト骨格
+- `Defs.lean`
+  - `vertical (σ t)` : 縦線 `σ + i t`
+  - `torque (z dz)` : 位相変化の分子
+  - `denom z` : `re^2 + im^2`
+  - `phaseVel f t := Im((f'(t))/f(t))`
+  - `phaseUnwrap` : 積分による位相のアンラップ
+  - `driftFreeAt` : 位相ドリフト消失
+
+- `Lemmas.lean`
+  - `Im(dz / z)` と `torque / normSq` の等価
+  - `driftFreeAt ↔ phaseVel = 0`
+  - `phaseVel = Im(f' * conj f) / normSq`
+
+- `Theorems.lean`
+  - `phaseUnwrap` の微分が `phaseVel` に戻ること
+
+B. EulerZeta 層
+- `EulerZeta.lean`
+  - `w(p,σ,t) := exp((σ+it) log p) - 1`
+  - `a_p(σ,t) := exp(σ log p) / ‖w(p,σ,t)‖`
+  - `eulerZetaMag := ∏' a_p`
+  - `eulerZetaPhase := arg(w)`
+
+- `EulerZetaLemmas.lean`
+  - 因子定義の等価変形
+  - `vertical` と `log p` の基本補題
+  - 今後の評価のための補題群
+
+- `EulerZetaConvergence.lean`
+  - `w ≠ 0`
+  - `‖a_p - 1‖ ≤ 2 / p^σ`
+  - `σ > 1` のもとで無限積収束
+  - `0 < eulerZetaMag`
+
+========================
+3. この研究の中心思想
+========================
+
+HOPC-RH の中心思想は次である。
+
+(1) `arg` を雑に多用しない
+枝問題を避けるため、位相は可能な限り
+`phaseVel` と `phaseUnwrap` によって扱う。
+
+(2) magnitude と phase を分業する
+- magnitude は収束・有界性・正値を担当
+- phase は零点検出・停留・共鳴を担当
+
+(3) prime-local contribution の言語を作る
+各素数 p の寄与を
+- 振幅
+- 位相
+- 位相速度
+- 曲率
+として整理し、
+有限 Euler 積から無限 Euler 積へ上げていく。
+
+(4) RH の主張を急がない
+現段階では「零点の完全証明」を主張しない。
+まずは
+- どの量が観測対象か
+- どの量が Lean で定義済みか
+- どの補題が不足しているか
+を明確にする。
+
+========================
+4. CFBRC / GN との関係
+========================
+
+HOPC-RH は CFBRC と無関係ではない。
+
+CFBRC は
+- べき差
+- `GN`
+- 円分多項式
+- valuation
+- primitive prime
+を橋渡しする。
+
+RH 側では、これを
+- prime-local phase
+- prime-local magnitude
+- 局所共鳴
+- 局所停留
+の言語へ移したい。
+
+重要:
+Codex は「CFBRC から RH がすぐ証明できる」とは書かないこと。
+正しくは、
+「CFBRC と RH はどちらも prime-local contribution の理論であり、
+その共通言語を作ることで FLT / ABC / RH の横断的理解を狙う」
+である。
+
+========================
+5. Codex に期待する仕事
+========================
+
+Codex が優先して行うべき仕事は、次の順である。
+
+優先度 A. 用語と定義の整備
+- 既存定義の再命名や docstring 強化
+- `phaseVel`, `phaseUnwrap`, `driftFreeAt`, `torque` の数学的意味を明記
+- HOPC-RH 用語集を `docs` に起こす
+
+優先度 B. 単一素数因子の解析 API
+- `w(p,σ,t)` の導関数
+- `arg` を直接使わない位相速度表示
+- `phaseVel` を `w_p` に適用した補題
+- 停留条件 `phaseVel = 0` の意味づけ
+
+優先度 C. 曲率 API
+- 位相速度の微分
+- 2 階微分または曲率様量の定義
+- 「停留」と「曲率」の組を Lean で扱える形にする
+
+優先度 D. 有限 Euler 積版 HOPC
+- 有限個の素数の積に対する phase / magnitude の合成
+- `log` を取ったときに積が和に落ちる構図の整理
+- prime-local contribution の総和としての観測量を作る
+
+優先度 E. RH docs の明文化
+- `RH/docs/HOPC-RH-Roadmap.md`
+- `RH/docs/HOPC-RH-Glossary.md`
+- `RH/docs/HOPC-RH-OpenProblems.md`
+
+========================
+6. Codex が避けるべきこと
+========================
+
+以下は禁止。
+
+- 「RH は証明された」と書くこと
+- 数値実験だけで定理化した気になること
+- `arg` の枝問題を無視して議論を進めること
+- CFBRC と RH の類似を、即座に等価や同値と断定すること
+- FLT / ABC / Collatz への応用を誇張すること
+- 未証明の推測を theorem として固定すること
+
+========================
+7. 出力形式の希望
+========================
+
+Codex の返答は次の形式を基本とする。
+
+1. 現状認識
+2. 今回触るファイル
+3. 追加する定義 / 補題 / 定理
+4. それが HOPC-RH 全体でどの役割を持つか
+5. Lean コード草案
+6. build / import 影響
+7. 未解決点
+
+定義追加や定理追加のときは、必ず
+「これは定義」「これは補題」「これは予想的メモ」
+を区別すること。
+
+========================
+8. 現時点での最重要タスク
+========================
+
+最重要タスクは次の 3 本。
+
+- 単一素数因子 `w(p,σ,t)` に対する位相速度の明示補題を作る
+- 曲率または 2 次の位相情報を導入する
+- 有限 Euler 積で HOPC 観測量を定義する
+
+これにより、#HOPC-RH は
+単なるアイデア名ではなく、
+Lean で成長可能な理論モジュール群になる。

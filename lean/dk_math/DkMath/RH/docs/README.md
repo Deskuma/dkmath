@@ -1,7 +1,7 @@
 # DkMath.RH：位相ドリフト骨格 + EulerZeta（現状の全コード）
 
 - Authors: D. and Kenro (ChatGPT-5.2)
-- Last updated: 2026/01/21 15:55
+- Last updated: 2026/03/13 00:31
 
 このディレクトリは、リーマンゼータ関数に差し込む前に必要な
 
@@ -15,6 +15,12 @@
 1. `arg`（偏角）を直接扱わず、**位相を積分で定義（アンラップ）** して枝問題を回避する。
 2. 位相付き Euler 因子を「magnitude（大きさ）」と「phase（位相）」に分解し、
    まず magnitude の無限積を **σ > 1 で収束する**ことまで Lean で確定する。
+
+このファイルは詳細版（理論背景・証明戦略）であり、
+入口と API 一覧は `DkMath/RH/README.md` を優先参照とする。
+実装計画の 1 枚版は `HOPC-RH-Roadmap.md` を参照。
+語彙の定義域整理は `HOPC-RH-Glossary.md` を参照。
+未解決タスク一覧は `HOPC-RH-OpenProblems.md` を参照。
 
 ---
 
@@ -134,6 +140,50 @@ $$
 2. 近似評価：`‖a_p(σ,t) - 1‖ ≤ 2 / p^σ`（σ > 1）。
 3. `∑ 1/n^σ`（p-series）へ比較して `Summable` を得る。
 4. Mathlib の一般定理で `Multipliable` と `tprod` の正値へ落とす。
+
+---
+
+## 現状 API（HOPC 公開名・RH-K2 時点）
+
+CFBRC 連携で使う公開名は次を基準とする。
+
+- 観測量（`EulerZeta.lean`）
+  - `hopcPrimeLocalContribution`
+  - `hopcPrimeContributionSum`
+- 同一化（`EulerZetaLemmas.lean`）
+  - `eulerZetaFactorPhaseVelFinite_eq_hopcPrimeContributionSum`
+- 停留判定（`EulerZetaLemmas.lean`）
+  - `driftFreeAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero`
+  - `stationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero`
+  - `nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum`
+- CFBRC 連携 bridge（`CFBRCBridge.lean`）
+  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge`
+  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge_of_local`
+
+補足:
+- 上記公開名は明示和
+  `∑_{p∈S} (log p - phaseVel(w_p))`
+  の alias/wrapper 層として設計されている。
+- `RH-CFBRC-Discussion.md` の `Implementation Bridge (RH-H1/H2)` と対応。
+
+---
+
+## 利用例（import）
+
+RH 側 API を使う最小例:
+
+```lean
+import DkMath.RH.EulerZeta
+import DkMath.RH.EulerZetaLemmas
+```
+
+CFBRC 連携 bridge まで使う例:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+```
 
 ---
 
