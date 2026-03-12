@@ -500,3 +500,26 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-I1 として、`DkMath/RH/docs/README.md` の「現状 API」節も
      HOPC 公開名に同期し、重複記述を避けた文書構成へ整える。
+
+### 日時: 2026/03/13 00:29 JST: Phase RH-I1 を実装（docs README の API 同期）
+
+1. 目的: `DkMath/RH/docs/README.md` を RH-H1/H2 の公開 API に同期し、
+   直下 README との重複を減らした文書役割分担を明確化する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/README.md`
+   - 変更点:
+     - 更新日時を現行時刻へ更新。
+     - 「詳細版である」旨と、入口/API は `DkMath/RH/README.md` を優先参照する旨を追記。
+     - 新節 `現状 API（HOPC 公開名・RH-H2 時点）` を追加し、
+       `hopcPrimeContributionSum` 系 API と停留判定補題を明示。
+3. 結論: RH 文書群で
+   「直下 README = 表紙/入口」「docs README = 詳細解説」
+   の分担が固定され、API 名の参照揺れが解消した。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+   - `RH-CFBRC-Discussion.md` の `Implementation Bridge (RH-H1/H2)` と内容同期。
+6. 次の課題:
+   - RH-I2 として、`HOPC-RH.txt` の優先度 A/E に沿って
+     `HOPC-RH-Roadmap.md`（1枚設計図）を新規作成する。
