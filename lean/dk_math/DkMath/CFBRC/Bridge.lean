@@ -33,14 +33,59 @@ theorem prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
     simpa [sub_eq_mul_cyclotomicPrimeCore_nat p x u] using hmul
 
 /--
-public API re-export:
-`u ≠ 0` の下で general `d` の divisors product shifted は `GN d x u` と一致する。
+deprecated alias:
+`cyclotomicDivisorsProductShifted_eq_GN_of_ne_zero` を使うこと。
 -/
+@[deprecated cyclotomicDivisorsProductShifted_eq_GN_of_ne_zero
+  (since := "2026-03-12")]
 theorem cyclotomicDivisorsProductShifted_eq_GN_of_ne_zero_bridge
     {R : Type _} [Field R] {d : ℕ} (hd : 0 < d)
     {x u : R} (hx : x ≠ 0) (hu : u ≠ 0) :
     cyclotomicDivisorsProductShifted d x u = GN d x u :=
   cyclotomicDivisorsProductShifted_eq_GN_of_ne_zero (R := R) hd hx hu
+
+/--
+Zsigmondy primitive-prime existence bridge（prime exponent）:
+`a := x + u, b := u` と置いた存在補題を CFBRC 記法で公開する。
+-/
+theorem exists_primitive_prime_factor_sub_pow_of_prime_exp_boundary
+    {d x u : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime (x + u) u)
+    (hpnd : ¬ d ∣ x) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ ((x + u) ^ d - u ^ d) ∧ ¬ q ∣ x ∧
+      (∀ {k : ℕ}, 0 < k → k < d → ¬ q ∣ ((x + u) ^ k - u ^ k)) := by
+  have hab_lt : u < x + u := by omega
+  rcases DkMath.NumberTheory.GcdNext.exists_primitive_prime_factor_basic
+      (a := x + u) (b := u) (d := d)
+      hd_prime hd_ge hab_lt hu hcop (by simpa [Nat.add_sub_cancel] using hpnd) with
+    ⟨q, hqP, hq_dvd_diff, hq_ndvd_gap⟩
+  have hd1 : 1 < d := lt_of_lt_of_le (by decide : 1 < 3) hd_ge
+  have hprim :
+      ∀ {k : ℕ}, 0 < k → k < d → ¬ q ∣ ((x + u) ^ k - u ^ k) :=
+    DkMath.NumberTheory.GcdNext.prime_exp_not_dvd_diff_imp_primitive
+      (a := x + u) (b := u) (d := d) (q := q)
+      hd_prime hd1 hqP hcop hab_lt hu hq_dvd_diff hq_ndvd_gap
+  refine ⟨q, hqP, hq_dvd_diff, ?_, hprim⟩
+  simpa [Nat.add_sub_cancel] using hq_ndvd_gap
+
+/--
+Zsigmondy existence を CFBRC core 除法へ直結する API（prime exponent）。
+-/
+theorem exists_primitive_prime_factor_dvd_cyclotomicPrimeCore_of_prime_exp_boundary
+    {d x u : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime (x + u) u)
+    (hpnd : ¬ d ∣ x) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ cyclotomicPrimeCore d x u ∧ ¬ q ∣ x ∧
+      (∀ {k : ℕ}, 0 < k → k < d → ¬ q ∣ ((x + u) ^ k - u ^ k)) := by
+  rcases exists_primitive_prime_factor_sub_pow_of_prime_exp_boundary
+      (d := d) (x := x) (u := u) hd_prime hd_ge hx hu hcop hpnd with
+    ⟨q, hqP, hq_dvd_diff, hq_ndvd_x, hprim⟩
+  have hq_dvd_core : q ∣ cyclotomicPrimeCore d x u :=
+    (prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
+      (p := d) (x := x) (u := u) (q := q) hqP hq_ndvd_x).1 hq_dvd_diff
+  exact ⟨q, hqP, hq_dvd_core, hq_ndvd_x, hprim⟩
 
 /--
 valuation bridge（general `u` 版）:

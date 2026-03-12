@@ -237,3 +237,32 @@
 6. 次の課題:
    - 必要に応じて `Bridge` 側の命名統一（`..._bridge` 接尾辞の整理）と
      Zsigmondy 直結 API（primitive prime existence 連携）を追加する。
+
+### 日時: 2026/03/12 16:40 JST: Bridge 命名整理 + Zsigmondy 直結 API 追加
+
+1. 目的: `Bridge` の命名を整理しつつ、原始素因子の存在（Zsigmondy 層A）を CFBRC 記法へ直結する API を追加する。
+2. 内容:
+   - 命名整理:
+     - `cyclotomicDivisorsProductShifted_eq_GN_of_ne_zero_bridge` に
+       deprecation 属性を付与し、標準名
+       `cyclotomicDivisorsProductShifted_eq_GN_of_ne_zero`
+       への移行を明示。
+   - Zsigmondy 直結 API を `DkMath.CFBRC.Bridge` に追加:
+     - `exists_primitive_prime_factor_sub_pow_of_prime_exp_boundary`
+       (`a := x+u, b := u` で prime exponent の primitive prime existence を公開)。
+     - `exists_primitive_prime_factor_dvd_cyclotomicPrimeCore_of_prime_exp_boundary`
+       (上記 existence を `cyclotomicPrimeCore d x u` 除法へ接続)。
+   - 追加 API は `prime_exp_not_dvd_diff_imp_primitive` を経由して
+     `∀ 0<k<d, q ∤ ((x+u)^k - u^k)` まで返す形にした。
+   - `lake build DkMath.CFBRC.Bridge` / `lake build DkMath.CFBRC` 成功。
+3. 結論: CFBRC `Bridge` から、
+   - 一般 `u` の product↔GN 同一化は標準名へ統一誘導され、
+   - prime exponent の primitive prime existence が
+     差分形・core 除法形の両方で直接利用可能になった。
+4. 失敗事例: 特になし（追加補題は一度でビルド通過）。
+5. 備考:
+   - 新規 existence API は `Nat` 上で、`hcop : Nat.Coprime (x+u) u` と `¬ d ∣ x` を要求。
+   - `hx : 0 < x` は `u < x+u` を導くために使っている。
+6. 次の課題:
+   - 必要なら `hcop : Nat.Coprime x u` 版 wrapper を追加し、
+     前提を CFBRC 側でより自然な形へ揃える。
