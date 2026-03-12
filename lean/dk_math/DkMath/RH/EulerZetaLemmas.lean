@@ -1036,4 +1036,74 @@ lemma nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff_sum_log_sub_phase
   exact nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff
     (S := S) (σ := σ) (t := t) hS_ne
 
+-- ============================================================================
+-- 17. RH-H1: CFBRC 連携向け HOPC 公開インタフェース
+-- ============================================================================
+
+/-- HOPC 局所寄与は `log p - phaseVel(w_p)` に一致する。 -/
+@[simp] lemma hopcPrimeLocalContribution_eq_log_sub_phaseVelLocal
+    (p : ℕ) (σ t : ℝ) :
+    hopcPrimeLocalContribution p σ t =
+      Real.log (p : ℝ) - eulerZetaPhaseVelLocal p σ t := by
+  rfl
+
+/-- HOPC 寄与総和は `∑ (log p - phaseVel(w_p))` の別名。 -/
+@[simp] lemma hopcPrimeContributionSum_eq_sum_log_sub_phaseVelLocal
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ) :
+    hopcPrimeContributionSum (S := S) σ t =
+      ∑ p ∈ S, (Real.log (p.1 : ℝ) - eulerZetaPhaseVelLocal p.1 σ t) := by
+  unfold hopcPrimeContributionSum hopcPrimeLocalContribution
+  rfl
+
+/--
+HOPC 寄与総和と `eulerZetaFactorPhaseVelFinite` の同一化。
+-/
+lemma eulerZetaFactorPhaseVelFinite_eq_hopcPrimeContributionSum
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    eulerZetaFactorPhaseVelFinite (S := S) σ t =
+      hopcPrimeContributionSum (S := S) σ t := by
+  rw [eulerZetaFactorPhaseVelFinite_eq_sum_log_sub_phaseVelLocal
+    (S := S) (σ := σ) (t := t) hS_ne]
+  simp
+
+/--
+`eulerZetaFinite_onVertical` のドリフト消失は HOPC 寄与総和 0 と同値。
+-/
+lemma driftFreeAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.driftFreeAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ↔
+      hopcPrimeContributionSum (S := S) σ t = 0 := by
+  rw [hopcPrimeContributionSum_eq_sum_log_sub_phaseVelLocal]
+  exact driftFreeAt_eulerZetaFinite_onVertical_iff_sum_log_sub_phaseVelLocal_eq_zero
+    (S := S) (σ := σ) (t := t) hS_ne
+
+/--
+`eulerZetaFinite_onVertical` の停留は HOPC 寄与総和 0 と同値。
+-/
+lemma stationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.stationaryAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ↔
+      hopcPrimeContributionSum (S := S) σ t = 0 := by
+  rw [hopcPrimeContributionSum_eq_sum_log_sub_phaseVelLocal]
+  exact stationaryAt_eulerZetaFinite_onVertical_iff_sum_log_sub_phaseVelLocal_eq_zero
+    (S := S) (σ := σ) (t := t) hS_ne
+
+/--
+`eulerZetaFinite_onVertical` の非退化停留は
+`hopcPrimeContributionSum = 0 ∧ phaseCurv ≠ 0` と同値。
+-/
+lemma nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.nondegenerateStationaryAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t
+      ↔
+      hopcPrimeContributionSum (S := S) σ t = 0 ∧
+        DkMath.RH.phaseCurv (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ≠ 0 := by
+  rw [hopcPrimeContributionSum_eq_sum_log_sub_phaseVelLocal]
+  exact nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff_sum_log_sub_phaseVelLocal
+    (S := S) (σ := σ) (t := t) hS_ne
+
 end DkMath.RH.EulerZeta

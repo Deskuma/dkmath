@@ -414,3 +414,42 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-H1 として、RH-CFBRC 連携資料に合わせて
      `EulerZetaLemmas` の公開補題群を「観測器インタフェース」として再整理し、
      `RH-CFBRC-Discussion.md` と同期する導線を追加する。
+
+### 日時: 2026/03/13 00:01 JST: Phase RH-H1 を実装（HOPC 公開インタフェース整備）
+
+1. 目的: RH-CFBRC 連携で直接利用する観測器 API を明示し、
+   既存補題群を「HOPC 公開名」で参照できるように整理する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/EulerZeta.lean`
+     - `DkMath/RH/EulerZetaLemmas.lean`
+   - 新規定義（`EulerZeta.lean`）:
+     - `hopcPrimeLocalContribution`
+     - `hopcPrimeContributionSum`
+   - 追加補題（`EulerZetaLemmas.lean`）:
+     - `hopcPrimeLocalContribution_eq_log_sub_phaseVelLocal`
+     - `hopcPrimeContributionSum_eq_sum_log_sub_phaseVelLocal`
+     - `eulerZetaFactorPhaseVelFinite_eq_hopcPrimeContributionSum`
+     - `driftFreeAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero`
+     - `stationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero`
+     - `nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum`
+   - 数学的要点:
+     - 明示和 `∑(log p - phaseVel(w_p))` を HOPC の公開観測量名へ束ねる。
+     - 既存の停留/非退化停留同値補題を wrapper 化し、
+       CFBRC 側から「寄与総和 = 0」言語で直結可能にする。
+   - 検証:
+     - `lake build DkMath.RH.EulerZetaLemmas`
+     - `lake build DkMath.RH`
+     ともに成功。
+3. 結論: RH 側の観測器 API が HOPC 名で公開され、
+   RH-CFBRC 連携に必要な「prime-local contribution language」の入口が整った。
+4. 失敗事例:
+   - `hopcPrimeContributionSum` 展開補題で `rfl` を欠落させ、`sum = sum` の未解決ゴールが発生。
+   - `rfl` を補って解消し、再ビルドで通過。
+5. 備考:
+   - `RH/docs/README.md` は存在せず、同期対象は `HOPC-RH.txt` と `RH-CFBRC-Discussion.md` に限定。
+   - 定義追加は薄い alias 層であり、既存 API 互換性は維持。
+6. 次の課題:
+   - RH-H2 として、`RH-CFBRC-Discussion.md` 側に
+     新公開 API（`hopcPrimeContributionSum` 系）への参照断面を追加し、
+     実装名と議論文書の往復導線を固定する。

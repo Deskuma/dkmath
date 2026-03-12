@@ -148,6 +148,21 @@ noncomputable def eulerZetaFactorPhaseVelFinite
     (S : Finset {p // Nat.Prime p}) (σ t : ℝ) : ℝ :=
   ∑ p ∈ S, eulerZetaFactorPhaseVelLocal p.1 σ t
 
+/--
+HOPC-RH における素数 `p` の局所位相寄与。
+
+`log p - phaseVel(w_p)` を 1 つの観測量として束ねた名前。
+-/
+noncomputable def hopcPrimeLocalContribution (p : ℕ) (σ t : ℝ) : ℝ :=
+  Real.log (p : ℝ) - eulerZetaPhaseVelLocal p σ t
+
+/--
+HOPC-RH の有限素数集合に対する局所位相寄与総和。
+-/
+noncomputable def hopcPrimeContributionSum
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ) : ℝ :=
+  ∑ p ∈ S, hopcPrimeLocalContribution p.1 σ t
+
 -- ============================================================================
 -- 5. 収束性の述語
 -- ============================================================================
