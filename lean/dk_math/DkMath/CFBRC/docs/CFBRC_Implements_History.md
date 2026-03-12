@@ -401,3 +401,28 @@
    - 今回は API 名・定理本体を変更せず、ドキュメント表現のみ更新。
 6. 次の課題:
    - `README.md` に Bridge 高位 API（`BoundarySide` ベース）の短い使用例を追加する。
+
+### 日時: 2026/03/12 19:24 JST: README 充実化（紹介・解説・使用例）
+
+1. 目的: CFBRC の入口ドキュメントを、理論概要と Lean 利用導線が分かる形へ拡張する。
+2. 内容:
+   - `DkMath/CFBRC/README.md` を全面改稿し、以下を追加:
+     - CFBRC の狙い（代数層 / 円分層 / 数論層の橋渡し）
+     - core 公式の解説
+     - Lean 側モジュール構成 (`Defs` / `Basic` / `CyclotomicProduct` / `Bridge`)
+     - Quick Start import
+     - 使用例（Lean snippets）:
+       - `cyclotomicPrimeCore = GN`
+       - 素数除法同値
+       - valuation bridge（右境界）
+       - `BoundarySide` による左右統一 API
+       - Zsigmondy primitive prime existence（core 形）
+     - 関連ドキュメントへのリンク
+   - 実装コード変更はなし（README 更新のみ）。
+3. 結論: README 単体で、CFBRC の位置づけ・主要 API・典型的使用パターンを把握できる状態になった。
+4. 失敗事例: 特になし。
+5. 備考:
+   - README のコード片は「最小利用イメージ」を優先した記述。
+6. 次の課題:
+   - 必要なら README に「Phase 別 API マップ（A/B/C/D）」を追加し、
+     実装計画書との往復参照を強化する。
