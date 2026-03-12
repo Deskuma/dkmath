@@ -143,7 +143,7 @@ $$
 
 ---
 
-## 現状 API（HOPC 公開名・RH-H2 時点）
+## 現状 API（HOPC 公開名・RH-K2 時点）
 
 CFBRC 連携で使う公開名は次を基準とする。
 
@@ -156,6 +156,9 @@ CFBRC 連携で使う公開名は次を基準とする。
   - `driftFreeAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero`
   - `stationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero`
   - `nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum`
+- CFBRC 連携 bridge（`CFBRCBridge.lean`）
+  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge`
+  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge_of_local`
 
 補足:
 - 上記公開名は明示和

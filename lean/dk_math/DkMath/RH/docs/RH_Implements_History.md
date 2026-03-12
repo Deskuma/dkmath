@@ -729,3 +729,25 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-K2 として、`DkMath/RH/docs/README.md` の現状 API 節にも
      bridge API を同期し、README 間の記載差分を解消する。
+
+### 日時: 2026/03/13 03:04 JST: Phase RH-K2 を実装（docs README の bridge API 同期）
+
+1. 目的: `DkMath/RH/README.md` と `DkMath/RH/docs/README.md` の
+   API 記載差分を解消し、CFBRC bridge 入口を両 README で一致させる。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/README.md`
+   - 変更点:
+     - 見出しを `RH-K2` 時点へ更新。
+     - `現状 API` 節に
+       `CFBRCBridge.lean` の 2 補題（global/local）を追記。
+3. 結論: RH の 2 つの README 間で bridge API 表記が統一され、
+   入口文書の整合性が取れた。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+   - bridge の使い分け詳細は引き続き `RH-CFBRC-Discussion.md` を参照。
+6. 次の課題:
+   - RH-L1 として、`DkMath/RH/README.md` の import 例に
+     `DkMath.RH.CFBRCBridge` 利用例を追加し、
+     CFBRC 連携の最小起動手順を明示する。
