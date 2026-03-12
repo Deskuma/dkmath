@@ -189,4 +189,50 @@ theorem padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_coprime_of_dvd
   exact padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_not_dvd_boundary
     (p := p) (x := x) (u := u) (q := q) hp2 hx hu hqP hq_not_dvd_x
 
+/--
+valuation の前提正規化 wrapper（対称版）:
+`hcop : Nat.Coprime x u` と `q ∣ x` から `q ∤ u` を導き、
+右境界形 `((x+u)^d - x^d)` を GN へ接続する。
+-/
+theorem padicValNat_sub_pow_eq_padicValNat_GN_of_coprime_of_dvd_left
+    {d x u q : ℕ}
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
+    (hcop : Nat.Coprime x u) (hqP : Nat.Prime q) (hq_dvd_x : q ∣ x) :
+    padicValNat q ((x + u) ^ d - x ^ d) =
+      padicValNat q (GN d u x) := by
+  have hq_not_dvd_u : ¬ q ∣ u := by
+    intro hq_dvd_u
+    have hq_dvd_gcd : q ∣ Nat.gcd x u := Nat.dvd_gcd hq_dvd_x hq_dvd_u
+    rw [hcop.gcd_eq_one] at hq_dvd_gcd
+    exact Nat.Prime.not_dvd_one hqP hq_dvd_gcd
+  have hswap :
+      padicValNat q ((u + x) ^ d - x ^ d) =
+        padicValNat q (GN d u x) :=
+    padicValNat_sub_pow_eq_padicValNat_GN_of_not_dvd_boundary
+      (d := d) (x := u) (u := x) (q := q) hd2 hu hx hqP hq_not_dvd_u
+  simpa [Nat.add_comm] using hswap
+
+/--
+valuation の前提正規化 wrapper（対称版）:
+`hcop : Nat.Coprime x u` と `q ∣ x` から `q ∤ u` を導き、
+右境界形 `((x+u)^p - x^p)` を core へ接続する。
+-/
+theorem padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_coprime_of_dvd_left
+    {p x u q : ℕ}
+    (hp2 : 2 ≤ p) (hx : 0 < x) (hu : 0 < u)
+    (hcop : Nat.Coprime x u) (hqP : Nat.Prime q) (hq_dvd_x : q ∣ x) :
+    padicValNat q ((x + u) ^ p - x ^ p) =
+      padicValNat q (cyclotomicPrimeCore p u x) := by
+  have hq_not_dvd_u : ¬ q ∣ u := by
+    intro hq_dvd_u
+    have hq_dvd_gcd : q ∣ Nat.gcd x u := Nat.dvd_gcd hq_dvd_x hq_dvd_u
+    rw [hcop.gcd_eq_one] at hq_dvd_gcd
+    exact Nat.Prime.not_dvd_one hqP hq_dvd_gcd
+  have hswap :
+      padicValNat q ((u + x) ^ p - x ^ p) =
+        padicValNat q (cyclotomicPrimeCore p u x) :=
+    padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_not_dvd_boundary
+      (p := p) (x := u) (u := x) (q := q) hp2 hu hx hqP hq_not_dvd_u
+  simpa [Nat.add_comm] using hswap
+
 end DkMath.CFBRC

@@ -307,3 +307,26 @@
    - 今回は `q ∣ u` ケース向けの正規化。`q ∣ x` 側は対称版が必要なら別途追加可能。
 6. 次の課題:
    - 必要なら対称版（`q ∣ x` から `¬ q ∣ u` を導く wrapper）も追加する。
+
+### 日時: 2026/03/12 17:02 JST: valuation 前提正規化 wrapper の対称版を追加
+
+1. 目的: `q ∣ x` 側でも、`Coprime x u` から対称に前提を正規化して valuation bridge を直接使えるようにする。
+2. 内容:
+   - `DkMath.CFBRC.Bridge` に以下を追加:
+     - `padicValNat_sub_pow_eq_padicValNat_GN_of_coprime_of_dvd_left`
+     - `padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_coprime_of_dvd_left`
+   - 前提:
+     - `hcop : Nat.Coprime x u`
+     - `hqP : Nat.Prime q`
+     - `hq_dvd_x : q ∣ x`
+   - 内部処理:
+     - `q ∣ u` を仮定すると `q ∣ gcd x u = 1` で矛盾、よって `¬ q ∣ u`。
+     - 既存の `..._of_not_dvd_boundary` を `(x,u)` を入れ替えた形
+       （`((x+u)^d - x^d)`, `GN d u x`, `cyclotomicPrimeCore d u x`）で適用。
+   - `lake build DkMath.CFBRC.Bridge` / `lake build DkMath.CFBRC` 成功。
+3. 結論: valuation 正規化 API が左右対称に揃い、`q ∣ u` 側・`q ∣ x` 側の両ケースを wrapper で直接扱えるようになった。
+4. 失敗事例: 特になし（追加補題は一度でビルド通過）。
+5. 備考:
+   - 対称版は式が `((x+u)^d - x^d)` となり、対応する右境界 `GN d u x` / `core d u x` に接続される。
+6. 次の課題:
+   - 必要なら左右を統一した高位 API（境界指定パラメータ付き）を設計する。
