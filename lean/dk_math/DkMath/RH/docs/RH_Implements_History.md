@@ -839,3 +839,27 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-N1 として、OP-003 先行方針に沿い
      singleton bridge（J2/J3）を small finite-set へ一般化する
      API スケッチを `CFBRCBridge.lean` に追加する。
+
+### 日時: 2026/03/13 03:13 JST: Phase RH-N1 を実装（small finite-set への API スケッチ）
+
+1. 目的: OP-003 先行方針に沿い、singleton bridge から
+   `insert p S` 形の small finite-set 観測器へ拡張する入口 API を用意する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+   - 追加補題:
+     - `stationaryAt_insert_of_hopcPrimeContributionSum_eq_zero`
+       （`insert p S` 上の非零前提 + 寄与総和ゼロから停留）
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local`
+       （CFBRC primitive-prime existence と `hlift` 仮定を合成した
+        small finite-set 版 bridge スケッチ）
+3. 結論: CFBRC→RH bridge を singleton 専用から一段抽象化し、
+   finite-set 拡張へ進むための最小 API 骨格を実装できた。
+4. 失敗事例: なし（初回実装でビルド通過）。
+5. 備考:
+   - `hlift` は翻訳層の仮定を保持したスケッチ設計。
+   - 既存 J2/J3 補題はそのまま残し、後方互換を維持。
+6. 次の課題:
+   - RH-N2 として、`hlift` の仮定を分解して
+     `hS_ne` 供給部分と `hopcPrimeContributionSum=0` 供給部分を
+     個別 wrapper 化し、small finite-set bridge の再利用性を上げる。
