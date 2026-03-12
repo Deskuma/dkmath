@@ -405,4 +405,79 @@ lemma driftFreeAt_eulerZeta_exp_s_log_p_sub_one_iff_phaseVel_eq_zero
       (f := fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u)
       (t := t) hw_ne)
 
+-- ============================================================================
+-- 12. HOPC-RH: 単一素数因子 `w_p` の 2 次情報（RH-C1）
+-- ============================================================================
+
+/--
+`w_p` の 2 階導関数（`t` 方向）。
+
+`w_p'(t) = exp(g(t)) * c`（`c = i*log p`）なので、
+再度の連鎖律により `w_p''(t) = exp(g(t)) * c * c`。
+-/
+lemma hasDerivAt_deriv_eulerZeta_exp_s_log_p_sub_one
+    (p : ℕ) (σ t : ℝ) :
+    HasDerivAt
+      (fun u : ℝ => deriv (fun v : ℝ => eulerZeta_exp_s_log_p_sub_one p σ v) u)
+      (Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) *
+        (Complex.I * (Real.log (p : ℝ) : ℂ)) *
+        (Complex.I * (Real.log (p : ℝ) : ℂ))) t := by
+  let lp : ℂ := (Real.log (p : ℝ) : ℂ)
+  have h_deriv_fun :
+      (fun u : ℝ => deriv (fun v : ℝ => eulerZeta_exp_s_log_p_sub_one p σ v) u) =
+      (fun u : ℝ => Complex.exp (vertical σ u * lp) * (Complex.I * lp)) := by
+    funext u
+    simpa [lp] using deriv_eulerZeta_exp_s_log_p_sub_one (p := p) (σ := σ) (t := u)
+  rw [h_deriv_fun]
+  have hinner := hasDerivAt_vertical_mul_log_p (p := p) (σ := σ) (t := t)
+  have hexp :
+      HasDerivAt
+        (fun u : ℝ => Complex.exp (vertical σ u * lp))
+        (Complex.exp (vertical σ t * lp) * (Complex.I * lp)) t := by
+    simpa [lp] using
+      (Complex.hasDerivAt_exp (vertical σ t * lp)).comp t hinner
+  have hmul := hexp.mul_const (Complex.I * lp)
+  simpa [lp, mul_assoc] using hmul
+
+/--
+`w_p` の 2 階導関数の `deriv` 版。
+-/
+lemma deriv_deriv_eulerZeta_exp_s_log_p_sub_one
+    (p : ℕ) (σ t : ℝ) :
+    deriv (fun u : ℝ => deriv (fun v : ℝ => eulerZeta_exp_s_log_p_sub_one p σ v) u) t =
+      Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) *
+        (Complex.I * (Real.log (p : ℝ) : ℂ)) *
+        (Complex.I * (Real.log (p : ℝ) : ℂ)) :=
+  (hasDerivAt_deriv_eulerZeta_exp_s_log_p_sub_one (p := p) (σ := σ) (t := t)).deriv
+
+/--
+`w_p(t) ≠ 0` の下で、`stationaryAt` は `driftFreeAt` と同値。
+-/
+lemma stationaryAt_eulerZeta_exp_s_log_p_sub_one_iff_driftFreeAt
+    (p : ℕ) (σ t : ℝ)
+    (hw_ne : eulerZeta_exp_s_log_p_sub_one p σ t ≠ 0) :
+    DkMath.RH.stationaryAt (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t ↔
+      DkMath.RH.driftFreeAt (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t := by
+  simpa [Iff.comm] using
+    (DkMath.RH.driftFreeAt_iff_stationaryAt
+      (f := fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u)
+      (t := t) hw_ne)
+
+/--
+`w_p(t) ≠ 0` の下で、非退化停留点は
+`driftFreeAt ∧ phaseCurv ≠ 0` と同値。
+-/
+lemma nondegenerateStationaryAt_eulerZeta_exp_s_log_p_sub_one_iff
+    (p : ℕ) (σ t : ℝ)
+    (hw_ne : eulerZeta_exp_s_log_p_sub_one p σ t ≠ 0) :
+    DkMath.RH.nondegenerateStationaryAt
+        (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t
+      ↔
+    (DkMath.RH.driftFreeAt (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t ∧
+      DkMath.RH.phaseCurv (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t ≠ 0) := by
+  simpa using
+    (DkMath.RH.nondegenerateStationaryAt_iff_driftFreeAt_and_phaseCurv_ne_zero
+      (f := fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u)
+      (t := t) hw_ne)
+
 end DkMath.RH.EulerZeta

@@ -112,4 +112,23 @@ lemma driftFreeAt_iff_phaseVel_eq_zero (f : ℝ → ℂ) (t : ℝ) (hz : f t ≠
     driftFreeAt f t ↔ phaseVel f t = 0 := by
   simpa [driftFreeAt] using (driftFreeLocal_iff_phaseVel_eq_zero (f:=f) (t:=t) hz)
 
+/-- 点 t でのドリフト消失は位相停留と同値（f t ≠ 0） -/
+lemma driftFreeAt_iff_stationaryAt (f : ℝ → ℂ) (t : ℝ) (hz : f t ≠ 0) :
+    driftFreeAt f t ↔ stationaryAt f t := by
+  simpa [stationaryAt] using (driftFreeAt_iff_phaseVel_eq_zero (f := f) (t := t) hz)
+
+/--
+非退化停留点は「ドリフト消失」と「位相曲率非零」に分解できる（f t ≠ 0）。
+-/
+lemma nondegenerateStationaryAt_iff_driftFreeAt_and_phaseCurv_ne_zero
+    (f : ℝ → ℂ) (t : ℝ) (hz : f t ≠ 0) :
+    nondegenerateStationaryAt f t ↔ driftFreeAt f t ∧ phaseCurv f t ≠ 0 := by
+  constructor
+  · intro h
+    rcases h with ⟨hstat, hcurv⟩
+    exact ⟨(driftFreeAt_iff_stationaryAt (f := f) (t := t) hz).2 hstat, hcurv⟩
+  · intro h
+    rcases h with ⟨hdrift, hcurv⟩
+    exact ⟨(driftFreeAt_iff_stationaryAt (f := f) (t := t) hz).1 hdrift, hcurv⟩
+
 end DkMath.RH

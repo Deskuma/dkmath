@@ -87,3 +87,40 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - Phase RH-C1 として `phaseVel` の 2 次情報（曲率様量）を定義し、
      `w_p` に対する導関数補題を追加する。
+
+### 日時: 2026/03/12 21:45 JST: Phase RH-C1 を実装（位相曲率 API と `w_p` 2次導関数）
+
+1. 目的: HOPC-RH 優先度 C に沿って、位相の 2 次情報（曲率様量）を Lean 上で扱える形にする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/Defs.lean`
+     - `DkMath/RH/Lemmas.lean`
+     - `DkMath/RH/EulerZetaLemmas.lean`
+   - 新規定義（`Defs.lean`）:
+     - `phaseCurv`
+     - `stationaryAt`
+     - `nondegenerateStationaryAt`
+   - 追加補題（`Lemmas.lean`）:
+     - `driftFreeAt_iff_stationaryAt`
+     - `nondegenerateStationaryAt_iff_driftFreeAt_and_phaseCurv_ne_zero`
+   - 追加補題（`EulerZetaLemmas.lean`）:
+     - `hasDerivAt_deriv_eulerZeta_exp_s_log_p_sub_one`
+     - `deriv_deriv_eulerZeta_exp_s_log_p_sub_one`
+     - `stationaryAt_eulerZeta_exp_s_log_p_sub_one_iff_driftFreeAt`
+     - `nondegenerateStationaryAt_eulerZeta_exp_s_log_p_sub_one_iff`
+   - 数学的要点:
+     - `w_p'(t)=exp((σ+it)log p)*(i log p)` をさらに微分し、
+       `w_p''(t)=exp((σ+it)log p)*(i log p)^2` を補題化。
+     - 停留・非退化停留を `driftFreeAt` と `phaseCurv` の言語へ統一。
+   - 検証:
+     - `lake build DkMath.RH.EulerZetaLemmas`
+     - `lake build DkMath.RH`
+     ともに成功。
+3. 結論: RH-C1 の最小核（停留 + 曲率 + `w_p` 2次微分）が成立し、
+   次段の有限 Euler 積観測量（RH-D1）へ進む準備が整った。
+4. 失敗事例: 特になし（追加定義と補題は一括でビルド通過）。
+5. 備考:
+   - `phaseCurv` は `deriv (phaseVel f)` として導入し、枝問題に踏み込まない設計を維持。
+6. 次の課題:
+   - Phase RH-D1（有限 Euler 積版 HOPC 観測量）を実装し、
+     prime-local contribution の和表示 API を追加する。
