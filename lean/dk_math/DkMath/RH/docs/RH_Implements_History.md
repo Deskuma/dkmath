@@ -453,3 +453,26 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-H2 として、`RH-CFBRC-Discussion.md` 側に
      新公開 API（`hopcPrimeContributionSum` 系）への参照断面を追加し、
      実装名と議論文書の往復導線を固定する。
+
+### 日時: 2026/03/13 00:25 JST: RH 直下 README（表紙）を新規追加
+
+1. 目的: `DkMath/RH` 直下に入口ページを作り、
+   初見で「何が実装され、どこを読めばよいか」を即座に辿れるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/README.md`（新規）
+   - 記載項目:
+     - モジュールの目的（位相ドリフト骨格 / Euler 因子観測 / HOPC 公開 API）
+     - ファイル構成（`Defs/Lemmas/Theorems/EulerZeta*`）
+     - RH-H1 時点の主要公開 API
+     - `docs`（`HOPC-RH.txt`, `RH-CFBRC-Discussion.md`, `RH_Implements_History.md`）への導線
+     - import 例
+3. 結論: RH 層に「表紙」が追加され、実装入口と議論文書の導線が統一された。
+4. 失敗事例: なし（ドキュメント追加のみ）。
+5. 備考:
+   - 詳細解説は従来どおり `DkMath/RH/docs/README.md` を参照する構成。
+   - 直下 README は短いナビゲーション用途に限定。
+6. 次の課題:
+   - RH-H2 として、`RH-CFBRC-Discussion.md` に
+     `hopcPrimeContributionSum` 系 API 参照断面を追加し、
+     文書側から実装へジャンプできる目次を整備する。
