@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.CFBRC.Bridge
+import DkMath.CFBRC.Basic
 import Mathlib.RingTheory.Polynomial.Cyclotomic.Basic
 
 /-!

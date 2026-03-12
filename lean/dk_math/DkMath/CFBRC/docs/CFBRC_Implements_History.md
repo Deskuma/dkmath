@@ -209,3 +209,31 @@
 6. 次の課題:
    - `cyclotomicDivisorsProductShifted_eq_GN_of_ne_zero` を
      CFBRC 公開 API（`Bridge` 側）へ再輸出し、valuation 連携の一般 `u` 版を追加する。
+
+### 日時: 2026/03/12 16:33 JST: Bridge 側へ再輸出 + valuation 連携 general `u` API 追加
+
+1. 目的: `CyclotomicProduct` の general `u` 完全同一化を CFBRC 公開 API に載せ、valuation 接続も一般 `u` 版を明示的に提供する。
+2. 内容:
+   - 依存整理:
+     - `DkMath.CFBRC.CyclotomicProduct` の import を `Bridge` から `Basic` へ変更（循環依存を回避）。
+     - `DkMath.CFBRC.Bridge` から `DkMath.CFBRC.CyclotomicProduct` を import。
+   - Bridge 公開 API 追加:
+     - `cyclotomicDivisorsProductShifted_eq_GN_of_ne_zero_bridge`
+       (`u ≠ 0` 下で divisors product shifted と `GN` の一致を再輸出)。
+     - `padicValNat_sub_pow_eq_padicValNat_GN_of_not_dvd_boundary`
+       (`(x+u)^d-u^d` と `GN d x u` の `q`-進付値一致; general `u`)。
+   - 既存 valuation 補題
+     `padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_not_dvd_boundary`
+     は、新規 `..._GN_of_not_dvd_boundary` を経由する形へ整理。
+   - `lake build DkMath.CFBRC.Bridge` / `lake build DkMath.CFBRC` 成功。
+3. 結論: `Bridge` を import するだけで、
+   - general `u` の product→`GN` 同一化（公開 wrapper）
+   - general `u` の valuation bridge（差の冪 ↔ `GN`、差の冪 ↔ core）
+   が利用可能になった。
+4. 失敗事例: 特になし（依存の組み替え後もビルドは安定通過）。
+5. 備考:
+   - valuation 補題は自然数上の `padicValNat` API のため、対象は引き続き Nat。
+   - product 側は Field 上 API のまま保持し、Bridge では wrapper として再輸出。
+6. 次の課題:
+   - 必要に応じて `Bridge` 側の命名統一（`..._bridge` 接尾辞の整理）と
+     Zsigmondy 直結 API（primitive prime existence 連携）を追加する。
