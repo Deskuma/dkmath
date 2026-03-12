@@ -20,6 +20,7 @@
 入口と API 一覧は `DkMath/RH/README.md` を優先参照とする。
 実装計画の 1 枚版は `HOPC-RH-Roadmap.md` を参照。
 語彙の定義域整理は `HOPC-RH-Glossary.md` を参照。
+未解決タスク一覧は `HOPC-RH-OpenProblems.md` を参照。
 
 ---
 

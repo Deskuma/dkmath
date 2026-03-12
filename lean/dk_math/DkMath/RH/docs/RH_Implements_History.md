@@ -574,3 +574,32 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-I4 として、`HOPC-RH-OpenProblems.md` を新規作成し、
      finite→infinite 接続条件と CFBRC 連携の未完タスクを issue 形式で整理する。
+
+### 日時: 2026/03/13 02:33 JST: Phase RH-I4 を実装（HOPC-RH-OpenProblems を新規作成）
+
+1. 目的: HOPC-RH の未完タスクを issue 形式で固定し、
+   次の実装フェーズを文書として管理可能にする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`（新規）
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`（OpenProblems 作成済みへ更新）
+     - `DkMath/RH/README.md`（OpenProblems 導線追加）
+     - `DkMath/RH/docs/README.md`（OpenProblems 参照追記）
+   - Open problems（抜粋）:
+     - OP-001: finite→infinite（位相寄与和）接続
+     - OP-002: 非零前提の管理 API
+     - OP-003: CFBRC 連携の実定理
+     - OP-004: 曲率条件の運用規約
+     - OP-005: 文書同期の継続管理
+3. 結論: HOPC-RH 文書セット（Roadmap/Glossary/OpenProblems）が揃い、
+   実装課題を優先度付きで継続管理できる状態になった。
+4. 失敗事例:
+   - 初回で `HOPC-RH-Roadmap.md` のパス指定を誤り、パッチ適用に失敗。
+   - 正しい `lean/dk_math/...` パスで再適用して解消。
+5. 備考:
+   - `.lean` 実装の変更はなし。
+   - Roadmap の I フェーズは「Glossary/OpenProblems 完了」に更新。
+6. 次の課題:
+   - RH-J1 として、OP-002（非零前提の管理 API）から着手し、
+     `w_p ≠ 0` 前提を束ねる finite-set wrapper 補題を
+     `EulerZetaLemmas.lean` に追加する。

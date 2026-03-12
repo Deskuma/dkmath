@@ -98,14 +98,15 @@ Lean 実装ロードマップを 1 枚で管理するための文書。
 
 - 目標候補:
   - `HOPC-RH-Glossary.md`（用語集, 作成済み）
-  - `HOPC-RH-OpenProblems.md`（未解決タスク）
+  - `HOPC-RH-OpenProblems.md`（未解決タスク, 作成済み）
   - finite から infinite への接続条件整理（収束・非零・停留の整合）
-- 状態: 一部完了（Glossary 完了）
+- 状態: 一部完了（Glossary/OpenProblems 完了）
 
 ## 参照導線
 
 - 方針本文: `HOPC-RH.txt`
 - 用語集: `HOPC-RH-Glossary.md`
+- 未解決タスク: `HOPC-RH-OpenProblems.md`
 - CFBRC 連携議論: `RH-CFBRC-Discussion.md`
 - 詳細解説: `README.md`
 - 実装履歴: `RH_Implements_History.md`
