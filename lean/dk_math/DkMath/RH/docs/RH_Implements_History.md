@@ -772,3 +772,25 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-L2 として、`DkMath/RH/docs/README.md` にも同等の import 例を追記し、
      README 間の利用手順を完全同期する。
+
+### 日時: 2026/03/13 03:07 JST: Phase RH-L2 を実装（docs README の import 例同期）
+
+1. 目的: `DkMath/RH/README.md` と `DkMath/RH/docs/README.md` の
+   利用手順（import 例）を一致させ、導入時の分岐をなくす。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/README.md`
+   - 追加内容:
+     - `利用例（import）` セクション
+     - RH 側 API 最小例（`EulerZeta`, `EulerZetaLemmas`）
+     - CFBRC 連携 bridge 例（`CFBRCBridge` + `open DkMath.RH.EulerZeta`）
+3. 結論: RH の 2 README で import 手順が同期され、
+   利用者はどちらを先に読んでも同じ起動方法に到達できる。
+4. 失敗事例: なし（ドキュメント追記のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+   - bridge 仮定の詳細は引き続き `RH-CFBRC-Discussion.md` 側で説明。
+6. 次の課題:
+   - RH-M1 として、`DkMath/RH/docs/HOPC-RH-OpenProblems.md` の OP-005 に対応し、
+     文書更新チェックリスト（README/Roadmap/Glossary/OpenProblems/Discussion/History）
+     を追記する。

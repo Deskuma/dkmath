@@ -168,6 +168,25 @@ CFBRC 連携で使う公開名は次を基準とする。
 
 ---
 
+## 利用例（import）
+
+RH 側 API を使う最小例:
+
+```lean
+import DkMath.RH.EulerZeta
+import DkMath.RH.EulerZetaLemmas
+```
+
+CFBRC 連携 bridge まで使う例:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+```
+
+---
+
 ## `#print axioms` に `sorryAx` が出る件について（メモ）
 
 ソース（`.lean`）上に `sorry` が無いのに `#print axioms` で `sorryAx` が見える場合、
