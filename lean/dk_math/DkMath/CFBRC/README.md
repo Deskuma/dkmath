@@ -1,4 +1,4 @@
-# CFBRC
+# CFBRC - Cosmic Formula Binomial Real Complex
 
 see: [CFBRC](/python/CFBRC/CFBRC.md)
 see: [CFBRC d=8](/python/CFBRC/CFBRC-d8.md)
