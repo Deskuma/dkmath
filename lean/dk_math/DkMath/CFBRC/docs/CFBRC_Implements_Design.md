@@ -405,6 +405,9 @@ GN の再展開・係数比較に突っ込むのは最後の手段とする。
 3. Phase C（次）:
    `DkMath.CFBRC.*` から Zsigmondy / valuation 層へ import 依存を追加し、
    除法同値補題を再利用 API として露出する。
+   - 2026/03/12 実装完了（`DkMath.CFBRC.Bridge`）
+     - `prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat`
+     - `padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_not_dvd_boundary`
 4. Phase D（次）:
    `CFBRC_Discussion.md` のロードマップに沿って、
    一般次数（general `d`）の product 版に進むかを評価して分岐判断する。

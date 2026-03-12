@@ -73,3 +73,22 @@
      今後は prime case 以外の比較補題へも流用可能。
 6. 次の課題:
    - `DkMath.CFBRC.*` から Zsigmondy / valuation 層への API 接続を進める。
+
+### 日時: 2026/03/12 15:23 JST: Phase C を実装（Zsigmondy / valuation 層への bridge と再利用 API 露出）
+
+1. 目的: `DkMath.CFBRC.*` から Zsigmondy / valuation 統合層へ依存を追加し、除法同値補題を再利用 API として公開する。
+2. 内容:
+   - `DkMath.CFBRC.Bridge` を新規追加し、`DkMath.NumberTheory.Gcd.GN` を import。
+   - 再利用 API として以下を追加:
+     - `prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat`
+       （`q ∤ x` 下で `q ∣ ((x+u)^p-u^p) ↔ q ∣ cyclotomicPrimeCore`）
+     - `padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_not_dvd_boundary`
+       （valuation 層の `padicValNat_sub_pow_eq_padicValNat_GN_of_not_dvd_gap` を core 側へ転送）
+   - `DkMath.CFBRC` 入口ファイルに `import DkMath.CFBRC.Bridge` を追加。
+   - `lake build DkMath.CFBRC.Bridge` と `lake build DkMath.CFBRC` でビルド成功を確認。
+3. 結論: CFBRC core から Zsigmondy / valuation 層への接続が実装され、除法同値・付値同値を CFBRC API として直接再利用できる状態になった。
+4. 失敗事例: 大きな失敗なし。既存 `Gcd.GN` API を薄い wrapper で安全に接続できた。
+5. 備考:
+   - 本フェーズは「橋渡し層の追加」に徹し、既存の数論証明本体（Zsigmondy / valuation）は改変していない。
+6. 次の課題:
+   - Phase D（general `d` product 版へ進むかの設計判断）を開始する。
