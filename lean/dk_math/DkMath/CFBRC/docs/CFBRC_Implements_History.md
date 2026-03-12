@@ -266,3 +266,22 @@
 6. 次の課題:
    - 必要なら `hcop : Nat.Coprime x u` 版 wrapper を追加し、
      前提を CFBRC 側でより自然な形へ揃える。
+
+### 日時: 2026/03/12 16:55 JST: `hcop : Nat.Coprime x u` 版 wrapper を追加
+
+1. 目的: CFBRC 側で自然な前提 `Nat.Coprime x u` を直接受ける形に API を揃える。
+2. 内容:
+   - `DkMath.CFBRC.Bridge` に以下の wrapper を追加:
+     - `exists_primitive_prime_factor_sub_pow_of_prime_exp_boundary_of_coprime`
+     - `exists_primitive_prime_factor_dvd_cyclotomicPrimeCore_of_prime_exp_boundary_of_coprime`
+   - 変換は
+     `Nat.Coprime x u -> Nat.Coprime (x + u) u`
+     を `Nat.coprime_add_self_left` で行い、既存定理へ委譲。
+   - 既存 API（`hcop : Nat.Coprime (x+u) u` 版）は保持し、後方互換を維持。
+   - `lake build DkMath.CFBRC.Bridge` / `lake build DkMath.CFBRC` 成功。
+3. 結論: CFBRC 利用側は自然な `Coprime x u` 前提で primitive-prime existence（差分形 / core 形）を直接呼び出せるようになった。
+4. 失敗事例: 特になし（wrapper 追加のみでビルド安定）。
+5. 備考:
+   - `hx : 0 < x` は引き続き必要（`u < x + u` の導出に使用）。
+6. 次の課題:
+   - `valuation` 側にも同様の「前提正規化 wrapper」が必要なら追加する。

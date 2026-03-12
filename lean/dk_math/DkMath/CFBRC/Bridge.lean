@@ -88,6 +88,34 @@ theorem exists_primitive_prime_factor_dvd_cyclotomicPrimeCore_of_prime_exp_bound
   exact ⟨q, hqP, hq_dvd_core, hq_ndvd_x, hprim⟩
 
 /--
+`hcop : Nat.Coprime x u` 版 wrapper（差分形）。
+-/
+theorem exists_primitive_prime_factor_sub_pow_of_prime_exp_boundary_of_coprime
+    {d x u : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : ¬ d ∣ x) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ ((x + u) ^ d - u ^ d) ∧ ¬ q ∣ x ∧
+      (∀ {k : ℕ}, 0 < k → k < d → ¬ q ∣ ((x + u) ^ k - u ^ k)) := by
+  exact exists_primitive_prime_factor_sub_pow_of_prime_exp_boundary
+    (d := d) (x := x) (u := u) hd_prime hd_ge hx hu
+    ((Nat.coprime_add_self_left).2 hcop) hpnd
+
+/--
+`hcop : Nat.Coprime x u` 版 wrapper（core 除法形）。
+-/
+theorem exists_primitive_prime_factor_dvd_cyclotomicPrimeCore_of_prime_exp_boundary_of_coprime
+    {d x u : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : ¬ d ∣ x) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ cyclotomicPrimeCore d x u ∧ ¬ q ∣ x ∧
+      (∀ {k : ℕ}, 0 < k → k < d → ¬ q ∣ ((x + u) ^ k - u ^ k)) := by
+  exact exists_primitive_prime_factor_dvd_cyclotomicPrimeCore_of_prime_exp_boundary
+    (d := d) (x := x) (u := u) hd_prime hd_ge hx hu
+    ((Nat.coprime_add_self_left).2 hcop) hpnd
+
+/--
 valuation bridge（general `u` 版）:
 `q ∤ x` のとき、`(x+u)^d - u^d` の `q`-進付値は `GN d x u` のそれに一致。
 -/
