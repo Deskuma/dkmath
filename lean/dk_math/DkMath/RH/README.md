@@ -44,7 +44,7 @@
 - `CFBRCBridge.lean`
   - CFBRC の primitive-prime existence から RH 側 singleton 停留判定へ接続する bridge
 
-## 主要 API（RH-J2 時点）
+## 主要 API（RH-N3 時点）
 
 - HOPC 観測量:
   - `hopcPrimeLocalContribution p σ t`
@@ -56,6 +56,14 @@
 - CFBRC 連携 bridge（singleton）:
   - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge`（global 仮定版）
   - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge_of_local`（local 仮定版）
+- CFBRC 連携 bridge（small finite-set）:
+  - `stationaryAt_insert_of_hopcPrimeContributionSum_eq_zero`
+  - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local`
+  - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_split`
+- CFBRC 連携 bridge（`BoundarySide` 統一）:
+  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_local`
+  - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local`
+  - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split`
 
 ## 利用例（import）
 
@@ -78,6 +86,43 @@ CFBRC 連携 bridge まで使う場合:
 import DkMath.RH.CFBRCBridge
 
 open DkMath.RH.EulerZeta
+```
+
+`BoundarySide` 高位 API（split 仮定）を使う最小テンプレート:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+
+-- side : DkMath.CFBRC.BoundarySide
+-- hpnd : match side with | .right => ¬ d ∣ x | .left => ¬ d ∣ u
+-- hS_lift / hsum_lift は insert p S 上の仮定供給器
+example (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hS_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with | .right => ¬ p.1 ∣ x | .left => ¬ p.1 ∣ u) →
+          ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0)
+    (hsum_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with | .right => ¬ p.1 ∣ x | .left => ¬ p.1 ∣ u) →
+          hopcPrimeContributionSum (S := insert p S) σ t = 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  exact
+    exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split
+      (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      hd_prime hd_ge hx hu hcop hpnd hS_lift hsum_lift
 ```
 
 ## 注意

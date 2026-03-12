@@ -917,3 +917,51 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-N4 として、`BoundarySide` 高位 API の利用例を
      `RH/docs/RH-CFBRC-Discussion.md` と `RH/README.md` に反映し、
      実利用時の仮定テンプレート（`hS_lift`/`hsum_lift`）を明示する。
+
+### 日時: 2026/03/13 03:25 JST: Phase RH-N4 を実装（BoundarySide 利用テンプレート文書化）
+
+1. 目的: RH-N3 で追加した `BoundarySide` 高位 API の利用導線を文書へ反映し、
+   実装側の仮定テンプレートを利用者がそのまま再利用できる状態にする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+   - 追記内容:
+     - `README.md`
+       - 主要 API を RH-N3 時点へ更新
+       - `BoundarySide` 統一 bridge（singleton / insert / split）を列挙
+       - `..._boundary_bridge_of_local_split` の最小利用テンプレートを追加
+     - `RH-CFBRC-Discussion.md`
+       - `Implementation Bridge (RH-N4: BoundarySide 高位 API)` セクションを追加
+       - `hS_lift` / `hsum_lift` の分離前提を明示
+       - split 版 bridge の最小テンプレートを追加
+3. 結論: API 追加とドキュメントが同期され、
+   `BoundarySide` + small finite-set bridge の利用入口が明文化された。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+   - テンプレートは `BoundarySide` 統一版の推奨入口（split 仮定）を採用。
+6. 次の課題:
+   - RH-N5 として、`DkMath/RH/docs/README.md` にも同等の
+     `BoundarySide` 利用テンプレートを同期し、README 間の API 導線を統一する。
+
+### 日時: 2026/03/13 03:26 JST: Phase RH-N5 を実装（docs README へ BoundarySide テンプレート同期）
+
+1. 目的: `DkMath/RH/README.md` と `DkMath/RH/docs/README.md` の
+   API 導線を一致させ、BoundarySide 高位 API の参照先を一意化する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/README.md`
+   - 追記内容:
+     - `現状 API` 見出しを RH-N5 時点へ更新
+     - CFBRC bridge 一覧に RH-N1〜N3 の補題群を追加
+     - `BoundarySide` + small finite-set（split 仮定）の最小テンプレートを追加
+3. 結論: RH の 2 README で `BoundarySide` bridge の利用手順が同期され、
+   実装側の仮定テンプレート参照が統一された。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+   - `RH-CFBRC-Discussion.md` 側の RH-N4 セクションと内容整合済み。
+6. 次の課題:
+   - RH-N6 として、`HOPC-RH-Roadmap.md` / `HOPC-RH-OpenProblems.md` の
+     OP-003 状態を RH-N3/N5 到達点に合わせて更新する。

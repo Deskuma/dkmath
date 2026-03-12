@@ -318,6 +318,57 @@ CFBRC 側から RH 側を参照する際の、現行公開 API の最短導線:
 2. `...eq_hopcPrimeContributionSum`（既存位相速度和との同一化）
 3. `driftFreeAt` / `stationaryAt` / `nondegenerateStationaryAt` の同値補題
 
+### Implementation Bridge (RH-N4: BoundarySide 高位 API)
+
+`CFBRC.BoundarySide`（`.right` / `.left`）で左右境界を統一した
+bridge API は次を公開している。
+
+- singleton:
+  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_local`
+- small finite-set:
+  - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local`
+  - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split`
+
+実運用では split 仮定版（`..._split`）を推奨する。
+理由は、翻訳レイヤで次の 2 つを独立に供給できるため。
+
+- `hS_lift`: `insert p S` 上の `w_r ≠ 0`
+- `hsum_lift`: `hopcPrimeContributionSum (insert p S) = 0`
+
+最小テンプレート:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+
+example (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hS_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with | .right => ¬ p.1 ∣ x | .left => ¬ p.1 ∣ u) →
+          ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0)
+    (hsum_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with | .right => ¬ p.1 ∣ x | .left => ¬ p.1 ∣ u) →
+          hopcPrimeContributionSum (S := insert p S) σ t = 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  exact
+    exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split
+      (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      hd_prime hd_ge hx hu hcop hpnd hS_lift hsum_lift
+```
+
 これで CFBRC 側の「prime-local contribution language」から、
 RH 側の停留・曲率 API へ直接接続できる。
 
