@@ -480,4 +480,57 @@ lemma nondegenerateStationaryAt_eulerZeta_exp_s_log_p_sub_one_iff
       (f := fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u)
       (t := t) hw_ne)
 
+-- ============================================================================
+-- 13. HOPC-RH: 有限 Euler 積観測量 API（RH-D1）
+-- ============================================================================
+
+/-- 空集合での有限 Euler 積（複素版）は 1。 -/
+@[simp] lemma eulerZetaFinite_empty (s : ℂ) :
+    eulerZetaFinite (S := (∅ : Finset {p // Nat.Prime p})) s = 1 := by
+  simp [eulerZetaFinite]
+
+/-- `insert` による有限 Euler 積（複素版）の再帰展開。 -/
+lemma eulerZetaFinite_insert
+    (p : {p // Nat.Prime p}) (S : Finset {p // Nat.Prime p}) (s : ℂ)
+    (hp : p ∉ S) :
+    eulerZetaFinite (S := insert p S) s =
+      eulerZetaFactor p.1 s * eulerZetaFinite (S := S) s := by
+  simp [eulerZetaFinite, hp]
+
+/-- 空集合での有限 Euler 積（magnitude 版）は 1。 -/
+@[simp] lemma eulerZetaMagFinite_empty (σ t : ℝ) :
+    eulerZetaMagFinite (S := (∅ : Finset {p // Nat.Prime p})) σ t = 1 := by
+  simp [eulerZetaMagFinite]
+
+/-- `insert` による有限 Euler 積（magnitude 版）の再帰展開。 -/
+lemma eulerZetaMagFinite_insert
+    (p : {p // Nat.Prime p}) (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hp : p ∉ S) :
+    eulerZetaMagFinite (S := insert p S) σ t =
+      eulerZetaFactorMag p.1 σ t * eulerZetaMagFinite (S := S) σ t := by
+  simp [eulerZetaMagFinite, hp]
+
+/-- 空集合での有限位相速度和は 0。 -/
+@[simp] lemma eulerZetaPhaseVelFinite_empty (σ t : ℝ) :
+    eulerZetaPhaseVelFinite (S := (∅ : Finset {p // Nat.Prime p})) σ t = 0 := by
+  simp [eulerZetaPhaseVelFinite]
+
+/-- `insert` による有限位相速度和の再帰展開。 -/
+lemma eulerZetaPhaseVelFinite_insert
+    (p : {p // Nat.Prime p}) (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hp : p ∉ S) :
+    eulerZetaPhaseVelFinite (S := insert p S) σ t =
+      eulerZetaPhaseVelLocal p.1 σ t + eulerZetaPhaseVelFinite (S := S) σ t := by
+  simp [eulerZetaPhaseVelFinite, hp]
+
+/-- 局所位相速度寄与は `phaseVel` 明示式補題と一致する。 -/
+lemma eulerZetaPhaseVelLocal_eq_phaseVel_formula
+    (p : ℕ) (σ t : ℝ) :
+    eulerZetaPhaseVelLocal p σ t =
+      (((Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) *
+          (Complex.I * (Real.log (p : ℝ) : ℂ))) /
+        (eulerZeta_exp_s_log_p_sub_one p σ t)).im) := by
+  simpa [eulerZetaPhaseVelLocal] using
+    (phaseVel_eulerZeta_exp_s_log_p_sub_one_eq (p := p) (σ := σ) (t := t))
+
 end DkMath.RH.EulerZeta

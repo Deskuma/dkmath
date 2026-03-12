@@ -17,6 +17,7 @@ namespace DkMath.RH.EulerZeta
 
 open DkMath.Basic
 open scoped Real
+open scoped BigOperators
 open Complex
 
 /-
@@ -93,7 +94,38 @@ noncomputable def eulerZetaPhase (p : ℕ) (σ t : ℝ) : ℝ :=
   Complex.arg (eulerZeta_exp_s_log_p_sub_one p σ t)
 
 -- ============================================================================
--- 4. 収束性の述語
+-- 4. 有限 Euler 積（HOPC-RH 観測量）
+-- ============================================================================
+
+/-- 有限素数集合で切った Euler-zeta 因子の複素積。 -/
+noncomputable def eulerZetaFinite (S : Finset {p // Nat.Prime p}) (s : ℂ) : ℂ :=
+  ∏ p ∈ S, eulerZetaFactor p.1 s
+
+/-- 縦線上の有限 Euler 積。 -/
+noncomputable def eulerZetaFinite_onVertical
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ) : ℂ :=
+  eulerZetaFinite S (vertical σ t)
+
+/-- magnitude 因子の有限積（観測用）。 -/
+noncomputable def eulerZetaMagFinite
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ) : ℝ :=
+  ∏ p ∈ S, eulerZetaFactorMag p.1 σ t
+
+/--
+素数 `p` に対する局所位相速度寄与。
+
+`w_p(t) = exp((σ+it)log p) - 1` に `phaseVel` を適用した値。
+-/
+noncomputable def eulerZetaPhaseVelLocal (p : ℕ) (σ t : ℝ) : ℝ :=
+  DkMath.RH.phaseVel (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t
+
+/-- 有限素数集合に対する局所位相速度寄与の和。 -/
+noncomputable def eulerZetaPhaseVelFinite
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ) : ℝ :=
+  ∑ p ∈ S, eulerZetaPhaseVelLocal p.1 σ t
+
+-- ============================================================================
+-- 5. 収束性の述語
 -- ============================================================================
 
 /-- magnitude 版の "Euler-zeta" が収束するという述語

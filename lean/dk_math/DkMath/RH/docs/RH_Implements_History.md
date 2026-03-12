@@ -124,3 +124,41 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - Phase RH-D1（有限 Euler 積版 HOPC 観測量）を実装し、
      prime-local contribution の和表示 API を追加する。
+
+### 日時: 2026/03/12 22:03 JST: Phase RH-D1 を実装（有限 Euler 積観測量 API）
+
+1. 目的: HOPC-RH 優先度 D に沿って、無限積へ上げる前段として
+   有限 Euler 積と prime-local contribution の有限和 API を公開する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/EulerZeta.lean`
+     - `DkMath/RH/EulerZetaLemmas.lean`
+   - 新規定義（`EulerZeta.lean`）:
+     - `eulerZetaFinite`
+     - `eulerZetaFinite_onVertical`
+     - `eulerZetaMagFinite`
+     - `eulerZetaPhaseVelLocal`
+     - `eulerZetaPhaseVelFinite`
+   - 追加補題（`EulerZetaLemmas.lean`）:
+     - `eulerZetaFinite_empty`, `eulerZetaFinite_insert`
+     - `eulerZetaMagFinite_empty`, `eulerZetaMagFinite_insert`
+     - `eulerZetaPhaseVelFinite_empty`, `eulerZetaPhaseVelFinite_insert`
+     - `eulerZetaPhaseVelLocal_eq_phaseVel_formula`
+   - 役割:
+     - 積（有限 Euler 積）と和（局所位相速度寄与）を明示的に分離し、
+       HOPC 観測量を有限次元で組み立てる API を整備。
+   - 検証:
+     - `lake build DkMath.RH.EulerZetaLemmas`
+     - `lake build DkMath.RH`
+     ともに成功。
+3. 結論: RH-D1 の最小核が成立し、
+   `single-prime -> finite aggregation -> infinite product` の中段が実装された。
+4. 失敗事例:
+   - 初回で `Finset` 記法を `∏ p in S` / `∑ p in S` と書いて構文エラー。
+   - Lean 記法 `∏ p ∈ S` / `∑ p ∈ S` に修正して解消。
+5. 備考:
+   - `eulerZetaPhaseVelFinite` は local 寄与の総和として定義のみ先行。
+   - 次段で有限積の微分と和表示（log 微分）へ接続可能。
+6. 次の課題:
+   - Phase RH-D2 として、有限 Euler 積の位相速度が
+     局所位相速度和へ落ちる補題（積→和）を追加する。
