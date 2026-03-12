@@ -548,3 +548,29 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-I3 として、`HOPC-RH-Glossary.md` を新規作成し、
      `phaseVel`, `driftFreeAt`, `stationaryAt`, `hopcPrimeContributionSum` など
      現行公開語彙の定義域・依存関係を簡潔に整理する。
+
+### 日時: 2026/03/13 00:58 JST: Phase RH-I3 を実装（HOPC-RH-Glossary を新規作成）
+
+1. 目的: HOPC 公開語彙の参照点を 1 つにまとめ、
+   `Defs/EulerZeta/EulerZetaLemmas` を横断する用語の意味と依存を短く確認できるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/HOPC-RH-Glossary.md`（新規）
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`（Glossary 完了に更新）
+     - `DkMath/RH/README.md`（Glossary 導線追加）
+     - `DkMath/RH/docs/README.md`（Glossary 参照追記）
+   - 用語集の対象:
+     - Core: `vertical`, `torque`, `phaseVel`, `driftFreeAt`, `phaseCurv`,
+       `stationaryAt`, `nondegenerateStationaryAt`
+     - Euler/HOPC: `w_p`, `eulerZetaPhaseVelLocal`, `eulerZetaFactorPhaseVelFinite`,
+       `hopcPrimeLocalContribution`, `hopcPrimeContributionSum`
+     - 公開 wrapper: 停留/非退化停留の HOPC 判定補題
+3. 結論: HOPC 用語の「定義場所・意味・依存」が固定され、
+   実装参照時の往復（コード↔文書）のコストが下がった。
+4. 失敗事例: なし（ドキュメント追加・更新のみ）。
+5. 備考:
+   - `.lean` 実装の変更はなし。
+   - Roadmap の I フェーズは「一部完了（Glossary 完了）」へ更新。
+6. 次の課題:
+   - RH-I4 として、`HOPC-RH-OpenProblems.md` を新規作成し、
+     finite→infinite 接続条件と CFBRC 連携の未完タスクを issue 形式で整理する。
