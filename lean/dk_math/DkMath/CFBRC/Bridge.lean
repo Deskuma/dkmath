@@ -19,7 +19,13 @@ namespace DkMath.CFBRC
 
 open DkMath.CosmicFormulaBinom
 
-/-- `q ∤ x` のもとで、prime `q` に対する差の冪除法と core 除法は同値。 -/
+/--
+差冪と core の除法同値（Nat 版）。
+
+前提 `q ∤ x` の下で、
+`q ∣ ((x+u)^p - u^p)` と `q ∣ cyclotomicPrimeCore p x u` は同値になる。
+差冪分解 `((x+u)^p-u^p)=x*core` と素数の積除法判定を使う基本橋渡し。
+-/
 theorem prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
     {p x u q : ℕ}
     (hq : Nat.Prime q) (hq_not_dvd_x : ¬ q ∣ x) :
@@ -33,8 +39,11 @@ theorem prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
     simpa [sub_eq_mul_cyclotomicPrimeCore_nat p x u] using hmul
 
 /--
-deprecated alias:
-`cyclotomicDivisorsProductShifted_eq_GN_of_ne_zero` を使うこと。
+deprecated alias.
+
+`CyclotomicProduct` 側の標準名
+`cyclotomicDivisorsProductShifted_eq_GN_of_ne_zero`
+へ移行するための互換エントリ。
 -/
 @[deprecated cyclotomicDivisorsProductShifted_eq_GN_of_ne_zero
   (since := "2026-03-12")]
@@ -45,8 +54,11 @@ theorem cyclotomicDivisorsProductShifted_eq_GN_of_ne_zero_bridge
   cyclotomicDivisorsProductShifted_eq_GN_of_ne_zero (R := R) hd hx hu
 
 /--
-Zsigmondy primitive-prime existence bridge（prime exponent）:
-`a := x + u, b := u` と置いた存在補題を CFBRC 記法で公開する。
+Zsigmondy 層A（prime exponent）からの存在橋渡し（差分形）。
+
+`a:=x+u, b:=u` と置き、`d` 素数指数で `d ∤ x` のとき、
+`(x+u)^d-u^d` を割る原始素因子 `q`（低次差分は割らない）を返す。
+CFBRC 記法に揃えた公開 API。
 -/
 theorem exists_primitive_prime_factor_sub_pow_of_prime_exp_boundary
     {d x u : ℕ}
@@ -70,7 +82,10 @@ theorem exists_primitive_prime_factor_sub_pow_of_prime_exp_boundary
   simpa [Nat.add_sub_cancel] using hq_ndvd_gap
 
 /--
-Zsigmondy existence を CFBRC core 除法へ直結する API（prime exponent）。
+Zsigmondy 存在結果の core 直結版（prime exponent）。
+
+同じ原始素因子 `q` が `cyclotomicPrimeCore d x u` を割る形に変換して返す。
+`prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat` を通じた除法同値を使用。
 -/
 theorem exists_primitive_prime_factor_dvd_cyclotomicPrimeCore_of_prime_exp_boundary
     {d x u : ℕ}
@@ -88,7 +103,10 @@ theorem exists_primitive_prime_factor_dvd_cyclotomicPrimeCore_of_prime_exp_bound
   exact ⟨q, hqP, hq_dvd_core, hq_ndvd_x, hprim⟩
 
 /--
-`hcop : Nat.Coprime x u` 版 wrapper（差分形）。
+`Nat.Coprime x u` 前提に正規化した差分形 wrapper。
+
+内部で `Nat.Coprime (x+u) u` へ変換し、
+Zsigmondy 存在 API（差分形）へ委譲する。
 -/
 theorem exists_primitive_prime_factor_sub_pow_of_prime_exp_boundary_of_coprime
     {d x u : ℕ}
@@ -102,7 +120,10 @@ theorem exists_primitive_prime_factor_sub_pow_of_prime_exp_boundary_of_coprime
     ((Nat.coprime_add_self_left).2 hcop) hpnd
 
 /--
-`hcop : Nat.Coprime x u` 版 wrapper（core 除法形）。
+`Nat.Coprime x u` 前提に正規化した core 形 wrapper。
+
+内部で `Nat.Coprime (x+u) u` へ変換し、
+Zsigmondy 存在 API（core 除法形）へ委譲する。
 -/
 theorem exists_primitive_prime_factor_dvd_cyclotomicPrimeCore_of_prime_exp_boundary_of_coprime
     {d x u : ℕ}
@@ -115,33 +136,53 @@ theorem exists_primitive_prime_factor_dvd_cyclotomicPrimeCore_of_prime_exp_bound
     (d := d) (x := x) (u := u) hd_prime hd_ge hx hu
     ((Nat.coprime_add_self_left).2 hcop) hpnd
 
-/-- 境界をどちら側に取るかを指定するパラメータ。 -/
+/--
+境界 side の指定子。
+
+`right`: 基準境界を `u` とする（`(x+u)^d-u^d`）。
+`left`: 基準境界を `x` とする（`(x+u)^d-x^d`）。
+-/
 inductive BoundarySide where
   | right
   | left
 deriving DecidableEq, Repr
 
-/-- side 指定に応じた差分式（valuation 対象）。 -/
+/--
+side 指定に応じた差分式（valuation の入力）。
+
+`right` では `((x+u)^d-u^d)`、`left` では `((x+u)^d-x^d)` を返す。
+-/
 @[simp] def boundaryDiffPow (side : BoundarySide) (d x u : ℕ) : ℕ :=
   match side with
   | .right => (x + u) ^ d - u ^ d
   | .left => (x + u) ^ d - x ^ d
 
-/-- side 指定に応じた `GN` の接続先。 -/
+/--
+side 指定に応じた `GN` 接続先。
+
+`right` では `GN d x u`、`left` では対称形 `GN d u x`。
+-/
 @[simp] def boundaryGN (side : BoundarySide) (d x u : ℕ) : ℕ :=
   match side with
   | .right => GN d x u
   | .left => GN d u x
 
-/-- side 指定に応じた `cyclotomicPrimeCore` の接続先。 -/
+/--
+side 指定に応じた `cyclotomicPrimeCore` 接続先。
+
+`right` では `core d x u`、`left` では対称形 `core d u x`。
+-/
 @[simp] def boundaryCyclotomicPrimeCore (side : BoundarySide) (d x u : ℕ) : ℕ :=
   match side with
   | .right => cyclotomicPrimeCore d x u
   | .left => cyclotomicPrimeCore d u x
 
 /--
-valuation bridge（general `u` 版）:
-`q ∤ x` のとき、`(x+u)^d - u^d` の `q`-進付値は `GN d x u` のそれに一致。
+valuation bridge（GN 版, 右境界）。
+
+前提 `q ∤ x` の下で
+`padicValNat q ((x+u)^d-u^d) = padicValNat q (GN d x u)` を与える。
+`Gcd.GN` 層の gap 版定理を CFBRC 境界記法へ移したもの。
 -/
 theorem padicValNat_sub_pow_eq_padicValNat_GN_of_not_dvd_boundary
     {d x u q : ℕ}
@@ -157,8 +198,10 @@ theorem padicValNat_sub_pow_eq_padicValNat_GN_of_not_dvd_boundary
   simpa [Nat.add_sub_cancel_left] using hval_gap
 
 /--
-valuation の前提正規化 wrapper:
-`hcop : Nat.Coprime x u` と `q ∣ u` から `q ∤ x` を導いて GN 版 valuation bridge を適用する。
+valuation bridge の前提正規化 wrapper（GN 版, 右境界）。
+
+`Nat.Coprime x u` と `q ∣ u` から `¬ q ∣ x` を導出し、
+`..._of_not_dvd_boundary` を直接使える形に落とす。
 -/
 theorem padicValNat_sub_pow_eq_padicValNat_GN_of_coprime_of_dvd_right
     {d x u q : ℕ}
@@ -175,8 +218,11 @@ theorem padicValNat_sub_pow_eq_padicValNat_GN_of_coprime_of_dvd_right
     (d := d) (x := x) (u := u) (q := q) hd2 hx hu hqP hq_not_dvd_x
 
 /--
-valuation bridge:
-`q ∤ x` のとき、`(x+u)^p - u^p` の `q`-進付値は `cyclotomicPrimeCore p x u` のそれに一致。
+valuation bridge（core 版, 右境界）。
+
+前提 `q ∤ x` の下で
+`padicValNat q ((x+u)^p-u^p) = padicValNat q (cyclotomicPrimeCore p x u)`。
+GN 版評価と `cyclotomicPrimeCore = GN`（Nat, `x>0`）を合成して得る。
 -/
 theorem padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_not_dvd_boundary
     {p x u q : ℕ}
@@ -196,8 +242,10 @@ theorem padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_not_dvd_bounda
       rw [hcore_eq_GN]
 
 /--
-valuation の前提正規化 wrapper:
-`hcop : Nat.Coprime x u` と `q ∣ u` から `q ∤ x` を導いて core 版 valuation bridge を適用する。
+valuation bridge の前提正規化 wrapper（core 版, 右境界）。
+
+`Nat.Coprime x u` と `q ∣ u` から `¬ q ∣ x` を導出し、
+core 版 valuation bridge へ接続する。
 -/
 theorem padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_coprime_of_dvd_right
     {p x u q : ℕ}
@@ -214,9 +262,10 @@ theorem padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_coprime_of_dvd
     (p := p) (x := x) (u := u) (q := q) hp2 hx hu hqP hq_not_dvd_x
 
 /--
-valuation の前提正規化 wrapper（対称版）:
-`hcop : Nat.Coprime x u` と `q ∣ x` から `q ∤ u` を導き、
-右境界形 `((x+u)^d - x^d)` を GN へ接続する。
+valuation bridge の前提正規化 wrapper（GN 版, 左境界=対称版）。
+
+`Nat.Coprime x u` と `q ∣ x` から `¬ q ∣ u` を導出し、
+変数入替えで `((x+u)^d-x^d)` を `GN d u x` 側に接続する。
 -/
 theorem padicValNat_sub_pow_eq_padicValNat_GN_of_coprime_of_dvd_left
     {d x u q : ℕ}
@@ -237,9 +286,10 @@ theorem padicValNat_sub_pow_eq_padicValNat_GN_of_coprime_of_dvd_left
   simpa [Nat.add_comm] using hswap
 
 /--
-valuation の前提正規化 wrapper（対称版）:
-`hcop : Nat.Coprime x u` と `q ∣ x` から `q ∤ u` を導き、
-右境界形 `((x+u)^p - x^p)` を core へ接続する。
+valuation bridge の前提正規化 wrapper（core 版, 左境界=対称版）。
+
+`Nat.Coprime x u` と `q ∣ x` から `¬ q ∣ u` を導出し、
+変数入替えで `((x+u)^p-x^p)` を `core p u x` 側に接続する。
 -/
 theorem padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_coprime_of_dvd_left
     {p x u q : ℕ}
@@ -260,9 +310,11 @@ theorem padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_coprime_of_dvd
   simpa [Nat.add_comm] using hswap
 
 /--
-高位 API（境界 side 指定）:
-`hcop : Nat.Coprime x u` と、指定 side の境界が `q` で割れる前提から、
-`padicValNat` の `GN` 接続を一元的に提供する。
+高位 API（GN 版, side 指定）。
+
+`BoundarySide` と境界除法前提
+`match side with | right => q ∣ u | left => q ∣ x`
+を受け取り、左右個別 wrapper を一つの入口に統合する。
 -/
 theorem padicValNat_boundaryDiffPow_eq_boundaryGN_of_coprime_of_dvd_boundary
     (side : BoundarySide) {d x u q : ℕ}
@@ -284,9 +336,10 @@ theorem padicValNat_boundaryDiffPow_eq_boundaryGN_of_coprime_of_dvd_boundary
           (d := d) (x := x) (u := u) (q := q) hd2 hx hu hcop hqP hq_dvd_boundary)
 
 /--
-高位 API（境界 side 指定）:
-`hcop : Nat.Coprime x u` と、指定 side の境界が `q` で割れる前提から、
-`padicValNat` の core 接続を一元的に提供する。
+高位 API（core 版, side 指定）。
+
+`BoundarySide` と境界除法前提を受け取り、
+`boundaryDiffPow` から `boundaryCyclotomicPrimeCore` への valuation 接続を統一提供する。
 -/
 theorem padicValNat_boundaryDiffPow_eq_boundaryCyclotomicPrimeCore_of_coprime_of_dvd_boundary
     (side : BoundarySide) {d x u q : ℕ}

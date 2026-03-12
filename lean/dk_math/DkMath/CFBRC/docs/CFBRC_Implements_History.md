@@ -356,3 +356,73 @@
    - 高位 API は Nat valuation の文脈（`Coprime x u`, `Prime q`, side 境界の除法）に合わせて設計。
 6. 次の課題:
    - 必要なら同様の side 指定 API を divisibility / primitive-prime existence 側にも拡張する。
+
+### 日時: 2026/03/12 17:17 JST: docstring 整備（第1弾: Basic / CyclotomicProduct）
+
+1. 目的: `DkMath.CFBRC` の定理・補題について、数学的意味が追える docstring を順次付与する。
+2. 内容:
+   - `DkMath.CFBRC.Basic` の主要補題へ説明を追加:
+     - prime cyclotomic との同一化
+     - core の漸化式
+     - Cosmic Formula 型恒等式
+     - `GN` 同一化・除法同値・差冪分解・素数除法帰結
+   - `DkMath.CFBRC.CyclotomicProduct` の主要補題へ説明を追加:
+     - `cyclotomicDegreeSum` と次数和評価
+     - 幾何和から core への接続
+     - general `u` の global product bridge
+     - `GN` への complete identification
+   - 既存コード本体は不変更（コメント追加のみ）。
+   - `lake build DkMath.CFBRC.Basic` / `lake build DkMath.CFBRC.CyclotomicProduct` /
+     `lake build DkMath.CFBRC` 成功。
+3. 結論: CFBRC の中心補題群に数学的 docstring が入り、定理の位置づけ・使い所を追いやすくなった。
+4. 失敗事例: 特になし（コメント追加のみでビルド安定）。
+5. 備考:
+   - 次段では `Bridge` 側の既存 docstring も粒度を揃えて統一する予定。
+6. 次の課題:
+   - `Bridge.lean` の docstring を「前提・結論・接続先」のフォーマットで統一し、
+     side 指定高位 API の利用例を短く補う。
+
+### 日時: 2026/03/12 17:21 JST: docstring 整備（第2弾: Bridge）
+
+1. 目的: `Bridge.lean` の docstring を「前提・結論・接続先」が分かる粒度へ統一する。
+2. 内容:
+   - `Bridge` 内の主要 API（除法同値 / Zsigmondy existence / valuation bridge / side 高位 API）
+     の docstring を数学的説明に更新。
+   - 具体的には以下を明示:
+     - どの前提（`q ∤ x`, `Coprime`, `q ∣ boundary`）で
+     - 何が結論（`padicValNat` 等式, primitive prime existence, core/GN 除法）
+     - どの層へ接続（`Gcd.GN` / `cyclotomicPrimeCore` / Zsigmondy 層A）
+   - `BoundarySide` と関連定義（`boundaryDiffPow`, `boundaryGN`, `boundaryCyclotomicPrimeCore`）
+     も左右の意味が読める説明へ更新。
+   - `lake build DkMath.CFBRC.Bridge` / `lake build DkMath.CFBRC` 成功。
+3. 結論: CFBRC bridge 層の公開 API は、docstring だけで前提と数学的役割を追える状態になった。
+4. 失敗事例: 特になし（コメント更新のみ）。
+5. 備考:
+   - 今回は API 名・定理本体を変更せず、ドキュメント表現のみ更新。
+6. 次の課題:
+   - `README.md` に Bridge 高位 API（`BoundarySide` ベース）の短い使用例を追加する。
+
+### 日時: 2026/03/12 19:24 JST: README 充実化（紹介・解説・使用例）
+
+1. 目的: CFBRC の入口ドキュメントを、理論概要と Lean 利用導線が分かる形へ拡張する。
+2. 内容:
+   - `DkMath/CFBRC/README.md` を全面改稿し、以下を追加:
+     - CFBRC の狙い（代数層 / 円分層 / 数論層の橋渡し）
+     - core 公式の解説
+     - Lean 側モジュール構成 (`Defs` / `Basic` / `CyclotomicProduct` / `Bridge`)
+     - Quick Start import
+     - 使用例（Lean snippets）:
+       - `cyclotomicPrimeCore = GN`
+       - 素数除法同値
+       - valuation bridge（右境界）
+       - `BoundarySide` による左右統一 API
+       - Zsigmondy primitive prime existence（core 形）
+     - 関連ドキュメントへのリンク
+   - 実装コード変更はなし（README 更新のみ）。
+3. 結論: README 単体で、CFBRC の位置づけ・主要 API・典型的使用パターンを把握できる状態になった。
+4. 失敗事例: 特になし。
+5. 備考:
+   - README のコード片は「最小利用イメージ」を優先した記述。
+6. 次の課題:
+   - 必要なら README に「Phase 別 API マップ（A/B/C/D）」を追加し、
+     実装計画書との往復参照を強化する。
