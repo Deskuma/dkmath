@@ -7,6 +7,9 @@ Authors: D. and Wise Wolf.
 import DkMath.CFBRC.Defs
 import Mathlib
 
+/-! # CFBRC: Cosmic Formula Binomial Real Complex - Basic Theorems
+-/
+
 namespace DkMath.CFBRC
 
 open scoped BigOperators
