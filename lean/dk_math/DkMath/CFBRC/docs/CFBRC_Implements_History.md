@@ -381,3 +381,23 @@
 6. 次の課題:
    - `Bridge.lean` の docstring を「前提・結論・接続先」のフォーマットで統一し、
      side 指定高位 API の利用例を短く補う。
+
+### 日時: 2026/03/12 17:21 JST: docstring 整備（第2弾: Bridge）
+
+1. 目的: `Bridge.lean` の docstring を「前提・結論・接続先」が分かる粒度へ統一する。
+2. 内容:
+   - `Bridge` 内の主要 API（除法同値 / Zsigmondy existence / valuation bridge / side 高位 API）
+     の docstring を数学的説明に更新。
+   - 具体的には以下を明示:
+     - どの前提（`q ∤ x`, `Coprime`, `q ∣ boundary`）で
+     - 何が結論（`padicValNat` 等式, primitive prime existence, core/GN 除法）
+     - どの層へ接続（`Gcd.GN` / `cyclotomicPrimeCore` / Zsigmondy 層A）
+   - `BoundarySide` と関連定義（`boundaryDiffPow`, `boundaryGN`, `boundaryCyclotomicPrimeCore`）
+     も左右の意味が読める説明へ更新。
+   - `lake build DkMath.CFBRC.Bridge` / `lake build DkMath.CFBRC` 成功。
+3. 結論: CFBRC bridge 層の公開 API は、docstring だけで前提と数学的役割を追える状態になった。
+4. 失敗事例: 特になし（コメント更新のみ）。
+5. 備考:
+   - 今回は API 名・定理本体を変更せず、ドキュメント表現のみ更新。
+6. 次の課題:
+   - `README.md` に Bridge 高位 API（`BoundarySide` ベース）の短い使用例を追加する。
