@@ -164,7 +164,7 @@ $$
 $$
 \frac{d}{d\theta}\arg F(\theta)=
 \frac{u v' - v u'}{u^2+v^2}=
-\operatorname{Im}\left(\frac{F'(\theta)}{F(\theta)}\right)
+\mathrm{Im}\left(\frac{F'(\theta)}{F(\theta)}\right)
 $$
 
 じゃ。
@@ -312,7 +312,7 @@ $$
 
 ### 7.3. 実軸交差の意味が変わる
 
-$\operatorname{Im} G_8(\theta)=0$ は、ただの「虚部ゼロ」ではない。
+$\mathrm{Im} G_8(\theta)=0$ は、ただの「虚部ゼロ」ではない。
 
 $$
 \arg F_2+\arg F_4+\arg F_8 \equiv 0 \pmod{\pi}
