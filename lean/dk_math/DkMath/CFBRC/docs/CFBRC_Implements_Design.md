@@ -424,6 +424,12 @@ GN の再展開・係数比較に突っ込むのは最後の手段とする。
      1. `Homog(Φ_m)(X,Y)` の評価器を最小定義。
      2. `((X^d - Y^d)/(X-Y))` に対応する divisors product 版の橋渡し補題を実装。
      3. `X := x+w`, `Y := w` 代入で `GN(d,x,w)` 側へ接続する。
+   - 2026/03/12 着手（Kickoff 実装）:
+     - `DkMath.CFBRC.CyclotomicProduct` を追加。
+     - `cyclotomicEval`（単変数評価器）と
+       `prod_cyclotomicEval_eq_geomSum`（divisors product bridge）を実装。
+     - shifted 側は `u=1` の接続
+       `cyclotomicDivisorsProductShifted_one_eq_cyclotomicPrimeCore` まで実装。
    - 非スコープ:
      - squarefree / valuation の一般次数強化
      - PrimeProvider 最終統合

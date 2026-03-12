@@ -111,3 +111,28 @@
    - 今回の決定は「代数橋は valuation 未完と独立に前進可能」という整理に基づく。
 6. 次の課題:
    - general `d` 向けに `Homog(Φ_m)(X,Y)` 評価器と divisors product bridge の実装を開始する。
+
+### 日時: 2026/03/12 15:37 JST: Phase D 実装着手（評価器 + divisors product bridge の kickoff）
+
+1. 目的: D-GO 方針に沿って、general `d` product 版の最小核（評価器と product bridge）を `DkMath.CFBRC.*` に実装開始する。
+2. 内容:
+   - `DkMath.CFBRC.CyclotomicProduct` を新規追加。
+   - 実装した定義・定理:
+     - `cyclotomicEval`
+     - `prod_cyclotomicEval_eq_geomSum`
+     - `cyclotomicShiftedEval`
+     - `cyclotomicDivisorsProductShifted`
+     - `cyclotomicShiftedEval_one_eq_cyclotomicEval_add_one`
+     - `cyclotomicDivisorsProductShifted_one_eq_geomSum`
+     - `cyclotomicPrimeCore_one_eq_geomSum`
+     - `cyclotomicDivisorsProductShifted_one_eq_cyclotomicPrimeCore`
+   - `DkMath.CFBRC` 入口に `import DkMath.CFBRC.CyclotomicProduct` を追加。
+   - `lake build DkMath.CFBRC.CyclotomicProduct` / `lake build DkMath.CFBRC` でビルド成功を確認。
+3. 結論: general `d` product bridge の足場が CFBRC 側に成立した。まずは `u=1` 断面で divisors product と core の接続まで到達。
+4. 失敗事例:
+   - 初回実装で `Polynomial.cyclotomic` 由来の noncomputable 制約と、`eval₂` 展開の書き換え不一致でビルド失敗。
+   - `noncomputable section` 化と `prod_congr` ベースの書き換えで解消。
+5. 備考:
+   - 今回は kickoff として `u=1` の橋を先に固定し、一般 `u` の完全斉次橋は次ステップで拡張する。
+6. 次の課題:
+   - `Homog(Φ_m)(X,Y)` の一般 `u` 接続を導入し、`GN(d,x,w)` 側への完全橋渡しを実装する。
