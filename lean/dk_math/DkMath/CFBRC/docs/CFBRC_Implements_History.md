@@ -426,3 +426,32 @@
 6. 次の課題:
    - 必要なら README に「Phase 別 API マップ（A/B/C/D）」を追加し、
      実装計画書との往復参照を強化する。
+
+### 日時: 2026/03/12 20:17 JST: `hS0_not_sq` への cyclotomic-core bridge 補題を FLT 側へ追加
+
+1. 目的: `d=3` での no-lift 仮定を `cyclotomicPrimeCore` から `S0_nat` へ直接移す薄い橋を実装する。
+2. 内容:
+   - `DkMath/FLT/CosmicPetalBridge.lean` に以下を追加:
+     - `hS0_not_sq_of_noLift_cyclotomicPrimeCore_d3`
+   - 補題の形:
+     - 入力: `¬ q^2 ∣ cyclotomicPrimeCore 3 (c-b) b`（primitive branch 前提つき）
+     - 出力: `¬ q^2 ∣ S0_nat c b`
+   - 証明の接続:
+     - `cyclotomicPrimeCore_eq_GN_nat`（`x:=c-b`）
+     - `GN_three_sub_eq_S0_nat`
+     - 上の同一化合成で `core -> S0` に転送
+   - 依存追加:
+     - `import DkMath.CFBRC.Basic` を `CosmicPetalBridge.lean` に追加。
+   - 検証:
+     - `lake build DkMath.FLT.CosmicPetalBridge`
+     - `lake build DkMath.FLT.Main`
+     ともに成功。
+3. 結論: `hS0_not_sq` 供給経路として、`NoSqOnS0` 系・`GN` 系に加えて
+   cyclotomic-core 経由の実装可能ルートをコード化できた。
+4. 失敗事例:
+   - 初回 `simpa` で `cyclotomicPrimeCore` 展開形（和表示）との型不一致が発生。
+   - 展開形総和 `∑ ... (c-b+b)^x ...` と `S0_nat` の一致を中間補題化して解消。
+5. 備考:
+   - 本補題は no-lift provider 自体を与えるものではなく、provider から `S0` 形へ移す glue。
+6. 次の課題:
+   - `PrimeProvider` 側の no-lift / squarefree 仮定から本補題へ接続する wrapper を追加する。
