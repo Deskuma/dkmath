@@ -388,3 +388,21 @@ lake build DkMath.NumberTheory.ZsigmondyCyclotomic
 
 の証明に投入してよい。
 GN の再展開・係数比較に突っ込むのは最後の手段とする。
+
+---
+
+## 12. 実行フェーズ計画（2026/03/12）
+
+1. Phase A（完了）:
+   `DkMath.CFBRC.Defs` に `cyclotomicPrimeCore` を定義し、
+   `DkMath.CFBRC.Basic` で prime case の 5 本（+最小補助）を実装。
+2. Phase B（次）:
+   `Nat.Prime p` を仮定したときの
+   「`cyclotomicPrimeCore` = prime cyclotomic の shifted homogeneous evaluation」
+   を補題化する。
+3. Phase C（次）:
+   `DkMath.CFBRC.*` から Zsigmondy / valuation 層へ import 依存を追加し、
+   除法同値補題を再利用 API として露出する。
+4. Phase D（次）:
+   `CFBRC_Discussion.md` のロードマップに沿って、
+   一般次数（general `d`）の product 版に進むかを評価して分岐判断する。

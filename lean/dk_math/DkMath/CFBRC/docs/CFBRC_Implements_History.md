@@ -29,3 +29,27 @@
 ## 実装履歴
 
 ※ここに上記テンプレートに沿った実装履歴を記録していく。
+
+### 日時: 2026/03/12 15:03 JST: CFBRC prime core（`cyclotomicPrimeCore`）の Lean 実装と GN 連結定理群を追加
+
+1. 目的: CFBRC の差冪コア `((x+u)^p-u^p)/x` を Lean 側で `DkMath.CFBRC.*` に定義し、既存 `GN` と exact に接続する。
+2. 内容:
+   - `DkMath.CFBRC.Defs` に `cyclotomicPrimeCore` を新規定義。
+   - `DkMath.CFBRC.Basic` に以下の橋渡し定理を実装:
+     - `add_pow_eq_mul_cyclotomicPrimeCore_add_gap`
+     - `mul_cyclotomicPrimeCore_eq_mul_GN`
+     - `cyclotomicPrimeCore_eq_GN_nat`
+     - `dvd_cyclotomicPrimeCore_iff_dvd_GN_nat`
+     - `prime_dvd_cyclotomicPrimeCore_of_dvd_sub_not_dvd_left`
+   - 補助補題として `cyclotomicPrimeCore_succ`, `sub_eq_mul_cyclotomicPrimeCore_nat` を追加。
+   - `lake build DkMath.CFBRC.Basic` でビルド成功を確認。
+3. 結論: prime case の最小核（CFBRC core -> GN bridge）が `DkMath.CFBRC.*` 配下で稼働し、Nat 上の除法同値と素因子抽出まで接続完了。
+4. 失敗事例:
+   - 初回実装で Mathlib の import パス差異（`Mathlib.Algebra.BigOperators.Basic/Ring` 不在）により失敗。
+   - `CommSemiring` 上の加法消去不足により、比較定理に `IsRightCancelAdd` 制約の明示が必要だった。
+5. 備考:
+   - 本実装は `GN` 再定義を行わず、`DkMath.CosmicFormulaBinom.cosmic_id_csr'` を基準に接続した。
+   - prime 仮定そのもの（`Nat.Prime p`）を使う円分側意味づけ定理は次フェーズ。
+6. 次の課題:
+   - `Nat.Prime p` を仮定した円分多項式（`Φ_p(T)=∑T^k`）との意味づけ補題を追加する。
+   - `DkMath.CFBRC` を入口にした上位 bridge（Zsigmondy / valuation 層）へ接続する。
