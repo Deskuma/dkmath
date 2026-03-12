@@ -202,3 +202,87 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - Phase RH-E1 として、`eulerZetaFinite` 側の位相速度接続
      （必要な非零条件を整理した上での積→和）を検討する。
+
+### 日時: 2026/03/12 22:54 JST: Phase RH-E1 を実装（`eulerZetaFinite` 側の因子位相速度接続）
+
+1. 目的: RH-D2 の `w_p` 有限積 API を一段進め、
+   `1 / (exp((σ+it)log p) - 1)` 因子（`eulerZetaFinite` の構成因子）側で
+   位相速度の局所寄与と有限和表示を扱えるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/EulerZeta.lean`
+     - `DkMath/RH/Lemmas.lean`
+     - `DkMath/RH/EulerZetaLemmas.lean`
+   - 新規定義（`EulerZeta.lean`）:
+     - `eulerZetaFactorVerticalExp`
+     - `eulerZetaFactorVerticalExpFinite`
+     - `eulerZetaFactorPhaseVelLocal`
+     - `eulerZetaFactorPhaseVelFinite`
+   - 新規補題（`Lemmas.lean`）:
+     - `phaseVel_inv`
+     - `phaseVel_div`
+   - 新規補題（`EulerZetaLemmas.lean`）:
+     - `eulerZetaFactorVerticalExpFinite_empty`
+     - `eulerZetaFactorVerticalExpFinite_insert`
+     - `eulerZetaFactorVerticalExp_ne_zero`
+     - `phaseVel_exp_vertical_mul_log_p_eq_log`
+     - `differentiableAt_eulerZetaFactorVerticalExp_of_ne`
+     - `phaseVel_eulerZetaFactorVerticalExp_eq_log_sub_phaseVelLocal`
+     - `differentiableAt_eulerZetaFactorVerticalExpFinite_of_ne`
+     - `phaseVel_eulerZetaFactorVerticalExpFinite_eq_sum`
+   - 数学的要点:
+     - 逆数・商に対する `phaseVel` の加法則
+       （`phaseVel(1/f) = - phaseVel(f)`, `phaseVel(f/g)=phaseVel(f)-phaseVel(g)`）を追加。
+     - `exp((σ+it)log p)` の位相速度が `log p` であることを補題化し、
+       `1/(exp(...) - 1)` 因子の局所寄与を `log p - phaseVelLocal` へ展開。
+     - `Finset` 帰納で有限積の位相速度を局所寄与有限和に落とす補題を整備。
+   - 検証:
+     - `lake build DkMath.RH.Lemmas`
+     - `lake build DkMath.RH.EulerZetaLemmas`
+     - `lake build DkMath.RH`
+     すべて成功。
+3. 結論: RH-E1 の主目標を達成し、
+   `eulerZetaFinite` 構成因子側でも「積→和」の位相観測 API を利用可能にした。
+4. 失敗事例:
+   - `phaseVel` の逆数補題で虚部の符号整理が不十分な状態があり、
+     `field_simp` 後に `simp [neg_div, Complex.neg_im]` へ調整して解消。
+   - `exp(...)` 因子の位相速度補題で `Complex.log` の実数化処理が崩れたため、
+     非零性からの `Complex.log_ofReal_re` を明示して再構成した。
+5. 備考:
+   - 今回の補題群は `eulerZetaFinite` 本体（積の逆数形）への直接接続前段として設計。
+   - 枝問題には踏み込まず、既存方針どおり `phaseVel` ベースで局所寄与を記述。
+6. 次の課題:
+   - RH-E2 として、`eulerZetaFinite` 本体の位相速度を
+     `eulerZetaFactorPhaseVelFinite` と直結する補題を追加する。
+
+### 日時: 2026/03/12 22:57 JST: Phase RH-E2 を実装（`eulerZetaFinite_onVertical` の積→和接続）
+
+1. 目的: RH-E1 で整備した exp 形因子 API を `eulerZetaFinite_onVertical` 本体へ接続し、
+   有限 Euler 積本体の位相速度を局所寄与和として直接利用できる形にする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/EulerZetaLemmas.lean`
+   - 追加補題:
+     - `eulerZetaFactor_onVertical_eq_factorVerticalExp`
+     - `eulerZetaFinite_onVertical_eq_factorVerticalExpFinite`
+     - `phaseVel_eulerZetaFinite_onVertical_eq_factor_sum`
+   - 数学的要点:
+     - 素数 `p` に対し `eulerZetaFactor p (vertical σ t)` を
+       `exp((σ+it)log p)/(exp((σ+it)log p)-1)` 形へ同一化。
+     - 有限積レベルで同一化を `Finset.prod_congr` で持ち上げ。
+     - RH-E1 の `phaseVel_eulerZetaFactorVerticalExpFinite_eq_sum` を再利用して
+       `eulerZetaFinite_onVertical` 本体の位相速度和表示を導出。
+   - 検証:
+     - `lake build DkMath.RH.EulerZetaLemmas`
+     - `lake build DkMath.RH`
+     ともに成功。
+3. 結論: `eulerZetaFinite_onVertical` 本体から
+   局所寄与有限和 (`eulerZetaFactorPhaseVelFinite`) への橋渡しが完成し、
+   RH-D/E 系の有限観測 API が本体側まで閉じた。
+4. 失敗事例: なし（初回実装でビルド通過）。
+5. 備考:
+   - 非零条件は RH-E1 と同じく `w_p(t) ≠ 0` で統一。
+   - 本補題は HOPC-RH の「有限 Euler 積観測器」の実運用入口として利用可能。
+6. 次の課題:
+   - RH-F1 として、`eulerZetaFinite_onVertical` の停留 (`driftFreeAt`) 条件と
+     有限和 API の零化条件 (`= 0`) の同値補題を追加する。

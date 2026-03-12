@@ -119,6 +119,50 @@ lemma phaseVel_mul
     field_simp [hf0, hg0]
   rw [hdiv, Complex.add_im]
 
+/--
+位相速度の逆数法則。
+
+`f(t) ≠ 0` の下で `phaseVel (1/f) = - phaseVel f`。
+-/
+lemma phaseVel_inv
+    (f : ℝ → ℂ) (t : ℝ)
+    (hf : DifferentiableAt ℝ f t) (hf0 : f t ≠ 0) :
+    phaseVel (fun u => (f u)⁻¹) t = - phaseVel f t := by
+  unfold phaseVel
+  have hderiv :
+      deriv (fun u : ℝ => (1 : ℂ) / f u) t =
+        ((deriv (fun _ : ℝ => (1 : ℂ)) t * f t - (1 : ℂ) * deriv f t) / (f t) ^ 2) := by
+    simpa using
+      (deriv_fun_div (𝕜 := ℝ)
+        (c := fun _ : ℝ => (1 : ℂ)) (d := f) (x := t)
+        (differentiableAt_const (x := t) (c := (1 : ℂ))) hf hf0)
+  have hone : deriv (fun _ : ℝ => (1 : ℂ)) t = 0 := by simp
+  rw [show (fun u => (f u)⁻¹) = (fun u : ℝ => (1 : ℂ) / f u) by
+      funext u; simp [one_div], hderiv, hone]
+  field_simp [hf0]
+  simp [neg_div, Complex.neg_im]
+
+/--
+位相速度の除法則。
+
+`g(t) ≠ 0` の下で `phaseVel (f/g) = phaseVel f - phaseVel g`。
+-/
+lemma phaseVel_div
+    (f g : ℝ → ℂ) (t : ℝ)
+    (hf : DifferentiableAt ℝ f t) (hg : DifferentiableAt ℝ g t)
+    (hf0 : f t ≠ 0)
+    (hg0 : g t ≠ 0) :
+    phaseVel (fun u => f u / g u) t = phaseVel f t - phaseVel g t := by
+  have hmul :
+      phaseVel (fun u => f u * (g u)⁻¹) t =
+        phaseVel f t + phaseVel (fun u => (g u)⁻¹) t := by
+    exact phaseVel_mul (f := f) (g := fun u => (g u)⁻¹) (t := t)
+      hf (hg.inv hg0) hf0 (inv_ne_zero hg0)
+  have hinv :
+      phaseVel (fun u => (g u)⁻¹) t = - phaseVel g t :=
+    phaseVel_inv (f := g) (t := t) hg hg0
+  simpa [div_eq_mul_inv, hinv, sub_eq_add_neg] using hmul
+
 -- ----------------------------------------------------------------------------
 
 /-- 局所ドリフト消失と位相速度ゼロの同値性 -/
