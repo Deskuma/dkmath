@@ -707,3 +707,25 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-K1 として、`RH/README.md` にも RH-J2/J3 bridge の項目を追記し、
      実装トップ README から CFBRC 連携入口を直接辿れるようにする。
+
+### 日時: 2026/03/13 03:03 JST: Phase RH-K1 を実装（トップ README の bridge 入口追加）
+
+1. 目的: 実装トップ README から CFBRC 連携 bridge を直接参照できるようにし、
+   RH-J2/J3 の入口を docs 依存なしで把握できるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/README.md`
+   - 追記箇所:
+     - `主要 API` 節に `CFBRC 連携 bridge（singleton）` を追加
+   - 追加項目:
+     - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge`（global 仮定版）
+     - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge_of_local`（local 仮定版）
+3. 結論: `DkMath/RH/README.md` 単体で
+   HOPC API と CFBRC bridge の両方を把握できる構成になった。
+4. 失敗事例: なし（ドキュメント追記のみ）。
+5. 備考:
+   - `.lean` 実装には変更なし。
+   - 詳細な使い分けは `RH-CFBRC-Discussion.md` の `Bridge Usage (RH-J2/J3)` を参照。
+6. 次の課題:
+   - RH-K2 として、`DkMath/RH/docs/README.md` の現状 API 節にも
+     bridge API を同期し、README 間の記載差分を解消する。

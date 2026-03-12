@@ -53,6 +53,9 @@
   - `driftFreeAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero`
   - `stationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero`
   - `nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum`
+- CFBRC 連携 bridge（singleton）:
+  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge`（global 仮定版）
+  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge_of_local`（local 仮定版）
 
 ## 利用例（import）
 
