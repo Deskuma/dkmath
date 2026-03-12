@@ -330,3 +330,29 @@
    - 対称版は式が `((x+u)^d - x^d)` となり、対応する右境界 `GN d u x` / `core d u x` に接続される。
 6. 次の課題:
    - 必要なら左右を統一した高位 API（境界指定パラメータ付き）を設計する。
+
+### 日時: 2026/03/12 17:06 JST: 左右統一の高位 API（境界 side 指定）を設計・実装
+
+1. 目的: left/right の valuation bridge 群を、境界指定パラメータで統一して呼べる高位 API を整備する。
+2. 内容:
+   - `DkMath.CFBRC.Bridge` に設計要素を追加:
+     - `BoundarySide` (`right` / `left`)
+     - `boundaryDiffPow`
+     - `boundaryGN`
+     - `boundaryCyclotomicPrimeCore`
+   - 高位 API を追加:
+     - `padicValNat_boundaryDiffPow_eq_boundaryGN_of_coprime_of_dvd_boundary`
+     - `padicValNat_boundaryDiffPow_eq_boundaryCyclotomicPrimeCore_of_coprime_of_dvd_boundary`
+   - 設計方針:
+     - side ごとに必要前提を
+       `hq_dvd_boundary : match side with | right => q ∣ u | left => q ∣ x`
+       で表現。
+     - 証明本体は `cases side` で既存 left/right wrapper へ委譲し、
+       低位 API との整合を保つ。
+   - `lake build DkMath.CFBRC.Bridge` / `lake build DkMath.CFBRC` 成功。
+3. 結論: 境界 side を引数にした統一 API が導入され、利用側は left/right の個別定理名を意識せずに valuation bridge を呼び出せるようになった。
+4. 失敗事例: 特になし（既存 wrapper 群を再利用して安定実装）。
+5. 備考:
+   - 高位 API は Nat valuation の文脈（`Coprime x u`, `Prime q`, side 境界の除法）に合わせて設計。
+6. 次の課題:
+   - 必要なら同様の side 指定 API を divisibility / primitive-prime existence 側にも拡張する。

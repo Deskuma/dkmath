@@ -115,6 +115,30 @@ theorem exists_primitive_prime_factor_dvd_cyclotomicPrimeCore_of_prime_exp_bound
     (d := d) (x := x) (u := u) hd_prime hd_ge hx hu
     ((Nat.coprime_add_self_left).2 hcop) hpnd
 
+/-- 境界をどちら側に取るかを指定するパラメータ。 -/
+inductive BoundarySide where
+  | right
+  | left
+deriving DecidableEq, Repr
+
+/-- side 指定に応じた差分式（valuation 対象）。 -/
+@[simp] def boundaryDiffPow (side : BoundarySide) (d x u : ℕ) : ℕ :=
+  match side with
+  | .right => (x + u) ^ d - u ^ d
+  | .left => (x + u) ^ d - x ^ d
+
+/-- side 指定に応じた `GN` の接続先。 -/
+@[simp] def boundaryGN (side : BoundarySide) (d x u : ℕ) : ℕ :=
+  match side with
+  | .right => GN d x u
+  | .left => GN d u x
+
+/-- side 指定に応じた `cyclotomicPrimeCore` の接続先。 -/
+@[simp] def boundaryCyclotomicPrimeCore (side : BoundarySide) (d x u : ℕ) : ℕ :=
+  match side with
+  | .right => cyclotomicPrimeCore d x u
+  | .left => cyclotomicPrimeCore d u x
+
 /--
 valuation bridge（general `u` 版）:
 `q ∤ x` のとき、`(x+u)^d - u^d` の `q`-進付値は `GN d x u` のそれに一致。
@@ -234,5 +258,53 @@ theorem padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_coprime_of_dvd
     padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_not_dvd_boundary
       (p := p) (x := u) (u := x) (q := q) hp2 hu hx hqP hq_not_dvd_u
   simpa [Nat.add_comm] using hswap
+
+/--
+高位 API（境界 side 指定）:
+`hcop : Nat.Coprime x u` と、指定 side の境界が `q` で割れる前提から、
+`padicValNat` の `GN` 接続を一元的に提供する。
+-/
+theorem padicValNat_boundaryDiffPow_eq_boundaryGN_of_coprime_of_dvd_boundary
+    (side : BoundarySide) {d x u q : ℕ}
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
+    (hcop : Nat.Coprime x u) (hqP : Nat.Prime q)
+    (hq_dvd_boundary : match side with
+      | .right => q ∣ u
+      | .left => q ∣ x) :
+    padicValNat q (boundaryDiffPow side d x u) =
+      padicValNat q (boundaryGN side d x u) := by
+  cases side with
+  | right =>
+      simpa [boundaryDiffPow, boundaryGN] using
+        (padicValNat_sub_pow_eq_padicValNat_GN_of_coprime_of_dvd_right
+          (d := d) (x := x) (u := u) (q := q) hd2 hx hu hcop hqP hq_dvd_boundary)
+  | left =>
+      simpa [boundaryDiffPow, boundaryGN] using
+        (padicValNat_sub_pow_eq_padicValNat_GN_of_coprime_of_dvd_left
+          (d := d) (x := x) (u := u) (q := q) hd2 hx hu hcop hqP hq_dvd_boundary)
+
+/--
+高位 API（境界 side 指定）:
+`hcop : Nat.Coprime x u` と、指定 side の境界が `q` で割れる前提から、
+`padicValNat` の core 接続を一元的に提供する。
+-/
+theorem padicValNat_boundaryDiffPow_eq_boundaryCyclotomicPrimeCore_of_coprime_of_dvd_boundary
+    (side : BoundarySide) {d x u q : ℕ}
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
+    (hcop : Nat.Coprime x u) (hqP : Nat.Prime q)
+    (hq_dvd_boundary : match side with
+      | .right => q ∣ u
+      | .left => q ∣ x) :
+    padicValNat q (boundaryDiffPow side d x u) =
+      padicValNat q (boundaryCyclotomicPrimeCore side d x u) := by
+  cases side with
+  | right =>
+      simpa [boundaryDiffPow, boundaryCyclotomicPrimeCore] using
+        (padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_coprime_of_dvd_right
+          (p := d) (x := x) (u := u) (q := q) hd2 hx hu hcop hqP hq_dvd_boundary)
+  | left =>
+      simpa [boundaryDiffPow, boundaryCyclotomicPrimeCore] using
+        (padicValNat_sub_pow_eq_padicValNat_cyclotomicPrimeCore_of_coprime_of_dvd_left
+          (p := d) (x := x) (u := u) (q := q) hd2 hx hu hcop hqP hq_dvd_boundary)
 
 end DkMath.CFBRC
