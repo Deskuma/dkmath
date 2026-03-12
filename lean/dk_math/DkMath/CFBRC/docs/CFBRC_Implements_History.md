@@ -455,3 +455,31 @@
    - 本補題は no-lift provider 自体を与えるものではなく、provider から `S0` 形へ移す glue。
 6. 次の課題:
    - `PrimeProvider` 側の no-lift / squarefree 仮定から本補題へ接続する wrapper を追加する。
+
+### 日時: 2026/03/12 20:31 JST: PrimeProvider から `hS0_not_sq` への wrapper を追加
+
+1. 目的: `PrimeProvider` 側で持っている `GN 3 (c-b) b` の no-lift / squarefree 仮定を、
+   `Main` が要求する `hS0_not_sq` 形へ直接接続する。
+2. 内容:
+   - `DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean` に以下を追加:
+     - `hS0_not_sq_of_noLift_GN_d3`
+     - `hS0_not_sq_of_squarefree_GN_d3`
+   - 証明接続:
+     - no-lift 版は `cyclotomicPrimeCore_eq_GN_nat` で仮定を core 側へ移し、
+       `hS0_not_sq_of_noLift_cyclotomicPrimeCore_d3` へ渡す。
+     - squarefree 版は `not_sq_dvd_of_squarefree` で no-lift を抽出して
+       no-lift wrapper に合成する。
+   - 検証:
+     - `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich`
+     - `lake build DkMath.FLT.Main`
+     ともに成功。
+3. 結論: PrimeProvider の仮定をそのまま `hS0_not_sq` に落とせる導線ができ、
+   `Main` 側での仮定供給が薄い glue で統一できた。
+4. 失敗事例:
+   - 初回実装で `simpa` による展開が過剰に進み、`cyclotomicPrimeCore` 展開和と `GN` 展開和の型不一致が発生。
+   - `rw [← hcore_eq_GN]` の明示書き換えへ変更して解消。
+   - 追加で implicit dependent binder 推論が崩れたため、`intro q ...` を明示して解消。
+5. 備考:
+   - 既存の `triomino*` bridge 群を壊さず、`d=3` 向け補助 API として追記した。
+6. 次の課題:
+   - 必要なら同様の wrapper を `boundary` 高位 API（`BoundarySide`）へ揃えて公開する。
