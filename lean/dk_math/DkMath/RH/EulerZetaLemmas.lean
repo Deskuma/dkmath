@@ -1017,4 +1017,23 @@ lemma stationaryAt_eulerZetaFinite_onVertical_iff_sum_log_sub_phaseVelLocal_eq_z
   exact stationaryAt_eulerZetaFinite_onVertical_iff_factor_sum_eq_zero
     (S := S) (σ := σ) (t := t) hS_ne
 
+/--
+`eulerZetaFinite_onVertical` の非退化停留条件（明示和版）。
+
+`S` 内で `w_p(t) ≠ 0` なら、
+`nondegenerateStationaryAt` は
+`(∑_{p∈S}(log p - phaseVel(w_p)) = 0) ∧ phaseCurv ≠ 0` と同値。
+-/
+lemma nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff_sum_log_sub_phaseVelLocal
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.nondegenerateStationaryAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t
+      ↔
+      (∑ p ∈ S, (Real.log (p.1 : ℝ) - eulerZetaPhaseVelLocal p.1 σ t)) = 0 ∧
+        DkMath.RH.phaseCurv (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ≠ 0 := by
+  rw [← eulerZetaFactorPhaseVelFinite_eq_sum_log_sub_phaseVelLocal
+    (S := S) (σ := σ) (t := t) hS_ne]
+  exact nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff
+    (S := S) (σ := σ) (t := t) hS_ne
+
 end DkMath.RH.EulerZeta

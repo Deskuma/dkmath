@@ -381,3 +381,36 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-G2 として、`nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff` も
      明示和形（`sum_log_sub = 0 ∧ phaseCurv ≠ 0`）へ揃える補題を追加する。
+
+### 日時: 2026/03/12 23:52 JST: Phase RH-G2 を実装（非退化停留条件の明示和版）
+
+1. 目的: RH-G1 で整えた明示和正規化を非退化停留条件にも拡張し、
+   停留・非退化停留の API を同一表現で揃える。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/EulerZetaLemmas.lean`
+   - 追加補題:
+     - `nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff_sum_log_sub_phaseVelLocal`
+   - 数学的要点:
+     - 既存の
+       `nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff`
+       を基礎に、
+       RH-G1 の `eulerZetaFactorPhaseVelFinite_eq_sum_log_sub_phaseVelLocal`
+       で第一成分を rewrite。
+     - これにより非退化停留条件を
+       `sum_log_sub = 0 ∧ phaseCurv ≠ 0` の直読可能な形へ統一。
+   - 検証:
+     - `lake build DkMath.RH.EulerZetaLemmas`
+     - `lake build DkMath.RH`
+     ともに成功。
+3. 結論: `eulerZetaFinite_onVertical` の
+   `driftFreeAt` / `stationaryAt` / `nondegenerateStationaryAt` が
+   すべて明示和ベースで整列し、観測器 API の一貫性が完成した。
+4. 失敗事例: なし（初回実装でビルド通過）。
+5. 備考:
+   - 非零前提は従来どおり `p ∈ S` での `w_p(t) ≠ 0`。
+   - 新規は整理補題のみで、既存証明・既存定義の互換性は維持。
+6. 次の課題:
+   - RH-H1 として、RH-CFBRC 連携資料に合わせて
+     `EulerZetaLemmas` の公開補題群を「観測器インタフェース」として再整理し、
+     `RH-CFBRC-Discussion.md` と同期する導線を追加する。
