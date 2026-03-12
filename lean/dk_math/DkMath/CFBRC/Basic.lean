@@ -16,6 +16,33 @@ open scoped BigOperators
 
 open DkMath.CosmicFormulaBinom
 
+/--
+整数係数多項式 `Φ` に対する shifted homogeneous evaluation:
+`∑_{k=0}^{p-1} coeff(Φ,k) * (x+u)^k * u^(p-1-k)`。
+-/
+@[simp] def cyclotomicShiftedHomEval {R : Type _} [CommRing R]
+    (p : ℕ) (Φ : Polynomial ℤ) (x u : R) : R :=
+  ∑ k ∈ Finset.range p, (Φ.coeff k : R) * (x + u) ^ k * u ^ (p - 1 - k)
+
+theorem cyclotomicPrimeCore_eq_shiftedHomEval_cyclotomic_of_prime
+    {R : Type _} [CommRing R] {p : ℕ} (hp : Nat.Prime p) (x u : R) :
+    cyclotomicPrimeCore p x u =
+      cyclotomicShiftedHomEval p (Polynomial.cyclotomic p ℤ) x u := by
+  have hΦ : Polynomial.cyclotomic p ℤ =
+      ∑ i ∈ Finset.range p, (Polynomial.X : Polynomial ℤ) ^ i := by
+    letI : Fact p.Prime := ⟨hp⟩
+    simpa using (Polynomial.cyclotomic_prime ℤ p)
+  have hcoeff : ∀ {k : ℕ}, k < p → (Polynomial.cyclotomic p ℤ).coeff k = 1 := by
+    intro k hk
+    rw [hΦ]
+    simp [hk]
+  unfold cyclotomicPrimeCore cyclotomicShiftedHomEval
+  apply Finset.sum_congr rfl
+  intro k hk
+  have hk' : k < p := Finset.mem_range.mp hk
+  rw [hcoeff hk']
+  simp
+
 lemma cyclotomicPrimeCore_succ {R : Type _} [CommSemiring R] (p : ℕ) (x u : R) :
     cyclotomicPrimeCore (p + 1) x u = u * cyclotomicPrimeCore p x u + (x + u) ^ p := by
   unfold cyclotomicPrimeCore
