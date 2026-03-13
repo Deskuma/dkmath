@@ -1998,3 +1998,42 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-O8: `hAbs_dvd` / `hAbs_offdvd` を CFBRC provider 前提から導く
      具体評価補題を追加し、split bound 仮定の入力負担を減らす。
+
+### 日時: 2026/03/13 19:30 JST: Phase RH-O8 を実装（local-zero 由来の具体 bound 供給）
+
+1. 目的: OP-001 の RH-O8 として、
+   RH-O7 が要求する split bound 入力（`hAbs_dvd / hAbs_offdvd`）を
+   local-zero 仮定から直接生成する具体補題を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `hopcPrimeContributionFn_abs_le_prime_rpow_of_local_zero`
+     - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0`
+     - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_offdvd_local0`
+     - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_offdvd_local0`
+     - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_local0_sigma_gt_one`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_local0_sigma_gt_one`
+   - 実装方針:
+     - `hopcPrimeLocalContribution = 0` から `hopcPrimeContributionFn = 0` を介し、
+       `|hopcPrimeContributionFn| ≤ C / p^σ` を `C ≥ 0` の下で構成
+     - divide 側は `hwnz_diff + hfactor_diff0` から local-zero を生成
+     - off-divide 側は `hlocal_offdvd` を直接利用し、split bound へ統合
+     - 統合上界を RH-O6/RH-O7 の infinite 接続 API へ接続
+3. 結論:
+   - split bound 仮定の入力負担が下がり、
+     CFBRC 側の local-zero 系仮定から `tsum=0` / atTop 極限 0 まで導けるようになった。
+4. 失敗事例:
+   - 追加時に `𝓝` 記法の scope 未開放エラーが発生。
+   - `open scoped Topology` を導入して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-O9: `hlocal_offdvd` を `BoundaryInsertLocalLiftProvider` など既存 provider 前提から
+     供給する補題を追加し、入力仮定をさらに統一する。

@@ -2037,4 +2037,186 @@ theorem tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_split_prime_rp
   exact tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound_sigma_gt_one
     (σ := σ) (t := t) (C := C) hσ hAbs hEvStationary
 
+/--
+RH-O8: `hopcPrimeLocalContribution = 0` から
+`|hopcPrimeContributionFn| ≤ C / p^σ` を供給する補題。
+-/
+theorem hopcPrimeContributionFn_abs_le_prime_rpow_of_local_zero
+    {σ t C : ℝ}
+    (hC : 0 ≤ C)
+    (hlocal0 :
+      ∀ p : {q // Nat.Prime q}, hopcPrimeLocalContribution p.1 σ t = 0) :
+    ∀ p : {q // Nat.Prime q},
+      |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ := by
+  intro p
+  have hp_pos : (0 : ℝ) < (↑p : ℝ) := by
+    exact_mod_cast p.2.pos
+  have hBoundNonneg : 0 ≤ C / (↑p : ℝ) ^ σ := by
+    exact div_nonneg hC (le_of_lt (Real.rpow_pos_of_pos hp_pos σ))
+  have h0 : hopcPrimeContributionFn σ t p = 0 := by
+    simpa [hopcPrimeContributionFn] using hlocal0 p
+  rw [h0]
+  simpa using hBoundNonneg
+
+/--
+RH-O8: `boundaryDiffPow` を割る素数での
+`w_p ≠ 0` と factor 位相速度ゼロから、`hAbs_dvd` を供給する。
+-/
+theorem hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t C : ℝ}
+    (hC : 0 ≤ C)
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
+    ∀ p : {q // Nat.Prime q},
+      p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+        |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ := by
+  intro p hp_dvd
+  have hlocal0 : hopcPrimeLocalContribution p.1 σ t = 0 :=
+    hopcPrimeLocalContribution_eq_zero_of_factorPhaseVelLocal_eq_zero_of_nonzero
+      (p := p.1) (σ := σ) (t := t) (hwnz_diff p hp_dvd) (hfactor_diff0 p hp_dvd)
+  have hp_pos : (0 : ℝ) < (↑p : ℝ) := by
+    exact_mod_cast p.2.pos
+  have hBoundNonneg : 0 ≤ C / (↑p : ℝ) ^ σ := by
+    exact div_nonneg hC (le_of_lt (Real.rpow_pos_of_pos hp_pos σ))
+  have h0 : hopcPrimeContributionFn σ t p = 0 := by
+    simpa [hopcPrimeContributionFn] using hlocal0
+  rw [h0]
+  simpa using hBoundNonneg
+
+/--
+RH-O8: `boundaryDiffPow` を割らない素数での local-zero 仮定から、
+`hAbs_offdvd` を供給する。
+-/
+theorem hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_offdvd_local0
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t C : ℝ}
+    (hC : 0 ≤ C)
+    (hlocal_offdvd :
+      ∀ p : {q // Nat.Prime q},
+        ¬ p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    ∀ p : {q // Nat.Prime q},
+      ¬ p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+        |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ := by
+  intro p hp_offdvd
+  have hlocal0 : hopcPrimeLocalContribution p.1 σ t = 0 :=
+    hlocal_offdvd p hp_offdvd
+  have hp_pos : (0 : ℝ) < (↑p : ℝ) := by
+    exact_mod_cast p.2.pos
+  have hBoundNonneg : 0 ≤ C / (↑p : ℝ) ^ σ := by
+    exact div_nonneg hC (le_of_lt (Real.rpow_pos_of_pos hp_pos σ))
+  have h0 : hopcPrimeContributionFn σ t p = 0 := by
+    simpa [hopcPrimeContributionFn] using hlocal0
+  rw [h0]
+  simpa using hBoundNonneg
+
+/--
+RH-O8: `boundaryDiffPow` を割る側は factor0、割らない側は local-zero を仮定して、
+global な `|hopcPrimeContributionFn| ≤ C / p^σ` を供給する。
+-/
+theorem hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_offdvd_local0
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t C : ℝ}
+    (hC : 0 ≤ C)
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0)
+    (hlocal_offdvd :
+      ∀ p : {q // Nat.Prime q},
+        ¬ p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    ∀ p : {q // Nat.Prime q},
+      |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ :=
+  hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_split
+    (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) (C := C)
+    (hAbs_dvd := hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) (C := C)
+      hC hwnz_diff hfactor_diff0)
+    (hAbs_offdvd := hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_offdvd_local0
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) (C := C)
+      hC hlocal_offdvd)
+
+/--
+RH-O8: `boundaryDiffPow` factor0 + off-dvd local-zero 仮定から、
+`hopcPrimeContributionTsum = 0` を得る。
+-/
+theorem hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_local0_sigma_gt_one
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t C : ℝ}
+    (hσ : 1 < σ) (hC : 0 ≤ C)
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0)
+    (hlocal_offdvd :
+      ∀ p : {q // Nat.Prime q},
+        ¬ p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          hopcPrimeLocalContribution p.1 σ t = 0)
+    (hEvStationary :
+      ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+        DkMath.RH.stationaryAt
+          (fun v : ℝ => eulerZetaFinite_onVertical S σ v) t) :
+    hopcPrimeContributionTsum σ t = 0 := by
+  have hAbs :
+      ∀ p : {q // Nat.Prime q},
+        |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ :=
+    hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_offdvd_local0
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) (C := C)
+      hC hwnz_diff hfactor_diff0 hlocal_offdvd
+  exact hopcPrimeContributionTsum_eq_zero_of_prime_rpow_bound_sigma_gt_one
+    (σ := σ) (t := t) (C := C) hσ hAbs hEvStationary
+
+/--
+RH-O8: `boundaryDiffPow` factor0 + off-dvd local-zero 仮定から、
+有限寄与和の atTop 極限（0）を得る。
+-/
+theorem tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_local0_sigma_gt_one
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t C : ℝ}
+    (hσ : 1 < σ) (hC : 0 ≤ C)
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0)
+    (hlocal_offdvd :
+      ∀ p : {q // Nat.Prime q},
+        ¬ p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          hopcPrimeLocalContribution p.1 σ t = 0)
+    (hEvStationary :
+      ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+        DkMath.RH.stationaryAt
+          (fun v : ℝ => eulerZetaFinite_onVertical S σ v) t) :
+    Filter.Tendsto
+      (fun S : Finset {p // Nat.Prime p} =>
+        hopcPrimeContributionSum (S := S) σ t)
+      Filter.atTop (𝓝 (0 : ℝ)) := by
+  have hAbs :
+      ∀ p : {q // Nat.Prime q},
+        |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ :=
+    hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_offdvd_local0
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) (C := C)
+      hC hwnz_diff hfactor_diff0 hlocal_offdvd
+  exact tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound_sigma_gt_one
+    (σ := σ) (t := t) (C := C) hσ hAbs hEvStationary
+
 end DkMath.RH.EulerZeta
