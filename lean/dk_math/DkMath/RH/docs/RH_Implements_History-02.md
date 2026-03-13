@@ -214,3 +214,33 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - `lake build DkMath.RH` 成功。
 6. 次の課題:
    - OP-004 は完了扱いとし、以後は OP-001 系（witness / provider 分離）の研究タスクを継続する。
+
+### 日時: 2026/03/14 03:00 JST: RH-CFBRC-HOPC 研究草稿（prime-local 形成機構）の新設
+
+1. 目的:
+   実装で明確化された
+   「prime-local contribution が停留/非退化停留形成に与える構造寄与」を
+   研究論文草稿（GitHub Markdown）として独立文書化する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/HOPC-RH-PrimeLocal-Formation.md`（新規）
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/RH_Implements_History-02.md`
+   - 新規草稿の要点:
+     - `hopcPrimeContributionSum = 0` と停留条件の同値を中心命題として整理
+     - CFBRC primitive-prime witness から RH 観測器への bridge を数理的に説明
+     - `stationary` / `nondegenerate` / provider / normalized 経路を層構造で整理
+     - 「RH の最終証明は主張しない」立場を明記
+   - README 同期:
+     - 冒頭の参照導線に
+       `docs/HOPC-RH-PrimeLocal-Formation.md` を追加
+3. 結論:
+   - 実装知見を「補題の列」から「研究主張の形」へ再構成する文書基盤を用意できた。
+   - 今後の OP-001 系研究を、形成原理の明文化を保ったまま進められる。
+4. 失敗事例:
+   - なし。
+5. 検証:
+   - ドキュメント追加のみ（Lean build 影響なし）。
+6. 次の課題:
+   - 草稿に実装 API の具体名（代表補題）を段階的に追加し、
+     将来的な preprint 形式へ拡張する。

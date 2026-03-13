@@ -20,6 +20,7 @@
 実装計画の 1 枚版は `docs/HOPC-RH-Roadmap.md` を参照。
 語彙の定義域整理は `docs/HOPC-RH-Glossary.md` を参照。
 未解決タスク一覧は `docs/HOPC-RH-OpenProblems.md` を参照。
+prime-local 形成機構の草稿は `docs/HOPC-RH-PrimeLocal-Formation.md` を参照。
 
 ---
 
