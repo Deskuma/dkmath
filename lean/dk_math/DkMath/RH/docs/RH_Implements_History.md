@@ -1742,3 +1742,880 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 
 - OP-003 は RH-N31 で完了と判定。
 - 今後の主要未完は OP-001 / OP-004。
+
+### 日時: 2026/03/13 18:12 JST: Phase RH-O1 を実装（OP-001: finite→infinite 接続の初期 API）
+
+1. 目的: OP-001 の着手として、`hopcPrimeContributionSum` の finite 和から
+   infinite 側（`HasSum` / `tsum`）への接続インタフェースを実装する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/HopcInfiniteLift.lean`（新規）
+     - `DkMath/RH.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`HopcInfiniteLift.lean`）:
+     - `hopcPrimeContributionFn`
+     - `hopcPrimeContributionTsum`
+     - `HopcInfiniteLiftAssumptions`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_hasSum`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_assumptions`
+     - `hopcPrimeContributionTsum_eq_zero_of_hasSumZero`
+     - `hopcPrimeContributionTsum_eq_zero_of_assumptions`
+     - `eventually_abs_hopcPrimeContributionSum_lt_of_assumptions`
+   - 実装修正:
+     - `DkMath/RH.lean` に `import DkMath.RH.HopcInfiniteLift` を追加
+   - 文書同期:
+     - README 2 枚の API に OP-001 接続層を追加（RH-N32 時点へ更新）
+     - `HOPC-RH-OpenProblems.md` の OP-001 を「進行中（RH-O1）」へ更新
+     - `HOPC-RH-Roadmap.md` の Next Sprint を OP-001 主軸へ更新
+3. 結論:
+   - finite 和 `hopcPrimeContributionSum` を atTop 極限で扱う
+     最小の機械可読 API が整った。
+   - OP-001 は「条件列挙フェーズ」から「形式化フェーズ」へ移行した。
+4. 失敗事例:
+   - 初稿で `Tendsto`/`atTop` の名前解決と `eventually` 取り出し方で
+     エラーが発生。
+   - `Filter.Tendsto` / `Filter.atTop` 明示と `hT.eventually` で解消。
+5. 検証:
+   - `lake build DkMath.RH.HopcInfiniteLift` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - OP-001 の RH-O2 として、
+     `HasSum` 仮定をより運用しやすい収束条件へ分解する補題を追加する。
+
+### 日時: 2026/03/13 18:28 JST: Phase RH-O2 を実装（`Summable + tsum=0` 接続）
+
+1. 目的: RH-O1 の次段として、`HasSum` 直仮定を弱め、
+   `Summable + tsum=0` から finite→infinite 接続 API を使えるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/HopcInfiniteLift.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`HopcInfiniteLift.lean`）:
+     - `HopcInfiniteLiftSummableAssumptions`
+     - `hasSumZero_of_summable_assumptions`
+     - `assumptions_of_summable_assumptions`
+     - `hopcPrimeContributionTsum_eq_zero_of_summable_assumptions`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_summable_assumptions`
+     - `eventually_abs_hopcPrimeContributionSum_lt_of_summable_assumptions`
+3. 結論:
+   - OP-001 の finite→infinite 接続は `HasSum` 直仮定だけでなく、
+     より運用しやすい `Summable + tsum=0` 仮定でも利用可能になった。
+4. 失敗事例:
+   - なし（今回追加分は一度で型チェック通過）。
+5. 検証:
+   - `lake build DkMath.RH.HopcInfiniteLift` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-O3: `Summable` を解析的な十分条件へ接続する補題
+     （比較判定 / majorant 供給）を追加する。
+
+### 日時: 2026/03/13 18:34 JST: Phase RH-O3 を実装（majorant 比較で `Summable` 接続）
+
+1. 目的: RH-O2 の次段として、`Summable` 仮定を
+   majorant 比較（`|hopc| ≤ g`, `Summable g`）から供給できる補題を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/HopcInfiniteLift.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`HopcInfiniteLift.lean`）:
+     - `HopcInfiniteLiftMajorantAssumptions`
+     - `summable_hopcPrimeContributionFn_of_majorant_assumptions`
+     - `summable_assumptions_of_majorant_assumptions`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_majorant_assumptions`
+     - `hopcPrimeContributionTsum_eq_zero_of_majorant_assumptions`
+     - `eventually_abs_hopcPrimeContributionSum_lt_of_majorant_assumptions`
+3. 結論:
+   - OP-001 の接続層は
+     `HasSum` → `Summable+tsum=0` → `majorant 比較`
+     まで段階化された。
+4. 失敗事例:
+   - `HopcInfiniteLiftMajorantAssumptions` を `Prop` で定義した初稿は
+     データフィールドを持てず失敗。
+   - `Type` 構造体へ修正して解消。
+5. 検証:
+   - `lake build DkMath.RH.HopcInfiniteLift` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-O4: majorant 供給器（CFBRC/RH 連携の具体化）と、
+     finite 側停留判定から infinite 側観測量への接続補題を追加する。
+
+### 日時: 2026/03/13 18:47 JST: Phase RH-O4 を実装（finite 側停留判定→infinite 側観測量）
+
+1. 目的: OP-001 の RH-O4 として、
+   finite 側の `stationaryAt` 判定を atTop で束ね、
+   infinite 側の `hopcPrimeContributionTsum = 0` へ接続する補題を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/HopcInfiniteLift.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`HopcInfiniteLift.lean`）:
+     - `eventually_hopcPrimeContributionSum_eq_zero_of_eventually_stationaryAt`
+     - `eventually_abs_hopcPrimeContributionSum_lt_of_eventually_stationaryAt`
+     - `hopcPrimeContributionTsum_eq_zero_of_summable_of_eventually_stationaryAt`
+   - 実装方針:
+     - `stationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero`
+       を atTop の `Eventually` へ持ち上げ、`eventually sum = 0` を構成
+     - `eventually` で 0 同一化された有限和の極限を `tendsto_nhds_unique` で一意化し、
+       `Summable` 由来の `tsum` と一致させて `tsum = 0` を導出
+   - 文書同期:
+     - README 2 枚を RH-N35 時点へ更新
+     - OpenProblems / Roadmap の OP-001 状態を RH-O4 到達へ更新
+3. 結論:
+   - finite 側停留判定から infinite 側観測量への接続補題が導入され、
+     OP-001 の「停留判定→極限観測」導線が最小形で成立した。
+4. 失敗事例:
+   - `EulerZetaLemmas` 取り込み後に `simp` 展開が強くなり、
+     既存 `simpa` が型不一致になった。
+   - `simpa only [...]` へ限定し、`eventually` 側は `rw` 明示で修正して解消。
+5. 検証:
+   - `lake build DkMath.RH.HopcInfiniteLift` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-O5: majorant / bridge 仮定から `Summable` を直接供給する具体化レイヤ
+     （CFBRC/RH 連携）を追加する。
+
+### 日時: 2026/03/13 18:53 JST: Phase RH-O5 を実装（`C / p^σ` majorant 供給器）
+
+1. 目的: OP-001 の RH-O5 として、
+   `Summable` を手入力せずに供給できる解析的 wrapper を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/HopcInfiniteLift.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`HopcInfiniteLift.lean`）:
+     - `summable_hopcPrimeContributionFn_of_prime_rpow_bound`
+     - `majorant_assumptions_of_prime_rpow_bound`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound`
+     - `hopcPrimeContributionTsum_eq_zero_of_prime_rpow_bound_of_eventually_stationaryAt`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound_of_eventually_stationaryAt`
+   - 実装方針:
+     - `summable_one_div_prime_rpow_sigma` を再利用し、
+       `|hopc| ≤ C / p^σ`（`σ > 1`）から `Summable` を供給
+     - 供給した可和性を RH-O4 の `eventually_stationary` 系補題へ接続し、
+       `tsum = 0` と atTop 極限 0 を導出
+3. 結論:
+   - OP-001 は RH-O5 到達により、
+     「解析的 bound からの `Summable` 自動供給」まで実装された。
+4. 失敗事例:
+   - `HopcInfiniteLiftMajorantAssumptions` が `Type` のため、
+     構成補題を `theorem` として書くと不正（命題ではない）で失敗。
+   - `def` 化と引数整理（未使用 `hC` 削除）で解消。
+5. 検証:
+   - `lake build DkMath.RH.HopcInfiniteLift` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-O6: CFBRC/RH bridge 前提から
+     `hAbsLe` と `hPrime_ne` を系統供給する wrapper を追加する。
+
+### 日時: 2026/03/13 19:09 JST: Phase RH-O6 を実装（`σ > 1` で `hPrime_ne` 自動供給）
+
+1. 目的: OP-001 の RH-O6 として、
+   `eventually stationary` 系 API が要求する `hPrime_ne` を
+   `σ > 1` から自動供給できる wrapper を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/HopcInfiniteLift.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`HopcInfiniteLift.lean`）:
+     - `hPrime_ne_of_sigma_gt_one`
+     - `eventually_hopcPrimeContributionSum_eq_zero_of_sigma_gt_one_of_eventually_stationaryAt`
+     - `hopcPrimeContributionTsum_eq_zero_of_prime_rpow_bound_sigma_gt_one`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound_sigma_gt_one`
+   - 実装方針:
+     - `EulerZetaConvergence` 側の
+       `eulerZeta_exp_s_log_p_sub_one_ne_zero_strong` を再利用し、
+       `σ > 1` から `∀ p, w_p ≠ 0` を即時供給
+     - RH-O5 の `prime_rpow_bound + eventually_stationary` 補題へ接続して
+       `tsum = 0` と atTop 極限 0 を導出
+3. 結論:
+   - `hPrime_ne` の手入力が不要な高位 API が増え、
+     OP-001 の実運用前提がさらに簡約された。
+4. 失敗事例:
+   - 追加補題名が長すぎて `longLine` linter 警告が発生。
+   - 補題名を短縮して解消。
+5. 検証:
+   - `lake build DkMath.RH.HopcInfiniteLift` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-O7: CFBRC bridge 前提（`BoundarySide` 高位 API）から
+     `hAbsLe` を供給する具体 wrapper を追加する。
+
+### 日時: 2026/03/13 19:17 JST: Phase RH-O7 を実装（`BoundarySide` split bound 連携）
+
+1. 目的: OP-001 の RH-O7 として、
+   CFBRC `BoundarySide` 文脈の split 仮定（divide/off-divide）から
+   `hAbsLe` を合成し、infinite 接続 API へ直結する wrapper を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_split`
+     - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_split_prime_rpow_bound_sigma_gt_one`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_split_prime_rpow_bound_sigma_gt_one`
+   - 実装方針:
+     - `p ∣ boundaryDiffPow` / `¬ p ∣ boundaryDiffPow` の 2 仮定を `by_cases` で統合し、
+       `∀ p, |hopcPrimeContributionFn| ≤ C / p^σ` を構築
+     - 構築した global 上界を `HopcInfiniteLift` の RH-O6 API
+       (`..._prime_rpow_bound_sigma_gt_one`) に接続
+3. 結論:
+   - CFBRC 側 split bound 仮定から、`tsum = 0` と atTop 極限 0 を
+     直接得る橋渡しが追加された。
+4. 失敗事例:
+   - `CFBRCBridge` 側で `𝓝` 記法が未開放で型エラー。
+   - `open scoped Topology` を追加して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-O8: `hAbs_dvd` / `hAbs_offdvd` を CFBRC provider 前提から導く
+     具体評価補題を追加し、split bound 仮定の入力負担を減らす。
+
+### 日時: 2026/03/13 19:30 JST: Phase RH-O8 を実装（local-zero 由来の具体 bound 供給）
+
+1. 目的: OP-001 の RH-O8 として、
+   RH-O7 が要求する split bound 入力（`hAbs_dvd / hAbs_offdvd`）を
+   local-zero 仮定から直接生成する具体補題を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `hopcPrimeContributionFn_abs_le_prime_rpow_of_local_zero`
+     - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0`
+     - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_offdvd_local0`
+     - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_offdvd_local0`
+     - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_local0_sigma_gt_one`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_local0_sigma_gt_one`
+   - 実装方針:
+     - `hopcPrimeLocalContribution = 0` から `hopcPrimeContributionFn = 0` を介し、
+       `|hopcPrimeContributionFn| ≤ C / p^σ` を `C ≥ 0` の下で構成
+     - divide 側は `hwnz_diff + hfactor_diff0` から local-zero を生成
+     - off-divide 側は `hlocal_offdvd` を直接利用し、split bound へ統合
+     - 統合上界を RH-O6/RH-O7 の infinite 接続 API へ接続
+3. 結論:
+   - split bound 仮定の入力負担が下がり、
+     CFBRC 側の local-zero 系仮定から `tsum=0` / atTop 極限 0 まで導けるようになった。
+4. 失敗事例:
+   - 追加時に `𝓝` 記法の scope 未開放エラーが発生。
+   - `open scoped Topology` を導入して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-O9: `hlocal_offdvd` を `BoundaryInsertLocalLiftProvider` など既存 provider 前提から
+     供給する補題を追加し、入力仮定をさらに統一する。
+
+### 日時: 2026/03/13 20:01 JST: Phase RH-O9 を実装（off-dvd local-zero provider 統一）
+
+1. 目的: OP-001 の RH-O9 として、
+   off-dvd 側 local-zero 仮定を record 化し、O8 系 API の入力を統一する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `BoundaryOffDvdLocalZeroProvider`
+     - `boundaryOffDvdLocalZeroProvider_of_factorPhaseVelLocal_eq_zero`
+     - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_offdvd_provider`
+     - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
+   - 実装方針:
+     - off-dvd 側の local-zero 供給を `BoundaryOffDvdLocalZeroProvider` に集約
+     - `hwnz_offdvd + hfactor_offdvd0` から provider を構成する補題を追加
+     - provider を O8 の local-zero 版 API へ接続して `tsum=0` / atTop 極限へ到達
+3. 結論:
+   - O8 の入力仮定が record 統一され、CFBRC 連携の呼び出し導線が整理された。
+4. 失敗事例:
+   - なし（今回追加分は一回で型チェック通過）。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-O10: `BoundaryInsertLocalLiftProvider` から
+     `BoundaryOffDvdLocalZeroProvider` へ落とす変換規則を設計し、
+     provider 層の入力をさらに一本化する。
+
+### 日時: 2026/03/13 20:08 JST: Phase RH-O10 を実装（insert-provider から off-dvd provider 変換）
+
+1. 目的: OP-001 の RH-O10 として、
+   `BoundaryInsertLocalLiftProvider` から
+   `BoundaryOffDvdLocalZeroProvider` へ変換する規則を追加し、provider 層の接続点を統一する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider`
+     - `boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider_of_factorPhaseVelLocal_eq_zero`
+   - 実装方針:
+     - insert-provider を受ける変換器を置き、off-dvd 側 local-zero provider への接続を一本化
+     - `hwnz_offdvd + hfactor_offdvd0` から local-zero を供給する既存規則と合流
+3. 結論:
+   - O9 の provider API と insert-provider API の接続点が整理され、
+     呼び出し側での変換手順が定型化された。
+4. 失敗事例:
+   - なし（追加分は型チェック一回で通過）。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+6. 次の課題:
+   - RH-O11: insert-provider を直接受ける高位 wrapper を追加し、
+     off-dvd 側仮定の入力をさらに簡約する。
+
+### 日時: 2026/03/13 20:46 JST: Phase RH-O11 を実装（insert-provider 直結の高位 wrapper）
+
+1. 目的: OP-001 の RH-O11 として、
+   `BoundaryInsertLocalLiftProvider` と off-dvd 側 factor0 供給を直接受け、
+   `prime_rpow_bound / tsum / tendsto` へ到達する高位 wrapper を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_insertProvider_sigma`
+     - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_insertProvider_sigma_gt_one`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_insertProvider_sigma_gt_one`
+   - 実装方針:
+     - O10 変換規則で insert-provider から off-dvd local-zero を構成
+     - 構成した local-zero を既存の O8 系 (`..._with_offdvd_local0...`) へ接続
+3. 結論:
+   - 呼び出し側が `BoundaryOffDvdLocalZeroProvider` を明示構築せずに、
+     insert-provider から infinite 接続 API へ直接到達できるようになった。
+4. 失敗事例:
+   - 初回実装で未定義の後方参照（宣言順依存）により build 失敗。
+   - 参照先を `..._with_offdvd_local0...` 系へ切替えて解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - insert-provider 内部情報だけで off-dvd local-zero を導出できる十分条件を抽出し、
+     off-dvd 側追加仮定をさらに削減する。
+
+### 日時: 2026/03/13 21:02 JST: Phase RH-O12 を実装（off-dvd factor0 provider 統合）
+
+1. 目的: OP-001 の RH-O12 として、
+   off-dvd 側の `hwnz_offdvd` / `hfactor_offdvd0` を record 化し、
+   insert-provider 直結の infinite 接続 API へ統合する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `BoundaryOffDvdFactorZeroProvider`
+     - `boundaryOffDvdLocalZeroProvider_of_offdvdFactorZeroProvider`
+     - `boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider_of_offdvdFactorZeroProvider`
+     - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_insertProvider_and_offdvdFactorZeroProvider`
+     - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_insertProvider_and_offdvdFactorZeroProvider_sigma_gt_one`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_insertProvider_and_offdvdFactorZeroProvider_sigma_gt_one`
+   - 実装方針:
+     - off-dvd 側評価の 2 条件を `BoundaryOffDvdFactorZeroProvider` に集約
+     - factor0 provider から local-zero provider を構成し、
+       O8 系 (`..._with_offdvd_local0...`) へ接続
+     - insert-provider と factor0 provider を同時に受ける高位 wrapper を追加
+3. 結論:
+   - off-dvd 側評価仮定の受け渡しが record API に統一され、
+     insert-provider 直結の運用が簡潔になった。
+4. 失敗事例:
+   - 初回実装で前方参照により build 失敗
+     （`boundaryOffDvdLocalZeroProvider_of_factorPhaseVelLocal_eq_zero` を未定義位置で参照）。
+   - `boundaryOffDvdLocalZeroProvider_of_offdvdFactorZeroProvider` を直接構成に変更して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - `BoundaryOffDvdFactorZeroProvider` の標準構成器を追加し、
+     off-dvd 側の個別仮定入力をさらに削減する。
+
+### 日時: 2026/03/13 21:05 JST: Phase RH-O13 を実装（off-dvd factor0 provider の標準構成器）
+
+1. 目的: OP-001 の RH-O13 として、
+   `BoundaryOffDvdFactorZeroProvider` を段階的に構成する標準 API を追加し、
+   off-dvd 側の個別仮定入力を削減する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundaryOffDvdFactorZeroProvider_of_split`
+     - `boundaryOffDvdFactorZeroProvider_of_nonzero_and_localZeroProvider`
+     - `boundaryOffDvdFactorZeroProvider_of_boundaryInsertLocalLiftProvider_of_nonzero_and_localZeroProvider`
+     - `boundaryOffDvdFactorZeroProvider_of_boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero`
+   - 併走整理:
+     - RH-O11 wrapper を O12 高位 wrapper + `boundaryOffDvdFactorZeroProvider_of_split`
+       経由へリファクタして重複を削減
+3. 結論:
+   - off-dvd 側前提の受け渡しが record API に寄り、
+     呼び出し側で「関数 2 本を都度渡す」負担が軽減された。
+4. 失敗事例:
+   - 初回実装で前方参照により build 失敗
+     （`boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider` を未定義位置で参照）。
+   - `BoundaryOffDvdLocalZeroProvider` を構造体リテラルで直接構成して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - `BoundaryInsertLocalLiftProvider` 内部情報から
+     off-dvd 側 local-zero を導出する十分条件を補題化し、
+     `_provider` を実質利用する高位 API へ進める。
+
+### 日時: 2026/03/13 21:15 JST: Phase RH-O14 を実装（singleton `S` の off-dvd 抽出）
+
+1. 目的: OP-001 の RH-O14 として、
+   `BoundaryInsertLocalLiftProvider` の `hsum_lift` を使い、
+   singleton `S={r}` 上で off-dvd 側 local-zero を抽出する十分条件補題を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `BoundaryOffDvdLocalZeroOnSetProvider`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_global`
+     - `boundary_hlocal_offdvd_singleton_of_insertProvider_and_witness_local0`
+     - `boundary_hlocal_offdvd_singleton_of_insertProvider_and_boundaryDiffPow_factor0`
+     - `boundaryOffDvdLocalZeroOnSetProvider_singleton_of_insertProvider_and_boundaryDiffPow_factor0`
+   - 実装方針:
+     - `insert p {r}` 上の `hopcPrimeContributionSum = 0` と witness 側 local-zero から
+       `r` 側 local-zero を導出
+     - まず singleton 版で十分条件を固定し、on-set provider へ公開
+3. 結論:
+   - `_provider` の内部情報（`hsum_lift`）を実際に使う off-dvd 抽出が
+     最初の形で追加され、一般有限集合 `S` への拡張基盤ができた。
+4. 失敗事例:
+   - `side` 依存型と `hsum_lift` 引数型の不一致、前方参照、`simp` 変形不足で初回 build 失敗。
+   - `cases side` で分岐し、`BoundaryOffDvdLocalZeroProvider` を局所構成、
+     等式変形を明示して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - singleton 抽出を一般有限集合 `S` へ拡張し、
+     on-set provider を段階的に自動構成できる補題群を追加する。
+
+### 日時: 2026/03/13 21:48 JST: Phase RH-O15 を実装（一般有限集合 `S` への拡張）
+
+1. 目的: OP-001 の RH-O15 として、
+   singleton 抽出（RH-O14）を一般有限集合 `S` へ拡張し、
+   on-set provider 構成器を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundary_hlocal_on_S_of_insertProvider_and_witness_local0_and_local0_on_erase`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_witness_local0_and_local0_on_erase`
+   - 実装方針:
+     - `insert p S` の `hsum_lift` を `p ∉ S` の下で展開し、
+       witness 側 local-zero + `S.erase r` 側 local-zero から `r` を抽出
+     - 抽出補題を束ねて一般 `S` 版 on-set provider 構成器へ接続
+3. 結論:
+   - 一般有限集合 `S` 版の抽出 API が追加され、
+     O14 の singleton 基盤を実運用向けに一段拡張できた。
+4. 失敗事例:
+   - `Finset.not_mem_erase` の識別子不一致、`hp_gap` の依存型不一致、
+     和の整理不足で初回 build が失敗。
+   - `sum_insert` 展開を `simp` で明示し、`cases side` + `by simpa` で依存型を揃え、
+     和の消去を `calc` で構成して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-O15 の `hlocal_erase` 仮定を弱め、
+     `BoundaryInsertLocalLiftProvider` 内部情報からの導出比率を高める。
+
+### 日時: 2026/03/13 22:01 JST: Phase RH-O16 を実装（`hlocal_erase` の内部生成）
+
+1. 目的: OP-001 の RH-O16 として、
+   RH-O15 が要求する `hlocal_erase` を
+   `boundaryDiffPow` 側 factor0 + divisibility から内部生成する wrapper を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundary_hlocal_on_S_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S`
+   - 実装方針:
+     - `S.erase r` 上除法前提から local-zero-on-erase を自動供給し、
+       RH-O15 の 1点抽出補題へ接続
+     - `hS_dvd`（`S` 全体除法）から erase 除法前提を導出する簡約 wrapper を追加
+3. 結論:
+   - RH-O15 の入力前提が軽量化され、
+     on-set provider 構成器で `hlocal_erase` を直接渡す必要がなくなった。
+4. 失敗事例:
+   - `hp_gap` の依存型不一致（`side`/`provider`/`hp_dvd` 依存）で build 失敗。
+   - `cases side` + `simpa` で型を明示変換して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - witness 入力の `p ∉ S` 条件を自動供給する
+     （または代替条件へ置換する）補題を追加する。
+
+### 日時: 2026/03/13 22:08 JST: Phase RH-O17 を実装（witness 前提の `p ∉ S` 除去）
+
+1. 目的: OP-001 の RH-O17 として、
+   一般有限集合 `S` 抽出 wrapper 群の witness 入力から `p ∉ S` 前提を除去し、
+   API 入力を簡約する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 変更実装（`CFBRCBridge.lean`）:
+     - `boundary_hlocal_on_S_of_insertProvider_and_witness_local0_and_local0_on_erase`
+       から `hp_not_mem : p ∉ S` を削除し、
+       `p ∈ S` / `p ∉ S` 分岐で `hsum_lift` 展開を内部処理
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_witness_local0_and_local0_on_erase`
+       の witness から `p ∉ S` を削除
+     - `boundary_hlocal_on_S_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase`
+       の `hp_not_mem` 依存を削除
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase`
+       / `_on_S` の witness から `p ∉ S` を削除
+3. 結論:
+   - RH-O15/O16 で追加した on-set provider 構成 API の入力が一段軽量化され、
+     `insert p S` 展開での集合外仮定を利用側から隠蔽できた。
+4. 失敗事例:
+   - 初回検証で `lake` 実行ディレクトリを 1 階層誤り、
+     `lakefile` 未検出エラーが発生。
+   - `lean/dk_math` 直下で再実行して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - on-set provider 構成器の witness 前提を
+     `BoundaryInsertLocalLiftProvider` 側情報へさらに寄せる。
+
+### 日時: 2026/03/13 22:22 JST: Phase RH-O18 を実装（global witness 化と primitive-prime 直結）
+
+1. 目的: OP-001 の RH-O18 として、
+   RH-O15/O16 の on-set provider 構成器で要求していた
+   `r` ごとの witness 前提を global witness へ簡約し、
+   さらに CFBRC primitive-prime existence から witness を自動供給する wrapper を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_global_witness_local0_and_local0_on_erase`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase_of_global_witness`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+   - 実装方針:
+     - 既存 RH-O15/O16 API を再利用し、`hwitness : ∃ p, ...` を
+       `fun r hrS => ⟨p, ...⟩` へ持ち上げる薄い wrapper を追加
+     - CFBRC 側 `exists_boundaryPrime_dvd_gap_of_..._of_coprime` から
+       global witness を自動生成して on-set provider 構成へ接続
+3. 結論:
+   - witness 入力が「各 `r` ごと」から「全体で 1 つ」へ軽量化され、
+     さらに primitive-prime 直結経路では witness を明示入力せず利用可能になった。
+4. 失敗事例:
+   - `def` 本体での `rcases hwitness` により Prop→Type 消去制限で build 失敗。
+   - `Classical.choose` への置換後も依存型の不一致が残ったため、
+     `cases side` 分岐 + `simpa` で型を正規化して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - `BoundaryInsertLocalLiftProvider` 単体（primitive-prime 仮定なし）で
+     witness を内製する API の可否を評価し、必要なら別 provider 設計へ分岐する。
+
+### 日時: 2026/03/13 22:41 JST: Phase RH-O19 を実装（witness existence の provider 分離）
+
+1. 目的: OP-001 の RH-O19 として、
+   `BoundaryInsertLocalLiftProvider` 単体で witness existence を内製可能かを評価し、
+   不足情報を別 provider として分離する API を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `BoundaryGlobalWitnessProvider`
+     - `BoundaryGlobalWitnessLocalZeroProvider`
+     - `boundaryGlobalWitnessProvider_of_exists`
+     - `boundaryGlobalWitnessLocalZeroProvider_of_exists`
+     - `boundaryGlobalWitnessProvider_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_globalWitnessLocalZeroProvider_and_local0_on_erase`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_globalWitnessProvider`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_globalWitnessProvider_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+   - 実装方針:
+     - `BoundaryInsertLocalLiftProvider` は「与えられた `p` に対する lift 則」を提供するだけで
+       witness existence は含まない、という役割分離を型として明示
+     - 既存 RH-O18 wrapper へ、新しい witness provider record を介して接続
+3. 結論:
+   - 可否評価: `BoundaryInsertLocalLiftProvider` 単体から witness existence を復元する API は
+     現状の情報量では成立しないため、provider 分離が妥当。
+   - 運用面: witness existence の供給経路（手動 / CFBRC primitive-prime）を
+     record 化して再利用可能になった。
+4. 失敗事例:
+   - 依存型（`match side with ...`）の不一致で初回 build が失敗。
+   - `cases side` + `simpa` で witness 型を正規化し解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - witness 分離 provider（RH-O19）前提で、
+     高位 wrapper の命名統一と最小前提化を進める。
+
+### 日時: 2026/03/13 22:54 JST: Phase RH-O20 を実装（命名統一と最小前提化）
+
+1. 目的: OP-001 の RH-O20 として、
+   witness 分離 provider（RH-O19）前提の高位 wrapper 命名を統一し、
+   `hwnz_diff` / `hfactor_diff0` 前提を record 化して最小前提化する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `BoundaryDiffPowFactorZeroProvider`
+     - `boundaryDiffPowFactorZeroProvider_of_split`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_S_of_globalWitnessProvider_and_diffFactorZeroProvider`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_S_of_cfbRc_primitive_prime_and_diffFactorZeroProvider`
+   - 実装方針:
+     - RH-O19 の witness provider 路線を維持しつつ、
+       高位 wrapper 名を `..._of_globalWitnessProvider...` 系へ集約
+     - `hwnz_diff` / `hfactor_diff0` を個別関数で渡さず、
+       `BoundaryDiffPowFactorZeroProvider` 1 引数へ束ねる
+3. 結論:
+   - 高位 API の命名規則が揃い、前提入力の記述量が削減された。
+   - 呼び出し側は witness provider と diff-factor provider を組み合わせる形で
+     再利用しやすくなった。
+4. 失敗事例:
+   - 追加直後の依存型整合で build 調整が必要だったが、
+     `cases side` と wrapper 経由の接続で解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-O20 新命名 wrapper へ呼び出し側を段階移行し、
+     旧命名（`..._global_witness...`）の公開方針を整理する。
+
+### 日時: 2026/03/13 23:23 JST: Phase RH-O21 を実装（旧命名 deprecation と移行導線）
+
+1. 目的: OP-001 の RH-O21 として、
+   RH-O20 新命名 wrapper への段階移行を進めるため、
+   旧 `..._global_witness...` 命名の公開方針をコード上で明示する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_erase_of_globalWitnessProvider_and_diffFactorZeroProvider`
+       （O20 命名系の erase 版）
+   - 方針整理（`CFBRCBridge.lean`）:
+     - 旧命名 4 API に `deprecated` 属性を付与し、移行先を明示
+       - `..._global_witness_local0_and_local0_on_erase`
+       - `..._dvd_on_erase_of_global_witness`
+       - `..._dvd_on_S_of_global_witness`
+       - `..._dvd_on_S_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+3. 結論:
+   - 旧命名は互換維持しつつ、コンパイラ警告ベースで新命名への移行導線を確立した。
+   - 公開方針が「legacy 維持 + 新命名推奨」に整理された。
+4. 失敗事例:
+   - `side` 依存型の不一致と `attribute` 配置で初回 build 失敗。
+   - `cases side` + `simpa` で witness 型を正規化し、
+     `attribute` 前の docstring を通常コメント化して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - 旧命名呼び出しを新命名 wrapper へ段階移行し、
+     `deprecated` 警告の運用ポリシー（削除時期）を確定する。
+
+### 日時: 2026/03/13 23:45 JST: Phase RH-O22 を実装（内部移行と削除時期固定）
+
+1. 目的: OP-001 の RH-O22 として、
+   旧命名呼び出しの内部移行を進め、`deprecated` 運用の削除時期を固定する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 変更実装（`CFBRCBridge.lean`）:
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_globalWitnessLocalZeroProvider_and_local0_on_erase`
+       の内部呼び出しを旧 `..._global_witness...` 依存から
+       非 legacy 経路（`..._witness_local0_and_local0_on_erase`）へ移行
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_globalWitnessProvider`
+       の内部呼び出しを旧 `..._global_witness...` 依存から
+       非 legacy 経路（`..._boundaryDiffPow_factor0_and_dvd_on_S`）へ移行
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_erase_of_globalWitnessProvider_and_diffFactorZeroProvider`
+       を非 legacy 経路（`..._boundaryDiffPow_factor0_and_dvd_on_erase`）へ接続
+     - deprecation コメントへ削除候補日 `2026-06-30` を追記
+3. 結論:
+   - `CFBRCBridge` 内の新命名 wrapper から旧命名 API への依存が解消され、
+     旧命名は互換レイヤとして隔離された。
+   - 削除候補日を `2026-06-30` に固定し、運用方針を明文化した。
+4. 失敗事例:
+   - 依存型（`match side, provider`）の不一致で初回 build が失敗。
+   - `cases side` + `simpa` に戻して witness 型を正規化し解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - 下流（外部利用側）の旧命名呼び出しを `2026-06-30` までに移行し、
+     到達時点で削除可否を判定する。
+
+### 日時: 2026/03/13 23:58 JST: Phase RH-O22 追補（legacy 内部連鎖の切断）
+
+1. 目的: RH-O22 の追補として、
+   旧命名 wrapper 間の内部連鎖呼び出しを減らし、
+   legacy 名を「互換公開レイヤ」に限定する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 変更実装（`CFBRCBridge.lean`）:
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness`
+       を、旧 erase wrapper ではなく基底の
+       `..._boundaryDiffPow_factor0_and_dvd_on_S` へ直結
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+       を、旧 global-witness wrapper ではなく基底の
+       `..._boundaryDiffPow_factor0_and_dvd_on_S` へ直結
+   - 移行結果:
+     - 旧命名の参照は「旧定義本体」と `attribute [deprecated ...]` のみに限定
+3. 結論:
+   - 新規/推奨経路の実装本体は legacy 名に依存しない状態を維持しつつ、
+     旧命名は互換 API として明確に分離された。
+4. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+5. 次の課題:
+   - 下流呼び出し側の移行率を監視し、`2026-06-30` 時点で
+     旧命名 API 削除可否を判定する。
+
+### 日時: 2026/03/14 00:12 JST: Phase RH-O23 を実施（旧命名呼び出し監査）
+
+1. 目的:
+   RH-O22 後の段階移行確認として、リポジトリ内の旧命名呼び出し残存を監査し、
+   deprecation 運用を「外部移行監視フェーズ」へ進める。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 監査実施:
+     - `rg` で旧命名 4 API の参照を `DkMath/**/*.lean` 全域で走査
+     - 残存参照が `CFBRCBridge.lean` の互換定義本体と
+       `attribute [deprecated ...]` のみであることを確認
+3. 結論:
+   - リポジトリ内実コード（下流 Lean 呼び出し）の旧命名依存は解消済み。
+   - `deprecated` 運用は外部利用側の移行監視に絞り、
+     削除候補日 `2026-06-30` を維持する。
+4. 検証:
+   - `rg -n "boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_(global_witness_local0_and_local0_on_erase|boundaryDiffPow_factor0_and_dvd_on_erase_of_global_witness|boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness|boundaryDiffPow_factor0_and_dvd_on_S_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime)" lean/dk_math/DkMath --glob "*.lean"`
+   - `lake build DkMath.RH.CFBRCBridge`
+5. 次の課題:
+   - 外部利用側の旧命名呼び出し移行率を継続監視し、
+     `2026-06-30` 時点で削除可否を最終判定する。
+
+### 日時: 2026/03/14 00:24 JST: Phase RH-O24 を実施（未公開運用前提の確定）
+
+1. 目的:
+   RH-O23 で残した「外部移行監視」前提の妥当性を見直し、
+   未公開運用で外部依存が存在しない前提へ整理する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 方針更新:
+     - OP-001 の状態を「完了（RH-O24）」へ更新
+     - 「外部利用側移行完了」タスクを open issue から除去
+     - 旧命名 API 削除は、公開計画と整合する時点で
+       `2026-06-30` を目安に再判定する方針へ変更
+3. 結論:
+   - 未公開運用前提では、旧命名の deprecation 運用は
+     「内部移行完了済み + 互換層保留」の管理で十分と判断。
+   - OP-001 は現段階の実装課題として完了扱いに更新した。
+4. 検証:
+   - `rg -n "boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_(global_witness_local0_and_local0_on_erase|boundaryDiffPow_factor0_and_dvd_on_erase_of_global_witness|boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness|boundaryDiffPow_factor0_and_dvd_on_S_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime)" --glob '!**/.lake/**' --glob '!**/build/**'`
+5. 次の課題:
+   - OP-004（曲率条件運用）の供給規約・命名規約整理へ進む。

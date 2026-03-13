@@ -13,7 +13,99 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
     無限側観測量へ上げるための前提を明文化する。
 - 目標成果:
   - 条件付きの「有限判定 → 極限判定」補題群
-- 優先度: 高
+- 状態: 完了（RH-O24: 未公開運用前提で外部依存なしを確認）
+- 到達済み:
+  - `hopcPrimeContributionFn`
+  - `hopcPrimeContributionTsum`
+  - `HopcInfiniteLiftAssumptions`
+  - `HopcInfiniteLiftSummableAssumptions`
+  - `HopcInfiniteLiftMajorantAssumptions`
+  - `summable_hopcPrimeContributionFn_of_majorant_assumptions`
+  - `summable_assumptions_of_majorant_assumptions`
+  - `hasSumZero_of_summable_assumptions`
+  - `assumptions_of_summable_assumptions`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_assumptions`
+  - `hopcPrimeContributionTsum_eq_zero_of_assumptions`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_summable_assumptions`
+  - `hopcPrimeContributionTsum_eq_zero_of_summable_assumptions`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_majorant_assumptions`
+  - `hopcPrimeContributionTsum_eq_zero_of_majorant_assumptions`
+  - `eventually_abs_hopcPrimeContributionSum_lt_of_assumptions`
+  - `eventually_abs_hopcPrimeContributionSum_lt_of_summable_assumptions`
+  - `eventually_abs_hopcPrimeContributionSum_lt_of_majorant_assumptions`
+  - `eventually_hopcPrimeContributionSum_eq_zero_of_eventually_stationaryAt`
+  - `eventually_abs_hopcPrimeContributionSum_lt_of_eventually_stationaryAt`
+  - `hopcPrimeContributionTsum_eq_zero_of_summable_of_eventually_stationaryAt`
+  - `summable_hopcPrimeContributionFn_of_prime_rpow_bound`
+  - `majorant_assumptions_of_prime_rpow_bound`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound`
+  - `hopcPrimeContributionTsum_eq_zero_of_prime_rpow_bound_of_eventually_stationaryAt`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound_of_eventually_stationaryAt`
+  - `hPrime_ne_of_sigma_gt_one`
+  - `eventually_hopcPrimeContributionSum_eq_zero_of_sigma_gt_one_of_eventually_stationaryAt`
+  - `hopcPrimeContributionTsum_eq_zero_of_prime_rpow_bound_sigma_gt_one`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound_sigma_gt_one`
+  - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_split`
+  - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_split_prime_rpow_bound_sigma_gt_one`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_split_prime_rpow_bound_sigma_gt_one`
+  - `hopcPrimeContributionFn_abs_le_prime_rpow_of_local_zero`
+  - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0`
+  - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_offdvd_local0`
+  - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_offdvd_local0`
+  - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_local0_sigma_gt_one`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_local0_sigma_gt_one`
+  - `BoundaryOffDvdLocalZeroProvider`
+  - `BoundaryOffDvdLocalZeroOnSetProvider`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_global`
+  - `boundary_hlocal_offdvd_singleton_of_insertProvider_and_witness_local0`
+  - `boundary_hlocal_offdvd_singleton_of_insertProvider_and_boundaryDiffPow_factor0`
+  - `boundaryOffDvdLocalZeroOnSetProvider_singleton_of_insertProvider_and_boundaryDiffPow_factor0`
+  - `boundary_hlocal_on_S_of_insertProvider_and_witness_local0_and_local0_on_erase`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_witness_local0_and_local0_on_erase`
+  - `boundary_hlocal_on_S_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_global_witness_local0_and_local0_on_erase`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase_of_global_witness`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+  - `BoundaryGlobalWitnessProvider`
+  - `BoundaryGlobalWitnessLocalZeroProvider`
+  - `boundaryGlobalWitnessProvider_of_exists`
+  - `boundaryGlobalWitnessLocalZeroProvider_of_exists`
+  - `boundaryGlobalWitnessProvider_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_globalWitnessLocalZeroProvider_and_local0_on_erase`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_globalWitnessProvider`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_globalWitnessProvider_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+  - `BoundaryDiffPowFactorZeroProvider`
+  - `boundaryDiffPowFactorZeroProvider_of_split`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_S_of_globalWitnessProvider_and_diffFactorZeroProvider`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_S_of_cfbRc_primitive_prime_and_diffFactorZeroProvider`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_erase_of_globalWitnessProvider_and_diffFactorZeroProvider`
+  - `BoundaryOffDvdFactorZeroProvider`
+  - `boundaryOffDvdFactorZeroProvider_of_split`
+  - `boundaryOffDvdFactorZeroProvider_of_nonzero_and_localZeroProvider`
+  - `boundaryOffDvdFactorZeroProvider_of_boundaryInsertLocalLiftProvider_of_nonzero_and_localZeroProvider`
+  - `boundaryOffDvdFactorZeroProvider_of_boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero`
+  - `boundaryOffDvdLocalZeroProvider_of_offdvdFactorZeroProvider`
+  - `boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider`
+  - `boundaryOffDvdLocalZeroProvider_of_factorPhaseVelLocal_eq_zero`
+  - `boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider_of_factorPhaseVelLocal_eq_zero`
+  - `boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider_of_offdvdFactorZeroProvider`
+  - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_insertProvider_and_offdvdFactorZeroProvider`
+  - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_insertProvider_and_offdvdFactorZeroProvider_sigma_gt_one`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_insertProvider_and_offdvdFactorZeroProvider_sigma_gt_one`
+  - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_insertProvider_sigma`
+  - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_insertProvider_sigma_gt_one`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_insertProvider_sigma_gt_one`
+  - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_offdvd_provider`
+  - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
+- 備考:
+  - リポジトリ内（`DkMath/**/*.lean`）の旧命名呼び出しは移行完了
+    （旧命名は `CFBRCBridge.lean` の互換定義 + `deprecated` 属性のみ）
+  - 本リポジトリは未公開運用のため、2026-03-14 時点で外部依存は想定しない。
+  - 旧命名 API の削除実施は `2026-06-30` を目安に公開計画と合わせて再判定する。
 
 ## OP-002: 非零前提の管理 API
 
