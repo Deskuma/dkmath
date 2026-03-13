@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.CFBRC.Bridge
 import DkMath.RH.EulerZetaLemmas
 
+set_option linter.style.longLine false
+
 /-!
 # RH-CFBRC Bridge
 
@@ -568,6 +570,124 @@ theorem boundary_local_zero_on_S_of_boundary_dvd_and_gap
   | left =>
       intro r hr
       exact hlocal_witness r (hS_dvd r hr) (hS_gap r hr)
+
+/--
+RH-N28: `S` 上の boundary 除法仮定と witness の boundary 除法を合成し、
+`insert p S` 上の boundary 除法仮定を供給する補題。
+-/
+theorem boundary_dvd_on_insert_of_boundary_dvd_and_witness
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ}
+    (p : {q // Nat.Prime q})
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hp_dvd : p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u) :
+    ∀ r ∈ insert p S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u := by
+  intro r hr
+  rcases Finset.mem_insert.mp hr with hrp | hrS
+  · simpa [hrp] using hp_dvd
+  · exact hS_dvd r hrS
+
+/--
+RH-N28: `S` 上の gap 非除法仮定と witness の gap 非除法を合成し、
+`insert p S` 上の gap 非除法仮定を供給する補題。
+-/
+theorem boundary_gap_on_insert_of_boundary_gap_and_witness
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {x u : ℕ}
+    (p : {q // Nat.Prime q})
+    (hS_gap :
+      ∀ r ∈ S, (match side with
+        | .right => ¬ r.1 ∣ x
+        | .left => ¬ r.1 ∣ u))
+    (hp_gap : match side with
+      | .right => ¬ p.1 ∣ x
+      | .left => ¬ p.1 ∣ u) :
+    ∀ r ∈ insert p S, (match side with
+      | .right => ¬ r.1 ∣ x
+      | .left => ¬ r.1 ∣ u) := by
+  cases side with
+  | right =>
+      intro r hr
+      rcases Finset.mem_insert.mp hr with hrp | hrS
+      · simpa [hrp] using hp_gap
+      · exact hS_gap r hrS
+  | left =>
+      intro r hr
+      rcases Finset.mem_insert.mp hr with hrp | hrS
+      · simpa [hrp] using hp_gap
+      · exact hS_gap r hrS
+
+/--
+RH-N28: CFBRC の primitive prime existence から、
+`boundaryDiffPow side d x u` を割り、対応 gap を割らない素数 witness を返す。
+-/
+theorem exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u) :
+    ∃ p : {q // Nat.Prime q},
+      p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u ∧
+      (match side with
+        | .right => ¬ p.1 ∣ x
+        | .left => ¬ p.1 ∣ u) := by
+  rcases DkMath.CFBRC.exists_primitive_prime_factor_boundaryDiffPow_of_prime_exp_boundary_of_coprime
+      (side := side) (d := d) (x := x) (u := u)
+      hd_prime hd_ge hx hu hcop hpnd with
+    ⟨q, hqP, hq_dvd, hq_gap, _hprim⟩
+  exact ⟨⟨q, hqP⟩, hq_dvd, hq_gap⟩
+
+/--
+RH-N28: CFBRC primitive prime existence と `S` 上の `hS_dvd / hS_gap` を接続し、
+`insert p S` 上の `hS_dvd / hS_gap` を同時供給する実補題。
+-/
+theorem exists_boundary_dvd_gap_on_insert_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with
+        | .right => ¬ r.1 ∣ x
+        | .left => ¬ r.1 ∣ u)) :
+    ∃ p : {q // Nat.Prime q},
+      (∀ r ∈ insert p S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u) ∧
+      (∀ r ∈ insert p S, (match side with
+        | .right => ¬ r.1 ∣ x
+        | .left => ¬ r.1 ∣ u)) := by
+  cases side with
+  | right =>
+      rcases exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
+          (side := .right) (d := d) (x := x) (u := u)
+          hd_prime hd_ge hx hu hcop hpnd with
+        ⟨p, hp_dvd, hp_gap⟩
+      exact ⟨p,
+        boundary_dvd_on_insert_of_boundary_dvd_and_witness
+          (side := .right) (S := S) (d := d) (x := x) (u := u) p hS_dvd hp_dvd,
+        boundary_gap_on_insert_of_boundary_gap_and_witness
+          (side := .right) (S := S) (x := x) (u := u) p hS_gap hp_gap⟩
+  | left =>
+      rcases exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
+          (side := .left) (d := d) (x := x) (u := u)
+          hd_prime hd_ge hx hu hcop hpnd with
+        ⟨p, hp_dvd, hp_gap⟩
+      exact ⟨p,
+        boundary_dvd_on_insert_of_boundary_dvd_and_witness
+          (side := .left) (S := S) (d := d) (x := x) (u := u) p hS_dvd hp_dvd,
+        boundary_gap_on_insert_of_boundary_gap_and_witness
+          (side := .left) (S := S) (x := x) (u := u) p hS_gap hp_gap⟩
 
 /--
 RH-N22: `boundaryCyclotomicPrimeCore` 側の local-zero 仮定から witness local-zero を復元。

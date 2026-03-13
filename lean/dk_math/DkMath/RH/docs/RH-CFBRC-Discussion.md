@@ -454,7 +454,7 @@ example (side : DkMath.CFBRC.BoundarySide)
       (hlocal_witness := hlocal_witness)
 ```
 
-### Implementation Bridge (RH-N27: boundary_dvd + gap / boundaryCore・boundaryDiffPow witness 正規化)
+### Implementation Bridge (RH-N28: boundary_dvd + gap / boundaryCore・boundaryDiffPow witness 正規化)
 
 RH-N21/N22 では、`S` 上の boundary 除法情報と gap 非除法情報を軸に、
 provider 供給前提を段階的に削減した。
@@ -464,6 +464,10 @@ provider 供給前提を段階的に削減した。
 - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap`
 - `boundary_hwnz_witness_of_boundaryCore_nonzero`
 - `boundary_hlocal_witness_of_boundaryCore_local_zero`
+- `boundary_dvd_on_insert_of_boundary_dvd_and_witness`
+- `boundary_gap_on_insert_of_boundary_gap_and_witness`
+- `exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+- `exists_boundary_dvd_gap_on_insert_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
 - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_of_boundaryCore_witness`
 - `hopcPrimeLocalContribution_eq_eulerZetaFactorPhaseVelLocal_of_nonzero`
 - `hopcPrimeLocalContribution_eq_zero_of_factorPhaseVelLocal_eq_zero_of_nonzero`

@@ -1599,3 +1599,40 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - CFBRC 側 primitive prime existence と
      `hS_dvd` / `hS_gap` 供給をさらに密結合する実補題を追加。
    - direct existence wrapper の仮定削減（provider 前提の自動供給）を継続。
+
+### 日時: 2026/03/13 17:24 JST: Phase RH-N28 を実装（primitive prime existence と `hS_dvd / hS_gap` の接続）
+
+1. 目的: OP-003 の残課題だった
+   「CFBRC 側 primitive prime existence と `hS_dvd / hS_gap` を接続する実補題」
+   を RH 側 bridge に追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundary_dvd_on_insert_of_boundary_dvd_and_witness`
+     - `boundary_gap_on_insert_of_boundary_gap_and_witness`
+     - `exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+     - `exists_boundary_dvd_gap_on_insert_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+   - 文書同期:
+     - README 2 枚の API 見出しを RH-N28 に更新し、上記 API を追加
+     - `RH-CFBRC-Discussion.md` の Implementation Bridge 見出し/到達 API を RH-N28 へ更新
+     - `HOPC-RH-OpenProblems.md` の OP-003 状態を RH-N28 に更新し、
+       完了した `primitive prime existence ↔ hS_dvd/hS_gap` 接続タスクを残タスクから除外
+3. 結論:
+   - primitive prime witness を `Subtype` で取り出し、
+     `insert p S` 上の `hS_dvd / hS_gap` を自動構成する導線が追加された。
+   - これにより、次段の「direct existence wrapper の仮定削減」の下地が揃った。
+4. 失敗事例:
+   - `match side` 依存型のまま `gap` 補題を組んだ初稿で型不一致が発生。
+   - `cases side` へ枝分けして証明を安定化し解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N29: RH-N28 補題を使って direct existence wrapper 側の
+     `hS_dvd / hS_gap` 仮定をさらに自動化し、呼び出し前提を削減する。

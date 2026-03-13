@@ -44,7 +44,7 @@
 - `CFBRCBridge.lean`
   - CFBRC の primitive-prime existence から RH 側 singleton 停留判定へ接続する bridge
 
-## 主要 API（RH-N27 時点）
+## 主要 API（RH-N28 時点）
 
 - HOPC 観測量:
   - `hopcPrimeLocalContribution p σ t`
@@ -74,6 +74,10 @@
   - `boundary_hwnz_witness_of_boundaryCore_nonzero`
   - `boundary_local_zero_on_S_of_boundary_dvd_and_gap`
   - `boundary_hlocal_witness_of_boundaryCore_local_zero`
+  - `boundary_dvd_on_insert_of_boundary_dvd_and_witness`
+  - `boundary_gap_on_insert_of_boundary_gap_and_witness`
+  - `exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+  - `exists_boundary_dvd_gap_on_insert_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
   - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap`
   - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_of_boundaryCore_witness`
   - `hopcPrimeLocalContribution_eq_eulerZetaFactorPhaseVelLocal_of_nonzero`
