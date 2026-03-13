@@ -1,71 +1,288 @@
-# DkMath.RH
+# DkMath.RH：位相ドリフト骨格 + EulerZeta（現状の全コード）
 
-`DkMath.RH` は、Riemann Hypothesis 周辺の解析を
-「prime-local contribution（素数ごとの局所寄与）」で観測するための Lean モジュール群です。
+- Authors: D. and Kenro (ChatGPT-5.2)
+- Last updated: 2026/03/14 00:35
 
-ここでの実装目標は、RH の即時証明主張ではなく、次を機械検証可能な API として整備することです。
+このディレクトリは、リーマンゼータ関数に差し込む前に必要な
 
-- 位相ドリフト骨格（`phaseVel`, `driftFreeAt`, `phaseCurv`）
-- Euler 因子の局所観測（`w_p`, factor phase velocity）
-- 有限 Euler 積での停留・非退化停留判定
-- CFBRC と接続可能な HOPC 観測量（寄与総和）公開
+- 「複素関数の位相（角度）の変化＝位相速度」を Lean で扱う骨格
+- その骨格を使って定義した **EulerZeta（magnitude/phase）** の無限積を、収束・正値まで含めて固める
 
-## 入口
+ためのモジュール群です。
 
-- 実装トップ: `DkMath/RH.lean`
-- 詳細解説（長文）: `DkMath/RH/docs/README.md`
-- 方針文書: `DkMath/RH/docs/HOPC-RH.txt`
-- ロードマップ: `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-- 用語集: `DkMath/RH/docs/HOPC-RH-Glossary.md`
-- 未解決タスク: `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
-- CFBRC 連携議論: `DkMath/RH/docs/RH-CFBRC-Discussion.md`
-- 実装履歴: `DkMath/RH/docs/RH_Implements_History.md`
+重要方針は 2 つ：
 
-## ファイル構成（実装）
+1. `arg`（偏角）を直接扱わず、**位相を積分で定義（アンラップ）** して枝問題を回避する。
+2. 位相付き Euler 因子を「magnitude（大きさ）」と「phase（位相）」に分解し、
+   まず magnitude の無限積を **σ > 1 で収束する**ことまで Lean で確定する。
+
+このファイルは RH ディレクトリの統合 README（唯一の表紙）です。
+実装計画の 1 枚版は `docs/HOPC-RH-Roadmap.md` を参照。
+語彙の定義域整理は `docs/HOPC-RH-Glossary.md` を参照。
+未解決タスク一覧は `docs/HOPC-RH-OpenProblems.md` を参照。
+prime-local 形成機構の草稿は `docs/HOPC-RH-PrimeLocal-Formation.md` を参照。
+
+---
+
+## 論文
+
+このモジュール群の理論的背景は、次の論文に基づきます。
+
+- [Euler Zeta Function ζe(s): A Novel Approach to Prime Distribution through Scale Analysis](./docs/EulerZetaFunction-v0-1.pdf)
+  - March 15, 2025
+  - Author: D. and Kenro (ChatGPT-4o)
+  - cid: 67d46595-3550-8009-896d-00c3263c4f23
+
+### オイラーゼータ関数
+
+$$
+  \Large
+  \zeta_e(s) = \prod_{p} \frac{e^{\sigma \log p}}{| e^{(\sigma+it) \log p} - 1 |}
+$$
+
+オイラー積表示より導出されたゼータ関数の変形版で、位相因子を含むものを指します。
+
+#### オイラー積表示
+
+$$
+  \large
+  \zeta(s) = \prod_{p} \frac{1}{1 - p^{-s}}
+$$
+
+$$
+  \left(
+  \frac{1}{1 - p^{-s}}
+  = \frac{p^s}{p^s - 1}
+  = \frac{\exp(s\ln p)}{\exp(s\ln p) - 1}
+  \right)
+$$
+
+※ $s = \sigma + it$ : 複素数変数
+
+---
+
+## ファイル構成（現状）
+
+### 位相ドリフト骨格
+
+- `Basic.lean`
+  空ファイル（予約）。将来の共通設定や再輸出（re-export）置き場候補。
 
 - `Defs.lean`
-  - `vertical`, `torque`, `phaseVel`, `phaseUnwrap`, `driftFreeAt`, `phaseCurv`
+  定義置き場（記号・概念の導入のみ）。
+
 - `Lemmas.lean`
-  - 位相速度の代数公式、積・商・逆数法則、停留同値
+  定義間の関係を示す補題（代数コア、同値、別表現など）。
+
 - `Theorems.lean`
-  - `phaseUnwrap` の微分に関する基礎定理
+  積分で定義した位相が期待通り微分できること（解析骨格）を示す定理。
+
+### EulerZeta（今回追加された成果）
+
 - `EulerZeta.lean`
-  - Euler 因子 / 有限積 / 局所位相寄与
-  - HOPC 公開定義:
-    - `hopcPrimeLocalContribution`
-    - `hopcPrimeContributionSum`
+  EulerZeta（magnitude/phase）に関する公開インタフェース（定義の再輸出、主要定理の提示）。
+
 - `EulerZetaLemmas.lean`
-  - 単一素数因子の導関数・位相速度
-  - 有限積の積→和補題
-  - `driftFreeAt` / `stationaryAt` / `nondegenerateStationaryAt` と
-    HOPC 寄与総和の同値
+  EulerZeta の局所補題集：
+  分母 `w = exp((σ+it)log p) - 1` の非零、`‖a_p - 1‖` の評価など。
+
 - `EulerZetaConvergence.lean`
-  - `σ > 1` での magnitude 無限積収束と正値
-- `CFBRCBridge.lean`
-  - CFBRC の primitive-prime existence から RH 側 singleton 停留判定へ接続する bridge
+  収束と正値の主証明：
+  `σ > 1` のもとで `EulerZetaMagMultipliable` と `0 < eulerZetaMag` を確定。
 
-## 主要 API（RH-N31 時点）
+- `HopcInfiniteLift.lean`
+  OP-001 向け finite→infinite 接続 API：
+  `HasSum` 仮定から `hopcPrimeContributionSum` の atTop 極限・`tsum` へ接続。
 
-- HOPC 観測量:
-  - `hopcPrimeLocalContribution p σ t`
-  - `hopcPrimeContributionSum S σ t`
-- 停留判定（有限 Euler 積）:
+---
+
+## 位相ドリフト骨格：到達点（短く）
+
+- 位相速度 `phaseVel` を `torque / normSq` として代数的に扱えるようにした。
+- 「ドリフト消失」は「位相速度ゼロ」と同値になった（零点回避 `f t ≠ 0` を条件に）。
+- `arg` を使わず、位相を積分で定義した上で、微分が正しく戻ることを示した。
+
+（詳細は [DkMath_RH.md](./docs/DkMath_RH.md) を参照）
+
+---
+
+## EulerZeta：定義と成果（短く）
+
+### 定義（magnitude / phase）
+
+素数ごとに
+
+- 分母（複素数）
+  `w(p,σ,t) := exp((σ+it)log p) - 1`
+
+- magnitude 因子（実数）
+  `a_p(σ,t) := exp(σ log p) / ‖w(p,σ,t)‖`
+
+を定義し、EulerZeta magnitude を
+
+- `eulerZetaMag (σ t : ℝ) : ℝ := ∏' p : {p // Nat.Prime p}, a_p(σ,t)`
+
+として無限積（`tprod`）で定義します。
+
+また位相は
+
+- `eulerZetaPhase (p) (σ t) := Complex.arg (w(p,σ,t))`
+
+として別途導入します（位相骨格の側は `arg` を直接使わずにアンラップへ接続する予定）。
+
+### 主定理（σ > 1）
+
+- `eulerZetaMag_multipliable_sigma_gt_one`
+  `σ > 1` のもとで EulerZeta magnitude の無限積が収束（`Multipliable`）。
+
+- `eulerZetaMag_pos_sigma_gt_one`
+  `σ > 1` のもとで `0 < eulerZetaMag σ t`。
+
+### 証明戦略（要点）
+
+1. `w(p,σ,t) ≠ 0` を確定（定義が安全になる）。
+2. 近似評価：`‖a_p(σ,t) - 1‖ ≤ 2 / p^σ`（σ > 1）。
+3. `∑ 1/n^σ`（p-series）へ比較して `Summable` を得る。
+4. Mathlib の一般定理で `Multipliable` と `tprod` の正値へ落とす。
+
+---
+
+## 現状 API（HOPC 公開名・RH-N53 時点）
+
+CFBRC 連携で使う公開名は次を基準とする。
+
+- 観測量（`EulerZeta.lean`）
+  - `hopcPrimeLocalContribution`
+  - `hopcPrimeContributionSum`
+- finite→infinite 接続（`HopcInfiniteLift.lean`）
+  - `hopcPrimeContributionFn`
+  - `hopcPrimeContributionTsum`
+  - `HopcInfiniteLiftAssumptions`
+  - `HopcInfiniteLiftSummableAssumptions`
+  - `HopcInfiniteLiftMajorantAssumptions`
+  - `summable_hopcPrimeContributionFn_of_majorant_assumptions`
+  - `summable_assumptions_of_majorant_assumptions`
+  - `hasSumZero_of_summable_assumptions`
+  - `assumptions_of_summable_assumptions`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_assumptions`
+  - `hopcPrimeContributionTsum_eq_zero_of_assumptions`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_summable_assumptions`
+  - `hopcPrimeContributionTsum_eq_zero_of_summable_assumptions`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_majorant_assumptions`
+  - `hopcPrimeContributionTsum_eq_zero_of_majorant_assumptions`
+  - `eventually_abs_hopcPrimeContributionSum_lt_of_assumptions`
+  - `eventually_abs_hopcPrimeContributionSum_lt_of_summable_assumptions`
+  - `eventually_abs_hopcPrimeContributionSum_lt_of_majorant_assumptions`
+  - `summable_hopcPrimeContributionFn_of_prime_rpow_bound`
+  - `majorant_assumptions_of_prime_rpow_bound`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound`
+  - `eventually_hopcPrimeContributionSum_eq_zero_of_eventually_stationaryAt`
+  - `eventually_abs_hopcPrimeContributionSum_lt_of_eventually_stationaryAt`
+  - `hopcPrimeContributionTsum_eq_zero_of_summable_of_eventually_stationaryAt`
+  - `hopcPrimeContributionTsum_eq_zero_of_prime_rpow_bound_of_eventually_stationaryAt`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound_of_eventually_stationaryAt`
+  - `hPrime_ne_of_sigma_gt_one`
+  - `eventually_hopcPrimeContributionSum_eq_zero_of_sigma_gt_one_of_eventually_stationaryAt`
+  - `hopcPrimeContributionTsum_eq_zero_of_prime_rpow_bound_sigma_gt_one`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound_sigma_gt_one`
+  - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_split`
+  - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_split_prime_rpow_bound_sigma_gt_one`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_split_prime_rpow_bound_sigma_gt_one`
+  - `hopcPrimeContributionFn_abs_le_prime_rpow_of_local_zero`
+  - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0`
+  - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_offdvd_local0`
+  - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_offdvd_local0`
+  - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_local0_sigma_gt_one`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_local0_sigma_gt_one`
+  - `BoundaryOffDvdLocalZeroProvider`
+  - `BoundaryOffDvdLocalZeroOnSetProvider`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_global`
+  - `boundary_hlocal_offdvd_singleton_of_insertProvider_and_witness_local0`
+  - `boundary_hlocal_offdvd_singleton_of_insertProvider_and_boundaryDiffPow_factor0`
+  - `boundaryOffDvdLocalZeroOnSetProvider_singleton_of_insertProvider_and_boundaryDiffPow_factor0`
+  - `boundary_hlocal_on_S_of_insertProvider_and_witness_local0_and_local0_on_erase`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_witness_local0_and_local0_on_erase`
+  - `boundary_hlocal_on_S_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_global_witness_local0_and_local0_on_erase` (legacy, deprecated; removal target: 2026-06-30)
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase_of_global_witness` (legacy, deprecated; removal target: 2026-06-30)
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness` (legacy, deprecated; removal target: 2026-06-30)
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime` (legacy, deprecated; removal target: 2026-06-30)
+  - リポジトリ内呼び出し（`DkMath/**/*.lean`）は 2026-03-14 時点で新命名へ移行済み
+  - 本リポジトリは未公開運用のため、2026-03-14 時点で外部依存は想定しない
+  - `BoundaryGlobalWitnessProvider`
+  - `BoundaryGlobalWitnessLocalZeroProvider`
+  - `boundaryGlobalWitnessProvider_of_exists`
+  - `boundaryGlobalWitnessLocalZeroProvider_of_exists`
+  - `boundaryGlobalWitnessProvider_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_globalWitnessLocalZeroProvider_and_local0_on_erase`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_globalWitnessProvider`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_globalWitnessProvider_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+  - `BoundaryDiffPowFactorZeroProvider`
+  - `boundaryDiffPowFactorZeroProvider_of_split`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_erase_of_globalWitnessProvider_and_diffFactorZeroProvider`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_S_of_globalWitnessProvider_and_diffFactorZeroProvider`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_S_of_cfbRc_primitive_prime_and_diffFactorZeroProvider`
+  - `BoundaryOffDvdFactorZeroProvider`
+  - `boundaryOffDvdFactorZeroProvider_of_split`
+  - `boundaryOffDvdFactorZeroProvider_of_nonzero_and_localZeroProvider`
+  - `boundaryOffDvdFactorZeroProvider_of_boundaryInsertLocalLiftProvider_of_nonzero_and_localZeroProvider`
+  - `boundaryOffDvdFactorZeroProvider_of_boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero`
+  - `boundaryOffDvdLocalZeroProvider_of_offdvdFactorZeroProvider`
+  - `boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider`
+  - `boundaryOffDvdLocalZeroProvider_of_factorPhaseVelLocal_eq_zero`
+  - `boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider_of_factorPhaseVelLocal_eq_zero`
+  - `boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider_of_offdvdFactorZeroProvider`
+  - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_insertProvider_and_offdvdFactorZeroProvider`
+  - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_insertProvider_and_offdvdFactorZeroProvider_sigma_gt_one`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_insertProvider_and_offdvdFactorZeroProvider_sigma_gt_one`
+  - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_insertProvider_sigma`
+  - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_insertProvider_sigma_gt_one`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_insertProvider_sigma_gt_one`
+  - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_offdvd_provider`
+  - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
+  - `eventually_stationaryAt_of_cfbRc_primitive_prime_boundary_bridge_of_providerFamily`
+  - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_and_providerFamily_sigma_gt_one`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_provider_and_providerFamily_sigma_gt_one`
+  - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvdFactorZeroProvider_and_providerFamily_sigma_gt_one`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvdFactorZeroProvider_and_providerFamily_sigma_gt_one`
+- 同一化（`EulerZetaLemmas.lean`）
+  - `eulerZetaFactorPhaseVelFinite_eq_hopcPrimeContributionSum`
+- 停留判定（`EulerZetaLemmas.lean`）
   - `driftFreeAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero`
   - `stationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero`
   - `nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum`
-- CFBRC 連携 bridge（singleton）:
-  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge`（global 仮定版）
-  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge_of_local`（local 仮定版）
-- CFBRC 連携 bridge（small finite-set）:
+- CFBRC 連携 bridge（`CFBRCBridge.lean`）
+  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge`
+  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge_of_local`
+  - `exists_nondegenerateStationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_local_and_phaseCurv`
   - `stationaryAt_insert_of_hopcPrimeContributionSum_eq_zero`
+  - `nondegenerateStationaryAt_insert_of_hopcPrimeContributionSum_eq_zero_and_phaseCurv_ne_zero`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_split`
-- CFBRC 連携 bridge（`BoundarySide` 統一）:
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_split_and_phaseCurv`
   - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_local`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv`
   - `BoundaryInsertLocalLiftProvider`
+  - `BoundaryInsertPhaseCurvProvider`
+  - `boundaryInsertPhaseCurvProvider_of_split`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider_and_phaseCurvProvider`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_of_dvd_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_normalized_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_with_offdvd_and_phaseCurv`
   - `boundary_hS_lift_of_nonzero_on_S_and_witness`
   - `boundaryInsertLocalLiftProvider_of_nonzero_on_S_and_witness`
   - `boundary_hsum_lift_of_local_zero_on_S_and_witness`
@@ -109,22 +326,32 @@
   - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0`
   - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_and_local_zero`
 
+補足:
+
+- 上記公開名は明示和
+  `∑_{p∈S} (log p - phaseVel(w_p))`
+  の alias/wrapper 層として設計されている。
+- `docs/RH-CFBRC-Discussion.md` の `Implementation Bridge (RH-H1/H2)` と対応。
+
+`hEvStationary` 直入力 API と provider-family API の公開方針（2026-03-14）:
+
+- 方針は当面 `併存`（即時 `deprecated` 化はしない）。
+- `hEvStationary` 直入力 API は、解析側が `Eventually` 証明を直接供給する low-level 入口として維持。
+- CFBRC 駆動の標準導線では provider-family API（`..._and_providerFamily_...`）を推奨。
+- 再評価日は `2026-06-30`。その時点で利用実態を確認し、段階的 `deprecated` 付与可否を判定する。
+
+---
+
 ## 利用例（import）
 
-```lean
-import DkMath.RH
-
-open DkMath.RH.EulerZeta
-```
-
-必要最小だけ使う場合:
+RH 側 API を使う最小例:
 
 ```lean
 import DkMath.RH.EulerZeta
 import DkMath.RH.EulerZetaLemmas
 ```
 
-CFBRC 連携 bridge まで使う場合:
+CFBRC 連携 bridge まで使う例:
 
 ```lean
 import DkMath.RH.CFBRCBridge
@@ -132,16 +359,13 @@ import DkMath.RH.CFBRCBridge
 open DkMath.RH.EulerZeta
 ```
 
-`BoundarySide` 高位 API（split 仮定）を使う最小テンプレート:
+`BoundarySide` + small finite-set（split 仮定）テンプレート:
 
 ```lean
 import DkMath.RH.CFBRCBridge
 
 open DkMath.RH.EulerZeta
 
--- side : DkMath.CFBRC.BoundarySide
--- hpnd : match side with | .right => ¬ d ∣ x | .left => ¬ d ∣ u
--- hS_lift / hsum_lift は insert p S 上の仮定供給器
 example (side : DkMath.CFBRC.BoundarySide)
     (S : Finset {q // Nat.Prime q})
     {d x u : ℕ} {σ t : ℝ}
@@ -169,7 +393,7 @@ example (side : DkMath.CFBRC.BoundarySide)
       hd_prime hd_ge hx hu hcop hpnd hS_lift hsum_lift
 ```
 
-`BoundaryInsertLocalLiftProvider` を使う最小テンプレート:
+`BoundaryInsertLocalLiftProvider`（provider record）テンプレート:
 
 ```lean
 import DkMath.RH.CFBRCBridge
@@ -462,7 +686,32 @@ example (side : DkMath.CFBRC.BoundarySide)
       hd_prime hd_ge hx hu hcop hpnd hS_dvd hS_gap hwnz_diff hfactor_diff0
 ```
 
-## 注意
+---
 
-- 本層は「観測器 API の整備」を主目的とし、RH の完全証明を主張しません。
-- `arg` の枝問題は避け、`phaseVel` / `phaseUnwrap` 中心で整理します。
+## `#print axioms` に `sorryAx` が出る件について（メモ）
+
+ソース（`.lean`）上に `sorry` が無いのに `#print axioms` で `sorryAx` が見える場合、
+典型的には次のどちらかです：
+
+- 古い `.olean` が残っている（ビルドキャッシュ混入）
+- 依存先（環境側）に `sorryAx` を含むものがある
+
+まずは `lake clean` と `.lake/build` の再生成で切り分けるのが確実です。
+
+なお `propext / Classical.choice / Quot.sound` は、Mathlib を普通に使うと出やすい標準的な依存です。
+
+---
+
+## 次にやると自然な拡張（予定メモ）
+
+- EulerZeta の phase 側を、位相骨格（アンラップ位相）へ接続する：
+  `arg` を直接扱わず、`phaseUnwrap` で連続位相として扱う。
+- σ 方向（横方向）でも同型テンプレートを作る：
+  `phaseVelSigma` / `phaseUnwrapSigma`。
+- ゼータ差し込みのための仮定（零点回避・可微分性・可積分性）を整理してまとめる。
+
+---
+
+VSCode and GitHub Markdown $\LaTeX$ Style Documentation
+
+This document uses GitHub-flavored Markdown and $\LaTeX$ for mathematical expressions. To render the $\LaTeX$ expressions correctly, ensure that your Markdown viewer supports MathJax or a similar library.
