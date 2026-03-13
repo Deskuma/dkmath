@@ -502,6 +502,98 @@ def boundaryInsertLocalLiftProvider_of_nonzero_on_S_and_witness
         (hsum_lift := hsum_lift)
 
 /--
+RH-N13: `hsum_lift` の段階供給補題（`S` 上 local=0 + witness local=0）。
+
+`insert p S` 上の local contribution をゼロ化して、
+`hopcPrimeContributionSum (insert p S) = 0` を組み立てる。
+-/
+theorem boundary_hsum_lift_of_local_zero_on_S_and_witness
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hS_local0 :
+      ∀ r ∈ S, hopcPrimeLocalContribution r.1 σ t = 0)
+    (hlocal_witness :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    ∀ p : {q // Nat.Prime q},
+      p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+        (match side with
+          | .right => ¬ p.1 ∣ x
+          | .left => ¬ p.1 ∣ u) →
+        hopcPrimeContributionSum (S := insert p S) σ t = 0 := by
+  cases side with
+  | right =>
+      intro p hq_dvd hq_not_dvd_x
+      unfold hopcPrimeContributionSum
+      refine Finset.sum_eq_zero ?_
+      intro r hr
+      rcases Finset.mem_insert.mp hr with hr_eq | hrS
+      · have hp0 : hopcPrimeLocalContribution p.1 σ t = 0 :=
+          hlocal_witness p hq_dvd hq_not_dvd_x
+        simpa [hr_eq] using hp0
+      · exact hS_local0 r hrS
+  | left =>
+      intro p hq_dvd hq_not_dvd_u
+      unfold hopcPrimeContributionSum
+      refine Finset.sum_eq_zero ?_
+      intro r hr
+      rcases Finset.mem_insert.mp hr with hr_eq | hrS
+      · have hp0 : hopcPrimeLocalContribution p.1 σ t = 0 :=
+          hlocal_witness p hq_dvd hq_not_dvd_u
+        simpa [hr_eq] using hp0
+      · exact hS_local0 r hrS
+
+/--
+RH-N13: nonzero/local-zero の段階供給を統合した provider 構成補題。
+
+`hS_lift` は RH-N12 補題で、`hsum_lift` は RH-N13 補題で生成し、
+`BoundaryInsertLocalLiftProvider` へ束ねる。
+-/
+def boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero_on_S_and_witness
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hS_nonzero :
+      ∀ r ∈ S, eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0)
+    (hwnz_witness :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hS_local0 :
+      ∀ r ∈ S, hopcPrimeLocalContribution r.1 σ t = 0)
+    (hlocal_witness :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    BoundaryInsertLocalLiftProvider side S d x u σ t := by
+  cases side with
+  | right =>
+      exact boundaryInsertLocalLiftProvider_of_split
+        (side := .right) (S := S)
+        (hS_lift := boundary_hS_lift_of_nonzero_on_S_and_witness
+          (side := .right) (S := S) hS_nonzero hwnz_witness)
+        (hsum_lift := boundary_hsum_lift_of_local_zero_on_S_and_witness
+          (side := .right) (S := S) hS_local0 hlocal_witness)
+  | left =>
+      exact boundaryInsertLocalLiftProvider_of_split
+        (side := .left) (S := S)
+        (hS_lift := boundary_hS_lift_of_nonzero_on_S_and_witness
+          (side := .left) (S := S) hS_nonzero hwnz_witness)
+        (hsum_lift := boundary_hsum_lift_of_local_zero_on_S_and_witness
+          (side := .left) (S := S) hS_local0 hlocal_witness)
+
+/--
 RH-N7: provider record 版 wrapper（`BoundarySide` + small finite-set）。
 
 `BoundaryInsertLocalLiftProvider` を受け取り、

@@ -1144,3 +1144,28 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-N13 として、`hsum_lift` 供給候補（local contribution 由来）の
      最小 wrapper 設計を追加し、
      provider 実体供給の両輪（nonzero/sum-zero）を揃える。
+
+### 日時: 2026/03/13 12:02 JST: Phase RH-N13 を実装（`hsum_lift` 段階供給 wrapper）
+
+1. 目的: RH-N12 で先行した `hS_lift` 供給に対応して、
+   `hsum_lift` 側も local contribution 由来で段階供給できる補題を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+   - 追加実装:
+     - `boundary_hsum_lift_of_local_zero_on_S_and_witness`
+       （`S` 上 local=0 + witness local=0 から `hopcPrimeContributionSum(insert p S)=0` を構成）
+     - `boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero_on_S_and_witness`
+       （RH-N12 の `hS_lift` 供給と RH-N13 の `hsum_lift` 供給を統合した provider 構成）
+3. 結論: provider 実体供給の両輪（nonzero/sum-zero）が揃い、
+   `BoundaryInsertLocalLiftProvider` への段階供給導線が完結した。
+4. 失敗事例:
+   - 初回実装で `match side` 依存型不一致が発生。
+   - `cases side` で分岐固定して `hS_lift` / `hsum_lift` を組み立てる形へ修正。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N14 として、RH README / Discussion に
+     RH-N12/N13 の段階供給テンプレート（nonzero/local-zero から provider 生成）を追記し、
+     provider 実体供給の利用例を公開導線へ反映する。
