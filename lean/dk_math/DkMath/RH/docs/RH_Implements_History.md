@@ -1069,3 +1069,26 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-N10 として、`HOPC-RH-OpenProblems.md` の OP-003 残タスクに
      provider 実装進捗（RH-N7〜N9）を反映し、
      次の実装対象（provider 実体供給補題）を明示する。
+
+### 日時: 2026/03/13 11:51 JST: Phase RH-N10 を実装（OP-003 残タスクの provider 進捗反映）
+
+1. 目的: OpenProblems 側の OP-003 記述を RH-N7〜N9 の進捗に合わせて更新し、
+   「入口整備済み / 実体供給未完」の境界を明確化する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 更新内容:
+     - OP-003 の状態文言を RH-N1〜N9 到達へ更新
+     - 到達済みに provider 入口（record + wrapper）を追加
+     - 残タスクを provider 実体供給補題中心へ具体化
+       （`hS_lift` / `hsum_lift` 構成と供給源整理）
+3. 結論: OP-003 は「bridge API 導線整備」段を完了し、
+   次の実装対象が provider 供給補題群であることを文書上で固定できた。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+   - OP-003 の優先度は高（継続）のまま維持。
+6. 次の課題:
+   - RH-N11 として、`CFBRCBridge.lean` に
+     provider 供給補題の最小スケッチ（`hS_lift` 供給器の雛形）を追加し、
+     実体供給層へ着手する。
