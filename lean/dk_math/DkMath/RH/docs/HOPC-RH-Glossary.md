@@ -133,11 +133,14 @@
   - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0_and_phaseCurv`
   - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0_and_phaseCurv`
   - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_of_dvd_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_normalized_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_with_offdvd_and_phaseCurv`
 - 意味:
   - `stationaryAt` bridge に曲率非零供給を合成し、
     `nondegenerateStationaryAt` の存在へ接続する。
-  - OP-004 RH-P3 では `boundaryCore` / `boundaryDiffPow` の
-    計算補題直結 wrapper（insert/singleton）を追加して、
+  - OP-004 RH-P3/P4 では `boundaryCore` / `boundaryDiffPow` の
+    計算補題直結 wrapper（insert/singleton、`of_dvd/normalized/with_offdvd` を含む）を追加し、
     曲率側のみを `phaseCurv ≠ 0` 補題で差し替える運用を固定した。
 
 ## 注意（前提）

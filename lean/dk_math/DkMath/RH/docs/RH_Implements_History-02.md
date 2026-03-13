@@ -179,3 +179,38 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - OP-004 の次段として、`normalized` / `with_offdvd` 経路に
      nondegenerate 版（`..._and_phaseCurv`）を追加するかを評価する。
+
+### 日時: 2026/03/14 02:10 JST: OP-004 RH-P4（normalized / with_offdvd 非退化拡張）
+
+1. 目的:
+   OP-004 の残件として、
+   `boundaryDiffPow` の `of_dvd` / `normalized` / `with_offdvd` 経路でも
+   `nondegenerateStationaryAt` へ直接接続できる wrapper を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/HOPC-RH-Glossary.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History-02.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_of_dvd_and_phaseCurv`
+     - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_normalized_and_phaseCurv`
+     - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_with_offdvd_and_phaseCurv`
+   - 実装方針:
+     - 停留供給は既存 `BoundaryInsertLocalLiftProvider` 構成器（`of_dvd`/`with_offdvd`）を再利用
+     - 曲率供給は `BoundaryInsertPhaseCurvProvider` へ分離して合成
+     - `normalized` 版は `boundaryDiffPowDvdSet` を使い `of_dvd` 版へ委譲
+3. 結論:
+   - OP-004 で意図していた計算補題版 nondegenerate 経路が、
+     `factor0` 系の主要導線（通常 / `of_dvd` / `normalized` / `with_offdvd`）で揃った。
+   - 曲率供給規約は provider 合成で一貫運用できる形になった。
+4. 失敗事例:
+   - `normalized` 非退化 wrapper で `match side` 依存型不一致が発生。
+   - `cases side` で左右を固定して型正規化し解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - OP-004 は完了扱いとし、以後は OP-001 系（witness / provider 分離）の研究タスクを継続する。

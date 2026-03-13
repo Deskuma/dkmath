@@ -2507,6 +2507,65 @@ theorem
       hS_dvd hwnz_diff hfactor_diff0)
 
 /--
+OP-004: `boundaryDiffPow` factor0 + `hS_dvd`（`hS_gap` 不要）から、
+small finite-set 非退化停留点存在へ接続する wrapper。
+-/
+theorem
+    exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_of_dvd_and_phaseCurv
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0)
+    (hcurv_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          DkMath.RH.phaseCurv
+            (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t ≠ 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.nondegenerateStationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  cases side with
+  | right =>
+      exact
+        exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider_and_phaseCurvProvider
+          (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd
+          (boundaryInsertLocalLiftProvider_of_boundary_dvd_of_boundaryDiffPow_factor0
+            (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+            hS_dvd hwnz_diff hfactor_diff0)
+          (boundaryInsertPhaseCurvProvider_of_split
+            (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+            hcurv_lift)
+  | left =>
+      exact
+        exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider_and_phaseCurvProvider
+          (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd
+          (boundaryInsertLocalLiftProvider_of_boundary_dvd_of_boundaryDiffPow_factor0
+            (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+            hS_dvd hwnz_diff hfactor_diff0)
+          (boundaryInsertPhaseCurvProvider_of_split
+            (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+            hcurv_lift)
+
+/--
 RH-N30: `S` を `boundaryDiffPow side d x u` の除法条件で正規化した有限集合。
 -/
 @[simp] def boundaryDiffPowDvdSet
@@ -2581,6 +2640,59 @@ theorem
     hd_prime hd_ge hx hu hcop hpnd
     (hS_dvd := boundary_dvd_on_boundaryDiffPowDvdSet (side := side) (S := S))
     hwnz_diff hfactor_diff0
+
+/--
+OP-004: `S` 正規化版（`boundaryDiffPowDvdSet`）の
+`boundaryDiffPow` factor0 から非退化停留点存在へ接続する wrapper。
+-/
+theorem
+    exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_normalized_and_phaseCurv
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0)
+    (hcurv_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          DkMath.RH.phaseCurv
+            (fun v : ℝ =>
+              eulerZetaFinite_onVertical (insert p (boundaryDiffPowDvdSet side S d x u)) σ v) t ≠ 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.nondegenerateStationaryAt
+        (fun v : ℝ =>
+          eulerZetaFinite_onVertical (insert p (boundaryDiffPowDvdSet side S d x u)) σ v) t := by
+  cases side with
+  | right =>
+      exact
+        exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_of_dvd_and_phaseCurv
+          (side := .right) (S := boundaryDiffPowDvdSet .right S d x u)
+          (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd
+          (hS_dvd := boundary_dvd_on_boundaryDiffPowDvdSet (side := .right) (S := S))
+          hwnz_diff hfactor_diff0 hcurv_lift
+  | left =>
+      exact
+        exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_of_dvd_and_phaseCurv
+          (side := .left) (S := boundaryDiffPowDvdSet .left S d x u)
+          (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd
+          (hS_dvd := boundary_dvd_on_boundaryDiffPowDvdSet (side := .left) (S := S))
+          hwnz_diff hfactor_diff0 hcurv_lift
 
 /--
 RH-N31: 元の `S` を保持したまま、`hS_dvd` を要求しない provider 構成 wrapper。
@@ -2672,6 +2784,69 @@ theorem
     (boundaryInsertLocalLiftProvider_of_boundaryDiffPow_factor0_with_offdvd
       (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
       hwnz_diff hfactor_diff0 hS_nonzero_offdvd hS_local0_offdvd)
+
+/--
+OP-004: `boundaryDiffPow` factor0 + off-dvd 補完仮定（`hS_dvd` 不要）から、
+small finite-set 非退化停留点存在へ接続する wrapper。
+-/
+theorem
+    exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_with_offdvd_and_phaseCurv
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0)
+    (hS_nonzero_offdvd :
+      ∀ r ∈ S, ¬ r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+        eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0)
+    (hS_local0_offdvd :
+      ∀ r ∈ S, ¬ r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+        hopcPrimeLocalContribution r.1 σ t = 0)
+    (hcurv_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          DkMath.RH.phaseCurv
+            (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t ≠ 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.nondegenerateStationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  cases side with
+  | right =>
+      exact
+        exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider_and_phaseCurvProvider
+          (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd
+          (boundaryInsertLocalLiftProvider_of_boundaryDiffPow_factor0_with_offdvd
+            (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+            hwnz_diff hfactor_diff0 hS_nonzero_offdvd hS_local0_offdvd)
+          (boundaryInsertPhaseCurvProvider_of_split
+            (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+            hcurv_lift)
+  | left =>
+      exact
+        exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider_and_phaseCurvProvider
+          (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd
+          (boundaryInsertLocalLiftProvider_of_boundaryDiffPow_factor0_with_offdvd
+            (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+            hwnz_diff hfactor_diff0 hS_nonzero_offdvd hS_local0_offdvd)
+          (boundaryInsertPhaseCurvProvider_of_split
+            (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+            hcurv_lift)
 
 local notation "existsStatInsertBoundaryDiffPowLocal0" =>
   exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0

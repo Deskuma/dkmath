@@ -171,7 +171,7 @@ Lean 実装ロードマップを 1 枚で管理するための文書。
      - RH-O24: 未公開運用前提を確認し、外部依存監視タスクをクローズ
      - 旧命名 API 削除は `2026-06-30` を目安に公開計画と合わせて再判定
 2. OP-004（曲率条件運用）を並行整理
-   - 到達済み（RH-P1/P2/P3）:
+   - 到達済み（RH-P1/P2/P3/P4）:
      - `BoundaryInsertPhaseCurvProvider` / `boundaryInsertPhaseCurvProvider_of_split`
      - nondegenerate 高位 bridge
        - `..._singleton_..._of_local_and_phaseCurv`
@@ -182,6 +182,8 @@ Lean 実装ロードマップを 1 枚で管理するための文書。
        - `..._of_boundaryCore_local0_and_phaseCurv`
        - `..._of_boundaryDiffPow_local0_and_phaseCurv`
        - `..._of_boundaryDiffPow_factor0_and_phaseCurv`
+       - `..._of_boundaryDiffPow_factor0_of_dvd_and_phaseCurv`
+       - `..._of_boundaryDiffPow_factor0_normalized_and_phaseCurv`
+       - `..._of_boundaryDiffPow_factor0_with_offdvd_and_phaseCurv`
    - 次の焦点:
-     - `phaseCurv` 供給規約（解析仮定 / 計算補題 / provider）を維持し、
-       `normalized` / `with_offdvd` 経路への nondegenerate 拡張可否を評価
+     - OP-001 系（witness / off-dvd / provider 分離）の研究タスクを継続
