@@ -120,6 +120,25 @@ theorem stationaryAt_insert_of_hopcPrimeContributionSum_eq_zero
     (S := insert p S) (σ := σ) (t := t) hS_ne).2 hsum0
 
 /--
+OP-004: `insert p S` 観測器で、停留 + 曲率非零から
+非退化停留を得る標準 wrapper。
+-/
+theorem nondegenerateStationaryAt_insert_of_hopcPrimeContributionSum_eq_zero_and_phaseCurv_ne_zero
+    (S : Finset {q // Nat.Prime q}) (p : {q // Nat.Prime q}) {σ t : ℝ}
+    (hS_ne :
+      ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0)
+    (hsum0 :
+      hopcPrimeContributionSum (S := insert p S) σ t = 0)
+    (hcurv0 :
+      DkMath.RH.phaseCurv
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t ≠ 0) :
+    DkMath.RH.nondegenerateStationaryAt
+      (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  exact
+    (nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum
+      (S := insert p S) (σ := σ) (t := t) hS_ne).2 ⟨hsum0, hcurv0⟩
+
+/--
 RH-N1: CFBRC existence + local 翻訳仮定を small finite-set（`insert p S`）へ持ち上げる
 API スケッチ。
 
@@ -188,6 +207,52 @@ theorem exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_spli
     hsum_lift p hq_dvd hq_not_dvd_x
   exact ⟨p, stationaryAt_insert_of_hopcPrimeContributionSum_eq_zero
     (S := S) (p := p) (hS_ne := hS_ne) (hsum0 := hsum0)⟩
+
+/--
+OP-004: small finite-set bridge（right 境界）に曲率非零供給を追加した版。
+
+`hS_lift` / `hsum_lift` に加えて `hcurv_lift` を受け取り、
+`insert p S` 観測器での非退化停留点存在へ接続する。
+-/
+theorem exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_split_and_phaseCurv
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : ¬ d ∣ x)
+    (hS_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ ((x + u) ^ d - u ^ d) → ¬ p.1 ∣ x →
+          ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0)
+    (hsum_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ ((x + u) ^ d - u ^ d) → ¬ p.1 ∣ x →
+          hopcPrimeContributionSum (S := insert p S) σ t = 0)
+    (hcurv_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ ((x + u) ^ d - u ^ d) → ¬ p.1 ∣ x →
+          DkMath.RH.phaseCurv
+            (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t ≠ 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.nondegenerateStationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  rcases DkMath.CFBRC.exists_primitive_prime_factor_sub_pow_of_prime_exp_boundary_of_coprime
+      (d := d) (x := x) (u := u) hd_prime hd_ge hx hu hcop hpnd with
+    ⟨q, hqP, hq_dvd, hq_not_dvd_x, _hprim⟩
+  let p : {q // Nat.Prime q} := ⟨q, hqP⟩
+  have hS_ne :
+      ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 :=
+    hS_lift p hq_dvd hq_not_dvd_x
+  have hsum0 :
+      hopcPrimeContributionSum (S := insert p S) σ t = 0 :=
+    hsum_lift p hq_dvd hq_not_dvd_x
+  have hcurv0 :
+      DkMath.RH.phaseCurv
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t ≠ 0 :=
+    hcurv_lift p hq_dvd hq_not_dvd_x
+  exact ⟨p,
+    nondegenerateStationaryAt_insert_of_hopcPrimeContributionSum_eq_zero_and_phaseCurv_ne_zero
+      (S := S) (p := p) (hS_ne := hS_ne) (hsum0 := hsum0) (hcurv0 := hcurv0)⟩
 
 /--
 RH-N3: `BoundarySide` 統一版の singleton local bridge。
@@ -294,6 +359,69 @@ theorem exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_l
               hq_not_dvd_u))
 
 /--
+OP-004: `BoundarySide` 統一版の small finite-set 非退化停留 bridge（split 仮定）。
+
+`hS_lift` / `hsum_lift` に加え、`hcurv_lift`（曲率非零供給）を受け取る。
+-/
+theorem exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hS_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0)
+    (hsum_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          hopcPrimeContributionSum (S := insert p S) σ t = 0)
+    (hcurv_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          DkMath.RH.phaseCurv
+            (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t ≠ 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.nondegenerateStationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  cases side with
+  | right =>
+      simpa [DkMath.CFBRC.boundaryDiffPow] using
+        (exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_split_and_phaseCurv
+          (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd hS_lift hsum_lift hcurv_lift)
+  | left =>
+      simpa [DkMath.CFBRC.boundaryDiffPow, Nat.add_comm] using
+        (exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_split_and_phaseCurv
+          (S := S) (d := d) (x := u) (u := x) (σ := σ) (t := t)
+          hd_prime hd_ge hu hx hcop.symm hpnd
+          (fun p hq_dvd hq_not_dvd_u =>
+            hS_lift p
+              (by simpa [DkMath.CFBRC.boundaryDiffPow, Nat.add_comm] using hq_dvd)
+              hq_not_dvd_u)
+          (fun p hq_dvd hq_not_dvd_u =>
+            hsum_lift p
+              (by simpa [DkMath.CFBRC.boundaryDiffPow, Nat.add_comm] using hq_dvd)
+              hq_not_dvd_u)
+          (fun p hq_dvd hq_not_dvd_u =>
+            hcurv_lift p
+              (by simpa [DkMath.CFBRC.boundaryDiffPow, Nat.add_comm] using hq_dvd)
+              hq_not_dvd_u))
+
+/--
 RH-N3: `BoundarySide` 統一版の small finite-set bridge（一括 `hlift` 入力）。
 
 split 版 API への互換 wrapper。
@@ -360,6 +488,24 @@ structure BoundaryInsertLocalLiftProvider
         hopcPrimeContributionSum (S := insert p S) σ t = 0
 
 /--
+OP-004: `BoundarySide` + small finite-set 向けの曲率非零供給インターフェース。
+
+`insert p S` 観測器に対する `phaseCurv ≠ 0` 供給を record 化する。
+-/
+structure BoundaryInsertPhaseCurvProvider
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    (d x u : ℕ) (σ t : ℝ) : Type where
+  hcurv_lift :
+    ∀ p : {q // Nat.Prime q},
+      p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+        (match side with
+          | .right => ¬ p.1 ∣ x
+          | .left => ¬ p.1 ∣ u) →
+        DkMath.RH.phaseCurv
+          (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t ≠ 0
+
+/--
 RH-N11: split 仮定から provider record を構成する最小補題。
 
 `hS_lift` と `hsum_lift` をそのまま `BoundaryInsertLocalLiftProvider`
@@ -385,6 +531,24 @@ def boundaryInsertLocalLiftProvider_of_split
           hopcPrimeContributionSum (S := insert p S) σ t = 0) :
     BoundaryInsertLocalLiftProvider side S d x u σ t :=
   ⟨hS_lift, hsum_lift⟩
+
+/--
+OP-004: split 仮定から曲率供給 provider を構成する最小補題。
+-/
+def boundaryInsertPhaseCurvProvider_of_split
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hcurv_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          DkMath.RH.phaseCurv
+            (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t ≠ 0) :
+    BoundaryInsertPhaseCurvProvider side S d x u σ t :=
+  ⟨hcurv_lift⟩
 
 /--
 RH-N11: pair 形式 (`hlift`) から provider record を構成する補題。
@@ -1302,6 +1466,41 @@ theorem exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_p
         exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split
           (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
           hd_prime hd_ge hx hu hcop hpnd provider.hS_lift provider.hsum_lift
+
+/--
+OP-004: provider record + 曲率 provider 版の非退化停留 bridge。
+
+`BoundaryInsertLocalLiftProvider`（停留供給）と
+`BoundaryInsertPhaseCurvProvider`（曲率非零供給）を分離したまま受け取り、
+`insert p S` 観測器での非退化停留点存在を返す。
+-/
+theorem exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider_and_phaseCurvProvider
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (provider : BoundaryInsertLocalLiftProvider side S d x u σ t)
+    (curvProvider : BoundaryInsertPhaseCurvProvider side S d x u σ t) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.nondegenerateStationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  cases side with
+  | right =>
+      exact
+        exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+          (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd
+          provider.hS_lift provider.hsum_lift curvProvider.hcurv_lift
+  | left =>
+      exact
+        exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+          (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd
+          provider.hS_lift provider.hsum_lift curvProvider.hcurv_lift
 
 /--
 RH-N24: `boundaryCore` の factor 位相速度ゼロ仮定から

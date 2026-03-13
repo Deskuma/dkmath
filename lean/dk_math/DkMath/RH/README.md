@@ -252,13 +252,19 @@ CFBRC 連携で使う公開名は次を基準とする。
   - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge`
   - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge_of_local`
   - `stationaryAt_insert_of_hopcPrimeContributionSum_eq_zero`
+  - `nondegenerateStationaryAt_insert_of_hopcPrimeContributionSum_eq_zero_and_phaseCurv_ne_zero`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_split`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_split_and_phaseCurv`
   - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_local`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv`
   - `BoundaryInsertLocalLiftProvider`
+  - `BoundaryInsertPhaseCurvProvider`
+  - `boundaryInsertPhaseCurvProvider_of_split`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider_and_phaseCurvProvider`
   - `boundary_hS_lift_of_nonzero_on_S_and_witness`
   - `boundaryInsertLocalLiftProvider_of_nonzero_on_S_and_witness`
   - `boundary_hsum_lift_of_local_zero_on_S_and_witness`

@@ -58,3 +58,41 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      を実行し、残存が `RH_Implements_History-01.md`（旧履歴アーカイブ）内のみであることを確認。
 6. 次の課題:
    - OP-004 の残作業（曲率条件運用の供給規約・命名規約整理）へ進む。
+
+### 日時: 2026/03/14 01:08 JST: OP-004 RH-P1（phaseCurv provider 層の導入）
+
+1. 目的:
+   OP-004 の着手として、`phaseCurv ≠ 0` 供給を provider として切り出し、
+   `stationaryAt` bridge から `nondegenerateStationaryAt` bridge へ接続する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History-02.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `nondegenerateStationaryAt_insert_of_hopcPrimeContributionSum_eq_zero_and_phaseCurv_ne_zero`
+     - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_split_and_phaseCurv`
+     - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv`
+     - `BoundaryInsertPhaseCurvProvider`
+     - `boundaryInsertPhaseCurvProvider_of_split`
+     - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider_and_phaseCurvProvider`
+   - 文書同期:
+     - `README.md` の CFBRC bridge API 一覧へ OP-004 API を追記
+     - `HOPC-RH-OpenProblems.md` の OP-004 に状態・到達済み・命名規約を追記
+     - `HOPC-RH-Roadmap.md` の Next Sprint に RH-P1 到達済みを追記
+3. 結論:
+   - 曲率前提を `BoundaryInsertPhaseCurvProvider` として分離でき、
+     停留供給 (`BoundaryInsertLocalLiftProvider`) と独立に合成可能になった。
+   - OP-004 の命名規約を
+     `..._of_local_split_and_phaseCurv` / `..._of_provider_and_phaseCurvProvider`
+     として暫定確定した。
+4. 失敗事例:
+   - `side` 依存型（`match side with ...`）の不一致で初回 build が失敗。
+   - `cases side` による分岐で型を正規化して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+6. 次の課題:
+   - `phaseCurv ≠ 0` の供給パターンを
+     解析仮定版 / 計算補題版 / provider 版で文書化する。

@@ -171,4 +171,10 @@ Lean 実装ロードマップを 1 枚で管理するための文書。
      - RH-O24: 未公開運用前提を確認し、外部依存監視タスクをクローズ
      - 旧命名 API 削除は `2026-06-30` を目安に公開計画と合わせて再判定
 2. OP-004（曲率条件運用）を並行整理
-   - `phaseCurv` 供給規約と wrapper 命名規約の整備
+   - 到達済み（RH-P1）:
+     - `BoundaryInsertPhaseCurvProvider` / `boundaryInsertPhaseCurvProvider_of_split`
+     - nondegenerate 高位 bridge
+       - `..._of_local_split_and_phaseCurv`
+       - `..._of_provider_and_phaseCurvProvider`
+   - 次の焦点:
+     - `phaseCurv` 供給規約（解析仮定 / 計算補題 / provider）の文書化
