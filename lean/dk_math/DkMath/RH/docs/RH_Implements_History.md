@@ -965,3 +965,30 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-N6 として、`HOPC-RH-Roadmap.md` / `HOPC-RH-OpenProblems.md` の
      OP-003 状態を RH-N3/N5 到達点に合わせて更新する。
+
+### 日時: 2026/03/13 11:30 JST: Phase RH-N6 を実装（Roadmap/OpenProblems の OP-003 状態更新）
+
+1. 目的: RH-N3/N5 までの到達状況を計画文書へ反映し、
+   OP-003 の進捗と残課題を明示して次段着手点を固定する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 更新内容:
+     - `Roadmap`:
+       - Next Sprint を「OP-003 継続 + OP-001 着手」へ更新
+       - OP-003 の到達済み項目（N1〜N5）と次の焦点（provider 直結）を明記
+     - `OpenProblems`:
+       - OP-003 を「未実装」から「進行中」へ更新
+       - 到達済み（singleton/small finite-set/BoundarySide/docs同期）を列挙
+       - 残タスク（`hS_lift` / `hsum_lift` 供給、OP-001 再利用仮定化）を追加
+3. 結論: OP-003 は API 骨格完成フェーズを通過し、
+   次は provider 供給層と finite→infinite 接続を主軸に進める段階へ移行した。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+   - OP-003 の優先度は高のまま維持（継続）。
+6. 次の課題:
+   - RH-N7 として、provider 側の最小実装に向け
+     `hS_lift` / `hsum_lift` を生成する抽象インターフェースを
+     `CFBRCBridge.lean` 近傍へ設計する。
