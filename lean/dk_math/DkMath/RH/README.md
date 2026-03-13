@@ -44,7 +44,7 @@
 - `CFBRCBridge.lean`
   - CFBRC の primitive-prime existence から RH 側 singleton 停留判定へ接続する bridge
 
-## 主要 API（RH-N3 時点）
+## 主要 API（RH-N14 時点）
 
 - HOPC 観測量:
   - `hopcPrimeLocalContribution p σ t`
@@ -66,6 +66,10 @@
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split`
   - `BoundaryInsertLocalLiftProvider`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider`
+  - `boundary_hS_lift_of_nonzero_on_S_and_witness`
+  - `boundaryInsertLocalLiftProvider_of_nonzero_on_S_and_witness`
+  - `boundary_hsum_lift_of_local_zero_on_S_and_witness`
+  - `boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero_on_S_and_witness`
 
 ## 利用例（import）
 
@@ -150,6 +154,40 @@ example (side : DkMath.CFBRC.BoundarySide)
     exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider
       (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
       hd_prime hd_ge hx hu hcop hpnd provider
+```
+
+段階供給（RH-N12/N13）から provider を生成するテンプレート:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+
+example (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hS_nonzero :
+      ∀ r ∈ S, eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0)
+    (hwnz_witness :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with | .right => ¬ p.1 ∣ x | .left => ¬ p.1 ∣ u) →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hS_local0 :
+      ∀ r ∈ S, hopcPrimeLocalContribution r.1 σ t = 0)
+    (hlocal_witness :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with | .right => ¬ p.1 ∣ x | .left => ¬ p.1 ∣ u) →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    BoundaryInsertLocalLiftProvider side S d x u σ t := by
+  exact
+    boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero_on_S_and_witness
+      (side := side) (S := S)
+      (hS_nonzero := hS_nonzero)
+      (hwnz_witness := hwnz_witness)
+      (hS_local0 := hS_local0)
+      (hlocal_witness := hlocal_witness)
 ```
 
 ## 注意

@@ -1169,3 +1169,29 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-N14 として、RH README / Discussion に
      RH-N12/N13 の段階供給テンプレート（nonzero/local-zero から provider 生成）を追記し、
      provider 実体供給の利用例を公開導線へ反映する。
+
+### 日時: 2026/03/13 12:16 JST: Phase RH-N14 を実装（段階供給テンプレートの公開導線反映）
+
+1. 目的: RH-N12/N13 で追加した段階供給補題を
+   README / Discussion の公開導線に反映し、利用入口を明確化する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+   - 追記内容:
+     - `README.md`
+       - 主要 API 見出しを RH-N14 時点へ更新
+       - 段階供給補題 4 本を API 一覧へ追加
+       - nonzero/local-zero から provider を生成する最小テンプレートを追加
+     - `RH-CFBRC-Discussion.md`
+       - `Implementation Bridge (RH-N14: 段階供給から provider 生成)` を追加
+       - RH-N12/N13 補題の役割整理と最小テンプレートを追記
+3. 結論: provider 実体供給の実装導線が文書化され、
+   split 版 / provider 版 / 段階供給版の 3 入口が利用者に明示された。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし（RH-N13 で完了済み）。
+   - `docs/README.md` は次フェーズで同等テンプレート同期予定。
+6. 次の課題:
+   - RH-N15 として、`DkMath/RH/docs/README.md` にも RH-N14 の
+     段階供給テンプレートを同期し、README 間の導線差分を解消する。

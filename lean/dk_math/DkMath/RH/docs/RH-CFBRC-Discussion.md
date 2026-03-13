@@ -409,6 +409,51 @@ example (side : DkMath.CFBRC.BoundarySide)
 - 供給器を 1 record で管理する場合:
   `..._of_provider`
 
+### Implementation Bridge (RH-N14: 段階供給から provider 生成)
+
+RH-N12/N13 では provider 供給を 2 段に分離できるようになった。
+
+- nonzero 側:
+  - `boundary_hS_lift_of_nonzero_on_S_and_witness`
+  - `boundaryInsertLocalLiftProvider_of_nonzero_on_S_and_witness`
+- sum-zero 側:
+  - `boundary_hsum_lift_of_local_zero_on_S_and_witness`
+  - `boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero_on_S_and_witness`
+
+最小テンプレート（段階供給 → provider 化）:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+
+example (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hS_nonzero :
+      ∀ r ∈ S, eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0)
+    (hwnz_witness :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with | .right => ¬ p.1 ∣ x | .left => ¬ p.1 ∣ u) →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hS_local0 :
+      ∀ r ∈ S, hopcPrimeLocalContribution r.1 σ t = 0)
+    (hlocal_witness :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with | .right => ¬ p.1 ∣ x | .left => ¬ p.1 ∣ u) →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    BoundaryInsertLocalLiftProvider side S d x u σ t := by
+  exact
+    boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero_on_S_and_witness
+      (side := side) (S := S)
+      (hS_nonzero := hS_nonzero)
+      (hwnz_witness := hwnz_witness)
+      (hS_local0 := hS_local0)
+      (hlocal_witness := hlocal_witness)
+```
+
 ### Bridge Usage (RH-J2/J3)
 
 `DkMath.RH.CFBRCBridge` には、CFBRC primitive-prime existence から
