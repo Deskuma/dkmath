@@ -1311,3 +1311,56 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-N20 として、`HOPC-RH-OpenProblems.md` の OP-003 到達済みに
      RH-N17〜N19（実供給導線）を反映し、残タスクをさらに具体化する。
+
+### 日時: 2026/03/13 12:29 JST: Phase RH-N20 を実装（OP-003 到達済みと残タスクの更新）
+
+1. 目的: RH-N17〜N19 の実供給導線を OP-003 へ反映し、残タスクを実装可能粒度へ再整理する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 更新内容:
+     - OP-003 の状態を「RH-N1〜N19 到達済み」へ更新
+     - 到達済みに RH-N17 実供給導線（`boundary_nonzero_on_S_of_boundary_dvd_and_gap`、
+       `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_and_local_zero`）を反映
+     - 残タスクを provider 実供給補題（`hS_local0` / `hlocal_witness` / `hS_dvd` / `hS_gap` 接続）
+       へ再整理
+3. 結論: OP-003 は「導線整備済み・実供給拡張継続中」の境界が明確化され、
+   次段を `hS_local0` 側自動供給の実装へ集中できる状態になった。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+6. 次の課題:
+   - RH-N21 として、`hS_local0` を `boundary_dvd + gap + hlocal_witness` から
+     自動供給する補題と、前提簡約版 provider wrapper を追加する。
+
+### 日時: 2026/03/13 12:32 JST: Phase RH-N21 を実装（`hS_local0` 自動供給と前提簡約 wrapper）
+
+1. 目的: OP-003 残タスクのうち `hS_local0` 供給を実装し、
+   `boundary_dvd + gap` 系 provider 構成の前提を削減する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundary_local_zero_on_S_of_boundary_dvd_and_gap`
+       （`hS_dvd` / `hS_gap` / `hlocal_witness` から `hS_local0` を供給）
+     - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap`
+       （`hS_local0` を自動生成して RH-N17 wrapper へ委譲）
+   - 文書同期:
+     - `RH/docs/README.md` と `RH/README.md` の API 見出しを RH-N21 へ更新
+     - 新規 API 2 本を一覧へ追加
+     - `boundary_dvd + gap` テンプレートを前提簡約版へ更新
+     - OP-003 状態を RH-N1〜N21 へ更新し、残タスクから `hS_local0` 供給を除外
+3. 結論: `boundary_dvd + gap` 系 provider 構成は
+   `hS_local0` 手動供給不要の段階まで進み、OP-003 は `hlocal_witness` 実供給に主眼が移った。
+4. 失敗事例:
+   - `BoundarySide` 依存型の一致で 1 箇所型不一致が発生。
+   - `cases side` で right/left を固定して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N22 として、local contribution 側から `hlocal_witness` を供給する実補題を追加し、
+     `boundary_dvd + gap` 系 wrapper の仮定をさらに削減する。

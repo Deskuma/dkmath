@@ -495,6 +495,40 @@ theorem boundary_nonzero_on_S_of_boundary_dvd_and_gap
       exact hwnz_witness r (hS_dvd r hr) (hS_gap r hr)
 
 /--
+RH-N21: CFBRC 側条件（boundary 除法 + gap 非除法）から `S` 上 local-zero を供給。
+
+各 `r ∈ S` について
+`r ∣ boundaryDiffPow side d x u` と
+`side` 対応の gap 非除法が供給されれば、
+`hlocal_witness` から `hopcPrimeLocalContribution r.1 σ t = 0` を得る。
+-/
+theorem boundary_local_zero_on_S_of_boundary_dvd_and_gap
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with
+        | .right => ¬ r.1 ∣ x
+        | .left => ¬ r.1 ∣ u))
+    (hlocal_witness :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    ∀ r ∈ S, hopcPrimeLocalContribution r.1 σ t = 0 := by
+  cases side with
+  | right =>
+      intro r hr
+      exact hlocal_witness r (hS_dvd r hr) (hS_gap r hr)
+  | left =>
+      intro r hr
+      exact hlocal_witness r (hS_dvd r hr) (hS_gap r hr)
+
+/--
 RH-N12: `hS_lift` 段階供給を使った provider 構成補題。
 
 `hS_nonzero` と `hwnz_witness` で `hS_lift` を組み立て、
@@ -676,6 +710,58 @@ def boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_and_local_zero
           (side := .left) (S := S) hS_dvd hS_gap hwnz_witness)
         (hwnz_witness := hwnz_witness)
         (hS_local0 := hS_local0)
+        (hlocal_witness := hlocal_witness)
+
+/--
+RH-N21: `boundary_dvd + gap` から nonzero/local-zero を同時生成する簡約 wrapper。
+
+`hS_local0` を要求せず、`hlocal_witness` から
+`boundary_local_zero_on_S_of_boundary_dvd_and_gap` で自動生成して
+RH-N17 wrapper へ委譲する。
+-/
+def boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with
+        | .right => ¬ r.1 ∣ x
+        | .left => ¬ r.1 ∣ u))
+    (hwnz_witness :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hlocal_witness :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    BoundaryInsertLocalLiftProvider side S d x u σ t := by
+  cases side with
+  | right =>
+      exact boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_and_local_zero
+        (side := .right) (S := S)
+        (hS_dvd := hS_dvd)
+        (hS_gap := hS_gap)
+        (hwnz_witness := hwnz_witness)
+        (hS_local0 := boundary_local_zero_on_S_of_boundary_dvd_and_gap
+          (side := .right) (S := S) hS_dvd hS_gap hlocal_witness)
+        (hlocal_witness := hlocal_witness)
+  | left =>
+      exact boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_and_local_zero
+        (side := .left) (S := S)
+        (hS_dvd := hS_dvd)
+        (hS_gap := hS_gap)
+        (hwnz_witness := hwnz_witness)
+        (hS_local0 := boundary_local_zero_on_S_of_boundary_dvd_and_gap
+          (side := .left) (S := S) hS_dvd hS_gap hlocal_witness)
         (hlocal_witness := hlocal_witness)
 
 /--
