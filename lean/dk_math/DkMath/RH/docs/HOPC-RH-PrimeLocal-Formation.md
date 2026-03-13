@@ -97,6 +97,13 @@ HOPC-RH の運用では、`arg` を主役にせず、
 
 を直接返す形式化を導入した。
 
+続いて RH-PF2 として、
+
+- `eventually_exists_primeLocalFormation_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv`
+
+を追加し、`S` 一様の lift 仮定から
+`Filter.atTop` 上の eventually 形成条件存在へ持ち上げる中間段を形式化した。
+
 ---
 
 ## 3. Why Primes Are Structurally Central

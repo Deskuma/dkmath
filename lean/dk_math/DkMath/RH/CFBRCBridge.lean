@@ -1021,6 +1021,57 @@ theorem exists_primeLocalFormation_insert_of_cfbRc_primitive_prime_boundary_brid
       exact ⟨p, hsum_lift p hp_dvd hp_gap, hcurv_lift p hp_dvd hp_gap⟩
 
 /--
+RH-PF2: `S` 一様の形成条件供給から、
+`Filter.atTop` 上での prime-local 形成条件存在を得る。
+
+各有限集合 `S` について RH-PF1 を適用し、
+`Eventually.of_forall` で eventually 形式へ持ち上げる。
+-/
+theorem eventually_exists_primeLocalFormation_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hsum_lift :
+      ∀ (S : Finset {q // Nat.Prime q}) (p : {q // Nat.Prime q}),
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          hopcPrimeContributionSum (S := insert p S) σ t = 0)
+    (hcurv_lift :
+      ∀ (S : Finset {q // Nat.Prime q}) (p : {q // Nat.Prime q}),
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          DkMath.RH.phaseCurv
+            (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t ≠ 0) :
+    ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+      ∃ p : {q // Nat.Prime q},
+        hopcPrimeContributionSum (S := insert p S) σ t = 0 ∧
+        DkMath.RH.phaseCurv
+          (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t ≠ 0 := by
+  cases side with
+  | right =>
+      exact Filter.Eventually.of_forall (fun S =>
+        exists_primeLocalFormation_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+          (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd
+          (hsum_lift := fun p hp_dvd hp_gap => hsum_lift S p hp_dvd hp_gap)
+          (hcurv_lift := fun p hp_dvd hp_gap => hcurv_lift S p hp_dvd hp_gap))
+  | left =>
+      exact Filter.Eventually.of_forall (fun S =>
+        exists_primeLocalFormation_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+          (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd
+          (hsum_lift := fun p hp_dvd hp_gap => hsum_lift S p hp_dvd hp_gap)
+          (hcurv_lift := fun p hp_dvd hp_gap => hcurv_lift S p hp_dvd hp_gap))
+
+/--
 RH-N22: `boundaryCyclotomicPrimeCore` 側の local-zero 仮定から witness local-zero を復元。
 
 `hlocal_core`（core 除法だけを前提にした local-zero 仮定）から、

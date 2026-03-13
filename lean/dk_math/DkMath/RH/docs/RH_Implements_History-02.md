@@ -276,3 +276,35 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-PF1 を起点に、有限形成条件から atTop 側へ持ち上げる
      intermediate theorem（eventually 版）を設計する。
+
+### 日時: 2026/03/14 03:27 JST: RH-PF2（finite 形成条件の eventually 持ち上げ）
+
+1. 目的:
+   RH-PF1（`insert p S` での形成条件直接抽出）を
+   `Filter.atTop` 上の eventually 形式へ持ち上げる中間補題を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/docs/HOPC-RH-PrimeLocal-Formation.md`
+     - `DkMath/RH/docs/RH-CFBRC-HOPC.md`
+     - `DkMath/RH/docs/RH_Implements_History-02.md`
+   - 追加実装:
+     - `eventually_exists_primeLocalFormation_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv`
+   - 補題の意味:
+     - `S` 一様の `hsum_lift` / `hcurv_lift` を仮定し、
+       `∀ᶠ S in atTop, ∃ p, (hopcPrimeContributionSum = 0 ∧ phaseCurv ≠ 0)`
+       を返す。
+     - 証明は RH-PF1 を `Eventually.of_forall` で持ち上げる構造。
+3. 結論:
+   - 論文説明で必要だった
+     「finite 形成条件 → eventually 形成条件」
+     の接続が Lean 補題として明示化された。
+4. 失敗事例:
+   - 初回証明で `match side` 依存型不一致が発生。
+   - `cases side` 分岐で型を固定して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-PF2 を入力として、eventually `stationaryAt` / `nondegenerateStationaryAt`
+     への高位 bridge を設計する。

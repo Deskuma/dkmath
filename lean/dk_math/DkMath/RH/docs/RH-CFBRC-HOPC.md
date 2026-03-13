@@ -90,6 +90,7 @@ HOPC-RH の「位相を微分量で観測する」設計は、
    - prime-local 形成条件
      (`hopcPrimeContributionSum = 0 ∧ phaseCurv ≠ 0`)
      を直接返す RH-PF1 補題
+   - RH-PF1 を `Filter.atTop` の eventually 形式へ持ち上げる RH-PF2 補題
    - `boundaryCore` / `boundaryDiffPow` の計算補題版 wrapper
    - `of_dvd` / `normalized` / `with_offdvd` の高位 API
 
