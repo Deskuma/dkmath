@@ -970,6 +970,488 @@ theorem exists_boundary_dvd_gap_on_insert_of_cfbRc_primitive_prime_boundaryDiffP
           (side := .left) (S := S) (x := x) (u := u) p hS_gap hp_gap⟩
 
 /--
+RH-PF1: CFBRC primitive-prime witness から、
+`insert p S` 観測器の prime-local 形成条件
+`hopcPrimeContributionSum = 0 ∧ phaseCurv ≠ 0`
+を直接返す bridge。
+
+`stationaryAt` / `nondegenerateStationaryAt` へ落とす前段として、
+論文記述に対応する「形成条件そのもの」を抽出する。
+-/
+theorem exists_primeLocalFormation_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hsum_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          hopcPrimeContributionSum (S := insert p S) σ t = 0)
+    (hcurv_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          DkMath.RH.phaseCurv
+            (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t ≠ 0) :
+    ∃ p : {q // Nat.Prime q},
+      hopcPrimeContributionSum (S := insert p S) σ t = 0 ∧
+      DkMath.RH.phaseCurv
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t ≠ 0 := by
+  cases side with
+  | right =>
+      rcases exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
+          (side := .right) (d := d) (x := x) (u := u)
+          hd_prime hd_ge hx hu hcop hpnd with
+        ⟨p, hp_dvd, hp_gap⟩
+      exact ⟨p, hsum_lift p hp_dvd hp_gap, hcurv_lift p hp_dvd hp_gap⟩
+  | left =>
+      rcases exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
+          (side := .left) (d := d) (x := x) (u := u)
+          hd_prime hd_ge hx hu hcop hpnd with
+        ⟨p, hp_dvd, hp_gap⟩
+      exact ⟨p, hsum_lift p hp_dvd hp_gap, hcurv_lift p hp_dvd hp_gap⟩
+
+/--
+RH-PF2: `S` 一様の形成条件供給から、
+`Filter.atTop` 上での prime-local 形成条件存在を得る。
+
+各有限集合 `S` について RH-PF1 を適用し、
+`Eventually.of_forall` で eventually 形式へ持ち上げる。
+-/
+theorem eventually_exists_primeLocalFormation_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hsum_lift :
+      ∀ (S : Finset {q // Nat.Prime q}) (p : {q // Nat.Prime q}),
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          hopcPrimeContributionSum (S := insert p S) σ t = 0)
+    (hcurv_lift :
+      ∀ (S : Finset {q // Nat.Prime q}) (p : {q // Nat.Prime q}),
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          DkMath.RH.phaseCurv
+            (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t ≠ 0) :
+    ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+      ∃ p : {q // Nat.Prime q},
+        hopcPrimeContributionSum (S := insert p S) σ t = 0 ∧
+        DkMath.RH.phaseCurv
+          (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t ≠ 0 := by
+  cases side with
+  | right =>
+      exact Filter.Eventually.of_forall (fun S =>
+        exists_primeLocalFormation_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+          (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd
+          (hsum_lift := fun p hp_dvd hp_gap => hsum_lift S p hp_dvd hp_gap)
+          (hcurv_lift := fun p hp_dvd hp_gap => hcurv_lift S p hp_dvd hp_gap))
+  | left =>
+      exact Filter.Eventually.of_forall (fun S =>
+        exists_primeLocalFormation_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+          (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd
+          (hsum_lift := fun p hp_dvd hp_gap => hsum_lift S p hp_dvd hp_gap)
+          (hcurv_lift := fun p hp_dvd hp_gap => hcurv_lift S p hp_dvd hp_gap))
+
+/--
+RH-PF2w: CFBRC primitive-prime witness と形成条件
+`hopcPrimeContributionSum = 0 ∧ phaseCurv ≠ 0`
+を同時に返す版。
+-/
+theorem exists_primeLocalFormationWitness_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hsum_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          hopcPrimeContributionSum (S := insert p S) σ t = 0)
+    (hcurv_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          DkMath.RH.phaseCurv
+            (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t ≠ 0) :
+    ∃ p : {q // Nat.Prime q},
+      p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u ∧
+      (match side with
+        | .right => ¬ p.1 ∣ x
+        | .left => ¬ p.1 ∣ u) ∧
+      hopcPrimeContributionSum (S := insert p S) σ t = 0 ∧
+      DkMath.RH.phaseCurv
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t ≠ 0 := by
+  cases side with
+  | right =>
+      rcases exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
+          (side := .right) (d := d) (x := x) (u := u)
+          hd_prime hd_ge hx hu hcop hpnd with
+        ⟨p, hp_dvd, hp_gap⟩
+      exact ⟨p, hp_dvd, hp_gap, hsum_lift p hp_dvd hp_gap, hcurv_lift p hp_dvd hp_gap⟩
+  | left =>
+      rcases exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
+          (side := .left) (d := d) (x := x) (u := u)
+          hd_prime hd_ge hx hu hcop hpnd with
+        ⟨p, hp_dvd, hp_gap⟩
+      exact ⟨p, hp_dvd, hp_gap, hsum_lift p hp_dvd hp_gap, hcurv_lift p hp_dvd hp_gap⟩
+
+/--
+RH-PF2w: `S` 一様の形成条件供給から、
+`Filter.atTop` 上で witness 付き形成条件存在を得る。
+-/
+theorem eventually_exists_primeLocalFormationWitness_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hsum_lift :
+      ∀ (S : Finset {q // Nat.Prime q}) (p : {q // Nat.Prime q}),
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          hopcPrimeContributionSum (S := insert p S) σ t = 0)
+    (hcurv_lift :
+      ∀ (S : Finset {q // Nat.Prime q}) (p : {q // Nat.Prime q}),
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          DkMath.RH.phaseCurv
+            (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t ≠ 0) :
+    ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+      ∃ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u ∧
+        (match side with
+          | .right => ¬ p.1 ∣ x
+          | .left => ¬ p.1 ∣ u) ∧
+        hopcPrimeContributionSum (S := insert p S) σ t = 0 ∧
+        DkMath.RH.phaseCurv
+          (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t ≠ 0 := by
+  cases side with
+  | right =>
+      exact Filter.Eventually.of_forall (fun S =>
+        exists_primeLocalFormationWitness_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+          (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd
+          (hsum_lift := fun p hp_dvd hp_gap => hsum_lift S p hp_dvd hp_gap)
+          (hcurv_lift := fun p hp_dvd hp_gap => hcurv_lift S p hp_dvd hp_gap))
+  | left =>
+      exact Filter.Eventually.of_forall (fun S =>
+        exists_primeLocalFormationWitness_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+          (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd
+          (hsum_lift := fun p hp_dvd hp_gap => hsum_lift S p hp_dvd hp_gap)
+          (hcurv_lift := fun p hp_dvd hp_gap => hcurv_lift S p hp_dvd hp_gap))
+
+/--
+RH-PF3: RH-PF2w（witness 付き eventually 形成条件）から、
+`eventually (∃ p, stationaryAt insert)` を得る高位 bridge。
+-/
+theorem eventually_exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hS_lift :
+      ∀ (S : Finset {q // Nat.Prime q}) (p : {q // Nat.Prime q}),
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0)
+    (hsum_lift :
+      ∀ (S : Finset {q // Nat.Prime q}) (p : {q // Nat.Prime q}),
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          hopcPrimeContributionSum (S := insert p S) σ t = 0) :
+    ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+      ∃ p : {q // Nat.Prime q},
+        DkMath.RH.stationaryAt
+          (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  cases side with
+  | right =>
+      exact Filter.Eventually.of_forall (fun S => by
+        rcases exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
+            (side := .right) (d := d) (x := x) (u := u)
+            hd_prime hd_ge hx hu hcop hpnd with
+          ⟨p, hp_dvd, hp_gap⟩
+        have hS_ne :
+            ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 :=
+          hS_lift S p hp_dvd hp_gap
+        have hsum0 : hopcPrimeContributionSum (S := insert p S) σ t = 0 :=
+          hsum_lift S p hp_dvd hp_gap
+        exact ⟨p, stationaryAt_insert_of_hopcPrimeContributionSum_eq_zero
+          (S := S) (p := p) (hS_ne := hS_ne) (hsum0 := hsum0)⟩)
+  | left =>
+      exact Filter.Eventually.of_forall (fun S => by
+        rcases exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
+            (side := .left) (d := d) (x := x) (u := u)
+            hd_prime hd_ge hx hu hcop hpnd with
+          ⟨p, hp_dvd, hp_gap⟩
+        have hS_ne :
+            ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 :=
+          hS_lift S p hp_dvd hp_gap
+        have hsum0 : hopcPrimeContributionSum (S := insert p S) σ t = 0 :=
+          hsum_lift S p hp_dvd hp_gap
+        exact ⟨p, stationaryAt_insert_of_hopcPrimeContributionSum_eq_zero
+          (S := S) (p := p) (hS_ne := hS_ne) (hsum0 := hsum0)⟩)
+
+/--
+RH-PF3: RH-PF2w（witness 付き eventually 形成条件）から、
+`eventually (∃ p, nondegenerateStationaryAt insert)` を得る高位 bridge。
+-/
+theorem eventually_exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hS_lift :
+      ∀ (S : Finset {q // Nat.Prime q}) (p : {q // Nat.Prime q}),
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0)
+    (hsum_lift :
+      ∀ (S : Finset {q // Nat.Prime q}) (p : {q // Nat.Prime q}),
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          hopcPrimeContributionSum (S := insert p S) σ t = 0)
+    (hcurv_lift :
+      ∀ (S : Finset {q // Nat.Prime q}) (p : {q // Nat.Prime q}),
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          DkMath.RH.phaseCurv
+            (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t ≠ 0) :
+    ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+      ∃ p : {q // Nat.Prime q},
+        DkMath.RH.nondegenerateStationaryAt
+          (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  cases side with
+  | right =>
+      have hEvWitness :=
+        eventually_exists_primeLocalFormationWitness_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+          (side := .right) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd
+          (hsum_lift := fun S p hp_dvd hp_gap => hsum_lift S p hp_dvd hp_gap)
+          (hcurv_lift := fun S p hp_dvd hp_gap => hcurv_lift S p hp_dvd hp_gap)
+      exact hEvWitness.mono (fun S hS => by
+        rcases hS with ⟨p, hp_dvd, hp_gap, hsum0, hcurv0⟩
+        have hS_ne :
+            ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 :=
+          hS_lift S p hp_dvd hp_gap
+        exact ⟨p,
+          nondegenerateStationaryAt_insert_of_hopcPrimeContributionSum_eq_zero_and_phaseCurv_ne_zero
+            (S := S) (p := p) (hS_ne := hS_ne) (hsum0 := hsum0) (hcurv0 := hcurv0)⟩)
+  | left =>
+      have hEvWitness :=
+        eventually_exists_primeLocalFormationWitness_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+          (side := .left) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd
+          (hsum_lift := fun S p hp_dvd hp_gap => hsum_lift S p hp_dvd hp_gap)
+          (hcurv_lift := fun S p hp_dvd hp_gap => hcurv_lift S p hp_dvd hp_gap)
+      exact hEvWitness.mono (fun S hS => by
+        rcases hS with ⟨p, hp_dvd, hp_gap, hsum0, hcurv0⟩
+        have hS_ne :
+            ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 :=
+          hS_lift S p hp_dvd hp_gap
+        exact ⟨p,
+          nondegenerateStationaryAt_insert_of_hopcPrimeContributionSum_eq_zero_and_phaseCurv_ne_zero
+            (S := S) (p := p) (hS_ne := hS_ne) (hsum0 := hsum0) (hcurv0 := hcurv0)⟩)
+
+/--
+RH-PF3: `BoundaryInsertLocalLiftProvider` を `S` ごとに供給できるとき、
+`eventually (∃ p, stationaryAt insert)` を返す provider-family 版 wrapper。
+-/
+theorem eventually_exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_providerFamily
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (providerFamily :
+      ∀ S : Finset {q // Nat.Prime q},
+        BoundaryInsertLocalLiftProvider side S d x u σ t) :
+    ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+      ∃ p : {q // Nat.Prime q},
+        DkMath.RH.stationaryAt
+          (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  cases side with
+  | right =>
+      exact eventually_exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split
+        (side := .right) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+        hd_prime hd_ge hx hu hcop hpnd
+        (hS_lift := fun S p hp_dvd hp_gap => (providerFamily S).hS_lift p hp_dvd hp_gap)
+        (hsum_lift := fun S p hp_dvd hp_gap => (providerFamily S).hsum_lift p hp_dvd hp_gap)
+  | left =>
+      exact eventually_exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split
+        (side := .left) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+        hd_prime hd_ge hx hu hcop hpnd
+        (hS_lift := fun S p hp_dvd hp_gap => (providerFamily S).hS_lift p hp_dvd hp_gap)
+        (hsum_lift := fun S p hp_dvd hp_gap => (providerFamily S).hsum_lift p hp_dvd hp_gap)
+
+/--
+RH-PF3: local provider family と phase-curvature provider family から、
+`eventually (∃ p, nondegenerateStationaryAt insert)` を返す高位 wrapper。
+-/
+theorem
+    eventually_exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_providerFamily_and_phaseCurvProviderFamily
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (providerFamily :
+      ∀ S : Finset {q // Nat.Prime q},
+        BoundaryInsertLocalLiftProvider side S d x u σ t)
+    (curvProviderFamily :
+      ∀ S : Finset {q // Nat.Prime q},
+        BoundaryInsertPhaseCurvProvider side S d x u σ t) :
+    ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+      ∃ p : {q // Nat.Prime q},
+        DkMath.RH.nondegenerateStationaryAt
+          (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  cases side with
+  | right =>
+      exact
+        eventually_exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+          (side := .right) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd
+          (hS_lift := fun S p hp_dvd hp_gap => (providerFamily S).hS_lift p hp_dvd hp_gap)
+          (hsum_lift := fun S p hp_dvd hp_gap => (providerFamily S).hsum_lift p hp_dvd hp_gap)
+          (hcurv_lift := fun S p hp_dvd hp_gap => (curvProviderFamily S).hcurv_lift p hp_dvd hp_gap)
+  | left =>
+      exact
+        eventually_exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+          (side := .left) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd
+          (hS_lift := fun S p hp_dvd hp_gap => (providerFamily S).hS_lift p hp_dvd hp_gap)
+          (hsum_lift := fun S p hp_dvd hp_gap => (providerFamily S).hsum_lift p hp_dvd hp_gap)
+          (hcurv_lift := fun S p hp_dvd hp_gap => (curvProviderFamily S).hcurv_lift p hp_dvd hp_gap)
+
+/--
+RH-PF3: `providerFamily` から、`Filter.atTop` 上の
+`eventually stationaryAt (S)` を回収する補題。
+
+固定 witness prime `p` を 1 つ選び、`p ∈ S` が eventually 成立することを用いて
+`insert p S = S` に正規化する。
+-/
+theorem eventually_stationaryAt_of_cfbRc_primitive_prime_boundary_bridge_of_providerFamily
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (providerFamily :
+      ∀ S : Finset {q // Nat.Prime q},
+        BoundaryInsertLocalLiftProvider side S d x u σ t) :
+    ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+      DkMath.RH.stationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical S σ v) t := by
+  cases side with
+  | right =>
+      rcases exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
+          (side := .right) (d := d) (x := x) (u := u)
+          hd_prime hd_ge hx hu hcop hpnd with
+        ⟨p, hp_dvd, hp_gap⟩
+      have hEvMem :
+          ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop, p ∈ S := by
+        refine Filter.mem_atTop_sets.2 ?_
+        refine ⟨({p} : Finset {q // Nat.Prime q}), ?_⟩
+        intro S hS
+        exact hS (by simp)
+      exact hEvMem.mono (fun S hp_mem => by
+        have hS_ne_insert :
+            ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 :=
+          (providerFamily S).hS_lift p hp_dvd hp_gap
+        have hsum_insert : hopcPrimeContributionSum (S := insert p S) σ t = 0 :=
+          (providerFamily S).hsum_lift p hp_dvd hp_gap
+        have hS_ne :
+            ∀ r ∈ S, eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 := by
+          intro r hr
+          exact hS_ne_insert r (Finset.mem_insert_of_mem hr)
+        have hsumS : hopcPrimeContributionSum (S := S) σ t = 0 := by
+          simpa [Finset.insert_eq_of_mem hp_mem] using hsum_insert
+        exact
+          (stationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero
+            (S := S) (σ := σ) (t := t) hS_ne).2 hsumS)
+  | left =>
+      rcases exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
+          (side := .left) (d := d) (x := x) (u := u)
+          hd_prime hd_ge hx hu hcop hpnd with
+        ⟨p, hp_dvd, hp_gap⟩
+      have hEvMem :
+          ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop, p ∈ S := by
+        refine Filter.mem_atTop_sets.2 ?_
+        refine ⟨({p} : Finset {q // Nat.Prime q}), ?_⟩
+        intro S hS
+        exact hS (by simp)
+      exact hEvMem.mono (fun S hp_mem => by
+        have hS_ne_insert :
+            ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 :=
+          (providerFamily S).hS_lift p hp_dvd hp_gap
+        have hsum_insert : hopcPrimeContributionSum (S := insert p S) σ t = 0 :=
+          (providerFamily S).hsum_lift p hp_dvd hp_gap
+        have hS_ne :
+            ∀ r ∈ S, eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 := by
+          intro r hr
+          exact hS_ne_insert r (Finset.mem_insert_of_mem hr)
+        have hsumS : hopcPrimeContributionSum (S := S) σ t = 0 := by
+          simpa [Finset.insert_eq_of_mem hp_mem] using hsum_insert
+        exact
+          (stationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero
+            (S := S) (σ := σ) (t := t) hS_ne).2 hsumS)
+
+/--
 RH-N22: `boundaryCyclotomicPrimeCore` 側の local-zero 仮定から witness local-zero を復元。
 
 `hlocal_core`（core 除法だけを前提にした local-zero 仮定）から、
@@ -1570,15 +2052,29 @@ theorem exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_p
         (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
   cases side with
   | right =>
-      exact
-        exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split
-          (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
-          hd_prime hd_ge hx hu hcop hpnd provider.hS_lift provider.hsum_lift
+      rcases exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
+          (side := .right) (d := d) (x := x) (u := u)
+          hd_prime hd_ge hx hu hcop hpnd with
+        ⟨p, hp_dvd, hp_gap⟩
+      have hS_ne :
+          ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 :=
+        provider.hS_lift p hp_dvd hp_gap
+      have hsum0 : hopcPrimeContributionSum (S := insert p S) σ t = 0 :=
+        provider.hsum_lift p hp_dvd hp_gap
+      exact ⟨p, stationaryAt_insert_of_hopcPrimeContributionSum_eq_zero
+        (S := S) (p := p) (hS_ne := hS_ne) (hsum0 := hsum0)⟩
   | left =>
-      exact
-        exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split
-          (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
-          hd_prime hd_ge hx hu hcop hpnd provider.hS_lift provider.hsum_lift
+      rcases exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
+          (side := .left) (d := d) (x := x) (u := u)
+          hd_prime hd_ge hx hu hcop hpnd with
+        ⟨p, hp_dvd, hp_gap⟩
+      have hS_ne :
+          ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 :=
+        provider.hS_lift p hp_dvd hp_gap
+      have hsum0 : hopcPrimeContributionSum (S := insert p S) σ t = 0 :=
+        provider.hsum_lift p hp_dvd hp_gap
+      exact ⟨p, stationaryAt_insert_of_hopcPrimeContributionSum_eq_zero
+        (S := S) (p := p) (hS_ne := hS_ne) (hsum0 := hsum0)⟩
 
 /--
 OP-004: provider record + 曲率 provider 版の非退化停留 bridge。
@@ -1603,17 +2099,33 @@ theorem exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundar
         (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
   cases side with
   | right =>
-      exact
-        exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
-          (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
-          hd_prime hd_ge hx hu hcop hpnd
-          provider.hS_lift provider.hsum_lift curvProvider.hcurv_lift
+      rcases
+          exists_primeLocalFormationWitness_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+            (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+            hd_prime hd_ge hx hu hcop hpnd
+            (hsum_lift := provider.hsum_lift)
+            (hcurv_lift := curvProvider.hcurv_lift) with
+        ⟨p, hp_dvd, hp_gap, hsum0, hcurv0⟩
+      have hS_ne :
+          ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 :=
+        provider.hS_lift p hp_dvd hp_gap
+      exact ⟨p,
+        nondegenerateStationaryAt_insert_of_hopcPrimeContributionSum_eq_zero_and_phaseCurv_ne_zero
+          (S := S) (p := p) (hS_ne := hS_ne) (hsum0 := hsum0) (hcurv0 := hcurv0)⟩
   | left =>
-      exact
-        exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
-          (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
-          hd_prime hd_ge hx hu hcop hpnd
-          provider.hS_lift provider.hsum_lift curvProvider.hcurv_lift
+      rcases
+          exists_primeLocalFormationWitness_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+            (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+            hd_prime hd_ge hx hu hcop hpnd
+            (hsum_lift := provider.hsum_lift)
+            (hcurv_lift := curvProvider.hcurv_lift) with
+        ⟨p, hp_dvd, hp_gap, hsum0, hcurv0⟩
+      have hS_ne :
+          ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 :=
+        provider.hS_lift p hp_dvd hp_gap
+      exact ⟨p,
+        nondegenerateStationaryAt_insert_of_hopcPrimeContributionSum_eq_zero_and_phaseCurv_ne_zero
+          (S := S) (p := p) (hS_ne := hS_ne) (hsum0 := hsum0) (hcurv0 := hcurv0)⟩
 
 /--
 OP-004: `boundaryCore` の factor 位相速度ゼロ仮定 + 曲率非零仮定から、
@@ -2952,6 +3464,12 @@ theorem hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_split
 /--
 RH-O7: `boundaryDiffPow` split 上界と `σ > 1`・`eventually stationary` から
 `hopcPrimeContributionTsum = 0` を得る。
+
+API policy note (2026-03-14):
+- 本補題は `hEvStationary` を直接受ける low-level 入口として維持する。
+- CFBRC 駆動の標準経路では provider-family 版
+  (`..._and_providerFamily_...`) を推奨する。
+- `hEvStationary` 直入力 API の deprecate 判定は 2026-06-30 に再評価する。
 -/
 theorem hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_split_prime_rpow_bound_sigma_gt_one
     (side : DkMath.CFBRC.BoundarySide)
@@ -4588,6 +5106,12 @@ theorem hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_wit
 
 /--
 RH-O9: off-dvd local-zero provider 版の `hopcPrimeContributionTsum = 0`。
+
+API policy note (2026-03-14):
+- 本補題は `hEvStationary` 直入力の low-level 入口。
+- provider-family から `hEvStationary` を内製する高位版
+  `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_and_providerFamily_sigma_gt_one`
+  を標準推奨とする。
 -/
 theorem hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one
     (side : DkMath.CFBRC.BoundarySide)
@@ -4638,5 +5162,159 @@ theorem tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_o
   tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_local0_sigma_gt_one
     (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) (C := C)
     hσ hC hwnz_diff hfactor_diff0 offdvdProvider.hlocal_offdvd hEvStationary
+
+/--
+RH-O9/RH-PF3: off-dvd local-zero provider と provider-family 供給から、
+`hopcPrimeContributionTsum = 0` を得る高位 wrapper。
+-/
+theorem hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_and_providerFamily_sigma_gt_one
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t C : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hσ : 1 < σ) (hC : 0 ≤ C)
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0)
+    (providerFamily :
+      ∀ S : Finset {q // Nat.Prime q},
+        BoundaryInsertLocalLiftProvider side S d x u σ t)
+    (offdvdProvider : BoundaryOffDvdLocalZeroProvider side d x u σ t) :
+    hopcPrimeContributionTsum σ t = 0 := by
+  have hEvStationary :
+      ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+        DkMath.RH.stationaryAt
+          (fun v : ℝ => eulerZetaFinite_onVertical S σ v) t :=
+    eventually_stationaryAt_of_cfbRc_primitive_prime_boundary_bridge_of_providerFamily
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      hd_prime hd_ge hx hu hcop hpnd providerFamily
+  exact hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one
+    (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) (C := C)
+    hσ hC hwnz_diff hfactor_diff0 offdvdProvider hEvStationary
+
+/--
+RH-O9/RH-PF3: off-dvd local-zero provider と provider-family 供給から、
+有限寄与和の atTop 極限（0）を得る高位 wrapper。
+-/
+theorem tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_provider_and_providerFamily_sigma_gt_one
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t C : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hσ : 1 < σ) (hC : 0 ≤ C)
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0)
+    (providerFamily :
+      ∀ S : Finset {q // Nat.Prime q},
+        BoundaryInsertLocalLiftProvider side S d x u σ t)
+    (offdvdProvider : BoundaryOffDvdLocalZeroProvider side d x u σ t) :
+    Filter.Tendsto
+      (fun S : Finset {p // Nat.Prime p} =>
+        hopcPrimeContributionSum (S := S) σ t)
+      Filter.atTop (𝓝 (0 : ℝ)) := by
+  have hEvStationary :
+      ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+        DkMath.RH.stationaryAt
+          (fun v : ℝ => eulerZetaFinite_onVertical S σ v) t :=
+    eventually_stationaryAt_of_cfbRc_primitive_prime_boundary_bridge_of_providerFamily
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      hd_prime hd_ge hx hu hcop hpnd providerFamily
+  exact tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one
+    (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) (C := C)
+    hσ hC hwnz_diff hfactor_diff0 offdvdProvider hEvStationary
+
+/--
+RH-O12/RH-PF3: off-dvd factor0 provider と provider-family 供給から、
+`hopcPrimeContributionTsum = 0` を得る wrapper。
+-/
+theorem
+    hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvdFactorZeroProvider_and_providerFamily_sigma_gt_one
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t C : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hσ : 1 < σ) (hC : 0 ≤ C)
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0)
+    (providerFamily :
+      ∀ S : Finset {q // Nat.Prime q},
+        BoundaryInsertLocalLiftProvider side S d x u σ t)
+    (offdvdFactorProvider : BoundaryOffDvdFactorZeroProvider side d x u σ t) :
+    hopcPrimeContributionTsum σ t = 0 := by
+  let offdvdProvider : BoundaryOffDvdLocalZeroProvider side d x u σ t :=
+    boundaryOffDvdLocalZeroProvider_of_offdvdFactorZeroProvider
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      offdvdFactorProvider
+  exact
+    hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_and_providerFamily_sigma_gt_one
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) (C := C)
+      hd_prime hd_ge hx hu hcop hpnd hσ hC
+      hwnz_diff hfactor_diff0 providerFamily offdvdProvider
+
+/--
+RH-O12/RH-PF3: off-dvd factor0 provider と provider-family 供給から、
+有限寄与和の atTop 極限（0）を得る wrapper。
+-/
+theorem
+    tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvdFactorZeroProvider_and_providerFamily_sigma_gt_one
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t C : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hσ : 1 < σ) (hC : 0 ≤ C)
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0)
+    (providerFamily :
+      ∀ S : Finset {q // Nat.Prime q},
+        BoundaryInsertLocalLiftProvider side S d x u σ t)
+    (offdvdFactorProvider : BoundaryOffDvdFactorZeroProvider side d x u σ t) :
+    Filter.Tendsto
+      (fun S : Finset {p // Nat.Prime p} =>
+        hopcPrimeContributionSum (S := S) σ t)
+      Filter.atTop (𝓝 (0 : ℝ)) := by
+  let offdvdProvider : BoundaryOffDvdLocalZeroProvider side d x u σ t :=
+    boundaryOffDvdLocalZeroProvider_of_offdvdFactorZeroProvider
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      offdvdFactorProvider
+  exact
+    tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_provider_and_providerFamily_sigma_gt_one
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) (C := C)
+      hd_prime hd_ge hx hu hcop hpnd hσ hC
+      hwnz_diff hfactor_diff0 providerFamily offdvdProvider
 
 end DkMath.RH.EulerZeta
