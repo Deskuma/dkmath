@@ -3014,6 +3014,86 @@ def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_f
     hS_dvd hwnz_diff hfactor_diff0
 
 /--
+RH-O20: `boundaryDiffPow` を割る側の
+`w_p ≠ 0` と factor 位相速度ゼロを束ねる供給器。
+-/
+structure BoundaryDiffPowFactorZeroProvider
+    (side : DkMath.CFBRC.BoundarySide)
+    (d x u : ℕ) (σ t : ℝ) : Type where
+  hwnz_diff :
+    ∀ q : {q0 // Nat.Prime q0},
+      q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+        eulerZeta_exp_s_log_p_sub_one q.1 σ t ≠ 0
+  hfactor_diff0 :
+    ∀ q : {q0 // Nat.Prime q0},
+      q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+        eulerZetaFactorPhaseVelLocal q.1 σ t = 0
+
+/--
+RH-O20: `hwnz_diff` / `hfactor_diff0` 関数を
+`BoundaryDiffPowFactorZeroProvider` へ束ねる標準構成器。
+-/
+def boundaryDiffPowFactorZeroProvider_of_split
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hwnz_diff :
+      ∀ q : {q0 // Nat.Prime q0},
+        q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one q.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ q : {q0 // Nat.Prime q0},
+        q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal q.1 σ t = 0) :
+    BoundaryDiffPowFactorZeroProvider side d x u σ t :=
+  ⟨hwnz_diff, hfactor_diff0⟩
+
+/--
+RH-O20: 命名統一版（推奨）
+`insert-provider + witnessProvider + diffFactorProvider + S 全体除法` から
+on-set off-dvd local-zero provider を構成する。
+-/
+def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_S_of_globalWitnessProvider_and_diffFactorZeroProvider
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (provider : BoundaryInsertLocalLiftProvider side S d x u σ t)
+    (witnessProvider : BoundaryGlobalWitnessProvider side d x u)
+    (diffProvider : BoundaryDiffPowFactorZeroProvider side d x u σ t)
+    (hS_dvd :
+      ∀ q ∈ S, q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u) :
+    BoundaryOffDvdLocalZeroOnSetProvider side S d x u σ t :=
+  boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_globalWitnessProvider
+    (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+    provider witnessProvider hS_dvd diffProvider.hwnz_diff diffProvider.hfactor_diff0
+
+/--
+RH-O20: 命名統一版（推奨）
+CFBRC primitive-prime existence から witness provider を自動生成し、
+`diffFactorProvider` と `hS_dvd` だけで on-set provider を構成する。
+-/
+def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_S_of_cfbRc_primitive_prime_and_diffFactorZeroProvider
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (provider : BoundaryInsertLocalLiftProvider side S d x u σ t)
+    (diffProvider : BoundaryDiffPowFactorZeroProvider side d x u σ t)
+    (hS_dvd :
+      ∀ q ∈ S, q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u) :
+    BoundaryOffDvdLocalZeroOnSetProvider side S d x u σ t :=
+  boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_S_of_globalWitnessProvider_and_diffFactorZeroProvider
+    (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+    provider
+    (boundaryGlobalWitnessProvider_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
+      (side := side) (d := d) (x := x) (u := u)
+      hd_prime hd_ge hx hu hcop hpnd)
+    diffProvider hS_dvd
+
+/--
 RH-O12: off-dvd 側の非零 (`w_p ≠ 0`) と factor 位相速度ゼロを束ねる供給器。
 -/
 structure BoundaryOffDvdFactorZeroProvider

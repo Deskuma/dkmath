@@ -2429,3 +2429,40 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - witness 分離 provider（RH-O19）前提で、
      高位 wrapper の命名統一と最小前提化を進める。
+
+### 日時: 2026/03/13 22:54 JST: Phase RH-O20 を実装（命名統一と最小前提化）
+
+1. 目的: OP-001 の RH-O20 として、
+   witness 分離 provider（RH-O19）前提の高位 wrapper 命名を統一し、
+   `hwnz_diff` / `hfactor_diff0` 前提を record 化して最小前提化する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `BoundaryDiffPowFactorZeroProvider`
+     - `boundaryDiffPowFactorZeroProvider_of_split`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_S_of_globalWitnessProvider_and_diffFactorZeroProvider`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_S_of_cfbRc_primitive_prime_and_diffFactorZeroProvider`
+   - 実装方針:
+     - RH-O19 の witness provider 路線を維持しつつ、
+       高位 wrapper 名を `..._of_globalWitnessProvider...` 系へ集約
+     - `hwnz_diff` / `hfactor_diff0` を個別関数で渡さず、
+       `BoundaryDiffPowFactorZeroProvider` 1 引数へ束ねる
+3. 結論:
+   - 高位 API の命名規則が揃い、前提入力の記述量が削減された。
+   - 呼び出し側は witness provider と diff-factor provider を組み合わせる形で
+     再利用しやすくなった。
+4. 失敗事例:
+   - 追加直後の依存型整合で build 調整が必要だったが、
+     `cases side` と wrapper 経由の接続で解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-O20 新命名 wrapper へ呼び出し側を段階移行し、
+     旧命名（`..._global_witness...`）の公開方針を整理する。

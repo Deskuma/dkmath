@@ -1,7 +1,7 @@
 # DkMath.RH：位相ドリフト骨格 + EulerZeta（現状の全コード）
 
 - Authors: D. and Kenro (ChatGPT-5.2)
-- Last updated: 2026/03/13 22:41
+- Last updated: 2026/03/13 22:54
 
 このディレクトリは、リーマンゼータ関数に差し込む前に必要な
 
@@ -147,7 +147,7 @@ $$
 
 ---
 
-## 現状 API（HOPC 公開名・RH-N50 時点）
+## 現状 API（HOPC 公開名・RH-N51 時点）
 
 CFBRC 連携で使う公開名は次を基準とする。
 
@@ -217,6 +217,10 @@ CFBRC 連携で使う公開名は次を基準とする。
   - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_globalWitnessLocalZeroProvider_and_local0_on_erase`
   - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_globalWitnessProvider`
   - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_globalWitnessProvider_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+  - `BoundaryDiffPowFactorZeroProvider`
+  - `boundaryDiffPowFactorZeroProvider_of_split`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_S_of_globalWitnessProvider_and_diffFactorZeroProvider`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_S_of_cfbRc_primitive_prime_and_diffFactorZeroProvider`
   - `BoundaryOffDvdFactorZeroProvider`
   - `boundaryOffDvdFactorZeroProvider_of_split`
   - `boundaryOffDvdFactorZeroProvider_of_nonzero_and_localZeroProvider`

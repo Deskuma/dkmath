@@ -13,7 +13,7 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
     無限側観測量へ上げるための前提を明文化する。
 - 目標成果:
   - 条件付きの「有限判定 → 極限判定」補題群
-- 状態: 進行中（RH-O19: witness existence を provider 分離し、可否評価を API 化）
+- 状態: 進行中（RH-O20: 高位 wrapper 命名統一と diff-factor 前提の record 化）
 - 到達済み:
   - `hopcPrimeContributionFn`
   - `hopcPrimeContributionTsum`
@@ -77,6 +77,10 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
   - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_globalWitnessLocalZeroProvider_and_local0_on_erase`
   - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_globalWitnessProvider`
   - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_globalWitnessProvider_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+  - `BoundaryDiffPowFactorZeroProvider`
+  - `boundaryDiffPowFactorZeroProvider_of_split`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_S_of_globalWitnessProvider_and_diffFactorZeroProvider`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_S_of_cfbRc_primitive_prime_and_diffFactorZeroProvider`
   - `BoundaryOffDvdFactorZeroProvider`
   - `boundaryOffDvdFactorZeroProvider_of_split`
   - `boundaryOffDvdFactorZeroProvider_of_nonzero_and_localZeroProvider`
@@ -97,8 +101,8 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
   - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
   - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
 - 残タスク:
-  - `BoundaryInsertLocalLiftProvider` 単体だけで witness existence を導出する定理は
-    現時点では見込めないため、provider 分離方針（RH-O19）の運用妥当性を継続評価
+  - RH-O20 新命名 wrapper へ呼び出し側を段階移行し、
+    旧命名（`..._global_witness...`）の公開方針を整理
 - 優先度: 高
 
 ## OP-002: 非零前提の管理 API
