@@ -970,6 +970,57 @@ theorem exists_boundary_dvd_gap_on_insert_of_cfbRc_primitive_prime_boundaryDiffP
           (side := .left) (S := S) (x := x) (u := u) p hS_gap hp_gap⟩
 
 /--
+RH-PF1: CFBRC primitive-prime witness から、
+`insert p S` 観測器の prime-local 形成条件
+`hopcPrimeContributionSum = 0 ∧ phaseCurv ≠ 0`
+を直接返す bridge。
+
+`stationaryAt` / `nondegenerateStationaryAt` へ落とす前段として、
+論文記述に対応する「形成条件そのもの」を抽出する。
+-/
+theorem exists_primeLocalFormation_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hsum_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          hopcPrimeContributionSum (S := insert p S) σ t = 0)
+    (hcurv_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          DkMath.RH.phaseCurv
+            (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t ≠ 0) :
+    ∃ p : {q // Nat.Prime q},
+      hopcPrimeContributionSum (S := insert p S) σ t = 0 ∧
+      DkMath.RH.phaseCurv
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t ≠ 0 := by
+  cases side with
+  | right =>
+      rcases exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
+          (side := .right) (d := d) (x := x) (u := u)
+          hd_prime hd_ge hx hu hcop hpnd with
+        ⟨p, hp_dvd, hp_gap⟩
+      exact ⟨p, hsum_lift p hp_dvd hp_gap, hcurv_lift p hp_dvd hp_gap⟩
+  | left =>
+      rcases exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
+          (side := .left) (d := d) (x := x) (u := u)
+          hd_prime hd_ge hx hu hcop hpnd with
+        ⟨p, hp_dvd, hp_gap⟩
+      exact ⟨p, hsum_lift p hp_dvd hp_gap, hcurv_lift p hp_dvd hp_gap⟩
+
+/--
 RH-N22: `boundaryCyclotomicPrimeCore` 側の local-zero 仮定から witness local-zero を復元。
 
 `hlocal_core`（core 除法だけを前提にした local-zero 仮定）から、

@@ -85,6 +85,18 @@ HOPC-RH の運用では、`arg` を主役にせず、
 
 の存在定理群が、算術存在と位相観測を同一 API 上で接続する。
 
+さらに RH-PF1 として、
+
+- `exists_primeLocalFormation_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv`
+
+を追加し、`stationaryAt` へ落とす前段の
+「形成条件そのもの」
+
+- `hopcPrimeContributionSum (insert p S) = 0`
+- `phaseCurv(insert p S) ≠ 0`
+
+を直接返す形式化を導入した。
+
 ---
 
 ## 3. Why Primes Are Structurally Central

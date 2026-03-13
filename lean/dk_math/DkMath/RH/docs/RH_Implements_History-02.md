@@ -244,3 +244,35 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - 草稿に実装 API の具体名（代表補題）を段階的に追加し、
      将来的な preprint 形式へ拡張する。
+
+### 日時: 2026/03/14 03:21 JST: RH-PF1（prime-local 形成条件の直接抽出補題）
+
+1. 目的:
+   論文草稿の説明構造に対応して、
+   `stationaryAt`/`nondegenerate` へ落とす前段の形成条件
+   `hopcPrimeContributionSum = 0 ∧ phaseCurv ≠ 0`
+   を Lean 補題として直接抽出する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/docs/HOPC-RH-PrimeLocal-Formation.md`
+     - `DkMath/RH/docs/RH-CFBRC-HOPC.md`
+     - `DkMath/RH/docs/RH_Implements_History-02.md`
+   - 追加実装:
+     - `exists_primeLocalFormation_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv`
+   - 文書同期:
+     - 草稿に RH-PF1 補題名と数理的意味（形成条件の直接返却）を追記
+     - RH-CFBRC-HOPC 実装層説明に RH-PF1 の位置づけを追加
+3. 結論:
+   - 「prime-local 形成機構」を、存在定理の帰結ではなく
+     独立した中間命題として参照できるようになった。
+   - 論文本文と Lean 補題の対応関係が 1 段明確化された。
+4. 失敗事例:
+   - 初回証明で `match side` 依存型不一致が発生。
+   - `cases side` で左右分岐して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-PF1 を起点に、有限形成条件から atTop 側へ持ち上げる
+     intermediate theorem（eventually 版）を設計する。
