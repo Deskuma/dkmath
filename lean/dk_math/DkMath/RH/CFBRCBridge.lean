@@ -355,6 +355,68 @@ structure BoundaryInsertLocalLiftProvider
         hopcPrimeContributionSum (S := insert p S) σ t = 0
 
 /--
+RH-N11: split 仮定から provider record を構成する最小補題。
+
+`hS_lift` と `hsum_lift` をそのまま `BoundaryInsertLocalLiftProvider`
+へ束ねる供給器。
+-/
+def boundaryInsertLocalLiftProvider_of_split
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hS_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0)
+    (hsum_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          hopcPrimeContributionSum (S := insert p S) σ t = 0) :
+    BoundaryInsertLocalLiftProvider side S d x u σ t :=
+  ⟨hS_lift, hsum_lift⟩
+
+/--
+RH-N11: pair 形式 (`hlift`) から provider record を構成する補題。
+
+既存の一括入力
+`(hS_lift ∧ hsum_lift)` 形式から provider 版 API へ接続する。
+-/
+def boundaryInsertLocalLiftProvider_of_pair
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hlift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          (∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0) ∧
+          hopcPrimeContributionSum (S := insert p S) σ t = 0) :
+    BoundaryInsertLocalLiftProvider side S d x u σ t := by
+  cases side with
+  | right =>
+      exact boundaryInsertLocalLiftProvider_of_split
+        (side := .right) (S := S)
+        (hS_lift := fun p hq_dvd hq_not_dvd_x =>
+          (hlift p hq_dvd hq_not_dvd_x).1)
+        (hsum_lift := fun p hq_dvd hq_not_dvd_x =>
+          (hlift p hq_dvd hq_not_dvd_x).2)
+  | left =>
+      exact boundaryInsertLocalLiftProvider_of_split
+        (side := .left) (S := S)
+        (hS_lift := fun p hq_dvd hq_not_dvd_u =>
+          (hlift p hq_dvd hq_not_dvd_u).1)
+        (hsum_lift := fun p hq_dvd hq_not_dvd_u =>
+          (hlift p hq_dvd hq_not_dvd_u).2)
+
+/--
 RH-N7: provider record 版 wrapper（`BoundarySide` + small finite-set）。
 
 `BoundaryInsertLocalLiftProvider` を受け取り、

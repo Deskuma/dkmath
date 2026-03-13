@@ -1092,3 +1092,30 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-N11 として、`CFBRCBridge.lean` に
      provider 供給補題の最小スケッチ（`hS_lift` 供給器の雛形）を追加し、
      実体供給層へ着手する。
+
+### 日時: 2026/03/13 11:54 JST: Phase RH-N11 を実装（provider 供給補題の最小スケッチ）
+
+1. 目的: RH-N10 で明確化した「provider 実体供給」へ着手するため、
+   split/pair 仮定から provider record を構成する最小補題を実装する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+   - 追加実装:
+     - `boundaryInsertLocalLiftProvider_of_split`
+       （`hS_lift` / `hsum_lift` から `BoundaryInsertLocalLiftProvider` を構成）
+     - `boundaryInsertLocalLiftProvider_of_pair`
+       （既存 pair 形式 `hlift` から provider を構成）
+3. 結論: provider record への「供給入口」が補題化され、
+   以後は供給側が split 形式または pair 形式で証明を作っても
+   provider API へ同一手順で接続できるようになった。
+4. 失敗事例:
+   - `boundaryInsertLocalLiftProvider_of_pair` の初回実装で
+     `match side` 依存型不一致が発生。
+   - `cases side` で right/left を固定して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N12 として、provider 実体供給の最初の候補として
+     nonzero 前提 (`hS_lift`) だけを組み立てる補題群を導入し、
+     `hsum_lift` 側と段階分離した実装計画へ進む。
