@@ -2566,3 +2566,30 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 5. 次の課題:
    - 下流呼び出し側の移行率を監視し、`2026-06-30` 時点で
      旧命名 API 削除可否を判定する。
+
+### 日時: 2026/03/14 00:12 JST: Phase RH-O23 を実施（旧命名呼び出し監査）
+
+1. 目的:
+   RH-O22 後の段階移行確認として、リポジトリ内の旧命名呼び出し残存を監査し、
+   deprecation 運用を「外部移行監視フェーズ」へ進める。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 監査実施:
+     - `rg` で旧命名 4 API の参照を `DkMath/**/*.lean` 全域で走査
+     - 残存参照が `CFBRCBridge.lean` の互換定義本体と
+       `attribute [deprecated ...]` のみであることを確認
+3. 結論:
+   - リポジトリ内実コード（下流 Lean 呼び出し）の旧命名依存は解消済み。
+   - `deprecated` 運用は外部利用側の移行監視に絞り、
+     削除候補日 `2026-06-30` を維持する。
+4. 検証:
+   - `rg -n "boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_(global_witness_local0_and_local0_on_erase|boundaryDiffPow_factor0_and_dvd_on_erase_of_global_witness|boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness|boundaryDiffPow_factor0_and_dvd_on_S_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime)" lean/dk_math/DkMath --glob "*.lean"`
+   - `lake build DkMath.RH.CFBRCBridge`
+5. 次の課題:
+   - 外部利用側の旧命名呼び出し移行率を継続監視し、
+     `2026-06-30` 時点で削除可否を最終判定する。
