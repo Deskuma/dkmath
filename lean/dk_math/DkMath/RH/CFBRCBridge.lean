@@ -329,4 +329,60 @@ theorem exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_l
               (by simpa [DkMath.CFBRC.boundaryDiffPow, Nat.add_comm] using hq_dvd)
               hq_not_dvd_u))
 
+/--
+RH-N7: `BoundarySide` + small finite-set 向けの split 供給インターフェース。
+
+`hS_lift`（非零前提供給）と `hsum_lift`（寄与総和ゼロ供給）を
+一つの record として束ね、provider 層から bridge へ渡しやすくする。
+-/
+structure BoundaryInsertLocalLiftProvider
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    (d x u : ℕ) (σ t : ℝ) : Type where
+  hS_lift :
+    ∀ p : {q // Nat.Prime q},
+      p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+        (match side with
+          | .right => ¬ p.1 ∣ x
+          | .left => ¬ p.1 ∣ u) →
+        ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0
+  hsum_lift :
+    ∀ p : {q // Nat.Prime q},
+      p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+        (match side with
+          | .right => ¬ p.1 ∣ x
+          | .left => ¬ p.1 ∣ u) →
+        hopcPrimeContributionSum (S := insert p S) σ t = 0
+
+/--
+RH-N7: provider record 版 wrapper（`BoundarySide` + small finite-set）。
+
+`BoundaryInsertLocalLiftProvider` を受け取り、
+split 版 bridge へ委譲して停留点存在を返す。
+-/
+theorem exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (provider : BoundaryInsertLocalLiftProvider side S d x u σ t) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  cases side with
+  | right =>
+      exact
+        exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split
+          (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd provider.hS_lift provider.hsum_lift
+  | left =>
+      exact
+        exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split
+          (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd provider.hS_lift provider.hsum_lift
+
 end DkMath.RH.EulerZeta

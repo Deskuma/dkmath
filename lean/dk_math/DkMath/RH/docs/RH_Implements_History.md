@@ -992,3 +992,28 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-N7 として、provider 側の最小実装に向け
      `hS_lift` / `hsum_lift` を生成する抽象インターフェースを
      `CFBRCBridge.lean` 近傍へ設計する。
+
+### 日時: 2026/03/13 11:34 JST: Phase RH-N7 を実装（`hS_lift` / `hsum_lift` provider interface）
+
+1. 目的: small finite-set bridge で必要な split 仮定
+   (`hS_lift` / `hsum_lift`) を provider 層から渡しやすくする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+   - 追加実装:
+     - `BoundaryInsertLocalLiftProvider` 構造体
+       （`BoundarySide` + `insert p S` 用の `hS_lift` / `hsum_lift` を束ねる record）
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider`
+       （provider record を受けて split bridge へ委譲する wrapper）
+3. 結論: RH 側 bridge に provider 直結入口を追加でき、
+   翻訳層は record 1 個で `BoundarySide` small finite-set 停留補題へ接続可能になった。
+4. 失敗事例:
+   - 初回 wrapper 実装で `match side, hpnd` 由来の依存型不一致が発生。
+   - `cases side` 分岐へ変更して型差を解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N8 として、`BoundaryInsertLocalLiftProvider` を使う
+     最小利用例を `RH/README.md` と `RH/docs/RH-CFBRC-Discussion.md` に追記し、
+     provider 設計の導入導線を固定する。
