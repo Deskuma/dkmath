@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.RH.EulerZeta
+import DkMath.RH.EulerZetaLemmas
 
 /-!
 # HOPC Infinite Lift
@@ -56,7 +56,7 @@ theorem tendsto_hopcPrimeContributionSum_atTop_of_hasSum
       (fun S : Finset {p // Nat.Prime p} =>
         hopcPrimeContributionSum (S := S) σ t)
       Filter.atTop (𝓝 L) := by
-  simpa [hopcPrimeContributionFn, hopcPrimeContributionSum] using hHasSum
+  simpa only [HasSum, hopcPrimeContributionFn, hopcPrimeContributionSum] using hHasSum
 
 /-- `HopcInfiniteLiftAssumptions` 版の atTop 極限（極限値 0）。 -/
 theorem tendsto_hopcPrimeContributionSum_atTop_of_assumptions
@@ -211,5 +211,98 @@ theorem eventually_abs_hopcPrimeContributionSum_lt_of_majorant_assumptions
       |hopcPrimeContributionSum (S := S) σ t| < ε :=
   eventually_abs_hopcPrimeContributionSum_lt_of_summable_assumptions
     hε (summable_assumptions_of_majorant_assumptions hAssump)
+
+/--
+全素数で `w_p(σ,t) ≠ 0` が成り立ち、有限集合版観測器が最終的に停留するとき、
+`hopcPrimeContributionSum` は最終的に 0 になる。
+-/
+theorem eventually_hopcPrimeContributionSum_eq_zero_of_eventually_stationaryAt
+    {σ t : ℝ}
+    (hPrime_ne :
+      ∀ p : {q // Nat.Prime q}, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hEvStationary :
+      ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+        DkMath.RH.stationaryAt
+          (fun v : ℝ => eulerZetaFinite_onVertical S σ v) t) :
+    ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+      hopcPrimeContributionSum (S := S) σ t = 0 := by
+  refine hEvStationary.mono ?_
+  intro S hS
+  have hS_ne :
+      ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0 := by
+    intro p hp
+    exact hPrime_ne p
+  exact
+    (stationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero
+      (S := S) (σ := σ) (t := t) hS_ne).1 hS
+
+/--
+`eventually stationary` 仮定版:
+有限集合版寄与和は最終的に任意 `ε` 未満になる。
+-/
+theorem eventually_abs_hopcPrimeContributionSum_lt_of_eventually_stationaryAt
+    {σ t ε : ℝ}
+    (hε : 0 < ε)
+    (hPrime_ne :
+      ∀ p : {q // Nat.Prime q}, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hEvStationary :
+      ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+        DkMath.RH.stationaryAt
+          (fun v : ℝ => eulerZetaFinite_onVertical S σ v) t) :
+    ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+      |hopcPrimeContributionSum (S := S) σ t| < ε := by
+  have hEv0 :
+      ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+        hopcPrimeContributionSum (S := S) σ t = 0 :=
+    eventually_hopcPrimeContributionSum_eq_zero_of_eventually_stationaryAt
+      (σ := σ) (t := t) hPrime_ne hEvStationary
+  exact hEv0.mono (by
+    intro S hS0
+    have hAbs0 : |hopcPrimeContributionSum (S := S) σ t| = 0 := by
+      rw [hS0]
+      simp
+    exact hAbs0 ▸ hε)
+
+/--
+`Summable` と `eventually stationary` から、無限和観測量 `hopcPrimeContributionTsum` は 0。
+-/
+theorem hopcPrimeContributionTsum_eq_zero_of_summable_of_eventually_stationaryAt
+    {σ t : ℝ}
+    (hSummable : Summable (hopcPrimeContributionFn σ t))
+    (hPrime_ne :
+      ∀ p : {q // Nat.Prime q}, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hEvStationary :
+      ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+        DkMath.RH.stationaryAt
+          (fun v : ℝ => eulerZetaFinite_onVertical S σ v) t) :
+    hopcPrimeContributionTsum σ t = 0 := by
+  have hEv0 :
+      ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+        hopcPrimeContributionSum (S := S) σ t = 0 :=
+    eventually_hopcPrimeContributionSum_eq_zero_of_eventually_stationaryAt
+      (σ := σ) (t := t) hPrime_ne hEvStationary
+  have hEventuallyEq :
+      (fun S : Finset {q // Nat.Prime q} =>
+        hopcPrimeContributionSum (S := S) σ t) =ᶠ[Filter.atTop]
+      (fun _ => (0 : ℝ)) :=
+    hEv0
+  have hT0 :
+      Filter.Tendsto
+        (fun S : Finset {q // Nat.Prime q} =>
+          hopcPrimeContributionSum (S := S) σ t)
+        Filter.atTop (𝓝 (0 : ℝ)) := by
+    exact
+      (tendsto_const_nhds :
+        Filter.Tendsto (fun _ : Finset {q // Nat.Prime q} => (0 : ℝ))
+          Filter.atTop (𝓝 (0 : ℝ))).congr' hEventuallyEq.symm
+  have hTsum :
+      Filter.Tendsto
+        (fun S : Finset {q // Nat.Prime q} =>
+          hopcPrimeContributionSum (S := S) σ t)
+        Filter.atTop (𝓝 (hopcPrimeContributionTsum σ t)) := by
+    simpa only [HasSum, hopcPrimeContributionFn, hopcPrimeContributionTsum,
+      hopcPrimeContributionSum]
+      using hSummable.hasSum
+  exact tendsto_nhds_unique hTsum hT0
 
 end DkMath.RH.EulerZeta

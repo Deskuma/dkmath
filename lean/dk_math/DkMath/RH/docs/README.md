@@ -1,7 +1,7 @@
 # DkMath.RH：位相ドリフト骨格 + EulerZeta（現状の全コード）
 
 - Authors: D. and Kenro (ChatGPT-5.2)
-- Last updated: 2026/03/13 00:31
+- Last updated: 2026/03/13 18:47
 
 このディレクトリは、リーマンゼータ関数に差し込む前に必要な
 
@@ -147,7 +147,7 @@ $$
 
 ---
 
-## 現状 API（HOPC 公開名・RH-N34 時点）
+## 現状 API（HOPC 公開名・RH-N35 時点）
 
 CFBRC 連携で使う公開名は次を基準とする。
 
@@ -173,6 +173,9 @@ CFBRC 連携で使う公開名は次を基準とする。
   - `eventually_abs_hopcPrimeContributionSum_lt_of_assumptions`
   - `eventually_abs_hopcPrimeContributionSum_lt_of_summable_assumptions`
   - `eventually_abs_hopcPrimeContributionSum_lt_of_majorant_assumptions`
+  - `eventually_hopcPrimeContributionSum_eq_zero_of_eventually_stationaryAt`
+  - `eventually_abs_hopcPrimeContributionSum_lt_of_eventually_stationaryAt`
+  - `hopcPrimeContributionTsum_eq_zero_of_summable_of_eventually_stationaryAt`
 - 同一化（`EulerZetaLemmas.lean`）
   - `eulerZetaFactorPhaseVelFinite_eq_hopcPrimeContributionSum`
 - 停留判定（`EulerZetaLemmas.lean`）

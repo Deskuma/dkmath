@@ -1850,3 +1850,42 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-O4: majorant 供給器（CFBRC/RH 連携の具体化）と、
      finite 側停留判定から infinite 側観測量への接続補題を追加する。
+
+### 日時: 2026/03/13 18:47 JST: Phase RH-O4 を実装（finite 側停留判定→infinite 側観測量）
+
+1. 目的: OP-001 の RH-O4 として、
+   finite 側の `stationaryAt` 判定を atTop で束ね、
+   infinite 側の `hopcPrimeContributionTsum = 0` へ接続する補題を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/HopcInfiniteLift.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`HopcInfiniteLift.lean`）:
+     - `eventually_hopcPrimeContributionSum_eq_zero_of_eventually_stationaryAt`
+     - `eventually_abs_hopcPrimeContributionSum_lt_of_eventually_stationaryAt`
+     - `hopcPrimeContributionTsum_eq_zero_of_summable_of_eventually_stationaryAt`
+   - 実装方針:
+     - `stationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero`
+       を atTop の `Eventually` へ持ち上げ、`eventually sum = 0` を構成
+     - `eventually` で 0 同一化された有限和の極限を `tendsto_nhds_unique` で一意化し、
+       `Summable` 由来の `tsum` と一致させて `tsum = 0` を導出
+   - 文書同期:
+     - README 2 枚を RH-N35 時点へ更新
+     - OpenProblems / Roadmap の OP-001 状態を RH-O4 到達へ更新
+3. 結論:
+   - finite 側停留判定から infinite 側観測量への接続補題が導入され、
+     OP-001 の「停留判定→極限観測」導線が最小形で成立した。
+4. 失敗事例:
+   - `EulerZetaLemmas` 取り込み後に `simp` 展開が強くなり、
+     既存 `simpa` が型不一致になった。
+   - `simpa only [...]` へ限定し、`eventually` 側は `rw` 明示で修正して解消。
+5. 検証:
+   - `lake build DkMath.RH.HopcInfiniteLift` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-O5: majorant / bridge 仮定から `Summable` を直接供給する具体化レイヤ
+     （CFBRC/RH 連携）を追加する。
