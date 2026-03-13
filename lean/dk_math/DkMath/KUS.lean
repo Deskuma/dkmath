@@ -12,5 +12,6 @@ import DkMath.KUS.Monoid
 import DkMath.KUS.Extract
 import DkMath.KUS.Scale
 import DkMath.KUS.RoundTrip
+import DkMath.KUS.Examples
 
 #print "file: DkMath.KUS"
