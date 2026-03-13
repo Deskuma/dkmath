@@ -2861,11 +2861,31 @@ def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_f
         q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
           eulerZetaFactorPhaseVelLocal q.1 σ t = 0) :
     BoundaryOffDvdLocalZeroOnSetProvider side S d x u σ t := by
-  exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase_of_global_witness
-    (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
-    provider hwitness
-    (fun r hrS q hq => hS_dvd q (Finset.mem_of_mem_erase hq))
-    hwnz_diff hfactor_diff0
+  cases side with
+  | right =>
+      classical
+      let p : {q // Nat.Prime q} := Classical.choose hwitness
+      have hp_dvd : p.1 ∣ DkMath.CFBRC.boundaryDiffPow .right d x u := by
+        simpa [p] using (Classical.choose_spec hwitness).1
+      have hp_gap : ¬ p.1 ∣ x := by
+        simpa [p] using (Classical.choose_spec hwitness).2
+      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S
+        (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+        provider
+        (fun r hrS => ⟨p, hp_dvd, hp_gap⟩)
+        hS_dvd hwnz_diff hfactor_diff0
+  | left =>
+      classical
+      let p : {q // Nat.Prime q} := Classical.choose hwitness
+      have hp_dvd : p.1 ∣ DkMath.CFBRC.boundaryDiffPow .left d x u := by
+        simpa [p] using (Classical.choose_spec hwitness).1
+      have hp_gap : ¬ p.1 ∣ u := by
+        simpa [p] using (Classical.choose_spec hwitness).2
+      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S
+        (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+        provider
+        (fun r hrS => ⟨p, hp_dvd, hp_gap⟩)
+        hS_dvd hwnz_diff hfactor_diff0
 
 /--
 RH-O18: CFBRC primitive-prime existence を使い、
@@ -2902,9 +2922,13 @@ def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_f
           (exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
             (side := .right) (d := d) (x := x) (u := u)
             hd_prime hd_ge hx hu hcop hpnd)
-      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness
+      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S
         (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
-        provider hwitness hS_dvd hwnz_diff hfactor_diff0
+        provider
+        (fun r hrS => by
+          rcases hwitness with ⟨p, hp_dvd, hp_gap⟩
+          exact ⟨p, hp_dvd, hp_gap⟩)
+        hS_dvd hwnz_diff hfactor_diff0
   | left =>
       have hwitness :
           ∃ p : {q // Nat.Prime q},
@@ -2914,9 +2938,13 @@ def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_f
           (exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
             (side := .left) (d := d) (x := x) (u := u)
             hd_prime hd_ge hx hu hcop hpnd)
-      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness
+      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S
         (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
-        provider hwitness hS_dvd hwnz_diff hfactor_diff0
+        provider
+        (fun r hrS => by
+          rcases hwitness with ⟨p, hp_dvd, hp_gap⟩
+          exact ⟨p, hp_dvd, hp_gap⟩)
+        hS_dvd hwnz_diff hfactor_diff0
 
 /--
 RH-O19: witness-local-zero provider を使って、
@@ -2933,16 +2961,20 @@ def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_globalWitnessLoca
     BoundaryOffDvdLocalZeroOnSetProvider side S d x u σ t := by
   cases side with
   | right =>
-      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_global_witness_local0_and_local0_on_erase
+      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_witness_local0_and_local0_on_erase
         (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
         provider
-        (by simpa using witnessProvider.hwitness)
+        (fun r hrS => by
+          rcases witnessProvider.hwitness with ⟨p, hp_dvd, hp_gap, hlocal_p⟩
+          exact ⟨p, hp_dvd, hp_gap, hlocal_p⟩)
         hlocal_erase
   | left =>
-      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_global_witness_local0_and_local0_on_erase
+      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_witness_local0_and_local0_on_erase
         (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
         provider
-        (by simpa using witnessProvider.hwitness)
+        (fun r hrS => by
+          rcases witnessProvider.hwitness with ⟨p, hp_dvd, hp_gap, hlocal_p⟩
+          exact ⟨p, hp_dvd, hp_gap, hlocal_p⟩)
         hlocal_erase
 
 /--
@@ -2968,16 +3000,20 @@ def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_f
     BoundaryOffDvdLocalZeroOnSetProvider side S d x u σ t := by
   cases side with
   | right =>
-      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness
+      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S
         (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
         provider
-        (by simpa using witnessProvider.hwitness)
+        (fun r hrS => by
+          rcases witnessProvider.hwitness with ⟨p, hp_dvd, hp_gap⟩
+          exact ⟨p, hp_dvd, hp_gap⟩)
         hS_dvd hwnz_diff hfactor_diff0
   | left =>
-      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness
+      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S
         (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
         provider
-        (by simpa using witnessProvider.hwitness)
+        (fun r hrS => by
+          rcases witnessProvider.hwitness with ⟨p, hp_dvd, hp_gap⟩
+          exact ⟨p, hp_dvd, hp_gap⟩)
         hS_dvd hwnz_diff hfactor_diff0
 
 /--
@@ -3110,20 +3146,25 @@ def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_erase_of_g
     BoundaryOffDvdLocalZeroOnSetProvider side S d x u σ t := by
   cases side with
   | right =>
-      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase_of_global_witness
+      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase
         (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
         provider
-        (by simpa using witnessProvider.hwitness)
+        (fun r hrS => by
+          rcases witnessProvider.hwitness with ⟨p, hp_dvd, hp_gap⟩
+          exact ⟨p, hp_dvd, hp_gap⟩)
         herase_dvd diffProvider.hwnz_diff diffProvider.hfactor_diff0
   | left =>
-      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase_of_global_witness
+      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase
         (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
         provider
-        (by simpa using witnessProvider.hwitness)
+        (fun r hrS => by
+          rcases witnessProvider.hwitness with ⟨p, hp_dvd, hp_gap⟩
+          exact ⟨p, hp_dvd, hp_gap⟩)
         herase_dvd diffProvider.hwnz_diff diffProvider.hfactor_diff0
 
--- RH-O21: 旧 `..._global_witness...` 命名は互換維持のみ。
--- 新規利用は provider ベース命名（RH-O20/O21）へ移行する。
+-- RH-O21/RH-O22: 旧 `..._global_witness...` 命名は互換維持のみ。
+-- 新規利用は provider ベース命名（RH-O20/O21）へ移行し、
+-- 削除候補日は 2026-06-30（以降、移行完了を確認して撤去）とする。
 attribute [deprecated boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_globalWitnessLocalZeroProvider_and_local0_on_erase
   (since := "2026-03-13")]
   boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_global_witness_local0_and_local0_on_erase

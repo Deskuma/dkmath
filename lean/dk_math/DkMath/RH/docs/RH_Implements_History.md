@@ -2502,3 +2502,67 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - 旧命名呼び出しを新命名 wrapper へ段階移行し、
      `deprecated` 警告の運用ポリシー（削除時期）を確定する。
+
+### 日時: 2026/03/13 23:45 JST: Phase RH-O22 を実装（内部移行と削除時期固定）
+
+1. 目的: OP-001 の RH-O22 として、
+   旧命名呼び出しの内部移行を進め、`deprecated` 運用の削除時期を固定する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 変更実装（`CFBRCBridge.lean`）:
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_globalWitnessLocalZeroProvider_and_local0_on_erase`
+       の内部呼び出しを旧 `..._global_witness...` 依存から
+       非 legacy 経路（`..._witness_local0_and_local0_on_erase`）へ移行
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_globalWitnessProvider`
+       の内部呼び出しを旧 `..._global_witness...` 依存から
+       非 legacy 経路（`..._boundaryDiffPow_factor0_and_dvd_on_S`）へ移行
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_erase_of_globalWitnessProvider_and_diffFactorZeroProvider`
+       を非 legacy 経路（`..._boundaryDiffPow_factor0_and_dvd_on_erase`）へ接続
+     - deprecation コメントへ削除候補日 `2026-06-30` を追記
+3. 結論:
+   - `CFBRCBridge` 内の新命名 wrapper から旧命名 API への依存が解消され、
+     旧命名は互換レイヤとして隔離された。
+   - 削除候補日を `2026-06-30` に固定し、運用方針を明文化した。
+4. 失敗事例:
+   - 依存型（`match side, provider`）の不一致で初回 build が失敗。
+   - `cases side` + `simpa` に戻して witness 型を正規化し解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - 下流（外部利用側）の旧命名呼び出しを `2026-06-30` までに移行し、
+     到達時点で削除可否を判定する。
+
+### 日時: 2026/03/13 23:58 JST: Phase RH-O22 追補（legacy 内部連鎖の切断）
+
+1. 目的: RH-O22 の追補として、
+   旧命名 wrapper 間の内部連鎖呼び出しを減らし、
+   legacy 名を「互換公開レイヤ」に限定する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 変更実装（`CFBRCBridge.lean`）:
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness`
+       を、旧 erase wrapper ではなく基底の
+       `..._boundaryDiffPow_factor0_and_dvd_on_S` へ直結
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+       を、旧 global-witness wrapper ではなく基底の
+       `..._boundaryDiffPow_factor0_and_dvd_on_S` へ直結
+   - 移行結果:
+     - 旧命名の参照は「旧定義本体」と `attribute [deprecated ...]` のみに限定
+3. 結論:
+   - 新規/推奨経路の実装本体は legacy 名に依存しない状態を維持しつつ、
+     旧命名は互換 API として明確に分離された。
+4. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+5. 次の課題:
+   - 下流呼び出し側の移行率を監視し、`2026-06-30` 時点で
+     旧命名 API 削除可否を判定する。

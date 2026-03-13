@@ -116,7 +116,7 @@ Lean 実装ロードマップを 1 枚で管理するための文書。
 次スプリントは OP-001 を主軸として進める。
 
 1. OP-001（finite→infinite 接続）を継続
-   - 到達済み（RH-O1/O2/O3/O4/O5/O6/O7/O8/O9/O10/O11/O12/O13/O14/O15/O16/O17/O18/O19/O20/O21）:
+   - 到達済み（RH-O1/O2/O3/O4/O5/O6/O7/O8/O9/O10/O11/O12/O13/O14/O15/O16/O17/O18/O19/O20/O21/O22）:
      - `HopcInfiniteLift.lean` を追加
      - `HasSum` 仮定から `hopcPrimeContributionSum` の atTop 極限へ接続
      - `Summable + tsum=0` 仮定から同極限へ接続
@@ -165,7 +165,11 @@ Lean 実装ロードマップを 1 枚で管理するための文書。
        `BoundaryDiffPowFactorZeroProvider` 導入で前提を record 化
      - RH-O21 として、旧 `..._global_witness...` 命名に
        `deprecated` 属性を付与し、移行先 wrapper を明示
+     - RH-O22 として、`CFBRCBridge` 内部呼び出しを
+       旧命名依存から新命名 / 非 legacy 経路へ移行し、
+       旧命名 API の削除候補日を `2026-06-30` に固定
    - 次の焦点:
-     - 旧命名呼び出しを新命名 wrapper へ段階移行し、削除時期を含む公開方針を決定する
+     - 下流（外部利用側）の旧命名呼び出し移行を `2026-06-30` までに完了させる
+     - `2026-06-30` 時点で削除可否を判定する
 2. OP-004（曲率条件運用）を並行整理
    - `phaseCurv` 供給規約と wrapper 命名規約の整備

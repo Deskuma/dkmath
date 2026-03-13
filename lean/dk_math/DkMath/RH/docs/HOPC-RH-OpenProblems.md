@@ -13,7 +13,7 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
     無限側観測量へ上げるための前提を明文化する。
 - 目標成果:
   - 条件付きの「有限判定 → 極限判定」補題群
-- 状態: 進行中（RH-O21: 旧命名の deprecation 方針を実装）
+- 状態: 進行中（RH-O22: 移行実施と削除時期の固定）
 - 到達済み:
   - `hopcPrimeContributionFn`
   - `hopcPrimeContributionTsum`
@@ -102,8 +102,8 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
   - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
   - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
 - 残タスク:
-  - 旧命名（`..._global_witness...`）呼び出しを段階的に新命名 wrapper へ置換し、
-    `deprecated` 警告の実運用方針（削除時期）を確定
+  - 削除目標日 `2026-06-30` までに、下流（外部利用側）の旧命名呼び出し移行を完了させる
+  - `2026-06-30` 到来時点で移行率を確認し、削除可否を判定
 - 優先度: 高
 
 ## OP-002: 非零前提の管理 API
