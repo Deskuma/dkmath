@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-05: scale-monoid compatibility
+status: 作業中 - phase-06: fiber design decision
 
 ## 課題
 
@@ -12,10 +12,11 @@ status: 作業中 - phase-05: scale-monoid compatibility
 - [x] `Scale` と unit transport の仕様を定める
 - [x] toy blueprint による最小使用例を追加する
 - [x] `Scale` と `Monoid` の整合補題を最小追加する
+- [x] fiber 型設計（Nat alias / subtype）比較を文書化する
 
 ## 状況タスク
 
-- 完了条件（phase-05）
+- 完了条件（phase-06）
   - [x] `DkMath/KUS/Unit.lean` が `US` を提供する
   - [x] `DkMath/KUS/Core.lean` が `KUS`, `mkWith`, `zeroState` を提供する
   - [x] `DkMath/KUS/NatEmbed.lean` が `ofNat`, `toNat` を提供する
@@ -25,15 +26,16 @@ status: 作業中 - phase-05: scale-monoid compatibility
   - [x] `DkMath/KUS/Scale.lean` が `ScaleSpec` と最小 transport API を提供する
   - [x] `DkMath/KUS/Examples.lean` が toy 使用例を提供する
   - [x] `Scale` と fixed fiber の整合補題が `Scale.lean` にある
+  - [x] `DkMath/KUS/docs/KUS-FiberDesign.md` に採用方針と移行トリガーがある
 
 ## 計画
 
 - 直近の主戦場:
-  - transport 後 fiber 型の見直し方針を決める
+  - phase-07 の最小実装（補題の使用例強化）
 - 直近の設計候補:
-  - `Fiber := Nat` のまま進める場合の利点/制約を docs に分離記録する
+  - `Examples.lean` に phase-05 補題の利用例を最小追加する
+  - subtype 版の試作は本流へ入れず docs 先行で設計比較する
   - 例示モジュールを肥大化させず、証明用の最小例に限定する
-  - phase-06 では設計比較（subtype fiber への回帰可能性）を先に文書化する
 - 非目標（phase-01 ではやらない）:
   - `Div` の導入
   - `K : ℚ`, `ℝ`, 一般 carrier への拡張
@@ -48,6 +50,7 @@ status: 作業中 - phase-05: scale-monoid compatibility
 - phase-03 では `ScaleSpec` により、`US` / `KUS` へ unit transport を与える最小 API を追加し、係数保存と extract 整合を補題で固定した。
 - phase-04 では `Examples.lean` を追加し、toy blueprint 上で `KUS` / `Fiber` / `ScaleSpec` の最小利用例を固定した。
 - phase-05 では `Scale.lean` に fixed fiber 整合補題を追加し、`Scale` と `Monoid` の接続を観測係数レベルで固定した。
+- phase-06 では `KUS-FiberDesign.md` を追加し、`Fiber := Nat` 継続採用と subtype 版への移行トリガーを明文化した。
 
 ## 作業ログ
 
@@ -182,3 +185,25 @@ status: 作業中 - phase-05: scale-monoid compatibility
   3. KUS 追加分の warning は解消し、全体 warning は既存 repo 由来の `sorry` 群のみ
 - 次の予定:
   - phase-06 で fiber 型設計比較（Nat alias / subtype）を docs へ明示する
+
+### 2026-03-14 phase-06 fiber 型設計比較（docs）
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/docs/KUS-FiberDesign.md`
+  - `lean/dk_math/DkMath/KUS/docs/KUS-WorkNotes.md`
+- 内容:
+  1. `Fiber := Nat` と subtype fiber を比較し、長所・短所を整理した
+  2. phase-06 の結論として `Fiber := Nat` 継続採用を明文化した
+  3. subtype 版へ移行すべき条件（移行トリガー）を定義した
+- 次の予定:
+  - phase-07 で phase-05 補題の使用例を `Examples.lean` に追加する
+
+### 2026-03-14 phase-06 確認ビルド（lean-build.sh）
+
+- 対象:
+  - `cd lean/dk_math && ./lean-build.sh DkMath.KUS`
+- 内容:
+  1. docs-only 更新後も `DkMath.KUS` の build succeeded を確認
+  2. 実装ファイルの挙動を変えていないことを再確認
+- 次の予定:
+  - phase-07 の `Examples.lean` 強化へ進む

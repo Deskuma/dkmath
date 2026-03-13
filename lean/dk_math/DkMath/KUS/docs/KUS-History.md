@@ -84,3 +84,15 @@
 - `lean-build.sh` で `./lean-build.sh DkMath.KUS` と `./lean-build.sh DkMath` の成功を確認した。
 - `Scale.lean` の補題追加後も KUS 側に新規 warning はなく、全体 warning は既存 repo 由来のみ。
 - これにより phase-05 は「補題追加・仕様更新・記録・ビルド確認」が揃った状態で確定した。
+
+### 2026-03-14 / Work Unit 12. phase-06 fiber 設計方針の固定
+
+- `KUS-FiberDesign.md` を追加し、`Fiber := Nat` と subtype fiber の比較を文書化した。
+- phase-06 の採用方針として、当面は `Fiber := Nat` を継続することを明示した。
+- subtype 版へ移行する条件（移行トリガー）を定義し、判断基準を固定した。
+- `KUS-WorkNotes.md` に phase-06 の実施内容と次作業予定（phase-07）を追記した。
+
+### 2026-03-14 / Work Unit 13. phase-06 docs 更新後の確認ビルド
+
+- `lean-build.sh` で `./lean-build.sh DkMath.KUS` を実行し、build succeeded を確認した。
+- phase-06 は docs 中心の変更であり、実装挙動を変えずに設計判断だけを固定できたことを確認した。
