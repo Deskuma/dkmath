@@ -2350,3 +2350,41 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - on-set provider 構成器の witness 前提を
      `BoundaryInsertLocalLiftProvider` 側情報へさらに寄せる。
+
+### 日時: 2026/03/13 22:22 JST: Phase RH-O18 を実装（global witness 化と primitive-prime 直結）
+
+1. 目的: OP-001 の RH-O18 として、
+   RH-O15/O16 の on-set provider 構成器で要求していた
+   `r` ごとの witness 前提を global witness へ簡約し、
+   さらに CFBRC primitive-prime existence から witness を自動供給する wrapper を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_global_witness_local0_and_local0_on_erase`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase_of_global_witness`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+   - 実装方針:
+     - 既存 RH-O15/O16 API を再利用し、`hwitness : ∃ p, ...` を
+       `fun r hrS => ⟨p, ...⟩` へ持ち上げる薄い wrapper を追加
+     - CFBRC 側 `exists_boundaryPrime_dvd_gap_of_..._of_coprime` から
+       global witness を自動生成して on-set provider 構成へ接続
+3. 結論:
+   - witness 入力が「各 `r` ごと」から「全体で 1 つ」へ軽量化され、
+     さらに primitive-prime 直結経路では witness を明示入力せず利用可能になった。
+4. 失敗事例:
+   - `def` 本体での `rcases hwitness` により Prop→Type 消去制限で build 失敗。
+   - `Classical.choose` への置換後も依存型の不一致が残ったため、
+     `cases side` 分岐 + `simpa` で型を正規化して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - `BoundaryInsertLocalLiftProvider` 単体（primitive-prime 仮定なし）で
+     witness を内製する API の可否を評価し、必要なら別 provider 設計へ分岐する。

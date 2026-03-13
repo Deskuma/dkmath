@@ -2642,6 +2642,195 @@ def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_f
     hwnz_diff hfactor_diff0
 
 /--
+RH-O18: 一般有限集合 `S` での on-set provider 構成器（global witness + erase local-zero 版）。
+
+`r` ごとの witness ではなく、共通 witness prime を 1 つ与えるだけで
+RH-O15 の on-set provider 構成器へ接続する。
+-/
+def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_global_witness_local0_and_local0_on_erase
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (provider : BoundaryInsertLocalLiftProvider side S d x u σ t)
+    (hwitness :
+      ∃ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u ∧
+        (match side with
+          | .right => ¬ p.1 ∣ x
+          | .left => ¬ p.1 ∣ u) ∧
+        hopcPrimeLocalContribution p.1 σ t = 0)
+    (hlocal_erase :
+      ∀ r ∈ S, ∀ q ∈ S.erase r, hopcPrimeLocalContribution q.1 σ t = 0) :
+    BoundaryOffDvdLocalZeroOnSetProvider side S d x u σ t := by
+  cases side with
+  | right =>
+      classical
+      let p : {q // Nat.Prime q} := Classical.choose hwitness
+      have hp_dvd : p.1 ∣ DkMath.CFBRC.boundaryDiffPow .right d x u := by
+        simpa [p] using (Classical.choose_spec hwitness).1
+      have hp_gap : ¬ p.1 ∣ x := by
+        simpa [p] using (Classical.choose_spec hwitness).2.1
+      have hlocal_p : hopcPrimeLocalContribution p.1 σ t = 0 := by
+        simpa [p] using (Classical.choose_spec hwitness).2.2
+      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_witness_local0_and_local0_on_erase
+        (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+        provider
+        (fun r hrS => ⟨p, hp_dvd, hp_gap, hlocal_p⟩)
+        hlocal_erase
+  | left =>
+      classical
+      let p : {q // Nat.Prime q} := Classical.choose hwitness
+      have hp_dvd : p.1 ∣ DkMath.CFBRC.boundaryDiffPow .left d x u := by
+        simpa [p] using (Classical.choose_spec hwitness).1
+      have hp_gap : ¬ p.1 ∣ u := by
+        simpa [p] using (Classical.choose_spec hwitness).2.1
+      have hlocal_p : hopcPrimeLocalContribution p.1 σ t = 0 := by
+        simpa [p] using (Classical.choose_spec hwitness).2.2
+      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_witness_local0_and_local0_on_erase
+        (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+        provider
+        (fun r hrS => ⟨p, hp_dvd, hp_gap, hlocal_p⟩)
+        hlocal_erase
+
+/--
+RH-O18: 一般有限集合 `S` での on-set provider 構成器
+（global witness + factor0 + erase 除法版）。
+
+`r` ごとの witness を要求せず、共通 witness prime を 1 つ与えれば
+RH-O16 erase 除法版へ接続できる。
+-/
+def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase_of_global_witness
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (provider : BoundaryInsertLocalLiftProvider side S d x u σ t)
+    (hwitness :
+      ∃ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u ∧
+        (match side with
+          | .right => ¬ p.1 ∣ x
+          | .left => ¬ p.1 ∣ u))
+    (herase_dvd :
+      ∀ r ∈ S, ∀ q ∈ S.erase r, q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hwnz_diff :
+      ∀ q : {q0 // Nat.Prime q0},
+        q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one q.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ q : {q0 // Nat.Prime q0},
+        q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal q.1 σ t = 0) :
+    BoundaryOffDvdLocalZeroOnSetProvider side S d x u σ t := by
+  cases side with
+  | right =>
+      classical
+      let p : {q // Nat.Prime q} := Classical.choose hwitness
+      have hp_dvd : p.1 ∣ DkMath.CFBRC.boundaryDiffPow .right d x u := by
+        simpa [p] using (Classical.choose_spec hwitness).1
+      have hp_gap : ¬ p.1 ∣ x := by
+        simpa [p] using (Classical.choose_spec hwitness).2
+      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase
+        (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+        provider
+        (fun r hrS => ⟨p, hp_dvd, hp_gap⟩)
+        herase_dvd hwnz_diff hfactor_diff0
+  | left =>
+      classical
+      let p : {q // Nat.Prime q} := Classical.choose hwitness
+      have hp_dvd : p.1 ∣ DkMath.CFBRC.boundaryDiffPow .left d x u := by
+        simpa [p] using (Classical.choose_spec hwitness).1
+      have hp_gap : ¬ p.1 ∣ u := by
+        simpa [p] using (Classical.choose_spec hwitness).2
+      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase
+        (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+        provider
+        (fun r hrS => ⟨p, hp_dvd, hp_gap⟩)
+        herase_dvd hwnz_diff hfactor_diff0
+
+/--
+RH-O18: 一般有限集合 `S` での on-set provider 構成器
+（global witness + factor0 + `S` 全体除法版）。
+-/
+def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (provider : BoundaryInsertLocalLiftProvider side S d x u σ t)
+    (hwitness :
+      ∃ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u ∧
+        (match side with
+          | .right => ¬ p.1 ∣ x
+          | .left => ¬ p.1 ∣ u))
+    (hS_dvd :
+      ∀ q ∈ S, q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hwnz_diff :
+      ∀ q : {q0 // Nat.Prime q0},
+        q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one q.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ q : {q0 // Nat.Prime q0},
+        q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal q.1 σ t = 0) :
+    BoundaryOffDvdLocalZeroOnSetProvider side S d x u σ t := by
+  exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase_of_global_witness
+    (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+    provider hwitness
+    (fun r hrS q hq => hS_dvd q (Finset.mem_of_mem_erase hq))
+    hwnz_diff hfactor_diff0
+
+/--
+RH-O18: CFBRC primitive-prime existence を使い、
+global witness を自動生成して RH-O18 の `S` 全体除法版へ接続する wrapper。
+-/
+def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (provider : BoundaryInsertLocalLiftProvider side S d x u σ t)
+    (hS_dvd :
+      ∀ q ∈ S, q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hwnz_diff :
+      ∀ q : {q0 // Nat.Prime q0},
+        q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one q.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ q : {q0 // Nat.Prime q0},
+        q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal q.1 σ t = 0) :
+    BoundaryOffDvdLocalZeroOnSetProvider side S d x u σ t := by
+  cases side with
+  | right =>
+      have hwitness :
+          ∃ p : {q // Nat.Prime q},
+            p.1 ∣ DkMath.CFBRC.boundaryDiffPow .right d x u ∧
+            ¬ p.1 ∣ x := by
+        simpa using
+          (exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
+            (side := .right) (d := d) (x := x) (u := u)
+            hd_prime hd_ge hx hu hcop hpnd)
+      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness
+        (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+        provider hwitness hS_dvd hwnz_diff hfactor_diff0
+  | left =>
+      have hwitness :
+          ∃ p : {q // Nat.Prime q},
+            p.1 ∣ DkMath.CFBRC.boundaryDiffPow .left d x u ∧
+            ¬ p.1 ∣ u := by
+        simpa using
+          (exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
+            (side := .left) (d := d) (x := x) (u := u)
+            hd_prime hd_ge hx hu hcop hpnd)
+      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness
+        (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+        provider hwitness hS_dvd hwnz_diff hfactor_diff0
+
+/--
 RH-O12: off-dvd 側の非零 (`w_p ≠ 0`) と factor 位相速度ゼロを束ねる供給器。
 -/
 structure BoundaryOffDvdFactorZeroProvider
