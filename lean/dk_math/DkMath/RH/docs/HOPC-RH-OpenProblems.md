@@ -106,6 +106,10 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
     （旧命名は `CFBRCBridge.lean` の互換定義 + `deprecated` 属性のみ）
   - 本リポジトリは未公開運用のため、2026-03-14 時点で外部依存は想定しない。
   - 旧命名 API の削除実施は `2026-06-30` を目安に公開計画と合わせて再判定する。
+  - `hEvStationary` 直入力 API と provider-family API は 2026-03-14 時点で併存方針。
+    CFBRC 駆動の標準導線は provider-family API を推奨し、
+    `hEvStationary` 直入力は low-level 入口として維持する。
+  - 上記 2 系列の deprecate 判定も `2026-06-30` に合わせて再評価する。
 
 ## OP-002: 非零前提の管理 API
 
