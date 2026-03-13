@@ -1119,3 +1119,28 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-N12 として、provider 実体供給の最初の候補として
      nonzero 前提 (`hS_lift`) だけを組み立てる補題群を導入し、
      `hsum_lift` 側と段階分離した実装計画へ進む。
+
+### 日時: 2026/03/13 11:59 JST: Phase RH-N12 を実装（`hS_lift` 段階供給補題の導入）
+
+1. 目的: provider 供給実装を段階分離するため、
+   `hS_lift` を「`S` 上非零 + witness 非零」から合成する補題群を導入する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+   - 追加実装:
+     - `boundary_hS_lift_of_nonzero_on_S_and_witness`
+       （`hS_nonzero` と `hwnz_witness` から `hS_lift` を構成）
+     - `boundaryInsertLocalLiftProvider_of_nonzero_on_S_and_witness`
+       （上記 `hS_lift` 合成 + 既存 `hsum_lift` で provider record を構成）
+3. 結論: `hS_lift` 供給が独立補題として切り出され、
+   今後は `hsum_lift` の供給研究を別ラインで進められる構造になった。
+4. 失敗事例:
+   - 初回実装で `match side` 依存型不一致と `insert` 分岐での同一視ミスが発生。
+   - `cases side` 分岐固定 + `simpa [hr_eq]` による同一視へ修正して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N13 として、`hsum_lift` 供給候補（local contribution 由来）の
+     最小 wrapper 設計を追加し、
+     provider 実体供給の両輪（nonzero/sum-zero）を揃える。
