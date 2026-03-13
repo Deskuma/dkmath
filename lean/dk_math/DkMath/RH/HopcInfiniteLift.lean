@@ -36,6 +36,17 @@ structure HopcInfiniteLiftSummableAssumptions (σ t : ℝ) : Prop where
   hTsumZero : hopcPrimeContributionTsum σ t = 0
 
 /--
+OP-001 向け majorant 仮定。
+`|hopcPrimeContributionFn|` が非負可和関数 `majorant` で抑えられることを表す。
+-/
+structure HopcInfiniteLiftMajorantAssumptions (σ t : ℝ) : Type where
+  majorant : {p // Nat.Prime p} → ℝ
+  hMajorantNonneg : ∀ p, 0 ≤ majorant p
+  hMajorantSummable : Summable majorant
+  hAbsLe : ∀ p, |hopcPrimeContributionFn σ t p| ≤ majorant p
+  hTsumZero : hopcPrimeContributionTsum σ t = 0
+
+/--
 `HasSum` 仮定から、有限集合版 `hopcPrimeContributionSum` の atTop 極限を得る。
 -/
 theorem tendsto_hopcPrimeContributionSum_atTop_of_hasSum
@@ -75,6 +86,30 @@ theorem assumptions_of_summable_assumptions
     (hAssump : HopcInfiniteLiftSummableAssumptions σ t) :
     HopcInfiniteLiftAssumptions σ t :=
   ⟨hasSumZero_of_summable_assumptions hAssump⟩
+
+/--
+majorant 仮定から `hopcPrimeContributionFn` の可和性を得る。
+-/
+theorem summable_hopcPrimeContributionFn_of_majorant_assumptions
+    {σ t : ℝ}
+    (hAssump : HopcInfiniteLiftMajorantAssumptions σ t) :
+    Summable (hopcPrimeContributionFn σ t) := by
+  have hAbsSummable :
+      Summable (fun p : {q // Nat.Prime q} => |hopcPrimeContributionFn σ t p|) :=
+    Summable.of_nonneg_of_le
+      (fun _ => abs_nonneg _)
+      (hAssump.hAbsLe)
+      hAssump.hMajorantSummable
+  exact hAbsSummable.of_abs
+
+/--
+majorant 仮定を `Summable + tsum = 0` 仮定へ落とす。
+-/
+theorem summable_assumptions_of_majorant_assumptions
+    {σ t : ℝ}
+    (hAssump : HopcInfiniteLiftMajorantAssumptions σ t) :
+    HopcInfiniteLiftSummableAssumptions σ t :=
+  ⟨summable_hopcPrimeContributionFn_of_majorant_assumptions hAssump, hAssump.hTsumZero⟩
 
 /-- `HasSum = 0` 仮定から `hopcPrimeContributionTsum = 0` を得る。 -/
 theorem hopcPrimeContributionTsum_eq_zero_of_hasSumZero
@@ -145,5 +180,36 @@ theorem eventually_abs_hopcPrimeContributionSum_lt_of_summable_assumptions
       |hopcPrimeContributionSum (S := S) σ t| < ε :=
   eventually_abs_hopcPrimeContributionSum_lt_of_assumptions
     hε (assumptions_of_summable_assumptions hAssump)
+
+/-- majorant 仮定版の atTop 極限（極限値 0）。 -/
+theorem tendsto_hopcPrimeContributionSum_atTop_of_majorant_assumptions
+    {σ t : ℝ}
+    (hAssump : HopcInfiniteLiftMajorantAssumptions σ t) :
+    Filter.Tendsto
+      (fun S : Finset {p // Nat.Prime p} =>
+        hopcPrimeContributionSum (S := S) σ t)
+      Filter.atTop (𝓝 (0 : ℝ)) :=
+  tendsto_hopcPrimeContributionSum_atTop_of_summable_assumptions
+    (summable_assumptions_of_majorant_assumptions hAssump)
+
+/-- majorant 仮定版の `tsum = 0`。 -/
+theorem hopcPrimeContributionTsum_eq_zero_of_majorant_assumptions
+    {σ t : ℝ}
+    (hAssump : HopcInfiniteLiftMajorantAssumptions σ t) :
+    hopcPrimeContributionTsum σ t = 0 :=
+  hAssump.hTsumZero
+
+/--
+majorant 仮定版:
+有限集合版寄与和は最終的に任意 `ε` 未満になる。
+-/
+theorem eventually_abs_hopcPrimeContributionSum_lt_of_majorant_assumptions
+    {σ t ε : ℝ}
+    (hε : 0 < ε)
+    (hAssump : HopcInfiniteLiftMajorantAssumptions σ t) :
+    ∀ᶠ S : Finset {p // Nat.Prime p} in Filter.atTop,
+      |hopcPrimeContributionSum (S := S) σ t| < ε :=
+  eventually_abs_hopcPrimeContributionSum_lt_of_summable_assumptions
+    hε (summable_assumptions_of_majorant_assumptions hAssump)
 
 end DkMath.RH.EulerZeta

@@ -13,22 +13,28 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
     無限側観測量へ上げるための前提を明文化する。
 - 目標成果:
   - 条件付きの「有限判定 → 極限判定」補題群
-- 状態: 進行中（RH-O2: `Summable + tsum=0` 版まで接続）
+- 状態: 進行中（RH-O3: majorant 比較による `Summable` 接続を追加）
 - 到達済み:
   - `hopcPrimeContributionFn`
   - `hopcPrimeContributionTsum`
   - `HopcInfiniteLiftAssumptions`
   - `HopcInfiniteLiftSummableAssumptions`
+  - `HopcInfiniteLiftMajorantAssumptions`
+  - `summable_hopcPrimeContributionFn_of_majorant_assumptions`
+  - `summable_assumptions_of_majorant_assumptions`
   - `hasSumZero_of_summable_assumptions`
   - `assumptions_of_summable_assumptions`
   - `tendsto_hopcPrimeContributionSum_atTop_of_assumptions`
   - `hopcPrimeContributionTsum_eq_zero_of_assumptions`
   - `tendsto_hopcPrimeContributionSum_atTop_of_summable_assumptions`
   - `hopcPrimeContributionTsum_eq_zero_of_summable_assumptions`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_majorant_assumptions`
+  - `hopcPrimeContributionTsum_eq_zero_of_majorant_assumptions`
   - `eventually_abs_hopcPrimeContributionSum_lt_of_assumptions`
   - `eventually_abs_hopcPrimeContributionSum_lt_of_summable_assumptions`
+  - `eventually_abs_hopcPrimeContributionSum_lt_of_majorant_assumptions`
 - 残タスク:
-  - `Summable` 仮定を解析的な十分条件へ接続（比較判定・優収束型条件）
+  - majorant 供給器（CFBRC/RH 連携の具体化）を追加
   - finite 側停留判定から infinite 側観測量への接続補題を追加
 - 優先度: 高
 

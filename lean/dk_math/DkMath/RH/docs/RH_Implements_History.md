@@ -1816,3 +1816,37 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-O3: `Summable` を解析的な十分条件へ接続する補題
      （比較判定 / majorant 供給）を追加する。
+
+### 日時: 2026/03/13 18:34 JST: Phase RH-O3 を実装（majorant 比較で `Summable` 接続）
+
+1. 目的: RH-O2 の次段として、`Summable` 仮定を
+   majorant 比較（`|hopc| ≤ g`, `Summable g`）から供給できる補題を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/HopcInfiniteLift.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`HopcInfiniteLift.lean`）:
+     - `HopcInfiniteLiftMajorantAssumptions`
+     - `summable_hopcPrimeContributionFn_of_majorant_assumptions`
+     - `summable_assumptions_of_majorant_assumptions`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_majorant_assumptions`
+     - `hopcPrimeContributionTsum_eq_zero_of_majorant_assumptions`
+     - `eventually_abs_hopcPrimeContributionSum_lt_of_majorant_assumptions`
+3. 結論:
+   - OP-001 の接続層は
+     `HasSum` → `Summable+tsum=0` → `majorant 比較`
+     まで段階化された。
+4. 失敗事例:
+   - `HopcInfiniteLiftMajorantAssumptions` を `Prop` で定義した初稿は
+     データフィールドを持てず失敗。
+   - `Type` 構造体へ修正して解消。
+5. 検証:
+   - `lake build DkMath.RH.HopcInfiniteLift` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-O4: majorant 供給器（CFBRC/RH 連携の具体化）と、
+     finite 側停留判定から infinite 側観測量への接続補題を追加する。
