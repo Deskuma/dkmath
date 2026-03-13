@@ -342,3 +342,63 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - `lake build DkMath.RH` 成功。
 6. 次の課題:
    - RH-PF3 を呼ぶ既存 wrapper 群の段階移行（旧導線の統合整理）を進める。
+
+### 日時: 2026/03/14 04:19 JST: RH-PF2w への段階移行（provider 高位 wrapper 内部導線の統一）
+
+1. 目的:
+   RH-PF 系の導線へ呼び出し側を段階移行するため、
+   provider 高位 wrapper が旧 split bridge へ直接依存していた部分を整理する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/docs/RH_Implements_History-02.md`
+   - 実装変更:
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider`
+       を、`exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+       による witness 抽出 + 判定補題適用の直接構成へ変更。
+     - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider_and_phaseCurvProvider`
+       を、RH-PF2w
+       (`exists_primeLocalFormationWitness_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv`)
+       経由で構成する形へ変更。
+   - 互換性:
+     - 公開シグネチャは変更なし（内部証明導線のみ更新）。
+3. 結論:
+   - provider 入口での内部実装が RH-PF 系と整合し、
+     旧 split bridge 直接依存を一段減らせた。
+4. 失敗事例:
+   - なし（`cases side` で依存型を固定した構成で通過）。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - 同様の内部移行を `eventually` 系高位 wrapper（導入予定）へ拡張する。
+
+### 日時: 2026/03/14 04:23 JST: RH-PF3 拡張（eventually 側の最小前提化 + provider-family 高位 API）
+
+1. 目的:
+   RH-PF3 の eventually 導線を整理し、
+   `stationaryAt` 側の前提最小化と provider-family 直接入力 API を整備する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/docs/HOPC-RH-PrimeLocal-Formation.md`
+     - `DkMath/RH/docs/RH-CFBRC-HOPC.md`
+     - `DkMath/RH/docs/RH_Implements_History-02.md`
+   - 実装変更:
+     - `eventually_exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split`
+       から不要だった曲率仮定を削除し、
+       primitive-prime witness + `hS_lift` + `hsum_lift` だけで構成。
+     - 新規追加:
+       - `eventually_exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_providerFamily`
+       - `eventually_exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_providerFamily_and_phaseCurvProviderFamily`
+3. 結論:
+   - eventually 側でも「必要な仮定だけ」で停留存在へ到達できる導線になった。
+   - provider 設計（record）を `atTop` へ持ち上げる高位 API が揃った。
+4. 失敗事例:
+   - provider-family wrapper 実装時に `hp_gap` の依存型不一致（`match side, hpnd`）が発生。
+   - `cases side` で左右を固定して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - `eventually` provider-family wrapper を利用する呼び出し側（tendsto/tsum 接続）を段階移行する。

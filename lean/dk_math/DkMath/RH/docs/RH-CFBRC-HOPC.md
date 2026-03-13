@@ -93,6 +93,8 @@ HOPC-RH の「位相を微分量で観測する」設計は、
    - RH-PF1 を `Filter.atTop` の eventually 形式へ持ち上げる RH-PF2 補題
    - witness 付き eventually 形成条件（RH-PF2w）
    - eventually `stationaryAt` / eventually `nondegenerateStationaryAt` への高位 bridge（RH-PF3）
+   - provider family を直接受け取る eventually 高位 wrapper（RH-PF3 拡張）
+   - eventually `stationaryAt` 側は曲率仮定を不要化（最小前提化）
    - `boundaryCore` / `boundaryDiffPow` の計算補題版 wrapper
    - `of_dvd` / `normalized` / `with_offdvd` の高位 API
 
