@@ -1195,3 +1195,24 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-N15 として、`DkMath/RH/docs/README.md` にも RH-N14 の
      段階供給テンプレートを同期し、README 間の導線差分を解消する。
+
+### 日時: 2026/03/13 12:18 JST: Phase RH-N15 を実装（docs README へ段階供給テンプレート同期）
+
+1. 目的: RH-N14 で追加した段階供給導線を `DkMath/RH/docs/README.md` に同期し、
+   README 間の API/テンプレート差分を解消する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/README.md`
+   - 追記内容:
+     - `現状 API` 見出しを RH-N15 時点へ更新
+     - CFBRC bridge 一覧へ段階供給補題 4 本を追加
+     - nonzero/local-zero から provider を構成する最小テンプレートを追加
+3. 結論: `RH/README.md` と `RH/docs/README.md` の導線が揃い、
+   split 版 / provider 版 / 段階供給版の 3 入口が両 README で一貫した。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし（RH-N13 までで完了）。
+   - `RH-CFBRC-Discussion.md` の RH-N14 セクションと内容整合済み。
+6. 次の課題:
+   - RH-N16 として、`HOPC-RH-OpenProblems.md` の OP-003 到達済みに
+     RH-N12〜N15（段階供給導線）を反映し、残タスクを provider 実供給補題へ再整理する。
