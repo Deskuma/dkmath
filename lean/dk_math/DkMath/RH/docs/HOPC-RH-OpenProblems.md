@@ -36,7 +36,7 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
 - 目標成果:
   - provider 前提を直接受ける bridge 補題（`hS_lift` / `hsum_lift` 実供給）
   - finite-set から運用可能な仮定正規化 wrapper 群
-- 状態: 進行中（RH-N1〜N9 で API 骨格・provider 入口・文書導線を整備済み）
+- 状態: 進行中（RH-N1〜N15 で API 骨格・provider 入口・段階供給導線を整備済み）
 - 到達済み:
   - singleton bridge（global/local）
   - small finite-set bridge（`insert p S`）
@@ -44,12 +44,17 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
   - provider 入口:
     - `BoundaryInsertLocalLiftProvider`
     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider`
+  - provider 段階供給補題:
+    - `boundary_hS_lift_of_nonzero_on_S_and_witness`
+    - `boundaryInsertLocalLiftProvider_of_nonzero_on_S_and_witness`
+    - `boundary_hsum_lift_of_local_zero_on_S_and_witness`
+    - `boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero_on_S_and_witness`
   - README / Discussion / docs README の利用テンプレート同期（split 版 / provider 版）
 - 残タスク:
-  - provider 実体供給補題の追加（`hS_lift` / `hsum_lift` を構成して record 化）
-  - provider 供給源の候補整理:
-    - CFBRC divisibility/valuation 層からの非零前提 (`hS_lift`) 生成
-    - local contribution 側ゼロ条件 (`hsum_lift`) の供給補題群
+  - provider 実供給補題の具体化:
+    - CFBRC divisibility/valuation 層から `hS_nonzero` を生成する補題
+    - local contribution 側から `hS_local0` / `hlocal_witness` を生成する補題
+    - 上記を用いた `BoundaryInsertLocalLiftProvider` 自動構成 wrapper
   - OP-001 の finite→infinite 接続で再利用できる仮定パッケージ化
 - 優先度: 高（継続）
 
