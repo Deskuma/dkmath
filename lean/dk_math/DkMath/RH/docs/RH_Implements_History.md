@@ -1703,3 +1703,42 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-N31: 正規化集合ではなく元の `S` を保持したまま、
      `hS_dvd` 省略可能な API 設計（包摂関係補題 or 2段 wrapper）を検討する。
+
+### 日時: 2026/03/13 17:51 JST: Phase RH-N31 を実装（元の `S` 保持で `hS_dvd` 省略）
+
+1. 目的: RH-N30 の次段として、正規化集合を使わず元の `S` を保持したまま
+   `hS_dvd` を省略可能な direct wrapper を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundaryInsertLocalLiftProvider_of_boundaryDiffPow_factor0_with_offdvd`
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_with_offdvd`
+   - 実装方針:
+     - `r ∣ boundaryDiffPow` の要素は `hwnz_diff / hfactor_diff0` で処理
+     - `r ∤ boundaryDiffPow` の要素は
+       `hS_nonzero_offdvd / hS_local0_offdvd` で補完
+     - これを `boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero_on_S_and_witness`
+       へ接続して provider / existence を構築
+   - 文書同期:
+     - README 2 枚、Discussion、OpenProblems を RH-N31 へ更新
+3. 結論:
+   - 元の `S` を保持したまま `hS_dvd` を省略可能な高位 API を提供できた。
+   - OP-003 の残タスクは解消し、OpenProblems 上で完了状態へ更新。
+4. 失敗事例:
+   - なし。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - OP-001（finite→infinite 接続）へ主軸を移す。
+
+### OP-003 完了合図（2026/03/13 17:51 JST）
+
+- OP-003 は RH-N31 で完了と判定。
+- 今後の主要未完は OP-001 / OP-004。

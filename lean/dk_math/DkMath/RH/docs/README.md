@@ -143,7 +143,7 @@ $$
 
 ---
 
-## 現状 API（HOPC 公開名・RH-N30 時点）
+## 現状 API（HOPC 公開名・RH-N31 時点）
 
 CFBRC 連携で使う公開名は次を基準とする。
 
@@ -196,6 +196,7 @@ CFBRC 連携で使う公開名は次を基準とする。
   - `boundaryDiffPowDvdSet`
   - `boundary_dvd_on_boundaryDiffPowDvdSet`
   - `boundaryInsertLocalLiftProvider_of_boundaryDiffPow_factor0_normalized`
+  - `boundaryInsertLocalLiftProvider_of_boundaryDiffPow_factor0_with_offdvd`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0`
   - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0`
@@ -205,6 +206,7 @@ CFBRC 連携で使う公開名は次を基準とする。
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_of_dvd`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_normalized`
+  - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_with_offdvd`
   - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0`
   - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_and_local_zero`
 
