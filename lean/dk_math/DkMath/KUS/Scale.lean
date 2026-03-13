@@ -102,6 +102,29 @@ variable (σ : ScaleSpec U Blueprint V Blueprint')
   cases x
   rfl
 
+@[simp] theorem scaleKUS_toKUS
+    (support : US U Blueprint)
+    (n : Fiber support) :
+    scaleKUS σ (Fiber.toKUS support n)
+      = Fiber.toKUS (scaleUS σ support) n := by
+  cases support
+  rfl
+
+@[simp] theorem extract_scaleKUS_toKUS
+    (support : US U Blueprint)
+    (n : Fiber support) :
+    extract (scaleKUS σ (Fiber.toKUS support n)) = scaleUS σ support := by
+  rw [scaleKUS_toKUS (σ := σ) support n]
+  simp
+
+@[simp] theorem toNat_scaleKUS_toKUS_add
+    (support : US U Blueprint)
+    (n m : Fiber support) :
+    toNat (scaleKUS σ (Fiber.toKUS support (n + m)))
+      = toNat (scaleKUS σ (Fiber.toKUS support n))
+        + toNat (scaleKUS σ (Fiber.toKUS support m)) := by
+  simp
+
 end ScaleSpec
 
 end DkMath.KUS
