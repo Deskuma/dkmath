@@ -1264,3 +1264,29 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-N18 として、`docs/README.md` / `RH-CFBRC-Discussion.md` に
      RH-N17 の `boundary_dvd + gap` 供給テンプレートを追記し、
      実供給ルートを公開導線へ反映する。
+
+### 日時: 2026/03/13 12:25 JST: Phase RH-N18 を実装（`boundary_dvd + gap` 導線の文書反映）
+
+1. 目的: RH-N17 の実供給ルートを公開導線へ反映し、
+   docs 側から provider 実供給テンプレートへ直接到達できるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+   - 追記内容:
+     - `docs/README.md`
+       - API 見出しを RH-N18 時点へ更新
+       - RH-N17 追加補題 2 本を API 一覧へ追加
+       - `boundary_dvd + gap + local-zero` から provider 生成するテンプレートを追加
+     - `RH-CFBRC-Discussion.md`
+       - `Implementation Bridge (RH-N18: boundary_dvd + gap 直結供給)` セクションを追加
+       - 同テンプレートを追記
+3. 結論: RH-N17 の実供給ルートが docs 導線へ統合され、
+   実利用者は `hS_dvd` / `hS_gap` から provider 生成まで一気通貫で参照可能になった。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし（RH-N17 で完了済み）。
+   - `RH/README.md` への同等同期は次フェーズ候補。
+6. 次の課題:
+   - RH-N19 として、`RH/README.md` にも RH-N18 テンプレートを同期し、
+     README 間の公開導線を完全一致させる。
