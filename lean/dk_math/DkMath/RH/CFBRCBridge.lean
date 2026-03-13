@@ -2515,6 +2515,126 @@ def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_witness_local0_an
     (hlocal_erase r hrS)
 
 /--
+RH-O16: RH-O15 の `hlocal_erase` を、
+`boundaryDiffPow` 側 factor0 + `S.erase r` 上の除法仮定から内部生成する wrapper。
+-/
+theorem boundary_hlocal_on_S_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (r p : {q // Nat.Prime q})
+    (hrS : r ∈ S)
+    (provider : BoundaryInsertLocalLiftProvider side S d x u σ t)
+    (hp_dvd : p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hp_gap : match side with
+      | .right => ¬ p.1 ∣ x
+      | .left => ¬ p.1 ∣ u)
+    (hp_not_mem : p ∉ S)
+    (herase_dvd :
+      ∀ q ∈ S.erase r, q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hwnz_diff :
+      ∀ q : {q0 // Nat.Prime q0},
+        q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one q.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ q : {q0 // Nat.Prime q0},
+        q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal q.1 σ t = 0) :
+    hopcPrimeLocalContribution r.1 σ t = 0 := by
+  have hlocal_p : hopcPrimeLocalContribution p.1 σ t = 0 :=
+    hopcPrimeLocalContribution_eq_zero_of_factorPhaseVelLocal_eq_zero_of_nonzero
+      (p := p.1) (σ := σ) (t := t)
+      (hwnz_diff p hp_dvd)
+      (hfactor_diff0 p hp_dvd)
+  have hlocal_erase :
+      ∀ q ∈ S.erase r, hopcPrimeLocalContribution q.1 σ t = 0 := by
+    intro q hq
+    exact hopcPrimeLocalContribution_eq_zero_of_factorPhaseVelLocal_eq_zero_of_nonzero
+      (p := q.1) (σ := σ) (t := t)
+      (hwnz_diff q (herase_dvd q hq))
+      (hfactor_diff0 q (herase_dvd q hq))
+  exact boundary_hlocal_on_S_of_insertProvider_and_witness_local0_and_local0_on_erase
+    (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+    (r := r) (p := p) hrS provider hp_dvd hp_gap hp_not_mem hlocal_p hlocal_erase
+
+/--
+RH-O16: 一般有限集合 `S` での on-set provider 構成器（erase 除法版）。
+
+各 `r ∈ S` について witness prime（divide + gap + outside）と
+`S.erase r` 上の `boundaryDiffPow` 除法を供給できれば、
+factor0 仮定から `BoundaryOffDvdLocalZeroOnSetProvider` を構成する。
+-/
+def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (provider : BoundaryInsertLocalLiftProvider side S d x u σ t)
+    (hwitness :
+      ∀ r ∈ S,
+        ∃ p : {q // Nat.Prime q},
+          p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u ∧
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) ∧
+          p ∉ S)
+    (herase_dvd :
+      ∀ r ∈ S, ∀ q ∈ S.erase r, q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hwnz_diff :
+      ∀ q : {q0 // Nat.Prime q0},
+        q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one q.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ q : {q0 // Nat.Prime q0},
+        q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal q.1 σ t = 0) :
+    BoundaryOffDvdLocalZeroOnSetProvider side S d x u σ t := by
+  refine ⟨?_⟩
+  intro r hrS _hr_offdvd
+  rcases hwitness r hrS with ⟨p, hp_dvd, hp_gap, hp_not_mem⟩
+  exact boundary_hlocal_on_S_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase
+    (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+    (r := r) (p := p) hrS provider hp_dvd
+    (by
+      cases side <;> simpa using hp_gap)
+    hp_not_mem
+    (herase_dvd r hrS) hwnz_diff hfactor_diff0
+
+/--
+RH-O16: 一般有限集合 `S` での on-set provider 構成器（`S` 全体除法版）。
+
+`∀ q ∈ S, q ∣ boundaryDiffPow` を与えるだけで erase 除法前提を自動生成する。
+-/
+def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (provider : BoundaryInsertLocalLiftProvider side S d x u σ t)
+    (hwitness :
+      ∀ r ∈ S,
+        ∃ p : {q // Nat.Prime q},
+          p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u ∧
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) ∧
+          p ∉ S)
+    (hS_dvd :
+      ∀ q ∈ S, q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hwnz_diff :
+      ∀ q : {q0 // Nat.Prime q0},
+        q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one q.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ q : {q0 // Nat.Prime q0},
+        q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal q.1 σ t = 0) :
+    BoundaryOffDvdLocalZeroOnSetProvider side S d x u σ t := by
+  exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase
+    (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+    provider hwitness
+    (fun r hrS q hq => hS_dvd q (Finset.mem_of_mem_erase hq))
+    hwnz_diff hfactor_diff0
+
+/--
 RH-O12: off-dvd 側の非零 (`w_p ≠ 0`) と factor 位相速度ゼロを束ねる供給器。
 -/
 structure BoundaryOffDvdFactorZeroProvider

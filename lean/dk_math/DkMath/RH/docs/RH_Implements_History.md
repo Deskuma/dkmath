@@ -2279,3 +2279,37 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-O15 の `hlocal_erase` 仮定を弱め、
      `BoundaryInsertLocalLiftProvider` 内部情報からの導出比率を高める。
+
+### 日時: 2026/03/13 22:01 JST: Phase RH-O16 を実装（`hlocal_erase` の内部生成）
+
+1. 目的: OP-001 の RH-O16 として、
+   RH-O15 が要求する `hlocal_erase` を
+   `boundaryDiffPow` 側 factor0 + divisibility から内部生成する wrapper を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundary_hlocal_on_S_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S`
+   - 実装方針:
+     - `S.erase r` 上除法前提から local-zero-on-erase を自動供給し、
+       RH-O15 の 1点抽出補題へ接続
+     - `hS_dvd`（`S` 全体除法）から erase 除法前提を導出する簡約 wrapper を追加
+3. 結論:
+   - RH-O15 の入力前提が軽量化され、
+     on-set provider 構成器で `hlocal_erase` を直接渡す必要がなくなった。
+4. 失敗事例:
+   - `hp_gap` の依存型不一致（`side`/`provider`/`hp_dvd` 依存）で build 失敗。
+   - `cases side` + `simpa` で型を明示変換して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - witness 入力の `p ∉ S` 条件を自動供給する
+     （または代替条件へ置換する）補題を追加する。
