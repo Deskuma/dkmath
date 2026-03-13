@@ -116,7 +116,7 @@ Lean 実装ロードマップを 1 枚で管理するための文書。
 次スプリントは OP-001 を主軸として進める。
 
 1. OP-001（finite→infinite 接続）を継続
-   - 到達済み（RH-O1/O2/O3/O4/O5/O6/O7/O8/O9/O10/O11/O12/O13/O14/O15/O16/O17/O18/O19/O20）:
+   - 到達済み（RH-O1/O2/O3/O4/O5/O6/O7/O8/O9/O10/O11/O12/O13/O14/O15/O16/O17/O18/O19/O20/O21）:
      - `HopcInfiniteLift.lean` を追加
      - `HasSum` 仮定から `hopcPrimeContributionSum` の atTop 極限へ接続
      - `Summable + tsum=0` 仮定から同極限へ接続
@@ -163,7 +163,9 @@ Lean 実装ロードマップを 1 枚で管理するための文書。
      - RH-O20 として、witness 分離 provider 前提の高位 API を
        命名統一（`..._of_globalWitnessProvider...`）し、
        `BoundaryDiffPowFactorZeroProvider` 導入で前提を record 化
+     - RH-O21 として、旧 `..._global_witness...` 命名に
+       `deprecated` 属性を付与し、移行先 wrapper を明示
    - 次の焦点:
-     - RH-O20 新命名 wrapper へ呼び出し側を段階移行し、旧命名公開の整理方針を決める
+     - 旧命名呼び出しを新命名 wrapper へ段階移行し、削除時期を含む公開方針を決定する
 2. OP-004（曲率条件運用）を並行整理
    - `phaseCurv` 供給規約と wrapper 命名規約の整備

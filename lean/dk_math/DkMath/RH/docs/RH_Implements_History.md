@@ -2466,3 +2466,39 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-O20 新命名 wrapper へ呼び出し側を段階移行し、
      旧命名（`..._global_witness...`）の公開方針を整理する。
+
+### 日時: 2026/03/13 23:23 JST: Phase RH-O21 を実装（旧命名 deprecation と移行導線）
+
+1. 目的: OP-001 の RH-O21 として、
+   RH-O20 新命名 wrapper への段階移行を進めるため、
+   旧 `..._global_witness...` 命名の公開方針をコード上で明示する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_erase_of_globalWitnessProvider_and_diffFactorZeroProvider`
+       （O20 命名系の erase 版）
+   - 方針整理（`CFBRCBridge.lean`）:
+     - 旧命名 4 API に `deprecated` 属性を付与し、移行先を明示
+       - `..._global_witness_local0_and_local0_on_erase`
+       - `..._dvd_on_erase_of_global_witness`
+       - `..._dvd_on_S_of_global_witness`
+       - `..._dvd_on_S_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+3. 結論:
+   - 旧命名は互換維持しつつ、コンパイラ警告ベースで新命名への移行導線を確立した。
+   - 公開方針が「legacy 維持 + 新命名推奨」に整理された。
+4. 失敗事例:
+   - `side` 依存型の不一致と `attribute` 配置で初回 build 失敗。
+   - `cases side` + `simpa` で witness 型を正規化し、
+     `attribute` 前の docstring を通常コメント化して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - 旧命名呼び出しを新命名 wrapper へ段階移行し、
+     `deprecated` 警告の運用ポリシー（削除時期）を確定する。

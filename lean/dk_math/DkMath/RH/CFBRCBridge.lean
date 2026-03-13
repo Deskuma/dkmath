@@ -3094,6 +3094,53 @@ def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_S_of_cfbRc
     diffProvider hS_dvd
 
 /--
+RH-O21: 命名統一版（推奨）
+`insert-provider + witnessProvider + diffFactorProvider + erase 除法` から
+on-set off-dvd local-zero provider を構成する。
+-/
+def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_erase_of_globalWitnessProvider_and_diffFactorZeroProvider
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (provider : BoundaryInsertLocalLiftProvider side S d x u σ t)
+    (witnessProvider : BoundaryGlobalWitnessProvider side d x u)
+    (diffProvider : BoundaryDiffPowFactorZeroProvider side d x u σ t)
+    (herase_dvd :
+      ∀ r ∈ S, ∀ q ∈ S.erase r, q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u) :
+    BoundaryOffDvdLocalZeroOnSetProvider side S d x u σ t := by
+  cases side with
+  | right =>
+      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase_of_global_witness
+        (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+        provider
+        (by simpa using witnessProvider.hwitness)
+        herase_dvd diffProvider.hwnz_diff diffProvider.hfactor_diff0
+  | left =>
+      exact boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase_of_global_witness
+        (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+        provider
+        (by simpa using witnessProvider.hwitness)
+        herase_dvd diffProvider.hwnz_diff diffProvider.hfactor_diff0
+
+-- RH-O21: 旧 `..._global_witness...` 命名は互換維持のみ。
+-- 新規利用は provider ベース命名（RH-O20/O21）へ移行する。
+attribute [deprecated boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_globalWitnessLocalZeroProvider_and_local0_on_erase
+  (since := "2026-03-13")]
+  boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_global_witness_local0_and_local0_on_erase
+
+attribute [deprecated boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_erase_of_globalWitnessProvider_and_diffFactorZeroProvider
+  (since := "2026-03-13")]
+  boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase_of_global_witness
+
+attribute [deprecated boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_S_of_globalWitnessProvider_and_diffFactorZeroProvider
+  (since := "2026-03-13")]
+  boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness
+
+attribute [deprecated boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_S_of_cfbRc_primitive_prime_and_diffFactorZeroProvider
+  (since := "2026-03-13")]
+  boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime
+
+/--
 RH-O12: off-dvd 側の非零 (`w_p ≠ 0`) と factor 位相速度ゼロを束ねる供給器。
 -/
 structure BoundaryOffDvdFactorZeroProvider

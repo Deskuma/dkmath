@@ -13,7 +13,7 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
     無限側観測量へ上げるための前提を明文化する。
 - 目標成果:
   - 条件付きの「有限判定 → 極限判定」補題群
-- 状態: 進行中（RH-O20: 高位 wrapper 命名統一と diff-factor 前提の record 化）
+- 状態: 進行中（RH-O21: 旧命名の deprecation 方針を実装）
 - 到達済み:
   - `hopcPrimeContributionFn`
   - `hopcPrimeContributionTsum`
@@ -81,6 +81,7 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
   - `boundaryDiffPowFactorZeroProvider_of_split`
   - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_S_of_globalWitnessProvider_and_diffFactorZeroProvider`
   - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_S_of_cfbRc_primitive_prime_and_diffFactorZeroProvider`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_erase_of_globalWitnessProvider_and_diffFactorZeroProvider`
   - `BoundaryOffDvdFactorZeroProvider`
   - `boundaryOffDvdFactorZeroProvider_of_split`
   - `boundaryOffDvdFactorZeroProvider_of_nonzero_and_localZeroProvider`
@@ -101,8 +102,8 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
   - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
   - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
 - 残タスク:
-  - RH-O20 新命名 wrapper へ呼び出し側を段階移行し、
-    旧命名（`..._global_witness...`）の公開方針を整理
+  - 旧命名（`..._global_witness...`）呼び出しを段階的に新命名 wrapper へ置換し、
+    `deprecated` 警告の実運用方針（削除時期）を確定
 - 優先度: 高
 
 ## OP-002: 非零前提の管理 API
