@@ -30,6 +30,11 @@ noncomputable def hopcPrimeContributionTsum (σ t : ℝ) : ℝ :=
 structure HopcInfiniteLiftAssumptions (σ t : ℝ) : Prop where
   hHasSumZero : HasSum (hopcPrimeContributionFn σ t) 0
 
+/-- OP-001 向け finite→infinite 接続の運用仮定（`Summable + tsum = 0`）。 -/
+structure HopcInfiniteLiftSummableAssumptions (σ t : ℝ) : Prop where
+  hSummable : Summable (hopcPrimeContributionFn σ t)
+  hTsumZero : hopcPrimeContributionTsum σ t = 0
+
 /--
 `HasSum` 仮定から、有限集合版 `hopcPrimeContributionSum` の atTop 極限を得る。
 -/
@@ -52,6 +57,25 @@ theorem tendsto_hopcPrimeContributionSum_atTop_of_assumptions
       Filter.atTop (𝓝 (0 : ℝ)) :=
   tendsto_hopcPrimeContributionSum_atTop_of_hasSum hAssump.hHasSumZero
 
+/--
+`Summable + tsum = 0` 仮定から `HasSum = 0` 仮定を復元する。
+-/
+theorem hasSumZero_of_summable_assumptions
+    {σ t : ℝ}
+    (hAssump : HopcInfiniteLiftSummableAssumptions σ t) :
+    HasSum (hopcPrimeContributionFn σ t) 0 := by
+  have hHas :
+      HasSum (hopcPrimeContributionFn σ t) (hopcPrimeContributionTsum σ t) := by
+    simpa [hopcPrimeContributionTsum] using hAssump.hSummable.hasSum
+  simpa [hAssump.hTsumZero] using hHas
+
+/-- `Summable + tsum = 0` 仮定を RH-O1 の仮定パッケージへ落とす。 -/
+theorem assumptions_of_summable_assumptions
+    {σ t : ℝ}
+    (hAssump : HopcInfiniteLiftSummableAssumptions σ t) :
+    HopcInfiniteLiftAssumptions σ t :=
+  ⟨hasSumZero_of_summable_assumptions hAssump⟩
+
 /-- `HasSum = 0` 仮定から `hopcPrimeContributionTsum = 0` を得る。 -/
 theorem hopcPrimeContributionTsum_eq_zero_of_hasSumZero
     {σ t : ℝ}
@@ -65,6 +89,24 @@ theorem hopcPrimeContributionTsum_eq_zero_of_assumptions
     (hAssump : HopcInfiniteLiftAssumptions σ t) :
     hopcPrimeContributionTsum σ t = 0 :=
   hopcPrimeContributionTsum_eq_zero_of_hasSumZero hAssump.hHasSumZero
+
+/-- `Summable + tsum = 0` 仮定版の `tsum = 0`。 -/
+theorem hopcPrimeContributionTsum_eq_zero_of_summable_assumptions
+    {σ t : ℝ}
+    (hAssump : HopcInfiniteLiftSummableAssumptions σ t) :
+    hopcPrimeContributionTsum σ t = 0 :=
+  hAssump.hTsumZero
+
+/-- `Summable + tsum = 0` 仮定版の atTop 極限（極限値 0）。 -/
+theorem tendsto_hopcPrimeContributionSum_atTop_of_summable_assumptions
+    {σ t : ℝ}
+    (hAssump : HopcInfiniteLiftSummableAssumptions σ t) :
+    Filter.Tendsto
+      (fun S : Finset {p // Nat.Prime p} =>
+        hopcPrimeContributionSum (S := S) σ t)
+      Filter.atTop (𝓝 (0 : ℝ)) :=
+  tendsto_hopcPrimeContributionSum_atTop_of_assumptions
+    (assumptions_of_summable_assumptions hAssump)
 
 /--
 極限 0 の場合、有限集合版寄与和は最終的に任意 `ε` 未満になる。
@@ -90,5 +132,18 @@ theorem eventually_abs_hopcPrimeContributionSum_lt_of_assumptions
   exact hEv.mono (by
     intro S hS
     simpa [Metric.mem_ball, Real.dist_eq] using hS)
+
+/--
+`Summable + tsum = 0` 仮定版:
+有限集合版寄与和は最終的に任意 `ε` 未満になる。
+-/
+theorem eventually_abs_hopcPrimeContributionSum_lt_of_summable_assumptions
+    {σ t ε : ℝ}
+    (hε : 0 < ε)
+    (hAssump : HopcInfiniteLiftSummableAssumptions σ t) :
+    ∀ᶠ S : Finset {p // Nat.Prime p} in Filter.atTop,
+      |hopcPrimeContributionSum (S := S) σ t| < ε :=
+  eventually_abs_hopcPrimeContributionSum_lt_of_assumptions
+    hε (assumptions_of_summable_assumptions hAssump)
 
 end DkMath.RH.EulerZeta

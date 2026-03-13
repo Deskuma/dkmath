@@ -1785,3 +1785,34 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - OP-001 の RH-O2 として、
      `HasSum` 仮定をより運用しやすい収束条件へ分解する補題を追加する。
+
+### 日時: 2026/03/13 18:28 JST: Phase RH-O2 を実装（`Summable + tsum=0` 接続）
+
+1. 目的: RH-O1 の次段として、`HasSum` 直仮定を弱め、
+   `Summable + tsum=0` から finite→infinite 接続 API を使えるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/HopcInfiniteLift.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`HopcInfiniteLift.lean`）:
+     - `HopcInfiniteLiftSummableAssumptions`
+     - `hasSumZero_of_summable_assumptions`
+     - `assumptions_of_summable_assumptions`
+     - `hopcPrimeContributionTsum_eq_zero_of_summable_assumptions`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_summable_assumptions`
+     - `eventually_abs_hopcPrimeContributionSum_lt_of_summable_assumptions`
+3. 結論:
+   - OP-001 の finite→infinite 接続は `HasSum` 直仮定だけでなく、
+     より運用しやすい `Summable + tsum=0` 仮定でも利用可能になった。
+4. 失敗事例:
+   - なし（今回追加分は一度で型チェック通過）。
+5. 検証:
+   - `lake build DkMath.RH.HopcInfiniteLift` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-O3: `Summable` を解析的な十分条件へ接続する補題
+     （比較判定 / majorant 供給）を追加する。

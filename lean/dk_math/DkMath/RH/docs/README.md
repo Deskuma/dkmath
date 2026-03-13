@@ -147,7 +147,7 @@ $$
 
 ---
 
-## 現状 API（HOPC 公開名・RH-N32 時点）
+## 現状 API（HOPC 公開名・RH-N33 時点）
 
 CFBRC 連携で使う公開名は次を基準とする。
 
@@ -158,9 +158,15 @@ CFBRC 連携で使う公開名は次を基準とする。
   - `hopcPrimeContributionFn`
   - `hopcPrimeContributionTsum`
   - `HopcInfiniteLiftAssumptions`
+  - `HopcInfiniteLiftSummableAssumptions`
+  - `hasSumZero_of_summable_assumptions`
+  - `assumptions_of_summable_assumptions`
   - `tendsto_hopcPrimeContributionSum_atTop_of_assumptions`
   - `hopcPrimeContributionTsum_eq_zero_of_assumptions`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_summable_assumptions`
+  - `hopcPrimeContributionTsum_eq_zero_of_summable_assumptions`
   - `eventually_abs_hopcPrimeContributionSum_lt_of_assumptions`
+  - `eventually_abs_hopcPrimeContributionSum_lt_of_summable_assumptions`
 - 同一化（`EulerZetaLemmas.lean`）
   - `eulerZetaFactorPhaseVelFinite_eq_hopcPrimeContributionSum`
 - 停留判定（`EulerZetaLemmas.lean`）
