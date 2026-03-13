@@ -434,3 +434,37 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - 旧 `hEvStationary` 直入力 API と新 provider-family API の公開方針
      （段階的 deprecate するか併存するか）を整理する。
+
+### 日時: 2026/03/14 05:45 JST: `hEvStationary` 直入力 API と provider-family API の公開方針整理
+
+1. 目的:
+   OP-001 の次段として、`hEvStationary` 直入力 API と
+   provider-family API の運用ポリシーを明文化する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/RH-CFBRC-HOPC.md`
+     - `DkMath/RH/docs/RH_Implements_History-02.md`
+   - 方針決定:
+     - 2026-03-14 時点では **併存**（即時 deprecate は行わない）。
+     - provider-family API を CFBRC 駆動の標準導線として推奨。
+     - `hEvStationary` 直入力 API は解析側 low-level 入口として維持。
+     - 再評価日を `2026-06-30` に固定。
+   - コード反映:
+     - `CFBRCBridge.lean` の `hEvStationary` 直入力 wrapper（代表 2 箇所）に
+       API policy note を docstring 追記。
+   - 文書反映:
+     - `RH/README.md`, `HOPC-RH-OpenProblems.md`, `RH-CFBRC-HOPC.md` に
+       同方針を追記し、公開運用ルールを同期。
+3. 結論:
+   - 低レイヤ柔軟性（解析側接続）と高レイヤ標準導線（provider-family）を
+     両立した公開方針を確定できた。
+4. 失敗事例:
+   - なし。
+5. 検証:
+   - ドキュメント/コメント整備中心（定理本体の意味変更なし）。
+6. 次の課題:
+   - 再評価日（2026-06-30）までに、`hEvStationary` 直入力 API の
+     実使用箇所（リポジトリ内）を定期監査し、deprecate 可否を判断する。

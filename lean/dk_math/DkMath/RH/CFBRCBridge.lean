@@ -3464,6 +3464,12 @@ theorem hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_split
 /--
 RH-O7: `boundaryDiffPow` split 上界と `σ > 1`・`eventually stationary` から
 `hopcPrimeContributionTsum = 0` を得る。
+
+API policy note (2026-03-14):
+- 本補題は `hEvStationary` を直接受ける low-level 入口として維持する。
+- CFBRC 駆動の標準経路では provider-family 版
+  (`..._and_providerFamily_...`) を推奨する。
+- `hEvStationary` 直入力 API の deprecate 判定は 2026-06-30 に再評価する。
 -/
 theorem hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_split_prime_rpow_bound_sigma_gt_one
     (side : DkMath.CFBRC.BoundarySide)
@@ -5100,6 +5106,12 @@ theorem hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_wit
 
 /--
 RH-O9: off-dvd local-zero provider 版の `hopcPrimeContributionTsum = 0`。
+
+API policy note (2026-03-14):
+- 本補題は `hEvStationary` 直入力の low-level 入口。
+- provider-family から `hEvStationary` を内製する高位版
+  `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_and_providerFamily_sigma_gt_one`
+  を標準推奨とする。
 -/
 theorem hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one
     (side : DkMath.CFBRC.BoundarySide)

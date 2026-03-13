@@ -104,6 +104,13 @@ HOPC-RH の「位相を微分量で観測する」設計は、
 「算術 existence（CFBRC）」→「局所寄与零化（HOPC）」→「停留/非退化停留（RH）」の経路が
 API として明示化された。
 
+公開方針（2026-03-14）:
+
+- `hEvStationary` 直入力 API と provider-family API は当面併存する。
+- CFBRC 由来の標準利用では provider-family API を推奨する。
+- `hEvStationary` 直入力 API は解析側の low-level 接続口として維持し、
+  deprecate 判定は `2026-06-30` に再評価する。
+
 今後の直接的な発展先は次の 2 つである。
 
 - OP-001 系（witness 分離・off-dvd 補完 provider）の研究継続

@@ -243,6 +243,11 @@ CFBRC 連携で使う公開名は次を基準とする。
   - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_offdvd_provider`
   - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
   - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
+  - `eventually_stationaryAt_of_cfbRc_primitive_prime_boundary_bridge_of_providerFamily`
+  - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_and_providerFamily_sigma_gt_one`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_provider_and_providerFamily_sigma_gt_one`
+  - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvdFactorZeroProvider_and_providerFamily_sigma_gt_one`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvdFactorZeroProvider_and_providerFamily_sigma_gt_one`
 - 同一化（`EulerZetaLemmas.lean`）
   - `eulerZetaFactorPhaseVelFinite_eq_hopcPrimeContributionSum`
 - 停留判定（`EulerZetaLemmas.lean`）
@@ -327,6 +332,13 @@ CFBRC 連携で使う公開名は次を基準とする。
   `∑_{p∈S} (log p - phaseVel(w_p))`
   の alias/wrapper 層として設計されている。
 - `docs/RH-CFBRC-Discussion.md` の `Implementation Bridge (RH-H1/H2)` と対応。
+
+`hEvStationary` 直入力 API と provider-family API の公開方針（2026-03-14）:
+
+- 方針は当面 `併存`（即時 `deprecated` 化はしない）。
+- `hEvStationary` 直入力 API は、解析側が `Eventually` 証明を直接供給する low-level 入口として維持。
+- CFBRC 駆動の標準導線では provider-family API（`..._and_providerFamily_...`）を推奨。
+- 再評価日は `2026-06-30`。その時点で利用実態を確認し、段階的 `deprecated` 付与可否を判定する。
 
 ---
 
