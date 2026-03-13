@@ -1518,3 +1518,43 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-N26 として、`hlocal_core` 自体を供給する実補題
      （解析条件 or finite-set 観測条件から `hopcPrimeLocalContribution = 0` を導く層）
      を追加する。
+
+### 日時: 2026/03/13 13:19 JST: Phase RH-N26 を実装（`boundaryDiffPow` local0 から `hlocal_core` 供給）
+
+1. 目的: RH-N25 の残課題を進め、`hlocal_core` を
+   `boundaryDiffPow` 側 local0 仮定から供給できるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundary_hlocal_core_of_boundaryDiffPow_local_zero`
+       （`core ∣ diff` を用いて diff-local0 から core-local0 へ移送）
+     - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryDiffPow_local0`
+       （RH-N25 local0 入口へ委譲する provider wrapper）
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0`
+     - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0`
+   - 実装修正:
+     - left 側の `core -> diff` 変換は等式 `hsub` で明示的に書き換えて型不一致を解消
+     - 誤参照していた constructor 名を既存 API へ修正
+     - long-line 警告は local notation (`existsStatSingletonBoundaryCoreLocal0`) で解消
+   - 文書同期:
+     - README 2 枚を RH-N26 へ更新
+     - `RH-CFBRC-Discussion.md` を RH-N26 内容へ更新
+     - OP-003 を RH-N1〜N26 到達へ更新し、残タスクを `hlocal_diff0` 供給へ整理
+3. 結論: `boundaryCore local0` だけでなく
+   `boundaryDiffPow local0` からも direct existence API へ接続可能になり、
+   local 側の入口がさらに自然な形に揃った。
+4. 失敗事例:
+   - 初回実装で left 側の `simp` 書き換えが不十分で型不一致が発生。
+   - `hsub` を明示導入して `hsub ▸ hmul` で解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N27 として、`hlocal_diff0` 自体を供給する実補題
+     （解析条件 or finite-set 観測条件から `hopcPrimeLocalContribution = 0` を導く層）
+     を追加する。
