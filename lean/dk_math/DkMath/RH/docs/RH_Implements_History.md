@@ -2071,3 +2071,64 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-O10: `BoundaryInsertLocalLiftProvider` から
      `BoundaryOffDvdLocalZeroProvider` へ落とす変換規則を設計し、
      provider 層の入力をさらに一本化する。
+
+### 日時: 2026/03/13 20:08 JST: Phase RH-O10 を実装（insert-provider から off-dvd provider 変換）
+
+1. 目的: OP-001 の RH-O10 として、
+   `BoundaryInsertLocalLiftProvider` から
+   `BoundaryOffDvdLocalZeroProvider` へ変換する規則を追加し、provider 層の接続点を統一する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider`
+     - `boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider_of_factorPhaseVelLocal_eq_zero`
+   - 実装方針:
+     - insert-provider を受ける変換器を置き、off-dvd 側 local-zero provider への接続を一本化
+     - `hwnz_offdvd + hfactor_offdvd0` から local-zero を供給する既存規則と合流
+3. 結論:
+   - O9 の provider API と insert-provider API の接続点が整理され、
+     呼び出し側での変換手順が定型化された。
+4. 失敗事例:
+   - なし（追加分は型チェック一回で通過）。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+6. 次の課題:
+   - RH-O11: insert-provider を直接受ける高位 wrapper を追加し、
+     off-dvd 側仮定の入力をさらに簡約する。
+
+### 日時: 2026/03/13 20:46 JST: Phase RH-O11 を実装（insert-provider 直結の高位 wrapper）
+
+1. 目的: OP-001 の RH-O11 として、
+   `BoundaryInsertLocalLiftProvider` と off-dvd 側 factor0 供給を直接受け、
+   `prime_rpow_bound / tsum / tendsto` へ到達する高位 wrapper を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_insertProvider_sigma`
+     - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_insertProvider_sigma_gt_one`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_insertProvider_sigma_gt_one`
+   - 実装方針:
+     - O10 変換規則で insert-provider から off-dvd local-zero を構成
+     - 構成した local-zero を既存の O8 系 (`..._with_offdvd_local0...`) へ接続
+3. 結論:
+   - 呼び出し側が `BoundaryOffDvdLocalZeroProvider` を明示構築せずに、
+     insert-provider から infinite 接続 API へ直接到達できるようになった。
+4. 失敗事例:
+   - 初回実装で未定義の後方参照（宣言順依存）により build 失敗。
+   - 参照先を `..._with_offdvd_local0...` 系へ切替えて解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - insert-provider 内部情報だけで off-dvd local-zero を導出できる十分条件を抽出し、
+     off-dvd 側追加仮定をさらに削減する。

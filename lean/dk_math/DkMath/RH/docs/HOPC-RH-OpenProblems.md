@@ -13,7 +13,7 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
     無限側観測量へ上げるための前提を明文化する。
 - 目標成果:
   - 条件付きの「有限判定 → 極限判定」補題群
-- 状態: 進行中（RH-O9: off-dvd local-zero provider を導入）
+- 状態: 進行中（RH-O11: insert-provider 直結 wrapper を追加）
 - 到達済み:
   - `hopcPrimeContributionFn`
   - `hopcPrimeContributionTsum`
@@ -55,13 +55,19 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
   - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_local0_sigma_gt_one`
   - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_local0_sigma_gt_one`
   - `BoundaryOffDvdLocalZeroProvider`
+  - `boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider`
   - `boundaryOffDvdLocalZeroProvider_of_factorPhaseVelLocal_eq_zero`
+  - `boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider_of_factorPhaseVelLocal_eq_zero`
+  - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_insertProvider_sigma`
+  - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_insertProvider_sigma_gt_one`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_insertProvider_sigma_gt_one`
   - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_offdvd_provider`
   - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
   - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
 - 残タスク:
-  - `BoundaryInsertLocalLiftProvider` から `BoundaryOffDvdLocalZeroProvider` への変換規則を設計
-  - off-dvd 側評価（`hwnz_offdvd`, `hfactor_offdvd0`）の標準供給器を追加
+  - `BoundaryInsertLocalLiftProvider` の内部情報のみで off-dvd 側 local-zero を回収できる十分条件を追加
+  - off-dvd 側評価（`hwnz_offdvd`, `hfactor_offdvd0`）を生成する標準供給器を拡張し、
+    insert-provider 直結 wrapper への入力をさらに削減
 - 優先度: 高
 
 ## OP-002: 非零前提の管理 API
