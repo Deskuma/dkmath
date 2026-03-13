@@ -1239,3 +1239,28 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-N17 として、`hS_nonzero` を CFBRC 側条件から供給する
      最小補題（候補1本）を `CFBRCBridge.lean` に追加し、
      provider 実供給フェーズへ入る。
+
+### 日時: 2026/03/13 12:23 JST: Phase RH-N17 を実装（`hS_nonzero` 実供給補題の追加）
+
+1. 目的: OP-003 の実供給フェーズ着手として、
+   CFBRC 側条件（boundary 除法 + gap 非除法）から `hS_nonzero` を導出する最小補題を実装する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+   - 追加実装:
+     - `boundary_nonzero_on_S_of_boundary_dvd_and_gap`
+       （`S` 上の boundary 除法/非除法条件から `S` 上非零を供給）
+     - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_and_local_zero`
+       （上記 `hS_nonzero` と local-zero 条件を統合して provider を構成）
+3. 結論: `hS_nonzero` の実供給入口が導入され、
+   CFBRC 条件セットから provider 構成へ接続する最小ルートが成立した。
+4. 失敗事例:
+   - 初回実装で `match side` 依存型不一致が発生。
+   - `cases side` で side 固定の組立てへ修正して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N18 として、`docs/README.md` / `RH-CFBRC-Discussion.md` に
+     RH-N17 の `boundary_dvd + gap` 供給テンプレートを追記し、
+     実供給ルートを公開導線へ反映する。
