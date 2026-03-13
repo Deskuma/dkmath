@@ -2231,6 +2231,160 @@ structure BoundaryOffDvdLocalZeroProvider
           hopcPrimeLocalContribution p.1 σ t = 0
 
 /--
+RH-O14: 有限集合 `S` 上に制限した off-dvd local-zero 供給器。
+-/
+structure BoundaryOffDvdLocalZeroOnSetProvider
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    (d x u : ℕ) (σ t : ℝ) : Type where
+  hlocal_offdvd_on_S :
+    ∀ r ∈ S,
+      ¬ r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+        hopcPrimeLocalContribution r.1 σ t = 0
+
+/--
+RH-O14: global off-dvd local-zero provider から on-set provider へ制限する。
+-/
+def boundaryOffDvdLocalZeroOnSetProvider_of_global
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (offdvdProvider : BoundaryOffDvdLocalZeroProvider side d x u σ t) :
+    BoundaryOffDvdLocalZeroOnSetProvider side S d x u σ t := by
+  refine ⟨?_⟩
+  intro r _hrS hr_offdvd
+  exact offdvdProvider.hlocal_offdvd r hr_offdvd
+
+/--
+RH-O14: singleton `S={r}` で、insert-provider の `hsum_lift` から
+off-dvd 側の局所寄与ゼロを抽出する十分条件補題。
+-/
+theorem boundary_hlocal_offdvd_singleton_of_insertProvider_and_witness_local0
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (r p : {q // Nat.Prime q})
+    (provider :
+      BoundaryInsertLocalLiftProvider side ({r} : Finset {q // Nat.Prime q}) d x u σ t)
+    (hp_dvd : p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hp_gap : match side with
+      | .right => ¬ p.1 ∣ x
+      | .left => ¬ p.1 ∣ u)
+    (hr_offdvd : ¬ r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hlocal_p : hopcPrimeLocalContribution p.1 σ t = 0) :
+    hopcPrimeLocalContribution r.1 σ t = 0 := by
+  cases side with
+  | right =>
+      have hp_ne_r : p.1 ≠ r.1 := by
+        intro hp_eq
+        apply hr_offdvd
+        simpa [DkMath.CFBRC.boundaryDiffPow, hp_eq] using hp_dvd
+      have hp_ne_r_subtype : p ≠ r := by
+        intro hpr
+        apply hp_ne_r
+        exact congrArg Subtype.val hpr
+      have hp_not_mem : p ∉ ({r} : Finset {q // Nat.Prime q}) := by
+        simp [hp_ne_r_subtype]
+      have hsum :
+          hopcPrimeContributionSum (S := insert p ({r} : Finset {q // Nat.Prime q})) σ t = 0 :=
+        provider.hsum_lift p hp_dvd hp_gap
+      have hpair :
+          hopcPrimeLocalContribution p.1 σ t + hopcPrimeLocalContribution r.1 σ t = 0 := by
+        unfold hopcPrimeContributionSum at hsum
+        rw [Finset.sum_insert hp_not_mem] at hsum
+        simpa using hsum
+      rw [hlocal_p, zero_add] at hpair
+      exact hpair
+  | left =>
+      have hp_ne_r : p.1 ≠ r.1 := by
+        intro hp_eq
+        apply hr_offdvd
+        simpa [DkMath.CFBRC.boundaryDiffPow, Nat.add_comm, hp_eq] using hp_dvd
+      have hp_ne_r_subtype : p ≠ r := by
+        intro hpr
+        apply hp_ne_r
+        exact congrArg Subtype.val hpr
+      have hp_not_mem : p ∉ ({r} : Finset {q // Nat.Prime q}) := by
+        simp [hp_ne_r_subtype]
+      have hsum :
+          hopcPrimeContributionSum (S := insert p ({r} : Finset {q // Nat.Prime q})) σ t = 0 :=
+        provider.hsum_lift p hp_dvd hp_gap
+      have hpair :
+          hopcPrimeLocalContribution p.1 σ t + hopcPrimeLocalContribution r.1 σ t = 0 := by
+        unfold hopcPrimeContributionSum at hsum
+        rw [Finset.sum_insert hp_not_mem] at hsum
+        simpa using hsum
+      rw [hlocal_p, zero_add] at hpair
+      exact hpair
+
+/--
+RH-O14: singleton `S={r}` で、`boundaryDiffPow` 側 factor0 仮定から
+insert-provider を使って off-dvd 局所寄与ゼロを抽出する wrapper。
+-/
+theorem boundary_hlocal_offdvd_singleton_of_insertProvider_and_boundaryDiffPow_factor0
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (r p : {q // Nat.Prime q})
+    (provider :
+      BoundaryInsertLocalLiftProvider side ({r} : Finset {q // Nat.Prime q}) d x u σ t)
+    (hp_dvd : p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hp_gap : match side with
+      | .right => ¬ p.1 ∣ x
+      | .left => ¬ p.1 ∣ u)
+    (hr_offdvd : ¬ r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hwnz_diff :
+      ∀ q : {q0 // Nat.Prime q0},
+        q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one q.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ q : {q0 // Nat.Prime q0},
+        q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal q.1 σ t = 0) :
+    hopcPrimeLocalContribution r.1 σ t = 0 := by
+  have hlocal_p : hopcPrimeLocalContribution p.1 σ t = 0 :=
+    hopcPrimeLocalContribution_eq_zero_of_factorPhaseVelLocal_eq_zero_of_nonzero
+      (p := p.1) (σ := σ) (t := t)
+      (hwnz_diff p hp_dvd)
+      (hfactor_diff0 p hp_dvd)
+  exact boundary_hlocal_offdvd_singleton_of_insertProvider_and_witness_local0
+    (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+    (r := r) (p := p) provider hp_dvd hp_gap hr_offdvd hlocal_p
+
+/--
+RH-O14: singleton `S={r}` の off-dvd local-zero 抽出を
+on-set provider として返す wrapper。
+-/
+def boundaryOffDvdLocalZeroOnSetProvider_singleton_of_insertProvider_and_boundaryDiffPow_factor0
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (r p : {q // Nat.Prime q})
+    (provider :
+      BoundaryInsertLocalLiftProvider side ({r} : Finset {q // Nat.Prime q}) d x u σ t)
+    (hp_dvd : p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hp_gap : match side with
+      | .right => ¬ p.1 ∣ x
+      | .left => ¬ p.1 ∣ u)
+    (hwnz_diff :
+      ∀ q : {q0 // Nat.Prime q0},
+        q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one q.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ q : {q0 // Nat.Prime q0},
+        q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal q.1 σ t = 0) :
+    BoundaryOffDvdLocalZeroOnSetProvider
+      side ({r} : Finset {q // Nat.Prime q}) d x u σ t := by
+  refine ⟨?_⟩
+  intro s hs hs_offdvd
+  have hs_eq : s = r := Finset.mem_singleton.mp hs
+  have hs_offdvd_r : ¬ r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u := by
+    simpa [hs_eq] using hs_offdvd
+  have hr0 : hopcPrimeLocalContribution r.1 σ t = 0 :=
+    boundary_hlocal_offdvd_singleton_of_insertProvider_and_boundaryDiffPow_factor0
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      (r := r) (p := p) provider hp_dvd hp_gap hs_offdvd_r hwnz_diff hfactor_diff0
+  simpa [hs_eq] using hr0
+
+/--
 RH-O12: off-dvd 側の非零 (`w_p ≠ 0`) と factor 位相速度ゼロを束ねる供給器。
 -/
 structure BoundaryOffDvdFactorZeroProvider

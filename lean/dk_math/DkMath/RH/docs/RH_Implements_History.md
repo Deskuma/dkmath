@@ -2172,7 +2172,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - `BoundaryOffDvdFactorZeroProvider` の標準構成器を追加し、
      off-dvd 側の個別仮定入力をさらに削減する。
 
-### 日時: 2026/03/13 21:20 JST: Phase RH-O13 を実装（off-dvd factor0 provider の標準構成器）
+### 日時: 2026/03/13 21:05 JST: Phase RH-O13 を実装（off-dvd factor0 provider の標準構成器）
 
 1. 目的: OP-001 の RH-O13 として、
    `BoundaryOffDvdFactorZeroProvider` を段階的に構成する標準 API を追加し、
@@ -2207,3 +2207,40 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - `BoundaryInsertLocalLiftProvider` 内部情報から
      off-dvd 側 local-zero を導出する十分条件を補題化し、
      `_provider` を実質利用する高位 API へ進める。
+
+### 日時: 2026/03/13 21:15 JST: Phase RH-O14 を実装（singleton `S` の off-dvd 抽出）
+
+1. 目的: OP-001 の RH-O14 として、
+   `BoundaryInsertLocalLiftProvider` の `hsum_lift` を使い、
+   singleton `S={r}` 上で off-dvd 側 local-zero を抽出する十分条件補題を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `BoundaryOffDvdLocalZeroOnSetProvider`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_global`
+     - `boundary_hlocal_offdvd_singleton_of_insertProvider_and_witness_local0`
+     - `boundary_hlocal_offdvd_singleton_of_insertProvider_and_boundaryDiffPow_factor0`
+     - `boundaryOffDvdLocalZeroOnSetProvider_singleton_of_insertProvider_and_boundaryDiffPow_factor0`
+   - 実装方針:
+     - `insert p {r}` 上の `hopcPrimeContributionSum = 0` と witness 側 local-zero から
+       `r` 側 local-zero を導出
+     - まず singleton 版で十分条件を固定し、on-set provider へ公開
+3. 結論:
+   - `_provider` の内部情報（`hsum_lift`）を実際に使う off-dvd 抽出が
+     最初の形で追加され、一般有限集合 `S` への拡張基盤ができた。
+4. 失敗事例:
+   - `side` 依存型と `hsum_lift` 引数型の不一致、前方参照、`simp` 変形不足で初回 build 失敗。
+   - `cases side` で分岐し、`BoundaryOffDvdLocalZeroProvider` を局所構成、
+     等式変形を明示して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - singleton 抽出を一般有限集合 `S` へ拡張し、
+     on-set provider を段階的に自動構成できる補題群を追加する。
