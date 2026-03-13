@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.CosmicFormula.CosmicFormulaBinom
+import DkMath.CFBRC.Basic
 import DkMath.FLT.PetalDetect
 import DkMath.NumberTheory.ZsigmondyCyclotomic
 import DkMath.Zsigmondy
@@ -158,5 +159,50 @@ lemma prime_dvd_S0_via_cosmic_bridge {c b q : ℕ}
   have hGN_eq : GN 3 (c - b) b = S0_nat c b := GN_three_sub_eq_S0_nat hbc
   rw [hGN_eq] at hq_dvd_GN
   exact hq_dvd_GN
+
+/--
+`d=3` の no-lift 仮定を `cyclotomicPrimeCore` 経由で `S0_nat` へ移す橋。
+
+仮定:
+- primitive branch 条件 `q ∣ c^3-b^3`, `q ∤ c-b`
+- `¬ q^2 ∣ cyclotomicPrimeCore 3 (c-b) b`
+
+結論:
+- `¬ q^2 ∣ S0_nat c b`
+
+証明は
+`cyclotomicPrimeCore = GN`（`x = c-b > 0`）と
+`GN 3 (c-b) b = S0_nat c b` を合成するだけで閉じる。
+-/
+lemma hS0_not_sq_of_noLift_cyclotomicPrimeCore_d3 {c b : ℕ}
+    (hNoLift :
+      ∀ {q : ℕ}, Nat.Prime q → q ∣ c ^ 3 - b ^ 3 → ¬ q ∣ c - b →
+        ¬ q ^ 2 ∣ DkMath.CFBRC.cyclotomicPrimeCore 3 (c - b) b) :
+    ∀ {q : ℕ}, Nat.Prime q → q ∣ c ^ 3 - b ^ 3 → ¬ q ∣ c - b →
+      ¬ q ^ 2 ∣ S0_nat c b := by
+  intro q hq hq_dvd hq_ndvd
+  have hbc : b < c := by
+    by_contra hbc_not
+    have hcb : c ≤ b := Nat.not_lt.mp hbc_not
+    have hdiff_zero : c - b = 0 := Nat.sub_eq_zero_of_le hcb
+    exact hq_ndvd (hdiff_zero ▸ dvd_zero q)
+  have hx : 0 < c - b := Nat.sub_pos_of_lt hbc
+  have hcore_eq_GN :
+      DkMath.CFBRC.cyclotomicPrimeCore 3 (c - b) b = GN 3 (c - b) b :=
+    DkMath.CFBRC.cyclotomicPrimeCore_eq_GN_nat
+      (p := 3) (x := c - b) (u := b) hx
+  have hGN_eq_S0 : GN 3 (c - b) b = S0_nat c b :=
+    GN_three_sub_eq_S0_nat hbc
+  have hcore_eq_S0 :
+      DkMath.CFBRC.cyclotomicPrimeCore 3 (c - b) b = S0_nat c b := by
+    rw [hcore_eq_GN, hGN_eq_S0]
+  have hsum_eq_S0 :
+      (∑ x ∈ Finset.range 3, (c - b + b) ^ x * b ^ (2 - x)) = S0_nat c b := by
+    calc
+      (∑ x ∈ Finset.range 3, (c - b + b) ^ x * b ^ (2 - x))
+          = DkMath.CFBRC.cyclotomicPrimeCore 3 (c - b) b := by
+            simp [DkMath.CFBRC.cyclotomicPrimeCore]
+      _ = S0_nat c b := hcore_eq_S0
+  simpa [hsum_eq_S0] using (hNoLift hq hq_dvd hq_ndvd)
 
 end DkMath.FLT

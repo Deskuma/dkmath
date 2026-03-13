@@ -426,3 +426,117 @@
 6. 次の課題:
    - 必要なら README に「Phase 別 API マップ（A/B/C/D）」を追加し、
      実装計画書との往復参照を強化する。
+
+### 日時: 2026/03/12 20:17 JST: `hS0_not_sq` への cyclotomic-core bridge 補題を FLT 側へ追加
+
+1. 目的: `d=3` での no-lift 仮定を `cyclotomicPrimeCore` から `S0_nat` へ直接移す薄い橋を実装する。
+2. 内容:
+   - `DkMath/FLT/CosmicPetalBridge.lean` に以下を追加:
+     - `hS0_not_sq_of_noLift_cyclotomicPrimeCore_d3`
+   - 補題の形:
+     - 入力: `¬ q^2 ∣ cyclotomicPrimeCore 3 (c-b) b`（primitive branch 前提つき）
+     - 出力: `¬ q^2 ∣ S0_nat c b`
+   - 証明の接続:
+     - `cyclotomicPrimeCore_eq_GN_nat`（`x:=c-b`）
+     - `GN_three_sub_eq_S0_nat`
+     - 上の同一化合成で `core -> S0` に転送
+   - 依存追加:
+     - `import DkMath.CFBRC.Basic` を `CosmicPetalBridge.lean` に追加。
+   - 検証:
+     - `lake build DkMath.FLT.CosmicPetalBridge`
+     - `lake build DkMath.FLT.Main`
+     ともに成功。
+3. 結論: `hS0_not_sq` 供給経路として、`NoSqOnS0` 系・`GN` 系に加えて
+   cyclotomic-core 経由の実装可能ルートをコード化できた。
+4. 失敗事例:
+   - 初回 `simpa` で `cyclotomicPrimeCore` 展開形（和表示）との型不一致が発生。
+   - 展開形総和 `∑ ... (c-b+b)^x ...` と `S0_nat` の一致を中間補題化して解消。
+5. 備考:
+   - 本補題は no-lift provider 自体を与えるものではなく、provider から `S0` 形へ移す glue。
+6. 次の課題:
+   - `PrimeProvider` 側の no-lift / squarefree 仮定から本補題へ接続する wrapper を追加する。
+
+### 日時: 2026/03/12 20:31 JST: PrimeProvider から `hS0_not_sq` への wrapper を追加
+
+1. 目的: `PrimeProvider` 側で持っている `GN 3 (c-b) b` の no-lift / squarefree 仮定を、
+   `Main` が要求する `hS0_not_sq` 形へ直接接続する。
+2. 内容:
+   - `DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNNoWieferich.lean` に以下を追加:
+     - `hS0_not_sq_of_noLift_GN_d3`
+     - `hS0_not_sq_of_squarefree_GN_d3`
+   - 証明接続:
+     - no-lift 版は `cyclotomicPrimeCore_eq_GN_nat` で仮定を core 側へ移し、
+       `hS0_not_sq_of_noLift_cyclotomicPrimeCore_d3` へ渡す。
+     - squarefree 版は `not_sq_dvd_of_squarefree` で no-lift を抽出して
+       no-lift wrapper に合成する。
+   - 検証:
+     - `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich`
+     - `lake build DkMath.FLT.Main`
+     ともに成功。
+3. 結論: PrimeProvider の仮定をそのまま `hS0_not_sq` に落とせる導線ができ、
+   `Main` 側での仮定供給が薄い glue で統一できた。
+4. 失敗事例:
+   - 初回実装で `simpa` による展開が過剰に進み、`cyclotomicPrimeCore` 展開和と `GN` 展開和の型不一致が発生。
+   - `rw [← hcore_eq_GN]` の明示書き換えへ変更して解消。
+   - 追加で implicit dependent binder 推論が崩れたため、`intro q ...` を明示して解消。
+5. 備考:
+   - 既存の `triomino*` bridge 群を壊さず、`d=3` 向け補助 API として追記した。
+6. 次の課題:
+   - 必要なら同様の wrapper を `boundary` 高位 API（`BoundarySide`）へ揃えて公開する。
+
+### 日時: 2026/03/12 20:45 JST: `BoundarySide` 高位 API へ同型 wrapper を追加公開
+
+1. 目的: 右/左個別の valuation bridge と同じ粒度で、`BoundarySide` 側にも
+   「gap 非除法前提」と「前提正規化（coprime + boundary 除法）」の二層 API を揃える。
+2. 内容:
+   - `DkMath/CFBRC/Bridge.lean` に高位 API を追加:
+     - `padicValNat_boundaryDiffPow_eq_boundaryGN_of_not_dvd_gap`
+     - `padicValNat_boundaryDiffPow_eq_boundaryCyclotomicPrimeCore_of_not_dvd_gap`
+   - 既存の `..._of_coprime_of_dvd_boundary` 2本を整理:
+     - `Nat.Coprime x u` と境界除法（`q ∣ u` or `q ∣ x`）から gap 非除法を導出
+     - 新しい `..._of_not_dvd_gap` 高位 API へ委譲する構成へ変更
+   - 左境界は変数入替え（`x ↔ u`）で既存右境界 bridge を再利用。
+   - 検証:
+     - `lake build DkMath.CFBRC.Bridge`
+     - `lake build DkMath.CFBRC`
+     ともに成功。
+3. 結論: `BoundarySide` 公開 API が
+   - 直接適用層（`not_dvd_gap`）
+   - 前提正規化層（`coprime + dvd_boundary`）
+   の二層で統一され、利用導線が右/左対称に揃った。
+4. 失敗事例: 特になし（既存 API との後方互換を保ったまま拡張できた）。
+5. 備考:
+   - 今回は valuation bridge を対象に統一。`boundary` 側の存在論 API は未追加。
+6. 次の課題:
+   - 必要なら `BoundarySide` に対応した存在論（primitive prime existence）高位 API も検討する。
+
+### 日時: 2026/03/12 20:58 JST: `BoundarySide` 対応の存在論（primitive prime existence）高位 API を追加
+
+1. 目的: valuation だけでなく存在論（`∃ q`）も `BoundarySide` で左右統一し、
+   `right/left` それぞれを単一入口から利用できるようにする。
+2. 内容:
+   - `DkMath/CFBRC/Bridge.lean` に以下を追加:
+     - `exists_primitive_prime_factor_boundaryDiffPow_of_prime_exp_boundary_of_coprime`
+     - `exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime`
+   - API 仕様:
+     - 入力: `side`, `Nat.Prime d`, `3 ≤ d`, `0 < x`, `0 < u`, `Nat.Coprime x u`,
+       および side 依存の gap 条件（`right: ¬ d ∣ x`, `left: ¬ d ∣ u`）
+     - 出力: side 指定の差分式 / core を割る primitive prime `q` と、
+       `0 < k < d` に対する低次差分非除法（side 指定）を返す。
+   - 実装方針:
+     - `right` は既存の `_of_coprime` existence API へ直接委譲。
+     - `left` は `x,u` を入れ替えて既存 API を再利用し、
+       `Nat.add_comm` で差分式を side 形へ戻す。
+   - 検証:
+     - `lake build DkMath.CFBRC.Bridge`
+     - `lake build DkMath.CFBRC`
+     ともに成功。
+3. 結論: `BoundarySide` 高位 API が valuation 層だけでなく存在論層でも揃い、
+   CFBRC 公開導線の左右対称性が強化された。
+4. 失敗事例:
+   - 追加した theorem 名が長く style warning を出したため、
+     core 版の公開名を短縮（`...boundaryCore...`）して解消。
+5. 備考:
+   - primitive 条件は `boundaryDiffPow side k x u` で統一して返す。
+6. 次の課題:
+   - 必要なら `BoundarySide` 版の no-lift / squarefree provider 接続も同様に追加する。

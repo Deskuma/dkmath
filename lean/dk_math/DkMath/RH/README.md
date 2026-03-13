@@ -1,167 +1,66 @@
-# DkMath.RH：位相ドリフト骨格 + EulerZeta（現状の全コード）
+# DkMath.RH
 
-- Authors: D. and Kenro (ChatGPT-5.2)
-- Last updated: 2026/03/13 00:31
+`DkMath.RH` は、Riemann Hypothesis 周辺の解析を
+「prime-local contribution（素数ごとの局所寄与）」で観測するための Lean モジュール群です。
 
-このディレクトリは、リーマンゼータ関数に差し込む前に必要な
+ここでの実装目標は、RH の即時証明主張ではなく、次を機械検証可能な API として整備することです。
 
-- 「複素関数の位相（角度）の変化＝位相速度」を Lean で扱う骨格
-- その骨格を使って定義した **EulerZeta（magnitude/phase）** の無限積を、収束・正値まで含めて固める
+- 位相ドリフト骨格（`phaseVel`, `driftFreeAt`, `phaseCurv`）
+- Euler 因子の局所観測（`w_p`, factor phase velocity）
+- 有限 Euler 積での停留・非退化停留判定
+- CFBRC と接続可能な HOPC 観測量（寄与総和）公開
 
-ためのモジュール群です。
+## 入口
 
-重要方針は 2 つ：
+- 実装トップ: `DkMath/RH.lean`
+- 詳細解説（長文）: `DkMath/RH/docs/README.md`
+- 方針文書: `DkMath/RH/docs/HOPC-RH.txt`
+- ロードマップ: `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+- 用語集: `DkMath/RH/docs/HOPC-RH-Glossary.md`
+- 未解決タスク: `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+- CFBRC 連携議論: `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+- 実装履歴: `DkMath/RH/docs/RH_Implements_History.md`
 
-1. `arg`（偏角）を直接扱わず、**位相を積分で定義（アンラップ）** して枝問題を回避する。
-2. 位相付き Euler 因子を「magnitude（大きさ）」と「phase（位相）」に分解し、
-   まず magnitude の無限積を **σ > 1 で収束する**ことまで Lean で確定する。
-
-このファイルは詳細版（理論背景・証明戦略）であり、
-入口と API 一覧は `DkMath/RH/README.md` を優先参照とする。
-実装計画の 1 枚版は `HOPC-RH-Roadmap.md` を参照。
-語彙の定義域整理は `HOPC-RH-Glossary.md` を参照。
-未解決タスク一覧は `HOPC-RH-OpenProblems.md` を参照。
-
----
-
-## 論文
-
-このモジュール群の理論的背景は、次の論文に基づきます。
-
-- [Euler Zeta Function ζe(s): A Novel Approach to Prime Distribution through Scale Analysis](./EulerZetaFunction-v0-1.pdf)
-  - March 15, 2025
-  - Author: D. and Kenro (ChatGPT-4o)
-  - cid: 67d46595-3550-8009-896d-00c3263c4f23
-
-### オイラーゼータ関数
-
-$$
-  \Large
-  \zeta_e(s) = \prod_{p} \frac{e^{\sigma \log p}}{| e^{(\sigma+it) \log p} - 1 |}
-$$
-
-オイラー積表示より導出されたゼータ関数の変形版で、位相因子を含むものを指します。
-
-#### オイラー積表示
-
-$$
-  \large
-  \zeta(s) = \prod_{p} \frac{1}{1 - p^{-s}}
-$$
-
-$$
-  \left(
-  \frac{1}{1 - p^{-s}}
-  = \frac{p^s}{p^s - 1}
-  = \frac{\exp(s\ln p)}{\exp(s\ln p) - 1}
-  \right)
-$$
-
-※ $s = \sigma + it$ : 複素数変数
-
----
-
-## ファイル構成（現状）
-
-### 位相ドリフト骨格
-
-- `Basic.lean`
-  空ファイル（予約）。将来の共通設定や再輸出（re-export）置き場候補。
+## ファイル構成（実装）
 
 - `Defs.lean`
-  定義置き場（記号・概念の導入のみ）。
-
+  - `vertical`, `torque`, `phaseVel`, `phaseUnwrap`, `driftFreeAt`, `phaseCurv`
 - `Lemmas.lean`
-  定義間の関係を示す補題（代数コア、同値、別表現など）。
-
+  - 位相速度の代数公式、積・商・逆数法則、停留同値
 - `Theorems.lean`
-  積分で定義した位相が期待通り微分できること（解析骨格）を示す定理。
-
-### EulerZeta（今回追加された成果）
-
+  - `phaseUnwrap` の微分に関する基礎定理
 - `EulerZeta.lean`
-  EulerZeta（magnitude/phase）に関する公開インタフェース（定義の再輸出、主要定理の提示）。
-
+  - Euler 因子 / 有限積 / 局所位相寄与
+  - HOPC 公開定義:
+    - `hopcPrimeLocalContribution`
+    - `hopcPrimeContributionSum`
 - `EulerZetaLemmas.lean`
-  EulerZeta の局所補題集：
-  分母 `w = exp((σ+it)log p) - 1` の非零、`‖a_p - 1‖` の評価など。
-
+  - 単一素数因子の導関数・位相速度
+  - 有限積の積→和補題
+  - `driftFreeAt` / `stationaryAt` / `nondegenerateStationaryAt` と
+    HOPC 寄与総和の同値
 - `EulerZetaConvergence.lean`
-  収束と正値の主証明：
-  `σ > 1` のもとで `EulerZetaMagMultipliable` と `0 < eulerZetaMag` を確定。
+  - `σ > 1` での magnitude 無限積収束と正値
+- `CFBRCBridge.lean`
+  - CFBRC の primitive-prime existence から RH 側 singleton 停留判定へ接続する bridge
 
----
+## 主要 API（RH-N31 時点）
 
-## 位相ドリフト骨格：到達点（短く）
-
-- 位相速度 `phaseVel` を `torque / normSq` として代数的に扱えるようにした。
-- 「ドリフト消失」は「位相速度ゼロ」と同値になった（零点回避 `f t ≠ 0` を条件に）。
-- `arg` を使わず、位相を積分で定義した上で、微分が正しく戻ることを示した。
-
-（詳細は [DkMath_RH.md](./DkMath_RH.md) を参照）
-
----
-
-## EulerZeta：定義と成果（短く）
-
-### 定義（magnitude / phase）
-
-素数ごとに
-
-- 分母（複素数）
-  `w(p,σ,t) := exp((σ+it)log p) - 1`
-
-- magnitude 因子（実数）
-  `a_p(σ,t) := exp(σ log p) / ‖w(p,σ,t)‖`
-
-を定義し、EulerZeta magnitude を
-
-- `eulerZetaMag (σ t : ℝ) : ℝ := ∏' p : {p // Nat.Prime p}, a_p(σ,t)`
-
-として無限積（`tprod`）で定義します。
-
-また位相は
-
-- `eulerZetaPhase (p) (σ t) := Complex.arg (w(p,σ,t))`
-
-として別途導入します（位相骨格の側は `arg` を直接使わずにアンラップへ接続する予定）。
-
-### 主定理（σ > 1）
-
-- `eulerZetaMag_multipliable_sigma_gt_one`
-  `σ > 1` のもとで EulerZeta magnitude の無限積が収束（`Multipliable`）。
-
-- `eulerZetaMag_pos_sigma_gt_one`
-  `σ > 1` のもとで `0 < eulerZetaMag σ t`。
-
-### 証明戦略（要点）
-
-1. `w(p,σ,t) ≠ 0` を確定（定義が安全になる）。
-2. 近似評価：`‖a_p(σ,t) - 1‖ ≤ 2 / p^σ`（σ > 1）。
-3. `∑ 1/n^σ`（p-series）へ比較して `Summable` を得る。
-4. Mathlib の一般定理で `Multipliable` と `tprod` の正値へ落とす。
-
----
-
-## 現状 API（HOPC 公開名・RH-N31 時点）
-
-CFBRC 連携で使う公開名は次を基準とする。
-
-- 観測量（`EulerZeta.lean`）
-  - `hopcPrimeLocalContribution`
-  - `hopcPrimeContributionSum`
-- 同一化（`EulerZetaLemmas.lean`）
-  - `eulerZetaFactorPhaseVelFinite_eq_hopcPrimeContributionSum`
-- 停留判定（`EulerZetaLemmas.lean`）
+- HOPC 観測量:
+  - `hopcPrimeLocalContribution p σ t`
+  - `hopcPrimeContributionSum S σ t`
+- 停留判定（有限 Euler 積）:
   - `driftFreeAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero`
   - `stationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero`
   - `nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum`
-- CFBRC 連携 bridge（`CFBRCBridge.lean`）
-  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge`
-  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge_of_local`
+- CFBRC 連携 bridge（singleton）:
+  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge`（global 仮定版）
+  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge_of_local`（local 仮定版）
+- CFBRC 連携 bridge（small finite-set）:
   - `stationaryAt_insert_of_hopcPrimeContributionSum_eq_zero`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_split`
+- CFBRC 連携 bridge（`BoundarySide` 統一）:
   - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_local`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split`
@@ -210,24 +109,22 @@ CFBRC 連携で使う公開名は次を基準とする。
   - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0`
   - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_and_local_zero`
 
-補足:
-- 上記公開名は明示和
-  `∑_{p∈S} (log p - phaseVel(w_p))`
-  の alias/wrapper 層として設計されている。
-- `RH-CFBRC-Discussion.md` の `Implementation Bridge (RH-H1/H2)` と対応。
-
----
-
 ## 利用例（import）
 
-RH 側 API を使う最小例:
+```lean
+import DkMath.RH
+
+open DkMath.RH.EulerZeta
+```
+
+必要最小だけ使う場合:
 
 ```lean
 import DkMath.RH.EulerZeta
 import DkMath.RH.EulerZetaLemmas
 ```
 
-CFBRC 連携 bridge まで使う例:
+CFBRC 連携 bridge まで使う場合:
 
 ```lean
 import DkMath.RH.CFBRCBridge
@@ -235,13 +132,16 @@ import DkMath.RH.CFBRCBridge
 open DkMath.RH.EulerZeta
 ```
 
-`BoundarySide` + small finite-set（split 仮定）テンプレート:
+`BoundarySide` 高位 API（split 仮定）を使う最小テンプレート:
 
 ```lean
 import DkMath.RH.CFBRCBridge
 
 open DkMath.RH.EulerZeta
 
+-- side : DkMath.CFBRC.BoundarySide
+-- hpnd : match side with | .right => ¬ d ∣ x | .left => ¬ d ∣ u
+-- hS_lift / hsum_lift は insert p S 上の仮定供給器
 example (side : DkMath.CFBRC.BoundarySide)
     (S : Finset {q // Nat.Prime q})
     {d x u : ℕ} {σ t : ℝ}
@@ -269,7 +169,7 @@ example (side : DkMath.CFBRC.BoundarySide)
       hd_prime hd_ge hx hu hcop hpnd hS_lift hsum_lift
 ```
 
-`BoundaryInsertLocalLiftProvider`（provider record）テンプレート:
+`BoundaryInsertLocalLiftProvider` を使う最小テンプレート:
 
 ```lean
 import DkMath.RH.CFBRCBridge
@@ -562,32 +462,7 @@ example (side : DkMath.CFBRC.BoundarySide)
       hd_prime hd_ge hx hu hcop hpnd hS_dvd hS_gap hwnz_diff hfactor_diff0
 ```
 
----
+## 注意
 
-## `#print axioms` に `sorryAx` が出る件について（メモ）
-
-ソース（`.lean`）上に `sorry` が無いのに `#print axioms` で `sorryAx` が見える場合、
-典型的には次のどちらかです：
-
-- 古い `.olean` が残っている（ビルドキャッシュ混入）
-- 依存先（環境側）に `sorryAx` を含むものがある
-
-まずは `lake clean` と `.lake/build` の再生成で切り分けるのが確実です。
-
-なお `propext / Classical.choice / Quot.sound` は、Mathlib を普通に使うと出やすい標準的な依存です。
-
----
-
-## 次にやると自然な拡張（予定メモ）
-
-- EulerZeta の phase 側を、位相骨格（アンラップ位相）へ接続する：
-  `arg` を直接扱わず、`phaseUnwrap` で連続位相として扱う。
-- σ 方向（横方向）でも同型テンプレートを作る：
-  `phaseVelSigma` / `phaseUnwrapSigma`。
-- ゼータ差し込みのための仮定（零点回避・可微分性・可積分性）を整理してまとめる。
-
----
-
-VSCode and GitHub Markdown $\LaTeX$ Style Documentation
-
-This document uses GitHub-flavored Markdown and $\LaTeX$ for mathematical expressions. To render the $\LaTeX$ expressions correctly, ensure that your Markdown viewer supports MathJax or a similar library.
+- 本層は「観測器 API の整備」を主目的とし、RH の完全証明を主張しません。
+- `arg` の枝問題は避け、`phaseVel` / `phaseUnwrap` 中心で整理します。

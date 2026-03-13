@@ -6,6 +6,7 @@ LOG_DIR="logs"  # Directory to store logs data
 SUMMARY_REPORT_DIR="$LOG_DIR/summary_report"  # Directory to store final summary report
 REPORT_DIR="$LOG_DIR/reports"  # Directory to store generated reports archives
 ARCHIVE_NAME="$LOG_DIR/__summary_report_data.tar.gz"
+SUMMARY_TIMESTAMP=$(date +%y%m%d-%H%M%S)
 
 # Ensure directories exist
 mkdir -p "$LOG_DIR" "$SUMMARY_REPORT_DIR" "$REPORT_DIR"
@@ -61,6 +62,7 @@ rg -n "^import\s+" lean/dk_math/DkMath -S --heading | tee "$SUMMARY_REPORT_DIR/_
 git diff mark-summary-report | awk 'BEGIN {IGNORE_FLAG=0} /diff --git/{ if ($0 ~ /\.vscode/) {IGNORE_FLAG=1} else {IGNORE_FLAG=0} } !IGNORE_FLAG {print}' | tee "$SUMMARY_REPORT_DIR/__git_diff_summary_report.txt" || true
 # update the tag to mark the current summary report state
 git tag -d mark-summary-report && git tag mark-summary-report || true
+git tag "summary-report-$SUMMARY_TIMESTAMP"
 
 # archive the logs (saved in $LOG_DIR to avoid self-inclusion)
 tar -czf "$ARCHIVE_NAME" -C "$SUMMARY_REPORT_DIR" .
