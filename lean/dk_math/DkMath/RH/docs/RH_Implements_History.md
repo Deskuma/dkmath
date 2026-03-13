@@ -839,3 +839,906 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-N1 として、OP-003 先行方針に沿い
      singleton bridge（J2/J3）を small finite-set へ一般化する
      API スケッチを `CFBRCBridge.lean` に追加する。
+
+### 日時: 2026/03/13 03:13 JST: Phase RH-N1 を実装（small finite-set への API スケッチ）
+
+1. 目的: OP-003 先行方針に沿い、singleton bridge から
+   `insert p S` 形の small finite-set 観測器へ拡張する入口 API を用意する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+   - 追加補題:
+     - `stationaryAt_insert_of_hopcPrimeContributionSum_eq_zero`
+       （`insert p S` 上の非零前提 + 寄与総和ゼロから停留）
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local`
+       （CFBRC primitive-prime existence と `hlift` 仮定を合成した
+        small finite-set 版 bridge スケッチ）
+3. 結論: CFBRC→RH bridge を singleton 専用から一段抽象化し、
+   finite-set 拡張へ進むための最小 API 骨格を実装できた。
+4. 失敗事例: なし（初回実装でビルド通過）。
+5. 備考:
+   - `hlift` は翻訳層の仮定を保持したスケッチ設計。
+   - 既存 J2/J3 補題はそのまま残し、後方互換を維持。
+6. 次の課題:
+   - RH-N2 として、`hlift` の仮定を分解して
+     `hS_ne` 供給部分と `hopcPrimeContributionSum=0` 供給部分を
+     個別 wrapper 化し、small finite-set bridge の再利用性を上げる。
+
+### 日時: 2026/03/13 03:20 JST: Phase RH-N2 を実装（`hlift` 分解版 bridge 追加）
+
+1. 目的: RH-N1 の `hlift` 一括仮定を分解し、
+   非零前提と寄与総和ゼロ前提を別々に再利用できる API へ整理する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+   - 追加補題:
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_split`
+       （`hS_lift` と `hsum_lift` を分離した small finite-set bridge）
+   - 互換対応:
+     - 既存 `exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local`
+       は残し、従来の `hlift` 一括入力を受ける wrapper として維持。
+3. 結論: small finite-set bridge の仮定設計が分離され、
+   翻訳レイヤで `w_r ≠ 0` と `hopcPrimeContributionSum=0` を独立供給できる形になった。
+4. 失敗事例:
+   - 初回実装で wrapper から split 補題を先行参照し、
+     `Unknown identifier` が発生。
+   - wrapper 本体を直接証明へ戻して forward reference を解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N3 として、`BoundarySide` と対応づけた finite-set 向け高位 API
+     （left/right 共通インターフェース）を検討し、
+     CFBRC 側 boundary 正規化 wrapper と接続する。
+
+### 日時: 2026/03/13 03:23 JST: Phase RH-N3 を実装（`BoundarySide` 高位 API 公開）
+
+1. 目的: RH 側 bridge でも left/right 境界を統一的に扱えるよう、
+   `BoundarySide` パラメータ付きの高位 API を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+   - 追加補題:
+     - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_local`
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split`
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local`
+   - 設計:
+     - `right` は既存 bridge へ直接委譲。
+     - `left` は `(x,u)` を `(u,x)` に入れ替えて既存 bridge を再利用。
+3. 結論: singleton と small finite-set の両方で、
+   boundary 側の前提を 1 つの API 群で受けられるようになった。
+4. 失敗事例:
+   - 初回実装は `match side` 依存型引数の適用で型不一致が発生。
+   - `cases side` による左右分岐 + 既存補題委譲へ変更して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N4 として、`BoundarySide` 高位 API の利用例を
+     `RH/docs/RH-CFBRC-Discussion.md` と `RH/README.md` に反映し、
+     実利用時の仮定テンプレート（`hS_lift`/`hsum_lift`）を明示する。
+
+### 日時: 2026/03/13 03:25 JST: Phase RH-N4 を実装（BoundarySide 利用テンプレート文書化）
+
+1. 目的: RH-N3 で追加した `BoundarySide` 高位 API の利用導線を文書へ反映し、
+   実装側の仮定テンプレートを利用者がそのまま再利用できる状態にする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+   - 追記内容:
+     - `README.md`
+       - 主要 API を RH-N3 時点へ更新
+       - `BoundarySide` 統一 bridge（singleton / insert / split）を列挙
+       - `..._boundary_bridge_of_local_split` の最小利用テンプレートを追加
+     - `RH-CFBRC-Discussion.md`
+       - `Implementation Bridge (RH-N4: BoundarySide 高位 API)` セクションを追加
+       - `hS_lift` / `hsum_lift` の分離前提を明示
+       - split 版 bridge の最小テンプレートを追加
+3. 結論: API 追加とドキュメントが同期され、
+   `BoundarySide` + small finite-set bridge の利用入口が明文化された。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+   - テンプレートは `BoundarySide` 統一版の推奨入口（split 仮定）を採用。
+6. 次の課題:
+   - RH-N5 として、`DkMath/RH/docs/README.md` にも同等の
+     `BoundarySide` 利用テンプレートを同期し、README 間の API 導線を統一する。
+
+### 日時: 2026/03/13 03:26 JST: Phase RH-N5 を実装（docs README へ BoundarySide テンプレート同期）
+
+1. 目的: `DkMath/RH/README.md` と `DkMath/RH/docs/README.md` の
+   API 導線を一致させ、BoundarySide 高位 API の参照先を一意化する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/README.md`
+   - 追記内容:
+     - `現状 API` 見出しを RH-N5 時点へ更新
+     - CFBRC bridge 一覧に RH-N1〜N3 の補題群を追加
+     - `BoundarySide` + small finite-set（split 仮定）の最小テンプレートを追加
+3. 結論: RH の 2 README で `BoundarySide` bridge の利用手順が同期され、
+   実装側の仮定テンプレート参照が統一された。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+   - `RH-CFBRC-Discussion.md` 側の RH-N4 セクションと内容整合済み。
+6. 次の課題:
+   - RH-N6 として、`HOPC-RH-Roadmap.md` / `HOPC-RH-OpenProblems.md` の
+     OP-003 状態を RH-N3/N5 到達点に合わせて更新する。
+
+### 日時: 2026/03/13 11:30 JST: Phase RH-N6 を実装（Roadmap/OpenProblems の OP-003 状態更新）
+
+1. 目的: RH-N3/N5 までの到達状況を計画文書へ反映し、
+   OP-003 の進捗と残課題を明示して次段着手点を固定する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 更新内容:
+     - `Roadmap`:
+       - Next Sprint を「OP-003 継続 + OP-001 着手」へ更新
+       - OP-003 の到達済み項目（N1〜N5）と次の焦点（provider 直結）を明記
+     - `OpenProblems`:
+       - OP-003 を「未実装」から「進行中」へ更新
+       - 到達済み（singleton/small finite-set/BoundarySide/docs同期）を列挙
+       - 残タスク（`hS_lift` / `hsum_lift` 供給、OP-001 再利用仮定化）を追加
+3. 結論: OP-003 は API 骨格完成フェーズを通過し、
+   次は provider 供給層と finite→infinite 接続を主軸に進める段階へ移行した。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+   - OP-003 の優先度は高のまま維持（継続）。
+6. 次の課題:
+   - RH-N7 として、provider 側の最小実装に向け
+     `hS_lift` / `hsum_lift` を生成する抽象インターフェースを
+     `CFBRCBridge.lean` 近傍へ設計する。
+
+### 日時: 2026/03/13 11:34 JST: Phase RH-N7 を実装（`hS_lift` / `hsum_lift` provider interface）
+
+1. 目的: small finite-set bridge で必要な split 仮定
+   (`hS_lift` / `hsum_lift`) を provider 層から渡しやすくする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+   - 追加実装:
+     - `BoundaryInsertLocalLiftProvider` 構造体
+       （`BoundarySide` + `insert p S` 用の `hS_lift` / `hsum_lift` を束ねる record）
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider`
+       （provider record を受けて split bridge へ委譲する wrapper）
+3. 結論: RH 側 bridge に provider 直結入口を追加でき、
+   翻訳層は record 1 個で `BoundarySide` small finite-set 停留補題へ接続可能になった。
+4. 失敗事例:
+   - 初回 wrapper 実装で `match side, hpnd` 由来の依存型不一致が発生。
+   - `cases side` 分岐へ変更して型差を解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N8 として、`BoundaryInsertLocalLiftProvider` を使う
+     最小利用例を `RH/README.md` と `RH/docs/RH-CFBRC-Discussion.md` に追記し、
+     provider 設計の導入導線を固定する。
+
+### 日時: 2026/03/13 11:40 JST: Phase RH-N8 を実装（provider 利用例の文書導線化）
+
+1. 目的: RH-N7 で追加した provider interface の利用入口を
+   README / Discussion に明示し、split 仮定版との使い分けを固定する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+   - 追記内容:
+     - `README.md`
+       - `BoundarySide` API 一覧へ
+         `BoundaryInsertLocalLiftProvider` と
+         `..._boundary_bridge_of_provider` を追加
+       - provider record 版の最小テンプレートを追加
+     - `RH-CFBRC-Discussion.md`
+       - RH-N4 セクションの公開 API に provider 系を追加
+       - `Implementation Bridge (RH-N8: Provider record 直結)` を新設
+       - split 版と provider 版の使い分けを明示
+3. 結論: provider 設計の導入導線が文書上で確立し、
+   bridge 利用者は「関数2本」か「record 1個」かで入口を選べるようになった。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+   - RH-N7 の実装補題名とテンプレート記述の整合を確認済み。
+6. 次の課題:
+   - RH-N9 として、`DkMath/RH/docs/README.md` にも provider 版テンプレートを同期し、
+     README 間で RH-N8 導線を統一する。
+
+### 日時: 2026/03/13 11:49 JST: Phase RH-N9 を実装（docs README へ provider テンプレート同期）
+
+1. 目的: RH-N8 で整備した provider 導線を
+   `DkMath/RH/docs/README.md` にも同期し、README 間の参照体験を一致させる。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/README.md`
+   - 追記内容:
+     - `現状 API` 見出しを RH-N9 時点へ更新
+     - CFBRC bridge 一覧に
+       `BoundaryInsertLocalLiftProvider` と
+       `..._boundary_bridge_of_provider` を追加
+     - provider record 版の最小テンプレートを追加
+3. 結論: `RH/README.md` と `RH/docs/README.md` の
+   provider 利用導線が同期され、split 版 / provider 版の両入口が一致した。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+   - RH-N8 の Discussion 記述との整合を維持。
+6. 次の課題:
+   - RH-N10 として、`HOPC-RH-OpenProblems.md` の OP-003 残タスクに
+     provider 実装進捗（RH-N7〜N9）を反映し、
+     次の実装対象（provider 実体供給補題）を明示する。
+
+### 日時: 2026/03/13 11:51 JST: Phase RH-N10 を実装（OP-003 残タスクの provider 進捗反映）
+
+1. 目的: OpenProblems 側の OP-003 記述を RH-N7〜N9 の進捗に合わせて更新し、
+   「入口整備済み / 実体供給未完」の境界を明確化する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 更新内容:
+     - OP-003 の状態文言を RH-N1〜N9 到達へ更新
+     - 到達済みに provider 入口（record + wrapper）を追加
+     - 残タスクを provider 実体供給補題中心へ具体化
+       （`hS_lift` / `hsum_lift` 構成と供給源整理）
+3. 結論: OP-003 は「bridge API 導線整備」段を完了し、
+   次の実装対象が provider 供給補題群であることを文書上で固定できた。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+   - OP-003 の優先度は高（継続）のまま維持。
+6. 次の課題:
+   - RH-N11 として、`CFBRCBridge.lean` に
+     provider 供給補題の最小スケッチ（`hS_lift` 供給器の雛形）を追加し、
+     実体供給層へ着手する。
+
+### 日時: 2026/03/13 11:54 JST: Phase RH-N11 を実装（provider 供給補題の最小スケッチ）
+
+1. 目的: RH-N10 で明確化した「provider 実体供給」へ着手するため、
+   split/pair 仮定から provider record を構成する最小補題を実装する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+   - 追加実装:
+     - `boundaryInsertLocalLiftProvider_of_split`
+       （`hS_lift` / `hsum_lift` から `BoundaryInsertLocalLiftProvider` を構成）
+     - `boundaryInsertLocalLiftProvider_of_pair`
+       （既存 pair 形式 `hlift` から provider を構成）
+3. 結論: provider record への「供給入口」が補題化され、
+   以後は供給側が split 形式または pair 形式で証明を作っても
+   provider API へ同一手順で接続できるようになった。
+4. 失敗事例:
+   - `boundaryInsertLocalLiftProvider_of_pair` の初回実装で
+     `match side` 依存型不一致が発生。
+   - `cases side` で right/left を固定して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N12 として、provider 実体供給の最初の候補として
+     nonzero 前提 (`hS_lift`) だけを組み立てる補題群を導入し、
+     `hsum_lift` 側と段階分離した実装計画へ進む。
+
+### 日時: 2026/03/13 11:59 JST: Phase RH-N12 を実装（`hS_lift` 段階供給補題の導入）
+
+1. 目的: provider 供給実装を段階分離するため、
+   `hS_lift` を「`S` 上非零 + witness 非零」から合成する補題群を導入する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+   - 追加実装:
+     - `boundary_hS_lift_of_nonzero_on_S_and_witness`
+       （`hS_nonzero` と `hwnz_witness` から `hS_lift` を構成）
+     - `boundaryInsertLocalLiftProvider_of_nonzero_on_S_and_witness`
+       （上記 `hS_lift` 合成 + 既存 `hsum_lift` で provider record を構成）
+3. 結論: `hS_lift` 供給が独立補題として切り出され、
+   今後は `hsum_lift` の供給研究を別ラインで進められる構造になった。
+4. 失敗事例:
+   - 初回実装で `match side` 依存型不一致と `insert` 分岐での同一視ミスが発生。
+   - `cases side` 分岐固定 + `simpa [hr_eq]` による同一視へ修正して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N13 として、`hsum_lift` 供給候補（local contribution 由来）の
+     最小 wrapper 設計を追加し、
+     provider 実体供給の両輪（nonzero/sum-zero）を揃える。
+
+### 日時: 2026/03/13 12:02 JST: Phase RH-N13 を実装（`hsum_lift` 段階供給 wrapper）
+
+1. 目的: RH-N12 で先行した `hS_lift` 供給に対応して、
+   `hsum_lift` 側も local contribution 由来で段階供給できる補題を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+   - 追加実装:
+     - `boundary_hsum_lift_of_local_zero_on_S_and_witness`
+       （`S` 上 local=0 + witness local=0 から `hopcPrimeContributionSum(insert p S)=0` を構成）
+     - `boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero_on_S_and_witness`
+       （RH-N12 の `hS_lift` 供給と RH-N13 の `hsum_lift` 供給を統合した provider 構成）
+3. 結論: provider 実体供給の両輪（nonzero/sum-zero）が揃い、
+   `BoundaryInsertLocalLiftProvider` への段階供給導線が完結した。
+4. 失敗事例:
+   - 初回実装で `match side` 依存型不一致が発生。
+   - `cases side` で分岐固定して `hS_lift` / `hsum_lift` を組み立てる形へ修正。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N14 として、RH README / Discussion に
+     RH-N12/N13 の段階供給テンプレート（nonzero/local-zero から provider 生成）を追記し、
+     provider 実体供給の利用例を公開導線へ反映する。
+
+### 日時: 2026/03/13 12:16 JST: Phase RH-N14 を実装（段階供給テンプレートの公開導線反映）
+
+1. 目的: RH-N12/N13 で追加した段階供給補題を
+   README / Discussion の公開導線に反映し、利用入口を明確化する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+   - 追記内容:
+     - `README.md`
+       - 主要 API 見出しを RH-N14 時点へ更新
+       - 段階供給補題 4 本を API 一覧へ追加
+       - nonzero/local-zero から provider を生成する最小テンプレートを追加
+     - `RH-CFBRC-Discussion.md`
+       - `Implementation Bridge (RH-N14: 段階供給から provider 生成)` を追加
+       - RH-N12/N13 補題の役割整理と最小テンプレートを追記
+3. 結論: provider 実体供給の実装導線が文書化され、
+   split 版 / provider 版 / 段階供給版の 3 入口が利用者に明示された。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし（RH-N13 で完了済み）。
+   - `docs/README.md` は次フェーズで同等テンプレート同期予定。
+6. 次の課題:
+   - RH-N15 として、`DkMath/RH/docs/README.md` にも RH-N14 の
+     段階供給テンプレートを同期し、README 間の導線差分を解消する。
+
+### 日時: 2026/03/13 12:18 JST: Phase RH-N15 を実装（docs README へ段階供給テンプレート同期）
+
+1. 目的: RH-N14 で追加した段階供給導線を `DkMath/RH/docs/README.md` に同期し、
+   README 間の API/テンプレート差分を解消する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/README.md`
+   - 追記内容:
+     - `現状 API` 見出しを RH-N15 時点へ更新
+     - CFBRC bridge 一覧へ段階供給補題 4 本を追加
+     - nonzero/local-zero から provider を構成する最小テンプレートを追加
+3. 結論: `RH/README.md` と `RH/docs/README.md` の導線が揃い、
+   split 版 / provider 版 / 段階供給版の 3 入口が両 README で一貫した。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし（RH-N13 までで完了）。
+   - `RH-CFBRC-Discussion.md` の RH-N14 セクションと内容整合済み。
+6. 次の課題:
+   - RH-N16 として、`HOPC-RH-OpenProblems.md` の OP-003 到達済みに
+     RH-N12〜N15（段階供給導線）を反映し、残タスクを provider 実供給補題へ再整理する。
+
+### 日時: 2026/03/13 12:20 JST: Phase RH-N16 を実装（OP-003 到達済み/残タスクの再整理）
+
+1. 目的: RH-N12〜N15 の到達点を OP-003 に反映し、
+   「導線整備済み」と「実供給未完」の境界を最新状態へ更新する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 更新内容:
+     - OP-003 状態文言を RH-N1〜N15 到達へ更新
+     - 到達済みに段階供給補題群（`hS_lift` / `hsum_lift` 系）を追加
+     - 残タスクを provider 実供給補題へ具体化
+       （`hS_nonzero`, `hS_local0`, `hlocal_witness` の実供給補題）
+3. 結論: OP-003 は橋渡し API と段階供給導線を確保済みで、
+   次段は供給源の実補題実装に集中すべき状態へ整理された。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+   - OP-003 優先度は高（継続）を維持。
+6. 次の課題:
+   - RH-N17 として、`hS_nonzero` を CFBRC 側条件から供給する
+     最小補題（候補1本）を `CFBRCBridge.lean` に追加し、
+     provider 実供給フェーズへ入る。
+
+### 日時: 2026/03/13 12:23 JST: Phase RH-N17 を実装（`hS_nonzero` 実供給補題の追加）
+
+1. 目的: OP-003 の実供給フェーズ着手として、
+   CFBRC 側条件（boundary 除法 + gap 非除法）から `hS_nonzero` を導出する最小補題を実装する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+   - 追加実装:
+     - `boundary_nonzero_on_S_of_boundary_dvd_and_gap`
+       （`S` 上の boundary 除法/非除法条件から `S` 上非零を供給）
+     - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_and_local_zero`
+       （上記 `hS_nonzero` と local-zero 条件を統合して provider を構成）
+3. 結論: `hS_nonzero` の実供給入口が導入され、
+   CFBRC 条件セットから provider 構成へ接続する最小ルートが成立した。
+4. 失敗事例:
+   - 初回実装で `match side` 依存型不一致が発生。
+   - `cases side` で side 固定の組立てへ修正して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N18 として、`docs/README.md` / `RH-CFBRC-Discussion.md` に
+     RH-N17 の `boundary_dvd + gap` 供給テンプレートを追記し、
+     実供給ルートを公開導線へ反映する。
+
+### 日時: 2026/03/13 12:25 JST: Phase RH-N18 を実装（`boundary_dvd + gap` 導線の文書反映）
+
+1. 目的: RH-N17 の実供給ルートを公開導線へ反映し、
+   docs 側から provider 実供給テンプレートへ直接到達できるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+   - 追記内容:
+     - `docs/README.md`
+       - API 見出しを RH-N18 時点へ更新
+       - RH-N17 追加補題 2 本を API 一覧へ追加
+       - `boundary_dvd + gap + local-zero` から provider 生成するテンプレートを追加
+     - `RH-CFBRC-Discussion.md`
+       - `Implementation Bridge (RH-N18: boundary_dvd + gap 直結供給)` セクションを追加
+       - 同テンプレートを追記
+3. 結論: RH-N17 の実供給ルートが docs 導線へ統合され、
+   実利用者は `hS_dvd` / `hS_gap` から provider 生成まで一気通貫で参照可能になった。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし（RH-N17 で完了済み）。
+   - `RH/README.md` への同等同期は次フェーズ候補。
+6. 次の課題:
+   - RH-N19 として、`RH/README.md` にも RH-N18 テンプレートを同期し、
+     README 間の公開導線を完全一致させる。
+
+### 日時: 2026/03/13 12:27 JST: Phase RH-N19 を実装（RH README へ RH-N18 導線同期）
+
+1. 目的: RH-N18 で docs 側に追加した実供給導線を
+   `DkMath/RH/README.md` に同期し、README 間の公開導線を一致させる。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/README.md`
+   - 追記内容:
+     - 主要 API 見出しを RH-N19 時点へ更新
+     - RH-N17 追加補題 2 本を API 一覧へ追加
+     - `boundary_dvd + gap + local-zero` から provider 生成するテンプレートを追加
+3. 結論: `RH/README.md` と `RH/docs/README.md` の
+   RH-N18 導線が同期され、公開導線の差分が解消された。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+   - Discussion 側 RH-N18 セクションとの整合を維持。
+6. 次の課題:
+   - RH-N20 として、`HOPC-RH-OpenProblems.md` の OP-003 到達済みに
+     RH-N17〜N19（実供給導線）を反映し、残タスクをさらに具体化する。
+
+### 日時: 2026/03/13 12:29 JST: Phase RH-N20 を実装（OP-003 到達済みと残タスクの更新）
+
+1. 目的: RH-N17〜N19 の実供給導線を OP-003 へ反映し、残タスクを実装可能粒度へ再整理する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 更新内容:
+     - OP-003 の状態を「RH-N1〜N19 到達済み」へ更新
+     - 到達済みに RH-N17 実供給導線（`boundary_nonzero_on_S_of_boundary_dvd_and_gap`、
+       `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_and_local_zero`）を反映
+     - 残タスクを provider 実供給補題（`hS_local0` / `hlocal_witness` / `hS_dvd` / `hS_gap` 接続）
+       へ再整理
+3. 結論: OP-003 は「導線整備済み・実供給拡張継続中」の境界が明確化され、
+   次段を `hS_local0` 側自動供給の実装へ集中できる状態になった。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+6. 次の課題:
+   - RH-N21 として、`hS_local0` を `boundary_dvd + gap + hlocal_witness` から
+     自動供給する補題と、前提簡約版 provider wrapper を追加する。
+
+### 日時: 2026/03/13 12:32 JST: Phase RH-N21 を実装（`hS_local0` 自動供給と前提簡約 wrapper）
+
+1. 目的: OP-003 残タスクのうち `hS_local0` 供給を実装し、
+   `boundary_dvd + gap` 系 provider 構成の前提を削減する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundary_local_zero_on_S_of_boundary_dvd_and_gap`
+       （`hS_dvd` / `hS_gap` / `hlocal_witness` から `hS_local0` を供給）
+     - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap`
+       （`hS_local0` を自動生成して RH-N17 wrapper へ委譲）
+   - 文書同期:
+     - `RH/docs/README.md` と `RH/README.md` の API 見出しを RH-N21 へ更新
+     - 新規 API 2 本を一覧へ追加
+     - `boundary_dvd + gap` テンプレートを前提簡約版へ更新
+     - OP-003 状態を RH-N1〜N21 へ更新し、残タスクから `hS_local0` 供給を除外
+3. 結論: `boundary_dvd + gap` 系 provider 構成は
+   `hS_local0` 手動供給不要の段階まで進み、OP-003 は `hlocal_witness` 実供給に主眼が移った。
+4. 失敗事例:
+   - `BoundarySide` 依存型の一致で 1 箇所型不一致が発生。
+   - `cases side` で right/left を固定して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N22 として、local contribution 側から `hlocal_witness` を供給する実補題を追加し、
+     `boundary_dvd + gap` 系 wrapper の仮定をさらに削減する。
+
+### 日時: 2026/03/13 12:42 JST: Phase RH-N22 を実装（`boundaryCore` witness からの前提正規化）
+
+1. 目的: RH-N21 の残課題である `hlocal_witness` 供給の負担を下げるため、
+   `boundaryCyclotomicPrimeCore` 側 witness 仮定から
+   `boundaryDiffPow + gap` 形式へ正規化する補題を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundary_hwnz_witness_of_boundaryCore_nonzero`
+       （core 除法仮定から `hwnz_witness` を復元）
+     - `boundary_hlocal_witness_of_boundaryCore_local_zero`
+       （core 除法仮定から `hlocal_witness` を復元）
+     - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_of_boundaryCore_witness`
+       （上記 2 補題を使って RH-N21 wrapper へ接続）
+   - 文書同期:
+     - README 2 枚の API 見出しを RH-N22 へ更新
+     - `boundaryCore witness -> provider` テンプレートを追加
+     - `RH-CFBRC-Discussion.md` の Implementation Bridge を RH-N22 内容へ更新
+     - OP-003 の状態を RH-N1〜N22 へ更新し、残タスクを `hlocal_core` 供給へ再整理
+3. 結論: `hlocal_witness` / `hwnz_witness` の供給は
+   `boundaryCore` 側仮定へ前提正規化できるようになり、
+   OP-003 は「core 側 witness 供給」を次の主タスクとして切り出せた。
+4. 失敗事例:
+   - `BoundarySide` 依存型一致で `match` 由来の型不一致が複数箇所で発生。
+   - `cases side` で right/left を固定して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+6. 次の課題:
+   - RH-N23 として、`hlocal_core` を生成する実補題
+     （例えば `boundaryCore` 上の解析条件から `hopcPrimeLocalContribution = 0` へ落とす層）
+     を設計・実装する。
+
+### 日時: 2026/03/13 12:50 JST: Phase RH-N23 を実装（factor 位相速度ゼロから `hlocal_core` 供給）
+
+1. 目的: RH-N22 の残課題を一段進め、`hlocal_core` を
+   `boundaryCore` 上の factor 位相速度ゼロ仮定から生成できるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `hopcPrimeLocalContribution_eq_eulerZetaFactorPhaseVelLocal_of_nonzero`
+       （`w_p ≠ 0` 下で HOPC 局所寄与と factor 位相速度寄与を同一化）
+     - `hopcPrimeLocalContribution_eq_zero_of_factorPhaseVelLocal_eq_zero_of_nonzero`
+       （`w_p ≠ 0` + factor 位相速度ゼロから local 寄与ゼロを導出）
+     - `boundary_hlocal_core_of_boundaryCore_factorPhaseVelLocal_eq_zero`
+       （core 除法上の factor ゼロ仮定から `hlocal_core` を供給）
+     - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryCore_factor0`
+       （RH-N22 wrapper へ委譲する前提簡約 wrapper）
+   - 文書同期:
+     - README 2 枚の API 見出しを RH-N23 へ更新
+     - `boundaryCore factor0 -> provider` テンプレートを追加
+     - `RH-CFBRC-Discussion.md` を RH-N23 内容へ更新
+     - OP-003 の状態を RH-N1〜N23 へ更新し、残タスクを `hfactor_core0` 供給へ再整理
+3. 結論: `hlocal_core` は
+   `hwnz_core + hfactor_core0` から供給できる形になり、
+   provider 構成は `boundaryCore` 上の位相速度仮定まで前提を圧縮できた。
+4. 失敗事例:
+   - 長い定理名で long-line linter 警告が発生。
+   - wrapper 名を短縮（`..._factor0`）して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N24 として、`boundaryCore` 上で `hfactor_core0` を供給する実補題
+     （解析条件 or finite-set 観測条件から `eulerZetaFactorPhaseVelLocal = 0` を導く層）
+     を追加する。
+
+### 日時: 2026/03/13 12:58 JST: Phase RH-N24 を実装（factor0 から direct existence への昇格）
+
+1. 目的: RH-N23 で整えた provider 構成を高位 API へ昇格し、
+   `boundaryCore` factor0 仮定から停留点存在までを一段で呼べるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0`
+       （RH-N23 provider wrapper + provider 版 existence を合成）
+     - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0`
+       （`S = ∅` 特化で singleton 停留点存在へ接続）
+   - 実装修正:
+     - `BoundarySide` 依存型不一致を `cases side` で解消
+     - empty-set 分岐の証明を `simp at hr` へ整理
+   - 文書同期:
+     - README 2 枚を RH-N24 へ更新し direct existence テンプレートを追加
+     - `RH-CFBRC-Discussion.md` を RH-N24 内容へ更新
+     - OP-003 を RH-N1〜N24 到達へ更新
+3. 結論: `boundaryCore` factor0 仮定から
+   provider 構成を経由せずに existence API を直接呼べるようになり、
+   利用導線が「仮定供給 -> 停留点存在」で一段短くなった。
+4. 失敗事例:
+   - 初回で `BoundarySide` 依存型の `match` 不一致が発生。
+   - `cases side` 分岐で型を固定して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N25 として、`hfactor_core0` を供給する実補題
+     （解析条件 or finite-set 観測条件から `eulerZetaFactorPhaseVelLocal = 0` を導く層）
+     を追加する。
+
+### 日時: 2026/03/13 13:05 JST: Phase RH-N25 を実装（local0 から factor0 供給 + direct existence 拡張）
+
+1. 目的: RH-N24 の残課題を進め、`hlocal_core` から `hfactor_core0` を供給し、
+   `boundaryCore local0` 仮定でも direct existence API を使えるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `eulerZetaFactorPhaseVelLocal_eq_zero_of_hopcPrimeLocalContribution_eq_zero_of_nonzero`
+       （`w_p ≠ 0` + local0 から factor0 を導出）
+     - `boundary_hfactor_core0_of_boundaryCore_local_zero`
+       （core 除法上の local0 仮定から `hfactor_core0` を供給）
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0`
+       （`hlocal_core` から direct existence へ接続）
+     - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0`
+       （singleton 特化版）
+   - 実装修正:
+     - `BoundarySide` 依存型不一致は `cases side` で固定して解消
+     - long-line/不要 simpa 警告は alias 導入と `simp at hr` で解消
+   - 文書同期:
+     - README 2 枚を RH-N25 へ更新
+     - `RH-CFBRC-Discussion.md` を RH-N25 内容へ更新
+     - OP-003 を RH-N1〜N25 到達へ更新し、残タスク文言を `hlocal_core` 供給へ整理
+3. 結論: `boundaryCore local0` 仮定から
+   provider を意識せずに停留点存在へ直接接続できるようになり、
+   RH 側の高位 API は local0/factor0 の両入口を揃えた。
+4. 失敗事例:
+   - `BoundarySide` 依存型の `match` 不一致とスタイル警告が発生。
+   - `cases side` 分岐固定と補助 alias 導入で解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N26 として、`hlocal_core` 自体を供給する実補題
+     （解析条件 or finite-set 観測条件から `hopcPrimeLocalContribution = 0` を導く層）
+     を追加する。
+
+### 日時: 2026/03/13 13:19 JST: Phase RH-N26 を実装（`boundaryDiffPow` local0 から `hlocal_core` 供給）
+
+1. 目的: RH-N25 の残課題を進め、`hlocal_core` を
+   `boundaryDiffPow` 側 local0 仮定から供給できるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundary_hlocal_core_of_boundaryDiffPow_local_zero`
+       （`core ∣ diff` を用いて diff-local0 から core-local0 へ移送）
+     - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryDiffPow_local0`
+       （RH-N25 local0 入口へ委譲する provider wrapper）
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0`
+     - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0`
+   - 実装修正:
+     - left 側の `core -> diff` 変換は等式 `hsub` で明示的に書き換えて型不一致を解消
+     - 誤参照していた constructor 名を既存 API へ修正
+     - long-line 警告は local notation (`existsStatSingletonBoundaryCoreLocal0`) で解消
+   - 文書同期:
+     - README 2 枚を RH-N26 へ更新
+     - `RH-CFBRC-Discussion.md` を RH-N26 内容へ更新
+     - OP-003 を RH-N1〜N26 到達へ更新し、残タスクを `hlocal_diff0` 供給へ整理
+3. 結論: `boundaryCore local0` だけでなく
+   `boundaryDiffPow local0` からも direct existence API へ接続可能になり、
+   local 側の入口がさらに自然な形に揃った。
+4. 失敗事例:
+   - 初回実装で left 側の `simp` 書き換えが不十分で型不一致が発生。
+   - `hsub` を明示導入して `hsub ▸ hmul` で解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N27 として、`hlocal_diff0` 自体を供給する実補題
+     （解析条件 or finite-set 観測条件から `hopcPrimeLocalContribution = 0` を導く層）
+     を追加する。
+
+### 日時: 2026/03/13 13:31 JST: Phase RH-N27 を実装（`boundaryDiffPow` factor0 から direct wrapper 公開）
+
+1. 目的: RH-N26 の次段として、`boundaryDiffPow` 側の
+   `nonzero + factorPhaseVelLocal=0` 仮定から
+   provider / 停留点存在 wrapper へ直接接続する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundary_hwnz_core_of_boundaryDiffPow_nonzero`
+     - `boundary_hlocal_diff0_of_boundaryDiffPow_factorPhaseVelLocal_eq_zero`
+     - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryDiffPow_factor0`
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0`
+     - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0`
+   - 文書同期:
+     - `RH/README.md` の主要 API を RH-N27 へ更新し、
+       `boundaryDiffPow factor0` テンプレートを追記
+     - `RH-CFBRC-Discussion.md` の Implementation Bridge を RH-N27 へ更新
+     - `HOPC-RH-OpenProblems.md` の OP-003 到達済み API を RH-N27 へ更新し、
+       完了した `hlocal_diff0` 供給タスクを残タスクから除外
+3. 結論:
+   - `boundaryDiffPow` 側 factor0 仮定から、
+     provider 構築と direct existence wrapper（insert/singleton）まで
+     一気通貫で接続できる高位 API が揃った。
+4. 失敗事例:
+   - 長識別子の long-line 警告を `set_option ... in` で
+     局所抑制しようとしたが、doc comment 直後配置で
+     parser error（`expected 'lemma'`）となり採用を撤回。
+5. 検証:
+   - `lake build DkMath.RH` 成功。
+   - 既知の style 警告 1 件（`CFBRCBridge.lean` 長識別子行）は継続。
+6. 次の課題:
+   - CFBRC 側 primitive prime existence と
+     `hS_dvd` / `hS_gap` 供給をさらに密結合する実補題を追加。
+   - direct existence wrapper の仮定削減（provider 前提の自動供給）を継続。
+
+### 日時: 2026/03/13 17:24 JST: Phase RH-N28 を実装（primitive prime existence と `hS_dvd / hS_gap` の接続）
+
+1. 目的: OP-003 の残課題だった
+   「CFBRC 側 primitive prime existence と `hS_dvd / hS_gap` を接続する実補題」
+   を RH 側 bridge に追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundary_dvd_on_insert_of_boundary_dvd_and_witness`
+     - `boundary_gap_on_insert_of_boundary_gap_and_witness`
+     - `exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+     - `exists_boundary_dvd_gap_on_insert_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+   - 文書同期:
+     - README 2 枚の API 見出しを RH-N28 に更新し、上記 API を追加
+     - `RH-CFBRC-Discussion.md` の Implementation Bridge 見出し/到達 API を RH-N28 へ更新
+     - `HOPC-RH-OpenProblems.md` の OP-003 状態を RH-N28 に更新し、
+       完了した `primitive prime existence ↔ hS_dvd/hS_gap` 接続タスクを残タスクから除外
+3. 結論:
+   - primitive prime witness を `Subtype` で取り出し、
+     `insert p S` 上の `hS_dvd / hS_gap` を自動構成する導線が追加された。
+   - これにより、次段の「direct existence wrapper の仮定削減」の下地が揃った。
+4. 失敗事例:
+   - `match side` 依存型のまま `gap` 補題を組んだ初稿で型不一致が発生。
+   - `cases side` へ枝分けして証明を安定化し解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N29: RH-N28 補題を使って direct existence wrapper 側の
+     `hS_dvd / hS_gap` 仮定をさらに自動化し、呼び出し前提を削減する。
+
+### 日時: 2026/03/13 17:30 JST: Phase RH-N29 を実装（`hS_gap` 不要化 wrapper）
+
+1. 目的: RH-N28 の次段として、`boundaryDiffPow factor0` 系 direct wrapper で
+   `hS_gap` 前提を不要化し、`hS_dvd + hwnz_diff + hfactor_diff0` へ簡約する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundaryInsertLocalLiftProvider_of_boundary_dvd_of_boundaryDiffPow_factor0`
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_of_dvd`
+   - 実装方針:
+     - `hS_nonzero` を `hS_dvd + hwnz_diff` から生成
+     - `hS_local0` を `hS_dvd + hwnz_diff + hfactor_diff0` から生成
+     - 既存の
+       `boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero_on_S_and_witness`
+       に接続して provider / existence を構築
+3. 結論:
+   - `boundaryDiffPow factor0` の insert 版は、
+     `hS_gap` なしで呼べる高位 API が追加された。
+   - OP-003 の「direct wrapper 仮定削減」は一段前進した。
+4. 失敗事例:
+   - なし（今回追加分では型不一致なく通過）。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N30: `hS_dvd` も不要化できる set 正規化（`S` 側の構成規約 or wrapper）を検討する。
+
+### 日時: 2026/03/13 17:34 JST: Phase RH-N30 を実装（`hS_dvd` 不要化の set 正規化 wrapper）
+
+1. 目的: RH-N29 の次段として、`hS_dvd` を前提に要求しないよう
+   `S` の正規化（`boundaryDiffPow` 除法 filter）を導入する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundaryDiffPowDvdSet`
+     - `boundary_dvd_on_boundaryDiffPowDvdSet`
+     - `boundaryInsertLocalLiftProvider_of_boundaryDiffPow_factor0_normalized`
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_normalized`
+   - 実装方針:
+     - `S` を `boundaryDiffPow side d x u` の除法条件で正規化し、
+       `hS_dvd` は `boundary_dvd_on_boundaryDiffPowDvdSet` で自動供給
+     - RH-N29 の `..._of_dvd` wrapper に接続して停留点存在へ落とす
+3. 結論:
+   - 正規化集合 `boundaryDiffPowDvdSet` を介すことで、
+     `hS_dvd` なしの direct existence wrapper を提供できた。
+   - OP-003 の仮定削減は、`hS_gap` と `hS_dvd` の両方を不要化（正規化版）まで到達。
+4. 失敗事例:
+   - なし。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N31: 正規化集合ではなく元の `S` を保持したまま、
+     `hS_dvd` 省略可能な API 設計（包摂関係補題 or 2段 wrapper）を検討する。
+
+### 日時: 2026/03/13 17:51 JST: Phase RH-N31 を実装（元の `S` 保持で `hS_dvd` 省略）
+
+1. 目的: RH-N30 の次段として、正規化集合を使わず元の `S` を保持したまま
+   `hS_dvd` を省略可能な direct wrapper を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundaryInsertLocalLiftProvider_of_boundaryDiffPow_factor0_with_offdvd`
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_with_offdvd`
+   - 実装方針:
+     - `r ∣ boundaryDiffPow` の要素は `hwnz_diff / hfactor_diff0` で処理
+     - `r ∤ boundaryDiffPow` の要素は
+       `hS_nonzero_offdvd / hS_local0_offdvd` で補完
+     - これを `boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero_on_S_and_witness`
+       へ接続して provider / existence を構築
+   - 文書同期:
+     - README 2 枚、Discussion、OpenProblems を RH-N31 へ更新
+3. 結論:
+   - 元の `S` を保持したまま `hS_dvd` を省略可能な高位 API を提供できた。
+   - OP-003 の残タスクは解消し、OpenProblems 上で完了状態へ更新。
+4. 失敗事例:
+   - なし。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - OP-001（finite→infinite 接続）へ主軸を移す。
+
+### OP-003 完了合図（2026/03/13 17:51 JST）
+
+- OP-003 は RH-N31 で完了と判定。
+- 今後の主要未完は OP-001 / OP-004。
