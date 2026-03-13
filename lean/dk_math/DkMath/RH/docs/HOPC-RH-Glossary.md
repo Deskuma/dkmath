@@ -108,6 +108,41 @@
 - 意味: `eulerZetaFinite_onVertical` の停留/非退化停留を
   `hopcPrimeContributionSum` の零化条件で判定する API
 
+## OP-004（曲率供給）語彙
+
+### `BoundaryInsertPhaseCurvProvider`（定義）
+
+- 実装: `CFBRCBridge.lean`
+- 型: `BoundarySide → Finset prime → d x u σ t → Type`
+- 意味: `insert p S` 観測器に対する `phaseCurv ≠ 0` 供給 record
+- 依存: `phaseCurv`, `eulerZetaFinite_onVertical`, `boundaryDiffPow`
+
+### `boundaryInsertPhaseCurvProvider_of_split`（補題）
+
+- 実装: `CFBRCBridge.lean`
+- 意味: split 形式の `hcurv_lift` から provider record を構成する最小 wrapper
+
+### nondegenerate bridge 群（補題）
+
+- 実装: `CFBRCBridge.lean`
+- 補題:
+  - `exists_nondegenerateStationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_local_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider_and_phaseCurvProvider`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_of_dvd_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_normalized_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_with_offdvd_and_phaseCurv`
+- 意味:
+  - `stationaryAt` bridge に曲率非零供給を合成し、
+    `nondegenerateStationaryAt` の存在へ接続する。
+  - OP-004 RH-P3/P4 では `boundaryCore` / `boundaryDiffPow` の
+    計算補題直結 wrapper（insert/singleton、`of_dvd/normalized/with_offdvd` を含む）を追加し、
+    曲率側のみを `phaseCurv ≠ 0` 補題で差し替える運用を固定した。
+
 ## 注意（前提）
 
 - 多くの停留判定補題は `∀ p ∈ S, w_p(σ,t) ≠ 0` を仮定する。
@@ -118,4 +153,4 @@
 - 方針: `HOPC-RH.txt`
 - ロードマップ: `HOPC-RH-Roadmap.md`
 - 議論: `RH-CFBRC-Discussion.md`
-- 実装履歴: `RH_Implements_History.md`
+- 実装履歴: `RH_Implements_History-02.md`

@@ -194,6 +194,41 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
   - 曲率前提の供給パターン（解析仮定 / 計算補題 / provider）を切り分ける。
 - 目標成果:
   - `phaseCurv` 供給戦略メモ + wrapper 名称規約
+- 状態: 完了（RH-P1/P2/P3/P4）
+- 到達済み:
+  - `nondegenerateStationaryAt_insert_of_hopcPrimeContributionSum_eq_zero_and_phaseCurv_ne_zero`
+  - `exists_nondegenerateStationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_local_and_phaseCurv`
+  - `BoundaryInsertPhaseCurvProvider`
+  - `boundaryInsertPhaseCurvProvider_of_split`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_split_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider_and_phaseCurvProvider`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_of_dvd_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_normalized_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_with_offdvd_and_phaseCurv`
+  - singleton 版:
+    - `..._boundaryCore_factor0_and_phaseCurv`
+    - `..._boundaryCore_local0_and_phaseCurv`
+    - `..._boundaryDiffPow_local0_and_phaseCurv`
+    - `..._boundaryDiffPow_factor0_and_phaseCurv`
+- 供給パターン v1（暫定）:
+  - 解析仮定版:
+    `hcurv_lift` / `hcurv_local0` を仮定として直接入力する
+  - 計算補題版:
+    `hopcPrimeContributionSum = 0` 側は局所 zero 補題から再利用し、
+    曲率側のみ `phaseCurv ≠ 0` 補題を差し替える
+  - provider 版:
+    `BoundaryInsertLocalLiftProvider` + `BoundaryInsertPhaseCurvProvider` を合成する
+- 命名規約（暫定）:
+  - split 入力は `..._of_local_split_and_phaseCurv`
+  - singleton 入力は `..._singleton_..._of_local_and_phaseCurv`
+  - provider 入力は `..._of_provider_and_phaseCurvProvider`
+- 残タスク:
+  - なし（以後の拡張は OP-001 系の研究タスクとして管理）
 - 優先度: 中
 
 ## OP-005: 文書同期の継続管理
@@ -215,7 +250,6 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
    - 必要なら `DkMath/RH.lean` の import を更新
 2. 公開 API（定義/補題名）が増減したか
    - `DkMath/RH/README.md` の「主要 API」を更新
-   - `DkMath/RH/docs/README.md` の「現状 API」を更新
    - `DkMath/RH/docs/HOPC-RH-Glossary.md` に語彙を追加
 3. CFBRC 連携 API/bridge が増減したか
    - `DkMath/RH/docs/RH-CFBRC-Discussion.md` の
@@ -224,7 +258,7 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
    - `DkMath/RH/docs/HOPC-RH-Roadmap.md` のフェーズ状態を更新
    - `DkMath/RH/docs/HOPC-RH-OpenProblems.md` の優先度・状態を更新
 5. すべての作業で履歴を記録したか
-   - `DkMath/RH/docs/RH_Implements_History.md` にテンプレート形式で追記
+   - `DkMath/RH/docs/RH_Implements_History-02.md` にテンプレート形式で追記
 
 ## 参照
 
@@ -232,4 +266,4 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
 - ロードマップ: `HOPC-RH-Roadmap.md`
 - 用語集: `HOPC-RH-Glossary.md`
 - 議論: `RH-CFBRC-Discussion.md`
-- 実装履歴: `RH_Implements_History.md`
+- 実装履歴: `RH_Implements_History-02.md`
