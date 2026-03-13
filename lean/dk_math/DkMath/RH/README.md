@@ -47,7 +47,7 @@
 - `CFBRCBridge.lean`
   - CFBRC の primitive-prime existence から RH 側 singleton 停留判定へ接続する bridge
 
-## 主要 API（RH-N42 時点）
+## 主要 API（RH-N43 時点）
 
 - HOPC 観測量:
   - `hopcPrimeLocalContribution p σ t`
@@ -93,9 +93,15 @@
   - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_local0_sigma_gt_one`
   - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_local0_sigma_gt_one`
   - `BoundaryOffDvdLocalZeroProvider`
+  - `BoundaryOffDvdFactorZeroProvider`
+  - `boundaryOffDvdLocalZeroProvider_of_offdvdFactorZeroProvider`
   - `boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider`
   - `boundaryOffDvdLocalZeroProvider_of_factorPhaseVelLocal_eq_zero`
   - `boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider_of_factorPhaseVelLocal_eq_zero`
+  - `boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider_of_offdvdFactorZeroProvider`
+  - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_insertProvider_and_offdvdFactorZeroProvider`
+  - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_insertProvider_and_offdvdFactorZeroProvider_sigma_gt_one`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_insertProvider_and_offdvdFactorZeroProvider_sigma_gt_one`
   - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_insertProvider_sigma`
   - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_insertProvider_sigma_gt_one`
   - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_insertProvider_sigma_gt_one`

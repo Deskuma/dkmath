@@ -2132,3 +2132,42 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - insert-provider 内部情報だけで off-dvd local-zero を導出できる十分条件を抽出し、
      off-dvd 側追加仮定をさらに削減する。
+
+### 日時: 2026/03/13 21:02 JST: Phase RH-O12 を実装（off-dvd factor0 provider 統合）
+
+1. 目的: OP-001 の RH-O12 として、
+   off-dvd 側の `hwnz_offdvd` / `hfactor_offdvd0` を record 化し、
+   insert-provider 直結の infinite 接続 API へ統合する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `BoundaryOffDvdFactorZeroProvider`
+     - `boundaryOffDvdLocalZeroProvider_of_offdvdFactorZeroProvider`
+     - `boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider_of_offdvdFactorZeroProvider`
+     - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_insertProvider_and_offdvdFactorZeroProvider`
+     - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_insertProvider_and_offdvdFactorZeroProvider_sigma_gt_one`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_insertProvider_and_offdvdFactorZeroProvider_sigma_gt_one`
+   - 実装方針:
+     - off-dvd 側評価の 2 条件を `BoundaryOffDvdFactorZeroProvider` に集約
+     - factor0 provider から local-zero provider を構成し、
+       O8 系 (`..._with_offdvd_local0...`) へ接続
+     - insert-provider と factor0 provider を同時に受ける高位 wrapper を追加
+3. 結論:
+   - off-dvd 側評価仮定の受け渡しが record API に統一され、
+     insert-provider 直結の運用が簡潔になった。
+4. 失敗事例:
+   - 初回実装で前方参照により build 失敗
+     （`boundaryOffDvdLocalZeroProvider_of_factorPhaseVelLocal_eq_zero` を未定義位置で参照）。
+   - `boundaryOffDvdLocalZeroProvider_of_offdvdFactorZeroProvider` を直接構成に変更して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - `BoundaryOffDvdFactorZeroProvider` の標準構成器を追加し、
+     off-dvd 側の個別仮定入力をさらに削減する。
