@@ -1889,3 +1889,40 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-O5: majorant / bridge 仮定から `Summable` を直接供給する具体化レイヤ
      （CFBRC/RH 連携）を追加する。
+
+### 日時: 2026/03/13 18:53 JST: Phase RH-O5 を実装（`C / p^σ` majorant 供給器）
+
+1. 目的: OP-001 の RH-O5 として、
+   `Summable` を手入力せずに供給できる解析的 wrapper を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/HopcInfiniteLift.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`HopcInfiniteLift.lean`）:
+     - `summable_hopcPrimeContributionFn_of_prime_rpow_bound`
+     - `majorant_assumptions_of_prime_rpow_bound`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound`
+     - `hopcPrimeContributionTsum_eq_zero_of_prime_rpow_bound_of_eventually_stationaryAt`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound_of_eventually_stationaryAt`
+   - 実装方針:
+     - `summable_one_div_prime_rpow_sigma` を再利用し、
+       `|hopc| ≤ C / p^σ`（`σ > 1`）から `Summable` を供給
+     - 供給した可和性を RH-O4 の `eventually_stationary` 系補題へ接続し、
+       `tsum = 0` と atTop 極限 0 を導出
+3. 結論:
+   - OP-001 は RH-O5 到達により、
+     「解析的 bound からの `Summable` 自動供給」まで実装された。
+4. 失敗事例:
+   - `HopcInfiniteLiftMajorantAssumptions` が `Type` のため、
+     構成補題を `theorem` として書くと不正（命題ではない）で失敗。
+   - `def` 化と引数整理（未使用 `hC` 削除）で解消。
+5. 検証:
+   - `lake build DkMath.RH.HopcInfiniteLift` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-O6: CFBRC/RH bridge 前提から
+     `hAbsLe` と `hPrime_ne` を系統供給する wrapper を追加する。

@@ -47,6 +47,60 @@ structure HopcInfiniteLiftMajorantAssumptions (σ t : ℝ) : Type where
   hTsumZero : hopcPrimeContributionTsum σ t = 0
 
 /--
+`|hopcPrimeContributionFn| ≤ C / p^σ`（`σ > 1`）型の評価から
+`hopcPrimeContributionFn` の可和性を得る。
+-/
+theorem summable_hopcPrimeContributionFn_of_prime_rpow_bound
+    {σ t C : ℝ}
+    (hσ : 1 < σ)
+    (hAbsLe :
+      ∀ p : {q // Nat.Prime q},
+        |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ) :
+    Summable (hopcPrimeContributionFn σ t) := by
+  have hPrime :
+      Summable (fun p : {q // Nat.Prime q} => (1 : ℝ) / (↑p : ℝ) ^ σ) :=
+    summable_one_div_prime_rpow_sigma σ hσ
+  have hMajorantSummable :
+      Summable (fun p : {q // Nat.Prime q} => C / (↑p : ℝ) ^ σ) := by
+    have hMul :
+        Summable (fun p : {q // Nat.Prime q} => C * ((1 : ℝ) / (↑p : ℝ) ^ σ)) :=
+      Summable.mul_left C hPrime
+    simpa [div_eq_mul_inv, mul_assoc, mul_left_comm, mul_comm] using hMul
+  have hAbsSummable :
+      Summable (fun p : {q // Nat.Prime q} => |hopcPrimeContributionFn σ t p|) :=
+    Summable.of_nonneg_of_le
+      (fun _ => abs_nonneg _)
+      hAbsLe
+      hMajorantSummable
+  exact hAbsSummable.of_abs
+
+/--
+`C / p^σ` 上界（`σ > 1`）と `tsum = 0` から、
+majorant 仮定パッケージを構成する。
+-/
+noncomputable def majorant_assumptions_of_prime_rpow_bound
+    {σ t C : ℝ}
+    (hσ : 1 < σ) (hC : 0 ≤ C)
+    (hAbsLe :
+      ∀ p : {q // Nat.Prime q},
+        |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ)
+    (hTsumZero : hopcPrimeContributionTsum σ t = 0) :
+    HopcInfiniteLiftMajorantAssumptions σ t := by
+  refine
+    ⟨(fun p : {q // Nat.Prime q} => C / (↑p : ℝ) ^ σ), ?_, ?_, hAbsLe, hTsumZero⟩
+  · intro p
+    have hp_pos : (0 : ℝ) < (↑p : ℝ) := by
+      exact_mod_cast p.2.pos
+    exact div_nonneg hC (le_of_lt (Real.rpow_pos_of_pos hp_pos σ))
+  · have hPrime :
+        Summable (fun p : {q // Nat.Prime q} => (1 : ℝ) / (↑p : ℝ) ^ σ) :=
+      summable_one_div_prime_rpow_sigma σ hσ
+    have hMul :
+        Summable (fun p : {q // Nat.Prime q} => C * ((1 : ℝ) / (↑p : ℝ) ^ σ)) :=
+      Summable.mul_left C hPrime
+    simpa [div_eq_mul_inv, mul_assoc, mul_left_comm, mul_comm] using hMul
+
+/--
 `HasSum` 仮定から、有限集合版 `hopcPrimeContributionSum` の atTop 極限を得る。
 -/
 theorem tendsto_hopcPrimeContributionSum_atTop_of_hasSum
@@ -213,6 +267,25 @@ theorem eventually_abs_hopcPrimeContributionSum_lt_of_majorant_assumptions
     hε (summable_assumptions_of_majorant_assumptions hAssump)
 
 /--
+`C / p^σ` 上界（`σ > 1`）と `tsum = 0` から、
+有限寄与和の atTop 極限（0）を得る。
+-/
+theorem tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound
+    {σ t C : ℝ}
+    (hσ : 1 < σ) (hC : 0 ≤ C)
+    (hAbsLe :
+      ∀ p : {q // Nat.Prime q},
+        |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ)
+    (hTsumZero : hopcPrimeContributionTsum σ t = 0) :
+    Filter.Tendsto
+      (fun S : Finset {p // Nat.Prime p} =>
+        hopcPrimeContributionSum (S := S) σ t)
+      Filter.atTop (𝓝 (0 : ℝ)) :=
+  tendsto_hopcPrimeContributionSum_atTop_of_majorant_assumptions
+    (majorant_assumptions_of_prime_rpow_bound
+      (σ := σ) (t := t) (C := C) hσ hC hAbsLe hTsumZero)
+
+/--
 全素数で `w_p(σ,t) ≠ 0` が成り立ち、有限集合版観測器が最終的に停留するとき、
 `hopcPrimeContributionSum` は最終的に 0 になる。
 -/
@@ -304,5 +377,60 @@ theorem hopcPrimeContributionTsum_eq_zero_of_summable_of_eventually_stationaryAt
       hopcPrimeContributionSum]
       using hSummable.hasSum
   exact tendsto_nhds_unique hTsum hT0
+
+/--
+`C / p^σ` 上界（`σ > 1`）と `eventually stationary` から、
+`hopcPrimeContributionTsum = 0` を得る。
+-/
+theorem hopcPrimeContributionTsum_eq_zero_of_prime_rpow_bound_of_eventually_stationaryAt
+    {σ t C : ℝ}
+    (hσ : 1 < σ)
+    (hAbsLe :
+      ∀ p : {q // Nat.Prime q},
+        |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ)
+    (hPrime_ne :
+      ∀ p : {q // Nat.Prime q}, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hEvStationary :
+      ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+        DkMath.RH.stationaryAt
+          (fun v : ℝ => eulerZetaFinite_onVertical S σ v) t) :
+    hopcPrimeContributionTsum σ t = 0 := by
+  have hSummable : Summable (hopcPrimeContributionFn σ t) :=
+    summable_hopcPrimeContributionFn_of_prime_rpow_bound
+      (σ := σ) (t := t) (C := C) hσ hAbsLe
+  exact
+    hopcPrimeContributionTsum_eq_zero_of_summable_of_eventually_stationaryAt
+      (σ := σ) (t := t) hSummable hPrime_ne hEvStationary
+
+/--
+`C / p^σ` 上界（`σ > 1`）と `eventually stationary` から、
+有限寄与和の atTop 極限（0）を得る。
+-/
+theorem tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound_of_eventually_stationaryAt
+    {σ t C : ℝ}
+    (hσ : 1 < σ)
+    (hAbsLe :
+      ∀ p : {q // Nat.Prime q},
+        |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ)
+    (hPrime_ne :
+      ∀ p : {q // Nat.Prime q}, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hEvStationary :
+      ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+        DkMath.RH.stationaryAt
+          (fun v : ℝ => eulerZetaFinite_onVertical S σ v) t) :
+    Filter.Tendsto
+      (fun S : Finset {p // Nat.Prime p} =>
+        hopcPrimeContributionSum (S := S) σ t)
+      Filter.atTop (𝓝 (0 : ℝ)) := by
+  have hSummable : Summable (hopcPrimeContributionFn σ t) :=
+    summable_hopcPrimeContributionFn_of_prime_rpow_bound
+      (σ := σ) (t := t) (C := C) hσ hAbsLe
+  have hTsumZero :
+      hopcPrimeContributionTsum σ t = 0 :=
+    hopcPrimeContributionTsum_eq_zero_of_prime_rpow_bound_of_eventually_stationaryAt
+      (σ := σ) (t := t) (C := C) hσ hAbsLe hPrime_ne hEvStationary
+  exact
+    tendsto_hopcPrimeContributionSum_atTop_of_summable_assumptions
+      (σ := σ) (t := t) ⟨hSummable, hTsumZero⟩
 
 end DkMath.RH.EulerZeta

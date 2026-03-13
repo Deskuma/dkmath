@@ -13,7 +13,7 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
     無限側観測量へ上げるための前提を明文化する。
 - 目標成果:
   - 条件付きの「有限判定 → 極限判定」補題群
-- 状態: 進行中（RH-O4: finite 側停留判定から infinite 側観測量への接続を追加）
+- 状態: 進行中（RH-O5: `C/p^σ` majorant 供給器を追加）
 - 到達済み:
   - `hopcPrimeContributionFn`
   - `hopcPrimeContributionTsum`
@@ -36,9 +36,14 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
   - `eventually_hopcPrimeContributionSum_eq_zero_of_eventually_stationaryAt`
   - `eventually_abs_hopcPrimeContributionSum_lt_of_eventually_stationaryAt`
   - `hopcPrimeContributionTsum_eq_zero_of_summable_of_eventually_stationaryAt`
+  - `summable_hopcPrimeContributionFn_of_prime_rpow_bound`
+  - `majorant_assumptions_of_prime_rpow_bound`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound`
+  - `hopcPrimeContributionTsum_eq_zero_of_prime_rpow_bound_of_eventually_stationaryAt`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound_of_eventually_stationaryAt`
 - 残タスク:
-  - majorant 供給器（CFBRC/RH 連携の具体化）を追加
-  - `Summable` 仮定の供給器（CFBRC bridge 前提からの直接導線）を追加
+  - majorant 供給器（CFBRC/RH 連携で `hAbsLe` を供給）を追加
+  - `hPrime_ne` を系統供給する wrapper（`σ` 条件や bridge 前提からの導線）を追加
 - 優先度: 高
 
 ## OP-002: 非零前提の管理 API
