@@ -91,7 +91,6 @@ Lean 実装ロードマップを 1 枚で管理するための文書。
 - 状態: 完了
 - 主ファイル:
   - `DkMath/RH/README.md`
-  - `DkMath/RH/docs/README.md`
   - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
 
 ### I. 次段（未完）

@@ -27,3 +27,34 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 ## 実装履歴
 
 ※ここに上記テンプレートに沿った実装履歴を記録していく。
+
+### 日時: 2026/03/14 00:35 JST: OP-004 文書整理（README 一本化）
+
+1. 目的:
+   `docs/README.md` を廃止し、`DkMath/RH/README.md` を単一の表紙ドキュメントとして統合する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History-02.md`
+   - 実施内容:
+     - `docs/README.md` の内容を `RH/README.md` に統合（ファイル移動）
+     - 統合後 README の相対リンクを root 基準へ補正
+       - `./docs/EulerZetaFunction-v0-1.pdf`
+       - `./docs/DkMath_RH.md`
+       - `docs/HOPC-RH-Roadmap.md` / `docs/HOPC-RH-Glossary.md` / `docs/HOPC-RH-OpenProblems.md`
+       - `docs/RH-CFBRC-Discussion.md`
+     - `HOPC-RH-OpenProblems.md` の運用チェックリストから
+       `docs/README.md` 参照を削除し、履歴記録先を `History-02` へ更新
+     - `HOPC-RH-Roadmap.md` の主ファイル一覧から `docs/README.md` を削除
+3. 結論:
+   - RH README は `DkMath/RH/README.md` の 1 本に統一された。
+   - `docs/README.md` への依存は、現行運用文書では解消された。
+4. 失敗事例:
+   - なし。
+5. 検証:
+   - `rg -n "DkMath/RH/docs/README\\.md|docs/README\\.md" lean/dk_math/DkMath/RH --glob "*.md"`
+     を実行し、残存が `RH_Implements_History-01.md`（旧履歴アーカイブ）内のみであることを確認。
+6. 次の課題:
+   - OP-004 の残作業（曲率条件運用の供給規約・命名規約整理）へ進む。
