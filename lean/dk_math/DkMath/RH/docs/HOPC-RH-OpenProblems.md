@@ -224,7 +224,7 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
    - `DkMath/RH/docs/HOPC-RH-Roadmap.md` のフェーズ状態を更新
    - `DkMath/RH/docs/HOPC-RH-OpenProblems.md` の優先度・状態を更新
 5. すべての作業で履歴を記録したか
-   - `DkMath/RH/docs/RH_Implements_History.md` にテンプレート形式で追記
+   - `DkMath/RH/docs/RH_Implements_History-01.md` にテンプレート形式で追記
 
 ## 参照
 
@@ -232,4 +232,4 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
 - ロードマップ: `HOPC-RH-Roadmap.md`
 - 用語集: `HOPC-RH-Glossary.md`
 - 議論: `RH-CFBRC-Discussion.md`
-- 実装履歴: `RH_Implements_History.md`
+- 実装履歴: `RH_Implements_History-01.md`

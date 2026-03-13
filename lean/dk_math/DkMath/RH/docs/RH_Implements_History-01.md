@@ -465,7 +465,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - モジュールの目的（位相ドリフト骨格 / Euler 因子観測 / HOPC 公開 API）
      - ファイル構成（`Defs/Lemmas/Theorems/EulerZeta*`）
      - RH-H1 時点の主要公開 API
-     - `docs`（`HOPC-RH.txt`, `RH-CFBRC-Discussion.md`, `RH_Implements_History.md`）への導線
+     - `docs`（`HOPC-RH.txt`, `RH-CFBRC-Discussion.md`, `RH_Implements_History-01.md`）への導線
      - import 例
 3. 結論: RH 層に「表紙」が追加され、実装入口と議論文書の導線が統一された。
 4. 失敗事例: なし（ドキュメント追加のみ）。
@@ -539,7 +539,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - フェーズ A〜I の状態（完了/未完）
      - 次段候補（Glossary / OpenProblems / finite→infinite 接続）
 3. 結論: HOPC-RH の実装計画が文書化され、
-   方針文書 (`HOPC-RH.txt`) と実装履歴 (`RH_Implements_History.md`) の中間導線が整った。
+   方針文書 (`HOPC-RH.txt`) と実装履歴 (`RH_Implements_History-01.md`) の中間導線が整った。
 4. 失敗事例: なし（ドキュメント追加・更新のみ）。
 5. 備考:
    - `.lean` 実装の変更はなし。
@@ -1571,7 +1571,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`CFBRCBridge.lean`）:
      - `boundary_hwnz_core_of_boundaryDiffPow_nonzero`
      - `boundary_hlocal_diff0_of_boundaryDiffPow_factorPhaseVelLocal_eq_zero`
@@ -1612,7 +1612,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`CFBRCBridge.lean`）:
      - `boundary_dvd_on_insert_of_boundary_dvd_and_witness`
      - `boundary_gap_on_insert_of_boundary_gap_and_witness`
@@ -1648,7 +1648,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`CFBRCBridge.lean`）:
      - `boundaryInsertLocalLiftProvider_of_boundary_dvd_of_boundaryDiffPow_factor0`
      - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_of_dvd`
@@ -1681,7 +1681,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`CFBRCBridge.lean`）:
      - `boundaryDiffPowDvdSet`
      - `boundary_dvd_on_boundaryDiffPowDvdSet`
@@ -1715,7 +1715,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`CFBRCBridge.lean`）:
      - `boundaryInsertLocalLiftProvider_of_boundaryDiffPow_factor0_with_offdvd`
      - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_with_offdvd`
@@ -1755,7 +1755,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`HopcInfiniteLift.lean`）:
      - `hopcPrimeContributionFn`
      - `hopcPrimeContributionTsum`
@@ -1797,7 +1797,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`HopcInfiniteLift.lean`）:
      - `HopcInfiniteLiftSummableAssumptions`
      - `hasSumZero_of_summable_assumptions`
@@ -1828,7 +1828,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`HopcInfiniteLift.lean`）:
      - `HopcInfiniteLiftMajorantAssumptions`
      - `summable_hopcPrimeContributionFn_of_majorant_assumptions`
@@ -1863,7 +1863,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`HopcInfiniteLift.lean`）:
      - `eventually_hopcPrimeContributionSum_eq_zero_of_eventually_stationaryAt`
      - `eventually_abs_hopcPrimeContributionSum_lt_of_eventually_stationaryAt`
@@ -1901,7 +1901,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`HopcInfiniteLift.lean`）:
      - `summable_hopcPrimeContributionFn_of_prime_rpow_bound`
      - `majorant_assumptions_of_prime_rpow_bound`
@@ -1939,7 +1939,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`HopcInfiniteLift.lean`）:
      - `hPrime_ne_of_sigma_gt_one`
      - `eventually_hopcPrimeContributionSum_eq_zero_of_sigma_gt_one_of_eventually_stationaryAt`
@@ -1976,7 +1976,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`CFBRCBridge.lean`）:
      - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_split`
      - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_split_prime_rpow_bound_sigma_gt_one`
@@ -2011,7 +2011,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`CFBRCBridge.lean`）:
      - `hopcPrimeContributionFn_abs_le_prime_rpow_of_local_zero`
      - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0`
@@ -2049,7 +2049,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`CFBRCBridge.lean`）:
      - `BoundaryOffDvdLocalZeroProvider`
      - `boundaryOffDvdLocalZeroProvider_of_factorPhaseVelLocal_eq_zero`
@@ -2112,7 +2112,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`CFBRCBridge.lean`）:
      - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_insertProvider_sigma`
      - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_insertProvider_sigma_gt_one`
@@ -2145,7 +2145,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`CFBRCBridge.lean`）:
      - `BoundaryOffDvdFactorZeroProvider`
      - `boundaryOffDvdLocalZeroProvider_of_offdvdFactorZeroProvider`
@@ -2184,7 +2184,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`CFBRCBridge.lean`）:
      - `boundaryOffDvdFactorZeroProvider_of_split`
      - `boundaryOffDvdFactorZeroProvider_of_nonzero_and_localZeroProvider`
@@ -2220,7 +2220,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`CFBRCBridge.lean`）:
      - `BoundaryOffDvdLocalZeroOnSetProvider`
      - `boundaryOffDvdLocalZeroOnSetProvider_of_global`
@@ -2257,7 +2257,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`CFBRCBridge.lean`）:
      - `boundary_hlocal_on_S_of_insertProvider_and_witness_local0_and_local0_on_erase`
      - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_witness_local0_and_local0_on_erase`
@@ -2292,7 +2292,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`CFBRCBridge.lean`）:
      - `boundary_hlocal_on_S_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase`
      - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase`
@@ -2326,7 +2326,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 変更実装（`CFBRCBridge.lean`）:
      - `boundary_hlocal_on_S_of_insertProvider_and_witness_local0_and_local0_on_erase`
        から `hp_not_mem : p ∉ S` を削除し、
@@ -2364,7 +2364,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`CFBRCBridge.lean`）:
      - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_global_witness_local0_and_local0_on_erase`
      - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase_of_global_witness`
@@ -2401,7 +2401,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`CFBRCBridge.lean`）:
      - `BoundaryGlobalWitnessProvider`
      - `BoundaryGlobalWitnessLocalZeroProvider`
@@ -2442,7 +2442,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`CFBRCBridge.lean`）:
      - `BoundaryDiffPowFactorZeroProvider`
      - `boundaryDiffPowFactorZeroProvider_of_split`
@@ -2479,7 +2479,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 追加実装（`CFBRCBridge.lean`）:
      - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_dvd_on_erase_of_globalWitnessProvider_and_diffFactorZeroProvider`
        （O20 命名系の erase 版）
@@ -2514,7 +2514,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/README.md`
      - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 変更実装（`CFBRCBridge.lean`）:
      - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_globalWitnessLocalZeroProvider_and_local0_on_erase`
        の内部呼び出しを旧 `..._global_witness...` 依存から
@@ -2547,7 +2547,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 2. 内容:
    - 変更ファイル:
      - `DkMath/RH/CFBRCBridge.lean`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 変更実装（`CFBRCBridge.lean`）:
      - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness`
        を、旧 erase wrapper ではなく基底の
@@ -2578,7 +2578,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
      - `DkMath/RH/README.md`
      - `DkMath/RH/docs/README.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 監査実施:
      - `rg` で旧命名 4 API の参照を `DkMath/**/*.lean` 全域で走査
      - 残存参照が `CFBRCBridge.lean` の互換定義本体と
@@ -2605,7 +2605,7 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
      - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
      - `DkMath/RH/README.md`
      - `DkMath/RH/docs/README.md`
-     - `DkMath/RH/docs/RH_Implements_History.md`
+     - `DkMath/RH/docs/RH_Implements_History-01.md`
    - 方針更新:
      - OP-001 の状態を「完了（RH-O24）」へ更新
      - 「外部利用側移行完了」タスクを open issue から除去

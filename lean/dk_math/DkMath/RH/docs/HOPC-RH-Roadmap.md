@@ -109,7 +109,7 @@ Lean 実装ロードマップを 1 枚で管理するための文書。
 - 未解決タスク: `HOPC-RH-OpenProblems.md`
 - CFBRC 連携議論: `RH-CFBRC-Discussion.md`
 - 詳細解説: `README.md`
-- 実装履歴: `RH_Implements_History.md`
+- 実装履歴: `RH_Implements_History-01.md`
 
 ## Next Sprint（短期実装順）
 
