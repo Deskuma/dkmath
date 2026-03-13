@@ -2219,4 +2219,113 @@ theorem tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_o
   exact tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound_sigma_gt_one
     (σ := σ) (t := t) (C := C) hσ hAbs hEvStationary
 
+/--
+RH-O9: `boundaryDiffPow` を割らない素数に対する local-zero 供給器。
+-/
+structure BoundaryOffDvdLocalZeroProvider
+    (side : DkMath.CFBRC.BoundarySide)
+    (d x u : ℕ) (σ t : ℝ) : Type where
+  hlocal_offdvd :
+    ∀ p : {q // Nat.Prime q},
+      ¬ p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+        hopcPrimeLocalContribution p.1 σ t = 0
+
+/--
+RH-O9: off-dvd 側で `w_p ≠ 0` と factor 位相速度ゼロが供給できるとき、
+`BoundaryOffDvdLocalZeroProvider` を構成する。
+-/
+def boundaryOffDvdLocalZeroProvider_of_factorPhaseVelLocal_eq_zero
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hwnz_offdvd :
+      ∀ p : {q // Nat.Prime q},
+        ¬ p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_offdvd0 :
+      ∀ p : {q // Nat.Prime q},
+        ¬ p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
+    BoundaryOffDvdLocalZeroProvider side d x u σ t := by
+  refine ⟨?_⟩
+  intro p hp_offdvd
+  exact hopcPrimeLocalContribution_eq_zero_of_factorPhaseVelLocal_eq_zero_of_nonzero
+    (p := p.1) (σ := σ) (t := t)
+    (hwnz_offdvd p hp_offdvd) (hfactor_offdvd0 p hp_offdvd)
+
+/--
+RH-O9: off-dvd local-zero provider を使って
+`|hopcPrimeContributionFn| ≤ C / p^σ` を供給する wrapper。
+-/
+theorem hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_offdvd_provider
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t C : ℝ}
+    (hC : 0 ≤ C)
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0)
+    (offdvdProvider : BoundaryOffDvdLocalZeroProvider side d x u σ t) :
+    ∀ p : {q // Nat.Prime q},
+      |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ :=
+  hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_offdvd_local0
+    (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) (C := C)
+    hC hwnz_diff hfactor_diff0 offdvdProvider.hlocal_offdvd
+
+/--
+RH-O9: off-dvd local-zero provider 版の `hopcPrimeContributionTsum = 0`。
+-/
+theorem hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t C : ℝ}
+    (hσ : 1 < σ) (hC : 0 ≤ C)
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0)
+    (offdvdProvider : BoundaryOffDvdLocalZeroProvider side d x u σ t)
+    (hEvStationary :
+      ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+        DkMath.RH.stationaryAt
+          (fun v : ℝ => eulerZetaFinite_onVertical S σ v) t) :
+    hopcPrimeContributionTsum σ t = 0 :=
+  hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_local0_sigma_gt_one
+    (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) (C := C)
+    hσ hC hwnz_diff hfactor_diff0 offdvdProvider.hlocal_offdvd hEvStationary
+
+/--
+RH-O9: off-dvd local-zero provider 版の atTop 極限（0）。
+-/
+theorem tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t C : ℝ}
+    (hσ : 1 < σ) (hC : 0 ≤ C)
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0)
+    (offdvdProvider : BoundaryOffDvdLocalZeroProvider side d x u σ t)
+    (hEvStationary :
+      ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+        DkMath.RH.stationaryAt
+          (fun v : ℝ => eulerZetaFinite_onVertical S σ v) t) :
+    Filter.Tendsto
+      (fun S : Finset {p // Nat.Prime p} =>
+        hopcPrimeContributionSum (S := S) σ t)
+      Filter.atTop (𝓝 (0 : ℝ)) :=
+  tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_local0_sigma_gt_one
+    (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) (C := C)
+    hσ hC hwnz_diff hfactor_diff0 offdvdProvider.hlocal_offdvd hEvStationary
+
 end DkMath.RH.EulerZeta

@@ -2037,3 +2037,37 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-O9: `hlocal_offdvd` を `BoundaryInsertLocalLiftProvider` など既存 provider 前提から
      供給する補題を追加し、入力仮定をさらに統一する。
+
+### 日時: 2026/03/13 20:01 JST: Phase RH-O9 を実装（off-dvd local-zero provider 統一）
+
+1. 目的: OP-001 の RH-O9 として、
+   off-dvd 側 local-zero 仮定を record 化し、O8 系 API の入力を統一する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `BoundaryOffDvdLocalZeroProvider`
+     - `boundaryOffDvdLocalZeroProvider_of_factorPhaseVelLocal_eq_zero`
+     - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_offdvd_provider`
+     - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
+   - 実装方針:
+     - off-dvd 側の local-zero 供給を `BoundaryOffDvdLocalZeroProvider` に集約
+     - `hwnz_offdvd + hfactor_offdvd0` から provider を構成する補題を追加
+     - provider を O8 の local-zero 版 API へ接続して `tsum=0` / atTop 極限へ到達
+3. 結論:
+   - O8 の入力仮定が record 統一され、CFBRC 連携の呼び出し導線が整理された。
+4. 失敗事例:
+   - なし（今回追加分は一回で型チェック通過）。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-O10: `BoundaryInsertLocalLiftProvider` から
+     `BoundaryOffDvdLocalZeroProvider` へ落とす変換規則を設計し、
+     provider 層の入力をさらに一本化する。
