@@ -47,7 +47,7 @@
 - `CFBRCBridge.lean`
   - CFBRC の primitive-prime existence から RH 側 singleton 停留判定へ接続する bridge
 
-## 主要 API（RH-N47 時点）
+## 主要 API（RH-N48 時点）
 
 - HOPC 観測量:
   - `hopcPrimeLocalContribution p σ t`

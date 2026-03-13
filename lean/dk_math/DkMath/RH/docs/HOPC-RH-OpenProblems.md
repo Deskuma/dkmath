@@ -13,7 +13,7 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
     無限側観測量へ上げるための前提を明文化する。
 - 目標成果:
   - 条件付きの「有限判定 → 極限判定」補題群
-- 状態: 進行中（RH-O16: `hlocal_erase` を factor0 + divisibility から生成する wrapper を追加）
+- 状態: 進行中（RH-O17: witness 入力の `p ∉ S` 条件を除去）
 - 到達済み:
   - `hopcPrimeContributionFn`
   - `hopcPrimeContributionTsum`
@@ -85,7 +85,6 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
   - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
   - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
 - 残タスク:
-  - witness 入力の `p ∉ S` 条件を自動供給する（または代替条件化する）補題を追加
   - on-set provider 構成器の witness 前提を
     `BoundaryInsertLocalLiftProvider` 側情報へさらに寄せる
 - 優先度: 高

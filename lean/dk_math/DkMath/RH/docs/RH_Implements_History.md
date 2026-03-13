@@ -2313,3 +2313,40 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - witness 入力の `p ∉ S` 条件を自動供給する
      （または代替条件へ置換する）補題を追加する。
+
+### 日時: 2026/03/13 22:08 JST: Phase RH-O17 を実装（witness 前提の `p ∉ S` 除去）
+
+1. 目的: OP-001 の RH-O17 として、
+   一般有限集合 `S` 抽出 wrapper 群の witness 入力から `p ∉ S` 前提を除去し、
+   API 入力を簡約する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 変更実装（`CFBRCBridge.lean`）:
+     - `boundary_hlocal_on_S_of_insertProvider_and_witness_local0_and_local0_on_erase`
+       から `hp_not_mem : p ∉ S` を削除し、
+       `p ∈ S` / `p ∉ S` 分岐で `hsum_lift` 展開を内部処理
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_witness_local0_and_local0_on_erase`
+       の witness から `p ∉ S` を削除
+     - `boundary_hlocal_on_S_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase`
+       の `hp_not_mem` 依存を削除
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase`
+       / `_on_S` の witness から `p ∉ S` を削除
+3. 結論:
+   - RH-O15/O16 で追加した on-set provider 構成 API の入力が一段軽量化され、
+     `insert p S` 展開での集合外仮定を利用側から隠蔽できた。
+4. 失敗事例:
+   - 初回検証で `lake` 実行ディレクトリを 1 階層誤り、
+     `lakefile` 未検出エラーが発生。
+   - `lean/dk_math` 直下で再実行して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - on-set provider 構成器の witness 前提を
+     `BoundaryInsertLocalLiftProvider` 側情報へさらに寄せる。

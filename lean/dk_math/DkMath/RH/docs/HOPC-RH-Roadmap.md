@@ -116,7 +116,7 @@ Lean 実装ロードマップを 1 枚で管理するための文書。
 次スプリントは OP-001 を主軸として進める。
 
 1. OP-001（finite→infinite 接続）を継続
-   - 到達済み（RH-O1/O2/O3/O4/O5/O6/O7/O8/O9/O10/O11/O12/O13/O14/O15/O16）:
+   - 到達済み（RH-O1/O2/O3/O4/O5/O6/O7/O8/O9/O10/O11/O12/O13/O14/O15/O16/O17）:
      - `HopcInfiniteLift.lean` を追加
      - `HasSum` 仮定から `hopcPrimeContributionSum` の atTop 極限へ接続
      - `Summable + tsum=0` 仮定から同極限へ接続
@@ -151,11 +151,11 @@ Lean 実装ロードマップを 1 枚で管理するための文書。
        （witness + local-zero-on-erase 入力）を追加
      - RH-O15 の `hlocal_erase` を、
        factor0 + divisibility（erase / 全体 `S`）から内部生成する wrapper を追加
+     - RH-O17 として、一般有限集合 `S` 抽出 wrapper 群の witness 入力から
+       `p ∉ S` 条件を除去
    - 次の焦点:
      - `BoundaryInsertLocalLiftProvider` の追加仮定を最小化し、
        off-dvd 側 local-zero 抽出を provider 内部情報に寄せる
-     - witness 入力の `p ∉ S` 条件を自動供給する
-       （または代替条件へ置換する）補題を追加する
      - on-set provider 構成の witness 前提を
        `BoundaryInsertLocalLiftProvider` 側情報へさらに寄せる
 2. OP-004（曲率条件運用）を並行整理

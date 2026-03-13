@@ -2389,6 +2389,7 @@ RH-O15: 一般有限集合 `S` 版の 1 点抽出補題。
 
 `insert p S` 上の寄与総和ゼロ（`hsum_lift`）と、
 `S.erase r` 上の local-zero が与えられたとき、`r` の local-zero を導く。
+RH-O17 で `p ∉ S` の明示仮定を不要化し、`p ∈ S` / `p ∉ S` を内部で分岐処理する。
 -/
 theorem boundary_hlocal_on_S_of_insertProvider_and_witness_local0_and_local0_on_erase
     (side : DkMath.CFBRC.BoundarySide)
@@ -2401,18 +2402,22 @@ theorem boundary_hlocal_on_S_of_insertProvider_and_witness_local0_and_local0_on_
     (hp_gap : match side with
       | .right => ¬ p.1 ∣ x
       | .left => ¬ p.1 ∣ u)
-    (hp_not_mem : p ∉ S)
     (hlocal_p : hopcPrimeLocalContribution p.1 σ t = 0)
     (hlocal_erase :
       ∀ q ∈ S.erase r, hopcPrimeLocalContribution q.1 σ t = 0) :
     hopcPrimeLocalContribution r.1 σ t = 0 := by
   cases side with
   | right =>
-      have hsum :
+      have hsum_insert :
           hopcPrimeContributionSum (S := insert p S) σ t = 0 :=
         provider.hsum_lift p hp_dvd hp_gap
-      unfold hopcPrimeContributionSum at hsum
-      rw [Finset.sum_insert hp_not_mem, hlocal_p, zero_add] at hsum
+      unfold hopcPrimeContributionSum at hsum_insert
+      have hsum :
+          (∑ q ∈ S, hopcPrimeLocalContribution q.1 σ t) = 0 := by
+        by_cases hp_mem : p ∈ S
+        · simpa [Finset.insert_eq_of_mem hp_mem] using hsum_insert
+        · rw [Finset.sum_insert hp_mem, hlocal_p, zero_add] at hsum_insert
+          exact hsum_insert
       have hdecomp :
           hopcPrimeLocalContribution r.1 σ t +
               (∑ q ∈ S.erase r, hopcPrimeLocalContribution q.1 σ t) =
@@ -2444,11 +2449,16 @@ theorem boundary_hlocal_on_S_of_insertProvider_and_witness_local0_and_local0_on_
               rw [hsum_erase_zero]
         _ = 0 := hr_plus
   | left =>
-      have hsum :
+      have hsum_insert :
           hopcPrimeContributionSum (S := insert p S) σ t = 0 :=
         provider.hsum_lift p hp_dvd hp_gap
-      unfold hopcPrimeContributionSum at hsum
-      rw [Finset.sum_insert hp_not_mem, hlocal_p, zero_add] at hsum
+      unfold hopcPrimeContributionSum at hsum_insert
+      have hsum :
+          (∑ q ∈ S, hopcPrimeLocalContribution q.1 σ t) = 0 := by
+        by_cases hp_mem : p ∈ S
+        · simpa [Finset.insert_eq_of_mem hp_mem] using hsum_insert
+        · rw [Finset.sum_insert hp_mem, hlocal_p, zero_add] at hsum_insert
+          exact hsum_insert
       have hdecomp :
           hopcPrimeLocalContribution r.1 σ t +
               (∑ q ∈ S.erase r, hopcPrimeLocalContribution q.1 σ t) =
@@ -2485,6 +2495,7 @@ RH-O15: 一般有限集合 `S` での on-set provider 構成器。
 
 各 `r ∈ S` について witness prime `p` と `S.erase r` 上 local-zero を供給できるなら、
 `BoundaryOffDvdLocalZeroOnSetProvider` を構成できる。
+RH-O17 で witness 側から `p ∉ S` 条件を除去した。
 -/
 def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_witness_local0_and_local0_on_erase
     (side : DkMath.CFBRC.BoundarySide)
@@ -2498,20 +2509,19 @@ def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_witness_local0_an
           (match side with
             | .right => ¬ p.1 ∣ x
             | .left => ¬ p.1 ∣ u) ∧
-          p ∉ S ∧
           hopcPrimeLocalContribution p.1 σ t = 0)
     (hlocal_erase :
       ∀ r ∈ S, ∀ q ∈ S.erase r, hopcPrimeLocalContribution q.1 σ t = 0) :
     BoundaryOffDvdLocalZeroOnSetProvider side S d x u σ t := by
   refine ⟨?_⟩
   intro r hrS _hr_offdvd
-  rcases hwitness r hrS with ⟨p, hp_dvd, hp_gap, hp_not_mem, hlocal_p⟩
+  rcases hwitness r hrS with ⟨p, hp_dvd, hp_gap, hlocal_p⟩
   exact boundary_hlocal_on_S_of_insertProvider_and_witness_local0_and_local0_on_erase
     (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
     (r := r) (p := p) hrS provider hp_dvd
     (by
       cases side <;> simpa using hp_gap)
-    hp_not_mem hlocal_p
+    hlocal_p
     (hlocal_erase r hrS)
 
 /--
@@ -2529,7 +2539,6 @@ theorem boundary_hlocal_on_S_of_insertProvider_and_boundaryDiffPow_factor0_and_d
     (hp_gap : match side with
       | .right => ¬ p.1 ∣ x
       | .left => ¬ p.1 ∣ u)
-    (hp_not_mem : p ∉ S)
     (herase_dvd :
       ∀ q ∈ S.erase r, q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
     (hwnz_diff :
@@ -2555,14 +2564,15 @@ theorem boundary_hlocal_on_S_of_insertProvider_and_boundaryDiffPow_factor0_and_d
       (hfactor_diff0 q (herase_dvd q hq))
   exact boundary_hlocal_on_S_of_insertProvider_and_witness_local0_and_local0_on_erase
     (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
-    (r := r) (p := p) hrS provider hp_dvd hp_gap hp_not_mem hlocal_p hlocal_erase
+    (r := r) (p := p) hrS provider hp_dvd hp_gap hlocal_p hlocal_erase
 
 /--
 RH-O16: 一般有限集合 `S` での on-set provider 構成器（erase 除法版）。
 
-各 `r ∈ S` について witness prime（divide + gap + outside）と
+各 `r ∈ S` について witness prime（divide + gap）と
 `S.erase r` 上の `boundaryDiffPow` 除法を供給できれば、
 factor0 仮定から `BoundaryOffDvdLocalZeroOnSetProvider` を構成する。
+RH-O17 で witness 側から `p ∉ S` 条件を除去した。
 -/
 def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase
     (side : DkMath.CFBRC.BoundarySide)
@@ -2575,8 +2585,7 @@ def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_f
           p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u ∧
           (match side with
             | .right => ¬ p.1 ∣ x
-            | .left => ¬ p.1 ∣ u) ∧
-          p ∉ S)
+            | .left => ¬ p.1 ∣ u))
     (herase_dvd :
       ∀ r ∈ S, ∀ q ∈ S.erase r, q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
     (hwnz_diff :
@@ -2590,13 +2599,12 @@ def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_f
     BoundaryOffDvdLocalZeroOnSetProvider side S d x u σ t := by
   refine ⟨?_⟩
   intro r hrS _hr_offdvd
-  rcases hwitness r hrS with ⟨p, hp_dvd, hp_gap, hp_not_mem⟩
+  rcases hwitness r hrS with ⟨p, hp_dvd, hp_gap⟩
   exact boundary_hlocal_on_S_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase
     (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
     (r := r) (p := p) hrS provider hp_dvd
     (by
       cases side <;> simpa using hp_gap)
-    hp_not_mem
     (herase_dvd r hrS) hwnz_diff hfactor_diff0
 
 /--
@@ -2615,8 +2623,7 @@ def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_f
           p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u ∧
           (match side with
             | .right => ¬ p.1 ∣ x
-            | .left => ¬ p.1 ∣ u) ∧
-          p ∉ S)
+            | .left => ¬ p.1 ∣ u))
     (hS_dvd :
       ∀ q ∈ S, q.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
     (hwnz_diff :

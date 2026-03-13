@@ -1,7 +1,7 @@
 # DkMath.RH：位相ドリフト骨格 + EulerZeta（現状の全コード）
 
 - Authors: D. and Kenro (ChatGPT-5.2)
-- Last updated: 2026/03/13 22:01
+- Last updated: 2026/03/13 22:08
 
 このディレクトリは、リーマンゼータ関数に差し込む前に必要な
 
@@ -147,7 +147,7 @@ $$
 
 ---
 
-## 現状 API（HOPC 公開名・RH-N47 時点）
+## 現状 API（HOPC 公開名・RH-N48 時点）
 
 CFBRC 連携で使う公開名は次を基準とする。
 
