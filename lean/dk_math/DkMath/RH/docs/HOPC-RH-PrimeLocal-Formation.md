@@ -104,6 +104,15 @@ HOPC-RH の運用では、`arg` を主役にせず、
 を追加し、`S` 一様の lift 仮定から
 `Filter.atTop` 上の eventually 形成条件存在へ持ち上げる中間段を形式化した。
 
+加えて RH-PF2w と RH-PF3 として、
+
+- `eventually_exists_primeLocalFormationWitness_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv`
+- `eventually_exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split`
+- `eventually_exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv`
+
+を追加し、eventually 形成条件を witness 付きで回収しつつ、
+`stationaryAt` / `nondegenerateStationaryAt` へ落とし込む高位 bridge を明示化した。
+
 ---
 
 ## 3. Why Primes Are Structurally Central

@@ -308,3 +308,37 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-PF2 を入力として、eventually `stationaryAt` / `nondegenerateStationaryAt`
      への高位 bridge を設計する。
+
+### 日時: 2026/03/14 03:49 JST: RH-PF2w / RH-PF3（witness 付き eventually 形成と高位停留 bridge）
+
+1. 目的:
+   RH-PF2 の次段として、eventually 形成条件を witness 付きで回収し、
+   eventually `stationaryAt` / eventually `nondegenerateStationaryAt` を返す
+   高位 bridge を実装する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/docs/HOPC-RH-PrimeLocal-Formation.md`
+     - `DkMath/RH/docs/RH-CFBRC-HOPC.md`
+     - `DkMath/RH/docs/RH_Implements_History-02.md`
+   - 追加実装:
+     - `exists_primeLocalFormationWitness_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv`
+     - `eventually_exists_primeLocalFormationWitness_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv`
+     - `eventually_exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split`
+     - `eventually_exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv`
+   - 補題の意味:
+     - RH-PF2 の形成条件に `p ∣ boundaryDiffPow` と gap 条件を同梱し、
+       witness 付き eventually 形成へ強化。
+     - 形成条件を `stationaryAt` / `nondegenerateStationaryAt` 判定補題へ接続し、
+       atTop 側の高位存在命題を直接返す API を整備。
+3. 結論:
+   - RH-PF1 → RH-PF2 → RH-PF2w → RH-PF3 の段階が揃い、
+     prime-local 形成機構から高位停留命題への導線が完成した。
+4. 失敗事例:
+   - RH-PF3 実装時に `match side` 依存型不一致（`hsum_lift` 引数型）が発生。
+   - `cases side` で右/左を固定し、呼び出し側の型を正規化して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-PF3 を呼ぶ既存 wrapper 群の段階移行（旧導線の統合整理）を進める。

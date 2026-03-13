@@ -91,6 +91,8 @@ HOPC-RH の「位相を微分量で観測する」設計は、
      (`hopcPrimeContributionSum = 0 ∧ phaseCurv ≠ 0`)
      を直接返す RH-PF1 補題
    - RH-PF1 を `Filter.atTop` の eventually 形式へ持ち上げる RH-PF2 補題
+   - witness 付き eventually 形成条件（RH-PF2w）
+   - eventually `stationaryAt` / eventually `nondegenerateStationaryAt` への高位 bridge（RH-PF3）
    - `boundaryCore` / `boundaryDiffPow` の計算補題版 wrapper
    - `of_dvd` / `normalized` / `with_offdvd` の高位 API
 
