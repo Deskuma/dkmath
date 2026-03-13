@@ -1669,3 +1669,37 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - `lake build DkMath.RH` 成功。
 6. 次の課題:
    - RH-N30: `hS_dvd` も不要化できる set 正規化（`S` 側の構成規約 or wrapper）を検討する。
+
+### 日時: 2026/03/13 17:34 JST: Phase RH-N30 を実装（`hS_dvd` 不要化の set 正規化 wrapper）
+
+1. 目的: RH-N29 の次段として、`hS_dvd` を前提に要求しないよう
+   `S` の正規化（`boundaryDiffPow` 除法 filter）を導入する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundaryDiffPowDvdSet`
+     - `boundary_dvd_on_boundaryDiffPowDvdSet`
+     - `boundaryInsertLocalLiftProvider_of_boundaryDiffPow_factor0_normalized`
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_normalized`
+   - 実装方針:
+     - `S` を `boundaryDiffPow side d x u` の除法条件で正規化し、
+       `hS_dvd` は `boundary_dvd_on_boundaryDiffPowDvdSet` で自動供給
+     - RH-N29 の `..._of_dvd` wrapper に接続して停留点存在へ落とす
+3. 結論:
+   - 正規化集合 `boundaryDiffPowDvdSet` を介すことで、
+     `hS_dvd` なしの direct existence wrapper を提供できた。
+   - OP-003 の仮定削減は、`hS_gap` と `hS_dvd` の両方を不要化（正規化版）まで到達。
+4. 失敗事例:
+   - なし。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N31: 正規化集合ではなく元の `S` を保持したまま、
+     `hS_dvd` 省略可能な API 設計（包摂関係補題 or 2段 wrapper）を検討する。

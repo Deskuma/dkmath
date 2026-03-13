@@ -36,7 +36,7 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
 - 目標成果:
   - provider 前提を直接受ける bridge 補題（`hS_lift` / `hsum_lift` 実供給）
   - finite-set から運用可能な仮定正規化 wrapper 群
-- 状態: 進行中（RH-N1〜N29 で API 骨格・provider 入口・実供給導線を整備済み）
+- 状態: 進行中（RH-N1〜N30 で API 骨格・provider 入口・実供給導線を整備済み）
 - 到達済み:
   - singleton bridge（global/local）
   - small finite-set bridge（`insert p S`）
@@ -73,6 +73,9 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
     - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryDiffPow_local0`
     - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryDiffPow_factor0`
     - `boundaryInsertLocalLiftProvider_of_boundary_dvd_of_boundaryDiffPow_factor0`
+    - `boundaryDiffPowDvdSet`
+    - `boundary_dvd_on_boundaryDiffPowDvdSet`
+    - `boundaryInsertLocalLiftProvider_of_boundaryDiffPow_factor0_normalized`
     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0`
     - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0`
     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0`
@@ -81,11 +84,12 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
     - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0`
     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0`
     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_of_dvd`
+    - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_normalized`
     - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0`
   - README / Discussion / docs README の利用テンプレート同期（split 版 / provider 版）
 - 残タスク:
   - provider 実供給補題の具体化:
-    - `hS_dvd` も不要化する direct existence wrapper の仮定削減
+    - 元の `S` を保持したまま `hS_dvd` を不要化する direct existence wrapper の仮定削減
   - OP-001 の finite→infinite 接続で再利用できる仮定パッケージ化
 - 優先度: 高（継続）
 

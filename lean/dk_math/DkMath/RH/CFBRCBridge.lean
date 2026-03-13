@@ -1703,6 +1703,82 @@ theorem
       (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
       hS_dvd hwnz_diff hfactor_diff0)
 
+/--
+RH-N30: `S` を `boundaryDiffPow side d x u` の除法条件で正規化した有限集合。
+-/
+@[simp] def boundaryDiffPowDvdSet
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    (d x u : ℕ) : Finset {q // Nat.Prime q} :=
+  S.filter (fun r => r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+
+/--
+RH-N30: `boundaryDiffPowDvdSet` の要素は自動的に boundary 除法を満たす。
+-/
+theorem boundary_dvd_on_boundaryDiffPowDvdSet
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} :
+    ∀ r ∈ boundaryDiffPowDvdSet side S d x u,
+      r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u := by
+  intro r hr
+  exact (Finset.mem_filter.mp hr).2
+
+/--
+RH-N30: `S` の正規化を使って `hS_dvd` を要求しない provider 構成 wrapper。
+-/
+def boundaryInsertLocalLiftProvider_of_boundaryDiffPow_factor0_normalized
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
+    BoundaryInsertLocalLiftProvider side (boundaryDiffPowDvdSet side S d x u) d x u σ t := by
+  exact boundaryInsertLocalLiftProvider_of_boundary_dvd_of_boundaryDiffPow_factor0
+    (side := side) (S := boundaryDiffPowDvdSet side S d x u)
+    (d := d) (x := x) (u := u) (σ := σ) (t := t)
+    (hS_dvd := boundary_dvd_on_boundaryDiffPowDvdSet (side := side) (S := S))
+    hwnz_diff hfactor_diff0
+
+/--
+RH-N30: `S` 正規化版の `boundaryDiffPow` factor0 から
+small finite-set 停留点存在へ接続する wrapper。
+-/
+theorem
+    exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_normalized
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ =>
+          eulerZetaFinite_onVertical (insert p (boundaryDiffPowDvdSet side S d x u)) σ v) t := by
+  exact exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_of_dvd
+    (side := side) (S := boundaryDiffPowDvdSet side S d x u)
+    (d := d) (x := x) (u := u) (σ := σ) (t := t)
+    hd_prime hd_ge hx hu hcop hpnd
+    (hS_dvd := boundary_dvd_on_boundaryDiffPowDvdSet (side := side) (S := S))
+    hwnz_diff hfactor_diff0
+
 local notation "existsStatInsertBoundaryDiffPowLocal0" =>
   exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0
 

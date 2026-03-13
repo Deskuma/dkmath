@@ -454,7 +454,7 @@ example (side : DkMath.CFBRC.BoundarySide)
       (hlocal_witness := hlocal_witness)
 ```
 
-### Implementation Bridge (RH-N29: boundary_dvd + gap / boundaryCore・boundaryDiffPow witness 正規化)
+### Implementation Bridge (RH-N30: boundary_dvd + gap / boundaryCore・boundaryDiffPow witness 正規化)
 
 RH-N21/N22 では、`S` 上の boundary 除法情報と gap 非除法情報を軸に、
 provider 供給前提を段階的に削減した。
@@ -481,6 +481,9 @@ provider 供給前提を段階的に削減した。
 - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryDiffPow_local0`
 - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryDiffPow_factor0`
 - `boundaryInsertLocalLiftProvider_of_boundary_dvd_of_boundaryDiffPow_factor0`
+- `boundaryDiffPowDvdSet`
+- `boundary_dvd_on_boundaryDiffPowDvdSet`
+- `boundaryInsertLocalLiftProvider_of_boundaryDiffPow_factor0_normalized`
 - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0`
 - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0`
 - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0`
@@ -489,6 +492,7 @@ provider 供給前提を段階的に削減した。
 - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0`
 - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0`
 - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_of_dvd`
+- `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_normalized`
 - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0`
 
 最小テンプレート（boundary_dvd + gap + witness → provider）:
