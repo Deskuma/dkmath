@@ -164,4 +164,3 @@ Lean では明示的な関数・補題・存在定理の形で確認できる。
 - ロードマップ: `HOPC-RH-Roadmap.md`
 - 未解決タスク: `HOPC-RH-OpenProblems.md`
 - 履歴: `RH_Implements_History-02.md`
-
