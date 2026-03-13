@@ -47,7 +47,7 @@
 - `CFBRCBridge.lean`
   - CFBRC の primitive-prime existence から RH 側 singleton 停留判定へ接続する bridge
 
-## 主要 API（RH-N36 時点）
+## 主要 API（RH-N37 時点）
 
 - HOPC 観測量:
   - `hopcPrimeLocalContribution p σ t`
@@ -79,6 +79,10 @@
   - `hopcPrimeContributionTsum_eq_zero_of_summable_of_eventually_stationaryAt`
   - `hopcPrimeContributionTsum_eq_zero_of_prime_rpow_bound_of_eventually_stationaryAt`
   - `tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound_of_eventually_stationaryAt`
+  - `hPrime_ne_of_sigma_gt_one`
+  - `eventually_hopcPrimeContributionSum_eq_zero_of_sigma_gt_one_of_eventually_stationaryAt`
+  - `hopcPrimeContributionTsum_eq_zero_of_prime_rpow_bound_sigma_gt_one`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound_sigma_gt_one`
 - 停留判定（有限 Euler 積）:
   - `driftFreeAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero`
   - `stationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero`

@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.RH.EulerZetaLemmas
+import DkMath.RH.EulerZetaConvergence
 
 /-!
 # HOPC Infinite Lift
@@ -432,5 +432,73 @@ theorem tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound_of_eventually
   exact
     tendsto_hopcPrimeContributionSum_atTop_of_summable_assumptions
       (σ := σ) (t := t) ⟨hSummable, hTsumZero⟩
+
+/--
+`σ > 1` なら、全素数で `w_p(σ,t) = exp((σ+it)\log p)-1` は非零。
+-/
+theorem hPrime_ne_of_sigma_gt_one
+    {σ t : ℝ}
+    (hσ : 1 < σ) :
+    ∀ p : {q // Nat.Prime q}, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0 := by
+  intro p
+  exact eulerZeta_exp_s_log_p_sub_one_ne_zero_strong p.1 p.2 σ t hσ
+
+/--
+`σ > 1` 仮定版:
+`eventually stationary` から `eventually hopcPrimeContributionSum = 0` を得る。
+-/
+theorem eventually_hopcPrimeContributionSum_eq_zero_of_sigma_gt_one_of_eventually_stationaryAt
+    {σ t : ℝ}
+    (hσ : 1 < σ)
+    (hEvStationary :
+      ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+        DkMath.RH.stationaryAt
+          (fun v : ℝ => eulerZetaFinite_onVertical S σ v) t) :
+    ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+      hopcPrimeContributionSum (S := S) σ t = 0 :=
+  eventually_hopcPrimeContributionSum_eq_zero_of_eventually_stationaryAt
+    (σ := σ) (t := t) (hPrime_ne_of_sigma_gt_one (σ := σ) (t := t) hσ) hEvStationary
+
+/--
+`σ > 1` 仮定版:
+`eventually stationary` から `hopcPrimeContributionTsum = 0` を得る。
+-/
+theorem hopcPrimeContributionTsum_eq_zero_of_prime_rpow_bound_sigma_gt_one
+    {σ t C : ℝ}
+    (hσ : 1 < σ)
+    (hAbsLe :
+      ∀ p : {q // Nat.Prime q},
+        |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ)
+    (hEvStationary :
+      ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+        DkMath.RH.stationaryAt
+          (fun v : ℝ => eulerZetaFinite_onVertical S σ v) t) :
+    hopcPrimeContributionTsum σ t = 0 :=
+  hopcPrimeContributionTsum_eq_zero_of_prime_rpow_bound_of_eventually_stationaryAt
+    (σ := σ) (t := t) (C := C) hσ hAbsLe
+    (hPrime_ne_of_sigma_gt_one (σ := σ) (t := t) hσ) hEvStationary
+
+/--
+`σ > 1` 仮定版:
+`C / p^σ` 上界と `eventually stationary` から
+有限寄与和の atTop 極限（0）を得る。
+-/
+theorem tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound_sigma_gt_one
+    {σ t C : ℝ}
+    (hσ : 1 < σ)
+    (hAbsLe :
+      ∀ p : {q // Nat.Prime q},
+        |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ)
+    (hEvStationary :
+      ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+        DkMath.RH.stationaryAt
+          (fun v : ℝ => eulerZetaFinite_onVertical S σ v) t) :
+    Filter.Tendsto
+      (fun S : Finset {p // Nat.Prime p} =>
+        hopcPrimeContributionSum (S := S) σ t)
+      Filter.atTop (𝓝 (0 : ℝ)) :=
+  tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound_of_eventually_stationaryAt
+    (σ := σ) (t := t) (C := C) hσ hAbsLe
+    (hPrime_ne_of_sigma_gt_one (σ := σ) (t := t) hσ) hEvStationary
 
 end DkMath.RH.EulerZeta

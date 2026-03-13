@@ -1926,3 +1926,40 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-O6: CFBRC/RH bridge 前提から
      `hAbsLe` と `hPrime_ne` を系統供給する wrapper を追加する。
+
+### 日時: 2026/03/13 19:09 JST: Phase RH-O6 を実装（`σ > 1` で `hPrime_ne` 自動供給）
+
+1. 目的: OP-001 の RH-O6 として、
+   `eventually stationary` 系 API が要求する `hPrime_ne` を
+   `σ > 1` から自動供給できる wrapper を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/HopcInfiniteLift.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`HopcInfiniteLift.lean`）:
+     - `hPrime_ne_of_sigma_gt_one`
+     - `eventually_hopcPrimeContributionSum_eq_zero_of_sigma_gt_one_of_eventually_stationaryAt`
+     - `hopcPrimeContributionTsum_eq_zero_of_prime_rpow_bound_sigma_gt_one`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound_sigma_gt_one`
+   - 実装方針:
+     - `EulerZetaConvergence` 側の
+       `eulerZeta_exp_s_log_p_sub_one_ne_zero_strong` を再利用し、
+       `σ > 1` から `∀ p, w_p ≠ 0` を即時供給
+     - RH-O5 の `prime_rpow_bound + eventually_stationary` 補題へ接続して
+       `tsum = 0` と atTop 極限 0 を導出
+3. 結論:
+   - `hPrime_ne` の手入力が不要な高位 API が増え、
+     OP-001 の実運用前提がさらに簡約された。
+4. 失敗事例:
+   - 追加補題名が長すぎて `longLine` linter 警告が発生。
+   - 補題名を短縮して解消。
+5. 検証:
+   - `lake build DkMath.RH.HopcInfiniteLift` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-O7: CFBRC bridge 前提（`BoundarySide` 高位 API）から
+     `hAbsLe` を供給する具体 wrapper を追加する。

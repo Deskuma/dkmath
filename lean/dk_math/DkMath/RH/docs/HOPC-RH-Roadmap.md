@@ -116,7 +116,7 @@ Lean 実装ロードマップを 1 枚で管理するための文書。
 次スプリントは OP-001 を主軸として進める。
 
 1. OP-001（finite→infinite 接続）を継続
-   - 到達済み（RH-O1/O2/O3/O4/O5）:
+   - 到達済み（RH-O1/O2/O3/O4/O5/O6）:
      - `HopcInfiniteLift.lean` を追加
      - `HasSum` 仮定から `hopcPrimeContributionSum` の atTop 極限へ接続
      - `Summable + tsum=0` 仮定から同極限へ接続
@@ -125,8 +125,9 @@ Lean 実装ロードマップを 1 枚で管理するための文書。
        `eventually hopcPrimeContributionSum = 0` と
        `hopcPrimeContributionTsum = 0`（`Summable` 併用）へ接続
      - `C / p^σ`（`σ > 1`）型上界から `Summable` / majorant / atTop 極限を供給
+     - `σ > 1` から `hPrime_ne` を自動供給する wrapper を追加
    - 次の焦点:
      - majorant 供給器（CFBRC/RH 連携で `hAbsLe` を供給）を追加
-     - `hPrime_ne` を系統供給する wrapper（`σ` 条件や bridge 前提からの導線）を追加
+     - CFBRC bridge 前提からの `hAbsLe` 具体化（`BoundarySide` 高位 API 接続）を追加
 2. OP-004（曲率条件運用）を並行整理
    - `phaseCurv` 供給規約と wrapper 命名規約の整備
