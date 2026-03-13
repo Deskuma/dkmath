@@ -108,6 +108,7 @@
   - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness` (legacy, deprecated; removal target: 2026-06-30)
   - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime` (legacy, deprecated; removal target: 2026-06-30)
   - リポジトリ内呼び出し（`DkMath/**/*.lean`）は 2026-03-14 時点で新命名へ移行済み
+  - 本リポジトリは未公開運用のため、2026-03-14 時点で外部依存は想定しない
   - `BoundaryGlobalWitnessProvider`
   - `BoundaryGlobalWitnessLocalZeroProvider`
   - `boundaryGlobalWitnessProvider_of_exists`

@@ -2593,3 +2593,29 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 5. 次の課題:
    - 外部利用側の旧命名呼び出し移行率を継続監視し、
      `2026-06-30` 時点で削除可否を最終判定する。
+
+### 日時: 2026/03/14 00:24 JST: Phase RH-O24 を実施（未公開運用前提の確定）
+
+1. 目的:
+   RH-O23 で残した「外部移行監視」前提の妥当性を見直し、
+   未公開運用で外部依存が存在しない前提へ整理する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 方針更新:
+     - OP-001 の状態を「完了（RH-O24）」へ更新
+     - 「外部利用側移行完了」タスクを open issue から除去
+     - 旧命名 API 削除は、公開計画と整合する時点で
+       `2026-06-30` を目安に再判定する方針へ変更
+3. 結論:
+   - 未公開運用前提では、旧命名の deprecation 運用は
+     「内部移行完了済み + 互換層保留」の管理で十分と判断。
+   - OP-001 は現段階の実装課題として完了扱いに更新した。
+4. 検証:
+   - `rg -n "boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_(global_witness_local0_and_local0_on_erase|boundaryDiffPow_factor0_and_dvd_on_erase_of_global_witness|boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness|boundaryDiffPow_factor0_and_dvd_on_S_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime)" --glob '!**/.lake/**' --glob '!**/build/**'`
+5. 次の課題:
+   - OP-004（曲率条件運用）の供給規約・命名規約整理へ進む。

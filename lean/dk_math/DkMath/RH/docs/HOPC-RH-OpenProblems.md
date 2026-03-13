@@ -13,7 +13,7 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
     無限側観測量へ上げるための前提を明文化する。
 - 目標成果:
   - 条件付きの「有限判定 → 極限判定」補題群
-- 状態: 進行中（RH-O23: リポジトリ内移行監査完了、外部移行監視フェーズ）
+- 状態: 完了（RH-O24: 未公開運用前提で外部依存なしを確認）
 - 到達済み:
   - `hopcPrimeContributionFn`
   - `hopcPrimeContributionTsum`
@@ -101,12 +101,11 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
   - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_offdvd_provider`
   - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
   - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_provider_sigma_gt_one`
-- 残タスク:
+- 備考:
   - リポジトリ内（`DkMath/**/*.lean`）の旧命名呼び出しは移行完了
     （旧命名は `CFBRCBridge.lean` の互換定義 + `deprecated` 属性のみ）
-  - 削除目標日 `2026-06-30` までに、下流（外部利用側）の旧命名呼び出し移行を完了させる
-  - `2026-06-30` 到来時点で移行率を確認し、削除可否を判定
-- 優先度: 高
+  - 本リポジトリは未公開運用のため、2026-03-14 時点で外部依存は想定しない。
+  - 旧命名 API の削除実施は `2026-06-30` を目安に公開計画と合わせて再判定する。
 
 ## OP-002: 非零前提の管理 API
 
