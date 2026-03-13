@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.CFBRC.Bridge
+import DkMath.RH.HopcInfiniteLift
 import DkMath.RH.EulerZetaLemmas
 
 set_option linter.style.longLine false
@@ -17,6 +18,8 @@ CFBRC 側で得た primitive-prime existence を、RH 側の
 -/
 
 namespace DkMath.RH.EulerZeta
+
+open scoped Topology
 
 /--
 CFBRC の primitive-prime existence（right boundary）から、
@@ -1948,5 +1951,90 @@ theorem
     (boundary_hlocal_diff0_of_boundaryDiffPow_factorPhaseVelLocal_eq_zero
       (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t)
       hwnz_diff hfactor_diff0)
+
+/--
+RH-O7: `boundaryDiffPow` に関する split 仮定（divide / off-divide）から、
+`|hopcPrimeContributionFn| ≤ C / p^σ` の一括上界を構成する。
+-/
+theorem hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_split
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t C : ℝ}
+    (hAbs_dvd :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ)
+    (hAbs_offdvd :
+      ∀ p : {q // Nat.Prime q},
+        ¬ p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ) :
+    ∀ p : {q // Nat.Prime q},
+      |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ := by
+  intro p
+  by_cases hp_dvd : p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u
+  · exact hAbs_dvd p hp_dvd
+  · exact hAbs_offdvd p hp_dvd
+
+/--
+RH-O7: `boundaryDiffPow` split 上界と `σ > 1`・`eventually stationary` から
+`hopcPrimeContributionTsum = 0` を得る。
+-/
+theorem hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_split_prime_rpow_bound_sigma_gt_one
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t C : ℝ}
+    (hσ : 1 < σ)
+    (hAbs_dvd :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ)
+    (hAbs_offdvd :
+      ∀ p : {q // Nat.Prime q},
+        ¬ p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ)
+    (hEvStationary :
+      ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+        DkMath.RH.stationaryAt
+          (fun v : ℝ => eulerZetaFinite_onVertical S σ v) t) :
+    hopcPrimeContributionTsum σ t = 0 := by
+  have hAbs :
+      ∀ p : {q // Nat.Prime q},
+        |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ :=
+    hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_split
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) (C := C)
+      hAbs_dvd hAbs_offdvd
+  exact hopcPrimeContributionTsum_eq_zero_of_prime_rpow_bound_sigma_gt_one
+    (σ := σ) (t := t) (C := C) hσ hAbs hEvStationary
+
+/--
+RH-O7: `boundaryDiffPow` split 上界と `σ > 1`・`eventually stationary` から、
+有限寄与和の atTop 極限（0）を得る。
+-/
+theorem tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_split_prime_rpow_bound_sigma_gt_one
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t C : ℝ}
+    (hσ : 1 < σ)
+    (hAbs_dvd :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ)
+    (hAbs_offdvd :
+      ∀ p : {q // Nat.Prime q},
+        ¬ p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ)
+    (hEvStationary :
+      ∀ᶠ S : Finset {q // Nat.Prime q} in Filter.atTop,
+        DkMath.RH.stationaryAt
+          (fun v : ℝ => eulerZetaFinite_onVertical S σ v) t) :
+    Filter.Tendsto
+      (fun S : Finset {p // Nat.Prime p} =>
+        hopcPrimeContributionSum (S := S) σ t)
+      Filter.atTop (𝓝 (0 : ℝ)) := by
+  have hAbs :
+      ∀ p : {q // Nat.Prime q},
+        |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ :=
+    hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_split
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) (C := C)
+      hAbs_dvd hAbs_offdvd
+  exact tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound_sigma_gt_one
+    (σ := σ) (t := t) (C := C) hσ hAbs hEvStationary
 
 end DkMath.RH.EulerZeta

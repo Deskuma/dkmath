@@ -1963,3 +1963,38 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-O7: CFBRC bridge 前提（`BoundarySide` 高位 API）から
      `hAbsLe` を供給する具体 wrapper を追加する。
+
+### 日時: 2026/03/13 19:17 JST: Phase RH-O7 を実装（`BoundarySide` split bound 連携）
+
+1. 目的: OP-001 の RH-O7 として、
+   CFBRC `BoundarySide` 文脈の split 仮定（divide/off-divide）から
+   `hAbsLe` を合成し、infinite 接続 API へ直結する wrapper を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_split`
+     - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_split_prime_rpow_bound_sigma_gt_one`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_split_prime_rpow_bound_sigma_gt_one`
+   - 実装方針:
+     - `p ∣ boundaryDiffPow` / `¬ p ∣ boundaryDiffPow` の 2 仮定を `by_cases` で統合し、
+       `∀ p, |hopcPrimeContributionFn| ≤ C / p^σ` を構築
+     - 構築した global 上界を `HopcInfiniteLift` の RH-O6 API
+       (`..._prime_rpow_bound_sigma_gt_one`) に接続
+3. 結論:
+   - CFBRC 側 split bound 仮定から、`tsum = 0` と atTop 極限 0 を
+     直接得る橋渡しが追加された。
+4. 失敗事例:
+   - `CFBRCBridge` 側で `𝓝` 記法が未開放で型エラー。
+   - `open scoped Topology` を追加して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-O8: `hAbs_dvd` / `hAbs_offdvd` を CFBRC provider 前提から導く
+     具体評価補題を追加し、split bound 仮定の入力負担を減らす。

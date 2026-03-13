@@ -13,7 +13,7 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
     無限側観測量へ上げるための前提を明文化する。
 - 目標成果:
   - 条件付きの「有限判定 → 極限判定」補題群
-- 状態: 進行中（RH-O6: `σ>1` から `hPrime_ne` 供給 wrapper を追加）
+- 状態: 進行中（RH-O7: `BoundarySide` split bound から `hAbsLe` 供給 wrapper を追加）
 - 到達済み:
   - `hopcPrimeContributionFn`
   - `hopcPrimeContributionTsum`
@@ -45,9 +45,12 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
   - `eventually_hopcPrimeContributionSum_eq_zero_of_sigma_gt_one_of_eventually_stationaryAt`
   - `hopcPrimeContributionTsum_eq_zero_of_prime_rpow_bound_sigma_gt_one`
   - `tendsto_hopcPrimeContributionSum_atTop_of_prime_rpow_bound_sigma_gt_one`
+  - `hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_split`
+  - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_split_prime_rpow_bound_sigma_gt_one`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_split_prime_rpow_bound_sigma_gt_one`
 - 残タスク:
-  - majorant 供給器（CFBRC/RH 連携で `hAbsLe` を供給）を追加
-  - CFBRC bridge 前提からの `hAbsLe` 具体化（`BoundarySide` 高位 API との接続）を追加
+  - `hAbs_dvd` / `hAbs_offdvd` を CFBRC 既存 provider 仮定から導く具体評価補題を追加
+  - split bound 仮定を `BoundaryInsertLocalLiftProvider` レベルへ持ち上げる設計を追加
 - 優先度: 高
 
 ## OP-002: 非零前提の管理 API
