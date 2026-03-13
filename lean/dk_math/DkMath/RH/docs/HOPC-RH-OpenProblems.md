@@ -36,7 +36,7 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
 - 目標成果:
   - provider 前提を直接受ける bridge 補題（`hS_lift` / `hsum_lift` 実供給）
   - finite-set から運用可能な仮定正規化 wrapper 群
-- 状態: 進行中（RH-N1〜N23 で API 骨格・provider 入口・実供給導線を整備済み）
+- 状態: 進行中（RH-N1〜N24 で API 骨格・provider 入口・実供給導線を整備済み）
 - 到達済み:
   - singleton bridge（global/local）
   - small finite-set bridge（`insert p S`）
@@ -61,12 +61,14 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
     - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap`
     - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_of_boundaryCore_witness`
     - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryCore_factor0`
+    - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0`
+    - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0`
   - README / Discussion / docs README の利用テンプレート同期（split 版 / provider 版）
 - 残タスク:
   - provider 実供給補題の具体化:
     - local contribution 側から `hfactor_core0` を生成する実補題
     - CFBRC 側 primitive prime existence と `hS_dvd` / `hS_gap` を接続する実補題
-    - 上記実補題を使う provider 自動構成 wrapper のさらなる仮定削減
+    - 上記実補題を使う direct existence wrapper のさらなる仮定削減
   - OP-001 の finite→infinite 接続で再利用できる仮定パッケージ化
 - 優先度: 高（継続）
 

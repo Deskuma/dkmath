@@ -1440,3 +1440,40 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-N24 として、`boundaryCore` 上で `hfactor_core0` を供給する実補題
      （解析条件 or finite-set 観測条件から `eulerZetaFactorPhaseVelLocal = 0` を導く層）
      を追加する。
+
+### 日時: 2026/03/13 12:58 JST: Phase RH-N24 を実装（factor0 から direct existence への昇格）
+
+1. 目的: RH-N23 で整えた provider 構成を高位 API へ昇格し、
+   `boundaryCore` factor0 仮定から停留点存在までを一段で呼べるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0`
+       （RH-N23 provider wrapper + provider 版 existence を合成）
+     - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0`
+       （`S = ∅` 特化で singleton 停留点存在へ接続）
+   - 実装修正:
+     - `BoundarySide` 依存型不一致を `cases side` で解消
+     - empty-set 分岐の証明を `simp at hr` へ整理
+   - 文書同期:
+     - README 2 枚を RH-N24 へ更新し direct existence テンプレートを追加
+     - `RH-CFBRC-Discussion.md` を RH-N24 内容へ更新
+     - OP-003 を RH-N1〜N24 到達へ更新
+3. 結論: `boundaryCore` factor0 仮定から
+   provider 構成を経由せずに existence API を直接呼べるようになり、
+   利用導線が「仮定供給 -> 停留点存在」で一段短くなった。
+4. 失敗事例:
+   - 初回で `BoundarySide` 依存型の `match` 不一致が発生。
+   - `cases side` 分岐で型を固定して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N25 として、`hfactor_core0` を供給する実補題
+     （解析条件 or finite-set 観測条件から `eulerZetaFactorPhaseVelLocal = 0` を導く層）
+     を追加する。

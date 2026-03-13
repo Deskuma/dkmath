@@ -1004,4 +1004,119 @@ theorem exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_p
           (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
           hd_prime hd_ge hx hu hcop hpnd provider.hS_lift provider.hsum_lift
 
+/--
+RH-N24: `boundaryCore` の factor 位相速度ゼロ仮定から
+small finite-set 停留点存在へ接続する高位 wrapper。
+
+provider は RH-N23 の
+`boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryCore_factor0`
+で自動構成する。
+-/
+theorem
+    exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with
+        | .right => ¬ r.1 ∣ x
+        | .left => ¬ r.1 ∣ u))
+    (hwnz_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_core0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  cases side with
+  | right =>
+      exact exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider
+        (side := .right) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+        hd_prime hd_ge hx hu hcop hpnd
+        (boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryCore_factor0
+          (side := .right) (S := S)
+          (hS_dvd := hS_dvd)
+          (hS_gap := hS_gap)
+          (hwnz_core := hwnz_core)
+          (hfactor_core0 := hfactor_core0))
+  | left =>
+      exact exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider
+        (side := .left) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+        hd_prime hd_ge hx hu hcop hpnd
+        (boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryCore_factor0
+          (side := .left) (S := S)
+          (hS_dvd := hS_dvd)
+          (hS_gap := hS_gap)
+          (hwnz_core := hwnz_core)
+          (hfactor_core0 := hfactor_core0))
+
+/--
+RH-N24: `boundaryCore` factor0 仮定から singleton 停留点存在へ接続する wrapper。
+
+`S = ∅` として RH-N24 insert 版を適用する。
+-/
+theorem
+    exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hwnz_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_core0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ =>
+          eulerZetaFinite_onVertical ({p} : Finset {q // Nat.Prime q}) σ v) t := by
+  cases side with
+  | right =>
+      have hS_dvd :
+          ∀ r ∈ (∅ : Finset {q // Nat.Prime q}),
+            r.1 ∣ DkMath.CFBRC.boundaryDiffPow .right d x u := by
+        intro r hr
+        simp at hr
+      have hS_gap :
+          ∀ r ∈ (∅ : Finset {q // Nat.Prime q}), ¬ r.1 ∣ x := by
+        intro r hr
+        simp at hr
+      simpa using
+        (exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0
+          (side := .right) (S := (∅ : Finset {q // Nat.Prime q}))
+          (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd hS_dvd hS_gap hwnz_core hfactor_core0)
+  | left =>
+      have hS_dvd :
+          ∀ r ∈ (∅ : Finset {q // Nat.Prime q}),
+            r.1 ∣ DkMath.CFBRC.boundaryDiffPow .left d x u := by
+        intro r hr
+        simp at hr
+      have hS_gap :
+          ∀ r ∈ (∅ : Finset {q // Nat.Prime q}), ¬ r.1 ∣ u := by
+        intro r hr
+        simp at hr
+      simpa using
+        (exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0
+          (side := .left) (S := (∅ : Finset {q // Nat.Prime q}))
+          (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd hS_dvd hS_gap hwnz_core hfactor_core0)
+
 end DkMath.RH.EulerZeta
