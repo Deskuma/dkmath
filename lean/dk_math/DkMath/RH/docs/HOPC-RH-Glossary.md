@@ -108,6 +108,31 @@
 - 意味: `eulerZetaFinite_onVertical` の停留/非退化停留を
   `hopcPrimeContributionSum` の零化条件で判定する API
 
+## OP-004（曲率供給）語彙
+
+### `BoundaryInsertPhaseCurvProvider`（定義）
+
+- 実装: `CFBRCBridge.lean`
+- 型: `BoundarySide → Finset prime → d x u σ t → Type`
+- 意味: `insert p S` 観測器に対する `phaseCurv ≠ 0` 供給 record
+- 依存: `phaseCurv`, `eulerZetaFinite_onVertical`, `boundaryDiffPow`
+
+### `boundaryInsertPhaseCurvProvider_of_split`（補題）
+
+- 実装: `CFBRCBridge.lean`
+- 意味: split 形式の `hcurv_lift` から provider record を構成する最小 wrapper
+
+### nondegenerate bridge 群（補題）
+
+- 実装: `CFBRCBridge.lean`
+- 補題:
+  - `exists_nondegenerateStationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_local_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider_and_phaseCurvProvider`
+- 意味:
+  - `stationaryAt` bridge に曲率非零供給を合成し、
+    `nondegenerateStationaryAt` の存在へ接続する。
+
 ## 注意（前提）
 
 - 多くの停留判定補題は `∀ p ∈ S, w_p(σ,t) ≠ 0` を仮定する。

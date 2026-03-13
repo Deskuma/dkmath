@@ -307,6 +307,119 @@ theorem exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_o
               hq_not_dvd_u))
 
 /--
+OP-004: `BoundarySide` 統一版の singleton 非退化停留 bridge（local + phaseCurv）。
+
+`side` 境界の primitive prime existence を使い、
+singleton 観測器で `stationaryAt` と `phaseCurv ≠ 0` を同時に満たす点を返す。
+-/
+theorem exists_nondegenerateStationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_local_and_phaseCurv
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hwnz :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hhopc_local0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          hopcPrimeLocalContribution p.1 σ t = 0)
+    (hcurv_local0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) →
+          DkMath.RH.phaseCurv
+            (fun v : ℝ => eulerZetaFinite_onVertical ({p} : Finset {q // Nat.Prime q}) σ v) t ≠ 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.nondegenerateStationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical ({p} : Finset {q // Nat.Prime q}) σ v) t := by
+  cases side with
+  | right =>
+      have hS_lift :
+          ∀ p : {q // Nat.Prime q},
+            p.1 ∣ ((x + u) ^ d - u ^ d) → ¬ p.1 ∣ x →
+            ∀ r ∈ (insert p (∅ : Finset {q // Nat.Prime q})),
+              eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 := by
+        intro p hp_dvd hp_gap r hr
+        have hpr : eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0 :=
+          hwnz p (by simpa [DkMath.CFBRC.boundaryDiffPow] using hp_dvd) hp_gap
+        have hrp : r = p := by simpa using (Finset.mem_singleton.mp (by simpa using hr))
+        simpa [hrp] using hpr
+      have hsum_lift :
+          ∀ p : {q // Nat.Prime q},
+            p.1 ∣ ((x + u) ^ d - u ^ d) → ¬ p.1 ∣ x →
+            hopcPrimeContributionSum (S := insert p (∅ : Finset {q // Nat.Prime q})) σ t = 0 := by
+        intro p hp_dvd hp_gap
+        have hlocal0 : hopcPrimeLocalContribution p.1 σ t = 0 :=
+          hhopc_local0 p (by simpa [DkMath.CFBRC.boundaryDiffPow] using hp_dvd) hp_gap
+        simpa using hlocal0
+      have hcurv_lift :
+          ∀ p : {q // Nat.Prime q},
+            p.1 ∣ ((x + u) ^ d - u ^ d) → ¬ p.1 ∣ x →
+            DkMath.RH.phaseCurv
+              (fun v : ℝ =>
+                eulerZetaFinite_onVertical (insert p (∅ : Finset {q // Nat.Prime q})) σ v) t ≠ 0 := by
+        intro p hp_dvd hp_gap
+        have hcurv0 :
+            DkMath.RH.phaseCurv
+              (fun v : ℝ => eulerZetaFinite_onVertical ({p} : Finset {q // Nat.Prime q}) σ v) t ≠ 0 :=
+          hcurv_local0 p (by simpa [DkMath.CFBRC.boundaryDiffPow] using hp_dvd) hp_gap
+        simpa using hcurv0
+      simpa using
+        (exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_split_and_phaseCurv
+          (S := (∅ : Finset {q // Nat.Prime q}))
+          (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd hS_lift hsum_lift hcurv_lift)
+  | left =>
+      have hS_lift :
+          ∀ p : {q // Nat.Prime q},
+            p.1 ∣ ((u + x) ^ d - x ^ d) → ¬ p.1 ∣ u →
+            ∀ r ∈ (insert p (∅ : Finset {q // Nat.Prime q})),
+              eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 := by
+        intro p hp_dvd hp_gap r hr
+        have hpr : eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0 :=
+          hwnz p (by simpa [DkMath.CFBRC.boundaryDiffPow, Nat.add_comm] using hp_dvd) hp_gap
+        have hrp : r = p := by simpa using (Finset.mem_singleton.mp (by simpa using hr))
+        simpa [hrp] using hpr
+      have hsum_lift :
+          ∀ p : {q // Nat.Prime q},
+            p.1 ∣ ((u + x) ^ d - x ^ d) → ¬ p.1 ∣ u →
+            hopcPrimeContributionSum (S := insert p (∅ : Finset {q // Nat.Prime q})) σ t = 0 := by
+        intro p hp_dvd hp_gap
+        have hlocal0 : hopcPrimeLocalContribution p.1 σ t = 0 :=
+          hhopc_local0 p (by simpa [DkMath.CFBRC.boundaryDiffPow, Nat.add_comm] using hp_dvd) hp_gap
+        simpa using hlocal0
+      have hcurv_lift :
+          ∀ p : {q // Nat.Prime q},
+            p.1 ∣ ((u + x) ^ d - x ^ d) → ¬ p.1 ∣ u →
+            DkMath.RH.phaseCurv
+              (fun v : ℝ =>
+                eulerZetaFinite_onVertical (insert p (∅ : Finset {q // Nat.Prime q})) σ v) t ≠ 0 := by
+        intro p hp_dvd hp_gap
+        have hcurv0 :
+            DkMath.RH.phaseCurv
+              (fun v : ℝ => eulerZetaFinite_onVertical ({p} : Finset {q // Nat.Prime q}) σ v) t ≠ 0 :=
+          hcurv_local0 p (by simpa [DkMath.CFBRC.boundaryDiffPow, Nat.add_comm] using hp_dvd) hp_gap
+        simpa using hcurv0
+      simpa using
+        (exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_split_and_phaseCurv
+          (S := (∅ : Finset {q // Nat.Prime q}))
+          (d := d) (x := u) (u := x) (σ := σ) (t := t)
+          hd_prime hd_ge hu hx hcop.symm hpnd hS_lift hsum_lift hcurv_lift)
+
+/--
 RH-N3: `BoundarySide` 統一版の small finite-set bridge（split 仮定）。
 
 `insert p S` 上の非零前提供給と寄与総和ゼロ供給を分離したまま、

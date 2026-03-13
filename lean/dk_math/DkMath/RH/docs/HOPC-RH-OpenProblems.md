@@ -197,18 +197,27 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
 - 状態: 進行中（RH-P1: phaseCurv provider 層を導入）
 - 到達済み:
   - `nondegenerateStationaryAt_insert_of_hopcPrimeContributionSum_eq_zero_and_phaseCurv_ne_zero`
+  - `exists_nondegenerateStationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_local_and_phaseCurv`
   - `BoundaryInsertPhaseCurvProvider`
   - `boundaryInsertPhaseCurvProvider_of_split`
   - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_split_and_phaseCurv`
   - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv`
   - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider_and_phaseCurvProvider`
+- 供給パターン v1（暫定）:
+  - 解析仮定版:
+    `hcurv_lift` / `hcurv_local0` を仮定として直接入力する
+  - 計算補題版:
+    `hopcPrimeContributionSum = 0` 側は局所 zero 補題から再利用し、
+    曲率側のみ `phaseCurv ≠ 0` 補題を差し替える
+  - provider 版:
+    `BoundaryInsertLocalLiftProvider` + `BoundaryInsertPhaseCurvProvider` を合成する
 - 命名規約（暫定）:
   - split 入力は `..._of_local_split_and_phaseCurv`
+  - singleton 入力は `..._singleton_..._of_local_and_phaseCurv`
   - provider 入力は `..._of_provider_and_phaseCurvProvider`
 - 残タスク:
-  - `phaseCurv ≠ 0` の供給パターンを
-    解析仮定版 / 計算補題版 / provider 版の 3 層で文書化する
-  - singleton 用の nondegenerate 高位 wrapper を必要性評価のうえ追加する
+  - `phaseCurv ≠ 0` の計算補題版（`boundaryCore`/`boundaryDiffPow` 直結）を
+    高位 wrapper として追加する
 - 優先度: 中
 
 ## OP-005: 文書同期の継続管理

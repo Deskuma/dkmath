@@ -251,6 +251,7 @@ CFBRC 連携で使う公開名は次を基準とする。
 - CFBRC 連携 bridge（`CFBRCBridge.lean`）
   - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge`
   - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge_of_local`
+  - `exists_nondegenerateStationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_local_and_phaseCurv`
   - `stationaryAt_insert_of_hopcPrimeContributionSum_eq_zero`
   - `nondegenerateStationaryAt_insert_of_hopcPrimeContributionSum_eq_zero_and_phaseCurv_ne_zero`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local`

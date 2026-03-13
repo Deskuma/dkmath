@@ -96,3 +96,38 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - `phaseCurv ≠ 0` の供給パターンを
      解析仮定版 / 計算補題版 / provider 版で文書化する。
+
+### 日時: 2026/03/14 01:24 JST: OP-004 RH-P2（singleton nondegenerate と規約追補）
+
+1. 目的:
+   OP-004 の次段として、singleton でも非退化停留を直接返せる高位 wrapper を追加し、
+   曲率供給規約の文書化を進める。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/HOPC-RH-Glossary.md`
+     - `DkMath/RH/docs/RH_Implements_History-02.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `exists_nondegenerateStationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_local_and_phaseCurv`
+       (`S := ∅` 還元で既存 insert nondegenerate bridge を再利用)
+   - 文書更新:
+     - README の主要 API に singleton nondegenerate wrapper を追加
+     - OpenProblems OP-004 に供給パターン v1（解析仮定/計算補題/provider）を明記
+     - Roadmap の OP-004 到達済みを RH-P1/P2 へ更新
+     - Glossary に `BoundaryInsertPhaseCurvProvider` と nondegenerate bridge 群を追加
+3. 結論:
+   - OP-004 の高位 API は singleton / insert の両経路で
+     `nondegenerateStationaryAt` へ接続できる状態になった。
+   - 曲率供給運用の命名規約と層分け（v1）が文書で追跡可能になった。
+4. 失敗事例:
+   - 初回実装で `match side` 由来の依存型不一致と前方参照問題が発生。
+   - `cases side` で左右分岐し、right 版 bridge へ還元して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - `phaseCurv ≠ 0` の計算補題版（`boundaryCore` / `boundaryDiffPow` 直結）を
+     高位 wrapper として追加する。
