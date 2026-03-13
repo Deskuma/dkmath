@@ -44,7 +44,7 @@
 - `CFBRCBridge.lean`
   - CFBRC の primitive-prime existence から RH 側 singleton 停留判定へ接続する bridge
 
-## 主要 API（RH-N28 時点）
+## 主要 API（RH-N29 時点）
 
 - HOPC 観測量:
   - `hopcPrimeLocalContribution p σ t`
@@ -91,6 +91,7 @@
   - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryCore_factor0`
   - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryDiffPow_local0`
   - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryDiffPow_factor0`
+  - `boundaryInsertLocalLiftProvider_of_boundary_dvd_of_boundaryDiffPow_factor0`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0`
   - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0`
@@ -98,6 +99,7 @@
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0`
   - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0`
+  - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_of_dvd`
   - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0`
   - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_and_local_zero`
 

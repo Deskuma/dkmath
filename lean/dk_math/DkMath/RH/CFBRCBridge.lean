@@ -1622,6 +1622,87 @@ def boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryDiffPow_facto
       (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t)
       hwnz_diff hfactor_diff0)
 
+/--
+RH-N29: `boundaryDiffPow` factor0 仮定で、`hS_gap` を要求しない provider 構成 wrapper。
+
+`hS_dvd` と `hwnz_diff` から `S` 上非零を、
+`hS_dvd` と `hfactor_diff0` から `S` 上 local-zero を生成して
+provider を返す。
+-/
+def boundaryInsertLocalLiftProvider_of_boundary_dvd_of_boundaryDiffPow_factor0
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
+    BoundaryInsertLocalLiftProvider side S d x u σ t := by
+  have hS_nonzero :
+      ∀ r ∈ S, eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 := by
+    intro r hr
+    exact hwnz_diff r (hS_dvd r hr)
+  have hS_local0 :
+      ∀ r ∈ S, hopcPrimeLocalContribution r.1 σ t = 0 := by
+    intro r hr
+    exact hopcPrimeLocalContribution_eq_zero_of_factorPhaseVelLocal_eq_zero_of_nonzero
+      (p := r.1) (σ := σ) (t := t)
+      (hwnz_diff r (hS_dvd r hr))
+      (hfactor_diff0 r (hS_dvd r hr))
+  have hlocal_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          hopcPrimeLocalContribution p.1 σ t = 0 :=
+    boundary_hlocal_diff0_of_boundaryDiffPow_factorPhaseVelLocal_eq_zero
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      hwnz_diff hfactor_diff0
+  exact boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero_on_S_and_witness
+    (side := side) (S := S)
+    (hS_nonzero := hS_nonzero)
+    (hwnz_witness := fun p hp_dvd _hgap => hwnz_diff p hp_dvd)
+    (hS_local0 := hS_local0)
+    (hlocal_witness := fun p hp_dvd _hgap => hlocal_diff0 p hp_dvd)
+
+/--
+RH-N29: `boundaryDiffPow` factor0 仮定で、`hS_gap` を要求しない
+small finite-set 停留点存在 wrapper。
+-/
+theorem
+    exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_of_dvd
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  exact exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider
+    (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+    hd_prime hd_ge hx hu hcop hpnd
+    (boundaryInsertLocalLiftProvider_of_boundary_dvd_of_boundaryDiffPow_factor0
+      (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      hS_dvd hwnz_diff hfactor_diff0)
+
 local notation "existsStatInsertBoundaryDiffPowLocal0" =>
   exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0
 

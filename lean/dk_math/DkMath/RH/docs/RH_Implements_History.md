@@ -1636,3 +1636,36 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-N29: RH-N28 補題を使って direct existence wrapper 側の
      `hS_dvd / hS_gap` 仮定をさらに自動化し、呼び出し前提を削減する。
+
+### 日時: 2026/03/13 17:30 JST: Phase RH-N29 を実装（`hS_gap` 不要化 wrapper）
+
+1. 目的: RH-N28 の次段として、`boundaryDiffPow factor0` 系 direct wrapper で
+   `hS_gap` 前提を不要化し、`hS_dvd + hwnz_diff + hfactor_diff0` へ簡約する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundaryInsertLocalLiftProvider_of_boundary_dvd_of_boundaryDiffPow_factor0`
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_of_dvd`
+   - 実装方針:
+     - `hS_nonzero` を `hS_dvd + hwnz_diff` から生成
+     - `hS_local0` を `hS_dvd + hwnz_diff + hfactor_diff0` から生成
+     - 既存の
+       `boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero_on_S_and_witness`
+       に接続して provider / existence を構築
+3. 結論:
+   - `boundaryDiffPow factor0` の insert 版は、
+     `hS_gap` なしで呼べる高位 API が追加された。
+   - OP-003 の「direct wrapper 仮定削減」は一段前進した。
+4. 失敗事例:
+   - なし（今回追加分では型不一致なく通過）。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N30: `hS_dvd` も不要化できる set 正規化（`S` 側の構成規約 or wrapper）を検討する。
