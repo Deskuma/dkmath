@@ -611,6 +611,52 @@ theorem boundary_hlocal_witness_of_boundaryCore_local_zero
       exact hlocal_core p hq_dvd_core
 
 /--
+RH-N23: `w_p ≠ 0` の下で HOPC 局所寄与と factor 位相速度寄与を同一化。
+-/
+theorem hopcPrimeLocalContribution_eq_eulerZetaFactorPhaseVelLocal_of_nonzero
+    {p : ℕ} {σ t : ℝ}
+    (hp_ne : eulerZeta_exp_s_log_p_sub_one p σ t ≠ 0) :
+    hopcPrimeLocalContribution p σ t = eulerZetaFactorPhaseVelLocal p σ t := by
+  simpa [hopcPrimeLocalContribution_eq_log_sub_phaseVelLocal] using
+    (phaseVel_eulerZetaFactorVerticalExp_eq_log_sub_phaseVelLocal
+      (p := p) (σ := σ) (t := t) hp_ne).symm
+
+/--
+RH-N23: `w_p ≠ 0` と factor 位相速度寄与ゼロから HOPC 局所寄与ゼロを得る。
+-/
+theorem hopcPrimeLocalContribution_eq_zero_of_factorPhaseVelLocal_eq_zero_of_nonzero
+    {p : ℕ} {σ t : ℝ}
+    (hp_ne : eulerZeta_exp_s_log_p_sub_one p σ t ≠ 0)
+    (hfactor0 : eulerZetaFactorPhaseVelLocal p σ t = 0) :
+    hopcPrimeLocalContribution p σ t = 0 := by
+  rw [hopcPrimeLocalContribution_eq_eulerZetaFactorPhaseVelLocal_of_nonzero
+    (p := p) (σ := σ) (t := t) hp_ne]
+  exact hfactor0
+
+/--
+RH-N23: `boundaryCyclotomicPrimeCore` 側の factor 位相速度ゼロ仮定から `hlocal_core` を供給。
+-/
+theorem boundary_hlocal_core_of_boundaryCore_factorPhaseVelLocal_eq_zero
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hwnz_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_core0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
+    ∀ p : {q // Nat.Prime q},
+      p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+        hopcPrimeLocalContribution p.1 σ t = 0 := by
+  intro p hp_core
+  exact hopcPrimeLocalContribution_eq_zero_of_factorPhaseVelLocal_eq_zero_of_nonzero
+    (p := p.1) (σ := σ) (t := t)
+    (hwnz_core p hp_core)
+    (hfactor_core0 p hp_core)
+
+/--
 RH-N12: `hS_lift` 段階供給を使った provider 構成補題。
 
 `hS_nonzero` と `hwnz_witness` で `hS_lift` を組み立て、
@@ -890,6 +936,42 @@ def boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_of_boundaryCore_witn
           (side := .left) (d := d) (x := x) (u := u) (σ := σ) (t := t) hwnz_core)
         (hlocal_witness := boundary_hlocal_witness_of_boundaryCore_local_zero
           (side := .left) (d := d) (x := x) (u := u) (σ := σ) (t := t) hlocal_core)
+
+/--
+RH-N23: `boundaryCore` 上の factor 位相速度ゼロ仮定から provider を構成する wrapper。
+
+`hlocal_core` は
+`boundary_hlocal_core_of_boundaryCore_factorPhaseVelLocal_eq_zero`
+で自動生成し、RH-N22 wrapper へ委譲する。
+-/
+def
+    boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryCore_factor0
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with
+        | .right => ¬ r.1 ∣ x
+        | .left => ¬ r.1 ∣ u))
+    (hwnz_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_core0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
+    BoundaryInsertLocalLiftProvider side S d x u σ t := by
+  exact boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_of_boundaryCore_witness
+    (side := side) (S := S)
+    (hS_dvd := hS_dvd)
+    (hS_gap := hS_gap)
+    (hwnz_core := hwnz_core)
+    (hlocal_core := boundary_hlocal_core_of_boundaryCore_factorPhaseVelLocal_eq_zero
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      hwnz_core hfactor_core0)
 
 /--
 RH-N7: provider record 版 wrapper（`BoundarySide` + small finite-set）。

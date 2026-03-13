@@ -454,7 +454,7 @@ example (side : DkMath.CFBRC.BoundarySide)
       (hlocal_witness := hlocal_witness)
 ```
 
-### Implementation Bridge (RH-N22: boundary_dvd + gap / boundaryCore witness 供給)
+### Implementation Bridge (RH-N23: boundary_dvd + gap / boundaryCore witness 正規化)
 
 RH-N21/N22 では、`S` 上の boundary 除法情報と gap 非除法情報を軸に、
 provider 供給前提を段階的に削減した。
@@ -465,6 +465,10 @@ provider 供給前提を段階的に削減した。
 - `boundary_hwnz_witness_of_boundaryCore_nonzero`
 - `boundary_hlocal_witness_of_boundaryCore_local_zero`
 - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_of_boundaryCore_witness`
+- `hopcPrimeLocalContribution_eq_eulerZetaFactorPhaseVelLocal_of_nonzero`
+- `hopcPrimeLocalContribution_eq_zero_of_factorPhaseVelLocal_eq_zero_of_nonzero`
+- `boundary_hlocal_core_of_boundaryCore_factorPhaseVelLocal_eq_zero`
+- `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryCore_factor0`
 
 最小テンプレート（boundary_dvd + gap + witness → provider）:
 
@@ -530,6 +534,38 @@ example (side : DkMath.CFBRC.BoundarySide)
       (hS_gap := hS_gap)
       (hwnz_core := hwnz_core)
       (hlocal_core := hlocal_core)
+```
+
+最小テンプレート（boundaryCore 上の factor 位相速度ゼロ → provider）:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+
+example (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with | .right => ¬ r.1 ∣ x | .left => ¬ r.1 ∣ u))
+    (hwnz_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_core0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
+    BoundaryInsertLocalLiftProvider side S d x u σ t := by
+  exact
+    boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryCore_factor0
+      (side := side) (S := S)
+      (hS_dvd := hS_dvd)
+      (hS_gap := hS_gap)
+      (hwnz_core := hwnz_core)
+      (hfactor_core0 := hfactor_core0)
 ```
 
 ### Bridge Usage (RH-J2/J3)

@@ -1401,3 +1401,42 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-N23 として、`hlocal_core` を生成する実補題
      （例えば `boundaryCore` 上の解析条件から `hopcPrimeLocalContribution = 0` へ落とす層）
      を設計・実装する。
+
+### 日時: 2026/03/13 12:50 JST: Phase RH-N23 を実装（factor 位相速度ゼロから `hlocal_core` 供給）
+
+1. 目的: RH-N22 の残課題を一段進め、`hlocal_core` を
+   `boundaryCore` 上の factor 位相速度ゼロ仮定から生成できるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `hopcPrimeLocalContribution_eq_eulerZetaFactorPhaseVelLocal_of_nonzero`
+       （`w_p ≠ 0` 下で HOPC 局所寄与と factor 位相速度寄与を同一化）
+     - `hopcPrimeLocalContribution_eq_zero_of_factorPhaseVelLocal_eq_zero_of_nonzero`
+       （`w_p ≠ 0` + factor 位相速度ゼロから local 寄与ゼロを導出）
+     - `boundary_hlocal_core_of_boundaryCore_factorPhaseVelLocal_eq_zero`
+       （core 除法上の factor ゼロ仮定から `hlocal_core` を供給）
+     - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryCore_factor0`
+       （RH-N22 wrapper へ委譲する前提簡約 wrapper）
+   - 文書同期:
+     - README 2 枚の API 見出しを RH-N23 へ更新
+     - `boundaryCore factor0 -> provider` テンプレートを追加
+     - `RH-CFBRC-Discussion.md` を RH-N23 内容へ更新
+     - OP-003 の状態を RH-N1〜N23 へ更新し、残タスクを `hfactor_core0` 供給へ再整理
+3. 結論: `hlocal_core` は
+   `hwnz_core + hfactor_core0` から供給できる形になり、
+   provider 構成は `boundaryCore` 上の位相速度仮定まで前提を圧縮できた。
+4. 失敗事例:
+   - 長い定理名で long-line linter 警告が発生。
+   - wrapper 名を短縮（`..._factor0`）して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N24 として、`boundaryCore` 上で `hfactor_core0` を供給する実補題
+     （解析条件 or finite-set 観測条件から `eulerZetaFactorPhaseVelLocal = 0` を導く層）
+     を追加する。

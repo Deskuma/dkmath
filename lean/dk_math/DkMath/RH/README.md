@@ -44,7 +44,7 @@
 - `CFBRCBridge.lean`
   - CFBRC の primitive-prime existence から RH 側 singleton 停留判定へ接続する bridge
 
-## 主要 API（RH-N22 時点）
+## 主要 API（RH-N23 時点）
 
 - HOPC 観測量:
   - `hopcPrimeLocalContribution p σ t`
@@ -76,6 +76,10 @@
   - `boundary_hlocal_witness_of_boundaryCore_local_zero`
   - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap`
   - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_of_boundaryCore_witness`
+  - `hopcPrimeLocalContribution_eq_eulerZetaFactorPhaseVelLocal_of_nonzero`
+  - `hopcPrimeLocalContribution_eq_zero_of_factorPhaseVelLocal_eq_zero_of_nonzero`
+  - `boundary_hlocal_core_of_boundaryCore_factorPhaseVelLocal_eq_zero`
+  - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryCore_factor0`
   - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_and_local_zero`
 
 ## 利用例（import）
@@ -261,6 +265,38 @@ example (side : DkMath.CFBRC.BoundarySide)
       (hS_gap := hS_gap)
       (hwnz_core := hwnz_core)
       (hlocal_core := hlocal_core)
+```
+
+`boundaryCore` 上の factor 位相速度ゼロ仮定（RH-N23）から provider を生成するテンプレート:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+
+example (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with | .right => ¬ r.1 ∣ x | .left => ¬ r.1 ∣ u))
+    (hwnz_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_core0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
+    BoundaryInsertLocalLiftProvider side S d x u σ t := by
+  exact
+    boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryCore_factor0
+      (side := side) (S := S)
+      (hS_dvd := hS_dvd)
+      (hS_gap := hS_gap)
+      (hwnz_core := hwnz_core)
+      (hfactor_core0 := hfactor_core0)
 ```
 
 ## 注意
