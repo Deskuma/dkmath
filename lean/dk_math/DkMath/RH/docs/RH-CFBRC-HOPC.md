@@ -95,6 +95,8 @@ HOPC-RH の「位相を微分量で観測する」設計は、
    - eventually `stationaryAt` / eventually `nondegenerateStationaryAt` への高位 bridge（RH-PF3）
    - provider family を直接受け取る eventually 高位 wrapper（RH-PF3 拡張）
    - eventually `stationaryAt` 側は曲率仮定を不要化（最小前提化）
+   - provider family から `eventually stationaryAt(S)` を回収し、
+     `hopcPrimeContributionTsum` / `tendsto` へ接続する無限側 wrapper
    - `boundaryCore` / `boundaryDiffPow` の計算補題版 wrapper
    - `of_dvd` / `normalized` / `with_offdvd` の高位 API
 

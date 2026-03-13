@@ -402,3 +402,35 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - `lake build DkMath.RH` 成功。
 6. 次の課題:
    - `eventually` provider-family wrapper を利用する呼び出し側（tendsto/tsum 接続）を段階移行する。
+
+### 日時: 2026/03/14 05:35 JST: RH-PF3 呼び出し側移行（tendsto/tsum 接続）
+
+1. 目的:
+   RH-PF3 の provider-family 系補題を、
+   `hopcPrimeContributionTsum` / `tendsto` 接続の呼び出し側で実際に利用する導線へ移行する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/docs/HOPC-RH-PrimeLocal-Formation.md`
+     - `DkMath/RH/docs/RH-CFBRC-HOPC.md`
+     - `DkMath/RH/docs/RH_Implements_History-02.md`
+   - 追加実装（中間補題）:
+     - `eventually_stationaryAt_of_cfbRc_primitive_prime_boundary_bridge_of_providerFamily`
+       - fixed witness `p` を取り、`p ∈ S` eventually により
+         `insert p S = S` へ正規化して `eventually stationaryAt(S)` を回収。
+   - 追加実装（無限側接続）:
+     - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_and_providerFamily_sigma_gt_one`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_provider_and_providerFamily_sigma_gt_one`
+     - `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvdFactorZeroProvider_and_providerFamily_sigma_gt_one`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvdFactorZeroProvider_and_providerFamily_sigma_gt_one`
+3. 結論:
+   - PF3 provider-family wrapper 群が、有限側補題で止まらず
+     `tsum/tendsto`（無限側）へ直結する呼び出し経路を持った。
+4. 失敗事例:
+   - なし。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - 旧 `hEvStationary` 直入力 API と新 provider-family API の公開方針
+     （段階的 deprecate するか併存するか）を整理する。

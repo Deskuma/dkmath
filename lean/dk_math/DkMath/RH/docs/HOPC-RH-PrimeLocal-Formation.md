@@ -111,11 +111,16 @@ HOPC-RH の運用では、`arg` を主役にせず、
 - `eventually_exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv`
 - `eventually_exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_providerFamily`
 - `eventually_exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_providerFamily_and_phaseCurvProviderFamily`
+- `eventually_stationaryAt_of_cfbRc_primitive_prime_boundary_bridge_of_providerFamily`
+- `hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_provider_and_providerFamily_sigma_gt_one`
+- `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_provider_and_providerFamily_sigma_gt_one`
 
 を追加し、eventually 形成条件を witness 付きで回収しつつ、
 `stationaryAt` / `nondegenerateStationaryAt` へ落とし込む高位 bridge を明示化した。
 あわせて `eventually_exists_stationaryAt_..._of_local_split` は、
 曲率仮定なし（`hS_lift` + `hsum_lift` のみ）へ前提を最小化した。
+さらに PF3 provider-family から `eventually stationaryAt(S)` を回収し、
+HOPC 無限側（`hopcPrimeContributionTsum` / `tendsto`）への接続補題を追加した。
 
 ---
 
