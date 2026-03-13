@@ -1045,3 +1045,27 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-N9 として、`DkMath/RH/docs/README.md` にも provider 版テンプレートを同期し、
      README 間で RH-N8 導線を統一する。
+
+### 日時: 2026/03/13 11:49 JST: Phase RH-N9 を実装（docs README へ provider テンプレート同期）
+
+1. 目的: RH-N8 で整備した provider 導線を
+   `DkMath/RH/docs/README.md` にも同期し、README 間の参照体験を一致させる。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/docs/README.md`
+   - 追記内容:
+     - `現状 API` 見出しを RH-N9 時点へ更新
+     - CFBRC bridge 一覧に
+       `BoundaryInsertLocalLiftProvider` と
+       `..._boundary_bridge_of_provider` を追加
+     - provider record 版の最小テンプレートを追加
+3. 結論: `RH/README.md` と `RH/docs/README.md` の
+   provider 利用導線が同期され、split 版 / provider 版の両入口が一致した。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+   - RH-N8 の Discussion 記述との整合を維持。
+6. 次の課題:
+   - RH-N10 として、`HOPC-RH-OpenProblems.md` の OP-003 残タスクに
+     provider 実装進捗（RH-N7〜N9）を反映し、
+     次の実装対象（provider 実体供給補題）を明示する。

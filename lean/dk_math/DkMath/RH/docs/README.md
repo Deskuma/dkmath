@@ -143,7 +143,7 @@ $$
 
 ---
 
-## 現状 API（HOPC 公開名・RH-N5 時点）
+## 現状 API（HOPC 公開名・RH-N9 時点）
 
 CFBRC 連携で使う公開名は次を基準とする。
 
@@ -165,6 +165,8 @@ CFBRC 連携で使う公開名は次を基準とする。
   - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_local`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local`
   - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split`
+  - `BoundaryInsertLocalLiftProvider`
+  - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider`
 
 補足:
 - 上記公開名は明示和
@@ -223,6 +225,31 @@ example (side : DkMath.CFBRC.BoundarySide)
     exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split
       (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
       hd_prime hd_ge hx hu hcop hpnd hS_lift hsum_lift
+```
+
+`BoundaryInsertLocalLiftProvider`（provider record）テンプレート:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+
+example (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (provider : BoundaryInsertLocalLiftProvider side S d x u σ t) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  exact
+    exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider
+      (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      hd_prime hd_ge hx hu hcop hpnd provider
 ```
 
 ---
