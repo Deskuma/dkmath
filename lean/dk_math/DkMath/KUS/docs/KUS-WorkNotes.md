@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-04: minimal examples
+status: 作業中 - phase-05: scale-monoid compatibility
 
 ## 課題
 
@@ -11,10 +11,11 @@ status: 作業中 - phase-04: minimal examples
 - [x] 固定 fiber 上の可換モノイド的構造を設計する
 - [x] `Scale` と unit transport の仕様を定める
 - [x] toy blueprint による最小使用例を追加する
+- [x] `Scale` と `Monoid` の整合補題を最小追加する
 
 ## 状況タスク
 
-- 完了条件（phase-04）
+- 完了条件（phase-05）
   - [x] `DkMath/KUS/Unit.lean` が `US` を提供する
   - [x] `DkMath/KUS/Core.lean` が `KUS`, `mkWith`, `zeroState` を提供する
   - [x] `DkMath/KUS/NatEmbed.lean` が `ofNat`, `toNat` を提供する
@@ -23,15 +24,16 @@ status: 作業中 - phase-04: minimal examples
   - [x] 固定 fiber の演算 API が確定する
   - [x] `DkMath/KUS/Scale.lean` が `ScaleSpec` と最小 transport API を提供する
   - [x] `DkMath/KUS/Examples.lean` が toy 使用例を提供する
+  - [x] `Scale` と fixed fiber の整合補題が `Scale.lean` にある
 
 ## 計画
 
 - 直近の主戦場:
-  - `Scale` と `Monoid` の整合補題の最小追加
+  - transport 後 fiber 型の見直し方針を決める
 - 直近の設計候補:
-  - `scaleKUS` が `Fiber.toKUS` とどう整合するかの補題を追加する
-  - transport 後の固定 fiber をどう型で切るかを決める
+  - `Fiber := Nat` のまま進める場合の利点/制約を docs に分離記録する
   - 例示モジュールを肥大化させず、証明用の最小例に限定する
+  - phase-06 では設計比較（subtype fiber への回帰可能性）を先に文書化する
 - 非目標（phase-01 ではやらない）:
   - `Div` の導入
   - `K : ℚ`, `ℝ`, 一般 carrier への拡張
@@ -45,6 +47,7 @@ status: 作業中 - phase-04: minimal examples
 - phase-02 では `Fiber support := {x : KUS // extract x = support}` を導入し、固定 support 上で `Nat` 係数と同型な `AddCommMonoid` を与えた。
 - phase-03 では `ScaleSpec` により、`US` / `KUS` へ unit transport を与える最小 API を追加し、係数保存と extract 整合を補題で固定した。
 - phase-04 では `Examples.lean` を追加し、toy blueprint 上で `KUS` / `Fiber` / `ScaleSpec` の最小利用例を固定した。
+- phase-05 では `Scale.lean` に fixed fiber 整合補題を追加し、`Scale` と `Monoid` の接続を観測係数レベルで固定した。
 
 ## 作業ログ
 
@@ -155,3 +158,27 @@ status: 作業中 - phase-04: minimal examples
   3. `Examples.lean` の軽微な whitespace 警告を修正し、KUS 側の追加分は warning なしで通過
 - 次の予定:
   - phase-05 で `Scale` と `Monoid` の整合補題を最小追加する
+
+### 2026-03-14 phase-05 Scale×Monoid 整合補題
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Scale.lean`
+  - `lean/dk_math/DkMath/KUS/docs/KUS-ScaleSpec.md`
+- 内容:
+  1. `scaleKUS_toKUS` を追加し、scale と fixed fiber 埋め込みの整合を固定した
+  2. `extract_scaleKUS_toKUS` を追加し、transport 後 support の抽出整合を固定した
+  3. `toNat_scaleKUS_toKUS_add` を追加し、観測係数レベルで加法整合を固定した
+- 次の予定:
+  - phase-06 として、transport 後 fiber 型（Nat 別名 vs subtype）の設計比較を文書化する
+
+### 2026-03-14 phase-05 ビルド確認（lean-build.sh）
+
+- 対象:
+  - `cd lean/dk_math && ./lean-build.sh DkMath.KUS`
+  - `cd lean/dk_math && ./lean-build.sh DkMath`
+- 内容:
+  1. `DkMath.KUS` は build succeeded を確認
+  2. root `DkMath` でも build succeeded を確認
+  3. KUS 追加分の warning は解消し、全体 warning は既存 repo 由来の `sorry` 群のみ
+- 次の予定:
+  - phase-06 で fiber 型設計比較（Nat alias / subtype）を docs へ明示する

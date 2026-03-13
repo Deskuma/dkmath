@@ -1,4 +1,4 @@
-# KUS Scale Specification (phase-03)
+# KUS Scale Specification (phase-05)
 
 この文書は、`Scale.lean` で導入した最小の unit transport 仕様を要約する。
 
@@ -30,6 +30,14 @@ $$
 - `scaleKUS idScale x = x`
 - `scaleKUS (comp τ σ) x = scaleKUS τ (scaleKUS σ x)`
 
+## 追加保証（phase-05）
+
+- `scaleKUS σ (Fiber.toKUS support n) = Fiber.toKUS (scaleUS σ support) n`
+- `extract (scaleKUS σ (Fiber.toKUS support n)) = scaleUS σ support`
+- `toNat` レベルでは、fixed fiber の加法と scale が整合する
+  - `toNat (scaleKUS σ (Fiber.toKUS support (n + m)))`
+  - `= toNat (scaleKUS σ (Fiber.toKUS support n)) + toNat (scaleKUS σ (Fiber.toKUS support m))`
+
 これにより、「観測側の係数保持」と「構造保持側の transport」を分離したまま扱える。
 
 ## 範囲外
@@ -40,5 +48,5 @@ $$
 
 ## 次作業の候補
 
-1. `Examples.lean` で toy blueprint の scale 例を追加
-2. `Monoid` と `Scale` の相互作用（例: scale が加法を保存）を最小補題として追加
+1. `Examples.lean` へ phase-05 補題の具体利用例を 1 つ追加
+2. transport 後 fiber の型設計（Nat 別名のままにするか）を見直す

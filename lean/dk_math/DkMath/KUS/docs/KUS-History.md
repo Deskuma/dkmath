@@ -71,3 +71,16 @@
 - `lean-build.sh` で `./lean-build.sh DkMath.KUS` と `./lean-build.sh DkMath` の成功を確認した。
 - `Examples.lean` の軽微な whitespace 警告を解消した。
 - これにより phase-04 は「実装・入口接続・記録・ビルド確認」が揃った状態で確定した。
+
+### 2026-03-14 / Work Unit 10. phase-05 Scale×Monoid 整合
+
+- `DkMath/KUS/Scale.lean` に、`Scale` と fixed fiber (`Fiber.toKUS`) の整合補題を追加した。
+- 追加補題は `scaleKUS_toKUS`, `extract_scaleKUS_toKUS`, `toNat_scaleKUS_toKUS_add` の 3 本。
+- これにより、scale 後 support への移送と、観測係数レベルでの加法整合が最小形で固定された。
+- `KUS-ScaleSpec.md` と `KUS-WorkNotes.md` を phase-05 状態へ更新した。
+
+### 2026-03-14 / Work Unit 11. phase-05 build 確認
+
+- `lean-build.sh` で `./lean-build.sh DkMath.KUS` と `./lean-build.sh DkMath` の成功を確認した。
+- `Scale.lean` の補題追加後も KUS 側に新規 warning はなく、全体 warning は既存 repo 由来のみ。
+- これにより phase-05 は「補題追加・仕様更新・記録・ビルド確認」が揃った状態で確定した。
