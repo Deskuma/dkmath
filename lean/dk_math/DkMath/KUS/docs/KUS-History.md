@@ -43,3 +43,17 @@
 - 続けて `./lean-build.sh DkMath` を実行し、root 入口でも成功することを確認した。
 - ビルドログ上の warning は既存 repo 由来の `sorry` によるもので、KUS phase-02 追加分に起因する新規エラーはない。
 - これにより、phase-02 の成果は「実装・文書・入口接続・ビルド確認」が揃った状態で保存された。
+
+### 2026-03-14 / Work Unit 6. phase-03 Scale transport
+
+- `DkMath/KUS/Scale.lean` を追加し、`ScaleSpec`（`mapUnit` と依存型 `mapBlueprint`）を導入した。
+- `scaleUS` / `scaleKUS` を追加し、`toNat` 保存・`extract` 整合・零状態の整合を最小補題として固定した。
+- `idScale` / `comp` と、それぞれの `US` / `KUS` への作用補題を追加して、transport の最小代数を整えた。
+- 入口 `DkMath/KUS.lean` に `import DkMath.KUS.Scale` を追加し、公開 API へ接続した。
+- docs として `KUS-ScaleSpec.md` を追加し、phase-03 の仕様・保証・次作業候補を文書化した。
+
+### 2026-03-14 / Work Unit 7. phase-03 build と軽微警告整理
+
+- `lean-build.sh` を用いて `./lean-build.sh DkMath.KUS` と `./lean-build.sh DkMath` の成功を確認した。
+- `Scale.lean` の軽微な lint 警告（`simpa` 推奨、未使用変数、whitespace）を修正した。
+- これにより phase-03 は「実装・仕様文書・入口接続・ビルド確認」が揃った状態で確定した。

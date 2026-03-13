@@ -39,14 +39,24 @@ $$
   - `Fiber.toKUS`, `Fiber.toNat`
   - `Fiber` 上の `AddCommMonoid` instance
 
+## 実装後の状況（phase-03）
+
+- unit transport 仕様を `DkMath/KUS/Scale.lean` に追加した
+  - `ScaleSpec`
+  - `scaleUS`, `scaleKUS`
+  - `idScale`, `comp`
+- 係数保持と構造抽出の整合を補題として固定した
+  - `toNat (scaleKUS σ x) = toNat x`
+  - `extract (scaleKUS σ x) = scaleUS σ (extract x)`
+
 ## まだ実装していないもの
 
-- unit 変更に伴う transport / scale
 - 一般 carrier への拡張
 - 無限状態の扱い
+- `Scale` と `Monoid` の相互作用法則
 
 ## 次作業の候補
 
 1. `Scale.lean` の前段として、unit transport の仕様だけを docs に固定する
 2. `Examples.lean` 用に最小の toy blueprint を一つ作る
-3. `Monoid` の API を必要最小限で命名整理する
+3. `Scale` と `Monoid` の整合補題を最小追加する
