@@ -736,6 +736,69 @@ theorem boundary_hlocal_core_of_boundaryDiffPow_local_zero
       exact hlocal_diff0 p hp_diff
 
 /--
+RH-N27: `boundaryDiffPow` 側の非零仮定から `hwnz_core` を供給。
+-/
+theorem boundary_hwnz_core_of_boundaryDiffPow_nonzero
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    ∀ p : {q // Nat.Prime q},
+      p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+        eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0 := by
+  cases side with
+  | right =>
+      intro p hp_core
+      have hp_core' : p.1 ∣ DkMath.CFBRC.cyclotomicPrimeCore d x u := by
+        simpa [DkMath.CFBRC.boundaryCyclotomicPrimeCore] using hp_core
+      have hp_diff : p.1 ∣ DkMath.CFBRC.boundaryDiffPow .right d x u := by
+        have hmul : p.1 ∣ x * DkMath.CFBRC.cyclotomicPrimeCore d x u :=
+          dvd_mul_of_dvd_right hp_core' x
+        have hsub :
+            (x + u) ^ d - u ^ d = x * DkMath.CFBRC.cyclotomicPrimeCore d x u := by
+          simpa using DkMath.CFBRC.sub_eq_mul_cyclotomicPrimeCore_nat d x u
+        simpa [DkMath.CFBRC.boundaryDiffPow] using (hsub ▸ hmul)
+      exact hwnz_diff p hp_diff
+  | left =>
+      intro p hp_core
+      have hp_core' : p.1 ∣ DkMath.CFBRC.cyclotomicPrimeCore d u x := by
+        simpa [DkMath.CFBRC.boundaryCyclotomicPrimeCore] using hp_core
+      have hp_diff : p.1 ∣ DkMath.CFBRC.boundaryDiffPow .left d x u := by
+        have hmul : p.1 ∣ u * DkMath.CFBRC.cyclotomicPrimeCore d u x :=
+          dvd_mul_of_dvd_right hp_core' u
+        have hsub :
+            (u + x) ^ d - x ^ d = u * DkMath.CFBRC.cyclotomicPrimeCore d u x := by
+          simpa using DkMath.CFBRC.sub_eq_mul_cyclotomicPrimeCore_nat d u x
+        have hs : p.1 ∣ (u + x) ^ d - x ^ d := hsub ▸ hmul
+        simpa [DkMath.CFBRC.boundaryDiffPow, Nat.add_comm] using hs
+      exact hwnz_diff p hp_diff
+
+/--
+RH-N27: `boundaryDiffPow` 側の factor 位相速度ゼロ仮定から `hlocal_diff0` を供給。
+-/
+theorem boundary_hlocal_diff0_of_boundaryDiffPow_factorPhaseVelLocal_eq_zero
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
+    ∀ p : {q // Nat.Prime q},
+      p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+        hopcPrimeLocalContribution p.1 σ t = 0 := by
+  intro p hp_dvd
+  exact hopcPrimeLocalContribution_eq_zero_of_factorPhaseVelLocal_eq_zero_of_nonzero
+    (p := p.1) (σ := σ) (t := t)
+    (hwnz_diff p hp_dvd)
+    (hfactor_diff0 p hp_dvd)
+
+/--
 RH-N12: `hS_lift` 段階供給を使った provider 構成補題。
 
 `hS_nonzero` と `hwnz_witness` で `hS_lift` を組み立て、
@@ -1371,6 +1434,9 @@ theorem
     (boundary_hlocal_core_of_boundaryDiffPow_local_zero
       (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) hlocal_diff0)
 
+local notation "existsStatInsertBoundaryCoreLocal0" =>
+  exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0
+
 local notation "existsStatSingletonBoundaryCoreLocal0" =>
   exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0
 
@@ -1403,5 +1469,116 @@ theorem
     hd_prime hd_ge hx hu hcop hpnd hwnz_core
     (boundary_hlocal_core_of_boundaryDiffPow_local_zero
       (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) hlocal_diff0)
+
+/--
+RH-N27: `boundaryDiffPow` factor0 仮定から provider を構成する wrapper。
+-/
+def boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryDiffPow_factor0
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with
+        | .right => ¬ r.1 ∣ x
+        | .left => ¬ r.1 ∣ u))
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
+    BoundaryInsertLocalLiftProvider side S d x u σ t := by
+  exact boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryDiffPow_local0
+    (side := side) (S := S)
+    (hS_dvd := hS_dvd)
+    (hS_gap := hS_gap)
+    (hwnz_core := boundary_hwnz_core_of_boundaryDiffPow_nonzero
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) hwnz_diff)
+    (hlocal_diff0 := boundary_hlocal_diff0_of_boundaryDiffPow_factorPhaseVelLocal_eq_zero
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      hwnz_diff hfactor_diff0)
+
+local notation "existsStatInsertBoundaryDiffPowLocal0" =>
+  exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0
+
+local notation "existsStatSingletonBoundaryDiffPowLocal0" =>
+  exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0
+
+/--
+RH-N27: `boundaryDiffPow` factor0 仮定から
+small finite-set 停留点存在へ接続する高位 wrapper。
+-/
+theorem
+    exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with
+        | .right => ¬ r.1 ∣ x
+        | .left => ¬ r.1 ∣ u))
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  exact existsStatInsertBoundaryDiffPowLocal0
+    (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+    hd_prime hd_ge hx hu hcop hpnd hS_dvd hS_gap
+    (boundary_hwnz_core_of_boundaryDiffPow_nonzero
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) hwnz_diff)
+    (boundary_hlocal_diff0_of_boundaryDiffPow_factorPhaseVelLocal_eq_zero
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      hwnz_diff hfactor_diff0)
+
+/--
+RH-N27: `boundaryDiffPow` factor0 仮定から singleton 停留点存在へ接続する wrapper。
+-/
+theorem
+    exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ =>
+          eulerZetaFinite_onVertical ({p} : Finset {q // Nat.Prime q}) σ v) t := by
+  exact existsStatSingletonBoundaryDiffPowLocal0
+    (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+    hd_prime hd_ge hx hu hcop hpnd
+    (boundary_hwnz_core_of_boundaryDiffPow_nonzero
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) hwnz_diff)
+    (boundary_hlocal_diff0_of_boundaryDiffPow_factorPhaseVelLocal_eq_zero
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      hwnz_diff hfactor_diff0)
 
 end DkMath.RH.EulerZeta

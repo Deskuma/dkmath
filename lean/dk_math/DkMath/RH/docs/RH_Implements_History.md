@@ -1558,3 +1558,44 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-N27 として、`hlocal_diff0` 自体を供給する実補題
      （解析条件 or finite-set 観測条件から `hopcPrimeLocalContribution = 0` を導く層）
      を追加する。
+
+### 日時: 2026/03/13 13:31 JST: Phase RH-N27 を実装（`boundaryDiffPow` factor0 から direct wrapper 公開）
+
+1. 目的: RH-N26 の次段として、`boundaryDiffPow` 側の
+   `nonzero + factorPhaseVelLocal=0` 仮定から
+   provider / 停留点存在 wrapper へ直接接続する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundary_hwnz_core_of_boundaryDiffPow_nonzero`
+     - `boundary_hlocal_diff0_of_boundaryDiffPow_factorPhaseVelLocal_eq_zero`
+     - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryDiffPow_factor0`
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0`
+     - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0`
+   - 文書同期:
+     - `RH/README.md` の主要 API を RH-N27 へ更新し、
+       `boundaryDiffPow factor0` テンプレートを追記
+     - `RH-CFBRC-Discussion.md` の Implementation Bridge を RH-N27 へ更新
+     - `HOPC-RH-OpenProblems.md` の OP-003 到達済み API を RH-N27 へ更新し、
+       完了した `hlocal_diff0` 供給タスクを残タスクから除外
+3. 結論:
+   - `boundaryDiffPow` 側 factor0 仮定から、
+     provider 構築と direct existence wrapper（insert/singleton）まで
+     一気通貫で接続できる高位 API が揃った。
+4. 失敗事例:
+   - 長識別子の long-line 警告を `set_option ... in` で
+     局所抑制しようとしたが、doc comment 直後配置で
+     parser error（`expected 'lemma'`）となり採用を撤回。
+5. 検証:
+   - `lake build DkMath.RH` 成功。
+   - 既知の style 警告 1 件（`CFBRCBridge.lean` 長識別子行）は継続。
+6. 次の課題:
+   - CFBRC 側 primitive prime existence と
+     `hS_dvd` / `hS_gap` 供給をさらに密結合する実補題を追加。
+   - direct existence wrapper の仮定削減（provider 前提の自動供給）を継続。

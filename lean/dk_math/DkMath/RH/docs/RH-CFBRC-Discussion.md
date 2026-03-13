@@ -454,7 +454,7 @@ example (side : DkMath.CFBRC.BoundarySide)
       (hlocal_witness := hlocal_witness)
 ```
 
-### Implementation Bridge (RH-N26: boundary_dvd + gap / boundaryCore witness 正規化)
+### Implementation Bridge (RH-N27: boundary_dvd + gap / boundaryCore・boundaryDiffPow witness 正規化)
 
 RH-N21/N22 では、`S` 上の boundary 除法情報と gap 非除法情報を軸に、
 provider 供給前提を段階的に削減した。
@@ -471,14 +471,19 @@ provider 供給前提を段階的に削減した。
 - `boundary_hlocal_core_of_boundaryCore_factorPhaseVelLocal_eq_zero`
 - `boundary_hfactor_core0_of_boundaryCore_local_zero`
 - `boundary_hlocal_core_of_boundaryDiffPow_local_zero`
+- `boundary_hwnz_core_of_boundaryDiffPow_nonzero`
+- `boundary_hlocal_diff0_of_boundaryDiffPow_factorPhaseVelLocal_eq_zero`
 - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryCore_factor0`
 - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryDiffPow_local0`
+- `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryDiffPow_factor0`
 - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0`
 - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0`
 - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0`
 - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0`
 - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0`
 - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0`
+- `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0`
+- `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0`
 
 最小テンプレート（boundary_dvd + gap + witness → provider）:
 
@@ -678,6 +683,40 @@ example (side : DkMath.CFBRC.BoundarySide)
     exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0
       (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
       hd_prime hd_ge hx hu hcop hpnd hS_dvd hS_gap hwnz_core hlocal_diff0
+```
+
+最小テンプレート（boundaryDiffPow factor0 → 停留点存在）:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+
+example (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with | .right => ¬ d ∣ x | .left => ¬ d ∣ u)
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with | .right => ¬ r.1 ∣ x | .left => ¬ r.1 ∣ u))
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  exact
+    exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0
+      (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      hd_prime hd_ge hx hu hcop hpnd hS_dvd hS_gap hwnz_diff hfactor_diff0
 ```
 
 ### Bridge Usage (RH-J2/J3)
