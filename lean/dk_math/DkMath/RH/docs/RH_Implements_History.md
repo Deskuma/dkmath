@@ -1017,3 +1017,31 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-N8 として、`BoundaryInsertLocalLiftProvider` を使う
      最小利用例を `RH/README.md` と `RH/docs/RH-CFBRC-Discussion.md` に追記し、
      provider 設計の導入導線を固定する。
+
+### 日時: 2026/03/13 11:40 JST: Phase RH-N8 を実装（provider 利用例の文書導線化）
+
+1. 目的: RH-N7 で追加した provider interface の利用入口を
+   README / Discussion に明示し、split 仮定版との使い分けを固定する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+   - 追記内容:
+     - `README.md`
+       - `BoundarySide` API 一覧へ
+         `BoundaryInsertLocalLiftProvider` と
+         `..._boundary_bridge_of_provider` を追加
+       - provider record 版の最小テンプレートを追加
+     - `RH-CFBRC-Discussion.md`
+       - RH-N4 セクションの公開 API に provider 系を追加
+       - `Implementation Bridge (RH-N8: Provider record 直結)` を新設
+       - split 版と provider 版の使い分けを明示
+3. 結論: provider 設計の導入導線が文書上で確立し、
+   bridge 利用者は「関数2本」か「record 1個」かで入口を選べるようになった。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+   - RH-N7 の実装補題名とテンプレート記述の整合を確認済み。
+6. 次の課題:
+   - RH-N9 として、`DkMath/RH/docs/README.md` にも provider 版テンプレートを同期し、
+     README 間で RH-N8 導線を統一する。
