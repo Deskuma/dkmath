@@ -28,3 +28,18 @@
 - root 側では `DkMath.lean` に `import DkMath.KUS` を追加し、`lake build DkMath` で全体接続を確認した。
 - 既存 repo に由来する `sorry` warning は継続しているが、今回の KUS 追加による新規エラーは解消済みである。
 - 次作業は、固定 support 上の演算を `Monoid.lean` として切り出し、README の planned modules を Lean 実装へさらに寄せること。
+
+### 2026-03-14 / Work Unit 4. phase-02 固定 fiber 加法モノイド
+
+- `DkMath/KUS/Monoid.lean` を追加し、phase-02 の最小実装として `Fiber support := Nat` を導入した。
+- `Fiber.toKUS` と `Fiber.toNat` を追加し、固定 support fiber と KUS 本体の接続 API を固定した。
+- `Fiber` 上に `AddCommMonoid` を与え、phase-01 の「固定 fiber 上の可換モノイド的土台」を最小更新で実装した。
+- `DkMath/KUS.lean` を更新し、`import DkMath.KUS.Monoid` で公開入口に接続した。
+- 次作業予定は `KUS-WorkNotes.md` へ反映し、`Scale` 仕様と `Examples` の最小化を次段タスクとして残した。
+
+### 2026-03-14 / Work Unit 5. phase-02 build 確認
+
+- 指定されたビルドスクリプト `lean-build.sh` を利用し、`./lean-build.sh DkMath.KUS` を実行して成功を確認した。
+- 続けて `./lean-build.sh DkMath` を実行し、root 入口でも成功することを確認した。
+- ビルドログ上の warning は既存 repo 由来の `sorry` によるもので、KUS phase-02 追加分に起因する新規エラーはない。
+- これにより、phase-02 の成果は「実装・文書・入口接続・ビルド確認」が揃った状態で保存された。

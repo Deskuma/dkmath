@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-01: minimal dependent core
+status: 作業中 - phase-02: fixed-fiber additive monoid
 
 ## 課題
 
@@ -8,27 +8,27 @@ status: 作業中 - phase-01: minimal dependent core
 - [x] `Nat -> KUS` 埋め込みと `KUS -> Nat` forget を導入する
 - [x] `extract : KUS -> US` を通常除法と分離して導入する
 - [x] 最小 round-trip 定理を追加する
-- [ ] 固定 fiber 上の可換モノイド的構造を設計する
+- [x] 固定 fiber 上の可換モノイド的構造を設計する
 - [ ] `Scale` と unit transport の仕様を定める
 
 ## 状況タスク
 
-- 完了条件（phase-01）
+- 完了条件（phase-02）
   - [x] `DkMath/KUS/Unit.lean` が `US` を提供する
   - [x] `DkMath/KUS/Core.lean` が `KUS`, `mkWith`, `zeroState` を提供する
   - [x] `DkMath/KUS/NatEmbed.lean` が `ofNat`, `toNat` を提供する
   - [x] `DkMath/KUS/Extract.lean` が `extract` を提供する
   - [x] `DkMath/KUS/RoundTrip.lean` が最小往復定理を提供する
-  - [ ] 固定 fiber の演算 API が確定する
+  - [x] 固定 fiber の演算 API が確定する
 
 ## 計画
 
 - 直近の主戦場:
-  - fixed support 上の演算をどう切るかを決める
+  - unit transport / scale の仕様固定
 - 直近の設計候補:
-  - `US` を support と見なし、その上で `Nat` 係数層として fiber を定義する
-  - 加法は係数加算、零元は `zeroState`、必要なら `support` ごとの subobject として型を切る
-  - blueprint が一致する場合に限る大域演算を入れるかは後回しにする
+  - `Scale.lean` を実装する前に、`US` の unit 変更と blueprint transport の仕様を書面で固定する
+  - `Examples.lean` の toy blueprint で `Fiber` の利用例を最小提示する
+  - blueprint が一致する場合に限る大域演算は後回しにする
 - 非目標（phase-01 ではやらない）:
   - `Div` の導入
   - `K : ℚ`, `ℝ`, 一般 carrier への拡張
@@ -39,6 +39,7 @@ status: 作業中 - phase-01: minimal dependent core
 - `US` を先に独立させたことで、README の `(U, S_U)` を `extract` の戻り値として明示できる形になった。
 - `KUS` は `coeff : Nat` と support の従属対であり、零状態は「係数が 0 になった support 保持状態」として `zeroState` に切り出した。
 - `ofNat (extract x) (toNat x) = x` を最小の再構成定理として置き、観測側と構造保持側の分離を Lean 上で固定した。
+- phase-02 では `Fiber support := {x : KUS // extract x = support}` を導入し、固定 support 上で `Nat` 係数と同型な `AddCommMonoid` を与えた。
 
 ## 作業ログ
 
@@ -72,3 +73,29 @@ status: 作業中 - phase-01: minimal dependent core
 - 次の予定:
   - fixed support 上の加法構造を `Monoid.lean` として導入する
   - linter の軽微な style warning を、次回の小修正タイミングでまとめて掃除する
+
+### 2026-03-14 phase-02 固定 fiber 加法モノイド
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Monoid.lean`
+  - `lean/dk_math/DkMath/KUS.lean`
+- 内容:
+  1. `Fiber support := Nat` として fixed support の係数層を最小実装した
+  2. `Fiber.toKUS` / `Fiber.toNat` を導入し、固定 fiber と KUS 本体の接続 API を整えた
+  3. `Fiber` 上に `Zero`, `Add`, `AddCommMonoid` instance を追加し、加法構造を固定 support 上で確立した
+  4. 入口 `DkMath/KUS.lean` で `Monoid.lean` を import して公開 API へ接続した
+- 次の予定:
+  - `Scale.lean` の仕様を docs で先に固定する
+  - `Examples.lean` で固定 fiber 演算の toy 例を最小追加する
+
+### 2026-03-14 phase-02 ビルド確認（lean-build.sh）
+
+- 対象:
+  - `cd lean/dk_math && ./lean-build.sh DkMath.KUS`
+  - `cd lean/dk_math && ./lean-build.sh DkMath`
+- 内容:
+  1. `DkMath.KUS` は build succeeded を確認した
+  2. root の `DkMath` でも build succeeded を確認し、KUS phase-02 の接続が全体で有効であることを確認した
+  3. 全体ビルドで出る warning は既存 repo 由来の `sorry` 群が中心で、今回追加分に新規エラーはない
+- 次の予定:
+  - `Scale` 仕様の文書化を先行し、phase-03 の実装境界を固定する
