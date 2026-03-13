@@ -41,14 +41,24 @@
     HOPC 寄与総和の同値
 - `EulerZetaConvergence.lean`
   - `σ > 1` での magnitude 無限積収束と正値
+- `HopcInfiniteLift.lean`
+  - OP-001 向け finite→infinite 接続の最小 API
+  - `HasSum` 仮定から `hopcPrimeContributionSum` の atTop 極限へ接続
 - `CFBRCBridge.lean`
   - CFBRC の primitive-prime existence から RH 側 singleton 停留判定へ接続する bridge
 
-## 主要 API（RH-N31 時点）
+## 主要 API（RH-N32 時点）
 
 - HOPC 観測量:
   - `hopcPrimeLocalContribution p σ t`
   - `hopcPrimeContributionSum S σ t`
+- finite→infinite 接続（OP-001）:
+  - `hopcPrimeContributionFn`
+  - `hopcPrimeContributionTsum`
+  - `HopcInfiniteLiftAssumptions`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_assumptions`
+  - `hopcPrimeContributionTsum_eq_zero_of_assumptions`
+  - `eventually_abs_hopcPrimeContributionSum_lt_of_assumptions`
 - 停留判定（有限 Euler 積）:
   - `driftFreeAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero`
   - `stationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero`

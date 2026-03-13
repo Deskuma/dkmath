@@ -100,7 +100,7 @@ Lean 実装ロードマップを 1 枚で管理するための文書。
   - `HOPC-RH-Glossary.md`（用語集, 作成済み）
   - `HOPC-RH-OpenProblems.md`（未解決タスク, 作成済み）
   - finite から infinite への接続条件整理（収束・非零・停留の整合）
-- 状態: 一部完了（Glossary/OpenProblems 完了）
+- 状態: 進行中（OP-001 着手、OP-003 完了）
 
 ## 参照導線
 
@@ -113,20 +113,14 @@ Lean 実装ロードマップを 1 枚で管理するための文書。
 
 ## Next Sprint（短期実装順）
 
-次スプリントは OP-003 を継続しつつ、OP-001 の接続設計へ入る。
+次スプリントは OP-001 を主軸として進める。
 
-1. OP-003（CFBRC 連携の実定理）を継続
-   - 到達済み:
-     - singleton → small finite-set への持ち上げ（RH-N1/N2）
-     - `BoundarySide` 統一高位 API（RH-N3）
-     - README / Discussion / docs README の利用テンプレート同期（RH-N4/N5）
+1. OP-001（finite→infinite 接続）を継続
+   - 到達済み（RH-O1）:
+     - `HopcInfiniteLift.lean` を追加
+     - `HasSum` 仮定から `hopcPrimeContributionSum` の atTop 極限へ接続
    - 次の焦点:
-     - provider 層（実際の `hS_lift` / `hsum_lift` 供給）との直結補題
-2. OP-001（finite→infinite 接続）へ着手
-   - 目標: `hopcPrimeContributionSum` の極限接続条件（収束/極限交換）を整理
-   - 具体: まずは条件列挙と補題インタフェース設計を先に固定する
-
-理由:
-
-- OP-003 の API 骨格は RH-N5 で一段落したため、
-  次は供給層の実装と finite→infinite 接続を並行管理する段階に入ったため。
+     - 収束条件の分解（`HasSum` 依存を弱める）
+     - finite 側停留判定と infinite 側観測量を接続する補題の追加
+2. OP-004（曲率条件運用）を並行整理
+   - `phaseCurv` 供給規約と wrapper 命名規約の整備

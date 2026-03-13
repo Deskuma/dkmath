@@ -1742,3 +1742,46 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 
 - OP-003 は RH-N31 で完了と判定。
 - 今後の主要未完は OP-001 / OP-004。
+
+### 日時: 2026/03/13 18:12 JST: Phase RH-O1 を実装（OP-001: finite→infinite 接続の初期 API）
+
+1. 目的: OP-001 の着手として、`hopcPrimeContributionSum` の finite 和から
+   infinite 側（`HasSum` / `tsum`）への接続インタフェースを実装する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/HopcInfiniteLift.lean`（新規）
+     - `DkMath/RH.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`HopcInfiniteLift.lean`）:
+     - `hopcPrimeContributionFn`
+     - `hopcPrimeContributionTsum`
+     - `HopcInfiniteLiftAssumptions`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_hasSum`
+     - `tendsto_hopcPrimeContributionSum_atTop_of_assumptions`
+     - `hopcPrimeContributionTsum_eq_zero_of_hasSumZero`
+     - `hopcPrimeContributionTsum_eq_zero_of_assumptions`
+     - `eventually_abs_hopcPrimeContributionSum_lt_of_assumptions`
+   - 実装修正:
+     - `DkMath/RH.lean` に `import DkMath.RH.HopcInfiniteLift` を追加
+   - 文書同期:
+     - README 2 枚の API に OP-001 接続層を追加（RH-N32 時点へ更新）
+     - `HOPC-RH-OpenProblems.md` の OP-001 を「進行中（RH-O1）」へ更新
+     - `HOPC-RH-Roadmap.md` の Next Sprint を OP-001 主軸へ更新
+3. 結論:
+   - finite 和 `hopcPrimeContributionSum` を atTop 極限で扱う
+     最小の機械可読 API が整った。
+   - OP-001 は「条件列挙フェーズ」から「形式化フェーズ」へ移行した。
+4. 失敗事例:
+   - 初稿で `Tendsto`/`atTop` の名前解決と `eventually` 取り出し方で
+     エラーが発生。
+   - `Filter.Tendsto` / `Filter.atTop` 明示と `hT.eventually` で解消。
+5. 検証:
+   - `lake build DkMath.RH.HopcInfiniteLift` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - OP-001 の RH-O2 として、
+     `HasSum` 仮定をより運用しやすい収束条件へ分解する補題を追加する。

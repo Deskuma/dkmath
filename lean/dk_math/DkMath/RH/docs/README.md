@@ -90,6 +90,10 @@ $$
   収束と正値の主証明：
   `σ > 1` のもとで `EulerZetaMagMultipliable` と `0 < eulerZetaMag` を確定。
 
+- `HopcInfiniteLift.lean`
+  OP-001 向け finite→infinite 接続 API：
+  `HasSum` 仮定から `hopcPrimeContributionSum` の atTop 極限・`tsum` へ接続。
+
 ---
 
 ## 位相ドリフト骨格：到達点（短く）
@@ -143,13 +147,20 @@ $$
 
 ---
 
-## 現状 API（HOPC 公開名・RH-N31 時点）
+## 現状 API（HOPC 公開名・RH-N32 時点）
 
 CFBRC 連携で使う公開名は次を基準とする。
 
 - 観測量（`EulerZeta.lean`）
   - `hopcPrimeLocalContribution`
   - `hopcPrimeContributionSum`
+- finite→infinite 接続（`HopcInfiniteLift.lean`）
+  - `hopcPrimeContributionFn`
+  - `hopcPrimeContributionTsum`
+  - `HopcInfiniteLiftAssumptions`
+  - `tendsto_hopcPrimeContributionSum_atTop_of_assumptions`
+  - `hopcPrimeContributionTsum_eq_zero_of_assumptions`
+  - `eventually_abs_hopcPrimeContributionSum_lt_of_assumptions`
 - 同一化（`EulerZetaLemmas.lean`）
   - `eulerZetaFactorPhaseVelFinite_eq_hopcPrimeContributionSum`
 - 停留判定（`EulerZetaLemmas.lean`）
