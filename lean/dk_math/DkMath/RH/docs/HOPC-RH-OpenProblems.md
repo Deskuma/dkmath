@@ -194,7 +194,7 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
   - 曲率前提の供給パターン（解析仮定 / 計算補題 / provider）を切り分ける。
 - 目標成果:
   - `phaseCurv` 供給戦略メモ + wrapper 名称規約
-- 状態: 進行中（RH-P1: phaseCurv provider 層を導入）
+- 状態: 進行中（RH-P1/P2/P3: provider 層 + 計算補題版 nondegenerate wrapper）
 - 到達済み:
   - `nondegenerateStationaryAt_insert_of_hopcPrimeContributionSum_eq_zero_and_phaseCurv_ne_zero`
   - `exists_nondegenerateStationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_local_and_phaseCurv`
@@ -203,6 +203,15 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
   - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_split_and_phaseCurv`
   - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv`
   - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider_and_phaseCurvProvider`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_and_phaseCurv`
+  - singleton 版:
+    - `..._boundaryCore_factor0_and_phaseCurv`
+    - `..._boundaryCore_local0_and_phaseCurv`
+    - `..._boundaryDiffPow_local0_and_phaseCurv`
+    - `..._boundaryDiffPow_factor0_and_phaseCurv`
 - 供給パターン v1（暫定）:
   - 解析仮定版:
     `hcurv_lift` / `hcurv_local0` を仮定として直接入力する
@@ -216,8 +225,8 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
   - singleton 入力は `..._singleton_..._of_local_and_phaseCurv`
   - provider 入力は `..._of_provider_and_phaseCurvProvider`
 - 残タスク:
-  - `phaseCurv ≠ 0` の計算補題版（`boundaryCore`/`boundaryDiffPow` 直結）を
-    高位 wrapper として追加する
+  - `normalized` / `with_offdvd` 経路に対しても
+    nondegenerate 版（`..._and_phaseCurv`）を追加するか評価する
 - 優先度: 中
 
 ## OP-005: 文書同期の継続管理

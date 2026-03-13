@@ -131,3 +131,51 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - `phaseCurv ≠ 0` の計算補題版（`boundaryCore` / `boundaryDiffPow` 直結）を
      高位 wrapper として追加する。
+
+### 日時: 2026/03/14 01:45 JST: OP-004 RH-P3（計算補題直結 nondegenerate wrapper）
+
+1. 目的:
+   OP-004 の残タスクとして、
+   `boundaryCore` / `boundaryDiffPow` 直結の計算補題入口から
+   `nondegenerateStationaryAt` へ接続する高位 wrapper 群を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/HOPC-RH-Glossary.md`
+     - `DkMath/RH/docs/RH_Implements_History-02.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0_and_phaseCurv`
+     - `exists_nondegenerateStationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0_and_phaseCurv`
+     - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0_and_phaseCurv`
+     - `exists_nondegenerateStationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0_and_phaseCurv`
+     - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0_and_phaseCurv`
+     - `exists_nondegenerateStationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0_and_phaseCurv`
+     - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_and_phaseCurv`
+     - `exists_nondegenerateStationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_and_phaseCurv`
+   - 設計メモ:
+     - `stationary` 側既存 wrapper の層（factor0 → local0 → provider）を再利用し、
+       `phaseCurv ≠ 0` 供給のみを追加入力として合成。
+     - 依存型の不一致回避のため、各 wrapper 証明は `cases side` で
+       `.right/.left` に正規化した。
+   - 文書更新:
+     - README API 一覧に OP-004 RH-P3 の非退化 wrapper 群を追加
+     - OpenProblems / Roadmap を RH-P3 到達済みへ更新
+     - Glossary の OP-004 語彙に計算補題直結 wrapper 群を追記
+3. 結論:
+   - OP-004 の計算補題版（`boundaryCore` / `boundaryDiffPow` 直結）で、
+     `stationaryAt` だけでなく `nondegenerateStationaryAt` まで
+     高位 API で到達できる形が揃った。
+   - 曲率供給運用は
+     解析仮定 / 計算補題 / provider の 3 層で統一された。
+4. 失敗事例:
+   - 初回実装で `match side` 依存型の不一致が連鎖的に発生。
+   - すべての高位 wrapper を左右分岐 (`cases side`) へ落として解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - OP-004 の次段として、`normalized` / `with_offdvd` 経路に
+     nondegenerate 版（`..._and_phaseCurv`）を追加するかを評価する。

@@ -129,9 +129,16 @@
   - `exists_nondegenerateStationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_local_and_phaseCurv`
   - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split_and_phaseCurv`
   - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider_and_phaseCurvProvider`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0_and_phaseCurv`
+  - `exists_nondegenerateStationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_and_phaseCurv`
 - 意味:
   - `stationaryAt` bridge に曲率非零供給を合成し、
     `nondegenerateStationaryAt` の存在へ接続する。
+  - OP-004 RH-P3 では `boundaryCore` / `boundaryDiffPow` の
+    計算補題直結 wrapper（insert/singleton）を追加して、
+    曲率側のみを `phaseCurv ≠ 0` 補題で差し替える運用を固定した。
 
 ## 注意（前提）
 
@@ -143,4 +150,4 @@
 - 方針: `HOPC-RH.txt`
 - ロードマップ: `HOPC-RH-Roadmap.md`
 - 議論: `RH-CFBRC-Discussion.md`
-- 実装履歴: `RH_Implements_History-01.md`
+- 実装履歴: `RH_Implements_History-02.md`
