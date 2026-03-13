@@ -57,3 +57,17 @@
 - `lean-build.sh` を用いて `./lean-build.sh DkMath.KUS` と `./lean-build.sh DkMath` の成功を確認した。
 - `Scale.lean` の軽微な lint 警告（`simpa` 推奨、未使用変数、whitespace）を修正した。
 - これにより phase-03 は「実装・仕様文書・入口接続・ビルド確認」が揃った状態で確定した。
+
+### 2026-03-14 / Work Unit 8. phase-04 Examples 導入
+
+- `DkMath/KUS/Examples.lean` を追加し、toy unit / blueprint を使った最小使用例を実装した。
+- `toySupport`, `toyX`, `toyFiberSum`, `toyScale` を導入し、`KUS` / `Fiber` / `Scale` の基本利用を補題で固定した。
+- 入口 `DkMath/KUS.lean` を更新し、`import DkMath.KUS.Examples` を追加して公開 API に接続した。
+- docs 側では `KUS-WorkNotes.md` と `KUS-MinimalKernel.md` を phase-04 状態へ更新した。
+- 次作業予定は `Scale` と `Monoid` の整合補題追加（phase-05）とした。
+
+### 2026-03-14 / Work Unit 9. phase-04 build と警告整理
+
+- `lean-build.sh` で `./lean-build.sh DkMath.KUS` と `./lean-build.sh DkMath` の成功を確認した。
+- `Examples.lean` の軽微な whitespace 警告を解消した。
+- これにより phase-04 は「実装・入口接続・記録・ビルド確認」が揃った状態で確定した。

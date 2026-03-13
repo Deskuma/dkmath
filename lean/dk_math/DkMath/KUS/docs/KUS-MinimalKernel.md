@@ -49,6 +49,13 @@ $$
   - `toNat (scaleKUS σ x) = toNat x`
   - `extract (scaleKUS σ x) = scaleUS σ (extract x)`
 
+## 実装後の状況（phase-04）
+
+- `DkMath/KUS/Examples.lean` を追加し、toy unit / blueprint 上で最小使用例を固定した
+  - `US` / `KUS` の具体値
+  - `Fiber` の加法例
+  - `ScaleSpec` の具体例
+
 ## まだ実装していないもの
 
 - 一般 carrier への拡張

@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-03: scale transport specification
+status: 作業中 - phase-04: minimal examples
 
 ## 課題
 
@@ -10,10 +10,11 @@ status: 作業中 - phase-03: scale transport specification
 - [x] 最小 round-trip 定理を追加する
 - [x] 固定 fiber 上の可換モノイド的構造を設計する
 - [x] `Scale` と unit transport の仕様を定める
+- [x] toy blueprint による最小使用例を追加する
 
 ## 状況タスク
 
-- 完了条件（phase-03）
+- 完了条件（phase-04）
   - [x] `DkMath/KUS/Unit.lean` が `US` を提供する
   - [x] `DkMath/KUS/Core.lean` が `KUS`, `mkWith`, `zeroState` を提供する
   - [x] `DkMath/KUS/NatEmbed.lean` が `ofNat`, `toNat` を提供する
@@ -21,15 +22,16 @@ status: 作業中 - phase-03: scale transport specification
   - [x] `DkMath/KUS/RoundTrip.lean` が最小往復定理を提供する
   - [x] 固定 fiber の演算 API が確定する
   - [x] `DkMath/KUS/Scale.lean` が `ScaleSpec` と最小 transport API を提供する
+  - [x] `DkMath/KUS/Examples.lean` が toy 使用例を提供する
 
 ## 計画
 
 - 直近の主戦場:
-  - `Examples.lean` の最小導入
+  - `Scale` と `Monoid` の整合補題の最小追加
 - 直近の設計候補:
-  - toy blueprint を置いて `scaleUS` / `scaleKUS` を具体例で確認する
-  - `Examples.lean` の toy blueprint で `Fiber` の利用例を最小提示する
-  - `Scale` が固定 fiber 演算へどう作用するかを最小補題で追加する
+  - `scaleKUS` が `Fiber.toKUS` とどう整合するかの補題を追加する
+  - transport 後の固定 fiber をどう型で切るかを決める
+  - 例示モジュールを肥大化させず、証明用の最小例に限定する
 - 非目標（phase-01 ではやらない）:
   - `Div` の導入
   - `K : ℚ`, `ℝ`, 一般 carrier への拡張
@@ -42,6 +44,7 @@ status: 作業中 - phase-03: scale transport specification
 - `ofNat (extract x) (toNat x) = x` を最小の再構成定理として置き、観測側と構造保持側の分離を Lean 上で固定した。
 - phase-02 では `Fiber support := {x : KUS // extract x = support}` を導入し、固定 support 上で `Nat` 係数と同型な `AddCommMonoid` を与えた。
 - phase-03 では `ScaleSpec` により、`US` / `KUS` へ unit transport を与える最小 API を追加し、係数保存と extract 整合を補題で固定した。
+- phase-04 では `Examples.lean` を追加し、toy blueprint 上で `KUS` / `Fiber` / `ScaleSpec` の最小利用例を固定した。
 
 ## 作業ログ
 
@@ -127,3 +130,28 @@ status: 作業中 - phase-03: scale transport specification
   3. `Scale.lean` の軽微な lint 警告（`simpa`/未使用変数/whitespace）は修正済み
 - 次の予定:
   - phase-04 として `Examples.lean` を追加し、toy blueprint 上の `Monoid` / `Scale` 使用例を固定する
+
+### 2026-03-14 phase-04 Examples 追加
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Examples.lean`
+  - `lean/dk_math/DkMath/KUS.lean`
+- 内容:
+  1. `ToyUnit := Nat`, `ToyBlueprint u := Fin (u+1)` を定義し、依存型 blueprint の最小具体例を導入した
+  2. 固定 support `toySupport`、KUS 値 `toyX`、fiber 加法 `toyFiberSum` を追加した
+  3. `toyScale` を追加し、`toNat` 保存と `extract` 整合を具体例で確認した
+  4. 入口 `DkMath/KUS.lean` へ `Examples.lean` import を追加した
+- 次の予定:
+  - `Scale` と `Monoid` の整合補題を最小追加する（phase-05）
+
+### 2026-03-14 phase-04 ビルド確認（lean-build.sh）
+
+- 対象:
+  - `cd lean/dk_math && ./lean-build.sh DkMath.KUS`
+  - `cd lean/dk_math && ./lean-build.sh DkMath`
+- 内容:
+  1. `DkMath.KUS` は build succeeded を確認
+  2. root `DkMath` でも build succeeded を確認
+  3. `Examples.lean` の軽微な whitespace 警告を修正し、KUS 側の追加分は warning なしで通過
+- 次の予定:
+  - phase-05 で `Scale` と `Monoid` の整合補題を最小追加する
