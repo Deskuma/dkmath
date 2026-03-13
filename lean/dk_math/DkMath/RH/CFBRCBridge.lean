@@ -2385,6 +2385,136 @@ def boundaryOffDvdLocalZeroOnSetProvider_singleton_of_insertProvider_and_boundar
   simpa [hs_eq] using hr0
 
 /--
+RH-O15: 一般有限集合 `S` 版の 1 点抽出補題。
+
+`insert p S` 上の寄与総和ゼロ（`hsum_lift`）と、
+`S.erase r` 上の local-zero が与えられたとき、`r` の local-zero を導く。
+-/
+theorem boundary_hlocal_on_S_of_insertProvider_and_witness_local0_and_local0_on_erase
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (r p : {q // Nat.Prime q})
+    (hrS : r ∈ S)
+    (provider : BoundaryInsertLocalLiftProvider side S d x u σ t)
+    (hp_dvd : p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hp_gap : match side with
+      | .right => ¬ p.1 ∣ x
+      | .left => ¬ p.1 ∣ u)
+    (hp_not_mem : p ∉ S)
+    (hlocal_p : hopcPrimeLocalContribution p.1 σ t = 0)
+    (hlocal_erase :
+      ∀ q ∈ S.erase r, hopcPrimeLocalContribution q.1 σ t = 0) :
+    hopcPrimeLocalContribution r.1 σ t = 0 := by
+  cases side with
+  | right =>
+      have hsum :
+          hopcPrimeContributionSum (S := insert p S) σ t = 0 :=
+        provider.hsum_lift p hp_dvd hp_gap
+      unfold hopcPrimeContributionSum at hsum
+      rw [Finset.sum_insert hp_not_mem, hlocal_p, zero_add] at hsum
+      have hdecomp :
+          hopcPrimeLocalContribution r.1 σ t +
+              (∑ q ∈ S.erase r, hopcPrimeLocalContribution q.1 σ t) =
+            (∑ q ∈ S, hopcPrimeLocalContribution q.1 σ t) := by
+        calc
+          hopcPrimeLocalContribution r.1 σ t +
+              (∑ q ∈ S.erase r, hopcPrimeLocalContribution q.1 σ t)
+              = (∑ q ∈ insert r (S.erase r), hopcPrimeLocalContribution q.1 σ t) := by
+                rw [Finset.sum_insert (by simp)]
+          _ = (∑ q ∈ S, hopcPrimeLocalContribution q.1 σ t) := by
+            simp [Finset.insert_erase hrS]
+      have hsum_erase_zero :
+          (∑ q ∈ S.erase r, hopcPrimeLocalContribution q.1 σ t) = 0 := by
+        refine Finset.sum_eq_zero ?_
+        intro q hq
+        exact hlocal_erase q hq
+      have hr_plus : hopcPrimeLocalContribution r.1 σ t +
+          (∑ q ∈ S.erase r, hopcPrimeLocalContribution q.1 σ t) = 0 := by
+        calc
+          hopcPrimeLocalContribution r.1 σ t +
+              (∑ q ∈ S.erase r, hopcPrimeLocalContribution q.1 σ t)
+              = (∑ q ∈ S, hopcPrimeLocalContribution q.1 σ t) := hdecomp
+          _ = 0 := hsum
+      calc
+        hopcPrimeLocalContribution r.1 σ t
+            = hopcPrimeLocalContribution r.1 σ t + 0 := by simp
+        _ = hopcPrimeLocalContribution r.1 σ t +
+              (∑ q ∈ S.erase r, hopcPrimeLocalContribution q.1 σ t) := by
+              rw [hsum_erase_zero]
+        _ = 0 := hr_plus
+  | left =>
+      have hsum :
+          hopcPrimeContributionSum (S := insert p S) σ t = 0 :=
+        provider.hsum_lift p hp_dvd hp_gap
+      unfold hopcPrimeContributionSum at hsum
+      rw [Finset.sum_insert hp_not_mem, hlocal_p, zero_add] at hsum
+      have hdecomp :
+          hopcPrimeLocalContribution r.1 σ t +
+              (∑ q ∈ S.erase r, hopcPrimeLocalContribution q.1 σ t) =
+            (∑ q ∈ S, hopcPrimeLocalContribution q.1 σ t) := by
+        calc
+          hopcPrimeLocalContribution r.1 σ t +
+              (∑ q ∈ S.erase r, hopcPrimeLocalContribution q.1 σ t)
+              = (∑ q ∈ insert r (S.erase r), hopcPrimeLocalContribution q.1 σ t) := by
+                rw [Finset.sum_insert (by simp)]
+          _ = (∑ q ∈ S, hopcPrimeLocalContribution q.1 σ t) := by
+            simp [Finset.insert_erase hrS]
+      have hsum_erase_zero :
+          (∑ q ∈ S.erase r, hopcPrimeLocalContribution q.1 σ t) = 0 := by
+        refine Finset.sum_eq_zero ?_
+        intro q hq
+        exact hlocal_erase q hq
+      have hr_plus : hopcPrimeLocalContribution r.1 σ t +
+          (∑ q ∈ S.erase r, hopcPrimeLocalContribution q.1 σ t) = 0 := by
+        calc
+          hopcPrimeLocalContribution r.1 σ t +
+              (∑ q ∈ S.erase r, hopcPrimeLocalContribution q.1 σ t)
+              = (∑ q ∈ S, hopcPrimeLocalContribution q.1 σ t) := hdecomp
+          _ = 0 := hsum
+      calc
+        hopcPrimeLocalContribution r.1 σ t
+            = hopcPrimeLocalContribution r.1 σ t + 0 := by simp
+        _ = hopcPrimeLocalContribution r.1 σ t +
+              (∑ q ∈ S.erase r, hopcPrimeLocalContribution q.1 σ t) := by
+              rw [hsum_erase_zero]
+        _ = 0 := hr_plus
+
+/--
+RH-O15: 一般有限集合 `S` での on-set provider 構成器。
+
+各 `r ∈ S` について witness prime `p` と `S.erase r` 上 local-zero を供給できるなら、
+`BoundaryOffDvdLocalZeroOnSetProvider` を構成できる。
+-/
+def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_witness_local0_and_local0_on_erase
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (provider : BoundaryInsertLocalLiftProvider side S d x u σ t)
+    (hwitness :
+      ∀ r ∈ S,
+        ∃ p : {q // Nat.Prime q},
+          p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u ∧
+          (match side with
+            | .right => ¬ p.1 ∣ x
+            | .left => ¬ p.1 ∣ u) ∧
+          p ∉ S ∧
+          hopcPrimeLocalContribution p.1 σ t = 0)
+    (hlocal_erase :
+      ∀ r ∈ S, ∀ q ∈ S.erase r, hopcPrimeLocalContribution q.1 σ t = 0) :
+    BoundaryOffDvdLocalZeroOnSetProvider side S d x u σ t := by
+  refine ⟨?_⟩
+  intro r hrS _hr_offdvd
+  rcases hwitness r hrS with ⟨p, hp_dvd, hp_gap, hp_not_mem, hlocal_p⟩
+  exact boundary_hlocal_on_S_of_insertProvider_and_witness_local0_and_local0_on_erase
+    (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+    (r := r) (p := p) hrS provider hp_dvd
+    (by
+      cases side <;> simpa using hp_gap)
+    hp_not_mem hlocal_p
+    (hlocal_erase r hrS)
+
+/--
 RH-O12: off-dvd 側の非零 (`w_p ≠ 0`) と factor 位相速度ゼロを束ねる供給器。
 -/
 structure BoundaryOffDvdFactorZeroProvider

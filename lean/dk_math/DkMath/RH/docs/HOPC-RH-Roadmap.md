@@ -116,7 +116,7 @@ Lean 実装ロードマップを 1 枚で管理するための文書。
 次スプリントは OP-001 を主軸として進める。
 
 1. OP-001（finite→infinite 接続）を継続
-   - 到達済み（RH-O1/O2/O3/O4/O5/O6/O7/O8/O9/O10/O11/O12/O13/O14）:
+   - 到達済み（RH-O1/O2/O3/O4/O5/O6/O7/O8/O9/O10/O11/O12/O13/O14/O15）:
      - `HopcInfiniteLift.lean` を追加
      - `HasSum` 仮定から `hopcPrimeContributionSum` の atTop 極限へ接続
      - `Summable + tsum=0` 仮定から同極限へ接続
@@ -145,10 +145,16 @@ Lean 実装ロードマップを 1 枚で管理するための文書。
        insert-provider の `hsum_lift` から off-dvd local-zero を抽出する補題を追加
      - `BoundaryOffDvdLocalZeroOnSetProvider` を導入し、
        singleton 抽出結果を on-set provider として公開
+     - 一般有限集合 `S` 版の 1点抽出補題
+       （`S.erase r` 上 local-zero 仮定つき）を追加
+     - 一般有限集合 `S` 版の on-set provider 構成器
+       （witness + local-zero-on-erase 入力）を追加
    - 次の焦点:
      - `BoundaryInsertLocalLiftProvider` の追加仮定を最小化し、
        off-dvd 側 local-zero 抽出を provider 内部情報に寄せる
-     - singleton 抽出を一般有限集合 `S` へ拡張し、
-       on-set provider 構成を段階的に自動化する
+     - 一般有限集合 `S` 版で `hlocal_erase` 仮定を弱め、
+       provider 内部情報への依存度を高める
+     - on-set provider 構成の witness/local-zero 前提を
+       段階的に自動供給する補題群を追加する
 2. OP-004（曲率条件運用）を並行整理
    - `phaseCurv` 供給規約と wrapper 命名規約の整備

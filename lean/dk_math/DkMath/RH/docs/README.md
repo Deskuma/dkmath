@@ -1,7 +1,7 @@
 # DkMath.RH：位相ドリフト骨格 + EulerZeta（現状の全コード）
 
 - Authors: D. and Kenro (ChatGPT-5.2)
-- Last updated: 2026/03/13 21:14
+- Last updated: 2026/03/13 21:48
 
 このディレクトリは、リーマンゼータ関数に差し込む前に必要な
 
@@ -147,7 +147,7 @@ $$
 
 ---
 
-## 現状 API（HOPC 公開名・RH-N45 時点）
+## 現状 API（HOPC 公開名・RH-N46 時点）
 
 CFBRC 連携で使う公開名は次を基準とする。
 
@@ -200,6 +200,8 @@ CFBRC 連携で使う公開名は次を基準とする。
   - `boundary_hlocal_offdvd_singleton_of_insertProvider_and_witness_local0`
   - `boundary_hlocal_offdvd_singleton_of_insertProvider_and_boundaryDiffPow_factor0`
   - `boundaryOffDvdLocalZeroOnSetProvider_singleton_of_insertProvider_and_boundaryDiffPow_factor0`
+  - `boundary_hlocal_on_S_of_insertProvider_and_witness_local0_and_local0_on_erase`
+  - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_witness_local0_and_local0_on_erase`
   - `BoundaryOffDvdFactorZeroProvider`
   - `boundaryOffDvdFactorZeroProvider_of_split`
   - `boundaryOffDvdFactorZeroProvider_of_nonzero_and_localZeroProvider`
@@ -280,6 +282,7 @@ CFBRC 連携で使う公開名は次を基準とする。
   - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_and_local_zero`
 
 補足:
+
 - 上記公開名は明示和
   `∑_{p∈S} (log p - phaseVel(w_p))`
   の alias/wrapper 層として設計されている。

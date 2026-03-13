@@ -2244,3 +2244,38 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - singleton 抽出を一般有限集合 `S` へ拡張し、
      on-set provider を段階的に自動構成できる補題群を追加する。
+
+### 日時: 2026/03/13 21:48 JST: Phase RH-O15 を実装（一般有限集合 `S` への拡張）
+
+1. 目的: OP-001 の RH-O15 として、
+   singleton 抽出（RH-O14）を一般有限集合 `S` へ拡張し、
+   on-set provider 構成器を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundary_hlocal_on_S_of_insertProvider_and_witness_local0_and_local0_on_erase`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_witness_local0_and_local0_on_erase`
+   - 実装方針:
+     - `insert p S` の `hsum_lift` を `p ∉ S` の下で展開し、
+       witness 側 local-zero + `S.erase r` 側 local-zero から `r` を抽出
+     - 抽出補題を束ねて一般 `S` 版 on-set provider 構成器へ接続
+3. 結論:
+   - 一般有限集合 `S` 版の抽出 API が追加され、
+     O14 の singleton 基盤を実運用向けに一段拡張できた。
+4. 失敗事例:
+   - `Finset.not_mem_erase` の識別子不一致、`hp_gap` の依存型不一致、
+     和の整理不足で初回 build が失敗。
+   - `sum_insert` 展開を `simp` で明示し、`cases side` + `by simpa` で依存型を揃え、
+     和の消去を `calc` で構成して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-O15 の `hlocal_erase` 仮定を弱め、
+     `BoundaryInsertLocalLiftProvider` 内部情報からの導出比率を高める。
