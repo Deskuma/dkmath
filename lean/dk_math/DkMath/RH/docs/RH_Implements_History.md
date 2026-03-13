@@ -1290,3 +1290,24 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-N19 として、`RH/README.md` にも RH-N18 テンプレートを同期し、
      README 間の公開導線を完全一致させる。
+
+### 日時: 2026/03/13 12:27 JST: Phase RH-N19 を実装（RH README へ RH-N18 導線同期）
+
+1. 目的: RH-N18 で docs 側に追加した実供給導線を
+   `DkMath/RH/README.md` に同期し、README 間の公開導線を一致させる。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/README.md`
+   - 追記内容:
+     - 主要 API 見出しを RH-N19 時点へ更新
+     - RH-N17 追加補題 2 本を API 一覧へ追加
+     - `boundary_dvd + gap + local-zero` から provider 生成するテンプレートを追加
+3. 結論: `RH/README.md` と `RH/docs/README.md` の
+   RH-N18 導線が同期され、公開導線の差分が解消された。
+4. 失敗事例: なし（ドキュメント更新のみ）。
+5. 備考:
+   - `.lean` 実装への変更はなし。
+   - Discussion 側 RH-N18 セクションとの整合を維持。
+6. 次の課題:
+   - RH-N20 として、`HOPC-RH-OpenProblems.md` の OP-003 到達済みに
+     RH-N17〜N19（実供給導線）を反映し、残タスクをさらに具体化する。

@@ -44,7 +44,7 @@
 - `CFBRCBridge.lean`
   - CFBRC の primitive-prime existence から RH 側 singleton 停留判定へ接続する bridge
 
-## 主要 API（RH-N14 時点）
+## 主要 API（RH-N19 時点）
 
 - HOPC 観測量:
   - `hopcPrimeLocalContribution p σ t`
@@ -70,6 +70,8 @@
   - `boundaryInsertLocalLiftProvider_of_nonzero_on_S_and_witness`
   - `boundary_hsum_lift_of_local_zero_on_S_and_witness`
   - `boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero_on_S_and_witness`
+  - `boundary_nonzero_on_S_of_boundary_dvd_and_gap`
+  - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_and_local_zero`
 
 ## 利用例（import）
 
@@ -185,6 +187,43 @@ example (side : DkMath.CFBRC.BoundarySide)
     boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero_on_S_and_witness
       (side := side) (S := S)
       (hS_nonzero := hS_nonzero)
+      (hwnz_witness := hwnz_witness)
+      (hS_local0 := hS_local0)
+      (hlocal_witness := hlocal_witness)
+```
+
+`boundary_dvd + gap` 供給（RH-N17）から provider を生成するテンプレート:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+
+example (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with | .right => ¬ r.1 ∣ x | .left => ¬ r.1 ∣ u))
+    (hwnz_witness :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with | .right => ¬ p.1 ∣ x | .left => ¬ p.1 ∣ u) →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hS_local0 :
+      ∀ r ∈ S, hopcPrimeLocalContribution r.1 σ t = 0)
+    (hlocal_witness :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with | .right => ¬ p.1 ∣ x | .left => ¬ p.1 ∣ u) →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    BoundaryInsertLocalLiftProvider side S d x u σ t := by
+  exact
+    boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_and_local_zero
+      (side := side) (S := S)
+      (hS_dvd := hS_dvd)
+      (hS_gap := hS_gap)
       (hwnz_witness := hwnz_witness)
       (hS_local0 := hS_local0)
       (hlocal_witness := hlocal_witness)
