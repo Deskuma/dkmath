@@ -10,3 +10,21 @@
 - 実装上の重要論点として、`Div` を早期導入せず `extract` を先に設計すること、全空間演算より固定 unit fiber の演算を優先すること、依存型として `S_U ∈ Blueprint(U)` を正面から扱うことを整理。
 - repo 全体の流儀として、`Core` を中心に薄い補助モジュールを分け、入口ファイルで import 集約する構成が多いことを確認。KUS の README 案はその方針と整合する。
 - 次段候補としては、`Unit.lean` と `Blueprint.lean` で依存型の土台を置き、`Core.lean` で最小 KUS 構造を定義し、続いて `NatEmbed.lean` と `Extract.lean` を設計する流れが自然と判断。
+
+### 2026-03-14 / Work Unit 2. phase-01 最小核の実装
+
+- `DkMath/KUS/Unit.lean` に `(U, S_U)` を束ねる `US` を追加し、KUS の構造保持側を Lean 上で独立させた。
+- `DkMath/KUS/Core.lean` に `KUS`、`mkWith`、`zeroState` を追加し、`(0, U, S_U)` を「係数のみ零化した構造保持零」として定義した。
+- `DkMath/KUS/NatEmbed.lean` に `ofNat`, `toNat` を追加し、README の `Nat -> KUS -> Nat` の最小往復を実装した。
+- `DkMath/KUS/Extract.lean` に `extract` を追加し、通常除法とは別の特異操作として `(U, S_U)` を回収する経路を固定した。
+- `DkMath/KUS/RoundTrip.lean` に `extract (ofNat support n) = support` と `ofNat (extract x) (toNat x) = x` を追加し、観測側と構造保持側の round-trip を最小形で整備した。
+- 入口 `DkMath/KUS.lean` と root import `DkMath.lean` を追加更新し、KUS をライブラリの公開入口に接続した。
+- docs として `KUS-WorkNotes.md` と `KUS-MinimalKernel.md` を追加し、実装済み範囲と次作業候補を Markdown 側でも追跡できるようにした。
+- 次作業予定は `KUS-WorkNotes.md` に明記し、固定 fiber 上のモノイド構造と unit transport 仕様を次段候補として残した。
+
+### 2026-03-14 / Work Unit 3. build 接続確認
+
+- `lake build DkMath.KUS` を通し、KUS の入口モジュールとして独立ビルドできることを確認した。
+- root 側では `DkMath.lean` に `import DkMath.KUS` を追加し、`lake build DkMath` で全体接続を確認した。
+- 既存 repo に由来する `sorry` warning は継続しているが、今回の KUS 追加による新規エラーは解消済みである。
+- 次作業は、固定 support 上の演算を `Monoid.lean` として切り出し、README の planned modules を Lean 実装へさらに寄せること。
