@@ -2388,3 +2388,44 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - `BoundaryInsertLocalLiftProvider` 単体（primitive-prime 仮定なし）で
      witness を内製する API の可否を評価し、必要なら別 provider 設計へ分岐する。
+
+### 日時: 2026/03/13 22:41 JST: Phase RH-O19 を実装（witness existence の provider 分離）
+
+1. 目的: OP-001 の RH-O19 として、
+   `BoundaryInsertLocalLiftProvider` 単体で witness existence を内製可能かを評価し、
+   不足情報を別 provider として分離する API を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `BoundaryGlobalWitnessProvider`
+     - `BoundaryGlobalWitnessLocalZeroProvider`
+     - `boundaryGlobalWitnessProvider_of_exists`
+     - `boundaryGlobalWitnessLocalZeroProvider_of_exists`
+     - `boundaryGlobalWitnessProvider_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_globalWitnessLocalZeroProvider_and_local0_on_erase`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_globalWitnessProvider`
+     - `boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_globalWitnessProvider_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+   - 実装方針:
+     - `BoundaryInsertLocalLiftProvider` は「与えられた `p` に対する lift 則」を提供するだけで
+       witness existence は含まない、という役割分離を型として明示
+     - 既存 RH-O18 wrapper へ、新しい witness provider record を介して接続
+3. 結論:
+   - 可否評価: `BoundaryInsertLocalLiftProvider` 単体から witness existence を復元する API は
+     現状の情報量では成立しないため、provider 分離が妥当。
+   - 運用面: witness existence の供給経路（手動 / CFBRC primitive-prime）を
+     record 化して再利用可能になった。
+4. 失敗事例:
+   - 依存型（`match side with ...`）の不一致で初回 build が失敗。
+   - `cases side` + `simpa` で witness 型を正規化し解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - witness 分離 provider（RH-O19）前提で、
+     高位 wrapper の命名統一と最小前提化を進める。
