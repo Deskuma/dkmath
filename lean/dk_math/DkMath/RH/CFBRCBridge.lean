@@ -634,6 +634,18 @@ theorem hopcPrimeLocalContribution_eq_zero_of_factorPhaseVelLocal_eq_zero_of_non
   exact hfactor0
 
 /--
+RH-N25: `w_p ≠ 0` と HOPC 局所寄与ゼロから factor 位相速度寄与ゼロを得る。
+-/
+theorem eulerZetaFactorPhaseVelLocal_eq_zero_of_hopcPrimeLocalContribution_eq_zero_of_nonzero
+    {p : ℕ} {σ t : ℝ}
+    (hp_ne : eulerZeta_exp_s_log_p_sub_one p σ t ≠ 0)
+    (hlocal0 : hopcPrimeLocalContribution p σ t = 0) :
+    eulerZetaFactorPhaseVelLocal p σ t = 0 := by
+  rw [← hopcPrimeLocalContribution_eq_eulerZetaFactorPhaseVelLocal_of_nonzero
+    (p := p) (σ := σ) (t := t) hp_ne]
+  exact hlocal0
+
+/--
 RH-N23: `boundaryCyclotomicPrimeCore` 側の factor 位相速度ゼロ仮定から `hlocal_core` を供給。
 -/
 theorem boundary_hlocal_core_of_boundaryCore_factorPhaseVelLocal_eq_zero
@@ -655,6 +667,29 @@ theorem boundary_hlocal_core_of_boundaryCore_factorPhaseVelLocal_eq_zero
     (p := p.1) (σ := σ) (t := t)
     (hwnz_core p hp_core)
     (hfactor_core0 p hp_core)
+
+/--
+RH-N25: `boundaryCyclotomicPrimeCore` 側の local-zero 仮定から `hfactor_core0` を供給。
+-/
+theorem boundary_hfactor_core0_of_boundaryCore_local_zero
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hwnz_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hlocal_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    ∀ p : {q // Nat.Prime q},
+      p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+        eulerZetaFactorPhaseVelLocal p.1 σ t = 0 := by
+  intro p hp_core
+  exact eulerZetaFactorPhaseVelLocal_eq_zero_of_hopcPrimeLocalContribution_eq_zero_of_nonzero
+    (p := p.1) (σ := σ) (t := t)
+    (hwnz_core p hp_core)
+    (hlocal_core p hp_core)
 
 /--
 RH-N12: `hS_lift` 段階供給を使った provider 構成補題。
@@ -1118,5 +1153,107 @@ theorem
           (side := .left) (S := (∅ : Finset {q // Nat.Prime q}))
           (d := d) (x := x) (u := u) (σ := σ) (t := t)
           hd_prime hd_ge hx hu hcop hpnd hS_dvd hS_gap hwnz_core hfactor_core0)
+
+/--
+RH-N25: `boundaryCore` local-zero 仮定から
+small finite-set 停留点存在へ接続する高位 wrapper。
+
+`hfactor_core0` は
+`boundary_hfactor_core0_of_boundaryCore_local_zero`
+で自動生成し、RH-N24 wrapper へ委譲する。
+-/
+theorem
+    exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with
+        | .right => ¬ r.1 ∣ x
+        | .left => ¬ r.1 ∣ u))
+    (hwnz_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hlocal_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  cases side with
+  | right =>
+      exact
+        exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0
+          (side := .right) (S := S)
+          (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd hS_dvd hS_gap hwnz_core
+          (boundary_hfactor_core0_of_boundaryCore_local_zero
+            (side := .right) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+            hwnz_core hlocal_core)
+  | left =>
+      exact
+        exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0
+          (side := .left) (S := S)
+          (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd hS_dvd hS_gap hwnz_core
+          (boundary_hfactor_core0_of_boundaryCore_local_zero
+            (side := .left) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+            hwnz_core hlocal_core)
+
+local notation "existsStatSingletonBoundaryCoreFactor0" =>
+  exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0
+
+/--
+RH-N25: `boundaryCore` local-zero 仮定から singleton 停留点存在へ接続する wrapper。
+-/
+theorem
+    exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hwnz_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hlocal_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ =>
+          eulerZetaFinite_onVertical ({p} : Finset {q // Nat.Prime q}) σ v) t := by
+  cases side with
+  | right =>
+      have hstat :=
+        existsStatSingletonBoundaryCoreFactor0
+          (side := .right) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd hwnz_core
+          (boundary_hfactor_core0_of_boundaryCore_local_zero
+            (side := .right) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+            hwnz_core hlocal_core)
+      exact hstat
+  | left =>
+      have hstat :=
+        existsStatSingletonBoundaryCoreFactor0
+          (side := .left) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+          hd_prime hd_ge hx hu hcop hpnd hwnz_core
+          (boundary_hfactor_core0_of_boundaryCore_local_zero
+            (side := .left) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+            hwnz_core hlocal_core)
+      exact hstat
 
 end DkMath.RH.EulerZeta

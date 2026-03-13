@@ -1477,3 +1477,44 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
    - RH-N25 として、`hfactor_core0` を供給する実補題
      （解析条件 or finite-set 観測条件から `eulerZetaFactorPhaseVelLocal = 0` を導く層）
      を追加する。
+
+### 日時: 2026/03/13 13:05 JST: Phase RH-N25 を実装（local0 から factor0 供給 + direct existence 拡張）
+
+1. 目的: RH-N24 の残課題を進め、`hlocal_core` から `hfactor_core0` を供給し、
+   `boundaryCore local0` 仮定でも direct existence API を使えるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `eulerZetaFactorPhaseVelLocal_eq_zero_of_hopcPrimeLocalContribution_eq_zero_of_nonzero`
+       （`w_p ≠ 0` + local0 から factor0 を導出）
+     - `boundary_hfactor_core0_of_boundaryCore_local_zero`
+       （core 除法上の local0 仮定から `hfactor_core0` を供給）
+     - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0`
+       （`hlocal_core` から direct existence へ接続）
+     - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0`
+       （singleton 特化版）
+   - 実装修正:
+     - `BoundarySide` 依存型不一致は `cases side` で固定して解消
+     - long-line/不要 simpa 警告は alias 導入と `simp at hr` で解消
+   - 文書同期:
+     - README 2 枚を RH-N25 へ更新
+     - `RH-CFBRC-Discussion.md` を RH-N25 内容へ更新
+     - OP-003 を RH-N1〜N25 到達へ更新し、残タスク文言を `hlocal_core` 供給へ整理
+3. 結論: `boundaryCore local0` 仮定から
+   provider を意識せずに停留点存在へ直接接続できるようになり、
+   RH 側の高位 API は local0/factor0 の両入口を揃えた。
+4. 失敗事例:
+   - `BoundarySide` 依存型の `match` 不一致とスタイル警告が発生。
+   - `cases side` 分岐固定と補助 alias 導入で解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - RH-N26 として、`hlocal_core` 自体を供給する実補題
+     （解析条件 or finite-set 観測条件から `hopcPrimeLocalContribution = 0` を導く層）
+     を追加する。
