@@ -495,6 +495,47 @@ theorem boundary_nonzero_on_S_of_boundary_dvd_and_gap
       exact hwnz_witness r (hS_dvd r hr) (hS_gap r hr)
 
 /--
+RH-N22: `boundaryCyclotomicPrimeCore` 側の非零仮定から witness 非零を復元。
+
+`hwnz_core`（core 除法だけを前提にした非零仮定）から、
+`boundaryDiffPow` 除法 + gap 非除法を前提にした
+`hwnz_witness` 形式へ落とす。
+-/
+theorem boundary_hwnz_witness_of_boundaryCore_nonzero
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hwnz_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    ∀ p : {q // Nat.Prime q},
+      p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+        (match side with
+          | .right => ¬ p.1 ∣ x
+          | .left => ¬ p.1 ∣ u) →
+        eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0 := by
+  cases side with
+  | right =>
+      intro p hq_dvd hq_not_dvd_x
+      have hq_dvd_core : p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u := by
+        have hq_dvd_core_nat : p.1 ∣ DkMath.CFBRC.cyclotomicPrimeCore d x u :=
+          (DkMath.CFBRC.prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
+            (p := d) (x := x) (u := u) (q := p.1) p.2 hq_not_dvd_x).1
+            (by simpa [DkMath.CFBRC.boundaryDiffPow] using hq_dvd)
+        simpa [DkMath.CFBRC.boundaryCyclotomicPrimeCore] using hq_dvd_core_nat
+      exact hwnz_core p hq_dvd_core
+  | left =>
+      intro p hq_dvd hq_not_dvd_u
+      have hq_dvd_core : p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .left d x u := by
+        have hq_dvd_sub_swap : p.1 ∣ ((u + x) ^ d - x ^ d) := by
+          simpa [DkMath.CFBRC.boundaryDiffPow, Nat.add_comm] using hq_dvd
+        have hq_dvd_core_swap : p.1 ∣ DkMath.CFBRC.cyclotomicPrimeCore d u x :=
+          (DkMath.CFBRC.prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
+            (p := d) (x := u) (u := x) (q := p.1) p.2 hq_not_dvd_u).1 hq_dvd_sub_swap
+        simpa [DkMath.CFBRC.boundaryCyclotomicPrimeCore] using hq_dvd_core_swap
+      exact hwnz_core p hq_dvd_core
+
+/--
 RH-N21: CFBRC 側条件（boundary 除法 + gap 非除法）から `S` 上 local-zero を供給。
 
 各 `r ∈ S` について
@@ -527,6 +568,47 @@ theorem boundary_local_zero_on_S_of_boundary_dvd_and_gap
   | left =>
       intro r hr
       exact hlocal_witness r (hS_dvd r hr) (hS_gap r hr)
+
+/--
+RH-N22: `boundaryCyclotomicPrimeCore` 側の local-zero 仮定から witness local-zero を復元。
+
+`hlocal_core`（core 除法だけを前提にした local-zero 仮定）から、
+`boundaryDiffPow` 除法 + gap 非除法を前提にした
+`hlocal_witness` 形式へ落とす。
+-/
+theorem boundary_hlocal_witness_of_boundaryCore_local_zero
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hlocal_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    ∀ p : {q // Nat.Prime q},
+      p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+        (match side with
+          | .right => ¬ p.1 ∣ x
+          | .left => ¬ p.1 ∣ u) →
+        hopcPrimeLocalContribution p.1 σ t = 0 := by
+  cases side with
+  | right =>
+      intro p hq_dvd hq_not_dvd_x
+      have hq_dvd_core : p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u := by
+        have hq_dvd_core_nat : p.1 ∣ DkMath.CFBRC.cyclotomicPrimeCore d x u :=
+          (DkMath.CFBRC.prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
+            (p := d) (x := x) (u := u) (q := p.1) p.2 hq_not_dvd_x).1
+            (by simpa [DkMath.CFBRC.boundaryDiffPow] using hq_dvd)
+        simpa [DkMath.CFBRC.boundaryCyclotomicPrimeCore] using hq_dvd_core_nat
+      exact hlocal_core p hq_dvd_core
+  | left =>
+      intro p hq_dvd hq_not_dvd_u
+      have hq_dvd_core : p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .left d x u := by
+        have hq_dvd_sub_swap : p.1 ∣ ((u + x) ^ d - x ^ d) := by
+          simpa [DkMath.CFBRC.boundaryDiffPow, Nat.add_comm] using hq_dvd
+        have hq_dvd_core_swap : p.1 ∣ DkMath.CFBRC.cyclotomicPrimeCore d u x :=
+          (DkMath.CFBRC.prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
+            (p := d) (x := u) (u := x) (q := p.1) p.2 hq_not_dvd_u).1 hq_dvd_sub_swap
+        simpa [DkMath.CFBRC.boundaryCyclotomicPrimeCore] using hq_dvd_core_swap
+      exact hlocal_core p hq_dvd_core
 
 /--
 RH-N12: `hS_lift` 段階供給を使った provider 構成補題。
@@ -763,6 +845,51 @@ def boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap
         (hS_local0 := boundary_local_zero_on_S_of_boundary_dvd_and_gap
           (side := .left) (S := S) hS_dvd hS_gap hlocal_witness)
         (hlocal_witness := hlocal_witness)
+
+/--
+RH-N22: `boundaryCore` 側 witness 仮定から provider を構成する wrapper。
+
+`boundaryDiffPow` 側 witness 仮定は内部で復元し、
+RH-N21 の前提簡約 wrapper へ委譲する。
+-/
+def boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_of_boundaryCore_witness
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with
+        | .right => ¬ r.1 ∣ x
+        | .left => ¬ r.1 ∣ u))
+    (hwnz_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hlocal_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    BoundaryInsertLocalLiftProvider side S d x u σ t := by
+  cases side with
+  | right =>
+      exact boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap
+        (side := .right) (S := S)
+        (hS_dvd := hS_dvd)
+        (hS_gap := hS_gap)
+        (hwnz_witness := boundary_hwnz_witness_of_boundaryCore_nonzero
+          (side := .right) (d := d) (x := x) (u := u) (σ := σ) (t := t) hwnz_core)
+        (hlocal_witness := boundary_hlocal_witness_of_boundaryCore_local_zero
+          (side := .right) (d := d) (x := x) (u := u) (σ := σ) (t := t) hlocal_core)
+  | left =>
+      exact boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap
+        (side := .left) (S := S)
+        (hS_dvd := hS_dvd)
+        (hS_gap := hS_gap)
+        (hwnz_witness := boundary_hwnz_witness_of_boundaryCore_nonzero
+          (side := .left) (d := d) (x := x) (u := u) (σ := σ) (t := t) hwnz_core)
+        (hlocal_witness := boundary_hlocal_witness_of_boundaryCore_local_zero
+          (side := .left) (d := d) (x := x) (u := u) (σ := σ) (t := t) hlocal_core)
 
 /--
 RH-N7: provider record 版 wrapper（`BoundarySide` + small finite-set）。

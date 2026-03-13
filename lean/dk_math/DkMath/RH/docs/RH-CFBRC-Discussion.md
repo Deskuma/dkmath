@@ -454,15 +454,19 @@ example (side : DkMath.CFBRC.BoundarySide)
       (hlocal_witness := hlocal_witness)
 ```
 
-### Implementation Bridge (RH-N18: boundary_dvd + gap 直結供給)
+### Implementation Bridge (RH-N22: boundary_dvd + gap / boundaryCore witness 供給)
 
-RH-N17 では、`S` 上の boundary 除法情報と gap 非除法情報から
-`hS_nonzero` を直接供給する入口を追加した。
+RH-N21/N22 では、`S` 上の boundary 除法情報と gap 非除法情報を軸に、
+provider 供給前提を段階的に削減した。
 
 - `boundary_nonzero_on_S_of_boundary_dvd_and_gap`
-- `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_and_local_zero`
+- `boundary_local_zero_on_S_of_boundary_dvd_and_gap`
+- `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap`
+- `boundary_hwnz_witness_of_boundaryCore_nonzero`
+- `boundary_hlocal_witness_of_boundaryCore_local_zero`
+- `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_of_boundaryCore_witness`
 
-最小テンプレート（boundary_dvd + gap + local-zero → provider）:
+最小テンプレート（boundary_dvd + gap + witness → provider）:
 
 ```lean
 import DkMath.RH.CFBRCBridge
@@ -481,8 +485,6 @@ example (side : DkMath.CFBRC.BoundarySide)
         p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
           (match side with | .right => ¬ p.1 ∣ x | .left => ¬ p.1 ∣ u) →
           eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
-    (hS_local0 :
-      ∀ r ∈ S, hopcPrimeLocalContribution r.1 σ t = 0)
     (hlocal_witness :
       ∀ p : {q // Nat.Prime q},
         p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
@@ -490,13 +492,44 @@ example (side : DkMath.CFBRC.BoundarySide)
           hopcPrimeLocalContribution p.1 σ t = 0) :
     BoundaryInsertLocalLiftProvider side S d x u σ t := by
   exact
-    boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_and_local_zero
+    boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap
       (side := side) (S := S)
       (hS_dvd := hS_dvd)
       (hS_gap := hS_gap)
       (hwnz_witness := hwnz_witness)
-      (hS_local0 := hS_local0)
       (hlocal_witness := hlocal_witness)
+```
+
+最小テンプレート（boundaryCore witness → provider）:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+
+example (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with | .right => ¬ r.1 ∣ x | .left => ¬ r.1 ∣ u))
+    (hwnz_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hlocal_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    BoundaryInsertLocalLiftProvider side S d x u σ t := by
+  exact
+    boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_of_boundaryCore_witness
+      (side := side) (S := S)
+      (hS_dvd := hS_dvd)
+      (hS_gap := hS_gap)
+      (hwnz_core := hwnz_core)
+      (hlocal_core := hlocal_core)
 ```
 
 ### Bridge Usage (RH-J2/J3)

@@ -143,7 +143,7 @@ $$
 
 ---
 
-## 現状 API（HOPC 公開名・RH-N21 時点）
+## 現状 API（HOPC 公開名・RH-N22 時点）
 
 CFBRC 連携で使う公開名は次を基準とする。
 
@@ -172,8 +172,11 @@ CFBRC 連携で使う公開名は次を基準とする。
   - `boundary_hsum_lift_of_local_zero_on_S_and_witness`
   - `boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero_on_S_and_witness`
   - `boundary_nonzero_on_S_of_boundary_dvd_and_gap`
+  - `boundary_hwnz_witness_of_boundaryCore_nonzero`
   - `boundary_local_zero_on_S_of_boundary_dvd_and_gap`
+  - `boundary_hlocal_witness_of_boundaryCore_local_zero`
   - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap`
+  - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_of_boundaryCore_witness`
   - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_and_local_zero`
 
 補足:
@@ -326,6 +329,38 @@ example (side : DkMath.CFBRC.BoundarySide)
       (hS_gap := hS_gap)
       (hwnz_witness := hwnz_witness)
       (hlocal_witness := hlocal_witness)
+```
+
+`boundaryCore` 側 witness 仮定（RH-N22）から provider を生成するテンプレート:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+
+example (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with | .right => ¬ r.1 ∣ x | .left => ¬ r.1 ∣ u))
+    (hwnz_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hlocal_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    BoundaryInsertLocalLiftProvider side S d x u σ t := by
+  exact
+    boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_of_boundaryCore_witness
+      (side := side) (S := S)
+      (hS_dvd := hS_dvd)
+      (hS_gap := hS_gap)
+      (hwnz_core := hwnz_core)
+      (hlocal_core := hlocal_core)
 ```
 
 ---

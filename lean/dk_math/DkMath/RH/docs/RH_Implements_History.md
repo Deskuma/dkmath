@@ -1364,3 +1364,40 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - RH-N22 として、local contribution 側から `hlocal_witness` を供給する実補題を追加し、
      `boundary_dvd + gap` 系 wrapper の仮定をさらに削減する。
+
+### 日時: 2026/03/13 12:42 JST: Phase RH-N22 を実装（`boundaryCore` witness からの前提正規化）
+
+1. 目的: RH-N21 の残課題である `hlocal_witness` 供給の負担を下げるため、
+   `boundaryCyclotomicPrimeCore` 側 witness 仮定から
+   `boundaryDiffPow + gap` 形式へ正規化する補題を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/RH-CFBRC-Discussion.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundary_hwnz_witness_of_boundaryCore_nonzero`
+       （core 除法仮定から `hwnz_witness` を復元）
+     - `boundary_hlocal_witness_of_boundaryCore_local_zero`
+       （core 除法仮定から `hlocal_witness` を復元）
+     - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_of_boundaryCore_witness`
+       （上記 2 補題を使って RH-N21 wrapper へ接続）
+   - 文書同期:
+     - README 2 枚の API 見出しを RH-N22 へ更新
+     - `boundaryCore witness -> provider` テンプレートを追加
+     - `RH-CFBRC-Discussion.md` の Implementation Bridge を RH-N22 内容へ更新
+     - OP-003 の状態を RH-N1〜N22 へ更新し、残タスクを `hlocal_core` 供給へ再整理
+3. 結論: `hlocal_witness` / `hwnz_witness` の供給は
+   `boundaryCore` 側仮定へ前提正規化できるようになり、
+   OP-003 は「core 側 witness 供給」を次の主タスクとして切り出せた。
+4. 失敗事例:
+   - `BoundarySide` 依存型一致で `match` 由来の型不一致が複数箇所で発生。
+   - `cases side` で right/left を固定して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+6. 次の課題:
+   - RH-N23 として、`hlocal_core` を生成する実補題
+     （例えば `boundaryCore` 上の解析条件から `hopcPrimeLocalContribution = 0` へ落とす層）
+     を設計・実装する。
