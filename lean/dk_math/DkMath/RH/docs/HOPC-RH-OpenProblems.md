@@ -32,10 +32,66 @@ HOPC-RH の未完タスクを、実装可能な issue 形式で管理する。
   - 文書上は prime-local contribution language が整った。
 - 課題:
   - CFBRC 側 API（core/divisibility/valuation）と
-    RH 側 HOPC API をつなぐ「具体的命題」が未実装。
+    RH 側 HOPC API をつなぐ「具体的命題」の供給層を強化する。
 - 目標成果:
-  - CFBRC 側条件を受けて RH 側停留判定へ落ちる bridge 補題（最低 1 本）
-- 優先度: 高
+  - provider 前提を直接受ける bridge 補題（`hS_lift` / `hsum_lift` 実供給）
+  - finite-set から運用可能な仮定正規化 wrapper 群
+- 状態: 完了（RH-N1〜N31 で API 骨格・provider 入口・実供給導線を整備完了）
+- 到達済み:
+  - singleton bridge（global/local）
+  - small finite-set bridge（`insert p S`）
+  - `BoundarySide` 統一高位 API（singleton / insert / split）
+  - provider 入口:
+    - `BoundaryInsertLocalLiftProvider`
+    - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider`
+  - provider 段階供給補題:
+    - `boundary_hS_lift_of_nonzero_on_S_and_witness`
+    - `boundaryInsertLocalLiftProvider_of_nonzero_on_S_and_witness`
+    - `boundary_hsum_lift_of_local_zero_on_S_and_witness`
+    - `boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero_on_S_and_witness`
+  - provider 実供給補題:
+    - `boundary_nonzero_on_S_of_boundary_dvd_and_gap`
+    - `boundary_hwnz_witness_of_boundaryCore_nonzero`
+    - `boundary_local_zero_on_S_of_boundary_dvd_and_gap`
+    - `boundary_hlocal_witness_of_boundaryCore_local_zero`
+    - `boundary_dvd_on_insert_of_boundary_dvd_and_witness`
+    - `boundary_gap_on_insert_of_boundary_gap_and_witness`
+    - `exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+    - `exists_boundary_dvd_gap_on_insert_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+    - `hopcPrimeLocalContribution_eq_eulerZetaFactorPhaseVelLocal_of_nonzero`
+    - `hopcPrimeLocalContribution_eq_zero_of_factorPhaseVelLocal_eq_zero_of_nonzero`
+    - `eulerZetaFactorPhaseVelLocal_eq_zero_of_hopcPrimeLocalContribution_eq_zero_of_nonzero`
+    - `boundary_hlocal_core_of_boundaryCore_factorPhaseVelLocal_eq_zero`
+    - `boundary_hfactor_core0_of_boundaryCore_local_zero`
+    - `boundary_hlocal_core_of_boundaryDiffPow_local_zero`
+    - `boundary_hwnz_core_of_boundaryDiffPow_nonzero`
+    - `boundary_hlocal_diff0_of_boundaryDiffPow_factorPhaseVelLocal_eq_zero`
+    - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_and_local_zero`
+    - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap`
+    - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_of_boundaryCore_witness`
+    - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryCore_factor0`
+    - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryDiffPow_local0`
+    - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryDiffPow_factor0`
+    - `boundaryInsertLocalLiftProvider_of_boundary_dvd_of_boundaryDiffPow_factor0`
+    - `boundaryDiffPowDvdSet`
+    - `boundary_dvd_on_boundaryDiffPowDvdSet`
+    - `boundaryInsertLocalLiftProvider_of_boundaryDiffPow_factor0_normalized`
+    - `boundaryInsertLocalLiftProvider_of_boundaryDiffPow_factor0_with_offdvd`
+    - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0`
+    - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0`
+    - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0`
+    - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0`
+    - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0`
+    - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0`
+    - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0`
+    - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_of_dvd`
+    - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_normalized`
+    - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_with_offdvd`
+    - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0`
+  - README / Discussion / docs README の利用テンプレート同期（split 版 / provider 版）
+- 残タスク:
+  - なし（以後の発展は OP-001 / OP-004 で管理）
+- 優先度: 完了
 
 ## OP-004: 曲率条件の運用規約
 

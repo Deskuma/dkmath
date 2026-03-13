@@ -44,7 +44,7 @@
 - `CFBRCBridge.lean`
   - CFBRC の primitive-prime existence から RH 側 singleton 停留判定へ接続する bridge
 
-## 主要 API（RH-J2 時点）
+## 主要 API（RH-N31 時点）
 
 - HOPC 観測量:
   - `hopcPrimeLocalContribution p σ t`
@@ -56,6 +56,58 @@
 - CFBRC 連携 bridge（singleton）:
   - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge`（global 仮定版）
   - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_bridge_of_local`（local 仮定版）
+- CFBRC 連携 bridge（small finite-set）:
+  - `stationaryAt_insert_of_hopcPrimeContributionSum_eq_zero`
+  - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local`
+  - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_bridge_of_local_split`
+- CFBRC 連携 bridge（`BoundarySide` 統一）:
+  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_local`
+  - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local`
+  - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split`
+  - `BoundaryInsertLocalLiftProvider`
+  - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider`
+  - `boundary_hS_lift_of_nonzero_on_S_and_witness`
+  - `boundaryInsertLocalLiftProvider_of_nonzero_on_S_and_witness`
+  - `boundary_hsum_lift_of_local_zero_on_S_and_witness`
+  - `boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero_on_S_and_witness`
+  - `boundary_nonzero_on_S_of_boundary_dvd_and_gap`
+  - `boundary_hwnz_witness_of_boundaryCore_nonzero`
+  - `boundary_local_zero_on_S_of_boundary_dvd_and_gap`
+  - `boundary_hlocal_witness_of_boundaryCore_local_zero`
+  - `boundary_dvd_on_insert_of_boundary_dvd_and_witness`
+  - `boundary_gap_on_insert_of_boundary_gap_and_witness`
+  - `exists_boundaryPrime_dvd_gap_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+  - `exists_boundary_dvd_gap_on_insert_of_cfbRc_primitive_prime_boundaryDiffPow_of_coprime`
+  - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap`
+  - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_of_boundaryCore_witness`
+  - `hopcPrimeLocalContribution_eq_eulerZetaFactorPhaseVelLocal_of_nonzero`
+  - `hopcPrimeLocalContribution_eq_zero_of_factorPhaseVelLocal_eq_zero_of_nonzero`
+  - `eulerZetaFactorPhaseVelLocal_eq_zero_of_hopcPrimeLocalContribution_eq_zero_of_nonzero`
+  - `boundary_hlocal_core_of_boundaryCore_factorPhaseVelLocal_eq_zero`
+  - `boundary_hfactor_core0_of_boundaryCore_local_zero`
+  - `boundary_hlocal_core_of_boundaryDiffPow_local_zero`
+  - `boundary_hwnz_core_of_boundaryDiffPow_nonzero`
+  - `boundary_hlocal_diff0_of_boundaryDiffPow_factorPhaseVelLocal_eq_zero`
+  - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryCore_factor0`
+  - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryDiffPow_local0`
+  - `boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryDiffPow_factor0`
+  - `boundaryInsertLocalLiftProvider_of_boundary_dvd_of_boundaryDiffPow_factor0`
+  - `boundaryDiffPowDvdSet`
+  - `boundary_dvd_on_boundaryDiffPowDvdSet`
+  - `boundaryInsertLocalLiftProvider_of_boundaryDiffPow_factor0_normalized`
+  - `boundaryInsertLocalLiftProvider_of_boundaryDiffPow_factor0_with_offdvd`
+  - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0`
+  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0`
+  - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0`
+  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0`
+  - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0`
+  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0`
+  - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0`
+  - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_of_dvd`
+  - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_normalized`
+  - `exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0_with_offdvd`
+  - `exists_stationaryAt_singleton_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0`
+  - `boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_and_local_zero`
 
 ## 利用例（import）
 
@@ -78,6 +130,336 @@ CFBRC 連携 bridge まで使う場合:
 import DkMath.RH.CFBRCBridge
 
 open DkMath.RH.EulerZeta
+```
+
+`BoundarySide` 高位 API（split 仮定）を使う最小テンプレート:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+
+-- side : DkMath.CFBRC.BoundarySide
+-- hpnd : match side with | .right => ¬ d ∣ x | .left => ¬ d ∣ u
+-- hS_lift / hsum_lift は insert p S 上の仮定供給器
+example (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (hS_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with | .right => ¬ p.1 ∣ x | .left => ¬ p.1 ∣ u) →
+          ∀ r ∈ (insert p S), eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0)
+    (hsum_lift :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with | .right => ¬ p.1 ∣ x | .left => ¬ p.1 ∣ u) →
+          hopcPrimeContributionSum (S := insert p S) σ t = 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  exact
+    exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_local_split
+      (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      hd_prime hd_ge hx hu hcop hpnd hS_lift hsum_lift
+```
+
+`BoundaryInsertLocalLiftProvider` を使う最小テンプレート:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+
+example (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u)
+    (provider : BoundaryInsertLocalLiftProvider side S d x u σ t) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  exact
+    exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_provider
+      (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      hd_prime hd_ge hx hu hcop hpnd provider
+```
+
+段階供給（RH-N12/N13）から provider を生成するテンプレート:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+
+example (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hS_nonzero :
+      ∀ r ∈ S, eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0)
+    (hwnz_witness :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with | .right => ¬ p.1 ∣ x | .left => ¬ p.1 ∣ u) →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hS_local0 :
+      ∀ r ∈ S, hopcPrimeLocalContribution r.1 σ t = 0)
+    (hlocal_witness :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with | .right => ¬ p.1 ∣ x | .left => ¬ p.1 ∣ u) →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    BoundaryInsertLocalLiftProvider side S d x u σ t := by
+  exact
+    boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero_on_S_and_witness
+      (side := side) (S := S)
+      (hS_nonzero := hS_nonzero)
+      (hwnz_witness := hwnz_witness)
+      (hS_local0 := hS_local0)
+      (hlocal_witness := hlocal_witness)
+```
+
+`boundary_dvd + gap` 供給（RH-N21 前提簡約版）から provider を生成するテンプレート:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+
+example (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with | .right => ¬ r.1 ∣ x | .left => ¬ r.1 ∣ u))
+    (hwnz_witness :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with | .right => ¬ p.1 ∣ x | .left => ¬ p.1 ∣ u) →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hlocal_witness :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          (match side with | .right => ¬ p.1 ∣ x | .left => ¬ p.1 ∣ u) →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    BoundaryInsertLocalLiftProvider side S d x u σ t := by
+  exact
+    boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap
+      (side := side) (S := S)
+      (hS_dvd := hS_dvd)
+      (hS_gap := hS_gap)
+      (hwnz_witness := hwnz_witness)
+      (hlocal_witness := hlocal_witness)
+```
+
+`boundaryCore` 側 witness 仮定（RH-N22）から provider を生成するテンプレート:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+
+example (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with | .right => ¬ r.1 ∣ x | .left => ¬ r.1 ∣ u))
+    (hwnz_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hlocal_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    BoundaryInsertLocalLiftProvider side S d x u σ t := by
+  exact
+    boundaryInsertLocalLiftProvider_of_boundary_dvd_and_gap_of_boundaryCore_witness
+      (side := side) (S := S)
+      (hS_dvd := hS_dvd)
+      (hS_gap := hS_gap)
+      (hwnz_core := hwnz_core)
+      (hlocal_core := hlocal_core)
+```
+
+`boundaryCore` 上の factor 位相速度ゼロ仮定（RH-N23）から provider を生成するテンプレート:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+
+example (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with | .right => ¬ r.1 ∣ x | .left => ¬ r.1 ∣ u))
+    (hwnz_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_core0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
+    BoundaryInsertLocalLiftProvider side S d x u σ t := by
+  exact
+    boundaryInsertLocalLiftProvider_of_boundary_dvd_gap_of_boundaryCore_factor0
+      (side := side) (S := S)
+      (hS_dvd := hS_dvd)
+      (hS_gap := hS_gap)
+      (hwnz_core := hwnz_core)
+      (hfactor_core0 := hfactor_core0)
+```
+
+`boundaryCore` factor0 から停留点存在へ直接接続するテンプレート（RH-N24）:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+
+example (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with | .right => ¬ d ∣ x | .left => ¬ d ∣ u)
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with | .right => ¬ r.1 ∣ x | .left => ¬ r.1 ∣ u))
+    (hwnz_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_core0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  exact
+    exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_factor0
+      (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      hd_prime hd_ge hx hu hcop hpnd hS_dvd hS_gap hwnz_core hfactor_core0
+```
+
+`boundaryCore` local0 から停留点存在へ直接接続するテンプレート（RH-N25）:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+
+example (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with | .right => ¬ d ∣ x | .left => ¬ d ∣ u)
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with | .right => ¬ r.1 ∣ x | .left => ¬ r.1 ∣ u))
+    (hwnz_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hlocal_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  exact
+    exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryCore_local0
+      (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      hd_prime hd_ge hx hu hcop hpnd hS_dvd hS_gap hwnz_core hlocal_core
+```
+
+`boundaryDiffPow` local0 から停留点存在へ直接接続するテンプレート（RH-N26）:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+
+example (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with | .right => ¬ d ∣ x | .left => ¬ d ∣ u)
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with | .right => ¬ r.1 ∣ x | .left => ¬ r.1 ∣ u))
+    (hwnz_core :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hlocal_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  exact
+    exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_local0
+      (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      hd_prime hd_ge hx hu hcop hpnd hS_dvd hS_gap hwnz_core hlocal_diff0
+```
+
+`boundaryDiffPow` factor0 から停留点存在へ直接接続するテンプレート（RH-N27）:
+
+```lean
+import DkMath.RH.CFBRCBridge
+
+open DkMath.RH.EulerZeta
+
+example (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with | .right => ¬ d ∣ x | .left => ¬ d ∣ u)
+    (hS_dvd :
+      ∀ r ∈ S, r.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u)
+    (hS_gap :
+      ∀ r ∈ S, (match side with | .right => ¬ r.1 ∣ x | .left => ¬ r.1 ∣ u))
+    (hwnz_diff :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_diff0 :
+      ∀ p : {q // Nat.Prime q},
+        p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
+    ∃ p : {q // Nat.Prime q},
+      DkMath.RH.stationaryAt
+        (fun v : ℝ => eulerZetaFinite_onVertical (insert p S) σ v) t := by
+  exact
+    exists_stationaryAt_insert_of_cfbRc_primitive_prime_boundary_bridge_of_boundaryDiffPow_factor0
+      (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      hd_prime hd_ge hx hu hcop hpnd hS_dvd hS_gap hwnz_diff hfactor_diff0
 ```
 
 ## 注意
