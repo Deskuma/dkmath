@@ -116,7 +116,7 @@ Lean 実装ロードマップを 1 枚で管理するための文書。
 次スプリントは OP-001 を主軸として進める。
 
 1. OP-001（finite→infinite 接続）を継続
-   - 到達済み（RH-O1/O2/O3/O4/O5/O6/O7/O8/O9/O10/O11/O12）:
+   - 到達済み（RH-O1/O2/O3/O4/O5/O6/O7/O8/O9/O10/O11/O12/O13）:
      - `HopcInfiniteLift.lean` を追加
      - `HasSum` 仮定から `hopcPrimeContributionSum` の atTop 極限へ接続
      - `Summable + tsum=0` 仮定から同極限へ接続
@@ -139,10 +139,12 @@ Lean 実装ロードマップを 1 枚で管理するための文書。
        `BoundaryOffDvdFactorZeroProvider` として record 化
      - `BoundaryOffDvdFactorZeroProvider` を
        insert-provider 直結の高位 wrapper へ統合
+     - `BoundaryOffDvdFactorZeroProvider` の標準構成器
+       （split / nonzero+local-zero / insert-provider 経由）を追加
    - 次の焦点:
      - `BoundaryInsertLocalLiftProvider` の追加仮定を最小化し、
        off-dvd 側 local-zero 抽出を provider 内部情報に寄せる
-     - `BoundaryOffDvdFactorZeroProvider` の標準構成器を整備し、
-       off-dvd 側前提の受け渡しを record API へ一本化する
+     - `_provider` を実質利用する off-dvd 抽出補題を追加し、
+       insert-provider 直結 API の仮定簡約を継続する
 2. OP-004（曲率条件運用）を並行整理
    - `phaseCurv` 供給規約と wrapper 命名規約の整備

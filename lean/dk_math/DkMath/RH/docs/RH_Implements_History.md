@@ -2171,3 +2171,39 @@ RH: Riemann Hypothesis を説明するための補題群の実装に関する記
 6. 次の課題:
    - `BoundaryOffDvdFactorZeroProvider` の標準構成器を追加し、
      off-dvd 側の個別仮定入力をさらに削減する。
+
+### 日時: 2026/03/13 21:20 JST: Phase RH-O13 を実装（off-dvd factor0 provider の標準構成器）
+
+1. 目的: OP-001 の RH-O13 として、
+   `BoundaryOffDvdFactorZeroProvider` を段階的に構成する標準 API を追加し、
+   off-dvd 側の個別仮定入力を削減する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/RH/CFBRCBridge.lean`
+     - `DkMath/RH/README.md`
+     - `DkMath/RH/docs/README.md`
+     - `DkMath/RH/docs/HOPC-RH-OpenProblems.md`
+     - `DkMath/RH/docs/HOPC-RH-Roadmap.md`
+     - `DkMath/RH/docs/RH_Implements_History.md`
+   - 追加実装（`CFBRCBridge.lean`）:
+     - `boundaryOffDvdFactorZeroProvider_of_split`
+     - `boundaryOffDvdFactorZeroProvider_of_nonzero_and_localZeroProvider`
+     - `boundaryOffDvdFactorZeroProvider_of_boundaryInsertLocalLiftProvider_of_nonzero_and_localZeroProvider`
+     - `boundaryOffDvdFactorZeroProvider_of_boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero`
+   - 併走整理:
+     - RH-O11 wrapper を O12 高位 wrapper + `boundaryOffDvdFactorZeroProvider_of_split`
+       経由へリファクタして重複を削減
+3. 結論:
+   - off-dvd 側前提の受け渡しが record API に寄り、
+     呼び出し側で「関数 2 本を都度渡す」負担が軽減された。
+4. 失敗事例:
+   - 初回実装で前方参照により build 失敗
+     （`boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider` を未定義位置で参照）。
+   - `BoundaryOffDvdLocalZeroProvider` を構造体リテラルで直接構成して解消。
+5. 検証:
+   - `lake build DkMath.RH.CFBRCBridge` 成功。
+   - `lake build DkMath.RH` 成功。
+6. 次の課題:
+   - `BoundaryInsertLocalLiftProvider` 内部情報から
+     off-dvd 側 local-zero を導出する十分条件を補題化し、
+     `_provider` を実質利用する高位 API へ進める。

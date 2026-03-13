@@ -2246,6 +2246,88 @@ structure BoundaryOffDvdFactorZeroProvider
         eulerZetaFactorPhaseVelLocal p.1 σ t = 0
 
 /--
+RH-O13: off-dvd 側の非零/因子位相速度ゼロ仮定を
+`BoundaryOffDvdFactorZeroProvider` へ束ねる標準構成器。
+-/
+def boundaryOffDvdFactorZeroProvider_of_split
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hwnz_offdvd :
+      ∀ p : {q // Nat.Prime q},
+        ¬ p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hfactor_offdvd0 :
+      ∀ p : {q // Nat.Prime q},
+        ¬ p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
+    BoundaryOffDvdFactorZeroProvider side d x u σ t :=
+  ⟨hwnz_offdvd, hfactor_offdvd0⟩
+
+/--
+RH-O13: off-dvd 側の非零供給と local-zero provider から
+`BoundaryOffDvdFactorZeroProvider` を構成する。
+-/
+def boundaryOffDvdFactorZeroProvider_of_nonzero_and_localZeroProvider
+    (side : DkMath.CFBRC.BoundarySide)
+    {d x u : ℕ} {σ t : ℝ}
+    (hwnz_offdvd :
+      ∀ p : {q // Nat.Prime q},
+        ¬ p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (offdvdProvider : BoundaryOffDvdLocalZeroProvider side d x u σ t) :
+    BoundaryOffDvdFactorZeroProvider side d x u σ t := by
+  refine ⟨hwnz_offdvd, ?_⟩
+  intro p hp_offdvd
+  exact eulerZetaFactorPhaseVelLocal_eq_zero_of_hopcPrimeLocalContribution_eq_zero_of_nonzero
+    (p := p.1) (σ := σ) (t := t)
+    (hwnz_offdvd p hp_offdvd)
+    (offdvdProvider.hlocal_offdvd p hp_offdvd)
+
+/--
+RH-O13: insert-provider と off-dvd 側 local-zero provider から
+`BoundaryOffDvdFactorZeroProvider` を構成する変換規則。
+-/
+def boundaryOffDvdFactorZeroProvider_of_boundaryInsertLocalLiftProvider_of_nonzero_and_localZeroProvider
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (_provider : BoundaryInsertLocalLiftProvider side S d x u σ t)
+    (hwnz_offdvd :
+      ∀ p : {q // Nat.Prime q},
+        ¬ p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (offdvdProvider : BoundaryOffDvdLocalZeroProvider side d x u σ t) :
+    BoundaryOffDvdFactorZeroProvider side d x u σ t :=
+  boundaryOffDvdFactorZeroProvider_of_nonzero_and_localZeroProvider
+    (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+    hwnz_offdvd offdvdProvider
+
+/--
+RH-O13: insert-provider と off-dvd 側 local-zero 仮定（関数形式）から
+`BoundaryOffDvdFactorZeroProvider` を構成する標準 wrapper。
+-/
+def boundaryOffDvdFactorZeroProvider_of_boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero
+    (side : DkMath.CFBRC.BoundarySide)
+    (S : Finset {q // Nat.Prime q})
+    {d x u : ℕ} {σ t : ℝ}
+    (provider : BoundaryInsertLocalLiftProvider side S d x u σ t)
+    (hwnz_offdvd :
+      ∀ p : {q // Nat.Prime q},
+        ¬ p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hlocal_offdvd :
+      ∀ p : {q // Nat.Prime q},
+        ¬ p.1 ∣ DkMath.CFBRC.boundaryDiffPow side d x u →
+          hopcPrimeLocalContribution p.1 σ t = 0) :
+    BoundaryOffDvdFactorZeroProvider side d x u σ t := by
+  let offdvdProvider : BoundaryOffDvdLocalZeroProvider side d x u σ t :=
+    ⟨hlocal_offdvd⟩
+  exact
+    boundaryOffDvdFactorZeroProvider_of_boundaryInsertLocalLiftProvider_of_nonzero_and_localZeroProvider
+      (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      provider hwnz_offdvd offdvdProvider
+
+/--
 RH-O12: off-dvd factor0 provider から local-zero provider を構成する。
 -/
 def boundaryOffDvdLocalZeroProvider_of_offdvdFactorZeroProvider
@@ -2463,14 +2545,14 @@ theorem hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_wit
           eulerZetaFactorPhaseVelLocal p.1 σ t = 0) :
     ∀ p : {q // Nat.Prime q},
       |hopcPrimeContributionFn σ t p| ≤ C / (↑p : ℝ) ^ σ := by
-  let offdvdProvider : BoundaryOffDvdLocalZeroProvider side d x u σ t :=
-    boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider_of_factorPhaseVelLocal_eq_zero
-      (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
-      provider hwnz_offdvd hfactor_offdvd0
+  let offdvdFactorProvider : BoundaryOffDvdFactorZeroProvider side d x u σ t :=
+    boundaryOffDvdFactorZeroProvider_of_split
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      hwnz_offdvd hfactor_offdvd0
   exact
-    hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_offdvd_local0
+    hopcPrimeContributionFn_abs_le_prime_rpow_of_boundaryDiffPow_factor0_with_insertProvider_and_offdvdFactorZeroProvider
       (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) (C := C)
-      hC hwnz_diff hfactor_diff0 offdvdProvider.hlocal_offdvd
+      (S := S) hC hwnz_diff hfactor_diff0 provider offdvdFactorProvider
 
 /--
 RH-O11: `BoundaryInsertLocalLiftProvider` と off-dvd 側 factor0 供給から、
@@ -2503,14 +2585,14 @@ theorem hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_insert
         DkMath.RH.stationaryAt
           (fun v : ℝ => eulerZetaFinite_onVertical S σ v) t) :
     hopcPrimeContributionTsum σ t = 0 := by
-  let offdvdProvider : BoundaryOffDvdLocalZeroProvider side d x u σ t :=
-    boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider_of_factorPhaseVelLocal_eq_zero
-      (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
-      provider hwnz_offdvd hfactor_offdvd0
+  let offdvdFactorProvider : BoundaryOffDvdFactorZeroProvider side d x u σ t :=
+    boundaryOffDvdFactorZeroProvider_of_split
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      hwnz_offdvd hfactor_offdvd0
   exact
-    hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_offdvd_local0_sigma_gt_one
+    hopcPrimeContributionTsum_eq_zero_of_boundaryDiffPow_factor0_with_insertProvider_and_offdvdFactorZeroProvider_sigma_gt_one
       (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) (C := C)
-      hσ hC hwnz_diff hfactor_diff0 offdvdProvider.hlocal_offdvd hEvStationary
+      (S := S) hσ hC hwnz_diff hfactor_diff0 provider offdvdFactorProvider hEvStationary
 
 /--
 RH-O11: `BoundaryInsertLocalLiftProvider` と off-dvd 側 factor0 供給から、
@@ -2546,14 +2628,14 @@ theorem tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_i
       (fun S : Finset {p // Nat.Prime p} =>
         hopcPrimeContributionSum (S := S) σ t)
       Filter.atTop (𝓝 (0 : ℝ)) := by
-  let offdvdProvider : BoundaryOffDvdLocalZeroProvider side d x u σ t :=
-    boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider_of_factorPhaseVelLocal_eq_zero
-      (side := side) (S := S) (d := d) (x := x) (u := u) (σ := σ) (t := t)
-      provider hwnz_offdvd hfactor_offdvd0
+  let offdvdFactorProvider : BoundaryOffDvdFactorZeroProvider side d x u σ t :=
+    boundaryOffDvdFactorZeroProvider_of_split
+      (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t)
+      hwnz_offdvd hfactor_offdvd0
   exact
-    tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_local0_sigma_gt_one
+    tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_insertProvider_and_offdvdFactorZeroProvider_sigma_gt_one
       (side := side) (d := d) (x := x) (u := u) (σ := σ) (t := t) (C := C)
-      hσ hC hwnz_diff hfactor_diff0 offdvdProvider.hlocal_offdvd hEvStationary
+      (S := S) hσ hC hwnz_diff hfactor_diff0 provider offdvdFactorProvider hEvStationary
 
 /--
 RH-O9: off-dvd local-zero provider を使って

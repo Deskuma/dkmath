@@ -1,7 +1,7 @@
 # DkMath.RH：位相ドリフト骨格 + EulerZeta（現状の全コード）
 
 - Authors: D. and Kenro (ChatGPT-5.2)
-- Last updated: 2026/03/13 21:02
+- Last updated: 2026/03/13 21:20
 
 このディレクトリは、リーマンゼータ関数に差し込む前に必要な
 
@@ -147,7 +147,7 @@ $$
 
 ---
 
-## 現状 API（HOPC 公開名・RH-N43 時点）
+## 現状 API（HOPC 公開名・RH-N44 時点）
 
 CFBRC 連携で使う公開名は次を基準とする。
 
@@ -196,6 +196,10 @@ CFBRC 連携で使う公開名は次を基準とする。
   - `tendsto_hopcPrimeContributionSum_atTop_of_boundaryDiffPow_factor0_with_offdvd_local0_sigma_gt_one`
   - `BoundaryOffDvdLocalZeroProvider`
   - `BoundaryOffDvdFactorZeroProvider`
+  - `boundaryOffDvdFactorZeroProvider_of_split`
+  - `boundaryOffDvdFactorZeroProvider_of_nonzero_and_localZeroProvider`
+  - `boundaryOffDvdFactorZeroProvider_of_boundaryInsertLocalLiftProvider_of_nonzero_and_localZeroProvider`
+  - `boundaryOffDvdFactorZeroProvider_of_boundaryInsertLocalLiftProvider_of_nonzero_and_local_zero`
   - `boundaryOffDvdLocalZeroProvider_of_offdvdFactorZeroProvider`
   - `boundaryOffDvdLocalZeroProvider_of_boundaryInsertLocalLiftProvider`
   - `boundaryOffDvdLocalZeroProvider_of_factorPhaseVelLocal_eq_zero`
