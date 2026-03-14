@@ -10,6 +10,15 @@ presented by D. and Wise Wolf
 - 現在の主軸は **FLT（フェルマーの最終定理）形式化** で、特に `d = 3` 周辺の複数アプローチを整備しています。
 - Collatz・DHNT・宇宙式系は、FLT を支える周辺理論として継続開発中です。
 
+## 最新ステータス（2026-03-08）
+
+- FLT `d = 3` の公開 API は `DkMath/FLT/Main.lean` 側で概ね安定
+- StandAlone artifact（`FLT3#StandAlone-NC-v0.lean-v2.lean`）は build 成功・実 placeholder なし
+- 主ボトルネックは一般指数（`n ≥ 5`）側の prime provider 実装
+- 研究段階としては「cubic completion 後の prime-ge5 bridge construction phase」
+
+詳細は [../../docs/PROJECT_STATUS.md](../../docs/PROJECT_STATUS.md) を参照。
+
 ## カテゴリ
 
 - 数学ライブラリ
@@ -21,6 +30,10 @@ presented by D. and Wise Wolf
     - 単位と量の理論 (Units and Quantities Theory)
     - FLT（フェルマーの最終定理）関連 (FLT-related)
     - Collatz予想関連 (Collatz-related)
+    - ABC 予想関連 (ABC-related)
+    - RH 関連 (RH-related)
+    - KUS 関連 (KUS-related)
+    - CFBRC 関連 (CFBRC-related)
 
 ## ファイル
 
@@ -43,7 +56,16 @@ presented by D. and Wise Wolf
 - サンプル定理と例 [Samples](./DkMath/Samples.lean)
 - 数学未解決問題（解決済み難問も含む）
   - フェルマーの最終定理（FLT）関連 [FLT](./DkMath/FLT.lean)
+    - 実装ガイド [FLT/README.md](./DkMath/FLT/README.md)
+    - prime-ge5 provider 本丸 [TriominoCosmicPrimeGe5](./DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean)
   - Collatz予想関連 [Collatz](./DkMath/Collatz/Collatz2K26.lean)
+  - 宇宙式×FLT 接続 [TriominoFLT](./DkMath/CosmicFormula/TriominoFLT.lean)
+  - ABC 予想系入口 [ABC](./DkMath/ABC.lean)
+  - RH 系入口 [RH](./DkMath/RH.lean)
+  - KUS 系入口 [KUS](./DkMath/KUS.lean)
+  - CFBRC Lean 入口 [CFBRC](./DkMath/CFBRC.lean)
+  - Silver Ratio 入口 [SilverRatio](./DkMath/SilverRatio.lean)
+  - UnitCycle 入口 [UnitCycle](./DkMath/UnitCycle.lean)
 - 研究ノート（未整理のアイデアや証明のスケッチ）
 
 ## ビルド
@@ -63,6 +85,12 @@ presented by D. and Wise Wolf
 ### 宇宙式の次元に関する定理
 
 - [CosmicFormulaCellDimGuide](./DkMath/CosmicFormula/docs/CosmicFormulaCellDimGuide.md) に、宇宙式の次元に関する定理のガイドを掲載しています。
+
+### Collatz ドキュメント（進捗）
+
+- 実装報告: [IMPLEMENTATION_REPORT_20260130.md](./DkMath/Collatz/docs/IMPLEMENTATION_REPORT_20260130.md)
+- 補助補題完成報告: [AUXILIARY_LEMMA_COMPLETION_20260130.md](./DkMath/Collatz/docs/AUXILIARY_LEMMA_COMPLETION_20260130.md)
+- sorry 解消進捗: [SORRY_CLEANUP_PROGRESS_20260130.md](./DkMath/Collatz/docs/SORRY_CLEANUP_PROGRESS_20260130.md)
 
 ---
 
