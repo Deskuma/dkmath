@@ -6,6 +6,7 @@
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -144,7 +145,21 @@ def find_project_root(start: Path) -> Path:
     )
 
 
-def extract_definitions(input_file: str, output_file: str) -> None:
+def shorten_by_section(snippet: str) -> Dict[str, Union[str, bool]]:
+    lines = snippet.rstrip().splitlines()
+    for idx, line in enumerate(lines):
+        if re.search(r"\bby\b", line):
+            truncated = idx < len(lines) - 1
+            shortened_lines = lines[: idx + 1]
+            if truncated:
+                # Append " ..." to the line containing "by"
+                shortened_lines[-1] = shortened_lines[-1].rstrip() + " ..."
+            shortened = "\n".join(shortened_lines).rstrip() + "\n"
+            return {"snippet": shortened, "truncated": truncated}
+    return {"snippet": snippet, "truncated": False}
+
+
+def extract_definitions(input_file: str, output_file: str, short: bool) -> None:
     with open(input_file, "r", encoding="utf-8") as f:
         text = f.read()
 
@@ -194,7 +209,11 @@ def extract_definitions(input_file: str, output_file: str) -> None:
 
     flat_symbols = flatten(symbols) if isinstance(symbols, list) else []
 
-    allowed_kinds = {5, 6, 12, 13, 14, 25}
+    # LSP SymbolKind values that might be used in Lean:
+    # 5=Class, 6=Method, 7=Property, 8=Field, 9=Constructor,
+    # 12=Function (theorems), 13=Variable, 14=Constant, 25=Operator
+    # Note: Lean LSP may use different kinds for lemma vs theorem
+    allowed_kinds = {5, 6, 7, 8, 9, 12, 13, 14, 25}
 
     lines = text.splitlines(keepends=True)
     line_offsets: List[int] = []
@@ -224,12 +243,19 @@ def extract_definitions(input_file: str, output_file: str) -> None:
             continue
         snippet = slice_by_range(rng)
         ident = sym.get("name", "(unknown)")
+        if short:
+            shortened = shorten_by_section(snippet)
+            snippet = shortened["snippet"]
+            truncated = shortened["truncated"]
+        else:
+            snippet = snippet.rstrip() + "\n"
+            truncated = False
         collected.append(
             {
                 "keyword": "decl",
                 "ident": ident,
-                "snippet": snippet.rstrip() + "\n",
-                "truncated": False,
+                "snippet": snippet,
+                "truncated": truncated,
                 "start": rng.get("start", {}).get("line", 0),
             }
         )
@@ -249,8 +275,6 @@ def write_markdown(
             f.write(f"### {item['ident']}\n\n")
             f.write("```lean\n")
             f.write(item["snippet"].rstrip() + "\n")
-            if item.get("truncated"):
-                f.write("  ...\n")
             if idx < len(definitions) - 1:
                 f.write("```\n\n")
             else:
@@ -269,11 +293,16 @@ def main():
         help="Output .md file (default: __Theorems.md)",
         nargs="?",
     )
+    parser.add_argument(
+        "--short",
+        action="store_true",
+        help="Truncate after the first `by` block and replace with `...`.",
+    )
     args = parser.parse_args()
     if not os.path.isfile(args.input):
         print(f"Error: Input file {args.input} does not exist.")
         sys.exit(1)
-    extract_definitions(args.input, args.output)
+    extract_definitions(args.input, args.output, args.short)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,7 @@
 # Project specific ignores
-notes/
+lean/dk_math/notes/
+__*
+!__init__.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

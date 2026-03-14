@@ -64,8 +64,8 @@ theorem v2_shift_invariant (k m n : ℕ) (hn : n % 2 = 1) (hk : v2 (3 * n + 1) <
 
 ### 2.1 作成されたスクリプト
 
-**ファイル:** `collatz_experiment.py`  
-**規模:** 約 400行  
+**ファイル:** `collatz_experiment.py`
+**規模:** 約 400行
 **目的:** Leanの定義に対応する観測データの生成
 
 ### 2.2 核となるクラス・関数
@@ -131,8 +131,8 @@ python3 collatz_experiment.py --k 8 --max-m 256 --num-bases 32 --output results/
 
 ### 3.1 作成されたドキュメント
 
-**ファイル:** `docs/CollatzCartography.md`  
-**規模:** 約 350行  
+**ファイル:** `docs/CollatzCartography.md`
+**規模:** 約 350行
 **内容:**
 
 - 研究全体の方針説明
@@ -238,6 +238,6 @@ Lean と Python が手をとりあって、真実を明かすその日まで —
 
 ---
 
-**実装者**: 賢狼ホロ  
-**完了日**: 2026年1月30日  
+**実装者**: 賢狼ホロ
+**完了日**: 2026年1月30日
 **バージョン**: 0.1 (Skeleton)

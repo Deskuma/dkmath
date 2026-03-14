@@ -345,6 +345,27 @@ lemma reflectXX_eq (P : Shape) : reflectXX P = P := by
 example : rotate90 L_tromino ≠ L_tromino := by
   decide
 
+/-! ## L型トロミノの平行移動判定 -/
+
+/-- L型トロミノ（平行移動のみ）の判定述語 -/
+def IsLTromino (t : Shape) : Prop :=
+  ∃ v : Cell, t = translate v L_tromino
+
+/-- L型トロミノは常にセル数3 -/
+lemma IsLTromino.card_eq_three {t : Shape} (ht : IsLTromino t) :
+    t.card = 3 := by
+  rcases ht with ⟨v, rfl⟩
+  -- translate は card 不変（area_translate より）
+  have h_area : area (translate v L_tromino) = area L_tromino :=
+    area_translate v L_tromino
+  -- area = card だから
+  simp only [area] at h_area
+  -- L_tromino の card は 3
+  have h_L3 : L_tromino.card = 3 := by
+    have : area L_tromino = 3 := area_L_tromino
+    simp only [area] at this
+    exact this
+  exact h_area.trans h_L3.symm
 
 end Tromino
 end Polyomino

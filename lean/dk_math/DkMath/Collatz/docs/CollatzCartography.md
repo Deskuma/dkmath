@@ -1,8 +1,8 @@
-# Collatz Cartography  
+# Collatz Cartography
 
 — Block Self-Similarity (“Petals”) and Singular Ridges in the Accelerated Collatz Map —
 
-> This document is a design note for a numerical-verification program that views the Collatz dynamics through **geometric–self-similar blocks** of size \(2^k\) (“petals”).  
+> This document is a design note for a numerical-verification program that views the Collatz dynamics through **geometric–self-similar blocks** of size \(2^k\) (“petals”).
 > The goal is to **map where differences actually arise** under block offsets, identify **singular ridges**, and extract **inequality-style boundary conditions** that separate “contained / convergent-looking” behavior from “spiky / jumpy” behavior.
 
 ---
@@ -11,13 +11,13 @@
 
 Before chasing a full proof, this project aims to fix and observe the *structural* claims that make the “petal” picture meaningful:
 
-1. **Block (petal) invariance**  
+1. **Block (petal) invariance**
    Under an offset \(+2^k m\), how long does the dynamics remain effectively “the same” inside a block?
 
-2. **Where do differences actually originate?**  
+2. **Where do differences actually originate?**
    When two offset trajectories diverge, *where* does the divergence first appear?
 
-3. **Quantify “spikes” (bad cases) as measurable terrain**  
+3. **Quantify “spikes” (bad cases) as measurable terrain**
    Capture “bad cases” as *density / ridges inside blocks*, not just isolated outliers.
 
 ---
@@ -161,18 +161,18 @@ The experimental instrument is `collatz_experiment.py`.
 
 ### 6.1 Outputs
 
-- `trajectories_k{k}.json`  
+- `trajectories_k{k}.json`
   Per-base trajectory logs: \((n,a=3n+1,s,n_{\text{next}})\), plus \(S_m\), \(D_m\), and `max_prefix_D`.
 
-- `differences_k{k}.json`  
+- `differences_k{k}.json`
   Pairwise comparison logs for base vs offset: \(\Delta s_t\), `first_delta_index`, \(\Delta n_t\), and \(v_2(|\Delta n_t|)\).
 
-- `statistics_k{k}.json`  
+- `statistics_k{k}.json`
   Aggregate statistics: means / maxima / minima / standard deviations for drift, spikes, and terrain.
 
 ### 6.2 Observation window note
 
-`first_delta_index = null` does **not** mean “no difference forever.”  
+`first_delta_index = null` does **not** mean “no difference forever.”
 It means **no difference within the finite observation window** (finite steps).
 
 ---
@@ -212,7 +212,7 @@ and compare distributions across scales.
 
 Add and analyze:
 
-- Terrain break time  
+- Terrain break time
   \[
   \tau_r := \min\{t : v_2(\Delta n_t) < r\}
   \]
