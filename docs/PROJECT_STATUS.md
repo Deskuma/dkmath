@@ -120,6 +120,14 @@ FLT 現状レポート 2026-03-08
 
 ---
 
+## 3.E. CFBRC → GN → RH bridge の導線が見えてきた
+
+`DkMath/CFBRC/Bridge.lean` は、差冪・core・`GN`・valuation・原始素因子存在を同じ記法圏で扱う薄い接続層として機能しておる。さらに `DkMath/RH/CFBRCBridge.lean` により、その primitive-prime existence を `hopcPrimeContributionSum` と `stationaryAt` 判定へ渡す道が明示された。
+
+現時点では RH 側の大域結論を直接閉じる段階ではないが、**FLT 側で整えた素因子供給の成果を RH 観測器へ運べる配線** が先に確保された意義は大きい。
+
+---
+
 ## 4. 実質的な未完了点
 
 今回のスナップショットを機械的に見ると、**実行上の placeholder は FLT 系でほぼ 2 箇所に収束** している。
