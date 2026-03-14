@@ -119,7 +119,7 @@ def translate (v : Cell) (P : Shape) : Shape :=
   P.map (translateEmb' v)
 
 -- test
-#eval translate (1,2) L_tromino  -- {(1, 2), (2, 2), (1, 3)}
+-- #eval translate (1,2) L_tromino  -- {(1, 2), (2, 2), (1, 3)}
 
 example : translate (1,2) L_tromino = {(1,2), (2,2), (1,3)} := by
   decide
@@ -228,9 +228,9 @@ lemma area_reflectY (P : Shape) :
   simp only [area, reflectY, Finset.card_map]
 
 -- tests
-#eval rotate90 L_tromino
-#eval reflectX L_tromino
-#eval reflectY L_tromino
+-- #eval rotate90 L_tromino
+-- #eval reflectX L_tromino
+-- #eval reflectY L_tromino
 
 example : area (rotate90 L_tromino) = 3 := by
   simpa [area_L_tromino] using (area_rotate90 (P := L_tromino))
@@ -337,10 +337,10 @@ lemma reflectXX_eq (P : Shape) : reflectXX P = P := by
 
 
 -- tests
-#eval rotate90 L_tromino  -- {(0, 0), (0, 1), (-1, 0)}
-#eval reflectX L_tromino  -- {(0, 0), (1, 0), (0, -1)}
-#eval reflectY L_tromino  -- {(0, 0), (-1, 0), (0, 1)}
-#eval reflectXX L_tromino -- {(0, 0), (1, 0), (0, 1)}
+-- #eval rotate90 L_tromino  -- {(0, 0), (0, 1), (-1, 0)}
+-- #eval reflectX L_tromino  -- {(0, 0), (1, 0), (0, -1)}
+-- #eval reflectY L_tromino  -- {(0, 0), (-1, 0), (0, 1)}
+-- #eval reflectXX L_tromino -- {(0, 0), (1, 0), (0, 1)}
 
 example : rotate90 L_tromino ≠ L_tromino := by
   decide

@@ -1,8 +1,34 @@
 # Project D.K. math
 
-The result of "D." and Wise Wolf's experiment with new mathematical theories.
+The result of "D." and Wise Wolf's (GPT) experiment with new mathematical theories.
+
+「D」と🐺賢狼(GPT)による新しい数学理論の実験結果。
+
+> [!IMPORTANT]
+> The main branch may be slow to reflect updates. The latest development is primarily on the **nightly branch**.
+>
+> The latest state is here:
+> [https://github.com/Deskuma/dkmath/tree/nightly](https://github.com/Deskuma/dkmath/tree/nightly)
+>
+> Please check the following before working:
+> `git checkout nightly`
+
+> [!IMPORTANT]
+> main ブランチは更新反映が遅れる場合があります。最新の開発は **nightly ブランチ主体** です。
+>
+> 最新状態はこちら:
+> [https://github.com/Deskuma/dkmath/tree/nightly](https://github.com/Deskuma/dkmath/tree/nightly)
+>
+> 作業前に次を確認してください:
+> `git checkout nightly`
 
 ## Index
+
+※当プロジェクトは「日本語」が主なコミュニケーション言語ですが、README は英語と日本語の両方で書いています。内容は同一ですが、英語版と日本語版が混在していることにご注意ください。
+
+*While Japanese is the primary communication language for this project, the README is written in both English and Japanese. The content is identical, but please note that the English and Japanese versions coexist.
+
+(Therefore, automatic translation may not function correctly in some cases.)
 
 ### Lean
 
@@ -10,11 +36,19 @@ The result of "D." and Wise Wolf's experiment with new mathematical theories.
 
 運用方法については [lean/README.md](./lean/README.md) を参照。
 
+> コメント内の `so#rry` は、検索しても見つからないようにスペルを崩してあります。ご了承ください。`ad#mit` も同様です。
+
 #### DkMath: Lean 4 数学ライブラリ
 
 動的調和数論（Dynamic Harmonic Number Theory, DHNT）に焦点を当てた Lean 4 用数学ライブラリ。
 
 詳細は [dk_math/README.md](./lean/dk_math/README.md) を参照。
+
+### README 整理方針
+
+- この `README.md` は **プロジェクト全体の入口**（重点テーマ・全体進捗・横断ドキュメント）を扱う
+- `lean/dk_math/README.md` は **Lean 実装の詳細入口**（モジュール一覧・ビルド導線）を扱う
+- FLT の最新進捗の正本は [docs/PROJECT_STATUS.md](./docs/PROJECT_STATUS.md) とする
 
 ## Project
 
@@ -24,6 +58,24 @@ The result of "D." and Wise Wolf's experiment with new mathematical theories.
 
 Mathlib.FLT とは、異なるアプローチで、特に `d = 3` 周辺の複数アプローチを整備することを目指しています。
 ※既に形式化証明は完成されていますが、補題の整理や証明の安定化を図ります。
+
+### 最新ステータス（2026-03-15）
+
+`docs/PROJECT_STATUS.md` 時点の要約：
+
+- FLT `d = 3` の公開 API は `DkMath/FLT/Main.lean` 側で概ね安定
+- StandAlone artifact（`FLT3#StandAlone-NC-v0.lean-v2.lean`）は build 成功・実 placeholder なし
+- 一般指数 `n > 3` は未完で、現在の `so#rry` は次の 2 箇所に局所化
+  - `DkMath/FLT/Basic.lean`（`n > 3` 分岐）
+  - `DkMath/CosmicFormula/TriominoFLT.lean`（`FLT_highExponent_core_pending`）
+- `DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean` では
+  - 正規化（`primeGe5CounterexampleNormalizer_impl`）
+  - spec 合成（`FLTPrimeGe5Target_of_*`）
+  - provider 直結（`triominoCosmic_globalProvider_of_specs`）
+  まで実装済み（`so#rry` 非依存ルートを整備）
+- ただし `FLT_prime_ge5` 本体は現状 `DkMath.FLT` 経由で、上記 pending に接続しているため最終閉路は未完
+
+詳細は [docs/PROJECT_STATUS.md](./docs/PROJECT_STATUS.md) を参照。
 
 ### 紹介
 
@@ -159,10 +211,23 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 - FLT 総合入口: [DkMath/FLT.lean](./lean/dk_math/DkMath/FLT.lean)
 - FLT 別解（padicValNat 系）: [DkMath/FLT/Main.lean](./lean/dk_math/DkMath/FLT/Main.lean)
 - FLT 基本系（宇宙式ベース）: [DkMath/FLT/Basic.lean](./lean/dk_math/DkMath/FLT/Basic.lean) ※Mathlib.FLT に接続
+- FLT 実装ガイド: [DkMath/FLT/README.md](./lean/dk_math/DkMath/FLT/README.md)
+- FLT PrimeProvider 本丸: [DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean](./lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean)
 - 数論ハブ（本流）: [DkMath/NumberTheory/GcdNext.lean](./lean/dk_math/DkMath/NumberTheory/GcdNext.lean)
 - 数論研究系: [DkMath/NumberTheory/GcdNextResearch.lean](./lean/dk_math/DkMath/NumberTheory/GcdNextResearch.lean)
 - 宇宙式入口: [DkMath/CosmicFormula.lean](./lean/dk_math/DkMath/CosmicFormula.lean)
+- 宇宙式×FLT 接続: [DkMath/CosmicFormula/TriominoFLT.lean](./lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean)
 - 研究用エントリ: [DkMath/Research.lean](./lean/dk_math/DkMath/Research.lean)
+
+### 主要モジュール（新規・拡張）
+
+- ABC 予想系入口: [DkMath/ABC.lean](./lean/dk_math/DkMath/ABC.lean)
+- RH 系入口: [DkMath/RH.lean](./lean/dk_math/DkMath/RH.lean)
+- RH CFBRC 接続: [DkMath/RH/CFBRCBridge.lean](./lean/dk_math/DkMath/RH/CFBRCBridge.lean)
+- KUS 系入口: [DkMath/KUS.lean](./lean/dk_math/DkMath/KUS.lean)
+- CFBRC Lean 入口: [DkMath/CFBRC.lean](./lean/dk_math/DkMath/CFBRC.lean)
+- Silver Ratio 入口: [DkMath/SilverRatio.lean](./lean/dk_math/DkMath/SilverRatio.lean)
+- UnitCycle 入口: [DkMath/UnitCycle.lean](./lean/dk_math/DkMath/UnitCycle.lean)
 
 ### Cosmic Formula
 
@@ -189,6 +254,33 @@ $$
 宇宙式の一般化 $G(x,w;d)=(x+w)^d - w^d$ の複素化 $w=i\theta$ に伴う代数構造と位相挙動を解析する Python モジュール。
 
 詳細は [python/CFBRC/README.md](./python/CFBRC/README.md) を参照。
+
+### CFBRC × GN × RH Bridge
+
+— CFBRC から RH 観測器への接続層 —
+
+CFBRC では、差冪
+
+$$
+(x+u)^d-u^d
+$$
+
+を円分的 core（`cyclotomicPrimeCore`）で扱い、`GN`（`DkMath.NumberTheory.Gcd.GN`）との同一化・除法判定・`padicValNat` 評価・原始素因子存在を橋渡しする API を整備しています。
+
+さらに `DkMath.RH.CFBRCBridge` では、CFBRC 側で得た primitive-prime existence を RH 側の
+
+- `hopcPrimeContributionSum`
+- `stationaryAt` / `nondegenerateStationaryAt`
+
+へ接続し、有限観測器での停留点存在判定へ渡す流れを提供します。
+
+関連入口:
+
+- CFBRC 実装ガイド: [DkMath/CFBRC/README.md](./lean/dk_math/DkMath/CFBRC/README.md)
+- CFBRC bridge 実装: [DkMath/CFBRC/Bridge.lean](./lean/dk_math/DkMath/CFBRC/Bridge.lean)
+- GN（数論 bridge 核）: [DkMath/NumberTheory/Gcd/GN.lean](./lean/dk_math/DkMath/NumberTheory/Gcd/GN.lean)
+- RH bridge 実装: [DkMath/RH/CFBRCBridge.lean](./lean/dk_math/DkMath/RH/CFBRCBridge.lean)
+- RH 統合 README: [DkMath/RH/README.md](./lean/dk_math/DkMath/RH/README.md)
 
 ### Collatz Cartography
 
@@ -226,6 +318,12 @@ $$
 
 詳細は [lean/dk_math/DkMath/Collatz/docs/AUXILIARY_LEMMA_COMPLETION_20260130.md](./lean/dk_math/DkMath/Collatz/docs/AUXILIARY_LEMMA_COMPLETION_20260130.md) を参照。
 
+### Collatz SORRY Cleanup Progress (2026/01/30)
+
+コラッツ予想の形式化プロジェクトにおける `sorry` 解消進捗レポート（2026年1月30日版）。
+
+詳細は [lean/dk_math/DkMath/Collatz/docs/SORRY_CLEANUP_PROGRESS_20260130.md](./lean/dk_math/DkMath/Collatz/docs/SORRY_CLEANUP_PROGRESS_20260130.md) を参照。
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
@@ -236,7 +334,9 @@ Contributions are welcome! Please read the [CONTRIBUTING.md](./CONTRIBUTING.md) 
 
 ## Contact
 
-For questions or suggestions, please open an issue in this repository or start a discussion (if available).
+If you have any inquiries, questions, or suggestions regarding this project, please create an issue in this repository, submit a pull request, or start a discussion (if available).
+
+このプロジェクトに関してご質問、ご不明な点、ご提案などがございましたら、このリポジトリにイシューを作成するか、プルリクエストを送信するか、または（利用可能な場合は）ディスカッションを開始してください。
 
 ## Acknowledgements
 

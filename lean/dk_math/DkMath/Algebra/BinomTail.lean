@@ -129,6 +129,67 @@ lemma binom_tail_nat_dvd (u y : ℕ) {n : ℕ} (hn : 2 ≤ n) :
         rw [← h_eq]
     _ = u ^ 2 * H := by omega
 
+/--
+For positive naturals `a, b`, every exponent at least `2` produces strictly positive mixed terms in
+the binomial expansion. Concretely, `(a + b)^n` is strictly larger than `a^n + b^n`.
+
+This is the reusable “mixed-term positivity” fact behind statements like:
+`(a + b)^p` cannot coincide with `a^p + b^p` once `p ≥ 2` and both inputs are positive.
+-/
+lemma add_pow_gt_sum_pows_nat (a b : ℕ) (ha : 0 < a) (hb : 0 < b) (k : ℕ) :
+    a ^ (k + 2) + b ^ (k + 2) < (a + b) ^ (k + 2) := by
+  induction k with
+  | zero =>
+      have hab_pos : 0 < a * b := Nat.mul_pos ha hb
+      have hmix_pos : 0 < a * b + a * b := by
+        omega
+      have hlt : a ^ 2 + b ^ 2 < a ^ 2 + b ^ 2 + (a * b + a * b) := by
+        exact Nat.lt_add_of_pos_right hmix_pos
+      have hexpand : (a + b) ^ 2 = a ^ 2 + b ^ 2 + (a * b + a * b) := by
+        ring
+      have hgoal : a ^ 2 + b ^ 2 < (a + b) ^ 2 := by
+        rw [hexpand]
+        exact hlt
+      simpa using hgoal
+  | succ k ih =>
+      have hab_pos : 0 < a + b := by
+        omega
+      have hmul_lt :
+          (a ^ (k + 2) + b ^ (k + 2)) * (a + b) <
+            (a + b) ^ (k + 2) * (a + b) := by
+        exact Nat.mul_lt_mul_of_pos_right ih hab_pos
+      have ha_pow_pos : 0 < a ^ (k + 2) := Nat.pow_pos ha
+      have hb_pow_pos : 0 < b ^ (k + 2) := Nat.pow_pos hb
+      have hcross_pos : 0 < a ^ (k + 2) * b + b ^ (k + 2) * a := by
+        have h1 : 0 < a ^ (k + 2) * b := Nat.mul_pos ha_pow_pos hb
+        have h2 : 0 < b ^ (k + 2) * a := Nat.mul_pos hb_pow_pos ha
+        omega
+      calc
+        a ^ (k + 3) + b ^ (k + 3)
+            = a ^ (k + 2) * a + b ^ (k + 2) * b := by
+                simp [pow_succ, Nat.mul_comm]
+        _ < a ^ (k + 2) * a + b ^ (k + 2) * b + (a ^ (k + 2) * b + b ^ (k + 2) * a) := by
+              exact Nat.lt_add_of_pos_right hcross_pos
+        _ = (a ^ (k + 2) + b ^ (k + 2)) * (a + b) := by
+              ring
+        _ < (a + b) ^ (k + 2) * (a + b) := hmul_lt
+        _ = (a + b) ^ (k + 3) := by
+              simp [pow_succ, Nat.mul_comm]
+
+/-- Convenience wrapper of `add_pow_gt_sum_pows_nat` with a `2 ≤ n` hypothesis. -/
+lemma add_pow_gt_sum_pows_nat_of_two_le (a b : ℕ) {n : ℕ}
+    (hn : 2 ≤ n) (ha : 0 < a) (hb : 0 < b) :
+    a ^ n + b ^ n < (a + b) ^ n := by
+  rcases Nat.exists_eq_add_of_le hn with ⟨k, hk⟩
+  rw [hk]
+  simpa [Nat.add_comm] using add_pow_gt_sum_pows_nat a b ha hb k
+
+/-- Consequently, `(a + b)^n` cannot coincide with `a^n + b^n` once `n ≥ 2` and `a,b > 0`. -/
+lemma add_pow_ne_sum_pows_nat_of_two_le (a b : ℕ) {n : ℕ}
+    (hn : 2 ≤ n) (ha : 0 < a) (hb : 0 < b) :
+    (a + b) ^ n ≠ a ^ n + b ^ n := by
+  exact ne_of_gt (add_pow_gt_sum_pows_nat_of_two_le a b hn ha hb)
+
 end BinomTail
 
 end DkMath.Algebra.BinomTail

@@ -8,8 +8,10 @@ import Mathlib.Analysis.PSeries
 
 import DkMath.RH.Defs
 import DkMath.RH.EulerZeta
+import DkMath.RH.Lemmas
 
---cid: 696f0dea-ce88-8322-9d20-8ce524dcd533
+-- cid: 696f0dea-ce88-8322-9d20-8ce524dcd533
+-- cid: 69b29c85-0a0c-83a7-aa18-c44fbc8c3399
 
 -- ============================================================================
 
@@ -325,5 +327,836 @@ theorem summable_one_div_prime_rpow_sigma (σ : ℝ) (hσ : 1 < σ) :
     rfl
   rw [this]
   exact Summable.comp_injective h_nat h_inj
+
+-- ============================================================================
+-- 11. HOPC-RH: 単一素数因子 `w_p` の位相 API（RH-B1）
+-- ============================================================================
+
+/--
+`g_p(t) := vertical σ t * log p` の `t` 微分。
+
+`vertical σ t = σ + i t` なので `d/dt` は `i`、
+よって `g_p` の導関数は `i * log p` になる。
+-/
+lemma hasDerivAt_vertical_mul_log_p
+    (p : ℕ) (σ t : ℝ) :
+    HasDerivAt
+      (fun u : ℝ => vertical σ u * (Real.log (p : ℝ) : ℂ))
+      (Complex.I * (Real.log (p : ℝ) : ℂ)) t := by
+  have hvertical : HasDerivAt (fun u : ℝ => vertical σ u) Complex.I t := by
+    simpa [vertical, one_mul] using
+      ((((hasDerivAt_id (t : ℂ)).mul_const Complex.I).comp_ofReal).const_add (σ : ℂ))
+  simpa [mul_assoc] using hvertical.mul_const (Real.log (p : ℝ) : ℂ)
+
+/--
+`w_p(t) = exp((σ+it)log p) - 1` の `t` 微分。
+
+連鎖律より
+`w_p'(t) = exp((σ+it)log p) * (i * log p)`。
+-/
+lemma hasDerivAt_eulerZeta_exp_s_log_p_sub_one
+    (p : ℕ) (σ t : ℝ) :
+    HasDerivAt
+      (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u)
+      (Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) *
+        (Complex.I * (Real.log (p : ℝ) : ℂ))) t := by
+  unfold eulerZeta_exp_s_log_p_sub_one
+  have hinner :=
+    hasDerivAt_vertical_mul_log_p (p := p) (σ := σ) (t := t)
+  simpa [mul_comm, mul_left_comm, mul_assoc] using
+    ((Complex.hasDerivAt_exp
+      (vertical σ t * (Real.log (p : ℝ) : ℂ))).comp t hinner).sub_const (1 : ℂ)
+
+/--
+`w_p` の導関数の `deriv` 版。
+-/
+lemma deriv_eulerZeta_exp_s_log_p_sub_one
+    (p : ℕ) (σ t : ℝ) :
+    deriv (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t =
+      Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) *
+        (Complex.I * (Real.log (p : ℝ) : ℂ)) :=
+  (hasDerivAt_eulerZeta_exp_s_log_p_sub_one (p := p) (σ := σ) (t := t)).deriv
+
+/--
+`w_p` に対する位相速度の明示式。
+
+`phaseVel f t = Im(f'(t)/f(t))` に `f = w_p` を代入した形。
+-/
+lemma phaseVel_eulerZeta_exp_s_log_p_sub_one_eq
+    (p : ℕ) (σ t : ℝ) :
+    DkMath.RH.phaseVel (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t =
+      (((Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) *
+          (Complex.I * (Real.log (p : ℝ) : ℂ))) /
+        (eulerZeta_exp_s_log_p_sub_one p σ t)).im) := by
+  simp [DkMath.RH.phaseVel, deriv_eulerZeta_exp_s_log_p_sub_one]
+
+/--
+`w_p(t) ≠ 0` の下で、`driftFreeAt` と `phaseVel = 0` は同値。
+
+HOPC-RH では停留条件の入口として使う。
+-/
+lemma driftFreeAt_eulerZeta_exp_s_log_p_sub_one_iff_phaseVel_eq_zero
+    (p : ℕ) (σ t : ℝ)
+    (hw_ne : eulerZeta_exp_s_log_p_sub_one p σ t ≠ 0) :
+    DkMath.RH.driftFreeAt (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t ↔
+      DkMath.RH.phaseVel (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t = 0 := by
+  simpa using
+    (DkMath.RH.driftFreeAt_iff_phaseVel_eq_zero
+      (f := fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u)
+      (t := t) hw_ne)
+
+-- ============================================================================
+-- 12. HOPC-RH: 単一素数因子 `w_p` の 2 次情報（RH-C1）
+-- ============================================================================
+
+/--
+`w_p` の 2 階導関数（`t` 方向）。
+
+`w_p'(t) = exp(g(t)) * c`（`c = i*log p`）なので、
+再度の連鎖律により `w_p''(t) = exp(g(t)) * c * c`。
+-/
+lemma hasDerivAt_deriv_eulerZeta_exp_s_log_p_sub_one
+    (p : ℕ) (σ t : ℝ) :
+    HasDerivAt
+      (fun u : ℝ => deriv (fun v : ℝ => eulerZeta_exp_s_log_p_sub_one p σ v) u)
+      (Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) *
+        (Complex.I * (Real.log (p : ℝ) : ℂ)) *
+        (Complex.I * (Real.log (p : ℝ) : ℂ))) t := by
+  let lp : ℂ := (Real.log (p : ℝ) : ℂ)
+  have h_deriv_fun :
+      (fun u : ℝ => deriv (fun v : ℝ => eulerZeta_exp_s_log_p_sub_one p σ v) u) =
+      (fun u : ℝ => Complex.exp (vertical σ u * lp) * (Complex.I * lp)) := by
+    funext u
+    simpa [lp] using deriv_eulerZeta_exp_s_log_p_sub_one (p := p) (σ := σ) (t := u)
+  rw [h_deriv_fun]
+  have hinner := hasDerivAt_vertical_mul_log_p (p := p) (σ := σ) (t := t)
+  have hexp :
+      HasDerivAt
+        (fun u : ℝ => Complex.exp (vertical σ u * lp))
+        (Complex.exp (vertical σ t * lp) * (Complex.I * lp)) t := by
+    simpa [lp] using
+      (Complex.hasDerivAt_exp (vertical σ t * lp)).comp t hinner
+  have hmul := hexp.mul_const (Complex.I * lp)
+  simpa [lp, mul_assoc] using hmul
+
+/--
+`w_p` の 2 階導関数の `deriv` 版。
+-/
+lemma deriv_deriv_eulerZeta_exp_s_log_p_sub_one
+    (p : ℕ) (σ t : ℝ) :
+    deriv (fun u : ℝ => deriv (fun v : ℝ => eulerZeta_exp_s_log_p_sub_one p σ v) u) t =
+      Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) *
+        (Complex.I * (Real.log (p : ℝ) : ℂ)) *
+        (Complex.I * (Real.log (p : ℝ) : ℂ)) :=
+  (hasDerivAt_deriv_eulerZeta_exp_s_log_p_sub_one (p := p) (σ := σ) (t := t)).deriv
+
+/--
+`w_p(t) ≠ 0` の下で、`stationaryAt` は `driftFreeAt` と同値。
+-/
+lemma stationaryAt_eulerZeta_exp_s_log_p_sub_one_iff_driftFreeAt
+    (p : ℕ) (σ t : ℝ)
+    (hw_ne : eulerZeta_exp_s_log_p_sub_one p σ t ≠ 0) :
+    DkMath.RH.stationaryAt (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t ↔
+      DkMath.RH.driftFreeAt (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t := by
+  simpa [Iff.comm] using
+    (DkMath.RH.driftFreeAt_iff_stationaryAt
+      (f := fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u)
+      (t := t) hw_ne)
+
+/--
+`w_p(t) ≠ 0` の下で、非退化停留点は
+`driftFreeAt ∧ phaseCurv ≠ 0` と同値。
+-/
+lemma nondegenerateStationaryAt_eulerZeta_exp_s_log_p_sub_one_iff
+    (p : ℕ) (σ t : ℝ)
+    (hw_ne : eulerZeta_exp_s_log_p_sub_one p σ t ≠ 0) :
+    DkMath.RH.nondegenerateStationaryAt
+        (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t
+      ↔
+    (DkMath.RH.driftFreeAt (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t ∧
+      DkMath.RH.phaseCurv (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t ≠ 0) := by
+  simpa using
+    (DkMath.RH.nondegenerateStationaryAt_iff_driftFreeAt_and_phaseCurv_ne_zero
+      (f := fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u)
+      (t := t) hw_ne)
+
+-- ============================================================================
+-- 13. HOPC-RH: 有限 Euler 積観測量 API（RH-D1）
+-- ============================================================================
+
+/-- 空集合での有限 Euler 積（複素版）は 1。 -/
+@[simp] lemma eulerZetaFinite_empty (s : ℂ) :
+    eulerZetaFinite (S := (∅ : Finset {p // Nat.Prime p})) s = 1 := by
+  simp [eulerZetaFinite]
+
+/-- `insert` による有限 Euler 積（複素版）の再帰展開。 -/
+lemma eulerZetaFinite_insert
+    (p : {p // Nat.Prime p}) (S : Finset {p // Nat.Prime p}) (s : ℂ)
+    (hp : p ∉ S) :
+    eulerZetaFinite (S := insert p S) s =
+      eulerZetaFactor p.1 s * eulerZetaFinite (S := S) s := by
+  simp [eulerZetaFinite, hp]
+
+/-- 空集合での有限 Euler 積（magnitude 版）は 1。 -/
+@[simp] lemma eulerZetaMagFinite_empty (σ t : ℝ) :
+    eulerZetaMagFinite (S := (∅ : Finset {p // Nat.Prime p})) σ t = 1 := by
+  simp [eulerZetaMagFinite]
+
+/-- `insert` による有限 Euler 積（magnitude 版）の再帰展開。 -/
+lemma eulerZetaMagFinite_insert
+    (p : {p // Nat.Prime p}) (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hp : p ∉ S) :
+    eulerZetaMagFinite (S := insert p S) σ t =
+      eulerZetaFactorMag p.1 σ t * eulerZetaMagFinite (S := S) σ t := by
+  simp [eulerZetaMagFinite, hp]
+
+/-- 空集合での有限位相速度和は 0。 -/
+@[simp] lemma eulerZetaPhaseVelFinite_empty (σ t : ℝ) :
+    eulerZetaPhaseVelFinite (S := (∅ : Finset {p // Nat.Prime p})) σ t = 0 := by
+  simp [eulerZetaPhaseVelFinite]
+
+/-- `insert` による有限位相速度和の再帰展開。 -/
+lemma eulerZetaPhaseVelFinite_insert
+    (p : {p // Nat.Prime p}) (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hp : p ∉ S) :
+    eulerZetaPhaseVelFinite (S := insert p S) σ t =
+      eulerZetaPhaseVelLocal p.1 σ t + eulerZetaPhaseVelFinite (S := S) σ t := by
+  simp [eulerZetaPhaseVelFinite, hp]
+
+/-- 局所位相速度寄与は `phaseVel` 明示式補題と一致する。 -/
+lemma eulerZetaPhaseVelLocal_eq_phaseVel_formula
+    (p : ℕ) (σ t : ℝ) :
+    eulerZetaPhaseVelLocal p σ t =
+      (((Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) *
+          (Complex.I * (Real.log (p : ℝ) : ℂ))) /
+        (eulerZeta_exp_s_log_p_sub_one p σ t)).im) := by
+  simpa [eulerZetaPhaseVelLocal] using
+    (phaseVel_eulerZeta_exp_s_log_p_sub_one_eq (p := p) (σ := σ) (t := t))
+
+-- ============================================================================
+-- 14. HOPC-RH: 有限積の位相速度を局所寄与和へ落とす（RH-D2）
+-- ============================================================================
+
+/-- 空集合での `w_p` 有限積は 1。 -/
+@[simp] lemma eulerZetaExpSubOneFinite_empty (σ t : ℝ) :
+    eulerZetaExpSubOneFinite (S := (∅ : Finset {p // Nat.Prime p})) σ t = 1 := by
+  simp [eulerZetaExpSubOneFinite]
+
+/-- `insert` による `w_p` 有限積の再帰展開。 -/
+lemma eulerZetaExpSubOneFinite_insert
+    (p : {p // Nat.Prime p}) (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hp : p ∉ S) :
+    eulerZetaExpSubOneFinite (S := insert p S) σ t =
+      eulerZeta_exp_s_log_p_sub_one p.1 σ t *
+        eulerZetaExpSubOneFinite (S := S) σ t := by
+  simp [eulerZetaExpSubOneFinite, hp]
+
+/-- `w_p` 有限積は各点で微分可能。 -/
+lemma differentiableAt_eulerZetaExpSubOneFinite
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ) :
+    DifferentiableAt ℝ (fun u : ℝ => eulerZetaExpSubOneFinite S σ u) t := by
+  classical
+  induction S using Finset.induction_on with
+  | empty =>
+      simp [eulerZetaExpSubOneFinite]
+  | @insert p S hp ih =>
+      have hd_p :
+          DifferentiableAt ℝ (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p.1 σ u) t :=
+        (hasDerivAt_eulerZeta_exp_s_log_p_sub_one (p := p.1) (σ := σ) (t := t)).differentiableAt
+      simpa [eulerZetaExpSubOneFinite, hp] using hd_p.mul ih
+
+/--
+`insert` 1ステップ版の積→和補題。
+
+`w_p` 有限積で 0 除算が起きない点では、位相速度は 1 因子ぶん加法分解できる。
+-/
+lemma phaseVel_eulerZetaExpSubOneFinite_insert
+    (p : {p // Nat.Prime p}) (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hp : p ∉ S)
+    (hp_ne : eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hS_ne : eulerZetaExpSubOneFinite (S := S) σ t ≠ 0) :
+    DkMath.RH.phaseVel
+        (fun u : ℝ => eulerZetaExpSubOneFinite (S := insert p S) σ u) t =
+      eulerZetaPhaseVelLocal p.1 σ t +
+        DkMath.RH.phaseVel (fun u : ℝ => eulerZetaExpSubOneFinite (S := S) σ u) t := by
+  have hmul :
+      (fun u : ℝ => eulerZetaExpSubOneFinite (S := insert p S) σ u) =
+      (fun u : ℝ =>
+        eulerZeta_exp_s_log_p_sub_one p.1 σ u * eulerZetaExpSubOneFinite (S := S) σ u) := by
+    funext u
+    simp [eulerZetaExpSubOneFinite, hp]
+  rw [hmul]
+  have hd_p :
+      DifferentiableAt ℝ (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p.1 σ u) t :=
+    (hasDerivAt_eulerZeta_exp_s_log_p_sub_one (p := p.1) (σ := σ) (t := t)).differentiableAt
+  have hd_S :
+      DifferentiableAt ℝ (fun u : ℝ => eulerZetaExpSubOneFinite (S := S) σ u) t :=
+    differentiableAt_eulerZetaExpSubOneFinite (S := S) (σ := σ) (t := t)
+  simpa [eulerZetaPhaseVelLocal] using
+    (DkMath.RH.phaseVel_mul
+      (f := fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p.1 σ u)
+      (g := fun u : ℝ => eulerZetaExpSubOneFinite (S := S) σ u)
+      (t := t) hd_p hd_S hp_ne hS_ne)
+
+/-- `S` 上で `w_p(t) ≠ 0` なら、その有限積も非零。 -/
+lemma eulerZetaExpSubOneFinite_ne_zero_of_ne
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    eulerZetaExpSubOneFinite (S := S) σ t ≠ 0 := by
+  unfold eulerZetaExpSubOneFinite
+  exact (Finset.prod_ne_zero_iff).2 (by
+    intro p hp
+    exact hS_ne p hp)
+
+/--
+有限積版の積→和補題（本体）。
+
+`S` 内の各素数因子で `w_p(t) ≠ 0` が成り立つとき、
+`w_p` 有限積の位相速度は局所位相速度寄与の有限和に一致する。
+-/
+lemma phaseVel_eulerZetaExpSubOneFinite_eq_sum
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne :
+      ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.phaseVel (fun u : ℝ => eulerZetaExpSubOneFinite (S := S) σ u) t =
+      eulerZetaPhaseVelFinite (S := S) σ t := by
+  classical
+  revert hS_ne
+  refine Finset.induction_on S ?h0 ?hstep
+  · intro _
+    simp [eulerZetaExpSubOneFinite, eulerZetaPhaseVelFinite, DkMath.RH.phaseVel]
+  · intro p S hp ih hS_ne
+    have hp_ne : eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0 :=
+      hS_ne p (Finset.mem_insert_self p S)
+    have hS_ne' : ∀ q ∈ S, eulerZeta_exp_s_log_p_sub_one q.1 σ t ≠ 0 := by
+      intro q hq
+      exact hS_ne q (Finset.mem_insert_of_mem hq)
+    have hprod_ne :
+        eulerZetaExpSubOneFinite (S := S) σ t ≠ 0 := by
+      exact eulerZetaExpSubOneFinite_ne_zero_of_ne
+        (S := S) (σ := σ) (t := t) hS_ne'
+    have h_insert :=
+      phaseVel_eulerZetaExpSubOneFinite_insert
+        (p := p) (S := S) (σ := σ) (t := t) hp hp_ne hprod_ne
+    calc
+      DkMath.RH.phaseVel
+          (fun u : ℝ => eulerZetaExpSubOneFinite (S := insert p S) σ u) t
+          = eulerZetaPhaseVelLocal p.1 σ t +
+              DkMath.RH.phaseVel (fun u : ℝ => eulerZetaExpSubOneFinite (S := S) σ u) t := h_insert
+      _ = eulerZetaPhaseVelLocal p.1 σ t + eulerZetaPhaseVelFinite (S := S) σ t := by
+          rw [ih hS_ne']
+      _ = eulerZetaPhaseVelFinite (S := insert p S) σ t := by
+          symm
+          exact eulerZetaPhaseVelFinite_insert (p := p) (S := S) (σ := σ) (t := t) hp
+
+-- ============================================================================
+-- 15. RH-E1: exp 形 Euler 因子の位相速度接続
+-- ============================================================================
+
+/-- exp 形 Euler 因子の有限積：空集合は 1。 -/
+@[simp] lemma eulerZetaFactorVerticalExpFinite_empty (σ t : ℝ) :
+    eulerZetaFactorVerticalExpFinite (S := (∅ : Finset {p // Nat.Prime p})) σ t = 1 := by
+  simp [eulerZetaFactorVerticalExpFinite]
+
+/-- exp 形 Euler 因子の有限積：`insert` 展開。 -/
+lemma eulerZetaFactorVerticalExpFinite_insert
+    (p : {p // Nat.Prime p}) (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hp : p ∉ S) :
+    eulerZetaFactorVerticalExpFinite (S := insert p S) σ t =
+      eulerZetaFactorVerticalExp p.1 σ t *
+        eulerZetaFactorVerticalExpFinite (S := S) σ t := by
+  simp [eulerZetaFactorVerticalExpFinite, hp]
+
+/-- 局所因子 `exp / (exp-1)` は分母非零なら非零。 -/
+lemma eulerZetaFactorVerticalExp_ne_zero
+    (p : ℕ) (σ t : ℝ)
+    (hw_ne : eulerZeta_exp_s_log_p_sub_one p σ t ≠ 0) :
+    eulerZetaFactorVerticalExp p σ t ≠ 0 := by
+  unfold eulerZetaFactorVerticalExp
+  exact div_ne_zero (Complex.exp_ne_zero _) hw_ne
+
+/-- `S` 上で `w_p(t) ≠ 0` なら、exp 形 Euler 因子有限積は非零。 -/
+lemma eulerZetaFactorVerticalExpFinite_ne_zero_of_ne
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    eulerZetaFactorVerticalExpFinite (S := S) σ t ≠ 0 := by
+  unfold eulerZetaFactorVerticalExpFinite
+  exact (Finset.prod_ne_zero_iff).2 (by
+    intro p hp
+    exact eulerZetaFactorVerticalExp_ne_zero
+      (p := p.1) (σ := σ) (t := t) (hS_ne p hp))
+
+/-- `exp((σ+it)log p)` の位相速度は `log p`。 -/
+lemma phaseVel_exp_vertical_mul_log_p_eq_log
+    (p : ℕ) (σ t : ℝ) :
+    DkMath.RH.phaseVel
+      (fun u : ℝ => Complex.exp (vertical σ u * (Real.log (p : ℝ) : ℂ))) t
+      = Real.log (p : ℝ) := by
+  have hinner := hasDerivAt_vertical_mul_log_p (p := p) (σ := σ) (t := t)
+  have hderiv :
+      deriv (fun u : ℝ => Complex.exp (vertical σ u * (Real.log (p : ℝ) : ℂ))) t =
+        Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) *
+          (Complex.I * (Real.log (p : ℝ) : ℂ)) := by
+    simpa using ((Complex.hasDerivAt_exp
+      (vertical σ t * (Real.log (p : ℝ) : ℂ))).comp t hinner).deriv
+  unfold DkMath.RH.phaseVel
+  rw [hderiv]
+  have hexp_ne : Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) ≠ 0 :=
+    Complex.exp_ne_zero _
+  have hcancel :
+      (((Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) *
+          (Complex.I * (Real.log (p : ℝ) : ℂ))) /
+        Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ))).im) =
+      (Complex.I * (Real.log (p : ℝ) : ℂ)).im := by
+    field_simp [hexp_ne]
+  rw [hcancel]
+  simpa using (Complex.log_ofReal_re (p : ℝ))
+
+/-- 分母非零の下で exp 形 Euler 因子は微分可能。 -/
+lemma differentiableAt_eulerZetaFactorVerticalExp_of_ne
+    (p : ℕ) (σ t : ℝ)
+    (hw_ne : eulerZeta_exp_s_log_p_sub_one p σ t ≠ 0) :
+    DifferentiableAt ℝ (fun u : ℝ => eulerZetaFactorVerticalExp p σ u) t := by
+  unfold eulerZetaFactorVerticalExp
+  have hnum :
+      DifferentiableAt ℝ
+        (fun u : ℝ => Complex.exp (vertical σ u * (Real.log (p : ℝ) : ℂ))) t := by
+    have hinner := hasDerivAt_vertical_mul_log_p (p := p) (σ := σ) (t := t)
+    exact ((Complex.hasDerivAt_exp
+      (vertical σ t * (Real.log (p : ℝ) : ℂ))).comp t hinner).differentiableAt
+  have hden :
+      DifferentiableAt ℝ (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t :=
+    (hasDerivAt_eulerZeta_exp_s_log_p_sub_one (p := p) (σ := σ) (t := t)).differentiableAt
+  exact hnum.div hden hw_ne
+
+/--
+exp 形 Euler 因子の局所位相速度は
+`log p - phaseVel(w_p)`。
+-/
+lemma phaseVel_eulerZetaFactorVerticalExp_eq_log_sub_phaseVelLocal
+    (p : ℕ) (σ t : ℝ)
+    (hw_ne : eulerZeta_exp_s_log_p_sub_one p σ t ≠ 0) :
+    eulerZetaFactorPhaseVelLocal p σ t =
+      Real.log (p : ℝ) - eulerZetaPhaseVelLocal p σ t := by
+  unfold eulerZetaFactorPhaseVelLocal eulerZetaFactorVerticalExp eulerZetaPhaseVelLocal
+  have hnum :
+      DifferentiableAt ℝ
+        (fun u : ℝ => Complex.exp (vertical σ u * (Real.log (p : ℝ) : ℂ))) t := by
+    have hinner := hasDerivAt_vertical_mul_log_p (p := p) (σ := σ) (t := t)
+    exact ((Complex.hasDerivAt_exp
+      (vertical σ t * (Real.log (p : ℝ) : ℂ))).comp t hinner).differentiableAt
+  have hden :
+      DifferentiableAt ℝ (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t :=
+    (hasDerivAt_eulerZeta_exp_s_log_p_sub_one (p := p) (σ := σ) (t := t)).differentiableAt
+  have hnum_ne :
+      Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) ≠ 0 := Complex.exp_ne_zero _
+  calc
+    DkMath.RH.phaseVel
+        (fun u : ℝ =>
+          Complex.exp (vertical σ u * (Real.log (p : ℝ) : ℂ)) /
+            eulerZeta_exp_s_log_p_sub_one p σ u) t
+        = DkMath.RH.phaseVel
+            (fun u : ℝ => Complex.exp (vertical σ u * (Real.log (p : ℝ) : ℂ))) t
+          - DkMath.RH.phaseVel (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t := by
+              exact DkMath.RH.phaseVel_div
+                (f := fun u : ℝ => Complex.exp (vertical σ u * (Real.log (p : ℝ) : ℂ)))
+                (g := fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u)
+                (t := t) hnum hden hnum_ne hw_ne
+    _ = Real.log (p : ℝ) -
+          DkMath.RH.phaseVel (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t := by
+          rw [phaseVel_exp_vertical_mul_log_p_eq_log (p := p) (σ := σ) (t := t)]
+
+/-- 分母非零条件の下で exp 形 Euler 因子有限積は微分可能。 -/
+lemma differentiableAt_eulerZetaFactorVerticalExpFinite_of_ne
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DifferentiableAt ℝ (fun u : ℝ => eulerZetaFactorVerticalExpFinite (S := S) σ u) t := by
+  classical
+  induction S using Finset.induction_on with
+  | empty =>
+      simp [eulerZetaFactorVerticalExpFinite]
+  | @insert p S hp ih =>
+      have hp_ne : eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0 :=
+        hS_ne p (Finset.mem_insert_self p S)
+      have hS_ne' : ∀ q ∈ S, eulerZeta_exp_s_log_p_sub_one q.1 σ t ≠ 0 := by
+        intro q hq
+        exact hS_ne q (Finset.mem_insert_of_mem hq)
+      have hd_p :
+          DifferentiableAt ℝ (fun u : ℝ => eulerZetaFactorVerticalExp p.1 σ u) t :=
+        differentiableAt_eulerZetaFactorVerticalExp_of_ne (p := p.1) (σ := σ) (t := t) hp_ne
+      have hd_S :
+          DifferentiableAt ℝ (fun u : ℝ => eulerZetaFactorVerticalExpFinite (S := S) σ u) t :=
+        ih hS_ne'
+      simpa [eulerZetaFactorVerticalExpFinite, hp] using hd_p.mul hd_S
+
+/--
+exp 形 Euler 因子有限積の位相速度は、局所位相速度寄与の有限和に一致する。
+-/
+lemma phaseVel_eulerZetaFactorVerticalExpFinite_eq_sum
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne :
+      ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.phaseVel (fun u : ℝ => eulerZetaFactorVerticalExpFinite (S := S) σ u) t =
+      eulerZetaFactorPhaseVelFinite (S := S) σ t := by
+  classical
+  revert hS_ne
+  refine Finset.induction_on S ?h0 ?hstep
+  · intro _
+    simp [eulerZetaFactorVerticalExpFinite, eulerZetaFactorPhaseVelFinite, DkMath.RH.phaseVel]
+  · intro p S hp ih hS_ne
+    have hp_ne : eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0 :=
+      hS_ne p (Finset.mem_insert_self p S)
+    have hS_ne' : ∀ q ∈ S, eulerZeta_exp_s_log_p_sub_one q.1 σ t ≠ 0 := by
+      intro q hq
+      exact hS_ne q (Finset.mem_insert_of_mem hq)
+    have hprod_ne :
+        eulerZetaFactorVerticalExpFinite (S := S) σ t ≠ 0 := by
+      exact eulerZetaFactorVerticalExpFinite_ne_zero_of_ne
+        (S := S) (σ := σ) (t := t) hS_ne'
+    have hmul :
+      (fun u : ℝ => eulerZetaFactorVerticalExpFinite (S := insert p S) σ u) =
+      (fun u : ℝ => eulerZetaFactorVerticalExp p.1 σ u *
+        eulerZetaFactorVerticalExpFinite (S := S) σ u) := by
+      funext u
+      simp [eulerZetaFactorVerticalExpFinite, hp]
+    rw [hmul]
+    have hd_p :
+        DifferentiableAt ℝ (fun u : ℝ => eulerZetaFactorVerticalExp p.1 σ u) t :=
+      differentiableAt_eulerZetaFactorVerticalExp_of_ne (p := p.1) (σ := σ) (t := t) hp_ne
+    have hd_S :
+        DifferentiableAt ℝ (fun u : ℝ => eulerZetaFactorVerticalExpFinite (S := S) σ u) t := by
+      exact differentiableAt_eulerZetaFactorVerticalExpFinite_of_ne
+        (S := S) (σ := σ) (t := t) hS_ne'
+    have hp_factor_ne :
+        eulerZetaFactorVerticalExp p.1 σ t ≠ 0 :=
+      eulerZetaFactorVerticalExp_ne_zero (p := p.1) (σ := σ) (t := t) hp_ne
+    have hstep_mul :
+        DkMath.RH.phaseVel
+          (fun u : ℝ =>
+            eulerZetaFactorVerticalExp p.1 σ u *
+              eulerZetaFactorVerticalExpFinite (S := S) σ u) t
+          =
+        eulerZetaFactorPhaseVelLocal p.1 σ t +
+          DkMath.RH.phaseVel (fun u : ℝ => eulerZetaFactorVerticalExpFinite (S := S) σ u) t := by
+      simpa [eulerZetaFactorPhaseVelLocal] using
+        (DkMath.RH.phaseVel_mul
+          (f := fun u : ℝ => eulerZetaFactorVerticalExp p.1 σ u)
+          (g := fun u : ℝ => eulerZetaFactorVerticalExpFinite (S := S) σ u)
+          (t := t) hd_p hd_S hp_factor_ne hprod_ne)
+    calc
+      DkMath.RH.phaseVel
+          (fun u : ℝ =>
+            eulerZetaFactorVerticalExp p.1 σ u *
+              eulerZetaFactorVerticalExpFinite (S := S) σ u) t
+          = eulerZetaFactorPhaseVelLocal p.1 σ t +
+              DkMath.RH.phaseVel (fun u : ℝ => eulerZetaFactorVerticalExpFinite (S := S) σ u) t :=
+            hstep_mul
+      _ = eulerZetaFactorPhaseVelLocal p.1 σ t +
+            eulerZetaFactorPhaseVelFinite (S := S) σ t := by
+              rw [ih hS_ne']
+      _ = eulerZetaFactorPhaseVelFinite (S := insert p S) σ t := by
+            symm
+            simp [eulerZetaFactorPhaseVelFinite, hp]
+
+-- ============================================================================
+-- 16. RH-E2: eulerZetaFinite 本体への接続
+-- ============================================================================
+
+/-- 素数 `p` では `eulerZetaFactor (vertical σ t)` は exp 形表示に一致する。 -/
+lemma eulerZetaFactor_onVertical_eq_factorVerticalExp
+    (p : {p // Nat.Prime p}) (σ t : ℝ) :
+    eulerZetaFactor p.1 (vertical σ t) = eulerZetaFactorVerticalExp p.1 σ t := by
+  have hp0 : (p.1 : ℂ) ≠ 0 := by
+    exact_mod_cast (Nat.Prime.ne_zero p.2)
+  rw [eulerZetaFactor, eulerZetaFactorVerticalExp, eulerZeta_exp_s_log_p_sub_one]
+  rw [Complex.cpow_def_of_ne_zero hp0]
+  rw [Complex.natCast_log]
+  simp [mul_comm]
+
+/-- 有限 Euler 積の縦線版は exp 形因子の有限積に一致する。 -/
+lemma eulerZetaFinite_onVertical_eq_factorVerticalExpFinite
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ) :
+    eulerZetaFinite_onVertical S σ t = eulerZetaFactorVerticalExpFinite (S := S) σ t := by
+  unfold eulerZetaFinite_onVertical eulerZetaFinite eulerZetaFactorVerticalExpFinite
+  refine Finset.prod_congr rfl ?_
+  intro p hp
+  exact eulerZetaFactor_onVertical_eq_factorVerticalExp (p := p) (σ := σ) (t := t)
+
+/--
+`eulerZetaFinite_onVertical` の位相速度は、exp 形局所寄与の有限和へ落ちる。
+-/
+lemma phaseVel_eulerZetaFinite_onVertical_eq_factor_sum
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne :
+      ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.phaseVel (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t =
+      eulerZetaFactorPhaseVelFinite (S := S) σ t := by
+  have hfun :
+      (fun u : ℝ => eulerZetaFinite_onVertical S σ u) =
+      (fun u : ℝ => eulerZetaFactorVerticalExpFinite (S := S) σ u) := by
+    funext u
+    exact eulerZetaFinite_onVertical_eq_factorVerticalExpFinite (S := S) (σ := σ) (t := u)
+  rw [hfun]
+  exact phaseVel_eulerZetaFactorVerticalExpFinite_eq_sum (S := S) (σ := σ) (t := t) hS_ne
+
+/-- `w_p(t) ≠ 0` が各素数で成り立てば、有限 Euler 積本体も `t` で非零。 -/
+lemma eulerZetaFinite_onVertical_ne_zero_of_ne
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    eulerZetaFinite_onVertical S σ t ≠ 0 := by
+  rw [eulerZetaFinite_onVertical_eq_factorVerticalExpFinite (S := S) (σ := σ) (t := t)]
+  exact eulerZetaFactorVerticalExpFinite_ne_zero_of_ne
+    (S := S) (σ := σ) (t := t) hS_ne
+
+/--
+`eulerZetaFinite_onVertical` に対する停留同値。
+
+`S` 内の全素数で `w_p(t) ≠ 0` の下、
+`driftFreeAt` は `eulerZetaFactorPhaseVelFinite = 0` と同値。
+-/
+lemma driftFreeAt_eulerZetaFinite_onVertical_iff_factor_sum_eq_zero
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.driftFreeAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ↔
+      eulerZetaFactorPhaseVelFinite (S := S) σ t = 0 := by
+  have hz :
+      eulerZetaFinite_onVertical S σ t ≠ 0 :=
+    eulerZetaFinite_onVertical_ne_zero_of_ne (S := S) (σ := σ) (t := t) hS_ne
+  have hphase :
+      DkMath.RH.phaseVel (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t =
+        eulerZetaFactorPhaseVelFinite (S := S) σ t :=
+    phaseVel_eulerZetaFinite_onVertical_eq_factor_sum (S := S) (σ := σ) (t := t) hS_ne
+  simpa [hphase] using
+    (DkMath.RH.driftFreeAt_iff_phaseVel_eq_zero
+      (f := fun u : ℝ => eulerZetaFinite_onVertical S σ u) (t := t) hz)
+
+/--
+`eulerZetaFinite_onVertical` の停留条件は有限局所寄与和の零化と同値。
+-/
+lemma stationaryAt_eulerZetaFinite_onVertical_iff_factor_sum_eq_zero
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.stationaryAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ↔
+      eulerZetaFactorPhaseVelFinite (S := S) σ t = 0 := by
+  have hz :
+      eulerZetaFinite_onVertical S σ t ≠ 0 :=
+    eulerZetaFinite_onVertical_ne_zero_of_ne (S := S) (σ := σ) (t := t) hS_ne
+  have hsd :
+      DkMath.RH.stationaryAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ↔
+        DkMath.RH.driftFreeAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t := by
+    symm
+    exact DkMath.RH.driftFreeAt_iff_stationaryAt
+      (f := fun u : ℝ => eulerZetaFinite_onVertical S σ u) (t := t) hz
+  exact hsd.trans
+    (driftFreeAt_eulerZetaFinite_onVertical_iff_factor_sum_eq_zero
+      (S := S) (σ := σ) (t := t) hS_ne)
+
+/--
+`eulerZetaFinite_onVertical` の非退化停留条件。
+
+停留（有限局所寄与和の零化）と位相曲率非零の組へ分解される。
+-/
+lemma nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.nondegenerateStationaryAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t
+      ↔
+      eulerZetaFactorPhaseVelFinite (S := S) σ t = 0 ∧
+        DkMath.RH.phaseCurv (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ≠ 0 := by
+  have hz :
+      eulerZetaFinite_onVertical S σ t ≠ 0 :=
+    eulerZetaFinite_onVertical_ne_zero_of_ne (S := S) (σ := σ) (t := t) hS_ne
+  have hnd :
+      DkMath.RH.nondegenerateStationaryAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ↔
+        DkMath.RH.driftFreeAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ∧
+          DkMath.RH.phaseCurv (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ≠ 0 :=
+    DkMath.RH.nondegenerateStationaryAt_iff_driftFreeAt_and_phaseCurv_ne_zero
+      (f := fun u : ℝ => eulerZetaFinite_onVertical S σ u) (t := t) hz
+  constructor
+  · intro h
+    rcases hnd.mp h with ⟨hdrift, hcurv⟩
+    exact ⟨(driftFreeAt_eulerZetaFinite_onVertical_iff_factor_sum_eq_zero
+      (S := S) (σ := σ) (t := t) hS_ne).mp hdrift, hcurv⟩
+  · intro h
+    rcases h with ⟨hsum0, hcurv⟩
+    exact hnd.mpr ⟨(driftFreeAt_eulerZetaFinite_onVertical_iff_factor_sum_eq_zero
+      (S := S) (σ := σ) (t := t) hS_ne).mpr hsum0, hcurv⟩
+
+/--
+`eulerZetaFactorPhaseVelFinite` の明示式。
+
+`S` 内で `w_p(t) ≠ 0` なら
+`∑ phaseVel(factor_p) = ∑ (log p - phaseVel(w_p))`。
+-/
+lemma eulerZetaFactorPhaseVelFinite_eq_sum_log_sub_phaseVelLocal
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    eulerZetaFactorPhaseVelFinite (S := S) σ t
+      =
+      ∑ p ∈ S, (Real.log (p.1 : ℝ) - eulerZetaPhaseVelLocal p.1 σ t) := by
+  unfold eulerZetaFactorPhaseVelFinite
+  refine Finset.sum_congr rfl ?_
+  intro p hp
+  exact phaseVel_eulerZetaFactorVerticalExp_eq_log_sub_phaseVelLocal
+    (p := p.1) (σ := σ) (t := t) (hS_ne p hp)
+
+/--
+`eulerZetaFinite_onVertical` のドリフト消失条件（明示和版）。
+
+`S` 内で `w_p(t) ≠ 0` なら、
+`driftFreeAt` は `∑_{p∈S} (log p - phaseVel(w_p)) = 0` と同値。
+-/
+lemma driftFreeAt_eulerZetaFinite_onVertical_iff_sum_log_sub_phaseVelLocal_eq_zero
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.driftFreeAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ↔
+      (∑ p ∈ S, (Real.log (p.1 : ℝ) - eulerZetaPhaseVelLocal p.1 σ t)) = 0 := by
+  rw [← eulerZetaFactorPhaseVelFinite_eq_sum_log_sub_phaseVelLocal
+    (S := S) (σ := σ) (t := t) hS_ne]
+  exact driftFreeAt_eulerZetaFinite_onVertical_iff_factor_sum_eq_zero
+    (S := S) (σ := σ) (t := t) hS_ne
+
+/--
+`eulerZetaFinite_onVertical` の停留条件（明示和版）。
+
+`S` 内で `w_p(t) ≠ 0` なら、
+`stationaryAt` は `∑_{p∈S} (log p - phaseVel(w_p)) = 0` と同値。
+-/
+lemma stationaryAt_eulerZetaFinite_onVertical_iff_sum_log_sub_phaseVelLocal_eq_zero
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.stationaryAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ↔
+      (∑ p ∈ S, (Real.log (p.1 : ℝ) - eulerZetaPhaseVelLocal p.1 σ t)) = 0 := by
+  rw [← eulerZetaFactorPhaseVelFinite_eq_sum_log_sub_phaseVelLocal
+    (S := S) (σ := σ) (t := t) hS_ne]
+  exact stationaryAt_eulerZetaFinite_onVertical_iff_factor_sum_eq_zero
+    (S := S) (σ := σ) (t := t) hS_ne
+
+/--
+`eulerZetaFinite_onVertical` の非退化停留条件（明示和版）。
+
+`S` 内で `w_p(t) ≠ 0` なら、
+`nondegenerateStationaryAt` は
+`(∑_{p∈S}(log p - phaseVel(w_p)) = 0) ∧ phaseCurv ≠ 0` と同値。
+-/
+lemma nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff_sum_log_sub_phaseVelLocal
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.nondegenerateStationaryAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t
+      ↔
+      (∑ p ∈ S, (Real.log (p.1 : ℝ) - eulerZetaPhaseVelLocal p.1 σ t)) = 0 ∧
+        DkMath.RH.phaseCurv (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ≠ 0 := by
+  rw [← eulerZetaFactorPhaseVelFinite_eq_sum_log_sub_phaseVelLocal
+    (S := S) (σ := σ) (t := t) hS_ne]
+  exact nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff
+    (S := S) (σ := σ) (t := t) hS_ne
+
+-- ============================================================================
+-- 17. RH-H1: CFBRC 連携向け HOPC 公開インタフェース
+-- ============================================================================
+
+/-- HOPC 局所寄与は `log p - phaseVel(w_p)` に一致する。 -/
+@[simp] lemma hopcPrimeLocalContribution_eq_log_sub_phaseVelLocal
+    (p : ℕ) (σ t : ℝ) :
+    hopcPrimeLocalContribution p σ t =
+      Real.log (p : ℝ) - eulerZetaPhaseVelLocal p σ t := by
+  rfl
+
+/-- HOPC 寄与総和は `∑ (log p - phaseVel(w_p))` の別名。 -/
+@[simp] lemma hopcPrimeContributionSum_eq_sum_log_sub_phaseVelLocal
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ) :
+    hopcPrimeContributionSum (S := S) σ t =
+      ∑ p ∈ S, (Real.log (p.1 : ℝ) - eulerZetaPhaseVelLocal p.1 σ t) := by
+  unfold hopcPrimeContributionSum hopcPrimeLocalContribution
+  rfl
+
+/--
+HOPC 寄与総和と `eulerZetaFactorPhaseVelFinite` の同一化。
+-/
+lemma eulerZetaFactorPhaseVelFinite_eq_hopcPrimeContributionSum
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    eulerZetaFactorPhaseVelFinite (S := S) σ t =
+      hopcPrimeContributionSum (S := S) σ t := by
+  rw [eulerZetaFactorPhaseVelFinite_eq_sum_log_sub_phaseVelLocal
+    (S := S) (σ := σ) (t := t) hS_ne]
+  simp
+
+/--
+`eulerZetaFinite_onVertical` のドリフト消失は HOPC 寄与総和 0 と同値。
+-/
+lemma driftFreeAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.driftFreeAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ↔
+      hopcPrimeContributionSum (S := S) σ t = 0 := by
+  rw [hopcPrimeContributionSum_eq_sum_log_sub_phaseVelLocal]
+  exact driftFreeAt_eulerZetaFinite_onVertical_iff_sum_log_sub_phaseVelLocal_eq_zero
+    (S := S) (σ := σ) (t := t) hS_ne
+
+/--
+`eulerZetaFinite_onVertical` の停留は HOPC 寄与総和 0 と同値。
+-/
+lemma stationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.stationaryAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ↔
+      hopcPrimeContributionSum (S := S) σ t = 0 := by
+  rw [hopcPrimeContributionSum_eq_sum_log_sub_phaseVelLocal]
+  exact stationaryAt_eulerZetaFinite_onVertical_iff_sum_log_sub_phaseVelLocal_eq_zero
+    (S := S) (σ := σ) (t := t) hS_ne
+
+/--
+`eulerZetaFinite_onVertical` の非退化停留は
+`hopcPrimeContributionSum = 0 ∧ phaseCurv ≠ 0` と同値。
+-/
+lemma nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum
+    (S : Finset {p // Nat.Prime p}) (σ t : ℝ)
+    (hS_ne : ∀ p ∈ S, eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    DkMath.RH.nondegenerateStationaryAt (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t
+      ↔
+      hopcPrimeContributionSum (S := S) σ t = 0 ∧
+        DkMath.RH.phaseCurv (fun u : ℝ => eulerZetaFinite_onVertical S σ u) t ≠ 0 := by
+  rw [hopcPrimeContributionSum_eq_sum_log_sub_phaseVelLocal]
+  exact nondegenerateStationaryAt_eulerZetaFinite_onVertical_iff_sum_log_sub_phaseVelLocal
+    (S := S) (σ := σ) (t := t) hS_ne
+
+/-- singleton 集合での `w_p ≠ 0` 前提供給 wrapper。 -/
+lemma eulerZeta_exp_s_log_p_sub_one_ne_zero_on_singleton
+    (p : {q // Nat.Prime q}) (σ t : ℝ)
+    (hp_ne : eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0) :
+    ∀ r ∈ ({p} : Finset {q // Nat.Prime q}),
+      eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 := by
+  intro r hr
+  have hrp : r = p := Finset.mem_singleton.mp hr
+  simpa [hrp] using hp_ne
+
+/-- singleton 集合では HOPC 寄与総和は局所寄与に簡約される。 -/
+@[simp] lemma hopcPrimeContributionSum_singleton
+    (p : {q // Nat.Prime q}) (σ t : ℝ) :
+    hopcPrimeContributionSum (S := ({p} : Finset {q // Nat.Prime q})) σ t =
+      hopcPrimeLocalContribution p.1 σ t := by
+  simp [hopcPrimeContributionSum]
+
+/--
+singleton 観測器版の停留判定 wrapper（local 寄与ゼロ仮定）。
+
+`w_p(σ,t) ≠ 0` と `hopcPrimeLocalContribution p σ t = 0` から
+`stationaryAt` を得る。
+-/
+lemma stationaryAt_eulerZetaFinite_onVertical_singleton_of_hopcPrimeLocalContribution_eq_zero
+    (p : {q // Nat.Prime q}) (σ t : ℝ)
+    (hp_ne : eulerZeta_exp_s_log_p_sub_one p.1 σ t ≠ 0)
+    (hlocal0 : hopcPrimeLocalContribution p.1 σ t = 0) :
+    DkMath.RH.stationaryAt
+      (fun v : ℝ => eulerZetaFinite_onVertical ({p} : Finset {q // Nat.Prime q}) σ v) t := by
+  have hS_ne :
+      ∀ r ∈ ({p} : Finset {q // Nat.Prime q}),
+        eulerZeta_exp_s_log_p_sub_one r.1 σ t ≠ 0 :=
+    eulerZeta_exp_s_log_p_sub_one_ne_zero_on_singleton (p := p) (σ := σ) (t := t) hp_ne
+  exact
+    (stationaryAt_eulerZetaFinite_onVertical_iff_hopcPrimeContributionSum_eq_zero
+      (S := ({p} : Finset {q // Nat.Prime q})) (σ := σ) (t := t) hS_ne).2
+      (by simpa using hlocal0)
 
 end DkMath.RH.EulerZeta
