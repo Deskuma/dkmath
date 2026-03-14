@@ -5,5 +5,6 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMathlib.Basic
+import DkMathTest.KUS
 
 #print "file: DkMathTest"
