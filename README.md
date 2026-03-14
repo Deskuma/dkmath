@@ -1,6 +1,17 @@
 # Project D.K. math
 
-The result of "D." and Wise Wolf's experiment with new mathematical theories.
+The result of "D." and Wise Wolf's (GPT) experiment with new mathematical theories.
+
+「D」と🐺賢狼(GPT)による新しい数学理論の実験結果。
+
+> [!IMPORTANT]
+> The main branch may be slow to reflect updates. The latest development is primarily on the **nightly branch**.
+>
+> The latest state is here:
+> [https://github.com/Deskuma/dkmath/tree/nightly](https://github.com/Deskuma/dkmath/tree/nightly)
+>
+> Please check the following before working:
+> `git checkout nightly`
 
 > [!IMPORTANT]
 > main ブランチは更新反映が遅れる場合があります。最新の開発は **nightly ブランチ主体** です。
@@ -12,6 +23,12 @@ The result of "D." and Wise Wolf's experiment with new mathematical theories.
 > `git checkout nightly`
 
 ## Index
+
+※当プロジェクトは「日本語」が主なコミュニケーション言語ですが、README は英語と日本語の両方で書いています。内容は同一ですが、英語版と日本語版が混在していることにご注意ください。
+
+*While Japanese is the primary communication language for this project, the README is written in both English and Japanese. The content is identical, but please note that the English and Japanese versions coexist.
+
+(Therefore, automatic translation may not function correctly in some cases.)
 
 ### Lean
 
@@ -317,7 +334,9 @@ Contributions are welcome! Please read the [CONTRIBUTING.md](./CONTRIBUTING.md) 
 
 ## Contact
 
-For questions or suggestions, please open an issue in this repository or start a discussion (if available).
+If you have any inquiries, questions, or suggestions regarding this project, please create an issue in this repository, submit a pull request, or start a discussion (if available).
+
+このプロジェクトに関してご質問、ご不明な点、ご提案などがございましたら、このリポジトリにイシューを作成するか、プルリクエストを送信するか、または（利用可能な場合は）ディスカッションを開始してください。
 
 ## Acknowledgements
 
