@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-13: KUS 乗法（kusMul）の実装
+status: 作業中 - phase-14: 係数型の一般化（GKUS / Nat→Int→Rat）
 
 ## 課題
 
@@ -22,6 +22,11 @@ status: 作業中 - phase-13: KUS 乗法（kusMul）の実装
 - [x] 零追跡性補題を実装する（係数が零になっても support を保持）
 - [x] 同一 support 上の KUS 乗法（`kusMul`）を定義する
 - [x] 乗法の零追跡性補題を実装する（係数が零になっても support を保持）
+- [x] `lake test` 環境を `DkMathTest` として整備する
+- [x] KUS 回帰テスト（`DkMathTest/KUS.lean`）を追加する
+- [ ] 係数型を一般化した `GKUS C U Blueprint` を設計・実装する
+- [ ] `Nat` 係数をデフォルトとして既存 `KUS` との互換性を保つ
+- [ ] `Int` 係数上での加算・乗法を最小実装する
 
 ## 状況タスク
 
@@ -46,15 +51,22 @@ status: 作業中 - phase-13: KUS 乗法（kusMul）の実装
   - [x] 単位元・交換則・結合則（toNat レベル）が補題として固定されている
   - [x] `DkMath/KUS/Mul.lean` が `kusMul` と `oneState` を提供する
   - [x] 乗法の零追跡性（`kusMul.zero_tracking`）が補題として固定されている
+  - [x] `lakefile.toml` に `testDriver = "DkMathTest"` を追加した
+  - [x] `DkMathTest/KUS.lean` に kusAdd / kusMul の回帰テストがある
+  - [ ] `DkMath/KUS/docs/KUS-CoeffDesign.md` に係数拡張の設計がある
+  - [ ] `DkMath/KUS/Coeff.lean` が `GKUS` を提供する
+  - [ ] `Int` 係数の最小テストが `DkMathTest/KUS.lean` にある
 
 ## 計画
 
 - 直近の主戦場:
-  - phase-14 の方向決め（係数拡張: Nat→Int/Rat）
+  - phase-14: 係数型一般化（`GKUS C U Blueprint`）
 - 直近の設計候補:
+  - `GKUS` は `C : Type*` でパラメータ化し、`CommSemiring C` を要求する
+  - 既存 `KUS` は `GKUS Nat` の型エイリアスとして互換性を保つ
+  - 減法は `C = Int` 以上のときのみ意味を持つ（`Ab` 群制約で導入）
+  - 乗法は CommSemiring の範囲で自然に使える
   - alias 適用は `Examples` を境界とし、コア理論は従来名を維持する
-  - 減法は係数拡張（Int 以上）後に「逆操作として加法を戻す」定義で整合させる
-  - 乗法層は完了したので、次は `Coeff` 一般化の下準備を docs 先行で行う
   - subtype 版の試作は本流へ入れず docs 先行で設計比較する
   - 例示モジュールを肥大化させず、証明用の最小例に限定する
 - 非目標（phase-01 ではやらない）:
@@ -388,3 +400,17 @@ status: 作業中 - phase-13: KUS 乗法（kusMul）の実装
   3. `zero_tracking` の `hz` は `_` に変更し、support 保持が無条件であることを明確にした
 - 次の予定:
   - phase-13 で減法または乗法の最小実装へ進む
+
+### 2026-03-14 phase-14 GKUS テスト修復（`lake test` 復旧）
+
+- 対象:
+  - `lean/dk_math/DkMathTest/KUS.lean`
+- 内容:
+  1. `DkMathTest.GKUS` 節を全面整理し、重複と構文崩れを除去した
+  2. `GSameSupport` 証明を `hN` / `hI` として共通化し、`gOp` / `gAdd` / `gMul` / `gSub` テストで再利用した
+  3. `extract_g` と係数一致の回帰テストを最小構成で復元した
+  4. `lake build DkMathTest.KUS` でエラー解消を確認した（warning のみ）
+  5. `./lean-test.sh` で `build succeeded` を確認した
+- 次の予定:
+  - `DkMathTest/KUS.lean` の unused simp warning を段階的に整理する
+  - `GKUS` の `Int` / `Rat` 拡張テストを phase-14 後半で追加する

@@ -176,3 +176,11 @@
 
 - `lean-build.sh` で `./lean-build.sh DkMath.KUS` の成功を確認した。
 - 乗法の交換則・結合則は `omega` 依存から `Nat.mul_comm` / `Nat.mul_assoc` ベースへ整理し、安定化した。
+
+### 2026-03-14 / Work Unit 27. phase-14 GKUS テスト修復と `lake test` 復旧
+
+- `DkMathTest/KUS.lean` の `DkMathTest.GKUS` 節を再編し、壊れた重複・構文崩れを解消した。
+- `GSameSupport` の inline `by simp` を各 `example` で直接書く形をやめ、共通補題 `hN` / `hI` を導入して証明を安定化した。
+- `gOp` / `gAdd` / `gMul` / `gSub` の係数テストと `extract_g` テストを、共通 support 証明を使う最小形へ整理した。
+- `lake build DkMathTest.KUS` を実行し、エラー解消を確認した（unused simp argument の warning のみ）。
+- `./lean-test.sh` を実行し、`build succeeded` を確認した。
