@@ -188,6 +188,7 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 
 - ABC 予想系入口: [DkMath/ABC.lean](./lean/dk_math/DkMath/ABC.lean)
 - RH 系入口: [DkMath/RH.lean](./lean/dk_math/DkMath/RH.lean)
+- RH CFBRC 接続: [DkMath/RH/CFBRCBridge.lean](./lean/dk_math/DkMath/RH/CFBRCBridge.lean)
 - KUS 系入口: [DkMath/KUS.lean](./lean/dk_math/DkMath/KUS.lean)
 - CFBRC Lean 入口: [DkMath/CFBRC.lean](./lean/dk_math/DkMath/CFBRC.lean)
 - Silver Ratio 入口: [DkMath/SilverRatio.lean](./lean/dk_math/DkMath/SilverRatio.lean)
@@ -218,6 +219,33 @@ $$
 宇宙式の一般化 $G(x,w;d)=(x+w)^d - w^d$ の複素化 $w=i\theta$ に伴う代数構造と位相挙動を解析する Python モジュール。
 
 詳細は [python/CFBRC/README.md](./python/CFBRC/README.md) を参照。
+
+### CFBRC × GN × RH Bridge
+
+— CFBRC から RH 観測器への接続層 —
+
+CFBRC では、差冪
+
+$$
+(x+u)^d-u^d
+$$
+
+を円分的 core（`cyclotomicPrimeCore`）で扱い、`GN`（`DkMath.NumberTheory.Gcd.GN`）との同一化・除法判定・`padicValNat` 評価・原始素因子存在を橋渡しする API を整備しています。
+
+さらに `DkMath.RH.CFBRCBridge` では、CFBRC 側で得た primitive-prime existence を RH 側の
+
+- `hopcPrimeContributionSum`
+- `stationaryAt` / `nondegenerateStationaryAt`
+
+へ接続し、有限観測器での停留点存在判定へ渡す流れを提供します。
+
+関連入口:
+
+- CFBRC 実装ガイド: [DkMath/CFBRC/README.md](./lean/dk_math/DkMath/CFBRC/README.md)
+- CFBRC bridge 実装: [DkMath/CFBRC/Bridge.lean](./lean/dk_math/DkMath/CFBRC/Bridge.lean)
+- GN（数論 bridge 核）: [DkMath/NumberTheory/Gcd/GN.lean](./lean/dk_math/DkMath/NumberTheory/Gcd/GN.lean)
+- RH bridge 実装: [DkMath/RH/CFBRCBridge.lean](./lean/dk_math/DkMath/RH/CFBRCBridge.lean)
+- RH 統合 README: [DkMath/RH/README.md](./lean/dk_math/DkMath/RH/README.md)
 
 ### Collatz Cartography
 
