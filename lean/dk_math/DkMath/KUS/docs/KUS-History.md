@@ -133,3 +133,14 @@
 
 - `lean-build.sh` で `./lean-build.sh DkMath.KUS` と `./lean-build.sh DkMath` の成功を確認した。
 - phase-09 の変更は可読性改善のみで、理論挙動に変更がないことを確認した。
+
+### 2026-03-14 / Work Unit 20. phase-10 alias ポリシー固定
+
+- `KUS-AliasPolicy.md` を追加し、alias の標準適用範囲を `Examples` 層までと固定した。
+- `KUS-ScaleSpec.md` に phase-10 方針を追記し、コア理論の正準名維持を明文化した。
+- `KUS-WorkNotes.md` を phase-10 状態へ更新し、次作業を phase-11（命名規則ガイド）に設定した。
+
+### 2026-03-14 / Work Unit 21. phase-10 docs 更新後の確認ビルド
+
+- `lean-build.sh` で `./lean-build.sh DkMath.KUS` を実行し、build succeeded を確認した。
+- phase-10 は docs 中心の変更であり、実装挙動を変えずに運用ポリシーのみ固定できたことを確認した。

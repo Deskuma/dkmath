@@ -1,4 +1,4 @@
-# KUS Scale Specification (phase-09)
+# KUS Scale Specification (phase-10)
 
 この文書は、`Scale.lean` で導入した最小の unit transport 仕様を要約する。
 
@@ -65,6 +65,12 @@ $$
 
 この結果、長い修飾名を減らしつつ、理論内容は変えずに可読性だけ改善できることを確認した。
 
+## 運用方針（phase-10）
+
+- alias の標準適用範囲は `Examples.lean` までとする。
+- コア理論層は既存の `ScaleSpec.*` 名を正準参照として維持する。
+- 詳細は `KUS-AliasPolicy.md` に分離した。
+
 これにより、「観測側の係数保持」と「構造保持側の transport」を分離したまま扱える。
 
 ## 範囲外
@@ -75,5 +81,5 @@ $$
 
 ## 次作業の候補
 
-1. alias 適用をどこまで広げるか（Examples のみに留めるか）を判断する
+1. alias 命名規則の簡易ガイドを追加する
 2. subtype fiber を再導入する場合の移行手順を docs へ切り出す

@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-09: alias adoption decision
+status: 作業中 - phase-10: alias policy fixation
 
 ## 課題
 
@@ -16,10 +16,11 @@ status: 作業中 - phase-09: alias adoption decision
 - [x] phase-05 補題の利用例を `Examples.lean` に追加する
 - [x] `Scale` API の非破壊命名整理を行う
 - [x] alias 補題の `Examples` 反映範囲を判断する
+- [x] alias 標準適用範囲を文書として固定する
 
 ## 状況タスク
 
-- 完了条件（phase-09）
+- 完了条件（phase-10）
   - [x] `DkMath/KUS/Unit.lean` が `US` を提供する
   - [x] `DkMath/KUS/Core.lean` が `KUS`, `mkWith`, `zeroState` を提供する
   - [x] `DkMath/KUS/NatEmbed.lean` が `ofNat`, `toNat` を提供する
@@ -33,13 +34,15 @@ status: 作業中 - phase-09: alias adoption decision
   - [x] `DkMath/KUS/Examples.lean` に phase-05 補題の利用例がある
   - [x] `DkMath/KUS/Scale.lean` に alias API が追加されている
   - [x] `DkMath/KUS/Examples.lean` が alias 補題を利用している
+  - [x] `DkMath/KUS/docs/KUS-AliasPolicy.md` に運用方針がある
 
 ## 計画
 
 - 直近の主戦場:
-  - phase-10 の方向決め（alias 適用の拡張有無）
+  - phase-11 の方向決め（alias 命名規則の簡易化）
 - 直近の設計候補:
   - alias 適用は `Examples` を境界とし、コア理論は従来名を維持する
+  - alias 命名規則は短い docs で固定し、将来追加時の揺れを防ぐ
   - subtype 版の試作は本流へ入れず docs 先行で設計比較する
   - 例示モジュールを肥大化させず、証明用の最小例に限定する
 - 非目標（phase-01 ではやらない）:
@@ -60,6 +63,7 @@ status: 作業中 - phase-09: alias adoption decision
 - phase-07 では `Examples.lean` に phase-05 補題の利用例を追加し、定義済み整合補題の実用性を確認した。
 - phase-08 では `Scale.lean` に非破壊 alias API を追加し、長い修飾名なしでも同じ理論を参照できるようにした。
 - phase-09 では alias API を `Examples.lean` へ適用し、可読性改善が実利用で有効かを確認した。
+- phase-10 では alias 運用範囲を docs へ固定し、適用境界を `Examples` 層までと明文化した。
 
 ## 作業ログ
 
@@ -277,7 +281,26 @@ status: 作業中 - phase-09: alias adoption decision
   3. alias 適用は「利用例層でのみ採用」が妥当という結論にした
 - 次の予定:
   - phase-10 で alias 適用の拡張有無を判断する
-  1. root `DkMath` でも build succeeded を確認
-  2. phase-08 途中で alias 実装の推論問題が出たため、補題 alias のみに絞って安定化した
+
+### 2026-03-14 phase-10 alias ポリシー固定（docs）
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/docs/KUS-AliasPolicy.md`
+  - `lean/dk_math/DkMath/KUS/docs/KUS-ScaleSpec.md`
+  - `lean/dk_math/DkMath/KUS/docs/KUS-WorkNotes.md`
+- 内容:
+  1. alias の標準適用範囲を `Examples` 層までに固定した
+  2. コア理論では `ScaleSpec.*` 名を正準参照として維持する方針を明文化した
+  3. alias 追加時の運用ルール（追加は許可、置換強制なし）を定義した
 - 次の予定:
-  - phase-09 で alias 適用範囲を判断し、必要なら Examples 側の呼び出しを整理する
+  - phase-11 で alias 命名規則の簡易ガイドを追加する
+
+### 2026-03-14 phase-10 確認ビルド（lean-build.sh）
+
+- 対象:
+  - `cd lean/dk_math && ./lean-build.sh DkMath.KUS`
+- 内容:
+  1. docs 更新後も `DkMath.KUS` は build succeeded を確認
+  2. 理論実装を変更せず、運用方針のみ固定できたことを確認
+- 次の予定:
+  - phase-11 で alias 命名規則の簡易ガイドを追加する
