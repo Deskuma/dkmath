@@ -177,6 +177,17 @@
 - `lean-build.sh` で `./lean-build.sh DkMath.KUS` の成功を確認した。
 - 乗法の交換則・結合則は `omega` 依存から `Nat.mul_comm` / `Nat.mul_assoc` ベースへ整理し、安定化した。
 
+### 2026-03-14 / Work Unit 30. phase-16 CommSemiring 補題の整備
+
+- `DkMath/KUS/Coeff.lean` に `section Algebra` を追加し、GKUS レベルの代数法則群を実装した。
+- 追加証明: `gAdd_comm`(`[AddCommMonoid C]`)、`gAdd_assoc`(`[AddSemigroup C]`)、
+  `gMul_comm`(`[CommMonoid C]`)、`gMul_assoc`(`[Semigroup C]`)、
+  `gMul_gAdd`/`gAdd_gMul`(`[Distrib C]`) の 6 本。
+- 証明方式: comm 系は `simp only + rw`、assoc/distrib 系は `GKUS.ext` に分解して `simp [gOp, …]` で安定化した。
+- `DkMathTest/KUS.lean` に `namespace DkMathTest.GKUSAlgebra` を追加し、
+  `grA`(`1/2`)・`grB`(`1/3`)・`grC`(`1/4`) の Rat 3 値を使った交換・結合・分配則テスト 6 本を追加した。
+- `tl` で `build succeeded` を確認した（warning/error なし）。
+
 ### 2026-03-14 / Work Unit 29. phase-15 gDiv の実装と Rat 除算テスト
 
 - `DkMath/KUS/Coeff.lean` に `gDiv`（`[Div C]` 制約の除算）を追加した。

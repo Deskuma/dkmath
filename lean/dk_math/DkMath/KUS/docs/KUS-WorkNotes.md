@@ -431,6 +431,20 @@ status: 作業中 - phase-14: 係数型の一般化（GKUS / Nat→Int→Rat）
 - 次の予定:
   - phase-16: `CommSemiring` 補題の整備（`gAdd`/`gMul` の代数法則を `GKUS` レベルで固定）
 
+### 2026-03-14 phase-16 CommSemiring 補題の実装
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Coeff.lean`
+  - `lean/dk_math/DkMathTest/KUS.lean`
+- 内容:
+  1. `Coeff.lean` に `section Algebra` を追加し 6 本の代数法則を実装
+  2. comm 系: `simp only [gOp]` + `rw [add_comm/mul_comm, h']` パターン
+  3. assoc/distrib 系: `GKUS.ext` に分解して各フィールドを `simp [gOp, …]` で閉じる
+  4. `DkMathTest/KUS.lean` に `DkMathTest.GKUSAlgebra` を新設し Rat 3 値で全法則テスト
+  5. `tl` で `build succeeded` を確認（warning/error なし）
+- 次の予定:
+  - phase-17: 除算を組み込んだときの零追跡保証の強化（`gDiv` と除算向化の関係）
+
 ### 2026-03-14 phase-14 Rat 係数テスト追加
 
 - 対象:
