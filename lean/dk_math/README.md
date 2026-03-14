@@ -10,14 +10,16 @@ presented by D. and Wise Wolf
 - 現在の主軸は **FLT（フェルマーの最終定理）形式化** で、特に `d = 3` 周辺の複数アプローチを整備しています。
 - Collatz・DHNT・宇宙式系は、FLT を支える周辺理論として継続開発中です。
 
+## この README の役割
+
+- このファイルは **Lean 実装の詳細入口**（モジュール一覧・ファイル導線・ビルド情報）を扱います。
+- プロジェクト全体の進捗要約はルート [README.md](../../README.md) を参照してください。
+- FLT 最新進捗の正本は [../../docs/PROJECT_STATUS.md](../../docs/PROJECT_STATUS.md) です。
+
 ## 最新ステータス（2026-03-08）
 
-- FLT `d = 3` の公開 API は `DkMath/FLT/Main.lean` 側で概ね安定
-- StandAlone artifact（`FLT3#StandAlone-NC-v0.lean-v2.lean`）は build 成功・実 placeholder なし
-- 主ボトルネックは一般指数（`n ≥ 5`）側の prime provider 実装
-- 研究段階としては「cubic completion 後の prime-ge5 bridge construction phase」
-
-詳細は [../../docs/PROJECT_STATUS.md](../../docs/PROJECT_STATUS.md) を参照。
+- 要点はルート [README.md](../../README.md) の「最新ステータス（2026-03-08）」に集約しています。
+- 詳細分析は [../../docs/PROJECT_STATUS.md](../../docs/PROJECT_STATUS.md) を参照してください。
 
 ## カテゴリ
 

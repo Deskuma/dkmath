@@ -16,6 +16,12 @@ The result of "D." and Wise Wolf's experiment with new mathematical theories.
 
 詳細は [dk_math/README.md](./lean/dk_math/README.md) を参照。
 
+### README 整理方針
+
+- この `README.md` は **プロジェクト全体の入口**（重点テーマ・全体進捗・横断ドキュメント）を扱う
+- `lean/dk_math/README.md` は **Lean 実装の詳細入口**（モジュール一覧・ビルド導線）を扱う
+- FLT の最新進捗の正本は [docs/PROJECT_STATUS.md](./docs/PROJECT_STATUS.md) とする
+
 ## Project
 
 ### 重点テーマ（Top Priority）
