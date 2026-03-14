@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-10: alias policy fixation
+status: 作業中 - phase-11: alias naming guide
 
 ## 課題
 
@@ -17,10 +17,11 @@ status: 作業中 - phase-10: alias policy fixation
 - [x] `Scale` API の非破壊命名整理を行う
 - [x] alias 補題の `Examples` 反映範囲を判断する
 - [x] alias 標準適用範囲を文書として固定する
+- [x] alias 命名規則ガイドを `KUS-AliasPolicy.md` に追加する
 
 ## 状況タスク
 
-- 完了条件（phase-10）
+- 完了条件（phase-11）
   - [x] `DkMath/KUS/Unit.lean` が `US` を提供する
   - [x] `DkMath/KUS/Core.lean` が `KUS`, `mkWith`, `zeroState` を提供する
   - [x] `DkMath/KUS/NatEmbed.lean` が `ofNat`, `toNat` を提供する
@@ -35,14 +36,14 @@ status: 作業中 - phase-10: alias policy fixation
   - [x] `DkMath/KUS/Scale.lean` に alias API が追加されている
   - [x] `DkMath/KUS/Examples.lean` が alias 補題を利用している
   - [x] `DkMath/KUS/docs/KUS-AliasPolicy.md` に運用方針がある
+  - [x] `DkMath/KUS/docs/KUS-AliasPolicy.md` に命名規則ガイドがある
 
 ## 計画
 
 - 直近の主戦場:
-  - phase-11 の方向決め（alias 命名規則の簡易化）
+  - phase-12 の方向決め（次の実装拡張候補を選択）
 - 直近の設計候補:
   - alias 適用は `Examples` を境界とし、コア理論は従来名を維持する
-  - alias 命名規則は短い docs で固定し、将来追加時の揺れを防ぐ
   - subtype 版の試作は本流へ入れず docs 先行で設計比較する
   - 例示モジュールを肥大化させず、証明用の最小例に限定する
 - 非目標（phase-01 ではやらない）:
@@ -64,6 +65,7 @@ status: 作業中 - phase-10: alias policy fixation
 - phase-08 では `Scale.lean` に非破壊 alias API を追加し、長い修飾名なしでも同じ理論を参照できるようにした。
 - phase-09 では alias API を `Examples.lean` へ適用し、可読性改善が実利用で有効かを確認した。
 - phase-10 では alias 運用範囲を docs へ固定し、適用境界を `Examples` 層までと明文化した。
+- phase-11 では alias 命名規則ガイドを `KUS-AliasPolicy.md` に追記し、将来追加時の揺れを防ぐ基準を確立した。
 
 ## 作業ログ
 
@@ -304,3 +306,22 @@ status: 作業中 - phase-10: alias policy fixation
   2. 理論実装を変更せず、運用方針のみ固定できたことを確認
 - 次の予定:
   - phase-11 で alias 命名規則の簡易ガイドを追加する
+
+### 2026-03-14 phase-11 alias 命名規則ガイドの追加
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/docs/KUS-AliasPolicy.md`
+- 内容:
+  1. 命名規則 5 条（prefix 除去・語順・サフィックス・短縮範囲・1 対 1 対応）を追記
+  2. 正準名 vs alias の対応表を記載
+  3. ユーザーによる `#print "file: ..."` 追加を確認し、ビルドへの影響なしを確認
+
+### 2026-03-14 phase-11 確認ビルド（lean-build.sh）
+
+- 対象:
+  - `cd lean/dk_math && ./lean-build.sh DkMath.KUS`
+- 内容:
+  1. `DkMath.KUS` は build succeeded を確認
+  2. docs のみ変更で理論挙動は無変更であることを確認
+- 次の予定:
+  - phase-12 で次の実装拡張候補を評価・選択する

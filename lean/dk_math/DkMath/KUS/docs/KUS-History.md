@@ -144,3 +144,9 @@
 
 - `lean-build.sh` で `./lean-build.sh DkMath.KUS` を実行し、build succeeded を確認した。
 - phase-10 は docs 中心の変更であり、実装挙動を変えずに運用ポリシーのみ固定できたことを確認した。
+
+### 2026-03-14 / Work Unit 22. phase-11 alias 命名規則ガイド
+
+- `KUS-AliasPolicy.md` に命名規則ガイドを追記した。
+- 規則 5 条（prefix 除去・語順・型サフィックス・短縮範囲・1 対 1 対応）と対応表を明文化した。
+- ユーザーによる `#print "file: ..."` 追加（全 KUS モジュール）を確認し、ビルドへの影響なし（build succeeded）を確認した。
