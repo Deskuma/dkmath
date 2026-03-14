@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.KUS.Monoid
 
+#print "file: DkMath.KUS.Scale"
+
 namespace DkMath.KUS
 
 universe u v u' v'

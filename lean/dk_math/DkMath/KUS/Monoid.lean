@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.KUS.RoundTrip
 
+#print "file: DkMath.KUS.Monoid"
+
 namespace DkMath.KUS
 
 universe u v

@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.KUS.Scale
 
+#print "file: DkMath.KUS.Examples"
+
 namespace DkMath.KUS.Examples
 
 /-- toy unit。phase-04 では自然数 unit を使う。 -/

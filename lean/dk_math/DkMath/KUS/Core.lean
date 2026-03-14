@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.KUS.Blueprint
 
+#print "file: DkMath.KUS.Core"
+
 namespace DkMath.KUS
 
 universe u v

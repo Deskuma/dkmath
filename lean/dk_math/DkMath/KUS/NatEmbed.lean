@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.KUS.Core
 
+#print "file: DkMath.KUS.NatEmbed"
+
 namespace DkMath.KUS
 
 universe u v
