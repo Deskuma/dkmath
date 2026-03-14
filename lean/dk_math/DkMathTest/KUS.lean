@@ -210,4 +210,24 @@ example : gMul (gAdd grA grB hAB) grC
   gAdd_gMul hAB hBC
     (by simp [GSameSupport, gOp]) hAC (by simp [GSameSupport, gOp])
 
+-- gDiv_one: grA / 1 = grA
+example : gDiv grA (gOneState suppR) (by simp [GSameSupport]) = grA :=
+  gDiv_one suppR (by simp [GSameSupport])
+
+-- gDiv_add_distrib: (grA + grB) / grC = grA/grC + grB/grC
+example : gDiv (gAdd grA grB hAB) grC
+          (by simp [GSameSupport, gOp])
+          = gAdd (gDiv grA grC hAC) (gDiv grB grC hBC)
+          (by simp [GSameSupport, gOp]) :=
+  gDiv_add_distrib hAB hAC hBC
+    (by simp [GSameSupport, gOp]) (by simp [GSameSupport, gOp])
+
+-- gMul_gDiv_assoc: grA * (grB / grC) = (grA * grB) / grC
+example : gMul grA (gDiv grB grC hBC)
+          (by simp [GSameSupport, gOp])
+          = gDiv (gMul grA grB hAB) grC
+          (by simp [GSameSupport, gOp]) :=
+  gMul_gDiv_assoc hAB hBC
+    (by simp [GSameSupport, gOp]) (by simp [GSameSupport, gOp])
+
 end DkMathTest.GKUSAlgebra

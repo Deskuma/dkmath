@@ -302,6 +302,43 @@ theorem gAdd_gMul [Distrib C]
   · simp [gOp]
   · simp [gOp]
 
+/-! ### gDiv 代数法則 -/
+
+/-- `x / 1 = x`（GKUS レベル）。 -/
+theorem gDiv_one [DivisionRing C] (support : US U Blueprint)
+    {x : GKUS C U Blueprint} (h : GSameSupport x (gOneState support)) :
+    gDiv x (gOneState support) h = x := by
+  apply GKUS.ext
+  · simp [gOp, div_one]
+  · simp [gOp]
+  · simp [gOp]
+
+/-- 加算の右除算線形性: `(x + y) / z = x/z + y/z`（GKUS レベル）。
+
+`Rat`、`ℝ`、任意 `DivisionRing` 係数型で有効。 -/
+theorem gDiv_add_distrib [DivisionRing C]
+    (hxy : GSameSupport x y) (hxz : GSameSupport x z) (hyz : GSameSupport y z)
+    (h₁ : GSameSupport (gAdd x y hxy) z)
+    (h₂ : GSameSupport (gDiv x z hxz) (gDiv y z hyz)) :
+    gDiv (gAdd x y hxy) z h₁ = gAdd (gDiv x z hxz) (gDiv y z hyz) h₂ := by
+  apply GKUS.ext
+  · simp [gOp, add_div]
+  · simp [gOp]
+  · simp [gOp]
+
+/-- 乗除結合性: `x * (y / z) = (x * y) / z`（GKUS レベル）。
+
+`DivisionRing` 制約。support は常に左辺側から保持される。 -/
+theorem gMul_gDiv_assoc [DivisionRing C]
+    (hxy : GSameSupport x y) (hyz : GSameSupport y z)
+    (h₁ : GSameSupport x (gDiv y z hyz))
+    (h₂ : GSameSupport (gMul x y hxy) z) :
+    gMul x (gDiv y z hyz) h₁ = gDiv (gMul x y hxy) z h₂ := by
+  apply GKUS.ext
+  · simp [gOp, ← mul_div_assoc]
+  · simp [gOp]
+  · simp [gOp]
+
 end Algebra
 
 /-! ## Nat 係数との接続 -/
