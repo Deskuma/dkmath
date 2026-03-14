@@ -156,3 +156,58 @@ example (x : KUS DkMath.KUS.Examples.ToyUnit DkMath.KUS.Examples.ToyBlueprint) :
   simp
 
 end DkMathTest.GKUS
+
+namespace DkMathTest.GKUSAlgebra
+
+open DkMath.KUS
+
+-- 3 値テスト用の Rat 係数値
+abbrev suppR := DkMath.KUS.Examples.toySupport
+abbrev grA : GKUS Rat DkMath.KUS.Examples.ToyUnit DkMath.KUS.Examples.ToyBlueprint :=
+  mkGWith ((1 : Rat) / 2) suppR
+abbrev grB : GKUS Rat DkMath.KUS.Examples.ToyUnit DkMath.KUS.Examples.ToyBlueprint :=
+  mkGWith ((1 : Rat) / 3) suppR
+abbrev grC : GKUS Rat DkMath.KUS.Examples.ToyUnit DkMath.KUS.Examples.ToyBlueprint :=
+  mkGWith ((1 : Rat) / 4) suppR
+
+lemma hAB : GSameSupport grA grB := by simp [GSameSupport]
+lemma hBC : GSameSupport grB grC := by simp [GSameSupport]
+lemma hAC : GSameSupport grA grC := hAB.trans hBC
+
+-- 加法交換則
+example : gAdd grA grB hAB = gAdd grB grA hAB.symm := gAdd_comm hAB
+
+-- 乗法交換則
+example : gMul grA grB hAB = gMul grB grA hAB.symm := gMul_comm hAB
+
+-- 加法結合則
+example : gAdd (gAdd grA grB hAB) grC
+          (by simp [GSameSupport, gOp])
+          = gAdd grA (gAdd grB grC hBC)
+          (by simp [GSameSupport, gOp]) :=
+  gAdd_assoc hAB hBC (by simp [GSameSupport, gOp]) (by simp [GSameSupport, gOp])
+
+-- 乗法結合則
+example : gMul (gMul grA grB hAB) grC
+          (by simp [GSameSupport, gOp])
+          = gMul grA (gMul grB grC hBC)
+          (by simp [GSameSupport, gOp]) :=
+  gMul_assoc hAB hBC (by simp [GSameSupport, gOp]) (by simp [GSameSupport, gOp])
+
+-- 左分配則: grA * (grB + grC) = grA * grB + grA * grC
+example : gMul grA (gAdd grB grC hBC)
+          (by simp [GSameSupport, gOp])
+          = gAdd (gMul grA grB hAB) (gMul grA grC hAC)
+          (by simp [GSameSupport, gOp]) :=
+  gMul_gAdd hAB hBC
+    (by simp [GSameSupport, gOp]) hAC (by simp [GSameSupport, gOp])
+
+-- 右分配則: (grA + grB) * grC = grA * grC + grB * grC
+example : gMul (gAdd grA grB hAB) grC
+          (by simp [GSameSupport, gOp])
+          = gAdd (gMul grA grC hAC) (gMul grB grC hBC)
+          (by simp [GSameSupport, gOp]) :=
+  gAdd_gMul hAB hBC
+    (by simp [GSameSupport, gOp]) hAC (by simp [GSameSupport, gOp])
+
+end DkMathTest.GKUSAlgebra

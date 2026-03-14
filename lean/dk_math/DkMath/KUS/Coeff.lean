@@ -238,6 +238,72 @@ end gDiv
 
 end GOps
 
+/-! ## 代数法則（GKUS レベル） -/
+
+section Algebra
+
+variable {C : Type*} {x y z : GKUS C U Blueprint}
+
+/-- 加法交換則: 同一 support 上で `gAdd x y = gAdd y x`。 -/
+theorem gAdd_comm [AddCommMonoid C] (h : GSameSupport x y) :
+    gAdd x y h = gAdd y x h.symm := by
+  have h' : extract_g x = extract_g y := h
+  simp only [gAdd, gOp]; rw [add_comm, h']
+
+/-- 加法結合則: 同一 support を持つ 3 値に対し結合順は自由。 -/
+theorem gAdd_assoc [AddSemigroup C]
+    (hxy : GSameSupport x y) (hyz : GSameSupport y z)
+    (h₁ : GSameSupport (gAdd x y hxy) z)
+    (h₂ : GSameSupport x (gAdd y z hyz)) :
+    gAdd (gAdd x y hxy) z h₁ = gAdd x (gAdd y z hyz) h₂ := by
+  apply GKUS.ext
+  · simp [gOp, add_assoc]
+  · simp [gOp]
+  · simp [gOp]
+
+/-- 乗法交換則: 同一 support 上で `gMul x y = gMul y x`。 -/
+theorem gMul_comm [CommMonoid C] (h : GSameSupport x y) :
+    gMul x y h = gMul y x h.symm := by
+  have h' : extract_g x = extract_g y := h
+  simp only [gMul, gOp]; rw [mul_comm, h']
+
+/-- 乗法結合則: 同一 support を持つ 3 値に対し結合順は自由。 -/
+theorem gMul_assoc [Semigroup C]
+    (hxy : GSameSupport x y) (hyz : GSameSupport y z)
+    (h₁ : GSameSupport (gMul x y hxy) z)
+    (h₂ : GSameSupport x (gMul y z hyz)) :
+    gMul (gMul x y hxy) z h₁ = gMul x (gMul y z hyz) h₂ := by
+  apply GKUS.ext
+  · simp [gOp, mul_assoc]
+  · simp [gOp]
+  · simp [gOp]
+
+/-- 左分配則: `x * (y + z) = x * y + x * z`（GKUS レベル）。 -/
+theorem gMul_gAdd [Distrib C]
+    (hxy : GSameSupport x y) (hyz : GSameSupport y z)
+    (h₁ : GSameSupport x (gAdd y z hyz))
+    (hxz : GSameSupport x z)
+    (h₂ : GSameSupport (gMul x y hxy) (gMul x z hxz)) :
+    gMul x (gAdd y z hyz) h₁ = gAdd (gMul x y hxy) (gMul x z hxz) h₂ := by
+  apply GKUS.ext
+  · simp [gOp, mul_add]
+  · simp [gOp]
+  · simp [gOp]
+
+/-- 右分配則: `(x + y) * z = x * z + y * z`（GKUS レベル）。 -/
+theorem gAdd_gMul [Distrib C]
+    (hxy : GSameSupport x y) (hyz : GSameSupport y z)
+    (h₁ : GSameSupport (gAdd x y hxy) z)
+    (hxz : GSameSupport x z)
+    (h₂ : GSameSupport (gMul x z hxz) (gMul y z hyz)) :
+    gMul (gAdd x y hxy) z h₁ = gAdd (gMul x z hxz) (gMul y z hyz) h₂ := by
+  apply GKUS.ext
+  · simp [gOp, add_mul]
+  · simp [gOp]
+  · simp [gOp]
+
+end Algebra
+
 /-! ## Nat 係数との接続 -/
 
 /--
