@@ -108,3 +108,16 @@
 - `lean-build.sh` で `./lean-build.sh DkMath.KUS` と `./lean-build.sh DkMath` の成功を確認した。
 - `Examples.lean` の利用例証明で `simpa using` が構文エラーとなる環境差分を確認し、`exact` 形式へ修正して安定化した。
 - これにより phase-07 は「利用例追加・docs 更新・ビルド確認」が揃った状態で確定した。
+
+### 2026-03-14 / Work Unit 16. phase-08 API 命名の薄い整理
+
+- `DkMath/KUS/Scale.lean` に、`ScaleSpec.*` の整合補題短縮 alias を追加した。
+- 追加内容は `scale_toKUS`, `extract_scale_toKUS`, `toNat_scale_toKUS_add` の 3 本。
+- 既存名・既存利用は維持し、移行を強制しない方針で可読性だけを改善した。
+- `KUS-ScaleSpec.md` と `KUS-WorkNotes.md` を phase-08 状態へ更新した。
+
+### 2026-03-14 / Work Unit 17. phase-08 build と安定化
+
+- `lean-build.sh` で `./lean-build.sh DkMath.KUS` と `./lean-build.sh DkMath` の成功を確認した。
+- phase-08 途中で関数 alias の暗黙推論エラーが出たため、補題 alias のみに絞ることで安定化した。
+- これにより phase-08 は「命名整理・docs 更新・ビルド確認」が揃った状態で確定した。

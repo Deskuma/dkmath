@@ -1,4 +1,4 @@
-# KUS Scale Specification (phase-07)
+# KUS Scale Specification (phase-08)
 
 この文書は、`Scale.lean` で導入した最小の unit transport 仕様を要約する。
 
@@ -47,6 +47,15 @@ $$
 
 これにより、`Scale` と `Monoid` の整合補題が「定義」だけでなく「実利用」でも確認できる状態になった。
 
+## API 整理（phase-08）
+
+- 既存名を壊さずに、整合補題の短い alias を追加した
+  - `scale_toKUS`
+  - `extract_scale_toKUS`
+  - `toNat_scale_toKUS_add`
+
+方針は「命名の薄い整理のみ」であり、既存定理名・既存利用はそのまま有効である。
+
 これにより、「観測側の係数保持」と「構造保持側の transport」を分離したまま扱える。
 
 ## 範囲外
@@ -57,5 +66,5 @@ $$
 
 ## 次作業の候補
 
-1. `Fiber := Nat` 設計を維持したまま、補題命名を最小整理する
+1. `Examples.lean` 側を新 alias API へ寄せるかを検討する（任意）
 2. subtype fiber を再導入する場合の移行手順を docs へ切り出す

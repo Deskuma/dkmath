@@ -127,4 +127,33 @@ variable (σ : ScaleSpec U Blueprint V Blueprint')
 
 end ScaleSpec
 
+/-! ## phase-08: non-breaking API aliases -/
+
+/-- `ScaleSpec.scaleKUS_toKUS` の短い別名（非破壊 alias）。 -/
+theorem scale_toKUS
+    {σ : ScaleSpec U Blueprint V Blueprint'}
+    (support : US U Blueprint)
+    (n : Fiber support) :
+    ScaleSpec.scaleKUS σ (Fiber.toKUS support n)
+      = Fiber.toKUS (ScaleSpec.scaleUS σ support) n :=
+  ScaleSpec.scaleKUS_toKUS (σ := σ) support n
+
+/-- `ScaleSpec.extract_scaleKUS_toKUS` の短い別名（非破壊 alias）。 -/
+theorem extract_scale_toKUS
+    {σ : ScaleSpec U Blueprint V Blueprint'}
+    (support : US U Blueprint)
+    (n : Fiber support) :
+  extract (ScaleSpec.scaleKUS σ (Fiber.toKUS support n)) = ScaleSpec.scaleUS σ support :=
+  ScaleSpec.extract_scaleKUS_toKUS (σ := σ) support n
+
+/-- `ScaleSpec.toNat_scaleKUS_toKUS_add` の短い別名（非破壊 alias）。 -/
+theorem toNat_scale_toKUS_add
+    {σ : ScaleSpec U Blueprint V Blueprint'}
+    (support : US U Blueprint)
+    (n m : Fiber support) :
+    toNat (ScaleSpec.scaleKUS σ (Fiber.toKUS support (n + m)))
+      = toNat (ScaleSpec.scaleKUS σ (Fiber.toKUS support n))
+        + toNat (ScaleSpec.scaleKUS σ (Fiber.toKUS support m)) :=
+  ScaleSpec.toNat_scaleKUS_toKUS_add (σ := σ) support n m
+
 end DkMath.KUS

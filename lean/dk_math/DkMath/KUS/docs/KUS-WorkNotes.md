@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-07: compatibility examples
+status: 作業中 - phase-08: naming/API cleanup
 
 ## 課題
 
@@ -14,10 +14,11 @@ status: 作業中 - phase-07: compatibility examples
 - [x] `Scale` と `Monoid` の整合補題を最小追加する
 - [x] fiber 型設計（Nat alias / subtype）比較を文書化する
 - [x] phase-05 補題の利用例を `Examples.lean` に追加する
+- [x] `Scale` API の非破壊命名整理を行う
 
 ## 状況タスク
 
-- 完了条件（phase-07）
+- 完了条件（phase-08）
   - [x] `DkMath/KUS/Unit.lean` が `US` を提供する
   - [x] `DkMath/KUS/Core.lean` が `KUS`, `mkWith`, `zeroState` を提供する
   - [x] `DkMath/KUS/NatEmbed.lean` が `ofNat`, `toNat` を提供する
@@ -29,13 +30,14 @@ status: 作業中 - phase-07: compatibility examples
   - [x] `Scale` と fixed fiber の整合補題が `Scale.lean` にある
   - [x] `DkMath/KUS/docs/KUS-FiberDesign.md` に採用方針と移行トリガーがある
   - [x] `DkMath/KUS/Examples.lean` に phase-05 補題の利用例がある
+  - [x] `DkMath/KUS/Scale.lean` に alias API が追加されている
 
 ## 計画
 
 - 直近の主戦場:
-  - 補題命名と整理方針の最小化（phase-08）
+  - phase-09 の方向決め（alias 反映範囲）
 - 直近の設計候補:
-  - `Scale`/`Monoid` 連携補題の命名を API 観点で薄く整理する
+  - alias API を `Examples.lean` へ適用するかは任意とし、可読性効果を見て判断する
   - subtype 版の試作は本流へ入れず docs 先行で設計比較する
   - 例示モジュールを肥大化させず、証明用の最小例に限定する
 - 非目標（phase-01 ではやらない）:
@@ -54,6 +56,7 @@ status: 作業中 - phase-07: compatibility examples
 - phase-05 では `Scale.lean` に fixed fiber 整合補題を追加し、`Scale` と `Monoid` の接続を観測係数レベルで固定した。
 - phase-06 では `KUS-FiberDesign.md` を追加し、`Fiber := Nat` 継続採用と subtype 版への移行トリガーを明文化した。
 - phase-07 では `Examples.lean` に phase-05 補題の利用例を追加し、定義済み整合補題の実用性を確認した。
+- phase-08 では `Scale.lean` に非破壊 alias API を追加し、長い修飾名なしでも同じ理論を参照できるようにした。
 
 ## 作業ログ
 
@@ -235,3 +238,27 @@ status: 作業中 - phase-07: compatibility examples
   3. 途中で `simpa using` が構文エラーになったため、`Examples.lean` は `exact` 形式へ修正して安定化した
 - 次の予定:
   - phase-08 で補題命名と API の最小整理を実施する
+
+### 2026-03-14 phase-08 非破壊命名整理
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Scale.lean`
+  - `lean/dk_math/DkMath/KUS/docs/KUS-ScaleSpec.md`
+- 内容:
+  1. `ScaleSpec.*` を壊さず、整合補題の短縮別名を追加した（`scale_toKUS` など）
+  2. 環境差分で暗黙推論が厳しいため、関数 alias は見送り、補題 alias のみに絞った
+  3. 既存利用を壊さない方針で、API の見通しのみ改善した
+- 次の予定:
+  - phase-09 で alias 適用範囲（Examples まで寄せるか）を判断する
+
+### 2026-03-14 phase-08 ビルド確認（lean-build.sh）
+
+- 対象:
+  - `cd lean/dk_math && ./lean-build.sh DkMath.KUS`
+  - `cd lean/dk_math && ./lean-build.sh DkMath`
+- 内容:
+  1. `DkMath.KUS` は build succeeded を確認
+  2. root `DkMath` でも build succeeded を確認
+  3. phase-08 途中で alias 実装の推論問題が出たため、補題 alias のみに絞って安定化した
+- 次の予定:
+  - phase-09 で alias 適用範囲を判断し、必要なら Examples 側の呼び出しを整理する
