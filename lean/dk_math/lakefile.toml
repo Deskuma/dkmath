@@ -2,6 +2,7 @@ name = "dk_math"
 version = "0.1.0"
 keywords = ["math"]
 defaultTargets = ["DkMath"]
+testDriver = "DkMathTest"
 
 [leanOptions]
 pp.unicode.fun = true                 # pretty-prints `fun a ↦ b`
