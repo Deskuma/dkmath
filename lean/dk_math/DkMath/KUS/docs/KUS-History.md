@@ -163,3 +163,16 @@
 - `lean-build.sh` で `./lean-build.sh DkMath.KUS` を実行し、build succeeded を確認した（warning なし）。
 - `symm`/`trans` の dot notation 自己再帰問題 → `unfold SameSupport at *` で解消。
 - `zero_tracking` の未使用 `hz` → `_` に変更し、support 保持の無条件性を明確化した。
+
+### 2026-03-14 / Work Unit 25. phase-13 KUS 乗法層の追加
+
+- `DkMath/KUS/Mul.lean` を追加し、`kusMul`（SameSupport 制約つき乗法）を導入した。
+- `oneState` と単位元補題（`one_mul`, `mul_one`）を追加した。
+- 乗法の零追跡性（`kusMul.zero_tracking`）と零再構成（`kusMul_eq_zeroState`）を固定した。
+- 乗法の交換則・結合則を `toNat` レベルで固定した。
+- `DkMath/KUS.lean` に `import DkMath.KUS.Mul` を追加した。
+
+### 2026-03-14 / Work Unit 26. phase-13 build 確認
+
+- `lean-build.sh` で `./lean-build.sh DkMath.KUS` の成功を確認した。
+- 乗法の交換則・結合則は `omega` 依存から `Nat.mul_comm` / `Nat.mul_assoc` ベースへ整理し、安定化した。

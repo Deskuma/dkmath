@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-12: KUS 加算（kusAdd）の実装
+status: 作業中 - phase-13: KUS 乗法（kusMul）の実装
 
 ## 課題
 
@@ -20,10 +20,12 @@ status: 作業中 - phase-12: KUS 加算（kusAdd）の実装
 - [x] alias 命名規則ガイドを `KUS-AliasPolicy.md` に追加する
 - [x] 同一 support 上の KUS 加算（`kusAdd`）を定義する
 - [x] 零追跡性補題を実装する（係数が零になっても support を保持）
+- [x] 同一 support 上の KUS 乗法（`kusMul`）を定義する
+- [x] 乗法の零追跡性補題を実装する（係数が零になっても support を保持）
 
 ## 状況タスク
 
-- 完了条件（phase-12）
+- 完了条件（phase-13）
   - [x] `DkMath/KUS/Unit.lean` が `US` を提供する
   - [x] `DkMath/KUS/Core.lean` が `KUS`, `mkWith`, `zeroState` を提供する
   - [x] `DkMath/KUS/NatEmbed.lean` が `ofNat`, `toNat` を提供する
@@ -42,14 +44,17 @@ status: 作業中 - phase-12: KUS 加算（kusAdd）の実装
   - [x] `DkMath/KUS/Add.lean` が `SameSupport` と `kusAdd` を提供する
   - [x] 零追跡性（`zero_tracking`）が補題として固定されている
   - [x] 単位元・交換則・結合則（toNat レベル）が補題として固定されている
+  - [x] `DkMath/KUS/Mul.lean` が `kusMul` と `oneState` を提供する
+  - [x] 乗法の零追跡性（`kusMul.zero_tracking`）が補題として固定されている
 
 ## 計画
 
 - 直近の主戦場:
-  - phase-13 の方向決め（減法 or 乗法の導入）
+  - phase-14 の方向決め（係数拡張: Nat→Int/Rat）
 - 直近の設計候補:
   - alias 適用は `Examples` を境界とし、コア理論は従来名を維持する
-  - 減法は「逆操作として加法を元に戻す」定義で整合させる
+  - 減法は係数拡張（Int 以上）後に「逆操作として加法を戻す」定義で整合させる
+  - 乗法層は完了したので、次は `Coeff` 一般化の下準備を docs 先行で行う
   - subtype 版の試作は本流へ入れず docs 先行で設計比較する
   - 例示モジュールを肥大化させず、証明用の最小例に限定する
 - 非目標（phase-01 ではやらない）:
@@ -73,6 +78,31 @@ status: 作業中 - phase-12: KUS 加算（kusAdd）の実装
 - phase-10 では alias 運用範囲を docs へ固定し、適用境界を `Examples` 層までと明文化した。
 - phase-11 では alias 命名規則ガイドを `KUS-AliasPolicy.md` に追記し、将来追加時の揺れを防ぐ基準を確立した。
 - phase-12 では `Add.lean` を追加し、同一 support 上の KUS 加算（`kusAdd`）を実装した。零追跡性・単位元・交換則・結合則を最小形で固定した。
+- phase-13 では `Mul.lean` を追加し、同一 support 上の KUS 乗法（`kusMul`）を実装した。零追跡性・単位元・交換則・結合則を最小形で固定した。
+
+### 2026-03-14 phase-13 KUS 乗法の実装
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Mul.lean`
+  - `lean/dk_math/DkMath/KUS.lean`
+- 内容:
+  1. `kusMul` を定義し、可視係数の Nat 乗法と support 保持を一体化した
+  2. `oneState` を導入し、左右単位元（`one_mul`, `mul_one`）を固定した
+  3. 零追跡性（`kusMul.zero_tracking`）を固定した
+  4. 交換則・結合則を `toNat` レベルで固定した
+  5. 零閉補題（`zeroState_kusMul_zeroState`）を追加した
+- 次の予定:
+  - phase-14 で係数拡張（Nat→Int/Rat）の設計を docs 先行で固める
+
+### 2026-03-14 phase-13 ビルド確認（lean-build.sh）
+
+- 対象:
+  - `cd lean/dk_math && ./lean-build.sh DkMath.KUS`
+- 内容:
+  1. `DkMath.KUS` は build succeeded を確認
+  2. `omega` 依存を除去し、`Nat.mul_comm`/`Nat.mul_assoc` による安定証明へ整理した
+- 次の予定:
+  - phase-14 で係数拡張の前提を整理する
 
 ## 作業ログ
 
