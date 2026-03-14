@@ -14,6 +14,7 @@ import DkMath.KUS.Scale
 import DkMath.KUS.RoundTrip
 import DkMath.KUS.Add
 import DkMath.KUS.Mul
+import DkMath.KUS.Coeff
 import DkMath.KUS.Examples
 
 #print "file: DkMath.KUS"
