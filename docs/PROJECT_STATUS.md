@@ -29,6 +29,7 @@ FLT 現状レポート 2026-03-08
 - `DkMath/CosmicFormula/TriominoFLT.lean`
 - `DkMath/FLT/Basic.lean`
 - `DkMath/FLT/PrimeProvider/*.lean`
+- `DkMath/CFBRC/Bridge.lean`, `DkMath/RH/CFBRCBridge.lean`
 
 ただし、この環境には `lake` が無いため、**ローカル再ビルドまではしておらぬ**。ゆえに build 成功の事実は、添付されていた build log に基づく確認じゃ。
 
