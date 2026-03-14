@@ -211,6 +211,31 @@ theorem zero_tracking [Sub C] [Zero C] (h : GSameSupport x y)
 
 end gSub
 
+/-- 同一 support 上の GKUS 除算（`Rat` など `Div` を持つ係数型で有効）。
+
+ゼロ除算は係数型の `Div` 実装に委ねられる（`Rat` では 0 / 0 = 0 など型が処理する）。
+support は演算結果によらず常に保持される（zero tracking 保証）。
+-/
+abbrev gDiv [Div C] (x y : GKUS C U Blueprint) (h : GSameSupport x y) : GKUS C U Blueprint :=
+  gOp (· / ·) x y h
+
+namespace gDiv
+variable {x y : GKUS C U Blueprint}
+
+@[simp] theorem toCoeff_div [Div C] (h : GSameSupport x y) :
+    toCoeff (gDiv x y h) = x.coeff / y.coeff := toCoeff_gOp _ h
+
+@[simp] theorem extract_div_left [Div C] (h : GSameSupport x y) :
+    extract_g (gDiv x y h) = extract_g x := extract_g_gOp _ h
+
+/-- ゼロ追跡性: 商が 0 になっても extract_g は常に左辺の support を返す。
+`Rat` では x / 0 = 0, 0 / x = 0 が Lean の定義済みゆえ本補題は無条件に使える。 -/
+theorem zero_tracking [Div C] [Zero C] (h : GSameSupport x y)
+    (_ : x.coeff / y.coeff = 0) :
+    extract_g (gDiv x y h) = extract_g x := extract_div_left h
+
+end gDiv
+
 end GOps
 
 /-! ## Nat 係数との接続 -/

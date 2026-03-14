@@ -138,6 +138,18 @@ example : extract_g (gMul grA grB hR) = suppR := by
 example : extract_g (gSub grA grB hR) = suppR := by
   simp [gOp]
 
+-- Rat: 除算テスト  (1/2) / (1/3) = 3/2
+example : toCoeff (gDiv grA grB hR) = ((1 : Rat) / 2) / ((1 : Rat) / 3) := by
+  simp [gDiv, gOp, grA, grB]
+
+-- support 保持（ゼロ除算でも）
+example : extract_g (gDiv grA grB hR) = suppR := by
+  simp [gOp]
+
+-- ゼロ除算: (1/2) / 0 の support 保持（Rat では x / 0 = 0 が定義済み）
+example : extract_g (gDiv grA (mkGWith (0 : Rat) suppR) hR) = suppR := by
+  simp [gOp]
+
 -- KUS ↔ GKUS Nat 往復変換
 example (x : KUS DkMath.KUS.Examples.ToyUnit DkMath.KUS.Examples.ToyBlueprint) :
     gKUSToKUS (kusToGKUS x) = x := by
