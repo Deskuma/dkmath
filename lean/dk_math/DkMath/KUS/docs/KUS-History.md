@@ -2,6 +2,14 @@
 
 ## History Log
 
+### 2026-03-15 / Work Unit 36. phase-22 decode canonical choice の API 化
+
+- `DkMath/KUS/Transport.lean` の `DecodeSpec` に `ofScale` を追加し、decode 指定の記述を簡約した。
+- `harmonizeAddLeft` / `harmonizeAddRight` / `harmonizeAddNormalized` を追加し、加法の decode 先選択を API として明示化した。
+- `harmonizeMulLeft` / `harmonizeMulRight` / `harmonizeMulNormalized` を追加し、乗法でも同様の API 階層を整備した。
+- `DkMathTest/KUS.lean` の `DkMathTest.GKUSTransport` に API ラッパ回帰テストを追加し、係数計算と support 保持の整合を確認した。
+- `lake build DkMathTest.KUS` および `./lean-test.sh` の成功を確認した。
+
 ### 2026-03-15 / Work Unit 35. phase-21 harmonizeMul と decode 自然性の導入
 
 - `DkMath/KUS/Transport.lean` に `harmonizeMul` / `harmonizeMulTo` を追加し、異 support 演算の 3 相合成を乗法にも拡張した。

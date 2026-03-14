@@ -35,6 +35,20 @@ structure DecodeSpec
     (T : Type uT) (BT : BlueprintFamily T) where
   dec : ScaleSpec H BH T BT
 
+namespace DecodeSpec
+
+variable {H : Type uH} {BH : BlueprintFamily H}
+variable {T : Type uT} {BT : BlueprintFamily T}
+
+/-- `ScaleSpec` から `DecodeSpec` を作る最小コンストラクタ。 -/
+@[simp] def ofScale (σ : ScaleSpec H BH T BT) : DecodeSpec H BH T BT :=
+  ⟨σ⟩
+
+@[simp] theorem dec_ofScale (σ : ScaleSpec H BH T BT) :
+    (ofScale (H := H) (BH := BH) (T := T) (BT := BT) σ).dec = σ := rfl
+
+end DecodeSpec
+
 namespace HarmonizeSpec
 
 variable {C : Type*}
@@ -79,6 +93,50 @@ variable {T' : Type _} {BT' : BlueprintFamily T'}
     (ds : DecodeSpec H BH T BT)
     (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂) : GKUS C T BT :=
   ScaleSpec.scaleGKUS ds.dec (harmonizeMul hs x y)
+
+/-! ## API aliases: canonical decode choices -/
+
+/-- 左系への decode を明示した加算 API。 -/
+@[simp] def harmonizeAddLeft [Add C]
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (decLeft : ScaleSpec H BH U₁ B₁)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂) : GKUS C U₁ B₁ :=
+  harmonizeAddTo hs (DecodeSpec.ofScale decLeft) x y
+
+/-- 右系への decode を明示した加算 API。 -/
+@[simp] def harmonizeAddRight [Add C]
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (decRight : ScaleSpec H BH U₂ B₂)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂) : GKUS C U₂ B₂ :=
+  harmonizeAddTo hs (DecodeSpec.ofScale decRight) x y
+
+/-- 正規形 support への decode を明示した加算 API。 -/
+@[simp] def harmonizeAddNormalized [Add C]
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (decNorm : ScaleSpec H BH T BT)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂) : GKUS C T BT :=
+  harmonizeAddTo hs (DecodeSpec.ofScale decNorm) x y
+
+/-- 左系への decode を明示した乗算 API。 -/
+@[simp] def harmonizeMulLeft [Mul C]
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (decLeft : ScaleSpec H BH U₁ B₁)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂) : GKUS C U₁ B₁ :=
+  harmonizeMulTo hs (DecodeSpec.ofScale decLeft) x y
+
+/-- 右系への decode を明示した乗算 API。 -/
+@[simp] def harmonizeMulRight [Mul C]
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (decRight : ScaleSpec H BH U₂ B₂)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂) : GKUS C U₂ B₂ :=
+  harmonizeMulTo hs (DecodeSpec.ofScale decRight) x y
+
+/-- 正規形 support への decode を明示した乗算 API。 -/
+@[simp] def harmonizeMulNormalized [Mul C]
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (decNorm : ScaleSpec H BH T BT)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂) : GKUS C T BT :=
+  harmonizeMulTo hs (DecodeSpec.ofScale decNorm) x y
 
 @[simp] theorem toCoeff_harmonizeAdd [Add C]
     (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)

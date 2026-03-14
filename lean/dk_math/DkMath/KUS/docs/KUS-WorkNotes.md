@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-21: harmonizeMul と decode 自然性の導入
+status: 作業中 - phase-22: decode canonical choice の API 化
 
 ## 課題
 
@@ -531,3 +531,19 @@ status: 作業中 - phase-21: harmonizeMul と decode 自然性の導入
   5. `lake build DkMathTest.KUS` と `./lean-test.sh` の成功を確認した
 - 次の予定:
   - phase-22: decode 先の canonical choice と `HarmonizeSpec` の既定化（左/右/正規形）設計
+
+### 2026-03-15 phase-22 decode canonical choice の API 化
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Transport.lean`
+  - `lean/dk_math/DkMathTest/KUS.lean`
+- 内容:
+  1. `DecodeSpec` に `ofScale` コンストラクタを追加し、`ScaleSpec` から decode 仕様を直接生成できる API を導入した
+  2. `harmonizeAdd` / `harmonizeMul` について、decode 先の canonical choice を表す API を追加した
+     - `harmonizeAddLeft` / `harmonizeAddRight` / `harmonizeAddNormalized`
+     - `harmonizeMulLeft` / `harmonizeMulRight` / `harmonizeMulNormalized`
+  3. `DkMathTest.GKUSTransport` に API ラッパ回帰を追加し、係数追跡・support 保持を左/右/正規形で確認した
+  4. 既存の decode 合成自然性テストと合わせて、API 層が従来コア定義と整合することを確認した
+  5. `lake build DkMathTest.KUS` と `./lean-test.sh` の成功を確認した
+- 次の予定:
+  - phase-23: `HarmonizeSpec` の既定戦略（left-first/right-first/canonical）を型クラス化する設計検討

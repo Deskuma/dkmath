@@ -282,6 +282,18 @@ def tau : ScaleSpec ToyUnit ToyBlueprint ToyUnit ToyBlueprint where
   mapUnit := fun _ => 9
   mapBlueprint := fun {_} _ => ⟨0, by decide⟩
 
+def decLeft : ScaleSpec ToyUnit ToyBlueprint ToyUnit ToyBlueprint where
+  mapUnit := fun _ => 11
+  mapBlueprint := fun {_} _ => ⟨0, by decide⟩
+
+def decRight : ScaleSpec ToyUnit ToyBlueprint ToyUnit ToyBlueprint where
+  mapUnit := fun _ => 13
+  mapBlueprint := fun {_} _ => ⟨0, by decide⟩
+
+def decNorm : ScaleSpec ToyUnit ToyBlueprint ToyUnit ToyBlueprint where
+  mapUnit := fun _ => 17
+  mapBlueprint := fun {_} _ => ⟨0, by decide⟩
+
 def supportH : US ToyUnit ToyBlueprint where
   unit := 2
   blueprint := ⟨0, by decide⟩
@@ -296,6 +308,18 @@ def supportT2 : US ToyUnit ToyBlueprint where
 
 def supportTau : US ToyUnit ToyBlueprint where
   unit := 9
+  blueprint := ⟨0, by decide⟩
+
+def supportLeftAPI : US ToyUnit ToyBlueprint where
+  unit := 11
+  blueprint := ⟨0, by decide⟩
+
+def supportRightAPI : US ToyUnit ToyBlueprint where
+  unit := 13
+  blueprint := ⟨0, by decide⟩
+
+def supportNormAPI : US ToyUnit ToyBlueprint where
+  unit := 17
   blueprint := ⟨0, by decide⟩
 
 example : toCoeff (HarmonizeSpec.harmonizeAdd hs gx gy) = ((1 : Rat) / 2 + (1 : Rat) / 3) := by
@@ -344,5 +368,41 @@ example :
     extract_g (ScaleSpec.scaleGKUS tau (HarmonizeSpec.harmonizeAddTo hs ds gx gy))
       = supportTau := by
   simp [HarmonizeSpec.harmonizeAdd, HarmonizeSpec.encodeLeft, hs, ds, tau, supportTau]
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeAddLeft hs decLeft gx gy)
+      = ((1 : Rat) / 2 + (1 : Rat) / 3) := by
+  unfold HarmonizeSpec.harmonizeAddLeft
+  simpa [DecodeSpec.ofScale, gx, gy] using
+    (HarmonizeSpec.toCoeff_harmonizeAddTo (hs := hs) (ds := DecodeSpec.ofScale decLeft)
+      (x := gx) (y := gy))
+
+example : extract_g (HarmonizeSpec.harmonizeAddLeft hs decLeft gx gy) = supportLeftAPI := by
+  simp [HarmonizeSpec.harmonizeAddLeft, HarmonizeSpec.harmonizeAdd, HarmonizeSpec.encodeLeft,
+    hs, decLeft, supportLeftAPI]
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeAddRight hs decRight gx gy)
+      = ((1 : Rat) / 2 + (1 : Rat) / 3) := by
+  unfold HarmonizeSpec.harmonizeAddRight
+  simpa [DecodeSpec.ofScale, gx, gy] using
+    (HarmonizeSpec.toCoeff_harmonizeAddTo (hs := hs) (ds := DecodeSpec.ofScale decRight)
+      (x := gx) (y := gy))
+
+example : extract_g (HarmonizeSpec.harmonizeAddRight hs decRight gx gy) = supportRightAPI := by
+  simp [HarmonizeSpec.harmonizeAddRight, HarmonizeSpec.harmonizeAdd, HarmonizeSpec.encodeLeft,
+    hs, decRight, supportRightAPI]
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeMulNormalized hs decNorm gx gy)
+      = ((1 : Rat) / 2) * ((1 : Rat) / 3) := by
+  unfold HarmonizeSpec.harmonizeMulNormalized
+  simpa [DecodeSpec.ofScale, gx, gy] using
+    (HarmonizeSpec.toCoeff_harmonizeMulTo (hs := hs) (ds := DecodeSpec.ofScale decNorm)
+      (x := gx) (y := gy))
+
+example : extract_g (HarmonizeSpec.harmonizeMulNormalized hs decNorm gx gy) = supportNormAPI := by
+  simp [HarmonizeSpec.harmonizeMulNormalized, HarmonizeSpec.harmonizeMul, HarmonizeSpec.encodeLeft,
+    hs, decNorm, supportNormAPI]
 
 end DkMathTest.GKUSTransport
