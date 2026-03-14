@@ -177,6 +177,17 @@
 - `lean-build.sh` で `./lean-build.sh DkMath.KUS` の成功を確認した。
 - 乗法の交換則・結合則は `omega` 依存から `Nat.mul_comm` / `Nat.mul_assoc` ベースへ整理し、安定化した。
 
+### 2026-03-15 / Work Unit 31. phase-17 gDiv 代数法則の実装
+
+- `DkMath/KUS/Coeff.lean` の `section Algebra` に `gDiv` 関連の代数法則 3 本を追加した。
+- 追加証明: `gDiv_one`（`[DivisionRing C]`, `x / 1 = x`）、
+  `gDiv_add_distrib`（`(x + y) / z = x/z + y/z`）、
+  `gMul_gDiv_assoc`（`x * (y / z) = (x * y) / z`）。
+- 型クラスは全て `[DivisionRing C]` に統一した（`DivOneClass` は Mathlib になかった）。
+- 証明パターン: `GKUS.ext` + `simp [gOp, div_one/add_div/←mul_div_assoc]`。
+- `DkMathTest/KUS.lean` の `DkMathTest.GKUSAlgebra` に `gDiv` テスト 3 本を追加した。
+- `tl` で `build succeeded` を確認した（warning/error なし）。
+
 ### 2026-03-14 / Work Unit 30. phase-16 CommSemiring 補題の整備
 
 - `DkMath/KUS/Coeff.lean` に `section Algebra` を追加し、GKUS レベルの代数法則群を実装した。

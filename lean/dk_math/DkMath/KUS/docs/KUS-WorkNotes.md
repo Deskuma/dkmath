@@ -445,6 +445,22 @@ status: 作業中 - phase-14: 係数型の一般化（GKUS / Nat→Int→Rat）
 - 次の予定:
   - phase-17: 除算を組み込んだときの零追跡保証の強化（`gDiv` と除算向化の関係）
 
+### 2026-03-15 phase-17 gDiv 代数法則の実装
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Coeff.lean`
+  - `lean/dk_math/DkMathTest/KUS.lean`
+- 内容:
+  1. `gDiv_one` — `x / 1 = x`， `[DivisionRing C]`
+  2. `gDiv_add_distrib` — `(x + y) / z = x/z + y/z`， `[DivisionRing C]`
+  3. `gMul_gDiv_assoc` — `x * (y / z) = (x * y) / z`， `[DivisionRing C]`
+  4. 型クラスは全て `DivisionRing` に統一（`DivOneClass` は Mathlib に不在）
+  5. 証明: `GKUS.ext` + `simp [gOp, …]` パターン
+  6. `DkMathTest.GKUSAlgebra` に `Rat` 係数で全法則テスト追加
+  7. `tl` で `build succeeded` 確認
+- 次の予定:
+  - phase-18: `GKUS` 全体の設計整理・ドキュメント総括
+
 ### 2026-03-14 phase-14 Rat 係数テスト追加
 
 - 対象:
