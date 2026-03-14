@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-14: 係数型の一般化（GKUS / Nat→Int→Rat）
+status: 作業中 - phase-19: 異 support 演算（transport 規則）設計
 
 ## 課題
 
@@ -484,3 +484,19 @@ status: 作業中 - phase-14: 係数型の一般化（GKUS / Nat→Int→Rat）
   4. 今後課題として異 support 演算の整合法則と数論適用方針を明示した
 - 次の予定:
   - phase-19: GKUS の異 support 演算（transport 規則）設計案の初稿作成
+
+### 2026-03-15 phase-19 異 support 演算（transport 規則）設計初稿
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/docs/KUS-transport-design-spec.md`
+  - `lean/dk_math/DkMath/KUS/docs/KUS-transport_design_discussion.md`
+  - `lean/dk_math/DkMath/DHNT/DHNT_Base.lean`
+  - `lean/dk_math/DkMath/KUS/Scale.lean`
+- 内容:
+  1. 異 support 演算を `US₁ → H ← US₂` の span 図式で定義する方針を、設計原理として明文化した
+  2. 3 層接続（`CosmicFormula` absolute layer → `DHNT` harmonic encoding layer → `KUS` typed transport layer）を仕様化した
+  3. `HarmonizeSpec` / `DecodeSpec` / `harmonizeAdd` / `harmonizeAddTo` の Lean 擬似シグネチャを初稿として固定した
+  4. blueprint の意味保存と依存型 transport（`mapBlueprint`）を分離して扱う不変量方針を明記した
+  5. 実装段階を phase-19a〜19c（docs-first → Lean最小導入 → DHNT/Cosmic bridge）に分割した
+- 次の予定:
+  - phase-20: `ScaleSpec` の `GKUS` 版 transport（`scaleGKUS`）と `HarmonizeSpec` の Lean 最小導入

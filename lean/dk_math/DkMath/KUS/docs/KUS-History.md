@@ -2,6 +2,14 @@
 
 ## History Log
 
+### 2026-03-15 / Work Unit 33. phase-19 異 support 演算（transport 規則）設計初稿
+
+- `DkMath/KUS/docs/KUS-transport-design-spec.md` を新規作成し、異 support 演算の設計原理を `US₁ → H ← US₂` の span 図式として定義した。
+- 仕様を 3 層（`CosmicFormula` absolute layer / `DHNT` harmonic encoding layer / `KUS` typed transport layer）に分解し、接続責務を明確化した。
+- `HarmonizeSpec` / `DecodeSpec` と `harmonizeAdd` / `harmonizeAddTo` の Lean 擬似シグネチャを提示し、今後の実装の受け皿を固定した。
+- blueprint の不変量について「意味保存」と「依存型表現の transport」を分離する方針を明文化した。
+- phase-19 の実行計画を `docs-first → Lean 最小導入 → DHNT/Cosmic bridge` の 3 段へ分割し、次作業の導入順を確定した。
+
 ### 2026-03-14 / Work Unit 1. 内容把握
 
 - KUS の主題は、通常の数体系で単一の `0` に潰れて失われる構造を、`(K, U, S_U)` という依存型構造として保持することだと確認。
