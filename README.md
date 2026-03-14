@@ -2,6 +2,15 @@
 
 The result of "D." and Wise Wolf's experiment with new mathematical theories.
 
+> [!IMPORTANT]
+> main ブランチは更新反映が遅れる場合があります。最新の開発は **nightly ブランチ主体** です。
+>
+> 最新状態はこちら:
+> [https://github.com/Deskuma/dkmath/tree/nightly](https://github.com/Deskuma/dkmath/tree/nightly)
+>
+> 作業前に次を確認してください:
+> `git checkout nightly`
+
 ## Index
 
 ### Lean
