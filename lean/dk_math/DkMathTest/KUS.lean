@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.KUS
 
+/-! ## GKUS（一般係数）回帰テスト -/
+
 #print "file: DkMathTest.KUS"
 
 namespace DkMathTest.KUS
@@ -55,3 +57,61 @@ example :
   simp [kusMul, DkMath.KUS.Examples.toyX]
 
 end DkMathTest.KUS
+
+namespace DkMathTest.GKUS
+
+open DkMath.KUS
+
+-- Nat 係数（既存 KUS との互換）
+abbrev suppN := DkMath.KUS.Examples.toySupport
+abbrev gnA : GKUS Nat DkMath.KUS.Examples.ToyUnit DkMath.KUS.Examples.ToyBlueprint :=
+  mkGWith 3 suppN
+abbrev gnB : GKUS Nat DkMath.KUS.Examples.ToyUnit DkMath.KUS.Examples.ToyBlueprint :=
+  mkGWith 4 suppN
+
+-- Int 係数（減法が可能）
+abbrev suppI := DkMath.KUS.Examples.toySupport
+abbrev giA : GKUS Int DkMath.KUS.Examples.ToyUnit DkMath.KUS.Examples.ToyBlueprint :=
+  mkGWith (5 : Int) suppI
+abbrev giB : GKUS Int DkMath.KUS.Examples.ToyUnit DkMath.KUS.Examples.ToyBlueprint :=
+  mkGWith (8 : Int) suppI
+
+lemma hN : GSameSupport gnA gnB := by
+  simp only [GSameSupport, extract_g, mkGWith.eq_1]
+
+lemma hI : GSameSupport giA giB := by
+  simp only [GSameSupport, extract_g, mkGWith.eq_1]
+
+-- toCoeff_gOp で 3 + 4 = 7
+example : toCoeff (gOp (· + ·) gnA gnB hN) = 7 := by
+  simp [gOp, gnA, gnB]
+
+-- extract_g_gOp で support 保持
+example : extract_g (gOp (· + ·) gnA gnB hN) = suppN := by
+  simp only [mkGWith.eq_1, gOp, extract_g.eq_1]
+
+-- gAdd API
+example : toCoeff (gAdd gnA gnB hN) = 7 := by
+  simp [gAdd, gOp, gnA, gnB]
+
+-- gMul API：3 * 4 = 12
+example : toCoeff (gMul gnA gnB hN) = 12 := by
+  simp [gMul, gOp, gnA, gnB]
+
+-- gSub：8 - 5 = 3（Int）
+example : toCoeff (gSub giB giA hI.symm) = (3 : Int) := by
+  simp [gSub, gOp, giA, giB]
+
+-- gSub：5 - 8 = -3（Int、マイナス係数でも support 保持）
+example : toCoeff (gSub giA giB hI) = (-3 : Int) := by
+  simp [gSub, gOp, giA, giB]
+
+example : extract_g (gSub giA giB hI) = suppI := by
+  simp [gOp]
+
+-- KUS ↔ GKUS Nat 往復変換
+example (x : KUS DkMath.KUS.Examples.ToyUnit DkMath.KUS.Examples.ToyBlueprint) :
+    gKUSToKUS (kusToGKUS x) = x := by
+  simp
+
+end DkMathTest.GKUS
