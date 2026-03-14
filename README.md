@@ -19,6 +19,8 @@ The result of "D." and Wise Wolf's experiment with new mathematical theories.
 
 運用方法については [lean/README.md](./lean/README.md) を参照。
 
+> コメント内の `so#rry` は、検索しても見つからないようにスペルを崩してあります。ご了承ください。`ad#mit` も同様です。
+
 #### DkMath: Lean 4 数学ライブラリ
 
 動的調和数論（Dynamic Harmonic Number Theory, DHNT）に焦点を当てた Lean 4 用数学ライブラリ。
@@ -40,14 +42,21 @@ The result of "D." and Wise Wolf's experiment with new mathematical theories.
 Mathlib.FLT とは、異なるアプローチで、特に `d = 3` 周辺の複数アプローチを整備することを目指しています。
 ※既に形式化証明は完成されていますが、補題の整理や証明の安定化を図ります。
 
-### 最新ステータス（2026-03-08）
+### 最新ステータス（2026-03-15）
 
 `docs/PROJECT_STATUS.md` 時点の要約：
 
 - FLT `d = 3` の公開 API は `DkMath/FLT/Main.lean` 側で概ね安定
 - StandAlone artifact（`FLT3#StandAlone-NC-v0.lean-v2.lean`）は build 成功・実 placeholder なし
-- 主ボトルネックは一般指数（`n ≥ 5`）側の prime provider 実装
-- 研究段階としては「cubic completion 後の prime-ge5 bridge construction phase」
+- 一般指数 `n > 3` は未完で、現在の `so#rry` は次の 2 箇所に局所化
+  - `DkMath/FLT/Basic.lean`（`n > 3` 分岐）
+  - `DkMath/CosmicFormula/TriominoFLT.lean`（`FLT_highExponent_core_pending`）
+- `DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean` では
+  - 正規化（`primeGe5CounterexampleNormalizer_impl`）
+  - spec 合成（`FLTPrimeGe5Target_of_*`）
+  - provider 直結（`triominoCosmic_globalProvider_of_specs`）
+  まで実装済み（`so#rry` 非依存ルートを整備）
+- ただし `FLT_prime_ge5` 本体は現状 `DkMath.FLT` 経由で、上記 pending に接続しているため最終閉路は未完
 
 詳細は [docs/PROJECT_STATUS.md](./docs/PROJECT_STATUS.md) を参照。
 

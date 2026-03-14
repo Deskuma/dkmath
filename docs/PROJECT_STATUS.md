@@ -2,7 +2,7 @@
 
 ## FLT: Fermat's Last Theorem
 
-FLT 現状レポート 2026-03-08
+FLT 現状レポート 2026-03-15
 
 ## 1. 結論
 
@@ -12,7 +12,7 @@ FLT 現状レポート 2026-03-08
 
 - `DkMath/FLT/Main.lean` 側の **\(d=3\) 公開 API は形になっている**
 - `FLT3#StandAlone-NC-v0.lean-v2.lean` は **1700 行・定理 21 個・実 placeholder なし** で、付属 build log でも成功している
-- いま残る実質的な未完了点は、**prime-ge5 provider をどう実装して一般指数へ接続するか** に収束している
+- いま残る実質的な未完了点は、**一般指数 `n > 3` の最終閉路**であり、`sorry` は 2 箇所（`FLT/Basic.lean`, `CosmicFormula/TriominoFLT.lean`）に局所化している
 
 つまり、以前のように「立方ケースの骨格そのものがまだ未成形」という段階ではない。今は **cubic spine はほぼ出来ており、一般化の最後の橋が未架設** という局面じゃな。
 
@@ -130,6 +130,12 @@ FLT 現状レポート 2026-03-08
 
 - `CFBRCBridge` 側の翻訳仮定（`hwnz`, `hhopc0`）を、使い回せる provider 形式へ整理する。
 - singleton 停留判定から finite-set / atTop へ持ち上げる接続補題を段階化し、`HopcInfiniteLift` 側へ統合する。
+
+## 3.F. `n > 3` 実装状況（2026-03-15 点検）
+
+`DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean` では、`primeGe5CounterexampleNormalizer_impl` と spec 合成（`FLTPrimeGe5Target_of_*`）により、provider へ接続する no-`so#rry` ルート（`triominoCosmic_globalProvider_of_specs`）まで到達しておる。
+
+一方で `FLT_prime_ge5` 本体は現状 `DkMath.FLT`（`DkMath/FLT/Basic.lean`）経由で閉じており、その `n > 3` 分岐と `DkMath/CosmicFormula/TriominoFLT.lean` の `FLT_highExponent_core_pending` が `so#rry` のまま残るため、一般指数の本線は未完という評価になる。
 
 ---
 
