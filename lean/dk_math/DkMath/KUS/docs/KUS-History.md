@@ -121,3 +121,15 @@
 - `lean-build.sh` で `./lean-build.sh DkMath.KUS` と `./lean-build.sh DkMath` の成功を確認した。
 - phase-08 途中で関数 alias の暗黙推論エラーが出たため、補題 alias のみに絞ることで安定化した。
 - これにより phase-08 は「命名整理・docs 更新・ビルド確認」が揃った状態で確定した。
+
+### 2026-03-14 / Work Unit 18. phase-09 alias 適用判断
+
+- `DkMath/KUS/Examples.lean` の補題呼び出し 3 箇所を alias 名へ置換した。
+- 置換先は `scale_toKUS`, `extract_scale_toKUS`, `toNat_scale_toKUS_add`。
+- コア理論側の命名は維持し、利用例層のみ alias を採用する方針を確定した。
+- `KUS-ScaleSpec.md` と `KUS-WorkNotes.md` を phase-09 状態へ更新した。
+
+### 2026-03-14 / Work Unit 19. phase-09 build 確認
+
+- `lean-build.sh` で `./lean-build.sh DkMath.KUS` と `./lean-build.sh DkMath` の成功を確認した。
+- phase-09 の変更は可読性改善のみで、理論挙動に変更がないことを確認した。

@@ -58,13 +58,13 @@ def toyScale : DkMath.KUS.ScaleSpec ToyUnit ToyBlueprint ToyUnit ToyBlueprint wh
 @[simp] theorem toyScale_toKUS_comm (n : DkMath.KUS.Fiber toySupport) :
     DkMath.KUS.ScaleSpec.scaleKUS toyScale (DkMath.KUS.Fiber.toKUS toySupport n)
       = DkMath.KUS.Fiber.toKUS (DkMath.KUS.ScaleSpec.scaleUS toyScale toySupport) n := by
-  exact DkMath.KUS.ScaleSpec.scaleKUS_toKUS (σ := toyScale) toySupport n
+  exact DkMath.KUS.scale_toKUS (σ := toyScale) toySupport n
 
 @[simp] theorem toyScale_extract_toKUS_comm (n : DkMath.KUS.Fiber toySupport) :
     DkMath.KUS.extract
         (DkMath.KUS.ScaleSpec.scaleKUS toyScale (DkMath.KUS.Fiber.toKUS toySupport n))
       = DkMath.KUS.ScaleSpec.scaleUS toyScale toySupport := by
-  exact DkMath.KUS.ScaleSpec.extract_scaleKUS_toKUS (σ := toyScale) toySupport n
+  exact DkMath.KUS.extract_scale_toKUS (σ := toyScale) toySupport n
 
 @[simp] theorem toyScale_toNat_add_comm
     (n m : DkMath.KUS.Fiber toySupport) :
@@ -74,6 +74,6 @@ def toyScale : DkMath.KUS.ScaleSpec ToyUnit ToyBlueprint ToyUnit ToyBlueprint wh
           (DkMath.KUS.ScaleSpec.scaleKUS toyScale (DkMath.KUS.Fiber.toKUS toySupport n))
         + DkMath.KUS.toNat
             (DkMath.KUS.ScaleSpec.scaleKUS toyScale (DkMath.KUS.Fiber.toKUS toySupport m)) := by
-  exact DkMath.KUS.ScaleSpec.toNat_scaleKUS_toKUS_add (σ := toyScale) toySupport n m
+  exact DkMath.KUS.toNat_scale_toKUS_add (σ := toyScale) toySupport n m
 
 end DkMath.KUS.Examples

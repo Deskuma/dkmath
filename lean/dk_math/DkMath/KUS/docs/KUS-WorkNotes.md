@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-08: naming/API cleanup
+status: 作業中 - phase-09: alias adoption decision
 
 ## 課題
 
@@ -15,10 +15,11 @@ status: 作業中 - phase-08: naming/API cleanup
 - [x] fiber 型設計（Nat alias / subtype）比較を文書化する
 - [x] phase-05 補題の利用例を `Examples.lean` に追加する
 - [x] `Scale` API の非破壊命名整理を行う
+- [x] alias 補題の `Examples` 反映範囲を判断する
 
 ## 状況タスク
 
-- 完了条件（phase-08）
+- 完了条件（phase-09）
   - [x] `DkMath/KUS/Unit.lean` が `US` を提供する
   - [x] `DkMath/KUS/Core.lean` が `KUS`, `mkWith`, `zeroState` を提供する
   - [x] `DkMath/KUS/NatEmbed.lean` が `ofNat`, `toNat` を提供する
@@ -31,13 +32,14 @@ status: 作業中 - phase-08: naming/API cleanup
   - [x] `DkMath/KUS/docs/KUS-FiberDesign.md` に採用方針と移行トリガーがある
   - [x] `DkMath/KUS/Examples.lean` に phase-05 補題の利用例がある
   - [x] `DkMath/KUS/Scale.lean` に alias API が追加されている
+  - [x] `DkMath/KUS/Examples.lean` が alias 補題を利用している
 
 ## 計画
 
 - 直近の主戦場:
-  - phase-09 の方向決め（alias 反映範囲）
+  - phase-10 の方向決め（alias 適用の拡張有無）
 - 直近の設計候補:
-  - alias API を `Examples.lean` へ適用するかは任意とし、可読性効果を見て判断する
+  - alias 適用は `Examples` を境界とし、コア理論は従来名を維持する
   - subtype 版の試作は本流へ入れず docs 先行で設計比較する
   - 例示モジュールを肥大化させず、証明用の最小例に限定する
 - 非目標（phase-01 ではやらない）:
@@ -57,6 +59,7 @@ status: 作業中 - phase-08: naming/API cleanup
 - phase-06 では `KUS-FiberDesign.md` を追加し、`Fiber := Nat` 継続採用と subtype 版への移行トリガーを明文化した。
 - phase-07 では `Examples.lean` に phase-05 補題の利用例を追加し、定義済み整合補題の実用性を確認した。
 - phase-08 では `Scale.lean` に非破壊 alias API を追加し、長い修飾名なしでも同じ理論を参照できるようにした。
+- phase-09 では alias API を `Examples.lean` へ適用し、可読性改善が実利用で有効かを確認した。
 
 ## 作業ログ
 
@@ -260,5 +263,21 @@ status: 作業中 - phase-08: naming/API cleanup
   1. `DkMath.KUS` は build succeeded を確認
   2. root `DkMath` でも build succeeded を確認
   3. phase-08 途中で alias 実装の推論問題が出たため、補題 alias のみに絞って安定化した
+- 次の予定:
+  - phase-09 で alias 適用範囲を判断し、必要なら Examples 側の呼び出しを整理する
+
+### 2026-03-14 phase-09 alias 適用判断
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Examples.lean`
+  - `lean/dk_math/DkMath/KUS/docs/KUS-ScaleSpec.md`
+- 内容:
+  1. `Examples.lean` の phase-05 補題呼び出しを alias 名へ置換した
+  2. 置換対象は 3 箇所に限定し、理論本体の命名は維持した
+  3. alias 適用は「利用例層でのみ採用」が妥当という結論にした
+- 次の予定:
+  - phase-10 で alias 適用の拡張有無を判断する
+  1. root `DkMath` でも build succeeded を確認
+  2. phase-08 途中で alias 実装の推論問題が出たため、補題 alias のみに絞って安定化した
 - 次の予定:
   - phase-09 で alias 適用範囲を判断し、必要なら Examples 側の呼び出しを整理する
