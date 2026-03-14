@@ -2,6 +2,14 @@
 
 ## History Log
 
+### 2026-03-15 / Work Unit 35. phase-21 harmonizeMul と decode 自然性の導入
+
+- `DkMath/KUS/Transport.lean` に `harmonizeMul` / `harmonizeMulTo` を追加し、異 support 演算の 3 相合成を乗法にも拡張した。
+- `toCoeff_harmonizeMul` / `extract_g_harmonizeMul` / `toCoeff_harmonizeMulTo` / `extract_g_harmonizeMulTo` を追加し、係数計算と support 保持を補題として固定した。
+- decode 合成可換性として `harmonizeAddTo_decode_comp` と `harmonizeMulTo_decode_comp` を追加した。
+- `DkMathTest/KUS.lean` の `DkMathTest.GKUSTransport` に、乗法回帰と decode 合成自然性のテストを追加した。
+- `lake build DkMathTest.KUS` および `./lean-test.sh` の成功を確認した。
+
 ### 2026-03-15 / Work Unit 34. phase-20 異 support 演算（transport 規則）Lean 最小導入
 
 - `DkMath/KUS/Scale.lean` に `scaleGKUS` を追加し、`GKUS` の unit/blueprint transport と係数保持を `toCoeff_scaleGKUS` / `extract_g_scaleGKUS` で固定した。

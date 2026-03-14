@@ -42,6 +42,7 @@ variable {U₁ : Type u₁} {B₁ : BlueprintFamily U₁}
 variable {U₂ : Type u₂} {B₂ : BlueprintFamily U₂}
 variable {H : Type uH} {BH : BlueprintFamily H}
 variable {T : Type uT} {BT : BlueprintFamily T}
+variable {T' : Type _} {BT' : BlueprintFamily T'}
 
 /-- 左入力を共通調和 support `H` へ encode。 -/
 @[simp] def encodeLeft (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
@@ -65,6 +66,19 @@ variable {T : Type uT} {BT : BlueprintFamily T}
     (ds : DecodeSpec H BH T BT)
     (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂) : GKUS C T BT :=
   ScaleSpec.scaleGKUS ds.dec (harmonizeAdd hs x y)
+
+/-- encode 後に共通 support で乗算する（結果は H 上）。 -/
+@[simp] def harmonizeMul [Mul C]
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂) : GKUS C H BH :=
+  gMul (encodeLeft hs x) (encodeRight hs y) (hs.sameSupport x y)
+
+/-- encode → confluence(mul) → decode の 3 相合成。 -/
+@[simp] def harmonizeMulTo [Mul C]
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (ds : DecodeSpec H BH T BT)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂) : GKUS C T BT :=
+  ScaleSpec.scaleGKUS ds.dec (harmonizeMul hs x y)
 
 @[simp] theorem toCoeff_harmonizeAdd [Add C]
     (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
@@ -95,6 +109,56 @@ variable {T : Type uT} {BT : BlueprintFamily T}
     extract_g (harmonizeAddTo hs ds x y)
       = ScaleSpec.scaleUS ds.dec (extract_g (harmonizeAdd hs x y)) := by
   simp [harmonizeAddTo]
+
+@[simp] theorem toCoeff_harmonizeMul [Mul C]
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂) :
+    toCoeff (harmonizeMul hs x y) = toCoeff x * toCoeff y := by
+  unfold harmonizeMul encodeLeft encodeRight
+  simp [gMul, gOp, toCoeff]
+
+@[simp] theorem extract_g_harmonizeMul [Mul C]
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂) :
+    extract_g (harmonizeMul hs x y) = extract_g (encodeLeft hs x) := by
+  unfold harmonizeMul encodeLeft encodeRight
+  simp [gOp]
+
+@[simp] theorem toCoeff_harmonizeMulTo [Mul C]
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (ds : DecodeSpec H BH T BT)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂) :
+    toCoeff (harmonizeMulTo hs ds x y) = toCoeff x * toCoeff y := by
+  unfold harmonizeMulTo
+  simpa using toCoeff_harmonizeMul (hs := hs) (x := x) (y := y)
+
+@[simp] theorem extract_g_harmonizeMulTo [Mul C]
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (ds : DecodeSpec H BH T BT)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂) :
+    extract_g (harmonizeMulTo hs ds x y)
+      = ScaleSpec.scaleUS ds.dec (extract_g (harmonizeMul hs x y)) := by
+  simp [harmonizeMulTo]
+
+/-- decode の合成に対する自然性（加法版）。 -/
+@[simp] theorem harmonizeAddTo_decode_comp [Add C]
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (ds : DecodeSpec H BH T BT)
+    (τ : ScaleSpec T BT T' BT')
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂) :
+    ScaleSpec.scaleGKUS τ (harmonizeAddTo hs ds x y)
+      = harmonizeAddTo hs ⟨ScaleSpec.comp τ ds.dec⟩ x y := by
+  simp [harmonizeAddTo]
+
+/-- decode の合成に対する自然性（乗法版）。 -/
+@[simp] theorem harmonizeMulTo_decode_comp [Mul C]
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (ds : DecodeSpec H BH T BT)
+    (τ : ScaleSpec T BT T' BT')
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂) :
+    ScaleSpec.scaleGKUS τ (harmonizeMulTo hs ds x y)
+      = harmonizeMulTo hs ⟨ScaleSpec.comp τ ds.dec⟩ x y := by
+  simp [harmonizeMulTo]
 
 end HarmonizeSpec
 

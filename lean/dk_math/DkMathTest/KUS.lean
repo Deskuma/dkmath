@@ -272,12 +272,30 @@ def ds : DecodeSpec ToyUnit ToyBlueprint ToyUnit ToyBlueprint where
     mapBlueprint := fun {_} _ => ⟨0, by decide⟩
   }
 
+def ds2 : DecodeSpec ToyUnit ToyBlueprint ToyUnit ToyBlueprint where
+  dec := {
+    mapUnit := fun _ => 7
+    mapBlueprint := fun {_} _ => ⟨0, by decide⟩
+  }
+
+def tau : ScaleSpec ToyUnit ToyBlueprint ToyUnit ToyBlueprint where
+  mapUnit := fun _ => 9
+  mapBlueprint := fun {_} _ => ⟨0, by decide⟩
+
 def supportH : US ToyUnit ToyBlueprint where
   unit := 2
   blueprint := ⟨0, by decide⟩
 
 def supportT : US ToyUnit ToyBlueprint where
   unit := 1
+  blueprint := ⟨0, by decide⟩
+
+def supportT2 : US ToyUnit ToyBlueprint where
+  unit := 7
+  blueprint := ⟨0, by decide⟩
+
+def supportTau : US ToyUnit ToyBlueprint where
+  unit := 9
   blueprint := ⟨0, by decide⟩
 
 example : toCoeff (HarmonizeSpec.harmonizeAdd hs gx gy) = ((1 : Rat) / 2 + (1 : Rat) / 3) := by
@@ -295,5 +313,36 @@ example :
 
 example : extract_g (HarmonizeSpec.harmonizeAddTo hs ds gx gy) = supportT := by
   simp [HarmonizeSpec.harmonizeAdd, HarmonizeSpec.encodeLeft, hs, ds, supportT]
+
+example : toCoeff (HarmonizeSpec.harmonizeMul hs gx gy) = ((1 : Rat) / 2) * ((1 : Rat) / 3) := by
+  simpa [gx, gy] using (HarmonizeSpec.toCoeff_harmonizeMul (hs := hs) (x := gx) (y := gy))
+
+example : extract_g (HarmonizeSpec.harmonizeMul hs gx gy) = supportH := by
+  simpa [HarmonizeSpec.encodeLeft, hs, gx, supportH] using
+    (HarmonizeSpec.extract_g_harmonizeMul (hs := hs) (x := gx) (y := gy))
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeMulTo hs ds2 gx gy)
+      = ((1 : Rat) / 2) * ((1 : Rat) / 3) := by
+  simpa [gx, gy] using
+    (HarmonizeSpec.toCoeff_harmonizeMulTo (hs := hs) (ds := ds2) (x := gx) (y := gy))
+
+example : extract_g (HarmonizeSpec.harmonizeMulTo hs ds2 gx gy) = supportT2 := by
+  simp [HarmonizeSpec.harmonizeMul, HarmonizeSpec.encodeLeft, hs, ds2, supportT2]
+
+example :
+    ScaleSpec.scaleGKUS tau (HarmonizeSpec.harmonizeAddTo hs ds gx gy)
+      = HarmonizeSpec.harmonizeAddTo hs ⟨ScaleSpec.comp tau ds.dec⟩ gx gy := by
+  simp
+
+example :
+    ScaleSpec.scaleGKUS tau (HarmonizeSpec.harmonizeMulTo hs ds2 gx gy)
+      = HarmonizeSpec.harmonizeMulTo hs ⟨ScaleSpec.comp tau ds2.dec⟩ gx gy := by
+  simp
+
+example :
+    extract_g (ScaleSpec.scaleGKUS tau (HarmonizeSpec.harmonizeAddTo hs ds gx gy))
+      = supportTau := by
+  simp [HarmonizeSpec.harmonizeAdd, HarmonizeSpec.encodeLeft, hs, ds, tau, supportTau]
 
 end DkMathTest.GKUSTransport
