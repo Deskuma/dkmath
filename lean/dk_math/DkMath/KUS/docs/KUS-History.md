@@ -2,6 +2,16 @@
 
 ## History Log
 
+### 2026-03-15 / Work Unit 34. phase-20 異 support 演算（transport 規則）Lean 最小導入
+
+- `DkMath/KUS/Scale.lean` に `scaleGKUS` を追加し、`GKUS` の unit/blueprint transport と係数保持を `toCoeff_scaleGKUS` / `extract_g_scaleGKUS` で固定した。
+- 同ファイルに `scaleGKUS_comp` を追加し、`ScaleSpec.comp` に対する合成整合を `GKUS` 側でも成立させた。
+- `DkMath/KUS/Transport.lean` を新規作成し、`HarmonizeSpec` / `DecodeSpec` と `harmonizeAdd` / `harmonizeAddTo` を実装した。
+- `toCoeff_harmonizeAdd` / `extract_g_harmonizeAdd` / `toCoeff_harmonizeAddTo` / `extract_g_harmonizeAddTo` を追加し、encode-confluence-decode の最小法則を補題として固定した。
+- 入口 `DkMath/KUS.lean` に `import DkMath.KUS.Transport` を追加した。
+- `DkMathTest/KUS.lean` に `DkMathTest.GKUSTransport` を追加し、異 support 入力を共通 support へ合流する回帰テストを実装した。
+- `lake build DkMathTest.KUS` と `./lean-test.sh` を実行し、`build succeeded` を確認した。
+
 ### 2026-03-15 / Work Unit 33. phase-19 異 support 演算（transport 規則）設計初稿
 
 - `DkMath/KUS/docs/KUS-transport-design-spec.md` を新規作成し、異 support 演算の設計原理を `US₁ → H ← US₂` の span 図式として定義した。

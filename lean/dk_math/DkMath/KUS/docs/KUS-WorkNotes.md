@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-19: 異 support 演算（transport 規則）設計
+status: 作業中 - phase-20: 異 support 演算（transport 規則）Lean 最小導入
 
 ## 課題
 
@@ -500,3 +500,20 @@ status: 作業中 - phase-19: 異 support 演算（transport 規則）設計
   5. 実装段階を phase-19a〜19c（docs-first → Lean最小導入 → DHNT/Cosmic bridge）に分割した
 - 次の予定:
   - phase-20: `ScaleSpec` の `GKUS` 版 transport（`scaleGKUS`）と `HarmonizeSpec` の Lean 最小導入
+
+### 2026-03-15 phase-20 異 support 演算（transport 規則）Lean 最小導入
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Scale.lean`
+  - `lean/dk_math/DkMath/KUS/Transport.lean`
+  - `lean/dk_math/DkMath/KUS.lean`
+  - `lean/dk_math/DkMathTest/KUS.lean`
+- 内容:
+  1. `ScaleSpec` に `GKUS` 版 transport として `scaleGKUS` を追加し、`toCoeff_scaleGKUS` / `extract_g_scaleGKUS` / `scaleGKUS_comp` を補題化した
+  2. `DkMath.KUS.Transport` を新設し、`HarmonizeSpec` / `DecodeSpec` と `harmonizeAdd` / `harmonizeAddTo` を実装した
+  3. `toCoeff_harmonizeAdd` / `extract_g_harmonizeAdd` / `toCoeff_harmonizeAddTo` / `extract_g_harmonizeAddTo` を追加し、3 相（encode-confluence-decode）の最小性質を固定した
+  4. 入口 `DkMath/KUS.lean` に `import DkMath.KUS.Transport` を追加し公開 API に接続した
+  5. `DkMathTest/KUS.lean` に `DkMathTest.GKUSTransport` 節を追加し、異 support 入力（`supportL`/`supportR`）から `H` へ合流して係数計算・support 保持を確認する回帰テストを追加した
+  6. 検証として `lake build DkMathTest.KUS` と `./lean-test.sh` の成功を確認した
+- 次の予定:
+  - phase-21: `harmonizeMul` 追加と decode 自然性（合成可換性）補題の最小導入

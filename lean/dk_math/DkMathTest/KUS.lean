@@ -231,3 +231,69 @@ example : gMul grA (gDiv grB grC hBC)
     (by simp [GSameSupport, gOp]) (by simp [GSameSupport, gOp])
 
 end DkMathTest.GKUSAlgebra
+
+namespace DkMathTest.GKUSTransport
+
+open DkMath.KUS
+
+abbrev ToyUnit := DkMath.KUS.Examples.ToyUnit
+abbrev ToyBlueprint := DkMath.KUS.Examples.ToyBlueprint
+
+def supportL : US ToyUnit ToyBlueprint where
+  unit := 3
+  blueprint := ⟨0, by decide⟩
+
+def supportR : US ToyUnit ToyBlueprint where
+  unit := 5
+  blueprint := ⟨0, by decide⟩
+
+abbrev gx : GKUS Rat ToyUnit ToyBlueprint :=
+  mkGWith ((1 : Rat) / 2) supportL
+
+abbrev gy : GKUS Rat ToyUnit ToyBlueprint :=
+  mkGWith ((1 : Rat) / 3) supportR
+
+def hs : HarmonizeSpec Rat ToyUnit ToyBlueprint ToyUnit ToyBlueprint ToyUnit ToyBlueprint where
+  encLeft := {
+    mapUnit := fun _ => 2
+    mapBlueprint := fun {_} _ => ⟨0, by decide⟩
+  }
+  encRight := {
+    mapUnit := fun _ => 2
+    mapBlueprint := fun {_} _ => ⟨0, by decide⟩
+  }
+  sameSupport := by
+    intro x y
+    simp [GSameSupport]
+
+def ds : DecodeSpec ToyUnit ToyBlueprint ToyUnit ToyBlueprint where
+  dec := {
+    mapUnit := fun _ => 1
+    mapBlueprint := fun {_} _ => ⟨0, by decide⟩
+  }
+
+def supportH : US ToyUnit ToyBlueprint where
+  unit := 2
+  blueprint := ⟨0, by decide⟩
+
+def supportT : US ToyUnit ToyBlueprint where
+  unit := 1
+  blueprint := ⟨0, by decide⟩
+
+example : toCoeff (HarmonizeSpec.harmonizeAdd hs gx gy) = ((1 : Rat) / 2 + (1 : Rat) / 3) := by
+  simpa [gx, gy] using (HarmonizeSpec.toCoeff_harmonizeAdd (hs := hs) (x := gx) (y := gy))
+
+example : extract_g (HarmonizeSpec.harmonizeAdd hs gx gy) = supportH := by
+  simpa [HarmonizeSpec.encodeLeft, hs, gx, supportH] using
+    (HarmonizeSpec.extract_g_harmonizeAdd (hs := hs) (x := gx) (y := gy))
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeAddTo hs ds gx gy)
+      = ((1 : Rat) / 2 + (1 : Rat) / 3) := by
+  simpa [gx, gy] using
+    (HarmonizeSpec.toCoeff_harmonizeAddTo (hs := hs) (ds := ds) (x := gx) (y := gy))
+
+example : extract_g (HarmonizeSpec.harmonizeAddTo hs ds gx gy) = supportT := by
+  simp [HarmonizeSpec.harmonizeAdd, HarmonizeSpec.encodeLeft, hs, ds, supportT]
+
+end DkMathTest.GKUSTransport
