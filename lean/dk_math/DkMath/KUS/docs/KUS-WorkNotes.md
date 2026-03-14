@@ -92,30 +92,6 @@ status: 作業中 - phase-14: 係数型の一般化（GKUS / Nat→Int→Rat）
 - phase-12 では `Add.lean` を追加し、同一 support 上の KUS 加算（`kusAdd`）を実装した。零追跡性・単位元・交換則・結合則を最小形で固定した。
 - phase-13 では `Mul.lean` を追加し、同一 support 上の KUS 乗法（`kusMul`）を実装した。零追跡性・単位元・交換則・結合則を最小形で固定した。
 
-### 2026-03-14 phase-13 KUS 乗法の実装
-
-- 対象:
-  - `lean/dk_math/DkMath/KUS/Mul.lean`
-  - `lean/dk_math/DkMath/KUS.lean`
-- 内容:
-  1. `kusMul` を定義し、可視係数の Nat 乗法と support 保持を一体化した
-  2. `oneState` を導入し、左右単位元（`one_mul`, `mul_one`）を固定した
-  3. 零追跡性（`kusMul.zero_tracking`）を固定した
-  4. 交換則・結合則を `toNat` レベルで固定した
-  5. 零閉補題（`zeroState_kusMul_zeroState`）を追加した
-- 次の予定:
-  - phase-14 で係数拡張（Nat→Int/Rat）の設計を docs 先行で固める
-
-### 2026-03-14 phase-13 ビルド確認（lean-build.sh）
-
-- 対象:
-  - `cd lean/dk_math && ./lean-build.sh DkMath.KUS`
-- 内容:
-  1. `DkMath.KUS` は build succeeded を確認
-  2. `omega` 依存を除去し、`Nat.mul_comm`/`Nat.mul_assoc` による安定証明へ整理した
-- 次の予定:
-  - phase-14 で係数拡張の前提を整理する
-
 ## 作業ログ
 
 ### 2026-03-14 phase-01 最小核の実装
@@ -401,6 +377,42 @@ status: 作業中 - phase-14: 係数型の一般化（GKUS / Nat→Int→Rat）
 - 次の予定:
   - phase-13 で減法または乗法の最小実装へ進む
 
+### 2026-03-14 phase-13 KUS 乗法の実装
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Mul.lean`
+  - `lean/dk_math/DkMath/KUS.lean`
+- 内容:
+  1. `kusMul` を定義し、可視係数の Nat 乗法と support 保持を一体化した
+  2. `oneState` を導入し、左右単位元（`one_mul`, `mul_one`）を固定した
+  3. 零追跡性（`kusMul.zero_tracking`）を固定した
+  4. 交換則・結合則を `toNat` レベルで固定した
+  5. 零閉補題（`zeroState_kusMul_zeroState`）を追加した
+- 次の予定:
+  - phase-14 で係数拡張（Nat→Int/Rat）の設計を docs 先行で固める
+
+### 2026-03-14 phase-13 ビルド確認（lean-build.sh）
+
+- 対象:
+  - `cd lean/dk_math && ./lean-build.sh DkMath.KUS`
+- 内容:
+  1. `DkMath.KUS` は build succeeded を確認
+  2. `omega` 依存を除去し、`Nat.mul_comm`/`Nat.mul_assoc` による安定証明へ整理した
+- 次の予定:
+  - phase-14 で係数拡張の前提を整理する
+
+### 2026-03-14 phase-14 Rat 係数テスト追加
+
+- 対象:
+  - `lean/dk_math/DkMathTest/KUS.lean`
+- 内容:
+  1. `Rat` 係数の `grA` (`1/2`) / `grB` (`1/3`) と共通補題 `hR` を追加した
+  2. `gAdd`/`gMul`/`gSub` の係数計算テストと `extract_g` support 保持テストを追加した
+  3. `Rat` 乗法の優先順位問題（`*` と `/` 混在）を明示括弧で修正して安定化した
+  4. `tl` で `build succeeded` を確認した（error/warning ともなし）
+- 次の予定:
+  - phase-15 で `gDiv`（除算）設計と `Rat` ゼロ追跡の整理を行う
+
 ### 2026-03-14 phase-14 GKUS テスト修復（`lake test` 復旧）
 
 - 対象:
@@ -461,14 +473,14 @@ status: 作業中 - phase-14: 係数型の一般化（GKUS / Nat→Int→Rat）
 - 次の予定:
   - phase-18: `GKUS` 全体の設計整理・ドキュメント総括
 
-### 2026-03-14 phase-14 Rat 係数テスト追加
+### 2026-03-15 phase-18 GKUS 設計総括ドキュメント（論文化）
 
 - 対象:
-  - `lean/dk_math/DkMathTest/KUS.lean`
+  - `lean/dk_math/DkMath/KUS/docs/GKUS-Design-Synthesis.md`
 - 内容:
-  1. `Rat` 係数の `grA` (`1/2`) / `grB` (`1/3`) と共通補題 `hR` を追加した
-  2. `gAdd`/`gMul`/`gSub` の係数計算テストと `extract_g` support 保持テストを追加した
-  3. `Rat` 乗法の優先順位問題（`*` と `/` 混在）を明示括弧で修正して安定化した
-  4. `tl` で `build succeeded` を確認した（error/warning ともなし）
+  1. GKUS 実装を論文化形式（Markdown）で総括した
+  2. 章立てを「概要・問題設定・形式モデル・代数階層・証明様式・Rat 検証・理論的意義・制約と今後」に統一した
+  3. `gAdd`/`gMul`/`gSub`/`gDiv` と phase-16,17 の代数法則を、設計上の意味（係数層と構造層の分離）に結び付けて記述した
+  4. 今後課題として異 support 演算の整合法則と数論適用方針を明示した
 - 次の予定:
-  - phase-15 で `gDiv`（除算）設計と `Rat` ゼロ追跡の整理を行う
+  - phase-19: GKUS の異 support 演算（transport 規則）設計案の初稿作成
