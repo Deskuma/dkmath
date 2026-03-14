@@ -90,9 +90,24 @@
 
 - `DkMath.FLT`
 
+### 3.11 KUS（単位構造演算）
+
+- `DkMath.KUS.Unit` — `US` 構造（unit + blueprint 束）
+- `DkMath.KUS.Blueprint` — `BlueprintFamily` / `BlueprintAt` 型エイリアス
+- `DkMath.KUS.Core` — `KUS` 構造・`mkWith`・`zeroState`
+- `DkMath.KUS.NatEmbed` — `ofNat` / `toNat`
+- `DkMath.KUS.Extract` — `extract`（support 取り出し）
+- `DkMath.KUS.RoundTrip` — 往復定理（`reconstruct_from_extract` 等）
+- `DkMath.KUS.Add` — `kusAdd`・`SameSupport`
+- `DkMath.KUS.Mul` — `kusMul`・`oneState`
+- `DkMath.KUS.Scale` — `ScaleSpec`（異 support 間スケール写像）
+- `DkMath.KUS.Monoid` — `Fiber` 型エイリアス
+- `DkMath.KUS.Coeff` — `GKUS`（汎用係数型）・`gOp`/`gAdd`/`gMul`/`gDiv` 等
+- `DkMath.KUS.Examples` — `ToyUnit` / `toyX` / `toyScale` サンプル
+
 ---
 
-## 3.11 理論依存グラフ（章立て再編）
+## 3.12 理論依存グラフ（章立て再編）
 
 ここからは「理論の流れ」で再構成する。
 
@@ -430,11 +445,131 @@ graph TD
 
 ---
 
-## 3.12 ダッシュボード（規模と未完集中）
+# V. KUS柱（単位構造演算）
+
+## V-1. 設計概要
+
+```mermaid
+graph TD
+  Unit[DkMath.KUS.Unit] --> Blueprint[DkMath.KUS.Blueprint]
+  Blueprint --> Core[DkMath.KUS.Core]
+  Core --> NatEmbed[DkMath.KUS.NatEmbed]
+  NatEmbed --> Extract[DkMath.KUS.Extract]
+  Extract --> RoundTrip[DkMath.KUS.RoundTrip]
+  RoundTrip --> Add[DkMath.KUS.Add]
+  RoundTrip --> Mul[DkMath.KUS.Mul]
+  RoundTrip --> Scale[DkMath.KUS.Scale]
+  Add --> Coeff[DkMath.KUS.Coeff]
+  Mul --> Coeff
+  Coeff --> Examples[DkMath.KUS.Examples]
+```
+
+- **KUS** = Knowledge Unit Structure（単位構造演算体）
+- `coeff` が観測される可視係数、`unit` + `blueprint` が「構造保持側（US）」。
+- 係数が 0 になっても US は消えない — これが **zero tracking** 保証。
+- **GKUS** = Generic KUS：`Nat` 以外の任意係数型 `C` を扱う汎用版。
+
+---
+
+## V-2. 補題インデックス
+
+### V-2-a. 基盤層（Unit / Blueprint / Core）
+
+主に `DkMath.KUS.Unit` / `DkMath.KUS.Blueprint` / `DkMath.KUS.Core`。
+
+- `structure US` : unit + blueprint を束ねる構造保持核
+- `abbrev BlueprintFamily` : `U → Type v` のエイリアス
+- `structure KUS` : coeff + unit + blueprint の最小核
+- `def toUS` : KUS → US の forgetful map
+- `def mkWith` : 係数と support から KUS を構築
+- `def zeroState` : 係数 0 の zero state
+
+---
+
+### V-2-b. 埋め込み・抽出層（NatEmbed / Extract / RoundTrip）
+
+主に `DkMath.KUS.NatEmbed` / `DkMath.KUS.Extract` / `DkMath.KUS.RoundTrip`。
+
+- `def ofNat` : Nat → KUS 埋め込み
+- `def toNat` : KUS → Nat 可視係数取り出し
+- `def extract` : KUS → US 構造取り出し
+- `theorem roundTrip_nat` : `toNat (ofNat s n) = n`
+- `theorem roundTrip_support` : `extract (ofNat s n) = s`
+- `theorem reconstruct_from_extract` : `ofNat (extract x) (toNat x) = x` ✅
+
+---
+
+### V-2-c. 演算層（Add / Mul / Scale）
+
+主に `DkMath.KUS.Add` / `DkMath.KUS.Mul` / `DkMath.KUS.Scale`。
+
+- `def SameSupport` : 2 つの KUS が同一 support を持つ述語
+- `theorem SameSupport.symm` / `theorem SameSupport.trans`
+- `def kusAdd` : SameSupport 保証付き Nat 係数加算
+- `def kusMul` : SameSupport 保証付き Nat 係数乗算
+- `def oneState` : 乗法単位元 KUS
+- `theorem kusAdd.zero_tracking` : 和が 0 でも extract は support を保持
+- `theorem kusMul.zero_tracking` : 積が 0 でも extract は support を保持
+- `structure ScaleSpec` : 異 support 間スケール写像
+- `theorem scale_toKUS` / `theorem extract_scale_toKUS` / `theorem toNat_scale_toKUS_add`
+
+---
+
+### V-2-d. 汎用係数層 GKUS（Coeff）✅
+
+モジュール：`DkMath.KUS.Coeff`
+
+- `structure GKUS C U Blueprint` : 係数型 `C` を汎用化した KUS
+- `def mkGWith` / `def extract_g` / `def toCoeff`
+- `def GSameSupport` : GKUS 版同一 support 述語
+- `def gOp (op : C → C → C)` : 基底二項演算（全操作の共通カーネル）
+- `abbrev gAdd [Add C]` / `abbrev gMul [Mul C]` / `abbrev gSub [Sub C]` / `abbrev gDiv [Div C]`
+- `theorem gAdd.zero_tracking` / `theorem gMul.zero_tracking` / …（各演算版）
+- `def kusToGKUS` / `def gKUSToKUS` / `theorem gKUSToKUS_roundtrip` ✅
+
+**section Algebra（代数法則）✅**  型クラス `[DivisionRing C]` / `[CommMonoid C]` / `[Distrib C]` 等：
+
+- `theorem gAdd_comm [AddCommMonoid C]`
+- `theorem gAdd_assoc [AddSemigroup C]`
+- `theorem gMul_comm [CommMonoid C]`
+- `theorem gMul_assoc [Semigroup C]`
+- `theorem gMul_gAdd [Distrib C]` — 左分配則
+- `theorem gAdd_gMul [Distrib C]` — 右分配則
+- `theorem gDiv_one [DivisionRing C]`
+- `theorem gDiv_add_distrib [DivisionRing C]`
+- `theorem gMul_gDiv_assoc [DivisionRing C]`
+
+---
+
+### V-2-e. Examples（おもちゃ例）
+
+- `ToyUnit = Nat`, `ToyBlueprint (u) = Fin (u + 1)`
+- `toySupport`, `toyX`, `toyY`, `toyMul`
+- `toyScale : ScaleSpec ToyUnit ToyBlueprint ToyUnit ToyBlueprint`
+
+---
+
+## V-3. 設計原則
+
+- **二層分離**: 観測層（coefficient）× 構造層（support = US）
+- **zero tracking 保証**: 係数が 0 になっても support は消えない（gAdd/gMul/gSub/gDiv すべてで保証）
+- **gOp 抽象化**: 全演算の共通カーネル — `gAdd/gMul/gSub/gDiv` は `gOp` の特殊化
+- **証明パターン**: `GKUS.ext` → 3 サブゴール → `simp [gOp, <代数則>]`
+
+## V-4. 関連ドキュメント
+
+- `DkMath/KUS/docs/KUS-CoeffDesign.md` — GKUS 設計背景
+- `DkMath/KUS/docs/GKUS-Design-Synthesis.md` — 設計総括（論文形式、phase-18 作成）
+- `DkMath/KUS/docs/KUS-History.md` — 開発履歴（Work Unit 27–32）
+- `DkMath/KUS/docs/KUS-WorkNotes.md` — 作業ノート（phase-14〜18 ログ）
+
+---
+
+## 3.13 ダッシュボード（規模と未完集中）
 
 （この節は 2026-03-10 時点のワークツリー実測から更新。）
 
-### 3.12.1 宣言（`def/lemma/theorem`）の総数
+### 3.13.1 宣言（`def/lemma/theorem`）の総数
 
 - `rg -n "^(theorem|lemma|def)\\s+" lean/dk_math/DkMath -S` で抽出：**2612 件**
 - 対象 Lean ファイル数（`find lean/dk_math/DkMath -name "*.lean"`）：**163 ファイル**
@@ -446,7 +581,7 @@ graph TD
 
 が理由としてあり得る。
 
-### 3.12.2 `sorry`（証明穴）の総数
+### 3.13.2 `sorry`（証明穴）の総数
 
 - `rg -n --type-add 'lean:*.lean' --type lean "\\bsorry\\b" lean/dk_math/DkMath -S` で抽出：**25 件**
 

@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-11: alias naming guide
+status: 作業中 - phase-14: 係数型の一般化（GKUS / Nat→Int→Rat）
 
 ## 課題
 
@@ -18,10 +18,19 @@ status: 作業中 - phase-11: alias naming guide
 - [x] alias 補題の `Examples` 反映範囲を判断する
 - [x] alias 標準適用範囲を文書として固定する
 - [x] alias 命名規則ガイドを `KUS-AliasPolicy.md` に追加する
+- [x] 同一 support 上の KUS 加算（`kusAdd`）を定義する
+- [x] 零追跡性補題を実装する（係数が零になっても support を保持）
+- [x] 同一 support 上の KUS 乗法（`kusMul`）を定義する
+- [x] 乗法の零追跡性補題を実装する（係数が零になっても support を保持）
+- [x] `lake test` 環境を `DkMathTest` として整備する
+- [x] KUS 回帰テスト（`DkMathTest/KUS.lean`）を追加する
+- [ ] 係数型を一般化した `GKUS C U Blueprint` を設計・実装する
+- [ ] `Nat` 係数をデフォルトとして既存 `KUS` との互換性を保つ
+- [ ] `Int` 係数上での加算・乗法を最小実装する
 
 ## 状況タスク
 
-- 完了条件（phase-11）
+- 完了条件（phase-13）
   - [x] `DkMath/KUS/Unit.lean` が `US` を提供する
   - [x] `DkMath/KUS/Core.lean` が `KUS`, `mkWith`, `zeroState` を提供する
   - [x] `DkMath/KUS/NatEmbed.lean` が `ofNat`, `toNat` を提供する
@@ -37,12 +46,26 @@ status: 作業中 - phase-11: alias naming guide
   - [x] `DkMath/KUS/Examples.lean` が alias 補題を利用している
   - [x] `DkMath/KUS/docs/KUS-AliasPolicy.md` に運用方針がある
   - [x] `DkMath/KUS/docs/KUS-AliasPolicy.md` に命名規則ガイドがある
+  - [x] `DkMath/KUS/Add.lean` が `SameSupport` と `kusAdd` を提供する
+  - [x] 零追跡性（`zero_tracking`）が補題として固定されている
+  - [x] 単位元・交換則・結合則（toNat レベル）が補題として固定されている
+  - [x] `DkMath/KUS/Mul.lean` が `kusMul` と `oneState` を提供する
+  - [x] 乗法の零追跡性（`kusMul.zero_tracking`）が補題として固定されている
+  - [x] `lakefile.toml` に `testDriver = "DkMathTest"` を追加した
+  - [x] `DkMathTest/KUS.lean` に kusAdd / kusMul の回帰テストがある
+  - [ ] `DkMath/KUS/docs/KUS-CoeffDesign.md` に係数拡張の設計がある
+  - [ ] `DkMath/KUS/Coeff.lean` が `GKUS` を提供する
+  - [ ] `Int` 係数の最小テストが `DkMathTest/KUS.lean` にある
 
 ## 計画
 
 - 直近の主戦場:
-  - phase-12 の方向決め（次の実装拡張候補を選択）
+  - phase-14: 係数型一般化（`GKUS C U Blueprint`）
 - 直近の設計候補:
+  - `GKUS` は `C : Type*` でパラメータ化し、`CommSemiring C` を要求する
+  - 既存 `KUS` は `GKUS Nat` の型エイリアスとして互換性を保つ
+  - 減法は `C = Int` 以上のときのみ意味を持つ（`Ab` 群制約で導入）
+  - 乗法は CommSemiring の範囲で自然に使える
   - alias 適用は `Examples` を境界とし、コア理論は従来名を維持する
   - subtype 版の試作は本流へ入れず docs 先行で設計比較する
   - 例示モジュールを肥大化させず、証明用の最小例に限定する
@@ -66,6 +89,8 @@ status: 作業中 - phase-11: alias naming guide
 - phase-09 では alias API を `Examples.lean` へ適用し、可読性改善が実利用で有効かを確認した。
 - phase-10 では alias 運用範囲を docs へ固定し、適用境界を `Examples` 層までと明文化した。
 - phase-11 では alias 命名規則ガイドを `KUS-AliasPolicy.md` に追記し、将来追加時の揺れを防ぐ基準を確立した。
+- phase-12 では `Add.lean` を追加し、同一 support 上の KUS 加算（`kusAdd`）を実装した。零追跡性・単位元・交換則・結合則を最小形で固定した。
+- phase-13 では `Mul.lean` を追加し、同一 support 上の KUS 乗法（`kusMul`）を実装した。零追跡性・単位元・交換則・結合則を最小形で固定した。
 
 ## 作業ログ
 
@@ -325,3 +350,137 @@ status: 作業中 - phase-11: alias naming guide
   2. docs のみ変更で理論挙動は無変更であることを確認
 - 次の予定:
   - phase-12 で次の実装拡張候補を評価・選択する
+
+### 2026-03-14 phase-12 KUS 加算の実装
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Add.lean`
+  - `lean/dk_math/DkMath/KUS.lean`
+- 内容:
+  1. `SameSupport` 述語を導入し、同一 support の判定を型で明示した
+  2. `kusAdd` を定義し、可視係数加算と support 保持を一体化した
+  3. 零追跡性（`zero_tracking`）：係数が 0 になっても `extract` が US を返すことを補題で固定した
+  4. 零状態を左右単位元として確認した（`zero_add`, `add_zero`）
+  5. `toNat` レベルの交換則・結合則を `omega` で固定した
+  6. 零閉補題（`zeroState_kusAdd_zeroState`）を追加した
+- 次の予定:
+  - phase-13 で減法または乗法の導入を検討する
+
+### 2026-03-14 phase-12 ビルド確認（lean-build.sh）
+
+- 対象:
+  - `cd lean/dk_math && ./lean-build.sh DkMath.KUS`
+- 内容:
+  1. `DkMath.KUS` は build succeeded を確認（warning なし）
+  2. `symm`/`trans` の自己再帰は `unfold SameSupport at *` で解消した
+  3. `zero_tracking` の `hz` は `_` に変更し、support 保持が無条件であることを明確にした
+- 次の予定:
+  - phase-13 で減法または乗法の最小実装へ進む
+
+### 2026-03-14 phase-13 KUS 乗法の実装
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Mul.lean`
+  - `lean/dk_math/DkMath/KUS.lean`
+- 内容:
+  1. `kusMul` を定義し、可視係数の Nat 乗法と support 保持を一体化した
+  2. `oneState` を導入し、左右単位元（`one_mul`, `mul_one`）を固定した
+  3. 零追跡性（`kusMul.zero_tracking`）を固定した
+  4. 交換則・結合則を `toNat` レベルで固定した
+  5. 零閉補題（`zeroState_kusMul_zeroState`）を追加した
+- 次の予定:
+  - phase-14 で係数拡張（Nat→Int/Rat）の設計を docs 先行で固める
+
+### 2026-03-14 phase-13 ビルド確認（lean-build.sh）
+
+- 対象:
+  - `cd lean/dk_math && ./lean-build.sh DkMath.KUS`
+- 内容:
+  1. `DkMath.KUS` は build succeeded を確認
+  2. `omega` 依存を除去し、`Nat.mul_comm`/`Nat.mul_assoc` による安定証明へ整理した
+- 次の予定:
+  - phase-14 で係数拡張の前提を整理する
+
+### 2026-03-14 phase-14 Rat 係数テスト追加
+
+- 対象:
+  - `lean/dk_math/DkMathTest/KUS.lean`
+- 内容:
+  1. `Rat` 係数の `grA` (`1/2`) / `grB` (`1/3`) と共通補題 `hR` を追加した
+  2. `gAdd`/`gMul`/`gSub` の係数計算テストと `extract_g` support 保持テストを追加した
+  3. `Rat` 乗法の優先順位問題（`*` と `/` 混在）を明示括弧で修正して安定化した
+  4. `tl` で `build succeeded` を確認した（error/warning ともなし）
+- 次の予定:
+  - phase-15 で `gDiv`（除算）設計と `Rat` ゼロ追跡の整理を行う
+
+### 2026-03-14 phase-14 GKUS テスト修復（`lake test` 復旧）
+
+- 対象:
+  - `lean/dk_math/DkMathTest/KUS.lean`
+- 内容:
+  1. `DkMathTest.GKUS` 節を全面整理し、重複と構文崩れを除去した
+  2. `GSameSupport` 証明を `hN` / `hI` として共通化し、`gOp` / `gAdd` / `gMul` / `gSub` テストで再利用した
+  3. `extract_g` と係数一致の回帰テストを最小構成で復元した
+  4. `lake build DkMathTest.KUS` でエラー解消を確認した（warning のみ）
+  5. `./lean-test.sh` で `build succeeded` を確認した
+- 次の予定:
+  - phase-15: `GKUS` のコンテキスト拡張（`CommSemiring` 補題・`gDiv`（除算型）設計）
+  - `Rat` 係数でのゼロ追跡テスト（分子が 0 のとき support 保持）を検討する
+
+### 2026-03-14 phase-15 gDiv の実装と Rat 除算テスト
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Coeff.lean`
+  - `lean/dk_math/DkMathTest/KUS.lean`
+- 内容:
+  1. `abbrev gDiv [Div C] ...` を `gSub` 直後に追加し、`gOp (· / ·)` の略記として定義した
+  2. `gDiv` namespace に `toCoeff_div`、`extract_div_left`、`zero_tracking` を追加した
+  3. `DkMathTest/KUS.lean` に `Rat` 除算テスト 3 本を追加した
+     - `(1/2) / (1/3)` の係数計算テスト
+     - `extract_g` の support 保持テスト
+     - `x / 0 = 0`（Rat のゼロ除算）でも support 保持することのテスト
+  4. `tl` で `build succeeded` を確認した
+- 次の予定:
+  - phase-16: `CommSemiring` 補題の整備（`gAdd`/`gMul` の代数法則を `GKUS` レベルで固定）
+
+### 2026-03-14 phase-16 CommSemiring 補題の実装
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Coeff.lean`
+  - `lean/dk_math/DkMathTest/KUS.lean`
+- 内容:
+  1. `Coeff.lean` に `section Algebra` を追加し 6 本の代数法則を実装
+  2. comm 系: `simp only [gOp]` + `rw [add_comm/mul_comm, h']` パターン
+  3. assoc/distrib 系: `GKUS.ext` に分解して各フィールドを `simp [gOp, …]` で閉じる
+  4. `DkMathTest/KUS.lean` に `DkMathTest.GKUSAlgebra` を新設し Rat 3 値で全法則テスト
+  5. `tl` で `build succeeded` を確認（warning/error なし）
+- 次の予定:
+  - phase-17: 除算を組み込んだときの零追跡保証の強化（`gDiv` と除算向化の関係）
+
+### 2026-03-15 phase-17 gDiv 代数法則の実装
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Coeff.lean`
+  - `lean/dk_math/DkMathTest/KUS.lean`
+- 内容:
+  1. `gDiv_one` — `x / 1 = x`， `[DivisionRing C]`
+  2. `gDiv_add_distrib` — `(x + y) / z = x/z + y/z`， `[DivisionRing C]`
+  3. `gMul_gDiv_assoc` — `x * (y / z) = (x * y) / z`， `[DivisionRing C]`
+  4. 型クラスは全て `DivisionRing` に統一（`DivOneClass` は Mathlib に不在）
+  5. 証明: `GKUS.ext` + `simp [gOp, …]` パターン
+  6. `DkMathTest.GKUSAlgebra` に `Rat` 係数で全法則テスト追加
+  7. `tl` で `build succeeded` 確認
+- 次の予定:
+  - phase-18: `GKUS` 全体の設計整理・ドキュメント総括
+
+### 2026-03-15 phase-18 GKUS 設計総括ドキュメント（論文化）
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/docs/GKUS-Design-Synthesis.md`
+- 内容:
+  1. GKUS 実装を論文化形式（Markdown）で総括した
+  2. 章立てを「概要・問題設定・形式モデル・代数階層・証明様式・Rat 検証・理論的意義・制約と今後」に統一した
+  3. `gAdd`/`gMul`/`gSub`/`gDiv` と phase-16,17 の代数法則を、設計上の意味（係数層と構造層の分離）に結び付けて記述した
+  4. 今後課題として異 support 演算の整合法則と数論適用方針を明示した
+- 次の予定:
+  - phase-19: GKUS の異 support 演算（transport 規則）設計案の初稿作成

@@ -535,6 +535,11 @@
     "chat.tools.terminal.autoApprove": {
         "./run_assistant_driver.sh": true,
         "./lean-build.sh": true,
-        "bash lean-build.sh": false
+        "./lean-test.sh": true,
+        "bash lean-build.sh": true,
+        "bash lean-test.sh": true,
+        "source set-alias": true,
+        "tl": true,
+        "bl": true,
     }
 }
