@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-22: decode canonical choice の API 化
+status: 作業中 - phase-23: decode 戦略の型クラス選択
 
 ## 課題
 
@@ -547,3 +547,19 @@ status: 作業中 - phase-22: decode canonical choice の API 化
   5. `lake build DkMathTest.KUS` と `./lean-test.sh` の成功を確認した
 - 次の予定:
   - phase-23: `HarmonizeSpec` の既定戦略（left-first/right-first/canonical）を型クラス化する設計検討
+
+### 2026-03-15 phase-23 decode 戦略の型クラス選択
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Transport.lean`
+  - `lean/dk_math/DkMathTest/KUS.lean`
+- 内容:
+  1. decode 供給クラス `LeftDecode` / `RightDecode` / `NormalizedDecode` を導入した
+  2. 戦略タグ `UseLeft` / `UseRight` / `UseNormalized` と統一クラス `DecodeStrategy` を追加した
+  3. `DecodeStrategy` を使う汎用 API `harmonizeAddBy` / `harmonizeMulBy` を追加した
+  4. 自動選択 API `harmonizeAddAutoLeft` / `harmonizeAddAutoRight` / `harmonizeAddAutoNormalized` と
+     `harmonizeMulAutoLeft` / `harmonizeMulAutoRight` / `harmonizeMulAutoNormalized` を追加した
+  5. `DkMathTest.GKUSTransport` で型クラスインスタンスを定義し、`harmonize*By` と `harmonize*Auto*` の係数回帰を追加した
+  6. `lake build DkMathTest.KUS` と `./lean-test.sh` の成功を確認した
+- 次の予定:
+  - phase-24: `HarmonizeSpec` 生成を簡約する builder API（既定H・既定decode）設計

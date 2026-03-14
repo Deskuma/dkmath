@@ -49,6 +49,94 @@ variable {T : Type uT} {BT : BlueprintFamily T}
 
 end DecodeSpec
 
+/-! ## typeclass-based decode strategy -/
+
+/-- 左系 decode を供給する型クラス。 -/
+class LeftDecode
+    (C : Type*)
+    (U₁ : Type u₁) (B₁ : BlueprintFamily U₁)
+    (U₂ : Type u₂) (B₂ : BlueprintFamily U₂)
+    (H : Type uH) (BH : BlueprintFamily H)
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH) where
+  decLeft : ScaleSpec H BH U₁ B₁
+
+/-- 右系 decode を供給する型クラス。 -/
+class RightDecode
+    (C : Type*)
+    (U₁ : Type u₁) (B₁ : BlueprintFamily U₁)
+    (U₂ : Type u₂) (B₂ : BlueprintFamily U₂)
+    (H : Type uH) (BH : BlueprintFamily H)
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH) where
+  decRight : ScaleSpec H BH U₂ B₂
+
+/-- 正規形 decode を供給する型クラス。 -/
+class NormalizedDecode
+    (C : Type*)
+    (U₁ : Type u₁) (B₁ : BlueprintFamily U₁)
+    (U₂ : Type u₂) (B₂ : BlueprintFamily U₂)
+    (H : Type uH) (BH : BlueprintFamily H)
+    (T : Type uT) (BT : BlueprintFamily T)
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH) where
+  decNorm : ScaleSpec H BH T BT
+
+/-- decode 戦略タグ：左優先。 -/
+structure UseLeft : Type
+
+/-- decode 戦略タグ：右優先。 -/
+structure UseRight : Type
+
+/-- decode 戦略タグ：正規形。 -/
+structure UseNormalized (T : Type uT) (BT : BlueprintFamily T) : Type
+
+/-- decode 戦略を型クラスで選ぶための統一インターフェース。 -/
+class DecodeStrategy
+    (S : Type*)
+    (C : Type*)
+    (U₁ : Type u₁) (B₁ : BlueprintFamily U₁)
+    (U₂ : Type u₂) (B₂ : BlueprintFamily U₂)
+    (H : Type uH) (BH : BlueprintFamily H)
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH) where
+  T : outParam (Type _)
+  BT : outParam (BlueprintFamily T)
+  dec : ScaleSpec H BH T BT
+
+instance instDecodeStrategyUseLeft
+    {C : Type*}
+    {U₁ : Type u₁} {B₁ : BlueprintFamily U₁}
+    {U₂ : Type u₂} {B₂ : BlueprintFamily U₂}
+    {H : Type uH} {BH : BlueprintFamily H}
+    {hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH}
+    [d : LeftDecode C U₁ B₁ U₂ B₂ H BH hs] :
+    DecodeStrategy UseLeft C U₁ B₁ U₂ B₂ H BH hs where
+  T := U₁
+  BT := B₁
+  dec := d.decLeft
+
+instance instDecodeStrategyUseRight
+    {C : Type*}
+    {U₁ : Type u₁} {B₁ : BlueprintFamily U₁}
+    {U₂ : Type u₂} {B₂ : BlueprintFamily U₂}
+    {H : Type uH} {BH : BlueprintFamily H}
+    {hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH}
+    [d : RightDecode C U₁ B₁ U₂ B₂ H BH hs] :
+    DecodeStrategy UseRight C U₁ B₁ U₂ B₂ H BH hs where
+  T := U₂
+  BT := B₂
+  dec := d.decRight
+
+instance instDecodeStrategyUseNormalized
+    {C : Type*}
+    {U₁ : Type u₁} {B₁ : BlueprintFamily U₁}
+    {U₂ : Type u₂} {B₂ : BlueprintFamily U₂}
+    {H : Type uH} {BH : BlueprintFamily H}
+    {T : Type uT} {BT : BlueprintFamily T}
+    {hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH}
+    [d : NormalizedDecode C U₁ B₁ U₂ B₂ H BH T BT hs] :
+    DecodeStrategy (UseNormalized T BT) C U₁ B₁ U₂ B₂ H BH hs where
+  T := T
+  BT := BT
+  dec := d.decNorm
+
 namespace HarmonizeSpec
 
 variable {C : Type*}
@@ -217,6 +305,80 @@ variable {T' : Type _} {BT' : BlueprintFamily T'}
     ScaleSpec.scaleGKUS τ (harmonizeMulTo hs ds x y)
       = harmonizeMulTo hs ⟨ScaleSpec.comp τ ds.dec⟩ x y := by
   simp [harmonizeMulTo]
+
+/-! ## typeclass-selected APIs -/
+
+/-- decode 戦略 `S` を型クラスで選ぶ加算 API。 -/
+@[simp] def harmonizeAddBy [Add C] (S : Type*)
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂)
+    [d : DecodeStrategy S C U₁ B₁ U₂ B₂ H BH hs] : GKUS C d.T d.BT :=
+  harmonizeAddTo hs (DecodeSpec.ofScale d.dec) x y
+
+/-- decode 戦略 `S` を型クラスで選ぶ乗算 API。 -/
+@[simp] def harmonizeMulBy [Mul C] (S : Type*)
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂)
+    [d : DecodeStrategy S C U₁ B₁ U₂ B₂ H BH hs] : GKUS C d.T d.BT :=
+  harmonizeMulTo hs (DecodeSpec.ofScale d.dec) x y
+
+@[simp] theorem toCoeff_harmonizeAddBy [Add C] (S : Type*)
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂)
+    [d : DecodeStrategy S C U₁ B₁ U₂ B₂ H BH hs] :
+    toCoeff (harmonizeAddBy (S := S) hs x y) = toCoeff x + toCoeff y := by
+  unfold harmonizeAddBy
+  simpa using toCoeff_harmonizeAddTo (hs := hs) (ds := DecodeSpec.ofScale d.dec) (x := x) (y := y)
+
+@[simp] theorem toCoeff_harmonizeMulBy [Mul C] (S : Type*)
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂)
+    [d : DecodeStrategy S C U₁ B₁ U₂ B₂ H BH hs] :
+    toCoeff (harmonizeMulBy (S := S) hs x y) = toCoeff x * toCoeff y := by
+  unfold harmonizeMulBy
+  simpa using toCoeff_harmonizeMulTo (hs := hs) (ds := DecodeSpec.ofScale d.dec) (x := x) (y := y)
+
+/-- 左戦略の加算 API（型クラス自動選択）。 -/
+@[simp] def harmonizeAddAutoLeft [Add C]
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂)
+    [LeftDecode C U₁ B₁ U₂ B₂ H BH hs] : GKUS C U₁ B₁ :=
+  harmonizeAddBy (S := UseLeft) hs x y
+
+/-- 右戦略の加算 API（型クラス自動選択）。 -/
+@[simp] def harmonizeAddAutoRight [Add C]
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂)
+    [RightDecode C U₁ B₁ U₂ B₂ H BH hs] : GKUS C U₂ B₂ :=
+  harmonizeAddBy (S := UseRight) hs x y
+
+/-- 正規形戦略の加算 API（型クラス自動選択）。 -/
+@[simp] def harmonizeAddAutoNormalized [Add C]
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂)
+    [NormalizedDecode C U₁ B₁ U₂ B₂ H BH T BT hs] : GKUS C T BT :=
+  harmonizeAddBy (S := UseNormalized T BT) hs x y
+
+/-- 左戦略の乗算 API（型クラス自動選択）。 -/
+@[simp] def harmonizeMulAutoLeft [Mul C]
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂)
+    [LeftDecode C U₁ B₁ U₂ B₂ H BH hs] : GKUS C U₁ B₁ :=
+  harmonizeMulBy (S := UseLeft) hs x y
+
+/-- 右戦略の乗算 API（型クラス自動選択）。 -/
+@[simp] def harmonizeMulAutoRight [Mul C]
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂)
+    [RightDecode C U₁ B₁ U₂ B₂ H BH hs] : GKUS C U₂ B₂ :=
+  harmonizeMulBy (S := UseRight) hs x y
+
+/-- 正規形戦略の乗算 API（型クラス自動選択）。 -/
+@[simp] def harmonizeMulAutoNormalized [Mul C]
+    (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
+    (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂)
+    [NormalizedDecode C U₁ B₁ U₂ B₂ H BH T BT hs] : GKUS C T BT :=
+  harmonizeMulBy (S := UseNormalized T BT) hs x y
 
 end HarmonizeSpec
 

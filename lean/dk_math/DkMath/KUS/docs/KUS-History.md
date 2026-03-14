@@ -2,6 +2,14 @@
 
 ## History Log
 
+### 2026-03-15 / Work Unit 37. phase-23 decode 戦略の型クラス選択
+
+- `DkMath/KUS/Transport.lean` に `LeftDecode` / `RightDecode` / `NormalizedDecode` を追加し、decode 戦略を型クラスで供給できるようにした。
+- 戦略タグ `UseLeft` / `UseRight` / `UseNormalized` と統一クラス `DecodeStrategy` を導入し、戦略選択を一元化した。
+- 汎用 API `harmonizeAddBy` / `harmonizeMulBy` と、自動選択 API `harmonizeAddAuto*` / `harmonizeMulAuto*` を追加した。
+- `DkMathTest/KUS.lean` の `DkMathTest.GKUSTransport` に型クラスインスタンスを追加し、`harmonize*By` / `harmonize*Auto*` の回帰を実装した。
+- `lake build DkMathTest.KUS` および `./lean-test.sh` の成功を確認した。
+
 ### 2026-03-15 / Work Unit 36. phase-22 decode canonical choice の API 化
 
 - `DkMath/KUS/Transport.lean` の `DecodeSpec` に `ofScale` を追加し、decode 指定の記述を簡約した。
