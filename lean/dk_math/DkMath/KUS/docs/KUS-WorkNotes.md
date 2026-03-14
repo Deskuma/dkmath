@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-11: alias naming guide
+status: 作業中 - phase-12: KUS 加算（kusAdd）の実装
 
 ## 課題
 
@@ -18,10 +18,12 @@ status: 作業中 - phase-11: alias naming guide
 - [x] alias 補題の `Examples` 反映範囲を判断する
 - [x] alias 標準適用範囲を文書として固定する
 - [x] alias 命名規則ガイドを `KUS-AliasPolicy.md` に追加する
+- [x] 同一 support 上の KUS 加算（`kusAdd`）を定義する
+- [x] 零追跡性補題を実装する（係数が零になっても support を保持）
 
 ## 状況タスク
 
-- 完了条件（phase-11）
+- 完了条件（phase-12）
   - [x] `DkMath/KUS/Unit.lean` が `US` を提供する
   - [x] `DkMath/KUS/Core.lean` が `KUS`, `mkWith`, `zeroState` を提供する
   - [x] `DkMath/KUS/NatEmbed.lean` が `ofNat`, `toNat` を提供する
@@ -37,13 +39,17 @@ status: 作業中 - phase-11: alias naming guide
   - [x] `DkMath/KUS/Examples.lean` が alias 補題を利用している
   - [x] `DkMath/KUS/docs/KUS-AliasPolicy.md` に運用方針がある
   - [x] `DkMath/KUS/docs/KUS-AliasPolicy.md` に命名規則ガイドがある
+  - [x] `DkMath/KUS/Add.lean` が `SameSupport` と `kusAdd` を提供する
+  - [x] 零追跡性（`zero_tracking`）が補題として固定されている
+  - [x] 単位元・交換則・結合則（toNat レベル）が補題として固定されている
 
 ## 計画
 
 - 直近の主戦場:
-  - phase-12 の方向決め（次の実装拡張候補を選択）
+  - phase-13 の方向決め（減法 or 乗法の導入）
 - 直近の設計候補:
   - alias 適用は `Examples` を境界とし、コア理論は従来名を維持する
+  - 減法は「逆操作として加法を元に戻す」定義で整合させる
   - subtype 版の試作は本流へ入れず docs 先行で設計比較する
   - 例示モジュールを肥大化させず、証明用の最小例に限定する
 - 非目標（phase-01 ではやらない）:
@@ -66,6 +72,7 @@ status: 作業中 - phase-11: alias naming guide
 - phase-09 では alias API を `Examples.lean` へ適用し、可読性改善が実利用で有効かを確認した。
 - phase-10 では alias 運用範囲を docs へ固定し、適用境界を `Examples` 層までと明文化した。
 - phase-11 では alias 命名規則ガイドを `KUS-AliasPolicy.md` に追記し、将来追加時の揺れを防ぐ基準を確立した。
+- phase-12 では `Add.lean` を追加し、同一 support 上の KUS 加算（`kusAdd`）を実装した。零追跡性・単位元・交換則・結合則を最小形で固定した。
 
 ## 作業ログ
 
@@ -325,3 +332,29 @@ status: 作業中 - phase-11: alias naming guide
   2. docs のみ変更で理論挙動は無変更であることを確認
 - 次の予定:
   - phase-12 で次の実装拡張候補を評価・選択する
+
+### 2026-03-14 phase-12 KUS 加算の実装
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Add.lean`
+  - `lean/dk_math/DkMath/KUS.lean`
+- 内容:
+  1. `SameSupport` 述語を導入し、同一 support の判定を型で明示した
+  2. `kusAdd` を定義し、可視係数加算と support 保持を一体化した
+  3. 零追跡性（`zero_tracking`）：係数が 0 になっても `extract` が US を返すことを補題で固定した
+  4. 零状態を左右単位元として確認した（`zero_add`, `add_zero`）
+  5. `toNat` レベルの交換則・結合則を `omega` で固定した
+  6. 零閉補題（`zeroState_kusAdd_zeroState`）を追加した
+- 次の予定:
+  - phase-13 で減法または乗法の導入を検討する
+
+### 2026-03-14 phase-12 ビルド確認（lean-build.sh）
+
+- 対象:
+  - `cd lean/dk_math && ./lean-build.sh DkMath.KUS`
+- 内容:
+  1. `DkMath.KUS` は build succeeded を確認（warning なし）
+  2. `symm`/`trans` の自己再帰は `unfold SameSupport at *` で解消した
+  3. `zero_tracking` の `hz` は `_` に変更し、support 保持が無条件であることを明確にした
+- 次の予定:
+  - phase-13 で減法または乗法の最小実装へ進む

@@ -150,3 +150,16 @@
 - `KUS-AliasPolicy.md` に命名規則ガイドを追記した。
 - 規則 5 条（prefix 除去・語順・型サフィックス・短縮範囲・1 対 1 対応）と対応表を明文化した。
 - ユーザーによる `#print "file: ..."` 追加（全 KUS モジュール）を確認し、ビルドへの影響なし（build succeeded）を確認した。
+
+### 2026-03-14 / Work Unit 23. phase-12 KUS 加算の実装
+
+- `DkMath/KUS/Add.lean` を追加した。
+- `SameSupport` 述語、`kusAdd` 定義、零追跡性・単位元・交換則・結合則・零閉補題を実装した。
+- 設計の核：係数が 0 になっても `extract (kusAdd x y h) = extract x` が成立する（零追跡性）。
+- `DkMath/KUS.lean` に `import DkMath.KUS.Add` を追加した。
+
+### 2026-03-14 / Work Unit 24. phase-12 build と安定化
+
+- `lean-build.sh` で `./lean-build.sh DkMath.KUS` を実行し、build succeeded を確認した（warning なし）。
+- `symm`/`trans` の dot notation 自己再帰問題 → `unfold SameSupport at *` で解消。
+- `zero_tracking` の未使用 `hz` → `_` に変更し、support 保持の無条件性を明確化した。
