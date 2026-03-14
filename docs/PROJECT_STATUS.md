@@ -2,7 +2,7 @@
 
 ## FLT: Fermat's Last Theorem
 
-FLT 現状レポート 2026-03-08
+FLT 現状レポート 2026-03-15
 
 ## 1. 結論
 
@@ -12,7 +12,7 @@ FLT 現状レポート 2026-03-08
 
 - `DkMath/FLT/Main.lean` 側の **\(d=3\) 公開 API は形になっている**
 - `FLT3#StandAlone-NC-v0.lean-v2.lean` は **1700 行・定理 21 個・実 placeholder なし** で、付属 build log でも成功している
-- いま残る実質的な未完了点は、**prime-ge5 provider をどう実装して一般指数へ接続するか** に収束している
+- いま残る実質的な未完了点は、**一般指数 `n > 3` の最終閉路**であり、`sorry` は 2 箇所（`FLT/Basic.lean`, `CosmicFormula/TriominoFLT.lean`）に局所化している
 
 つまり、以前のように「立方ケースの骨格そのものがまだ未成形」という段階ではない。今は **cubic spine はほぼ出来ており、一般化の最後の橋が未架設** という局面じゃな。
 
@@ -29,6 +29,7 @@ FLT 現状レポート 2026-03-08
 - `DkMath/CosmicFormula/TriominoFLT.lean`
 - `DkMath/FLT/Basic.lean`
 - `DkMath/FLT/PrimeProvider/*.lean`
+- `DkMath/CFBRC/Bridge.lean`, `DkMath/RH/CFBRCBridge.lean`
 
 ただし、この環境には `lake` が無いため、**ローカル再ビルドまではしておらぬ**。ゆえに build 成功の事実は、添付されていた build log に基づく確認じゃ。
 
@@ -116,6 +117,25 @@ FLT 現状レポート 2026-03-08
   - prime-ge5 完成へ向けた roadmap・前提補題の staging
 
 この分解は良い。以前のように「未解決の数論核が公開面へ漏れ出す」構造ではなく、**unresolved kernel を狭い部屋に追い込む構成** になっておる。
+
+---
+
+## 3.E. CFBRC → GN → RH bridge の導線が見えてきた
+
+`DkMath/CFBRC/Bridge.lean` は、差冪・core・`GN`・valuation・原始素因子存在を同じ記法圏で扱う薄い接続層として機能しておる。さらに `DkMath/RH/CFBRCBridge.lean` により、その primitive-prime existence を `hopcPrimeContributionSum` と `stationaryAt` 判定へ渡す道が明示された。
+
+現時点では RH 側の大域結論を直接閉じる段階ではないが、**FLT 側で整えた素因子供給の成果を RH 観測器へ運べる配線** が先に確保された意義は大きい。
+
+最短 TODO:
+
+- `CFBRCBridge` 側の翻訳仮定（`hwnz`, `hhopc0`）を、使い回せる provider 形式へ整理する。
+- singleton 停留判定から finite-set / atTop へ持ち上げる接続補題を段階化し、`HopcInfiniteLift` 側へ統合する。
+
+## 3.F. `n > 3` 実装状況（2026-03-15 点検）
+
+`DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean` では、`primeGe5CounterexampleNormalizer_impl` と spec 合成（`FLTPrimeGe5Target_of_*`）により、provider へ接続する no-`so#rry` ルート（`triominoCosmic_globalProvider_of_specs`）まで到達しておる。
+
+一方で `FLT_prime_ge5` 本体は現状 `DkMath.FLT`（`DkMath/FLT/Basic.lean`）経由で閉じており、その `n > 3` 分岐と `DkMath/CosmicFormula/TriominoFLT.lean` の `FLT_highExponent_core_pending` が `so#rry` のまま残るため、一般指数の本線は未完という評価になる。
 
 ---
 
