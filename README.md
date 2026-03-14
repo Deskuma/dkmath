@@ -25,6 +25,17 @@ The result of "D." and Wise Wolf's experiment with new mathematical theories.
 Mathlib.FLT とは、異なるアプローチで、特に `d = 3` 周辺の複数アプローチを整備することを目指しています。
 ※既に形式化証明は完成されていますが、補題の整理や証明の安定化を図ります。
 
+### 最新ステータス（2026-03-08）
+
+`docs/PROJECT_STATUS.md` 時点の要約：
+
+- FLT `d = 3` の公開 API は `DkMath/FLT/Main.lean` 側で概ね安定
+- StandAlone artifact（`FLT3#StandAlone-NC-v0.lean-v2.lean`）は build 成功・実 placeholder なし
+- 主ボトルネックは一般指数（`n ≥ 5`）側の prime provider 実装
+- 研究段階としては「cubic completion 後の prime-ge5 bridge construction phase」
+
+詳細は [docs/PROJECT_STATUS.md](./docs/PROJECT_STATUS.md) を参照。
+
 ### 紹介
 
 仮定受け入れAPIを活用した、Zsigmondy原始素因子 + padicValNat評価による背理法的なFLT d=3証明の実装と、そこから得られる補題の整理。
@@ -159,10 +170,22 @@ theorem FLT_d3_by_padicValNat {a b c : ℕ}
 - FLT 総合入口: [DkMath/FLT.lean](./lean/dk_math/DkMath/FLT.lean)
 - FLT 別解（padicValNat 系）: [DkMath/FLT/Main.lean](./lean/dk_math/DkMath/FLT/Main.lean)
 - FLT 基本系（宇宙式ベース）: [DkMath/FLT/Basic.lean](./lean/dk_math/DkMath/FLT/Basic.lean) ※Mathlib.FLT に接続
+- FLT 実装ガイド: [DkMath/FLT/README.md](./lean/dk_math/DkMath/FLT/README.md)
+- FLT PrimeProvider 本丸: [DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean](./lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean)
 - 数論ハブ（本流）: [DkMath/NumberTheory/GcdNext.lean](./lean/dk_math/DkMath/NumberTheory/GcdNext.lean)
 - 数論研究系: [DkMath/NumberTheory/GcdNextResearch.lean](./lean/dk_math/DkMath/NumberTheory/GcdNextResearch.lean)
 - 宇宙式入口: [DkMath/CosmicFormula.lean](./lean/dk_math/DkMath/CosmicFormula.lean)
+- 宇宙式×FLT 接続: [DkMath/CosmicFormula/TriominoFLT.lean](./lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean)
 - 研究用エントリ: [DkMath/Research.lean](./lean/dk_math/DkMath/Research.lean)
+
+### 主要モジュール（新規・拡張）
+
+- ABC 予想系入口: [DkMath/ABC.lean](./lean/dk_math/DkMath/ABC.lean)
+- RH 系入口: [DkMath/RH.lean](./lean/dk_math/DkMath/RH.lean)
+- KUS 系入口: [DkMath/KUS.lean](./lean/dk_math/DkMath/KUS.lean)
+- CFBRC Lean 入口: [DkMath/CFBRC.lean](./lean/dk_math/DkMath/CFBRC.lean)
+- Silver Ratio 入口: [DkMath/SilverRatio.lean](./lean/dk_math/DkMath/SilverRatio.lean)
+- UnitCycle 入口: [DkMath/UnitCycle.lean](./lean/dk_math/DkMath/UnitCycle.lean)
 
 ### Cosmic Formula
 
@@ -225,6 +248,12 @@ $$
 コラッツ予想の形式化プロジェクトにおける補助補題完成報告書（2026年1月30日版）。
 
 詳細は [lean/dk_math/DkMath/Collatz/docs/AUXILIARY_LEMMA_COMPLETION_20260130.md](./lean/dk_math/DkMath/Collatz/docs/AUXILIARY_LEMMA_COMPLETION_20260130.md) を参照。
+
+### Collatz SORRY Cleanup Progress (2026/01/30)
+
+コラッツ予想の形式化プロジェクトにおける `sorry` 解消進捗レポート（2026年1月30日版）。
+
+詳細は [lean/dk_math/DkMath/Collatz/docs/SORRY_CLEANUP_PROGRESS_20260130.md](./lean/dk_math/DkMath/Collatz/docs/SORRY_CLEANUP_PROGRESS_20260130.md) を参照。
 
 ## License
 
