@@ -96,3 +96,15 @@
 
 - `lean-build.sh` で `./lean-build.sh DkMath.KUS` を実行し、build succeeded を確認した。
 - phase-06 は docs 中心の変更であり、実装挙動を変えずに設計判断だけを固定できたことを確認した。
+
+### 2026-03-14 / Work Unit 14. phase-07 補題利用例の固定
+
+- `DkMath/KUS/Examples.lean` に、phase-05 整合補題の具体利用例を 3 本追加した。
+- 追加した利用例は `toyScale_toKUS_comm`, `toyScale_extract_toKUS_comm`, `toyScale_toNat_add_comm`。
+- `KUS-ScaleSpec.md` と `KUS-WorkNotes.md` を phase-07 状態へ更新した。
+
+### 2026-03-14 / Work Unit 15. phase-07 build 確認と小修正
+
+- `lean-build.sh` で `./lean-build.sh DkMath.KUS` と `./lean-build.sh DkMath` の成功を確認した。
+- `Examples.lean` の利用例証明で `simpa using` が構文エラーとなる環境差分を確認し、`exact` 形式へ修正して安定化した。
+- これにより phase-07 は「利用例追加・docs 更新・ビルド確認」が揃った状態で確定した。

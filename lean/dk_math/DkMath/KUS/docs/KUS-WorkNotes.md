@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-06: fiber design decision
+status: 作業中 - phase-07: compatibility examples
 
 ## 課題
 
@@ -13,10 +13,11 @@ status: 作業中 - phase-06: fiber design decision
 - [x] toy blueprint による最小使用例を追加する
 - [x] `Scale` と `Monoid` の整合補題を最小追加する
 - [x] fiber 型設計（Nat alias / subtype）比較を文書化する
+- [x] phase-05 補題の利用例を `Examples.lean` に追加する
 
 ## 状況タスク
 
-- 完了条件（phase-06）
+- 完了条件（phase-07）
   - [x] `DkMath/KUS/Unit.lean` が `US` を提供する
   - [x] `DkMath/KUS/Core.lean` が `KUS`, `mkWith`, `zeroState` を提供する
   - [x] `DkMath/KUS/NatEmbed.lean` が `ofNat`, `toNat` を提供する
@@ -27,13 +28,14 @@ status: 作業中 - phase-06: fiber design decision
   - [x] `DkMath/KUS/Examples.lean` が toy 使用例を提供する
   - [x] `Scale` と fixed fiber の整合補題が `Scale.lean` にある
   - [x] `DkMath/KUS/docs/KUS-FiberDesign.md` に採用方針と移行トリガーがある
+  - [x] `DkMath/KUS/Examples.lean` に phase-05 補題の利用例がある
 
 ## 計画
 
 - 直近の主戦場:
-  - phase-07 の最小実装（補題の使用例強化）
+  - 補題命名と整理方針の最小化（phase-08）
 - 直近の設計候補:
-  - `Examples.lean` に phase-05 補題の利用例を最小追加する
+  - `Scale`/`Monoid` 連携補題の命名を API 観点で薄く整理する
   - subtype 版の試作は本流へ入れず docs 先行で設計比較する
   - 例示モジュールを肥大化させず、証明用の最小例に限定する
 - 非目標（phase-01 ではやらない）:
@@ -51,6 +53,7 @@ status: 作業中 - phase-06: fiber design decision
 - phase-04 では `Examples.lean` を追加し、toy blueprint 上で `KUS` / `Fiber` / `ScaleSpec` の最小利用例を固定した。
 - phase-05 では `Scale.lean` に fixed fiber 整合補題を追加し、`Scale` と `Monoid` の接続を観測係数レベルで固定した。
 - phase-06 では `KUS-FiberDesign.md` を追加し、`Fiber := Nat` 継続採用と subtype 版への移行トリガーを明文化した。
+- phase-07 では `Examples.lean` に phase-05 補題の利用例を追加し、定義済み整合補題の実用性を確認した。
 
 ## 作業ログ
 
@@ -207,3 +210,28 @@ status: 作業中 - phase-06: fiber design decision
   2. 実装ファイルの挙動を変えていないことを再確認
 - 次の予定:
   - phase-07 の `Examples.lean` 強化へ進む
+
+### 2026-03-14 phase-07 補題利用例の追加
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Examples.lean`
+  - `lean/dk_math/DkMath/KUS/docs/KUS-ScaleSpec.md`
+- 内容:
+  1. `toyScale_toKUS_comm` を追加し、`scaleKUS_toKUS` の具体利用を固定
+  2. `toyScale_extract_toKUS_comm` を追加し、`extract_scaleKUS_toKUS` の具体利用を固定
+  3. `toyScale_toNat_add_comm` を追加し、`toNat_scaleKUS_toKUS_add` の具体利用を固定
+  4. `KUS-ScaleSpec.md` に phase-07 の利用例を追記
+- 次の予定:
+  - phase-08 で補題命名と API の最小整理を検討する
+
+### 2026-03-14 phase-07 ビルド確認（lean-build.sh）
+
+- 対象:
+  - `cd lean/dk_math && ./lean-build.sh DkMath.KUS`
+  - `cd lean/dk_math && ./lean-build.sh DkMath`
+- 内容:
+  1. `DkMath.KUS` は build succeeded を確認
+  2. root `DkMath` でも build succeeded を確認
+  3. 途中で `simpa using` が構文エラーになったため、`Examples.lean` は `exact` 形式へ修正して安定化した
+- 次の予定:
+  - phase-08 で補題命名と API の最小整理を実施する
