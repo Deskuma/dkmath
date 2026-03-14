@@ -64,6 +64,7 @@ presented by D. and Wise Wolf
   - 宇宙式×FLT 接続 [TriominoFLT](./DkMath/CosmicFormula/TriominoFLT.lean)
   - ABC 予想系入口 [ABC](./DkMath/ABC.lean)
   - RH 系入口 [RH](./DkMath/RH.lean)
+  - RH CFBRC 接続 [CFBRCBridge](./DkMath/RH/CFBRCBridge.lean)
   - KUS 系入口 [KUS](./DkMath/KUS.lean)
   - CFBRC Lean 入口 [CFBRC](./DkMath/CFBRC.lean)
   - Silver Ratio 入口 [SilverRatio](./DkMath/SilverRatio.lean)
@@ -87,6 +88,12 @@ presented by D. and Wise Wolf
 ### 宇宙式の次元に関する定理
 
 - [CosmicFormulaCellDimGuide](./DkMath/CosmicFormula/docs/CosmicFormulaCellDimGuide.md) に、宇宙式の次元に関する定理のガイドを掲載しています。
+
+### CFBRC × GN × RH Bridge（概要）
+
+- CFBRC は `cyclotomicPrimeCore` と `GN` を接続し、差冪・除法判定・valuation・原始素因子存在を扱う橋渡し層です。
+- RH 側の [CFBRCBridge.lean](./DkMath/RH/CFBRCBridge.lean) は、その primitive-prime existence を `hopcPrimeContributionSum` と `stationaryAt` 判定へ接続します。
+- 詳細は [DkMath/CFBRC/README.md](./DkMath/CFBRC/README.md) と [DkMath/RH/README.md](./DkMath/RH/README.md) を参照してください。
 
 ### Collatz ドキュメント（進捗）
 
