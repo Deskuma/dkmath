@@ -18,5 +18,9 @@ rev = "v4.28.0"
 name = "DkMath"
 
 [[lean_lib]]
+name = "DkMathTest"
+globs = ["DkMathTest.+"]
+
+[[lean_lib]]
 name = "DkMathlib"
 globs = ["DkMathlib.+"]
