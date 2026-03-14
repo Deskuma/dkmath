@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.KUS.Scale
+import DkMath.KUS.Mul
 
 #print "file: DkMath.KUS.Examples"
 
@@ -77,5 +78,31 @@ def toyScale : DkMath.KUS.ScaleSpec ToyUnit ToyBlueprint ToyUnit ToyBlueprint wh
         + DkMath.KUS.toNat
             (DkMath.KUS.ScaleSpec.scaleKUS toyScale (DkMath.KUS.Fiber.toKUS toySupport m)) := by
   exact DkMath.KUS.toNat_scale_toKUS_add (σ := toyScale) toySupport n m
+
+/-- 乗法の最小利用例。 -/
+def toyY : DkMath.KUS.KUS ToyUnit ToyBlueprint :=
+  DkMath.KUS.ofNat toySupport 2
+
+/-- `5 * 2 = 10` の KUS 乗法例。 -/
+def toyMul : DkMath.KUS.KUS ToyUnit ToyBlueprint :=
+  DkMath.KUS.kusMul (DkMath.KUS.ofNat toySupport 5) (DkMath.KUS.ofNat toySupport 2)
+    (by simp [DkMath.KUS.SameSupport])
+
+@[simp] theorem toyMul_toNat : DkMath.KUS.toNat toyMul = 10 := by
+  simp [toyMul, DkMath.KUS.kusMul]
+
+@[simp] theorem toyMul_extract : DkMath.KUS.extract toyMul = toySupport := by
+  simp [toyMul, DkMath.KUS.kusMul]
+
+@[simp] theorem toyMul_zero_tracking :
+    DkMath.KUS.extract
+      (DkMath.KUS.kusMul toyX (DkMath.KUS.zeroState toySupport)
+        (by simp [DkMath.KUS.SameSupport, toyX])) = toySupport := by
+  simp [DkMath.KUS.kusMul, toyX]
+
+@[simp] theorem toyMul_one_right :
+    DkMath.KUS.kusMul toyX (DkMath.KUS.oneState toySupport)
+      (by simp [DkMath.KUS.SameSupport, DkMath.KUS.oneState, toyX]) = toyX := by
+  simpa [toyX] using (DkMath.KUS.kusMul.mul_one (x := toyX))
 
 end DkMath.KUS.Examples
