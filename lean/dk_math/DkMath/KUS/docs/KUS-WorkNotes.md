@@ -415,6 +415,22 @@ status: 作業中 - phase-14: 係数型の一般化（GKUS / Nat→Int→Rat）
   - phase-15: `GKUS` のコンテキスト拡張（`CommSemiring` 補題・`gDiv`（除算型）設計）
   - `Rat` 係数でのゼロ追跡テスト（分子が 0 のとき support 保持）を検討する
 
+### 2026-03-14 phase-15 gDiv の実装と Rat 除算テスト
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Coeff.lean`
+  - `lean/dk_math/DkMathTest/KUS.lean`
+- 内容:
+  1. `abbrev gDiv [Div C] ...` を `gSub` 直後に追加し、`gOp (· / ·)` の略記として定義した
+  2. `gDiv` namespace に `toCoeff_div`、`extract_div_left`、`zero_tracking` を追加した
+  3. `DkMathTest/KUS.lean` に `Rat` 除算テスト 3 本を追加した
+     - `(1/2) / (1/3)` の係数計算テスト
+     - `extract_g` の support 保持テスト
+     - `x / 0 = 0`（Rat のゼロ除算）でも support 保持することのテスト
+  4. `tl` で `build succeeded` を確認した
+- 次の予定:
+  - phase-16: `CommSemiring` 補題の整備（`gAdd`/`gMul` の代数法則を `GKUS` レベルで固定）
+
 ### 2026-03-14 phase-14 Rat 係数テスト追加
 
 - 対象:

@@ -177,6 +177,13 @@
 - `lean-build.sh` で `./lean-build.sh DkMath.KUS` の成功を確認した。
 - 乗法の交換則・結合則は `omega` 依存から `Nat.mul_comm` / `Nat.mul_assoc` ベースへ整理し、安定化した。
 
+### 2026-03-14 / Work Unit 29. phase-15 gDiv の実装と Rat 除算テスト
+
+- `DkMath/KUS/Coeff.lean` に `gDiv`（`[Div C]` 制約の除算）を追加した。
+- `gOp (· / ·)` の略記として定義し、`gSub` と同形の補題群（`toCoeff_div`, `extract_div_left`, `zero_tracking`）を追加した。
+- `DkMathTest/KUS.lean` に `Rat` 係数 `gDiv` の回帰テストを 3 本追加した（係数計算・support 保持・ゼロ除算 support 保持）。
+- `tl` で `build succeeded` を確認した（warning なし、error なし）。
+
 ### 2026-03-14 / Work Unit 28. phase-14 Rat 係数テスト追加
 
 - `DkMathTest/KUS.lean` に `Rat` 係数の回帰テストを追加した。
