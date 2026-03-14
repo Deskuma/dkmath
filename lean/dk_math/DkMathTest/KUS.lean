@@ -76,10 +76,20 @@ abbrev giA : GKUS Int DkMath.KUS.Examples.ToyUnit DkMath.KUS.Examples.ToyBluepri
 abbrev giB : GKUS Int DkMath.KUS.Examples.ToyUnit DkMath.KUS.Examples.ToyBlueprint :=
   mkGWith (8 : Int) suppI
 
+-- Rat 係数（有理係数）
+abbrev suppR := DkMath.KUS.Examples.toySupport
+abbrev grA : GKUS Rat DkMath.KUS.Examples.ToyUnit DkMath.KUS.Examples.ToyBlueprint :=
+  mkGWith ((1 : Rat) / 2) suppR
+abbrev grB : GKUS Rat DkMath.KUS.Examples.ToyUnit DkMath.KUS.Examples.ToyBlueprint :=
+  mkGWith ((1 : Rat) / 3) suppR
+
 lemma hN : GSameSupport gnA gnB := by
   simp only [GSameSupport, extract_g, mkGWith.eq_1]
 
 lemma hI : GSameSupport giA giB := by
+  simp only [GSameSupport, extract_g, mkGWith.eq_1]
+
+lemma hR : GSameSupport grA grB := by
   simp only [GSameSupport, extract_g, mkGWith.eq_1]
 
 -- toCoeff_gOp で 3 + 4 = 7
@@ -107,6 +117,25 @@ example : toCoeff (gSub giA giB hI) = (-3 : Int) := by
   simp [gSub, gOp, giA, giB]
 
 example : extract_g (gSub giA giB hI) = suppI := by
+  simp [gOp]
+
+-- Rat: 加算・乗算・減算の係数追跡
+example : toCoeff (gAdd grA grB hR) = ((1 : Rat) / 2 + (1 : Rat) / 3) := by
+  simp [gAdd, gOp, grA, grB]
+
+example : toCoeff (gMul grA grB hR) = (((1 : Rat) / 2) * ((1 : Rat) / 3)) := by
+  simp [gMul, gOp, grA, grB]
+
+example : toCoeff (gSub grA grB hR) = ((1 : Rat) / 2 - (1 : Rat) / 3) := by
+  simp [gSub, gOp, grA, grB]
+
+example : extract_g (gAdd grA grB hR) = suppR := by
+  simp [gOp]
+
+example : extract_g (gMul grA grB hR) = suppR := by
+  simp [gOp]
+
+example : extract_g (gSub grA grB hR) = suppR := by
   simp [gOp]
 
 -- KUS ↔ GKUS Nat 往復変換

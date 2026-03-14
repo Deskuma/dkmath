@@ -177,6 +177,13 @@
 - `lean-build.sh` で `./lean-build.sh DkMath.KUS` の成功を確認した。
 - 乗法の交換則・結合則は `omega` 依存から `Nat.mul_comm` / `Nat.mul_assoc` ベースへ整理し、安定化した。
 
+### 2026-03-14 / Work Unit 28. phase-14 Rat 係数テスト追加
+
+- `DkMathTest/KUS.lean` に `Rat` 係数の回帰テストを追加した。
+- 追加内容: `grA` (`1/2`)・`grB` (`1/3`) の共通補題 `hR` を導入し、`gAdd`/`gMul`/`gSub` の係数追跡テストと `extract_g` の support 保持テストを追加した。
+- `Rat` 乗法の演算子優先順位（`*` と `/` 混在）に起因する unsolved goal を明示括弧で修正した。
+- `tl` で `build succeeded` を確認した（warning なし、error なし）。
+
 ### 2026-03-14 / Work Unit 27. phase-14 GKUS テスト修復と `lake test` 復旧
 
 - `DkMathTest/KUS.lean` の `DkMathTest.GKUS` 節を再編し、壊れた重複・構文崩れを解消した。

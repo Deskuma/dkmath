@@ -412,5 +412,17 @@ status: 作業中 - phase-14: 係数型の一般化（GKUS / Nat→Int→Rat）
   4. `lake build DkMathTest.KUS` でエラー解消を確認した（warning のみ）
   5. `./lean-test.sh` で `build succeeded` を確認した
 - 次の予定:
-  - `DkMathTest/KUS.lean` の unused simp warning を段階的に整理する
-  - `GKUS` の `Int` / `Rat` 拡張テストを phase-14 後半で追加する
+  - phase-15: `GKUS` のコンテキスト拡張（`CommSemiring` 補題・`gDiv`（除算型）設計）
+  - `Rat` 係数でのゼロ追跡テスト（分子が 0 のとき support 保持）を検討する
+
+### 2026-03-14 phase-14 Rat 係数テスト追加
+
+- 対象:
+  - `lean/dk_math/DkMathTest/KUS.lean`
+- 内容:
+  1. `Rat` 係数の `grA` (`1/2`) / `grB` (`1/3`) と共通補題 `hR` を追加した
+  2. `gAdd`/`gMul`/`gSub` の係数計算テストと `extract_g` support 保持テストを追加した
+  3. `Rat` 乗法の優先順位問題（`*` と `/` 混在）を明示括弧で修正して安定化した
+  4. `tl` で `build succeeded` を確認した（error/warning ともなし）
+- 次の予定:
+  - phase-15 で `gDiv`（除算）設計と `Rat` ゼロ追跡の整理を行う
