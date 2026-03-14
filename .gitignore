@@ -2,6 +2,8 @@
 lean/dk_math/notes/
 __*
 !__init__.py
+*.inserted
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

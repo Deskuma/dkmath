@@ -251,7 +251,10 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
     -- - GcdAg正規化：DkMath.SilverRatio.GcdAg
     -- - PetalDetect検出器：DkMath.FLT.PetalDetect
     --
-    sorry  -- 層B補助補題（padicValNat_d3_upper_bound等）が完成したら埋まる
+    -- [TODO] 一般次元 d > 3 での CosmicFormula `Body` が完全累乗数に
+    --        ならないことの証明。層B（Layer B）における p-adic 付値の上界評価を
+    --        GcdNextLayerB/Phase 4.2 として完全実装するまで保留。
+    sorry
 
   -- 矛盾：padicValNat q (a^d - b^d) ≤ 1 だが ≥ d ≥ 3
   omega
@@ -493,7 +496,10 @@ lemma padicValNat_upper_bound_layer_b_stub {a b d q : ℕ}
     -- C. Lucas/Kummer定理の d ≥ 5 への拡張
     -- D. GcdAg+PetalDetect との統合フロー確認
     --
-    sorry  -- d > 3 の一般化は GcdNextLayerB/Phase 4.2 で実装
+    -- [TODO] d ≥ 5 向けの一般化された上界評価。
+    --        具体的な一般化は GcdNextLayerB/Phase 4.2 として別タスクで
+    --        自前の定式化を進める必要があるため、現在はスタブとして so#rry としている。
+    sorry
 
 /-- 一般的 d への上界補題
 

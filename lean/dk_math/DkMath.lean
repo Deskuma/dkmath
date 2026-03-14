@@ -7,13 +7,14 @@ Authors: D. and Wise Wolf.
 import DkMath.Basic  -- Basic Definitions and Utilities
 import DkMath.Samples  -- Sample Theorems and Examples
 -- ABC: abc Conjecture Module
-import DkMath.ABC.Basic  -- ABC Conjecture Basics
+import DkMath.ABC  -- ABC Conjecture Module
 import DkMath.ABC.PadicValNat  -- ABC: p-adic Valuation on Natural Numbers
 import DkMath.ABC.CountPowersDividing2n1  -- ABC: Counting Powers Dividing 2n+1
 -- Collatz Module (2026 Cartography Research)
 import DkMath.Collatz.Collatz2K26  -- Collatz2K26: Accelerated Collatz Dynamics
 -- Cosmic Formula Module
 import DkMath.CosmicFormula  -- Cosmic Formula Basics
+import DkMath.Zsigmondy  -- Zsigmondy bridge layer
 -- Polyomino Module
 import DkMath.Polyomino  -- Polyomino Basics
 import DkMath.PolyominoPrototype  -- Polyomino Prototype
@@ -25,12 +26,15 @@ import DkMath.UniqueRepSimple  -- Unique Representation in ℚ(√2)
 import DkMath.UniqueRepresentation  -- Silver Ratio Unique Representation
 -- DHNT: Dynamic Harmonic Number Theory
 import DkMath.DHNT  -- DHNT: Units and Quantities (Dynamic Harmonic Number Theory)
+import DkMath.KUS  -- KUS: coefficient-unit-blueprint kernel
 -- RH: Riemann Hypothesis Module
 import DkMath.RH  -- RH: Riemann Hypothesis Module
 -- Unit Cycle Module
 import DkMath.UnitCycle  -- Unit Cycle Basics
 -- FLT: Fermat's Last Theorem Module
 import DkMath.FLT  -- FLT: Fermat's Last Theorem Module
+-- CFBRC: Cosmic Formula Binomial Real Complex -/
+import DkMath.CFBRC  -- CFBRC: Cosmic Formula Binomial Real Complex
 
 -- >|---|-----------|------------------|-------------------|-------------------|----------|---------
 
