@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-28: CosmicFormula/KUS 接続実装
+status: 作業中 - phase-29: Big/Body/Gap 3層分解 KUS対応実装
 
 ## 課題
 
@@ -650,3 +650,20 @@ status: 作業中 - phase-28: CosmicFormula/KUS 接続実装
 - 次の予定:
   - phase-29: `Big`/`Body`/`Gap` の 3 層分解と GKUS の対応、
     および `CosmicBridge` を使った新定理の設計
+
+### 2026-03-15 phase-29 Big/Body/Gap 3層分解 KUS 対応実装
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/CosmicBridge.lean`
+- 内容:
+  1. `cosmicGap d` / `cosmicCore d` — Gap/Core の GKUS 表現（係数 1、support = d）を定義した
+  2. `cosmicBig d` — Big の GKUS 表現（係数 `2^d`）を定義した
+  3. `cosmicCore_eq_cosmicGap` — x=u=1 で Core = Gap を証明した
+  4. `toCoeff_cosmicBig_eq` — `Big = Body + Gap` の KUS 係数等式を証明した
+  5. `cosmicBig_body_gap_coeff` / `cosmicBodyPlusGap_eq_big` — `cosmicBodyCoeffSum d + 1 = 2^d` の確認形式を整備した
+  6. `cosmicBeamCoeff d` / `cosmicBeamCoeff_add_two` — x=u=1 の Beam 係数を定義し、`d ≥ 2` のとき `Beam + 2 = 2^d` を証明した
+  7. `CoreBeamGap` を import し、定理の根拠を接続した
+  8. `./lean-test.sh` の成功を確認した
+- 次の予定:
+  - phase-30: `CosmicBridge` + `DHNT.Bridge` 統合検証テスト、
+    およびブランチの commit ・ merge 方针検誎

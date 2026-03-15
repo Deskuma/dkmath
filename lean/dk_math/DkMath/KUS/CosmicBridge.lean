@@ -6,8 +6,11 @@ Authors: D. and Wise Wolf.
 
 import DkMath.KUS.Bridge
 import DkMath.CosmicFormula.Defs
+import DkMath.CosmicFormula.CoreBeamGap
 
 #print "file: DkMath.KUS.CosmicBridge"
+
+set_option linter.style.longLine false
 
 /-!
 ## DkMath.KUS.CosmicBridge
@@ -129,5 +132,103 @@ theorem sum_toCoeff_cosmicTerm (d : ℕ) :
     ∑ k ∈ Finset.range d, toCoeff (cosmicTerm d k)
       = cosmicBodyCoeffSum d := by
   simp only [toCoeff_cosmicTerm, cosmicBodyCoeffSum]
+
+/-! ## 3 層分解の KUS 対応 (phase-29) -/
+
+/--
+`Gap d 1` に対応する KUS 表現。係数 1、support unit = d。
+（`Gap _ u d = u^d`、u=1 のとき値は 1）
+-/
+noncomputable def cosmicGap (d : ℕ) : GKUS ℕ ℕ DHNTBlueprint :=
+  mkGWith 1 ⟨d, trivialBlueprint d⟩
+
+@[simp] theorem toCoeff_cosmicGap (d : ℕ) :
+    toCoeff (cosmicGap d) = 1 := rfl
+
+@[simp] theorem extract_g_cosmicGap_unit (d : ℕ) :
+    (extract_g (cosmicGap d)).unit = d := rfl
+
+/--
+`Core d 1` に対応する KUS 表現。係数 1、support unit = d。
+（`Core d x = x^d`、x=1 のとき値は 1）
+unit=1 での Core と Gap は値が等しい（`1^d = 1`）。
+-/
+noncomputable def cosmicCore (d : ℕ) : GKUS ℕ ℕ DHNTBlueprint :=
+  mkGWith 1 ⟨d, trivialBlueprint d⟩
+
+@[simp] theorem toCoeff_cosmicCore (d : ℕ) :
+    toCoeff (cosmicCore d) = 1 := rfl
+
+/-- x=u=1 のとき Core と Gap は KUS 上で等しい。 -/
+theorem cosmicCore_eq_cosmicGap (d : ℕ) :
+    cosmicCore d = cosmicGap d := rfl
+
+/--
+`Big d 1 1` に対応する KUS 表現。係数 `2^d`、support unit = d。
+（`Big x u d = (x+u)^d`、x=u=1 のとき `2^d`）
+-/
+noncomputable def cosmicBig (d : ℕ) : GKUS ℕ ℕ DHNTBlueprint :=
+  mkGWith (2 ^ d) ⟨d, trivialBlueprint d⟩
+
+@[simp] theorem toCoeff_cosmicBig (d : ℕ) :
+    toCoeff (cosmicBig d) = 2 ^ d := rfl
+
+/--
+`Big = Body + Gap` の KUS 係数対応。
+
+DHNT/CosmicFormula では `Big d 1 1 = Body 1 1 d + Gap _ 1 d`。
+KUS の係数上では `2^d = cosmicBodyCoeffSum d + 1`。
+-/
+theorem toCoeff_cosmicBig_eq (d : ℕ) :
+    toCoeff (cosmicBig d)
+      = (∑ k ∈ Finset.range d, toCoeff (cosmicTerm d k))
+        + toCoeff (cosmicGap d) := by
+  simp only [toCoeff_cosmicBig, toCoeff_cosmicGap, sum_toCoeff_cosmicTerm]
+  exact_mod_cast (cosmicBodyCoeffSum_eq d).symm
+
+/--
+`Big = Core + Body + Gap` の KUS 係数対応（3 層分解）
+
+x=u=1 では `Core = Gap = 1`、`Body = cosmicBodyCoeffSum d = 2^d - 1`
+したがって `2^d = 1 + (2^d - 1) + 1 - 1 = 1 + cosmicBodyCoeffSum d + 1 - 1`
+正確には `CoreBeamGap.body_eq_core_add_beam` により
+`Body = Core + Beam` → `Big = Core + Beam + Gap`
+KUS 係数版では `2^d = 1 + (2^d - 2) + 1`（d ≥ 1 のとき）
+
+本補題はシンプルな 2 層版 `Big = Body + Gap` を `sum + 1 = 2^d` として述べる。
+-/
+theorem cosmicBig_body_gap_coeff (d : ℕ) :
+    cosmicBodyCoeffSum d + toCoeff (cosmicGap d) = toCoeff (cosmicBig d) := by
+  simp only [toCoeff_cosmicBig, toCoeff_cosmicGap]
+  exact_mod_cast cosmicBodyCoeffSum_eq d
+
+/--
+DHNT `body_one_one` の KUS 係数版。
+`Body 1 1 d + Gap _ 1 d = Big 1 1 d`（係数が一致）を KUS ℕ で述べる。
+-/
+theorem cosmicBodyPlusGap_eq_big (d : ℕ) :
+    (∑ k ∈ Finset.range d, toCoeff (cosmicTerm d k)) + 1 = 2 ^ d := by
+  rw [sum_toCoeff_cosmicTerm]
+  exact_mod_cast cosmicBodyCoeffSum_eq d
+
+/-! ## Beam の GKUS 表現（d ≥ 2 向け） -/
+
+/--
+`Beam d 1 1` に対応する KUS 係数。
+`Big = Core + Beam + Gap` より `2^d = 1 + Beam + 1`。
+したがって x=u=1 での Beam の係数は `2^d - 2`（d ≥ 2 が必要）。
+-/
+noncomputable def cosmicBeamCoeff (d : ℕ) : ℕ :=
+  cosmicBodyCoeffSum d - 1  -- Body - Core = (2^d - 1) - 1
+
+/-- `cosmicBeamCoeff d ≥ 0` は自明だが、d ≥ 2 では `cosmicBeamCoeff d + 2 = 2^d`。 -/
+theorem cosmicBeamCoeff_add_two (d : ℕ) (hd : 2 ≤ d) :
+    cosmicBeamCoeff d + 2 = 2 ^ d := by
+  simp only [cosmicBeamCoeff]
+  have hbody := cosmicBodyCoeffSum_eq d
+  have hge : 1 ≤ cosmicBodyCoeffSum d := by
+    have := cosmicBodyCoeffSum_ge d (by omega)
+    omega
+  omega
 
 end DkMath.KUS.CosmicBridge

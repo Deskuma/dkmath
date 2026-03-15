@@ -2,6 +2,15 @@
 
 ## History Log
 
+### 2026-03-15 / Work Unit 43. phase-29 Big/Body/Gap 3層分解 KUS 対応実装
+
+- `DkMath/KUS/CosmicBridge.lean` を拡張した。
+  - `cosmicGap` / `cosmicCore` / `cosmicBig` — Gap/Core/Big の GKUS 表現を定義。
+  - `toCoeff_cosmicBig_eq` — `Big = Body + Gap` の KUS 係数等式。
+  - `cosmicBeamCoeff` / `cosmicBeamCoeff_add_two` — Beam 係数と `Beam + 2 = 2^d` (d ≥ 2)。
+  - `CoreBeamGap` を import し、定理の根拠を 3 層構造に接続。
+- `./lean-test.sh` の成功を確認した。
+
 ### 2026-03-15 / Work Unit 42. phase-28 CosmicFormula/KUS 接続実装
 
 - `DkMath/KUS/CosmicBridge.lean` を新設し、CosmicFormula と KUS Bridge の接続層を構築した。
