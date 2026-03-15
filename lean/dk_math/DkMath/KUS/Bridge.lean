@@ -167,4 +167,73 @@ noncomputable def mulViaSpec (w : DHNT.Unit) :
     HarmonizeSpec.mkHarmonizeFixed, HarmonizeSpec.mkHarmonize,
     encConst, embedQty, mkGWith, extract_g]
 
+/-! ## KUS 実体値（absVal 対応） -/
+
+/--
+`GKUS ℝ ℕ DHNTBlueprint` における「KUS 実体値」。
+DHNT の `absVal q = q.x * q.u.val` に対応し、
+`phiUnit` による離散化を経た近似量として定義する。
+
+`kusAbsVal g := toCoeff g * (extract_g g).unit`
+-/
+noncomputable def kusAbsVal (g : GKUS ℝ ℕ DHNTBlueprint) : ℝ :=
+  toCoeff g * ((extract_g g).unit : ℝ)
+
+@[simp] theorem kusAbsVal_mkGWith (c : ℝ) (s : US ℕ DHNTBlueprint) :
+    kusAbsVal (mkGWith c s) = c * (s.unit : ℝ) := rfl
+
+/--
+`embedQty q` の KUS 実体値は `q.x * phiUnit q.u` に等しい。
+これは DHNT `absVal q = q.x * q.u.val` の「離散化版」にあたる。
+-/
+@[simp] theorem kusAbsVal_embedQty (q : Qty) :
+    kusAbsVal (embedQty q) = q.x * (phiUnit q.u : ℝ) := rfl
+
+/--
+`harmonizeAdd (addViaSpec w)` の KUS 実体値は
+`(a.x + b.x) * phiUnit w` に等しい。
+-/
+@[simp] theorem kusAbsVal_harmonizeAdd (w : DHNT.Unit) (a b : Qty) :
+    kusAbsVal (HarmonizeSpec.harmonizeAdd (addViaSpec w) (embedQty a) (embedQty b))
+      = (a.x + b.x) * (phiUnit w : ℝ) := by
+  unfold kusAbsVal
+  rw [addVia_toCoeff, addVia_unit]
+
+/--
+`harmonizeMul (mulViaSpec w)` の KUS 実体値は
+`(a.x * b.x) * phiUnit w` に等しい。
+-/
+@[simp] theorem kusAbsVal_harmonizeMul (w : DHNT.Unit) (a b : Qty) :
+    kusAbsVal (HarmonizeSpec.harmonizeMul (mulViaSpec w) (embedQty a) (embedQty b))
+      = (a.x * b.x) * (phiUnit w : ℝ) := by
+  unfold kusAbsVal
+  rw [mulVia_toCoeff, mulVia_unit]
+
+/-! ## phiUnit の基礎性質 -/
+
+/-- `phiUnit` は `Unit.val` の単調性を受け継ぐ。 -/
+theorem phiUnit_mono {u v : DHNT.Unit} (h : u.val ≤ v.val) :
+    phiUnit u ≤ phiUnit v :=
+  Nat.floor_le_floor h
+
+/-- `phiUnit` と `Unit.val` の誤差は 1 未満。 -/
+theorem phiUnit_lt_succ (u : DHNT.Unit) :
+    (phiUnit u : ℝ) ≤ u.val :=
+  Nat.floor_le (le_of_lt u.pos)
+
+/-- `u.val < phiUnit u + 1`（自然数床の基本不等式）。 -/
+theorem lt_phiUnit_succ (u : DHNT.Unit) :
+    u.val < (phiUnit u : ℝ) + 1 :=
+  Nat.lt_floor_add_one u.val
+
+/--
+`phiUnit` による離散化誤差の上界。
+`|kusAbsVal (embedQty q) - absVal q| < |q.x|`
+（`phiUnit q.u ≤ q.u.val < phiUnit q.u + 1` による）
+-/
+theorem kusAbsVal_embedQty_error_bound (q : Qty) (hx : 0 ≤ q.x) :
+    kusAbsVal (embedQty q) ≤ Qty.absVal q := by
+  simp only [kusAbsVal_embedQty, Qty.absVal]
+  exact mul_le_mul_of_nonneg_left (phiUnit_lt_succ q.u) hx
+
 end DkMath.KUS.Bridge

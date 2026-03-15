@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-26: addVia自然性・乗法 bridge 実装
+status: 作業中 - phase-27: kusAbsVal ・ phiUnit 単調性実装
 
 ## 課題
 
@@ -615,3 +615,19 @@ status: 作業中 - phase-26: addVia自然性・乗法 bridge 実装
 - 次の予定:
   - phase-27: `absVal`（実体値）保存と KUS `toCoeff` の対応、
     蹟証可能性設計（逃れ時の追跡）
+
+### 2026-03-15 phase-27 kusAbsVal / phiUnit 単調性実装
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Bridge.lean`
+- 内容:
+  1. `kusAbsVal` — `GKUS ℝ ℕ DHNTBlueprint` 上の KUS 実体値 (`toCoeff * unit`) を定義した
+  2. `kusAbsVal_embedQty` — DHNT `absVal` の离散化版との対応を証明した
+  3. `kusAbsVal_harmonizeAdd` / `kusAbsVal_harmonizeMul` — 演算後の実体値を証明した
+  4. `phiUnit_mono` — `⌊⋅⌋₊` の単調性を確認した
+  5. `phiUnit_lt_succ` / `lt_phiUnit_succ` — 自然数床の基本不等式 `⌊ u ⌋ ≤ u < ⌊ u ⌋ + 1` を証明した
+  6. `kusAbsVal_embedQty_error_bound` — 離散化誤差の上界 `kusAbsVal(embedQty q) ≤ absVal q` を証明した
+  7. `./lean-test.sh` の成功を確認した
+- 次の予定:
+  - phase-28: `CosmicFormula.G` / `Body` と KUS `GKUS` の対応、
+    および `DkMath.lean` への KUS Bridge 公開統合

@@ -2,6 +2,15 @@
 
 ## History Log
 
+### 2026-03-15 / Work Unit 41. phase-27 kusAbsVal / phiUnit 単調性実装
+
+- `DkMath/KUS/Bridge.lean` に KUS 実体値層を追加した。
+  - `kusAbsVal` — `toCoeff g * (extract_g g).unit` として定義。DHNT `absVal` の离散化版。
+  - `kusAbsVal_embedQty` / `kusAbsVal_harmonizeAdd` / `kusAbsVal_harmonizeMul` を証明。
+  - `phiUnit_mono` / `phiUnit_lt_succ` / `lt_phiUnit_succ` — `⌊⋅⌋₊` の単調性・不等式を証明。
+  - `kusAbsVal_embedQty_error_bound` — 离散化誤差上界「`kusAbsVal(embedQty q) ≤ absVal q`」を証明。
+- `./lean-test.sh` の成功を確認した。
+
 ### 2026-03-15 / Work Unit 40. phase-26 addVia 自然性・乗法 bridge 実装
 
 - `DkMath/KUS/Bridge.lean` に以下を追加した。
