@@ -2,6 +2,16 @@
 
 ## History Log
 
+### 2026-03-15 / Work Unit 39. phase-25 DHNT/KUS 最小接続実装
+
+- `DkMath/KUS/docs/KUS-bridge-design-spec.md` を新設し、DHNT 連続層→ KUS 依存型層の接続方針を 3 層図式で文書化した。
+- `DkMath/KUS/Bridge.lean` を新設し、`DHNT.Qty → GKUS ℝ ℕ DHNTBlueprint` の埋め込みと
+  `addViaSpec`（`mkHarmonizeFixed` ベース）を実装した。
+- `DHNTBlueprint`（trivial）、`phiUnit`（bed 離散化）、`encConst`（定数 `ScaleSpec`）を導入した。
+- `addVia_toCoeff`（係数和）・`addVia_unit`（unit 場）の基本補題を証明した。
+- `DkMath/KUS.lean` に `import DkMath.KUS.Bridge` を追加し公開入口に接続した。
+- `./lean-test.sh` の成功を確認した。
+
 ### 2026-03-15 / Work Unit 38. phase-24 HarmonizeSpec builder APIの実装
 
 - `DkMath/KUS/Transport.lean` に `mkHarmonize` / `mkHarmonizeFixed` / `mkHarmonizeSameSpec` の 3 層構成の builder API を導入した。

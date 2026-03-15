@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-24: HarmonizeSpec builder APIの実装
+status: 作業中 - phase-25: DHNT/KUS 最小接続実装
 
 ## 課題
 
@@ -580,3 +580,22 @@ status: 作業中 - phase-24: HarmonizeSpec builder APIの実装
   6. `lake build DkMathTest.KUS` と `./lean-test.sh` の成功を確認した
 - 次の予定:
   - phase-25: DHNT/CosmicFormula との接続設計（encode 仕様直結橋渡し）
+
+### 2026-03-15 phase-25 DHNT/KUS 最小接続実装
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Bridge.lean`（新規）
+  - `lean/dk_math/DkMath/KUS/docs/KUS-bridge-design-spec.md`（新規）
+  - `lean/dk_math/DkMath/KUS.lean`
+- 内容:
+  1. 設計仕様 `KUS-bridge-design-spec.md` を新設し、接続方向・長秀・実装ロードマップを文書化した
+  2. `DHNTBlueprint` （trivial `fun _ => Fin 1`）を導入し、`DHNT.Unit` (正実数単位) を `ℕ` 層へ離散化する `phiUnit := ⌊u.val⌋₊` を実装した
+  3. `embedQty : DHNT.Qty → GKUS ℝ ℕ DHNTBlueprint` を実装し、`toCoeff_embedQty` を証明した
+  4. `encConst n` — trivial 定数 `ScaleSpec` を導入した
+  5. `addViaSpec w` — `Qty.addVia w` の KUS 対応物を `mkHarmonizeFixed` で構成した
+  6. `addVia_toCoeff`・`addVia_unit` — 結果の係数・ unit 場の等式を証明した
+  7. `DkMath/KUS.lean` に `import DkMath.KUS.Bridge` を追加し公開入口に接続した
+  8. `./lean-test.sh` の成功を確認した
+- 次の予定:
+  - phase-26: `Qty.addVia_natural` と `harmonizeAddTo_decode_comp` の対応補題、
+    および乗法対応 (`harmonizeMul`) の設計
