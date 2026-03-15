@@ -18,5 +18,6 @@ import DkMath.KUS.Mul
 import DkMath.KUS.Coeff
 import DkMath.KUS.Examples
 import DkMath.KUS.Bridge
+import DkMath.KUS.CosmicBridge
 
 #print "file: DkMath.KUS"
