@@ -231,3 +231,286 @@ example : gMul grA (gDiv grB grC hBC)
     (by simp [GSameSupport, gOp]) (by simp [GSameSupport, gOp])
 
 end DkMathTest.GKUSAlgebra
+
+namespace DkMathTest.GKUSTransport
+
+open DkMath.KUS
+
+abbrev ToyUnit := DkMath.KUS.Examples.ToyUnit
+abbrev ToyBlueprint := DkMath.KUS.Examples.ToyBlueprint
+
+def supportL : US ToyUnit ToyBlueprint where
+  unit := 3
+  blueprint := ⟨0, by decide⟩
+
+def supportR : US ToyUnit ToyBlueprint where
+  unit := 5
+  blueprint := ⟨0, by decide⟩
+
+abbrev gx : GKUS Rat ToyUnit ToyBlueprint :=
+  mkGWith ((1 : Rat) / 2) supportL
+
+abbrev gy : GKUS Rat ToyUnit ToyBlueprint :=
+  mkGWith ((1 : Rat) / 3) supportR
+
+def hs : HarmonizeSpec Rat ToyUnit ToyBlueprint ToyUnit ToyBlueprint ToyUnit ToyBlueprint where
+  encLeft := {
+    mapUnit := fun _ => 2
+    mapBlueprint := fun {_} _ => ⟨0, by decide⟩
+  }
+  encRight := {
+    mapUnit := fun _ => 2
+    mapBlueprint := fun {_} _ => ⟨0, by decide⟩
+  }
+  sameSupport := by
+    intro x y
+    simp [GSameSupport]
+
+def ds : DecodeSpec ToyUnit ToyBlueprint ToyUnit ToyBlueprint where
+  dec := {
+    mapUnit := fun _ => 1
+    mapBlueprint := fun {_} _ => ⟨0, by decide⟩
+  }
+
+def ds2 : DecodeSpec ToyUnit ToyBlueprint ToyUnit ToyBlueprint where
+  dec := {
+    mapUnit := fun _ => 7
+    mapBlueprint := fun {_} _ => ⟨0, by decide⟩
+  }
+
+def tau : ScaleSpec ToyUnit ToyBlueprint ToyUnit ToyBlueprint where
+  mapUnit := fun _ => 9
+  mapBlueprint := fun {_} _ => ⟨0, by decide⟩
+
+def decLeft : ScaleSpec ToyUnit ToyBlueprint ToyUnit ToyBlueprint where
+  mapUnit := fun _ => 11
+  mapBlueprint := fun {_} _ => ⟨0, by decide⟩
+
+def decRight : ScaleSpec ToyUnit ToyBlueprint ToyUnit ToyBlueprint where
+  mapUnit := fun _ => 13
+  mapBlueprint := fun {_} _ => ⟨0, by decide⟩
+
+def decNorm : ScaleSpec ToyUnit ToyBlueprint ToyUnit ToyBlueprint where
+  mapUnit := fun _ => 17
+  mapBlueprint := fun {_} _ => ⟨0, by decide⟩
+
+instance : LeftDecode Rat ToyUnit ToyBlueprint ToyUnit ToyBlueprint ToyUnit ToyBlueprint hs where
+  decLeft := decLeft
+
+instance : RightDecode Rat ToyUnit ToyBlueprint ToyUnit ToyBlueprint ToyUnit ToyBlueprint hs where
+  decRight := decRight
+
+instance :
+    NormalizedDecode Rat
+      ToyUnit ToyBlueprint ToyUnit ToyBlueprint ToyUnit ToyBlueprint ToyUnit ToyBlueprint hs where
+  decNorm := decNorm
+
+def supportH : US ToyUnit ToyBlueprint where
+  unit := 2
+  blueprint := ⟨0, by decide⟩
+
+def supportT : US ToyUnit ToyBlueprint where
+  unit := 1
+  blueprint := ⟨0, by decide⟩
+
+def supportT2 : US ToyUnit ToyBlueprint where
+  unit := 7
+  blueprint := ⟨0, by decide⟩
+
+def supportTau : US ToyUnit ToyBlueprint where
+  unit := 9
+  blueprint := ⟨0, by decide⟩
+
+def supportLeftAPI : US ToyUnit ToyBlueprint where
+  unit := 11
+  blueprint := ⟨0, by decide⟩
+
+def supportRightAPI : US ToyUnit ToyBlueprint where
+  unit := 13
+  blueprint := ⟨0, by decide⟩
+
+def supportNormAPI : US ToyUnit ToyBlueprint where
+  unit := 17
+  blueprint := ⟨0, by decide⟩
+
+example : toCoeff (HarmonizeSpec.harmonizeAdd hs gx gy) = ((1 : Rat) / 2 + (1 : Rat) / 3) := by
+  simpa [gx, gy] using (HarmonizeSpec.toCoeff_harmonizeAdd (hs := hs) (x := gx) (y := gy))
+
+example : extract_g (HarmonizeSpec.harmonizeAdd hs gx gy) = supportH := by
+  simpa [HarmonizeSpec.encodeLeft, hs, gx, supportH] using
+    (HarmonizeSpec.extract_g_harmonizeAdd (hs := hs) (x := gx) (y := gy))
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeAddTo hs ds gx gy)
+      = ((1 : Rat) / 2 + (1 : Rat) / 3) := by
+  simpa [gx, gy] using
+    (HarmonizeSpec.toCoeff_harmonizeAddTo (hs := hs) (ds := ds) (x := gx) (y := gy))
+
+example : extract_g (HarmonizeSpec.harmonizeAddTo hs ds gx gy) = supportT := by
+  simp [HarmonizeSpec.harmonizeAdd, HarmonizeSpec.encodeLeft, hs, ds, supportT]
+
+example : toCoeff (HarmonizeSpec.harmonizeMul hs gx gy) = ((1 : Rat) / 2) * ((1 : Rat) / 3) := by
+  simpa [gx, gy] using (HarmonizeSpec.toCoeff_harmonizeMul (hs := hs) (x := gx) (y := gy))
+
+example : extract_g (HarmonizeSpec.harmonizeMul hs gx gy) = supportH := by
+  simpa [HarmonizeSpec.encodeLeft, hs, gx, supportH] using
+    (HarmonizeSpec.extract_g_harmonizeMul (hs := hs) (x := gx) (y := gy))
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeMulTo hs ds2 gx gy)
+      = ((1 : Rat) / 2) * ((1 : Rat) / 3) := by
+  simpa [gx, gy] using
+    (HarmonizeSpec.toCoeff_harmonizeMulTo (hs := hs) (ds := ds2) (x := gx) (y := gy))
+
+example : extract_g (HarmonizeSpec.harmonizeMulTo hs ds2 gx gy) = supportT2 := by
+  simp [HarmonizeSpec.harmonizeMul, HarmonizeSpec.encodeLeft, hs, ds2, supportT2]
+
+example :
+    ScaleSpec.scaleGKUS tau (HarmonizeSpec.harmonizeAddTo hs ds gx gy)
+      = HarmonizeSpec.harmonizeAddTo hs ⟨ScaleSpec.comp tau ds.dec⟩ gx gy := by
+  simp
+
+example :
+    ScaleSpec.scaleGKUS tau (HarmonizeSpec.harmonizeMulTo hs ds2 gx gy)
+      = HarmonizeSpec.harmonizeMulTo hs ⟨ScaleSpec.comp tau ds2.dec⟩ gx gy := by
+  simp
+
+example :
+    extract_g (ScaleSpec.scaleGKUS tau (HarmonizeSpec.harmonizeAddTo hs ds gx gy))
+      = supportTau := by
+  simp [HarmonizeSpec.harmonizeAdd, HarmonizeSpec.encodeLeft, hs, ds, tau, supportTau]
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeAddLeft hs decLeft gx gy)
+      = ((1 : Rat) / 2 + (1 : Rat) / 3) := by
+  unfold HarmonizeSpec.harmonizeAddLeft
+  simpa [DecodeSpec.ofScale, gx, gy] using
+    (HarmonizeSpec.toCoeff_harmonizeAddTo (hs := hs) (ds := DecodeSpec.ofScale decLeft)
+      (x := gx) (y := gy))
+
+example : extract_g (HarmonizeSpec.harmonizeAddLeft hs decLeft gx gy) = supportLeftAPI := by
+  simp [HarmonizeSpec.harmonizeAddLeft, HarmonizeSpec.harmonizeAdd, HarmonizeSpec.encodeLeft,
+    hs, decLeft, supportLeftAPI]
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeAddRight hs decRight gx gy)
+      = ((1 : Rat) / 2 + (1 : Rat) / 3) := by
+  unfold HarmonizeSpec.harmonizeAddRight
+  simpa [DecodeSpec.ofScale, gx, gy] using
+    (HarmonizeSpec.toCoeff_harmonizeAddTo (hs := hs) (ds := DecodeSpec.ofScale decRight)
+      (x := gx) (y := gy))
+
+example : extract_g (HarmonizeSpec.harmonizeAddRight hs decRight gx gy) = supportRightAPI := by
+  simp [HarmonizeSpec.harmonizeAddRight, HarmonizeSpec.harmonizeAdd, HarmonizeSpec.encodeLeft,
+    hs, decRight, supportRightAPI]
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeMulNormalized hs decNorm gx gy)
+      = ((1 : Rat) / 2) * ((1 : Rat) / 3) := by
+  unfold HarmonizeSpec.harmonizeMulNormalized
+  simpa [DecodeSpec.ofScale, gx, gy] using
+    (HarmonizeSpec.toCoeff_harmonizeMulTo (hs := hs) (ds := DecodeSpec.ofScale decNorm)
+      (x := gx) (y := gy))
+
+example : extract_g (HarmonizeSpec.harmonizeMulNormalized hs decNorm gx gy) = supportNormAPI := by
+  simp [HarmonizeSpec.harmonizeMulNormalized, HarmonizeSpec.harmonizeMul, HarmonizeSpec.encodeLeft,
+    hs, decNorm, supportNormAPI]
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeAddBy (S := UseLeft) hs gx gy)
+      = ((1 : Rat) / 2 + (1 : Rat) / 3) := by
+  simpa [gx, gy] using
+    (HarmonizeSpec.toCoeff_harmonizeAddBy (S := UseLeft) (hs := hs) (x := gx) (y := gy))
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeAddBy (S := UseRight) hs gx gy)
+      = ((1 : Rat) / 2 + (1 : Rat) / 3) := by
+  simpa [gx, gy] using
+    (HarmonizeSpec.toCoeff_harmonizeAddBy (S := UseRight) (hs := hs) (x := gx) (y := gy))
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeMulBy (S := UseNormalized ToyUnit ToyBlueprint) hs gx gy)
+      = ((1 : Rat) / 2) * ((1 : Rat) / 3) := by
+  simpa [gx, gy] using
+    (HarmonizeSpec.toCoeff_harmonizeMulBy
+      (S := UseNormalized ToyUnit ToyBlueprint) (hs := hs) (x := gx) (y := gy))
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeAddAutoLeft hs gx gy)
+      = ((1 : Rat) / 2 + (1 : Rat) / 3) := by
+  unfold HarmonizeSpec.harmonizeAddAutoLeft
+  simpa [gx, gy] using
+    (HarmonizeSpec.toCoeff_harmonizeAddBy (S := UseLeft) (hs := hs) (x := gx) (y := gy))
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeAddAutoRight hs gx gy)
+      = ((1 : Rat) / 2 + (1 : Rat) / 3) := by
+  unfold HarmonizeSpec.harmonizeAddAutoRight
+  simpa [gx, gy] using
+    (HarmonizeSpec.toCoeff_harmonizeAddBy (S := UseRight) (hs := hs) (x := gx) (y := gy))
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeMulAutoNormalized
+      (T := ToyUnit) (BT := ToyBlueprint) hs gx gy)
+      = ((1 : Rat) / 2) * ((1 : Rat) / 3) := by
+  unfold HarmonizeSpec.harmonizeMulAutoNormalized
+  simpa [gx, gy] using
+    (HarmonizeSpec.toCoeff_harmonizeMulBy
+      (S := UseNormalized ToyUnit ToyBlueprint) (hs := hs) (x := gx) (y := gy))
+
+/-! ## builder API 回帰 -/
+
+-- `encLeft`/`encRight` 共通 scale。mapUnit が定数なので証明に simp が使える。
+private def encConst : ScaleSpec ToyUnit ToyBlueprint ToyUnit ToyBlueprint where
+  mapUnit    := fun _ => 2
+  mapBlueprint := fun {_} _ => ⟨0, by decide⟩
+
+private def commonSupport : US ToyUnit ToyBlueprint where
+  unit      := 2
+  blueprint := ⟨0, by decide⟩
+
+-- `mkHarmonize` : hSameSupport を直接供給
+private def hs_via_mkHarmonize : HarmonizeSpec Rat ToyUnit ToyBlueprint
+    ToyUnit ToyBlueprint ToyUnit ToyBlueprint :=
+  HarmonizeSpec.mkHarmonize encConst encConst
+    (fun x y => by simp [ScaleSpec.scaleUS, encConst])
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeAdd hs_via_mkHarmonize gx gy)
+      = ((1 : Rat) / 2 + (1 : Rat) / 3) := by
+  simpa [gx, gy] using HarmonizeSpec.toCoeff_harmonizeAdd
+    (hs := hs_via_mkHarmonize) (x := gx) (y := gy)
+
+-- `mkHarmonizeFixed` : cs + hL/hR を供給
+private def hs_via_fixed : HarmonizeSpec Rat ToyUnit ToyBlueprint
+    ToyUnit ToyBlueprint ToyUnit ToyBlueprint :=
+  HarmonizeSpec.mkHarmonizeFixed encConst encConst commonSupport
+    (fun x => by simp [ScaleSpec.scaleUS, encConst, commonSupport])
+    (fun y => by simp [ScaleSpec.scaleUS, encConst, commonSupport])
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeAdd hs_via_fixed gx gy)
+      = ((1 : Rat) / 2 + (1 : Rat) / 3) := by
+  simpa [gx, gy] using HarmonizeSpec.toCoeff_harmonizeAdd
+    (hs := hs_via_fixed) (x := gx) (y := gy)
+
+-- `mkHarmonizeSameSpec` : 同一 enc での shorthand
+private def hs_via_same : HarmonizeSpec Rat ToyUnit ToyBlueprint
+    ToyUnit ToyBlueprint ToyUnit ToyBlueprint :=
+  HarmonizeSpec.mkHarmonizeSameSpec encConst commonSupport
+    (fun x => by simp [ScaleSpec.scaleUS, encConst, commonSupport])
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeMul hs_via_same gx gy)
+      = ((1 : Rat) / 2) * ((1 : Rat) / 3) := by
+  simpa [gx, gy] using HarmonizeSpec.toCoeff_harmonizeMul
+    (hs := hs_via_same) (x := gx) (y := gy)
+
+-- builder で作った HarmonizeSpec は手動構築版 `hs` と同じ振る舞いをする
+example :
+    HarmonizeSpec.harmonizeAdd hs_via_fixed gx gy
+      = HarmonizeSpec.harmonizeAdd hs gx gy := by
+  simp [HarmonizeSpec.harmonizeAdd, HarmonizeSpec.encodeLeft, HarmonizeSpec.encodeRight,
+    hs_via_fixed, hs, encConst, HarmonizeSpec.mkHarmonizeFixed, HarmonizeSpec.mkHarmonize]
+
+end DkMathTest.GKUSTransport

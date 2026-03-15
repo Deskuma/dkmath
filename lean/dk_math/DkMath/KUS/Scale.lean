@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.KUS.Monoid
+import DkMath.KUS.Coeff
 
 #print "file: DkMath.KUS.Scale"
 
@@ -45,8 +46,19 @@ variable (σ : ScaleSpec U Blueprint V Blueprint')
   unit := (scaleUS σ (toUS x)).unit
   blueprint := (scaleUS σ (toUS x)).blueprint
 
+/-- `GKUS` の scale（可視係数は保存）。 -/
+@[simp] def scaleGKUS {C : Type*} (x : GKUS C U Blueprint) : GKUS C V Blueprint' where
+  coeff := x.coeff
+  unit := (scaleUS σ (extract_g x)).unit
+  blueprint := (scaleUS σ (extract_g x)).blueprint
+
 @[simp] theorem toUS_scaleKUS (x : KUS U Blueprint) :
     toUS (scaleKUS σ x) = scaleUS σ (toUS x) := by
+  cases x
+  rfl
+
+@[simp] theorem extract_g_scaleGKUS {C : Type*} (x : GKUS C U Blueprint) :
+    extract_g (scaleGKUS σ x) = scaleUS σ (extract_g x) := by
   cases x
   rfl
 
@@ -56,6 +68,10 @@ variable (σ : ScaleSpec U Blueprint V Blueprint')
 
 @[simp] theorem toNat_scaleKUS (x : KUS U Blueprint) :
     toNat (scaleKUS σ x) = toNat x :=
+  rfl
+
+@[simp] theorem toCoeff_scaleGKUS {C : Type*} (x : GKUS C U Blueprint) :
+    toCoeff (scaleGKUS σ x) = toCoeff x :=
   rfl
 
 @[simp] theorem scaleKUS_zeroState (support : US U Blueprint) :
@@ -101,6 +117,16 @@ variable (σ : ScaleSpec U Blueprint V Blueprint')
     (σ : ScaleSpec U Blueprint V Blueprint')
     (x : KUS U Blueprint) :
     scaleKUS (comp τ σ) x = scaleKUS τ (scaleKUS σ x) := by
+  cases x
+  rfl
+
+@[simp] theorem scaleGKUS_comp
+    {W : Type _} {Blueprint'' : BlueprintFamily W}
+    {C : Type*}
+    (τ : ScaleSpec V Blueprint' W Blueprint'')
+    (σ : ScaleSpec U Blueprint V Blueprint')
+    (x : GKUS C U Blueprint) :
+    scaleGKUS (comp τ σ) x = scaleGKUS τ (scaleGKUS σ x) := by
   cases x
   rfl
 
