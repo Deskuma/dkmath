@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-27: kusAbsVal ・ phiUnit 単調性実装
+status: 作業中 - phase-28: CosmicFormula/KUS 接続実装
 
 ## 課題
 
@@ -631,3 +631,22 @@ status: 作業中 - phase-27: kusAbsVal ・ phiUnit 単調性実装
 - 次の予定:
   - phase-28: `CosmicFormula.G` / `Body` と KUS `GKUS` の対応、
     および `DkMath.lean` への KUS Bridge 公開統合
+
+### 2026-03-15 phase-28 CosmicFormula/KUS 接続実装
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/CosmicBridge.lean`（新規）
+  - `lean/dk_math/DkMath/KUS.lean`
+- 内容:
+  1. `cosmicTerm d k` — `CosmicFormula.G` の第 `k` 項を `GKUS ℕ ℕ DHNTBlueprint` として表現した
+  2. `cosmicBodyCoeffSum d` — `Body d 1 1` の係数和を整数で定義した
+  3. `cosmicBodyCoeffSum_eq` — `cosmicBodyCoeffSum d + 1 = 2^d`（二項定理から）を証明した
+  4. `cosmicBodyCoeffSum_ge` — `d ≤ cosmicBodyCoeffSum d`（各次元で 1 以上の係数和）を証明した
+  5. `G_one_one_eq` — `G ℕ 1 1 d = cosmicBodyCoeffSum d` を証明した
+  6. `body_one_one` — `Body 1 1 d + 1 = 2^d`（実数上）を証明した
+  7. `sum_toCoeff_cosmicTerm` — 個別 GKUS 項の `toCoeff` 和が `cosmicBodyCoeffSum` に一致することを証明した
+  8. `DkMath/KUS.lean` に `import DkMath.KUS.CosmicBridge` を追加した
+  9. `./lean-test.sh` の成功を確認した
+- 次の予定:
+  - phase-29: `Big`/`Body`/`Gap` の 3 層分解と GKUS の対応、
+    および `CosmicBridge` を使った新定理の設計

@@ -2,6 +2,14 @@
 
 ## History Log
 
+### 2026-03-15 / Work Unit 42. phase-28 CosmicFormula/KUS 接続実装
+
+- `DkMath/KUS/CosmicBridge.lean` を新設し、CosmicFormula と KUS Bridge の接続層を構築した。
+  - `cosmicTerm` / `cosmicBodyCoeffSum` / `cosmicBodyCoeffSum_eq` / `body_one_one` を実装。
+  - `sum_toCoeff_cosmicTerm` — 個別項の GKUS `toCoeff` 和 = `cosmicBodyCoeffSum` を証明。
+- `DkMath/KUS.lean` に `import DkMath.KUS.CosmicBridge` を追加して公開統合した。
+- `./lean-test.sh` の成功を確認した。
+
 ### 2026-03-15 / Work Unit 41. phase-27 kusAbsVal / phiUnit 単調性実装
 
 - `DkMath/KUS/Bridge.lean` に KUS 実体値層を追加した。
