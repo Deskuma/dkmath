@@ -1,7 +1,7 @@
 # snapshot review: KUS 実装
 
 snaphost: __snapshot-dk_math-lean-code-260315-2338.tar.gz
-tag: dev-KUS-260313-v1-cp2: 5687c7ac30484cea3d90887c344c5b0a66193242
+tag: dev-KUS-260313-v2-closed: 76706b5d6eb649616a29d20c654d7a69249d8df7
 
 ## DkMath.KUS 実装の構造解析と解説
 
