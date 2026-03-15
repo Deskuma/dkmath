@@ -109,4 +109,62 @@ noncomputable def addViaSpec (w : DHNT.Unit) :
     HarmonizeSpec.mkHarmonizeFixed, HarmonizeSpec.mkHarmonize,
     encConst, embedQty, mkGWith, extract_g]
 
+/-! ## addVia_natural の KUS 対応 -/
+
+/--
+`Qty.addVia_natural` の KUS 対応補題。
+
+DHNT では `convert (addVia w₁ a b) w₂ = addVia w₂ a b`。
+KUS では decode 先を `w₂` に換えることが `harmonizeAddTo_decode_comp` に対応する。
+
+本補題は「`w₁` で合流した結果を `w₂` へ re-encode することが、
+最初から `w₂` で合流したのと係数上で一致する」ことを示す。
+-/
+theorem addVia_natural_toCoeff
+    (w₁ w₂ : DHNT.Unit) (a b : Qty) :
+    toCoeff (ScaleSpec.scaleGKUS (encConst (phiUnit w₂))
+        (HarmonizeSpec.harmonizeAdd (addViaSpec w₁) (embedQty a) (embedQty b)))
+      = toCoeff (HarmonizeSpec.harmonizeAdd (addViaSpec w₂) (embedQty a) (embedQty b)) := by
+  simp only [ScaleSpec.toCoeff_scaleGKUS, addVia_toCoeff]
+
+/--
+`addVia_natural_toCoeff` の `harmonizeAddTo` 版。
+decode 仕様の合成可換性 `harmonizeAddTo_decode_comp` との対応を明示。
+-/
+theorem addVia_natural_harmonizeAddTo
+    (w₁ w₂ : DHNT.Unit) (a b : Qty) :
+    toCoeff (HarmonizeSpec.harmonizeAddTo (addViaSpec w₁)
+        ⟨ScaleSpec.comp (encConst (phiUnit w₂)) (encConst (phiUnit w₁))⟩
+        (embedQty a) (embedQty b))
+      = a.x + b.x := by
+  simp only [HarmonizeSpec.toCoeff_harmonizeAddTo, toCoeff_embedQty]
+
+/-! ## mulViaSpec — 乗法 bridge -/
+
+/--
+乗法用 `HarmonizeSpec`。`Qty` の乗法では単位が `u * v`（積）になる。
+KUS 側では encode 先を `phiUnit w` に固定した `addViaSpec` と同じ形。
+-/
+noncomputable def mulViaSpec (w : DHNT.Unit) :
+    HarmonizeSpec ℝ ℕ DHNTBlueprint ℕ DHNTBlueprint ℕ DHNTBlueprint :=
+  addViaSpec w   -- spec は加算と共通（支持先は同じ `phiUnit w`）
+
+/--
+`mulViaSpec` で乗算した係数は元の係数の積に等しい。
+-/
+@[simp] theorem mulVia_toCoeff (w : DHNT.Unit) (a b : Qty) :
+    toCoeff (HarmonizeSpec.harmonizeMul (mulViaSpec w) (embedQty a) (embedQty b))
+      = a.x * b.x := by
+  simpa using HarmonizeSpec.toCoeff_harmonizeMul
+    (hs := mulViaSpec w) (x := embedQty a) (y := embedQty b)
+
+/-- `harmonizeMul (mulViaSpec w)` の結果 unit は `phiUnit w` に等しい。 -/
+@[simp] theorem mulVia_unit (w : DHNT.Unit) (a b : Qty) :
+    (extract_g (HarmonizeSpec.harmonizeMul (mulViaSpec w) (embedQty a) (embedQty b))).unit
+      = phiUnit w := by
+  simp [HarmonizeSpec.harmonizeMul, HarmonizeSpec.encodeLeft,
+    ScaleSpec.scaleGKUS, ScaleSpec.scaleUS, gOp, mulViaSpec, addViaSpec,
+    HarmonizeSpec.mkHarmonizeFixed, HarmonizeSpec.mkHarmonize,
+    encConst, embedQty, mkGWith, extract_g]
+
 end DkMath.KUS.Bridge

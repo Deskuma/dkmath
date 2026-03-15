@@ -2,6 +2,14 @@
 
 ## History Log
 
+### 2026-03-15 / Work Unit 40. phase-26 addVia 自然性・乗法 bridge 実装
+
+- `DkMath/KUS/Bridge.lean` に以下を追加した。
+  - `addVia_natural_toCoeff` — 共通単位 `w₂` への re-encode が最初から `w₂` で合流した結果と係数上一致する補題。
+  - `addVia_natural_harmonizeAddTo` — decode の合成可換性（DHNT `addVia_natural` の KUS 対応）。
+  - `mulViaSpec` / `mulVia_toCoeff` / `mulVia_unit` — 乗法 bridge（係数積・ unit 場）。
+- `./lean-test.sh` の成功を確認した。
+
 ### 2026-03-15 / Work Unit 39. phase-25 DHNT/KUS 最小接続実装
 
 - `DkMath/KUS/docs/KUS-bridge-design-spec.md` を新設し、DHNT 連続層→ KUS 依存型層の接続方針を 3 層図式で文書化した。

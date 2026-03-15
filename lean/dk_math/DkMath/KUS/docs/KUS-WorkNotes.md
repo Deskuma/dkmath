@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-25: DHNT/KUS 最小接続実装
+status: 作業中 - phase-26: addVia自然性・乗法 bridge 実装
 
 ## 課題
 
@@ -599,3 +599,19 @@ status: 作業中 - phase-25: DHNT/KUS 最小接続実装
 - 次の予定:
   - phase-26: `Qty.addVia_natural` と `harmonizeAddTo_decode_comp` の対応補題、
     および乗法対応 (`harmonizeMul`) の設計
+
+### 2026-03-15 phase-26 addVia 自然性・乗法 bridge 実装
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Bridge.lean`
+- 内容:
+  1. `addVia_natural_toCoeff` — `convert ∘ harmonizeAdd` と `harmonizeAdd w₂` の係数等価を証明した
+  2. `addVia_natural_harmonizeAddTo` — decode 定式の合成可換性として展開し、
+     DHNT `addVia_natural` との対応を文書化・証明した
+  3. `mulViaSpec w` — 乗法用 `HarmonizeSpec`（`addViaSpec` と共通の spec を流用）を導入した
+  4. `mulVia_toCoeff` — 係数積が保存されることを証明した
+  5. `mulVia_unit` — 結果 unit が `phiUnit w` に等しいことを証明した
+  6. `./lean-test.sh` の成功を確認した
+- 次の予定:
+  - phase-27: `absVal`（実体値）保存と KUS `toCoeff` の対応、
+    蹟証可能性設計（逃れ時の追跡）
