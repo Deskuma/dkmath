@@ -458,4 +458,59 @@ example :
     (HarmonizeSpec.toCoeff_harmonizeMulBy
       (S := UseNormalized ToyUnit ToyBlueprint) (hs := hs) (x := gx) (y := gy))
 
+/-! ## builder API 回帰 -/
+
+-- `encLeft`/`encRight` 共通 scale。mapUnit が定数なので証明に simp が使える。
+private def encConst : ScaleSpec ToyUnit ToyBlueprint ToyUnit ToyBlueprint where
+  mapUnit    := fun _ => 2
+  mapBlueprint := fun {_} _ => ⟨0, by decide⟩
+
+private def commonSupport : US ToyUnit ToyBlueprint where
+  unit      := 2
+  blueprint := ⟨0, by decide⟩
+
+-- `mkHarmonize` : hSameSupport を直接供給
+private def hs_via_mkHarmonize : HarmonizeSpec Rat ToyUnit ToyBlueprint
+    ToyUnit ToyBlueprint ToyUnit ToyBlueprint :=
+  HarmonizeSpec.mkHarmonize encConst encConst
+    (fun x y => by simp [ScaleSpec.scaleUS, encConst])
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeAdd hs_via_mkHarmonize gx gy)
+      = ((1 : Rat) / 2 + (1 : Rat) / 3) := by
+  simpa [gx, gy] using HarmonizeSpec.toCoeff_harmonizeAdd
+    (hs := hs_via_mkHarmonize) (x := gx) (y := gy)
+
+-- `mkHarmonizeFixed` : cs + hL/hR を供給
+private def hs_via_fixed : HarmonizeSpec Rat ToyUnit ToyBlueprint
+    ToyUnit ToyBlueprint ToyUnit ToyBlueprint :=
+  HarmonizeSpec.mkHarmonizeFixed encConst encConst commonSupport
+    (fun x => by simp [ScaleSpec.scaleUS, encConst, commonSupport])
+    (fun y => by simp [ScaleSpec.scaleUS, encConst, commonSupport])
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeAdd hs_via_fixed gx gy)
+      = ((1 : Rat) / 2 + (1 : Rat) / 3) := by
+  simpa [gx, gy] using HarmonizeSpec.toCoeff_harmonizeAdd
+    (hs := hs_via_fixed) (x := gx) (y := gy)
+
+-- `mkHarmonizeSameSpec` : 同一 enc での shorthand
+private def hs_via_same : HarmonizeSpec Rat ToyUnit ToyBlueprint
+    ToyUnit ToyBlueprint ToyUnit ToyBlueprint :=
+  HarmonizeSpec.mkHarmonizeSameSpec encConst commonSupport
+    (fun x => by simp [ScaleSpec.scaleUS, encConst, commonSupport])
+
+example :
+    toCoeff (HarmonizeSpec.harmonizeMul hs_via_same gx gy)
+      = ((1 : Rat) / 2) * ((1 : Rat) / 3) := by
+  simpa [gx, gy] using HarmonizeSpec.toCoeff_harmonizeMul
+    (hs := hs_via_same) (x := gx) (y := gy)
+
+-- builder で作った HarmonizeSpec は手動構築版 `hs` と同じ振る舞いをする
+example :
+    HarmonizeSpec.harmonizeAdd hs_via_fixed gx gy
+      = HarmonizeSpec.harmonizeAdd hs gx gy := by
+  simp [HarmonizeSpec.harmonizeAdd, HarmonizeSpec.encodeLeft, HarmonizeSpec.encodeRight,
+    hs_via_fixed, hs, encConst, HarmonizeSpec.mkHarmonizeFixed, HarmonizeSpec.mkHarmonize]
+
 end DkMathTest.GKUSTransport

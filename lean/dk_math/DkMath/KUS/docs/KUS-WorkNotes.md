@@ -1,6 +1,6 @@
 # KUS Work Notes
 
-status: 作業中 - phase-23: decode 戦略の型クラス選択
+status: 作業中 - phase-24: HarmonizeSpec builder APIの実装
 
 ## 課題
 
@@ -563,3 +563,20 @@ status: 作業中 - phase-23: decode 戦略の型クラス選択
   6. `lake build DkMathTest.KUS` と `./lean-test.sh` の成功を確認した
 - 次の予定:
   - phase-24: `HarmonizeSpec` 生成を簡約する builder API（既定H・既定decode）設計
+
+### 2026-03-15 phase-24 HarmonizeSpec builder APIの実装
+
+- 対象:
+  - `lean/dk_math/DkMath/KUS/Transport.lean`
+  - `lean/dk_math/DkMathTest/KUS.lean`
+- 内容:
+  1. `GSameSupport` が `extract_g x = extract_g y` という単一等式に展開されることを利用し、`sameSupport` 証明を
+     `scaleUS` 等式として直接受け取るbuilder 設計に変更した
+  2. `mkHarmonize` — `hSameSupport` を直接受け取る汎用 builder
+  3. `mkHarmonizeFixed` — 固定 support `cs` と `hL`/`hR` 覚诃を受け取る主流 builder
+  4. `mkHarmonizeSameSpec` — `mkHarmonizeFixed enc enc cs h h` の shorthand
+  5. `DkMathTest.GKUSTransport` にビルダ回帰を追加し、`hs_via_mkHarmonize` / `hs_via_fixed` / `hs_via_same` による
+     係数演算・手動構築版との等価性を確認した
+  6. `lake build DkMathTest.KUS` と `./lean-test.sh` の成功を確認した
+- 次の予定:
+  - phase-25: DHNT/CosmicFormula との接続設計（encode 仕様直結橋渡し）

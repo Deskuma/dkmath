@@ -2,6 +2,13 @@
 
 ## History Log
 
+### 2026-03-15 / Work Unit 38. phase-24 HarmonizeSpec builder APIの実装
+
+- `DkMath/KUS/Transport.lean` に `mkHarmonize` / `mkHarmonizeFixed` / `mkHarmonizeSameSpec` の 3 層構成の builder API を導入した。
+- `GSameSupport` を `scaleUS` 等式として直接受け取る設計に内部証明を統一し、等式証明の複雑性（依存型 blueprint の HEq）を呈示側で吸収できる構造にした。
+- `DkMathTest/KUS.lean` に `hs_via_mkHarmonize` / `hs_via_fixed` / `hs_via_same` の回帰テストを追加し、builder 期笧・係数演算・手動構築版との等価性を確認した。
+- `lake build DkMathTest.KUS` および `./lean-test.sh` の成功を確認した。
+
 ### 2026-03-15 / Work Unit 37. phase-23 decode 戦略の型クラス選択
 
 - `DkMath/KUS/Transport.lean` に `LeftDecode` / `RightDecode` / `NormalizedDecode` を追加し、decode 戦略を型クラスで供給できるようにした。

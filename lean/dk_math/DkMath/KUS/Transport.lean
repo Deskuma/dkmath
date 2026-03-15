@@ -306,6 +306,63 @@ variable {T' : Type _} {BT' : BlueprintFamily T'}
       = harmonizeMulTo hs ⟨ScaleSpec.comp τ ds.dec⟩ x y := by
   simp [harmonizeMulTo]
 
+/-! ## HarmonizeSpec builder API -/
+
+/--
+`mkHarmonize` — `HarmonizeSpec` の汎用最小 builder。
+
+`hSameSupport` として
+「両 encode が常に同一の `US H BH` へ写す」ことを直接受け取り、
+`sameSupport` フィールドを自動生成する。
+-/
+def mkHarmonize
+    {C : Type*}
+    {U₁ : Type u₁} {B₁ : BlueprintFamily U₁}
+    {U₂ : Type u₂} {B₂ : BlueprintFamily U₂}
+    {H : Type uH} {BH : BlueprintFamily H}
+    (encLeft : ScaleSpec U₁ B₁ H BH)
+    (encRight : ScaleSpec U₂ B₂ H BH)
+    (hSameSupport : ∀ (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂),
+        ScaleSpec.scaleUS encLeft (extract_g x)
+          = ScaleSpec.scaleUS encRight (extract_g y)) :
+    HarmonizeSpec C U₁ B₁ U₂ B₂ H BH where
+  encLeft  := encLeft
+  encRight := encRight
+  sameSupport := fun x y => by
+    simp only [GSameSupport, ScaleSpec.extract_g_scaleGKUS]
+    exact hSameSupport x y
+
+/--
+`mkHarmonizeFixed` — 両 encode が固定 support `cs : US H BH` へ常に写す場合の builder。
+`hL`/`hR` の証明に `simp [ScaleSpec.scaleUS, ...]` が使えるため実用的に使いやすい。
+-/
+def mkHarmonizeFixed
+    {C : Type*}
+    {U₁ : Type u₁} {B₁ : BlueprintFamily U₁}
+    {U₂ : Type u₂} {B₂ : BlueprintFamily U₂}
+    {H : Type uH} {BH : BlueprintFamily H}
+    (encLeft : ScaleSpec U₁ B₁ H BH)
+    (encRight : ScaleSpec U₂ B₂ H BH)
+    (cs : US H BH)
+    (hL : ∀ (x : GKUS C U₁ B₁), ScaleSpec.scaleUS encLeft (extract_g x) = cs)
+    (hR : ∀ (y : GKUS C U₂ B₂), ScaleSpec.scaleUS encRight (extract_g y) = cs) :
+    HarmonizeSpec C U₁ B₁ U₂ B₂ H BH :=
+  mkHarmonize encLeft encRight (fun x y => by rw [hL x, hR y])
+
+/--
+`mkHarmonizeSameSpec` — 両系が同一 `enc` を共有し、固定 support `cs` へ写す場合の builder。
+`mkHarmonizeFixed enc enc cs h h` の syntactic shorthand。
+-/
+def mkHarmonizeSameSpec
+    {C : Type*}
+    {U : Type u₁} {B : BlueprintFamily U}
+    {H : Type uH} {BH : BlueprintFamily H}
+    (enc : ScaleSpec U B H BH)
+    (cs : US H BH)
+    (h : ∀ (x : GKUS C U B), ScaleSpec.scaleUS enc (extract_g x) = cs) :
+    HarmonizeSpec C U B U B H BH :=
+  mkHarmonizeFixed enc enc cs h h
+
 /-! ## typeclass-selected APIs -/
 
 /-- decode 戦略 `S` を型クラスで選ぶ加算 API。 -/
