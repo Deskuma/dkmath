@@ -17,5 +17,6 @@ import DkMath.KUS.Add
 import DkMath.KUS.Mul
 import DkMath.KUS.Coeff
 import DkMath.KUS.Examples
+import DkMath.KUS.Bridge
 
 #print "file: DkMath.KUS"
