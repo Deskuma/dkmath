@@ -14,6 +14,7 @@ see: [Exponent Type Mapping](../../../lean/dk_math/DkMath/Samples/LPS/docs/Expon
 スクリプト:
 
 - `experiment_profile_map.py`
+- `extract_profile_views.py`
 
 ### 2.1. できること
 
@@ -72,3 +73,24 @@ python experiment_profile_map.py \
 - `docs/profile_map_summary.csv`
 - `docs/profile_map_non_other.csv`
 - `docs/profile_map_boundary_switches.csv`
+
+## 3. 抽出スクリプト（縮約ビュー生成）
+
+`extract_profile_views.py` は、既存 CSV から研究ノート向けの縮約ビューを再生成する。
+
+```bash
+cd python/LPS/DHNT
+python extract_profile_views.py --big-order 27,64,125,216,343,512,729
+```
+
+生成物:
+
+- `docs/profile_map_boundary_with_delta.csv`
+- `docs/profile_map_delta_first_appearance.csv`
+- `docs/profile_map_growth_timeline.csv`
+
+主用途:
+
+- 境界切替 CSV に `ΔBody` / `Δresidual` を付与
+- `ΔBody` の初出列（段階性）を抽出
+- `One/Two` 個数の増殖タイムラインを抽出

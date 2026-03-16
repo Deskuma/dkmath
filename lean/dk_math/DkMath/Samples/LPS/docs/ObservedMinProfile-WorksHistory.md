@@ -8,6 +8,29 @@
 
 ## 履歴
 
+### 2026-03-17: 抽出スクリプトを追加（縮約ビュー再生成）
+
+- **目的**
+  - 既存 profile-map CSV から、研究ノート更新に必要な縮約ビューを再生成できるようにする。
+
+- **変更**
+  - `python/LPS/DHNT/extract_profile_views.py` を新規追加。
+    - `profile_map_boundary_switches.csv` から `Δ` 付き境界表を生成。
+    - `ΔBody` 初出表を生成。
+    - `One/Two` 増殖タイムラインを生成。
+  - `python/LPS/DHNT/README.md` に抽出スクリプトの実行手順を追記。
+
+- **検証**
+  - `python extract_profile_views.py --big-order 27,64,125,216,343,512,729` を実行。
+  - 出力確認:
+    - `profile_map_boundary_with_delta.csv`
+    - `profile_map_delta_first_appearance.csv`
+    - `profile_map_growth_timeline.csv`
+
+- **次アクション候補**
+  - 抽出 CSV から ResearchNote へ自動転記する小ツールを追加。
+  - `d=2` 用の同型抽出パイプラインを整備。
+
 ### 2026-03-17: `m`–`ΔTwo` 対応小表と弱い仮説文を追加
 
 - **目的**
