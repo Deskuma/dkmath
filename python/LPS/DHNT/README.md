@@ -15,6 +15,7 @@ see: [Exponent Type Mapping](../../../lean/dk_math/DkMath/Samples/LPS/docs/Expon
 
 - `experiment_profile_map.py`
 - `extract_profile_views.py`
+- `experiment_exchange_balance.py`
 
 ### 2.1. できること
 
@@ -94,3 +95,22 @@ python extract_profile_views.py --big-order 27,64,125,216,343,512,729
 - 境界切替 CSV に `ΔBody` / `Δresidual` を付与
 - `ΔBody` の初出列（段階性）を抽出
 - `One/Two` 個数の増殖タイムラインを抽出
+
+## 4. 粗視化↔微視化・反転平衡の試算
+
+`experiment_exchange_balance.py` は次を CSV 化する。
+
+- 粗視化↔微視化交換例（`A^m = a^n`）
+- 多段階粒度鎖（例: `64^2 = 8^4 = 4^6 = 2^12`）
+- 連続族 `a=t^(1/(t-1)), b=t^(t/(t-1))` による `a^b=b^a` 試算
+
+```bash
+cd python/LPS/DHNT
+python experiment_exchange_balance.py --t-list 0.5,2,3,4
+```
+
+生成物:
+
+- `docs/exchange_coarse_fine_examples.csv`
+- `docs/exchange_multiresolution_chain.csv`
+- `docs/powerswap_continuous_samples.csv`

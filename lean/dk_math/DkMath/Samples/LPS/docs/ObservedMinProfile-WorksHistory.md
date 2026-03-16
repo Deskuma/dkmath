@@ -8,6 +8,28 @@
 
 ## 履歴
 
+### 2026-03-17: 新実験「割り切り関係倍数の抽出」スクリプトを追加
+
+- **目的**
+  - 粗視化↔微視化交換（`A^m = a^n`）と反転平衡（`a^b = b^a`）の試算を
+    CSV で再現可能にする。
+
+- **変更**
+  - `python/LPS/DHNT/experiment_exchange_balance.py` を新規追加。
+    - 粗視化↔微視化交換例を `exchange_coarse_fine_examples.csv` として出力。
+    - 多段粒度鎖を `exchange_multiresolution_chain.csv` として出力。
+    - 連続族 PowerSwap 試算を `powerswap_continuous_samples.csv` として出力。
+  - `python/LPS/DHNT/README.md` に実行手順を追記。
+
+- **検証**
+  - `python experiment_exchange_balance.py --t-list 0.5,2,3,4` を実行。
+  - 3 種 CSV の生成と代表行を確認。
+  - 実行後に `64` 行の不整合を修正し、再実行して整合確認。
+
+- **次アクション候補**
+  - 交換例 CSV を ResearchNote の「粗視化↔微視化交換条件」節へ転記。
+  - `A=a^t` 成立例の自動探索モード（上限付き）を追加。
+
 ### 2026-03-17: 抽出スクリプトを追加（縮約ビュー再生成）
 
 - **目的**
