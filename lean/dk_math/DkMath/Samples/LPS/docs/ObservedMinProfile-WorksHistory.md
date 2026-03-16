@@ -8,6 +8,28 @@
 
 ## 履歴
 
+### 2026-03-17: 境界縮約表（One↔Two 切替点）を追加
+
+- **目的**
+  - 展開マップを圧縮し、profile 切替境界の座標だけを比較可能にする。
+
+- **変更**
+  - `ObservedMinProfile-ResearchNote.md` に
+    - `11.8 境界縮約表` を追加。
+    - `Big = 64, 125, 216` それぞれで、
+      `profile != other` 行の隣接切替点（One↔Two）を一覧化。
+    - 縮約規則（非 other 行を Body 昇順、隣接 profile 差分を境界）を明記。
+
+- **検証**
+  - `python/LPS/DHNT/docs/profile_map_big_64.csv`
+  - `python/LPS/DHNT/docs/profile_map_big_125.csv`
+  - `python/LPS/DHNT/docs/profile_map_big_216.csv`
+  から機械抽出した切替点を反映。
+
+- **次アクション候補**
+  - 境界切替点の間隔（Body差, residual差）を定量化する。
+  - `d = 2` 側でも同じ縮約規則で境界表を作る。
+
 ### 2026-03-17: fixed Big マップ展開（profile != other 抜粋表）
 
 - **目的**

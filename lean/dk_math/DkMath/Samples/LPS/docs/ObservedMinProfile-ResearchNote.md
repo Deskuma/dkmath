@@ -442,6 +442,55 @@ Type II/III/IV は補助情報として扱い、一般化は後段で行う。
 この展開版により、fixed Big の中で profile 島がどの Body 座標に出るかを
 直接比較できる。
 
+### 11.8. 境界縮約表（One↔Two 切替点のみ）
+
+定義（本ノートの縮約規則）:
+
+- fixed Big の `profile != other` 行を Body 昇順で並べる。
+- 連続する2行で profile が異なるとき、そのペアを「境界切替点」と記録する。
+
+#### Big = 64
+
+| from (Body,residual,profile) | to (Body,residual,profile) |
+|---|---|
+| (0, 64, One) | (10, 54, Two) |
+| (36, 28, Two) | (37, 27, One) |
+| (37, 27, One) | (48, 16, Two) |
+| (55, 9, Two) | (56, 8, One) |
+| (56, 8, One) | (62, 2, Two) |
+| (62, 2, Two) | (63, 1, One) |
+
+#### Big = 125
+
+| from (Body,residual,profile) | to (Body,residual,profile) |
+|---|---|
+| (0, 125, One) | (34, 91, Two) |
+| (60, 65, Two) | (61, 64, One) |
+| (61, 64, One) | (71, 54, Two) |
+| (97, 28, Two) | (98, 27, One) |
+| (98, 27, One) | (109, 16, Two) |
+| (116, 9, Two) | (117, 8, One) |
+| (117, 8, One) | (123, 2, Two) |
+| (123, 2, Two) | (124, 1, One) |
+
+#### Big = 216
+
+| from (Body,residual,profile) | to (Body,residual,profile) |
+|---|---|
+| (0, 216, One) | (27, 189, Two) |
+| (90, 126, Two) | (91, 125, One) |
+| (91, 125, One) | (125, 91, Two) |
+| (151, 65, Two) | (152, 64, One) |
+| (152, 64, One) | (162, 54, Two) |
+| (188, 28, Two) | (189, 27, One) |
+| (189, 27, One) | (200, 16, Two) |
+| (207, 9, Two) | (208, 8, One) |
+| (208, 8, One) | (214, 2, Two) |
+| (214, 2, Two) | (215, 1, One) |
+
+この縮約表により、profile 地形の「島の位置」だけでなく
+「切替境界の座標」を比較可能にする。
+
 ## 12. 追記テンプレート
 
 ### yyyy-mm-dd: new sample
