@@ -8,6 +8,32 @@
 
 ## 履歴
 
+### 2026-03-17: 観測領域拡大（立方 Big 列 m=3..9）
+
+- **目的**
+  - 次数を増やす前に `d=3` の観測地図を「点」から「面」へ拡大する。
+
+- **変更**
+  - `python/LPS/DHNT/experiment_profile_map.py` を拡張。
+    - 複数 Big 一括走査（`--big-list`）
+    - 立方列一括走査（`--cube-m-start/--cube-m-end`）
+    - 集計 CSV（`--emit-summary`）
+    - `profile != other` 集約 CSV（`--emit-non-other`）
+    - 境界切替 CSV（`--emit-boundary`）
+  - `python/LPS/DHNT/README.md` に一括実行手順と成果物を追記。
+
+- **検証**
+  - `python experiment_profile_map.py --cube-m-start 3 --cube-m-end 9 --emit-summary --emit-non-other --emit-boundary`
+  - 生成物を確認:
+    - `profile_map_big_27/64/125/216/343/512/729.csv`
+    - `profile_map_summary.csv`
+    - `profile_map_non_other.csv`
+    - `profile_map_boundary_switches.csv`
+
+- **次アクション候補**
+  - `profile_map_summary.csv` の推移を `ResearchNote` に追記。
+  - 境界切替 CSV から `ΔBody` / `Δresidual` の間隔統計を作る。
+
 ### 2026-03-17: 境界縮約表（One↔Two 切替点）を追加
 
 - **目的**
