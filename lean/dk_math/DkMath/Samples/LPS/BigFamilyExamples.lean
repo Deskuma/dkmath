@@ -26,6 +26,30 @@ theorem exchange_condition_minimal_nat
     A ^ m = a ^ (t * m) := by
   simp [hA, pow_mul]
 
+/-- 交換条件の具体例: `4^2 = 2^4`。 -/
+theorem exchange_example_4_2_eq_2_4 :
+    (4 : ℕ) ^ 2 = 2 ^ 4 := by
+  have hA : (4 : ℕ) = 2 ^ 2 := by norm_num
+  calc
+    (4 : ℕ) ^ 2 = 2 ^ (2 * 2) := exchange_condition_minimal_nat 2 4 2 2 hA
+    _ = 2 ^ 4 := by norm_num
+
+/-- 交換条件の具体例: `8^2 = 2^6`。 -/
+theorem exchange_example_8_2_eq_2_6 :
+    (8 : ℕ) ^ 2 = 2 ^ 6 := by
+  have hA : (8 : ℕ) = 2 ^ 3 := by norm_num
+  calc
+    (8 : ℕ) ^ 2 = 2 ^ (3 * 2) := exchange_condition_minimal_nat 2 8 3 2 hA
+    _ = 2 ^ 6 := by norm_num
+
+/-- 交換条件の具体例: `27^2 = 3^6`。 -/
+theorem exchange_example_27_2_eq_3_6 :
+    (27 : ℕ) ^ 2 = 3 ^ 6 := by
+  have hA : (27 : ℕ) = 3 ^ 3 := by norm_num
+  calc
+    (27 : ℕ) ^ 2 = 3 ^ (3 * 2) := exchange_condition_minimal_nat 3 27 3 2 hA
+    _ = 3 ^ 6 := by norm_num
+
 /-- 同じ `16` は 2 乗 1 項 (`4^2`) で埋まる。 -/
 theorem fillable_pow2_16_exact_one : FillableByPowSumExact 2 16 1 :=
   fillable_sq_16_exact_one

@@ -8,6 +8,26 @@
 
 ## 履歴
 
+### 2026-03-17: 交換条件の具体例補題を Lean へ追加
+
+- **目的**
+  - 最小交換条件定理を具体数値例へ接続し、ノート記述との対応を強化する。
+
+- **変更**
+  - `DkMath/Samples/LPS/BigFamilyExamples.lean` に
+    - `exchange_example_4_2_eq_2_4`
+    - `exchange_example_8_2_eq_2_6`
+    - `exchange_example_27_2_eq_3_6`
+    を追加。
+  - いずれも `exchange_condition_minimal_nat` から `calc` で導出。
+
+- **検証**
+  - `./lean-build.sh DkMath.Samples.LPS.BigFamilyExamples` 成功。
+
+- **次アクション候補**
+  - 同型で `16^2=4^4`, `25^2=5^4` など追加例を増やす。
+  - `exchange_coarse_fine_examples.csv` と定理名の対応表をノートへ追記。
+
 ### 2026-03-17: 最小交換条件を Lean 定理として実装
 
 - **目的**
