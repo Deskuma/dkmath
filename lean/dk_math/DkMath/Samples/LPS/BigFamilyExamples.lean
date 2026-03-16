@@ -14,6 +14,18 @@ namespace BigFamilyExamples
 theorem powerSwap_2_4 : PowerSwap 2 4 :=
   powerSwap_two_four
 
+/-! ## 粗視化↔微視化交換の最小形 -/
+
+/--
+交換条件の最小形（`ℕ` 版）。
+
+`A = a^t` なら、任意の `m` で `A^m = a^(t*m)`。
+-/
+theorem exchange_condition_minimal_nat
+    (a A t m : ℕ) (hA : A = a ^ t) :
+    A ^ m = a ^ (t * m) := by
+  simp [hA, pow_mul]
+
 /-- 同じ `16` は 2 乗 1 項 (`4^2`) で埋まる。 -/
 theorem fillable_pow2_16_exact_one : FillableByPowSumExact 2 16 1 :=
   fillable_sq_16_exact_one
