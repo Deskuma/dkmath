@@ -10,3 +10,4 @@ import DkMath.Samples.Curry
 import DkMath.Samples.CurryDish
 import DkMath.Samples.SketchBook
 import DkMath.Samples.Qty
+import DkMath.Samples.SumThreeSquaresEqSquare
