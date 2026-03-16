@@ -6,6 +6,7 @@ Samples related to the Lander, Parkin, and Selfridge conjecture.
 
 - **設計書**: [LPS-FLT-design.md](../../FLT/docs/LPS-FLT-design.md) — Big 族分解と Gap 反転構造の理論設計
 - **実装メモ**: [LPS_Memo.md](./LPS_Memo.md) — Lean 実装の骨格案とアプローチ
+- **研究ノート**: [ObservedMinProfile-ResearchNote.md](./docs/ObservedMinProfile-ResearchNote.md) — observed minimum profile 分岐の実験記録
 
 ## Lean コード構成
 
@@ -24,6 +25,21 @@ Big-family 分解の基本定義と定理。
 - `big = body + gap`
 - `body = core + beam`
 - `big = core + beam + gap`
+
+### [BigFamilyInt.lean](./BigFamilyInt.lean)
+
+Big-family 分解の `ℤ` 版。
+
+- `big / gap / body / core / beam / residual` を整数で定義
+- `ℤ` の減算構造を使った等式復元を確認
+
+### [BigFamilyExamples.lean](./BigFamilyExamples.lean)
+
+Big-family と Fillability を接続する観測標本集。
+
+- `ObservedMinOne / ObservedMinTwo`（局所定義）
+- same Big で observed minimum profile が分岐する標本
+- `d = 3` の 3 標本を束ねる総括定理
 
 ### [PowerSwap.lean](./PowerSwap.lean)
 
