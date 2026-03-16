@@ -118,6 +118,45 @@ theorem candidate_same_big_observed_min_split :
     candidate_fill_body₂_exact_one⟩
   norm_num [candidateBody₁, candidateBody₂]
 
+/--
+Observed minimum profile at degree `d`.
+
+- `ObservedMinOne d n`: `n` is fillable by one `d`-th power.
+- `ObservedMinTwo d n`: `n` is not fillable by one `d`-th power,
+  but is fillable by two `d`-th powers.
+
+This is a lightweight observational notion, weaker than a full `FillRank`.
+-/
+/-
+TODO:
+If observed minimum profiles are reused across multiple LPS sample files,
+promote `ObservedMinOne/Two` to `GapFillRank.lean`.
+-/
+def ObservedMinOne (d n : ℕ) : Prop :=
+  FillableByPowSumExact d n 1
+
+/-- Lightweight observational minimum profile at count `2`. -/
+def ObservedMinTwo (d n : ℕ) : Prop :=
+  ¬ FillableByPowSumExact d n 1 ∧ FillableByPowSumExact d n 2
+
+/-- 候補ペアの residual で observed minimum profile が分かれる。 -/
+theorem candidate_same_big_observed_min_profile :
+    ObservedMinTwo 3 (candidateBig - candidateBody₁) ∧
+    ObservedMinOne 3 (candidateBig - candidateBody₂) := by
+  refine ⟨?_, ?_⟩
+  · exact ⟨candidate_fill_body₁_not_exact_one, candidate_fill_body₁_exact_two⟩
+  · exact candidate_fill_body₂_exact_one
+
+/-- Body の差も含めた候補ペアの observed minimum profile。 -/
+theorem candidate_same_big_observed_min_split_profile :
+    candidateBody₁ ≠ candidateBody₂ ∧
+    ObservedMinTwo 3 (candidateBig - candidateBody₁) ∧
+    ObservedMinOne 3 (candidateBig - candidateBody₂) := by
+  refine ⟨?_, ?_, ?_⟩
+  · norm_num [candidateBody₁, candidateBody₂]
+  · exact ⟨candidate_fill_body₁_not_exact_one, candidate_fill_body₁_exact_two⟩
+  · exact candidate_fill_body₂_exact_one
+
 /-! ## 三平方補正項族（整数版） -/
 
 /--
