@@ -157,6 +157,60 @@ theorem candidate_same_big_observed_min_split_profile :
   · exact ⟨candidate_fill_body₁_not_exact_one, candidate_fill_body₁_exact_two⟩
   · exact candidate_fill_body₂_exact_one
 
+/-! ## 第2標本（平方版）：same Big, different observed minimum profiles -/
+
+/-- 第2標本の固定 `Big`。 -/
+def candidateBigSq : ℕ := 25
+
+/-- `Body₁` 側の residual は `13`。 -/
+def candidateBodySq₁ : ℕ := 12
+
+/-- `Body₂` 側の residual は `9`。 -/
+def candidateBodySq₂ : ℕ := 16
+
+/-- 第2標本の residual 分岐。 -/
+theorem candidate_sq_residuals_split :
+    candidateBigSq - candidateBodySq₁ = 13 ∧
+    candidateBigSq - candidateBodySq₂ = 9 := by
+  constructor <;> norm_num [candidateBigSq, candidateBodySq₁, candidateBodySq₂]
+
+/-- `13 = 2^2 + 3^2` なので 2 項の平方和で埋まる。 -/
+theorem candidate_sq_fill_body₁_exact_two :
+    FillableByPowSumExact 2 (candidateBigSq - candidateBodySq₁) 2 := by
+  refine ⟨![2, 3], ?_⟩
+  norm_num [candidateBigSq, candidateBodySq₁]
+
+/-- `13` は 1 項の平方では埋まらない。 -/
+theorem candidate_sq_fill_body₁_not_exact_one :
+    ¬ FillableByPowSumExact 2 (candidateBigSq - candidateBodySq₁) 1 := by
+  intro h
+  rcases h with ⟨f, hf⟩
+  have h13 : (f 0) ^ 2 = 13 := by
+    simpa [candidateBigSq, candidateBodySq₁] using hf
+  have hle : f 0 ≤ 3 := by
+    by_contra hgt
+    have hge4 : 4 ≤ f 0 := by omega
+    have h16le : 16 ≤ (f 0) ^ 2 := by
+      simpa using (Nat.pow_le_pow_left hge4 2)
+    omega
+  interval_cases h0 : f 0 <;> norm_num [h0] at h13
+
+/-- `9 = 3^2` なので 1 項の平方和で埋まる。 -/
+theorem candidate_sq_fill_body₂_exact_one :
+    FillableByPowSumExact 2 (candidateBigSq - candidateBodySq₂) 1 := by
+  refine ⟨fun _ => 3, ?_⟩
+  norm_num [candidateBigSq, candidateBodySq₂]
+
+/-- 第2標本でも same Big で observed minimum profile が分岐する。 -/
+theorem candidate_sq_same_big_observed_min_split_profile :
+    candidateBodySq₁ ≠ candidateBodySq₂ ∧
+    ObservedMinTwo 2 (candidateBigSq - candidateBodySq₁) ∧
+    ObservedMinOne 2 (candidateBigSq - candidateBodySq₂) := by
+  refine ⟨?_, ?_, ?_⟩
+  · norm_num [candidateBodySq₁, candidateBodySq₂]
+  · exact ⟨candidate_sq_fill_body₁_not_exact_one, candidate_sq_fill_body₁_exact_two⟩
+  · exact candidate_sq_fill_body₂_exact_one
+
 /-! ## 三平方補正項族（整数版） -/
 
 /--
