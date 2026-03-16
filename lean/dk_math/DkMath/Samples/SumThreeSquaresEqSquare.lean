@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 
+-- cid: 69b7fe50-e6a8-83a3-9fe5-356e926f6623
+
 /-!
 This file records a DkMath sample family of solutions to
 
@@ -207,6 +209,36 @@ theorem infinitely_many_sum_three_squares_eq_square :
 /-- Cubic contrast: a nontrivial integer example exists for three cubes. -/
 theorem three_cubes_eq_cube_example : (3 : ℤ) ^ 3 + 4 ^ 3 + 5 ^ 3 = 6 ^ 3 := by
   norm_num
+
+/-
+Research note (for follow-up):
+
+Lander-Parkin-Selfridge conjecture concerns equal sums of like powers:
+
+  sum_{i=1}^n a_i^k = sum_{j=1}^m b_j^k
+
+with positive integers. The conjectural bound is
+
+  m + n >= k.
+
+This generalizes the direction around Fermat/Euler-type equations. Classical
+counterexamples to Euler's "one-side single term" conjecture include:
+
+  27^5 + 84^5 + 110^5 + 133^5 = 144^5
+  95800^4 + 217519^4 + 414560^4 = 422481^4
+
+These still satisfy m + n = k, so they are compatible with LPS.
+
+In this file, `three_cubes_eq_cube_example` gives
+
+  3^3 + 4^3 + 5^3 = 6^3
+
+which has (m, n, k) = (1, 3, 3), hence m + n = 4 >= 3.
+So this sample is a useful anchor when thinking about LPS-shaped constraints.
+
+Reference:
+https://en.wikipedia.org/wiki/Lander,_Parkin,_and_Selfridge_conjecture
+-/
 
 /-- Existence form of `a^3 + b^3 + c^3 = d^3` over integers. -/
 theorem exists_sum_three_cubes_eq_cube :
