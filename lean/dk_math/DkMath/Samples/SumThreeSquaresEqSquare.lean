@@ -204,4 +204,13 @@ theorem infinitely_many_sum_three_squares_eq_square :
     ⟨a, b, c, d, hEq, hk⟩
   exact ⟨a, b, c, d, hk, hEq⟩
 
+/-- Cubic contrast: a nontrivial integer example exists for three cubes. -/
+theorem three_cubes_eq_cube_example : (3 : ℤ) ^ 3 + 4 ^ 3 + 5 ^ 3 = 6 ^ 3 := by
+  norm_num
+
+/-- Existence form of `a^3 + b^3 + c^3 = d^3` over integers. -/
+theorem exists_sum_three_cubes_eq_cube :
+    ∃ a b c d : ℤ, a ^ 3 + b ^ 3 + c ^ 3 = d ^ 3 := by
+  exact ⟨3, 4, 5, 6, by norm_num⟩
+
 end DkMath
