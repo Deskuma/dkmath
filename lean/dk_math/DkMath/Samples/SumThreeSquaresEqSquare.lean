@@ -152,4 +152,16 @@ theorem exists_sum_three_squares_eq_square_with_lower_bound
     have hsq : 0 ≤ (N - 1) ^ 2 := by exact sq_nonneg (N - 1)
     nlinarith
 
+/--
+Unbounded existence over `ℕ`: for every lower bound `N`, there is a solution
+`a^2 + b^2 + c^2 = d^2` with `N ≤ d`.
+-/
+theorem exists_sum_three_squares_eq_square_with_lower_bound_nat
+    (N : ℕ) :
+    ∃ a b c d : ℕ, a ^ 2 + b ^ 2 + c ^ 2 = d ^ 2 ∧ N ≤ d := by
+  refine ⟨2 * N, 2, N ^ 2, N ^ 2 + 2, ?_⟩
+  constructor
+  · ring
+  · nlinarith
+
 end DkMath
