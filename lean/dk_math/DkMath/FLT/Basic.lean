@@ -700,7 +700,14 @@ theorem FLT_case_3 (x y z : ℕ)
       h_xn_val
       h3
 
-#print axioms FLT_case_3  -- NG: 2026/02/22  7:39 so#rryAx
+#print axioms FLT_case_3  -- OK: no Research link 2026/03/17  0:35
+-- 'DkMath.FLT_case_3' depends on axioms: [propext, Classical.choice, Quot.sound]
+-- exact GN3_one_not_cube_use_FLT3 hpos.2.1 ⟨x, hx3⟩ ← Mathlib.FLT を使っている。
+
+#print axioms GN3_one_not_cube_use_FLT3
+#print axioms gcd_three_case_contra_template
+-- #print axioms gcd_u_GN3 -- まだ書いてない！？
+#print axioms u_eq_one_of_coprime_gcd
 
 /-- Fermat's Last Theorem (FLT)
 Cosmic Formula を用いた新しい証明
