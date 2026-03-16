@@ -265,6 +265,14 @@ theorem candidate_cube₂_same_big_observed_min_split_profile :
   · exact ⟨candidate_cube₂_fill_body₁_not_exact_one, candidate_cube₂_fill_body₁_exact_two⟩
   · exact candidate_cube₂_fill_body₂_exact_one
 
+/-- 第3標本の profile 本体（Body 不等号条件を除く）。 -/
+theorem candidate_cube₂_same_big_observed_min_profile :
+    ObservedMinTwo 3 (candidateBigCube₂ - candidateBodyCube₂₁) ∧
+    ObservedMinOne 3 (candidateBigCube₂ - candidateBodyCube₂₂) := by
+  refine ⟨?_, ?_⟩
+  · exact ⟨candidate_cube₂_fill_body₁_not_exact_one, candidate_cube₂_fill_body₁_exact_two⟩
+  · exact candidate_cube₂_fill_body₂_exact_one
+
 /-! ## 第4標本（立方版）：same Big, different observed minimum profiles -/
 
 /-- 第4標本の固定 `Big`。 -/
@@ -318,6 +326,31 @@ theorem candidate_cube₃_same_big_observed_min_split_profile :
   · norm_num [candidateBodyCube₃₁, candidateBodyCube₃₂]
   · exact ⟨candidate_cube₃_fill_body₁_not_exact_one, candidate_cube₃_fill_body₁_exact_two⟩
   · exact candidate_cube₃_fill_body₂_exact_one
+
+/-- 第4標本の profile 本体（Body 不等号条件を除く）。 -/
+theorem candidate_cube₃_same_big_observed_min_profile :
+    ObservedMinTwo 3 (candidateBigCube₃ - candidateBodyCube₃₁) ∧
+    ObservedMinOne 3 (candidateBigCube₃ - candidateBodyCube₃₂) := by
+  refine ⟨?_, ?_⟩
+  · exact ⟨candidate_cube₃_fill_body₁_not_exact_one, candidate_cube₃_fill_body₁_exact_two⟩
+  · exact candidate_cube₃_fill_body₂_exact_one
+
+/-! ## 立方次数 `d = 3` における3標本総括 -/
+
+/--
+立方次数 `d = 3` において、same Big に対する observed minimum profile の分岐が
+独立な 3 標本で再現する。
+-/
+theorem cube_observed_min_split_reproduced_three_samples :
+    (ObservedMinTwo 3 (candidateBig - candidateBody₁) ∧
+      ObservedMinOne 3 (candidateBig - candidateBody₂)) ∧
+    (ObservedMinTwo 3 (candidateBigCube₂ - candidateBodyCube₂₁) ∧
+      ObservedMinOne 3 (candidateBigCube₂ - candidateBodyCube₂₂)) ∧
+    (ObservedMinTwo 3 (candidateBigCube₃ - candidateBodyCube₃₁) ∧
+      ObservedMinOne 3 (candidateBigCube₃ - candidateBodyCube₃₂)) := by
+  refine ⟨candidate_same_big_observed_min_profile,
+    candidate_cube₂_same_big_observed_min_profile,
+    candidate_cube₃_same_big_observed_min_profile⟩
 
 /-! ## 三平方補正項族（整数版） -/
 
