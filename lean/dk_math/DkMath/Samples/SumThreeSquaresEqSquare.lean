@@ -1,0 +1,248 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+import Mathlib
+
+-- cid: 69b7fe50-e6a8-83a3-9fe5-356e926f6623
+
+/-!
+This file records a DkMath sample family of solutions to
+
+  a^2 + b^2 + c^2 = d^2.
+
+The construction is induced from the cosmic square-gap identity
+
+  (P + 1)^2 - (P - 1)^2 = 4P
+
+together with the specialization
+
+  P = m^2 + n^2.
+
+Then the square-gap becomes
+
+  4P = (2m)^2 + (2n)^2,
+
+hence
+
+  (m^2 + n^2 - 1)^2 + (2m)^2 + (2n)^2 = (m^2 + n^2 + 1)^2.
+-/
+
+namespace DkMath
+
+/-- Cosmic square-gap identity. -/
+theorem square_gap_of_P (P : ℤ) :
+    (P + 1) ^ 2 - (P - 1) ^ 2 = 4 * P := by
+  ring
+
+/-- Expands `4 * (m^2 + n^2)` as a sum of two even squares. -/
+theorem four_mul_sum_two_squares (m n : ℤ) :
+    4 * (m ^ 2 + n ^ 2) = (2 * m) ^ 2 + (2 * n) ^ 2 := by
+  ring
+
+/--
+Abstract cosmic form: if `P = x^2 + y^2`, then
+`(2x)^2 + (2y)^2 + (P - 1)^2 = (P + 1)^2`.
+-/
+theorem sum_three_squares_eq_square_of_P
+    (P x y : ℤ) (hP : P = x ^ 2 + y ^ 2) :
+    (2 * x) ^ 2 + (2 * y) ^ 2 + (P - 1) ^ 2 = (P + 1) ^ 2 := by
+  subst hP
+  ring
+
+/--
+A DkMath sample family:
+`a = 2m`, `b = 2n`, `c = m^2 + n^2 - 1`, `d = m^2 + n^2 + 1`
+gives `a^2 + b^2 + c^2 = d^2`.
+-/
+theorem sum_three_squares_eq_square_cosmic (m n : ℤ) :
+    let a := 2 * m
+    let b := 2 * n
+    let c := m ^ 2 + n ^ 2 - 1
+    let d := m ^ 2 + n ^ 2 + 1
+    a ^ 2 + b ^ 2 + c ^ 2 = d ^ 2 := by
+  dsimp
+  ring
+
+/-- Existence form of the same family. -/
+theorem exists_sum_three_squares_eq_square (m n : ℤ) :
+    ∃ a b c d : ℤ, a ^ 2 + b ^ 2 + c ^ 2 = d ^ 2 := by
+  refine ⟨2 * m, 2 * n, m ^ 2 + n ^ 2 - 1, m ^ 2 + n ^ 2 + 1, ?_⟩
+  -- ⊢ (2 * m) ^ 2 + (2 * n) ^ 2 + (m ^ 2 + n ^ 2 - 1) ^ 2 = (m ^ 2 + n ^ 2 + 1) ^ 2
+  ring
+
+/-- Nat version of `4 * (m^2 + n^2) = (2m)^2 + (2n)^2`. -/
+theorem four_mul_sum_two_squares_nat (m n : ℕ) :
+    4 * (m ^ 2 + n ^ 2) = (2 * m) ^ 2 + (2 * n) ^ 2 := by
+  ring
+
+/--
+Nat-parametric version.
+Assume `1 ≤ m^2 + n^2` so that `m^2 + n^2 - 1` is the intended predecessor.
+-/
+theorem sum_three_squares_eq_square_cosmic_nat
+    (m n : ℕ) (h : 1 ≤ m ^ 2 + n ^ 2) :
+    let a := 2 * m
+    let b := 2 * n
+    let c := m ^ 2 + n ^ 2 - 1
+    let d := m ^ 2 + n ^ 2 + 1
+    a ^ 2 + b ^ 2 + c ^ 2 = d ^ 2 := by
+  dsimp
+  let P : ℕ := m ^ 2 + n ^ 2
+  let c : ℕ := P - 1
+  have hP : 1 ≤ P := by simpa [P] using h
+  have hc : c + 1 = P := by
+    simpa [c, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using Nat.sub_add_cancel hP
+  have hc' : c + 2 = P + 1 := by
+    calc
+      c + 2 = (c + 1) + 1 := by omega
+      _ = P + 1 := by simp [hc]
+  have hEven : (2 * m) ^ 2 + (2 * n) ^ 2 = 4 * P := by
+    simpa [P] using (four_mul_sum_two_squares_nat m n).symm
+  calc
+    (2 * m) ^ 2 + (2 * n) ^ 2 + (m ^ 2 + n ^ 2 - 1) ^ 2
+        = 4 * P + c ^ 2 := by
+          simp [P, c, hEven]
+    _ = 4 * (c + 1) + c ^ 2 := by simp [hc]
+    _ = (c + 2) ^ 2 := by ring
+    _ = (P + 1) ^ 2 := by simp [hc']
+    _ = (m ^ 2 + n ^ 2 + 1) ^ 2 := by simp [P]
+
+/--
+Nat wrapper: if at least one parameter is positive, the Nat family is valid.
+-/
+theorem sum_three_squares_eq_square_cosmic_nat_of_pos
+    (m n : ℕ) (hpos : 1 ≤ m ∨ 1 ≤ n) :
+    let a := 2 * m
+    let b := 2 * n
+    let c := m ^ 2 + n ^ 2 - 1
+    let d := m ^ 2 + n ^ 2 + 1
+    a ^ 2 + b ^ 2 + c ^ 2 = d ^ 2 := by
+  apply sum_three_squares_eq_square_cosmic_nat m n
+  rcases hpos with hm | hn
+  · have hm2 : 1 ≤ m ^ 2 := by
+      calc
+        1 ≤ m := hm
+        _ ≤ m * m := by simpa [one_mul] using (Nat.mul_le_mul_right m hm)
+        _ = m ^ 2 := by simp [pow_two]
+    exact le_trans hm2 (Nat.le_add_right (m ^ 2) (n ^ 2))
+  · have hn2 : 1 ≤ n ^ 2 := by
+      calc
+        1 ≤ n := hn
+        _ ≤ n * n := by simpa [one_mul] using (Nat.mul_le_mul_right n hn)
+        _ = n ^ 2 := by simp [pow_two]
+    have hn_sum : n ^ 2 ≤ m ^ 2 + n ^ 2 := by
+      calc
+        n ^ 2 ≤ n ^ 2 + m ^ 2 := Nat.le_add_right (n ^ 2) (m ^ 2)
+        _ = m ^ 2 + n ^ 2 := by omega
+    exact le_trans hn2 hn_sum
+
+/--
+DkMath explicit two-parameter family over `ℕ` with positive parameters.
+Key identity:
+`d^2 - c^2 = (d - c) * (d + c) = 4 * (m^2 + n^2) = (2m)^2 + (2n)^2`.
+-/
+theorem sum_three_squares_eq_square_of_two_params
+    (m n : ℕ) (hm : 1 ≤ m) (_hn : 1 ≤ n) :
+    let a := 2 * m
+    let b := 2 * n
+    let c := m ^ 2 + n ^ 2 - 1
+    let d := m ^ 2 + n ^ 2 + 1
+    a ^ 2 + b ^ 2 + c ^ 2 = d ^ 2 := by
+  exact sum_three_squares_eq_square_cosmic_nat_of_pos m n (Or.inl hm)
+
+/--
+Existence form of the same two-parameter Nat family (`m,n ≥ 1`).
+-/
+theorem exists_sum_three_squares_eq_square_of_two_params
+    (m n : ℕ) (hm : 1 ≤ m) (hn : 1 ≤ n) :
+    ∃ a b c d : ℕ, a ^ 2 + b ^ 2 + c ^ 2 = d ^ 2 := by
+  refine ⟨2 * m, 2 * n, m ^ 2 + n ^ 2 - 1, m ^ 2 + n ^ 2 + 1, ?_⟩
+  simpa using (sum_three_squares_eq_square_of_two_params m n hm hn)
+
+/--
+Unbounded existence over `ℤ`: for every lower bound `N`, there is a solution
+`a^2 + b^2 + c^2 = d^2` with `N ≤ d`.
+-/
+theorem exists_sum_three_squares_eq_square_with_lower_bound
+    (N : ℤ) :
+    ∃ a b c d : ℤ, a ^ 2 + b ^ 2 + c ^ 2 = d ^ 2 ∧ N ≤ d := by
+  refine ⟨2 * N, 0, N ^ 2 - 1, N ^ 2 + 1, ?_⟩
+  constructor
+  · -- ⊢ (2 * N) ^ 2 + 0 ^ 2 + (N ^ 2 - 1) ^ 2 = (N ^ 2 + 1) ^ 2
+    ring
+  · -- ⊢ N ≤ N ^ 2 + 1
+    have hsq : 0 ≤ (N - 1) ^ 2 := by exact sq_nonneg (N - 1)
+    nlinarith
+
+/--
+Unbounded existence over `ℕ`: for every lower bound `N`, there is a solution
+`a^2 + b^2 + c^2 = d^2` with `N ≤ d`.
+-/
+theorem exists_sum_three_squares_eq_square_with_lower_bound_nat
+    (N : ℕ) :
+    ∃ a b c d : ℕ, a ^ 2 + b ^ 2 + c ^ 2 = d ^ 2 ∧ N ≤ d := by
+  refine ⟨2 * N, 2, N ^ 2, N ^ 2 + 2, ?_⟩
+  constructor
+  · ring
+  · nlinarith
+
+/-- Alias name for the Nat lower-bound existence theorem. -/
+theorem exists_sum_three_squares_eq_square_of_ge
+    (N : ℕ) :
+    ∃ a b c d : ℕ, a ^ 2 + b ^ 2 + c ^ 2 = d ^ 2 ∧ N ≤ d :=
+  exists_sum_three_squares_eq_square_with_lower_bound_nat N
+
+/--
+Infinite-family form: for every threshold `k`, there is a solution
+with `d ≥ k`.
+-/
+theorem infinitely_many_sum_three_squares_eq_square :
+    ∀ k : ℕ, ∃ a b c d : ℕ, k ≤ d ∧ a ^ 2 + b ^ 2 + c ^ 2 = d ^ 2 := by
+  intro k
+  rcases exists_sum_three_squares_eq_square_with_lower_bound_nat k with
+    ⟨a, b, c, d, hEq, hk⟩
+  exact ⟨a, b, c, d, hk, hEq⟩
+
+/-- Cubic contrast: a nontrivial integer example exists for three cubes. -/
+theorem three_cubes_eq_cube_example : (3 : ℤ) ^ 3 + 4 ^ 3 + 5 ^ 3 = 6 ^ 3 := by
+  norm_num
+
+/-
+Research note (for follow-up):
+
+Lander-Parkin-Selfridge conjecture concerns equal sums of like powers:
+
+  sum_{i=1}^n a_i^k = sum_{j=1}^m b_j^k
+
+with positive integers. The conjectural bound is
+
+  m + n >= k.
+
+This generalizes the direction around Fermat/Euler-type equations. Classical
+counterexamples to Euler's "one-side single term" conjecture include:
+
+  27^5 + 84^5 + 110^5 + 133^5 = 144^5
+  95800^4 + 217519^4 + 414560^4 = 422481^4
+
+These still satisfy m + n = k, so they are compatible with LPS.
+
+In this file, `three_cubes_eq_cube_example` gives
+
+  3^3 + 4^3 + 5^3 = 6^3
+
+which has (m, n, k) = (1, 3, 3), hence m + n = 4 >= 3.
+So this sample is a useful anchor when thinking about LPS-shaped constraints.
+
+Reference:
+https://en.wikipedia.org/wiki/Lander,_Parkin,_and_Selfridge_conjecture
+-/
+
+/-- Existence form of `a^3 + b^3 + c^3 = d^3` over integers. -/
+theorem exists_sum_three_cubes_eq_cube :
+    ∃ a b c d : ℤ, a ^ 3 + b ^ 3 + c ^ 3 = d ^ 3 := by
+  exact ⟨3, 4, 5, 6, by norm_num⟩
+
+end DkMath
