@@ -107,7 +107,7 @@ theorem fillable_zero_exact_zero (d : ℕ) :
 /--
 `n` が `k` 個で埋まるなら、`k ≤ r` な任意の `r` でも埋まる（追加の 0 項を入れる）。
 -/
-theorem fillable_le_of_exact {d n k r : ℕ}
+theorem fillable_exact_of_exact_le {d n k r : ℕ}
     (h : FillableByPowSumExact d n k) (hle : k ≤ r) (hd : 0 < d) :
     FillableByPowSumExact d n r := by
   rcases h with ⟨f, hf⟩
@@ -119,10 +119,22 @@ theorem fillable_le_of_exact {d n k r : ℕ}
 /--
 `FillableByPowSumExact` が存在するなら `FillableByPowSumLE` も成り立つ。
 -/
-theorem fillableLE_of_exact {d n r : ℕ}
+theorem fillable_le_of_exact {d n r : ℕ}
     (h : FillableByPowSumExact d n r) :
     FillableByPowSumLE d n r := by
   exact ⟨r, le_refl r, h⟩
 
 end Samples
 end DkMath
+
+/- Note:
+命題は次の2つで別です。
+
+- `Exact k -> Exact r`（`k ≤ r` で項数を増やす）
+- `Exact r -> LE r`（「ちょうど r 個」から「高々 r 個」へ落とす）
+
+識別名を整理して修正しました。
+
+- `fillable_le_of_exact` → `fillable_exact_of_exact_le`
+- `fillableLE_of_exact` → `fillable_le_of_exact`
+-/
