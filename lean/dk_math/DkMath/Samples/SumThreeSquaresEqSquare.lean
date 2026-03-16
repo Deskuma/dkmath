@@ -146,8 +146,10 @@ theorem exists_sum_three_squares_eq_square_with_lower_bound
     ∃ a b c d : ℤ, a ^ 2 + b ^ 2 + c ^ 2 = d ^ 2 ∧ N ≤ d := by
   refine ⟨2 * N, 0, N ^ 2 - 1, N ^ 2 + 1, ?_⟩
   constructor
-  · ring
-  · have hsq : 0 ≤ (N - 1) ^ 2 := by exact sq_nonneg (N - 1)
+  · -- ⊢ (2 * N) ^ 2 + 0 ^ 2 + (N ^ 2 - 1) ^ 2 = (N ^ 2 + 1) ^ 2
+    ring
+  · -- ⊢ N ≤ N ^ 2 + 1
+    have hsq : 0 ≤ (N - 1) ^ 2 := by exact sq_nonneg (N - 1)
     nlinarith
 
 end DkMath
