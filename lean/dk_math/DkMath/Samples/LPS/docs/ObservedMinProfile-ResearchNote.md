@@ -327,6 +327,24 @@ same Big の下での residual profile 分岐は、
 - `d = 3` の 3 標本で、profile と Type の対応表が作成済み。
 - Lean 側で Type I 実例と 1 項非存在実例が再利用可能な形で参照できる。
 
+### 11.5. 現時点の分類記録（実証データ追加なし）
+
+本段階では、まず「Type I（両整数表示）の有無」を主軸に記録する。
+Type II/III/IV は補助情報として扱い、一般化は後段で行う。
+
+| residual `n` | observed profile | Type I（両整数表示） | 記録根拠 |
+|---:|---|---|---|
+| 64  | ObservedMinOne | あり | `64 = 4^3 = 2^6 = 8^2` |
+| 27  | ObservedMinOne | あり | `27 = 3^3` |
+| 125 | ObservedMinOne | あり | `125 = 5^3` |
+| 91  | ObservedMinTwo | なし（少なくとも1項立方ではない） | `¬ FillableByPowSumExact 3 91 1` |
+| 35  | ObservedMinTwo | なし（少なくとも1項立方ではない） | `¬ FillableByPowSumExact 3 35 1` |
+| 65  | ObservedMinTwo | なし（少なくとも1項立方ではない） | `¬ FillableByPowSumExact 3 65 1` |
+
+この表は、現時点での作業仮説
+「ObservedMinOne 側は Type I を持ち、ObservedMinTwo 側は Type I を持ちにくい」
+を**分類記録として**固定するためのものであり、一般定理ではない。
+
 ## 12. 追記テンプレート
 
 ### yyyy-mm-dd: new sample
