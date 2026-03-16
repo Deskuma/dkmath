@@ -108,4 +108,46 @@ theorem sum_three_squares_eq_square_cosmic_nat
     _ = (P + 1) ^ 2 := by simp [hc']
     _ = (m ^ 2 + n ^ 2 + 1) ^ 2 := by simp [P]
 
+/--
+Nat wrapper: if at least one parameter is positive, the Nat family is valid.
+-/
+theorem sum_three_squares_eq_square_cosmic_nat_of_pos
+    (m n : ℕ) (hpos : 1 ≤ m ∨ 1 ≤ n) :
+    let a := 2 * m
+    let b := 2 * n
+    let c := m ^ 2 + n ^ 2 - 1
+    let d := m ^ 2 + n ^ 2 + 1
+    a ^ 2 + b ^ 2 + c ^ 2 = d ^ 2 := by
+  apply sum_three_squares_eq_square_cosmic_nat m n
+  rcases hpos with hm | hn
+  · have hm2 : 1 ≤ m ^ 2 := by
+      calc
+        1 ≤ m := hm
+        _ ≤ m * m := by simpa [one_mul] using (Nat.mul_le_mul_right m hm)
+        _ = m ^ 2 := by simp [pow_two]
+    exact le_trans hm2 (Nat.le_add_right (m ^ 2) (n ^ 2))
+  · have hn2 : 1 ≤ n ^ 2 := by
+      calc
+        1 ≤ n := hn
+        _ ≤ n * n := by simpa [one_mul] using (Nat.mul_le_mul_right n hn)
+        _ = n ^ 2 := by simp [pow_two]
+    have hn_sum : n ^ 2 ≤ m ^ 2 + n ^ 2 := by
+      calc
+        n ^ 2 ≤ n ^ 2 + m ^ 2 := Nat.le_add_right (n ^ 2) (m ^ 2)
+        _ = m ^ 2 + n ^ 2 := by omega
+    exact le_trans hn2 hn_sum
+
+/--
+Unbounded existence over `ℤ`: for every lower bound `N`, there is a solution
+`a^2 + b^2 + c^2 = d^2` with `N ≤ d`.
+-/
+theorem exists_sum_three_squares_eq_square_with_lower_bound
+    (N : ℤ) :
+    ∃ a b c d : ℤ, a ^ 2 + b ^ 2 + c ^ 2 = d ^ 2 ∧ N ≤ d := by
+  refine ⟨2 * N, 0, N ^ 2 - 1, N ^ 2 + 1, ?_⟩
+  constructor
+  · ring
+  · have hsq : 0 ≤ (N - 1) ^ 2 := by exact sq_nonneg (N - 1)
+    nlinarith
+
 end DkMath
