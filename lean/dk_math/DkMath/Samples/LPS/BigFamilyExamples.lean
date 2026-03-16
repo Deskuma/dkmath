@@ -211,6 +211,60 @@ theorem candidate_sq_same_big_observed_min_split_profile :
   · exact ⟨candidate_sq_fill_body₁_not_exact_one, candidate_sq_fill_body₁_exact_two⟩
   · exact candidate_sq_fill_body₂_exact_one
 
+/-! ## 第3標本（立方版）：same Big, different observed minimum profiles -/
+
+/-- 第3標本の固定 `Big`。 -/
+def candidateBigCube₂ : ℕ := 64
+
+/-- `Body₁` 側の residual は `35`。 -/
+def candidateBodyCube₂₁ : ℕ := 29
+
+/-- `Body₂` 側の residual は `27`。 -/
+def candidateBodyCube₂₂ : ℕ := 37
+
+/-- 第3標本の residual 分岐。 -/
+theorem candidate_cube₂_residuals_split :
+    candidateBigCube₂ - candidateBodyCube₂₁ = 35 ∧
+    candidateBigCube₂ - candidateBodyCube₂₂ = 27 := by
+  constructor <;> norm_num [candidateBigCube₂, candidateBodyCube₂₁, candidateBodyCube₂₂]
+
+/-- `35 = 2^3 + 3^3` なので 2 項の立方和で埋まる。 -/
+theorem candidate_cube₂_fill_body₁_exact_two :
+    FillableByPowSumExact 3 (candidateBigCube₂ - candidateBodyCube₂₁) 2 := by
+  refine ⟨![2, 3], ?_⟩
+  norm_num [candidateBigCube₂, candidateBodyCube₂₁]
+
+/-- `35` は 1 項の立方では埋まらない。 -/
+theorem candidate_cube₂_fill_body₁_not_exact_one :
+    ¬ FillableByPowSumExact 3 (candidateBigCube₂ - candidateBodyCube₂₁) 1 := by
+  intro h
+  rcases h with ⟨f, hf⟩
+  have h35 : (f 0) ^ 3 = 35 := by
+    simpa [candidateBigCube₂, candidateBodyCube₂₁] using hf
+  have hle : f 0 ≤ 3 := by
+    by_contra hgt
+    have hge4 : 4 ≤ f 0 := by omega
+    have h64le : 64 ≤ (f 0) ^ 3 := by
+      simpa using (Nat.pow_le_pow_left hge4 3)
+    omega
+  interval_cases h0 : f 0 <;> norm_num [h0] at h35
+
+/-- `27 = 3^3` なので 1 項の立方和で埋まる。 -/
+theorem candidate_cube₂_fill_body₂_exact_one :
+    FillableByPowSumExact 3 (candidateBigCube₂ - candidateBodyCube₂₂) 1 := by
+  refine ⟨fun _ => 3, ?_⟩
+  norm_num [candidateBigCube₂, candidateBodyCube₂₂]
+
+/-- 第3標本でも same Big で observed minimum profile が分岐する。 -/
+theorem candidate_cube₂_same_big_observed_min_split_profile :
+    candidateBodyCube₂₁ ≠ candidateBodyCube₂₂ ∧
+    ObservedMinTwo 3 (candidateBigCube₂ - candidateBodyCube₂₁) ∧
+    ObservedMinOne 3 (candidateBigCube₂ - candidateBodyCube₂₂) := by
+  refine ⟨?_, ?_, ?_⟩
+  · norm_num [candidateBodyCube₂₁, candidateBodyCube₂₂]
+  · exact ⟨candidate_cube₂_fill_body₁_not_exact_one, candidate_cube₂_fill_body₁_exact_two⟩
+  · exact candidate_cube₂_fill_body₂_exact_one
+
 /-! ## 三平方補正項族（整数版） -/
 
 /--
