@@ -87,7 +87,31 @@ observed minimum profile 分岐 (`ObservedMinTwo`, `ObservedMinOne`) が、
 
 現時点では、生成原理の短文化を先に行う方が研究ノートとしての密度が高い。
 
-## 6. 追記テンプレート
+## 6. 生成テンプレ（Lean 定理名対応）
+
+same Big の分岐標本を Lean 側へ固定する際の最小テンプレは次。
+
+1. `candidateBig*`, `candidateBody*₁`, `candidateBody*₂` を定義する。
+2. `*_residuals_split` で residual 2 本を数値確定する。
+3. 2項側について
+   - `*_fill_body₁_exact_two`
+   - `*_fill_body₁_not_exact_one`
+   を示して `ObservedMinTwo` を作る。
+4. 1項側について
+   - `*_fill_body₂_exact_one`
+   を示して `ObservedMinOne` を作る。
+5. 最後に
+   - `*_same_big_observed_min_profile`
+   - 必要に応じて `*_same_big_observed_min_split_profile`
+   を置いて profile 本体と Body 不等号付き版を分離する。
+
+既存の参照実装:
+
+- `candidate_same_big_observed_min_profile`
+- `candidate_cube₂_same_big_observed_min_profile`
+- `candidate_cube₃_same_big_observed_min_profile`
+
+## 7. 追記テンプレート
 
 ### yyyy-mm-dd: new sample
 
