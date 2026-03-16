@@ -69,22 +69,38 @@ theorem residual_big_minus_core_eq_two_cubes_int :
 /-- 観測固定用の `Big` 値。 -/
 def candidateBig : ℕ := 216
 
-/-- 候補 `Body₁`。残差は `216`。 -/
-def candidateBody₁ : ℕ := 0
+/-- 候補 `Body₁`。残差は `91`。 -/
+def candidateBody₁ : ℕ := 125
 
 /-- 候補 `Body₂`。残差は `64`。 -/
 def candidateBody₂ : ℕ := 152
 
 /-- 同じ Big でも Body の取り方で residual は変わる。 -/
 theorem candidate_residuals_split :
-    candidateBig - candidateBody₁ = 216 ∧
+    candidateBig - candidateBody₁ = 91 ∧
     candidateBig - candidateBody₂ = 64 := by
   constructor <;> norm_num [candidateBig, candidateBody₁, candidateBody₂]
 
-/-- `Body₁ = 0` 側では residual `216` が 3 項の 3 乗和で観測できる。 -/
-theorem candidate_fill_body₁_exact_three :
-    FillableByPowSumExact 3 (candidateBig - candidateBody₁) 3 := by
-  simpa [candidateBig, candidateBody₁] using fillable_cube_216_exact_three
+/-- `Body₁ = 125` 側では residual `91` が 2 項の 3 乗和で観測できる。 -/
+theorem candidate_fill_body₁_exact_two :
+    FillableByPowSumExact 3 (candidateBig - candidateBody₁) 2 := by
+  refine ⟨![3, 4], ?_⟩
+  norm_num [candidateBig, candidateBody₁]
+
+/-- `Body₁ = 125` 側の residual `91` は 1 項の 3 乗和では埋まらない。 -/
+theorem candidate_fill_body₁_not_exact_one :
+    ¬ FillableByPowSumExact 3 (candidateBig - candidateBody₁) 1 := by
+  intro h
+  rcases h with ⟨f, hf⟩
+  have h91 : (f 0) ^ 3 = 91 := by
+    simpa [candidateBig, candidateBody₁] using hf
+  have hle : f 0 ≤ 4 := by
+    by_contra hgt
+    have hge5 : 5 ≤ f 0 := by omega
+    have h125le : 125 ≤ (f 0) ^ 3 := by
+      simpa using (Nat.pow_le_pow_left hge5 3)
+    omega
+  interval_cases h0 : f 0 <;> norm_num [h0] at h91
 
 /-- `Body₂ = 152` 側では residual `64` が 1 項の 3 乗和で観測できる。 -/
 theorem candidate_fill_body₂_exact_one :
@@ -92,12 +108,14 @@ theorem candidate_fill_body₂_exact_one :
   refine ⟨fun _ => 4, ?_⟩
   norm_num [candidateBig, candidateBody₂]
 
-/-- 同じ `Big = 216` の候補ペアで、観測上の filling 項数が分かれる。 -/
-theorem candidate_same_big_observed_split :
+/-- 同じ `Big = 216` の候補ペアで、観測上の最小項数候補が分かれる。 -/
+theorem candidate_same_big_observed_min_split :
     candidateBody₁ ≠ candidateBody₂ ∧
-    FillableByPowSumExact 3 (candidateBig - candidateBody₁) 3 ∧
+    FillableByPowSumExact 3 (candidateBig - candidateBody₁) 2 ∧
+    ¬ FillableByPowSumExact 3 (candidateBig - candidateBody₁) 1 ∧
     FillableByPowSumExact 3 (candidateBig - candidateBody₂) 1 := by
-  refine ⟨?_, candidate_fill_body₁_exact_three, candidate_fill_body₂_exact_one⟩
+  refine ⟨?_, candidate_fill_body₁_exact_two, candidate_fill_body₁_not_exact_one,
+    candidate_fill_body₂_exact_one⟩
   norm_num [candidateBody₁, candidateBody₂]
 
 /-! ## 三平方補正項族（整数版） -/
