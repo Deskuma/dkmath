@@ -8,6 +8,26 @@
 
 ## 履歴
 
+### 2026-03-17: 交点地形（profile map）分析の追記
+
+- **目的**
+  - 「標本がある」状態から一歩進め、`ObservedMinOne ↔ ObservedMinTwo` の境界が
+    どこに現れるかを研究ノートで読める形にする。
+
+- **変更**
+  - `ObservedMinProfile-ResearchNote.md` に
+    - 「交点地形メモ（profile map）」節を追加。
+    - 交点を 3 層（PowerSwap / same Big / profile 境界）で整理。
+    - 固定 Big で `B ↦ label(Big - B)` として観測する枠組みを明記。
+    - `Big = 216, d = 3` の境界表（Body, residual, profile）を追記。
+
+- **検証**
+  - 文書更新のみ（Lean コード変更なし）。
+
+- **次アクション候補**
+  - 同形式の境界表を `Big = 64`, `Big = 125` にも追加。
+  - 必要なら小スクリプトで `Body` 掃引表を自動生成し、ノートへ転記。
+
 ### 2026-03-17: 現状分析の固定と生成テンプレ明文化
 
 - **目的**
