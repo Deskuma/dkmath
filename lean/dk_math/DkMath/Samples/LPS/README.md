@@ -7,6 +7,7 @@ Samples related to the Lander, Parkin, and Selfridge conjecture.
 - **設計書**: [LPS-FLT-design.md](../../FLT/docs/LPS-FLT-design.md) — Big 族分解と Gap 反転構造の理論設計
 - **実装メモ**: [LPS_Memo.md](./LPS_Memo.md) — Lean 実装の骨格案とアプローチ
 - **研究ノート**: [ObservedMinProfile-ResearchNote.md](./docs/ObservedMinProfile-ResearchNote.md) — observed minimum profile 分岐の実験記録
+- **作業履歴**: [ObservedMinProfile-WorksHistory.md](./docs/ObservedMinProfile-WorksHistory.md) — 作業ごとの追記ログ
 
 ## Lean コード構成
 
