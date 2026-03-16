@@ -54,7 +54,40 @@ observed minimum profile 分岐 (`ObservedMinTwo`, `ObservedMinOne`) が、
 - 汎用 API (`GapFillRank.lean` への昇格) は、再利用箇所が増えてから判断する。
 - 先に標本数を増やし、観測再現性を優先する。
 
-## 5. 追記テンプレート
+## 5. 現状分析（2026-03-17）
+
+### 5.1. 現在地
+
+- `Samples/LPS` は LPS 本体の証明ではなく、Big-family 語彙で現象を観測する実験層として機能している。
+- `BigFamily` / `BigFamilyInt` / `PowerSwap` / `GapFillRank` / `BigFamilyExamples` の役割分担は明確で、相互接続も安定している。
+
+### 5.2. 重要な観測事実
+
+- 立方次数 `d = 3` で、same Big に対する residual の observed minimum profile 分岐
+   (`ObservedMinTwo`, `ObservedMinOne`) が独立 3 標本で再現した。
+- この事実は `cube_observed_min_split_reproduced_three_samples` で Lean 上に固定されている。
+- 平方次数 `d = 2` でも 1 標本の分岐が確認され、現象が立方世界だけの偶然ではない可能性を示す。
+
+### 5.3. 強み
+
+- 語彙統一（Big / Body / Gap / Core / Beam / ObservedMin）により、設計書と実装の対応が追跡しやすい。
+- `ℕ` 版と `ℤ` 版の併置により、差分観測の記述自由度が高い。
+- `ObservedMinOne/Two` を局所定義に留めたことで、実験段階の仕様変更に耐えやすい。
+
+### 5.4. 未確定点
+
+- `ObservedMin` は現状 `1` と `2` のみで、一般 `r` への拡張方針は未固定。
+- 標本は hand-crafted が中心で、系統生成の一般条件はまだ定式化途上。
+- LPS 本体予想への論理橋（一般定理レベル）は未整備。
+
+### 5.5. 次の分岐
+
+1. 生成原理を短文化して標本設計の再利用性を上げる。
+2. 立方標本を増やして再現性の厚みを上げる。
+
+現時点では、生成原理の短文化を先に行う方が研究ノートとしての密度が高い。
+
+## 6. 追記テンプレート
 
 ### yyyy-mm-dd: new sample
 
