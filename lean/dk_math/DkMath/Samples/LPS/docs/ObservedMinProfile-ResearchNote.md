@@ -741,7 +741,9 @@ Type II/III/IV は補助情報として扱い、一般化は後段で行う。
 注記:
 
 - 本節では観測記録に接続する最小形のみを使う。
-- 形式化する場合は、Lean 側で `Nat` の冪法則として直接補題化できる。
+- Lean 側の対応定理:
+  - `exchange_condition_minimal_nat`
+      （`DkMath/Samples/LPS/BigFamilyExamples.lean`）
 
 本節は試算転記であり、証明主張ではない。
 

@@ -8,6 +8,26 @@
 
 ## 履歴
 
+### 2026-03-17: 最小交換条件を Lean 定理として実装
+
+- **目的**
+  - ResearchNote の命題 `A = a^t ⇒ A^m = a^(tm)` を
+    Lean 側へ最小補題として接続する。
+
+- **変更**
+  - `DkMath/Samples/LPS/BigFamilyExamples.lean` に
+    - `exchange_condition_minimal_nat` を追加。
+  - `ObservedMinProfile-ResearchNote.md` の `12.4` に
+    - 対応定理名の参照を追記。
+
+- **検証**
+  - `./lean-build.sh DkMath.Samples.LPS.BigFamilyExamples` 成功。
+  - `./lean-build.sh DkMath.Samples` 成功（途中警告は修正済み）。
+
+- **次アクション候補**
+  - `ℤ` 版の同型補題を追加して BigFamilyInt 側へ接続。
+  - 交換条件補題を使うサンプル定理（`16, 64, 729`）を Lean で短く再証明する。
+
 ### 2026-03-17: 交換条件の最小形を追加（理論接続を強化）
 
 - **目的**
