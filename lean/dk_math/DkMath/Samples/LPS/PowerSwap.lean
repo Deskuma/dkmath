@@ -35,7 +35,8 @@ theorem powerSwap_four_two : PowerSwap 4 2 := by
   exact powerSwap_symm powerSwap_two_four
 
 /--
-`1^a = a^1 = a` より、1 を片側に持つ場合は (a=1) のみ成り立つ。
+`PowerSwap a 1` なら `a = 1`
+`a^1 = 1^a = 1` なので、a は 1 でなければならない。
 -/
 theorem powerSwap_with_one {a : ℕ} (h : PowerSwap a 1) :
     a = 1 := by
