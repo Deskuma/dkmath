@@ -8,6 +8,29 @@
 
 ## 履歴
 
+### 2026-03-17: fixed Big マップ展開（profile != other 抜粋表）
+
+- **目的**
+  - 「マップを広げる」方針に沿って、
+    fixed Big ごとの profile 島の位置を直接読める形にする。
+
+- **変更**
+  - `ObservedMinProfile-ResearchNote.md` に
+    - `11.7` 節を追加。
+    - `Big = 64, 125, 216` の `profile != other` 行を展開表として追記。
+    - `Body / residual / profile / cube2_repr / type_i` を同時表示し、
+      島配置の横比較を可能化。
+
+- **検証**
+  - `python/LPS/DHNT/docs/profile_map_big_64.csv`
+  - `python/LPS/DHNT/docs/profile_map_big_125.csv`
+  - `python/LPS/DHNT/docs/profile_map_big_216.csv`
+  から機械抽出した行を使用。
+
+- **次アクション候補**
+  - 各 Big で境界近傍（One↔Two切替点）を抽出した縮約表を追加。
+  - `d = 2` 側にも同形式の展開表を作り、次数横断比較を行う。
+
 ### 2026-03-17: 仮説更新（Type I 一般から次数固定圧縮へ）
 
 - **目的**

@@ -372,6 +372,76 @@ Type II/III/IV は補助情報として扱い、一般化は後段で行う。
 すなわち主境界は一般 Type I ではなく、
 **次数 `d` 固定の圧縮可能性**で記述するのが自然である。
 
+### 11.7. 固定 Big ごとの非 `other` マップ（展開版）
+
+以下は `python/LPS/DHNT/docs/profile_map_big_<big>.csv` から
+`profile != other` 行のみを抜粋した表である。
+
+#### Big = 64
+
+| Body | residual | profile | cube2_repr | has_type_i_nontrivial | type_i_repr |
+|---:|---:|---|---|---:|---|
+| 0 | 64 | ObservedMinOne-candidate | 0^3+4^3 | 1 | 2^6;4^3;8^2 |
+| 10 | 54 | ObservedMinTwo-candidate | 3^3+3^3 | 0 |  |
+| 29 | 35 | ObservedMinTwo-candidate | 2^3+3^3 | 0 |  |
+| 36 | 28 | ObservedMinTwo-candidate | 1^3+3^3 | 0 |  |
+| 37 | 27 | ObservedMinOne-candidate | 0^3+3^3 | 1 | 3^3 |
+| 48 | 16 | ObservedMinTwo-candidate | 2^3+2^3 | 1 | 2^4;4^2 |
+| 55 | 9 | ObservedMinTwo-candidate | 1^3+2^3 | 1 | 3^2 |
+| 56 | 8 | ObservedMinOne-candidate | 0^3+2^3 | 1 | 2^3 |
+| 62 | 2 | ObservedMinTwo-candidate | 1^3+1^3 | 0 |  |
+| 63 | 1 | ObservedMinOne-candidate | 0^3+1^3 | 0 |  |
+| 64 | 0 | ObservedMinOne-candidate | 0^3+0^3 | 0 |  |
+
+#### Big = 125
+
+| Body | residual | profile | cube2_repr | has_type_i_nontrivial | type_i_repr |
+|---:|---:|---|---|---:|---|
+| 0 | 125 | ObservedMinOne-candidate | 0^3+5^3 | 1 | 5^3 |
+| 34 | 91 | ObservedMinTwo-candidate | 3^3+4^3 | 0 |  |
+| 53 | 72 | ObservedMinTwo-candidate | 2^3+4^3 | 0 |  |
+| 60 | 65 | ObservedMinTwo-candidate | 1^3+4^3 | 0 |  |
+| 61 | 64 | ObservedMinOne-candidate | 0^3+4^3 | 1 | 2^6;4^3;8^2 |
+| 71 | 54 | ObservedMinTwo-candidate | 3^3+3^3 | 0 |  |
+| 90 | 35 | ObservedMinTwo-candidate | 2^3+3^3 | 0 |  |
+| 97 | 28 | ObservedMinTwo-candidate | 1^3+3^3 | 0 |  |
+| 98 | 27 | ObservedMinOne-candidate | 0^3+3^3 | 1 | 3^3 |
+| 109 | 16 | ObservedMinTwo-candidate | 2^3+2^3 | 1 | 2^4;4^2 |
+| 116 | 9 | ObservedMinTwo-candidate | 1^3+2^3 | 1 | 3^2 |
+| 117 | 8 | ObservedMinOne-candidate | 0^3+2^3 | 1 | 2^3 |
+| 123 | 2 | ObservedMinTwo-candidate | 1^3+1^3 | 0 |  |
+| 124 | 1 | ObservedMinOne-candidate | 0^3+1^3 | 0 |  |
+| 125 | 0 | ObservedMinOne-candidate | 0^3+0^3 | 0 |  |
+
+#### Big = 216
+
+| Body | residual | profile | cube2_repr | has_type_i_nontrivial | type_i_repr |
+|---:|---:|---|---|---:|---|
+| 0 | 216 | ObservedMinOne-candidate | 0^3+6^3 | 1 | 6^3 |
+| 27 | 189 | ObservedMinTwo-candidate | 4^3+5^3 | 0 |  |
+| 64 | 152 | ObservedMinTwo-candidate | 3^3+5^3 | 0 |  |
+| 83 | 133 | ObservedMinTwo-candidate | 2^3+5^3 | 0 |  |
+| 88 | 128 | ObservedMinTwo-candidate | 4^3+4^3 | 1 | 2^7 |
+| 90 | 126 | ObservedMinTwo-candidate | 1^3+5^3 | 0 |  |
+| 91 | 125 | ObservedMinOne-candidate | 0^3+5^3 | 1 | 5^3 |
+| 125 | 91 | ObservedMinTwo-candidate | 3^3+4^3 | 0 |  |
+| 144 | 72 | ObservedMinTwo-candidate | 2^3+4^3 | 0 |  |
+| 151 | 65 | ObservedMinTwo-candidate | 1^3+4^3 | 0 |  |
+| 152 | 64 | ObservedMinOne-candidate | 0^3+4^3 | 1 | 2^6;4^3;8^2 |
+| 162 | 54 | ObservedMinTwo-candidate | 3^3+3^3 | 0 |  |
+| 181 | 35 | ObservedMinTwo-candidate | 2^3+3^3 | 0 |  |
+| 188 | 28 | ObservedMinTwo-candidate | 1^3+3^3 | 0 |  |
+| 189 | 27 | ObservedMinOne-candidate | 0^3+3^3 | 1 | 3^3 |
+| 200 | 16 | ObservedMinTwo-candidate | 2^3+2^3 | 1 | 2^4;4^2 |
+| 207 | 9 | ObservedMinTwo-candidate | 1^3+2^3 | 1 | 3^2 |
+| 208 | 8 | ObservedMinOne-candidate | 0^3+2^3 | 1 | 2^3 |
+| 214 | 2 | ObservedMinTwo-candidate | 1^3+1^3 | 0 |  |
+| 215 | 1 | ObservedMinOne-candidate | 0^3+1^3 | 0 |  |
+| 216 | 0 | ObservedMinOne-candidate | 0^3+0^3 | 0 |  |
+
+この展開版により、fixed Big の中で profile 島がどの Body 座標に出るかを
+直接比較できる。
+
 ## 12. 追記テンプレート
 
 ### yyyy-mm-dd: new sample
