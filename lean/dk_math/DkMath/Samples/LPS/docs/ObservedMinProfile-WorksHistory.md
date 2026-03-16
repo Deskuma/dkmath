@@ -8,6 +8,28 @@
 
 ## 履歴
 
+### 2026-03-17: 交換則試算を ResearchNote へ転記
+
+- **目的**
+  - 新実験「粗視化↔微視化交換・反転平衡」の結果を
+    観測記録として研究ノートへ固定する。
+
+- **変更**
+  - `ObservedMinProfile-ResearchNote.md` に
+    - `12. 粗視化↔微視化交換則（試算転記）` を追加。
+    - `exchange_coarse_fine_examples.csv` の交換例表を転記。
+    - `exchange_multiresolution_chain.csv` の多段鎖を転記。
+    - `powerswap_continuous_samples.csv` の連続族試算を転記。
+    - 「試算転記であり証明主張ではない」を明記。
+  - 追記テンプレート節を `13.` に繰り下げ。
+
+- **検証**
+  - `python/LPS/DHNT/docs/` の各 CSV 内容を照合して転記。
+
+- **次アクション候補**
+  - 交換例の自動探索結果を同節へ追加（上限付き列挙）。
+  - Lean 側に最小補題（`A=a^t -> A^m=a^(tm)`）を試験追加。
+
 ### 2026-03-17: 新実験「割り切り関係倍数の抽出」スクリプトを追加
 
 - **目的**
