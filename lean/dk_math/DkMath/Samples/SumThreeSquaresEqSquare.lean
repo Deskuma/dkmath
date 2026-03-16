@@ -138,6 +138,29 @@ theorem sum_three_squares_eq_square_cosmic_nat_of_pos
     exact le_trans hn2 hn_sum
 
 /--
+DkMath explicit two-parameter family over `ℕ` with positive parameters.
+Key identity:
+`d^2 - c^2 = (d - c) * (d + c) = 4 * (m^2 + n^2) = (2m)^2 + (2n)^2`.
+-/
+theorem sum_three_squares_eq_square_of_two_params
+    (m n : ℕ) (hm : 1 ≤ m) (_hn : 1 ≤ n) :
+    let a := 2 * m
+    let b := 2 * n
+    let c := m ^ 2 + n ^ 2 - 1
+    let d := m ^ 2 + n ^ 2 + 1
+    a ^ 2 + b ^ 2 + c ^ 2 = d ^ 2 := by
+  exact sum_three_squares_eq_square_cosmic_nat_of_pos m n (Or.inl hm)
+
+/--
+Existence form of the same two-parameter Nat family (`m,n ≥ 1`).
+-/
+theorem exists_sum_three_squares_eq_square_of_two_params
+    (m n : ℕ) (hm : 1 ≤ m) (hn : 1 ≤ n) :
+    ∃ a b c d : ℕ, a ^ 2 + b ^ 2 + c ^ 2 = d ^ 2 := by
+  refine ⟨2 * m, 2 * n, m ^ 2 + n ^ 2 - 1, m ^ 2 + n ^ 2 + 1, ?_⟩
+  simpa using (sum_three_squares_eq_square_of_two_params m n hm hn)
+
+/--
 Unbounded existence over `ℤ`: for every lower bound `N`, there is a solution
 `a^2 + b^2 + c^2 = d^2` with `N ≤ d`.
 -/
@@ -163,5 +186,22 @@ theorem exists_sum_three_squares_eq_square_with_lower_bound_nat
   constructor
   · ring
   · nlinarith
+
+/-- Alias name for the Nat lower-bound existence theorem. -/
+theorem exists_sum_three_squares_eq_square_of_ge
+    (N : ℕ) :
+    ∃ a b c d : ℕ, a ^ 2 + b ^ 2 + c ^ 2 = d ^ 2 ∧ N ≤ d :=
+  exists_sum_three_squares_eq_square_with_lower_bound_nat N
+
+/--
+Infinite-family form: for every threshold `k`, there is a solution
+with `d ≥ k`.
+-/
+theorem infinitely_many_sum_three_squares_eq_square :
+    ∀ k : ℕ, ∃ a b c d : ℕ, k ≤ d ∧ a ^ 2 + b ^ 2 + c ^ 2 = d ^ 2 := by
+  intro k
+  rcases exists_sum_three_squares_eq_square_with_lower_bound_nat k with
+    ⟨a, b, c, d, hEq, hk⟩
+  exact ⟨a, b, c, d, hk, hEq⟩
 
 end DkMath
