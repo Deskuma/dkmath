@@ -8,6 +8,27 @@
 
 ## 履歴
 
+### 2026-03-17: 仮説更新（Type I 一般から次数固定圧縮へ）
+
+- **目的**
+  - CSV 観測結果を反映し、`ObservedMinOne/Two` の境界仮説を
+    実データ整合的な形へ更新する。
+
+- **変更**
+  - `ObservedMinProfile-ResearchNote.md` に
+    - `Big = 64, 125, 216` の profile 集計表を追加。
+    - `Type I` 粗分類の限界（`16`, `9` など）を明記。
+    - 仮説を
+      「一般 Type I 対応」から
+      「次数 `d` 固定の single-`d`-power / two-`d`-power 圧縮対応」へ修正。
+
+- **検証**
+  - 既存 CSV（`profile_map_big_64/125/216.csv`）の集計に基づく文書更新。
+
+- **次アクション候補**
+  - `profile != other` 行の抜粋表を Big ごとにノートへ追加。
+  - Lean 側で `single-cube` / `two-cube` の補助述語名を整備して対応を明確化。
+
 ### 2026-03-17: 実証データより分類記録を優先して追記
 
 - **目的**

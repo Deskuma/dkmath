@@ -317,9 +317,9 @@ same Big の下での residual profile 分岐は、
      分類スクリプトは別ファイルで分離する。
 
 5. **接続定理（作業仮説の固定）**
-   - `ObservedMinOne` 側が Type I を持ちやすく、
-     `ObservedMinTwo` 側は Type I を持ちにくい、という
-     観測傾向を「仮説」として明記する。
+    - `ObservedMinOne/Two` を一般 Type I ではなく、
+       次数 `d` 固定の圧縮可能性（single `d`-power / two `d`-power）
+       として記述する。
 
 ### 11.4. 完了条件（実験段階）
 
@@ -341,9 +341,36 @@ Type II/III/IV は補助情報として扱い、一般化は後段で行う。
 | 35  | ObservedMinTwo | なし（少なくとも1項立方ではない） | `¬ FillableByPowSumExact 3 35 1` |
 | 65  | ObservedMinTwo | なし（少なくとも1項立方ではない） | `¬ FillableByPowSumExact 3 65 1` |
 
-この表は、現時点での作業仮説
-「ObservedMinOne 側は Type I を持ち、ObservedMinTwo 側は Type I を持ちにくい」
-を**分類記録として**固定するためのものであり、一般定理ではない。
+この表は Type I の粗い地図として有用だが、
+`16` や `9` のように Type I を持ちながら立方1項ではない数があるため、
+`ObservedMinOne/Two` の主境界を直接には与えない。
+
+### 11.6. CSV 観測による仮説更新（Big 固定走査）
+
+`python/LPS/DHNT/experiment_profile_map.py` により、
+`Big = 64, 125, 216` で `Body` 全走査を行った集計は次の通り。
+
+| Big | ObservedMinOne-candidate | ObservedMinTwo-candidate | other |
+|---:|---:|---:|---:|
+| 64  | 5 | 6  | 54  |
+| 125 | 6 | 9  | 111 |
+| 216 | 7 | 14 | 196 |
+
+この結果から、fixed Big の内部に「1項島」と「2項島」が共存することが再確認された。
+
+#### 仮説の修正版（次数固定）
+
+旧: `ObservedMinOne ↔ Type I`（一般）
+
+新:
+
+- `ObservedMinOne-candidate at degree d`
+   ↔ residual が単一 `d` 乗（single `d`-power）
+- `ObservedMinTwo-candidate at degree d`
+   ↔ residual は単一 `d` 乗ではないが、2項 `d` 乗和で表せる
+
+すなわち主境界は一般 Type I ではなく、
+**次数 `d` 固定の圧縮可能性**で記述するのが自然である。
 
 ## 12. 追記テンプレート
 
