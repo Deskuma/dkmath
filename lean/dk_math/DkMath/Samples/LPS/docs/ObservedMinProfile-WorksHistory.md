@@ -8,6 +8,36 @@
 
 ## 履歴
 
+### 2026-03-17: B2 一般形と C4 を完了
+
+- **目的**
+  - 設計図の次点項目を埋め、branch と contour の理論接続を一段進める。
+
+- **変更**
+  - `DkMath/Samples/LPS/PowerSwapBranch.lean`
+    - 一般前提付き補題を追加:
+      - `powerSwap_branch_y_eq_t_mul_x`
+      - `powerSwap_branch_correct`
+    - 段階補題を拡張:
+      - `powerSwap_branch_at_three`
+      - `powerSwap_branch_correct_at_three`
+      - `powerSwap_branch_correct_finite_samples`
+  - `DkMath/Samples/LPS/GapContours.lean`
+    - `gapF_eq_soft_hyperbolic_form` を追加。
+  - `ObservedMinProfile-ResearchNote.md`
+    - 実装状況（14.2/14.3）を最新化。
+  - `Codex_Lean_Design_LPS_PowerSwap_GapContours.md`
+    - 進捗スナップショット節を追記。
+
+- **検証**
+  - `./lean-build.sh DkMath.Samples.LPS.PowerSwapBranch` 成功
+  - `./lean-build.sh DkMath.Samples.LPS.GapContours` 成功
+  - `./lean-build.sh DkMath.Samples.LPS` 成功
+
+- **次アクション候補**
+  - `powerSwap_branch_limit_to_e` を補題列へ分割して導入。
+  - `(e,e)` 局所近似を `GapContours` の comment から最小 theorem へ昇格。
+
 ### 2026-03-17: Phase B2/C3 の最小補題を追加
 
 - **目的**

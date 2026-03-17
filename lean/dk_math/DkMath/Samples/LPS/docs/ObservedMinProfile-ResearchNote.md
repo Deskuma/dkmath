@@ -852,6 +852,14 @@ Type II/III/IV は補助情報として扱い、一般化は後段で行う。
   - `powerSwapBranchPair`
   - `powerSwap_branch_at_two`
   - `powerSwap_branch_at_half`
+  - `powerSwap_branch_at_three`
+  - `powerSwap_branch_at_three_y_eq_three_mul_x`
+  - `powerSwap_branch_correct_at_two`
+  - `powerSwap_branch_correct_at_half`
+  - `powerSwap_branch_correct_at_three`
+  - `powerSwap_branch_correct_finite_samples`
+  - `powerSwap_branch_y_eq_t_mul_x`（一般前提付き）
+  - `powerSwap_branch_correct`（一般前提付き）
 
 ### 14.3. GapContours 実装（定義層 + 最小補題）
 
@@ -860,6 +868,7 @@ Type II/III/IV は補助情報として扱い、一般化は後段で行う。
   - `gapU`, `gapV`, `gapP`, `gapQ`, `harmonicCoord`, `gapF`
   - 補題: `gapQ_eq_xy_mul_Hdiff`
   - 補題: `gapF_eq_expU_sub_expV`
+  - 補題: `gapF_eq_soft_hyperbolic_form`
 
 ### 14.4. 既存モジュール連結
 
