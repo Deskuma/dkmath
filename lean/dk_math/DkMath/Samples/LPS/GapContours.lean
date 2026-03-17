@@ -39,6 +39,12 @@ def harmonicCoord (x : ℝ) : ℝ :=
 def gapF (x y : ℝ) : ℝ :=
   Real.rpow x y - Real.rpow y x
 
+/-- `gapF` の指数形: `x^y - y^x = exp(U) - exp(V)`。 -/
+theorem gapF_eq_expU_sub_expV (x y : ℝ) (hx : 0 < x) (hy : 0 < y) :
+    gapF x y = Real.exp (gapU x y) - Real.exp (gapV x y) := by
+  unfold gapF gapU gapV
+  simp [Real.rpow_def_of_pos hx, Real.rpow_def_of_pos hy, mul_comm]
+
 /--
 `gapQ` は調和座標差の重み付き形
 `xy * (H(x) - H(y))` で書ける。

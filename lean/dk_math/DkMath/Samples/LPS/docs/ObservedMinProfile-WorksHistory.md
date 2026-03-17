@@ -8,6 +8,27 @@
 
 ## 履歴
 
+### 2026-03-17: Phase B2/C3 の最小補題を追加
+
+- **目的**
+  - 定義層の次段として、branch と gap で最小限の correctness 補題を固定する。
+
+- **変更**
+  - `DkMath/Samples/LPS/PowerSwapBranch.lean`
+    - `powerSwap_branch_at_two`
+    - `powerSwap_branch_at_half`
+  - `DkMath/Samples/LPS/GapContours.lean`
+    - `gapF_eq_expU_sub_expV`
+  - `ObservedMinProfile-ResearchNote.md` の `14.2/14.3` に追記反映。
+
+- **検証**
+  - `./lean-build.sh DkMath.Samples.LPS.GapContours` 成功
+  - `./lean-build.sh DkMath.Samples.LPS` 成功
+
+- **次アクション候補**
+  - `powerSwap_branch_correct` の一般形（条件付き）を段階分割で追加。
+  - `gapQ_eq_xy_mul_Hdiff` と `gapF_eq_expU_sub_expV` から `p,q` 形へ接続する。
+
 ### 2026-03-17: Codex 設計図 Phase A/B/C を実装
 
 - **目的**

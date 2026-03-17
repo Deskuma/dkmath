@@ -31,6 +31,24 @@ def powerSwapBranchY (t : ℝ) : ℝ :=
 def powerSwapBranchPair (t : ℝ) : ℝ × ℝ :=
   (powerSwapBranchX t, powerSwapBranchY t)
 
+/-- branch の整数格子点: `t = 2` で `(x,y) = (2,4)`。 -/
+theorem powerSwap_branch_at_two :
+    powerSwapBranchX 2 = 2 ∧ powerSwapBranchY 2 = 4 := by
+  constructor
+  · unfold powerSwapBranchX
+    norm_num
+  · unfold powerSwapBranchY
+    norm_num
+
+/-- branch の整数格子点: `t = 1/2` で `(x,y) = (4,2)`。 -/
+theorem powerSwap_branch_at_half :
+    powerSwapBranchX (1 / 2 : ℝ) = 4 ∧ powerSwapBranchY (1 / 2 : ℝ) = 2 := by
+  constructor
+  · unfold powerSwapBranchX
+    norm_num
+  · unfold powerSwapBranchY
+    norm_num
+
 end
 
 end Samples
