@@ -4,7 +4,6 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import Mathlib
 import DkMath.ABC
 
 set_option linter.style.emptyLine false
