@@ -8,6 +8,92 @@
 
 ## 履歴
 
+### 2026-03-17～03-18: LPS リファクタリング完了（3 家主への再編）
+
+- **目的**
+  - `DkMath.Samples.LPS` を単一の「寄せ鍋」から、概念のオーナーシップに基づく
+    3 つの柱に再構成する。
+  - BigFamily は CosmicFormula の所有物、PowerSwap/GapContours は独立モジュール、
+    PowerSums 系は NumberTheory 配下へ昇進させる。
+  - FLT は本丸を保ち、橋ファイルのみ持つ。
+  - 循環依存を完全に排除。
+
+- **変更 (第1段)：新ディレクトリ構造を作成**
+  - `DkMath/PowerSwap/` ディレクトリ作成
+  - `DkMath/NumberTheory/PowerSums/` ディレクトリ作成
+
+- **変更 (第2段)：BigFamily を CosmicFormula へ移行**
+  - `DkMath/Samples/LPS/BigFamily.lean`
+    → `DkMath/CosmicFormula/ResidualNat.lean`
+    (namespace 変更、import 更新)
+  - `DkMath/Samples/LPS/BigFamilyInt.lean`
+    → `DkMath/CosmicFormula/ResidualInt.lean`
+    (定義名に "Int" suffix 追加)
+
+- **変更 (第3段)：PowerSwap 系を新モジュールへ移行**
+  - `DkMath/Samples/LPS/PowerSwap.lean`
+    → `DkMath/PowerSwap/Basic.lean`
+  - `DkMath/Samples/LPS/Exchange.lean`
+    → `DkMath/PowerSwap/Exchange.lean`
+  - `DkMath/Samples/LPS/PowerSwapBranch.lean`
+    → `DkMath/PowerSwap/Branch.lean`
+  - `DkMath/Samples/LPS/GapContours.lean`
+    → `DkMath/PowerSwap/Contours.lean`
+  - `DkMath/PowerSwap.lean` (トップレベル import) 作成
+
+- **変更 (第4段)：PowerSums 系を NumberTheory へ移行**
+  - `DkMath/Samples/LPS/GapFillRank.lean`
+    → `DkMath/NumberTheory/PowerSums/Basic.lean`
+  - `ObservedMinOne/Two` 定義
+    → `DkMath/NumberTheory/PowerSums/ObservedMin.lean` (新規)
+  - 具体例（平方・立方例）
+    → `DkMath/NumberTheory/PowerSums/Examples.lean` (新規)
+  - 複雑な候補ペア（same Big / different Body）
+    → `DkMath/NumberTheory/PowerSums/ResidualProfile.lean` (新規)
+  - `DkMath/NumberTheory/PowerSums.lean` (トップレベル import) 作成
+
+- **変更 (第5段)：FLT 橋ファイルを作成**
+  - `DkMath/FLT/PowerSumsBridge.lean` (新規)
+    PowerSums 概念を FLT へ翻訳するレイヤー
+  - `DkMath/FLT/PowerSwapBridge.lean` (新規)
+    PowerSwap 概念を FLT へ翻訳するレイヤー
+
+- **変更 (第6段)：トップレベル import を更新**
+  - `DkMath.lean`
+    - `import DkMath.PowerSwap` 追加
+    - `import DkMath.NumberTheory.PowerSums` 追加
+  - `DkMath/Samples/LPS.lean` (互換性レイヤー)
+    - 新ドメインからの re-export へ変更
+    - 移行過程で Samples/LPS 自体の主役性を廃止
+
+- **検証**
+  - `./lean-build.sh` (全体) → ✅ 成功
+  - `./lean-test.sh` (全体) → ✅ 成功
+  - 循環依存なし確認済み
+  - すべての定理が新位置で正常にコンパイル
+
+- **新しい依存関係（DAG）**
+
+  ```
+  CosmicFormula.*    (既存)
+  PowerSwap.*        (新独立モジュール)
+  NumberTheory.PowerSums.*  (新独立モジュール)
+         ↓
+  FLT.*  (PowerSumsBridge, PowerSwapBridge で翻訳)
+  ```
+
+- **非依存性（禁止）**
+  - CosmicFormula → FLT は直接依存しない
+  - PowerSwap → FLT は直接依存しない
+  - PowerSums → PowerSwap に依存しない
+  - 各モジュールは独立資産として保持
+
+- **次アクション候補**
+  - 旧 Samples/LPS/*.lean ファイル群の廃止タイミング決定
+  - FLT bridge へ具体的な翻訳補題を実装（現在はスケルトン）
+  - Zsigmondy 系が PowerSwap/PowerSums を再利用する際の例示
+  - RH 幹線への PowerSums 応用の検討
+
 ### 2026-03-17: 主観測ペア 91/64 補題を明示化
 
 - **目的**
