@@ -654,3 +654,37 @@ F(x,y)=x^y-y^x
 を Lean に固定し、既存の `Samples/LPS` の observed minimum profile 実験群と接続したい。
 
 一般理論はまだ狙わず、戻り道のある局所核を固めることを優先する。
+
+---
+
+## 11. 実装進捗スナップショット（2026-03-17）
+
+### 11.1. 完了
+
+- Phase A
+  - `Exchange.lean`
+    - `exchange_condition_minimal_nat`
+    - `exchange_condition_minimal_int`
+    - 具体例群（`4^2=2^4`, `8^2=2^6`, `9^2=3^4`, `27^2=3^6`）
+
+- Phase B
+  - `PowerSwapBranch.lean`
+    - 定義: `powerSwapBranchX`, `powerSwapBranchY`, `PowerSwapBranchDomain`
+    - 段階補題: `at_two`, `at_half`, `at_three`
+    - correctness: `correct_at_two`, `correct_at_half`, `correct_at_three`
+    - 束ね補題: `powerSwap_branch_correct_finite_samples`
+    - 一般前提付き: `powerSwap_branch_y_eq_t_mul_x`, `powerSwap_branch_correct`
+
+- Phase C
+  - `GapContours.lean`
+    - 定義: `gapU`, `gapV`, `gapP`, `gapQ`, `harmonicCoord`, `gapF`
+    - `gapQ_eq_xy_mul_Hdiff`
+    - `gapF_eq_expU_sub_expV`
+    - `gapF_eq_soft_hyperbolic_form`
+
+### 11.2. 未完了（保留）
+
+- `powerSwap_branch_limit_to_e`
+- `(e,e)` の局所二次近似の theorem 化
+- 一般 `ObservedMin` API への昇格
+- アイゼンシュタイン整数様マッピングの形式化
