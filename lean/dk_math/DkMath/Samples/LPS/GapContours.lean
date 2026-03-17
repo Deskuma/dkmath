@@ -46,6 +46,39 @@ theorem gapF_eq_expU_sub_expV (x y : ℝ) (hx : 0 < x) (hy : 0 < y) :
   simp [Real.rpow_def_of_pos hx, Real.rpow_def_of_pos hy, mul_comm]
 
 /--
+soft hyperbolic form:
+`F = 2 * exp(p) * sinh(q/2)`.
+-/
+theorem gapF_eq_soft_hyperbolic_form (x y : ℝ) (hx : 0 < x) (hy : 0 < y) :
+    gapF x y = 2 * Real.exp (gapP x y) * Real.sinh (gapQ x y / 2) := by
+  set U : ℝ := gapU x y
+  set V : ℝ := gapV x y
+  set p : ℝ := (U + V) / 2
+  set q : ℝ := U - V
+  have hU : U = p + q / 2 := by
+    simp [p, q]
+    ring_nf
+  have hV : V = p - q / 2 := by
+    simp [p, q]
+    ring_nf
+  calc
+    gapF x y = Real.exp U - Real.exp V := by
+      simp [U, V, gapF_eq_expU_sub_expV, hx, hy]
+    _ = Real.exp (p + q / 2) - Real.exp (p - q / 2) := by rw [hU, hV]
+    _ = Real.exp p * Real.exp (q / 2)
+      - Real.exp p * Real.exp (-(q / 2)) := by
+          have hpm : p - q / 2 = p + (-(q / 2)) := by ring
+          rw [hpm, sub_eq_add_neg, Real.exp_add, Real.exp_add]
+          ring_nf
+    _ = Real.exp p * (Real.exp (q / 2) - Real.exp (-(q / 2))) := by
+          ring
+    _ = 2 * Real.exp p * Real.sinh (q / 2) := by
+          rw [Real.sinh_eq]
+          ring
+    _ = 2 * Real.exp (gapP x y) * Real.sinh (gapQ x y / 2) := by
+      simp [U, V, p, q, gapP, gapQ]
+
+/--
 `gapQ` は調和座標差の重み付き形
 `xy * (H(x) - H(y))` で書ける。
 -/
