@@ -59,6 +59,21 @@ theorem powerSwap_branch_at_three :
   · unfold powerSwapBranchY
     norm_num
 
+/-- 段階補題: `t = 3` では `y(3) = 3 * x(3)`。 -/
+theorem powerSwap_branch_at_three_y_eq_three_mul_x :
+    powerSwapBranchY 3 = 3 * powerSwapBranchX 3 := by
+  have h3pos : (0 : ℝ) < 3 := by norm_num
+  rcases powerSwap_branch_at_three with ⟨hx, hy⟩
+  calc
+    powerSwapBranchY 3 = Real.rpow 3 (3 / 2 : ℝ) := hy
+    _ = Real.rpow 3 ((1 / 2 : ℝ) + 1) := by ring_nf
+    _ = Real.rpow 3 (1 / 2 : ℝ) * Real.rpow 3 1 := by
+        simpa using
+        (Real.rpow_add (x := (3 : ℝ)) (y := (1 / 2 : ℝ)) (z := (1 : ℝ))
+            h3pos)
+    _ = powerSwapBranchX 3 * 3 := by simp [hx, Real.rpow_one]
+    _ = 3 * powerSwapBranchX 3 := by ring
+
 /-- 段階補題: `t = 2` では branch 上で `x^y = y^x` が成立。 -/
 theorem powerSwap_branch_correct_at_two :
     Real.rpow (powerSwapBranchX 2) (powerSwapBranchY 2) =
