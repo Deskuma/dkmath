@@ -829,7 +829,53 @@ Type II/III/IV は補助情報として扱い、一般化は後段で行う。
 
 を LPS 実験語彙に接続する入口として使える。
 
-## 14. 追記テンプレート
+## 14. 新規追加実装（Codex 設計図 Phase A/B/C）
+
+`Codex_Lean_Design_LPS_PowerSwap_GapContours.md` に沿って、
+確定層の最小核を先行実装した。
+
+### 14.1. Exchange 実装
+
+- 追加: `DkMath/Samples/LPS/Exchange.lean`
+- 実装:
+  - `exchange_condition_minimal_nat`
+  - `exchange_condition_minimal_int`
+  - 具体例: `4^2=2^4`, `8^2=2^6`, `9^2=3^4`, `27^2=3^6`
+
+### 14.2. PowerSwapBranch 実装（定義層）
+
+- 追加: `DkMath/Samples/LPS/PowerSwapBranch.lean`
+- 実装:
+  - `PowerSwapBranchDomain`
+  - `powerSwapBranchX`
+  - `powerSwapBranchY`
+  - `powerSwapBranchPair`
+
+### 14.3. GapContours 実装（定義層 + 最小補題）
+
+- 追加: `DkMath/Samples/LPS/GapContours.lean`
+- 実装:
+  - `gapU`, `gapV`, `gapP`, `gapQ`, `harmonicCoord`, `gapF`
+  - 補題: `gapQ_eq_xy_mul_Hdiff`
+
+### 14.4. 既存モジュール連結
+
+- 更新: `DkMath/Samples/LPS.lean`
+  - 新規 import: `Exchange`, `PowerSwapBranch`, `GapContours`
+- 更新: `DkMath/Samples/LPS/PowerSwap.lean`
+  - `powerSwap_pair_two_four`
+  - `exists_powerSwap_nontrivial`
+
+### 14.5. 検証結果
+
+- `./lean-build.sh DkMath.Samples.LPS` 成功
+- `./lean-build.sh DkMath.Samples` 成功
+
+注記:
+
+- `Real.log` / `Real.rpow` を含む定義群は `noncomputable section` で固定した。
+
+## 15. 追記テンプレート
 
 ### yyyy-mm-dd: new sample
 

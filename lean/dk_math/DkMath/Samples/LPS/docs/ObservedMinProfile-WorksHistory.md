@@ -8,6 +8,32 @@
 
 ## 履歴
 
+### 2026-03-17: Codex 設計図 Phase A/B/C を実装
+
+- **目的**
+  - 設計図で定義した確定層（Exchange / PowerSwapBranch / GapContours）を
+    Lean の最小核として固定する。
+
+- **変更**
+  - 新規追加:
+    - `DkMath/Samples/LPS/Exchange.lean`
+    - `DkMath/Samples/LPS/PowerSwapBranch.lean`
+    - `DkMath/Samples/LPS/GapContours.lean`
+  - 既存更新:
+    - `DkMath/Samples/LPS/PowerSwap.lean`（実例補題追加）
+    - `DkMath/Samples/LPS.lean`（新規 import 追加）
+  - 研究ノート更新:
+    - 実装状況節を追加（追記テンプレートは `15.` へ繰り下げ）。
+
+- **検証**
+  - `./lean-build.sh DkMath.Samples.LPS` 成功
+  - `./lean-build.sh DkMath.Samples` 成功
+
+- **次アクション候補**
+  - `powerSwap_branch_correct` の段階導入（重い証明は分割）。
+  - `gapF_eq_expU_sub_expV` の最小補題を追加。
+  - `Exchange` と `BigFamilyExamples` のサンプル対応表を整備。
+
 ### 2026-03-17: GN 関連 def/lemma のワークスペース調査を記録
 
 - **目的**
