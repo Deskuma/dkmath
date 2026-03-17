@@ -8,6 +8,27 @@
 
 ## 履歴
 
+### 2026-03-17: GN 関連 def/lemma のワークスペース調査を記録
+
+- **目的**
+  - 「素因数」より「構造因子 `x * GN`」を見る方針に沿って、
+    GN 関連補題の配置を地図化する。
+
+- **変更**
+  - `ObservedMinProfile-ResearchNote.md` に
+    - `13. GN 関連ワークスペース調査（def / lemma マップ）` を追加。
+    - 定義本体（CosmicFormulaBinom）、橋渡し（CosmicPetalBridge）、
+      gcd/valuation（NumberTheory/Gcd/GN）、Zsigmondy 連結、
+      LPS 接続補題を層別に整理。
+  - 追記テンプレート節を `14.` に繰り下げ。
+
+- **検証**
+  - `grep` と対象ファイル読み出しで定理名・配置を照合して転記。
+
+- **次アクション候補**
+  - GN マップのうち LPS で直接使う最小列（3〜5補題）を選抜。
+  - `residual = x * GN` 形式へ落ちる候補を CSV 側と突き合わせる。
+
 ### 2026-03-17: 交換条件の具体例補題を Lean へ追加
 
 - **目的**

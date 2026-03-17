@@ -747,7 +747,89 @@ Type II/III/IV は補助情報として扱い、一般化は後段で行う。
 
 本節は試算転記であり、証明主張ではない。
 
-## 13. 追記テンプレート
+## 13. GN 関連ワークスペース調査（def / lemma マップ）
+
+本節は、`GN` を「素因数の最終分解」ではなく
+「差分構造を開く一次因子」の観点で追うための地図である。
+
+### 13.1. 定義本体（核）
+
+- `DkMath/CosmicFormula/CosmicFormulaBinom.lean`
+  - `def GN`
+  - `def BigN`, `def BodyN`, `def GapN`
+  - 恒等式: `cosmic_id_csr'`, `add_pow_gap_factor`
+
+要点:
+
+- `GN` は二項展開の中間層（混合項）として定義される。
+- `BodyN = x * GN` により、差分構造を `x` 因子で開く形が固定される。
+
+### 13.2. 性質補題（Nat 側）
+
+- `DkMath/CosmicFormula/CosmicFormulaBinom.lean`
+  - `GN_ne_zero_nat_of_two_le`
+  - `one_le_GN_nat_of_two_le`
+  - `xpow_lt_bodyN_nat_of_two_le`, `bodyN_pos_nat_of_two_le`
+
+要点:
+
+- `d ≥ 2`, `x,u > 0` で `GN` の非零・下界が得られ、
+   `BodyN = x * GN` の構造因子分解が退化しない。
+
+### 13.3. 差分橋渡し（FLT 側）
+
+- `DkMath/FLT/CosmicPetalBridge.lean`
+  - `sub_eq_mul_GN`
+  - `sub_pow_eq_mul_GN`
+  - `prime_dvd_GN_of_dvd_sub_not_dvd_left`
+  - `dvd_GN_of_dvd_sub_pow`
+  - `GN_three_sub_eq_S0_nat`
+
+要点:
+
+- `z^d - y^d = (z-y) * GN d (z-y) y` を主軸に、
+   「差分を割ると GN が露出する」流れが補題化されている。
+
+### 13.4. gcd / valuation 方向（数論層）
+
+- `DkMath/NumberTheory/Gcd/GN.lean`
+  - `gn_sub_eq_sd_int`
+  - `gcd_gap_GN_dvd_exp_int`
+  - `padicValNat_sub_pow_eq_padicValNat_GN_of_not_dvd_gap`
+  - `gcd_boundary_GN_three_eq_gcd_boundary_three`
+
+要点:
+
+- `GN` は差分和 `Sd`・`gcd`・`padicValNat` へ橋渡し済みで、
+   「素数因子そのもの」より「どこで割ると構造が出るか」の追跡が可能。
+
+### 13.5. Zsigmondy 方向（原始素因子橋）
+
+- `DkMath/Zsigmondy.lean`
+  - `body_three_eq_boundary_mul_GN_nat`
+  - `prime_dvd_body_three_of_not_dvd_boundary_imp_dvd_GN`
+  - `primitivePrimeDivisor_body_three_imp_dvd_GN`
+
+要点:
+
+- Body 側の原始素因子情報を GN 側へ押し込む橋が既にある。
+
+### 13.6. 今回の LPS 接続点
+
+- `DkMath/Samples/LPS/BigFamilyExamples.lean`
+  - `exchange_condition_minimal_nat`
+  - `exchange_example_4_2_eq_2_4`
+  - `exchange_example_8_2_eq_2_6`
+  - `exchange_example_27_2_eq_3_6`
+
+この層は、
+
+- 粗視化↔微視化交換（`A=a^t ⇒ A^m=a^(tm)`）
+- `GN` を使う差分因子観測
+
+を LPS 実験語彙に接続する入口として使える。
+
+## 14. 追記テンプレート
 
 ### yyyy-mm-dd: new sample
 
