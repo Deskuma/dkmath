@@ -34,6 +34,16 @@ theorem powerSwap_two_four : PowerSwap 2 4 := by
 theorem powerSwap_four_two : PowerSwap 4 2 := by
   exact powerSwap_symm powerSwap_two_four
 
+/-- 非自明なペア `(2,4)` と `(4,2)` は同時に成立する。 -/
+theorem powerSwap_pair_two_four :
+    PowerSwap 2 4 ∧ PowerSwap 4 2 := by
+  exact ⟨powerSwap_two_four, powerSwap_four_two⟩
+
+/-- 非自明解の存在。 -/
+theorem exists_powerSwap_nontrivial :
+    ∃ a b : ℕ, a ≠ b ∧ PowerSwap a b := by
+  refine ⟨2, 4, by decide, powerSwap_two_four⟩
+
 /--
 `PowerSwap a 1` なら `a = 1`
 `a^1 = 1^a = 1` なので、a は 1 でなければならない。
