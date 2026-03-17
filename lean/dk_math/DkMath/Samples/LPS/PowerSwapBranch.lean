@@ -83,6 +83,48 @@ theorem powerSwap_branch_limit_to_e_of_core_limits
   exact (powerSwap_branchX_tendsto_e_of_log_div_sub_tendsto_one hpos hlogX).prodMk
     (powerSwap_branchY_tendsto_e_of_mul_log_div_sub_tendsto_one hpos hlogY)
 
+/-- コア極限: `log t / (t-1) → 1`（`t → 1`, punctured）。 -/
+theorem tendsto_log_div_sub_one_at_one_punctured :
+    Filter.Tendsto (fun t : ℝ => Real.log t / (t - 1))
+      (nhdsWithin (1 : ℝ) ({1}ᶜ)) (nhds 1) := by
+  have hderiv : HasDerivAt Real.log 1 1 := by
+    simpa using (Real.hasDerivAt_log (by norm_num : (1 : ℝ) ≠ 0))
+  convert hderiv.tendsto_slope using 1
+  ext t
+  simp [slope, Real.log_one, div_eq_mul_inv, mul_comm]
+
+/-- コア極限: `(t * log t)/(t-1) → 1`（`t → 1`, punctured）。 -/
+theorem tendsto_mul_log_div_sub_one_at_one_punctured :
+    Filter.Tendsto (fun t : ℝ => (t * Real.log t) / (t - 1))
+      (nhdsWithin (1 : ℝ) ({1}ᶜ)) (nhds 1) := by
+  have hid_within :
+      Filter.Tendsto (fun t : ℝ => t) (nhdsWithin (1 : ℝ) ({1}ᶜ)) (nhdsWithin (1 : ℝ) ({1}ᶜ)) :=
+    Filter.tendsto_id
+  have hid :
+      Filter.Tendsto (fun t : ℝ => t) (nhdsWithin (1 : ℝ) ({1}ᶜ)) (nhds 1) :=
+    hid_within.mono_right nhdsWithin_le_nhds
+  have hmul :
+      Filter.Tendsto (fun t : ℝ => t * (Real.log t / (t - 1)))
+        (nhdsWithin (1 : ℝ) ({1}ᶜ)) (nhds (1 * 1)) :=
+    hid.mul tendsto_log_div_sub_one_at_one_punctured
+  simpa [div_eq_mul_inv, mul_assoc, mul_comm, mul_left_comm] using hmul
+
+/--
+`t → 1`（punctured）で branch pair は `(e, e)` に収束する。
+これは `limit_to_e` の最小実装版。
+-/
+theorem powerSwap_branch_limit_to_e :
+    Filter.Tendsto powerSwapBranchPair (nhdsWithin (1 : ℝ) ({1}ᶜ))
+      ((nhds (Real.exp 1)) ×ˢ (nhds (Real.exp 1))) := by
+  have hpos_nhds : ∀ᶠ t : ℝ in nhds (1 : ℝ), 0 < t :=
+    Ioi_mem_nhds (by norm_num : (0 : ℝ) < 1)
+  have hpos_within : ∀ᶠ t : ℝ in nhdsWithin (1 : ℝ) ({1}ᶜ), 0 < t :=
+    hpos_nhds.filter_mono nhdsWithin_le_nhds
+  exact powerSwap_branch_limit_to_e_of_core_limits
+    hpos_within
+    tendsto_log_div_sub_one_at_one_punctured
+    tendsto_mul_log_div_sub_one_at_one_punctured
+
 /-- branch 上で `y(t) = t * x(t)`。 -/
 theorem powerSwap_branch_y_eq_t_mul_x (t : ℝ)
     (hdom : PowerSwapBranchDomain t) :
