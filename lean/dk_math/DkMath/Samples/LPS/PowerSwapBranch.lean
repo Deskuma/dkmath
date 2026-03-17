@@ -49,6 +49,16 @@ theorem powerSwap_branch_at_half :
   · unfold powerSwapBranchY
     norm_num
 
+/-- branch の実数標本: `t = 3` で `(x,y) = (3^(1/2), 3^(3/2))`。 -/
+theorem powerSwap_branch_at_three :
+    powerSwapBranchX 3 = Real.rpow 3 (1 / 2 : ℝ) ∧
+    powerSwapBranchY 3 = Real.rpow 3 (3 / 2 : ℝ) := by
+  constructor
+  · unfold powerSwapBranchX
+    norm_num
+  · unfold powerSwapBranchY
+    norm_num
+
 /-- 段階補題: `t = 2` では branch 上で `x^y = y^x` が成立。 -/
 theorem powerSwap_branch_correct_at_two :
     Real.rpow (powerSwapBranchX 2) (powerSwapBranchY 2) =
