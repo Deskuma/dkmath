@@ -118,6 +118,21 @@ theorem powerSwap_branch_correct_at_three :
     _ = Real.rpow (powerSwapBranchY 3) (powerSwapBranchX 3) := by
           simp [hx, hy]
 
+/--
+有限標本パック: `t = 2, 1/2, 3` の 3 点で branch 平衡
+`x(t)^y(t) = y(t)^x(t)` が成立する。
+-/
+theorem powerSwap_branch_correct_finite_samples :
+    Real.rpow (powerSwapBranchX 2) (powerSwapBranchY 2)
+      = Real.rpow (powerSwapBranchY 2) (powerSwapBranchX 2)
+    ∧ Real.rpow (powerSwapBranchX (1 / 2 : ℝ)) (powerSwapBranchY (1 / 2 : ℝ))
+      = Real.rpow (powerSwapBranchY (1 / 2 : ℝ)) (powerSwapBranchX (1 / 2 : ℝ))
+    ∧ Real.rpow (powerSwapBranchX 3) (powerSwapBranchY 3)
+      = Real.rpow (powerSwapBranchY 3) (powerSwapBranchX 3) := by
+  exact ⟨powerSwap_branch_correct_at_two,
+    powerSwap_branch_correct_at_half,
+    powerSwap_branch_correct_at_three⟩
+
 end
 
 end Samples
