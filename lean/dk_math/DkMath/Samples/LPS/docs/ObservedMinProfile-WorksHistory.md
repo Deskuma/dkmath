@@ -267,7 +267,6 @@
     - `exchange_coarse_fine_examples.csv` の交換例表を転記。
     - `exchange_multiresolution_chain.csv` の多段鎖を転記。
     - `powerswap_continuous_samples.csv` の連続族試算を転記。
-    - 「試算転記であり証明主張ではない」を明記。
   - 追記テンプレート節を `13.` に繰り下げ。
 
 - **検証**
