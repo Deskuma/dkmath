@@ -43,6 +43,46 @@ theorem powerSwap_branchY_eq_exp_mul_log_div_sub (t : ℝ) (ht : 0 < t) :
   unfold powerSwapBranchY
   simp [Real.rpow_def_of_pos ht, div_eq_mul_inv, mul_assoc, mul_comm, mul_left_comm]
 
+/--
+`log t / (t-1) → 1` が示せれば、`x(t)` は `e` に収束する。
+`limit_to_e` 本体の前段補題。
+-/
+theorem powerSwap_branchX_tendsto_e_of_log_div_sub_tendsto_one
+    (hpos : ∀ᶠ t in nhdsWithin (1 : ℝ) ({1}ᶜ), 0 < t)
+    (hlog : Filter.Tendsto (fun t : ℝ => Real.log t / (t - 1))
+      (nhdsWithin (1 : ℝ) ({1}ᶜ)) (nhds 1)) :
+    Filter.Tendsto powerSwapBranchX (nhdsWithin (1 : ℝ) ({1}ᶜ)) (nhds (Real.exp 1)) := by
+  refine Filter.Tendsto.congr' ?_ ((Real.continuous_exp.continuousAt).tendsto.comp hlog)
+  filter_upwards [hpos] with t ht
+  exact (powerSwap_branchX_eq_exp_log_div_sub t ht).symm
+
+/--
+`(t*log t)/(t-1) → 1` が示せれば、`y(t)` は `e` に収束する。
+`limit_to_e` 本体の前段補題。
+-/
+theorem powerSwap_branchY_tendsto_e_of_mul_log_div_sub_tendsto_one
+    (hpos : ∀ᶠ t in nhdsWithin (1 : ℝ) ({1}ᶜ), 0 < t)
+    (hlog : Filter.Tendsto (fun t : ℝ => (t * Real.log t) / (t - 1))
+      (nhdsWithin (1 : ℝ) ({1}ᶜ)) (nhds 1)) :
+    Filter.Tendsto powerSwapBranchY (nhdsWithin (1 : ℝ) ({1}ᶜ)) (nhds (Real.exp 1)) := by
+  refine Filter.Tendsto.congr' ?_ ((Real.continuous_exp.continuousAt).tendsto.comp hlog)
+  filter_upwards [hpos] with t ht
+  exact (powerSwap_branchY_eq_exp_mul_log_div_sub t ht).symm
+
+/--
+`limit_to_e` の核: 2 つの指数極限が示せれば branch pair は `(e,e)` へ収束する。
+-/
+theorem powerSwap_branch_limit_to_e_of_core_limits
+    (hpos : ∀ᶠ t in nhdsWithin (1 : ℝ) ({1}ᶜ), 0 < t)
+    (hlogX : Filter.Tendsto (fun t : ℝ => Real.log t / (t - 1))
+      (nhdsWithin (1 : ℝ) ({1}ᶜ)) (nhds 1))
+    (hlogY : Filter.Tendsto (fun t : ℝ => (t * Real.log t) / (t - 1))
+      (nhdsWithin (1 : ℝ) ({1}ᶜ)) (nhds 1)) :
+    Filter.Tendsto powerSwapBranchPair (nhdsWithin (1 : ℝ) ({1}ᶜ))
+      ((nhds (Real.exp 1)) ×ˢ (nhds (Real.exp 1))) := by
+  exact (powerSwap_branchX_tendsto_e_of_log_div_sub_tendsto_one hpos hlogX).prodMk
+    (powerSwap_branchY_tendsto_e_of_mul_log_div_sub_tendsto_one hpos hlogY)
+
 /-- branch 上で `y(t) = t * x(t)`。 -/
 theorem powerSwap_branch_y_eq_t_mul_x (t : ℝ)
     (hdom : PowerSwapBranchDomain t) :
