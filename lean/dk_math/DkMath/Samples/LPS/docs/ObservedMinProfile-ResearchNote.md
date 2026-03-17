@@ -841,6 +841,10 @@ Type II/III/IV は補助情報として扱い、一般化は後段で行う。
   - `exchange_condition_minimal_nat`
   - `exchange_condition_minimal_int`
   - 具体例: `4^2=2^4`, `8^2=2^6`, `9^2=3^4`, `27^2=3^6`
+  - 91/64 観測更新:
+    - `not_fillable_cube_91_exact_one`
+    - `observed_min_profile_91_64`
+    - `observed_min_gap_91_64_eq_27`
 
 ### 14.2. PowerSwapBranch 実装（定義層）
 

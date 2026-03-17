@@ -8,6 +8,29 @@
 
 ## 履歴
 
+### 2026-03-17: 主観測ペア 91/64 補題を明示化
+
+- **目的**
+  - TODO「候補ペアを 91/64 へ差替」「1項非存在補題」「観測最小差定理」を
+    直接参照可能な補題名で固定する。
+
+- **変更**
+  - `DkMath/Samples/LPS/BigFamilyExamples.lean`
+    - `not_fillable_cube_91_exact_one`
+    - `observed_min_profile_91_64`
+    - `observed_min_gap_91_64_eq_27`
+    を追加。
+  - `ObservedMinProfile-ResearchNote.md`
+    - `14.1` 実装一覧へ 91/64 関連補題を追記。
+
+- **検証**
+  - `./lean-build.sh DkMath.Samples.LPS.BigFamilyExamples` 成功
+  - `./lean-build.sh DkMath.Samples.LPS` 成功
+
+- **次アクション候補**
+  - `cube_observed_min_split_reproduced_three_samples` の周辺で
+    91/64 主観測を優先表示するラッパ補題を追加。
+
 ### 2026-03-17: `(e,e)` 局所二次モデルの最小補題を追加
 
 - **目的**

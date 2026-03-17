@@ -138,6 +138,11 @@ theorem candidate_fill_body₁_not_exact_one :
     omega
   interval_cases h0 : f 0 <;> norm_num [h0] at h91
 
+/-- `91` は 1 項の立方和では埋まらない（明示版）。 -/
+theorem not_fillable_cube_91_exact_one :
+    ¬ FillableByPowSumExact 3 91 1 := by
+  simpa [candidateBig, candidateBody₁] using candidate_fill_body₁_not_exact_one
+
 /-- `Body₂ = 152` 側では residual `64` が 1 項の 3 乗和で観測できる。 -/
 theorem candidate_fill_body₂_exact_one :
     FillableByPowSumExact 3 (candidateBig - candidateBody₂) 1 := by
@@ -182,6 +187,17 @@ theorem candidate_same_big_observed_min_profile :
   refine ⟨?_, ?_⟩
   · exact ⟨candidate_fill_body₁_not_exact_one, candidate_fill_body₁_exact_two⟩
   · exact candidate_fill_body₂_exact_one
+
+/-- 主観測ペア `91/64` の observed minimum profile。 -/
+theorem observed_min_profile_91_64 :
+    ObservedMinTwo 3 91 ∧ ObservedMinOne 3 64 := by
+  simpa [candidateBig, candidateBody₁, candidateBody₂] using
+    candidate_same_big_observed_min_profile
+
+/-- 主観測ペア `91/64` の residual 差は `27`。 -/
+theorem observed_min_gap_91_64_eq_27 :
+    91 - 64 = 27 := by
+  norm_num
 
 /-- Body の差も含めた候補ペアの observed minimum profile。 -/
 theorem candidate_same_big_observed_min_split_profile :
