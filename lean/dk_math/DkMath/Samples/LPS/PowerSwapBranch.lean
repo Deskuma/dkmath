@@ -31,6 +31,60 @@ def powerSwapBranchY (t : ℝ) : ℝ :=
 def powerSwapBranchPair (t : ℝ) : ℝ × ℝ :=
   (powerSwapBranchX t, powerSwapBranchY t)
 
+/-- branch 上で `y(t) = t * x(t)`。 -/
+theorem powerSwap_branch_y_eq_t_mul_x (t : ℝ)
+    (hdom : PowerSwapBranchDomain t) :
+    powerSwapBranchY t = t * powerSwapBranchX t := by
+  rcases hdom with ⟨ht, ht_ne_one⟩
+  unfold powerSwapBranchY powerSwapBranchX
+  have ht1 : (t - 1 : ℝ) ≠ 0 := sub_ne_zero.mpr ht_ne_one
+  have hexp : t / (t - 1) = (1 / (t - 1 : ℝ)) + 1 := by
+    calc
+      t / (t - 1) = ((t - 1) + 1) / (t - 1) := by ring
+      _ = (t - 1) / (t - 1) + 1 / (t - 1) := by rw [add_div]
+      _ = 1 + 1 / (t - 1) := by simp [ht1]
+      _ = (1 / (t - 1 : ℝ)) + 1 := by ring
+  calc
+    Real.rpow t (t / (t - 1))
+        = Real.rpow t ((1 / (t - 1 : ℝ)) + 1) := by rw [hexp]
+    _ = Real.rpow t (1 / (t - 1 : ℝ)) * Real.rpow t 1 := by
+          simpa [add_comm] using
+            (Real.rpow_add (x := t) (y := (1 / (t - 1 : ℝ))) (z := (1 : ℝ)) ht)
+    _ = t * Real.rpow t (1 / (t - 1 : ℝ)) := by simp [mul_comm]
+    _ = t * powerSwapBranchX t := by rfl
+
+/--
+一般形（前提付き）:
+`t > 0`, `t ≠ 1` なら branch で `x(t)^y(t) = y(t)^x(t)`。
+-/
+theorem powerSwap_branch_correct (t : ℝ)
+    (hdom : PowerSwapBranchDomain t) :
+    Real.rpow (powerSwapBranchX t) (powerSwapBranchY t) =
+      Real.rpow (powerSwapBranchY t) (powerSwapBranchX t) := by
+  rcases hdom with ⟨ht, ht_ne_one⟩
+  have hx_pos : 0 < powerSwapBranchX t := by
+    unfold powerSwapBranchX
+    exact Real.rpow_pos_of_pos ht _
+  have hx_nonneg : 0 ≤ powerSwapBranchX t := le_of_lt hx_pos
+  have hxt : Real.rpow (powerSwapBranchX t) t = powerSwapBranchY t := by
+    unfold powerSwapBranchX powerSwapBranchY
+    calc
+      Real.rpow (Real.rpow t (1 / (t - 1 : ℝ))) t
+        = Real.rpow t ((1 / (t - 1 : ℝ)) * t) := by
+              simpa [mul_comm] using
+                (Real.rpow_mul (le_of_lt ht) (1 / (t - 1 : ℝ)) t).symm
+      _ = Real.rpow t (t / (t - 1)) := by
+        simp [div_eq_mul_inv, mul_comm]
+  have hyx : powerSwapBranchY t = t * powerSwapBranchX t :=
+    powerSwap_branch_y_eq_t_mul_x t ⟨ht, ht_ne_one⟩
+  calc
+    Real.rpow (powerSwapBranchX t) (powerSwapBranchY t)
+        = Real.rpow (powerSwapBranchX t) (t * powerSwapBranchX t) := by rw [hyx]
+    _ = Real.rpow (Real.rpow (powerSwapBranchX t) t) (powerSwapBranchX t) := by
+          simpa [mul_comm] using
+            (Real.rpow_mul hx_nonneg t (powerSwapBranchX t))
+    _ = Real.rpow (powerSwapBranchY t) (powerSwapBranchX t) := by rw [hxt]
+
 /-- branch の整数格子点: `t = 2` で `(x,y) = (2,4)`。 -/
 theorem powerSwap_branch_at_two :
     powerSwapBranchX 2 = 2 ∧ powerSwapBranchY 2 = 4 := by
