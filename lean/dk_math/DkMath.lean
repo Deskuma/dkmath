@@ -15,6 +15,10 @@ import DkMath.Collatz.Collatz2K26  -- Collatz2K26: Accelerated Collatz Dynamics
 -- Cosmic Formula Module
 import DkMath.CosmicFormula  -- Cosmic Formula Basics
 import DkMath.Zsigmondy  -- Zsigmondy bridge layer
+-- PowerSwap Module
+import DkMath.PowerSwap  -- PowerSwap: Power Swapping Relations
+-- NumberTheory Module
+import DkMath.NumberTheory.PowerSums  -- NumberTheory.PowerSums: Power Sum Fillability
 -- Polyomino Module
 import DkMath.Polyomino  -- Polyomino Basics
 import DkMath.PolyominoPrototype  -- Polyomino Prototype
