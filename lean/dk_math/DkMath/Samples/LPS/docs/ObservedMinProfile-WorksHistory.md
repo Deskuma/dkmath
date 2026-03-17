@@ -8,6 +8,28 @@
 
 ## 履歴
 
+### 2026-03-17: `(e,e)` 中心の最小 theorem を追加
+
+- **目的**
+  - `GapContours` における `(e,e)` 中心性を、重い局所展開の前段として最小固定する。
+
+- **変更**
+  - `DkMath/Samples/LPS/GapContours.lean`
+    - `gapQ_at_e_e`
+    - `gapP_at_e_e`
+    - `gapF_at_e_e`
+    を追加。
+  - `ObservedMinProfile-ResearchNote.md`
+    - `14.3` に中心固定補題を追記。
+
+- **検証**
+  - `./lean-build.sh DkMath.Samples.LPS.GapContours` 成功
+  - `./lean-build.sh DkMath.Samples.LPS` 成功
+
+- **次アクション候補**
+  - `(e,e)` の局所二次近似（`v^2-u^2` 主部）を段階補題で導入。
+  - `GapContours` の中心補題を設計図 4.5 と相互参照させる。
+
 ### 2026-03-17: `powerSwap_branch_limit_to_e` を実装完了
 
 - **目的**

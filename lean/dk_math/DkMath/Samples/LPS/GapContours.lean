@@ -87,6 +87,31 @@ theorem gapQ_eq_xy_mul_Hdiff (x y : ℝ) (hx : x ≠ 0) (hy : y ≠ 0) :
   unfold gapQ gapU gapV harmonicCoord
   field_simp [hx, hy]
 
+/-! ## `(e,e)` 中心の最小固定 -/
+
+/-- 中心 `(e,e)` では差座標 `q` は 0。 -/
+theorem gapQ_at_e_e :
+    gapQ (Real.exp 1) (Real.exp 1) = 0 := by
+  unfold gapQ gapU gapV
+  simp [mul_comm]
+
+/-- 中心 `(e,e)` では平均座標 `p` は `e`。 -/
+theorem gapP_at_e_e :
+    gapP (Real.exp 1) (Real.exp 1) = Real.exp 1 := by
+  unfold gapP gapU gapV
+  simp [mul_comm]
+
+/-- 中心 `(e,e)` では `F(e,e)=0`。 -/
+theorem gapF_at_e_e :
+    gapF (Real.exp 1) (Real.exp 1) = 0 := by
+  have hpos : 0 < Real.exp (1 : ℝ) := Real.exp_pos 1
+  calc
+    gapF (Real.exp 1) (Real.exp 1)
+        = 2 * Real.exp (gapP (Real.exp 1) (Real.exp 1))
+            * Real.sinh (gapQ (Real.exp 1) (Real.exp 1) / 2) :=
+          gapF_eq_soft_hyperbolic_form (Real.exp 1) (Real.exp 1) hpos hpos
+    _ = 0 := by simp [gapQ_at_e_e]
+
 end
 
 end Samples

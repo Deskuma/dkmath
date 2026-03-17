@@ -875,6 +875,7 @@ Type II/III/IV は補助情報として扱い、一般化は後段で行う。
   - 補題: `gapQ_eq_xy_mul_Hdiff`
   - 補題: `gapF_eq_expU_sub_expV`
   - 補題: `gapF_eq_soft_hyperbolic_form`
+   - 中心固定: `gapQ_at_e_e`, `gapP_at_e_e`, `gapF_at_e_e`
 
 ### 14.4. 既存モジュール連結
 
