@@ -31,6 +31,18 @@ def powerSwapBranchY (t : ℝ) : ℝ :=
 def powerSwapBranchPair (t : ℝ) : ℝ × ℝ :=
   (powerSwapBranchX t, powerSwapBranchY t)
 
+/-- `x(t)` の指数表示: `x(t) = exp(log t / (t-1))`（`t > 0`）。 -/
+theorem powerSwap_branchX_eq_exp_log_div_sub (t : ℝ) (ht : 0 < t) :
+    powerSwapBranchX t = Real.exp (Real.log t / (t - 1)) := by
+  unfold powerSwapBranchX
+  simp [Real.rpow_def_of_pos ht, div_eq_mul_inv, mul_comm]
+
+/-- `y(t)` の指数表示: `y(t) = exp((t*log t)/(t-1))`（`t > 0`）。 -/
+theorem powerSwap_branchY_eq_exp_mul_log_div_sub (t : ℝ) (ht : 0 < t) :
+    powerSwapBranchY t = Real.exp ((t * Real.log t) / (t - 1)) := by
+  unfold powerSwapBranchY
+  simp [Real.rpow_def_of_pos ht, div_eq_mul_inv, mul_assoc, mul_comm, mul_left_comm]
+
 /-- branch 上で `y(t) = t * x(t)`。 -/
 theorem powerSwap_branch_y_eq_t_mul_x (t : ℝ)
     (hdom : PowerSwapBranchDomain t) :
