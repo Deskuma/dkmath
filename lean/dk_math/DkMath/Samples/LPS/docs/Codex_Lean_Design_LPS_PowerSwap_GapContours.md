@@ -674,6 +674,8 @@ F(x,y)=x^y-y^x
     - correctness: `correct_at_two`, `correct_at_half`, `correct_at_three`
     - 束ね補題: `powerSwap_branch_correct_finite_samples`
     - 一般前提付き: `powerSwap_branch_y_eq_t_mul_x`, `powerSwap_branch_correct`
+      - limit 導線: `...eq_exp...`, `...tendsto..._punctured`,
+         `powerSwap_branch_limit_to_e_of_core_limits`, `powerSwap_branch_limit_to_e`
 
 - Phase C
   - `GapContours.lean`
@@ -684,7 +686,6 @@ F(x,y)=x^y-y^x
 
 ### 11.2. 未完了（保留）
 
-- `powerSwap_branch_limit_to_e`
 - `(e,e)` の局所二次近似の theorem 化
 - 一般 `ObservedMin` API への昇格
 - アイゼンシュタイン整数様マッピングの形式化

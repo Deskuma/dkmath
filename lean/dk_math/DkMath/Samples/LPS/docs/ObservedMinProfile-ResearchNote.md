@@ -860,6 +860,12 @@ Type II/III/IV は補助情報として扱い、一般化は後段で行う。
   - `powerSwap_branch_correct_finite_samples`
   - `powerSwap_branch_y_eq_t_mul_x`（一般前提付き）
   - `powerSwap_branch_correct`（一般前提付き）
+  - `powerSwap_branchX_eq_exp_log_div_sub`
+  - `powerSwap_branchY_eq_exp_mul_log_div_sub`
+  - `tendsto_log_div_sub_one_at_one_punctured`
+  - `tendsto_mul_log_div_sub_one_at_one_punctured`
+  - `powerSwap_branch_limit_to_e_of_core_limits`
+  - `powerSwap_branch_limit_to_e`
 
 ### 14.3. GapContours 実装（定義層 + 最小補題）
 

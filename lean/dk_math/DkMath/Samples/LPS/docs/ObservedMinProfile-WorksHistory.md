@@ -8,6 +8,33 @@
 
 ## 履歴
 
+### 2026-03-17: `powerSwap_branch_limit_to_e` を実装完了
+
+- **目的**
+  - `PowerSwapBranch` の未完了項目 `limit_to_e` を、戻り道を残す補題列で完了する。
+
+- **変更**
+  - `DkMath/Samples/LPS/PowerSwapBranch.lean`
+    - 追加:
+      - `powerSwap_branchX_eq_exp_log_div_sub`
+      - `powerSwap_branchY_eq_exp_mul_log_div_sub`
+      - `tendsto_log_div_sub_one_at_one_punctured`
+      - `tendsto_mul_log_div_sub_one_at_one_punctured`
+      - `powerSwap_branch_limit_to_e_of_core_limits`
+      - `powerSwap_branch_limit_to_e`
+  - `ObservedMinProfile-ResearchNote.md`
+    - `14.2` の実装一覧を最新化。
+  - `Codex_Lean_Design_LPS_PowerSwap_GapContours.md`
+    - 進捗スナップショットの未完了一覧を更新。
+
+- **検証**
+  - `./lean-build.sh DkMath.Samples.LPS.PowerSwapBranch` 成功
+  - `./lean-build.sh DkMath.Samples.LPS` 成功
+
+- **次アクション候補**
+  - `(e,e)` の局所二次近似を `GapContours` 側で最小 theorem 化。
+  - `limit_to_e` の結果を設計図 4.5 節の実装メモへ逆リンク。
+
 ### 2026-03-17: B2 一般形と C4 を完了
 
 - **目的**
