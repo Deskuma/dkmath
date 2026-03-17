@@ -49,6 +49,22 @@ theorem powerSwap_branch_at_half :
   · unfold powerSwapBranchY
     norm_num
 
+/-- 段階補題: `t = 2` では branch 上で `x^y = y^x` が成立。 -/
+theorem powerSwap_branch_correct_at_two :
+    Real.rpow (powerSwapBranchX 2) (powerSwapBranchY 2) =
+      Real.rpow (powerSwapBranchY 2) (powerSwapBranchX 2) := by
+  rcases powerSwap_branch_at_two with ⟨hx, hy⟩
+  rw [hx, hy]
+  norm_num
+
+/-- 段階補題: `t = 1/2` でも branch 上で `x^y = y^x` が成立。 -/
+theorem powerSwap_branch_correct_at_half :
+    Real.rpow (powerSwapBranchX (1 / 2 : ℝ)) (powerSwapBranchY (1 / 2 : ℝ)) =
+      Real.rpow (powerSwapBranchY (1 / 2 : ℝ)) (powerSwapBranchX (1 / 2 : ℝ)) := by
+  rcases powerSwap_branch_at_half with ⟨hx, hy⟩
+  rw [hx, hy]
+  norm_num
+
 end
 
 end Samples
