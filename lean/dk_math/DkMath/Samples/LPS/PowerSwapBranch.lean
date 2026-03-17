@@ -90,6 +90,34 @@ theorem powerSwap_branch_correct_at_half :
   rw [hx, hy]
   norm_num
 
+/-- 段階補題: `t = 3` でも branch 上で `x^y = y^x` が成立。 -/
+theorem powerSwap_branch_correct_at_three :
+    Real.rpow (powerSwapBranchX 3) (powerSwapBranchY 3) =
+      Real.rpow (powerSwapBranchY 3) (powerSwapBranchX 3) := by
+  have h3nonneg : (0 : ℝ) ≤ 3 := by norm_num
+  rcases powerSwap_branch_at_three with ⟨hx, hy⟩
+  have hyx : Real.rpow 3 (3 / 2 : ℝ) = 3 * Real.rpow 3 (1 / 2 : ℝ) := by
+    calc
+      Real.rpow 3 (3 / 2 : ℝ) = powerSwapBranchY 3 := by simp [hy]
+      _ = 3 * powerSwapBranchX 3 := powerSwap_branch_at_three_y_eq_three_mul_x
+      _ = 3 * Real.rpow 3 (1 / 2 : ℝ) := by simp [hx]
+  calc
+    Real.rpow (powerSwapBranchX 3) (powerSwapBranchY 3)
+        = Real.rpow (Real.rpow 3 (1 / 2 : ℝ)) (Real.rpow 3 (3 / 2 : ℝ)) := by
+          simp [hx, hy]
+    _ = Real.rpow 3 ((1 / 2 : ℝ) * Real.rpow 3 (3 / 2 : ℝ)) := by
+          simpa [mul_comm] using
+            (Real.rpow_mul h3nonneg (1 / 2 : ℝ) (Real.rpow 3 (3 / 2 : ℝ))).symm
+    _ = Real.rpow 3 ((3 / 2 : ℝ) * Real.rpow 3 (1 / 2 : ℝ)) := by
+          rw [hyx]
+          ring_nf
+    _ = Real.rpow 3 ((3 / 2 : ℝ) * Real.rpow 3 (1 / 2 : ℝ)) := by rfl
+    _ = Real.rpow (Real.rpow 3 (3 / 2 : ℝ)) (Real.rpow 3 (1 / 2 : ℝ)) := by
+          simpa [mul_comm] using
+            (Real.rpow_mul h3nonneg (3 / 2 : ℝ) (Real.rpow 3 (1 / 2 : ℝ)))
+    _ = Real.rpow (powerSwapBranchY 3) (powerSwapBranchX 3) := by
+          simp [hx, hy]
+
 end
 
 end Samples
