@@ -1,3 +1,11 @@
+/-
+Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
+Released under MIT license as described in the file LICENSE.
+Authors: D. and Wise Wolf.
+-/
+
+-- LPS module: Lander, Parkin, and Selfridge conjecture research
+
 import Mathlib
 
 open scoped BigOperators
