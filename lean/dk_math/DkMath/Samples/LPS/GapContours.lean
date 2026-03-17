@@ -112,6 +112,35 @@ theorem gapF_at_e_e :
           gapF_eq_soft_hyperbolic_form (Real.exp 1) (Real.exp 1) hpos hpos
     _ = 0 := by simp [gapQ_at_e_e]
 
+/-! ## `(e,e)` 近傍の局所二次モデル（最小固定） -/
+
+/-- `(e,e)` 近傍の局所座標 `x = e+u`。 -/
+def localX (u : ℝ) : ℝ := Real.exp 1 + u
+
+/-- `(e,e)` 近傍の局所座標 `y = e+v`。 -/
+def localY (v : ℝ) : ℝ := Real.exp 1 + v
+
+/-- 局所二次主部モデル（候補）: `v^2 - u^2`。 -/
+def gapQuadraticModel (u v : ℝ) : ℝ := v ^ 2 - u ^ 2
+
+/-- 二次モデルは反対称（引数交換で符号反転）。 -/
+theorem gapQuadraticModel_swap_neg (u v : ℝ) :
+    gapQuadraticModel v u = -gapQuadraticModel u v := by
+  unfold gapQuadraticModel
+  ring
+
+/-- 対角上では二次モデルは 0。 -/
+theorem gapQuadraticModel_diag_zero (u : ℝ) :
+    gapQuadraticModel u u = 0 := by
+  unfold gapQuadraticModel
+  ring
+
+/-- 局所対角 `u=v`（かつ正値域）では `F(e+u,e+u)=0`。 -/
+theorem gapF_local_diag_zero (u : ℝ) :
+    gapF (localX u) (localY u) = 0 := by
+  unfold gapF localX localY
+  ring_nf
+
 end
 
 end Samples

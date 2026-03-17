@@ -8,6 +8,25 @@
 
 ## 履歴
 
+### 2026-03-17: `(e,e)` 局所二次モデルの最小補題を追加
+
+- **目的**
+  - `(e,e)` 近傍での二次主部 `v^2-u^2` を重い漸近証明なしで再利用可能に固定する。
+
+- **変更**
+  - `DkMath/Samples/LPS/GapContours.lean`
+    - 定義: `localX`, `localY`, `gapQuadraticModel`
+    - 補題: `gapQuadraticModel_swap_neg`, `gapQuadraticModel_diag_zero`,
+      `gapF_local_diag_zero`
+  - `ObservedMinProfile-ResearchNote.md`
+    - `14.3` 実装一覧へ局所モデル群を追記。
+
+- **検証**
+  - `./lean-build.sh DkMath.Samples.LPS.GapContours` 成功
+
+- **次アクション候補**
+  - 局所モデルと `gapF_eq_soft_hyperbolic_form` の接続補題を1本追加。
+
 ### 2026-03-17: `(e,e)` 中心の最小 theorem を追加
 
 - **目的**
