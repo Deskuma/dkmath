@@ -221,11 +221,28 @@ private lemma card_separated_by_gap_le_div_add_one
     (hSsub : S ⊆ Finset.Icc 0 X) :
     S.card ≤ (X + 1) / q + 1 := by
   classical
-  -- 主な証明戦略：S の各要素は隔たりが ≥ q で分かれている。
-  -- したがって S の要素は [0,q),[q,2q),...,[⌊X/q⌋*q, X+1) の各区間に高々 1 個ずつ。
-  -- 区間の個数は ⌊(X+1)/q⌋ + 1 ≤ (X+1)/q + 1。
-  -- ブロック分割による標準的な不等式。要はカウント論。
-  sorry
+  by_cases hSempty : S = ∅
+  · simp [hSempty]
+  have hnon : S.Nonempty := by
+    exact Finset.nonempty_iff_ne_empty.mpr hSempty
+  let m : ℕ := S.max' hnon
+  have hmS : m ∈ S := by
+    simpa [m] using (Finset.max'_mem S hnon)
+  have hmax : m ≤ X := by
+    exact (Finset.mem_Icc.mp (hSsub hmS)).2
+  have h_le : (S.card - 1) * q ≤ m := by
+    sorry
+  have h_mul_leX : (S.card - 1) * q ≤ X := le_trans h_le hmax
+  have h_div : S.card - 1 ≤ X / q := (Nat.le_div_iff_mul_le hqpos).2 h_mul_leX
+  have h_card_le : S.card ≤ X / q + 1 := by
+    have hcard_pos : 0 < S.card := Finset.card_pos.mpr hnon
+    have hcard_eq : S.card = (S.card - 1) + 1 := by
+      exact (Nat.succ_pred_eq_of_pos hcard_pos).symm
+    calc
+      S.card = (S.card - 1) + 1 := hcard_eq
+      _ ≤ X / q + 1 := Nat.succ_le_succ h_div
+  have h_div_mono : X / q ≤ (X + 1) / q := Nat.div_le_div_right (Nat.le_add_right X 1)
+  exact le_trans h_card_le (Nat.succ_le_succ h_div_mono)
 
 -- Count v_p(2n+1) ≥ k+2 in [0..X]: 最多 (X+1)/p^k + 1
 lemma count_vp_ge_for_layercake
