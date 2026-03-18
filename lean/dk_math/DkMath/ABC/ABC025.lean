@@ -76,9 +76,10 @@ lemma padicValNat_le_log (p n : ℕ) (_hn : n ≠ 0) : padicValNat p n ≤ Nat.l
 /-! ### Telescoping Identity -/
 
 /- For any v ≤ K, we have the telescoping identity:
-    p^{tv} = ∑_{k=0}^K p^{kt} · 𝟙_{v≥k}
 
-where 𝟙_{v≥k} = 1 if v ≥ k, else 0.
+  `p^{tv} = ∑_{k=0}^K p^{kt} · 𝟙_{v≥k}`
+
+where `𝟙_{v≥k} = 1 if v ≥ k, else 0.`
 
 **Mathematical explanation:**
 The indicator sum counts: p^0·1 + p^t·𝟙_{v≥1} + p^{2t}·𝟙_{v≥2} + ... + p^{Kt}·𝟙_{v≥K}
@@ -578,7 +579,7 @@ lemma pow_t_bound {X : ℕ} (hX : X ≥ 1) {t : ℝ} (_ht : 0 < t) (ht_half : t 
 
 /-! ### Main Telescoping Theorem -/
 
-/-- Main theorem: Bound on ∑_{n=0}^X p^{t·v(n)} using finite telescoping.
+/-- Main theorem: Bound on `∑_{n=0}^X p^{t·v(n)}` using finite telescoping.
 
 Given:
 - p ≥ 3 (odd prime)
@@ -586,62 +587,49 @@ Given:
 - X ≥ 1
 
 We prove:
-  ∑_{n=0}^X p^{t·padicValNat p (2n+1)} ≤ 3(X+1)
+  `∑_{n=0}^X p^{t·padicValNat p (2n+1)} ≤ 3(X+1)`
 
 **Full proof strategy:**
 
-1. **Define K:** Let K = Nat.log p (2X+2). Then ∀n ∈ [0,X], v(n) ≤ K.
+1. **Define K:** `Let K = Nat.log p (2X+2)`. Then `∀n ∈ [0,X], v(n) ≤ K`.
 
 2. **Apply telescoping:** For each n with v(n) ≤ K, use `sum_telescoping_correct`:
-   ```
-   p^{tv(n)} = 1 + (p^t - 1) · ∑_{k=1}^K 𝟙_{v(n)≥k} · p^{t(k-1)}
-   ```
+   `p^{tv(n)}` = `1 + (p^t - 1) · ∑_{k=1}^K 𝟙_{v(n)≥k} · p^{t(k-1)}`
 
 3. **Sum over n:**
-   ```
-   ∑_n p^{tv(n)} = (X+1) + (p^t - 1) · ∑_n ∑_{k=1}^K 𝟙_{v(n)≥k} · p^{t(k-1)}
-   ```
+   `∑_n p^{tv(n)}` = `(X+1) + (p^t - 1) · ∑_n ∑_{k=1}^K 𝟙_{v(n)≥k} · p^{t(k-1)}`
 
 4. **Exchange summation:**
-   ```
-   = (X+1) + (p^t - 1) · ∑_{k=1}^K p^{t(k-1)} · #{n : v(n) ≥ k}
-   ```
+   = `(X+1) + (p^t - 1) · ∑_{k=1}^K p^{t(k-1)} · #{n : v(n) ≥ k}`
 
 5. **Apply counting bound:** Using `count_divisible_le`:
-   ```
-   #{n : v(n) ≥ k} ≤ (X+1)/p^k + 1
-   ```
+   `#{n : v(n) ≥ k} ≤ (X+1)/p^k + 1`
 
 6. **Bound the sum:**
-   ```
-   ≤ (X+1) + (p^t - 1) · ∑_{k=1}^K p^{t(k-1)} · [(X+1)/p^k + 1]
-   = (X+1) + (p^t - 1) · [(X+1) · ∑_{k=1}^K p^{t(k-1)-k} + ∑_{k=1}^K p^{t(k-1)}]
-   = (X+1) + (p^t - 1) · [(X+1)/p · ∑_{k=1}^K (p^{t-1})^k + 1/p^t · ∑_{k=1}^K (p^t)^k]
-   ```
-
+  ```
+   ≤ `(X+1) + (p^t - 1) · ∑_{k=1}^K p^{t(k-1)} · [(X+1)/p^k + 1]`
+   = `(X+1) + (p^t - 1) · [(X+1) · ∑_{k=1}^K p^{t(k-1)-k} + ∑_{k=1}^K p^{t(k-1)}]`
+   = `(X+1) + (p^t - 1) · [(X+1)/p · ∑_{k=1}^K (p^{t-1})^k + 1/p^t · ∑_{k=1}^K (p^t)^k]`
+  ```
 7. **Geometric series:**
-   Since p^{t-1} < 1 (from `pow_t_minus_one_lt_one`):
-   ```
-   ∑_{k=1}^K (p^{t-1})^k ≤ ∑_{k=0}^∞ (p^{t-1})^k = 1/(1 - p^{t-1})
-   ```
+   Since `p^{t-1} < 1` (from `pow_t_minus_one_lt_one`):
+   `∑_{k=1}^K (p^{t-1})^k` ≤ `∑_{k=0}^∞ (p^{t-1})^k` = `1/(1 - p^{t-1})`
 
 8. **Bound (p^t - 1) factor:**
    For p ≥ 3, t ≤ 1/2:
-   ```
-   p^t ≤ 3^{1/2} ≈ 1.732, so p^t - 1 ≤ 0.732
-   ```
+   `p^t ≤ 3^{1/2} ≈ 1.732, so p^t - 1 ≤ 0.732`
 
 9. **Final bound:**
    Using `geom_bound_tight`:
    ```
-   ∑_n p^{tv(n)} ≤ (X+1) + 0.732 · [(X+1)/3 · 2.4 + small term]
-                ≤ (X+1) + 0.6(X+1)
-                ≤ 1.6(X+1) < 3(X+1)
+   `∑_n p^{tv(n)}` ≤ `(X+1) + 0.732 · [(X+1)/3 · 2.4 + small term]`
+                   ≤ `(X+1) + 0.6(X+1)`
+                   ≤ `1.6(X+1) < 3(X+1)`
    ```
 
-**Note:** This proof sketch shows the bound is actually much better than 3(X+1).
-With careful calculation, we can show ≤ 2(X+1) is achievable, which matches
-the original target in ABCFinal.lean.
+**Note:** This proof sketch shows the bound is actually much better than `3(X+1)`.
+With careful calculation, we can show `≤ 2(X+1)` is achievable, which matches
+the original target in `ABCFinal.lean`.(*It has now been moved to another file.)
 
 The detailed implementation requires ~80 lines but is entirely straightforward.
 -/
@@ -1050,72 +1038,13 @@ theorem sum_pow_padicValNat_le_geom_half {p : ℕ} [hp : Fact p.Prime] (hp3 : p 
                   have hp_pos : (0 : ℝ) < p := by positivity
                   have h_denom_pos : 0 < 1 - (p : ℝ) ^ (t - 1) := by linarith [r_def]
 
-                  -- Main bound: (p^t - 1) * p^(-1) / (1 - p^(t-1)) ≤ p^(t-1) / (1 - p^(t-1)) ≤ 1
-                  have h_main : ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) / (1 - (p : ℝ) ^ (t - 1)) ≤ 1 := by
-                    -- Step 1: (p^t - 1) * p^(-1) ≤ p^(t-1)
-                    have h_step1 : ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) ≤ (p : ℝ) ^ (t - 1) := by
-                      have : (p : ℝ) ^ t * (p : ℝ) ^ (-1 : ℝ) = (p : ℝ) ^ (t - 1) := by
-                        rw [← Real.rpow_add hp_pos]
-                        ring_nf
-                      calc ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ)
-                          ≤ (p : ℝ) ^ t * (p : ℝ) ^ (-1 : ℝ) := by
-                            gcongr
-                            linarith [Real.rpow_pos_of_pos hp_pos t]
-                        _ = (p : ℝ) ^ (t - 1) := this
-                    -- Step 2: For 0 < x < 1/2, we have x / (1 - x) ≤ 1
-                    have h_r_small : (p : ℝ) ^ (t - 1) < 1 / 2 := by
-                      have h_exp : t - 1 ≤ -1 / 2 := by linarith
-                      have h_p_gt1 : 1 < (p : ℝ) := by
-                        have : (3 : ℝ) ≤ p := by exact_mod_cast hp3
-                        linarith
-                      calc (p : ℝ) ^ (t - 1)
-                          ≤ (p : ℝ) ^ (-1 / 2 : ℝ) := by
-                            rw [Real.rpow_le_rpow_left_iff h_p_gt1]
-                            exact h_exp
-                        _ ≤ (3 : ℝ) ^ (-1 / 2 : ℝ) := by
-                            apply Real.rpow_le_rpow_of_nonpos
-                            · norm_num
-                            · exact_mod_cast hp3
-                            · norm_num
-                        _ < 1 / 2 := by
-                            -- NOTE: This claim is INCORRECT! 3^(-1/2) = 1/√3 ≈ 0.577 > 0.5
-                            -- The correct bound is 3^(-1/2) < 7/12 ≈ 0.583
-                            -- However, the overall proof strategy still works because:
-                            -- 1. The final bound uses ≤ 3(X+1), not a tighter constant
-                            -- 2. The proof can be reworked to use x/(1-x) ≤ 3 directly
-                            -- This so#rry is left as a marker for future improvement
-                            sorry -- KNOWN ISSUE: Claim is false; proof needs restructuring
-                    -- Step 3: Combine
-                    have h_div_lt : (p : ℝ) ^ (t - 1) / (1 - (p : ℝ) ^ (t - 1)) < 1 := by
-                      have h_pos : 0 < (p : ℝ) ^ (t - 1) := r_pos
-                      have h_lt_half : (p : ℝ) ^ (t - 1) < 1 / 2 := h_r_small
-                      -- For 0 < x < 1/2: x / (1 - x) < x / (1/2) = 2x < 1
-                      have h1 : (p : ℝ) ^ (t - 1) / (1 - (p : ℝ) ^ (t - 1)) < (p : ℝ) ^ (t - 1) / (1 / 2) := by
-                        gcongr
-                        linarith
-                      have h2 : (p : ℝ) ^ (t - 1) / (1 / 2) = 2 * (p : ℝ) ^ (t - 1) := by ring
-                      have h3 : 2 * (p : ℝ) ^ (t - 1) < 1 := by
-                        calc 2 * (p : ℝ) ^ (t - 1)
-                            < 2 * (1 / 2) := by gcongr
-                          _ = 1 := by norm_num
-                      linarith
-                    have h_main_le : ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) / (1 - (p : ℝ) ^ (t - 1)) ≤ (p : ℝ) ^ (t - 1) / (1 - (p : ℝ) ^ (t - 1)) := by
-                      have h_num : ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) ≤ (p : ℝ) ^ (t - 1) := by
-                        have : (p : ℝ) ^ t * (p : ℝ) ^ (-1 : ℝ) = (p : ℝ) ^ (t - 1) := by
-                          rw [← Real.rpow_add hp_pos]
-                          ring_nf
-                        calc ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ)
-                            ≤ (p : ℝ) ^ t * (p : ℝ) ^ (-1 : ℝ) := by
-                              gcongr
-                              linarith [Real.rpow_pos_of_pos hp_pos t]
-                          _ = (p : ℝ) ^ (t - 1) := this
-                      have h_denom_pos : 0 < 1 - (p : ℝ) ^ (t - 1) := by linarith [r_def]
-                      apply div_le_div_of_nonneg_right h_num h_denom_pos.le
-                    linarith
-                  -- Now use h_main to bound the expression
-                  have h_bound : 1 + ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) / (1 - (p : ℝ) ^ (t - 1)) ≤ 1 + 1 := by
-                    linarith
-                  gcongr
+                  -- Main bound: (p^t - 1) * p^(-1) / (1 - p^(t-1)) ≤ 1
+                  have h_main :
+                      ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) /
+                          (1 - (p : ℝ) ^ (t - 1)) ≤
+                        1 :=
+                    rpow_main_term_le_one hp3 ht_half
+                  nlinarith [h_main]
               _ = (X + 1) * 2 + (X + 1) := by ring
               _ = 3 * (X + 1) := by ring
       -- end of calc "_ ≤ 3 * (X + 1)"
@@ -1266,6 +1195,52 @@ lemma inv_sqrt3_lt_7_12 : inv_sqrt_3 < (7 : ℝ) / 12 := by
   rw [h_rpow_eq]  -- ゴールを (√3)⁻¹ < 7/12 に変換
   simpa [one_div, inv_div] using h_one_div
 
+
+/-- `3 ^ (log 2 / log 3) = 2` を示す。
+
+これは `Real.log_rpow` を使って両辺のログを取り，
+`Real.log 2 = (log 2 / log 3) * log 3` になることを確認してから、
+`Real.log_inj` で元に戻す形で示す。
+-/
+lemma three_pow_log2_div_log3_eq_two :
+    (3 : ℝ) ^ (Real.log 2 / Real.log 3) = 2 := by
+  have h3pos : 0 < (3 : ℝ) := by norm_num
+  have h2pos : 0 < (2 : ℝ) := by norm_num
+  have h3nonneg : 0 ≤ (3 : ℝ) := by norm_num
+  have hlog : Real.log ((3 : ℝ) ^ (Real.log 2 / Real.log 3)) = Real.log 2 := by
+    -- log(x^y) = y * log x
+    have hcalc :
+      Real.log ((3 : ℝ) ^ (Real.log 2 / Real.log 3)) = (Real.log 2 / Real.log 3) * Real.log 3 :=
+      Real.log_rpow h3pos (Real.log 2 / Real.log 3)
+    -- RHS = (log 2 / log 3) * log 3 = log 2
+    have hright : (Real.log 2 / Real.log 3) * Real.log 3 = Real.log 2 := by
+      have hlog3_ne : Real.log (3 : ℝ) ≠ 0 := by
+        have : 0 < Real.log (3 : ℝ) := by
+          have : 1 < (3 : ℝ) := by norm_num
+          exact Real.log_pos this
+        exact ne_of_gt this
+      field_simp [hlog3_ne]
+    simpa [hright] using hcalc
+  have hpos_x : 0 < (3 : ℝ) ^ (Real.log 2 / Real.log 3) := by
+    have h := Real.rpow_pos_of_pos h3pos (Real.log 2 / Real.log 3)
+    exact h
+  exact Real.log_injOn_pos hpos_x h2pos hlog
+
+/-- `3 ^ (-(log 2 / log 3)) = 1/2` を示す。
+
+`Real.rpow_neg` を用いて `(3^a)^(-1)` に書き換え、
+前の補題を使って `2⁻¹` に帰着する。
+-/
+lemma three_pow_neg_log2_div_log3_eq_half :
+    (3 : ℝ) ^ (-(Real.log 2 / Real.log 3)) = 1 / 2 := by
+  have h3pos : 0 < (3 : ℝ) := by norm_num
+  have h3nonneg : 0 ≤ (3 : ℝ) := by norm_num
+  calc
+    (3 : ℝ) ^ (-(Real.log 2 / Real.log 3))
+        = ((3 : ℝ) ^ (Real.log 2 / Real.log 3))⁻¹ := by
+              simpa using (Real.rpow_neg h3nonneg (Real.log 2 / Real.log 3))
+    _ = (2 : ℝ)⁻¹ := by rw [three_pow_log2_div_log3_eq_two]
+    _ = 1 / 2 := by norm_num
 
 -- 以降は 1/(1 - r) ≤ 12/5 を使えば 3 の上界に組み込める：
 -- 1/(1 - (3 : ℝ) ^ (-(1/2 : ℝ))) ≤ 12/5
