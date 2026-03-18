@@ -1632,6 +1632,32 @@ lemma rpow_t_le_sqrt_nat {p : ℕ} {t : ℝ} (ht_half : t ≤ 1 / 2) (hp : p ≥
   have : 1 ≤ (p : ℝ) := by norm_cast
   exact Real.rpow_le_rpow_of_exponent_le this ht_half
 
+/-- p ≥ 3 なら √p ≤ (p+1)/2 であること。 -/
+lemma sqrt_le_p_add_one_div_two {p : ℕ} (hp3 : p ≥ 3) :
+    Real.sqrt (p : ℝ) ≤ ((p + 1 : ℝ) / 2) := by
+  have hpos : 0 ≤ (p : ℝ) := by norm_cast; omega
+  have hsq : (Real.sqrt (p : ℝ)) ^ 2 ≤ ((p + 1 : ℝ) / 2) ^ 2 := by
+    -- (sqrt p)^2 = p, so this is equivalent to p ≤ ((p+1)/2)^2
+    have : (p : ℝ) ≤ ((p + 1 : ℝ) / 2) ^ 2 := by
+      -- (p + 1)^2 / 4 - p = (p - 1)^2 / 4 ≥ 0
+      have : 0 ≤ ((p : ℝ) - 1) ^ 2 := by nlinarith [hp3]
+      nlinarith
+    simpa [Real.sq_sqrt] using this
+  have hpos' : 0 ≤ ((p + 1 : ℝ) / 2) := by nlinarith
+  have hRHS : Real.sqrt (((p + 1 : ℝ) / 2) ^ 2) = (p + 1 : ℝ) / 2 := by
+    -- sqrt(x^2) = x for x ≥ 0
+    simpa using (Real.sqrt_sq hpos')
+  have h_le_sqrt : Real.sqrt (p : ℝ) ≤ Real.sqrt (((p + 1 : ℝ) / 2) ^ 2) :=
+    Real.le_sqrt_of_sq_le hsq
+  exact le_trans h_le_sqrt hRHS.le
+
+/-- For p ≥ 3 and t ≤ 1/2, p^t ≤ (p+1)/2. -/
+lemma rpow_t_le_p_add_one_div_two {p : ℕ} {t : ℝ} (hp3 : p ≥ 3) (ht_half : t ≤ 1 / 2) :
+    (p : ℝ) ^ t ≤ ((p + 1 : ℝ) / 2) := by
+  have h1 : (p : ℝ) ^ t ≤ Real.sqrt (p : ℝ) := rpow_t_le_sqrt_nat ht_half (by linarith)
+  have h2 : Real.sqrt (p : ℝ) ≤ ((p + 1 : ℝ) / 2) := sqrt_le_p_add_one_div_two hp3
+  exact le_trans h1 h2
+
 
 -- 1/2 < t ≤ log 2 / log 3, X ≥ 1 ⇒ (X+1)^(t-1) は X=1 で最大
 lemma pow_t_sub_one_decreasing {X : ℕ} {t : ℝ} (hX : X ≥ 1)
