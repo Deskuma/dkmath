@@ -1,5 +1,7 @@
 # CFBRC 構造核ロードマップ
 
+[next](CFBRC_StructureCore_lemmas.md)
+
 ## 1. 目的
 
 本メモの目的は、CFBRC を **解析対象そのものではなく観測器** として位置づけ、  
@@ -452,3 +454,5 @@ Lean 実装では、いきなり大きな代数構造を定義するより、
 が本研究の基本路線である。
 
 ---
+
+[next](CFBRC_StructureCore_lemmas.md)
