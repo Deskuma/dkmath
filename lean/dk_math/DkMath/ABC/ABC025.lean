@@ -579,7 +579,7 @@ lemma pow_t_bound {X : ℕ} (hX : X ≥ 1) {t : ℝ} (_ht : 0 < t) (ht_half : t 
 
 /-! ### Main Telescoping Theorem -/
 
-/-- Main theorem: Bound on ∑_{n=0}^X p^{t·v(n)} using finite telescoping.
+/-- Main theorem: Bound on `∑_{n=0}^X p^{t·v(n)}` using finite telescoping.
 
 Given:
 - p ≥ 3 (odd prime)
@@ -587,62 +587,49 @@ Given:
 - X ≥ 1
 
 We prove:
-  ∑_{n=0}^X p^{t·padicValNat p (2n+1)} ≤ 3(X+1)
+  `∑_{n=0}^X p^{t·padicValNat p (2n+1)} ≤ 3(X+1)`
 
 **Full proof strategy:**
 
-1. **Define K:** Let K = Nat.log p (2X+2). Then ∀n ∈ [0,X], v(n) ≤ K.
+1. **Define K:** `Let K = Nat.log p (2X+2)`. Then `∀n ∈ [0,X], v(n) ≤ K`.
 
 2. **Apply telescoping:** For each n with v(n) ≤ K, use `sum_telescoping_correct`:
-   ```
-   p^{tv(n)} = 1 + (p^t - 1) · ∑_{k=1}^K 𝟙_{v(n)≥k} · p^{t(k-1)}
-   ```
+   `p^{tv(n)}` = `1 + (p^t - 1) · ∑_{k=1}^K 𝟙_{v(n)≥k} · p^{t(k-1)}`
 
 3. **Sum over n:**
-   ```
-   ∑_n p^{tv(n)} = (X+1) + (p^t - 1) · ∑_n ∑_{k=1}^K 𝟙_{v(n)≥k} · p^{t(k-1)}
-   ```
+   `∑_n p^{tv(n)}` = `(X+1) + (p^t - 1) · ∑_n ∑_{k=1}^K 𝟙_{v(n)≥k} · p^{t(k-1)}`
 
 4. **Exchange summation:**
-   ```
-   = (X+1) + (p^t - 1) · ∑_{k=1}^K p^{t(k-1)} · #{n : v(n) ≥ k}
-   ```
+   = `(X+1) + (p^t - 1) · ∑_{k=1}^K p^{t(k-1)} · #{n : v(n) ≥ k}`
 
 5. **Apply counting bound:** Using `count_divisible_le`:
-   ```
-   #{n : v(n) ≥ k} ≤ (X+1)/p^k + 1
-   ```
+   `#{n : v(n) ≥ k} ≤ (X+1)/p^k + 1`
 
 6. **Bound the sum:**
-   ```
-   ≤ (X+1) + (p^t - 1) · ∑_{k=1}^K p^{t(k-1)} · [(X+1)/p^k + 1]
-   = (X+1) + (p^t - 1) · [(X+1) · ∑_{k=1}^K p^{t(k-1)-k} + ∑_{k=1}^K p^{t(k-1)}]
-   = (X+1) + (p^t - 1) · [(X+1)/p · ∑_{k=1}^K (p^{t-1})^k + 1/p^t · ∑_{k=1}^K (p^t)^k]
-   ```
-
+  ```
+   ≤ `(X+1) + (p^t - 1) · ∑_{k=1}^K p^{t(k-1)} · [(X+1)/p^k + 1]`
+   = `(X+1) + (p^t - 1) · [(X+1) · ∑_{k=1}^K p^{t(k-1)-k} + ∑_{k=1}^K p^{t(k-1)}]`
+   = `(X+1) + (p^t - 1) · [(X+1)/p · ∑_{k=1}^K (p^{t-1})^k + 1/p^t · ∑_{k=1}^K (p^t)^k]`
+  ```
 7. **Geometric series:**
-   Since p^{t-1} < 1 (from `pow_t_minus_one_lt_one`):
-   ```
-   ∑_{k=1}^K (p^{t-1})^k ≤ ∑_{k=0}^∞ (p^{t-1})^k = 1/(1 - p^{t-1})
-   ```
+   Since `p^{t-1} < 1` (from `pow_t_minus_one_lt_one`):
+   `∑_{k=1}^K (p^{t-1})^k` ≤ `∑_{k=0}^∞ (p^{t-1})^k` = `1/(1 - p^{t-1})`
 
 8. **Bound (p^t - 1) factor:**
    For p ≥ 3, t ≤ 1/2:
-   ```
-   p^t ≤ 3^{1/2} ≈ 1.732, so p^t - 1 ≤ 0.732
-   ```
+   `p^t ≤ 3^{1/2} ≈ 1.732, so p^t - 1 ≤ 0.732`
 
 9. **Final bound:**
    Using `geom_bound_tight`:
    ```
-   ∑_n p^{tv(n)} ≤ (X+1) + 0.732 · [(X+1)/3 · 2.4 + small term]
-                ≤ (X+1) + 0.6(X+1)
-                ≤ 1.6(X+1) < 3(X+1)
+   `∑_n p^{tv(n)}` ≤ `(X+1) + 0.732 · [(X+1)/3 · 2.4 + small term]`
+                   ≤ `(X+1) + 0.6(X+1)`
+                   ≤ `1.6(X+1) < 3(X+1)`
    ```
 
-**Note:** This proof sketch shows the bound is actually much better than 3(X+1).
-With careful calculation, we can show ≤ 2(X+1) is achievable, which matches
-the original target in ABCFinal.lean.
+**Note:** This proof sketch shows the bound is actually much better than `3(X+1)`.
+With careful calculation, we can show `≤ 2(X+1)` is achievable, which matches
+the original target in `ABCFinal.lean`.(*It has now been moved to another file.)
 
 The detailed implementation requires ~80 lines but is entirely straightforward.
 -/
