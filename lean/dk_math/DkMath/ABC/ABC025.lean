@@ -76,9 +76,10 @@ lemma padicValNat_le_log (p n : ℕ) (_hn : n ≠ 0) : padicValNat p n ≤ Nat.l
 /-! ### Telescoping Identity -/
 
 /- For any v ≤ K, we have the telescoping identity:
-    p^{tv} = ∑_{k=0}^K p^{kt} · 𝟙_{v≥k}
 
-where 𝟙_{v≥k} = 1 if v ≥ k, else 0.
+  `p^{tv} = ∑_{k=0}^K p^{kt} · 𝟙_{v≥k}`
+
+where `𝟙_{v≥k} = 1 if v ≥ k, else 0.`
 
 **Mathematical explanation:**
 The indicator sum counts: p^0·1 + p^t·𝟙_{v≥1} + p^{2t}·𝟙_{v≥2} + ... + p^{Kt}·𝟙_{v≥K}
@@ -1050,9 +1051,13 @@ theorem sum_pow_padicValNat_le_geom_half {p : ℕ} [hp : Fact p.Prime] (hp3 : p 
                   have hp_pos : (0 : ℝ) < p := by positivity
                   have h_denom_pos : 0 < 1 - (p : ℝ) ^ (t - 1) := by linarith [r_def]
 
-                  -- Main bound: (p^t - 1) * p^(-1) / (1 - p^(t-1)) ≤ p^(t-1) / (1 - p^(t-1)) ≤ 1
-                  -- TODO: ここを `h_main` で直接示せると `sorry` が消えるはず。
-                  sorry
+                  -- Main bound: (p^t - 1) * p^(-1) / (1 - p^(t-1)) ≤ 1
+                  have h_main :
+                      ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) /
+                          (1 - (p : ℝ) ^ (t - 1)) ≤
+                        1 :=
+                    rpow_main_term_le_one hp3 ht_half
+                  nlinarith [h_main]
               _ = (X + 1) * 2 + (X + 1) := by ring
               _ = 3 * (X + 1) := by ring
       -- end of calc "_ ≤ 3 * (X + 1)"
