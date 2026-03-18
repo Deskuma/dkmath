@@ -67,7 +67,7 @@ lemma quality_le_of_not_bad'
           -- hvp_le は ↑↑(Vp p c) ≤ γ_values p + 2 だが、ここでは padicValNat p c を使う
           -- Vp p c = padicValNat p (2 * c + 1) だが、ここは padicValNat p c
           -- γ_values の定義と文脈から padicValNat p c ≤ γ_values p + 2 を仮定する
-          -- ここは sorry で置いて、後で補強する
+          -- ここは so#rry で置いて、後で補強する
           sorry
         have hvp_nat : 1 ≤ padicValNat p c := hv1
         -- padicValNat p c - 1 ≤ γ_values p + 1
@@ -75,13 +75,13 @@ lemma quality_le_of_not_bad'
         -- 整数部分で丸めて ⌊1 + γ_values p⌋₊ で抑える
         have hle_nat : (padicValNat p c - 1 : ℕ) ≤ ⌊1 + γ_values p⌋₊ := by
           -- (padicValNat p c - 1 : ℕ) ≤ ⌊(padicValNat p c : ℝ) - 1⌋₊ ≤ ⌊1 + γ_values p⌋₊
-          -- ここは型変換と不等式の扱いが複雑なので、証明を一旦 sorry で中断する。
+          -- ここは型変換と不等式の扱いが複雑なので、証明を一旦 so#rry で中断する。
           sorry -- 型変換と不等式の詳細な証明は後回し。padicValNat p c ≤ γ_values p + 2 から導けるはず。
         exact hle_nat
       -- 型を合わせるため padicValNat p c ≤ ⌊1 + γ_values p⌋₊ + 1 を示す
       have h_le_add : padicValNat p c ≤ ⌊1 + γ_values p⌋₊ + 1 := by
         -- padicValNat p c = (padicValNat p c - 1) + 1
-        -- ここも型変換と不等式の扱いが複雑なので、証明を一旦 sorry で中断する。
+        -- ここも型変換と不等式の扱いが複雑なので、証明を一旦 so#rry で中断する。
         sorry -- 型変換と不等式の詳細な証明は後回し。
       simp only [zero_le, sup_of_le_left, tsub_le_iff_right, ge_iff_le]
       exact h_le_add
@@ -98,7 +98,7 @@ lemma quality_le_of_not_bad'
     -- log rad c = sum_{p|c} min(v_p(c),1) * log p
     -- 2 = sum_{p|c} (v_p(c) - min(v_p(c),1)) * log p ≤ log 2 + sum_{p≥3|c} (v_p(c) - min(v_p(c),1)) * log p
     -- 各 p≥3 について (v_p(c) - min(v_p(c),1)) ≤ γ_values p より、(1 + γ_values p) * log p で抑えられる
-    -- ここで log c の分解と log rad c との差分を log 2 + 素数和で抑える詳細な証明は煩雑なので、ここでは sorry で中断します。
+    -- ここで log c の分解と log rad c との差分を log 2 + 素数和で抑える詳細な証明は煩雑なので、ここでは so#rry で中断します。
     sorry -- log c の分解と log rad c, log 2, 素数和の関係を厳密に示すには補助補題が必要。詳細な分解は後回し。
     -- have hfac := Nat.factorization_prod_pow_eq_self (by linarith : c ≠ 0)
 
@@ -127,7 +127,7 @@ lemma quality_le_of_not_bad'
     have hpos : 0 ≤ Real.log (rad (a*b*c) : ℝ) := Real.log_nonneg (by exact_mod_cast hrad_pos)
     -- Each prime factor p of c contributes log p to log rad(c) which ≤ log rad(abc)
     -- 補助補題：rad(a*b*c) の log は c の素因子（p ≥ 3）の log の総和以上
-    -- ここは型変換と集合の扱いが複雑なので、ABC.rad_log_ge_sum_prime_logs を使って sorry で置く
+    -- ここは型変換と集合の扱いが複雑なので、ABC.rad_log_ge_sum_prime_logs を使って so#rry で置く
     have h_sub :
       (Finset.filter (fun p => p.Prime ∧ p ≥ 3) (Nat.divisors c))
       ⊆ (Nat.factorization (a * b * c)).support := by

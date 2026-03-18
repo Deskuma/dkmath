@@ -54,7 +54,7 @@ axiom quality_le_of_not_bad
   -- have h_split := padicValNat_split p c
   -- これで v_p(c) の分解を使える
 
-  -- sorry -- γ_values を p 依存にする設計変更が必要
+  -- so#rry -- γ_values を p 依存にする設計変更が必要
 
 -- ==========================================
 -- Final Theorem: ABC Quality Inequality
@@ -98,7 +98,7 @@ theorem abc_quality_final (ε : ℝ) (hε : 0 < ε) :
     -- 【暫定対処】
     -- Working-Note.md の方針に従い、密度版で進めるべきだが、
     -- quality_le_of_not_bad との接続が未完成。
-    -- ここでは sorry で進め、設計変更を TODO とする。
+    -- ここでは so#rry で進め、設計変更を TODO とする。
 
     have h_c_ge_0 : 0 ≤ (c : ℝ) := by norm_cast; omega
 
