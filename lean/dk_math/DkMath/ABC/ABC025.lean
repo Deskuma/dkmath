@@ -1000,8 +1000,7 @@ theorem sum_pow_padicValNat_le_geom_half {p : ℕ} [hp : Fact p.Prime] (hp3 : p 
               exact h_le
 
             -- Combine: main + correction ≤ bound
-            -- Strategy: We bound (p^t - 1) / (p * (1 - p^(t-1))) ≤ 2/3
-            -- This gives us (X+1) * (1 + 2/3) + (X+1) = 3(X+1)
+            -- Use main-term 2/3 and tail-term ≤ (X+1) to get 2(X+1).
             have hp_pos : (0 : ℝ) < p := by positivity
             have h_denom_pos : 0 < 1 - (p : ℝ) ^ (t - 1) := by linarith [r_def]
             have h_main :
@@ -1009,6 +1008,10 @@ theorem sum_pow_padicValNat_le_geom_half {p : ℕ} [hp : Fact p.Prime] (hp3 : p 
                     (1 - (p : ℝ) ^ (t - 1)) ≤
                   2 / 3 :=
               rpow_main_term_le_two_thirds hp3 ht ht_half
+            have h_tail :
+                ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k) ≤
+                  (X + 1) :=
+              h_sum2
             calc (X + 1) * (1 + ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ ((t - 1) * (k : ℝ) - 1)) +
                   ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k)
                 ≤ (X + 1) * (1 + ((p : ℝ) ^ t - 1) * ((p : ℝ) ^ (-1 : ℝ) / (1 - (p : ℝ) ^ (t - 1)))) +
