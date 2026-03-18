@@ -1078,12 +1078,13 @@ theorem sum_pow_padicValNat_le_geom_half {p : ℕ} [hp : Fact p.Prime] (hp3 : p 
                             · exact_mod_cast hp3
                             · norm_num
                         _ < 1 / 2 := by
-                            -- NOTE: This claim is INCORRECT! 3^(-1/2) = 1/√3 ≈ 0.577 > 0.5
-                            -- The correct bound is 3^(-1/2) < 7/12 ≈ 0.583
-                            -- However, the overall proof strategy still works because:
-                            -- 1. The final bound uses ≤ 3(X+1), not a tighter constant
-                            -- 2. The proof can be reworked to use x/(1-x) ≤ 3 directly
-                            -- This so#rry is left as a marker for future improvement
+                            -- [dev/ABC-260318-v1] NOTE: This claim is INCORRECT! 3^(-1/2) = 1/√3 ≈ 0.577 > 0.5
+                            -- [dev/ABC-260318-v1] The correct bound is 3^(-1/2) < 7/12 ≈ 0.583
+                            -- [dev/ABC-260318-v1] However, the overall proof strategy still works because:
+                            -- [dev/ABC-260318-v1] 1. The final bound uses ≤ 3(X+1), not a tighter constant
+                            -- [dev/ABC-260318-v1] 2. The proof can be reworked to use x/(1-x) ≤ 3 directly
+                            -- [dev/ABC-260318-v1] This so#rry is left as a marker for future improvement
+                            -- [dev/ABC-260318-v1] TODO: Replace this `sorry` by using `three_pow_neg_log2_div_log3_eq_half` and/or a direct `r ≤ 2/3` bound
                             sorry -- KNOWN ISSUE: Claim is false; proof needs restructuring
                     -- Step 3: Combine
                     have h_div_lt : (p : ℝ) ^ (t - 1) / (1 - (p : ℝ) ^ (t - 1)) < 1 := by
