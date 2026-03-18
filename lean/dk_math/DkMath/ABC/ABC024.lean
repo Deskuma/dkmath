@@ -1094,17 +1094,17 @@ lemma mgf_padic_excess_bound_pbase_layercake
   -- - 最後に代数的な計算で順序を入れ替え、定義された定数 `C` と一致させて終了します。
 
   -- 要点としては、整数・自然数・実数間のキャスト、冪の性質、有限和に対する因数分解、分母が正であることの確認を組み合わせることで
-  -- 「(p^{-2t}) × 平均和 ≤ (1 + 4 p) × p^{-2t} = C」を形式的に導出している点です。
+  -- `「(p^{-2t}) × 平均和 ≤ (1 + 4 p) × p^{-2t} = C」`を形式的に導出している点です。
 
   -- Convert from V n : ℕ to padicValNat (equality by definition)
   /-
   有限和の項が定義上一致することによる自明な等式。
 
-  ここでは V n を (padicValNat p (2*n+1) : ℤ) を実数に写したものとして扱っているため、
+  ここでは V n を `(padicValNat p (2*n+1) : ℤ)` を実数に写したものとして扱っているため、
   各 n に対する被積分関数
-    (p : ℝ) ^ (t * (padicValNat p (2*n+1) : ℤ))
+    `(p : ℝ) ^ (t * (padicValNat p (2*n+1) : ℤ))`
   は項ごとに
-    (p : ℝ) ^ (t * (V n : ℝ))
+    `(p : ℝ) ^ (t * (V n : ℝ))`
   と一致する。したがって Finset.Icc 0 X 上の和も定義により一致し、この等式は rfl によって示される。
   -/
   have h_sum_with_int : Finset.sum (Finset.Icc 0 X) (fun n => (p : ℝ) ^ (t * (padicValNat p (2*n+1) : ℤ)))
@@ -1136,9 +1136,9 @@ lemma mgf_padic_excess_bound_pbase_layercake
 
   - まず `h_sum_with_int` によって和の表現を適切な形に書き換え，分子が既に得ている上界 `h_sum_bound` と対応するようにする。
   - 次に `ABC.div_le_iff` を用いて不等式
-    A / (X + 1) ≤ B
+    `A / (X + 1) ≤ B`
     を分母を払って
-    A ≤ B * (X + 1)
+    `A ≤ B * (X + 1)`
     と同値に変換する（この変換には分母が正であることが必要）。
   - 分母 `(X + 1 : ℝ) > 0` の確認は `norm_cast; omega` により，整数から実数へのキャストと簡単な代数的不等式処理で解決する。
   - 最後に，既に得られている `h_sum_bound` を適用することで所望の不等式を導く。
@@ -1155,23 +1155,23 @@ lemma mgf_padic_excess_bound_pbase_layercake
   /-
   この計算は、有限和の平均に対して次の上界を与えることを示す:
 
-    (p : ℝ) ^ (-2 * t) * (Finset.sum (Finset.Icc 0 X) fun n =>
-      (p : ℝ) ^ (t * (padicValNat p (2*n+1) : ℤ))) / (X + 1)
-    ≤ (p : ℝ) ^ (-2 * t) * (1 + 4 * (p : ℝ)).
+    `(p : ℝ) ^ (-2 * t) * (Finset.sum (Finset.Icc 0 X) fun n` =>
+        `(p : ℝ) ^ (t * (padicValNat p (2*n+1) : ℤ))) / (X + 1)`
+      ≤ `(p : ℝ) ^ (-2 * t) * (1 + 4 * (p : ℝ))`.
 
   主な論旨と手順:
-  - まず mul_le_mul_of_nonneg_left を適用して、左から乗じる (p : ℝ) ^ (-2 * t) が非負であることにより不等式の向きを保つ。
-    この非負性は Real.rpow_nonneg によって示し、型変換や符号関係の処理は norm_cast; omega により正当化する。
-  - 次に ring を用いて乗法の順序を整理し、表現を (1 + 4 * (p : ℝ)) * (p : ℝ) ^ (-2 * t) の形に書き換える。
-  - 最後に rfl によりこれを定数 C と同一視する。
+  - まず `mul_le_mul_of_nonneg_left` を適用して、左から乗じる `(p : ℝ) ^ (-2 * t)` が非負であることにより不等式の向きを保つ。
+    この非負性は `Real.rpow_nonneg` によって示し、型変換や符号関係の処理は `norm_cast; omega` により正当化する。
+  - 次に `ring` を用いて乗法の順序を整理し、表現を `(1 + 4 * (p : ℝ)) * (p : ℝ) ^ (-2 * t)` の形に書き換える。
+  - 最後に `rfl` によりこれを定数 C と同一視する。
 
   ここで用いている仮定 h_ineq は
-    (Finset.sum ...)/(X + 1) ≤ 1 + 4 * (p : ℝ)
+    `(Finset.sum ...)/(X + 1) ≤ 1 + 4 * (p : ℝ)`
   のような和の上界を与えるものであり、上の補題適用により安全に計算を進められる。
   -/
   calc (p : ℝ) ^ (-2 * t) * ((Finset.sum (Finset.Icc 0 X) fun n => (p : ℝ) ^ (t * (padicValNat p (2*n+1) : ℤ))) / (X + 1))
 
-      -- Apply the inequality h_ineq with the nonnegative factor (p : ℝ) ^ (-2 * t)
+      -- Apply the inequality h_ineq with the nonnegative factor `(p : ℝ) ^ (-2 * t)`
       ≤ (p : ℝ) ^ (-2 * t) * (1 + 4 * (p : ℝ)) := by
         apply mul_le_mul_of_nonneg_left h_ineq
         apply Real.rpow_nonneg
@@ -1179,25 +1179,51 @@ lemma mgf_padic_excess_bound_pbase_layercake
 
     -- Rearrange to match C
     _ = (1 + 4 * (p : ℝ)) * (p : ℝ) ^ (-2 * t) := by ring
-    -- Structural note:
-    -- The final constant `(1 + 4*p)` is a coarse envelope, not the sharp structural coefficient.
-    -- The layer-cake split first yields the more intrinsic form `(1 + 2 * p^t)`:
-    --   `1` comes from the base floor term `(X+1)` (every summand contributes at least 1),
-    --   while `2 * p^t` is the merged contribution of the two higher-layer channels
-    --   (`sum1` = main density tail, `sum2` = low-layer ceiling slack).
-    -- The later replacement
-    --   `1 + 2 * p^t ≤ 1 + 2*p ≤ 1 + 4*p`
-    -- is only a uniform simplification over odd primes.
-    -- 構造メモ:
-    -- 最終定数 `(1 + 4*p)` は鋭い本質定数ではなく、安全側の包絡定数である。
-    -- layer-cake 分解から最初に自然に現れるのは `(1 + 2 * p^t)` であり、
-    --   `1` は各項が最低でも 1 を持つ基底床（Gap 的寄与）、
-    --   `2 * p^t` は二つの上位層寄与
-    --     (`sum1`: 主密度尾部, `sum2`: 低層 ceiling 補正)
-    --   が合流した doubled-beam 的量と読める。
-    -- その後の
+    -- Structural note (layer-cake → Big/Core/Beam/Gap view):
+    --
+    -- The constant `(1 + 4*p)` is a coarse uniform envelope.
+    -- The intrinsic coefficient before simplification is `(1 + 2 * p^t)`.
+    --
+    -- Interpretation:
+    --   * `1`  : base floor contribution (each term contributes ≥ 1)
+    --            → Gap-like minimal unit layer
+    --
+    --   * `2 * p^t` :
+    --       merged contribution of two layer-cake channels
+    --         - main density tail   (sum1)
+    --         - low-layer ceiling slack (sum2)
+    --
+    --     These two contributions combine into a "doubled beam" effect:
+    --
+    --         N + N' = Core + 2*Beam + Gap
+    --
+    --     so `2 * p^t` corresponds to an analytic analogue of `2*Beam`.
+    --
+    -- Final replacement:
     --   `1 + 2*p^t ≤ 1 + 2*p ≤ 1 + 4*p`
-    -- は、奇素数全体で一様に扱うための粗視化である。
+    --
+    -- gives a p-uniform bound over odd primes.
+    --
+    -- 構造メモ:
+    -- `(1 + 4*p)` は鋭い本質定数ではなく、安全側の一様包絡定数である。
+    --
+    -- layer-cake 分解から自然に現れる本質形は `(1 + 2 * p^t)`。
+    --
+    --   * `1` は各項が最低でも持つ基底寄与（Gap 的な最小単位層）
+    --
+    --   * `2 * p^t` は2つの寄与の合流:
+    --       - 主密度尾部 (sum1)
+    --       - ceiling 補正 (sum2)
+    --
+    --     これは「中央層が2回数えられる」構造に対応し、
+    --
+    --         N + N' = Core + 2*Beam + Gap
+    --
+    --     の `2*Beam` に対応する解析的アナロジーと見なせる。
+    --
+    -- 最後に
+    --   `1 + 2*p^t ≤ 1 + 2*p ≤ 1 + 4*p`
+    -- により奇素数で一様化している。
 
     -- Finish by showing equality to C (QED)
     _ = C := by rfl
@@ -1222,14 +1248,14 @@ lemma mgf_padic_excess_bound_pbase_layercake
     最終的な定数 `C` との不等式を得る
 
       展開された定数 `C` の定義に従って順序を入れ替え
-      C = (1 + 4 * (p : ℝ)) * (p : ℝ) ^ (-2 * t)
-      ⊢ (1 + 4 * (p : ℝ)) * (p : ℝ) ^ (-2 * t) = C
+      `C = (1 + 4 * (p : ℝ)) * (p : ℝ) ^ (-2 * t)`
+      ⊢ `(1 + 4 * (p : ℝ)) * (p : ℝ) ^ (-2 * t) = C`
       定義により等しいことを示す
-      C の定義: C := (1 + 4 * (p : ℝ)) * (p : ℝ) ^ (-2 * t)
+      `C` の定義: `C := (1 + 4 * (p : ℝ)) * (p : ℝ) ^ (-2 * t)`
       したがって、上記の式と一致する
       両辺を展開して確認する
-      左辺: (1 + 4 * (p : ℝ)) * (p : ℝ) ^ (-2 * t)
-      右辺: C
+      左辺: `(1 + 4 * (p : ℝ)) * (p : ℝ) ^ (-2 * t)`
+      右辺: `C` の定義により `C = (1 + 4 * (p : ℝ)) * (p : ℝ) ^ (-2 * t)`
       両辺は同じ式であるため、等しい
       よって、等式が成り立つことが確認できる
       最終的に、等式を証明するために `rfl` を使用する
