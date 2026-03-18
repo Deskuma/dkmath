@@ -231,7 +231,44 @@ private lemma card_separated_by_gap_le_div_add_one
   have hmax : m ≤ X := by
     exact (Finset.mem_Icc.mp (hSsub hmS)).2
   have h_le : (S.card - 1) * q ≤ m := by
-    sorry
+    have hquot_strict :
+        ∀ {n n' : ℕ}, n ∈ S → n' ∈ S → n < n' → n / q < n' / q := by
+      intro n n' hnS hnS' hlt
+      have hgap : q ≤ n' - n := hS hnS hnS' hlt
+      have h_add : n + q ≤ n' := by
+        simpa [Nat.add_comm] using (Nat.le_sub_iff_add_le (Nat.le_of_lt hlt)).1 hgap
+      have hsucc_le : n / q + 1 ≤ n' / q := by
+        calc
+          n / q + 1 = (n + q) / q := (Nat.add_div_right n hqpos).symm
+          _ ≤ n' / q := Nat.div_le_div_right h_add
+      exact Nat.lt_of_lt_of_le (Nat.lt_succ_self (n / q)) hsucc_le
+    have hinj : Set.InjOn (fun n : ℕ => n / q) (↑S : Set ℕ) := by
+      intro n hnS n' hnS' hEq
+      by_contra hne
+      rcases Nat.lt_or_gt_of_ne hne with hlt | hgt
+      · exact (Nat.ne_of_lt (hquot_strict hnS hnS' hlt)) hEq
+      · exact (Nat.ne_of_lt (hquot_strict hnS' hnS hgt)) hEq.symm
+    have himage_sub : S.image (fun n : ℕ => n / q) ⊆ Finset.Icc 0 (m / q) := by
+      intro y hy
+      rcases Finset.mem_image.mp hy with ⟨n, hnS, rfl⟩
+      have hn_le_m : n ≤ m := by
+        simpa [m] using (Finset.le_max' S n hnS)
+      exact Finset.mem_Icc.mpr ⟨Nat.zero_le _, Nat.div_le_div_right hn_le_m⟩
+    have hcard_img :
+        S.card = (S.image (fun n : ℕ => n / q)).card := by
+      symm
+      exact Finset.card_image_of_injOn hinj
+    have hcard_m : S.card ≤ m / q + 1 := by
+      calc
+        S.card = (S.image (fun n : ℕ => n / q)).card := hcard_img
+        _ ≤ (Finset.Icc 0 (m / q)).card := Finset.card_le_card himage_sub
+        _ = m / q + 1 := by simp
+    have hcard_pos : 0 < S.card := Finset.card_pos.mpr hnon
+    have hpred_le : S.card - 1 ≤ m / q := by
+      have hpred_succ : (S.card - 1).succ ≤ (m / q).succ := by
+        simpa [Nat.succ_eq_add_one, Nat.succ_pred_eq_of_pos hcard_pos] using hcard_m
+      exact (Nat.succ_le_succ_iff).1 hpred_succ
+    exact (Nat.le_div_iff_mul_le hqpos).1 hpred_le
   have h_mul_leX : (S.card - 1) * q ≤ X := le_trans h_le hmax
   have h_div : S.card - 1 ≤ X / q := (Nat.le_div_iff_mul_le hqpos).2 h_mul_leX
   have h_card_le : S.card ≤ X / q + 1 := by
