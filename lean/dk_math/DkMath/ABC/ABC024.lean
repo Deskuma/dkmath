@@ -1112,12 +1112,12 @@ lemma mgf_padic_excess_bound_pbase_layercake
     rfl
 
   /-
-  与式の各項から共通因子 p^{-2*t} をくくり出す変形の説明。
+  与式の各項から共通因子 `p^{-2*t}` をくくり出す変形の説明。
 
-  指数の線形性 t * (padicValNat p (2*n+1) - 2) = -2*t + t * padicValNat p (2*n+1)
-  により各項は p^{-2*t} * p^{t * padicValNat p (2*n+1)} と表せる。したがって
-  有限和に対して Finset.mul_sum で定数因子 p^{-2*t} を和の外に出し、ext と ring により
-  各項の指数を変形する。実数べき乗の和の法則 Real.rpow_add を適用する際には底 p が正であること
+  指数の線形性 `t * (padicValNat p (2*n+1) - 2)` = `-2*t + t * padicValNat p (2*n+1)`
+  により各項は `p^{-2*t} * p^{t * padicValNat p (2*n+1)}` と表せる。したがって
+  有限和に対して `Finset.mul_sum` で定数因子 `p^{-2*t}` を和の外に出し、ext と ring により
+  各項の指数を変形する。実数べき乗の和の法則 `Real.rpow_add` を適用する際には底 p が正であること
   (hp.pos) を用いており、padicValNat の値は整数であるため適切にキャストして扱っている。
   -/
   have h_factor : (Finset.sum (Finset.Icc 0 X) fun n => (p : ℝ) ^ (t * ((padicValNat p (2*n+1) : ℤ) - 2)))
@@ -1143,7 +1143,8 @@ lemma mgf_padic_excess_bound_pbase_layercake
   - 分母 `(X + 1 : ℝ) > 0` の確認は `norm_cast; omega` により，整数から実数へのキャストと簡単な代数的不等式処理で解決する。
   - 最後に，既に得られている `h_sum_bound` を適用することで所望の不等式を導く。
 
-  補足: `padicValNat` の整数から実数へのキャストや累乗に関する整理は `h_sum_with_int` 側で行われているため，この箇所では主に分母の正性の確認と `h_sum_bound` の適用が鍵となる。
+  補足: `padicValNat` の整数から実数へのキャストや累乗に関する整理は `h_sum_with_int` 側で行われているため，
+  この箇所では主に分母の正性の確認と `h_sum_bound` の適用が鍵となる。
   -/
   have h_ineq : (Finset.sum (Finset.Icc 0 X) fun n => (p : ℝ) ^ (t * (padicValNat p (2*n+1) : ℤ))) / (X + 1) ≤ (1 + 4 * (p : ℝ)) := by
     rw [h_sum_with_int]
@@ -1178,6 +1179,25 @@ lemma mgf_padic_excess_bound_pbase_layercake
 
     -- Rearrange to match C
     _ = (1 + 4 * (p : ℝ)) * (p : ℝ) ^ (-2 * t) := by ring
+    -- Structural note:
+    -- The final constant `(1 + 4*p)` is a coarse envelope, not the sharp structural coefficient.
+    -- The layer-cake split first yields the more intrinsic form `(1 + 2 * p^t)`:
+    --   `1` comes from the base floor term `(X+1)` (every summand contributes at least 1),
+    --   while `2 * p^t` is the merged contribution of the two higher-layer channels
+    --   (`sum1` = main density tail, `sum2` = low-layer ceiling slack).
+    -- The later replacement
+    --   `1 + 2 * p^t ≤ 1 + 2*p ≤ 1 + 4*p`
+    -- is only a uniform simplification over odd primes.
+    -- 構造メモ:
+    -- 最終定数 `(1 + 4*p)` は鋭い本質定数ではなく、安全側の包絡定数である。
+    -- layer-cake 分解から最初に自然に現れるのは `(1 + 2 * p^t)` であり、
+    --   `1` は各項が最低でも 1 を持つ基底床（Gap 的寄与）、
+    --   `2 * p^t` は二つの上位層寄与
+    --     (`sum1`: 主密度尾部, `sum2`: 低層 ceiling 補正)
+    --   が合流した doubled-beam 的量と読める。
+    -- その後の
+    --   `1 + 2*p^t ≤ 1 + 2*p ≤ 1 + 4*p`
+    -- は、奇素数全体で一様に扱うための粗視化である。
 
     -- Finish by showing equality to C (QED)
     _ = C := by rfl
