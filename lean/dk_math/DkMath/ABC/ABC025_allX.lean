@@ -54,12 +54,15 @@ lemma sum_pow_padicValNat_le_geom_two_all_X {p : ℕ} [hp : Fact p.Prime]
     exact sum_pow_padicValNat_le_geom_two_for_large_X hp3 ht ht_half hXge11
   · -- X < 11 のときは、個別評価でカバーする
     have hXle10 : X ≤ 10 := by linarith
-    -- `interval_cases` を使って X=1..10 の各ケースを分岐する
+
+    -- X=1..10 の各ケースを分岐して証明する構造
+    --（証明本体は手数が多いため、各ケースを埋める枠組みだけ用意）
     interval_cases X
     all_goals
-      -- TODO: 各 X の場合について厳密評価を埋める
-      --       例えば、p が小さいときに悪いケースになるためそれを抑える
-      --       などを行う。ここでは構造のみを示し `sorry` としておく。
+      -- 各ケースで「
+      --   ∑_{n=0}^X p^{t·v(n)} ≤ 2(X+1)
+      -- 」を証明する。
+      -- たとえば p=3,t=1/2 が最悪ケースになることを使うなど。
       sorry
 
 end Telescoping
