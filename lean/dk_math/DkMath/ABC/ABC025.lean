@@ -739,8 +739,8 @@ theorem sum_pow_padicValNat_le_geom_half {p : ℕ} [hp : Fact p.Prime] (hp3 : p 
             rw [← Finset.sum_filter]
             simp only [Finset.sum_const, nsmul_eq_mul, mul_comm]
         _ ≤ (X + 1) + ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k) * ((X + 1) / (p : ℝ) ^ (k + 1) + 1) := by
-            -- Apply ceiling bound: card ≤ (X+1)/p^(k+1) + 1
-            -- This is the KEY step: split into main term (X+1)/p^(k+1) and correction term +1
+            -- Apply ceiling bound: `card ≤ (X+1)/p^(k+1) + 1`
+            -- This is the KEY step: split into main term `(X+1)/p^(k+1)` and correction term +1
             gcongr with k hk
             -- ⊢ 0 ≤ ↑p ^ t - 1
             · have hpt_pos : (p : ℝ) ^ t - 1 > 0 := by
@@ -752,8 +752,8 @@ theorem sum_pow_padicValNat_le_geom_half {p : ℕ} [hp : Fact p.Prime] (hp3 : p 
                   _ > 1 := Real.one_lt_rpow (by linarith : (1 : ℝ) < 3) ht
                 linarith
               · linarith
-            -- ⊢ ↑(#({n ∈ Finset.Icc 0 X | padicValNat p (2 * n + 1) ≥ k + 1})) ≤ (↑X + 1) / ↑p ^ (k + 1) + 1
-            -- Need to relate padicValNat p (2*n+1) ≥ k+1 to p^(k+1) | 2*n+1
+            -- ⊢ ↑{n ∈ Finset.Icc 0 X | padicValNat p (2 * n + 1) ≥ k + 1}.card ≤ (↑X + 1) / ↑p ^ (k + 1) + 1
+            -- Need to relate padicValNat p `(2*n+1) ≥ k+1 to p^(k+1) | 2*n+1`
             have h_equiv : {n ∈ Finset.Icc 0 X | padicValNat p (2 * n + 1) ≥ k + 1}
                          = {n ∈ Finset.Icc 0 X | (p : ℕ) ^ (k + 1) ∣ 2 * n + 1} := by
               ext n
@@ -954,13 +954,13 @@ theorem sum_pow_padicValNat_le_geom_half {p : ℕ} [hp : Fact p.Prime] (hp3 : p 
                 have h_step2 : Real.sqrt (2 * X + 2) ≤ X + 1 := by
                   rw [Real.sqrt_le_iff]
                   constructor
-                  · -- 0 ≤ X + 1
+                  · -- ⊢ 0 ≤ ↑X + 1
                     have : (0 : ℝ) ≤ X := Nat.cast_nonneg X
                     linarith
-                  · -- 2X+2 ≤ (X+1)^2
+                  · -- ⊢ 2 * ↑X + 2 ≤ (↑X + 1) ^ 2
                     have h_sq : (X + 1 : ℝ) ^ 2 = X ^ 2 + 2 * X + 1 := by ring
                     rw [h_sq]
-                    -- Need: 2X+2 ≤ X^2 + 2X + 1, i.e., 1 ≤ X^2
+                    -- Need: `2X+2 ≤ X^2 + 2X + 1`, i.e., `1 ≤ X^2`
                     have h_X_sq : 1 ≤ (X : ℝ) ^ 2 := by
                       have : 1 ≤ X := hX
                       calc (1 : ℝ)
@@ -977,14 +977,14 @@ theorem sum_pow_padicValNat_le_geom_half {p : ℕ} [hp : Fact p.Prime] (hp3 : p 
               exact le_trans h1 h2
             have h_sum2 : ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k)
                         ≤ (X + 1) := by
-              -- Let r = (p^t). For r > 1 we have (r - 1) * ∑_{k=0}^{K-1} r^k = r^K - 1.
+              -- Let `r = (p^t)`. For `r > 1` we have `(r - 1) * ∑_{k=0}^{K-1} r^k = r^K - 1`.
               have hp_pos : (0 : ℝ) < p := by positivity
               have h_r_gt1 : 1 < (p : ℝ) ^ t := by
                 apply one_lt_rpow
                 · have : (3 : ℝ) ≤ p := by exact_mod_cast hp3
                   linarith
                 · exact ht
-              -- Prove by induction that (r - 1) * ∑_{k=0}^{K-1} r^k = r^K - 1 where r = (p : ℝ) ^ t
+              -- Prove by induction that `(r - 1) * ∑_{k=0}^{K-1} r^k = r^K - 1` where `r = (p : ℝ) ^ t`
               let r := (p : ℝ) ^ t
               have mul_eq : (r - 1) * ∑ k ∈ Finset.range K, r ^ k = r ^ K - 1 := by
                 induction K with
@@ -1002,52 +1002,45 @@ theorem sum_pow_padicValNat_le_geom_half {p : ℕ} [hp : Fact p.Prime] (hp3 : p 
                       calc (r ^ K - 1) + (r - 1) * r ^ K
                           = (r ^ K - 1) + (r ^ (K + 1) - r ^ K) := by { congr; ring }
                         _ = r ^ (K + 1) - 1 := by ring
-              -- Relate ((p^t)^K) to p^(t*K) and finish with h_pK
+              -- Relate `((p^t)^K)` to `p^(t*K)` and finish with `h_pK`
               have pow_eq : ((p : ℝ) ^ t) ^ K = (p : ℝ) ^ (t * K) := by
-                -- show nonnegativity of the base and apply the appropriate lemma
-                have hp_pos : 0 < (p : ℝ) := by positivity
-                have h_nonneg : 0 ≤ (p : ℝ) := le_of_lt hp_pos
+                have hp_pos' : 0 < (p : ℝ) := by positivity
+                have h_nonneg : 0 ≤ (p : ℝ) := le_of_lt hp_pos'
                 exact (Real.rpow_mul_natCast h_nonneg t K).symm
               rw [pow_eq] at mul_eq
-              -- Now mul_eq = (p : ℝ) ^ (t * K) - 1, and use h_pK
               have h_le : (p : ℝ) ^ (t * K) - 1 ≤ X + 1 := by
                 calc (p : ℝ) ^ (t * K) - 1 ≤ (p : ℝ) ^ (t * K) := by linarith
                   _ ≤ X + 1 := by linarith [h_pK]
-              -- Convert the sum ∑ r^k to ∑ p^(t*k) so we can apply `mul_eq` to the current goal.
               have h_nonneg : 0 ≤ (p : ℝ) := by positivity
               have h_sum_eq : ∑ k ∈ Finset.range K, r ^ k = ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k) := by
                 apply Finset.sum_congr rfl
                 intro k _
                 rw [Real.rpow_mul_natCast h_nonneg t k]
-              -- Rewrite `mul_eq` to use the same sum-shape as the goal, then finish with `h_le`.
               rw [h_sum_eq] at mul_eq
               rw [mul_eq]
               exact h_le
 
             -- Combine: main + correction ≤ bound
-            -- Strategy: We bound (p^t - 1) / (p * (1 - p^(t-1))) ≤ 1 (proved as h_main below)
-            -- This gives us (X+1) * (1 + ...) ≤ (X+1) * 2
-            -- Then the tail term +1 gives us total ≤ 3(X+1)
+            -- Strategy: We bound (p^t - 1) / (p * (1 - p^(t-1))) ≤ 2/3
+            -- This gives us (X+1) * (1 + 2/3) + (X+1) = 3(X+1)
+            have hp_pos : (0 : ℝ) < p := by positivity
+            have h_denom_pos : 0 < 1 - (p : ℝ) ^ (t - 1) := by linarith [r_def]
+            have h_main :
+                ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) /
+                    (1 - (p : ℝ) ^ (t - 1)) ≤
+                  2 / 3 :=
+              rpow_main_term_le_two_thirds hp3 ht ht_half
             calc (X + 1) * (1 + ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ ((t - 1) * (k : ℝ) - 1)) +
                   ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k)
                 ≤ (X + 1) * (1 + ((p : ℝ) ^ t - 1) * ((p : ℝ) ^ (-1 : ℝ) / (1 - (p : ℝ) ^ (t - 1)))) +
                   (X + 1) := by gcongr
-              _ = (X + 1) * (1 + ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) / (1 - (p : ℝ) ^ (t - 1))) +
+            _ = (X + 1) * (1 + ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) / (1 - (p : ℝ) ^ (t - 1))) +
                   (X + 1) := by ring
-              _ ≤ (X + 1) * (1 + 1) + (X + 1) := by
-                  -- Bound the main term: (p^t - 1) * p^(-1) / (1 - p^(t-1)) ≤ 1
-                  have hp_pos : (0 : ℝ) < p := by positivity
-                  have h_denom_pos : 0 < 1 - (p : ℝ) ^ (t - 1) := by linarith [r_def]
-
-                  -- Main bound: (p^t - 1) * p^(-1) / (1 - p^(t-1)) ≤ 2/3
-                  have h_main :
-                      ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) /
-                          (1 - (p : ℝ) ^ (t - 1)) ≤
-                        2 / 3 :=
-                    rpow_main_term_le_two_thirds hp3 ht ht_half
-                  nlinarith [h_main]
-              _ = (X + 1) * 2 + (X + 1) := by ring
-              _ = 3 * (X + 1) := by ring
+            _ ≤ (X + 1) * (1 + 2 / 3) + (X + 1) := by
+                nlinarith [h_main]
+            _ ≤ 3 * (X + 1) := by
+                have h_pos : 0 ≤ (X + 1 : ℝ) := by linarith
+                nlinarith [h_pos]
       -- end of calc "_ ≤ 3 * (X + 1)"
   -- end of proof
 
