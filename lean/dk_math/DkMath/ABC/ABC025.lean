@@ -1039,12 +1039,12 @@ theorem sum_pow_padicValNat_le_geom_half {p : ℕ} [hp : Fact p.Prime] (hp3 : p 
                   have hp_pos : (0 : ℝ) < p := by positivity
                   have h_denom_pos : 0 < 1 - (p : ℝ) ^ (t - 1) := by linarith [r_def]
 
-                  -- Main bound: (p^t - 1) * p^(-1) / (1 - p^(t-1)) ≤ 1
+                  -- Main bound: (p^t - 1) * p^(-1) / (1 - p^(t-1)) ≤ 2/3
                   have h_main :
                       ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) /
                           (1 - (p : ℝ) ^ (t - 1)) ≤
-                        1 :=
-                    rpow_main_term_le_one hp3 ht_half
+                        2 / 3 :=
+                    rpow_main_term_le_two_thirds hp3 ht ht_half
                   nlinarith [h_main]
               _ = (X + 1) * 2 + (X + 1) := by ring
               _ = 3 * (X + 1) := by ring
