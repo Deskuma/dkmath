@@ -1671,13 +1671,40 @@ lemma pow_t_sub_one_decreasing {X : ℕ} {t : ℝ} (hX : X ≥ 1)
   -- 指数が負で底が大きいほど値は小さい
   exact Real.rpow_le_rpow_of_nonpos (by norm_num) h_base (by linarith)
 
--- -log 2 / log 3 < 0
-lemma log2_div_log3_neg : -log 2 / log 3 < 0 := by
-  -- log 2 > 0, log 3 > 0 より -log 2 < 0, log 3 > 0
-  have h_log2_pos : 0 < log 2 := by apply log_pos; norm_num
-  have h_log3_pos : 0 < log 3 := by apply log_pos; norm_num
-  -- よって -log 2 / log 3 < 0
-  exact div_neg_of_neg_of_pos (neg_lt_zero.mpr h_log2_pos) h_log3_pos
+/-- p ≥ 3, t ≤ 1/2 のとき、
+--    (p^t - 1) * p^{-1} / (1 - p^{t-1}) ≤ 1 が成り立つ補題。 -/
+lemma rpow_main_term_le_one {p : ℕ} [hp : Fact p.Prime] (hp3 : p ≥ 3) {t : ℝ}
+    (ht_half : t ≤ 1 / 2) :
+    ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) /
+        (1 - (p : ℝ) ^ (t - 1)) ≤
+  1 := by
+  have hp_pos : 0 < (p : ℝ) := nat_ge_3_cast_pos hp3
+  have hp_ne : (p : ℝ) ≠ 0 := by exact_mod_cast hp.out.ne_zero
+  have hpow_le : (p : ℝ) ^ t ≤ ((p + 1 : ℝ) / 2) := rpow_t_le_p_add_one_div_two hp3 ht_half
+  have hpow_lt_p : (p : ℝ) ^ t < (p : ℝ) := by
+    have hmid_lt : ((p + 1 : ℝ) / 2) < (p : ℝ) := by nlinarith [show (3 : ℝ) ≤ (p : ℝ) by exact_mod_cast hp3]
+    exact lt_of_le_of_lt hpow_le hmid_lt
+  have hpow_sub : (p : ℝ) ^ (t - 1) = (p : ℝ) ^ t / (p : ℝ) := by
+    simpa [Real.rpow_one] using (Real.rpow_sub hp_pos t 1)
+  have hden_pos : 0 < (1 - (p : ℝ) ^ (t - 1)) := by
+    rw [hpow_sub]
+    have h_num_pos : 0 < (p : ℝ) - (p : ℝ) ^ t := sub_pos.mpr hpow_lt_p
+    have hrewrite : 1 - (p : ℝ) ^ t / (p : ℝ) = ((p : ℝ) - (p : ℝ) ^ t) / (p : ℝ) := by
+      field_simp [hp_ne]
+    rw [hrewrite]
+    exact div_pos h_num_pos hp_pos
+  have h_num_le_den : ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) ≤ 1 - (p : ℝ) ^ (t - 1) := by
+    rw [hpow_sub, Real.rpow_neg_one, ← div_eq_mul_inv]
+    have hmain : (p : ℝ) ^ t - 1 ≤ (p : ℝ) - (p : ℝ) ^ t := by
+      nlinarith [hpow_le]
+    have hrewrite : 1 - (p : ℝ) ^ t / (p : ℝ) = ((p : ℝ) - (p : ℝ) ^ t) / (p : ℝ) := by
+      field_simp [hp_ne]
+    rw [hrewrite]
+    have hdiv_mul :
+        ((p : ℝ) ^ t - 1) * (p : ℝ)⁻¹ ≤ ((p : ℝ) - (p : ℝ) ^ t) * (p : ℝ)⁻¹ :=
+      mul_le_mul_of_nonneg_right hmain (inv_nonneg.mpr hp_pos.le)
+    simpa [div_eq_mul_inv] using hdiv_mul
+  exact (div_le_iff hden_pos).2 (by simpa using h_num_le_den)
 
 
 lemma log2_div_log3_le_zero : -log 2 / log 3 ≤ 0 := by
