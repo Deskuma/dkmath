@@ -1267,6 +1267,52 @@ lemma inv_sqrt3_lt_7_12 : inv_sqrt_3 < (7 : ℝ) / 12 := by
   simpa [one_div, inv_div] using h_one_div
 
 
+/-- `3 ^ (log 2 / log 3) = 2` を示す。
+
+これは `Real.log_rpow` を使って両辺のログを取り，
+`Real.log 2 = (log 2 / log 3) * log 3` になることを確認してから、
+`Real.log_inj` で元に戻す形で示す。
+-/
+lemma three_pow_log2_div_log3_eq_two :
+    (3 : ℝ) ^ (Real.log 2 / Real.log 3) = 2 := by
+  have h3pos : 0 < (3 : ℝ) := by norm_num
+  have h2pos : 0 < (2 : ℝ) := by norm_num
+  have h3nonneg : 0 ≤ (3 : ℝ) := by norm_num
+  have hlog : Real.log ((3 : ℝ) ^ (Real.log 2 / Real.log 3)) = Real.log 2 := by
+    -- log(x^y) = y * log x
+    have hcalc :
+      Real.log ((3 : ℝ) ^ (Real.log 2 / Real.log 3)) = (Real.log 2 / Real.log 3) * Real.log 3 :=
+      Real.log_rpow h3pos (Real.log 2 / Real.log 3)
+    -- RHS = (log 2 / log 3) * log 3 = log 2
+    have hright : (Real.log 2 / Real.log 3) * Real.log 3 = Real.log 2 := by
+      have hlog3_ne : Real.log (3 : ℝ) ≠ 0 := by
+        have : 0 < Real.log (3 : ℝ) := by
+          have : 1 < (3 : ℝ) := by norm_num
+          exact Real.log_pos this
+        exact ne_of_gt this
+      field_simp [hlog3_ne]
+    simpa [hright] using hcalc
+  have hpos_x : 0 < (3 : ℝ) ^ (Real.log 2 / Real.log 3) := by
+    have h := Real.rpow_pos_of_pos h3pos (Real.log 2 / Real.log 3)
+    exact h
+  exact Real.log_injOn_pos hpos_x h2pos hlog
+
+/-- `3 ^ (-(log 2 / log 3)) = 1/2` を示す。
+
+`Real.rpow_neg` を用いて `(3^a)^(-1)` に書き換え、
+前の補題を使って `2⁻¹` に帰着する。
+-/
+lemma three_pow_neg_log2_div_log3_eq_half :
+    (3 : ℝ) ^ (-(Real.log 2 / Real.log 3)) = 1 / 2 := by
+  have h3pos : 0 < (3 : ℝ) := by norm_num
+  have h3nonneg : 0 ≤ (3 : ℝ) := by norm_num
+  calc
+    (3 : ℝ) ^ (-(Real.log 2 / Real.log 3))
+        = ((3 : ℝ) ^ (Real.log 2 / Real.log 3))⁻¹ := by
+              simpa using (Real.rpow_neg h3nonneg (Real.log 2 / Real.log 3))
+    _ = (2 : ℝ)⁻¹ := by rw [three_pow_log2_div_log3_eq_two]
+    _ = 1 / 2 := by norm_num
+
 -- 以降は 1/(1 - r) ≤ 12/5 を使えば 3 の上界に組み込める：
 -- 1/(1 - (3 : ℝ) ^ (-(1/2 : ℝ))) ≤ 12/5
 -- 1/(1-3^(-1/2))=2.3660254<12/5=2.4
