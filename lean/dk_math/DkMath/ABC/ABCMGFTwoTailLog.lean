@@ -431,152 +431,65 @@ private lemma count_vp_ge (p m X : ℕ) (hp : p.Prime) (hpodd : p ≠ 2) :
 private lemma mgf_vp_base (p : ℕ) (hp : p.Prime) (hpodd : p ≠ 2) (t : ℝ) (ht0 : 0 < t) (ht_star : t ≤ t_star) :
   ∃ C > 0, ∀ X ≥ 3,
     (Finset.sum (Finset.Icc 0 X) (fun n => (p : ℝ) ^ (t * (((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ)))) / (X + 1) ≤ 1 + C := by
-  -- derive p ≥ 3 from primality and p ≠ 2
-  have h2 : 2 ≤ p := hp.two_le
-  have hneq2 : p ≠ 2 := hpodd
   have hp_ge_3 : 3 ≤ p := by
-    have hlt : 2 < p := Nat.lt_of_le_of_ne h2 (Ne.symm hneq2)
+    have h2 : 2 ≤ p := hp.two_le
+    have hlt : 2 < p := Nat.lt_of_le_of_ne h2 (Ne.symm hpodd)
     exact Nat.succ_le_of_lt hlt
-  have hp_ge_3_real : (3 : ℝ) ≤ p := by norm_cast
+  have hp_ge_1 : (1 : ℝ) ≤ p := by
+    exact_mod_cast (Nat.succ_le_of_lt hp.pos)
 
-  -- Proof strategy: Use level-set counting (layer-cake decomposition)
-  -- For each k ≥ 0, count how many n ∈ [0,X] have v_p(2n+1) ≥ k+2
-  -- This gives the bound: average ≤ 1 + 1/p^2 * ∑_{k≥0} (p^t)^k / (1 - p^{t-1})
-
-  have hp_pos : 0 < (p : ℝ) := by norm_cast; exact hp.pos
-
-  -- Define the constant C := 1/p^2 * 1/(1 - p^{t-1})
-  -- This is the bound from the layer-cake decomposition
-  let C := (p : ℝ) ^ (-2 : ℝ) * (1 / (1 - (p : ℝ) ^ (t - 1)))
-
-  have hCpos : 0 < C := by
-    have ht_lt_1 : t < 1 := by
-      -- t ≤ log 2 / log 3 < 1
-      have : (Real.log 2) / (Real.log 3) < 1 := by
-        have h2_pos : 0 < (2 : ℝ) := by norm_num
-        have h3_pos : 0 < (3 : ℝ) := by norm_num
-        have h3_gt_1 : 1 < (3 : ℝ) := by norm_num
-        have h2_gt_1 : 1 < (2 : ℝ) := by norm_num
-        have log2_pos : 0 < Real.log 2 := Real.log_pos h2_gt_1
-        have log3_pos : 0 < Real.log 3 := Real.log_pos h3_gt_1
-        have h23 : (2 : ℝ) < 3 := by norm_num
-        have log23 : Real.log 2 < Real.log 3 := Real.log_lt_log h2_pos h23
-        exact div_lt_one log3_pos |>.mpr log23
-      exact lt_of_le_of_lt ht_star this
-    have hden_pos : 0 < 1 - (p : ℝ) ^ (t - 1) := by
-      have ht_sub : t - 1 < 0 := by linarith
-      have hp_gt_1 : (1 : ℝ) < p := by
-        have : (1 : ℕ) < p := by omega
-        exact_mod_cast this
-      have : (p : ℝ) ^ (t - 1) < 1 := by
-        have : (p : ℝ) ^ (t - 1) < (p : ℝ) ^ (0 : ℝ) :=
-          Real.rpow_lt_rpow_of_exponent_lt hp_gt_1 ht_sub
-        rwa [Real.rpow_zero (p : ℝ)] at this
-      linarith
-    have hp2pos : 0 < (p : ℝ) ^ (-2 : ℝ) := by
-      exact Real.rpow_pos_of_pos hp_pos (-2 : ℝ)
-    exact mul_pos hp2pos (one_div_pos.mpr hden_pos)
-
-  use C, hCpos
-  intro X hX
-
-  -- Apply layer-cake decomposition
-  -- The key step is to split the exponent into contributions by level sets
-  -- For each k ≥ 0, let E_k = {n ∈ [0,X] : v_p(2n+1) ≥ k+2}
-  -- Then ∑_n p^{t(v_p(2n+1)-2)_+} = ∑_k |E_k| * p^{tk}
-
-  -- First, establish that each term is nonnegative
-  have h_nonneg : ∀ n ∈ Finset.Icc 0 X, 0 ≤ (p : ℝ) ^ (t * (((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ)) := by
-    intro n _
-    apply Real.rpow_nonneg_of_nonneg hp_pos.le
-
-  -- Establish that the average starts from 1 (since each term ≥ p^0 = 1 when v_p ≤ 2)
-  -- Actually: when v_p(2n+1) < 2, then (v_p - 2)_+ = 0, so term = p^0 = 1
-  -- When v_p(2n+1) ≥ 2, then (v_p - 2)_+ ≥ 0, so term ≥ 1
-  have h_each_ge_1 : ∀ n ∈ Finset.Icc 0 X, 1 ≤ (p : ℝ) ^ (t * (((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ)) := by
-    intro n _
-    have h_exp_nonneg : 0 ≤ t * (((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ) := by
-      apply mul_nonneg ht0.le
-      norm_cast
-      omega
-    have : (p : ℝ) ^ (0 : ℝ) = 1 := Real.rpow_zero _
-    rw [← this]
-    have hp_ge_1 : (1 : ℝ) ≤ p := by
-      have : (1 : ℕ) ≤ p := by omega
-      exact_mod_cast this
-    exact Real.rpow_le_rpow_of_exponent_le hp_ge_1 h_exp_nonneg
-
-  have h_sum_ge : (X + 1 : ℝ) ≤ Finset.sum (Finset.Icc 0 X) (fun n => (p : ℝ) ^ (t * (((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ))) := by
-    calc
-      (X + 1 : ℝ) = ∑ n ∈ Finset.Icc 0 X, (1 : ℝ) := by
-        rw [Finset.sum_const]
-        norm_cast
-        simp only [Nat.cast_add, Nat.cast_one, Nat.card_Icc, tsub_zero, nsmul_eq_mul, mul_one]
-      _ ≤ ∑ n ∈ Finset.Icc 0 X, (p : ℝ) ^ (t * (((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ)) := by
-        apply Finset.sum_le_sum
-        intro n _
-        exact h_each_ge_1 n ‹n ∈ Finset.Icc 0 X›
-
-  -- Now derive the averaged upper bound using the geometric series bound
-  -- ∑ k ≥ 0, (p^t)^k / p^{k+2} ≤ 1/p^2 * 1/(1 - p^{t-1})
-  have h_avg_bound : Finset.sum (Finset.Icc 0 X) (fun n => (p : ℝ) ^ (t * (((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ))) / (X + 1)
-                  ≤ 1 + C := by
-    -- Layer-cake decomposition using ABC.rpow_layer_cake
-    -- Define V(n) = (v_p(2n+1) - 2)_+ (clamped valuation)
-    let V : ℕ → ℕ := fun n => (padicValNat p (2 * n + 1) - 2)
-
-    have hp_gt_1 : (1 : ℝ) < p := by
-      have : (1 : ℕ) < p := by omega
-      exact_mod_cast this
-
-    -- Establish bounds on V (use crude upper bound X+1, no precise number theory needed)
-    have hV_bound : ∀ n ≤ X, V n ≤ X + 1 := by
+  have hsum :
+      ∀ X ≥ 3,
+        ∑ n ∈ Finset.Icc 0 X, (p : ℝ) ^ (t * (((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ))
+          ≤ 4 * (X + 1) := by
+    intro X hX
+    haveI : Fact p.Prime := ⟨hp⟩
+    have htel :
+        ∑ n ∈ Finset.Icc 0 X, (p : ℝ) ^ (t * (padicValNat p (2 * n + 1) : ℤ))
+          ≤ 4 * (X + 1) := by
+      exact ABC.Telescoping.sum_pow_padicValNat_le_geom_log2_div_log3
+        (p := p) (hp := inferInstance) (hp3 := hp_ge_3) (t := t) (ht := ht0)
+        (ht_le := by simpa [t_star] using ht_star) (X := X) (hX := hX)
+    have hterm :
+        ∀ n ∈ Finset.Icc 0 X,
+          (p : ℝ) ^ (t * (((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ))
+            ≤ (p : ℝ) ^ (t * (padicValNat p (2 * n + 1) : ℤ)) := by
       intro n hn
-      -- v_p(2n+1) ≤ 2n+1 ≤ 2X+1, so (v_p(2n+1) - 2) ≤ 2X-1 ≤ X+1 (crude but safe)
-      -- crudeな上界：v_p(2n+1) - 2 < 2n+1 ≤ 2X+1、従って (v_p(2n+1) - 2) ≤ X+1
-      simp only [V]
-      have h2n1_le : 2*n+1 ≤ 2*X+1 := by omega
-      -- 粗いbound：v_p(m) ≤ m であることから（実は v_p(m) ≤ log_p(m)）
-      -- padicValNat p (2n+1) < 2n+1 ≤ 2X+1
-      -- わっちの指摘：padicValNat の上界は mathlib で直接サポートされていない。
-      -- 代わりに、以下の理由で問題ない：
-      -- 論文では層状分解での V(n) 上界は「粗さ」のみが重要であり、
-      -- 実際には定数倍の違いのみが最終的な C_p(t) に影響する。
-      -- v_p(2n+1) ≤ 2X+1 のような粗い上界で十分。
-      sorry
+      have hsub : (((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ)
+          ≤ (padicValNat p (2 * n + 1) : ℝ) := by
+        exact_mod_cast (Nat.sub_le (padicValNat p (2 * n + 1)) 2)
+      have hmul :
+          t * ((((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ))
+            ≤ t * (padicValNat p (2 * n + 1) : ℝ) :=
+        mul_le_mul_of_nonneg_left hsub ht0.le
+      have hcast :
+          t * (padicValNat p (2 * n + 1) : ℤ)
+            = t * (padicValNat p (2 * n + 1) : ℝ) := by
+        norm_cast
+      calc
+        (p : ℝ) ^ (t * ((((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ)))
+            ≤ (p : ℝ) ^ (t * (padicValNat p (2 * n + 1) : ℝ)) :=
+              Real.rpow_le_rpow_of_exponent_le hp_ge_1 hmul
+        _ = (p : ℝ) ^ (t * (padicValNat p (2 * n + 1) : ℤ)) := by
+              rw [hcast]
+    calc
+      ∑ n ∈ Finset.Icc 0 X, (p : ℝ) ^ (t * (((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ))
+          ≤ ∑ n ∈ Finset.Icc 0 X, (p : ℝ) ^ (t * (padicValNat p (2 * n + 1) : ℤ)) := by
+            refine Finset.sum_le_sum ?_
+            intro n hn
+            exact hterm n hn
+      _ ≤ 4 * (X + 1) := htel
 
-    -- Apply rpow_layer_cake
-    have h_layer := ABC.rpow_layer_cake (p : ℝ) hp_gt_1 X t ht0 V hV_bound
-
-    -- RHS of layer-cake gives:
-    -- (X+1) + (p^t - 1) * ∑_{k=1}^{X+1} p^{t(k-1)} * |{n : V(n) ≥ k}|
-
-    -- Key insight: each cardinality |{n : V(n) ≥ k}| = |{n : p^{k+2} | (2n+1)}| ≤ (X+1)/p^{k+2}
-    -- Note: V(n) = v_p(2n+1) - 2, so V(n) ≥ k means v_p(2n+1) ≥ k+2, i.e., p^{k+2} | (2n+1)
-    -- For now, we defer the precise relationship and use ABC.count_powers_dividing_2n1 directly
-    have h_layer_rhs : (X + 1 : ℝ) + ((p : ℝ) ^ t - 1) *
-        (Finset.sum (Finset.Icc 1 (X+1)) (fun k =>
-          (p : ℝ) ^ (t * ((k : ℝ) - 1)) *
-          ((Finset.filter (fun n => n ≤ X ∧ k ≤ V n) (Finset.Icc 0 X)).card : ℝ)))
-      ≤ (X + 1 : ℝ) * (1 + C) := by
-      -- The key idea: each layer {n : k ≤ V(n)} corresponds to divisibility by p^{k+2}
-      -- with bound ≈ (X+1)/p^{k+2}, combined with geometric series gives the total bound
-      sorry  -- Layer-cake geometric series: ABC.count_powers_dividing_2n1 + series evaluation
-
-    -- Final bound
-    calc (Finset.sum (Finset.Icc 0 X) (fun n => (p : ℝ) ^ (t * (V n : ℝ)))) / (X + 1)
-        ≤ ((X + 1 : ℝ) + ((p : ℝ) ^ t - 1) *
-            (Finset.sum (Finset.Icc 1 (X+1)) (fun k =>
-              (p : ℝ) ^ (t * ((k : ℝ) - 1)) *
-              ((Finset.filter (fun n => n ≤ X ∧ k ≤ V n) (Finset.Icc 0 X)).card : ℝ)))) / (X + 1) := by
-          exact div_le_div_of_nonneg_right h_layer (by norm_cast; omega)
-      _ ≤ ((X + 1 : ℝ) * (1 + C)) / (X + 1) := by
-          exact div_le_div_of_nonneg_right h_layer_rhs (by norm_cast; omega)
-      _ = 1 + C := by
-          have : (0 : ℝ) < X + 1 := by norm_cast; omega
-          field_simp
-
-  exact h_avg_bound
+  refine ⟨4, by norm_num, ?_⟩
+  intro X hX
+  have hsumX := hsum X hX
+  have hpos : 0 < (X + 1 : ℝ) := by norm_cast; omega
+  have hdiv :
+      (Finset.sum (Finset.Icc 0 X)
+          (fun n => (p : ℝ) ^ (t * (((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ)))) / (X + 1)
+        ≤ 4 := by
+    exact (Real.div_le_iff hpos).2 (by simpa [mul_assoc, mul_comm, mul_left_comm] using hsumX)
+  linarith
 
 
 -- [T2] -- mgf_twoTail_log
