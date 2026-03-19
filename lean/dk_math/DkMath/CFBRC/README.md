@@ -51,7 +51,7 @@ $$
   - `d=2` の三角置換 bridge
   - `body2 = a^2 * cos^2 φ = Re(cfbrcR 2 (a cos φ) (a sin φ))`
 - `DkMath.CFBRC.TrigBridge.General`
-  - general `d` 向けの `Re/Im` 補助（基底値と再帰式）
+  - general `d` 向けの `Re/Im` 補助（基底値・再帰式・`(iΘ)^d` の偶奇補題）
 
 ## Quick Start
 
@@ -188,6 +188,10 @@ example (d : ℕ) (X Θ : ℝ) :
     cfbrcRe (d + 1) X Θ =
       X * cfbrcRe d X Θ - Θ * cfbrcIm d X Θ + X * Complex.re ((Complex.I * Θ) ^ d) :=
   cfbrcRe_succ' d X Θ
+
+example (n : ℕ) (Θ : ℝ) :
+    Complex.im ((Complex.I * Θ) ^ (2 * n + 1)) = (-1 : ℝ) ^ n * Θ ^ (2 * n + 1) :=
+  pure_phase_pow_odd_im n Θ
 ```
 
 ## Related Docs

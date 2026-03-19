@@ -55,6 +55,20 @@ example (d : ℕ) (X Θ : ℝ) :
       X * cfbrcIm d X Θ + Θ * cfbrcRe d X Θ + X * Complex.im ((Complex.I * Θ) ^ d) := by
   simpa using cfbrcIm_succ' d X Θ
 
+example (n : ℕ) (Θ : ℝ) :
+    Complex.re ((Complex.I * Θ) ^ (2 * n)) = (-1 : ℝ) ^ n * Θ ^ (2 * n) := by
+  simpa using pure_phase_pow_even_re n Θ
+
+example (n : ℕ) (Θ : ℝ) :
+    Complex.im ((Complex.I * Θ) ^ (2 * n + 1)) = (-1 : ℝ) ^ n * Θ ^ (2 * n + 1) := by
+  simpa using pure_phase_pow_odd_im n Θ
+
+example (n : ℕ) (X Θ : ℝ) :
+    cfbrcIm (2 * n + 2) X Θ =
+      X * cfbrcIm (2 * n + 1) X Θ + Θ * cfbrcRe (2 * n + 1) X Θ +
+        X * ((-1 : ℝ) ^ n * Θ ^ (2 * n + 1)) := by
+  simpa using cfbrcIm_even_from_odd n X Θ
+
 -- BoundarySide 高位 API（valuation）
 example (side : BoundarySide) {d x u q : ℕ}
     (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
@@ -111,6 +125,7 @@ example (side : BoundarySide) {d x u : ℕ}
 #print axioms factor_eq_re_cfbrc2
 #print axioms prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
 #print axioms cfbrcRe_succ'
+#print axioms pure_phase_pow_odd_im
 #print axioms padicValNat_boundaryDiffPow_eq_boundaryGN_of_coprime_of_dvd_boundary
 #print axioms exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime
 #print axioms exists_primitive_prime_factor_boundaryDiffPow_of_prime_exp_boundary_of_coprime

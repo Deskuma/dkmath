@@ -101,6 +101,143 @@ lemma cfbrcIm_succ' (d : ℕ) (X Θ : ℝ) :
       X * cfbrcIm d X Θ + Θ * cfbrcRe d X Θ + X * Complex.im ((Complex.I * Θ) ^ d) := by
   simpa [cfbrcRe, cfbrcIm] using cfbrcIm_succ d X Θ
 
+/--
+`(iΘ)^2` の実部評価。
+
+`Re((iΘ)^2) = -Θ^2`。
+-/
+lemma pure_phase_sq_re (Θ : ℝ) :
+    Complex.re ((Complex.I * Θ) ^ 2) = -(Θ ^ 2) := by
+  rw [pow_two, Complex.mul_re]
+  simp [pow_two]
+
+/--
+`(iΘ)^2` の虚部評価。
+
+`Im((iΘ)^2) = 0`。
+-/
+lemma pure_phase_sq_im (Θ : ℝ) :
+    Complex.im ((Complex.I * Θ) ^ 2) = 0 := by
+  rw [pow_two, Complex.mul_im]
+  simp
+
+/--
+偶数冪 `(iΘ)^(2n)` の虚部は 0。
+-/
+lemma pure_phase_pow_even_im (n : ℕ) (Θ : ℝ) :
+    Complex.im ((Complex.I * Θ) ^ (2 * n)) = 0 := by
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      have hdecomp : (Complex.I * Θ) ^ (2 * (n + 1)) =
+          (Complex.I * Θ) ^ (2 * n) * (Complex.I * Θ) ^ 2 := by
+        have htwo : 2 * (n + 1) = 2 * n + 2 := by ring
+        rw [htwo, pow_add]
+      rw [hdecomp, Complex.mul_im, ih, pure_phase_sq_im]
+      ring
+
+/--
+偶数冪 `(iΘ)^(2n)` の実部評価。
+
+`Re((iΘ)^(2n)) = (-1)^n * Θ^(2n)`。
+-/
+lemma pure_phase_pow_even_re (n : ℕ) (Θ : ℝ) :
+    Complex.re ((Complex.I * Θ) ^ (2 * n)) = (-1 : ℝ) ^ n * Θ ^ (2 * n) := by
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      have hdecomp : (Complex.I * Θ) ^ (2 * (n + 1)) =
+          (Complex.I * Θ) ^ (2 * n) * (Complex.I * Θ) ^ 2 := by
+        have htwo : 2 * (n + 1) = 2 * n + 2 := by ring
+        rw [htwo, pow_add]
+      rw [hdecomp, Complex.mul_re, ih, pure_phase_sq_re, pure_phase_pow_even_im, pure_phase_sq_im]
+      have hpow1 : (-1 : ℝ) ^ (n + 1) = (-1 : ℝ) ^ n * (-1 : ℝ) := by
+        rw [pow_succ]
+      have hpow2 : Θ ^ (2 * (n + 1)) = Θ ^ (2 * n) * Θ ^ 2 := by
+        have htwo : 2 * (n + 1) = 2 * n + 2 := by ring
+        rw [htwo, pow_add]
+      rw [hpow1, hpow2]
+      ring
+
+/--
+奇数冪 `(iΘ)^(2n+1)` の実部は 0。
+-/
+lemma pure_phase_pow_odd_re (n : ℕ) (Θ : ℝ) :
+    Complex.re ((Complex.I * Θ) ^ (2 * n + 1)) = 0 := by
+  calc
+    Complex.re ((Complex.I * Θ) ^ (2 * n + 1))
+        = Complex.re ((Complex.I * Θ) ^ (2 * n) * (Complex.I * Θ)) := by
+            rw [pow_succ]
+    _ = Complex.re ((Complex.I * Θ) ^ (2 * n)) * Complex.re (Complex.I * Θ)
+          - Complex.im ((Complex.I * Θ) ^ (2 * n)) * Complex.im (Complex.I * Θ) := by
+            rw [Complex.mul_re]
+    _ = 0 := by
+            simp [pure_phase_pow_even_im]
+
+/--
+奇数冪 `(iΘ)^(2n+1)` の虚部評価。
+
+`Im((iΘ)^(2n+1)) = (-1)^n * Θ^(2n+1)`。
+-/
+lemma pure_phase_pow_odd_im (n : ℕ) (Θ : ℝ) :
+    Complex.im ((Complex.I * Θ) ^ (2 * n + 1)) = (-1 : ℝ) ^ n * Θ ^ (2 * n + 1) := by
+  calc
+    Complex.im ((Complex.I * Θ) ^ (2 * n + 1))
+        = Complex.im ((Complex.I * Θ) ^ (2 * n) * (Complex.I * Θ)) := by
+            rw [pow_succ]
+    _ = Complex.re ((Complex.I * Θ) ^ (2 * n)) * Complex.im (Complex.I * Θ)
+          + Complex.im ((Complex.I * Θ) ^ (2 * n)) * Complex.re (Complex.I * Θ) := by
+            rw [Complex.mul_im]
+    _ = (-1 : ℝ) ^ n * Θ ^ (2 * n) * Θ := by
+            simp [pure_phase_pow_even_re, pure_phase_pow_even_im]
+    _ = (-1 : ℝ) ^ n * Θ ^ (2 * n + 1) := by
+            rw [pow_succ]
+            ring
+
+/--
+`d=2n` から `d+1=2n+1` への実部再帰（偶数相）。
+
+`(iΘ)^(2n)` の実部評価を展開した形。
+-/
+lemma cfbrcRe_odd_from_even (n : ℕ) (X Θ : ℝ) :
+    cfbrcRe (2 * n + 1) X Θ =
+      X * cfbrcRe (2 * n) X Θ - Θ * cfbrcIm (2 * n) X Θ +
+        X * ((-1 : ℝ) ^ n * Θ ^ (2 * n)) := by
+  simpa [pure_phase_pow_even_re] using cfbrcRe_succ' (d := 2 * n) X Θ
+
+/--
+`d=2n` から `d+1=2n+1` への虚部再帰（偶数相）。
+
+`(iΘ)^(2n)` の虚部は 0 なので、右端項は消える。
+-/
+lemma cfbrcIm_odd_from_even (n : ℕ) (X Θ : ℝ) :
+    cfbrcIm (2 * n + 1) X Θ =
+      X * cfbrcIm (2 * n) X Θ + Θ * cfbrcRe (2 * n) X Θ := by
+  simpa [pure_phase_pow_even_im] using cfbrcIm_succ' (d := 2 * n) X Θ
+
+/--
+`d=2n+1` から `d+1=2n+2` への実部再帰（奇数相）。
+
+`(iΘ)^(2n+1)` の実部は 0 なので、右端項は消える。
+-/
+lemma cfbrcRe_even_from_odd (n : ℕ) (X Θ : ℝ) :
+    cfbrcRe (2 * n + 2) X Θ =
+      X * cfbrcRe (2 * n + 1) X Θ - Θ * cfbrcIm (2 * n + 1) X Θ := by
+  simpa [pure_phase_pow_odd_re] using cfbrcRe_succ' (d := 2 * n + 1) X Θ
+
+/--
+`d=2n+1` から `d+1=2n+2` への虚部再帰（奇数相）。
+
+`(iΘ)^(2n+1)` の虚部評価を展開した形。
+-/
+lemma cfbrcIm_even_from_odd (n : ℕ) (X Θ : ℝ) :
+    cfbrcIm (2 * n + 2) X Θ =
+      X * cfbrcIm (2 * n + 1) X Θ + Θ * cfbrcRe (2 * n + 1) X Θ +
+        X * ((-1 : ℝ) ^ n * Θ ^ (2 * n + 1)) := by
+  simpa [pure_phase_pow_odd_im] using cfbrcIm_succ' (d := 2 * n + 1) X Θ
+
 end
 
 end DkMath.CFBRC.TrigBridge

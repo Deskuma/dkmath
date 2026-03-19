@@ -734,3 +734,39 @@
 6. 次の課題:
    - `(iΘ)^d` の `Re/Im` を parity で整理する補題（偶奇・`mod 4`）を追加する。
    - `cfbrcRe_succ'` を使った general `d` の実部漸化式（`Θ=0`・`X=0` 断面）を先に固定する。
+
+### 日時: 2026/03/20 01:57 JST: `(iΘ)^d` の偶奇補題を追加し、`cfbrcRe/Im` 再帰を偶奇分解
+
+1. 目的: general `d` の `Re/Im` 抽出を実用化するため、`(iΘ)^d` 項を偶奇で閉じる補題を追加する。
+2. 内容:
+   - `DkMath/CFBRC/TrigBridge/General.lean` に追加:
+     - 二乗評価: `pure_phase_sq_re`, `pure_phase_sq_im`
+     - 偶数冪: `pure_phase_pow_even_re`, `pure_phase_pow_even_im`
+     - 奇数冪: `pure_phase_pow_odd_re`, `pure_phase_pow_odd_im`
+     - `cfbrcRe/Im` 偶奇再帰:
+       - `cfbrcRe_odd_from_even`
+       - `cfbrcIm_odd_from_even`
+       - `cfbrcRe_even_from_odd`
+       - `cfbrcIm_even_from_odd`
+   - `DkMathTest/CFBRC.lean` に回帰例を追加:
+     - `pure_phase_pow_odd_im`
+     - `cfbrcIm_even_from_odd`
+     - および `#print axioms pure_phase_pow_odd_im`
+   - `DkMath/CFBRC/README.md` を更新:
+     - `TrigBridge.General` の説明に偶奇補題を追記
+     - Usage に `pure_phase_pow_odd_im` の例を追加
+   - 検証:
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.General` 成功
+     - `./lean-build.sh DkMath.CFBRC` 成功
+     - `./lean-build.sh DkMathTest.CFBRC` 成功
+     - `./lean-build.sh DkMathTest` 成功
+3. 結論: `cfbrcRe_succ'` / `cfbrcIm_succ'` の右端に残っていた `(iΘ)^d` 項を偶奇で評価できるようになり、general `d` の再帰解析が一段進んだ。
+4. 失敗事例:
+   - 初期案で `simp` ベース簡約が不安定（`No goals` / `simp made no progress`）。
+   - 帰納法＋`Complex.mul_re/im` の明示展開へ切替えて安定化。
+5. 備考:
+   - 今回は `mod 4` まで分解せず、まず偶奇で使える最小核を固定した。
+6. 次の課題:
+   - `I^d` の `mod 4` 分解（`0,1,2,3` ケース）を追加し、
+     `pure_phase_pow_*` をさらに閉形式化する。
+   - `Θ = 0` / `X = 0` の断面補題を追加し、general `d` の境界挙動を先に固定する。
