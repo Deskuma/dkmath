@@ -18,8 +18,6 @@ These are small, reusable statements around:
  -/
 
 
-
-
 namespace ABC
 
 
@@ -98,15 +96,6 @@ lemma div_RX1_nonneg {X : ℕ} {a : ℝ} (ha : 0 ≤ a) : 0 ≤ div_RX1 X a := b
 end RX1_defs
 
 
-
-/-!
-Standard constants and small helper lemmas used throughout the T1--T4 workflow.
-We fix a project-wide constant t_* = log 2 / log 3 and a few casting/exp/log helpers
-so proofs can follow a single consistent style.
--/
-
-noncomputable def t_star : ℝ := Real.log 2 / Real.log 3
-
 /-! Note: mathlib provides `Real.exp_sum` which we prefer to use; we avoid reimplementing
 the finite induction here to reduce duplication. -/
 
@@ -168,9 +157,6 @@ private lemma coprime_two_pow_of_odd_prime (p m : ℕ) (hp : p.Prime) (hpodd : p
     rw [Nat.coprime_primes Nat.prime_two hp]
     exact fun h => hpodd h.symm
   exact h2p.pow_right m
-
-
-
 
 -- Gap separation: 区間内に高々 1 解の場合、全体の解個数 ≤ (X+1)/q + 1
 lemma card_separated_by_gap_le_div_add_one
