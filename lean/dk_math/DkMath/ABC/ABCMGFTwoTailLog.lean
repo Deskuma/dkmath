@@ -1001,8 +1001,8 @@ private lemma finset_holder_equal_power {α : Type _} (s : Finset α) (hs : s.No
                     (Finset.sum I fun n => (G n) ^ qR) ^ (1 / qR) / RX1 X := by
             simpa [RX1] using h_first_div
           exact h_first'
-        _ ≤ (Finset.sum I fun n => (F a n) ^ mR) ^ (1 / mR) * Finset.prod s fun b
-            => (Finset.sum I fun n => (F b n) ^ mR) ^ (1 / mR) / RX1 X := by
+        _ ≤ ((Finset.sum I fun n => (F a n) ^ mR) ^ (1 / mR) *
+              Finset.prod s (fun b => (Finset.sum I fun n => (F b n) ^ mR) ^ (1 / mR))) / RX1 X := by
           -- final_step で (∑ n ∈ I, G n ^ qR) ^ (1 / qR) ≤ ∏ b ∈ s, (∑ n ∈ I, F b n ^ mR) ^ (1 / mR)
           -- 左側の因子 (∑ n ∈ I, F a n ^ mR) ^ (1 / mR) は非負
           have h_nonneg : 0 ≤ (Finset.sum I fun n => F a n ^ mR) ^ (1 / mR) := by
@@ -1011,36 +1011,10 @@ private lemma finset_holder_equal_power {α : Type _} (s : Finset α) (hs : s.No
             intro n hn
             apply Real.rpow_nonneg_of_nonneg
             exact hF a n
-          -- final_step を左側の因子で掛けて型を合わせる
-          -- 両辺に (↑X+1) を掛けて分母を消す
+          -- final_step を左側の因子で掛け、正の RX1 X で割る
           have h_mul := mul_le_mul_of_nonneg_left final_step h_nonneg
-          -- もとの不等式に戻すため両辺を (↑X+1) で割る
-          -- 右辺に / (↑X+1) を掛けて型を合わせる
-          have h_div : (Finset.sum I fun n => F a n ^ mR) ^ (1 / mR) * (Finset.sum I fun n => G n ^ qR) ^ (1 / qR)
-                ≤ ((Finset.sum I fun n => F a n ^ mR) ^ (1 / mR) * Finset.prod s fun b => (Finset.sum I fun n => (F b n) ^ mR) ^ (1 / mR) / RX1 X) * RX1 X := by
-            -- h_mul の右辺に (X+1) を掛けて (... / (X+1)) * (X+1) の形にする
-            -- h_mul: LHS ≤ (∑ n ∈ I, F a n ^ mR) ^ (1 / mR) * (∏ b ∈ s, ...)
-            -- h_div の右辺: ((∑ n ∈ I, F a n ^ mR) ^ (1 / mR) * (∏ b ∈ s, ...) / (X+1)) * (X+1)
-            -- これは (a * b / c) * c = a * b の形なので，a/c * c = a を使えば OK
-            have h_div_mul : (Finset.sum I fun n => F a n ^ mR) ^ (1 / mR) * (Finset.prod s fun b => (Finset.sum I fun n => (F b n) ^ mR) ^ (1 / mR))
-              = (((Finset.sum I fun n => F a n ^ mR) ^ (1 / mR) * (Finset.prod s fun b => (Finset.sum I fun n => (F b n) ^ mR) ^ (1 / mR))) / RX1 X) * RX1 X := by
-              -- 両辺は共に A = (A / (X+1)) * (X+1) の形で等価なはずだが
-              -- field_simp による正規化では括弧の配置の差で等式にならないため so#rry を置く。
-              -- 実質的には除算と乗算の順序による形式的な等式なので証明可能だが、
-              -- Lean の field_simp と ring の相互作用の複雑さによるもの。
-              grind only [= Finset.nonempty_def, = Finset.insert_eq_of_mem, cases Or]
-            calc (Finset.sum I fun n => F a n ^ mR) ^ (1 / mR) * (Finset.sum I fun n => G n ^ qR) ^ (1 / qR)
-                ≤ (Finset.sum I fun n => F a n ^ mR) ^ (1 / mR) * (Finset.prod s fun b => (Finset.sum I fun n => (F b n) ^ mR) ^ (1 / mR)) := h_mul
-              _ = (((Finset.sum I fun n => F a n ^ mR) ^ (1 / mR) * (Finset.prod s fun b => (Finset.sum I fun n => (F b n) ^ mR) ^ (1 / mR))) / RX1 X) * RX1 X := h_div_mul
-              _ = ((Finset.sum I fun n => F a n ^ mR) ^ (1 / mR) * (Finset.prod s fun b => (Finset.sum I fun n => (F b n) ^ mR) ^ (1 / mR)) / RX1 X) * RX1 X := by
-                rfl
-            try grind  -- failed to complete automatically
-            admit
-            done  -- have h_div
-
-          -- 両辺を (↑X+1) で割ることで目標の不等式に一致させる（(X+1)>0 を使って除算を明示）
-          exact (div_le_iff h_rx_pos).mpr h_div
-        _ = Finset.prod (insert a s) fun b => ((Finset.sum I fun n => (F b n) ^ (insert a s).card) / RX1 X) ^ (1 / (insert a s).card) := by
+          exact div_le_div_of_nonneg_right h_mul (le_of_lt h_rx_pos)
+        _ = Finset.prod (insert a s) fun b => ((Finset.sum I fun n => (F b n) ^ (insert a s).card) / RX1 X) ^ ((1 : ℝ) / (insert a s).card) := by
           -- finalize the algebra to match the target rhs
           -- 前のステップ（calc ≤ ステップ）の RHS は：
           --   (∑ n ∈ I, F a n ^ mR) ^ (1/mR) * ∏ b ∈ s, (∑ n ∈ I, F b n ^ mR) ^ (1/mR)
@@ -1057,19 +1031,7 @@ private lemma finset_holder_equal_power {α : Type _} (s : Finset α) (hs : s.No
           try grind  -- failed to complete automatically
           admit
 
-      -- ⊢ ∏ b   ∈ insert a s, ((∑ n ∈ I             , F b n   ^ (insert a s).card) / (↑X+1)) ^ (1 / (insert a s).card)
-      -- ≤ ∏ a_1 ∈ insert a s, ((∑ n ∈ Finset.Icc 0 X, F a_1 n ^ Rsc (insert a s))  / (↑X+1)) ^ (1 /  Rsc (insert a s))
-      have : (insert a s).card = Rsc (insert a s) := by rw [Rsc]
-      rw [← this]
-      -- ⊢ ∏ b   ∈ insert a s, ((∑ n ∈ I, F b   n ^  (insert a s).card) / (↑X+1)) ^ (1 /  (insert a s).card)
-      -- ≤ ∏ a_1 ∈ insert a s, ((∑ n ∈ I, F a_1 n ^ ↑(insert a s).card) / (↑X+1)) ^ (1 / ↑(insert a s).card)
-      have : (insert a s).card = ↑(insert a s).card := by rfl
-      rw [this]
-      -- ⊢ ∏ b ∈ insert a s, ((∑ n ∈ I, F b n ^ ↑(insert a s).card) / (↑X+1)) ^ (1 / ↑(insert a s).card)
-      -- ≤ ∏ a_1 ∈ insert a s, ((∑ n ∈ I, F a_1 n ^ ↑(insert a s).card) / (↑X+1)) ^ (1 / ↑(insert a s).card)
-      -- これは型キャストの関係で形式的には異なる表記だが、数学的に同一の式である。
-      -- Lean の definitional equality では区別されるため、admit で終了。
-      admit
+      simp [Rsc]
       done  -- by_cases -- general case: tail nonempty
 
     -- end of induction
