@@ -17,7 +17,7 @@ namespace PowerSums
 /-!
 ## Residual Profile Examples (Same Big, Different Body)
 
-Examples where the same Big value admits multiple Body choices,
+Examples where the same Big value ad#mits multiple Body choices,
 leading to different observed minimum profiles for the residuals.
 -/
 
