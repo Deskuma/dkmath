@@ -257,7 +257,8 @@ lemma quality_le_of_not_bad'
     let S := Finset.filter (fun p => p.Prime ∧ p ≥ 3) (Nat.divisors c)
     have hcard_bound : (S.card : ℝ) * (ε / 4) ≤ ε * Real.log (rad (a*b*c) : ℝ) := by
       -- use that log rad(abc) ≥ Σ_{p∈S} log p ≥ S.card * log 2 and ε/4 ≤ ε * log rad? rough bound
-      have hlog_min : Real.log (rad (a*b*c) : ℝ) ≥ (S.card : ℝ) * Real.log 2 := by admit
+      have hlog_min : Real.log (rad (a*b*c) : ℝ) ≥ (S.card : ℝ) * Real.log 2 := by
+        admit
       -- linarith
       admit
     calc ∑ p ∈ S, γ_values p * Real.log (p : ℝ)
