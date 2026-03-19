@@ -1,80 +1,72 @@
-# ABC: `sorry` 一覧（チェックリスト）
+# ABC: `sorry` / `admit` 再調査メモ
 
-このドキュメントは、`lean/dk_math/DkMath/ABC/ABC0*.lean` に残る `sorry` を一覧化し、
-どこで何が詰まっているのかを可視化するためのチェックリストです。
+最終更新: 2026-03-19
 
-**Note:** 本ファイルは `dev/ABC-260318-v1` ブランチに対応しています。
+対象: `lean/dk_math/DkMath/ABC/**/*.lean`
 
----
-
-## ✅ 進行中（現状確認済み）
-
-### `ABC025.lean`（Telescoping系）
-
-- **行 1087**: `sorry -- KNOWN ISSUE: Claim is false; proof needs restructuring`  
-  - **内容**: `3^(-1/2)` を `1/2` 未満とする不正確な評価に依存している。
-  - **対応方針**: 既に追加済みの `three_pow_neg_log2_div_log3_eq_half` 補題を活用し、`x/(1-x) ≤ 3` 型のシンプル評価に書き換える。
-  - [ ] 目標：`sorry` を削除し、`norm_num` などで完結させる。
-
-### `ABC021.lean`（Janson / 2次モーメント系）
-
-このファイルには複数の `sorry` が残っており、いずれも **確率期待値／分散／Janson不等式** に関する証明の穴です。
-
-- **行 246**: `sorry -- This is a general property of indicator expectations`
-- **行 254**: `sorry -- Need to show mu ≠ 0 implies mu > 0` (定義からの正値性)
-- **行 258**: `sorry -- This should follow from the definition of mu in ABC.lean`
-- **行 263**: `sorry -- Sum of indicators is nonnegative`
-- **行 277**: `sorry -- Combine second moment method with variance formula`
-- **行 283**: `sorry -- This is the key analytic inequality (uses convexity/Taylor)`
-- **行 308**: `sorry -- Product is 1 iff all ¬ω v are true iff X = 0`
-- **行 313**: `sorry -- Apply PMF.expect_mono with h_prod_to_sum`
-- **行 317**: `sorry -- Apply janson_core_inequality and algebraic manipulation`
-- **行 323**: `sorry -- When Δ̄ = 0, events are independent; use simpler bound`
-
-> これらは「証明の骨格は見えているが、確率論的な細部（期待値操作や不等式の組み合わせ）を形式化していない」パターンと見られる。
-
-### `ABC031.lean`（密度 / ε-δ 系）
-
-- **行 309**: `sorry  -- TODO: fill from twoTail_log_bound_adjacent_density_one (deferred)`
-- **行 411**: `sorry  -- TODO: Refine ε ≤ δ case via parameter optimization or limiting argument`
-
-### `ABC038.lean`（不明：コメントなし）
-
-- **行 221**: `sorry`
-- **行 242**: `sorry`
-- **行 270**: `sorry`
-
-### `ABC039.lean`（不明：コメントなし）
-
-- **行 61**: `sorry`
-- **行 180**: `sorry`
+- 調査コマンド: `rg -n '\\bsorry\\b|\\badmit\\b' lean/dk_math/DkMath/ABC/**/*.lean`
+- 注意: `ABC025_allX.lean` の 3 件中 2 件は本文中の文字列（`\`sorry\``）で、実際の穴は 1 件。
 
 ---
 
-## 🔍 使い方（進め方の例）
+## 0件（確認済み）
 
-1. **優先度をつける**
-   - 1st: `ABC025.lean` の `sorry`（「数学的に間違っている」ため）
-   - 2nd: `ABC021.lean` の `sorry`（主要な不等式 / Janson 連鎖）
-   - 3rd: `ABC031/ABC038/ABC039` の `sorry`（内容がコメント無しのため、調査が必要）
-
-2. **該当箇所の “正解候補” を用意する**
-   - `ABC025.lean` なら `three_pow_neg_log2_div_log3_eq_half` を使う形で書き換え
-   - `ABC021.lean` なら `PMF.expect_mono` や `Real.exp` の基本不等式を使う形で証明を埋める
-
-3. **作業を記録する**
-   - 直した `sorry` には `[dev/ABC-260318-v1]` のようにタグを残す（既にその模式を追加済み）
-   - 変更が完了したら、このドキュメントにチェックボックスを追加して完了状態にする
+- `ABC025.lean`
+- `ABCMGFTwoTailLog.lean`
+- `ABCFinalRealExpFactorizationLog.lean`
 
 ---
 
-## 🔧 次のアクション提案
+## 残件一覧（実測）
 
-- ✅ **まずは `ABC025.lean` の `sorry`** を 1 つ潰す（`three_pow_neg_log2_div_log3_eq_half` で置換する、など）。
-- 🔎 **次に `ABC021.lean` の `sorry`** をひとつずつ「どんな補題で潰すか」を整理する。
-
-必要なら、`ABC021.lean` の該当行だけを深堀りして「どの Mathlib 補題で埋められるか」を具体的に提案できます。
+| file | hits | lines | メモ |
+|---|---:|---|---|
+| `ABC021.lean` | 16 | 187,192,201,207,219,227,246,254,258,263,277,283,308,313,317,323 | Janson/期待値系。重い本丸。 |
+| `ABCQualityLeOfNotBad.lean` | 8 | 71,79,85,102,255,260,262,278 | 型変換＋log分解＋補助不等式。中～重。 |
+| `ABC038.lean` | 3 | 221,242,270 | 文脈依存。statement整合チェック要。 |
+| `ABC025_allX.lean` | 3 | 32,45,66 | 実穴は 66 の 1 件（32,45 は文中参照）。 |
+| `ABC039.lean` | 2 | 61,180 | 設計不一致の可能性あり（先にstatement確認）。 |
+| `ABC031.lean` | 2 | 309,411 | 密度/ε-δ。中程度。 |
+| `ABC030.lean` | 2 | 376,386 | 小規模 admit。着手しやすい。 |
+| `ABC029.lean` | 1 | 135 | 小規模 admit。最優先候補。 |
+| `ABC016.lean` | 1 | 740 | 小規模 admit。最優先候補。 |
+| `ABC008.lean` | 1 | 1981 | 単発 admit。着手可。 |
+| `ABCWorking.lean` | 1 | 351 | 作業用ファイル。削除/保留判断対象。 |
+| `ABC#Research.lean` | 1 | 105 | 研究用（モジュール運用対象外なら除外可）。 |
 
 ---
 
-🧠 **補足**: `ABC026.lean` や `ABC027〜ABC024` などには `sorry` は見当たらないため、今回の「チェックリスト対象」は上記のファイルに絞られます。
+## 着手優先度（いま潰しやすい順）
+
+### A. すぐ潰せる可能性が高い（局所穴）
+
+1. `ABC029.lean:135`
+2. `ABC016.lean:740`
+3. `ABC030.lean:376,386`
+4. `ABC008.lean:1981`
+
+### B. 次点（局所だが文脈確認が必要）
+
+1. `ABC031.lean:309,411`
+2. `ABC038.lean:221,242,270`
+3. `ABC025_allX.lean:66`
+
+### C. 先に設計確認を推奨
+
+1. `ABC039.lean`（valuation の対象定義がズレる可能性）
+2. `ABCQualityLeOfNotBad.lean`（補助補題の棚卸しが先）
+
+### D. 最後にまとめて攻める本丸
+
+1. `ABC021.lean`（16件、期待値/分散/Janson の連鎖）
+
+---
+
+## 次の実作業チェックリスト
+
+- [ ] `ABC029.lean:135` を解消
+- [ ] `ABC016.lean:740` を解消
+- [ ] `ABC030.lean:376,386` を解消
+- [ ] `ABC008.lean:1981` を解消
+- [ ] `ABC025_allX.lean` は文中参照と実穴を分離して整理
+- [ ] `ABCWorking.lean`, `ABC#Research.lean` を「対象に含めるか」決定
