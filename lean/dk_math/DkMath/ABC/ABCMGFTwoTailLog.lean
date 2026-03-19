@@ -11,28 +11,11 @@ set_option linter.style.longLine false
 
 /-!
 Auxiliary lemmas used in the mgf_twoTail_log argument.
-These are small, self-contained statements that will be proved in subsequent commits.
- - `finset_holder_equal_power` : equal-exponent Hölder bound for finite products over a finite set
- - `large_primes_tail_const_exists` : existence of a positive tail-side constant
- - `mgf_vp_base_apply` : wrapper to apply `mgf_vp_base` uniformly over primes
+These are small, reusable statements around:
+ - separated-set counting on intervals,
+ - layer-cake counting for `padicValNat p (2*n+1)`,
+ - geometric-series style bounds used in the MGF argument.
  -/
-
--- Generalized equal-exponent Hölder inequality for finite products over finite sets
--- Proof strategy:
--- 1. Induction on s using Finset.induction_on (revert F/hF to keep IH generic)
--- 2. Base case (empty): impossible by s.Nonempty assumption
--- 3. Singleton case s = {a}: both sides equal average of F a, trivial by simp
--- 4. Inductive case s = insert a s' with s' nonempty:
---    - Let m = s'.card + 1, q = m/(m-1), define G n = ∏_{b∈s'} F b n, H b n = (F b n)^q
---    - Apply 2-term Hölder (Real.inner_le_Lp_mul_Lq) to F a and G with exponents m, q
---    - Apply IH to H (tail) to bound (∑ G^q)^(1/q) in terms of powers of F_b
---    - Key algebra: q * s'.card = m (cancels denominators), (X+1) factors simplify
---    - Combine Hölder bound with IH bound via multiplication and Finset.prod_insert
--- Technical notes:
--- - Need Real.finset_prod_rpow to distribute rpow over products
--- - Need Real.rpow_mul for nested rpow simplification (a^b)^c = a^(bc)
--- - r := (s.card : ℝ) must be unfolded carefully in proofs (not definitional equality)
--- - Finset.prod_const converts ∏ c to c^(card), then use rpow laws
 
 
 
@@ -124,32 +107,8 @@ so proofs can follow a single consistent style.
 
 noncomputable def t_star : ℝ := Real.log 2 / Real.log 3
 
-private lemma t_star_pos : 0 < t_star := by
-  dsimp [t_star]
-  -- Real.log 2 > 0 and Real.log 3 > 0
-  have h2 : (1 : ℝ) < 2 := by norm_num
-  have h3 : (1 : ℝ) < 3 := by norm_num
-  have l2 := Real.log_pos h2
-  have l3 := Real.log_pos h3
-  exact div_pos l2 l3
-
-private lemma pow_pos_of_prime {p : ℕ} (hp : p.Prime) : 0 < (p : ℝ) := by
-  norm_cast; exact hp.pos
-
-private lemma rpow_pos_of_pos_cast {a : ℝ} (ha : 0 < a) (x : ℝ) : 0 < a ^ x :=
-  Real.rpow_pos_of_pos ha x
-
 /-! Note: mathlib provides `Real.exp_sum` which we prefer to use; we avoid reimplementing
 the finite induction here to reduce duplication. -/
-
-private lemma log_rpow_bridge {A B γ : ℝ} (h : Real.log A ≤ γ * Real.log B) (hA : 0 < A) (hB : 0 < B) :
-  A ≤ B ^ γ := by
-  have hexp := Real.exp_le_exp.mpr h
-  rw [Real.exp_log hA] at hexp
-  -- rewrite exp (γ * log B) as B ^ γ using rpow_def_of_pos
-  rw [mul_comm γ (Real.log B)] at hexp
-  rw [(Real.rpow_def_of_pos hB γ).symm] at hexp
-  exact hexp
 
 /-! Set up Finset cardinality cast lemmas for ℝ and ℕ -/
 
@@ -194,7 +153,7 @@ lemma Finset_scard_N_eq {α : Type*} (s : Finset α) : Finset.card s = Nsc s := 
 lemma Finset_scard_R_eq {α : Type*} (s : Finset α) : Finset.card s = Rsc s := by rfl
 lemma Finset_scard_R_eq' {α : Type*} (s : Finset α) : ↑(Finset.card s) = Rsc s := by rfl
 
--- [T1] -- mgf_vp_base
+-- [T1] layer-cake counting helpers
 
 -- ===========================
 -- 3-point set: layer-cake helpers
@@ -214,7 +173,7 @@ private lemma coprime_two_pow_of_odd_prime (p m : ℕ) (hp : p.Prime) (hpodd : p
 
 
 -- Gap separation: 区間内に高々 1 解の場合、全体の解個数 ≤ (X+1)/q + 1
-private lemma card_separated_by_gap_le_div_add_one
+lemma card_separated_by_gap_le_div_add_one
     (X q : ℕ) (hqpos : 0 < q)
     (S : Finset ℕ)
     (hS : ∀ {n n'}, n ∈ S → n' ∈ S → n < n' → q ≤ n' - n)
@@ -449,7 +408,7 @@ lemma layercake_rhs_bound_for_layercake
                 ring
         _ = (X + 1 : ℝ) * ((p : ℝ) ^ (t * ((k : ℝ) - 1) - ((k + 2 : ℕ) : ℝ))) := by
               rw [hpow_nat, ← Real.rpow_neg hp_pos.le, ← Real.rpow_add hp_pos]
-              ring
+              ring_nf
         _ = (X + 1 : ℝ) * ((p : ℝ) ^ (-2 - t + (t - 1) * (k : ℝ))) := by
               congr 2
               rw [hcastk]
@@ -520,236 +479,5 @@ lemma layercake_rhs_bound_for_layercake
     _ = (X + 1 : ℝ) * (1 + Cpt)
           + ((p : ℝ)^t - 1) * (Finset.sum (Finset.Icc 1 K) fun k => (p : ℝ)^(t * ((k : ℝ) - 1))) := by
           rfl
-
--- mgf_vp_base: MGF の基礎補題
--- For p prime (p ≠ 2) and 0 < t ≤ log 2 / log 3, the average
---   (1/(X+1)) * ∑_{n=0}^X p^{t*(v_p(2n+1)-2)_+}
--- is bounded by 1 + an explicit constant C > 0.
--- Proof: Use level-set counting (layer-cake decomposition).
-private lemma mgf_vp_base (p : ℕ) (hp : p.Prime) (hpodd : p ≠ 2) (t : ℝ) (ht0 : 0 < t) (ht_star : t ≤ t_star) :
-  ∃ C > 0, ∀ X ≥ 3,
-    (Finset.sum (Finset.Icc 0 X) (fun n => (p : ℝ) ^ (t * (((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ)))) / (X + 1) ≤ 1 + C := by
-  have hp_ge_3 : 3 ≤ p := by
-    have h2 : 2 ≤ p := hp.two_le
-    have hlt : 2 < p := Nat.lt_of_le_of_ne h2 (Ne.symm hpodd)
-    exact Nat.succ_le_of_lt hlt
-  have hp_ge_1 : (1 : ℝ) ≤ p := by
-    exact_mod_cast (Nat.succ_le_of_lt hp.pos)
-
-  have hsum :
-      ∀ X ≥ 3,
-        ∑ n ∈ Finset.Icc 0 X, (p : ℝ) ^ (t * (((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ))
-          ≤ 4 * (X + 1) := by
-    intro X hX
-    haveI : Fact p.Prime := ⟨hp⟩
-    have htel :
-        ∑ n ∈ Finset.Icc 0 X, (p : ℝ) ^ (t * (padicValNat p (2 * n + 1) : ℤ))
-          ≤ 4 * (X + 1) := by
-      exact ABC.Telescoping.sum_pow_padicValNat_le_geom_log2_div_log3
-        (p := p) (hp := inferInstance) (hp3 := hp_ge_3) (t := t) (ht := ht0)
-        (ht_le := by simpa [t_star] using ht_star) (X := X) (hX := hX)
-    have hterm :
-        ∀ n ∈ Finset.Icc 0 X,
-          (p : ℝ) ^ (t * (((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ))
-            ≤ (p : ℝ) ^ (t * (padicValNat p (2 * n + 1) : ℤ)) := by
-      intro n hn
-      have hsub : (((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ)
-          ≤ (padicValNat p (2 * n + 1) : ℝ) := by
-        exact_mod_cast (Nat.sub_le (padicValNat p (2 * n + 1)) 2)
-      have hmul :
-          t * ((((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ))
-            ≤ t * (padicValNat p (2 * n + 1) : ℝ) :=
-        mul_le_mul_of_nonneg_left hsub ht0.le
-      have hcast :
-          t * (padicValNat p (2 * n + 1) : ℤ)
-            = t * (padicValNat p (2 * n + 1) : ℝ) := by
-        norm_cast
-      calc
-        (p : ℝ) ^ (t * ((((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ)))
-            ≤ (p : ℝ) ^ (t * (padicValNat p (2 * n + 1) : ℝ)) :=
-              Real.rpow_le_rpow_of_exponent_le hp_ge_1 hmul
-        _ = (p : ℝ) ^ (t * (padicValNat p (2 * n + 1) : ℤ)) := by
-              rw [hcast]
-    calc
-      ∑ n ∈ Finset.Icc 0 X, (p : ℝ) ^ (t * (((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ))
-          ≤ ∑ n ∈ Finset.Icc 0 X, (p : ℝ) ^ (t * (padicValNat p (2 * n + 1) : ℤ)) := by
-            refine Finset.sum_le_sum ?_
-            intro n hn
-            exact hterm n hn
-      _ ≤ 4 * (X + 1) := htel
-
-  refine ⟨4, by norm_num, ?_⟩
-  intro X hX
-  have hsumX := hsum X hX
-  have hpos : 0 < (X + 1 : ℝ) := by norm_cast; omega
-  have hdiv :
-      (Finset.sum (Finset.Icc 0 X)
-          (fun n => (p : ℝ) ^ (t * (((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ)))) / (X + 1)
-        ≤ 4 := by
-    exact (Real.div_le_iff hpos).2 (by simpa [mul_assoc, mul_comm, mul_left_comm] using hsumX)
-  linarith
-
-
--- [T2] -- mgf_twoTail_log
-
--- set_option maxHeartbeats 1000000  -- 証明過程のタイムアウトを防ぐため心拍数上限を増やす
-
-/-! mgf_twoTail_log: define logarithmic twoTail sum S_X and give MGF upper bound -/
--- S_X := ∑_{n=0}^X log (twoTail (2n+1))
-noncomputable def S_X (X : ℕ) : ℝ := Finset.sum (Finset.Icc 0 X) fun n => Real.log ((twoTail (2 * n + 1) : ℝ))
-
-/-! Expansion lemma: rewrite exp(t * log twoTail) as a product over prime factors.
-    This reduces the mgf to a finite product of per-prime exponentials, which is
-    the first step in the prime-sum reduction strategy (案3).
--/
-private lemma twoTail_exp_prod_eq (t : ℝ) (n : ℕ) (hn : 2 * n + 1 ≠ 0) :
-  Real.exp (t * Real.log (twoTail (2 * n + 1) : ℝ))
-    = Finset.prod ((2 * n + 1).primeFactors) fun p =>
-        Real.exp (t * ((((2 * n + 1).factorization p) - 2 : ℕ) : ℝ) * Real.log (p : ℝ)) := by
-  -- Use the logarithmic representation and then `Real.exp_sum` to turn the sum into a product.
-  have h_log := ABC.log_twoTail_eq_sum_vplus (2 * n + 1) hn
-  -- rewrite using the log equality, push the scalar t into the finite sum, then apply exp_sum
-  rw [h_log]
-  rw [Finset.mul_sum]
-  -- 和の中のスカラー倍を分配する
-  rw [← Finset.sum_congr rfl (fun p _ => mul_assoc t _ _)]
-  -- exp(∑ ...) = ∏ exp(...) を適用
-  apply Real.exp_sum
-
-
-set_option linter.unusedTactic false
-
-/-!
-  補助補題：unscale_tail_average_bound
-
-  この補題は、有限集合 `s` が空でない場合に、
-  集合 `s` 上の関数族 `H` に対して、
-  和と積の間に Hölder 型の不等式が成り立つことを示します。
-
-  具体的には、以下を証明します：
-  ∑ n ∈ I, ∏ b ∈ s, H b n ≤ ∏ b ∈ s, (∑ n ∈ I, H b n ^ Rsc s) ^ (1 / Rsc s) * RX1 X
--/
-private lemma unscale_tail_average_bound {α : Type _}
-  (s : Finset α) (hs : s.Nonempty)
-  (H : α → ℕ → ℝ) (hH : ∀ b n, 0 ≤ H b n)
-  (X : ℕ) (hX : 1 ≤ X)
-  -- 帰納仮説を追加：Hölder の不等式から導かれる tail_bound
-  (ih_tail_bound : let I := Finset.Icc 0 X
-                   let S : α → ℝ := fun b => ∑ n ∈ I, H b n ^ Rsc s
-                   (∑ n ∈ I, ∏ b ∈ s, H b n) / RX1 X
-                     ≤ ∏ b ∈ s, ((S b) / RX1 X) ^ (1 / Rsc s)) :
-  let I := Finset.Icc 0 X
-  let S : α → ℝ := fun b => ∑ n ∈ I, H b n ^ Rsc s
-  (∑ n ∈ I, ∏ b ∈ s, H b n) ≤ (∏ b ∈ s, (S b) ^ (1 / Rsc s)) * RX1 X := by
-  classical
-  -- shorthand
-  let I := Finset.Icc 0 X
-  let S : α → ℝ := fun b => ∑ n ∈ I, H b n ^ Rsc s
-
-  have h_rx_pos : 0 < RX1 X := by rw [RX1]; norm_cast; omega
-
-  have hRpos : 0 < Rsc s := by
-    rw [Rsc]
-    exact Nat.cast_pos.mpr (Finset.card_pos.2 hs)
-
-  have hexp_nonneg : 0 ≤ (1 / Rsc s) := by exact by positivity
-
-  have hS_nonneg : ∀ b, 0 ≤ S b := by
-    intro b
-    refine Finset.sum_nonneg ?hn
-    intro n hn
-    have : 0 ≤ H b n := hH b n
-    simpa using Real.rpow_nonneg this (Rsc s)
-
-  have one_le_X : (1 : ℝ) ≤ ↑X + 1 := by
-    have : (2 : ℝ) ≤ (↑X + 1 : ℝ) := by
-      have : (2 : ℕ) ≤ X + 1 := Nat.succ_le_succ hX
-      exact_mod_cast this
-    exact (le_trans (by norm_num) this)
-
-  -- (1) 帰納仮説から tail_bound を得る
-  have tail_bound : (∑ n ∈ I, ∏ b ∈ s, H b n) / RX1 X
-    ≤ ∏ b ∈ s, ((S b) / RX1 X) ^ (1 / Rsc s) := ih_tail_bound
-
-  -- (2) 両辺に RX1 X を掛けて分母を消す
-  have tb_mul_div :
-      ∑ n ∈ I, ∏ b ∈ s, H b n ≤ (∏ b ∈ s, ((S b) / RX1 X) ^ (1 / Rsc s)) * RX1 X := by
-    have := (Real.div_le_iff h_rx_pos).mp tail_bound
-    exact this
-
-  -- (3) 各 b について ((S b)/(X+1))^(1/r) ≤ (S b)^(1/r) を示す
-  have hfac_le : ∀ ⦃b⦄, b ∈ s →
-      ((S b) / RX1 X) ^ (1 / Rsc s) ≤ (S b) ^ (1 / Rsc s) := by
-    intro b hb
-    have hdiv_le_self : (S b) / RX1 X ≤ S b := by
-      exact div_le_self (hS_nonneg b) one_le_X
-    have hbase_nonneg : 0 ≤ (S b) / RX1 X := by
-      exact div_nonneg (hS_nonneg b) (le_of_lt h_rx_pos)
-    simpa using
-      Real.rpow_le_rpow hbase_nonneg (hdiv_le_self) hexp_nonneg
-
-  -- (4) 積でも引き上げ（積の単調性）
-  have hprod_le :
-      (∏ b ∈ s, ((S b) / RX1 X) ^ (1 / Rsc s))
-        ≤ ∏ b ∈ s, (S b) ^ (1 / Rsc s) := by
-    -- Finset.prod_le_prod を使用して積の単調性を示す
-    apply Finset.prod_le_prod
-    · intro b _
-      apply Real.rpow_nonneg_of_nonneg
-      exact div_nonneg (hS_nonneg b) (le_of_lt h_rx_pos)
-    · intro b hb
-      exact hfac_le hb
-
-  -- (5) 連鎖してゴールを得る
-  calc (∑ n ∈ I, ∏ b ∈ s, H b n)
-      ≤ (∏ b ∈ s, ((S b) / RX1 X) ^ (1 / Rsc s)) * RX1 X := tb_mul_div
-    _ ≤ (∏ b ∈ s, (S b) ^ (1 / Rsc s)) * RX1 X := mul_le_mul_of_nonneg_right hprod_le (le_of_lt h_rx_pos)
-
--- Legacy Hölder draft (finset_holder_equal_power*) was removed because it is currently unused
--- by `mgf_twoTail_log` and only added maintenance overhead.
--- 大素数帯の尾部定数（有限和）
--- For primes p ≥ 5 up to bound B, sum the individual MGF bounds
-noncomputable def C_tail (t : ℝ) (B : ℕ) : ℝ :=
-  (Finset.filter (fun p : ℕ => p.Prime ∧ 5 ≤ p ∧ p ≤ B) (Finset.range (B+1))).sum
-    (fun p => (p : ℝ)^((-2 : ℝ)) * (1 - (p : ℝ)^(t - 1))⁻¹)
-
--- 大素数帯の尾部上界（p=5項のみで十分）
-private lemma large_primes_tail_const_exists (t : ℝ) (_ht0 : 0 < t) (_ht_star : t ≤ t_star) :
-  ∃ C : ℝ, 0 < C := by
-  -- Choose the p=5 term as the constant (suffices for existence)
-  let C := (5 : ℝ)^((-2 : ℝ)) * (1 - (5 : ℝ)^(t - 1))⁻¹
-  use C
-  have h5_pow_pos : 0 < (5 : ℝ)^((-2 : ℝ)) := by
-    exact Real.rpow_pos_of_pos (by norm_num : (0 : ℝ) < 5) _
-  have ht_lt_1 : t < 1 := by
-    have : (Real.log 2) / (Real.log 3) < 1 := by
-      have h2_pos : 0 < (2 : ℝ) := by norm_num
-      have h3_pos : 0 < (3 : ℝ) := by norm_num
-      have h2_gt_1 : 1 < (2 : ℝ) := by norm_num
-      have h3_gt_1 : 1 < (3 : ℝ) := by norm_num
-      have log2_pos : 0 < Real.log 2 := Real.log_pos h2_gt_1
-      have log3_pos : 0 < Real.log 3 := Real.log_pos h3_gt_1
-      have h23 : (2 : ℝ) < 3 := by norm_num
-      have log23 : Real.log 2 < Real.log 3 := Real.log_lt_log h2_pos h23
-      exact div_lt_one log3_pos |>.mpr log23
-    exact lt_of_le_of_lt _ht_star this
-  have h5_pow_lt_1 : (5 : ℝ)^(t - 1) < 1 := by
-    have : (5 : ℝ)^(t - 1) < (5 : ℝ)^(0 : ℝ) := by
-      have h5_gt_1 : (1 : ℝ) < 5 := by norm_num
-      exact Real.rpow_lt_rpow_of_exponent_lt h5_gt_1 (by linarith : t - 1 < 0)
-    rwa [Real.rpow_zero (5 : ℝ)] at this
-  have hden : 0 < 1 - (5 : ℝ)^(t - 1) := by linarith
-  have hden_inv : 0 < ((1 : ℝ) - (5 : ℝ)^(t - 1))⁻¹ := inv_pos.mpr hden
-  exact mul_pos h5_pow_pos hden_inv
-
-
-private lemma mgf_vp_base_apply (t : ℝ) (ht0 : 0 < t) (ht_star : t ≤ t_star) :
-  ∀ p : ℕ, p.Prime → p ≠ 2 → ∃ C > 0, ∀ X ≥ 3,
-    (Finset.sum (Finset.Icc 0 X) fun n => (p : ℝ) ^ (t * (((padicValNat p (2 * n + 1)) - 2 : ℕ) : ℝ))) / (X + 1) ≤ 1 + C := by
-  intro p hp hneq
-  -- wrapper around mgf_vp_base
-  obtain ⟨C, hCpos, hC⟩ := mgf_vp_base p hp hneq t ht0 ht_star
-  exact ⟨C, hCpos, fun X hX => by apply hC X hX⟩
-
 
 end ABC
