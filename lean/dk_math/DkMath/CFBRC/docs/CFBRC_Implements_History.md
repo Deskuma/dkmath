@@ -1292,3 +1292,31 @@
    - 既知の `ABC021` `sorry` 警告は継続（今回変更範囲外）。
 6. 次の課題:
    - 低次数回帰（`d=3..12`）を `cfbrcClosed_re/im_eq_cfbrcRe/ImClosed` 経由にも寄せる。
+
+### 日時: 2026/03/20 04:56 JST: 低次数回帰（`d=3..12`）を `cfbrcClosed` 経由へ寄せた
+
+1. 目的:
+   - 既存の `d=3..12` 明示式回帰を、
+     `Complex.re/im (cfbrcClosed d X Θ)` からも同じ式で検証できる形にする。
+2. 内容:
+   - `DkMathTest/CFBRC.lean` に private 補助補題を追加:
+     - `cfbrcClosed_re_eq_cfbrcRe_via_closed`
+     - `cfbrcClosed_im_eq_cfbrcIm_via_closed`
+   - これらは
+     - `cfbrcClosed_re/im_eq_cfbrcRe/ImClosed`
+     - `cfbrcRe/Im_eq_cfbrcRe/ImClosed`
+     を合成して、`cfbrcClosed` の `Re/Im` を `cfbrcRe/Im` に戻す橋として使う。
+   - `d=3..12` について、以下の回帰 `example` を追加:
+     - `Complex.re (cfbrcClosed d X Θ) =` 既存の明示式
+     - `Complex.im (cfbrcClosed d X Θ) =` 既存の明示式
+3. 結論:
+   - 低次数回帰は
+     - 旧経路（`cfbrcRe/Im d`）
+     - 新経路（`cfbrcClosed -> Re/Im -> cfbrcRe/ImClosed`）
+     の両方で固定された。
+4. 失敗事例:
+   - 特になし（既存低次数補題を `simpa` で再利用できた）。
+5. 備考:
+   - 既知の `ABC021` `sorry` 警告は継続（今回変更範囲外）。
+6. 次の課題:
+   - 必要なら `d=3..12` の `cfbrcRe/ImClosed d X Θ` そのものを主語にした回帰も追加する。

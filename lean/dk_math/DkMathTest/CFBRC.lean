@@ -131,6 +131,22 @@ example (d : ℕ) (X Θ : ℝ) :
     Complex.im (cfbrcClosed d X Θ) = cfbrcImClosed d X Θ := by
   simpa using cfbrcClosed_im_eq_cfbrcImClosed d X Θ
 
+private lemma cfbrcClosed_re_eq_cfbrcRe_via_closed (d : ℕ) (X Θ : ℝ) :
+    Complex.re (cfbrcClosed d X Θ) = cfbrcRe d X Θ := by
+  calc
+    Complex.re (cfbrcClosed d X Θ) = cfbrcReClosed d X Θ := by
+      simpa using cfbrcClosed_re_eq_cfbrcReClosed d X Θ
+    _ = cfbrcRe d X Θ := by
+      simpa using (cfbrcRe_eq_cfbrcReClosed d X Θ).symm
+
+private lemma cfbrcClosed_im_eq_cfbrcIm_via_closed (d : ℕ) (X Θ : ℝ) :
+    Complex.im (cfbrcClosed d X Θ) = cfbrcIm d X Θ := by
+  calc
+    Complex.im (cfbrcClosed d X Θ) = cfbrcImClosed d X Θ := by
+      simpa using cfbrcClosed_im_eq_cfbrcImClosed d X Θ
+    _ = cfbrcIm d X Θ := by
+      simpa using (cfbrcIm_eq_cfbrcImClosed d X Θ).symm
+
 example (d : ℕ) (X : ℝ) :
     cfbrcRe (d + 1) X 0 = X ^ (d + 1) := by
   simpa using cfbrcRe_succ_theta_zero d X
@@ -268,6 +284,104 @@ example (X Θ : ℝ) :
       12 * X ^ 11 * Θ - 220 * X ^ 9 * Θ ^ 3 + 792 * X ^ 7 * Θ ^ 5 -
         792 * X ^ 5 * Θ ^ 7 + 220 * X ^ 3 * Θ ^ 9 - 12 * X * Θ ^ 11 := by
   simpa using cfbrcIm_twelve_from_template X Θ
+
+-- d=3..12 回帰（`cfbrcClosed` 実部/虚部 -> `cfbrcRe/ImClosed` 経由）
+example (X Θ : ℝ) :
+    Complex.re (cfbrcClosed 3 X Θ) = X ^ 3 - 3 * X * Θ ^ 2 := by
+  simpa [cfbrcClosed_re_eq_cfbrcRe_via_closed] using cfbrcRe_three X Θ
+
+example (X Θ : ℝ) :
+    Complex.im (cfbrcClosed 3 X Θ) = 3 * X ^ 2 * Θ := by
+  simpa [cfbrcClosed_im_eq_cfbrcIm_via_closed] using cfbrcIm_three X Θ
+
+example (X Θ : ℝ) :
+    Complex.re (cfbrcClosed 4 X Θ) = X ^ 4 - 6 * X ^ 2 * Θ ^ 2 := by
+  simpa [cfbrcClosed_re_eq_cfbrcRe_via_closed] using cfbrcRe_four X Θ
+
+example (X Θ : ℝ) :
+    Complex.im (cfbrcClosed 4 X Θ) = 4 * X ^ 3 * Θ - 4 * X * Θ ^ 3 := by
+  simpa [cfbrcClosed_im_eq_cfbrcIm_via_closed] using cfbrcIm_four X Θ
+
+example (X Θ : ℝ) :
+    Complex.re (cfbrcClosed 5 X Θ) = X ^ 5 - 10 * X ^ 3 * Θ ^ 2 + 5 * X * Θ ^ 4 := by
+  simpa [cfbrcClosed_re_eq_cfbrcRe_via_closed] using cfbrcRe_five X Θ
+
+example (X Θ : ℝ) :
+    Complex.im (cfbrcClosed 5 X Θ) = 5 * X ^ 4 * Θ - 10 * X ^ 2 * Θ ^ 3 := by
+  simpa [cfbrcClosed_im_eq_cfbrcIm_via_closed] using cfbrcIm_five X Θ
+
+example (X Θ : ℝ) :
+    Complex.re (cfbrcClosed 6 X Θ) = X ^ 6 - 15 * X ^ 4 * Θ ^ 2 + 15 * X ^ 2 * Θ ^ 4 := by
+  simpa [cfbrcClosed_re_eq_cfbrcRe_via_closed] using cfbrcRe_six X Θ
+
+example (X Θ : ℝ) :
+    Complex.im (cfbrcClosed 6 X Θ) = 6 * X ^ 5 * Θ - 20 * X ^ 3 * Θ ^ 3 + 6 * X * Θ ^ 5 := by
+  simpa [cfbrcClosed_im_eq_cfbrcIm_via_closed] using cfbrcIm_six X Θ
+
+example (X Θ : ℝ) :
+    Complex.re (cfbrcClosed 7 X Θ) =
+      X ^ 7 - 21 * X ^ 5 * Θ ^ 2 + 35 * X ^ 3 * Θ ^ 4 - 7 * X * Θ ^ 6 := by
+  simpa [cfbrcClosed_re_eq_cfbrcRe_via_closed] using cfbrcRe_seven X Θ
+
+example (X Θ : ℝ) :
+    Complex.im (cfbrcClosed 7 X Θ) = 7 * X ^ 6 * Θ - 35 * X ^ 4 * Θ ^ 3 + 21 * X ^ 2 * Θ ^ 5 := by
+  simpa [cfbrcClosed_im_eq_cfbrcIm_via_closed] using cfbrcIm_seven X Θ
+
+example (X Θ : ℝ) :
+    Complex.re (cfbrcClosed 8 X Θ) =
+      X ^ 8 - 28 * X ^ 6 * Θ ^ 2 + 70 * X ^ 4 * Θ ^ 4 - 28 * X ^ 2 * Θ ^ 6 := by
+  simpa [cfbrcClosed_re_eq_cfbrcRe_via_closed] using cfbrcRe_eight_from_template X Θ
+
+example (X Θ : ℝ) :
+    Complex.im (cfbrcClosed 8 X Θ) =
+      8 * X ^ 7 * Θ - 56 * X ^ 5 * Θ ^ 3 + 56 * X ^ 3 * Θ ^ 5 - 8 * X * Θ ^ 7 := by
+  simpa [cfbrcClosed_im_eq_cfbrcIm_via_closed] using cfbrcIm_eight_from_template X Θ
+
+example (X Θ : ℝ) :
+    Complex.re (cfbrcClosed 9 X Θ) =
+      X ^ 9 - 36 * X ^ 7 * Θ ^ 2 + 126 * X ^ 5 * Θ ^ 4 - 84 * X ^ 3 * Θ ^ 6 + 9 * X * Θ ^ 8 := by
+  simpa [cfbrcClosed_re_eq_cfbrcRe_via_closed] using cfbrcRe_nine_from_template X Θ
+
+example (X Θ : ℝ) :
+    Complex.im (cfbrcClosed 9 X Θ) =
+      9 * X ^ 8 * Θ - 84 * X ^ 6 * Θ ^ 3 + 126 * X ^ 4 * Θ ^ 5 - 36 * X ^ 2 * Θ ^ 7 := by
+  simpa [cfbrcClosed_im_eq_cfbrcIm_via_closed] using cfbrcIm_nine_from_template X Θ
+
+example (X Θ : ℝ) :
+    Complex.re (cfbrcClosed 10 X Θ) =
+      X ^ 10 - 45 * X ^ 8 * Θ ^ 2 + 210 * X ^ 6 * Θ ^ 4 -
+        210 * X ^ 4 * Θ ^ 6 + 45 * X ^ 2 * Θ ^ 8 := by
+  simpa [cfbrcClosed_re_eq_cfbrcRe_via_closed] using cfbrcRe_ten_from_template X Θ
+
+example (X Θ : ℝ) :
+    Complex.im (cfbrcClosed 10 X Θ) =
+      10 * X ^ 9 * Θ - 120 * X ^ 7 * Θ ^ 3 + 252 * X ^ 5 * Θ ^ 5 -
+        120 * X ^ 3 * Θ ^ 7 + 10 * X * Θ ^ 9 := by
+  simpa [cfbrcClosed_im_eq_cfbrcIm_via_closed] using cfbrcIm_ten_from_template X Θ
+
+example (X Θ : ℝ) :
+    Complex.re (cfbrcClosed 11 X Θ) =
+      X ^ 11 - 55 * X ^ 9 * Θ ^ 2 + 330 * X ^ 7 * Θ ^ 4 - 462 * X ^ 5 * Θ ^ 6 +
+        165 * X ^ 3 * Θ ^ 8 - 11 * X * Θ ^ 10 := by
+  simpa [cfbrcClosed_re_eq_cfbrcRe_via_closed] using cfbrcRe_eleven_from_template X Θ
+
+example (X Θ : ℝ) :
+    Complex.im (cfbrcClosed 11 X Θ) =
+      11 * X ^ 10 * Θ - 165 * X ^ 8 * Θ ^ 3 + 462 * X ^ 6 * Θ ^ 5 -
+        330 * X ^ 4 * Θ ^ 7 + 55 * X ^ 2 * Θ ^ 9 := by
+  simpa [cfbrcClosed_im_eq_cfbrcIm_via_closed] using cfbrcIm_eleven_from_template X Θ
+
+example (X Θ : ℝ) :
+    Complex.re (cfbrcClosed 12 X Θ) =
+      X ^ 12 - 66 * X ^ 10 * Θ ^ 2 + 495 * X ^ 8 * Θ ^ 4 - 924 * X ^ 6 * Θ ^ 6 +
+        495 * X ^ 4 * Θ ^ 8 - 66 * X ^ 2 * Θ ^ 10 := by
+  simpa [cfbrcClosed_re_eq_cfbrcRe_via_closed] using cfbrcRe_twelve_from_template X Θ
+
+example (X Θ : ℝ) :
+    Complex.im (cfbrcClosed 12 X Θ) =
+      12 * X ^ 11 * Θ - 220 * X ^ 9 * Θ ^ 3 + 792 * X ^ 7 * Θ ^ 5 -
+        792 * X ^ 5 * Θ ^ 7 + 220 * X ^ 3 * Θ ^ 9 - 12 * X * Θ ^ 11 := by
+  simpa [cfbrcClosed_im_eq_cfbrcIm_via_closed] using cfbrcIm_twelve_from_template X Θ
 
 -- BoundarySide 高位 API（valuation）
 example (side : BoundarySide) {d x u q : ℕ}
