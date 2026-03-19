@@ -1,5 +1,7 @@
 # 三角置換と CFBRC の橋  
 
+cid: 69bbbe97-4940-83a7-b5ce-9719abb650a4
+
 三角置換: triangular permutation
 
 副題：冪の差因数分解・二次 Body・実位相断面
