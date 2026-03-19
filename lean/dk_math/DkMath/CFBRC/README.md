@@ -53,6 +53,9 @@ $$
 - `DkMath.CFBRC.TrigBridge.General`
   - general `d` 向けの `Re/Im` 補助（基底値・再帰式・`(iΘ)^d` の偶奇補題）
   - `d=8` 以降のための再帰テンプレート（`cfbrcRe/Im_succ_template`）
+- `DkMath.CFBRC.TrigBridge.ClosedForm`
+  - `Nat.choose` による複素閉形式 `cfbrcClosed`
+  - `cfbrcR = cfbrcClosed` と `Re/Im` の raw 閉形式一致
 
 ## Quick Start
 
@@ -294,6 +297,18 @@ example (X Θ : ℝ) :
       12 * X ^ 11 * Θ - 220 * X ^ 9 * Θ ^ 3 + 792 * X ^ 7 * Θ ^ 5 -
         792 * X ^ 5 * Θ ^ 7 + 220 * X ^ 3 * Θ ^ 9 - 12 * X * Θ ^ 11 :=
   cfbrcIm_twelve_from_template X Θ
+
+example (d : ℕ) (X Θ : ℝ) :
+    cfbrcR d X Θ = cfbrcClosed d X Θ :=
+  cfbrcR_eq_cfbrcClosed d X Θ
+
+example (d : ℕ) (X Θ : ℝ) :
+    cfbrcRe d X Θ = cfbrcReClosedRaw d X Θ :=
+  cfbrcRe_eq_cfbrcReClosedRaw d X Θ
+
+example (d : ℕ) (X Θ : ℝ) :
+    cfbrcIm d X Θ = cfbrcImClosedRaw d X Θ :=
+  cfbrcIm_eq_cfbrcImClosedRaw d X Θ
 ```
 
 ## Related Docs

@@ -1179,3 +1179,49 @@
    `./lean-build.sh DkMathTest`
 
 この計画で、次ターンは `ClosedForm.lean` 作成と `cfbrcR = cfbrcClosed` の証明から着手します。
+
+### 日時: 2026/03/20 04:05 JST: `ClosedForm` 第1段（複素 choose 形 + Re/Im raw）を実装
+
+1. 目的:
+   - `Nat.choose` 昇格の初手として、`cfbrcR` の複素 closed form と
+     `cfbrcRe/Im` の raw closed form を定義・同一化する。
+2. 内容:
+   - 新規ファイル `DkMath/CFBRC/TrigBridge/ClosedForm.lean` を追加。
+   - 追加定義:
+     - `cfbrcClosed`（複素 choose 和）
+     - `cfbrcReClosedRaw`
+     - `cfbrcImClosedRaw`
+   - 追加定理:
+     - `cfbrcR_eq_cfbrcClosed`
+     - `cfbrcRe_eq_cfbrcReClosedRaw`
+     - `cfbrcIm_eq_cfbrcImClosedRaw`
+   - 実装要点:
+     - `add_pow` + `Finset.sum_range_succ'` で `k=0` 項を分離して
+       `(X+iΘ)^d-(iΘ)^d` を `range d` の和へ落とす。
+     - `Complex.re_sum` / `Complex.im_sum` と
+       `ofReal_pow_re/im` を使って項ごとに `Re/Im` を抽出。
+   - 公開入口更新:
+     - `DkMath/CFBRC.lean` に `import DkMath.CFBRC.TrigBridge.ClosedForm` を追加。
+   - 回帰・ドキュメント:
+     - `DkMathTest/CFBRC.lean` に
+       `cfbrcR_eq_cfbrcClosed` / `cfbrcRe/Im_eq_*Raw` の `example` と
+       `#print axioms` 追加。
+     - `DkMath/CFBRC/README.md` に
+       `TrigBridge.ClosedForm` のモジュール説明と使用例を追加。
+   - 検証:
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.ClosedForm` 成功
+     - `./lean-build.sh DkMathTest.CFBRC` 成功
+     - `./lean-build.sh DkMath.CFBRC` 成功
+     - `./lean-build.sh DkMathTest` 成功
+3. 結論:
+   - choose 形式への移行は定義・同一化の第1段が完了。
+   - 既存の低次数・テンプレート資産と共存したまま、closed form 系 API の導線を確立した。
+4. 失敗事例:
+   - 初回実装で `∑ k in ...` 記法が環境非対応（`∑ k ∈ ...` へ修正）。
+   - `simp` が係数約分を試みて分岐ゴールを生成したため、
+     `Complex.mul_re/im` の手動展開 + `ofReal_pow_re/im` + `ring` へ変更して安定化。
+5. 備考:
+   - 既知の `ABC021` `sorry` 警告は継続（今回変更範囲外）。
+6. 次の課題:
+   - `cfbrcReClosed` / `cfbrcImClosed`（偶奇分離版）を `Nat.choose` 形式で定義する。
+   - `cfbrcRe/ImClosedRaw` との同値を証明し、最終 API を choose 版へ昇格する。
