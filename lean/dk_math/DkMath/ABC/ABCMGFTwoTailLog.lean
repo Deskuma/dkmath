@@ -350,7 +350,7 @@ lemma Vp_minus_two_le_max_for_layercake
 -- 指数整理や幾何級数の無限和への収束、有限和 ≤ 無限和の単調性等が主要な admit ポイント
 lemma layercake_rhs_bound_for_layercake
     (p X K : ℕ) (t : ℝ)
-    (hp : p.Prime) (hpodd : p ≠ 2)
+    (hp : p.Prime) (_hpodd : p ≠ 2)
     (ht0 : 0 < t) (htlt1 : t < 1)
     (Ek_card_le : ∀ k ∈ Finset.Icc 1 K,
       ((Finset.filter (fun n => n ≤ X ∧ k ≤ (Vp p n - 2)) (Finset.Icc 0 X)).card : ℝ)
@@ -360,10 +360,16 @@ lemma layercake_rhs_bound_for_layercake
       (Finset.sum (Finset.Icc 1 K) fun k =>
         (p : ℝ)^(t * ((k : ℝ) - 1)) *
         ((Finset.filter (fun n => n ≤ X ∧ k ≤ (Vp p n - 2)) (Finset.Icc 0 X)).card : ℝ))
-    ≤ (X + 1 : ℝ) * (1 + Cpt) := by
+    ≤ (X + 1 : ℝ) * (1 + Cpt)
+      + ((p : ℝ)^t - 1) * (Finset.sum (Finset.Icc 1 K) fun k => (p : ℝ)^(t * ((k : ℝ) - 1))) := by
   classical
   intro Cpt
   have hp_pos : 0 < (p : ℝ) := by exact_mod_cast hp.pos
+  have hp_gt_one : (1 : ℝ) < p := by
+    exact_mod_cast hp.one_lt
+  have hcoef_nonneg : 0 ≤ (p : ℝ)^t - 1 := by
+    have : (1 : ℝ) < (p : ℝ)^t := Real.one_lt_rpow hp_gt_one ht0
+    linarith
   have hpt1 : (p : ℝ)^(t - 1) < 1 := by
     have : t - 1 < 0 := by linarith
     have hp_cast : (1 : ℝ) < p := by norm_cast; exact Nat.Prime.one_lt hp
@@ -371,7 +377,144 @@ lemma layercake_rhs_bound_for_layercake
       Real.rpow_lt_rpow_of_exponent_lt hp_cast this
     simpa [Real.rpow_zero] using this
   have hden_pos : 0 < 1 - (p : ℝ)^(t - 1) := sub_pos.mpr hpt1
-  sorry  -- 指数整理・級数評価。詳細は補足参照。
+  let S : ℝ :=
+    Finset.sum (Finset.Icc 1 K) fun k =>
+      (p : ℝ)^(t * ((k : ℝ) - 1)) *
+      ((Finset.filter (fun n => n ≤ X ∧ k ≤ (Vp p n - 2)) (Finset.Icc 0 X)).card : ℝ)
+  let Smain : ℝ :=
+    Finset.sum (Finset.Icc 1 K) fun k =>
+      (p : ℝ)^(t * ((k : ℝ) - 1)) * ((X + 1 : ℝ) / (p : ℝ) ^ (k + 2))
+  let Stail : ℝ :=
+    Finset.sum (Finset.Icc 1 K) fun k => (p : ℝ)^(t * ((k : ℝ) - 1))
+
+  have hS_le : S ≤ Smain + Stail := by
+    have htmp :
+        S ≤ Finset.sum (Finset.Icc 1 K) (fun k =>
+          (p : ℝ)^(t * ((k : ℝ) - 1)) *
+            (((X + 1 : ℝ) / (p : ℝ) ^ (k + 2)) + 1)) := by
+      unfold S
+      refine Finset.sum_le_sum ?_
+      intro k hk
+      exact mul_le_mul_of_nonneg_left (Ek_card_le k hk)
+        (Real.rpow_nonneg_of_nonneg hp_pos.le _)
+    have hsplit :
+        (Finset.sum (Finset.Icc 1 K) fun k =>
+          (p : ℝ)^(t * ((k : ℝ) - 1)) *
+            (((X + 1 : ℝ) / (p : ℝ) ^ (k + 2)) + 1))
+          = Smain + Stail := by
+      unfold Smain Stail
+      simp [mul_add, Finset.sum_add_distrib, add_comm]
+    exact htmp.trans (by simp [hsplit])
+
+  let r : ℝ := (p : ℝ)^(t - 1)
+  have hr_pos : 0 < r := by
+    unfold r
+    exact Real.rpow_pos_of_pos hp_pos _
+  have hsubset : Finset.Icc 1 K ⊆ Finset.range (K + 1) := by
+    intro k hk
+    exact Finset.mem_range.mpr (Nat.lt_succ_iff.mpr (Finset.mem_Icc.mp hk).2)
+  have hsum_r :
+      (Finset.sum (Finset.Icc 1 K) fun k => r ^ k) ≤ 1 / (1 - r) := by
+    have hsub_le :
+        (Finset.sum (Finset.Icc 1 K) fun k => r ^ k)
+          ≤ Finset.sum (Finset.range (K + 1)) (fun k => r ^ k) := by
+      exact Finset.sum_le_sum_of_subset_of_nonneg hsubset
+        (by
+          intro x hx hxnot
+          exact pow_nonneg hr_pos.le x)
+    exact hsub_le.trans (ABC.Telescoping.geom_sum_le hr_pos (by simpa [r] using hpt1) K)
+
+  have hSmain_le :
+      Smain ≤ (X + 1 : ℝ) * (p : ℝ)^(-2 - t) * (1 / (1 - r)) := by
+    have hterm :
+        ∀ k ∈ Finset.Icc 1 K,
+          (p : ℝ)^(t * ((k : ℝ) - 1)) * ((X + 1 : ℝ) / (p : ℝ) ^ (k + 2))
+            = (X + 1 : ℝ) * (p : ℝ)^(-2 - t) * r ^ k := by
+      intro k hk
+      unfold r
+      have hpow_nat : (p : ℝ) ^ (k + 2 : ℕ) = (p : ℝ) ^ ((k + 2 : ℕ) : ℝ) := by
+        rw [← Real.rpow_natCast]
+      have hmulk : (p : ℝ) ^ ((t - 1) * (k : ℝ)) = ((p : ℝ) ^ (t - 1)) ^ k := by
+        simpa [mul_comm] using (Real.rpow_mul_natCast hp_pos.le (t - 1) k)
+      have hcastk : (((k + 2 : ℕ) : ℝ)) = (k : ℝ) + 2 := by norm_num
+      calc
+        (p : ℝ) ^ (t * ((k : ℝ) - 1)) * ((X + 1 : ℝ) / (p : ℝ) ^ (k + 2))
+            = (X + 1 : ℝ) * ((p : ℝ) ^ (t * ((k : ℝ) - 1)) * ((p : ℝ) ^ (k + 2 : ℕ))⁻¹) := by
+                rw [div_eq_mul_inv]
+                ring
+        _ = (X + 1 : ℝ) * ((p : ℝ) ^ (t * ((k : ℝ) - 1) - ((k + 2 : ℕ) : ℝ))) := by
+              rw [hpow_nat, ← Real.rpow_neg hp_pos.le, ← Real.rpow_add hp_pos]
+              ring
+        _ = (X + 1 : ℝ) * ((p : ℝ) ^ (-2 - t + (t - 1) * (k : ℝ))) := by
+              congr 2
+              rw [hcastk]
+              ring
+        _ = (X + 1 : ℝ) * ((p : ℝ) ^ (-2 - t) * (p : ℝ) ^ ((t - 1) * (k : ℝ))) := by
+              rw [Real.rpow_add hp_pos]
+        _ = (X + 1 : ℝ) * (p : ℝ)^(-2 - t) * ((p : ℝ) ^ ((t - 1) * (k : ℝ))) := by
+              ring
+        _ = (X + 1 : ℝ) * (p : ℝ)^(-2 - t) * (((p : ℝ) ^ (t - 1)) ^ k) := by
+              rw [hmulk]
+    have hrewrite :
+        Smain = (X + 1 : ℝ) * (p : ℝ)^(-2 - t) * (Finset.sum (Finset.Icc 1 K) fun k => r ^ k) := by
+      unfold Smain
+      calc
+        (Finset.sum (Finset.Icc 1 K) fun k =>
+          (p : ℝ) ^ (t * ((k : ℝ) - 1)) * ((X + 1 : ℝ) / (p : ℝ) ^ (k + 2)))
+            = Finset.sum (Finset.Icc 1 K) (fun k => (X + 1 : ℝ) * (p : ℝ)^(-2 - t) * r ^ k) := by
+                refine Finset.sum_congr rfl ?_
+                intro k hk
+                simpa using hterm k hk
+        _ = (X + 1 : ℝ) * (p : ℝ)^(-2 - t) * (Finset.sum (Finset.Icc 1 K) fun k => r ^ k) := by
+              rw [← Finset.mul_sum]
+    rw [hrewrite]
+    refine mul_le_mul_of_nonneg_left hsum_r ?_
+    exact mul_nonneg (by positivity) (Real.rpow_nonneg_of_nonneg hp_pos.le _)
+
+  have hcoef_le :
+      ((p : ℝ)^t - 1) * (p : ℝ)^(-2 - t) ≤ (p : ℝ)^(-2 : ℝ) := by
+    have hsub : (p : ℝ)^t - 1 ≤ (p : ℝ)^t := by linarith
+    have hnonneg : 0 ≤ (p : ℝ)^(-2 - t) := Real.rpow_nonneg_of_nonneg hp_pos.le _
+    have hmul :
+        ((p : ℝ)^t - 1) * (p : ℝ)^(-2 - t)
+          ≤ (p : ℝ)^t * (p : ℝ)^(-2 - t) := mul_le_mul_of_nonneg_right hsub hnonneg
+    have hpow :
+        (p : ℝ)^t * (p : ℝ)^(-2 - t) = (p : ℝ)^(-2 : ℝ) := by
+      calc
+        (p : ℝ)^t * (p : ℝ)^(-2 - t) = (p : ℝ)^(t + (-2 - t)) := by
+          rw [← Real.rpow_add hp_pos]
+        _ = (p : ℝ)^(-2 : ℝ) := by ring_nf
+    exact hmul.trans (by simp [hpow])
+
+  have hmain :
+      ((p : ℝ)^t - 1) * Smain ≤ (X + 1 : ℝ) * Cpt := by
+    calc
+      ((p : ℝ)^t - 1) * Smain
+          ≤ ((p : ℝ)^t - 1) * ((X + 1 : ℝ) * (p : ℝ)^(-2 - t) * (1 / (1 - r))) := by
+            exact mul_le_mul_of_nonneg_left hSmain_le hcoef_nonneg
+      _ = (((p : ℝ)^t - 1) * (p : ℝ)^(-2 - t)) * ((X + 1 : ℝ) * (1 / (1 - r))) := by
+            ring
+      _ ≤ ((p : ℝ)^(-2 : ℝ)) * ((X + 1 : ℝ) * (1 / (1 - r))) := by
+            refine mul_le_mul_of_nonneg_right hcoef_le ?_
+            exact mul_nonneg (by positivity) (one_div_nonneg.mpr (le_of_lt hden_pos))
+      _ = (X + 1 : ℝ) * Cpt := by
+            unfold Cpt r
+            ring
+
+  calc
+    (X + 1 : ℝ) + ((p : ℝ)^t - 1) * S
+        ≤ (X + 1 : ℝ) + ((p : ℝ)^t - 1) * (Smain + Stail) := by
+              simpa [add_comm, add_left_comm, add_assoc] using
+                add_le_add_left (mul_le_mul_of_nonneg_left hS_le hcoef_nonneg) (X + 1 : ℝ)
+    _ = (X + 1 : ℝ) + (((p : ℝ)^t - 1) * Smain + ((p : ℝ)^t - 1) * Stail) := by
+          ring
+    _ ≤ (X + 1 : ℝ) + ((X + 1 : ℝ) * Cpt + ((p : ℝ)^t - 1) * Stail) := by
+          gcongr
+    _ = (X + 1 : ℝ) * (1 + Cpt) + ((p : ℝ)^t - 1) * Stail := by
+          ring
+    _ = (X + 1 : ℝ) * (1 + Cpt)
+          + ((p : ℝ)^t - 1) * (Finset.sum (Finset.Icc 1 K) fun k => (p : ℝ)^(t * ((k : ℝ) - 1))) := by
+          rfl
 
 -- 補助補題：p^m が奇数 2n+1 を割く個数上界（+1 付き安全版）
 -- For odd prime p and n ∈ [0..X], solutions to p^m ∣ (2n+1) are p^m-separated.
