@@ -372,27 +372,6 @@ example (t : ℝ) (X P₀ : ℕ) :
     funext p
     rw [mul_assoc]
 
-example (t : ℝ) (X P₀ : ℕ) :
-    (∑ n ∈ Finset.Icc 0 X, ∏ p ∈ (2 * n + 1).primeFactors with p > P₀,
-      Real.exp (t *  ↑((2 * n + 1).factorization p - 2) * Real.log ↑p ) ≤ (Finset.Icc 0 X).card • 1)
-  = (∑ n ∈ Finset.Icc 0 X, ∏ p ∈ (2 * n + 1).primeFactors with p > P₀,
-      Real.exp (t * (↑((2 * n + 1).factorization p - 2) * Real.log ↑p)) ≤ (Finset.Icc 0 X).card • 1)
-  := by grind
-
-example (t : ℝ) (X P₀ : ℕ) :
-    (∑ n ∈ Finset.Icc 0 X, ∏ p ∈ (2 * n + 1).primeFactors with p > P₀,
-      Real.exp (t *  ↑((2 * n + 1).factorization p - 2) * Real.log ↑p ) ≤ (Finset.Icc 0 X).card • 1)
-  = (∑ n ∈ Finset.Icc 0 X, ∏ p ∈ (2 * n + 1).primeFactors with p > P₀,
-      Real.exp (t * (↑((2 * n + 1).factorization p - 2) * Real.log ↑p)) ≤ (Finset.Icc 0 X).card • 1)
-  := by grind only [cases Or]
-
-example (t : ℝ) (X P₀ : ℕ) :
-    (∑ n ∈ Finset.Icc 0 X, ∏ p ∈ (2 * n + 1).primeFactors with p > P₀,
-      Real.exp (t *  ↑((2 * n + 1).factorization p - 2) * Real.log ↑p ) ≤ (Finset.Icc 0 X).card • 1)
-  = (∑ n ∈ Finset.Icc 0 X, ∏ p ∈ (2 * n + 1).primeFactors with p > P₀,
-      Real.exp (t * (↑((2 * n + 1).factorization p - 2) * Real.log ↑p)) ≤ (Finset.Icc 0 X).card • 1)
-  := by grind
-
 /-- Logarithmic twoTail sum S_X (iff version) -/
 example (t : ℝ) (X P₀ : ℕ) :
     (∑ n ∈ Finset.Icc 0 X, ∏ p ∈ (2 * n + 1).primeFactors with p > P₀,
