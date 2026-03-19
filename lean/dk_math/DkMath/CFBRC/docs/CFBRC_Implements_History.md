@@ -907,3 +907,30 @@
 6. 次の課題:
    - `d=6,7` など次段の低次数明示式を同様に追加し、`mod 4` 再帰との対応を強化する。
    - `Main` 側で `d=2` が general 補題の特化であることを明示する接続補題を追加する。
+
+### 日時: 2026/03/20 02:42 JST: `d=6,7` 明示式を追加し低次数帯を拡張
+
+1. 目的: `d=3,4,5` に続き、低次数明示式を `d=6,7` まで拡張して手計算比較を容易にする。
+2. 内容:
+   - `DkMath/CFBRC/TrigBridge/General.lean` に追加:
+     - `cfbrcRe_six`, `cfbrcIm_six`
+     - `cfbrcRe_seven`, `cfbrcIm_seven`
+   - `DkMathTest/CFBRC.lean` に回帰例を追加:
+     - `cfbrcRe/Im` の `d=6,7` 明示式 `example`。
+     - 依存公理監視に `#print axioms cfbrcIm_seven` を追加。
+   - `DkMath/CFBRC/README.md` の general `d` 章へ
+     - `cfbrcRe_seven` / `cfbrcIm_seven` の使用例を追加。
+   - 検証:
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.General`
+     - `./lean-build.sh DkMathTest.CFBRC`
+     - `./lean-build.sh DkMath.CFBRC`
+     - `./lean-build.sh DkMathTest`
+3. 結論: 低次数明示式の整備範囲が `d=7` まで拡張され、
+   `mod 4` 再帰で追った結果を具体式で突き合わせる導線が強化された。
+4. 失敗事例:
+   - 特になし（`simp` + `ring` で安定に導出可能）。
+5. 備考:
+   - `d=6,7` でも `(iΘ)^d` 減算により定数項（純 `Θ` 項）が消える形が維持される。
+6. 次の課題:
+   - `Main` に「`d=2` は general 補題（`cfbrcRe_two` 相当）から得られる」接続補題を追加する。
+   - 必要なら `d=8` 以降は再帰ベース自動化（`linarith`/`ring_nf` 連携）に寄せる。

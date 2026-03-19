@@ -123,6 +123,22 @@ example (X Θ : ℝ) :
     cfbrcIm 5 X Θ = 5 * X ^ 4 * Θ - 10 * X ^ 2 * Θ ^ 3 := by
   simpa using cfbrcIm_five X Θ
 
+example (X Θ : ℝ) :
+    cfbrcRe 6 X Θ = X ^ 6 - 15 * X ^ 4 * Θ ^ 2 + 15 * X ^ 2 * Θ ^ 4 := by
+  simpa using cfbrcRe_six X Θ
+
+example (X Θ : ℝ) :
+    cfbrcIm 6 X Θ = 6 * X ^ 5 * Θ - 20 * X ^ 3 * Θ ^ 3 + 6 * X * Θ ^ 5 := by
+  simpa using cfbrcIm_six X Θ
+
+example (X Θ : ℝ) :
+    cfbrcRe 7 X Θ = X ^ 7 - 21 * X ^ 5 * Θ ^ 2 + 35 * X ^ 3 * Θ ^ 4 - 7 * X * Θ ^ 6 := by
+  simpa using cfbrcRe_seven X Θ
+
+example (X Θ : ℝ) :
+    cfbrcIm 7 X Θ = 7 * X ^ 6 * Θ - 35 * X ^ 4 * Θ ^ 3 + 21 * X ^ 2 * Θ ^ 5 := by
+  simpa using cfbrcIm_seven X Θ
+
 -- BoundarySide 高位 API（valuation）
 example (side : BoundarySide) {d x u q : ℕ}
     (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
@@ -184,6 +200,7 @@ example (side : BoundarySide) {d x u : ℕ}
 #print axioms pure_phase_pow_mod4_three_im
 #print axioms cfbrcIm_mod4_four_from_three
 #print axioms cfbrcRe_five
+#print axioms cfbrcIm_seven
 #print axioms padicValNat_boundaryDiffPow_eq_boundaryGN_of_coprime_of_dvd_boundary
 #print axioms exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime
 #print axioms exists_primitive_prime_factor_boundaryDiffPow_of_prime_exp_boundary_of_coprime

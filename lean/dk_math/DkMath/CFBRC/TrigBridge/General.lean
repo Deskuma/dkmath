@@ -578,6 +578,46 @@ lemma cfbrcIm_five (X Θ : ℝ) :
   simp [cfbrcIm, cfbrcR, cfbrc, pow_succ]
   ring
 
+/--
+低次数 `d=6` の実部明示式。
+
+`cfbrcRe 6 X Θ = X^6 - 15X^4Θ^2 + 15X^2Θ^4`。
+-/
+lemma cfbrcRe_six (X Θ : ℝ) :
+    cfbrcRe 6 X Θ = X ^ 6 - 15 * X ^ 4 * Θ ^ 2 + 15 * X ^ 2 * Θ ^ 4 := by
+  simp [cfbrcRe, cfbrcR, cfbrc, pow_succ]
+  ring
+
+/--
+低次数 `d=6` の虚部明示式。
+
+`cfbrcIm 6 X Θ = 6X^5Θ - 20X^3Θ^3 + 6XΘ^5`。
+-/
+lemma cfbrcIm_six (X Θ : ℝ) :
+    cfbrcIm 6 X Θ = 6 * X ^ 5 * Θ - 20 * X ^ 3 * Θ ^ 3 + 6 * X * Θ ^ 5 := by
+  simp [cfbrcIm, cfbrcR, cfbrc, pow_succ]
+  ring
+
+/--
+低次数 `d=7` の実部明示式。
+
+`cfbrcRe 7 X Θ = X^7 - 21X^5Θ^2 + 35X^3Θ^4 - 7XΘ^6`。
+-/
+lemma cfbrcRe_seven (X Θ : ℝ) :
+    cfbrcRe 7 X Θ = X ^ 7 - 21 * X ^ 5 * Θ ^ 2 + 35 * X ^ 3 * Θ ^ 4 - 7 * X * Θ ^ 6 := by
+  simp [cfbrcRe, cfbrcR, cfbrc, pow_succ]
+  ring
+
+/--
+低次数 `d=7` の虚部明示式。
+
+`cfbrcIm 7 X Θ = 7X^6Θ - 35X^4Θ^3 + 21X^2Θ^5`。
+-/
+lemma cfbrcIm_seven (X Θ : ℝ) :
+    cfbrcIm 7 X Θ = 7 * X ^ 6 * Θ - 35 * X ^ 4 * Θ ^ 3 + 21 * X ^ 2 * Θ ^ 5 := by
+  simp [cfbrcIm, cfbrcR, cfbrc, pow_succ]
+  ring
+
 end
 
 end DkMath.CFBRC.TrigBridge

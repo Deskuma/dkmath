@@ -213,6 +213,14 @@ example (X Θ : ℝ) :
 example (X Θ : ℝ) :
     cfbrcIm 5 X Θ = 5 * X ^ 4 * Θ - 10 * X ^ 2 * Θ ^ 3 :=
   cfbrcIm_five X Θ
+
+example (X Θ : ℝ) :
+    cfbrcRe 7 X Θ = X ^ 7 - 21 * X ^ 5 * Θ ^ 2 + 35 * X ^ 3 * Θ ^ 4 - 7 * X * Θ ^ 6 :=
+  cfbrcRe_seven X Θ
+
+example (X Θ : ℝ) :
+    cfbrcIm 7 X Θ = 7 * X ^ 6 * Θ - 35 * X ^ 4 * Θ ^ 3 + 21 * X ^ 2 * Θ ^ 5 :=
+  cfbrcIm_seven X Θ
 ```
 
 ## Related Docs
