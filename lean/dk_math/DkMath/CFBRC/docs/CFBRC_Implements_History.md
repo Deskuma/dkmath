@@ -1123,3 +1123,172 @@
 6. 次の課題:
    - `d=13,14` へ継続し、テンプレート適用の反復性をさらに確認する。
    - `phaseRe/phaseIm` を `mod 4` から自動選択する高位テンプレートの設計を進める。
+
+### 日時: 2026/03/20  3:57 JST: choose_phase
+
+**事前調査結果**
+
+1. `choose` 展開の実装パターンは既に `CosmicFormula` 側にあり、`add_pow` + `Finset.sum_range_succ'` で安定して証明されています。  
+   [CosmicFormulaBinom.lean:77](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean:77)  
+   [CosmicFormulaBinom.lean:280](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean:280)
+
+2. `Complex` の和の実部・虚部は `Complex.re_sum` / `Complex.im_sum` が使えます。  
+   [Mathlib Data/Complex/BigOperators.lean:44](/lean/dk_math/.lake/packages/mathlib/Mathlib/Data/Complex/BigOperators.lean:44)
+
+3. `add_pow` の形は  
+   `(x + y)^n = ∑ m∈range (n+1), x^m * y^(n-m) * choose n m` です。  
+   このまま `cfbrcR = (X+iΘ)^d - (iΘ)^d` へ接続できます。  
+   [Mathlib Data/Nat/Choose/Sum.lean:76](/lean/dk_math/.lake/packages/mathlib/Mathlib/Data/Nat/Choose/Sum.lean:76)
+
+4. 現在の `TrigBridge.General` は再帰・位相評価が十分に揃っており、閉形式証明の土台は完成済みです。  
+   [General.lean:166](/lean/dk_math/DkMath/CFBRC/TrigBridge/General.lean:166)  
+   [General.lean:186](/lean/dk_math/DkMath/CFBRC/TrigBridge/General.lean:186)
+
+5. `Nat.cast_choose` は `DivisionSemiring` 要件の式なので主証明では使いません。`(Nat.choose d k : ℂ)` / `: ℝ` の直接キャストで進める方が安全です。
+
+**実装計画（Nat.choose 昇格）**
+
+1. 新規ファイル `DkMath/CFBRC/TrigBridge/ClosedForm.lean` を追加する。  
+   `General.lean` は再帰エンジン、`ClosedForm.lean` は choose 主定理に分離。
+
+2. まず複素閉形式を定義する（ルートA）。  
+   `cfbrcClosed (d X Θ)` を `Finset.range d` の和で定義し、`cfbrcR d X Θ = cfbrcClosed d X Θ` を証明する。  
+   証明は `add_pow` と `Finset.sum_range_succ'` ベース。
+
+3. 次に実部・虚部の閉形式（raw版）を定義する。  
+   `cfbrcReClosedRaw` / `cfbrcImClosedRaw` を `j` 走査の単一和で定義し、偶奇は `if` で処理する。  
+   ここで `Complex.re_sum` / `Complex.im_sum` と既存の `pure_phase_pow_*` 補題を使って  
+   `cfbrcRe = cfbrcReClosedRaw`, `cfbrcIm = cfbrcImClosedRaw` を先に確定する。
+
+4. その後に見た目の良い本命 API へ昇格する。  
+   `m` 走査（`2m`, `2m+1`）の `cfbrcReClosed` / `cfbrcImClosed` を定義し、raw版との同値を示す。  
+   ユーザー提示の式を最終形として公開。
+
+5. 低次数補題の役割を変更する。  
+   `d=3..12` は削除せず「回帰・可読サンプル」に残し、主APIは choose 閉形式へ移す。
+
+6. 反映対象。  
+   `DkMathTest/CFBRC.lean` に closed form 回帰を追加。  
+   `README.md` を choose 主体へ更新。  
+   `CFBRC_Implements_History.md` に今回方針と進捗を記録。
+
+7. 検証コマンド。  
+   `./lean-build.sh DkMath.CFBRC.TrigBridge.ClosedForm`  
+   `./lean-build.sh DkMathTest.CFBRC`  
+   `./lean-build.sh DkMath.CFBRC`  
+   `./lean-build.sh DkMathTest`
+
+この計画で、次ターンは `ClosedForm.lean` 作成と `cfbrcR = cfbrcClosed` の証明から着手します。
+
+### 日時: 2026/03/20 04:05 JST: `ClosedForm` 第1段（複素 choose 形 + Re/Im raw）を実装
+
+1. 目的:
+   - `Nat.choose` 昇格の初手として、`cfbrcR` の複素 closed form と
+     `cfbrcRe/Im` の raw closed form を定義・同一化する。
+2. 内容:
+   - 新規ファイル `DkMath/CFBRC/TrigBridge/ClosedForm.lean` を追加。
+   - 追加定義:
+     - `cfbrcClosed`（複素 choose 和）
+     - `cfbrcReClosedRaw`
+     - `cfbrcImClosedRaw`
+   - 追加定理:
+     - `cfbrcR_eq_cfbrcClosed`
+     - `cfbrcRe_eq_cfbrcReClosedRaw`
+     - `cfbrcIm_eq_cfbrcImClosedRaw`
+   - 実装要点:
+     - `add_pow` + `Finset.sum_range_succ'` で `k=0` 項を分離して
+       `(X+iΘ)^d-(iΘ)^d` を `range d` の和へ落とす。
+     - `Complex.re_sum` / `Complex.im_sum` と
+       `ofReal_pow_re/im` を使って項ごとに `Re/Im` を抽出。
+   - 公開入口更新:
+     - `DkMath/CFBRC.lean` に `import DkMath.CFBRC.TrigBridge.ClosedForm` を追加。
+   - 回帰・ドキュメント:
+     - `DkMathTest/CFBRC.lean` に
+       `cfbrcR_eq_cfbrcClosed` / `cfbrcRe/Im_eq_*Raw` の `example` と
+       `#print axioms` 追加。
+     - `DkMath/CFBRC/README.md` に
+       `TrigBridge.ClosedForm` のモジュール説明と使用例を追加。
+   - 検証:
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.ClosedForm` 成功
+     - `./lean-build.sh DkMathTest.CFBRC` 成功
+     - `./lean-build.sh DkMath.CFBRC` 成功
+     - `./lean-build.sh DkMathTest` 成功
+3. 結論:
+   - choose 形式への移行は定義・同一化の第1段が完了。
+   - 既存の低次数・テンプレート資産と共存したまま、closed form 系 API の導線を確立した。
+4. 失敗事例:
+   - 初回実装で `∑ k in ...` 記法が環境非対応（`∑ k ∈ ...` へ修正）。
+   - `simp` が係数約分を試みて分岐ゴールを生成したため、
+     `Complex.mul_re/im` の手動展開 + `ofReal_pow_re/im` + `ring` へ変更して安定化。
+5. 備考:
+   - 既知の `ABC021` `sorry` 警告は継続（今回変更範囲外）。
+6. 次の課題:
+   - `cfbrcReClosed` / `cfbrcImClosed`（偶奇分離版）を `Nat.choose` 形式で定義する。
+   - `cfbrcRe/ImClosedRaw` との同値を証明し、最終 API を choose 版へ昇格する。
+
+### 日時: 2026/03/20 04:31 JST: `ClosedForm` 第2段（偶奇分離 choose 形）を実装
+
+1. 目的:
+   - `Raw` 形式で止まっていた `Re/Im` 閉形式を、`2m` / `2m+1` の
+     `Nat.choose` 主形式へ昇格する。
+2. 内容:
+   - `DkMath/CFBRC/TrigBridge/ClosedForm.lean` を拡張。
+   - 追加定義:
+     - `cfbrcReClosed`
+     - `cfbrcImClosed`
+   - 追加定理:
+     - `cfbrcReClosedRaw_eq_cfbrcReClosed`
+     - `cfbrcImClosedRaw_eq_cfbrcImClosed`
+     - `cfbrcRe_eq_cfbrcReClosed`
+     - `cfbrcIm_eq_cfbrcImClosed`
+   - 補助補題（private）:
+     - `Raw` 和の添字反転（`sum_range_reflect` + `Nat.choose_symm`）
+     - 純位相 `Re/Im` の `if Even/Odd` 形
+     - `if Even/Odd` 和を `range ((d+1)/2)` / `range (d/2)` に圧縮する一般補題
+   - `DkMathTest/CFBRC.lean` に以下の回帰を追加:
+     - `Raw -> Closed` 同値
+     - `cfbrcRe/Im -> Closed` 同値
+     - `#print axioms cfbrcRe_eq_cfbrcReClosed`
+     - `#print axioms cfbrcIm_eq_cfbrcImClosed`
+   - `DkMath/CFBRC/README.md` を更新:
+     - `TrigBridge.ClosedForm` の説明を `Raw + 偶奇分離` へ拡張
+     - 新同値の使用例を追加
+3. 結論:
+   - `choose` 昇格の第2段を完了。
+   - `cfbrcRe/Im` は最終的に `Nat.choose` の偶奇分離主形式へ直接接続できる状態になった。
+4. 失敗事例:
+   - `sum_odd_if_eq` の even case で `simp` が進まない箇所があり、
+     `¬ Odd (n+n)` を明示補題化して解消。
+5. 備考:
+   - 既知の `ABC021` `sorry` 警告は継続（今回変更範囲外）。
+6. 次の課題:
+   - `cfbrcClosed`（複素和）から `cfbrcReClosed` / `cfbrcImClosed` への直結 API を整備する。
+   - 必要に応じて低次数補題（`d=3..12`）を `Closed` 形式経由の回帰へ寄せる。
+
+### 日時: 2026/03/20 04:45 JST: `cfbrcClosed -> cfbrcRe/ImClosed` 直結補題を追加
+
+1. 目的:
+   - `cfbrcClosed` を起点に、実部・虚部の最終閉形式へ直接到達する API を追加する。
+2. 内容:
+   - `DkMath/CFBRC/TrigBridge/ClosedForm.lean` に以下を追加:
+     - `cfbrcClosed_re_eq_cfbrcReClosed`
+     - `cfbrcClosed_im_eq_cfbrcImClosed`
+   - 証明方針:
+     - `cfbrcR_eq_cfbrcClosed` で `cfbrcClosed` を `cfbrcR` へ戻し、
+       既存の `cfbrcRe/Im_eq_cfbrcRe/ImClosed` を合成。
+   - `DkMathTest/CFBRC.lean`:
+     - 上記2補題の `example` を追加。
+     - `#print axioms cfbrcClosed_re_eq_cfbrcReClosed`
+     - `#print axioms cfbrcClosed_im_eq_cfbrcImClosed`
+   - `DkMath/CFBRC/README.md`:
+     - `Complex.re/im (cfbrcClosed ...)` から
+       `cfbrcRe/ImClosed` へ直接接続する使用例を追記。
+3. 結論:
+   - `cfbrcClosed` の利用者は、`Re/Im` を取った時点で
+     そのまま偶奇分離 `Nat.choose` 主形式へ落とせるようになった。
+4. 失敗事例:
+   - 特になし（既存同値の合成で安定）。
+5. 備考:
+   - 既知の `ABC021` `sorry` 警告は継続（今回変更範囲外）。
+6. 次の課題:
+   - 低次数回帰（`d=3..12`）を `cfbrcClosed_re/im_eq_cfbrcRe/ImClosed` 経由にも寄せる。
