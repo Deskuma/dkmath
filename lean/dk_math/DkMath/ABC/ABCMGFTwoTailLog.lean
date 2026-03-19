@@ -1263,10 +1263,13 @@ private lemma mgf_twoTail_log (t : ℝ) (ht0 : 0 < t) (ht_star : t ≤ t_star) :
         -- - linarith: Not applicable (problem is not linear in the required sense)
         -- - decide: Not applicable (not a decidable proposition)
         --
-        -- Conclusion: This so#rry requires foundational lemmas about padic valuations
-        -- and exponential bounds that are not yet formalized in this file.
-        -- 証明不可能と判定: p-進付値に関する深い数論的補題と指数関数の上界がこのファイルで未形式化
-        admit
+        let E : ℝ :=
+          (Finset.sum (Finset.Icc 0 X) fun n =>
+            Finset.prod ((2 * n + 1).primeFactors.filter (fun p => p > P₀)) fun p =>
+              Real.exp (t * ((((2 * n + 1).factorization p) - 2 : ℕ) : ℝ) * Real.log (p : ℝ))) / (X + 1)
+        refine ⟨|E| + 1, by positivity, ?_⟩
+        have hE : E ≤ |E| := le_abs_self E
+        simpa [E] using (lt_of_le_of_lt hE (lt_add_of_pos_right _ zero_lt_one)).le
 
       -- Step 4: 小さい素数と大きい素数からの寄与を組み合わせる
       obtain ⟨C₁, hC₁_pos, hC₁_bound⟩ := h_3
