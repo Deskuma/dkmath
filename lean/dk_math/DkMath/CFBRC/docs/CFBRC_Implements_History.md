@@ -971,3 +971,33 @@
 6. 次の課題:
    - `d=8` 以降を手作業明示式で増やすか、再帰ベース自動生成（または補題テンプレート）へ移行するか方針を決める。
    - 必要なら `cfbrc_two_im_polar` 側も `via_general` 版を `Main` で利用する定理を追加する。
+
+### 日時: 2026/03/20 02:55 JST: `cfbrc_two_im_polar` の `via_general` 導線を追加
+
+1. 目的: `d=2` の虚部極座標公式も、`General` 再帰補題系から導く接続を `Main` に揃える。
+2. 内容:
+   - `DkMath/CFBRC/TrigBridge/Main.lean`
+     - 追加:
+       - `cfbrc_two_im_polar_via_general`
+         - `cfbrc_two_im_via_general` を極座標代入して
+           `Im (cfbrcR 2 (a cos φ) (a sin φ)) = 2 a^2 sin φ cos φ` を導出。
+   - `DkMathTest/CFBRC.lean`
+     - 回帰 `example` を追加:
+       - `cfbrc_two_im_polar_via_general`
+     - 依存公理監視に `#print axioms cfbrc_two_im_polar_via_general` を追加。
+   - `DkMath/CFBRC/README.md`
+     - `d=2` 使用例セクションに `cfbrc_two_im_polar_via_general` を追記。
+   - 検証:
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.Main`
+     - `./lean-build.sh DkMathTest.CFBRC`
+     - `./lean-build.sh DkMath.CFBRC`
+     - `./lean-build.sh DkMathTest`
+3. 結論: `d=2` の実部・虚部ともに `Main <- General` の導線が揃い、
+   `Complex` 専用補題に依存しない説明経路が完成した。
+4. 失敗事例:
+   - 特になし（`rw` と `ring` で直ちに整合）。
+5. 備考:
+   - 既存の `Complex.cfbrc_two_im_polar` は保持して互換性を維持。
+6. 次の課題:
+   - `d=8` 以降の明示式整備を継続するか、再帰式主体の運用に寄せるかを決める。
+   - 必要なら `d=2` で `via_general` と `Complex` 版の同値を示す補題を追加する。

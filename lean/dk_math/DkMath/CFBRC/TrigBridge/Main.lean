@@ -82,6 +82,17 @@ theorem cfbrc_two_re_polar_via_general (a φ : ℝ) :
   ring
 
 /--
+極座標代入後の `d=2` 虚部（general 補題由来）。
+
+`Im (cfbrcR 2 (a cos φ) (a sin φ)) = 2 a^2 sin φ cos φ`。
+-/
+theorem cfbrc_two_im_polar_via_general (a φ : ℝ) :
+    Complex.im (cfbrcR 2 (a * Real.cos φ) (a * Real.sin φ)) =
+      2 * a ^ 2 * Real.sin φ * Real.cos φ := by
+  rw [cfbrc_two_im_via_general]
+  ring
+
+/--
 Body 形と CFBRC 実部の同一化（`d=2`）。
 
 `body2 (a*(1-sin φ)) (a*sin φ) = Re(cfbrcR 2 (a cos φ) (a sin φ))`。

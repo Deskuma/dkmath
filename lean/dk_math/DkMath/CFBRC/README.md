@@ -179,6 +179,11 @@ example (a φ : ℝ) :
 example (X Θ : ℝ) :
     Complex.re (cfbrcR 2 X Θ) = X ^ 2 :=
   cfbrc_two_re_via_general X Θ
+
+example (a φ : ℝ) :
+    Complex.im (cfbrcR 2 (a * Real.cos φ) (a * Real.sin φ)) =
+      2 * a ^ 2 * Real.sin φ * Real.cos φ :=
+  cfbrc_two_im_polar_via_general a φ
 ```
 
 ### 7) General `d` 用の `Re/Im` 補助
