@@ -709,6 +709,123 @@ lemma cfbrcIm_eight_from_template (X Θ : ℝ) :
     _ = 8 * X ^ 7 * Θ - 56 * X ^ 5 * Θ ^ 3 + 56 * X ^ 3 * Θ ^ 5 - 8 * X * Θ ^ 7 := by
           ring
 
+/--
+再帰テンプレートで導く `d=9` 実部明示式。
+
+`d=8` の明示式と `Re((iΘ)^8)=Θ^8` をテンプレートへ渡して生成する。
+-/
+lemma cfbrcRe_nine_from_template (X Θ : ℝ) :
+    cfbrcRe 9 X Θ =
+      X ^ 9 - 36 * X ^ 7 * Θ ^ 2 + 126 * X ^ 5 * Θ ^ 4 - 84 * X ^ 3 * Θ ^ 6 + 9 * X * Θ ^ 8 := by
+  have hPhaseRe : Complex.re ((Complex.I * Θ) ^ 8) = Θ ^ 8 := by
+    simpa using (pure_phase_pow_mod4_zero_re (n := 2) Θ)
+  have hStep :=
+    cfbrcRe_succ_template
+      (d := 8) (X := X) (Θ := Θ)
+      (ReD := X ^ 8 - 28 * X ^ 6 * Θ ^ 2 + 70 * X ^ 4 * Θ ^ 4 - 28 * X ^ 2 * Θ ^ 6)
+      (ImD := 8 * X ^ 7 * Θ - 56 * X ^ 5 * Θ ^ 3 + 56 * X ^ 3 * Θ ^ 5 - 8 * X * Θ ^ 7)
+      (phaseRe := Θ ^ 8)
+      (hRe := cfbrcRe_eight_from_template X Θ)
+      (hIm := cfbrcIm_eight_from_template X Θ)
+      (hPhaseRe := hPhaseRe)
+  calc
+    cfbrcRe 9 X Θ =
+        X * (X ^ 8 - 28 * X ^ 6 * Θ ^ 2 + 70 * X ^ 4 * Θ ^ 4 - 28 * X ^ 2 * Θ ^ 6) -
+        Θ * (8 * X ^ 7 * Θ - 56 * X ^ 5 * Θ ^ 3 + 56 * X ^ 3 * Θ ^ 5 - 8 * X * Θ ^ 7) +
+        X * (Θ ^ 8) := by
+          simpa using hStep
+    _ = X ^ 9 - 36 * X ^ 7 * Θ ^ 2 + 126 * X ^ 5 * Θ ^ 4 - 84 * X ^ 3 * Θ ^ 6 + 9 * X * Θ ^ 8 := by
+          ring
+
+/--
+再帰テンプレートで導く `d=9` 虚部明示式。
+
+`d=8` の明示式と `Im((iΘ)^8)=0` をテンプレートへ渡して生成する。
+-/
+lemma cfbrcIm_nine_from_template (X Θ : ℝ) :
+    cfbrcIm 9 X Θ =
+      9 * X ^ 8 * Θ - 84 * X ^ 6 * Θ ^ 3 + 126 * X ^ 4 * Θ ^ 5 - 36 * X ^ 2 * Θ ^ 7 := by
+  have hPhaseIm : Complex.im ((Complex.I * Θ) ^ 8) = 0 := by
+    simpa using (pure_phase_pow_mod4_zero_im (n := 2) Θ)
+  have hStep :=
+    cfbrcIm_succ_template
+      (d := 8) (X := X) (Θ := Θ)
+      (ReD := X ^ 8 - 28 * X ^ 6 * Θ ^ 2 + 70 * X ^ 4 * Θ ^ 4 - 28 * X ^ 2 * Θ ^ 6)
+      (ImD := 8 * X ^ 7 * Θ - 56 * X ^ 5 * Θ ^ 3 + 56 * X ^ 3 * Θ ^ 5 - 8 * X * Θ ^ 7)
+      (phaseIm := 0)
+      (hRe := cfbrcRe_eight_from_template X Θ)
+      (hIm := cfbrcIm_eight_from_template X Θ)
+      (hPhaseIm := hPhaseIm)
+  calc
+    cfbrcIm 9 X Θ =
+        X * (8 * X ^ 7 * Θ - 56 * X ^ 5 * Θ ^ 3 + 56 * X ^ 3 * Θ ^ 5 - 8 * X * Θ ^ 7) +
+        Θ * (X ^ 8 - 28 * X ^ 6 * Θ ^ 2 + 70 * X ^ 4 * Θ ^ 4 - 28 * X ^ 2 * Θ ^ 6) + X * 0 := by
+          simpa using hStep
+    _ = 9 * X ^ 8 * Θ - 84 * X ^ 6 * Θ ^ 3 + 126 * X ^ 4 * Θ ^ 5 - 36 * X ^ 2 * Θ ^ 7 := by
+          ring
+
+/--
+再帰テンプレートで導く `d=10` 実部明示式。
+
+`d=9` の明示式と `Re((iΘ)^9)=0` をテンプレートへ渡して生成する。
+-/
+lemma cfbrcRe_ten_from_template (X Θ : ℝ) :
+    cfbrcRe 10 X Θ =
+      X ^ 10 - 45 * X ^ 8 * Θ ^ 2 + 210 * X ^ 6 * Θ ^ 4 -
+        210 * X ^ 4 * Θ ^ 6 + 45 * X ^ 2 * Θ ^ 8 := by
+  have hPhaseRe : Complex.re ((Complex.I * Θ) ^ 9) = 0 := by
+    simpa using (pure_phase_pow_mod4_one_re (n := 2) Θ)
+  have hStep :=
+    cfbrcRe_succ_template
+      (d := 9) (X := X) (Θ := Θ)
+      (ReD := X ^ 9 - 36 * X ^ 7 * Θ ^ 2 + 126 * X ^ 5 * Θ ^ 4 - 84 * X ^ 3 * Θ ^ 6 + 9 * X * Θ ^ 8)
+      (ImD := 9 * X ^ 8 * Θ - 84 * X ^ 6 * Θ ^ 3 + 126 * X ^ 4 * Θ ^ 5 - 36 * X ^ 2 * Θ ^ 7)
+      (phaseRe := 0)
+      (hRe := cfbrcRe_nine_from_template X Θ)
+      (hIm := cfbrcIm_nine_from_template X Θ)
+      (hPhaseRe := hPhaseRe)
+  calc
+    cfbrcRe 10 X Θ =
+        X * (X ^ 9 - 36 * X ^ 7 * Θ ^ 2 + 126 * X ^ 5 * Θ ^ 4 - 84 * X ^ 3 * Θ ^ 6 +
+          9 * X * Θ ^ 8) -
+        Θ * (9 * X ^ 8 * Θ - 84 * X ^ 6 * Θ ^ 3 + 126 * X ^ 4 * Θ ^ 5 - 36 * X ^ 2 * Θ ^ 7) +
+        X * 0 := by
+          simpa using hStep
+    _ = X ^ 10 - 45 * X ^ 8 * Θ ^ 2 + 210 * X ^ 6 * Θ ^ 4 -
+        210 * X ^ 4 * Θ ^ 6 + 45 * X ^ 2 * Θ ^ 8 := by
+          ring
+
+/--
+再帰テンプレートで導く `d=10` 虚部明示式。
+
+`d=9` の明示式と `Im((iΘ)^9)=Θ^9` をテンプレートへ渡して生成する。
+-/
+lemma cfbrcIm_ten_from_template (X Θ : ℝ) :
+    cfbrcIm 10 X Θ =
+      10 * X ^ 9 * Θ - 120 * X ^ 7 * Θ ^ 3 + 252 * X ^ 5 * Θ ^ 5 -
+        120 * X ^ 3 * Θ ^ 7 + 10 * X * Θ ^ 9 := by
+  have hPhaseIm : Complex.im ((Complex.I * Θ) ^ 9) = Θ ^ 9 := by
+    simpa using (pure_phase_pow_mod4_one_im (n := 2) Θ)
+  have hStep :=
+    cfbrcIm_succ_template
+      (d := 9) (X := X) (Θ := Θ)
+      (ReD := X ^ 9 - 36 * X ^ 7 * Θ ^ 2 + 126 * X ^ 5 * Θ ^ 4 - 84 * X ^ 3 * Θ ^ 6 + 9 * X * Θ ^ 8)
+      (ImD := 9 * X ^ 8 * Θ - 84 * X ^ 6 * Θ ^ 3 + 126 * X ^ 4 * Θ ^ 5 - 36 * X ^ 2 * Θ ^ 7)
+      (phaseIm := Θ ^ 9)
+      (hRe := cfbrcRe_nine_from_template X Θ)
+      (hIm := cfbrcIm_nine_from_template X Θ)
+      (hPhaseIm := hPhaseIm)
+  calc
+    cfbrcIm 10 X Θ =
+        X * (9 * X ^ 8 * Θ - 84 * X ^ 6 * Θ ^ 3 + 126 * X ^ 4 * Θ ^ 5 - 36 * X ^ 2 * Θ ^ 7) +
+        Θ * (X ^ 9 - 36 * X ^ 7 * Θ ^ 2 + 126 * X ^ 5 * Θ ^ 4 - 84 * X ^ 3 * Θ ^ 6 +
+          9 * X * Θ ^ 8) +
+        X * (Θ ^ 9) := by
+          simpa using hStep
+    _ = 10 * X ^ 9 * Θ - 120 * X ^ 7 * Θ ^ 3 + 252 * X ^ 5 * Θ ^ 5 -
+        120 * X ^ 3 * Θ ^ 7 + 10 * X * Θ ^ 9 := by
+          ring
+
 end
 
 end DkMath.CFBRC.TrigBridge

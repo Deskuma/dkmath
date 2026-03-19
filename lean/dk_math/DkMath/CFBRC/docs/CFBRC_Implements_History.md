@@ -1049,3 +1049,40 @@
 6. 次の課題:
    - テンプレートを使った `d=9,10` の段階的追加（必要なら自動化マクロ化）を検討する。
    - `mod 4` ごとの位相評価投入をまとめる補助テンプレート（4ケース）を追加する。
+
+### 日時: 2026/03/20 03:37 JST: テンプレート運用で `d=9,10` まで拡張
+
+1. 目的:
+   - `d=8` 以降を再帰テンプレート主体で伸ばす方針を実運用し、
+     `d=9,10` 明示式まで機械的に到達できることを確認する。
+2. 内容:
+   - `DkMath/CFBRC/TrigBridge/General.lean`
+     - 追加（テンプレート導出）:
+       - `cfbrcRe_nine_from_template`
+       - `cfbrcIm_nine_from_template`
+       - `cfbrcRe_ten_from_template`
+       - `cfbrcIm_ten_from_template`
+     - 位相項は `mod 4` 補題（`n=2`）を使用:
+       - `Re((iΘ)^8)=Θ^8`, `Im((iΘ)^8)=0`
+       - `Re((iΘ)^9)=0`, `Im((iΘ)^9)=Θ^9`
+   - `DkMathTest/CFBRC.lean`
+     - `d=9,10` の `cfbrcRe/Im` 回帰 `example` を追加。
+     - 依存公理監視に `#print axioms cfbrcIm_ten_from_template` を追加。
+   - `DkMath/CFBRC/README.md`
+     - general `d` 使用例へ `d=9,10` 明示式を追記。
+   - 検証:
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.General` 成功
+     - `./lean-build.sh DkMathTest.CFBRC` 成功
+     - `./lean-build.sh DkMath.CFBRC` 成功
+     - `./lean-build.sh DkMathTest` 成功
+3. 結論:
+   - `d=8` 以降の拡張は「前次数明示式 + 位相評価 + テンプレート」で進める実装パターンが確立した。
+   - `d=10` まで同一パターンで到達できることを確認した。
+4. 失敗事例:
+   - 初回追加時に long-line 警告が発生（`General` と `DkMathTest` の長い式行）。
+   - 改行整形で解消し、警告なし（変更範囲内）でビルド通過。
+5. 備考:
+   - 既知の `ABC021` `sorry` 警告は継続（今回変更範囲外）。
+6. 次の課題:
+   - `d=11,12` も同テンプレートで追加し、奇偶・`mod 4` の切替パターンをさらに固定する。
+   - `mod 4` 位相投入まで吸収する高位テンプレート（`phaseRe/phaseIm` 自動選択）を検討する。
