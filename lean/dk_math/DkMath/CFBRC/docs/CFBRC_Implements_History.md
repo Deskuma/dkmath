@@ -1123,3 +1123,59 @@
 6. 次の課題:
    - `d=13,14` へ継続し、テンプレート適用の反復性をさらに確認する。
    - `phaseRe/phaseIm` を `mod 4` から自動選択する高位テンプレートの設計を進める。
+
+### 日時: 2026/03/20  3:57 JST: choose_phase
+
+**事前調査結果**
+
+1. `choose` 展開の実装パターンは既に `CosmicFormula` 側にあり、`add_pow` + `Finset.sum_range_succ'` で安定して証明されています。  
+   [CosmicFormulaBinom.lean:77](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean:77)  
+   [CosmicFormulaBinom.lean:280](/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean:280)
+
+2. `Complex` の和の実部・虚部は `Complex.re_sum` / `Complex.im_sum` が使えます。  
+   [Mathlib Data/Complex/BigOperators.lean:44](/lean/dk_math/.lake/packages/mathlib/Mathlib/Data/Complex/BigOperators.lean:44)
+
+3. `add_pow` の形は  
+   `(x + y)^n = ∑ m∈range (n+1), x^m * y^(n-m) * choose n m` です。  
+   このまま `cfbrcR = (X+iΘ)^d - (iΘ)^d` へ接続できます。  
+   [Mathlib Data/Nat/Choose/Sum.lean:76](/lean/dk_math/.lake/packages/mathlib/Mathlib/Data/Nat/Choose/Sum.lean:76)
+
+4. 現在の `TrigBridge.General` は再帰・位相評価が十分に揃っており、閉形式証明の土台は完成済みです。  
+   [General.lean:166](/lean/dk_math/DkMath/CFBRC/TrigBridge/General.lean:166)  
+   [General.lean:186](/lean/dk_math/DkMath/CFBRC/TrigBridge/General.lean:186)
+
+5. `Nat.cast_choose` は `DivisionSemiring` 要件の式なので主証明では使いません。`(Nat.choose d k : ℂ)` / `: ℝ` の直接キャストで進める方が安全です。
+
+**実装計画（Nat.choose 昇格）**
+
+1. 新規ファイル `DkMath/CFBRC/TrigBridge/ClosedForm.lean` を追加する。  
+   `General.lean` は再帰エンジン、`ClosedForm.lean` は choose 主定理に分離。
+
+2. まず複素閉形式を定義する（ルートA）。  
+   `cfbrcClosed (d X Θ)` を `Finset.range d` の和で定義し、`cfbrcR d X Θ = cfbrcClosed d X Θ` を証明する。  
+   証明は `add_pow` と `Finset.sum_range_succ'` ベース。
+
+3. 次に実部・虚部の閉形式（raw版）を定義する。  
+   `cfbrcReClosedRaw` / `cfbrcImClosedRaw` を `j` 走査の単一和で定義し、偶奇は `if` で処理する。  
+   ここで `Complex.re_sum` / `Complex.im_sum` と既存の `pure_phase_pow_*` 補題を使って  
+   `cfbrcRe = cfbrcReClosedRaw`, `cfbrcIm = cfbrcImClosedRaw` を先に確定する。
+
+4. その後に見た目の良い本命 API へ昇格する。  
+   `m` 走査（`2m`, `2m+1`）の `cfbrcReClosed` / `cfbrcImClosed` を定義し、raw版との同値を示す。  
+   ユーザー提示の式を最終形として公開。
+
+5. 低次数補題の役割を変更する。  
+   `d=3..12` は削除せず「回帰・可読サンプル」に残し、主APIは choose 閉形式へ移す。
+
+6. 反映対象。  
+   `DkMathTest/CFBRC.lean` に closed form 回帰を追加。  
+   `README.md` を choose 主体へ更新。  
+   `CFBRC_Implements_History.md` に今回方針と進捗を記録。
+
+7. 検証コマンド。  
+   `./lean-build.sh DkMath.CFBRC.TrigBridge.ClosedForm`  
+   `./lean-build.sh DkMathTest.CFBRC`  
+   `./lean-build.sh DkMath.CFBRC`  
+   `./lean-build.sh DkMathTest`
+
+この計画で、次ターンは `ClosedForm.lean` 作成と `cfbrcR = cfbrcClosed` の証明から着手します。
