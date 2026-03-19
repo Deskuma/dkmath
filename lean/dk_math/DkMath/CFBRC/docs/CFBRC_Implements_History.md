@@ -580,3 +580,32 @@
 6. 次の課題:
    - `README.md` に TrigBridge の短い使用例を追加する。
    - `cfbrc d` 一般に対する `Complex.re` 抽出の補助補題群（general `d`）を別ファイルで設計する。
+
+### 日時: 2026/03/20 01:14 JST: README 反映 + `DkMathTest.CFBRC` を新設（TriPerm 検証導線の整備）
+
+1. 目的: TrigBridge 実装を README に反映し、`DkMathTest.*` 側に CFBRC 専用の検証入口を追加する。
+2. 内容:
+   - `DkMath/CFBRC/README.md` を更新:
+     - Lean Modules に `DkMath.CFBRC.TrigBridge.Main` を追加。
+     - Quick Start に `import DkMath.CFBRC.TrigBridge.Main` の最小導線を追加。
+     - Usage Examples に Triangular Permutation bridge（`d=2`）の例を追加。
+   - `DkMathTest/CFBRC.lean` を新規作成:
+     - `body2_eq_re_cfbrc2`, `factor_eq_re_cfbrc2` の回帰例
+     - `prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat` の例
+     - `cyclotomicPrimeCore_eq_GN_nat` の例
+     - 代表定理の `#print axioms` を配置。
+   - `DkMathTest.lean` に `import DkMathTest.CFBRC` を追加。
+   - 検証:
+     - `./lean-build.sh DkMathTest.CFBRC` 成功
+     - `./lean-build.sh DkMathTest` 成功
+3. 結論: README とテスト導線が TrigBridge 追加に追随し、  
+   CFBRC の補題検証は `DkMathTest.CFBRC` から直接再実行できる状態になった。
+4. 失敗事例:
+   - ビルド失敗はなし。
+   - `DkMathTest` 全体では既存 `ABC021` の `sorry` 警告が出るが、今回変更とは無関係（既知残件）。
+5. 備考:
+   - ユーザー要望「DkMathTest.* の CFBRC 整備」に対応し、`DkMathTest/CFBRC.lean` を新設。
+   - 既存の公開入口 `DkMath/CFBRC.lean` は維持したまま、テスト側入口を追加した。
+6. 次の課題:
+   - `DkMathTest.CFBRC` に `BoundarySide` 高位 API の回帰例を追加する。
+   - 必要なら `cfbrc d` 一般化作業に合わせて test ケースを `d=3` 以上へ拡張する。
