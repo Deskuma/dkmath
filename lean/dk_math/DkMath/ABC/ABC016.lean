@@ -193,28 +193,28 @@ lemma decomp_oddPart_evenPart_real (c : ℕ) (hc : c ≠ 0) :
 -- ========================================================================
 
 
-/-- The "two-tail" of a natural number: ∏_{p|c} p^{max(v_p(c)-2, 0)}.
+/-- The "two-tail" of a natural number: `∏_{p|c} p^{max(v_p(c)-2, 0)}`.
     This extracts only the "excess beyond square" part from the factorization.
 
     Key insight: Each prime's exponent can be split as:
-      v_p(c) = 1_{v_p≥2} (piSqRad part) + 1_{v_p≥1} (rad part) + (v_p - 2) (twoTail part)
+      `v_p(c) = 1_{v_p≥2} (piSqRad part) + 1_{v_p≥1} (rad part) + (v_p - 2) (twoTail part)`
 
-    This gives the identity: c = piSqRad(c) * rad(c) * twoTail(c)
+    This gives the identity: `c = piSqRad(c) * rad(c) * twoTail(c)`
 
-    Example: c = 2³ * 3⁵ * 5²
-    - v_2 - 2 = 1, v_3 - 2 = 3, v_5 - 2 = 0
-    - twoTail(c) = 2¹ * 3³ * 5⁰ = 2 * 27 = 54
-    - piSqRad(c) = 2 * 3 * 5 = 30 (all primes with v_p ≥ 2)
-    - rad(c) = 2 * 3 * 5 = 30 (all primes with v_p ≥ 1)
-    - Check: 2³*3⁵*5² = 8*243*25 = 48600 = 30*30*54 ✓
+    Example: `c = 2³ * 3⁵ * 5²`
+    - `v_2 - 2` = `1, v_3 - 2 = 3, v_5 - 2 = 0`
+    - twoTail(c) = `2¹ * 3³ * 5⁰ = 2 * 27 = 54`
+    - piSqRad(c) = `2 * 3 * 5 = 30 (all primes with v_p ≥ 2)`
+    - rad(c) = `2 * 3 * 5 = 30 (all primes with v_p ≥ 1)`
+    - Check: `2³*3⁵*5² = 8*243*25 = 48600 = 30*30*54` ✓
 
     This is DIFFERENT from both oddPart/evenPart:
     - oddPart extracts v_p mod 2 (odd exponents)
     - evenPart extracts ⌊v_p/2⌋ (square root of even part)
     - twoTail extracts v_p - 2 (excess beyond square)
 
-    The advantage: c = piSqRad * rad * twoTail gives htail WITHOUT needing
-    oddPart ≤ piSqRad (which is FALSE in general).
+    The advantage: `c = piSqRad * rad * twoTail` gives htail WITHOUT needing
+    `oddPart ≤ piSqRad` (which is FALSE in general).
 -/
 def twoTail (c : ℕ) : ℕ :=
   c.factorization.support.prod (fun p => p ^ (c.factorization p - 2))
