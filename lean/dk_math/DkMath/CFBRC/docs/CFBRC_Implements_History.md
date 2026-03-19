@@ -540,3 +540,161 @@
    - primitive 条件は `boundaryDiffPow side k x u` で統一して返す。
 6. 次の課題:
    - 必要なら `BoundarySide` 版の no-lift / squarefree provider 接続も同様に追加する。
+
+### 日時: 2026/03/20 01:07 JST: Triangular Permutation の `d=2` 実装（TrigBridge 4層）を CFBRC 配下へ追加
+
+1. 目的: 設計書 `CFBRC_TriPerm_Lean_Design.md` に沿って、  
+   `a'(a'+2x) = a^2 cos^2 φ = Re(G_2(a cos φ, a sin φ))` の Lean bridge を `DkMath.CFBRC` へ実装する。
+2. 内容:
+   - 新規ファイルを追加:
+     - `DkMath/CFBRC/TrigBridge/Basic.lean`
+     - `DkMath/CFBRC/TrigBridge/Trig.lean`
+     - `DkMath/CFBRC/TrigBridge/Complex.lean`
+     - `DkMath/CFBRC/TrigBridge/Main.lean`
+   - 追加した主な定義・定理:
+     - 定義: `body2`, `cfbrc`, `cfbrcR`
+     - 代数層: `body2_factor`, `body2_sub`, `body2_sub_factor`
+     - 三角層: `sq_sub_sin_eq_cos`, `body2_trig`, `body2_factor_trig`
+     - 複素層: `cfbrc_two_re`, `cfbrc_two_im`, `cfbrc_two_re_polar`, `cfbrc_two_im_polar`
+     - 主定理: `body2_eq_re_cfbrc2`, `factor_eq_re_cfbrc2`
+   - 入口更新:
+     - `DkMath/CFBRC.lean` に `import DkMath.CFBRC.TrigBridge.Main` を追加。
+   - 検証:
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.Basic`
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.Trig`
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.Complex`
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.Main`
+     - `./lean-build.sh DkMath.CFBRC`
+     すべて成功。
+3. 結論: CFBRC 配下に「代数 -> 三角 -> 複素 -> 主定理」の `d=2` bridge が実装され、  
+   Triangular Permutation 設計の最小核が build 可能な形で固定された。
+4. 失敗事例:
+   - 初期 script で一部補題に `simp` 後の不要 `ring` が残り、`No goals to be solved` が発生。
+   - `body2_sub` と `cfbrc_two_re` は `simp` のみで完結する形に調整して解消。
+5. 備考:
+   - 今回は `d=2` 専用橋を先に固定し、general `d` の実部一般式は未着手。
+   - 再開時の起点:
+     - 実装本体: `DkMath/CFBRC/TrigBridge/Main.lean`
+     - 設計参照: `DkMath/CFBRC/docs/CFBRC_TriPerm_Lean_Design.md`
+     - 理論背景: `DkMath/CFBRC/docs/CFBRC_Triangular Permutation.md`
+6. 次の課題:
+   - `README.md` に TrigBridge の短い使用例を追加する。
+   - `cfbrc d` 一般に対する `Complex.re` 抽出の補助補題群（general `d`）を別ファイルで設計する。
+
+### 日時: 2026/03/20 01:14 JST: README 反映 + `DkMathTest.CFBRC` を新設（TriPerm 検証導線の整備）
+
+1. 目的: TrigBridge 実装を README に反映し、`DkMathTest.*` 側に CFBRC 専用の検証入口を追加する。
+2. 内容:
+   - `DkMath/CFBRC/README.md` を更新:
+     - Lean Modules に `DkMath.CFBRC.TrigBridge.Main` を追加。
+     - Quick Start に `import DkMath.CFBRC.TrigBridge.Main` の最小導線を追加。
+     - Usage Examples に Triangular Permutation bridge（`d=2`）の例を追加。
+   - `DkMathTest/CFBRC.lean` を新規作成:
+     - `body2_eq_re_cfbrc2`, `factor_eq_re_cfbrc2` の回帰例
+     - `prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat` の例
+     - `cyclotomicPrimeCore_eq_GN_nat` の例
+     - 代表定理の `#print axioms` を配置。
+   - `DkMathTest.lean` に `import DkMathTest.CFBRC` を追加。
+   - 検証:
+     - `./lean-build.sh DkMathTest.CFBRC` 成功
+     - `./lean-build.sh DkMathTest` 成功
+3. 結論: README とテスト導線が TrigBridge 追加に追随し、  
+   CFBRC の補題検証は `DkMathTest.CFBRC` から直接再実行できる状態になった。
+4. 失敗事例:
+   - ビルド失敗はなし。
+   - `DkMathTest` 全体では既存 `ABC021` の `sorry` 警告が出るが、今回変更とは無関係（既知残件）。
+5. 備考:
+   - ユーザー要望「DkMathTest.* の CFBRC 整備」に対応し、`DkMathTest/CFBRC.lean` を新設。
+   - 既存の公開入口 `DkMath/CFBRC.lean` は維持したまま、テスト側入口を追加した。
+6. 次の課題:
+   - `DkMathTest.CFBRC` に `BoundarySide` 高位 API の回帰例を追加する。
+   - 必要なら `cfbrc d` 一般化作業に合わせて test ケースを `d=3` 以上へ拡張する。
+
+### 日時: 2026/03/20 01:27 JST: `DkMathTest.CFBRC` に `BoundarySide` 高位 API 回帰例を追加
+
+1. 目的: `BoundarySide` 統一 API（valuation / existence）を test 側で常時検証できるようにする。
+2. 内容:
+   - `DkMathTest/CFBRC.lean` に以下の回帰例を追加:
+     - `padicValNat_boundaryDiffPow_eq_boundaryGN_of_coprime_of_dvd_boundary`
+     - `padicValNat_boundaryDiffPow_eq_boundaryCyclotomicPrimeCore_of_coprime_of_dvd_boundary`
+     - `exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime`
+   - `#print axioms` を追加:
+     - `padicValNat_boundaryDiffPow_eq_boundaryGN_of_coprime_of_dvd_boundary`
+     - `exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime`
+   - 検証:
+     - `./lean-build.sh DkMathTest.CFBRC` 成功
+     - `./lean-build.sh DkMathTest` 成功
+3. 結論: `BoundarySide` の高位 API が test 層でも固定化され、  
+   将来の API 変更・型崩れを `DkMathTest.CFBRC` で即検知できる状態になった。
+4. 失敗事例:
+   - ビルド失敗はなし。
+   - `DkMathTest` 全体では既知の `ABC021` `sorry` 警告が継続（今回変更とは無関係）。
+5. 備考:
+   - 追加例は `side` 依存前提（`match side with ...`）をそのまま受ける形で記述し、
+     API の使用形をドキュメント兼テストとして保持した。
+6. 次の課題:
+   - 必要なら `exists_primitive_prime_factor_boundaryDiffPow_of_prime_exp_boundary_of_coprime`
+     の差分形も test 例に追加する。
+   - `d=2` bridge 以外（general `d` 実部抽出）に着手する際は
+     test 入口を `DkMathTest.CFBRC` に同時追加する。
+
+### 日時: 2026/03/20 01:32 JST: `BoundarySide` 差分形 existence の回帰例を `DkMathTest.CFBRC` に追加
+
+1. 目的: `BoundarySide` の存在論 API を core 形だけでなく差分形でも test 固定化する。
+2. 内容:
+   - `DkMathTest/CFBRC.lean` に以下を追加:
+     - `exists_primitive_prime_factor_boundaryDiffPow_of_prime_exp_boundary_of_coprime`
+       の回帰例（`side` 依存前提をそのまま受ける形）。
+   - `#print axioms` を追加:
+     - `exists_primitive_prime_factor_boundaryDiffPow_of_prime_exp_boundary_of_coprime`
+   - 検証:
+     - `./lean-build.sh DkMathTest.CFBRC` 成功
+     - `./lean-build.sh DkMathTest` 成功
+3. 結論: `BoundarySide` existence API は
+   - core 形
+   - 差分形
+   の両方が `DkMathTest.CFBRC` で回帰検証される状態になった。
+4. 失敗事例:
+   - ビルド失敗はなし。
+   - `DkMathTest` 全体では既知の `ABC021` `sorry` 警告のみ継続。
+5. 備考:
+   - 追加例により、`BoundarySide` API の公開名変更や依存前提変更を test で即検知可能。
+6. 次の課題:
+   - 必要なら `padicValNat_boundaryDiffPow_eq_boundary*_*_of_not_dvd_gap`
+     系も `DkMathTest.CFBRC` に追加し、正規化 wrapper 前の層まで監視する。
+   - `cfbrc d` general 化を開始する際は、`DkMathTest.CFBRC` に同時で最小検証例を追加する。
+
+### 日時: 2026/03/20 01:36 JST: TrigBridge / Test に数学的 docstring を追加整備
+
+1. 目的: CFBRC の Triangular Permutation 実装を、コードだけでなく docstring でも追える状態にする。
+2. 内容:
+   - `DkMath/CFBRC/TrigBridge/Basic.lean`:
+     - ファイル冒頭に層の目的（代数層）を追加。
+     - `body2_factor`, `body2_sub`, `body2_sub_factor` に数学的意味を追記。
+   - `DkMath/CFBRC/TrigBridge/Trig.lean`:
+     - 三角層の意図（`x = a sin φ` による位相化）を追加。
+     - `sq_sub_sin_eq_cos`, `body2_trig`, `body2_factor_trig` に説明を追加。
+   - `DkMath/CFBRC/TrigBridge/Complex.lean`:
+     - 複素層の意図（`d=2` の `Re/Im` 固定）を追加。
+     - `cfbrc_two_re/im` と極座標補題に説明を追加。
+   - `DkMath/CFBRC/TrigBridge/Main.lean`:
+     - 最終橋の連鎖式を冒頭 docstring で明示。
+     - 主定理2本の意味を補足。
+   - `DkMathTest/CFBRC.lean`:
+     - ファイル冒頭に test 目的を追加。
+     - `example` 群を用途別（`d=2` bridge / core-GN / BoundarySide valuation-existence）に区分コメント化。
+   - 検証:
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.Main` 成功
+     - `./lean-build.sh DkMathTest.CFBRC` 成功
+     - `./lean-build.sh DkMath.CFBRC` 成功
+     - `./lean-build.sh DkMathTest` 成功
+3. 結論: TrigBridge 実装は、式の意味・層構造・定理の位置づけを docstring から追える状態になった。
+4. 失敗事例:
+   - ビルド失敗はなし。
+   - `DkMathTest` 全体では既知 `ABC021` の `sorry` 警告が継続（今回変更とは無関係）。
+5. 備考:
+   - 今回は API 本体を変えず、可読性向上のための説明追加に限定した。
+6. 次の課題:
+   - 必要なら `Bridge.lean` の高位 API 例（`BoundarySide`）を README に短く再掲し、
+     ドキュメント導線を一本化する。
+   - general `d` 拡張フェーズでは、新規補題ごとに「式の意味 + 接続先」を同じ docstring 形式で維持する。

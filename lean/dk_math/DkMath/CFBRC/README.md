@@ -12,6 +12,7 @@ CFBRC は、べき差
 3. 数論層: 除法判定、`padicValNat`、Zsigmondy primitive prime existence
 
 参考:
+
 - [CFBRC 理論メモ](/python/CFBRC/CFBRC.md)
 - [CFBRC d=8 メモ](/python/CFBRC/CFBRC-d8.md)
 
@@ -46,6 +47,9 @@ $$
   - valuation bridge (`padicValNat`)
   - Zsigmondy existence bridge
   - `BoundarySide` による左右統一 API
+- `DkMath.CFBRC.TrigBridge.Main`
+  - `d=2` の三角置換 bridge
+  - `body2 = a^2 * cos^2 φ = Re(cfbrcR 2 (a cos φ) (a sin φ))`
 
 ## Quick Start
 
@@ -58,6 +62,12 @@ import DkMath.CFBRC
 ```lean
 import DkMath.CFBRC.Basic
 import DkMath.CFBRC.Bridge
+```
+
+Triangular Permutation の `d=2` bridge のみ使う場合:
+
+```lean
+import DkMath.CFBRC.TrigBridge.Main
 ```
 
 ## Usage Examples
@@ -145,6 +155,24 @@ example {d x u : ℕ}
       (d := d) (x := x) (u := u) hd hd3 hx hu hcop hnd with
     ⟨q, hqP, hqCore, hqnx, _hprim⟩
   exact ⟨q, hqP, hqCore, hqnx⟩
+```
+
+### 6) Triangular Permutation bridge（`d=2`）
+
+```lean
+import DkMath.CFBRC.TrigBridge.Main
+
+open DkMath.CFBRC.TrigBridge
+
+example (a φ : ℝ) :
+    body2 (a * (1 - Real.sin φ)) (a * Real.sin φ)
+      = Complex.re (cfbrcR 2 (a * Real.cos φ) (a * Real.sin φ)) :=
+  body2_eq_re_cfbrc2 a φ
+
+example (a φ : ℝ) :
+    (a * (1 - Real.sin φ)) * ((a * (1 - Real.sin φ)) + 2 * (a * Real.sin φ))
+      = Complex.re (cfbrcR 2 (a * Real.cos φ) (a * Real.sin φ)) :=
+  factor_eq_re_cfbrc2 a φ
 ```
 
 ## Related Docs
