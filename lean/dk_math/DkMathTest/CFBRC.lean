@@ -1,5 +1,16 @@
 import DkMath.CFBRC
 
+/-! # DkMathTest.CFBRC
+
+`DkMath.CFBRC` 公開 API の回帰検証ファイル。
+
+- `TrigBridge` (`d=2`) の橋定理
+- core/GN の除法橋
+- `BoundarySide` 高位 API（valuation / existence）
+
+を `example` で固定し、将来の型崩れ・命名変更を検知する。
+-/
+
 #print "file: DkMathTest.CFBRC"
 
 namespace DkMathTest.CFBRC
@@ -8,6 +19,7 @@ open DkMath.CFBRC
 open DkMath.CFBRC.TrigBridge
 open DkMath.CosmicFormulaBinom
 
+-- d=2 三角置換 bridge
 example (a φ : ℝ) :
     body2 (a * (1 - Real.sin φ)) (a * Real.sin φ)
       = Complex.re (cfbrcR 2 (a * Real.cos φ) (a * Real.sin φ)) :=
@@ -18,6 +30,7 @@ example (a φ : ℝ) :
       = Complex.re (cfbrcR 2 (a * Real.cos φ) (a * Real.sin φ)) :=
   factor_eq_re_cfbrc2 a φ
 
+-- core と GN の橋
 example {p x u q : ℕ} (hq : Nat.Prime q) (hqx : ¬ q ∣ x) :
     q ∣ ((x + u) ^ p - u ^ p) ↔ q ∣ cyclotomicPrimeCore p x u :=
   prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
@@ -27,6 +40,7 @@ example {d x u : ℕ} (hx : 0 < x) :
     cyclotomicPrimeCore d x u = GN d x u :=
   cyclotomicPrimeCore_eq_GN_nat (p := d) (x := x) (u := u) hx
 
+-- BoundarySide 高位 API（valuation）
 example (side : BoundarySide) {d x u q : ℕ}
     (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
     (hcop : Nat.Coprime x u) (hqP : Nat.Prime q)
@@ -49,6 +63,7 @@ example (side : BoundarySide) {d x u q : ℕ}
   padicValNat_boundaryDiffPow_eq_boundaryCyclotomicPrimeCore_of_coprime_of_dvd_boundary
     side hd2 hx hu hcop hqP hq_dvd_boundary
 
+-- BoundarySide 高位 API（existence）
 example (side : BoundarySide) {d x u : ℕ}
     (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
     (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
@@ -63,9 +78,25 @@ example (side : BoundarySide) {d x u : ℕ}
   exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime
     side hd_prime hd_ge hx hu hcop hpnd
 
+example (side : BoundarySide) {d x u : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hpnd : match side with
+      | .right => ¬ d ∣ x
+      | .left => ¬ d ∣ u) :
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ boundaryDiffPow side d x u ∧
+      (match side with
+        | .right => ¬ q ∣ x
+        | .left => ¬ q ∣ u) ∧
+      (∀ {k : ℕ}, 0 < k → k < d → ¬ q ∣ boundaryDiffPow side k x u) :=
+  exists_primitive_prime_factor_boundaryDiffPow_of_prime_exp_boundary_of_coprime
+    side hd_prime hd_ge hx hu hcop hpnd
+
+-- 依存公理の確認（回帰用）
 #print axioms factor_eq_re_cfbrc2
 #print axioms prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
 #print axioms padicValNat_boundaryDiffPow_eq_boundaryGN_of_coprime_of_dvd_boundary
 #print axioms exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime
+#print axioms exists_primitive_prime_factor_boundaryDiffPow_of_prime_exp_boundary_of_coprime
 
 end DkMathTest.CFBRC
