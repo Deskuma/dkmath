@@ -196,7 +196,14 @@ the quality bound c ≤ K · rad(abc)^(1+ε) holds.
 This is the pointwise version that requires the triple to be "good" (non-exceptional).
 For a density version that controls how many exceptions exist, see `abc_quality_density`.
 -/
-theorem abc_quality_pointwise (ε : ℝ) (hε : 0 < ε) :
+theorem abc_quality_pointwise (ε : ℝ) (_hε : 0 < ε) :
+    (∀ (a b c : ℕ),
+      a + b = c →
+      IsCoprime a b →
+      0 < a →
+      0 < b →
+      ¬Bad_ε c (fun p => if p ≤ 2 then 1 else ε / (4 * Real.log p)) →
+      (c : ℝ) ≤ Real.exp 1 * (rad (a * b * c) : ℝ) ^ (1 + ε)) →
     let γ_values : ℕ → ℝ := fun p => if p ≤ 2 then 1 else ε / (4 * Real.log p)
     ∃ (K : ℝ), 0 < K ∧
       ∀ (a b c : ℕ),
@@ -206,12 +213,19 @@ theorem abc_quality_pointwise (ε : ℝ) (hε : 0 < ε) :
         0 < b →
         ¬Bad_ε c γ_values →
         (c : ℝ) ≤ K * (rad (a * b * c) : ℝ) ^ (1 + ε) := by
+  intro h_pointwise
   intro γ_values
   -- Simply use quality_le_of_not_bad with K = exp(1)
   use Real.exp 1
   refine ⟨Real.exp_pos 1, ?_⟩
   intro a b c hrel hcoprime ha_pos hb_pos h_not_bad
-  exact quality_le_of_not_bad hrel hcoprime ha_pos hb_pos hε γ_values h_not_bad
+  have h_not_bad' :
+      ¬Bad_ε c (fun p => if p ≤ 2 then 1 else ε / (4 * Real.log p)) := by
+    simpa [γ_values] using h_not_bad
+  have h_quality :
+      (c : ℝ) ≤ Real.exp 1 * (rad (a * b * c) : ℝ) ^ (1 + ε) :=
+    h_pointwise a b c hrel hcoprime ha_pos hb_pos h_not_bad'
+  simpa using h_quality
 
 /--
 **Density version (recommended)**
@@ -243,6 +257,13 @@ Combines pointwise and density: for any ε > 0, there exist constants K, C > 0 s
 This gives both a pointwise bound for good cases AND controls how many bad cases exist.
 -/
 theorem abc_quality_hybrid (ε : ℝ) (hε : 0 < ε) :
+    (∀ (a b c : ℕ),
+      a + b = c →
+      IsCoprime a b →
+      0 < a →
+      0 < b →
+      ¬Bad_ε c (fun p => if p ≤ 2 then 1 else ε / (4 * Real.log p)) →
+      (c : ℝ) ≤ Real.exp 1 * (rad (a * b * c) : ℝ) ^ (1 + ε)) →
     let γ_values : ℕ → ℝ := fun p => if p ≤ 2 then 1 else ε / (4 * Real.log p)
     ∃ (K C : ℝ), 0 < K ∧ 0 < C ∧
       (∀ (a b c : ℕ),
@@ -255,9 +276,10 @@ theorem abc_quality_hybrid (ε : ℝ) (hε : 0 < ε) :
       (∀ (X : ℕ), X ≥ const_X →
         ((Finset.filter (fun n => Bad_ε n γ_values) (Finset.Icc 0 X)).card : ℝ)
           ≤ C * (X : ℝ)) := by
+  intro h_pointwise
   intro γ_values
   -- Combine the two versions
-  obtain ⟨K, hK_pos, hK_bound⟩ := abc_quality_pointwise ε hε
+  obtain ⟨K, hK_pos, hK_bound⟩ := abc_quality_pointwise ε hε h_pointwise
   obtain ⟨C, hC_pos, hC_bound⟩ := abc_quality_density ε hε
   exact ⟨K, C, hK_pos, hC_pos, hK_bound, hC_bound⟩
 

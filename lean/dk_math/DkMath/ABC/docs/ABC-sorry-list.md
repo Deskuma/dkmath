@@ -19,6 +19,7 @@
 - `ABC008.lean`
 - `ABC009.lean`
 - `ABC031.lean`
+- `ABC038.lean`
 - `ABCMGFTwoTailLog.lean`
 - `ABCFinalRealExpFactorizationLog.lean`
 
@@ -30,7 +31,6 @@
 |---|---:|---|---|
 | `ABC021.lean` | 16 | 187,192,201,207,219,227,246,254,258,263,277,283,308,313,317,323 | Janson/期待値系。重い本丸。 |
 | `ABCQualityLeOfNotBad.lean` | 8 | 71,79,85,102,255,261,263,279 | 型変換＋log分解＋補助不等式。中～重。 |
-| `ABC038.lean` | 3 | 221,242,270 | 文脈依存。statement整合チェック要。 |
 | `ABC039.lean` | 2 | 61,180 | 設計不一致の可能性あり（先にstatement確認）。 |
 | `ABCWorking.lean` | 1 | 351 | 作業用ファイル。削除/保留判断対象。 |
 | `ABC#Research.lean` | 1 | 105 | 研究用（モジュール運用対象外なら除外可）。 |
@@ -41,13 +41,13 @@
 
 ### A. すぐ潰せる可能性が高い（局所穴）
 
-1. `ABC038.lean:221,242,270`
-2. `ABCQualityLeOfNotBad.lean:261,263`（`admit` 2件）
+1. `ABCQualityLeOfNotBad.lean:261,263`（`admit` 2件）
+2. `ABC039.lean:61,180`
 
 ### B. 次点（局所だが文脈確認が必要）
 
 1. `ABCQualityLeOfNotBad.lean:71,79,85,102,255,279`
-2. `ABC039.lean:61,180`
+2. `ABC021.lean:246,254,258,263`（局所補題だが依存が重い）
 
 ### C. 先に設計確認を推奨
 
@@ -64,4 +64,5 @@
 - [x] `ABC008.lean:1981` を解消
 - [x] `ABC025_allX.lean:66` を解消
 - [x] `ABC031.lean:315,423` を解消
+- [x] `ABC038.lean:221,242,270` を解消
 - [ ] `ABCWorking.lean`, `ABC#Research.lean` を「対象に含めるか」決定
