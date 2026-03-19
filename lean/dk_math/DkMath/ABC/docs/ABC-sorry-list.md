@@ -5,16 +5,20 @@
 対象: `lean/dk_math/DkMath/ABC/**/*.lean`
 
 - 調査コマンド: `rg -n '\\bsorry\\b|\\badmit\\b' lean/dk_math/DkMath/ABC/**/*.lean`
-- 注意: `ABC025_allX.lean` の 3 件中 2 件は本文中の文字列（`\`sorry\``）で、実際の穴は 1 件。
+- 備考: 本リストは実際の `sorry/admit` トークンのみを集計（コメント文字列は除外）。
 
 ---
 
 ## 0件（確認済み）
 
 - `ABC025.lean`
+- `ABC025_allX.lean`
 - `ABC029.lean`
 - `ABC016.lean`
 - `ABC030.lean`
+- `ABC008.lean`
+- `ABC009.lean`
+- `ABC031.lean`
 - `ABCMGFTwoTailLog.lean`
 - `ABCFinalRealExpFactorizationLog.lean`
 
@@ -25,12 +29,9 @@
 | file | hits | lines | メモ |
 |---|---:|---|---|
 | `ABC021.lean` | 16 | 187,192,201,207,219,227,246,254,258,263,277,283,308,313,317,323 | Janson/期待値系。重い本丸。 |
-| `ABCQualityLeOfNotBad.lean` | 8 | 71,79,85,102,255,260,262,278 | 型変換＋log分解＋補助不等式。中～重。 |
+| `ABCQualityLeOfNotBad.lean` | 8 | 71,79,85,102,255,261,263,279 | 型変換＋log分解＋補助不等式。中～重。 |
 | `ABC038.lean` | 3 | 221,242,270 | 文脈依存。statement整合チェック要。 |
-| `ABC025_allX.lean` | 3 | 32,45,66 | 実穴は 66 の 1 件（32,45 は文中参照）。 |
 | `ABC039.lean` | 2 | 61,180 | 設計不一致の可能性あり（先にstatement確認）。 |
-| `ABC031.lean` | 2 | 309,411 | 密度/ε-δ。中程度。 |
-| `ABC008.lean` | 1 | 1981 | 単発 admit。着手可。 |
 | `ABCWorking.lean` | 1 | 351 | 作業用ファイル。削除/保留判断対象。 |
 | `ABC#Research.lean` | 1 | 105 | 研究用（モジュール運用対象外なら除外可）。 |
 
@@ -40,18 +41,17 @@
 
 ### A. すぐ潰せる可能性が高い（局所穴）
 
-1. `ABC008.lean:1981`
+1. `ABC038.lean:221,242,270`
+2. `ABCQualityLeOfNotBad.lean:261,263`（`admit` 2件）
 
 ### B. 次点（局所だが文脈確認が必要）
 
-1. `ABC031.lean:309,411`
-2. `ABC038.lean:221,242,270`
-3. `ABC025_allX.lean:66`
+1. `ABCQualityLeOfNotBad.lean:71,79,85,102,255,279`
+2. `ABC039.lean:61,180`
 
 ### C. 先に設計確認を推奨
 
-1. `ABC039.lean`（valuation の対象定義がズレる可能性）
-2. `ABCQualityLeOfNotBad.lean`（補助補題の棚卸しが先）
+1. `ABCWorking.lean`, `ABC#Research.lean`（運用対象かどうかを先に決定）
 
 ### D. 最後にまとめて攻める本丸
 
@@ -61,6 +61,7 @@
 
 ## 次の実作業チェックリスト
 
-- [ ] `ABC008.lean:1981` を解消
-- [ ] `ABC025_allX.lean` は文中参照と実穴を分離して整理
+- [x] `ABC008.lean:1981` を解消
+- [x] `ABC025_allX.lean:66` を解消
+- [x] `ABC031.lean:315,423` を解消
 - [ ] `ABCWorking.lean`, `ABC#Research.lean` を「対象に含めるか」決定

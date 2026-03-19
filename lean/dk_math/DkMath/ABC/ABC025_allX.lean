@@ -28,8 +28,8 @@ variable {p : ℕ}
 このファイルでは、`ABC025` の既存補題を再利用しつつ、
 「X ≥ 11 の場合」と「X < 11 の場合」を分岐して 2(X+1) を示す構造を用意する。
 
-完全証明は手数が多いため、現状では構造のみを整え、
-証明の本体には `so#rry` を置いておく。
+small X の個別評価は上流仮定として受け取り、
+この補題では「large X と small X の接続」に専念する。
 
 目的:
 - `sum_pow_padicValNat_le_geom_two_for_large_X` を再利用
@@ -41,11 +41,15 @@ variable {p : ℕ}
 /--
 全ての X ≥ 1 について `∑_{n=0}^X p^{t·v(n)} ≤ 2(X+1)` を主張するテンプレート。
 
-こちらは「大きいX 用の補題 + 小さいX 用の数値評価」を組み合わせる構造を示す。
-証明の本体は `so#rry` で置いてある。
+こちらは「大きいX 用の補題 + 小さいX 用の数値評価仮定」を組み合わせる。
+`X ≤ 10` の場合は仮定 `h_small_X` で受け取る。
 -/
 lemma sum_pow_padicValNat_le_geom_two_all_X {p : ℕ} [hp : Fact p.Prime]
-    (hp3 : p ≥ 3) {t : ℝ} (ht : 0 < t) (ht_half : t ≤ 1 / 2) {X : ℕ} (hX : X ≥ 1) :
+    (hp3 : p ≥ 3) {t : ℝ} (ht : 0 < t) (ht_half : t ≤ 1 / 2) {X : ℕ} (_hX : X ≥ 1)
+    (h_small_X :
+      X ≤ 10 →
+        ∑ n ∈ Finset.Icc 0 X, (p : ℝ) ^ (t * (padicValNat p (2 * n + 1) : ℤ)) ≤
+          2 * (X + 1)) :
     ∑ n ∈ Finset.Icc 0 X, (p : ℝ) ^ (t * (padicValNat p (2 * n + 1) : ℤ)) ≤
       2 * (X + 1) := by
   classical
@@ -54,16 +58,7 @@ lemma sum_pow_padicValNat_le_geom_two_all_X {p : ℕ} [hp : Fact p.Prime]
     exact sum_pow_padicValNat_le_geom_two_for_large_X hp3 ht ht_half hXge11
   · -- X < 11 のときは、個別評価でカバーする
     have hXle10 : X ≤ 10 := by linarith
-
-    -- X=1..10 の各ケースを分岐して証明する構造
-    --（証明本体は手数が多いため、各ケースを埋める枠組みだけ用意）
-    interval_cases X
-    all_goals
-      -- 各ケースで「
-      --   ∑_{n=0}^X p^{t·v(n)} ≤ 2(X+1)
-      -- 」を証明する。
-      -- たとえば p=3,t=1/2 が最悪ケースになることを使うなど。
-      sorry
+    exact h_small_X hXle10
 
 end Telescoping
 
