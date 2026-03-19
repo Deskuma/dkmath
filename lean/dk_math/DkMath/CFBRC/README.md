@@ -205,6 +205,14 @@ example (n : ℕ) (X Θ : ℝ) :
 example (d : ℕ) (X : ℝ) :
     cfbrcRe (d + 1) X 0 = X ^ (d + 1) :=
   cfbrcRe_succ_theta_zero d X
+
+example (X Θ : ℝ) :
+    cfbrcRe 5 X Θ = X ^ 5 - 10 * X ^ 3 * Θ ^ 2 + 5 * X * Θ ^ 4 :=
+  cfbrcRe_five X Θ
+
+example (X Θ : ℝ) :
+    cfbrcIm 5 X Θ = 5 * X ^ 4 * Θ - 10 * X ^ 2 * Θ ^ 3 :=
+  cfbrcIm_five X Θ
 ```
 
 ## Related Docs

@@ -518,6 +518,66 @@ lemma cfbrcIm_mod4_four_from_three (n : ℕ) (X Θ : ℝ) :
     _ = X * cfbrcIm (4 * n + 3) X Θ + Θ * cfbrcRe (4 * n + 3) X Θ - X * Θ ^ (4 * n + 3) := by
           ring
 
+/--
+低次数 `d=3` の実部明示式。
+
+`cfbrcRe 3 X Θ = X^3 - 3XΘ^2`。
+-/
+lemma cfbrcRe_three (X Θ : ℝ) :
+    cfbrcRe 3 X Θ = X ^ 3 - 3 * X * Θ ^ 2 := by
+  simp [cfbrcRe, cfbrcR, cfbrc, pow_succ]
+  ring
+
+/--
+低次数 `d=3` の虚部明示式。
+
+`cfbrcIm 3 X Θ = 3X^2Θ`。
+-/
+lemma cfbrcIm_three (X Θ : ℝ) :
+    cfbrcIm 3 X Θ = 3 * X ^ 2 * Θ := by
+  simp [cfbrcIm, cfbrcR, cfbrc, pow_succ]
+  ring
+
+/--
+低次数 `d=4` の実部明示式。
+
+`cfbrcRe 4 X Θ = X^4 - 6X^2Θ^2`。
+-/
+lemma cfbrcRe_four (X Θ : ℝ) :
+    cfbrcRe 4 X Θ = X ^ 4 - 6 * X ^ 2 * Θ ^ 2 := by
+  simp [cfbrcRe, cfbrcR, cfbrc, pow_succ]
+  ring
+
+/--
+低次数 `d=4` の虚部明示式。
+
+`cfbrcIm 4 X Θ = 4X^3Θ - 4XΘ^3`。
+-/
+lemma cfbrcIm_four (X Θ : ℝ) :
+    cfbrcIm 4 X Θ = 4 * X ^ 3 * Θ - 4 * X * Θ ^ 3 := by
+  simp [cfbrcIm, cfbrcR, cfbrc, pow_succ]
+  ring
+
+/--
+低次数 `d=5` の実部明示式。
+
+`cfbrcRe 5 X Θ = X^5 - 10X^3Θ^2 + 5XΘ^4`。
+-/
+lemma cfbrcRe_five (X Θ : ℝ) :
+    cfbrcRe 5 X Θ = X ^ 5 - 10 * X ^ 3 * Θ ^ 2 + 5 * X * Θ ^ 4 := by
+  simp [cfbrcRe, cfbrcR, cfbrc, pow_succ]
+  ring
+
+/--
+低次数 `d=5` の虚部明示式。
+
+`cfbrcIm 5 X Θ = 5X^4Θ - 10X^2Θ^3`。
+-/
+lemma cfbrcIm_five (X Θ : ℝ) :
+    cfbrcIm 5 X Θ = 5 * X ^ 4 * Θ - 10 * X ^ 2 * Θ ^ 3 := by
+  simp [cfbrcIm, cfbrcR, cfbrc, pow_succ]
+  ring
+
 end
 
 end DkMath.CFBRC.TrigBridge

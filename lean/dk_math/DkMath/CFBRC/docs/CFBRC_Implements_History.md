@@ -879,3 +879,31 @@
    - `mod 4` 再帰と断面補題を使って `cfbrcRe` / `cfbrcIm` の低次数明示式
      (`d=3,4,5`) を `General` または `Complex` に追加する。
    - 必要なら `Main` 側に「`d=2` は general 補題系の特殊化」という接続定理を追加する。
+
+### 日時: 2026/03/20 02:38 JST: `d=3,4,5` 明示式の回帰固定と公開ドキュメント反映
+
+1. 目的: 低次数明示式を `General` 実装に固定した上で、利用導線（テスト・README）を更新する。
+2. 内容:
+   - `DkMath/CFBRC/TrigBridge/General.lean`
+     - 追加済み低次数補題を確定:
+       - `cfbrcRe_three`, `cfbrcIm_three`
+       - `cfbrcRe_four`, `cfbrcIm_four`
+       - `cfbrcRe_five`, `cfbrcIm_five`
+   - `DkMathTest/CFBRC.lean`
+     - 上記 6 補題の `example` 回帰を追加。
+     - 依存公理監視に `#print axioms cfbrcRe_five` を追加。
+   - `DkMath/CFBRC/README.md`
+     - general `d` 章に `cfbrcRe_five` / `cfbrcIm_five` の使用例を追加。
+   - 検証:
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.General` 成功
+     - `./lean-build.sh DkMathTest.CFBRC` 成功
+     - `./lean-build.sh DkMath.CFBRC` 成功
+     - `./lean-build.sh DkMathTest` 成功
+3. 結論: 低次数 (`d=3,4,5`) の実部・虚部明示式が、定理・回帰・README の 3 点で整合した状態になった。
+4. 失敗事例:
+   - 特になし（追加分は既存補題への `simpa` 回帰で安定）。
+5. 備考:
+   - 全体ビルド時の `ABC021` `sorry` 警告は既知の別件であり、今回変更範囲の退行ではない。
+6. 次の課題:
+   - `d=6,7` など次段の低次数明示式を同様に追加し、`mod 4` 再帰との対応を強化する。
+   - `Main` 側で `d=2` が general 補題の特化であることを明示する接続補題を追加する。
