@@ -609,3 +609,31 @@
 6. 次の課題:
    - `DkMathTest.CFBRC` に `BoundarySide` 高位 API の回帰例を追加する。
    - 必要なら `cfbrc d` 一般化作業に合わせて test ケースを `d=3` 以上へ拡張する。
+
+### 日時: 2026/03/20 01:27 JST: `DkMathTest.CFBRC` に `BoundarySide` 高位 API 回帰例を追加
+
+1. 目的: `BoundarySide` 統一 API（valuation / existence）を test 側で常時検証できるようにする。
+2. 内容:
+   - `DkMathTest/CFBRC.lean` に以下の回帰例を追加:
+     - `padicValNat_boundaryDiffPow_eq_boundaryGN_of_coprime_of_dvd_boundary`
+     - `padicValNat_boundaryDiffPow_eq_boundaryCyclotomicPrimeCore_of_coprime_of_dvd_boundary`
+     - `exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime`
+   - `#print axioms` を追加:
+     - `padicValNat_boundaryDiffPow_eq_boundaryGN_of_coprime_of_dvd_boundary`
+     - `exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime`
+   - 検証:
+     - `./lean-build.sh DkMathTest.CFBRC` 成功
+     - `./lean-build.sh DkMathTest` 成功
+3. 結論: `BoundarySide` の高位 API が test 層でも固定化され、  
+   将来の API 変更・型崩れを `DkMathTest.CFBRC` で即検知できる状態になった。
+4. 失敗事例:
+   - ビルド失敗はなし。
+   - `DkMathTest` 全体では既知の `ABC021` `sorry` 警告が継続（今回変更とは無関係）。
+5. 備考:
+   - 追加例は `side` 依存前提（`match side with ...`）をそのまま受ける形で記述し、
+     API の使用形をドキュメント兼テストとして保持した。
+6. 次の課題:
+   - 必要なら `exists_primitive_prime_factor_boundaryDiffPow_of_prime_exp_boundary_of_coprime`
+     の差分形も test 例に追加する。
+   - `d=2` bridge 以外（general `d` 実部抽出）に着手する際は
+     test 入口を `DkMathTest.CFBRC` に同時追加する。
