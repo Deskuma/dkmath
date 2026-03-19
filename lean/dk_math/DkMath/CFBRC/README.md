@@ -201,6 +201,10 @@ example (n : ℕ) (X Θ : ℝ) :
     cfbrcIm (4 * n + 4) X Θ =
       X * cfbrcIm (4 * n + 3) X Θ + Θ * cfbrcRe (4 * n + 3) X Θ - X * Θ ^ (4 * n + 3) :=
   cfbrcIm_mod4_four_from_three n X Θ
+
+example (d : ℕ) (X : ℝ) :
+    cfbrcRe (d + 1) X 0 = X ^ (d + 1) :=
+  cfbrcRe_succ_theta_zero d X
 ```
 
 ## Related Docs

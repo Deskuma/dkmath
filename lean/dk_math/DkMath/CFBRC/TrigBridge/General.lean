@@ -45,6 +45,81 @@ def cfbrcIm (d : ℕ) (X Θ : ℝ) : ℝ :=
   simp [cfbrcIm, cfbrcR, cfbrc]
 
 /--
+実数埋め込み冪 `((X:ℂ)^d)` の実部は `X^d`。
+-/
+lemma ofReal_pow_re (d : ℕ) (X : ℝ) : Complex.re ((X : ℂ) ^ d) = X ^ d := by
+  induction d with
+  | zero =>
+      simp
+  | succ d ih =>
+      rw [pow_succ, Complex.mul_re, ih]
+      simp [pow_succ]
+
+/--
+実数埋め込み冪 `((X:ℂ)^d)` の虚部は 0。
+-/
+lemma ofReal_pow_im (d : ℕ) (X : ℝ) : Complex.im ((X : ℂ) ^ d) = 0 := by
+  induction d with
+  | zero =>
+      simp
+  | succ d ih =>
+      rw [pow_succ, Complex.mul_im, ih]
+      simp
+
+/--
+`Θ = 0` 断面（`d+1` 版）。
+
+`cfbrcR (d+1) X 0 = X^(d+1)`。
+-/
+lemma cfbrcR_succ_theta_zero (d : ℕ) (X : ℝ) :
+    cfbrcR (d + 1) X 0 = (X : ℂ) ^ (d + 1) := by
+  simp [cfbrcR, cfbrc]
+
+/--
+`Θ = 0` 断面の実部（`d+1` 版）。
+
+`cfbrcRe (d+1) X 0 = X^(d+1)`。
+-/
+lemma cfbrcRe_succ_theta_zero (d : ℕ) (X : ℝ) :
+    cfbrcRe (d + 1) X 0 = X ^ (d + 1) := by
+  rw [cfbrcRe, cfbrcR_succ_theta_zero]
+  exact ofReal_pow_re (d + 1) X
+
+/--
+`Θ = 0` 断面の虚部（`d+1` 版）。
+
+`cfbrcIm (d+1) X 0 = 0`。
+-/
+lemma cfbrcIm_succ_theta_zero (d : ℕ) (X : ℝ) :
+    cfbrcIm (d + 1) X 0 = 0 := by
+  rw [cfbrcIm, cfbrcR_succ_theta_zero]
+  exact ofReal_pow_im (d + 1) X
+
+/--
+`X = 0` 断面。
+
+`cfbrcR d 0 Θ = 0`（全ての `d`）。
+-/
+lemma cfbrcR_x_zero (d : ℕ) (Θ : ℝ) : cfbrcR d 0 Θ = 0 := by
+  simp [cfbrcR, cfbrc]
+
+/--
+`X = 0` 断面の実部。
+
+`cfbrcRe d 0 Θ = 0`。
+-/
+lemma cfbrcRe_x_zero (d : ℕ) (Θ : ℝ) : cfbrcRe d 0 Θ = 0 := by
+  simp [cfbrcRe, cfbrcR_x_zero]
+
+/--
+`X = 0` 断面の虚部。
+
+`cfbrcIm d 0 Θ = 0`。
+-/
+lemma cfbrcIm_x_zero (d : ℕ) (Θ : ℝ) : cfbrcIm d 0 Θ = 0 := by
+  simp [cfbrcIm, cfbrcR_x_zero]
+
+/--
 `d -> d+1` の分解公式。
 
 `A := X + iΘ`, `B := iΘ` とおくと

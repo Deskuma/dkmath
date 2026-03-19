@@ -840,3 +840,42 @@
 6. 次の課題:
    - `X = 0` / `Θ = 0` 断面で `cfbrcRe/Im` がどう簡約されるかの補題を追加する。
    - 必要なら `mod 4` 再帰を使って `cfbrcRe` の低次数（`d=3,4,5`）明示式を追加し、回帰テストへ固定する。
+
+### 日時: 2026/03/20 02:18 JST: `X=0` / `Θ=0` 断面補題を追加
+
+1. 目的: general `d` 補助の境界挙動を固定し、`cfbrcRe/Im` 再帰の端点を明確化する。
+2. 内容:
+   - `DkMath/CFBRC/TrigBridge/General.lean` に追加:
+     - 実数冪の複素埋め込み補助:
+       - `ofReal_pow_re`
+       - `ofReal_pow_im`
+     - `Θ = 0` 断面 (`d+1` 版):
+       - `cfbrcR_succ_theta_zero`
+       - `cfbrcRe_succ_theta_zero`
+       - `cfbrcIm_succ_theta_zero`
+     - `X = 0` 断面:
+       - `cfbrcR_x_zero`
+       - `cfbrcRe_x_zero`
+       - `cfbrcIm_x_zero`
+   - `DkMathTest/CFBRC.lean` に回帰例を追加:
+     - `cfbrcRe_succ_theta_zero`
+     - `cfbrcRe_x_zero`
+     - `cfbrcIm_x_zero`
+     - `#print axioms cfbrcRe_succ_theta_zero`
+   - `DkMath/CFBRC/README.md` に `Θ=0` 断面の使用例を追加。
+   - 検証:
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.General` 成功
+     - `./lean-build.sh DkMathTest.CFBRC` 成功
+     - `./lean-build.sh DkMath.CFBRC` 成功
+     - `./lean-build.sh DkMathTest` 成功
+3. 結論: `X=0` / `Θ=0` の境界ケースが `General` に固定され、  
+   `mod 4` 再帰と合わせて general `d` の追跡が端点まで閉じた。
+4. 失敗事例:
+   - `Complex.re ((X:ℂ)^d)` / `Complex.im ((X:ℂ)^d)` の `simp` 直接簡約が不安定。
+   - 帰納法補助 `ofReal_pow_re/im` を導入して安定化。
+5. 備考:
+   - `Θ=0` は `d=0` 特異点 (`0^0`) を避けるため `d+1` 版で固定した。
+6. 次の課題:
+   - `mod 4` 再帰と断面補題を使って `cfbrcRe` / `cfbrcIm` の低次数明示式
+     (`d=3,4,5`) を `General` または `Complex` に追加する。
+   - 必要なら `Main` 側に「`d=2` は general 補題系の特殊化」という接続定理を追加する。

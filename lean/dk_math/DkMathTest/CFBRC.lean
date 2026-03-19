@@ -55,6 +55,18 @@ example (d : ℕ) (X Θ : ℝ) :
       X * cfbrcIm d X Θ + Θ * cfbrcRe d X Θ + X * Complex.im ((Complex.I * Θ) ^ d) := by
   simpa using cfbrcIm_succ' d X Θ
 
+example (d : ℕ) (X : ℝ) :
+    cfbrcRe (d + 1) X 0 = X ^ (d + 1) := by
+  simpa using cfbrcRe_succ_theta_zero d X
+
+example (d : ℕ) (Θ : ℝ) :
+    cfbrcRe d 0 Θ = 0 := by
+  simpa using cfbrcRe_x_zero d Θ
+
+example (d : ℕ) (Θ : ℝ) :
+    cfbrcIm d 0 Θ = 0 := by
+  simpa using cfbrcIm_x_zero d Θ
+
 example (n : ℕ) (Θ : ℝ) :
     Complex.re ((Complex.I * Θ) ^ (2 * n)) = (-1 : ℝ) ^ n * Θ ^ (2 * n) := by
   simpa using pure_phase_pow_even_re n Θ
@@ -143,6 +155,7 @@ example (side : BoundarySide) {d x u : ℕ}
 #print axioms factor_eq_re_cfbrc2
 #print axioms prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
 #print axioms cfbrcRe_succ'
+#print axioms cfbrcRe_succ_theta_zero
 #print axioms pure_phase_pow_odd_im
 #print axioms pure_phase_pow_mod4_three_im
 #print axioms cfbrcIm_mod4_four_from_three
