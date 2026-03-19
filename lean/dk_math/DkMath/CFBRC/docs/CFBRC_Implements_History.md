@@ -1320,3 +1320,37 @@
    - 既知の `ABC021` `sorry` 警告は継続（今回変更範囲外）。
 6. 次の課題:
    - 必要なら `d=3..12` の `cfbrcRe/ImClosed d X Θ` そのものを主語にした回帰も追加する。
+
+### 日時: 2026/03/20 05:11 JST: `cfbrcRe/ImClosed` 主語の低次数回帰 + README 役割明確化
+
+1. 目的:
+   - low-degree window を closed API 側へ寄せ切るため、
+     `cfbrcReClosed` / `cfbrcImClosed` を主語にした `d=3..12` 回帰を追加する。
+   - README 上で `General` と `ClosedForm` の役割分担を明示する。
+2. 内容:
+   - `DkMathTest/CFBRC.lean`:
+     - private 補助補題を追加:
+       - `cfbrcReClosed_eq_cfbrcRe_via_api`
+       - `cfbrcImClosed_eq_cfbrcIm_via_api`
+     - `d=3..12` について
+       - `cfbrcReClosed d X Θ = ...`
+       - `cfbrcImClosed d X Θ = ...`
+       の回帰 `example` を追加。
+   - `DkMath/CFBRC/README.md`:
+     - `TrigBridge.General` を「証明エンジン / 内部基盤」と明記。
+     - `TrigBridge.ClosedForm` を「主API」と明記。
+     - Quick Start に
+       `import DkMath.CFBRC.TrigBridge.ClosedForm`
+       （general `d` 利用時の推奨）を追記。
+3. 結論:
+   - 低次数回帰は
+     - `cfbrcRe/Im`
+     - `Complex.re/im (cfbrcClosed ...)`
+     - `cfbrcRe/ImClosed`
+     の3経路で固定され、closed API 側への寄せが完了した。
+4. 失敗事例:
+   - 特になし（既存低次数補題を `simpa` 再利用）。
+5. 備考:
+   - 既知の `ABC021` `sorry` 警告は継続（今回変更範囲外）。
+6. 次の課題:
+   - 必要なら `cfbrcClosed` の和定義そのもの（`Nat.choose` 係数列）に対する係数回帰を追加する。
