@@ -50,6 +50,8 @@ $$
 - `DkMath.CFBRC.TrigBridge.Main`
   - `d=2` の三角置換 bridge
   - `body2 = a^2 * cos^2 φ = Re(cfbrcR 2 (a cos φ) (a sin φ))`
+- `DkMath.CFBRC.TrigBridge.General`
+  - general `d` 向けの `Re/Im` 補助（基底値と再帰式）
 
 ## Quick Start
 
@@ -173,6 +175,19 @@ example (a φ : ℝ) :
     (a * (1 - Real.sin φ)) * ((a * (1 - Real.sin φ)) + 2 * (a * Real.sin φ))
       = Complex.re (cfbrcR 2 (a * Real.cos φ) (a * Real.sin φ)) :=
   factor_eq_re_cfbrc2 a φ
+```
+
+### 7) General `d` 用の `Re/Im` 補助
+
+```lean
+import DkMath.CFBRC.TrigBridge.General
+
+open DkMath.CFBRC.TrigBridge
+
+example (d : ℕ) (X Θ : ℝ) :
+    cfbrcRe (d + 1) X Θ =
+      X * cfbrcRe d X Θ - Θ * cfbrcIm d X Θ + X * Complex.re ((Complex.I * Θ) ^ d) :=
+  cfbrcRe_succ' d X Θ
 ```
 
 ## Related Docs

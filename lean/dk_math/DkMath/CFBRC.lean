@@ -8,6 +8,7 @@ import DkMath.Basic
 import DkMath.CFBRC.Basic
 import DkMath.CFBRC.Bridge
 import DkMath.CFBRC.CyclotomicProduct
+import DkMath.CFBRC.TrigBridge.General
 import DkMath.CFBRC.TrigBridge.Main
 
 /-! # CFBRC: Cosmic Formula Binomial Real Complex -/

@@ -40,6 +40,21 @@ example {d x u : ℕ} (hx : 0 < x) :
     cyclotomicPrimeCore d x u = GN d x u :=
   cyclotomicPrimeCore_eq_GN_nat (p := d) (x := x) (u := u) hx
 
+-- general d の Re/Im 補助
+example (X Θ : ℝ) :
+    cfbrcRe 1 X Θ = X := by
+  exact cfbrcRe_one X Θ
+
+example (d : ℕ) (X Θ : ℝ) :
+    cfbrcRe (d + 1) X Θ =
+      X * cfbrcRe d X Θ - Θ * cfbrcIm d X Θ + X * Complex.re ((Complex.I * Θ) ^ d) := by
+  simpa using cfbrcRe_succ' d X Θ
+
+example (d : ℕ) (X Θ : ℝ) :
+    cfbrcIm (d + 1) X Θ =
+      X * cfbrcIm d X Θ + Θ * cfbrcRe d X Θ + X * Complex.im ((Complex.I * Θ) ^ d) := by
+  simpa using cfbrcIm_succ' d X Θ
+
 -- BoundarySide 高位 API（valuation）
 example (side : BoundarySide) {d x u q : ℕ}
     (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
@@ -95,6 +110,7 @@ example (side : BoundarySide) {d x u : ℕ}
 -- 依存公理の確認（回帰用）
 #print axioms factor_eq_re_cfbrc2
 #print axioms prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
+#print axioms cfbrcRe_succ'
 #print axioms padicValNat_boundaryDiffPow_eq_boundaryGN_of_coprime_of_dvd_boundary
 #print axioms exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime
 #print axioms exists_primitive_prime_factor_boundaryDiffPow_of_prime_exp_boundary_of_coprime

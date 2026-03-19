@@ -698,3 +698,39 @@
    - 必要なら `Bridge.lean` の高位 API 例（`BoundarySide`）を README に短く再掲し、
      ドキュメント導線を一本化する。
    - general `d` 拡張フェーズでは、新規補題ごとに「式の意味 + 接続先」を同じ docstring 形式で維持する。
+
+### 日時: 2026/03/20 01:46 JST: `TrigBridge.General` を追加（general `d` の `Re/Im` 抽出補助）
+
+1. 目的: `cfbrc d` の general `d` 拡張に向けて、`Complex.re`/`Complex.im` を追跡する再帰補助を先に固定する。
+2. 内容:
+   - `DkMath/CFBRC/TrigBridge/General.lean` を新規追加:
+     - 補助定義: `cfbrcRe`, `cfbrcIm`
+     - 基底値: `cfbrcRe_zero`, `cfbrcIm_zero`, `cfbrcRe_one`, `cfbrcIm_one`
+     - 再帰分解: `cfbrcR_succ_decompose`
+     - 実部/虚部再帰: `cfbrcRe_succ`, `cfbrcIm_succ`
+     - 補助定義版再帰: `cfbrcRe_succ'`, `cfbrcIm_succ'`
+   - `DkMath/CFBRC.lean` に
+     - `import DkMath.CFBRC.TrigBridge.General`
+     を追加し公開入口に接続。
+   - `DkMathTest/CFBRC.lean` に general `d` 回帰例を追加:
+     - `cfbrcRe 1 X Θ = X`
+     - `cfbrcRe_succ'`, `cfbrcIm_succ'` の使用例
+     - `#print axioms cfbrcRe_succ'` を追加。
+   - `DkMath/CFBRC/README.md` を更新:
+     - Lean Modules に `TrigBridge.General` を追加
+     - Usage に general `d` の `Re/Im` 再帰例を追加。
+   - 検証:
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.General` 成功
+     - `./lean-build.sh DkMath.CFBRC` 成功
+     - `./lean-build.sh DkMathTest.CFBRC` 成功
+     - `./lean-build.sh DkMathTest` 成功
+3. 結論: `d=2` 固定橋に加え、general `d` へ進むための `Re/Im` 抽出レイヤが `TrigBridge.General` として整備された。
+4. 失敗事例:
+   - 初期 draft で `No goals to be solved`（`simp` 後の不要 `ring`）が発生。
+   - `DkMathTest.CFBRC` に `unnecessarySimpa` 警告が1件発生。
+   - いずれも proof script を簡約して解消。
+5. 備考:
+   - 今回の再帰式は `(iΘ)^d` の `Re/Im` を残した形で、将来の parity/閉形式導出に接続しやすい構成にした。
+6. 次の課題:
+   - `(iΘ)^d` の `Re/Im` を parity で整理する補題（偶奇・`mod 4`）を追加する。
+   - `cfbrcRe_succ'` を使った general `d` の実部漸化式（`Θ=0`・`X=0` 断面）を先に固定する。
