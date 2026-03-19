@@ -50,6 +50,9 @@ $$
 - `DkMath.CFBRC.TrigBridge.Main`
   - `d=2` の三角置換 bridge
   - `body2 = a^2 * cos^2 φ = Re(cfbrcR 2 (a cos φ) (a sin φ))`
+- `DkMath.CFBRC.TrigBridge.General`
+  - general `d` 向けの `Re/Im` 補助（基底値・再帰式・`(iΘ)^d` の偶奇補題）
+  - `d=8` 以降のための再帰テンプレート（`cfbrcRe/Im_succ_template`）
 
 ## Quick Start
 
@@ -173,6 +176,124 @@ example (a φ : ℝ) :
     (a * (1 - Real.sin φ)) * ((a * (1 - Real.sin φ)) + 2 * (a * Real.sin φ))
       = Complex.re (cfbrcR 2 (a * Real.cos φ) (a * Real.sin φ)) :=
   factor_eq_re_cfbrc2 a φ
+
+example (X Θ : ℝ) :
+    Complex.re (cfbrcR 2 X Θ) = X ^ 2 :=
+  cfbrc_two_re_via_general X Θ
+
+example (X Θ : ℝ) :
+    Complex.re (cfbrcR 2 X Θ) = X ^ 2 :=
+  cfbrc_two_re X Θ
+
+example (a φ : ℝ) :
+    Complex.im (cfbrcR 2 (a * Real.cos φ) (a * Real.sin φ)) =
+      2 * a ^ 2 * Real.sin φ * Real.cos φ :=
+  cfbrc_two_im_polar_via_general a φ
+```
+
+### 7) General `d` 用の `Re/Im` 補助
+
+```lean
+import DkMath.CFBRC.TrigBridge.General
+
+open DkMath.CFBRC.TrigBridge
+
+example (d : ℕ) (X Θ : ℝ) :
+    cfbrcRe (d + 1) X Θ =
+      X * cfbrcRe d X Θ - Θ * cfbrcIm d X Θ + X * Complex.re ((Complex.I * Θ) ^ d) :=
+  cfbrcRe_succ' d X Θ
+
+example (d : ℕ) (X Θ ReD ImD phaseRe : ℝ)
+    (hRe : cfbrcRe d X Θ = ReD)
+    (hIm : cfbrcIm d X Θ = ImD)
+    (hPhaseRe : Complex.re ((Complex.I * Θ) ^ d) = phaseRe) :
+    cfbrcRe (d + 1) X Θ = X * ReD - Θ * ImD + X * phaseRe :=
+  cfbrcRe_succ_template d X Θ ReD ImD phaseRe hRe hIm hPhaseRe
+
+example (n : ℕ) (Θ : ℝ) :
+    Complex.im ((Complex.I * Θ) ^ (2 * n + 1)) = (-1 : ℝ) ^ n * Θ ^ (2 * n + 1) :=
+  pure_phase_pow_odd_im n Θ
+
+example (n : ℕ) (Θ : ℝ) :
+    Complex.re ((Complex.I * Θ) ^ (4 * n + 2)) = -(Θ ^ (4 * n + 2)) :=
+  pure_phase_pow_mod4_two_re n Θ
+
+example (n : ℕ) (X Θ : ℝ) :
+    cfbrcIm (4 * n + 4) X Θ =
+      X * cfbrcIm (4 * n + 3) X Θ + Θ * cfbrcRe (4 * n + 3) X Θ - X * Θ ^ (4 * n + 3) :=
+  cfbrcIm_mod4_four_from_three n X Θ
+
+example (d : ℕ) (X : ℝ) :
+    cfbrcRe (d + 1) X 0 = X ^ (d + 1) :=
+  cfbrcRe_succ_theta_zero d X
+
+example (X Θ : ℝ) :
+    cfbrcRe 5 X Θ = X ^ 5 - 10 * X ^ 3 * Θ ^ 2 + 5 * X * Θ ^ 4 :=
+  cfbrcRe_five X Θ
+
+example (X Θ : ℝ) :
+    cfbrcIm 5 X Θ = 5 * X ^ 4 * Θ - 10 * X ^ 2 * Θ ^ 3 :=
+  cfbrcIm_five X Θ
+
+example (X Θ : ℝ) :
+    cfbrcRe 7 X Θ = X ^ 7 - 21 * X ^ 5 * Θ ^ 2 + 35 * X ^ 3 * Θ ^ 4 - 7 * X * Θ ^ 6 :=
+  cfbrcRe_seven X Θ
+
+example (X Θ : ℝ) :
+    cfbrcIm 7 X Θ = 7 * X ^ 6 * Θ - 35 * X ^ 4 * Θ ^ 3 + 21 * X ^ 2 * Θ ^ 5 :=
+  cfbrcIm_seven X Θ
+
+example (X Θ : ℝ) :
+    cfbrcRe 8 X Θ = X ^ 8 - 28 * X ^ 6 * Θ ^ 2 + 70 * X ^ 4 * Θ ^ 4 - 28 * X ^ 2 * Θ ^ 6 :=
+  cfbrcRe_eight_from_template X Θ
+
+example (X Θ : ℝ) :
+    cfbrcIm 8 X Θ = 8 * X ^ 7 * Θ - 56 * X ^ 5 * Θ ^ 3 + 56 * X ^ 3 * Θ ^ 5 - 8 * X * Θ ^ 7 :=
+  cfbrcIm_eight_from_template X Θ
+
+example (X Θ : ℝ) :
+    cfbrcRe 9 X Θ =
+      X ^ 9 - 36 * X ^ 7 * Θ ^ 2 + 126 * X ^ 5 * Θ ^ 4 - 84 * X ^ 3 * Θ ^ 6 + 9 * X * Θ ^ 8 :=
+  cfbrcRe_nine_from_template X Θ
+
+example (X Θ : ℝ) :
+    cfbrcIm 9 X Θ =
+      9 * X ^ 8 * Θ - 84 * X ^ 6 * Θ ^ 3 + 126 * X ^ 4 * Θ ^ 5 - 36 * X ^ 2 * Θ ^ 7 :=
+  cfbrcIm_nine_from_template X Θ
+
+example (X Θ : ℝ) :
+    cfbrcRe 10 X Θ =
+      X ^ 10 - 45 * X ^ 8 * Θ ^ 2 + 210 * X ^ 6 * Θ ^ 4 - 210 * X ^ 4 * Θ ^ 6 + 45 * X ^ 2 * Θ ^ 8 :=
+  cfbrcRe_ten_from_template X Θ
+
+example (X Θ : ℝ) :
+    cfbrcIm 10 X Θ =
+      10 * X ^ 9 * Θ - 120 * X ^ 7 * Θ ^ 3 + 252 * X ^ 5 * Θ ^ 5 - 120 * X ^ 3 * Θ ^ 7 + 10 * X * Θ ^ 9 :=
+  cfbrcIm_ten_from_template X Θ
+
+example (X Θ : ℝ) :
+    cfbrcRe 11 X Θ =
+      X ^ 11 - 55 * X ^ 9 * Θ ^ 2 + 330 * X ^ 7 * Θ ^ 4 - 462 * X ^ 5 * Θ ^ 6 +
+        165 * X ^ 3 * Θ ^ 8 - 11 * X * Θ ^ 10 :=
+  cfbrcRe_eleven_from_template X Θ
+
+example (X Θ : ℝ) :
+    cfbrcIm 11 X Θ =
+      11 * X ^ 10 * Θ - 165 * X ^ 8 * Θ ^ 3 + 462 * X ^ 6 * Θ ^ 5 -
+        330 * X ^ 4 * Θ ^ 7 + 55 * X ^ 2 * Θ ^ 9 :=
+  cfbrcIm_eleven_from_template X Θ
+
+example (X Θ : ℝ) :
+    cfbrcRe 12 X Θ =
+      X ^ 12 - 66 * X ^ 10 * Θ ^ 2 + 495 * X ^ 8 * Θ ^ 4 - 924 * X ^ 6 * Θ ^ 6 +
+        495 * X ^ 4 * Θ ^ 8 - 66 * X ^ 2 * Θ ^ 10 :=
+  cfbrcRe_twelve_from_template X Θ
+
+example (X Θ : ℝ) :
+    cfbrcIm 12 X Θ =
+      12 * X ^ 11 * Θ - 220 * X ^ 9 * Θ ^ 3 + 792 * X ^ 7 * Θ ^ 5 -
+        792 * X ^ 5 * Θ ^ 7 + 220 * X ^ 3 * Θ ^ 9 - 12 * X * Θ ^ 11 :=
+  cfbrcIm_twelve_from_template X Θ
 ```
 
 ## Related Docs
