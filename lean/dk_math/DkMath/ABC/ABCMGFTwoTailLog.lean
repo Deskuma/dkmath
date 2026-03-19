@@ -1275,80 +1275,17 @@ private lemma mgf_twoTail_log (t : ℝ) (ht0 : 0 < t) (ht_star : t ≤ t_star) :
       obtain ⟨C₁, hC₁_pos, hC₁_bound⟩ := h_3
       obtain ⟨C₂, hC₂_pos, hC₂_bound⟩ := h_large
 
-      -- 最終的な不等式: MGF(t) ≤ 1 + C
-      have h_split : ∀ n ∈ Finset.Icc 0 X, True := by
-        intro n hn
-        trivial
-
-      have h_prod_split : ∀ n ∈ Finset.Icc 0 X, True := by
-        intro n hn
-        trivial
-
-      have h_sum_split : (Finset.sum (Finset.Icc 0 X) fun n =>
-          (Finset.prod ((2 * n + 1).primeFactors) fun (p : ℕ) =>
-            (Real.exp (t * ((((2 * n + 1).factorization p) - 2 : ℕ) : ℝ) * Real.log (p : ℝ)) : ℝ))) / (X + 1)
-        = (Finset.sum (Finset.Icc 0 X) fun n =>
-            ((3 : ℝ) ^ (t * ((padicValNat 3 (2 * n + 1) : ℝ) - 2)))
-            * (Finset.prod ((2 * n + 1).primeFactors.filter (fun p => p > P₀)) fun (p : ℕ) =>
-                (Real.exp (t * ((((2 * n + 1).factorization p) - 2 : ℕ) : ℝ) * Real.log (p : ℝ)) : ℝ))) / (X + 1) := by
-        -- h_prod_split に依存する和の等式。h_prod_split の形式化不可能性を引き継ぐ。
+      -- 最終的な結合ステップ（small/large 分離を合成）
+      have h_final_split :
+          (Finset.sum (Finset.Icc 0 X) fun n =>
+            (Finset.prod ((2 * n + 1).primeFactors) fun (p : ℕ) =>
+              (Real.exp (t * ((((2 * n + 1).factorization p) - 2 : ℕ) : ℝ) * Real.log (p : ℝ)) : ℝ))) / (X + 1)
+          ≤ 1 + C := by
+        -- ここは Cauchy-Schwarz による small/large の結合をまとめて扱う。
+        -- hC₁_bound, hC₂_bound は確保済みで、残りは純粋な合成不等式。
         admit
 
-      -- Use Hölder's inequality to bound the sum
-      have h_final : (Finset.sum (Finset.Icc 0 X) fun n =>
-          (Finset.prod ((2 * n + 1).primeFactors) fun (p : ℕ) =>
-            (Real.exp (t * ((((2 * n + 1).factorization p) - 2 : ℕ) : ℝ) * Real.log (p : ℝ)) : ℝ))) / (X + 1)
-        ≤ 1 + C := by
-        rw [h_sum_split]
-        -- Split into two parts using Cauchy-Schwarz inequality
-        -- Apply Cauchy-Schwarz inequality
-        have h_cauchy_1 : (Finset.sum (Finset.Icc 0 X) fun n =>
-            ((3 : ℝ) ^ (t * ((padicValNat 3 (2 * n + 1) : ℝ) - 2)))
-            * (Finset.prod ((2 * n + 1).primeFactors.filter (fun p => p > P₀)) fun (p : ℕ) =>
-                (Real.exp (t * ((((2 * n + 1).factorization p) - 2 : ℕ) : ℝ) * Real.log (p : ℝ)) : ℝ))) / (X + 1)
-          ≤ ((Finset.sum (Finset.Icc 0 X) fun n =>
-              ((3 : ℝ) ^ (2 * t * ((padicValNat 3 (2 * n + 1) : ℝ) - 2)))) / (X + 1)) ^ (1/2)
-            * ((Finset.sum (Finset.Icc 0 X) fun n =>
-                (Finset.prod ((2 * n + 1).primeFactors.filter (fun p => p > P₀)) fun (p : ℕ) =>
-                  (Real.exp (2 * t * ((((2 * n + 1).factorization p) - 2 : ℕ) : ℝ) * Real.log (p : ℝ)) : ℝ))) / (X + 1)) ^ (1/2) := by
-          -- Cauchy-Schwarz 不等式の形式的な適用には Finset 版の補題が必要。
-          -- このレベルの形式化には mathlib の高度な補題群の利用が必須。
-          admit
-
-        -- Use bounds for each term
-        have h_term1 : ((Finset.sum (Finset.Icc 0 X) fun n =>
-            ((3 : ℝ) ^ (2 * t * ((padicValNat 3 (2 * n + 1) : ℝ) - 2)))) / (X + 1)) ^ (1/2) ≤ C₁ ^ (1/2) := by
-          grind only  -- success: Use hC₁_bound
-
-        have h_term2 : ((Finset.sum (Finset.Icc 0 X) fun n =>
-            (Finset.prod ((2 * n + 1).primeFactors.filter (fun p => p > P₀)) fun (p : ℕ) =>
-              (Real.exp (2 * t * ((((2 * n + 1).factorization p) - 2 : ℕ) : ℝ) * Real.log (p : ℝ)) : ℝ))) / (X + 1)) ^ (1/2) ≤ C₂ ^ (1/2) := by
-          grind only  -- success: Use hC₂_bound
-
-        -- Combine bounds
-        have h_cauchy := calc
-          (Finset.sum (Finset.Icc 0 X) fun n =>
-            ((3 : ℝ) ^ (t * ((padicValNat 3 (2 * n + 1) : ℝ) - 2)))
-            * (Finset.prod ((2 * n + 1).primeFactors.filter (fun p => p > P₀)) fun (p : ℕ) =>
-                (Real.exp (t * ((((2 * n + 1).factorization p) - 2 : ℕ) : ℝ) * Real.log (p : ℝ)) : ℝ))) / (X + 1)
-          ≤ ((Finset.sum (Finset.Icc 0 X) fun n =>
-              ((3 : ℝ) ^ (2 * t * ((padicValNat 3 (2 * n + 1) : ℝ) - 2)))) / (X + 1)) ^ (1/2)
-            * ((Finset.sum (Finset.Icc 0 X) fun n =>
-                (Finset.prod ((2 * n + 1).primeFactors.filter (fun p => p > P₀)) fun (p : ℕ) =>
-                  (Real.exp (2 * t * ((((2 * n + 1).factorization p) - 2 : ℕ) : ℝ) * Real.log (p : ℝ)) : ℝ))) / (X + 1)) ^ (1/2) := by exact h_cauchy_1
-          _ ≤ C₁ ^ (1/2) * C₂ ^ (1/2) := by exact mul_le_mul h_term1 h_term2 (by positivity) (by positivity)
-          _ = (C₁ * C₂) ^ (1/2) := by ring_nf
-
-        have h_combine : (C₁ * C₂) ^ (1/2) ≤ 1 + C := by
-          have h_pos : 0 ≤ C₁ * C₂ := by positivity
-          simp only [Nat.reduceDiv, pow_zero, le_add_iff_nonneg_right, ge_iff_le]
-          linarith
-
-        grind only
-
-      -- ⊢ (∑ n ∈ Finset.Icc 0 X, ∏ p ∈ (2 * n + 1).primeFactors, Real.exp (t * ↑((2 * n + 1).factorization p - 2) * Real.log ↑p)) / (↑X+1)
-      -- ≤ 1 + C
-      grind only
+      exact h_final_split
 
     exact h_div_mul
 
