@@ -13,7 +13,7 @@ set_option linter.style.longLine false
 Auxiliary lemmas used in the mgf_twoTail_log argument.
 These are small, self-contained statements that will be proved in subsequent commits.
  - `finset_holder_equal_power` : equal-exponent Hölder bound for finite products over a finite set
- - `large_primes_tail_bound` : tail sum over large primes is bounded by a convergent series
+ - `large_primes_tail_const_exists` : existence of a positive tail-side constant
  - `mgf_vp_base_apply` : wrapper to apply `mgf_vp_base` uniformly over primes
  -/
 
@@ -281,18 +281,17 @@ private lemma card_separated_by_gap_le_div_add_one
   have h_div_mono : X / q ≤ (X + 1) / q := Nat.div_le_div_right (Nat.le_add_right X 1)
   exact le_trans h_card_le (Nat.succ_le_succ h_div_mono)
 
--- Count v_p(2n+1) ≥ k+2 in [0..X]: 最多 (X+1)/p^k + 1
-lemma count_vp_ge_for_layercake
-    (p X k : ℕ) (hp : p.Prime) (hpodd : p ≠ 2) :
-    ((Finset.Icc 0 X).filter (fun n => p^(k+2) ∣ (2*n+1))).card
-      ≤ (X + 1) / p^(k+2) + 1 := by
+-- 一般版: p^m ∣ (2n+1) を満たす n ∈ [0..X] の個数上界（+1 付き安全版）
+lemma count_vp_ge (p m X : ℕ) (hp : p.Prime) (hpodd : p ≠ 2) :
+    ((Finset.Icc 0 X).filter (fun n => p^m ∣ (2*n+1))).card
+      ≤ (X + 1) / p^m + 1 := by
   classical
-  let q := p^(k+2)
+  let q := p^m
   have hqpos : 0 < q := by
     have hppos : 0 < (p:ℕ) := hp.pos
-    have : 0 < p ^ (k + 2) := Nat.pow_pos hppos
+    have : 0 < p ^ m := Nat.pow_pos hppos
     exact this
-  have hcop : Nat.Coprime 2 q := coprime_two_pow_of_odd_prime p (k+2) hp hpodd
+  have hcop : Nat.Coprime 2 q := coprime_two_pow_of_odd_prime p m hp hpodd
   have hgap :
       ∀ {n n'}, n ∈ (Finset.Icc 0 X).filter (fun n => q ∣ 2*n+1) →
                   n' ∈ (Finset.Icc 0 X).filter (fun n => q ∣ 2*n+1) →
@@ -328,6 +327,13 @@ lemma count_vp_ge_for_layercake
     -- extract the left component of the filter
     have ⟨hmem, _⟩ := Finset.mem_filter.mp hn
     exact hmem
+
+-- layer-cake 用の薄い wrapper
+lemma count_vp_ge_for_layercake
+    (p X k : ℕ) (hp : p.Prime) (hpodd : p ≠ 2) :
+    ((Finset.Icc 0 X).filter (fun n => p^(k+2) ∣ (2*n+1))).card
+      ≤ (X + 1) / p^(k+2) + 1 := by
+  simpa using count_vp_ge p (k + 2) X hp hpodd
 
 -- K の一様上界確保
 lemma Vp_minus_two_le_max_for_layercake
@@ -515,56 +521,6 @@ lemma layercake_rhs_bound_for_layercake
           + ((p : ℝ)^t - 1) * (Finset.sum (Finset.Icc 1 K) fun k => (p : ℝ)^(t * ((k : ℝ) - 1))) := by
           rfl
 
--- 補助補題：p^m が奇数 2n+1 を割く個数上界（+1 付き安全版）
--- For odd prime p and n ∈ [0..X], solutions to p^m ∣ (2n+1) are p^m-separated.
--- Therefore card ≤ ⌊(X+1)/p^m⌋ + 1 ≤ (X+1)/p^m + 1
-private lemma count_vp_ge (p m X : ℕ) (hp : p.Prime) (hpodd : p ≠ 2) :
-  ((Finset.Icc 0 X).filter (fun n => p^m ∣ (2*n+1))).card ≤ (X + 1) / p^m + 1 := by
-  classical
-  set q := p^m with hq_def
-  have hqpos : 0 < q := by
-    by_cases hm : m = 0
-    · simp [hq_def, hm]
-    · push_neg at hm
-      have : 0 < m := Nat.pos_of_ne_zero hm
-      have : 1 < p := Nat.Prime.one_lt hp
-      have : 1 < p ^ m := Nat.one_lt_pow hm this
-      omega
-
-  -- Key gap lemma: if n < n' and both satisfy q ∣ (2n+1), then q ≤ n' - n
-  -- Proof sketch:
-  --   q ∣ (2n+1) ∧ q ∣ (2n'+1) ⇒ q ∣ (2n'+1 - (2n+1)) = 2(n'-n)
-  --   Since p is odd ⇒ gcd(2, q) = 1 ⇒ q ∣ (n'-n) ⇒ q ≤ n'-n
-  have gap :
-    ∀ {n n' : ℕ}, n < n' →
-      q ∣ (2*n+1) → q ∣ (2*n'+1) → q ≤ n' - n := by
-    intro n n' hlt hn hn'
-    -- Gap property from solutions being spaced by multiples of q
-    -- This requires number-theoretic arguments; we apply the same logic as count_vp_ge_for_layercake
-    -- q ∣ (2n'+1) - (2n+1) = q ∣ 2(n'-n)
-    have h2diff : q ∣ (2*n' + 1) - (2*n + 1) := Nat.dvd_sub hn' hn
-    have : (2*n' + 1) - (2*n + 1) = 2*(n' - n) := by omega
-    rw [this] at h2diff
-    -- coprime(q, 2) because p is odd, where q = p^m
-    have hcop_base : Nat.Coprime 2 (p ^ m) := coprime_two_pow_of_odd_prime p m hp hpodd
-    rw [← hq_def] at hcop_base
-    let hcop := hcop_base.symm
-    -- q ∣ (n'-n)*2 and coprime(q, 2) ⇒ q ∣ (n'-n)
-    have h2diff' : q ∣ (n' - n) * 2 := by convert h2diff using 1; ring
-    have : q ∣ (n' - n) := Nat.Coprime.dvd_of_dvd_mul_right hcop h2diff'
-    exact Nat.le_of_dvd (Nat.sub_pos_of_lt hlt) this
-
-  -- Standard result: interval-spaced subsequence count
-  -- If we have solutions at positions n₀ < n₁ < ... with q ≤ nᵢ₊₁ - nᵢ,
-  -- then count ≤ ⌊(X+1-1)/q⌋ + 1 ≤ (X+1)/q + 1
-  -- 適用: S = {n : q ∣ 2n+1} ∩ [0,X] に対して card_separated_by_gap_le_div_add_one を使う
-  let S := (Finset.Icc 0 X).filter (fun n => q ∣ 2*n+1)
-  refine card_separated_by_gap_le_div_add_one X q hqpos S ?hgap ?hsub
-  · intro n n' hn hn' hlt
-    exact gap hlt (by simpa using (Finset.mem_filter.mp hn).2) (by simpa using (Finset.mem_filter.mp hn').2)
-  · intro n hn
-    exact (Finset.mem_filter.mp hn).1
-
 -- mgf_vp_base: MGF の基礎補題
 -- For p prime (p ≠ 2) and 0 < t ≤ log 2 / log 3, the average
 --   (1/(X+1)) * ∑_{n=0}^X p^{t*(v_p(2n+1)-2)_+}
@@ -664,7 +620,7 @@ private lemma twoTail_exp_prod_eq (t : ℝ) (n : ℕ) (hn : 2 * n + 1 ≠ 0) :
 set_option linter.unusedTactic false
 
 /-!
-  補助補題：tail_nonempty_bound_mul
+  補助補題：unscale_tail_average_bound
 
   この補題は、有限集合 `s` が空でない場合に、
   集合 `s` 上の関数族 `H` に対して、
@@ -673,7 +629,7 @@ set_option linter.unusedTactic false
   具体的には、以下を証明します：
   ∑ n ∈ I, ∏ b ∈ s, H b n ≤ ∏ b ∈ s, (∑ n ∈ I, H b n ^ Rsc s) ^ (1 / Rsc s) * RX1 X
 -/
-private lemma tail_nonempty_bound_mul {α : Type _}
+private lemma unscale_tail_average_bound {α : Type _}
   (s : Finset α) (hs : s.Nonempty)
   (H : α → ℕ → ℝ) (hH : ∀ b n, 0 ≤ H b n)
   (X : ℕ) (hX : 1 ≤ X)
@@ -758,7 +714,7 @@ noncomputable def C_tail (t : ℝ) (B : ℕ) : ℝ :=
     (fun p => (p : ℝ)^((-2 : ℝ)) * (1 - (p : ℝ)^(t - 1))⁻¹)
 
 -- 大素数帯の尾部上界（p=5項のみで十分）
-private lemma large_primes_tail_bound (t : ℝ) (_ht0 : 0 < t) (_ht_star : t ≤ t_star) :
+private lemma large_primes_tail_const_exists (t : ℝ) (_ht0 : 0 < t) (_ht_star : t ≤ t_star) :
   ∃ C : ℝ, 0 < C := by
   -- Choose the p=5 term as the constant (suffices for existence)
   let C := (5 : ℝ)^((-2 : ℝ)) * (1 - (5 : ℝ)^(t - 1))⁻¹
