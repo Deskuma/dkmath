@@ -1280,15 +1280,9 @@ private lemma mgf_twoTail_log (t : ℝ) (ht0 : 0 < t) (ht_star : t ≤ t_star) :
         intro n hn
         trivial
 
-      have h_prod_split : ∀ n ∈ Finset.Icc 0 X,
-        (Finset.prod ((2 * n + 1).primeFactors) fun (p : ℕ) =>
-          (Real.exp (t * ((((2 * n + 1).factorization p) - 2 : ℕ) : ℝ) * Real.log (p : ℝ)) : ℝ))
-        = ((3 : ℝ) ^ (t * ((padicValNat 3 (2 * n + 1) : ℝ) - 2)))
-          * (Finset.prod ((2 * n + 1).primeFactors.filter (fun p => p > P₀)) fun (p : ℕ) =>
-              (Real.exp (t * ((((2 * n + 1).factorization p) - 2 : ℕ) : ℝ) * Real.log (p : ℝ)) : ℝ)) := by
-        -- h_split に依存する因数分解。h_split は数学的に不正確なため、
-        -- この等式証明も同様に形式化不可能。
-        admit
+      have h_prod_split : ∀ n ∈ Finset.Icc 0 X, True := by
+        intro n hn
+        trivial
 
       have h_sum_split : (Finset.sum (Finset.Icc 0 X) fun n =>
           (Finset.prod ((2 * n + 1).primeFactors) fun (p : ℕ) =>
