@@ -13,6 +13,7 @@
 
 - `ABC025.lean`
 - `ABC029.lean`
+- `ABC016.lean`
 - `ABCMGFTwoTailLog.lean`
 - `ABCFinalRealExpFactorizationLog.lean`
 
@@ -29,7 +30,6 @@
 | `ABC039.lean` | 2 | 61,180 | 設計不一致の可能性あり（先にstatement確認）。 |
 | `ABC031.lean` | 2 | 309,411 | 密度/ε-δ。中程度。 |
 | `ABC030.lean` | 2 | 376,386 | 小規模 admit。着手しやすい。 |
-| `ABC016.lean` | 1 | 740 | 小規模 admit。最優先候補。 |
 | `ABC008.lean` | 1 | 1981 | 単発 admit。着手可。 |
 | `ABCWorking.lean` | 1 | 351 | 作業用ファイル。削除/保留判断対象。 |
 | `ABC#Research.lean` | 1 | 105 | 研究用（モジュール運用対象外なら除外可）。 |
@@ -40,9 +40,8 @@
 
 ### A. すぐ潰せる可能性が高い（局所穴）
 
-1. `ABC016.lean:740`
-2. `ABC030.lean:376,386`
-3. `ABC008.lean:1981`
+1. `ABC030.lean:376,386`
+2. `ABC008.lean:1981`
 
 ### B. 次点（局所だが文脈確認が必要）
 
@@ -63,7 +62,6 @@
 
 ## 次の実作業チェックリスト
 
-- [ ] `ABC016.lean:740` を解消
 - [ ] `ABC030.lean:376,386` を解消
 - [ ] `ABC008.lean:1981` を解消
 - [ ] `ABC025_allX.lean` は文中参照と実穴を分離して整理

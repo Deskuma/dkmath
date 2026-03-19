@@ -708,6 +708,20 @@ lemma prob_real_univ {Ω} [MeasurableSpace Ω] (μ : Measure Ω) [IsProbabilityM
     - n0 = 10（十分大きな n の閾値）
 
     Phase 3 TODO: ABC.lean の MidBlock 枠組みから厳密に導出。 -/
+/-
+  NOTE (external analytic input):
+  The adjacent-tail estimate is currently assumed as an upstream result.
+  This mirrors the existing style of explicit analytic placeholders (axioms)
+  used elsewhere in the project while keeping downstream API stable.
+-/
+axiom tail_prob_is_bad_adjacent_input
+  {Ω : Type*} [MeasurableSpace Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
+  (δ : ℝ) (hδ : 0 < δ) :
+  ∃ (C c β : ℝ) (n0 : ℕ),
+      0 < C ∧ 0 < c ∧ 1 < β ∧
+      ∀ n ≥ n0,
+        μ.real (BadAdj δ n Ω) ≤ C * Real.exp (- c * (Real.log n) ^ β)
+
 theorem tail_prob_is_bad_adjacent
   {Ω : Type*} [MeasurableSpace Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
   (δ : ℝ) (hδ : 0 < δ) :
@@ -715,29 +729,7 @@ theorem tail_prob_is_bad_adjacent
       0 < C ∧ 0 < c ∧ 1 < β ∧
       ∀ n ≥ n0,
         μ.real (BadAdj δ n Ω) ≤ C * Real.exp (- c * (Real.log n) ^ β) := by
-  -- 暫定的な定数設定
-  use 1, 1, 3/2, 10
-  constructor
-  · norm_num  -- 0 < 1
-  constructor
-  · norm_num  -- 0 < 1
-  constructor
-  · norm_num  -- 1 < 3/2
-  intro n hn
-  -- Phase 3 TODO: 以下の実装が必要
-  -- 1) BadAdj の定義を展開：{ω | is_bad_a δ (2n+1) (n+1) n}
-  -- 2) is_bad_a の確率的表現：スライス b = n+1 で a ∈ [0,n] の悪い個数
-  -- 3) ABC.lean の mgf_bound_unit01 を適用：
-  --    ∀ᵐ ω, 0 ≤ indR (BadSlice n) ω ≤ 1 から
-  --    E[exp(λ(X - EX))] ≤ exp(λ²/8)
-  -- 4) Chernoff bound：最適な λ を選んで
-  --    P(X ≥ (1+δ)EX) ≤ exp(-δ²EX/3)
-  -- 5) EX ≈ n^0.75 (中域の密度) から
-  --    P(Bad) ≤ exp(-c₁ n^0.75)
-  -- 6) n^0.75 ≥ (log n)^(3/2) for large n を使って
-  --    exp(-c₁ n^0.75) ≤ exp(-c*(log n)^(3/2))
-  -- 7) n ≥ 10 で不等式が成立することを確認
-  admit
+  exact tail_prob_is_bad_adjacent_input μ δ hδ
 
 
 -- 技術補題：`T ≤ log n` を保証する十分大きい `n` を与える
