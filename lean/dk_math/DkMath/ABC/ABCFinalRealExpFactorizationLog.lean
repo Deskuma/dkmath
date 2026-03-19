@@ -389,7 +389,8 @@ example (t : ℝ) (X P₀ : ℕ) :
     rw [mul_assoc]
 
 
-private lemma twoTail_exp_prod_eq (t : ℝ) (n : ℕ) (hn : 2 * n + 1 ≠ 0) :
+/-- Rewrite `exp (t * log (twoTail (2*n+1)))` as a prime-factor product. -/
+lemma twoTail_exp_prod_eq (t : ℝ) (n : ℕ) (hn : 2 * n + 1 ≠ 0) :
   Real.exp (t * Real.log (twoTail (2 * n + 1) : ℝ))
     = Finset.prod ((2 * n + 1).primeFactors) fun p =>
         Real.exp (t * ((((2 * n + 1).factorization p) - 2 : ℕ) : ℝ) * Real.log (p : ℝ)) := by
