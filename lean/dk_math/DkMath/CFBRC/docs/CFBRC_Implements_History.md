@@ -770,3 +770,36 @@
    - `I^d` の `mod 4` 分解（`0,1,2,3` ケース）を追加し、
      `pure_phase_pow_*` をさらに閉形式化する。
    - `Θ = 0` / `X = 0` の断面補題を追加し、general `d` の境界挙動を先に固定する。
+
+### 日時: 2026/03/20 02:07 JST: `mod 4` 補題を追加（`4n+r` で `(iΘ)^d` の `Re/Im` を閉形式化）
+
+1. 目的: 偶奇補題を一段進め、`(iΘ)^d` の位相項を `4` 周期で直接使える形にする。
+2. 内容:
+   - `DkMath/CFBRC/TrigBridge/General.lean` に追加:
+     - `neg_one_pow_even`, `neg_one_pow_odd`
+     - `pure_phase_pow_mod4_zero_re`, `pure_phase_pow_mod4_zero_im`
+     - `pure_phase_pow_mod4_one_re`, `pure_phase_pow_mod4_one_im`
+     - `pure_phase_pow_mod4_two_re`, `pure_phase_pow_mod4_two_im`
+     - `pure_phase_pow_mod4_three_re`, `pure_phase_pow_mod4_three_im`
+   - `DkMathTest/CFBRC.lean` に回帰例を追加:
+     - `pure_phase_pow_mod4_two_re`
+     - `pure_phase_pow_mod4_three_im`
+     - `#print axioms pure_phase_pow_mod4_three_im`
+   - `DkMath/CFBRC/README.md` に `mod 4` 使用例を追記。
+   - ビルド時の `unused simp arg` 警告（`General.lean`）を修正。
+   - 検証:
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.General` 成功
+     - `./lean-build.sh DkMathTest.CFBRC` 成功
+     - `./lean-build.sh DkMath.CFBRC` 成功
+     - `./lean-build.sh DkMathTest` 成功
+3. 結論: `Re/Im ((iΘ)^d)` が `4n+r` ごとに直接評価できるようになり、
+   general `d` の再帰式で位相項を即座に閉じられる状態になった。
+4. 失敗事例:
+   - 初期案は `simp` 依存で不安定（`simp made no progress` / `No goals`）。
+   - 帰納法＋明示展開（`Complex.mul_re/im`, `pow_add`）へ切り替えて安定化。
+5. 備考:
+   - `mod 4` 補題は偶奇補題の上に積んだため、今後の `I^d` 系補題でも再利用しやすい。
+6. 次の課題:
+   - `cfbrcRe/Im` について `d mod 4` ベースの再帰（または閉形式）を追加し、
+     `X=0` / `Θ=0` 断面の簡約定理を整備する。
+   - 必要なら `TrigBridge.Main` に general `d` 入口定理（`d=2` 特化との関係明示）を追加する。

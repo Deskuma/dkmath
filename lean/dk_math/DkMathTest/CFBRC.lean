@@ -63,6 +63,14 @@ example (n : ℕ) (Θ : ℝ) :
     Complex.im ((Complex.I * Θ) ^ (2 * n + 1)) = (-1 : ℝ) ^ n * Θ ^ (2 * n + 1) := by
   simpa using pure_phase_pow_odd_im n Θ
 
+example (n : ℕ) (Θ : ℝ) :
+    Complex.re ((Complex.I * Θ) ^ (4 * n + 2)) = -(Θ ^ (4 * n + 2)) := by
+  simpa using pure_phase_pow_mod4_two_re n Θ
+
+example (n : ℕ) (Θ : ℝ) :
+    Complex.im ((Complex.I * Θ) ^ (4 * n + 3)) = -(Θ ^ (4 * n + 3)) := by
+  simpa using pure_phase_pow_mod4_three_im n Θ
+
 example (n : ℕ) (X Θ : ℝ) :
     cfbrcIm (2 * n + 2) X Θ =
       X * cfbrcIm (2 * n + 1) X Θ + Θ * cfbrcRe (2 * n + 1) X Θ +
@@ -126,6 +134,7 @@ example (side : BoundarySide) {d x u : ℕ}
 #print axioms prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
 #print axioms cfbrcRe_succ'
 #print axioms pure_phase_pow_odd_im
+#print axioms pure_phase_pow_mod4_three_im
 #print axioms padicValNat_boundaryDiffPow_eq_boundaryGN_of_coprime_of_dvd_boundary
 #print axioms exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime
 #print axioms exists_primitive_prime_factor_boundaryDiffPow_of_prime_exp_boundary_of_coprime

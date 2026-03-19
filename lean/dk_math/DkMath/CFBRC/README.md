@@ -192,6 +192,10 @@ example (d : ℕ) (X Θ : ℝ) :
 example (n : ℕ) (Θ : ℝ) :
     Complex.im ((Complex.I * Θ) ^ (2 * n + 1)) = (-1 : ℝ) ^ n * Θ ^ (2 * n + 1) :=
   pure_phase_pow_odd_im n Θ
+
+example (n : ℕ) (Θ : ℝ) :
+    Complex.re ((Complex.I * Θ) ^ (4 * n + 2)) = -(Θ ^ (4 * n + 2)) :=
+  pure_phase_pow_mod4_two_re n Θ
 ```
 
 ## Related Docs

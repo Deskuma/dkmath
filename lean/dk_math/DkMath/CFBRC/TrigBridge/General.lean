@@ -197,6 +197,113 @@ lemma pure_phase_pow_odd_im (n : ℕ) (Θ : ℝ) :
             ring
 
 /--
+実数上の `(-1)` の偶数冪。
+
+`(-1)^(2n) = 1`。
+-/
+lemma neg_one_pow_even (n : ℕ) : (-1 : ℝ) ^ (2 * n) = 1 := by
+  induction n with
+  | zero =>
+      simp
+  | succ n ih =>
+      have htwo : 2 * (n + 1) = 2 * n + 2 := by ring
+      rw [htwo, pow_add]
+      simp [ih]
+
+/--
+実数上の `(-1)` の奇数冪。
+
+`(-1)^(2n+1) = -1`。
+-/
+lemma neg_one_pow_odd (n : ℕ) : (-1 : ℝ) ^ (2 * n + 1) = -1 := by
+  rw [pow_succ]
+  simp
+
+/--
+`(iΘ)^(4n)` の実部。
+
+`Re((iΘ)^(4n)) = Θ^(4n)`。
+-/
+lemma pure_phase_pow_mod4_zero_re (n : ℕ) (Θ : ℝ) :
+    Complex.re ((Complex.I * Θ) ^ (4 * n)) = Θ ^ (4 * n) := by
+  have hfour : 4 * n = 2 * (2 * n) := by ring
+  rw [hfour]
+  rw [pure_phase_pow_even_re]
+  simp
+
+/--
+`(iΘ)^(4n)` の虚部は 0。
+-/
+lemma pure_phase_pow_mod4_zero_im (n : ℕ) (Θ : ℝ) :
+    Complex.im ((Complex.I * Θ) ^ (4 * n)) = 0 := by
+  have hfour : 4 * n = 2 * (2 * n) := by ring
+  rw [hfour]
+  simpa using pure_phase_pow_even_im (2 * n) Θ
+
+/--
+`(iΘ)^(4n+1)` の実部は 0。
+-/
+lemma pure_phase_pow_mod4_one_re (n : ℕ) (Θ : ℝ) :
+    Complex.re ((Complex.I * Θ) ^ (4 * n + 1)) = 0 := by
+  have hfour : 4 * n + 1 = 2 * (2 * n) + 1 := by ring
+  rw [hfour]
+  simpa using pure_phase_pow_odd_re (2 * n) Θ
+
+/--
+`(iΘ)^(4n+1)` の虚部。
+
+`Im((iΘ)^(4n+1)) = Θ^(4n+1)`。
+-/
+lemma pure_phase_pow_mod4_one_im (n : ℕ) (Θ : ℝ) :
+    Complex.im ((Complex.I * Θ) ^ (4 * n + 1)) = Θ ^ (4 * n + 1) := by
+  have hfour : 4 * n + 1 = 2 * (2 * n) + 1 := by ring
+  rw [hfour]
+  rw [pure_phase_pow_odd_im]
+  simp
+
+/--
+`(iΘ)^(4n+2)` の実部。
+
+`Re((iΘ)^(4n+2)) = -Θ^(4n+2)`。
+-/
+lemma pure_phase_pow_mod4_two_re (n : ℕ) (Θ : ℝ) :
+    Complex.re ((Complex.I * Θ) ^ (4 * n + 2)) = -(Θ ^ (4 * n + 2)) := by
+  have hfour : 4 * n + 2 = 2 * (2 * n + 1) := by ring
+  rw [hfour]
+  rw [pure_phase_pow_even_re]
+  simp [neg_one_pow_odd]
+
+/--
+`(iΘ)^(4n+2)` の虚部は 0。
+-/
+lemma pure_phase_pow_mod4_two_im (n : ℕ) (Θ : ℝ) :
+    Complex.im ((Complex.I * Θ) ^ (4 * n + 2)) = 0 := by
+  have hfour : 4 * n + 2 = 2 * (2 * n + 1) := by ring
+  rw [hfour]
+  simpa using pure_phase_pow_even_im (2 * n + 1) Θ
+
+/--
+`(iΘ)^(4n+3)` の実部は 0。
+-/
+lemma pure_phase_pow_mod4_three_re (n : ℕ) (Θ : ℝ) :
+    Complex.re ((Complex.I * Θ) ^ (4 * n + 3)) = 0 := by
+  have hfour : 4 * n + 3 = 2 * (2 * n + 1) + 1 := by ring
+  rw [hfour]
+  simpa using pure_phase_pow_odd_re (2 * n + 1) Θ
+
+/--
+`(iΘ)^(4n+3)` の虚部。
+
+`Im((iΘ)^(4n+3)) = -Θ^(4n+3)`。
+-/
+lemma pure_phase_pow_mod4_three_im (n : ℕ) (Θ : ℝ) :
+    Complex.im ((Complex.I * Θ) ^ (4 * n + 3)) = -(Θ ^ (4 * n + 3)) := by
+  have hfour : 4 * n + 3 = 2 * (2 * n + 1) + 1 := by ring
+  rw [hfour]
+  rw [pure_phase_pow_odd_im]
+  simp [neg_one_pow_odd]
+
+/--
 `d=2n` から `d+1=2n+1` への実部再帰（偶数相）。
 
 `(iΘ)^(2n)` の実部評価を展開した形。
