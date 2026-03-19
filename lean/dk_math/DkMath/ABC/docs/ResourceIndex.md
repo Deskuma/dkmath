@@ -51,7 +51,7 @@
 
 ### D. Quality / ABC 本体（`quality` の上界）
 
-- **実装ファイル**: `lean/dk_math/DkMath/ABC/ABCQualityLeOfNotBad.lean` ほか
+- **実装ファイル**: `lean/dk_math/DkMath/ABC/ABC038.lean`, `lean/dk_math/DkMath/ABC/ABC039.lean` ほか
 - **進捗ログ**: `ABCFinal-progress-2025-10-01.md` など
 
 ---
@@ -83,7 +83,7 @@
 | ファイル | 役割 | 代表的な未完箇所（コメント） |
 |---|---|---|
 | `ABC025.lean` | Telescoping / Sum-bound | `t - 1 ≤ -log 2 / log 3` の不等式、`(2X+2)^(log2/log3) ≤ X+1` など |
-| `ABCQualityLeOfNotBad.lean` | ABC quality の上界 | log 分解や padicValNat の評価で `sorry` が多数 |
+| `ABC038.lean` / `ABC039.lean` | ABC quality の上界（Bridge/Pointwise/Density） | `Bad_ε` と `Bad_ε_ABC` の接続設計が中心 |
 | `ABCFinalRealExpFactorizationLog.lean` | 解析的 log/exp factorization | 多数の `sorry` が残存（型変換・rpow 操作など） |
 | `ABCFinalChernoffPrototype.lean` | Chernoff 型不等式の構造 | まずは `sorry` を「nested で defer」して構造を整えている |
 
