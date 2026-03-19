@@ -1086,3 +1086,40 @@
 6. 次の課題:
    - `d=11,12` も同テンプレートで追加し、奇偶・`mod 4` の切替パターンをさらに固定する。
    - `mod 4` 位相投入まで吸収する高位テンプレート（`phaseRe/phaseIm` 自動選択）を検討する。
+
+### 日時: 2026/03/20 03:44 JST: テンプレート運用を `d=11,12` へ拡張
+
+1. 目的:
+   - `d=9,10` で確立した再帰テンプレート運用を継続し、
+     `d=11,12` 明示式まで同一パターンで到達する。
+2. 内容:
+   - `DkMath/CFBRC/TrigBridge/General.lean`
+     - 追加:
+       - `cfbrcRe_eleven_from_template`
+       - `cfbrcIm_eleven_from_template`
+       - `cfbrcRe_twelve_from_template`
+       - `cfbrcIm_twelve_from_template`
+     - 位相項評価:
+       - `Re((iΘ)^10) = -Θ^10`, `Im((iΘ)^10) = 0`
+       - `Re((iΘ)^11) = 0`, `Im((iΘ)^11) = -Θ^11`
+       を `mod 4` 補題 (`n=2`) で投入。
+   - `DkMathTest/CFBRC.lean`
+     - `d=11,12` の `cfbrcRe/Im` 回帰 `example` を追加。
+     - 依存公理監視に `#print axioms cfbrcIm_twelve_from_template` を追加。
+   - `DkMath/CFBRC/README.md`
+     - general `d` 使用例へ `d=11,12` を追記。
+   - 検証:
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.General` 成功
+     - `./lean-build.sh DkMathTest.CFBRC` 成功
+     - `./lean-build.sh DkMath.CFBRC` 成功
+     - `./lean-build.sh DkMathTest` 成功
+3. 結論:
+   - `d=12` まで、`前次数明示式 + 位相評価 + テンプレート` の
+     単一手順で拡張可能なことを確認。
+4. 失敗事例:
+   - 特になし（追加分は `simpa` + `ring` で安定）。
+5. 備考:
+   - 既知の `ABC021` `sorry` 警告は継続（今回変更範囲外）。
+6. 次の課題:
+   - `d=13,14` へ継続し、テンプレート適用の反復性をさらに確認する。
+   - `phaseRe/phaseIm` を `mod 4` から自動選択する高位テンプレートの設計を進める。

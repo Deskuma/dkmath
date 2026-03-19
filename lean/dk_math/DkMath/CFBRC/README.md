@@ -270,6 +270,30 @@ example (X Θ : ℝ) :
     cfbrcIm 10 X Θ =
       10 * X ^ 9 * Θ - 120 * X ^ 7 * Θ ^ 3 + 252 * X ^ 5 * Θ ^ 5 - 120 * X ^ 3 * Θ ^ 7 + 10 * X * Θ ^ 9 :=
   cfbrcIm_ten_from_template X Θ
+
+example (X Θ : ℝ) :
+    cfbrcRe 11 X Θ =
+      X ^ 11 - 55 * X ^ 9 * Θ ^ 2 + 330 * X ^ 7 * Θ ^ 4 - 462 * X ^ 5 * Θ ^ 6 +
+        165 * X ^ 3 * Θ ^ 8 - 11 * X * Θ ^ 10 :=
+  cfbrcRe_eleven_from_template X Θ
+
+example (X Θ : ℝ) :
+    cfbrcIm 11 X Θ =
+      11 * X ^ 10 * Θ - 165 * X ^ 8 * Θ ^ 3 + 462 * X ^ 6 * Θ ^ 5 -
+        330 * X ^ 4 * Θ ^ 7 + 55 * X ^ 2 * Θ ^ 9 :=
+  cfbrcIm_eleven_from_template X Θ
+
+example (X Θ : ℝ) :
+    cfbrcRe 12 X Θ =
+      X ^ 12 - 66 * X ^ 10 * Θ ^ 2 + 495 * X ^ 8 * Θ ^ 4 - 924 * X ^ 6 * Θ ^ 6 +
+        495 * X ^ 4 * Θ ^ 8 - 66 * X ^ 2 * Θ ^ 10 :=
+  cfbrcRe_twelve_from_template X Θ
+
+example (X Θ : ℝ) :
+    cfbrcIm 12 X Θ =
+      12 * X ^ 11 * Θ - 220 * X ^ 9 * Θ ^ 3 + 792 * X ^ 7 * Θ ^ 5 -
+        792 * X ^ 5 * Θ ^ 7 + 220 * X ^ 3 * Θ ^ 9 - 12 * X * Θ ^ 11 :=
+  cfbrcIm_twelve_from_template X Θ
 ```
 
 ## Related Docs

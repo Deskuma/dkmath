@@ -209,6 +209,30 @@ example (X Θ : ℝ) :
         120 * X ^ 3 * Θ ^ 7 + 10 * X * Θ ^ 9 := by
   simpa using cfbrcIm_ten_from_template X Θ
 
+example (X Θ : ℝ) :
+    cfbrcRe 11 X Θ =
+      X ^ 11 - 55 * X ^ 9 * Θ ^ 2 + 330 * X ^ 7 * Θ ^ 4 - 462 * X ^ 5 * Θ ^ 6 +
+        165 * X ^ 3 * Θ ^ 8 - 11 * X * Θ ^ 10 := by
+  simpa using cfbrcRe_eleven_from_template X Θ
+
+example (X Θ : ℝ) :
+    cfbrcIm 11 X Θ =
+      11 * X ^ 10 * Θ - 165 * X ^ 8 * Θ ^ 3 + 462 * X ^ 6 * Θ ^ 5 -
+        330 * X ^ 4 * Θ ^ 7 + 55 * X ^ 2 * Θ ^ 9 := by
+  simpa using cfbrcIm_eleven_from_template X Θ
+
+example (X Θ : ℝ) :
+    cfbrcRe 12 X Θ =
+      X ^ 12 - 66 * X ^ 10 * Θ ^ 2 + 495 * X ^ 8 * Θ ^ 4 - 924 * X ^ 6 * Θ ^ 6 +
+        495 * X ^ 4 * Θ ^ 8 - 66 * X ^ 2 * Θ ^ 10 := by
+  simpa using cfbrcRe_twelve_from_template X Θ
+
+example (X Θ : ℝ) :
+    cfbrcIm 12 X Θ =
+      12 * X ^ 11 * Θ - 220 * X ^ 9 * Θ ^ 3 + 792 * X ^ 7 * Θ ^ 5 -
+        792 * X ^ 5 * Θ ^ 7 + 220 * X ^ 3 * Θ ^ 9 - 12 * X * Θ ^ 11 := by
+  simpa using cfbrcIm_twelve_from_template X Θ
+
 -- BoundarySide 高位 API（valuation）
 example (side : BoundarySide) {d x u q : ℕ}
     (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
@@ -278,6 +302,7 @@ example (side : BoundarySide) {d x u : ℕ}
 #print axioms cfbrcIm_seven
 #print axioms cfbrcRe_eight_from_template
 #print axioms cfbrcIm_ten_from_template
+#print axioms cfbrcIm_twelve_from_template
 #print axioms padicValNat_boundaryDiffPow_eq_boundaryGN_of_coprime_of_dvd_boundary
 #print axioms exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime
 #print axioms exists_primitive_prime_factor_boundaryDiffPow_of_prime_exp_boundary_of_coprime

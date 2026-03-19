@@ -826,6 +826,141 @@ lemma cfbrcIm_ten_from_template (X Θ : ℝ) :
         120 * X ^ 3 * Θ ^ 7 + 10 * X * Θ ^ 9 := by
           ring
 
+/--
+再帰テンプレートで導く `d=11` 実部明示式。
+
+`d=10` の明示式と `Re((iΘ)^10)=-Θ^10` をテンプレートへ渡して生成する。
+-/
+lemma cfbrcRe_eleven_from_template (X Θ : ℝ) :
+    cfbrcRe 11 X Θ =
+      X ^ 11 - 55 * X ^ 9 * Θ ^ 2 + 330 * X ^ 7 * Θ ^ 4 - 462 * X ^ 5 * Θ ^ 6 +
+        165 * X ^ 3 * Θ ^ 8 - 11 * X * Θ ^ 10 := by
+  have hPhaseRe : Complex.re ((Complex.I * Θ) ^ 10) = -(Θ ^ 10) := by
+    simpa using (pure_phase_pow_mod4_two_re (n := 2) Θ)
+  have hStep :=
+    cfbrcRe_succ_template
+      (d := 10) (X := X) (Θ := Θ)
+      (ReD := X ^ 10 - 45 * X ^ 8 * Θ ^ 2 + 210 * X ^ 6 * Θ ^ 4 -
+        210 * X ^ 4 * Θ ^ 6 + 45 * X ^ 2 * Θ ^ 8)
+      (ImD := 10 * X ^ 9 * Θ - 120 * X ^ 7 * Θ ^ 3 + 252 * X ^ 5 * Θ ^ 5 -
+        120 * X ^ 3 * Θ ^ 7 + 10 * X * Θ ^ 9)
+      (phaseRe := -(Θ ^ 10))
+      (hRe := cfbrcRe_ten_from_template X Θ)
+      (hIm := cfbrcIm_ten_from_template X Θ)
+      (hPhaseRe := hPhaseRe)
+  calc
+    cfbrcRe 11 X Θ =
+        X * (X ^ 10 - 45 * X ^ 8 * Θ ^ 2 + 210 * X ^ 6 * Θ ^ 4 -
+          210 * X ^ 4 * Θ ^ 6 + 45 * X ^ 2 * Θ ^ 8) -
+        Θ * (10 * X ^ 9 * Θ - 120 * X ^ 7 * Θ ^ 3 + 252 * X ^ 5 * Θ ^ 5 -
+          120 * X ^ 3 * Θ ^ 7 + 10 * X * Θ ^ 9) +
+        X * (-(Θ ^ 10)) := by
+          simpa using hStep
+    _ = X ^ 11 - 55 * X ^ 9 * Θ ^ 2 + 330 * X ^ 7 * Θ ^ 4 - 462 * X ^ 5 * Θ ^ 6 +
+          165 * X ^ 3 * Θ ^ 8 - 11 * X * Θ ^ 10 := by
+          ring
+
+/--
+再帰テンプレートで導く `d=11` 虚部明示式。
+
+`d=10` の明示式と `Im((iΘ)^10)=0` をテンプレートへ渡して生成する。
+-/
+lemma cfbrcIm_eleven_from_template (X Θ : ℝ) :
+    cfbrcIm 11 X Θ =
+      11 * X ^ 10 * Θ - 165 * X ^ 8 * Θ ^ 3 + 462 * X ^ 6 * Θ ^ 5 -
+        330 * X ^ 4 * Θ ^ 7 + 55 * X ^ 2 * Θ ^ 9 := by
+  have hPhaseIm : Complex.im ((Complex.I * Θ) ^ 10) = 0 := by
+    simpa using (pure_phase_pow_mod4_two_im (n := 2) Θ)
+  have hStep :=
+    cfbrcIm_succ_template
+      (d := 10) (X := X) (Θ := Θ)
+      (ReD := X ^ 10 - 45 * X ^ 8 * Θ ^ 2 + 210 * X ^ 6 * Θ ^ 4 -
+        210 * X ^ 4 * Θ ^ 6 + 45 * X ^ 2 * Θ ^ 8)
+      (ImD := 10 * X ^ 9 * Θ - 120 * X ^ 7 * Θ ^ 3 + 252 * X ^ 5 * Θ ^ 5 -
+        120 * X ^ 3 * Θ ^ 7 + 10 * X * Θ ^ 9)
+      (phaseIm := 0)
+      (hRe := cfbrcRe_ten_from_template X Θ)
+      (hIm := cfbrcIm_ten_from_template X Θ)
+      (hPhaseIm := hPhaseIm)
+  calc
+    cfbrcIm 11 X Θ =
+        X * (10 * X ^ 9 * Θ - 120 * X ^ 7 * Θ ^ 3 + 252 * X ^ 5 * Θ ^ 5 -
+          120 * X ^ 3 * Θ ^ 7 + 10 * X * Θ ^ 9) +
+        Θ * (X ^ 10 - 45 * X ^ 8 * Θ ^ 2 + 210 * X ^ 6 * Θ ^ 4 -
+          210 * X ^ 4 * Θ ^ 6 + 45 * X ^ 2 * Θ ^ 8) + X * 0 := by
+          simpa using hStep
+    _ = 11 * X ^ 10 * Θ - 165 * X ^ 8 * Θ ^ 3 + 462 * X ^ 6 * Θ ^ 5 -
+          330 * X ^ 4 * Θ ^ 7 + 55 * X ^ 2 * Θ ^ 9 := by
+          ring
+
+/--
+再帰テンプレートで導く `d=12` 実部明示式。
+
+`d=11` の明示式と `Re((iΘ)^11)=0` をテンプレートへ渡して生成する。
+-/
+lemma cfbrcRe_twelve_from_template (X Θ : ℝ) :
+    cfbrcRe 12 X Θ =
+      X ^ 12 - 66 * X ^ 10 * Θ ^ 2 + 495 * X ^ 8 * Θ ^ 4 - 924 * X ^ 6 * Θ ^ 6 +
+        495 * X ^ 4 * Θ ^ 8 - 66 * X ^ 2 * Θ ^ 10 := by
+  have hPhaseRe : Complex.re ((Complex.I * Θ) ^ 11) = 0 := by
+    simpa using (pure_phase_pow_mod4_three_re (n := 2) Θ)
+  have hStep :=
+    cfbrcRe_succ_template
+      (d := 11) (X := X) (Θ := Θ)
+      (ReD := X ^ 11 - 55 * X ^ 9 * Θ ^ 2 + 330 * X ^ 7 * Θ ^ 4 -
+        462 * X ^ 5 * Θ ^ 6 + 165 * X ^ 3 * Θ ^ 8 - 11 * X * Θ ^ 10)
+      (ImD := 11 * X ^ 10 * Θ - 165 * X ^ 8 * Θ ^ 3 + 462 * X ^ 6 * Θ ^ 5 -
+        330 * X ^ 4 * Θ ^ 7 + 55 * X ^ 2 * Θ ^ 9)
+      (phaseRe := 0)
+      (hRe := cfbrcRe_eleven_from_template X Θ)
+      (hIm := cfbrcIm_eleven_from_template X Θ)
+      (hPhaseRe := hPhaseRe)
+  calc
+    cfbrcRe 12 X Θ =
+        X * (X ^ 11 - 55 * X ^ 9 * Θ ^ 2 + 330 * X ^ 7 * Θ ^ 4 -
+          462 * X ^ 5 * Θ ^ 6 + 165 * X ^ 3 * Θ ^ 8 - 11 * X * Θ ^ 10) -
+        Θ * (11 * X ^ 10 * Θ - 165 * X ^ 8 * Θ ^ 3 + 462 * X ^ 6 * Θ ^ 5 -
+          330 * X ^ 4 * Θ ^ 7 + 55 * X ^ 2 * Θ ^ 9) +
+        X * 0 := by
+          simpa using hStep
+    _ = X ^ 12 - 66 * X ^ 10 * Θ ^ 2 + 495 * X ^ 8 * Θ ^ 4 - 924 * X ^ 6 * Θ ^ 6 +
+          495 * X ^ 4 * Θ ^ 8 - 66 * X ^ 2 * Θ ^ 10 := by
+          ring
+
+/--
+再帰テンプレートで導く `d=12` 虚部明示式。
+
+`d=11` の明示式と `Im((iΘ)^11)=-Θ^11` をテンプレートへ渡して生成する。
+-/
+lemma cfbrcIm_twelve_from_template (X Θ : ℝ) :
+    cfbrcIm 12 X Θ =
+      12 * X ^ 11 * Θ - 220 * X ^ 9 * Θ ^ 3 + 792 * X ^ 7 * Θ ^ 5 -
+        792 * X ^ 5 * Θ ^ 7 + 220 * X ^ 3 * Θ ^ 9 - 12 * X * Θ ^ 11 := by
+  have hPhaseIm : Complex.im ((Complex.I * Θ) ^ 11) = -(Θ ^ 11) := by
+    simpa using (pure_phase_pow_mod4_three_im (n := 2) Θ)
+  have hStep :=
+    cfbrcIm_succ_template
+      (d := 11) (X := X) (Θ := Θ)
+      (ReD := X ^ 11 - 55 * X ^ 9 * Θ ^ 2 + 330 * X ^ 7 * Θ ^ 4 -
+        462 * X ^ 5 * Θ ^ 6 + 165 * X ^ 3 * Θ ^ 8 - 11 * X * Θ ^ 10)
+      (ImD := 11 * X ^ 10 * Θ - 165 * X ^ 8 * Θ ^ 3 + 462 * X ^ 6 * Θ ^ 5 -
+        330 * X ^ 4 * Θ ^ 7 + 55 * X ^ 2 * Θ ^ 9)
+      (phaseIm := -(Θ ^ 11))
+      (hRe := cfbrcRe_eleven_from_template X Θ)
+      (hIm := cfbrcIm_eleven_from_template X Θ)
+      (hPhaseIm := hPhaseIm)
+  calc
+    cfbrcIm 12 X Θ =
+        X * (11 * X ^ 10 * Θ - 165 * X ^ 8 * Θ ^ 3 + 462 * X ^ 6 * Θ ^ 5 -
+          330 * X ^ 4 * Θ ^ 7 + 55 * X ^ 2 * Θ ^ 9) +
+        Θ * (X ^ 11 - 55 * X ^ 9 * Θ ^ 2 + 330 * X ^ 7 * Θ ^ 4 -
+          462 * X ^ 5 * Θ ^ 6 + 165 * X ^ 3 * Θ ^ 8 - 11 * X * Θ ^ 10) +
+        X * (-(Θ ^ 11)) := by
+          simpa using hStep
+    _ = 12 * X ^ 11 * Θ - 220 * X ^ 9 * Θ ^ 3 + 792 * X ^ 7 * Θ ^ 5 -
+          792 * X ^ 5 * Θ ^ 7 + 220 * X ^ 3 * Θ ^ 9 - 12 * X * Θ ^ 11 := by
+          ring
+
 end
 
 end DkMath.CFBRC.TrigBridge
