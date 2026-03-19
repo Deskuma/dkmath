@@ -30,6 +30,14 @@ example (a φ : ℝ) :
       = Complex.re (cfbrcR 2 (a * Real.cos φ) (a * Real.sin φ)) :=
   factor_eq_re_cfbrc2 a φ
 
+example (X Θ : ℝ) :
+    Complex.re (cfbrcR 2 X Θ) = X ^ 2 := by
+  simpa using cfbrc_two_re_via_general X Θ
+
+example (X Θ : ℝ) :
+    Complex.im (cfbrcR 2 X Θ) = 2 * X * Θ := by
+  simpa using cfbrc_two_im_via_general X Θ
+
 -- core と GN の橋
 example {p x u q : ℕ} (hq : Nat.Prime q) (hqx : ¬ q ∣ x) :
     q ∣ ((x + u) ^ p - u ^ p) ↔ q ∣ cyclotomicPrimeCore p x u :=
@@ -193,6 +201,7 @@ example (side : BoundarySide) {d x u : ℕ}
 
 -- 依存公理の確認（回帰用）
 #print axioms factor_eq_re_cfbrc2
+#print axioms cfbrc_two_re_via_general
 #print axioms prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
 #print axioms cfbrcRe_succ'
 #print axioms cfbrcRe_succ_theta_zero

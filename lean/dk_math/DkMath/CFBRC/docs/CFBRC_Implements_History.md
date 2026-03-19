@@ -934,3 +934,40 @@
 6. 次の課題:
    - `Main` に「`d=2` は general 補題（`cfbrcRe_two` 相当）から得られる」接続補題を追加する。
    - 必要なら `d=8` 以降は再帰ベース自動化（`linarith`/`ring_nf` 連携）に寄せる。
+
+### 日時: 2026/03/20 02:47 JST: `Main` に `d=2` の general 特化接続を追加
+
+1. 目的: `d=2` の橋定理が `Complex` 専用補題だけでなく、`General` 再帰補題系の特殊化としても成立することを明示する。
+2. 内容:
+   - `DkMath/CFBRC/TrigBridge/Main.lean`
+     - `import DkMath.CFBRC.TrigBridge.General` を追加。
+     - `General` 由来の接続補題を追加:
+       - `cfbrcRe_two_from_general`
+       - `cfbrcIm_two_from_general`
+       - `cfbrc_two_re_via_general`
+       - `cfbrc_two_im_via_general`
+       - `cfbrc_two_re_polar_via_general`
+     - 既存の主定理
+       - `body2_eq_re_cfbrc2`
+       - `factor_eq_re_cfbrc2`
+       の証明で `cfbrc_two_re_polar_via_general` を利用する形へ変更。
+   - `DkMathTest/CFBRC.lean`
+     - `cfbrc_two_re_via_general` / `cfbrc_two_im_via_general` の回帰 `example` を追加。
+     - 依存公理監視に `#print axioms cfbrc_two_re_via_general` を追加。
+   - `DkMath/CFBRC/README.md`
+     - `d=2` 使用例セクションに `cfbrc_two_re_via_general` の例を追加。
+   - 検証:
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.Main` 成功
+     - `./lean-build.sh DkMathTest.CFBRC` 成功
+     - 追検証で全体:
+       - `./lean-build.sh DkMath.CFBRC`
+       - `./lean-build.sh DkMathTest`
+3. 結論: `d=2` の橋は `Main <- General` の導線でも説明可能となり、
+   `d=2` 特化と general `d` 補題系の接続がコード上で明示化された。
+4. 失敗事例:
+   - 特になし（`cfbrcRe_succ'` / `cfbrcIm_succ'` の `d=1` 代入で直ちに導出できた）。
+5. 備考:
+   - `Complex.lean` 側の `cfbrc_two_re` / `cfbrc_two_im` は残し、互換性を維持した。
+6. 次の課題:
+   - `d=8` 以降を手作業明示式で増やすか、再帰ベース自動生成（または補題テンプレート）へ移行するか方針を決める。
+   - 必要なら `cfbrc_two_im_polar` 側も `via_general` 版を `Main` で利用する定理を追加する。

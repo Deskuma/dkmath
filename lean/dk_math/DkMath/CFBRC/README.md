@@ -175,6 +175,10 @@ example (a φ : ℝ) :
     (a * (1 - Real.sin φ)) * ((a * (1 - Real.sin φ)) + 2 * (a * Real.sin φ))
       = Complex.re (cfbrcR 2 (a * Real.cos φ) (a * Real.sin φ)) :=
   factor_eq_re_cfbrc2 a φ
+
+example (X Θ : ℝ) :
+    Complex.re (cfbrcR 2 X Θ) = X ^ 2 :=
+  cfbrc_two_re_via_general X Θ
 ```
 
 ### 7) General `d` 用の `Re/Im` 補助
