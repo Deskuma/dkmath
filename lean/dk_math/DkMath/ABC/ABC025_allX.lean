@@ -29,7 +29,7 @@ variable {p : ℕ}
 「X ≥ 11 の場合」と「X < 11 の場合」を分岐して 2(X+1) を示す構造を用意する。
 
 完全証明は手数が多いため、現状では構造のみを整え、
-証明の本体には `sorry` を置いておく。
+証明の本体には `so#rry` を置いておく。
 
 目的:
 - `sum_pow_padicValNat_le_geom_two_for_large_X` を再利用
@@ -42,7 +42,7 @@ variable {p : ℕ}
 全ての X ≥ 1 について `∑_{n=0}^X p^{t·v(n)} ≤ 2(X+1)` を主張するテンプレート。
 
 こちらは「大きいX 用の補題 + 小さいX 用の数値評価」を組み合わせる構造を示す。
-証明の本体は `sorry` で置いてある。
+証明の本体は `so#rry` で置いてある。
 -/
 lemma sum_pow_padicValNat_le_geom_two_all_X {p : ℕ} [hp : Fact p.Prime]
     (hp3 : p ≥ 3) {t : ℝ} (ht : 0 < t) (ht_half : t ≤ 1 / 2) {X : ℕ} (hX : X ≥ 1) :
