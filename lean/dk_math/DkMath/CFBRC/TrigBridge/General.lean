@@ -345,6 +345,104 @@ lemma cfbrcIm_even_from_odd (n : ℕ) (X Θ : ℝ) :
         X * ((-1 : ℝ) ^ n * Θ ^ (2 * n + 1)) := by
   simpa [pure_phase_pow_odd_im] using cfbrcIm_succ' (d := 2 * n + 1) X Θ
 
+/--
+`d = 4n` から `d+1 = 4n+1` への実部再帰。
+
+`(iΘ)^(4n)` の実部 `Θ^(4n)` を右端項へ代入した形。
+-/
+lemma cfbrcRe_mod4_one_from_zero (n : ℕ) (X Θ : ℝ) :
+    cfbrcRe (4 * n + 1) X Θ =
+      X * cfbrcRe (4 * n) X Θ - Θ * cfbrcIm (4 * n) X Θ + X * Θ ^ (4 * n) := by
+  simpa [pure_phase_pow_mod4_zero_re] using cfbrcRe_succ' (d := 4 * n) X Θ
+
+/--
+`d = 4n` から `d+1 = 4n+1` への虚部再帰。
+
+`(iΘ)^(4n)` の虚部は `0` なので、右端項は消える。
+-/
+lemma cfbrcIm_mod4_one_from_zero (n : ℕ) (X Θ : ℝ) :
+    cfbrcIm (4 * n + 1) X Θ =
+      X * cfbrcIm (4 * n) X Θ + Θ * cfbrcRe (4 * n) X Θ := by
+  simpa [pure_phase_pow_mod4_zero_im] using cfbrcIm_succ' (d := 4 * n) X Θ
+
+/--
+`d = 4n+1` から `d+1 = 4n+2` への実部再帰。
+
+`(iΘ)^(4n+1)` の実部は `0` なので、右端項は消える。
+-/
+lemma cfbrcRe_mod4_two_from_one (n : ℕ) (X Θ : ℝ) :
+    cfbrcRe (4 * n + 2) X Θ =
+      X * cfbrcRe (4 * n + 1) X Θ - Θ * cfbrcIm (4 * n + 1) X Θ := by
+  simpa [pure_phase_pow_mod4_one_re] using cfbrcRe_succ' (d := 4 * n + 1) X Θ
+
+/--
+`d = 4n+1` から `d+1 = 4n+2` への虚部再帰。
+
+`(iΘ)^(4n+1)` の虚部 `Θ^(4n+1)` を右端項へ代入した形。
+-/
+lemma cfbrcIm_mod4_two_from_one (n : ℕ) (X Θ : ℝ) :
+    cfbrcIm (4 * n + 2) X Θ =
+      X * cfbrcIm (4 * n + 1) X Θ + Θ * cfbrcRe (4 * n + 1) X Θ + X * Θ ^ (4 * n + 1) := by
+  simpa [pure_phase_pow_mod4_one_im] using cfbrcIm_succ' (d := 4 * n + 1) X Θ
+
+/--
+`d = 4n+2` から `d+1 = 4n+3` への実部再帰。
+
+`(iΘ)^(4n+2)` の実部 `-Θ^(4n+2)` を右端項へ代入した形。
+-/
+lemma cfbrcRe_mod4_three_from_two (n : ℕ) (X Θ : ℝ) :
+    cfbrcRe (4 * n + 3) X Θ =
+      X * cfbrcRe (4 * n + 2) X Θ - Θ * cfbrcIm (4 * n + 2) X Θ - X * Θ ^ (4 * n + 2) := by
+  calc
+    cfbrcRe (4 * n + 3) X Θ = cfbrcRe ((4 * n + 2) + 1) X Θ := by ring_nf
+    _ = X * cfbrcRe (4 * n + 2) X Θ - Θ * cfbrcIm (4 * n + 2) X Θ +
+          X * Complex.re ((Complex.I * Θ) ^ (4 * n + 2)) := by
+          simpa using cfbrcRe_succ' (d := 4 * n + 2) X Θ
+    _ = X * cfbrcRe (4 * n + 2) X Θ - Θ * cfbrcIm (4 * n + 2) X Θ +
+          X * (-(Θ ^ (4 * n + 2))) := by
+          rw [pure_phase_pow_mod4_two_re]
+    _ = X * cfbrcRe (4 * n + 2) X Θ - Θ * cfbrcIm (4 * n + 2) X Θ - X * Θ ^ (4 * n + 2) := by
+          ring
+
+/--
+`d = 4n+2` から `d+1 = 4n+3` への虚部再帰。
+
+`(iΘ)^(4n+2)` の虚部は `0` なので、右端項は消える。
+-/
+lemma cfbrcIm_mod4_three_from_two (n : ℕ) (X Θ : ℝ) :
+    cfbrcIm (4 * n + 3) X Θ =
+      X * cfbrcIm (4 * n + 2) X Θ + Θ * cfbrcRe (4 * n + 2) X Θ := by
+  simpa [pure_phase_pow_mod4_two_im] using cfbrcIm_succ' (d := 4 * n + 2) X Θ
+
+/--
+`d = 4n+3` から `d+1 = 4n+4` への実部再帰。
+
+`(iΘ)^(4n+3)` の実部は `0` なので、右端項は消える。
+-/
+lemma cfbrcRe_mod4_four_from_three (n : ℕ) (X Θ : ℝ) :
+    cfbrcRe (4 * n + 4) X Θ =
+      X * cfbrcRe (4 * n + 3) X Θ - Θ * cfbrcIm (4 * n + 3) X Θ := by
+  simpa [pure_phase_pow_mod4_three_re] using cfbrcRe_succ' (d := 4 * n + 3) X Θ
+
+/--
+`d = 4n+3` から `d+1 = 4n+4` への虚部再帰。
+
+`(iΘ)^(4n+3)` の虚部 `-Θ^(4n+3)` を右端項へ代入した形。
+-/
+lemma cfbrcIm_mod4_four_from_three (n : ℕ) (X Θ : ℝ) :
+    cfbrcIm (4 * n + 4) X Θ =
+      X * cfbrcIm (4 * n + 3) X Θ + Θ * cfbrcRe (4 * n + 3) X Θ - X * Θ ^ (4 * n + 3) := by
+  calc
+    cfbrcIm (4 * n + 4) X Θ = cfbrcIm ((4 * n + 3) + 1) X Θ := by ring_nf
+    _ = X * cfbrcIm (4 * n + 3) X Θ + Θ * cfbrcRe (4 * n + 3) X Θ +
+          X * Complex.im ((Complex.I * Θ) ^ (4 * n + 3)) := by
+          simpa using cfbrcIm_succ' (d := 4 * n + 3) X Θ
+    _ = X * cfbrcIm (4 * n + 3) X Θ + Θ * cfbrcRe (4 * n + 3) X Θ +
+          X * (-(Θ ^ (4 * n + 3))) := by
+          rw [pure_phase_pow_mod4_three_im]
+    _ = X * cfbrcIm (4 * n + 3) X Θ + Θ * cfbrcRe (4 * n + 3) X Θ - X * Θ ^ (4 * n + 3) := by
+          ring
+
 end
 
 end DkMath.CFBRC.TrigBridge

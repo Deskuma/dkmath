@@ -77,6 +77,16 @@ example (n : ℕ) (X Θ : ℝ) :
         X * ((-1 : ℝ) ^ n * Θ ^ (2 * n + 1)) := by
   simpa using cfbrcIm_even_from_odd n X Θ
 
+example (n : ℕ) (X Θ : ℝ) :
+    cfbrcRe (4 * n + 3) X Θ =
+      X * cfbrcRe (4 * n + 2) X Θ - Θ * cfbrcIm (4 * n + 2) X Θ - X * Θ ^ (4 * n + 2) := by
+  simpa using cfbrcRe_mod4_three_from_two n X Θ
+
+example (n : ℕ) (X Θ : ℝ) :
+    cfbrcIm (4 * n + 4) X Θ =
+      X * cfbrcIm (4 * n + 3) X Θ + Θ * cfbrcRe (4 * n + 3) X Θ - X * Θ ^ (4 * n + 3) := by
+  simpa using cfbrcIm_mod4_four_from_three n X Θ
+
 -- BoundarySide 高位 API（valuation）
 example (side : BoundarySide) {d x u q : ℕ}
     (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
@@ -135,6 +145,7 @@ example (side : BoundarySide) {d x u : ℕ}
 #print axioms cfbrcRe_succ'
 #print axioms pure_phase_pow_odd_im
 #print axioms pure_phase_pow_mod4_three_im
+#print axioms cfbrcIm_mod4_four_from_three
 #print axioms padicValNat_boundaryDiffPow_eq_boundaryGN_of_coprime_of_dvd_boundary
 #print axioms exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime
 #print axioms exists_primitive_prime_factor_boundaryDiffPow_of_prime_exp_boundary_of_coprime

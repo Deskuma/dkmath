@@ -196,6 +196,11 @@ example (n : ℕ) (Θ : ℝ) :
 example (n : ℕ) (Θ : ℝ) :
     Complex.re ((Complex.I * Θ) ^ (4 * n + 2)) = -(Θ ^ (4 * n + 2)) :=
   pure_phase_pow_mod4_two_re n Θ
+
+example (n : ℕ) (X Θ : ℝ) :
+    cfbrcIm (4 * n + 4) X Θ =
+      X * cfbrcIm (4 * n + 3) X Θ + Θ * cfbrcRe (4 * n + 3) X Θ - X * Θ ^ (4 * n + 3) :=
+  cfbrcIm_mod4_four_from_three n X Θ
 ```
 
 ## Related Docs

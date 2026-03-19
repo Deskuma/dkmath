@@ -803,3 +803,40 @@
    - `cfbrcRe/Im` について `d mod 4` ベースの再帰（または閉形式）を追加し、
      `X=0` / `Θ=0` 断面の簡約定理を整備する。
    - 必要なら `TrigBridge.Main` に general `d` 入口定理（`d=2` 特化との関係明示）を追加する。
+
+### 日時: 2026/03/20 02:13 JST: `cfbrcRe/Im` の `d mod 4` 直接再帰を追加
+
+1. 目的: `mod 4` 位相補題を `cfbrcRe/Im` 側へ反映し、`d` の合同類ごとに直接使える再帰式を提供する。
+2. 内容:
+   - `DkMath/CFBRC/TrigBridge/General.lean` に追加:
+     - `cfbrcRe_mod4_one_from_zero`
+     - `cfbrcIm_mod4_one_from_zero`
+     - `cfbrcRe_mod4_two_from_one`
+     - `cfbrcIm_mod4_two_from_one`
+     - `cfbrcRe_mod4_three_from_two`
+     - `cfbrcIm_mod4_three_from_two`
+     - `cfbrcRe_mod4_four_from_three`
+     - `cfbrcIm_mod4_four_from_three`
+   - `DkMathTest/CFBRC.lean` に回帰例を追加:
+     - `cfbrcRe_mod4_three_from_two`
+     - `cfbrcIm_mod4_four_from_three`
+     - `#print axioms cfbrcIm_mod4_four_from_three`
+   - `DkMath/CFBRC/README.md` に
+     - `cfbrcIm_mod4_four_from_three` の使用例を追加。
+   - 実装中の型不一致（`simpa` の指数正規化差: `4*n` vs `n*4`）は、
+     `calc` で明示変形して解消。
+   - 検証:
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.General` 成功
+     - `./lean-build.sh DkMathTest.CFBRC` 成功
+     - `./lean-build.sh DkMath.CFBRC` 成功
+     - `./lean-build.sh DkMathTest` 成功
+3. 結論: `cfbrcRe/Im` は `d mod 4` の各相で直接読める再帰形まで到達し、
+   general `d` の手計算・自動化の両方で使いやすくなった。
+4. 失敗事例:
+   - 初期 `simpa` 実装で指数正規化の向き差（`4*n` と `n*4`）により型不一致が発生。
+   - `calc` での明示書き換え（`d+1` 展開と位相項置換）に変更して安定化。
+5. 備考:
+   - 今回は再帰形の整備を優先し、閉形式（和の形）への変換は次段へ残した。
+6. 次の課題:
+   - `X = 0` / `Θ = 0` 断面で `cfbrcRe/Im` がどう簡約されるかの補題を追加する。
+   - 必要なら `mod 4` 再帰を使って `cfbrcRe` の低次数（`d=3,4,5`）明示式を追加し、回帰テストへ固定する。
