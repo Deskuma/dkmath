@@ -21,7 +21,6 @@
 - `ABC031.lean`
 - `ABC038.lean`
 - `ABC039.lean`
-- `ABCQualityLeOfNotBad.lean`
 - `ABCMGFTwoTailLog.lean`
 - `ABCFinalRealExpFactorizationLog.lean`
 
@@ -66,5 +65,5 @@
 - [x] `ABC031.lean:315,423` を解消
 - [x] `ABC038.lean:221,242,270` を解消
 - [x] `ABC039.lean:61,180` を解消
-- [x] `ABCQualityLeOfNotBad.lean:71,79,85,102,255,261,263,279` を解消
+- [x] `ABCQualityLeOfNotBad.lean` を削除（内容は `ABC038/039` 系へ統合）
 - [ ] `ABCWorking.lean`, `ABC#Research.lean` を「対象に含めるか」決定
