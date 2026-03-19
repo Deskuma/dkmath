@@ -52,6 +52,7 @@ $$
   - `body2 = a^2 * cos^2 φ = Re(cfbrcR 2 (a cos φ) (a sin φ))`
 - `DkMath.CFBRC.TrigBridge.General`
   - general `d` 向けの `Re/Im` 補助（基底値・再帰式・`(iΘ)^d` の偶奇補題）
+  - `d=8` 以降のための再帰テンプレート（`cfbrcRe/Im_succ_template`）
 
 ## Quick Start
 
@@ -180,6 +181,10 @@ example (X Θ : ℝ) :
     Complex.re (cfbrcR 2 X Θ) = X ^ 2 :=
   cfbrc_two_re_via_general X Θ
 
+example (X Θ : ℝ) :
+    Complex.re (cfbrcR 2 X Θ) = X ^ 2 :=
+  cfbrc_two_re X Θ
+
 example (a φ : ℝ) :
     Complex.im (cfbrcR 2 (a * Real.cos φ) (a * Real.sin φ)) =
       2 * a ^ 2 * Real.sin φ * Real.cos φ :=
@@ -197,6 +202,13 @@ example (d : ℕ) (X Θ : ℝ) :
     cfbrcRe (d + 1) X Θ =
       X * cfbrcRe d X Θ - Θ * cfbrcIm d X Θ + X * Complex.re ((Complex.I * Θ) ^ d) :=
   cfbrcRe_succ' d X Θ
+
+example (d : ℕ) (X Θ ReD ImD phaseRe : ℝ)
+    (hRe : cfbrcRe d X Θ = ReD)
+    (hIm : cfbrcIm d X Θ = ImD)
+    (hPhaseRe : Complex.re ((Complex.I * Θ) ^ d) = phaseRe) :
+    cfbrcRe (d + 1) X Θ = X * ReD - Θ * ImD + X * phaseRe :=
+  cfbrcRe_succ_template d X Θ ReD ImD phaseRe hRe hIm hPhaseRe
 
 example (n : ℕ) (Θ : ℝ) :
     Complex.im ((Complex.I * Θ) ^ (2 * n + 1)) = (-1 : ℝ) ^ n * Θ ^ (2 * n + 1) :=
@@ -230,6 +242,14 @@ example (X Θ : ℝ) :
 example (X Θ : ℝ) :
     cfbrcIm 7 X Θ = 7 * X ^ 6 * Θ - 35 * X ^ 4 * Θ ^ 3 + 21 * X ^ 2 * Θ ^ 5 :=
   cfbrcIm_seven X Θ
+
+example (X Θ : ℝ) :
+    cfbrcRe 8 X Θ = X ^ 8 - 28 * X ^ 6 * Θ ^ 2 + 70 * X ^ 4 * Θ ^ 4 - 28 * X ^ 2 * Θ ^ 6 :=
+  cfbrcRe_eight_from_template X Θ
+
+example (X Θ : ℝ) :
+    cfbrcIm 8 X Θ = 8 * X ^ 7 * Θ - 56 * X ^ 5 * Θ ^ 3 + 56 * X ^ 3 * Θ ^ 5 - 8 * X * Θ ^ 7 :=
+  cfbrcIm_eight_from_template X Θ
 ```
 
 ## Related Docs

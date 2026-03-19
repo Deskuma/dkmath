@@ -177,6 +177,46 @@ lemma cfbrcIm_succ' (d : ℕ) (X Θ : ℝ) :
   simpa [cfbrcRe, cfbrcIm] using cfbrcIm_succ d X Θ
 
 /--
+明示式を `d -> d+1` へ進める実部テンプレート。
+
+`d` 次の実部・虚部の式と位相項の実部評価を与えると、
+`d+1` 次の実部式を機械的に生成できる。
+`d=8` 以降の展開を手書きせず進めるための雛形。
+-/
+lemma cfbrcRe_succ_template
+    (d : ℕ) (X Θ ReD ImD phaseRe : ℝ)
+    (hRe : cfbrcRe d X Θ = ReD)
+    (hIm : cfbrcIm d X Θ = ImD)
+    (hPhaseRe : Complex.re ((Complex.I * Θ) ^ d) = phaseRe) :
+    cfbrcRe (d + 1) X Θ = X * ReD - Θ * ImD + X * phaseRe := by
+  calc
+    cfbrcRe (d + 1) X Θ =
+        X * cfbrcRe d X Θ - Θ * cfbrcIm d X Θ + X * Complex.re ((Complex.I * Θ) ^ d) := by
+          simpa using cfbrcRe_succ' d X Θ
+    _ = X * ReD - Θ * ImD + X * phaseRe := by
+          rw [hRe, hIm, hPhaseRe]
+
+/--
+明示式を `d -> d+1` へ進める虚部テンプレート。
+
+`d` 次の実部・虚部の式と位相項の虚部評価を与えると、
+`d+1` 次の虚部式を機械的に生成できる。
+`cfbrcRe_succ_template` と対で使う。
+-/
+lemma cfbrcIm_succ_template
+    (d : ℕ) (X Θ ReD ImD phaseIm : ℝ)
+    (hRe : cfbrcRe d X Θ = ReD)
+    (hIm : cfbrcIm d X Θ = ImD)
+    (hPhaseIm : Complex.im ((Complex.I * Θ) ^ d) = phaseIm) :
+    cfbrcIm (d + 1) X Θ = X * ImD + Θ * ReD + X * phaseIm := by
+  calc
+    cfbrcIm (d + 1) X Θ =
+        X * cfbrcIm d X Θ + Θ * cfbrcRe d X Θ + X * Complex.im ((Complex.I * Θ) ^ d) := by
+          simpa using cfbrcIm_succ' d X Θ
+    _ = X * ImD + Θ * ReD + X * phaseIm := by
+          rw [hRe, hIm, hPhaseIm]
+
+/--
 `(iΘ)^2` の実部評価。
 
 `Re((iΘ)^2) = -Θ^2`。
@@ -617,6 +657,57 @@ lemma cfbrcIm_seven (X Θ : ℝ) :
     cfbrcIm 7 X Θ = 7 * X ^ 6 * Θ - 35 * X ^ 4 * Θ ^ 3 + 21 * X ^ 2 * Θ ^ 5 := by
   simp [cfbrcIm, cfbrcR, cfbrc, pow_succ]
   ring
+
+/--
+再帰テンプレートで導く `d=8` 実部明示式。
+
+`d=7` の明示式と `Re((iΘ)^7)=0` をテンプレートへ渡して生成する。
+-/
+lemma cfbrcRe_eight_from_template (X Θ : ℝ) :
+    cfbrcRe 8 X Θ = X ^ 8 - 28 * X ^ 6 * Θ ^ 2 + 70 * X ^ 4 * Θ ^ 4 - 28 * X ^ 2 * Θ ^ 6 := by
+  have hPhaseRe : Complex.re ((Complex.I * Θ) ^ 7) = 0 := by
+    simpa using (pure_phase_pow_mod4_three_re (n := 1) Θ)
+  have hStep :=
+    cfbrcRe_succ_template
+      (d := 7) (X := X) (Θ := Θ)
+      (ReD := X ^ 7 - 21 * X ^ 5 * Θ ^ 2 + 35 * X ^ 3 * Θ ^ 4 - 7 * X * Θ ^ 6)
+      (ImD := 7 * X ^ 6 * Θ - 35 * X ^ 4 * Θ ^ 3 + 21 * X ^ 2 * Θ ^ 5)
+      (phaseRe := 0)
+      (hRe := cfbrcRe_seven X Θ)
+      (hIm := cfbrcIm_seven X Θ)
+      (hPhaseRe := hPhaseRe)
+  calc
+    cfbrcRe 8 X Θ = X * (X ^ 7 - 21 * X ^ 5 * Θ ^ 2 + 35 * X ^ 3 * Θ ^ 4 - 7 * X * Θ ^ 6) -
+        Θ * (7 * X ^ 6 * Θ - 35 * X ^ 4 * Θ ^ 3 + 21 * X ^ 2 * Θ ^ 5) + X * 0 := by
+          simpa using hStep
+    _ = X ^ 8 - 28 * X ^ 6 * Θ ^ 2 + 70 * X ^ 4 * Θ ^ 4 - 28 * X ^ 2 * Θ ^ 6 := by
+          ring
+
+/--
+再帰テンプレートで導く `d=8` 虚部明示式。
+
+`d=7` の明示式と `Im((iΘ)^7)=-Θ^7` をテンプレートへ渡して生成する。
+-/
+lemma cfbrcIm_eight_from_template (X Θ : ℝ) :
+    cfbrcIm 8 X Θ = 8 * X ^ 7 * Θ - 56 * X ^ 5 * Θ ^ 3 + 56 * X ^ 3 * Θ ^ 5 - 8 * X * Θ ^ 7 := by
+  have hPhaseIm : Complex.im ((Complex.I * Θ) ^ 7) = -(Θ ^ 7) := by
+    simpa using (pure_phase_pow_mod4_three_im (n := 1) Θ)
+  have hStep :=
+    cfbrcIm_succ_template
+      (d := 7) (X := X) (Θ := Θ)
+      (ReD := X ^ 7 - 21 * X ^ 5 * Θ ^ 2 + 35 * X ^ 3 * Θ ^ 4 - 7 * X * Θ ^ 6)
+      (ImD := 7 * X ^ 6 * Θ - 35 * X ^ 4 * Θ ^ 3 + 21 * X ^ 2 * Θ ^ 5)
+      (phaseIm := -(Θ ^ 7))
+      (hRe := cfbrcRe_seven X Θ)
+      (hIm := cfbrcIm_seven X Θ)
+      (hPhaseIm := hPhaseIm)
+  calc
+    cfbrcIm 8 X Θ = X * (7 * X ^ 6 * Θ - 35 * X ^ 4 * Θ ^ 3 + 21 * X ^ 2 * Θ ^ 5) +
+        Θ * (X ^ 7 - 21 * X ^ 5 * Θ ^ 2 + 35 * X ^ 3 * Θ ^ 4 - 7 * X * Θ ^ 6) +
+        X * (-(Θ ^ 7)) := by
+          simpa using hStep
+    _ = 8 * X ^ 7 * Θ - 56 * X ^ 5 * Θ ^ 3 + 56 * X ^ 3 * Θ ^ 5 - 8 * X * Θ ^ 7 := by
+          ring
 
 end
 

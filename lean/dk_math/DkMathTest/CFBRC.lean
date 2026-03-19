@@ -35,13 +35,26 @@ example (X Θ : ℝ) :
   simpa using cfbrc_two_re_via_general X Θ
 
 example (X Θ : ℝ) :
+    Complex.re (cfbrcR 2 X Θ) = X ^ 2 := by
+  simpa using cfbrc_two_re X Θ
+
+example (X Θ : ℝ) :
     Complex.im (cfbrcR 2 X Θ) = 2 * X * Θ := by
   simpa using cfbrc_two_im_via_general X Θ
+
+example (X Θ : ℝ) :
+    Complex.im (cfbrcR 2 X Θ) = 2 * X * Θ := by
+  simpa using cfbrc_two_im X Θ
 
 example (a φ : ℝ) :
     Complex.im (cfbrcR 2 (a * Real.cos φ) (a * Real.sin φ)) =
       2 * a ^ 2 * Real.sin φ * Real.cos φ := by
   simpa using cfbrc_two_im_polar_via_general a φ
+
+example (a φ : ℝ) :
+    Complex.im (cfbrcR 2 (a * Real.cos φ) (a * Real.sin φ)) =
+      2 * a ^ 2 * Real.sin φ * Real.cos φ := by
+  simpa using cfbrc_two_im_polar a φ
 
 -- core と GN の橋
 example {p x u q : ℕ} (hq : Nat.Prime q) (hqx : ¬ q ∣ x) :
@@ -67,6 +80,20 @@ example (d : ℕ) (X Θ : ℝ) :
     cfbrcIm (d + 1) X Θ =
       X * cfbrcIm d X Θ + Θ * cfbrcRe d X Θ + X * Complex.im ((Complex.I * Θ) ^ d) := by
   simpa using cfbrcIm_succ' d X Θ
+
+example (d : ℕ) (X Θ ReD ImD phaseRe : ℝ)
+    (hRe : cfbrcRe d X Θ = ReD)
+    (hIm : cfbrcIm d X Θ = ImD)
+    (hPhaseRe : Complex.re ((Complex.I * Θ) ^ d) = phaseRe) :
+    cfbrcRe (d + 1) X Θ = X * ReD - Θ * ImD + X * phaseRe := by
+  simpa using cfbrcRe_succ_template d X Θ ReD ImD phaseRe hRe hIm hPhaseRe
+
+example (d : ℕ) (X Θ ReD ImD phaseIm : ℝ)
+    (hRe : cfbrcRe d X Θ = ReD)
+    (hIm : cfbrcIm d X Θ = ImD)
+    (hPhaseIm : Complex.im ((Complex.I * Θ) ^ d) = phaseIm) :
+    cfbrcIm (d + 1) X Θ = X * ImD + Θ * ReD + X * phaseIm := by
+  simpa using cfbrcIm_succ_template d X Θ ReD ImD phaseIm hRe hIm hPhaseIm
 
 example (d : ℕ) (X : ℝ) :
     cfbrcRe (d + 1) X 0 = X ^ (d + 1) := by
@@ -152,6 +179,14 @@ example (X Θ : ℝ) :
     cfbrcIm 7 X Θ = 7 * X ^ 6 * Θ - 35 * X ^ 4 * Θ ^ 3 + 21 * X ^ 2 * Θ ^ 5 := by
   simpa using cfbrcIm_seven X Θ
 
+example (X Θ : ℝ) :
+    cfbrcRe 8 X Θ = X ^ 8 - 28 * X ^ 6 * Θ ^ 2 + 70 * X ^ 4 * Θ ^ 4 - 28 * X ^ 2 * Θ ^ 6 := by
+  simpa using cfbrcRe_eight_from_template X Θ
+
+example (X Θ : ℝ) :
+    cfbrcIm 8 X Θ = 8 * X ^ 7 * Θ - 56 * X ^ 5 * Θ ^ 3 + 56 * X ^ 3 * Θ ^ 5 - 8 * X * Θ ^ 7 := by
+  simpa using cfbrcIm_eight_from_template X Θ
+
 -- BoundarySide 高位 API（valuation）
 example (side : BoundarySide) {d x u q : ℕ}
     (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
@@ -207,15 +242,19 @@ example (side : BoundarySide) {d x u : ℕ}
 -- 依存公理の確認（回帰用）
 #print axioms factor_eq_re_cfbrc2
 #print axioms cfbrc_two_re_via_general
+#print axioms cfbrc_two_re
 #print axioms cfbrc_two_im_polar_via_general
+#print axioms cfbrc_two_im_polar
 #print axioms prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
 #print axioms cfbrcRe_succ'
+#print axioms cfbrcRe_succ_template
 #print axioms cfbrcRe_succ_theta_zero
 #print axioms pure_phase_pow_odd_im
 #print axioms pure_phase_pow_mod4_three_im
 #print axioms cfbrcIm_mod4_four_from_three
 #print axioms cfbrcRe_five
 #print axioms cfbrcIm_seven
+#print axioms cfbrcRe_eight_from_template
 #print axioms padicValNat_boundaryDiffPow_eq_boundaryGN_of_coprime_of_dvd_boundary
 #print axioms exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime
 #print axioms exists_primitive_prime_factor_boundaryDiffPow_of_prime_exp_boundary_of_coprime

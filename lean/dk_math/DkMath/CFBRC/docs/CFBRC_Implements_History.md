@@ -1001,3 +1001,51 @@
 6. 次の課題:
    - `d=8` 以降の明示式整備を継続するか、再帰式主体の運用に寄せるかを決める。
    - 必要なら `d=2` で `via_general` と `Complex` 版の同値を示す補題を追加する。
+
+### 日時: 2026/03/20 03:27 JST: `d=8` 以降向けの再帰テンプレート化と `d=2` 両経路回帰
+
+1. 目的:
+   - `d=8` 以降を手書き展開に頼らず、再帰テンプレートで機械的に進められる形へ移行する。
+   - あわせて `d=2` について `via_general` と `Complex` 直補題の両経路を回帰で固定する。
+2. 内容:
+   - `DkMath/CFBRC/TrigBridge/General.lean`
+     - 再帰テンプレートを追加:
+       - `cfbrcRe_succ_template`
+       - `cfbrcIm_succ_template`
+     - テンプレート利用例として `d=8` 明示式を追加:
+       - `cfbrcRe_eight_from_template`
+       - `cfbrcIm_eight_from_template`
+   - `DkMathTest/CFBRC.lean`
+     - テンプレートの一般形 (`Re/Im`) を `example` で回帰固定。
+     - `d=8` 明示式 (`cfbrcRe/Im_eight_from_template`) を回帰固定。
+     - `d=2` について
+       - `via_general` 経路 (`cfbrc_two_re_via_general`, `cfbrc_two_im_via_general`,
+         `cfbrc_two_im_polar_via_general`)
+       - `Complex` 経路 (`cfbrc_two_re`, `cfbrc_two_im`, `cfbrc_two_im_polar`)
+       を並行回帰として追加。
+     - 依存公理監視に:
+       - `#print axioms cfbrcRe_succ_template`
+       - `#print axioms cfbrcRe_eight_from_template`
+       - `#print axioms cfbrc_two_re`
+       - `#print axioms cfbrc_two_im_polar`
+       を追加。
+   - `DkMath/CFBRC/README.md`
+     - `General` の説明に「再帰テンプレート」を追記。
+     - Usage へテンプレート利用例と `d=8` 例を追記。
+     - `d=2` セクションへ `cfbrc_two_re`（Complex 経路）例を追加。
+   - 検証:
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.General` 成功
+     - `./lean-build.sh DkMathTest.CFBRC` 成功
+     - `./lean-build.sh DkMath.CFBRC` 成功
+     - `./lean-build.sh DkMathTest` 成功
+3. 結論:
+   - `d=8` 以降は「前段の式 + 位相項評価」を渡すテンプレートで拡張可能になり、
+     明示式追加の実装負荷を下げられる状態になった。
+   - `d=2` は `via_general` / `Complex` の両ルートが回帰上で同時に維持される。
+4. 失敗事例:
+   - 特になし（テンプレート適用は `simpa` + `ring` で安定）。
+5. 備考:
+   - `d=8` は手書き二項展開ではなく、`d=7` 明示式と `mod 4` 位相補題から導出した。
+6. 次の課題:
+   - テンプレートを使った `d=9,10` の段階的追加（必要なら自動化マクロ化）を検討する。
+   - `mod 4` ごとの位相評価投入をまとめる補助テンプレート（4ケース）を追加する。
