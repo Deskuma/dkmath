@@ -1225,3 +1225,42 @@
 6. 次の課題:
    - `cfbrcReClosed` / `cfbrcImClosed`（偶奇分離版）を `Nat.choose` 形式で定義する。
    - `cfbrcRe/ImClosedRaw` との同値を証明し、最終 API を choose 版へ昇格する。
+
+### 日時: 2026/03/20 04:31 JST: `ClosedForm` 第2段（偶奇分離 choose 形）を実装
+
+1. 目的:
+   - `Raw` 形式で止まっていた `Re/Im` 閉形式を、`2m` / `2m+1` の
+     `Nat.choose` 主形式へ昇格する。
+2. 内容:
+   - `DkMath/CFBRC/TrigBridge/ClosedForm.lean` を拡張。
+   - 追加定義:
+     - `cfbrcReClosed`
+     - `cfbrcImClosed`
+   - 追加定理:
+     - `cfbrcReClosedRaw_eq_cfbrcReClosed`
+     - `cfbrcImClosedRaw_eq_cfbrcImClosed`
+     - `cfbrcRe_eq_cfbrcReClosed`
+     - `cfbrcIm_eq_cfbrcImClosed`
+   - 補助補題（private）:
+     - `Raw` 和の添字反転（`sum_range_reflect` + `Nat.choose_symm`）
+     - 純位相 `Re/Im` の `if Even/Odd` 形
+     - `if Even/Odd` 和を `range ((d+1)/2)` / `range (d/2)` に圧縮する一般補題
+   - `DkMathTest/CFBRC.lean` に以下の回帰を追加:
+     - `Raw -> Closed` 同値
+     - `cfbrcRe/Im -> Closed` 同値
+     - `#print axioms cfbrcRe_eq_cfbrcReClosed`
+     - `#print axioms cfbrcIm_eq_cfbrcImClosed`
+   - `DkMath/CFBRC/README.md` を更新:
+     - `TrigBridge.ClosedForm` の説明を `Raw + 偶奇分離` へ拡張
+     - 新同値の使用例を追加
+3. 結論:
+   - `choose` 昇格の第2段を完了。
+   - `cfbrcRe/Im` は最終的に `Nat.choose` の偶奇分離主形式へ直接接続できる状態になった。
+4. 失敗事例:
+   - `sum_odd_if_eq` の even case で `simp` が進まない箇所があり、
+     `¬ Odd (n+n)` を明示補題化して解消。
+5. 備考:
+   - 既知の `ABC021` `sorry` 警告は継続（今回変更範囲外）。
+6. 次の課題:
+   - `cfbrcClosed`（複素和）から `cfbrcReClosed` / `cfbrcImClosed` への直結 API を整備する。
+   - 必要に応じて低次数補題（`d=3..12`）を `Closed` 形式経由の回帰へ寄せる。

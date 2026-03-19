@@ -55,7 +55,9 @@ $$
   - `d=8` 以降のための再帰テンプレート（`cfbrcRe/Im_succ_template`）
 - `DkMath.CFBRC.TrigBridge.ClosedForm`
   - `Nat.choose` による複素閉形式 `cfbrcClosed`
-  - `cfbrcR = cfbrcClosed` と `Re/Im` の raw 閉形式一致
+  - `cfbrcR = cfbrcClosed`
+  - `Re/Im` の raw 閉形式 `cfbrcRe/ImClosedRaw`
+  - 偶奇分離済み閉形式 `cfbrcRe/ImClosed`
 
 ## Quick Start
 
@@ -309,6 +311,22 @@ example (d : ℕ) (X Θ : ℝ) :
 example (d : ℕ) (X Θ : ℝ) :
     cfbrcIm d X Θ = cfbrcImClosedRaw d X Θ :=
   cfbrcIm_eq_cfbrcImClosedRaw d X Θ
+
+example (d : ℕ) (X Θ : ℝ) :
+    cfbrcReClosedRaw d X Θ = cfbrcReClosed d X Θ :=
+  cfbrcReClosedRaw_eq_cfbrcReClosed d X Θ
+
+example (d : ℕ) (X Θ : ℝ) :
+    cfbrcImClosedRaw d X Θ = cfbrcImClosed d X Θ :=
+  cfbrcImClosedRaw_eq_cfbrcImClosed d X Θ
+
+example (d : ℕ) (X Θ : ℝ) :
+    cfbrcRe d X Θ = cfbrcReClosed d X Θ :=
+  cfbrcRe_eq_cfbrcReClosed d X Θ
+
+example (d : ℕ) (X Θ : ℝ) :
+    cfbrcIm d X Θ = cfbrcImClosed d X Θ :=
+  cfbrcIm_eq_cfbrcImClosed d X Θ
 ```
 
 ## Related Docs

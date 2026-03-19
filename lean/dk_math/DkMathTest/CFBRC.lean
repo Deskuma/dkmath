@@ -107,6 +107,22 @@ example (d : ℕ) (X Θ : ℝ) :
     cfbrcIm d X Θ = cfbrcImClosedRaw d X Θ := by
   simpa using cfbrcIm_eq_cfbrcImClosedRaw d X Θ
 
+example (d : ℕ) (X Θ : ℝ) :
+    cfbrcReClosedRaw d X Θ = cfbrcReClosed d X Θ := by
+  simpa using cfbrcReClosedRaw_eq_cfbrcReClosed d X Θ
+
+example (d : ℕ) (X Θ : ℝ) :
+    cfbrcImClosedRaw d X Θ = cfbrcImClosed d X Θ := by
+  simpa using cfbrcImClosedRaw_eq_cfbrcImClosed d X Θ
+
+example (d : ℕ) (X Θ : ℝ) :
+    cfbrcRe d X Θ = cfbrcReClosed d X Θ := by
+  simpa using cfbrcRe_eq_cfbrcReClosed d X Θ
+
+example (d : ℕ) (X Θ : ℝ) :
+    cfbrcIm d X Θ = cfbrcImClosed d X Θ := by
+  simpa using cfbrcIm_eq_cfbrcImClosed d X Θ
+
 example (d : ℕ) (X : ℝ) :
     cfbrcRe (d + 1) X 0 = X ^ (d + 1) := by
   simpa using cfbrcRe_succ_theta_zero d X
@@ -308,6 +324,8 @@ example (side : BoundarySide) {d x u : ℕ}
 #print axioms cfbrcRe_succ_template
 #print axioms cfbrcR_eq_cfbrcClosed
 #print axioms cfbrcRe_eq_cfbrcReClosedRaw
+#print axioms cfbrcRe_eq_cfbrcReClosed
+#print axioms cfbrcIm_eq_cfbrcImClosed
 #print axioms cfbrcRe_succ_theta_zero
 #print axioms pure_phase_pow_odd_im
 #print axioms pure_phase_pow_mod4_three_im
