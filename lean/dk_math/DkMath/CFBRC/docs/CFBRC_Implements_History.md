@@ -1264,3 +1264,31 @@
 6. 次の課題:
    - `cfbrcClosed`（複素和）から `cfbrcReClosed` / `cfbrcImClosed` への直結 API を整備する。
    - 必要に応じて低次数補題（`d=3..12`）を `Closed` 形式経由の回帰へ寄せる。
+
+### 日時: 2026/03/20 04:45 JST: `cfbrcClosed -> cfbrcRe/ImClosed` 直結補題を追加
+
+1. 目的:
+   - `cfbrcClosed` を起点に、実部・虚部の最終閉形式へ直接到達する API を追加する。
+2. 内容:
+   - `DkMath/CFBRC/TrigBridge/ClosedForm.lean` に以下を追加:
+     - `cfbrcClosed_re_eq_cfbrcReClosed`
+     - `cfbrcClosed_im_eq_cfbrcImClosed`
+   - 証明方針:
+     - `cfbrcR_eq_cfbrcClosed` で `cfbrcClosed` を `cfbrcR` へ戻し、
+       既存の `cfbrcRe/Im_eq_cfbrcRe/ImClosed` を合成。
+   - `DkMathTest/CFBRC.lean`:
+     - 上記2補題の `example` を追加。
+     - `#print axioms cfbrcClosed_re_eq_cfbrcReClosed`
+     - `#print axioms cfbrcClosed_im_eq_cfbrcImClosed`
+   - `DkMath/CFBRC/README.md`:
+     - `Complex.re/im (cfbrcClosed ...)` から
+       `cfbrcRe/ImClosed` へ直接接続する使用例を追記。
+3. 結論:
+   - `cfbrcClosed` の利用者は、`Re/Im` を取った時点で
+     そのまま偶奇分離 `Nat.choose` 主形式へ落とせるようになった。
+4. 失敗事例:
+   - 特になし（既存同値の合成で安定）。
+5. 備考:
+   - 既知の `ABC021` `sorry` 警告は継続（今回変更範囲外）。
+6. 次の課題:
+   - 低次数回帰（`d=3..12`）を `cfbrcClosed_re/im_eq_cfbrcRe/ImClosed` 経由にも寄せる。

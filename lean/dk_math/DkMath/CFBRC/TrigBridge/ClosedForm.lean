@@ -394,6 +394,30 @@ lemma cfbrcIm_eq_cfbrcImClosed (d : ℕ) (X Θ : ℝ) :
     cfbrcIm d X Θ = cfbrcImClosed d X Θ := by
   rw [cfbrcIm_eq_cfbrcImClosedRaw, cfbrcImClosedRaw_eq_cfbrcImClosed]
 
+/--
+`cfbrcClosed` の実部は、偶数位相抽出版 `cfbrcReClosed` に一致する。
+-/
+lemma cfbrcClosed_re_eq_cfbrcReClosed (d : ℕ) (X Θ : ℝ) :
+    Complex.re (cfbrcClosed d X Θ) = cfbrcReClosed d X Θ := by
+  calc
+    Complex.re (cfbrcClosed d X Θ) = cfbrcRe d X Θ := by
+      rw [← cfbrcR_eq_cfbrcClosed]
+      rfl
+    _ = cfbrcReClosed d X Θ := by
+      exact cfbrcRe_eq_cfbrcReClosed d X Θ
+
+/--
+`cfbrcClosed` の虚部は、奇数位相抽出版 `cfbrcImClosed` に一致する。
+-/
+lemma cfbrcClosed_im_eq_cfbrcImClosed (d : ℕ) (X Θ : ℝ) :
+    Complex.im (cfbrcClosed d X Θ) = cfbrcImClosed d X Θ := by
+  calc
+    Complex.im (cfbrcClosed d X Θ) = cfbrcIm d X Θ := by
+      rw [← cfbrcR_eq_cfbrcClosed]
+      rfl
+    _ = cfbrcImClosed d X Θ := by
+      exact cfbrcIm_eq_cfbrcImClosed d X Θ
+
 end
 
 end DkMath.CFBRC.TrigBridge

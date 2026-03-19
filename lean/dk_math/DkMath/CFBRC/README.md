@@ -327,6 +327,14 @@ example (d : ℕ) (X Θ : ℝ) :
 example (d : ℕ) (X Θ : ℝ) :
     cfbrcIm d X Θ = cfbrcImClosed d X Θ :=
   cfbrcIm_eq_cfbrcImClosed d X Θ
+
+example (d : ℕ) (X Θ : ℝ) :
+    Complex.re (cfbrcClosed d X Θ) = cfbrcReClosed d X Θ :=
+  cfbrcClosed_re_eq_cfbrcReClosed d X Θ
+
+example (d : ℕ) (X Θ : ℝ) :
+    Complex.im (cfbrcClosed d X Θ) = cfbrcImClosed d X Θ :=
+  cfbrcClosed_im_eq_cfbrcImClosed d X Θ
 ```
 
 ## Related Docs
