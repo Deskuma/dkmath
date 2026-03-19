@@ -540,3 +540,43 @@
    - primitive 条件は `boundaryDiffPow side k x u` で統一して返す。
 6. 次の課題:
    - 必要なら `BoundarySide` 版の no-lift / squarefree provider 接続も同様に追加する。
+
+### 日時: 2026/03/20 01:07 JST: Triangular Permutation の `d=2` 実装（TrigBridge 4層）を CFBRC 配下へ追加
+
+1. 目的: 設計書 `CFBRC_TriPerm_Lean_Design.md` に沿って、  
+   `a'(a'+2x) = a^2 cos^2 φ = Re(G_2(a cos φ, a sin φ))` の Lean bridge を `DkMath.CFBRC` へ実装する。
+2. 内容:
+   - 新規ファイルを追加:
+     - `DkMath/CFBRC/TrigBridge/Basic.lean`
+     - `DkMath/CFBRC/TrigBridge/Trig.lean`
+     - `DkMath/CFBRC/TrigBridge/Complex.lean`
+     - `DkMath/CFBRC/TrigBridge/Main.lean`
+   - 追加した主な定義・定理:
+     - 定義: `body2`, `cfbrc`, `cfbrcR`
+     - 代数層: `body2_factor`, `body2_sub`, `body2_sub_factor`
+     - 三角層: `sq_sub_sin_eq_cos`, `body2_trig`, `body2_factor_trig`
+     - 複素層: `cfbrc_two_re`, `cfbrc_two_im`, `cfbrc_two_re_polar`, `cfbrc_two_im_polar`
+     - 主定理: `body2_eq_re_cfbrc2`, `factor_eq_re_cfbrc2`
+   - 入口更新:
+     - `DkMath/CFBRC.lean` に `import DkMath.CFBRC.TrigBridge.Main` を追加。
+   - 検証:
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.Basic`
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.Trig`
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.Complex`
+     - `./lean-build.sh DkMath.CFBRC.TrigBridge.Main`
+     - `./lean-build.sh DkMath.CFBRC`
+     すべて成功。
+3. 結論: CFBRC 配下に「代数 -> 三角 -> 複素 -> 主定理」の `d=2` bridge が実装され、  
+   Triangular Permutation 設計の最小核が build 可能な形で固定された。
+4. 失敗事例:
+   - 初期 script で一部補題に `simp` 後の不要 `ring` が残り、`No goals to be solved` が発生。
+   - `body2_sub` と `cfbrc_two_re` は `simp` のみで完結する形に調整して解消。
+5. 備考:
+   - 今回は `d=2` 専用橋を先に固定し、general `d` の実部一般式は未着手。
+   - 再開時の起点:
+     - 実装本体: `DkMath/CFBRC/TrigBridge/Main.lean`
+     - 設計参照: `DkMath/CFBRC/docs/CFBRC_TriPerm_Lean_Design.md`
+     - 理論背景: `DkMath/CFBRC/docs/CFBRC_Triangular Permutation.md`
+6. 次の課題:
+   - `README.md` に TrigBridge の短い使用例を追加する。
+   - `cfbrc d` 一般に対する `Complex.re` 抽出の補助補題群（general `d`）を別ファイルで設計する。
