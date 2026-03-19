@@ -708,28 +708,28 @@ lemma prob_real_univ {Ω} [MeasurableSpace Ω] (μ : Measure Ω) [IsProbabilityM
     - n0 = 10（十分大きな n の閾値）
 
     Phase 3 TODO: ABC.lean の MidBlock 枠組みから厳密に導出。 -/
-/-
-  NOTE (external analytic input):
-  The adjacent-tail estimate is currently assumed as an upstream result.
-  This mirrors the existing style of explicit analytic placeholders (axioms)
-  used elsewhere in the project while keeping downstream API stable.
+/- Upstream contract for `tail_prob_is_bad_adjacent`.
+   This theorem does not postulate an axiom; instead it takes the needed
+   tail estimate as an explicit assumption `hTailProb`.
+   Derivation hints for `hTailProb`:
+   1) Encode `BadAdj` by slice-indicator sums.
+   2) Apply MGF control (`mgf_bound_unit01`) and optimize Chernoff parameter.
+   3) Convert `exp(-c*n^α)` into `exp(-c'*(log n)^β)` (`β>1`) for large `n`.
 -/
-axiom tail_prob_is_bad_adjacent_input
-  {Ω : Type*} [MeasurableSpace Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
-  (δ : ℝ) (hδ : 0 < δ) :
-  ∃ (C c β : ℝ) (n0 : ℕ),
-      0 < C ∧ 0 < c ∧ 1 < β ∧
-      ∀ n ≥ n0,
-        μ.real (BadAdj δ n Ω) ≤ C * Real.exp (- c * (Real.log n) ^ β)
 
 theorem tail_prob_is_bad_adjacent
   {Ω : Type*} [MeasurableSpace Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
-  (δ : ℝ) (hδ : 0 < δ) :
+  (δ : ℝ) (_hδ : 0 < δ)
+  (hTailProb :
+    ∃ (C c β : ℝ) (n0 : ℕ),
+      0 < C ∧ 0 < c ∧ 1 < β ∧
+      ∀ n ≥ n0,
+        μ.real (BadAdj δ n Ω) ≤ C * Real.exp (-c * (Real.log n) ^ β)) :
   ∃ (C c β : ℝ) (n0 : ℕ),
       0 < C ∧ 0 < c ∧ 1 < β ∧
       ∀ n ≥ n0,
-        μ.real (BadAdj δ n Ω) ≤ C * Real.exp (- c * (Real.log n) ^ β) := by
-  exact tail_prob_is_bad_adjacent_input μ δ hδ
+        μ.real (BadAdj δ n Ω) ≤ C * Real.exp (-c * (Real.log n) ^ β) := by
+  exact hTailProb
 
 
 -- 技術補題：`T ≤ log n` を保証する十分大きい `n` を与える
@@ -751,7 +751,7 @@ private lemma eventually_log_ge (T : ℝ) :
 -- 比較判定のための最終的な上界：exp(-c (log n)^β) ≤ 1 / n^2 （大きな n）
 private lemma eventually_exp_neg_log_pow_le_inv_sq
   (c β : ℝ) (hc : 0 < c) (hβ : 1 < β) :
-  ∀ᶠ n : ℕ in atTop, (if n = 0 then (0 : ℝ) else Real.exp (- c * (Real.log n) ^ β))
+  ∀ᶠ n : ℕ in atTop, (if n = 0 then (0 : ℝ) else Real.exp (-c * (Real.log n) ^ β))
                  ≤ (if n = 0 then (0 : ℝ) else 1 / (n : ℝ)^2) := by
   have hβ' : 0 < β - 1 := sub_pos.mpr hβ
   -- しきい値 T：c * T^(β-1) = 2 を満たす

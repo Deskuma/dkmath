@@ -41,6 +41,12 @@ For general ε > 0 (possibly < δ), use the density-one version instead.
 -- - The value δ = 0.435 is not exact, so equality is not meaningful
 lemma adjacent_quality_le_density_one
   (ε : ℝ) (hε : 0 < ε) (hε_gt_δ : 0.435 < ε)
+  (hTailProb :
+    ∀ (δ : ℝ), 0 < δ →
+      ∃ (C c β : ℝ) (n0 : ℕ),
+        0 < C ∧ 0 < c ∧ 1 < β ∧
+        ∀ n ≥ n0,
+          (Measure.dirac ()).real (BadAdj δ n Unit) ≤ C * Real.exp (-c * (Real.log n) ^ β))
   (hDiagR : ∀ (ε' : ℝ), ε' > 0 → ∀ᶠ X in atTop,
     ((Finset.filter (fun b => b ≤ X ∧ is_bad_a 0.435 X b (b - 1)) (Finset.Icc 0 X)).card : ℝ) ≤ X ^ (3 / 4 + ε')) :
   ∀ᶠ n in atTop, quality (Triple.mk n (n+1) (n + (n + 1)) (by rfl : n + (n + 1) = n + (n + 1)) (coprime_succ n)) ≤ 1 + ε := by
@@ -66,7 +72,7 @@ lemma adjacent_quality_le_density_one
   have h_diag : ∀ᶠ X in atTop, ((Finset.filter (fun b => b ≤ X ∧ is_bad_a 0.435 X b (b-1)) (Finset.Icc 0 X)).card : ℝ) ≤ X^(3/4 + ε') :=
     hDiagR ε' hε'_pos
   -- BC Framework: eventually ¬is_bad_a for adjacent triples
-  have h_not_bad_ev := eventually_not_is_bad_adjacent δ hδ_pos
+  have h_not_bad_ev := eventually_not_is_bad_adjacent δ hδ_pos hTailProb
   have ev1 := Filter.eventually_atTop.2 ⟨1, fun k hk => hk⟩
   -- Combine eventual properties (including BC result!)
   have all := Filter.Eventually.and
@@ -372,6 +378,12 @@ lemma adjacent_quality_le_density_one
 -- When ε < δ, we use the density-one version with ε' = δ and absorb the gap
 lemma adjacent_quality_le_ae_alt
   (ε : ℝ) (hε : 0 < ε)
+  (hTailProb :
+    ∀ (δ : ℝ), 0 < δ →
+      ∃ (C c β : ℝ) (n0 : ℕ),
+        0 < C ∧ 0 < c ∧ 1 < β ∧
+        ∀ n ≥ n0,
+          (Measure.dirac ()).real (BadAdj δ n Unit) ≤ C * Real.exp (-c * (Real.log n) ^ β))
   (hDiagR : ∀ (ε' : ℝ), ε' > 0 → ∀ᶠ X in atTop,
     ((Finset.filter (fun b => b ≤ X ∧ is_bad_a 0.435 X b (b - 1)) (Finset.Icc 0 X)).card : ℝ) ≤ X ^ (3 / 4 + ε')) :
   ∀ᶠ n in atTop, quality (Triple.mk n (n+1) (n + (n + 1)) (by rfl : n + (n + 1) = n + (n + 1)) (coprime_succ n)) ≤ 1 + ε := by
@@ -381,7 +393,7 @@ lemma adjacent_quality_le_ae_alt
   by_cases h : δ < ε
   case pos =>
     -- ε > δ: Use density-one version directly (now requires strict inequality)
-    exact adjacent_quality_le_density_one ε hε h hDiagR
+    exact adjacent_quality_le_density_one ε hε h hTailProb hDiagR
   case neg =>
     -- ε ≤ δ: Use density-one version with ε' = δ + (small positive value)
     push_neg at h
@@ -399,7 +411,7 @@ lemma adjacent_quality_le_ae_alt
            _ = ε' := rfl
 
     -- Get the density-one result for ε' = 1.1 * δ
-    have h_density := adjacent_quality_le_density_one ε' hε'_pos hε'_gt_δ hDiagR
+    have h_density := adjacent_quality_le_density_one ε' hε'_pos hε'_gt_δ hTailProb hDiagR
 
     -- Strengthen from quality ≤ 1 + δ to quality ≤ 1 + ε
     -- Since δ > ε, we have 1 + δ > 1 + ε, so quality ≤ 1 + δ does NOT imply quality ≤ 1 + ε

@@ -137,11 +137,20 @@ lemma chernoff_single_prime_uniform_easy (γ : ℝ) (hγ : 0 < γ) :
   obtain ⟨t, C, ht, ht_half, hC_pos, hbound⟩ := chernoff_single_prime p hp γ hγ
   use t, C, ht, ht_half, hC_pos
 
-/- Upstream analytic input:
-   eventual Chernoff-side budget after summing non-heavy primes.
-   This isolates dyadic+Abel/PNT-heavy analysis while keeping downstream API stable. -/
-axiom eventually_chernoff_budget_adjacent
-  (γ ε' : ℝ) (hγ : 0 < γ) (hε' : 0 < ε') :
+/- Upstream contract for the non-heavy prime Chernoff budget.
+   This is a hypothesis schema (not an axiom).
+   Practical derivation plan (from the removed skeleton):
+   1) Dyadic partition of primes `p ≤ X^(1/3)` into blocks `[2^k, 2^(k+1))`.
+   2) Per-prime Chernoff extraction `(t_p, C_p)` from `chernoff_single_prime`.
+   3) Normalize weights with `γ_p = γ * log p / W`, where
+      `W = ∑_{p∈P_light} log p` (handle `W = 0` separately).
+   4) Union bound:
+      `#bad ≤ ∑_{p∈P_light} C_p * X * p^(-(t_p * γ_p))`.
+   5) Control the sum via Abel partial summation + prime counting/PNT input.
+   6) Fit into budget split `K_full = B*K_heavy + K_chernoff` with `B = 4`.
+-/
+def EventuallyChernoffBudgetAdjacentHypothesis : Prop :=
+  ∀ (γ ε' : ℝ), (hγ : 0 < γ) → (hε' : 0 < ε') →
   ∀ᶠ (X : ℕ) in atTop,
     (let B : ℕ := 4; let K_full := ⌈(X : ℝ)^(3/4 + ε')⌉₊;
      let K_heavy := ⌈(X : ℝ)^(3/4 + ε') / (B + 1)⌉₊;
@@ -169,6 +178,7 @@ axiom eventually_chernoff_budget_adjacent
 -- - Sum over all primes: total excess ≤ γ log rad(ab)
 lemma twoTail_log_bound_adjacent_density_one
     (γ ε' : ℝ) (hγ : 0 < γ) (hε' : 0 < ε')
+    (hChernoffBudget : EventuallyChernoffBudgetAdjacentHypothesis)
     : ∀ᶠ X in atTop,
         (Finset.filter (fun n => n ≤ X ∧
            Real.log (twoTail (2*n+1) : ℝ)
@@ -251,7 +261,7 @@ lemma twoTail_log_bound_adjacent_density_one
        )
        (Finset.Icc 0 X)
      ).card ≤ K_chernoff) :=
-    eventually_chernoff_budget_adjacent γ ε' hγ hε'
+    hChernoffBudget γ ε' hγ hε'
 
   -- Step 3: Combine bounds and finish
   -- We also need the threshold condition X^(3/4+ε') ≥ 20 for the budget allocation lemma
