@@ -51,9 +51,11 @@ $$
   - `d=2` の三角置換 bridge
   - `body2 = a^2 * cos^2 φ = Re(cfbrcR 2 (a cos φ) (a sin φ))`
 - `DkMath.CFBRC.TrigBridge.General`
-  - general `d` 向けの `Re/Im` 補助（基底値・再帰式・`(iΘ)^d` の偶奇補題）
-  - `d=8` 以降のための再帰テンプレート（`cfbrcRe/Im_succ_template`）
+  - general `d` 向けの `Re/Im` 証明エンジン（基底値・再帰式・`(iΘ)^d` の偶奇補題）
+  - `d=8` 以降の再帰テンプレート（`cfbrcRe/Im_succ_template`）
+  - 低次数展開や closed form 証明を支える内部基盤
 - `DkMath.CFBRC.TrigBridge.ClosedForm`
+  - `TrigBridge` の主 API（利用者はまずここを使う想定）
   - `Nat.choose` による複素閉形式 `cfbrcClosed`
   - `cfbrcR = cfbrcClosed`
   - `Re/Im` の raw 閉形式 `cfbrcRe/ImClosedRaw`
@@ -76,6 +78,12 @@ Triangular Permutation の `d=2` bridge のみ使う場合:
 
 ```lean
 import DkMath.CFBRC.TrigBridge.Main
+```
+
+general `d` の closed API を使う場合（推奨）:
+
+```lean
+import DkMath.CFBRC.TrigBridge.ClosedForm
 ```
 
 ## Usage Examples

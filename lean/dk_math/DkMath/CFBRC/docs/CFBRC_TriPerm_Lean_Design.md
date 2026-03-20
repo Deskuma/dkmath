@@ -46,7 +46,11 @@ DkMath/
       Basic.lean
       Trig.lean
       Complex.lean
+      General.lean
+      ClosedForm.lean
       Main.lean
+  DkMathTest/
+    CFBRC.lean
 ```
 
 ### 2A. `Basic.lean`
@@ -71,6 +75,27 @@ DkMath/
 
 * 全橋を結ぶ最終定理
 * 将来の一般 \(d\) 用の入口定理
+
+### 2E. `General.lean`（証明エンジン）
+
+* general `d` 向け `cfbrcRe` / `cfbrcIm` の基底値・再帰
+* 純位相 `((iΘ)^d)` の偶奇・`mod 4` 補題
+* `d=8` 以降の展開を機械化するテンプレート
+
+### 2F. `ClosedForm.lean`（主API）
+
+* `cfbrcClosed`（`Nat.choose` による複素 closed form）
+* `cfbrcR = cfbrcClosed`
+* `cfbrcRe/ImClosedRaw` と偶奇分離版 `cfbrcRe/ImClosed`
+* `Complex.re/im (cfbrcClosed ...) = cfbrcRe/ImClosed ...`
+
+### 2G. `DkMathTest/CFBRC.lean`（回帰固定）
+
+* `d=3..12` の低次数窓を 3 経路で固定
+  - `cfbrcRe/Im d`
+  - `Complex.re/im (cfbrcClosed d ...)`
+  - `cfbrcRe/ImClosed d`
+* `cfbrcClosed` の係数列回帰（`Nat.choose` 行の具体展開）
 
 もし RH 側に寄せたいなら `DkMath.RH.CFBRC.TrigBridge.*` でもよいが、
 今回の橋は **RH 専用ではなく、代数・三角・複素の一般橋** じゃから、独立配置のほうが後々美しい。
@@ -408,38 +433,52 @@ a^2-(a\sin\phi)^2=a^2\cos^2\phi
 
 ---
 
-## 11. 一段先の一般化設計
+## 11. 一段先の一般化設計（現状反映）
 
-(d=2) を固定した後は、こう広げるのが筋じゃ。
+(d=2) 固定から general `d` へは、現状すでに次の形で到達しておる。
 
-### 11A. 一般 (d) CFBRC
+### 11A. 複素 closed form（実装済）
 
-```lean
-lemma cfbrc_expand (d : ℕ) (X Θ : ℂ) :
-    cfbrc d X Θ
-      = ∑ k in Finset.Icc 1 d,
-          (Nat.choose d k : ℂ) * X^k * (Complex.I * Θ)^(d-k) := by
-  -- binomial theorem route
-  sorry
-```
+`ClosedForm.lean` 側で、次を主APIとして確立済み:
 
-### 11B. 実部抽出
+* `cfbrcClosed`
+* `cfbrcR_eq_cfbrcClosed`
+* `cfbrcClosed_re_eq_cfbrcReClosed`
+* `cfbrcClosed_im_eq_cfbrcImClosed`
 
-`Complex.re (cfbrc d X Θ)` の一般式を作る。
+### 11B. 実部・虚部 closed form（実装済）
 
-### 11C. 二次は特殊に綺麗
+`Nat.choose` の偶奇分離和として:
 
-(d=2) だけは `cos²` が直接出る。
-ここを **特殊ブリッジ定理** として固定しておく。
+* `cfbrcReClosed d X Θ`
+* `cfbrcImClosed d X Θ`
+
+が実装済みで、`cfbrcRe/Im` と一致する。
+
+### 11C. 低次数回帰の固定（実装済）
+
+`DkMathTest/CFBRC.lean` で `d=3..12` の低次数窓を
+
+* `cfbrcRe/Im`
+* `cfbrcClosed` の `Re/Im`
+* `cfbrcRe/ImClosed`
+
+の 3 経路で固定し、さらに `cfbrcClosed` の係数列（`choose` 行）も回帰済み。
+
+### 11D. 次に抽象化するなら（将来）
+
+係数列回帰を手並べからもう一段上げるなら、
+`Nat.choose` 行の一般補題（添字変換・係数同定）を導入し、
+`d` 任意の係数構造を定理として直接固定するのが次手となる。
 
 つまり一般化の順は
 
 \[
 d=2 \text{ を完成}
 \;\to\;
-CFBRC 一般展開
+ClosedForm 主API を確立
 \;\to\;
-実部・虚部の高調波構造
+（必要なら）係数列の一般補題で抽象化
 \]
 
 がよい。
