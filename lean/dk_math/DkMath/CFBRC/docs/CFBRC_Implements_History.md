@@ -1386,3 +1386,32 @@
 6. 次の課題:
    - 必要なら設計書側（TriPerm Lean Design）にも
      `ClosedForm` 主API・係数列回帰の位置づけを反映する。
+
+### 日時: 2026/03/20 05:35 JST: TriPerm Lean Design に `ClosedForm` 主APIと係数列回帰の位置づけを反映
+
+1. 目的:
+   - 設計書側の記述を現状実装（`General`/`ClosedForm`/回帰構成）に同期する。
+2. 内容:
+   - `DkMath/CFBRC/docs/CFBRC_TriPerm_Lean_Design.md` を更新:
+     - 推奨ファイル構成に
+       - `TrigBridge/General.lean`
+       - `TrigBridge/ClosedForm.lean`
+       - `DkMathTest/CFBRC.lean`
+       を追加。
+     - 役割分担を明記:
+       - `General` = 証明エンジン
+       - `ClosedForm` = 主API
+     - 回帰位置づけを明記:
+       - `d=3..12` の 3 経路回帰
+       - `cfbrcClosed` の `Nat.choose` 係数列回帰
+     - 「一段先の一般化設計」を現状反映へ更新し、
+       将来の抽象化（係数列一般補題）を次手として整理。
+3. 結論:
+   - TriPerm Lean Design は、現行コードベースの整理方針
+     （`ClosedForm` 主API・`General` 証明エンジン）と一致した。
+4. 失敗事例:
+   - 特になし（ドキュメント更新のみ）。
+5. 備考:
+   - 今回はドキュメント反映のみで Lean コード差分はなし。
+6. 次の課題:
+   - 必要なら `CFBRC_Triangular Permutation.md` 側にも同じ役割分担を要約反映する。
