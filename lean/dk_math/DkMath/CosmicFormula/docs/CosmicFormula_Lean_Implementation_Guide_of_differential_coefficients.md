@@ -55,6 +55,7 @@
   - `tendsto_cosmicKernel_polynomial_eval`
   - `tendsto_cosmicKernel_polynomial_eval_from_hasDerivAt`
   - `deriv_polynomial_eval_cosmic`
+  - `deriv_polynomial_eval_cosmic_from_mathlib`
   - `cosmicKernel_monomial_of_ne_zero`
   - `cosmicKernel_eval_monomial_of_ne_zero`
   - `cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero`
@@ -135,6 +136,8 @@
 | `hasDerivAt_polynomial_eval_cosmic_from_mathlib` | `CosmicDerivativePolynomial.lean` | §6 / §11.4 | `legacy bridge` |
 | `tendsto_cosmicKernel_polynomial_eval` | `CosmicDerivativePolynomial.lean` | §8 / §11.4 | `canonical` |
 | `tendsto_cosmicKernel_polynomial_eval_from_hasDerivAt` | `CosmicDerivativePolynomial.lean` | §6 / §11.4 | `legacy bridge` |
+| `deriv_polynomial_eval_cosmic` | `CosmicDerivativePolynomial.lean` | §3.5 / §11.4 | `canonical` |
+| `deriv_polynomial_eval_cosmic_from_mathlib` | `CosmicDerivativePolynomial.lean` | §6 / §11.4 | `legacy bridge` |
 | `cosmicKernel_monomial_of_ne_zero` | `CosmicDerivativePolynomial.lean` | §3.5 / §11.4 | `direct decomposition` |
 | `cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero` | `CosmicDerivativePolynomial.lean` | §3.5 / §11.4 | `direct decomposition` |
 | `polynomialKernelExt`, `continuous_polynomialKernelExt`, `polynomialKernelExt_zero` | `CosmicDerivativePolynomial.lean` | §2.2 / §8 / §11.4 | `helper` |

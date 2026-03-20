@@ -12,20 +12,23 @@ import DkMath.CosmicFormula.CosmicDerivativePowerLimit
 
 namespace DkMath.CosmicFormula
 
-/-- Polynomial evaluation derivative (legacy bridge via existing mathlib theorem). -/
+/-- Polynomial evaluation derivative (legacy bridge via existing mathlib theorem).
+Canonical theorem: `hasDerivAt_polynomial_eval_cosmic`. -/
 theorem hasDerivAt_polynomial_eval_cosmic_from_mathlib (p : Polynomial ℝ) (x : ℝ) :
     HasDerivAt (fun y : ℝ => p.eval y) (p.derivative.eval x) x := by
   simpa using (p.hasDerivAt x)
 
-/-- Cosmic-kernel limit form for polynomial evaluation (legacy bridge style). -/
+/-- Cosmic-kernel limit form for polynomial evaluation (legacy bridge style).
+Canonical theorem: `tendsto_cosmicKernel_polynomial_eval`. -/
 theorem tendsto_cosmicKernel_polynomial_eval_from_hasDerivAt (p : Polynomial ℝ) (x : ℝ) :
     Filter.Tendsto (fun u : ℝ => cosmicKernel (fun y : ℝ => p.eval y) x u)
       (nhdsWithin (0 : ℝ) (Set.compl ({(0 : ℝ)} : Set ℝ)))
       (nhds (p.derivative.eval x)) := by
   exact tendsto_cosmicKernel_of_hasDerivAt (hasDerivAt_polynomial_eval_cosmic_from_mathlib p x)
 
-/-- `deriv` form of the polynomial-evaluation derivative theorem. -/
-theorem deriv_polynomial_eval_cosmic (p : Polynomial ℝ) (x : ℝ) :
+/-- `deriv` form (legacy bridge via existing mathlib theorem).
+Canonical theorem: `deriv_polynomial_eval_cosmic`. -/
+theorem deriv_polynomial_eval_cosmic_from_mathlib (p : Polynomial ℝ) (x : ℝ) :
     deriv (fun y : ℝ => p.eval y) x = p.derivative.eval x := by
   simp [p.deriv (x := x)]
 
@@ -173,6 +176,11 @@ theorem hasDerivAt_polynomial_eval_cosmic_via_powerKernel (p : Polynomial ℝ) (
 theorem deriv_polynomial_eval_cosmic_via_powerKernel (p : Polynomial ℝ) (x : ℝ) :
     deriv (fun y : ℝ => p.eval y) x = p.derivative.eval x := by
   simp [(hasDerivAt_polynomial_eval_cosmic_via_powerKernel p x).deriv]
+
+/-- `deriv` form for polynomial evaluation (canonical: via power-kernel decomposition flow). -/
+theorem deriv_polynomial_eval_cosmic (p : Polynomial ℝ) (x : ℝ) :
+    deriv (fun y : ℝ => p.eval y) x = p.derivative.eval x :=
+  deriv_polynomial_eval_cosmic_via_powerKernel p x
 
 /-- Polynomial evaluation derivative (canonical: via power-kernel decomposition flow). -/
 theorem hasDerivAt_polynomial_eval_cosmic (p : Polynomial ℝ) (x : ℝ) :

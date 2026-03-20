@@ -644,3 +644,32 @@
    - 必要に応じて `hasDerivAt_polynomial_eval_cosmic_from_mathlib` /
      `tendsto_cosmicKernel_polynomial_eval_from_hasDerivAt` へ
      comment レベルの移行案内を付与する。
+
+### 日時: 2026/03/20 23:22 JST: `deriv_polynomial_eval_cosmic` を canonical 新系へ統一し、legacy 参照案内を補強
+
+1. 目的:
+   - 7.1 方針として `deriv_polynomial_eval_cosmic` も canonical 本流を `via_powerKernel` 系へ揃える。
+   - 7.2 方針として旧系定理へ comment レベルの移行案内を付与する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/CosmicDerivativePolynomial.lean`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_Lean_Implementation_Guide_of_differential_coefficients.md`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_ImplHistory.md`
+   - 実装変更:
+     - 旧 `deriv` bridge を `deriv_polynomial_eval_cosmic_from_mathlib` へ改名。
+     - `deriv_polynomial_eval_cosmic` は
+       `deriv_polynomial_eval_cosmic_via_powerKernel` へ委譲する canonical 定理へ統一。
+     - 旧系 3 定理（`hasDerivAt` / `tendsto` / `deriv`）の docstring に
+       canonical 定理名の参照案内を追記。
+   - docs 更新:
+     - 多項式主要定理一覧へ `deriv_polynomial_eval_cosmic_from_mathlib` を追記。
+     - 対応表へ `deriv` の canonical / legacy bridge の 2 行を追加。
+3. 結論:
+   - 多項式主要 API の canonical 系 (`hasDerivAt` / `tendsto` / `deriv`) が
+     一貫して `via_powerKernel` を本流とする構成に揃った。
+4. 失敗事例:
+   - 特になし。
+5. 備考:
+   - deprecated 注釈は導入せず、旧系は比較参照・互換補助として維持。
+6. 次の課題:
+   - 旧系定理の利用箇所が増える場合は、段階的に `via_powerKernel` への置換ガイドを整備する。
