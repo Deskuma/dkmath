@@ -296,9 +296,13 @@
      - `tendsto_powerKernel_zero_punctured`
    - 次段実装:
      - `hasDerivAt_pow_cosmic` を `simpa hasDerivAt_pow` から置換し、
+
+      ```txt
        `tendsto_powerKernel_zero_punctured`
        + `cosmicKernel_pow_eq_powerKernel_of_ne_zero`
        + `hasDerivAt_of_tendsto_cosmicKernel`
+      ```
+
        の接続で構成的に証明。
    - ビルド検証:
      - `lake build DkMath.CosmicFormula.CosmicDerivativePowerLimit` 成功。
@@ -521,9 +525,13 @@
      - `tendsto_cosmicKernel_polynomial_eval_finset_sum` を
        `tendsto_cosmicKernel_polynomial_eval_via_powerKernel`（`p := Finset.sum s P`）経由へ差し替え。
      - これにより有限和 `tendsto` は
+
+       ```txt
        `cosmicKernel = polynomialKernelExt (u ≠ 0)`
        + `polynomialKernelExt` の連続性
        + `powerKernel` 極限
+       ```
+
        の流れで導出する形になった。
    - docs 更新:
      - 多項式一般化層へ `polynomialKernelExt` 系 API を追記。
@@ -580,3 +588,35 @@
    - `tendsto_cosmicKernel_polynomial_eval` 本体を
      `tendsto_cosmicKernel_polynomial_eval_via_powerKernel` へ統一するか判断。
    - `hasDerivAt_polynomial_eval_cosmic` 本体も同系統へ寄せる場合の API 互換方針を決める。
+
+### 日時: 2026/03/20 22:43 JST: `tendsto_cosmicKernel_polynomial_eval` 本体を `via_powerKernel` 系へ統一
+
+1. 目的:
+   - 7.1 方針として `tendsto_cosmicKernel_polynomial_eval` の canonical 実装を
+     `tendsto_cosmicKernel_polynomial_eval_via_powerKernel` へ統一する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/CosmicDerivativePolynomial.lean`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_Lean_Implementation_Guide_of_differential_coefficients.md`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_ImplHistory.md`
+   - 実装変更:
+     - 旧 bridge 直結証明を
+       `tendsto_cosmicKernel_polynomial_eval_from_hasDerivAt` として分離。
+     - `tendsto_cosmicKernel_polynomial_eval` は
+       `tendsto_cosmicKernel_polynomial_eval_via_powerKernel` への委譲形へ更新。
+   - docs 更新:
+     - 多項式主要定理一覧と対応表に
+       `tendsto_cosmicKernel_polynomial_eval_from_hasDerivAt` を追記し、
+       旧系が補助位置づけであることを明確化。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDerivativePolynomial` 成功。
+3. 結論:
+   - `tendsto_cosmicKernel_polynomial_eval` の本体は新系（kernel 分解 + 拡張 + 復帰）へ統一され、
+     旧系は互換補助として保持される構造になった。
+4. 失敗事例:
+   - 特になし。
+5. 備考:
+   - API 名は維持したため、既存利用側の呼び出しは破壊していない。
+6. 次の課題:
+   - `hasDerivAt_polynomial_eval_cosmic` 本体も `..._via_powerKernel` へ統一するかを決める。
+   - 統一方針決定後、旧系定理へ deprecation 方針を設けるか検討する。

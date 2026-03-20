@@ -17,8 +17,8 @@ theorem hasDerivAt_polynomial_eval_cosmic (p : Polynomial ℝ) (x : ℝ) :
     HasDerivAt (fun y : ℝ => p.eval y) (p.derivative.eval x) x := by
   simpa using (p.hasDerivAt x)
 
-/-- Cosmic-kernel limit form for polynomial evaluation. -/
-theorem tendsto_cosmicKernel_polynomial_eval (p : Polynomial ℝ) (x : ℝ) :
+/-- Cosmic-kernel limit form for polynomial evaluation (legacy bridge style). -/
+theorem tendsto_cosmicKernel_polynomial_eval_from_hasDerivAt (p : Polynomial ℝ) (x : ℝ) :
     Filter.Tendsto (fun u : ℝ => cosmicKernel (fun y : ℝ => p.eval y) x u)
       (nhdsWithin (0 : ℝ) (Set.compl ({(0 : ℝ)} : Set ℝ)))
       (nhds (p.derivative.eval x)) := by
@@ -155,6 +155,13 @@ theorem tendsto_cosmicKernel_polynomial_eval_via_powerKernel
   have hu0 : u ≠ 0 := by
     simpa [Set.mem_compl_iff, Set.mem_singleton_iff] using hu
   exact (cosmicKernel_polynomial_eval_eq_polynomialKernelExt_of_ne_zero p x u hu0).symm
+
+/-- Canonical cosmic-kernel limit form for polynomial evaluation (power-kernel flow). -/
+theorem tendsto_cosmicKernel_polynomial_eval (p : Polynomial ℝ) (x : ℝ) :
+    Filter.Tendsto (fun u : ℝ => cosmicKernel (fun y : ℝ => p.eval y) x u)
+      (nhdsWithin (0 : ℝ) (Set.compl ({(0 : ℝ)} : Set ℝ)))
+      (nhds (p.derivative.eval x)) :=
+  tendsto_cosmicKernel_polynomial_eval_via_powerKernel p x
 
 /-- Polynomial derivative theorem reconstructed via kernel decomposition flow. -/
 theorem hasDerivAt_polynomial_eval_cosmic_via_powerKernel (p : Polynomial ℝ) (x : ℝ) :

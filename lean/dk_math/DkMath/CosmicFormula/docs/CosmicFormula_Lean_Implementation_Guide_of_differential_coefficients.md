@@ -52,6 +52,7 @@
 - 主要定理（単体）:
   - `hasDerivAt_polynomial_eval_cosmic`
   - `tendsto_cosmicKernel_polynomial_eval`
+  - `tendsto_cosmicKernel_polynomial_eval_from_hasDerivAt`
   - `deriv_polynomial_eval_cosmic`
   - `cosmicKernel_monomial_of_ne_zero`
   - `cosmicKernel_eval_monomial_of_ne_zero`
@@ -127,6 +128,7 @@
 | `hasDerivAt_pow_cosmic` | `CosmicDerivativePowerLimit.lean` | §9 |
 | `cosmic_formula_unit_eq_u_sq_from_derivative_bridge` | `CosmicFormulaDerivativeBridge.lean` | §10 |
 | `hasDerivAt_polynomial_eval_cosmic` | `CosmicDerivativePolynomial.lean` | §3.5 / §11.4 |
+| `tendsto_cosmicKernel_polynomial_eval_from_hasDerivAt` | `CosmicDerivativePolynomial.lean` | §6 / §11.4 |
 | `cosmicKernel_monomial_of_ne_zero` | `CosmicDerivativePolynomial.lean` | §3.5 / §11.4 |
 | `cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero` | `CosmicDerivativePolynomial.lean` | §3.5 / §11.4 |
 | `polynomialKernelExt`, `continuous_polynomialKernelExt`, `polynomialKernelExt_zero` | `CosmicDerivativePolynomial.lean` | §2.2 / §8 / §11.4 |
