@@ -12,27 +12,54 @@ import DkMath.CosmicFormula.CosmicDerivativePowerLimit
 
 namespace DkMath.CosmicFormula
 
-/-- Polynomial evaluation derivative (legacy bridge via existing mathlib theorem).
-Canonical theorem: `hasDerivAt_polynomial_eval_cosmic`. -/
+/--
+Legacy bridge:
+derive polynomial evaluation directly from mathlib's `Polynomial.hasDerivAt`.
+
+Mathematical content:
+`d/dx (p(x)) = p'(x)`.
+
+Canonical theorem is `hasDerivAt_polynomial_eval_cosmic`, which is reconstructed
+from the cosmic-kernel decomposition flow.
+-/
 theorem hasDerivAt_polynomial_eval_cosmic_from_mathlib (p : Polynomial ℝ) (x : ℝ) :
     HasDerivAt (fun y : ℝ => p.eval y) (p.derivative.eval x) x := by
   simpa using (p.hasDerivAt x)
 
-/-- Cosmic-kernel limit form for polynomial evaluation (legacy bridge style).
-Canonical theorem: `tendsto_cosmicKernel_polynomial_eval`. -/
+/--
+Legacy bridge in limit form:
+convert `HasDerivAt` to the cosmic-kernel punctured limit.
+
+Formula:
+`cosmicKernel f x u = (f (x + u) - f x) / u`
+and
+`cosmicKernel (fun y => p.eval y) x u -> p.derivative.eval x` as `u -> 0`, `u ≠ 0`.
+
+Canonical theorem is `tendsto_cosmicKernel_polynomial_eval`.
+-/
 theorem tendsto_cosmicKernel_polynomial_eval_from_hasDerivAt (p : Polynomial ℝ) (x : ℝ) :
     Filter.Tendsto (fun u : ℝ => cosmicKernel (fun y : ℝ => p.eval y) x u)
       (nhdsWithin (0 : ℝ) (Set.compl ({(0 : ℝ)} : Set ℝ)))
       (nhds (p.derivative.eval x)) := by
   exact tendsto_cosmicKernel_of_hasDerivAt (hasDerivAt_polynomial_eval_cosmic_from_mathlib p x)
 
-/-- `deriv` form (legacy bridge via existing mathlib theorem).
-Canonical theorem: `deriv_polynomial_eval_cosmic`. -/
+/--
+Legacy bridge in `deriv` form:
+`deriv (fun y => p.eval y) x = p.derivative.eval x` via existing mathlib theorem.
+
+Canonical theorem is `deriv_polynomial_eval_cosmic`.
+-/
 theorem deriv_polynomial_eval_cosmic_from_mathlib (p : Polynomial ℝ) (x : ℝ) :
     deriv (fun y : ℝ => p.eval y) x = p.derivative.eval x := by
   simp [p.deriv (x := x)]
 
-/-- Cosmic-kernel form for a scalar monomial function (punctured at `u = 0`). -/
+/--
+Monomial kernel decomposition (`u ≠ 0`):
+for `f(y) = a * y^n`,
+`cosmicKernel f x u = a * powerKernel n x u`.
+
+This is the basic brick used to expand polynomial kernels coefficient-wise.
+-/
 theorem cosmicKernel_monomial_of_ne_zero
     (a x u : ℝ) (n : ℕ) (hu : u ≠ 0) :
     cosmicKernel (fun y : ℝ => a * y ^ n) x u = a * powerKernel n x u := by
@@ -51,7 +78,13 @@ theorem cosmicKernel_eval_monomial_of_ne_zero
   simpa [Polynomial.eval_monomial] using
     (cosmicKernel_monomial_of_ne_zero a x u n hu)
 
-/-- Kernel-level expansion of a polynomial into a finite sum of monomial kernels. -/
+/--
+Polynomial kernel decomposition (`u ≠ 0`):
+`cosmicKernel (fun y => p.eval y) x u` is expanded as the finite sum
+`sum_{n=0}^{natDegree p} coeff_n * powerKernel n x u`.
+
+This corresponds to termwise expansion of `(p(x+u)-p(x))/u` into monomials.
+-/
 theorem cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero
     (p : Polynomial ℝ) (x u : ℝ) (hu : u ≠ 0) :
     cosmicKernel (fun y : ℝ => p.eval y) x u
@@ -82,18 +115,38 @@ theorem cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero
   intro n hn
   simpa using (cosmicKernel_monomial_of_ne_zero (a := p.coeff n) (x := x) (u := u) (n := n) hu)
 
-/-- Continuous extension kernel for polynomial evaluation (explicitly including `u = 0`). -/
+/--
+Continuous extension of the polynomial kernel to `u = 0`:
+`polynomialKernelExt p x u` is defined as a finite sum of `powerKernel`.
+
+Design intent:
+1. For `u ≠ 0`, it matches the original `cosmicKernel`.
+2. At `u = 0`, it evaluates to `p.derivative.eval x`.
+
+So this object realizes a textbook "removable singularity" extension.
+-/
 def polynomialKernelExt (p : Polynomial ℝ) (x u : ℝ) : ℝ :=
   Finset.sum (Finset.range (p.natDegree + 1)) (fun n => p.coeff n * powerKernel n x u)
 
-/-- On `u ≠ 0`, `cosmicKernel` coincides with `polynomialKernelExt`. -/
+/--
+Compatibility on punctured neighborhood:
+if `u ≠ 0`, then
+`cosmicKernel (fun y => p.eval y) x u = polynomialKernelExt p x u`.
+-/
 theorem cosmicKernel_polynomial_eval_eq_polynomialKernelExt_of_ne_zero
     (p : Polynomial ℝ) (x u : ℝ) (hu : u ≠ 0) :
     cosmicKernel (fun y : ℝ => p.eval y) x u = polynomialKernelExt p x u := by
   simpa [polynomialKernelExt] using
     (cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero p x u hu)
 
-/-- Range-sum form of `p.derivative.eval x` compatible with `polynomialKernelExt`. -/
+/--
+Derivative evaluation in range-sum form:
+`p.derivative.eval x` is rewritten as
+`sum coeff_n * (n * x^(n-1))` over `range (natDegree p + 1)`.
+
+This normalization makes the `u = 0` value of `polynomialKernelExt` align
+with the derivative expression term by term.
+-/
 theorem derivative_eval_eq_sum_range_coeff_mul_pow
     (p : Polynomial ℝ) (x : ℝ) :
     p.derivative.eval x
@@ -105,7 +158,13 @@ theorem derivative_eval_eq_sum_range_coeff_mul_pow
       (f := fun n a => a * (n : ℝ) * x ^ (n - 1))
       (h := by intro n; simp))
 
-/-- `polynomialKernelExt` is continuous in `u`. -/
+/--
+Continuity of the extended kernel in `u`.
+
+Reason:
+each `powerKernel n x u` is continuous in `u`,
+and finite sums and scalar multiples preserve continuity.
+-/
 theorem continuous_polynomialKernelExt (p : Polynomial ℝ) (x : ℝ) :
     Continuous (fun u : ℝ => polynomialKernelExt p x u) := by
   unfold polynomialKernelExt
@@ -113,7 +172,12 @@ theorem continuous_polynomialKernelExt (p : Polynomial ℝ) (x : ℝ) :
   intro n hn
   exact (continuous_const.mul (continuous_powerKernel n x))
 
-/-- Evaluation of `polynomialKernelExt` at `u = 0`. -/
+/--
+Value of the continuous extension at the center:
+`polynomialKernelExt p x 0 = p.derivative.eval x`.
+
+This is the key identity that identifies the limit value of the kernel.
+-/
 theorem polynomialKernelExt_zero (p : Polynomial ℝ) (x : ℝ) :
     polynomialKernelExt p x 0 = p.derivative.eval x := by
   unfold polynomialKernelExt
@@ -128,21 +192,38 @@ theorem polynomialKernelExt_zero (p : Polynomial ℝ) (x : ℝ) :
     _ = p.derivative.eval x := by
       simpa using (derivative_eval_eq_sum_range_coeff_mul_pow p x).symm
 
-/-- Full-neighborhood limit for the continuous extension kernel at `u → 0`. -/
+/--
+Full-neighborhood limit of the extension:
+`polynomialKernelExt p x u -> p.derivative.eval x` in `nhds 0`.
+
+This is obtained from continuity plus the center-value identity.
+-/
 theorem tendsto_polynomialKernelExt_zero (p : Polynomial ℝ) (x : ℝ) :
     Filter.Tendsto (fun u : ℝ => polynomialKernelExt p x u)
       (nhds (0 : ℝ))
       (nhds (p.derivative.eval x)) := by
   simpa [polynomialKernelExt_zero] using (continuous_polynomialKernelExt p x).tendsto 0
 
-/-- Punctured-neighborhood variant for the continuous extension kernel. -/
+/--
+Punctured-neighborhood variant:
+restrict the previous full-neighborhood limit to `u ≠ 0`.
+-/
 theorem tendsto_polynomialKernelExt_zero_punctured (p : Polynomial ℝ) (x : ℝ) :
     Filter.Tendsto (fun u : ℝ => polynomialKernelExt p x u)
       (nhdsWithin (0 : ℝ) (Set.compl ({(0 : ℝ)} : Set ℝ)))
       (nhds (p.derivative.eval x)) :=
   (tendsto_polynomialKernelExt_zero p x).mono_left nhdsWithin_le_nhds
 
-/-- Polynomial cosmic-kernel limit reconstructed from kernel decomposition + power limits. -/
+/--
+Core reconstruction theorem (decomposition flow):
+combine
+1. `cosmicKernel = polynomialKernelExt` on `u ≠ 0`,
+2. punctured limit of `polynomialKernelExt`.
+
+Conclusion:
+`cosmicKernel (fun y => p.eval y) x u -> p.derivative.eval x`
+on the punctured neighborhood of `0`.
+-/
 theorem tendsto_cosmicKernel_polynomial_eval_via_powerKernel
     (p : Polynomial ℝ) (x : ℝ) :
     Filter.Tendsto (fun u : ℝ => cosmicKernel (fun y : ℝ => p.eval y) x u)
@@ -159,14 +240,22 @@ theorem tendsto_cosmicKernel_polynomial_eval_via_powerKernel
     simpa [Set.mem_compl_iff, Set.mem_singleton_iff] using hu
   exact (cosmicKernel_polynomial_eval_eq_polynomialKernelExt_of_ne_zero p x u hu0).symm
 
-/-- Canonical cosmic-kernel limit form for polynomial evaluation (power-kernel flow). -/
+/--
+Canonical punctured-limit theorem for polynomial evaluation.
+
+This theorem is intentionally routed through the decomposition flow
+(`..._via_powerKernel`) as the public mainline API.
+-/
 theorem tendsto_cosmicKernel_polynomial_eval (p : Polynomial ℝ) (x : ℝ) :
     Filter.Tendsto (fun u : ℝ => cosmicKernel (fun y : ℝ => p.eval y) x u)
       (nhdsWithin (0 : ℝ) (Set.compl ({(0 : ℝ)} : Set ℝ)))
       (nhds (p.derivative.eval x)) :=
   tendsto_cosmicKernel_polynomial_eval_via_powerKernel p x
 
-/-- Polynomial derivative theorem reconstructed via kernel decomposition flow. -/
+/--
+Canonical derivative theorem in `HasDerivAt` form, reconstructed from the
+cosmic-kernel limit (`hasDerivAt_of_tendsto_cosmicKernel`).
+-/
 theorem hasDerivAt_polynomial_eval_cosmic_via_powerKernel (p : Polynomial ℝ) (x : ℝ) :
     HasDerivAt (fun y : ℝ => p.eval y) (p.derivative.eval x) x := by
   exact hasDerivAt_of_tendsto_cosmicKernel

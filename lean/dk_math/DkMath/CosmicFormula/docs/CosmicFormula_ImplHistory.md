@@ -673,3 +673,33 @@
    - deprecated 注釈は導入せず、旧系は比較参照・互換補助として維持。
 6. 次の課題:
    - 旧系定理の利用箇所が増える場合は、段階的に `via_powerKernel` への置換ガイドを整備する。
+
+### 日時: 2026/03/21 00:37 JST: 多項式一般化層の docstring を教科書的説明へ強化
+
+1. 目的:
+   - API 名だけでは追いづらい定理意図を、数学的説明と式で読めるようにする。
+   - `via_powerKernel` 系の流れ（分解 -> 拡張 -> 極限 -> 微分）を docstring から辿れるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/CosmicDerivativePolynomial.lean`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_ImplHistory.md`
+   - docstring 更新:
+     - legacy bridge 3 定理に位置づけ説明を追記。
+     - `cosmicKernel_monomial_of_ne_zero` /
+       `cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero` に
+       分解式の意図を明記。
+     - `polynomialKernelExt` 系（連続性、`u=0` 値、`tendsto`）に
+       removable singularity の観点を明記。
+     - `tendsto_cosmicKernel_polynomial_eval_via_powerKernel` と canonical 定理群に
+       導出フローを明記。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDerivativePolynomial` 成功。
+     - `lake build DkMath.CosmicFormula` 成功。
+3. 結論:
+   - 読者は theorem 名だけでなく、docstring 上で数学的役割と証明フローを確認できる状態になった。
+4. 失敗事例:
+   - 特になし。
+5. 備考:
+   - コード本体の証明構造・API 名は変更せず、説明層のみを強化。
+6. 次の課題:
+   - 必要に応じて和・積・合成・有限和 API 群にも同程度の式ベース docstring を展開する。
