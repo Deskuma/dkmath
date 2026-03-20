@@ -497,6 +497,82 @@ macro "cfbrc_closed_coeff" : tactic =>
      try ring_nf
      try norm_num [Nat.choose]))
 
+-- simp, ring_nf, norm_num [Nat.choose] を組み合わせたマクロを使った例
+example (X Θ : ℝ) :
+    cfbrcClosed 3 X Θ =
+      3 * (X : ℂ) * (Complex.I * Θ) ^ 2 +
+      3 * (X : ℂ) ^ 2 * (Complex.I * Θ) +
+      (X : ℂ) ^ 3 := by
+  -- cfbrc_closed_coeff  -- これを使っても良いが、`simp` と `ring_nf` だけでも十分
+  simp [cfbrcClosed, Finset.sum_range_succ]
+  ring_nf
+
+example (X Θ : ℝ) :
+    cfbrcClosed 4 X Θ =
+      4 * (X : ℂ) * (Complex.I * Θ) ^ 3 +
+      6 * (X : ℂ) ^ 2 * (Complex.I * Θ) ^ 2 +
+      4 * (X : ℂ) ^ 3 * (Complex.I * Θ) +
+      (X : ℂ) ^ 4 := by
+  -- cfbrc_closed_coeff
+  simp [cfbrcClosed, Finset.sum_range_succ]
+  ring_nf
+  norm_num [Nat.choose]
+
+example (X Θ : ℝ) :
+    cfbrcClosed 5 X Θ =
+      5 * (X : ℂ) * (Complex.I * Θ) ^ 4 +
+      10 * (X : ℂ) ^ 2 * (Complex.I * Θ) ^ 3 +
+      10 * (X : ℂ) ^ 3 * (Complex.I * Θ) ^ 2 +
+      5 * (X : ℂ) ^ 4 * (Complex.I * Θ) +
+      (X : ℂ) ^ 5 := by
+  -- cfbrc_closed_coeff
+  simp [cfbrcClosed, Finset.sum_range_succ]
+  ring_nf
+  norm_num [Nat.choose]
+
+example (X Θ : ℝ) :
+    cfbrcClosed 6 X Θ =
+      6 * (X : ℂ) * (Complex.I * Θ) ^ 5 +
+      15 * (X : ℂ) ^ 2 * (Complex.I * Θ) ^ 4 +
+      20 * (X : ℂ) ^ 3 * (Complex.I * Θ) ^ 3 +
+      15 * (X : ℂ) ^ 4 * (Complex.I * Θ) ^ 2 +
+      6 * (X : ℂ) ^ 5 * (Complex.I * Θ) +
+      (X : ℂ) ^ 6 := by
+  -- cfbrc_closed_coeff
+  simp [cfbrcClosed, Finset.sum_range_succ]
+  ring_nf
+  norm_num [Nat.choose]
+
+example (X Θ : ℝ) :
+    cfbrcClosed 7 X Θ =
+      7 * (X : ℂ) * (Complex.I * Θ) ^ 6 +
+      21 * (X : ℂ) ^ 2 * (Complex.I * Θ) ^ 5 +
+      35 * (X : ℂ) ^ 3 * (Complex.I * Θ) ^ 4 +
+      35 * (X : ℂ) ^ 4 * (Complex.I * Θ) ^ 3 +
+      21 * (X : ℂ) ^ 5 * (Complex.I * Θ) ^ 2 +
+      7 * (X : ℂ) ^ 6 * (Complex.I * Θ) +
+      (X : ℂ) ^ 7 := by
+  -- cfbrc_closed_coeff
+  simp [cfbrcClosed, Finset.sum_range_succ]
+  ring_nf
+  norm_num [Nat.choose]
+
+example (X Θ : ℝ) :
+    cfbrcClosed 8 X Θ =
+      8 * (X : ℂ) * (Complex.I * Θ) ^ 7 +
+      28 * (X : ℂ) ^ 2 * (Complex.I * Θ) ^ 6 +
+      56 * (X : ℂ) ^ 3 * (Complex.I * Θ) ^ 5 +
+      70 * (X : ℂ) ^ 4 * (Complex.I * Θ) ^ 4 +
+      56 * (X : ℂ) ^ 5 * (Complex.I * Θ) ^ 3 +
+      28 * (X : ℂ) ^ 6 * (Complex.I * Θ) ^ 2 +
+      8 * (X : ℂ) ^ 7 * (Complex.I * Θ) +
+      (X : ℂ) ^ 8 := by
+  -- cfbrc_closed_coeff
+  simp [cfbrcClosed, Finset.sum_range_succ]
+  ring_nf
+  norm_num [Nat.choose]
+
+-- cfbrc_closed_coeff マクロを使った例
 example (X Θ : ℝ) :
     cfbrcClosed 12 X Θ =
       12 * (X : ℂ) * (Complex.I * Θ) ^ 11 +
@@ -511,7 +587,7 @@ example (X Θ : ℝ) :
       66 * (X : ℂ) ^ 10 * (Complex.I * Θ) ^ 2 +
       12 * (X : ℂ) ^ 11 * (Complex.I * Θ) +
       (X : ℂ) ^ 12 := by
-  cfbrc_closed_coeff
+  cfbrc_closed_coeff  -- ※ここはビルドに時間がかかります
 
 -- BoundarySide 高位 API（valuation）
 example (side : BoundarySide) {d x u q : ℕ}
