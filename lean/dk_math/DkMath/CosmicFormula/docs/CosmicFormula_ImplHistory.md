@@ -347,3 +347,46 @@
    - 必要なら多項式の演算別 API（和・積・合成）を cosmic kernel 直結で補強する。
    - `CosmicFormula_Design_Lean_Formal_of_differential_coefficients.md` の段階表と
      今回追加 API の対応表を docs に追記する。
+
+### 日時: 2026/03/20 20:15 JST: 多項式の演算別 API（和・積・合成）を cosmic kernel 直結で補強し、Lean 実装ガイド docs を開始
+
+1. 目的: `CosmicDerivativePolynomial` を演算別に拡張し、同時に Lean 実装視点の説明書整備を開始する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/CosmicDerivativePolynomial.lean`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_Lean_Implementation_Guide_of_differential_coefficients.md`（新規）
+   - 演算別 API 追加（`CosmicDerivativePolynomial.lean`）:
+     - 和:
+       - `hasDerivAt_polynomial_eval_add_cosmic`
+       - `tendsto_cosmicKernel_polynomial_eval_add`
+       - `deriv_polynomial_eval_add_cosmic`
+     - 積:
+       - `hasDerivAt_polynomial_eval_mul_cosmic`
+       - `tendsto_cosmicKernel_polynomial_eval_mul`
+       - `deriv_polynomial_eval_mul_cosmic`
+     - 合成:
+       - `hasDerivAt_polynomial_eval_comp_cosmic`
+       - `tendsto_cosmicKernel_polynomial_eval_comp`
+       - `deriv_polynomial_eval_comp_cosmic`
+   - 実装方針:
+     - まず `(p + q)`, `(p * q)`, `(p.comp q)` 全体に
+       `hasDerivAt_polynomial_eval_cosmic` を適用。
+     - `Polynomial.eval_*` / `Polynomial.derivative_*` で演算別の形へ `simp` 展開。
+     - 合成版は乗算順序差を `mul_comm` で正規化。
+   - 新 docs 初版の内容:
+     - 実装マップ（差分核 / bridge / power / polynomial）
+     - Lean 実装パターン（`HasDerivAt` → `tendsto_cosmicKernel` → `deriv`）
+     - 運用上注意（`Finset.sum` 明示形、`unnecessarySimpa` 対応）
+     - 次の整備候補（有限和 API 拡張、設計書対応表）
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDerivativePolynomial` 成功。
+3. 結論: 多項式演算 API は和・積・合成まで cosmic kernel 直結で利用可能になり、
+   実装者向け docs の初版整備を開始した。
+4. 失敗事例:
+   - 合成版の初稿で微分係数の積順序が逆向き (`q' * p'`) となり型不一致。
+   - `mul_comm` を `simp` に追加して目的形 (`p' * q'`) に正規化して解消。
+5. 備考:
+   - 演算別 API はすべて「`HasDerivAt` / `tendsto` / `deriv` の 3 形態」で揃えた。
+6. 次の課題:
+   - 有限和版 (`Finset.sum`) に対して `tendsto` / `deriv` 形 API を追加する。
+   - 新 docs に「定理名 ↔ 設計書節」の対応表を追記し、参照性を高める。
