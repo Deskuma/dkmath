@@ -1354,3 +1354,35 @@
    - 既知の `ABC021` `sorry` 警告は継続（今回変更範囲外）。
 6. 次の課題:
    - 必要なら `cfbrcClosed` の和定義そのもの（`Nat.choose` 係数列）に対する係数回帰を追加する。
+
+### 日時: 2026/03/20 05:24 JST: `cfbrcClosed` の係数列回帰（`d=3..12`）を追加
+
+1. 目的:
+   - `cfbrcClosed` の和定義そのものに対し、
+     低次数で `Nat.choose` 係数列が正しく並ぶことを回帰で固定する。
+2. 内容:
+   - `DkMathTest/CFBRC.lean` に
+     `cfbrcClosed d X Θ = Σ_{j=1..d} (d choose j) X^j (iΘ)^(d-j)`
+     の具体展開を `d=3..12` まで追加。
+   - 係数列（`choose` 行）を明示:
+     - `d=8`: `8,28,56,70,56,28,8,1`
+     - `d=10`: `10,45,120,210,252,210,120,45,10,1`
+     - `d=12`: `12,66,220,495,792,924,792,495,220,66,12,1`
+   - 各証明は同一テンプレート:
+     - `simp [cfbrcClosed, Finset.sum_range_succ]`
+     - `ring_nf`
+     - `norm_num [Nat.choose]`
+3. 結論:
+   - `cfbrcClosed` の係数列回帰が入り、
+     closed API の低次数検証は
+     - `Re/Im` 明示式回帰
+     - `cfbrcClosed` 係数列回帰
+     の2面で固定された。
+4. 失敗事例:
+   - 初期案で `simp` の引数を増やしすぎると heartbeat timeout が発生。
+   - `simp` を最小化し、`ring_nf` と `norm_num [Nat.choose]` で安定化。
+5. 備考:
+   - 既知の `ABC021` `sorry` 警告は継続（今回変更範囲外）。
+6. 次の課題:
+   - 必要なら設計書側（TriPerm Lean Design）にも
+     `ClosedForm` 主API・係数列回帰の位置づけを反映する。
