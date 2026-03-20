@@ -16,9 +16,9 @@ presented by D. and Wise Wolf
 - プロジェクト全体の進捗要約はルート [README.md](../../README.md) を参照してください。
 - FLT 最新進捗の正本は [../../docs/PROJECT_STATUS.md](../../docs/PROJECT_STATUS.md) です。
 
-## 最新ステータス（2026-03-08）
+## 最新ステータス（2026-03-15）
 
-- 要点はルート [README.md](../../README.md) の「最新ステータス（2026-03-08）」に集約しています。
+- 要点はルート [README.md](../../README.md) の「最新ステータス（2026-03-15）」に集約しています。
 - 詳細分析は [../../docs/PROJECT_STATUS.md](../../docs/PROJECT_STATUS.md) を参照してください。
 
 ## カテゴリ

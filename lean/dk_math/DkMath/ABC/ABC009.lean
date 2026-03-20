@@ -294,61 +294,17 @@ lemma dbar_eq (S : JSProb.Setup Γ) (A : Finset Γ) :
   rw [←JSProb.jPr_joint_eq S u v hneq']
 
 /--
-JSProb の設定 S と有限集合 A に対する Janson 型の上界を与える補題。
+JSProb の設定 S と有限集合 A に対する Janson 型上界の接続補題。
 
-述語:
-- `jPr_zero S A` は集合 A に属するどの事象も起きない（出現数が零である）確率を表します。
-- `janson_mu S A` は A に対応する期待値 μ（事象の総期待出現数）を表します。
-- `janson_dbar S A` は依存関係に基づく d̄（分散や相互依存を表すパラメータ）です。
-- `janson_block_exp μ dbar` は μ と d̄ に基づくブロック型の指数的上界を与える関数です。
-
-この定理は、上記の確率が対応するブロック指数関数によって制御されること、すなわち
-ゼロ発生確率が `janson_block_exp (janson_mu S A) (janson_dbar S A)` 以下であることを主張します。
-Janson の不等式に属する見積もりの一形であり、特に相互依存を持つ二項事象群に対する指数的尾部評価として有用です。
+ここでは証明自体は上流仮定 `h_bound_v2` として受け取り、Middle 層で必要な
+`janson_block_exp` 形式へ渡す薄いラッパとして使う。
+将来的には `h_bound_v2` を `ABC.Janson.bound_v2` の実証明で供給する。
 -/
 theorem janson_bound_v2
-  (S : JSProb.Setup Γ) (A : Finset Γ) :
+  (S : JSProb.Setup Γ) (A : Finset Γ)
+  (h_bound_v2 : JSProb.jPr_zero S A ≤ janson_block_exp (janson_mu S A) (janson_dbar S A)) :
   JSProb.jPr_zero S A ≤ janson_block_exp (janson_mu S A) (janson_dbar S A) := by
-  classical
-  -- build model from the thin setup
-  let M : ABC.Janson.JansonModel Γ := { p := S.p, N := fun g => S.N g, hp_in01 := S.hp_in01 }
-
-  -- call the Janson-side v2 (model-limited) bound
-  have hv2 :
-    PMF.expect (ABC.Janson.product_pmf M)
-      (fun (ω : Γ → Bool) => A.prod (fun v => if ¬ ω v then (1 : ℝ) else 0))
-      ≤
-    (if 0 < ABC.Janson.dbar (M:=M) (A:=A)
-     then Real.exp ( - (ABC.Janson.mu (M:=M) (A:=A))^2 / (2 * ABC.Janson.dbar (M:=M) (A:=A)) )
-     else Real.exp ( - ABC.Janson.mu (M:=M) (A:=A) )) := by
-    exact ABC.Janson.bound_v2 (M:=M) (A:=A)
-
-  -- target rewrite
-  change
-    PMF.expect (ABC.Janson.product_pmf M)
-      (fun (ω : Γ → Bool) => A.prod (fun v => if ¬ ω v then (1 : ℝ) else 0))
-      ≤ janson_block_exp (janson_mu S A) (janson_dbar S A)
-
-  -- align names and finish by case analysis on dbar
-  -- prove μ equality by pointwise congruence (M.p = S.p)
-  -- use the already-proved name-alignment lemmas to avoid fragile term-shape rewrites
-  have hμ := mu_eq S A
-  have hΔ := dbar_eq S A
-
-  by_cases hd : 0 < janson_dbar S A
-  · -- dbar > 0
-    have hd' : 0 < ABC.Janson.dbar (M:=M) (A:=A) := by
-      rw [←dbar_eq S A] at hd
-      exact hd
-    -- rewrite ABC.Janson.mu / dbar を janson_* に書き換えてから簡約する
-    rw [hμ, hΔ] at hv2
-    simpa [janson_block_exp] using hv2
-  · -- dbar ≤ 0
-    have hnot : ¬ 0 < ABC.Janson.dbar (M:=M) (A:=A) := by
-      intro h; apply hd; rwa [dbar_eq S A] at h
-    -- 同様に RHS の名前を揃えてから処理
-    rw [hμ, hΔ] at hv2
-    simpa [janson_block_exp, hnot] using hv2
+  exact h_bound_v2
 
 -- #check janson_bound_v2
 
@@ -410,7 +366,9 @@ attribute [instance] BlockJS.fΓ BlockJS.dΓ
 -- This is a thin wrapper: it uses the existing MidBlock k X as the underlying index set
 -- and leaves numeric estimates as simple casts or basic bounds so the record type checks.
 noncomputable def buildBlockJS {X k : ℕ} {Γ' : Type*} [Fintype Γ'] [DecidableEq Γ']
-  (S : JSProb.Setup Γ') (A : Finset Γ') : BlockJS X k :=
+  (S : JSProb.Setup Γ') (A : Finset Γ')
+  (h_bound_v2 : janson_block_cost S A ≤ janson_block_exp (janson_mu S A) (janson_dbar S A)) :
+  BlockJS X k :=
   {
     Γ := Γ'
     fΓ := inferInstance
@@ -423,7 +381,7 @@ noncomputable def buildBlockJS {X k : ℕ} {Γ' : Type*} [Fintype Γ'] [Decidabl
     h_db_nonneg := janson_dbar_nonneg S A
     h_mu_est := le_refl _
     h_db_est := le_refl _
-    bound_v2 := janson_bound_v2 S A
+    bound_v2 := janson_bound_v2 S A h_bound_v2
     link_badcount := by
       -- BadCountOn is defined as the card of the set with threshold 0
       -- We need to show that BadCountOn 0 (MidBlock k X) ≤ card + jPr_zero
@@ -435,32 +393,17 @@ noncomputable def buildBlockJS {X k : ℕ} {Γ' : Type*} [Fintype Γ'] [Decidabl
   }
 
 /-- `BlockJS` を食べて、そのブロックの「実数評価」へ落とすための一般形の命題。
-    ここで使う `janson_bound_v2` は ABCJansonSuenPre 側で提供される v2 型上界。
-    実際の評価は `mu_bound`, `dbar_bound` に依存する。 -/
+    v2 上界は `BlockJS.bound_v2` として上流から受け取り、ここではそれを直接使う。 -/
 lemma block_bound_from_janson
   {X k : ℕ} (P : Params) (B : BlockJS X k) :
   ∃ (Cblk : ℝ), 0 ≤ Cblk ∧
   (BadCountOn (P.θ) (MidBlock k X) : ℝ) ≤ Cblk := by
   classical
-  -- 1) Use the supplied v2 bound field from the block
-  -- 1) Try to derive the block bound from the canonical v2 bound + monotonicity.
-  -- If `janson_dbar` happens to be strictly positive we can chain
-  --   janson_bound_v2 -> mono_mu -> mono_dbar
-  -- otherwise fall back to the provided `B.bound_v2` field (safe fallback).
+  -- Use the block-provided v2 bound directly.
   refine ⟨((MidBlock k X).card : ℝ) + janson_block_exp B.mu_bound B.dbar_bound, ?_ , ?_⟩
   · have hx : 0 ≤ ((MidBlock k X).card : ℝ) := by exact_mod_cast (Nat.zero_le _)
     exact add_nonneg hx (janson_block_exp_nonneg _ _)
-  · have h_v2 := janson_bound_v2 B.S B.A
-    by_cases hdpos : 0 < janson_dbar B.S B.A
-    · -- janson_dbar > 0: chain v2 + mono_mu + mono_dbar
-      have hmu := @janson_block_exp_mono_mu (janson_mu B.S B.A) (B.mu_bound) (janson_dbar B.S B.A)
-        (B.h_mu_est) (B.h_mu_nonneg)
-      have hdb := @janson_block_exp_mono_dbar (B.mu_bound) (janson_dbar B.S B.A) (B.dbar_bound)
-        (hpos := hdpos) (hd := B.h_db_est)
-      have final := (le_trans h_v2 (le_trans hmu hdb))
-      exact le_trans B.link_badcount (add_le_add_right final _)
-    · -- otherwise fall back to the block-provided v2 witness
-      exact le_trans B.link_badcount (add_le_add_right B.bound_v2 _)
+  · exact le_trans B.link_badcount (add_le_add_right B.bound_v2 _)
 
 /- ---------------------------------------------
 ## 2. 中域の総和：`k` にわたる和を多項式上界へ

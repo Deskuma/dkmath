@@ -193,28 +193,28 @@ lemma decomp_oddPart_evenPart_real (c : ℕ) (hc : c ≠ 0) :
 -- ========================================================================
 
 
-/-- The "two-tail" of a natural number: ∏_{p|c} p^{max(v_p(c)-2, 0)}.
+/-- The "two-tail" of a natural number: `∏_{p|c} p^{max(v_p(c)-2, 0)}`.
     This extracts only the "excess beyond square" part from the factorization.
 
     Key insight: Each prime's exponent can be split as:
-      v_p(c) = 1_{v_p≥2} (piSqRad part) + 1_{v_p≥1} (rad part) + (v_p - 2) (twoTail part)
+      `v_p(c) = 1_{v_p≥2} (piSqRad part) + 1_{v_p≥1} (rad part) + (v_p - 2) (twoTail part)`
 
-    This gives the identity: c = piSqRad(c) * rad(c) * twoTail(c)
+    This gives the identity: `c = piSqRad(c) * rad(c) * twoTail(c)`
 
-    Example: c = 2³ * 3⁵ * 5²
-    - v_2 - 2 = 1, v_3 - 2 = 3, v_5 - 2 = 0
-    - twoTail(c) = 2¹ * 3³ * 5⁰ = 2 * 27 = 54
-    - piSqRad(c) = 2 * 3 * 5 = 30 (all primes with v_p ≥ 2)
-    - rad(c) = 2 * 3 * 5 = 30 (all primes with v_p ≥ 1)
-    - Check: 2³*3⁵*5² = 8*243*25 = 48600 = 30*30*54 ✓
+    Example: `c = 2³ * 3⁵ * 5²`
+    - `v_2 - 2` = `1, v_3 - 2 = 3, v_5 - 2 = 0`
+    - twoTail(c) = `2¹ * 3³ * 5⁰ = 2 * 27 = 54`
+    - piSqRad(c) = `2 * 3 * 5 = 30 (all primes with v_p ≥ 2)`
+    - rad(c) = `2 * 3 * 5 = 30 (all primes with v_p ≥ 1)`
+    - Check: `2³*3⁵*5² = 8*243*25 = 48600 = 30*30*54` ✓
 
     This is DIFFERENT from both oddPart/evenPart:
     - oddPart extracts v_p mod 2 (odd exponents)
     - evenPart extracts ⌊v_p/2⌋ (square root of even part)
     - twoTail extracts v_p - 2 (excess beyond square)
 
-    The advantage: c = piSqRad * rad * twoTail gives htail WITHOUT needing
-    oddPart ≤ piSqRad (which is FALSE in general).
+    The advantage: `c = piSqRad * rad * twoTail` gives htail WITHOUT needing
+    `oddPart ≤ piSqRad` (which is FALSE in general).
 -/
 def twoTail (c : ℕ) : ℕ :=
   c.factorization.support.prod (fun p => p ^ (c.factorization p - 2))
@@ -708,36 +708,28 @@ lemma prob_real_univ {Ω} [MeasurableSpace Ω] (μ : Measure Ω) [IsProbabilityM
     - n0 = 10（十分大きな n の閾値）
 
     Phase 3 TODO: ABC.lean の MidBlock 枠組みから厳密に導出。 -/
+/- Upstream contract for `tail_prob_is_bad_adjacent`.
+   This theorem does not postulate an axiom; instead it takes the needed
+   tail estimate as an explicit assumption `hTailProb`.
+   Derivation hints for `hTailProb`:
+   1) Encode `BadAdj` by slice-indicator sums.
+   2) Apply MGF control (`mgf_bound_unit01`) and optimize Chernoff parameter.
+   3) Convert `exp(-c*n^α)` into `exp(-c'*(log n)^β)` (`β>1`) for large `n`.
+-/
+
 theorem tail_prob_is_bad_adjacent
   {Ω : Type*} [MeasurableSpace Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
-  (δ : ℝ) (hδ : 0 < δ) :
+  (δ : ℝ) (_hδ : 0 < δ)
+  (hTailProb :
+    ∃ (C c β : ℝ) (n0 : ℕ),
+      0 < C ∧ 0 < c ∧ 1 < β ∧
+      ∀ n ≥ n0,
+        μ.real (BadAdj δ n Ω) ≤ C * Real.exp (-c * (Real.log n) ^ β)) :
   ∃ (C c β : ℝ) (n0 : ℕ),
       0 < C ∧ 0 < c ∧ 1 < β ∧
       ∀ n ≥ n0,
-        μ.real (BadAdj δ n Ω) ≤ C * Real.exp (- c * (Real.log n) ^ β) := by
-  -- 暫定的な定数設定
-  use 1, 1, 3/2, 10
-  constructor
-  · norm_num  -- 0 < 1
-  constructor
-  · norm_num  -- 0 < 1
-  constructor
-  · norm_num  -- 1 < 3/2
-  intro n hn
-  -- Phase 3 TODO: 以下の実装が必要
-  -- 1) BadAdj の定義を展開：{ω | is_bad_a δ (2n+1) (n+1) n}
-  -- 2) is_bad_a の確率的表現：スライス b = n+1 で a ∈ [0,n] の悪い個数
-  -- 3) ABC.lean の mgf_bound_unit01 を適用：
-  --    ∀ᵐ ω, 0 ≤ indR (BadSlice n) ω ≤ 1 から
-  --    E[exp(λ(X - EX))] ≤ exp(λ²/8)
-  -- 4) Chernoff bound：最適な λ を選んで
-  --    P(X ≥ (1+δ)EX) ≤ exp(-δ²EX/3)
-  -- 5) EX ≈ n^0.75 (中域の密度) から
-  --    P(Bad) ≤ exp(-c₁ n^0.75)
-  -- 6) n^0.75 ≥ (log n)^(3/2) for large n を使って
-  --    exp(-c₁ n^0.75) ≤ exp(-c*(log n)^(3/2))
-  -- 7) n ≥ 10 で不等式が成立することを確認
-  admit
+        μ.real (BadAdj δ n Ω) ≤ C * Real.exp (-c * (Real.log n) ^ β) := by
+  exact hTailProb
 
 
 -- 技術補題：`T ≤ log n` を保証する十分大きい `n` を与える
@@ -759,7 +751,7 @@ private lemma eventually_log_ge (T : ℝ) :
 -- 比較判定のための最終的な上界：exp(-c (log n)^β) ≤ 1 / n^2 （大きな n）
 private lemma eventually_exp_neg_log_pow_le_inv_sq
   (c β : ℝ) (hc : 0 < c) (hβ : 1 < β) :
-  ∀ᶠ n : ℕ in atTop, (if n = 0 then (0 : ℝ) else Real.exp (- c * (Real.log n) ^ β))
+  ∀ᶠ n : ℕ in atTop, (if n = 0 then (0 : ℝ) else Real.exp (-c * (Real.log n) ^ β))
                  ≤ (if n = 0 then (0 : ℝ) else 1 / (n : ℝ)^2) := by
   have hβ' : 0 < β - 1 := sub_pos.mpr hβ
   -- しきい値 T：c * T^(β-1) = 2 を満たす

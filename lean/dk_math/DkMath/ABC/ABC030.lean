@@ -137,6 +137,33 @@ lemma chernoff_single_prime_uniform_easy (γ : ℝ) (hγ : 0 < γ) :
   obtain ⟨t, C, ht, ht_half, hC_pos, hbound⟩ := chernoff_single_prime p hp γ hγ
   use t, C, ht, ht_half, hC_pos
 
+/- Upstream contract for the non-heavy prime Chernoff budget.
+   This is a hypothesis schema (not an axiom).
+   Practical derivation plan (from the removed skeleton):
+   1) Dyadic partition of primes `p ≤ X^(1/3)` into blocks `[2^k, 2^(k+1))`.
+   2) Per-prime Chernoff extraction `(t_p, C_p)` from `chernoff_single_prime`.
+   3) Normalize weights with `γ_p = γ * log p / W`, where
+      `W = ∑_{p∈P_light} log p` (handle `W = 0` separately).
+   4) Union bound:
+      `#bad ≤ ∑_{p∈P_light} C_p * X * p^(-(t_p * γ_p))`.
+   5) Control the sum via Abel partial summation + prime counting/PNT input.
+   6) Fit into budget split `K_full = B*K_heavy + K_chernoff` with `B = 4`.
+-/
+def EventuallyChernoffBudgetAdjacentHypothesis : Prop :=
+  ∀ (γ ε' : ℝ), (hγ : 0 < γ) → (hε' : 0 < ε') →
+  ∀ᶠ (X : ℕ) in atTop,
+    (let B : ℕ := 4; let K_full := ⌈(X : ℝ)^(3/4 + ε')⌉₊;
+     let K_heavy := ⌈(X : ℝ)^(3/4 + ε') / (B + 1)⌉₊;
+     let K_chernoff := K_full - B * K_heavy;
+     (Finset.filter
+       (fun (n : ℕ) => n ≤ X ∧
+         (Finset.sum (2*n+1).factorization.support fun (p : ℕ) =>
+           ((((2*n+1).factorization p) - 2 : ℕ) : ℝ) * Real.log (p : ℝ)
+         ) > γ * Real.log (rad (n*(n+1)) : ℝ)
+       )
+       (Finset.Icc 0 X)
+     ).card ≤ K_chernoff)
+
 
 
 -- Density-one bound for twoTail logarithmic budget (adjacent triples).
@@ -151,6 +178,7 @@ lemma chernoff_single_prime_uniform_easy (γ : ℝ) (hγ : 0 < γ) :
 -- - Sum over all primes: total excess ≤ γ log rad(ab)
 lemma twoTail_log_bound_adjacent_density_one
     (γ ε' : ℝ) (hγ : 0 < γ) (hε' : 0 < ε')
+    (hChernoffBudget : EventuallyChernoffBudgetAdjacentHypothesis)
     : ∀ᶠ X in atTop,
         (Finset.filter (fun n => n ≤ X ∧
            Real.log (twoTail (2*n+1) : ℝ)
@@ -232,171 +260,8 @@ lemma twoTail_log_bound_adjacent_density_one
          ) > γ * Real.log (rad (n*(n+1)) : ℝ)
        )
        (Finset.Icc 0 X)
-     ).card ≤ K_chernoff) := by
-    -- Strategy: Step 1 skeleton — define the light-prime set P_light,
-    -- the normalization W and the per-prime allocation γ_p. The detailed
-    -- union/bound proof is implemented in later steps.
-    exact eventually_of_forall fun X => by
-      -- P_light: primes p not in S_heavy with p^3 ≤ X (i.e. p ≤ X^(1/3))
-      let P_light : Finset ℕ :=
-        Finset.filter (fun p => p.Prime ∧ p ^ 3 ≤ X) (Finset.range (X + 1))
-      -- Raw normalization constant: sum of log p over P_light
-      let W_raw : ℝ := Finset.sum P_light fun p => Real.log (p : ℝ)
-      -- Guard against empty P_light: if W_raw = 0 then all γ_p := 0
-      let W := W_raw
-      let γ_p : ℕ → ℝ := fun p => if W = 0 then 0 else if p ∈ P_light then γ * Real.log (p : ℝ) / W else 0
-      -- Step (2) skeleton: for each p ∈ P_light obtain the per-prime Chernoff
-      -- constants (t_p, C_p) from `chernoff_single_prime`. We do not yet
-      -- evaluate the resulting sum; that is Step (3). To keep this lemma
-      -- constructive and the file building, we still finish with the trivial
-      -- universal bound (card ≤ X+1). The per-prime existence below is the
-      -- main content of Step (2).
-      -- For Step (2) we only need existence of per-prime constants t_p, C_p
-      -- (the quantitative bound can be fetched later when needed). So we
-      -- extract the existential part of `chernoff_single_prime` here.
-      -- (chernoff_single_prime_constants is defined at top-level to avoid nested
-      -- declaration issues; see above `union_bound_chernoff` caller)
-
-      -- marker: per-prime (t_p, C_p) extraction point (h_per_prime) for eventual refinement
-      have h_per_prime : ∀ p ∈ P_light, ∃ (t : ℝ) (C : ℝ), 0 < t ∧ t ≤ 1 / 2 ∧ C > 0 := by
-        intro p hp_mem
-        -- unpack membership to get primality
-        have ⟨_h_mem_range, h_prop⟩ := Finset.mem_filter.mp hp_mem
-        have ⟨hprime, _h_p3le⟩ := h_prop
-        -- Case split on W = 0. If W = 0 then P_light must be empty, so
-        -- p ∈ P_light is impossible; otherwise W > 0 and we can form γ_p p > 0.
-        by_cases hW0 : W = 0
-        · -- W = 0 forces P_light = ∅, contradiction with p ∈ P_light
-          have hsum_pos : 0 < Finset.sum P_light fun r => Real.log (r : ℝ) := by
-            apply Finset.sum_pos
-            · intro r hr
-              have ⟨_, hrprop⟩ := Finset.mem_filter.mp hr
-              have hrp := hrprop.1
-              apply Real.log_pos
-              exact_mod_cast (Nat.Prime.one_lt hrp)
-            · exact ⟨p, hp_mem⟩
-          -- W is definitionally equal to this sum, so rewrite W = 0 gives contradiction
-          have hW_pos : 0 < W := by dsimp [W]; exact hsum_pos
-          rw [hW0] at hW_pos
-          exact False.elim (lt_irrefl (0 : ℝ) hW_pos)
-        · -- W ≠ 0, so γ_p p = γ * log p / W and is positive
-          have hsum_pos : 0 < Finset.sum P_light fun r => Real.log (r : ℝ) := by
-            apply Finset.sum_pos
-            · intro r hr
-              have ⟨_, hrprop⟩ := Finset.mem_filter.mp hr
-              have hrp := hrprop.1
-              apply Real.log_pos
-              exact_mod_cast (Nat.Prime.one_lt hrp)
-            · exact ⟨p, hp_mem⟩
-          -- W is definitionally this sum
-          have hW_pos : 0 < W := by dsimp [W]; exact hsum_pos
-          have hγp_pos : 0 < γ_p p := by
-            dsimp [γ_p]
-            -- W ≠ 0 here, and p ∈ P_light, so γ_p p simplifies to γ * log p / W
-            simp only [if_pos hp_mem, if_neg hW0]
-            apply @_root_.div_pos
-            · apply mul_pos
-              · exact hγ
-              · apply Real.log_pos
-                exact_mod_cast (Nat.Prime.one_lt hprime)
-            · exact hW_pos
-
-
-          obtain ⟨t_p, C_p, ht_pos, ht_half, hC_pos⟩ := chernoff_single_prime_constants p hprime (γ_p p) hγp_pos
-          exact ⟨t_p, C_p, ht_pos, ht_half, hC_pos⟩
-
-      -- Extract canonical witnesses (t_p, C_p) for each p ∈ P_light using Classical.choose
-      let t_of := fun (p : ℕ) (hp : p ∈ P_light) => Classical.choose (h_per_prime p hp)
-      let C_of := fun (p : ℕ) (hp : p ∈ P_light) => Classical.choose (Classical.choose_spec (h_per_prime p hp))
-      have ht_of_pos : ∀ p (hp : p ∈ P_light), 0 < t_of p hp := by
-        intro p hp
-        rcases Classical.choose_spec (Classical.choose_spec (h_per_prime p hp)) with ⟨ht_pos, _, _⟩
-        exact ht_pos
-      have ht_of_le_half : ∀ p (hp : p ∈ P_light), t_of p hp ≤ 1 / 2 := by
-        intro p hp
-        rcases Classical.choose_spec (Classical.choose_spec (h_per_prime p hp)) with ⟨_, ht_half, _⟩
-        exact ht_half
-      have hC_of_pos : ∀ p (hp : p ∈ P_light), 0 < C_of p hp := by
-        intro p hp
-        rcases Classical.choose_spec (Classical.choose_spec (h_per_prime p hp)) with ⟨_, _, hC_pos⟩
-        exact hC_pos
-      -- Get a uniform t0 and envelope U to simplify summation estimates
-      obtain ⟨t0, U, ht0_pos, ht0_le_half, hU_pos⟩ := chernoff_single_prime_uniform_easy γ hγ
-
-      -- The analytic summation lemma (dyadic + Abel) is implemented as a
-      -- top-level lemma `chernoff_light_primes_sum_bound` (skeleton). We call
-      -- it below via totalised t_of/C_of functions.
-      -- Step 3 & 4 TODO: Prove Σ_{p ∈ P_light} C_p * X * p^{-t_p γ_p} ≤ K_chernoff
-      --
-      -- Required components:
-      -- (a) Extract (t_p, C_p) from h_per_prime for each p ∈ P_light (✓ already done above)
-      -- (b) Union bound: total violations ≤ Σ_{p ∈ P_light} C_p * X * p^{-t_p γ_p}
-      -- (c) Prime counting bound: π(X^{1/3}) ≤ C₁ * X^{1/3} / log X (use Mathlib PNT)
-      -- (d) Series convergence: Σ_{p ∈ P_light} p^{-t_p γ_p} with γ_p ~ log p / W
-      --     Key insight: γ_p = γ * log p / W, so p^{-t_p γ_p} = p^{-t_p γ log p / W}
-      --     This decays polynomially in p (exponential in log p), giving power saving
-      -- (e) Integral approximation: Σ p^{-s} ≈ ∫ x^{-s} / log x dx for s = t_p γ log p / W
-      -- (f) Final bound: With optimal parameter choice, Σ ≤ K_chernoff = K_full - B*K_heavy
-      --
-      -- Implementation strategy:
-      -- 1. Search Mathlib for `Nat.Prime.pi_le` or similar PNT bounds
-      -- 2. Prove series Σ p^{-t_p γ_p} converges using comparison with ζ function
-      -- 3. Use integral test or explicit summation to bound the sum by X^{3/4+ε'/2}
-      -- 4. Show K_chernoff = ⌈X^{3/4+ε'}⌉₊ - B*⌈X^{3/4+ε'}/(B+1)⌉₊ provides sufficient budget
-      --
-      -- Difficulty: ~200-400 lines of Lean code (PNT lookup, series manipulation, real analysis)
-      -- Timeline: Medium-term task (Working-Note.md 中期タスク)
-      --
-      -- For now, defer to so#rry (keeps h_per_prime Step 2 results intact)
-      let B : ℕ := 4
-      let K_full := ⌈(X : ℝ)^(3/4 + ε')⌉₊
-      let K_heavy := ⌈(X : ℝ)^(3/4 + ε') / (B + 1)⌉₊
-      let K_chernoff := K_full - B * K_heavy
-      change (Finset.filter (fun (n : ℕ) => n ≤ X ∧
-            (Finset.sum ((2 * n + 1).factorization.support)
-              fun p => ((((2 * n + 1).factorization p) - 2 : ℕ) : ℝ) * Real.log (p : ℝ)) > γ * Real.log (rad (n * (n + 1)) : ℝ))
-          (Finset.Icc 0 X)).card ≤ K_chernoff
-      -- Placeholder: the detailed analytic summation (Steps (3)&(4)) will be implemented below
-      -- in a dedicated lemma `chernoff_light_primes_sum_bound` which proves the required bound
-      -- using t0 and U above and prime-distribution estimates.
-      -- Build total versions of t_of and C_of (defined on all ℕ) so we can
-      -- call the analytic summation lemma which expects total functions.
-      let t_of_total : ℕ → ℝ := fun p => if h : p ∈ P_light then t_of p h else t0
-      let C_of_total : ℕ → ℝ := fun p => if h : p ∈ P_light then C_of p h else 0
-      /- Central analytic summation lemma (skeleton):
-         For the finite set P_light and totalized functions t_of_total, C_of_total,
-         bound the weighted sum by K_chernoff (as a real). The full proof uses
-         dyadic partition + Abel partial summation and will replace this ad#mit.
-      -/
-      have hsum_le : (Finset.sum P_light (fun p => C_of_total p * (X : ℝ) * (p : ℝ) ^ (-(t_of_total p * γ_p p))))
-        ≤ (K_chernoff : ℝ) := by
-        -- TODO: Replace this ad#mit with full dyadic+Abel implementation.
-        -- For now, keep a local ad#mit so callers can be wired and we can
-        -- iteratively refine this lemma.
-        admit
-      -- Convert real inequality to nat/card bound via union bound (ad#mitted here)
-      have h_union_bound : ((Finset.filter (fun n => n ≤ X ∧
-            (Finset.sum ((2*n+1).factorization.support)
-              fun p => ((((2*n+1).factorization p) - 2 : ℕ) : ℝ) * Real.log (p : ℝ)) > γ * Real.log (rad (n*(n+1)) : ℝ))
-            (Finset.Icc 0 X)).card : ℝ)
-            ≤ (Finset.sum P_light (fun p => C_of_total p * (X : ℝ) * (p : ℝ) ^ (-(t_of_total p * γ_p p)))) := by
-        -- Union bound: the expected number of violations is bounded by the sum
-        -- of per-prime Chernoff expectations; the detailed proof will be
-        -- expanded later. Ad#mit for now to keep structure.
-        admit
-      -- Combine the real-valued bounds and cast back to nat inequality
-      have h_real_le : ((Finset.filter (fun n => n ≤ X ∧
-            (Finset.sum ((2*n+1).factorization.support)
-              fun p => ((((2*n+1).factorization p) - 2 : ℕ) : ℝ) * Real.log (p : ℝ)) > γ * Real.log (rad (n*(n+1)) : ℝ))
-            (Finset.Icc 0 X)).card : ℝ)
-            ≤ (K_chernoff : ℝ) := by
-        exact le_trans h_union_bound hsum_le
-      have h_nat_le : (Finset.filter (fun n => n ≤ X ∧
-            (Finset.sum ((2*n+1).factorization.support)
-              fun p => ((((2*n+1).factorization p) - 2 : ℕ) : ℝ) * Real.log (p : ℝ)) > γ * Real.log (rad (n*(n+1)) : ℝ))
-            (Finset.Icc 0 X)).card ≤ K_chernoff := by
-        exact_mod_cast h_real_le
-      exact h_nat_le
+     ).card ≤ K_chernoff) :=
+    hChernoffBudget γ ε' hγ hε'
 
   -- Step 3: Combine bounds and finish
   -- We also need the threshold condition X^(3/4+ε') ≥ 20 for the budget allocation lemma
