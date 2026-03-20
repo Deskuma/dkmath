@@ -25,6 +25,20 @@ def cfbrcClosed (d : ℕ) (X Θ : ℝ) : ℂ :=
     (X : ℂ) ^ (k + 1) * (Complex.I * Θ) ^ (d - 1 - k) * (Nat.choose d (k + 1) : ℂ)
 
 /--
+`cfbrcClosed` を `Nat.choose` 行（係数先頭）として読み替えた一般形。
+
+回帰テストで低次数の係数列を自動展開する際の基準補題として使う。
+-/
+lemma cfbrcClosed_choose_row (d : ℕ) (X Θ : ℝ) :
+    cfbrcClosed d X Θ =
+      ∑ k ∈ Finset.range d,
+        (Nat.choose d (k + 1) : ℂ) * (X : ℂ) ^ (k + 1) * (Complex.I * Θ) ^ (d - 1 - k) := by
+  unfold cfbrcClosed
+  refine Finset.sum_congr rfl ?_
+  intro k hk
+  ring
+
+/--
 `cfbrcR` は `cfbrcClosed`（choose 形式）に一致する。
 -/
 lemma cfbrcR_eq_cfbrcClosed (d : ℕ) (X Θ : ℝ) :

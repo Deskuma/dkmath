@@ -1292,3 +1292,201 @@
    - 既知の `ABC021` `sorry` 警告は継続（今回変更範囲外）。
 6. 次の課題:
    - 低次数回帰（`d=3..12`）を `cfbrcClosed_re/im_eq_cfbrcRe/ImClosed` 経由にも寄せる。
+
+### 日時: 2026/03/20 04:56 JST: 低次数回帰（`d=3..12`）を `cfbrcClosed` 経由へ寄せた
+
+1. 目的:
+   - 既存の `d=3..12` 明示式回帰を、
+     `Complex.re/im (cfbrcClosed d X Θ)` からも同じ式で検証できる形にする。
+2. 内容:
+   - `DkMathTest/CFBRC.lean` に private 補助補題を追加:
+     - `cfbrcClosed_re_eq_cfbrcRe_via_closed`
+     - `cfbrcClosed_im_eq_cfbrcIm_via_closed`
+   - これらは
+     - `cfbrcClosed_re/im_eq_cfbrcRe/ImClosed`
+     - `cfbrcRe/Im_eq_cfbrcRe/ImClosed`
+     を合成して、`cfbrcClosed` の `Re/Im` を `cfbrcRe/Im` に戻す橋として使う。
+   - `d=3..12` について、以下の回帰 `example` を追加:
+     - `Complex.re (cfbrcClosed d X Θ) =` 既存の明示式
+     - `Complex.im (cfbrcClosed d X Θ) =` 既存の明示式
+3. 結論:
+   - 低次数回帰は
+     - 旧経路（`cfbrcRe/Im d`）
+     - 新経路（`cfbrcClosed -> Re/Im -> cfbrcRe/ImClosed`）
+     の両方で固定された。
+4. 失敗事例:
+   - 特になし（既存低次数補題を `simpa` で再利用できた）。
+5. 備考:
+   - 既知の `ABC021` `sorry` 警告は継続（今回変更範囲外）。
+6. 次の課題:
+   - 必要なら `d=3..12` の `cfbrcRe/ImClosed d X Θ` そのものを主語にした回帰も追加する。
+
+### 日時: 2026/03/20 05:11 JST: `cfbrcRe/ImClosed` 主語の低次数回帰 + README 役割明確化
+
+1. 目的:
+   - low-degree window を closed API 側へ寄せ切るため、
+     `cfbrcReClosed` / `cfbrcImClosed` を主語にした `d=3..12` 回帰を追加する。
+   - README 上で `General` と `ClosedForm` の役割分担を明示する。
+2. 内容:
+   - `DkMathTest/CFBRC.lean`:
+     - private 補助補題を追加:
+       - `cfbrcReClosed_eq_cfbrcRe_via_api`
+       - `cfbrcImClosed_eq_cfbrcIm_via_api`
+     - `d=3..12` について
+       - `cfbrcReClosed d X Θ = ...`
+       - `cfbrcImClosed d X Θ = ...`
+       の回帰 `example` を追加。
+   - `DkMath/CFBRC/README.md`:
+     - `TrigBridge.General` を「証明エンジン / 内部基盤」と明記。
+     - `TrigBridge.ClosedForm` を「主API」と明記。
+     - Quick Start に
+       `import DkMath.CFBRC.TrigBridge.ClosedForm`
+       （general `d` 利用時の推奨）を追記。
+3. 結論:
+   - 低次数回帰は
+     - `cfbrcRe/Im`
+     - `Complex.re/im (cfbrcClosed ...)`
+     - `cfbrcRe/ImClosed`
+     の3経路で固定され、closed API 側への寄せが完了した。
+4. 失敗事例:
+   - 特になし（既存低次数補題を `simpa` 再利用）。
+5. 備考:
+   - 既知の `ABC021` `sorry` 警告は継続（今回変更範囲外）。
+6. 次の課題:
+   - 必要なら `cfbrcClosed` の和定義そのもの（`Nat.choose` 係数列）に対する係数回帰を追加する。
+
+### 日時: 2026/03/20 05:24 JST: `cfbrcClosed` の係数列回帰（`d=3..12`）を追加
+
+1. 目的:
+   - `cfbrcClosed` の和定義そのものに対し、
+     低次数で `Nat.choose` 係数列が正しく並ぶことを回帰で固定する。
+2. 内容:
+   - `DkMathTest/CFBRC.lean` に
+     `cfbrcClosed d X Θ = Σ_{j=1..d} (d choose j) X^j (iΘ)^(d-j)`
+     の具体展開を `d=3..12` まで追加。
+   - 係数列（`choose` 行）を明示:
+     - `d=8`: `8,28,56,70,56,28,8,1`
+     - `d=10`: `10,45,120,210,252,210,120,45,10,1`
+     - `d=12`: `12,66,220,495,792,924,792,495,220,66,12,1`
+   - 各証明は同一テンプレート:
+     - `simp [cfbrcClosed, Finset.sum_range_succ]`
+     - `ring_nf`
+     - `norm_num [Nat.choose]`
+3. 結論:
+   - `cfbrcClosed` の係数列回帰が入り、
+     closed API の低次数検証は
+     - `Re/Im` 明示式回帰
+     - `cfbrcClosed` 係数列回帰
+     の2面で固定された。
+4. 失敗事例:
+   - 初期案で `simp` の引数を増やしすぎると heartbeat timeout が発生。
+   - `simp` を最小化し、`ring_nf` と `norm_num [Nat.choose]` で安定化。
+5. 備考:
+   - 既知の `ABC021` `sorry` 警告は継続（今回変更範囲外）。
+6. 次の課題:
+   - 必要なら設計書側（TriPerm Lean Design）にも
+     `ClosedForm` 主API・係数列回帰の位置づけを反映する。
+
+### 日時: 2026/03/20 05:35 JST: TriPerm Lean Design に `ClosedForm` 主APIと係数列回帰の位置づけを反映
+
+1. 目的:
+   - 設計書側の記述を現状実装（`General`/`ClosedForm`/回帰構成）に同期する。
+2. 内容:
+   - `DkMath/CFBRC/docs/CFBRC_TriPerm_Lean_Design.md` を更新:
+     - 推奨ファイル構成に
+       - `TrigBridge/General.lean`
+       - `TrigBridge/ClosedForm.lean`
+       - `DkMathTest/CFBRC.lean`
+       を追加。
+     - 役割分担を明記:
+       - `General` = 証明エンジン
+       - `ClosedForm` = 主API
+     - 回帰位置づけを明記:
+       - `d=3..12` の 3 経路回帰
+       - `cfbrcClosed` の `Nat.choose` 係数列回帰
+     - 「一段先の一般化設計」を現状反映へ更新し、
+       将来の抽象化（係数列一般補題）を次手として整理。
+3. 結論:
+   - TriPerm Lean Design は、現行コードベースの整理方針
+     （`ClosedForm` 主API・`General` 証明エンジン）と一致した。
+4. 失敗事例:
+   - 特になし（ドキュメント更新のみ）。
+5. 備考:
+   - 今回はドキュメント反映のみで Lean コード差分はなし。
+6. 次の課題:
+   - 必要なら `CFBRC_Triangular Permutation.md` 側にも同じ役割分担を要約反映する。
+
+### 日時: 2026/03/20 05:49 JST: 係数列回帰を `Nat.choose` 一般補題へ接続して自動化
+
+1. 目的:
+   - 手書き係数列回帰の証明手順を一般補題へ接続し、回帰追加時の作業を自動化する。
+2. 内容:
+   - `DkMath/CFBRC/TrigBridge/ClosedForm.lean`:
+     - `cfbrcClosed_choose_row` を追加。
+     - `cfbrcClosed` を
+       `∑ (d.choose (k+1)) * X^(k+1) * (iΘ)^(d-1-k)`
+       の一般形として明示。
+   - `DkMathTest/CFBRC.lean`:
+     - 係数列回帰セクションにタクティックマクロ
+       `cfbrc_closed_coeff`
+       を導入。
+     - 既存 `d=3..12` の各回帰証明を
+       - `rw [cfbrcClosed_choose_row]`
+       - `simp [Finset.sum_range_succ]`
+       - `ring_nf` / `norm_num [Nat.choose]`
+       の共通処理に一本化。
+3. 結論:
+   - 係数列回帰は手書き展開依存から脱し、
+     `Nat.choose` 行の一般補題経由で機械的に再現できる形へ整理できた。
+4. 失敗事例:
+   - `d=3` のケースは `simp` だけで閉じるため、
+     追加タクティックが「No goals」になる場面があった。
+   - マクロ内を `try` で保護して解消。
+5. 備考:
+   - 既知の `ABC021` `sorry` 警告は継続（今回変更範囲外）。
+6. 次の課題:
+   - 必要なら `cfbrcClosed_choose_row` から `Finset.Icc` 形式への添字変換補題を追加する。
+
+### 日時: 2026/03/20 06:02 JST: 係数列回帰を最深段のみへ絞ってビルド負荷を軽量化
+
+1. 目的:
+   - 係数列回帰のビルド時間増加を抑えるため、
+     重い低次数列挙を整理する。
+2. 内容:
+   - `DkMathTest/CFBRC.lean` の係数列回帰セクションを調整:
+     - `d=3..11` の `cfbrcClosed` 係数列回帰を削除。
+     - 最深段 `d=12` の係数列回帰のみ保持。
+     - 自動化マクロ `cfbrc_closed_coeff` は維持し、
+       最深段検証に使用。
+3. 結論:
+   - 係数列回帰は「最大深さでの健全性検証」を維持しつつ、
+     テスト負荷を実務的な水準へ下げられた。
+4. 失敗事例:
+   - 特になし（回帰件数整理のみ）。
+5. 備考:
+   - `Re/Im` 系の `d=3..12` 回帰は引き続き保持しているため、
+     低次数窓の多面検証は継続される。
+6. 次の課題:
+   - 必要なら CI 条件に応じて
+     `d=12` のみ常時検証・他次数は任意実行（軽量プロファイル）へ分離する。
+
+### 日時: 2026/03/20 06:14 JST: 係数列回帰方針を中庸化（両系統の例を保持）し、ビルド再確認
+
+1. 目的:
+   - 「全段保持」と「最深段のみ」の極端な運用を避け、
+     実務運用として中庸な回帰構成にする。
+2. 内容:
+   - `DkMathTest/CFBRC.lean` 側はユーザー適用済み方針に合わせ、
+     両系統の例（既存の低次数回帰群と係数列回帰系）を保持する方針で確定。
+   - 本作業ではコード変更は行わず、
+     実装履歴ドキュメントの追記のみ実施。
+3. ビルド確認:
+   - `./lean-build.sh DkMathTest.CFBRC` : 成功
+   - `./lean-build.sh DkMath.CFBRC` : 成功
+   - `./lean-build.sh DkMathTest` : 成功
+   - 備考: `DkMathTest` 実行時は既知の `DkMath/ABC/ABC021.lean` の `sorry` 警告のみ発生（今回変更範囲外）。
+4. 結論:
+   - 方針変更（中庸化）後も CFBRC 系ビルドは安定通過を確認。
+5. 次の課題:
+   - 必要なら将来、回帰セットを
+     「常時実行（軽量）」と「任意実行（詳細）」に明示分離する。
