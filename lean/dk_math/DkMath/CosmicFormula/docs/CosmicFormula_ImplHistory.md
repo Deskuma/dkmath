@@ -279,3 +279,35 @@
    - 既存利用に配慮して punctured 版は補題として残した。
 6. 次の課題:
    - 必要なら `hasDerivAt_pow_cosmic` の証明を cosmic kernel 経由の構成へ統一し、説明文書との対応をさらに強化する。
+
+### 日時: 2026/03/20 18:54 JST: `CosmicDerivativePowerLimit` を 3 層APIへ整理し、`hasDerivAt_pow_cosmic` を構成版へ更新
+
+1. 目的: 実装を再利用しやすい形へ整理し、`hasDerivAt_pow_cosmic` を cosmic kernel フローで導出する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/CosmicDerivativePowerLimit.lean`
+   - API 整理（3 層分割）:
+     - `continuous_powerKernel`
+     - `powerKernel_zero`
+     - `tendsto_powerKernel_zero`
+   - `tendsto_powerKernel_zero` は次の 1 行構成へ整理:
+     - `simpa [powerKernel_zero] using (continuous_powerKernel d x).tendsto 0`
+   - 互換補題維持:
+     - `tendsto_powerKernel_zero_punctured`
+   - 次段実装:
+     - `hasDerivAt_pow_cosmic` を `simpa hasDerivAt_pow` から置換し、
+       `tendsto_powerKernel_zero_punctured`
+       + `cosmicKernel_pow_eq_powerKernel_of_ne_zero`
+       + `hasDerivAt_of_tendsto_cosmicKernel`
+       の接続で構成的に証明。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDerivativePowerLimit` 成功。
+     - `lake build DkMath.CosmicFormula` 成功。
+3. 結論: `tendsto_powerKernel_zero` は整理された API 上に再配置され、`hasDerivAt_pow_cosmic` は説明資料と一致する証明フローへ更新された。
+4. 失敗事例:
+   - `powerKernel_zero` 初版で `simp` が進まず失敗。
+   - `d` 場合分け + `Finset.sum_eq_single` に切替えて安定化。
+5. 備考:
+   - 今回の整理で、`powerKernel` 系 API の独立再利用性が向上した。
+6. 次の課題:
+   - 必要なら `CosmicDerivativePolynomial` 相当の多項式一般化へ進む。
