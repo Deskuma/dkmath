@@ -496,3 +496,51 @@
    - `cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero` を起点に、
      有限和 `tendsto` の証明を「既存微分定理からの翻訳」依存を減らす方向で再構成する。
    - 必要なら `u = 0` を含む連続拡張版 API（別名で明示）を設計する。
+
+### 日時: 2026/03/20 20:49 JST: 有限和 `tendsto` を kernel 分解ベースへ再構成し、`u=0` を含む連続拡張 API を導入
+
+1. 目的:
+   - `cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero` を起点に、
+     有限和 `tendsto` の証明を「既存微分定理からの翻訳」依存を減らす方向へ再構成する。
+   - `u = 0` を含む連続拡張版 API を別名で明示する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/CosmicDerivativePolynomial.lean`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_Lean_Implementation_Guide_of_differential_coefficients.md`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_ImplHistory.md`
+   - 追加した主定理/定義（`CosmicDerivativePolynomial.lean`）:
+     - `polynomialKernelExt`
+     - `cosmicKernel_polynomial_eval_eq_polynomialKernelExt_of_ne_zero`
+     - `derivative_eval_eq_sum_range_coeff_mul_pow`
+     - `continuous_polynomialKernelExt`
+     - `polynomialKernelExt_zero`
+     - `tendsto_polynomialKernelExt_zero`
+     - `tendsto_polynomialKernelExt_zero_punctured`
+     - `tendsto_cosmicKernel_polynomial_eval_via_powerKernel`
+   - 証明再構成:
+     - `tendsto_cosmicKernel_polynomial_eval_finset_sum` を
+       `tendsto_cosmicKernel_polynomial_eval_via_powerKernel`（`p := Finset.sum s P`）経由へ差し替え。
+     - これにより有限和 `tendsto` は
+       `cosmicKernel = polynomialKernelExt (u ≠ 0)`
+       + `polynomialKernelExt` の連続性
+       + `powerKernel` 極限
+       の流れで導出する形になった。
+   - docs 更新:
+     - 多項式一般化層へ `polynomialKernelExt` 系 API を追記。
+     - 「定理名 ↔ 設計書節」対応表へ拡張 API と再構成定理を追加。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDerivativePolynomial` 成功。
+3. 結論:
+   - 有限和 `tendsto` は kernel 分解ベースで再構成され、
+     `HasDerivAt` 翻訳依存を 1 段減らした。
+   - `u=0` を含む連続拡張 API（`polynomialKernelExt`）が導入され、
+     punctured 極限と full-neighborhood 極限の橋渡しが明示化された。
+4. 失敗事例:
+   - `continuous_polynomialKernelExt` 初稿で `Finset.continuous_sum` を使い未定義エラー。
+   - `continuous_finset_sum` へ切替えて解消。
+5. 備考:
+   - 既存の `tendsto_cosmicKernel_polynomial_eval`（旧系）は互換維持で残し、
+     新系は `..._via_powerKernel` 名で明示分離した。
+6. 次の課題:
+   - `tendsto_cosmicKernel_polynomial_eval` 本体を新系（`..._via_powerKernel`）へ統一するか判断。
+   - `deriv` 側も `polynomialKernelExt` 起点で再構成する場合の API 設計を検討する。

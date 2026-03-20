@@ -56,6 +56,12 @@
   - `cosmicKernel_monomial_of_ne_zero`
   - `cosmicKernel_eval_monomial_of_ne_zero`
   - `cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero`
+  - `polynomialKernelExt`
+  - `cosmicKernel_polynomial_eval_eq_polynomialKernelExt_of_ne_zero`
+  - `continuous_polynomialKernelExt`
+  - `polynomialKernelExt_zero`
+  - `tendsto_polynomialKernelExt_zero`
+  - `tendsto_cosmicKernel_polynomial_eval_via_powerKernel`
 - 演算別 API:
   - 和: `hasDerivAt_polynomial_eval_add_cosmic`,
     `tendsto_cosmicKernel_polynomial_eval_add`,
@@ -118,6 +124,8 @@
 | `hasDerivAt_polynomial_eval_cosmic` | `CosmicDerivativePolynomial.lean` | §3.5 / §11.4 |
 | `cosmicKernel_monomial_of_ne_zero` | `CosmicDerivativePolynomial.lean` | §3.5 / §11.4 |
 | `cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero` | `CosmicDerivativePolynomial.lean` | §3.5 / §11.4 |
+| `polynomialKernelExt`, `continuous_polynomialKernelExt`, `polynomialKernelExt_zero` | `CosmicDerivativePolynomial.lean` | §2.2 / §8 / §11.4 |
+| `tendsto_polynomialKernelExt_zero`, `tendsto_cosmicKernel_polynomial_eval_via_powerKernel` | `CosmicDerivativePolynomial.lean` | §8 / §11.4 |
 | `hasDerivAt_polynomial_eval_finset_sum_cosmic` | `CosmicDerivativePolynomial.lean` | §11.4 |
 | `tendsto_cosmicKernel_polynomial_eval_finset_sum` | `CosmicDerivativePolynomial.lean` | §11.4 |
 | `deriv_polynomial_eval_finset_sum_cosmic` | `CosmicDerivativePolynomial.lean` | §11.4 |

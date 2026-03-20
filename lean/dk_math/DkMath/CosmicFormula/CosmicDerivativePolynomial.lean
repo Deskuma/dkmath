@@ -79,6 +79,83 @@ theorem cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero
   intro n hn
   simpa using (cosmicKernel_monomial_of_ne_zero (a := p.coeff n) (x := x) (u := u) (n := n) hu)
 
+/-- Continuous extension kernel for polynomial evaluation (explicitly including `u = 0`). -/
+def polynomialKernelExt (p : Polynomial ℝ) (x u : ℝ) : ℝ :=
+  Finset.sum (Finset.range (p.natDegree + 1)) (fun n => p.coeff n * powerKernel n x u)
+
+/-- On `u ≠ 0`, `cosmicKernel` coincides with `polynomialKernelExt`. -/
+theorem cosmicKernel_polynomial_eval_eq_polynomialKernelExt_of_ne_zero
+    (p : Polynomial ℝ) (x u : ℝ) (hu : u ≠ 0) :
+    cosmicKernel (fun y : ℝ => p.eval y) x u = polynomialKernelExt p x u := by
+  simpa [polynomialKernelExt] using
+    (cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero p x u hu)
+
+/-- Range-sum form of `p.derivative.eval x` compatible with `polynomialKernelExt`. -/
+theorem derivative_eval_eq_sum_range_coeff_mul_pow
+    (p : Polynomial ℝ) (x : ℝ) :
+    p.derivative.eval x
+      = Finset.sum (Finset.range (p.natDegree + 1))
+          (fun n => p.coeff n * ((n : ℝ) * x ^ (n - 1))) := by
+  rw [Polynomial.derivative_eval]
+  simpa [mul_assoc] using
+    (p.sum_over_range
+      (f := fun n a => a * (n : ℝ) * x ^ (n - 1))
+      (h := by intro n; simp))
+
+/-- `polynomialKernelExt` is continuous in `u`. -/
+theorem continuous_polynomialKernelExt (p : Polynomial ℝ) (x : ℝ) :
+    Continuous (fun u : ℝ => polynomialKernelExt p x u) := by
+  unfold polynomialKernelExt
+  refine continuous_finset_sum (s := Finset.range (p.natDegree + 1)) ?_
+  intro n hn
+  exact (continuous_const.mul (continuous_powerKernel n x))
+
+/-- Evaluation of `polynomialKernelExt` at `u = 0`. -/
+theorem polynomialKernelExt_zero (p : Polynomial ℝ) (x : ℝ) :
+    polynomialKernelExt p x 0 = p.derivative.eval x := by
+  unfold polynomialKernelExt
+  calc
+    Finset.sum (Finset.range (p.natDegree + 1))
+      (fun n => p.coeff n * powerKernel n x 0)
+        = Finset.sum (Finset.range (p.natDegree + 1))
+            (fun n => p.coeff n * ((n : ℝ) * x ^ (n - 1))) := by
+            refine Finset.sum_congr rfl ?_
+            intro n hn
+            simp [powerKernel_zero]
+    _ = p.derivative.eval x := by
+      simpa using (derivative_eval_eq_sum_range_coeff_mul_pow p x).symm
+
+/-- Full-neighborhood limit for the continuous extension kernel at `u → 0`. -/
+theorem tendsto_polynomialKernelExt_zero (p : Polynomial ℝ) (x : ℝ) :
+    Filter.Tendsto (fun u : ℝ => polynomialKernelExt p x u)
+      (nhds (0 : ℝ))
+      (nhds (p.derivative.eval x)) := by
+  simpa [polynomialKernelExt_zero] using (continuous_polynomialKernelExt p x).tendsto 0
+
+/-- Punctured-neighborhood variant for the continuous extension kernel. -/
+theorem tendsto_polynomialKernelExt_zero_punctured (p : Polynomial ℝ) (x : ℝ) :
+    Filter.Tendsto (fun u : ℝ => polynomialKernelExt p x u)
+      (nhdsWithin (0 : ℝ) (Set.compl ({(0 : ℝ)} : Set ℝ)))
+      (nhds (p.derivative.eval x)) :=
+  (tendsto_polynomialKernelExt_zero p x).mono_left nhdsWithin_le_nhds
+
+/-- Polynomial cosmic-kernel limit reconstructed from kernel decomposition + power limits. -/
+theorem tendsto_cosmicKernel_polynomial_eval_via_powerKernel
+    (p : Polynomial ℝ) (x : ℝ) :
+    Filter.Tendsto (fun u : ℝ => cosmicKernel (fun y : ℝ => p.eval y) x u)
+      (nhdsWithin (0 : ℝ) (Set.compl ({(0 : ℝ)} : Set ℝ)))
+      (nhds (p.derivative.eval x)) := by
+  have hExt :
+      Filter.Tendsto (fun u : ℝ => polynomialKernelExt p x u)
+        (nhdsWithin (0 : ℝ) (Set.compl ({(0 : ℝ)} : Set ℝ)))
+        (nhds (p.derivative.eval x)) :=
+    tendsto_polynomialKernelExt_zero_punctured p x
+  refine tendsto_nhdsWithin_congr ?hEq hExt
+  intro u hu
+  have hu0 : u ≠ 0 := by
+    simpa [Set.mem_compl_iff, Set.mem_singleton_iff] using hu
+  exact (cosmicKernel_polynomial_eval_eq_polynomialKernelExt_of_ne_zero p x u hu0).symm
+
 /-- Additive operation API in `HasDerivAt` form. -/
 theorem hasDerivAt_polynomial_eval_add_cosmic
     (p q : Polynomial ℝ) (x : ℝ) :
@@ -164,8 +241,8 @@ theorem tendsto_cosmicKernel_polynomial_eval_finset_sum
       (fun u : ℝ => cosmicKernel (fun y : ℝ => Finset.sum s (fun i => (P i).eval y)) x u)
       (nhdsWithin (0 : ℝ) (Set.compl ({(0 : ℝ)} : Set ℝ)))
       (nhds (Finset.sum s (fun i => ((P i).derivative).eval x))) := by
-  exact tendsto_cosmicKernel_of_hasDerivAt
-    (hasDerivAt_polynomial_eval_finset_sum_cosmic (s := s) (P := P) (x := x))
+  simpa [Polynomial.eval_finset_sum, Polynomial.derivative_sum] using
+    (tendsto_cosmicKernel_polynomial_eval_via_powerKernel (p := Finset.sum s P) (x := x))
 
 /-- Finite-sum polynomial generalization in `deriv` form. -/
 theorem deriv_polynomial_eval_finset_sum_cosmic
