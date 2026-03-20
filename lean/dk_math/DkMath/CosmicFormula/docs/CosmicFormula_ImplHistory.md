@@ -460,3 +460,39 @@
      `cosmicKernel_finset_sum` + 単項 kernel 補題ベースへ段階的に置き換える。
    - `cosmicKernel_monomial` を追加し、
      多項式を monomial 有限和として kernel レベルで展開する流れを実装する。
+
+### 日時: 2026/03/20 20:40 JST: `cosmicKernel_monomial` を導入し、多項式 kernel を monomial 有限和へ展開
+
+1. 目的: 次段の本丸として、`delta/cosmicKernel` の構造を使って monomial と多項式の kernel 展開を直接記述する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/CosmicDerivativePolynomial.lean`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_Lean_Implementation_Guide_of_differential_coefficients.md`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_ImplHistory.md`
+   - 追加した定理（`CosmicDerivativePolynomial.lean`）:
+     - `cosmicKernel_monomial_of_ne_zero`
+     - `cosmicKernel_eval_monomial_of_ne_zero`
+     - `cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero`
+   - 実装方針:
+     - monomial 版は
+       `cosmicKernel_smul` + `cosmicKernel_pow_eq_powerKernel_of_ne_zero` を直結。
+     - 多項式版は
+       `p.as_sum_range_C_mul_X_pow` で評価関数を monomial 有限和へ展開し、
+       `cosmicKernel_finset_sum` + `cosmicKernel_monomial_of_ne_zero` で kernel 和へ移す。
+   - docs 更新:
+     - 実装マップ（多項式一般化層）に monomial/kernel 展開 API を追記。
+     - 「定理名 ↔ 設計書節」対応表へ新定理を追加。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDerivativePolynomial` 成功。
+3. 結論: `cosmicKernel` を monomial 有限和として扱う導線が実装され、
+   多項式微分を「powerKernel の有限和」として読む準備が整った。
+4. 失敗事例:
+   - `p.as_sum_range_C_mul_X_pow` を `rw` で直接適用すると `natDegree` 周りで過剰書換えが発生。
+   - `congrArg (fun q => q.eval y)` で評価に押し込む形へ変更して解消。
+5. 備考:
+   - `u = 0` では `cosmicKernel` と `powerKernel` の値が一般に一致しないため、
+     新定理は `hu : u ≠ 0` 付きで実装した。
+6. 次の課題:
+   - `cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero` を起点に、
+     有限和 `tendsto` の証明を「既存微分定理からの翻訳」依存を減らす方向で再構成する。
+   - 必要なら `u = 0` を含む連続拡張版 API（別名で明示）を設計する。

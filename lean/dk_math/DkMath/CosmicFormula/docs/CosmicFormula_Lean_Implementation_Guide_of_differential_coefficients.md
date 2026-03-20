@@ -53,6 +53,9 @@
   - `hasDerivAt_polynomial_eval_cosmic`
   - `tendsto_cosmicKernel_polynomial_eval`
   - `deriv_polynomial_eval_cosmic`
+  - `cosmicKernel_monomial_of_ne_zero`
+  - `cosmicKernel_eval_monomial_of_ne_zero`
+  - `cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero`
 - 演算別 API:
   - 和: `hasDerivAt_polynomial_eval_add_cosmic`,
     `tendsto_cosmicKernel_polynomial_eval_add`,
@@ -113,6 +116,8 @@
 | `hasDerivAt_pow_cosmic` | `CosmicDerivativePowerLimit.lean` | §9 |
 | `cosmic_formula_unit_eq_u_sq_from_derivative_bridge` | `CosmicFormulaDerivativeBridge.lean` | §10 |
 | `hasDerivAt_polynomial_eval_cosmic` | `CosmicDerivativePolynomial.lean` | §3.5 / §11.4 |
+| `cosmicKernel_monomial_of_ne_zero` | `CosmicDerivativePolynomial.lean` | §3.5 / §11.4 |
+| `cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero` | `CosmicDerivativePolynomial.lean` | §3.5 / §11.4 |
 | `hasDerivAt_polynomial_eval_finset_sum_cosmic` | `CosmicDerivativePolynomial.lean` | §11.4 |
 | `tendsto_cosmicKernel_polynomial_eval_finset_sum` | `CosmicDerivativePolynomial.lean` | §11.4 |
 | `deriv_polynomial_eval_finset_sum_cosmic` | `CosmicDerivativePolynomial.lean` | §11.4 |

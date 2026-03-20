@@ -29,6 +29,56 @@ theorem deriv_polynomial_eval_cosmic (p : Polynomial ℝ) (x : ℝ) :
     deriv (fun y : ℝ => p.eval y) x = p.derivative.eval x := by
   simp [p.deriv (x := x)]
 
+/-- Cosmic-kernel form for a scalar monomial function (punctured at `u = 0`). -/
+theorem cosmicKernel_monomial_of_ne_zero
+    (a x u : ℝ) (n : ℕ) (hu : u ≠ 0) :
+    cosmicKernel (fun y : ℝ => a * y ^ n) x u = a * powerKernel n x u := by
+  calc
+    cosmicKernel (fun y : ℝ => a * y ^ n) x u
+        = a * cosmicKernel (fun y : ℝ => y ^ n) x u := by
+          simpa using (cosmicKernel_smul a (fun y : ℝ => y ^ n) x u)
+    _ = a * powerKernel n x u := by
+      rw [cosmicKernel_pow_eq_powerKernel_of_ne_zero n x u hu]
+
+/-- `Polynomial.monomial` specialization of `cosmicKernel_monomial_of_ne_zero`. -/
+theorem cosmicKernel_eval_monomial_of_ne_zero
+    (a x u : ℝ) (n : ℕ) (hu : u ≠ 0) :
+    cosmicKernel (fun y : ℝ => (Polynomial.monomial n a).eval y) x u
+      = a * powerKernel n x u := by
+  simpa [Polynomial.eval_monomial] using
+    (cosmicKernel_monomial_of_ne_zero a x u n hu)
+
+/-- Kernel-level expansion of a polynomial into a finite sum of monomial kernels. -/
+theorem cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero
+    (p : Polynomial ℝ) (x u : ℝ) (hu : u ≠ 0) :
+    cosmicKernel (fun y : ℝ => p.eval y) x u
+      = Finset.sum (Finset.range (p.natDegree + 1))
+          (fun n => p.coeff n * powerKernel n x u) := by
+  have hfun :
+      (fun y : ℝ => p.eval y)
+        = (fun y : ℝ =>
+            Finset.sum (Finset.range (p.natDegree + 1))
+              (fun n => p.coeff n * y ^ n)) := by
+    funext y
+    calc
+      p.eval y
+          = (Finset.sum (Finset.range (p.natDegree + 1))
+              (fun n => Polynomial.C (p.coeff n) * Polynomial.X ^ n)).eval y := by
+              exact congrArg (fun q : Polynomial ℝ => q.eval y) p.as_sum_range_C_mul_X_pow
+      _ = Finset.sum (Finset.range (p.natDegree + 1))
+            (fun n => (Polynomial.C (p.coeff n) * Polynomial.X ^ n).eval y) := by
+            rw [Polynomial.eval_finset_sum]
+      _ = Finset.sum (Finset.range (p.natDegree + 1))
+            (fun n => p.coeff n * y ^ n) := by
+            refine Finset.sum_congr rfl ?_
+            intro n hn
+            simp
+  rw [hfun]
+  rw [cosmicKernel_finset_sum]
+  refine Finset.sum_congr rfl ?_
+  intro n hn
+  simpa using (cosmicKernel_monomial_of_ne_zero (a := p.coeff n) (x := x) (u := u) (n := n) hu)
+
 /-- Additive operation API in `HasDerivAt` form. -/
 theorem hasDerivAt_polynomial_eval_add_cosmic
     (p q : Polynomial ℝ) (x : ℝ) :
