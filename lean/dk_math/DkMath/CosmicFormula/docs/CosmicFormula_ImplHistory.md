@@ -311,3 +311,39 @@
    - 今回の整理で、`powerKernel` 系 API の独立再利用性が向上した。
 6. 次の課題:
    - 必要なら `CosmicDerivativePolynomial` 相当の多項式一般化へ進む。
+
+### 日時: 2026/03/20 19:13 JST: `CosmicDerivativePolynomial` を追加し、多項式評価の微分を cosmic 形式へ一般化
+
+1. 目的: 冪関数 case から一段抽象化し、`Polynomial ℝ` の評価関数 `fun y => p.eval y` について cosmic 微分 API を整備する。
+2. 内容:
+   - 新規ファイル追加:
+     - `DkMath/CosmicFormula/CosmicDerivativePolynomial.lean`
+   - 実装した定理:
+     - `hasDerivAt_polynomial_eval_cosmic`
+     - `tendsto_cosmicKernel_polynomial_eval`
+     - `deriv_polynomial_eval_cosmic`
+     - `hasDerivAt_polynomial_eval_finset_sum_cosmic`
+   - import 配線更新:
+     - `DkMath/CosmicFormula/Basic.lean` に
+       `import DkMath.CosmicFormula.CosmicDerivativePolynomial` を追加。
+   - 実装方針:
+     - mathlib 既存 API（`Polynomial.hasDerivAt`, `Polynomial.deriv`）を起点にし、
+       `tendsto_cosmicKernel_of_hasDerivAt` で cosmic kernel 極限へ接続。
+     - 有限和版は `Finset.sum s P` へ畳み込んだ上で
+       `Polynomial.eval_finset_sum` / `Polynomial.derivative_sum` で展開。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDerivativePolynomial` 成功。
+     - `lake build DkMath.CosmicFormula` 成功。
+3. 結論: `CosmicDerivativePolynomial` 相当の多項式一般化が入り、
+   「多項式評価の `HasDerivAt` / cosmic kernel limit / `deriv`」の 3 形態を利用可能にした。
+4. 失敗事例:
+   - `∑ ... in ...` 記法が新規ファイルでパース不安定だったため、
+     `Finset.sum` 明示形で記述して回避。
+   - `deriv` 補題で `unnecessarySimpa` 警告が出たため、`simp` 証明へ修正。
+5. 備考:
+   - 証明は既存 power case と同様に「mathlib 基本定理 + cosmic bridge」の薄い接着に寄せ、
+     再利用性を優先した。
+6. 次の課題:
+   - 必要なら多項式の演算別 API（和・積・合成）を cosmic kernel 直結で補強する。
+   - `CosmicFormula_Design_Lean_Formal_of_differential_coefficients.md` の段階表と
+     今回追加 API の対応表を docs に追記する。

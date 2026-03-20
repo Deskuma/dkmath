@@ -11,6 +11,7 @@ import DkMath.CosmicFormula.CosmicDifferenceKernel  -- Cosmic Difference Kernel
 import DkMath.CosmicFormula.CosmicDerivativeBasic  -- Cosmic Derivative Basic
 import DkMath.CosmicFormula.CosmicDerivativePower  -- Cosmic Derivative Power
 import DkMath.CosmicFormula.CosmicDerivativePowerLimit  -- Cosmic Derivative Power Limit
+import DkMath.CosmicFormula.CosmicDerivativePolynomial  -- Cosmic Derivative Polynomial
 import DkMath.CosmicFormula.CosmicFormulaDerivativeBridge  -- Cosmic Formula Derivative Bridge
 import DkMath.CosmicFormula.CosmicFormulaBasic  -- Cosmic Formula Basics
 import DkMath.CosmicFormula.CosmicFormulaDim  -- Cosmic Formula Dimensionality
