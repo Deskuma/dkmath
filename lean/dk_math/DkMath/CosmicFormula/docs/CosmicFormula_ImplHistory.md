@@ -544,3 +544,39 @@
 6. 次の課題:
    - `tendsto_cosmicKernel_polynomial_eval` 本体を新系（`..._via_powerKernel`）へ統一するか判断。
    - `deriv` 側も `polynomialKernelExt` 起点で再構成する場合の API 設計を検討する。
+
+### 日時: 2026/03/20 22:30 JST: `HasDerivAt` を `via_powerKernel` から再構成し、`polynomialKernelExt` の多項式専用性を docs 明示
+
+1. 目的:
+   - 分解/拡張/復帰の 3 層を維持したまま、`HasDerivAt` 側を `via_powerKernel` 系から直接導く。
+   - `polynomialKernelExt` が多項式専用 API である点を docs で明確化する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/CosmicDerivativePolynomial.lean`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_Lean_Implementation_Guide_of_differential_coefficients.md`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_ImplHistory.md`
+   - 追加した定理（`CosmicDerivativePolynomial.lean`）:
+     - `hasDerivAt_polynomial_eval_cosmic_via_powerKernel`
+     - `deriv_polynomial_eval_cosmic_via_powerKernel`
+   - 再構成した既存定理:
+     - `hasDerivAt_polynomial_eval_finset_sum_cosmic` の導出を
+       `hasDerivAt_polynomial_eval_cosmic_via_powerKernel (p := Finset.sum s P)`
+       ベースへ差し替え。
+   - docs 明示:
+     - `polynomialKernelExt` は
+       「`powerKernel` の有限和として書ける多項式専用 extension」である旨を
+       既知の運用上注意へ追記。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDerivativePolynomial` 成功。
+3. 結論:
+   - 推奨分岐 7.2（`HasDerivAt` 側の `via_powerKernel` 化）を反映し、
+     多項式微分の導出経路はより direct になった。
+4. 失敗事例:
+   - `deriv_polynomial_eval_cosmic_via_powerKernel` 初稿で `unnecessarySimpa` 警告。
+   - `simp` 形へ修正して解消。
+5. 備考:
+   - 互換性維持のため、既存 `hasDerivAt_polynomial_eval_cosmic` は残している。
+6. 次の課題:
+   - `tendsto_cosmicKernel_polynomial_eval` 本体を
+     `tendsto_cosmicKernel_polynomial_eval_via_powerKernel` へ統一するか判断。
+   - `hasDerivAt_polynomial_eval_cosmic` 本体も同系統へ寄せる場合の API 互換方針を決める。

@@ -62,6 +62,8 @@
   - `polynomialKernelExt_zero`
   - `tendsto_polynomialKernelExt_zero`
   - `tendsto_cosmicKernel_polynomial_eval_via_powerKernel`
+  - `hasDerivAt_polynomial_eval_cosmic_via_powerKernel`
+  - `deriv_polynomial_eval_cosmic_via_powerKernel`
 - 演算別 API:
   - 和: `hasDerivAt_polynomial_eval_add_cosmic`,
     `tendsto_cosmicKernel_polynomial_eval_add`,
@@ -106,6 +108,9 @@
   新規ファイルでは `Finset.sum` 明示形が安全。
 - `simpa` は linter により `unnecessarySimpa` 警告になることがある。
   自明同値だけなら `simp` へ寄せる。
+- `polynomialKernelExt` は多項式専用 API である。
+  `powerKernel` の有限和として明示定義できることを使っているため、
+  任意関数への一般化 API とは分けて扱う。
 
 ---
 
@@ -126,6 +131,7 @@
 | `cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero` | `CosmicDerivativePolynomial.lean` | §3.5 / §11.4 |
 | `polynomialKernelExt`, `continuous_polynomialKernelExt`, `polynomialKernelExt_zero` | `CosmicDerivativePolynomial.lean` | §2.2 / §8 / §11.4 |
 | `tendsto_polynomialKernelExt_zero`, `tendsto_cosmicKernel_polynomial_eval_via_powerKernel` | `CosmicDerivativePolynomial.lean` | §8 / §11.4 |
+| `hasDerivAt_polynomial_eval_cosmic_via_powerKernel`, `deriv_polynomial_eval_cosmic_via_powerKernel` | `CosmicDerivativePolynomial.lean` | §6 / §11.4 |
 | `hasDerivAt_polynomial_eval_finset_sum_cosmic` | `CosmicDerivativePolynomial.lean` | §11.4 |
 | `tendsto_cosmicKernel_polynomial_eval_finset_sum` | `CosmicDerivativePolynomial.lean` | §11.4 |
 | `deriv_polynomial_eval_finset_sum_cosmic` | `CosmicDerivativePolynomial.lean` | §11.4 |

@@ -156,6 +156,17 @@ theorem tendsto_cosmicKernel_polynomial_eval_via_powerKernel
     simpa [Set.mem_compl_iff, Set.mem_singleton_iff] using hu
   exact (cosmicKernel_polynomial_eval_eq_polynomialKernelExt_of_ne_zero p x u hu0).symm
 
+/-- Polynomial derivative theorem reconstructed via kernel decomposition flow. -/
+theorem hasDerivAt_polynomial_eval_cosmic_via_powerKernel (p : Polynomial ℝ) (x : ℝ) :
+    HasDerivAt (fun y : ℝ => p.eval y) (p.derivative.eval x) x := by
+  exact hasDerivAt_of_tendsto_cosmicKernel
+    (tendsto_cosmicKernel_polynomial_eval_via_powerKernel p x)
+
+/-- `deriv` form reconstructed via kernel decomposition flow. -/
+theorem deriv_polynomial_eval_cosmic_via_powerKernel (p : Polynomial ℝ) (x : ℝ) :
+    deriv (fun y : ℝ => p.eval y) x = p.derivative.eval x := by
+  simp [(hasDerivAt_polynomial_eval_cosmic_via_powerKernel p x).deriv]
+
 /-- Additive operation API in `HasDerivAt` form. -/
 theorem hasDerivAt_polynomial_eval_add_cosmic
     (p q : Polynomial ℝ) (x : ℝ) :
@@ -232,7 +243,7 @@ theorem hasDerivAt_polynomial_eval_finset_sum_cosmic
     HasDerivAt (fun y : ℝ => Finset.sum s (fun i => (P i).eval y))
       (Finset.sum s (fun i => ((P i).derivative).eval x)) x := by
   simpa [Polynomial.eval_finset_sum, Polynomial.derivative_sum] using
-    (hasDerivAt_polynomial_eval_cosmic (p := Finset.sum s P) (x := x))
+    (hasDerivAt_polynomial_eval_cosmic_via_powerKernel (p := Finset.sum s P) (x := x))
 
 /-- Finite-sum polynomial generalization in cosmic-kernel limit form. -/
 theorem tendsto_cosmicKernel_polynomial_eval_finset_sum
