@@ -261,22 +261,41 @@ theorem hasDerivAt_polynomial_eval_cosmic_via_powerKernel (p : Polynomial ℝ) (
   exact hasDerivAt_of_tendsto_cosmicKernel
     (tendsto_cosmicKernel_polynomial_eval_via_powerKernel p x)
 
-/-- `deriv` form reconstructed via kernel decomposition flow. -/
+/--
+`deriv` form of the decomposition-based derivative theorem:
+`deriv (fun y => p.eval y) x = p.derivative.eval x`.
+-/
 theorem deriv_polynomial_eval_cosmic_via_powerKernel (p : Polynomial ℝ) (x : ℝ) :
     deriv (fun y : ℝ => p.eval y) x = p.derivative.eval x := by
   simp [(hasDerivAt_polynomial_eval_cosmic_via_powerKernel p x).deriv]
 
-/-- `deriv` form for polynomial evaluation (canonical: via power-kernel decomposition flow). -/
+/--
+Canonical `deriv` API for polynomial evaluation.
+
+Mathematical statement:
+if `f(y) = p(y)`, then `f'(x) = p'(x)`.
+
+Implementation route is fixed to `..._via_powerKernel`.
+-/
 theorem deriv_polynomial_eval_cosmic (p : Polynomial ℝ) (x : ℝ) :
     deriv (fun y : ℝ => p.eval y) x = p.derivative.eval x :=
   deriv_polynomial_eval_cosmic_via_powerKernel p x
 
-/-- Polynomial evaluation derivative (canonical: via power-kernel decomposition flow). -/
+/--
+Canonical `HasDerivAt` API for polynomial evaluation.
+
+Textbook form:
+`HasDerivAt (fun y => p.eval y) (p.derivative.eval x) x`.
+-/
 theorem hasDerivAt_polynomial_eval_cosmic (p : Polynomial ℝ) (x : ℝ) :
     HasDerivAt (fun y : ℝ => p.eval y) (p.derivative.eval x) x :=
   hasDerivAt_polynomial_eval_cosmic_via_powerKernel p x
 
-/-- Additive operation API in `HasDerivAt` form. -/
+/--
+Additivity (`HasDerivAt` form):
+for `f(y) = (p+q)(y)`,
+`f'(x) = p'(x) + q'(x)`.
+-/
 theorem hasDerivAt_polynomial_eval_add_cosmic
     (p q : Polynomial ℝ) (x : ℝ) :
     HasDerivAt (fun y : ℝ => (p + q).eval y)
@@ -284,7 +303,11 @@ theorem hasDerivAt_polynomial_eval_add_cosmic
   simpa [Polynomial.eval_add, Polynomial.derivative_add] using
     (hasDerivAt_polynomial_eval_cosmic (p := p + q) (x := x))
 
-/-- Additive operation API in cosmic-kernel limit form. -/
+/--
+Additivity in cosmic-kernel punctured-limit form:
+`cosmicKernel (fun y => (p+q).eval y) x u`
+tends to `p'(x)+q'(x)` as `u -> 0`, `u ≠ 0`.
+-/
 theorem tendsto_cosmicKernel_polynomial_eval_add
     (p q : Polynomial ℝ) (x : ℝ) :
     Filter.Tendsto (fun u : ℝ => cosmicKernel (fun y : ℝ => (p + q).eval y) x u)
@@ -292,14 +315,21 @@ theorem tendsto_cosmicKernel_polynomial_eval_add
       (nhds (p.derivative.eval x + q.derivative.eval x)) := by
   exact tendsto_cosmicKernel_of_hasDerivAt (hasDerivAt_polynomial_eval_add_cosmic p q x)
 
-/-- Additive operation API in `deriv` form. -/
+/--
+Additivity in `deriv` form:
+`deriv (fun y => (p+q).eval y) x = p'(x) + q'(x)`.
+-/
 theorem deriv_polynomial_eval_add_cosmic
     (p q : Polynomial ℝ) (x : ℝ) :
     deriv (fun y : ℝ => (p + q).eval y) x =
       p.derivative.eval x + q.derivative.eval x := by
   simpa using (hasDerivAt_polynomial_eval_add_cosmic p q x).deriv
 
-/-- Multiplicative operation API in `HasDerivAt` form. -/
+/--
+Product rule (`HasDerivAt` form):
+for `f(y) = (p*q)(y)`,
+`f'(x) = p'(x) q(x) + p(x) q'(x)`.
+-/
 theorem hasDerivAt_polynomial_eval_mul_cosmic
     (p q : Polynomial ℝ) (x : ℝ) :
     HasDerivAt (fun y : ℝ => (p * q).eval y)
@@ -307,7 +337,11 @@ theorem hasDerivAt_polynomial_eval_mul_cosmic
   simpa [Polynomial.eval_mul, Polynomial.derivative_mul] using
     (hasDerivAt_polynomial_eval_cosmic (p := p * q) (x := x))
 
-/-- Multiplicative operation API in cosmic-kernel limit form. -/
+/--
+Product rule in cosmic-kernel punctured-limit form:
+`cosmicKernel (fun y => (p*q).eval y) x u`
+tends to `p'(x)q(x) + p(x)q'(x)` as `u -> 0`, `u ≠ 0`.
+-/
 theorem tendsto_cosmicKernel_polynomial_eval_mul
     (p q : Polynomial ℝ) (x : ℝ) :
     Filter.Tendsto (fun u : ℝ => cosmicKernel (fun y : ℝ => (p * q).eval y) x u)
@@ -315,14 +349,21 @@ theorem tendsto_cosmicKernel_polynomial_eval_mul
       (nhds (p.derivative.eval x * q.eval x + p.eval x * q.derivative.eval x)) := by
   exact tendsto_cosmicKernel_of_hasDerivAt (hasDerivAt_polynomial_eval_mul_cosmic p q x)
 
-/-- Multiplicative operation API in `deriv` form. -/
+/--
+Product rule in `deriv` form:
+`deriv (fun y => (p*q).eval y) x = p'(x)q(x) + p(x)q'(x)`.
+-/
 theorem deriv_polynomial_eval_mul_cosmic
     (p q : Polynomial ℝ) (x : ℝ) :
     deriv (fun y : ℝ => (p * q).eval y) x =
       p.derivative.eval x * q.eval x + p.eval x * q.derivative.eval x := by
   simpa using (hasDerivAt_polynomial_eval_mul_cosmic p q x).deriv
 
-/-- Compositional operation API in `HasDerivAt` form. -/
+/--
+Chain rule (`HasDerivAt` form):
+for `f(y) = p(q(y))`,
+`f'(x) = p'(q(x)) * q'(x)`.
+-/
 theorem hasDerivAt_polynomial_eval_comp_cosmic
     (p q : Polynomial ℝ) (x : ℝ) :
     HasDerivAt (fun y : ℝ => (p.comp q).eval y)
@@ -331,7 +372,11 @@ theorem hasDerivAt_polynomial_eval_comp_cosmic
     mul_comm, mul_left_comm, mul_assoc] using
     (hasDerivAt_polynomial_eval_cosmic (p := p.comp q) (x := x))
 
-/-- Compositional operation API in cosmic-kernel limit form. -/
+/--
+Chain rule in cosmic-kernel punctured-limit form:
+`cosmicKernel (fun y => (p.comp q).eval y) x u`
+tends to `p'(q(x)) * q'(x)` as `u -> 0`, `u ≠ 0`.
+-/
 theorem tendsto_cosmicKernel_polynomial_eval_comp
     (p q : Polynomial ℝ) (x : ℝ) :
     Filter.Tendsto (fun u : ℝ => cosmicKernel (fun y : ℝ => (p.comp q).eval y) x u)
@@ -339,14 +384,21 @@ theorem tendsto_cosmicKernel_polynomial_eval_comp
       (nhds (p.derivative.eval (q.eval x) * q.derivative.eval x)) := by
   exact tendsto_cosmicKernel_of_hasDerivAt (hasDerivAt_polynomial_eval_comp_cosmic p q x)
 
-/-- Compositional operation API in `deriv` form. -/
+/--
+Chain rule in `deriv` form:
+`deriv (fun y => (p.comp q).eval y) x = p'(q(x)) * q'(x)`.
+-/
 theorem deriv_polynomial_eval_comp_cosmic
     (p q : Polynomial ℝ) (x : ℝ) :
     deriv (fun y : ℝ => (p.comp q).eval y) x =
       p.derivative.eval (q.eval x) * q.derivative.eval x := by
   simpa using (hasDerivAt_polynomial_eval_comp_cosmic p q x).deriv
 
-/-- Finite-sum polynomial generalization in `HasDerivAt` form. -/
+/--
+Finite-sum linearity (`HasDerivAt` form):
+for `F(y) = sum_{i in s} P i (y)`,
+`F'(x) = sum_{i in s} (P i)'(x)`.
+-/
 theorem hasDerivAt_polynomial_eval_finset_sum_cosmic
     {ι : Type*} (s : Finset ι) (P : ι → Polynomial ℝ) (x : ℝ) :
     HasDerivAt (fun y : ℝ => Finset.sum s (fun i => (P i).eval y))
@@ -354,7 +406,11 @@ theorem hasDerivAt_polynomial_eval_finset_sum_cosmic
   simpa [Polynomial.eval_finset_sum, Polynomial.derivative_sum] using
     (hasDerivAt_polynomial_eval_cosmic_via_powerKernel (p := Finset.sum s P) (x := x))
 
-/-- Finite-sum polynomial generalization in cosmic-kernel limit form. -/
+/--
+Finite-sum linearity in cosmic-kernel punctured-limit form:
+the kernel of `sum_{i in s} P i` tends to
+`sum_{i in s} (P i)'(x)` as `u -> 0`, `u ≠ 0`.
+-/
 theorem tendsto_cosmicKernel_polynomial_eval_finset_sum
     {ι : Type*} (s : Finset ι) (P : ι → Polynomial ℝ) (x : ℝ) :
     Filter.Tendsto
@@ -364,7 +420,10 @@ theorem tendsto_cosmicKernel_polynomial_eval_finset_sum
   simpa [Polynomial.eval_finset_sum, Polynomial.derivative_sum] using
     (tendsto_cosmicKernel_polynomial_eval_via_powerKernel (p := Finset.sum s P) (x := x))
 
-/-- Finite-sum polynomial generalization in `deriv` form. -/
+/--
+Finite-sum linearity in `deriv` form:
+`deriv (fun y => sum_{i in s} P i (y)) x = sum_{i in s} (P i)'(x)`.
+-/
 theorem deriv_polynomial_eval_finset_sum_cosmic
     {ι : Type*} (s : Finset ι) (P : ι → Polynomial ℝ) (x : ℝ) :
     deriv (fun y : ℝ => Finset.sum s (fun i => (P i).eval y)) x =

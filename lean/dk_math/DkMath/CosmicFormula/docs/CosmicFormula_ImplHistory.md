@@ -703,3 +703,34 @@
    - コード本体の証明構造・API 名は変更せず、説明層のみを強化。
 6. 次の課題:
    - 必要に応じて和・積・合成・有限和 API 群にも同程度の式ベース docstring を展開する。
+
+### 日時: 2026/03/21 00:56 JST: 和・積・合成・有限和 API の docstring を式ベースで拡張
+
+1. 目的:
+   - 演算別 API（和・積・合成・有限和）にも教科書的な式説明を揃え、
+     利用者が theorem 名と数学法則を即対応できるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/CosmicDerivativePolynomial.lean`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_ImplHistory.md`
+   - docstring 更新:
+     - `hasDerivAt` / `tendsto` / `deriv` の各 3 形態について、
+       和: 線形性 `((p+q)' = p' + q')`
+       積: 積の法則 `((pq)' = p'q + pq')`
+       合成: 連鎖律 `((p∘q)' = (p'∘q) q')`
+       有限和: 項別微分 `(\sum_i P_i)' = \sum_i P_i'`
+       を対応づける説明を追記。
+     - canonical core 定理（`deriv_polynomial_eval_cosmic`,
+       `hasDerivAt_polynomial_eval_cosmic`）の説明も式ベースに統一。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDerivativePolynomial` 成功。
+     - `lake build DkMath.CosmicFormula` 成功。
+3. 結論:
+   - 多項式一般化層の公開 API 群は、docstring だけで
+     「どの法則を formalize した定理か」を把握できる構成になった。
+4. 失敗事例:
+   - 特になし。
+5. 備考:
+   - 今回も証明コードは非変更で、説明層のみを強化。
+6. 次の課題:
+   - 必要なら同様の式ベース docstring を `CosmicDifferenceKernel.lean` 側へも展開する。
