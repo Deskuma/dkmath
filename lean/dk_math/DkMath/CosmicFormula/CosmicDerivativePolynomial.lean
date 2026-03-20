@@ -107,4 +107,22 @@ theorem hasDerivAt_polynomial_eval_finset_sum_cosmic
   simpa [Polynomial.eval_finset_sum, Polynomial.derivative_sum] using
     (hasDerivAt_polynomial_eval_cosmic (p := Finset.sum s P) (x := x))
 
+/-- Finite-sum polynomial generalization in cosmic-kernel limit form. -/
+theorem tendsto_cosmicKernel_polynomial_eval_finset_sum
+    {ι : Type*} (s : Finset ι) (P : ι → Polynomial ℝ) (x : ℝ) :
+    Filter.Tendsto
+      (fun u : ℝ => cosmicKernel (fun y : ℝ => Finset.sum s (fun i => (P i).eval y)) x u)
+      (nhdsWithin (0 : ℝ) (Set.compl ({(0 : ℝ)} : Set ℝ)))
+      (nhds (Finset.sum s (fun i => ((P i).derivative).eval x))) := by
+  exact tendsto_cosmicKernel_of_hasDerivAt
+    (hasDerivAt_polynomial_eval_finset_sum_cosmic (s := s) (P := P) (x := x))
+
+/-- Finite-sum polynomial generalization in `deriv` form. -/
+theorem deriv_polynomial_eval_finset_sum_cosmic
+    {ι : Type*} (s : Finset ι) (P : ι → Polynomial ℝ) (x : ℝ) :
+    deriv (fun y : ℝ => Finset.sum s (fun i => (P i).eval y)) x =
+      Finset.sum s (fun i => ((P i).derivative).eval x) := by
+  simpa using
+    (hasDerivAt_polynomial_eval_finset_sum_cosmic (s := s) (P := P) (x := x)).deriv
+
 end DkMath.CosmicFormula

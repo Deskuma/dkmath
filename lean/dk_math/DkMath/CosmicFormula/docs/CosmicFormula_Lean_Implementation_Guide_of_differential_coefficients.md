@@ -64,6 +64,8 @@
     `deriv_polynomial_eval_comp_cosmic`
 - 有限和拡張:
   - `hasDerivAt_polynomial_eval_finset_sum_cosmic`
+  - `tendsto_cosmicKernel_polynomial_eval_finset_sum`
+  - `deriv_polynomial_eval_finset_sum_cosmic`
 
 ---
 
@@ -97,8 +99,24 @@
 
 ---
 
-## 5. 次の整備候補
+## 5. 定理名 ↔ 設計書節 対応表
 
-- 有限和版について `tendsto` / `deriv` 形 API を追加し、3 層 API を揃える。
+| Lean 定理/定義 | 実装ファイル | 設計書節 |
+|---|---|---|
+| `delta`, `cosmicKernel` | `CosmicDifferenceKernel.lean` | §4 |
+| `delta_add`, `delta_sub`, `delta_mul` | `CosmicDifferenceKernel.lean` | §5.1 |
+| `cosmicKernel_eq`, `cosmicKernel_add` | `CosmicDifferenceKernel.lean` | §5.2 |
+| `hasDerivAt_iff_tendsto_cosmicKernel` | `CosmicDerivativeBasic.lean` | §6 |
+| `sub_pow_eq_u_mul_powerKernel` | `CosmicDerivativePower.lean` | §7 |
+| `tendsto_powerKernel_zero` | `CosmicDerivativePowerLimit.lean` | §8 |
+| `hasDerivAt_pow_cosmic` | `CosmicDerivativePowerLimit.lean` | §9 |
+| `cosmic_formula_unit_eq_u_sq_from_derivative_bridge` | `CosmicFormulaDerivativeBridge.lean` | §10 |
+| `hasDerivAt_polynomial_eval_cosmic` | `CosmicDerivativePolynomial.lean` | §3.5 / §11.4 |
+| `hasDerivAt_polynomial_eval_finset_sum_cosmic` | `CosmicDerivativePolynomial.lean` | §11.4 |
+| `tendsto_cosmicKernel_polynomial_eval_finset_sum` | `CosmicDerivativePolynomial.lean` | §11.4 |
+| `deriv_polynomial_eval_finset_sum_cosmic` | `CosmicDerivativePolynomial.lean` | §11.4 |
+
+## 6. 次の整備候補
+
 - 多項式 API から一般関数 API（和・積・合成）への橋渡し節を追加する。
-- 本文書へ「定理名 → 設計書節番号」の対応表を追記する。
+- 対応表に設計書の将来節（例: §12〜§14）との「未実装/非目標」状態を明示する。

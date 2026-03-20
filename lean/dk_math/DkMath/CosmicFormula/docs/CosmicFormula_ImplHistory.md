@@ -390,3 +390,35 @@
 6. 次の課題:
    - 有限和版 (`Finset.sum`) に対して `tendsto` / `deriv` 形 API を追加する。
    - 新 docs に「定理名 ↔ 設計書節」の対応表を追記し、参照性を高める。
+
+### 日時: 2026/03/20 20:25 JST: 有限和 `Finset.sum` の `tendsto/deriv` API を追加し、設計書節対応表を docs へ追記
+
+1. 目的: 多項式有限和 API を 3 形態（`HasDerivAt` / `tendsto` / `deriv`）で揃え、実装ガイドに「定理名 ↔ 設計書節」の参照表を追加する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/CosmicDerivativePolynomial.lean`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_Lean_Implementation_Guide_of_differential_coefficients.md`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_ImplHistory.md`
+   - 追加した定理（`CosmicDerivativePolynomial.lean`）:
+     - `tendsto_cosmicKernel_polynomial_eval_finset_sum`
+     - `deriv_polynomial_eval_finset_sum_cosmic`
+   - 証明方針:
+     - 既存 `hasDerivAt_polynomial_eval_finset_sum_cosmic` を起点に
+       `tendsto_cosmicKernel_of_hasDerivAt` と `.deriv` で 2 形態を導出。
+   - docs 追記:
+     - 有限和 API の 3 形態を多項式一般化節に反映。
+     - 「定理名 ↔ 設計書節 対応表」を新設し、
+       差分核・bridge・power・多項式の主要定理を
+       `CosmicFormula_Design_Lean_Formal_of_differential_coefficients.md` の節番号へ対応付け。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDerivativePolynomial` 成功。
+     - `lake build DkMath.CosmicFormula` 成功。
+3. 結論: 有限和版も 3 形態 API が揃い、実装ガイドは「定理から設計書へ遡れる」状態になった。
+4. 失敗事例:
+   - 特になし（既存補題連結で実装できた）。
+5. 備考:
+   - これで `CosmicDerivativePolynomial` では「単体・和・積・合成・有限和」の全てが
+     `HasDerivAt` / `tendsto` / `deriv` の形で参照可能になった。
+6. 次の課題:
+   - 対応表に「未実装/非目標（設計書 §12〜§14）」のステータス列を追加する。
+   - 一般関数側（多項式以外）へ演算 API を昇格させる際の依存方針を docs 化する。
