@@ -1967,18 +1967,25 @@ lemma expect_indicator_prod {Γ : Type*} [Fintype Γ] [DecidableEq Γ] (M : Jans
 
 -- Model-limited (product PMF) version of the v2 bound used by the Middle band.
 -- This lemma provides the exact shape `ABCMiddle` expects as `ABC.Janson.bound_v2`.
--- A full formal derivation of the Janson inequality is nontrivial; for integration
--- with the Middle layer we temporarily ad#mit the statement here. Replace `ad#mit`
--- with a full proof later.
+-- A full formal derivation of the Janson inequality is nontrivial; for now we keep
+-- this as an explicit hypothesis-in/hypothesis-out bridge so downstream files avoid
+-- `ad#mit`/`ax#iom` and must pass the needed assumption explicitly.
 theorem bound_v2 {Γ : Type*} [Fintype Γ] [DecidableEq Γ]
-  (M : JansonModel Γ) (A : Finset Γ) :
+  (M : JansonModel Γ) (A : Finset Γ)
+  (h_bound_v2 :
+    PMF.expect (product_pmf M)
+      (fun (ω : Γ → Bool) => A.prod (fun v => if ¬ ω v then (1 : ℝ) else 0))
+      ≤ (if 0 < dbar (M := M) (A := A) then
+           Real.exp (-(mu (M := M) (A := A)) ^ 2 / (2 * dbar (M := M) (A := A)))
+         else
+           Real.exp (-mu (M := M) (A := A)))) :
   PMF.expect (product_pmf M)
     (fun (ω : Γ → Bool) => A.prod (fun v => if ¬ ω v then (1 : ℝ) else 0))
-    ≤ (if 0 < dbar (M:=M) (A:=A) then
-         Real.exp ( - (mu (M:=M) (A:=A)) ^ 2 / (2 * dbar (M:=M) (A:=A)) )
+    ≤ (if 0 < dbar (M := M) (A := A) then
+         Real.exp (-(mu (M := M) (A := A)) ^ 2 / (2 * dbar (M := M) (A := A)))
        else
-         Real.exp ( - mu (M:=M) (A:=A) )) := by
-  admit
+         Real.exp (-mu (M := M) (A := A))) := by
+  exact h_bound_v2
 
 
 -- -------------------------------------------------------

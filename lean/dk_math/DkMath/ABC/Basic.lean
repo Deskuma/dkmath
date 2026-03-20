@@ -1632,6 +1632,32 @@ lemma rpow_t_le_sqrt_nat {p : ℕ} {t : ℝ} (ht_half : t ≤ 1 / 2) (hp : p ≥
   have : 1 ≤ (p : ℝ) := by norm_cast
   exact Real.rpow_le_rpow_of_exponent_le this ht_half
 
+/-- p ≥ 3 なら √p ≤ (p+1)/2 であること。 -/
+lemma sqrt_le_p_add_one_div_two {p : ℕ} (hp3 : p ≥ 3) :
+    Real.sqrt (p : ℝ) ≤ ((p + 1 : ℝ) / 2) := by
+  have hpos : 0 ≤ (p : ℝ) := by norm_cast; omega
+  have hsq : (Real.sqrt (p : ℝ)) ^ 2 ≤ ((p + 1 : ℝ) / 2) ^ 2 := by
+    -- (sqrt p)^2 = p, so this is equivalent to p ≤ ((p+1)/2)^2
+    have : (p : ℝ) ≤ ((p + 1 : ℝ) / 2) ^ 2 := by
+      -- (p + 1)^2 / 4 - p = (p - 1)^2 / 4 ≥ 0
+      have : 0 ≤ ((p : ℝ) - 1) ^ 2 := by nlinarith [hp3]
+      nlinarith
+    simpa [Real.sq_sqrt] using this
+  have hpos' : 0 ≤ ((p + 1 : ℝ) / 2) := by nlinarith
+  have hRHS : Real.sqrt (((p + 1 : ℝ) / 2) ^ 2) = (p + 1 : ℝ) / 2 := by
+    -- sqrt(x^2) = x for x ≥ 0
+    simpa using (Real.sqrt_sq hpos')
+  have h_le_sqrt : Real.sqrt (p : ℝ) ≤ Real.sqrt (((p + 1 : ℝ) / 2) ^ 2) :=
+    Real.le_sqrt_of_sq_le hsq
+  exact le_trans h_le_sqrt hRHS.le
+
+/-- For p ≥ 3 and t ≤ 1/2, p^t ≤ (p+1)/2. -/
+lemma rpow_t_le_p_add_one_div_two {p : ℕ} {t : ℝ} (hp3 : p ≥ 3) (ht_half : t ≤ 1 / 2) :
+    (p : ℝ) ^ t ≤ ((p + 1 : ℝ) / 2) := by
+  have h1 : (p : ℝ) ^ t ≤ Real.sqrt (p : ℝ) := rpow_t_le_sqrt_nat ht_half (by linarith)
+  have h2 : Real.sqrt (p : ℝ) ≤ ((p + 1 : ℝ) / 2) := sqrt_le_p_add_one_div_two hp3
+  exact le_trans h1 h2
+
 
 -- 1/2 < t ≤ log 2 / log 3, X ≥ 1 ⇒ (X+1)^(t-1) は X=1 で最大
 lemma pow_t_sub_one_decreasing {X : ℕ} {t : ℝ} (hX : X ≥ 1)
@@ -1645,13 +1671,64 @@ lemma pow_t_sub_one_decreasing {X : ℕ} {t : ℝ} (hX : X ≥ 1)
   -- 指数が負で底が大きいほど値は小さい
   exact Real.rpow_le_rpow_of_nonpos (by norm_num) h_base (by linarith)
 
--- -log 2 / log 3 < 0
-lemma log2_div_log3_neg : -log 2 / log 3 < 0 := by
-  -- log 2 > 0, log 3 > 0 より -log 2 < 0, log 3 > 0
-  have h_log2_pos : 0 < log 2 := by apply log_pos; norm_num
-  have h_log3_pos : 0 < log 3 := by apply log_pos; norm_num
-  -- よって -log 2 / log 3 < 0
-  exact div_neg_of_neg_of_pos (neg_lt_zero.mpr h_log2_pos) h_log3_pos
+/-- 1 - p^{t-1} を (p - p^t)/p に書き換える補題。
+    p > 0 が仮定で必要。
+-/
+lemma one_sub_rpow_sub_one_div {p : ℝ} (hp_pos : 0 < p) (t : ℝ) :
+    1 - p ^ (t - 1) = (p - p ^ t) / p := by
+  have hpow : p ^ (t - 1) = p ^ t / p := by
+    simpa using (Real.rpow_sub hp_pos t 1)
+  calc
+    1 - p ^ (t - 1)
+        = 1 - (p ^ t / p) := by simp [hpow]
+    _ = (p - p ^ t) / p := by field_simp [hp_pos.ne']
+
+/-- p ≥ 3, t ≤ 1/2 のとき、
+    (p^t - 1) * p^{-1} / (1 - p^{t-1}) ≤ 1 が成り立つ補題。 -/
+lemma rpow_main_term_le_one {p : ℕ} [hp : Fact p.Prime] (hp3 : p ≥ 3) {t : ℝ}
+    (ht_half : t ≤ 1 / 2) :
+    ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) /
+        (1 - (p : ℝ) ^ (t - 1)) ≤ 1 := by
+  have hp_pos : 0 < (p : ℝ) := nat_ge_3_cast_pos hp3
+  have hp_ne : (p : ℝ) ≠ 0 := by exact_mod_cast hp.out.ne_zero
+  have hpow_le : (p : ℝ) ^ t ≤ ((p + 1 : ℝ) / 2) :=
+    rpow_t_le_p_add_one_div_two hp3 ht_half
+  have hpow_lt_p : (p : ℝ) ^ t < (p : ℝ) := by
+    have hmid_lt : ((p + 1 : ℝ) / 2) < (p : ℝ) := by
+      nlinarith [show (3 : ℝ) ≤ (p : ℝ) by exact_mod_cast hp3]
+    exact lt_of_le_of_lt hpow_le hmid_lt
+  have hpow_sub : (p : ℝ) ^ (t - 1) = (p : ℝ) ^ t / (p : ℝ) := by
+    simpa [Real.rpow_one] using (Real.rpow_sub hp_pos t 1)
+  have hden_pos : 0 < (1 - (p : ℝ) ^ (t - 1)) := by
+    have h_num_pos : 0 < (p : ℝ) - (p : ℝ) ^ t := sub_pos.mpr hpow_lt_p
+    have hrewrite :
+        1 - (p : ℝ) ^ (t - 1) = ((p : ℝ) - (p : ℝ) ^ t) / (p : ℝ) := by
+      simpa [hpow_sub] using (one_sub_rpow_sub_one_div hp_pos t)
+    rw [hrewrite]
+    exact div_pos h_num_pos hp_pos
+  have h_num_le_den :
+      ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) ≤
+        1 - (p : ℝ) ^ (t - 1) := by
+    have hmain : (p : ℝ) ^ t - 1 ≤ (p : ℝ) - (p : ℝ) ^ t := by
+      nlinarith [hpow_le]
+    have hrewrite :
+        1 - (p : ℝ) ^ (t - 1) = ((p : ℝ) - (p : ℝ) ^ t) / (p : ℝ) := by
+      simpa [hpow_sub] using (one_sub_rpow_sub_one_div hp_pos t)
+    have hinv : (p : ℝ) ^ (-1 : ℝ) = (p : ℝ)⁻¹ := by
+      -- rpow (-1) は逆数になる
+      simpa using (Real.rpow_neg_one (p : ℝ))
+    have hpos_inv : 0 ≤ (p : ℝ) ^ (-1 : ℝ) := by
+      positivity
+    have hdiv_mul :
+        ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) ≤
+          ((p : ℝ) - (p : ℝ) ^ t) * (p : ℝ) ^ (-1 : ℝ) := by
+      exact mul_le_mul_of_nonneg_right hmain hpos_inv
+    have htmp :
+        ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) ≤
+          ((p : ℝ) - (p : ℝ) ^ t) / (p : ℝ) := by
+      simpa [div_eq_mul_inv, hinv] using hdiv_mul
+    simpa [hrewrite] using htmp
+  exact (div_le_iff hden_pos).2 (by simpa using h_num_le_den)
 
 
 lemma log2_div_log3_le_zero : -log 2 / log 3 ≤ 0 := by
