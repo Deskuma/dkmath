@@ -153,3 +153,101 @@
      `(x+u)^d - x^d = u * powerKernel`
      の exact factorization を実装する。
    - 既存 `CosmicFormulaBinom` の二項展開補題を優先再利用し、証明重複を回避する。
+
+### 日時: 2026/03/20 17:19 JST: Phase 3 実装（`powerKernel` と exact factorization を追加）
+
+1. 目的: power case の exact 層を実装し、差分冪を `u * powerKernel` に因数分解する。
+2. 内容:
+   - 新規ファイル追加:
+     - `DkMath/CosmicFormula/CosmicDerivativePower.lean`
+   - 実装した定義・定理:
+     - `powerKernel`
+     - `powerKernel_eq_GN_swap`
+     - `sub_pow_eq_u_mul_powerKernel`
+     - `sub_eq_u_mul_powerKernel`（alias）
+     - `cosmicKernel_pow_eq_powerKernel_of_ne_zero`
+   - 証明方針:
+     - 既存 `DkMath.CosmicFormulaBinom.cosmic_id_csr'` を
+       `x := u, u := x` で再利用し、
+       `(x+u)^d - x^d` の分解へ接続。
+     - `powerKernel` は `GN d u x` との一致補題
+       `powerKernel_eq_GN_swap` を介して整理。
+   - import 配線更新:
+     - `DkMath/CosmicFormula/Basic.lean` に
+       `import DkMath.CosmicFormula.CosmicDerivativePower` を追加。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDerivativePower` 成功。
+     - `lake build DkMath.CosmicFormula` 成功。
+3. 結論: Phase 3 の exact 要件
+   「`(x+u)^d - x^d = u * powerKernel`」を Lean 実装として確立した。
+4. 失敗事例:
+   - `∑ ... in ...` 記法がこの新規ファイルでパース失敗し、`Finset.sum` 明示形へ変更。
+   - `Basic.lean` 更新時に一度パス指定を誤った。
+   - `simp ... using` を使って構文エラーを起こし、`exact mul_div_cancel_left₀ ...` に修正。
+5. 備考:
+   - 既存 Binom 補題を再利用したことで、power case の証明重複を抑制できた。
+   - `cosmicKernel_pow_eq_powerKernel_of_ne_zero` により、次フェーズの極限定理へ直結可能な形になった。
+6. 次の課題:
+   - Phase 4 として `tendsto_powerKernel_zero` と `hasDerivAt_pow_cosmic` を実装する。
+   - `j=0` 項と `j≥1` 項の有限和分解（高次項消滅）で極限証明を構成する。
+
+### 日時: 2026/03/20 17:23 JST: Phase 4 実装（`hasDerivAt_pow_cosmic` と `tendsto_powerKernel_zero` を追加）
+
+1. 目的: power case の limit/derivative 層を実装し、Phase 3 の exact 核を微分定理へ接続する。
+2. 内容:
+   - 新規ファイル追加:
+     - `DkMath/CosmicFormula/CosmicDerivativePowerLimit.lean`
+   - 実装した定理:
+     - `hasDerivAt_pow_cosmic`
+     - `tendsto_powerKernel_zero`（punctured 近傍版）
+   - 証明方針:
+     - `hasDerivAt_pow_cosmic` は mathlib `hasDerivAt_pow` から `simpa` で導出。
+     - `tendsto_powerKernel_zero` は
+       `tendsto_cosmicKernel_of_hasDerivAt` と
+       `cosmicKernel_pow_eq_powerKernel_of_ne_zero` を
+       `tendsto_nhdsWithin_congr` で接続して導出。
+   - import 配線更新:
+     - `DkMath/CosmicFormula/Basic.lean` に
+       `import DkMath.CosmicFormula.CosmicDerivativePowerLimit` を追加。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDerivativePowerLimit` 成功。
+     - `lake build DkMath.CosmicFormula` 成功。
+3. 結論: Phase 4 要件（冪関数微分定理 + power kernel の punctured limit）を実装完了した。
+4. 失敗事例:
+   - `tendsto_nhdsWithin_congr` 呼び出しで `f/g` の推論が曖昧になり失敗。
+   - `f := cosmicKernel` / `g := powerKernel` を明示して解決。
+5. 備考:
+   - `tendsto_powerKernel_zero` は現時点で punctured 近傍版として実装。
+   - 全近傍版（`nhds 0`）へ強化する場合は `u=0` 点での値一致と連続性の補題追加で拡張可能。
+6. 次の課題:
+   - Phase 5 として `CosmicFormulaDerivativeBridge.lean` を追加し、
+     一次差分核と二次補正核（`cosmic_formula_unit`）の橋渡し補題を整備する。
+
+### 日時: 2026/03/20 17:26 JST: Phase 5 実装（一次差分核と二次補正核の bridge 補題を追加）
+
+1. 目的: 一次差分核（`delta`, `powerKernel 2`）と宇宙式本体の二次補正核（`cosmic_formula_unit`）を明示的に接続する。
+2. 内容:
+   - 新規ファイル追加:
+     - `DkMath/CosmicFormula/CosmicFormulaDerivativeBridge.lean`
+   - 実装した主要補題:
+     - `delta_pow_two_eq_u_mul_powerKernel_two`
+     - `cosmic_formula_unit_eq_delta_pow_two_sub_two_mul`
+     - `cosmic_formula_unit_eq_u_mul_powerKernel_two_sub_two_mul`
+     - `cosmic_formula_unit_eq_u_mul_powerKernel_two_gap`
+     - `cosmic_formula_unit_eq_u_sq_from_derivative_bridge`
+   - import 配線更新:
+     - `DkMath/CosmicFormula/Basic.lean` に
+       `import DkMath.CosmicFormula.CosmicFormulaDerivativeBridge` を追加。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicFormulaDerivativeBridge` 成功。
+     - `lake build DkMath.CosmicFormula` 成功。
+     - `lake build DkMath` 成功（既存他モジュール由来の warning / sorry 表示は継続）。
+3. 結論: Phase 5 目標の
+   「一次差分核と二次補正核の橋渡し」が Lean 補題として実装完了した。
+4. 失敗事例:
+   - 1箇所 `simpa` の不要警告が出たため `exact` へ置換して解消。
+5. 備考:
+   - これで当初計画した 5 Phase（差分核→微分橋→power exact→power limit→二次橋渡し）は一通り実装済み。
+6. 次の課題:
+   - `tendsto_powerKernel_zero` を全近傍版（`nhds 0`）へ強化するか判断する。
+   - 必要なら多項式一般化（`CosmicDerivativePolynomial` 相当）へ進む。
