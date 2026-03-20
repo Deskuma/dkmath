@@ -823,3 +823,32 @@
 6. 次の課題:
    - 必要なら `CosmicFormula_Lean_Implementation_Guide_of_differential_coefficients.md` に
      「power セクション読解ガイド」を追加する。
+
+### 日時: 2026/03/21 01:48 JST: 実装ガイドへ「power セクション読解ガイド」を追加
+
+1. 目的:
+   - べき関数セクションの読む順と、各定理の数学的役割を
+     実装ガイド上で即参照できるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/docs/CosmicFormula_Lean_Implementation_Guide_of_differential_coefficients.md`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_ImplHistory.md`
+   - docs 更新:
+     - `2.3 冪関数 exact/limit 層` の直後に
+       `2.3.1 power セクション読解ガイド` を新設。
+     - ガイド内で
+       `sub_pow_eq_u_mul_powerKernel`
+       -> `cosmicKernel_pow_eq_powerKernel_of_ne_zero`
+       -> `tendsto_powerKernel_zero(_punctured)`
+       -> `hasDerivAt_pow_cosmic`
+       の読解順を明示。
+     - 設計書節 §7 / §8 / §9 との対応と、
+       実装時の確認ポイント（`u = 0` と `u ≠ 0` の役割分担）を追記。
+3. 結論:
+   - power 系の導出フローを、実装ガイド単体で追跡できる構成になった。
+4. 失敗事例:
+   - 特になし。
+5. 備考:
+   - ドキュメント更新のみ（Lean 証明コードの変更なし）。
+6. 次の課題:
+   - 必要なら同様の「読解ガイド」を polynomial セクションにも追加する。
