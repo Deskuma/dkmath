@@ -620,3 +620,27 @@
 6. 次の課題:
    - `hasDerivAt_polynomial_eval_cosmic` 本体も `..._via_powerKernel` へ統一するかを決める。
    - 統一方針決定後、旧系定理へ deprecation 方針を設けるか検討する。
+
+### 日時: 2026/03/20 23:02 JST: canonical / legacy / direct / helper の status 管理を docs に導入
+
+1. 目的:
+   - 実装ガイドで旧系と新系の位置づけを明確化し、研究実装フェーズでの参照混線を防ぐ。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/docs/CosmicFormula_Lean_Implementation_Guide_of_differential_coefficients.md`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_ImplHistory.md`
+   - docs 更新:
+     - 多項式主要定理一覧に `hasDerivAt_polynomial_eval_cosmic_from_mathlib` を追記。
+     - 対応表に `Status` 列を追加し、
+       `canonical` / `legacy bridge` / `direct decomposition` / `helper` を付与。
+     - 運用上注意へ `Status` 列の読み方を明示。
+3. 結論:
+   - 「本流 API」と「比較参照用 API」の境界が文書上で明確化された。
+4. 失敗事例:
+   - 特になし。
+5. 備考:
+   - この段階では deprecated 化は実施せず、旧系は比較参照用に維持。
+6. 次の課題:
+   - 必要に応じて `hasDerivAt_polynomial_eval_cosmic_from_mathlib` /
+     `tendsto_cosmicKernel_polynomial_eval_from_hasDerivAt` へ
+     comment レベルの移行案内を付与する。

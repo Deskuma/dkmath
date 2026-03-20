@@ -51,6 +51,7 @@
 - ファイル: `DkMath/CosmicFormula/CosmicDerivativePolynomial.lean`
 - 主要定理（単体）:
   - `hasDerivAt_polynomial_eval_cosmic`
+  - `hasDerivAt_polynomial_eval_cosmic_from_mathlib`
   - `tendsto_cosmicKernel_polynomial_eval`
   - `tendsto_cosmicKernel_polynomial_eval_from_hasDerivAt`
   - `deriv_polynomial_eval_cosmic`
@@ -112,31 +113,36 @@
 - `polynomialKernelExt` は多項式専用 API である。
   `powerKernel` の有限和として明示定義できることを使っているため、
   任意関数への一般化 API とは分けて扱う。
+- 対応表の `Status` は次の意味:
+  `canonical`（公開本流） / `legacy bridge`（互換参照） /
+  `direct decomposition`（分解に立脚した中核） / `helper`（補助 API）。
 
 ---
 
 ## 5. 定理名 ↔ 設計書節 対応表
 
-| Lean 定理/定義 | 実装ファイル | 設計書節 |
-|---|---|---|
-| `delta`, `cosmicKernel` | `CosmicDifferenceKernel.lean` | §4 |
-| `delta_add`, `delta_sub`, `delta_smul`, `delta_mul`, `delta_finset_sum` | `CosmicDifferenceKernel.lean` | §5.1 |
-| `cosmicKernel_eq`, `cosmicKernel_add`, `cosmicKernel_smul`, `cosmicKernel_finset_sum`, `cosmicKernel_mul` | `CosmicDifferenceKernel.lean` | §5.2 |
-| `hasDerivAt_iff_tendsto_cosmicKernel` | `CosmicDerivativeBasic.lean` | §6 |
-| `sub_pow_eq_u_mul_powerKernel` | `CosmicDerivativePower.lean` | §7 |
-| `tendsto_powerKernel_zero` | `CosmicDerivativePowerLimit.lean` | §8 |
-| `hasDerivAt_pow_cosmic` | `CosmicDerivativePowerLimit.lean` | §9 |
-| `cosmic_formula_unit_eq_u_sq_from_derivative_bridge` | `CosmicFormulaDerivativeBridge.lean` | §10 |
-| `hasDerivAt_polynomial_eval_cosmic` | `CosmicDerivativePolynomial.lean` | §3.5 / §11.4 |
-| `tendsto_cosmicKernel_polynomial_eval_from_hasDerivAt` | `CosmicDerivativePolynomial.lean` | §6 / §11.4 |
-| `cosmicKernel_monomial_of_ne_zero` | `CosmicDerivativePolynomial.lean` | §3.5 / §11.4 |
-| `cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero` | `CosmicDerivativePolynomial.lean` | §3.5 / §11.4 |
-| `polynomialKernelExt`, `continuous_polynomialKernelExt`, `polynomialKernelExt_zero` | `CosmicDerivativePolynomial.lean` | §2.2 / §8 / §11.4 |
-| `tendsto_polynomialKernelExt_zero`, `tendsto_cosmicKernel_polynomial_eval_via_powerKernel` | `CosmicDerivativePolynomial.lean` | §8 / §11.4 |
-| `hasDerivAt_polynomial_eval_cosmic_via_powerKernel`, `deriv_polynomial_eval_cosmic_via_powerKernel` | `CosmicDerivativePolynomial.lean` | §6 / §11.4 |
-| `hasDerivAt_polynomial_eval_finset_sum_cosmic` | `CosmicDerivativePolynomial.lean` | §11.4 |
-| `tendsto_cosmicKernel_polynomial_eval_finset_sum` | `CosmicDerivativePolynomial.lean` | §11.4 |
-| `deriv_polynomial_eval_finset_sum_cosmic` | `CosmicDerivativePolynomial.lean` | §11.4 |
+| Lean 定理/定義 | 実装ファイル | 設計書節 | Status |
+|---|---|---|---|
+| `delta`, `cosmicKernel` | `CosmicDifferenceKernel.lean` | §4 | `canonical` |
+| `delta_add`, `delta_sub`, `delta_smul`, `delta_mul`, `delta_finset_sum` | `CosmicDifferenceKernel.lean` | §5.1 | `helper` |
+| `cosmicKernel_eq`, `cosmicKernel_add`, `cosmicKernel_smul`, `cosmicKernel_finset_sum`, `cosmicKernel_mul` | `CosmicDifferenceKernel.lean` | §5.2 | `helper` |
+| `hasDerivAt_iff_tendsto_cosmicKernel` | `CosmicDerivativeBasic.lean` | §6 | `canonical` |
+| `sub_pow_eq_u_mul_powerKernel` | `CosmicDerivativePower.lean` | §7 | `direct decomposition` |
+| `tendsto_powerKernel_zero` | `CosmicDerivativePowerLimit.lean` | §8 | `canonical` |
+| `hasDerivAt_pow_cosmic` | `CosmicDerivativePowerLimit.lean` | §9 | `canonical` |
+| `cosmic_formula_unit_eq_u_sq_from_derivative_bridge` | `CosmicFormulaDerivativeBridge.lean` | §10 | `helper` |
+| `hasDerivAt_polynomial_eval_cosmic` | `CosmicDerivativePolynomial.lean` | §3.5 / §11.4 | `canonical` |
+| `hasDerivAt_polynomial_eval_cosmic_from_mathlib` | `CosmicDerivativePolynomial.lean` | §6 / §11.4 | `legacy bridge` |
+| `tendsto_cosmicKernel_polynomial_eval` | `CosmicDerivativePolynomial.lean` | §8 / §11.4 | `canonical` |
+| `tendsto_cosmicKernel_polynomial_eval_from_hasDerivAt` | `CosmicDerivativePolynomial.lean` | §6 / §11.4 | `legacy bridge` |
+| `cosmicKernel_monomial_of_ne_zero` | `CosmicDerivativePolynomial.lean` | §3.5 / §11.4 | `direct decomposition` |
+| `cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero` | `CosmicDerivativePolynomial.lean` | §3.5 / §11.4 | `direct decomposition` |
+| `polynomialKernelExt`, `continuous_polynomialKernelExt`, `polynomialKernelExt_zero` | `CosmicDerivativePolynomial.lean` | §2.2 / §8 / §11.4 | `helper` |
+| `tendsto_polynomialKernelExt_zero`, `tendsto_cosmicKernel_polynomial_eval_via_powerKernel` | `CosmicDerivativePolynomial.lean` | §8 / §11.4 | `direct decomposition` |
+| `hasDerivAt_polynomial_eval_cosmic_via_powerKernel`, `deriv_polynomial_eval_cosmic_via_powerKernel` | `CosmicDerivativePolynomial.lean` | §6 / §11.4 | `direct decomposition` |
+| `hasDerivAt_polynomial_eval_finset_sum_cosmic` | `CosmicDerivativePolynomial.lean` | §11.4 | `canonical` |
+| `tendsto_cosmicKernel_polynomial_eval_finset_sum` | `CosmicDerivativePolynomial.lean` | §11.4 | `canonical` |
+| `deriv_polynomial_eval_finset_sum_cosmic` | `CosmicDerivativePolynomial.lean` | §11.4 | `canonical` |
 
 ## 6. 次の整備候補
 
