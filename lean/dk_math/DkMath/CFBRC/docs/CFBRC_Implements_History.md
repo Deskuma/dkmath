@@ -1415,3 +1415,34 @@
    - 今回はドキュメント反映のみで Lean コード差分はなし。
 6. 次の課題:
    - 必要なら `CFBRC_Triangular Permutation.md` 側にも同じ役割分担を要約反映する。
+
+### 日時: 2026/03/20 05:49 JST: 係数列回帰を `Nat.choose` 一般補題へ接続して自動化
+
+1. 目的:
+   - 手書き係数列回帰の証明手順を一般補題へ接続し、回帰追加時の作業を自動化する。
+2. 内容:
+   - `DkMath/CFBRC/TrigBridge/ClosedForm.lean`:
+     - `cfbrcClosed_choose_row` を追加。
+     - `cfbrcClosed` を
+       `∑ (d.choose (k+1)) * X^(k+1) * (iΘ)^(d-1-k)`
+       の一般形として明示。
+   - `DkMathTest/CFBRC.lean`:
+     - 係数列回帰セクションにタクティックマクロ
+       `cfbrc_closed_coeff`
+       を導入。
+     - 既存 `d=3..12` の各回帰証明を
+       - `rw [cfbrcClosed_choose_row]`
+       - `simp [Finset.sum_range_succ]`
+       - `ring_nf` / `norm_num [Nat.choose]`
+       の共通処理に一本化。
+3. 結論:
+   - 係数列回帰は手書き展開依存から脱し、
+     `Nat.choose` 行の一般補題経由で機械的に再現できる形へ整理できた。
+4. 失敗事例:
+   - `d=3` のケースは `simp` だけで閉じるため、
+     追加タクティックが「No goals」になる場面があった。
+   - マクロ内を `try` で保護して解消。
+5. 備考:
+   - 既知の `ABC021` `sorry` 警告は継続（今回変更範囲外）。
+6. 次の課題:
+   - 必要なら `cfbrcClosed_choose_row` から `Finset.Icc` 形式への添字変換補題を追加する。
