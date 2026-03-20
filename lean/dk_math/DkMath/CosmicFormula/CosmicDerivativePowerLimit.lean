@@ -18,24 +18,32 @@ theorem hasDerivAt_pow_cosmic (d : ℕ) (x : ℝ) :
     HasDerivAt (fun y : ℝ => y ^ d) ((d : ℝ) * x ^ (d - 1)) x := by
   simpa using (hasDerivAt_pow d x)
 
-/--
-Punctured-limit version of `powerKernel` at `u → 0`.
-
-This is the Phase 4 limit target aligned with the cosmic-kernel bridge.
--/
+/-- Full-neighborhood limit of `powerKernel` at `u → 0`. -/
 theorem tendsto_powerKernel_zero (d : ℕ) (x : ℝ) :
     Filter.Tendsto (fun u : ℝ => powerKernel d x u)
-      (nhdsWithin (0 : ℝ) (Set.compl ({(0 : ℝ)} : Set ℝ)))
+      (nhds (0 : ℝ))
       (nhds ((d : ℝ) * x ^ (d - 1))) := by
-  refine tendsto_nhdsWithin_congr
-    (f := fun u : ℝ => cosmicKernel (fun y : ℝ => y ^ d) x u)
-    (g := fun u : ℝ => powerKernel d x u)
-    ?hEq
-    ?hCosmic
-  · intro u hu
-    have hu0 : u ≠ 0 := by
-      simpa [Set.mem_compl_iff, Set.mem_singleton_iff] using hu
-    exact cosmicKernel_pow_eq_powerKernel_of_ne_zero d x u hu0
-  · exact tendsto_cosmicKernel_of_hasDerivAt (hasDerivAt_pow_cosmic d x)
+  have hcont : Continuous (fun u : ℝ => powerKernel d x u) := by
+    unfold powerKernel
+    continuity
+  have hzero : powerKernel d x 0 = (d : ℝ) * x ^ (d - 1) := by
+    cases d with
+    | zero =>
+        simp [powerKernel]
+    | succ n =>
+        unfold powerKernel
+        rw [Finset.sum_eq_single 0]
+        · simp
+        · intro j hj hj0
+          simp [hj0]
+        · simp
+  simpa [hzero] using hcont.tendsto 0
+
+/-- Punctured-neighborhood variant, derived from the full-neighborhood limit. -/
+theorem tendsto_powerKernel_zero_punctured (d : ℕ) (x : ℝ) :
+    Filter.Tendsto (fun u : ℝ => powerKernel d x u)
+      (nhdsWithin (0 : ℝ) (Set.compl ({(0 : ℝ)} : Set ℝ)))
+      (nhds ((d : ℝ) * x ^ (d - 1))) :=
+  (tendsto_powerKernel_zero d x).mono_left nhdsWithin_le_nhds
 
 end DkMath.CosmicFormula

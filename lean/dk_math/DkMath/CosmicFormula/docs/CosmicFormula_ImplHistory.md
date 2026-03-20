@@ -251,3 +251,31 @@
 6. 次の課題:
    - `tendsto_powerKernel_zero` を全近傍版（`nhds 0`）へ強化するか判断する。
    - 必要なら多項式一般化（`CosmicDerivativePolynomial` 相当）へ進む。
+
+### 日時: 2026/03/20 17:50 JST: `tendsto_powerKernel_zero` を全近傍版（`nhds 0`）へ強化
+
+1. 目的: `tendsto_powerKernel_zero` のフィルタを punctured 近傍から全近傍へ強化する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/CosmicDerivativePowerLimit.lean`
+   - 変更点:
+     - `tendsto_powerKernel_zero` の型を
+       `nhdsWithin (0) ({0}ᶜ)` から `nhds (0)` に更新。
+     - 証明を「punctured bridge」から「連続性 + `u=0` 値評価」へ置換:
+       - `hcont : Continuous (fun u => powerKernel d x u)` を `continuity` で構成
+       - `hzero : powerKernel d x 0 = (d:ℝ) * x^(d-1)` を `d` の場合分けで証明
+       - `hcont.tendsto 0` を `hzero` で書換えて目標を導出
+     - 互換補題として
+       `tendsto_powerKernel_zero_punctured` を追加
+       （`mono_left nhdsWithin_le_nhds` で導出）。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDerivativePowerLimit` 成功。
+     - `lake build DkMath.CosmicFormula` 成功。
+3. 結論: `tendsto_powerKernel_zero` は設計書どおり全近傍版（`nhds 0`）で成立した。
+4. 失敗事例:
+   - 初回の `hzero` 証明で `simp` が進まず失敗。
+   - `Finset.sum_eq_single` による `d` 場合分けへ切替えて解消。
+5. 備考:
+   - 既存利用に配慮して punctured 版は補題として残した。
+6. 次の課題:
+   - 必要なら `hasDerivAt_pow_cosmic` の証明を cosmic kernel 経由の構成へ統一し、説明文書との対応をさらに強化する。
