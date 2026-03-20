@@ -112,3 +112,44 @@
    - Phase 2 として `CosmicDerivativeBasic.lean` を追加し、
      `HasDerivAt` と `𝓝[≠] (0 : ℝ)` 極限を結ぶ橋渡し補題へ着手する。
    - 既存の `HasDerivAt.tendsto_slope` 系 API を再利用して証明骨格を固定する。
+
+### 日時: 2026/03/20 17:16 JST: Phase 2 実装（`HasDerivAt` と cosmic kernel 極限の橋渡し定理を追加）
+
+1. 目的: `HasDerivAt` を宇宙式差分核 `cosmicKernel` の punctured-limit で記述する基本橋を実装する。
+2. 内容:
+   - 新規ファイル追加:
+     - `DkMath/CosmicFormula/CosmicDerivativeBasic.lean`
+   - 実装した主要定理:
+     - `hasDerivAt_iff_tendsto_cosmicKernel`
+     - `tendsto_cosmicKernel_of_hasDerivAt`
+     - `hasDerivAt_of_tendsto_cosmicKernel`
+     - `hasDerivAt_id_cosmic`
+     - `tendsto_cosmicKernel_id`
+     - `hasDerivAt_const_cosmic`
+     - `tendsto_cosmicKernel_const`
+   - 証明方針:
+     - mathlib の `hasDerivAt_iff_tendsto_slope_zero` を直接利用し、
+       `cosmicKernel` 形式へ `simpa` で橋渡し。
+   - import 配線更新:
+     - `DkMath/CosmicFormula/Basic.lean` に
+       `import DkMath.CosmicFormula.CosmicDerivativeBasic` を追加。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDerivativeBasic` 成功。
+     - `lake build DkMath.CosmicFormula` 成功。
+3. 結論: Phase 2 目標の中核である
+   「`HasDerivAt` ↔ cosmic kernel の punctured-limit」が Lean 実装として成立した。
+4. 失敗事例:
+   - `𝓝[≠]` / `𝓝` 記法がこのファイルの記法スコープで解決されずパース失敗。
+   - `Tendsto` を unqualified に書いて識別子未解決。
+   - `Filter.nhds` も本環境では未解決で、`nhds` へ修正が必要だった。
+5. 備考:
+   - 記法依存を避けるため、最終版は
+     `nhdsWithin (0 : ℝ) (Set.compl ({(0 : ℝ)} : Set ℝ))`
+     と `Filter.Tendsto` / `nhds` を採用した。
+   - この形は後続 Phase（power kernel）でも再利用しやすい。
+6. 次の課題:
+   - Phase 3 として `CosmicDerivativePower.lean` を追加し、
+     `powerKernel` と
+     `(x+u)^d - x^d = u * powerKernel`
+     の exact factorization を実装する。
+   - 既存 `CosmicFormulaBinom` の二項展開補題を優先再利用し、証明重複を回避する。
