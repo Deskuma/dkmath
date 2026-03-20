@@ -734,3 +734,29 @@
    - 今回も証明コードは非変更で、説明層のみを強化。
 6. 次の課題:
    - 必要なら同様の式ベース docstring を `CosmicDifferenceKernel.lean` 側へも展開する。
+
+### 日時: 2026/03/21 01:03 JST: `CosmicDifferenceKernel` の docstring を教科書調に整備
+
+1. 目的:
+   - 差分核の基礎 API（`delta`, `cosmicKernel`）を、
+     数学法則と直接対応する説明で読めるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/CosmicDifferenceKernel.lean`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_ImplHistory.md`
+   - docstring 更新:
+     - `delta`, `cosmicKernel` の定義に
+       `f(x+u)-f(x)` / `(f(x+u)-f(x))/u` の式説明を追記。
+     - `delta_add/sub/smul/mul/finset_sum` に
+       線形性・離散積法則・有限和線形性を明記。
+     - `cosmicKernel_add/sub/smul/finset_sum/mul` に
+       quotient レベルでの対応法則を明記。
+3. 結論:
+   - 基礎演算則の docstring だけで、
+     「増分レベル -> 差分商レベル」の対応が追える状態になった。
+4. 失敗事例:
+   - 特になし。
+5. 備考:
+   - 証明コード本体は非変更で、説明層のみを更新。
+6. 次の課題:
+   - 必要なら `CosmicDerivativeBasic.lean` にも同様の式ベース説明を展開する。
