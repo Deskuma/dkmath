@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import Mathlib
 
 import DkMath.CosmicFormula.Defs  -- Cosmic Formula Definitions
+import DkMath.CosmicFormula.CosmicDifferenceKernel  -- Cosmic Difference Kernel
 import DkMath.CosmicFormula.CosmicFormulaBasic  -- Cosmic Formula Basics
 import DkMath.CosmicFormula.CosmicFormulaDim  -- Cosmic Formula Dimensionality
 import DkMath.CosmicFormula.CosmicFormulaGeom  -- Cosmic Formula Geometry

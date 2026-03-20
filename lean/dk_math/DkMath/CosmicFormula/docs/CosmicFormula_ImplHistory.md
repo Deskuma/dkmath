@@ -76,3 +76,39 @@
 6. 次の課題:
    - Phase 1 として `CosmicDifferenceKernel.lean` を新規作成し、`delta/cosmicKernel` 基礎補題群を実装する。
    - 入口 import を最小限で追加し、`lake build DkMath.CosmicFormula.CosmicDifferenceKernel` で初回通過を確認する。
+
+### 日時: 2026/03/20 16:53 JST: Phase 1 実装（差分核 `delta` / `cosmicKernel` の基礎補題群を追加）
+
+1. 目的: 実装計画の Phase 1 として、宇宙式微分の最小コア（差分演算子と差分商核）を Lean コード化する。
+2. 内容:
+   - 新規ファイル追加:
+     - `DkMath/CosmicFormula/CosmicDifferenceKernel.lean`
+   - 実装した定義:
+     - `delta (f : ℝ → ℝ) (x u : ℝ) : ℝ := f (x + u) - f x`
+     - `cosmicKernel (f : ℝ → ℝ) (x u : ℝ) : ℝ := delta f x u / u`
+   - 実装した補題:
+     - `delta_zero_right`
+     - `delta_add`
+     - `delta_sub`
+     - `delta_mul`
+     - `cosmicKernel_eq`
+     - `cosmicKernel_add`
+     - `cosmicKernel_sub`
+   - import 配線更新:
+     - `DkMath/CosmicFormula/Basic.lean` に
+       `import DkMath.CosmicFormula.CosmicDifferenceKernel` を追加。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDifferenceKernel` 成功。
+     - `lake build DkMath.CosmicFormula` 成功。
+3. 結論: Phase 1 の最小実装は完了し、差分核 API が `DkMath.CosmicFormula` 系に組み込まれた。
+4. 失敗事例:
+   - 新規ファイル先頭コメントを `/* ... */` で書き、Lean がパース失敗。
+   - `Real` の割り算を含む定義で `noncomputable` 指定が必要だった。
+   - `noncomputable section` の `end` 漏れで scope エラーが発生。
+5. 備考:
+   - いずれも局所修正で解消し、最終ビルドは安定通過した。
+   - 補題群は設計書の Phase 1 要件（差分・核の基礎）に一致している。
+6. 次の課題:
+   - Phase 2 として `CosmicDerivativeBasic.lean` を追加し、
+     `HasDerivAt` と `𝓝[≠] (0 : ℝ)` 極限を結ぶ橋渡し補題へ着手する。
+   - 既存の `HasDerivAt.tendsto_slope` 系 API を再利用して証明骨格を固定する。
