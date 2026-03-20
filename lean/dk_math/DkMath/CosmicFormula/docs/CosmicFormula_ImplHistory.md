@@ -760,3 +760,31 @@
    - 証明コード本体は非変更で、説明層のみを更新。
 6. 次の課題:
    - 必要なら `CosmicDerivativeBasic.lean` にも同様の式ベース説明を展開する。
+
+### 日時: 2026/03/21 01:22 JST: `CosmicDerivativeBasic` の docstring を式ベースへ拡張
+
+1. 目的:
+   - `HasDerivAt <-> cosmicKernel の punctured limit` という中心同値を、
+     ファイル冒頭の定理群だけで教科書的に読めるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/CosmicDerivativeBasic.lean`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_ImplHistory.md`
+   - docstring 更新:
+     - `hasDerivAt_iff_tendsto_cosmicKernel` に同値の数式説明を追記。
+     - 前向き・逆向き補題
+       (`tendsto_cosmicKernel_of_hasDerivAt`,
+       `hasDerivAt_of_tendsto_cosmicKernel`) の役割を明示。
+     - `id` / `const` の基本例について
+       `HasDerivAt` 形と `tendsto` 形の意味を式で補足。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDerivativeBasic` 成功。
+     - `lake build DkMath.CosmicFormula` 成功。
+3. 結論:
+   - 基本橋渡し層でも、定理名と数学的主張の対応が docstring 上で即読できる状態になった。
+4. 失敗事例:
+   - 特になし。
+5. 備考:
+   - 証明コードには変更を加えず、説明層のみ更新。
+6. 次の課題:
+   - 必要なら `CosmicDerivativePower.lean` 側にも同形式の式ベース説明を適用する。
