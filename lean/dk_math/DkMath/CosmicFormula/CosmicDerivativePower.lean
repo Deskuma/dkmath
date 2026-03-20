@@ -17,11 +17,21 @@ open scoped BigOperators
 
 noncomputable section
 
-/-- Power-case cosmic kernel polynomial part. -/
+/--
+Power-case kernel polynomial:
+`powerKernel d x u = sum_{j=0}^{d-1} (choose d (j+1)) * x^(d-1-j) * u^j`.
+
+It is the polynomial part that appears after factoring
+`(x+u)^d - x^d` by `u`.
+-/
 def powerKernel (d : ℕ) (x u : ℝ) : ℝ :=
   Finset.sum (Finset.range d) (fun j =>
     (Nat.choose d (j + 1) : ℝ) * x ^ (d - 1 - j) * u ^ j)
 
+/--
+Compatibility with the binomial helper `GN`:
+`powerKernel d x u = GN d u x`.
+-/
 theorem powerKernel_eq_GN_swap (d : ℕ) (x u : ℝ) :
     powerKernel d x u = DkMath.CosmicFormulaBinom.GN d u x := by
   unfold powerKernel DkMath.CosmicFormulaBinom.GN
@@ -30,7 +40,10 @@ theorem powerKernel_eq_GN_swap (d : ℕ) (x u : ℝ) :
   ring
 
 /--
-Exact factorization for powers in cosmic-kernel form.
+Exact factorization of the power increment:
+`(x+u)^d - x^d = u * powerKernel d x u`.
+
+This is the key algebraic decomposition behind the derivative proof.
 -/
 theorem sub_pow_eq_u_mul_powerKernel (d : ℕ) (x u : ℝ) :
     (x + u) ^ d - x ^ d = u * powerKernel d x u := by
@@ -46,10 +59,17 @@ theorem sub_pow_eq_u_mul_powerKernel (d : ℕ) (x u : ℝ) :
     _ = u * powerKernel d x u := by
       rw [powerKernel_eq_GN_swap]
 
+/--
+Alias of `sub_pow_eq_u_mul_powerKernel` for naming compatibility.
+-/
 theorem sub_eq_u_mul_powerKernel (d : ℕ) (x u : ℝ) :
     (x + u) ^ d - x ^ d = u * powerKernel d x u :=
   sub_pow_eq_u_mul_powerKernel d x u
 
+/--
+On `u ≠ 0`, the cosmic kernel of `y^d` coincides with `powerKernel`:
+`cosmicKernel (fun y => y^d) x u = powerKernel d x u`.
+-/
 theorem cosmicKernel_pow_eq_powerKernel_of_ne_zero
     (d : ℕ) (x u : ℝ) (hu : u ≠ 0) :
     cosmicKernel (fun y : ℝ => y ^ d) x u = powerKernel d x u := by

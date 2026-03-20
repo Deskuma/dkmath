@@ -46,6 +46,39 @@
   - `tendsto_powerKernel_zero`
   - `hasDerivAt_pow_cosmic`
 
+### 2.3.1 power セクション読解ガイド
+
+`CosmicDerivativePower.lean` と `CosmicDerivativePowerLimit.lean` は、
+次の 4 段階を順に読むと流れが最も追いやすい。
+
+1. exact 分解（代数）
+   - `sub_pow_eq_u_mul_powerKernel`
+   - 数学式: `(x+u)^d - x^d = u * powerKernel d x u`
+2. 差分商への同一視（`u ≠ 0`）
+   - `cosmicKernel_pow_eq_powerKernel_of_ne_zero`
+   - 数学式: `cosmicKernel (fun y => y^d) x u = powerKernel d x u`
+3. `u -> 0` の極限
+   - `powerKernel_zero`
+   - `tendsto_powerKernel_zero`（full neighborhood）
+   - `tendsto_powerKernel_zero_punctured`（punctured neighborhood）
+   - 数学式: `powerKernel d x u -> (d : ℝ) * x^(d-1)`
+4. 微分定理への復帰
+   - `hasDerivAt_pow_cosmic`
+   - bridge: `hasDerivAt_of_tendsto_cosmicKernel`
+   - 結論: `HasDerivAt (fun y => y^d) ((d : ℝ) * x^(d-1)) x`
+
+設計書節との対応は次のとおり。
+
+- §7: exact 分解（`(x+u)^d - x^d` の因子 `u` 抽出）
+- §8: kernel の極限（`u -> 0`）
+- §9: `HasDerivAt` への再構成
+
+実装時の確認ポイント:
+
+- `u = 0` を含む議論は `powerKernel` 側（連続拡張）で扱う。
+- `cosmicKernel` 側の同値化は `u ≠ 0` の領域でのみ使う。
+- full neighborhood の極限を先に確立してから、punctured へ制限すると安定する。
+
 ### 2.4 多項式一般化層
 
 - ファイル: `DkMath/CosmicFormula/CosmicDerivativePolynomial.lean`

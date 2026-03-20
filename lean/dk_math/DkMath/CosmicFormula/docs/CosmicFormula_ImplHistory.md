@@ -673,3 +673,182 @@
    - deprecated 注釈は導入せず、旧系は比較参照・互換補助として維持。
 6. 次の課題:
    - 旧系定理の利用箇所が増える場合は、段階的に `via_powerKernel` への置換ガイドを整備する。
+
+### 日時: 2026/03/21 00:37 JST: 多項式一般化層の docstring を教科書的説明へ強化
+
+1. 目的:
+   - API 名だけでは追いづらい定理意図を、数学的説明と式で読めるようにする。
+   - `via_powerKernel` 系の流れ（分解 -> 拡張 -> 極限 -> 微分）を docstring から辿れるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/CosmicDerivativePolynomial.lean`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_ImplHistory.md`
+   - docstring 更新:
+     - legacy bridge 3 定理に位置づけ説明を追記。
+     - `cosmicKernel_monomial_of_ne_zero` /
+       `cosmicKernel_polynomial_eval_eq_sum_coeff_mul_powerKernel_of_ne_zero` に
+       分解式の意図を明記。
+     - `polynomialKernelExt` 系（連続性、`u=0` 値、`tendsto`）に
+       removable singularity の観点を明記。
+     - `tendsto_cosmicKernel_polynomial_eval_via_powerKernel` と canonical 定理群に
+       導出フローを明記。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDerivativePolynomial` 成功。
+     - `lake build DkMath.CosmicFormula` 成功。
+3. 結論:
+   - 読者は theorem 名だけでなく、docstring 上で数学的役割と証明フローを確認できる状態になった。
+4. 失敗事例:
+   - 特になし。
+5. 備考:
+   - コード本体の証明構造・API 名は変更せず、説明層のみを強化。
+6. 次の課題:
+   - 必要に応じて和・積・合成・有限和 API 群にも同程度の式ベース docstring を展開する。
+
+### 日時: 2026/03/21 00:56 JST: 和・積・合成・有限和 API の docstring を式ベースで拡張
+
+1. 目的:
+   - 演算別 API（和・積・合成・有限和）にも教科書的な式説明を揃え、
+     利用者が theorem 名と数学法則を即対応できるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/CosmicDerivativePolynomial.lean`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_ImplHistory.md`
+   - docstring 更新:
+     - `hasDerivAt` / `tendsto` / `deriv` の各 3 形態について、
+       和: 線形性 `((p+q)' = p' + q')`
+       積: 積の法則 `((pq)' = p'q + pq')`
+       合成: 連鎖律 `((p∘q)' = (p'∘q) q')`
+       有限和: 項別微分 `(\sum_i P_i)' = \sum_i P_i'`
+       を対応づける説明を追記。
+     - canonical core 定理（`deriv_polynomial_eval_cosmic`,
+       `hasDerivAt_polynomial_eval_cosmic`）の説明も式ベースに統一。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDerivativePolynomial` 成功。
+     - `lake build DkMath.CosmicFormula` 成功。
+3. 結論:
+   - 多項式一般化層の公開 API 群は、docstring だけで
+     「どの法則を formalize した定理か」を把握できる構成になった。
+4. 失敗事例:
+   - 特になし。
+5. 備考:
+   - 今回も証明コードは非変更で、説明層のみを強化。
+6. 次の課題:
+   - 必要なら同様の式ベース docstring を `CosmicDifferenceKernel.lean` 側へも展開する。
+
+### 日時: 2026/03/21 01:03 JST: `CosmicDifferenceKernel` の docstring を教科書調に整備
+
+1. 目的:
+   - 差分核の基礎 API（`delta`, `cosmicKernel`）を、
+     数学法則と直接対応する説明で読めるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/CosmicDifferenceKernel.lean`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_ImplHistory.md`
+   - docstring 更新:
+     - `delta`, `cosmicKernel` の定義に
+       `f(x+u)-f(x)` / `(f(x+u)-f(x))/u` の式説明を追記。
+     - `delta_add/sub/smul/mul/finset_sum` に
+       線形性・離散積法則・有限和線形性を明記。
+     - `cosmicKernel_add/sub/smul/finset_sum/mul` に
+       quotient レベルでの対応法則を明記。
+3. 結論:
+   - 基礎演算則の docstring だけで、
+     「増分レベル -> 差分商レベル」の対応が追える状態になった。
+4. 失敗事例:
+   - 特になし。
+5. 備考:
+   - 証明コード本体は非変更で、説明層のみを更新。
+6. 次の課題:
+   - 必要なら `CosmicDerivativeBasic.lean` にも同様の式ベース説明を展開する。
+
+### 日時: 2026/03/21 01:22 JST: `CosmicDerivativeBasic` の docstring を式ベースへ拡張
+
+1. 目的:
+   - `HasDerivAt <-> cosmicKernel の punctured limit` という中心同値を、
+     ファイル冒頭の定理群だけで教科書的に読めるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/CosmicDerivativeBasic.lean`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_ImplHistory.md`
+   - docstring 更新:
+     - `hasDerivAt_iff_tendsto_cosmicKernel` に同値の数式説明を追記。
+     - 前向き・逆向き補題
+       (`tendsto_cosmicKernel_of_hasDerivAt`,
+       `hasDerivAt_of_tendsto_cosmicKernel`) の役割を明示。
+     - `id` / `const` の基本例について
+       `HasDerivAt` 形と `tendsto` 形の意味を式で補足。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDerivativeBasic` 成功。
+     - `lake build DkMath.CosmicFormula` 成功。
+3. 結論:
+   - 基本橋渡し層でも、定理名と数学的主張の対応が docstring 上で即読できる状態になった。
+4. 失敗事例:
+   - 特になし。
+5. 備考:
+   - 証明コードには変更を加えず、説明層のみ更新。
+6. 次の課題:
+   - 必要なら `CosmicDerivativePower.lean` 側にも同形式の式ベース説明を適用する。
+
+### 日時: 2026/03/21 01:45 JST: `CosmicDerivativePower` / `PowerLimit` の docstring を式ベースで整備
+
+1. 目的:
+   - べき関数導出の中核フロー
+     `増分分解 -> kernel 同一視 -> 極限 -> HasDerivAt`
+     を docstring だけで読めるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/CosmicDerivativePower.lean`
+     - `DkMath/CosmicFormula/CosmicDerivativePowerLimit.lean`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_ImplHistory.md`
+   - docstring 更新:
+     - `powerKernel` の有限和式を明示。
+     - `sub_pow_eq_u_mul_powerKernel` に
+       `(x+u)^d - x^d = u * powerKernel` の役割を明記。
+     - `cosmicKernel_pow_eq_powerKernel_of_ne_zero` に
+       `u ≠ 0` での同一視を明記。
+     - `continuous_powerKernel`, `powerKernel_zero`,
+       `tendsto_powerKernel_zero`, `tendsto_powerKernel_zero_punctured`,
+       `hasDerivAt_pow_cosmic` に
+       極限導出の数式説明を追記。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDerivativePower` 成功。
+     - `lake build DkMath.CosmicFormula.CosmicDerivativePowerLimit` 成功。
+     - `lake build DkMath.CosmicFormula` 成功。
+3. 結論:
+   - べき関数セクションでも、定理名と数学的主張の対応が docstring 上で明瞭になった。
+4. 失敗事例:
+   - 特になし。
+5. 備考:
+   - 証明コードは非変更で、説明層のみを更新。
+6. 次の課題:
+   - 必要なら `CosmicFormula_Lean_Implementation_Guide_of_differential_coefficients.md` に
+     「power セクション読解ガイド」を追加する。
+
+### 日時: 2026/03/21 01:48 JST: 実装ガイドへ「power セクション読解ガイド」を追加
+
+1. 目的:
+   - べき関数セクションの読む順と、各定理の数学的役割を
+     実装ガイド上で即参照できるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/docs/CosmicFormula_Lean_Implementation_Guide_of_differential_coefficients.md`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_ImplHistory.md`
+   - docs 更新:
+     - `2.3 冪関数 exact/limit 層` の直後に
+       `2.3.1 power セクション読解ガイド` を新設。
+     - ガイド内で
+       `sub_pow_eq_u_mul_powerKernel`
+       -> `cosmicKernel_pow_eq_powerKernel_of_ne_zero`
+       -> `tendsto_powerKernel_zero(_punctured)`
+       -> `hasDerivAt_pow_cosmic`
+       の読解順を明示。
+     - 設計書節 §7 / §8 / §9 との対応と、
+       実装時の確認ポイント（`u = 0` と `u ≠ 0` の役割分担）を追記。
+3. 結論:
+   - power 系の導出フローを、実装ガイド単体で追跡できる構成になった。
+4. 失敗事例:
+   - 特になし。
+5. 備考:
+   - ドキュメント更新のみ（Lean 証明コードの変更なし）。
+6. 次の課題:
+   - 必要なら同様の「読解ガイド」を polynomial セクションにも追加する。
