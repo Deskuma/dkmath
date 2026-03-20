@@ -13,8 +13,8 @@ CFBRC は、べき差
 
 参考:
 
-- [CFBRC 理論メモ](/python/CFBRC/CFBRC.md)
-- [CFBRC d=8 メモ](/python/CFBRC/CFBRC-d8.md)
+- [CFBRC 理論メモ](../../../../python/CFBRC/CFBRC.md)
+- [CFBRC d=8 メモ](../../../../python/CFBRC/CFBRC-d8.md)
 
 ## Core Formula
 

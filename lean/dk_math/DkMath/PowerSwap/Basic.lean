@@ -23,7 +23,7 @@ theorem powerSwap_refl (a : ℕ) : PowerSwap a a := by
   rfl
 
 /--
-PowerSwap は对称関係である。
+PowerSwap は対称関係である。
 -/
 theorem powerSwap_symm {a b : ℕ} (h : PowerSwap a b) : PowerSwap b a := by
   unfold PowerSwap at *
