@@ -788,3 +788,38 @@
    - 証明コードには変更を加えず、説明層のみ更新。
 6. 次の課題:
    - 必要なら `CosmicDerivativePower.lean` 側にも同形式の式ベース説明を適用する。
+
+### 日時: 2026/03/21 01:45 JST: `CosmicDerivativePower` / `PowerLimit` の docstring を式ベースで整備
+
+1. 目的:
+   - べき関数導出の中核フロー
+     `増分分解 -> kernel 同一視 -> 極限 -> HasDerivAt`
+     を docstring だけで読めるようにする。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/CosmicDerivativePower.lean`
+     - `DkMath/CosmicFormula/CosmicDerivativePowerLimit.lean`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_ImplHistory.md`
+   - docstring 更新:
+     - `powerKernel` の有限和式を明示。
+     - `sub_pow_eq_u_mul_powerKernel` に
+       `(x+u)^d - x^d = u * powerKernel` の役割を明記。
+     - `cosmicKernel_pow_eq_powerKernel_of_ne_zero` に
+       `u ≠ 0` での同一視を明記。
+     - `continuous_powerKernel`, `powerKernel_zero`,
+       `tendsto_powerKernel_zero`, `tendsto_powerKernel_zero_punctured`,
+       `hasDerivAt_pow_cosmic` に
+       極限導出の数式説明を追記。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDerivativePower` 成功。
+     - `lake build DkMath.CosmicFormula.CosmicDerivativePowerLimit` 成功。
+     - `lake build DkMath.CosmicFormula` 成功。
+3. 結論:
+   - べき関数セクションでも、定理名と数学的主張の対応が docstring 上で明瞭になった。
+4. 失敗事例:
+   - 特になし。
+5. 備考:
+   - 証明コードは非変更で、説明層のみを更新。
+6. 次の課題:
+   - 必要なら `CosmicFormula_Lean_Implementation_Guide_of_differential_coefficients.md` に
+     「power セクション読解ガイド」を追加する。
