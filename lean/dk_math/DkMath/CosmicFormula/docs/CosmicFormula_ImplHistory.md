@@ -422,3 +422,41 @@
 6. 次の課題:
    - 対応表に「未実装/非目標（設計書 §12〜§14）」のステータス列を追加する。
    - 一般関数側（多項式以外）へ演算 API を昇格させる際の依存方針を docs 化する。
+
+### 日時: 2026/03/20 20:32 JST: `CosmicDifferenceKernel` の演算則を拡張（smul / Finset.sum / mul）
+
+1. 目的: `CosmicDerivativePolynomial` の外側 API を支える内側構造核として、`delta` / `cosmicKernel` の演算則を強化する。
+2. 内容:
+   - 変更ファイル:
+     - `DkMath/CosmicFormula/CosmicDifferenceKernel.lean`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_Lean_Implementation_Guide_of_differential_coefficients.md`
+     - `DkMath/CosmicFormula/docs/CosmicFormula_ImplHistory.md`
+   - 追加した補題（`CosmicDifferenceKernel.lean`）:
+     - `delta_smul`
+     - `cosmicKernel_smul`
+     - `delta_finset_sum`
+     - `cosmicKernel_finset_sum`
+     - `cosmicKernel_mul`
+   - 実装方針:
+     - `delta` 側は `ring` と `delta_add` 再利用で線形性を追加。
+     - `Finset.sum` 側は `Finset.induction_on` で `delta_add` / `cosmicKernel_add` に帰着。
+     - `cosmicKernel_mul` は
+       `delta_mul` → `add_div` → 各項の除算再配置（`div_eq_mul_inv`）で導出。
+   - docs 更新:
+     - 実装マップ（差分核層）へ新補題群を反映。
+     - 「定理名 ↔ 設計書節」対応表へ新補題群を追加。
+   - ビルド検証:
+     - `lake build DkMath.CosmicFormula.CosmicDifferenceKernel` 成功。
+3. 結論: `delta` / `cosmicKernel` の演算則が「定数倍・有限和・積」まで拡張され、
+   以後は多項式有限和の議論を kernel 側の構造から直接組み立てやすくなった。
+4. 失敗事例:
+   - `Finset` 帰納で `DecidableEq` インスタンス不足エラーが発生。
+   - 各証明に `classical` を導入して解消。
+   - `cosmicKernel_mul` で単純 `simp` が停止し、`calc` で分解して解消。
+5. 備考:
+   - 今回は API 追加に集中し、`CosmicDerivativePolynomial` 側の既存証明置換（kernel 直結化）は未着手。
+6. 次の課題:
+   - `CosmicDerivativePolynomial` の有限和 `tendsto/deriv` を
+     `cosmicKernel_finset_sum` + 単項 kernel 補題ベースへ段階的に置き換える。
+   - `cosmicKernel_monomial` を追加し、
+     多項式を monomial 有限和として kernel レベルで展開する流れを実装する。

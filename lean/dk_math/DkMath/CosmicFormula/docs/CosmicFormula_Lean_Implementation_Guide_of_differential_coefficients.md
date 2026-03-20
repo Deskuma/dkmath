@@ -21,8 +21,9 @@
   - `delta (f : ℝ → ℝ) (x u : ℝ) := f (x + u) - f x`
   - `cosmicKernel (f : ℝ → ℝ) (x u : ℝ) := delta f x u / u`
 - 主要補題:
-  - `delta_add`, `delta_sub`, `delta_mul`
-  - `cosmicKernel_add`, `cosmicKernel_sub`
+  - `delta_add`, `delta_sub`, `delta_smul`, `delta_mul`, `delta_finset_sum`
+  - `cosmicKernel_add`, `cosmicKernel_sub`, `cosmicKernel_smul`,
+    `cosmicKernel_finset_sum`, `cosmicKernel_mul`
 
 ### 2.2 微分 bridge 層（mathlib 接続）
 
@@ -104,8 +105,8 @@
 | Lean 定理/定義 | 実装ファイル | 設計書節 |
 |---|---|---|
 | `delta`, `cosmicKernel` | `CosmicDifferenceKernel.lean` | §4 |
-| `delta_add`, `delta_sub`, `delta_mul` | `CosmicDifferenceKernel.lean` | §5.1 |
-| `cosmicKernel_eq`, `cosmicKernel_add` | `CosmicDifferenceKernel.lean` | §5.2 |
+| `delta_add`, `delta_sub`, `delta_smul`, `delta_mul`, `delta_finset_sum` | `CosmicDifferenceKernel.lean` | §5.1 |
+| `cosmicKernel_eq`, `cosmicKernel_add`, `cosmicKernel_smul`, `cosmicKernel_finset_sum`, `cosmicKernel_mul` | `CosmicDifferenceKernel.lean` | §5.2 |
 | `hasDerivAt_iff_tendsto_cosmicKernel` | `CosmicDerivativeBasic.lean` | §6 |
 | `sub_pow_eq_u_mul_powerKernel` | `CosmicDerivativePower.lean` | §7 |
 | `tendsto_powerKernel_zero` | `CosmicDerivativePowerLimit.lean` | §8 |
