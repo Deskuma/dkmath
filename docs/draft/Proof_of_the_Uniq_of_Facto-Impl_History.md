@@ -45,3 +45,25 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - 新規ファイル（候補: `DkMath/NumberTheory/UniqueFactorizationGN.lean`）を作成し、
      `factorization` の pointwise 等価を主軸に補題を段階実装する。
+
+### 日時: 2026/03/22 21:31 JST: プロトタイプ実装（Mathlib 依存）として一意性骨格補題を追加
+
+1. 目的: 「まずはプロトタイプを固める」方針に従い、Mathlib API を活用して自然数の因数分解一意性の中核補題を実装する。
+2. 内容:
+   - 新規ファイル `DkMath/NumberTheory/UniqueFactorizationGN.lean` を作成。
+   - 実装した補題・定理:
+     - `prime_mem_support_iff_dvd`
+     - `support_eq_of_primewise_dvd_iff`
+     - `factorization_eq_of_prime_pow_dvd_iff`
+     - `unique_factorization_nat_via_prime_powers`
+   - 中核依存として Mathlib の `Nat.Prime.pow_dvd_iff_le_factorization` を利用し、
+     prime-power 除法同値から `factorization` の一致を導出する構造を確立。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` でビルド成功を確認。
+3. 結論: プロトタイプ段階として、因数分解一意性証明の Lean 骨格を稼働状態で確保できた。
+4. 失敗事例:
+   - 初回でファイル先頭コメントを C 形式 `/* ... */` で書いたため Lean parser エラー。
+   - `/- ... -/` に修正して解消。
+5. 備考:
+   - 現時点は意図的に Mathlib 依存を許容し、証明構造を先に固定した。
+6. 次の課題:
+   - 追加定理を wrapper/bridge 層へ寄せ、将来の `DkMathlib` 独立化に向けて依存境界を明確化する。

@@ -539,3 +539,24 @@ u\,GN_d(x,u)
   4. `unique_factorization_nat_via_support`
 
 この順で進めると、既存補題の再利用率が高く、`sorry` を最小化しやすい。
+
+### 16.6 プロトタイプ実装（Mathlib 依存）進捗
+
+初手の骨格として、以下を実装済み:
+
+- 新規 Lean ファイル:
+  - `DkMath/NumberTheory/UniqueFactorizationGN.lean`
+- 追加した主要定理:
+  - `prime_mem_support_iff_dvd`
+  - `support_eq_of_primewise_dvd_iff`
+  - `factorization_eq_of_prime_pow_dvd_iff`
+  - `unique_factorization_nat_via_prime_powers`
+
+ビルド確認:
+
+- `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功。
+
+備考:
+
+- この実装は「プロトタイプ優先」のため Mathlib API を積極利用している。
+- 将来の `DkMathlib` 独立化フェーズでは、ここを wrapper/bridge 境界として分離する。
