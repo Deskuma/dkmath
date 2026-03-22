@@ -276,4 +276,65 @@ theorem prime_dvd_boundaryLeft_not_dvd_kernelLeft_of_coprime_of_not_dvd_exp
     (prime_dvd_right_not_dvd_GN_swap_of_coprime_of_not_dvd_exp
       (d := d) (x := x) (u := u) hd1 hu hcop hqP hq_ndvd_d hq_dvd_boundary)
 
+/--
+`boundaryProd = x*u` についての prime-power 分解読み出し（prototype）。
+
+`q^k ∣ x*u` は「`i+j=k` となる分割で `q^i ∣ x`, `q^j ∣ u`」と同値。
+-/
+theorem primePow_dvd_boundaryProd_iff_exists_split
+    {x u q k : ℕ} (hqP : Nat.Prime q) (hx : 0 < x) (hu : 0 < u) :
+    q ^ k ∣ boundaryProd x u ↔
+      ∃ i j : ℕ, i + j = k ∧ q ^ i ∣ x ∧ q ^ j ∣ u := by
+  haveI : Fact q.Prime := ⟨hqP⟩
+  have hx0 : x ≠ 0 := Nat.ne_of_gt hx
+  have hu0 : u ≠ 0 := Nat.ne_of_gt hu
+  have hxu0 : x * u ≠ 0 := Nat.mul_ne_zero hx0 hu0
+  have hmul : padicValNat q (x * u) = padicValNat q x + padicValNat q u :=
+    padicValNat.mul (p := q) (a := x) (b := u) hx0 hu0
+  constructor
+  · intro hqk
+    have hk_le_mul : k ≤ padicValNat q (x * u) :=
+      (padicValNat_dvd_iff_le (p := q) (a := x * u) (n := k) hxu0).1
+        (by simpa [boundaryProd] using hqk)
+    have hk_le_sum : k ≤ padicValNat q x + padicValNat q u := by simpa [hmul] using hk_le_mul
+    by_cases hkx : k ≤ padicValNat q x
+    · refine ⟨k, 0, by simp, ?_, ?_⟩
+      · exact (padicValNat_dvd_iff_le (p := q) (a := x) (n := k) hx0).2 hkx
+      · simp
+    · have hlt : padicValNat q x < k := lt_of_not_ge hkx
+      refine ⟨padicValNat q x, k - padicValNat q x, by omega, ?_, ?_⟩
+      · exact
+          (padicValNat_dvd_iff_le (p := q) (a := x) (n := padicValNat q x) hx0).2 le_rfl
+      · have hsub_le : k - padicValNat q x ≤ padicValNat q u :=
+          (Nat.sub_le_iff_le_add'.2 hk_le_sum)
+        exact
+          (padicValNat_dvd_iff_le (p := q) (a := u) (n := k - padicValNat q x) hu0).2 hsub_le
+  · rintro ⟨i, j, hij, hqi, hqj⟩
+    have hi_le : i ≤ padicValNat q x :=
+      (padicValNat_dvd_iff_le (p := q) (a := x) (n := i) hx0).1 hqi
+    have hj_le : j ≤ padicValNat q u :=
+      (padicValNat_dvd_iff_le (p := q) (a := u) (n := j) hu0).1 hqj
+    have hk_le_sum : k ≤ padicValNat q x + padicValNat q u := by
+      have hsum_le : i + j ≤ padicValNat q x + padicValNat q u := Nat.add_le_add hi_le hj_le
+      simpa [hij] using hsum_le
+    have hk_le_mul : k ≤ padicValNat q (x * u) := by simpa [hmul] using hk_le_sum
+    exact (padicValNat_dvd_iff_le (p := q) (a := x * u) (n := k) hxu0).2 hk_le_mul
+
+/--
+`boundaryProd` と `kernelRight` の積に対する wrapper 形 valuation 加法。
+-/
+theorem padicValNat_mul_boundaryProd_kernelRight_eq_add_wrapper
+    {d x u q : ℕ}
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) (hqP : Nat.Prime q) :
+    padicValNat q (boundaryProd x u * kernelRight d x u) =
+      padicValNat q (boundaryProd x u) + padicValNat q (kernelRight d x u) := by
+  haveI : Fact q.Prime := ⟨hqP⟩
+  have hA0 : boundaryProd x u ≠ 0 := by
+    exact Nat.mul_ne_zero (Nat.ne_of_gt hx) (Nat.ne_of_gt hu)
+  have hK0 : kernelRight d x u ≠ 0 := by
+    simpa [kernelRight] using
+      (GN_ne_zero_nat_of_two_le (d := d) (x := x) (u := u) hd2 hx hu)
+  simpa [boundaryProd, kernelRight] using
+    (padicValNat.mul (p := q) (a := boundaryProd x u) (b := kernelRight d x u) hA0 hK0)
+
 end DkMath.NumberTheory

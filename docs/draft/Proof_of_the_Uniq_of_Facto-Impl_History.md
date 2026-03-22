@@ -147,3 +147,26 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
    - `padicValNat.mul` の適用には `x ≠ 0`, `u ≠ 0`, `GN ≠ 0` を明示供給している。
 6. 次の課題:
    - `boundaryProd` 側（`A := xu`）での `q^k` レベル API（`p^k ∣ A ↔ ...`）へ接続する。
+
+### 日時: 2026/03/22 23:09 JST: `boundaryProd` の prime-power 読み出し補題を追加し、`kernelRight` 比較 wrapper を整備
+
+1. 目的: `A := xu` 側の `q^k` API を具体化し、`boundaryProd` と `kernelRight` の比較入口を強化する。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に以下を追加。
+     - `primePow_dvd_boundaryProd_iff_exists_split`
+     - `padicValNat_mul_boundaryProd_kernelRight_eq_add_wrapper`
+   - 前者で `q^k ∣ boundaryProd x u` の分割表示
+     `∃ i+j=k, q^i∣x, q^j∣u` を実装。
+   - 後者で wrapper 形
+     `v_q(boundaryProd * kernelRight) = v_q(boundaryProd) + v_q(kernelRight)`
+     を明示。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: `boundaryProd` 側の prime-power 読み出しが API 化され、一意性モジュールへの接続準備が一段進んだ。
+4. 失敗事例:
+   - なし（初回ビルドで本質エラーは発生せず）。
+5. 備考:
+   - valuation 加法自体は一般公式（`padicValNat.mul`）だが、GN 分解の寄与は
+     boundary/kernel の構造化と non-overlap 条件の API 化にある、と整理した。
+6. 次の課題:
+   - `q^k ∣ boundaryProd` と `q^k ∣ kernelRight` の比較を、
+     support 重なり制御（非例外素数）として補題化する。

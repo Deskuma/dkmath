@@ -694,3 +694,25 @@ q \mid A \Rightarrow q \nmid B
   - `prime_dvd_boundaryLeft_not_dvd_kernelLeft_of_coprime_of_not_dvd_exp`
 
 これで「gcd レベル → product レベル」への最初の移送と、`boundary/kernel` 命名での API 入口が揃った。
+
+### 16.12 `boundaryProd` の prime-power 読み出しと比較 wrapper
+
+精密化ポイント（設計上の切り分け）:
+
+- valuation 加法そのものは `padicValNat.mul` の一般公式。
+- GN 側の固有貢献は、
+  - 何を `boundary/kernel` 積として見るか
+  - 非競合条件をどう API に持ち上げるか
+  - naming をどう固定するか
+  にある。
+
+追加実装:
+
+- `primePow_dvd_boundaryProd_iff_exists_split`
+  - `q^k ∣ boundaryProd x u` と
+    `∃ i j, i+j=k ∧ q^i∣x ∧ q^j∣u` の同値（`q` prime, `x,u>0`）。
+- `padicValNat_mul_boundaryProd_kernelRight_eq_add_wrapper`
+  - wrapper 形で
+    `v_q(boundaryProd * kernelRight) = v_q(boundaryProd)+v_q(kernelRight)`。
+
+これで `boundaryProd` 側の prime-power API と `kernelRight` 比較 API の入口が揃った。
