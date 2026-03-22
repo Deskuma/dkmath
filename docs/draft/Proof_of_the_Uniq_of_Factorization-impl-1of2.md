@@ -419,15 +419,15 @@ GN_d(x,u)\equiv d\,x^{d-1}\pmod{u}
 (x+u)^d-x^d=u\,GN_d(x,u)
 \]
 
-とする。このとき任意の素数 p \nmid d について
+とする。このとき任意の素数 \( p \nmid d \) について
 
 \[
 p\mid x \Rightarrow p\nmid GN_d(x,u),\qquad
 p\mid u \Rightarrow p\nmid GN_d(x,u)
 \]
 
-が成り立つ。したがって xu\,GN_d(x,u) に現れる非例外素数は、
-その所属層 x,u,GN_d(x,u) が一意に定まる。
+が成り立つ。したがって \( xu\,GN_d(x,u) \) に現れる非例外素数は、
+その所属層 \( x,u,GN_d(x,u) \) が一意に定まる。
 この原理を反復剥離に適用することで、素因数分解の一意性へ向かう
 Euclid 型消去原理の差分版が得られる。
 ```
@@ -458,105 +458,3 @@ u\,GN_d(x,u)
 という 3段階の構造を持つ。
 
 この橋を一般の \( ab \) 型の積へどう延長するかが、今後の定式化上の主課題となる。
-
----
-
-## 16. Lean 実装計画（事前調査）
-
-### 16.1 調査スコープ
-
-本フェーズでは「自然数の素因数分解の一意性」を、
-既存の `GN`/差分系補題と `Nat.factorization` 系 API を使って実装可能かを確認した。
-
-### 16.2 既存補題の所在（ワークスペース内）
-
-1. `DkMath/Basic/Nat.lean`
-
-- `mem_support_factorization_iff`
-  - `p ∈ n.factorization.support ↔ (n ≠ 0 ∧ Nat.Prime p ∧ p ∣ n)`
-- `disjoint_support_of_coprime`
-  - `Nat.Coprime a b → Disjoint a.factorization.support b.factorization.support`
-- `support_mul_coprime`
-  - 互いに素条件下で support が和集合になる補題
-- `rad_mul_coprime`
-  - support 分離を使う積の既存実装例として有用
-
-1. `DkMath/CFBRC/Basic.lean`
-
-- `sub_eq_mul_cyclotomicPrimeCore_nat`
-- `prime_dvd_cyclotomicPrimeCore_of_dvd_sub_not_dvd_left`
-  - 差分式から core 側への素数除法移送
-
-1. `DkMath/CFBRC/Bridge.lean`
-
-- `prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat`
-  - `q ∤ x` 下で差分式と core の除法同値
-- primitive prime existence 系 wrapper
-  - `exists_primitive_prime_factor_*`
-
-1. `DkMath/NumberTheory/Gcd/GN.lean`
-
-- `gcd_gap_GN_dvd_exp_int`
-- `coprime_gap_GN_of_not_dvd_exp_prime`
-- `padicValNat_sub_pow_eq_padicValNat_GN_of_not_dvd_gap`
-  - 例外素数（指数を割る素数）を切り分けるための補強材料
-
-### 16.3 利用可能定理（主に Mathlib API）
-
-既存コードで実際に使用されており、本実装でも再利用可能であることを確認:
-
-- `Nat.factorization_mul`
-- `Nat.mem_primeFactors`
-- `Nat.Prime.dvd_mul`
-- `Nat.dvd_gcd`, `Nat.gcd_dvd_left`, `Nat.gcd_dvd_right`
-- `Nat.exists_prime_and_dvd`
-- `Nat.coprime_iff_gcd_eq_one`
-
-### 16.4 実装方針（分割）
-
-1. Phase A: 純粋な自然数版の一意性骨格
-
-- 目標: `factorization.support` の同一性から、素因子集合の一意性を先に確立。
-- 依存: `mem_support_factorization_iff`, `support_mul_coprime`。
-
-1. Phase B: Euclid 型消去を差分（`GN`）へ接続
-
-- 目標: `p ∤ d` の非例外素数で、`x / u / GN` の所属先が競合しないことを Lean 補題化。
-- 依存: `prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat`, `coprime_gap_GN_of_not_dvd_exp_prime`。
-
-1. Phase C: 一意性定理として統合
-
-- 目標: 「分解が 2 通り与えられたとき、素数ごとの指数が一致する」主定理へ集約。
-- 実装形: `Nat.factorization` の pointwise equality (`ext p`) を基本に構成。
-
-### 16.5 直近の実装対象（提案）
-
-- 新規ファイル候補: `DkMath/NumberTheory/UniqueFactorizationGN.lean`
-- 最初に置く補題候補:
-  1. `prime_mem_support_iff_dvd`
-  2. `support_eq_of_primewise_dvd_iff`
-  3. `factorization_ext_of_primewise`
-  4. `unique_factorization_nat_via_support`
-
-この順で進めると、既存補題の再利用率が高く、`sorry` を最小化しやすい。
-
-### 16.6 プロトタイプ実装（Mathlib 依存）進捗
-
-初手の骨格として、以下を実装済み:
-
-- 新規 Lean ファイル:
-  - `DkMath/NumberTheory/UniqueFactorizationGN.lean`
-- 追加した主要定理:
-  - `prime_mem_support_iff_dvd`
-  - `support_eq_of_primewise_dvd_iff`
-  - `factorization_eq_of_prime_pow_dvd_iff`
-  - `unique_factorization_nat_via_prime_powers`
-
-ビルド確認:
-
-- `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功。
-
-備考:
-
-- この実装は「プロトタイプ優先」のため Mathlib API を積極利用している。
-- 将来の `DkMathlib` 独立化フェーズでは、ここを wrapper/bridge 境界として分離する。
