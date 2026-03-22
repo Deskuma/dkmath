@@ -777,3 +777,26 @@ q \mid A \Rightarrow q \nmid B
 
 これで、例外素数レイヤを別管理したまま
 最終の factorization 比較定理へ入れる導線が明示化された。
+
+### 16.17 `hExc` の具体供給と end-to-end 比較定理
+
+`boundaryProd/kernelRight` の具体補題群から `hExc` を供給する接続層を追加した。
+
+- 例外層の具体補題:
+  - `prime_dvd_boundaryRight_dvd_kernelRight_of_dvd_exp`
+    - `q ∣ d` かつ `q ∣ boundaryRight` なら `q ∣ kernelRight`。
+  - `prime_dvd_boundaryProd_dvd_kernelRight_of_dvd_exp_of_not_dvd_boundaryLeft`
+    - `q ∣ d`, `q ∣ boundaryProd`, `q ∤ boundaryLeft` から `q ∣ kernelRight`。
+- 層供給 API:
+  - `exceptionalLayer_of_boundaryProd_kernelRight`
+  - `nonExceptionalLayer_of_boundaryProd_kernelRight`
+  - それぞれ `boundaryProd/kernelRight` 由来の比較補題群を
+    `PrimePowComparisonExceptionalLayer` / `PrimePowComparisonNonExceptionalLayer`
+    に束ねる。
+- end-to-end:
+  - `unique_factorization_nat_via_boundaryProd_kernelRight_split_layers_e2e`
+    - 上記 2 層 API を受けて、最終的に `m = n` を返す。
+
+これで、`hExc` を抽象引数のまま置かずに
+`boundaryProd/kernelRight` 補題群から注入して
+最終比較定理まで一気通しで接続できる形になった。

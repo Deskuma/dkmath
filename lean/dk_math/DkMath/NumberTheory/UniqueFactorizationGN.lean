@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Basic.Nat
 import DkMath.NumberTheory.Gcd.GN
+import DkMath.FLT.Core
 import Mathlib
 
 /-!
@@ -135,6 +136,116 @@ theorem unique_factorization_nat_via_split_prime_layers
   by_cases hq_dvd_d : q ∣ d
   · exact hExc q k hqP hq_dvd_d
   · exact hNonExc q k hqP hq_dvd_d
+
+/--
+例外素数層の具体補題（right boundary -> right kernel）:
+`q ∣ d` かつ `q ∣ boundaryRight x u` なら `q ∣ kernelRight d x u`。
+-/
+theorem prime_dvd_boundaryRight_dvd_kernelRight_of_dvd_exp
+    {d x u q : ℕ}
+    (hd1 : 1 ≤ d) (hqP : Nat.Prime q) (hq_dvd_d : q ∣ d)
+    (hq_dvd_boundary : q ∣ boundaryRight x u) :
+    q ∣ kernelRight d x u := by
+  have hhead :
+      GN (R := ZMod q) d (x : ZMod q) (u : ZMod q) =
+        (Nat.choose d 1 : ZMod q) * (u : ZMod q) ^ (d - 1) := by
+    simpa [boundaryRight] using
+      (DkMath.GN_zmod_eq_head_of_dvd
+        (p := q) (d := d) (x := x) (u := u) hqP hd1 hq_dvd_boundary)
+  have hd0 : (d : ZMod q) = 0 := (ZMod.natCast_eq_zero_iff d q).2 hq_dvd_d
+  have hGN0 : (GN d x u : ZMod q) = 0 := by
+    calc
+      (GN d x u : ZMod q)
+          = (Nat.choose d 1 : ZMod q) * (u : ZMod q) ^ (d - 1) := by
+              simpa using hhead
+      _ = (d : ZMod q) * (u : ZMod q) ^ (d - 1) := by simp
+      _ = 0 := by simp [hd0]
+  exact (ZMod.natCast_eq_zero_iff (kernelRight d x u) q).1 (by simpa [kernelRight] using hGN0)
+
+/--
+例外素数層の具体補題（boundaryProd 版）:
+`q ∣ d`、`q ∣ boundaryProd x u`、`q ∤ boundaryLeft x u` なら `q ∣ kernelRight d x u`。
+-/
+theorem prime_dvd_boundaryProd_dvd_kernelRight_of_dvd_exp_of_not_dvd_boundaryLeft
+    {d x u q : ℕ}
+    (hd1 : 1 ≤ d) (hqP : Nat.Prime q) (hq_dvd_d : q ∣ d)
+    (hq_dvd_boundaryProd : q ∣ boundaryProd x u)
+    (hq_not_dvd_boundaryLeft : ¬ q ∣ boundaryLeft x u) :
+    q ∣ kernelRight d x u := by
+  have hq_dvd_x : q ∣ x := by
+    have hq_dvd_x_or_u : q ∣ x ∨ q ∣ u := by
+      have hq_dvd_mul : q ∣ x * u := by simpa [boundaryProd] using hq_dvd_boundaryProd
+      exact hqP.dvd_mul.mp hq_dvd_mul
+    rcases hq_dvd_x_or_u with hq_dvd_x | hq_dvd_u
+    · exact hq_dvd_x
+    · exact False.elim (hq_not_dvd_boundaryLeft (by simpa [boundaryLeft] using hq_dvd_u))
+  exact
+    prime_dvd_boundaryRight_dvd_kernelRight_of_dvd_exp
+      (d := d) (x := x) (u := u) (q := q)
+      hd1 hqP hq_dvd_d (by simpa [boundaryRight] using hq_dvd_x)
+
+/--
+`boundaryProd/kernelRight` の具体比較補題群から、例外層 `hExc` を構成する。
+-/
+theorem exceptionalLayer_of_boundaryProd_kernelRight
+    {d x u m n : ℕ}
+    (hExcM : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hExcK : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hExcBK : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ boundaryProd x u ↔ q ^ k ∣ kernelRight d x u)) :
+    PrimePowComparisonExceptionalLayer d m n := by
+  intro q k hqP hq_dvd_d
+  exact (hExcM q k hqP hq_dvd_d).trans
+    ((hExcBK q k hqP hq_dvd_d).trans (hExcK q k hqP hq_dvd_d).symm)
+
+/--
+`boundaryProd/kernelRight` の具体比較補題群から、非例外層 `hNonExc` を構成する。
+-/
+theorem nonExceptionalLayer_of_boundaryProd_kernelRight
+    {d x u m n : ℕ}
+    (hNonExcM : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hNonExcK : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hNonExcBK : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ boundaryProd x u ↔ q ^ k ∣ kernelRight d x u)) :
+    PrimePowComparisonNonExceptionalLayer d m n := by
+  intro q k hqP hq_ndvd_d
+  exact (hNonExcM q k hqP hq_ndvd_d).trans
+    ((hNonExcBK q k hqP hq_ndvd_d).trans (hNonExcK q k hqP hq_ndvd_d).symm)
+
+/--
+実データ向け end-to-end 比較定理:
+`boundaryProd/kernelRight` 由来の層別比較補題群を束ねて `m = n` を得る。
+-/
+theorem unique_factorization_nat_via_boundaryProd_kernelRight_split_layers_e2e
+    {d x u m n : ℕ}
+    (hm : m ≠ 0) (hn : n ≠ 0)
+    (hExcM : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hExcK : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hExcBK : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ boundaryProd x u ↔ q ^ k ∣ kernelRight d x u))
+    (hNonExcM : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hNonExcK : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hNonExcBK : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ boundaryProd x u ↔ q ^ k ∣ kernelRight d x u)) :
+    m = n := by
+  have hExc : PrimePowComparisonExceptionalLayer d m n :=
+    exceptionalLayer_of_boundaryProd_kernelRight
+      (d := d) (x := x) (u := u) (m := m) (n := n)
+      hExcM hExcK hExcBK
+  have hNonExc : PrimePowComparisonNonExceptionalLayer d m n :=
+    nonExceptionalLayer_of_boundaryProd_kernelRight
+      (d := d) (x := x) (u := u) (m := m) (n := n)
+      hNonExcM hNonExcK hNonExcBK
+  exact unique_factorization_nat_via_split_prime_layers
+    (d := d) (m := m) (n := n) hm hn hExc hNonExc
 
 /--
 GN-side layer separation (right boundary):

@@ -274,3 +274,31 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - 例外層 `hExc` を `boundaryProd/kernelRight` の具体的補題群で供給し、
      実データに対する end-to-end 比較定理を実装する。
+
+### 日時: 2026/03/23 01:19 JST: `hExc` を `boundaryProd/kernelRight` 補題群で供給し、end-to-end 比較定理を実装
+
+1. 目的: 抽象引数だった `hExc` を `boundaryProd/kernelRight` の具体補題群から構成し、
+   実データ比較を最終定理 `m = n` まで接続する。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` を拡張。
+   - 例外層の具体補題を追加:
+     - `prime_dvd_boundaryRight_dvd_kernelRight_of_dvd_exp`
+     - `prime_dvd_boundaryProd_dvd_kernelRight_of_dvd_exp_of_not_dvd_boundaryLeft`
+   - 層供給 API を追加:
+     - `exceptionalLayer_of_boundaryProd_kernelRight`
+     - `nonExceptionalLayer_of_boundaryProd_kernelRight`
+   - end-to-end 比較定理を追加:
+     - `unique_factorization_nat_via_boundaryProd_kernelRight_split_layers_e2e`
+     - `boundaryProd/kernelRight` 由来の層別比較仮定を束ねて
+       `unique_factorization_nat_via_split_prime_layers` へ接続し、`m = n` を導出。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: 例外層 `hExc` の供給経路が具体化され、層別 API から
+   end-to-end 比較定理まで一気通しで到達できる実装になった。
+4. 失敗事例:
+   - なし（今回の追加では本質エラーなし）。
+5. 備考:
+   - 例外層の right-boundary -> kernel 接続に `DkMath.FLT.Core` の
+     `GN_zmod_eq_head_of_dvd` を再利用した。
+6. 次の課題:
+   - 例外層比較仮定 `hExcBK` / 非例外層比較仮定 `hNonExcBK` を、
+     さらに自動供給できる具体補題セットへ縮約する。
