@@ -391,6 +391,82 @@ theorem primePow_dvd_boundaryProd_not_primePow_dvd_kernelRight_of_coprime_of_not
       (d := d) (x := x) (u := u) (q := q) (k := k)
       hd1 hx hu hcop hqP hq_ndvd_d hk hqk_dvd_boundary) hq_dvd_kernel
 
+/--
+`k ≤ v_q(boundaryProd)`（`k>0`）を入口にした `kernelRight` 側の valuation ゼロ化。
+
+`q ∤ d` 層では、`boundaryProd` 側に現れた prime-power は
+`kernelRight` 側 support に現れない。
+-/
+theorem padicValNat_kernelRight_eq_zero_of_pos_le_padicVal_boundaryProd_of_coprime_of_not_dvd_exp
+    {d x u q k : ℕ}
+    (hd1 : 1 ≤ d) (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hqP : Nat.Prime q) (hq_ndvd_d : ¬ q ∣ d)
+    (hk : 0 < k) (hk_le_boundary : k ≤ padicValNat q (boundaryProd x u)) :
+    padicValNat q (kernelRight d x u) = 0 := by
+  haveI : Fact q.Prime := ⟨hqP⟩
+  have hB0 : boundaryProd x u ≠ 0 := Nat.mul_ne_zero (Nat.ne_of_gt hx) (Nat.ne_of_gt hu)
+  have hqk_dvd_boundary : q ^ k ∣ boundaryProd x u :=
+    (padicValNat_dvd_iff_le (p := q) (a := boundaryProd x u) (n := k) hB0).2 hk_le_boundary
+  have hq_not_dvd_kernel :
+      ¬ q ∣ kernelRight d x u :=
+    primePow_dvd_boundaryProd_not_dvd_kernelRight_of_coprime_of_not_dvd_exp
+      (d := d) (x := x) (u := u) (q := q) (k := k)
+      hd1 hx hu hcop hqP hq_ndvd_d hk hqk_dvd_boundary
+  exact padicValNat.eq_zero_of_not_dvd hq_not_dvd_kernel
+
+/--
+`k ≤ v_q(boundaryProd)`（`k>0`）なら、同じ `k` は `kernelRight` 側 valuation に載らない。
+
+`k ≤ ...` 形 API での直接比較版。
+-/
+theorem not_le_padicValNat_kernelRight_of_pos_le_padicVal_boundaryProd_of_coprime_of_not_dvd_exp
+    {d x u q k : ℕ}
+    (hd1 : 1 ≤ d) (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hqP : Nat.Prime q) (hq_ndvd_d : ¬ q ∣ d)
+    (hk : 0 < k) (hk_le_boundary : k ≤ padicValNat q (boundaryProd x u)) :
+    ¬ k ≤ padicValNat q (kernelRight d x u) := by
+  have hK0 :
+      padicValNat q (kernelRight d x u) = 0 :=
+    padicValNat_kernelRight_eq_zero_of_pos_le_padicVal_boundaryProd_of_coprime_of_not_dvd_exp
+      (d := d) (x := x) (u := u) (q := q) (k := k)
+      hd1 hx hu hcop hqP hq_ndvd_d hk hk_le_boundary
+  rw [hK0]
+  exact Nat.not_le_of_gt hk
+
+/--
+`support` 比較 API:
+`q ∤ d` 層で `boundaryProd` 側 support にある素数は
+`kernelRight` 側 support には現れない。
+-/
+theorem support_boundaryProd_disjoint_kernelRight_of_coprime_of_not_dvd_exp
+    {d x u q : ℕ}
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hq_ndvd_d : ¬ q ∣ d) :
+    q ∈ (boundaryProd x u).factorization.support →
+    q ∉ (kernelRight d x u).factorization.support := by
+  intro hq_mem_boundary hq_mem_kernel
+  have hqP : Nat.Prime q :=
+    (DkMath.Basic.Nat.mem_support_factorization_iff.mp hq_mem_boundary).2.1
+  have hB0 : boundaryProd x u ≠ 0 := Nat.mul_ne_zero (Nat.ne_of_gt hx) (Nat.ne_of_gt hu)
+  have hq_dvd_boundary :
+      q ∣ boundaryProd x u :=
+    (prime_mem_support_iff_dvd (n := boundaryProd x u) (p := q) hB0 hqP).1 hq_mem_boundary
+  have hq_not_dvd_kernel :
+      ¬ q ∣ kernelRight d x u := by
+    have hd1 : 1 ≤ d := Nat.le_trans (by decide : 1 ≤ 2) hd2
+    have hq1_dvd_boundary : q ^ 1 ∣ boundaryProd x u := by simpa using hq_dvd_boundary
+    exact
+      primePow_dvd_boundaryProd_not_dvd_kernelRight_of_coprime_of_not_dvd_exp
+        (d := d) (x := x) (u := u) (q := q) (k := 1)
+        hd1 hx hu hcop hqP hq_ndvd_d (by decide) hq1_dvd_boundary
+  have hK0 : kernelRight d x u ≠ 0 := by
+    simpa [kernelRight] using
+      (GN_ne_zero_nat_of_two_le (d := d) (x := x) (u := u) hd2 hx hu)
+  have hq_dvd_kernel :
+      q ∣ kernelRight d x u :=
+    (prime_mem_support_iff_dvd (n := kernelRight d x u) (p := q) hK0 hqP).1 hq_mem_kernel
+  exact hq_not_dvd_kernel hq_dvd_kernel
+
 /-- `boundaryProd = x*u` の `q`-進付値は和に分解される（wrapper）。 -/
 theorem padicValNat_boundaryProd_eq_add
     {x u q : ℕ} (hqP : Nat.Prime q) (hx : 0 < x) (hu : 0 < u) :

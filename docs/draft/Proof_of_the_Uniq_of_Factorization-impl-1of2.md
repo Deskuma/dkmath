@@ -744,3 +744,17 @@ q \mid A \Rightarrow q \nmid B
 `q ∣ x*u` から `q ∣ x` または `q ∣ u` を取り、
 前者は既存の `q ∤ d` 非競合補題、後者は新規補題
 `prime_dvd_right_not_dvd_GN_of_coprime`（`q ∣ u → ¬ q ∣ GN d x u`）で処理している。
+
+### 16.15 非重複を `v_q` / support 比較 API（`k ≤ ...` 形）へ統合
+
+`boundaryProd` vs `kernelRight` の非重複を、比較しやすい API に持ち上げた。
+
+- `padicValNat_kernelRight_eq_zero_of_pos_le_padicVal_boundaryProd_of_coprime_of_not_dvd_exp`
+  - `0<k` かつ `k ≤ v_q(boundaryProd)` なら `v_q(kernelRight)=0`。
+- `not_le_padicValNat_kernelRight_of_pos_le_padicVal_boundaryProd_of_coprime_of_not_dvd_exp`
+  - 同じ前提で `¬ k ≤ v_q(kernelRight)`（`k ≤ ...` 形の直接比較）。
+- `support_boundaryProd_disjoint_kernelRight_of_coprime_of_not_dvd_exp`
+  - `q ∈ support(boundaryProd)` なら `q ∉ support(kernelRight)`（`q ∤ d` 層）。
+
+これで、prime-power 非重複が
+`dvd` 表現だけでなく `valuation` / `support` 比較 API として再利用可能になった。

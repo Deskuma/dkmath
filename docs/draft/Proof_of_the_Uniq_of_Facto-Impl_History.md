@@ -218,3 +218,32 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - `boundaryProd` と `kernelRight` の非重複を
      `v_q` / support 比較 API（`k ≤ ...` 形）へ統合する。
+
+### 日時: 2026/03/23 00:47 JST: 非重複を `v_q` / support 比較 API（`k ≤ ...` 形）へ統合
+
+1. 目的: `boundaryProd` vs `kernelRight` の prime-power 非重複を、
+   そのまま比較定理で使える `valuation` / `support` API に持ち上げる。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に以下を追加。
+     - `padicValNat_kernelRight_eq_zero_of_pos_le_padicVal_boundaryProd_of_coprime_of_not_dvd_exp`
+     - `not_le_padicValNat_kernelRight_of_pos_le_padicVal_boundaryProd_of_coprime_of_not_dvd_exp`
+     - `support_boundaryProd_disjoint_kernelRight_of_coprime_of_not_dvd_exp`
+   - `k ≤ v_q(boundaryProd)`（`k>0`）から `q^k ∣ boundaryProd` を復元し、
+     既存の prime-power 非重複補題へ接続して
+     `v_q(kernelRight)=0` / `¬ k ≤ v_q(kernelRight)` を導出。
+   - support 版では
+     `q ∈ support(boundaryProd) -> q ∣ boundaryProd`
+     と `q ∤ kernelRight` を組み合わせて
+     `q ∉ support(kernelRight)` を証明。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: 非重複の主張が
+   `dvd` 形式から `k ≤ ...` valuation 形式・support 形式へ統合され、
+   一意性モジュール側の比較 API と直接接続できる状態になった。
+4. 失敗事例:
+   - `¬ k ≤ 0` の証明で `Nat.not_succ_le_zero` を誤適用して型不一致。
+   - `Nat.not_le_of_gt hk` に置換して解消。
+5. 備考:
+   - support 版は `kernelRight ≠ 0` を要するため、`2 ≤ d` と `x,u>0` を前提にしている。
+6. 次の課題:
+   - 例外素数（`q ∣ d`）レイヤを分離した比較 API を追加し、
+     最終の factorization 比較定理へ接続する。
