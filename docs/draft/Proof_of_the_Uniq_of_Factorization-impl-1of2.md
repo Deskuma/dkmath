@@ -716,3 +716,17 @@ q \mid A \Rightarrow q \nmid B
     `v_q(boundaryProd * kernelRight) = v_q(boundaryProd)+v_q(kernelRight)`。
 
 これで `boundaryProd` 側の prime-power API と `kernelRight` 比較 API の入口が揃った。
+
+### 16.13 `boundaryProd` の prime-power 判定を不等式 wrapper へ拡張
+
+存在分割版
+
+- `primePow_dvd_boundaryProd_iff_exists_split`
+
+に加えて、不等式版 wrapper を追加した。
+
+- `primePow_dvd_boundaryProd_iff_le_padicVal_sum`
+  - `q^k ∣ boundaryProd x u ↔ k ≤ v_q(x) + v_q(u)`（`q` prime, `x,u>0`）。
+
+これにより、将来の factorization 一致・support 比較で使いやすい
+`k ≤ ...` 形式の入口が明示化された。

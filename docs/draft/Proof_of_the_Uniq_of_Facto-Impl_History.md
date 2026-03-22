@@ -170,3 +170,26 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - `q^k ∣ boundaryProd` と `q^k ∣ kernelRight` の比較を、
      support 重なり制御（非例外素数）として補題化する。
+
+### 日時: 2026/03/22 23:36 JST: `boundaryProd` の prime-power 判定に不等式 wrapper を追加
+
+1. 目的: 存在分割 API（`∃ i+j=k`）に加えて、比較定理へ直接つなぎやすい `k ≤ ...` 形式を明示する。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に以下を追加。
+     - `padicValNat_boundaryProd_eq_add`
+     - `primePow_dvd_boundaryProd_iff_le_padicVal_sum`
+   - `boundaryProd = x*u` を介して
+     `q^k ∣ boundaryProd x u ↔ k ≤ padicValNat q x + padicValNat q u`
+     を実装。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: `boundaryProd` の prime-power API が
+   「存在分割版」と「不等式版」の二窓構成になり、factorization/suppport 比較へ接続しやすくなった。
+4. 失敗事例:
+   - 初版で `k ≤ padicValNat q (x*u)` 目標への書き換えが届かず失敗。
+   - `hmul : padicValNat q (x*u) = ...` を明示して解消。
+5. 備考:
+   - valuation 加法の核は一般公式（`padicValNat.mul`）で、GN 側の寄与は
+     wrapper 命名と比較導線の整備にある。
+6. 次の課題:
+   - `boundaryProd` と `kernelRight` の prime-power 非重複を
+     `q ∤ d` 層で補題化する。

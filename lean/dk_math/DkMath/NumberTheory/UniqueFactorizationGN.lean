@@ -320,6 +320,36 @@ theorem primePow_dvd_boundaryProd_iff_exists_split
     have hk_le_mul : k ≤ padicValNat q (x * u) := by simpa [hmul] using hk_le_sum
     exact (padicValNat_dvd_iff_le (p := q) (a := x * u) (n := k) hxu0).2 hk_le_mul
 
+/-- `boundaryProd = x*u` の `q`-進付値は和に分解される（wrapper）。 -/
+theorem padicValNat_boundaryProd_eq_add
+    {x u q : ℕ} (hqP : Nat.Prime q) (hx : 0 < x) (hu : 0 < u) :
+    padicValNat q (boundaryProd x u) =
+      padicValNat q x + padicValNat q u := by
+  haveI : Fact q.Prime := ⟨hqP⟩
+  have hx0 : x ≠ 0 := Nat.ne_of_gt hx
+  have hu0 : u ≠ 0 := Nat.ne_of_gt hu
+  simpa [boundaryProd] using (padicValNat.mul (p := q) (a := x) (b := u) hx0 hu0)
+
+/--
+`boundaryProd = x*u` の prime-power 判定（不等式版 wrapper）。
+
+`q^k ∣ boundaryProd x u` を `k ≤ v_q(x)+v_q(u)` に読み替える。
+-/
+theorem primePow_dvd_boundaryProd_iff_le_padicVal_sum
+    {x u q k : ℕ} (hqP : Nat.Prime q) (hx : 0 < x) (hu : 0 < u) :
+    q ^ k ∣ boundaryProd x u ↔
+      k ≤ padicValNat q x + padicValNat q u := by
+  haveI : Fact q.Prime := ⟨hqP⟩
+  have hmul : padicValNat q (x * u) = padicValNat q x + padicValNat q u := by
+    simpa [boundaryProd] using (padicValNat_boundaryProd_eq_add (q := q) hqP hx hu)
+  have hA0 : boundaryProd x u ≠ 0 := by
+    exact Nat.mul_ne_zero (Nat.ne_of_gt hx) (Nat.ne_of_gt hu)
+  calc
+    q ^ k ∣ boundaryProd x u ↔ k ≤ padicValNat q (boundaryProd x u) :=
+      (padicValNat_dvd_iff_le (p := q) (a := boundaryProd x u) (n := k) hA0)
+    _ ↔ k ≤ padicValNat q x + padicValNat q u := by
+      simp [boundaryProd, hmul]
+
 /--
 `boundaryProd` と `kernelRight` の積に対する wrapper 形 valuation 加法。
 -/
