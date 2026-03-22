@@ -560,3 +560,19 @@ u\,GN_d(x,u)
 
 - この実装は「プロトタイプ優先」のため Mathlib API を積極利用している。
 - 将来の `DkMathlib` 独立化フェーズでは、ここを wrapper/bridge 境界として分離する。
+
+### 16.7 `GN` 側「層所属一意性」補題の接続
+
+`UniqueFactorizationGN` へ、`Gcd.GN` 層を利用した以下の接続補題を追加:
+
+- `prime_dvd_left_not_dvd_GN_of_coprime_of_not_dvd_exp`
+  - 前提: `1 ≤ d`, `0 < x`, `Nat.Coprime x u`, `Nat.Prime q`, `¬ q ∣ d`, `q ∣ x`
+  - 結論: `¬ q ∣ GN d x u`
+- `prime_dvd_right_not_dvd_GN_swap_of_coprime_of_not_dvd_exp`
+  - 前提: `1 ≤ d`, `0 < u`, `Nat.Coprime x u`, `Nat.Prime q`, `¬ q ∣ d`, `q ∣ u`
+  - 結論: `¬ q ∣ GN d u x`（左境界対称版）
+
+実装ポイント:
+
+- `DkMath.NumberTheory.Gcd.gcd_gap_GN_dvd_exp_int` を中核に再利用。
+- `z := x+u, y := u` 代入（対称版は変数 swap）で gap 側と `GN` 側を接続。

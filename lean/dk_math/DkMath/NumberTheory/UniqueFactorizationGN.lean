@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Basic.Nat
+import DkMath.NumberTheory.Gcd.GN
 import Mathlib
 
 /-!
@@ -16,6 +17,8 @@ behind wrappers/bridges in later phases.
 -/
 
 namespace DkMath.NumberTheory
+
+open DkMath.CosmicFormulaBinom
 
 /-- Prime membership in `factorization.support` is equivalent to divisibility. -/
 lemma prime_mem_support_iff_dvd {n p : ℕ} (hn : n ≠ 0) (hp : Nat.Prime p) :
@@ -84,5 +87,52 @@ theorem unique_factorization_nat_via_prime_powers {m n : ℕ}
       simp [hfac]
     _ = n := by
       simpa using Nat.factorization_prod_pow_eq_self hn
+
+/--
+GN-side layer separation (right boundary):
+if a prime `q` divides the gap `x` and does not divide the exponent `d`,
+then under `Nat.Coprime x u` it cannot divide `GN d x u`.
+-/
+theorem prime_dvd_left_not_dvd_GN_of_coprime_of_not_dvd_exp
+    {d x u q : ℕ}
+    (hd1 : 1 ≤ d) (hx : 0 < x) (hcop : Nat.Coprime x u)
+    (_hqP : Nat.Prime q) (hq_ndvd_d : ¬ q ∣ d)
+    (hq_dvd_x : q ∣ x) :
+    ¬ q ∣ GN d x u := by
+  intro hq_dvd_GN
+  have hyz : u < x + u := by omega
+  have hcop_zu : Nat.Coprime (x + u) u := (Nat.coprime_add_self_left).2 hcop
+  have hgcd_dvd :
+      Int.gcd (x : ℤ) (GN d (x : ℤ) (u : ℤ)) ∣ d := by
+    have htmp :=
+      DkMath.NumberTheory.Gcd.gcd_gap_GN_dvd_exp_int
+        (p := d) (z := x + u) (y := u) hd1 hyz hcop_zu
+    simpa [Nat.add_sub_cancel_left] using htmp
+  have hq_dvd_x_int : (q : ℤ) ∣ (x : ℤ) := by
+    exact_mod_cast hq_dvd_x
+  have hq_dvd_GN_int : (q : ℤ) ∣ GN d (x : ℤ) (u : ℤ) := by
+    have hq_dvd_GN_cast : (q : ℤ) ∣ ((GN d x u : ℕ) : ℤ) := by
+      exact_mod_cast hq_dvd_GN
+    simpa [GN] using hq_dvd_GN_cast
+  have hq_dvd_gcd :
+      q ∣ Int.gcd (x : ℤ) (GN d (x : ℤ) (u : ℤ)) :=
+    Int.dvd_gcd hq_dvd_x_int hq_dvd_GN_int
+  have hq_dvd_d : q ∣ d := dvd_trans hq_dvd_gcd hgcd_dvd
+  exact hq_ndvd_d hq_dvd_d
+
+/--
+GN-side layer separation (left boundary, swapped GN orientation):
+if a prime `q` divides the gap `u` and does not divide the exponent `d`,
+then under `Nat.Coprime x u` it cannot divide `GN d u x`.
+-/
+theorem prime_dvd_right_not_dvd_GN_swap_of_coprime_of_not_dvd_exp
+    {d x u q : ℕ}
+    (hd1 : 1 ≤ d) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (_hqP : Nat.Prime q) (hq_ndvd_d : ¬ q ∣ d)
+    (hq_dvd_u : q ∣ u) :
+    ¬ q ∣ GN d u x := by
+  simpa using
+    (prime_dvd_left_not_dvd_GN_of_coprime_of_not_dvd_exp
+      (d := d) (x := u) (u := x) hd1 hu hcop.symm _hqP hq_ndvd_d hq_dvd_u)
 
 end DkMath.NumberTheory

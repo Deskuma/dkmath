@@ -67,3 +67,22 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
    - 現時点は意図的に Mathlib 依存を許容し、証明構造を先に固定した。
 6. 次の課題:
    - 追加定理を wrapper/bridge 層へ寄せ、将来の `DkMathlib` 独立化に向けて依存境界を明確化する。
+
+### 日時: 2026/03/22 21:54 JST: `GN` 側「層所属一意性」補題を `UniqueFactorizationGN` へ接続
+
+1. 目的: `GN` 側の層分離（boundary layer と kernel layer の非競合）を、プロトタイプ一意性モジュールへ直接接続する。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に以下を追加。
+     - `prime_dvd_left_not_dvd_GN_of_coprime_of_not_dvd_exp`
+     - `prime_dvd_right_not_dvd_GN_swap_of_coprime_of_not_dvd_exp`
+   - 既存 API `DkMath.NumberTheory.Gcd.gcd_gap_GN_dvd_exp_int` を再利用し、
+     `z := x + u, y := u`（対称版は swap）で接続。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` の成功を確認。
+3. 結論: 因数分解一意性プロトタイプに、`GN` 側の層所属一意性（非例外素数の混線防止）を組み込めた。
+4. 失敗事例:
+   - 初版で `Nat.pos_of_dvd_of_pos` の使い方を誤りビルド失敗。
+   - 正値前提（`0 < x` / `0 < u`）を明示し、証明を修正して解消。
+5. 備考:
+   - この段階は Mathlib 依存を許容し、証明パターンを先に安定化している。
+6. 次の課題:
+   - `GN d x u` と `GN d u x` の対称橋を明示 wrapper 化し、boundary side API へ統合する。
