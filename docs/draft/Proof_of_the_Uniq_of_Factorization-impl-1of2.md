@@ -800,3 +800,23 @@ q \mid A \Rightarrow q \nmid B
 これで、`hExc` を抽象引数のまま置かずに
 `boundaryProd/kernelRight` 補題群から注入して
 最終比較定理まで一気通しで接続できる形になった。
+
+### 16.18 `hExcBK/hNonExcBK` の自動供給縮約（valuation 等式ベース）
+
+`hExcBK` / `hNonExcBK` を直接仮定せず、`v_q` 等式から自動供給する補題群を追加した。
+
+- `exceptionalBK_of_padicValNat_eq_boundaryProd_kernelRight`
+  - 例外層（`q ∣ d`）で
+    `v_q(boundaryProd)=v_q(kernelRight)` から
+    `q^k ∣ boundaryProd ↔ q^k ∣ kernelRight` を自動生成。
+- `nonExceptionalBK_of_padicValNat_eq_boundaryProd_kernelRight`
+  - 非例外層（`q ∤ d`）の同型。
+- `exceptionalLayer_of_boundaryProd_kernelRight_autoBK`
+- `nonExceptionalLayer_of_boundaryProd_kernelRight_autoBK`
+  - それぞれ `hExcBK` / `hNonExcBK` を内部生成して層 API を構成。
+- `unique_factorization_nat_via_boundaryProd_kernelRight_split_layers_e2e_autoBK`
+  - `hExcBK/hNonExcBK` を要求しない end-to-end 版。
+
+これにより、比較仮定は
+「prime-power 同値そのもの」から
+「層別 valuation 等式」へ縮約され、実データ供給が軽くなった。

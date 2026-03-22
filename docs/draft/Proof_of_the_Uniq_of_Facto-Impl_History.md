@@ -302,3 +302,33 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - 例外層比較仮定 `hExcBK` / 非例外層比較仮定 `hNonExcBK` を、
      さらに自動供給できる具体補題セットへ縮約する。
+
+### 日時: 2026/03/23 01:30 JST: `hExcBK/hNonExcBK` を valuation 等式から自動供給する縮約版を実装
+
+1. 目的: `hExcBK` / `hNonExcBK`（prime-power 同値仮定）を直接要求せず、
+   具体的な valuation 等式補題から自動構成できる形へ縮約する。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に以下を追加。
+     - `exceptionalBK_of_padicValNat_eq_boundaryProd_kernelRight`
+     - `nonExceptionalBK_of_padicValNat_eq_boundaryProd_kernelRight`
+     - `exceptionalLayer_of_boundaryProd_kernelRight_autoBK`
+     - `nonExceptionalLayer_of_boundaryProd_kernelRight_autoBK`
+     - `unique_factorization_nat_via_boundaryProd_kernelRight_split_layers_e2e_autoBK`
+   - 要点:
+     - `hd2`, `x>0`, `u>0` から `boundaryProd ≠ 0`, `kernelRight ≠ 0` を確保。
+     - `padicValNat_dvd_iff_le` を使って
+       valuation 等式 `v_q(boundaryProd)=v_q(kernelRight)` から
+       `q^k` 除法同値を生成。
+     - 生成した同値を既存の `exceptionalLayer/nonExceptionalLayer` へ注入し、
+       end-to-end 比較定理へ接続。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: `hExcBK/hNonExcBK` は直接仮定から外れ、
+   層別 valuation 等式で代替できる縮約 API になった。
+4. 失敗事例:
+   - 初版で `boundaryProd`/`kernelRight` の定義展開差により rewrite が失敗。
+   - `hval : padicValNat q (x*u) = padicValNat q (GN d x u)` を明示して解消。
+5. 備考:
+   - 縮約後も比較対象は `boundaryProd` vs `kernelRight` のまま維持している。
+6. 次の課題:
+   - valuation 等式仮定（`hExcVal` / `hNonExcVal`）自体を
+     さらに自動供給する具体補題連鎖を整備する。
