@@ -135,4 +135,62 @@ theorem prime_dvd_right_not_dvd_GN_swap_of_coprime_of_not_dvd_exp
     (prime_dvd_left_not_dvd_GN_of_coprime_of_not_dvd_exp
       (d := d) (x := u) (u := x) hd1 hu hcop.symm _hqP hq_ndvd_d hq_dvd_u)
 
+/--
+`q ∤ d` の下で、`q` は `gcd(x, GN d x u)` を割らない（右境界）。
+
+これは `v_q` 補題に進むための直接前段。
+-/
+theorem prime_not_dvd_gcd_left_GN_of_coprime_of_not_dvd_exp
+    {d x u q : ℕ}
+    (hd1 : 1 ≤ d) (hx : 0 < x) (hcop : Nat.Coprime x u)
+    (hqP : Nat.Prime q) (hq_ndvd_d : ¬ q ∣ d) :
+    ¬ q ∣ Nat.gcd x (GN d x u) := by
+  intro hq_dvd_gcd
+  by_cases hq_dvd_x : q ∣ x
+  · have hq_not_dvd_GN :
+      ¬ q ∣ GN d x u :=
+      prime_dvd_left_not_dvd_GN_of_coprime_of_not_dvd_exp
+        (d := d) (x := x) (u := u) hd1 hx hcop hqP hq_ndvd_d hq_dvd_x
+    exact hq_not_dvd_GN (dvd_trans hq_dvd_gcd (Nat.gcd_dvd_right x (GN d x u)))
+  · exact hq_dvd_x (dvd_trans hq_dvd_gcd (Nat.gcd_dvd_left x (GN d x u)))
+
+/--
+`q ∤ d` の下で、`v_q(gcd(x, GN d x u)) = 0`（右境界）。
+-/
+theorem padicValNat_gcd_left_GN_eq_zero_of_coprime_of_not_dvd_exp
+    {d x u q : ℕ}
+    (hd1 : 1 ≤ d) (hx : 0 < x) (hcop : Nat.Coprime x u)
+    (hqP : Nat.Prime q) (hq_ndvd_d : ¬ q ∣ d) :
+    padicValNat q (Nat.gcd x (GN d x u)) = 0 := by
+  exact padicValNat.eq_zero_of_not_dvd
+    (prime_not_dvd_gcd_left_GN_of_coprime_of_not_dvd_exp
+      (d := d) (x := x) (u := u) (q := q) hd1 hx hcop hqP hq_ndvd_d)
+
+/--
+`q ∤ d` の下で、`v_q(gcd(u, GN d u x)) = 0`（左境界対称版）。
+-/
+theorem padicValNat_gcd_right_GN_swap_eq_zero_of_coprime_of_not_dvd_exp
+    {d x u q : ℕ}
+    (hd1 : 1 ≤ d) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hqP : Nat.Prime q) (hq_ndvd_d : ¬ q ∣ d) :
+    padicValNat q (Nat.gcd u (GN d u x)) = 0 := by
+  simpa using
+    (padicValNat_gcd_left_GN_eq_zero_of_coprime_of_not_dvd_exp
+      (d := d) (x := u) (u := x) (q := q) hd1 hu hcop.symm hqP hq_ndvd_d)
+
+/--
+prime-power 接続の最初の帰結（右境界）:
+`k > 0` なら `q^k` も `gcd(x, GN d x u)` を割れない。
+-/
+  theorem not_primePow_dvd_gcd_left_GN_of_coprime_of_not_dvd_exp
+    {d x u q k : ℕ}
+    (hd1 : 1 ≤ d) (hx : 0 < x) (hcop : Nat.Coprime x u)
+    (hqP : Nat.Prime q) (hq_ndvd_d : ¬ q ∣ d) (hk : 0 < k) :
+    ¬ q ^ k ∣ Nat.gcd x (GN d x u) := by
+  intro hqk
+  have hq_dvd_gcd : q ∣ Nat.gcd x (GN d x u) := by
+    exact dvd_trans (dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk)) hqk
+  exact (prime_not_dvd_gcd_left_GN_of_coprime_of_not_dvd_exp
+    (d := d) (x := x) (u := u) (q := q) hd1 hx hcop hqP hq_ndvd_d) hq_dvd_gcd
+
 end DkMath.NumberTheory

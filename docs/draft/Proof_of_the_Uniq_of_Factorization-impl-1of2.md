@@ -576,3 +576,102 @@ u\,GN_d(x,u)
 
 - `DkMath.NumberTheory.Gcd.gcd_gap_GN_dvd_exp_int` を中核に再利用。
 - `z := x+u, y := u` 代入（対称版は変数 swap）で gap 側と `GN` 側を接続。
+
+### 16.8 まだ残っていること（明示）
+
+今回の補題で得たのは **prime divisibility の非競合** であり、まだ
+
+\[
+q^k \mid x \Rightarrow q^k \nmid GN_d(x,u)
+\]
+
+のような **prime-power レベルの完全分離** ではない。  
+したがって、前段の
+
+\[
+\forall p, k,\; p^k \mid m \iff p^k \mid n
+\]
+
+へは直結していない。  
+ただし方向は妥当であり、現段階は
+
+\[
+k = 1 \text{ の層所属一意性}
+\]
+
+を先に固定した段と位置づける。
+
+また、左右対称版が `GN d u x` に対する形で出ているため、将来的には API の見え方を揃える目的で、
+
+\[
+\text{boundaryLeft},\ \text{boundaryRight},\ \text{kernel}
+\]
+
+のような naming に寄せると、証明の意味がより明確になる。
+
+### 16.9 次に狙うべき順序
+
+#### 16.9.1 prime から prime-power へ
+
+今回の補題を足場に、非例外素数（`q ∤ d`）について
+
+\[
+v_q(\gcd(x, GN_d(x,u))) = 0
+\]
+
+または少なくとも
+
+\[
+q^k \mid x \Rightarrow q \nmid GN_d(x,u)
+\]
+
+型の valuation 補題へ伸ばす。  
+ここで一気に `k` まで言うか、先に `v_q` 記法を整えるかが分岐点。
+
+#### 16.9.2 二層圧縮 wrapper
+
+現在の三層構造
+
+\[
+x,\ u,\ GN_d(x,u)
+\]
+
+を、一意性モジュール入口として
+
+\[
+A := x,\qquad B := GN_d(x,u)
+\]
+
+または
+
+\[
+A := xu,\qquad B := GN_d(x,u)
+\]
+
+に圧縮し、
+
+\[
+q \mid A \Rightarrow q \nmid B
+\]
+
+型 API にまとめる。これにより `factorization_eq_of_prime_pow_dvd_iff` 側へ接続しやすくなる。
+
+#### 16.9.3 例外素数（`q ∣ d`）の隔離
+
+現行補題は条件 `q ∤ d` を持つ。これは妥当かつ必要なので、  
+例外側は明示的に別レイヤとして扱う方針を維持する。
+
+### 16.10 `v_q` ベース補題の実装（prime-power 接続点）
+
+`DkMath/NumberTheory/UniqueFactorizationGN.lean` に、`q ∤ d` 下の `v_q` 補題を追加した。
+
+- `prime_not_dvd_gcd_left_GN_of_coprime_of_not_dvd_exp`
+  - `¬ q ∣ gcd(x, GN d x u)` を直接与える。
+- `padicValNat_gcd_left_GN_eq_zero_of_coprime_of_not_dvd_exp`
+  - `v_q(gcd(x, GN d x u)) = 0`。
+- `padicValNat_gcd_right_GN_swap_eq_zero_of_coprime_of_not_dvd_exp`
+  - 左境界対称版（`gcd(u, GN d u x)`）。
+- `not_primePow_dvd_gcd_left_GN_of_coprime_of_not_dvd_exp`
+  - `k>0` なら `q^k ∤ gcd(x, GN d x u)`。
+
+これで、`k=1` の層分離から `v_q`・`q^k` 側への最初の橋が通った。

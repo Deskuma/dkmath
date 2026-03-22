@@ -86,3 +86,42 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
    - この段階は Mathlib 依存を許容し、証明パターンを先に安定化している。
 6. 次の課題:
    - `GN d x u` と `GN d u x` の対称橋を明示 wrapper 化し、boundary side API へ統合する。
+
+### 日時: 2026/03/22 22:05 JST: 残課題を「prime vs prime-power」と「次段ターゲット」に明文化
+
+1. 目的: 現在達成済みの範囲（`k=1` 層分離）と未達範囲（prime-power 完全分離）を混同しないよう、計画書上で境界を明確化する。
+2. 内容:
+   - `docs/draft/Proof_of_the_Uniq_of_Factorization-impl-1of2.md` に以下を追記。
+     - `16.8 まだ残っていること（明示）`
+     - `16.9 次に狙うべき順序`
+   - 特に以下を明示。
+     - 現段階は `prime divisibility` の非競合であり、`prime-power` 完全分離ではない。
+     - 次段は valuation 補題、二層圧縮 wrapper、例外素数（`q ∣ d`）の別レイヤ化。
+3. 結論: 実装進捗の意味づけと次手が整理され、以後の補題拡張の優先順位が明確になった。
+4. 失敗事例:
+   - なし（設計・文書化フェーズ）。
+5. 備考:
+   - 数式表現は今後の Lean 命名候補（`boundaryLeft/right`, `kernel`）に対応しやすい形へ寄せた。
+6. 次の課題:
+   - `q ∤ d` 下の `v_q` ベース補題を最初の prime-power 接続点として実装する。
+
+### 日時: 2026/03/22 22:10 JST: `q ∤ d` 下の `v_q` ベース補題を実装（prime-power 接続点）
+
+1. 目的: `k=1` 層分離から prime-power 議論へ進む最初の接続として、`v_q(gcd(...))=0` 型補題を Lean 実装する。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に以下を追加。
+     - `prime_not_dvd_gcd_left_GN_of_coprime_of_not_dvd_exp`
+     - `padicValNat_gcd_left_GN_eq_zero_of_coprime_of_not_dvd_exp`
+     - `padicValNat_gcd_right_GN_swap_eq_zero_of_coprime_of_not_dvd_exp`
+     - `not_primePow_dvd_gcd_left_GN_of_coprime_of_not_dvd_exp`
+   - 既存の `prime_dvd_left_not_dvd_GN_of_coprime_of_not_dvd_exp` を再利用し、
+     `¬ q ∣ gcd(...)` と `padicValNat.eq_zero_of_not_dvd` を接続。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: `q ∤ d` の非例外素数に対して、`gcd` レベルで `v_q=0` を得る橋が実装でき、prime-power 側への遷移点が成立した。
+4. 失敗事例:
+   - `dvd_pow_self` の引数型（`k ≠ 0`）を `0 < k` のまま渡して失敗。
+   - `Nat.pos_iff_ne_zero.mp hk` を介して解消。
+5. 備考:
+   - 右境界本体（`GN d x u`）と左境界対称（`GN d u x`）を分けて実装している。
+6. 次の課題:
+   - `boundaryLeft/right/kernel` naming の wrapper を導入し、対称版 API を統一する。
