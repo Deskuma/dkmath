@@ -473,15 +473,15 @@ p \mid AB \Rightarrow p \mid A \ \text{or}\ p \mid B
 (x+u)^d-x^d=u\,GN_d(x,u)
 \]
 
-とする。このとき任意の素数 p \nmid d について、
+とする。このとき任意の素数 \( p \nmid d \) について、
 
 \[
 p \mid xu\,GN_d(x,u)
 \]
 
-ならば、p は x,u,GN_d(x,u) のうちただ一つを割る。
+ならば、\( p \) は \( x,u,GN_d(x,u) \) のうちただ一つを割る。
 
-したがって A=xu,\, B=GN_d(x,u) とおけば
+したがって \( A=xu,\, B=GN_d(x,u) \) とおけば
 
 \[
 p \mid AB \Rightarrow p \mid A \ \text{or}\ p \mid B
