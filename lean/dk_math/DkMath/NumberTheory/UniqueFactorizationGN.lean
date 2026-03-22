@@ -20,6 +20,12 @@ namespace DkMath.NumberTheory
 
 open DkMath.CosmicFormulaBinom
 
+@[simp] def boundaryRight (x _u : ℕ) : ℕ := x
+@[simp] def boundaryLeft (_x u : ℕ) : ℕ := u
+@[simp] def kernelRight (d x u : ℕ) : ℕ := GN d x u
+@[simp] def kernelLeft (d x u : ℕ) : ℕ := GN d u x
+@[simp] def boundaryProd (x u : ℕ) : ℕ := x * u
+
 /-- Prime membership in `factorization.support` is equivalent to divisibility. -/
 lemma prime_mem_support_iff_dvd {n p : ℕ} (hn : n ≠ 0) (hp : Nat.Prime p) :
     p ∈ n.factorization.support ↔ p ∣ n := by
@@ -182,7 +188,7 @@ theorem padicValNat_gcd_right_GN_swap_eq_zero_of_coprime_of_not_dvd_exp
 prime-power 接続の最初の帰結（右境界）:
 `k > 0` なら `q^k` も `gcd(x, GN d x u)` を割れない。
 -/
-  theorem not_primePow_dvd_gcd_left_GN_of_coprime_of_not_dvd_exp
+theorem not_primePow_dvd_gcd_left_GN_of_coprime_of_not_dvd_exp
     {d x u q k : ℕ}
     (hd1 : 1 ≤ d) (hx : 0 < x) (hcop : Nat.Coprime x u)
     (hqP : Nat.Prime q) (hq_ndvd_d : ¬ q ∣ d) (hk : 0 < k) :
@@ -192,5 +198,82 @@ prime-power 接続の最初の帰結（右境界）:
     exact dvd_trans (dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk)) hqk
   exact (prime_not_dvd_gcd_left_GN_of_coprime_of_not_dvd_exp
     (d := d) (x := x) (u := u) (q := q) hd1 hx hcop hqP hq_ndvd_d) hq_dvd_gcd
+
+/--
+`q ∤ d` かつ `Nat.Coprime x u` の右境界で、積 `x * GN d x u` の `q`-進付値は加法化できる。
+
+`v_q(gcd(x,GN))=0` を確保した上で、prototype では `padicValNat.mul` を直接利用する。
+-/
+theorem padicValNat_mul_boundaryRight_kernelRight_eq_add
+    {d x u q : ℕ}
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hqP : Nat.Prime q) (hq_ndvd_d : ¬ q ∣ d) :
+    padicValNat q (x * GN d x u) =
+      padicValNat q x + padicValNat q (GN d x u) := by
+  have _ :
+      padicValNat q (Nat.gcd x (GN d x u)) = 0 :=
+    padicValNat_gcd_left_GN_eq_zero_of_coprime_of_not_dvd_exp
+      (d := d) (x := x) (u := u) (q := q)
+      (Nat.le_trans (by decide : 1 ≤ 2) hd2) hx hcop hqP hq_ndvd_d
+  haveI : Fact q.Prime := ⟨hqP⟩
+  have hx0 : x ≠ 0 := Nat.ne_of_gt hx
+  have hGN0 : GN d x u ≠ 0 :=
+    GN_ne_zero_nat_of_two_le (d := d) (x := x) (u := u) hd2 hx hu
+  simpa using (padicValNat.mul (p := q) (a := x) (b := GN d x u) hx0 hGN0)
+
+/--
+三層圧縮の積 `x*u*GN d x u` 版の `q`-進付値加法（prototype）。
+-/
+theorem padicValNat_mul_boundaryProd_kernelRight_eq_add
+    {d x u q : ℕ}
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
+    (hqP : Nat.Prime q) :
+    padicValNat q (x * u * GN d x u) =
+      padicValNat q x + padicValNat q u + padicValNat q (GN d x u) := by
+  haveI : Fact q.Prime := ⟨hqP⟩
+  have hx0 : x ≠ 0 := Nat.ne_of_gt hx
+  have hu0 : u ≠ 0 := Nat.ne_of_gt hu
+  have hxu0 : x * u ≠ 0 := Nat.mul_ne_zero hx0 hu0
+  have hGN0 : GN d x u ≠ 0 :=
+    GN_ne_zero_nat_of_two_le (d := d) (x := x) (u := u) hd2 hx hu
+  calc
+    padicValNat q (x * u * GN d x u)
+        = padicValNat q (x * u) + padicValNat q (GN d x u) := by
+            simpa [Nat.mul_assoc] using
+              (padicValNat.mul (p := q) (a := x * u) (b := GN d x u) hxu0 hGN0)
+    _ = (padicValNat q x + padicValNat q u) + padicValNat q (GN d x u) := by
+          rw [padicValNat.mul (p := q) (a := x) (b := u) hx0 hu0]
+    _ = padicValNat q x + padicValNat q u + padicValNat q (GN d x u) := by
+          omega
+
+/--
+Wrapper:
+right boundary divisibility implies right kernel non-divisibility
+(nonexception prime).
+-/
+theorem prime_dvd_boundaryRight_not_dvd_kernelRight_of_coprime_of_not_dvd_exp
+    {d x u q : ℕ}
+    (hd1 : 1 ≤ d) (hx : 0 < x) (hcop : Nat.Coprime x u)
+    (hqP : Nat.Prime q) (hq_ndvd_d : ¬ q ∣ d)
+    (hq_dvd_boundary : q ∣ boundaryRight x u) :
+    ¬ q ∣ kernelRight d x u := by
+  simpa [boundaryRight, kernelRight] using
+    (prime_dvd_left_not_dvd_GN_of_coprime_of_not_dvd_exp
+      (d := d) (x := x) (u := u) hd1 hx hcop hqP hq_ndvd_d hq_dvd_boundary)
+
+/--
+Wrapper:
+left boundary divisibility implies left kernel non-divisibility
+(nonexception prime).
+-/
+theorem prime_dvd_boundaryLeft_not_dvd_kernelLeft_of_coprime_of_not_dvd_exp
+    {d x u q : ℕ}
+    (hd1 : 1 ≤ d) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hqP : Nat.Prime q) (hq_ndvd_d : ¬ q ∣ d)
+    (hq_dvd_boundary : q ∣ boundaryLeft x u) :
+    ¬ q ∣ kernelLeft d x u := by
+  simpa [boundaryLeft, kernelLeft] using
+    (prime_dvd_right_not_dvd_GN_swap_of_coprime_of_not_dvd_exp
+      (d := d) (x := x) (u := u) hd1 hu hcop hqP hq_ndvd_d hq_dvd_boundary)
 
 end DkMath.NumberTheory

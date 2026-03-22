@@ -675,3 +675,22 @@ q \mid A \Rightarrow q \nmid B
   - `k>0` なら `q^k ∤ gcd(x, GN d x u)`。
 
 これで、`k=1` の層分離から `v_q`・`q^k` 側への最初の橋が通った。
+
+### 16.11 product レベル valuation と二層 wrapper の追加
+
+次段として、`UniqueFactorizationGN` に以下を実装:
+
+- wrapper 定義:
+  - `boundaryRight`, `boundaryLeft`
+  - `kernelRight`, `kernelLeft`
+  - `boundaryProd`
+- product valuation:
+  - `padicValNat_mul_boundaryRight_kernelRight_eq_add`
+    - `v_q(x * GN d x u) = v_q(x) + v_q(GN d x u)`
+  - `padicValNat_mul_boundaryProd_kernelRight_eq_add`
+    - `v_q(x*u*GN d x u) = v_q(x) + v_q(u) + v_q(GN d x u)`
+- wrapper 上の層分離:
+  - `prime_dvd_boundaryRight_not_dvd_kernelRight_of_coprime_of_not_dvd_exp`
+  - `prime_dvd_boundaryLeft_not_dvd_kernelLeft_of_coprime_of_not_dvd_exp`
+
+これで「gcd レベル → product レベル」への最初の移送と、`boundary/kernel` 命名での API 入口が揃った。

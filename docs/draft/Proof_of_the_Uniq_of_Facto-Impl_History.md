@@ -125,3 +125,25 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
    - 右境界本体（`GN d x u`）と左境界対称（`GN d u x`）を分けて実装している。
 6. 次の課題:
    - `boundaryLeft/right/kernel` naming の wrapper を導入し、対称版 API を統一する。
+
+### 日時: 2026/03/22 22:58 JST: product レベル valuation と `boundary/kernel` wrapper を追加
+
+1. 目的: `v_q(gcd(...))=0` から次段へ進めるため、`x*GN` / `x*u*GN` の valuation 加法形を実装し、圧縮 API を整備する。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に wrapper 定義を追加。
+     - `boundaryRight`, `boundaryLeft`, `kernelRight`, `kernelLeft`, `boundaryProd`
+   - product valuation 補題を追加。
+     - `padicValNat_mul_boundaryRight_kernelRight_eq_add`
+     - `padicValNat_mul_boundaryProd_kernelRight_eq_add`
+   - wrapper 入口の層分離補題を追加。
+     - `prime_dvd_boundaryRight_not_dvd_kernelRight_of_coprime_of_not_dvd_exp`
+     - `prime_dvd_boundaryLeft_not_dvd_kernelLeft_of_coprime_of_not_dvd_exp`
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: gcd レベルの分離結果を product valuation へ持ち上げる足場ができ、二層圧縮 API の入口が稼働状態になった。
+4. 失敗事例:
+   - 初版で wrapper 定義の未使用引数 warning と長行 warning が発生。
+   - 引数名の調整とコメント改行で解消。
+5. 備考:
+   - `padicValNat.mul` の適用には `x ≠ 0`, `u ≠ 0`, `GN ≠ 0` を明示供給している。
+6. 次の課題:
+   - `boundaryProd` 側（`A := xu`）での `q^k` レベル API（`p^k ∣ A ↔ ...`）へ接続する。
