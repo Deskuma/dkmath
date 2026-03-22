@@ -758,3 +758,22 @@ q \mid A \Rightarrow q \nmid B
 
 これで、prime-power 非重複が
 `dvd` 表現だけでなく `valuation` / `support` 比較 API として再利用可能になった。
+
+### 16.16 例外素数（`q ∣ d`）レイヤ分離 API と最終比較定理への接続
+
+例外素数を明示分離するため、prime-power 比較 API を 2 層に分割した。
+
+- `PrimePowComparisonExceptionalLayer d m n`
+  - `q ∣ d` 側だけで `q^k ∣ m ↔ q^k ∣ n` を要求。
+- `PrimePowComparisonNonExceptionalLayer d m n`
+  - `q ∤ d` 側だけで `q^k ∣ m ↔ q^k ∣ n` を要求。
+
+この 2 層 API から、既存の最終比較系へ直接接続する橋を追加:
+
+- `factorization_eq_of_prime_pow_dvd_iff_split_layers`
+  - 2 層仮定から `m.factorization = n.factorization`。
+- `unique_factorization_nat_via_split_prime_layers`
+  - 2 層仮定から `m = n`。
+
+これで、例外素数レイヤを別管理したまま
+最終の factorization 比較定理へ入れる導線が明示化された。

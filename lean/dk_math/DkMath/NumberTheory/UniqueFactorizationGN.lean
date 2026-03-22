@@ -95,6 +95,48 @@ theorem unique_factorization_nat_via_prime_powers {m n : ℕ}
       simpa using Nat.factorization_prod_pow_eq_self hn
 
 /--
+例外素数レイヤ（`q ∣ d`）に限定した prime-power 比較 API。
+-/
+abbrev PrimePowComparisonExceptionalLayer (d m n : ℕ) : Prop :=
+  ∀ q k : ℕ, Nat.Prime q → q ∣ d → (q ^ k ∣ m ↔ q ^ k ∣ n)
+
+/--
+非例外素数レイヤ（`q ∤ d`）に限定した prime-power 比較 API。
+-/
+abbrev PrimePowComparisonNonExceptionalLayer (d m n : ℕ) : Prop :=
+  ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d → (q ^ k ∣ m ↔ q ^ k ∣ n)
+
+/--
+例外/非例外の 2 層比較 API から、factorization 一致へ接続する橋。
+-/
+theorem factorization_eq_of_prime_pow_dvd_iff_split_layers
+    {d m n : ℕ}
+    (hm : m ≠ 0) (hn : n ≠ 0)
+    (hExc : PrimePowComparisonExceptionalLayer d m n)
+    (hNonExc : PrimePowComparisonNonExceptionalLayer d m n) :
+    m.factorization = n.factorization := by
+  apply factorization_eq_of_prime_pow_dvd_iff hm hn
+  intro q k hqP
+  by_cases hq_dvd_d : q ∣ d
+  · exact hExc q k hqP hq_dvd_d
+  · exact hNonExc q k hqP hq_dvd_d
+
+/--
+例外/非例外の 2 層比較 API から、自然数本体の一致へ接続する最終形。
+-/
+theorem unique_factorization_nat_via_split_prime_layers
+    {d m n : ℕ}
+    (hm : m ≠ 0) (hn : n ≠ 0)
+    (hExc : PrimePowComparisonExceptionalLayer d m n)
+    (hNonExc : PrimePowComparisonNonExceptionalLayer d m n) :
+    m = n := by
+  apply unique_factorization_nat_via_prime_powers hm hn
+  intro q k hqP
+  by_cases hq_dvd_d : q ∣ d
+  · exact hExc q k hqP hq_dvd_d
+  · exact hNonExc q k hqP hq_dvd_d
+
+/--
 GN-side layer separation (right boundary):
 if a prime `q` divides the gap `x` and does not divide the exponent `d`,
 then under `Nat.Coprime x u` it cannot divide `GN d x u`.

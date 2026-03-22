@@ -247,3 +247,30 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - 例外素数（`q ∣ d`）レイヤを分離した比較 API を追加し、
      最終の factorization 比較定理へ接続する。
+
+### 日時: 2026/03/23 01:01 JST: 例外素数レイヤ分離 API を追加し、最終 factorization 比較定理へ接続
+
+1. 目的: 例外素数（`q ∣ d`）を非例外素数（`q ∤ d`）から分離管理した比較 API を導入し、
+   最終の factorization 比較定理へ直接接続する。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に以下を追加。
+     - `PrimePowComparisonExceptionalLayer`
+     - `PrimePowComparisonNonExceptionalLayer`
+     - `factorization_eq_of_prime_pow_dvd_iff_split_layers`
+     - `unique_factorization_nat_via_split_prime_layers`
+   - 接続方式:
+     - prime `q` ごとに `by_cases (q ∣ d)` で層分岐。
+     - 例外層は `hExc`、非例外層は `hNonExc` を適用。
+     - 既存の `factorization_eq_of_prime_pow_dvd_iff` /
+       `unique_factorization_nat_via_prime_powers` へ橋渡し。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: 例外素数を分離した比較 API が成立し、
+   2 層仮定から `factorization` 一致・自然数一致へ到達できる導線が完成した。
+4. 失敗事例:
+   - 初版で `Nat.factorization_injective` を使ったが、当該定数が環境に存在せず失敗。
+   - `unique_factorization_nat_via_prime_powers` を直接適用する構成に変更して解消。
+5. 備考:
+   - 本追加は「層分離 API」の骨格であり、各層仮定の供給（特に例外層）は次段で具体化する。
+6. 次の課題:
+   - 例外層 `hExc` を `boundaryProd/kernelRight` の具体的補題群で供給し、
+     実データに対する end-to-end 比較定理を実装する。
