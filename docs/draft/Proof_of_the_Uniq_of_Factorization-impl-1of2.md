@@ -730,3 +730,17 @@ q \mid A \Rightarrow q \nmid B
 
 これにより、将来の factorization 一致・support 比較で使いやすい
 `k ≤ ...` 形式の入口が明示化された。
+
+### 16.14 `boundaryProd` と `kernelRight` の prime-power 非重複（`q ∤ d` 層）
+
+`q^k ∣ boundaryProd x u`（`k>0`）から `kernelRight` 側の非重複を引く補題を追加した。
+
+- `primePow_dvd_boundaryProd_not_dvd_kernelRight_of_coprime_of_not_dvd_exp`
+  - `q^k ∣ boundaryProd x u` なら `¬ q ∣ kernelRight d x u`。
+- `primePow_dvd_boundaryProd_not_primePow_dvd_kernelRight_of_coprime_of_not_dvd_exp`
+  - 任意の `l>0` で `¬ q^l ∣ kernelRight d x u`。
+
+証明の分岐は
+`q ∣ x*u` から `q ∣ x` または `q ∣ u` を取り、
+前者は既存の `q ∤ d` 非競合補題、後者は新規補題
+`prime_dvd_right_not_dvd_GN_of_coprime`（`q ∣ u → ¬ q ∣ GN d x u`）で処理している。

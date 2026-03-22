@@ -142,6 +142,33 @@ theorem prime_dvd_right_not_dvd_GN_swap_of_coprime_of_not_dvd_exp
       (d := d) (x := u) (u := x) hd1 hu hcop.symm _hqP hq_ndvd_d hq_dvd_u)
 
 /--
+`q ∣ u` なら、`Nat.Coprime x u` の下で `q` は `GN d x u` を割らない。
+
+これは `boundaryProd` 側（`x*u`）の非重複で `q ∣ u` 分岐を処理する補題。
+-/
+theorem prime_dvd_right_not_dvd_GN_of_coprime
+    {d x u q : ℕ}
+    (hd1 : 1 ≤ d) (hcop : Nat.Coprime x u)
+    (hqP : Nat.Prime q) (hq_dvd_u : q ∣ u) :
+    ¬ q ∣ GN d x u := by
+  intro hq_dvd_GN
+  have hd0 : d ≠ 0 := by omega
+  have hq_dvd_xGN : q ∣ x * GN d x u := dvd_mul_of_dvd_right hq_dvd_GN x
+  have hq_dvd_u_pow : q ∣ u ^ d :=
+    dvd_trans hq_dvd_u (dvd_pow_self u hd0)
+  have hq_dvd_rhs : q ∣ x * GN d x u + u ^ d :=
+    Nat.dvd_add hq_dvd_xGN hq_dvd_u_pow
+  have hq_dvd_sum_pow : q ∣ (x + u) ^ d := by
+    simpa [cosmic_id_csr' (R := ℕ) d x u] using hq_dvd_rhs
+  have hq_dvd_sum : q ∣ x + u := hqP.dvd_of_dvd_pow hq_dvd_sum_pow
+  have hq_dvd_x : q ∣ x := by
+    have hq_dvd_sub : q ∣ (x + u) - u := Nat.dvd_sub hq_dvd_sum hq_dvd_u
+    simpa [Nat.add_sub_cancel] using hq_dvd_sub
+  have hq_dvd_gcd : q ∣ Nat.gcd x u := Nat.dvd_gcd hq_dvd_x hq_dvd_u
+  rw [hcop.gcd_eq_one] at hq_dvd_gcd
+  exact Nat.Prime.not_dvd_one hqP hq_dvd_gcd
+
+/--
 `q ∤ d` の下で、`q` は `gcd(x, GN d x u)` を割らない（右境界）。
 
 これは `v_q` 補題に進むための直接前段。
@@ -319,6 +346,50 @@ theorem primePow_dvd_boundaryProd_iff_exists_split
       simpa [hij] using hsum_le
     have hk_le_mul : k ≤ padicValNat q (x * u) := by simpa [hmul] using hk_le_sum
     exact (padicValNat_dvd_iff_le (p := q) (a := x * u) (n := k) hxu0).2 hk_le_mul
+
+/--
+`q ∤ d` 層での prime-power 非重複（boundaryProd vs kernelRight, `k>0` の入口）。
+
+`q^k ∣ boundaryProd x u` なら `q ∤ kernelRight d x u`。
+-/
+theorem primePow_dvd_boundaryProd_not_dvd_kernelRight_of_coprime_of_not_dvd_exp
+    {d x u q k : ℕ}
+    (hd1 : 1 ≤ d) (hx : 0 < x) (_hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hqP : Nat.Prime q) (hq_ndvd_d : ¬ q ∣ d)
+    (hk : 0 < k) (hqk_dvd_boundary : q ^ k ∣ boundaryProd x u) :
+    ¬ q ∣ kernelRight d x u := by
+  have hq_dvd_boundary : q ∣ boundaryProd x u := by
+    exact dvd_trans (dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk)) hqk_dvd_boundary
+  have hq_dvd_prod : q ∣ x * u := by
+    simpa [boundaryProd] using hq_dvd_boundary
+  rcases hqP.dvd_mul.mp hq_dvd_prod with hq_dvd_x | hq_dvd_u
+  · simpa [kernelRight] using
+      (prime_dvd_left_not_dvd_GN_of_coprime_of_not_dvd_exp
+        (d := d) (x := x) (u := u) hd1 hx hcop hqP hq_ndvd_d hq_dvd_x)
+  · simpa [kernelRight] using
+      (prime_dvd_right_not_dvd_GN_of_coprime
+        (d := d) (x := x) (u := u) (q := q) hd1 hcop hqP hq_dvd_u)
+
+/--
+`q ∤ d` 層での prime-power 非重複（完全版）。
+
+`q^k ∣ boundaryProd x u`（`k>0`）なら、任意の `l>0` について
+`q^l ∤ kernelRight d x u`。
+-/
+theorem primePow_dvd_boundaryProd_not_primePow_dvd_kernelRight_of_coprime_of_not_dvd_exp
+    {d x u q k l : ℕ}
+    (hd1 : 1 ≤ d) (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hqP : Nat.Prime q) (hq_ndvd_d : ¬ q ∣ d)
+    (hk : 0 < k) (hl : 0 < l)
+    (hqk_dvd_boundary : q ^ k ∣ boundaryProd x u) :
+    ¬ q ^ l ∣ kernelRight d x u := by
+  intro hql_dvd_kernel
+  have hq_dvd_kernel : q ∣ kernelRight d x u := by
+    exact dvd_trans (dvd_pow_self q (Nat.pos_iff_ne_zero.mp hl)) hql_dvd_kernel
+  exact
+    (primePow_dvd_boundaryProd_not_dvd_kernelRight_of_coprime_of_not_dvd_exp
+      (d := d) (x := x) (u := u) (q := q) (k := k)
+      hd1 hx hu hcop hqP hq_ndvd_d hk hqk_dvd_boundary) hq_dvd_kernel
 
 /-- `boundaryProd = x*u` の `q`-進付値は和に分解される（wrapper）。 -/
 theorem padicValNat_boundaryProd_eq_add

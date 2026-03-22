@@ -193,3 +193,28 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - `boundaryProd` と `kernelRight` の prime-power 非重複を
      `q ∤ d` 層で補題化する。
+
+### 日時: 2026/03/23 00:04 JST: `boundaryProd` と `kernelRight` の prime-power 非重複を実装（`q ∤ d` 層）
+
+1. 目的: `A := boundaryProd x u` と `B := kernelRight d x u` の比較で、
+   `q^k` レベルの非重複を `q ∤ d` 層として明示 API 化する。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に以下を追加。
+     - `prime_dvd_right_not_dvd_GN_of_coprime`
+     - `primePow_dvd_boundaryProd_not_dvd_kernelRight_of_coprime_of_not_dvd_exp`
+     - `primePow_dvd_boundaryProd_not_primePow_dvd_kernelRight_of_coprime_of_not_dvd_exp`
+   - 証明戦略:
+     - `q^k ∣ boundaryProd`（`k>0`）から `q ∣ x*u` を得る。
+     - `q ∣ x` 分岐は既存 `q ∤ d` 非競合補題へ接続。
+     - `q ∣ u` 分岐は新規補題
+       `q ∣ u → ¬ q ∣ GN d x u`（`Nat.Coprime x u` 下）で処理。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: `boundaryProd` 側に現れた非例外素数の prime-power は
+   `kernelRight` 側へ持ち越されない、という比較 API の最初の完成版が入った。
+4. 失敗事例:
+   - なし（追加補題は初回方針でビルド通過）。
+5. 備考:
+   - `q ∣ u` 分岐は `q ∤ d` を使わず成立し、`q ∣ x` 分岐で `q ∤ d` が本質的に効く。
+6. 次の課題:
+   - `boundaryProd` と `kernelRight` の非重複を
+     `v_q` / support 比較 API（`k ≤ ...` 形）へ統合する。
