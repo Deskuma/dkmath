@@ -1,5 +1,7 @@
 # Proof of the Uniqueness of Factorization - Implements History
 
+cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
+
 ## 記録内容テンプレート（例）
 
 ### 日時: 2026/03/22 21:14 JST: タイトル
