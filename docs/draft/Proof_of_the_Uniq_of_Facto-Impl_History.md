@@ -450,3 +450,30 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - `hNonExcPowRev`（kernel→boundary の prime-power 連鎖）を
      GN 側既存補題から生成する具体 wrapper を実装する。
+
+### 日時: 2026/03/23 13:24 JST: `hNonExcPowRev` を GN 既存比較補題から供給する wrapper を追加
+
+1. 目的: `hNonExcPowRev`（kernel→boundary の prime-power 連鎖）を
+   直接仮定せず、GN 側既存補題から自動生成できるようにする。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に以下を追加。
+     - `nonExceptionalPowRev_of_nonExceptionalBK`
+     - `nonExceptionalPowRev_of_padicValNat_eq_boundaryProd_kernelRight`
+     - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_powChain_from_nonExcVal`
+   - 接続方式:
+     - `hNonExcBK`（`boundaryProd ↔ kernelRight`）から `.2` 方向を取り出し
+       `hNonExcPowRev` を構成。
+     - `hNonExcVal` が与えられる場合は
+       `nonExceptionalBK_of_padicValNat_eq_boundaryProd_kernelRight` で `hNonExcBK` 化して同様に抽出。
+     - 抽出した `hNonExcPowRev` を既存の
+       `...powChain_boundarySides` へ渡して `m = n` を導出。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: `hNonExcPowRev` の concrete 供給経路ができ、
+   非例外層 chain の入力前提がさらに整理された。
+4. 失敗事例:
+   - なし（初回追加でビルド通過）。
+5. 備考:
+   - 新規 end-to-end 名は linter 長行制約を満たすため短縮している。
+6. 次の課題:
+   - `hNonExcNotDvdRight/Left` 側も GN 既存補題から自動供給する
+     boundary-side wrapper を強化する。

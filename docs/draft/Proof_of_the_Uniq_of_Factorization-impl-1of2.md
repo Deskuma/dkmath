@@ -917,3 +917,24 @@ GN 側の具体補題から自動構成する導線を追加した。
 これで非例外層は、
 `prime-power` chain -> `hNonExcLeRev` -> `hNonExcZero` -> end-to-end
 の接続が可能になった。
+
+### 16.23 `hNonExcPowRev` の concrete wrapper 追加（GN 既存比較補題から生成）
+
+`hNonExcPowRev` を手で与えず、既存の非例外層比較補題から抽出する wrapper を追加した。
+
+- 追加補題:
+  - `nonExceptionalPowRev_of_nonExceptionalBK`
+    - 非例外層の `hNonExcBK`（`boundaryProd ↔ kernelRight`）から
+      kernel→boundary の `q^k` 連鎖を抽出。
+  - `nonExceptionalPowRev_of_padicValNat_eq_boundaryProd_kernelRight`
+    - `hNonExcVal`（valuation 等式）を
+      `nonExceptionalBK_of_padicValNat_eq_boundaryProd_kernelRight`
+      で `hNonExcBK` 化し、上記抽出へ接続。
+- end-to-end wrapper:
+  - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_powChain_from_nonExcVal`
+    - `hNonExcVal` から `hNonExcPowRev` を内部生成し、
+      既存の `...powChain_boundarySides` ルートに接続。
+
+これで `hNonExcPowRev` は、
+GN 側既存比較補題（`hNonExcBK` / `hNonExcVal` 系）から
+具体的に供給できるようになった。
