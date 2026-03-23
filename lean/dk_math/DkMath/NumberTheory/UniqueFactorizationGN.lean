@@ -1115,7 +1115,12 @@ theorem
     hNonExcLeRev hNonExcBoundary
 
 /--
-`hNonExcVal` 入力で、非例外層 boundary 入口を facade 化した最終 e2e wrapper。
+`[compat/thin]`
+`hNonExcVal` 入力で、非例外層 boundary 入口を facade 化した e2e wrapper。
+
+新規コードでは
+`unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcFacade_boundaryFacade`
+の利用を推奨。
 -/
 theorem
     unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcVal_boundaryFacade
@@ -1150,7 +1155,12 @@ theorem
     hNonExcLeRev hNonExcBoundary
 
 /--
-`hNonExcBK` 入力で、非例外層 boundary 入口を facade 化した最終 e2e wrapper。
+`[compat/thin]`
+`hNonExcBK` 入力で、非例外層 boundary 入口を facade 化した e2e wrapper。
+
+新規コードでは
+`unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcFacade_boundaryFacade`
+の利用を推奨。
 -/
 theorem
     unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcBK_boundaryFacade
@@ -1268,9 +1278,14 @@ theorem unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoE
       hNonExcBoundary
 
 /--
+`[compat/thin]`
 段 A（例外層入力の concrete 化）:
 `hExcM/hExcK` を valuation 入力から自動供給して、
 `nonExcVal + boundaryFacade` 入口へ接続する。
+
+新規コードでは
+`unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcMK`
+の利用を推奨。
 -/
 theorem unique_factorization_nat_e2e_autoGNVal_nonExcVal_boundaryFacade_autoExcMK
     {d x u m n : ℕ}
@@ -1302,9 +1317,14 @@ theorem unique_factorization_nat_e2e_autoGNVal_nonExcVal_boundaryFacade_autoExcM
       hNonExcBoundary
 
 /--
+`[compat/thin]`
 段 A（例外層入力の concrete 化）:
 `hExcM/hExcK` を valuation 入力から自動供給して、
 `nonExcBK + boundaryFacade` 入口へ接続する。
+
+新規コードでは
+`unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcMK`
+の利用を推奨。
 -/
 theorem unique_factorization_nat_e2e_autoGNVal_nonExcBK_boundaryFacade_autoExcMK
     {d x u m n : ℕ}
@@ -1337,9 +1357,14 @@ theorem unique_factorization_nat_e2e_autoGNVal_nonExcBK_boundaryFacade_autoExcMK
       hNonExcBoundary
 
 /--
+`[compat/thin]`
 段 B（非例外層入力の concrete 化）:
 `hNonExcM/hNonExcK` を valuation 入力から自動供給して、
 `nonExcVal + boundaryFacade`（段 A: `hExcM/hExcK` 自動供給）へ接続する。
+
+新規コードでは
+`unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcNonExcMK`
+の利用を推奨。
 -/
 theorem unique_factorization_nat_e2e_autoGNVal_nonExcVal_boundaryFacade_autoExcNonExcMK
     {d x u m n : ℕ}
@@ -1381,9 +1406,14 @@ theorem unique_factorization_nat_e2e_autoGNVal_nonExcVal_boundaryFacade_autoExcN
       hNonExcBoundary
 
 /--
+`[compat/thin]`
 段 B（非例外層入力の concrete 化）:
 `hNonExcM/hNonExcK` を valuation 入力から自動供給して、
 `nonExcBK + boundaryFacade`（段 A: `hExcM/hExcK` 自動供給）へ接続する。
+
+新規コードでは
+`unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcNonExcMK`
+の利用を推奨。
 -/
 theorem unique_factorization_nat_e2e_autoGNVal_nonExcBK_boundaryFacade_autoExcNonExcMK
     {d x u m n : ℕ}
@@ -1426,6 +1456,7 @@ theorem unique_factorization_nat_e2e_autoGNVal_nonExcBK_boundaryFacade_autoExcNo
       hNonExcBoundary
 
 /--
+`[recommended]`
 段 C（最終 facade 入口の一本化）:
 段 A/B を束ね、非例外層 bridge 入口（`hNonExcVal` / `hNonExcBK`）を
 単一 facade で受ける最終 e2e 入口。
@@ -1953,8 +1984,13 @@ theorem
       (d := d) (x := x) (u := u) hNonExcNotDvdBoundaryProd
 
 /--
+`[compat/thin]`
 `hNonExcVal` 入力版の boundary-side 自動供給:
 `hNonExcNotDvdRight/Left` を GN 側既存補題から内部生成して接続する。
+
+新規コードでは
+`unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcFacade_boundaryFacade`
+の利用を推奨。
 -/
 theorem
     unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcVal_boundarySides
@@ -1993,8 +2029,13 @@ theorem
       hNonExcBoundary
 
 /--
+`[compat/thin]`
 `hNonExcBK` から `hNonExcLeRev` と `hNonExcNotDvdBoundaryProd` を自動供給し、
 weakKernel 入口へ接続する wrapper。
+
+新規コードでは
+`unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcFacade_boundaryFacade`
+の利用を推奨。
 -/
 theorem
     unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcBK_boundaryProd
@@ -2035,8 +2076,13 @@ theorem
       hNonExcBoundary
 
 /--
+`[compat/thin]`
 `hNonExcVal` から `hNonExcLeRev` と `hNonExcNotDvdBoundaryProd` を自動供給し、
 weakKernel 入口へ接続する wrapper。
+
+新規コードでは
+`unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcFacade_boundaryFacade`
+の利用を推奨。
 -/
 theorem
     unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcVal_boundaryProd

@@ -1195,3 +1195,25 @@ wrapper 群を実装した。
 
 これで A/B 系の旧 wrapper も、段階的に
 `...nonExcFacade_boundaryFacade...` 中心の薄い互換層へ揃った。
+
+### 16.35 `compat/thin` ラベル付けと最終推奨入口の導線整理
+
+互換維持のため残す wrapper 群に `compat/thin` を明示し、
+「新規実装でどこを呼ぶべきか」を固定した。
+
+- コード内ラベル方針:
+  - 旧公開名で残す wrapper の docstring 先頭に
+    ``[compat/thin]`` を付与。
+  - 併せて「新規コードではどの facade 入口を使うべきか」を追記。
+  - 最終入口には ``[recommended]`` を付与。
+- 最終推奨入口（完全 concrete 版）:
+  - `unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcNonExcMK`
+  - これを「A/B/C を束ねた最終推奨入口」とする。
+- 準推奨入口（入力が一部高レベルの場合）:
+  - 例外層だけ concrete の場合:
+    - `unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcMK`
+  - `m/n` 側 prime-power 比較を既に持つ場合:
+    - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcFacade_boundaryFacade`
+
+これで「互換 API は残すが新規呼び出しは推奨入口へ」という導線が
+コードと文書の両方で一致した。

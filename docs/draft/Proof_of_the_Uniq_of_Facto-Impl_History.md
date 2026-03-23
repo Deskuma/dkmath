@@ -781,3 +781,34 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - 互換 wrapper 群への `compat/thin` ラベル付けと、
      最終推奨入口のドキュメント導線を整理する。
+
+### 日時: 2026/03/24 01:18 JST: `compat/thin` ラベル付けと推奨入口導線を整理
+
+1. 目的: 互換 wrapper 群を識別可能にし、
+   新規呼び出しが最終推奨入口へ収束する導線を明確化する。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` の docstring を更新。
+     - 互換 wrapper 群に ``[compat/thin]`` を付与。
+       - 対象例:
+         - `...nonExcVal_boundaryFacade`
+         - `...nonExcBK_boundaryFacade`
+         - `...autoExcMK` / `...autoExcNonExcMK` の branch-specific 版
+         - `...nonExcVal_boundarySides`
+         - `...nonExcBK_boundaryProd`
+         - `...nonExcVal_boundaryProd`
+     - 最終入口
+       `unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcNonExcMK`
+       に ``[recommended]`` を付与。
+     - 各 `compat/thin` wrapper に「新規コードで使うべき入口」を追記。
+   - `Proof_of_the_Uniq_of_Factorization-impl-1of2.md` に
+     「16.35 `compat/thin` ラベル付けと最終推奨入口の導線整理」を追加。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: 互換層と推奨入口の境界が明示され、
+   API 遷移方針をコード/文書の両面で固定できた。
+4. 失敗事例:
+   - なし（初回更新でビルド通過）。
+5. 備考:
+   - 署名互換性は維持。今回の変更は docstring と導線整理が主。
+6. 次の課題:
+   - `DkMath/Samples` 側に最終推奨入口を使う最小呼び出し例を追加し、
+     実利用導線を確定する。
