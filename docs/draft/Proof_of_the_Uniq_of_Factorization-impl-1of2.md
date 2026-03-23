@@ -1263,3 +1263,21 @@ README/目次導線を補足した。
 
 これで、コード目次（`Samples.lean`）・利用 README・全体 INDEX の
 3 つの入口で同じ導線が引けるようになった。
+
+### 16.38 新規ドキュメント 2 本の作成（API 仕様書 / 主鎖証明ノート）
+
+技術文書整備として、`docs/draft/` に以下を新規作成した。
+
+- `Proof_of_the_Uniq_of_Factorization-API-Spec.md`
+  - 推奨入口の優先順
+  - facade 型の意味
+  - `compat/thin` 層の扱い
+  - `Samples` からの最小呼び出し導線
+- `Proof_of_the_Uniq_of_Factorization-MainChain-ProofNote.md`
+  - 証明主鎖（prime-power → factorization → equality）
+  - 例外層/非例外層の分離
+  - valuation から prime-power への橋
+  - GN 構造の寄与と境界条件
+
+これで、実装ドキュメント（API）と証明ドキュメント（主鎖）を分離して
+保守できる土台が整った。

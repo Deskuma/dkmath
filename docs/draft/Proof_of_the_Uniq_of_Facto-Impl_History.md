@@ -864,3 +864,32 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
    - 実装ロジックの変更はなし。導線整理（コメント/目次）中心。
 6. 次の課題:
    - ルート README（リポジトリ直下）にも同導線を最小追記するか検討する。
+
+### 日時: 2026/03/24 02:28 JST: API 仕様書と主鎖証明ノートを新規作成
+
+1. 目的: 実装利用者向けドキュメントと証明論文的ドキュメントを分離し、
+   今後の保守・拡張の基盤を作る。
+2. 内容:
+   - `docs/draft/` に新規 2 ファイルを作成。
+     - `Proof_of_the_Uniq_of_Factorization-API-Spec.md`
+       - 推奨入口の優先順
+       - facade 型（bridge/boundary）の意味
+       - `compat/thin` 層の扱い
+       - `Samples` からの最小呼び出し導線
+     - `Proof_of_the_Uniq_of_Factorization-MainChain-ProofNote.md`
+       - 証明主鎖（prime-power → factorization → equality）
+       - 例外層/非例外層分離
+       - valuation 橋の役割
+       - GN 構造アプローチの位置づけ
+   - 併せて
+     `Proof_of_the_Uniq_of_Factorization-impl-1of2.md`
+     に「16.38 新規ドキュメント 2 本の作成」を追記。
+3. 結論: API と証明主鎖を独立文書として保持できる形が整い、
+   以後の更新単位が明確になった。
+4. 失敗事例:
+   - なし（文書作成のみ）。
+5. 備考:
+   - Lean 実装コードの変更は無し。
+6. 次の課題:
+   - 2 文書に定理対応表（Lean 名 ↔ 論文記法）を追加し、
+     論文化時の変換コストを下げる。
