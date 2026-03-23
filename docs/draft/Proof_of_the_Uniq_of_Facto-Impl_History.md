@@ -669,3 +669,30 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - 段 B として、非例外層 `hNonExcM/hNonExcK` 側も
      concrete valuation 入力から自動供給する wrapper を実装する。
+
+### 日時: 2026/03/23 19:23 JST: 段 B（非例外層 `hNonExcM/hNonExcK` concrete 自動供給）を実装
+
+1. 目的: 非例外層入力 `hNonExcM/hNonExcK` を手入力前提から外し、
+   `hNonExcMVal/hNonExcKVal`（valuation 等式）から自動供給できる形にする。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に以下を追加。
+     - `nonExceptionalPowComparison_of_padicValNat_eq`
+       - `q ∤ d` 上の `v_q(a)=v_q(b)` から
+         `q^k ∣ a ↔ q^k ∣ b` を与える汎用補題。
+     - `nonExceptionalM_of_padicValNat_eq_m_boundaryProd`
+       - `hNonExcMVal` から `hNonExcM` を生成。
+     - `nonExceptionalK_of_padicValNat_eq_n_kernelRight`
+       - `hNonExcKVal` から `hNonExcK` を生成。
+     - `unique_factorization_nat_e2e_autoGNVal_nonExcVal_boundaryFacade_autoExcNonExcMK`
+     - `unique_factorization_nat_e2e_autoGNVal_nonExcBK_boundaryFacade_autoExcNonExcMK`
+       - 上記 2 本は段 A の `autoExcMK` wrapper に委譲しつつ、
+         `hNonExcM/hNonExcK` を内部生成して接続。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: 段 B で、非例外層 `m/n` 側比較入力の concrete 自動供給導線を確立できた。
+4. 失敗事例:
+   - なし（初回実装でビルド通過）。
+5. 備考:
+   - A/B を積んだことで、`m/n` 側比較入力の手動供給は
+     例外層・非例外層ともに不要化した（valuation 入力で代替可能）。
+6. 次の課題:
+   - 段 C として、A/B を束ねた最終 facade 入口の一本化を進める。

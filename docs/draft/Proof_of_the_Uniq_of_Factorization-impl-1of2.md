@@ -1102,3 +1102,27 @@ wrapper 群を実装した。
 
 これで段 A は「設計開始」から一歩進み、例外層入力の concrete 自動供給ルートが
 実装として成立した。次は段 B（非例外層 `hNonExcM/hNonExcK` の同型自動供給）を詰める。
+
+### 16.31 段 B: 非例外層 `hNonExcM/hNonExcK` の concrete 自動供給 wrapper を追加
+
+段 B として、非例外層の `m/n` 側入力も valuation 等式から自動供給できるようにした。
+
+- 追加（汎用）:
+  - `nonExceptionalPowComparison_of_padicValNat_eq`
+    - `q ∤ d` 上の `v_q(a)=v_q(b)` を
+      `q^k ∣ a ↔ q^k ∣ b`（全 `k`）へ持ち上げる共通補題。
+- 追加（concrete 供給）:
+  - `nonExceptionalM_of_padicValNat_eq_m_boundaryProd`
+    - `hNonExcMVal : v_q(m)=v_q(boundaryProd x u)` から
+      `hNonExcM` を自動供給。
+  - `nonExceptionalK_of_padicValNat_eq_n_kernelRight`
+    - `hNonExcKVal : v_q(n)=v_q(kernelRight d x u)` から
+      `hNonExcK` を自動供給。
+- 追加（e2e 接続）:
+  - `unique_factorization_nat_e2e_autoGNVal_nonExcVal_boundaryFacade_autoExcNonExcMK`
+  - `unique_factorization_nat_e2e_autoGNVal_nonExcBK_boundaryFacade_autoExcNonExcMK`
+  - いずれも段 A の `autoExcMK` 入口を再利用しつつ、
+    `hNonExcM/hNonExcK` を内部生成して接続。
+
+これで A/B の両方で `m/n` 側比較入力の concrete 自動供給が揃った。
+次段（段 C）は、A/B を束ねた最終 facade 入口の一本化と旧 wrapper 群の更なる thin 化。
