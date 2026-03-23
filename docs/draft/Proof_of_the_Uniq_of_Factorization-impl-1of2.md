@@ -1172,3 +1172,26 @@ wrapper 群を実装した。
 
 これで旧 wrapper 群の一部は、公開シグネチャを維持したまま
 新 facade 入口中心の薄い互換層へ移行した。
+
+### 16.34 段 C-3: A/B 旧 wrapper の委譲化（第2段）
+
+残る A/B 系 wrapper も、同じ facade 入口へ段階的に寄せた。
+
+- 追加（共通入口）:
+  - `unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcMK`
+  - 役割:
+    - 例外層 `hExcM/hExcK` を valuation から自動生成。
+    - 非例外層は `hNonExcBridge : NonExceptionalBridgeEntrance` で統一受理。
+    - 下位の
+      `...via_boundaryProd_kernelRight...nonExcFacade_boundaryFacade`
+      へ委譲。
+- 置換（thin wrapper 化）:
+  - `unique_factorization_nat_e2e_autoGNVal_nonExcVal_boundaryFacade_autoExcMK`
+  - `unique_factorization_nat_e2e_autoGNVal_nonExcBK_boundaryFacade_autoExcMK`
+  - `unique_factorization_nat_e2e_autoGNVal_nonExcVal_boundaryFacade_autoExcNonExcMK`
+  - `unique_factorization_nat_e2e_autoGNVal_nonExcBK_boundaryFacade_autoExcNonExcMK`
+  - 上記 4 本は branch-specific 本体を縮退し、
+    `hNonExcBridge` を構築して共通入口へ委譲する形に整理。
+
+これで A/B 系の旧 wrapper も、段階的に
+`...nonExcFacade_boundaryFacade...` 中心の薄い互換層へ揃った。

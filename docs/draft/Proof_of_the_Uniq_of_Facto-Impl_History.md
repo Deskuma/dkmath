@@ -751,3 +751,33 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
    - 公開シグネチャは維持。呼び出し側互換性はそのまま。
 6. 次の課題:
    - 残る旧 wrapper についても、同入口への委譲化を順次進める。
+
+### 日時: 2026/03/24 01:09 JST: 旧 wrapper 群の thin 化（第2段）を実施
+
+1. 目的: 残る A/B 系 wrapper も同入口へ委譲し、
+   `...nonExcFacade_boundaryFacade...` 中心の呼び出し面へ整理する。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に
+     共通入口 `unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcMK`
+     を追加。
+     - 例外層の `hExcM/hExcK` は valuation から内部生成。
+     - 非例外層 bridge は `hNonExcBridge`（Val/BK facade）で受ける。
+   - 既存 wrapper 4 本を thin 化（本体を上記共通入口へ委譲）。
+     - `...nonExcVal_boundaryFacade_autoExcMK`
+     - `...nonExcBK_boundaryFacade_autoExcMK`
+     - `...nonExcVal_boundaryFacade_autoExcNonExcMK`
+     - `...nonExcBK_boundaryFacade_autoExcNonExcMK`
+   - 置換方針:
+     - branch-specific 入力（Val/BK）から
+       `nonExceptionalBridgeEntrance_of_nonExcVal/BK` で bridge facade を構築。
+     - 既存シグネチャを保ったまま、共通入口へ委譲。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: A/B 系の旧 wrapper まで thin 化が進み、
+   非例外層分岐は `NonExceptionalBridgeEntrance` 経由へさらに集約できた。
+4. 失敗事例:
+   - なし（初回置換でビルド通過）。
+5. 備考:
+   - 互換維持のため旧公開名は残置。内部のみ委譲化。
+6. 次の課題:
+   - 互換 wrapper 群への `compat/thin` ラベル付けと、
+     最終推奨入口のドキュメント導線を整理する。
