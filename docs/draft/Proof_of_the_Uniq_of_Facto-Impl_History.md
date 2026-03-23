@@ -592,3 +592,31 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - `weakKernel_boundarySides` / `powChain_boundarySides` 側も
      facade 中心実装へ揃える再配置方針を詰める。
+
+### 日時: 2026/03/23 18:25 JST: `boundarySides` 系を facade 中心実装へ再配置
+
+1. 目的: `weakKernel_boundarySides` / `powChain_boundarySides` 側も
+   facade 中心実装へ揃え、旧入口を薄い互換層にする。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に共通コアを追加。
+     - `unique_factorization_nat_e2e_autoGNVal_weakKernel_boundaryFacade_core`
+   - 既存定理の本体を再配置・委譲化。
+     - `..._weakKernel_boundarySides`
+       - `nonExceptionalBoundaryEntrance_of_not_dvd_boundarySides` で facade 化し、
+         共通コアへ委譲。
+     - `..._weakKernel_boundaryFacade`
+       - 共通コアへの薄い委譲に統一。
+     - `..._powChain_boundarySides`
+       - `hNonExcLeRev` 生成後に `boundarySides` を facade 化し、
+         共通コアへ委譲。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: `boundarySides` 入口も facade 中心の実装一本化に揃い、
+   旧 wrapper は thin 層として整理が進んだ。
+4. 失敗事例:
+   - 追加直後に長行警告（定理名・参照名）4 件。
+   - コア定理名を短縮し、呼び出し側参照も更新して解消。
+5. 備考:
+   - 公開シグネチャは維持しているため、呼び出し側互換性はそのまま。
+6. 次の課題:
+   - facade 経由が既定であることを明示するため、
+     旧 wrapper の docstring に「compat/thin」ラベルを付けるか検討する。

@@ -879,49 +879,11 @@ theorem unique_factorization_nat_via_boundaryProd_kernelRight_split_layers_e2e_a
     hNonExcNotDvdBoundaryProd hNonExcNotDvdKernelRight
 
 /--
-`autoGNVal_weakKernel` の境界 side 入力版:
-非例外層 `boundaryRight/Left` 側 `¬dvd` から `boundaryProd` 側 `¬dvd` を自動生成して接続する。
--/
-theorem
-    unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_weakKernel_boundarySides
-    {d x u m n : ℕ}
-    (hm : m ≠ 0) (hn : n ≠ 0)
-    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
-    (hExcM : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
-      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
-    (hExcK : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
-      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
-    (hExcVal : ∀ q : ℕ, Nat.Prime q → q ∣ d →
-      padicValNat q (boundaryProd x u) = padicValNat q (kernelRight d x u))
-    (hNonExcM : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
-      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
-    (hNonExcK : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
-      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
-    (hNonExcLeRev :
-      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d →
-        padicValNat q (kernelRight d x u) ≤ padicValNat q (boundaryProd x u))
-    (hNonExcNotDvdRight :
-      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryRight x u)
-    (hNonExcNotDvdLeft :
-      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryLeft x u) :
-    m = n := by
-  have hNonExcNotDvdBoundaryProd :
-      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryProd x u :=
-    nonExceptionalNotDvd_boundaryProd_of_not_dvd_boundarySides
-      (d := d) (x := x) (u := u) hNonExcNotDvdRight hNonExcNotDvdLeft
-  exact unique_factorization_nat_via_boundaryProd_kernelRight_split_layers_e2e_autoGNVal_weakKernel
-    (d := d) (x := x) (u := u) (m := m) (n := n)
-    hm hn hd2 hx hu
-    hExcM hExcK hExcVal
-    hNonExcM hNonExcK
-    hNonExcLeRev hNonExcNotDvdBoundaryProd
-
-/--
-`autoGNVal_weakKernel` の facade 版:
+`autoGNVal_weakKernel` の facade 入力コア。
 非例外層の boundary 入口（`boundaryProd` / `boundarySides`）を統一して受ける。
 -/
 theorem
-    unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_weakKernel_boundaryFacade
+    unique_factorization_nat_e2e_autoGNVal_weakKernel_boundaryFacade_core
     {d x u m n : ℕ}
     (hm : m ≠ 0) (hn : n ≠ 0)
     (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
@@ -950,6 +912,76 @@ theorem
     hExcM hExcK hExcVal
     hNonExcM hNonExcK
     hNonExcLeRev hNonExcNotDvdBoundaryProd
+
+/--
+`autoGNVal_weakKernel` の境界 side 入力版:
+非例外層 `boundaryRight/Left` 側 `¬dvd` から `boundaryProd` 側 `¬dvd` を自動生成して接続する。
+-/
+theorem
+    unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_weakKernel_boundarySides
+    {d x u m n : ℕ}
+    (hm : m ≠ 0) (hn : n ≠ 0)
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
+    (hExcM : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hExcK : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hExcVal : ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q (boundaryProd x u) = padicValNat q (kernelRight d x u))
+    (hNonExcM : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hNonExcK : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hNonExcLeRev :
+      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d →
+        padicValNat q (kernelRight d x u) ≤ padicValNat q (boundaryProd x u))
+    (hNonExcNotDvdRight :
+      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryRight x u)
+    (hNonExcNotDvdLeft :
+      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryLeft x u) :
+    m = n := by
+  have hNonExcBoundary : NonExceptionalBoundaryEntrance d x u :=
+    nonExceptionalBoundaryEntrance_of_not_dvd_boundarySides
+      (d := d) (x := x) (u := u) hNonExcNotDvdRight hNonExcNotDvdLeft
+  exact
+    unique_factorization_nat_e2e_autoGNVal_weakKernel_boundaryFacade_core
+    (d := d) (x := x) (u := u) (m := m) (n := n)
+    hm hn hd2 hx hu
+    hExcM hExcK hExcVal
+    hNonExcM hNonExcK
+    hNonExcLeRev hNonExcBoundary
+
+/--
+`autoGNVal_weakKernel` の facade 版:
+非例外層の boundary 入口（`boundaryProd` / `boundarySides`）を統一して受ける。
+-/
+theorem
+    unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_weakKernel_boundaryFacade
+    {d x u m n : ℕ}
+    (hm : m ≠ 0) (hn : n ≠ 0)
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
+    (hExcM : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hExcK : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hExcVal : ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q (boundaryProd x u) = padicValNat q (kernelRight d x u))
+    (hNonExcM : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hNonExcK : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hNonExcLeRev :
+      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d →
+        padicValNat q (kernelRight d x u) ≤ padicValNat q (boundaryProd x u))
+    (hNonExcBoundary : NonExceptionalBoundaryEntrance d x u) :
+    m = n := by
+  exact
+    unique_factorization_nat_e2e_autoGNVal_weakKernel_boundaryFacade_core
+    (d := d) (x := x) (u := u) (m := m) (n := n)
+    hm hn hd2 hx hu
+    hExcM hExcK hExcVal
+    hNonExcM hNonExcK
+    hNonExcLeRev hNonExcBoundary
 
 /--
 `hNonExcVal` 入力で、非例外層 boundary 入口を facade 化した最終 e2e wrapper。
@@ -1058,12 +1090,16 @@ theorem unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_powC
         padicValNat q (kernelRight d x u) ≤ padicValNat q (boundaryProd x u) :=
     nonExceptionalLeRev_of_primePow_kernelRight_to_boundaryProd
       (d := d) (x := x) (u := u) hd2 hx hu hNonExcPowRev
-  exact unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_weakKernel_boundarySides
+  have hNonExcBoundary : NonExceptionalBoundaryEntrance d x u :=
+    nonExceptionalBoundaryEntrance_of_not_dvd_boundarySides
+      (d := d) (x := x) (u := u) hNonExcNotDvdRight hNonExcNotDvdLeft
+  exact
+    unique_factorization_nat_e2e_autoGNVal_weakKernel_boundaryFacade_core
     (d := d) (x := x) (u := u) (m := m) (n := n)
     hm hn hd2 hx hu
     hExcM hExcK hExcVal
     hNonExcM hNonExcK
-    hNonExcLeRev hNonExcNotDvdRight hNonExcNotDvdLeft
+    hNonExcLeRev hNonExcBoundary
 
 /--
 `hNonExcPowRev` の自動供給版（`hNonExcVal` 入力）:
