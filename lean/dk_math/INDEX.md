@@ -43,6 +43,9 @@
 
 - `DkMath.Basic`
 - `DkMath.Samples`
+  - 推奨導線サンプル: `DkMath.Samples.UniqueFactorizationGNFacade`
+  - 最終推奨入口（NumberTheory 側）:
+    `DkMath.NumberTheory.unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcNonExcMK`
 
 ### 3.2 ABC まわり
 
