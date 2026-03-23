@@ -537,3 +537,30 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - 例外層/非例外層の入口（`boundaryProd` / `boundarySides`）を
      最終 e2e API で統一する facade を検討する。
+
+### 日時: 2026/03/23 17:58 JST: `boundaryProd / boundarySides` の統一 facade を追加
+
+1. 目的: 例外層/非例外層の最終 e2e で、非例外層境界入口
+   （`boundaryProd` / `boundarySides`）を単一 API で受けられるようにする。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に以下を追加。
+     - `NonExceptionalBoundaryEntrance`
+     - `nonExceptionalNotDvd_boundaryProd_of_boundaryEntrance`
+     - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_weakKernel_boundaryFacade`
+     - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcVal_boundaryFacade`
+     - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcBK_boundaryFacade`
+   - 設計:
+     - facade は `boundaryProd` 直入力か `boundarySides` 入力を `Or` で保持。
+     - `...of_boundaryEntrance` で `hNonExcNotDvdBoundaryProd` へ正規化。
+     - 最終 e2e はこの正規化結果に集約し、`nonExcVal` / `nonExcBK` は
+       `hNonExcLeRev` 供給だけを担う。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: 非例外層境界の入口形を統一でき、
+   最終 e2e で呼び出し側の分岐を減らせる状態になった。
+4. 失敗事例:
+   - 追加直後に長行警告（100 文字超過）2 件。
+   - `exact` 行を改行して解消。
+5. 備考:
+   - 既存の `...boundaryProd` / `...boundarySides` wrapper は互換維持のため残置。
+6. 次の課題:
+   - facade 入口を基準に、旧 wrapper 群の段階的整理（thin wrapper 化）を検討する。
