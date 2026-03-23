@@ -1250,6 +1250,121 @@ theorem primePow_dvd_boundaryProd_not_primePow_dvd_kernelRight_of_coprime_of_not
       hd1 hx hu hcop hqP hq_ndvd_d hk hqk_dvd_boundary) hq_dvd_kernel
 
 /--
+`hNonExcBK`（`boundaryProd ↔ kernelRight`）と GN 側非重複補題から、
+非例外層の `boundaryProd` 側 `¬dvd` を抽出する。
+-/
+theorem nonExceptionalNotDvd_boundaryProd_of_nonExceptionalBK_of_coprime_of_not_dvd_exp
+    {d x u : ℕ}
+    (hd1 : 1 ≤ d) (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hNonExcBK :
+      ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+        (q ^ k ∣ boundaryProd x u ↔ q ^ k ∣ kernelRight d x u)) :
+    ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryProd x u := by
+  intro q hqP hq_ndvd_d hq_dvd_boundary
+  have hq1_dvd_boundary : q ^ 1 ∣ boundaryProd x u := by simpa using hq_dvd_boundary
+  have hq1_dvd_kernel : q ^ 1 ∣ kernelRight d x u :=
+    (hNonExcBK q 1 hqP hq_ndvd_d).1 hq1_dvd_boundary
+  have hq_dvd_kernel : q ∣ kernelRight d x u := by simpa using hq1_dvd_kernel
+  exact
+    (primePow_dvd_boundaryProd_not_dvd_kernelRight_of_coprime_of_not_dvd_exp
+      (d := d) (x := x) (u := u) (q := q) (k := 1)
+      hd1 hx hu hcop hqP hq_ndvd_d (by decide) hq1_dvd_boundary) hq_dvd_kernel
+
+/--
+`boundaryProd` 側 `¬dvd` から、`boundaryRight/Left` 側 `¬dvd` を生成する。
+-/
+theorem nonExceptionalNotDvd_boundarySides_of_not_dvd_boundaryProd
+    {d x u : ℕ}
+    (hNonExcNotDvdBoundaryProd :
+      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryProd x u) :
+    (∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryRight x u) ∧
+    (∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryLeft x u) := by
+  constructor
+  · intro q hqP hq_ndvd_d hq_dvd_right
+    have hq_dvd_x : q ∣ x := by simpa [boundaryRight] using hq_dvd_right
+    have hq_dvd_boundaryProd : q ∣ boundaryProd x u := by
+      simpa [boundaryProd] using (dvd_mul_of_dvd_left hq_dvd_x u)
+    exact (hNonExcNotDvdBoundaryProd q hqP hq_ndvd_d) hq_dvd_boundaryProd
+  · intro q hqP hq_ndvd_d hq_dvd_left
+    have hq_dvd_u : q ∣ u := by simpa [boundaryLeft] using hq_dvd_left
+    have hq_dvd_boundaryProd : q ∣ boundaryProd x u := by
+      simpa [boundaryProd] using (dvd_mul_of_dvd_right hq_dvd_u x)
+    exact (hNonExcNotDvdBoundaryProd q hqP hq_ndvd_d) hq_dvd_boundaryProd
+
+/--
+`hNonExcBK` と GN 側非重複補題から、`hNonExcNotDvdRight/Left` を自動供給する wrapper。
+-/
+theorem nonExceptionalNotDvd_boundarySides_of_nonExceptionalBK_of_coprime_of_not_dvd_exp
+    {d x u : ℕ}
+    (hd1 : 1 ≤ d) (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hNonExcBK :
+      ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+        (q ^ k ∣ boundaryProd x u ↔ q ^ k ∣ kernelRight d x u)) :
+    (∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryRight x u) ∧
+    (∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryLeft x u) := by
+  have hNonExcNotDvdBoundaryProd :
+      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryProd x u :=
+    nonExceptionalNotDvd_boundaryProd_of_nonExceptionalBK_of_coprime_of_not_dvd_exp
+      (d := d) (x := x) (u := u) hd1 hx hu hcop hNonExcBK
+  exact
+    nonExceptionalNotDvd_boundarySides_of_not_dvd_boundaryProd
+      (d := d) (x := x) (u := u) hNonExcNotDvdBoundaryProd
+
+/--
+`hNonExcVal`（valuation 等式）から `hNonExcBK` を経由し、
+`hNonExcNotDvdRight/Left` を GN 側補題で自動供給する wrapper。
+-/
+theorem
+    nonExceptionalNotDvd_boundarySides_from_nonExcVal
+    {d x u : ℕ}
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hNonExcVal : ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d →
+      padicValNat q (boundaryProd x u) = padicValNat q (kernelRight d x u)) :
+    (∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryRight x u) ∧
+    (∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryLeft x u) := by
+  have hd1 : 1 ≤ d := Nat.le_trans (by decide : 1 ≤ 2) hd2
+  have hNonExcBK :
+      ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+        (q ^ k ∣ boundaryProd x u ↔ q ^ k ∣ kernelRight d x u) :=
+    nonExceptionalBK_of_padicValNat_eq_boundaryProd_kernelRight
+      (d := d) (x := x) (u := u) hd2 hx hu hNonExcVal
+  exact
+    nonExceptionalNotDvd_boundarySides_of_nonExceptionalBK_of_coprime_of_not_dvd_exp
+      (d := d) (x := x) (u := u) hd1 hx hu hcop hNonExcBK
+
+/--
+`hNonExcVal` 入力版の boundary-side 自動供給:
+`hNonExcNotDvdRight/Left` を GN 側既存補題から内部生成して接続する。
+-/
+theorem
+    unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcVal_boundarySides
+    {d x u m n : ℕ}
+    (hm : m ≠ 0) (hn : n ≠ 0)
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hExcM : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hExcK : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hExcVal : ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q (boundaryProd x u) = padicValNat q (kernelRight d x u))
+    (hNonExcM : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hNonExcK : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hNonExcVal : ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d →
+      padicValNat q (boundaryProd x u) = padicValNat q (kernelRight d x u)) :
+    m = n := by
+  obtain ⟨hNonExcNotDvdRight, hNonExcNotDvdLeft⟩ :=
+    nonExceptionalNotDvd_boundarySides_from_nonExcVal
+      (d := d) (x := x) (u := u) hd2 hx hu hcop hNonExcVal
+  exact unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_powChain_from_nonExcVal
+    (d := d) (x := x) (u := u) (m := m) (n := n)
+    hm hn hd2 hx hu
+    hExcM hExcK hExcVal
+    hNonExcM hNonExcK hNonExcVal
+    hNonExcNotDvdRight hNonExcNotDvdLeft
+
+/--
 `k ≤ v_q(boundaryProd)`（`k>0`）を入口にした `kernelRight` 側の valuation ゼロ化。
 
 `q ∤ d` 層では、`boundaryProd` 側に現れた prime-power は

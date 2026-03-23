@@ -477,3 +477,33 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - `hNonExcNotDvdRight/Left` 側も GN 既存補題から自動供給する
      boundary-side wrapper を強化する。
+
+### 日時: 2026/03/23 17:38 JST: `hNonExcNotDvdRight/Left` の boundary-side 自動供給 wrapper を強化
+
+1. 目的: `hNonExcNotDvdRight/Left` を直接仮定せず、
+   GN 側既存補題から自動供給する chain を整備する。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に以下を追加。
+     - `nonExceptionalNotDvd_boundaryProd_of_nonExceptionalBK_of_coprime_of_not_dvd_exp`
+     - `nonExceptionalNotDvd_boundarySides_of_not_dvd_boundaryProd`
+     - `nonExceptionalNotDvd_boundarySides_of_nonExceptionalBK_of_coprime_of_not_dvd_exp`
+     - `nonExceptionalNotDvd_boundarySides_from_nonExcVal`
+     - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcVal_boundarySides`
+   - 導出方式:
+     - `hNonExcBK` から `q ∣ boundaryProd -> q ∣ kernelRight` を得る。
+     - GN 側非重複補題
+       `primePow_dvd_boundaryProd_not_dvd_kernelRight_of_coprime_of_not_dvd_exp`
+       （`k=1`）で `q ∣ kernelRight` と矛盾させ、`¬ q ∣ boundaryProd` を導出。
+     - `¬ q ∣ boundaryProd` から `boundaryRight/Left` 側 `¬dvd` を抽出。
+     - `hNonExcVal` 入力版は `hNonExcBK` 化して同 chain に接続。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: `hNonExcNotDvdRight/Left` を手入力せず、
+   GN 側比較補題から boundary-side 前提を供給できるようになった。
+4. 失敗事例:
+   - 初版で補題を前方配置し、後段定理への前方参照で解決不能となった。
+   - 補題群を `primePow_dvd_boundaryProd_not_dvd_kernelRight...` 後へ再配置して解消。
+5. 備考:
+   - linter の長行警告回避のため、2 つの新規定理名を短縮した。
+6. 次の課題:
+   - `hNonExcNotDvdBoundaryProd` 側の供給も同様に、
+     `hNonExcVal` / `hNonExcBK` から直接使える入力形へ整理する。

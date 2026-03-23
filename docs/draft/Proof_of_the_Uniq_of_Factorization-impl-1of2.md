@@ -938,3 +938,26 @@ GN 側の具体補題から自動構成する導線を追加した。
 これで `hNonExcPowRev` は、
 GN 側既存比較補題（`hNonExcBK` / `hNonExcVal` 系）から
 具体的に供給できるようになった。
+
+### 16.24 `hNonExcNotDvdRight/Left` の boundary-side 自動供給 wrapper 強化
+
+`hNonExcNotDvdRight/Left` を手で与えず、GN 側既存補題から供給する導線を追加した。
+
+- 追加補題:
+  - `nonExceptionalNotDvd_boundaryProd_of_nonExceptionalBK_of_coprime_of_not_dvd_exp`
+    - `hNonExcBK`（`boundaryProd ↔ kernelRight`）と
+      `primePow_dvd_boundaryProd_not_dvd_kernelRight_of_coprime_of_not_dvd_exp`
+      を組み合わせて、非例外層の `¬ q ∣ boundaryProd` を導出。
+  - `nonExceptionalNotDvd_boundarySides_of_not_dvd_boundaryProd`
+    - `¬ q ∣ boundaryProd` から `¬ q ∣ boundaryRight/Left` を抽出。
+  - `nonExceptionalNotDvd_boundarySides_of_nonExceptionalBK_of_coprime_of_not_dvd_exp`
+    - 上の 2 段を合成して `hNonExcNotDvdRight/Left` を供給。
+  - `nonExceptionalNotDvd_boundarySides_from_nonExcVal`
+    - `hNonExcVal` を `hNonExcBK` 化して同じ chain に接続。
+- end-to-end wrapper:
+  - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcVal_boundarySides`
+    - `hNonExcVal` と `Nat.Coprime x u` から `hNonExcNotDvdRight/Left` を内部生成し、
+      既存の `...powChain_from_nonExcVal` へ接続して `m = n` を返す。
+
+これで boundary-side 入力は、
+GN 側比較補題と非重複補題から自動供給できるようになった。
