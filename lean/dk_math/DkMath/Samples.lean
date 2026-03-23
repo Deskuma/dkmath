@@ -17,3 +17,4 @@ import DkMath.Samples.SketchBook
 import DkMath.Samples.Qty
 import DkMath.Samples.SumThreeSquaresEqSquare
 import DkMath.Samples.UniqueFactorizationGNFacade
+import DkMath.Samples.Demo
