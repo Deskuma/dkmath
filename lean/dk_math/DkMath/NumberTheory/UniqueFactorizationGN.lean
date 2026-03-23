@@ -1191,6 +1191,43 @@ theorem
     hNonExcLeRev hNonExcBoundary
 
 /--
+`hNonExcVal` / `hNonExcBK` の bridge 入口を facade 化した最終 e2e wrapper。
+-/
+theorem
+    unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcFacade_boundaryFacade
+    {d x u m n : ℕ}
+    (hm : m ≠ 0) (hn : n ≠ 0)
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
+    (hExcM : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hExcK : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hExcVal : ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q (boundaryProd x u) = padicValNat q (kernelRight d x u))
+    (hNonExcM : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hNonExcK : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hNonExcBridge : NonExceptionalBridgeEntrance d x u)
+    (hNonExcBoundary : NonExceptionalBoundaryEntrance d x u) :
+    m = n := by
+  rcases hNonExcBridge with hNonExcVal | hNonExcBK
+  · exact
+      unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcVal_boundaryFacade
+        (d := d) (x := x) (u := u) (m := m) (n := n)
+        hm hn hd2 hx hu
+        hExcM hExcK hExcVal
+        hNonExcM hNonExcK hNonExcVal
+        hNonExcBoundary
+  · exact
+      unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcBK_boundaryFacade
+        (d := d) (x := x) (u := u) (m := m) (n := n)
+        hm hn hd2 hx hu
+        hExcM hExcK hExcVal
+        hNonExcM hNonExcK hNonExcBK
+        hNonExcBoundary
+
+/--
 段 A（例外層入力の concrete 化）:
 `hExcM/hExcK` を valuation 入力から自動供給して、
 `nonExcVal + boundaryFacade` 入口へ接続する。
@@ -1908,12 +1945,15 @@ theorem
     exact
       nonExceptionalBoundaryEntrance_of_not_dvd_boundarySides
         (d := d) (x := x) (u := u) hNonExcNotDvdRight hNonExcNotDvdLeft
+  have hNonExcBridge : NonExceptionalBridgeEntrance d x u :=
+    nonExceptionalBridgeEntrance_of_nonExcVal
+      (d := d) (x := x) (u := u) hNonExcVal
   exact
-    unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcVal_boundaryFacade
+    unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcFacade_boundaryFacade
       (d := d) (x := x) (u := u) (m := m) (n := n)
       hm hn hd2 hx hu
       hExcM hExcK hExcVal
-      hNonExcM hNonExcK hNonExcVal
+      hNonExcM hNonExcK hNonExcBridge
       hNonExcBoundary
 
 /--
@@ -1947,12 +1987,15 @@ theorem
   have hNonExcBoundary : NonExceptionalBoundaryEntrance d x u :=
     nonExceptionalBoundaryEntrance_of_not_dvd_boundaryProd
       (d := d) (x := x) (u := u) hNonExcNotDvdBoundaryProd
+  have hNonExcBridge : NonExceptionalBridgeEntrance d x u :=
+    nonExceptionalBridgeEntrance_of_nonExcBK
+      (d := d) (x := x) (u := u) hNonExcBK
   exact
-    unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcBK_boundaryFacade
+    unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcFacade_boundaryFacade
       (d := d) (x := x) (u := u) (m := m) (n := n)
       hm hn hd2 hx hu
       hExcM hExcK hExcVal
-      hNonExcM hNonExcK hNonExcBK
+      hNonExcM hNonExcK hNonExcBridge
       hNonExcBoundary
 
 /--
@@ -1984,12 +2027,15 @@ theorem
   have hNonExcBoundary : NonExceptionalBoundaryEntrance d x u :=
     nonExceptionalBoundaryEntrance_of_not_dvd_boundaryProd
       (d := d) (x := x) (u := u) hNonExcNotDvdBoundaryProd
+  have hNonExcBridge : NonExceptionalBridgeEntrance d x u :=
+    nonExceptionalBridgeEntrance_of_nonExcVal
+      (d := d) (x := x) (u := u) hNonExcVal
   exact
-    unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcVal_boundaryFacade
+    unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcFacade_boundaryFacade
       (d := d) (x := x) (u := u) (m := m) (n := n)
       hm hn hd2 hx hu
       hExcM hExcK hExcVal
-      hNonExcM hNonExcK hNonExcVal
+      hNonExcM hNonExcK hNonExcBridge
       hNonExcBoundary
 
 /--

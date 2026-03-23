@@ -1151,3 +1151,24 @@ wrapper 群を実装した。
 
 これで最終 API は、非例外層 bridge 入力と boundary 入力の両方で facade 統一され、
 段 A/B の実装を 1 つの入口から呼べる形になった。
+
+### 16.33 段 C-2: 旧 wrapper 群の thin 化（`nonExcFacade_boundaryFacade` 中心）
+
+段 C の次段として、旧 wrapper の本体ロジックを新入口へ段階的に寄せた。
+
+- 追加（中間統一入口）:
+  - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcFacade_boundaryFacade`
+  - 役割:
+    - `hNonExcVal` / `hNonExcBK` の分岐を
+      `NonExceptionalBridgeEntrance` で一本化。
+    - 既存 `...nonExcVal_boundaryFacade` / `...nonExcBK_boundaryFacade` へ委譲。
+- 置換（thin wrapper 化）:
+  - `...nonExcVal_boundarySides`
+  - `...nonExcBK_boundaryProd`
+  - `...nonExcVal_boundaryProd`
+  - 上記 3 本は、`hNonExcBoundary` 生成後に
+    `hNonExcBridge`（Val/BK facade）を作って
+    `...nonExcFacade_boundaryFacade` へ委譲する形に整理。
+
+これで旧 wrapper 群の一部は、公開シグネチャを維持したまま
+新 facade 入口中心の薄い互換層へ移行した。

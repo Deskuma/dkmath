@@ -724,3 +724,30 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - 旧 wrapper 群を段階的に thin 化し、
      新 `...nonExcFacade_boundaryFacade...` を中心に呼び出し面を整理する。
+
+### 日時: 2026/03/24 00:56 JST: 旧 wrapper 群の thin 化（第1段）を実施
+
+1. 目的: 旧 wrapper 群を段階的に thin 化し、
+   新 `...nonExcFacade_boundaryFacade...` を中心に呼び出し面を整理する。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に中間統一入口を追加。
+     - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcFacade_boundaryFacade`
+       - `hNonExcBridge : NonExceptionalBridgeEntrance` を受け、
+         `nonExcVal`/`nonExcBK` 分岐を内部処理。
+   - 既存 wrapper 3 本を thin 化（本体を上記統一入口へ委譲）。
+     - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcVal_boundarySides`
+     - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcBK_boundaryProd`
+     - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcVal_boundaryProd`
+   - 置換方針:
+     - 各 wrapper 内で `hNonExcBoundary` は従来どおり生成。
+     - `hNonExcVal` または `hNonExcBK` から
+       `hNonExcBridge` を構築し、統一入口へ接続。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: 旧 wrapper 群の第1段 thin 化が完了し、
+   非例外層 bridge 分岐は `nonExcFacade_boundaryFacade` へ集約できた。
+4. 失敗事例:
+   - なし（初回置換でビルド通過）。
+5. 備考:
+   - 公開シグネチャは維持。呼び出し側互換性はそのまま。
+6. 次の課題:
+   - 残る旧 wrapper についても、同入口への委譲化を順次進める。
