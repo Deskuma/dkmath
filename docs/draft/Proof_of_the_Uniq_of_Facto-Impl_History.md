@@ -640,3 +640,32 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
    - 実装コードの変更は無し。ドキュメント整理のみ。
 6. 次の課題:
    - 段 A として、例外層 `hExcM/hExcK` の concrete 自動供給 wrapper 設計を開始する。
+
+### 日時: 2026/03/23 19:04 JST: 段 A（例外層 `hExcM/hExcK` concrete 自動供給）を実装
+
+1. 目的: 例外層入力 `hExcM/hExcK` を手入力前提から外し、
+   `GN` 側で与える valuation 等式（`hExcMVal/hExcKVal`）から自動供給できる形にする。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に以下を追加。
+     - `exceptionalPowComparison_of_padicValNat_eq`
+       - `q ∣ d` 上の `v_q(a)=v_q(b)` から
+         `q^k ∣ a ↔ q^k ∣ b` を与える汎用補題。
+     - `exceptionalM_of_padicValNat_eq_m_boundaryProd`
+       - `hExcMVal` から `hExcM` を生成。
+     - `exceptionalK_of_padicValNat_eq_n_kernelRight`
+       - `hExcKVal` から `hExcK` を生成。
+     - `unique_factorization_nat_e2e_autoGNVal_nonExcVal_boundaryFacade_autoExcMK`
+     - `unique_factorization_nat_e2e_autoGNVal_nonExcBK_boundaryFacade_autoExcMK`
+       - 上記 2 本は `hExcM/hExcK` を内部生成して既存 facade e2e に委譲。
+   - 併せて `unnecessarySimpa` 警告 1 件を `simp` へ置換して解消。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: 段 A は実装段階へ進み、例外層 `hExcM/hExcK` の concrete 自動供給導線を確立できた。
+4. 失敗事例:
+   - 追加直後、linter の `unnecessarySimpa` 警告 1 件。
+   - `simpa` を `simp` に置換して解消。
+5. 備考:
+   - 新 e2e は既存 facade API を再利用する薄い上位入口として設計。
+   - 既存呼び出し互換性は維持。
+6. 次の課題:
+   - 段 B として、非例外層 `hNonExcM/hNonExcK` 側も
+     concrete valuation 入力から自動供給する wrapper を実装する。
