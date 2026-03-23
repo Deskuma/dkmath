@@ -393,3 +393,33 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - 非例外層の `kernelRight` 側 `¬dvd`（または 0 化）を
      より弱い仮定から供給する GN 補題連鎖を拡張する。
+
+### 日時: 2026/03/23 10:16 JST: 非例外層 `kernelRight` 側 `¬dvd`/0化を弱化仮定から供給する chain を追加
+
+1. 目的: 非例外層で `kernelRight` 側 `¬dvd` を直接仮定する形を弱め、
+   valuation 比較と境界側情報から自動導出できる補題連鎖へ拡張する。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に以下を追加。
+     - `nonExceptionalNotDvd_kernelRight_of_padicValNat_le_boundaryProd_and_not_dvd_boundaryProd`
+     - `nonExceptionalZero_of_padicValNat_le_boundaryProd_and_not_dvd_boundaryProd`
+     - `nonExceptionalZero_of_padicValNat_le_boundaryProd_and_not_dvd_boundarySides`
+     - `unique_factorization_nat_via_boundaryProd_kernelRight_split_layers_e2e_autoGNVal_weakKernel`
+     - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_weakKernel_boundarySides`
+   - 設計要点:
+     - `v_q(kernelRight) ≤ v_q(boundaryProd)` と `¬ q ∣ boundaryProd` から
+       `v_q(kernelRight)=0`（したがって `¬ q ∣ kernelRight`）を導出。
+     - `boundaryRight/Left` 側 `¬dvd` から `¬ q ∣ boundaryProd` を構成し、
+       上記 chain へ接続。
+     - end-to-end では、従来必要だった `hNonExcNotDvdKernelRight` を
+       より弱い入力へ置き換えた wrapper を追加。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: 非例外層 `kernelRight` 側の供給条件が弱化され、
+   concrete 仮定からの自動導出経路が一段進んだ。
+4. 失敗事例:
+   - 初版で `simp [hBz]` が `padicValNat.eq_zero_iff` を過展開し型不一致。
+   - `calc` で不等式を段階接続し、`Nat.le_zero.mp` で 0 化して解消。
+5. 備考:
+   - 新規 `boundarySides` wrapper 名は linter 長行制約を満たすよう短縮している。
+6. 次の課題:
+   - `hNonExcLeRev` 自体を、GN 側のさらに具体的な prime-power 非重複補題から
+     自動供給する chain を整備する。

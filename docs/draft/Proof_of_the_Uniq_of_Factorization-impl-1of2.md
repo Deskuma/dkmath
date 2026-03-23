@@ -868,3 +868,31 @@ GN 側の具体補題から自動構成する導線を追加した。
 
 この追加で、呼び出し側は `hExcLe/hExcLeRev/hNonExcZero` を手で組み立てず、
 より concrete な GN 側補題（valuation 等式・prime `¬dvd`）を与えればよくなった。
+
+### 16.21 非例外層 `kernelRight` 側 `¬dvd` / 0化の弱化 chain 拡張
+
+非例外層で `kernelRight` 側 `¬dvd` を直接要求していた部分を、
+より弱い仮定から供給できる chain を追加した。
+
+- 追加補題:
+  - `nonExceptionalNotDvd_kernelRight_of_padicValNat_le_boundaryProd_and_not_dvd_boundaryProd`
+    - 仮定:
+      - `v_q(kernelRight) ≤ v_q(boundaryProd)`
+      - `¬ q ∣ boundaryProd`
+    - 結論:
+      - `¬ q ∣ kernelRight`
+  - `nonExceptionalZero_of_padicValNat_le_boundaryProd_and_not_dvd_boundaryProd`
+    - 上の条件から `v_q(boundaryProd)=0 ∧ v_q(kernelRight)=0` を生成。
+  - `nonExceptionalZero_of_padicValNat_le_boundaryProd_and_not_dvd_boundarySides`
+    - `boundaryRight/Left` 側 `¬dvd` から `¬ q ∣ boundaryProd` を自動生成して接続。
+- end-to-end 弱化 wrapper:
+  - `unique_factorization_nat_via_boundaryProd_kernelRight_split_layers_e2e_autoGNVal_weakKernel`
+    - `hNonExcNotDvdKernelRight` 直接仮定を除去し、
+      `hNonExcLeRev + hNonExcNotDvdBoundaryProd` に置換。
+  - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_weakKernel_boundarySides`
+    - さらに `hNonExcNotDvdBoundaryProd` も除去し、
+      `boundaryRight/Left` 側 `¬dvd` 入力から自動供給。
+
+これで非例外層の `kernelRight` 側は、
+「直接 `¬dvd` を与える」から
+「valuation 比較 + 境界側 `¬dvd` で導出する」へ弱化できた。
