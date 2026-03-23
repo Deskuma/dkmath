@@ -564,3 +564,31 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
    - 既存の `...boundaryProd` / `...boundarySides` wrapper は互換維持のため残置。
 6. 次の課題:
    - facade 入口を基準に、旧 wrapper 群の段階的整理（thin wrapper 化）を検討する。
+
+### 日時: 2026/03/23 18:05 JST: facade 基準で旧 wrapper 群の thin 化（段階 1）を実施
+
+1. 目的: facade 入口を基準に、既存 wrapper を互換維持しつつ薄い委譲層へ寄せる。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に以下を追加。
+     - `nonExceptionalBoundaryEntrance_of_not_dvd_boundaryProd`
+     - `nonExceptionalBoundaryEntrance_of_not_dvd_boundarySides`
+   - 既存 wrapper の実装本体を facade 委譲へ置換。
+     - `nonExceptionalNotDvd_boundarySides_of_nonExceptionalBK_of_coprime_of_not_dvd_exp`
+     - `nonExceptionalNotDvd_boundarySides_from_nonExcVal`
+     - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcVal_boundarySides`
+     - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcBK_boundaryProd`
+     - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcVal_boundaryProd`
+   - 置換方針:
+     - 入口の形（`boundaryProd` / `boundarySides`）は constructor で facade 化。
+     - 本体証明は `...boundaryFacade` 系へ委譲し、重複ロジックを削減。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: 旧 wrapper 群は公開シグネチャを保ったまま、
+   facade 入口中心の thin wrapper へ段階的に移行できた。
+4. 失敗事例:
+   - なし（初回置換でビルド通過）。
+5. 備考:
+   - 依存順を崩さないため、`weakKernel_boundarySides` 本体の facade 直接委譲は
+     次段で再配置と合わせて検討する。
+6. 次の課題:
+   - `weakKernel_boundarySides` / `powChain_boundarySides` 側も
+     facade 中心実装へ揃える再配置方針を詰める。
