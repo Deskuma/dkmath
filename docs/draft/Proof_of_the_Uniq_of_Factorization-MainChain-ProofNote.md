@@ -145,3 +145,22 @@ valuation 法則を生むこと自体ではなく、
 - 例外層/非例外層の独立節化
 - 主要補題の依存 DAG 図
 
+---
+
+## 10. Lean 定理名 ↔ 論文記法（主鎖視点）
+
+| Lean 名 | 論文記法（提案） | 主鎖での役割 |
+|---|---|---|
+| `factorization_eq_of_prime_pow_dvd_iff` | \(\mathbf{FacEq}_{\mathrm{pow}}\) | `∀ p,k` の prime-power 同値から `factorization` 一致を導く |
+| `unique_factorization_nat_via_prime_powers` | \(\mathbf{UF}_{\mathrm{pow}}\) | `∀ p,k` 同値から `m=n` を導く核定理 |
+| `factorization_eq_of_prime_pow_dvd_iff_split_layers` | \(\mathbf{FacEq}_{\mathrm{split}}\) | 例外層/非例外層を合成して `factorization` 一致へ接続 |
+| `unique_factorization_nat_via_split_prime_layers` | \(\mathbf{UF}_{\mathrm{split}}\) | 層別比較（Exc/NonExc）を合成して `m=n` |
+| `exceptionalPowComparison_of_padicValNat_eq` | \(\mathbf{PowCmp}_{\mathrm{Exc}}^{v}\) | 例外層で `v_q` 等式を prime-power 同値へ変換 |
+| `nonExceptionalPowComparison_of_padicValNat_eq` | \(\mathbf{PowCmp}_{\neg\mathrm{Exc}}^{v}\) | 非例外層で `v_q` 等式を prime-power 同値へ変換 |
+| `exceptionalBK_of_padicValNat_eq_boundaryProd_kernelRight` | \(\mathbf{BK}_{\mathrm{Exc}}^{v}\) | 例外層の `boundaryProd ↔ kernelRight` prime-power 比較 |
+| `nonExceptionalBK_of_padicValNat_eq_boundaryProd_kernelRight` | \(\mathbf{BK}_{\neg\mathrm{Exc}}^{v}\) | 非例外層の `boundaryProd ↔ kernelRight` prime-power 比較 |
+| `exceptionalM_of_padicValNat_eq_m_boundaryProd` | \(\mathbf{M}_{\mathrm{Exc}}^{v}\) | 例外層 `m ↔ boundaryProd` 供給 |
+| `exceptionalK_of_padicValNat_eq_n_kernelRight` | \(\mathbf{K}_{\mathrm{Exc}}^{v}\) | 例外層 `n ↔ kernelRight` 供給 |
+| `nonExceptionalM_of_padicValNat_eq_m_boundaryProd` | \(\mathbf{M}_{\neg\mathrm{Exc}}^{v}\) | 非例外層 `m ↔ boundaryProd` 供給 |
+| `nonExceptionalK_of_padicValNat_eq_n_kernelRight` | \(\mathbf{K}_{\neg\mathrm{Exc}}^{v}\) | 非例外層 `n ↔ kernelRight` 供給 |
+| `unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcNonExcMK` | \(\mathbf{UF}_{\mathrm{GN}}^{\mathrm{final}}\) | 主鎖最終入口（facade 統合） |

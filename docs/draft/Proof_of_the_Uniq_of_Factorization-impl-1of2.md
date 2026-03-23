@@ -1281,3 +1281,19 @@ README/目次導線を補足した。
 
 これで、実装ドキュメント（API）と証明ドキュメント（主鎖）を分離して
 保守できる土台が整った。
+
+### 16.39 「Lean 定理名 ↔ 論文記法」対応表を 2 文書へ追記
+
+API 仕様書と主鎖証明ノートの両方に、対応表セクションを追加した。
+
+- `Proof_of_the_Uniq_of_Factorization-API-Spec.md`
+  - API 視点の対応表を追加。
+  - facade 型・constructor・推奨入口の Lean 名を、
+    論文記法（提案）へ写像。
+- `Proof_of_the_Uniq_of_Factorization-MainChain-ProofNote.md`
+  - 主鎖視点の対応表を追加。
+  - 核定理、層合成、valuation→prime-power 橋、最終入口を
+    論文記法（提案）へ写像。
+
+これで実装名と論文記法の往復が可能になり、
+論文化時の命名変換コストを下げる準備ができた。

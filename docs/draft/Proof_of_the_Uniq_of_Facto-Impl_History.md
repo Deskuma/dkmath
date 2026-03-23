@@ -893,3 +893,25 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - 2 文書に定理対応表（Lean 名 ↔ 論文記法）を追加し、
      論文化時の変換コストを下げる。
+
+### 日時: 2026/03/24 02:36 JST: 2 文書へ「Lean 定理名 ↔ 論文記法」対応表を追加
+
+1. 目的: 実装名と論文記法の対応を固定し、
+   論文化・レビュー時の参照変換コストを下げる。
+2. 内容:
+   - `Proof_of_the_Uniq_of_Factorization-API-Spec.md` を更新。
+     - 「9. Lean 定理名 ↔ 論文記法（API 視点）」を追加。
+     - facade 型/constructor/推奨入口を対応付け。
+   - `Proof_of_the_Uniq_of_Factorization-MainChain-ProofNote.md` を更新。
+     - 「10. Lean 定理名 ↔ 論文記法（主鎖視点）」を追加。
+     - 核定理・層合成・valuation 橋・最終入口を対応付け。
+   - `Proof_of_the_Uniq_of_Factorization-impl-1of2.md` に
+     「16.39 対応表追記」を記録。
+3. 結論: API 視点と証明主鎖視点の両方で、
+   Lean 名↔論文記法の参照表を利用できる状態になった。
+4. 失敗事例:
+   - なし（文書更新のみ）。
+5. 備考:
+   - 記法は提案版のため、論文執筆段階で最終調整可能。
+6. 次の課題:
+   - 対応表に「記号定義の一貫性チェック（`Exc`/`NonExc` 記法）」を追加する。
