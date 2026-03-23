@@ -364,3 +364,32 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - `hExcLe` / `hExcLeRev` / `hNonExcZero` 自体を、
      `GN` 側の具体 valuation 補題から自動供給する連鎖を整備する。
+
+### 日時: 2026/03/23 09:54 JST: `hExcLe/hExcLeRev/hNonExcZero` を GN concrete chain で自動導出
+
+1. 目的: `hExcLe` / `hExcLeRev` / `hNonExcZero` を直接仮定せず、
+   `GN` 側の具体 valuation/prime-divisibility 補題から自動生成できる導線を実装する。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に以下を追加。
+     - `exceptionalLe_of_padicValNat_eq_boundaryProd_kernelRight`
+     - `exceptionalLeRev_of_padicValNat_eq_boundaryProd_kernelRight`
+     - `nonExceptionalNotDvd_boundaryProd_of_not_dvd_boundarySides`
+     - `nonExceptionalZero_of_not_dvd_boundaryProd_and_kernelRight`
+     - `unique_factorization_nat_via_boundaryProd_kernelRight_split_layers_e2e_autoGNVal`
+   - 導出設計:
+     - 例外層は `hExcVal`（valuation 等式）から
+       `hExcLe` / `hExcLeRev` を機械的に導出。
+     - 非例外層は `boundaryProd` / `kernelRight` の具体 `¬dvd` 情報から
+       `hNonExcZero` を導出。
+     - 最後に `autoBK_le_zero` 系の end-to-end へ接続して `m = n` を返す。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: `hExcLe/hExcLeRev/hNonExcZero` の手作業組み立てが不要になり、
+   concrete な GN 側補題をそのまま流し込める接続 API が成立した。
+4. 失敗事例:
+   - なし（初回追加でビルド通過）。
+5. 備考:
+   - `hNonExcZero` の導出は理論上一般には強い仮定を要するため、
+     非例外層では concrete `¬dvd` 補題を入力として受ける構成を採用。
+6. 次の課題:
+   - 非例外層の `kernelRight` 側 `¬dvd`（または 0 化）を
+     より弱い仮定から供給する GN 補題連鎖を拡張する。

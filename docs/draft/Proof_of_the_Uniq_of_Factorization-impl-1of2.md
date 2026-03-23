@@ -847,3 +847,24 @@ q \mid A \Rightarrow q \nmid B
 これで `hExcBK/hNonExcBK` の供給窓は
 1) valuation 等式版 と 2) `<=`/0 化版 の 2 系統になり、
 実データ側の前提整備に応じて選べるようになった。
+
+### 16.20 `hExcLe/hExcLeRev/hNonExcZero` の自動導出（GN concrete chain）
+
+`hExcLe` / `hExcLeRev` / `hNonExcZero` を直接仮定せず、
+GN 側の具体補題から自動構成する導線を追加した。
+
+- 例外層の導出:
+  - `exceptionalLe_of_padicValNat_eq_boundaryProd_kernelRight`
+  - `exceptionalLeRev_of_padicValNat_eq_boundaryProd_kernelRight`
+  - `hExcVal`（valuation 等式）から `hExcLe` / `hExcLeRev` を自動生成。
+- 非例外層の導出:
+  - `nonExceptionalNotDvd_boundaryProd_of_not_dvd_boundarySides`
+    - `boundaryRight`/`boundaryLeft` の `¬dvd` から `boundaryProd` の `¬dvd` を構成。
+  - `nonExceptionalZero_of_not_dvd_boundaryProd_and_kernelRight`
+    - `boundaryProd`/`kernelRight` の具体 `¬dvd` から `hNonExcZero` を生成。
+- end-to-end 追加:
+  - `unique_factorization_nat_via_boundaryProd_kernelRight_split_layers_e2e_autoGNVal`
+    - 上記自動導出を内部で使って `m = n` へ接続。
+
+この追加で、呼び出し側は `hExcLe/hExcLeRev/hNonExcZero` を手で組み立てず、
+より concrete な GN 側補題（valuation 等式・prime `¬dvd`）を与えればよくなった。

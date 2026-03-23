@@ -552,6 +552,109 @@ theorem unique_factorization_nat_via_boundaryProd_kernelRight_split_layers_e2e_a
     (d := d) (m := m) (n := n) hm hn hExc hNonExc
 
 /--
+例外層の valuation 等式から、`hExcLe`（`boundaryProd ≤ kernelRight`）を自動導出する。
+-/
+theorem exceptionalLe_of_padicValNat_eq_boundaryProd_kernelRight
+    {d x u : ℕ}
+    (hExcVal : ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q (boundaryProd x u) = padicValNat q (kernelRight d x u)) :
+    ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q (boundaryProd x u) ≤ padicValNat q (kernelRight d x u) := by
+  intro q hqP hq_dvd_d
+  exact le_of_eq (hExcVal q hqP hq_dvd_d)
+
+/--
+例外層の valuation 等式から、`hExcLeRev`（`kernelRight ≤ boundaryProd`）を自動導出する。
+-/
+theorem exceptionalLeRev_of_padicValNat_eq_boundaryProd_kernelRight
+    {d x u : ℕ}
+    (hExcVal : ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q (boundaryProd x u) = padicValNat q (kernelRight d x u)) :
+    ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q (kernelRight d x u) ≤ padicValNat q (boundaryProd x u) := by
+  intro q hqP hq_dvd_d
+  exact le_of_eq (hExcVal q hqP hq_dvd_d).symm
+
+/--
+`boundaryRight`/`boundaryLeft` の非除法情報から、`boundaryProd` の非除法を作る（非例外層）。
+-/
+theorem nonExceptionalNotDvd_boundaryProd_of_not_dvd_boundarySides
+    {d x u : ℕ}
+    (hNonExcNotDvdRight : ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryRight x u)
+    (hNonExcNotDvdLeft : ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryLeft x u) :
+    ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryProd x u := by
+  intro q hqP hq_ndvd_d hq_dvd_boundaryProd
+  have hq_dvd_mul : q ∣ x * u := by
+    simpa [boundaryProd] using hq_dvd_boundaryProd
+  rcases hqP.dvd_mul.mp hq_dvd_mul with hq_dvd_x | hq_dvd_u
+  · exact hNonExcNotDvdRight q hqP hq_ndvd_d (by simpa [boundaryRight] using hq_dvd_x)
+  · exact hNonExcNotDvdLeft q hqP hq_ndvd_d (by simpa [boundaryLeft] using hq_dvd_u)
+
+/--
+非例外層の具体 `¬dvd` 補題（`boundaryProd`/`kernelRight`）から `hNonExcZero` を自動導出する。
+-/
+theorem nonExceptionalZero_of_not_dvd_boundaryProd_and_kernelRight
+    {d x u : ℕ}
+    (hNonExcNotDvdBoundaryProd :
+      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryProd x u)
+    (hNonExcNotDvdKernelRight :
+      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ kernelRight d x u) :
+    ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d →
+      padicValNat q (boundaryProd x u) = 0 ∧
+      padicValNat q (kernelRight d x u) = 0 := by
+  intro q hqP hq_ndvd_d
+  exact ⟨
+    padicValNat.eq_zero_of_not_dvd (hNonExcNotDvdBoundaryProd q hqP hq_ndvd_d),
+    padicValNat.eq_zero_of_not_dvd (hNonExcNotDvdKernelRight q hqP hq_ndvd_d)
+  ⟩
+
+/--
+`hExcLe/hExcLeRev/hNonExcZero` を `GN` 側の具体 valuation/prime-divisibility 補題から自動導出し、
+`m = n` へ接続する end-to-end 版。
+-/
+theorem unique_factorization_nat_via_boundaryProd_kernelRight_split_layers_e2e_autoGNVal
+    {d x u m n : ℕ}
+    (hm : m ≠ 0) (hn : n ≠ 0)
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
+    (hExcM : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hExcK : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hExcVal : ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q (boundaryProd x u) = padicValNat q (kernelRight d x u))
+    (hNonExcM : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hNonExcK : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hNonExcNotDvdBoundaryProd :
+      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryProd x u)
+    (hNonExcNotDvdKernelRight :
+      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ kernelRight d x u) :
+    m = n := by
+  have hExcLe :
+      ∀ q : ℕ, Nat.Prime q → q ∣ d →
+        padicValNat q (boundaryProd x u) ≤ padicValNat q (kernelRight d x u) :=
+    exceptionalLe_of_padicValNat_eq_boundaryProd_kernelRight
+      (d := d) (x := x) (u := u) hExcVal
+  have hExcLeRev :
+      ∀ q : ℕ, Nat.Prime q → q ∣ d →
+        padicValNat q (kernelRight d x u) ≤ padicValNat q (boundaryProd x u) :=
+    exceptionalLeRev_of_padicValNat_eq_boundaryProd_kernelRight
+      (d := d) (x := x) (u := u) hExcVal
+  have hNonExcZero :
+      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d →
+        padicValNat q (boundaryProd x u) = 0 ∧
+        padicValNat q (kernelRight d x u) = 0 :=
+    nonExceptionalZero_of_not_dvd_boundaryProd_and_kernelRight
+      (d := d) (x := x) (u := u)
+      hNonExcNotDvdBoundaryProd hNonExcNotDvdKernelRight
+  exact unique_factorization_nat_via_boundaryProd_kernelRight_split_layers_e2e_autoBK_le_zero
+    (d := d) (x := x) (u := u) (m := m) (n := n)
+    hm hn hd2 hx hu
+    hExcM hExcK hExcLe hExcLeRev
+    hNonExcM hNonExcK hNonExcZero
+
+/--
 GN-side layer separation (right boundary):
 if a prime `q` divides the gap `x` and does not divide the exponent `d`,
 then under `Nat.Coprime x u` it cannot divide `GN d x u`.
