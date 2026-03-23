@@ -812,3 +812,32 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - `DkMath/Samples` 側に最終推奨入口を使う最小呼び出し例を追加し、
      実利用導線を確定する。
+
+### 日時: 2026/03/24 01:35 JST: `DkMath/Samples` に最終推奨入口の最小例を追加
+
+1. 目的: 最終推奨入口の実利用導線を `Samples` 側で固定し、
+   呼び出し側の参照起点を明確化する。
+2. 内容:
+   - 新規ファイル追加:
+     - `DkMath/Samples/UniqueFactorizationGNFacade.lean`
+   - 収録例:
+     - `unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcNonExcMK`
+       の最小呼び出し例（入力受理型）。
+     - `hNonExcVal` と `hNonExcNotDvdBoundaryProd` から
+       facade 入口（bridge/boundary）を組み立てて同推奨入口へ接続する例。
+   - 集約 import 更新:
+     - `DkMath/Samples.lean` に
+       `import DkMath.Samples.UniqueFactorizationGNFacade` を追加。
+   - 検証:
+     - `lake build DkMath.Samples.UniqueFactorizationGNFacade` 成功。
+     - `lake build DkMath.Samples` 成功。
+3. 結論: 最終推奨入口の呼び出し例を `Samples` に定着でき、
+   実利用導線を確定した。
+4. 失敗事例:
+   - なし（初回追加でビルド通過）。
+5. 備考:
+   - 例は「値固定の具体計算」ではなく、
+     API 形状をそのまま写す最小呼び出しテンプレートとして設計。
+6. 次の課題:
+   - `Samples` から最終推奨入口へ到達する README/目次導線を補足し、
+     初見利用者の探索コストを下げる。

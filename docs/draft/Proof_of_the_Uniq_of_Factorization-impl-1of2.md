@@ -1217,3 +1217,27 @@ wrapper 群を実装した。
 
 これで「互換 API は残すが新規呼び出しは推奨入口へ」という導線が
 コードと文書の両方で一致した。
+
+### 16.36 `DkMath/Samples` に最終推奨入口の最小呼び出し例を追加
+
+実利用導線の固定として、`DkMath/Samples` に推奨入口の最小呼び出し例を追加した。
+
+- 追加ファイル:
+  - `DkMath/Samples/UniqueFactorizationGNFacade.lean`
+- 収録した最小例:
+  - 最終推奨入口
+    `unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcNonExcMK`
+    を直接呼ぶ最小形。
+  - `hNonExcVal` と `hNonExcNotDvdBoundaryProd` から
+    `NonExceptionalBridgeEntrance` / `NonExceptionalBoundaryEntrance` を組み立てて
+    同推奨入口へ接続する形。
+- 集約 import 更新:
+  - `DkMath/Samples.lean` に
+    `import DkMath.Samples.UniqueFactorizationGNFacade` を追加。
+- 検証:
+  - `lake build DkMath.Samples.UniqueFactorizationGNFacade`
+  - `lake build DkMath.Samples`
+  - いずれも成功。
+
+これで `NumberTheory` 側で整備した最終 facade API が、
+`Samples` 側から即参照できる状態になった。
