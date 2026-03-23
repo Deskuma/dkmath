@@ -75,7 +75,60 @@ lemma i_speak_in_lean
   SpeaksInLean me := by
   exact hBecause hCannot
 
+lemma i_speak_in_lean'
+  (hCannot : ¬ CanExplainMath me)
+  (hBecause : ¬ CanExplainMath me → SpeaksInLean me) :
+  SpeaksInLean me :=
+  hBecause hCannot
+
 end TalkLean
+
+-- アフィン変換
+
+namespace Affine
+
+section
+variable (a b x : ℝ)
+
+/-- 正規化の等式 -/
+lemma normalize_eq :
+    (1 / (b - a)) * x + (-a / (b - a))
+  = (x - a) / (b - a)
+  := by
+  field_simp
+  ring
+
+end
+
+end Affine
+
+namespace Affine
+
+section
+variable (a b : ℝ)
+
+/-- 正規化関数 -/
+noncomputable def normalize (x : ℝ) : ℝ :=
+  (x - a) / (b - a)
+
+/-- 正規化関数が a を 0 に写すことを示す -/
+lemma map_a (h : b ≠ a) :
+  normalize a b a = 0 := by
+  dsimp [normalize]
+  have h' : b - a ≠ 0 := sub_ne_zero.mpr h
+  field_simp [h']
+  ring
+
+/-- 正規化関数が b を 1 に写すことを示す -/
+lemma map_b (h : b ≠ a) :
+  normalize a b b = 1 := by
+  dsimp [normalize]
+  have h' : b - a ≠ 0 := sub_ne_zero.mpr h
+  field_simp [h']
+
+end
+
+end Affine
 
 end Samples
 end DkMath
