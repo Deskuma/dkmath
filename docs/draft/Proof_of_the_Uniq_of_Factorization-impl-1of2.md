@@ -961,3 +961,30 @@ GN 側既存比較補題（`hNonExcBK` / `hNonExcVal` 系）から
 
 これで boundary-side 入力は、
 GN 側比較補題と非重複補題から自動供給できるようになった。
+
+### 16.25 `hNonExcNotDvdBoundaryProd` の入力形整理（`hNonExcVal` / `hNonExcBK` 直結）
+
+`hNonExcNotDvdBoundaryProd` 側も、`hNonExcVal` / `hNonExcBK` から
+直接使える形へ整理した。
+
+- 追加補題:
+  - `nonExceptionalNotDvd_boundaryProd_from_nonExcBK`
+    - 既存の
+      `nonExceptionalNotDvd_boundaryProd_of_nonExceptionalBK_of_coprime_of_not_dvd_exp`
+      への短名 wrapper。
+  - `nonExceptionalNotDvd_boundaryProd_from_nonExcVal`
+    - `hNonExcVal` を `hNonExcBK` 化して
+      `hNonExcNotDvdBoundaryProd` を直接供給。
+- end-to-end wrapper:
+  - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcBK_boundaryProd`
+    - `hNonExcBK` から `hNonExcPowRev -> hNonExcLeRev` と
+      `hNonExcNotDvdBoundaryProd` を内部生成し、
+      `...split_layers_e2e_autoGNVal_weakKernel` へ接続。
+  - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcVal_boundaryProd`
+    - `hNonExcVal` から
+      `hNonExcLeRev`（等式から）と
+      `hNonExcNotDvdBoundaryProd`（上記 wrapper）を生成し、
+      同じ weakKernel 入口へ接続。
+
+これで非例外層の `boundaryProd` 側非除法は、
+`hNonExcVal` / `hNonExcBK` から直接供給できる API になった。

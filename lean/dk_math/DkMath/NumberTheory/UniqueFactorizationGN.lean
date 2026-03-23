@@ -1271,6 +1271,39 @@ theorem nonExceptionalNotDvd_boundaryProd_of_nonExceptionalBK_of_coprime_of_not_
       hd1 hx hu hcop hqP hq_ndvd_d (by decide) hq1_dvd_boundary) hq_dvd_kernel
 
 /--
+`hNonExcBK` から `hNonExcNotDvdBoundaryProd` を供給する短名 wrapper。
+-/
+theorem nonExceptionalNotDvd_boundaryProd_from_nonExcBK
+    {d x u : ℕ}
+    (hd1 : 1 ≤ d) (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hNonExcBK :
+      ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+        (q ^ k ∣ boundaryProd x u ↔ q ^ k ∣ kernelRight d x u)) :
+    ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryProd x u := by
+  exact
+    nonExceptionalNotDvd_boundaryProd_of_nonExceptionalBK_of_coprime_of_not_dvd_exp
+      (d := d) (x := x) (u := u) hd1 hx hu hcop hNonExcBK
+
+/--
+`hNonExcVal` から `hNonExcNotDvdBoundaryProd` を供給する wrapper。
+-/
+theorem nonExceptionalNotDvd_boundaryProd_from_nonExcVal
+    {d x u : ℕ}
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hNonExcVal : ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d →
+      padicValNat q (boundaryProd x u) = padicValNat q (kernelRight d x u)) :
+    ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryProd x u := by
+  have hd1 : 1 ≤ d := Nat.le_trans (by decide : 1 ≤ 2) hd2
+  have hNonExcBK :
+      ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+        (q ^ k ∣ boundaryProd x u ↔ q ^ k ∣ kernelRight d x u) :=
+    nonExceptionalBK_of_padicValNat_eq_boundaryProd_kernelRight
+      (d := d) (x := x) (u := u) hd2 hx hu hNonExcVal
+  exact
+    nonExceptionalNotDvd_boundaryProd_from_nonExcBK
+      (d := d) (x := x) (u := u) hd1 hx hu hcop hNonExcBK
+
+/--
 `boundaryProd` 側 `¬dvd` から、`boundaryRight/Left` 側 `¬dvd` を生成する。
 -/
 theorem nonExceptionalNotDvd_boundarySides_of_not_dvd_boundaryProd
@@ -1363,6 +1396,89 @@ theorem
     hExcM hExcK hExcVal
     hNonExcM hNonExcK hNonExcVal
     hNonExcNotDvdRight hNonExcNotDvdLeft
+
+/--
+`hNonExcBK` から `hNonExcLeRev` と `hNonExcNotDvdBoundaryProd` を自動供給し、
+weakKernel 入口へ接続する wrapper。
+-/
+theorem
+    unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcBK_boundaryProd
+    {d x u m n : ℕ}
+    (hm : m ≠ 0) (hn : n ≠ 0)
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hExcM : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hExcK : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hExcVal : ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q (boundaryProd x u) = padicValNat q (kernelRight d x u))
+    (hNonExcM : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hNonExcK : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hNonExcBK :
+      ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+        (q ^ k ∣ boundaryProd x u ↔ q ^ k ∣ kernelRight d x u)) :
+    m = n := by
+  have hNonExcPowRev :
+      ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d → 0 < k →
+        q ^ k ∣ kernelRight d x u → q ^ k ∣ boundaryProd x u :=
+    nonExceptionalPowRev_of_nonExceptionalBK
+      (d := d) (x := x) (u := u) hNonExcBK
+  have hNonExcLeRev :
+      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d →
+        padicValNat q (kernelRight d x u) ≤ padicValNat q (boundaryProd x u) :=
+    nonExceptionalLeRev_of_primePow_kernelRight_to_boundaryProd
+      (d := d) (x := x) (u := u) hd2 hx hu hNonExcPowRev
+  have hd1 : 1 ≤ d := Nat.le_trans (by decide : 1 ≤ 2) hd2
+  have hNonExcNotDvdBoundaryProd :
+      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryProd x u :=
+    nonExceptionalNotDvd_boundaryProd_from_nonExcBK
+      (d := d) (x := x) (u := u) hd1 hx hu hcop hNonExcBK
+  exact unique_factorization_nat_via_boundaryProd_kernelRight_split_layers_e2e_autoGNVal_weakKernel
+    (d := d) (x := x) (u := u) (m := m) (n := n)
+    hm hn hd2 hx hu
+    hExcM hExcK hExcVal
+    hNonExcM hNonExcK
+    hNonExcLeRev hNonExcNotDvdBoundaryProd
+
+/--
+`hNonExcVal` から `hNonExcLeRev` と `hNonExcNotDvdBoundaryProd` を自動供給し、
+weakKernel 入口へ接続する wrapper。
+-/
+theorem
+    unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcVal_boundaryProd
+    {d x u m n : ℕ}
+    (hm : m ≠ 0) (hn : n ≠ 0)
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) (hcop : Nat.Coprime x u)
+    (hExcM : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hExcK : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hExcVal : ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q (boundaryProd x u) = padicValNat q (kernelRight d x u))
+    (hNonExcM : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hNonExcK : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hNonExcVal : ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d →
+      padicValNat q (boundaryProd x u) = padicValNat q (kernelRight d x u)) :
+    m = n := by
+  have hNonExcLeRev :
+      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d →
+        padicValNat q (kernelRight d x u) ≤ padicValNat q (boundaryProd x u) := by
+    intro q hqP hq_ndvd_d
+    exact le_of_eq (hNonExcVal q hqP hq_ndvd_d).symm
+  have hNonExcNotDvdBoundaryProd :
+      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryProd x u :=
+    nonExceptionalNotDvd_boundaryProd_from_nonExcVal
+      (d := d) (x := x) (u := u) hd2 hx hu hcop hNonExcVal
+  exact unique_factorization_nat_via_boundaryProd_kernelRight_split_layers_e2e_autoGNVal_weakKernel
+    (d := d) (x := x) (u := u) (m := m) (n := n)
+    hm hn hd2 hx hu
+    hExcM hExcK hExcVal
+    hNonExcM hNonExcK
+    hNonExcLeRev hNonExcNotDvdBoundaryProd
 
 /--
 `k ≤ v_q(boundaryProd)`（`k>0`）を入口にした `kernelRight` 側の valuation ゼロ化。

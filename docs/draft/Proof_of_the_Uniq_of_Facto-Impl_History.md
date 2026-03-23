@@ -507,3 +507,33 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - `hNonExcNotDvdBoundaryProd` 側の供給も同様に、
      `hNonExcVal` / `hNonExcBK` から直接使える入力形へ整理する。
+
+### 日時: 2026/03/23 17:46 JST: `hNonExcNotDvdBoundaryProd` の direct 供給 API を追加
+
+1. 目的: `hNonExcNotDvdBoundaryProd` 側も
+   `hNonExcVal` / `hNonExcBK` から直接使える入力形へ整理する。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に以下を追加。
+     - `nonExceptionalNotDvd_boundaryProd_from_nonExcBK`
+     - `nonExceptionalNotDvd_boundaryProd_from_nonExcVal`
+     - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcBK_boundaryProd`
+     - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_nonExcVal_boundaryProd`
+   - 整理方針:
+     - `from_nonExcBK` は既存の長名補題を短名で包み、
+       `hNonExcNotDvdBoundaryProd` 供給点を固定。
+     - `from_nonExcVal` は
+       `nonExceptionalBK_of_padicValNat_eq_boundaryProd_kernelRight` を介して
+       `hNonExcBK` 化し、同じ供給点へ接続。
+     - e2e wrapper では `hNonExcLeRev` と `hNonExcNotDvdBoundaryProd` を
+       内部生成して `...split_layers_e2e_autoGNVal_weakKernel` に接続。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: 非例外層 `boundaryProd` 側非除法は、
+   `hNonExcVal` / `hNonExcBK` から直接投入できる API に整理できた。
+4. 失敗事例:
+   - なし（初回実装でビルド通過）。
+5. 備考:
+   - 既存の boundary-side 自動供給 wrapper と併用可能で、
+     呼び出し側は `boundaryProd` 入口か `boundarySides` 入口を選べる。
+6. 次の課題:
+   - 例外層/非例外層の入口（`boundaryProd` / `boundarySides`）を
+     最終 e2e API で統一する facade を検討する。
