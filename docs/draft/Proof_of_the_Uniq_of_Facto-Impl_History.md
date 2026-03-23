@@ -696,3 +696,31 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
      例外層・非例外層ともに不要化した（valuation 入力で代替可能）。
 6. 次の課題:
    - 段 C として、A/B を束ねた最終 facade 入口の一本化を進める。
+
+### 日時: 2026/03/23 22:36 JST: 段 C（A/B を束ねた最終 facade 入口）を実装
+
+1. 目的: 段 A/B の分岐（`hNonExcVal` 系 / `hNonExcBK` 系）を
+   最終 e2e 入口で一本化し、呼び出し側の入口選択を facade 化する。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に以下を追加。
+     - `NonExceptionalBridgeEntrance`
+       - 非例外層 bridge 入力を
+         `hNonExcVal` or `hNonExcBK` の 2 形から統一する facade 型。
+     - `nonExceptionalBridgeEntrance_of_nonExcVal`
+     - `nonExceptionalBridgeEntrance_of_nonExcBK`
+       - 上記 facade 型への constructor。
+     - `unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcNonExcMK`
+       - 段 A/B の concrete valuation 入力を保持したまま、
+         `hNonExcBridge` の分岐を内部で処理して
+         段 B の 2 wrapper へ委譲する最終単一入口。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: 段 C により、最終 API で
+   非例外層 bridge 入力（`Val`/`BK`）と boundary 入力の両方が facade 化され、
+   A/B を束ねた単一 e2e 入口が成立した。
+4. 失敗事例:
+   - なし（初回実装でビルド通過）。
+5. 備考:
+   - 既存段 A/B 入口は互換保持のため残し、新入口は上位 facade として追加。
+6. 次の課題:
+   - 旧 wrapper 群を段階的に thin 化し、
+     新 `...nonExcFacade_boundaryFacade...` を中心に呼び出し面を整理する。

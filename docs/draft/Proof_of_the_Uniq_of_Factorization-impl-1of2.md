@@ -1126,3 +1126,28 @@ wrapper 群を実装した。
 
 これで A/B の両方で `m/n` 側比較入力の concrete 自動供給が揃った。
 次段（段 C）は、A/B を束ねた最終 facade 入口の一本化と旧 wrapper 群の更なる thin 化。
+
+### 16.32 段 C: A/B を束ねた最終 facade 入口を追加
+
+段 C として、段 A/B の分岐（`hNonExcVal` 入口か `hNonExcBK` 入口か）を
+単一 facade に吸収する最終入口を追加した。
+
+- 追加（facade 型）:
+  - `NonExceptionalBridgeEntrance`
+    - `hNonExcVal` または `hNonExcBK` を `Or` で統一。
+  - constructor:
+    - `nonExceptionalBridgeEntrance_of_nonExcVal`
+    - `nonExceptionalBridgeEntrance_of_nonExcBK`
+- 追加（最終 e2e 入口）:
+  - `unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcNonExcMK`
+  - 入力:
+    - 段 A/B の valuation concrete 入力（`hExcMVal/hExcKVal/hNonExcMVal/hNonExcKVal`）
+    - `hNonExcBridge : NonExceptionalBridgeEntrance d x u`
+    - `hNonExcBoundary : NonExceptionalBoundaryEntrance d x u`
+  - 内部:
+    - `hNonExcBridge` を分解し、段 B の
+      `...nonExcVal...autoExcNonExcMK` / `...nonExcBK...autoExcNonExcMK`
+      へ委譲。
+
+これで最終 API は、非例外層 bridge 入力と boundary 入力の両方で facade 統一され、
+段 A/B の実装を 1 つの入口から呼べる形になった。

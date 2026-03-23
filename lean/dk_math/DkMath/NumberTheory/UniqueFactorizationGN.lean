@@ -735,6 +735,33 @@ theorem nonExceptionalNotDvd_boundaryProd_of_boundaryEntrance
         (d := d) (x := x) (u := u) hNonExcNotDvdRight hNonExcNotDvdLeft
 
 /--
+非例外層 bridge 入口の facade:
+`hNonExcVal`（valuation 等式）または `hNonExcBK`（prime-power 同値）を統一して受ける。
+-/
+def NonExceptionalBridgeEntrance (d x u : ℕ) : Prop :=
+  (∀ q : ℕ, Nat.Prime q → ¬ q ∣ d →
+      padicValNat q (boundaryProd x u) = padicValNat q (kernelRight d x u)) ∨
+  (∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ boundaryProd x u ↔ q ^ k ∣ kernelRight d x u))
+
+/-- `hNonExcVal` 入力を bridge facade 入口へ持ち上げる。 -/
+theorem nonExceptionalBridgeEntrance_of_nonExcVal
+    {d x u : ℕ}
+    (hNonExcVal : ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d →
+      padicValNat q (boundaryProd x u) = padicValNat q (kernelRight d x u)) :
+    NonExceptionalBridgeEntrance d x u :=
+  Or.inl hNonExcVal
+
+/-- `hNonExcBK` 入力を bridge facade 入口へ持ち上げる。 -/
+theorem nonExceptionalBridgeEntrance_of_nonExcBK
+    {d x u : ℕ}
+    (hNonExcBK :
+      ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+        (q ^ k ∣ boundaryProd x u ↔ q ^ k ∣ kernelRight d x u)) :
+    NonExceptionalBridgeEntrance d x u :=
+  Or.inr hNonExcBK
+
+/--
 非例外層での kernel→boundary prime-power 連鎖（`k>0`）から、
 valuation 比較 `hNonExcLeRev` を導出する。
 -/
@@ -1324,6 +1351,42 @@ theorem unique_factorization_nat_e2e_autoGNVal_nonExcBK_boundaryFacade_autoExcNo
     hExcMVal hExcKVal hExcVal
     hNonExcM hNonExcK hNonExcBK
     hNonExcBoundary
+
+/--
+段 C（最終 facade 入口の一本化）:
+段 A/B を束ね、非例外層 bridge 入口（`hNonExcVal` / `hNonExcBK`）を
+単一 facade で受ける最終 e2e 入口。
+-/
+theorem unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcNonExcMK
+    {d x u m n : ℕ}
+    (hm : m ≠ 0) (hn : n ≠ 0)
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
+    (hExcMVal : ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q m = padicValNat q (boundaryProd x u))
+    (hExcKVal : ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q n = padicValNat q (kernelRight d x u))
+    (hExcVal : ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q (boundaryProd x u) = padicValNat q (kernelRight d x u))
+    (hNonExcMVal : ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d →
+      padicValNat q m = padicValNat q (boundaryProd x u))
+    (hNonExcKVal : ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d →
+      padicValNat q n = padicValNat q (kernelRight d x u))
+    (hNonExcBridge : NonExceptionalBridgeEntrance d x u)
+    (hNonExcBoundary : NonExceptionalBoundaryEntrance d x u) :
+    m = n := by
+  rcases hNonExcBridge with hNonExcVal | hNonExcBK
+  · exact unique_factorization_nat_e2e_autoGNVal_nonExcVal_boundaryFacade_autoExcNonExcMK
+      (d := d) (x := x) (u := u) (m := m) (n := n)
+      hm hn hd2 hx hu
+      hExcMVal hExcKVal hExcVal
+      hNonExcMVal hNonExcKVal hNonExcVal
+      hNonExcBoundary
+  · exact unique_factorization_nat_e2e_autoGNVal_nonExcBK_boundaryFacade_autoExcNonExcMK
+      (d := d) (x := x) (u := u) (m := m) (n := n)
+      hm hn hd2 hx hu
+      hExcMVal hExcKVal hExcVal
+      hNonExcMVal hNonExcKVal hNonExcBK
+      hNonExcBoundary
 
 /--
 `hNonExcLeRev` 自動供給版（prime-power 連鎖入力）:
