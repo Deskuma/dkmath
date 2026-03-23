@@ -164,3 +164,27 @@ valuation 法則を生むこと自体ではなく、
 | `nonExceptionalM_of_padicValNat_eq_m_boundaryProd` | \(\mathbf{M}_{\neg\mathrm{Exc}}^{v}\) | 非例外層 `m ↔ boundaryProd` 供給 |
 | `nonExceptionalK_of_padicValNat_eq_n_kernelRight` | \(\mathbf{K}_{\neg\mathrm{Exc}}^{v}\) | 非例外層 `n ↔ kernelRight` 供給 |
 | `unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcNonExcMK` | \(\mathbf{UF}_{\mathrm{GN}}^{\mathrm{final}}\) | 主鎖最終入口（facade 統合） |
+
+---
+
+## 11. 記号定義の一貫性チェック（`Exc` / `NonExc`）
+
+主鎖記述で `Exc` / `NonExc` の意味が揺れないことを確認する。
+
+### 11.1 チェック規約
+
+1. 例外層は `Exc` で統一し、条件は常に `q ∣ d`。
+2. 非例外層は `NonExc` または `\neg\mathrm{Exc}` で統一し、条件は常に `q ∤ d`。
+3. 例外層比較補題は `...Exceptional...` / `_{Exc}`、
+   非例外層比較補題は `...nonExceptional...` / `_{\neg Exc}` に対応させる。
+4. split 合成（`UF_split`）では、`Exc` / `NonExc` の両層が同時に必要であることを明示する。
+
+### 11.2 主鎖での整合結果
+
+| 対象 | 判定 | 確認内容 |
+|---|---|---|
+| `PowCmp_Exc^v` / `PowCmp_{¬Exc}^v` | OK | 条件がそれぞれ `q ∣ d` / `q ∤ d` で固定 |
+| `BK_Exc^v` / `BK_{¬Exc}^v` | OK | boundary-kernel 比較が層別に分離 |
+| `M_Exc^v, K_Exc^v` と `M_{¬Exc}^v, K_{¬Exc}^v` | OK | `m/n` 側供給が層別記法と一致 |
+| `UF_split` | OK | 例外層と非例外層の合成として記述 |
+| `UF_GN^final` | OK | facade 入口で層意味が混線しない |
