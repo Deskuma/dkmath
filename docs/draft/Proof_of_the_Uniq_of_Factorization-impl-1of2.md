@@ -1241,3 +1241,25 @@ wrapper 群を実装した。
 
 これで `NumberTheory` 側で整備した最終 facade API が、
 `Samples` 側から即参照できる状態になった。
+
+### 16.37 README/目次導線の補足（`Samples` → 最終推奨入口）
+
+初見利用者の探索コストを下げるため、`Samples` から最終推奨入口へ到達する
+README/目次導線を補足した。
+
+- `DkMath/Samples.lean`:
+  - 先頭コメントに
+    `DkMath.Samples.UniqueFactorizationGNFacade` と
+    最終推奨入口定理名を明記。
+- `lean/dk_math/README.md`:
+  - 「サンプル定理と例」配下に
+    `UniqueFactorizationGNFacade` へのリンクと
+    最終推奨入口名を追加。
+- `lean/dk_math/INDEX.md`:
+  - `3.1 コア` の `DkMath.Samples` 配下に
+    推奨導線サンプルと最終推奨入口を追記。
+- 検証:
+  - `lake build DkMath.Samples` 成功。
+
+これで、コード目次（`Samples.lean`）・利用 README・全体 INDEX の
+3 つの入口で同じ導線が引けるようになった。

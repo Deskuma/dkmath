@@ -841,3 +841,26 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - `Samples` から最終推奨入口へ到達する README/目次導線を補足し、
      初見利用者の探索コストを下げる。
+
+### 日時: 2026/03/24 01:45 JST: `Samples`→最終推奨入口の README/目次導線を補足
+
+1. 目的: 初見利用者が `Samples` から最終推奨入口へ迷わず到達できるよう、
+   README/目次導線を補強する。
+2. 内容:
+   - `DkMath/Samples.lean` に導線コメントを追加。
+     - `DkMath.Samples.UniqueFactorizationGNFacade` への入口
+     - 最終推奨入口
+       `unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcNonExcMK`
+   - `lean/dk_math/README.md` の「サンプル定理と例」に
+     `UniqueFactorizationGNFacade` と最終推奨入口名を追記。
+   - `lean/dk_math/INDEX.md` の `3.1 コア` に
+     `DkMath.Samples` からの推奨導線を追記。
+   - `lake build DkMath.Samples` 成功を確認。
+3. 結論: コード目次・README・INDEX の3系統で
+   `Samples`→最終推奨入口への導線を統一できた。
+4. 失敗事例:
+   - なし（初回更新でビルド通過）。
+5. 備考:
+   - 実装ロジックの変更はなし。導線整理（コメント/目次）中心。
+6. 次の課題:
+   - ルート README（リポジトリ直下）にも同導線を最小追記するか検討する。

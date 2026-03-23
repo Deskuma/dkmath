@@ -56,6 +56,9 @@ presented by D. and Wise Wolf
   - 宇宙式とトロミノ構造の接続定理 [CosmicFormulaTrominoLink](./DkMath/CosmicFormula/CosmicFormulaTrominoLink.lean)
 - 基本定義とユーティリティ [Basic](./DkMath/Basic.lean)
 - サンプル定理と例 [Samples](./DkMath/Samples.lean)
+  - UniqueFactorizationGN facade 最小導線 [UniqueFactorizationGNFacade](./DkMath/Samples/UniqueFactorizationGNFacade.lean)
+    - 最終推奨入口:
+      `DkMath.NumberTheory.unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcNonExcMK`
 - 数学未解決問題（解決済み難問も含む）
   - フェルマーの最終定理（FLT）関連 [FLT](./DkMath/FLT.lean)
     - 実装ガイド [FLT/README.md](./DkMath/FLT/README.md)
