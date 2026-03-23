@@ -591,6 +591,40 @@ theorem nonExceptionalNotDvd_boundaryProd_of_not_dvd_boundarySides
   · exact hNonExcNotDvdLeft q hqP hq_ndvd_d (by simpa [boundaryLeft] using hq_dvd_u)
 
 /--
+非例外層での kernel→boundary prime-power 連鎖（`k>0`）から、
+valuation 比較 `hNonExcLeRev` を導出する。
+-/
+theorem nonExceptionalLeRev_of_primePow_kernelRight_to_boundaryProd
+    {d x u : ℕ}
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
+    (hNonExcPowRev :
+      ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d → 0 < k →
+        q ^ k ∣ kernelRight d x u → q ^ k ∣ boundaryProd x u) :
+    ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d →
+      padicValNat q (kernelRight d x u) ≤ padicValNat q (boundaryProd x u) := by
+  intro q hqP hq_ndvd_d
+  haveI : Fact q.Prime := ⟨hqP⟩
+  have hK0 : kernelRight d x u ≠ 0 := by
+    simpa [kernelRight] using
+      (GN_ne_zero_nat_of_two_le (d := d) (x := x) (u := u) hd2 hx hu)
+  have hB0 : boundaryProd x u ≠ 0 := Nat.mul_ne_zero (Nat.ne_of_gt hx) (Nat.ne_of_gt hu)
+  by_cases hKz : padicValNat q (kernelRight d x u) = 0
+  · rw [hKz]
+    exact Nat.zero_le _
+  · have hKpos : 0 < padicValNat q (kernelRight d x u) := Nat.pos_iff_ne_zero.mpr hKz
+    have hpow_dvd_kernel :
+        q ^ padicValNat q (kernelRight d x u) ∣ kernelRight d x u :=
+      (padicValNat_dvd_iff_le
+        (p := q) (a := kernelRight d x u) (n := padicValNat q (kernelRight d x u)) hK0).2 le_rfl
+    have hpow_dvd_boundary :
+        q ^ padicValNat q (kernelRight d x u) ∣ boundaryProd x u :=
+      hNonExcPowRev q (padicValNat q (kernelRight d x u)) hqP hq_ndvd_d hKpos hpow_dvd_kernel
+    exact
+      (padicValNat_dvd_iff_le
+        (p := q) (a := boundaryProd x u) (n := padicValNat q (kernelRight d x u)) hB0).1
+        hpow_dvd_boundary
+
+/--
 非例外層で `v_q(kernelRight) ≤ v_q(boundaryProd)` と `boundaryProd` 側 `¬dvd` があれば、
 `kernelRight` 側 `¬dvd` を導出できる。
 -/
@@ -809,6 +843,44 @@ theorem
     hExcM hExcK hExcVal
     hNonExcM hNonExcK
     hNonExcLeRev hNonExcNotDvdBoundaryProd
+
+/--
+`hNonExcLeRev` 自動供給版（prime-power 連鎖入力）:
+非例外層の kernel→boundary prime-power 補題（`k>0`）から `hNonExcLeRev` を構成する。
+-/
+theorem unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_powChain_boundarySides
+    {d x u m n : ℕ}
+    (hm : m ≠ 0) (hn : n ≠ 0)
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
+    (hExcM : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hExcK : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hExcVal : ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q (boundaryProd x u) = padicValNat q (kernelRight d x u))
+    (hNonExcM : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hNonExcK : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hNonExcPowRev :
+      ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d → 0 < k →
+        q ^ k ∣ kernelRight d x u → q ^ k ∣ boundaryProd x u)
+    (hNonExcNotDvdRight :
+      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryRight x u)
+    (hNonExcNotDvdLeft :
+      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d → ¬ q ∣ boundaryLeft x u) :
+    m = n := by
+  have hNonExcLeRev :
+      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d →
+        padicValNat q (kernelRight d x u) ≤ padicValNat q (boundaryProd x u) :=
+    nonExceptionalLeRev_of_primePow_kernelRight_to_boundaryProd
+      (d := d) (x := x) (u := u) hd2 hx hu hNonExcPowRev
+  exact unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_weakKernel_boundarySides
+    (d := d) (x := x) (u := u) (m := m) (n := n)
+    hm hn hd2 hx hu
+    hExcM hExcK hExcVal
+    hNonExcM hNonExcK
+    hNonExcLeRev hNonExcNotDvdRight hNonExcNotDvdLeft
 
 /--
 GN-side layer separation (right boundary):

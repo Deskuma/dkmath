@@ -896,3 +896,24 @@ GN 側の具体補題から自動構成する導線を追加した。
 これで非例外層の `kernelRight` 側は、
 「直接 `¬dvd` を与える」から
 「valuation 比較 + 境界側 `¬dvd` で導出する」へ弱化できた。
+
+### 16.22 `hNonExcLeRev` の自動供給（prime-power chain 入力）
+
+次段として、`hNonExcLeRev` 自体を直接与えず、
+非例外層の kernel→boundary prime-power 連鎖（`k>0`）から導出する補題を追加した。
+
+- 追加補題:
+  - `nonExceptionalLeRev_of_primePow_kernelRight_to_boundaryProd`
+    - 仮定:
+      - `∀ q k, q` prime, `q ∤ d`, `0<k`,
+        `q^k ∣ kernelRight -> q^k ∣ boundaryProd`
+    - 結論:
+      - `hNonExcLeRev`（`v_q(kernelRight) ≤ v_q(boundaryProd)`）
+- end-to-end wrapper:
+  - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_powChain_boundarySides`
+    - 上記 prime-power chain から `hNonExcLeRev` を内部生成し、
+      既存の weakKernel/boundarySides ルートへ接続して `m = n` を返す。
+
+これで非例外層は、
+`prime-power` chain -> `hNonExcLeRev` -> `hNonExcZero` -> end-to-end
+の接続が可能になった。

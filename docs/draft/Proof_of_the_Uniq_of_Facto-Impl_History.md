@@ -423,3 +423,30 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - `hNonExcLeRev` 自体を、GN 側のさらに具体的な prime-power 非重複補題から
      自動供給する chain を整備する。
+
+### 日時: 2026/03/23 13:11 JST: `hNonExcLeRev` を prime-power chain から自動供給する導線を追加
+
+1. 目的: `hNonExcLeRev` を直接仮定せず、
+   非例外層の concrete prime-power 連鎖から自動生成する chain を整備する。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に以下を追加。
+     - `nonExceptionalLeRev_of_primePow_kernelRight_to_boundaryProd`
+     - `unique_factorization_nat_via_boundaryProd_kernelRight_e2e_autoGNVal_powChain_boundarySides`
+   - 導出設計:
+     - 入力は
+       `q^k ∣ kernelRight -> q^k ∣ boundaryProd`（`q` prime, `q ∤ d`, `k>0`）。
+     - `k := v_q(kernelRight)` を代入し、
+       `padicValNat_dvd_iff_le` を使って `hNonExcLeRev` を導出。
+     - 導出した `hNonExcLeRev` を既存の
+       `...autoGNVal_weakKernel_boundarySides` へ渡して `m = n` を返す。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: 非例外層は
+   prime-power chain から valuation 比較へ落とす自動供給ルートを獲得した。
+4. 失敗事例:
+   - なし（初回実装でビルド通過）。
+5. 備考:
+   - 本段階は「chain の接続整備」であり、
+     `hNonExcPowRev` 自体の具体供給補題は次段で詰める。
+6. 次の課題:
+   - `hNonExcPowRev`（kernel→boundary の prime-power 連鎖）を
+     GN 側既存補題から生成する具体 wrapper を実装する。
