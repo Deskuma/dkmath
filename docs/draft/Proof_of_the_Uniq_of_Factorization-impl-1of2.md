@@ -820,3 +820,30 @@ q \mid A \Rightarrow q \nmid B
 これにより、比較仮定は
 「prime-power 同値そのもの」から
 「層別 valuation 等式」へ縮約され、実データ供給が軽くなった。
+
+### 16.19 `hExcBK/hNonExcBK` の追加縮約（`<=` / 0 化ベース）
+
+`hExcBK` / `hNonExcBK` をさらに軽い形で供給できるよう、次の縮約を追加した。
+
+- 例外層（`q ∣ d`）:
+  - `exceptionalBK_fwd_of_padicValNat_le_boundaryProd_kernelRight`
+    - `v_q(boundaryProd) ≤ v_q(kernelRight)` から
+      `q^k ∣ boundaryProd -> q^k ∣ kernelRight`。
+  - `exceptionalBK_rev_of_padicValNat_le_kernelRight_boundaryProd`
+    - 逆向き不等式から逆向き含意。
+  - `exceptionalBK_of_padicValNat_le_le_boundaryProd_kernelRight`
+    - 両向き `≤` から `q^k` 同値を生成。
+- 非例外層（`q ∤ d`）:
+  - `nonExceptionalBK_of_padicValNat_eq_zero_boundaryProd_kernelRight`
+    - `v_q(boundaryProd)=0 ∧ v_q(kernelRight)=0` から
+      `q^k` 同値を生成。
+- 層 API への注入:
+  - `exceptionalLayer_of_boundaryProd_kernelRight_autoBK_le`
+  - `nonExceptionalLayer_of_boundaryProd_kernelRight_autoBK_zero`
+- end-to-end:
+  - `unique_factorization_nat_via_boundaryProd_kernelRight_split_layers_e2e_autoBK_le_zero`
+    - 例外層は `≤`（両向き）、非例外層は 0 化で与えれば `m = n` へ到達。
+
+これで `hExcBK/hNonExcBK` の供給窓は
+1) valuation 等式版 と 2) `<=`/0 化版 の 2 系統になり、
+実データ側の前提整備に応じて選べるようになった。

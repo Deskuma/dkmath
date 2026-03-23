@@ -237,6 +237,98 @@ theorem nonExceptionalBK_of_padicValNat_eq_boundaryProd_kernelRight
       (padicValNat_dvd_iff_le (p := q) (a := kernelRight d x u) (n := k) hK0).symm
 
 /--
+例外素数層の `boundaryProd -> kernelRight` 比較を valuation 不等式（`≤`）から供給する。
+-/
+theorem exceptionalBK_fwd_of_padicValNat_le_boundaryProd_kernelRight
+    {d x u : ℕ}
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
+    (hExcLe : ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q (boundaryProd x u) ≤ padicValNat q (kernelRight d x u)) :
+    ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ boundaryProd x u → q ^ k ∣ kernelRight d x u) := by
+  intro q k hqP hq_dvd_d hqk_dvd_boundary
+  haveI : Fact q.Prime := ⟨hqP⟩
+  have hB0 : boundaryProd x u ≠ 0 := Nat.mul_ne_zero (Nat.ne_of_gt hx) (Nat.ne_of_gt hu)
+  have hK0 : kernelRight d x u ≠ 0 := by
+    simpa [kernelRight] using
+      (GN_ne_zero_nat_of_two_le (d := d) (x := x) (u := u) hd2 hx hu)
+  have hk_le_boundary : k ≤ padicValNat q (boundaryProd x u) :=
+    (padicValNat_dvd_iff_le (p := q) (a := boundaryProd x u) (n := k) hB0).1 hqk_dvd_boundary
+  have hk_le_kernel : k ≤ padicValNat q (kernelRight d x u) :=
+    le_trans hk_le_boundary (hExcLe q hqP hq_dvd_d)
+  exact (padicValNat_dvd_iff_le (p := q) (a := kernelRight d x u) (n := k) hK0).2 hk_le_kernel
+
+/--
+例外素数層の `kernelRight -> boundaryProd` 比較を valuation 不等式（`≤`）から供給する。
+-/
+theorem exceptionalBK_rev_of_padicValNat_le_kernelRight_boundaryProd
+    {d x u : ℕ}
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
+    (hExcLeRev : ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q (kernelRight d x u) ≤ padicValNat q (boundaryProd x u)) :
+    ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ kernelRight d x u → q ^ k ∣ boundaryProd x u) := by
+  intro q k hqP hq_dvd_d hqk_dvd_kernel
+  haveI : Fact q.Prime := ⟨hqP⟩
+  have hB0 : boundaryProd x u ≠ 0 := Nat.mul_ne_zero (Nat.ne_of_gt hx) (Nat.ne_of_gt hu)
+  have hK0 : kernelRight d x u ≠ 0 := by
+    simpa [kernelRight] using
+      (GN_ne_zero_nat_of_two_le (d := d) (x := x) (u := u) hd2 hx hu)
+  have hk_le_kernel : k ≤ padicValNat q (kernelRight d x u) :=
+    (padicValNat_dvd_iff_le (p := q) (a := kernelRight d x u) (n := k) hK0).1 hqk_dvd_kernel
+  have hk_le_boundary : k ≤ padicValNat q (boundaryProd x u) :=
+    le_trans hk_le_kernel (hExcLeRev q hqP hq_dvd_d)
+  exact (padicValNat_dvd_iff_le (p := q) (a := boundaryProd x u) (n := k) hB0).2 hk_le_boundary
+
+/--
+例外素数層の `boundaryProd ↔ kernelRight` 比較を valuation 不等式の両向きから供給する。
+-/
+theorem exceptionalBK_of_padicValNat_le_le_boundaryProd_kernelRight
+    {d x u : ℕ}
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
+    (hExcLe : ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q (boundaryProd x u) ≤ padicValNat q (kernelRight d x u))
+    (hExcLeRev : ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q (kernelRight d x u) ≤ padicValNat q (boundaryProd x u)) :
+    ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ boundaryProd x u ↔ q ^ k ∣ kernelRight d x u) := by
+  intro q k hqP hq_dvd_d
+  constructor
+  · intro hqk_dvd_boundary
+    exact exceptionalBK_fwd_of_padicValNat_le_boundaryProd_kernelRight
+      (d := d) (x := x) (u := u) hd2 hx hu hExcLe q k hqP hq_dvd_d hqk_dvd_boundary
+  · intro hqk_dvd_kernel
+    exact exceptionalBK_rev_of_padicValNat_le_kernelRight_boundaryProd
+      (d := d) (x := x) (u := u) hd2 hx hu hExcLeRev q k hqP hq_dvd_d hqk_dvd_kernel
+
+/--
+非例外素数層の `boundaryProd ↔ kernelRight` 比較を両側 0 化から供給する。
+-/
+theorem nonExceptionalBK_of_padicValNat_eq_zero_boundaryProd_kernelRight
+    {d x u : ℕ}
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
+    (hNonExcZero :
+      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d →
+        padicValNat q (boundaryProd x u) = 0 ∧
+        padicValNat q (kernelRight d x u) = 0) :
+    ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ boundaryProd x u ↔ q ^ k ∣ kernelRight d x u) := by
+  intro q k hqP hq_ndvd_d
+  haveI : Fact q.Prime := ⟨hqP⟩
+  have hB0 : boundaryProd x u ≠ 0 := Nat.mul_ne_zero (Nat.ne_of_gt hx) (Nat.ne_of_gt hu)
+  have hK0 : kernelRight d x u ≠ 0 := by
+    simpa [kernelRight] using
+      (GN_ne_zero_nat_of_two_le (d := d) (x := x) (u := u) hd2 hx hu)
+  rcases hNonExcZero q hqP hq_ndvd_d with ⟨hBz, hKz⟩
+  calc
+    q ^ k ∣ boundaryProd x u ↔ k ≤ padicValNat q (boundaryProd x u) :=
+      (padicValNat_dvd_iff_le (p := q) (a := boundaryProd x u) (n := k) hB0)
+    _ ↔ k ≤ padicValNat q (kernelRight d x u) := by
+      rw [hBz, hKz]
+    _ ↔ q ^ k ∣ kernelRight d x u :=
+      (padicValNat_dvd_iff_le (p := q) (a := kernelRight d x u) (n := k) hK0).symm
+
+/--
 `boundaryProd/kernelRight` の具体比較補題群から、例外層 `hExc` を構成する。
 -/
 theorem exceptionalLayer_of_boundaryProd_kernelRight
@@ -311,6 +403,52 @@ theorem nonExceptionalLayer_of_boundaryProd_kernelRight_autoBK
     (d := d) (x := x) (u := u) (m := m) (n := n) hNonExcM hNonExcK hNonExcBK
 
 /--
+`hExcBK` を valuation 不等式（両向き `≤`）から自動供給する縮約版（例外層）。
+-/
+theorem exceptionalLayer_of_boundaryProd_kernelRight_autoBK_le
+    {d x u m n : ℕ}
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
+    (hExcM : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hExcK : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hExcLe : ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q (boundaryProd x u) ≤ padicValNat q (kernelRight d x u))
+    (hExcLeRev : ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q (kernelRight d x u) ≤ padicValNat q (boundaryProd x u)) :
+    PrimePowComparisonExceptionalLayer d m n := by
+  have hExcBK :
+      ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+        (q ^ k ∣ boundaryProd x u ↔ q ^ k ∣ kernelRight d x u) :=
+    exceptionalBK_of_padicValNat_le_le_boundaryProd_kernelRight
+      (d := d) (x := x) (u := u) hd2 hx hu hExcLe hExcLeRev
+  exact exceptionalLayer_of_boundaryProd_kernelRight
+    (d := d) (x := x) (u := u) (m := m) (n := n) hExcM hExcK hExcBK
+
+/--
+`hNonExcBK` を両側 0 化から自動供給する縮約版（非例外層）。
+-/
+theorem nonExceptionalLayer_of_boundaryProd_kernelRight_autoBK_zero
+    {d x u m n : ℕ}
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
+    (hNonExcM : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hNonExcK : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hNonExcZero :
+      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d →
+        padicValNat q (boundaryProd x u) = 0 ∧
+        padicValNat q (kernelRight d x u) = 0) :
+    PrimePowComparisonNonExceptionalLayer d m n := by
+  have hNonExcBK :
+      ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+        (q ^ k ∣ boundaryProd x u ↔ q ^ k ∣ kernelRight d x u) :=
+    nonExceptionalBK_of_padicValNat_eq_zero_boundaryProd_kernelRight
+      (d := d) (x := x) (u := u) hd2 hx hu hNonExcZero
+  exact nonExceptionalLayer_of_boundaryProd_kernelRight
+    (d := d) (x := x) (u := u) (m := m) (n := n) hNonExcM hNonExcK hNonExcBK
+
+/--
 実データ向け end-to-end 比較定理:
 `boundaryProd/kernelRight` 由来の層別比較補題群を束ねて `m = n` を得る。
 -/
@@ -372,6 +510,44 @@ theorem unique_factorization_nat_via_boundaryProd_kernelRight_split_layers_e2e_a
     nonExceptionalLayer_of_boundaryProd_kernelRight_autoBK
       (d := d) (x := x) (u := u) (m := m) (n := n)
       hd2 hx hu hNonExcM hNonExcK hNonExcVal
+  exact unique_factorization_nat_via_split_prime_layers
+    (d := d) (m := m) (n := n) hm hn hExc hNonExc
+
+/--
+実データ向け end-to-end 比較定理（`≤` / 0 化ベース縮約版）。
+
+- 例外層 `hExcBK` は valuation 不等式（両向き `≤`）から自動供給
+- 非例外層 `hNonExcBK` は両側 0 化から自動供給
+-/
+theorem unique_factorization_nat_via_boundaryProd_kernelRight_split_layers_e2e_autoBK_le_zero
+    {d x u m n : ℕ}
+    (hm : m ≠ 0) (hn : n ≠ 0)
+    (hd2 : 2 ≤ d) (hx : 0 < x) (hu : 0 < u)
+    (hExcM : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hExcK : ∀ q k : ℕ, Nat.Prime q → q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hExcLe : ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q (boundaryProd x u) ≤ padicValNat q (kernelRight d x u))
+    (hExcLeRev : ∀ q : ℕ, Nat.Prime q → q ∣ d →
+      padicValNat q (kernelRight d x u) ≤ padicValNat q (boundaryProd x u))
+    (hNonExcM : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ m ↔ q ^ k ∣ boundaryProd x u))
+    (hNonExcK : ∀ q k : ℕ, Nat.Prime q → ¬ q ∣ d →
+      (q ^ k ∣ n ↔ q ^ k ∣ kernelRight d x u))
+    (hNonExcZero :
+      ∀ q : ℕ, Nat.Prime q → ¬ q ∣ d →
+        padicValNat q (boundaryProd x u) = 0 ∧
+        padicValNat q (kernelRight d x u) = 0) :
+    m = n := by
+  have hExc : PrimePowComparisonExceptionalLayer d m n :=
+    exceptionalLayer_of_boundaryProd_kernelRight_autoBK_le
+      (d := d) (x := x) (u := u) (m := m) (n := n)
+      hd2 hx hu hExcM hExcK hExcLe hExcLeRev
+  have hNonExc : PrimePowComparisonNonExceptionalLayer d m n :=
+    nonExceptionalLayer_of_boundaryProd_kernelRight_autoBK_zero
+      (d := d) (x := x) (u := u) (m := m) (n := n)
+      hd2 hx hu hNonExcM hNonExcK hNonExcZero
   exact unique_factorization_nat_via_split_prime_layers
     (d := d) (m := m) (n := n) hm hn hExc hNonExc
 

@@ -332,3 +332,35 @@ cid: 69becbd2-3f3c-83ab-97af-666a8f8f4fb3
 6. 次の課題:
    - valuation 等式仮定（`hExcVal` / `hNonExcVal`）自体を
      さらに自動供給する具体補題連鎖を整備する。
+
+### 日時: 2026/03/23 09:42 JST: `hExcBK/hNonExcBK` を `<=` / 0 化ベースでも自動供給できるよう拡張
+
+1. 目的: `hExcBK` / `hNonExcBK` を valuation 等式だけでなく、
+   より弱い具体仮定（例外層は両向き `<=`、非例外層は両側 0 化）からも自動構成できるようにする。
+2. 内容:
+   - `DkMath/NumberTheory/UniqueFactorizationGN.lean` に以下を追加。
+     - `exceptionalBK_fwd_of_padicValNat_le_boundaryProd_kernelRight`
+     - `exceptionalBK_rev_of_padicValNat_le_kernelRight_boundaryProd`
+     - `exceptionalBK_of_padicValNat_le_le_boundaryProd_kernelRight`
+     - `nonExceptionalBK_of_padicValNat_eq_zero_boundaryProd_kernelRight`
+     - `exceptionalLayer_of_boundaryProd_kernelRight_autoBK_le`
+     - `nonExceptionalLayer_of_boundaryProd_kernelRight_autoBK_zero`
+     - `unique_factorization_nat_via_boundaryProd_kernelRight_split_layers_e2e_autoBK_le_zero`
+   - 例外層は `v_q(boundaryProd) <= v_q(kernelRight)` と逆向き不等式を束ねて
+     `q^k` 比較同値を生成。
+   - 非例外層は `v_q(boundaryProd)=0 ∧ v_q(kernelRight)=0` から
+     `q^k` 比較同値を生成。
+   - `lake build DkMath.NumberTheory.UniqueFactorizationGN` 成功を確認。
+3. 結論: `hExcBK/hNonExcBK` の供給窓が
+   「valuation 等式版」に加えて「`<=` / 0 化版」でも成立し、
+   実データ側の前提に合わせた接続がしやすくなった。
+4. 失敗事例:
+   - `nonExceptionalBK_of_padicValNat_eq_zero_boundaryProd_kernelRight` で、
+     `simp` が `boundaryProd/kernelRight` の展開形と補題形を合わせ切れず未解決ゴールが発生。
+   - `rw [hBz, hKz]` に切り替え、定義展開依存を除いて解消。
+5. 備考:
+   - 比較対象は引き続き `boundaryProd` vs `kernelRight` を維持し、
+     層 API と end-to-end 定理の形は変えていない。
+6. 次の課題:
+   - `hExcLe` / `hExcLeRev` / `hNonExcZero` 自体を、
+     `GN` 側の具体 valuation 補題から自動供給する連鎖を整備する。
