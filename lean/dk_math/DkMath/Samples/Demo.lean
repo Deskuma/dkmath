@@ -63,5 +63,19 @@ example (a b : ℝ) (h : b ≠ a) : normalizeToUnit a b b = 1 := by
 end
 
 end IntervalUnit
+
+namespace TalkLean
+
+variable (Person : Type) (me : Person)
+variable (CanExplainMath SpeaksInLean : Person → Prop)
+
+lemma i_speak_in_lean
+  (hCannot : ¬ CanExplainMath me)
+  (hBecause : ¬ CanExplainMath me → SpeaksInLean me) :
+  SpeaksInLean me := by
+  exact hBecause hCannot
+
+end TalkLean
+
 end Samples
 end DkMath

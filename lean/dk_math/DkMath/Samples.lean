@@ -12,3 +12,4 @@ import DkMath.Samples.LPS
 import DkMath.Samples.SketchBook
 import DkMath.Samples.Qty
 import DkMath.Samples.SumThreeSquaresEqSquare
+import DkMath.Samples.Demo
