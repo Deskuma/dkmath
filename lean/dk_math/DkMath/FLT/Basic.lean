@@ -93,8 +93,6 @@ lemma GN3_one_not_cube_use_FLT3 {y : ℕ} (hy : 0 < y) : ¬ ∃ x, x^3 = GN 3 1 
   have hz_pos : y + 1 ≠ 0 := by omega
   exact fermatLastTheoremThree x y (y + 1) hx_pos hy_pos hz_pos h_flt
 
-#print axioms GN3_one_not_cube_use_FLT3  -- OK: 2026/02/22  6:59
-
 /-- 補題: 互いに素な因子の積が立方数ならば、両方とも立方数である（汎用補題）
     注: gcd(u, v) = 1 かつ u * v = w^3 ならば、u = a^3, v = b^3 となる a, b が存在する。
     これは素因数分解の一意性から導かれる基本的な性質じゃ。
@@ -292,7 +290,7 @@ private lemma a6_lt_GN3_cube (a y : ℕ) (ha : 1 ≤ a) (hy : 1 ≤ y) :
     本線は `GN3_cube_not_cube_of_gt_one_of_provider`（非依存版）であり、
     この補題は fallback の比較検証・回帰確認用として残している。
 -/
-private lemma GN3_cube_not_cube_of_gt_one_use_FLT3 (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y) :
+lemma GN3_cube_not_cube_of_gt_one_use_FLT3 (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y) :
     ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
   rintro ⟨b, hb⟩
   have hy_pos : 0 < y := by omega
@@ -320,13 +318,11 @@ private lemma GN3_cube_not_cube_of_gt_one_use_FLT3 (a y : ℕ) (ha : 2 ≤ a) (h
     hz_pos.ne'
     hsum
 
-#print axioms GN3_cube_not_cube_of_gt_one_use_FLT3  -- OK: 2026/02/22  7:03
-
 /-
 `q` を 1 本だけ抜く（Zsigmondy で primitive prime factor を取り出し、
 `A^3 - B^3 = (A-B) * GN 3 (A-B) B` から `q ∣ GN ...` を押し出す）最小スニペット。
 -/
-private lemma pick_primitive_q_data_GN3
+lemma pick_primitive_q_data_GN3
     (A B : ℕ)
     (hAB_lt : B < A) (hB_pos : 0 < B)
     (hAB_coprime : Nat.Coprime A B)
@@ -367,8 +363,6 @@ private lemma pick_primitive_q_data_GN3
       (DkMath.Zsigmondy.primitivePrimeDivisor_body_three_imp_dvd_GN
         (x := x) (u := u) hx_pos hprim)
 
-#print axioms pick_primitive_q_data_GN3  -- OK: no Research link 2026/03/06  1:24
-
 /-- `¬ q^2 ∣ N` から `padicValNat q N ≤ 1` を得る汎用補助。 -/
 private lemma padicValNat_le_one_of_noLift
     {q N : ℕ}
@@ -389,7 +383,7 @@ private lemma padicValNat_le_one_of_noLift
     `(a^3 + y)^3 - y^3` の原始素因子 `q`（指数 3）を Zsigmondy で取り、
     `padicValNat q` の上下界を比較して矛盾を導く。
 -/
-private lemma GN3_cube_not_cube_of_gt_one_of_provider_core
+lemma GN3_cube_not_cube_of_gt_one_of_provider_core
     (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y)
     (hcop : Nat.Coprime a y) (h3a : ¬ 3 ∣ a)
     (hProv : DkMath.FLT.GN3NoLiftProvider a y) :
@@ -473,7 +467,7 @@ private lemma GN3_cube_not_cube_of_gt_one_of_provider_core
   omega
 
 /-- 補題: squarefree 仮定から provider を作って本線へ委譲する wrapper。 -/
-private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
+lemma GN3_cube_not_cube_of_gt_one_of_squarefree
     (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y)
     (hcop : Nat.Coprime a y) (h3a : ¬ 3 ∣ a)
     (hSq : Squarefree (GN 3 (a ^ 3) y)) :
@@ -502,10 +496,6 @@ lemma GN3_cube_not_cube_of_gt_one_of_provider
     (hProv : DkMath.FLT.GN3NoLiftProvider a y) :
     ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
   exact GN3_cube_not_cube_of_gt_one_of_provider_core a y ha hy hcop h3a hProv
-
-#print axioms GN3_cube_not_cube_of_gt_one_of_provider_core  -- OK: no Research link 2026/03/05
-#print axioms GN3_cube_not_cube_of_gt_one_of_provider  -- OK: no Research link 2026/03/05
-#print axioms GN3_cube_not_cube_of_gt_one_of_squarefree  -- OK: no Research link 2026/03/05
 
 /--
 一般指数ルートで `body_not_perfect_pow` へ委譲するための薄い橋。
@@ -717,26 +707,9 @@ theorem FLT_case_3 (x y z : ℕ)
       h_xn_val
       h3
 
-#print axioms FLT_case_3  -- OK: no Research link 2026/03/17  0:35
--- 'DkMath.FLT_case_3' depends on axioms: [propext, Classical.choice, Quot.sound]
--- exact GN3_one_not_cube_use_FLT3 hpos.2.1 ⟨x, hx3⟩ ← Mathlib.FLT を使っている。
-
-#print axioms GN3_one_not_cube_use_FLT3  -- OK: no Research link 2026/03/17  0:35
-#print axioms gcd_three_case_contra_template  -- OK: no Research link 2026/03/17  0:35
-
 /-- エイリアス: `gcd(u, GN 3 u y) = gcd(u, 3)`（古い命名、新実装は `gcd_boundary_GN_three_eq_gcd_boundary_three`） -/
 lemma gcd_u_GN3 {u y : ℕ} (h_gcd_uy : u.gcd y = 1) : u.gcd (GN 3 u y) = u.gcd 3 :=
   DkMath.NumberTheory.Gcd.gcd_boundary_GN_three_eq_gcd_boundary_three h_gcd_uy
-
-#print axioms gcd_u_GN3  -- OK: no Research link 2026/03/17
-#print axioms u_eq_one_of_coprime_gcd  -- OK: no Research link 2026/03/17  0:35
-
--- 'DkMath.GN3_one_not_cube_use_FLT3' depends on axioms: [propext, Classical.choice, Quot.sound]
--- 'DkMath.gcd_three_case_contra_template' depends on axioms: [propext, Classical.choice, Quot.sound]
--- 'DkMath.gcd_u_GN3' depends on axioms: [propext, Classical.choice, Quot.sound]
--- 'DkMath.u_eq_one_of_coprime_gcd' depends on axioms: [propext, Classical.choice, Quot.sound]
-
--- TODO: これらは DkMathTest.* に移行する。
 
 /-- Fermat's Last Theorem (FLT)
 Cosmic Formula を用いた新しい証明
@@ -1036,8 +1009,6 @@ theorem FLT {x y z : ℕ} (n : ℕ) (hpos_xyz : 0 < x ∧ 0 < y ∧ 0 < z) (hn :
 
   -- 最終的に原始解に還元して `FLT_of_coprime` を適用
   exact FLT_of_coprime n (And.intro hx'_pos (And.intro hy'_pos hz'_pos)) hn h_gcd_x'y' hxy'
-
-#print axioms FLT  -- NG: 2026/02/22  7:39 so#rryAx
 
 end DkMath
 
