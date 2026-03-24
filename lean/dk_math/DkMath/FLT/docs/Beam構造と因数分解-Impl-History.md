@@ -271,3 +271,58 @@ head: 713f369
      - composite exponent reduction
      に明示分解し、`sorry` を完全に局所化する。
    - Branch A では gap-power 供給の既存 spine を lower layer へ切り出し、`Basic.lean` から依存循環なしに呼べる入口へ再配置する。
+
+### 日時: 2026/03/25 02:32 JST: PrimeGe5 core/wrapper 分離と `FLT_of_coprime` residual の Branch A / composite 明示分解
+
+1. 目的: `FLT.Basic` に残っていた高指数 residual branch を
+   - prime branch A (`Nat.Prime n ∧ n ∣ u`)
+   - composite exponent reduction
+   へ明示分解し、`Basic.lean` 側の残差 `sorry` を最小化する。
+   同時に、Branch A の gap-power / refuter spine を `Basic` から依存循環なしに呼べる lower layer へ退避する。
+2. 内容:
+   - `DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5Core.lean`
+     - 旧 `TriominoCosmicPrimeGe5.lean` から、`PrimeGe5CounterexamplePack`、normalizer、spec 合成、provider 接続など
+       `Basic` 非依存の staging 定義群を core module として分離した。
+     - import から `DkMath.FLT.Basic` を外し、純粋な lower layer とした。
+   - `DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean`
+     - wrapper 化し、`TriominoCosmicPrimeGe5Core` と `DkMath.FLT.Basic` を import して
+       `FLT_prime_ge5` だけを保持する薄い入口に縮約した。
+   - `DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean`
+     - `PrimeGe5BranchAGapPowFactorizationTarget`
+     - `primeGe5BranchAGapPow_of_factorization`
+     - `primeGe5BranchARefuter_default`
+       を追加した。
+     - このうち `primeGe5BranchARefuter_default` に Branch A の未完核を隔離し、
+       `Basic` 側では lower layer の既知入口だけを呼ぶ形に変えた。
+   - `DkMath/FLT/Basic.lean`
+     - 高指数 `n > 3` branch を
+       1. `Nat.Prime n ∧ n ∣ u` を扱う `flt_of_coprime_prime_branchA`
+       2. composite exponent reduction を扱う `flt_of_coprime_composite_reduction_residual`
+       に明示分解した。
+     - mainline 本体では
+       - `Nat.Prime n`
+       - `n ∣ u`
+       - `¬ Nat.Prime n`
+       の case split を直接書く形に組み替えた。
+     - Branch A helper は `PrimeGe5CounterexamplePack` をその場で構成し、
+       `primeGe5BranchARefuter_default` へ委譲するだけにした。
+     - これにより `FLT_of_coprime` 本体から raw な Branch A TODO は消え、
+       composite reduction helper だけが `Basic` 側の局所 `sorry` として残る。
+3. 結論: `Basic` の高指数 residual は「prime Branch A は lower layer 入口へ委譲」「composite reduction は別 helper に隔離」という構造になった。以後は
+   - Branch A は `TriominoCosmicBranchA` を育てる
+   - composite exponent reduction は `flt_of_coprime_composite_reduction_residual` を埋める
+   の 2 点へ独立に作業を進められる。
+4. 備考:
+   - 新規 `sorry` warning は
+     - `DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean`
+     - `DkMath/FLT/Basic.lean`
+     に各 1 箇所で、責務はそれぞれ
+     - Branch A refuter kernel
+     - composite exponent reduction
+     に限定されている。
+   - `TriominoCosmicGapInvariant.lean` 本体の既存実装は今回は触らず、mainline import cycle の解消だけを優先した。
+5. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5Core`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。

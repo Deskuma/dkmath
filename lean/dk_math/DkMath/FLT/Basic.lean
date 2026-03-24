@@ -18,6 +18,7 @@ import DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
 import DkMath.Zsigmondy
 import Mathlib.Algebra.Divisibility.Basic
 import DkMath.FLT.Core
+import DkMath.FLT.PrimeProvider.TriominoCosmicBranchA
 
 import Mathlib.NumberTheory.FLT.Three
 
@@ -549,6 +550,68 @@ private lemma coprime_right_of_add_pow_eq_pow
     Nat.not_coprime_of_dvd_of_dvd (Nat.Prime.one_lt hqPrime) hq_dvd_x hq_dvd_y
   exact hnot hxy
 
+/--
+`FLT_of_coprime` の high-exponent residual のうち、
+prime branch A (`Nat.Prime n ∧ n ∣ u`) を lower layer へ委譲する薄い橋。
+-/
+private lemma flt_of_coprime_prime_branchA
+    {x y z n u : ℕ}
+    (hpos_xyz : 0 < x ∧ 0 < y ∧ 0 < z)
+    (hn_gt3 : 3 < n)
+    (hn_prime : Nat.Prime n)
+    (hxy_coprime : Nat.Coprime x y)
+    (hzy : y < z)
+    (hu_def : u = z - y)
+    (hn_dvd_u : n ∣ u)
+    (hEq : x ^ n + y ^ n = z ^ n) :
+    False := by
+  have hn_ge4 : 4 ≤ n := Nat.succ_le_of_lt hn_gt3
+  have hn_ne4 : n ≠ 4 := by
+    intro h4
+    subst h4
+    norm_num at hn_prime
+  have hn5 : 5 ≤ n := by
+    omega
+  let hpack : DkMath.FLT.PrimeGe5CounterexamplePack n x y z :=
+    { toPrimeCounterexamplePack :=
+        { hp := hn_prime
+          hxy := hxy_coprime
+          hyz := le_of_lt hzy
+          hyz_lt := hzy
+          hEq := hEq }
+      hp5 := hn5
+      hx0 := Nat.ne_of_gt hpos_xyz.1
+      hy0 := Nat.ne_of_gt hpos_xyz.2.1
+      hz0 := Nat.ne_of_gt hpos_xyz.2.2 }
+  have hn_dvd_gap : n ∣ (z - y) := by
+    simpa [hu_def] using hn_dvd_u
+  exact DkMath.FLT.primeGe5BranchARefuter_default hpack hn_dvd_gap
+
+/--
+`FLT_of_coprime` の high-exponent residual のうち、
+composite exponent reduction を隔離する helper。
+-/
+private lemma flt_of_coprime_composite_reduction_residual
+    {x y z n u : ℕ}
+    (_hpos_xyz : 0 < x ∧ 0 < y ∧ 0 < z)
+    (_hn : 3 ≤ n)
+    (hn_composite : ¬ Nat.Prime n)
+    (_hxy_coprime : Nat.Coprime x y)
+    (_hzy : y < z)
+    (_hu_def : u = z - y)
+    (_hEq : x ^ n + y ^ n = z ^ n) :
+    False := by
+  /-
+  TODO:
+  1. composite `n` から `4` もしくは odd prime divisor を取り出す。
+  2. 指数縮約で prime exponent case に戻す。
+  3. Branch A / Branch B helper を再利用して閉じる。
+  -/
+  exact False.elim (by
+    have : False := by
+      sorry
+    exact this)
+
 /-- 暫定 fallback 入口。squarefree 未供給の呼び出しは FLT(3) 参照へ明示的に落とす。 -/
 private lemma GN3_cube_not_cube_of_gt_one_fallback_use_FLT3
     (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y)
@@ -958,38 +1021,41 @@ theorem FLT_of_coprime
   · -- n > 3 の場合
     have hxy_coprime : Nat.Coprime x y := by
       exact (Nat.coprime_iff_gcd_eq_one).2 h_coprime
-    by_cases hprimeB : Nat.Prime n ∧ ¬ n ∣ u
-    · rcases hprimeB with ⟨hn_prime, hndiv⟩
-      have hyz_coprime : Nat.Coprime y z :=
-        coprime_right_of_add_pow_eq_pow hn_prime hxy_coprime hxy
-      have hcop_u_y : Nat.Coprime (u + y) y := by
-        have hcop_gap : Nat.Coprime u y := by
-          simpa [u] using coprime_sub_of_coprime hzy.le hyz_coprime
-        simpa [hz_yu] using hcop_gap
-      have hbody_not_pow :
-          ¬ ∃ t : ℕ, 0 < t ∧ (u + y) ^ n - y ^ n = t ^ n := by
-        exact
-          body_not_perfect_pow_bridge
-            (u := u) (y := y) (n := n)
-            (by omega)
-            hn_prime
-            hu
-            hpos_xyz.2.1
-            hcop_u_y
-            hndiv
-      apply hbody_not_pow
-      refine ⟨x, hpos_xyz.1, ?_⟩
-      have hsub : x ^ n = z ^ n - y ^ n := by
-        have := congrArg (fun t => t - y ^ n) hxy
-        simpa [Nat.add_sub_cancel] using this
-      calc
-        (u + y) ^ n - y ^ n = z ^ n - y ^ n := by simp [hz_yu]
-        _ = x ^ n := hsub.symm
-    · -- 残差は 2 つ:
-      --   1. prime branch A (`Nat.Prime n ∧ n ∣ u`)
-      --   2. composite exponent を `4` / odd prime divisor へ落とす reduction
-      -- ここでは branch B の橋だけを mainline 化し、残りを高指数側 task に隔離する。
-      sorry
+    by_cases hn_prime : Nat.Prime n
+    · by_cases hn_dvd_u : n ∣ u
+      · exact
+          flt_of_coprime_prime_branchA
+            (x := x) (y := y) (z := z) (n := n) (u := u)
+            hpos_xyz (by omega) hn_prime hxy_coprime hzy rfl hn_dvd_u hxy
+      · have hyz_coprime : Nat.Coprime y z :=
+          coprime_right_of_add_pow_eq_pow hn_prime hxy_coprime hxy
+        have hcop_u_y : Nat.Coprime (u + y) y := by
+          have hcop_gap : Nat.Coprime u y := by
+            simpa [u] using coprime_sub_of_coprime hzy.le hyz_coprime
+          simpa [hz_yu] using hcop_gap
+        have hbody_not_pow :
+            ¬ ∃ t : ℕ, 0 < t ∧ (u + y) ^ n - y ^ n = t ^ n := by
+          exact
+            body_not_perfect_pow_bridge
+              (u := u) (y := y) (n := n)
+              (by omega)
+              hn_prime
+              hu
+              hpos_xyz.2.1
+              hcop_u_y
+              hn_dvd_u
+        apply hbody_not_pow
+        refine ⟨x, hpos_xyz.1, ?_⟩
+        have hsub : x ^ n = z ^ n - y ^ n := by
+          have := congrArg (fun t => t - y ^ n) hxy
+          simpa [Nat.add_sub_cancel] using this
+        calc
+          (u + y) ^ n - y ^ n = z ^ n - y ^ n := by simp [hz_yu]
+          _ = x ^ n := hsub.symm
+    · exact
+        flt_of_coprime_composite_reduction_residual
+          (x := x) (y := y) (z := z) (n := n) (u := u)
+          hpos_xyz hn hn_prime hxy_coprime hzy rfl hxy
 
 
 
