@@ -87,3 +87,55 @@ head: 713f369
 6. 次の課題:
    - Phase A の最小実装として、まず `PrimitivePrimeFactorOfDiffPow` と `primitive_prime_dvd_GN` までを作る。
    - 続いて `PrimitiveBeamExamples.lean` を置き、整数 Beam に primitive prime が立つ具体例を固定する。
+
+### 日時: 2026/03/24 21:31 JST: Phase A/B 実装（`PrimitiveBeam` 本体と具体例を追加）
+
+1. 目的: 事前計画どおり、研究層へ踏み込む前に `primitive -> GN / Beam` の薄い mainline API と小例を固定する。
+2. 内容:
+   - 新規ファイル `DkMath/NumberTheory/PrimitiveBeam.lean` を追加。
+   - namespace は `DkMath.NumberTheory.PrimitiveBeam` を採用しつつ、既存上流 API は `DkMath.NumberTheory.GcdNext` から再利用。
+   - 実装した定義・補題:
+     - `PrimitivePrimeFactorOfDiffPow`
+     - `exists_primitive_prime_factor_as_prop`
+     - `primitive_prime_not_dvd_boundary`
+     - `primitive_prime_dvd_GN`
+     - `primitive_prime_padic_eq_GN`
+     - `primitive_prime_dvd_GN_body`
+     - `primitive_prime_in_beam_for_body_one`
+   - 証明方針はすべて既存定理の薄い再編成に限定。
+     - existence / primitive 化:
+       `exists_primitive_prime_factor_basic`,
+       `prime_exp_not_dvd_diff_imp_primitive`
+     - Beam への移送:
+       `pow_sub_pow_factor_cosmic_N`
+     - valuation 帰着:
+       `padicValNat_factorization`
+   - 新規ファイル `DkMath/NumberTheory/PrimitiveBeamExamples.lean` を追加。
+   - 具体例として以下を固定。
+     - `GN 5 1 1 = 31`
+     - `GN 5 2 1 = 121`
+     - `11 ∣ GN 5 2 1`
+     - `¬ 11 ∣ 2`
+   - `native_decide` は linter warning を出すため採用せず、例は `decide` で通す形へ調整。
+   - `lake build DkMath.NumberTheory.PrimitiveBeam DkMath.NumberTheory.PrimitiveBeamExamples` を実行し、ビルド成功を確認。
+3. 結論: `Beam構造と因数分解.md` で要求されていた最初の核
+   「primitive prime は boundary ではなく GN / Beam 側へ移る」
+   を mainline API として `no sorry` で固定できた。特に `primitive_prime_dvd_GN` と
+   `primitive_prime_padic_eq_GN` が、今後 `GcdNextResearch` / `FLT.Basic` へ接続する入口になる。
+4. 失敗事例:
+   - 初版では `a^1 - b^1` から `a - b` への型簡約を `simpa` なしで通そうとして失敗。
+   - `Nat.Prime.dvd_of_dvd_mul_left` を想定していたが、現行環境では未提供だったため
+     `Nat.Prime.dvd_mul` の分岐で処理する形に修正。
+   - 例ファイルで `native_decide` を使うと style warning が出たため `decide` に差し替えた。
+5. 備考:
+   - 今回は intentionally 研究補題
+     `body_not_perfect_pow` / `padicValNat_general_upper_bound`
+     にはまだ手を入れていない。
+   - 先に thin wrapper を立てたことで、研究層の `sorry` へ依存せずに
+     primitive → Beam の意味づけを mainline で共有できる状態になった。
+6. 次の課題:
+   - `GcdNextResearch.lean` の `body_not_perfect_pow` 前半を、新 API
+     `primitive_prime_dvd_GN` / `primitive_prime_padic_eq_GN`
+     へ差し替える。
+   - `FLT.Basic.lean` では一般指数ルートの comment / TODO / statement を、
+     新 API を前提に整理する。
