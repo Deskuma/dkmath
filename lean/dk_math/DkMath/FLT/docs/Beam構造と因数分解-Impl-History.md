@@ -369,3 +369,46 @@ head: 713f369
 - 2つ目は Branch A kernel を埋めることです。今は [TriominoCosmicBranchA.lean](/lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean#L20) に lower-layer 入口だけ作ってあり、ここを育てれば `Basic` 側はほぼ触らずに前進できます。
 
 要するに、ドキュメント後半の「PrimitiveBeam API を立てる」部分は達成済みで、「それを FLT/ABC の完成形に押し込む」部分が未完、という状況です。必要なら次に、後半部の未実装項目を `実装済み / 部分実装 / 未着手` の表にして整理します。
+
+### 日時: 2026/03/25 03:05 JST: `primitive_prime_obstructs_GN_perfect_power` を standalone 定理として切り出し
+
+1. 目的: これまで `GcdNextResearch.body_not_perfect_pow` の中に半ば埋め込まれていた
+   「primitive prime が立つなら `GN d (a-b) b` は `d` 乗になれない」
+   を、`PrimitiveBeam` 側の独立 API として固定する。
+2. 内容:
+   - `DkMath/NumberTheory/PrimitiveBeam.lean`
+     - import に `ZsigmondyCyclotomicResearch` を追加し、
+       研究上界 wrapper
+       `padicValNat_primitive_prime_factor_le_one`
+       を直接参照できるようにした。
+     - 新定理
+       `primitive_prime_obstructs_GN_perfect_power`
+       を追加した。
+     - 証明の流れは次の 1 本化である。
+       1. `exists_primitive_prime_factor_as_prop` で primitive prime `q` を取る
+       2. `primitive_prime_dvd_GN` と `primitive_prime_padic_eq_GN` で GN 側へ移す
+       3. `GN = t^d` を仮定すると `q ∣ t` なので
+          `padicValNat q (t^d) ≥ d`
+       4. 一方で研究 wrapper により
+          `padicValNat q (a^d - b^d) ≤ 1`
+          だから GN 側 valuation も `≤ 1`
+       5. `d ≥ 3` と衝突して矛盾
+   - これにより、`PrimitiveBeam` は
+     - primitive existence
+     - primitive -> GN divisibility
+     - primitive -> valuation transport
+     - GN perfect-power obstruction
+     までを 1 モジュールで保持する形になった。
+3. 結論: `primitive_prime_obstructs_GN_perfect_power` は standalone 定理として固定された。以後
+   `GcdNextResearch.body_not_perfect_pow`
+   はこの obstruction を呼ぶ形へさらに薄く整理できる。
+4. 備考:
+   - この定理は現時点では
+     `ZsigmondyCyclotomicResearch.padicValNat_primitive_prime_factor_le_one`
+     に依存するため、axiom 面では research 依存を引き継ぐ。
+   - ただし未完核の位置は明確で、`PrimitiveBeam` 側の statement / API 自体は今後変えずに済む見込み。
+5. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveBeam`
+   - `lake build DkMath.NumberTheory.GcdNextResearch`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
