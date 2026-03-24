@@ -782,10 +782,13 @@ theorem FLT_of_coprime
   -- ぬしよ、まずは gcd(x, y) = 1 と仮定しても一般性を失わないことを示す必要があるの。
 
   -- 観察: x^n = u * GN(n,u,y) の形は、u と GN の間に乗法的制約を課す。
-  -- 特に gcd(u,y)=1 の場合、GN に新しい素因子が現れるため GN が n 乗になるのは通常あり得ない。
-
-  -- 一般の y, u については、GN(n, u, y) が新しい素因数（Zsigmondy 原始素因子）を
-  -- 持つことを利用して、$x^n$ の $n$ 乗構造と矛盾することを示すのが本筋じゃな。
+  -- 一般指数側の整理方針は、`PrimitiveBeam` API を入口にして
+  --   primitive prime existence
+  --     -> `primitive_prime_dvd_GN`
+  --     -> `primitive_prime_padic_eq_GN`
+  -- の順で GN / Beam 側へ押し込み、そこで「GN は n 乗になれない」を示す流れに寄せる。
+  -- したがって一般 `n > 3` では、直接この場で raw Zsigmondy 展開を書くより、
+  -- `GcdNextResearch.body_not_perfect_pow` 相当の橋を整備してそこへ委譲するのが筋になる。
 
   have h_gcd_u_y : Nat.gcd u y = 1 := by
     -- g = gcd(y, z) とおく。g | y, g | z ならば g^n | y^n, z^n → g^n | x^n → g | x
@@ -927,11 +930,14 @@ theorem FLT_of_coprime
         h3
 
   · -- n > 3 の場合
-    -- Zsigmondy 原始素因子などを利用した証明の隔離箇所。
-    -- [TODO] : 現在は n=3 の分岐のみが機能しており、n > 3 に関しては
-    --          `PrimeExponentFLTProvider n` 等の機構を別途呼び出して処理する方針。
-    --          あるいは Zsigmondy 原始素因子の存在から GN n u y が n 乗数に
-    --          なることが矛盾することを直接導く（Phase 4 以降）。
+    -- 一般指数ルートの隔離箇所。
+    -- [TODO] :
+    --   1. `PrimitiveBeam.exists_primitive_prime_factor_as_prop` で primitive prime を取る。
+    --   2. `PrimitiveBeam.primitive_prime_dvd_GN` / `primitive_prime_padic_eq_GN`
+    --      で boundary 側から GN / Beam 側へ情報を移す。
+    --   3. `GcdNextResearch.body_not_perfect_pow` の valuation 上界と接続し、
+    --      `GN n u y` が `n` 乗になれないことを矛盾として閉じる。
+    -- 現状は n=3 分岐のみが mainline 本線で、n > 3 は上記 bridge の整備待ち。
     sorry
 
 

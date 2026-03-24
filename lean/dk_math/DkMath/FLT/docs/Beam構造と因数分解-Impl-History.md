@@ -139,3 +139,36 @@ head: 713f369
      へ差し替える。
    - `FLT.Basic.lean` では一般指数ルートの comment / TODO / statement を、
      新 API を前提に整理する。
+
+### 日時: 2026/03/24 23:23 JST: `GcdNextResearch` 前半を `PrimitiveBeam` API へ差し替え、`FLT.Basic` の一般指数 TODO を整理
+
+1. 目的: Phase A/B で追加した `PrimitiveBeam` を、研究層と FLT 応用層の接続点に反映する。
+2. 内容:
+   - `DkMath/NumberTheory/GcdNextResearch.lean` に `import DkMath.NumberTheory.PrimitiveBeam` を追加。
+   - `body_not_perfect_pow` 前半の raw Zsigmondy 展開を削減し、以下へ差し替えた。
+     - `PrimitiveBeam.exists_primitive_prime_factor_as_prop`
+     - `PrimitiveBeam.primitive_prime_not_dvd_boundary`
+     - `PrimitiveBeam.primitive_prime_dvd_GN`
+     - `PrimitiveBeam.primitive_prime_padic_eq_GN`
+   - これにより、従来この定理の前半にあった
+     - `q ∣ a^d - b^d` の整数/自然数キャスト往復
+     - `q ∣ x * Sd` から `q ∣ Sd` を抜く手作業
+     を削除し、primitive -> GN / Beam への移送を wrapper 経由で表現する形へ整理した。
+   - `body_not_perfect_pow` の層Bコメントも、新方針に合わせて更新。
+     - まず primitive prime を proposition API で取る
+     - `primitive_prime_dvd_GN` で GN 側へ送る
+     - `primitive_prime_padic_eq_GN` で valuation も GN 側へ送る
+   - `DkMath/FLT/Basic.lean` の一般指数ルートコメントを更新。
+     - raw Zsigmondy 展開を書くのではなく、`PrimitiveBeam` -> `GcdNextResearch.body_not_perfect_pow` の橋へ寄せる方針を明記。
+     - `n > 3` 分岐の TODO も、`PrimitiveBeam` API 名を明示した 3 段構成へ更新。
+   - `lake build DkMath.NumberTheory.GcdNextResearch DkMath.FLT.Basic` を実行し、対象モジュールのビルド成功を確認。
+3. 結論: `PrimitiveBeam` は standalone 追加に留まらず、`GcdNextResearch` と `FLT.Basic` の間で「一般指数ルートの入口 API」として機能し始めた。研究層の `sorry` 自体は残るが、primitive prime の取り回しは今後 wrapper ベースで統一できる。
+4. 失敗事例:
+   - 初回で `GcdNextResearch.lean` 側に `open DkMath.CosmicFormulaBinom` がなく、`GN` が unqualified で解決できなかった。
+   - `open DkMath.CosmicFormulaBinom` を追加して解消。
+5. 備考:
+   - `GcdNextResearch.lean` と `FLT.Basic.lean` は引き続き `sorry` を含むが、今回の差分はそれらを増やしていない。
+   - 今回のビルドでは `GcdNextResearch.lean` / `FLT.Basic.lean` 由来の既存 `sorry` warning は継続して出る。
+6. 次の課題:
+   - `body_not_perfect_pow` の `hpadic_bound` を、`PrimitiveBeam` から渡した GN 側 valuation 文脈で埋める。
+   - 一般指数 `n > 3` の FLT ルートを、`body_not_perfect_pow` あるいは同等の provider へ明示的に委譲する。

@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.GcdNext
+import DkMath.NumberTheory.PrimitiveBeam
 import DkMath.NumberTheory.ZsigmondyCyclotomicResearch
 
 set_option linter.style.emptyLine false
@@ -12,6 +13,7 @@ set_option linter.style.longLine false
 
 namespace DkMath.NumberTheory.GcdNext
 
+open DkMath.CosmicFormulaBinom
 open DkMath.SilverRatio.GcdAg  -- Phase 2: GcdAg 正規化関数を使用
 open DkMath.FLT.PetalDetect  -- Phase 3: φビット構造を使用
 
@@ -24,12 +26,13 @@ open DkMath.FLT.PetalDetect  -- Phase 3: φビット構造を使用
 
 **証明構造（3層統合）:**
 
-1. **層A（存在層）**: ZsigmondyCyclotomic.exists_primitive_prime_factor_basic
-   - 原始素因子 q の存在を保証
-   - q ∣ a^d - b^d かつ q ∤ a - b
+1. **層A（存在層）**: `PrimitiveBeam.exists_primitive_prime_factor_as_prop`
+   - 原始素因子 q の存在を proposition API として保証
+   - `primitive_prime_dvd_GN` / `primitive_prime_padic_eq_GN` へ直結できる形に束ねる
 
 2. **層B（精密層）**: padicValNat 評価
-   - padicValNat q (a^d - b^d) ≤ 1 の上界
+   - `padicValNat q (GN d (a-b) b)` ≤ 1 の上界
+   - `primitive_prime_padic_eq_GN` により `padicValNat q (a^d - b^d)` へ戻す
    - GcdAg 正規化による 2進ノイズ除去
    - PetalDetect による (a+b) 核の排除
 
@@ -65,89 +68,38 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
   set a := x + u with ha_def
   set b := u with hb_def
 
-  -- (1) 基本分解：a^d - b^d = x * Sd(a,b,d)
-  have body_eq : (a : ℤ)^d - (b : ℤ)^d = (x : ℤ) * Sd a b d := by
-    have key := DkMath.Algebra.DiffPow.pow_sub_pow_factor (a : ℤ) (b : ℤ) d
-    have x_eq : (x : ℤ) = (a : ℤ) - (b : ℤ) := by omega
-    rw [x_eq]
-    exact key
-
-  -- (2) Zsigmondy の原始素因子定理を使用：原始素因子 q の存在
-  -- a = x + u > u = b （x > 0 より）、且つ coprime
+  -- (1) `a := x + u`, `b := u` へ仮定を移送する
   have hab_lt : b < a := by
     simp only [ha_def, hb_def]
     omega
   have hb_pos : 0 < b := hu
   have hab : Nat.Coprime a b := hcop
 
-  -- d が素数であることが仮定で与えられた
   have hd_ge : 3 ≤ d := by omega
+  have hd_pos : 0 < d := by omega
+  have hd1 : 1 < d := by omega
 
-  -- ¬ d ∣ a - b を示す（これは ¬ d ∣ x と同じ）
   have hpnd_ab : ¬ d ∣ a - b := by
     have : a - b = x := by omega
     rw [this]
     exact hpnd
 
-  obtain ⟨q, hq_prime, hq_div_pow, hq_ndiv_diff⟩ :=
-    exists_primitive_prime_factor_prime hd_prime hd_ge hab_lt hb_pos hab hpnd_ab
-
-  -- q ∣ a^d - b^d かつ q ∤ a - b = x
-  -- body_eq より a^d - b^d = x * Sd なので、q ∣ x * Sd
-  -- q ∤ x より q ∣ Sd
-
-  have hq_div_body : (q : ℤ) ∣ (a : ℤ)^d - (b : ℤ)^d := by
-    -- a^d ≥ b^d を示す
-    have hab_le : b ≤ a := by
-      simp only [ha_def, hb_def]; omega
-    have hab_pow : b^d ≤ a^d := Nat.pow_le_pow_left hab_le d
-    have : ((a^d - b^d : ℕ) : ℤ) = (a : ℤ)^d - (b : ℤ)^d := by
-      simp only [Nat.cast_sub hab_pow, Nat.cast_pow]
-    rw [← this]
-    exact Int.ofNat_dvd.mpr hq_div_pow
-
-  rw [body_eq] at hq_div_body
-
-  -- q ∣ x * Sd かつ q ∤ x なら q ∣ Sd
-  have hq_ndiv_x : ¬ (q : ℤ) ∣ (x : ℤ) := by
-    intro hdiv
-    apply hq_ndiv_diff
-    -- a - b = x を使う
-    have x_eq_ab : x = a - b := by omega
-    rw [← x_eq_ab]
-    exact Int.ofNat_dvd.mp hdiv
-
-  have hq_div_Sd : (q : ℤ) ∣ Sd a b d := by
-    -- 最初に hq_div_body を body_eq で書き換えて hq_div_prod を得る
-    have hq_div_prod : (q : ℤ) ∣ (x : ℤ) * Sd a b d :=
-      body_eq ▸ hq_div_body
-    -- q は素数で q ∣ x * Sd かつ q ∤ x なので q ∣ Sd
-    have hq_prime_int : Prime (q : ℤ) := Nat.prime_iff_prime_int.mp hq_prime
-    have : (q : ℤ) ∣ (x : ℤ) ∨ (q : ℤ) ∣ Sd a b d := hq_prime_int.dvd_mul.mp hq_div_prod
-    cases this with
-    | inl h => exfalso; exact hq_ndiv_x h
-    | inr h => exact h
+  obtain ⟨q, hq⟩ :=
+    DkMath.NumberTheory.PrimitiveBeam.exists_primitive_prime_factor_as_prop
+      hd_prime hd_ge hab_lt hb_pos hab hpnd_ab
+  have hq_prime : Nat.Prime q := hq.1
+  have hq_div_pow_nat : q ∣ a ^ d - b ^ d := hq.2.1
+  have hq_ndiv_diff : ¬ q ∣ a - b :=
+    DkMath.NumberTheory.PrimitiveBeam.primitive_prime_not_dvd_boundary hq hd1
+  have _hq_div_GN : q ∣ GN d (a - b) b :=
+    DkMath.NumberTheory.PrimitiveBeam.primitive_prime_dvd_GN hq hd_pos hd1 hab_lt
+  have _hpadic_eq_GN :
+      padicValNat q (a ^ d - b ^ d) = padicValNat q (GN d (a - b) b) :=
+    DkMath.NumberTheory.PrimitiveBeam.primitive_prime_padic_eq_GN hq hd_pos hd1 hab_lt
 
   -- (3) 矛盾を導く：p-adic valuation を使った完全冪判定
   -- heq : (x+u)^d - u^d = t^d より a^d - b^d = t^d (ℕ での等式)
   -- したがって padicValNat q (a^d - b^d) = padicValNat q (t^d)
-
-  -- q ∣ a^d - b^d を ℕ の可除性に変換
-  have hq_div_pow_nat : q ∣ a^d - b^d := by
-    have hab_pow_le : b^d ≤ a^d := by
-      have : b ≤ a := by omega
-      exact Nat.pow_le_pow_left this d
-    -- body_eq : (a : ℤ)^d - (b : ℤ)^d = (x : ℤ) * Sd a b d を使う
-    have hq_div_int : (q : ℤ) ∣ (a : ℤ)^d - (b : ℤ)^d := by
-      -- キャストを正規化
-      convert hq_div_body using 2
-      -- body_eq を適用
-      -- exact body_eq.symm
-    -- ℤ から ℕ に変換
-    have heq_cast : ((a^d - b^d : ℕ) : ℤ) = (a : ℤ)^d - (b : ℤ)^d := by
-      simp only [Nat.cast_sub hab_pow_le, Nat.cast_pow]
-    rw [← heq_cast] at hq_div_int
-    exact Int.ofNat_dvd.mp hq_div_int
 
   -- a^d - b^d = t^d を使う
   have heq_nat : a^d - b^d = t^d := by
@@ -217,22 +169,19 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
     -- d ≥ 5 の素数については、以下の統合が必要：
     --
     -- 1. **必要な理論梁**（層B補助補題）
+    --    - `PrimitiveBeam.primitive_prime_dvd_GN`
+    --    - `PrimitiveBeam.primitive_prime_padic_eq_GN`
     --    - Lucas/Kummer定理による二項係数のpadicValNat評価
     --    - 円分多項式 Φ_d(a/b) の因子分解
-    --    - Cosmic Formula: a^d - b^d = (a-b) · G_d(a,b)
     --    - GcdAg正規化：π_Ag により 2進ノイズ除去
     --    - PetalDetect φビット判定：(a+b) 位相限定
     --
     -- 2. **証明スケッチ（一般d）**
-    --    i) 層A: q | a^d - b^d ∧ q ∤ (a-b) より原始素因子 q の存在
-    --    ii) Cosmic Formula: a^d - b^d = (a-b) · G_d に分解
-    --    iii) q ∤ (a-b) より q | G_d（割り切りの推移）
-    --    iv) padicValNat_G_upper_bound により padicValNat q (G_d) ≤ d-1
-    --    v) padicValNat の乗法性により
-    --       padicValNat q (a^d - b^d) = padicValNat q (a-b) + padicValNat q (G_d)
-    --    vi) q ∤ (a-b) より padicValNat q (a-b) = 0
-    --    vii) したがって padicValNat q (a^d - b^d) ≤ d-1
-    --    viii) GcdAg+PetalDetect条件下で、さらに ≤ 1 に絞り込める
+    --    i) 層A: `exists_primitive_prime_factor_as_prop` で primitive prime `q` を取る
+    --    ii) `primitive_prime_dvd_GN` で q を GN / Beam 側へ移す
+    --    iii) `primitive_prime_padic_eq_GN` で valuation も GN 側へ移す
+    --    iv) padicValNat_G_upper_bound により padicValNat q (GN d (a-b) b) ≤ d-1
+    --    v) GcdAg+PetalDetect条件下で、さらに ≤ 1 に絞り込める
     --
     -- **実装ロードマップ**
     -- Phase 4.1: d=3 での完全実装（現在）
