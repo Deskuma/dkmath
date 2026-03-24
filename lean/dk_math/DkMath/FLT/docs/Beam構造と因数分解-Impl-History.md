@@ -326,3 +326,46 @@ head: 713f369
    - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
    - `lake build DkMath.FLT.Basic`
    を実行し、ビルド成功を確認した。
+
+---
+
+### 状況分析 #1
+
+- `Beam構造と因数分解.md` の提案は、現在のワークスペースでどこまで既存資産だけで受けられるかを具体化する必要がある。
+
+後半の設計節に対応する実装は、かなり進んでいます。結論だけ先に言うと、`PrimitiveBeam` のコア API はほぼ埋まっていて、未完核はもう `PrimitiveBeam` 本体ではなく、`FLT` 側の Branch A / composite reduction と、ABC 側の bridge/comment 層に寄っています。
+
+**実装済み**
+
+- `Phase A` は実質完了です。[PrimitiveBeam.lean](/lean/dk_math/DkMath/NumberTheory/PrimitiveBeam.lean#L20) に
+  `PrimitivePrimeFactorOfDiffPow`,
+  `exists_primitive_prime_factor_as_prop`,
+  `primitive_prime_not_dvd_boundary`,
+  `primitive_prime_dvd_GN`,
+  `primitive_prime_padic_eq_GN`
+  が入っています。
+- 特に [primitive_prime_dvd_GN](/lean/dk_math/DkMath/NumberTheory/PrimitiveBeam.lean#L54) は no-sorry で立っています。ここは設計書の中心目標どおりです。
+- 設計書では後回し想定だった [primitive_prime_padic_eq_GN](/lean/dk_math/DkMath/NumberTheory/PrimitiveBeam.lean#L74) も、今は no-sorry で通っています。
+- ABC/Body specialized 側も [primitive_prime_dvd_GN_body](/lean/dk_math/DkMath/NumberTheory/PrimitiveBeam.lean#L102) と [primitive_prime_in_beam_for_body_one](/lean/dk_math/DkMath/NumberTheory/PrimitiveBeam.lean#L118) まで入っています。
+- `Phase B` も最低到達点は達成済みです。[PrimitiveBeamExamples.lean](/lean/dk_math/DkMath/NumberTheory/PrimitiveBeamExamples.lean#L14) に `GN 5 1 1 = 31` と `GN 5 2 1 = 121`、および `11 ∣ GN 5 2 1` があります。
+- `Phase C` は設計書より一歩先です。[GcdNextResearch.lean](/lean/dk_math/DkMath/NumberTheory/GcdNextResearch.lean#L61) の `body_not_perfect_pow` は既に `PrimitiveBeam` API を使う形へ差し替わっています。
+
+**まだ足りない補題・未完核**
+
+- 設計書の `primitive_prime_obstructs_GN_perfect_power` は、現状まだ standalone theorem としては未実装です。`PrimitiveBeam.lean` にこの名前の定理はありません。
+- その役割は今は standalone ではなく、[body_not_perfect_pow](/lean/dk_math/DkMath/NumberTheory/GcdNextResearch.lean#L61) の中に半分吸収されています。なので「GN 単体の obstruction 定理」として切り出す余地が残っています。
+- `FLT.Basic` 側は、後半設計で想定していた residual の整理は済んでいますが、まだ 2 核残っています。
+  [TriominoCosmicBranchA.lean](/lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean#L49) の `primeGe5BranchARefuter_default`
+  と
+  [Basic.lean](/lean/dk_math/DkMath/FLT/Basic.lean#L594) の `flt_of_coprime_composite_reduction_residual`
+  です。
+- ABC 側の `Phase D` は未着手です。設計書にある `ABC/PrimitiveBeamBridge.lean` 相当は、今のワークスペースにはまだありません。
+- 具体例も最低限はある一方で、設計書後半にある「Mersenne 系を並べる」「primitive witness を concrete に固定する」までは未実装です。
+
+**見立て**
+
+- いま一番自然な次手は 2 つです。
+- 1つ目は `primitive_prime_obstructs_GN_perfect_power` を standalone 化することです。これが立つと、`GcdNextResearch` と `FLT` 側の説明がかなりきれいになります。
+- 2つ目は Branch A kernel を埋めることです。今は [TriominoCosmicBranchA.lean](/lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean#L20) に lower-layer 入口だけ作ってあり、ここを育てれば `Basic` 側はほぼ触らずに前進できます。
+
+要するに、ドキュメント後半の「PrimitiveBeam API を立てる」部分は達成済みで、「それを FLT/ABC の完成形に押し込む」部分が未完、という状況です。必要なら次に、後半部の未実装項目を `実装済み / 部分実装 / 未着手` の表にして整理します。
