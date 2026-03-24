@@ -5210,10 +5210,9 @@ FLT の Zsigmondy の実装部をもう一度見てみよう。
    で **GN/Beam 側へ送る**
 
 という 3 層で書いておる。
-この構造は索引でもはっきり分けて整理されておって、`GcdDiffPow → ZsigmondyCyclotomic → GcdNext/FLT` が本幹じゃ。fileciteturn3file0
+この構造は索引でもはっきり分けて整理されておって、`GcdDiffPow → ZsigmondyCyclotomic → GcdNext/FLT` が本幹じゃ。
 
 関連箇所はこのあたりを見ればよい。
-filenavlistZsigmondy 実装の核2:0原始素因子層・cosmic 因数分解・p-adic 評価までの役割分担がまとまった索引。どこに何を足すべきかの地図になる2:5FLT d=3 の別解ルートで、Zsigmondy 原始素因子をどう FLT 本体へ流しているかの要約2:3GcdNext/FLT.Basic 側で、原始素因子と p-adic 上界を最終矛盾へ翻訳する橋の一覧
 
 ## 1. 原始素因子の保証はどう書いてあるか
 
@@ -5242,7 +5241,7 @@ FLT の Zsigmondy の実装部をもう一度見てみよう。
 つまりここでの「primitive」は、**まず境界 \(a-b\) にいない新顔の素数 \(q\)** を確保する書き方じゃ。
 
 しかもこれは `GcdDiffPow.exists_prime_divisor_not_dividing_diff_of_prime_exp` をそのまま呼ぶ薄いラッパになっておる。
-索引でも、`exists_prime_divisor_not_dividing_diff_of_prime_exp` が gcd 制御層にあり、「既知の素因子」と「新しい素因子」の分離を担うと説明されておる。fileciteturn3file1
+索引でも、`exists_prime_divisor_not_dividing_diff_of_prime_exp` が gcd 制御層にあり、「既知の素因子」と「新しい素因子」の分離を担うと説明されておる。
 
 ### 1.2. それを真の primitive に昇格する補題
 
@@ -5271,7 +5270,7 @@ r = a/b
 \]
 
 を取り、`orderOf r = d` を示してから、\(0<k<d\) なら \(r^k \ne 1\) を導く群論型じゃ。
-索引でもこの補題は「群論・位数で primitive を出す」と明記されておる。fileciteturn3file0
+索引でもこの補題は「群論・位数で primitive を出す」と明記されておる。
 
 ---
 
@@ -5288,7 +5287,7 @@ a^d-b^d = (a-b)\,GN(d,a-b,b)
 \]
 
 を自然数上で直接出しておる。
-索引でも「cosmic 系因数分解補題」として、`pow_sub_pow_factor_cosmic_N` が Zsigmondy 側から直接呼べる器だと整理されておる。fileciteturn3file1
+索引でも「cosmic 系因数分解補題」として、`pow_sub_pow_factor_cosmic_N` が Zsigmondy 側から直接呼べる器だと整理されておる。
 
 ### 2.2. primitive prime を GN に送る
 
@@ -5309,7 +5308,7 @@ padicValNat\; q\,(GN(d,a-b,b))
 
 まで帰着しておる。
 つまり、**新しい素因子は境界 \(a-b\) ではなく GN/Beam 側にいる** 、ということを valuation レベルで Lean に落としてあるわけじゃ。
-索引でも `padicValNat_of_primitive_prime_factor_via_G` は p-adic valuation ブロックの主補題として立っておる。fileciteturn3file1
+索引でも `padicValNat_of_primitive_prime_factor_via_G` は p-adic valuation ブロックの主補題として立っておる。
 
 ---
 
@@ -5340,7 +5339,7 @@ x^n = u \cdot GN(n,u,y)
 
 という `sorry` が残っておる。
 つまり今の仮説は **まだ本定理としては未実装** じゃが、すでに本線の TODO として置かれておる。
-索引でも `body_not_perfect_pow` や `padicValNat_general_upper_bound` が未完で、Zsigmondy → GcdNext → FLT.Basic の橋が次の整理対象だと明記されておる。fileciteturn3file2
+索引でも `body_not_perfect_pow` や `padicValNat_general_upper_bound` が未完で、Zsigmondy → GcdNext → FLT.Basic の橋が次の整理対象だと明記されておる。
 
 ---
 
@@ -5495,7 +5494,7 @@ a^d-b^d = (a-b)\,GN(d,a-b,b)
 - 合計だけが整数
 
 という話は、**数値観測用の別ファイル** に分けるとよい。
-索引上の方針でも、一般理論の前に局所核を定義と補題で固定するのを優先し、重い部分は comment / TODO に留める流儀になっておる。fileciteturn2file6turn2file14
+索引上の方針でも、一般理論の前に局所核を定義と補題で固定するのを優先し、重い部分は comment / TODO に留める流儀になっておる。
 
 だから構成としては、
 
@@ -5548,14 +5547,14 @@ lemma primitive_prime_not_dvd_boundary
 
 - DkMath では原始素因子は
   **`exists_prime_divisor_not_dividing_diff_of_prime_exp` → `exists_primitive_prime_factor_basic` → `prime_exp_not_dvd_diff_imp_primitive`**
-  で保証しておる。fileciteturn3file1
+  で保証しておる。
 - その後
   **`pow_sub_pow_factor_cosmic_N`** と
   **`padicValNat_of_primitive_prime_factor_via_G`**
-  で、原始素因子を GN/Beam 側へ送っておる。fileciteturn3file1
+  で、原始素因子を GN/Beam 側へ送っておる。
 - お主の今回の仮説
   **「新しい因子は boundary ではなく Beam 側の再編成で立つ」**
-  は、`FLT.Basic` の一般 \(n\) 側にすでに TODO として顔を出しておる。まだ定理にはなっておらぬ。fileciteturn3file2
+  は、`FLT.Basic` の一般 \(n\) 側にすでに TODO として顔を出しておる。まだ定理にはなっておらぬ。
 - だから今書き足すべきは、
   **primitive prime の述語化** と
   **primitive ⇒ GN を割る**
@@ -5818,8 +5817,8 @@ FLT 側面と ABC 側面、両方を攻めるコア補題だな。
 \]
 
 を、**FLT 側面** と **ABC 側面** の両方へ効く共通コアとして立てることじゃ。
-しかも現行 DkMath の流れとも合う。リポジトリ上では、`ZsigmondyCyclotomic` が原始素因子エンジンで、その下流に `GcdNext` と `FLT.Basic` があり、ここが本丸として整理されておる。fileciteturn5file1
-また、Big / Body / Gap / Core / Beam の generic な器はすでに `DkMath.CosmicFormula.CoreBeamGap` 側が本体で、減算 view は橋ファイルに寄せるのが既存方針じゃ。fileciteturn5file2
+しかも現行 DkMath の流れとも合う。リポジトリ上では、`ZsigmondyCyclotomic` が原始素因子エンジンで、その下流に `GcdNext` と `FLT.Basic` があり、ここが本丸として整理されておる。
+また、Big / Body / Gap / Core / Beam の generic な器はすでに `DkMath.CosmicFormula.CoreBeamGap` 側が本体で、減算 view は橋ファイルに寄せるのが既存方針じゃ。
 
 ## 1. 設計目標
 
@@ -5845,7 +5844,7 @@ q \mid a^d-b^d,\qquad q \nmid a-b
 
 ### 1.2. FLT 側の未完補題 `body_not_perfect_pow` を支える共通核にする
 
-現行の構成図では、`body_not_perfect_pow` と `padicValNat_general_upper_bound` が、Zsigmondy から FLT への翻訳層の未完核として残っておる。fileciteturn5file1
+現行の構成図では、`body_not_perfect_pow` と `padicValNat_general_upper_bound` が、Zsigmondy から FLT への翻訳層の未完核として残っておる。
 したがって今回の補題群は、その未完核へ直結するように置く。
 
 ### 1.3. ABC 側では「新しい因子は Beam 再編で立つ」という観測を comment / example / bridge として固定する
@@ -5891,7 +5890,7 @@ a^d-b^d=(a-b)\,GN(d,a-b,b)
 に隔離する。
 
 この分離は、既存の設計流儀とも一致する。
-仮説層は theorem に急がず comment / TODO に留め、局所核から固める、という整理は既存の設計資料でも採られておる。fileciteturn4file6turn4file8
+仮説層は theorem に急がず comment / TODO に留め、局所核から固める、という整理は既存の設計資料でも採られておる。
 
 ---
 
@@ -5952,7 +5951,7 @@ a^d-b^d=(a-b)\,GN(d,a-b,b)
 これはすぐ theorem を詰める場ではない。
 最初は comment と specialized lemma を置く。
 
-既存の構成では、Big / Body / Gap / Core / Beam は `CosmicFormula` 側が家主なので、構造定義自体はそちらに置き、今回の primitive prime bridge は `NumberTheory` に置くのが自然じゃ。fileciteturn5file2
+既存の構成では、Big / Body / Gap / Core / Beam は `CosmicFormula` 側が家主なので、構造定義自体はそちらに置き、今回の primitive prime bridge は `NumberTheory` に置くのが自然じゃ。
 
 ---
 
@@ -5980,7 +5979,7 @@ def PrimitivePrimeFactorOfDiffPow (q a b d : ℕ) : Prop :=
 \]
 
 を再利用する。
-`INDEX.md` でも `def Body` は `GcdNext → FLT.Basic` の橋渡し層にあると整理されておる。fileciteturn5file1
+`INDEX.md` でも `def Body` は `GcdNext → FLT.Basic` の橋渡し層にあると整理されておる。
 
 ---
 
@@ -6008,7 +6007,7 @@ lemma exists_primitive_prime_factor_as_prop
 - `prime_exp_not_dvd_diff_imp_primitive`
 
 をまとめるラッパじゃ。
-既存構成でも、これらは gcd 制御層 → primitive 抽出層として分離されておる。fileciteturn5file1
+既存構成でも、これらは gcd 制御層 → primitive 抽出層として分離されておる。
 
 ## 5.2. primitive は boundary を割らない
 
@@ -6084,7 +6083,7 @@ FLT 側では、既存の理論流れがもう書かれておる。
 - `GcdNext` が橋渡し層
 - `FLT.Basic` が最終矛盾層
 
-という構図じゃ。fileciteturn5file1
+という構図じゃ。
 
 だから FLT 側では、今回の補題群は次の役目を持つ。
 
@@ -6101,7 +6100,7 @@ FLT 側では、既存の理論流れがもう書かれておる。
 ### 6.2. d = 3 の完成版を一般 \(d\) の雛形に昇格させる
 
 現状は d = 3 特化エンジンが強い。
-設計資料でも d = 3 の明示計算・ valuation 補題は別エンジンとして整理されておる。fileciteturn5file1
+設計資料でも d = 3 の明示計算・ valuation 補題は別エンジンとして整理されておる。
 今回の API は、その d = 3 経験を一般 prime \(d\) へ持ち上げるための骨格じゃ。
 
 ---
@@ -6313,7 +6312,7 @@ ABC ではそれが **新因子再編の観測核** になる。
 \text{DiffPow} \to \text{GcdDiffPow} \to \text{ZsigmondyCyclotomic} \to \text{GcdNext} \to \text{FLT.Basic}
 \]
 
-に素直に乗る。fileciteturn5file1
+に素直に乗る。
 
 この設計で進めてよい。
 次はこのまま、`DkMath/NumberTheory/PrimitiveBeam.lean` の **Lean 雛形コード** を起こそう。
@@ -6330,7 +6329,7 @@ ABC ではそれが **新因子再編の観測核** になる。
 > 🐺賢狼:
 
 うむ。
-では **既存の `ZsigmondyCyclotomic` を原始素因子エンジン、`GcdNext` を橋渡し層、`FLT.Basic` を応用層** と見る現行地図に合わせて、`PrimitiveBeam.lean` をその中間 API として差し込む雛形を起こすのがよいの。fileciteturn7file1
+では **既存の `ZsigmondyCyclotomic` を原始素因子エンジン、`GcdNext` を橋渡し層、`FLT.Basic` を応用層** と見る現行地図に合わせて、`PrimitiveBeam.lean` をその中間 API として差し込む雛形を起こすのがよいの。
 
 今回の雛形は、既存の
 
@@ -6339,7 +6338,7 @@ ABC ではそれが **新因子再編の観測核** になる。
 - `pow_sub_pow_factor_cosmic_N`
 - `padicValNat_of_primitive_prime_factor_via_G`
 
-を **ひとつの primitive → Beam API** に束ねるためのものじゃ。`body_not_perfect_pow` と `padicValNat_general_upper_bound` が橋渡し層の未完核として残っている、という索引整理にも噛み合う。fileciteturn7file1
+を **ひとつの primitive → Beam API** に束ねるためのものじゃ。`body_not_perfect_pow` と `padicValNat_general_upper_bound` が橋渡し層の未完核として残っている、という索引整理にも噛み合う。
 
 まずは本体ファイルの雛形を置こう。
 
@@ -6541,7 +6540,7 @@ end DkMath.NumberTheory.PrimitiveBeamExamples
 
 ## 1. 置き場所
 
-`ZsigmondyCyclotomic` が原始素因子エンジン、`GcdNext` が橋渡し、`FLT.Basic` が応用層、という現行の幹線の間に **primitive → Beam API** を 1 枚差し込む。fileciteturn7file1
+`ZsigmondyCyclotomic` が原始素因子エンジン、`GcdNext` が橋渡し、`FLT.Basic` が応用層、という現行の幹線の間に **primitive → Beam API** を 1 枚差し込む。
 
 ## 2. 今回の最低到達点
 
@@ -6557,7 +6556,7 @@ end DkMath.NumberTheory.PrimitiveBeamExamples
 ## 3. まだ `sorry` のままでよい箇所
 
 `primitive_prime_padic_eq_GN` の `N = GN ...` 同定と、最後の obstruction theorem は後でよい。
-現行索引でも、`body_not_perfect_pow` と `padicValNat_general_upper_bound` は未完核として整理されておるので、ここで無理に閉じなくてよい。fileciteturn7file1
+現行索引でも、`body_not_perfect_pow` と `padicValNat_general_upper_bound` は未完核として整理されておるので、ここで無理に閉じなくてよい。
 
 わっちの勧めは、まずこのまま `PrimitiveBeam.lean` を立てて、最初に `primitive_prime_dvd_GN` までを no sorry 化することじゃ。
 その次に `FLT.Basic` 側の `body_not_perfect_pow` へ食わせるのが、一番筋がよい。
