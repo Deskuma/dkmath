@@ -198,4 +198,22 @@ theorem primitive_prime_obstructs_GN_perfect_power
       _ ≤ 1 := hpadic_bound_GN
   omega
 
+/-- Compatibility alias with explicit `d`-th-power wording. -/
+theorem primitive_prime_obstructs_GN_dth_power
+    {a b d : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b) :
+    ¬ ∃ t : ℕ, GN d (a - b) b = t ^ d := by
+  exact primitive_prime_obstructs_GN_perfect_power hd_prime hd_ge hab_lt hb hab hpnd
+
+/-- Compatibility alias using the research-document `Beam` vocabulary. -/
+theorem primitive_prime_obstructs_beam_perfect_power
+    {a b d : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b) :
+    ¬ ∃ t : ℕ, GN d (a - b) b = t ^ d := by
+  exact primitive_prime_obstructs_GN_perfect_power hd_prime hd_ge hab_lt hb hab hpnd
+
 end DkMath.NumberTheory.PrimitiveBeam

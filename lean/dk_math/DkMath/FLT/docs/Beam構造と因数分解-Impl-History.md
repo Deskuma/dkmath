@@ -412,3 +412,42 @@ head: 713f369
    - `lake build DkMath.NumberTheory.GcdNextResearch`
    - `lake build DkMath.FLT.Basic`
    を実行し、ビルド成功を確認した。
+
+### 日時: 2026/03/25 03:18 JST: `body_not_perfect_pow` を standalone obstruction 呼び出しへ寄せ、命名 alias を追加
+
+1. 目的:
+   - `GcdNextResearch.body_not_perfect_pow` の内部で GN 側 obstruction を生で再説明せず、
+     `primitive_prime_obstructs_GN_perfect_power`
+     を先頭で呼ぶ形へ寄せる。
+   - 併せて研究文書の語彙に近い別名を追加し、命名の揺れを吸収する。
+2. 内容:
+   - `DkMath/NumberTheory/GcdNextResearch.lean`
+     - `a := x + u`, `b := u` の移送直後に
+       `hGN_not_pow : ¬ ∃ s, GN d (a - b) b = s ^ d`
+       を
+       `PrimitiveBeam.primitive_prime_obstructs_GN_perfect_power`
+       から取得するようにした。
+     - これを用いて `GN d (a - b) b ≠ 0` を回収し、
+       obstruction の意味付けを theorem 呼び出しへ明示的に寄せた。
+     - body 全体の完全冪否定そのものは、依然として valuation spine で閉じている。
+       つまり「GN obstruction の責務」と「body valuation 矛盾の責務」がコード上でも分離された。
+   - `DkMath/NumberTheory/PrimitiveBeam.lean`
+     - 互換 alias
+       `primitive_prime_obstructs_GN_dth_power`
+       を追加。
+     - 研究文書側の語彙に合わせた alias
+       `primitive_prime_obstructs_beam_perfect_power`
+       も追加。
+     - 本名は引き続き
+       `primitive_prime_obstructs_GN_perfect_power`
+       を採用する。
+3. 結論:
+   - `body_not_perfect_pow` は、完全には 1 行化していないが、
+     「GN が `d` 乗になれない」という obstruction 層を standalone 定理へ委譲する構造になった。
+   - 以後は、必要なら valuation 本体もさらに別 helper に切り出して、
+     `body_not_perfect_pow` 自体をより薄くできる。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveBeam`
+   - `lake build DkMath.NumberTheory.GcdNextResearch`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。

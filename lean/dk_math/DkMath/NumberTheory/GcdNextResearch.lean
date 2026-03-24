@@ -84,6 +84,12 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
     rw [this]
     exact hpnd
 
+  have hGN_not_pow :
+      ¬ ∃ s : ℕ, GN d (a - b) b = s ^ d := by
+    exact
+      DkMath.NumberTheory.PrimitiveBeam.primitive_prime_obstructs_GN_perfect_power
+        hd_prime hd_ge hab_lt hb_pos hab hpnd_ab
+
   obtain ⟨q, hq⟩ :=
     DkMath.NumberTheory.PrimitiveBeam.exists_primitive_prime_factor_as_prop
       hd_prime hd_ge hab_lt hb_pos hab hpnd_ab
@@ -195,6 +201,13 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
     calc
       padicValNat q (a ^ d - b ^ d) = padicValNat q (GN d (a - b) b) := hpadic_eq_GN
       _ ≤ 1 := hpadic_bound_GN
+
+  have hGN_ne : GN d (a - b) b ≠ 0 := by
+    intro hGN0
+    apply hGN_not_pow
+    refine ⟨0, ?_⟩
+    rw [hGN0]
+    simp [hd_pos.ne']
 
   -- 矛盾：padicValNat q (a^d - b^d) ≤ 1 だが ≥ d ≥ 3
   omega
