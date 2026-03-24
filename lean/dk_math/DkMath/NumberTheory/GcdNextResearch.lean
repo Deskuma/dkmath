@@ -93,7 +93,7 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
     DkMath.NumberTheory.PrimitiveBeam.primitive_prime_not_dvd_boundary hq hd1
   have _hq_div_GN : q ∣ GN d (a - b) b :=
     DkMath.NumberTheory.PrimitiveBeam.primitive_prime_dvd_GN hq hd_pos hd1 hab_lt
-  have _hpadic_eq_GN :
+  have hpadic_eq_GN :
       padicValNat q (a ^ d - b ^ d) = padicValNat q (GN d (a - b) b) :=
     DkMath.NumberTheory.PrimitiveBeam.primitive_prime_padic_eq_GN hq hd_pos hd1 hab_lt
 
@@ -155,15 +155,16 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
   -- 層B補助補題の実装により、以下が得られれば直ちに完成：
   -- padicValNat q (a^d - b^d) ≤ 1
 
-  have hpadic_bound : padicValNat q (a^d - b^d) ≤ 1 := by
+  have hpadic_bound_GN : padicValNat q (GN d (a - b) b) ≤ 1 := by
     -- **Stage A（確実に埋まる部分）：d=3 の具体計算**
-    -- ZsigmondyCyclotomic.leanで既に padicValNat_d3_upper_bound が準備されている
-    -- これを使えば、d=3 の場合は 1) GcdNext直接埋め込み可能
+    -- ここでは `primitive_prime_padic_eq_GN` により valuation の舞台を
+    -- すでに GN / Beam 側へ移してある。したがって未完核は
+    -- `padicValNat q (GN d (a-b) b) ≤ 1` の一点に局所化される。
     --
     -- 実装パターン（d=3の場合）:
-    --   obtain ⟨q, hpq, hq_div⟩ := hprime  -- 層Aから原始素因子 q
-    --   have := padicValNat_d3_upper_bound a b q hpq hab_lt hab_coprime h_Ag h_petal
-    --   exact this
+    --   1. d=3 のときは `GN 3 (a-b) b = a^2 + ab + b^2` を使う
+    --   2. `padicValNat_d3_upper_bound` で body 側上界を出す
+    --   3. `hpadic_eq_GN` の対称向きで GN 側上界へ戻す
     --
     -- **Stage B（研究テーマ）：一般 d への拡張**
     -- d ≥ 5 の素数については、以下の統合が必要：
@@ -201,9 +202,13 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
     -- - PetalDetect検出器：DkMath.FLT.PetalDetect
     --
     -- [TODO] 一般次元 d > 3 での CosmicFormula `Body` が完全累乗数に
-    --        ならないことの証明。層B（Layer B）における p-adic 付値の上界評価を
-    --        GcdNextLayerB/Phase 4.2 として完全実装するまで保留。
+    --        ならないことの証明。現在の `sorry` は body 側ではなく
+    --        GN 側 valuation 上界にだけ残してある。
     sorry
+  have hpadic_bound : padicValNat q (a^d - b^d) ≤ 1 := by
+    calc
+      padicValNat q (a ^ d - b ^ d) = padicValNat q (GN d (a - b) b) := hpadic_eq_GN
+      _ ≤ 1 := hpadic_bound_GN
 
   -- 矛盾：padicValNat q (a^d - b^d) ≤ 1 だが ≥ d ≥ 3
   omega

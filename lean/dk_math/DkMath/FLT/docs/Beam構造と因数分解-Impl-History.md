@@ -1,6 +1,7 @@
 # Beam構造と因数分解 - Implements History
 
-cid: 69c20351-9194-83a5-8a0d-6308a6e8c75c
+cid: 69c20351-9194-83a5-8a0d-6308a6e8c75c design
+cid: 69c29dd8-c09c-83a9-8e2b-f56f4c210e08 review
 branch: dev/flt-abc-260324-v0
 head: 713f369
 
@@ -172,3 +173,45 @@ head: 713f369
 6. 次の課題:
    - `body_not_perfect_pow` の `hpadic_bound` を、`PrimitiveBeam` から渡した GN 側 valuation 文脈で埋める。
    - 一般指数 `n > 3` の FLT ルートを、`body_not_perfect_pow` あるいは同等の provider へ明示的に委譲する。
+
+### 日時: 2026/03/25 00:32 JST: `hpadic_bound` を GN 側 valuation 文脈へ局所化し、`FLT.Basic` に明示 bridge を追加
+
+1. 目的: 次に埋めるべき `sorry` を body 側ではなく GN / Beam 側 valuation 上界へ限定し、同時に FLT 一般指数 branch の委譲先を code level で固定する。
+2. 内容:
+   - `DkMath/NumberTheory/GcdNextResearch.lean` の `body_not_perfect_pow` で、
+     `PrimitiveBeam.primitive_prime_padic_eq_GN` による
+     `hpadic_eq_GN : padicValNat q (a^d - b^d) = padicValNat q (GN d (a-b) b)`
+     を本体に昇格。
+   - `hpadic_bound` を直接 `sorry` にする構造を廃止し、
+     まず
+     `hpadic_bound_GN : padicValNat q (GN d (a-b) b) ≤ 1`
+     を未完核として置き、
+     その後
+     `hpadic_eq_GN` で body 側へ戻す 2 段構成へ変更。
+   - これにより `body_not_perfect_pow` の残る本質的未証明点が
+     「GN 側 valuation 上界」だとコード上でも明確になった。
+   - `DkMath/FLT/Basic.lean` に
+     `body_not_perfect_pow_bridge`
+     を新設。
+     - 型は
+       `¬ ∃ t, 0 < t ∧ (u + y)^n - y^n = t^n`
+       を返す薄い wrapper。
+     - 実体は `DkMath.NumberTheory.GcdNext.body_not_perfect_pow` への委譲。
+   - `FLT_of_coprime` の `n > 3` 分岐 TODO を更新し、
+     今後の作業を
+     1. bridge の前提供給
+     2. body 非完全冪の回収
+     3. witness `t := x` による矛盾
+     の 3 段へ明示化した。
+   - `lake build DkMath.NumberTheory.GcdNextResearch DkMath.FLT.Basic` を実行し、ビルド成功を確認。
+3. 結論: `body_not_perfect_pow` の `sorry` は「body 全体の付値上界」ではなく「GN 側 valuation 上界」に局所化され、`FLT.Basic` の一般指数分岐は `body_not_perfect_pow_bridge` という具体名を持つ委譲先を得た。これで次に埋める対象がかなり明瞭になった。
+4. 失敗事例:
+   - 初回差分では `FLT.Basic` の import 配列と comment 文脈の当て先がずれており、パッチを分割して適用し直した。
+5. 備考:
+   - 既存 `sorry` は引き続き `GcdNextResearch.lean` と `FLT.Basic.lean` に残るが、今回の変更で未完核の責務はより狭く、明示的になった。
+   - `FLT.Basic` で bridge を置いたことで、将来 provider 経由へ切り替える場合も置換点が 1 箇所に集約される。
+6. 次の課題:
+   - `hpadic_bound_GN` を、`d = 3` の既存補題と `d ≥ 5` 研究ルートに分けて埋める。
+   - `FLT_of_coprime` の `n > 3` branch で
+     `Nat.Prime n` / `¬ n ∣ u` / `Nat.Coprime (u + y) y`
+     をどう供給するかを決め、`body_not_perfect_pow_bridge` を実際に呼ぶ。

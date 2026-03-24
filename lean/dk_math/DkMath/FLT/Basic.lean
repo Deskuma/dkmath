@@ -12,6 +12,7 @@ import DkMath.Algebra.BinomTail
 import DkMath.NumberTheory.GdcDivD
 import DkMath.NumberTheory.Gcd
 import DkMath.NumberTheory.GcdNext
+import DkMath.NumberTheory.GcdNextResearch
 import DkMath.NumberTheory.ZsigmondyCyclotomic
 import DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
 import DkMath.Zsigmondy
@@ -506,6 +507,22 @@ lemma GN3_cube_not_cube_of_gt_one_of_provider
 #print axioms GN3_cube_not_cube_of_gt_one_of_provider  -- OK: no Research link 2026/03/05
 #print axioms GN3_cube_not_cube_of_gt_one_of_squarefree  -- OK: no Research link 2026/03/05
 
+/--
+一般指数ルートで `body_not_perfect_pow` へ委譲するための薄い橋。
+
+`FLT_of_coprime` 本体ではまだ `Nat.Prime n` や `¬ n ∣ u` を supply していないため、
+この補題を直接適用するところまでは届いていないが、
+一般指数 branch の委譲先を code level で固定するために置いておく。
+-/
+private lemma body_not_perfect_pow_bridge
+    {u y n : ℕ}
+    (hn : 2 < n) (hn_prime : Nat.Prime n)
+    (hu : 0 < u) (hy : 0 < y)
+    (hcop : Nat.Coprime (u + y) y)
+    (hndiv : ¬ n ∣ u) :
+    ¬ ∃ t : ℕ, 0 < t ∧ (u + y) ^ n - y ^ n = t ^ n := by
+  exact DkMath.NumberTheory.GcdNext.body_not_perfect_pow u y n hn hn_prime hu hy hcop hndiv
+
 /-- 暫定 fallback 入口。squarefree 未供給の呼び出しは FLT(3) 参照へ明示的に落とす。 -/
 private lemma GN3_cube_not_cube_of_gt_one_fallback_use_FLT3
     (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y)
@@ -932,11 +949,13 @@ theorem FLT_of_coprime
   · -- n > 3 の場合
     -- 一般指数ルートの隔離箇所。
     -- [TODO] :
-    --   1. `PrimitiveBeam.exists_primitive_prime_factor_as_prop` で primitive prime を取る。
-    --   2. `PrimitiveBeam.primitive_prime_dvd_GN` / `primitive_prime_padic_eq_GN`
-    --      で boundary 側から GN / Beam 側へ情報を移す。
-    --   3. `GcdNextResearch.body_not_perfect_pow` の valuation 上界と接続し、
-    --      `GN n u y` が `n` 乗になれないことを矛盾として閉じる。
+    --   1. 下の `body_not_perfect_pow_bridge` に必要な
+    --      `Nat.Prime n`, `¬ n ∣ u`, `Nat.Coprime (u + y) y`
+    --      をこの branch で供給する。
+    --   2. その橋から
+    --      `¬ ∃ t, 0 < t ∧ (u + y)^n - y^n = t^n`
+    --      を得る。
+    --   3. `h_body` / `h_xn_val` から witness `t := x` を与えて矛盾へ落とす。
     -- 現状は n=3 分岐のみが mainline 本線で、n > 3 は上記 bridge の整備待ち。
     sorry
 
