@@ -513,6 +513,42 @@ private lemma body_not_perfect_pow_bridge
     ¬ ∃ t : ℕ, 0 < t ∧ (u + y) ^ n - y ^ n = t ^ n := by
   exact DkMath.NumberTheory.GcdNext.body_not_perfect_pow u y n hn hn_prime hu hy hcop hndiv
 
+/-- `y ≤ z` かつ `y` と `z` が互いに素なら、gap `z - y` と `y` も互いに素。 -/
+private lemma coprime_sub_of_coprime
+    {y z : ℕ} (hyz : y ≤ z) (hcop : Nat.Coprime y z) :
+    Nat.Coprime (z - y) y := by
+  have hy_sub : Nat.Coprime y (z - y) :=
+    (Nat.coprime_sub_self_right hyz).2 hcop
+  simpa [Nat.coprime_comm] using hy_sub
+
+/-- `x^p + y^p = z^p` と `x ⟂ y` から `y ⟂ z` を回収する。 -/
+private lemma coprime_right_of_add_pow_eq_pow
+    {p x y z : ℕ}
+    (hp : Nat.Prime p)
+    (hxy : Nat.Coprime x y)
+    (hEq : x ^ p + y ^ p = z ^ p) :
+    Nat.Coprime y z := by
+  refine (Nat.coprime_iff_gcd_eq_one).2 ?_
+  by_contra hg1
+  have hg_ne1 : Nat.gcd y z ≠ 1 := by
+    simpa using hg1
+  rcases Nat.exists_prime_and_dvd (n := Nat.gcd y z) hg_ne1 with ⟨q, hqPrime, hq_dvd_g⟩
+  have hq_dvd_y : q ∣ y := dvd_trans hq_dvd_g (Nat.gcd_dvd_left y z)
+  have hq_dvd_z : q ∣ z := dvd_trans hq_dvd_g (Nat.gcd_dvd_right y z)
+  have hq_dvd_yp : q ∣ y ^ p :=
+    dvd_trans hq_dvd_y (dvd_pow_self y hp.ne_zero)
+  have hq_dvd_zp : q ∣ z ^ p :=
+    dvd_trans hq_dvd_z (dvd_pow_self z hp.ne_zero)
+  have hq_dvd_sum : q ∣ x ^ p + y ^ p := by
+    rw [hEq]
+    exact hq_dvd_zp
+  have hq_dvd_xp : q ∣ x ^ p := by
+    exact (Nat.dvd_add_left hq_dvd_yp).1 hq_dvd_sum
+  have hq_dvd_x : q ∣ x := hqPrime.dvd_of_dvd_pow hq_dvd_xp
+  have hnot : ¬ Nat.Coprime x y :=
+    Nat.not_coprime_of_dvd_of_dvd (Nat.Prime.one_lt hqPrime) hq_dvd_x hq_dvd_y
+  exact hnot hxy
+
 /-- 暫定 fallback 入口。squarefree 未供給の呼び出しは FLT(3) 参照へ明示的に落とす。 -/
 private lemma GN3_cube_not_cube_of_gt_one_fallback_use_FLT3
     (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y)
@@ -920,17 +956,40 @@ theorem FLT_of_coprime
         h3
 
   · -- n > 3 の場合
-    -- 一般指数ルートの隔離箇所。
-    -- [TODO] :
-    --   1. 下の `body_not_perfect_pow_bridge` に必要な
-    --      `Nat.Prime n`, `¬ n ∣ u`, `Nat.Coprime (u + y) y`
-    --      をこの branch で供給する。
-    --   2. その橋から
-    --      `¬ ∃ t, 0 < t ∧ (u + y)^n - y^n = t^n`
-    --      を得る。
-    --   3. `h_body` / `h_xn_val` から witness `t := x` を与えて矛盾へ落とす。
-    -- 現状は n=3 分岐のみが mainline 本線で、n > 3 は上記 bridge の整備待ち。
-    sorry
+    have hxy_coprime : Nat.Coprime x y := by
+      exact (Nat.coprime_iff_gcd_eq_one).2 h_coprime
+    by_cases hprimeB : Nat.Prime n ∧ ¬ n ∣ u
+    · rcases hprimeB with ⟨hn_prime, hndiv⟩
+      have hyz_coprime : Nat.Coprime y z :=
+        coprime_right_of_add_pow_eq_pow hn_prime hxy_coprime hxy
+      have hcop_u_y : Nat.Coprime (u + y) y := by
+        have hcop_gap : Nat.Coprime u y := by
+          simpa [u] using coprime_sub_of_coprime hzy.le hyz_coprime
+        simpa [hz_yu] using hcop_gap
+      have hbody_not_pow :
+          ¬ ∃ t : ℕ, 0 < t ∧ (u + y) ^ n - y ^ n = t ^ n := by
+        exact
+          body_not_perfect_pow_bridge
+            (u := u) (y := y) (n := n)
+            (by omega)
+            hn_prime
+            hu
+            hpos_xyz.2.1
+            hcop_u_y
+            hndiv
+      apply hbody_not_pow
+      refine ⟨x, hpos_xyz.1, ?_⟩
+      have hsub : x ^ n = z ^ n - y ^ n := by
+        have := congrArg (fun t => t - y ^ n) hxy
+        simpa [Nat.add_sub_cancel] using this
+      calc
+        (u + y) ^ n - y ^ n = z ^ n - y ^ n := by simp [hz_yu]
+        _ = x ^ n := hsub.symm
+    · -- 残差は 2 つ:
+      --   1. prime branch A (`Nat.Prime n ∧ n ∣ u`)
+      --   2. composite exponent を `4` / odd prime divisor へ落とす reduction
+      -- ここでは branch B の橋だけを mainline 化し、残りを高指数側 task に隔離する。
+      sorry
 
 
 

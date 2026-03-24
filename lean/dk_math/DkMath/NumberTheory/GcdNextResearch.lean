@@ -156,55 +156,41 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
   -- padicValNat q (a^d - b^d) ≤ 1
 
   have hpadic_bound_GN : padicValNat q (GN d (a - b) b) ≤ 1 := by
-    -- **Stage A（確実に埋まる部分）：d=3 の具体計算**
-    -- ここでは `primitive_prime_padic_eq_GN` により valuation の舞台を
-    -- すでに GN / Beam 側へ移してある。したがって未完核は
-    -- `padicValNat q (GN d (a-b) b) ≤ 1` の一点に局所化される。
-    --
-    -- 実装パターン（d=3の場合）:
-    --   1. d=3 のときは `GN 3 (a-b) b = a^2 + ab + b^2` を使う
-    --   2. `padicValNat_d3_upper_bound` で body 側上界を出す
-    --   3. `hpadic_eq_GN` の対称向きで GN 側上界へ戻す
-    --
-    -- **Stage B（研究テーマ）：一般 d への拡張**
-    -- d ≥ 5 の素数については、以下の統合が必要：
-    --
-    -- 1. **必要な理論梁**（層B補助補題）
-    --    - `PrimitiveBeam.primitive_prime_dvd_GN`
-    --    - `PrimitiveBeam.primitive_prime_padic_eq_GN`
-    --    - Lucas/Kummer定理による二項係数のpadicValNat評価
-    --    - 円分多項式 Φ_d(a/b) の因子分解
-    --    - GcdAg正規化：π_Ag により 2進ノイズ除去
-    --    - PetalDetect φビット判定：(a+b) 位相限定
-    --
-    -- 2. **証明スケッチ（一般d）**
-    --    i) 層A: `exists_primitive_prime_factor_as_prop` で primitive prime `q` を取る
-    --    ii) `primitive_prime_dvd_GN` で q を GN / Beam 側へ移す
-    --    iii) `primitive_prime_padic_eq_GN` で valuation も GN 側へ移す
-    --    iv) padicValNat_G_upper_bound により padicValNat q (GN d (a-b) b) ≤ d-1
-    --    v) GcdAg+PetalDetect条件下で、さらに ≤ 1 に絞り込める
-    --
-    -- **実装ロードマップ**
-    -- Phase 4.1: d=3 での完全実装（現在）
-    -- Phase 4.2: d=5, 7 ... での個別検証
-    -- Phase 4.3: 一般化パターン認識→汎用補題化
-    --
-    -- **当ファイルでの即座の対応**
-    -- padicValNat_d3_upper_bound が available ならそれを呼ぶ
-    -- 一般 d については「存在形」に落として、次フェーズへ預ける
-    -- （NextWork.md Phase 1/2/3参照）
-    --
-    -- **検索対象（Mathlib/ZsigmondyCyclotomic/PetalDetect）**
-    -- - padicValNat_d3_upper_bound （ZsigmondyCyclotomic.leanで定義予定）
-    -- - Cosmic Formula分解：DkMath.Algebra.DiffPow
-    -- - Lucas/Kummer定理：ZsigmondyCyclotomic.lean
-    -- - GcdAg正規化：DkMath.SilverRatio.GcdAg
-    -- - PetalDetect検出器：DkMath.FLT.PetalDetect
-    --
-    -- [TODO] 一般次元 d > 3 での CosmicFormula `Body` が完全累乗数に
-    --        ならないことの証明。現在の `sorry` は body 側ではなく
-    --        GN 側 valuation 上界にだけ残してある。
-    sorry
+    have hpadic_bound_diff : padicValNat q (a ^ d - b ^ d) ≤ 1 := by
+      by_cases hd3 : d = 3
+      · subst hd3
+        exact
+          DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one
+            (a := a) (b := b) (d := 3) (q := q)
+            Nat.prime_three
+            (by norm_num)
+            hab_lt
+            hb_pos
+            hab
+            hpnd_ab
+            hq_prime
+            hq_div_pow_nat
+            hq_ndiv_diff
+      · have hd5 : 5 ≤ d := by
+          have hd_ne4 : d ≠ 4 := by
+            intro hd4
+            have : Nat.Prime 4 := by simpa [hd4] using hd_prime
+            exact (by decide : ¬ Nat.Prime 4) this
+          omega
+        exact
+          DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one
+            (a := a) (b := b) (d := d) (q := q)
+            hd_prime
+            hd_ge
+            hab_lt
+            hb_pos
+            hab
+            hpnd_ab
+            hq_prime
+            hq_div_pow_nat
+            hq_ndiv_diff
+    rw [← hpadic_eq_GN]
+    exact hpadic_bound_diff
   have hpadic_bound : padicValNat q (a^d - b^d) ≤ 1 := by
     calc
       padicValNat q (a ^ d - b ^ d) = padicValNat q (GN d (a - b) b) := hpadic_eq_GN

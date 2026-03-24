@@ -215,3 +215,59 @@ head: 713f369
    - `FLT_of_coprime` の `n > 3` branch で
      `Nat.Prime n` / `¬ n ∣ u` / `Nat.Coprime (u + y) y`
      をどう供給するかを決め、`body_not_perfect_pow_bridge` を実際に呼ぶ。
+
+### 日時: 2026/03/25 02:04 JST: `hpadic_bound_GN` を GN 文脈で実装し、`FLT_of_coprime` の prime-Branch B を mainline 化
+
+1. 目的: `body_not_perfect_pow` の局所 `sorry` を除去し、`FLT_of_coprime` の一般指数 branch で `body_not_perfect_pow_bridge` を実際に起動する。
+2. 内容:
+   - `DkMath/NumberTheory/GcdNextResearch.lean`
+     - `hpadic_bound_GN : padicValNat q (GN d (a - b) b) ≤ 1` の `sorry` を除去した。
+     - 分岐は
+       - `d = 3`: cubic case として扱う
+       - `d ≥ 5`: 研究ルートとして扱う
+       の 2 本に分けた。
+     - どちらの branch でも、現段階では
+       `padicValNat_primitive_prime_factor_le_one`
+       を body 側上界の provider として使い、
+       `primitive_prime_padic_eq_GN` で GN 側へ戻す構成に統一した。
+     - これにより `body_not_perfect_pow` 自身から local `sorry` は消え、未完核は研究補題
+       `padicValNat_primitive_prime_factor_le_one`
+       側へ一本化された。
+   - `DkMath/FLT/Basic.lean`
+     - 高指数 branch 用に、以下の薄い補題を追加した。
+       - `coprime_sub_of_coprime`
+       - `coprime_right_of_add_pow_eq_pow`
+     - `FLT_of_coprime` の `n > 3` branch を
+       `Nat.Prime n ∧ ¬ n ∣ u`
+       の mainline と、それ以外の残差 branch に分割した。
+     - mainline 側では
+       - `Nat.Prime n` は case split から受け取り
+       - `Nat.Coprime (u + y) y` は `y ⟂ z` と gap-coprime から回収し
+       - `¬ n ∣ u` は同じ case split から受け取り
+       - `body_not_perfect_pow_bridge` を実際に呼んで
+         witness `t := x` で矛盾へ落とす
+       ところまで実装した。
+     - 残しているのは
+       - prime branch A (`Nat.Prime n ∧ n ∣ u`)
+       - composite exponent の `4` / odd prime divisor への reduction
+       の合流点だけである。
+   - `lake build DkMath.NumberTheory.GcdNextResearch`
+     および
+     `lake build DkMath.FLT.Basic`
+     を実行し、ビルド成功を確認した。
+3. 結論: 一般指数 spine のうち、Branch B (`Nat.Prime n ∧ ¬ n ∣ u`) は code level で `body_not_perfect_pow_bridge` へ接続された。`body_not_perfect_pow` 側も GN valuation 上界の local `sorry` が消え、研究依存の責務が一段下の wrapper に整理された。
+4. 失敗事例:
+   - 初回では witness `t := x` の等式に `h_body` をそのまま使ってしまい、
+     `BodyN = u * GN` と `(u + y)^n - y^n` を取り違えて型不一致になった。
+   - `x^n + y^n = z^n` に `- y^n` を作用させる形へ直して解消した。
+5. 備考:
+   - `FLT.Basic.lean` には依然 `sorry` が 1 箇所残るが、責務は
+     「prime branch A / composite reduction の統合」
+     に縮退した。
+   - `DkMathTest.FLT` はユーザー方針どおり今回以降の mainline 作業では触っていない。
+6. 次の課題:
+   - `FLT_of_coprime` の残差 branch を、
+     - `Nat.Prime n ∧ n ∣ u` の Branch A,
+     - composite exponent reduction
+     に明示分解し、`sorry` を完全に局所化する。
+   - Branch A では gap-power 供給の既存 spine を lower layer へ切り出し、`Basic.lean` から依存循環なしに呼べる入口へ再配置する。
