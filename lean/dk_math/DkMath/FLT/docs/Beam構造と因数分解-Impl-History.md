@@ -451,3 +451,57 @@ head: 713f369
    - `lake build DkMath.NumberTheory.GcdNextResearch`
    - `lake build DkMath.FLT.Basic`
    を実行し、ビルド成功を確認した。
+
+### 日時: 2026/03/25 03:34 JST: valuation spine を helper 化し、`body_not_perfect_pow` を setup + helper 呼び出しへ圧縮
+
+1. 目的:
+   - 前回の「必要なら valuation 本体もさらに別 helper に切り出す」という方針を実施し、
+     `GcdNextResearch.body_not_perfect_pow` 自体を薄くする。
+2. 内容:
+   - `DkMath/NumberTheory/GcdNextResearch.lean`
+     に、valuation spine を分割した private helper を追加した。
+     - `primitive_prime_padic_bound_diff`
+     - `primitive_prime_padic_bound_GN`
+     - `primitive_prime_contradicts_diff_dth_power`
+   - 役割分担は次のとおり。
+     - `primitive_prime_padic_bound_diff`:
+       primitive prime から
+       `padicValNat q (a^d - b^d) ≤ 1`
+       を得る。
+     - `primitive_prime_padic_bound_GN`:
+       `primitive_prime_padic_eq_GN`
+       で GN 側 valuation 上界へ移す。
+     - `primitive_prime_contradicts_diff_dth_power`:
+       `a^d - b^d = t^d`
+       を仮定すると
+       `v_q(t^d) ≥ d`
+       と
+       `v_q(a^d - b^d) ≤ 1`
+       が衝突することをまとめる。
+   - `body_not_perfect_pow` 本体は、
+     - `a := x + u`, `b := u` への移送
+     - `primitive_prime_obstructs_GN_perfect_power` 呼び出し
+     - primitive prime の取得
+     - `heq_nat` の整形
+     のみを行い、最後は
+     `primitive_prime_contradicts_diff_dth_power`
+     を 1 回呼ぶ形へ圧縮した。
+   - これにより、旧来 theorem 本体に残っていた raw valuation 展開
+     （`q ∣ t^d`、`q ∣ t`、`padicValNat_pow`、GN 上界評価、`omega`）
+     は helper 側へ退避した。
+3. 結論:
+   - `body_not_perfect_pow` は「setup theorem」としてかなり薄くなった。
+   - 今後さらに整理するなら、`primitive_prime_contradicts_diff_dth_power`
+     を GN-side naming に寄せるか、`primitive_prime_padic_bound_GN`
+     を直接使う別 helper を追加するだけで済む。
+4. 検証:
+   - `lake build DkMath.NumberTheory.GcdNextResearch`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - 残る `sorry` は今回増えていない。
+   - 既存の research 層
+     `ZsigmondyCyclotomicResearch.lean`
+     と
+     `GcdNextResearch.lean`
+     の warning は継続。
