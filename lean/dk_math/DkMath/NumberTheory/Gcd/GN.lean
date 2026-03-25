@@ -27,6 +27,28 @@ theorem gcd_boundary_sd_divides_exp_int
     Int.gcd x (Sd (x + u) u d) ∣ d := by
   simpa using DkMath.NumberTheory.GcdNext.gcd_specialized_divides_d x u d hd hcop
 
+/-- `GN` は自然数から整数へのキャストと可換。 -/
+theorem gn_natCast_int
+    {d x u : ℕ} :
+    DkMath.CosmicFormulaBinom.GN d (x : ℤ) (u : ℤ) =
+      (DkMath.CosmicFormulaBinom.GN d x u : ℤ) := by
+  simp [DkMath.CosmicFormulaBinom.GN]
+
+/-- 自然数入力を整数へ持ち上げた `GN` の `natAbs` は自然数版 `GN` に戻る。 -/
+theorem natAbs_gn_natCast_int
+    {d x u : ℕ} :
+    (DkMath.CosmicFormulaBinom.GN d (x : ℤ) (u : ℤ)).natAbs =
+      DkMath.CosmicFormulaBinom.GN d x u := by
+  simpa [DkMath.CosmicFormulaBinom.GN] using
+    (Int.natAbs_natCast (DkMath.CosmicFormulaBinom.GN d x u))
+
+/-- `gap = z - y` の specialized `natAbs` 版。 -/
+theorem natAbs_gn_gap_natCast_int
+    {p z y : ℕ} :
+    (DkMath.CosmicFormulaBinom.GN p (((z - y : ℕ) : ℤ)) (y : ℤ)).natAbs =
+      DkMath.CosmicFormulaBinom.GN p (z - y) y := by
+  exact natAbs_gn_natCast_int (d := p) (x := z - y) (u := y)
+
 /-- `gap = z - y` と置くと、整数環の `GN` は差の冪和 `Sd z y p` と一致する。 -/
 theorem gn_sub_eq_sd_int
     {p z y : ℕ} (hp : 0 < p) (hyz : y < z) :
@@ -77,6 +99,18 @@ theorem gcd_gap_GN_dvd_exp_int
       (DkMath.NumberTheory.GcdDiffPow.gcd_divides_d (a := (z : ℤ)) (b := (y : ℤ)) (d := p) hp1 hab)
   rw [gn_sub_eq_sd_int hp1 hyz]
   exact hSd
+
+/-- `gcd(z - y, GN p (z - y) y)` の自然数版は `p` を割る。 -/
+theorem gcd_gap_GN_dvd_exp
+    {p z y : ℕ} (hp1 : 1 ≤ p) (hyz : y < z) (hcop : Nat.Coprime z y) :
+    Nat.gcd (z - y) (DkMath.CosmicFormulaBinom.GN p (z - y) y) ∣ p := by
+  have hgcd_int :
+      Int.gcd (((z - y : ℕ) : ℤ))
+        (DkMath.CosmicFormulaBinom.GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) ∣ p := by
+    exact gcd_gap_GN_dvd_exp_int (hp1 := hp1) (hyz := hyz) (hcop := hcop)
+  rw [Int.gcd_eq_natAbs] at hgcd_int
+  rw [natAbs_gn_gap_natCast_int] at hgcd_int
+  exact hgcd_int
 
 /-- `z` と `y` が互いに素で `p` が gap を割らなければ、`gap` と `GN` は互いに素。 -/
 theorem coprime_gap_GN_of_not_dvd_exp_prime
