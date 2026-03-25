@@ -590,3 +590,75 @@ Branch A / composite を攻めに行く。
      - shape を作る補題
      - shape を潰す補題
      の合成だけを行う配線係へ落とす。
+
+### 日時: 2026/03/25 16:29 JST: Branch A factorization spine を BranchA lower layer へ引き下ろし、残穴を witness-kernel 1 点へ局所化
+
+1. 目的:
+   - `primeGe5BranchARefuter_default` から証明本体を剥がし、
+     「shape-factorization の clean 実装」と
+     「shape-witness kernel」の分離を明示化する。
+   - `GapInvariant` 側にあった clean な Branch A factorization 数学を、
+     `Basic` 非依存の `TriominoCosmicBranchA.lean` 側へ戻す。
+2. 内容:
+   - `DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean` に、
+     Branch A の clean factorization spine を追加した。
+     - `PrimeGe5BranchANoSharedPrimeOnGNTarget`
+     - `primeGe5BranchANoSharedPrimeOnGN_math`
+     - `primeGe5BranchAShapeFactorization_ne_p_of_noShared`
+     - `primeGe5BranchAShapeFactorization_ne_p_default`
+     - `primeGe5BranchAPadicValNat_eq_one_of_dvd_not_sq`
+     - `primeGe5BranchAPadicValNat_gap_shape_of_mul_eq_pow`
+     - `primeGe5BranchAP_dvd_GN_and_not_sq_when_p_dvd_gap`
+     - `primeGe5BranchAShapeFactorization_p_of_padicValNat`
+     - `primeGe5BranchAShapeFactorization_p_default`
+     - `primeGe5BranchAShapeFactorization_default`
+   - これにより Branch A の
+     `q ≠ p` 側 / `q = p` 側 factorization 条件は、
+     `TriominoCosmicBranchA.lean` 単体で no-sorry 実装になった。
+   - さらに shape witness 受け口を lower layer に固定した。
+     - `primeGe5BranchAShapeWitness_powPred_dvd_gap`
+     - `PrimeGe5BranchAShapeWitnessDescentInput`
+     - `primeGe5BranchAShapeWitness_to_descent_input`
+     - `PrimeGe5BranchAShapeWitnessKernelTarget`
+     - `primeGe5BranchAShapeValueToRefuter_of_witness_kernel`
+     - `primeGe5BranchAShapeValueToRefuter_default`
+   - `primeGe5BranchARefuter_default` 自体は、
+     いまは
+     `primeGe5BranchAShapeFactorization_default`
+     と
+     `primeGe5BranchAShapeValueToRefuter_default`
+     を合成するだけの配線係になった。
+   - 残る `sorry` は
+     `primeGe5BranchAShapeWitnessKernel_default`
+     の 1 箇所へ移った。
+3. 結論:
+   - Branch A lower layer には、
+     - pack -> shape-factorization
+     - shape-factorization -> shape-value
+     - shape-value -> witness-kernel 入口
+     の spine が揃った。
+   - 以後の本当の未完核は
+     `PrimeGe5BranchAShapeWitnessKernelTarget`
+     を clean descent/shrink 数学で埋めることだけになった。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の warning は
+     `primeGe5BranchAShapeWitnessKernel_default`
+     の `sorry` 1 件のみ。
+   - `Basic.lean` 側の既存 `sorry` は
+     composite reduction residual の 1 件のまま。
+6. 次の課題:
+   - `primeGe5BranchAShapeWitnessKernel_default` を、
+     `PrimeGe5BranchAShapeWitnessDescentInput`
+     を受ける clean kernel へ置換する。
+   - その際は
+     `hInput.gapShape : z - y = p^(p-1) * t^p`
+     と
+     `hInput.powPredDvdGap : p^(p-1) ∣ z - y`
+     を使って、
+     pack の局所条件から shrink/descent witness あるいは直接矛盾を返す。
+   - `*_via_FLT` / `*_use_FLT` の残骸は、
+     以後この witness-kernel 差し替えで順に不要化する。
