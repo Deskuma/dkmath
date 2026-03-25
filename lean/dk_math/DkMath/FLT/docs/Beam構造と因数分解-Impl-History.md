@@ -526,3 +526,53 @@ Branch A / composite を攻めに行く。
 要するに、`Branch A` は基礎工事で、`composite` はその上の dispatcher です。先にやるべきは基礎工事です。
 
 ---
+
+### 日時: 2026/03/25 11:18 JST: Branch A clean kernel の lower-layer 抽出を開始
+
+1. 目的:
+   - `*_via_FLT` / `*_use_FLT` を外していくため、
+     まず Branch A の clean path を `Basic` 非依存の lower layer に切り出す。
+   - いきなり `primeGe5BranchARefuter_default` を閉じるのではなく、
+     `shape-factorization -> shape-value -> refuter` の責務分解を先に固定する。
+2. 内容:
+   - `DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean` に、Branch A 本線用の shape API を追加した。
+     - `PrimeGe5BranchAShapeFactorizationTarget`
+     - `PrimeGe5BranchAShapeValueTarget`
+     - `PrimeGe5BranchAShapeValueToRefuterTarget`
+   - clean な no-sorry 核として
+     `primeGe5BranchAShapeValue_of_factorization`
+     を実装した。
+     - これは `(z - y).factorization p = (p - 1) + p*m`
+       と
+       `q ≠ p` 側の指数整列から、
+       `z - y = p^(p-1) * t^p`
+       を直接再構成する。
+     - 実体は `exists_eq_pow_of_factorization_dvd`
+       と
+       `Nat.factorization_div`
+       を使う factorization 再構成であり、
+       `via_FLT` には依存しない。
+   - 合成補題
+     `primeGe5BranchARefuter_of_shape_pipeline`
+     も追加した。
+     - これで lower layer 側の残穴は
+       「shape-value をどう refute するか」
+       に絞られた。
+   - 既存の `primeGe5BranchARefuter_default` の `sorry` はまだ残しているが、
+     それが担う責務は以前よりかなり明確になった。
+3. 結論:
+   - Branch A の lower layer には、すでに no-sorry の
+     `shape-factorization -> shape-value`
+     spine が入った。
+   - 次に埋めるべきなのは
+     `PrimeGe5BranchAShapeValueToRefuterTarget`
+     に相当する clean descent/refuter kernel である。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` 側の `sorry` 数は増やしていない。
+   - 残る Branch A hole は
+     `primeGe5BranchARefuter_default`
+     の 1 箇所に留まっている。
