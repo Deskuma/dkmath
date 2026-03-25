@@ -505,3 +505,1218 @@ head: 713f369
      と
      `GcdNextResearch.lean`
      の warning は継続。
+
+### 次の攻め込み先
+
+Branch A / composite を攻めに行く。
+どちらが優先か？
+
+---
+
+`Branch A` を先に潰すべきです。
+
+理由は単純で、composite 側は既に [Basic.lean](/lean/dk_math/DkMath/FLT/Basic.lean#L594) の TODO に書いてある通り、最終的に prime exponent case へ縮約して `Branch A / Branch B helper` を再利用する構造です。つまり composite を先に攻めても、着地点は結局まだ未完の Branch A に戻ります。一方、`Branch A` は [TriominoCosmicBranchA.lean](/lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean#L49) に `sorry` が局所化されていて、[Basic.lean](/lean/dk_math/DkMath/FLT/Basic.lean#L557) の prime residual もそこだけを呼ぶ形になっています。
+
+順番としてはこれです。
+
+1. [TriominoCosmicBranchA.lean](/lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean#L49) の `primeGe5BranchARefuter_default` を埋める。
+2. それで [Basic.lean](/lean/dk_math/DkMath/FLT/Basic.lean#L557) の prime `n > 3` residual を実質完了させる。
+3. その後で composite reduction を「指数を prime/4 に落として既存 refuter へ投げる薄い補題」として閉じる。
+
+要するに、`Branch A` は基礎工事で、`composite` はその上の dispatcher です。先にやるべきは基礎工事です。
+
+---
+
+### 日時: 2026/03/25 11:18 JST: Branch A clean kernel の lower-layer 抽出を開始
+
+1. 目的:
+   - `*_via_FLT` / `*_use_FLT` を外していくため、
+     まず Branch A の clean path を `Basic` 非依存の lower layer に切り出す。
+   - いきなり `primeGe5BranchARefuter_default` を閉じるのではなく、
+     `shape-factorization -> shape-value -> refuter` の責務分解を先に固定する。
+2. 内容:
+   - `DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean` に、Branch A 本線用の shape API を追加した。
+     - `PrimeGe5BranchAShapeFactorizationTarget`
+     - `PrimeGe5BranchAShapeValueTarget`
+     - `PrimeGe5BranchAShapeValueToRefuterTarget`
+   - clean な no-sorry 核として
+     `primeGe5BranchAShapeValue_of_factorization`
+     を実装した。
+     - これは `(z - y).factorization p = (p - 1) + p*m`
+       と
+       `q ≠ p` 側の指数整列から、
+       `z - y = p^(p-1) * t^p`
+       を直接再構成する。
+     - 実体は `exists_eq_pow_of_factorization_dvd`
+       と
+       `Nat.factorization_div`
+       を使う factorization 再構成であり、
+       `via_FLT` には依存しない。
+   - 合成補題
+     `primeGe5BranchARefuter_of_shape_pipeline`
+     も追加した。
+     - これで lower layer 側の残穴は
+       「shape-value をどう refute するか」
+       に絞られた。
+   - 既存の `primeGe5BranchARefuter_default` の `sorry` はまだ残しているが、
+     それが担う責務は以前よりかなり明確になった。
+3. 結論:
+   - Branch A の lower layer には、すでに no-sorry の
+     `shape-factorization -> shape-value`
+     spine が入った。
+   - 次に埋めるべきなのは
+     `PrimeGe5BranchAShapeValueToRefuterTarget`
+     に相当する clean descent/refuter kernel である。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` 側の `sorry` 数は増やしていない。
+   - 残る Branch A hole は
+     `primeGe5BranchARefuter_default`
+     の 1 箇所に留まっている。
+6. 次の課題:
+   - `PrimeGe5BranchAShapeValueToRefuterTarget` を clean kernel として育てる。
+   - まず `u = p^(p-1) * t^p` から、
+     - `q ≠ p` 側は `p` 倍数指数、
+     - `q = p` 側は `(p - 1) mod p`
+     という shape-value の算術拘束を、値域形から読み直せる補題群として固定する。
+   - 次に `PrimeGe5CounterexamplePack` の局所条件
+     （互いに素性・大小関係・差の冪分解整合）
+     と shape-value を衝突させ、
+     FLT 本体を呼ばずに Branch A を refute する補題群へ分解する。
+   - 最終的に `primeGe5BranchARefuter_default` は、
+     - shape を作る補題
+     - shape を潰す補題
+     の合成だけを行う配線係へ落とす。
+
+### 日時: 2026/03/25 16:29 JST: Branch A factorization spine を BranchA lower layer へ引き下ろし、残穴を witness-kernel 1 点へ局所化
+
+1. 目的:
+   - `primeGe5BranchARefuter_default` から証明本体を剥がし、
+     「shape-factorization の clean 実装」と
+     「shape-witness kernel」の分離を明示化する。
+   - `GapInvariant` 側にあった clean な Branch A factorization 数学を、
+     `Basic` 非依存の `TriominoCosmicBranchA.lean` 側へ戻す。
+2. 内容:
+   - `DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean` に、
+     Branch A の clean factorization spine を追加した。
+     - `PrimeGe5BranchANoSharedPrimeOnGNTarget`
+     - `primeGe5BranchANoSharedPrimeOnGN_math`
+     - `primeGe5BranchAShapeFactorization_ne_p_of_noShared`
+     - `primeGe5BranchAShapeFactorization_ne_p_default`
+     - `primeGe5BranchAPadicValNat_eq_one_of_dvd_not_sq`
+     - `primeGe5BranchAPadicValNat_gap_shape_of_mul_eq_pow`
+     - `primeGe5BranchAP_dvd_GN_and_not_sq_when_p_dvd_gap`
+     - `primeGe5BranchAShapeFactorization_p_of_padicValNat`
+     - `primeGe5BranchAShapeFactorization_p_default`
+     - `primeGe5BranchAShapeFactorization_default`
+   - これにより Branch A の
+     `q ≠ p` 側 / `q = p` 側 factorization 条件は、
+     `TriominoCosmicBranchA.lean` 単体で no-sorry 実装になった。
+   - さらに shape witness 受け口を lower layer に固定した。
+     - `primeGe5BranchAShapeWitness_powPred_dvd_gap`
+     - `PrimeGe5BranchAShapeWitnessDescentInput`
+     - `primeGe5BranchAShapeWitness_to_descent_input`
+     - `PrimeGe5BranchAShapeWitnessKernelTarget`
+     - `primeGe5BranchAShapeValueToRefuter_of_witness_kernel`
+     - `primeGe5BranchAShapeValueToRefuter_default`
+   - `primeGe5BranchARefuter_default` 自体は、
+     いまは
+     `primeGe5BranchAShapeFactorization_default`
+     と
+     `primeGe5BranchAShapeValueToRefuter_default`
+     を合成するだけの配線係になった。
+   - 残る `sorry` は
+     `primeGe5BranchAShapeWitnessKernel_default`
+     の 1 箇所へ移った。
+3. 結論:
+   - Branch A lower layer には、
+     - pack -> shape-factorization
+     - shape-factorization -> shape-value
+     - shape-value -> witness-kernel 入口
+     の spine が揃った。
+   - 以後の本当の未完核は
+     `PrimeGe5BranchAShapeWitnessKernelTarget`
+     を clean descent/shrink 数学で埋めることだけになった。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の warning は
+     `primeGe5BranchAShapeWitnessKernel_default`
+     の `sorry` 1 件のみ。
+   - `Basic.lean` 側の既存 `sorry` は
+     composite reduction residual の 1 件のまま。
+6. 次の課題:
+   - `primeGe5BranchAShapeWitnessKernel_default` を、
+     `PrimeGe5BranchAShapeWitnessDescentInput`
+     を受ける clean kernel へ置換する。
+   - その際は
+     `hInput.gapShape : z - y = p^(p-1) * t^p`
+     と
+     `hInput.powPredDvdGap : p^(p-1) ∣ z - y`
+     を使って、
+     pack の局所条件から shrink/descent witness あるいは直接矛盾を返す。
+   - `*_via_FLT` / `*_use_FLT` の残骸は、
+     以後この witness-kernel 差し替えで順に不要化する。
+
+### 日時: 2026/03/25 17:06 JST: Branch A の `GN-shape` と normal form を lower layer に固定し、残穴を normal-form refuter へ押し込んだ
+
+1. 目的:
+   - `hint-001.md` / `plan-001.md` の方針に沿って、
+     Branch A の内部像を
+     `gap`, `GN`, `x`
+     の 3 つの normal form に落とす。
+   - `primeGe5BranchAShapeWitnessKernel_default` の残穴をさらに押し込み、
+     最終責務を
+     `normal form -> False`
+     の 1 点へ縮める。
+2. 内容:
+   - `DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean` に
+     `PrimeGe5BranchAGNShapeTarget`
+     を追加した。
+   - まず `q ≠ p` 側の `GN` 指数整列として
+     `primeGe5BranchAGN_factorization_ne_p_math`
+     を実装した。
+     - `x^p = gap * GN`
+       と
+       `gapNePNoSharedPrimeOnGN_branchA` 型の数学
+       を用いて、
+       `q ≠ p` のとき
+       `p ∣ (GN ...).factorization q`
+       を直接回収する。
+   - ついで
+     `primeGe5BranchAGN_eq_p_mul_pow_math`
+     を実装した。
+     - `p ∣ GN` かつ `¬ p^2 ∣ GN`
+       から `GN.factorization p = 1`
+       を得る。
+     - `w := GN / p` とおくと、
+       全ての素因子指数が `p` の倍数になるので、
+       `exists_eq_pow_of_factorization_dvd`
+       から
+       `GN = p * s^p`
+       を再構成する。
+   - さらに
+     `primeGe5BranchANormalForm_of_witness`
+     を実装した。
+     - witness
+       `z - y = p^(p-1) * t^p`
+       と
+       上の `GN = p * s^p`
+       を
+       `x^p = gap * GN`
+       に代入し、
+       `Nat.pow_left_injective`
+       で
+       `x = p * (t * s)`
+       を得る。
+   - 最後に
+     `PrimeGe5BranchANormalFormRefuterTarget`
+     と
+     `primeGe5BranchAShapeWitnessKernel_of_normalFormRefuter`
+     を追加した。
+     - これにより
+       `primeGe5BranchAShapeWitnessKernel_default`
+       は薄い橋になり、
+       残る `sorry` は
+       `primeGe5BranchANormalFormRefuter_default`
+       の 1 箇所へ移った。
+3. 結論:
+   - Branch A lower layer では、いまや内部像が
+     `(gap, GN, x) = (p^(p-1) * t^p, p * s^p, p * (t * s))`
+     まで固定できる。
+   - これで `via_FLT` 置換の本当の残穴は、
+     normal form を局所 gcd / valuation 衝突へ送る refuter のみになった。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormRefuter_default`
+     の 1 箇所のみ。
+   - `Basic.lean` 側の既存 `sorry` は
+     composite reduction residual の 1 箇所のまま。
+6. 次の課題:
+   - `primeGe5BranchANormalFormRefuter_default` を、
+     normal form
+     - `z - y = p^(p-1) * t^p`
+     - `GN p (z - y) y = p * s^p`
+     - `x = p * (t * s)`
+     を pack の局所条件へ衝突させる clean kernel に置換する。
+   - 第一候補は gcd exactness:
+     `gcd(gap, GN) = p * gcd(t, s)^p`
+     型評価を作り、
+     `gcd(gap, GN) ∣ p`
+     と衝突させて
+     `gcd(t, s) = 1`
+     を強制する路線。
+   - 第二候補は valuation dictionary:
+     `ν_q(x) = ν_q(t) + ν_q(s)` や `ν_p(x) = 1 + ν_p(t) + ν_p(s)`
+     を補題化し、pack の互いに素条件と組み合わせて局所矛盾へ落とす路線。
+
+### 日時: 2026/03/25 18:52 JST
+
+1. 目的:
+   - `hint-002.md` に沿って、
+     Branch A normal-form refuter の `gcd exactness` 路線をさらに具体化できるか確認する。
+   - 特に
+     `gcd(gap, GN) ∣ p`
+     の自然数 wrapper を lower layer へ下ろせるかを試す。
+2. 実施:
+   - 既存の
+     `primeGe5BranchANormalForm_p_mul_gcd_ts_pow_dvd_gcd_gap_GN`
+     と
+     `primeGe5BranchANormalForm_gcd_ts_eq_one_of_gcd_gap_GN_dvd_p`
+     が、
+     `hint-002` のいう「gcd exactness 下半身」として十分に機能していることを再確認した。
+   - そのうえで、
+     `DkMath.NumberTheory.Gcd.gcd_gap_GN_dvd_exp_int`
+     から
+     `Nat.gcd (z - y) (GN p (z - y) y) ∣ p`
+     を直接返す wrapper
+     `primeGe5BranchAGcdGapGNDvdP_default`
+     を試作した。
+   - しかしこの方針は、
+     `GN p (((z - y : ℕ) : ℤ)) (y : ℤ)` の `natAbs`
+     を
+     `GN p (z - y) y`
+     に戻す段で、
+     `↑(z - y)` と `↑z - ↑y`
+     の cast 正規化がまだ素直に揃わず、
+     no-sorry では閉じなかった。
+   - ワークスペースを壊さないため、
+     この concrete wrapper 試作は今回の差分からは戻し、
+     抽象 target
+     `PrimeGe5BranchAGcdGapGNDvdPTarget`
+     を残す形に維持した。
+3. 結論:
+   - `hint-002` の見立て自体は正しい。
+     Branch A の次の本筋は依然として
+     `gcd exactness -> gcd(t,s)=1 -> normal-form refuter`
+     である。
+   - ただし
+     `gcd_gap_GN_dvd_exp_int`
+     から自然数版 wrapper を直接降ろすには、
+     `GN` の cast / natAbs 正規化を別補題として先に固定するのが必要だと分かった。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、最終的にビルド成功を確認した。
+5. 備考:
+   - この時点で新しい no-sorry 定理は増えていない。
+   - `TriominoCosmicBranchA.lean` の `sorry` は引き続き
+     `primeGe5BranchANormalFormRefuter_default`
+     の 1 箇所のみ。
+6. 次の課題:
+   - `GN` の cast / natAbs 正規化だけを担う小補題
+     たとえば
+     `((GN p (((z - y : ℕ) : ℤ)) (y : ℤ)).natAbs = GN p (z - y) y)`
+     型
+     を、`NumberTheory.Gcd.GN` か `TriominoCosmicBranchA` の lower helper として独立に立てる。
+   - それが立ったら、
+     `primeGe5BranchAGcdGapGNDvdP_default`
+     を再挑戦し、
+     `primeGe5BranchANormalForm_gcd_ts_eq_one_default`
+     を concrete 化する。
+   - その先で、
+     `gcd(t,s)=1` と
+     `x = p * (t * s)`
+     を pack の局所条件へどう衝突させるかを normal-form refuter 本体で詰める。
+
+### 日時: 2026/03/25 19:27 JST
+
+1. 目的:
+   - 先に `GN` の cast / `natAbs` bridge を整備し、
+     Branch A の `gcd exactness` 路線を concrete theorem ベースへ戻す。
+2. 実施:
+   - `[DkMath.NumberTheory.Gcd.GN]` に、以下の bridge を追加した。
+     - `gn_natCast_int`
+     - `natAbs_gn_natCast_int`
+     - `natAbs_gn_gap_natCast_int`
+     - `gcd_gap_GN_dvd_exp`
+   - これにより、
+     既存の整数版
+     `gcd_gap_GN_dvd_exp_int`
+     から自然数版
+     `Nat.gcd (z - y) (GN p (z - y) y) ∣ p`
+     を直接引けるようになった。
+   - `[TriominoCosmicBranchA.lean]` では
+     `primeGe5BranchAGcdGapGNDvdP_default`
+     と
+     `primeGe5BranchANormalForm_gcd_ts_eq_one_default`
+     を追加し、
+     Branch A の gcd route を abstract target から concrete theorem 呼び出しへ下ろした。
+3. 結論:
+   - 以前に詰まっていた
+     `GN p (((z - y : ℕ) : ℤ)) (y : ℤ)` と
+     `GN p (z - y) y`
+     の橋は、少なくとも gcd 用の主経路では解消できた。
+   - これで Branch A では
+     `normal form -> gcd(gap, GN) ∣ p -> gcd(t,s)=1`
+     までが no-sorry の concrete spine になった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.Gcd.GN`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は引き続き
+     `primeGe5BranchANormalFormRefuter_default`
+     の 1 箇所のみ。
+   - `Basic.lean` 側の既存 `sorry` は
+     composite reduction residual の 1 箇所のまま。
+6. 次の課題:
+   - `primeGe5BranchANormalFormRefuter_default` の中で、
+     新しく concrete 化できた
+     `primeGe5BranchANormalForm_gcd_ts_eq_one_default`
+     を実際に使う。
+   - そのうえで
+     `gcd(t,s)=1` と
+     `x = p * (t * s)`
+     を pack の局所条件へどう衝突させるか、
+     局所 gcd 衝突か valuation dictionary のどちらで閉じるかを決める。
+
+### 日時: 2026/03/25 18:10 JST
+
+1. 目的:
+   - Branch A の `normal form -> False` をさらに薄くし、
+     既に no-sorry で抽出できる arithmetic facts だけを残核へ分離する。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に以下を追加した。
+     - `primeGe5BranchANormalForm_gcd_gap_GN_eq_p_default`
+     - `primeGe5BranchANormalForm_prime_not_dvd_s_default`
+     - `PrimeGe5BranchANormalFormArithmeticKernelTarget`
+     - `primeGe5BranchANormalFormRefuter_of_arithmetic_kernel`
+     - `primeGe5BranchANormalFormArithmeticKernel_default`
+   - これにより、
+     旧 `primeGe5BranchANormalFormRefuter_default`
+     の `sorry` を直接抱え込む形をやめ、
+     `gcd(gap, GN) = p`,
+     `t ⟂ s`,
+     `t ⟂ y`,
+     `s ⟂ y`,
+     `p ∤ s`
+     を渡すだけの thin bridge に差し替えた。
+3. 結論:
+   - Branch A の未完核は、
+     「normal form 全体」を受ける refuter ではなく、
+     `PrimeGe5BranchANormalFormArithmeticKernelTarget`
+     1 本に局所化された。
+   - 特に
+     `gcd(gap, GN) = p`
+     と
+     `p ∤ s`
+     が no-sorry の concrete theorem として取れたのは前進。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormArithmeticKernel_default`
+     の 1 箇所だけになった。
+   - `primeGe5BranchANormalFormRefuter_default`
+     自体はもう配線係であり、未完核ではない。
+   - `Basic.lean` 側の既存 `sorry` は
+     composite reduction residual の 1 箇所のまま。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormArithmeticKernelTarget`
+     の中で、
+     `hgcd_eq : gcd(gap, GN) = p`
+     と
+     `hp_not_dvd_s : ¬ p ∣ s`
+     を起点に、`Nat.Coprime p s` や `p ∤ y` を explicit helper 化する。
+   - その上で
+     `t ⟂ s`, `t ⟂ y`, `s ⟂ y`
+     を使う局所 gcd 衝突を first candidate として詰める。
+   - もし gcd だけで閉じなければ、
+     valuation dictionary を arithmetic kernel 専用 helper として追加する。
+
+### 日時: 2026/03/25 18:33 JST
+
+1. 目的:
+   - Review 003 を踏まえ、
+     `Nat.Coprime p s` と `¬ p ∣ y` を helper 化し、
+     arithmetic kernel の未完核をさらに下へ落とす。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に以下を追加した。
+     - `primeGe5BranchANormalForm_coprime_p_s_default`
+     - `primeGe5BranchANormalForm_prime_not_dvd_y_default`
+     - `primeGe5BranchANormalForm_coprime_p_y_default`
+     - `PrimeGe5BranchANormalFormLocalCoprimeKernelTarget`
+     - `primeGe5BranchANormalFormArithmeticKernel_of_localCoprimeKernel`
+     - `primeGe5BranchANormalFormLocalCoprimeKernel_default`
+   - これにより、
+     `PrimeGe5BranchANormalFormArithmeticKernel_default`
+     は local-coprime kernel への thin bridge になった。
+3. 結論:
+   - Branch A の未完核は、
+     arithmetic kernel からさらに
+     `PrimeGe5BranchANormalFormLocalCoprimeKernelTarget`
+     1 本へ縮んだ。
+   - いま kernel が explicit に持つ局所情報は
+     `gcd(gap, GN) = p`,
+     `t ⟂ s`,
+     `t ⟂ y`,
+     `s ⟂ y`,
+     `p ∤ s`,
+     `p ⟂ s`,
+     `p ∤ y`
+     である。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormLocalCoprimeKernel_default`
+     の 1 箇所だけになった。
+   - `primeGe5BranchANormalFormArithmeticKernel_default`
+     と
+     `primeGe5BranchANormalFormRefuter_default`
+     は now thin bridge である。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormLocalCoprimeKernelTarget`
+     の内部で、
+     `Nat.Coprime p s` と `¬ p ∣ y`
+     を使う最初の局所衝突を試す。
+   - 第一候補は、
+     `GN = p * s^p`
+     と
+     `s ⟂ y`, `p ⟂ s`, `p ∤ y`
+     をまとめて
+     `GN` と `y` の関係へ押し戻す gcd 路線。
+   - それで不足なら、
+     valuation dictionary をこの local-coprime kernel 専用 helper として足す。
+
+### 日時: 2026/03/25 18:59 JST
+
+1. 目的:
+   - `GN` 側へ局所情報を押し戻し、
+     `GN ⟂ y` を explicit helper にした kernel へ未完核をさらに局所化する。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に
+     `primeGe5BranchANormalForm_coprime_GN_right_default`
+     を追加した。
+     これは `x^p = gap * GN` と `x ⟂ y` から
+     `GN p (z - y) y ⟂ y`
+     を直接引く no-sorry helper。
+   - さらに
+     `PrimeGe5BranchANormalFormGNRightKernelTarget`
+     を新設し、
+     `primeGe5BranchANormalFormLocalCoprimeKernel_of_GNRightKernel`
+     と
+     `primeGe5BranchANormalFormGNRightKernel_default`
+     を追加した。
+   - これにより、
+     `LocalCoprimeKernel`
+     は `GN-side kernel` への thin bridge になった。
+3. 結論:
+   - Branch A の未完核は、
+     `PrimeGe5BranchANormalFormLocalCoprimeKernelTarget`
+     からさらに
+     `PrimeGe5BranchANormalFormGNRightKernelTarget`
+     1 本へ縮んだ。
+   - いま explicit に使える `GN` 側局所情報は
+     `GN = p * s^p`
+     と
+     `Nat.Coprime (GN p (z - y) y) y`
+     である。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormGNRightKernel_default`
+     の 1 箇所だけになった。
+   - `ArithmeticKernel` / `LocalCoprimeKernel` / `Refuter`
+     は now all thin bridge。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormGNRightKernelTarget`
+     の中で、
+     `GN = p * s^p`
+     と
+     `GN ⟂ y`
+     を主入口にした局所衝突を first candidate にする。
+   - 必要なら
+     `Nat.Coprime (p * s ^ p) y`
+     や
+     `padicValNat q (GN p (z - y) y)`
+     の small dictionary を追加する。
+   - `s ⟂ y`, `p ⟂ s`, `p ∤ y`
+     は GN-side kernel の補助入力として維持する。
+
+### 日時: 2026/03/25 19:12 JST
+
+1. 目的:
+   - `GN = p * s^p` を factor-level に展開し、
+     `GN ⟂ y` を `p * s^p ⟂ y` / `s^p ⟂ y` まで落とした kernel へ未完核をさらに局所化する。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に以下を追加した。
+     - `primeGe5BranchANormalForm_coprime_pspow_y_default`
+     - `primeGe5BranchANormalForm_coprime_spow_y_default`
+     - `PrimeGe5BranchANormalFormGNFactorKernelTarget`
+     - `primeGe5BranchANormalFormGNRightKernel_of_factorKernel`
+     - `primeGe5BranchANormalFormGNFactorKernel_default`
+   - これにより、
+     `GNRightKernel`
+     は `GNFactorKernel`
+     への thin bridge になった。
+3. 結論:
+   - Branch A の未完核は、
+     `PrimeGe5BranchANormalFormGNRightKernelTarget`
+     からさらに
+     `PrimeGe5BranchANormalFormGNFactorKernelTarget`
+     1 本へ縮んだ。
+   - いま explicit に使える factor-level 局所情報は
+     `Nat.Coprime (p * s ^ p) y`
+     と
+     `Nat.Coprime (s ^ p) y`
+     である。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormGNFactorKernel_default`
+     の 1 箇所だけになった。
+   - `GNRightKernel` / `LocalCoprimeKernel` / `ArithmeticKernel` / `Refuter`
+     は all thin bridge。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormGNFactorKernelTarget`
+     の中で、
+     `Nat.Coprime (p * s ^ p) y`
+     と
+     `Nat.Coprime (s ^ p) y`
+     からさらに
+     `Nat.Coprime p (s ^ p)` や
+     `Nat.Coprime (p * s) y`
+     を helper 化する。
+   - その上で factor-level exactness を使い、
+     `GN = p * s^p`
+     を起点にした最終局所衝突を試す。
+   - gcd だけで止まるなら、valuation dictionary を factor kernel 専用 helper として追加する。
+
+### 日時: 2026/03/25 19:18 JST
+
+1. 目的:
+   - factor-level helper をさらに linear-factor helper へ落とし、
+     `p * s` と `s^p` の局所情報で最後の kernel を書ける形へ近づける。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に以下を追加した。
+     - `primeGe5BranchANormalForm_coprime_p_spow_default`
+     - `primeGe5BranchANormalForm_coprime_ps_y_default`
+     - `PrimeGe5BranchANormalFormGNLinearFactorKernelTarget`
+     - `primeGe5BranchANormalFormGNFactorKernel_of_linearFactorKernel`
+     - `primeGe5BranchANormalFormGNLinearFactorKernel_default`
+   - これにより、
+     `GNFactorKernel`
+     は `GNLinearFactorKernel`
+     への thin bridge になった。
+3. 結論:
+   - Branch A の未完核は、
+     `PrimeGe5BranchANormalFormGNFactorKernelTarget`
+     からさらに
+     `PrimeGe5BranchANormalFormGNLinearFactorKernelTarget`
+     1 本へ縮んだ。
+   - いま explicit に使える linear/factor 辞書は
+     `Nat.Coprime p (s ^ p)`
+     と
+     `Nat.Coprime (p * s) y`
+     である。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormGNLinearFactorKernel_default`
+     の 1 箇所だけになった。
+   - `GNFactorKernel` / `GNRightKernel` / `LocalCoprimeKernel` / `ArithmeticKernel`
+     は all thin bridge。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormGNLinearFactorKernelTarget`
+     の中で、
+     `Nat.Coprime (p * s) y`
+     と
+     `x = p * (t * s)`
+     を合わせた線形因子側の exactness を first candidate として試す。
+   - 必要なら
+     `Nat.Coprime t (p * s)` や
+     `Nat.Coprime (p * s) (s ^ p)`
+     を helper 化する。
+   - それでも不足なら、valuation dictionary を linear-factor kernel 専用 helper として足す。
+
+### 日時: 2026/03/25 19:24 JST
+
+1. 目的:
+   - Review 004 の線形因子 exactness 路線に沿って、
+     `x` 側の線形分解辞書まで explicit に落とす。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に以下を追加した。
+     - `primeGe5BranchANormalForm_x_eq_t_mul_ps`
+     - `primeGe5BranchANormalForm_coprime_t_ps_default`
+     - `PrimeGe5BranchANormalFormXFactorKernelTarget`
+     - `primeGe5BranchANormalFormGNLinearFactorKernel_of_xFactorKernel`
+     - `primeGe5BranchANormalFormXFactorKernel_default`
+   - これにより、
+     `GNLinearFactorKernel`
+     は `XFactorKernel`
+     への thin bridge になった。
+3. 結論:
+   - Branch A の未完核は、
+     `PrimeGe5BranchANormalFormGNLinearFactorKernelTarget`
+     からさらに
+     `PrimeGe5BranchANormalFormXFactorKernelTarget`
+     1 本へ縮んだ。
+   - いま explicit に使える `x` 側線形辞書は
+     `x = t * (p * s)`
+     と
+     `Nat.Coprime (t * (p * s)) y`
+     である。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormXFactorKernel_default`
+     の 1 箇所だけになった。
+   - `GNLinearFactorKernel` / `GNFactorKernel` / `GNRightKernel` /
+     `LocalCoprimeKernel` / `ArithmeticKernel`
+     は all thin bridge。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormXFactorKernelTarget`
+     の中で、
+     `x = t * (p * s)` と
+     `Nat.Coprime (t * (p * s)) y`
+     を `x^p` 側 exactness に押し戻す。
+   - 必要なら
+     `Nat.Coprime t (p * s)` や
+     `Nat.Coprime (t * (p * s)) (s ^ p)`
+     を helper 化する。
+   - それでも足りなければ、valuation dictionary を x-factor kernel 専用 helper として追加する。
+
+### 日時: 2026/03/25 19:47 JST
+
+1. 目的:
+   - Review 005 の exactness 路線に沿って、
+     `XFactorKernel` の残核を
+     `x^p` 側 / `gap * GN` 側の比較核へさらに押し下げる。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に以下を追加した。
+     - `primeGe5BranchANormalForm_gapGN_eq_tps_pow`
+     - `primeGe5BranchANormalForm_gapGN_factorization_exact`
+     - `PrimeGe5BranchANormalFormPowComparisonKernelTarget`
+     - `primeGe5BranchANormalFormXPowExactKernel_of_powComparisonKernel`
+     - `primeGe5BranchANormalFormPowComparisonKernel_default`
+   - 既存の
+     `primeGe5BranchANormalForm_xpow_eq_tps_pow`
+     と
+     `primeGe5BranchANormalForm_xpow_factorization_exact`
+     は linter warning が出ない形へ微修正した。
+   - これにより、
+     `XPowExactKernel`
+     は `PowComparisonKernel`
+     への thin bridge になった。
+3. 結論:
+   - Branch A の未完核は、
+     `PrimeGe5BranchANormalFormXPowExactKernelTarget`
+     からさらに
+     `PrimeGe5BranchANormalFormPowComparisonKernelTarget`
+     1 本へ縮んだ。
+   - いま explicit に使える exactness 辞書は
+     `x ^ p = (t * (p * s)) ^ p`
+     と
+     `((z - y) * GN p (z - y) y) = (t * (p * s)) ^ p`
+     および両辺の factorization exactness である。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormPowComparisonKernel_default`
+     の 1 箇所だけになった。
+   - `XPowExactKernel` / `XFactorKernel` / `GNLinearFactorKernel` /
+     `GNFactorKernel` / `GNRightKernel` / `LocalCoprimeKernel` /
+     `ArithmeticKernel`
+     は all thin bridge。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormPowComparisonKernelTarget`
+     の中で、
+     `x^p` 側 exactness と `gap * GN` 側 exactness の比較から
+     本当の arithmetic obstruction を切り出す。
+   - 必要なら comparison kernel を
+     equality-part と factorization-part にさらに分解して、
+     どちらが本当の最終核かを見極める。
+   - それでも不足なら、
+     `x^p = gap * GN` 自体の pack 由来 exactness を
+     comparison 専用 helper として外出しする。
+
+### 日時: 2026/03/25 20:53 JST
+
+1. 目的:
+   - `PowComparisonKernel` を
+     equality-part / factorization-part
+     にさらに分解し、
+     本当の残核を指数比較側だけへ押し込める。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に以下を追加した。
+     - `PrimeGe5BranchANormalFormPowEqualityPartTarget`
+     - `PrimeGe5BranchANormalFormPowFactorizationPartTarget`
+     - `primeGe5BranchANormalFormPowComparisonKernel_of_parts`
+     - `primeGe5BranchANormalFormPowEqualityPart_default`
+     - `primeGe5BranchANormalFormPowFactorizationPart_default`
+   - `primeGe5BranchANormalFormPowComparisonKernel_default`
+     は上記 2 part の合成へ置き換えた。
+3. 結論:
+   - Branch A の未完核は、
+     `PrimeGe5BranchANormalFormPowComparisonKernelTarget`
+     からさらに
+     `PrimeGe5BranchANormalFormPowFactorizationPartTarget`
+     1 本へ縮んだ。
+   - equality-part は
+     pack 由来の
+     `x^p = gap * GN`
+     を explicit に戻す thin bridge として固定できた。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormPowFactorizationPart_default`
+     の 1 箇所だけになった。
+   - `PowComparisonKernel` / `PowEqualityPart` / `XPowExactKernel` /
+     `XFactorKernel` / `GNLinearFactorKernel` / `GNFactorKernel` /
+     `GNRightKernel` / `LocalCoprimeKernel` / `ArithmeticKernel`
+     は配線済み。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormPowFactorizationPartTarget`
+     の中で、
+     `x^p` 側 / `gap * GN` 側の factorization exactness を
+     prime ごとの指数比較に落とし込む。
+   - 必要なら
+     `hEq : x^p = gap * GN`
+     を特定素数 `q` の factorization 比較へ送る
+     comparison 専用 helper を足す。
+   - それでも不足なら、
+     factorization-part を
+     `q = p` / `q ≠ p`
+     の 2 核にさらに分ける。
+
+### 日時: 2026/03/25 20:58 JST
+
+1. 目的:
+   - factorization-part を
+     `q = p` / `q ≠ p`
+     の 2 核に分け、
+     valuation 側と no-shared 側の責務を完全に分離する。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に以下を追加した。
+     - `PrimeGe5BranchANormalFormPowFactorizationAtPTarget`
+     - `PrimeGe5BranchANormalFormPowFactorizationNePTarget`
+     - `primeGe5BranchANormalFormPowFactorizationPart_of_cases`
+     - `primeGe5BranchANormalFormPowFactorizationAtP_default`
+     - `primeGe5BranchANormalFormPowFactorizationNeP_default`
+   - `primeGe5BranchANormalFormPowFactorizationPart_default`
+     は上記 2 case の合成へ置き換えた。
+3. 結論:
+   - Branch A の未完核は、
+     `PrimeGe5BranchANormalFormPowFactorizationPartTarget`
+     からさらに
+     `PrimeGe5BranchANormalFormPowFactorizationAtPTarget`
+     と
+     `PrimeGe5BranchANormalFormPowFactorizationNePTarget`
+     の 2 箇所へ割れた。
+   - これで `q = p` 側は valuation/gcd exactness、
+     `q ≠ p` 側は no-shared/factorization spine
+     へ戻す方針が明示された。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormPowFactorizationAtP_default`
+     と
+     `primeGe5BranchANormalFormPowFactorizationNeP_default`
+     の 2 箇所になった。
+   - `PowFactorizationPart` / `PowComparisonKernel` / `PowEqualityPart` /
+     `XPowExactKernel` / `XFactorKernel`
+     は配線済み。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormPowFactorizationAtPTarget`
+     では、
+     `gap = p^(p-1) * t^p` と `GN = p * s^p`
+     の `p`-進指数比較を valuation exactness へ戻す。
+   - `PrimeGe5BranchANormalFormPowFactorizationNePTarget`
+     では、
+     `q ≠ p` の指数比較を
+     no-shared / shape-factorization spine
+     へ戻して contradiction へ繋ぐ。
+   - どちらか片側が自明化できるなら、
+     もう片側だけを真の最終核として再局所化する。
+
+### 日時: 2026/03/25 21:29 JST
+
+1. 目的:
+   - `q = p` 側を valuation 文脈へ、
+     `q ≠ p` 側を gap/GN の factorization spine へ戻し、
+     残核の数学責務をより直接に示す。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に以下を追加した。
+     - `PrimeGe5BranchANormalFormPowFactorizationAtPValuationTarget`
+     - `PrimeGe5BranchANormalFormPowFactorizationNePSpineTarget`
+     - `primeGe5BranchANormalFormPowFactorizationAtP_of_valuationKernel`
+     - `primeGe5BranchANormalFormPowFactorizationNeP_of_spineKernel`
+     - `primeGe5BranchANormalFormPowFactorizationAtPValuation_default`
+     - `primeGe5BranchANormalFormPowFactorizationNePSpine_default`
+   - `primeGe5BranchANormalFormPowFactorizationAtP_default`
+     と
+     `primeGe5BranchANormalFormPowFactorizationNeP_default`
+     は、それぞれ上記 bridge を経由する thin wrapper に置き換えた。
+3. 結論:
+   - Branch A の未完核は、
+     `PrimeGe5BranchANormalFormPowFactorizationAtPTarget`
+     から
+     `PrimeGe5BranchANormalFormPowFactorizationAtPValuationTarget`
+     へ、
+     `PrimeGe5BranchANormalFormPowFactorizationNePTarget`
+     から
+     `PrimeGe5BranchANormalFormPowFactorizationNePSpineTarget`
+     へ局所化された。
+   - これで
+     `q = p` 側は valuation/gcd exactness、
+     `q ≠ p` 側は no-shared / shape-factorization spine
+     に戻る責務であることが型の上でも明示された。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormPowFactorizationAtPValuation_default`
+     と
+     `primeGe5BranchANormalFormPowFactorizationNePSpine_default`
+     の 2 箇所になった。
+   - `PowFactorizationAtP` / `PowFactorizationNeP` /
+     `PowFactorizationPart` / `PowComparisonKernel`
+     は配線済み。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormPowFactorizationAtPValuationTarget`
+     では、
+     `padicValNat p (z - y)` と `padicValNat p (GN ...) = 1`
+     から `q = p` 側 obstruction が本当に出るかを見極める。
+   - `PrimeGe5BranchANormalFormPowFactorizationNePSpineTarget`
+     では、
+     `q ≠ p` の指数比較を
+     no-shared / factorization divisibility
+     へ戻して contradiction へ接続する。
+   - もし片側が単なる tautology なら、
+     もう片側だけを真の最終核として再設計する。
+
+### 日時: 2026/03/25 22:04 JST
+
+1. 目的:
+   - `q = p` 側が obstruction ではなく整合条件に過ぎない可能性を反映し、
+     factorization-part の mainline を `q ≠ p` 側へ寄せる。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に
+     `primeGe5BranchANormalFormPowFactorizationPart_of_neP`
+     を追加し、
+     factorization-part を `NeP` 側だけで閉じる bridge を作った。
+   - `primeGe5BranchANormalFormPowFactorizationPart_default`
+     は上記 bridge と
+     `primeGe5BranchANormalFormPowFactorizationNeP_default`
+     を使う形へ置き換えた。
+   - `primeGe5BranchANormalFormPowFactorizationAtPValuation_default`
+     と
+     `primeGe5BranchANormalFormPowFactorizationAtP_default`
+     は mainline から外した。
+3. 結論:
+   - Branch A の active 残核は、
+     `PrimeGe5BranchANormalFormPowFactorizationNePSpineTarget`
+     1 箇所まで縮んだ。
+   - `q = p` 側は現状、
+     最終矛盾の本体というより compatibility/valuation bookkeeping
+     と見るのが自然になった。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormPowFactorizationNePSpine_default`
+     の 1 箇所だけになった。
+   - `PowFactorizationPart` / `PowComparisonKernel` / `PowEqualityPart`
+     は mainline 配線済み。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormPowFactorizationNePSpineTarget`
+     の中で、
+     `q ≠ p` の指数比較を
+     no-shared / factorization divisibility
+     から contradiction へ接続する。
+   - 必要なら
+     `q ∣ gap` と `q ∣ GN` の排他を
+     comparison 専用 helper として独立化する。
+   - その結果 `q ≠ p` 側も tautology に見えるなら、
+     comparison-based refuter の設計自体を見直す。
+
+### 日時: 2026/03/25 22:09 JST
+
+1. 目的:
+   - `NeP` spine が現時点で少なくとも何を与えるかをコード上で固定し、
+     残る gap を「support separation からどう `False` へ行くか」へ狭める。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に以下を追加した。
+     - `primeGe5BranchANormalForm_neP_dvd_t_not_dvd_s`
+     - `primeGe5BranchANormalForm_neP_dvd_s_not_dvd_t`
+   - いずれも `q ≠ p`・prime `q` に対して、
+     `q ∣ gap` と `q ∣ GN` の no-shared を
+     `t` / `s` の素因子分離へ戻す helper である。
+3. 結論:
+   - `NeP` route はまず
+     「`q ≠ p` の素因子は `t` と `s` に同時には立たない」
+     ことを与える、と明確になった。
+   - したがって active 残核は、
+     この support separation からどう最終矛盾へ接続するか
+     1 点にかなり近づいた。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は変わらず
+     `primeGe5BranchANormalFormPowFactorizationNePSpine_default`
+     の 1 箇所だけである。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormPowFactorizationNePSpineTarget`
+     の中で、
+     上で切り出した support separation を
+     `False` へ送る追加局所条件が本当にあるかを見極める。
+   - もし support separation までしか出ないなら、
+     comparison-based refuter はここで止まり、
+     別の kernel へ設計転換すべきかを判断する。
+
+### 日時: 2026/03/25 22:15 JST
+
+1. 目的:
+   - `NePSpine_default` が実際に使っている情報だけを独立 target に切り出し、
+     comparison-based refuter の active 残核をより正直な形にする。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に
+     `PrimeGe5BranchANormalFormNePSupportKernelTarget`
+     を追加した。
+   - 同ファイルに
+     `primeGe5BranchANormalFormPowFactorizationNePSpine_of_supportKernel`
+     を追加し、
+     `NePSpineTarget` を support-separation kernel から閉じる
+     thin bridge に置き換えた。
+   - `primeGe5BranchANormalFormNePSupportKernel_default`
+     を新しい残核として立て、
+     `primeGe5BranchANormalFormPowFactorizationNePSpine_default`
+     はその橋にした。
+3. 結論:
+   - `q ≠ p` comparison route の active 残核は、
+     factorization exactness 全体ではなく
+     support separation だけを受ける
+     `PrimeGe5BranchANormalFormNePSupportKernelTarget`
+     1 本へさらに縮んだ。
+   - これにより、
+     `x^p` / `gap * GN` の equality や factorization exactness の大半は
+     `NeP` の最終核では未使用であることがコード上でも明示化された。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormNePSupportKernel_default`
+     の 1 箇所だけになった。
+   - 位置としては
+     comparison-based refuter の「本当に必要な情報は何か」を
+     確認するための final checkpoint になっている。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormNePSupportKernelTarget`
+     で受けている support separation が
+     `Nat.Coprime t s` の焼き直しに過ぎないかを精査する。
+   - もし焼き直しなら、
+     `NeP` comparison route 単独では `False` が出ないと判断し、
+     Branch A の最終 refuter を
+     descent / minimality / 別 arithmetic kernel
+     のどれへ切り替えるか決める。
+   - もし support separation からまだ新情報が引けるなら、
+     その一点だけを使う最小 helper を追加して
+     `NePSupportKernel_default` を埋める。
+
+### 日時: 2026/03/25 22:38 JST
+
+1. 目的:
+   - `NeP` support separation が本当に
+     `Nat.Coprime t s` の焼き直しかどうかを、
+     補題として明示的に証明する。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に
+     generic 補題
+     `prime_not_dvd_right_of_coprime_of_dvd_left`
+     を追加した。
+   - 同ファイルに
+     `primeGe5BranchANormalForm_neP_dvd_t_not_dvd_s_of_coprime`
+     と
+     `primeGe5BranchANormalForm_neP_dvd_s_not_dvd_t_of_coprime`
+     を追加し、
+     `q ≠ p` support separation は
+     `Nat.Coprime t s` だけで従うことを証明した。
+   - さらに
+     `PrimeGe5BranchANormalFormNePCoprimeKernelTarget`
+     と
+     `primeGe5BranchANormalFormNePSupportKernel_of_coprimeKernel`
+     を追加し、
+     active 残核を support-kernel から coprime-only checkpoint へ下ろした。
+3. 結論:
+   - `NeP` route の support separation は、
+     comparison exactness の新情報ではなく
+     `Nat.Coprime t s` の直接の帰結であることが証明できた。
+   - よって comparison-based refuter の active 残核は、
+     もはや `NeP` comparison ではなく
+     `PrimeGe5BranchANormalFormNePCoprimeKernelTarget`
+     1 本である。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormNePCoprimeKernel_default`
+     の 1 箇所だけになった。
+   - これは
+     「`NeP` comparison route ではこれ以上進まない」
+     ことをかなり強く示唆している。
+6. 次の課題:
+   - Branch A の最終 refuter を、
+     `NeP` comparison から離れて
+     descent / minimality / 別 arithmetic kernel
+     のどれへ切り替えるか決める。
+   - 既存の lower layer で再利用できる
+     minimality / shrink 契約があるかを確認し、
+     `PrimeGe5BranchANormalFormNePCoprimeKernelTarget`
+     の代替出口を設計する。
+   - もし local arithmetic で押し切る案を残すなら、
+     `Nat.Coprime t s` 単独ではなく
+     追加で何が必要かを最小入力として再定義する。
+
+### 日時: 2026/03/25 22:53 JST
+
+1. 目的:
+   - せっかく確定した
+     「support separation は `Nat.Coprime t s` の焼き直し」
+     という知見を、
+     左右同値の形で将来再利用しやすい定理へ仕上げる。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に
+     generic 定理
+     `coprime_iff_ne_p_support_separation_of_not_dvd_right`
+     を追加した。
+   - 同ファイルに
+     Branch A specialization
+     `primeGe5BranchANormalForm_neP_support_separation_iff_coprime`
+     を追加し、
+     `¬ p ∣ s` は
+     `primeGe5BranchANormalForm_prime_not_dvd_s_default`
+     から供給する形にした。
+3. 結論:
+   - `q ≠ p` の support separation は、
+     Branch A 文脈では
+     `Nat.Coprime t s`
+     と完全に同値であることが明示化された。
+   - これにより
+     「`NeP` route が comparison 由来の新 obstruction を与えている」
+     という可能性は、
+     かなりはっきり退いた。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は引き続き
+     `primeGe5BranchANormalFormNePCoprimeKernel_default`
+     の 1 箇所だけである。
+   - 今回の iff 定理は、
+     Branch A 固有の実装メモではなく
+     support/coprime 変換辞書として
+     将来の別ルートでも再利用できる。
+6. 次の課題:
+   - Branch A の最終 refuter を
+     `NeP` comparison から切り離し、
+     coprime-only checkpoint の先にある
+     minimality / descent / 別 arithmetic kernel
+     のどれへ接続するかを決める。
+   - 必要なら
+     `PrimeGe5BranchANormalFormNePCoprimeKernelTarget`
+     自体を、
+     新しい出口に合わせて
+     より具体的な target に置き換える。
+   - `review-007` の観点も踏まえ、
+     ここで comparison route を終了扱いにするかどうかを判断する。
+
+### 日時: 2026/03/25 23:13 JST
+
+1. 目的:
+   - 今回の `NeP` route 整理が
+     単なる行き止まり確認ではなく、
+     プロジェクト全体として前進であることを
+     将来向けに明記して残す。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` の以下の docstring に、
+     付録情報と refactor TODO を追記した。
+     - `coprime_iff_ne_p_support_separation_of_not_dvd_right`
+     - `primeGe5BranchANormalForm_neP_support_separation_iff_coprime`
+     - `primeGe5BranchANormalFormNePSupportKernel_of_coprimeKernel`
+     - `primeGe5BranchANormalFormNePCoprimeKernel_default`
+   - 履歴にも、今回の成果を
+     FLT 側・ABC 側の両方から読めるように記録した。
+3. 結論:
+   - 今回の収穫は
+     「Branch A が止まった」ことではなく、
+     `NeP` comparison route の情報量境界を
+     generic iff と coprime-only checkpoint の形で
+     コード化できたことにある。
+   - これは FLT では route 切替の判断材料になり、
+     ABC/Beam では support/rad 観測の辞書として
+     再利用可能な基盤になる。
+4. 検証:
+   - docstring と履歴追記のみであり、
+     直前の `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+     と
+     `lake build DkMath.FLT.Basic`
+     の成功状態を保持している。
+5. 備考:
+   - `analysis-009.md` の観点どおり、
+     今回の成果は ABC 側では
+     support-level 観測器の校正結果として価値が高い。
+   - `review-009.md` の観点どおり、
+     `NeP` comparison route の限界は
+     generic 定理と specialization により
+     十分に「知財化」できた。
+6. 次の課題:
+   - Branch A 本線では、
+     `PrimeGe5BranchANormalFormNePCoprimeKernelTarget`
+     の先を
+     descent / minimality / 別 arithmetic kernel
+     のいずれへ繋ぐかを決める。
+   - Beam 本来用途では、
+     support/coprime 辞書を
+     ABC 側の rad / valuation 観測へどう接続するかを
+     別タスクで設計する。
+   - refactor 観点では、
+     今回追加した generic iff と Branch A specialization を
+     将来どこまで utility 層へ引き上げるかを検討する。
