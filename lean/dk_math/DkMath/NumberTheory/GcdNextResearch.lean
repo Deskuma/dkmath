@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.GcdNext
+import DkMath.NumberTheory.PrimitiveBeam
 import DkMath.NumberTheory.ZsigmondyCyclotomicResearch
 
 set_option linter.style.emptyLine false
@@ -12,6 +13,7 @@ set_option linter.style.longLine false
 
 namespace DkMath.NumberTheory.GcdNext
 
+open DkMath.CosmicFormulaBinom
 open DkMath.SilverRatio.GcdAg  -- Phase 2: GcdAg 正規化関数を使用
 open DkMath.FLT.PetalDetect  -- Phase 3: φビット構造を使用
 
@@ -20,16 +22,112 @@ open DkMath.FLT.PetalDetect  -- Phase 3: φビット構造を使用
 **統合戦略（Zsigmondy 層A・層B + GcdAg + PetalDetect）**
 -/
 
+/-- Primitive prime factor gives the diff-side valuation upper bound. -/
+private lemma primitive_prime_padic_bound_diff
+    {a b d q : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b)
+    (hq : DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow q a b d) :
+    padicValNat q (a ^ d - b ^ d) ≤ 1 := by
+  have hq_prime : Nat.Prime q := hq.1
+  have hq_div_pow : q ∣ a ^ d - b ^ d := hq.2.1
+  have hd1 : 1 < d := by omega
+  have hq_ndiv_diff :
+      ¬ q ∣ a - b :=
+    DkMath.NumberTheory.PrimitiveBeam.primitive_prime_not_dvd_boundary hq hd1
+  by_cases hd3 : d = 3
+  · subst hd3
+    exact
+      DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one
+        (a := a) (b := b) (d := 3) (q := q)
+        Nat.prime_three
+        (by norm_num)
+        hab_lt
+        hb
+        hab
+        hpnd
+        hq_prime
+        hq_div_pow
+        hq_ndiv_diff
+  · have hd5 : 5 ≤ d := by
+      have hd_ne4 : d ≠ 4 := by
+        intro hd4
+        have : Nat.Prime 4 := by simpa [hd4] using hd_prime
+        exact (by decide : ¬ Nat.Prime 4) this
+      omega
+    exact
+      DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one
+        (a := a) (b := b) (d := d) (q := q)
+        hd_prime
+        hd_ge
+        hab_lt
+        hb
+        hab
+        hpnd
+        hq_prime
+        hq_div_pow
+        hq_ndiv_diff
+
+/-- Primitive prime factor gives the GN-side valuation upper bound. -/
+private lemma primitive_prime_padic_bound_GN
+    {a b d q : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b)
+    (hq : DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow q a b d) :
+    padicValNat q (GN d (a - b) b) ≤ 1 := by
+  have hd_pos : 0 < d := hd_prime.pos
+  have hd1 : 1 < d := by omega
+  have hpadic_eq_GN :
+      padicValNat q (a ^ d - b ^ d) = padicValNat q (GN d (a - b) b) :=
+    DkMath.NumberTheory.PrimitiveBeam.primitive_prime_padic_eq_GN hq hd_pos hd1 hab_lt
+  rw [← hpadic_eq_GN]
+  exact primitive_prime_padic_bound_diff hd_prime hd_ge hab_lt hb hab hpnd hq
+
+/-- A fixed primitive prime factor already contradicts `a^d - b^d = t^d`. -/
+private lemma primitive_prime_contradicts_diff_dth_power
+    {a b d q t : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b)
+    (hq : DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow q a b d)
+    (ht : 0 < t)
+    (heq : a ^ d - b ^ d = t ^ d) :
+    False := by
+  have hq_prime : Nat.Prime q := hq.1
+  have hq_div_pow : q ∣ a ^ d - b ^ d := hq.2.1
+  have hq_div_td : q ∣ t ^ d := by
+    rw [← heq]
+    exact hq_div_pow
+  have hq_div_t : q ∣ t := hq_prime.dvd_of_dvd_pow hq_div_td
+  have ht_ne : t ≠ 0 := Nat.ne_of_gt ht
+  have hvt_ge : 1 ≤ padicValNat q t :=
+    DkMath.ABC.padicValNat_one_le_of_prime_dvd hq_prime ht_ne hq_div_t
+  have hvtd_eq : padicValNat q (t ^ d) = d * padicValNat q t :=
+    DkMath.ABC.padicValNat_pow hq_prime d ht_ne
+  have hvtd_ge : d ≤ padicValNat q (t ^ d) := by
+    rw [hvtd_eq]
+    calc
+      d = d * 1 := (Nat.mul_one d).symm
+      _ ≤ d * padicValNat q t := Nat.mul_le_mul_left d hvt_ge
+  have hpadic_bound_diff : padicValNat q (a ^ d - b ^ d) ≤ 1 :=
+    primitive_prime_padic_bound_diff hd_prime hd_ge hab_lt hb hab hpnd hq
+  have hvað_eq : padicValNat q (a ^ d - b ^ d) = padicValNat q (t ^ d) := by
+    rw [heq]
+  omega
+
 /-- 目標定理：Body(x,u,d) は完全 d 乗にならない（d > 2）
 
 **証明構造（3層統合）:**
 
-1. **層A（存在層）**: ZsigmondyCyclotomic.exists_primitive_prime_factor_basic
-   - 原始素因子 q の存在を保証
-   - q ∣ a^d - b^d かつ q ∤ a - b
+1. **層A（存在層）**: `PrimitiveBeam.exists_primitive_prime_factor_as_prop`
+   - 原始素因子 q の存在を proposition API として保証
+   - `primitive_prime_dvd_GN` / `primitive_prime_padic_eq_GN` へ直結できる形に束ねる
 
 2. **層B（精密層）**: padicValNat 評価
-   - padicValNat q (a^d - b^d) ≤ 1 の上界
+   - `padicValNat q (GN d (a-b) b)` ≤ 1 の上界
+   - `primitive_prime_padic_eq_GN` により `padicValNat q (a^d - b^d)` へ戻す
    - GcdAg 正規化による 2進ノイズ除去
    - PetalDetect による (a+b) 核の排除
 
@@ -65,89 +163,29 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
   set a := x + u with ha_def
   set b := u with hb_def
 
-  -- (1) 基本分解：a^d - b^d = x * Sd(a,b,d)
-  have body_eq : (a : ℤ)^d - (b : ℤ)^d = (x : ℤ) * Sd a b d := by
-    have key := DkMath.Algebra.DiffPow.pow_sub_pow_factor (a : ℤ) (b : ℤ) d
-    have x_eq : (x : ℤ) = (a : ℤ) - (b : ℤ) := by omega
-    rw [x_eq]
-    exact key
-
-  -- (2) Zsigmondy の原始素因子定理を使用：原始素因子 q の存在
-  -- a = x + u > u = b （x > 0 より）、且つ coprime
+  -- (1) `a := x + u`, `b := u` へ仮定を移送する
   have hab_lt : b < a := by
     simp only [ha_def, hb_def]
     omega
   have hb_pos : 0 < b := hu
   have hab : Nat.Coprime a b := hcop
 
-  -- d が素数であることが仮定で与えられた
   have hd_ge : 3 ≤ d := by omega
 
-  -- ¬ d ∣ a - b を示す（これは ¬ d ∣ x と同じ）
   have hpnd_ab : ¬ d ∣ a - b := by
     have : a - b = x := by omega
     rw [this]
     exact hpnd
 
-  obtain ⟨q, hq_prime, hq_div_pow, hq_ndiv_diff⟩ :=
-    exists_primitive_prime_factor_prime hd_prime hd_ge hab_lt hb_pos hab hpnd_ab
+  have _hGN_not_pow :
+      ¬ ∃ s : ℕ, GN d (a - b) b = s ^ d := by
+    exact
+      DkMath.NumberTheory.PrimitiveBeam.primitive_prime_obstructs_GN_perfect_power
+        hd_prime hd_ge hab_lt hb_pos hab hpnd_ab
 
-  -- q ∣ a^d - b^d かつ q ∤ a - b = x
-  -- body_eq より a^d - b^d = x * Sd なので、q ∣ x * Sd
-  -- q ∤ x より q ∣ Sd
-
-  have hq_div_body : (q : ℤ) ∣ (a : ℤ)^d - (b : ℤ)^d := by
-    -- a^d ≥ b^d を示す
-    have hab_le : b ≤ a := by
-      simp only [ha_def, hb_def]; omega
-    have hab_pow : b^d ≤ a^d := Nat.pow_le_pow_left hab_le d
-    have : ((a^d - b^d : ℕ) : ℤ) = (a : ℤ)^d - (b : ℤ)^d := by
-      simp only [Nat.cast_sub hab_pow, Nat.cast_pow]
-    rw [← this]
-    exact Int.ofNat_dvd.mpr hq_div_pow
-
-  rw [body_eq] at hq_div_body
-
-  -- q ∣ x * Sd かつ q ∤ x なら q ∣ Sd
-  have hq_ndiv_x : ¬ (q : ℤ) ∣ (x : ℤ) := by
-    intro hdiv
-    apply hq_ndiv_diff
-    -- a - b = x を使う
-    have x_eq_ab : x = a - b := by omega
-    rw [← x_eq_ab]
-    exact Int.ofNat_dvd.mp hdiv
-
-  have hq_div_Sd : (q : ℤ) ∣ Sd a b d := by
-    -- 最初に hq_div_body を body_eq で書き換えて hq_div_prod を得る
-    have hq_div_prod : (q : ℤ) ∣ (x : ℤ) * Sd a b d :=
-      body_eq ▸ hq_div_body
-    -- q は素数で q ∣ x * Sd かつ q ∤ x なので q ∣ Sd
-    have hq_prime_int : Prime (q : ℤ) := Nat.prime_iff_prime_int.mp hq_prime
-    have : (q : ℤ) ∣ (x : ℤ) ∨ (q : ℤ) ∣ Sd a b d := hq_prime_int.dvd_mul.mp hq_div_prod
-    cases this with
-    | inl h => exfalso; exact hq_ndiv_x h
-    | inr h => exact h
-
-  -- (3) 矛盾を導く：p-adic valuation を使った完全冪判定
-  -- heq : (x+u)^d - u^d = t^d より a^d - b^d = t^d (ℕ での等式)
-  -- したがって padicValNat q (a^d - b^d) = padicValNat q (t^d)
-
-  -- q ∣ a^d - b^d を ℕ の可除性に変換
-  have hq_div_pow_nat : q ∣ a^d - b^d := by
-    have hab_pow_le : b^d ≤ a^d := by
-      have : b ≤ a := by omega
-      exact Nat.pow_le_pow_left this d
-    -- body_eq : (a : ℤ)^d - (b : ℤ)^d = (x : ℤ) * Sd a b d を使う
-    have hq_div_int : (q : ℤ) ∣ (a : ℤ)^d - (b : ℤ)^d := by
-      -- キャストを正規化
-      convert hq_div_body using 2
-      -- body_eq を適用
-      -- exact body_eq.symm
-    -- ℤ から ℕ に変換
-    have heq_cast : ((a^d - b^d : ℕ) : ℤ) = (a : ℤ)^d - (b : ℤ)^d := by
-      simp only [Nat.cast_sub hab_pow_le, Nat.cast_pow]
-    rw [← heq_cast] at hq_div_int
-    exact Int.ofNat_dvd.mp hq_div_int
+  obtain ⟨q, hq⟩ :=
+    DkMath.NumberTheory.PrimitiveBeam.exists_primitive_prime_factor_as_prop
+      hd_prime hd_ge hab_lt hb_pos hab hpnd_ab
 
   -- a^d - b^d = t^d を使う
   have heq_nat : a^d - b^d = t^d := by
@@ -158,106 +196,9 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
       _ = (x + u)^d - u^d := by simp only [ha_def, hb_def]
       _ = t^d := heq
 
-  -- したがって q ∣ t^d
-  have hq_div_td : q ∣ t^d := by
-    rw [← heq_nat]
-    exact hq_div_pow_nat
-
-  -- q は素数で q ∣ t^d なので q ∣ t
-  have hq_div_t : q ∣ t := by
-    -- q が素数で q ∣ t^d なら q ∣ t
-    -- Nat.Prime.dvd_of_dvd_pow を使う
-    exact hq_prime.dvd_of_dvd_pow hq_div_td
-
-  -- したがって padicValNat q t ≥ 1
-  have hvt_ge : 1 ≤ padicValNat q t := by
-    have ht_ne : t ≠ 0 := Nat.ne_of_gt ht
-    exact DkMath.ABC.padicValNat_one_le_of_prime_dvd hq_prime ht_ne hq_div_t
-
-  -- 新補題を使う：padicValNat q (t^d) = d * padicValNat q t
-  have ht_ne : t ≠ 0 := Nat.ne_of_gt ht
-  have hvtd_eq : padicValNat q (t^d) = d * padicValNat q t :=
-    DkMath.ABC.padicValNat_pow hq_prime d ht_ne
-
-  -- したがって padicValNat q (t^d) ≥ d ≥ 3
-  have hvtd_ge : d ≤ padicValNat q (t^d) := by
-    rw [hvtd_eq]
-    calc d
-      _ = d * 1 := (Nat.mul_one d).symm
-      _ ≤ d * padicValNat q t := Nat.mul_le_mul_left d hvt_ge
-
-  -- 一方、padicValNat q (a^d - b^d) = padicValNat q (t^d)
-  have hvad_eq : padicValNat q (a^d - b^d) = padicValNat q (t^d) := by
-    rw [heq_nat]
-
-  -- ========================================
-  -- 層B統合フック：padicValNat 上界評価
-  -- ========================================
-  --
-  -- 以下が完成すれば、矛盾導出が直ちに完了する形：
-  --
-  -- 命題：padicValNat q (a^d - b^d) ≤ 1  [← 層B補助補題から導出]
-  -- 対比：padicValNat q (t^d) ≥ d ≥ 3   [← 上記 hvtd_ge から導出]
-  -- 矛盾：hvad_eq より同じ値だが 1 ≥ 3 で矛盾！
-  --
-  -- 層B補助補題の実装により、以下が得られれば直ちに完成：
-  -- padicValNat q (a^d - b^d) ≤ 1
-
-  have hpadic_bound : padicValNat q (a^d - b^d) ≤ 1 := by
-    -- **Stage A（確実に埋まる部分）：d=3 の具体計算**
-    -- ZsigmondyCyclotomic.leanで既に padicValNat_d3_upper_bound が準備されている
-    -- これを使えば、d=3 の場合は 1) GcdNext直接埋め込み可能
-    --
-    -- 実装パターン（d=3の場合）:
-    --   obtain ⟨q, hpq, hq_div⟩ := hprime  -- 層Aから原始素因子 q
-    --   have := padicValNat_d3_upper_bound a b q hpq hab_lt hab_coprime h_Ag h_petal
-    --   exact this
-    --
-    -- **Stage B（研究テーマ）：一般 d への拡張**
-    -- d ≥ 5 の素数については、以下の統合が必要：
-    --
-    -- 1. **必要な理論梁**（層B補助補題）
-    --    - Lucas/Kummer定理による二項係数のpadicValNat評価
-    --    - 円分多項式 Φ_d(a/b) の因子分解
-    --    - Cosmic Formula: a^d - b^d = (a-b) · G_d(a,b)
-    --    - GcdAg正規化：π_Ag により 2進ノイズ除去
-    --    - PetalDetect φビット判定：(a+b) 位相限定
-    --
-    -- 2. **証明スケッチ（一般d）**
-    --    i) 層A: q | a^d - b^d ∧ q ∤ (a-b) より原始素因子 q の存在
-    --    ii) Cosmic Formula: a^d - b^d = (a-b) · G_d に分解
-    --    iii) q ∤ (a-b) より q | G_d（割り切りの推移）
-    --    iv) padicValNat_G_upper_bound により padicValNat q (G_d) ≤ d-1
-    --    v) padicValNat の乗法性により
-    --       padicValNat q (a^d - b^d) = padicValNat q (a-b) + padicValNat q (G_d)
-    --    vi) q ∤ (a-b) より padicValNat q (a-b) = 0
-    --    vii) したがって padicValNat q (a^d - b^d) ≤ d-1
-    --    viii) GcdAg+PetalDetect条件下で、さらに ≤ 1 に絞り込める
-    --
-    -- **実装ロードマップ**
-    -- Phase 4.1: d=3 での完全実装（現在）
-    -- Phase 4.2: d=5, 7 ... での個別検証
-    -- Phase 4.3: 一般化パターン認識→汎用補題化
-    --
-    -- **当ファイルでの即座の対応**
-    -- padicValNat_d3_upper_bound が available ならそれを呼ぶ
-    -- 一般 d については「存在形」に落として、次フェーズへ預ける
-    -- （NextWork.md Phase 1/2/3参照）
-    --
-    -- **検索対象（Mathlib/ZsigmondyCyclotomic/PetalDetect）**
-    -- - padicValNat_d3_upper_bound （ZsigmondyCyclotomic.leanで定義予定）
-    -- - Cosmic Formula分解：DkMath.Algebra.DiffPow
-    -- - Lucas/Kummer定理：ZsigmondyCyclotomic.lean
-    -- - GcdAg正規化：DkMath.SilverRatio.GcdAg
-    -- - PetalDetect検出器：DkMath.FLT.PetalDetect
-    --
-    -- [TODO] 一般次元 d > 3 での CosmicFormula `Body` が完全累乗数に
-    --        ならないことの証明。層B（Layer B）における p-adic 付値の上界評価を
-    --        GcdNextLayerB/Phase 4.2 として完全実装するまで保留。
-    sorry
-
-  -- 矛盾：padicValNat q (a^d - b^d) ≤ 1 だが ≥ d ≥ 3
-  omega
+  exact
+    primitive_prime_contradicts_diff_dth_power
+      hd_prime hd_ge hab_lt hb_pos hab hpnd_ab hq ht heq_nat
 
 /-! ### 6. 統合準備：GcdAg 正規化と PetalDetect 検出器
 
