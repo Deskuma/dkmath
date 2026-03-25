@@ -1348,6 +1348,68 @@ abbrev PrimeGe5BranchANormalFormPowComparisonKernelTarget : Prop :=
     False
 
 /--
+comparison kernel の equality-part。
+
+shared normal form から `x^p = gap * GN` へ戻すだけの薄い橋を明示分離する。
+-/
+abbrev PrimeGe5BranchANormalFormPowEqualityPartTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    x = t * (p * s) →
+    Nat.gcd (z - y) (GN p (z - y) y) = p →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    Nat.Coprime p s →
+    ¬ p ∣ y →
+    Nat.Coprime (GN p (z - y) y) y →
+    Nat.Coprime (p * s ^ p) y →
+    Nat.Coprime (s ^ p) y →
+    Nat.Coprime p (s ^ p) →
+    Nat.Coprime (p * s) y →
+    Nat.Coprime (t * (p * s)) y →
+    x ^ p = (t * (p * s)) ^ p →
+    (z - y) * GN p (z - y) y = (t * (p * s)) ^ p →
+    x ^ p = (z - y) * GN p (z - y) y
+
+/--
+comparison kernel の factorization-part。
+
+equality-part で `x^p = gap * GN` を回収した後、指数比較だけに集中する。
+-/
+abbrev PrimeGe5BranchANormalFormPowFactorizationPartTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    x = t * (p * s) →
+    Nat.gcd (z - y) (GN p (z - y) y) = p →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    Nat.Coprime p s →
+    ¬ p ∣ y →
+    Nat.Coprime (GN p (z - y) y) y →
+    Nat.Coprime (p * s ^ p) y →
+    Nat.Coprime (s ^ p) y →
+    Nat.Coprime p (s ^ p) →
+    Nat.Coprime (p * s) y →
+    Nat.Coprime (t * (p * s)) y →
+    x ^ p = (t * (p * s)) ^ p →
+    (∀ q : ℕ, (x ^ p).factorization q = p * (t * (p * s)).factorization q) →
+    (z - y) * GN p (z - y) y = (t * (p * s)) ^ p →
+    (∀ q : ℕ, ((z - y) * GN p (z - y) y).factorization q =
+      p * (t * (p * s)).factorization q) →
+    x ^ p = (z - y) * GN p (z - y) y →
+    False
+
+/--
 shape-value refuter は、最終的には witness-kernel 1 本の注入へ還元する。
 -/
 theorem primeGe5BranchAShapeValueToRefuter_of_witness_kernel
@@ -1469,14 +1531,60 @@ theorem primeGe5BranchANormalFormXPowExactKernel_of_powComparisonKernel
     (fun q => primeGe5BranchANormalForm_gapGN_factorization_exact hpack hp_dvd_gap hgap hsGN)
 
 /--
-X-pow exact kernel の実装入口。
-
-ここでは `x^p = (t * (p * s))^p` と factorization exactness まで explicit に受け、
-最後の `x^p` 側衝突だけを残す。
+equality-part と factorization-part が揃えば、comparison kernel は橋だけで閉じる。
 -/
-theorem primeGe5BranchANormalFormPowComparisonKernel_default :
+theorem primeGe5BranchANormalFormPowComparisonKernel_of_parts
+    (hEqPart : PrimeGe5BranchANormalFormPowEqualityPartTarget)
+    (hFacPart : PrimeGe5BranchANormalFormPowFactorizationPartTarget) :
     PrimeGe5BranchANormalFormPowComparisonKernelTarget := by
-  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hx_tps hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s hp_cop_ps hp_not_dvd_y hp_cop_GNy hp_cop_pspow_y hp_cop_spow_y hp_cop_pspow hp_cop_ps_y hp_cop_tps_y hxpow_tps hfac_xpow
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hx_tps hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s hp_cop_ps hp_not_dvd_y hp_cop_GNy hp_cop_pspow_y hp_cop_spow_y hp_cop_pspow hp_cop_ps_y hp_cop_tps_y hxpow_tps hfac_xpow hgapGN_tps hfac_gapGN
+  have hEq :
+      x ^ p = (z - y) * GN p (z - y) y :=
+    hEqPart hpack hp_dvd_gap hgap hsGN hsx hx_tps hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s hp_cop_ps hp_not_dvd_y hp_cop_GNy hp_cop_pspow_y hp_cop_spow_y hp_cop_pspow hp_cop_ps_y hp_cop_tps_y hxpow_tps hgapGN_tps
+  exact hFacPart hpack hp_dvd_gap hgap hsGN hsx hx_tps hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s hp_cop_ps hp_not_dvd_y hp_cop_GNy hp_cop_pspow_y hp_cop_spow_y hp_cop_pspow hp_cop_ps_y hp_cop_tps_y hxpow_tps hfac_xpow hgapGN_tps hfac_gapGN hEq
+
+/--
+comparison kernel の equality-part 実装入口。
+
+ここは obstruction ではなく、pack 由来の `x^p = gap * GN` を
+explicit に戻すだけの薄い橋である。
+-/
+theorem primeGe5BranchANormalFormPowEqualityPart_default :
+    PrimeGe5BranchANormalFormPowEqualityPartTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hx_tps hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s hp_cop_ps hp_not_dvd_y hp_cop_GNy hp_cop_pspow_y hp_cop_spow_y hp_cop_pspow hp_cop_ps_y hp_cop_tps_y hxpow_tps hgapGN_tps
+  let _ := t
+  let _ := s
+  let _ := hp_dvd_gap
+  let _ := hgap
+  let _ := hsGN
+  let _ := hsx
+  let _ := hx_tps
+  let _ := hgcd_eq
+  let _ := hp_cop_ts
+  let _ := hp_cop_ty
+  let _ := hp_cop_sy
+  let _ := hp_not_dvd_s
+  let _ := hp_cop_ps
+  let _ := hp_not_dvd_y
+  let _ := hp_cop_GNy
+  let _ := hp_cop_pspow_y
+  let _ := hp_cop_spow_y
+  let _ := hp_cop_pspow
+  let _ := hp_cop_ps_y
+  let _ := hp_cop_tps_y
+  let _ := hxpow_tps
+  let _ := hgapGN_tps
+  simpa [PrimeGe5CounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
+
+/--
+comparison kernel の factorization-part 実装入口。
+
+ここでは prime ごとの指数比較だけを残し、
+comparison の本当の算術 obstruction を 1 点へ集約する。
+-/
+theorem primeGe5BranchANormalFormPowFactorizationPart_default :
+    PrimeGe5BranchANormalFormPowFactorizationPartTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hx_tps hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s hp_cop_ps hp_not_dvd_y hp_cop_GNy hp_cop_pspow_y hp_cop_spow_y hp_cop_pspow hp_cop_ps_y hp_cop_tps_y hxpow_tps hfac_xpow hgapGN_tps hfac_gapGN hEq
   let _ := p
   let _ := x
   let _ := y
@@ -1504,16 +1612,29 @@ theorem primeGe5BranchANormalFormPowComparisonKernel_default :
   let _ := hp_cop_tps_y
   let _ := hxpow_tps
   let _ := hfac_xpow
-  let _ := primeGe5BranchANormalForm_gapGN_eq_tps_pow hpack hp_dvd_gap hgap hsGN
-  let _ := fun q => primeGe5BranchANormalForm_gapGN_factorization_exact hpack hp_dvd_gap hgap hsGN (q := q)
+  let _ := hgapGN_tps
+  let _ := hfac_gapGN
+  let _ := hEq
   /-
   TODO:
-  1. `x^p` 側 / `gap * GN` 側の exactness を比較し、
-     どこが本当の arithmetic obstruction かをさらに切り出す。
-  2. 必要なら equality と factorization を分けて、
-     comparison kernel をもう一段 thin bridge 化する。
+  1. `x^p` 側 / `gap * GN` 側の factorization exactness を prime ごとに比較し、
+     本当の arithmetic obstruction を切り出す。
+  2. 必要なら equality-part の `hEq` を特定素数の指数比較へ流し込む
+     helper を足す。
   -/
   sorry
+
+/--
+X-pow exact kernel の実装入口。
+
+ここでは `x^p = (t * (p * s))^p` と factorization exactness まで explicit に受け、
+最後の `x^p` 側衝突だけを残す。
+-/
+theorem primeGe5BranchANormalFormPowComparisonKernel_default :
+    PrimeGe5BranchANormalFormPowComparisonKernelTarget := by
+  exact primeGe5BranchANormalFormPowComparisonKernel_of_parts
+    primeGe5BranchANormalFormPowEqualityPart_default
+    primeGe5BranchANormalFormPowFactorizationPart_default
 
 /--
 X-pow exact kernel の実装入口。

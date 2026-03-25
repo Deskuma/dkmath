@@ -1053,6 +1053,7 @@ Branch A / composite を攻めに行く。
      は GN-side kernel の補助入力として維持する。
 
 ### 日時: 2026/03/25 19:12 JST
+
 1. 目的:
    - `GN = p * s^p` を factor-level に展開し、
      `GN ⟂ y` を `p * s^p ⟂ y` / `s^p ⟂ y` まで落とした kernel へ未完核をさらに局所化する。
@@ -1104,6 +1105,7 @@ Branch A / composite を攻めに行く。
    - gcd だけで止まるなら、valuation dictionary を factor kernel 専用 helper として追加する。
 
 ### 日時: 2026/03/25 19:18 JST
+
 1. 目的:
    - factor-level helper をさらに linear-factor helper へ落とし、
      `p * s` と `s^p` の局所情報で最後の kernel を書ける形へ近づける。
@@ -1153,6 +1155,7 @@ Branch A / composite を攻めに行く。
    - それでも不足なら、valuation dictionary を linear-factor kernel 専用 helper として足す。
 
 ### 日時: 2026/03/25 19:24 JST
+
 1. 目的:
    - Review 004 の線形因子 exactness 路線に沿って、
      `x` 側の線形分解辞書まで explicit に落とす。
@@ -1202,6 +1205,7 @@ Branch A / composite を攻めに行く。
    - それでも足りなければ、valuation dictionary を x-factor kernel 専用 helper として追加する。
 
 ### 日時: 2026/03/25 19:47 JST
+
 1. 目的:
    - Review 005 の exactness 路線に沿って、
      `XFactorKernel` の残核を
@@ -1256,3 +1260,55 @@ Branch A / composite を攻めに行く。
    - それでも不足なら、
      `x^p = gap * GN` 自体の pack 由来 exactness を
      comparison 専用 helper として外出しする。
+
+### 日時: 2026/03/25 20:53 JST
+
+1. 目的:
+   - `PowComparisonKernel` を
+     equality-part / factorization-part
+     にさらに分解し、
+     本当の残核を指数比較側だけへ押し込める。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に以下を追加した。
+     - `PrimeGe5BranchANormalFormPowEqualityPartTarget`
+     - `PrimeGe5BranchANormalFormPowFactorizationPartTarget`
+     - `primeGe5BranchANormalFormPowComparisonKernel_of_parts`
+     - `primeGe5BranchANormalFormPowEqualityPart_default`
+     - `primeGe5BranchANormalFormPowFactorizationPart_default`
+   - `primeGe5BranchANormalFormPowComparisonKernel_default`
+     は上記 2 part の合成へ置き換えた。
+3. 結論:
+   - Branch A の未完核は、
+     `PrimeGe5BranchANormalFormPowComparisonKernelTarget`
+     からさらに
+     `PrimeGe5BranchANormalFormPowFactorizationPartTarget`
+     1 本へ縮んだ。
+   - equality-part は
+     pack 由来の
+     `x^p = gap * GN`
+     を explicit に戻す thin bridge として固定できた。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormPowFactorizationPart_default`
+     の 1 箇所だけになった。
+   - `PowComparisonKernel` / `PowEqualityPart` / `XPowExactKernel` /
+     `XFactorKernel` / `GNLinearFactorKernel` / `GNFactorKernel` /
+     `GNRightKernel` / `LocalCoprimeKernel` / `ArithmeticKernel`
+     は配線済み。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormPowFactorizationPartTarget`
+     の中で、
+     `x^p` 側 / `gap * GN` 側の factorization exactness を
+     prime ごとの指数比較に落とし込む。
+   - 必要なら
+     `hEq : x^p = gap * GN`
+     を特定素数 `q` の factorization 比較へ送る
+     comparison 専用 helper を足す。
+   - それでも不足なら、
+     factorization-part を
+     `q = p` / `q ≠ p`
+     の 2 核にさらに分ける。
