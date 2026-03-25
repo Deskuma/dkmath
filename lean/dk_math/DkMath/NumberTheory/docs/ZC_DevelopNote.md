@@ -136,7 +136,7 @@ lemma exists_primitive_prime_factor_basic
 
    ```lean
    /-- d=3 での精密評価（追加条件付き：non-Wieferich など） -/
-   lemma padicValNat_eq_one_if_condition {a b q : ℕ} 
+   lemma padicValNat_eq_one_if_condition {a b q : ℕ}
        (h_condition : ...) : padicValNat q (...) = 1 := by
    ```
 

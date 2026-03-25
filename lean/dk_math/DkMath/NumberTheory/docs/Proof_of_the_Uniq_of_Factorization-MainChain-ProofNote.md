@@ -121,10 +121,10 @@ valuation 法則を生むこと自体ではなく、
 
 概念的には次の連鎖である。
 
-1. GN 構造から層別比較入力を得る  
-2. valuation ↔ prime-power の橋で比較を正規化  
-3. 例外層/非例外層を合成  
-4. prime-power 全一致へ到達  
+1. GN 構造から層別比較入力を得る
+2. valuation ↔ prime-power の橋で比較を正規化
+3. 例外層/非例外層を合成
+4. prime-power 全一致へ到達
 5. 核定理で `m = n`
 
 ---
