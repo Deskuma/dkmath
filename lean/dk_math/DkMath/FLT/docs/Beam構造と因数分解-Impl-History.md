@@ -933,3 +933,59 @@ Branch A / composite を攻めに行く。
      を使う局所 gcd 衝突を first candidate として詰める。
    - もし gcd だけで閉じなければ、
      valuation dictionary を arithmetic kernel 専用 helper として追加する。
+
+### 日時: 2026/03/25 18:33 JST
+1. 目的:
+   - Review 003 を踏まえ、
+     `Nat.Coprime p s` と `¬ p ∣ y` を helper 化し、
+     arithmetic kernel の未完核をさらに下へ落とす。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に以下を追加した。
+     - `primeGe5BranchANormalForm_coprime_p_s_default`
+     - `primeGe5BranchANormalForm_prime_not_dvd_y_default`
+     - `primeGe5BranchANormalForm_coprime_p_y_default`
+     - `PrimeGe5BranchANormalFormLocalCoprimeKernelTarget`
+     - `primeGe5BranchANormalFormArithmeticKernel_of_localCoprimeKernel`
+     - `primeGe5BranchANormalFormLocalCoprimeKernel_default`
+   - これにより、
+     `PrimeGe5BranchANormalFormArithmeticKernel_default`
+     は local-coprime kernel への thin bridge になった。
+3. 結論:
+   - Branch A の未完核は、
+     arithmetic kernel からさらに
+     `PrimeGe5BranchANormalFormLocalCoprimeKernelTarget`
+     1 本へ縮んだ。
+   - いま kernel が explicit に持つ局所情報は
+     `gcd(gap, GN) = p`,
+     `t ⟂ s`,
+     `t ⟂ y`,
+     `s ⟂ y`,
+     `p ∤ s`,
+     `p ⟂ s`,
+     `p ∤ y`
+     である。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormLocalCoprimeKernel_default`
+     の 1 箇所だけになった。
+   - `primeGe5BranchANormalFormArithmeticKernel_default`
+     と
+     `primeGe5BranchANormalFormRefuter_default`
+     は now thin bridge である。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormLocalCoprimeKernelTarget`
+     の内部で、
+     `Nat.Coprime p s` と `¬ p ∣ y`
+     を使う最初の局所衝突を試す。
+   - 第一候補は、
+     `GN = p * s^p`
+     と
+     `s ⟂ y`, `p ⟂ s`, `p ∤ y`
+     をまとめて
+     `GN` と `y` の関係へ押し戻す gcd 路線。
+   - それで不足なら、
+     valuation dictionary をこの local-coprime kernel 専用 helper として足す。

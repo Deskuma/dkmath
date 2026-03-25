@@ -878,6 +878,41 @@ theorem primeGe5BranchANormalForm_prime_not_dvd_s_default
     simpa [pow_two, Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm] using hmul
   exact hGN_not_sq hp2_dvd_GN
 
+/--
+`p ∤ s` が取れれば、素数性から `p ⟂ s` へ直ちに上げられる。
+-/
+theorem primeGe5BranchANormalForm_coprime_p_s_default
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    Nat.Coprime p s := by
+  exact (Nat.Prime.coprime_iff_not_dvd hpack.hp).2
+    (primeGe5BranchANormalForm_prime_not_dvd_s_default hpack hp_dvd_gap hgap hsGN)
+
+/--
+Branch A では `p ∣ gap` と `gap ⟂ y` から `p ∤ y` が従う。
+-/
+theorem primeGe5BranchANormalForm_prime_not_dvd_y_default
+    {p x y z : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y)) :
+    ¬ p ∣ y := by
+  simpa [PrimeGe5CounterexamplePack.gap] using
+    hpack.prime_not_dvd_right_of_prime_dvd_gap hp_dvd_gap
+
+/--
+`p ∤ y` も、素数性から `p ⟂ y` の形へ上げておける。
+-/
+theorem primeGe5BranchANormalForm_coprime_p_y_default
+    {p x y z : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y)) :
+    Nat.Coprime p y := by
+  exact (Nat.Prime.coprime_iff_not_dvd hpack.hp).2
+    (primeGe5BranchANormalForm_prime_not_dvd_y_default hpack hp_dvd_gap)
+
 /-- Branch A の shape witness から `p^(p-1) ∣ z-y` を回収する。 -/
 lemma primeGe5BranchAShapeWitness_powPred_dvd_gap
     {p y z t : ℕ}
@@ -951,6 +986,27 @@ abbrev PrimeGe5BranchANormalFormArithmeticKernelTarget : Prop :=
     False
 
 /--
+arithmetic kernel のさらに下の局所差し替え口。
+
+`p ⟂ s` と `p ∤ y` まで明示入力にして、
+最後の衝突だけへ責務をさらに寄せる。
+-/
+abbrev PrimeGe5BranchANormalFormLocalCoprimeKernelTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.gcd (z - y) (GN p (z - y) y) = p →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    Nat.Coprime p s →
+    ¬ p ∣ y →
+    False
+
+/--
 shape-value refuter は、最終的には witness-kernel 1 本の注入へ還元する。
 -/
 theorem primeGe5BranchAShapeValueToRefuter_of_witness_kernel
@@ -987,14 +1043,26 @@ theorem primeGe5BranchANormalFormRefuter_of_arithmetic_kernel
     (primeGe5BranchANormalForm_prime_not_dvd_s_default hpack hp_dvd_gap hgap hsGN)
 
 /--
-Branch A arithmetic kernel の実装入口。
-
-未完核を normal form そのものから切り離し、
-抽出済みの算術拘束だけへ局所化する。
+arithmetic kernel は、`p ⟂ s` と `p ∤ y` を明示入力にした
+さらに小さい local kernel へ reduce できる。
 -/
-theorem primeGe5BranchANormalFormArithmeticKernel_default :
+theorem primeGe5BranchANormalFormArithmeticKernel_of_localCoprimeKernel
+    (hKernel : PrimeGe5BranchANormalFormLocalCoprimeKernelTarget) :
     PrimeGe5BranchANormalFormArithmeticKernelTarget := by
   intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s
+  exact hKernel hpack hp_dvd_gap hgap hsGN hsx hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s
+    (primeGe5BranchANormalForm_coprime_p_s_default hpack hp_dvd_gap hgap hsGN)
+    (primeGe5BranchANormalForm_prime_not_dvd_y_default hpack hp_dvd_gap)
+
+/--
+local coprime kernel の実装入口。
+
+ここでは `p ⟂ s` と `p ∤ y` まで explicit に並べた上で、
+最後の局所 gcd / valuation 衝突だけを扱う。
+-/
+theorem primeGe5BranchANormalFormLocalCoprimeKernel_default :
+    PrimeGe5BranchANormalFormLocalCoprimeKernelTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s hp_cop_ps hp_not_dvd_y
   let _ := p
   let _ := x
   let _ := y
@@ -1011,14 +1079,26 @@ theorem primeGe5BranchANormalFormArithmeticKernel_default :
   let _ := hp_cop_ty
   let _ := hp_cop_sy
   let _ := hp_not_dvd_s
+  let _ := hp_cop_ps
+  let _ := hp_not_dvd_y
   /-
   TODO:
-  1. `gcd(gap, GN) = p` と `t ⟂ s`, `t ⟂ y`, `s ⟂ y`, `p ∤ s`
-     だけで書ける local contradiction をここへ集約する。
-  2. 必要なら `p ∤ y`, `Nat.Coprime p s`, valuation 分解などを
-     追加 helper として昇格させる。
+  1. `Nat.Coprime p s` と `¬ p ∣ y` を使い、
+     `GN = p * s^p` の local arithmetic を `y` と衝突させる。
+  2. gcd だけで足りなければ、valuation dictionary はこの kernel 専用 helper として追加する。
   -/
   sorry
+
+/--
+Branch A arithmetic kernel の実装入口。
+
+未完核を normal form そのものから切り離し、
+抽出済みの算術拘束だけへ局所化する。
+-/
+theorem primeGe5BranchANormalFormArithmeticKernel_default :
+    PrimeGe5BranchANormalFormArithmeticKernelTarget := by
+  exact primeGe5BranchANormalFormArithmeticKernel_of_localCoprimeKernel
+    primeGe5BranchANormalFormLocalCoprimeKernel_default
 
 /--
 Branch A の normal-form refuter 実装入口。
