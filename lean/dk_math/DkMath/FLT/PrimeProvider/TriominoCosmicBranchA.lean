@@ -1897,6 +1897,18 @@ theorem primeGe5BranchANormalForm_neP_dvd_s_not_dvd_t_of_coprime
 
 Branch A で確定した局所 separation は、
 結局この一般事実の specialized 版に過ぎない。
+
+付録:
+- 今回の Branch A 実装で得られた
+  「`NeP` comparison route は新 obstruction を生まない」
+  という評価を、再利用可能な一般辞書へ落とした定理である。
+- support-level の比較が coprime 情報へ collapse することを明示するので、
+  今後は FLT では route の打ち切り判断に、
+  ABC では support/rad 観測の変換辞書に使える。
+
+Refactor TODO:
+- 将来 `support separation <-> coprime` の辞書を
+  Branch A ファイルから独立 utility へ昇格させるか検討する。
 -/
 theorem coprime_iff_ne_p_support_separation_of_not_dvd_right
     {p t s : ℕ}
@@ -1924,6 +1936,17 @@ theorem coprime_iff_ne_p_support_separation_of_not_dvd_right
 /--
 Branch A normal form では、
 `q ≠ p` support separation と `Nat.Coprime t s` は同値である。
+
+付録:
+- これは generic iff の thin specialization であり、
+  `primeGe5BranchANormalForm_prime_not_dvd_s_default` を使って
+  Branch A の内部変数 `(t,s)` に刺さる形へ下ろしている。
+- この定理により、`NeP` route の support separation は
+  Branch A 文脈では genuinely new な obstruction でないと読める。
+
+Refactor TODO:
+- `PrimeGe5BranchANormalFormNePSupportKernelTarget` が不要になった後も、
+  この specialization 自体は API として維持する。
 -/
 theorem primeGe5BranchANormalForm_neP_support_separation_iff_coprime
     {p x y z t s : ℕ}
@@ -1940,6 +1963,15 @@ theorem primeGe5BranchANormalForm_neP_support_separation_iff_coprime
 /--
 support-separation kernel が実は `Nat.Coprime t s` の焼き直しに過ぎないなら、
 最終核は coprime-only checkpoint へさらに reduce できる。
+
+付録:
+- 現在の `NeP` route が comparison/factorization の大半を使わず、
+  実質的には `Nat.Coprime t s` しか残していないことを型の上で固定する橋である。
+
+Refactor TODO:
+- Branch A の最終 refuter を別 route へ切り替えたら、
+  この bridge は `deprecated` 相当の位置づけに下げるか、
+  comparison-route-postmortem 用 helper として残す。
 -/
 theorem primeGe5BranchANormalFormNePSupportKernel_of_coprimeKernel
     (hKernel : PrimeGe5BranchANormalFormNePCoprimeKernelTarget) :
@@ -1993,6 +2025,19 @@ theorem primeGe5BranchANormalFormPowFactorizationNePSpine_of_supportKernel
 `q ≠ p` comparison の最終核。
 
 現状ここまで削ると、残っている数学は support separation だけである。
+
+付録:
+- 実装上はまだ `sorry` を含むが、意味論的には
+  「`NeP` comparison route の active 情報が coprime まで縮んだ後の final checkpoint」
+  を表す。
+- したがってこの定理は、未完の穴というより
+  route 終了判定のための設計マーカーとして読むのが正しい。
+
+Refactor TODO:
+- minimality / descent / 別 arithmetic kernel の出口が固まったら、
+  この declaration はその新 route への adapter に置き換える。
+- もし comparison route を正式終了するなら、
+  名前も `...Checkpoint` 系へ寄せることを検討する。
 -/
 theorem primeGe5BranchANormalFormNePCoprimeKernel_default :
     PrimeGe5BranchANormalFormNePCoprimeKernelTarget := by

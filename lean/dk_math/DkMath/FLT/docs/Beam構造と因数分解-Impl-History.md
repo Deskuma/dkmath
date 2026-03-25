@@ -1667,3 +1667,56 @@ Branch A / composite を攻めに行く。
      より具体的な target に置き換える。
    - `review-007` の観点も踏まえ、
      ここで comparison route を終了扱いにするかどうかを判断する。
+
+### 日時: 2026/03/25 23:13 JST
+
+1. 目的:
+   - 今回の `NeP` route 整理が
+     単なる行き止まり確認ではなく、
+     プロジェクト全体として前進であることを
+     将来向けに明記して残す。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` の以下の docstring に、
+     付録情報と refactor TODO を追記した。
+     - `coprime_iff_ne_p_support_separation_of_not_dvd_right`
+     - `primeGe5BranchANormalForm_neP_support_separation_iff_coprime`
+     - `primeGe5BranchANormalFormNePSupportKernel_of_coprimeKernel`
+     - `primeGe5BranchANormalFormNePCoprimeKernel_default`
+   - 履歴にも、今回の成果を
+     FLT 側・ABC 側の両方から読めるように記録した。
+3. 結論:
+   - 今回の収穫は
+     「Branch A が止まった」ことではなく、
+     `NeP` comparison route の情報量境界を
+     generic iff と coprime-only checkpoint の形で
+     コード化できたことにある。
+   - これは FLT では route 切替の判断材料になり、
+     ABC/Beam では support/rad 観測の辞書として
+     再利用可能な基盤になる。
+4. 検証:
+   - docstring と履歴追記のみであり、
+     直前の `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+     と
+     `lake build DkMath.FLT.Basic`
+     の成功状態を保持している。
+5. 備考:
+   - `analysis-009.md` の観点どおり、
+     今回の成果は ABC 側では
+     support-level 観測器の校正結果として価値が高い。
+   - `review-009.md` の観点どおり、
+     `NeP` comparison route の限界は
+     generic 定理と specialization により
+     十分に「知財化」できた。
+6. 次の課題:
+   - Branch A 本線では、
+     `PrimeGe5BranchANormalFormNePCoprimeKernelTarget`
+     の先を
+     descent / minimality / 別 arithmetic kernel
+     のいずれへ繋ぐかを決める。
+   - Beam 本来用途では、
+     support/coprime 辞書を
+     ABC 側の rad / valuation 観測へどう接続するかを
+     別タスクで設計する。
+   - refactor 観点では、
+     今回追加した generic iff と Branch A specialization を
+     将来どこまで utility 層へ引き上げるかを検討する。
