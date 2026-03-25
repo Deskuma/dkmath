@@ -1312,3 +1312,56 @@ Branch A / composite を攻めに行く。
      factorization-part を
      `q = p` / `q ≠ p`
      の 2 核にさらに分ける。
+
+### 日時: 2026/03/25 20:58 JST
+
+1. 目的:
+   - factorization-part を
+     `q = p` / `q ≠ p`
+     の 2 核に分け、
+     valuation 側と no-shared 側の責務を完全に分離する。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に以下を追加した。
+     - `PrimeGe5BranchANormalFormPowFactorizationAtPTarget`
+     - `PrimeGe5BranchANormalFormPowFactorizationNePTarget`
+     - `primeGe5BranchANormalFormPowFactorizationPart_of_cases`
+     - `primeGe5BranchANormalFormPowFactorizationAtP_default`
+     - `primeGe5BranchANormalFormPowFactorizationNeP_default`
+   - `primeGe5BranchANormalFormPowFactorizationPart_default`
+     は上記 2 case の合成へ置き換えた。
+3. 結論:
+   - Branch A の未完核は、
+     `PrimeGe5BranchANormalFormPowFactorizationPartTarget`
+     からさらに
+     `PrimeGe5BranchANormalFormPowFactorizationAtPTarget`
+     と
+     `PrimeGe5BranchANormalFormPowFactorizationNePTarget`
+     の 2 箇所へ割れた。
+   - これで `q = p` 側は valuation/gcd exactness、
+     `q ≠ p` 側は no-shared/factorization spine
+     へ戻す方針が明示された。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormPowFactorizationAtP_default`
+     と
+     `primeGe5BranchANormalFormPowFactorizationNeP_default`
+     の 2 箇所になった。
+   - `PowFactorizationPart` / `PowComparisonKernel` / `PowEqualityPart` /
+     `XPowExactKernel` / `XFactorKernel`
+     は配線済み。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormPowFactorizationAtPTarget`
+     では、
+     `gap = p^(p-1) * t^p` と `GN = p * s^p`
+     の `p`-進指数比較を valuation exactness へ戻す。
+   - `PrimeGe5BranchANormalFormPowFactorizationNePTarget`
+     では、
+     `q ≠ p` の指数比較を
+     no-shared / shape-factorization spine
+     へ戻して contradiction へ繋ぐ。
+   - どちらか片側が自明化できるなら、
+     もう片側だけを真の最終核として再局所化する。
