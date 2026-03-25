@@ -1365,3 +1365,60 @@ Branch A / composite を攻めに行く。
      へ戻して contradiction へ繋ぐ。
    - どちらか片側が自明化できるなら、
      もう片側だけを真の最終核として再局所化する。
+
+### 日時: 2026/03/25 21:29 JST
+1. 目的:
+   - `q = p` 側を valuation 文脈へ、
+     `q ≠ p` 側を gap/GN の factorization spine へ戻し、
+     残核の数学責務をより直接に示す。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に以下を追加した。
+     - `PrimeGe5BranchANormalFormPowFactorizationAtPValuationTarget`
+     - `PrimeGe5BranchANormalFormPowFactorizationNePSpineTarget`
+     - `primeGe5BranchANormalFormPowFactorizationAtP_of_valuationKernel`
+     - `primeGe5BranchANormalFormPowFactorizationNeP_of_spineKernel`
+     - `primeGe5BranchANormalFormPowFactorizationAtPValuation_default`
+     - `primeGe5BranchANormalFormPowFactorizationNePSpine_default`
+   - `primeGe5BranchANormalFormPowFactorizationAtP_default`
+     と
+     `primeGe5BranchANormalFormPowFactorizationNeP_default`
+     は、それぞれ上記 bridge を経由する thin wrapper に置き換えた。
+3. 結論:
+   - Branch A の未完核は、
+     `PrimeGe5BranchANormalFormPowFactorizationAtPTarget`
+     から
+     `PrimeGe5BranchANormalFormPowFactorizationAtPValuationTarget`
+     へ、
+     `PrimeGe5BranchANormalFormPowFactorizationNePTarget`
+     から
+     `PrimeGe5BranchANormalFormPowFactorizationNePSpineTarget`
+     へ局所化された。
+   - これで
+     `q = p` 側は valuation/gcd exactness、
+     `q ≠ p` 側は no-shared / shape-factorization spine
+     に戻る責務であることが型の上でも明示された。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormPowFactorizationAtPValuation_default`
+     と
+     `primeGe5BranchANormalFormPowFactorizationNePSpine_default`
+     の 2 箇所になった。
+   - `PowFactorizationAtP` / `PowFactorizationNeP` /
+     `PowFactorizationPart` / `PowComparisonKernel`
+     は配線済み。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormPowFactorizationAtPValuationTarget`
+     では、
+     `padicValNat p (z - y)` と `padicValNat p (GN ...) = 1`
+     から `q = p` 側 obstruction が本当に出るかを見極める。
+   - `PrimeGe5BranchANormalFormPowFactorizationNePSpineTarget`
+     では、
+     `q ≠ p` の指数比較を
+     no-shared / factorization divisibility
+     へ戻して contradiction へ接続する。
+   - もし片側が単なる tautology なら、
+     もう片側だけを真の最終核として再設計する。
