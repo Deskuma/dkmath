@@ -758,3 +758,71 @@ Branch A / composite を攻めに行く。
    - 第二候補は valuation dictionary:
      `ν_q(x) = ν_q(t) + ν_q(s)` や `ν_p(x) = 1 + ν_p(t) + ν_p(s)`
      を補題化し、pack の互いに素条件と組み合わせて局所矛盾へ落とす路線。
+
+### 日時: 2026/03/25 18:52 JST
+1. 目的:
+   - `hint-002.md` に沿って、
+     Branch A normal-form refuter の `gcd exactness` 路線をさらに具体化できるか確認する。
+   - 特に
+     `gcd(gap, GN) ∣ p`
+     の自然数 wrapper を lower layer へ下ろせるかを試す。
+2. 実施:
+   - 既存の
+     `primeGe5BranchANormalForm_p_mul_gcd_ts_pow_dvd_gcd_gap_GN`
+     と
+     `primeGe5BranchANormalForm_gcd_ts_eq_one_of_gcd_gap_GN_dvd_p`
+     が、
+     `hint-002` のいう「gcd exactness 下半身」として十分に機能していることを再確認した。
+   - そのうえで、
+     `DkMath.NumberTheory.Gcd.gcd_gap_GN_dvd_exp_int`
+     から
+     `Nat.gcd (z - y) (GN p (z - y) y) ∣ p`
+     を直接返す wrapper
+     `primeGe5BranchAGcdGapGNDvdP_default`
+     を試作した。
+   - しかしこの方針は、
+     `GN p (((z - y : ℕ) : ℤ)) (y : ℤ)` の `natAbs`
+     を
+     `GN p (z - y) y`
+     に戻す段で、
+     `↑(z - y)` と `↑z - ↑y`
+     の cast 正規化がまだ素直に揃わず、
+     no-sorry では閉じなかった。
+   - ワークスペースを壊さないため、
+     この concrete wrapper 試作は今回の差分からは戻し、
+     抽象 target
+     `PrimeGe5BranchAGcdGapGNDvdPTarget`
+     を残す形に維持した。
+3. 結論:
+   - `hint-002` の見立て自体は正しい。
+     Branch A の次の本筋は依然として
+     `gcd exactness -> gcd(t,s)=1 -> normal-form refuter`
+     である。
+   - ただし
+     `gcd_gap_GN_dvd_exp_int`
+     から自然数版 wrapper を直接降ろすには、
+     `GN` の cast / natAbs 正規化を別補題として先に固定するのが必要だと分かった。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、最終的にビルド成功を確認した。
+5. 備考:
+   - この時点で新しい no-sorry 定理は増えていない。
+   - `TriominoCosmicBranchA.lean` の `sorry` は引き続き
+     `primeGe5BranchANormalFormRefuter_default`
+     の 1 箇所のみ。
+6. 次の課題:
+   - `GN` の cast / natAbs 正規化だけを担う小補題
+     たとえば
+     `((GN p (((z - y : ℕ) : ℤ)) (y : ℤ)).natAbs = GN p (z - y) y)`
+     型
+     を、`NumberTheory.Gcd.GN` か `TriominoCosmicBranchA` の lower helper として独立に立てる。
+   - それが立ったら、
+     `primeGe5BranchAGcdGapGNDvdP_default`
+     を再挑戦し、
+     `primeGe5BranchANormalForm_gcd_ts_eq_one_default`
+     を concrete 化する。
+   - その先で、
+     `gcd(t,s)=1` と
+     `x = p * (t * s)`
+     を pack の局所条件へどう衝突させるかを normal-form refuter 本体で詰める。

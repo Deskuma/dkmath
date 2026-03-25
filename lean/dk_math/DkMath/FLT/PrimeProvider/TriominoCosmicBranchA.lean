@@ -674,6 +674,77 @@ theorem primeGe5BranchANormalForm_of_witness
       _ = (p * (t * s)) ^ p := by symm; exact Nat.mul_pow p (t * s) p
   exact (Nat.pow_left_injective hpack.hp.ne_zero) hpow_eq
 
+/--
+Branch A の `gcd(gap, GN)` が `p` を割るという制御を注入する abstract target。
+-/
+abbrev PrimeGe5BranchAGcdGapGNDvdPTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    Nat.gcd (z - y) (GN p (z - y) y) ∣ p
+
+/--
+normal form から、`p * gcd(t,s)^p` は `gcd(gap, GN)` を割る。
+
+gcd exactness の下半身。
+-/
+theorem primeGe5BranchANormalForm_p_mul_gcd_ts_pow_dvd_gcd_gap_GN
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (_hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    p * Nat.gcd t s ^ p ∣ Nat.gcd (z - y) (GN p (z - y) y) := by
+  let g : ℕ := Nat.gcd t s
+  have hg_t : g ∣ t := by
+    exact Nat.gcd_dvd_left t s
+  have hg_s : g ∣ s := by
+    exact Nat.gcd_dvd_right t s
+  have hgpow_tpow : g ^ p ∣ t ^ p := pow_dvd_pow_of_dvd hg_t p
+  have hgpow_spow : g ^ p ∣ s ^ p := pow_dvd_pow_of_dvd hg_s p
+  have hp_dvd_powPred : p ∣ p ^ (p - 1) := by
+    exact dvd_pow_self p (Nat.sub_ne_zero_of_lt hpack.hp.one_lt)
+  have hleft : p * g ^ p ∣ z - y := by
+    have hmul : p * g ^ p ∣ p ^ (p - 1) * t ^ p := by
+      simpa [Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm] using
+        Nat.mul_dvd_mul hp_dvd_powPred hgpow_tpow
+    simpa [hgap] using hmul
+  have hright : p * g ^ p ∣ GN p (z - y) y := by
+    have hsGN' : GN p (z - y) y = p * s ^ p := hsGN
+    have hmul : p * g ^ p ∣ p * s ^ p := by
+      simpa [Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm] using
+        Nat.mul_dvd_mul (dvd_rfl : p ∣ p) hgpow_spow
+    rw [hsGN']
+    exact hmul
+  exact Nat.dvd_gcd hleft hright
+
+/--
+`gcd(gap, GN) ∣ p` が与えられれば、normal form から `gcd(t,s) = 1` を抽出できる。
+-/
+theorem primeGe5BranchANormalForm_gcd_ts_eq_one_of_gcd_gap_GN_dvd_p
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hgcd_dvd_p : Nat.gcd (z - y) (GN p (z - y) y) ∣ p) :
+    Nat.gcd t s = 1 := by
+  let g : ℕ := Nat.gcd t s
+  have hdiv : p * g ^ p ∣ p := by
+    exact dvd_trans
+      (primeGe5BranchANormalForm_p_mul_gcd_ts_pow_dvd_gcd_gap_GN hpack hp_dvd_gap hgap hsGN)
+      hgcd_dvd_p
+  rcases hdiv with ⟨k, hk⟩
+  have hk' : p * 1 = p * (g ^ p * k) := by
+    calc
+      p * 1 = p := by simp
+      _ = (p * g ^ p) * k := hk
+      _ = p * (g ^ p * k) := by ac_rfl
+  have h1 : 1 = g ^ p * k := Nat.eq_of_mul_eq_mul_left hpack.hp.pos hk'
+  have hgpow_dvd_one : g ^ p ∣ 1 := ⟨k, h1⟩
+  have hgpow_eq_one : g ^ p = 1 := Nat.eq_one_of_dvd_one hgpow_dvd_one
+  have hg_eq : g ^ p = 1 ^ p := by simpa using hgpow_eq_one
+  exact (Nat.pow_left_injective hpack.hp.ne_zero) hg_eq
+
 /-- Branch A の shape witness から `p^(p-1) ∣ z-y` を回収する。 -/
 lemma primeGe5BranchAShapeWitness_powPred_dvd_gap
     {p y z t : ℕ}
