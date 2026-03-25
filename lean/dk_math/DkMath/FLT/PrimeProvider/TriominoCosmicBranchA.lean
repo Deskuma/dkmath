@@ -932,6 +932,32 @@ theorem primeGe5BranchANormalForm_coprime_GN_right_default
     (Nat.coprime_mul_iff_right).1 hcop_y_prod
   simpa [Nat.coprime_comm] using hparts.2
 
+/--
+`GN ⟂ y` と `GN = p * s^p` を合わせると、
+`p * s^p` そのものも `y` と互いに素である。
+-/
+theorem primeGe5BranchANormalForm_coprime_pspow_y_default
+    {p x y z s : ℕ}
+    (_hpack : PrimeGe5CounterexamplePack p x y z)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hcop_GNy : Nat.Coprime (GN p (z - y) y) y) :
+    Nat.Coprime (p * s ^ p) y := by
+  rw [← hsGN]
+  exact hcop_GNy
+
+/--
+`p * s^p ⟂ y` から `s^p ⟂ y` を抜き出す。
+-/
+theorem primeGe5BranchANormalForm_coprime_spow_y_default
+    {p x y z s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hcop_GNy : Nat.Coprime (GN p (z - y) y) y) :
+    Nat.Coprime (s ^ p) y := by
+  have hcop_pspow_y : Nat.Coprime (p * s ^ p) y :=
+    primeGe5BranchANormalForm_coprime_pspow_y_default hpack hsGN hcop_GNy
+  exact (Nat.coprime_mul_iff_left).1 hcop_pspow_y |>.2
+
 /-- Branch A の shape witness から `p^(p-1) ∣ z-y` を回収する。 -/
 lemma primeGe5BranchAShapeWitness_powPred_dvd_gap
     {p y z t : ℕ}
@@ -1047,6 +1073,28 @@ abbrev PrimeGe5BranchANormalFormGNRightKernelTarget : Prop :=
     False
 
 /--
+GN-side kernel のさらに下で、`GN = p * s^p` の factor-level coprime 情報
+まで explicit に並べる差し替え口。
+-/
+abbrev PrimeGe5BranchANormalFormGNFactorKernelTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.gcd (z - y) (GN p (z - y) y) = p →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    Nat.Coprime p s →
+    ¬ p ∣ y →
+    Nat.Coprime (GN p (z - y) y) y →
+    Nat.Coprime (p * s ^ p) y →
+    Nat.Coprime (s ^ p) y →
+    False
+
+/--
 shape-value refuter は、最終的には witness-kernel 1 本の注入へ還元する。
 -/
 theorem primeGe5BranchAShapeValueToRefuter_of_witness_kernel
@@ -1106,14 +1154,26 @@ theorem primeGe5BranchANormalFormLocalCoprimeKernel_of_GNRightKernel
     (primeGe5BranchANormalForm_coprime_GN_right_default hpack)
 
 /--
-GN-side local kernel の実装入口。
-
-ここでは `GN ⟂ y` まで explicit に受け取り、
-最後の `GN` 側局所衝突だけを残す。
+GN-side kernel は、`p * s^p ⟂ y` と `s^p ⟂ y` を explicit に受ける
+さらに小さい factor kernel へ reduce できる。
 -/
-theorem primeGe5BranchANormalFormGNRightKernel_default :
+theorem primeGe5BranchANormalFormGNRightKernel_of_factorKernel
+    (hKernel : PrimeGe5BranchANormalFormGNFactorKernelTarget) :
     PrimeGe5BranchANormalFormGNRightKernelTarget := by
   intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s hp_cop_ps hp_not_dvd_y hp_cop_GNy
+  exact hKernel hpack hp_dvd_gap hgap hsGN hsx hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s hp_cop_ps hp_not_dvd_y hp_cop_GNy
+    (primeGe5BranchANormalForm_coprime_pspow_y_default hpack hsGN hp_cop_GNy)
+    (primeGe5BranchANormalForm_coprime_spow_y_default hpack hsGN hp_cop_GNy)
+
+/--
+GN factor kernel の実装入口。
+
+ここでは `p * s^p ⟂ y` と `s^p ⟂ y` まで explicit に受け、
+最後の factor-level 局所衝突だけを残す。
+-/
+theorem primeGe5BranchANormalFormGNFactorKernel_default :
+    PrimeGe5BranchANormalFormGNFactorKernelTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s hp_cop_ps hp_not_dvd_y hp_cop_GNy hp_cop_pspow_y hp_cop_spow_y
   let _ := p
   let _ := x
   let _ := y
@@ -1133,14 +1193,27 @@ theorem primeGe5BranchANormalFormGNRightKernel_default :
   let _ := hp_cop_ps
   let _ := hp_not_dvd_y
   let _ := hp_cop_GNy
+  let _ := hp_cop_pspow_y
+  let _ := hp_cop_spow_y
   /-
   TODO:
-  1. `GN ⟂ y` と `GN = p * s^p` を主入口にして、
-     `s ⟂ y`, `p ⟂/∤ y` との整合を GN 側局所補題へ押し戻す。
-  2. 必要なら `Nat.Coprime (p * s ^ p) y` や
-     `padicValNat q (GN p (z - y) y)` の辞書を追加する。
+  1. `p * s^p ⟂ y` と `GN = p * s^p` を基準に、
+     GN-side の factor-level exactness を使って局所衝突へ送る。
+  2. 必要なら `Nat.Coprime p (s ^ p)` や
+     `Nat.Coprime (p * s) y` を追加 helper 化する。
   -/
   sorry
+
+/--
+GN-side local kernel の実装入口。
+
+ここでは `GN ⟂ y` まで explicit に受け取り、
+最後の `GN` 側局所衝突だけを残す。
+-/
+theorem primeGe5BranchANormalFormGNRightKernel_default :
+    PrimeGe5BranchANormalFormGNRightKernelTarget := by
+  exact primeGe5BranchANormalFormGNRightKernel_of_factorKernel
+    primeGe5BranchANormalFormGNFactorKernel_default
 
 /--
 local coprime kernel の実装入口。
