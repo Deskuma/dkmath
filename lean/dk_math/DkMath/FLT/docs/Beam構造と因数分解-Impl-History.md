@@ -576,3 +576,17 @@ Branch A / composite を攻めに行く。
    - 残る Branch A hole は
      `primeGe5BranchARefuter_default`
      の 1 箇所に留まっている。
+6. 次の課題:
+   - `PrimeGe5BranchAShapeValueToRefuterTarget` を clean kernel として育てる。
+   - まず `u = p^(p-1) * t^p` から、
+     - `q ≠ p` 側は `p` 倍数指数、
+     - `q = p` 側は `(p - 1) mod p`
+     という shape-value の算術拘束を、値域形から読み直せる補題群として固定する。
+   - 次に `PrimeGe5CounterexamplePack` の局所条件
+     （互いに素性・大小関係・差の冪分解整合）
+     と shape-value を衝突させ、
+     FLT 本体を呼ばずに Branch A を refute する補題群へ分解する。
+   - 最終的に `primeGe5BranchARefuter_default` は、
+     - shape を作る補題
+     - shape を潰す補題
+     の合成だけを行う配線係へ落とす。
