@@ -760,6 +760,7 @@ Branch A / composite を攻めに行く。
      を補題化し、pack の互いに素条件と組み合わせて局所矛盾へ落とす路線。
 
 ### 日時: 2026/03/25 18:52 JST
+
 1. 目的:
    - `hint-002.md` に沿って、
      Branch A normal-form refuter の `gcd exactness` 路線をさらに具体化できるか確認する。
@@ -828,6 +829,7 @@ Branch A / composite を攻めに行く。
      を pack の局所条件へどう衝突させるかを normal-form refuter 本体で詰める。
 
 ### 日時: 2026/03/25 19:27 JST
+
 1. 目的:
    - 先に `GN` の cast / `natAbs` bridge を整備し、
      Branch A の `gcd exactness` 路線を concrete theorem ベースへ戻す。
@@ -880,6 +882,7 @@ Branch A / composite を攻めに行く。
      局所 gcd 衝突か valuation dictionary のどちらで閉じるかを決める。
 
 ### 日時: 2026/03/25 18:10 JST
+
 1. 目的:
    - Branch A の `normal form -> False` をさらに薄くし、
      既に no-sorry で抽出できる arithmetic facts だけを残核へ分離する。
@@ -935,6 +938,7 @@ Branch A / composite を攻めに行く。
      valuation dictionary を arithmetic kernel 専用 helper として追加する。
 
 ### 日時: 2026/03/25 18:33 JST
+
 1. 目的:
    - Review 003 を踏まえ、
      `Nat.Coprime p s` と `¬ p ∣ y` を helper 化し、
@@ -989,3 +993,61 @@ Branch A / composite を攻めに行く。
      `GN` と `y` の関係へ押し戻す gcd 路線。
    - それで不足なら、
      valuation dictionary をこの local-coprime kernel 専用 helper として足す。
+
+### 日時: 2026/03/25 18:59 JST
+
+1. 目的:
+   - `GN` 側へ局所情報を押し戻し、
+     `GN ⟂ y` を explicit helper にした kernel へ未完核をさらに局所化する。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に
+     `primeGe5BranchANormalForm_coprime_GN_right_default`
+     を追加した。
+     これは `x^p = gap * GN` と `x ⟂ y` から
+     `GN p (z - y) y ⟂ y`
+     を直接引く no-sorry helper。
+   - さらに
+     `PrimeGe5BranchANormalFormGNRightKernelTarget`
+     を新設し、
+     `primeGe5BranchANormalFormLocalCoprimeKernel_of_GNRightKernel`
+     と
+     `primeGe5BranchANormalFormGNRightKernel_default`
+     を追加した。
+   - これにより、
+     `LocalCoprimeKernel`
+     は `GN-side kernel` への thin bridge になった。
+3. 結論:
+   - Branch A の未完核は、
+     `PrimeGe5BranchANormalFormLocalCoprimeKernelTarget`
+     からさらに
+     `PrimeGe5BranchANormalFormGNRightKernelTarget`
+     1 本へ縮んだ。
+   - いま explicit に使える `GN` 側局所情報は
+     `GN = p * s^p`
+     と
+     `Nat.Coprime (GN p (z - y) y) y`
+     である。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormGNRightKernel_default`
+     の 1 箇所だけになった。
+   - `ArithmeticKernel` / `LocalCoprimeKernel` / `Refuter`
+     は now all thin bridge。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormGNRightKernelTarget`
+     の中で、
+     `GN = p * s^p`
+     と
+     `GN ⟂ y`
+     を主入口にした局所衝突を first candidate にする。
+   - 必要なら
+     `Nat.Coprime (p * s ^ p) y`
+     や
+     `padicValNat q (GN p (z - y) y)`
+     の small dictionary を追加する。
+   - `s ⟂ y`, `p ⟂ s`, `p ∤ y`
+     は GN-side kernel の補助入力として維持する。

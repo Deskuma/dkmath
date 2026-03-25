@@ -913,6 +913,25 @@ theorem primeGe5BranchANormalForm_coprime_p_y_default
   exact (Nat.Prime.coprime_iff_not_dvd hpack.hp).2
     (primeGe5BranchANormalForm_prime_not_dvd_y_default hpack hp_dvd_gap)
 
+/--
+反例 pack の基本恒等式 `x^p = gap * GN` と `x ⟂ y` から、
+`GN p (z - y) y` 自体も `y` と互いに素である。
+-/
+theorem primeGe5BranchANormalForm_coprime_GN_right_default
+    {p x y z : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z) :
+    Nat.Coprime (GN p (z - y) y) y := by
+  have hcop_xpow_y : Nat.Coprime (x ^ p) y :=
+    Nat.Coprime.pow_left p hpack.hxy
+  have hcop_prod_y : Nat.Coprime ((z - y) * GN p (z - y) y) y := by
+    simpa [PrimeGe5CounterexamplePack.gap] using
+      (hpack.xpow_eq_gap_mul_GN ▸ hcop_xpow_y)
+  have hcop_y_prod : Nat.Coprime y ((z - y) * GN p (z - y) y) := hcop_prod_y.symm
+  have hparts :
+      Nat.Coprime y (z - y) ∧ Nat.Coprime y (GN p (z - y) y) :=
+    (Nat.coprime_mul_iff_right).1 hcop_y_prod
+  simpa [Nat.coprime_comm] using hparts.2
+
 /-- Branch A の shape witness から `p^(p-1) ∣ z-y` を回収する。 -/
 lemma primeGe5BranchAShapeWitness_powPred_dvd_gap
     {p y z t : ℕ}
@@ -1007,6 +1026,27 @@ abbrev PrimeGe5BranchANormalFormLocalCoprimeKernelTarget : Prop :=
     False
 
 /--
+local coprime kernel のさらに下で、`GN ⟂ y` を explicit に受ける差し替え口。
+
+`GN` 側の局所情報へ戻して衝突させる場合、この契約 1 本を詰めればよい。
+-/
+abbrev PrimeGe5BranchANormalFormGNRightKernelTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.gcd (z - y) (GN p (z - y) y) = p →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    Nat.Coprime p s →
+    ¬ p ∣ y →
+    Nat.Coprime (GN p (z - y) y) y →
+    False
+
+/--
 shape-value refuter は、最終的には witness-kernel 1 本の注入へ還元する。
 -/
 theorem primeGe5BranchAShapeValueToRefuter_of_witness_kernel
@@ -1055,14 +1095,25 @@ theorem primeGe5BranchANormalFormArithmeticKernel_of_localCoprimeKernel
     (primeGe5BranchANormalForm_prime_not_dvd_y_default hpack hp_dvd_gap)
 
 /--
-local coprime kernel の実装入口。
-
-ここでは `p ⟂ s` と `p ∤ y` まで explicit に並べた上で、
-最後の局所 gcd / valuation 衝突だけを扱う。
+local coprime kernel は、`GN ⟂ y` を explicit に受ける
+さらに小さい GN-side kernel へ reduce できる。
 -/
-theorem primeGe5BranchANormalFormLocalCoprimeKernel_default :
+theorem primeGe5BranchANormalFormLocalCoprimeKernel_of_GNRightKernel
+    (hKernel : PrimeGe5BranchANormalFormGNRightKernelTarget) :
     PrimeGe5BranchANormalFormLocalCoprimeKernelTarget := by
   intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s hp_cop_ps hp_not_dvd_y
+  exact hKernel hpack hp_dvd_gap hgap hsGN hsx hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s hp_cop_ps hp_not_dvd_y
+    (primeGe5BranchANormalForm_coprime_GN_right_default hpack)
+
+/--
+GN-side local kernel の実装入口。
+
+ここでは `GN ⟂ y` まで explicit に受け取り、
+最後の `GN` 側局所衝突だけを残す。
+-/
+theorem primeGe5BranchANormalFormGNRightKernel_default :
+    PrimeGe5BranchANormalFormGNRightKernelTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s hp_cop_ps hp_not_dvd_y hp_cop_GNy
   let _ := p
   let _ := x
   let _ := y
@@ -1081,13 +1132,26 @@ theorem primeGe5BranchANormalFormLocalCoprimeKernel_default :
   let _ := hp_not_dvd_s
   let _ := hp_cop_ps
   let _ := hp_not_dvd_y
+  let _ := hp_cop_GNy
   /-
   TODO:
-  1. `Nat.Coprime p s` と `¬ p ∣ y` を使い、
-     `GN = p * s^p` の local arithmetic を `y` と衝突させる。
-  2. gcd だけで足りなければ、valuation dictionary はこの kernel 専用 helper として追加する。
+  1. `GN ⟂ y` と `GN = p * s^p` を主入口にして、
+     `s ⟂ y`, `p ⟂/∤ y` との整合を GN 側局所補題へ押し戻す。
+  2. 必要なら `Nat.Coprime (p * s ^ p) y` や
+     `padicValNat q (GN p (z - y) y)` の辞書を追加する。
   -/
   sorry
+
+/--
+local coprime kernel の実装入口。
+
+ここでは `p ⟂ s` と `p ∤ y` まで explicit に並べた上で、
+最後の局所 gcd / valuation 衝突だけを扱う。
+-/
+theorem primeGe5BranchANormalFormLocalCoprimeKernel_default :
+    PrimeGe5BranchANormalFormLocalCoprimeKernelTarget := by
+  exact primeGe5BranchANormalFormLocalCoprimeKernel_of_GNRightKernel
+    primeGe5BranchANormalFormGNRightKernel_default
 
 /--
 Branch A arithmetic kernel の実装入口。
