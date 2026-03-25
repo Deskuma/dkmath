@@ -987,6 +987,36 @@ theorem primeGe5BranchANormalForm_coprime_ps_y_default
     primeGe5BranchANormalForm_coprime_p_y_default hpack hp_dvd_gap
   exact Nat.Coprime.mul_left hcop_py hcop_sy
 
+/--
+normal form の `x = p * (t * s)` は、線形因子 `(t, p * s)` の積に並べ替えられる。
+-/
+theorem primeGe5BranchANormalForm_x_eq_t_mul_ps
+    {p x y z t s : ℕ}
+    (_hpack : PrimeGe5CounterexamplePack p x y z)
+    (_hp_dvd_gap : p ∣ (z - y))
+    (_hgap : z - y = p ^ (p - 1) * t ^ p)
+    (_hsGN : GN p (z - y) y = p * s ^ p)
+    (hsx : x = p * (t * s)) :
+    x = t * (p * s) := by
+  calc
+    x = p * (t * s) := hsx
+    _ = t * (p * s) := by ac_rfl
+
+/--
+`t ⟂ y` と `(p * s) ⟂ y` が揃えば、線形分解 `t * (p * s)` も `y` と互いに素。
+-/
+theorem primeGe5BranchANormalForm_coprime_t_ps_default
+    {p x y z t s : ℕ}
+    (_hpack : PrimeGe5CounterexamplePack p x y z)
+    (_hp_dvd_gap : p ∣ (z - y))
+    (_hgap : z - y = p ^ (p - 1) * t ^ p)
+    (_hsGN : GN p (z - y) y = p * s ^ p)
+    (_hsx : x = p * (t * s))
+    (hcop_ty : Nat.Coprime t y)
+    (hcop_psy : Nat.Coprime (p * s) y) :
+    Nat.Coprime (t * (p * s)) y := by
+  exact Nat.Coprime.mul_left hcop_ty hcop_psy
+
 /-- Branch A の shape witness から `p^(p-1) ∣ z-y` を回収する。 -/
 lemma primeGe5BranchAShapeWitness_powPred_dvd_gap
     {p y z t : ℕ}
@@ -1148,6 +1178,32 @@ abbrev PrimeGe5BranchANormalFormGNLinearFactorKernelTarget : Prop :=
     False
 
 /--
+GN linear-factor kernel のさらに下で、`x = t * (p * s)` と
+`Nat.Coprime (t * (p * s)) y` まで explicit に並べる差し替え口。
+-/
+abbrev PrimeGe5BranchANormalFormXFactorKernelTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    x = t * (p * s) →
+    Nat.gcd (z - y) (GN p (z - y) y) = p →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    Nat.Coprime p s →
+    ¬ p ∣ y →
+    Nat.Coprime (GN p (z - y) y) y →
+    Nat.Coprime (p * s ^ p) y →
+    Nat.Coprime (s ^ p) y →
+    Nat.Coprime p (s ^ p) →
+    Nat.Coprime (p * s) y →
+    Nat.Coprime (t * (p * s)) y →
+    False
+
+/--
 shape-value refuter は、最終的には witness-kernel 1 本の注入へ還元する。
 -/
 theorem primeGe5BranchAShapeValueToRefuter_of_witness_kernel
@@ -1231,14 +1287,28 @@ theorem primeGe5BranchANormalFormGNFactorKernel_of_linearFactorKernel
     (primeGe5BranchANormalForm_coprime_ps_y_default hpack hp_dvd_gap hgap hsGN hsx hp_cop_sy)
 
 /--
-GN linear-factor kernel の実装入口。
-
-ここでは `Nat.Coprime p (s ^ p)` と `Nat.Coprime (p * s) y`
-まで explicit に受け、最後の線形/冪因子の局所衝突だけを残す。
+GN linear-factor kernel は、`x = t * (p * s)` と
+`Nat.Coprime (t * (p * s)) y` を explicit に受ける
+さらに小さい x-factor kernel へ reduce できる。
 -/
-theorem primeGe5BranchANormalFormGNLinearFactorKernel_default :
+theorem primeGe5BranchANormalFormGNLinearFactorKernel_of_xFactorKernel
+    (hKernel : PrimeGe5BranchANormalFormXFactorKernelTarget) :
     PrimeGe5BranchANormalFormGNLinearFactorKernelTarget := by
   intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s hp_cop_ps hp_not_dvd_y hp_cop_GNy hp_cop_pspow_y hp_cop_spow_y hp_cop_pspow hp_cop_ps_y
+  exact hKernel hpack hp_dvd_gap hgap hsGN hsx
+    (primeGe5BranchANormalForm_x_eq_t_mul_ps hpack hp_dvd_gap hgap hsGN hsx)
+    hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s hp_cop_ps hp_not_dvd_y hp_cop_GNy hp_cop_pspow_y hp_cop_spow_y hp_cop_pspow hp_cop_ps_y
+    (primeGe5BranchANormalForm_coprime_t_ps_default hpack hp_dvd_gap hgap hsGN hsx hp_cop_ty hp_cop_ps_y)
+
+/--
+x-factor kernel の実装入口。
+
+ここでは `x = t * (p * s)` と `Nat.Coprime (t * (p * s)) y`
+まで explicit に受け、最後の `x` 側 exactness との衝突だけを残す。
+-/
+theorem primeGe5BranchANormalFormXFactorKernel_default :
+    PrimeGe5BranchANormalFormXFactorKernelTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hx_tps hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s hp_cop_ps hp_not_dvd_y hp_cop_GNy hp_cop_pspow_y hp_cop_spow_y hp_cop_pspow hp_cop_ps_y hp_cop_tps_y
   let _ := p
   let _ := x
   let _ := y
@@ -1250,6 +1320,7 @@ theorem primeGe5BranchANormalFormGNLinearFactorKernel_default :
   let _ := hgap
   let _ := hsGN
   let _ := hsx
+  let _ := hx_tps
   let _ := hgcd_eq
   let _ := hp_cop_ts
   let _ := hp_cop_ty
@@ -1262,13 +1333,25 @@ theorem primeGe5BranchANormalFormGNLinearFactorKernel_default :
   let _ := hp_cop_spow_y
   let _ := hp_cop_pspow
   let _ := hp_cop_ps_y
+  let _ := hp_cop_tps_y
   /-
   TODO:
-  1. `Nat.Coprime p (s ^ p)` と `Nat.Coprime (p * s) y` を基準に、
-     factor-level exactness を線形因子側へ押し戻す。
-  2. 必要なら `Nat.Coprime t (p * s)` や `Nat.Coprime (p * s) (s ^ p)` を補題化する。
+  1. `x = t * (p * s)` と `Nat.Coprime (t * (p * s)) y` を主入口にして、
+     線形因子 exactness を `x^p` 側へ押し戻す。
+  2. 必要なら `Nat.Coprime t (p * s)` や `Nat.Coprime (t * (p * s)) (s ^ p)` を helper 化する。
   -/
   sorry
+
+/--
+GN linear-factor kernel の実装入口。
+
+ここでは `Nat.Coprime p (s ^ p)` と `Nat.Coprime (p * s) y`
+まで explicit に受け、最後の線形/冪因子の局所衝突だけを残す。
+-/
+theorem primeGe5BranchANormalFormGNLinearFactorKernel_default :
+    PrimeGe5BranchANormalFormGNLinearFactorKernelTarget := by
+  exact primeGe5BranchANormalFormGNLinearFactorKernel_of_xFactorKernel
+    primeGe5BranchANormalFormXFactorKernel_default
 
 /--
 GN factor kernel の実装入口。
