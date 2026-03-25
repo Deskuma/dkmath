@@ -1102,3 +1102,52 @@ Branch A / composite を攻めに行く。
      `GN = p * s^p`
      を起点にした最終局所衝突を試す。
    - gcd だけで止まるなら、valuation dictionary を factor kernel 専用 helper として追加する。
+
+### 日時: 2026/03/25 19:18 JST
+1. 目的:
+   - factor-level helper をさらに linear-factor helper へ落とし、
+     `p * s` と `s^p` の局所情報で最後の kernel を書ける形へ近づける。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に以下を追加した。
+     - `primeGe5BranchANormalForm_coprime_p_spow_default`
+     - `primeGe5BranchANormalForm_coprime_ps_y_default`
+     - `PrimeGe5BranchANormalFormGNLinearFactorKernelTarget`
+     - `primeGe5BranchANormalFormGNFactorKernel_of_linearFactorKernel`
+     - `primeGe5BranchANormalFormGNLinearFactorKernel_default`
+   - これにより、
+     `GNFactorKernel`
+     は `GNLinearFactorKernel`
+     への thin bridge になった。
+3. 結論:
+   - Branch A の未完核は、
+     `PrimeGe5BranchANormalFormGNFactorKernelTarget`
+     からさらに
+     `PrimeGe5BranchANormalFormGNLinearFactorKernelTarget`
+     1 本へ縮んだ。
+   - いま explicit に使える linear/factor 辞書は
+     `Nat.Coprime p (s ^ p)`
+     と
+     `Nat.Coprime (p * s) y`
+     である。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormGNLinearFactorKernel_default`
+     の 1 箇所だけになった。
+   - `GNFactorKernel` / `GNRightKernel` / `LocalCoprimeKernel` / `ArithmeticKernel`
+     は all thin bridge。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormGNLinearFactorKernelTarget`
+     の中で、
+     `Nat.Coprime (p * s) y`
+     と
+     `x = p * (t * s)`
+     を合わせた線形因子側の exactness を first candidate として試す。
+   - 必要なら
+     `Nat.Coprime t (p * s)` や
+     `Nat.Coprime (p * s) (s ^ p)`
+     を helper 化する。
+   - それでも不足なら、valuation dictionary を linear-factor kernel 専用 helper として足す。
