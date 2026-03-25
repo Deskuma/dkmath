@@ -826,3 +826,55 @@ Branch A / composite を攻めに行く。
      `gcd(t,s)=1` と
      `x = p * (t * s)`
      を pack の局所条件へどう衝突させるかを normal-form refuter 本体で詰める。
+
+### 日時: 2026/03/25 19:27 JST
+1. 目的:
+   - 先に `GN` の cast / `natAbs` bridge を整備し、
+     Branch A の `gcd exactness` 路線を concrete theorem ベースへ戻す。
+2. 実施:
+   - `[DkMath.NumberTheory.Gcd.GN]` に、以下の bridge を追加した。
+     - `gn_natCast_int`
+     - `natAbs_gn_natCast_int`
+     - `natAbs_gn_gap_natCast_int`
+     - `gcd_gap_GN_dvd_exp`
+   - これにより、
+     既存の整数版
+     `gcd_gap_GN_dvd_exp_int`
+     から自然数版
+     `Nat.gcd (z - y) (GN p (z - y) y) ∣ p`
+     を直接引けるようになった。
+   - `[TriominoCosmicBranchA.lean]` では
+     `primeGe5BranchAGcdGapGNDvdP_default`
+     と
+     `primeGe5BranchANormalForm_gcd_ts_eq_one_default`
+     を追加し、
+     Branch A の gcd route を abstract target から concrete theorem 呼び出しへ下ろした。
+3. 結論:
+   - 以前に詰まっていた
+     `GN p (((z - y : ℕ) : ℤ)) (y : ℤ)` と
+     `GN p (z - y) y`
+     の橋は、少なくとも gcd 用の主経路では解消できた。
+   - これで Branch A では
+     `normal form -> gcd(gap, GN) ∣ p -> gcd(t,s)=1`
+     までが no-sorry の concrete spine になった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.Gcd.GN`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は引き続き
+     `primeGe5BranchANormalFormRefuter_default`
+     の 1 箇所のみ。
+   - `Basic.lean` 側の既存 `sorry` は
+     composite reduction residual の 1 箇所のまま。
+6. 次の課題:
+   - `primeGe5BranchANormalFormRefuter_default` の中で、
+     新しく concrete 化できた
+     `primeGe5BranchANormalForm_gcd_ts_eq_one_default`
+     を実際に使う。
+   - そのうえで
+     `gcd(t,s)=1` と
+     `x = p * (t * s)`
+     を pack の局所条件へどう衝突させるか、
+     局所 gcd 衝突か valuation dictionary のどちらで閉じるかを決める。

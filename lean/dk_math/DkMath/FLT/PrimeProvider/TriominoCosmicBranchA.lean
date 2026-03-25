@@ -683,6 +683,18 @@ abbrev PrimeGe5BranchAGcdGapGNDvdPTarget : Prop :=
     Nat.gcd (z - y) (GN p (z - y) y) ∣ p
 
 /--
+`PrimeGe5CounterexamplePack` では、既存の gcd/GN API から
+`gcd(gap, GN) ∣ p` を自然数版で直接回収できる。
+-/
+theorem primeGe5BranchAGcdGapGNDvdP_default :
+    PrimeGe5BranchAGcdGapGNDvdPTarget := by
+  intro p x y z hpack _hp_dvd_gap
+  have hcop_zy : Nat.Coprime z y := by
+    exact (coprime_right_of_add_pow_eq_pow hpack.hp hpack.hxy hpack.hEq).symm
+  exact DkMath.NumberTheory.Gcd.gcd_gap_GN_dvd_exp
+    (hp1 := Nat.succ_le_of_lt hpack.hp.pos) (hyz := hpack.hyz_lt) (hcop := hcop_zy)
+
+/--
 normal form から、`p * gcd(t,s)^p` は `gcd(gap, GN)` を割る。
 
 gcd exactness の下半身。
@@ -744,6 +756,20 @@ theorem primeGe5BranchANormalForm_gcd_ts_eq_one_of_gcd_gap_GN_dvd_p
   have hgpow_eq_one : g ^ p = 1 := Nat.eq_one_of_dvd_one hgpow_dvd_one
   have hg_eq : g ^ p = 1 ^ p := by simpa using hgpow_eq_one
   exact (Nat.pow_left_injective hpack.hp.ne_zero) hg_eq
+
+/--
+Branch A の既存 gcd 制御を使えば、normal form から `gcd(t,s) = 1` を default で抽出できる。
+-/
+theorem primeGe5BranchANormalForm_gcd_ts_eq_one_default
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    Nat.gcd t s = 1 := by
+  exact primeGe5BranchANormalForm_gcd_ts_eq_one_of_gcd_gap_GN_dvd_p
+    hpack hp_dvd_gap hgap hsGN
+    (primeGe5BranchAGcdGapGNDvdP_default hpack hp_dvd_gap)
 
 /-- Branch A の shape witness から `p^(p-1) ∣ z-y` を回収する。 -/
 lemma primeGe5BranchAShapeWitness_powPred_dvd_gap
