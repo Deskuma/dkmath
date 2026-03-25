@@ -505,3 +505,24 @@ head: 713f369
      と
      `GcdNextResearch.lean`
      の warning は継続。
+
+### 次の攻め込み先
+
+Branch A / composite を攻めに行く。
+どちらが優先か？
+
+---
+
+`Branch A` を先に潰すべきです。
+
+理由は単純で、composite 側は既に [Basic.lean](/lean/dk_math/DkMath/FLT/Basic.lean#L594) の TODO に書いてある通り、最終的に prime exponent case へ縮約して `Branch A / Branch B helper` を再利用する構造です。つまり composite を先に攻めても、着地点は結局まだ未完の Branch A に戻ります。一方、`Branch A` は [TriominoCosmicBranchA.lean](/lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean#L49) に `sorry` が局所化されていて、[Basic.lean](/lean/dk_math/DkMath/FLT/Basic.lean#L557) の prime residual もそこだけを呼ぶ形になっています。
+
+順番としてはこれです。
+
+1. [TriominoCosmicBranchA.lean](/lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean#L49) の `primeGe5BranchARefuter_default` を埋める。
+2. それで [Basic.lean](/lean/dk_math/DkMath/FLT/Basic.lean#L557) の prime `n > 3` residual を実質完了させる。
+3. その後で composite reduction を「指数を prime/4 に落として既存 refuter へ投げる薄い補題」として閉じる。
+
+要するに、`Branch A` は基礎工事で、`composite` はその上の dispatcher です。先にやるべきは基礎工事です。
+
+---
