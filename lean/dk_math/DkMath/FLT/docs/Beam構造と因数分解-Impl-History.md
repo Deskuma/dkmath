@@ -1422,3 +1422,49 @@ Branch A / composite を攻めに行く。
      へ戻して contradiction へ接続する。
    - もし片側が単なる tautology なら、
      もう片側だけを真の最終核として再設計する。
+
+### 日時: 2026/03/25 22:04 JST
+1. 目的:
+   - `q = p` 側が obstruction ではなく整合条件に過ぎない可能性を反映し、
+     factorization-part の mainline を `q ≠ p` 側へ寄せる。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に
+     `primeGe5BranchANormalFormPowFactorizationPart_of_neP`
+     を追加し、
+     factorization-part を `NeP` 側だけで閉じる bridge を作った。
+   - `primeGe5BranchANormalFormPowFactorizationPart_default`
+     は上記 bridge と
+     `primeGe5BranchANormalFormPowFactorizationNeP_default`
+     を使う形へ置き換えた。
+   - `primeGe5BranchANormalFormPowFactorizationAtPValuation_default`
+     と
+     `primeGe5BranchANormalFormPowFactorizationAtP_default`
+     は mainline から外した。
+3. 結論:
+   - Branch A の active 残核は、
+     `PrimeGe5BranchANormalFormPowFactorizationNePSpineTarget`
+     1 箇所まで縮んだ。
+   - `q = p` 側は現状、
+     最終矛盾の本体というより compatibility/valuation bookkeeping
+     と見るのが自然になった。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormPowFactorizationNePSpine_default`
+     の 1 箇所だけになった。
+   - `PowFactorizationPart` / `PowComparisonKernel` / `PowEqualityPart`
+     は mainline 配線済み。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormPowFactorizationNePSpineTarget`
+     の中で、
+     `q ≠ p` の指数比較を
+     no-shared / factorization divisibility
+     から contradiction へ接続する。
+   - 必要なら
+     `q ∣ gap` と `q ∣ GN` の排他を
+     comparison 専用 helper として独立化する。
+   - その結果 `q ≠ p` 側も tautology に見えるなら、
+     comparison-based refuter の設計自体を見直す。

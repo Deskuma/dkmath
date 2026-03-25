@@ -1722,6 +1722,21 @@ theorem primeGe5BranchANormalFormPowFactorizationPart_of_cases
   exact hAtPFalse
 
 /--
+`q ≠ p` 側だけで十分なら、factorization-part はそのまま thin bridge で閉じられる。
+
+現状の mainline では、true obstruction はこちらに寄ると見てよい。
+-/
+theorem primeGe5BranchANormalFormPowFactorizationPart_of_neP
+    (hNeP : PrimeGe5BranchANormalFormPowFactorizationNePTarget) :
+    PrimeGe5BranchANormalFormPowFactorizationPartTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hx_tps hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s hp_cop_ps hp_not_dvd_y hp_cop_GNy hp_cop_pspow_y hp_cop_spow_y hp_cop_pspow hp_cop_ps_y hp_cop_tps_y hxpow_tps hfac_xpow hgapGN_tps hfac_gapGN hEq
+  exact hNeP hpack hp_dvd_gap hgap hsGN hsx hx_tps hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s hp_cop_ps hp_not_dvd_y hp_cop_GNy hp_cop_pspow_y hp_cop_spow_y hp_cop_pspow hp_cop_ps_y hp_cop_tps_y hxpow_tps
+    (fun q hqp => hfac_xpow q)
+    hgapGN_tps
+    (fun q hqp => hfac_gapGN q)
+    hEq
+
+/--
 valuation kernel があれば、`q = p` 側 factorization target は薄い橋で閉じる。
 -/
 theorem primeGe5BranchANormalFormPowFactorizationAtP_of_valuationKernel
@@ -1756,52 +1771,6 @@ theorem primeGe5BranchANormalFormPowFactorizationNeP_of_spineKernel
       primeGe5BranchAShapeFactorization_ne_p_of_value hpack hp_dvd_gap ⟨t, hgap⟩ q hqp)
     (fun q hqP hqp =>
       primeGe5BranchAGN_factorization_ne_p_math hpack hp_dvd_gap hqP hqp)
-
-/--
-`q = p` 側の valuation kernel 実装入口。
--/
-theorem primeGe5BranchANormalFormPowFactorizationAtPValuation_default :
-    PrimeGe5BranchANormalFormPowFactorizationAtPValuationTarget := by
-  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hx_tps hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s hp_cop_ps hp_not_dvd_y hp_cop_GNy hp_cop_pspow_y hp_cop_spow_y hp_cop_pspow hp_cop_ps_y hp_cop_tps_y hxpow_tps hfac_xpow_p hgapGN_tps hfac_gapGN_p hEq hgapVal hGNVal
-  let _ := x
-  let _ := y
-  let _ := z
-  let _ := t
-  let _ := s
-  let _ := hpack
-  let _ := hp_dvd_gap
-  let _ := hgap
-  let _ := hsGN
-  let _ := hsx
-  let _ := hx_tps
-  let _ := hgcd_eq
-  let _ := hp_cop_ts
-  let _ := hp_cop_ty
-  let _ := hp_cop_sy
-  let _ := hp_not_dvd_s
-  let _ := hp_cop_ps
-  let _ := hp_not_dvd_y
-  let _ := hp_cop_GNy
-  let _ := hp_cop_pspow_y
-  let _ := hp_cop_spow_y
-  let _ := hp_cop_pspow
-  let _ := hp_cop_ps_y
-  let _ := hp_cop_tps_y
-  let _ := hxpow_tps
-  let _ := hfac_xpow_p
-  let _ := hgapGN_tps
-  let _ := hfac_gapGN_p
-  let _ := hEq
-  let _ := hgapVal
-  let _ := hGNVal
-  /-
-  TODO:
-  1. `q = p` の指数比較を、
-     `padicValNat p (z - y)` と `padicValNat p (GN ...) = 1`
-     の valuation exactness に集中して読む。
-  2. 必要なら `gcd(gap,GN)=p` を valuation kernel 専用 helper に下ろす。
-  -/
-  sorry
 
 /--
 `q ≠ p` 側の spine kernel 実装入口。
@@ -1850,16 +1819,6 @@ theorem primeGe5BranchANormalFormPowFactorizationNePSpine_default :
   sorry
 
 /--
-factorization-part の `q = p` 側実装入口。
-
-ここでは `p`-進指数比較だけを isolated に受ける。
--/
-theorem primeGe5BranchANormalFormPowFactorizationAtP_default :
-    PrimeGe5BranchANormalFormPowFactorizationAtPTarget := by
-  exact primeGe5BranchANormalFormPowFactorizationAtP_of_valuationKernel
-    primeGe5BranchANormalFormPowFactorizationAtPValuation_default
-
-/--
 factorization-part の `q ≠ p` 側実装入口。
 
 ここでは `q ≠ p` の指数比較だけを isolated に受ける。
@@ -1877,8 +1836,7 @@ comparison の本当の算術 obstruction を 1 点へ集約する。
 -/
 theorem primeGe5BranchANormalFormPowFactorizationPart_default :
     PrimeGe5BranchANormalFormPowFactorizationPartTarget := by
-  exact primeGe5BranchANormalFormPowFactorizationPart_of_cases
-    primeGe5BranchANormalFormPowFactorizationAtP_default
+  exact primeGe5BranchANormalFormPowFactorizationPart_of_neP
     primeGe5BranchANormalFormPowFactorizationNeP_default
 
 /--
