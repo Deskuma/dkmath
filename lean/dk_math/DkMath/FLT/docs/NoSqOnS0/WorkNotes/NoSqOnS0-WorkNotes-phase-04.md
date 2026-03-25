@@ -22,10 +22,10 @@ status: 完了 - phase-04: 例外素数3の分離を追加
 
 `NoSqOnS0 c b` は本質的に次の2段です。
 
-1. `q ∣ c^3-b^3 ∧ q ∤ c-b -> q ∣ S0(c,b)`  
+1. `q ∣ c^3-b^3 ∧ q ∤ c-b -> q ∣ S0(c,b)`
   これは既に `CosmicPetalBridge` で確保済み。
 
-2. `q ∣ S0(c,b) -> ¬ q^2 ∣ S0(c,b)`  
+2. `q ∣ S0(c,b) -> ¬ q^2 ∣ S0(c,b)`
   ★ここが未解決（主戦場）。
 
 この2をさらに分解して証明可能な形へ落とす。
@@ -34,15 +34,15 @@ status: 完了 - phase-04: 例外素数3の分離を追加
 
 `PhaseLift.lean` に以下を追加。
 
-1. [x] `PrimitiveOnS0 c b q`  
+1. [x] `PrimitiveOnS0 c b q`
 
    - `Nat.Prime q ∧ q ∣ S0_nat c b ∧ ¬ q ∣ c-b`
 
-2. [x] `NonLiftableS0 c b q`  
+2. [x] `NonLiftableS0 c b q`
 
    - `PrimitiveOnS0 c b q -> ¬ q^2 ∣ S0_nat c b`
 
-3. [x] `AllNonLiftableOnS0 c b`  
+3. [x] `AllNonLiftableOnS0 c b`
 
    - `∀ q, PrimitiveOnS0 c b q -> ¬ q^2 ∣ S0_nat c b`
 
@@ -56,10 +56,10 @@ status: 完了 - phase-04: 例外素数3の分離を追加
 
 `PetalCoreUnit.lean` + `CounterexamplePattern.lean` で、
 
-1. [x] `NonExceptionalHarmonicOnS0 -> AllNonLiftableOnS0`（暫定接続）  
+1. [x] `NonExceptionalHarmonicOnS0 -> AllNonLiftableOnS0`（暫定接続）
 のスケルトン補題を追加（最初は弱い仮定込みで良い）。
 
-2. [x] `exceptional -> undecided` は実装済みなので、  
+2. [x] `exceptional -> undecided` は実装済みなので、
 `non-exceptional ∧ harmonic` 側で `impossible` に寄せる補題を増やす。
 
 ### 4. Main の接続先を差し替え

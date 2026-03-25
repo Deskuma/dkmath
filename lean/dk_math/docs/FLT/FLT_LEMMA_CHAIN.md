@@ -1,8 +1,8 @@
 # FLT d=3 別解による形式化証明：補題チェーン
 
-**作成日:** 2026年2月22日  
-**ファイル:** [DkMath/FLT/Main.lean](../DkMath/FLT/Main.lean)  
-**証明方針:** p-adic値評価による別解（Zsigmondy層A + PetalDetect層B)  
+**作成日:** 2026年2月22日
+**ファイル:** [DkMath/FLT/Main.lean](../DkMath/FLT/Main.lean)
+**証明方針:** p-adic値評価による別解（Zsigmondy層A + PetalDetect層B)
 **最終アクシオム:** `[propext, Classical.choice, Quot.sound]`
 
 ---
@@ -54,8 +54,8 @@ lemma cube_sub_eq_of_add_eq {a b c : ℕ} (h : a ^ 3 + b ^ 3 = c ^ 3) :
 #### 0.2 `coprime_cb_of_eq` ⟶ *互いに素性の遺伝*
 
 ```lean
-lemma coprime_cb_of_eq {a b c : ℕ} 
-    (hab : Nat.Coprime a b) 
+lemma coprime_cb_of_eq {a b c : ℕ}
+    (hab : Nat.Coprime a b)
     (h : a ^ 3 + b ^ 3 = c ^ 3) :
     Nat.Coprime c b
 ```
@@ -151,8 +151,8 @@ lemma exists_prime_factor_cube_diff {c b : ℕ}
 
 ```lean
 lemma exists_primitive_prime_factor_d3 {a b : ℕ}
-    (hab : Nat.Coprime a b) 
-    (hb : 0 < b) 
+    (hab : Nat.Coprime a b)
+    (hb : 0 < b)
     (ha : b < a)
     (hpnd : ¬ 3 ∣ a - b) :
     ∃ q : ℕ, Nat.Prime q ∧ q ∣ a ^ 3 - b ^ 3 ∧ ¬ q ∣ a - b
@@ -202,7 +202,7 @@ Zsigmondy定理によって原始素因子 `q` が存在することを保証
 
 ```lean
 lemma S0_not_sq_dvd_of_prime_dvd_and_not_dvd_apb {a b q : ℕ}
-    (_ha_pos : 0 < a) 
+    (_ha_pos : 0 < a)
     (_hb_pos : 0 < b)
     (_hab_coprime : Nat.Coprime a b)
     (_hq : Nat.Prime q)
@@ -304,7 +304,7 @@ $$v_q(c^3) = 3 \cdot v_q(c) \geq 3 \cdot 1 = 3$$
 ```lean
 lemma padicValNat_upper_bound_d3 {a b q : ℕ}
     (hab_lt : b < a)
-    (ha_pos : 0 < a) 
+    (ha_pos : 0 < a)
     (hb_pos : 0 < b)
     (hq : Nat.Prime q)
     (hq_dvd : q ∣ a ^ 3 - b ^ 3)
@@ -385,14 +385,14 @@ $$v_q(a^3 - b^3) = v_q(S0) \leq 1$$
 
 ```lean
 theorem FLT_d3_by_padicValNat {a b c : ℕ}
-    (ha : 0 < a) 
-    (hb : 0 < b) 
+    (ha : 0 < a)
+    (hb : 0 < b)
     (hc : 0 < c)
     (hab : Nat.Coprime a b)
-    (hS0_not_sq : ∀ {q : ℕ}, 
-        Nat.Prime q → 
-        q ∣ c ^ 3 - b ^ 3 → 
-        ¬ q ∣ c - b → 
+    (hS0_not_sq : ∀ {q : ℕ},
+        Nat.Prime q →
+        q ∣ c ^ 3 - b ^ 3 →
+        ¬ q ∣ c - b →
         ¬ q ^ 2 ∣ S0_nat c b) :
     a ^ 3 + b ^ 3 ≠ c ^ 3
 ```
@@ -463,7 +463,7 @@ omega  -- 矛盾
 **アクシオム確認:**
 
 ```
-'DkMath.FLT.FLT_d3_by_padicValNat' 
+'DkMath.FLT.FLT_d3_by_padicValNat'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 ```
 
@@ -552,7 +552,7 @@ depends on axioms: [propext, Classical.choice, Quot.sound]
 def S0_nat (a b : ℕ) : ℕ := a^2 + a*b + b^2
 ```
 
-**出典:** PetalDetect または Basic  
+**出典:** PetalDetect または Basic
 **意味:** 相対多角数（Eisenstein式）
 $$S_0(a, b) = a^2 + ab + b^2$$
 
@@ -582,11 +582,11 @@ def Nat.Prime (p : ℕ) : Prop := 2 ≤ p ∧ ∀ m, m ∣ p → m = 1 ∨ m = p
 propext      : ∀ {a b : Prop}, (a ↔ b) → a = b
              論証の拡張性（命題の等価性から等式）
 
-Classical.choice : ∀ {α : Sort u} (p : α → Prop), 
+Classical.choice : ∀ {α : Sort u} (p : α → Prop),
                    (∃ x, p x) → {x // p x}
              選択公理（存在から証人抽出）
 
-Quot.sound   : ∀ {α : Sort u} (r : α → α → Prop) 
+Quot.sound   : ∀ {α : Sort u} (r : α → α → Prop)
                {a b : α}, r a b → ⟦a⟧ = ⟦b⟧
              商集合の一貫性
 ```
@@ -660,6 +660,6 @@ Quot.sound   : ∀ {α : Sort u} (r : α → α → Prop)
 
 ---
 
-**生成日:** 2026-02-22  
-**ファイルID:** FLT_LEMMA_CHAIN.md  
+**生成日:** 2026-02-22
+**ファイルID:** FLT_LEMMA_CHAIN.md
 **状態:** ✅ 完成およびビルド確認済み
