@@ -1557,6 +1557,18 @@ abbrev PrimeGe5BranchANormalFormNePSupportKernelTarget : Prop :=
     False
 
 /--
+`q ≠ p` の support separation が本当に新情報でなければ、
+最終核は `Nat.Coprime t s` だけを受ける checkpoint へさらに縮む。
+-/
+abbrev PrimeGe5BranchANormalFormNePCoprimeKernelTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    Nat.Coprime t s →
+    False
+
+/--
 shape-value refuter は、最終的には witness-kernel 1 本の注入へ還元する。
 -/
 theorem primeGe5BranchAShapeValueToRefuter_of_witness_kernel
@@ -1833,6 +1845,65 @@ theorem primeGe5BranchANormalForm_neP_dvd_s_not_dvd_t
     hpack hp_dvd_gap hgap hsGN hqP hqp hq_t hq_s
 
 /--
+互いに素な 2 数では、片側を割る素数はもう片側を割れない。
+-/
+theorem prime_not_dvd_right_of_coprime_of_dvd_left
+    {a b q : ℕ}
+    (hcop : Nat.Coprime a b)
+    (hqP : Nat.Prime q)
+    (hq_a : q ∣ a) :
+    ¬ q ∣ b := by
+  intro hq_b
+  have hq_gcd : q ∣ Nat.gcd a b := Nat.dvd_gcd hq_a hq_b
+  have hq_one : q ∣ 1 := by
+    simpa [(Nat.coprime_iff_gcd_eq_one).1 hcop] using hq_gcd
+  exact hqP.not_dvd_one hq_one
+
+/--
+support separation の `t -> s` 向きは、実は `Nat.Coprime t s` だけで従う。
+-/
+theorem primeGe5BranchANormalForm_neP_dvd_t_not_dvd_s_of_coprime
+    {p x y z t s q : ℕ}
+    (_hpack : PrimeGe5CounterexamplePack p x y z)
+    (_hp_dvd_gap : p ∣ (z - y))
+    (_hgap : z - y = p ^ (p - 1) * t ^ p)
+    (_hsGN : GN p (z - y) y = p * s ^ p)
+    (hp_cop_ts : Nat.Coprime t s)
+    (hqP : Nat.Prime q)
+    (_hqp : q ≠ p)
+    (hq_t : q ∣ t) :
+    ¬ q ∣ s := by
+  exact prime_not_dvd_right_of_coprime_of_dvd_left hp_cop_ts hqP hq_t
+
+/--
+support separation の `s -> t` 向きも、`Nat.Coprime t s` だけで従う。
+-/
+theorem primeGe5BranchANormalForm_neP_dvd_s_not_dvd_t_of_coprime
+    {p x y z t s q : ℕ}
+    (_hpack : PrimeGe5CounterexamplePack p x y z)
+    (_hp_dvd_gap : p ∣ (z - y))
+    (_hgap : z - y = p ^ (p - 1) * t ^ p)
+    (_hsGN : GN p (z - y) y = p * s ^ p)
+    (hp_cop_ts : Nat.Coprime t s)
+    (hqP : Nat.Prime q)
+    (_hqp : q ≠ p)
+    (hq_s : q ∣ s) :
+    ¬ q ∣ t := by
+  exact prime_not_dvd_right_of_coprime_of_dvd_left hp_cop_ts.symm hqP hq_s
+
+/--
+support-separation kernel が実は `Nat.Coprime t s` の焼き直しに過ぎないなら、
+最終核は coprime-only checkpoint へさらに reduce できる。
+-/
+theorem primeGe5BranchANormalFormNePSupportKernel_of_coprimeKernel
+    (hKernel : PrimeGe5BranchANormalFormNePCoprimeKernelTarget) :
+    PrimeGe5BranchANormalFormNePSupportKernelTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hp_cop_ts hsep_ts hsep_st
+  let _ := hsep_ts
+  let _ := hsep_st
+  exact hKernel hpack hp_dvd_gap hgap hsGN hp_cop_ts
+
+/--
 support-separation kernel があれば、`q ≠ p` 側 spine target は
 薄い橋で閉じられる。
 -/
@@ -1877,9 +1948,9 @@ theorem primeGe5BranchANormalFormPowFactorizationNePSpine_of_supportKernel
 
 現状ここまで削ると、残っている数学は support separation だけである。
 -/
-theorem primeGe5BranchANormalFormNePSupportKernel_default :
-    PrimeGe5BranchANormalFormNePSupportKernelTarget := by
-  intro p x y z t s hpack hp_dvd_gap hgap hsGN hp_cop_ts hsep_ts hsep_st
+theorem primeGe5BranchANormalFormNePCoprimeKernel_default :
+    PrimeGe5BranchANormalFormNePCoprimeKernelTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hp_cop_ts
   let _ := p
   let _ := x
   let _ := y
@@ -1891,16 +1962,26 @@ theorem primeGe5BranchANormalFormNePSupportKernel_default :
   let _ := hgap
   let _ := hsGN
   let _ := hp_cop_ts
-  let _ := hsep_ts
-  let _ := hsep_st
   /-
   TODO:
-  1. support separation 自体が既に `Nat.Coprime t s` の焼き直しに過ぎないなら、
-     comparison-based refuter の設計をここで打ち切る。
-  2. そうでない追加情報があるなら、
-     `q ≠ p` 側だけで本当に `False` が出る算術核を別 route で入れる。
+  1. `q ≠ p` support separation は既に `Nat.Coprime t s` から出るので、
+     comparison-based refuter の active 情報はここで尽きている。
+  2. したがって Branch A の最終矛盾は、
+     `Nat.Coprime t s` 単独ではなく
+     minimality / descent / 別 arithmetic kernel
+     へ設計転換して取りに行く必要がある。
   -/
   sorry
+
+/--
+`q ≠ p` comparison の最終核。
+
+現状ここまで削ると、残っている数学は support separation だけである。
+-/
+theorem primeGe5BranchANormalFormNePSupportKernel_default :
+    PrimeGe5BranchANormalFormNePSupportKernelTarget := by
+  exact primeGe5BranchANormalFormNePSupportKernel_of_coprimeKernel
+    primeGe5BranchANormalFormNePCoprimeKernel_default
 
 /--
 `q ≠ p` 側の spine kernel 実装入口。

@@ -1557,3 +1557,59 @@ Branch A / composite を攻めに行く。
    - もし support separation からまだ新情報が引けるなら、
      その一点だけを使う最小 helper を追加して
      `NePSupportKernel_default` を埋める。
+
+### 日時: 2026/03/25 22:38 JST
+
+1. 目的:
+   - `NeP` support separation が本当に
+     `Nat.Coprime t s` の焼き直しかどうかを、
+     補題として明示的に証明する。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に
+     generic 補題
+     `prime_not_dvd_right_of_coprime_of_dvd_left`
+     を追加した。
+   - 同ファイルに
+     `primeGe5BranchANormalForm_neP_dvd_t_not_dvd_s_of_coprime`
+     と
+     `primeGe5BranchANormalForm_neP_dvd_s_not_dvd_t_of_coprime`
+     を追加し、
+     `q ≠ p` support separation は
+     `Nat.Coprime t s` だけで従うことを証明した。
+   - さらに
+     `PrimeGe5BranchANormalFormNePCoprimeKernelTarget`
+     と
+     `primeGe5BranchANormalFormNePSupportKernel_of_coprimeKernel`
+     を追加し、
+     active 残核を support-kernel から coprime-only checkpoint へ下ろした。
+3. 結論:
+   - `NeP` route の support separation は、
+     comparison exactness の新情報ではなく
+     `Nat.Coprime t s` の直接の帰結であることが証明できた。
+   - よって comparison-based refuter の active 残核は、
+     もはや `NeP` comparison ではなく
+     `PrimeGe5BranchANormalFormNePCoprimeKernelTarget`
+     1 本である。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormNePCoprimeKernel_default`
+     の 1 箇所だけになった。
+   - これは
+     「`NeP` comparison route ではこれ以上進まない」
+     ことをかなり強く示唆している。
+6. 次の課題:
+   - Branch A の最終 refuter を、
+     `NeP` comparison から離れて
+     descent / minimality / 別 arithmetic kernel
+     のどれへ切り替えるか決める。
+   - 既存の lower layer で再利用できる
+     minimality / shrink 契約があるかを確認し、
+     `PrimeGe5BranchANormalFormNePCoprimeKernelTarget`
+     の代替出口を設計する。
+   - もし local arithmetic で押し切る案を残すなら、
+     `Nat.Coprime t s` 単独ではなく
+     追加で何が必要かを最小入力として再定義する。
