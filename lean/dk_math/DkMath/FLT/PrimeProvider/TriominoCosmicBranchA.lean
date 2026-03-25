@@ -1892,6 +1892,52 @@ theorem primeGe5BranchANormalForm_neP_dvd_s_not_dvd_t_of_coprime
   exact prime_not_dvd_right_of_coprime_of_dvd_left hp_cop_ts.symm hqP hq_s
 
 /--
+右側が `p` で割れない状況では、
+`q ≠ p` の support separation と `Nat.Coprime t s` は同値になる。
+
+Branch A で確定した局所 separation は、
+結局この一般事実の specialized 版に過ぎない。
+-/
+theorem coprime_iff_ne_p_support_separation_of_not_dvd_right
+    {p t s : ℕ}
+    (hp_not_dvd_s : ¬ p ∣ s) :
+    Nat.Coprime t s ↔
+      (∀ q : ℕ, Nat.Prime q → q ≠ p → q ∣ t → ¬ q ∣ s) ∧
+      (∀ q : ℕ, Nat.Prime q → q ≠ p → q ∣ s → ¬ q ∣ t) := by
+  constructor
+  · intro hcop
+    constructor
+    · intro q hqP hqp hq_t
+      exact prime_not_dvd_right_of_coprime_of_dvd_left hcop hqP hq_t
+    · intro q hqP hqp hq_s
+      exact prime_not_dvd_right_of_coprime_of_dvd_left hcop.symm hqP hq_s
+  · rintro ⟨hsep_ts, hsep_st⟩
+    refine (Nat.coprime_iff_gcd_eq_one).2 ?_
+    by_contra hg_ne_one
+    rcases Nat.exists_prime_and_dvd hg_ne_one with ⟨q, hqP, hq_gcd⟩
+    have hq_t : q ∣ t := dvd_trans hq_gcd (Nat.gcd_dvd_left t s)
+    have hq_s : q ∣ s := dvd_trans hq_gcd (Nat.gcd_dvd_right t s)
+    by_cases hqp : q = p
+    · exact hp_not_dvd_s (hqp ▸ hq_s)
+    · exact (hsep_ts q hqP hqp hq_t) hq_s
+
+/--
+Branch A normal form では、
+`q ≠ p` support separation と `Nat.Coprime t s` は同値である。
+-/
+theorem primeGe5BranchANormalForm_neP_support_separation_iff_coprime
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    Nat.Coprime t s ↔
+      (∀ q : ℕ, Nat.Prime q → q ≠ p → q ∣ t → ¬ q ∣ s) ∧
+      (∀ q : ℕ, Nat.Prime q → q ≠ p → q ∣ s → ¬ q ∣ t) := by
+  exact coprime_iff_ne_p_support_separation_of_not_dvd_right
+    (primeGe5BranchANormalForm_prime_not_dvd_s_default hpack hp_dvd_gap hgap hsGN)
+
+/--
 support-separation kernel が実は `Nat.Coprime t s` の焼き直しに過ぎないなら、
 最終核は coprime-only checkpoint へさらに reduce できる。
 -/

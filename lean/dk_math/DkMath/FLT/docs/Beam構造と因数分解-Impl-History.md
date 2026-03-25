@@ -1613,3 +1613,57 @@ Branch A / composite を攻めに行く。
    - もし local arithmetic で押し切る案を残すなら、
      `Nat.Coprime t s` 単独ではなく
      追加で何が必要かを最小入力として再定義する。
+
+### 日時: 2026/03/25 22:53 JST
+
+1. 目的:
+   - せっかく確定した
+     「support separation は `Nat.Coprime t s` の焼き直し」
+     という知見を、
+     左右同値の形で将来再利用しやすい定理へ仕上げる。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に
+     generic 定理
+     `coprime_iff_ne_p_support_separation_of_not_dvd_right`
+     を追加した。
+   - 同ファイルに
+     Branch A specialization
+     `primeGe5BranchANormalForm_neP_support_separation_iff_coprime`
+     を追加し、
+     `¬ p ∣ s` は
+     `primeGe5BranchANormalForm_prime_not_dvd_s_default`
+     から供給する形にした。
+3. 結論:
+   - `q ≠ p` の support separation は、
+     Branch A 文脈では
+     `Nat.Coprime t s`
+     と完全に同値であることが明示化された。
+   - これにより
+     「`NeP` route が comparison 由来の新 obstruction を与えている」
+     という可能性は、
+     かなりはっきり退いた。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は引き続き
+     `primeGe5BranchANormalFormNePCoprimeKernel_default`
+     の 1 箇所だけである。
+   - 今回の iff 定理は、
+     Branch A 固有の実装メモではなく
+     support/coprime 変換辞書として
+     将来の別ルートでも再利用できる。
+6. 次の課題:
+   - Branch A の最終 refuter を
+     `NeP` comparison から切り離し、
+     coprime-only checkpoint の先にある
+     minimality / descent / 別 arithmetic kernel
+     のどれへ接続するかを決める。
+   - 必要なら
+     `PrimeGe5BranchANormalFormNePCoprimeKernelTarget`
+     自体を、
+     新しい出口に合わせて
+     より具体的な target に置き換える。
+   - `review-007` の観点も踏まえ、
+     ここで comparison route を終了扱いにするかどうかを判断する。
