@@ -1367,6 +1367,7 @@ Branch A / composite を攻めに行く。
      もう片側だけを真の最終核として再局所化する。
 
 ### 日時: 2026/03/25 21:29 JST
+
 1. 目的:
    - `q = p` 側を valuation 文脈へ、
      `q ≠ p` 側を gap/GN の factorization spine へ戻し、
@@ -1424,6 +1425,7 @@ Branch A / composite を攻めに行く。
      もう片側だけを真の最終核として再設計する。
 
 ### 日時: 2026/03/25 22:04 JST
+
 1. 目的:
    - `q = p` 側が obstruction ではなく整合条件に過ぎない可能性を反映し、
      factorization-part の mainline を `q ≠ p` 側へ寄せる。
@@ -1470,6 +1472,7 @@ Branch A / composite を攻めに行く。
      comparison-based refuter の設計自体を見直す。
 
 ### 日時: 2026/03/25 22:09 JST
+
 1. 目的:
    - `NeP` spine が現時点で少なくとも何を与えるかをコード上で固定し、
      残る gap を「support separation からどう `False` へ行くか」へ狭める。
@@ -1503,3 +1506,54 @@ Branch A / composite を攻めに行く。
    - もし support separation までしか出ないなら、
      comparison-based refuter はここで止まり、
      別の kernel へ設計転換すべきかを判断する。
+
+### 日時: 2026/03/25 22:15 JST
+
+1. 目的:
+   - `NePSpine_default` が実際に使っている情報だけを独立 target に切り出し、
+     comparison-based refuter の active 残核をより正直な形にする。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に
+     `PrimeGe5BranchANormalFormNePSupportKernelTarget`
+     を追加した。
+   - 同ファイルに
+     `primeGe5BranchANormalFormPowFactorizationNePSpine_of_supportKernel`
+     を追加し、
+     `NePSpineTarget` を support-separation kernel から閉じる
+     thin bridge に置き換えた。
+   - `primeGe5BranchANormalFormNePSupportKernel_default`
+     を新しい残核として立て、
+     `primeGe5BranchANormalFormPowFactorizationNePSpine_default`
+     はその橋にした。
+3. 結論:
+   - `q ≠ p` comparison route の active 残核は、
+     factorization exactness 全体ではなく
+     support separation だけを受ける
+     `PrimeGe5BranchANormalFormNePSupportKernelTarget`
+     1 本へさらに縮んだ。
+   - これにより、
+     `x^p` / `gap * GN` の equality や factorization exactness の大半は
+     `NeP` の最終核では未使用であることがコード上でも明示化された。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormNePSupportKernel_default`
+     の 1 箇所だけになった。
+   - 位置としては
+     comparison-based refuter の「本当に必要な情報は何か」を
+     確認するための final checkpoint になっている。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormNePSupportKernelTarget`
+     で受けている support separation が
+     `Nat.Coprime t s` の焼き直しに過ぎないかを精査する。
+   - もし焼き直しなら、
+     `NeP` comparison route 単独では `False` が出ないと判断し、
+     Branch A の最終 refuter を
+     descent / minimality / 別 arithmetic kernel
+     のどれへ切り替えるか決める。
+   - もし support separation からまだ新情報が引けるなら、
+     その一点だけを使う最小 helper を追加して
+     `NePSupportKernel_default` を埋める。

@@ -1542,6 +1542,21 @@ abbrev PrimeGe5BranchANormalFormPowFactorizationNePSpineTarget : Prop :=
     False
 
 /--
+`q ≠ p` 側 comparison が実際に使っているのは、
+support separation だけだと判明したので、
+最後の残核をその形に切り出しておく。
+-/
+abbrev PrimeGe5BranchANormalFormNePSupportKernelTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    Nat.Coprime t s →
+    (∀ q : ℕ, Nat.Prime q → q ≠ p → q ∣ t → ¬ q ∣ s) →
+    (∀ q : ℕ, Nat.Prime q → q ≠ p → q ∣ s → ¬ q ∣ t) →
+    False
+
+/--
 shape-value refuter は、最終的には witness-kernel 1 本の注入へ還元する。
 -/
 theorem primeGe5BranchAShapeValueToRefuter_of_witness_kernel
@@ -1818,25 +1833,19 @@ theorem primeGe5BranchANormalForm_neP_dvd_s_not_dvd_t
     hpack hp_dvd_gap hgap hsGN hqP hqp hq_t hq_s
 
 /--
-`q ≠ p` 側の spine kernel 実装入口。
+support-separation kernel があれば、`q ≠ p` 側 spine target は
+薄い橋で閉じられる。
 -/
-theorem primeGe5BranchANormalFormPowFactorizationNePSpine_default :
+theorem primeGe5BranchANormalFormPowFactorizationNePSpine_of_supportKernel
+    (hKernel : PrimeGe5BranchANormalFormNePSupportKernelTarget) :
     PrimeGe5BranchANormalFormPowFactorizationNePSpineTarget := by
   intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hx_tps hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s hp_cop_ps hp_not_dvd_y hp_cop_GNy hp_cop_pspow_y hp_cop_spow_y hp_cop_pspow hp_cop_ps_y hp_cop_tps_y hxpow_tps hfac_xpow_ne hgapGN_tps hfac_gapGN_ne hEq hgapFac_ne hGNFac_ne
-  let _ := p
   let _ := x
   let _ := y
   let _ := z
-  let _ := t
-  let _ := s
-  let _ := hpack
-  let _ := hp_dvd_gap
-  let _ := hgap
-  let _ := hsGN
   let _ := hsx
   let _ := hx_tps
   let _ := hgcd_eq
-  let _ := hp_cop_ts
   let _ := hp_cop_ty
   let _ := hp_cop_sy
   let _ := hp_not_dvd_s
@@ -1855,13 +1864,51 @@ theorem primeGe5BranchANormalFormPowFactorizationNePSpine_default :
   let _ := hEq
   let _ := hgapFac_ne
   let _ := hGNFac_ne
+  exact hKernel hpack hp_dvd_gap hgap hsGN hp_cop_ts
+    (fun q hqP hqp hq_t =>
+      primeGe5BranchANormalForm_neP_dvd_t_not_dvd_s
+        hpack hp_dvd_gap hgap hsGN hqP hqp hq_t)
+    (fun q hqP hqp hq_s =>
+      primeGe5BranchANormalForm_neP_dvd_s_not_dvd_t
+        hpack hp_dvd_gap hgap hsGN hqP hqp hq_s)
+
+/--
+`q ≠ p` comparison の最終核。
+
+現状ここまで削ると、残っている数学は support separation だけである。
+-/
+theorem primeGe5BranchANormalFormNePSupportKernel_default :
+    PrimeGe5BranchANormalFormNePSupportKernelTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hp_cop_ts hsep_ts hsep_st
+  let _ := p
+  let _ := x
+  let _ := y
+  let _ := z
+  let _ := t
+  let _ := s
+  let _ := hpack
+  let _ := hp_dvd_gap
+  let _ := hgap
+  let _ := hsGN
+  let _ := hp_cop_ts
+  let _ := hsep_ts
+  let _ := hsep_st
   /-
   TODO:
-  1. `q ≠ p` の指数比較を、
-     gap/GN の no-shared / factorization spine へ戻して読む。
-  2. 必要なら `Nat.Coprime t s` を `q ≠ p` kernel 専用 helper に下ろす。
+  1. support separation 自体が既に `Nat.Coprime t s` の焼き直しに過ぎないなら、
+     comparison-based refuter の設計をここで打ち切る。
+  2. そうでない追加情報があるなら、
+     `q ≠ p` 側だけで本当に `False` が出る算術核を別 route で入れる。
   -/
   sorry
+
+/--
+`q ≠ p` 側の spine kernel 実装入口。
+-/
+theorem primeGe5BranchANormalFormPowFactorizationNePSpine_default :
+    PrimeGe5BranchANormalFormPowFactorizationNePSpineTarget := by
+  exact primeGe5BranchANormalFormPowFactorizationNePSpine_of_supportKernel
+    primeGe5BranchANormalFormNePSupportKernel_default
 
 /--
 factorization-part の `q ≠ p` 側実装入口。
