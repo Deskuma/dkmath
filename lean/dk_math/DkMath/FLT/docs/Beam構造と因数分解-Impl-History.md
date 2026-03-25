@@ -1468,3 +1468,38 @@ Branch A / composite を攻めに行く。
      comparison 専用 helper として独立化する。
    - その結果 `q ≠ p` 側も tautology に見えるなら、
      comparison-based refuter の設計自体を見直す。
+
+### 日時: 2026/03/25 22:09 JST
+1. 目的:
+   - `NeP` spine が現時点で少なくとも何を与えるかをコード上で固定し、
+     残る gap を「support separation からどう `False` へ行くか」へ狭める。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に以下を追加した。
+     - `primeGe5BranchANormalForm_neP_dvd_t_not_dvd_s`
+     - `primeGe5BranchANormalForm_neP_dvd_s_not_dvd_t`
+   - いずれも `q ≠ p`・prime `q` に対して、
+     `q ∣ gap` と `q ∣ GN` の no-shared を
+     `t` / `s` の素因子分離へ戻す helper である。
+3. 結論:
+   - `NeP` route はまず
+     「`q ≠ p` の素因子は `t` と `s` に同時には立たない」
+     ことを与える、と明確になった。
+   - したがって active 残核は、
+     この support separation からどう最終矛盾へ接続するか
+     1 点にかなり近づいた。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は変わらず
+     `primeGe5BranchANormalFormPowFactorizationNePSpine_default`
+     の 1 箇所だけである。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormPowFactorizationNePSpineTarget`
+     の中で、
+     上で切り出した support separation を
+     `False` へ送る追加局所条件が本当にあるかを見極める。
+   - もし support separation までしか出ないなら、
+     comparison-based refuter はここで止まり、
+     別の kernel へ設計転換すべきかを判断する。

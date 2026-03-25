@@ -1773,6 +1773,51 @@ theorem primeGe5BranchANormalFormPowFactorizationNeP_of_spineKernel
       primeGe5BranchAGN_factorization_ne_p_math hpack hp_dvd_gap hqP hqp)
 
 /--
+`q ≠ p` で `q ∣ t` なら、Branch A normal form では `q ∤ s`。
+
+これは `q ∣ gap` と `q ∣ GN` の no-shared 版に戻しただけであり、
+NeP spine がまず与える局所 separation を表す。
+-/
+theorem primeGe5BranchANormalForm_neP_dvd_t_not_dvd_s
+    {p x y z t s q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hqP : Nat.Prime q)
+    (hqp : q ≠ p)
+    (hq_t : q ∣ t) :
+    ¬ q ∣ s := by
+  have hq_gap : q ∣ (z - y) := by
+    rw [hgap]
+    exact dvd_mul_of_dvd_right (dvd_pow hq_t hpack.hp.ne_zero) (p ^ (p - 1))
+  have hq_not_dvd_GN : ¬ q ∣ GN p (z - y) y := by
+    simpa using primeGe5BranchANoSharedPrimeOnGN_math
+      hpack hp_dvd_gap hqP hqp hq_gap
+  intro hq_s
+  have hq_GN : q ∣ GN p (z - y) y := by
+    rw [hsGN]
+    exact dvd_mul_of_dvd_right (dvd_pow hq_s hpack.hp.ne_zero) p
+  exact hq_not_dvd_GN hq_GN
+
+/--
+`q ≠ p` で `q ∣ s` なら、Branch A normal form では `q ∤ t`。
+-/
+theorem primeGe5BranchANormalForm_neP_dvd_s_not_dvd_t
+    {p x y z t s q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hqP : Nat.Prime q)
+    (hqp : q ≠ p)
+    (hq_s : q ∣ s) :
+    ¬ q ∣ t := by
+  intro hq_t
+  exact primeGe5BranchANormalForm_neP_dvd_t_not_dvd_s
+    hpack hp_dvd_gap hgap hsGN hqP hqp hq_t hq_s
+
+/--
 `q ≠ p` 側の spine kernel 実装入口。
 -/
 theorem primeGe5BranchANormalFormPowFactorizationNePSpine_default :
