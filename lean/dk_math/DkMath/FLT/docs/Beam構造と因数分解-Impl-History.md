@@ -662,3 +662,99 @@ Branch A / composite を攻めに行く。
      pack の局所条件から shrink/descent witness あるいは直接矛盾を返す。
    - `*_via_FLT` / `*_use_FLT` の残骸は、
      以後この witness-kernel 差し替えで順に不要化する。
+
+### 日時: 2026/03/25 17:06 JST: Branch A の `GN-shape` と normal form を lower layer に固定し、残穴を normal-form refuter へ押し込んだ
+
+1. 目的:
+   - `hint-001.md` / `plan-001.md` の方針に沿って、
+     Branch A の内部像を
+     `gap`, `GN`, `x`
+     の 3 つの normal form に落とす。
+   - `primeGe5BranchAShapeWitnessKernel_default` の残穴をさらに押し込み、
+     最終責務を
+     `normal form -> False`
+     の 1 点へ縮める。
+2. 内容:
+   - `DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean` に
+     `PrimeGe5BranchAGNShapeTarget`
+     を追加した。
+   - まず `q ≠ p` 側の `GN` 指数整列として
+     `primeGe5BranchAGN_factorization_ne_p_math`
+     を実装した。
+     - `x^p = gap * GN`
+       と
+       `gapNePNoSharedPrimeOnGN_branchA` 型の数学
+       を用いて、
+       `q ≠ p` のとき
+       `p ∣ (GN ...).factorization q`
+       を直接回収する。
+   - ついで
+     `primeGe5BranchAGN_eq_p_mul_pow_math`
+     を実装した。
+     - `p ∣ GN` かつ `¬ p^2 ∣ GN`
+       から `GN.factorization p = 1`
+       を得る。
+     - `w := GN / p` とおくと、
+       全ての素因子指数が `p` の倍数になるので、
+       `exists_eq_pow_of_factorization_dvd`
+       から
+       `GN = p * s^p`
+       を再構成する。
+   - さらに
+     `primeGe5BranchANormalForm_of_witness`
+     を実装した。
+     - witness
+       `z - y = p^(p-1) * t^p`
+       と
+       上の `GN = p * s^p`
+       を
+       `x^p = gap * GN`
+       に代入し、
+       `Nat.pow_left_injective`
+       で
+       `x = p * (t * s)`
+       を得る。
+   - 最後に
+     `PrimeGe5BranchANormalFormRefuterTarget`
+     と
+     `primeGe5BranchAShapeWitnessKernel_of_normalFormRefuter`
+     を追加した。
+     - これにより
+       `primeGe5BranchAShapeWitnessKernel_default`
+       は薄い橋になり、
+       残る `sorry` は
+       `primeGe5BranchANormalFormRefuter_default`
+       の 1 箇所へ移った。
+3. 結論:
+   - Branch A lower layer では、いまや内部像が
+     `(gap, GN, x) = (p^(p-1) * t^p, p * s^p, p * (t * s))`
+     まで固定できる。
+   - これで `via_FLT` 置換の本当の残穴は、
+     normal form を局所 gcd / valuation 衝突へ送る refuter のみになった。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormRefuter_default`
+     の 1 箇所のみ。
+   - `Basic.lean` 側の既存 `sorry` は
+     composite reduction residual の 1 箇所のまま。
+6. 次の課題:
+   - `primeGe5BranchANormalFormRefuter_default` を、
+     normal form
+     - `z - y = p^(p-1) * t^p`
+     - `GN p (z - y) y = p * s^p`
+     - `x = p * (t * s)`
+     を pack の局所条件へ衝突させる clean kernel に置換する。
+   - 第一候補は gcd exactness:
+     `gcd(gap, GN) = p * gcd(t, s)^p`
+     型評価を作り、
+     `gcd(gap, GN) ∣ p`
+     と衝突させて
+     `gcd(t, s) = 1`
+     を強制する路線。
+   - 第二候補は valuation dictionary:
+     `ν_q(x) = ν_q(t) + ν_q(s)` や `ν_p(x) = 1 + ν_p(t) + ν_p(s)`
+     を補題化し、pack の互いに素条件と組み合わせて局所矛盾へ落とす路線。

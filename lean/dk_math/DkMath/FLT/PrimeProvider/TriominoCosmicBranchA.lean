@@ -62,6 +62,12 @@ abbrev PrimeGe5BranchAShapeValueTarget : Prop :=
     p ∣ (z - y) →
     ∃ t : ℕ, (z - y) = p ^ (p - 1) * t ^ p
 
+/-- Branch A では `GN` 自体も `p * s^p` 形になる。 -/
+abbrev PrimeGe5BranchAGNShapeTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ∃ s : ℕ, GN p (z - y) y = p * s ^ p
+
 /--
 Branch A の shape 値を refute する lower-layer 契約。
 
@@ -535,6 +541,139 @@ theorem primeGe5BranchAShapeValue_of_factorization
     _ = d * w := hu_mul
     _ = p ^ (p - 1) * t ^ p := by simp [d, ht]
 
+/--
+Branch A では `q ≠ p` 側の `GN` 指数は `p` の倍数。
+-/
+theorem primeGe5BranchAGN_factorization_ne_p_math
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hqP : Nat.Prime q)
+    (hqp : q ≠ p) :
+    p ∣ (GN p (z - y) y).factorization q := by
+  let u : ℕ := z - y
+  let N : ℕ := GN p u y
+  have hxpow : x ^ p = u * N := by
+    simpa [u, N, PrimeGe5CounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
+  have hu0 : u ≠ 0 := Nat.ne_of_gt (Nat.sub_pos_of_lt hpack.hyz_lt)
+  have hN0 : N ≠ 0 := by
+    intro hN0
+    have hGN : p ∣ N ∧ ¬ p ^ 2 ∣ N := by
+      simpa [u, N] using primeGe5BranchAP_dvd_GN_and_not_sq_when_p_dvd_gap hpack hp_dvd_gap
+    exact hGN.2 (by simp [hN0])
+  by_cases hqU : q ∣ u
+  · have hq_not_dvd_N : ¬ q ∣ N := by
+      simpa [u, N] using primeGe5BranchANoSharedPrimeOnGN_math hpack hp_dvd_gap hqP hqp hqU
+    have hNfac0 : N.factorization q = 0 := Nat.factorization_eq_zero_of_not_dvd hq_not_dvd_N
+    exact ⟨0, by simpa [N, hNfac0]⟩
+  · have hfac0 : u.factorization q = 0 := Nat.factorization_eq_zero_of_not_dvd hqU
+    have hmulq : (u * N).factorization q = u.factorization q + N.factorization q := by
+      simpa using congrArg (fun f => f q) (Nat.factorization_mul hu0 hN0)
+    have hpowq : (x ^ p).factorization q = p * x.factorization q := by
+      simp [Nat.factorization_pow]
+    have hNq : N.factorization q = p * x.factorization q := by
+      calc
+        N.factorization q = 0 + N.factorization q := by simp
+        _ = u.factorization q + N.factorization q := by simp [hfac0]
+        _ = (u * N).factorization q := by symm; exact hmulq
+        _ = (x ^ p).factorization q := by simp [hxpow]
+        _ = p * x.factorization q := hpowq
+    exact ⟨x.factorization q, by simpa [N, hNq]⟩
+
+/--
+Branch A では `GN` 自体が `p * s^p` 形になる。
+`gapShape` はまだ使わない。
+-/
+theorem primeGe5BranchAGN_eq_p_mul_pow_math :
+    PrimeGe5BranchAGNShapeTarget := by
+  intro p x y z hpack hp_dvd_gap
+  let N : ℕ := GN p (z - y) y
+  have hp_dvd_N : p ∣ N := by
+    simpa [N] using (primeGe5BranchAP_dvd_GN_and_not_sq_when_p_dvd_gap hpack hp_dvd_gap).1
+  have hN_not_sq : ¬ p ^ 2 ∣ N := by
+    simpa [N] using (primeGe5BranchAP_dvd_GN_and_not_sq_when_p_dvd_gap hpack hp_dvd_gap).2
+  have hN0 : N ≠ 0 := by
+    intro hN0
+    exact hN_not_sq (by simp [hN0])
+  have hNfac_p : N.factorization p = 1 := by
+    calc
+      N.factorization p = padicValNat p N := by
+        symm
+        exact padicValNat_eq_factorization hpack.hp hN0
+      _ = 1 := primeGe5BranchAPadicValNat_eq_one_of_dvd_not_sq hpack.hp hp_dvd_N hN_not_sq
+  let w : ℕ := N / p
+  have hw_pos : 0 < w := Nat.div_pos (Nat.le_of_dvd (Nat.pos_of_ne_zero hN0) hp_dvd_N) hpack.hp.pos
+  have hw0 : w ≠ 0 := Nat.ne_of_gt hw_pos
+  have hfac_div : w.factorization = N.factorization - p.factorization := by
+    simpa [w] using Nat.factorization_div hp_dvd_N
+  have hall_w : ∀ q : ℕ, p ∣ w.factorization q := by
+    intro q
+    by_cases hq_eq : q = p
+    · have hp_fac_p : p.factorization p = 1 := by
+        simpa using congrArg (fun f => f p) hpack.hp.factorization
+      have hw_fac_p : w.factorization p = 0 := by
+        calc
+          w.factorization p = N.factorization p - p.factorization p := by
+            simpa using congrArg (fun f => f p) hfac_div
+          _ = 1 - 1 := by simp [hNfac_p, hp_fac_p]
+          _ = 0 := by simp
+      exact ⟨0, by simp [hq_eq, hw_fac_p]⟩
+    · by_cases hqP : Nat.Prime q
+      · have hNq : p ∣ N.factorization q := by
+          simpa [N] using primeGe5BranchAGN_factorization_ne_p_math hpack hp_dvd_gap hqP hq_eq
+        have hp_fac_q : p.factorization q = 0 := by
+          exact Nat.factorization_eq_zero_of_not_dvd (by
+            intro hq_dvd_p
+            exact hq_eq ((Nat.prime_dvd_prime_iff_eq hqP hpack.hp).1 hq_dvd_p))
+        have hw_fac_q : w.factorization q = N.factorization q := by
+          calc
+            w.factorization q = N.factorization q - p.factorization q := by
+              simpa using congrArg (fun f => f q) hfac_div
+            _ = N.factorization q := by simp [hp_fac_q]
+        rcases hNq with ⟨k, hk⟩
+        exact ⟨k, by simp [hw_fac_q, hk]⟩
+      · have hw_fac0 : w.factorization q = 0 := Nat.factorization_eq_zero_of_not_prime w hqP
+        exact ⟨0, by simp [hw_fac0]⟩
+  rcases exists_eq_pow_of_factorization_dvd
+      (u := w) (p := p) hw0 hpack.hp.pos hall_w with ⟨s, hs⟩
+  have hN_mul : N = p * w := by
+    have hw_mul : w * p = N := by
+      simpa [w] using Nat.div_mul_cancel hp_dvd_N
+    simpa [Nat.mul_comm] using hw_mul.symm
+  refine ⟨s, ?_⟩
+  calc
+    GN p (z - y) y = N := by rfl
+    _ = p * w := hN_mul
+    _ = p * s ^ p := by simp [hs]
+
+/--
+Branch A witness から `gap`, `GN`, `x` の 3 つを同時に正規形へ揃える。
+-/
+theorem primeGe5BranchANormalForm_of_witness
+    {p x y z t : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (ht : z - y = p ^ (p - 1) * t ^ p) :
+    ∃ s : ℕ, GN p (z - y) y = p * s ^ p ∧ x = p * (t * s) := by
+  rcases primeGe5BranchAGN_eq_p_mul_pow_math hpack hp_dvd_gap with ⟨s, hs⟩
+  refine ⟨s, hs, ?_⟩
+  have hxpow : x ^ p = (z - y) * GN p (z - y) y := by
+    simpa [PrimeGe5CounterexamplePack.gap] using hpack.xpow_eq_gap_mul_GN
+  have hpred : p - 1 + 1 = p := Nat.sub_add_cancel (Nat.succ_le_of_lt hpack.hp.pos)
+  have hs' : GN p (p ^ (p - 1) * t ^ p) y = p * s ^ p := by
+    simpa [ht] using hs
+  have hpow_eq : x ^ p = (p * (t * s)) ^ p := by
+    calc
+      x ^ p = (z - y) * GN p (z - y) y := hxpow
+      _ = (p ^ (p - 1) * t ^ p) * GN p (p ^ (p - 1) * t ^ p) y := by rw [ht]
+      _ = (p ^ (p - 1) * t ^ p) * (p * s ^ p) := by rw [hs']
+      _ = (p ^ (p - 1) * p) * (t ^ p * s ^ p) := by ac_rfl
+      _ = p ^ ((p - 1) + 1) * (t ^ p * s ^ p) := by rw [← pow_succ]
+      _ = p ^ p * (t ^ p * s ^ p) := by rw [hpred]
+      _ = p ^ p * (t * s) ^ p := by rw [Nat.mul_pow]
+      _ = (p * (t * s)) ^ p := by symm; exact Nat.mul_pow p (t * s) p
+  exact (Nat.pow_left_injective hpack.hp.ne_zero) hpow_eq
+
 /-- Branch A の shape witness から `p^(p-1) ∣ z-y` を回収する。 -/
 lemma primeGe5BranchAShapeWitness_powPred_dvd_gap
     {p y z t : ℕ}
@@ -571,6 +710,19 @@ abbrev PrimeGe5BranchAShapeWitnessKernelTarget : Prop :=
     False
 
 /--
+Branch A の局所数学核。
+
+normal form をどう矛盾へ送るかだけを担う最終差し替え口。
+-/
+abbrev PrimeGe5BranchANormalFormRefuterTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    False
+
+/--
 shape-value refuter は、最終的には witness-kernel 1 本の注入へ還元する。
 -/
 theorem primeGe5BranchAShapeValueToRefuter_of_witness_kernel
@@ -582,28 +734,56 @@ theorem primeGe5BranchAShapeValueToRefuter_of_witness_kernel
     (primeGe5BranchAShapeWitness_to_descent_input hpack hp_dvd_gap ht)
 
 /--
+normal-form refuter があれば、witness kernel は薄い橋で閉じる。
+-/
+theorem primeGe5BranchAShapeWitnessKernel_of_normalFormRefuter
+    (hRef : PrimeGe5BranchANormalFormRefuterTarget) :
+    PrimeGe5BranchAShapeWitnessKernelTarget := by
+  intro p x y z t hpack hp_dvd_gap hInput
+  rcases primeGe5BranchANormalForm_of_witness hpack hp_dvd_gap hInput.gapShape with
+    ⟨s, hsGN, hsx⟩
+  exact hRef hpack hp_dvd_gap hInput.gapShape hsGN hsx
+
+/--
+Branch A の normal-form refuter 実装入口。
+
+ここが clean な局所 gcd / valuation 衝突数学へ置換される最終穴。
+-/
+theorem primeGe5BranchANormalFormRefuter_default :
+    PrimeGe5BranchANormalFormRefuterTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+  let _ := p
+  let _ := x
+  let _ := y
+  let _ := z
+  let _ := t
+  let _ := s
+  let _ := hpack
+  let _ := hp_dvd_gap
+  let _ := hgap
+  let _ := hsGN
+  let _ := hsx
+  /-
+  TODO:
+  1. normal form
+       `z - y = p^(p-1) * t^p`,
+       `GN = p * s^p`,
+       `x = p * (t * s)`
+     を pack の局所条件へ衝突させる。
+  2. 必要なら gcd exactness / valuation dictionary を補題化して薄くする。
+  3. `*_via_FLT` を使わず、この refuter 1 本だけを clean 置換点にする。
+  -/
+  sorry
+
+/--
 Branch A の shape-witness kernel 実装入口。
 
 ここが clean descent / shrink 数学へ最終的に置換される本当の残穴。
 -/
 theorem primeGe5BranchAShapeWitnessKernel_default :
     PrimeGe5BranchAShapeWitnessKernelTarget := by
-  intro p x y z t hpack hp_dvd_gap hInput
-  let _ := p
-  let _ := x
-  let _ := y
-  let _ := z
-  let _ := t
-  let _ := hpack
-  let _ := hp_dvd_gap
-  let _ := hInput
-  /-
-  TODO:
-  1. `gapShape : z - y = p^(p-1) * t^p` を pack の局所条件へ衝突させる。
-  2. 必要なら `powPredDvdGap` と `tPos` から shrink/descent witness を組む。
-  3. `*_via_FLT` を使わず、この kernel 1 本だけを clean 置換点にする。
-  -/
-  sorry
+  exact primeGe5BranchAShapeWitnessKernel_of_normalFormRefuter
+    primeGe5BranchANormalFormRefuter_default
 
 /-- Branch A の shape-value refuter 実装入口。 -/
 theorem primeGe5BranchAShapeValueToRefuter_default :
