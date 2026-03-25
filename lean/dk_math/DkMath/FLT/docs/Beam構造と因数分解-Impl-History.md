@@ -1200,3 +1200,59 @@ Branch A / composite を攻めに行く。
      `Nat.Coprime (t * (p * s)) (s ^ p)`
      を helper 化する。
    - それでも足りなければ、valuation dictionary を x-factor kernel 専用 helper として追加する。
+
+### 日時: 2026/03/25 19:47 JST
+1. 目的:
+   - Review 005 の exactness 路線に沿って、
+     `XFactorKernel` の残核を
+     `x^p` 側 / `gap * GN` 側の比較核へさらに押し下げる。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に以下を追加した。
+     - `primeGe5BranchANormalForm_gapGN_eq_tps_pow`
+     - `primeGe5BranchANormalForm_gapGN_factorization_exact`
+     - `PrimeGe5BranchANormalFormPowComparisonKernelTarget`
+     - `primeGe5BranchANormalFormXPowExactKernel_of_powComparisonKernel`
+     - `primeGe5BranchANormalFormPowComparisonKernel_default`
+   - 既存の
+     `primeGe5BranchANormalForm_xpow_eq_tps_pow`
+     と
+     `primeGe5BranchANormalForm_xpow_factorization_exact`
+     は linter warning が出ない形へ微修正した。
+   - これにより、
+     `XPowExactKernel`
+     は `PowComparisonKernel`
+     への thin bridge になった。
+3. 結論:
+   - Branch A の未完核は、
+     `PrimeGe5BranchANormalFormXPowExactKernelTarget`
+     からさらに
+     `PrimeGe5BranchANormalFormPowComparisonKernelTarget`
+     1 本へ縮んだ。
+   - いま explicit に使える exactness 辞書は
+     `x ^ p = (t * (p * s)) ^ p`
+     と
+     `((z - y) * GN p (z - y) y) = (t * (p * s)) ^ p`
+     および両辺の factorization exactness である。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormPowComparisonKernel_default`
+     の 1 箇所だけになった。
+   - `XPowExactKernel` / `XFactorKernel` / `GNLinearFactorKernel` /
+     `GNFactorKernel` / `GNRightKernel` / `LocalCoprimeKernel` /
+     `ArithmeticKernel`
+     は all thin bridge。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormPowComparisonKernelTarget`
+     の中で、
+     `x^p` 側 exactness と `gap * GN` 側 exactness の比較から
+     本当の arithmetic obstruction を切り出す。
+   - 必要なら comparison kernel を
+     equality-part と factorization-part にさらに分解して、
+     どちらが本当の最終核かを見極める。
+   - それでも不足なら、
+     `x^p = gap * GN` 自体の pack 由来 exactness を
+     comparison 専用 helper として外出しする。
