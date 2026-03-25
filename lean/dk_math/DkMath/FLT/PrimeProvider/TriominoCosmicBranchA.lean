@@ -771,6 +771,113 @@ theorem primeGe5BranchANormalForm_gcd_ts_eq_one_default
     hpack hp_dvd_gap hgap hsGN
     (primeGe5BranchAGcdGapGNDvdP_default hpack hp_dvd_gap)
 
+/--
+normal form の `x = p * (t * s)` と反例 pack の `x ⟂ y` から、
+`t * s` も `y` と互いに素である。
+-/
+theorem primeGe5BranchANormalForm_coprime_ts_right
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hsx : x = p * (t * s)) :
+    Nat.Coprime (t * s) y := by
+  have hcop_y_pts : Nat.Coprime y (p * (t * s)) := by
+    simpa [Nat.coprime_comm, hsx]
+      using hpack.hxy
+  have hparts : Nat.Coprime y p ∧ Nat.Coprime y (t * s) :=
+    (Nat.coprime_mul_iff_right).1 hcop_y_pts
+  simpa [Nat.coprime_comm] using hparts.2
+
+/--
+`t * s ⟂ y` なら、個別にも `t ⟂ y` と `s ⟂ y` が従う。
+-/
+theorem primeGe5BranchANormalForm_coprime_t_right
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hsx : x = p * (t * s)) :
+    Nat.Coprime t y := by
+  have hcop_y_ts : Nat.Coprime y (t * s) := by
+    simpa [Nat.coprime_comm, mul_comm] using
+      (primeGe5BranchANormalForm_coprime_ts_right hpack hsx)
+  have hparts : Nat.Coprime y t ∧ Nat.Coprime y s :=
+    (Nat.coprime_mul_iff_right).1 hcop_y_ts
+  simpa [Nat.coprime_comm] using hparts.1
+
+/--
+`t * s ⟂ y` なら、個別にも `s ⟂ y` が従う。
+-/
+theorem primeGe5BranchANormalForm_coprime_s_right
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hsx : x = p * (t * s)) :
+    Nat.Coprime s y := by
+  have hcop_y_ts : Nat.Coprime y (t * s) := by
+    simpa [Nat.coprime_comm, mul_comm] using
+      (primeGe5BranchANormalForm_coprime_ts_right hpack hsx)
+  have hparts : Nat.Coprime y t ∧ Nat.Coprime y s :=
+    (Nat.coprime_mul_iff_right).1 hcop_y_ts
+  simpa [Nat.coprime_comm] using hparts.2
+
+/--
+Branch A normal form では `t` と `s` 自体も互いに素になる。
+-/
+theorem primeGe5BranchANormalForm_coprime_ts_default
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    Nat.Coprime t s := by
+  exact (Nat.coprime_iff_gcd_eq_one).2
+    (primeGe5BranchANormalForm_gcd_ts_eq_one_default hpack hp_dvd_gap hgap hsGN)
+
+/--
+Branch A normal form では、既存の `gcd(gap, GN) ∣ p` と
+`p ∣ gap`, `p ∣ GN` を合わせて `gcd(gap, GN) = p` まで exact に戻せる。
+-/
+theorem primeGe5BranchANormalForm_gcd_gap_GN_eq_p_default
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (_hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    Nat.gcd (z - y) (GN p (z - y) y) = p := by
+  have hgcd_dvd_p :
+      Nat.gcd (z - y) (GN p (z - y) y) ∣ p :=
+    primeGe5BranchAGcdGapGNDvdP_default hpack hp_dvd_gap
+  have hp_dvd_gcd :
+      p ∣ Nat.gcd (z - y) (GN p (z - y) y) := by
+    refine Nat.dvd_gcd hp_dvd_gap ?_
+    rw [hsGN]
+    exact dvd_mul_right p (s ^ p)
+  rcases (Nat.dvd_prime hpack.hp).mp hgcd_dvd_p with hgcd_eq_one | hgcd_eq_p
+  · have hp_dvd_one : p ∣ 1 := by
+      rw [← hgcd_eq_one]
+      exact hp_dvd_gcd
+    have hp_eq_one : p = 1 := Nat.eq_one_of_dvd_one hp_dvd_one
+    exact False.elim (hpack.hp.ne_one hp_eq_one)
+  · exact hgcd_eq_p
+
+/--
+`GN = p * s^p` と `p^2 ∤ GN` から、normal form の `s` は `p` で割れない。
+-/
+theorem primeGe5BranchANormalForm_prime_not_dvd_s_default
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (_hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    ¬ p ∣ s := by
+  have hGN_not_sq : ¬ p ^ 2 ∣ GN p (z - y) y := by
+    simpa using (primeGe5BranchAP_dvd_GN_and_not_sq_when_p_dvd_gap hpack hp_dvd_gap).2
+  intro hp_dvd_s
+  have hp_dvd_spow : p ∣ s ^ p := dvd_pow hp_dvd_s hpack.hp.ne_zero
+  have hp2_dvd_GN : p ^ 2 ∣ GN p (z - y) y := by
+    rw [hsGN]
+    have hmul : p * p ∣ p * s ^ p :=
+      Nat.mul_dvd_mul_left p hp_dvd_spow
+    simpa [pow_two, Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm] using hmul
+  exact hGN_not_sq hp2_dvd_GN
+
 /-- Branch A の shape witness から `p^(p-1) ∣ z-y` を回収する。 -/
 lemma primeGe5BranchAShapeWitness_powPred_dvd_gap
     {p y z t : ℕ}
@@ -820,6 +927,30 @@ abbrev PrimeGe5BranchANormalFormRefuterTarget : Prop :=
     False
 
 /--
+normal form refuter の残核。
+
+ここでは既に抽出済みの
+`gcd(gap, GN) = p`,
+`t ⟂ s`,
+`t ⟂ y`,
+`s ⟂ y`,
+`p ∤ s`
+だけを入力として、最後の局所矛盾へ集中する。
+-/
+abbrev PrimeGe5BranchANormalFormArithmeticKernelTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.gcd (z - y) (GN p (z - y) y) = p →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    False
+
+/--
 shape-value refuter は、最終的には witness-kernel 1 本の注入へ還元する。
 -/
 theorem primeGe5BranchAShapeValueToRefuter_of_witness_kernel
@@ -842,13 +973,28 @@ theorem primeGe5BranchAShapeWitnessKernel_of_normalFormRefuter
   exact hRef hpack hp_dvd_gap hInput.gapShape hsGN hsx
 
 /--
-Branch A の normal-form refuter 実装入口。
-
-ここが clean な局所 gcd / valuation 衝突数学へ置換される最終穴。
+normal form refuter は、最後の arithmetic kernel 1 本へ further reduce できる。
 -/
-theorem primeGe5BranchANormalFormRefuter_default :
+theorem primeGe5BranchANormalFormRefuter_of_arithmetic_kernel
+    (hKernel : PrimeGe5BranchANormalFormArithmeticKernelTarget) :
     PrimeGe5BranchANormalFormRefuterTarget := by
   intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+  exact hKernel hpack hp_dvd_gap hgap hsGN hsx
+    (primeGe5BranchANormalForm_gcd_gap_GN_eq_p_default hpack hp_dvd_gap hgap hsGN)
+    (primeGe5BranchANormalForm_coprime_ts_default hpack hp_dvd_gap hgap hsGN)
+    (primeGe5BranchANormalForm_coprime_t_right hpack hsx)
+    (primeGe5BranchANormalForm_coprime_s_right hpack hsx)
+    (primeGe5BranchANormalForm_prime_not_dvd_s_default hpack hp_dvd_gap hgap hsGN)
+
+/--
+Branch A arithmetic kernel の実装入口。
+
+未完核を normal form そのものから切り離し、
+抽出済みの算術拘束だけへ局所化する。
+-/
+theorem primeGe5BranchANormalFormArithmeticKernel_default :
+    PrimeGe5BranchANormalFormArithmeticKernelTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hgcd_eq hp_cop_ts hp_cop_ty hp_cop_sy hp_not_dvd_s
   let _ := p
   let _ := x
   let _ := y
@@ -860,17 +1006,29 @@ theorem primeGe5BranchANormalFormRefuter_default :
   let _ := hgap
   let _ := hsGN
   let _ := hsx
+  let _ := hgcd_eq
+  let _ := hp_cop_ts
+  let _ := hp_cop_ty
+  let _ := hp_cop_sy
+  let _ := hp_not_dvd_s
   /-
   TODO:
-  1. normal form
-       `z - y = p^(p-1) * t^p`,
-       `GN = p * s^p`,
-       `x = p * (t * s)`
-     を pack の局所条件へ衝突させる。
-  2. 必要なら gcd exactness / valuation dictionary を補題化して薄くする。
-  3. `*_via_FLT` を使わず、この refuter 1 本だけを clean 置換点にする。
+  1. `gcd(gap, GN) = p` と `t ⟂ s`, `t ⟂ y`, `s ⟂ y`, `p ∤ s`
+     だけで書ける local contradiction をここへ集約する。
+  2. 必要なら `p ∤ y`, `Nat.Coprime p s`, valuation 分解などを
+     追加 helper として昇格させる。
   -/
   sorry
+
+/--
+Branch A の normal-form refuter 実装入口。
+
+ここが clean な局所 gcd / valuation 衝突数学へ置換される最終穴。
+-/
+theorem primeGe5BranchANormalFormRefuter_default :
+    PrimeGe5BranchANormalFormRefuterTarget := by
+  exact primeGe5BranchANormalFormRefuter_of_arithmetic_kernel
+    primeGe5BranchANormalFormArithmeticKernel_default
 
 /--
 Branch A の shape-witness kernel 実装入口。

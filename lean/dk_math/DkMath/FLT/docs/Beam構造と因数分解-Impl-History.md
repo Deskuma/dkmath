@@ -878,3 +878,58 @@ Branch A / composite を攻めに行く。
      `x = p * (t * s)`
      を pack の局所条件へどう衝突させるか、
      局所 gcd 衝突か valuation dictionary のどちらで閉じるかを決める。
+
+### 日時: 2026/03/25 18:10 JST
+1. 目的:
+   - Branch A の `normal form -> False` をさらに薄くし、
+     既に no-sorry で抽出できる arithmetic facts だけを残核へ分離する。
+2. 実施:
+   - `[TriominoCosmicBranchA.lean]` に以下を追加した。
+     - `primeGe5BranchANormalForm_gcd_gap_GN_eq_p_default`
+     - `primeGe5BranchANormalForm_prime_not_dvd_s_default`
+     - `PrimeGe5BranchANormalFormArithmeticKernelTarget`
+     - `primeGe5BranchANormalFormRefuter_of_arithmetic_kernel`
+     - `primeGe5BranchANormalFormArithmeticKernel_default`
+   - これにより、
+     旧 `primeGe5BranchANormalFormRefuter_default`
+     の `sorry` を直接抱え込む形をやめ、
+     `gcd(gap, GN) = p`,
+     `t ⟂ s`,
+     `t ⟂ y`,
+     `s ⟂ y`,
+     `p ∤ s`
+     を渡すだけの thin bridge に差し替えた。
+3. 結論:
+   - Branch A の未完核は、
+     「normal form 全体」を受ける refuter ではなく、
+     `PrimeGe5BranchANormalFormArithmeticKernelTarget`
+     1 本に局所化された。
+   - 特に
+     `gcd(gap, GN) = p`
+     と
+     `p ∤ s`
+     が no-sorry の concrete theorem として取れたのは前進。
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、ビルド成功を確認した。
+5. 備考:
+   - `TriominoCosmicBranchA.lean` の `sorry` は
+     `primeGe5BranchANormalFormArithmeticKernel_default`
+     の 1 箇所だけになった。
+   - `primeGe5BranchANormalFormRefuter_default`
+     自体はもう配線係であり、未完核ではない。
+   - `Basic.lean` 側の既存 `sorry` は
+     composite reduction residual の 1 箇所のまま。
+6. 次の課題:
+   - `PrimeGe5BranchANormalFormArithmeticKernelTarget`
+     の中で、
+     `hgcd_eq : gcd(gap, GN) = p`
+     と
+     `hp_not_dvd_s : ¬ p ∣ s`
+     を起点に、`Nat.Coprime p s` や `p ∤ y` を explicit helper 化する。
+   - その上で
+     `t ⟂ s`, `t ⟂ y`, `s ⟂ y`
+     を使う局所 gcd 衝突を first candidate として詰める。
+   - もし gcd だけで閉じなければ、
+     valuation dictionary を arithmetic kernel 専用 helper として追加する。
