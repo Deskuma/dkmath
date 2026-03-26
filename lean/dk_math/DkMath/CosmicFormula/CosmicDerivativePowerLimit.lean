@@ -5,7 +5,6 @@ Authors: D. and Wise Wolf.
 -/
 
 import Mathlib
-
 import DkMath.CosmicFormula.CosmicDerivativeBasic
 import DkMath.CosmicFormula.CosmicDerivativePower
 

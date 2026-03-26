@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 -- import Mathlib
 import DkMath.Algebra.DiffPow
 
+#print "file: DkMath.NumberTheory.GcdDiffPow"
+
 set_option linter.style.longLine false
 
 namespace DkMath.NumberTheory.GcdDiffPow

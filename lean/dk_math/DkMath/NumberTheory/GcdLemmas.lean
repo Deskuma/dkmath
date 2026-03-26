@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 -- import Mathlib
 import DkMath.Algebra.DiffPow
 
+#print "file: DkMath.NumberTheory.GcdLemmas"
+
 namespace DkMath.NumberTheory.GcdDiffPow
 
 open scoped BigOperators

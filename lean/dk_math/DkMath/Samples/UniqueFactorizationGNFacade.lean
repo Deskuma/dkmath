@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.NumberTheory.UniqueFactorizationGN
 
+#print "file: DkMath.Samples.UniqueFactorizationGNFacade"
+
 open DkMath.NumberTheory
 
 /--

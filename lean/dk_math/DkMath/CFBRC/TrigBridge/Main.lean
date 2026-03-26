@@ -8,6 +8,8 @@ import DkMath.CFBRC.TrigBridge.Trig
 import DkMath.CFBRC.TrigBridge.Complex
 import DkMath.CFBRC.TrigBridge.General
 
+#print "file: DkMath.CFBRC.TrigBridge.Main"
+
 namespace DkMath.CFBRC.TrigBridge
 
 /-! # CFBRC TrigBridge: Main Theorems

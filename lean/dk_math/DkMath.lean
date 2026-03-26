@@ -40,6 +40,19 @@ import DkMath.FLT  -- FLT: Fermat's Last Theorem Module
 -- CFBRC: Cosmic Formula Binomial Real Complex -/
 import DkMath.CFBRC  -- CFBRC: Cosmic Formula Binomial Real Complex
 
+#print "file: DkMath"
+/- build check marker:
+```sh
+lake build -v --no-ansi --log-level=info | grep -B1 "file: "
+```
+To search for Lean files that do not have the `#print` statement for build check markers implemented,
+ use the following regular expression to find them.:
+
+regex: `^import .*$\n\n[^#]`
+include: `*.lean`
+exclude: `DkMathlib/**/*.lean`  -- Since DkMathlib is a public API, debug markers will not be inserted.
+-/
+
 -- >|---|-----------|------------------|-------------------|-------------------|----------|---------
 
 /-!
@@ -63,13 +76,6 @@ Silver Ratio, Dynamic Harmonic Number Theory (DHNT), and the Riemann Hypothesis 
 
 Each submodule contains definitions, theorems, and proofs relevant to its area of study.
 -/
-
-/- build check marker:
-```sh
-lake build -v --no-ansi --log-level=info | grep -B1 "file: "
-```
--/
-#print "file: DkMath"
 
 namespace DkMath
 

@@ -9,6 +9,8 @@ import DkMath.RH.Basic  -- Riemann Hypothesis Basic Utilities
 import DkMath.RH.Defs  -- Riemann Hypothesis Definitions
 import DkMath.RH.Lemmas  -- Riemann Hypothesis Lemmas
 
+#print "file: DkMath.RH.Theorems"
+
 -- ----------------------------------------------------------------------------
 
 namespace DkMath.RH

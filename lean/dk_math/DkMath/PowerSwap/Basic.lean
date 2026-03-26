@@ -8,6 +8,8 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 
+#print "file: DkMath.PowerSwap.Basic"
+
 namespace DkMath
 
 /-- Power-swap relation: `a^b = b^a`. -/

@@ -9,6 +9,8 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 
+#print "file: DkMath.CosmicFormula.CosmicFormulaExp"
+
 namespace DkMath
 namespace CosmicFormulaExp  -- Cosmic Formula Exponent の略
 

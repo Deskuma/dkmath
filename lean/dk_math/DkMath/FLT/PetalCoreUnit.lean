@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Units.NPUnit
 
+#print "file: DkMath.FLT.PetalCoreUnit"
+
 namespace DkMath.FLT
 
 /-- Phase-03 skeleton: Petal 側の中核単位。 -/

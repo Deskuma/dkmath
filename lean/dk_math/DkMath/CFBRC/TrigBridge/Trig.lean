@@ -8,6 +8,8 @@ import DkMath.CFBRC.TrigBridge.Basic
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Tactic
 
+#print "file: DkMath.CFBRC.TrigBridge.Trig"
+
 namespace DkMath.CFBRC.TrigBridge
 
 /-! # CFBRC TrigBridge: Trig Layer

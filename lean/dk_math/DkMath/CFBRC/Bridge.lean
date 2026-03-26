@@ -8,6 +8,8 @@ import DkMath.CFBRC.Basic
 import DkMath.CFBRC.CyclotomicProduct
 import DkMath.NumberTheory.Gcd.GN
 
+#print "file: DkMath.CFBRC.Bridge"
+
 /-!
 # CFBRC Bridge
 

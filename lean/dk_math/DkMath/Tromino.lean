@@ -9,6 +9,8 @@ Authors: D. and Wise Wolf.
 import Mathlib
 import DkMath.Polyomino
 
+#print "file: DkMath.Tromino"
+
 set_option linter.style.longLine true
 
 namespace DkMath

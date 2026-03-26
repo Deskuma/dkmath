@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import Mathlib
 import DkMath.SilverRatio.Sqrt2Lemmas
 
+#print "file: DkMath.UniqueRepresentation"
+
 namespace DkMath.UniqueRepresentation
 
 /-! ## UR: SilverRatio

@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Basic
 
+#print "file: DkMath.FLT.Samples"
+
 set_option linter.style.longLine false
 
 -- －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－

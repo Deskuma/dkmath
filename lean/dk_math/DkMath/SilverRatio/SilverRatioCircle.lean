@@ -4,6 +4,11 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import Mathlib
+import DkMath.SilverRatio.Sqrt2Lemmas
+
+#print "file: DkMath.SilverRatio.SilverRatioCircle"
+
 /-
 # Analytic coordinate development for the White-Silver-Ratio circle (overview)
 
@@ -105,9 +110,6 @@ Lean: it demonstrates how to represent simple Euclidean geometry, avoid
 square roots by working with squared distances, and carry out routine
 algebraic verifications with the standard tactic toolbox.
 -/
-
-import Mathlib
-import DkMath.SilverRatio.Sqrt2Lemmas
 
 /-!
 Analytic coordinate development for the White-Silver-Ratio circle.

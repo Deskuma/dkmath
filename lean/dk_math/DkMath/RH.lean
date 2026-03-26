@@ -16,6 +16,8 @@ import DkMath.RH.HopcInfiniteLift
 import DkMath.RH.CFBRCBridge
 import DkMath.RH.EulerZetaConvergence
 
+#print "file: DkMath.RH"
+
 -- ============================================================================
 
 namespace DkMath.RH
@@ -31,8 +33,8 @@ end DkMath.RH
 -- ============================================================================
 
 namespace DkMath.RH.EulerZeta
-#print axioms eulerZetaMag_multipliable_sigma_gt_one
-#print axioms eulerZetaMag_pos_sigma_gt_one
+-- #print axioms eulerZetaMag_multipliable_sigma_gt_one
+-- #print axioms eulerZetaMag_pos_sigma_gt_one
 end DkMath.RH.EulerZeta
 
 -- ============================================================================

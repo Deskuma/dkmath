@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC.Main
 
+#print "file: DkMath.ABC"
+
 set_option linter.style.longLine false
 
 /-! == a+b=c =======================

@@ -11,6 +11,8 @@ Date: 2026-01-28
 import Mathlib
 import DkMath.SilverRatio.Sqrt2Lemmas
 
+#print "file: DkMath.UniqueRepSimple"
+
 namespace DkMath.UniqueRepresentation
 
 namespace SilverRatio

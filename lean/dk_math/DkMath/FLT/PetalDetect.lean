@@ -10,6 +10,8 @@ import Mathlib.NumberTheory.Padics.PadicVal.Basic
 import DkMath.SilverRatio.GcdAg
 import DkMath.NumberTheory.ZsigmondyCyclotomic
 
+#print "file: DkMath.FLT.PetalDetect"
+
 set_option linter.style.emptyLine false
 
 /-!

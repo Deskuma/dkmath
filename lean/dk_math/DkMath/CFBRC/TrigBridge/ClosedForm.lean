@@ -8,6 +8,8 @@ import DkMath.CFBRC.TrigBridge.General
 import Mathlib.Data.Complex.BigOperators
 import Mathlib.Data.Nat.Choose.Sum
 
+#print "file: DkMath.CFBRC.TrigBridge.ClosedForm"
+
 open scoped BigOperators
 
 namespace DkMath.CFBRC.TrigBridge

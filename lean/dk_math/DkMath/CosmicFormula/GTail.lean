@@ -6,6 +6,8 @@
 
 import Mathlib
 
+#print "file: DkMath.CosmicFormula.GTail"
+
 open scoped BigOperators
 
 namespace DkMath.CosmicFormula

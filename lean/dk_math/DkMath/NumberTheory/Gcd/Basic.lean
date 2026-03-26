@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.NumberTheory.GdcDivD
 import DkMath.NumberTheory.GcdDiffPow
 
+#print "file: DkMath.NumberTheory.Gcd.Basic"
+
 /-!
 # DkMath.NumberTheory.Gcd.Basic
 

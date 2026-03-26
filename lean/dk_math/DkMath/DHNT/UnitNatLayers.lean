@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.DHNT.DHNT_Base
 import DkMath.UnitCycle.Core
 
+#print "file: DkMath.DHNT.UnitNatLayers"
+
 /-
 Unit/Nat 層の最小 Lean 定義と交えない定理
 -/

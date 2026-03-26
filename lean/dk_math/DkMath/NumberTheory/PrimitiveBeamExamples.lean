@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.NumberTheory.PrimitiveBeam
 
+#print "file: DkMath.NumberTheory.PrimitiveBeamExamples"
+
 set_option linter.style.emptyLine false
 
 namespace DkMath.NumberTheory.PrimitiveBeamExamples

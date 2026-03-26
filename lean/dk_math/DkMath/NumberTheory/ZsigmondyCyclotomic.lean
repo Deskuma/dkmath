@@ -2,8 +2,30 @@
 Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
 Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
+-/
 
-# Zsigmondy の定理と円分多項式理論
+import DkMath.ABC.PadicValNat
+import Mathlib.NumberTheory.Padics.PadicVal.Basic
+-- import Mathlib.NumberTheory.Padics.PadicVal.Defs
+import DkMath.Algebra.DiffPow
+import DkMath.NumberTheory.GcdDiffPow
+import DkMath.NumberTheory.GdcDivD
+-- Cyclotomic polynomial theory
+import Mathlib.RingTheory.Polynomial.Cyclotomic.Basic
+import Mathlib.RingTheory.Int.Basic
+-- Cosmic Formula theory (べき乗差の因数分解)
+import DkMath.CosmicFormula.CosmicFormulaBinom
+-- Lucas/Kummer theorems (二項係数の理論)
+import Mathlib.Data.Nat.Choose.Lucas
+-- 群論（orderOf を使った primitive 証明用）
+import Mathlib.Data.ZMod.Basic
+import Mathlib.GroupTheory.OrderOfElement
+
+#print "file: DkMath.NumberTheory.ZsigmondyCyclotomic"
+
+set_option linter.style.emptyLine false
+
+/-! # Zsigmondy の定理と円分多項式理論
 
 **ファイルの目的:**
 Zsigmondy の原始素因子定理（1892）の形式化。
@@ -40,26 +62,6 @@ a^d - b^d は「原始素因子」を持つ：
 **現在のフォーカス:**
 d = 3 での理論完成！⏳ 一般上界の最終段階へ
 -/
-
--- import Mathlib
-import DkMath.ABC.PadicValNat
-import Mathlib.NumberTheory.Padics.PadicVal.Basic
--- import Mathlib.NumberTheory.Padics.PadicVal.Defs
-import DkMath.Algebra.DiffPow
-import DkMath.NumberTheory.GcdDiffPow
-import DkMath.NumberTheory.GdcDivD
--- Cyclotomic polynomial theory
-import Mathlib.RingTheory.Polynomial.Cyclotomic.Basic
-import Mathlib.RingTheory.Int.Basic
--- Cosmic Formula theory (べき乗差の因数分解)
-import DkMath.CosmicFormula.CosmicFormulaBinom
--- Lucas/Kummer theorems (二項係数の理論)
-import Mathlib.Data.Nat.Choose.Lucas
--- 群論（orderOf を使った primitive 証明用）
-import Mathlib.Data.ZMod.Basic
-import Mathlib.GroupTheory.OrderOfElement
-
-set_option linter.style.emptyLine false
 
 namespace DkMath.NumberTheory.GcdNext
 

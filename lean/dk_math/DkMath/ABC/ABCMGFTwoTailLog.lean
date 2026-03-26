@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC
 
+#print "file: DkMath.ABC.ABCMGFTwoTailLog"
+
 set_option linter.style.emptyLine false
 set_option linter.style.longLine false
 

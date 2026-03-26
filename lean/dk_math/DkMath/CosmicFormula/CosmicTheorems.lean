@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 -- import Mathlib
 import DkMath.CosmicFormula.CosmicFormulaBinom  -- Cosmic Formula Binomial Expansion
 
+#print "file: DkMath.CosmicFormula.CosmicTheorems"
+
 namespace DkMath.CosmicFormula.CosmicTheorems
 
 open DkMath.CosmicFormulaBinom

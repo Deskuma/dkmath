@@ -13,6 +13,8 @@ import DkMath.Units.NPUnit
 import DkMath.NumberTheory.GcdNext
 import DkMath.ABC.PadicValNat
 
+#print "file: DkMath.FLT.PhaseLift"
+
 namespace DkMath.FLT
 
 open DkMath.FLT.PetalDetect

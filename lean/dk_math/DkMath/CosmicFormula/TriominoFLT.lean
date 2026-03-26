@@ -11,6 +11,8 @@ import DkMath.Tromino
 import DkMath.FLT.PrimeProviderCore
 import DkMath.FLT.MathlibBridge.FLT34
 
+#print "file: DkMath.CosmicFormula.TriominoFLT"
+
 /-
 NOTE [Temporary Mathlib FLT3 bridge]:
 - このファイルでの `DkMath.FLT.FLT3_core/FLT4_core` 参照は「暫定」。

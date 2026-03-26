@@ -8,6 +8,8 @@ import DkMath.NumberTheory.GcdNext
 import DkMath.NumberTheory.PrimitiveBeam
 import DkMath.NumberTheory.ZsigmondyCyclotomicResearch
 
+#print "file: DkMath.NumberTheory.GcdNextResearch"
+
 set_option linter.style.emptyLine false
 set_option linter.style.longLine false
 

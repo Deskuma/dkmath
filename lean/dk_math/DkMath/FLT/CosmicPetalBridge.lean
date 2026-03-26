@@ -10,6 +10,8 @@ import DkMath.FLT.PetalDetect
 import DkMath.NumberTheory.ZsigmondyCyclotomic
 import DkMath.Zsigmondy
 
+#print "file: DkMath.FLT.CosmicPetalBridge"
+
 namespace DkMath.FLT
 
 open DkMath.CosmicFormulaBinom

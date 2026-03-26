@@ -4,11 +4,14 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import Mathlib
+
+#print "file: DkMath.Samples.Qty"
+
 /-
   DHNT: 単位の圏 (Scale)、数量の層 (Qty)、換算 convert、
   「単位を揃えてから加法」、および u ↦ u^2 の関手性の自然性を形式化。
 -/
-import Mathlib
 
 namespace DkMath
 

@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.NumberTheory.ZsigmondyCyclotomic
 import DkMath.NumberTheory.ZsigmondyCyclotomicResearch
 
+#print "file: DkMath.NumberTheory.PrimitiveBeam"
+
 set_option linter.style.emptyLine false
 set_option linter.style.longLine false
 

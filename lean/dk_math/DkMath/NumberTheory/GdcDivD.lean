@@ -8,6 +8,8 @@ Authors: D. and Wise Wolf.
 import DkMath.Algebra.DiffPow
 import DkMath.NumberTheory.GcdNatAbsDivD
 
+#print "file: DkMath.NumberTheory.GcdDivD"
+
 namespace DkMath.NumberTheory.GcdDiffPow
 
 open scoped BigOperators

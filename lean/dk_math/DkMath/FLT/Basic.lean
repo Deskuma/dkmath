@@ -16,11 +16,12 @@ import DkMath.NumberTheory.GcdNextResearch
 import DkMath.NumberTheory.ZsigmondyCyclotomic
 import DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
 import DkMath.Zsigmondy
-import Mathlib.Algebra.Divisibility.Basic
 import DkMath.FLT.Core
 import DkMath.FLT.PrimeProvider.TriominoCosmicBranchA
-
+import Mathlib.Algebra.Divisibility.Basic
 import Mathlib.NumberTheory.FLT.Three
+
+#print "file: DkMath.FLT.Basic"
 
 set_option linter.style.longLine false
 set_option linter.style.multiGoal false

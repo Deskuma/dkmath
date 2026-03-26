@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.RH.EulerZetaConvergence
 
+#print "file: DkMath.RH.HopcInfiniteLift"
+
 /-!
 # HOPC Infinite Lift
 
