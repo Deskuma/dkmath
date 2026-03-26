@@ -703,3 +703,47 @@ import chain の観点では、`Defs` は定義だけの薄い層にできるの
    - `CosmicFormulaDim.G` / `CosmicFormulaCellDim.G`
      を
      `GNZC` 範囲外の別 family として明示分離するかを決める。
+
+### 日時: 2026/03/26 22:22 JST
+
+1. 目的:
+   - `KUS/CosmicBridge.lean` の語彙を、
+     theorem 名は壊さずに `GZ` 中心へ一段寄せる。
+
+2. 実施:
+   - `cosmicTerm` の docstring を
+     `CosmicFormula.GZ`
+     基準へ更新した。
+   - `cosmicBodyCoeffSum` の説明文も
+     `Body = GZ`
+     の wording に直した。
+   - `G_one_one_eq` は残しつつ、
+     canonical-name alias
+     `GZ_one_one_eq`
+     を追加した。
+   - `body_one_one` の docstring も
+     `GZ` 中心の表現へ修正した。
+
+3. 結論:
+   - `KUS/CosmicBridge` では、
+     theorem-name stability を保ったまま
+     説明文・新入口だけを `GZ` 側へ寄せる形が取れた。
+   - 以後の downstream 移行では、
+     新規参照は `GZ_one_one_eq`
+     を使い、
+     旧名 `G_one_one_eq`
+     は compatibility name として維持できる。
+
+4. 検証:
+   - `lake build DkMath.KUS.CosmicBridge`
+   - `lake build DkMath.CosmicFormula.Defs`
+   - `lake build DkMath.CosmicFormula.CosmicTheorems`
+   を実行し、成功を確認した。
+
+5. 次の課題:
+   - `KUS/CosmicBridge` 内の残る
+     `G`
+     wording を、必要に応じて alias 注記付きでさらに整理する。
+   - `CosmicFormulaBinom.CommRing.G`
+     について、
+     `Defs.GZ` とどこまで theorem alias 化できるかを検討する。

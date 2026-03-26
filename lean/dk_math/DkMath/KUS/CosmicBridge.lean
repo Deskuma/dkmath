@@ -51,13 +51,14 @@ open DkMath.CosmicFormula
 /-! ## cosmicTerm — 個別項の GKUS 表現 -/
 
 /--
-`CosmicFormula.G` の第 `k` 項を `GKUS ℕ ℕ DHNTBlueprint` として表現する。
+`CosmicFormula.GZ` の第 `k` 項を `GKUS ℕ ℕ DHNTBlueprint` として表現する。
 
-[GNZC] Here `G` means the legacy alias of canonical `GZ`.
+[GNZC] Legacy text may still say `G`, but this file now treats `GZ` as the
+primary meaning and `G` as the temporary alias.
 
 元の定義:
 ```
-G R x u d = ∑ k ∈ range d, C(d,k+1) * x^(k+1) * u^(d-1-k)
+GZ R x u d = ∑ k ∈ range d, C(d,k+1) * x^(k+1) * u^(d-1-k)
 ```
 
 ここでは係数 `C(d,k+1)` を `GKUS` の coeff に対応させ、
@@ -75,7 +76,7 @@ noncomputable def cosmicTerm (d k : ℕ) : GKUS ℕ ℕ DHNTBlueprint :=
 /-! ## cosmicBody — Body の GKUS 和分解 -/
 
 /--
-`Body d 1 1 = G ℝ 1 1 d = ∑ k, C(d,k+1)` の整数版。
+`Body d 1 1 = GZ ℝ 1 1 d = ∑ k, C(d,k+1)` の整数版。
 単位を 1 に設定したときの Body の係数和が `2^d - 1` に等しいことを示す補題の
 下準備として `Finset.sum` ベースの表現を用意する。
 -/
@@ -122,8 +123,19 @@ theorem G_one_one_eq (d : ℕ) :
   simp [G, GZ, cosmicBodyCoeffSum]
 
 /--
+Canonical-name version of `G_one_one_eq`.
+
+[GNZC] New code should prefer this theorem over the legacy `G_*` spelling.
+-/
+theorem GZ_one_one_eq (d : ℕ) :
+    GZ ℕ 1 1 d = cosmicBodyCoeffSum d := by
+  simp [GZ, cosmicBodyCoeffSum]
+
+/--
 `Body d 1 1 + 1 = 2^d` （ℝ 上）
-`B(d, 1, 1) = G ℝ 1 1 d = 2^d - 1`（実数でも成立）
+`B(d, 1, 1) = GZ ℝ 1 1 d = 2^d - 1`（実数でも成立）
+
+[GNZC] The theorem name stays stable, but the wording is now aligned to `GZ`.
 -/
 theorem body_one_one (d : ℕ) :
     Body 1 1 d + 1 = (2 : ℝ) ^ d := by
