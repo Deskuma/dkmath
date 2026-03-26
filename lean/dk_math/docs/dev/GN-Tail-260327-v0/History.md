@@ -965,3 +965,77 @@
    - そのうえで
      `TriominoCosmicGapInvariant`
      側の Wieferich bridge に渡す input spec を定める。
+
+### 日時: 2026/03/27 JST
+
+1. 目的:
+   - Branch A の gap-shape
+     `z - y = p^(p-1) * t^p`
+     を明示的に使い、
+     `GN`
+     の tail を
+     `p^3`
+     まで押し上げる。
+   - その結果として、
+     `s^p`
+     側に
+     `p^2`
+     tail を持つ concrete equality version を固定する。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     - `primeGe5BranchA_GN_eq_head_add_p_cube_mul`
+     - `primeGe5BranchA_spow_eq_head_add_p_sq_mul`
+     を追加した。
+   - 前者では、
+     `hgap`
+     から
+     `p^3 ∣ (z - y)`
+     を取り、
+     `GN`
+     の tail sum の各項に
+     `p^3`
+     が入ることを示した。
+   - 後者では、
+     `GN = p * s^p`
+     と上の展開を合わせて、
+     `p`
+     を 1 回キャンセルし、
+     `s^p = y^(p-1) + p^2 * M`
+     を得た。
+
+3. 結論:
+   - Branch A / Wieferich route の first milestone だった
+     `s^p ≡ y^(p-1) [MOD p^2]`
+     は、
+     すでに concrete equality
+     `s^p = y^(p-1) + p^2 * M`
+     の形で lower layer に入った。
+   - 次段では、
+     これを
+     `Nat.ModEq`
+     か Wieferich witness 仕様へ薄く包むだけでよい。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、成功を確認した。
+
+5. 備考:
+   - `TriominoCosmicBranchA.lean`
+     の active `sorry`
+     は引き続き final kernel
+     1 箇所だけで、今回増えていない。
+   - comparison route の残骸を増やさずに、
+     Wieferich route 向けの材料だけを先に theorem 化できた。
+
+6. 次の課題:
+   - `primeGe5BranchA_spow_eq_head_add_p_sq_mul`
+     を
+     `Nat.ModEq (p^2) (s^p) (y^(p-1))`
+     に直す thin wrapper を追加する。
+   - そのうえで、
+     `TriominoCosmicGapInvariant`
+     の Wieferich bridge が要求する witness 形式へ
+     どこまで直接合わせられるかを調べる。

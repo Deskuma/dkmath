@@ -341,6 +341,98 @@ theorem primeGe5BranchA_spow_eq_head_add_p_mul
   exact Nat.eq_of_mul_eq_mul_left hp_pos hEq
 
 /--
+Branch A の gap-shape `z - y = p^(p-1) * t^p` を使うと、
+`GN p (z - y) y` の tail は実際には `p^3` 以上を持つ。
+
+付録:
+- `GN = p * y^(p-1) + p^3 * M` は、
+  次段で `GN = p * s^p` を 1 回割って
+  `s^p ≡ y^(p-1) [MOD p^2]`
+  を読むための直前段階である。
+-/
+theorem primeGe5BranchA_GN_eq_head_add_p_cube_mul
+    {p x y z t : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (_hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p) :
+    ∃ M : ℕ, GN p (z - y) y = p * y ^ (p - 1) + p ^ 3 * M := by
+  let u : ℕ := z - y
+  let N : ℕ := GN p u y
+  let A : ℕ := p * y ^ (p - 1)
+  let B : ℕ := Finset.sum ((Finset.range p).erase 0) (fun k =>
+    (Nat.choose p (k + 1) : ℕ) * u ^ k * y ^ (p - 1 - k))
+  have hp_pos : 0 < p := hpack.hp.pos
+  have hp3_dvd_u : p ^ 3 ∣ u := by
+    unfold u
+    rw [hgap]
+    refine dvd_mul_of_dvd_left ?_ _
+    have hp_ge5 : 5 ≤ p := hpack.hp5
+    have h3_le : 3 ≤ p - 1 := by omega
+    exact pow_dvd_pow p h3_le
+  have hsplitBA : B + A = N := by
+    let f : ℕ → ℕ := fun k =>
+      (Nat.choose p (k + 1) : ℕ) * (z - y) ^ k * y ^ (p - 1 - k)
+    have hsum :
+        Finset.sum ((Finset.range p).erase 0) f + f 0 = Finset.sum (Finset.range p) f := by
+      simpa using
+        (Finset.sum_erase_add (s := Finset.range p) (f := f) (a := 0)
+          (by simpa using hp_pos))
+    unfold N
+    rw [GN_eq_sum]
+    unfold A B u
+    simpa [f, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using hsum
+  have hsplit : N = A + B := by
+    simpa [Nat.add_comm] using hsplitBA.symm
+  have hB_cube : p ^ 3 ∣ B := by
+    unfold B
+    refine Finset.dvd_sum ?_
+    intro k hk
+    have hk_ne_zero : k ≠ 0 := Finset.mem_erase.mp hk |>.1
+    have hk_ge_one : 1 ≤ k := Nat.succ_le_iff.mpr (Nat.pos_of_ne_zero hk_ne_zero)
+    have hp3_dvd_uk : p ^ 3 ∣ u ^ k := by
+      have hp3_dvd_u1 : p ^ 3 ∣ u ^ 1 := by simpa using hp3_dvd_u
+      exact dvd_trans hp3_dvd_u1 (pow_dvd_pow u hk_ge_one)
+    have hprefix : p ^ 3 ∣ (Nat.choose p (k + 1) : ℕ) * u ^ k :=
+      dvd_mul_of_dvd_right hp3_dvd_uk _
+    have hmul : p ^ 3 ∣ ((Nat.choose p (k + 1) : ℕ) * u ^ k) * y ^ (p - 1 - k) :=
+      dvd_mul_of_dvd_left hprefix _
+    simpa [Nat.mul_assoc] using hmul
+  obtain ⟨M, hM⟩ := exists_eq_mul_left_of_dvd hB_cube
+  refine ⟨M, ?_⟩
+  calc
+    GN p (z - y) y = N := by rfl
+    _ = A + B := hsplit
+    _ = p * y ^ (p - 1) + p ^ 3 * M := by
+      rw [hM]
+      simp [A, Nat.mul_comm]
+
+/--
+Branch A の gap-shape と `GN = p * s^p` を合わせると、
+`s^p` は `y^(p-1)` に `p^2` の倍数を足した形へ落ちる。
+
+付録:
+- これは実質的に
+  `s^p ≡ y^(p-1) [MOD p^2]`
+  の concrete equality version である。
+- 次段ではこの theorem を `Nat.ModEq` か Wieferich witness の入力仕様へ正規化する。
+-/
+theorem primeGe5BranchA_spow_eq_head_add_p_sq_mul
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    ∃ M : ℕ, s ^ p = y ^ (p - 1) + p ^ 2 * M := by
+  rcases primeGe5BranchA_GN_eq_head_add_p_cube_mul hpack hp_dvd_gap hgap with ⟨M, hM⟩
+  refine ⟨M, ?_⟩
+  have hp_pos : 0 < p := hpack.hp.pos
+  have hEq :
+      p * s ^ p = p * (y ^ (p - 1) + p ^ 2 * M) := by
+    rw [← hsGN, hM]
+    ring
+  exact Nat.eq_of_mul_eq_mul_left hp_pos hEq
+
+/--
 Branch A の `q ≠ p` 側本丸:
 `q ∣ gap` かつ `q ≠ p` なら `q ∤ GN p gap y`。
 -/
