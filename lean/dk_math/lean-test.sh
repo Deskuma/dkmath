@@ -2,10 +2,10 @@
 # `sed 's/^trace: .> LEAN_PATH=.*$/trace: .> LEAN_PATH=.../'` は、
 # ビルドログの中で `LEAN_PATH` を含む行を見つけて、その部分を `LEAN_PATH=...` に置き換えます。
 # これにより、ビルドログが読みやすくなります。
-# `tee __build.log` は、ビルドの出力を `__build.log` ファイルに保存しつつ、同時にターミナルにも表示します。
+# `tee __test_build.log` は、ビルドの出力を `__test_build.log` ファイルに保存しつつ、同時にターミナルにも表示します。
 # escape sequence を削除して、ビルドの進行状況をわかりやすくする
 # 空行を削除する
-echo "🚀 Starting build Lean..."
+echo "🚀 Starting test build Lean..."
 lake --quiet --no-ansi test $@ \
     | sed 's/^trace: .> LEAN_PATH=.*$//' \
     | sed 's/^✔ \[[0-9]\+\/[0-9]\+\] Replayed \(.*\)$/✔ [\1]/' \
@@ -14,16 +14,16 @@ lake --quiet --no-ansi test $@ \
     | grep -v 'Batteries' \
     | grep -v 'Aesop' \
     | grep -v '^$' \
-    | tee __build.log
+    | tee __test_build.log
 build_exit_code=${PIPESTATUS[0]}
 result_msg=""
 if [ "$build_exit_code" -eq 0 ]; then
-  result_msg="✅️ build succeeded"
+  result_msg="✅️ test build succeeded"
 else
-  result_msg="❌️ build failed"
+  result_msg="❌️ test build failed"
 fi
-echo "🔍 Checking build results..."
-echo "  see: __build.log:1"
+echo "🔍 Checking test build results..."
+echo "  see: __test_build.log:1"
 echo ${result_msg}
 
 # Exit with lake's exit code so callers (scripts) can detect failure
