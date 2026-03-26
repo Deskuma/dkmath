@@ -41,6 +41,9 @@ import DkMath.FLT  -- FLT: Fermat's Last Theorem Module
 import DkMath.CFBRC  -- CFBRC: Cosmic Formula Binomial Real Complex
 
 #print "file: DkMath"
+
+set_option linter.style.longLine false
+
 /- build check marker:
 ```sh
 lake build -v --no-ansi --log-level=info | grep -B1 "file: "

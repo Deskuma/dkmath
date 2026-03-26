@@ -24,6 +24,7 @@ import Mathlib.GroupTheory.OrderOfElement
 #print "file: DkMath.NumberTheory.ZsigmondyCyclotomic"
 
 set_option linter.style.emptyLine false
+set_option linter.style.longLine false
 
 /-! # Zsigmondy の定理と円分多項式理論
 

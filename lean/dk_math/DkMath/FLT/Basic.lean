@@ -730,7 +730,7 @@ lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h
             3 ∣ (a ^ 3).gcd (∑ x ∈ Finset.range 3, Nat.choose 3 (x + 1) * (a ^ 3) ^ x * y ^ (2 - x)) := by
           simpa [GN_eq_sum] using h3_gcd
         have : 3 ∣ 1 := by
-          simpa [h_gcd_sum] using h3_gcd_sum
+          simp [h_gcd_sum] at h3_gcd_sum
         omega
       -- u = a^3 を GN の引数として使う
       rw [ha] at hb
