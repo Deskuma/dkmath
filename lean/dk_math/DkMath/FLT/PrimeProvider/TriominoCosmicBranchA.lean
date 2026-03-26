@@ -433,6 +433,32 @@ theorem primeGe5BranchA_spow_eq_head_add_p_sq_mul
   exact Nat.eq_of_mul_eq_mul_left hp_pos hEq
 
 /--
+Branch A normal form から得る、`s^p ≡ y^(p-1) [MOD p^2]` の thin wrapper。
+
+付録:
+- `primeGe5BranchA_spow_eq_head_add_p_sq_mul` の concrete equality version を
+  `Nat.ModEq` API に移し替えるだけの定理である。
+- 次段で Wieferich witness の入力仕様が `Nat.ModEq` を要求するなら、
+  まずこの theorem を経由すればよい。
+-/
+theorem primeGe5BranchA_spow_congr_head_mod_p_sq
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    s ^ p ≡ y ^ (p - 1) [MOD p ^ 2] := by
+  rcases primeGe5BranchA_spow_eq_head_add_p_sq_mul hpack hp_dvd_gap hgap hsGN with ⟨M, hM⟩
+  have hle : y ^ (p - 1) ≤ s ^ p := by
+    rw [hM]
+    exact Nat.le_add_right _ _
+  have hmod : y ^ (p - 1) ≡ s ^ p [MOD p ^ 2] := by
+    exact (Nat.modEq_iff_dvd' hle).2 ⟨M, by
+      rw [hM]
+      simp⟩
+  exact hmod.symm
+
+/--
 Branch A の `q ≠ p` 側本丸:
 `q ∣ gap` かつ `q ≠ p` なら `q ∤ GN p gap y`。
 -/

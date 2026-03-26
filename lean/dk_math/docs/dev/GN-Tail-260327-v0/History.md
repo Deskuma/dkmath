@@ -1039,3 +1039,62 @@
      `TriominoCosmicGapInvariant`
      の Wieferich bridge が要求する witness 形式へ
      どこまで直接合わせられるかを調べる。
+
+### 日時: 2026/03/27 JST
+
+1. 目的:
+   - Branch A の concrete equality
+     `s^p = y^(p-1) + p^2 * M`
+     を
+     `Nat.ModEq`
+     形式へ正規化し、
+     Wieferich witness input により近い API を置く。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `primeGe5BranchA_spow_congr_head_mod_p_sq`
+     を追加した。
+   - 証明は
+     `primeGe5BranchA_spow_eq_head_add_p_sq_mul`
+     を使い、
+     まず
+     `y^(p-1) ≡ s^p [MOD p^2]`
+     を `Nat.modEq_iff_dvd'`
+     で立て、
+     最後に対称性で
+     `s^p ≡ y^(p-1) [MOD p^2]`
+     へ向きを揃えた。
+
+3. 結論:
+   - Branch A / Wieferich route の first milestone は、
+     concrete equality version だけでなく
+     `Nat.ModEq (p^2)`
+     version でも lower layer に入った。
+   - したがって次段では、
+     この theorem から直接
+     Wieferich witness spec
+     へ橋を掛けるだけでよい。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、成功を確認した。
+
+5. 備考:
+   - `TriominoCosmicBranchA.lean`
+     の active `sorry`
+     は引き続き final kernel
+     1 箇所だけで、今回増えていない。
+
+6. 次の課題:
+   - `primeGe5BranchA_spow_congr_head_mod_p_sq`
+     と
+     `p ∤ y`, `p ∤ s`
+     を合わせて、
+     `y^(p-1) ≡ 1 [MOD p^2]`
+     へ上げるための最小補題列を切る。
+   - その後、
+     `TriominoCosmicGapInvariant`
+     / `CosmicPetalBridgeGN`
+     側の Wieferich bridge へ接続する。
