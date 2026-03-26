@@ -1,0 +1,1 @@
+../../lean/dk_math/DkMath/CosmicFormula/docs/複素半宇宙式と直交Gap表現.md
