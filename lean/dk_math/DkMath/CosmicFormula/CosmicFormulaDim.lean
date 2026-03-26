@@ -13,7 +13,11 @@ namespace CosmicFormulaDim
 
 open scoped BigOperators Real
 
-/-! ### A: 代数レイヤ（d 次元の「実体項」G） -/
+/-! ### A: 代数レイヤ（d 次元の「実体項」G）
+
+[GNZC] This file is currently treated as a separate analytic/geometry-facing
+family, not as the canonical `Defs.GZ` migration target.
+-/
 
 /-- d 次元の「実体項」G の定義 -/
 noncomputable def G (d : ℕ) (x u : ℝ) : ℝ :=

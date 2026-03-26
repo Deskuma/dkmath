@@ -325,7 +325,12 @@ theorem card_Body_pow_form (d x u : ℕ) :
   classical
   simp only [card_Body_eq_sub (d := d) x u, card_Big_pow (d := d) x u, card_Gap_pow (d := d) u]
 
-/-- 差のべきの因数分解に使う和 `G` -/
+/-- 差のべきの因数分解に使う和 `G`.
+
+[GNZC] This is the geometric-series family used for cell-counting.
+It is currently outside the `Defs.GN / GZ / GC` migration path, though bridge
+lemmas to the binomial family are expected and already partially present below.
+-/
 def G (d x u : ℕ) : ℕ :=
   Finset.sum (Finset.range d) fun k => (x + u)^(d - 1 - k) * u ^ k
 

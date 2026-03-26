@@ -797,3 +797,61 @@ import chain の観点では、`Defs` は定義だけの薄い層にできるの
      `GNZC`
      範囲外の別 family かどうか、
      bridge 補題の有無を含めて次段で判定する。
+
+### 日時: 2026/03/27 00:03 JST
+
+1. 目的:
+   - `CosmicFormulaBinom` の `cosmic_id` 系説明文を
+     `Body_eq_GZ`
+     ベースの canonical wording に寄せる。
+   - `CosmicFormulaDim.G` / `CosmicFormulaCellDim.G`
+     が現段階で `GNZC` 範囲外の別 family だと
+     コード上でも明示する。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean]`
+     の
+     - `big_is_body_and_gap`
+     - `cosmic_id`
+     - `cosmic_formula_binom`
+     - `cosmic_id'`
+     の docstring に
+     `Body_eq_GZ`
+     ベースの `[GNZC]` 注記を追加した。
+   - `[lean/dk_math/DkMath/CosmicFormula/CosmicFormulaDim.lean]`
+     の冒頭 section comment に、
+     この `G` は解析・幾何寄りの別 family であり、
+     直ちに `Defs.GZ` 移行対象ではないと注記した。
+   - `[lean/dk_math/DkMath/CosmicFormula/CosmicFormulaCellDim.lean]`
+     の `G` 定義にも、
+     幾何級数 / cell-counting family であり
+     `GNZC` 範囲外だが
+     bridge 補題は今後整理対象である、
+     という注記を追加した。
+
+3. 結論:
+   - `CommRing.G` については
+     `x * G = GZ`
+     の橋でつながる一方、
+     `CosmicFormulaDim.G` と `CosmicFormulaCellDim.G`
+     は現時点では別 family と見るのが自然だと整理できた。
+   - したがって次段の refactor は、
+     まず `Binom` 側 canonical wording を進め、
+     `Dim` / `CellDim` は bridge 補題の有無を見て
+     後で接続する方針が妥当である。
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.CosmicFormulaBinom`
+   - `lake build DkMath.CosmicFormula.CosmicTheorems`
+   - `lake build DkMath.CosmicFormula.CosmicFormulaDim`
+   - `lake build DkMath.CosmicFormula.CosmicFormulaCellDim`
+   を実行して確認する。
+
+5. 次の課題:
+   - `CosmicFormulaCellDim` に既にある
+     `Gbinom`
+     との橋を再点検し、
+     `GNZC` から見た接続点を整理する。
+   - `CosmicFormulaDim.G`
+     にも canonical family との橋が必要か、
+     あるいは完全に別 namespace 方針にすべきかを決める。

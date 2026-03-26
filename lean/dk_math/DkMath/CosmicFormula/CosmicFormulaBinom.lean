@@ -107,7 +107,11 @@ theorem Body_eq_GZ {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
     Body d x u = DkMath.CosmicFormula.GZ R x u d := by
   simp [Body, mul_G_eq_GZ]
 
-/-- 無次元版: Big は Body と Gap の和に等しい -/
+/-- 無次元版: Big は Body と Gap の和に等しい。
+
+[GNZC] Via `Body_eq_GZ`, this is also the canonical Body-normalized identity
+`Big = GZ + Gap` in the `CommRing` layer.
+-/
 theorem big_is_body_and_gap {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
     Big d x u = Body d x u + Gap d u := by
     unfold Big Body Gap G
@@ -140,7 +144,11 @@ theorem big_is_body_and_gap {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
 
 /-- 無次元宇宙式に対する恒等式：
 `CommRing` 上で任意の `d, x, u` について
-`(x + u) ^ d - x * G d x u = u ^ d` が成り立つことを示す定理。 -/
+`(x + u) ^ d - x * G d x u = u ^ d` が成り立つことを示す定理。
+
+[GNZC] Using `Body_eq_GZ`, the same statement can be read as
+`(x + u)^d - GZ = u^d`.
+-/
 theorem cosmic_id {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
     Big d x u - Body d x u = Gap d u := by
     unfold Big Body Gap G
@@ -171,11 +179,15 @@ theorem cosmic_id {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
     simp only [Nat.choose_zero_right, Nat.cast_one, pow_zero, mul_one]
     ring
 
+/-- `[GNZC]` Thin corollary form of `cosmic_id`, still phrased through `Body`.
+Use `Body_eq_GZ` if a downstream theorem wants the canonical `GZ` spelling. -/
 @[simp]
 theorem cosmic_formula_binom {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
         (x + u) ^ d - (Body d x u) = u ^ d := by
         simpa using cosmic_id d x u
 
+/-- `[GNZC]` Legacy duplicate of `cosmic_formula_binom`.
+Kept for compatibility while docstrings and theorem names are normalized. -/
 theorem cosmic_id' {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
         (x + u) ^ d - (Body d x u) = u ^ d := by
     unfold Body G
