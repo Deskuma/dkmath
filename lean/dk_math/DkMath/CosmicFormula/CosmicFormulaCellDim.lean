@@ -101,12 +101,13 @@ namespace CosmicFormulaCellDim
 open scoped BigOperators
 
 /--
-二項定理（choose）側の `G_{d-1} := Σ_{k < d} (d choose k+1) x^k u^(d-1-k)` を表す関数。
+Legacy `CellDim` name for the canonical binomial kernel `GN` on `ℕ`.
 
-LaTeX: $G_{d-1}(x,u) = \sum_{k=0}^{d-1} \binom{d}{k+1} x^k u^{d-1-k}$.
+[GNZC] `Gbinom` is kept only as a local contrast-name against the geometric
+family `GCell`. New code should prefer `CosmicFormulaBinom.GN`.
 -/
-def Gbinom (d x u : ℕ) : ℕ :=
-  Finset.sum (Finset.range d) fun k => Nat.choose d (k + 1) * x ^ k * u ^ (d - 1 - k)
+@[simp] abbrev Gbinom (d x u : ℕ) : ℕ :=
+  DkMath.CosmicFormulaBinom.GN d x u
 
 /--
 `Gbinom` is exactly the canonical gap-normalized kernel `GN` on `ℕ`.
@@ -117,8 +118,7 @@ as `CosmicFormulaBinom.GN`.
 -/
 theorem Gbinom_eq_GN (d x u : ℕ) :
     Gbinom d x u = DkMath.CosmicFormulaBinom.GN d x u := by
-  simpa [Gbinom] using
-    (DkMath.CosmicFormulaBinom.GN_eq_sum (R := ℕ) d x u).symm
+  rfl
 
 /--
 Body-normalized bridge for the binomial kernel on `ℕ`.
@@ -127,7 +127,9 @@ Body-normalized bridge for the binomial kernel on `ℕ`.
 -/
 theorem x_mul_Gbinom_eq_GZ (d x u : ℕ) :
     x * Gbinom d x u = DkMath.CosmicFormula.GZ ℕ x u d := by
-  unfold Gbinom DkMath.CosmicFormula.GZ
+  rw [Gbinom_eq_GN]
+  rw [DkMath.CosmicFormulaBinom.GN_eq_sum (R := ℕ)]
+  unfold DkMath.CosmicFormula.GZ
   rw [Finset.mul_sum]
   apply Finset.sum_congr rfl
   intro k hk
@@ -281,10 +283,11 @@ theorem pow_sub_pow_eq_mul_Gbinom (d x u : ℕ) :
           ring
         rw [h2]
         congr 1
-        simp only [Gbinom]
+        rw [Gbinom_eq_GN]
+        rw [DkMath.CosmicFormulaBinom.GN_eq_sum (R := ℕ)]
         refine Finset.sum_congr rfl ?_
         intro k hk
-        ring
+        simp [Nat.mul_comm, Nat.mul_left_comm]
       -- まとめ
       -- (x+u)^n - u^n = x * Gbinom n x u
       -- ただし n=d+1 で、元の主張は d=n なので simp で戻す
@@ -301,6 +304,16 @@ theorem pow_sub_pow_eq_mul_Gbinom (d x u : ℕ) :
         _ = ∑ k ∈ Finset.range n,
                 Nat.choose n (k+1) * u^(n-1-k) * x^(k+1) := hchoose
         _ = x * Gbinom n x u := hfactor
+
+/--
+Canonical-name version of `pow_sub_pow_eq_mul_Gbinom`.
+
+[GNZC] New code should prefer this `GN` spelling; `pow_sub_pow_eq_mul_Gbinom`
+is kept as the `CellDim` compatibility theorem.
+-/
+theorem pow_sub_pow_eq_mul_GN (d x u : ℕ) :
+    (x + u)^d - u^d = x * DkMath.CosmicFormulaBinom.GN d x u := by
+  simpa [Gbinom] using pow_sub_pow_eq_mul_Gbinom d x u
 
 end CosmicFormulaCellDim
 end DkMath

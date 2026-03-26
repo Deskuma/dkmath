@@ -1800,13 +1800,15 @@ lemma color_balance_of_box_3k {d : ℕ} (hd : 2 ≤ d) (n : Fin d → ℕ)
 /-! ## セクション 3：宇宙式 Body との接続 -/
 
 /--
-補題：Body(d, x, u) のセル数は x * Gbinom d x u
-これが Cosmic Formula と Cell 分解の接点じゃ。
+Canonical binomial-kernel form of the Body card identity.
+
+[GNZC] The `CellDim` local name `Gbinom` is only a compatibility alias of
+`CosmicFormulaBinom.GN`, so the main theorem here is stated directly with `GN`.
 -/
-theorem card_body_from_cosmic (d x u : ℕ) :
-    (Body d x u).card = x * Gbinom d x u := by
+theorem card_body_from_GN (d x u : ℕ) :
+    (Body d x u).card = x * DkMath.CosmicFormulaBinom.GN d x u := by
   have h_big := card_Big_eq_card_Body_add_card_Gap d x u
-  have h_exp := pow_sub_pow_eq_mul_Gbinom d x u
+  have h_exp := pow_sub_pow_eq_mul_GN d x u
   simp only [Big, CellDim.card_Box, constVec, Finset.card_pi, Finset.card_range, Finset.prod_const,
     Finset.card_univ, Fintype.card_fin, Gap] at h_big
   -- (x + u) ^ d = (Body d x u).card + u ^ d
@@ -1814,6 +1816,15 @@ theorem card_body_from_cosmic (d x u : ℕ) :
     simpa [Fintype.card_pi, Finset.card_fin] using h_big
   rw [← h_exp, h_eq]
   omega
+
+/--
+Legacy `CellDim`-local spelling of `card_body_from_GN`.
+
+[GNZC] Kept for compatibility with older `Gbinom` wording.
+-/
+theorem card_body_from_cosmic (d x u : ℕ) :
+    (Body d x u).card = x * Gbinom d x u := by
+  simpa [Gbinom] using card_body_from_GN d x u
 
 /--
 `n ≥ 4`, `¬ 3 ∣ n`, `¬ 4 ∣ n` なら、`n` は `2,3` 以外の素因子を持つ。

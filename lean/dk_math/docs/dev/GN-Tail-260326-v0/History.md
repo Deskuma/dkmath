@@ -978,3 +978,88 @@ import chain の観点では、`Defs` は定義だけの薄い層にできるの
      記法を、
      `GN / GZ / GCell / GReal`
      のどれかへ分類して直す。
+
+### 日時: 2026/03/27 00:43 JST
+
+1. 目的:
+   - `CellDim.Gbinom` を、
+     「橋補題でつながる別定義」ではなく
+     canonical `GN`
+     の thin alias として整理する。
+   - `TriominoFLT`
+     の Body-card theorem が
+     `Gbinom`
+     固有である必要があるかを見直し、
+     必要なら
+     `GN`
+     を本線にする。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/CosmicFormula/CosmicFormulaCellDim.lean]`
+     の `Gbinom`
+     を
+     `@[simp] abbrev ... := CosmicFormulaBinom.GN ...`
+     へ変更した。
+   - `Gbinom_eq_GN`
+     は bridge 補題ではなく
+     `rfl`
+     で閉じる形へ薄くした。
+   - `x_mul_Gbinom_eq_GZ`
+     と
+     `pow_sub_pow_eq_mul_Gbinom`
+     の内部では、
+     sum-shape が必要な箇所に
+     `GN_eq_sum`
+     を明示的に挟む形へ調整した。
+   - `pow_sub_pow_eq_mul_GN`
+     を追加し、
+     canonical `GN`
+     spelling の theorem を先に立てた。
+   - `[lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean]`
+     には
+     `card_body_from_GN`
+     を追加し、
+     既存の
+     `card_body_from_cosmic`
+     は
+     `Gbinom`
+     wording の compatibility theorem
+     に落とした。
+
+3. 結論:
+   - `Gbinom`
+     は、
+     数学的に
+     `GN`
+     と同じであるだけでなく、
+     実装上も thin alias として固定された。
+   - `TriominoFLT`
+     の主たる binomial kernel theorem は
+     `GN`
+     で書いてよく、
+     `Gbinom`
+     は
+     `CellDim`
+     局所の対比名としてだけ残せばよい、
+     という判断が固まった。
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.CosmicFormulaCellDim`
+   - `lake build DkMath.CosmicFormula.TriominoFLT`
+   を実行し、成功を確認した。
+
+5. 次の課題:
+   - `CellDim`
+     内の theorem 名
+     `pow_sub_pow_eq_mul_Gbinom`
+     などを、
+     互換名として残すだけでよいか、
+     `..._GN`
+     系を本線に昇格させるかを検討する。
+   - `TriominoFLT`
+     内の残る説明文でも、
+     必要なら
+     `Gbinom`
+     より
+     `GN`
+     を優先する wording へ寄せる。
