@@ -895,3 +895,73 @@
      Branch A normal form から
      `s^p ≡ y^(p-1) [MOD p^2]`
      を抜くものである。
+
+### 日時: 2026/03/27 JST
+
+1. 目的:
+   - Branch A / Wieferich route の最初の concrete 材料を、
+     `TriominoCosmicBranchA`
+     lower layer に固定する。
+   - comparison の残核をすぐには閉じず、
+     まず
+     `GN = p * y^(p-1) + p^2 * M`
+     と
+     `s^p = y^(p-1) + p * M`
+     の shape を theorem 化する。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     - `primeGe5BranchA_GN_eq_head_add_p_sq_mul`
+     - `primeGe5BranchA_spow_eq_head_add_p_mul`
+     を追加した。
+   - 前者では、
+     既存の local proof に埋まっていた
+     `N = A + B`
+     と
+     `p^2 ∣ B`
+     を独立 theorem として再構成し、
+     `GN`
+     の head/tail 分離を explicit にした。
+   - 後者では、
+     `GN = p * s^p`
+     と上の head/tail 分離を合わせて、
+     `p`
+     を一度割った normal form
+     `s^p = y^(p-1) + p * M`
+     を concrete に取り出した。
+
+3. 結論:
+   - Branch A は、
+     comparison route の checkpoint だけでなく、
+     Wieferich route の最初の合同材料を
+     lower layer で直接持つ状態になった。
+   - これにより次の本命は、
+     `s^p = y^(p-1) + p * M`
+     から
+     `mod p^2`
+     の witness へ持ち上げる補題に絞られた。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、成功を確認した。
+
+5. 備考:
+   - `TriominoCosmicBranchA.lean`
+     の既存 `sorry`
+     は増えていない。
+   - 今回の 2 補題は、
+     最終 refuter を comparison から Wieferich bridge へ差し替える際の
+     concrete adapter 候補になる。
+
+6. 次の課題:
+   - `primeGe5BranchA_spow_eq_head_add_p_mul`
+     を
+     `s^p ≡ y^(p-1) [MOD p]`
+     あるいは
+     `mod p^2`
+     の形へ正規化する補題を追加する。
+   - そのうえで
+     `TriominoCosmicGapInvariant`
+     側の Wieferich bridge に渡す input spec を定める。
