@@ -506,6 +506,59 @@ lemma GN3_cube_not_cube_of_gt_one_of_provider
 この補題を直接適用するところまでは届いていないが、
 一般指数 branch の委譲先を code level で固定するために置いておく。
 -/
+private lemma body_not_perfect_pow_of_squarefree_GN_bridge
+    {u y n : ℕ}
+    (hn : 2 < n) (hn_prime : Nat.Prime n)
+    (hu : 0 < u)
+    (hcop : Nat.Coprime (u + y) y)
+    (hndiv : ¬ n ∣ u)
+    (hGN_gt : 1 < GN n u y)
+    (hSq : Squarefree (GN n u y)) :
+    ¬ ∃ t : ℕ, 0 < t ∧ (u + y) ^ n - y ^ n = t ^ n := by
+  have hcop_un' : Nat.Coprime n u :=
+    (Nat.Prime.coprime_iff_not_dvd hn_prime).2 hndiv
+  have hcop_un : Nat.Coprime u n := by
+    simpa [Nat.coprime_comm] using hcop_un'
+  exact DkMath.NumberTheory.Gcd.body_not_perfect_pow_of_squarefree_GN_of_coprime_add
+    (d := n) (x := u) (u := y)
+    (by omega)
+    hu
+    hcop
+    hcop_un
+    hGN_gt
+    hSq
+
+/--
+Primitive-prime route の `Body`-coordinate wrapper。
+
+`FLT.Basic` 本体では現状まだ mainline に配線していないが、
+high-exponent prime branch の non-research 差し込み点を目立つ形で固定しておく。
+-/
+private lemma body_not_perfect_pow_of_primitive_prime_factor_bridge
+    {u y n : ℕ}
+    (hn : 2 < n) (hn_prime : Nat.Prime n)
+    (hu : 0 < u) (hy : 0 < y)
+    (hcop : Nat.Coprime (u + y) y)
+    (hndiv : ¬ n ∣ u) :
+    ¬ ∃ t : ℕ, 0 < t ∧ (u + y) ^ n - y ^ n = t ^ n := by
+  exact DkMath.NumberTheory.Gcd.body_not_perfect_pow_of_primitive_prime_factor_of_coprime_add
+    (d := n) (x := u) (u := y)
+    hn_prime
+    (by omega)
+    hu
+    hy
+    hcop
+    hndiv
+
+/--
+一般指数ルートで `body_not_perfect_pow` へ委譲するための薄い橋。
+
+現在の mainline は依然として research route を使うが、
+この直前に置いた
+`body_not_perfect_pow_of_squarefree_GN_bridge` /
+`body_not_perfect_pow_of_primitive_prime_factor_bridge`
+が、今後の FLT 側 non-research 差し込み点である。
+-/
 private lemma body_not_perfect_pow_bridge
     {u y n : ℕ}
     (hn : 2 < n) (hn_prime : Nat.Prime n)
@@ -1039,6 +1092,13 @@ theorem FLT_of_coprime
           have hcop_gap : Nat.Coprime u y := by
             simpa [u] using coprime_sub_of_coprime hzy.le hyz_coprime
           simpa [hz_yu] using hcop_gap
+        -- NOTE:
+        -- `body_not_perfect_pow_bridge` は current mainline の research route。
+        -- FLT 側 non-research の差し込み候補は、上に置いた
+        -- `body_not_perfect_pow_of_squarefree_GN_bridge` と
+        -- `body_not_perfect_pow_of_primitive_prime_factor_bridge`。
+        -- ここで不足しているのは、squarefree あるいは primitive-prime
+        -- existence をこの branch へ供給する薄い配線だけである。
         have hbody_not_pow :
             ¬ ∃ t : ℕ, 0 < t ∧ (u + y) ^ n - y ^ n = t ^ n := by
           exact

@@ -694,3 +694,70 @@
      版 wrapper を追加し、
      FLT 側が使う典型仮定から
      これらの local refuter をさらに起動しやすくする。
+
+### 日時: 2026/03/27 JST
+
+1. 目的:
+   - `DkMath.FLT.Basic`
+     側でも、
+     いま追加した
+     FLT-shaped local refuter
+     をどこへ差し込むかを明示し、
+     後続で research route から切り替える位置を
+     迷わないようにする。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/FLT/Basic.lean]`
+     の
+     `body_not_perfect_pow_bridge`
+     直前に、
+     - `body_not_perfect_pow_of_squarefree_GN_bridge`
+     - `body_not_perfect_pow_of_primitive_prime_factor_bridge`
+     を追加した。
+   - どちらも
+     `DkMath.NumberTheory.Gcd.GN`
+     側の
+     FLT-shaped local refuter
+     を、
+     `FLT.Basic`
+     が持つ
+     `u,y,n`
+     語彙へ移しただけの thin bridge である。
+   - あわせて
+     `FLT_of_coprime`
+     の
+     `n > 3` prime / `¬ n ∣ u`
+     branch に注記を入れ、
+     現在の mainline はまだ research route だが、
+     non-research の差し込み候補は
+     直上の 2 bridge だと明記した。
+
+3. 結論:
+   - `FLT.Basic`
+     から見ても、
+     squarefree route / primitive-prime route
+     を差し込む位置が code level で固定された。
+   - まだ mainline の呼び先自体は
+     `GcdNext.body_not_perfect_pow`
+     のままだが、
+     これは「橋が無いから」ではなく、
+     `squarefree` や primitive-prime existence
+     を供給する最後の薄い配線が未実装なだけ、
+     という状態になった。
+
+4. 検証:
+   - `lake build DkMath.FLT.Basic`
+   を実行して、成功を確認する。
+
+5. 次の課題:
+   - `FLT_of_coprime`
+     の
+     `n > 3` / prime / `¬ n ∣ u`
+     branch へ、
+     `squarefree`
+     あるいは primitive-prime existence
+     を供給する薄い wrapper を追加する。
+   - そのとき、
+     current research route を
+     完全に置き換えるのか、
+     fallback として残すのかを決める。
