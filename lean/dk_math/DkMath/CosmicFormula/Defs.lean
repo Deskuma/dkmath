@@ -85,6 +85,16 @@ This is the `r = 1` specialization of the general tail family.
 @[simp] abbrev GN (R : Type*) [CommSemiring R] (x u : R) (d : ℕ) : R :=
   GTail d 1 x u
 
+/--
+Minimal complex-side skeleton.
+
+[GNZC] Reserved seat for the future `GC` pillar.
+For now this is only the `ℂ` specialization of the canonical Body-normalized
+kernel; later work may refine its semantics without changing the public name.
+-/
+@[simp] abbrev GC (z u : ℂ) (d : ℕ) : ℂ :=
+  GZ ℂ z u d
+
 -- #eval G ℝ 2 1 1  -- テスト評価
 
 /-- 大宇宙式 Big Cosmic Formula -/

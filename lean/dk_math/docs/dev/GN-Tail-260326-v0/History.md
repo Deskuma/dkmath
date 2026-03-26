@@ -576,3 +576,130 @@ import chain の観点では、`Defs` は定義だけの薄い層にできるの
    - 将来の `GC` をどの層に置くか
      (`Defs` 直下か別ファイルか)
      を次段で決める。
+
+---
+
+## 6. 次にやるとよい順番
+
+わっちなら、次はこの順で進める。
+
+### 6.1. `[GNZC]` grep で棚卸し
+
+まずタグを入れた効用を回収する。
+`[GNZC]` を grep して、箇所を
+
+- canonical point
+- legacy point
+- shadowing point
+- theorem-name-stable point
+
+に分類するのじゃ。
+
+### 6.2. `G` 実使用箇所の置換候補を洗う
+
+コメントだけでなく、実際に
+
+- `unfold G`
+- `simp [G]`
+- theorem statements with `G`
+  を拾って、`GZ` へ移せるものと、まだ残すものを分ける。
+
+### 6.3. `GN` 参照先の一本化方針を決める
+
+新規コードは `Defs.GN` を使う、旧コードは wrapper 許容、のように方針を固定するとぶれにくい。
+
+### 6.4. `GC` の最小 skeleton を 1 個だけ置く
+
+実装を広げる前に、たとえば定義名とコメントだけでも置く。
+それで「三本柱の場所」が確定する。
+
+### 日時: 2026/03/26 22:15 JST
+
+1. 目的:
+   - `[GNZC]` タグの効用を回収し、
+     migration 対象を
+     canonical / legacy / shadowing / theorem-name-stable
+     に棚卸しする。
+   - `G` の実使用箇所を洗い、
+     すぐ `GZ` へ移せるものと
+     当面残すものを切り分ける。
+   - `GC` の最小 skeleton を先に置き、
+     `GN / GZ / GC` の三本柱の場所だけ確定する。
+
+2. 実施:
+   - `[GNZC]` grep を行い、
+     現状の分類を次のように整理した。
+     - canonical point:
+       `Defs.GZ`, `Defs.GN`
+     - legacy point:
+       `Defs.G`, `CosmicFormulaBinom.CommRing.G`,
+       `CosmicFormulaBinom.GN` wrapper,
+       `KUS.CosmicBridge` 冒頭説明
+     - shadowing point:
+       `CosmicTheorems.cid_csr_iff'`
+     - theorem-name-stable point:
+       `KUS.CosmicBridge.G_one_one_eq`
+   - `G` 実使用の grep を行い、
+     次の切り分けを得た。
+     - `GZ` へ寄せやすい:
+       `KUS/CosmicBridge.lean` の comment / theorem wording
+     - 当面残す:
+       `CosmicFormulaBinom.lean` の `CommRing.G`,
+       `CosmicFormulaDim.lean`,
+       `CosmicFormulaCellDim.lean`
+       （独立 family / 幾何和 family としてまだ意味差がある）
+     - 対象外:
+       `SilverRatioCircle.lean` など、
+       Cosmic naming と無関係な局所記号 `G`
+   - `[lean/dk_math/DkMath/CosmicFormula/Defs.lean]`
+     に
+     `@[simp] abbrev GC (z u : ℂ) (d : ℕ) : ℂ := GZ ℂ z u d`
+     を追加した。
+   - `GC` には
+     `[GNZC]`
+     docstring を付け、
+     「今は complex specialization だが、
+      後で意味を独立させても名前は維持する」
+     ことを明記した。
+
+3. 結論:
+   - `[GNZC]` タグだけで、
+     「どこが canonical で、
+      どこが legacy で、
+      どこが namespace collision 回避か」
+     を追える状態になった。
+   - `GN` 参照先の一本化方針は、
+     - 新規コード:
+       `Defs.GN`
+     - 旧コード:
+       `CosmicFormulaBinom.GN` wrapper 許容
+     として固定するのが自然だと確認した。
+   - `GC` も `Defs` に席を持ったため、
+     三本柱の配置だけは先に安定した。
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.Defs`
+   - `lake build DkMath.CosmicFormula.CosmicFormulaBinom`
+   - `lake build DkMath.CosmicFormula.CosmicTheorems`
+   - `lake build DkMath.KUS.CosmicBridge`
+   を実行し、成功を確認した。
+
+5. 備考:
+   - 今回の `GC` は semantics 完成版ではなく、
+     まず public name と placement を固定するための
+     skeleton である。
+   - `CommRing.G` / `CosmicFormulaDim.G` /
+     `CosmicFormulaCellDim.G`
+     は同名でも直ちに統合すべき段階ではない。
+     先に comment / theorem naming を整理してから、
+     本当に `GZ` へ寄せるかを決めるべきと判断した。
+
+6. 次の課題:
+   - `KUS/CosmicBridge.lean` の theorem 名と説明文を、
+     `GZ` 中心語彙へさらに寄せる。
+   - `CosmicFormulaBinom.CommRing.G` を
+     alias 化できるか、
+     それとも独立 family として残すべきかを検討する。
+   - `CosmicFormulaDim.G` / `CosmicFormulaCellDim.G`
+     を
+     `GNZC` 範囲外の別 family として明示分離するかを決める。
