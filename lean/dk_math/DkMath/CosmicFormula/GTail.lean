@@ -151,17 +151,29 @@ theorem GTail_rec
   simp [add_comm, add_left_comm]
 
 /--
-Migration alias for the higher-tail recursion.
+`r = 1` recursion in the canonical `GN` vocabulary.
 
-The candidate notes used a `Gbinom`-flavored name before `GTail` became the
-canonical family. Keep this alias during the naming transition.
+This is the `GTail_rec` specialization that matches the standard one-gap
+normalized kernel naming.
+-/
+theorem GN_tail_rec
+    {R : Type _} [CommSemiring R]
+    (d : ℕ) (x u : R) (hd : 1 < d) :
+    GTail d 1 x u =
+      (Nat.choose d 1 : R) * u ^ (d - 1) + x * GTail d 2 x u := by
+  simpa using GTail_rec d 1 x u hd
+
+/--
+Compatibility alias for the old `Gbinom`-flavored recursion name.
+
+[GNZC] New code should prefer `GN_tail_rec`.
 -/
 theorem Gbinom_tail_rec
     {R : Type _} [CommSemiring R]
-    (d r : ℕ) (x u : R) (hr : r < d) :
-    GTail d r x u =
-      (Nat.choose d r : R) * u ^ (d - r) + x * GTail d (r + 1) x u :=
-  GTail_rec d r x u hr
+    (d : ℕ) (x u : R) (hd : 1 < d) :
+    GTail d 1 x u =
+      (Nat.choose d 1 : R) * u ^ (d - 1) + x * GTail d 2 x u :=
+  GN_tail_rec d x u hd
 
 /--
 The `r = 1` tail is the usual one-gap normalized sum.
@@ -200,16 +212,24 @@ theorem GTail_eval_zero
     simp [Nat.choose_eq_zero_of_lt hdlt]
 
 /--
-Migration alias for evaluating the higher tail at `x = 0`.
+`r = 1` zero-evaluation in the canonical `GN` vocabulary.
+-/
+theorem GN_zero_eval
+    {R : Type _} [CommSemiring R]
+    (d : ℕ) (u : R) :
+    GTail d 1 0 u = (Nat.choose d 1 : R) * u ^ (d - 1) :=
+  GTail_eval_zero d 1 u
 
-This keeps the candidate-notes vocabulary available while `GTail` becomes the
-single canonical family.
+/--
+Compatibility alias for the old `Gbinom`-flavored zero-evaluation name.
+
+[GNZC] New code should prefer `GN_zero_eval`.
 -/
 theorem Gbinom_zero_eval
     {R : Type _} [CommSemiring R]
-    (d r : ℕ) (u : R) :
-    GTail d r 0 u = (Nat.choose d r : R) * u ^ (d - r) :=
-  GTail_eval_zero d r u
+    (d : ℕ) (u : R) :
+    GTail d 1 0 u = (Nat.choose d 1 : R) * u ^ (d - 1) :=
+  GN_zero_eval d u
 
 /--
 On `ℕ`, the higher tail is divisible by its boundary power `x^r`.
@@ -247,11 +267,24 @@ theorem GTail_not_dvd_of_head_unit_of_prime_dvd_x
     (hpx : p ∣ x) :
     ¬ p ∣ GTail d r x u := by
   intro htail
-  rw [Gbinom_tail_rec (R := ℕ) d r x u hr] at htail
+  rw [GTail_rec (R := ℕ) d r x u hr] at htail
   have hmul : p ∣ x * GTail d (r + 1) x u := dvd_mul_of_dvd_left hpx _
   have hhead_dvd : p ∣ Nat.choose d r * u ^ (d - r) :=
     (Nat.dvd_add_right hmul).1 (by simpa [Nat.add_comm] using htail)
   exact hhead hhead_dvd
+
+/--
+`r = 1` specialization of `GTail_not_dvd_of_head_unit_of_prime_dvd_x`.
+
+[GNZC] This is the non-divisibility kernel for the standard `GN` layer.
+-/
+theorem GN_not_dvd_of_head_unit_of_prime_dvd_x
+    {p d x u : ℕ}
+    (hp : Nat.Prime p) (hd : 1 < d)
+    (hhead : ¬ p ∣ Nat.choose d 1 * u ^ (d - 1))
+    (hpx : p ∣ x) :
+    ¬ p ∣ GTail d 1 x u :=
+  GTail_not_dvd_of_head_unit_of_prime_dvd_x hp hd hhead hpx
 
 /--
 Under the head-unit condition, the normalized higher tail has `p`-adic
@@ -265,6 +298,17 @@ theorem padicValNat_GTail_eq_zero_of_head_unit_of_prime_dvd_x
     padicValNat p (GTail d r x u) = 0 := by
   exact padicValNat.eq_zero_of_not_dvd
     (GTail_not_dvd_of_head_unit_of_prime_dvd_x hp hr hhead hpx)
+
+/--
+`r = 1` specialization of the normalized-tail valuation-zero theorem.
+-/
+theorem padicValNat_GN_eq_zero_of_head_unit_of_prime_dvd_x
+    {p d x u : ℕ}
+    (hp : Nat.Prime p) (hd : 1 < d)
+    (hhead : ¬ p ∣ Nat.choose d 1 * u ^ (d - 1))
+    (hpx : p ∣ x) :
+    padicValNat p (GTail d 1 x u) = 0 :=
+  padicValNat_GTail_eq_zero_of_head_unit_of_prime_dvd_x hp hd hhead hpx
 
 /--
 Lower-bound half of the higher-tail valuation mechanism.
@@ -347,5 +391,26 @@ theorem padicValNat_tail_exact_of_head_unit
   rw [DkMath.ABC.padicValNat_pow' hp r hxpow_ne]
   rw [padicValNat_GTail_eq_zero_of_head_unit_of_prime_dvd_x hp hr hhead hpx]
   simp
+
+/--
+`r = 1` specialization of the exact higher-tail valuation theorem.
+
+[GNZC] This is the exact valuation theorem for the standard `GN` layer.
+-/
+theorem padicValNat_GN_exact_of_head_unit
+    {p d x u : ℕ}
+    (hp : Nat.Prime p) (hd : 1 < d)
+    (hGN_ne : ((x + u) ^ d - u ^ d) ≠ 0)
+    (hhead : ¬ p ∣ Nat.choose d 1 * u ^ (d - 1))
+    (hpx : p ∣ x) :
+    padicValNat p ((x + u) ^ d - u ^ d) = padicValNat p x := by
+  simpa using
+    (padicValNat_tail_exact_of_head_unit
+      (p := p) (d := d) (r := 1) (x := x) (u := u)
+      hp hd
+      (by
+        simpa [Finset.range_one, Nat.choose_zero_right, Nat.cast_one,
+          pow_zero, one_mul] using hGN_ne)
+      hhead hpx)
 
 end DkMath.CosmicFormula

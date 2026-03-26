@@ -312,3 +312,90 @@
      や primitive-prime route
      との接続で、
      この exact valuation theorem をどこへ流し込むかを決める。
+
+### 日時: 2026/03/27 01:43 JST
+
+1. 目的:
+   - `r = 1`
+     specialization では
+     `Gbinom`
+     ではなく
+     `GN`
+     を主軸命名にする。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/CosmicFormula/GTail.lean]`
+     に
+     - `GN_tail_rec`
+     - `GN_zero_eval`
+     - `GN_not_dvd_of_head_unit_of_prime_dvd_x`
+     - `padicValNat_GN_eq_zero_of_head_unit_of_prime_dvd_x`
+     - `padicValNat_GN_exact_of_head_unit`
+     を追加した。
+   - 既存の
+     `Gbinom_tail_rec`
+     / `Gbinom_zero_eval`
+     は compatibility alias
+     とし、
+     docstring でも
+     `GN`
+     を優先する旨を明記した。
+   - `GTail_not_dvd_of_head_unit_of_prime_dvd_x`
+     内の一般
+     `r`
+     参照は
+     `GTail_rec`
+     に戻し、
+     `GN`
+     alias は純粋に
+     `r = 1`
+     specialization として分離した。
+
+3. 結論:
+   - `GTail`
+     理論の
+     `r = 1`
+     側は、
+     名実ともに
+     `GN`
+     語彙で読む形に整理された。
+   - 以後は
+     `GN`
+     を prefix / suffix に使う方針で進められる。
+   - `Gbinom`
+     は
+     `CellDim`
+     ローカルの対比名として残しても、
+     valuation / tail
+     理論の主軸名ではなくなった。
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.GTail`
+   - `lake build DkMath.CosmicFormula.CosmicFormulaBinom`
+   を実行し、成功を確認した。
+
+5. 備考:
+   - `padicValNat_GN_exact_of_head_unit`
+     は
+     `padicValNat_tail_exact_of_head_unit`
+     の
+     `r = 1`
+     specialization を
+     `(x+u)^d - u^d`
+     の形へ戻した alias
+     である。
+
+6. 次の課題:
+   - `GN`
+     alias 群を
+     `CosmicFormulaBinom`
+     / `CellDim`
+     の
+     `GN`
+     語彙へどこまで露出するかを決める。
+   - `squarefree GN`
+     や primitive-prime route
+     と結ぶ theorem の statement へ、
+     この
+     `GN`
+     exact valuation を直接組み込む。
