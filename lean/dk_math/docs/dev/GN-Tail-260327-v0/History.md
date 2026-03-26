@@ -493,3 +493,85 @@
    - primitive-prime route
      `body_not_perfect_pow_of_primitive_prime_factor`
      を同じ naming layer で切る。
+
+### 日時: 2026/03/27 JST
+
+1. 目的:
+   - review-004 の方針に沿って、
+     `body_not_perfect_pow_of_squarefree_GN`
+     の仮定
+     `Nat.Coprime x (GN d x u)`
+     を、
+     より上流の coprime data から供給する wrapper を追加する。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/NumberTheory/Gcd/GN.lean]`
+     に
+     `coprime_boundary_GN_of_coprime_add_of_coprime_exp`
+     を追加した。
+     仮定は
+     - `1 ≤ d`
+     - `0 < x`
+     - `Nat.Coprime (x + u) u`
+     - `Nat.Coprime x d`
+     で、
+     結論は
+     `Nat.Coprime x (GN d x u)`
+     である。
+   - 同ファイルに
+     `body_not_perfect_pow_of_squarefree_GN_of_coprime_add`
+     を追加し、
+     上記 coprime wrapper を経由して
+     `CosmicFormulaBinom.body_not_perfect_pow_of_squarefree_GN`
+     を起動する形へ整理した。
+
+3. 結論:
+   - `squarefree GN`
+     obstruction は、
+     もはや
+     `Nat.Coprime x (GN d x u)`
+     を手で渡す theorem
+     ではなく、
+     `Body` 座標
+     `Nat.Coprime (x + u) u`
+     と
+     `Nat.Coprime x d`
+     から起動できる二層構成になった。
+   - 責務分離としては
+     - `CosmicFormulaBinom`:
+       pure obstruction
+     - `NumberTheory.Gcd.GN`:
+       coprime supply / wrapper
+     の分割がかなり自然になった。
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.CosmicFormulaBinom`
+   - `lake build DkMath.NumberTheory.Gcd.GN`
+   を実行し、成功を確認した。
+
+5. 備考:
+   - 今回の coprime wrapper は
+     `gcd_gap_GN_dvd_exp`
+     から
+     `gcd(x,GN) ∣ d`
+     を読み直し、
+     さらに
+     `Nat.Coprime x d`
+     で
+     `gcd(x,GN)=1`
+     へ落とす形で閉じている。
+   - したがって
+     `UniqueFactorizationGN`
+     の heavier valuation layer を import せずに済んだ。
+
+6. 次の課題:
+   - `body_not_perfect_pow_of_primitive_prime_factor`
+     を、今回の squarefree route と同じ naming layer
+     / wrapper 分割で追加する。
+   - 必要なら
+     `Nat.Coprime x u`
+     版の wrapper も薄く切り、
+     `Nat.Coprime (x + u) u`
+     と
+     `Nat.Coprime x u`
+     の両語彙で呼べるようにする。

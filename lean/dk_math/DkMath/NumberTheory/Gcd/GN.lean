@@ -114,6 +114,52 @@ theorem gcd_gap_GN_dvd_exp
   rw [natAbs_gn_gap_natCast_int] at hgcd_int
   exact hgcd_int
 
+/--
+If `gcd(x + u, u) = 1` and the boundary `x` is coprime to the exponent `d`,
+then the boundary and `GN d x u` are coprime.
+
+This is the direct `gcd(x,GN) ∣ d` wrapper in the natural `Body` coordinates
+`(x + u, u)`.
+-/
+theorem coprime_boundary_GN_of_coprime_add_of_coprime_exp
+    {d x u : ℕ}
+    (hd1 : 1 ≤ d) (hx : 0 < x)
+    (hcop_add : Nat.Coprime (x + u) u)
+    (hcop_xd : Nat.Coprime x d) :
+    Nat.Coprime x (DkMath.CosmicFormulaBinom.GN d x u) := by
+  have hyz : u < x + u := by omega
+  have hgcd_dvd_d :
+      Nat.gcd x (DkMath.CosmicFormulaBinom.GN d x u) ∣ d := by
+    simpa [Nat.add_sub_cancel_left] using
+      (gcd_gap_GN_dvd_exp (p := d) (z := x + u) (y := u) hd1 hyz hcop_add)
+  have hgcd_dvd_x :
+      Nat.gcd x (DkMath.CosmicFormulaBinom.GN d x u) ∣ x := by
+    exact Nat.gcd_dvd_left x (DkMath.CosmicFormulaBinom.GN d x u)
+  have hgcd_dvd_one :
+      Nat.gcd x (DkMath.CosmicFormulaBinom.GN d x u) ∣ 1 := by
+    rw [← hcop_xd.gcd_eq_one]
+    exact Nat.dvd_gcd hgcd_dvd_x hgcd_dvd_d
+  exact (Nat.coprime_iff_gcd_eq_one).2 (Nat.eq_one_of_dvd_one hgcd_dvd_one)
+
+/--
+Wrapper from coprime `Body` coordinates to the squarefree-`GN` obstruction
+theorem on the `CosmicFormula` side.
+-/
+theorem body_not_perfect_pow_of_squarefree_GN_of_coprime_add
+    {d x u : ℕ}
+    (hd : 1 < d) (hx : 0 < x)
+    (hcop_add : Nat.Coprime (x + u) u)
+    (hcop_xd : Nat.Coprime x d)
+    (hGN_gt : 1 < DkMath.CosmicFormulaBinom.GN d x u)
+    (hSq : Squarefree (DkMath.CosmicFormulaBinom.GN d x u)) :
+    ¬ ∃ t : ℕ, 0 < t ∧ (x + u) ^ d - u ^ d = t ^ d := by
+  exact DkMath.CosmicFormulaBinom.body_not_perfect_pow_of_squarefree_GN
+    hd hGN_gt
+    (coprime_boundary_GN_of_coprime_add_of_coprime_exp
+      (hd1 := Nat.le_of_lt hd) (hx := hx)
+      (hcop_add := hcop_add) (hcop_xd := hcop_xd))
+    hSq
+
 /-- `z` と `y` が互いに素で `p` が gap を割らなければ、`gap` と `GN` は互いに素。 -/
 theorem coprime_gap_GN_of_not_dvd_exp_prime
     {p z y : ℕ} (hp : Nat.Prime p) (hyz : y < z) (hcop : Nat.Coprime z y)
