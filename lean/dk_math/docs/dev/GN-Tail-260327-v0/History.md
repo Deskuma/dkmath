@@ -105,3 +105,101 @@
      `Nat`
      ベースで切るか、
      より抽象な setting にするかを決める。
+
+### 日時: 2026/03/27 01:12 JST
+
+1. 目的:
+   - `GTail`
+     の valuation 前段 API を固めるため、
+     計画した
+     1. boundary-factor theorem alias
+     2. recursion / zero-eval migration alias
+     3. 可除性 lower-bound
+     を実装する。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/CosmicFormula/GTail.lean]`
+     に
+     - `higher_tail_eq_pow_mul_GTail`
+     - `Gbinom_tail_rec`
+     - `Gbinom_zero_eval`
+     - `pow_dvd_higher_tail`
+     を追加した。
+   - `higher_tail_eq_pow_mul_GTail`
+     は既存
+     `add_pow_eq_prefix_add_xpow_mul_GTail`
+     の subtraction-shaped alias
+     として
+     `CommRing`
+     上で実装した。
+   - `Gbinom_tail_rec`
+     / `Gbinom_zero_eval`
+     は naming migration alias
+     として、
+     それぞれ
+     `GTail_rec`
+     / `GTail_eval_zero`
+     に直接接続した。
+   - `pow_dvd_higher_tail`
+     は
+     `Nat`
+     上で
+     `congrArg (fun t => t - prefix)`
+     を使って導出し、
+     高次 Tail が境界因子
+     `x^r`
+     を持つことを
+     `∣`
+     の形で固定した。
+
+3. 結論:
+   - valuation 本体に入る前段として必要だった
+     `higher tail = x^r * GTail`
+     の name-stable theorem と、
+     recursion / zero-eval / divisibility
+     の 3 本柱が揃った。
+   - これで
+     `padicValNat_tail_exact_of_head_unit`
+     は、
+     まず
+     `pow_dvd_higher_tail`
+     から lower bound を取り、
+     その上で upper bound を設計する流れに整理できる。
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.GTail`
+   - `lake build DkMath.CosmicFormula.CosmicFormulaBinom`
+   を実行し、成功を確認した。
+
+5. 失敗事例:
+   - `pow_dvd_higher_tail`
+     の初稿では、
+     `ℕ`
+     上の prefix 局所略記と
+     cast / parser
+     の組合せで証明が不安定だった。
+   - 最終的には
+     `congrArg (fun t => t - prefix)`
+     を直接使う形へ直し、
+     proof-local abbreviation
+     に依存しない形へ落ち着いた。
+
+6. 備考:
+   - `higher_tail_eq_pow_mul_GTail`
+     は
+     `CommRing`
+     版、
+     `pow_dvd_higher_tail`
+     は
+     `Nat`
+     版であり、
+     algebraic layer と divisibility layer を分ける形になっている。
+
+7. 次の課題:
+   - `padicValNat_tail_exact_of_head_unit`
+     の statement を具体化する。
+   - その際、
+     upper bound 側の head-unit 仮定を
+     `q ∤ (choose d r * u^(d-r))`
+     のような形で置くか、
+     より扱いやすい派生仮定に分解するかを決める。

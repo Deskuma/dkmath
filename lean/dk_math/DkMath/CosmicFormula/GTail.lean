@@ -86,6 +86,23 @@ theorem add_pow_eq_prefix_add_xpow_mul_GTail
         x ^ r * GTail d r x u := by
       rw [htail_factor]
 
+/--
+Boundary-factor form of the higher tail identity.
+
+This is the subtraction-shaped reading of
+`add_pow_eq_prefix_add_xpow_mul_GTail`, matching the intended
+"higher tail = boundary power times normalized kernel" API.
+-/
+theorem higher_tail_eq_pow_mul_GTail
+    {R : Type _} [CommRing R]
+    (d r : ℕ) (x u : R) (hr : r ≤ d) :
+    (x + u) ^ d -
+        (∑ j ∈ Finset.range r, (Nat.choose d j : R) * x ^ j * u ^ (d - j))
+      = x ^ r * GTail d r x u := by
+  rw [sub_eq_iff_eq_add]
+  simpa [add_comm, add_left_comm, add_assoc] using
+    add_pow_eq_prefix_add_xpow_mul_GTail d r x u hr
+
 /-- The `r = 0` tail is the whole binomial expansion. -/
 theorem GTail_zero_eq_add_pow
     {R : Type _} [CommSemiring R]
@@ -133,6 +150,19 @@ theorem GTail_rec
   simp [add_comm, add_left_comm]
 
 /--
+Migration alias for the higher-tail recursion.
+
+The candidate notes used a `Gbinom`-flavored name before `GTail` became the
+canonical family. Keep this alias during the naming transition.
+-/
+theorem Gbinom_tail_rec
+    {R : Type _} [CommSemiring R]
+    (d r : ℕ) (x u : R) (hr : r < d) :
+    GTail d r x u =
+      (Nat.choose d r : R) * u ^ (d - r) + x * GTail d (r + 1) x u :=
+  GTail_rec d r x u hr
+
+/--
 The `r = 1` tail is the usual one-gap normalized sum.
 
 This is the direct expansion shape that will later serve as the wrapper target
@@ -167,5 +197,42 @@ theorem GTail_eval_zero
     have hlen : d + 1 - r = 0 := by omega
     rw [hlen]
     simp [Nat.choose_eq_zero_of_lt hdlt]
+
+/--
+Migration alias for evaluating the higher tail at `x = 0`.
+
+This keeps the candidate-notes vocabulary available while `GTail` becomes the
+single canonical family.
+-/
+theorem Gbinom_zero_eval
+    {R : Type _} [CommSemiring R]
+    (d r : ℕ) (u : R) :
+    GTail d r 0 u = (Nat.choose d r : R) * u ^ (d - r) :=
+  GTail_eval_zero d r u
+
+/--
+On `ℕ`, the higher tail is divisible by its boundary power `x^r`.
+
+This is the natural divisibility corollary of the higher-tail factorization and
+serves as the lower-bound half of future valuation theorems.
+-/
+theorem pow_dvd_higher_tail
+    (d r x u : ℕ) (hr : r ≤ d) :
+    x ^ r ∣
+      ((x + u) ^ d -
+        ∑ j ∈ Finset.range r, Nat.choose d j * x ^ j * u ^ (d - j)) := by
+  refine ⟨GTail d r x u, ?_⟩
+  calc
+    (x + u) ^ d - ∑ j ∈ Finset.range r, Nat.choose d j * x ^ j * u ^ (d - j)
+      = ((∑ j ∈ Finset.range r, Nat.choose d j * x ^ j * u ^ (d - j)) +
+          x ^ r * GTail d r x u) -
+        ∑ j ∈ Finset.range r, Nat.choose d j * x ^ j * u ^ (d - j) := by
+          simpa using
+            congrArg
+              (fun t =>
+                t - ∑ j ∈ Finset.range r, Nat.choose d j * x ^ j * u ^ (d - j))
+              (add_pow_eq_prefix_add_xpow_mul_GTail (R := ℕ) d r x u hr)
+    _ = x ^ r * GTail d r x u := by
+          exact Nat.add_sub_cancel_left _ _
 
 end DkMath.CosmicFormula
