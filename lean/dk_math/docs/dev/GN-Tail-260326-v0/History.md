@@ -391,3 +391,52 @@
      `GN_eq_sum`
      の利用パターンを
      小さな refactor guideline として残す。
+
+### 日時: 2026/03/26 21:36
+
+突き合わせ結果は、かなり良いです。文書の主張のうち、**定義・基本恒等式・主要 special case は実装済み**で、**Beam 解釈や可除性の独立補題化はまだ薄い**、という状況です。
+
+**対応済み**
+
+- §2 一般化定義  
+  [GTail.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/GTail.lean#L19) の `GTail` が文書の `GN_d^(r)` に対応しています。添字の書き方だけ違い、内容は
+  `sum_{j=r}^d ... x^(j-r) u^(d-j)` を `k = j-r` に直した形です。
+- §3 Tail 分解  
+  [add_pow_eq_prefix_add_xpow_mul_GTail](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/GTail.lean#L30) がそのまま対応しています。
+- §4.1 `r = 0`  
+  [GTail_zero_eq_add_pow](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/GTail.lean#L87)
+- §4.2 `r = 1` 標準 GN  
+  [GTail_one_eq_sum](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/GTail.lean#L139) と、[CosmicFormulaBinom.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean#L266) の `abbrev GN := GTail d 1 x u`、さらに [GN_eq_sum](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean#L275)
+- §4.3 `r = d`  
+  [GTail_self_eq_one](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/GTail.lean#L95)
+- §5 再帰  
+  [GTail_rec](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/GTail.lean#L107)
+- §8 評価点  
+  [GTail_eval_zero](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/GTail.lean#L154)
+
+**部分実装**
+
+- §1 背景の `(x+u)^d - u^d = x * GN_d(x,u)`  
+  これは [cosmic_id_csr'](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean#L304) と [add_pow_gap_factor](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean#L318) で維持されています。しかも今は `GTail` 主定理ベースに寄っています。
+- §9 まとめの「可除性・p進付値・原始素因子解析への応用」  
+  これは実際に下流で使い始めていますが、`GTail` 名義の generic API としてはまだ薄いです。現状は `GN` wrapper を通じた利用が中心です。
+
+**まだ薄い / 未整理**
+
+- §6 最小次数と可除性  
+  数学的には [add_pow_eq_prefix_add_xpow_mul_GTail](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/GTail.lean#L30) から読めますが、
+  「`x^r ∣ ...`」を standalone lemma としてはまだ切っていません。
+- §7 Beam 解釈  
+  文書上の意味づけは合っていますが、Lean ではまだ comments / 命名方針の段階です。`GTail` を Beam family の canonical API として整理し切ったところまでは行っていません。
+- `Defs.lean` の `Gn` 整理  
+  まだ未着手です。履歴どおり保留中です。
+
+**見立て**
+
+- 文書のコア数式部分は、もう実装済みと言ってよいです。
+- 未完は「generic tool lemma の磨き込み」と「古い `Defs.Gn` / Beam 語彙との統合」です。
+- 次に自然なのは 2 つです。
+  - `x^r ∣ ...` の standalone 補題を `GTail` 側に足す
+  - `Defs.lean` の `Gn` を `GTail` family へどう接続するか決める
+
+要するに、**設計書の第2〜5節・第8節は実装済み、第6・7・9節は意味論と補題 API の整備が残っている**、という評価です。
