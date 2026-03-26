@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 
+#print "file: DkMath.Polyomino"
+
 namespace DkMath
 namespace Polyomino
 

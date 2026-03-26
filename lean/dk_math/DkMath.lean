@@ -40,6 +40,22 @@ import DkMath.FLT  -- FLT: Fermat's Last Theorem Module
 -- CFBRC: Cosmic Formula Binomial Real Complex -/
 import DkMath.CFBRC  -- CFBRC: Cosmic Formula Binomial Real Complex
 
+#print "file: DkMath"
+
+set_option linter.style.longLine false
+
+/- build check marker:
+```sh
+lake build -v --no-ansi --log-level=info | grep -B1 "file: "
+```
+To search for Lean files that do not have the `#print` statement for build check markers implemented,
+ use the following regular expression to find them.:
+
+regex: `^import .*$\n\n[^#]`
+include: `*.lean`
+exclude: `DkMathlib/**/*.lean`  -- Since DkMathlib is a public API, debug markers will not be inserted.
+-/
+
 -- >|---|-----------|------------------|-------------------|-------------------|----------|---------
 
 /-!
@@ -64,11 +80,32 @@ Silver Ratio, Dynamic Harmonic Number Theory (DHNT), and the Riemann Hypothesis 
 Each submodule contains definitions, theorems, and proofs relevant to its area of study.
 -/
 
--- build check marker: sh: $ lake build -v --no-ansi --log-level=info | grep -B1 "file: "
-#print "file: DkMath"
-
 namespace DkMath
 
 -- None
 
 end DkMath
+
+/- # Develop Note
+
+## print axioms statements are used for checking the dependencies of theorems and definitions.
+
+ビルド最適化のために axioms を使用している場合、`DkMathTest/**/*.lean` に移行することを検討してください。
+`DkMath/**/*.lean` に `#print axioms <定理補題名>` が含まれている場合は、`DkMathTest/**/*.lean` に移行すること。
+
+例:
+
+  ```lean
+  #print axioms DkMath
+  ```
+
+検索方法
+
+  regex: `^#print axioms`
+  replace: `-- TODO: [DkMathTest]: #print axioms`
+  include `*.lean`
+  exclude `DkMathTest/**/*.lean`
+
+`TODO: [DkMathTest]` タグを付けた行は、DkMathTestに移行する際の目印となります。
+
+-/

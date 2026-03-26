@@ -7,7 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.Basic.Nat
 import DkMath.NumberTheory.Gcd.GN
 import DkMath.FLT.Core
-import Mathlib
+
+#print "file: DkMath.NumberTheory.UniqueFactorizationGN"
 
 /-!
 # DkMath.NumberTheory.UniqueFactorizationGN

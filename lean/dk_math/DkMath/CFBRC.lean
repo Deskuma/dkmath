@@ -12,4 +12,6 @@ import DkMath.CFBRC.TrigBridge.General
 import DkMath.CFBRC.TrigBridge.ClosedForm
 import DkMath.CFBRC.TrigBridge.Main
 
+#print "file: DkMath.CFBRC"
+
 /-! # CFBRC: Cosmic Formula Binomial Real Complex -/

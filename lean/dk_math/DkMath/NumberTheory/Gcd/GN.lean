@@ -8,6 +8,8 @@ import DkMath.NumberTheory.Gcd.Basic
 import DkMath.NumberTheory.GcdNext
 import DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
 
+#print "file: DkMath.NumberTheory.Gcd.GN"
+
 /-!
 # DkMath.NumberTheory.Gcd.GN
 

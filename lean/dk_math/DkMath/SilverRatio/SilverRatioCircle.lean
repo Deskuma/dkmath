@@ -4,6 +4,11 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import Mathlib
+import DkMath.SilverRatio.Sqrt2Lemmas
+
+#print "file: DkMath.SilverRatio.SilverRatioCircle"
+
 /-
 # Analytic coordinate development for the White-Silver-Ratio circle (overview)
 
@@ -105,9 +110,6 @@ Lean: it demonstrates how to represent simple Euclidean geometry, avoid
 square roots by working with squared distances, and carry out routine
 algebraic verifications with the standard tactic toolbox.
 -/
-
-import Mathlib
-import DkMath.SilverRatio.Sqrt2Lemmas
 
 /-!
 Analytic coordinate development for the White-Silver-Ratio circle.
@@ -215,7 +217,7 @@ theorem bcfg_concyclic : concyclic4 B C F G := by
           rw [this]
       _ = sqrt2 ^ 2 * ((sqrt2 - 1 - 2) ^ 2 + (1 - 2 * 0) ^ 2) := by rw [h_sq]
 
-#print axioms bcfg_concyclic
+-- TODO: [DkMathTest]: #print axioms bcfg_concyclic
 
 end DkMath.SilverRatio.Circle
 

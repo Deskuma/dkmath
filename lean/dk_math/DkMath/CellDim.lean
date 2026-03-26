@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 
+#print "file: DkMath.CellDim"
+
 namespace DkMath
 
 /-- d 次元の格子セル（座標は ℤ）。 -/

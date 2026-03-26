@@ -5,7 +5,6 @@ Authors: D. and Wise Wolf.
 -/
 
 import Mathlib
-
 import DkMath.CosmicFormula.CosmicDerivativePowerLimit
 
 #print "file: DkMath.CosmicFormula.CosmicDerivativePolynomial"

@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.CFBRC.Defs
 import Mathlib
 
+#print "file: DkMath.CFBRC.Basic"
+
 /-! # CFBRC: Cosmic Formula Binomial Real Complex - Basic Theorems
 -/
 

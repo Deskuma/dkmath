@@ -5,7 +5,6 @@ Authors: D. and Wise Wolf.
 -/
 
 import Mathlib
-
 import DkMath.CosmicFormula.Defs  -- Cosmic Formula Definitions
 import DkMath.CosmicFormula.CosmicDifferenceKernel  -- Cosmic Difference Kernel
 import DkMath.CosmicFormula.CosmicDerivativeBasic  -- Cosmic Derivative Basic

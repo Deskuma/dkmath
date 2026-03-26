@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.PhaseLift
 import DkMath.FLT.PetalCoreUnit
 
+#print "file: DkMath.FLT.CounterexamplePattern"
+
 namespace DkMath.FLT
 
 open DkMath.FLT.PetalDetect

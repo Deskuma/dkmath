@@ -5,10 +5,9 @@ Authors: D. and Wise Wolf.
 -/
 
 import Mathlib
-
 import DkMath.CosmicFormula.Defs  -- Basic Definitions
 
-#print "file: DkMath.CosmicFormula.Basic"
+#print "file: DkMath.CosmicFormula.CosmicFormulaBasic"
 
 namespace DkMath.CosmicFormula.Basic
 

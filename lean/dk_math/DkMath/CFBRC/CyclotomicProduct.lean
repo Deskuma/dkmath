@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.CFBRC.Basic
 import Mathlib.RingTheory.Polynomial.Cyclotomic.Basic
 
+#print "file: DkMath.CFBRC.CyclotomicProduct"
+
 /-!
 # CFBRC Cyclotomic Product (general `d` kickoff)
 

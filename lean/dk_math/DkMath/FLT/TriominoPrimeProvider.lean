@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.PrimeProviderCore
 import DkMath.FLT.TriominoMainBridge
 
+#print "file: DkMath.FLT.TriominoPrimeProvider"
+
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
 

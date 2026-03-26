@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 
+#print "file: DkMath.SilverRatio.GcdAg"
+
 /-!
 # GCD-Ag 位相：2進ノイズを除去する射影 π_Ag と gcd_Ag
 

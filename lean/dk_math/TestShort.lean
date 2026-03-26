@@ -6,6 +6,8 @@ Sample Lean file for testing theorem_picker.py --short option.
 -/
 import Mathlib.Data.Nat.Basic
 
+#print "file: DkMath.TestShort"
+
 theorem simple_theorem : True := by
   trivial
 

@@ -10,6 +10,8 @@ import Mathlib
 import DkMath.NumberTheory.PowerSums.Basic
 import DkMath.NumberTheory.PowerSums.ObservedMin
 
+#print "file: DkMath.NumberTheory.PowerSums.Examples"
+
 namespace DkMath
 namespace NumberTheory
 namespace PowerSums

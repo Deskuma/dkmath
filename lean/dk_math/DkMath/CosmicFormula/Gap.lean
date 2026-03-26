@@ -9,6 +9,8 @@ import DkMath.Basic
 -- import Mathlib.NumberTheory.Padics.PadicVal.Basic
 import DkMath.CosmicFormula.CosmicFormulaBinom
 
+#print "file: DkMath.CosmicFormula.Gap"
+
 namespace DkMath
 
 open Nat

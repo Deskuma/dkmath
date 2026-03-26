@@ -4,9 +4,11 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+-- cid: 69b7fe50-e6a8-83a3-9fe5-356e926f6623
+
 import Mathlib
 
--- cid: 69b7fe50-e6a8-83a3-9fe5-356e926f6623
+#print "file: DkMath.Samples.SumThreeSquaresEqSquare"
 
 /-!
 This file records a DkMath sample family of solutions to

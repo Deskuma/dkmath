@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import Mathlib.Data.Real.Sqrt
 import Mathlib.Tactic
 
+#print "file: DkMath.FLT.OctagonCore"
+
 /-!
 # Octagon Core
 

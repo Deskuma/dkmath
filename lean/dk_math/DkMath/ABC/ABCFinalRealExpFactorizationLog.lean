@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC
 
+#print "file: DkMath.ABC.FinalRealExpFactorizationLog"
+
 set_option linter.style.longLine false
 set_option linter.unusedTactic false
 set_option linter.style.multiGoal false

@@ -8,6 +8,8 @@ import DkMath.FLT.PrimeProvider.TriominoCosmic
 import DkMath.FLT.Core
 import DkMath.Basic.Nat
 
+#print "file: DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5Core"
+
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
 
@@ -507,7 +509,7 @@ theorem triominoCosmic_globalProvider_of_specs
   exact triominoCosmic_globalProvider_of_FLTPrimeGe5
     (FLTPrimeGe5Target_of_normalizer_and_gap_specs hNorm hNotPow hGapPow)
 
-#print axioms triominoCosmic_globalProvider_of_specs  -- OK: no-`so#rryAx`
+-- TODO: [DkMathTest]: #print axioms triominoCosmic_globalProvider_of_specs  -- OK: no-`so#rryAx`
 
 /--
 `default` 供給を使わず、spec 3 本から直接 Triomino provider を得る no-`so#rry` 回避ルート。
@@ -520,7 +522,7 @@ theorem triominoPrimeProvider_of_specs
   exact triominoPrimeProvider_of_FLTPrimeGe5
     (FLTPrimeGe5Target_of_normalizer_and_gap_specs hNorm hNotPow hGapPow)
 
-#print axioms triominoPrimeProvider_of_specs  -- OK: no-`so#rryAx`
+-- TODO: [DkMathTest]: #print axioms triominoPrimeProvider_of_specs  -- OK: no-`so#rryAx`
 
 /-!
 ## 実装ロードマップ（順序固定）

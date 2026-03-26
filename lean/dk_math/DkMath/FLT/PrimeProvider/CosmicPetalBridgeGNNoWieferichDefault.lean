@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNCore
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch
 
+#print "file: DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichDefault"
+
 namespace DkMath.FLT
 
 /--

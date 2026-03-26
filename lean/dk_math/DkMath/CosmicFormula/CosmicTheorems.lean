@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 -- import Mathlib
 import DkMath.CosmicFormula.CosmicFormulaBinom  -- Cosmic Formula Binomial Expansion
 
+#print "file: DkMath.CosmicFormula.CosmicTheorems"
+
 namespace DkMath.CosmicFormula.CosmicTheorems
 
 open DkMath.CosmicFormulaBinom
@@ -36,8 +38,11 @@ lemma cid_csr_iff {N : Type _} [CommSemiring N] (d : ℕ) (x u : N) :
   (cosmic_id_csr' d x u) = (cosmic_id_csr d x u) := by simp
 
 lemma cid_csr_iff' {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
-    (x + u) ^ d = x * GN d x u + u ^ d ↔ (x + u) ^ d = BodyN d x u + GapN d u := by
-    simp [BodyN, GapN, GN]
+    (x + u) ^ d = x * DkMath.CosmicFormulaBinom.GN d x u + u ^ d ↔
+      (x + u) ^ d = BodyN d x u + GapN d u := by
+    -- [GNZC] Qualify `CosmicFormulaBinom.GN` explicitly to avoid shadowing
+    -- with the canonical `Defs.GN` that now lives in `DkMath.CosmicFormula`.
+    simp [BodyN, GapN, DkMath.CosmicFormulaBinom.GN]
 
 
 def BodyN_finset (d x u : ℕ) : ℕ :=

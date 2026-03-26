@@ -8,6 +8,8 @@ import DkMath.NumberTheory.GcdNext
 import DkMath.NumberTheory.PrimitiveBeam
 import DkMath.NumberTheory.ZsigmondyCyclotomicResearch
 
+#print "file: DkMath.NumberTheory.GcdNextResearch"
+
 set_option linter.style.emptyLine false
 set_option linter.style.longLine false
 
@@ -291,7 +293,7 @@ lemma padicValNat_s0_le_one_of_not_sq_dvd {a b q : ℕ}
   have : q^2 ∣ S0_nat a b := (DkMath.ABC.padicValNat_le_iff_dvd hq hS0_ne 2).1 h2
   exact hq_not_sq this
 
-#print axioms padicValNat_s0_le_one_of_not_sq_dvd
+-- TODO: [DkMathTest]: #print axioms padicValNat_s0_le_one_of_not_sq_dvd
 
 /-- Phase 2/3 条件下での a^2 + ab + b^2 の padicValNat 評価（統合補題）
 
@@ -311,7 +313,7 @@ lemma padicValNat_a2_ab_b2_upper_bound_stage1 {a b q : ℕ}
   have hS0_ne : S0_nat a b ≠ 0 := S0_ne_zero a b ha_pos
   exact padicValNat_s0_le_one_of_not_sq_dvd hq hS0_ne hq_not_sq
 
-#print axioms padicValNat_a2_ab_b2_upper_bound_stage1
+-- TODO: [DkMathTest]: #print axioms padicValNat_a2_ab_b2_upper_bound_stage1
 
 /-- d=3 での上界補題
 
@@ -366,7 +368,7 @@ lemma padicValNat_d3_upper_bound {a b q : ℕ}
       rw [hzero]
       norm_num
 
-#print axioms padicValNat_d3_upper_bound
+-- TODO: [DkMathTest]: #print axioms padicValNat_d3_upper_bound
 
 /-- 層B統合フック：GcdAg + PetalDetect による前処理後の上界評価
 

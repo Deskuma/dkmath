@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 
+#print "file: DkMath.SilverRatio.Sqrt2Lemmas"
+
 namespace DkMath.SilverRatio.Sqrt2
 
 noncomputable section

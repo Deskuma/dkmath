@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.PrimeProviderCore
 
+#print "file: DkMath.FLT.PrimeProvider.TriominoCosmic"
+
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
 
