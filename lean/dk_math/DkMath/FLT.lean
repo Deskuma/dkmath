@@ -8,6 +8,6 @@ import DkMath.FLT.GEisensteinBridge
 import DkMath.FLT.Main
 import DkMath.FLT.PrimeProvider
 
-#print "file: DkMath.FLT.Main"
+#print "file: DkMath.FLT"
 
 set_option linter.style.longLine false

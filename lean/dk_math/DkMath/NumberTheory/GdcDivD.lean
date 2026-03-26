@@ -8,7 +8,7 @@ Authors: D. and Wise Wolf.
 import DkMath.Algebra.DiffPow
 import DkMath.NumberTheory.GcdNatAbsDivD
 
-#print "file: DkMath.NumberTheory.GcdDivD"
+#print "file: DkMath.NumberTheory.GdcDivD"
 
 namespace DkMath.NumberTheory.GcdDiffPow
 

@@ -7,7 +7,7 @@ Authors: D. and Wise Wolf.
 import Mathlib
 import DkMath.ABC.Basic
 
-#print "file: DkMath.ABC025_bound2"
+#print "file: DkMath.ABC.ABC025_bound2"
 
 set_option linter.style.emptyLine false
 

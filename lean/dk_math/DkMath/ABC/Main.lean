@@ -6,7 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC.ABC090
 
-#print "file: DkMath.ABC.ABC"
+#print "file: DkMath.ABC.Main"
 
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false

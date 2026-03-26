@@ -7,7 +7,7 @@ Authors: D. and Wise Wolf.
 import Mathlib
 import DkMath.CellDim
 
-#print "file: DkMath.CosmicFormula.CellDim"
+#print "file: DkMath.CosmicFormula.CosmicFormulaCellDim"
 
 namespace DkMath
 namespace CosmicFormulaCellDim

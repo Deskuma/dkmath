@@ -7,7 +7,7 @@ Authors: D. and Wise Wolf.
 import Mathlib.NumberTheory.FLT.Three
 import Mathlib.NumberTheory.FLT.Four
 
-#print "file: DkMath.FLT.FLT34"
+#print "file: DkMath.FLT.MathlibBridge.FLT34"
 
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
