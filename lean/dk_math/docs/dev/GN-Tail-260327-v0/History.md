@@ -761,3 +761,137 @@
      current research route を
      完全に置き換えるのか、
      fallback として残すのかを決める。
+
+### 日時: 2026/03/27 JST
+
+1. 目的:
+   - `FLT`
+     方針へ舵を切り、
+     残核 2 本
+     （composite reduction / Branch A）
+     のうち、
+     何が軽く、
+     何が本命の新補題かを固定する。
+
+2. 実施:
+   - `review-007`
+     の分析と現行 workspace を突き合わせ、
+     以下を確認した。
+     - composite reduction は標準的な指数縮約であり、
+       Lean 整備の問題である。
+     - Branch A は comparison route の続きを掘る段階ではなく、
+       既存
+       `TriominoWieferichBranchBridge`
+       / no-Wieferich machinery
+       への出口を作る段階である。
+   - 特に
+     `TriominoCosmicBranchA`
+     には既に
+     - `z - y = p^(p-1) * t^p`
+     - `GN p (z - y) y = p * s^p`
+     - `Nat.Coprime t s`
+     - `p ∤ y`, `GN ⟂ y`
+     が揃っており、
+     Branch A normal form は
+     Wieferich witness
+     を抜く入口として十分育っていることを確認した。
+
+3. 結論:
+   - composite reduction は先に機械的に閉じてよい。
+   - Branch A の本命は
+     `False`
+     直出しではなく、
+     まず
+     `u = p^(p-1) * t^p`, `GN = p * s^p`
+     から
+     `s^p ≡ y^(p-1) [MOD p^2]`
+     を抜く補題である。
+   - その後に
+     `y^(p-1) ≡ 1 [MOD p^2]`
+     型の Wieferich witness へ上げ、
+     既存 bridge へ接続するのが mainline となる。
+
+4. 実装計画:
+   - まず composite reduction を閉じる。
+   - 並行して Branch A 側では次の補題列を狙う。
+     1. `branchA_GN_shape_expansion_mod_p3`
+     2. `branchA_shape_implies_spow_congr`
+     3. `branchA_shape_implies_wieferich_y`
+   - ここで
+     `branchA_shape_implies_spow_congr`
+     が最初の実装本命である。
+
+5. 備考:
+   - 現段階は
+     「新理論をゼロから作る」
+     のではなく、
+     「既存の枝を正しい出口へ差し替える」
+     フェーズに入ったと評価してよい。
+
+### 日時: 2026/03/27 JST
+
+1. 目的:
+   - `FLT.Basic`
+     の残核のうち、
+     まず軽い側である
+     composite exponent reduction
+     を閉じる。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/FLT/Basic.lean]`
+     に
+     `DkMath.FLT.MathlibBridge.FLT34`
+     を import した。
+   - prime exponent case を
+     `flt_of_coprime_prime_exponent`
+     として private helper に切り出した。
+     これにより、
+     original prime branch と
+     composite reduction の両方が
+     同じ prime-exponent 入口を共有する形になった。
+   - composite residual には
+     `exists_prime_dvd_of_composite_not_four_dvd`
+     を追加し、
+     `4 ∣ n`
+     の場合は
+     `FLT4_core`
+     で閉じ、
+     それ以外は
+     `p ≠ 2`
+     な prime divisor
+     `p`
+     と
+     `n = m * p`
+     を取り出して
+     `X := x^m`, `Y := y^m`, `Z := z^m`
+     に縮約し、
+     `flt_of_coprime_prime_exponent`
+     へ戻す形で実装した。
+
+3. 結論:
+   - `FLT.Basic`
+     の composite residual は
+     `no sorry`
+     で閉じた。
+   - これにより
+     `FLT.Basic`
+     の残核は、
+     実質的に
+     Branch A / Wieferich route
+     だけへ絞られた。
+
+4. 検証:
+   - `lake build DkMath.FLT.Basic`
+   を実行し、成功を確認した。
+
+5. 次の課題:
+   - `TriominoCosmicBranchA`
+     の最終残核を、
+     comparison route
+     ではなく
+     Wieferich witness route
+     へ差し替える。
+   - 最初の本命補題は、
+     Branch A normal form から
+     `s^p ≡ y^(p-1) [MOD p^2]`
+     を抜くものである。
