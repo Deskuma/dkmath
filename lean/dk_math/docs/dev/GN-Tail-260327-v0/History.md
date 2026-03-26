@@ -399,3 +399,97 @@
      この
      `GN`
      exact valuation を直接組み込む。
+
+### 日時: 2026/03/27 JST
+
+1. 目的:
+   - review-003 に沿って、
+     `squarefree GN`
+     から Body 差分の非完全冪性を直接返す
+     `body_not_perfect_pow_of_squarefree_GN`
+     を実装する。
+   - 依存の向きを守るため、
+     `CosmicFormula`
+     層から
+     `NumberTheory.ZsigmondyCyclotomicSquarefree`
+     へは上げずに閉じる。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean]`
+     に private helper
+     `padicValNat_eq_one_of_prime_dvd_of_squarefree`
+     を追加した。
+     これは
+     `Squarefree n`
+     と
+     `p ∣ n`
+     から
+     `padicValNat p n = 1`
+     を返す局所 valuation 補題である。
+   - 同ファイルに
+     `body_not_perfect_pow_of_squarefree_GN`
+     を追加した。
+     仮定は
+     - `1 < d`
+     - `1 < GN d x u`
+     - `Nat.Coprime x (GN d x u)`
+     - `Squarefree (GN d x u)`
+     で、
+     結論は
+     `¬ ∃ t, 0 < t ∧ (x + u)^d - u^d = t^d`
+     である。
+
+3. 結論:
+   - `squarefree GN`
+     から prime divisor `q`
+     を 1 本取り、
+     coprime 仮定で
+     `q ∤ x`
+     を確保し、
+     `v_q(GN)=1`
+     を使って
+     `v_q((x+u)^d-u^d)=1`
+     を示す
+     direct obstruction theorem
+     が
+     `CosmicFormula`
+     層に立った。
+   - これにより
+     `GN`
+     理論の exact valuation と
+     `squarefree`
+     route の統合が、
+     `NumberTheory`
+     依存なしに 1 本の theorem 名で読めるようになった。
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.GTail`
+   - `lake build DkMath.CosmicFormula.CosmicFormulaBinom`
+   を実行し、成功を確認した。
+
+5. 備考:
+   - 今回の定理は
+     `padicValNat_GN_exact_of_head_unit`
+     を直接使う形ではなく、
+     `Body = x * GN`
+     の factorization と
+     `squarefree`
+     valuation を正面から組み合わせる route を採った。
+   - これは
+     `p ∣ x`
+     を仮定する head-unit exactness とは別の、
+     `q ∣ GN` / `q ∤ x`
+     側の obstruction として整理できる。
+
+6. 次の課題:
+   - `body_not_perfect_pow_of_squarefree_GN`
+     の仮定
+     `Nat.Coprime x (GN d x u)`
+     を、
+     既存の
+     `Nat.Coprime (x + u) u`
+     などから供給する薄い wrapper
+     を整備する。
+   - primitive-prime route
+     `body_not_perfect_pow_of_primitive_prime_factor`
+     を同じ naming layer で切る。
