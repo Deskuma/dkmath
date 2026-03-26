@@ -855,3 +855,67 @@ import chain の観点では、`Defs` は定義だけの薄い層にできるの
    - `CosmicFormulaDim.G`
      にも canonical family との橋が必要か、
      あるいは完全に別 namespace 方針にすべきかを決める。
+
+### 日時: 2026/03/27 00:11 JST
+
+1. 目的:
+   - `CosmicFormulaDim.G` と
+     `CosmicFormulaCellDim.G`
+     の同名衝突を避けるため、
+     別 family であることが名前でも分かるようにする。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/CosmicFormula/CosmicFormulaDim.lean]`
+     の定義名を
+     `GReal`
+     へ変更し、
+     file 内の `cosmic_id` 説明・本体参照も追従させた。
+   - `[lean/dk_math/DkMath/CosmicFormula/CosmicFormulaCellDim.lean]`
+     の定義名を
+     `GCell`
+     へ変更し、
+     file 内の
+     - `pow_sub_pow_eq_mul_G`
+     - `card_Body_eq_mul_G`
+     - `mul_G_eq_mul_Gbinom`
+     - `G_eq_Gbinom_of_pos`
+     - `G_two_dim_eval`
+     - slab/card chain
+     - paper-chain comment
+     を追従させた。
+   - `[lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean]`
+     の
+     `dim_G_iff`
+     は
+     `DkMath.CosmicFormulaDim.GReal`
+     を参照するように更新した。
+
+3. 結論:
+   - canonical family
+     `Defs.GN / Defs.GZ / Defs.GC`
+     と、
+     analytic family `GReal`、
+     cell-counting family `GCell`
+     が名前の上でも分離された。
+   - これで `G` という短名は、
+     少なくとも `Dim` / `CellDim`
+     では今後新しい衝突源になりにくくなった。
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.CosmicFormulaBinom`
+   - `lake build DkMath.CosmicFormula.CosmicTheorems`
+   - `lake build DkMath.CosmicFormula.CosmicFormulaDim`
+   - `lake build DkMath.CosmicFormula.CosmicFormulaCellDim`
+   を実行して確認する。
+
+5. 次の課題:
+   - `CosmicFormulaCellDim` の theorem 名
+     `pow_sub_pow_eq_mul_G` などは、
+     互換を残すか
+     `..._GCell`
+     へ改名するかを次段で決める。
+   - `ZsigmondyCyclotomic` などの comment 中に残る
+     `G d x u`
+     表記を、
+     canonical / pre-normalized / cell-counting
+     のどれかへ分類して整理する。

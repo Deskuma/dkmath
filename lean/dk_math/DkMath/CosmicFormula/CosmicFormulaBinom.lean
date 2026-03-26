@@ -294,9 +294,9 @@ lemma f_eq_zero_iff {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
 
 /-- 無次元宇宙式の恒等式の同値変形: dim_G_iff (加法形) -/
 lemma dim_G_iff (d : ℕ) (x u : ℝ) :
-    (x + u) ^ d = x * DkMath.CosmicFormulaDim.G d x u + u ^ d
+    (x + u) ^ d = x * DkMath.CosmicFormulaDim.GReal d x u + u ^ d
         ↔ (x + u) ^ d = Body d x u + u ^ d := by
-    simp [DkMath.CosmicFormulaDim.G, Body, G]
+    simp [DkMath.CosmicFormulaDim.GReal, Body, G]
 
 end CommRing
 

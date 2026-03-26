@@ -331,16 +331,16 @@ theorem card_Body_pow_form (d x u : ℕ) :
 It is currently outside the `Defs.GN / GZ / GC` migration path, though bridge
 lemmas to the binomial family are expected and already partially present below.
 -/
-def G (d x u : ℕ) : ℕ :=
+def GCell (d x u : ℕ) : ℕ :=
   Finset.sum (Finset.range d) fun k => (x + u)^(d - 1 - k) * u ^ k
 
-/-- (x+u)^d - u^d = x * G x u -/
+/-- (x+u)^d - u^d = x * GCell x u -/
 theorem pow_sub_pow_eq_mul_G (d x u : ℕ) :
-    (x + u) ^ d - u ^ d = x * G d x u := by
+    (x + u) ^ d - u ^ d = x * GCell d x u := by
   induction d with
   | zero =>
     -- range 0 の和は 0, 両辺とも 0
-    simp [G]
+    simp [GCell]
   | succ d ih =>
     let a := x + u
     let b := u
@@ -378,25 +378,25 @@ theorem pow_sub_pow_eq_mul_G (d x u : ℕ) :
         simp [ha_eq]
     simpa [h_ab] using (Eq.symm h')
 
-/-- 最終形: Body = x * G d x u -/
+/-- 最終形: Body = x * GCell d x u -/
 theorem card_Body_eq_mul_G (d x u : ℕ) :
-    (Body (d := d) x u).card = x * G d x u := by
+    (Body (d := d) x u).card = x * GCell d x u := by
   -- 既存の card_Body_pow_form と今回の pow_sub_pow_eq_mul_G を繋ぐ
   simpa [card_Body_pow_form (d := d) x u] using pow_sub_pow_eq_mul_G d x u
 
-/-- 既存の幾何和版 `G` と二項定理版 `Gbinom` は、少なくとも `x` を掛けると一致。 -/
+/-- 既存の幾何和版 `GCell` と二項定理版 `Gbinom` は、少なくとも `x` を掛けると一致。 -/
 theorem mul_G_eq_mul_Gbinom (d x u : ℕ) :
-    x * G d x u = x * Gbinom d x u := by
+    x * GCell d x u = x * Gbinom d x u := by
   -- 左辺も右辺も (x+u)^d - u^d に等しい
   calc
-    x * G d x u = (x+u)^d - u^d := by
+    x * GCell d x u = (x+u)^d - u^d := by
       exact (pow_sub_pow_eq_mul_G d x u).symm
     _ = x * Gbinom d x u := by
       exact pow_sub_pow_eq_mul_Gbinom d x u
 
-/-- おまけ：x > 0 なら G 自体も一致（Nat の乗法キャンセル）。 -/
+/-- おまけ：x > 0 なら GCell 自体も一致（Nat の乗法キャンセル）。 -/
 theorem G_eq_Gbinom_of_pos {d x u : ℕ} (hx : 0 < x) :
-    G d x u = Gbinom d x u := by
+    GCell d x u = Gbinom d x u := by
   have h := mul_G_eq_mul_Gbinom (d := d) (x := x) (u := u)
   exact Nat.mul_left_cancel (Nat.pos_iff_ne_zero.mpr (Nat.pos_iff_ne_zero.mp hx)) h
 
@@ -436,13 +436,13 @@ theorem card_RectAt2 (ox oy : ℤ) (w h : ℕ) :
   classical
   simp [RectAt2, BoxAt, card_translate, vec2]
 
-/-- ついで：2D の G は x+2u（幾何和でも二項でも一致） -/
+/-- ついで：2D の GCell は x+2u（幾何和でも二項でも一致） -/
 theorem G_two_dim_eval (x u : ℕ) :
-    G 2 x u = x + 2*u := by
+    GCell 2 x u = x + 2*u := by
   classical
-  -- G 2 x u = Σ_{k<2} (x+u)^(1-k) * u^k = (x+u)^1*u^0 + (x+u)^0*u^1
+  -- GCell 2 x u = Σ_{k<2} (x+u)^(1-k) * u^k = (x+u)^1*u^0 + (x+u)^0*u^1
   -- = (x+u) + u
-  unfold G
+  unfold GCell
   simp only [Finset.sum_range_succ, Finset.sum_range_zero, zero_add]
   norm_num
   ring
@@ -837,11 +837,11 @@ theorem card_Body_eq_sum_card_Slab (d x u : ℕ) :
     (Body (d := d) x u).card =
       ∑ i : Fin d, (Slab (d := d) x u i).card := by
   classical
-  -- 方針：数え上げで示す。左辺は既に `x * G d x u` に等しい。
-  -- 右辺も `card_Slab_explicit` を用いて和が `x * G d x u` に等しいことを示す。
-  have h_body : (Body (d := d) x u).card = x * G d x u :=
+  -- 方針：数え上げで示す。左辺は既に `x * GCell d x u` に等しい。
+  -- 右辺も `card_Slab_explicit` を用いて和が `x * GCell d x u` に等しいことを示す。
+  have h_body : (Body (d := d) x u).card = x * GCell d x u :=
     card_Body_eq_mul_G (d := d) (x := x) (u := u)
-  -- Fin d の和を range d に落として G と一致させるための整形
+  -- Fin d の和を range d に落として GCell と一致させるための整形
   have h_reindex :
       (∑ i : Fin d, u ^ (i : ℕ) * (x + u) ^ (d - 1 - (i : ℕ)))
         = (∑ k ∈ Finset.range d, u ^ k * (x + u) ^ (d - 1 - k)) := by
@@ -874,9 +874,9 @@ theorem card_Body_eq_sum_card_Slab (d x u : ℕ) :
       -- 型レベルの和を `univ` の和に落として比較
       rw [himage]
     simpa [hmap] using h1
-  -- 右辺の和を `x * G d x u` に同定
+  -- 右辺の和を `x * GCell d x u` に同定
   have h_sum_slab :
-      (∑ i : Fin d, (Slab (d := d) x u i).card) = x * G d x u := by
+      (∑ i : Fin d, (Slab (d := d) x u i).card) = x * GCell d x u := by
     calc
       (∑ i : Fin d, (Slab (d := d) x u i).card)
           = ∑ i : Fin d, x * (u ^ (i : ℕ) * (x + u) ^ (d - 1 - (i : ℕ))) := by
@@ -885,21 +885,21 @@ theorem card_Body_eq_sum_card_Slab (d x u : ℕ) :
             simp [Finset.mul_sum]
       _ = x * ∑ k ∈ Finset.range d, u ^ k * (x + u) ^ (d - 1 - k) := by
             simp [h_reindex]
-      _ = x * G d x u := by
-            simp [G, mul_comm]
-  -- まとめ：両辺とも `x * G d x u` に等しい
+      _ = x * GCell d x u := by
+            simp [GCell, mul_comm]
+  -- まとめ：両辺とも `x * GCell d x u` に等しい
   calc
-    (Body (d := d) x u).card = x * G d x u := h_body
+    (Body (d := d) x u).card = x * GCell d x u := h_body
     _ = ∑ i : Fin d, (Slab (d := d) x u i).card := h_sum_slab.symm
 
--- 目標3: その和が x * G d x u（さらに choose 版）に一致
+-- 目標3: その和が x * GCell d x u（さらに choose 版）に一致
 theorem card_Body_eq_mul_G_constructive (d x u : ℕ) :
-    (∑ i : Fin d, (Slab (d := d) x u i).card) = x * G d x u := by
+    (∑ i : Fin d, (Slab (d := d) x u i).card) = x * GCell d x u := by
   classical
   -- card_Body_eq_sum_card_Slab と card_Body_eq_mul_G をつなぐ
   have h1 : (Body (d := d) x u).card = ∑ i : Fin d, (Slab (d := d) x u i).card :=
     card_Body_eq_sum_card_Slab (d := d) (x := x) (u := u)
-  have h2 : (Body (d := d) x u).card = x * G d x u :=
+  have h2 : (Body (d := d) x u).card = x * GCell d x u :=
     card_Body_eq_mul_G (d := d) (x := x) (u := u)
   exact h1.symm.trans h2
 
@@ -917,12 +917,12 @@ namespace CosmicFormulaTheory
 open CosmicFormulaCellDim
 
 /-- 論文用まとめ：
-    `Body = (x+u)^d - u^d = x*G = x*Gbinom` -/
+    `Body = (x+u)^d - u^d = x*GCell = x*Gbinom` -/
 theorem card_Body_box_chain' (d x u : ℕ) :
     (Body (d := d) x u).card
       = (x + u)^d - u^d ∧
     (x + u)^d - u^d
-      = x * G d x u ∧
+      = x * GCell d x u ∧
     (x + u)^d - u^d
       = x * Gbinom d x u := by
   constructor
@@ -939,10 +939,10 @@ theorem card_Body_box (d x u : ℕ) :
       = (x+u)^d - u^d := by
   exact card_Body_pow_form (d := d) x u
 
-/-- 論文用まとめその2：`(x+u)^d - u^d = x*G` -/
+/-- 論文用まとめその2：`(x+u)^d - u^d = x*GCell` -/
 theorem pow_sub_pow_box (d x u : ℕ) :
     (x+u)^d - u^d
-      = x * G d x u := by
+      = x * GCell d x u := by
   exact pow_sub_pow_eq_mul_G d x u
 
 /-- 論文用まとめその3：`(x+u)^d - u^d = x*Gbinom` -/
@@ -954,23 +954,23 @@ theorem pow_sub_pow_box_binom (d x u : ℕ) :
 -- ========================================================
 
 /-- 論文箱式（等式チェーン版）：
-    `#Body = (x+u)^d - u^d = x*G = x*Gbinom` -/
+    `#Body = (x+u)^d - u^d = x*GCell = x*Gbinom` -/
 theorem card_Body_box_chain (d x u : ℕ) :
     (Body (d := d) x u).card  -- #Body = (x+u)^d - u^d
       = (x + u)^d - u^d ∧
-    (Body (d := d) x u).card  -- #Body = x*G
-      = x * G d x u ∧
+    (Body (d := d) x u).card  -- #Body = x*GCell
+      = x * GCell d x u ∧
     (Body (d := d) x u).card  -- #Body = x*Gbinom
       = x * Gbinom d x u := by
   constructor
   · -- #Body = (x+u)^d - u^d
     exact card_Body_pow_form (d := d) x u
   constructor
-  · -- #Body = x*G（等式のチェーンで示す）
+  · -- #Body = x*GCell（等式のチェーンで示す）
     calc
       (Body (d := d) x u).card
           = (x + u)^d - u^d := card_Body_pow_form (d := d) x u
-      _ = x * G d x u := pow_sub_pow_eq_mul_G d x u
+      _ = x * GCell d x u := pow_sub_pow_eq_mul_G d x u
   · -- #Body = x*Gbinom
     calc
       (Body (d := d) x u).card
