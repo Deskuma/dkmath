@@ -120,3 +120,56 @@
    - `Defs.lean` の `Gn` を、
      実際に残すべき alias なのか
      置換対象なのかを次段で判断する。
+
+### 日時: 2026/03/26 15:25 JST
+
+1. 目的:
+   - 調査結果を踏まえ、
+     一般 tail family 実装の開始前に
+     命名・配置・移行方法を合意事項として固定する。
+
+2. 今回の合意:
+   - 一般 tail family は
+     `[lean/dk_math/DkMath/CosmicFormula/GTail.lean]`
+     を新設して実装する。
+   - `CosmicFormulaBinom.lean` は
+     `GTail.lean` を import する側に回し、
+     本線 `GN` は general tail の `r = 1` specialization とする。
+   - 既存 `GN` は当面 `def` ではなく `abbrev` wrapper にする。
+     想定形:
+     `abbrev GN ... := GTail d 1 x u`
+   - 以後の下流新規実装では、
+     必要に応じて `GTail` 直接参照も許容し、
+     既存コードは段階的に移行する。
+
+3. この方針を採る理由:
+   - 下流は既に `CosmicFormulaBinom.GN` を広く参照しており、
+     先に rename / move をかけると破壊範囲が大きい。
+   - `abbrev` wrapper なら、
+     移行期でも既存の展開系証明や `simp [GN]` が壊れにくい。
+   - `GTail.lean` を `CosmicFormulaBinom.lean` より前段に置くことで、
+     一般 family を canonical source として扱える。
+
+4. 実装開始時の最小スコープ:
+   - `GTail` 本体の定義
+   - tail 分解の基本恒等式
+   - `r = 0`
+   - `r = 1`
+   - `r = d`
+   - 基本再帰
+   - 評価点 `x = 0`
+
+5. 現時点の保留事項:
+   - 一般 tail family の公開名を
+     `GTail` で行くか、
+     内部で `GTail` / `GNtail` を併置するかは、
+     実装時の可読性を見て最終決定する。
+   - `Defs.lean` の `Gn` はこの段階では触らず、
+     一般 tail family 実装後に alias 化 / 廃止候補として再評価する。
+
+6. 次の課題:
+   - `GTail.lean` を新設し、
+     一般 tail family の最小 API を実装する。
+   - その後
+     `CosmicFormulaBinom.GN` を `abbrev` wrapper へ置き換え、
+     既存補題がそのまま通るかを確認する。
