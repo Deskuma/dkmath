@@ -343,3 +343,51 @@
      以外に有用な bridge
      （例えば `GN_eq_head_of_zero` の generic 版）
      を `CosmicFormulaBinom` に置くべきか検討する。
+
+### 日時: 2026/03/26 16:29 JST
+
+1. 目的:
+   - full build は通っても、
+     単体 target build
+     `DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+     が落ちる事象の原因を切り分ける。
+
+2. 事実確認:
+   - 失敗原因は import chain の欠落ではなかった。
+   - `TriominoCosmicBranchA.lean` 内で
+     local let `N := GN p u y`
+     を `unfold` した際、
+     `GN` が `GTail` 本体へ降り、
+     旧 explicit sum 形を期待した `sum_erase_add` の後続 `simpa`
+     が噛み合わなくなっていた。
+
+3. 実施:
+   - `[TriominoCosmicBranchA.lean]` の該当箇所で、
+     `unfold N`
+     の直後に
+     `rw [GN_eq_sum]`
+     を入れ、
+     `GN` を legacy sum shape に戻してから
+     `A / B / u` を展開する順へ修正した。
+
+4. 結論:
+   - 単体 target build の failure も、
+     本質的には import chain 問題ではなく
+     `GN -> GTail` refactor 後の reduction 順序の問題だった。
+   - したがって段階移行の基本方針は変わらず、
+     `GN_eq_sum`
+     を「局所 let 展開の直後に当てる」
+     という実装規約を足せば吸収できる。
+
+5. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+     を実行し、ビルド成功を確認した
+     （既存の `sorry` warning は継続）。
+
+6. 次の課題:
+   - `let N := GN ...` 型の局所略記を持つ downstream コードで、
+     `unfold N` の後に和形を仮定している箇所がないかを点検する。
+   - 必要なら
+     `GN_eq_sum`
+     の利用パターンを
+     小さな refactor guideline として残す。
