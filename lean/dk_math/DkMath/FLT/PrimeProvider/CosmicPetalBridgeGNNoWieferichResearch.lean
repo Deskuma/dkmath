@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich
 import DkMath.NumberTheory.ZsigmondyCyclotomicResearch
 
+#print "file: DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch"
+
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
 

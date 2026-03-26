@@ -8,6 +8,8 @@ import DkMath.FLT.PrimeProvider.TriominoCosmic
 import DkMath.FLT.Core
 import DkMath.Basic.Nat
 
+#print "file: DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5Core"
+
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
 

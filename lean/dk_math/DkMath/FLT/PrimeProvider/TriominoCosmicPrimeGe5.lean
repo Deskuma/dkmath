@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5Core
 import DkMath.FLT.Basic
 
+#print "file: DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5"
+
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
 

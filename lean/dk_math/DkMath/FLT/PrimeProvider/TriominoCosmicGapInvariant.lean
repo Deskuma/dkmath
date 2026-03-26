@@ -8,6 +8,8 @@ import DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5
 import DkMath.FLT.CosmicPetalBridge
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN
 
+#print "file: DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant"
+
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
 
@@ -235,7 +237,9 @@ theorem noSqPrimeOnGN_when_p_dvd_u_impl :
       simpa using
         (Finset.sum_erase_add (s := Finset.range p) (f := f) (a := 0)
           (by simpa using hp_pos))
-    unfold N A B u
+    unfold N
+    rw [GN_eq_sum]
+    unfold A B u
     simpa [f, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using hsum
   have hsplit : N = A + B := by
     simpa [Nat.add_comm] using hsplitBA.symm
@@ -324,7 +328,9 @@ theorem p_dvd_GN_and_not_sq_when_p_dvd_gap
       simpa using
         (Finset.sum_erase_add (s := Finset.range p) (f := f) (a := 0)
           (by simpa using hp_pos))
-    unfold N A B u
+    unfold N
+    rw [GN_eq_sum]
+    unfold A B u
     simpa [f, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using hsum
   have hsplit : N = A + B := by
     simpa [Nat.add_comm] using hsplitBA.symm
@@ -394,10 +400,7 @@ theorem noSqPrimeOnGN_when_p_not_dvd_u_of_specs
       (d := p) (z := z) (y := y) (q := q)
       hqP hq_dvd_diff hq_not_dvd_u
   have hq_dvd_GN : q ∣ GN p (z - y) y := by
-    change q ∣
-      (∑ x ∈ Finset.range p,
-        Nat.choose p (x + 1) * (z - y) ^ x * y ^ (p - 1 - x)) at hq_dvd_GN_raw
-    simpa [GN] using hq_dvd_GN_raw
+    simpa [GN_eq_sum] using hq_dvd_GN_raw
   have hq2_not : ¬ q ^ 2 ∣ GN p (z - y) y := by
     exact (hAll hpack hp_not_dvd_u q) ⟨hqP, hq_dvd_GN, hq_not_dvd_u⟩
   exact ⟨q, hqP, hq_dvd_GN, hq2_not⟩

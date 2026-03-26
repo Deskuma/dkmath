@@ -684,7 +684,7 @@ lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h
         simpa [ha] using h_gcd
       have h_gcd_sum :
           (a ^ 3).gcd (∑ x ∈ Finset.range 3, Nat.choose 3 (x + 1) * (a ^ 3) ^ x * y ^ (2 - x)) = 1 := by
-        simpa [GN] using h_gcd_a
+        simpa [GN_eq_sum] using h_gcd_a
       have hcop_ay : Nat.Coprime a y := by
         rw [Nat.coprime_iff_gcd_eq_one]
         apply Nat.eq_one_of_dvd_one
@@ -706,7 +706,10 @@ lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h
           rw [GN_quadratic]
           simpa [pow_mul, mul_assoc, mul_left_comm, mul_comm] using hdiv_right_poly
         have hdiv_gcd : a.gcd y ∣ (a ^ 3).gcd (GN 3 (a ^ 3) y) := Nat.dvd_gcd hdiv_left hdiv_right
-        have : a.gcd y ∣ 1 := by simpa [h_gcd_sum] using hdiv_gcd
+        have hdiv_gcd_sum :
+            a.gcd y ∣ (a ^ 3).gcd (∑ x ∈ Finset.range 3, Nat.choose 3 (x + 1) * (a ^ 3) ^ x * y ^ (2 - x)) := by
+          simpa [GN_eq_sum] using hdiv_gcd
+        have : a.gcd y ∣ 1 := by simpa [h_gcd_sum] using hdiv_gcd_sum
         exact this
       have h3a : ¬ 3 ∣ a := by
         intro h3
@@ -722,9 +725,11 @@ lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h
           rw [GN_quadratic]
           simpa [pow_mul, mul_assoc, mul_left_comm, mul_comm] using h3_right_poly
         have h3_gcd : 3 ∣ (a ^ 3).gcd (GN 3 (a ^ 3) y) := Nat.dvd_gcd h3_left h3_right
+        have h3_gcd_sum :
+            3 ∣ (a ^ 3).gcd (∑ x ∈ Finset.range 3, Nat.choose 3 (x + 1) * (a ^ 3) ^ x * y ^ (2 - x)) := by
+          simpa [GN_eq_sum] using h3_gcd
         have : 3 ∣ 1 := by
-          have h3_gcd' := h3_gcd
-          simp [h_gcd_sum] at h3_gcd'
+          simpa [h_gcd_sum] using h3_gcd_sum
         omega
       -- u = a^3 を GN の引数として使う
       rw [ha] at hb

@@ -10,6 +10,8 @@ import DkMath.CosmicFormula.Gap
 import DkMath.ABC.PadicValNat
 import Mathlib.NumberTheory.FLT.Three
 
+#print ""
+
 set_option linter.style.longLine false
 
 /-!
