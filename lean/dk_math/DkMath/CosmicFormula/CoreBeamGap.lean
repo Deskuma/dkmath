@@ -77,7 +77,8 @@ theorem body_eq_core_add_beam {d : ℕ} (hd : 0 < d) (x u : R) :
   | zero =>
       cases Nat.lt_asymm hd hd
   | succ n =>
-      unfold BodyN GN Core Beam
+      unfold BodyN Core Beam
+      rw [GN_eq_sum]
       simp only
       rw [Finset.mul_sum, Finset.sum_range_succ]
       have hsum :

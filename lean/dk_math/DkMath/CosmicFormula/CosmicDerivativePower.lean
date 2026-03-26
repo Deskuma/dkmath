@@ -34,9 +34,10 @@ Compatibility with the binomial helper `GN`:
 -/
 theorem powerKernel_eq_GN_swap (d : ℕ) (x u : ℝ) :
     powerKernel d x u = DkMath.CosmicFormulaBinom.GN d u x := by
-  unfold powerKernel DkMath.CosmicFormulaBinom.GN
+  unfold powerKernel
+  rw [DkMath.CosmicFormulaBinom.GN_eq_sum]
   apply Finset.sum_congr rfl
-  intro j _
+  intro j hj
   ring
 
 /--

@@ -267,6 +267,17 @@ refactor 移行期のあいだはこの公開名を温存し、downstream は段
 @[simp] abbrev GN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R :=
   DkMath.CosmicFormula.GTail d 1 x u
 
+/--
+Compatibility bridge to the legacy explicit sum shape of `GN`.
+
+This lemma is kept so that downstream files depending on the old expansion can
+be migrated incrementally instead of switching to `GTail` all at once.
+-/
+theorem GN_eq_sum {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
+    GN d x u =
+      ∑ k ∈ Finset.range d, (Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k) := by
+  simpa [GN] using DkMath.CosmicFormula.GTail_one_eq_sum (R := R) d x u
+
 /-- 無次元版: Big の定義 -/
 @[simp] def BigN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R := (x + u) ^ d
 

@@ -274,3 +274,72 @@
    - `BigN` / `BodyN` / `GapN` のうち、
      tail family に自然に吸収できるものを再点検する。
    - 次段で `Defs.lean` の `Gn` をどう整理するかを判断する。
+
+### 日時: 2026/03/26 16:20 JST
+
+1. 目的:
+   - `GN := GTail d 1 x u` への差し替え後に
+     full build で出た downstream 障害が、
+     rollback を要する種類か、
+     それとも compatibility shim で吸収できる種類かを調べる。
+
+2. 観測された障害:
+   - `CoreBeamGap.lean` では、
+     `unfold GN; rw [Finset.mul_sum]`
+     のような「旧和形を直接仮定した rewrite」が
+     `GTail` 本体に対して失敗した。
+   - `CosmicDerivativePower.lean` では、
+     `GN` の swap 互換証明が
+     `GTail` 展開後の指数正規化で止まった。
+   - `FLT/Core.lean` では、
+     `x = 0` のときの `GN` 先頭項化を
+     `Finset.sum_range_succ'` で直接書いていたため、
+     `GTail` 化後の形と噛み合わなくなった。
+
+3. 実施:
+   - `[CosmicFormulaBinom.lean]` に
+     `GN_eq_sum`
+     を追加し、
+     legacy `GN` の explicit sum shape へ戻す互換 bridge を置いた。
+   - `[CoreBeamGap.lean]` は
+     `rw [GN_eq_sum]`
+     を経由して旧証明 spine を維持した。
+   - `[CosmicDerivativePower.lean]` は
+     `GN_eq_sum`
+     を使う形へ切り替えた。
+   - `[FLT/Core.lean]` の
+     `GN_eq_head_of_x_eq_zero`
+     は、
+     旧 `Finset` 直接処理をやめ、
+     `GTail_eval_zero`
+     を使う薄い橋へ整理した。
+
+4. 調査結論:
+   - 今回の変更は
+     「影響範囲が大きくて rollback が必要」
+     というより、
+     「旧和形依存を吸収する互換層が 1 枚必要」
+     という種類の変更だった。
+   - したがって方針は
+     rollback ではなく
+     `GTail` 本体
+     → `GN_eq_sum` の compatibility shim
+     → downstream 段階移行
+     の 3 層で進めるのが自然である。
+
+5. 検証:
+   - `lake build DkMath.CosmicFormula.CoreBeamGap`
+   - `lake build DkMath.CosmicFormula.CosmicDerivativePower`
+   - `lake build DkMath.FLT.Core`
+   - `./lean-build.sh`
+   を実行し、full build 成功を確認した。
+
+6. 次の課題:
+   - `unfold GN` に依存する downstream 箇所を、
+     機械的に `GN_eq_sum` / `GTail_eval_zero` / `GTail` generic 補題
+     へ寄せられるか、順次棚卸しする。
+   - 互換層として
+     `GN_eq_sum`
+     以外に有用な bridge
+     （例えば `GN_eq_head_of_zero` の generic 版）
+     を `CosmicFormulaBinom` に置くべきか検討する。
