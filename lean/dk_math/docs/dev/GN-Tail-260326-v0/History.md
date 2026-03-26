@@ -1063,3 +1063,55 @@ import chain の観点では、`Defs` は定義だけの薄い層にできるの
      より
      `GN`
      を優先する wording へ寄せる。
+
+### 日時: 2026/03/27 00:57 JST
+
+1. 目的:
+   - `TriominoFLT`
+     に置いた
+     `card_body_from_GN`
+     / `card_body_from_cosmic`
+     が実際には未使用であり、
+     下層の再包装にとどまることを踏まえて、
+     narrative bridge を整理する。
+
+2. 実施:
+   - 参照調査を行い、
+     `card_body_from_GN`
+     / `card_body_from_cosmic`
+     が
+     `DkMath`
+     全体で未参照であることを確認した。
+   - 内容も
+     `CosmicFormulaCellDim.card_Body_pow_form`
+     と
+     `pow_sub_pow_eq_mul_GN`
+     の単なる再包装にすぎないことを確認した。
+   - `[lean/dk_math/DkMath/CosmicFormula/TriominoFLT.lean]`
+     から上記 2 補題を削除した。
+
+3. 結論:
+   - `TriominoFLT`
+     では、
+     `Body`
+     と
+     `GN`
+     の接続を独自に再掲する必要はなく、
+     必要な場合は下層の
+     `CellDim`
+     補題を直接参照すれば十分だと整理できた。
+   - これにより、
+     ファイル内の
+     `GNZC`
+     narrative bridge は削減され、
+     FLT
+     本体と直接関係する補題だけが残る形になった。
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.TriominoFLT`
+   を実行し、成功を確認した。
+
+5. 次の課題:
+   - `TriominoFLT`
+     に残る section comment や補題説明のうち、
+     すでに下層定理の再掲になっている箇所がないかを点検する。
