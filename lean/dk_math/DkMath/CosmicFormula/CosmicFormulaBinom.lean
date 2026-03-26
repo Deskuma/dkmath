@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 import DkMath.Algebra.BinomTail
+import DkMath.CosmicFormula.GTail
 import DkMath.CosmicFormula.CosmicFormulaDim  -- Cosmic Formula Dimensionality
 
 #print "file: DkMath.CosmicFormula.CosmicFormulaBinom"
@@ -257,9 +258,14 @@ end CommRing
 
 section CommSemiring
 
-/-- d 次元の「無次元実体項」G (CommSemiring) の定義（係数は Nat.choose を射影したもの） -/
-@[simp] def GN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R :=
-    ∑ k ∈ Finset.range d, (Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k)
+/--
+`GTail` の `r = 1` specialization としての legacy `GN` wrapper。
+
+refactor 移行期のあいだはこの公開名を温存し、downstream は段階的に
+`GTail` 直接参照へ寄せていく。
+-/
+@[simp] abbrev GN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R :=
+  DkMath.CosmicFormula.GTail d 1 x u
 
 /-- 無次元版: Big の定義 -/
 @[simp] def BigN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R := (x + u) ^ d
@@ -274,65 +280,26 @@ section CommSemiring
 `(x + u) ^ d = x * G d x u + u ^ d` が成り立つことを示す定理。 -/
 theorem cosmic_id_csr {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
     BigN d x u = BodyN d x u + GapN d u := by
-    unfold BigN BodyN GapN GN
-    rw [add_pow, Finset.mul_sum]
-    -- 二項展開を k=0 項と k≥1 項に分ける（項の順序を `add_pow` の出力に合わせる）
-    have h1 : ∑ k ∈ Finset.range (d + 1), x ^ k * u ^ (d - k) * (Nat.choose d k : R)
-      = x ^ 0 * u ^ d * (Nat.choose d 0 : R)
-      + ∑ k ∈ Finset.range d, x ^ (k + 1) * u ^ (d - 1 - k) * (Nat.choose d (k + 1) : R) := by
-        rw [Finset.sum_range_succ']
-        simp only [pow_zero, Nat.sub_zero]
-        rw [add_comm]
-        congr 1
-        apply Finset.sum_congr rfl
-        intro k hk
-        congr 2
-        have hk' : k < d := Finset.mem_range.mp hk
-        have hss : k + 1 ≤ d := Nat.succ_le_of_lt hk'
-        have h2 : d - (k + 1) = d - k - 1 := Nat.sub_sub d k 1
-        have h3 : d - k - 1 = d - 1 - k := by omega
-        rw [h2, h3]
-    -- x * G を展開すると h1 の第2項と一致する（項順序を合わせる）
-    have h2 : ∑ k ∈ Finset.range d, x * ((Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k))
-      = ∑ k ∈ Finset.range d, x ^ (k + 1) * u ^ (d - 1 - k) * (Nat.choose d (k + 1) : R) := by
-        apply Finset.sum_congr rfl
-        intro k _
-        ring
-    rw [h1, h2]
-    simp only [Nat.choose_zero_right, Nat.cast_one, pow_zero, mul_one]
-    ring
+  by_cases hd : d = 0
+  · subst hd
+    simp [BigN, BodyN, GapN, GN]
+  · have hle : 1 ≤ d := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hd)
+    have htail :=
+      DkMath.CosmicFormula.add_pow_eq_prefix_add_xpow_mul_GTail (R := R) d 1 x u hle
+    simpa [BigN, BodyN, GapN, GN, Finset.range_one, Nat.choose_zero_right, Nat.cast_one,
+      pow_zero, pow_one, Nat.sub_zero, one_mul, add_comm, add_left_comm, add_assoc] using htail
 
 /-! 無減算形の恒等式: (x+u)^d = x * G d x u + u^d (CommSemiring) -/
 theorem cosmic_id_csr' {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
         (x + u) ^ d = x * GN d x u + u ^ d := by
-    unfold GN
-    rw [add_pow, Finset.mul_sum]
-    -- 二項展開を k=0 項と k≥1 項に分ける（項の順序を `add_pow` の出力に合わせる）
-    have h1 : ∑ k ∈ Finset.range (d + 1), x ^ k * u ^ (d - k) * (Nat.choose d k : R)
-        = x ^ 0 * u ^ d * (Nat.choose d 0 : R)
-            + ∑ k ∈ Finset.range d, x ^ (k + 1) * u ^ (d - 1 - k) * (Nat.choose d (k + 1) : R) := by
-        rw [Finset.sum_range_succ']
-        simp only [pow_zero, Nat.sub_zero]
-        rw [add_comm]
-        congr 1
-        apply Finset.sum_congr rfl
-        intro k hk
-        congr 2
-        have hk' : k < d := Finset.mem_range.mp hk
-        have hss : k + 1 ≤ d := Nat.succ_le_of_lt hk'
-        have h2 : d - (k + 1) = d - k - 1 := Nat.sub_sub d k 1
-        have h3 : d - k - 1 = d - 1 - k := by omega
-        rw [h2, h3]
-    -- x * G を展開すると h1 の第2項と一致する（項順序を合わせる）
-    have h2 : ∑ k ∈ Finset.range d, x * ((Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k))
-        = ∑ k ∈ Finset.range d, x ^ (k + 1) * u ^ (d - 1 - k) * (Nat.choose d (k + 1) : R) := by
-        apply Finset.sum_congr rfl
-        intro k _
-        ring
-    -- 以上の等式から二項展開の和が x*G + u^d に一致する
-    rw [h1, h2]
-    simp only [Nat.choose_zero_right, Nat.cast_one, pow_zero, mul_one]
-    ring
+  by_cases hd : d = 0
+  · subst hd
+    simp [GN]
+  · have hle : 1 ≤ d := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hd)
+    have htail :=
+      DkMath.CosmicFormula.add_pow_eq_prefix_add_xpow_mul_GTail (R := R) d 1 x u hle
+    simpa [GN, Finset.range_one, Nat.choose_zero_right, Nat.cast_one, pow_zero, pow_one,
+      Nat.sub_zero, one_mul, add_comm, add_left_comm, add_assoc] using htail
 
 /--
 Big-Gap（1 Gap 抽出版）:

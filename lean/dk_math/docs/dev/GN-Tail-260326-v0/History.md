@@ -226,3 +226,51 @@
    - 必要なら `GTail` 側に
      `r = 1` specialized decomposition を追加し、
      `GN` 側の移行コストをさらに下げる。
+
+### 日時: 2026/03/26 16:02 JST
+
+1. 目的:
+   - `CosmicFormulaBinom.lean` に `GTail` を取り込み、
+     既存 `GN` を general tail family の `r = 1` wrapper へ置き換える。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean]`
+     に `import DkMath.CosmicFormula.GTail` を追加した。
+   - `GN` を
+     `@[simp] abbrev GN ... := DkMath.CosmicFormula.GTail d 1 x u`
+     へ置き換えた。
+   - `cosmic_id_csr` / `cosmic_id_csr'` は、
+     旧来の二項展開の手書き証明をやめ、
+     `GTail` の主恒等式
+     `add_pow_eq_prefix_add_xpow_mul_GTail`
+     を `r = 1` で使う形へ整理した。
+
+3. 結論:
+   - 本線 `GN` は、
+     既に general tail family の thin wrapper として再配置された。
+   - これにより今後の `GN` 系補題は、
+     必要に応じて
+     `GTail`
+     または
+     `GTail_one_eq_sum`
+     を介して整理できる状態になった。
+   - `CosmicFormulaBinom` 側の重複していた二項展開 spine も、
+     少なくとも主恒等式については下層 API へ寄せられた。
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.CosmicFormulaBinom`
+   - `lake build DkMath.NumberTheory.Gcd.GN`
+   を実行し、ビルド成功を確認した。
+
+5. 備考:
+   - この段階では downstream の API 名は変えていない。
+   - したがって既存 import / 参照側は、
+     `GN` をそのまま使いつつ内部だけ `GTail` family へ接続された状態である。
+
+6. 次の課題:
+   - `CosmicFormulaBinom` 内の `GN` 補題群を、
+     必要に応じて `GTail_one_eq_sum` や
+     `GTail` の generic 補題へ寄せていく。
+   - `BigN` / `BodyN` / `GapN` のうち、
+     tail family に自然に吸収できるものを再点検する。
+   - 次段で `Defs.lean` の `Gn` をどう整理するかを判断する。
