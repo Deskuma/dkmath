@@ -17,8 +17,13 @@ set_option linter.style.longLine false
 
 `CosmicFormula`（絶対量）と `KUS Bridge`（離散依存型 support）の接続層。
 
+[GNZC] Migration note:
+`Defs.GZ` is the canonical Body-normalized kernel, while legacy downstream text
+may still say `G`. This file keeps theorem names stable but is being migrated
+comment-by-comment toward the `GN / GZ / GC` naming split.
+
 ```
-CosmicFormula.G / Body / Big
+CosmicFormula.GZ (legacy `G`) / Body / Big
         │
         │  cosmicTerm k d x u  (個別項の分解)
         ↓
@@ -47,6 +52,8 @@ open DkMath.CosmicFormula
 
 /--
 `CosmicFormula.G` の第 `k` 項を `GKUS ℕ ℕ DHNTBlueprint` として表現する。
+
+[GNZC] Here `G` means the legacy alias of canonical `GZ`.
 
 元の定義:
 ```
@@ -106,6 +113,9 @@ theorem cosmicBodyCoeffSum_ge (d : ℕ) (_ : 1 ≤ d) :
 /--
 `G ℕ 1 1 d = cosmicBodyCoeffSum d`
 整数引数で評価した Body の係数和は `cosmicBodyCoeffSum` に等しい。
+
+[GNZC] The theorem name is kept stable for now, but semantically this is a
+`GZ` evaluation statement.
 -/
 theorem G_one_one_eq (d : ℕ) :
     G ℕ 1 1 d = cosmicBodyCoeffSum d := by

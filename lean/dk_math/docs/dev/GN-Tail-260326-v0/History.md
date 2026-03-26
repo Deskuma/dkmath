@@ -557,6 +557,12 @@ import chain の観点では、`Defs` は定義だけの薄い層にできるの
      `DkMath.CosmicFormulaBinom.GN`
      の shadowing で落ちたため、
      Binom 側を明示参照する方針にした。
+   - migration marker として
+     `[GNZC]`
+     タグを docstring / line comment に導入した。
+     以後、
+     canonical 定義点・legacy alias・shadowing 回避点には
+     このタグを刺して検索可能にする。
    - full build の warning は既存の `sorry` に限られ、
      今回の refactor で新たな warning は増やしていない。
 

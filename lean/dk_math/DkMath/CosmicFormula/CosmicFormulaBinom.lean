@@ -56,9 +56,19 @@ open scoped BigOperators
 
 section CommRing
 
-/-! ### 無次元版: G と Z_d の定義と恒等式の証明 -/
+/-! ### 無次元版: G と Z_d の定義と恒等式の証明
 
-/-- d 次元の「無次元実体項」G の定義（係数は Nat.choose を射影したもの） -/
+[GNZC] Migration note:
+this `CommRing` section still exposes the legacy name `G`.
+Canonical naming is being centralized as `Defs.GZ`, so downstream comments and
+new code should prefer `GZ` when referring to the Body-normalized kernel.
+-/
+
+/-- d 次元の「無次元実体項」G の定義（係数は Nat.choose を射影したもの）.
+
+[GNZC] Legacy public name in the `CommRing` layer.
+Long term this vocabulary should align with `Defs.GZ`.
+-/
 def G {R : Type _} [CommRing R] (d : ℕ) (x u : R) : R :=
     ∑ k ∈ Finset.range d, (Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k)
 
@@ -260,6 +270,10 @@ section CommSemiring
 
 /--
 `GTail` の `r = 1` specialization としての legacy `GN` wrapper。
+
+[GNZC] Migration note:
+the canonical naming home is now `DkMath.CosmicFormula.GN` in `Defs.lean`.
+This wrapper is kept to avoid breaking downstream imports during the transition.
 
 refactor 移行期のあいだはこの公開名を温存し、downstream は段階的に
 `GTail` 直接参照へ寄せていく。

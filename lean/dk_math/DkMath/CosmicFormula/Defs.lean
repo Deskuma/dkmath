@@ -51,6 +51,9 @@ abbrev dk := d_sub_n_k  -- d-k の略称
 /--
 `GZ` は Body-normalized side の canonical kernel。
 
+[GNZC] Naming migration anchor:
+canonical names are being centralized in `Defs.lean`.
+
 将来的な命名では
 - `GN` : gap-normalized tail
 - `GZ` : body-normalized kernel
@@ -63,6 +66,9 @@ def GZ (R : Type*) [CommSemiring R] (x u : R) (d : ℕ) : R :=
 /--
 Legacy alias kept during the `G -> GZ` migration.
 
+[GNZC] Search tag:
+old downstream references may still mention `G`; prefer `GZ` in new code.
+
 Downstream should gradually move to `GZ`.
 -/
 abbrev G (R : Type*) [CommSemiring R] (x u : R) (d : ℕ) : R :=
@@ -70,6 +76,9 @@ abbrev G (R : Type*) [CommSemiring R] (x u : R) (d : ℕ) : R :=
 
 /--
 Canonical gap-normalized kernel.
+
+[GNZC] Canonical entry point:
+`Defs.GN` is now the naming-stable home for the `r = 1` tail specialization.
 
 This is the `r = 1` specialization of the general tail family.
 -/

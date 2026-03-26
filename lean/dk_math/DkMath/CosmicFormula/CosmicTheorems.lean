@@ -40,6 +40,8 @@ lemma cid_csr_iff {N : Type _} [CommSemiring N] (d : ℕ) (x u : N) :
 lemma cid_csr_iff' {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
     (x + u) ^ d = x * DkMath.CosmicFormulaBinom.GN d x u + u ^ d ↔
       (x + u) ^ d = BodyN d x u + GapN d u := by
+    -- [GNZC] Qualify `CosmicFormulaBinom.GN` explicitly to avoid shadowing
+    -- with the canonical `Defs.GN` that now lives in `DkMath.CosmicFormula`.
     simp [BodyN, GapN, DkMath.CosmicFormulaBinom.GN]
 
 
