@@ -173,3 +173,56 @@
    - その後
      `CosmicFormulaBinom.GN` を `abbrev` wrapper へ置き換え、
      既存補題がそのまま通るかを確認する。
+
+### 日時: 2026/03/26 15:48 JST
+
+1. 目的:
+   - `GTail.lean` を新設し、
+     一般 tail family の最小 API を先に下層へ固定する。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/CosmicFormula/GTail.lean]`
+     を新設した。
+   - 以下を実装した。
+     - `GTail` の本体定義
+     - `add_pow_eq_prefix_add_xpow_mul_GTail`
+     - `GTail_zero_eq_add_pow`
+     - `GTail_self_eq_one`
+     - `GTail_rec`
+     - `GTail_eval_zero`
+     - `GTail_one_eq_sum`
+   - `GTail_one_eq_sum` により、
+     既存 `GN` の係数和の形へ戻す専用 bridge も先に置いた。
+
+3. 結論:
+   - 一般 tail family の最小 API は、
+     既存 `GN` を wrapper 化する前提として十分な形で先に独立した。
+   - とくに
+     - tail 分解
+     - `r = 0`
+     - `r = d`
+     - 再帰
+     - `x = 0` 評価
+     - `r = 1` 既存和形への bridge
+     が揃ったため、
+     次段は `CosmicFormulaBinom.GN := GTail d 1 x u`
+     への置換に移れる。
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.GTail`
+     を実行し、ビルド成功を確認した。
+
+5. 備考:
+   - この段階では downstream にはまだ触れていない。
+   - `Defs.lean` の `Gn` 整理は保留のままにしている。
+   - `GTail_one_eq_sum` は、
+     wrapper 化の直後に既存 `GN` 補題群を移植する際の基礎補題になる。
+
+6. 次の課題:
+   - `CosmicFormulaBinom.lean` に `GTail` を import し、
+     既存 `GN` を `abbrev` wrapper へ置き換える。
+   - `cosmic_id_csr'` など既存 `GN` ベース補題を、
+     `GTail_one_eq_sum` を使って破壊なく通す。
+   - 必要なら `GTail` 側に
+     `r = 1` specialized decomposition を追加し、
+     `GN` 側の移行コストをさらに下げる。
