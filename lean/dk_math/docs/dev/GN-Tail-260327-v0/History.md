@@ -575,3 +575,66 @@
      と
      `Nat.Coprime x u`
      の両語彙で呼べるようにする。
+
+### 日時: 2026/03/27 JST
+
+1. 目的:
+   - review-005 の方針に沿って、
+     primitive-prime route を
+     squarefree route と同じ
+     「pure obstruction / wrapper」
+     の二層構成へ揃える。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/NumberTheory/PrimitiveBeam.lean]`
+     に
+     `primitive_prime_factor_forbids_perfect_pow_diff`
+     を追加した。
+     これは
+     primitive prime existence と
+     primitive-prime valuation 上界から、
+     `a^d - b^d = t^d`
+     を直接矛盾させる pure obstruction theorem である。
+   - `[lean/dk_math/DkMath/NumberTheory/Gcd/GN.lean]`
+     に
+     `body_not_perfect_pow_of_primitive_prime_factor_of_coprime_add`
+     を追加した。
+     これは
+     `a := x + u`, `b := u`
+     specialization により、
+     `Body` 座標の coprime data から primitive-prime obstruction を起動する wrapper である。
+
+3. 結論:
+   - `GN` 理論の obstruction 層は、
+     - squarefree route
+     - primitive-prime route
+     の 2 本で、ほぼ対称な構造を持つようになった。
+   - 役割分離は
+     - `PrimitiveBeam`: pure primitive obstruction
+     - `Gcd.GN`: Body 座標 wrapper
+     という形で整理された。
+
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveBeam`
+   - `lake build DkMath.NumberTheory.Gcd.GN`
+   を実行し、成功を確認した。
+
+5. 備考:
+   - `PrimitiveBeam`
+     は既に research valuation wrapper を import しているため、
+     今回の pure obstruction はこの層に置くのが自然だった。
+   - `Gcd.GN`
+     側では、
+     primitive prime existence の条件供給だけを担当し、
+     obstruction 本体は再実装していない。
+
+6. 次の課題:
+   - `Nat.Coprime x u`
+     版の薄い wrapper を追加し、
+     `Nat.Coprime (x + u) u`
+     へ自動で流す。
+   - 必要なら
+     squarefree route / primitive-prime route
+     をまとめる共通 naming layer
+     （`..._of_coprime_gap` 系）
+     を整える。

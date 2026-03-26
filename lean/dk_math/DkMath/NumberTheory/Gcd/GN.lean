@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.NumberTheory.Gcd.Basic
 import DkMath.NumberTheory.GcdNext
+import DkMath.NumberTheory.PrimitiveBeam
 import DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
 
 #print "file: DkMath.NumberTheory.Gcd.GN"
@@ -159,6 +160,25 @@ theorem body_not_perfect_pow_of_squarefree_GN_of_coprime_add
       (hd1 := Nat.le_of_lt hd) (hx := hx)
       (hcop_add := hcop_add) (hcop_xd := hcop_xd))
     hSq
+
+/--
+Primitive-prime obstruction wrapper in `Body` coordinates.
+
+This is the `a := x + u`, `b := u` specialization of the pure diff-side
+primitive-prime obstruction.
+-/
+theorem body_not_perfect_pow_of_primitive_prime_factor_of_coprime_add
+    {d x u : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u)
+    (hcop_add : Nat.Coprime (x + u) u)
+    (hnd : ¬ d ∣ x) :
+    ¬ ∃ t : ℕ, 0 < t ∧ (x + u) ^ d - u ^ d = t ^ d := by
+  have hlt : u < x + u := by omega
+  simpa [Nat.add_sub_cancel_left] using
+    (DkMath.NumberTheory.PrimitiveBeam.primitive_prime_factor_forbids_perfect_pow_diff
+      (a := x + u) (b := u) (d := d)
+      hd_prime hd_ge hlt hu hcop_add (by simpa [Nat.add_sub_cancel_left] using hnd))
 
 /-- `z` と `y` が互いに素で `p` が gap を割らなければ、`gap` と `GN` は互いに素。 -/
 theorem coprime_gap_GN_of_not_dvd_exp_prime
