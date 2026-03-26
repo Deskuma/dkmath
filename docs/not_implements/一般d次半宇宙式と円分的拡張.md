@@ -1,0 +1,1 @@
+../../lean/dk_math/DkMath/CosmicFormula/docs/一般d次半宇宙式と円分的拡張.md

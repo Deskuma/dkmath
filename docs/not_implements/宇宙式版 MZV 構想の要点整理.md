@@ -1,0 +1,1 @@
+../../lean/dk_math/DkMath/CosmicFormula/docs/宇宙式版 MZV 構想の要点整理.md
