@@ -747,3 +747,53 @@ import chain の観点では、`Defs` は定義だけの薄い層にできるの
    - `CosmicFormulaBinom.CommRing.G`
      について、
      `Defs.GZ` とどこまで theorem alias 化できるかを検討する。
+
+### 日時: 2026/03/26 22:29 JST
+
+1. 目的:
+   - `CosmicFormulaBinom.CommRing.G` が
+     `Defs.GZ`
+     に直 alias できるかどうかを、
+     橋定理として明示化する。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean]`
+     に
+     - `mul_G_eq_GZ`
+     - `Body_eq_GZ`
+     を追加した。
+   - どちらにも
+     `[GNZC]`
+     docstring を付け、
+     `CommRing.G` は pre-normalized kernel、
+     `Defs.GZ` は Body-normalized kernel
+     だと明記した。
+
+3. 結論:
+   - `CommRing.G` は
+     `Defs.GZ`
+     と同一名に畳むべき対象ではなく、
+     `x * G = GZ`
+     という橋で接続される独立 family と整理するのが正しい。
+   - したがって今後の移行方針は
+     - Body-normalized を使う新規コード:
+       `GZ` / `Body_eq_GZ`
+     - pre-normalized を明示的に使う旧コード:
+       `G`
+     で分岐させるのが自然になった。
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.CosmicFormulaBinom`
+   - `lake build DkMath.CosmicFormula.CosmicTheorems`
+   を実行し、成功を確認した。
+
+5. 次の課題:
+   - `big_is_body_and_gap` / `cosmic_id` 系の docstring を、
+     必要なら
+     `Body_eq_GZ`
+     を参照する wording へ寄せる。
+   - `CosmicFormulaDim.G` / `CosmicFormulaCellDim.G`
+     が本当に
+     `GNZC`
+     範囲外の別 family かどうか、
+     bridge 補題の有無を含めて次段で判定する。

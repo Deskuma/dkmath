@@ -81,6 +81,32 @@ def Gap {R : Type _} [CommRing R] (d : ℕ) (u : R) : R := u ^ d
 /-- 無次元版: Body の定義 -/
 def Body {R : Type _} [CommRing R] (d : ℕ) (x u : R) : R := x * G d x u
 
+/--
+`CommRing` legacy kernel `G` and canonical `Defs.GZ` differ by one boundary factor `x`.
+
+[GNZC] This is the key bridge showing why `CommRing.G` cannot be replaced by a
+mere alias of `Defs.GZ`: `G` is the pre-normalized kernel, while `GZ` is the
+Body-normalized kernel.
+-/
+theorem mul_G_eq_GZ {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
+    x * G d x u = DkMath.CosmicFormula.GZ R x u d := by
+  unfold G DkMath.CosmicFormula.GZ
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro k hk
+  simp [DkMath.CosmicFormula.d1k, DkMath.CosmicFormula.d_sub_one_k, DkMath.CosmicFormula.d_sub_n_k]
+  ring
+
+/--
+`CommRing` Body is exactly the canonical `Defs.GZ` kernel.
+
+[GNZC] New code that only needs the Body-normalized side should use this bridge
+instead of referring to the legacy `G` spelling.
+-/
+theorem Body_eq_GZ {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
+    Body d x u = DkMath.CosmicFormula.GZ R x u d := by
+  simp [Body, mul_G_eq_GZ]
+
 /-- 無次元版: Big は Body と Gap の和に等しい -/
 theorem big_is_body_and_gap {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
     Big d x u = Body d x u + Gap d u := by
