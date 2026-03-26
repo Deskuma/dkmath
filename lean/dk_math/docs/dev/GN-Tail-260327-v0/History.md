@@ -203,3 +203,112 @@
      `q ∤ (choose d r * u^(d-r))`
      のような形で置くか、
      より扱いやすい派生仮定に分解するかを決める。
+
+### 日時: 2026/03/27 01:31 JST
+
+1. 目的:
+   - `GTail`
+     の valuation 層を先へ進め、
+     `padicValNat_tail_exact_of_head_unit`
+     を実際に statement / proof として固定する。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/CosmicFormula/GTail.lean]`
+     に
+     - `GTail_not_dvd_of_head_unit_of_prime_dvd_x`
+     - `padicValNat_GTail_eq_zero_of_head_unit_of_prime_dvd_x`
+     - `padicValNat_higher_tail_lower_bound`
+     - `padicValNat_tail_exact_of_head_unit`
+     を追加した。
+   - `GTail_rec`
+     を使って、
+     先頭項
+     `choose d r * u^(d-r)`
+     が
+     `p`-adic unit
+     であり、
+     かつ
+     `p ∣ x`
+     なら、
+     normalized tail
+     `GTail d r x u`
+     は
+     `p`
+     で割れないことを示した。
+   - そこから
+     normalized tail の valuation が
+     `0`
+     であることを出し、
+     boundary factor
+     `x^r`
+     の valuation と掛け合わせることで、
+     full tail の exact valuation
+     を閉じた。
+
+3. 結論:
+   - 候補文書にあった
+     `padicValNat_tail_exact_of_head_unit`
+     は、
+     いまの
+     `GTail`
+     API から自然に実装できる形へ落ちた。
+   - statement は
+     `Nat`
+     上で、
+     - `r < d`
+     - tail 自体が非零
+     - `¬ p ∣ choose d r * u^(d-r)`
+     - `p ∣ x`
+     を仮定し、
+     \[
+       v_p(\text{higher tail}) = r\,v_p(x)
+     \]
+     を返すものとして固定された。
+   - これで
+     higher-tail theory
+     は、
+     定義 / 再帰 / 評価 / 可除性 / exact valuation
+     まで一通り揃った。
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.GTail`
+   - `lake build DkMath.CosmicFormula.CosmicFormulaBinom`
+   を実行し、成功を確認した。
+
+5. 失敗事例:
+   - 初稿では
+     `Nat.dvd_add_right`
+     の向きと、
+     `padicValNat.mul`
+     が要求する
+     `[Fact (Nat.Prime p)]`
+     の供給で詰まった。
+   - 最終的には
+     `Nat.add_comm`
+     を挟んで和の向きを揃え、
+     exactness proof 内に
+     `letI : Fact (Nat.Prime p) := ⟨hp⟩`
+     を入れることで解決した。
+
+6. 備考:
+   - lower bound は
+     `pow_dvd_higher_tail`
+     と
+     `DkMath.ABC.padicValNat_le_iff_dvd`
+     の合成で得ている。
+   - exactness の upper bound は、
+     normalized tail 側 valuation を
+     `0`
+     に落とすことで実装したので、
+     今回の theorem はかなり reusable である。
+
+7. 次の課題:
+   - `r = 1`
+     specialization を
+     `GN`
+     / `Gbinom`
+     の語彙へ落とす alias を追加するか検討する。
+   - `squarefree GN`
+     や primitive-prime route
+     との接続で、
+     この exact valuation theorem をどこへ流し込むかを決める。

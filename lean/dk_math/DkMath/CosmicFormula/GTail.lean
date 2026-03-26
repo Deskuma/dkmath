@@ -5,6 +5,7 @@
  -/
 
 import Mathlib
+import DkMath.ABC.PadicValNat
 
 #print "file: DkMath.CosmicFormula.GTail"
 
@@ -234,5 +235,117 @@ theorem pow_dvd_higher_tail
               (add_pow_eq_prefix_add_xpow_mul_GTail (R := ℕ) d r x u hr)
     _ = x ^ r * GTail d r x u := by
           exact Nat.add_sub_cancel_left _ _
+
+/--
+If the leading term of `GTail_rec` is a `p`-adic unit and `p ∣ x`, then `p`
+does not divide the normalized higher tail.
+-/
+theorem GTail_not_dvd_of_head_unit_of_prime_dvd_x
+    {p d r x u : ℕ}
+    (_hp : Nat.Prime p) (hr : r < d)
+    (hhead : ¬ p ∣ Nat.choose d r * u ^ (d - r))
+    (hpx : p ∣ x) :
+    ¬ p ∣ GTail d r x u := by
+  intro htail
+  rw [Gbinom_tail_rec (R := ℕ) d r x u hr] at htail
+  have hmul : p ∣ x * GTail d (r + 1) x u := dvd_mul_of_dvd_left hpx _
+  have hhead_dvd : p ∣ Nat.choose d r * u ^ (d - r) :=
+    (Nat.dvd_add_right hmul).1 (by simpa [Nat.add_comm] using htail)
+  exact hhead hhead_dvd
+
+/--
+Under the head-unit condition, the normalized higher tail has `p`-adic
+valuation zero.
+-/
+theorem padicValNat_GTail_eq_zero_of_head_unit_of_prime_dvd_x
+    {p d r x u : ℕ}
+    (hp : Nat.Prime p) (hr : r < d)
+    (hhead : ¬ p ∣ Nat.choose d r * u ^ (d - r))
+    (hpx : p ∣ x) :
+    padicValNat p (GTail d r x u) = 0 := by
+  exact padicValNat.eq_zero_of_not_dvd
+    (GTail_not_dvd_of_head_unit_of_prime_dvd_x hp hr hhead hpx)
+
+/--
+Lower-bound half of the higher-tail valuation mechanism.
+
+Since the higher tail carries the boundary factor `x^r`, its `p`-adic
+valuation is at least `r * v_p(x)` whenever the tail itself is nonzero.
+-/
+theorem padicValNat_higher_tail_lower_bound
+    {p d r x u : ℕ}
+    (hp : Nat.Prime p) (hr : r ≤ d)
+    (htail_ne :
+      ((x + u) ^ d - ∑ j ∈ Finset.range r, Nat.choose d j * x ^ j * u ^ (d - j)) ≠ 0) :
+    r * padicValNat p x ≤
+      padicValNat p
+        ((x + u) ^ d - ∑ j ∈ Finset.range r, Nat.choose d j * x ^ j * u ^ (d - j)) := by
+  have hxdvd :=
+    pow_dvd_higher_tail d r x u hr
+  have hxpow_ne : x ^ r ≠ 0 := by
+    intro hxpow0
+    rcases hxdvd with ⟨k, hk⟩
+    apply htail_ne
+    rw [hk, hxpow0, zero_mul]
+  have hvxpow : padicValNat p (x ^ r) = r * padicValNat p x :=
+    DkMath.ABC.padicValNat_pow' hp r hxpow_ne
+  have hpk_dvd_xpow : p ^ (r * padicValNat p x) ∣ x ^ r := by
+    exact (DkMath.ABC.padicValNat_le_iff_dvd hp hxpow_ne (r * padicValNat p x)).mp
+      (by simp [hvxpow])
+  have hpk_dvd_tail :
+      p ^ (r * padicValNat p x) ∣
+        ((x + u) ^ d - ∑ j ∈ Finset.range r, Nat.choose d j * x ^ j * u ^ (d - j)) :=
+    dvd_trans hpk_dvd_xpow hxdvd
+  exact (DkMath.ABC.padicValNat_le_iff_dvd hp htail_ne (r * padicValNat p x)).mpr
+    hpk_dvd_tail
+
+/--
+Exact higher-tail valuation when the head term is a `p`-adic unit.
+
+The normalized tail has valuation zero, so the full higher tail inherits
+exactly the boundary contribution `r * v_p(x)`.
+-/
+theorem padicValNat_tail_exact_of_head_unit
+    {p d r x u : ℕ}
+    (hp : Nat.Prime p) (hr : r < d)
+    (htail_ne :
+      ((x + u) ^ d - ∑ j ∈ Finset.range r, Nat.choose d j * x ^ j * u ^ (d - j)) ≠ 0)
+    (hhead : ¬ p ∣ Nat.choose d r * u ^ (d - r))
+    (hpx : p ∣ x) :
+    padicValNat p
+      ((x + u) ^ d - ∑ j ∈ Finset.range r, Nat.choose d j * x ^ j * u ^ (d - j))
+      = r * padicValNat p x := by
+  have hrle : r ≤ d := Nat.le_of_lt hr
+  have hfactor :
+      ((x + u) ^ d - ∑ j ∈ Finset.range r, Nat.choose d j * x ^ j * u ^ (d - j))
+        = x ^ r * GTail d r x u := by
+    calc
+      (x + u) ^ d - ∑ j ∈ Finset.range r, Nat.choose d j * x ^ j * u ^ (d - j)
+        = ((∑ j ∈ Finset.range r, Nat.choose d j * x ^ j * u ^ (d - j)) +
+            x ^ r * GTail d r x u) -
+          ∑ j ∈ Finset.range r, Nat.choose d j * x ^ j * u ^ (d - j) := by
+            simpa using
+              congrArg
+                (fun t =>
+                  t - ∑ j ∈ Finset.range r, Nat.choose d j * x ^ j * u ^ (d - j))
+                (add_pow_eq_prefix_add_xpow_mul_GTail (R := ℕ) d r x u hrle)
+      _ = x ^ r * GTail d r x u := by
+            exact Nat.add_sub_cancel_left _ _
+  have hgtail_not :
+      ¬ p ∣ GTail d r x u :=
+    GTail_not_dvd_of_head_unit_of_prime_dvd_x hp hr hhead hpx
+  have hgtail_ne : GTail d r x u ≠ 0 := by
+    intro h0
+    exact hgtail_not (by rw [h0]; exact dvd_zero p)
+  have hxpow_ne : x ^ r ≠ 0 := by
+    intro hxpow0
+    apply htail_ne
+    rw [hfactor, hxpow0, zero_mul]
+  letI : Fact (Nat.Prime p) := ⟨hp⟩
+  rw [hfactor]
+  rw [padicValNat.mul hxpow_ne hgtail_ne]
+  rw [DkMath.ABC.padicValNat_pow' hp r hxpow_ne]
+  rw [padicValNat_GTail_eq_zero_of_head_unit_of_prime_dvd_x hp hr hhead hpx]
+  simp
 
 end DkMath.CosmicFormula
