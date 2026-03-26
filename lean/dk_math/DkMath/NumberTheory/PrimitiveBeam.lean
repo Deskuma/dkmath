@@ -131,6 +131,10 @@ being a perfect `d`-th power.
 
 This is the diff-side obstruction theorem that sits one layer below the
 `Body = x * GN` wrappers.
+
+It is mathematically FLT-shaped: the conclusion already has the form
+`¬ ∃ t, 0 < t ∧ a^d - b^d = t^d`, but the theorem stays in the lower
+primitive-prime layer so higher FLT files only need thin wrappers.
 -/
 theorem primitive_prime_factor_forbids_perfect_pow_diff
     {a b d : ℕ}

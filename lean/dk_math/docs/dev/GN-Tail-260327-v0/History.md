@@ -638,3 +638,59 @@
      をまとめる共通 naming layer
      （`..._of_coprime_gap` 系）
      を整える。
+
+### 日時: 2026/03/27 JST
+
+1. 目的:
+   - いま追加した obstruction theorem 群が
+     「FLT そのものではないが、既に FLT 型の局所 refuter である」
+     ことを、忘れないうちにコードコメントと履歴へ明記する。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean]`
+     の
+     `body_not_perfect_pow_of_squarefree_GN`
+     docstring に、
+     `CosmicFormula`
+     層に置かれた
+     FLT-shaped theorem
+     である旨を追記した。
+   - `[lean/dk_math/DkMath/NumberTheory/PrimitiveBeam.lean]`
+     の
+     `primitive_prime_factor_forbids_perfect_pow_diff`
+     docstring に、
+     lower layer に置かれた
+     FLT-shaped obstruction
+     だと明記した。
+   - `[lean/dk_math/DkMath/NumberTheory/Gcd/GN.lean]`
+     の
+     `body_not_perfect_pow_of_squarefree_GN_of_coprime_add`
+     と
+     `body_not_perfect_pow_of_primitive_prime_factor_of_coprime_add`
+     docstring にも、
+     `Body` 座標での
+     FLT-shaped local refuter
+     だと注記した。
+
+3. 結論:
+   - いまの obstruction 群は、
+     数学的にも実装上も
+     「FLT 本体ではないが、
+      既に FLT branch を折る型の theorem」
+     であることが記録された。
+   - 後続で
+     `FLT.Basic`
+     や provider 層へ接続するとき、
+     これらを
+     local refuter
+     として扱う判断がしやすくなった。
+
+4. 検証:
+   - 今回は docstring / 履歴更新のみ。
+   - 前段で確認済みの build 成功状態を維持している前提で記録した。
+
+5. 次の課題:
+   - `Nat.Coprime x u`
+     版 wrapper を追加し、
+     FLT 側が使う典型仮定から
+     これらの local refuter をさらに起動しやすくする。

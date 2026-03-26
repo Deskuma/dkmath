@@ -145,6 +145,10 @@ theorem coprime_boundary_GN_of_coprime_add_of_coprime_exp
 /--
 Wrapper from coprime `Body` coordinates to the squarefree-`GN` obstruction
 theorem on the `CosmicFormula` side.
+
+This is an FLT-shaped local refuter in `Body` coordinates:
+once the squarefree `GN` hypothesis is available, it directly rules out
+`(x + u)^d - u^d = t^d`.
 -/
 theorem body_not_perfect_pow_of_squarefree_GN_of_coprime_add
     {d x u : ℕ}
@@ -166,6 +170,10 @@ Primitive-prime obstruction wrapper in `Body` coordinates.
 
 This is the `a := x + u`, `b := u` specialization of the pure diff-side
 primitive-prime obstruction.
+
+Again this is already FLT-shaped: it is not the global FLT theorem, but it
+directly kills one local branch with conclusion
+`¬ ∃ t, 0 < t ∧ (x + u)^d - u^d = t^d`.
 -/
 theorem body_not_perfect_pow_of_primitive_prime_factor_of_coprime_add
     {d x u : ℕ}

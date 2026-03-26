@@ -477,6 +477,10 @@ choose a prime factor `q` of the squarefree kernel `GN`, use coprimality to
 keep `q` out of the boundary factor `x`, and conclude that
 `v_q ((x+u)^d - u^d) = 1`, which is incompatible with a `d`-th power when
 `d > 1`.
+
+[GNZC] Although this theorem lives in `CosmicFormula`, its shape is already
+FLT-like: it directly refutes a local branch of
+`(x + u)^d - u^d = t^d`.
 -/
 theorem body_not_perfect_pow_of_squarefree_GN
     {d x u : ℕ}
