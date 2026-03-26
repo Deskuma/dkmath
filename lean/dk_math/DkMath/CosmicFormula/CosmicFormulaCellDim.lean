@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 import DkMath.CellDim
+import DkMath.CosmicFormula.CosmicFormulaBinom
 
 #print "file: DkMath.CosmicFormula.CosmicFormulaCellDim"
 
@@ -106,6 +107,32 @@ LaTeX: $G_{d-1}(x,u) = \sum_{k=0}^{d-1} \binom{d}{k+1} x^k u^{d-1-k}$.
 -/
 def Gbinom (d x u : ℕ) : ℕ :=
   Finset.sum (Finset.range d) fun k => Nat.choose d (k + 1) * x ^ k * u ^ (d - 1 - k)
+
+/--
+`Gbinom` is exactly the canonical gap-normalized kernel `GN` on `ℕ`.
+
+[GNZC] In `CosmicFormulaCellDim`, the name `Gbinom` is kept only to contrast it
+with the geometric-series family `GCell`; mathematically it is the same object
+as `CosmicFormulaBinom.GN`.
+-/
+theorem Gbinom_eq_GN (d x u : ℕ) :
+    Gbinom d x u = DkMath.CosmicFormulaBinom.GN d x u := by
+  simpa [Gbinom] using
+    (DkMath.CosmicFormulaBinom.GN_eq_sum (R := ℕ) d x u).symm
+
+/--
+Body-normalized bridge for the binomial kernel on `ℕ`.
+
+[GNZC] This is the `CellDim`-side counterpart of `x * GN = GZ`.
+-/
+theorem x_mul_Gbinom_eq_GZ (d x u : ℕ) :
+    x * Gbinom d x u = DkMath.CosmicFormula.GZ ℕ x u d := by
+  unfold Gbinom DkMath.CosmicFormula.GZ
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro k hk
+  simp [DkMath.CosmicFormula.d1k, DkMath.CosmicFormula.d_sub_one_k, DkMath.CosmicFormula.d_sub_n_k]
+  ring
 
 /- 等式： (x+u)^d - u^d = x * Gbinom d x u -/
 /- 戦略 -----------------------------------------------------------------------

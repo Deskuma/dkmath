@@ -919,3 +919,62 @@ import chain の観点では、`Defs` は定義だけの薄い層にできるの
      表記を、
      canonical / pre-normalized / cell-counting
      のどれかへ分類して整理する。
+
+### 日時: 2026/03/27 00:18 JST
+
+1. 目的:
+   - `CosmicFormulaCellDim.Gbinom` が
+     canonical family のどこに位置するかを、
+     橋補題として明示化する。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/CosmicFormula/CosmicFormulaCellDim.lean]`
+     に
+     - `Gbinom_eq_GN`
+     - `x_mul_Gbinom_eq_GZ`
+     を追加した。
+   - `Gbinom_eq_GN` では
+     `CosmicFormulaBinom.GN_eq_sum`
+     を用いて、
+     `Gbinom`
+     が canonical `GN`
+     と同一であることを明示した。
+   - `x_mul_Gbinom_eq_GZ` では、
+     `CellDim` 側の binomial kernel から
+     `Defs.GZ`
+     への Body-normalized bridge を置いた。
+
+3. 結論:
+   - `Gbinom` は「ほぼ GN」ではなく、
+     code 上でも
+     `Gbinom = GN`
+     と確定した。
+   - さらに
+     `x * Gbinom = GZ`
+     が揃ったため、
+     `CellDim`
+     の binomial branch は canonical family に完全接続された。
+   - したがって
+     `CellDim`
+     に残る固有名詞の意味差は、
+     もはや `Gbinom`
+     ではなく
+     `GCell`
+     との対比だけである。
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.CosmicFormulaCellDim`
+   - `lake build DkMath.CosmicFormula.CosmicFormulaBinom`
+   - `lake build DkMath.CosmicFormula.CosmicTheorems`
+   を実行し、成功を確認した。
+
+5. 次の課題:
+   - `CellDim` 内で
+     `Gbinom`
+     を名前として残すべきか、
+     `GN` alias へ寄せるべきかを検討する。
+   - `ZsigmondyCyclotomic` などの文章中の
+     `G d x u`
+     記法を、
+     `GN / GZ / GCell / GReal`
+     のどれかへ分類して直す。
