@@ -440,3 +440,56 @@
   - `Defs.lean` の `Gn` を `GTail` family へどう接続するか決める
 
 要するに、**設計書の第2〜5節・第8節は実装済み、第6・7・9節は意味論と補題 API の整備が残っている**、という評価です。
+
+### 日時: 2026/03/26 21:44
+
+突き合わせると、`GTail` 文書のコアはかなり実装済みですが、`Defs` への定義集約はまだ未着手です。しかも `Defs` は今のままでは、そのまま canonical 置き場にするには少し危ないです。
+
+現状の整理はこうです。
+
+- [GTail.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/GTail.lean)  
+  文書の `GN_d^(r)` 本体です。定義、tail 分解、`r=0/1/d`、再帰、`x=0` 評価まであります。
+- [CosmicFormulaBinom.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean)  
+  ここで `GN := GTail d 1 x u` の wrapper 化が済んでいます。
+- [Defs.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/Defs.lean)  
+  ここには今も古い `G` / `Gn` / `Big` / `Body` / `Gap` がありますが、意味が mainline と揃っていません。
+
+特に問題なのは `Defs` 側です。
+
+- `Gn` は実際ほぼ使われていません。
+- しかし `G` は使われています。主に [KUS/CosmicBridge.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/KUS/CosmicBridge.lean) が依存しています。
+- しかも `Defs.G` は今の意味では「将来の `GZ` に近いもの」で、mainline `GN` とは別物です。
+- `Defs.Big` / `Defs.Body` / `Defs.Gap` は `ℝ` 固定で、mainline の generic 定義ともずれています。
+
+なので、結論はこれです。
+
+1. `Defs` を最終的な固定点にする方針自体は妥当  
+2. ただし今すぐ「散らばった def を全部 Defs へ移す」のは危険  
+3. 先に `Defs` を canonical-definition file に作り替える段階が必要
+
+安全な移行順はこうです。
+
+1. [Defs.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/Defs.lean) に新 canonical 名を追加する  
+   - `GN`
+   - `GZ`
+   - 将来の `GC` 用 placeholder
+   - ここで `GN := GTail d 1 x u` に寄せる
+2. 既存の `Defs.G` はすぐ消さず、`GZ` へ意味を明記して残す
+3. [CosmicFormulaBinom.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean) は Defs を import する側へ変える
+4. その後に downstream を `Defs.GN` / `Defs.GZ` へ段階移行する
+5. 最後に旧 `Gn` を alias か廃止候補へ落とす
+
+import chain の観点では、`Defs` は定義だけの薄い層にできるので、そこへ `GTail` を入れて [CosmicFormulaBinom.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean) が `Defs` を参照する形は作れます。逆向きに `Defs -> Binom` にすると循環しやすいので、それは避けるべきです。
+
+要するに、
+
+- `Gn -> GN`
+- `G -> GZ`
+- `GC` 新設
+
+という最終図は良いです。  
+ただし次の実装作業は「移設」そのものではなく、まず **`Defs` を新 canonical API の受け皿に改造する** ことです。
+
+必要なら次に、その Phase 1 として
+[Defs.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/Defs.lean)
+へ `GN` / `GZ` の新定義を追加し、`CosmicFormulaBinom` をそれに寄せる最小 patch を切ります。

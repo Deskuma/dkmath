@@ -55,7 +55,7 @@ def G (R : Type*) [CommSemiring R] (x u : R) (d : ℕ) : R :=
 def Gn (R : Type*) [CommSemiring R] (x u : R) (d n : ℕ) : R :=
   ∑ k ∈ Finset.range d, (Nat.choose d (k + n) : R) * x ^ k * u ^ (d_sub_n_k d n k)
 
-#eval G ℝ 2 1 1  -- テスト評価
+-- #eval G ℝ 2 1 1  -- テスト評価
 
 /-- 大宇宙式 Big Cosmic Formula -/
 def Big (x u : ℝ) (d : ℕ) : ℝ := (x + u)^d
