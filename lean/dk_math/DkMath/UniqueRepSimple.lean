@@ -73,7 +73,7 @@ theorem sqrt2_lin_indep_over_rat' (a b c d : ℚ) :
     -- But √2 is irrational, contradiction
     exact h_irrat hq
 
-#print axioms sqrt2_lin_indep_over_rat'
+-- TODO: [DkMathTest]: #print axioms sqrt2_lin_indep_over_rat'
 
 /-- Unique representation in ℚ(√2) -/
 def InQAdjSqrt2 (x : ℝ) : Prop :=
@@ -92,7 +92,7 @@ theorem unique_rep_in_Q_sqrt2 (x : ℝ) (hx : InQAdjSqrt2 x) :
     have ⟨ha, hb⟩ := sqrt2_lin_indep_over_rat' a' b' a b this
     exact ⟨ha, hb⟩
 
-#print axioms unique_rep_in_Q_sqrt2
+-- TODO: [DkMathTest]: #print axioms unique_rep_in_Q_sqrt2
 
 end -- noncomputable section
 

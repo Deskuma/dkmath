@@ -82,3 +82,27 @@ namespace DkMath
 -- None
 
 end DkMath
+
+/- # Develop Note
+
+## print axioms statements are used for checking the dependencies of theorems and definitions.
+
+ビルド最適化のために axioms を使用している場合、`DkMathTest/**/*.lean` に移行することを検討してください。
+`DkMath/**/*.lean` に `#print axioms <定理補題名>` が含まれている場合は、`DkMathTest/**/*.lean` に移行すること。
+
+例:
+
+  ```lean
+  #print axioms DkMath
+  ```
+
+検索方法
+
+  regex: `^#print axioms`
+  replace: `-- TODO: [DkMathTest]: #print axioms`
+  include `*.lean`
+  exclude `DkMathTest/**/*.lean`
+
+`TODO: [DkMathTest]` タグを付けた行は、DkMathTestに移行する際の目印となります。
+
+-/

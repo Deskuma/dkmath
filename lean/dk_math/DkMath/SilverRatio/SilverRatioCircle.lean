@@ -217,7 +217,7 @@ theorem bcfg_concyclic : concyclic4 B C F G := by
           rw [this]
       _ = sqrt2 ^ 2 * ((sqrt2 - 1 - 2) ^ 2 + (1 - 2 * 0) ^ 2) := by rw [h_sq]
 
-#print axioms bcfg_concyclic
+-- TODO: [DkMathTest]: #print axioms bcfg_concyclic
 
 end DkMath.SilverRatio.Circle
 

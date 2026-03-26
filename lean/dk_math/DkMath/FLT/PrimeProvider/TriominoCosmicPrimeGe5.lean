@@ -24,6 +24,6 @@ theorem FLT_prime_ge5 (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
   have hp3 : 3 ≤ p := le_trans (by decide : 3 ≤ 5) hp5
   exact DkMath.FLT (x := a) (y := b) (z := c) p hpos hp3 hEq
 
-#print axioms FLT_prime_ge5  -- NG so#rryAx connection root
+-- TODO: [DkMathTest]: #print axioms FLT_prime_ge5  -- NG so#rryAx connection root
 
 end DkMath.FLT

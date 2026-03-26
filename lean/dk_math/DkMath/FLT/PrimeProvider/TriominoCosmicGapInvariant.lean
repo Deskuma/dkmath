@@ -812,7 +812,7 @@ theorem gapPowFromPrimeGe5Counterexample_branchA_factorization_impl :
     FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
   exact False.elim (hNo hpack.hEq)
 
-#print axioms gapPowFromPrimeGe5Counterexample_branchA_factorization_impl  -- NG: so#rryAx, use DkMath.FLT
+-- TODO: [DkMathTest]: #print axioms gapPowFromPrimeGe5Counterexample_branchA_factorization_impl  -- NG: so#rryAx, use DkMath.FLT
 
 /--
 Branch A の因数分解指数条件が供給されれば、`gap = t^p` は no-`so#rry` で従う。
