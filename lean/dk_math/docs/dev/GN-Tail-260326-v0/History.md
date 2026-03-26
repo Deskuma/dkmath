@@ -493,3 +493,80 @@ import chain の観点では、`Defs` は定義だけの薄い層にできるの
 必要なら次に、その Phase 1 として
 [Defs.lean](/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/Defs.lean)
 へ `GN` / `GZ` の新定義を追加し、`CosmicFormulaBinom` をそれに寄せる最小 patch を切ります。
+
+### 日時: 2026/03/26 22:03 JST
+
+1. 目的:
+   - `Defs.lean` を
+     `GN / GZ / 将来の GC`
+     を受ける canonical definition layer へ寄せる。
+   - 未使用の `Gn` を廃止し、
+     `GN` 本線を `Defs` 経由で参照する import chain を確立する。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/CosmicFormula/Defs.lean]`
+     に
+     - `def GZ`
+     - legacy alias `abbrev G := GZ`
+     - `@[simp] abbrev GN := GTail d 1 x u`
+     を追加した。
+   - 旧 `Gn` 定義は削除した。
+   - `Body` は `GZ` を参照する形へ揃えた。
+   - `[lean/dk_math/DkMath/CosmicFormula/CosmicFormulaBinom.lean]`
+     は `GTail` 直 import をやめ、
+     `Defs` を import して
+     `GN` を `DkMath.CosmicFormula.GN` の wrapper に置き換えた。
+   - fallout 修正として
+     `[lean/dk_math/DkMath/KUS/CosmicBridge.lean]`
+     の `G_one_one_eq` / `body_one_one`
+     を `GZ` ベースへ更新した。
+   - namespace shadowing 修正として
+     `[lean/dk_math/DkMath/CosmicFormula/CosmicTheorems.lean]`
+     の `GN` 参照を
+     `DkMath.CosmicFormulaBinom.GN`
+     明示に直した。
+
+3. 結論:
+   - import chain は
+     `GTail -> Defs -> CosmicFormulaBinom`
+     に整理できた。
+   - `Gn` はワークスペース上から消え、
+     canonical 名は
+     `Defs.GN` / `Defs.GZ`
+     に寄った。
+   - 既存下流は
+     `CosmicFormulaBinom.GN`
+     を通じて従来どおり利用できるため、
+     段階移行の足場として十分に安定している。
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.Defs`
+   - `lake build DkMath.CosmicFormula.CosmicFormulaBinom`
+   - `lake build DkMath.KUS.CosmicBridge`
+   - `lake build DkMath.CosmicFormula.CosmicTheorems`
+   - `lake build DkMath`
+   を実行し、成功を確認した。
+
+5. 備考:
+   - 途中で `KUS.CosmicBridge` は
+     `G` の展開形に依存して落ちたが、
+     `GZ` 明示化で吸収できた。
+   - `CosmicTheorems` は
+     `DkMath.CosmicFormula.GN`
+     と
+     `DkMath.CosmicFormulaBinom.GN`
+     の shadowing で落ちたため、
+     Binom 側を明示参照する方針にした。
+   - full build の warning は既存の `sorry` に限られ、
+     今回の refactor で新たな warning は増やしていない。
+
+6. 次の課題:
+   - `Defs.G` を参照している downstream を、
+     コメント・docstring も含めて
+     `GZ` へ段階移行する。
+   - `CosmicFormulaBinom` / `CoreBeamGap` /
+     `CosmicDifference` 周辺で、
+     `GN` と `GZ` の役割分担を補題名でも揃える。
+   - 将来の `GC` をどの層に置くか
+     (`Defs` 直下か別ファイルか)
+     を次段で決める。

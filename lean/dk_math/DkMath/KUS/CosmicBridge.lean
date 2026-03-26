@@ -109,7 +109,7 @@ theorem cosmicBodyCoeffSum_ge (d : ℕ) (_ : 1 ≤ d) :
 -/
 theorem G_one_one_eq (d : ℕ) :
     G ℕ 1 1 d = cosmicBodyCoeffSum d := by
-  simp [G, cosmicBodyCoeffSum, d_sub_one_k, d_sub_n_k]
+  simp [G, GZ, cosmicBodyCoeffSum]
 
 /--
 `Body d 1 1 + 1 = 2^d` （ℝ 上）
@@ -117,10 +117,12 @@ theorem G_one_one_eq (d : ℕ) :
 -/
 theorem body_one_one (d : ℕ) :
     Body 1 1 d + 1 = (2 : ℝ) ^ d := by
-  have h : cosmicBodyCoeffSum d + 1 = 2 ^ d := cosmicBodyCoeffSum_eq d
-  simp only [Body, G, cosmicBodyCoeffSum, d1k] at *
-  simp only [mul_one, one_pow] at *
-  norm_cast at h ⊢
+  have h : (cosmicBodyCoeffSum d : ℝ) + 1 = (2 : ℝ) ^ d := by
+    exact_mod_cast cosmicBodyCoeffSum_eq d
+  calc
+    Body 1 1 d + 1 = (cosmicBodyCoeffSum d : ℝ) + 1 := by
+      simp [Body, GZ, cosmicBodyCoeffSum]
+    _ = (2 : ℝ) ^ d := h
 
 /-! ## GKUS → CosmicFormula の方向 -/
 

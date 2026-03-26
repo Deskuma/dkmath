@@ -6,7 +6,7 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 import DkMath.Algebra.BinomTail
-import DkMath.CosmicFormula.GTail
+import DkMath.CosmicFormula.Defs
 import DkMath.CosmicFormula.CosmicFormulaDim  -- Cosmic Formula Dimensionality
 
 #print "file: DkMath.CosmicFormula.CosmicFormulaBinom"
@@ -265,7 +265,7 @@ refactor 移行期のあいだはこの公開名を温存し、downstream は段
 `GTail` 直接参照へ寄せていく。
 -/
 @[simp] abbrev GN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R :=
-  DkMath.CosmicFormula.GTail d 1 x u
+  DkMath.CosmicFormula.GN R x u d
 
 /--
 Compatibility bridge to the legacy explicit sum shape of `GN`.
