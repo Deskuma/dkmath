@@ -879,3 +879,87 @@
      smaller normal-form packet
      の `(t', s', y', z')`
      をどう再組立てするかが次の本題になる。
+
+### 日時: 2026/03/27 20:20 JST
+
+1. 目的:
+   - `consider-005.md`
+     の方針に従い、
+     valuation peel route を
+     `seed -> canonical tail -> packet`
+     の 3 段で扱えるようにする。
+   - まずは
+     `GN/p`
+     の標準 tail を explicit に返す
+     canonical stage
+     を lower layer に固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `PrimeGe5BranchAValuationPeelCanonicalTailTarget`
+     を追加した。
+   - 同ファイルに
+     `primeGe5BranchAValuationPeelCanonicalTail_default`
+     を追加した。
+     これは
+     `p ∣ t`
+     から
+     `t = p * t₁`
+     を剥き、
+     `GN p (p^(p-1) * t₁^p) y`
+     を
+     `p * y^(p-1) + (p^(p-1) * t₁^p) * C`
+     の形で返す。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     には
+     `BranchAValuationPeelCanonicalTailAdapterTarget`
+     を追加し、
+     provider 側から見た splice point も明示した。
+
+3. 結論:
+   - valuation peel route は、
+     もはや seed から直接 packet を狙うだけでなく、
+     宇宙式の canonical tail
+     そのものを露出する中間段を持てるようになった。
+   - これにより次は、
+     `PrimeGe5BranchAValuationPeelSeedTarget`
+     の `B`
+     と
+     `PrimeGe5BranchAValuationPeelCanonicalTailTarget`
+     の `C`
+     を比較すればよい、
+     という形で不足情報がさらに見えやすくなった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   - `lake build DkMath.FLT.Basic`
+   を順番に実行し、build 完了まで待って成功を確認した。
+
+5. 備考:
+   - 今回の canonical stage は、
+     まだ
+     `GN p (p^(p-1) * t₁^p) y = p * s^p`
+     のような stronger equality を要求しない。
+     まずは
+     `GN/p`
+     の標準 tail を explicit に取り出す段階に留めた。
+   - これは `consider-005.md` の
+     5.1 / 5.2
+     に対応する lower-layer 実装である。
+
+6. 次の課題:
+   - seed 側の
+     `B`
+     と canonical tail 側の
+     `C`
+     を比較する補題を置き、
+     `canonical tail -> packet`
+     に足りない情報をさらに exact に炙り出す。
+   - その比較で余剰項が残るなら、
+     valuation peel route は
+     `obstruction extraction`
+     に留め、
+     `PrimeGe5BranchAPrimitivePacketDescentTarget`
+     を本命へ押し上げる。

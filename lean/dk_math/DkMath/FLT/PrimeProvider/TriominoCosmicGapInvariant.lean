@@ -1334,6 +1334,10 @@ abbrev BranchASmallerPacketAdapterTarget : Prop :=
 abbrev BranchAValuationPeelPacketAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAValuationPeelPacketTarget
 
+/-- `p ∣ t` の canonical tail stage を表す provider 側 alias。 -/
+abbrev BranchAValuationPeelCanonicalTailAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAValuationPeelCanonicalTailTarget
+
 /-- `p ∤ t` の primitive/cyclotomic packet descent route を表す provider 側 alias。 -/
 abbrev BranchAPrimitivePacketDescentAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitivePacketDescentTarget

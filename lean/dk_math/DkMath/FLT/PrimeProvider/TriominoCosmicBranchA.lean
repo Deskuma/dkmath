@@ -234,6 +234,35 @@ abbrev PrimeGe5BranchAValuationPeelSeedTarget : Prop :=
     ∃ t1 B : ℕ, t = p * t1 ∧ s ^ p = y ^ (p - 1) + p ^ (2 * p - 1) * (t1 ^ p * B)
 
 /--
+valuation peel route の canonical tail 契約。
+
+付録:
+- `p ∣ t` のとき、
+  `t = p * t1`
+  に剥いたあとで
+  `GN(p, p^(p-1) * t1^p, y)`
+  自体を宇宙式の canonical tail 展開で読めることを要求する。
+- これは seed から packet へ直接跳ぶ前に、
+  `GN/p`
+  の標準 tail と比較するための中間契約である。
+-/
+abbrev PrimeGe5BranchAValuationPeelCanonicalTailTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ t1 C : ℕ,
+      t = p * t1 ∧
+      GN p (p ^ (p - 1) * t1 ^ p) y =
+        p * y ^ (p - 1) + (p ^ (p - 1) * t1 ^ p) * C
+
+/--
 `p ∤ t` の primitive core に入った後、
 cyclotomic / distinguished-prime descent で smaller packet を返す route。
 
@@ -801,6 +830,45 @@ theorem primeGe5BranchAValuationPeelSeed_default :
     s ^ p = y ^ (p - 1) + (p ^ (p - 1) * t ^ p) * B := hB
     _ = y ^ (p - 1) + (p ^ (2 * p - 1) * t1 ^ p) * B := by rw [hpeel]
     _ = y ^ (p - 1) + p ^ (2 * p - 1) * (t1 ^ p * B) := by ac_rfl
+
+/--
+`p ∣ t` で 1 段剥いた canonical gap
+`p^(p-1) * t1^p`
+に対する `GN/p` tail の explicit 展開。
+
+付録:
+- これは `consider-005.md` でいう
+  `seed -> canonical tail`
+  の最初の concrete 実装である。
+- まだ packet を返さず、
+  宇宙式の標準 tail そのものを露出させる。
+-/
+theorem primeGe5BranchAValuationPeelCanonicalTail_default :
+    PrimeGe5BranchAValuationPeelCanonicalTailTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd
+  let _ := hp_dvd_gap
+  let _ := hgap
+  let _ := hsGN
+  let _ := hsx
+  let _ := hcop_ts
+  let _ := hcop_ty
+  let _ := hcop_sy
+  let _ := hp_not_dvd_s
+  rcases primeGe5BranchA_gapShape_peel_of_dvd_t ht_dvd with ⟨t1, ht, _hpeel⟩
+  refine ⟨t1, DkMath.CosmicFormula.GTail p 2 (p ^ (p - 1) * t1 ^ p) y, ht, ?_⟩
+  have hp_gt_one : 1 < p := lt_of_lt_of_le (by decide : 1 < 5) hpack.hp5
+  calc
+    GN p (p ^ (p - 1) * t1 ^ p) y
+        = (Nat.choose p 1 : ℕ) * y ^ (p - 1)
+            + (p ^ (p - 1) * t1 ^ p) *
+              DkMath.CosmicFormula.GTail p 2 (p ^ (p - 1) * t1 ^ p) y := by
+            simpa [GN] using
+              (DkMath.CosmicFormula.GN_tail_rec
+                (d := p) (x := p ^ (p - 1) * t1 ^ p) (u := y) hp_gt_one)
+    _ = p * y ^ (p - 1)
+          + (p ^ (p - 1) * t1 ^ p) *
+            DkMath.CosmicFormula.GTail p 2 (p ^ (p - 1) * t1 ^ p) y := by
+          simp
 
 /--
 Branch A normal form から得る、`s^p ≡ y^(p-1) [MOD p^2]` の thin wrapper。
