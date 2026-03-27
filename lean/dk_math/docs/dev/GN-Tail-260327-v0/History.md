@@ -1637,6 +1637,56 @@
 ### 日時: 2026/03/27 JST
 
 1. 目的:
+   - 公開の branch-split default mainline を、
+     旧 shape/value comparison route 直結ではなく
+     Branch A / Wieferich witness route
+     経由へ寄せる。
+   - これにより、
+     default mainline の clean 置換点を
+     `branchAWieferichRefuter_math`
+     周辺へさらに集中させる。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     で、
+     旧来の concrete shape/value 接続版を
+     `FLTPrimeGe5Target_branch_split_mainline_legacy_shape`
+     に退避した。
+   - `FLTPrimeGe5Target_branch_split_mainline`
+     は、
+     `FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl`
+     を返す default theorem
+     として置き換えた。
+
+3. 結論:
+   - public default の branch-split mainline は、
+     もはや shape/value comparison route
+     を直接読む必要がなく、
+     Branch A / Wieferich witness route
+     を既定の入口として読めるようになった。
+   - 一方で旧 route も
+     `..._legacy_shape`
+     として残したので、
+     comparison 層の検証や diff 追跡は引き続き可能。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   - `lake build DkMath.FLT.Basic`
+   - `lake build`
+   を実行し、build 完了まで待って確認する。
+
+5. 次の課題:
+   - `branchAWieferichRefuter_math`
+     自体を、
+     no-Wieferich / descent machinery
+     の clean 実装へ差し替える。
+   - その差し替え後、
+     `..._legacy_shape`
+     へ依存する theorem が実質残っていないかを再点検する。
+
+### 日時: 2026/03/27 JST
+
+1. 目的:
    - witness route の最終 clean 置換点を、
      `branchAWieferichRefuter_via_FLT`
      という局所名ではなく

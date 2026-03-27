@@ -1646,12 +1646,16 @@ theorem FLTPrimeGe5Target_of_branch_split_shapeValue_and_refuter_with_normalizer
     hAShape hB (branchAShapeToRefuter_of_value hValue hRefuteValue)
 
 /--
-Branch-split mainline の起動定理（現行 concrete 実装接続版）。
+Branch-split mainline の legacy 起動定理（shape/value concrete 実装接続版）。
 
-注意: Branch A の value/refuter 実装は現時点では via FLT であり、
-最終的には clean 数学核へ置換する。
+注意:
+- Branch A の value/refuter 実装は現時点では via FLT であり、
+  最終的には clean 数学核へ置換する。
+- 既定の public mainline は、より細く隔離された
+  `FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl`
+  を経由する。
 -/
-theorem FLTPrimeGe5Target_branch_split_mainline :
+theorem FLTPrimeGe5Target_branch_split_mainline_legacy_shape :
     FLTPrimeGe5Target := by
   exact FLTPrimeGe5Target_of_branch_split_shapeValue_and_refuter_with_normalizer_impl
     branchAShapeFactorizationTarget_impl
@@ -1659,6 +1663,16 @@ theorem FLTPrimeGe5Target_branch_split_mainline :
       gapPowFromPrimeGe5Counterexample_branchB_impl)
     branchAShapeValueTarget_impl
     branchAShapeValueToRefuter_impl
+
+/--
+Branch-split mainline の既定起動定理。
+
+現在の default route は、Branch A を shape/value comparison から直接起動するのではなく、
+Wieferich witness route に正規化してから mainline へ流す。
+-/
+theorem FLTPrimeGe5Target_branch_split_mainline :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl
 
 /--
 最終仮橋 (`branchAShapeValueToDescent_via_FLT`) を使わない clean 起動版。
