@@ -1342,6 +1342,10 @@ abbrev BranchAValuationPeelCanonicalTailAdapterTarget : Prop :=
 abbrev BranchAValuationPeelTailComparisonAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAValuationPeelTailComparisonTarget
 
+/-- provider 側から見た valuation peel exact-error 契約。 -/
+abbrev BranchAValuationPeelTailErrorAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAValuationPeelTailErrorTarget
+
 /-- `p ∤ t` の primitive/cyclotomic packet descent route を表す provider 側 alias。 -/
 abbrev BranchAPrimitivePacketDescentAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitivePacketDescentTarget

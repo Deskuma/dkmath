@@ -1137,3 +1137,79 @@
      で止め、
      `PrimeGe5BranchAPrimitivePacketDescentTarget`
      を本命 route として押し上げる。
+
+### 日時: 2026/03/27 21:24 JST
+
+1. 目的:
+   - `analysis-BC.md`
+     の追記に対応して、
+     mod-level relation
+     `p * B ≡ C [MOD u]`
+     を
+     exact error decomposition
+     に持ち上げる。
+   - nat 上では符号付き差を直接書けないので、
+     正しい向き
+     `p * B = C + u * E`
+     を lower layer 契約として固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `PrimeGe5BranchAValuationPeelTailErrorTarget`
+     を追加した。
+   - 同ファイルに
+     - `primeGe5BranchA_GTail_two_scaled_ge`
+     - `primeGe5BranchA_GTail_two_scaled_exists_error`
+     - `primeGe5BranchAValuationPeelTailError_of_exact`
+     - `primeGe5BranchAValuationPeelTailError_default`
+     を追加した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     には
+     `BranchAValuationPeelTailErrorAdapterTarget`
+     を追加した。
+
+3. 結論:
+   - `analysis-BC.md`
+     で議論した
+     `C - pB`
+     の first-order 差分は、
+     Lean では
+     `p * B = C + u * E`
+     という nat-compatible な exact decomposition として固定できた。
+   - これにより valuation peel route は、
+     合同情報だけでなく
+     error term を持つ concrete API
+     まで整備された。
+   - 一方で、ここまで来てもまだ smaller packet は直接出ていないので、
+     valuation peel の意味づけは引き続き
+     `obstruction extraction / first-order control`
+     寄りだと読める。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認した。
+
+5. 備考:
+   - 途中で
+     `Nat.pow_pos`
+     と
+     `Nat.modEq_iff_dvd'`
+     から exact equality への戻し方に Lean 側の修正が要ったが、
+     最終的に build failure は解消した。
+   - `TriominoCosmicBranchA.lean`
+     の残る本質的未完は、
+     これまで通り final `sorry` 1 箇所だけである。
+
+6. 次の課題:
+   - `PrimeGe5BranchAValuationPeelTailErrorTarget`
+     の error term
+     `E`
+     から packet 再構成へ届く stronger extraction があるかを検討する。
+   - それが薄い場合は、
+     valuation peel route を
+     obstruction extraction
+     に留め、
+     `PrimeGe5BranchAPrimitivePacketDescentTarget`
+     を本命 route として押し上げる。

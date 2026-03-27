@@ -354,6 +354,36 @@ abbrev PrimeGe5BranchAValuationPeelTailModEqTarget : Prop :=
       p * B ≡ C [MOD p ^ (p - 1) * t1 ^ p]
 
 /--
+valuation peel comparison の exact error decomposition。
+
+付録:
+- `analysis-BC.md`
+  の
+  `p * B = C + u * E`
+  型の first-order 差分分解に対応する。
+- nat 上では
+  `C = p * B + u * E`
+  ではなく、
+  大きい gap 側係数が canonical 側以上であることを使って
+  `p * B = C + u * E`
+  と書くのが自然である。
+-/
+abbrev PrimeGe5BranchAValuationPeelTailErrorTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ t1 B C E : ℕ,
+      t = p * t1 ∧
+      p * B = C + (p ^ (p - 1) * t1 ^ p) * E
+
+/--
 `p ∤ t` の primitive core に入った後、
 cyclotomic / distinguished-prime descent で smaller packet を返す route。
 
@@ -1121,6 +1151,62 @@ theorem primeGe5BranchA_GTail_two_scaled_modEq
   exact hmodScaled.symm.trans hmodCanon
 
 /--
+`GTail p 2` は、`x = p^p * u` の方が `x = u` より大きい。
+
+付録:
+- `analysis-BC.md`
+  の exact-error 版
+  `p * B = C + u * E`
+  を nat 上で書くための順序補題である。
+-/
+theorem primeGe5BranchA_GTail_two_scaled_ge
+    {p u y : ℕ}
+    (hp_gt_two : 2 < p) :
+    DkMath.CosmicFormula.GTail p 2 u y ≤
+      DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y := by
+  unfold DkMath.CosmicFormula.GTail
+  apply Finset.sum_le_sum
+  intro k hk
+  have hp_pos : 0 < p := lt_trans (by decide : 0 < 2) hp_gt_two
+  have hu_le : u ≤ p ^ p * u := by
+    calc
+      u = 1 * u := by simp
+      _ ≤ p ^ p * u := by
+        apply Nat.mul_le_mul_right
+        exact Nat.succ_le_of_lt (Nat.pow_pos hp_pos)
+  have hpow : u ^ k ≤ (p ^ p * u) ^ k := Nat.pow_le_pow_left hu_le k
+  have hmul1 :
+      (Nat.choose p (2 + k) : ℕ) * u ^ k ≤
+        (Nat.choose p (2 + k) : ℕ) * (p ^ p * u) ^ k := by
+    exact Nat.mul_le_mul_left _ hpow
+  have hmul2 :
+      ((Nat.choose p (2 + k) : ℕ) * u ^ k) * y ^ (p - (2 + k)) ≤
+        ((Nat.choose p (2 + k) : ℕ) * (p ^ p * u) ^ k) * y ^ (p - (2 + k)) := by
+    exact Nat.mul_le_mul_right _ hmul1
+  simpa [Nat.mul_assoc] using hmul2
+
+/--
+`GTail p 2 (p^p * u) y` と `GTail p 2 u y` の差は `u` の倍数に分解できる。
+-/
+theorem primeGe5BranchA_GTail_two_scaled_exists_error
+    {p u y : ℕ}
+    (hp_gt_two : 2 < p) :
+    ∃ E : ℕ,
+      DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y =
+        DkMath.CosmicFormula.GTail p 2 u y + u * E := by
+  have hle :
+      DkMath.CosmicFormula.GTail p 2 u y ≤
+        DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y :=
+    primeGe5BranchA_GTail_two_scaled_ge (p := p) (u := u) (y := y) hp_gt_two
+  have hmod :
+      DkMath.CosmicFormula.GTail p 2 u y ≡
+        DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y [MOD u] :=
+    (primeGe5BranchA_GTail_two_scaled_modEq (p := p) (u := u) (y := y) hp_gt_two).symm
+  rcases (Nat.modEq_iff_dvd' hle).1 hmod with ⟨E, hE⟩
+  refine ⟨E, ?_⟩
+  simpa [Nat.add_comm] using (Nat.sub_eq_iff_eq_add hle).1 hE
+
+/--
 comparison 段が与えられれば、
 `B`
 と
@@ -1212,6 +1298,36 @@ theorem primeGe5BranchAValuationPeelTailModEq_of_exact
 theorem primeGe5BranchAValuationPeelTailModEq_default :
     PrimeGe5BranchAValuationPeelTailModEqTarget :=
   primeGe5BranchAValuationPeelTailModEq_of_exact
+    (primeGe5BranchAValuationPeelTailExact_of_comparison
+      primeGe5BranchAValuationPeelTailComparison_default)
+
+/-- exact-error 版の default 実装。 -/
+theorem primeGe5BranchAValuationPeelTailError_of_exact
+    (hExact : PrimeGe5BranchAValuationPeelTailExactTarget) :
+    PrimeGe5BranchAValuationPeelTailErrorTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd
+  rcases hExact hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd with
+    ⟨t1, B, C, ht, hTailB, hTailC⟩
+  have hp_gt_two : 2 < p := lt_of_lt_of_le (by decide : 2 < 5) hpack.hp5
+  let u : ℕ := p ^ (p - 1) * t1 ^ p
+  have hgap_peel : z - y = p ^ p * u := by
+    unfold u
+    calc
+      z - y = p ^ (p - 1) * t ^ p := hgap
+      _ = p ^ (p - 1) * (p * t1) ^ p := by rw [ht]
+      _ = p ^ (p - 1) * (p ^ p * t1 ^ p) := by rw [Nat.mul_pow]
+      _ = p ^ p * (p ^ (p - 1) * t1 ^ p) := by ac_rfl
+  rcases primeGe5BranchA_GTail_two_scaled_exists_error (p := p) (u := u) (y := y) hp_gt_two with
+    ⟨E, hE⟩
+  refine ⟨t1, B, C, E, ht, ?_⟩
+  rw [← hTailB, ← hTailC]
+  rw [hgap_peel]
+  simpa [u, Nat.add_comm, Nat.add_left_comm, Nat.add_assoc] using hE
+
+/-- exact-error comparison 段の default 実装。 -/
+theorem primeGe5BranchAValuationPeelTailError_default :
+    PrimeGe5BranchAValuationPeelTailErrorTarget :=
+  primeGe5BranchAValuationPeelTailError_of_exact
     (primeGe5BranchAValuationPeelTailExact_of_comparison
       primeGe5BranchAValuationPeelTailComparison_default)
 
