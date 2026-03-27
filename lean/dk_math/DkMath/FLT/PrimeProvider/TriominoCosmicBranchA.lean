@@ -436,6 +436,32 @@ abbrev PrimeGe5BranchAPrimitivePacketDescentTarget : Prop :=
     ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
 
 /--
+primitive route の first-order local target。
+
+付録:
+- `¬ p ∣ t`
+  だけではなく、
+  Branch A normal form から既に得られる
+  `y^(p-1) ≡ 1 [MOD p^2]`
+  を明示入力として受ける。
+- primitive mainline の本体が本当に欲している追加数論情報を、
+  packet descent 契約から一段切り出した形である。
+-/
+abbrev PrimeGe5BranchAPrimitiveWieferichPacketTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
+
+/--
 Branch A normal form から直接、
 より小さい Branch A 反例を構成する stronger target。
 
@@ -3765,6 +3791,25 @@ theorem primeGe5BranchASmallerPacket_of_routes
   by_cases hpt : p ∣ t
   · exact hPeel hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hpt
   · exact hPrim hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hpt
+
+/--
+Wieferich witness 付き primitive local target があれば、
+primitive packet descent 契約は自動で従う。
+
+付録:
+- `PrimeGe5BranchAPrimitivePacketDescentTarget`
+  の truly new 部分を、
+  `y^(p-1) ≡ 1 [MOD p^2]`
+  を明示引数に取る primitive core 1 本へ局所化する。
+- witness 自体は Branch A normal form から既に得られる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_wieferichPacket
+    (hPrim : PrimeGe5BranchAPrimitiveWieferichPacketTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t
+  exact hPrim hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t
+    (primeGe5BranchANormalForm_y_wieferich_mod_p_sq hpack hp_dvd_gap hgap hsGN)
 
 /--
 valuation peel を error-lift 1 本に局所化した smaller-packet bridge。

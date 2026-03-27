@@ -1354,6 +1354,10 @@ abbrev BranchAValuationPeelPacketFromErrorAdapterTarget : Prop :=
 abbrev BranchAPrimitivePacketDescentAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitivePacketDescentTarget
 
+/-- `p ∤ t` primitive route の witness 付き local core を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveWieferichPacketAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveWieferichPacketTarget
+
 /--
 local kernel から最後の witness adapter を回収する thin bridge。
 -/
@@ -1432,6 +1436,15 @@ theorem branchAWieferichAdapter_of_primitiveMainline
     (hPrim : BranchAPrimitivePacketDescentAdapterTarget) :
     BranchAWieferichAdapterTarget :=
   branchAWieferichAdapter_of_errorLift_and_primitive hErr hLift hPrim
+
+/--
+witness 付き primitive local core から、
+primitive packet descent adapter を回収する thin bridge。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_wieferichPacket
+    (hPrim : BranchAPrimitiveWieferichPacketAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_wieferichPacket hPrim
 
 /--
 暫定 concrete adapter for the Branch A Wieferich witness route.
