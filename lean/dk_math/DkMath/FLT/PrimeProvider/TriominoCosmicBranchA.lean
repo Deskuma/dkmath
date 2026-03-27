@@ -96,6 +96,368 @@ abbrev PrimeGe5BranchAWieferichRefuterTarget : Prop :=
     False
 
 /--
+Branch A / Wieferich route の local kernel。
+
+Wieferich witness 単独ではなく、
+Branch A normal form
+`gap = p^(p-1) * t^p`, `GN = p * s^p`, `x = p * (t * s)`
+および局所 coprime 情報と合わせて refute する中間契約である。
+-/
+abbrev PrimeGe5BranchAWieferichLocalKernelTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    False
+
+/-- Branch A 条件付きで `z` 最小の prime-ge5 反例 pack。 -/
+abbrev MinimalPrimeGe5CounterexamplePackA (p x y z : ℕ) : Prop :=
+  PrimeGe5CounterexamplePack p x y z ∧ p ∣ (z - y) ∧
+  ∀ {x' y' z' : ℕ}, PrimeGe5CounterexamplePack p x' y' z' →
+    p ∣ (z' - y') → z' < z → False
+
+/--
+Branch A normal form を 1 パケットとして保持する構造体。
+
+付録:
+- smaller counterexample を直接返す前に、
+  まずは smaller normal-form packet を返す target を切るほうが自然な場合がある。
+- `PrimeGe5CounterexamplePack` への再包装は `pack` で既に持っている。
+-/
+structure PrimeGe5BranchANormalFormPacket (p : ℕ) where
+  x : ℕ
+  y : ℕ
+  z : ℕ
+  t : ℕ
+  s : ℕ
+  pack : PrimeGe5CounterexamplePack p x y z
+  hp_dvd_gap : p ∣ (z - y)
+  hgap : z - y = p ^ (p - 1) * t ^ p
+  hsGN : GN p (z - y) y = p * s ^ p
+  hsx : x = p * (t * s)
+
+/-- Branch A normal-form packet から反例 pack を取り出すだけの補題。 -/
+theorem counterexamplePack_of_branchANormalFormPacket
+    {p : ℕ} (pkt : PrimeGe5BranchANormalFormPacket p) :
+    PrimeGe5CounterexamplePack p pkt.x pkt.y pkt.z :=
+  pkt.pack
+
+/--
+Branch A 専用の truly new kernel 候補。
+
+Wieferich witness 自体ではなく、
+`q = p` が distinguished prime になる Branch A normal form から
+より小さい Branch A 反例を構成できることを要求する。
+-/
+abbrev PrimeGe5BranchADistinguishedPrimeDescentTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, MinimalPrimeGe5CounterexamplePackA p x y z →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ∃ x' y' z' : ℕ,
+      PrimeGe5CounterexamplePack p x' y' z' ∧ p ∣ (z' - y') ∧ z' < z
+
+/--
+Branch A normal form から、
+より小さい Branch A normal-form packet を直接返す stronger target。
+
+付録:
+- `PrimeGe5BranchASmallerCounterexampleTarget` に比べて、
+  smaller packet の情報 `t'`, `s'`, `hgap`, `hsGN`, `hsx` まで保持できる。
+- concrete 数学としては、
+  まずこちらを埋めてから counterexample target へ落とすほうが自然な場合がある。
+-/
+abbrev PrimeGe5BranchASmallerPacketTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
+
+/--
+`p ∣ t` のとき、余分な distinguished-prime 深さを 1 段剥いて
+smaller packet を返す route。
+
+付録:
+- これは Nat / valuation 層で完結する候補契約である。
+- `PrimeGe5BranchASmallerPacketTarget` のうち
+  `p ∣ t`
+  分岐だけを切り出している。
+-/
+abbrev PrimeGe5BranchAValuationPeelPacketTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
+
+/--
+valuation peel route の直前段階となる seed contract。
+
+付録:
+- `p ∣ t` のとき、
+  `s^p - y^(p-1)` が `p^(2p-1)` と `t1^p` を因子にもつ形へ落ちることを要求する。
+- smaller packet の再構成自体はまだ要求しない。
+-/
+abbrev PrimeGe5BranchAValuationPeelSeedTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ t1 B : ℕ, t = p * t1 ∧ s ^ p = y ^ (p - 1) + p ^ (2 * p - 1) * (t1 ^ p * B)
+
+/--
+valuation peel route の canonical tail 契約。
+
+付録:
+- `p ∣ t` のとき、
+  `t = p * t1`
+  に剥いたあとで
+  `GN(p, p^(p-1) * t1^p, y)`
+  自体を宇宙式の canonical tail 展開で読めることを要求する。
+- これは seed から packet へ直接跳ぶ前に、
+  `GN/p`
+  の標準 tail と比較するための中間契約である。
+-/
+abbrev PrimeGe5BranchAValuationPeelCanonicalTailTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ t1 C : ℕ,
+      t = p * t1 ∧
+      GN p (p ^ (p - 1) * t1 ^ p) y =
+        p * y ^ (p - 1) + (p ^ (p - 1) * t1 ^ p) * C
+
+/--
+valuation peel route の tail comparison 契約。
+
+付録:
+- seed 側の tail 係数 `B` と、
+  canonical tail 側の係数 `C`
+  を同じ `t1`
+  で比較可能な形に並べて返す。
+- この段階ではまだ
+  `B = C`
+  や
+  `C = p^p * B`
+  のような stronger relation は要求しない。
+  不足情報を exact に可視化するための中間契約である。
+-/
+abbrev PrimeGe5BranchAValuationPeelTailComparisonTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ t1 B C : ℕ,
+      t = p * t1 ∧
+      s ^ p = y ^ (p - 1) + p ^ (2 * p - 1) * (t1 ^ p * B) ∧
+      GN p (p ^ (p - 1) * t1 ^ p) y =
+        p * y ^ (p - 1) + (p ^ (p - 1) * t1 ^ p) * C
+
+/--
+valuation peel comparison の first exact output。
+
+付録:
+- `B`
+  と
+  `C`
+  が実際にどの `GTail p 2`
+  係数を表しているかを固定する。
+- これにより
+  `B`
+  と
+  `C`
+  の relation は、
+  2 つの `GTail`
+  の relation として読み替えられる。
+-/
+abbrev PrimeGe5BranchAValuationPeelTailExactTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ t1 B C : ℕ,
+      t = p * t1 ∧
+      DkMath.CosmicFormula.GTail p 2 (z - y) y = p * B ∧
+      DkMath.CosmicFormula.GTail p 2 (p ^ (p - 1) * t1 ^ p) y = C
+
+/--
+valuation peel comparison の mod-level output。
+
+付録:
+- exact tail identity を使って、
+  最終的に見たい
+  `p * B ≡ C [MOD p^(p-1) * t1^p]`
+  を返す契約である。
+- `analysis-BC.md`
+  の first formal target に対応する。
+-/
+abbrev PrimeGe5BranchAValuationPeelTailModEqTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ t1 B C : ℕ,
+      t = p * t1 ∧
+      p * B ≡ C [MOD p ^ (p - 1) * t1 ^ p]
+
+/--
+valuation peel comparison の exact error decomposition。
+
+付録:
+- `analysis-BC.md`
+  の
+  `p * B = C + u * E`
+  型の first-order 差分分解に対応する。
+- nat 上では
+  `C = p * B + u * E`
+  ではなく、
+  大きい gap 側係数が canonical 側以上であることを使って
+  `p * B = C + u * E`
+  と書くのが自然である。
+-/
+abbrev PrimeGe5BranchAValuationPeelTailErrorTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ t1 B C E : ℕ,
+      t = p * t1 ∧
+      p * B = C + (p ^ (p - 1) * t1 ^ p) * E
+
+/--
+valuation peel route の最後の unresolved lift。
+
+付録:
+- valuation peel を `obstruction extraction`
+  として読むなら、
+  未完数学は
+  `PrimeGe5BranchAValuationPeelTailErrorTarget`
+  の error term から
+  smaller packet
+  を起こすこの 1 本に集約できる。
+- primitive route と分離して扱うための target である。
+-/
+abbrev PrimeGe5BranchAValuationPeelPacketFromErrorTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∀ {t1 B C E : ℕ},
+      t = p * t1 →
+      p * B = C + (p ^ (p - 1) * t1 ^ p) * E →
+      ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
+
+/--
+`p ∤ t` の primitive core に入った後、
+cyclotomic / distinguished-prime descent で smaller packet を返す route。
+
+付録:
+- これは Nat 直操作よりも algebraic descent を置くべき側の契約である。
+- `PrimeGe5BranchASmallerPacketTarget` のうち
+  `¬ p ∣ t`
+  分岐だけを切り出している。
+-/
+abbrev PrimeGe5BranchAPrimitivePacketDescentTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
+
+/--
+Branch A normal form から直接、
+より小さい Branch A 反例を構成する stronger target。
+
+付録:
+- concrete 数学としては、minimality を仮定するよりこちらを直接埋めるほうが自然な可能性が高い。
+- `PrimeGe5BranchADistinguishedPrimeDescentTarget` は、この stronger target から
+  no-`sorry` で回収できる。
+-/
+abbrev PrimeGe5BranchASmallerCounterexampleTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ∃ x' y' z' : ℕ,
+      PrimeGe5CounterexamplePack p x' y' z' ∧ p ∣ (z' - y') ∧ z' < z
+
+/--
 Branch A の shape 値を refute する lower-layer 契約。
 
 ここを clean な descent/shrink kernel で埋めれば、
@@ -456,6 +818,665 @@ theorem primeGe5BranchA_spow_eq_head_add_p_sq_mul
     rw [← hsGN, hM]
     ring
   exact Nat.eq_of_mul_eq_mul_left hp_pos hEq
+
+/--
+Branch A では、`s^p - y^(p-1)` 自体が gap `z - y` を 1 因子持つ。
+
+付録:
+- `GN = p * s^p` を `p` で 1 回割ったあと、
+  tail 側に残る各項は `k ≥ 1` なので必ず `z - y` を 1 因子含む。
+- valuation peel route では、この theorem を
+  `z - y = p^(p-1) * t^p`
+  と組み合わせて使う。
+-/
+theorem primeGe5BranchA_spow_eq_head_add_gap_mul
+    {p x y z s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    ∃ B : ℕ, s ^ p = y ^ (p - 1) + (z - y) * B := by
+  let u : ℕ := z - y
+  let N : ℕ := GN p u y
+  let A : ℕ := p * y ^ (p - 1)
+  let T : ℕ := Finset.sum ((Finset.range p).erase 0) (fun k =>
+    (Nat.choose p (k + 1) : ℕ) * u ^ k * y ^ (p - 1 - k))
+  have hp_pos : 0 < p := hpack.hp.pos
+  have hu_pos : 0 < u := by
+    unfold u
+    exact Nat.sub_pos_of_lt hpack.hyz_lt
+  have hu_ne_zero : u ≠ 0 := Nat.ne_of_gt hu_pos
+  obtain ⟨a, ha0⟩ : ∃ a : ℕ, u = a * p := exists_eq_mul_left_of_dvd hp_dvd_gap
+  have ha : u = p * a := by simpa [Nat.mul_comm] using ha0
+  have hsplitTA : T + A = N := by
+    let f : ℕ → ℕ := fun k =>
+      (Nat.choose p (k + 1) : ℕ) * (z - y) ^ k * y ^ (p - 1 - k)
+    have hsum :
+        Finset.sum ((Finset.range p).erase 0) f + f 0 = Finset.sum (Finset.range p) f := by
+      simpa using
+        (Finset.sum_erase_add (s := Finset.range p) (f := f) (a := 0)
+          (by simpa using hp_pos))
+    unfold N
+    rw [GN_eq_sum]
+    unfold A T u
+    simpa [f, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using hsum
+  have hsplit : N = A + T := by
+    simpa [Nat.add_comm] using hsplitTA.symm
+  have hT_dvd : p * u ∣ T := by
+    unfold T
+    refine Finset.dvd_sum ?_
+    intro k hk
+    have hk_mem : k ∈ Finset.range p := Finset.mem_of_mem_erase hk
+    have hk_ne_zero : k ≠ 0 := Finset.mem_erase.mp hk |>.1
+    have hk_ge_one : 1 ≤ k := Nat.succ_le_iff.mpr (Nat.pos_of_ne_zero hk_ne_zero)
+    by_cases hk_one : k = 1
+    · have hchoose : p ∣ Nat.choose p (k + 1) := by
+        rw [hk_one]
+        apply hpack.hp.dvd_choose_self
+        · decide
+        · exact lt_of_lt_of_le (by decide : 2 < 5) hpack.hp5
+      obtain ⟨c, hc0⟩ : ∃ c : ℕ, Nat.choose p (k + 1) = c * p :=
+        exists_eq_mul_left_of_dvd hchoose
+      have hc : Nat.choose p (k + 1) = p * c := by
+        simpa [Nat.mul_comm] using hc0
+      have hc2 : Nat.choose p 2 = p * c := by
+        simpa [hk_one] using hc
+      refine ⟨c * y ^ (p - 1 - k), ?_⟩
+      calc
+        (Nat.choose p (k + 1) : ℕ) * u ^ k * y ^ (p - 1 - k)
+            = ((p * c) * u) * y ^ (p - 1 - k) := by
+                rw [hk_one, hc2]
+                simp [u, Nat.mul_assoc]
+        _ = (p * u) * (c * y ^ (p - 1 - k)) := by
+              ac_rfl
+    · have hk_ge_two : 2 ≤ k := by omega
+      have hk_decomp : k = (k - 2) + 2 := by omega
+      have hu2 : u ^ 2 = (p * u) * a := by
+        calc
+          u ^ 2 = u * u := by simp [pow_two]
+          _ = (p * a) * u := by simp [ha]
+          _ = (p * u) * a := by ac_rfl
+      refine ⟨(Nat.choose p (k + 1) : ℕ) * u ^ (k - 2) * a * y ^ (p - 1 - k), ?_⟩
+      calc
+        (Nat.choose p (k + 1) : ℕ) * u ^ k * y ^ (p - 1 - k)
+            = (Nat.choose p (k + 1) : ℕ) * (u ^ (k - 2) * u ^ 2) * y ^ (p - 1 - k) := by
+                rw [hk_decomp, pow_add]
+                simp
+        _ = (Nat.choose p (k + 1) : ℕ) * (u ^ (k - 2) * ((p * u) * a)) * y ^ (p - 1 - k) := by
+              rw [hu2]
+        _ = (p * u) * ((Nat.choose p (k + 1) : ℕ) * u ^ (k - 2) * a * y ^ (p - 1 - k)) := by
+              ac_rfl
+  obtain ⟨B, hB0⟩ : ∃ B : ℕ, T = B * (p * u) := exists_eq_mul_left_of_dvd hT_dvd
+  have hB : T = (p * u) * B := by
+    simpa [Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using hB0
+  refine ⟨B, ?_⟩
+  have hEq : p * s ^ p = p * (y ^ (p - 1) + u * B) := by
+    calc
+      p * s ^ p = N := by simpa [N, u] using hsGN.symm
+      _ = A + T := hsplit
+      _ = p * y ^ (p - 1) + (p * u) * B := by rw [hB]
+      _ = p * (y ^ (p - 1) + u * B) := by ring
+  exact Nat.eq_of_mul_eq_mul_left hp_pos hEq
+
+/--
+`z - y = p^(p-1) * t^p` と組み合わせた gap-factor seed。
+
+付録:
+- `s^p - y^(p-1)` が
+  `p^(p-1) * t^p`
+  を 1 因子持つことを直接読むための theorem である。
+- valuation peel route の seed として使う。
+-/
+theorem primeGe5BranchA_spow_eq_head_add_gapShape_mul
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    ∃ B : ℕ, s ^ p = y ^ (p - 1) + (p ^ (p - 1) * t ^ p) * B := by
+  rcases primeGe5BranchA_spow_eq_head_add_gap_mul hpack hp_dvd_gap hsGN with ⟨B, hB⟩
+  refine ⟨B, ?_⟩
+  rw [hB, hgap]
+
+/--
+`p ∣ t` なら、gap-shape の distinguished-prime 深さを 1 段剥ける。
+-/
+theorem primeGe5BranchA_gapShape_peel_of_dvd_t
+    {p t : ℕ}
+    (ht_dvd : p ∣ t) :
+    ∃ t1 : ℕ, t = p * t1 ∧ p ^ (p - 1) * t ^ p = p ^ (2 * p - 1) * t1 ^ p := by
+  obtain ⟨t1, ht0⟩ : ∃ t1 : ℕ, t = t1 * p := exists_eq_mul_left_of_dvd ht_dvd
+  have ht : t = p * t1 := by simpa [Nat.mul_comm] using ht0
+  refine ⟨t1, ht, ?_⟩
+  calc
+    p ^ (p - 1) * t ^ p = p ^ (p - 1) * ((p * t1) ^ p) := by rw [ht]
+    _ = p ^ (p - 1) * (p ^ p * t1 ^ p) := by rw [Nat.mul_pow]
+    _ = (p ^ (p - 1) * p ^ p) * t1 ^ p := by ac_rfl
+    _ = p ^ ((p - 1) + p) * t1 ^ p := by rw [← Nat.pow_add]
+    _ = p ^ (2 * p - 1) * t1 ^ p := by
+      have hExp : (p - 1) + p = 2 * p - 1 := by omega
+      simp [hExp]
+
+/--
+`p ∣ t` の valuation peel route に入るための concrete seed。
+
+付録:
+- これは `PrimeGe5BranchAValuationPeelSeedTarget` の default 実装である。
+- smaller packet 自体はまだ構成しないが、
+  `t = p * t1` と
+  `s^p - y^(p-1)` の高い `p`-冪因子を同時に返す。
+-/
+theorem primeGe5BranchAValuationPeelSeed_default :
+    PrimeGe5BranchAValuationPeelSeedTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd
+  let _ := hsx
+  let _ := hcop_ts
+  let _ := hcop_ty
+  let _ := hcop_sy
+  let _ := hp_not_dvd_s
+  rcases primeGe5BranchA_gapShape_peel_of_dvd_t ht_dvd with ⟨t1, ht, hpeel⟩
+  rcases primeGe5BranchA_spow_eq_head_add_gapShape_mul hpack hp_dvd_gap hgap hsGN with ⟨B, hB⟩
+  refine ⟨t1, B, ht, ?_⟩
+  calc
+    s ^ p = y ^ (p - 1) + (p ^ (p - 1) * t ^ p) * B := hB
+    _ = y ^ (p - 1) + (p ^ (2 * p - 1) * t1 ^ p) * B := by rw [hpeel]
+    _ = y ^ (p - 1) + p ^ (2 * p - 1) * (t1 ^ p * B) := by ac_rfl
+
+/--
+`p ∣ t` で 1 段剥いた canonical gap
+`p^(p-1) * t1^p`
+に対する `GN/p` tail の explicit 展開。
+
+付録:
+- これは `consider-005.md` でいう
+  `seed -> canonical tail`
+  の最初の concrete 実装である。
+- まだ packet を返さず、
+  宇宙式の標準 tail そのものを露出させる。
+-/
+theorem primeGe5BranchAValuationPeelCanonicalTail_default :
+    PrimeGe5BranchAValuationPeelCanonicalTailTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd
+  let _ := hp_dvd_gap
+  let _ := hgap
+  let _ := hsGN
+  let _ := hsx
+  let _ := hcop_ts
+  let _ := hcop_ty
+  let _ := hcop_sy
+  let _ := hp_not_dvd_s
+  rcases primeGe5BranchA_gapShape_peel_of_dvd_t ht_dvd with ⟨t1, ht, _hpeel⟩
+  refine ⟨t1, DkMath.CosmicFormula.GTail p 2 (p ^ (p - 1) * t1 ^ p) y, ht, ?_⟩
+  have hp_gt_one : 1 < p := lt_of_lt_of_le (by decide : 1 < 5) hpack.hp5
+  calc
+    GN p (p ^ (p - 1) * t1 ^ p) y
+        = (Nat.choose p 1 : ℕ) * y ^ (p - 1)
+            + (p ^ (p - 1) * t1 ^ p) *
+              DkMath.CosmicFormula.GTail p 2 (p ^ (p - 1) * t1 ^ p) y := by
+            simpa [GN] using
+              (DkMath.CosmicFormula.GN_tail_rec
+                (d := p) (x := p ^ (p - 1) * t1 ^ p) (u := y) hp_gt_one)
+    _ = p * y ^ (p - 1)
+          + (p ^ (p - 1) * t1 ^ p) *
+            DkMath.CosmicFormula.GTail p 2 (p ^ (p - 1) * t1 ^ p) y := by
+          simp
+
+/--
+seed と canonical tail が揃えば、
+valuation peel route の比較段は thin bridge で閉じる。
+
+付録:
+- ここで露出する本当の数学差分は
+  `B`
+  と
+  `C`
+  の関係だけである。
+- 以後の段階分解では、
+  `PrimeGe5BranchAValuationPeelTailComparisonTarget`
+  を packet route の直前段として扱える。
+-/
+theorem primeGe5BranchAValuationPeelTailComparison_of_seed_and_canonical
+    (hSeed : PrimeGe5BranchAValuationPeelSeedTarget)
+    (hCanon : PrimeGe5BranchAValuationPeelCanonicalTailTarget) :
+    PrimeGe5BranchAValuationPeelTailComparisonTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd
+  rcases hSeed hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd with
+    ⟨t1, B, ht, hB⟩
+  rcases hCanon hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd with
+    ⟨t1', C, ht', hC⟩
+  have ht1_eq : t1 = t1' := by
+    apply Nat.eq_of_mul_eq_mul_left hpack.hp.pos
+    rw [← ht, ← ht']
+  subst t1'
+  exact ⟨t1, B, C, ht, hB, hC⟩
+
+/-- comparison 段の default 実装。 -/
+theorem primeGe5BranchAValuationPeelTailComparison_default :
+    PrimeGe5BranchAValuationPeelTailComparisonTarget :=
+  primeGe5BranchAValuationPeelTailComparison_of_seed_and_canonical
+    primeGe5BranchAValuationPeelSeed_default
+    primeGe5BranchAValuationPeelCanonicalTail_default
+
+/--
+`s^p = y^(p-1) + gap * B` と `GN p gap y = p * s^p` を合わせると、
+`GTail p 2 gap y = p * B` となる。
+-/
+theorem primeGe5BranchA_gapTail_eq_p_mul_of_gapMul
+    {p x y z s B : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hB : s ^ p = y ^ (p - 1) + (z - y) * B) :
+    DkMath.CosmicFormula.GTail p 2 (z - y) y = p * B := by
+  have hp_gt_one : 1 < p := lt_of_lt_of_le (by decide : 1 < 5) hpack.hp5
+  have hgap_pos : 0 < z - y := Nat.sub_pos_of_lt hpack.hyz_lt
+  have hrec :
+      GN p (z - y) y =
+        p * y ^ (p - 1) + (z - y) * DkMath.CosmicFormula.GTail p 2 (z - y) y := by
+    calc
+      GN p (z - y) y
+          = (Nat.choose p 1 : ℕ) * y ^ (p - 1)
+              + (z - y) * DkMath.CosmicFormula.GTail p 2 (z - y) y := by
+              simpa [GN] using
+                (DkMath.CosmicFormula.GN_tail_rec (d := p) (x := z - y) (u := y) hp_gt_one)
+      _ = p * y ^ (p - 1) + (z - y) * DkMath.CosmicFormula.GTail p 2 (z - y) y := by
+            simp
+  have hEq :
+      p * y ^ (p - 1) + (z - y) * DkMath.CosmicFormula.GTail p 2 (z - y) y =
+        p * y ^ (p - 1) + (z - y) * (p * B) := by
+    calc
+      p * y ^ (p - 1) + (z - y) * DkMath.CosmicFormula.GTail p 2 (z - y) y
+          = GN p (z - y) y := by simpa using hrec.symm
+      _ = p * s ^ p := hsGN
+      _ = p * (y ^ (p - 1) + (z - y) * B) := by rw [hB]
+      _ = p * y ^ (p - 1) + (z - y) * (p * B) := by ring
+  have hMul :
+      (z - y) * DkMath.CosmicFormula.GTail p 2 (z - y) y =
+        (z - y) * (p * B) := by
+    exact Nat.add_left_cancel hEq
+  exact Nat.eq_of_mul_eq_mul_left hgap_pos hMul
+
+/--
+`GN p u y = p * y^(p-1) + u * C` なら、
+`C` は正確に `GTail p 2 u y` である。
+-/
+theorem primeGe5BranchA_canonicalTail_eq_coeff_of_expansion
+    {p u y C : ℕ}
+    (hp_gt_one : 1 < p)
+    (hu_pos : 0 < u)
+    (hC : GN p u y = p * y ^ (p - 1) + u * C) :
+    DkMath.CosmicFormula.GTail p 2 u y = C := by
+  have hrec :
+      GN p u y =
+        p * y ^ (p - 1) + u * DkMath.CosmicFormula.GTail p 2 u y := by
+    calc
+      GN p u y
+          = (Nat.choose p 1 : ℕ) * y ^ (p - 1)
+              + u * DkMath.CosmicFormula.GTail p 2 u y := by
+              simpa [GN] using
+                (DkMath.CosmicFormula.GN_tail_rec (d := p) (x := u) (u := y) hp_gt_one)
+      _ = p * y ^ (p - 1) + u * DkMath.CosmicFormula.GTail p 2 u y := by simp
+  have hEq :
+      p * y ^ (p - 1) + u * DkMath.CosmicFormula.GTail p 2 u y =
+        p * y ^ (p - 1) + u * C := by
+    rw [← hrec, hC]
+  have hMul :
+      u * DkMath.CosmicFormula.GTail p 2 u y = u * C := by
+    exact Nat.add_left_cancel hEq
+  exact Nat.eq_of_mul_eq_mul_left hu_pos hMul
+
+/--
+`GTail p 2` は、`x = u` と `x = p^p * u` とで `mod u` では一致する。
+
+付録:
+- `GTail p 2 x y = head + x * GTail p 3 x y`
+  の `head`
+  は `x` に依らないので、
+  `mod u`
+  では両者とも同じ residue を持つ。
+-/
+theorem primeGe5BranchA_GTail_two_scaled_modEq
+    {p u y : ℕ}
+    (hp_gt_two : 2 < p) :
+    DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y ≡
+      DkMath.CosmicFormula.GTail p 2 u y [MOD u] := by
+  let A : ℕ := (Nat.choose p 2 : ℕ) * y ^ (p - 2)
+  have hScaled :
+      DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y =
+        A + u * (p ^ p * DkMath.CosmicFormula.GTail p 3 (p ^ p * u) y) := by
+    calc
+      DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y
+          = (Nat.choose p 2 : ℕ) * y ^ (p - 2)
+              + (p ^ p * u) * DkMath.CosmicFormula.GTail p 3 (p ^ p * u) y := by
+                simpa using
+                  (DkMath.CosmicFormula.GTail_rec
+                    (d := p) (r := 2) (x := p ^ p * u) (u := y) hp_gt_two)
+      _ = A + u * (p ^ p * DkMath.CosmicFormula.GTail p 3 (p ^ p * u) y) := by
+            unfold A
+            ac_rfl
+  have hCanon :
+      DkMath.CosmicFormula.GTail p 2 u y =
+        A + u * DkMath.CosmicFormula.GTail p 3 u y := by
+    calc
+      DkMath.CosmicFormula.GTail p 2 u y
+          = (Nat.choose p 2 : ℕ) * y ^ (p - 2)
+              + u * DkMath.CosmicFormula.GTail p 3 u y := by
+                simpa using
+                  (DkMath.CosmicFormula.GTail_rec
+                    (d := p) (r := 2) (x := u) (u := y) hp_gt_two)
+      _ = A + u * DkMath.CosmicFormula.GTail p 3 u y := by rfl
+  have hmodScaled : A ≡ DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y [MOD u] := by
+    have hle : A ≤ DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y := by
+      rw [hScaled]
+      exact Nat.le_add_right _ _
+    exact (Nat.modEq_iff_dvd' hle).2 ⟨p ^ p * DkMath.CosmicFormula.GTail p 3 (p ^ p * u) y, by
+      rw [hScaled]
+      simp [A, Nat.mul_left_comm, Nat.mul_comm]⟩
+  have hmodCanon : A ≡ DkMath.CosmicFormula.GTail p 2 u y [MOD u] := by
+    have hle : A ≤ DkMath.CosmicFormula.GTail p 2 u y := by
+      rw [hCanon]
+      exact Nat.le_add_right _ _
+    exact (Nat.modEq_iff_dvd' hle).2 ⟨DkMath.CosmicFormula.GTail p 3 u y, by
+      rw [hCanon]
+      simp [A]⟩
+  exact hmodScaled.symm.trans hmodCanon
+
+/--
+`GTail p 2` は、`x = p^p * u` の方が `x = u` より大きい。
+
+付録:
+- `analysis-BC.md`
+  の exact-error 版
+  `p * B = C + u * E`
+  を nat 上で書くための順序補題である。
+-/
+theorem primeGe5BranchA_GTail_two_scaled_ge
+    {p u y : ℕ}
+    (hp_gt_two : 2 < p) :
+    DkMath.CosmicFormula.GTail p 2 u y ≤
+      DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y := by
+  unfold DkMath.CosmicFormula.GTail
+  apply Finset.sum_le_sum
+  intro k hk
+  have hp_pos : 0 < p := lt_trans (by decide : 0 < 2) hp_gt_two
+  have hu_le : u ≤ p ^ p * u := by
+    calc
+      u = 1 * u := by simp
+      _ ≤ p ^ p * u := by
+        apply Nat.mul_le_mul_right
+        exact Nat.succ_le_of_lt (Nat.pow_pos hp_pos)
+  have hpow : u ^ k ≤ (p ^ p * u) ^ k := Nat.pow_le_pow_left hu_le k
+  have hmul1 :
+      (Nat.choose p (2 + k) : ℕ) * u ^ k ≤
+        (Nat.choose p (2 + k) : ℕ) * (p ^ p * u) ^ k := by
+    exact Nat.mul_le_mul_left _ hpow
+  have hmul2 :
+      ((Nat.choose p (2 + k) : ℕ) * u ^ k) * y ^ (p - (2 + k)) ≤
+        ((Nat.choose p (2 + k) : ℕ) * (p ^ p * u) ^ k) * y ^ (p - (2 + k)) := by
+    exact Nat.mul_le_mul_right _ hmul1
+  simpa [Nat.mul_assoc] using hmul2
+
+/--
+`GTail p 3 u y` も、scaled 側に `p^p` を掛けたもの以下で抑えられる。
+
+付録:
+- `GTail p 2` の explicit error を
+  `GTail p 3`
+  で書くための補助順序補題である。
+-/
+theorem primeGe5BranchA_GTail_three_scaled_mul_ge
+    {p u y : ℕ}
+    (hp_gt_two : 2 < p) :
+    DkMath.CosmicFormula.GTail p 3 u y ≤
+      p ^ p * DkMath.CosmicFormula.GTail p 3 (p ^ p * u) y := by
+  unfold DkMath.CosmicFormula.GTail
+  have hsum :
+      ∑ k ∈ Finset.range (p + 1 - 3), ↑(p.choose (3 + k)) * u ^ k * y ^ (p - (3 + k)) ≤
+        ∑ k ∈ Finset.range (p + 1 - 3), ↑(p.choose (3 + k)) * (p ^ p * u) ^ k * y ^ (p - (3 + k)) := by
+    apply Finset.sum_le_sum
+    intro k hk
+    have hp_pos : 0 < p := lt_trans (by decide : 0 < 2) hp_gt_two
+    have hu_le : u ≤ p ^ p * u := by
+      calc
+        u = 1 * u := by simp
+        _ ≤ p ^ p * u := by
+          apply Nat.mul_le_mul_right
+          exact Nat.succ_le_of_lt (Nat.pow_pos hp_pos)
+    have hpow : u ^ k ≤ (p ^ p * u) ^ k := Nat.pow_le_pow_left hu_le k
+    have hmul1 :
+        (Nat.choose p (3 + k) : ℕ) * u ^ k ≤
+          (Nat.choose p (3 + k) : ℕ) * (p ^ p * u) ^ k := by
+      exact Nat.mul_le_mul_left _ hpow
+    have hmul2 :
+        ((Nat.choose p (3 + k) : ℕ) * u ^ k) * y ^ (p - (3 + k)) ≤
+          ((Nat.choose p (3 + k) : ℕ) * (p ^ p * u) ^ k) * y ^ (p - (3 + k)) := by
+      exact Nat.mul_le_mul_right _ hmul1
+    simpa [Nat.mul_assoc] using hmul2
+  have hp_pos : 0 < p := lt_trans (by decide : 0 < 2) hp_gt_two
+  calc
+    ∑ k ∈ Finset.range (p + 1 - 3), ↑(p.choose (3 + k)) * u ^ k * y ^ (p - (3 + k))
+      ≤ ∑ k ∈ Finset.range (p + 1 - 3), ↑(p.choose (3 + k)) * (p ^ p * u) ^ k * y ^ (p - (3 + k)) := hsum
+    _ ≤ p ^ p *
+        ∑ k ∈ Finset.range (p + 1 - 3), ↑(p.choose (3 + k)) * (p ^ p * u) ^ k * y ^ (p - (3 + k)) := by
+          exact Nat.le_mul_of_pos_left _ (Nat.pow_pos hp_pos)
+
+/--
+`GTail p 2 (p^p * u) y` と `GTail p 2 u y` の差は `u` の倍数に分解できる。
+-/
+theorem primeGe5BranchA_GTail_two_scaled_exists_error
+    {p u y : ℕ}
+    (hp_gt_two : 2 < p) :
+    ∃ E : ℕ,
+      DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y =
+        DkMath.CosmicFormula.GTail p 2 u y + u * E := by
+  have hle :
+      DkMath.CosmicFormula.GTail p 2 u y ≤
+        DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y :=
+    primeGe5BranchA_GTail_two_scaled_ge (p := p) (u := u) (y := y) hp_gt_two
+  have hmod :
+      DkMath.CosmicFormula.GTail p 2 u y ≡
+        DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y [MOD u] :=
+    (primeGe5BranchA_GTail_two_scaled_modEq (p := p) (u := u) (y := y) hp_gt_two).symm
+  rcases (Nat.modEq_iff_dvd' hle).1 hmod with ⟨E, hE⟩
+  refine ⟨E, ?_⟩
+  simpa [Nat.add_comm] using (Nat.sub_eq_iff_eq_add hle).1 hE
+
+/--
+`GTail p 2` の scaled/canonical 差分は、
+`GTail p 3`
+の差から explicit に書ける。
+
+付録:
+- existential `E` にとどめず、
+  `analysis-BC.md`
+  の error term がどこから来るかを式で固定する。
+- この式からは直ちに
+  `E = 0`
+  や
+  `p ∣ E`
+  は出ないため、
+  valuation peel はやはり obstruction measurement と読むのが自然である。
+-/
+theorem primeGe5BranchA_GTail_two_scaled_error_explicit
+    {p u y : ℕ}
+    (hp_gt_two : 2 < p) :
+    DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y =
+      DkMath.CosmicFormula.GTail p 2 u y +
+        u * (p ^ p * DkMath.CosmicFormula.GTail p 3 (p ^ p * u) y
+          - DkMath.CosmicFormula.GTail p 3 u y) := by
+  let A : ℕ := (Nat.choose p 2 : ℕ) * y ^ (p - 2)
+  let Ts : ℕ := DkMath.CosmicFormula.GTail p 3 (p ^ p * u) y
+  let Tc : ℕ := DkMath.CosmicFormula.GTail p 3 u y
+  have hScaled :
+      DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y = A + u * (p ^ p * Ts) := by
+    calc
+      DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y
+          = (Nat.choose p 2 : ℕ) * y ^ (p - 2) + (p ^ p * u) * Ts := by
+              simp [Ts]
+              simpa using
+                (DkMath.CosmicFormula.GTail_rec
+                  (d := p) (r := 2) (x := p ^ p * u) (u := y) hp_gt_two)
+      _ = A + u * (p ^ p * Ts) := by
+            simp [A, Ts]
+            ac_rfl
+  have hCanon :
+      DkMath.CosmicFormula.GTail p 2 u y = A + u * Tc := by
+    calc
+      DkMath.CosmicFormula.GTail p 2 u y
+          = (Nat.choose p 2 : ℕ) * y ^ (p - 2) + u * Tc := by
+              simp [Tc]
+              simpa using
+                (DkMath.CosmicFormula.GTail_rec
+                  (d := p) (r := 2) (x := u) (u := y) hp_gt_two)
+      _ = A + u * Tc := by simp [A, Tc]
+  have hTc_le : Tc ≤ p ^ p * Ts := by
+    simpa [Ts, Tc] using
+      (primeGe5BranchA_GTail_three_scaled_mul_ge (p := p) (u := u) (y := y) hp_gt_two)
+  have hmul_le : u * Tc ≤ u * (p ^ p * Ts) := Nat.mul_le_mul_left _ hTc_le
+  calc
+    DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y = A + u * (p ^ p * Ts) := hScaled
+    _ = A + (u * Tc + u * (p ^ p * Ts - Tc)) := by
+          rw [Nat.mul_sub_left_distrib, Nat.add_sub_of_le hmul_le]
+    _ = (A + u * Tc) + u * (p ^ p * Ts - Tc) := by ac_rfl
+    _ = DkMath.CosmicFormula.GTail p 2 u y
+          + u * (p ^ p * DkMath.CosmicFormula.GTail p 3 (p ^ p * u) y
+              - DkMath.CosmicFormula.GTail p 3 u y) := by
+          rw [← hCanon]
+
+/--
+comparison 段が与えられれば、
+`B`
+と
+`C`
+の exact tail identity は機械的に回収できる。
+-/
+theorem primeGe5BranchAValuationPeelTailExact_of_comparison
+    (hCmp : PrimeGe5BranchAValuationPeelTailComparisonTarget) :
+    PrimeGe5BranchAValuationPeelTailExactTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd
+  rcases hCmp hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd with
+    ⟨t1, B, C, ht, hB, hC⟩
+  have hp_gt_one : 1 < p := lt_of_lt_of_le (by decide : 1 < 5) hpack.hp5
+  have hgap_peel : z - y = p ^ (2 * p - 1) * t1 ^ p := by
+    calc
+      z - y = p ^ (p - 1) * t ^ p := hgap
+      _ = p ^ (p - 1) * (p * t1) ^ p := by rw [ht]
+      _ = p ^ (p - 1) * (p ^ p * t1 ^ p) := by rw [Nat.mul_pow]
+      _ = (p ^ (p - 1) * p ^ p) * t1 ^ p := by ac_rfl
+      _ = p ^ ((p - 1) + p) * t1 ^ p := by rw [Nat.pow_add]
+      _ = p ^ (2 * p - 1) * t1 ^ p := by
+            have hExp : (p - 1) + p = 2 * p - 1 := by omega
+            simp [hExp]
+  have hB_gap : s ^ p = y ^ (p - 1) + (z - y) * B := by
+    calc
+      s ^ p = y ^ (p - 1) + p ^ (2 * p - 1) * (t1 ^ p * B) := hB
+      _ = y ^ (p - 1) + (p ^ (2 * p - 1) * t1 ^ p) * B := by ac_rfl
+      _ = y ^ (p - 1) + (z - y) * B := by rw [hgap_peel]
+  have hTailB :
+      DkMath.CosmicFormula.GTail p 2 (z - y) y = p * B :=
+    primeGe5BranchA_gapTail_eq_p_mul_of_gapMul hpack hsGN hB_gap
+  have hu_pos : 0 < p ^ (p - 1) * t1 ^ p := by
+    have hzy_pos : 0 < z - y := Nat.sub_pos_of_lt hpack.hyz_lt
+    have hzy_eq : z - y = p ^ p * (p ^ (p - 1) * t1 ^ p) := by
+      calc
+        z - y = p ^ (2 * p - 1) * t1 ^ p := hgap_peel
+        _ = p ^ ((p - 1) + p) * t1 ^ p := by
+              have hExp : 2 * p - 1 = (p - 1) + p := by omega
+              simp [hExp]
+        _ = (p ^ (p - 1) * p ^ p) * t1 ^ p := by rw [Nat.pow_add]
+        _ = p ^ p * (p ^ (p - 1) * t1 ^ p) := by ac_rfl
+    exact Nat.pos_of_ne_zero (by
+      intro hu0
+      have hzero : z - y = 0 := by simp [hzy_eq, hu0]
+      exact (Nat.ne_of_gt hzy_pos) hzero)
+  have hTailC :
+      DkMath.CosmicFormula.GTail p 2 (p ^ (p - 1) * t1 ^ p) y = C :=
+    primeGe5BranchA_canonicalTail_eq_coeff_of_expansion hp_gt_one hu_pos hC
+  exact ⟨t1, B, C, ht, hTailB, hTailC⟩
+
+/--
+exact tail identity が与えられれば、
+`p * B ≡ C [MOD p^(p-1) * t1^p]`
+が従う。
+-/
+theorem primeGe5BranchAValuationPeelTailModEq_of_exact
+    (hExact : PrimeGe5BranchAValuationPeelTailExactTarget) :
+    PrimeGe5BranchAValuationPeelTailModEqTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd
+  rcases hExact hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd with
+    ⟨t1, B, C, ht, hTailB, hTailC⟩
+  have hp_gt_two : 2 < p := lt_of_lt_of_le (by decide : 2 < 5) hpack.hp5
+  have hgap_peel : z - y = p ^ p * (p ^ (p - 1) * t1 ^ p) := by
+    calc
+      z - y = p ^ (p - 1) * t ^ p := hgap
+      _ = p ^ (p - 1) * (p * t1) ^ p := by rw [ht]
+      _ = p ^ (p - 1) * (p ^ p * t1 ^ p) := by rw [Nat.mul_pow]
+      _ = (p ^ (p - 1) * p ^ p) * t1 ^ p := by ac_rfl
+      _ = p ^ ((p - 1) + p) * t1 ^ p := by rw [Nat.pow_add]
+      _ = p ^ (p + (p - 1)) * t1 ^ p := by
+            have hExp : (p - 1) + p = p + (p - 1) := by omega
+            simp [hExp]
+      _ = p ^ p * (p ^ (p - 1) * t1 ^ p) := by
+            rw [Nat.pow_add]
+            simp [Nat.mul_assoc]
+  have hmodTail :
+      DkMath.CosmicFormula.GTail p 2 (z - y) y ≡
+        DkMath.CosmicFormula.GTail p 2 (p ^ (p - 1) * t1 ^ p) y [MOD p ^ (p - 1) * t1 ^ p] := by
+    rw [hgap_peel]
+    simpa using
+      (primeGe5BranchA_GTail_two_scaled_modEq
+        (p := p) (u := p ^ (p - 1) * t1 ^ p) (y := y) hp_gt_two)
+  have hmodBC : p * B ≡ C [MOD p ^ (p - 1) * t1 ^ p] := by
+    rw [← hTailB, ← hTailC]
+    exact hmodTail
+  exact ⟨t1, B, C, ht, hmodBC⟩
+
+/-- mod-level comparison 段の default 実装。 -/
+theorem primeGe5BranchAValuationPeelTailModEq_default :
+    PrimeGe5BranchAValuationPeelTailModEqTarget :=
+  primeGe5BranchAValuationPeelTailModEq_of_exact
+    (primeGe5BranchAValuationPeelTailExact_of_comparison
+      primeGe5BranchAValuationPeelTailComparison_default)
+
+/-- exact-error 版の default 実装。 -/
+theorem primeGe5BranchAValuationPeelTailError_of_exact
+    (hExact : PrimeGe5BranchAValuationPeelTailExactTarget) :
+    PrimeGe5BranchAValuationPeelTailErrorTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd
+  rcases hExact hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd with
+    ⟨t1, B, C, ht, hTailB, hTailC⟩
+  have hp_gt_two : 2 < p := lt_of_lt_of_le (by decide : 2 < 5) hpack.hp5
+  let u : ℕ := p ^ (p - 1) * t1 ^ p
+  have hgap_peel : z - y = p ^ p * u := by
+    unfold u
+    calc
+      z - y = p ^ (p - 1) * t ^ p := hgap
+      _ = p ^ (p - 1) * (p * t1) ^ p := by rw [ht]
+      _ = p ^ (p - 1) * (p ^ p * t1 ^ p) := by rw [Nat.mul_pow]
+      _ = p ^ p * (p ^ (p - 1) * t1 ^ p) := by ac_rfl
+  rcases primeGe5BranchA_GTail_two_scaled_exists_error (p := p) (u := u) (y := y) hp_gt_two with
+    ⟨E, hE⟩
+  refine ⟨t1, B, C, E, ht, ?_⟩
+  rw [← hTailB, ← hTailC]
+  rw [hgap_peel]
+  simpa [u, Nat.add_comm, Nat.add_left_comm, Nat.add_assoc] using hE
+
+/-- exact-error comparison 段の default 実装。 -/
+theorem primeGe5BranchAValuationPeelTailError_default :
+    PrimeGe5BranchAValuationPeelTailErrorTarget :=
+  primeGe5BranchAValuationPeelTailError_of_exact
+    (primeGe5BranchAValuationPeelTailExact_of_comparison
+      primeGe5BranchAValuationPeelTailComparison_default)
+
+/--
+tail-error lift があれば、valuation peel packet route は自動で従う。
+-/
+theorem primeGe5BranchAValuationPeelPacket_of_tailErrorLift
+    (hErr : PrimeGe5BranchAValuationPeelTailErrorTarget)
+    (hLift : PrimeGe5BranchAValuationPeelPacketFromErrorTarget) :
+    PrimeGe5BranchAValuationPeelPacketTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd
+  rcases hErr hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd with
+    ⟨t1, B, C, E, ht, hErrEq⟩
+  exact hLift hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd ht hErrEq
 
 /--
 Branch A normal form から得る、`s^p ≡ y^(p-1) [MOD p^2]` の thin wrapper。
@@ -2637,6 +3658,213 @@ theorem primeGe5BranchARefuter_of_wieferich
       False := by
   intro p x y z hpack hp_dvd_gap
   exact hRefute hpack hp_dvd_gap (hWieferich hpack hp_dvd_gap)
+
+/--
+local kernel が与えられれば、Wieferich witness refuter は既存 normal form 抽出だけで得られる。
+
+付録:
+- `PrimeGe5BranchAWieferichRefuterTarget` を直接 clean 化できなくても、
+  欠けた数学をこの local kernel 1 本へ局所化できる。
+-/
+theorem primeGe5BranchAWieferichRefuter_of_localKernel
+    (hK : PrimeGe5BranchAWieferichLocalKernelTarget) :
+    PrimeGe5BranchAWieferichRefuterTarget := by
+  intro p x y z hpack hp_dvd_gap hWieferich
+  rcases primeGe5BranchAShapeValue_of_factorization
+      primeGe5BranchAShapeFactorization_default hpack hp_dvd_gap with ⟨t, hgap⟩
+  rcases primeGe5BranchANormalForm_of_witness hpack hp_dvd_gap hgap with ⟨s, hsGN, hsx⟩
+  exact hK hpack hp_dvd_gap hgap hsGN hsx
+    (primeGe5BranchANormalForm_coprime_ts_default hpack hp_dvd_gap hgap hsGN)
+    (primeGe5BranchANormalForm_coprime_t_right hpack hsx)
+    (primeGe5BranchANormalForm_coprime_s_right hpack hsx)
+    (primeGe5BranchANormalForm_prime_not_dvd_s_default hpack hp_dvd_gap hgap hsGN)
+    hWieferich
+
+/--
+arithmetic kernel が与えられれば、Wieferich local kernel は自動で閉じる。
+
+付録:
+- local kernel に入る witness は normal form から再生成できるので、
+  arithmetic kernel より本質的に強い入力は要求していない。
+-/
+theorem primeGe5BranchAWieferichLocalKernel_of_arithmeticKernel
+    (hK : PrimeGe5BranchANormalFormArithmeticKernelTarget) :
+    PrimeGe5BranchAWieferichLocalKernelTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hWieferich
+  exact hK hpack hp_dvd_gap hgap hsGN hsx
+    (primeGe5BranchANormalForm_gcd_gap_GN_eq_p_default hpack hp_dvd_gap hgap hsGN)
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s
+
+/--
+Wieferich local kernel が与えられれば、arithmetic kernel も閉じる。
+
+付録:
+- local kernel で要求する Wieferich witness 自体は、
+  `primeGe5BranchANormalForm_y_wieferich_mod_p_sq`
+  により normal form から既に得られる。
+- したがって両者の差は、現段階では数学核というより
+  witness を引数に出すかどうかの API 上の差に近い。
+-/
+theorem primeGe5BranchANormalFormArithmeticKernel_of_wieferichLocalKernel
+    (hK : PrimeGe5BranchAWieferichLocalKernelTarget) :
+    PrimeGe5BranchANormalFormArithmeticKernelTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx _hgcd_eq hcop_ts hcop_ty hcop_sy hp_not_dvd_s
+  exact hK hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s
+    (primeGe5BranchANormalForm_y_wieferich_mod_p_sq hpack hp_dvd_gap hgap hsGN)
+
+/-- Branch A 条件付きで、`z` 最小の反例 pack を no-`sorry` で選べる。 -/
+theorem minimalPrimeGe5CounterexampleSelectionA_impl :
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      p ∣ (z - y) →
+      ∃ x₀ y₀ z₀ : ℕ, MinimalPrimeGe5CounterexamplePackA p x₀ y₀ z₀ := by
+  classical
+  intro p x y z hpack hp_dvd_gap
+  let P : ℕ → Prop := fun z₀ => ∃ x₀ y₀ : ℕ,
+    PrimeGe5CounterexamplePack p x₀ y₀ z₀ ∧ p ∣ (z₀ - y₀)
+  have hExists : ∃ z₀ : ℕ, P z₀ := ⟨z, x, y, hpack, hp_dvd_gap⟩
+  let z₀ := Nat.find hExists
+  have hz₀ : P z₀ := Nat.find_spec hExists
+  rcases hz₀ with ⟨x₀, y₀, hpack₀, hpA₀⟩
+  refine ⟨x₀, y₀, z₀, hpack₀, hpA₀, ?_⟩
+  intro x' y' z' hpack' hpA' hz'lt
+  have hz₀_le : z₀ ≤ z' := by
+    simpa [z₀] using (Nat.find_min' hExists ⟨x', y', hpack', hpA'⟩)
+  exact (not_le_of_gt hz'lt) hz₀_le
+
+/--
+smaller-counterexample target があれば、minimality 付き distinguished-prime descent は自動で従う。
+-/
+theorem primeGe5BranchADistinguishedPrimeDescent_of_smallerCounterexample
+    (hSmall : PrimeGe5BranchASmallerCounterexampleTarget) :
+    PrimeGe5BranchADistinguishedPrimeDescentTarget := by
+  intro p x y z t s hMin hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s
+  exact hSmall hMin.1 hMin.2.1 hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s
+
+/--
+smaller-packet target があれば、smaller-counterexample target は機械的に従う。
+-/
+theorem primeGe5BranchASmallerCounterexample_of_smallerPacket
+    (hSmall : PrimeGe5BranchASmallerPacketTarget) :
+    PrimeGe5BranchASmallerCounterexampleTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s
+  rcases hSmall hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s with
+    ⟨pkt', hz'lt⟩
+  exact ⟨pkt'.x, pkt'.y, pkt'.z, counterexamplePack_of_branchANormalFormPacket pkt',
+    pkt'.hp_dvd_gap, hz'lt⟩
+
+/--
+valuation peel と primitive-packet descent の 2 分岐が揃えば、
+smaller-packet target は場合分けだけで閉じる。
+-/
+theorem primeGe5BranchASmallerPacket_of_routes
+    (hPeel : PrimeGe5BranchAValuationPeelPacketTarget)
+    (hPrim : PrimeGe5BranchAPrimitivePacketDescentTarget) :
+    PrimeGe5BranchASmallerPacketTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s
+  by_cases hpt : p ∣ t
+  · exact hPeel hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hpt
+  · exact hPrim hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hpt
+
+/--
+valuation peel を error-lift 1 本に局所化した smaller-packet bridge。
+
+付録:
+- provider/mainline 側から見ると、
+  valuation peel 側の残る未完は
+  `PrimeGe5BranchAValuationPeelPacketFromErrorTarget`
+  だけだと読める。
+- したがって primitive route を本命に押し上げつつ、
+  peel 側は exact-error からの lift として独立に詰められる。
+-/
+theorem primeGe5BranchASmallerPacket_of_errorLift_and_primitive
+    (hErr : PrimeGe5BranchAValuationPeelTailErrorTarget)
+    (hLift : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hPrim : PrimeGe5BranchAPrimitivePacketDescentTarget) :
+    PrimeGe5BranchASmallerPacketTarget :=
+  primeGe5BranchASmallerPacket_of_routes
+    (primeGe5BranchAValuationPeelPacket_of_tailErrorLift hErr hLift)
+    hPrim
+
+/--
+distinguished-prime descent があれば、最小 Branch A 反例は存在しえない。
+-/
+theorem primeGe5BranchARefuter_on_minimal_of_distinguishedPrimeDescent
+    (hDesc : PrimeGe5BranchADistinguishedPrimeDescentTarget) :
+    ∀ {p x y z : ℕ}, MinimalPrimeGe5CounterexamplePackA p x y z → False := by
+  intro p x y z hMin
+  have hpack : PrimeGe5CounterexamplePack p x y z := hMin.1
+  have hp_dvd_gap : p ∣ (z - y) := hMin.2.1
+  rcases primeGe5BranchAShapeValue_of_factorization
+      primeGe5BranchAShapeFactorization_default hpack hp_dvd_gap with ⟨t, hgap⟩
+  rcases primeGe5BranchANormalForm_of_witness hpack hp_dvd_gap hgap with ⟨s, hsGN, hsx⟩
+  rcases hDesc hMin hgap hsGN hsx
+      (primeGe5BranchANormalForm_coprime_ts_default hpack hp_dvd_gap hgap hsGN)
+      (primeGe5BranchANormalForm_coprime_t_right hpack hsx)
+      (primeGe5BranchANormalForm_coprime_s_right hpack hsx)
+      (primeGe5BranchANormalForm_prime_not_dvd_s_default hpack hp_dvd_gap hgap hsGN) with
+    ⟨x', y', z', hpack', hpA', hz'lt⟩
+  exact hMin.2.2 hpack' hpA' hz'lt
+
+/--
+distinguished-prime descent があれば、任意の Branch A 反例を直接 refute できる。
+
+付録:
+- これは Wieferich witness の有無を経由せず、
+  Branch A 専用 minimal selection と distinguished-prime descent だけで閉じる。
+- 後段で truly new kernel を採るなら、この theorem が
+  `PrimeGe5BranchAWieferichRefuterTarget` より自然な出口になる。
+-/
+theorem primeGe5BranchARefuter_of_distinguishedPrimeDescent
+    (hDesc : PrimeGe5BranchADistinguishedPrimeDescentTarget) :
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      p ∣ (z - y) →
+      False := by
+  intro p x y z hpack hp_dvd_gap
+  rcases minimalPrimeGe5CounterexampleSelectionA_impl hpack hp_dvd_gap with
+    ⟨x₀, y₀, z₀, hMin⟩
+  exact primeGe5BranchARefuter_on_minimal_of_distinguishedPrimeDescent hDesc hMin
+
+/--
+peel 側の exact-error lift と primitive descent が揃えば、
+Branch A refuter は smaller-packet route 経由で回収できる。
+
+付録:
+- これにより provider/mainline 側からは、
+  primitive route を本命にしつつ
+  peel 側の残核を error-lift 1 本として差し込めば十分だと読める。
+-/
+theorem primeGe5BranchARefuter_of_errorLift_and_primitive
+    (hErr : PrimeGe5BranchAValuationPeelTailErrorTarget)
+    (hLift : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hPrim : PrimeGe5BranchAPrimitivePacketDescentTarget) :
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      p ∣ (z - y) →
+      False :=
+  primeGe5BranchARefuter_of_distinguishedPrimeDescent
+    (primeGe5BranchADistinguishedPrimeDescent_of_smallerCounterexample
+      (primeGe5BranchASmallerCounterexample_of_smallerPacket
+        (primeGe5BranchASmallerPacket_of_errorLift_and_primitive hErr hLift hPrim)))
+
+/--
+primitive packet descent を本命 route として読む canonical wrapper。
+
+付録:
+- peel 側は
+  `tail error -> packet`
+  の補助 lift としてだけ受け取り、
+  truly new descent の本体は
+  `PrimeGe5BranchAPrimitivePacketDescentTarget`
+  に置く、という現在の設計判断を名前に反映している。
+-/
+theorem primeGe5BranchARefuter_of_primitiveMainline
+    (hErr : PrimeGe5BranchAValuationPeelTailErrorTarget)
+    (hLift : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hPrim : PrimeGe5BranchAPrimitivePacketDescentTarget) :
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      p ∣ (z - y) →
+      False :=
+  primeGe5BranchARefuter_of_errorLift_and_primitive hErr hLift hPrim
 
 /--
 `FLT_of_coprime` の residual branch から呼ぶ Branch A 専用 refuter 入口。
