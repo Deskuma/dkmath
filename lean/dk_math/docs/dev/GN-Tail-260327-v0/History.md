@@ -1259,3 +1259,75 @@
      は、
      comparison route の final checkpoint ではなく
      Wieferich witness route への adapter 名へ寄せることを検討する。
+
+### 日時: 2026/03/27 JST
+
+1. 目的:
+   - Branch A lower layer の
+     `PrimeGe5BranchAWieferichOnYTarget`
+     を、
+     `TriominoCosmicGapInvariant`
+     側の branch-split mainline に直接注入できる形へ整理する。
+   - その際、
+     build が通る定義順で adapter を置き、
+     full build まで確認する。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     に
+     `branchARefuter_of_wieferichTargets`
+     を追加した。
+     これは
+     `PrimeGe5BranchAWieferichOnYTarget`
+     と
+     `PrimeGe5BranchAWieferichRefuterTarget`
+     から
+     `BranchARefuterTarget`
+     を作る thin bridge である。
+   - さらに
+     `FLTPrimeGe5Target_of_branchA_wieferich_with_normalizer_impl`
+     を追加し、
+     Branch B の既存 default route と合わせて
+     `FLTPrimeGe5Target`
+     へ流し込む adapter を置いた。
+   - 最初はこの定理を
+     `FLTPrimeGe5Target_of_branch_split_refuter_with_normalizer_impl`
+     より前に置いて壊したため、
+     後段へ移して定義順を修正した。
+
+3. 結論:
+   - Branch A / Wieferich witness route は、
+     `TriominoCosmicGapInvariant`
+     側でも受け皿ができた。
+   - 残る未完核は依然として
+     `PrimeGe5BranchAWieferichRefuterTarget`
+     相当の数学本体であり、
+     adapter / import / build 構成ではないことがさらに明確になった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   - `lake build DkMath.FLT.Basic`
+   - `lake build`
+   を実行し、いずれも build 完了まで待って成功を確認した。
+
+5. 備考:
+   - `TriominoCosmicGapInvariant.lean`
+     の今回の追加は no-sorry。
+   - full build で残った warning は、
+     既存の
+     `ZsigmondyCyclotomicResearch`
+     `GcdNextResearch`
+     `TriominoCosmicBranchA`
+     `TriominoFLT`
+     `ABC021`
+     の `sorry` に限られる。
+
+6. 次の課題:
+   - `PrimeGe5BranchAWieferichRefuterTarget`
+     を、
+     既存の no-Wieferich / descent machinery のどれへ渡すかを決める。
+   - 必要なら
+     `FLTPrimeGe5Target_of_branchA_wieferich_with_normalizer_impl`
+     を
+     `TriominoPrimeProvider`
+     側の mainline 候補として目立つ位置へ引き上げる。

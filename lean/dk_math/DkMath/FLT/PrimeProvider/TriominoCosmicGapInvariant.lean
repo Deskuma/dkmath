@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5
 import DkMath.FLT.CosmicPetalBridge
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN
+import DkMath.FLT.PrimeProvider.TriominoCosmicBranchA
 
 #print "file: DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant"
 
@@ -859,6 +860,17 @@ abbrev BranchARefuterTarget : Prop :=
     p ∣ (z - y) →
     False
 
+/--
+Branch A lower layer が `y^(p-1) ≡ 1 [MOD p^2]` witness を返せるなら、
+その witness を refuter 契約へ注入するだけで Branch A 出口を構成できる。
+-/
+theorem branchARefuter_of_wieferichTargets
+    (hWieferich : DkMath.FLT.PrimeGe5BranchAWieferichOnYTarget)
+    (hRefute : DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget) :
+    BranchARefuterTarget := by
+  intro p x y z hpack hp_dvd_gap
+  exact hRefute hpack hp_dvd_gap (hWieferich hpack hp_dvd_gap)
+
 /-- Branch B 側の終着仕様（pure-gap-pow と gap-not-pow の衝突出口）。 -/
 abbrev BranchBRefuterTarget : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
@@ -1460,6 +1472,20 @@ theorem FLTPrimeGe5Target_of_branch_split_shape_and_refuter_with_normalizer_impl
   exact FLTPrimeGe5Target_of_branch_split_refuter_with_normalizer_impl
     (hShapeToRefuter hAShape)
     hB
+
+/--
+Branch A lower layer が Wieferich witness を返せるなら、
+既存の branch-split mainline へ直接注入できる。
+-/
+theorem FLTPrimeGe5Target_of_branchA_wieferich_with_normalizer_impl
+    (hRefute : DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_branch_split_refuter_with_normalizer_impl
+    (branchARefuter_of_wieferichTargets
+      DkMath.FLT.primeGe5BranchAWieferichOnY_default
+      hRefute)
+    (branchBRefuter_of_gapPow_and_defaultNotPow
+      gapPowFromPrimeGe5Counterexample_branchB_impl)
 
 /--
 2層 mainline の kernel 版。
