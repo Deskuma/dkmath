@@ -1341,3 +1341,41 @@
      少しだけ試す。
    - そこで強い extraction が出なければ、
      primitive packet descent を本命 route として明示的に押し上げる。
+
+### 日時: 2026/03/27 21:58 JST
+
+1. 目的:
+   - `review-007.md`
+     の方針に沿って、
+     primitive packet descent を本命 route として読む naming / bridge を
+     コード上でも明示する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `primeGe5BranchARefuter_of_primitiveMainline`
+     を追加した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     に
+     `branchAWieferichAdapter_of_primitiveMainline`
+     を追加した。
+
+3. 結論:
+   - 実体は既存の
+     `errorLift + primitive`
+     bridge の thin wrapper だが、
+     「primitive が本命で、peel は補助 lift」
+     という設計判断が公開名にも反映された。
+   - 以後の mainline 整理では、
+     `primitiveMainline`
+     を基準語彙として使いやすくなった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認した。
+
+5. 次の課題:
+   - `PrimeGe5BranchAValuationPeelPacketFromErrorTarget`
+     を軽く試し、
+     強い extraction がなければ primitive 側へ完全に舵を切る。

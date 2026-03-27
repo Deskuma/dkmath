@@ -1424,6 +1424,16 @@ theorem branchAWieferichAdapter_of_errorLift_and_primitive
     (branchASmallerPacketAdapter_of_errorLift_and_primitive hErr hLift hPrim)
 
 /--
+primitive route を canonical mainline として読む provider wrapper。
+-/
+theorem branchAWieferichAdapter_of_primitiveMainline
+    (hErr : BranchAValuationPeelTailErrorAdapterTarget)
+    (hLift : BranchAValuationPeelPacketFromErrorAdapterTarget)
+    (hPrim : BranchAPrimitivePacketDescentAdapterTarget) :
+    BranchAWieferichAdapterTarget :=
+  branchAWieferichAdapter_of_errorLift_and_primitive hErr hLift hPrim
+
+/--
 暫定 concrete adapter for the Branch A Wieferich witness route.
 
 付録:

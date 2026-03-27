@@ -3741,6 +3741,26 @@ theorem primeGe5BranchARefuter_of_errorLift_and_primitive
         (primeGe5BranchASmallerPacket_of_errorLift_and_primitive hErr hLift hPrim)))
 
 /--
+primitive packet descent を本命 route として読む canonical wrapper。
+
+付録:
+- peel 側は
+  `tail error -> packet`
+  の補助 lift としてだけ受け取り、
+  truly new descent の本体は
+  `PrimeGe5BranchAPrimitivePacketDescentTarget`
+  に置く、という現在の設計判断を名前に反映している。
+-/
+theorem primeGe5BranchARefuter_of_primitiveMainline
+    (hErr : PrimeGe5BranchAValuationPeelTailErrorTarget)
+    (hLift : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hPrim : PrimeGe5BranchAPrimitivePacketDescentTarget) :
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      p ∣ (z - y) →
+      False :=
+  primeGe5BranchARefuter_of_errorLift_and_primitive hErr hLift hPrim
+
+/--
 `FLT_of_coprime` の residual branch から呼ぶ Branch A 専用 refuter 入口。
 
 将来は `PrimeGe5BranchAGapPowFactorizationTarget` と shape/descent kernel を
