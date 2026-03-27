@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5
 import DkMath.FLT.CosmicPetalBridge
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN
+import DkMath.FLT.PrimeProvider.TriominoCosmicBranchA
 
 #print "file: DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant"
 
@@ -859,6 +860,17 @@ abbrev BranchARefuterTarget : Prop :=
     p ∣ (z - y) →
     False
 
+/--
+Branch A lower layer が `y^(p-1) ≡ 1 [MOD p^2]` witness を返せるなら、
+その witness を refuter 契約へ注入するだけで Branch A 出口を構成できる。
+-/
+theorem branchARefuter_of_wieferichTargets
+    (hWieferich : DkMath.FLT.PrimeGe5BranchAWieferichOnYTarget)
+    (hRefute : DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget) :
+    BranchARefuterTarget := by
+  intro p x y z hpack hp_dvd_gap
+  exact hRefute hpack hp_dvd_gap (hWieferich hpack hp_dvd_gap)
+
 /-- Branch B 側の終着仕様（pure-gap-pow と gap-not-pow の衝突出口）。 -/
 abbrev BranchBRefuterTarget : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
@@ -1090,7 +1102,7 @@ theorem branchAShapeValueTarget_math :
     by_cases hq_eq : q = p
     · have hd_fac_p : d.factorization p = p - 1 := by
         unfold d
-        simp? [hpack.hp.factorization]
+        simp [hpack.hp.factorization]
       have hm_u : u.factorization p = (p - 1) + p * m := by
         simpa [u] using hm
       have hw_fac_p : w.factorization p = p * m := by
@@ -1242,6 +1254,73 @@ theorem existingDescentRefuter_via_FLT
     FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
   exact hNo hpack.hEq
 
+/--
+既存 descent 契約があれば、Branch A の Wieferich witness refuter 契約は自動で閉じる。
+
+付録:
+- 現段階では witness 自体は使わず、
+  lower-layer の shape default から既存 descent 入力を再構成して refute する。
+- したがって clean route では、
+  `ExistingDescentRefuterTarget` の差し替えだけで
+  `PrimeGe5BranchAWieferichRefuterTarget` 側も同時に clean 化される。
+-/
+theorem branchAWieferichRefuter_of_existingDescent
+    (hDesc : ExistingDescentRefuterTarget) :
+    DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget := by
+  intro p x y z hpack hp_dvd_gap _hWieferich
+  rcases DkMath.FLT.primeGe5BranchAShapeValue_of_factorization
+      DkMath.FLT.primeGe5BranchAShapeFactorization_default hpack hp_dvd_gap with
+    ⟨t, ht⟩
+  exact hDesc hpack hp_dvd_gap
+    (branchAShapeWitness_to_existing_descent_input hpack hp_dvd_gap ht)
+
+/--
+暫定 concrete refuter for the Branch A Wieferich witness.
+
+付録:
+- 現段階では `PrimeGe5BranchAWieferichRefuterTarget` の clean 下降注入はまだ未実装だが、
+  実装自体は既存 descent 契約を経由して閉じる。
+- したがって clean route では、
+  `ExistingDescentRefuterTarget` の差し替えだけで
+  この theorem も同時に clean 化される。
+-/
+theorem branchAWieferichRefuter_via_FLT :
+    DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget :=
+  branchAWieferichRefuter_of_existingDescent existingDescentRefuter_via_FLT
+
+/--
+Branch A / Wieferich witness refuter の実装本体。
+
+最終 clean 置換点はこの定理 1 本に集約する。
+-/
+theorem branchAWieferichRefuter_math :
+    DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget :=
+  branchAWieferichRefuter_via_FLT
+
+/-- Branch A / Wieferich witness refuter の実装入口。 -/
+theorem branchAWieferichRefuter_impl :
+    DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget :=
+  branchAWieferichRefuter_math
+
+/--
+Branch A の Wieferich witness refuter 契約があれば、
+既存 descent 契約は witness を再構成して閉じられる。
+
+付録:
+- `BranchAShapeWitnessDescentInput` の `gapShape` 自体はここでは使わない。
+- clean route では、
+  `PrimeGe5BranchAWieferichRefuterTarget`
+  の差し替えだけで
+  `ExistingDescentRefuterTarget`
+  も同時に clean 化できる。
+-/
+theorem existingDescentRefuter_of_branchAWieferich
+    (hRefute : DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget) :
+    ExistingDescentRefuterTarget := by
+  intro p x y z t hpack hp_dvd_gap _hInput
+  exact hRefute hpack hp_dvd_gap
+    (DkMath.FLT.primeGe5BranchAWieferichOnY_default hpack hp_dvd_gap)
+
 /-- 既存契約入力を refute する暫定 concrete 実装（via FLT）。 -/
 theorem existingDescentContractRefuter_via_FLT :
   ExistingDescentRawRefuterTarget := by
@@ -1308,7 +1387,8 @@ theorem existingDescentRefuter_math
     p ∣ (z - y) →
     BranchAShapeWitnessDescentInput p x y z t →
     False :=
-  existingDescentRefuter_of_target branchAShapeWitnessDescentContract_impl
+  existingDescentRefuter_of_branchAWieferich
+    branchAWieferichRefuter_impl
 
 /--
 witness 直受け kernel の実装本体。
@@ -1462,6 +1542,84 @@ theorem FLTPrimeGe5Target_of_branch_split_shape_and_refuter_with_normalizer_impl
     hB
 
 /--
+Branch A lower layer が Wieferich witness を返せるなら、
+既存の branch-split mainline へ直接注入できる。
+-/
+theorem FLTPrimeGe5Target_of_branchA_wieferich_with_normalizer_impl
+    (hRefute : DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget) :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_branch_split_refuter_with_normalizer_impl
+    (branchARefuter_of_wieferichTargets
+      DkMath.FLT.primeGe5BranchAWieferichOnY_default
+      hRefute)
+    (branchBRefuter_of_gapPow_and_defaultNotPow
+      gapPowFromPrimeGe5Counterexample_branchB_impl)
+
+/--
+既定の Branch A Wieferich witness と暫定 refuter から得る default mainline。
+
+`PrimeGe5BranchAWieferichRefuterTarget` の clean 置換先はこの theorem の引数 1 本に隔離する。
+-/
+theorem FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_branchA_wieferich_with_normalizer_impl
+    branchAWieferichRefuter_impl
+
+/--
+Branch A の Wieferich witness route が供給されれば、
+`p ≥ 5` 素数指数の FLT を concrete に返せる。
+-/
+theorem FLT_prime_ge5_of_branchA_wieferich_with_normalizer_impl
+    (hRefute : DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget)
+    (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
+    FermatLastTheoremFor p := by
+  exact (FLTPrimeGe5Target_of_branchA_wieferich_with_normalizer_impl hRefute) p hp hp5
+
+/--
+既定の Branch A Wieferich route から得る `FLT_prime_ge5` 実装版。
+-/
+theorem FLT_prime_ge5_of_branchA_wieferich_default_with_normalizer_impl
+    (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
+    FermatLastTheoremFor p := by
+  exact (FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl) p hp hp5
+
+/--
+Branch A の Wieferich witness route が供給されれば、
+`FLT_prime_ge5` 本体を通さず global provider へ直結できる。
+-/
+theorem triominoCosmic_globalProvider_of_branchA_wieferich_with_normalizer_impl
+    (hRefute : DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget) :
+    GlobalPrimeExponentFLTProvider := by
+  exact triominoCosmic_globalProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_branchA_wieferich_with_normalizer_impl hRefute)
+
+/--
+既定の Branch A Wieferich route から得る global provider。
+-/
+theorem triominoCosmic_globalProvider_of_branchA_wieferich_default_with_normalizer_impl :
+    GlobalPrimeExponentFLTProvider := by
+  exact triominoCosmic_globalProvider_of_FLTPrimeGe5
+    FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl
+
+/--
+Branch A の Wieferich witness route が供給されれば、
+`FLT_prime_ge5` 本体を通さず Triomino provider へ直結できる。
+-/
+theorem triominoPrimeProvider_of_branchA_wieferich_with_normalizer_impl
+    (hRefute : DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget) :
+    TriominoPrimeProvider := by
+  exact triominoPrimeProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_branchA_wieferich_with_normalizer_impl hRefute)
+
+/--
+既定の Branch A Wieferich route から得る Triomino provider。
+-/
+theorem triominoPrimeProvider_of_branchA_wieferich_default_with_normalizer_impl :
+    TriominoPrimeProvider := by
+  exact triominoPrimeProvider_of_FLTPrimeGe5
+    FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl
+
+/--
 2層 mainline の kernel 版。
 `BranchAShapeToRefuterTarget` が与えられれば、shape 出口から refuter 出口への橋は自動生成できる。
 -/
@@ -1488,12 +1646,16 @@ theorem FLTPrimeGe5Target_of_branch_split_shapeValue_and_refuter_with_normalizer
     hAShape hB (branchAShapeToRefuter_of_value hValue hRefuteValue)
 
 /--
-Branch-split mainline の起動定理（現行 concrete 実装接続版）。
+Branch-split mainline の legacy 起動定理（shape/value concrete 実装接続版）。
 
-注意: Branch A の value/refuter 実装は現時点では via FLT であり、
-最終的には clean 数学核へ置換する。
+注意:
+- Branch A の value/refuter 実装は現時点では via FLT であり、
+  最終的には clean 数学核へ置換する。
+- 既定の public mainline は、より細く隔離された
+  `FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl`
+  を経由する。
 -/
-theorem FLTPrimeGe5Target_branch_split_mainline :
+theorem FLTPrimeGe5Target_branch_split_mainline_legacy_shape :
     FLTPrimeGe5Target := by
   exact FLTPrimeGe5Target_of_branch_split_shapeValue_and_refuter_with_normalizer_impl
     branchAShapeFactorizationTarget_impl
@@ -1501,6 +1663,56 @@ theorem FLTPrimeGe5Target_branch_split_mainline :
       gapPowFromPrimeGe5Counterexample_branchB_impl)
     branchAShapeValueTarget_impl
     branchAShapeValueToRefuter_impl
+
+/--
+Branch-split mainline の既定起動定理。
+
+現在の default route は、Branch A を shape/value comparison から直接起動するのではなく、
+Wieferich witness route に正規化してから mainline へ流す。
+-/
+theorem FLTPrimeGe5Target_branch_split_mainline :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl
+
+/--
+`TriominoCosmicGapInvariant` 側の canonical default `FLTPrimeGe5Target` 入口。
+
+現在の既定 route は Branch A / Wieferich witness を経由する branch-split mainline である。
+-/
+theorem FLTPrimeGe5Target_default :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_branch_split_mainline
+
+/--
+canonical default `FLT_prime_ge5` 実装版。
+
+`TriominoCosmicPrimeGe5.FLT_prime_ge5` とは独立に、
+provider 層だけで閉じる既定入口を与える。
+-/
+theorem FLT_prime_ge5_default
+    (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
+    FermatLastTheoremFor p := by
+  exact (FLTPrimeGe5Target_default) p hp hp5
+
+/--
+canonical default global provider。
+
+既定の branch-split / Wieferich witness mainline から直接得る。
+-/
+theorem triominoCosmic_globalProvider_default :
+    GlobalPrimeExponentFLTProvider := by
+  exact triominoCosmic_globalProvider_of_FLTPrimeGe5
+    FLTPrimeGe5Target_default
+
+/--
+canonical default Triomino prime provider。
+
+既定の branch-split / Wieferich witness mainline から直接得る。
+-/
+theorem triominoPrimeProvider_default :
+    TriominoPrimeProvider := by
+  exact triominoPrimeProvider_of_FLTPrimeGe5
+    FLTPrimeGe5Target_default
 
 /--
 最終仮橋 (`branchAShapeValueToDescent_via_FLT`) を使わない clean 起動版。

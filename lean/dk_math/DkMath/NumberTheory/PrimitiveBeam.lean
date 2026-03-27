@@ -126,6 +126,62 @@ lemma primitive_prime_in_beam_for_body_one
   simpa using primitive_prime_dvd_GN_body (q := q) (x := x) (u := 1) (d := d) hq hd hd1
 
 /--
+A primitive prime factor already forbids the body difference `a^d - b^d` from
+being a perfect `d`-th power.
+
+This is the diff-side obstruction theorem that sits one layer below the
+`Body = x * GN` wrappers.
+
+It is mathematically FLT-shaped: the conclusion already has the form
+`¬ ∃ t, 0 < t ∧ a^d - b^d = t^d`, but the theorem stays in the lower
+primitive-prime layer so higher FLT files only need thin wrappers.
+-/
+theorem primitive_prime_factor_forbids_perfect_pow_diff
+    {a b d : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b) :
+    ¬ ∃ t : ℕ, 0 < t ∧ a ^ d - b ^ d = t ^ d := by
+  intro hpow
+  rcases hpow with ⟨t, ht, heq⟩
+  obtain ⟨q, hq⟩ :=
+    exists_primitive_prime_factor_as_prop hd_prime hd_ge hab_lt hb hab hpnd
+  have hq_prime : Nat.Prime q := hq.1
+  have hq_div_pow : q ∣ a ^ d - b ^ d := hq.2.1
+  have hq_div_td : q ∣ t ^ d := by
+    rw [← heq]
+    exact hq_div_pow
+  have hq_div_t : q ∣ t := hq_prime.dvd_of_dvd_pow hq_div_td
+  have ht_ne : t ≠ 0 := Nat.ne_of_gt ht
+  have hvt_ge : 1 ≤ padicValNat q t :=
+    DkMath.ABC.padicValNat_one_le_of_prime_dvd hq_prime ht_ne hq_div_t
+  have hvtd_eq : padicValNat q (t ^ d) = d * padicValNat q t :=
+    DkMath.ABC.padicValNat_pow hq_prime d ht_ne
+  have hvtd_ge : d ≤ padicValNat q (t ^ d) := by
+    rw [hvtd_eq]
+    calc
+      d = d * 1 := (Nat.mul_one d).symm
+      _ ≤ d * padicValNat q t := Nat.mul_le_mul_left d hvt_ge
+  have hd1 : 1 < d := by omega
+  have hq_ndiv_diff : ¬ q ∣ a - b :=
+    primitive_prime_not_dvd_boundary hq hd1
+  have hpadic_bound_diff : padicValNat q (a ^ d - b ^ d) ≤ 1 :=
+    DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one
+      (a := a) (b := b) (d := d) (q := q)
+      hd_prime
+      hd_ge
+      hab_lt
+      hb
+      hab
+      hpnd
+      hq_prime
+      hq_div_pow
+      hq_ndiv_diff
+  have hvað_eq : padicValNat q (a ^ d - b ^ d) = padicValNat q (t ^ d) := by
+    rw [heq]
+  omega
+
+/--
 A primitive prime factor forces the Beam factor `GN d (a-b) b` to fail being a perfect
 `d`-th power.
 

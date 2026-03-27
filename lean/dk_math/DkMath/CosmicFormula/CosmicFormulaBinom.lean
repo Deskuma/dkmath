@@ -446,6 +446,87 @@ theorem one_le_GN_nat_of_two_le {d x u : ℕ}
   exact Nat.succ_le_of_lt (Nat.pos_of_ne_zero (GN_ne_zero_nat_of_two_le (d := d) (x := x) (u := u) hd hx hu))
 
 /--
+If a squarefree natural number is divisible by a prime `p`, then its `p`-adic
+valuation is exactly `1`.
+-/
+private lemma padicValNat_eq_one_of_prime_dvd_of_squarefree
+    {p n : ℕ}
+    (hp : Nat.Prime p) (hn : n ≠ 0)
+    (hpd : p ∣ n) (hsq : Squarefree n) :
+    padicValNat p n = 1 := by
+  have hle : padicValNat p n ≤ 1 := by
+    by_contra hnot
+    have htwo : 2 ≤ padicValNat p n := by omega
+    have hp2dvd : p ^ 2 ∣ n := by
+      exact (DkMath.ABC.padicValNat_le_iff_dvd hp hn 2).mp htwo
+    have hfac_le : n.factorization p ≤ 1 := by
+      exact (Nat.squarefree_iff_factorization_le_one hn).mp hsq p
+    have hfac_ge : 2 ≤ n.factorization p := by
+      exact (hp.pow_dvd_iff_le_factorization hn).mp hp2dvd
+    exact (Nat.not_succ_le_self 1) (le_trans hfac_ge hfac_le)
+  have hge : 1 ≤ padicValNat p n := by
+    exact DkMath.ABC.padicValNat_one_le_of_prime_dvd hp hn hpd
+  omega
+
+/--
+Squarefree `GN` obstructs the corresponding Body difference from being a
+perfect `d`-th power.
+
+This is the direct `GN`-layer wrapper of the valuation argument:
+choose a prime factor `q` of the squarefree kernel `GN`, use coprimality to
+keep `q` out of the boundary factor `x`, and conclude that
+`v_q ((x+u)^d - u^d) = 1`, which is incompatible with a `d`-th power when
+`d > 1`.
+
+[GNZC] Although this theorem lives in `CosmicFormula`, its shape is already
+FLT-like: it directly refutes a local branch of
+`(x + u)^d - u^d = t^d`.
+-/
+theorem body_not_perfect_pow_of_squarefree_GN
+    {d x u : ℕ}
+    (hd : 1 < d)
+    (hGN_gt : 1 < GN d x u)
+    (hcop : Nat.Coprime x (GN d x u))
+    (hSq : Squarefree (GN d x u)) :
+    ¬ ∃ t : ℕ, 0 < t ∧ (x + u) ^ d - u ^ d = t ^ d := by
+  let N := GN d x u
+  have hN_ne1 : N ≠ 1 := Nat.ne_of_gt hGN_gt
+  have hN_ne0 : N ≠ 0 := Nat.ne_of_gt (lt_trans Nat.zero_lt_one hGN_gt)
+  obtain ⟨q, hq_prime, hq_dvd_N⟩ := Nat.exists_prime_and_dvd hN_ne1
+  have hq_not_dvd_x : ¬ q ∣ x := by
+    intro hq_dvd_x
+    have hq_dvd_gcd : q ∣ Nat.gcd x N := Nat.dvd_gcd hq_dvd_x hq_dvd_N
+    rw [hcop.gcd_eq_one] at hq_dvd_gcd
+    exact hq_prime.not_dvd_one hq_dvd_gcd
+  have hval_N_eq : padicValNat q N = 1 := by
+    exact padicValNat_eq_one_of_prime_dvd_of_squarefree hq_prime hN_ne0 hq_dvd_N (by simpa [N] using hSq)
+  have hx_ne : x ≠ 0 := by
+    intro hx0
+    exact hq_not_dvd_x (by simp [hx0])
+  have hbody_factor : (x + u) ^ d - u ^ d = x * N := by
+    rw [show N = GN d x u by rfl]
+    rw [add_pow_gap_factor]
+    exact Nat.add_sub_cancel_left _ _
+  letI : Fact (Nat.Prime q) := ⟨hq_prime⟩
+  have hval_body : padicValNat q ((x + u) ^ d - u ^ d) = 1 := by
+    rw [hbody_factor, padicValNat.mul hx_ne hN_ne0]
+    rw [padicValNat.eq_zero_of_not_dvd hq_not_dvd_x, hval_N_eq]
+  intro hpow
+  rcases hpow with ⟨t, ht_pos, ht_eq⟩
+  have ht_ne : t ≠ 0 := Nat.ne_of_gt ht_pos
+  have hdvd : d ∣ padicValNat q (t ^ d) := by
+    exact DkMath.ABC.dvd_padicValNat_pow hq_prime d ht_ne
+  have hone : padicValNat q (t ^ d) = 1 := by
+    calc
+      padicValNat q (t ^ d) = padicValNat q ((x + u) ^ d - u ^ d) := by
+        rw [ht_eq]
+      _ = 1 := hval_body
+  have hdvd_one : d ∣ 1 := by
+    simpa [hone] using hdvd
+  have hle_one : d ≤ 1 := Nat.le_of_dvd (by decide : 0 < 1) hdvd_one
+  omega
+
+/--
 `d=3` の Tail は `u^2` ではなく（変数名を `x,u` に取っているため）`x^2` を因子に持つ。
 すなわち:
 `(x+u)^3 = u^3 + 3*x*u^2 + x^2*(x+3*u)`。
