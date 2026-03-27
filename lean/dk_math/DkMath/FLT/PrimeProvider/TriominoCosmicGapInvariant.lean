@@ -1532,6 +1532,60 @@ theorem FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl :
     branchAWieferichRefuter_via_FLT
 
 /--
+Branch A の Wieferich witness route が供給されれば、
+`p ≥ 5` 素数指数の FLT を concrete に返せる。
+-/
+theorem FLT_prime_ge5_of_branchA_wieferich_with_normalizer_impl
+    (hRefute : DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget)
+    (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
+    FermatLastTheoremFor p := by
+  exact (FLTPrimeGe5Target_of_branchA_wieferich_with_normalizer_impl hRefute) p hp hp5
+
+/--
+既定の Branch A Wieferich route から得る `FLT_prime_ge5` 実装版。
+-/
+theorem FLT_prime_ge5_of_branchA_wieferich_default_with_normalizer_impl
+    (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
+    FermatLastTheoremFor p := by
+  exact (FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl) p hp hp5
+
+/--
+Branch A の Wieferich witness route が供給されれば、
+`FLT_prime_ge5` 本体を通さず global provider へ直結できる。
+-/
+theorem triominoCosmic_globalProvider_of_branchA_wieferich_with_normalizer_impl
+    (hRefute : DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget) :
+    GlobalPrimeExponentFLTProvider := by
+  exact triominoCosmic_globalProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_branchA_wieferich_with_normalizer_impl hRefute)
+
+/--
+既定の Branch A Wieferich route から得る global provider。
+-/
+theorem triominoCosmic_globalProvider_of_branchA_wieferich_default_with_normalizer_impl :
+    GlobalPrimeExponentFLTProvider := by
+  exact triominoCosmic_globalProvider_of_FLTPrimeGe5
+    FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl
+
+/--
+Branch A の Wieferich witness route が供給されれば、
+`FLT_prime_ge5` 本体を通さず Triomino provider へ直結できる。
+-/
+theorem triominoPrimeProvider_of_branchA_wieferich_with_normalizer_impl
+    (hRefute : DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget) :
+    TriominoPrimeProvider := by
+  exact triominoPrimeProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_branchA_wieferich_with_normalizer_impl hRefute)
+
+/--
+既定の Branch A Wieferich route から得る Triomino provider。
+-/
+theorem triominoPrimeProvider_of_branchA_wieferich_default_with_normalizer_impl :
+    TriominoPrimeProvider := by
+  exact triominoPrimeProvider_of_FLTPrimeGe5
+    FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl
+
+/--
 2層 mainline の kernel 版。
 `BranchAShapeToRefuterTarget` が与えられれば、shape 出口から refuter 出口への橋は自動生成できる。
 -/

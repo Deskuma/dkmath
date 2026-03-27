@@ -1491,3 +1491,69 @@
      と
      `FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl`
      も自動的に clean 化する。
+
+### 日時: 2026/03/27 JST
+
+1. 目的:
+   - Branch A / Wieferich route の
+     `FLTPrimeGe5Target`
+     実装を、
+     provider-visible な公開 wrapper まで揃える。
+   - これにより、
+     shape route / gap-pow route
+     と同じ粒度で
+     `FLT_prime_ge5` / global provider / Triomino provider
+     へ辿れるようにする。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     に以下を追加した。
+     - `FLT_prime_ge5_of_branchA_wieferich_with_normalizer_impl`
+     - `FLT_prime_ge5_of_branchA_wieferich_default_with_normalizer_impl`
+     - `triominoCosmic_globalProvider_of_branchA_wieferich_with_normalizer_impl`
+     - `triominoCosmic_globalProvider_of_branchA_wieferich_default_with_normalizer_impl`
+     - `triominoPrimeProvider_of_branchA_wieferich_with_normalizer_impl`
+     - `triominoPrimeProvider_of_branchA_wieferich_default_with_normalizer_impl`
+   - いずれも
+     `FLTPrimeGe5Target_of_branchA_wieferich_with_normalizer_impl`
+     またはその default 版からの thin wrapper
+     として実装した。
+
+3. 結論:
+   - Branch A / Wieferich route は、
+     lower-layer witness
+     -> refuter
+     -> `FLTPrimeGe5Target`
+     に加えて、
+     `FLT_prime_ge5`
+     / global provider
+     / Triomino provider
+     まで同じ命名粒度で辿れるようになった。
+   - これで witness route は
+     provider-visible mainline
+     としても shape route と対等な公開面を持った。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   - `lake build DkMath.FLT.Basic`
+   - `lake build`
+   を実行し、build 完了まで待って成功を確認した。
+
+5. 備考:
+   - 今回の追加はすべて配線であり、
+     Branch A の active `sorry`
+     位置自体は変化していない。
+   - 以後、
+     `existingDescentRefuter_via_FLT`
+     を clean 実装へ差し替えれば、
+     witness route の公開 wrapper 群もまとめて clean 化される。
+
+6. 次の課題:
+   - `existingDescentRefuter_via_FLT`
+     を、
+     no-Wieferich / descent machinery
+     の clean 実装へ差し替える。
+   - 必要なら、
+     witness route の default 公開入口を
+     provider 側の実際の mainline 候補として
+     どの theorem 名で固定するかを決める。
