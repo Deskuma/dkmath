@@ -266,6 +266,26 @@ DkMathlib/
 - 実装だけでなく、設計意図を残す。
 - リファクタリングでは「どこへ移したか」だけでなく、
   「なぜそこへ移したか」を残す。
+- 記録場所は、以下に示す。
+  - `lean/dk_math/docs/<branch_name>/History.md`
+  - branch_name: `dev/branch_identifier` は、`dev/` 以下で一意な識別子 `branch_identifier` とする。
+  - `History.md` は、以下のテンプレートを基本とする。
+
+  ```markdown
+  # History of {Branch Name}
+
+  ## Log
+
+  ### 日時: 2026/03/26 15:48 JST
+
+  1. 目的:
+  2. 実施:
+  3. 結論:
+  4. 検証:
+  5. 失敗事例:
+  6. 備考:
+  7. 次の課題:
+  ```
 
 ---
 
