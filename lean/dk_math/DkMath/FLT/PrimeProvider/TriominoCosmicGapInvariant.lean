@@ -1289,6 +1289,20 @@ theorem branchAWieferichRefuter_via_FLT :
   branchAWieferichRefuter_of_existingDescent existingDescentRefuter_via_FLT
 
 /--
+Branch A / Wieferich witness refuter の実装本体。
+
+最終 clean 置換点はこの定理 1 本に集約する。
+-/
+theorem branchAWieferichRefuter_math :
+    DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget :=
+  branchAWieferichRefuter_via_FLT
+
+/-- Branch A / Wieferich witness refuter の実装入口。 -/
+theorem branchAWieferichRefuter_impl :
+    DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget :=
+  branchAWieferichRefuter_math
+
+/--
 Branch A の Wieferich witness refuter 契約があれば、
 既存 descent 契約は witness を再構成して閉じられる。
 
@@ -1374,7 +1388,7 @@ theorem existingDescentRefuter_math
     BranchAShapeWitnessDescentInput p x y z t →
     False :=
   existingDescentRefuter_of_branchAWieferich
-    branchAWieferichRefuter_via_FLT
+    branchAWieferichRefuter_impl
 
 /--
 witness 直受け kernel の実装本体。
@@ -1549,7 +1563,7 @@ theorem FLTPrimeGe5Target_of_branchA_wieferich_with_normalizer_impl
 theorem FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl :
     FLTPrimeGe5Target := by
   exact FLTPrimeGe5Target_of_branchA_wieferich_with_normalizer_impl
-    branchAWieferichRefuter_via_FLT
+    branchAWieferichRefuter_impl
 
 /--
 Branch A の Wieferich witness route が供給されれば、
