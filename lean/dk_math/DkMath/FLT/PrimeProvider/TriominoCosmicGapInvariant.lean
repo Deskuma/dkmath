@@ -1275,17 +1275,176 @@ theorem branchAWieferichRefuter_of_existingDescent
     (branchAShapeWitness_to_existing_descent_input hpack hp_dvd_gap ht)
 
 /--
-暫定 concrete refuter for the Branch A Wieferich witness.
+Branch A / Wieferich witness route の最後の clean 置換点。
 
 付録:
-- 現段階では `PrimeGe5BranchAWieferichRefuterTarget` の clean 下降注入はまだ未実装だが、
+- workspace 内の既存 clean machinery は Branch B (`¬ p ∣ z-y`) 向けに設計されており、
+  Branch A witness `y^(p-1) ≡ 1 [MOD p^2]` を直接受ける kernel はまだ存在しない。
+- したがって現段階では、
+  この contract 1 本に `via_FLT` を隔離しておくのが最も安全な整理になる。
+- 将来 clean 化するなら、この contract の concrete 実装だけを差し替えればよい。
+-/
+abbrev BranchAWieferichAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget
+
+/--
+Branch A / Wieferich route の 1 段手前に置く local kernel 置換点。
+
+付録:
+- witness 単独ではなく Branch A normal form と局所 coprime 情報を合わせて使う。
+- `BranchAWieferichAdapterTarget` の concrete 実装が直接見つからない場合でも、
+  欠けた数学をこの local kernel 1 本へ閉じ込められる。
+-/
+abbrev BranchAWieferichLocalKernelAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAWieferichLocalKernelTarget
+
+/--
+Branch A distinguished-prime descent route の置換点。
+
+付録:
+- これは Wieferich witness より 1 段深い truly new kernel 候補であり、
+  `q = p` が distinguished prime になる Branch A 専用の下降仕様を受ける。
+- clean 化が `AWieferichLocalKernel` で止まるなら、
+  次に差し替えるべき contract はこの target である。
+-/
+abbrev BranchADistinguishedPrimeDescentAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchADistinguishedPrimeDescentTarget
+
+/--
+Branch A normal form から直接 smaller counterexample を返す stronger splice point。
+
+付録:
+- minimality は provider 側で no-`sorry` に選べるため、
+  concrete 実装を探すときはこちらの contract のほうが自然な入口になりやすい。
+-/
+abbrev BranchASmallerCounterexampleAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchASmallerCounterexampleTarget
+
+/--
+Branch A normal form から直接 smaller packet を返す strongest splice point。
+
+付録:
+- `counterexample` への再包装をまだ行わない分、
+  concrete 数学の内部構造を一番多く保持できる。
+-/
+abbrev BranchASmallerPacketAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchASmallerPacketTarget
+
+/-- `p ∣ t` の valuation peel route を表す provider 側 alias。 -/
+abbrev BranchAValuationPeelPacketAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAValuationPeelPacketTarget
+
+/-- `p ∣ t` の canonical tail stage を表す provider 側 alias。 -/
+abbrev BranchAValuationPeelCanonicalTailAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAValuationPeelCanonicalTailTarget
+
+/-- `p ∣ t` の seed/canonical tail 比較段を表す provider 側 alias。 -/
+abbrev BranchAValuationPeelTailComparisonAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAValuationPeelTailComparisonTarget
+
+/-- provider 側から見た valuation peel exact-error 契約。 -/
+abbrev BranchAValuationPeelTailErrorAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAValuationPeelTailErrorTarget
+
+/-- provider 側から見た valuation peel error-to-packet lift 契約。 -/
+abbrev BranchAValuationPeelPacketFromErrorAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAValuationPeelPacketFromErrorTarget
+
+/-- `p ∤ t` の primitive/cyclotomic packet descent route を表す provider 側 alias。 -/
+abbrev BranchAPrimitivePacketDescentAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitivePacketDescentTarget
+
+/--
+local kernel から最後の witness adapter を回収する thin bridge。
+-/
+theorem branchAWieferichAdapter_of_localKernel
+    (hK : BranchAWieferichLocalKernelAdapterTarget) :
+    BranchAWieferichAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAWieferichRefuter_of_localKernel hK
+
+/--
+distinguished-prime descent から Branch A refuter を回収する thin bridge。
+-/
+theorem branchAWieferichAdapter_of_distinguishedPrimeDescent
+    (hDesc : BranchADistinguishedPrimeDescentAdapterTarget) :
+    BranchAWieferichAdapterTarget := by
+  intro p x y z hpack hp_dvd_gap _hWieferich
+  exact DkMath.FLT.primeGe5BranchARefuter_of_distinguishedPrimeDescent hDesc hpack hp_dvd_gap
+
+/--
+smaller-counterexample route から Branch A refuter を回収する thin bridge。
+-/
+theorem branchAWieferichAdapter_of_smallerCounterexample
+    (hSmall : BranchASmallerCounterexampleAdapterTarget) :
+    BranchAWieferichAdapterTarget :=
+  branchAWieferichAdapter_of_distinguishedPrimeDescent
+    (DkMath.FLT.primeGe5BranchADistinguishedPrimeDescent_of_smallerCounterexample hSmall)
+
+/--
+smaller-packet route から Branch A refuter を回収する thin bridge。
+-/
+theorem branchAWieferichAdapter_of_smallerPacket
+    (hSmall : BranchASmallerPacketAdapterTarget) :
+    BranchAWieferichAdapterTarget :=
+  branchAWieferichAdapter_of_smallerCounterexample
+    (DkMath.FLT.primeGe5BranchASmallerCounterexample_of_smallerPacket hSmall)
+
+/--
+valuation peel と primitive packet descent の 2 route から
+smaller-packet adapter を回収する thin bridge。
+-/
+theorem branchASmallerPacketAdapter_of_routes
+    (hPeel : BranchAValuationPeelPacketAdapterTarget)
+    (hPrim : BranchAPrimitivePacketDescentAdapterTarget) :
+    BranchASmallerPacketAdapterTarget :=
+  DkMath.FLT.primeGe5BranchASmallerPacket_of_routes hPeel hPrim
+
+/--
+valuation peel の exact-error lift と primitive route から
+smaller-packet adapter を回収する thin bridge。
+-/
+theorem branchASmallerPacketAdapter_of_errorLift_and_primitive
+    (hErr : BranchAValuationPeelTailErrorAdapterTarget)
+    (hLift : BranchAValuationPeelPacketFromErrorAdapterTarget)
+    (hPrim : BranchAPrimitivePacketDescentAdapterTarget) :
+    BranchASmallerPacketAdapterTarget :=
+  DkMath.FLT.primeGe5BranchASmallerPacket_of_errorLift_and_primitive
+    hErr hLift hPrim
+
+/--
+primitive route を本命にしつつ、
+peel 側を exact-error lift として差し込む provider bridge。
+-/
+theorem branchAWieferichAdapter_of_errorLift_and_primitive
+    (hErr : BranchAValuationPeelTailErrorAdapterTarget)
+    (hLift : BranchAValuationPeelPacketFromErrorAdapterTarget)
+    (hPrim : BranchAPrimitivePacketDescentAdapterTarget) :
+    BranchAWieferichAdapterTarget :=
+  branchAWieferichAdapter_of_smallerPacket
+    (branchASmallerPacketAdapter_of_errorLift_and_primitive hErr hLift hPrim)
+
+/--
+primitive route を canonical mainline として読む provider wrapper。
+-/
+theorem branchAWieferichAdapter_of_primitiveMainline
+    (hErr : BranchAValuationPeelTailErrorAdapterTarget)
+    (hLift : BranchAValuationPeelPacketFromErrorAdapterTarget)
+    (hPrim : BranchAPrimitivePacketDescentAdapterTarget) :
+    BranchAWieferichAdapterTarget :=
+  branchAWieferichAdapter_of_errorLift_and_primitive hErr hLift hPrim
+
+/--
+暫定 concrete adapter for the Branch A Wieferich witness route.
+
+付録:
+- 現段階では `BranchAWieferichAdapterTarget` の clean 実装はまだ未発見だが、
   実装自体は既存 descent 契約を経由して閉じる。
 - したがって clean route では、
-  `ExistingDescentRefuterTarget` の差し替えだけで
-  この theorem も同時に clean 化される。
+  この theorem 1 本の差し替えだけで
+  witness route 全体を clean 化できる。
 -/
-theorem branchAWieferichRefuter_via_FLT :
-    DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget :=
+theorem branchAWieferichAdapter_via_FLT :
+    BranchAWieferichAdapterTarget :=
   branchAWieferichRefuter_of_existingDescent existingDescentRefuter_via_FLT
 
 /--
@@ -1295,7 +1454,7 @@ Branch A / Wieferich witness refuter の実装本体。
 -/
 theorem branchAWieferichRefuter_math :
     DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget :=
-  branchAWieferichRefuter_via_FLT
+  branchAWieferichAdapter_via_FLT
 
 /-- Branch A / Wieferich witness refuter の実装入口。 -/
 theorem branchAWieferichRefuter_impl :
