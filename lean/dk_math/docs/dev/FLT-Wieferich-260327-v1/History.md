@@ -629,3 +629,85 @@
      - valuation peel による packet 再構成
      - cyclotomic / distinguished-prime descent による packet 再構成
      の 2 本。
+
+### 日時: 2026/03/27 20:16 JST
+
+1. 目的:
+   - `design-004` の二段構えを型として固定し、
+     `SmallerPacketTarget`
+     の concrete 実装探索を
+     `p ∣ t`
+     と
+     `¬ p ∣ t`
+     の 2 route
+     に完全分離する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     - `PrimeGe5BranchAValuationPeelPacketTarget`
+     - `PrimeGe5BranchAPrimitivePacketDescentTarget`
+     を追加した。
+   - 同ファイルに
+     `primeGe5BranchASmallerPacket_of_routes`
+     を追加し、
+     valuation peel route
+     と
+     primitive/cyclotomic route
+     が揃えば
+     `PrimeGe5BranchASmallerPacketTarget`
+     を場合分けだけで回収できるようにした。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     には
+     - `BranchAValuationPeelPacketAdapterTarget`
+     - `BranchAPrimitivePacketDescentAdapterTarget`
+     - `branchASmallerPacketAdapter_of_routes`
+     を追加し、
+     provider 側から見ても
+     route split
+     が splice point
+     として読めるようにした。
+
+3. 結論:
+   - Branch A packet 探索の concrete 未完核は、
+     いまや
+     `PrimeGe5BranchASmallerPacketTarget`
+     1 本ではなく、
+     - `PrimeGe5BranchAValuationPeelPacketTarget`
+     - `PrimeGe5BranchAPrimitivePacketDescentTarget`
+     の 2 本に分解されている。
+   - したがって今後は
+     `p ∣ t`
+     の Nat / valuation route
+     と、
+     `¬ p ∣ t`
+     の primitive/cyclotomic route
+     を独立に攻めればよい。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を実行し、build 完了まで待って成功を確認した。
+   - 後者の build で
+     `DkMath.FLT.Basic`
+     も再ビルドされ、成功を確認した。
+
+5. 備考:
+   - これ以降の concrete 数学は、
+     `smaller counterexample`
+     そのものより
+     `smaller packet`
+     の生成法を主題にして考えればよい。
+   - provider 側でも
+     route split
+     が visible になったため、
+     clean default へ差し込む場所はかなり明確になった。
+
+6. 次の課題:
+   - まずは
+     `PrimeGe5BranchAValuationPeelPacketTarget`
+     を攻める。
+     ここは Nat / valuation 層で比較的近い。
+   - primitive case は
+     `PrimeGe5BranchAPrimitivePacketDescentTarget`
+     として別腹で育てる。

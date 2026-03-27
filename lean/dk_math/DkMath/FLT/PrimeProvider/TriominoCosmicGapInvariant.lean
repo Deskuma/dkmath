@@ -1330,6 +1330,14 @@ Branch A normal form から直接 smaller packet を返す strongest splice poin
 abbrev BranchASmallerPacketAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchASmallerPacketTarget
 
+/-- `p ∣ t` の valuation peel route を表す provider 側 alias。 -/
+abbrev BranchAValuationPeelPacketAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAValuationPeelPacketTarget
+
+/-- `p ∤ t` の primitive/cyclotomic packet descent route を表す provider 側 alias。 -/
+abbrev BranchAPrimitivePacketDescentAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitivePacketDescentTarget
+
 /--
 local kernel から最後の witness adapter を回収する thin bridge。
 -/
@@ -1364,6 +1372,16 @@ theorem branchAWieferichAdapter_of_smallerPacket
     BranchAWieferichAdapterTarget :=
   branchAWieferichAdapter_of_smallerCounterexample
     (DkMath.FLT.primeGe5BranchASmallerCounterexample_of_smallerPacket hSmall)
+
+/--
+valuation peel と primitive packet descent の 2 route から
+smaller-packet adapter を回収する thin bridge。
+-/
+theorem branchASmallerPacketAdapter_of_routes
+    (hPeel : BranchAValuationPeelPacketAdapterTarget)
+    (hPrim : BranchAPrimitivePacketDescentAdapterTarget) :
+    BranchASmallerPacketAdapterTarget :=
+  DkMath.FLT.primeGe5BranchASmallerPacket_of_routes hPeel hPrim
 
 /--
 暫定 concrete adapter for the Branch A Wieferich witness route.

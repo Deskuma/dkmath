@@ -190,6 +190,52 @@ abbrev PrimeGe5BranchASmallerPacketTarget : Prop :=
     ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
 
 /--
+`p ∣ t` のとき、余分な distinguished-prime 深さを 1 段剥いて
+smaller packet を返す route。
+
+付録:
+- これは Nat / valuation 層で完結する候補契約である。
+- `PrimeGe5BranchASmallerPacketTarget` のうち
+  `p ∣ t`
+  分岐だけを切り出している。
+-/
+abbrev PrimeGe5BranchAValuationPeelPacketTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
+
+/--
+`p ∤ t` の primitive core に入った後、
+cyclotomic / distinguished-prime descent で smaller packet を返す route。
+
+付録:
+- これは Nat 直操作よりも algebraic descent を置くべき側の契約である。
+- `PrimeGe5BranchASmallerPacketTarget` のうち
+  `¬ p ∣ t`
+  分岐だけを切り出している。
+-/
+abbrev PrimeGe5BranchAPrimitivePacketDescentTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
+
+/--
 Branch A normal form から直接、
 より小さい Branch A 反例を構成する stronger target。
 
@@ -2847,6 +2893,19 @@ theorem primeGe5BranchASmallerCounterexample_of_smallerPacket
     ⟨pkt', hz'lt⟩
   exact ⟨pkt'.x, pkt'.y, pkt'.z, counterexamplePack_of_branchANormalFormPacket pkt',
     pkt'.hp_dvd_gap, hz'lt⟩
+
+/--
+valuation peel と primitive-packet descent の 2 分岐が揃えば、
+smaller-packet target は場合分けだけで閉じる。
+-/
+theorem primeGe5BranchASmallerPacket_of_routes
+    (hPeel : PrimeGe5BranchAValuationPeelPacketTarget)
+    (hPrim : PrimeGe5BranchAPrimitivePacketDescentTarget) :
+    PrimeGe5BranchASmallerPacketTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s
+  by_cases hpt : p ∣ t
+  · exact hPeel hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hpt
+  · exact hPrim hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hpt
 
 /--
 distinguished-prime descent があれば、最小 Branch A 反例は存在しえない。
