@@ -3720,6 +3720,27 @@ theorem primeGe5BranchARefuter_of_distinguishedPrimeDescent
   exact primeGe5BranchARefuter_on_minimal_of_distinguishedPrimeDescent hDesc hMin
 
 /--
+peel 側の exact-error lift と primitive descent が揃えば、
+Branch A refuter は smaller-packet route 経由で回収できる。
+
+付録:
+- これにより provider/mainline 側からは、
+  primitive route を本命にしつつ
+  peel 側の残核を error-lift 1 本として差し込めば十分だと読める。
+-/
+theorem primeGe5BranchARefuter_of_errorLift_and_primitive
+    (hErr : PrimeGe5BranchAValuationPeelTailErrorTarget)
+    (hLift : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hPrim : PrimeGe5BranchAPrimitivePacketDescentTarget) :
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      p ∣ (z - y) →
+      False :=
+  primeGe5BranchARefuter_of_distinguishedPrimeDescent
+    (primeGe5BranchADistinguishedPrimeDescent_of_smallerCounterexample
+      (primeGe5BranchASmallerCounterexample_of_smallerPacket
+        (primeGe5BranchASmallerPacket_of_errorLift_and_primitive hErr hLift hPrim)))
+
+/--
 `FLT_of_coprime` の residual branch から呼ぶ Branch A 専用 refuter 入口。
 
 将来は `PrimeGe5BranchAGapPowFactorizationTarget` と shape/descent kernel を

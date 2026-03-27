@@ -1412,6 +1412,18 @@ theorem branchASmallerPacketAdapter_of_errorLift_and_primitive
     hErr hLift hPrim
 
 /--
+primitive route を本命にしつつ、
+peel 側を exact-error lift として差し込む provider bridge。
+-/
+theorem branchAWieferichAdapter_of_errorLift_and_primitive
+    (hErr : BranchAValuationPeelTailErrorAdapterTarget)
+    (hLift : BranchAValuationPeelPacketFromErrorAdapterTarget)
+    (hPrim : BranchAPrimitivePacketDescentAdapterTarget) :
+    BranchAWieferichAdapterTarget :=
+  branchAWieferichAdapter_of_smallerPacket
+    (branchASmallerPacketAdapter_of_errorLift_and_primitive hErr hLift hPrim)
+
+/--
 暫定 concrete adapter for the Branch A Wieferich witness route.
 
 付録:

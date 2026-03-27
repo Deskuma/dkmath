@@ -1277,3 +1277,67 @@
      の concrete 実装可能性を見極める。
    - もし見込みが薄ければ、
      primitive packet descent を本命 route としてさらに前面に出す。
+
+### 日時: 2026/03/27 21:49 JST
+
+1. 目的:
+   - `review-006.md`
+     の方針に沿って、
+     primitive route を本命に押し上げても
+     final refuter まで一本線で読めることを、
+     bridge 定理として固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `primeGe5BranchARefuter_of_errorLift_and_primitive`
+     を追加した。
+   - この定理では、
+     `PrimeGe5BranchAValuationPeelTailErrorTarget`
+     と
+     `PrimeGe5BranchAValuationPeelPacketFromErrorTarget`
+     と
+     `PrimeGe5BranchAPrimitivePacketDescentTarget`
+     から、
+     smaller-packet / smaller-counterexample / distinguished-prime descent
+     を順に経由して
+     Branch A refuter を回収する。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     には
+     `branchAWieferichAdapter_of_errorLift_and_primitive`
+     を追加した。
+
+3. 結論:
+   - provider/mainline 側から見ると、
+     いまの Branch A route は
+     - primitive:
+       本命 descent
+     - peel:
+       exact-error lift
+     の二本立てで final refuter まで一直線に読める。
+   - したがって次の研究判断は、
+     `PrimeGe5BranchAValuationPeelPacketFromErrorTarget`
+     を本当に攻めるか、
+     それとも primitive route をさらに前面化するか、
+     の一点にかなり絞られた。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認した。
+
+5. 備考:
+   - 途中で
+     `primeGe5BranchARefuter_of_distinguishedPrimeDescent`
+     より前に bridge を置いてしまい、
+     定義順エラーが出たため、
+     theorem の位置だけ調整した。
+   - 数学内容自体は増やしておらず、
+     これは route 整理のステップである。
+
+6. 次の課題:
+   - `PrimeGe5BranchAValuationPeelPacketFromErrorTarget`
+     に自然な concrete 実装があるかを、
+     少しだけ試す。
+   - そこで強い extraction が出なければ、
+     primitive packet descent を本命 route として明示的に押し上げる。
