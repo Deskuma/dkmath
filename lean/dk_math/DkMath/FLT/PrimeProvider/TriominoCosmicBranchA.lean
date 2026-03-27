@@ -620,6 +620,124 @@ theorem primeGe5BranchA_spow_eq_head_add_p_sq_mul
   exact Nat.eq_of_mul_eq_mul_left hp_pos hEq
 
 /--
+Branch A では、`s^p - y^(p-1)` 自体が gap `z - y` を 1 因子持つ。
+
+付録:
+- `GN = p * s^p` を `p` で 1 回割ったあと、
+  tail 側に残る各項は `k ≥ 1` なので必ず `z - y` を 1 因子含む。
+- valuation peel route では、この theorem を
+  `z - y = p^(p-1) * t^p`
+  と組み合わせて使う。
+-/
+theorem primeGe5BranchA_spow_eq_head_add_gap_mul
+    {p x y z s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    ∃ B : ℕ, s ^ p = y ^ (p - 1) + (z - y) * B := by
+  let u : ℕ := z - y
+  let N : ℕ := GN p u y
+  let A : ℕ := p * y ^ (p - 1)
+  let T : ℕ := Finset.sum ((Finset.range p).erase 0) (fun k =>
+    (Nat.choose p (k + 1) : ℕ) * u ^ k * y ^ (p - 1 - k))
+  have hp_pos : 0 < p := hpack.hp.pos
+  have hu_pos : 0 < u := by
+    unfold u
+    exact Nat.sub_pos_of_lt hpack.hyz_lt
+  have hu_ne_zero : u ≠ 0 := Nat.ne_of_gt hu_pos
+  obtain ⟨a, ha0⟩ : ∃ a : ℕ, u = a * p := exists_eq_mul_left_of_dvd hp_dvd_gap
+  have ha : u = p * a := by simpa [Nat.mul_comm] using ha0
+  have hsplitTA : T + A = N := by
+    let f : ℕ → ℕ := fun k =>
+      (Nat.choose p (k + 1) : ℕ) * (z - y) ^ k * y ^ (p - 1 - k)
+    have hsum :
+        Finset.sum ((Finset.range p).erase 0) f + f 0 = Finset.sum (Finset.range p) f := by
+      simpa using
+        (Finset.sum_erase_add (s := Finset.range p) (f := f) (a := 0)
+          (by simpa using hp_pos))
+    unfold N
+    rw [GN_eq_sum]
+    unfold A T u
+    simpa [f, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using hsum
+  have hsplit : N = A + T := by
+    simpa [Nat.add_comm] using hsplitTA.symm
+  have hT_dvd : p * u ∣ T := by
+    unfold T
+    refine Finset.dvd_sum ?_
+    intro k hk
+    have hk_mem : k ∈ Finset.range p := Finset.mem_of_mem_erase hk
+    have hk_ne_zero : k ≠ 0 := Finset.mem_erase.mp hk |>.1
+    have hk_ge_one : 1 ≤ k := Nat.succ_le_iff.mpr (Nat.pos_of_ne_zero hk_ne_zero)
+    by_cases hk_one : k = 1
+    · have hchoose : p ∣ Nat.choose p (k + 1) := by
+        rw [hk_one]
+        apply hpack.hp.dvd_choose_self
+        · decide
+        · exact lt_of_lt_of_le (by decide : 2 < 5) hpack.hp5
+      obtain ⟨c, hc0⟩ : ∃ c : ℕ, Nat.choose p (k + 1) = c * p :=
+        exists_eq_mul_left_of_dvd hchoose
+      have hc : Nat.choose p (k + 1) = p * c := by
+        simpa [Nat.mul_comm] using hc0
+      have hc2 : Nat.choose p 2 = p * c := by
+        simpa [hk_one] using hc
+      refine ⟨c * y ^ (p - 1 - k), ?_⟩
+      calc
+        (Nat.choose p (k + 1) : ℕ) * u ^ k * y ^ (p - 1 - k)
+            = ((p * c) * u) * y ^ (p - 1 - k) := by
+                rw [hk_one, hc2]
+                simp [u, Nat.mul_assoc]
+        _ = (p * u) * (c * y ^ (p - 1 - k)) := by
+              ac_rfl
+    · have hk_ge_two : 2 ≤ k := by omega
+      have hk_decomp : k = (k - 2) + 2 := by omega
+      have hu2 : u ^ 2 = (p * u) * a := by
+        calc
+          u ^ 2 = u * u := by simp [pow_two]
+          _ = (p * a) * u := by simp [ha]
+          _ = (p * u) * a := by ac_rfl
+      refine ⟨(Nat.choose p (k + 1) : ℕ) * u ^ (k - 2) * a * y ^ (p - 1 - k), ?_⟩
+      calc
+        (Nat.choose p (k + 1) : ℕ) * u ^ k * y ^ (p - 1 - k)
+            = (Nat.choose p (k + 1) : ℕ) * (u ^ (k - 2) * u ^ 2) * y ^ (p - 1 - k) := by
+                rw [hk_decomp, pow_add]
+                simp
+        _ = (Nat.choose p (k + 1) : ℕ) * (u ^ (k - 2) * ((p * u) * a)) * y ^ (p - 1 - k) := by
+              rw [hu2]
+        _ = (p * u) * ((Nat.choose p (k + 1) : ℕ) * u ^ (k - 2) * a * y ^ (p - 1 - k)) := by
+              ac_rfl
+  obtain ⟨B, hB0⟩ : ∃ B : ℕ, T = B * (p * u) := exists_eq_mul_left_of_dvd hT_dvd
+  have hB : T = (p * u) * B := by
+    simpa [Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using hB0
+  refine ⟨B, ?_⟩
+  have hEq : p * s ^ p = p * (y ^ (p - 1) + u * B) := by
+    calc
+      p * s ^ p = N := by simpa [N, u] using hsGN.symm
+      _ = A + T := hsplit
+      _ = p * y ^ (p - 1) + (p * u) * B := by rw [hB]
+      _ = p * (y ^ (p - 1) + u * B) := by ring
+  exact Nat.eq_of_mul_eq_mul_left hp_pos hEq
+
+/--
+`z - y = p^(p-1) * t^p` と組み合わせた gap-factor seed。
+
+付録:
+- `s^p - y^(p-1)` が
+  `p^(p-1) * t^p`
+  を 1 因子持つことを直接読むための theorem である。
+- valuation peel route の seed として使う。
+-/
+theorem primeGe5BranchA_spow_eq_head_add_gapShape_mul
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    ∃ B : ℕ, s ^ p = y ^ (p - 1) + (p ^ (p - 1) * t ^ p) * B := by
+  rcases primeGe5BranchA_spow_eq_head_add_gap_mul hpack hp_dvd_gap hsGN with ⟨B, hB⟩
+  refine ⟨B, ?_⟩
+  rw [hB, hgap]
+
+/--
 Branch A normal form から得る、`s^p ≡ y^(p-1) [MOD p^2]` の thin wrapper。
 
 付録:

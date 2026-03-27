@@ -711,3 +711,82 @@
    - primitive case は
      `PrimeGe5BranchAPrimitivePacketDescentTarget`
      として別腹で育てる。
+
+### 日時: 2026/03/27 20:31 JST
+
+1. 目的:
+   - valuation peel route の seed を、
+     concrete equality として先に固定する。
+   - 具体的には、
+     `s^p - y^(p-1)`
+     が gap
+     あるいは
+     `p^(p-1) * t^p`
+     を 1 因子持つことを theorem 化する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     - `primeGe5BranchA_spow_eq_head_add_gap_mul`
+     - `primeGe5BranchA_spow_eq_head_add_gapShape_mul`
+     を追加した。
+   - 前者は
+     `GN p (z - y) y = p * s^p`
+     と
+     `p ∣ (z - y)`
+     から
+     `s^p = y^(p-1) + (z-y) * B`
+     を返す。
+   - 後者はこれを
+     `z - y = p^(p-1) * t^p`
+     で読み替え、
+     `s^p = y^(p-1) + (p^(p-1) * t^p) * B`
+     を返す。
+
+3. 結論:
+   - valuation peel route は、
+     もはや抽象的な
+     “余分な distinguished-prime 深さ”
+     の話ではなく、
+     `s^p - y^(p-1)`
+     が gap を因子にもつ concrete seed
+     を起点に考えられるようになった。
+   - 特に
+     `p ∣ t`
+     の場合は、
+     この seed と
+     `z - y = p^(p-1) * t^p`
+     を組み合わせることで、
+     `t` の 1 段 peeling
+     を狙う筋道がかなり見えやすくなった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を実行し、build 完了まで待って成功を確認した。
+
+5. 備考:
+   - 途中で
+     `exists_eq_mul_left_of_dvd`
+     の向きに起因する型エラーが数回出たが、
+     いずれも
+     `a * p`
+     と
+     `p * a`
+     の並べ替えを明示して解消した。
+   - `TriominoCosmicBranchA.lean`
+     の unused `simp` warning 1 件もこの作業中に解消した。
+
+6. 次の課題:
+   - `PrimeGe5BranchAValuationPeelPacketTarget`
+     を、
+     いま追加した gap-shape seed
+     から具体的に作る。
+   - 具体的には
+     `p ∣ t`
+     なら
+     `t = p * t₁`
+     と置いて、
+     そこから smaller packet
+     をどう再構成するかを探る。
