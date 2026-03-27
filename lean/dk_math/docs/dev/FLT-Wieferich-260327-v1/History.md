@@ -1213,3 +1213,67 @@
      に留め、
      `PrimeGe5BranchAPrimitivePacketDescentTarget`
      を本命 route として押し上げる。
+
+### 日時: 2026/03/27 21:37 JST
+
+1. 目的:
+   - valuation peel route を
+     `packet builder`
+     ではなく
+     `obstruction extraction`
+     として読む設計を、
+     target 分解として Lean 上に反映する。
+   - 具体的には、
+     peel 側の残る未完を
+     `tail error -> smaller packet`
+     の lift 1 本へ局所化する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `PrimeGe5BranchAValuationPeelPacketFromErrorTarget`
+     を追加した。
+   - 同ファイルに
+     - `primeGe5BranchAValuationPeelPacket_of_tailErrorLift`
+     - `primeGe5BranchASmallerPacket_of_errorLift_and_primitive`
+     を追加した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     には
+     `BranchAValuationPeelPacketFromErrorAdapterTarget`
+     と
+     `branchASmallerPacketAdapter_of_errorLift_and_primitive`
+     を追加した。
+
+3. 結論:
+   - valuation peel 側の未完数学は、
+     もはや
+     `PrimeGe5BranchAValuationPeelPacketTarget`
+     全体ではなく、
+     `PrimeGe5BranchAValuationPeelPacketFromErrorTarget`
+     1 本として読める。
+   - したがって current design は
+     - peel 側:
+       exact-error からの lift
+     - primitive 側:
+       本命 packet descent
+     の二本立てとしてかなり明確になった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認した。
+
+5. 備考:
+   - この段階では新しい数学証明は増やしておらず、
+     target 分解と bridge の整理が主である。
+   - しかし設計上は、
+     `analysis-BC.md`
+     の結論
+     「valuation peel は first-order obstruction route」
+     をそのまま型に落とせた。
+
+6. 次の課題:
+   - `PrimeGe5BranchAValuationPeelPacketFromErrorTarget`
+     の concrete 実装可能性を見極める。
+   - もし見込みが薄ければ、
+     primitive packet descent を本命 route としてさらに前面に出す。

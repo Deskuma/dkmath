@@ -1346,6 +1346,10 @@ abbrev BranchAValuationPeelTailComparisonAdapterTarget : Prop :=
 abbrev BranchAValuationPeelTailErrorAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAValuationPeelTailErrorTarget
 
+/-- provider 側から見た valuation peel error-to-packet lift 契約。 -/
+abbrev BranchAValuationPeelPacketFromErrorAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAValuationPeelPacketFromErrorTarget
+
 /-- `p ∤ t` の primitive/cyclotomic packet descent route を表す provider 側 alias。 -/
 abbrev BranchAPrimitivePacketDescentAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitivePacketDescentTarget
@@ -1394,6 +1398,18 @@ theorem branchASmallerPacketAdapter_of_routes
     (hPrim : BranchAPrimitivePacketDescentAdapterTarget) :
     BranchASmallerPacketAdapterTarget :=
   DkMath.FLT.primeGe5BranchASmallerPacket_of_routes hPeel hPrim
+
+/--
+valuation peel の exact-error lift と primitive route から
+smaller-packet adapter を回収する thin bridge。
+-/
+theorem branchASmallerPacketAdapter_of_errorLift_and_primitive
+    (hErr : BranchAValuationPeelTailErrorAdapterTarget)
+    (hLift : BranchAValuationPeelPacketFromErrorAdapterTarget)
+    (hPrim : BranchAPrimitivePacketDescentAdapterTarget) :
+    BranchASmallerPacketAdapterTarget :=
+  DkMath.FLT.primeGe5BranchASmallerPacket_of_errorLift_and_primitive
+    hErr hLift hPrim
 
 /--
 暫定 concrete adapter for the Branch A Wieferich witness route.

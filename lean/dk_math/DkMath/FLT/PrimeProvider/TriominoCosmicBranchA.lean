@@ -384,6 +384,35 @@ abbrev PrimeGe5BranchAValuationPeelTailErrorTarget : Prop :=
       p * B = C + (p ^ (p - 1) * t1 ^ p) * E
 
 /--
+valuation peel route の最後の unresolved lift。
+
+付録:
+- valuation peel を `obstruction extraction`
+  として読むなら、
+  未完数学は
+  `PrimeGe5BranchAValuationPeelTailErrorTarget`
+  の error term から
+  smaller packet
+  を起こすこの 1 本に集約できる。
+- primitive route と分離して扱うための target である。
+-/
+abbrev PrimeGe5BranchAValuationPeelPacketFromErrorTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∀ {t1 B C E : ℕ},
+      t = p * t1 →
+      p * B = C + (p ^ (p - 1) * t1 ^ p) * E →
+      ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
+
+/--
 `p ∤ t` の primitive core に入った後、
 cyclotomic / distinguished-prime descent で smaller packet を返す route。
 
@@ -1330,6 +1359,18 @@ theorem primeGe5BranchAValuationPeelTailError_default :
   primeGe5BranchAValuationPeelTailError_of_exact
     (primeGe5BranchAValuationPeelTailExact_of_comparison
       primeGe5BranchAValuationPeelTailComparison_default)
+
+/--
+tail-error lift があれば、valuation peel packet route は自動で従う。
+-/
+theorem primeGe5BranchAValuationPeelPacket_of_tailErrorLift
+    (hErr : PrimeGe5BranchAValuationPeelTailErrorTarget)
+    (hLift : PrimeGe5BranchAValuationPeelPacketFromErrorTarget) :
+    PrimeGe5BranchAValuationPeelPacketTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd
+  rcases hErr hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd with
+    ⟨t1, B, C, E, ht, hErrEq⟩
+  exact hLift hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd ht hErrEq
 
 /--
 Branch A normal form から得る、`s^p ≡ y^(p-1) [MOD p^2]` の thin wrapper。
@@ -3618,6 +3659,26 @@ theorem primeGe5BranchASmallerPacket_of_routes
   by_cases hpt : p ∣ t
   · exact hPeel hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hpt
   · exact hPrim hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hpt
+
+/--
+valuation peel を error-lift 1 本に局所化した smaller-packet bridge。
+
+付録:
+- provider/mainline 側から見ると、
+  valuation peel 側の残る未完は
+  `PrimeGe5BranchAValuationPeelPacketFromErrorTarget`
+  だけだと読める。
+- したがって primitive route を本命に押し上げつつ、
+  peel 側は exact-error からの lift として独立に詰められる。
+-/
+theorem primeGe5BranchASmallerPacket_of_errorLift_and_primitive
+    (hErr : PrimeGe5BranchAValuationPeelTailErrorTarget)
+    (hLift : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hPrim : PrimeGe5BranchAPrimitivePacketDescentTarget) :
+    PrimeGe5BranchASmallerPacketTarget :=
+  primeGe5BranchASmallerPacket_of_routes
+    (primeGe5BranchAValuationPeelPacket_of_tailErrorLift hErr hLift)
+    hPrim
 
 /--
 distinguished-prime descent があれば、最小 Branch A 反例は存在しえない。
