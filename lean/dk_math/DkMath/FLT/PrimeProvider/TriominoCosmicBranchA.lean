@@ -462,6 +462,56 @@ abbrev PrimeGe5BranchAPrimitiveWieferichPacketTarget : Prop :=
     ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
 
 /--
+primitive mainline の distinguished-prime selection 段。
+
+付録:
+- primitive route で本当に新しく必要なのは、
+  まず `GN p (z-y) y`
+  側に distinguished prime `q`
+  を 1 つ取ることである。
+- ここでは `q ∣ GN` かつ `¬ q ∣ (z-y)` だけを要求し、
+  packet restoration とは分離して扱う。
+-/
+abbrev PrimeGe5BranchAPrimitiveDistinguishedPrimeTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ GN p (z - y) y ∧ ¬ q ∣ (z - y)
+
+/--
+distinguished prime が取れた後の smaller-packet restoration 段。
+
+付録:
+- primitive route の後半だけを isolated に表す target である。
+- distinguished prime の existence と、
+  actual な smaller packet 復元を分離するために置く。
+-/
+abbrev PrimeGe5BranchAPrimitivePacketRestoreTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ GN p (z - y) y →
+      ¬ q ∣ (z - y) →
+      ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
+
+/--
 Branch A normal form から直接、
 より小さい Branch A 反例を構成する stronger target。
 
@@ -3810,6 +3860,20 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_wieferichPacket
   exact hPrim hpack hp_dvd_gap hgap hsGN hsx
     hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t
     (primeGe5BranchANormalForm_y_wieferich_mod_p_sq hpack hp_dvd_gap hgap hsGN)
+
+/--
+primitive distinguished-prime selection と packet restoration が揃えば、
+primitive witness-packet target は橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitiveWieferichPacket_of_distinguishedPrime_and_restore
+    (hPrime : PrimeGe5BranchAPrimitiveDistinguishedPrimeTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreTarget) :
+    PrimeGe5BranchAPrimitiveWieferichPacketTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+  rcases hPrime hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich with
+    ⟨q, hqprime, hqGN, hqgap⟩
+  exact hRestore hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich hqprime hqGN hqgap
 
 /--
 valuation peel を error-lift 1 本に局所化した smaller-packet bridge。

@@ -1358,6 +1358,14 @@ abbrev BranchAPrimitivePacketDescentAdapterTarget : Prop :=
 abbrev BranchAPrimitiveWieferichPacketAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitiveWieferichPacketTarget
 
+/-- primitive distinguished-prime selection 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveDistinguishedPrimeAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveDistinguishedPrimeTarget
+
+/-- primitive packet restoration 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitivePacketRestoreAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitivePacketRestoreTarget
+
 /--
 local kernel から最後の witness adapter を回収する thin bridge。
 -/
@@ -1445,6 +1453,17 @@ theorem branchAPrimitivePacketDescentAdapter_of_wieferichPacket
     (hPrim : BranchAPrimitiveWieferichPacketAdapterTarget) :
     BranchAPrimitivePacketDescentAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_wieferichPacket hPrim
+
+/--
+primitive distinguished-prime selection と restoration から、
+witness 付き primitive packet adapter を回収する thin bridge。
+-/
+theorem branchAPrimitiveWieferichPacketAdapter_of_distinguishedPrime_and_restore
+    (hPrime : BranchAPrimitiveDistinguishedPrimeAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreAdapterTarget) :
+    BranchAPrimitiveWieferichPacketAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveWieferichPacket_of_distinguishedPrime_and_restore
+    hPrime hRestore
 
 /--
 暫定 concrete adapter for the Branch A Wieferich witness route.
