@@ -1275,17 +1275,30 @@ theorem branchAWieferichRefuter_of_existingDescent
     (branchAShapeWitness_to_existing_descent_input hpack hp_dvd_gap ht)
 
 /--
-暫定 concrete refuter for the Branch A Wieferich witness.
+Branch A / Wieferich witness route の最後の clean 置換点。
 
 付録:
-- 現段階では `PrimeGe5BranchAWieferichRefuterTarget` の clean 下降注入はまだ未実装だが、
+- workspace 内の既存 clean machinery は Branch B (`¬ p ∣ z-y`) 向けに設計されており、
+  Branch A witness `y^(p-1) ≡ 1 [MOD p^2]` を直接受ける kernel はまだ存在しない。
+- したがって現段階では、
+  この contract 1 本に `via_FLT` を隔離しておくのが最も安全な整理になる。
+- 将来 clean 化するなら、この contract の concrete 実装だけを差し替えればよい。
+-/
+abbrev BranchAWieferichAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget
+
+/--
+暫定 concrete adapter for the Branch A Wieferich witness route.
+
+付録:
+- 現段階では `BranchAWieferichAdapterTarget` の clean 実装はまだ未発見だが、
   実装自体は既存 descent 契約を経由して閉じる。
 - したがって clean route では、
-  `ExistingDescentRefuterTarget` の差し替えだけで
-  この theorem も同時に clean 化される。
+  この theorem 1 本の差し替えだけで
+  witness route 全体を clean 化できる。
 -/
-theorem branchAWieferichRefuter_via_FLT :
-    DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget :=
+theorem branchAWieferichAdapter_via_FLT :
+    BranchAWieferichAdapterTarget :=
   branchAWieferichRefuter_of_existingDescent existingDescentRefuter_via_FLT
 
 /--
@@ -1295,7 +1308,7 @@ Branch A / Wieferich witness refuter の実装本体。
 -/
 theorem branchAWieferichRefuter_math :
     DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget :=
-  branchAWieferichRefuter_via_FLT
+  branchAWieferichAdapter_via_FLT
 
 /-- Branch A / Wieferich witness refuter の実装入口。 -/
 theorem branchAWieferichRefuter_impl :
