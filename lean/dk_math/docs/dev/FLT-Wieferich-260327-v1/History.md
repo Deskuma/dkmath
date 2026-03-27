@@ -205,3 +205,85 @@
      この local kernel を
      arithmetic / descent
      の 2 段にさらに分割する。
+
+### 日時: 2026/03/27 18:33 JST
+
+1. 目的:
+   - `review-003.md` の指摘どおり、
+     `PrimeGe5BranchAWieferichLocalKernelTarget`
+     が truly new kernel ではなく
+     既存
+     `PrimeGe5BranchANormalFormArithmeticKernelTarget`
+     の API 変種に近いことを、
+     Lean 上の bridge 定理として固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `primeGe5BranchAWieferichLocalKernel_of_arithmeticKernel`
+     を追加した。
+     これは
+     `PrimeGe5BranchANormalFormArithmeticKernelTarget`
+     から
+     `PrimeGe5BranchAWieferichLocalKernelTarget`
+     を回収する橋であり、
+     `gcd(gap,GN)=p`
+     は既存既定抽出
+     `primeGe5BranchANormalForm_gcd_gap_GN_eq_p_default`
+     で供給する。
+   - 同ファイルに
+     `primeGe5BranchANormalFormArithmeticKernel_of_wieferichLocalKernel`
+     も追加した。
+     こちらは
+     `PrimeGe5BranchAWieferichLocalKernelTarget`
+     から
+     arithmetic kernel
+     を戻す橋であり、
+     `y^(p-1) ≡ 1 [MOD p^2]`
+     は既存
+     `primeGe5BranchANormalForm_y_wieferich_mod_p_sq`
+     で再生成している。
+
+3. 結論:
+   - 現段階の
+     `PrimeGe5BranchAWieferichLocalKernelTarget`
+     は、
+     工学的には witness route の checkpoint として有益だが、
+     数学的には
+     `PrimeGe5BranchANormalFormArithmeticKernelTarget`
+     とほぼ往復可能であることが明示された。
+   - したがって obstruction の場所は
+     local kernel そのものへ移ったというより、
+     依然として arithmetic/descent 側の本体にある、
+     という読みが Lean 上でも固定された。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   - `lake build DkMath.FLT.Basic`
+   - `lake build`
+   を実行し、build 完了まで待って成功を確認した。
+
+5. 備考:
+   - warning は既存の
+     `TriominoCosmicBranchA.lean`
+     の final `sorry`
+     と、
+     研究層・`ABC021`・`TriominoFLT`
+     の既存 `sorry`
+     のみで、新規の build failure は無い。
+   - この段階で
+     `AWieferichLocalKernel`
+     は「最後の数学核」ではなく、
+     現在の情報量を見える化した API checkpoint と読むのが正確になった。
+
+6. 次の課題:
+   - truly new kernel として、
+     distinguished-prime descent
+     ないし
+     `p`-進深さ
+     を返す contract を別に切るかを決める。
+   - あるいは
+     `branchAWieferichRefuter_math`
+     を clean 化する際に、
+     arithmetic kernel を直接受ける route へ戻してよいかを再評価する。

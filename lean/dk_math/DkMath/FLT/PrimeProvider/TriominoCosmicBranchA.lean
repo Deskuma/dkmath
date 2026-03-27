@@ -2681,6 +2681,39 @@ theorem primeGe5BranchAWieferichRefuter_of_localKernel
     hWieferich
 
 /--
+arithmetic kernel が与えられれば、Wieferich local kernel は自動で閉じる。
+
+付録:
+- local kernel に入る witness は normal form から再生成できるので、
+  arithmetic kernel より本質的に強い入力は要求していない。
+-/
+theorem primeGe5BranchAWieferichLocalKernel_of_arithmeticKernel
+    (hK : PrimeGe5BranchANormalFormArithmeticKernelTarget) :
+    PrimeGe5BranchAWieferichLocalKernelTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hWieferich
+  exact hK hpack hp_dvd_gap hgap hsGN hsx
+    (primeGe5BranchANormalForm_gcd_gap_GN_eq_p_default hpack hp_dvd_gap hgap hsGN)
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s
+
+/--
+Wieferich local kernel が与えられれば、arithmetic kernel も閉じる。
+
+付録:
+- local kernel で要求する Wieferich witness 自体は、
+  `primeGe5BranchANormalForm_y_wieferich_mod_p_sq`
+  により normal form から既に得られる。
+- したがって両者の差は、現段階では数学核というより
+  witness を引数に出すかどうかの API 上の差に近い。
+-/
+theorem primeGe5BranchANormalFormArithmeticKernel_of_wieferichLocalKernel
+    (hK : PrimeGe5BranchAWieferichLocalKernelTarget) :
+    PrimeGe5BranchANormalFormArithmeticKernelTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx _hgcd_eq hcop_ts hcop_ty hcop_sy hp_not_dvd_s
+  exact hK hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s
+    (primeGe5BranchANormalForm_y_wieferich_mod_p_sq hpack hp_dvd_gap hgap hsGN)
+
+/--
 `FLT_of_coprime` の residual branch から呼ぶ Branch A 専用 refuter 入口。
 
 将来は `PrimeGe5BranchAGapPowFactorizationTarget` と shape/descent kernel を
