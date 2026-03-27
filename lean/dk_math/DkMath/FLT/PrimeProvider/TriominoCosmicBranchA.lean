@@ -72,6 +72,30 @@ abbrev PrimeGe5BranchAGNShapeTarget : Prop :=
     ∃ s : ℕ, GN p (z - y) y = p * s ^ p
 
 /--
+Branch A 専用の Wieferich-style witness target。
+
+`p ∣ z-y` の normal form から最終的に取りたい新情報は
+`y^(p-1) ≡ 1 [MOD p^2]`
+なので、comparison route と独立にこの出力仕様を明示しておく。
+-/
+abbrev PrimeGe5BranchAWieferichOnYTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2]
+
+/--
+Branch A 専用の最終 refuter 契約。
+
+Wieferich-style witness が lower layer で取れた後は、この target を埋めれば
+Branch A 全体の refuter が comparison route から独立に閉じる。
+-/
+abbrev PrimeGe5BranchAWieferichRefuterTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    False
+
+/--
 Branch A の shape 値を refute する lower-layer 契約。
 
 ここを clean な descent/shrink kernel で埋めれば、
@@ -1265,6 +1289,22 @@ theorem primeGe5BranchANormalForm_y_wieferich_mod_p_sq
       s ^ p ≡ 1 [MOD p ^ 2] :=
     primeGe5BranchANormalForm_spow_congr_one_mod_p_sq hpack hp_dvd_gap hgap hsGN
   exact hhead.symm.trans hspow_one
+
+/--
+Branch A 全体から直接取り出す、`y` 上の Wieferich-style witness。
+
+付録:
+- `gap` shape と `GN` shape の既定実装を使い、
+  lower-layer output を `PrimeGe5BranchAWieferichOnYTarget` へ正規化する thin wrapper。
+- `Basic` や gap-invariant 側が将来 Branch A を再配線する際の最小入口として使う。
+-/
+theorem primeGe5BranchAWieferichOnY_default :
+    PrimeGe5BranchAWieferichOnYTarget := by
+  intro p x y z hpack hp_dvd_gap
+  rcases primeGe5BranchAShapeValue_of_factorization
+      primeGe5BranchAShapeFactorization_default hpack hp_dvd_gap with ⟨t, hgap⟩
+  rcases primeGe5BranchAGN_eq_p_mul_pow_math hpack hp_dvd_gap with ⟨s, hsGN⟩
+  exact primeGe5BranchANormalForm_y_wieferich_mod_p_sq hpack hp_dvd_gap hgap hsGN
 
 /--
 反例 pack の基本恒等式 `x^p = gap * GN` と `x ⟂ y` から、
@@ -2584,6 +2624,19 @@ theorem primeGe5BranchARefuter_of_shape_pipeline
   intro p x y z hpack hp_dvd_gap
   exact hRefuteValue hpack hp_dvd_gap
     (primeGe5BranchAShapeValue_of_factorization hShape hpack hp_dvd_gap)
+
+/--
+Wieferich-style witness target とその最終 refuter が揃えば、
+Branch A 専用 refuter は comparison route を経由せずに閉じられる。
+-/
+theorem primeGe5BranchARefuter_of_wieferich
+    (hWieferich : PrimeGe5BranchAWieferichOnYTarget)
+    (hRefute : PrimeGe5BranchAWieferichRefuterTarget) :
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      p ∣ (z - y) →
+      False := by
+  intro p x y z hpack hp_dvd_gap
+  exact hRefute hpack hp_dvd_gap (hWieferich hpack hp_dvd_gap)
 
 /--
 `FLT_of_coprime` の residual branch から呼ぶ Branch A 専用 refuter 入口。

@@ -1178,3 +1178,84 @@
      Branch A 専用の Wieferich witness target を
      lower layer に 1 本だけ新設し、
      final kernel をその bridge へ寄せる。
+
+### 日時: 2026/03/27 JST
+
+1. 目的:
+   - Branch A の concrete witness
+     `y^(p-1) ≡ 1 [MOD p^2]`
+     を、
+     comparison route の残核から独立した target として固定する。
+   - `Basic -> GapInvariant`
+     直 import による差し替え可能性も確認し、
+     import cycle の有無を確定させる。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     - `PrimeGe5BranchAWieferichOnYTarget`
+     - `PrimeGe5BranchAWieferichRefuterTarget`
+     - `primeGe5BranchAWieferichOnY_default`
+     - `primeGe5BranchARefuter_of_wieferich`
+     を追加した。
+   - `primeGe5BranchAWieferichOnY_default`
+     では、
+     `primeGe5BranchAShapeValue_of_factorization primeGe5BranchAShapeFactorization_default`
+     と
+     `primeGe5BranchAGN_eq_p_mul_pow_math`
+     を使って normal form を回収し、
+     `primeGe5BranchANormalForm_y_wieferich_mod_p_sq`
+     へ委譲するだけの thin wrapper にした。
+   - あわせて
+     `Basic.lean`
+     から
+     `TriominoCosmicGapInvariant`
+     を直接 import して Branch A を clean route へ差し替える案を試したが、
+     `Basic -> GapInvariant -> CosmicPetalBridgeGN(Core) -> TriominoCosmicPrimeGe5 -> Basic`
+     の build cycle が発生することを確認した。
+   - そのため
+     `Basic`
+     は元の
+     `TriominoCosmicBranchA`
+     import に戻した。
+
+3. 結論:
+   - Branch A の次段は、
+     もはや comparison-based refuter の延長ではなく、
+     `PrimeGe5BranchAWieferichOnYTarget`
+     から
+     `PrimeGe5BranchAWieferichRefuterTarget`
+     へ渡す adapter 設計だとコード上でも明確になった。
+   - 同時に、
+     `Basic`
+     から
+     `GapInvariant`
+     を直接使う案は import cycle により不可であり、
+     Branch A の再配線は lower layer
+     `TriominoCosmicBranchA`
+     側で完結させる必要があると確定した。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、どちらも build 完了まで待って成功を確認した。
+
+5. 備考:
+   - `TriominoCosmicBranchA.lean`
+     の active `sorry`
+     は引き続き
+     `primeGe5BranchANormalFormNePCoprimeKernel_default`
+     1 箇所だけ。
+   - 今回の追加 target は、
+     その `sorry` の責務を arithmetic ではなく witness-refuter adapter へ読み替えるためのもの。
+
+6. 次の課題:
+   - `PrimeGe5BranchAWieferichRefuterTarget`
+     を埋めるか、
+     既存の Branch A descent / shrink 契約のどれかへ
+     `PrimeGe5BranchAWieferichOnYTarget`
+     を注入する thin bridge を置く。
+   - `primeGe5BranchANormalFormNePCoprimeKernel_default`
+     は、
+     comparison route の final checkpoint ではなく
+     Wieferich witness route への adapter 名へ寄せることを検討する。
