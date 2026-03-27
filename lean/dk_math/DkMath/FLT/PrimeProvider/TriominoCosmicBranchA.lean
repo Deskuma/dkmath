@@ -123,6 +123,32 @@ abbrev MinimalPrimeGe5CounterexamplePackA (p x y z : ℕ) : Prop :=
     p ∣ (z' - y') → z' < z → False
 
 /--
+Branch A normal form を 1 パケットとして保持する構造体。
+
+付録:
+- smaller counterexample を直接返す前に、
+  まずは smaller normal-form packet を返す target を切るほうが自然な場合がある。
+- `PrimeGe5CounterexamplePack` への再包装は `pack` で既に持っている。
+-/
+structure PrimeGe5BranchANormalFormPacket (p : ℕ) where
+  x : ℕ
+  y : ℕ
+  z : ℕ
+  t : ℕ
+  s : ℕ
+  pack : PrimeGe5CounterexamplePack p x y z
+  hp_dvd_gap : p ∣ (z - y)
+  hgap : z - y = p ^ (p - 1) * t ^ p
+  hsGN : GN p (z - y) y = p * s ^ p
+  hsx : x = p * (t * s)
+
+/-- Branch A normal-form packet から反例 pack を取り出すだけの補題。 -/
+theorem counterexamplePack_of_branchANormalFormPacket
+    {p : ℕ} (pkt : PrimeGe5BranchANormalFormPacket p) :
+    PrimeGe5CounterexamplePack p pkt.x pkt.y pkt.z :=
+  pkt.pack
+
+/--
 Branch A 専用の truly new kernel 候補。
 
 Wieferich witness 自体ではなく、
@@ -140,6 +166,28 @@ abbrev PrimeGe5BranchADistinguishedPrimeDescentTarget : Prop :=
     ¬ p ∣ s →
     ∃ x' y' z' : ℕ,
       PrimeGe5CounterexamplePack p x' y' z' ∧ p ∣ (z' - y') ∧ z' < z
+
+/--
+Branch A normal form から、
+より小さい Branch A normal-form packet を直接返す stronger target。
+
+付録:
+- `PrimeGe5BranchASmallerCounterexampleTarget` に比べて、
+  smaller packet の情報 `t'`, `s'`, `hgap`, `hsGN`, `hsx` まで保持できる。
+- concrete 数学としては、
+  まずこちらを埋めてから counterexample target へ落とすほうが自然な場合がある。
+-/
+abbrev PrimeGe5BranchASmallerPacketTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
 
 /--
 Branch A normal form から直接、
@@ -2787,6 +2835,18 @@ theorem primeGe5BranchADistinguishedPrimeDescent_of_smallerCounterexample
     PrimeGe5BranchADistinguishedPrimeDescentTarget := by
   intro p x y z t s hMin hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s
   exact hSmall hMin.1 hMin.2.1 hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s
+
+/--
+smaller-packet target があれば、smaller-counterexample target は機械的に従う。
+-/
+theorem primeGe5BranchASmallerCounterexample_of_smallerPacket
+    (hSmall : PrimeGe5BranchASmallerPacketTarget) :
+    PrimeGe5BranchASmallerCounterexampleTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s
+  rcases hSmall hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s with
+    ⟨pkt', hz'lt⟩
+  exact ⟨pkt'.x, pkt'.y, pkt'.z, counterexamplePack_of_branchANormalFormPacket pkt',
+    pkt'.hp_dvd_gap, hz'lt⟩
 
 /--
 distinguished-prime descent があれば、最小 Branch A 反例は存在しえない。

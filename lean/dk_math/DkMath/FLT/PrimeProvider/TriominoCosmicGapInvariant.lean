@@ -1321,6 +1321,16 @@ abbrev BranchASmallerCounterexampleAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchASmallerCounterexampleTarget
 
 /--
+Branch A normal form から直接 smaller packet を返す strongest splice point。
+
+付録:
+- `counterexample` への再包装をまだ行わない分、
+  concrete 数学の内部構造を一番多く保持できる。
+-/
+abbrev BranchASmallerPacketAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchASmallerPacketTarget
+
+/--
 local kernel から最後の witness adapter を回収する thin bridge。
 -/
 theorem branchAWieferichAdapter_of_localKernel
@@ -1345,6 +1355,15 @@ theorem branchAWieferichAdapter_of_smallerCounterexample
     BranchAWieferichAdapterTarget :=
   branchAWieferichAdapter_of_distinguishedPrimeDescent
     (DkMath.FLT.primeGe5BranchADistinguishedPrimeDescent_of_smallerCounterexample hSmall)
+
+/--
+smaller-packet route から Branch A refuter を回収する thin bridge。
+-/
+theorem branchAWieferichAdapter_of_smallerPacket
+    (hSmall : BranchASmallerPacketAdapterTarget) :
+    BranchAWieferichAdapterTarget :=
+  branchAWieferichAdapter_of_smallerCounterexample
+    (DkMath.FLT.primeGe5BranchASmallerCounterexample_of_smallerPacket hSmall)
 
 /--
 暫定 concrete adapter for the Branch A Wieferich witness route.

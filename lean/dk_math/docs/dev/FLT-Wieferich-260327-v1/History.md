@@ -545,3 +545,87 @@
      `SmallerCounterexampleA`
      contract / helper file
      を別に切って探索を分離する。
+
+### 日時: 2026/03/27 20:05 JST
+
+1. 目的:
+   - `design-004` に沿って、
+     smaller counterexample
+     より一段手前の
+     smaller normal-form packet
+     を返す契約を導入する。
+   - これにより、
+     concrete 数学の探索対象を
+     `x' y' z'`
+     直書きではなく
+     Branch A packet
+     の再構成へ寄せる。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `PrimeGe5BranchANormalFormPacket`
+     を追加した。
+     これは
+     `pack`, `hp_dvd_gap`, `hgap`, `hsGN`, `hsx`
+     をひとまとめに持つ構造体である。
+   - 同ファイルに
+     `counterexamplePack_of_branchANormalFormPacket`
+     を追加し、
+     packet から
+     `PrimeGe5CounterexamplePack`
+     を取り出す橋を固定した。
+   - さらに
+     `PrimeGe5BranchASmallerPacketTarget`
+     を追加し、
+     `primeGe5BranchASmallerCounterexample_of_smallerPacket`
+     で
+     `PrimeGe5BranchASmallerCounterexampleTarget`
+     を機械的に回収する形にした。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     には
+     `BranchASmallerPacketAdapterTarget`
+     と
+     `branchAWieferichAdapter_of_smallerPacket`
+     を追加し、
+     provider 側から見た strongest splice point
+     も packet route
+     で表現できるようにした。
+
+3. 結論:
+   - Branch A の concrete 未完核は、
+     `smaller counterexample`
+     ではなく
+     `smaller normal-form packet`
+     を返す問題としてまず考えるのが自然だと
+     Lean の型でも明示できた。
+   - したがって今後の数学探索では、
+     `u' = p^(p-1) * t'^p`,
+     `GN = p * s'^p`,
+     `x' = p * (t' * s')`
+     を保った packet の再構成を本題にできる。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、build 完了まで待って成功を確認した。
+
+5. 備考:
+   - 途中で並列 build により
+     `TriominoCosmicBranchA.setup.json`
+     が壊れる事象が出たため、
+     以後は依存の重なる target は順番に build する方針に戻した。
+   - `PrimeGe5BranchASmallerCounterexampleTarget`
+     は今後、
+     packet route
+     から機械的に得られる middle target
+     として読める。
+
+6. 次の課題:
+   - `PrimeGe5BranchASmallerPacketTarget`
+     の concrete 実装を探す。
+   - 候補は、
+     - valuation peel による packet 再構成
+     - cyclotomic / distinguished-prime descent による packet 再構成
+     の 2 本。
