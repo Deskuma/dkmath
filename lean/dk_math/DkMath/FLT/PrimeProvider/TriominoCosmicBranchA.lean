@@ -213,6 +213,27 @@ abbrev PrimeGe5BranchAValuationPeelPacketTarget : Prop :=
     ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
 
 /--
+valuation peel route の直前段階となる seed contract。
+
+付録:
+- `p ∣ t` のとき、
+  `s^p - y^(p-1)` が `p^(2p-1)` と `t1^p` を因子にもつ形へ落ちることを要求する。
+- smaller packet の再構成自体はまだ要求しない。
+-/
+abbrev PrimeGe5BranchAValuationPeelSeedTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ t1 B : ℕ, t = p * t1 ∧ s ^ p = y ^ (p - 1) + p ^ (2 * p - 1) * (t1 ^ p * B)
+
+/--
 `p ∤ t` の primitive core に入った後、
 cyclotomic / distinguished-prime descent で smaller packet を返す route。
 
@@ -736,6 +757,50 @@ theorem primeGe5BranchA_spow_eq_head_add_gapShape_mul
   rcases primeGe5BranchA_spow_eq_head_add_gap_mul hpack hp_dvd_gap hsGN with ⟨B, hB⟩
   refine ⟨B, ?_⟩
   rw [hB, hgap]
+
+/--
+`p ∣ t` なら、gap-shape の distinguished-prime 深さを 1 段剥ける。
+-/
+theorem primeGe5BranchA_gapShape_peel_of_dvd_t
+    {p t : ℕ}
+    (ht_dvd : p ∣ t) :
+    ∃ t1 : ℕ, t = p * t1 ∧ p ^ (p - 1) * t ^ p = p ^ (2 * p - 1) * t1 ^ p := by
+  obtain ⟨t1, ht0⟩ : ∃ t1 : ℕ, t = t1 * p := exists_eq_mul_left_of_dvd ht_dvd
+  have ht : t = p * t1 := by simpa [Nat.mul_comm] using ht0
+  refine ⟨t1, ht, ?_⟩
+  calc
+    p ^ (p - 1) * t ^ p = p ^ (p - 1) * ((p * t1) ^ p) := by rw [ht]
+    _ = p ^ (p - 1) * (p ^ p * t1 ^ p) := by rw [Nat.mul_pow]
+    _ = (p ^ (p - 1) * p ^ p) * t1 ^ p := by ac_rfl
+    _ = p ^ ((p - 1) + p) * t1 ^ p := by rw [← Nat.pow_add]
+    _ = p ^ (2 * p - 1) * t1 ^ p := by
+      have hExp : (p - 1) + p = 2 * p - 1 := by omega
+      simp [hExp]
+
+/--
+`p ∣ t` の valuation peel route に入るための concrete seed。
+
+付録:
+- これは `PrimeGe5BranchAValuationPeelSeedTarget` の default 実装である。
+- smaller packet 自体はまだ構成しないが、
+  `t = p * t1` と
+  `s^p - y^(p-1)` の高い `p`-冪因子を同時に返す。
+-/
+theorem primeGe5BranchAValuationPeelSeed_default :
+    PrimeGe5BranchAValuationPeelSeedTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd
+  let _ := hsx
+  let _ := hcop_ts
+  let _ := hcop_ty
+  let _ := hcop_sy
+  let _ := hp_not_dvd_s
+  rcases primeGe5BranchA_gapShape_peel_of_dvd_t ht_dvd with ⟨t1, ht, hpeel⟩
+  rcases primeGe5BranchA_spow_eq_head_add_gapShape_mul hpack hp_dvd_gap hgap hsGN with ⟨B, hB⟩
+  refine ⟨t1, B, ht, ?_⟩
+  calc
+    s ^ p = y ^ (p - 1) + (p ^ (p - 1) * t ^ p) * B := hB
+    _ = y ^ (p - 1) + (p ^ (2 * p - 1) * t1 ^ p) * B := by rw [hpeel]
+    _ = y ^ (p - 1) + p ^ (2 * p - 1) * (t1 ^ p * B) := by ac_rfl
 
 /--
 Branch A normal form から得る、`s^p ≡ y^(p-1) [MOD p^2]` の thin wrapper。

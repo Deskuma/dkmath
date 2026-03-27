@@ -790,3 +790,92 @@
      と置いて、
      そこから smaller packet
      をどう再構成するかを探る。
+
+### 日時: 2026/03/27 20:46 JST
+
+1. 目的:
+   - valuation peel route の入口を、
+     さらに target / theorem として固定する。
+   - 具体的には、
+     `p ∣ t`
+     のとき
+     `t = p * t₁`
+     と
+     `s^p - y^(p-1)`
+     の高い `p`-冪 tail
+     を同時に返す seed
+     を明示する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `PrimeGe5BranchAValuationPeelSeedTarget`
+     を追加した。
+   - 同ファイルに
+     - `primeGe5BranchA_gapShape_peel_of_dvd_t`
+     - `primeGe5BranchAValuationPeelSeed_default`
+     を追加した。
+   - `primeGe5BranchA_gapShape_peel_of_dvd_t`
+     は
+     `p ∣ t`
+     から
+     `t = p * t₁`
+     と
+     `p^(p-1) * t^p = p^(2p-1) * t₁^p`
+     を返す。
+   - `primeGe5BranchAValuationPeelSeed_default`
+     はさらに
+     `primeGe5BranchA_spow_eq_head_add_gapShape_mul`
+     と組み合わせ、
+     `s^p = y^(p-1) + p^(2p-1) * (t₁^p * B)`
+     を返す concrete seed
+     とした。
+
+3. 結論:
+   - valuation peel route は、
+     いまや
+     `PrimeGe5BranchAValuationPeelPacketTarget`
+     を直接埋める前に、
+     `PrimeGe5BranchAValuationPeelSeedTarget`
+     という 1 段下の checkpoint
+     を通して考えられるようになった。
+   - これにより
+     `p ∣ t`
+     の route は、
+     「gap-shape の distinguished-prime 深さを 1 段剥き、
+      `s^p - y^(p-1)` に残る tail を高い `p`-冪として読む」
+     という形でかなり具体化した。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.Basic`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を実行し、build 完了まで待って成功を確認した。
+
+5. 備考:
+   - `GapInvariant` 側の追加はまだ無い。
+     今回の seed は
+     Branch A lower layer
+     の concrete 数学 checkpoint
+     としてまず固定した。
+   - 途中で
+     `exists_eq_mul_left_of_dvd`
+     の向きや
+     `k = 1`
+     項の正規化でいくつか Lean の式整形を要したが、
+     いずれも解消済み。
+
+6. 次の課題:
+   - `PrimeGe5BranchAValuationPeelPacketTarget`
+     を、
+     いま固定した
+     `PrimeGe5BranchAValuationPeelSeedTarget`
+     からどう構成するかを考える。
+   - その際、
+     `t₁`
+     と
+     `t₁^p * B`
+     から
+     smaller normal-form packet
+     の `(t', s', y', z')`
+     をどう再組立てするかが次の本題になる。
