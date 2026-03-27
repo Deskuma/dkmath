@@ -871,6 +871,22 @@ theorem branchARefuter_of_wieferichTargets
   intro p x y z hpack hp_dvd_gap
   exact hRefute hpack hp_dvd_gap (hWieferich hpack hp_dvd_gap)
 
+/--
+暫定 concrete refuter for the Branch A Wieferich witness.
+
+付録:
+- 現段階では `PrimeGe5BranchAWieferichRefuterTarget` の clean 下降注入はまだ未実装なので、
+  ここでは `FLT_prime_ge5` へ委譲して閉じる。
+- 最終 clean route では、この theorem を no-Wieferich / descent machinery への
+  薄い adapter に置き換える。
+-/
+theorem branchAWieferichRefuter_via_FLT :
+    DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget := by
+  intro p x y z hpack _hp_dvd_gap _hWieferich
+  have hNo : x ^ p + y ^ p ≠ z ^ p :=
+    FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
+  exact hNo hpack.hEq
+
 /-- Branch B 側の終着仕様（pure-gap-pow と gap-not-pow の衝突出口）。 -/
 abbrev BranchBRefuterTarget : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
@@ -1102,7 +1118,7 @@ theorem branchAShapeValueTarget_math :
     by_cases hq_eq : q = p
     · have hd_fac_p : d.factorization p = p - 1 := by
         unfold d
-        simp? [hpack.hp.factorization]
+        simp [hpack.hp.factorization]
       have hm_u : u.factorization p = (p - 1) + p * m := by
         simpa [u] using hm
       have hw_fac_p : w.factorization p = p * m := by
@@ -1486,6 +1502,16 @@ theorem FLTPrimeGe5Target_of_branchA_wieferich_with_normalizer_impl
       hRefute)
     (branchBRefuter_of_gapPow_and_defaultNotPow
       gapPowFromPrimeGe5Counterexample_branchB_impl)
+
+/--
+既定の Branch A Wieferich witness と暫定 refuter から得る default mainline。
+
+`PrimeGe5BranchAWieferichRefuterTarget` の clean 置換先はこの theorem の引数 1 本に隔離する。
+-/
+theorem FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_of_branchA_wieferich_with_normalizer_impl
+    branchAWieferichRefuter_via_FLT
 
 /--
 2層 mainline の kernel 版。

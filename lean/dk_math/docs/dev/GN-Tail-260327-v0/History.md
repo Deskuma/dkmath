@@ -1331,3 +1331,90 @@
      を
      `TriominoPrimeProvider`
      側の mainline 候補として目立つ位置へ引き上げる。
+
+### 日時: 2026/03/27 JST
+
+1. 目的:
+   - `PrimeGe5BranchAWieferichOnYTarget`
+     を受ける最小 refuter 型を concretize し、
+     `GapInvariant`
+     側の mainline に default adapter を 1 本追加する。
+   - 同時に、
+     refuter 実装を
+     `TriominoCosmicBranchA`
+     ではなく
+     `TriominoCosmicGapInvariant`
+     側へ置くべきかを build 境界込みで確定する。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     に
+     `branchAWieferichRefuter_via_FLT`
+     を追加した。
+     これは
+     `PrimeGe5BranchAWieferichRefuterTarget`
+     の暫定 concrete 実装であり、
+     いまは
+     `FLT_prime_ge5`
+     へ委譲する。
+   - さらに
+     `FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl`
+     を追加し、
+     `primeGe5BranchAWieferichOnY_default`
+     と上記 refuter を組み合わせた
+     default mainline
+     を固定した。
+   - 途中で同等の refuter を
+     `TriominoCosmicBranchA`
+     側へ直接置く案も試したが、
+     `FLT_prime_ge5`
+     は
+     `TriominoCosmicPrimeGe5`
+     由来であり、
+     `BranchA`
+     側の import 境界では見えないことを確認した。
+     そのため、
+     refuter 実装は
+     `GapInvariant`
+     側へ置く方針に戻した。
+
+3. 結論:
+   - review-010 の指摘どおり、
+     「既存 machinery のどの入口に witness を渡すか」
+     という最後の継ぎ目は、
+     `GapInvariant`
+     側で default adapter を置くのが最短だった。
+   - `TriominoCosmicBranchA`
+     は引き続き witness 供給専用層、
+     `TriominoCosmicGapInvariant`
+     は witness を受けて mainline へ流す層、
+     という責務分離がより明確になった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   - `lake build DkMath.FLT.Basic`
+   - `lake build`
+   を実行し、いずれも build 完了まで待って成功を確認した。
+
+5. 備考:
+   - `TriominoCosmicBranchA.lean`
+     の active `sorry`
+     は引き続き
+     `primeGe5BranchANormalFormNePCoprimeKernel_default`
+     1 箇所で変化なし。
+   - 今回増えた theorem は no-sorry。
+   - `GapInvariant`
+     側には、
+     witness route の default mainline 候補
+     `FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl`
+     ができた。
+
+6. 次の課題:
+   - `branchAWieferichRefuter_via_FLT`
+     を、
+     no-Wieferich / descent machinery への clean adapter に置き換える。
+   - 必要なら
+     `TriominoPrimeProvider`
+     側から
+     `FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl`
+     を参照する mainline 候補を追加する。
