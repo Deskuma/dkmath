@@ -1675,6 +1675,46 @@ theorem FLTPrimeGe5Target_branch_split_mainline :
   exact FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl
 
 /--
+`TriominoCosmicGapInvariant` 側の canonical default `FLTPrimeGe5Target` 入口。
+
+現在の既定 route は Branch A / Wieferich witness を経由する branch-split mainline である。
+-/
+theorem FLTPrimeGe5Target_default :
+    FLTPrimeGe5Target := by
+  exact FLTPrimeGe5Target_branch_split_mainline
+
+/--
+canonical default `FLT_prime_ge5` 実装版。
+
+`TriominoCosmicPrimeGe5.FLT_prime_ge5` とは独立に、
+provider 層だけで閉じる既定入口を与える。
+-/
+theorem FLT_prime_ge5_default
+    (p : ℕ) (hp : Nat.Prime p) (hp5 : 5 ≤ p) :
+    FermatLastTheoremFor p := by
+  exact (FLTPrimeGe5Target_default) p hp hp5
+
+/--
+canonical default global provider。
+
+既定の branch-split / Wieferich witness mainline から直接得る。
+-/
+theorem triominoCosmic_globalProvider_default :
+    GlobalPrimeExponentFLTProvider := by
+  exact triominoCosmic_globalProvider_of_FLTPrimeGe5
+    FLTPrimeGe5Target_default
+
+/--
+canonical default Triomino prime provider。
+
+既定の branch-split / Wieferich witness mainline から直接得る。
+-/
+theorem triominoPrimeProvider_default :
+    TriominoPrimeProvider := by
+  exact triominoPrimeProvider_of_FLTPrimeGe5
+    FLTPrimeGe5Target_default
+
+/--
 最終仮橋 (`branchAShapeValueToDescent_via_FLT`) を使わない clean 起動版。
 `shape-value -> descent` の実体が供給されれば、そのまま mainline を起動できる。
 -/

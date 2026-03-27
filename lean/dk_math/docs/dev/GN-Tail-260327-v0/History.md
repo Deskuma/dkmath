@@ -1687,6 +1687,54 @@
 ### 日時: 2026/03/27 JST
 
 1. 目的:
+   - `GapInvariant` 側の公開 default 入口名を、
+     既に witness route へ寄せた branch-split mainline
+     と揃える。
+   - 今後の clean 差し替えで、
+     「どの theorem が canonical default か」
+     を明確にする。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     に
+     - `FLTPrimeGe5Target_default`
+     - `FLT_prime_ge5_default`
+     - `triominoCosmic_globalProvider_default`
+     - `triominoPrimeProvider_default`
+     を追加した。
+   - いずれも
+     `FLTPrimeGe5Target_branch_split_mainline`
+     を canonical default root
+     とする thin wrapper である。
+
+3. 結論:
+   - provider 層では、
+     default の公開入口が
+     branch-split / Wieferich witness mainline
+     を canonical route
+     として読む形に揃った。
+   - これで今後
+     `branchAWieferichRefuter_math`
+     を clean 実装へ差し替えれば、
+     canonical default 群も自動で追随する。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   - `lake build DkMath.FLT.Basic`
+   - `lake build`
+   を実行し、build 完了まで待って確認する。
+
+5. 次の課題:
+   - `branchAWieferichRefuter_math`
+     の clean 実装を見つける。
+   - 可能なら
+     `TriominoPrimeProvider` / `TriominoMainBridge`
+     側でも、
+     canonical default 名をどこまで表に出すかを整理する。
+
+### 日時: 2026/03/27 JST
+
+1. 目的:
    - witness route の最終 clean 置換点を、
      `branchAWieferichRefuter_via_FLT`
      という局所名ではなく
