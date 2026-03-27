@@ -1045,3 +1045,95 @@
      valuation peel route は obstruction extraction とみなし、
      `PrimeGe5BranchAPrimitivePacketDescentTarget`
      を本命 route として押し上げる。
+
+### 日時: 2026/03/27 21:02 JST
+
+1. 目的:
+   - `analysis-BC.md`
+     の first formal target を実装し、
+     valuation peel comparison の
+     `B`
+     と
+     `C`
+     を
+     `GTail p 2`
+     の exact coefficient として読み直した上で、
+     mod-level relation
+     `p * B ≡ C [MOD p^(p-1) * t₁^p]`
+     を lower layer に固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `PrimeGe5BranchAValuationPeelTailExactTarget`
+     と
+     `PrimeGe5BranchAValuationPeelTailModEqTarget`
+     を追加した。
+   - 同ファイルに
+     - `primeGe5BranchA_gapTail_eq_p_mul_of_gapMul`
+     - `primeGe5BranchA_canonicalTail_eq_coeff_of_expansion`
+     - `primeGe5BranchA_GTail_two_scaled_modEq`
+     - `primeGe5BranchAValuationPeelTailExact_of_comparison`
+     - `primeGe5BranchAValuationPeelTailModEq_of_exact`
+     - `primeGe5BranchAValuationPeelTailModEq_default`
+     を追加した。
+   - これにより、
+     comparison 段の
+     `B`
+     と
+     `C`
+     は
+     - `GTail p 2 (z - y) y = p * B`
+     - `GTail p 2 (p^(p-1) * t₁^p) y = C`
+     と exact に読め、
+     `z - y = p^p * (p^(p-1) * t₁^p)`
+     を通じて
+     `p * B ≡ C [MOD p^(p-1) * t₁^p]`
+     が従う形になった。
+
+3. 結論:
+   - `analysis-BC.md`
+     の「比較段の本当の差分は
+     `B`
+     と
+     `C`
+     だけ」という主張は、
+     Lean 上で
+     `GTail p 2`
+     の exact / modEq statement として実装された。
+   - valuation peel route は、
+     もう単なる heuristic ではなく、
+     canonical tail 係数どうしの relation を返す concrete API を持つ。
+   - これにより次に攻めるべき不足情報は、
+     packet 再構成そのものではなく、
+     `p * B ≡ C [MOD ...]`
+     から何をさらに extraction できるか、
+     あるいはここで valuation peel を obstruction route と見切るか、
+     の判断に絞られた。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   - `lake build DkMath.FLT.Basic`
+   - `lake build`
+   を順番に実行し、build 完了まで待って成功を確認した。
+
+5. 備考:
+   - `TriominoCosmicBranchA.lean`
+     には既存どおり final kernel の `sorry` が 1 箇所残る。
+   - 新規追加部分に関する warning は、
+     `primeGe5BranchA_canonicalTail_eq_coeff_of_expansion`
+     付近の
+     `simpa`/`simp`
+     lint だけで、
+     build failure は無い。
+
+6. 次の課題:
+   - `PrimeGe5BranchAValuationPeelTailModEqTarget`
+     から smaller packet 再構成に届く route が見えるかを検討する。
+   - もし十分な extraction が得られなければ、
+     valuation peel route は
+     obstruction extraction
+     で止め、
+     `PrimeGe5BranchAPrimitivePacketDescentTarget`
+     を本命 route として押し上げる。

@@ -295,6 +295,65 @@ abbrev PrimeGe5BranchAValuationPeelTailComparisonTarget : Prop :=
         p * y ^ (p - 1) + (p ^ (p - 1) * t1 ^ p) * C
 
 /--
+valuation peel comparison の first exact output。
+
+付録:
+- `B`
+  と
+  `C`
+  が実際にどの `GTail p 2`
+  係数を表しているかを固定する。
+- これにより
+  `B`
+  と
+  `C`
+  の relation は、
+  2 つの `GTail`
+  の relation として読み替えられる。
+-/
+abbrev PrimeGe5BranchAValuationPeelTailExactTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ t1 B C : ℕ,
+      t = p * t1 ∧
+      DkMath.CosmicFormula.GTail p 2 (z - y) y = p * B ∧
+      DkMath.CosmicFormula.GTail p 2 (p ^ (p - 1) * t1 ^ p) y = C
+
+/--
+valuation peel comparison の mod-level output。
+
+付録:
+- exact tail identity を使って、
+  最終的に見たい
+  `p * B ≡ C [MOD p^(p-1) * t1^p]`
+  を返す契約である。
+- `analysis-BC.md`
+  の first formal target に対応する。
+-/
+abbrev PrimeGe5BranchAValuationPeelTailModEqTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ t1 B C : ℕ,
+      t = p * t1 ∧
+      p * B ≡ C [MOD p ^ (p - 1) * t1 ^ p]
+
+/--
 `p ∤ t` の primitive core に入った後、
 cyclotomic / distinguished-prime descent で smaller packet を返す route。
 
@@ -937,6 +996,224 @@ theorem primeGe5BranchAValuationPeelTailComparison_default :
   primeGe5BranchAValuationPeelTailComparison_of_seed_and_canonical
     primeGe5BranchAValuationPeelSeed_default
     primeGe5BranchAValuationPeelCanonicalTail_default
+
+/--
+`s^p = y^(p-1) + gap * B` と `GN p gap y = p * s^p` を合わせると、
+`GTail p 2 gap y = p * B` となる。
+-/
+theorem primeGe5BranchA_gapTail_eq_p_mul_of_gapMul
+    {p x y z s B : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hB : s ^ p = y ^ (p - 1) + (z - y) * B) :
+    DkMath.CosmicFormula.GTail p 2 (z - y) y = p * B := by
+  have hp_gt_one : 1 < p := lt_of_lt_of_le (by decide : 1 < 5) hpack.hp5
+  have hgap_pos : 0 < z - y := Nat.sub_pos_of_lt hpack.hyz_lt
+  have hrec :
+      GN p (z - y) y =
+        p * y ^ (p - 1) + (z - y) * DkMath.CosmicFormula.GTail p 2 (z - y) y := by
+    calc
+      GN p (z - y) y
+          = (Nat.choose p 1 : ℕ) * y ^ (p - 1)
+              + (z - y) * DkMath.CosmicFormula.GTail p 2 (z - y) y := by
+              simpa [GN] using
+                (DkMath.CosmicFormula.GN_tail_rec (d := p) (x := z - y) (u := y) hp_gt_one)
+      _ = p * y ^ (p - 1) + (z - y) * DkMath.CosmicFormula.GTail p 2 (z - y) y := by
+            simp
+  have hEq :
+      p * y ^ (p - 1) + (z - y) * DkMath.CosmicFormula.GTail p 2 (z - y) y =
+        p * y ^ (p - 1) + (z - y) * (p * B) := by
+    calc
+      p * y ^ (p - 1) + (z - y) * DkMath.CosmicFormula.GTail p 2 (z - y) y
+          = GN p (z - y) y := by simpa using hrec.symm
+      _ = p * s ^ p := hsGN
+      _ = p * (y ^ (p - 1) + (z - y) * B) := by rw [hB]
+      _ = p * y ^ (p - 1) + (z - y) * (p * B) := by ring
+  have hMul :
+      (z - y) * DkMath.CosmicFormula.GTail p 2 (z - y) y =
+        (z - y) * (p * B) := by
+    exact Nat.add_left_cancel hEq
+  exact Nat.eq_of_mul_eq_mul_left hgap_pos hMul
+
+/--
+`GN p u y = p * y^(p-1) + u * C` なら、
+`C` は正確に `GTail p 2 u y` である。
+-/
+theorem primeGe5BranchA_canonicalTail_eq_coeff_of_expansion
+    {p u y C : ℕ}
+    (hp_gt_one : 1 < p)
+    (hu_pos : 0 < u)
+    (hC : GN p u y = p * y ^ (p - 1) + u * C) :
+    DkMath.CosmicFormula.GTail p 2 u y = C := by
+  have hrec :
+      GN p u y =
+        p * y ^ (p - 1) + u * DkMath.CosmicFormula.GTail p 2 u y := by
+    calc
+      GN p u y
+          = (Nat.choose p 1 : ℕ) * y ^ (p - 1)
+              + u * DkMath.CosmicFormula.GTail p 2 u y := by
+              simpa [GN] using
+                (DkMath.CosmicFormula.GN_tail_rec (d := p) (x := u) (u := y) hp_gt_one)
+      _ = p * y ^ (p - 1) + u * DkMath.CosmicFormula.GTail p 2 u y := by simp
+  have hEq :
+      p * y ^ (p - 1) + u * DkMath.CosmicFormula.GTail p 2 u y =
+        p * y ^ (p - 1) + u * C := by
+    rw [← hrec, hC]
+  have hMul :
+      u * DkMath.CosmicFormula.GTail p 2 u y = u * C := by
+    exact Nat.add_left_cancel hEq
+  exact Nat.eq_of_mul_eq_mul_left hu_pos hMul
+
+/--
+`GTail p 2` は、`x = u` と `x = p^p * u` とで `mod u` では一致する。
+
+付録:
+- `GTail p 2 x y = head + x * GTail p 3 x y`
+  の `head`
+  は `x` に依らないので、
+  `mod u`
+  では両者とも同じ residue を持つ。
+-/
+theorem primeGe5BranchA_GTail_two_scaled_modEq
+    {p u y : ℕ}
+    (hp_gt_two : 2 < p) :
+    DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y ≡
+      DkMath.CosmicFormula.GTail p 2 u y [MOD u] := by
+  let A : ℕ := (Nat.choose p 2 : ℕ) * y ^ (p - 2)
+  have hScaled :
+      DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y =
+        A + u * (p ^ p * DkMath.CosmicFormula.GTail p 3 (p ^ p * u) y) := by
+    calc
+      DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y
+          = (Nat.choose p 2 : ℕ) * y ^ (p - 2)
+              + (p ^ p * u) * DkMath.CosmicFormula.GTail p 3 (p ^ p * u) y := by
+                simpa using
+                  (DkMath.CosmicFormula.GTail_rec
+                    (d := p) (r := 2) (x := p ^ p * u) (u := y) hp_gt_two)
+      _ = A + u * (p ^ p * DkMath.CosmicFormula.GTail p 3 (p ^ p * u) y) := by
+            unfold A
+            ac_rfl
+  have hCanon :
+      DkMath.CosmicFormula.GTail p 2 u y =
+        A + u * DkMath.CosmicFormula.GTail p 3 u y := by
+    calc
+      DkMath.CosmicFormula.GTail p 2 u y
+          = (Nat.choose p 2 : ℕ) * y ^ (p - 2)
+              + u * DkMath.CosmicFormula.GTail p 3 u y := by
+                simpa using
+                  (DkMath.CosmicFormula.GTail_rec
+                    (d := p) (r := 2) (x := u) (u := y) hp_gt_two)
+      _ = A + u * DkMath.CosmicFormula.GTail p 3 u y := by rfl
+  have hmodScaled : A ≡ DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y [MOD u] := by
+    have hle : A ≤ DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y := by
+      rw [hScaled]
+      exact Nat.le_add_right _ _
+    exact (Nat.modEq_iff_dvd' hle).2 ⟨p ^ p * DkMath.CosmicFormula.GTail p 3 (p ^ p * u) y, by
+      rw [hScaled]
+      simp [A, Nat.mul_left_comm, Nat.mul_comm]⟩
+  have hmodCanon : A ≡ DkMath.CosmicFormula.GTail p 2 u y [MOD u] := by
+    have hle : A ≤ DkMath.CosmicFormula.GTail p 2 u y := by
+      rw [hCanon]
+      exact Nat.le_add_right _ _
+    exact (Nat.modEq_iff_dvd' hle).2 ⟨DkMath.CosmicFormula.GTail p 3 u y, by
+      rw [hCanon]
+      simp [A]⟩
+  exact hmodScaled.symm.trans hmodCanon
+
+/--
+comparison 段が与えられれば、
+`B`
+と
+`C`
+の exact tail identity は機械的に回収できる。
+-/
+theorem primeGe5BranchAValuationPeelTailExact_of_comparison
+    (hCmp : PrimeGe5BranchAValuationPeelTailComparisonTarget) :
+    PrimeGe5BranchAValuationPeelTailExactTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd
+  rcases hCmp hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd with
+    ⟨t1, B, C, ht, hB, hC⟩
+  have hp_gt_one : 1 < p := lt_of_lt_of_le (by decide : 1 < 5) hpack.hp5
+  have hgap_peel : z - y = p ^ (2 * p - 1) * t1 ^ p := by
+    calc
+      z - y = p ^ (p - 1) * t ^ p := hgap
+      _ = p ^ (p - 1) * (p * t1) ^ p := by rw [ht]
+      _ = p ^ (p - 1) * (p ^ p * t1 ^ p) := by rw [Nat.mul_pow]
+      _ = (p ^ (p - 1) * p ^ p) * t1 ^ p := by ac_rfl
+      _ = p ^ ((p - 1) + p) * t1 ^ p := by rw [Nat.pow_add]
+      _ = p ^ (2 * p - 1) * t1 ^ p := by
+            have hExp : (p - 1) + p = 2 * p - 1 := by omega
+            simp [hExp]
+  have hB_gap : s ^ p = y ^ (p - 1) + (z - y) * B := by
+    calc
+      s ^ p = y ^ (p - 1) + p ^ (2 * p - 1) * (t1 ^ p * B) := hB
+      _ = y ^ (p - 1) + (p ^ (2 * p - 1) * t1 ^ p) * B := by ac_rfl
+      _ = y ^ (p - 1) + (z - y) * B := by rw [hgap_peel]
+  have hTailB :
+      DkMath.CosmicFormula.GTail p 2 (z - y) y = p * B :=
+    primeGe5BranchA_gapTail_eq_p_mul_of_gapMul hpack hsGN hB_gap
+  have hu_pos : 0 < p ^ (p - 1) * t1 ^ p := by
+    have hzy_pos : 0 < z - y := Nat.sub_pos_of_lt hpack.hyz_lt
+    have hzy_eq : z - y = p ^ p * (p ^ (p - 1) * t1 ^ p) := by
+      calc
+        z - y = p ^ (2 * p - 1) * t1 ^ p := hgap_peel
+        _ = p ^ ((p - 1) + p) * t1 ^ p := by
+              have hExp : 2 * p - 1 = (p - 1) + p := by omega
+              simp [hExp]
+        _ = (p ^ (p - 1) * p ^ p) * t1 ^ p := by rw [Nat.pow_add]
+        _ = p ^ p * (p ^ (p - 1) * t1 ^ p) := by ac_rfl
+    exact Nat.pos_of_ne_zero (by
+      intro hu0
+      have hzero : z - y = 0 := by simp [hzy_eq, hu0]
+      exact (Nat.ne_of_gt hzy_pos) hzero)
+  have hTailC :
+      DkMath.CosmicFormula.GTail p 2 (p ^ (p - 1) * t1 ^ p) y = C :=
+    primeGe5BranchA_canonicalTail_eq_coeff_of_expansion hp_gt_one hu_pos hC
+  exact ⟨t1, B, C, ht, hTailB, hTailC⟩
+
+/--
+exact tail identity が与えられれば、
+`p * B ≡ C [MOD p^(p-1) * t1^p]`
+が従う。
+-/
+theorem primeGe5BranchAValuationPeelTailModEq_of_exact
+    (hExact : PrimeGe5BranchAValuationPeelTailExactTarget) :
+    PrimeGe5BranchAValuationPeelTailModEqTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd
+  rcases hExact hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd with
+    ⟨t1, B, C, ht, hTailB, hTailC⟩
+  have hp_gt_two : 2 < p := lt_of_lt_of_le (by decide : 2 < 5) hpack.hp5
+  have hgap_peel : z - y = p ^ p * (p ^ (p - 1) * t1 ^ p) := by
+    calc
+      z - y = p ^ (p - 1) * t ^ p := hgap
+      _ = p ^ (p - 1) * (p * t1) ^ p := by rw [ht]
+      _ = p ^ (p - 1) * (p ^ p * t1 ^ p) := by rw [Nat.mul_pow]
+      _ = (p ^ (p - 1) * p ^ p) * t1 ^ p := by ac_rfl
+      _ = p ^ ((p - 1) + p) * t1 ^ p := by rw [Nat.pow_add]
+      _ = p ^ (p + (p - 1)) * t1 ^ p := by
+            have hExp : (p - 1) + p = p + (p - 1) := by omega
+            simp [hExp]
+      _ = p ^ p * (p ^ (p - 1) * t1 ^ p) := by
+            rw [Nat.pow_add]
+            simp [Nat.mul_assoc]
+  have hmodTail :
+      DkMath.CosmicFormula.GTail p 2 (z - y) y ≡
+        DkMath.CosmicFormula.GTail p 2 (p ^ (p - 1) * t1 ^ p) y [MOD p ^ (p - 1) * t1 ^ p] := by
+    rw [hgap_peel]
+    simpa using
+      (primeGe5BranchA_GTail_two_scaled_modEq
+        (p := p) (u := p ^ (p - 1) * t1 ^ p) (y := y) hp_gt_two)
+  have hmodBC : p * B ≡ C [MOD p ^ (p - 1) * t1 ^ p] := by
+    rw [← hTailB, ← hTailC]
+    exact hmodTail
+  exact ⟨t1, B, C, ht, hmodBC⟩
+
+/-- mod-level comparison 段の default 実装。 -/
+theorem primeGe5BranchAValuationPeelTailModEq_default :
+    PrimeGe5BranchAValuationPeelTailModEqTarget :=
+  primeGe5BranchAValuationPeelTailModEq_of_exact
+    (primeGe5BranchAValuationPeelTailExact_of_comparison
+      primeGe5BranchAValuationPeelTailComparison_default)
 
 /--
 Branch A normal form から得る、`s^p ≡ y^(p-1) [MOD p^2]` の thin wrapper。
