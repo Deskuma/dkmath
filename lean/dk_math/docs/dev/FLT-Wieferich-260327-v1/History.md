@@ -287,3 +287,89 @@
      `branchAWieferichRefuter_math`
      を clean 化する際に、
      arithmetic kernel を直接受ける route へ戻してよいかを再評価する。
+
+### 日時: 2026/03/27 18:43 JST
+
+1. 目的:
+   - `AWieferichLocalKernel ↔ ArithmeticKernel`
+     の整理を踏まえ、
+     truly new kernel 候補として
+     Branch A distinguished-prime descent
+     を型で固定する。
+   - あわせて、
+     provider 側から見た差し替え口も
+     `GapInvariant`
+     に明示する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     - `MinimalPrimeGe5CounterexamplePackA`
+     - `PrimeGe5BranchADistinguishedPrimeDescentTarget`
+     - `minimalPrimeGe5CounterexampleSelectionA_impl`
+     - `primeGe5BranchARefuter_on_minimal_of_distinguishedPrimeDescent`
+     - `primeGe5BranchARefuter_of_distinguishedPrimeDescent`
+     を追加した。
+   - これにより、
+     Branch A 条件
+     `p ∣ (z - y)`
+     を保ったまま
+     `z` 最小の反例を no-`sorry` で選び、
+     distinguished-prime descent が供給されれば
+     Branch A refuter
+     が閉じることを lower layer で明示した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     には
+     - `BranchADistinguishedPrimeDescentAdapterTarget`
+     - `branchAWieferichAdapter_of_distinguishedPrimeDescent`
+     を追加し、
+     witness-route adapter と並ぶ
+     次段 clean 化候補として公開 splice を固定した。
+
+3. 結論:
+   - Branch A の truly new kernel 候補は、
+     もはや
+     `AWieferichLocalKernel`
+     ではなく、
+     `PrimeGe5BranchADistinguishedPrimeDescentTarget`
+     として明示できるようになった。
+   - これで
+     `q = p`
+     が distinguished prime になる Branch A 特有の下降仕様を、
+     Branch B の `WieferichDescentB`
+     とは別系統で育てる受け皿が整った。
+   - 現状の concrete 実装はまだ無いが、
+     「次に埋めるべき数学」が
+     arithmetic checkpoint ではなく
+     distinguished-prime descent
+     にあることが型でも記録された。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   - `lake build DkMath.FLT.Basic`
+   - `lake build`
+   を実行し、build 完了まで待って成功を確認した。
+
+5. 備考:
+   - `GapInvariant` 側では、
+     `branchAWieferichAdapter_of_distinguishedPrimeDescent`
+     は Wieferich witness を単に無視して
+     Branch A refuter へ落とす thin wrapper である。
+   - これは
+     distinguished-prime descent
+     が witness route より本質的に強い出口であることの反映でもある。
+
+6. 次の課題:
+   - `PrimeGe5BranchADistinguishedPrimeDescentTarget`
+     の concrete 数学を探す。
+     候補は
+     - smaller counterexample pack の構成
+     - `p`-進深さを使う descent
+     の 2 系統。
+   - あるいは、
+     既存 `WieferichDescentB`
+     の argument pattern を参考に、
+     Branch A 版の
+     `DistinguishedPrimeDescentA`
+     を別ファイルへ切り出す。

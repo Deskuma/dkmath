@@ -1299,12 +1299,33 @@ abbrev BranchAWieferichLocalKernelAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAWieferichLocalKernelTarget
 
 /--
+Branch A distinguished-prime descent route の置換点。
+
+付録:
+- これは Wieferich witness より 1 段深い truly new kernel 候補であり、
+  `q = p` が distinguished prime になる Branch A 専用の下降仕様を受ける。
+- clean 化が `AWieferichLocalKernel` で止まるなら、
+  次に差し替えるべき contract はこの target である。
+-/
+abbrev BranchADistinguishedPrimeDescentAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchADistinguishedPrimeDescentTarget
+
+/--
 local kernel から最後の witness adapter を回収する thin bridge。
 -/
 theorem branchAWieferichAdapter_of_localKernel
     (hK : BranchAWieferichLocalKernelAdapterTarget) :
     BranchAWieferichAdapterTarget :=
   DkMath.FLT.primeGe5BranchAWieferichRefuter_of_localKernel hK
+
+/--
+distinguished-prime descent から Branch A refuter を回収する thin bridge。
+-/
+theorem branchAWieferichAdapter_of_distinguishedPrimeDescent
+    (hDesc : BranchADistinguishedPrimeDescentAdapterTarget) :
+    BranchAWieferichAdapterTarget := by
+  intro p x y z hpack hp_dvd_gap _hWieferich
+  exact DkMath.FLT.primeGe5BranchARefuter_of_distinguishedPrimeDescent hDesc hpack hp_dvd_gap
 
 /--
 暫定 concrete adapter for the Branch A Wieferich witness route.

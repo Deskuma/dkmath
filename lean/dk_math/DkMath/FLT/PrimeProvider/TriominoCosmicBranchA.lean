@@ -116,6 +116,31 @@ abbrev PrimeGe5BranchAWieferichLocalKernelTarget : Prop :=
     y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
     False
 
+/-- Branch A 条件付きで `z` 最小の prime-ge5 反例 pack。 -/
+abbrev MinimalPrimeGe5CounterexamplePackA (p x y z : ℕ) : Prop :=
+  PrimeGe5CounterexamplePack p x y z ∧ p ∣ (z - y) ∧
+  ∀ {x' y' z' : ℕ}, PrimeGe5CounterexamplePack p x' y' z' →
+    p ∣ (z' - y') → z' < z → False
+
+/--
+Branch A 専用の truly new kernel 候補。
+
+Wieferich witness 自体ではなく、
+`q = p` が distinguished prime になる Branch A normal form から
+より小さい Branch A 反例を構成できることを要求する。
+-/
+abbrev PrimeGe5BranchADistinguishedPrimeDescentTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, MinimalPrimeGe5CounterexamplePackA p x y z →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ∃ x' y' z' : ℕ,
+      PrimeGe5CounterexamplePack p x' y' z' ∧ p ∣ (z' - y') ∧ z' < z
+
 /--
 Branch A の shape 値を refute する lower-layer 契約。
 
@@ -2712,6 +2737,64 @@ theorem primeGe5BranchANormalFormArithmeticKernel_of_wieferichLocalKernel
   exact hK hpack hp_dvd_gap hgap hsGN hsx
     hcop_ts hcop_ty hcop_sy hp_not_dvd_s
     (primeGe5BranchANormalForm_y_wieferich_mod_p_sq hpack hp_dvd_gap hgap hsGN)
+
+/-- Branch A 条件付きで、`z` 最小の反例 pack を no-`sorry` で選べる。 -/
+theorem minimalPrimeGe5CounterexampleSelectionA_impl :
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      p ∣ (z - y) →
+      ∃ x₀ y₀ z₀ : ℕ, MinimalPrimeGe5CounterexamplePackA p x₀ y₀ z₀ := by
+  classical
+  intro p x y z hpack hp_dvd_gap
+  let P : ℕ → Prop := fun z₀ => ∃ x₀ y₀ : ℕ,
+    PrimeGe5CounterexamplePack p x₀ y₀ z₀ ∧ p ∣ (z₀ - y₀)
+  have hExists : ∃ z₀ : ℕ, P z₀ := ⟨z, x, y, hpack, hp_dvd_gap⟩
+  let z₀ := Nat.find hExists
+  have hz₀ : P z₀ := Nat.find_spec hExists
+  rcases hz₀ with ⟨x₀, y₀, hpack₀, hpA₀⟩
+  refine ⟨x₀, y₀, z₀, hpack₀, hpA₀, ?_⟩
+  intro x' y' z' hpack' hpA' hz'lt
+  have hz₀_le : z₀ ≤ z' := by
+    simpa [z₀] using (Nat.find_min' hExists ⟨x', y', hpack', hpA'⟩)
+  exact (not_le_of_gt hz'lt) hz₀_le
+
+/--
+distinguished-prime descent があれば、最小 Branch A 反例は存在しえない。
+-/
+theorem primeGe5BranchARefuter_on_minimal_of_distinguishedPrimeDescent
+    (hDesc : PrimeGe5BranchADistinguishedPrimeDescentTarget) :
+    ∀ {p x y z : ℕ}, MinimalPrimeGe5CounterexamplePackA p x y z → False := by
+  intro p x y z hMin
+  have hpack : PrimeGe5CounterexamplePack p x y z := hMin.1
+  have hp_dvd_gap : p ∣ (z - y) := hMin.2.1
+  rcases primeGe5BranchAShapeValue_of_factorization
+      primeGe5BranchAShapeFactorization_default hpack hp_dvd_gap with ⟨t, hgap⟩
+  rcases primeGe5BranchANormalForm_of_witness hpack hp_dvd_gap hgap with ⟨s, hsGN, hsx⟩
+  rcases hDesc hMin hgap hsGN hsx
+      (primeGe5BranchANormalForm_coprime_ts_default hpack hp_dvd_gap hgap hsGN)
+      (primeGe5BranchANormalForm_coprime_t_right hpack hsx)
+      (primeGe5BranchANormalForm_coprime_s_right hpack hsx)
+      (primeGe5BranchANormalForm_prime_not_dvd_s_default hpack hp_dvd_gap hgap hsGN) with
+    ⟨x', y', z', hpack', hpA', hz'lt⟩
+  exact hMin.2.2 hpack' hpA' hz'lt
+
+/--
+distinguished-prime descent があれば、任意の Branch A 反例を直接 refute できる。
+
+付録:
+- これは Wieferich witness の有無を経由せず、
+  Branch A 専用 minimal selection と distinguished-prime descent だけで閉じる。
+- 後段で truly new kernel を採るなら、この theorem が
+  `PrimeGe5BranchAWieferichRefuterTarget` より自然な出口になる。
+-/
+theorem primeGe5BranchARefuter_of_distinguishedPrimeDescent
+    (hDesc : PrimeGe5BranchADistinguishedPrimeDescentTarget) :
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      p ∣ (z - y) →
+      False := by
+  intro p x y z hpack hp_dvd_gap
+  rcases minimalPrimeGe5CounterexampleSelectionA_impl hpack hp_dvd_gap with
+    ⟨x₀, y₀, z₀, hMin⟩
+  exact primeGe5BranchARefuter_on_minimal_of_distinguishedPrimeDescent hDesc hMin
 
 /--
 `FLT_of_coprime` の residual branch から呼ぶ Branch A 専用 refuter 入口。
