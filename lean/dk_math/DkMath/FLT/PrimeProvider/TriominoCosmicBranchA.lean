@@ -487,6 +487,31 @@ abbrev PrimeGe5BranchAPrimitiveDistinguishedPrimeTarget : Prop :=
     ∃ q : ℕ, Nat.Prime q ∧ q ∣ GN p (z - y) y ∧ ¬ q ∣ (z - y)
 
 /--
+primitive route の Zsigmondy-lite / cyclotomic existence 段。
+
+付録:
+- `GN p (z-y) y`
+  に対して、
+  gap 側に埋もれない新しい素数 `q`
+  が存在することだけを表す。
+- `PrimitiveBeam` や `ZsigmondyCyclotomic`
+  の既存存在論をここへ接続するのが自然である。
+-/
+abbrev PrimeGe5BranchAPrimitiveZsigmondyTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ GN p (z - y) y ∧ ¬ q ∣ (z - y)
+
+/--
 distinguished prime が取れた後の smaller-packet restoration 段。
 
 付録:
@@ -3874,6 +3899,24 @@ theorem primeGe5BranchAPrimitiveWieferichPacket_of_distinguishedPrime_and_restor
     ⟨q, hqprime, hqGN, hqgap⟩
   exact hRestore hpack hp_dvd_gap hgap hsGN hsx
     hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich hqprime hqGN hqgap
+
+/--
+Zsigmondy-lite existence 段があれば、distinguished-prime target は薄い橋で閉じる。
+
+付録:
+- 現段階では statement は同型だが、
+  役割を
+  「existing number-theory existence layer」
+  と
+  「primitive route internal target」
+  で分けるために名前を分離する。
+-/
+theorem primeGe5BranchAPrimitiveDistinguishedPrime_of_zsigmondy
+    (hZ : PrimeGe5BranchAPrimitiveZsigmondyTarget) :
+    PrimeGe5BranchAPrimitiveDistinguishedPrimeTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+  exact hZ hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
 
 /--
 valuation peel を error-lift 1 本に局所化した smaller-packet bridge。

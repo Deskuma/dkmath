@@ -115,3 +115,57 @@
      さらに local arithmetic 条件を足すかを決める。
    - restoration target の入力 `q`
      にどの追加条件が必要かを見極める。
+
+### 日時: 2026/03/27 22:38 JST
+
+1. 目的:
+   - `review-002.md`
+     に沿って、
+     primitive distinguished-prime selection を
+     cyclotomic / Zsigmondy 語彙へ一段寄せる。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `PrimeGe5BranchAPrimitiveZsigmondyTarget`
+     を追加した。
+   - 同ファイルに
+     `primeGe5BranchAPrimitiveDistinguishedPrime_of_zsigmondy`
+     を追加し、
+     Zsigmondy-lite existence 段から
+     primitive distinguished-prime target を回収する thin bridge を置いた。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     `BranchAPrimitiveZsigmondyAdapterTarget`
+     と
+     `branchAPrimitiveDistinguishedPrimeAdapter_of_zsigmondy`
+     を追加した。
+
+3. 結論:
+   - distinguished-prime selection は、
+     primitive route internal target としてだけでなく、
+     既存の number-theory existence layer
+     と接続する名前でも読めるようになった。
+   - 以後は
+     `PrimitiveBeam` / `ZsigmondyCyclotomic`
+     側の existence 補題を、
+     `PrimeGe5BranchAPrimitiveZsigmondyTarget`
+     にどう包むかを考えればよい。
+
+4. 検証:
+   - build はこの追記の次段で
+     `DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+     と
+     `DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+     を順番に確認する。
+
+5. 次の課題:
+   - `PrimeGe5BranchAPrimitiveZsigmondyTarget`
+     に、
+     既存の `PrimitiveBeam.exists_primitive_prime_factor_as_prop`
+     や
+     `primitive_prime_dvd_GN_body`
+     をどう接続するかを設計する。
+   - 必要なら
+     `Body = x * GN`
+     の変換を Branch A normal form packet 文脈に薄く包む補題を先に置く。

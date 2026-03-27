@@ -1362,6 +1362,10 @@ abbrev BranchAPrimitiveWieferichPacketAdapterTarget : Prop :=
 abbrev BranchAPrimitiveDistinguishedPrimeAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitiveDistinguishedPrimeTarget
 
+/-- primitive route の Zsigmondy-lite existence 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveZsigmondyAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveZsigmondyTarget
+
 /-- primitive packet restoration 段を表す provider 側 alias。 -/
 abbrev BranchAPrimitivePacketRestoreAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitivePacketRestoreTarget
@@ -1464,6 +1468,15 @@ theorem branchAPrimitiveWieferichPacketAdapter_of_distinguishedPrime_and_restore
     BranchAPrimitiveWieferichPacketAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitiveWieferichPacket_of_distinguishedPrime_and_restore
     hPrime hRestore
+
+/--
+Zsigmondy-lite existence から、
+primitive distinguished-prime adapter を回収する thin bridge。
+-/
+theorem branchAPrimitiveDistinguishedPrimeAdapter_of_zsigmondy
+    (hZ : BranchAPrimitiveZsigmondyAdapterTarget) :
+    BranchAPrimitiveDistinguishedPrimeAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveDistinguishedPrime_of_zsigmondy hZ
 
 /--
 暫定 concrete adapter for the Branch A Wieferich witness route.
