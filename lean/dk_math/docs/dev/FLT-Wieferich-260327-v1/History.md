@@ -1379,3 +1379,59 @@
    - `PrimeGe5BranchAValuationPeelPacketFromErrorTarget`
      を軽く試し、
      強い extraction がなければ primitive 側へ完全に舵を切る。
+
+### 日時: 2026/03/27 22:12 JST
+
+1. 目的:
+   - `review-008.md`
+     の「軽試験」に沿って、
+     valuation peel の exact error を
+     existential `E`
+     のままではなく
+     explicit な
+     `GTail p 3`
+     差分で書けるところまで進める。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     - `primeGe5BranchA_GTail_three_scaled_mul_ge`
+     - `primeGe5BranchA_GTail_two_scaled_error_explicit`
+     を追加した。
+   - これにより
+     `GTail p 2 (p^p * u) y`
+     の error term を
+     `p^p * GTail p 3 (p^p * u) y - GTail p 3 u y`
+     として明示できるようになった。
+
+3. 結論:
+   - peel 側の error は、
+     「何かある」
+     ではなく
+     `GTail p 3`
+     の scaled/canonical 差分として explicit に読める。
+   - ただしこの explicit 化だけからは、
+     `E = 0`
+     や
+     `p ∣ E`
+     や
+     `t1 ∣ E`
+     のような強い extraction はまだ自動では出ない。
+   - したがって現時点の評価は、
+     valuation peel はやはり
+     obstruction measurement
+     と読むのが自然、
+     というもので変わらない。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認した。
+
+5. 次の課題:
+   - `PrimeGe5BranchAValuationPeelPacketFromErrorTarget`
+     に本当に強い extraction があるかは、
+     さらに深追いせず保留にする。
+   - mainline の重心は
+     `PrimeGe5BranchAPrimitivePacketDescentTarget`
+     へ置いたまま進める。

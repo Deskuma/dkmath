@@ -1215,6 +1215,50 @@ theorem primeGe5BranchA_GTail_two_scaled_ge
   simpa [Nat.mul_assoc] using hmul2
 
 /--
+`GTail p 3 u y` も、scaled 側に `p^p` を掛けたもの以下で抑えられる。
+
+付録:
+- `GTail p 2` の explicit error を
+  `GTail p 3`
+  で書くための補助順序補題である。
+-/
+theorem primeGe5BranchA_GTail_three_scaled_mul_ge
+    {p u y : ℕ}
+    (hp_gt_two : 2 < p) :
+    DkMath.CosmicFormula.GTail p 3 u y ≤
+      p ^ p * DkMath.CosmicFormula.GTail p 3 (p ^ p * u) y := by
+  unfold DkMath.CosmicFormula.GTail
+  have hsum :
+      ∑ k ∈ Finset.range (p + 1 - 3), ↑(p.choose (3 + k)) * u ^ k * y ^ (p - (3 + k)) ≤
+        ∑ k ∈ Finset.range (p + 1 - 3), ↑(p.choose (3 + k)) * (p ^ p * u) ^ k * y ^ (p - (3 + k)) := by
+    apply Finset.sum_le_sum
+    intro k hk
+    have hp_pos : 0 < p := lt_trans (by decide : 0 < 2) hp_gt_two
+    have hu_le : u ≤ p ^ p * u := by
+      calc
+        u = 1 * u := by simp
+        _ ≤ p ^ p * u := by
+          apply Nat.mul_le_mul_right
+          exact Nat.succ_le_of_lt (Nat.pow_pos hp_pos)
+    have hpow : u ^ k ≤ (p ^ p * u) ^ k := Nat.pow_le_pow_left hu_le k
+    have hmul1 :
+        (Nat.choose p (3 + k) : ℕ) * u ^ k ≤
+          (Nat.choose p (3 + k) : ℕ) * (p ^ p * u) ^ k := by
+      exact Nat.mul_le_mul_left _ hpow
+    have hmul2 :
+        ((Nat.choose p (3 + k) : ℕ) * u ^ k) * y ^ (p - (3 + k)) ≤
+          ((Nat.choose p (3 + k) : ℕ) * (p ^ p * u) ^ k) * y ^ (p - (3 + k)) := by
+      exact Nat.mul_le_mul_right _ hmul1
+    simpa [Nat.mul_assoc] using hmul2
+  have hp_pos : 0 < p := lt_trans (by decide : 0 < 2) hp_gt_two
+  calc
+    ∑ k ∈ Finset.range (p + 1 - 3), ↑(p.choose (3 + k)) * u ^ k * y ^ (p - (3 + k))
+      ≤ ∑ k ∈ Finset.range (p + 1 - 3), ↑(p.choose (3 + k)) * (p ^ p * u) ^ k * y ^ (p - (3 + k)) := hsum
+    _ ≤ p ^ p *
+        ∑ k ∈ Finset.range (p + 1 - 3), ↑(p.choose (3 + k)) * (p ^ p * u) ^ k * y ^ (p - (3 + k)) := by
+          exact Nat.le_mul_of_pos_left _ (Nat.pow_pos hp_pos)
+
+/--
 `GTail p 2 (p^p * u) y` と `GTail p 2 u y` の差は `u` の倍数に分解できる。
 -/
 theorem primeGe5BranchA_GTail_two_scaled_exists_error
@@ -1234,6 +1278,68 @@ theorem primeGe5BranchA_GTail_two_scaled_exists_error
   rcases (Nat.modEq_iff_dvd' hle).1 hmod with ⟨E, hE⟩
   refine ⟨E, ?_⟩
   simpa [Nat.add_comm] using (Nat.sub_eq_iff_eq_add hle).1 hE
+
+/--
+`GTail p 2` の scaled/canonical 差分は、
+`GTail p 3`
+の差から explicit に書ける。
+
+付録:
+- existential `E` にとどめず、
+  `analysis-BC.md`
+  の error term がどこから来るかを式で固定する。
+- この式からは直ちに
+  `E = 0`
+  や
+  `p ∣ E`
+  は出ないため、
+  valuation peel はやはり obstruction measurement と読むのが自然である。
+-/
+theorem primeGe5BranchA_GTail_two_scaled_error_explicit
+    {p u y : ℕ}
+    (hp_gt_two : 2 < p) :
+    DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y =
+      DkMath.CosmicFormula.GTail p 2 u y +
+        u * (p ^ p * DkMath.CosmicFormula.GTail p 3 (p ^ p * u) y
+          - DkMath.CosmicFormula.GTail p 3 u y) := by
+  let A : ℕ := (Nat.choose p 2 : ℕ) * y ^ (p - 2)
+  let Ts : ℕ := DkMath.CosmicFormula.GTail p 3 (p ^ p * u) y
+  let Tc : ℕ := DkMath.CosmicFormula.GTail p 3 u y
+  have hScaled :
+      DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y = A + u * (p ^ p * Ts) := by
+    calc
+      DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y
+          = (Nat.choose p 2 : ℕ) * y ^ (p - 2) + (p ^ p * u) * Ts := by
+              simp [Ts]
+              simpa using
+                (DkMath.CosmicFormula.GTail_rec
+                  (d := p) (r := 2) (x := p ^ p * u) (u := y) hp_gt_two)
+      _ = A + u * (p ^ p * Ts) := by
+            simp [A, Ts]
+            ac_rfl
+  have hCanon :
+      DkMath.CosmicFormula.GTail p 2 u y = A + u * Tc := by
+    calc
+      DkMath.CosmicFormula.GTail p 2 u y
+          = (Nat.choose p 2 : ℕ) * y ^ (p - 2) + u * Tc := by
+              simp [Tc]
+              simpa using
+                (DkMath.CosmicFormula.GTail_rec
+                  (d := p) (r := 2) (x := u) (u := y) hp_gt_two)
+      _ = A + u * Tc := by simp [A, Tc]
+  have hTc_le : Tc ≤ p ^ p * Ts := by
+    simpa [Ts, Tc] using
+      (primeGe5BranchA_GTail_three_scaled_mul_ge (p := p) (u := u) (y := y) hp_gt_two)
+  have hmul_le : u * Tc ≤ u * (p ^ p * Ts) := Nat.mul_le_mul_left _ hTc_le
+  calc
+    DkMath.CosmicFormula.GTail p 2 (p ^ p * u) y = A + u * (p ^ p * Ts) := hScaled
+    _ = A + (u * Tc + u * (p ^ p * Ts - Tc)) := by
+          rw [Nat.mul_sub_left_distrib, Nat.add_sub_of_le hmul_le]
+    _ = (A + u * Tc) + u * (p ^ p * Ts - Tc) := by ac_rfl
+    _ = DkMath.CosmicFormula.GTail p 2 u y
+          + u * (p ^ p * DkMath.CosmicFormula.GTail p 3 (p ^ p * u) y
+              - DkMath.CosmicFormula.GTail p 3 u y) := by
+          rw [← hCanon]
 
 /--
 comparison 段が与えられれば、
