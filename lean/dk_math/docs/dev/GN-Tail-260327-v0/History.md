@@ -1418,3 +1418,76 @@
      側から
      `FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl`
      を参照する mainline 候補を追加する。
+
+### 日時: 2026/03/27 JST
+
+1. 目的:
+   - `branchAWieferichRefuter_via_FLT`
+     の責務を、
+     `FLT_prime_ge5`
+     直呼びではなく
+     既存 descent 契約経由へ寄せる。
+   - これにより、
+     Branch A witness route の clean 置換点を
+     `ExistingDescentRefuterTarget`
+     1 本へ集約する。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     に
+     `branchAWieferichRefuter_of_existingDescent`
+     を追加した。
+   - この定理では、
+     `primeGe5BranchAShapeValue_of_factorization
+      primeGe5BranchAShapeFactorization_default`
+     で `gap = p^(p-1) * t^p`
+     を回収し、
+     `branchAShapeWitness_to_existing_descent_input`
+     で既存 descent 入力へ変換して、
+     `ExistingDescentRefuterTarget`
+     を起動する。
+   - `branchAWieferichRefuter_via_FLT`
+     は、
+     もはや `FLT_prime_ge5` を直接呼ばず、
+     `branchAWieferichRefuter_of_existingDescent existingDescentRefuter_via_FLT`
+     として再定義した。
+
+3. 結論:
+   - Branch A / Wieferich witness route の暫定 refuter は、
+     既存 descent 契約の上に乗る thin wrapper へ整理された。
+   - したがって clean route で差し替えるべき最終入口は、
+     `PrimeGe5BranchAWieferichRefuterTarget`
+     そのものより
+     `ExistingDescentRefuterTarget`
+     に近いことが明確になった。
+   - これは、
+     witness route と shape/descent route が
+     既に同じ継ぎ目へ収束していることを意味する。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   - `lake build DkMath.FLT.Basic`
+   - `lake build`
+   を実行し、いずれも build 完了まで待って成功を確認した。
+
+5. 備考:
+   - `TriominoCosmicBranchA.lean`
+     の active `sorry`
+     は引き続き
+     `primeGe5BranchANormalFormNePCoprimeKernel_default`
+     1 箇所で変化なし。
+   - 今回の変更で、
+     `GapInvariant`
+     側の witness route は
+     `ExistingDescentRefuterTarget`
+     へ依存する構造だと明文化された。
+
+6. 次の課題:
+   - `existingDescentRefuter_via_FLT`
+     を、
+     no-Wieferich / descent machinery の clean 実装へ差し替える。
+   - その後で
+     `branchAWieferichRefuter_via_FLT`
+     と
+     `FLTPrimeGe5Target_of_branchA_wieferich_default_with_normalizer_impl`
+     も自動的に clean 化する。

@@ -871,22 +871,6 @@ theorem branchARefuter_of_wieferichTargets
   intro p x y z hpack hp_dvd_gap
   exact hRefute hpack hp_dvd_gap (hWieferich hpack hp_dvd_gap)
 
-/--
-暫定 concrete refuter for the Branch A Wieferich witness.
-
-付録:
-- 現段階では `PrimeGe5BranchAWieferichRefuterTarget` の clean 下降注入はまだ未実装なので、
-  ここでは `FLT_prime_ge5` へ委譲して閉じる。
-- 最終 clean route では、この theorem を no-Wieferich / descent machinery への
-  薄い adapter に置き換える。
--/
-theorem branchAWieferichRefuter_via_FLT :
-    DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget := by
-  intro p x y z hpack _hp_dvd_gap _hWieferich
-  have hNo : x ^ p + y ^ p ≠ z ^ p :=
-    FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
-  exact hNo hpack.hEq
-
 /-- Branch B 側の終着仕様（pure-gap-pow と gap-not-pow の衝突出口）。 -/
 abbrev BranchBRefuterTarget : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
@@ -1269,6 +1253,40 @@ theorem existingDescentRefuter_via_FLT
   have hNo : x ^ p + y ^ p ≠ z ^ p :=
     FLT_prime_ge5 p hpack.hp hpack.hp5 x y z hpack.hx0 hpack.hy0 hpack.hz0
   exact hNo hpack.hEq
+
+/--
+既存 descent 契約があれば、Branch A の Wieferich witness refuter 契約は自動で閉じる。
+
+付録:
+- 現段階では witness 自体は使わず、
+  lower-layer の shape default から既存 descent 入力を再構成して refute する。
+- したがって clean route では、
+  `ExistingDescentRefuterTarget` の差し替えだけで
+  `PrimeGe5BranchAWieferichRefuterTarget` 側も同時に clean 化される。
+-/
+theorem branchAWieferichRefuter_of_existingDescent
+    (hDesc : ExistingDescentRefuterTarget) :
+    DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget := by
+  intro p x y z hpack hp_dvd_gap _hWieferich
+  rcases DkMath.FLT.primeGe5BranchAShapeValue_of_factorization
+      DkMath.FLT.primeGe5BranchAShapeFactorization_default hpack hp_dvd_gap with
+    ⟨t, ht⟩
+  exact hDesc hpack hp_dvd_gap
+    (branchAShapeWitness_to_existing_descent_input hpack hp_dvd_gap ht)
+
+/--
+暫定 concrete refuter for the Branch A Wieferich witness.
+
+付録:
+- 現段階では `PrimeGe5BranchAWieferichRefuterTarget` の clean 下降注入はまだ未実装だが、
+  実装自体は既存 descent 契約を経由して閉じる。
+- したがって clean route では、
+  `ExistingDescentRefuterTarget` の差し替えだけで
+  この theorem も同時に clean 化される。
+-/
+theorem branchAWieferichRefuter_via_FLT :
+    DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget :=
+  branchAWieferichRefuter_of_existingDescent existingDescentRefuter_via_FLT
 
 /-- 既存契約入力を refute する暫定 concrete 実装（via FLT）。 -/
 theorem existingDescentContractRefuter_via_FLT :
