@@ -963,3 +963,85 @@
      に留め、
      `PrimeGe5BranchAPrimitivePacketDescentTarget`
      を本命へ押し上げる。
+
+### 日時: 2026/03/27 20:33 JST
+
+1. 目的:
+   - `consider-005.md`
+     の 5.3 に対応して、
+     valuation peel route の
+     `seed`
+     と
+     `canonical tail`
+     を同じ
+     `t₁`
+     上に並べる比較段を
+     lower layer に固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `PrimeGe5BranchAValuationPeelTailComparisonTarget`
+     を追加した。
+   - 同ファイルに
+     `primeGe5BranchAValuationPeelTailComparison_of_seed_and_canonical`
+     と
+     `primeGe5BranchAValuationPeelTailComparison_default`
+     を追加した。
+   - 比較段の契約は、
+     同じ
+     `t = p * t₁`
+     の下で
+     - seed 側:
+       `s^p = y^(p-1) + p^(2p-1) * (t₁^p * B)`
+     - canonical tail 側:
+       `GN p (p^(p-1) * t₁^p) y = p * y^(p-1) + (p^(p-1) * t₁^p) * C`
+     を同時に返す形とした。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     には
+     `BranchAValuationPeelTailComparisonAdapterTarget`
+     を追加した。
+
+3. 結論:
+   - valuation peel route は、
+     いまや
+     `seed`
+     と
+     `canonical tail`
+     の両方を
+     同じ `t₁`
+     上で比較できる段まで整備された。
+   - したがって next step は、
+     truly new math を
+     `B`
+     と
+     `C`
+     の関係に集中して書けばよい。
+     `packet`
+     を直接書くより、どこが不足しているかがさらに明瞭になった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   - `lake build DkMath.FLT.Basic`
+   - `lake build`
+   を順番に実行し、build 完了まで待って成功を確認した。
+
+5. 備考:
+   - 今回の比較段では、
+     まだ
+     `B = C`
+     や
+     `C = p^p * B`
+     のような stronger statement は要求していない。
+     そこが次の concrete 数学核である。
+
+6. 次の課題:
+   - `B`
+     と
+     `C`
+     の間に成り立つ exact relation を探す。
+   - その relation が packet の再構成まで届かなければ、
+     valuation peel route は obstruction extraction とみなし、
+     `PrimeGe5BranchAPrimitivePacketDescentTarget`
+     を本命 route として押し上げる。

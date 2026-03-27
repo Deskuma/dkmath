@@ -263,6 +263,38 @@ abbrev PrimeGe5BranchAValuationPeelCanonicalTailTarget : Prop :=
         p * y ^ (p - 1) + (p ^ (p - 1) * t1 ^ p) * C
 
 /--
+valuation peel route の tail comparison 契約。
+
+付録:
+- seed 側の tail 係数 `B` と、
+  canonical tail 側の係数 `C`
+  を同じ `t1`
+  で比較可能な形に並べて返す。
+- この段階ではまだ
+  `B = C`
+  や
+  `C = p^p * B`
+  のような stronger relation は要求しない。
+  不足情報を exact に可視化するための中間契約である。
+-/
+abbrev PrimeGe5BranchAValuationPeelTailComparisonTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ t1 B C : ℕ,
+      t = p * t1 ∧
+      s ^ p = y ^ (p - 1) + p ^ (2 * p - 1) * (t1 ^ p * B) ∧
+      GN p (p ^ (p - 1) * t1 ^ p) y =
+        p * y ^ (p - 1) + (p ^ (p - 1) * t1 ^ p) * C
+
+/--
 `p ∤ t` の primitive core に入った後、
 cyclotomic / distinguished-prime descent で smaller packet を返す route。
 
@@ -869,6 +901,42 @@ theorem primeGe5BranchAValuationPeelCanonicalTail_default :
           + (p ^ (p - 1) * t1 ^ p) *
             DkMath.CosmicFormula.GTail p 2 (p ^ (p - 1) * t1 ^ p) y := by
           simp
+
+/--
+seed と canonical tail が揃えば、
+valuation peel route の比較段は thin bridge で閉じる。
+
+付録:
+- ここで露出する本当の数学差分は
+  `B`
+  と
+  `C`
+  の関係だけである。
+- 以後の段階分解では、
+  `PrimeGe5BranchAValuationPeelTailComparisonTarget`
+  を packet route の直前段として扱える。
+-/
+theorem primeGe5BranchAValuationPeelTailComparison_of_seed_and_canonical
+    (hSeed : PrimeGe5BranchAValuationPeelSeedTarget)
+    (hCanon : PrimeGe5BranchAValuationPeelCanonicalTailTarget) :
+    PrimeGe5BranchAValuationPeelTailComparisonTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd
+  rcases hSeed hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd with
+    ⟨t1, B, ht, hB⟩
+  rcases hCanon hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s ht_dvd with
+    ⟨t1', C, ht', hC⟩
+  have ht1_eq : t1 = t1' := by
+    apply Nat.eq_of_mul_eq_mul_left hpack.hp.pos
+    rw [← ht, ← ht']
+  subst t1'
+  exact ⟨t1, B, C, ht, hB, hC⟩
+
+/-- comparison 段の default 実装。 -/
+theorem primeGe5BranchAValuationPeelTailComparison_default :
+    PrimeGe5BranchAValuationPeelTailComparisonTarget :=
+  primeGe5BranchAValuationPeelTailComparison_of_seed_and_canonical
+    primeGe5BranchAValuationPeelSeed_default
+    primeGe5BranchAValuationPeelCanonicalTail_default
 
 /--
 Branch A normal form から得る、`s^p ≡ y^(p-1) [MOD p^2]` の thin wrapper。
