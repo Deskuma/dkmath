@@ -142,6 +142,28 @@ abbrev PrimeGe5BranchADistinguishedPrimeDescentTarget : Prop :=
       PrimeGe5CounterexamplePack p x' y' z' ∧ p ∣ (z' - y') ∧ z' < z
 
 /--
+Branch A normal form から直接、
+より小さい Branch A 反例を構成する stronger target。
+
+付録:
+- concrete 数学としては、minimality を仮定するよりこちらを直接埋めるほうが自然な可能性が高い。
+- `PrimeGe5BranchADistinguishedPrimeDescentTarget` は、この stronger target から
+  no-`sorry` で回収できる。
+-/
+abbrev PrimeGe5BranchASmallerCounterexampleTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ∃ x' y' z' : ℕ,
+      PrimeGe5CounterexamplePack p x' y' z' ∧ p ∣ (z' - y') ∧ z' < z
+
+/--
 Branch A の shape 値を refute する lower-layer 契約。
 
 ここを clean な descent/shrink kernel で埋めれば、
@@ -2756,6 +2778,15 @@ theorem minimalPrimeGe5CounterexampleSelectionA_impl :
   have hz₀_le : z₀ ≤ z' := by
     simpa [z₀] using (Nat.find_min' hExists ⟨x', y', hpack', hpA'⟩)
   exact (not_le_of_gt hz'lt) hz₀_le
+
+/--
+smaller-counterexample target があれば、minimality 付き distinguished-prime descent は自動で従う。
+-/
+theorem primeGe5BranchADistinguishedPrimeDescent_of_smallerCounterexample
+    (hSmall : PrimeGe5BranchASmallerCounterexampleTarget) :
+    PrimeGe5BranchADistinguishedPrimeDescentTarget := by
+  intro p x y z t s hMin hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s
+  exact hSmall hMin.1 hMin.2.1 hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s
 
 /--
 distinguished-prime descent があれば、最小 Branch A 反例は存在しえない。

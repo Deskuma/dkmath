@@ -373,3 +373,175 @@
      Branch A 版の
      `DistinguishedPrimeDescentA`
      を別ファイルへ切り出す。
+
+### 日時: 2026/03/27 18:51 JST
+
+1. 目的:
+   - `distinguished-prime descent`
+     を単なる構想でなく、
+     Branch A 側の concrete な次段 kernel として
+     さらに見える化する。
+   - 具体的には、
+     最小 Branch A 反例上の refuter と
+     global Branch A refuter の関係を
+     no-`sorry` で固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     で
+     `MinimalPrimeGe5CounterexamplePackA`
+     と
+     `PrimeGe5BranchADistinguishedPrimeDescentTarget`
+     を使い、
+     - `minimalPrimeGe5CounterexampleSelectionA_impl`
+     - `primeGe5BranchARefuter_on_minimal_of_distinguishedPrimeDescent`
+     - `primeGe5BranchARefuter_of_distinguishedPrimeDescent`
+     を追加した。
+   - これにより
+     `p ∣ (z-y)`
+     を保つ Branch A 最小反例選択と、
+     distinguished-prime descent
+     からの global refuter 回収が
+     lower layer で閉じるようになった。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     には
+     `BranchADistinguishedPrimeDescentAdapterTarget`
+     と
+     `branchAWieferichAdapter_of_distinguishedPrimeDescent`
+     を追加し、
+     provider 側から見た splice point
+     としてもこの route を明示した。
+
+3. 結論:
+   - Branch A で truly new な数学を置く場所は、
+     `AWieferichLocalKernel`
+     ではなく、
+     `MinimalPrimeGe5CounterexamplePackA`
+     と
+     `PrimeGe5BranchADistinguishedPrimeDescentTarget`
+     の組であることが
+     Lean 上でも明確になった。
+   - 特に
+     `primeGe5BranchARefuter_of_distinguishedPrimeDescent`
+     により、
+     今後の concrete 実装は
+     minimal Branch A counterexample 上の descent
+     を与えるだけで
+     global refuter
+     に持ち上がる。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   - `lake build DkMath.FLT.Basic`
+   - `lake build`
+   を実行し、build 完了まで待って成功を確認した。
+
+5. 備考:
+   - `branchAWieferichAdapter_of_distinguishedPrimeDescent`
+     は witness を無視して Branch A refuter に落とす thin wrapper であり、
+     distinguished-prime descent
+     が witness route より強い出口であることを反映している。
+   - この段階では concrete descent 数学はまだ無いが、
+     どこへ置けば良いかはかなり明確になった。
+
+6. 次の課題:
+   - `PrimeGe5BranchADistinguishedPrimeDescentTarget`
+     の concrete 実装を探す。
+   - 候補は、
+     - smaller counterexample pack を直接構成する route
+     - `p`-進深さを介した descent route
+     の 2 本。
+   - 必要なら
+     `CosmicPetalBridgeGNCore` の
+     `WieferichDescentB`
+     と対応する Branch A 版 contract を
+     別ファイルへ切り出す。
+
+### 日時: 2026/03/27 19:09 JST
+
+1. 目的:
+   - `distinguished-prime descent`
+     をさらに concrete にし、
+     「最小反例上の descent」
+     よりも一段強い
+     「smaller Branch A counterexample を直接返す」
+     契約まで押し下げる。
+   - これにより、
+     最終的な concrete 数学が目指す型を
+     さらに明確にする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `PrimeGe5BranchASmallerCounterexampleTarget`
+     を追加した。
+     これは
+     Branch A normal form
+     から
+     `p ∣ (z' - y')`
+     を保つより小さい counterexample pack
+     を直接返す target である。
+   - 同ファイルに
+     `primeGe5BranchADistinguishedPrimeDescent_of_smallerCounterexample`
+     を追加し、
+     上記 stronger contract
+     から
+     `PrimeGe5BranchADistinguishedPrimeDescentTarget`
+     を得る橋を置いた。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     には
+     `BranchASmallerCounterexampleAdapterTarget`
+     と
+     `branchAWieferichAdapter_of_smallerCounterexample`
+     を追加し、
+     provider 側から見ても
+     stronger route
+     が splice point
+     として表現できるようにした。
+
+3. 結論:
+   - Branch A の concrete 未完核は、
+     単なる
+     `distinguished-prime descent`
+     ではなく、
+     さらに強い
+     `PrimeGe5BranchASmallerCounterexampleTarget`
+     として記述できることが明確になった。
+   - したがって今後の数学探索では、
+     「より小さい Branch A counterexample をどう直接作るか」
+     を本題として考えればよい。
+   - `distinguished-prime descent`
+     はその stronger contract
+     から機械的に回収できる。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   - `lake build DkMath.FLT.Basic`
+   を実行し、build 完了まで待って成功を確認した。
+
+5. 備考:
+   - `BranchASmallerCounterexampleAdapterTarget`
+     は、
+     witness route を使う provider 側から見た
+     strongest splice point
+     として機能する。
+   - 既存の
+     `PrimeGe5BranchADistinguishedPrimeDescentTarget`
+     は、
+     以後は middle contract
+     として読める。
+
+6. 次の課題:
+   - `PrimeGe5BranchASmallerCounterexampleTarget`
+     の concrete 実装を探す。
+   - 候補は、
+     - smaller counterexample pack を直接構成する arithmetic route
+     - `p`-進深さや distinguished prime を介した descent route
+     の 2 本。
+   - 必要なら、
+     Branch A 専用の
+     `SmallerCounterexampleA`
+     contract / helper file
+     を別に切って探索を分離する。
