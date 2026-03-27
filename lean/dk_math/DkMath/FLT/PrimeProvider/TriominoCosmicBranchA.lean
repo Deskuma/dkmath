@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5Core
 import DkMath.NumberTheory.Gcd.GN
+import Mathlib.FieldTheory.Finite.Basic
 
 #print "file: DkMath.FLT.PrimeProvider.TriominoCosmicBranchA"
 
@@ -1131,6 +1132,139 @@ theorem primeGe5BranchANormalForm_coprime_p_y_default
     Nat.Coprime p y := by
   exact (Nat.Prime.coprime_iff_not_dvd hpack.hp).2
     (primeGe5BranchANormalForm_prime_not_dvd_y_default hpack hp_dvd_gap)
+
+/--
+For prime exponent `p`, we have `s^p ≡ s [MOD p]`.
+-/
+theorem primeGe5BranchANormalForm_spow_congr_self_mod_p
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (_hp_dvd_gap : p ∣ (z - y))
+    (_hgap : z - y = p ^ (p - 1) * t ^ p)
+    (_hsGN : GN p (z - y) y = p * s ^ p) :
+    s ^ p ≡ s [MOD p] := by
+  rw [← Int.natCast_modEq_iff, Nat.cast_pow]
+  exact Int.ModEq.pow_prime_eq_self hpack.hp (s : ℤ)
+
+/--
+Branch A normal form forces `s ≡ 1 [MOD p]`.
+
+付録:
+- `s^p ≡ y^(p-1) [MOD p^2]` を mod `p` に落とし、
+  Fermat on `y` と Frobenius on `s` を合わせた結果である。
+-/
+theorem primeGe5BranchANormalForm_s_congr_one_mod_p
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    s ≡ 1 [MOD p] := by
+  have hspow_head_p2 :
+      s ^ p ≡ y ^ (p - 1) [MOD p ^ 2] :=
+    primeGe5BranchA_spow_congr_head_mod_p_sq hpack hp_dvd_gap hgap hsGN
+  have hspow_head_p :
+      s ^ p ≡ y ^ (p - 1) [MOD p] := by
+    have htmp : s ^ p ≡ y ^ (p - 1) [MOD p * p] := by
+      simpa [pow_two, Nat.mul_comm] using hspow_head_p2
+    simpa using Nat.ModEq.of_mul_left p htmp
+  have hy_one :
+      y ^ (p - 1) ≡ 1 [MOD p] :=
+    Nat.ModEq.pow_card_sub_one_eq_one (n := y) hpack.hp
+      (primeGe5BranchANormalForm_coprime_p_y_default
+        (p := p) (x := x) (y := y) (z := z) hpack hp_dvd_gap).symm
+  have hspow_one : s ^ p ≡ 1 [MOD p] :=
+    hspow_head_p.trans hy_one
+  exact (primeGe5BranchANormalForm_spow_congr_self_mod_p hpack hp_dvd_gap hgap hsGN).symm.trans hspow_one
+
+/--
+If Branch A forces `s ≡ 1 [MOD p]`, then binomial expansion lifts it to
+`s^p ≡ 1 [MOD p^2]`.
+
+付録:
+- `s = 1 + p * a` と書いて `exists_add_pow_prime_eq` を使うだけの局所補題である。
+- 以後の Wieferich route では、`s^p ≡ y^(p-1) [MOD p^2]` と合成して
+  `y^(p-1) ≡ 1 [MOD p^2]` を作る入口になる。
+-/
+theorem primeGe5BranchANormalForm_spow_congr_one_mod_p_sq
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    s ^ p ≡ 1 [MOD p ^ 2] := by
+  have hs_congr_one : s ≡ 1 [MOD p] :=
+    primeGe5BranchANormalForm_s_congr_one_mod_p hpack hp_dvd_gap hgap hsGN
+  have hs_ne_zero : s ≠ 0 := by
+    intro hs0
+    have hGN_zero : GN p (z - y) y = 0 := by
+      calc
+        GN p (z - y) y = p * s ^ p := hsGN
+        _ = 0 := by simp [hs0, hpack.hp.ne_zero]
+    have hGN_ne :
+        GN p (z - y) y ≠ 0 :=
+      GN_ne_zero_nat_of_two_le
+        (d := p) (x := z - y) (u := y)
+        (le_trans (by decide : 2 ≤ 5) hpack.hp5)
+        (Nat.sub_pos_of_lt hpack.hyz_lt)
+        hpack.y_pos
+    exact hGN_ne hGN_zero
+  have hs_ge_one : 1 ≤ s := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hs_ne_zero)
+  have hp_dvd_s_sub_one : p ∣ s - 1 := by
+    exact (Nat.modEq_iff_dvd' hs_ge_one).1 hs_congr_one.symm
+  rcases hp_dvd_s_sub_one with ⟨a, ha⟩
+  have hs_repr : s = 1 + p * a := by
+    have htmp : s = p * a + 1 := by
+      exact (Nat.sub_eq_iff_eq_add hs_ge_one).1 ha
+    simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using htmp
+  rcases exists_add_pow_prime_eq hpack.hp (p * a) 1 with ⟨r, hr⟩
+  have hs_pow_eq :
+      s ^ p = (p * a) ^ p + 1 + p * (p * a) * r := by
+    simpa [hs_repr, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm, one_pow] using hr
+  have hp2_le_p : 2 ≤ p := le_trans (by decide : 2 ≤ 5) hpack.hp5
+  have hp2_dvd_pow : p ^ 2 ∣ (p * a) ^ p := by
+    refine ⟨p ^ (p - 2) * a ^ p, ?_⟩
+    calc
+      (p * a) ^ p = p ^ p * a ^ p := by rw [Nat.mul_pow]
+      _ = p ^ (2 + (p - 2)) * a ^ p := by rw [Nat.add_sub_of_le hp2_le_p]
+      _ = p ^ 2 * (p ^ (p - 2) * a ^ p) := by
+        rw [Nat.pow_add]
+        ring_nf
+  have hp2_dvd_lin : p ^ 2 ∣ p * (p * a) * r := by
+    refine ⟨a * r, ?_⟩
+    simp [pow_two, Nat.mul_left_comm, Nat.mul_comm]
+  have hs_pow_ge_one : 1 ≤ s ^ p := Nat.succ_le_of_lt (Nat.pow_pos (Nat.pos_of_ne_zero hs_ne_zero))
+  have hmod : 1 ≡ s ^ p [MOD p ^ 2] := by
+    refine (Nat.modEq_iff_dvd' hs_pow_ge_one).2 ?_
+    have hs_sub_eq :
+        s ^ p - 1 = (p * a) ^ p + p * (p * a) * r := by
+      rw [hs_pow_eq]
+      omega
+    rw [hs_sub_eq]
+    exact dvd_add hp2_dvd_pow hp2_dvd_lin
+  exact hmod.symm
+
+/--
+Branch A normal form already yields a Wieferich-style witness on `y`.
+
+付録:
+- `s^p ≡ y^(p-1) [MOD p^2]` と `s^p ≡ 1 [MOD p^2]` を合成しただけの thin wrapper。
+- この theorem は `False` を直接返さないが、Wieferich bridge へ渡す最初の concrete witness として使う。
+-/
+theorem primeGe5BranchANormalForm_y_wieferich_mod_p_sq
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] := by
+  have hhead :
+      s ^ p ≡ y ^ (p - 1) [MOD p ^ 2] :=
+    primeGe5BranchA_spow_congr_head_mod_p_sq hpack hp_dvd_gap hgap hsGN
+  have hspow_one :
+      s ^ p ≡ 1 [MOD p ^ 2] :=
+    primeGe5BranchANormalForm_spow_congr_one_mod_p_sq hpack hp_dvd_gap hgap hsGN
+  exact hhead.symm.trans hspow_one
 
 /--
 反例 pack の基本恒等式 `x^p = gap * GN` と `x ⟂ y` から、
