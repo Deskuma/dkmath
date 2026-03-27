@@ -1288,6 +1288,25 @@ abbrev BranchAWieferichAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget
 
 /--
+Branch A / Wieferich route の 1 段手前に置く local kernel 置換点。
+
+付録:
+- witness 単独ではなく Branch A normal form と局所 coprime 情報を合わせて使う。
+- `BranchAWieferichAdapterTarget` の concrete 実装が直接見つからない場合でも、
+  欠けた数学をこの local kernel 1 本へ閉じ込められる。
+-/
+abbrev BranchAWieferichLocalKernelAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAWieferichLocalKernelTarget
+
+/--
+local kernel から最後の witness adapter を回収する thin bridge。
+-/
+theorem branchAWieferichAdapter_of_localKernel
+    (hK : BranchAWieferichLocalKernelAdapterTarget) :
+    BranchAWieferichAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAWieferichRefuter_of_localKernel hK
+
+/--
 暫定 concrete adapter for the Branch A Wieferich witness route.
 
 付録:

@@ -118,3 +118,90 @@
      の手前に
      もう 1 段薄い Branch A / Wieferich local kernel を導入して、
      欠けている数学入力をさらに可視化する。
+
+### 日時: 2026/03/27 17:43 JST
+
+1. 目的:
+   - `consider-002.md` の提案に従い、
+     Branch A witness route の clean 化を
+     `witness -> refuter`
+     で直接狙うのではなく、
+     `witness -> local kernel -> refuter`
+     へ再整理する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `PrimeGe5BranchAWieferichLocalKernelTarget`
+     を追加した。
+     契約は
+     `gap = p^(p-1) * t^p`,
+     `GN = p * s^p`,
+     `x = p * (t * s)`,
+     `t ⟂ s`,
+     `t ⟂ y`,
+     `s ⟂ y`,
+     `¬ p ∣ s`,
+     `y^(p-1) ≡ 1 [MOD p^2]`
+     から
+     `False`
+     を返す形である。
+   - 同ファイルに
+     `primeGe5BranchAWieferichRefuter_of_localKernel`
+     を追加した。
+     これは既存の
+     `primeGe5BranchAShapeValue_of_factorization`,
+     `primeGe5BranchANormalForm_of_witness`,
+     `primeGe5BranchANormalForm_coprime_*`,
+     `primeGe5BranchANormalForm_prime_not_dvd_s_default`
+     だけを使って、
+     local kernel から
+     `PrimeGe5BranchAWieferichRefuterTarget`
+     を回収する thin bridge である。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     には
+     `BranchAWieferichLocalKernelAdapterTarget`
+     と
+     `branchAWieferichAdapter_of_localKernel`
+     を追加し、
+     gap-invariant 層から見た clean 差し替え先も明示した。
+
+3. 結論:
+   - 欠けた数学は、
+     もはや
+     `PrimeGe5BranchAWieferichRefuterTarget`
+     全体ではなく、
+     `PrimeGe5BranchAWieferichLocalKernelTarget`
+     1 本に局所化できた。
+   - これにより
+     `BranchAWieferichAdapterTarget`
+     は public splice として保ったまま、
+     その 1 段手前にある真正の数学核が型として見えるようになった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   - `lake build DkMath.FLT.Basic`
+   - `lake build`
+   を実行し、build 完了まで待って成功を確認した。
+
+5. 失敗事例:
+   - witness 単独の
+     `PrimeGe5BranchAWieferichRefuterTarget`
+     を直接 Branch B machinery に落とす案は、
+     引き続き型の不一致で進展しなかった。
+
+6. 備考:
+   - 今回の変更は数学を進めたというより、
+     欠けた数学入力の場所を
+     `PrimeGe5BranchAWieferichLocalKernelTarget`
+     として固定した段階である。
+   - 既存 default mainline への配線はそのままで、
+     clean 化の照準だけがさらに狭まった。
+
+7. 次の課題:
+   - `PrimeGe5BranchAWieferichLocalKernelTarget`
+     の clean concrete 実装を探す。
+   - もしそれでも広すぎるなら、
+     この local kernel を
+     arithmetic / descent
+     の 2 段にさらに分割する。

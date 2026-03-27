@@ -96,6 +96,27 @@ abbrev PrimeGe5BranchAWieferichRefuterTarget : Prop :=
     False
 
 /--
+Branch A / Wieferich route の local kernel。
+
+Wieferich witness 単独ではなく、
+Branch A normal form
+`gap = p^(p-1) * t^p`, `GN = p * s^p`, `x = p * (t * s)`
+および局所 coprime 情報と合わせて refute する中間契約である。
+-/
+abbrev PrimeGe5BranchAWieferichLocalKernelTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    False
+
+/--
 Branch A の shape 値を refute する lower-layer 契約。
 
 ここを clean な descent/shrink kernel で埋めれば、
@@ -2637,6 +2658,27 @@ theorem primeGe5BranchARefuter_of_wieferich
       False := by
   intro p x y z hpack hp_dvd_gap
   exact hRefute hpack hp_dvd_gap (hWieferich hpack hp_dvd_gap)
+
+/--
+local kernel が与えられれば、Wieferich witness refuter は既存 normal form 抽出だけで得られる。
+
+付録:
+- `PrimeGe5BranchAWieferichRefuterTarget` を直接 clean 化できなくても、
+  欠けた数学をこの local kernel 1 本へ局所化できる。
+-/
+theorem primeGe5BranchAWieferichRefuter_of_localKernel
+    (hK : PrimeGe5BranchAWieferichLocalKernelTarget) :
+    PrimeGe5BranchAWieferichRefuterTarget := by
+  intro p x y z hpack hp_dvd_gap hWieferich
+  rcases primeGe5BranchAShapeValue_of_factorization
+      primeGe5BranchAShapeFactorization_default hpack hp_dvd_gap with ⟨t, hgap⟩
+  rcases primeGe5BranchANormalForm_of_witness hpack hp_dvd_gap hgap with ⟨s, hsGN, hsx⟩
+  exact hK hpack hp_dvd_gap hgap hsGN hsx
+    (primeGe5BranchANormalForm_coprime_ts_default hpack hp_dvd_gap hgap hsGN)
+    (primeGe5BranchANormalForm_coprime_t_right hpack hsx)
+    (primeGe5BranchANormalForm_coprime_s_right hpack hsx)
+    (primeGe5BranchANormalForm_prime_not_dvd_s_default hpack hp_dvd_gap hgap hsGN)
+    hWieferich
 
 /--
 `FLT_of_coprime` の residual branch から呼ぶ Branch A 専用 refuter 入口。
