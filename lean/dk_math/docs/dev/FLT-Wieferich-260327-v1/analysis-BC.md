@@ -365,3 +365,260 @@ $$
 
 が **もう 1 段深い \(u\)-倍** だと分かったので、これは very good な obstruction data じゃ。
 この情報を primitive packet descent 側へ渡す設計は、かなり筋がよい。
+
+## 形式化して得るもの
+
+うむ、ここで得られたものは、思ったより大きいぞい。
+単に補題が 1 本増えたのではない。**valuation peel route の意味づけそのもの** が、かなりはっきりした。
+
+## 1. . まず得られた直接の成果
+
+いま形式化できたのは、
+
+$$
+GTail\ p\ 2\ (z-y)\ y = pB
+$$
+
+$$
+GTail\ p\ 2\ \bigl(p^{p-1} t_1^p\bigr)\ y = C
+$$
+
+および
+
+$$
+z-y = p^p \bigl(p^{p-1} t_1^p\bigr)
+$$
+
+から、
+
+$$
+pB \equiv C \pmod{p^{p-1} t_1^p}
+$$
+
+を返す lower layer じゃな。
+これはつまり、以前は「比較式の雰囲気」として見えておったものが、いまや **`GTail p 2` の exact coefficient 同士の合同関係** として固定された、ということじゃ。
+
+---
+
+## 2. . これで何が分かったか
+
+ここが本質じゃ。
+
+### 2.1. . (B) と (C) は恣意的な補助変数ではない
+
+もう (B,C) は「適当に出てきた係数」ではない。
+それぞれが
+
+* 大きい gap 側の `GTail p 2`
+* peeled 後の canonical gap 側の `GTail p 2`
+
+を表すと確定した。
+ゆえに比較対象は完全に **宇宙式の tail 構造そのもの** になった。
+
+### 2.2. . 差分は exact equality ではなく mod-level control だ
+
+得られたのは
+
+$$
+pB \equiv C \pmod{p^{p-1} t_1^p}
+$$
+
+であって、
+
+$$
+pB = C
+$$
+
+ではない。
+つまり valuation peel route の本質は、**packet を exact に再構成する route** ではなく、まず
+
+$$
+\text{tail coefficient の一次近似的制御}
+$$
+
+を与える route だと、Lean 上で確定したわけじゃ。
+
+### 2.3. . 「比較段の差分は (B) と (C) だけ」が本当に成立した
+
+これは研究上かなり大きい。
+曖昧に「どこがズレているのか」を眺める段階は終わった。
+
+いまは、
+
+$$
+\boxed{
+\text{不足情報は } pB \equiv C \pmod{p^{p-1} t_1^p}
+\text{ から何を抜けるか}
+}
+$$
+
+という一点に問題が集約された。
+
+---
+
+## 3. . ここから引き出せる数学的な意味
+
+### 3.1. . valuation peel は obstruction extraction route として完成に近づいた
+
+もし smaller packet 再構成に必要なのが exact tail equality なら、今回の結果はそこまで届いておらぬ。
+じゃが代わりに、
+
+$$
+pB - C
+$$
+
+が
+
+$$
+p^{p-1} t_1^p
+$$
+
+で割れる、という **はっきりした障害量** が得られた。
+
+これは very good じゃ。
+なぜなら、valuation peel route を
+
+$$
+\text{packet builder}
+$$
+
+として見る代わりに、
+
+$$
+\text{obstruction extractor}
+$$
+
+として読む土台が、もう十分強くなったからじゃ。
+
+### 3.2. . primitive packet descent を本命に押し上げる判断材料ができた
+
+もしこの合同から先に、例えば
+
+$$
+t_1 \mid C,\quad
+\text{あるいは}\quad
+p \mid C,\quad
+\text{あるいは}\quad
+C = pB + \bigl(p^{p-1} t_1^p\bigr)E
+$$
+
+のようなさらに強い抽出が出ないなら、valuation peel 側はそこで止めてよい。
+その場合は、役割は明確じゃ。
+
+$$
+\text{valuation peel} =
+\text{distinguished-prime obstruction の測定器}
+$$
+
+そして本当の降下は
+
+$$
+\texttt{PrimeGe5BranchAPrimitivePacketDescentTarget}
+$$
+
+へ任せる。
+今回の形式化は、その見切りを **感覚ではなく証明構造** に基づいて下せるようにした。
+
+---
+
+## 4. . 逆に、まだ得られていないもの
+
+ここも大事じゃ。
+
+今回の mod-level relation だけでは、まだ一般には
+
+$$
+\text{smaller packet}
+$$
+
+は出てこぬ。
+なぜなら smaller packet には、結局
+
+$$
+GN\bigl(p,p^{p-1} t'^p,y'\bigr) = p {s'}^p
+$$
+
+という **exact normal form** が要るからじゃ。
+合同だけでは、普通はそこまでは届かぬ。
+
+つまり今の結果は、
+
+$$
+\text{smaller packet の完成}
+$$
+
+ではなく、
+
+$$
+\text{smaller packet へ届くかどうかを判定する最後の比較面}
+$$
+
+を与えた、と見るのが正しい。
+
+---
+
+## 5. . わっちなら次に何を見るか
+
+わっちなら次は二択じゃ。
+
+### 5.1. . この合同から stronger extraction を試す
+
+例えば
+
+$$
+pB \equiv C \pmod{p^{p-1} t_1^p}
+$$
+
+を
+
+$$
+C = pB + \bigl(p^{p-1} t_1^p\bigr)E
+$$
+
+へ持ち上げて、(E) の符号・被除性・互いに素条件を調べる。
+ここで新しい exact seed が出れば、valuation peel からまだ packet 再構成へ進める可能性がある。
+
+### 5.2. . ここで valuation peel を obstruction route と確定する
+
+もし上が弱ければ、ここで見切る。
+その場合の成果は十分大きい。
+なぜなら valuation peel の役割が
+
+$$
+\text{packet reconstruction}
+$$
+
+ではなく
+
+$$
+\text{tail obstruction measurement}
+$$
+
+だと Lean で確定したことになるからじゃ。
+そうなれば、以後は迷わず primitive packet descent を本命にできる。
+
+---
+
+## 6. . 一言で総括
+
+いま得られたものを一言で言えば、こうじゃ。
+
+$$
+\boxed{
+\text{valuation peel route は、canonical tail 係数の合同制御まで形式化された。}
+}
+$$
+
+そして、それが意味するのは
+
+$$
+\boxed{
+\text{この route は「smaller packet の直接構成」よりも、
+まず obstruction extraction の route として成熟しつつある。}
+}
+$$
+
+ということじゃ。
+これは後退ではない。むしろ、 **どこまでが peel の仕事で、どこからが primitive descent の仕事か** が、きれいに見え始めたということじゃよ。
+
+次は、この合同を `exists E` 形に持ち上げたときに何が抜けるか、そこを見るのがよい。
