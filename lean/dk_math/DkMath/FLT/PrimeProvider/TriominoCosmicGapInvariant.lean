@@ -1288,6 +1288,25 @@ theorem branchAWieferichRefuter_via_FLT :
     DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget :=
   branchAWieferichRefuter_of_existingDescent existingDescentRefuter_via_FLT
 
+/--
+Branch A の Wieferich witness refuter 契約があれば、
+既存 descent 契約は witness を再構成して閉じられる。
+
+付録:
+- `BranchAShapeWitnessDescentInput` の `gapShape` 自体はここでは使わない。
+- clean route では、
+  `PrimeGe5BranchAWieferichRefuterTarget`
+  の差し替えだけで
+  `ExistingDescentRefuterTarget`
+  も同時に clean 化できる。
+-/
+theorem existingDescentRefuter_of_branchAWieferich
+    (hRefute : DkMath.FLT.PrimeGe5BranchAWieferichRefuterTarget) :
+    ExistingDescentRefuterTarget := by
+  intro p x y z t hpack hp_dvd_gap _hInput
+  exact hRefute hpack hp_dvd_gap
+    (DkMath.FLT.primeGe5BranchAWieferichOnY_default hpack hp_dvd_gap)
+
 /-- 既存契約入力を refute する暫定 concrete 実装（via FLT）。 -/
 theorem existingDescentContractRefuter_via_FLT :
   ExistingDescentRawRefuterTarget := by
@@ -1354,7 +1373,8 @@ theorem existingDescentRefuter_math
     p ∣ (z - y) →
     BranchAShapeWitnessDescentInput p x y z t →
     False :=
-  existingDescentRefuter_of_target branchAShapeWitnessDescentContract_impl
+  existingDescentRefuter_of_branchAWieferich
+    branchAWieferichRefuter_via_FLT
 
 /--
 witness 直受け kernel の実装本体。

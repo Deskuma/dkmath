@@ -1557,3 +1557,79 @@
      witness route の default 公開入口を
      provider 側の実際の mainline 候補として
      どの theorem 名で固定するかを決める。
+
+### 日時: 2026/03/27 JST
+
+1. 目的:
+   - `ExistingDescentRefuterTarget`
+     の「実装本体」を、
+     direct `FLT_prime_ge5`
+     ではなく
+     Branch A / Wieferich witness route
+     経由へ寄せる。
+   - これにより、
+     `ExistingDescent*`
+     層の clean 置換点を
+     `PrimeGe5BranchAWieferichRefuterTarget`
+     に近づける。
+
+2. 実施:
+   - `[lean/dk_math/DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     に
+     `existingDescentRefuter_of_branchAWieferich`
+     を追加した。
+   - この定理では、
+     `primeGe5BranchAWieferichOnY_default`
+     で witness
+     `y^(p-1) ≡ 1 [MOD p^2]`
+     を再構成し、
+     `PrimeGe5BranchAWieferichRefuterTarget`
+     から
+     `ExistingDescentRefuterTarget`
+     を得る。
+   - `existingDescentRefuter_math`
+     は、
+     `branchAShapeWitnessDescentContract_impl`
+     経由ではなく
+     `existingDescentRefuter_of_branchAWieferich branchAWieferichRefuter_via_FLT`
+     へ置き換えた。
+
+3. 結論:
+   - `ExistingDescentRefuterTarget`
+     の実装本体は、
+     もはや shape witness 直読みによる
+     direct FLT 呼び出しではなく、
+     Branch A witness route
+     の thin wrapper として読めるようになった。
+   - したがって残る直截な
+     `via_FLT`
+     依存は、
+     実質
+     `PrimeGe5BranchAWieferichRefuterTarget`
+     1 本にさらに近づいた。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   - `lake build DkMath.FLT.Basic`
+   - `lake build`
+   を実行し、build 完了まで待って成功を確認した。
+
+5. 備考:
+   - `existingDescentRefuter_via_FLT`
+     自体はまだ残しており、
+     witness-route の default refuter から参照される。
+   - ただし
+     `ExistingDescentRefuterTarget`
+     の “math layer”
+     は witness route に乗ったので、
+     clean 化の照準はさらに狭まった。
+
+6. 次の課題:
+   - `branchAWieferichRefuter_via_FLT`
+     自体を、
+     no-Wieferich / descent machinery
+     の clean 実装へ差し替える。
+   - その際、
+     `PrimeGe5BranchAWieferichRefuterTarget`
+     が受け取る最小 witness 契約を
+     既存 machinery の型と一致させる。
