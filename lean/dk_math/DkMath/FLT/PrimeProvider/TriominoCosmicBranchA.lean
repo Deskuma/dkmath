@@ -725,6 +725,52 @@ abbrev CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteTarget : Prop :=
   CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget
 
 /--
+direct concrete target の existence-part。
+
+付録:
+- まず `boundaryCyclotomicPrimeCore .right d x u` を割る prime `q` と
+  `¬ q ∣ x` を回収する段だけを切り出す。
+- primitive 条件（低次 boundary 差分を割らないこと）はここでは要求しない。
+- したがって direct concrete 実装の missing math を
+  「prime existence」と「primitive kernel」
+  に二分したいときの前半 target である。
+-/
+abbrev CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget : Prop :=
+  ∀ {d x u : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧
+      q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ∧
+      ¬ q ∣ x
+
+/--
+direct concrete target の primitive-part。
+
+付録:
+- `q` が既に
+  `boundaryCyclotomicPrimeCore .right d x u`
+  を割り、
+  かつ `q ∤ x`
+  であるとき、
+  低次 boundary 差分を割らないことだけを要求する。
+- existence-part と組み合わせれば
+  `CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteTarget`
+  全体が橋だけで閉じる。
+-/
+abbrev CFBRCExceptionalPrimitiveKernelOnWieferichTarget : Prop :=
+  ∀ {d x u q : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    Nat.Prime q →
+    q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u →
+    ¬ q ∣ x →
+    (∀ {k : ℕ}, 0 < k → k < d → ¬ q ∣ DkMath.CFBRC.boundaryDiffPow .right k x u)
+
+/--
 distinguished prime が取れた後の smaller-packet restoration 段。
 
 付録:
@@ -4349,6 +4395,32 @@ theorem cfbrcPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplit_of_split
   hSplit
 
 /--
+direct concrete target があれば、existence-part は primitive 条件を忘れるだけで従う。
+-/
+theorem cfbrcExceptionalBoundaryCorePrimeExistenceOnWieferich_of_directConcrete
+    (hDirect : CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteTarget) :
+    CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich
+  rcases hDirect hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich with
+    ⟨q, hqprime, hqcore, hq_not_dvd_x, _hprim⟩
+  exact ⟨q, hqprime, hqcore, hq_not_dvd_x⟩
+
+/--
+existence-part と primitive-part が揃えば、
+direct concrete target は橋だけで閉じる。
+-/
+theorem cfbrcPrimitiveBoundaryCoreOfPrimeExpDirectConcrete_of_existence_and_kernel
+    (hExist : CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget)
+    (hKernel : CFBRCExceptionalPrimitiveKernelOnWieferichTarget) :
+    CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich
+  rcases hExist hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich with
+    ⟨q, hqprime, hqcore, hq_not_dvd_x⟩
+  refine ⟨q, hqprime, hqcore, hq_not_dvd_x, ?_⟩
+  exact hKernel hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich
+    hqprime hqcore hq_not_dvd_x
+
+/--
 distinguished prime が取れれば、
 primitive restoration に必要な arithmetic fallout は機械的に従う。
 -/
@@ -4602,6 +4674,20 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_directConcreteSelection_and_res
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_coreExceptional_and_restore
     hDirect hRestore
+
+/--
+direct concrete の existence-part と primitive-part が揃えば、
+primitive packet descent は restore と合わせて橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_directConcreteParts_and_restore
+    (hExist : CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget)
+    (hKernel : CFBRCExceptionalPrimitiveKernelOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_directConcreteSelection_and_restore
+    (cfbrcPrimitiveBoundaryCoreOfPrimeExpDirectConcrete_of_existence_and_kernel
+      hExist hKernel)
+    hRestore
 
 /--
 primitive route の concrete-ready mainline。

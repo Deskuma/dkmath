@@ -1410,6 +1410,14 @@ abbrev CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitAdapterTarget : Prop 
 abbrev CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteAdapterTarget : Prop :=
   DkMath.FLT.CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteTarget
 
+/-- direct concrete target の existence-part を表す provider 側 alias。 -/
+abbrev CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichAdapterTarget : Prop :=
+  DkMath.FLT.CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget
+
+/-- direct concrete target の primitive-part を表す provider 側 alias。 -/
+abbrev CFBRCExceptionalPrimitiveKernelOnWieferichAdapterTarget : Prop :=
+  DkMath.FLT.CFBRCExceptionalPrimitiveKernelOnWieferichTarget
+
 /-- primitive packet restoration 段を表す provider 側 alias。 -/
 abbrev BranchAPrimitivePacketRestoreAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitivePacketRestoreTarget
@@ -1775,6 +1783,18 @@ theorem branchAPrimitivePacketDescentAdapter_of_directConcreteSelection_and_rest
     BranchAPrimitivePacketDescentAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_directConcreteSelection_and_restore
     hDirect hRestore
+
+/--
+direct concrete の existence-part と primitive-part が揃えば、
+provider 側でも packet descent adapter は restore と合わせて橋だけで閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_directConcreteParts_and_restore
+    (hExist : CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichAdapterTarget)
+    (hKernel : CFBRCExceptionalPrimitiveKernelOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_directConcreteParts_and_restore
+    hExist hKernel hRestore
 
 /--
 暫定 concrete adapter for the Branch A Wieferich witness route.

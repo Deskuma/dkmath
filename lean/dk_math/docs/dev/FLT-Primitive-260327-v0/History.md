@@ -953,3 +953,50 @@
      この target の仮定順と命名を
      `CFBRC/Bridge`
      の通常枝 theorem とさらに平行に揃える。
+
+### 日時: 2026/03/28 18:02 JST
+
+1. 目的:
+   - first direct concrete target
+     `CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteTarget`
+     を、そのまま証明するのでなく
+     `prime existence`
+     と
+     `primitive kernel`
+     の 2 段へ分解する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     - `CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget`
+     - `CFBRCExceptionalPrimitiveKernelOnWieferichTarget`
+     - `cfbrcExceptionalBoundaryCorePrimeExistenceOnWieferich_of_directConcrete`
+     - `cfbrcPrimitiveBoundaryCoreOfPrimeExpDirectConcrete_of_existence_and_kernel`
+     - `primeGe5BranchAPrimitivePacketDescent_of_directConcreteParts_and_restore`
+     を追加した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     対応する provider alias / bridge を追加した。
+
+3. 結論:
+   - direct concrete target の missing math は、
+     いまや
+     - `boundaryCyclotomicPrimeCore` を割る prime の existence
+     - その prime が低次 boundary 差分を割らない primitive kernel
+     の 2 本へ分解された。
+   - したがって次に詰めるべき数学が
+     existence 側か primitive 側かを、
+     theorem の形で直接判定できるようになった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認する。
+
+5. 次の課題:
+   - `CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget`
+     が既存 `CFBRC/Bridge` / `PrimitiveBeam`
+     語彙へどこまで寄せられるかを試す。
+   - 同時に
+     `CFBRCExceptionalPrimitiveKernelOnWieferichTarget`
+     が単なる既存 primitive 条件の再包装かどうかを見極める。
