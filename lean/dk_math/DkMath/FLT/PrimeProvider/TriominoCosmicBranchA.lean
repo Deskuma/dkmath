@@ -558,6 +558,26 @@ abbrev PrimeGe5BranchACyclotomicExistenceTarget : Prop :=
     ∃ q : ℕ, Nat.Prime q ∧ q ∣ (z ^ p - y ^ p) ∧ ¬ q ∣ (z - y)
 
 /--
+Branch A の Wieferich witness を明示入力に取る diff-side existence target。
+
+付録:
+- Branch A では
+  `y^(p-1) ≡ 1 [MOD p^2]`
+  が lower layer で既に得られるので、
+  selection 側の concrete theorem 候補として
+  まずこの形を置いておく。
+- これが埋まれば、
+  最小 wrapper
+  `PrimeGe5BranchACyclotomicExistenceTarget`
+  へは既存 witness 供給だけで戻せる。
+-/
+abbrev PrimeGe5BranchACyclotomicExistenceOnWieferichTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ (z ^ p - y ^ p) ∧ ¬ q ∣ (z - y)
+
+/--
 distinguished prime が取れた後の smaller-packet restoration 段。
 
 付録:
@@ -4056,6 +4076,17 @@ theorem primeGe5BranchAPrimitiveCyclotomicPrime_of_existence
   exact hEx hpack hp_dvd_gap
 
 /--
+Wieferich witness 付き existence theorem があれば、
+Branch A 専用の最小 cyclotomic existence wrapper は既存 witness 供給だけで閉じる。
+-/
+theorem primeGe5BranchACyclotomicExistence_of_wieferich
+    (hWieferichEx : PrimeGe5BranchACyclotomicExistenceOnWieferichTarget) :
+    PrimeGe5BranchACyclotomicExistenceTarget := by
+  intro p x y z hpack hp_dvd_gap
+  exact hWieferichEx hpack hp_dvd_gap
+    (primeGe5BranchAWieferichOnY_default hpack hp_dvd_gap)
+
+/--
 distinguished prime が取れれば、
 primitive restoration に必要な arithmetic fallout は機械的に従う。
 -/
@@ -4185,6 +4216,18 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_existence_and_restore
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_cyclotomicPrime_and_restore
     (primeGe5BranchAPrimitiveCyclotomicPrime_of_existence hEx)
+    hRestore
+
+/--
+Branch A の Wieferich witness 付き cyclotomic existence と restore-from-arithmetic があれば、
+primitive packet descent は橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_wieferichExistence_and_restore
+    (hWieferichEx : PrimeGe5BranchACyclotomicExistenceOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_existence_and_restore
+    (primeGe5BranchACyclotomicExistence_of_wieferich hWieferichEx)
     hRestore
 
 /--

@@ -411,3 +411,55 @@
    - 既存の `PrimitiveBeam` 系補題を直接使えない理由を
      仮定ごとに整理し、
      追加すべき Branch A 専用 existence theorem の最小 statement を決める。
+
+### 日時: 2026/03/28 00:56 JST
+
+1. 目的:
+   - selection 側の concrete theorem 候補として、
+     Branch A が既に lower layer で持っている
+     Wieferich witness
+     `y^(p-1) ≡ 1 [MOD p^2]`
+     を明示入力に取る existence target を用意する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `PrimeGe5BranchACyclotomicExistenceOnWieferichTarget`
+     を追加した。
+   - 同ファイルに
+     - `primeGe5BranchACyclotomicExistence_of_wieferich`
+     - `primeGe5BranchAPrimitivePacketDescent_of_wieferichExistence_and_restore`
+     を追加し、
+     `primeGe5BranchAWieferichOnY_default`
+     を使って最小 existence wrapper へ戻す橋を置いた。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも対応する adapter alias / bridge を追加した。
+
+3. 結論:
+   - selection 側の concrete theorem 候補は、
+     もはや
+     `PrimeGe5BranchACyclotomicExistenceTarget`
+     1 本に固定する必要はなく、
+     Branch A 既存 witness を explicit に受ける
+     `PrimeGe5BranchACyclotomicExistenceOnWieferichTarget`
+     というより自然な statement でも扱えるようになった。
+   - したがって次段では、
+     Branch A 専用 existence theorem の最小形を
+     - witness なしの最小 wrapper
+     - witness 付きの concrete-ready wrapper
+     のどちらで置くかを比較できる。
+
+4. 検証:
+   - build はこの追記の次段で
+     `DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+     と
+     `DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+     を順番に確認する。
+
+5. 次の課題:
+   - Branch A 専用 existence theorem を、
+     `PrimeGe5BranchACyclotomicExistenceOnWieferichTarget`
+     の形で先に立てるのが自然かを判断する。
+   - restore 側との対称性も見ながら、
+     primitive route の concrete theorem 候補を
+     1 つに固定する。
