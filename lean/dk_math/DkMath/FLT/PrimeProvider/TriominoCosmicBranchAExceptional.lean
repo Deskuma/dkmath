@@ -158,6 +158,23 @@ theorem exceptional_right_boundary_core_prime_of_wieferich_of_mainline
   primeGe5BranchAExceptionalBoundaryCorePrimeExistence_on_pack_of_mainline hMain
 
 /--
+named concrete kernel の proof skeleton。
+
+[CFBRC] `boundaryData_default` で pack 由来の入力を一括抽出し、
+split reference theorem の right branch に流す形を
+proof file 上の canonical skeleton として固定する。
+-/
+theorem exceptional_right_boundary_core_prime_of_wieferich_of_split
+    (hSplit : CFBRCBoundaryCorePrimeExistenceOnSplitTarget) :
+    ExceptionalRightBoundaryCorePrimeOfWieferichTarget := by
+  intro p x y z hpack hp_dvd_gap hWieferich
+  rcases primeGe5BranchAExceptionalBoundaryData_default
+      hpack hp_dvd_gap hWieferich with
+    ⟨hp, hp5, hgap_pos, hy_pos, hcop_gap_y, hp_dvd_gap, hWieferich⟩
+  exact hSplit hp hp5 hgap_pos hy_pos hcop_gap_y
+    (Or.inr ⟨hp_dvd_gap, hWieferich⟩)
+
+/--
 named concrete kernel があれば、
 proof file mainline target へは thin bridge で戻せる。
 -/

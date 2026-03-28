@@ -221,3 +221,51 @@ Archive
    - `primeGe5BranchAExceptionalBoundaryData_default`
      を入口で呼ぶ形にして、
      ordinary reference theorem との差分がどこに残るかを Lean 上で露出させる。
+
+### 日時: 2026/03/29 00:47 JST
+
+1. 目的:
+   - named kernel
+     `ExceptionalRightBoundaryCorePrimeOfWieferichTarget`
+     の proof skeleton を、
+     `boundaryData_default`
+     を入口に使う形で新ファイルに固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `exceptional_right_boundary_core_prime_of_wieferich_of_split`
+     を追加した。
+   - この定理では、
+     `primeGe5BranchAExceptionalBoundaryData_default`
+     で
+     `hp`, `hp5`, `gap_pos`, `y_pos`, `gap_coprime_right`,
+     `p ∣ (z-y)`, `Wieferich`
+     を一括抽出し、
+     `CFBRCBoundaryCorePrimeExistenceOnSplitTarget`
+     の right branch へそのまま流している。
+
+3. 結論:
+   - named kernel の本文は、
+     少なくとも skeleton レベルでは
+     「pack bundle 抽出 -> split reference の right branch」
+     という形で書けばよいと固定された。
+   - これにより、
+     ordinary reference theorem との差分は
+     `hSplit`
+     をどう concrete に供給するか、
+     そこだけにさらに集約された。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認する。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `CFBRCBoundaryCorePrimeExistenceOnSplitTarget`
+     の right branch を、
+     Branch A exceptional 専用の concrete theorem でどう供給するかを
+     新ファイル側でさらに薄く切り出す。
