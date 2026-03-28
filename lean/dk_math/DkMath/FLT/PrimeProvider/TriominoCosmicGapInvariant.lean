@@ -1370,6 +1370,14 @@ abbrev BranchAPrimitiveZsigmondyAdapterTarget : Prop :=
 abbrev BranchAPrimitivePacketRestoreAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitivePacketRestoreTarget
 
+/-- distinguished prime 後の arithmetic fallout を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveDistinguishedPrimeArithmeticAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveDistinguishedPrimeArithmeticTarget
+
+/-- arithmetic fallout 付き primitive restoration 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget
+
 /--
 local kernel から最後の witness adapter を回収する thin bridge。
 -/
@@ -1477,6 +1485,46 @@ theorem branchAPrimitiveDistinguishedPrimeAdapter_of_zsigmondy
     (hZ : BranchAPrimitiveZsigmondyAdapterTarget) :
     BranchAPrimitiveDistinguishedPrimeAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitiveDistinguishedPrime_of_zsigmondy hZ
+
+/-- distinguished prime selection から arithmetic fallout adapter を回収する thin bridge。 -/
+theorem branchAPrimitiveDistinguishedPrimeArithmeticAdapter_default :
+    BranchAPrimitiveDistinguishedPrimeArithmeticAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveDistinguishedPrimeArithmetic_default
+
+/--
+arithmetic fallout 付き restoration target から、
+primitive packet restoration adapter を回収する thin bridge。
+-/
+theorem branchAPrimitivePacketRestoreAdapter_of_arithmetic
+    (hArith : BranchAPrimitiveDistinguishedPrimeArithmeticAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketRestoreAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketRestore_of_arithmetic hArith hRestore
+
+/--
+Zsigmondy-lite existence と arithmetic-aware restoration から、
+witness 付き primitive packet adapter を回収する thin bridge。
+-/
+theorem branchAPrimitiveWieferichPacketAdapter_of_zsigmondy_arithmetic_and_restore
+    (hZ : BranchAPrimitiveZsigmondyAdapterTarget)
+    (hArith : BranchAPrimitiveDistinguishedPrimeArithmeticAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitiveWieferichPacketAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveWieferichPacket_of_zsigmondy_arithmetic_and_restore
+    hZ hArith hRestore
+
+/--
+primitive packet descent adapter は、
+`zsigmondy existence + arithmetic fallout + restore-from-arithmetic`
+の 3 段から橋だけで閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_zsigmondy_arithmetic_and_restore
+    (hZ : BranchAPrimitiveZsigmondyAdapterTarget)
+    (hArith : BranchAPrimitiveDistinguishedPrimeArithmeticAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_zsigmondy_arithmetic_and_restore
+    hZ hArith hRestore
 
 /--
 暫定 concrete adapter for the Branch A Wieferich witness route.

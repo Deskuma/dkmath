@@ -537,6 +537,57 @@ abbrev PrimeGe5BranchAPrimitivePacketRestoreTarget : Prop :=
       ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
 
 /--
+distinguished prime を取った後の arithmetic fallout をまとめた local target。
+
+付録:
+- restoration 側が本当に使うであろう
+  `q ∣ s`, `q ∤ t`, `q ⟂ y`, `q ≠ p`
+  を、prime selection から独立に切り出す。
+-/
+abbrev PrimeGe5BranchAPrimitiveDistinguishedPrimeArithmeticTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ GN p (z - y) y →
+      ¬ q ∣ (z - y) →
+      q ∣ s ∧ ¬ q ∣ t ∧ Nat.Coprime q y ∧ q ≠ p
+
+/--
+arithmetic fallout まで明示した primitive restoration target。
+
+付録:
+- `PrimeGe5BranchAPrimitivePacketRestoreTarget`
+  をさらに local arithmetic 入力付きへ切り出した形である。
+-/
+abbrev PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
+
+/--
 Branch A normal form から直接、
 より小さい Branch A 反例を構成する stronger target。
 
@@ -3917,6 +3968,98 @@ theorem primeGe5BranchAPrimitiveDistinguishedPrime_of_zsigmondy
   intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
   exact hZ hpack hp_dvd_gap hgap hsGN hsx
     hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+
+/--
+distinguished prime が取れれば、
+primitive restoration に必要な arithmetic fallout は機械的に従う。
+-/
+theorem primeGe5BranchAPrimitiveDistinguishedPrimeArithmetic_default :
+    PrimeGe5BranchAPrimitiveDistinguishedPrimeArithmeticTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t _hWieferich q hqprime hqGN hqgap
+  have hq_ne_p : q ≠ p := by
+    intro hqp
+    exact hqgap (hqp ▸ hp_dvd_gap)
+  have hq_not_dvd_p : ¬ q ∣ p := by
+    intro hqp
+    rcases (Nat.dvd_prime hpack.hp).mp hqp with hq_one | hq_eq
+    · exact hqprime.ne_one hq_one
+    · exact hq_ne_p hq_eq
+  have hq_not_dvd_t : ¬ q ∣ t := by
+    intro hqt
+    have hq_dvd_gap' : q ∣ z - y := by
+      rw [hgap]
+      exact dvd_mul_of_dvd_right (dvd_pow hqt hpack.hp.ne_zero) (p ^ (p - 1))
+    exact hqgap hq_dvd_gap'
+  have hq_dvd_s : q ∣ s := by
+    have hq_dvd_pspow : q ∣ p * s ^ p := by
+      rw [← hsGN]
+      exact hqGN
+    rcases (hqprime.dvd_mul).mp hq_dvd_pspow with hqp | hqspow
+    · exact False.elim (hq_not_dvd_p hqp)
+    · exact hqprime.dvd_of_dvd_pow hqspow
+  have hcop_qy : Nat.Coprime q y := by
+    exact (Nat.Prime.coprime_iff_not_dvd hqprime).2 (by
+      intro hqy
+      have hq_dvd_gcd : q ∣ Nat.gcd s y := Nat.dvd_gcd hq_dvd_s hqy
+      rw [(Nat.coprime_iff_gcd_eq_one).mp hcop_sy] at hq_dvd_gcd
+      exact hqprime.not_dvd_one hq_dvd_gcd)
+  exact ⟨hq_dvd_s, hq_not_dvd_t, hcop_qy, hq_ne_p⟩
+
+/--
+arithmetic fallout まで明示した restoration target があれば、
+primitive packet restoration 契約は薄い橋で閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketRestore_of_arithmetic
+    (hArith : PrimeGe5BranchAPrimitiveDistinguishedPrimeArithmeticTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketRestoreTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich q hqprime hqGN hqgap
+  rcases hArith hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich hqprime hqGN hqgap with
+    ⟨hqs, hqt, hcop_qy, hq_ne_p⟩
+  exact hRestore hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich hqprime hqs hqt hcop_qy hq_ne_p
+
+/--
+Zsigmondy-lite existence と arithmetic fallout 付き restoration が揃えば、
+primitive witness-packet target は arithmetic-aware route だけで閉じる。
+
+付録:
+- concrete 実装の残核を
+  `PrimeGe5BranchAPrimitiveZsigmondyTarget`
+  と
+  `PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget`
+  の 2 本へ明示的に絞るための橋である。
+- distinguished-prime target 自体と packet-restore target 自体は、
+  ここではどちらも中間 API としてしか使わない。
+-/
+theorem primeGe5BranchAPrimitiveWieferichPacket_of_zsigmondy_arithmetic_and_restore
+    (hZ : PrimeGe5BranchAPrimitiveZsigmondyTarget)
+    (hArith : PrimeGe5BranchAPrimitiveDistinguishedPrimeArithmeticTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitiveWieferichPacketTarget :=
+  primeGe5BranchAPrimitiveWieferichPacket_of_distinguishedPrime_and_restore
+    (primeGe5BranchAPrimitiveDistinguishedPrime_of_zsigmondy hZ)
+    (primeGe5BranchAPrimitivePacketRestore_of_arithmetic hArith hRestore)
+
+/--
+primitive packet descent は、
+`zsigmondy existence + arithmetic fallout + restore-from-arithmetic`
+の 3 段が揃えば橋だけで閉じる。
+
+付録:
+- primitive route の concrete 実装を探すとき、
+  truly missing な数学をこの 3 本へ限定して読むための canonical wrapper である。
+- valuation peel route を使わない mainline を明示する役割も持つ。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_zsigmondy_arithmetic_and_restore
+    (hZ : PrimeGe5BranchAPrimitiveZsigmondyTarget)
+    (hArith : PrimeGe5BranchAPrimitiveDistinguishedPrimeArithmeticTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_wieferichPacket
+    (primeGe5BranchAPrimitiveWieferichPacket_of_zsigmondy_arithmetic_and_restore
+      hZ hArith hRestore)
 
 /--
 valuation peel を error-lift 1 本に局所化した smaller-packet bridge。

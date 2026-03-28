@@ -169,3 +169,57 @@
    - 必要なら
      `Body = x * GN`
      の変換を Branch A normal form packet 文脈に薄く包む補題を先に置く。
+
+### 日時: 2026/03/28 00:06 JST
+
+1. 目的:
+   - primitive route の missing math を、
+     `zsigmondy existence`
+     と
+     `restore from arithmetic`
+     の 2 本へさらに明示的に絞る。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     - `primeGe5BranchAPrimitiveWieferichPacket_of_zsigmondy_arithmetic_and_restore`
+     - `primeGe5BranchAPrimitivePacketDescent_of_zsigmondy_arithmetic_and_restore`
+     を追加した。
+   - これにより
+     `PrimeGe5BranchAPrimitivePacketDescentTarget`
+     は
+     - `PrimeGe5BranchAPrimitiveZsigmondyTarget`
+     - `PrimeGe5BranchAPrimitiveDistinguishedPrimeArithmeticTarget`
+     - `PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget`
+     の 3 段から橋だけで閉じる。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも対応する provider 側 adapter bridge を追加した。
+
+3. 結論:
+   - primitive mainline で concrete 実装すべき新しい数学は、
+     少なくとも API 上
+     - distinguished prime の existence
+     - distinguished prime からの arithmetic fallout
+     - arithmetic fallout からの packet 復元
+     の 3 本へ限定された。
+   - 既に default 実装がある arithmetic fallout を除けば、
+     実質的な未完核は
+     `zsigmondy existence`
+     と
+     `restore from arithmetic`
+     の 2 本だと読める。
+
+4. 検証:
+   - build はこの追記の次段で
+     `DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+     と
+     `DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+     を順番に確認する。
+
+5. 次の課題:
+   - `PrimeGe5BranchAPrimitiveZsigmondyTarget`
+     を既存の `PrimitiveBeam` / `ZsigmondyCyclotomic`
+     補題へどう接続するかを、Branch A の `p ∣ (z-y)` 制約込みで再設計する。
+   - `PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget`
+     の構成論を、`q ∣ s`, `q ∤ t`, `q ⟂ y`, `q ≠ p`
+     からどこまで進められるかを見極める。
