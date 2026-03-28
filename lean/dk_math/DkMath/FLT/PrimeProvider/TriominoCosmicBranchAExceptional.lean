@@ -103,6 +103,33 @@ abbrev ExceptionalBoundaryDataSplitRightConcreteTarget : Prop :=
       ¬ q ∣ x
 
 /--
+boundary-normalized exceptional branch で truly new な差分入力 1 個。
+
+[CFBRC] ordinary 側との違いは、最終的には
+`d ∣ x`
+と Wieferich 条件の組だけなので、
+proof file 本文ではこの datum を first-class に扱ってよい。
+-/
+abbrev ExceptionalBoundaryDatum (d x u : ℕ) : Prop :=
+  d ∣ x ∧ u ^ (d - 1) ≡ 1 [MOD d ^ 2]
+
+/--
+boundary-normalized concrete theorem を、
+共通入力と exceptional datum 1 個に完全分離して読む local target。
+
+[CFBRC] `review-032` の「差分入力は datum 1 個だけ」という整理を
+proof file 上の theorem 名として固定する。
+-/
+abbrev ExceptionalBoundaryDatumConcreteTarget : Prop :=
+  ∀ {d x u : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    ExceptionalBoundaryDatum d x u →
+    ∃ q : ℕ, Nat.Prime q ∧
+      q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ∧
+      ¬ q ∣ x
+
+/--
 ordinary branch における boundary-core prime existence の reference theorem。
 
 [CFBRC] exceptional proof は、この ordinary theorem と仮定・中間結論を
@@ -276,6 +303,26 @@ theorem exceptional_boundaryData_right_branch_supply_concrete_of_splitRight
   exact hRight hd_prime hd_ge hx hu hcop ⟨hdvd, hWieferich⟩
 
 /--
+exceptional datum 形の concrete theorem 名から、
+split-right concrete target へ戻る橋。
+-/
+theorem exceptional_boundaryData_splitRight_concrete_of_datum
+    (hDatum : ExceptionalBoundaryDatumConcreteTarget) :
+    ExceptionalBoundaryDataSplitRightConcreteTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hExc
+  exact hDatum hd_prime hd_ge hx hu hcop hExc
+
+/--
+exceptional datum 形の concrete theorem 名から、
+通常の boundary-normalized concrete target へ戻る橋。
+-/
+theorem exceptional_boundaryData_right_branch_supply_concrete_of_datum
+    (hDatum : ExceptionalBoundaryDatumConcreteTarget) :
+    ExceptionalBoundaryDataRightBranchSupplyConcreteTarget :=
+  exceptional_boundaryData_right_branch_supply_concrete_of_splitRight
+    (exceptional_boundaryData_splitRight_concrete_of_datum hDatum)
+
+/--
 right branch supply があれば、
 named kernel はそのまま閉じる。
 
@@ -306,6 +353,16 @@ theorem exceptional_right_boundary_core_prime_of_wieferich_of_splitRightConcrete
     ExceptionalRightBoundaryCorePrimeOfWieferichTarget :=
   exceptional_right_boundary_core_prime_of_wieferich_of_boundaryConcrete
     (exceptional_boundaryData_right_branch_supply_concrete_of_splitRight hRight)
+
+/--
+exceptional datum 形の concrete theorem 名からも、
+named kernel へは同じ配線で戻せる。
+-/
+theorem exceptional_right_boundary_core_prime_of_wieferich_of_datumConcrete
+    (hDatum : ExceptionalBoundaryDatumConcreteTarget) :
+    ExceptionalRightBoundaryCorePrimeOfWieferichTarget :=
+  exceptional_right_boundary_core_prime_of_wieferich_of_boundaryConcrete
+    (exceptional_boundaryData_right_branch_supply_concrete_of_datum hDatum)
 
 /--
 named kernel があれば、
@@ -350,6 +407,15 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_splitRightConcrete
     PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
   primeGe5BranchAExceptionalExistenceMainline_of_boundaryConcrete
     (exceptional_boundaryData_right_branch_supply_concrete_of_splitRight hRight)
+
+/--
+exceptional datum 形の concrete theorem 名から proof file mainline へ戻る橋。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_datumConcrete
+    (hDatum : ExceptionalBoundaryDatumConcreteTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_boundaryConcrete
+    (exceptional_boundaryData_right_branch_supply_concrete_of_datum hDatum)
 
 /--
 pack-local boundary existence があれば、
@@ -418,6 +484,17 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_splitRightConcrete_and_restore
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_boundaryConcrete_and_restore
     (exceptional_boundaryData_right_branch_supply_concrete_of_splitRight hRight)
+    hRestore
+
+/--
+exceptional datum 形の concrete theorem 名から primitive packet descent へ戻る橋。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_datumConcrete_and_restore
+    (hDatum : ExceptionalBoundaryDatumConcreteTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_boundaryConcrete_and_restore
+    (exceptional_boundaryData_right_branch_supply_concrete_of_datum hDatum)
     hRestore
 
 end DkMath.FLT

@@ -498,3 +498,53 @@ Archive
    - 必要なら、その本文でも
      ordinary reference theorem と共有できる部分と
      exceptional-only arithmetic をさらに分離する。
+
+### 日時: 2026/03/29 JST
+
+1. 目的:
+   - split-right concrete target の本文を、
+     「共通入力 + exceptional datum 1 個」
+     という形でさらに明示化する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `ExceptionalBoundaryDatum`
+     と
+     `ExceptionalBoundaryDatumConcreteTarget`
+     を追加した。
+   - さらに
+     - `exceptional_boundaryData_splitRight_concrete_of_datum`
+     - `exceptional_boundaryData_right_branch_supply_concrete_of_datum`
+     - `exceptional_right_boundary_core_prime_of_wieferich_of_datumConcrete`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_datumConcrete`
+     - `primeGe5BranchAPrimitivePacketDescent_of_datumConcrete_and_restore`
+     を追加し、
+     datum 形の concrete theorem 名から
+     split-right / boundary concrete / named kernel / mainline / packet descent
+     へ戻る橋を揃えた。
+
+3. 結論:
+   - proof file の本文は今後、
+     必ずしも split-right target そのものを直接受けずとも、
+     `ExceptionalBoundaryDatumConcreteTarget`
+     を first body target として書いてよい。
+   - これにより、
+     ordinary 側との差分は theorem 名の上でも
+     exceptional datum 1 個にまで局所化された。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumConcreteTarget`
+     を返す concrete theorem 本体を切る。
+   - 必要なら、
+     exceptional datum から right boundary-core prime existence を導く
+     arithmetic / CFBRC 補題を
+     proof file 内でさらに局所化する。
