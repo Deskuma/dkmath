@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5Core
+import DkMath.CFBRC.Bridge
 import DkMath.NumberTheory.Gcd.GN
 import Mathlib.FieldTheory.Finite.Basic
 
@@ -576,6 +577,24 @@ abbrev PrimeGe5BranchACyclotomicExistenceOnWieferichTarget : Prop :=
     p ∣ (z - y) →
     y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
     ∃ q : ℕ, Nat.Prime q ∧ q ∣ (z ^ p - y ^ p) ∧ ¬ q ∣ (z - y)
+
+/--
+Branch A の concrete-ready selection theorem の内部核。
+
+付録:
+- 公開 statement は diff-side existence でよいが、
+  証明の本体は `cyclotomicPrimeCore p (z-y) y`
+  に prime が立つ形で書いた方が既存 CFBRC / Zsigmondy 語彙へ寄せやすい。
+- したがって concrete 実装探索では、
+  まずこの target を埋めてから
+  `PrimeGe5BranchACyclotomicExistenceOnWieferichTarget`
+  へ戻す。
+-/
+abbrev PrimeGe5BranchACyclotomicCoreExistenceOnWieferichTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ DkMath.CFBRC.cyclotomicPrimeCore p (z - y) y ∧ ¬ q ∣ (z - y)
 
 /--
 distinguished prime が取れた後の smaller-packet restoration 段。
@@ -4087,6 +4106,23 @@ theorem primeGe5BranchACyclotomicExistence_of_wieferich
     (primeGe5BranchAWieferichOnY_default hpack hp_dvd_gap)
 
 /--
+cyclotomic factor 上の concrete existence theorem があれば、
+Branch A の公開 diff-side existence theorem は thin bridge で閉じる。
+-/
+theorem primeGe5BranchACyclotomicExistenceOnWieferich_of_coreExistence
+    (hCore : PrimeGe5BranchACyclotomicCoreExistenceOnWieferichTarget) :
+    PrimeGe5BranchACyclotomicExistenceOnWieferichTarget := by
+  intro p x y z hpack hp_dvd_gap hWieferich
+  rcases hCore hpack hp_dvd_gap hWieferich with ⟨q, hqprime, hqcore, hqgap⟩
+  have hqdiff :
+      q ∣ ((z - y) + y) ^ p - y ^ p :=
+    (DkMath.CFBRC.prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
+      (p := p) (x := z - y) (u := y) (q := q) hqprime hqgap).2 hqcore
+  have hzy : (z - y) + y = z := Nat.sub_add_cancel hpack.hyz
+  refine ⟨q, hqprime, ?_, hqgap⟩
+  simpa [hzy] using hqdiff
+
+/--
 distinguished prime が取れれば、
 primitive restoration に必要な arithmetic fallout は機械的に従う。
 -/
@@ -4228,6 +4264,18 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_wieferichExistence_and_restore
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_existence_and_restore
     (primeGe5BranchACyclotomicExistence_of_wieferich hWieferichEx)
+    hRestore
+
+/--
+primitive route の selection 側を cyclotomic factor existence として実装できれば、
+packet descent は restore と合わせて橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_coreExistence_and_restore
+    (hCore : PrimeGe5BranchACyclotomicCoreExistenceOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_wieferichExistence_and_restore
+    (primeGe5BranchACyclotomicExistenceOnWieferich_of_coreExistence hCore)
     hRestore
 
 /--

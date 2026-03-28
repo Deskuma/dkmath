@@ -518,3 +518,58 @@
      `PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget`
      を維持し、
      selection 側だけを本命 statement に固定して前進する。
+
+### 日時: 2026/03/28 13:50 JST
+
+1. 目的:
+   - Branch A primitive route の selection 側 concrete theorem を、
+     公開 diff-side existence のままではなく
+     `cyclotomicPrimeCore`
+     側の存在論としても読めるようにする。
+   - これにより、既存 `CFBRC/Bridge` 語彙への接続点を
+     theorem 名として固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `PrimeGe5BranchACyclotomicCoreExistenceOnWieferichTarget`
+     を追加した。
+   - 同ファイルに
+     - `primeGe5BranchACyclotomicExistenceOnWieferich_of_coreExistence`
+     - `primeGe5BranchAPrimitivePacketDescent_of_coreExistence_and_restore`
+     を追加し、
+     `cyclotomicPrimeCore p (z-y) y`
+     を割る prime の存在から
+     公開 diff-side existence と primitive packet descent へ戻す橋を置いた。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも対応する adapter alias / bridge を追加した。
+
+3. 結論:
+   - selection 側の concrete theorem は、
+     公開 API としては
+     `PrimeGe5BranchACyclotomicExistenceOnWieferichTarget`
+     を保ちつつ、
+     証明本体は
+     `PrimeGe5BranchACyclotomicCoreExistenceOnWieferichTarget`
+     を first target に置く、
+     という二層構造で読むのが自然になった。
+   - したがって今後の concrete 実装探索では、
+     まず
+     `cyclotomicPrimeCore`
+     上で prime を取る theorem を狙い、
+     そこから diff-side existence へ戻す方針で進められる。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認する。
+
+5. 次の課題:
+   - `PrimeGe5BranchACyclotomicCoreExistenceOnWieferichTarget`
+     の concrete theorem を、
+     `CFBRC/Bridge`
+     や primitive prime existence とどう接続するかを詰める。
+   - selection 側は
+     `core existence -> diff existence -> packet descent`
+     の spine で進め、
+     restore 側は現状の target を維持する。

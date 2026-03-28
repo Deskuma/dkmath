@@ -1378,6 +1378,10 @@ abbrev BranchACyclotomicExistenceAdapterTarget : Prop :=
 abbrev BranchACyclotomicExistenceOnWieferichAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchACyclotomicExistenceOnWieferichTarget
 
+/-- Branch A の cyclotomic factor 上で prime を取る concrete-ready selection kernel。 -/
+abbrev BranchACyclotomicCoreExistenceOnWieferichAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchACyclotomicCoreExistenceOnWieferichTarget
+
 /-- primitive packet restoration 段を表す provider 側 alias。 -/
 abbrev BranchAPrimitivePacketRestoreAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitivePacketRestoreTarget
@@ -1525,6 +1529,15 @@ theorem branchACyclotomicExistenceAdapter_of_wieferich
     BranchACyclotomicExistenceAdapterTarget :=
   DkMath.FLT.primeGe5BranchACyclotomicExistence_of_wieferich hWieferichEx
 
+/--
+cyclotomic factor 上の concrete existence theorem から、
+公開 diff-side existence wrapper を回収する thin bridge。
+-/
+theorem branchACyclotomicExistenceOnWieferichAdapter_of_coreExistence
+    (hCore : BranchACyclotomicCoreExistenceOnWieferichAdapterTarget) :
+    BranchACyclotomicExistenceOnWieferichAdapterTarget :=
+  DkMath.FLT.primeGe5BranchACyclotomicExistenceOnWieferich_of_coreExistence hCore
+
 /-- distinguished prime selection から arithmetic fallout adapter を回収する thin bridge。 -/
 theorem branchAPrimitiveDistinguishedPrimeArithmeticAdapter_default :
     BranchAPrimitiveDistinguishedPrimeArithmeticAdapterTarget :=
@@ -1609,6 +1622,17 @@ theorem branchAPrimitivePacketDescentAdapter_of_concreteSelection_and_restore
     BranchAPrimitivePacketDescentAdapterTarget :=
   branchAPrimitivePacketDescentAdapter_of_wieferichExistence_and_restore
     hConcrete hRestore
+
+/--
+primitive route の concrete-ready mainline を、
+cyclotomic factor existence の形で実装する provider wrapper。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_coreExistence_and_restore
+    (hCore : BranchACyclotomicCoreExistenceOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_coreExistence_and_restore
+    hCore hRestore
 
 /--
 暫定 concrete adapter for the Branch A Wieferich witness route.
