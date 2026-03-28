@@ -4358,6 +4358,24 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_boundaryExceptional_and_restore
     hRestore
 
 /--
+primitive route の selection 側 first missing theorem を
+boundary-normalized exceptional statement として読む canonical wrapper。
+
+付録:
+- 現時点では
+  `CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget`
+  が selection 側の実装本命 statement だと見てよい。
+- したがって primitive mainline の concrete 実装探索では、
+  この theorem を入口に restore 側と組み合わせる読みを既定にする。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_firstMissingSelection_and_restore
+    (hFirst : CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_boundaryExceptional_and_restore
+    hFirst hRestore
+
+/--
 primitive route の concrete-ready mainline。
 
 付録:

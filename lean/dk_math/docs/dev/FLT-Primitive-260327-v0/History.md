@@ -675,3 +675,50 @@
      語彙の薄い補強で済むかを見極める。
    - それでも一般化が重い場合は、
      この normalized target を final missing theorem の実装形として採用する。
+
+### 日時: 2026/03/28 16:11 JST
+
+1. 目的:
+   - selection 側の first missing theorem を、
+     boundary-normalized exceptional statement
+     として mainline 上でも canonical に読む wrapper を固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `primeGe5BranchAPrimitivePacketDescent_of_firstMissingSelection_and_restore`
+     を追加した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも対応する
+     `branchAPrimitivePacketDescentAdapter_of_firstMissingSelection_and_restore`
+     を追加した。
+   - どちらも
+     `...of_boundaryExceptional_and_restore`
+     への thin wrapper だが、
+     naming と docstring で
+     `CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget`
+     を selection 側の canonical first missing theorem と読む方針を固定した。
+
+3. 結論:
+   - Branch A primitive route の selection 側は、
+     Branch A 専用版・CFBRC exceptional 版・boundary-normalized 版
+     の 3 層を持つが、
+     concrete 実装探索の既定入口は now
+     `CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget`
+     と見てよい。
+   - したがって今後は、
+     「どの statement を first target にするか」
+     を迷う段ではなく、
+     この normalized target をどう concrete に埋めるかに集中できる。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認する。
+
+5. 次の課題:
+   - `CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget`
+     を、既存 `CFBRC/Bridge` / `PrimitiveBeam`
+     の薄い補強で済ませられるかを実際に試す。
+   - それが薄く済まないなら、
+     この normalized target 自体を concrete theorem として直接実装する。

@@ -1683,6 +1683,17 @@ theorem branchAPrimitivePacketDescentAdapter_of_boundaryExceptional_and_restore
     hBoundary hRestore
 
 /--
+primitive route の selection 側 first missing theorem を
+boundary-normalized exceptional statement として読む provider wrapper。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_firstMissingSelection_and_restore
+    (hFirst : CFBRCExceptionalPrimeExpBoundaryOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  branchAPrimitivePacketDescentAdapter_of_boundaryExceptional_and_restore
+    hFirst hRestore
+
+/--
 暫定 concrete adapter for the Branch A Wieferich witness route.
 
 付録:
