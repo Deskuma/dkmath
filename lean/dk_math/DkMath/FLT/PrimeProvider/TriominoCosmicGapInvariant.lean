@@ -1414,6 +1414,10 @@ abbrev CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteAdapterTarget : Prop :=
 abbrev CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichAdapterTarget : Prop :=
   DkMath.FLT.CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget
 
+/-- ordinary branch theorem と平行な exceptional existence concrete 候補の provider 側 alias。 -/
+abbrev CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichAdapterTarget : Prop :=
+  DkMath.FLT.CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichTarget
+
 /-- boundary-core prime existence の split theorem を表す provider 側 alias。 -/
 abbrev CFBRCBoundaryCorePrimeExistenceOnSplitAdapterTarget : Prop :=
   DkMath.FLT.CFBRCBoundaryCorePrimeExistenceOnSplitTarget
@@ -1810,6 +1814,17 @@ theorem branchAPrimitivePacketDescentAdapter_of_directConcreteExistence_and_rest
     BranchAPrimitivePacketDescentAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_directConcreteExistence_and_restore
     hExist hRestore
+
+/--
+ordinary branch theorem と平行な exceptional existence concrete 候補があれば、
+provider 側でも packet descent adapter は restore と合わせて橋だけで閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_parallelExceptionalExistence_and_restore
+    (hPar : CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_parallelExceptionalExistence_and_restore
+    hPar hRestore
 
 /--
 split existence と primitive kernel が揃えば、

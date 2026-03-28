@@ -1096,3 +1096,45 @@
      この target 自体の concrete theorem をどこに置くか
      (`CFBRC/Bridge` か `BranchA` 局所か)
      を決める。
+
+### 日時: 2026/03/28 18:44 JST
+
+1. 目的:
+   - existence 右枝 1 本へ絞れた missing kernel を、
+     既存 `CFBRC/Bridge`
+     の ordinary branch theorem とできるだけ平行な concrete 名で読む。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichTarget`
+     を追加した。
+   - 同ファイルに
+     - `cfbrcExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferich_of_existence`
+     - `cfbrcExceptionalBoundaryCorePrimeExistenceOnWieferich_of_parallelExceptional`
+     - `primeGe5BranchAPrimitivePacketDescent_of_parallelExceptionalExistence_and_restore`
+     を追加した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも対応する provider alias / adapter を追加した。
+
+3. 結論:
+   - truly new kernel は引き続き existence 右枝 1 本だが、
+     その theorem 名は
+     `exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime`
+     の exceptional parallel として読めるところまで正規化された。
+   - これで次の論点は、
+     「この concrete theorem を `CFBRC/Bridge` 側へ置くか、
+     Branch A 局所に留めるか」
+     へさらに絞られた。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認する。
+
+5. 次の課題:
+   - `CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichTarget`
+     を direct concrete theorem の canonical 名として採用するかを決める。
+   - その上で、
+     `CFBRC/Bridge`
+     側へ最小補強として移す余地があるかを見る。

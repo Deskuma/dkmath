@@ -746,6 +746,24 @@ abbrev CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget : Prop :=
       ¬ q ∣ x
 
 /--
+既存
+`exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime`
+と最も平行な exceptional concrete theorem 候補。
+
+付録:
+- 今回は primitive 条件を含まない existence-only 版なので、
+  statement は
+  `CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget`
+  と同型である。
+- ただし「ordinary branch theorem の例外枝差し替え版を
+  どの concrete 名で呼ぶか」を固定するために独立名を与える。
+- selection 側の truly new kernel を theorem 名で指すなら、
+  まずこの target を canonical 候補と見る。
+-/
+abbrev CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichTarget : Prop :=
+  CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget
+
+/--
 boundary-core prime existence を、通常枝と Wieferich 例外枝の split で読む target。
 
 付録:
@@ -4428,6 +4446,24 @@ theorem cfbrcExceptionalBoundaryCorePrimeExistenceOnWieferich_of_directConcrete
   exact ⟨q, hqprime, hqcore, hq_not_dvd_x⟩
 
 /--
+existence-only exceptional target があれば、
+parallel concrete theorem 候補もそのまま満たされる。
+-/
+theorem cfbrcExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferich_of_existence
+    (hExist : CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget) :
+    CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichTarget :=
+  hExist
+
+/--
+parallel concrete theorem 候補があれば、
+existence-only exceptional target へは thin alias で戻せる。
+-/
+theorem cfbrcExceptionalBoundaryCorePrimeExistenceOnWieferich_of_parallelExceptional
+    (hPar : CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichTarget) :
+    CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget :=
+  hPar
+
+/--
 existence-part と primitive-part が揃えば、
 direct concrete target は橋だけで閉じる。
 -/
@@ -4788,6 +4824,18 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_directConcreteExistence_and_res
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_directConcreteSelection_and_restore
     (cfbrcPrimitiveBoundaryCoreOfPrimeExpDirectConcrete_of_existence hExist)
+    hRestore
+
+/--
+ordinary branch theorem と平行な exceptional concrete theorem 候補があれば、
+primitive packet descent は restore と合わせて橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_parallelExceptionalExistence_and_restore
+    (hPar : CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_directConcreteExistence_and_restore
+    (cfbrcExceptionalBoundaryCorePrimeExistenceOnWieferich_of_parallelExceptional hPar)
     hRestore
 
 /--
