@@ -1801,6 +1801,17 @@ theorem branchAPrimitivePacketDescentAdapter_of_directConcreteParts_and_restore
     hExist hKernel hRestore
 
 /--
+primitive kernel が default 実装できるなら、
+provider 側でも direct concrete missing math は existence-part だけで読める。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_directConcreteExistence_and_restore
+    (hExist : CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_directConcreteExistence_and_restore
+    hExist hRestore
+
+/--
 split existence と primitive kernel が揃えば、
 provider 側でも packet descent adapter は橋だけで閉じる。
 -/
@@ -1811,6 +1822,17 @@ theorem branchAPrimitivePacketDescentAdapter_of_splitExistence_kernel_and_restor
     BranchAPrimitivePacketDescentAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_splitExistence_kernel_and_restore
     hSplitExist hKernel hRestore
+
+/--
+split existence の右枝だけが新 theorem で、primitive kernel が default 実装できるなら、
+provider 側でも packet descent adapter は split existence と restore だけで閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_splitExistence_and_restore
+    (hSplitExist : CFBRCBoundaryCorePrimeExistenceOnSplitAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_splitExistence_and_restore
+    hSplitExist hRestore
 
 /--
 暫定 concrete adapter for the Branch A Wieferich witness route.

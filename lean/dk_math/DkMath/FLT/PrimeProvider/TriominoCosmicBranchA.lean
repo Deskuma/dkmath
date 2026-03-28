@@ -4470,6 +4470,35 @@ theorem cfbrcBoundaryCorePrimeExistenceOnSplit_of_exceptional
   · exact hExc hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich
 
 /--
+direct concrete の primitive-part は、既存 primitive 条件定理から default 実装できる。
+
+付録:
+- `q ∣ boundaryCyclotomicPrimeCore .right d x u` と `¬ q ∣ x`
+  から `q ∣ ((x+u)^d-u^d)` を戻し、
+  `prime_exp_not_dvd_diff_imp_primitive`
+  をそのまま適用するだけでよい。
+- したがって selection 側で truly new な kernel は、
+  高い確率で existence-part に偏っている。
+-/
+theorem cfbrcExceptionalPrimitiveKernelOnWieferich_default :
+    CFBRCExceptionalPrimitiveKernelOnWieferichTarget := by
+  intro d x u q hd_prime hd_ge hx hu hcop _hd_dvd_x _hWieferich hqprime hqcore hq_not_dvd_x
+  have hd1 : 1 < d := by omega
+  have hu_lt : u < x + u := by omega
+  have hqdiff :
+      q ∣ (x + u) ^ d - u ^ d :=
+    (DkMath.CFBRC.prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
+      (p := d) (x := x) (u := u) (q := q) hqprime hq_not_dvd_x).2 hqcore
+  have hcop_add : Nat.Coprime (x + u) u :=
+    (Nat.coprime_add_self_left).2 hcop
+  intro k hk0 hkd
+  simpa [DkMath.CFBRC.boundaryDiffPow] using
+    (DkMath.NumberTheory.GcdNext.prime_exp_not_dvd_diff_imp_primitive
+      (a := x + u) (b := u) (d := d) (q := q)
+      hd_prime hd1 hqprime hcop_add hu_lt hu hqdiff (by simpa using hq_not_dvd_x)
+      hk0 hkd)
+
+/--
 distinguished prime が取れれば、
 primitive restoration に必要な arithmetic fallout は機械的に従う。
 -/
@@ -4739,6 +4768,29 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_directConcreteParts_and_restore
     hRestore
 
 /--
+primitive kernel が default 実装できるなら、
+direct concrete target は existence-part だけで閉じる。
+-/
+theorem cfbrcPrimitiveBoundaryCoreOfPrimeExpDirectConcrete_of_existence
+    (hExist : CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget) :
+    CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteTarget :=
+  cfbrcPrimitiveBoundaryCoreOfPrimeExpDirectConcrete_of_existence_and_kernel
+    hExist
+    cfbrcExceptionalPrimitiveKernelOnWieferich_default
+
+/--
+direct concrete の missing math が existence-part に寄るなら、
+primitive packet descent は existence と restore だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_directConcreteExistence_and_restore
+    (hExist : CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_directConcreteSelection_and_restore
+    (cfbrcPrimitiveBoundaryCoreOfPrimeExpDirectConcrete_of_existence hExist)
+    hRestore
+
+/--
 split existence と primitive kernel が揃えば、
 direct concrete target は right branch の抽出経由で橋だけで閉じる。
 -/
@@ -4750,6 +4802,19 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_splitExistence_kernel_and_resto
   primeGe5BranchAPrimitivePacketDescent_of_directConcreteParts_and_restore
     (cfbrcExceptionalBoundaryCorePrimeExistenceOnWieferich_of_split hSplitExist)
     hKernel
+    hRestore
+
+/--
+split existence の左枝が既存 theorem、右枝だけ新 theorem であり、
+primitive kernel は default 実装できるなら、
+primitive packet descent は split existence と restore だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_splitExistence_and_restore
+    (hSplitExist : CFBRCBoundaryCorePrimeExistenceOnSplitTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_directConcreteExistence_and_restore
+    (cfbrcExceptionalBoundaryCorePrimeExistenceOnWieferich_of_split hSplitExist)
     hRestore
 
 /--

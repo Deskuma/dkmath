@@ -1042,3 +1042,57 @@
      theorem の例外枝差し替えだけでどこまで書けるかを試す。
    - primitive kernel 側がもし既存 theorem の再包装なら、
      selection 側の truly new kernel は existence 1 本だけになる。
+
+### 日時: 2026/03/28 18:31 JST
+
+1. 目的:
+   - `CFBRCExceptionalPrimitiveKernelOnWieferichTarget`
+     が既存 primitive 条件定理の再包装だけで済むかを確定し、
+     selection 側の truly new kernel を existence 右枝 1 本へさらに絞る。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `cfbrcExceptionalPrimitiveKernelOnWieferich_default`
+     を追加した。
+   - 同定理では
+     `q ∣ boundaryCyclotomicPrimeCore .right d x u`
+     と
+     `¬ q ∣ x`
+     から
+     `q ∣ ((x+u)^d-u^d)`
+     を戻し、
+     `prime_exp_not_dvd_diff_imp_primitive`
+     を直接適用している。
+   - さらに
+     - `cfbrcPrimitiveBoundaryCoreOfPrimeExpDirectConcrete_of_existence`
+     - `primeGe5BranchAPrimitivePacketDescent_of_directConcreteExistence_and_restore`
+     - `primeGe5BranchAPrimitivePacketDescent_of_splitExistence_and_restore`
+     を追加し、
+     primitive kernel を explicit 仮定から外した wrapper を入れた。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも対応する provider adapter を追加した。
+
+3. 結論:
+   - `CFBRCExceptionalPrimitiveKernelOnWieferichTarget`
+     は new kernel ではなく、
+     既存 `CFBRC/Bridge` + `GcdNext`
+     の primitive 条件定理で default 実装できると確定した。
+   - したがって selection 側の truly new missing math は、
+     さらに強く
+     `CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget`
+     1 本だと読めるようになった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認する。
+
+5. 次の課題:
+   - `CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget`
+     を、既存 `CFBRC/Bridge`
+     の ordinary branch と最も平行な形へさらに正規化できるかを見る。
+   - そのうえで、
+     この target 自体の concrete theorem をどこに置くか
+     (`CFBRC/Bridge` か `BranchA` 局所か)
+     を決める。
