@@ -657,6 +657,23 @@ abbrev CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget : Prop :=
       (∀ {k : ℕ}, 0 < k → k < d → ¬ q ∣ DkMath.CFBRC.boundaryDiffPow .right k x u)
 
 /--
+既存 `CFBRC/Bridge` theorem
+`exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime`
+に対応する、Wieferich 例外枝版の concrete theorem 候補。
+
+付録:
+- statement 自体は
+  `CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget`
+  と同型だが、
+  「split theorem の右枝をどの theorem 名で concrete 実装するか」を
+  既存 `CFBRC/Bridge` 語彙に揃えて固定するために独立名を与える。
+- 以後、selection 側の right branch を concrete theorem として立てるなら、
+  まずこの target 名を本命候補とみなす。
+-/
+abbrev CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget : Prop :=
+  CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget
+
+/--
 primitive boundary selection を、通常枝と Wieferich 例外枝の split で読む target。
 
 付録:
@@ -4248,6 +4265,24 @@ theorem cfbrcExceptionalPrimitiveBoundaryOnWieferich_of_split
   exact hSplit hd_prime hd_ge hx hu hcop (Or.inr ⟨hd_dvd_x, hWieferich⟩)
 
 /--
+`CFBRC/Bridge` と同じ naming の concrete theorem 候補があれば、
+current exceptional target は単なる alias bridge で回収できる。
+-/
+theorem cfbrcExceptionalPrimitiveBoundaryOnWieferich_of_coreExceptional
+    (hCore : CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget) :
+    CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget :=
+  hCore
+
+/--
+current exceptional target があれば、
+`CFBRC/Bridge` 語彙に揃えた concrete theorem 候補もそのまま満たされる。
+-/
+theorem cfbrcExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferich_of_exceptional
+    (hExc : CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget) :
+    CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget :=
+  hExc
+
+/--
 通常枝の既存 `CFBRC/Bridge` theorem と、
 Wieferich 例外枝 target が揃えば split theorem を得る。
 -/
@@ -4484,6 +4519,18 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_splitSelection_and_restore
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_primitiveBoundaryExceptional_and_restore
     (cfbrcExceptionalPrimitiveBoundaryOnWieferich_of_split hSplit)
+    hRestore
+
+/--
+`CFBRC/Bridge` naming に揃えた例外枝 concrete theorem 候補があれば、
+primitive packet descent は restore と合わせて橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_coreExceptional_and_restore
+    (hCore : CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_primitiveBoundaryExceptional_and_restore
+    (cfbrcExceptionalPrimitiveBoundaryOnWieferich_of_coreExceptional hCore)
     hRestore
 
 /--
