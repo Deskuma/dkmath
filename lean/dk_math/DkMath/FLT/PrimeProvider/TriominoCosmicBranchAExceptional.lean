@@ -76,6 +76,15 @@ abbrev ExceptionalBoundaryDataRightBranchSupplyTarget : Prop :=
   CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget
 
 /--
+proof file で次に direct に本文を書く concrete theorem 名。
+
+[CFBRC] `review-030` 以降の「boundary-normalized exceptional statement」を
+この theorem 名で受ける。missing math は実質これを埋めることに等しい。
+-/
+abbrev ExceptionalBoundaryDataRightBranchSupplyConcreteTarget : Prop :=
+  ExceptionalBoundaryDataRightBranchSupplyTarget
+
+/--
 ordinary branch における boundary-core prime existence の reference theorem。
 
 [CFBRC] exceptional proof は、この ordinary theorem と仮定・中間結論を
@@ -225,6 +234,17 @@ theorem exceptional_split_right_branch_supply_of_boundaryData
     hpack.gap_coprime_right hp_dvd_gap hWieferich
 
 /--
+boundary-normalized concrete theorem 名から pack-local right branch supply を回収する橋。
+
+[CFBRC] concrete proof 本体はまずこの theorem 名で書き、
+pack-local supply への復元はこの薄い橋に任せればよい。
+-/
+theorem exceptional_split_right_branch_supply_of_boundaryConcrete
+    (hBoundary : ExceptionalBoundaryDataRightBranchSupplyConcreteTarget) :
+    ExceptionalSplitRightBranchSupplyTarget :=
+  exceptional_split_right_branch_supply_of_boundaryData hBoundary
+
+/--
 right branch supply があれば、
 named kernel はそのまま閉じる。
 
@@ -235,6 +255,16 @@ theorem exceptional_right_boundary_core_prime_of_wieferich_of_rightBranchSupply
     (hSupply : ExceptionalSplitRightBranchSupplyTarget) :
     ExceptionalRightBoundaryCorePrimeOfWieferichTarget :=
   hSupply
+
+/--
+boundary-normalized concrete theorem 名があれば、
+named kernel は pack-local supply 経由で回収できる。
+-/
+theorem exceptional_right_boundary_core_prime_of_wieferich_of_boundaryConcrete
+    (hBoundary : ExceptionalBoundaryDataRightBranchSupplyConcreteTarget) :
+    ExceptionalRightBoundaryCorePrimeOfWieferichTarget :=
+  exceptional_right_boundary_core_prime_of_wieferich_of_rightBranchSupply
+    (exceptional_split_right_branch_supply_of_boundaryConcrete hBoundary)
 
 /--
 named kernel があれば、
@@ -258,6 +288,18 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_namedKernel
       ⟨q, hqprime, hqcore, hq_not_dvd_gap⟩
     refine ⟨q, hqprime, ?_, hq_not_dvd_gap⟩
     simpa [DkMath.CFBRC.boundaryCyclotomicPrimeCore] using hqcore
+
+/--
+boundary-normalized concrete theorem 名から proof file mainline target へ戻る橋。
+
+[CFBRC] local exceptional arithmetic / CFBRC theorem がこの形で立てば、
+公開 mainline には thin bridge で戻せる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_boundaryConcrete
+    (hBoundary : ExceptionalBoundaryDataRightBranchSupplyConcreteTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_namedKernel
+    (exceptional_right_boundary_core_prime_of_wieferich_of_boundaryConcrete hBoundary)
 
 /--
 pack-local boundary existence があれば、
@@ -304,5 +346,17 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_exceptionalMainline_and_restore
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_localExceptionalExistence_and_restore
     hMain hRestore
+
+/--
+boundary-normalized concrete theorem 名から primitive packet descent へは
+mainline bridge を挟むだけで流せる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_boundaryConcrete_and_restore
+    (hBoundary : ExceptionalBoundaryDataRightBranchSupplyConcreteTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_exceptionalMainline_and_restore
+    (primeGe5BranchAExceptionalExistenceMainline_of_boundaryConcrete hBoundary)
+    hRestore
 
 end DkMath.FLT

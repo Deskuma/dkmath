@@ -392,3 +392,52 @@ Archive
    - `ExceptionalBoundaryDataRightBranchSupplyTarget`
      を直接返す concrete theorem を切り、
      new math の入口を boundary-normalized exceptional statement に固定する。
+
+### 日時: 2026/03/29 JST
+
+1. 目的:
+   - proof file 上で、
+     boundary-normalized exceptional statement に対する
+     「次に本文を書く theorem 名」
+     を固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `ExceptionalBoundaryDataRightBranchSupplyConcreteTarget`
+     を追加した。
+   - さらに
+     - `exceptional_split_right_branch_supply_of_boundaryConcrete`
+     - `exceptional_right_boundary_core_prime_of_wieferich_of_boundaryConcrete`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_boundaryConcrete`
+     - `primeGe5BranchAPrimitivePacketDescent_of_boundaryConcrete_and_restore`
+     を追加し、
+     concrete theorem 名から
+     pack-local / named kernel / mainline / packet descent
+     への thin bridge を一通り揃えた。
+
+3. 結論:
+   - 以後、
+     proof file で直接本文を書くべきものは
+     `ExceptionalBoundaryDataRightBranchSupplyConcreteTarget`
+     とみなしてよい。
+   - 新数学の入口は引き続き
+     boundary-normalized exceptional statement
+     だが、
+     今回の差分で
+     「その入口をどの theorem 名で埋めるか」
+     がファイル上でも固定された。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDataRightBranchSupplyConcreteTarget`
+     を返す concrete theorem 本体を切る。
+   - 必要なら ordinary reference theorem 側との差分入力だけを
+     別 target にもう 1 段切る。
