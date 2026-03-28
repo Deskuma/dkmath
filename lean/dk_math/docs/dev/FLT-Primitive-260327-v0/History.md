@@ -573,3 +573,52 @@
      `core existence -> diff existence -> packet descent`
      の spine で進め、
      restore 側は現状の target を維持する。
+
+### 日時: 2026/03/28 14:15 JST
+
+1. 目的:
+   - `CFBRC/Bridge` の標準 existence API が
+     `¬ p ∣ (z-y)`
+     側に立っていることを反映し、
+     Branch A (`p ∣ (z-y)`) 固有の missing theorem を
+     例外枝 target として明示する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget`
+     を追加した。
+   - 同ファイルに
+     - `primeGe5BranchACyclotomicCoreExistenceOnWieferich_of_cfbrcExceptional`
+     - `primeGe5BranchAPrimitivePacketDescent_of_cfbrcExceptional_and_restore`
+     を追加し、
+     CFBRC 例外枝 theorem から
+     `core existence -> diff existence -> packet descent`
+     へ戻す橋を固定した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも対応する provider alias / bridge を追加した。
+
+3. 結論:
+   - Branch A primitive route の selection 側で本当に missing なのは、
+     もはや一般の diff-side existence でも
+     一般の core-existence でもなく、
+     `p ∣ (z-y)` という例外枝のもとで
+     `cyclotomicPrimeCore p (z-y) y`
+     に prime が立つ
+     CFBRC 専用 theorem だと整理できた。
+   - したがって今後の concrete 実装探索では、
+     `PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget`
+     を first missing theorem と見なしてよい。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認する。
+
+5. 次の課題:
+   - `PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget`
+     の statement を、
+     existing `CFBRC/Bridge` / `PrimitiveBeam`
+     語彙へどこまで正規化できるかを詰める。
+   - もしそれ以上の一般化が重いなら、
+     Branch A 専用 exceptional theorem としてそのまま concrete 実装へ入る。

@@ -597,6 +597,22 @@ abbrev PrimeGe5BranchACyclotomicCoreExistenceOnWieferichTarget : Prop :=
     ∃ q : ℕ, Nat.Prime q ∧ q ∣ DkMath.CFBRC.cyclotomicPrimeCore p (z - y) y ∧ ¬ q ∣ (z - y)
 
 /--
+Branch A の例外枝で CFBRC/core 側 existence theorem を与える target。
+
+付録:
+- 標準の `CFBRC/Bridge` existence API は `¬ p ∣ (z-y)` 側に立っているため、
+  Branch A (`p ∣ (z-y)`) ではそのまま使えない。
+- したがって concrete 実装探索では、
+  この「exceptional core existence」target を
+  CFBRC 側の本当の missing theorem と見なす。
+-/
+abbrev PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ DkMath.CFBRC.cyclotomicPrimeCore p (z - y) y ∧ ¬ q ∣ (z - y)
+
+/--
 distinguished prime が取れた後の smaller-packet restoration 段。
 
 付録:
@@ -4123,6 +4139,16 @@ theorem primeGe5BranchACyclotomicExistenceOnWieferich_of_coreExistence
   simpa [hzy] using hqdiff
 
 /--
+CFBRC 例外枝 existence theorem があれば、
+Branch A の core-existence target は thin bridge で閉じる。
+-/
+theorem primeGe5BranchACyclotomicCoreExistenceOnWieferich_of_cfbrcExceptional
+    (hExc : PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget) :
+    PrimeGe5BranchACyclotomicCoreExistenceOnWieferichTarget := by
+  intro p x y z hpack hp_dvd_gap hWieferich
+  exact hExc hpack hp_dvd_gap hWieferich
+
+/--
 distinguished prime が取れれば、
 primitive restoration に必要な arithmetic fallout は機械的に従う。
 -/
@@ -4276,6 +4302,18 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_coreExistence_and_restore
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_wieferichExistence_and_restore
     (primeGe5BranchACyclotomicExistenceOnWieferich_of_coreExistence hCore)
+    hRestore
+
+/--
+primitive route の concrete-ready mainline は、
+CFBRC 例外枝 existence theorem と restore があれば橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_cfbrcExceptional_and_restore
+    (hExc : PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_coreExistence_and_restore
+    (primeGe5BranchACyclotomicCoreExistenceOnWieferich_of_cfbrcExceptional hExc)
     hRestore
 
 /--
