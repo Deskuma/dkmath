@@ -349,3 +349,65 @@
    - `PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget`
      が truly constructive に見えるか、
      さらに中間 packet / local kernel を挟むべきかを判断する。
+
+### 日時: 2026/03/28 00:44 JST
+
+1. 目的:
+   - `review-006.md`
+     に沿って、
+     primitive selection 側をさらに縮め、
+     `PrimeGe5BranchAPrimitiveCyclotomicPrimeTarget`
+     自体も
+     Branch A 専用の最小 existence wrapper
+     1 本から閉じる形にする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `PrimeGe5BranchACyclotomicExistenceTarget`
+     を追加した。
+     これは
+     `PrimeGe5CounterexamplePack p x y z`
+     と
+     `p ∣ (z-y)`
+     だけから
+     `∃ q, Prime q ∧ q ∣ (z^p - y^p) ∧ ¬ q ∣ (z-y)`
+     を返す最小 wrapper である。
+   - 同ファイルに
+     - `primeGe5BranchAPrimitiveCyclotomicPrime_of_existence`
+     - `primeGe5BranchAPrimitivePacketDescent_of_existence_and_restore`
+     を追加した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも対応する adapter alias / bridge を追加した。
+
+3. 結論:
+   - primitive packet descent は、
+     code 上ついに
+     - `PrimeGe5BranchACyclotomicExistenceTarget`
+     - `PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget`
+     の 2 本だけがあれば閉じるところまで縮んだ。
+   - selection 側の truly missing kernel は、
+     もはや
+     `GN`
+     や
+     normal-form
+     の局所データを一切含まない、
+     Branch A 専用の diff-side existence wrapper
+     1 本に押し込められた。
+
+4. 検証:
+   - build はこの追記の次段で
+     `DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+     と
+     `DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+     を順番に確認する。
+
+5. 次の課題:
+   - `PrimeGe5BranchACyclotomicExistenceTarget`
+     の concrete 実装を、
+     Branch A 条件
+     `p ∣ (z-y)`
+     のもとでどう与えるかを設計する。
+   - 既存の `PrimitiveBeam` 系補題を直接使えない理由を
+     仮定ごとに整理し、
+     追加すべき Branch A 専用 existence theorem の最小 statement を決める。

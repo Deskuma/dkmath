@@ -542,6 +542,22 @@ abbrev PrimeGe5BranchAPrimitiveCyclotomicPrimeTarget : Prop :=
     ∃ q : ℕ, Nat.Prime q ∧ q ∣ (z ^ p - y ^ p) ∧ ¬ q ∣ (z - y)
 
 /--
+Branch A 専用の diff-side / cyclotomic existence wrapper。
+
+付録:
+- primitive route の selection 側で本当に欲しい未完核を、
+  normal-form の局所情報をすべて隠した
+  `hpack + p ∣ (z-y)`
+  だけの存在論として切り出す。
+- これが concrete に埋まれば、
+  primitive mainline の selection 側は以後すべて既存橋で閉じる。
+-/
+abbrev PrimeGe5BranchACyclotomicExistenceTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ (z ^ p - y ^ p) ∧ ¬ q ∣ (z - y)
+
+/--
 distinguished prime が取れた後の smaller-packet restoration 段。
 
 付録:
@@ -4025,6 +4041,21 @@ theorem primeGe5BranchAPrimitiveZsigmondy_of_cyclotomicPrime
   exact ⟨q, hqprime, hqGN, hqgap⟩
 
 /--
+Branch A 専用の diff-side existence wrapper があれば、
+primitive cyclotomic-prime target は thin bridge で閉じる。
+
+付録:
+- `PrimeGe5BranchAPrimitiveCyclotomicPrimeTarget`
+  に入っている normal-form / Wieferich 仮定は、
+  existence 自体には不要だと明示するための橋である。
+-/
+theorem primeGe5BranchAPrimitiveCyclotomicPrime_of_existence
+    (hEx : PrimeGe5BranchACyclotomicExistenceTarget) :
+    PrimeGe5BranchAPrimitiveCyclotomicPrimeTarget := by
+  intro p x y z t s hpack hp_dvd_gap _hgap _hsGN _hsx _hcop_ts _hcop_ty _hcop_sy _hp_not_dvd_s _hp_not_dvd_t _hWieferich
+  exact hEx hpack hp_dvd_gap
+
+/--
 distinguished prime が取れれば、
 primitive restoration に必要な arithmetic fallout は機械的に従う。
 -/
@@ -4135,6 +4166,25 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_cyclotomicPrime_and_restore
   primeGe5BranchAPrimitivePacketDescent_of_zsigmondy_arithmetic_and_restore
     (primeGe5BranchAPrimitiveZsigmondy_of_cyclotomicPrime hCyc)
     primeGe5BranchAPrimitiveDistinguishedPrimeArithmetic_default
+    hRestore
+
+/--
+primitive packet descent は、
+Branch A 専用の cyclotomic existence wrapper と
+restore-from-arithmetic
+の 2 本だけがあれば橋で閉じる。
+
+付録:
+- selection 側の truly missing kernel を
+  `PrimeGe5BranchACyclotomicExistenceTarget`
+  1 本にさらに押し込めた canonical wrapper である。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_existence_and_restore
+    (hEx : PrimeGe5BranchACyclotomicExistenceTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_cyclotomicPrime_and_restore
+    (primeGe5BranchAPrimitiveCyclotomicPrime_of_existence hEx)
     hRestore
 
 /--

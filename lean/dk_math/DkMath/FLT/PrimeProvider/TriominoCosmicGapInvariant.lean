@@ -1370,6 +1370,10 @@ abbrev BranchAPrimitiveZsigmondyAdapterTarget : Prop :=
 abbrev BranchAPrimitiveCyclotomicPrimeAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitiveCyclotomicPrimeTarget
 
+/-- Branch A 専用の最小 diff-side existence wrapper。 -/
+abbrev BranchACyclotomicExistenceAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchACyclotomicExistenceTarget
+
 /-- primitive packet restoration 段を表す provider 側 alias。 -/
 abbrev BranchAPrimitivePacketRestoreAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitivePacketRestoreTarget
@@ -1499,6 +1503,15 @@ theorem branchAPrimitiveZsigmondyAdapter_of_cyclotomicPrime
     BranchAPrimitiveZsigmondyAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitiveZsigmondy_of_cyclotomicPrime hCyc
 
+/--
+Branch A 専用 existence wrapper から、
+primitive cyclotomic-prime adapter を回収する thin bridge。
+-/
+theorem branchAPrimitiveCyclotomicPrimeAdapter_of_existence
+    (hEx : BranchACyclotomicExistenceAdapterTarget) :
+    BranchAPrimitiveCyclotomicPrimeAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveCyclotomicPrime_of_existence hEx
+
 /-- distinguished prime selection から arithmetic fallout adapter を回収する thin bridge。 -/
 theorem branchAPrimitiveDistinguishedPrimeArithmeticAdapter_default :
     BranchAPrimitiveDistinguishedPrimeArithmeticAdapterTarget :=
@@ -1550,6 +1563,18 @@ theorem branchAPrimitivePacketDescentAdapter_of_cyclotomicPrime_and_restore
     BranchAPrimitivePacketDescentAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_cyclotomicPrime_and_restore
     hCyc hRestore
+
+/--
+primitive packet descent adapter は、
+Branch A 専用 existence wrapper と restore-from-arithmetic
+の 2 本だけがあれば橋で閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_existence_and_restore
+    (hEx : BranchACyclotomicExistenceAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_existence_and_restore
+    hEx hRestore
 
 /--
 暫定 concrete adapter for the Branch A Wieferich witness route.
