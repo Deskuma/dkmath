@@ -1402,6 +1402,10 @@ abbrev CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichAdapterTarget :
 abbrev CFBRCPrimitiveBoundarySelectionOnSplitAdapterTarget : Prop :=
   DkMath.FLT.CFBRCPrimitiveBoundarySelectionOnSplitTarget
 
+/-- `CFBRC/Bridge` naming に揃えた split concrete theorem 候補の provider 側 alias。 -/
+abbrev CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitAdapterTarget : Prop :=
+  DkMath.FLT.CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitTarget
+
 /-- primitive packet restoration 段を表す provider 側 alias。 -/
 abbrev BranchAPrimitivePacketRestoreAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitivePacketRestoreTarget
@@ -1746,6 +1750,17 @@ theorem branchAPrimitivePacketDescentAdapter_of_coreExceptional_and_restore
     BranchAPrimitivePacketDescentAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_coreExceptional_and_restore
     hCore hRestore
+
+/--
+`CFBRC/Bridge` naming に揃えた split concrete theorem 候補があれば、
+primitive packet descent adapter は restore と合わせて橋だけで閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_coreSplitSelection_and_restore
+    (hSplitCore : CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_coreSplitSelection_and_restore
+    hSplitCore hRestore
 
 /--
 暫定 concrete adapter for the Branch A Wieferich witness route.

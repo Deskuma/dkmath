@@ -861,3 +861,52 @@
      この target の statement をもう少し
      `CFBRC/Bridge`
      の仮定順・語彙順へ寄せる。
+
+### 日時: 2026/03/28 17:31 JST
+
+1. 目的:
+   - right branch だけでなく split theorem 全体も、
+     `CFBRC/Bridge`
+     naming に揃えた concrete theorem 候補名で読めるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitTarget`
+     を追加した。
+   - 同ファイルに
+     - `cfbrcPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplit_of_coreExceptional`
+     - `cfbrcPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplit_of_split`
+     - `primeGe5BranchAPrimitivePacketDescent_of_coreSplitSelection_and_restore`
+     を追加した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     対応する adapter alias / bridge を追加した。
+
+3. 結論:
+   - selection 側は now
+     - right branch の concrete theorem 候補
+       `CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget`
+     - split theorem 全体の concrete theorem 候補
+       `CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitTarget`
+     の 2 層で読める。
+   - これにより、
+     concrete 実装探索を
+     `CFBRC/Bridge`
+     theorem 名とほぼ平行な naming で進められるようになった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認する。
+
+5. 次の課題:
+   - `CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget`
+     と
+     `CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitTarget`
+     のうち、
+     どちらを direct concrete theorem として先に立てるのが自然かを見極める。
+   - 必要なら
+     exceptional 側の statement を
+     `BoundarySide.right`
+     を明示した既存 theorem の仮定順へさらに寄せる。

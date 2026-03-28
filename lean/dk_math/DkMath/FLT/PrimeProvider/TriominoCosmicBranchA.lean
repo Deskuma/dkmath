@@ -695,6 +695,21 @@ abbrev CFBRCPrimitiveBoundarySelectionOnSplitTarget : Prop :=
       (∀ {k : ℕ}, 0 < k → k < d → ¬ q ∣ DkMath.CFBRC.boundaryDiffPow .right k x u)
 
 /--
+既存 `CFBRC/Bridge` の primitive-boundary theorem と平行に読むための
+split concrete theorem 候補。
+
+付録:
+- 通常枝 `¬ d ∣ x` は既存 theorem、
+  例外枝 `d ∣ x ∧ Wieferich` は
+  `CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget`
+  が担当する、という split をそのまま theorem 名に反映する。
+- これにより、selection 側の concrete theorem 探索を
+  `core exceptional` と `core split` の二層で固定できる。
+-/
+abbrev CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitTarget : Prop :=
+  CFBRCPrimitiveBoundarySelectionOnSplitTarget
+
+/--
 distinguished prime が取れた後の smaller-packet restoration 段。
 
 付録:
@@ -4300,6 +4315,25 @@ theorem cfbrcPrimitiveBoundarySelectionOnSplit_of_exceptional
   · exact hExc hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich
 
 /--
+`CFBRC/Bridge` naming に揃えた core exceptional theorem 候補があれば、
+split theorem も同じ concrete naming で読める。
+-/
+theorem cfbrcPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplit_of_coreExceptional
+    (hCore : CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget) :
+    CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitTarget :=
+  cfbrcPrimitiveBoundarySelectionOnSplit_of_exceptional
+    (cfbrcExceptionalPrimitiveBoundaryOnWieferich_of_coreExceptional hCore)
+
+/--
+current split target があれば、
+`CFBRC/Bridge` naming に揃えた split concrete theorem 候補もそのまま満たされる。
+-/
+theorem cfbrcPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplit_of_split
+    (hSplit : CFBRCPrimitiveBoundarySelectionOnSplitTarget) :
+    CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitTarget :=
+  hSplit
+
+/--
 distinguished prime が取れれば、
 primitive restoration に必要な arithmetic fallout は機械的に従う。
 -/
@@ -4532,6 +4566,17 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_coreExceptional_and_restore
   primeGe5BranchAPrimitivePacketDescent_of_primitiveBoundaryExceptional_and_restore
     (cfbrcExceptionalPrimitiveBoundaryOnWieferich_of_coreExceptional hCore)
     hRestore
+
+/--
+`CFBRC/Bridge` naming に揃えた split concrete theorem 候補があれば、
+primitive packet descent は restore と合わせて橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_coreSplitSelection_and_restore
+    (hSplitCore : CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_splitSelection_and_restore
+    hSplitCore hRestore
 
 /--
 primitive route の concrete-ready mainline。
