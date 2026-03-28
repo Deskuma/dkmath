@@ -512,6 +512,36 @@ abbrev PrimeGe5BranchAPrimitiveZsigmondyTarget : Prop :=
     ∃ q : ℕ, Nat.Prime q ∧ q ∣ GN p (z - y) y ∧ ¬ q ∣ (z - y)
 
 /--
+primitive route の cyclotomic / diff-power existence 段。
+
+付録:
+- distinguished-prime をいきなり `GN`
+  側で取る代わりに、
+  まず
+  `z^p - y^p`
+  の側で
+  `q ∤ (z-y)`
+  な prime divisor を取る target を独立させる。
+- その後の `GN`
+  側への移送は
+  `pow_sub_pow_factor_cosmic_N`
+  による薄い橋で処理できる。
+-/
+abbrev PrimeGe5BranchAPrimitiveCyclotomicPrimeTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ (z ^ p - y ^ p) ∧ ¬ q ∣ (z - y)
+
+/--
 distinguished prime が取れた後の smaller-packet restoration 段。
 
 付録:
@@ -3968,6 +3998,31 @@ theorem primeGe5BranchAPrimitiveDistinguishedPrime_of_zsigmondy
   intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
   exact hZ hpack hp_dvd_gap hgap hsGN hsx
     hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+
+/--
+`z^p - y^p`
+側の cyclotomic prime existence があれば、
+因数分解を通して `GN`
+側の distinguished-prime target は薄い橋で閉じる。
+-/
+theorem primeGe5BranchAPrimitiveZsigmondy_of_cyclotomicPrime
+    (hCyc : PrimeGe5BranchAPrimitiveCyclotomicPrimeTarget) :
+    PrimeGe5BranchAPrimitiveZsigmondyTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+  rcases hCyc hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich with
+    ⟨q, hqprime, hqdiff, hqgap⟩
+  have hfactor : z ^ p - y ^ p = (z - y) * GN p (z - y) y := by
+    simpa using DkMath.NumberTheory.GcdNext.pow_sub_pow_factor_cosmic_N
+      (a := z) (b := y) (d := p) hpack.hp.pos hpack.hyz_lt
+  have hqmul : q ∣ (z - y) * GN p (z - y) y := by
+    rw [← hfactor]
+    exact hqdiff
+  have hqGN : q ∣ GN p (z - y) y := by
+    rcases (hqprime.dvd_mul).mp hqmul with hqgap' | hqGN
+    · exact False.elim (hqgap hqgap')
+    · exact hqGN
+  exact ⟨q, hqprime, hqGN, hqgap⟩
 
 /--
 distinguished prime が取れれば、

@@ -1366,6 +1366,10 @@ abbrev BranchAPrimitiveDistinguishedPrimeAdapterTarget : Prop :=
 abbrev BranchAPrimitiveZsigmondyAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitiveZsigmondyTarget
 
+/-- `z^p - y^p` 側で prime を取る primitive/cyclotomic existence target。 -/
+abbrev BranchAPrimitiveCyclotomicPrimeAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveCyclotomicPrimeTarget
+
 /-- primitive packet restoration 段を表す provider 側 alias。 -/
 abbrev BranchAPrimitivePacketRestoreAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitivePacketRestoreTarget
@@ -1485,6 +1489,15 @@ theorem branchAPrimitiveDistinguishedPrimeAdapter_of_zsigmondy
     (hZ : BranchAPrimitiveZsigmondyAdapterTarget) :
     BranchAPrimitiveDistinguishedPrimeAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitiveDistinguishedPrime_of_zsigmondy hZ
+
+/--
+cyclotomic / diff-power 側の prime existence から、
+primitive Zsigmondy adapter を回収する thin bridge。
+-/
+theorem branchAPrimitiveZsigmondyAdapter_of_cyclotomicPrime
+    (hCyc : BranchAPrimitiveCyclotomicPrimeAdapterTarget) :
+    BranchAPrimitiveZsigmondyAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveZsigmondy_of_cyclotomicPrime hCyc
 
 /-- distinguished prime selection から arithmetic fallout adapter を回収する thin bridge。 -/
 theorem branchAPrimitiveDistinguishedPrimeArithmeticAdapter_default :

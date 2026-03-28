@@ -223,3 +223,76 @@
    - `PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget`
      の構成論を、`q ∣ s`, `q ∤ t`, `q ⟂ y`, `q ≠ p`
      からどこまで進められるかを見極める。
+
+### 日時: 2026/03/28 00:19 JST
+
+1. 目的:
+   - `review-004.md`
+     と
+     `consider-003.md`
+     の方針に沿って、
+     primitive distinguished-prime selection を
+     いきなり `GN`
+     側で取るのでなく、
+     まず
+     `z^p - y^p`
+     側の cyclotomic / diff-power prime existence として切り出す。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `PrimeGe5BranchAPrimitiveCyclotomicPrimeTarget`
+     を追加した。
+   - 同ファイルに
+     `primeGe5BranchAPrimitiveZsigmondy_of_cyclotomicPrime`
+     を追加し、
+     `pow_sub_pow_factor_cosmic_N`
+     によって
+     `q ∣ (z^p - y^p), ¬ q ∣ (z-y)`
+     から
+     `q ∣ GN p (z-y) y`
+     を回収する薄い橋を置いた。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     `BranchAPrimitiveCyclotomicPrimeAdapterTarget`
+     と
+     `branchAPrimitiveZsigmondyAdapter_of_cyclotomicPrime`
+     を追加した。
+
+3. 結論:
+   - primitive selection 段は、
+     数学的には
+     `GN`
+     側 distinguished prime の存在そのものではなく、
+     まず
+     `z^p - y^p`
+     側で
+     `q ∤ (z-y)`
+     な prime divisor を取る段として読めるようになった。
+   - したがって
+     `PrimitiveBeam` / `ZsigmondyCyclotomic`
+     の既存 existence 補題に寄せる場合も、
+     まず
+     `PrimeGe5BranchAPrimitiveCyclotomicPrimeTarget`
+     を concrete 化し、
+     その後
+     `GN`
+     側 distinguished-prime へ移すのが自然になった。
+
+4. 検証:
+   - build はこの追記の次段で
+     `DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+     と
+     `DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+     を順番に確認する。
+
+5. 次の課題:
+   - `PrimeGe5BranchAPrimitiveCyclotomicPrimeTarget`
+     を、
+     Branch A の `p ∣ (z-y)` 制約と両立する concrete existence theorem
+     でどう埋めるかを決める。
+   - 既存の `PrimitiveBeam.exists_primitive_prime_factor_as_prop`
+     を直接使えない点
+     （`¬ p ∣ a-b` 前提）
+     を踏まえ、
+     Branch A 専用の existence wrapper が必要かを判断する。
