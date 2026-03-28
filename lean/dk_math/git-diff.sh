@@ -9,13 +9,30 @@
 if [[ "$1" == "-H" ]]; then
   shift
   COMMIT="HEAD~1"
+  LOG_COMMIT="HEAD"
 else
   COMMIT=""
+  LOG_COMMIT="HEAD"
+
 fi
 
-echo '`````md' > __git.diff
+echo '# git diff' > __git.diff
+echo '' >> __git.diff
+git log -1 --pretty=format:'## %s%n%n%H%n%n%b' $LOG_COMMIT >> __git.diff
+
+echo '' >> __git.diff
+echo '## Report' >> __git.diff
+echo '' >> __git.diff
+echo '' >> __git.diff
+
+echo '' >> __git.diff
+echo '## Diff' >> __git.diff
+echo '' >> __git.diff
+echo '`````md' >> __git.diff
 echo '````diff' >> __git.diff
 git diff $COMMIT $@ >> __git.diff
 echo '````' >> __git.diff
 echo '`````' >> __git.diff
+echo '' >> __git.diff
+
 code __git.diff
