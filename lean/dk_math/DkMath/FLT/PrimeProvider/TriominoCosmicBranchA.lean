@@ -631,6 +631,53 @@ abbrev CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget : Prop :=
     ∃ q : ℕ, Nat.Prime q ∧ q ∣ DkMath.CFBRC.cyclotomicPrimeCore d x u ∧ ¬ q ∣ x
 
 /--
+`CFBRC/Bridge` の標準 primitive-boundary existence theorem に最も近い
+Branch A 例外枝版 target。
+
+付録:
+- 結論は `boundaryCyclotomicPrimeCore` と `boundaryDiffPow` を使って書き、
+  既存 theorem
+  `exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime`
+  との差を
+  `¬ d ∣ x`
+  ではなく
+  `d ∣ x` と Wieferich witness を仮定する一点に寄せる。
+- current first missing theorem を薄い補強で済ませられるかを見るなら、
+  まずこの stronger target を経由するのが自然である。
+-/
+abbrev CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget : Prop :=
+  ∀ {d x u : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧
+      q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ∧
+      ¬ q ∣ x ∧
+      (∀ {k : ℕ}, 0 < k → k < d → ¬ q ∣ DkMath.CFBRC.boundaryDiffPow .right k x u)
+
+/--
+primitive boundary selection を、通常枝と Wieferich 例外枝の split で読む target。
+
+付録:
+- `¬ d ∣ x` 側は既存 `CFBRC/Bridge`
+  `exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime`
+  がそのまま供給する。
+- `d ∣ x` 側では `u^(d-1) ≡ 1 [MOD d^2]` を伴う例外枝だけを新 target として要求する。
+- したがって「既存語彙への薄い補強で済むか」を mainline 上で読むなら、
+  まずこの split target を見るのが自然である。
+-/
+abbrev CFBRCPrimitiveBoundarySelectionOnSplitTarget : Prop :=
+  ∀ {d x u : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    (¬ d ∣ x ∨ (d ∣ x ∧ u ^ (d - 1) ≡ 1 [MOD d ^ 2])) →
+    ∃ q : ℕ, Nat.Prime q ∧
+      q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ∧
+      ¬ q ∣ x ∧
+      (∀ {k : ℕ}, 0 < k → k < d → ¬ q ∣ DkMath.CFBRC.boundaryDiffPow .right k x u)
+
+/--
 distinguished prime が取れた後の smaller-packet restoration 段。
 
 付録:
@@ -4178,6 +4225,46 @@ theorem primeGe5BranchACFBRCExceptionalExistence_of_boundaryExceptional
     hpack.gap_coprime_right hp_dvd_gap hWieferich
 
 /--
+stronger な primitive-boundary exceptional theorem があれば、
+first missing theorem は primitive 条件を忘れるだけで閉じる。
+-/
+theorem cfbrcExceptionalBoundaryOnWieferich_of_primitiveBoundary
+    (hPrim : CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget) :
+    CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich
+  rcases hPrim hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich with
+    ⟨q, hqprime, hqcore, hq_not_dvd_x, _hprim⟩
+  refine ⟨q, hqprime, ?_, hq_not_dvd_x⟩
+  simpa [DkMath.CFBRC.boundaryCyclotomicPrimeCore] using hqcore
+
+/--
+primitive boundary の split theorem があれば、
+Wieferich 例外枝 target は右側の場合分けだけで回収できる。
+-/
+theorem cfbrcExceptionalPrimitiveBoundaryOnWieferich_of_split
+    (hSplit : CFBRCPrimitiveBoundarySelectionOnSplitTarget) :
+    CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich
+  exact hSplit hd_prime hd_ge hx hu hcop (Or.inr ⟨hd_dvd_x, hWieferich⟩)
+
+/--
+通常枝の既存 `CFBRC/Bridge` theorem と、
+Wieferich 例外枝 target が揃えば split theorem を得る。
+-/
+theorem cfbrcPrimitiveBoundarySelectionOnSplit_of_exceptional
+    (hExc : CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget) :
+    CFBRCPrimitiveBoundarySelectionOnSplitTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hsplit
+  rcases hsplit with hOrd | ⟨hd_dvd_x, hWieferich⟩
+  · have hd_ge3 : 3 ≤ d := by omega
+    simpa using
+      (DkMath.CFBRC.exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime
+        DkMath.CFBRC.BoundarySide.right
+        (d := d) (x := x) (u := u)
+        hd_prime hd_ge3 hx hu hcop hOrd)
+  · exact hExc hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich
+
+/--
 distinguished prime が取れれば、
 primitive restoration に必要な arithmetic fallout は機械的に従う。
 -/
@@ -4374,6 +4461,30 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_firstMissingSelection_and_resto
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_boundaryExceptional_and_restore
     hFirst hRestore
+
+/--
+primitive-boundary exceptional theorem を直接実装できれば、
+primitive packet descent は restore と合わせて橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_primitiveBoundaryExceptional_and_restore
+    (hPrim : CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_firstMissingSelection_and_restore
+    (cfbrcExceptionalBoundaryOnWieferich_of_primitiveBoundary hPrim)
+    hRestore
+
+/--
+通常枝は既存 `CFBRC/Bridge`、例外枝だけ新 theorem とする split selection があれば、
+primitive packet descent は restore と合わせて橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_splitSelection_and_restore
+    (hSplit : CFBRCPrimitiveBoundarySelectionOnSplitTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_primitiveBoundaryExceptional_and_restore
+    (cfbrcExceptionalPrimitiveBoundaryOnWieferich_of_split hSplit)
+    hRestore
 
 /--
 primitive route の concrete-ready mainline。

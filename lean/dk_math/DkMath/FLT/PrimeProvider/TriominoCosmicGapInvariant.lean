@@ -1390,6 +1390,14 @@ abbrev BranchACFBRCExceptionalExistenceOnWieferichAdapterTarget : Prop :=
 abbrev CFBRCExceptionalPrimeExpBoundaryOnWieferichAdapterTarget : Prop :=
   DkMath.FLT.CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget
 
+/-- `CFBRC/Bridge` 標準 theorem に最も近い primitive-boundary exceptional target の provider 側 alias。 -/
+abbrev CFBRCExceptionalPrimitiveBoundaryOnWieferichAdapterTarget : Prop :=
+  DkMath.FLT.CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget
+
+/-- 通常枝と Wieferich 例外枝の split で読む primitive boundary selection target の provider 側 alias。 -/
+abbrev CFBRCPrimitiveBoundarySelectionOnSplitAdapterTarget : Prop :=
+  DkMath.FLT.CFBRCPrimitiveBoundarySelectionOnSplitTarget
+
 /-- primitive packet restoration 段を表す provider 側 alias。 -/
 abbrev BranchAPrimitivePacketRestoreAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitivePacketRestoreTarget
@@ -1564,6 +1572,15 @@ theorem branchACFBRCExceptionalExistenceOnWieferichAdapter_of_boundaryExceptiona
     BranchACFBRCExceptionalExistenceOnWieferichAdapterTarget :=
   DkMath.FLT.primeGe5BranchACFBRCExceptionalExistence_of_boundaryExceptional hBoundary
 
+/--
+primitive-boundary exceptional theorem から、
+canonical first missing theorem を回収する thin bridge。
+-/
+theorem cfbrcExceptionalBoundaryOnWieferichAdapter_of_primitiveBoundary
+    (hPrim : CFBRCExceptionalPrimitiveBoundaryOnWieferichAdapterTarget) :
+    CFBRCExceptionalPrimeExpBoundaryOnWieferichAdapterTarget :=
+  DkMath.FLT.cfbrcExceptionalBoundaryOnWieferich_of_primitiveBoundary hPrim
+
 /-- distinguished prime selection から arithmetic fallout adapter を回収する thin bridge。 -/
 theorem branchAPrimitiveDistinguishedPrimeArithmeticAdapter_default :
     BranchAPrimitiveDistinguishedPrimeArithmeticAdapterTarget :=
@@ -1692,6 +1709,28 @@ theorem branchAPrimitivePacketDescentAdapter_of_firstMissingSelection_and_restor
     BranchAPrimitivePacketDescentAdapterTarget :=
   branchAPrimitivePacketDescentAdapter_of_boundaryExceptional_and_restore
     hFirst hRestore
+
+/--
+primitive-boundary exceptional theorem を直接実装できれば、
+primitive packet descent adapter は restore と合わせて橋だけで閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_primitiveBoundaryExceptional_and_restore
+    (hPrim : CFBRCExceptionalPrimitiveBoundaryOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_primitiveBoundaryExceptional_and_restore
+    hPrim hRestore
+
+/--
+通常枝は既存 `CFBRC/Bridge`、例外枝だけ新 theorem とする split selection があれば、
+primitive packet descent adapter は restore と合わせて橋だけで閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_splitSelection_and_restore
+    (hSplit : CFBRCPrimitiveBoundarySelectionOnSplitAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_splitSelection_and_restore
+    hSplit hRestore
 
 /--
 暫定 concrete adapter for the Branch A Wieferich witness route.

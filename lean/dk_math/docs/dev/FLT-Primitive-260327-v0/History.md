@@ -722,3 +722,98 @@
      の薄い補強で済ませられるかを実際に試す。
    - それが薄く済まないなら、
      この normalized target 自体を concrete theorem として直接実装する。
+
+### 日時: 2026/03/28 16:26 JST
+
+1. 目的:
+   - canonical first missing theorem
+     `CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget`
+     を、
+     既存 `CFBRC/Bridge`
+     標準 theorem に最も近い stronger target 経由でも読めるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget`
+     を追加した。
+   - 同ファイルに
+     - `cfbrcExceptionalBoundaryOnWieferich_of_primitiveBoundary`
+     - `primeGe5BranchAPrimitivePacketDescent_of_primitiveBoundaryExceptional_and_restore`
+     を追加し、
+     primitive 条件つきの stronger theorem から
+     current first missing theorem と primitive packet descent へ戻す橋を置いた。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも対応する provider alias / bridge を追加した。
+
+3. 結論:
+   - selection 側の first missing theorem は引き続き
+     `CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget`
+     だが、
+     既存 `CFBRC/Bridge`
+     の
+     `exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime`
+     に最も近い形として
+     `CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget`
+     を別に持てるようになった。
+   - したがって次段では、
+     「薄い補強で済むか」を試すときの concrete theorem 候補として、
+     primitive 条件つき stronger target も比較対象にできる。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認する。
+
+5. 次の課題:
+   - `CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget`
+     が既存 `CFBRC/Bridge` の theorem 群の
+     「例外枝差し替え」だけで書けるかを検討する。
+   - そこまで薄く済まないなら、
+     `CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget`
+     を concrete theorem として直接実装する方針へ戻る。
+
+### 日時: 2026/03/28 17:04 JST
+
+1. 目的:
+   - selection 側の primitive boundary theorem を、
+     通常枝は既存 `CFBRC/Bridge`、
+     例外枝だけ新 theorem、
+     という split 形で mainline 上に固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     - `CFBRCPrimitiveBoundarySelectionOnSplitTarget`
+     - `cfbrcExceptionalPrimitiveBoundaryOnWieferich_of_split`
+     - `cfbrcPrimitiveBoundarySelectionOnSplit_of_exceptional`
+     - `primeGe5BranchAPrimitivePacketDescent_of_splitSelection_and_restore`
+     を追加した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     - `CFBRCPrimitiveBoundarySelectionOnSplitAdapterTarget`
+     - `branchAPrimitivePacketDescentAdapter_of_splitSelection_and_restore`
+     を追加した。
+
+3. 結論:
+   - primitive selection 側は、
+     「通常枝は `exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime`」
+     と
+     「例外枝は `CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget`」
+     の split 合成として読めるようになった。
+   - これにより、
+     current missing math が本当に例外枝 1 本だけだと
+     theorem としても明示された。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認する。
+
+5. 次の課題:
+   - `CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget`
+     を、
+     split theorem の例外枝として concrete に埋める。
+   - その際、
+     `CFBRC/Bridge` / `PrimitiveBeam`
+     の通常枝 theorem と対照的に見える statement を保つ。
