@@ -1382,7 +1382,12 @@ abbrev BranchACyclotomicExistenceOnWieferichAdapterTarget : Prop :=
 abbrev BranchACyclotomicCoreExistenceOnWieferichAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchACyclotomicCoreExistenceOnWieferichTarget
 
-/-- Branch A の CFBRC 例外枝 existence theorem を表す provider 側 alias。 -/
+/--
+Branch A の CFBRC 例外枝 existence theorem を表す provider 側 alias。
+
+[CFBRC] まずはこの local theorem を canonical 入口として使い、
+bridge 層への昇格は後続タスクとして保留する。
+-/
 abbrev BranchACFBRCExceptionalExistenceOnWieferichAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget
 
@@ -1833,6 +1838,19 @@ theorem branchAPrimitivePacketDescentAdapter_of_parallelExceptionalExistence_and
     BranchAPrimitivePacketDescentAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_parallelExceptionalExistence_and_restore
     hPar hRestore
+
+/--
+Branch A 局所 exceptional existence theorem を canonical 入口と見る provider adapter。
+
+[CFBRC] 現段階では local theorem を先に実装し、
+boundary-normalized / parallel naming は bridge として扱う。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_localExceptionalExistence_and_restore
+    (hLocal : BranchACFBRCExceptionalExistenceOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_localExceptionalExistence_and_restore
+    hLocal hRestore
 
 /--
 split existence と primitive kernel が揃えば、

@@ -599,6 +599,9 @@ abbrev PrimeGe5BranchACyclotomicCoreExistenceOnWieferichTarget : Prop :=
 /--
 Branch A の例外枝で CFBRC/core 側 existence theorem を与える target。
 
+[CFBRC] まずはこの Branch A 局所 target を canonical 入口として使い、
+boundary-normalized theorem や `CFBRC/Bridge` への昇格は後続で行う。
+
 付録:
 - 標準の `CFBRC/Bridge` existence API は `¬ p ∣ (z-y)` 側に立っているため、
   Branch A (`p ∣ (z-y)`) ではそのまま使えない。
@@ -4342,6 +4345,9 @@ theorem primeGe5BranchACyclotomicExistenceOnWieferich_of_coreExistence
 /--
 CFBRC 例外枝 existence theorem があれば、
 Branch A の core-existence target は thin bridge で閉じる。
+
+[CFBRC] local Branch A target を先に埋め、
+境界正規化された theorem 群はそこから回収する。
 -/
 theorem primeGe5BranchACyclotomicCoreExistenceOnWieferich_of_cfbrcExceptional
     (hExc : PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget) :
@@ -4699,6 +4705,9 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_coreExistence_and_restore
 /--
 primitive route の concrete-ready mainline は、
 CFBRC 例外枝 existence theorem と restore があれば橋だけで閉じる。
+
+[CFBRC] ここで使う existence theorem は local Branch A 版を既定とし、
+bridge 層への昇格は後回しにする。
 -/
 theorem primeGe5BranchAPrimitivePacketDescent_of_cfbrcExceptional_and_restore
     (hExc : PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget)
@@ -4707,6 +4716,19 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_cfbrcExceptional_and_restore
   primeGe5BranchAPrimitivePacketDescent_of_coreExistence_and_restore
     (primeGe5BranchACyclotomicCoreExistenceOnWieferich_of_cfbrcExceptional hExc)
     hRestore
+
+/--
+Branch A 局所 exceptional existence theorem を canonical 入口と見る packet-descent wrapper。
+
+[CFBRC] 現段階ではこの local theorem を先に実装し、
+parallel / normalized naming は薄い bridge として扱う。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_localExceptionalExistence_and_restore
+    (hLocal : PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_cfbrcExceptional_and_restore
+    hLocal hRestore
 
 /--
 primitive route の concrete-ready mainline は、

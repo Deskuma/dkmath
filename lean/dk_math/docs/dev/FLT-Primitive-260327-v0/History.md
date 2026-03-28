@@ -1,5 +1,7 @@
 # FLT Primitive Packet Descent — History
 
+## History Log
+
 ### 日時: 2026/03/27 22:23 JST
 
 1. 目的:
@@ -1166,6 +1168,43 @@
    - `CFBRC/Bridge` への昇格は、
      statement の薄さと再利用価値がさらに固まってから行う、
      という方針がコードコメントでも追えるようになった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認する。
+
+### 日時: 2026/03/28 19:01 JST
+
+1. 目的:
+   - `review-021` の方針どおり、
+     exceptional existence theorem は
+     boundary-normalized 名より先に
+     Branch A 局所 theorem を canonical 入口として使うと明示する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     の
+     `PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget`
+     周辺に
+     `[CFBRC]`
+     注記を追加した。
+   - 同ファイルに
+     `primeGe5BranchAPrimitivePacketDescent_of_localExceptionalExistence_and_restore`
+     を追加し、
+     local theorem を直接 mainline へ差し込む入口を置いた。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     `branchAPrimitivePacketDescentAdapter_of_localExceptionalExistence_and_restore`
+     を追加した。
+
+3. 結論:
+   - 現段階の canonical 入口は、
+     `PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget`
+     という local Branch A theorem だと
+     API 名の上でも固定された。
+   - boundary-normalized / parallel concrete 名は、
+     引き続き昇格候補・bridge 名として保持する。
 
 4. 検証:
    - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
