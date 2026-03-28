@@ -1414,7 +1414,12 @@ abbrev CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteAdapterTarget : Prop :=
 abbrev CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichAdapterTarget : Prop :=
   DkMath.FLT.CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget
 
-/-- ordinary branch theorem と平行な exceptional existence concrete 候補の provider 側 alias。 -/
+/--
+ordinary branch theorem と平行な exceptional existence concrete 候補の provider 側 alias。
+
+[CFBRC] ここでは Branch A 局所 theorem をそのまま再公開し、
+`CFBRC/Bridge` への昇格は後続タスクとして保留する。
+-/
 abbrev CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichAdapterTarget : Prop :=
   DkMath.FLT.CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichTarget
 
@@ -1818,6 +1823,9 @@ theorem branchAPrimitivePacketDescentAdapter_of_directConcreteExistence_and_rest
 /--
 ordinary branch theorem と平行な exceptional existence concrete 候補があれば、
 provider 側でも packet descent adapter は restore と合わせて橋だけで閉じる。
+
+[CFBRC] local theorem を provider mainline に差し込むための橋であり、
+bridge 層への本格移設はまだ行っていない。
 -/
 theorem branchAPrimitivePacketDescentAdapter_of_parallelExceptionalExistence_and_restore
     (hPar : CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichAdapterTarget)

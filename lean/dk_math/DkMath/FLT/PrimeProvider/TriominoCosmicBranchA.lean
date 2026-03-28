@@ -750,6 +750,9 @@ abbrev CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget : Prop :=
 `exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime`
 と最も平行な exceptional concrete theorem 候補。
 
+[CFBRC] まずは Branch A 局所 theorem として実装し、
+`CFBRC/Bridge` への昇格は statement が十分薄いと確認できてから後回しにする。
+
 付録:
 - 今回は primitive 条件を含まない existence-only 版なので、
   statement は
@@ -4448,6 +4451,9 @@ theorem cfbrcExceptionalBoundaryCorePrimeExistenceOnWieferich_of_directConcrete
 /--
 existence-only exceptional target があれば、
 parallel concrete theorem 候補もそのまま満たされる。
+
+[CFBRC] この橋は local naming 固定のために置いており、
+昇格前の段階では Branch A 局所 route を canonical とする。
 -/
 theorem cfbrcExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferich_of_existence
     (hExist : CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget) :
@@ -4829,6 +4835,9 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_directConcreteExistence_and_res
 /--
 ordinary branch theorem と平行な exceptional concrete theorem 候補があれば、
 primitive packet descent は restore と合わせて橋だけで閉じる。
+
+[CFBRC] 現段階では local Branch A theorem を入口にし、
+`CFBRC/Bridge` 側への配置は後続の整理課題として保留する。
 -/
 theorem primeGe5BranchAPrimitivePacketDescent_of_parallelExceptionalExistence_and_restore
     (hPar : CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichTarget)

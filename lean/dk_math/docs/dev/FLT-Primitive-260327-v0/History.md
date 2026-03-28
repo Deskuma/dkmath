@@ -1138,3 +1138,36 @@
    - その上で、
      `CFBRC/Bridge`
      側へ最小補強として移す余地があるかを見る。
+
+### 日時: 2026/03/28 18:52 JST
+
+1. 目的:
+   - `review-021` の判断に従い、
+     exceptional existence concrete theorem は
+     まず Branch A 局所版として保持し、
+     `CFBRC/Bridge` への昇格は後回しだと明示する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     の
+     `CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichTarget`
+     とその周辺 bridge に
+     `[CFBRC]`
+     注記を追加した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     の provider alias / adapter にも
+     `[CFBRC]`
+     注記を追加した。
+
+3. 結論:
+   - current mainline の読みとしては、
+     exceptional existence theorem は
+     Branch A 局所 theorem を canonical として先に使う。
+   - `CFBRC/Bridge` への昇格は、
+     statement の薄さと再利用価値がさらに固まってから行う、
+     という方針がコードコメントでも追えるようになった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認する。
