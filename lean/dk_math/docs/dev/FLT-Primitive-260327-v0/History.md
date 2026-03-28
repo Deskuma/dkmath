@@ -175,3 +175,49 @@ Archive
      pack-local 補助補題を
      `TriominoCosmicBranchAExceptional.lean`
      側へ追加する。
+
+### 日時: 2026/03/29 00:39 JST
+
+1. 目的:
+   - proof file 上の pack-local target に、
+     concrete missing theorem として追える名前を与える。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `ExceptionalRightBoundaryCorePrimeOfWieferichTarget`
+     を追加した。
+   - さらに
+     - `primeGe5BranchAExceptionalPackLocalBoundaryExistence_of_namedKernel`
+     - `exceptional_right_boundary_core_prime_of_wieferich_of_mainline`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_namedKernel`
+     を追加し、
+     named kernel と pack-local / mainline target の往復橋を置いた。
+
+3. 結論:
+   - `review-025`
+     で想定していた
+     `exceptional_right_boundary_core_prime_of_wieferich`
+     相当は、
+     proof file 上では
+     `ExceptionalRightBoundaryCorePrimeOfWieferichTarget`
+     を埋める作業として追えるようになった。
+   - 以後、
+     concrete 証明本体はこの named kernel を直接返す形で起こし、
+     mainline target へは thin bridge で戻せばよい。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認する。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalRightBoundaryCorePrimeOfWieferichTarget`
+     の concrete 証明 skeleton を
+     `intro` / `rcases` レベルで新ファイルに起こす。
+   - `primeGe5BranchAExceptionalBoundaryData_default`
+     を入口で呼ぶ形にして、
+     ordinary reference theorem との差分がどこに残るかを Lean 上で露出させる。

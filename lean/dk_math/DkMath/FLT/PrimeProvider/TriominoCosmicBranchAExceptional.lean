@@ -47,6 +47,15 @@ abbrev PrimeGe5BranchAExceptionalPackLocalBoundaryExistenceTarget : Prop :=
       ¬ q ∣ (z - y)
 
 /--
+Branch A exceptional proof file で次に direct に埋めるべき concrete kernel。
+
+[CFBRC] `review-025` 以降は、この theorem 名を
+pack-local right branch existence の canonical missing theorem とみなす。
+-/
+abbrev ExceptionalRightBoundaryCorePrimeOfWieferichTarget : Prop :=
+  PrimeGe5BranchAExceptionalPackLocalBoundaryExistenceTarget
+
+/--
 ordinary branch における boundary-core prime existence の reference theorem。
 
 [CFBRC] exceptional proof は、この ordinary theorem と仮定・中間結論を
@@ -126,6 +135,41 @@ theorem primeGe5BranchAExceptionalBoundaryCorePrimeExistence_on_pack_of_split
       ¬ q ∣ (z - y) := by
   exact hSplit hpack.hp hpack.hp5 hpack.gap_pos hpack.y_pos
     hpack.gap_coprime_right (Or.inr ⟨hp_dvd_gap, hWieferich⟩)
+
+/--
+named concrete kernel があれば、
+proof file の pack-local main target はそのまま閉じる。
+
+[CFBRC] 今後は concrete 証明本体をこの theorem 名で積み、
+target 名は bridge 越しにだけ参照する。
+-/
+theorem primeGe5BranchAExceptionalPackLocalBoundaryExistence_of_namedKernel
+    (hKernel : ExceptionalRightBoundaryCorePrimeOfWieferichTarget) :
+    PrimeGe5BranchAExceptionalPackLocalBoundaryExistenceTarget :=
+  hKernel
+
+/--
+proof file mainline target があれば、
+named concrete kernel は right branch 抽出として回収できる。
+-/
+theorem exceptional_right_boundary_core_prime_of_wieferich_of_mainline
+    (hMain : PrimeGe5BranchAExceptionalExistenceMainlineTarget) :
+    ExceptionalRightBoundaryCorePrimeOfWieferichTarget :=
+  primeGe5BranchAExceptionalBoundaryCorePrimeExistence_on_pack_of_mainline hMain
+
+/--
+named concrete kernel があれば、
+proof file mainline target へは thin bridge で戻せる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_namedKernel
+    (hKernel : ExceptionalRightBoundaryCorePrimeOfWieferichTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  by
+    intro p x y z hpack hp_dvd_gap hWieferich
+    rcases hKernel hpack hp_dvd_gap hWieferich with
+      ⟨q, hqprime, hqcore, hq_not_dvd_gap⟩
+    refine ⟨q, hqprime, ?_, hq_not_dvd_gap⟩
+    simpa [DkMath.CFBRC.boundaryCyclotomicPrimeCore] using hqcore
 
 /--
 pack-local boundary existence があれば、
