@@ -4231,6 +4231,25 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_wieferichExistence_and_restore
     hRestore
 
 /--
+primitive route の concrete-ready mainline。
+
+付録:
+- selection 側の theorem statement は最小 wrapper と witness 付き wrapper の
+  2 形まで整理されたが、実装本命は後者と見る。
+- したがって concrete 実装探索の canonical 入口は、
+  `PrimeGe5BranchACyclotomicExistenceOnWieferichTarget`
+  と
+  `PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget`
+  の 2 本で読む。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_concreteSelection_and_restore
+    (hConcrete : PrimeGe5BranchACyclotomicExistenceOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_wieferichExistence_and_restore
+    hConcrete hRestore
+
+/--
 valuation peel を error-lift 1 本に局所化した smaller-packet bridge。
 
 付録:

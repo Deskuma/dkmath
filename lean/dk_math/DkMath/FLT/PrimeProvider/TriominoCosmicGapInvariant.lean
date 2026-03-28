@@ -1601,6 +1601,16 @@ theorem branchAPrimitivePacketDescentAdapter_of_wieferichExistence_and_restore
     hWieferichEx hRestore
 
 /--
+primitive route の concrete-ready selection statement を provider 側で読む canonical wrapper。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_concreteSelection_and_restore
+    (hConcrete : BranchACyclotomicExistenceOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  branchAPrimitivePacketDescentAdapter_of_wieferichExistence_and_restore
+    hConcrete hRestore
+
+/--
 暫定 concrete adapter for the Branch A Wieferich witness route.
 
 付録:

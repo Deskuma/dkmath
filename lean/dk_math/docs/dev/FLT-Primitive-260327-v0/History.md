@@ -463,3 +463,58 @@
    - restore 側との対称性も見ながら、
      primitive route の concrete theorem 候補を
      1 つに固定する。
+
+### 日時: 2026/03/28 12:44 JST
+
+1. 目的:
+   - selection 側の theorem statement を、
+     最小 wrapper と concrete-ready wrapper の二択から
+     実装本命に固定する。
+   - primitive route では、
+     Branch A が既に持つ Wieferich witness を明示入力に取る
+     concrete-ready 形を canonical に読む方針をコード上でも残す。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `primeGe5BranchAPrimitivePacketDescent_of_concreteSelection_and_restore`
+     を追加した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも対応する
+     `branchAPrimitivePacketDescentAdapter_of_concreteSelection_and_restore`
+     を追加した。
+   - どちらも中身は既存の
+     `...of_wieferichExistence_and_restore`
+     への thin wrapper だが、
+     naming と docstring で
+     「primitive route の concrete-ready mainline は witness 付き selection」
+     だと固定した。
+
+3. 結論:
+   - selection 側の statement は、
+     API 最小形としては
+     `PrimeGe5BranchACyclotomicExistenceTarget`
+     を残しつつ、
+     concrete 実装探索の canonical 入口は
+     `PrimeGe5BranchACyclotomicExistenceOnWieferichTarget`
+     と見てよい段になった。
+   - したがって今後の primitive route では、
+     「最小 wrapper を証明するか」
+     ではなく、
+     「witness 付き existence theorem をどう concrete に立てるか」
+     を first target に据えられる。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認する。
+
+5. 次の課題:
+   - `PrimeGe5BranchACyclotomicExistenceOnWieferichTarget`
+     の concrete theorem を、
+     Branch A 条件と既存 cyclotomic / Zsigmondy 語彙の間で
+     どう定式化するかを決める。
+   - restore 側は現状の
+     `PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget`
+     を維持し、
+     selection 側だけを本命 statement に固定して前進する。
