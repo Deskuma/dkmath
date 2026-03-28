@@ -1406,6 +1406,10 @@ abbrev CFBRCPrimitiveBoundarySelectionOnSplitAdapterTarget : Prop :=
 abbrev CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitAdapterTarget : Prop :=
   DkMath.FLT.CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitTarget
 
+/-- selection 側で first に direct concrete 実装を狙う既定入口の provider 側 alias。 -/
+abbrev CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteAdapterTarget : Prop :=
+  DkMath.FLT.CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteTarget
+
 /-- primitive packet restoration 段を表す provider 側 alias。 -/
 abbrev BranchAPrimitivePacketRestoreAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitivePacketRestoreTarget
@@ -1761,6 +1765,16 @@ theorem branchAPrimitivePacketDescentAdapter_of_coreSplitSelection_and_restore
     BranchAPrimitivePacketDescentAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_coreSplitSelection_and_restore
     hSplitCore hRestore
+
+/--
+right branch を direct concrete theorem の既定入口と見た provider-side bridge。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_directConcreteSelection_and_restore
+    (hDirect : CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_directConcreteSelection_and_restore
+    hDirect hRestore
 
 /--
 暫定 concrete adapter for the Branch A Wieferich witness route.

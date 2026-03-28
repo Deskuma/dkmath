@@ -910,3 +910,46 @@
      exceptional 側の statement を
      `BoundarySide.right`
      を明示した既存 theorem の仮定順へさらに寄せる。
+
+### 日時: 2026/03/28 17:44 JST
+
+1. 目的:
+   - concrete theorem 候補が
+     right branch と split 全体の二層で揃った状態から、
+     first direct target を 1 本に固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteTarget`
+     を追加した。
+   - 同ファイルに
+     `primeGe5BranchAPrimitivePacketDescent_of_directConcreteSelection_and_restore`
+     を追加し、
+     direct concrete 既定入口から packet descent へ行く thin bridge を置いた。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     対応する adapter alias / bridge を追加した。
+
+3. 結論:
+   - `review-016`
+     の判断どおり、
+     first に direct concrete 実装を狙う既定入口は
+     `CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget`
+     系だと名前の上でも固定された。
+   - split 全体の concrete theorem 候補は保持するが、
+     mainline の “first direct target”
+     はもう right branch に決め打ちできる。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認する。
+
+5. 次の課題:
+   - `CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteTarget`
+     を concrete に埋める。
+   - 必要なら、
+     この target の仮定順と命名を
+     `CFBRC/Bridge`
+     の通常枝 theorem とさらに平行に揃える。

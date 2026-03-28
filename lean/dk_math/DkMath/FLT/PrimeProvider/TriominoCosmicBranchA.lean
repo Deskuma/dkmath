@@ -710,6 +710,21 @@ abbrev CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitTarget : Prop :=
   CFBRCPrimitiveBoundarySelectionOnSplitTarget
 
 /--
+selection 側で first に direct concrete 実装を狙う既定入口。
+
+付録:
+- `review-016` の判断に沿って、
+  split 全体ではなく right branch
+  `CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget`
+  を first direct target として固定する。
+- split concrete theorem 候補は保持するが、
+  mainline 上の「まず埋めるべき concrete theorem」は
+  この target と読む。
+-/
+abbrev CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteTarget : Prop :=
+  CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget
+
+/--
 distinguished prime が取れた後の smaller-packet restoration 段。
 
 付録:
@@ -4577,6 +4592,16 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_coreSplitSelection_and_restore
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_splitSelection_and_restore
     hSplitCore hRestore
+
+/--
+right branch を direct concrete theorem の既定入口と見た primitive packet descent bridge。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_directConcreteSelection_and_restore
+    (hDirect : CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_coreExceptional_and_restore
+    hDirect hRestore
 
 /--
 primitive route の concrete-ready mainline。
