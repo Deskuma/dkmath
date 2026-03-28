@@ -441,3 +441,60 @@ Archive
      を返す concrete theorem 本体を切る。
    - 必要なら ordinary reference theorem 側との差分入力だけを
      別 target にもう 1 段切る。
+
+### 日時: 2026/03/29 JST
+
+1. 目的:
+   - boundary-normalized concrete theorem の入力を、
+     split theorem の right branch と同じ形にさらに揃える。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `ExceptionalBoundaryDataSplitRightConcreteTarget`
+     を追加した。
+   - この target は
+     `d ∣ x`
+     と
+     `u^(d-1) ≡ 1 [MOD d^2]`
+     を
+     ひとつの exceptional datum
+     `(d ∣ x ∧ ...)`
+     として受ける。
+   - さらに
+     - `exceptional_boundaryData_right_branch_supply_concrete_of_splitRight`
+     - `exceptional_right_boundary_core_prime_of_wieferich_of_splitRightConcrete`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_splitRightConcrete`
+     - `primeGe5BranchAPrimitivePacketDescent_of_splitRightConcrete_and_restore`
+     を追加し、
+     split-right concrete theorem 名から
+     既存の concrete / named kernel / mainline / packet descent
+     へ戻る橋を揃えた。
+
+3. 結論:
+   - proof file で next body を書くとき、
+     必ずしも
+     `ExceptionalBoundaryDataRightBranchSupplyConcreteTarget`
+     を直接受ける必要はなく、
+     split theorem の right branch と完全に平行な
+     `ExceptionalBoundaryDataSplitRightConcreteTarget`
+     を first body target にしてよい。
+   - これにより、
+     ordinary 側との差分入力は
+     `Or.inr` 相当の exceptional datum
+     1 個としてさらに局所化された。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDataSplitRightConcreteTarget`
+     を返す concrete theorem 本体を切る。
+   - 必要なら、その本文でも
+     ordinary reference theorem と共有できる部分と
+     exceptional-only arithmetic をさらに分離する。

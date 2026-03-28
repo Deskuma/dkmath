@@ -85,6 +85,24 @@ abbrev ExceptionalBoundaryDataRightBranchSupplyConcreteTarget : Prop :=
   ExceptionalBoundaryDataRightBranchSupplyTarget
 
 /--
+boundary-normalized concrete theorem を、
+split theorem の right branch と同じ入力形で読む local target。
+
+[CFBRC] 本文で truly new な入力は
+`d ∣ x` と Wieferich 条件の組なので、
+必要ならまずこの形で concrete theorem を書いてから
+通常の concrete target へ戻せばよい。
+-/
+abbrev ExceptionalBoundaryDataSplitRightConcreteTarget : Prop :=
+  ∀ {d x u : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    (d ∣ x ∧ u ^ (d - 1) ≡ 1 [MOD d ^ 2]) →
+    ∃ q : ℕ, Nat.Prime q ∧
+      q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ∧
+      ¬ q ∣ x
+
+/--
 ordinary branch における boundary-core prime existence の reference theorem。
 
 [CFBRC] exceptional proof は、この ordinary theorem と仮定・中間結論を
@@ -245,6 +263,19 @@ theorem exceptional_split_right_branch_supply_of_boundaryConcrete
   exceptional_split_right_branch_supply_of_boundaryData hBoundary
 
 /--
+split-right 形の concrete theorem 名から、
+通常の boundary-normalized concrete target へ戻る橋。
+
+[CFBRC] concrete 本文を split theorem と完全に同じ right-branch 入力で
+書きたい場合の canonical reducer。
+-/
+theorem exceptional_boundaryData_right_branch_supply_concrete_of_splitRight
+    (hRight : ExceptionalBoundaryDataSplitRightConcreteTarget) :
+    ExceptionalBoundaryDataRightBranchSupplyConcreteTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  exact hRight hd_prime hd_ge hx hu hcop ⟨hdvd, hWieferich⟩
+
+/--
 right branch supply があれば、
 named kernel はそのまま閉じる。
 
@@ -265,6 +296,16 @@ theorem exceptional_right_boundary_core_prime_of_wieferich_of_boundaryConcrete
     ExceptionalRightBoundaryCorePrimeOfWieferichTarget :=
   exceptional_right_boundary_core_prime_of_wieferich_of_rightBranchSupply
     (exceptional_split_right_branch_supply_of_boundaryConcrete hBoundary)
+
+/--
+split-right 形の concrete theorem 名からも、
+named kernel へは同じ配線で戻せる。
+-/
+theorem exceptional_right_boundary_core_prime_of_wieferich_of_splitRightConcrete
+    (hRight : ExceptionalBoundaryDataSplitRightConcreteTarget) :
+    ExceptionalRightBoundaryCorePrimeOfWieferichTarget :=
+  exceptional_right_boundary_core_prime_of_wieferich_of_boundaryConcrete
+    (exceptional_boundaryData_right_branch_supply_concrete_of_splitRight hRight)
 
 /--
 named kernel があれば、
@@ -300,6 +341,15 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_boundaryConcrete
     PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
   primeGe5BranchAExceptionalExistenceMainline_of_namedKernel
     (exceptional_right_boundary_core_prime_of_wieferich_of_boundaryConcrete hBoundary)
+
+/--
+split-right 形の concrete theorem 名から proof file mainline へ戻る橋。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_splitRightConcrete
+    (hRight : ExceptionalBoundaryDataSplitRightConcreteTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_boundaryConcrete
+    (exceptional_boundaryData_right_branch_supply_concrete_of_splitRight hRight)
 
 /--
 pack-local boundary existence があれば、
@@ -357,6 +407,17 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_boundaryConcrete_and_restore
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_exceptionalMainline_and_restore
     (primeGe5BranchAExceptionalExistenceMainline_of_boundaryConcrete hBoundary)
+    hRestore
+
+/--
+split-right 形の concrete theorem 名から primitive packet descent へ戻る橋。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_splitRightConcrete_and_restore
+    (hRight : ExceptionalBoundaryDataSplitRightConcreteTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_boundaryConcrete_and_restore
+    (exceptional_boundaryData_right_branch_supply_concrete_of_splitRight hRight)
     hRestore
 
 end DkMath.FLT
