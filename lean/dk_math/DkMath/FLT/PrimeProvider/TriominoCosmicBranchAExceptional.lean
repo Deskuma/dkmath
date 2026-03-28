@@ -66,6 +66,16 @@ abbrev ExceptionalSplitRightBranchSupplyTarget : Prop :=
   PrimeGe5BranchAExceptionalPackLocalBoundaryExistenceTarget
 
 /--
+pack をほどいた後に残る boundary-normalized exceptional 供給 target。
+
+[CFBRC] concrete 証明本文では、
+まず pack 由来の bundle をここへ落とし、
+その後の新数学をこの target に集約する。
+-/
+abbrev ExceptionalBoundaryDataRightBranchSupplyTarget : Prop :=
+  CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget
+
+/--
 ordinary branch における boundary-core prime existence の reference theorem。
 
 [CFBRC] exceptional proof は、この ordinary theorem と仮定・中間結論を
@@ -199,6 +209,20 @@ theorem exceptional_split_right_branch_supply_of_split
     ⟨hp, hp5, hgap_pos, hy_pos, hcop_gap_y, hp_dvd_gap, hWieferich⟩
   exact hSplit hp hp5 hgap_pos hy_pos hcop_gap_y
     (Or.inr ⟨hp_dvd_gap, hWieferich⟩)
+
+/--
+boundary-normalized exceptional supply があれば、
+pack-local right branch supply は bundle 展開だけで従う。
+
+[CFBRC] これにより、
+pack の解体と exceptional arithmetic / CFBRC 本体の責務を分離できる。
+-/
+theorem exceptional_split_right_branch_supply_of_boundaryData
+    (hBoundary : ExceptionalBoundaryDataRightBranchSupplyTarget) :
+    ExceptionalSplitRightBranchSupplyTarget := by
+  intro p x y z hpack hp_dvd_gap hWieferich
+  exact hBoundary hpack.hp hpack.hp5 hpack.gap_pos hpack.y_pos
+    hpack.gap_coprime_right hp_dvd_gap hWieferich
 
 /--
 right branch supply があれば、

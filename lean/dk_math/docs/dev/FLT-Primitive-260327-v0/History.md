@@ -352,3 +352,43 @@ Archive
    - `ExceptionalSplitRightBranchSupplyTarget`
      を directly 返す concrete theorem を、
      skeleton ではなく local arithmetic / CFBRC exceptional input から起こす。
+
+### 日時: 2026/03/29 01:10 JST
+
+1. 目的:
+   - `ExceptionalSplitRightBranchSupplyTarget`
+     を、pack-local 段と boundary-normalized 段にさらに分離する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `ExceptionalBoundaryDataRightBranchSupplyTarget`
+     を追加した。
+   - さらに
+     `exceptional_split_right_branch_supply_of_boundaryData`
+     を追加し、
+     boundary-normalized exceptional supply から
+     pack-local right branch supply を回収する橋を置いた。
+
+3. 結論:
+   - concrete 証明で今後直接狙うべき new math は、
+     pack を含む target そのものではなく、
+     `ExceptionalBoundaryDataRightBranchSupplyTarget`
+     にかなり近い形へ集約できるようになった。
+   - これにより、
+     pack 解体は `boundaryData_default`,
+     exceptional arithmetic / CFBRC 本体は boundary-normalized theorem
+     という責務分離がさらに明確になった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認する。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDataRightBranchSupplyTarget`
+     を直接返す concrete theorem を切り、
+     new math の入口を boundary-normalized exceptional statement に固定する。
