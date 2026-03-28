@@ -311,3 +311,44 @@ Archive
    - `ExceptionalSplitRightBranchSupplyTarget`
      を直接返す concrete 補題を切り、
      proof file 内の新数学をそこへ集約する。
+
+### 日時: 2026/03/29 01:02 JST
+
+1. 目的:
+   - `ExceptionalSplitRightBranchSupplyTarget`
+     自体の proof skeleton を新ファイルに直置きし、
+     今後の concrete 本文の first target をさらに明示化する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `exceptional_split_right_branch_supply_of_split`
+     を追加した。
+   - この定理も
+     `primeGe5BranchAExceptionalBoundaryData_default`
+     で bundle を一括抽出し、
+     `CFBRCBoundaryCorePrimeExistenceOnSplitTarget`
+     の right branch へ流すだけの skeleton である。
+
+3. 結論:
+   - proof file で次に directly 埋めるべき theorem 名は、
+     `ExceptionalSplitRightBranchSupplyTarget`
+     を返す concrete 補題だとさらに明確になった。
+   - 以後は、
+     `exceptional_split_right_branch_supply_of_split`
+     を reference skeleton、
+     `exceptional_right_boundary_core_prime_of_wieferich_of_rightBranchSupply`
+     を named-kernel bridge として使い分ければよい。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認する。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalSplitRightBranchSupplyTarget`
+     を directly 返す concrete theorem を、
+     skeleton ではなく local arithmetic / CFBRC exceptional input から起こす。

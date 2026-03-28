@@ -185,6 +185,22 @@ theorem exceptional_right_boundary_core_prime_of_wieferich_of_split
     (Or.inr ⟨hp_dvd_gap, hWieferich⟩)
 
 /--
+right branch supply 自体の proof skeleton。
+
+[CFBRC] 以後の concrete 証明本文は、
+まずこの theorem 名で書いてから named kernel / mainline へ戻せばよい。
+-/
+theorem exceptional_split_right_branch_supply_of_split
+    (hSplit : CFBRCBoundaryCorePrimeExistenceOnSplitTarget) :
+    ExceptionalSplitRightBranchSupplyTarget := by
+  intro p x y z hpack hp_dvd_gap hWieferich
+  rcases primeGe5BranchAExceptionalBoundaryData_default
+      hpack hp_dvd_gap hWieferich with
+    ⟨hp, hp5, hgap_pos, hy_pos, hcop_gap_y, hp_dvd_gap, hWieferich⟩
+  exact hSplit hp hp5 hgap_pos hy_pos hcop_gap_y
+    (Or.inr ⟨hp_dvd_gap, hWieferich⟩)
+
+/--
 right branch supply があれば、
 named kernel はそのまま閉じる。
 
