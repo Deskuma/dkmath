@@ -1540,6 +1540,18 @@ theorem branchAPrimitivePacketDescentAdapter_of_zsigmondy_arithmetic_and_restore
     hZ hArith hRestore
 
 /--
+primitive packet descent adapter は、
+Branch A 専用 cyclotomic prime existence と restore-from-arithmetic
+の 2 本だけがあれば橋で閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_cyclotomicPrime_and_restore
+    (hCyc : BranchAPrimitiveCyclotomicPrimeAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_cyclotomicPrime_and_restore
+    hCyc hRestore
+
+/--
 暫定 concrete adapter for the Branch A Wieferich witness route.
 
 付録:

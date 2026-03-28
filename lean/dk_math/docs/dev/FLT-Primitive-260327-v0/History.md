@@ -296,3 +296,56 @@
      （`¬ p ∣ a-b` 前提）
      を踏まえ、
      Branch A 専用の existence wrapper が必要かを判断する。
+
+### 日時: 2026/03/28 00:31 JST
+
+1. 目的:
+   - `review-005.md`
+     の整理に合わせて、
+     primitive mainline の concretely missing kernel が
+     本当に
+     - `PrimeGe5BranchAPrimitiveCyclotomicPrimeTarget`
+     - `PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget`
+     の 2 本だけだと、
+     theorem 名でも読めるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `primeGe5BranchAPrimitivePacketDescent_of_cyclotomicPrime_and_restore`
+     を追加した。
+   - この theorem は
+     - `primeGe5BranchAPrimitiveZsigmondy_of_cyclotomicPrime`
+     - `primeGe5BranchAPrimitiveDistinguishedPrimeArithmetic_default`
+     - `primeGe5BranchAPrimitivePacketDescent_of_zsigmondy_arithmetic_and_restore`
+     を合成するだけの canonical wrapper である。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     `branchAPrimitivePacketDescentAdapter_of_cyclotomicPrime_and_restore`
+     を追加した。
+
+3. 結論:
+   - primitive packet descent は、
+     中間 API をすべて隠せば
+     `cyclotomic prime existence`
+     と
+     `restore-from-arithmetic`
+     の 2 本だけがあれば橋で閉じる。
+   - したがって arithmetic fallout は完全に solved middle layer と見てよく、
+     実質的な未完核 2 本という戦況が
+     code 上でも固定された。
+
+4. 検証:
+   - build はこの追記の次段で
+     `DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+     と
+     `DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+     を順番に確認する。
+
+5. 次の課題:
+   - `PrimeGe5BranchAPrimitiveCyclotomicPrimeTarget`
+     の concrete 実装に必要な
+     Branch A 専用 existence wrapper の宣言案を切る。
+   - `PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget`
+     が truly constructive に見えるか、
+     さらに中間 packet / local kernel を挟むべきかを判断する。

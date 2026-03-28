@@ -4117,6 +4117,27 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_zsigmondy_arithmetic_and_restor
       hZ hArith hRestore)
 
 /--
+primitive packet descent は、
+Branch A 専用の cyclotomic-prime existence と
+restore-from-arithmetic
+の 2 本だけがあれば橋で閉じる。
+
+付録:
+- arithmetic fallout は既に default 実装で回収できるため、
+  primitive mainline の concretely missing kernel を
+  本当に 2 本へ見せる canonical wrapper である。
+- `zsigmondy` 層は中間 API としてのみ経由する。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_cyclotomicPrime_and_restore
+    (hCyc : PrimeGe5BranchAPrimitiveCyclotomicPrimeTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_zsigmondy_arithmetic_and_restore
+    (primeGe5BranchAPrimitiveZsigmondy_of_cyclotomicPrime hCyc)
+    primeGe5BranchAPrimitiveDistinguishedPrimeArithmetic_default
+    hRestore
+
+/--
 valuation peel を error-lift 1 本に局所化した smaller-packet bridge。
 
 付録:
