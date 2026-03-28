@@ -548,3 +548,49 @@ Archive
      exceptional datum から right boundary-core prime existence を導く
      arithmetic / CFBRC 補題を
      proof file 内でさらに局所化する。
+
+### 日時: 2026/03/29 JST
+
+1. 目的:
+   - datum concrete target の本文入口を、
+     theorem 名としてさらに固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `exceptional_boundary_datum_concrete_of_split`
+     を追加した。
+   - この定理は
+     `ExceptionalBoundaryDatumConcreteTarget`
+     の canonical proof skeleton であり、
+     `rcases hDatum with ⟨hdvd, hWieferich⟩`
+     の後に split theorem の right branch
+     `Or.inr ⟨hdvd, hWieferich⟩`
+     へ流すだけの形を固定する。
+
+3. 結論:
+   - proof file で次に directly 本文を書く theorem 名は引き続き
+     `ExceptionalBoundaryDatumConcreteTarget`
+     だが、
+     その本文の canonical skeleton も
+     theorem として明示された。
+   - 以後の truly new math は、
+     split theorem 全体ではなく
+     `exceptional_boundary_datum_concrete_of_split`
+     の中で
+     `hSplit`
+     を何で concrete に供給するか、
+     その一点にさらに絞って考えられる。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumConcreteTarget`
+     を返す concrete theorem 本体を、
+     `hSplit` 供給の local arithmetic / CFBRC exceptional 補題として切る。

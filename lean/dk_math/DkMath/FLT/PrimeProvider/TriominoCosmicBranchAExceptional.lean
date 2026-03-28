@@ -323,6 +323,20 @@ theorem exceptional_boundaryData_right_branch_supply_concrete_of_datum
     (exceptional_boundaryData_splitRight_concrete_of_datum hDatum)
 
 /--
+exceptional datum 形の concrete theorem の proof skeleton。
+
+[CFBRC] 本文では
+`intro ...; rcases hDatum with ⟨hdvd, hWieferich⟩`
+から始めれば十分だ、という入口を theorem 名として固定する。
+-/
+theorem exceptional_boundary_datum_concrete_of_split
+    (hSplit : CFBRCBoundaryCorePrimeExistenceOnSplitTarget) :
+    ExceptionalBoundaryDatumConcreteTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hDatum
+  rcases hDatum with ⟨hdvd, hWieferich⟩
+  exact hSplit hd_prime hd_ge hx hu hcop (Or.inr ⟨hdvd, hWieferich⟩)
+
+/--
 right branch supply があれば、
 named kernel はそのまま閉じる。
 
