@@ -56,6 +56,16 @@ abbrev ExceptionalRightBoundaryCorePrimeOfWieferichTarget : Prop :=
   PrimeGe5BranchAExceptionalPackLocalBoundaryExistenceTarget
 
 /--
+split reference theorem の right branch だけを供給する局所 target。
+
+[CFBRC] `review-027` 以降は、
+global split theorem 全体ではなくこの right branch supply を
+exceptional 側の直接の missing input とみなす。
+-/
+abbrev ExceptionalSplitRightBranchSupplyTarget : Prop :=
+  PrimeGe5BranchAExceptionalPackLocalBoundaryExistenceTarget
+
+/--
 ordinary branch における boundary-core prime existence の reference theorem。
 
 [CFBRC] exceptional proof は、この ordinary theorem と仮定・中間結論を
@@ -173,6 +183,27 @@ theorem exceptional_right_boundary_core_prime_of_wieferich_of_split
     ⟨hp, hp5, hgap_pos, hy_pos, hcop_gap_y, hp_dvd_gap, hWieferich⟩
   exact hSplit hp hp5 hgap_pos hy_pos hcop_gap_y
     (Or.inr ⟨hp_dvd_gap, hWieferich⟩)
+
+/--
+right branch supply があれば、
+named kernel はそのまま閉じる。
+
+[CFBRC] 以後の concrete 補題は、
+まずこの supply target を返す形で切ってよい。
+-/
+theorem exceptional_right_boundary_core_prime_of_wieferich_of_rightBranchSupply
+    (hSupply : ExceptionalSplitRightBranchSupplyTarget) :
+    ExceptionalRightBoundaryCorePrimeOfWieferichTarget :=
+  hSupply
+
+/--
+named kernel があれば、
+split right branch supply もそのまま回収できる。
+-/
+theorem exceptional_split_right_branch_supply_of_namedKernel
+    (hKernel : ExceptionalRightBoundaryCorePrimeOfWieferichTarget) :
+    ExceptionalSplitRightBranchSupplyTarget :=
+  hKernel
 
 /--
 named concrete kernel があれば、

@@ -269,3 +269,45 @@ Archive
      の right branch を、
      Branch A exceptional 専用の concrete theorem でどう供給するかを
      新ファイル側でさらに薄く切り出す。
+
+### 日時: 2026/03/29 00:55 JST
+
+1. 目的:
+   - `hSplit` の right branch 供給だけを、
+     proof file 上で別 target 名として切り出す。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `ExceptionalSplitRightBranchSupplyTarget`
+     を追加した。
+   - さらに
+     - `exceptional_right_boundary_core_prime_of_wieferich_of_rightBranchSupply`
+     - `exceptional_split_right_branch_supply_of_namedKernel`
+     を追加し、
+     named kernel と
+     right branch supply の往復橋を置いた。
+
+3. 結論:
+   - exceptional proof の missing input は、
+     もはや
+     `CFBRCBoundaryCorePrimeExistenceOnSplitTarget`
+     全体ではなく、
+     `ExceptionalSplitRightBranchSupplyTarget`
+     として追えるようになった。
+   - したがって次に切る concrete 補題は、
+     split theorem 全体を返す必要はなく、
+     right branch supply だけを返せば十分だと固定された。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認する。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalSplitRightBranchSupplyTarget`
+     を直接返す concrete 補題を切り、
+     proof file 内の新数学をそこへ集約する。
