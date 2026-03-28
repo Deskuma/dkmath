@@ -33,6 +33,87 @@ abbrev PrimeGe5BranchAExceptionalExistenceMainlineTarget : Prop :=
   PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget
 
 /--
+ordinary branch における boundary-core prime existence の reference theorem。
+
+[CFBRC] exceptional proof は、この ordinary theorem と仮定・中間結論を
+1 対 1 で対応させながら起こすのを基本方針とする。
+-/
+theorem cfbrcBoundaryCorePrimeExistence_reference
+    {d x u : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 5 ≤ d)
+    (hx : 0 < x) (hu : 0 < u)
+    (hcop : Nat.Coprime x u)
+    (hOrd : ¬ d ∣ x) :
+    ∃ q : ℕ, Nat.Prime q ∧
+      q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ∧
+      ¬ q ∣ x := by
+  have hd_ge3 : 3 ≤ d := by omega
+  rcases DkMath.CFBRC.exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime
+      DkMath.CFBRC.BoundarySide.right
+      (d := d) (x := x) (u := u)
+      hd_prime hd_ge3 hx hu hcop hOrd with
+    ⟨q, hqprime, hqcore, hq_not_dvd_x, _hprim⟩
+  exact ⟨q, hqprime, hqcore, hq_not_dvd_x⟩
+
+/--
+Branch A local exceptional proof で直接使う boundary-normalized input bundle。
+
+[CFBRC] concrete proof 本体では、まず pack からこの形へ落としてから
+ordinary reference theorem と比較する。
+-/
+theorem primeGe5BranchAExceptionalBoundaryData_default
+    {p x y z : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hWieferich : y ^ (p - 1) ≡ 1 [MOD p ^ 2]) :
+    Nat.Prime p ∧ 5 ≤ p ∧ 0 < (z - y) ∧ 0 < y ∧
+      Nat.Coprime (z - y) y ∧
+      p ∣ (z - y) ∧
+      y ^ (p - 1) ≡ 1 [MOD p ^ 2] := by
+  exact ⟨hpack.hp, hpack.hp5, hpack.gap_pos, hpack.y_pos,
+    hpack.gap_coprime_right, hp_dvd_gap, hWieferich⟩
+
+/--
+proof file mainline target から、
+Branch A の pack-local な boundary-core existence は直接回収できる。
+
+[CFBRC] concrete proof をこのファイルで進める際の first reduction。
+-/
+theorem primeGe5BranchAExceptionalBoundaryCorePrimeExistence_on_pack_of_mainline
+    (hMain : PrimeGe5BranchAExceptionalExistenceMainlineTarget)
+    {p x y z : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hWieferich : y ^ (p - 1) ≡ 1 [MOD p ^ 2]) :
+    ∃ q : ℕ, Nat.Prime q ∧
+      q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right p (z - y) y ∧
+      ¬ q ∣ (z - y) := by
+  rcases hMain hpack hp_dvd_gap hWieferich with
+    ⟨q, hqprime, hqcore, hq_not_dvd_gap⟩
+  refine ⟨q, hqprime, ?_, hq_not_dvd_gap⟩
+  simpa [DkMath.CFBRC.boundaryCyclotomicPrimeCore] using hqcore
+
+/--
+split reference theorem があれば、
+Branch A exceptional pack 上の boundary-core existence は right branch 評価で従う。
+
+[CFBRC] 以後の concrete 証明は、
+通常枝 `¬ d ∣ x` を reference theorem で閉じ、
+例外枝だけを local mainline で埋める構図で読める。
+-/
+theorem primeGe5BranchAExceptionalBoundaryCorePrimeExistence_on_pack_of_split
+    (hSplit : CFBRCBoundaryCorePrimeExistenceOnSplitTarget)
+    {p x y z : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hWieferich : y ^ (p - 1) ≡ 1 [MOD p ^ 2]) :
+    ∃ q : ℕ, Nat.Prime q ∧
+      q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right p (z - y) y ∧
+      ¬ q ∣ (z - y) := by
+  exact hSplit hpack.hp hpack.hp5 hpack.gap_pos hpack.y_pos
+    hpack.gap_coprime_right (Or.inr ⟨hp_dvd_gap, hWieferich⟩)
+
+/--
 proof file mainline target があれば、
 primitive packet descent へは既存 wrapper でそのまま流せる。
 
