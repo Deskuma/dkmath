@@ -7,7 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5
 import DkMath.FLT.CosmicPetalBridge
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN
-import DkMath.FLT.PrimeProvider.TriominoCosmicBranchA
+import DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional
 
 #print "file: DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant"
 
