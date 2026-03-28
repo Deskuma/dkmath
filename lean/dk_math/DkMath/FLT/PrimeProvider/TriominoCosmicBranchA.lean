@@ -613,6 +613,24 @@ abbrev PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget : Prop :=
     ∃ q : ℕ, Nat.Prime q ∧ q ∣ DkMath.CFBRC.cyclotomicPrimeCore p (z - y) y ∧ ¬ q ∣ (z - y)
 
 /--
+CFBRC 座標に正規化した prime-exponent exceptional existence target。
+
+付録:
+- `x := z-y`, `u := y`, `d := p` と置いたとき、
+  Branch A の selection 側 missing theorem を
+  counterexample pack 非依存の boundary-normalized 形で読む。
+- `CFBRC/Bridge` や `PrimitiveBeam` 既存語彙へ寄せるなら、
+  まずこの target を concrete theorem 候補とみなすのが自然である。
+-/
+abbrev CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget : Prop :=
+  ∀ {d x u : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ DkMath.CFBRC.cyclotomicPrimeCore d x u ∧ ¬ q ∣ x
+
+/--
 distinguished prime が取れた後の smaller-packet restoration 段。
 
 付録:
@@ -4149,6 +4167,17 @@ theorem primeGe5BranchACyclotomicCoreExistenceOnWieferich_of_cfbrcExceptional
   exact hExc hpack hp_dvd_gap hWieferich
 
 /--
+boundary-normalized exceptional existence theorem があれば、
+Branch A 専用の CFBRC exceptional theorem は thin bridge で閉じる。
+-/
+theorem primeGe5BranchACFBRCExceptionalExistence_of_boundaryExceptional
+    (hBoundary : CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget) :
+    PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget := by
+  intro p x y z hpack hp_dvd_gap hWieferich
+  exact hBoundary hpack.hp hpack.hp5 hpack.gap_pos hpack.y_pos
+    hpack.gap_coprime_right hp_dvd_gap hWieferich
+
+/--
 distinguished prime が取れれば、
 primitive restoration に必要な arithmetic fallout は機械的に従う。
 -/
@@ -4314,6 +4343,18 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_cfbrcExceptional_and_restore
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_coreExistence_and_restore
     (primeGe5BranchACyclotomicCoreExistenceOnWieferich_of_cfbrcExceptional hExc)
+    hRestore
+
+/--
+primitive route の concrete-ready mainline は、
+boundary-normalized exceptional existence theorem と restore からでも閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_boundaryExceptional_and_restore
+    (hBoundary : CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_cfbrcExceptional_and_restore
+    (primeGe5BranchACFBRCExceptionalExistence_of_boundaryExceptional hBoundary)
     hRestore
 
 /--

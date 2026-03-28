@@ -622,3 +622,56 @@
      語彙へどこまで正規化できるかを詰める。
    - もしそれ以上の一般化が重いなら、
      Branch A 専用 exceptional theorem としてそのまま concrete 実装へ入る。
+
+### 日時: 2026/03/28 16:03 JST
+
+1. 目的:
+   - Branch A 専用 exceptional theorem を、
+     `z,y,p`
+     固有の statement のままではなく
+     `x := z-y`, `u := y`, `d := p`
+     の CFBRC boundary-normalized 座標でも読めるようにする。
+   - これにより、
+     `CFBRC/Bridge` / `PrimitiveBeam`
+     既存語彙への接続候補をさらに明示化する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget`
+     を追加した。
+   - 同ファイルに
+     - `primeGe5BranchACFBRCExceptionalExistence_of_boundaryExceptional`
+     - `primeGe5BranchAPrimitivePacketDescent_of_boundaryExceptional_and_restore`
+     を追加し、
+     boundary-normalized exceptional theorem から
+     Branch A 専用 exceptional theorem、
+     さらに primitive packet descent へ戻す橋を固定した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも対応する provider alias / bridge を追加した。
+
+3. 結論:
+   - selection 側の first missing theorem は引き続き
+     `PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget`
+     だが、
+     それは now
+     `CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget`
+     という boundary-normalized 形でも読める。
+   - したがって次段では、
+     既存 `CFBRC/Bridge`
+     や `PrimitiveBeam`
+     の theorem 群をこの normalized target にどこまで接続できるかを
+     より直接に検討できる。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認する。
+
+5. 次の課題:
+   - `CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget`
+     の concrete theorem が、
+     既存 `CFBRC/Bridge` / `PrimitiveBeam`
+     語彙の薄い補強で済むかを見極める。
+   - それでも一般化が重い場合は、
+     この normalized target を final missing theorem の実装形として採用する。
