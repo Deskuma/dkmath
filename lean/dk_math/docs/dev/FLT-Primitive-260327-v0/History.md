@@ -117,3 +117,61 @@ Archive
      に対応する補助補題を
      `TriominoCosmicBranchAExceptional.lean`
      側へ順次移す。
+
+### 日時: 2026/03/29 00:31 JST
+
+1. 目的:
+   - exceptional proof file における concrete 証明の主目標を、
+     `cyclotomicPrimeCore`
+     ではなく
+     pack-local な
+     `boundaryCyclotomicPrimeCore .right`
+     形へ固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `PrimeGe5BranchAExceptionalPackLocalBoundaryExistenceTarget`
+     を追加した。
+   - さらに
+     - `primeGe5BranchAExceptionalExistenceMainline_of_packLocalBoundary`
+     - `primeGe5BranchAExceptionalExistenceMainline_iff_packLocalBoundary`
+     を追加し、
+     mainline target と pack-local boundary target の往復橋を置いた。
+
+3. 結論:
+   - proof file で今後直接埋めるべき statement は、
+     `PrimeGe5BranchAExceptionalExistenceMainlineTarget`
+     そのものではなく、
+     `PrimeGe5BranchAExceptionalPackLocalBoundaryExistenceTarget`
+     と見てよい状態になった。
+   - これにより、
+     `boundaryCyclotomicPrimeCore .right p (z-y) y`
+     を主目標にして concrete 証明を積み、
+     最後に thin bridge で mainline へ戻す方針が固定された。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認する。
+
+5. 失敗事例:
+   - 一度、
+     pack-local ではなく global target
+     `CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget`
+     へ直接上げようとして、
+     `PrimeGe5CounterexamplePack`
+     を要求しない型との不整合で build error が出た。
+   - これは proof file の責務に合わせて
+     pack-local statement へ戻すことで解消した。
+
+6. 次の課題:
+   - `PrimeGe5BranchAExceptionalPackLocalBoundaryExistenceTarget`
+     を直接埋める concrete 補題
+     `exceptional_right_boundary_core_prime_of_wieferich`
+     相当を切る。
+   - 必要なら、
+     ordinary reference theorem の proof skeleton を模した
+     pack-local 補助補題を
+     `TriominoCosmicBranchAExceptional.lean`
+     側へ追加する。

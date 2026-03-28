@@ -33,6 +33,20 @@ abbrev PrimeGe5BranchAExceptionalExistenceMainlineTarget : Prop :=
   PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget
 
 /--
+proof file で concrete に埋める既定の pack-local right branch target。
+
+[CFBRC] mainline target と同値だが、
+proof 実装では `boundaryCyclotomicPrimeCore .right` の形を主目標にする。
+-/
+abbrev PrimeGe5BranchAExceptionalPackLocalBoundaryExistenceTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧
+      q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right p (z - y) y ∧
+      ¬ q ∣ (z - y)
+
+/--
 ordinary branch における boundary-core prime existence の reference theorem。
 
 [CFBRC] exceptional proof は、この ordinary theorem と仮定・中間結論を
@@ -112,6 +126,38 @@ theorem primeGe5BranchAExceptionalBoundaryCorePrimeExistence_on_pack_of_split
       ¬ q ∣ (z - y) := by
   exact hSplit hpack.hp hpack.hp5 hpack.gap_pos hpack.y_pos
     hpack.gap_coprime_right (Or.inr ⟨hp_dvd_gap, hWieferich⟩)
+
+/--
+pack-local boundary existence があれば、
+proof file mainline target へは `boundaryCyclotomicPrimeCore` の展開だけで戻れる。
+
+[CFBRC] concrete proof の最終成果物は当面こちらを埋め、
+公開 mainline にはこの橋で戻す。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_packLocalBoundary
+    (hLocal : PrimeGe5BranchAExceptionalPackLocalBoundaryExistenceTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget := by
+  intro p x y z hpack hp_dvd_gap hWieferich
+  rcases hLocal hpack hp_dvd_gap hWieferich with
+    ⟨q, hqprime, hqcore, hq_not_dvd_gap⟩
+  refine ⟨q, hqprime, ?_, hq_not_dvd_gap⟩
+  simpa [DkMath.CFBRC.boundaryCyclotomicPrimeCore] using hqcore
+
+/--
+mainline target と pack-local boundary existence target は同値。
+
+[CFBRC] 以後このファイルでは、
+どちらを埋めても同じ concrete 証明探索だとみなしてよい。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_iff_packLocalBoundary :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget ↔
+      PrimeGe5BranchAExceptionalPackLocalBoundaryExistenceTarget := by
+  constructor
+  · intro hMain p x y z hpack hp_dvd_gap hWieferich
+    exact primeGe5BranchAExceptionalBoundaryCorePrimeExistence_on_pack_of_mainline
+      hMain hpack hp_dvd_gap hWieferich
+  · intro hLocal
+    exact primeGe5BranchAExceptionalExistenceMainline_of_packLocalBoundary hLocal
 
 /--
 proof file mainline target があれば、
