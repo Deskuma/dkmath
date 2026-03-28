@@ -1414,6 +1414,10 @@ abbrev CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteAdapterTarget : Prop :=
 abbrev CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichAdapterTarget : Prop :=
   DkMath.FLT.CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget
 
+/-- boundary-core prime existence の split theorem を表す provider 側 alias。 -/
+abbrev CFBRCBoundaryCorePrimeExistenceOnSplitAdapterTarget : Prop :=
+  DkMath.FLT.CFBRCBoundaryCorePrimeExistenceOnSplitTarget
+
 /-- direct concrete target の primitive-part を表す provider 側 alias。 -/
 abbrev CFBRCExceptionalPrimitiveKernelOnWieferichAdapterTarget : Prop :=
   DkMath.FLT.CFBRCExceptionalPrimitiveKernelOnWieferichTarget
@@ -1795,6 +1799,18 @@ theorem branchAPrimitivePacketDescentAdapter_of_directConcreteParts_and_restore
     BranchAPrimitivePacketDescentAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_directConcreteParts_and_restore
     hExist hKernel hRestore
+
+/--
+split existence と primitive kernel が揃えば、
+provider 側でも packet descent adapter は橋だけで閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_splitExistence_kernel_and_restore
+    (hSplitExist : CFBRCBoundaryCorePrimeExistenceOnSplitAdapterTarget)
+    (hKernel : CFBRCExceptionalPrimitiveKernelOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_splitExistence_kernel_and_restore
+    hSplitExist hKernel hRestore
 
 /--
 暫定 concrete adapter for the Branch A Wieferich witness route.

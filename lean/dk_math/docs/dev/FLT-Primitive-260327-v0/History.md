@@ -1000,3 +1000,45 @@
    - 同時に
      `CFBRCExceptionalPrimitiveKernelOnWieferichTarget`
      が単なる既存 primitive 条件の再包装かどうかを見極める。
+
+### 日時: 2026/03/28 18:16 JST
+
+1. 目的:
+   - direct concrete target のうち existence 側も、
+     通常枝と Wieferich 例外枝の split で読めるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     `CFBRCBoundaryCorePrimeExistenceOnSplitTarget`
+     を追加した。
+   - 同ファイルに
+     - `cfbrcExceptionalBoundaryCorePrimeExistenceOnWieferich_of_split`
+     - `cfbrcBoundaryCorePrimeExistenceOnSplit_of_exceptional`
+     - `primeGe5BranchAPrimitivePacketDescent_of_splitExistence_kernel_and_restore`
+     を追加した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     対応する provider alias / bridge を追加した。
+
+3. 結論:
+   - existence 側 missing math も、
+     theorem の形で
+     「通常枝は既存 `CFBRC/Bridge`、例外枝だけ新 theorem」
+     と読めるようになった。
+   - これにより、
+     existence 側の本当の missing math も
+     right branch 1 本だけだとさらに明確になった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を順番に実行し、build 完了まで待って成功を確認する。
+
+5. 次の課題:
+   - `CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget`
+     を、
+     既存 `CFBRC/Bridge`
+     theorem の例外枝差し替えだけでどこまで書けるかを試す。
+   - primitive kernel 側がもし既存 theorem の再包装なら、
+     selection 側の truly new kernel は existence 1 本だけになる。
