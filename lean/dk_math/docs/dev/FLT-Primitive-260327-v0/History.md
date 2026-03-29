@@ -876,3 +876,50 @@ Archive
 6. 次の課題:
    - `ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget`
      の concrete theorem 本体を切る。
+
+### 日時: 2026/03/29 JST
+
+1. 目的:
+   - prepared concrete theorem 名に対して、
+     直接本文を書き始める canonical skeleton を固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_split`
+     - `exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_reference_and_datum`
+     を追加した。
+   - 前者では
+     `intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich`
+     から
+     split theorem の right branch へ直接流す
+     canonical skeleton を theorem 名として固定した。
+   - あわせて
+     - `primeGe5BranchAExceptionalExistenceMainline_of_preparedArithmeticCore`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_preparedConcrete`
+     も追加し、
+     prepared core / prepared concrete から
+     mainline へ戻る橋を揃えた。
+
+3. 結論:
+   - proof file でいま直接追うべき着手点は、
+     抽象 target だけでなく
+     `exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_split`
+     という skeleton theorem 名でも読めるようになった。
+   - これにより、
+     prepared concrete 本体は
+     theorem 名の上でも
+     「どこから書き始めるか」
+     がさらに明確になった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget`
+     の concrete theorem 本体を切る。

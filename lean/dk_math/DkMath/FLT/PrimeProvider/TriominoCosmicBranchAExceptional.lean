@@ -406,6 +406,20 @@ theorem exceptional_boundary_datum_prepared_arithmetic_core_of_concrete
   hConcrete
 
 /--
+prepared concrete theorem 名の canonical proof skeleton。
+
+[CFBRC] いま concrete 本文を書き始めるなら、
+まずこの theorem 名に対して
+`intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich`
+から入ればよい。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_split
+    (hSplit : CFBRCBoundaryCorePrimeExistenceOnSplitTarget) :
+    ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  exact hSplit hd_prime hd_ge hx hu hcop (Or.inr ⟨hdvd, hWieferich⟩)
+
+/--
 prepared arithmetic core の concrete theorem 名から、
 canonical arithmetic core へ戻る橋。
 -/
@@ -488,6 +502,15 @@ theorem exceptional_boundary_datum_prepared_arithmetic_core_of_reference_and_dat
     (hDatum : ExceptionalBoundaryDatumConcreteTarget) :
     ExceptionalBoundaryDatumPreparedArithmeticCoreTarget :=
   exceptional_boundary_datum_prepared_arithmetic_core_of_split
+    (cfbrcBoundaryCorePrimeExistence_split_of_reference_and_datum hDatum)
+
+/--
+datum theorem から prepared concrete theorem 名へ入る canonical wrapper。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_reference_and_datum
+    (hDatum : ExceptionalBoundaryDatumConcreteTarget) :
+    ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget :=
+  exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_split
     (cfbrcBoundaryCorePrimeExistence_split_of_reference_and_datum hDatum)
 
 /--
@@ -720,6 +743,24 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_preparedArithmeticCore_and_rest
   primeGe5BranchAPrimitivePacketDescent_of_arithmeticCore_and_restore
     (exceptional_boundary_datum_arithmetic_core_of_prepared hPrepared)
     hRestore
+
+/--
+prepared arithmetic core から proof file mainline へ戻る橋。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_preparedArithmeticCore
+    (hPrepared : ExceptionalBoundaryDatumPreparedArithmeticCoreTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_arithmeticCore
+    (exceptional_boundary_datum_arithmetic_core_of_prepared hPrepared)
+
+/--
+prepared concrete theorem 名から proof file mainline へ戻る橋。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_preparedConcrete
+    (hConcrete : ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_preparedArithmeticCore
+    (exceptional_boundary_datum_prepared_arithmetic_core_of_concrete hConcrete)
 
 /--
 prepared arithmetic core の concrete theorem 名と restore theorem があれば、
