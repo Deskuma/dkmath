@@ -2855,6 +2855,54 @@ Archive
    - `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
      の concrete 本体を書く。
 
+### 日時: 2026/03/30 01:17 JST
+
+1. 目的:
+   - current practical first direct body が
+     「未証明」ではなく
+     「偽」であるなら、
+     それを Lean 上で明示的に確定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `primeGe5BranchAExceptionalPracticalWitnessDatum_counterexample`
+     - `counterexample_not_dvd_selectedCore`
+     - `not_primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
+     を追加した。
+   - 反例は
+     `(d, x, u, q) = (5, 5, 7, 2)`。
+   - この 4-tuple について
+     `PrimeGe5BranchAExceptionalPracticalWitnessDatum 5 5 7 2`
+     は成立する一方、
+     `¬ 2 ∣ cyclotomicPrimeCore 5 1 (7 - 1)`
+     を `decide` で閉じた。
+   - したがって
+     `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
+     は universal theorem として偽である。
+
+3. 結論:
+   - current practical route の
+     first direct body として固定していた
+     `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
+     は、
+     「まだ書けていない命題」ではなく
+     「偽命題」だと Lean 上で確定した。
+   - よってこの route は、
+     本文待ちではなく命題選定の誤りとして
+     打ち切ってよい。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   を完了まで待って実行し、成功を確認した。
+
+5. 次の課題:
+   - exceptional primitive route の命題を切り替える。
+   - 新しい candidate theorem は、
+     この反例を避ける stronger hypothesis か、
+     あるいは別 local face / 別 selection statement を
+     first body に採る必要がある。
+
 ### 日時: 2026/03/29 23:55 JST
 
 1. 目的:

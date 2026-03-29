@@ -854,6 +854,48 @@ abbrev PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget : Pr
   PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumTarget
 
 /--
+current practical datum route の explicit counterexample datum。
+
+`(d, x, u, q) = (5, 5, 7, 2)` は
+datum の仮定をすべて満たすが、
+`q ∣ cyclotomicPrimeCore d 1 (u - 1)` は壊れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalWitnessDatum_counterexample :
+    PrimeGe5BranchAExceptionalPracticalWitnessDatum 5 5 7 2 := by
+  refine ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · decide
+  · omega
+  · omega
+  · omega
+  · decide
+  · exact dvd_rfl
+  · decide
+  · decide
+  · decide
+  · decide
+
+/--
+counterexample datum では
+`2 ∤ cyclotomicPrimeCore 5 1 (7 - 1)`。
+-/
+theorem counterexample_not_dvd_selectedCore :
+    ¬ 2 ∣ DkMath.CFBRC.cyclotomicPrimeCore 5 1 (7 - 1) := by
+  decide
+
+/--
+current practical first direct body は universal theorem としては偽である。
+
+反例は
+`(d, x, u, q) = (5, 5, 7, 2)`。
+-/
+theorem not_primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget :
+    ¬ PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget := by
+  intro h
+  have hbad : 2 ∣ DkMath.CFBRC.cyclotomicPrimeCore 5 1 (7 - 1) := by
+    exact h primeGe5BranchAExceptionalPracticalWitnessDatum_counterexample
+  exact counterexample_not_dvd_selectedCore hbad
+
+/--
 on-witness body が立てば、datum 版も直ちに従う。
 -/
 theorem primeGe5BranchAExceptionalPracticalBodyOnDatum_of_bodyOnWitness
