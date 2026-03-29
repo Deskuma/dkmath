@@ -1366,6 +1366,14 @@ abbrev BranchASelectedDiffPowWitnessConcreteAdapterTarget : Prop :=
 abbrev BranchAExceptionalPracticalConcreteAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAExceptionalPracticalConcreteTarget
 
+/-- practical entrance の witness supply 部を表す provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalWitnessSupplyAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalWitnessSupplyTarget
+
+/-- practical entrance の on-witness body 部を表す provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalBodyOnWitnessAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyOnWitnessTarget
+
 /-- proof file exceptional existence mainline の provider 側 alias。 -/
 abbrev BranchAExceptionalExistenceMainlineAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAExceptionalExistenceMainlineTarget
@@ -1932,6 +1940,25 @@ theorem branchAExceptionalExistenceMainlineAdapter_of_practicalConcrete
     (hDiff : BranchAExceptionalPracticalConcreteAdapterTarget) :
     BranchAExceptionalExistenceMainlineAdapterTarget :=
   DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_practicalConcrete hDiff
+
+/--
+practical entrance は、
+provider 側から見ても witness supply と on-witness body が揃えば橋だけで閉じる。
+-/
+theorem branchAExceptionalPracticalConcreteAdapter_of_witnessSupply_and_bodyOnWitness
+    (hWitness : BranchAExceptionalPracticalWitnessSupplyAdapterTarget)
+    (hBody : BranchAExceptionalPracticalBodyOnWitnessAdapterTarget) :
+    BranchAExceptionalPracticalConcreteAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalPracticalConcrete_of_witnessSupply_and_bodyOnWitness
+    hWitness hBody
+
+/--
+practical entrance の missing body を on-witness concrete 1 本として読む provider wrapper。
+-/
+theorem branchAExceptionalPracticalConcreteAdapter_of_bodyOnWitness
+    (hBody : BranchAExceptionalPracticalBodyOnWitnessAdapterTarget) :
+    BranchAExceptionalPracticalConcreteAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalPracticalConcrete_of_bodyOnWitness hBody
 
 /--
 official direct body の concrete theorem 名が立てば、

@@ -538,12 +538,57 @@ abbrev PrimeGe5BranchAExceptionalPracticalConcreteTarget : Prop :=
   ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessConcreteTarget
 
 /--
+practical entrance の witness supply 部を表す local target。
+
+[CFBRC] practical entrance は existential 版なので、
+missing math を分けて読むなら
+まず `q ∣ x + 1` を返すこの供給部と、
+その `q` で差冪 divisibility を返す on-witness body に分かれる。
+-/
+abbrev PrimeGe5BranchAExceptionalPracticalWitnessSupplyTarget : Prop :=
+  ExceptionalBoundaryDatumPreparedArithmeticWitnessTarget
+
+/--
+practical entrance の on-witness body 部を表す local target。
+
+[CFBRC] witness supply は既に concrete 実装済みなので、
+practical entrance の truly new body は実質この on-witness 版として追える。
+-/
+abbrev PrimeGe5BranchAExceptionalPracticalBodyOnWitnessTarget : Prop :=
+  ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget
+
+/--
 practical entrance の canonical self bridge。
 -/
 theorem primeGe5BranchAExceptionalPracticalConcrete_of_self
     (hDiff : PrimeGe5BranchAExceptionalPracticalConcreteTarget) :
     PrimeGe5BranchAExceptionalPracticalConcreteTarget :=
   hDiff
+
+/--
+practical entrance は、
+witness supply と on-witness body が揃えば橋だけで閉じる。
+-/
+theorem primeGe5BranchAExceptionalPracticalConcrete_of_witnessSupply_and_bodyOnWitness
+    (hWitness : PrimeGe5BranchAExceptionalPracticalWitnessSupplyTarget)
+    (hBody : PrimeGe5BranchAExceptionalPracticalBodyOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalConcreteTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  rcases hWitness hd_prime hd_ge hx hu hcop hdvd hWieferich with
+    ⟨q, hqprime, hq_dvd_x1, hq_not_dvd_x⟩
+  refine ⟨q, hqprime, hq_dvd_x1, hq_not_dvd_x, ?_⟩
+  exact hBody hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x
+
+/--
+concrete arithmetic witness は既にあるので、
+practical entrance の missing body を on-witness concrete 1 本として読んでよい。
+-/
+theorem primeGe5BranchAExceptionalPracticalConcrete_of_bodyOnWitness
+    (hBody : PrimeGe5BranchAExceptionalPracticalBodyOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalConcrete_of_witnessSupply_and_bodyOnWitness
+    exceptional_boundary_datum_prepared_arithmetic_witness_concrete
+    hBody
 
 /-- `cyclotomicPrimeCore d 1 (u - 1)` は residual sum に一致する。 -/
 private theorem cyclotomicPrimeCore_one_pred_eq_residual_sum

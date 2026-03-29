@@ -2208,3 +2208,64 @@ Archive
 6. 次の課題:
    - `PrimeGe5BranchAExceptionalPracticalConcreteTarget`
      の concrete theorem 本体を直接切る。
+
+### 日時: 2026/03/29 15:31 JST
+
+1. 目的:
+   - practical entrance
+     `PrimeGe5BranchAExceptionalPracticalConcreteTarget`
+     の中身を、
+     theorem / target 名の上でも
+     「witness supply」と
+     「on-witness body」
+     の 2 part に分解する。
+   - そのうえで、
+     arithmetic witness は既に concrete 実装済みなので、
+     practical route の truly new body が
+     on-witness concrete 1 本だと固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `PrimeGe5BranchAExceptionalPracticalWitnessSupplyTarget`
+     - `PrimeGe5BranchAExceptionalPracticalBodyOnWitnessTarget`
+     を追加した。
+   - さらに
+     - `primeGe5BranchAExceptionalPracticalConcrete_of_witnessSupply_and_bodyOnWitness`
+     - `primeGe5BranchAExceptionalPracticalConcrete_of_bodyOnWitness`
+     を追加した。
+   - 後者では
+     `exceptional_boundary_datum_prepared_arithmetic_witness_concrete`
+     を固定して使っている。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも対応する
+     - `BranchAExceptionalPracticalWitnessSupplyAdapterTarget`
+     - `BranchAExceptionalPracticalBodyOnWitnessAdapterTarget`
+     - `branchAExceptionalPracticalConcreteAdapter_of_witnessSupply_and_bodyOnWitness`
+     - `branchAExceptionalPracticalConcreteAdapter_of_bodyOnWitness`
+     を追加した。
+
+3. 結論:
+   - practical entrance は、
+     theorem 名の上でも
+     `witness supply + on-witness body`
+     の合成として読めるようになった。
+   - arithmetic witness は既に concrete 実装済みなので、
+     current practical route の truly new body は、
+     実質
+     `PrimeGe5BranchAExceptionalPracticalBodyOnWitnessTarget`
+     1 本である。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `PrimeGe5BranchAExceptionalPracticalBodyOnWitnessTarget`
+     すなわち
+     `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget`
+     の concrete theorem 本体を切る。
