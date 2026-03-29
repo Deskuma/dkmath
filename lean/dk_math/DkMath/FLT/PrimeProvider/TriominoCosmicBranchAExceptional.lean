@@ -383,6 +383,85 @@ theorem exceptional_boundary_prime_not_dvd_core_of_dvd_x_ne_d
       hd_prime hd_ge hx hu hcop hqprime hq_dvd_x hq_dvd_core)
 
 /--
+`core / d` の prime divisor は、`d ∤ core / d` が分かっていれば `x` を割れない。
+
+proof-004 step 4 のうち、
+`gcd(core / d, x) = 1`
+へ向かう prime-local kernel。
+-/
+theorem exceptional_boundary_prime_not_dvd_x_of_dvd_core_div
+    {d x u q : ℕ}
+    (hd_prime : Nat.Prime d)
+    (hd_ge : 5 ≤ d)
+    (hx : 0 < x) (hu : 0 < u)
+    (hcop : Nat.Coprime x u)
+    (hcore_dvd : d ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u)
+    (hcore_div_not_dvd_d : ¬ d ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u / d)
+    (hqprime : Nat.Prime q)
+    (hq_dvd_core_div : q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u / d) :
+    ¬ q ∣ x := by
+  intro hq_dvd_x
+  have hq_dvd_core : q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u := by
+    exact dvd_trans hq_dvd_core_div (Nat.div_dvd_of_dvd hcore_dvd)
+  have hq_eq_d :
+      q = d :=
+    exceptional_boundary_prime_dvd_x_and_core_imp_eq_d
+      hd_prime hd_ge hx hu hcop hqprime hq_dvd_x hq_dvd_core
+  exact hcore_div_not_dvd_d (hq_eq_d ▸ hq_dvd_core_div)
+
+/--
+`d ∣ core`, `d ∤ core / d`, `1 < core / d`
+まで来れば、`core / d` の prime divisorから concrete witness が取れる。
+
+proof-004 step 4-5 を current boundary-core route 用にまとめた wrapper。
+-/
+theorem exceptional_boundary_core_concrete_of_div_data
+    {d x u : ℕ}
+    (hd_prime : Nat.Prime d)
+    (hd_ge : 5 ≤ d)
+    (hx : 0 < x) (hu : 0 < u)
+    (hcop : Nat.Coprime x u)
+    (hcore_dvd : d ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u)
+    (hcore_div_not_dvd_d : ¬ d ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u / d)
+    (hcore_div_gt1 : 1 < DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u / d) :
+    ∃ q : ℕ, Nat.Prime q ∧
+      q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ∧
+      ¬ q ∣ x := by
+  obtain ⟨q, hqprime, hq_dvd_core_div⟩ :=
+    Nat.exists_prime_and_dvd (Nat.ne_of_gt hcore_div_gt1)
+  refine ⟨q, hqprime, ?_, ?_⟩
+  · exact dvd_trans hq_dvd_core_div (Nat.div_dvd_of_dvd hcore_dvd)
+  · exact exceptional_boundary_prime_not_dvd_x_of_dvd_core_div
+      hd_prime hd_ge hx hu hcop hcore_dvd hcore_div_not_dvd_d hqprime hq_dvd_core_div
+
+/--
+proof-004 route の残核を valuation / `mod d^2` だけに押し込んだ concrete target。
+
+ここまで来れば、下流の existence mainline / primitive descent は橋だけで閉じる。
+-/
+abbrev ExceptionalBoundaryDatumPreparedArithmeticCoreDivDataTarget : Prop :=
+  ∀ {d x u : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    d ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ∧
+    ¬ d ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u / d ∧
+    1 < DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u / d
+
+/--
+div-data target が立てば、prepared arithmetic core concrete は橋だけで閉じる。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_divData
+    (hDiv : ExceptionalBoundaryDatumPreparedArithmeticCoreDivDataTarget) :
+    ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  rcases hDiv hd_prime hd_ge hx hu hcop hdvd hWieferich with
+    ⟨hcore_dvd, hcore_div_not_dvd_d, hcore_div_gt1⟩
+  exact exceptional_boundary_core_concrete_of_div_data
+    hd_prime hd_ge hx hu hcop hcore_dvd hcore_div_not_dvd_d hcore_div_gt1
+
+/--
 witness-aware arithmetic part を受ける CFBRC existence 部。
 
 [CFBRC] 実際に残っている local kernel は、
@@ -3108,6 +3187,18 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_preparedArithmeticCore_and_rest
     hRestore
 
 /--
+div-data target と restore theorem があれば、
+primitive packet descent へもそのまま流せる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_divData_and_restore
+    (hDiv : ExceptionalBoundaryDatumPreparedArithmeticCoreDivDataTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_preparedArithmeticCore_and_restore
+    (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_divData hDiv)
+    hRestore
+
+/--
 prepared arithmetic core から proof file mainline へ戻る橋。
 -/
 theorem primeGe5BranchAExceptionalExistenceMainline_of_preparedArithmeticCore
@@ -3124,6 +3215,15 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_preparedConcrete
     PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
   primeGe5BranchAExceptionalExistenceMainline_of_preparedArithmeticCore
     (exceptional_boundary_datum_prepared_arithmetic_core_of_concrete hConcrete)
+
+/--
+div-data target が立てば、proof file mainline へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_divData
+    (hDiv : ExceptionalBoundaryDatumPreparedArithmeticCoreDivDataTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_preparedConcrete
+    (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_divData hDiv)
 
 /--
 prepared arithmetic part の concrete 実装を既定値にすると、

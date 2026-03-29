@@ -334,3 +334,80 @@ Archive
      今回の step 1 補題と組み合わせて
      `ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget`
      を直接閉じる。
+
+### 日時: 2026/03/30 03:46 JST
+
+1. 目的:
+   - `proof-004`
+     の step 4-5 を先に API 化し、
+     boundary-core route の残核を
+     valuation / `mod d^2`
+     部だけに押し込む。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `exceptional_boundary_prime_not_dvd_x_of_dvd_core_div`
+     を追加した。
+     これは
+     `d ∣ core`,
+     `¬ d ∣ core / d`,
+     `q ∣ core / d`
+     なら
+     `¬ q ∣ x`
+     を返す prime-local kernel である。
+   - 同ファイルに
+     `exceptional_boundary_core_concrete_of_div_data`
+     を追加し、
+     `d ∣ core`,
+     `¬ d ∣ core / d`,
+     `1 < core / d`
+     から
+     concrete witness
+     `q ∣ core ∧ ¬ q ∣ x`
+     を回収できるようにした。
+   - さらに
+     `ExceptionalBoundaryDatumPreparedArithmeticCoreDivDataTarget`
+     と
+     `exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_divData`
+     を追加し、
+     prepared arithmetic core concrete の残核を
+     div-data 1 本に局所化した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     `BranchAExceptionalBoundaryCoreDivDataAdapterTarget`
+     と、
+     existence mainline / primitive packet descent への adapter を追加した。
+
+3. 結論:
+   - boundary-core route の後半
+     （prime を取って downstream へ渡す部分）
+     は bridge として閉じた。
+   - したがって、
+     current missing math は本当に
+     `d ∣ core`,
+     `¬ d ∣ core / d`,
+     `1 < core / d`
+     を返す arithmetic / valuation 補題だけである。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 備考:
+   - 今回も `Mathlib.FLT` は参照していない。
+   - `Exceptional` 側の warning は引き続き
+     `native_decide`
+     linter のみである。
+
+6. 次の課題:
+   - `boundaryCyclotomicPrimeCore .right d x u`
+     について
+     `d ∣ core`
+     と
+     `core ≡ d [MOD d^2]`
+     あるいは同等の valuation 補題を立てる。
+   - そこが通れば、
+     `ExceptionalBoundaryDatumPreparedArithmeticCoreDivDataTarget`
+     を直接埋めて本線を前へ進められる。

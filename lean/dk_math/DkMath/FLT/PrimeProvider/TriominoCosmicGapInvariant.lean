@@ -1440,6 +1440,10 @@ abbrev BranchAExceptionalExistenceMainlineAdapterTarget : Prop :=
 abbrev BranchAExceptionalBoundaryCoreWitnessConcreteAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAExceptionalBoundaryCoreWitnessConcreteTarget
 
+/-- `proof-004` step 4-5 までを切り出した provider 側 alias。 -/
+abbrev BranchAExceptionalBoundaryCoreDivDataAdapterTarget : Prop :=
+  DkMath.FLT.ExceptionalBoundaryDatumPreparedArithmeticCoreDivDataTarget
+
 /-- `p ∤ t` primitive route の witness 付き local core を表す provider 側 alias。 -/
 abbrev BranchAPrimitiveWieferichPacketAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitiveWieferichPacketTarget
@@ -2088,6 +2092,16 @@ theorem branchAExceptionalExistenceMainlineAdapter_of_twoWitness_and_bodyCoreBri
     hTwo hBridge
 
 /--
+boundary-core route の div-data が立てば、
+provider 側でも exceptional existence mainline は直接回収できる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_boundaryCoreDivData
+    (hDiv : BranchAExceptionalBoundaryCoreDivDataAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_preparedConcrete
+    (DkMath.FLT.exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_divData hDiv)
+
+/--
 practical entrance は、
 provider 側から見ても witness supply と on-witness body が揃えば橋だけで閉じる。
 -/
@@ -2195,6 +2209,16 @@ theorem branchAPrimitivePacketDescentAdapter_of_boundaryCoreOnDatumConcrete_and_
     BranchAPrimitivePacketDescentAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_boundaryCoreOnDatumConcrete_and_restore
     hBoundary hRestore
+
+/--
+boundary-core route の div-data と restore theorem があれば、
+provider 側でも primitive packet descent へ直接戻れる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_boundaryCoreDivData_and_restore
+    (hDiv : BranchAExceptionalBoundaryCoreDivDataAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_divData_and_restore hDiv hRestore
 
 /--
 `GN d 1 (u - 1)` divisibility が立てば、
