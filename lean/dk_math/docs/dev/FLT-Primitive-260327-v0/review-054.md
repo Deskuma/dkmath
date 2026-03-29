@@ -14,17 +14,17 @@ $$
 そして現在の判断はかなり明快じゃ。
 
 * **正本** は
-  [
+  $$
   \texttt{ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget}
-  ]
+  $$
 * **実戦入口** は
-  [
+  $$
   \texttt{PrimeGe5BranchAExceptionalPracticalConcreteTarget}
-  ]
+  $$
   すなわち実質
-  [
+  $$
   \texttt{ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessConcreteTarget}
-  ]
+  $$
   じゃ。
 
 ## 1. 今回なにが進んだか
