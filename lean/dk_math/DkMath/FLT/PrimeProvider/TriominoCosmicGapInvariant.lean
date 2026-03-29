@@ -1374,6 +1374,10 @@ abbrev BranchAExceptionalPracticalWitnessSupplyAdapterTarget : Prop :=
 abbrev BranchAExceptionalPracticalBodyOnWitnessAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyOnWitnessTarget
 
+/-- practical body-on-witness concrete theorem 名の provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalBodyOnWitnessConcreteAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget
+
 /-- proof file exceptional existence mainline の provider 側 alias。 -/
 abbrev BranchAExceptionalExistenceMainlineAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAExceptionalExistenceMainlineTarget
@@ -1953,12 +1957,33 @@ theorem branchAExceptionalPracticalConcreteAdapter_of_witnessSupply_and_bodyOnWi
     hWitness hBody
 
 /--
-practical entrance の missing body を on-witness concrete 1 本として読む provider wrapper。
+practical body-on-witness だけが立てば、
+provider 側でも practical entrance が直接回収できる。
 -/
 theorem branchAExceptionalPracticalConcreteAdapter_of_bodyOnWitness
-    (hBody : BranchAExceptionalPracticalBodyOnWitnessAdapterTarget) :
+    (hBody : BranchAExceptionalPracticalBodyOnWitnessConcreteAdapterTarget) :
     BranchAExceptionalPracticalConcreteAdapterTarget :=
   DkMath.FLT.primeGe5BranchAExceptionalPracticalConcrete_of_bodyOnWitness hBody
+
+/--
+practical body-on-witness だけが立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_practicalBodyOnWitness
+    (hBody : BranchAExceptionalPracticalBodyOnWitnessConcreteAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_practicalBodyOnWitness hBody
+
+/--
+practical body-on-witness と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_practicalBodyOnWitness_and_restore
+    (hBody : BranchAExceptionalPracticalBodyOnWitnessConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_practicalBodyOnWitness_and_restore
+    hBody hRestore
 
 /--
 official direct body の concrete theorem 名が立てば、

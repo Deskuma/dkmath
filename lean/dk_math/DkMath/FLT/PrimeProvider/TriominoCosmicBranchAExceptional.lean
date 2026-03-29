@@ -558,6 +558,15 @@ abbrev PrimeGe5BranchAExceptionalPracticalBodyOnWitnessTarget : Prop :=
   ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget
 
 /--
+practical body-on-witness の concrete 本文を置く既定の theorem 名。
+
+[CFBRC] practical route の truly new body を直接書くなら、
+まずこの theorem 名を canonical な着手点とする。
+-/
+abbrev PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget : Prop :=
+  PrimeGe5BranchAExceptionalPracticalBodyOnWitnessTarget
+
+/--
 practical entrance の canonical self bridge。
 -/
 theorem primeGe5BranchAExceptionalPracticalConcrete_of_self
@@ -589,6 +598,14 @@ theorem primeGe5BranchAExceptionalPracticalConcrete_of_bodyOnWitness
   primeGe5BranchAExceptionalPracticalConcrete_of_witnessSupply_and_bodyOnWitness
     exceptional_boundary_datum_prepared_arithmetic_witness_concrete
     hBody
+
+/--
+practical body-on-witness concrete theorem 名に対する canonical self bridge。
+-/
+theorem primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_self
+    (hBody : PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget :=
+  hBody
 
 /-- `cyclotomicPrimeCore d 1 (u - 1)` は residual sum に一致する。 -/
 private theorem cyclotomicPrimeCore_one_pred_eq_residual_sum
@@ -2077,6 +2094,16 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_practicalConcrete
   primeGe5BranchAExceptionalExistenceMainline_of_selectedDiffPowWitnessConcrete hDiff
 
 /--
+practical body-on-witness だけが立てば、
+practical entrance を経由して proof file mainline へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_practicalBodyOnWitness
+    (hBody : PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_practicalConcrete
+    (primeGe5BranchAExceptionalPracticalConcrete_of_bodyOnWitness hBody)
+
+/--
 selected-core diffPow route からも、
 practical diffPow witness concrete を経由して proof file mainline へ戻れる。
 -/
@@ -2331,6 +2358,18 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_practicalConcrete_and_restore
     (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_selectedDiffPowWitnessConcrete_and_restore hDiff hRestore
+
+/--
+practical body-on-witness と restore theorem があれば、
+practical entrance を経由して primitive packet descent まで直接閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_practicalBodyOnWitness_and_restore
+    (hBody : PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_practicalConcrete_and_restore
+    (primeGe5BranchAExceptionalPracticalConcrete_of_bodyOnWitness hBody)
+    hRestore
 
 /--
 selected-core diffPow route からも、

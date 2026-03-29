@@ -2269,3 +2269,57 @@ Archive
      すなわち
      `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget`
      の concrete theorem 本体を切る。
+
+### 日時: 2026/03/29 15:42 JST
+
+1. 目的:
+   - practical route の current missing body を、
+     theorem 名の上でも
+     `PracticalBodyOnWitness`
+     1 本として追えるようにする。
+   - そのうえで、
+     proof file / provider の両方から
+     practical body だけで
+     mainline / packet descent
+     へ直接流せるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget`
+     - `primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_self`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_practicalBodyOnWitness`
+     - `primeGe5BranchAPrimitivePacketDescent_of_practicalBodyOnWitness_and_restore`
+     を追加した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     に
+     - `BranchAExceptionalPracticalBodyOnWitnessConcreteAdapterTarget`
+     - `branchAExceptionalPracticalConcreteAdapter_of_witnessSupply_and_bodyOnWitness`
+     - `branchAExceptionalPracticalConcreteAdapter_of_bodyOnWitness`
+     - `branchAExceptionalExistenceMainlineAdapter_of_practicalBodyOnWitness`
+     - `branchAPrimitivePacketDescentAdapter_of_practicalBodyOnWitness_and_restore`
+     を追加した。
+
+3. 結論:
+   - practical route は、
+     theorem 名の上でも
+     `witness supply`
+     と
+     `PracticalBodyOnWitnessConcrete`
+     の 2 part に分かれた。
+   - witness supply は既に concrete 実装済みなので、
+     current missing math は
+     `PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget`
+     1 本だとさらに明確になった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget`
+     の concrete theorem 本体を切る。
