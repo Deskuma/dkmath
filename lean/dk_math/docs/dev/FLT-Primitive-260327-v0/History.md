@@ -1471,3 +1471,64 @@ Archive
      selected-witness 版のさらに下に
      `chosen q` 固定の local congruence target
      を置いて missing math をもう 1 段だけ局所化する。
+
+### 日時: 2026/03/29 13:11 JST
+
+1. 目的:
+   - selected-witness route の next body を、
+     直接の合同
+     `(u - 1)^d ≡ u^d [MOD q]`
+     ではなく
+     `cyclotomicPrimeCore d 1 (u - 1)`
+     divisibility まで落とせるかを確認する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget`
+     - `exceptional_boundary_datum_prepared_selectedCongruenceWitness_of_selectedCoreWitness`
+     を追加した。
+   - さらに downstream wrapper として
+     - `primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreWitness`
+     - `primeGe5BranchAPrimitivePacketDescent_of_selectedCoreWitness_and_restore`
+     を追加した。
+   - 変換本体では、
+     `DkMath.CFBRC.prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat`
+     を
+     `x := 1`, `u := u - 1`
+     に適用し、
+     `q ∣ cyclotomicPrimeCore d 1 (u - 1)`
+     から
+     `q ∣ u^d - (u - 1)^d`
+     を回収して
+     `Nat.ModEq`
+     へ戻した。
+
+3. 結論:
+   - selected-witness route の current missing math は、
+     直接の合同よりも
+     `ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget`
+     として追う方が
+     既存 `CFBRC` bridge に近く自然である。
+   - したがって next body は、
+     まず
+     `q ∣ cyclotomicPrimeCore d 1 (u - 1)`
+     を返す selected witness theorem
+     を目標にしてよい。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget`
+     の concrete theorem 本体を切る。
+   - 必要なら、
+     その下で
+     `cyclotomicPrimeCore d 1 (u - 1)`
+     を割る witness prime の arithmetic selection 部と
+     CFBRC divisibility 部をさらに分離する。

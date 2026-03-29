@@ -418,6 +418,27 @@ abbrev ExceptionalBoundaryDatumPreparedSelectedCongruenceWitnessTarget : Prop :=
       ¬ q ∣ x ∧
       (u - 1) ^ d ≡ u ^ d [MOD q]
 
+/--
+選んだ witness prime 1 個が `cyclotomicPrimeCore d 1 (u - 1)` を割ることを返す CFBRC 版 target。
+
+[CFBRC] selected-witness route の next body を、
+直接の合同
+`(u - 1)^d ≡ u^d [MOD q]`
+ではなく
+`q ∣ cyclotomicPrimeCore d 1 (u - 1)`
+として追えるようにする。
+-/
+abbrev ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget : Prop :=
+  ∀ {d x u : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧
+      q ∣ (x + 1) ∧
+      ¬ q ∣ x ∧
+      q ∣ DkMath.CFBRC.cyclotomicPrimeCore d 1 (u - 1)
+
 /-- `cyclotomicPrimeCore d 1 (u - 1)` は residual sum に一致する。 -/
 private theorem cyclotomicPrimeCore_one_pred_eq_residual_sum
     (d u : ℕ) (hu : 0 < u) :
@@ -815,6 +836,34 @@ theorem exceptional_boundary_datum_prepared_selectedCongruenceWitness_of_congrue
   refine ⟨q, hqprime, hq_dvd_x1, hq_not_dvd_x, ?_⟩
   exact hKernel hd_prime hd_ge hx hu hcop hdvd hWieferich
     hqprime hq_dvd_x1 hq_not_dvd_x
+
+/--
+選んだ witness prime が `cyclotomicPrimeCore d 1 (u - 1)` を割れば、
+selected-witness congruence は従う。
+
+[CFBRC] 既存の
+`prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat`
+を
+`x := 1`, `u := u - 1`
+に適用するだけでよい。
+-/
+theorem exceptional_boundary_datum_prepared_selectedCongruenceWitness_of_selectedCoreWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedCongruenceWitnessTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  rcases hCore hd_prime hd_ge hx hu hcop hdvd hWieferich with
+    ⟨q, hqprime, hq_dvd_x1, hq_not_dvd_x, hq_dvd_core⟩
+  refine ⟨q, hqprime, hq_dvd_x1, hq_not_dvd_x, ?_⟩
+  have hq_dvd_diff : q ∣ (1 + (u - 1)) ^ d - (u - 1) ^ d := by
+    exact (DkMath.CFBRC.prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
+      (p := d) (x := 1) (u := u - 1) (q := q) hqprime hqprime.not_dvd_one).2 hq_dvd_core
+  have hu_eq : 1 + (u - 1) = u := by
+    simpa [Nat.succ_eq_add_one, Nat.add_comm] using Nat.succ_pred_eq_of_pos hu
+  have hDiff : q ∣ u ^ d - (u - 1) ^ d := by
+    simpa [hu_eq] using hq_dvd_diff
+  have hle : (u - 1) ^ d ≤ u ^ d := by
+    exact Nat.pow_le_pow_left (Nat.sub_le _ _) d
+  exact (Nat.modEq_iff_dvd' hle).2 hDiff
 
 /--
 選んだ witness prime 上の diffPow congruence があれば、boundary core divisibility は直接従う。
@@ -1364,6 +1413,16 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_selectedCongruenceWitness
     (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_selectedCongruenceWitness hSel)
 
 /--
+選んだ witness prime が `cyclotomicPrimeCore d 1 (u - 1)` を割るだけでも、
+selected-witness congruence を経由して proof file mainline へ戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_selectedCongruenceWitness
+    (exceptional_boundary_datum_prepared_selectedCongruenceWitness_of_selectedCoreWitness hCore)
+
+/--
 prepared arithmetic core の concrete theorem 名と restore theorem があれば、
 primitive packet descent へもそのまま流せる。
 -/
@@ -1456,6 +1515,18 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_selectedCongruenceWitness_and_r
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_preparedConcrete_and_restore
     (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_selectedCongruenceWitness hSel)
+    hRestore
+
+/--
+選んだ witness prime の `cyclotomicPrimeCore d 1 (u - 1)` divisibility と restore theorem があれば、
+primitive packet descent まで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_selectedCoreWitness_and_restore
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_selectedCongruenceWitness_and_restore
+    (exceptional_boundary_datum_prepared_selectedCongruenceWitness_of_selectedCoreWitness hCore)
     hRestore
 
 /--
