@@ -768,13 +768,34 @@ practical route の on-witness body が実際に使う局所 datum。
 abbrev PrimeGe5BranchAExceptionalPracticalWitnessDatum
     (d x u q : ℕ) : Prop :=
   Nat.Prime d ∧ 5 ≤ d ∧
-    0 < x ∧ 0 < u ∧
-    Nat.Coprime x u ∧
-    d ∣ x ∧
-    u ^ (d - 1) ≡ 1 [MOD d ^ 2] ∧
-    Nat.Prime q ∧
-    q ∣ (x + 1) ∧
-    ¬ q ∣ x
+  0 < x ∧ 0 < u ∧
+  Nat.Coprime x u ∧
+  d ∣ x ∧
+  u ^ (d - 1) ≡ 1 [MOD d ^ 2] ∧
+  Nat.Prime q ∧
+  q ∣ (x + 1) ∧
+  ¬ q ∣ x
+
+/--
+practical route の arithmetic datum。
+
+`q ∣ x + 1` と `q ∤ x` を含む witness 側の条件は
+この datum に隔離して持つ。
+-/
+abbrev PrimeGe5BranchAExceptionalPracticalArithmeticDatum
+    (d x u q : ℕ) : Prop :=
+  PrimeGe5BranchAExceptionalPracticalWitnessDatum d x u q
+
+/--
+practical route の body/core datum。
+
+arithmetic datum とは同一視せず、
+`q ∣ cyclotomicPrimeCore d 1 (u - 1)` だけを独立に持つ。
+-/
+abbrev PrimeGe5BranchAExceptionalPracticalBodyCoreDatum
+    (d x u q : ℕ) : Prop :=
+  let _ := x
+  q ∣ DkMath.CFBRC.cyclotomicPrimeCore d 1 (u - 1)
 
 /--
 practical body-on-witness を局所 datum 1 個で読む target。
@@ -854,6 +875,35 @@ abbrev PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget : Pr
   PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumTarget
 
 /--
+arithmetic datum と body/core datum を分離して持つ existential witness target。
+
+current route の本線は、
+もはや「固定した arithmetic datum 上で universal に core を返す」
+のではなく、
+body/core witness を持つ `q` の存在から packet descent へ戻す形に置く。
+-/
+abbrev PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessTarget : Prop :=
+  ∀ {d x u : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    ∃ q : ℕ,
+      PrimeGe5BranchAExceptionalPracticalArithmeticDatum d x u q ∧
+      PrimeGe5BranchAExceptionalPracticalBodyCoreDatum d x u q
+
+/--
+body/core witness route の concrete theorem 名。
+
+[CFBRC] `selectedCoreOnDatumConcrete`
+は反例で偽と確定したので、
+current canonical target は
+この existential body/core witness concrete に切り替える。
+-/
+abbrev PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget : Prop :=
+  PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessTarget
+
+/--
 current practical datum route の explicit counterexample datum。
 
 `(d, x, u, q) = (5, 5, 7, 2)` は
@@ -894,6 +944,65 @@ theorem not_primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget
   have hbad : 2 ∣ DkMath.CFBRC.cyclotomicPrimeCore 5 1 (7 - 1) := by
     exact h primeGe5BranchAExceptionalPracticalWitnessDatum_counterexample
   exact counterexample_not_dvd_selectedCore hbad
+
+/--
+prepared selected-core witness は、
+datum 分割後の body/core witness としてそのまま読める。
+-/
+theorem primeGe5BranchAExceptionalPracticalBodyCoreWitness_of_selectedCoreWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  rcases hCore hd_prime hd_ge hx hu hcop hdvd hWieferich with
+    ⟨q, hqprime, hq_dvd_x1, hq_not_dvd_x, hq_dvd_core⟩
+  refine ⟨q, ?_, hq_dvd_core⟩
+  exact ⟨hd_prime, hd_ge, hx, hu, hcop, hdvd, hWieferich, hqprime, hq_dvd_x1, hq_not_dvd_x⟩
+
+/--
+body/core witness concrete theorem 名に対する canonical self bridge。
+-/
+theorem primeGe5BranchAExceptionalPracticalBodyCoreWitnessConcrete_of_self
+    (hCore : PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget :=
+  hCore
+
+/--
+prepared selected-core witness が立てば、
+body/core witness concrete theorem 名にも直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalBodyCoreWitnessConcrete_of_selectedCoreWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalBodyCoreWitness_of_selectedCoreWitness hCore
+
+/--
+分離された body/core witness があれば、
+practical entrance は再び existential route として閉じる。
+-/
+theorem primeGe5BranchAExceptionalPracticalConcrete_of_bodyCoreWitness
+    (hCore : PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalConcreteTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  rcases hCore hd_prime hd_ge hx hu hcop hdvd hWieferich with
+    ⟨q, hArith, hBodyCore⟩
+  rcases hArith with
+    ⟨_hd_prime, _hd_ge, _hx, hu, _hcop, _hdvd, _hWieferich, hqprime, hq_dvd_x1, hq_not_dvd_x⟩
+  refine ⟨q, hqprime, hq_dvd_x1, hq_not_dvd_x, ?_⟩
+  have hq_dvd_diff : q ∣ (1 + (u - 1)) ^ d - (u - 1) ^ d := by
+    exact (DkMath.CFBRC.prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
+      (p := d) (x := 1) (u := u - 1) (q := q) hqprime hqprime.not_dvd_one).2 hBodyCore
+  have hu_eq : 1 + (u - 1) = u := by
+    simpa [Nat.succ_eq_add_one, Nat.add_comm] using Nat.succ_pred_eq_of_pos hu
+  simpa [hu_eq] using hq_dvd_diff
+
+/--
+body/core witness concrete theorem 名が立てば、
+current practical entrance に直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalConcrete_of_bodyCoreWitnessConcrete
+    (hCore : PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget) :
+    PrimeGe5BranchAExceptionalPracticalConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalConcrete_of_bodyCoreWitness hCore
 
 /--
 on-witness body が立てば、datum 版も直ちに従う。
@@ -2866,6 +2975,25 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_practicalConcrete
   primeGe5BranchAExceptionalExistenceMainline_of_selectedDiffPowWitnessConcrete hDiff
 
 /--
+body/core witness が立てば、
+existential practical entrance を経由して proof file mainline へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_bodyCoreWitness
+    (hCore : PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_practicalConcrete
+    (primeGe5BranchAExceptionalPracticalConcrete_of_bodyCoreWitness hCore)
+
+/--
+body/core witness concrete theorem 名が立てば、
+proof file mainline へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_bodyCoreWitnessConcrete
+    (hCore : PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_bodyCoreWitness hCore
+
+/--
 practical body-on-witness だけが立てば、
 practical entrance を経由して proof file mainline へ直接戻れる。
 -/
@@ -3190,6 +3318,28 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_practicalConcrete_and_restore
     (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_selectedDiffPowWitnessConcrete_and_restore hDiff hRestore
+
+/--
+body/core witness と restore theorem があれば、
+existential practical entrance を経由して primitive packet descent まで直接閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_bodyCoreWitness_and_restore
+    (hCore : PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_practicalConcrete_and_restore
+    (primeGe5BranchAExceptionalPracticalConcrete_of_bodyCoreWitness hCore)
+    hRestore
+
+/--
+body/core witness concrete theorem 名と restore theorem があれば、
+primitive packet descent まで直接閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_bodyCoreWitnessConcrete_and_restore
+    (hCore : PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_bodyCoreWitness_and_restore hCore hRestore
 
 /--
 practical body-on-witness と restore theorem があれば、

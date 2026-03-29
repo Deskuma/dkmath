@@ -1370,6 +1370,14 @@ abbrev BranchAExceptionalPracticalConcreteAdapterTarget : Prop :=
 abbrev BranchAExceptionalPracticalWitnessSupplyAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAExceptionalPracticalWitnessSupplyTarget
 
+/-- arithmetic datum と body/core datum を分離して持つ existential witness の provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalBodyCoreWitnessAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessTarget
+
+/-- body/core witness concrete theorem 名の provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalBodyCoreWitnessConcreteAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget
+
 /-- practical entrance の on-witness body 部を表す provider 側 alias。 -/
 abbrev BranchAExceptionalPracticalBodyOnWitnessAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyOnWitnessTarget
@@ -1963,6 +1971,28 @@ theorem branchAPrimitivePacketDescentAdapter_of_practicalConcrete_and_restore
     hDiff hRestore
 
 /--
+body/core witness と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_bodyCoreWitness_and_restore
+    (hCore : BranchAExceptionalPracticalBodyCoreWitnessAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_bodyCoreWitness_and_restore
+    hCore hRestore
+
+/--
+body/core witness concrete theorem 名と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_bodyCoreWitnessConcrete_and_restore
+    (hCore : BranchAExceptionalPracticalBodyCoreWitnessConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_bodyCoreWitnessConcrete_and_restore
+    hCore hRestore
+
+/--
 practical entrance の concrete theorem 名が立てば、
 provider 側でも exceptional existence mainline へ直接戻れる。
 -/
@@ -1970,6 +2000,24 @@ theorem branchAExceptionalExistenceMainlineAdapter_of_practicalConcrete
     (hDiff : BranchAExceptionalPracticalConcreteAdapterTarget) :
     BranchAExceptionalExistenceMainlineAdapterTarget :=
   DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_practicalConcrete hDiff
+
+/--
+body/core witness が立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_bodyCoreWitness
+    (hCore : BranchAExceptionalPracticalBodyCoreWitnessAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_bodyCoreWitness hCore
+
+/--
+body/core witness concrete theorem 名が立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_bodyCoreWitnessConcrete
+    (hCore : BranchAExceptionalPracticalBodyCoreWitnessConcreteAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_bodyCoreWitnessConcrete hCore
 
 /--
 practical entrance は、

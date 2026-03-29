@@ -2855,6 +2855,56 @@ Archive
    - `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
      の concrete 本体を書く。
 
+### 日時: 2026/03/30 02:03 JST
+
+1. 目的:
+   - `selectedCoreOnDatumConcrete`
+     が反例で偽だと確定した後の canonical target を、
+     theorem 名の上でも
+     `BodyCoreWitness`
+     へ切り替える。
+   - practical / mainline / packet-descent の公開入口も、
+     旧 universal datum route ではなく
+     existential body/core witness route
+     に揃える。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget`
+     を追加した。
+   - あわせて
+     - `primeGe5BranchAExceptionalPracticalBodyCoreWitnessConcrete_of_self`
+     - `primeGe5BranchAExceptionalPracticalBodyCoreWitnessConcrete_of_selectedCoreWitness`
+     - `primeGe5BranchAExceptionalPracticalConcrete_of_bodyCoreWitnessConcrete`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_bodyCoreWitnessConcrete`
+     - `primeGe5BranchAPrimitivePacketDescent_of_bodyCoreWitnessConcrete_and_restore`
+     を追加した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     `BranchAExceptionalPracticalBodyCoreWitnessConcreteAdapterTarget`
+     と対応 adapter を追加した。
+
+3. 結論:
+   - current route の canonical concrete theorem 名は、
+     もはや
+     `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
+     ではなく、
+     `PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget`
+     だと読めるようになった。
+   - したがって以後の証明作業は、
+     arithmetic datum と body/core datum を分離して持つ
+     existential witness の concrete 本体へ集中すればよい。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 次の課題:
+   - `PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget`
+     の concrete 本体を書く。
+
 ### 日時: 2026/03/30 01:17 JST
 
 1. 目的:
@@ -3137,3 +3187,60 @@ Archive
 5. 次の課題:
    - `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
      の concrete 本体を書く。
+
+### 日時: 2026/03/30 01:33 JST
+
+1. 目的:
+   - false と確定した
+     `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
+     を route の本線から外し、
+     datum を
+     arithmetic datum と body/core datum に分割して
+     existential witness route に戻す。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `PrimeGe5BranchAExceptionalPracticalArithmeticDatum`
+     - `PrimeGe5BranchAExceptionalPracticalBodyCoreDatum`
+     - `PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessTarget`
+     を追加した。
+   - さらに
+     - `primeGe5BranchAExceptionalPracticalBodyCoreWitness_of_selectedCoreWitness`
+     - `primeGe5BranchAExceptionalPracticalConcrete_of_bodyCoreWitness`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_bodyCoreWitness`
+     - `primeGe5BranchAPrimitivePacketDescent_of_bodyCoreWitness_and_restore`
+     を追加し、
+     body/core witness から
+     practical entrance、
+     exceptional existence mainline、
+     primitive packet descent
+     まで直接戻る route を置いた。
+   - provider 側
+     `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     `BranchAExceptionalPracticalBodyCoreWitnessAdapterTarget`
+     と対応 adapter を追加した。
+
+3. 結論:
+   - datum は
+     - arithmetic datum:
+       `q ∣ x + 1`, `q ∤ x`
+     - body/core datum:
+       `q ∣ cyclotomicPrimeCore(d,1,u-1)`
+     に分離された。
+   - これにより、
+     false な universal local core theorem を経由せず、
+     body/core witness を持つ `q` の存在から
+     packet descent へ戻る route が
+     theorem 名の上で固定された。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 次の課題:
+   - new route の first missing theorem は、
+     `PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessTarget`
+     を返す concrete theorem として再定式化する。
