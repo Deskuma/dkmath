@@ -1150,6 +1150,34 @@ theorem exceptional_boundary_datum_prepared_selectedCongruenceWitness_of_selecte
   exact (Nat.modEq_iff_dvd' hle).2 hq_dvd_diff
 
 /--
+選んだ witness prime が `cyclotomicPrimeCore d 1 (u - 1)` を割れば、
+existential diffPow witness 版も直接従う。
+-/
+theorem exceptional_boundary_datum_prepared_selectedDiffPowWitness_of_selectedCoreWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  rcases hCore hd_prime hd_ge hx hu hcop hdvd hWieferich with
+    ⟨q, hqprime, hq_dvd_x1, hq_not_dvd_x, hq_dvd_core⟩
+  refine ⟨q, hqprime, hq_dvd_x1, hq_not_dvd_x, ?_⟩
+  have hq_dvd_diff : q ∣ (1 + (u - 1)) ^ d - (u - 1) ^ d := by
+    exact (DkMath.CFBRC.prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
+      (p := d) (x := 1) (u := u - 1) (q := q) hqprime hqprime.not_dvd_one).2 hq_dvd_core
+  have hu_eq : 1 + (u - 1) = u := by
+    simpa [Nat.succ_eq_add_one, Nat.add_comm] using Nat.succ_pred_eq_of_pos hu
+  simpa [hu_eq] using hq_dvd_diff
+
+/--
+witness-aware core divisibility があれば、
+existential diffPow witness 版は concrete arithmetic witness を通じて従う。
+-/
+theorem exceptional_boundary_datum_prepared_selectedDiffPowWitness_of_selectedCoreOnWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessTarget :=
+  exceptional_boundary_datum_prepared_selectedDiffPowWitness_of_selectedCoreWitness
+    (exceptional_boundary_datum_prepared_selectedCoreWitness_of_onWitness hCore)
+
+/--
 selected diffPow witness concrete theorem 名に対する canonical self bridge。
 -/
 theorem exceptional_boundary_datum_prepared_selectedDiffPowWitnessConcrete_of_self
@@ -1194,6 +1222,24 @@ theorem exceptional_boundary_datum_prepared_selectedDiffPowWitnessConcrete_of_co
     ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessConcreteTarget :=
   exceptional_boundary_datum_prepared_selectedDiffPowWitnessConcrete_of_diffPowModEq
     (exceptional_boundary_datum_prepared_diffPow_modEq_on_witness_of_congruenceKernel hKernel)
+
+/--
+selected core witness からも、
+existential diffPow witness concrete 名へ直接戻れる。
+-/
+theorem exceptional_boundary_datum_prepared_selectedDiffPowWitnessConcrete_of_selectedCoreWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessConcreteTarget :=
+  exceptional_boundary_datum_prepared_selectedDiffPowWitness_of_selectedCoreWitness hCore
+
+/--
+witness-aware selected core divisibility からも、
+existential diffPow witness concrete 名へ直接戻れる。
+-/
+theorem exceptional_boundary_datum_prepared_selectedDiffPowWitnessConcrete_of_selectedCoreOnWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessConcreteTarget :=
+  exceptional_boundary_datum_prepared_selectedDiffPowWitness_of_selectedCoreOnWitness hCore
 
 /--
 差冪 `ModEq` 版があれば、divisibility 版を経由して selected-core-on-witness target は従う。

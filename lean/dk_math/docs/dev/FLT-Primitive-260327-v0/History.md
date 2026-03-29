@@ -1942,3 +1942,52 @@ Archive
      か
      `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget`
      の concrete theorem 本体を切る。
+
+### 日時: 2026/03/29 14:33 JST
+
+1. 目的:
+   - practical entrance である
+     `SelectedDiffPowWitnessConcrete`
+     を、
+     selected-congruence だけでなく
+     selected-core 側からも直接使えるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `exceptional_boundary_datum_prepared_selectedDiffPowWitness_of_selectedCoreWitness`
+     - `exceptional_boundary_datum_prepared_selectedDiffPowWitness_of_selectedCoreOnWitness`
+     - `...SelectedDiffPowWitnessConcrete_of_selectedCoreWitness`
+     - `...SelectedDiffPowWitnessConcrete_of_selectedCoreOnWitness`
+     を追加した。
+   - 内容は、
+     `q ∣ cyclotomicPrimeCore d 1 (u - 1)`
+     から
+     `prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat`
+     で
+     `q ∣ u^d - (u - 1)^d`
+     を直接回収する橋である。
+
+3. 結論:
+   - practical route の
+     `SelectedDiffPowWitnessConcrete`
+     は、
+     arithmetic witness と congruence kernel だけでなく、
+     selected-core witness / on-witness からも
+     直接戻れるようになった。
+   - したがって実際に本文を試す際は、
+     core divisibility 側から差冪 body へ落とす書き方も取りやすくなった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessConcreteTarget`
+     か
+     `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget`
+     の concrete theorem 本体を切る。
