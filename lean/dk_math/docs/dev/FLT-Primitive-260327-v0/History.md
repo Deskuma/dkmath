@@ -880,6 +880,58 @@ Archive
 ### 日時: 2026/03/29 JST
 
 1. 目的:
+   - prepared concrete 本体がまだ重い場合に備えて、
+     その中身を
+     `exceptional arithmetic`
+     と
+     `CFBRC existence`
+     の 2 part に局所化する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `ExceptionalBoundaryDatumPreparedArithmeticPartTarget`
+     - `ExceptionalBoundaryDatumPreparedCFBRCExistencePartTarget`
+     を追加した。
+   - さらに
+     `exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_parts`
+     を追加し、
+     arithmetic part が
+     `Nat.Prime q ∧ ¬ q ∣ x`
+     を返し、
+     CFBRC existence part がその
+     `q`
+     の
+     `boundaryCyclotomicPrimeCore .right d x u`
+     可除性だけを返せば、
+     prepared concrete 本体が閉じる形を固定した。
+
+3. 結論:
+   - proof file の次の concrete body は引き続き
+     `ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget`
+     だが、
+     必要なら missing math は
+     - candidate prime を取る exceptional arithmetic 部
+     - boundary core divisibility を返す CFBRC existence 部
+     の 2 part として追えるようになった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedArithmeticPartTarget`
+     または
+     `ExceptionalBoundaryDatumPreparedCFBRCExistencePartTarget`
+     の concrete theorem 本体を切る。
+
+### 日時: 2026/03/29 JST
+
+1. 目的:
    - prepared concrete theorem 名に対して、
      直接本文を書き始める canonical skeleton を固定する。
 

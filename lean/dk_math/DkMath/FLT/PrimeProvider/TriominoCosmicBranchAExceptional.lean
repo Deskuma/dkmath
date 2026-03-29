@@ -166,6 +166,42 @@ abbrev ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget : Prop :=
   ExceptionalBoundaryDatumPreparedArithmeticCoreTarget
 
 /--
+prepared concrete 本体のうち、まず prime 候補を取り出す exceptional arithmetic 部。
+
+[CFBRC] `review-041` 以降は、
+prepared concrete 本体がまだ重ければ、
+まずこの part で
+`Nat.Prime q ∧ ¬ q ∣ x`
+を返すところまで切り分ける。
+-/
+abbrev ExceptionalBoundaryDatumPreparedArithmeticPartTarget : Prop :=
+  ∀ {d x u : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧ ¬ q ∣ x
+
+/--
+prepared concrete 本体のうち、候補 prime が boundary core を割ることを返す CFBRC existence 部。
+
+[CFBRC] arithmetic part で選んだ
+`q`
+を受け取り、
+`boundaryCyclotomicPrimeCore .right`
+への可除性だけを担当する局所 target。
+-/
+abbrev ExceptionalBoundaryDatumPreparedCFBRCExistencePartTarget : Prop :=
+  ∀ {d x u q : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    Nat.Prime q →
+    ¬ q ∣ x →
+    q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u
+
+/--
 ordinary branch における boundary-core prime existence の reference theorem。
 
 [CFBRC] exceptional proof は、この ordinary theorem と仮定・中間結論を
@@ -404,6 +440,24 @@ theorem exceptional_boundary_datum_prepared_arithmetic_core_of_concrete
     (hConcrete : ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget) :
     ExceptionalBoundaryDatumPreparedArithmeticCoreTarget :=
   hConcrete
+
+/--
+prepared concrete 本体は、
+exceptional arithmetic part と CFBRC existence part の合成で閉じられる。
+
+[CFBRC] 以後 prepared body が重ければ、
+missing math はこの 2 part に割って追えばよい。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_parts
+    (hArith : ExceptionalBoundaryDatumPreparedArithmeticPartTarget)
+    (hCFBRC : ExceptionalBoundaryDatumPreparedCFBRCExistencePartTarget) :
+    ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  rcases hArith hd_prime hd_ge hx hu hcop hdvd hWieferich with
+    ⟨q, hqprime, hq_not_dvd_x⟩
+  exact ⟨q, hqprime,
+    hCFBRC hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_not_dvd_x,
+    hq_not_dvd_x⟩
 
 /--
 prepared concrete theorem 名の canonical proof skeleton。
