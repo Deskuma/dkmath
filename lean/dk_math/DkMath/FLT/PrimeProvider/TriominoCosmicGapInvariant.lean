@@ -1436,6 +1436,10 @@ abbrev BranchAExceptionalPracticalModEqConcreteAdapterTarget : Prop :=
 abbrev BranchAExceptionalExistenceMainlineAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAExceptionalExistenceMainlineTarget
 
+/-- `proof-004` 以降の current canonical boundary route の provider 側 alias。 -/
+abbrev BranchAExceptionalBoundaryCoreWitnessConcreteAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalBoundaryCoreWitnessConcreteTarget
+
 /-- `p ∤ t` primitive route の witness 付き local core を表す provider 側 alias。 -/
 abbrev BranchAPrimitiveWieferichPacketAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitiveWieferichPacketTarget

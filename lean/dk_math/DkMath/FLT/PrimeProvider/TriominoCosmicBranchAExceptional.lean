@@ -306,6 +306,83 @@ theorem exceptional_boundary_datum_prepared_arithmetic_part_of_witness
   exact ⟨q, hqprime, hq_not_dvd_x⟩
 
 /--
+`q ∣ x` なら boundary core は `d * u^(d-1)` に合同である。
+
+`x + u ≡ u [MOD q]` を各項へ入れるだけの、proof-004 step 1 の基礎補題。
+-/
+theorem exceptional_boundary_core_modEq_mul_u_pow_pred_of_dvd
+    {d x u q : ℕ}
+    (hq_dvd_x : q ∣ x) :
+    DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ≡ d * u ^ (d - 1) [MOD q] := by
+  have hxu_mod : x + u ≡ u [MOD q] := by
+    exact ((Nat.modEq_iff_dvd' (Nat.le_add_left u x)).2 (by simpa using hq_dvd_x)).symm
+  have hsum_mod :
+      DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ≡
+        ∑ _k ∈ Finset.range d, u ^ (d - 1) [MOD q] := by
+    unfold DkMath.CFBRC.boundaryCyclotomicPrimeCore DkMath.CFBRC.cyclotomicPrimeCore
+    exact sum_range_modEq (fun k hk => by
+      calc
+        (x + u) ^ k * u ^ (d - 1 - k) ≡ u ^ k * u ^ (d - 1 - k) [MOD q] :=
+          (hxu_mod.pow k).mul_right (u ^ (d - 1 - k))
+        _ = u ^ (d - 1) := by
+          rw [← Nat.pow_add]
+          have hk_sum : k + (d - 1 - k) = d - 1 := by omega
+          simp [hk_sum])
+  calc
+    DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ≡
+        ∑ _k ∈ Finset.range d, u ^ (d - 1) [MOD q] := hsum_mod
+    _ = d * u ^ (d - 1) := by simp
+
+/--
+`q` が prime で `q ∣ x` かつ boundary core も割るなら、`q` は distinguished prime `d` に限られる。
+
+proof-004 step 1 の `p ≠ d` 側を切る local kernel。
+-/
+theorem exceptional_boundary_prime_dvd_x_and_core_imp_eq_d
+    {d x u q : ℕ}
+    (hd_prime : Nat.Prime d)
+    (_hd_ge : 5 ≤ d)
+    (_hx : 0 < x) (_hu : 0 < u)
+    (hcop : Nat.Coprime x u)
+    (hqprime : Nat.Prime q)
+    (hq_dvd_x : q ∣ x)
+    (hq_dvd_core : q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u) :
+    q = d := by
+  have hmod :
+      DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ≡
+        d * u ^ (d - 1) [MOD q] :=
+    exceptional_boundary_core_modEq_mul_u_pow_pred_of_dvd hq_dvd_x
+  have hmul0 : d * u ^ (d - 1) ≡ 0 [MOD q] := by
+    exact hmod.symm.trans hq_dvd_core.modEq_zero_nat
+  have hq_dvd_mul : q ∣ d * u ^ (d - 1) :=
+    Nat.modEq_zero_iff_dvd.mp hmul0
+  rcases hqprime.dvd_mul.mp hq_dvd_mul with hq_dvd_d | hq_dvd_upow
+  · exact (Nat.prime_dvd_prime_iff_eq hqprime hd_prime).mp hq_dvd_d
+  · have hq_dvd_u : q ∣ u := hqprime.dvd_of_dvd_pow hq_dvd_upow
+    have hq_dvd_gcd : q ∣ Nat.gcd x u := Nat.dvd_gcd hq_dvd_x hq_dvd_u
+    have hgcd_one : Nat.gcd x u = 1 := Nat.coprime_iff_gcd_eq_one.mp hcop
+    have : q ∣ 1 := by simpa [hgcd_one] using hq_dvd_gcd
+    exact False.elim (hqprime.not_dvd_one this)
+
+/--
+distinguished prime 以外の prime は、`x` を割るなら boundary core を割れない。
+-/
+theorem exceptional_boundary_prime_not_dvd_core_of_dvd_x_ne_d
+    {d x u q : ℕ}
+    (hd_prime : Nat.Prime d)
+    (hd_ge : 5 ≤ d)
+    (hx : 0 < x) (hu : 0 < u)
+    (hcop : Nat.Coprime x u)
+    (hqprime : Nat.Prime q)
+    (hq_dvd_x : q ∣ x)
+    (hq_ne_d : q ≠ d) :
+    ¬ q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u := by
+  intro hq_dvd_core
+  exact hq_ne_d
+    (exceptional_boundary_prime_dvd_x_and_core_imp_eq_d
+      hd_prime hd_ge hx hu hcop hqprime hq_dvd_x hq_dvd_core)
+
+/--
 witness-aware arithmetic part を受ける CFBRC existence 部。
 
 [CFBRC] 実際に残っている local kernel は、
@@ -1087,6 +1164,41 @@ theorem not_primeGe5BranchAExceptionalPracticalTwoWitnessConcreteTarget :
     ¬ PrimeGe5BranchAExceptionalPracticalTwoWitnessConcreteTarget := by
   intro h
   exact not_primeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget h.2
+
+/--
+`proof-004` で採用する current canonical route。
+
+[CFBRC] same-`q` / body-only / two-witness の各 route が false と確定したので、
+以後の first target は
+`ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget`
+に戻す。
+-/
+abbrev PrimeGe5BranchAExceptionalBoundaryCoreWitnessConcreteTarget : Prop :=
+  ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget
+
+/--
+current canonical boundary route の self bridge。
+-/
+theorem primeGe5BranchAExceptionalBoundaryCoreWitnessConcrete_of_self
+    (hCore : PrimeGe5BranchAExceptionalBoundaryCoreWitnessConcreteTarget) :
+    PrimeGe5BranchAExceptionalBoundaryCoreWitnessConcreteTarget :=
+  hCore
+
+/--
+`(d, x, u) = (5, 5, 1)` では
+boundary route 自体は壊れておらず、
+`q = 311`
+が concrete witness になる。
+-/
+theorem primeGe5BranchAExceptionalBoundaryCoreWitness_sanity_u_one :
+    ∃ q : ℕ, Nat.Prime q ∧
+      q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right 5 5 1 ∧
+      ¬ q ∣ 5 := by
+  refine ⟨311, ?_, ?_, ?_⟩
+  · native_decide
+  · change 311 ∣ 1555
+    decide
+  · decide
 
 /--
 prepared selected-core witness は、
