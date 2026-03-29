@@ -6,6 +6,10 @@ Archive
 
 - [#01](History-01.md)
 
+### Note
+
+`00:00 JST` は、単に「日時不明のログ」を意味する placeholder である。実際の日時がわかり次第、適宜更新する。※コミット時間より判断。
+
 ### 日時: 2026/03/27 22:23 JST
 
 1. 目的:
@@ -393,7 +397,7 @@ Archive
      を直接返す concrete theorem を切り、
      new math の入口を boundary-normalized exceptional statement に固定する。
 
-### 日時: 2026/03/29 JST
+### 日時: 2026/03/29 00:00 JST
 
 1. 目的:
    - proof file 上で、
@@ -442,7 +446,7 @@ Archive
    - 必要なら ordinary reference theorem 側との差分入力だけを
      別 target にもう 1 段切る。
 
-### 日時: 2026/03/29 JST
+### 日時: 2026/03/29 00:00 JST
 
 1. 目的:
    - boundary-normalized concrete theorem の入力を、
@@ -499,7 +503,7 @@ Archive
      ordinary reference theorem と共有できる部分と
      exceptional-only arithmetic をさらに分離する。
 
-### 日時: 2026/03/29 JST
+### 日時: 2026/03/29 00:00 JST
 
 1. 目的:
    - split-right concrete target の本文を、
@@ -549,7 +553,7 @@ Archive
      arithmetic / CFBRC 補題を
      proof file 内でさらに局所化する。
 
-### 日時: 2026/03/29 JST
+### 日時: 2026/03/29 00:00 JST
 
 1. 目的:
    - datum concrete target の本文入口を、
@@ -595,7 +599,7 @@ Archive
      を返す concrete theorem 本体を、
      `hSplit` 供給の local arithmetic / CFBRC exceptional 補題として切る。
 
-### 日時: 2026/03/29 JST
+### 日時: 2026/03/29 00:00 JST
 
 1. 目的:
    - `hSplit` 供給を、
@@ -640,7 +644,7 @@ Archive
      exceptional-only arithmetic / CFBRC core
      にさらに局所化する。
 
-### 日時: 2026/03/29 JST
+### 日時: 2026/03/29 00:00 JST
 
 1. 目的:
    - downstream 側から見て、
@@ -687,7 +691,7 @@ Archive
      その本文の中で使う exceptional-only arithmetic / CFBRC core
      だけを別 theorem に切る。
 
-### 日時: 2026/03/29 JST
+### 日時: 2026/03/29 00:00 JST
 
 1. 目的:
    - datum concrete 本体に、
@@ -734,7 +738,7 @@ Archive
    - `ExceptionalBoundaryDatumArithmeticCoreTarget`
      の concrete theorem 本体を切る。
 
-### 日時: 2026/03/29 JST
+### 日時: 2026/03/29 00:00 JST
 
 1. 目的:
    - proof file の datum-based wrapper を、
@@ -784,7 +788,7 @@ Archive
      の concrete theorem 本体を、
      proof file 上の canonical body として切る。
 
-### 日時: 2026/03/29 JST
+### 日時: 2026/03/29 00:00 JST
 
 1. 目的:
    - arithmetic core の concrete 本文を、
@@ -834,7 +838,7 @@ Archive
    - `ExceptionalBoundaryDatumPreparedArithmeticCoreTarget`
      の concrete theorem 本体を切る。
 
-### 日時: 2026/03/29 JST
+### 日時: 2026/03/29 00:00 JST
 
 1. 目的:
    - prepared arithmetic core の concrete 本文を、
@@ -877,7 +881,7 @@ Archive
    - `ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget`
      の concrete theorem 本体を切る。
 
-### 日時: 2026/03/29 JST
+### 日時: 2026/03/29 00:00 JST
 
 1. 目的:
    - prepared concrete 本体がまだ重い場合に備えて、
@@ -929,7 +933,7 @@ Archive
      `ExceptionalBoundaryDatumPreparedCFBRCExistencePartTarget`
      の concrete theorem 本体を切る。
 
-### 日時: 2026/03/29 JST
+### 日時: 2026/03/29 00:00 JST
 
 1. 目的:
    - prepared concrete theorem 名に対して、
@@ -974,4 +978,44 @@ Archive
 
 6. 次の課題:
    - `ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget`
+     の concrete theorem 本体を切る。
+
+### 日時: 2026/03/29 00:00 JST
+
+1. 目的:
+   - まず攻めるべき arithmetic part について、
+     proof file 上の concrete 着手点を theorem 名として固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `ExceptionalBoundaryDatumPreparedArithmeticPartConcreteTarget`
+     を追加した。
+   - さらに
+     - `exceptional_boundary_datum_prepared_arithmetic_part_concrete_of_self`
+     - `exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_arithmeticConcrete_and_cfbrc`
+     を追加し、
+     arithmetic part の concrete 名から
+     2-part assembler を通って
+     prepared concrete 本体へ戻る橋を揃えた。
+
+3. 結論:
+   - 次に直接攻めるべき local kernel は、
+     抽象 target
+     `ExceptionalBoundaryDatumPreparedArithmeticPartTarget`
+     でも読めるが、
+     proof file 上では
+     `ExceptionalBoundaryDatumPreparedArithmeticPartConcreteTarget`
+     を concrete 着手点として追ってよい。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedArithmeticPartConcreteTarget`
      の concrete theorem 本体を切る。

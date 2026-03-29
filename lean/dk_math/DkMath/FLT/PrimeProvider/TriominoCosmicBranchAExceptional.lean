@@ -183,6 +183,15 @@ abbrev ExceptionalBoundaryDatumPreparedArithmeticPartTarget : Prop :=
     ∃ q : ℕ, Nat.Prime q ∧ ¬ q ∣ x
 
 /--
+prepared arithmetic part の concrete 本文を置く既定の theorem 名。
+
+[CFBRC] 以後この part を直接攻めるときは、
+この theorem 名を canonical な着手点とする。
+-/
+abbrev ExceptionalBoundaryDatumPreparedArithmeticPartConcreteTarget : Prop :=
+  ExceptionalBoundaryDatumPreparedArithmeticPartTarget
+
+/--
 prepared concrete 本体のうち、候補 prime が boundary core を割ることを返す CFBRC existence 部。
 
 [CFBRC] arithmetic part で選んだ
@@ -200,6 +209,19 @@ abbrev ExceptionalBoundaryDatumPreparedCFBRCExistencePartTarget : Prop :=
     Nat.Prime q →
     ¬ q ∣ x →
     q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u
+
+/--
+prepared arithmetic part の concrete theorem 名に対する canonical proof skeleton。
+
+[CFBRC] 次にこの part の本文を書くなら、
+この theorem 名に対して
+`intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich`
+から入ればよい。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_part_concrete_of_self
+    (hArith : ExceptionalBoundaryDatumPreparedArithmeticPartTarget) :
+    ExceptionalBoundaryDatumPreparedArithmeticPartConcreteTarget :=
+  hArith
 
 /--
 ordinary branch における boundary-core prime existence の reference theorem。
@@ -458,6 +480,18 @@ theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_parts
   exact ⟨q, hqprime,
     hCFBRC hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_not_dvd_x,
     hq_not_dvd_x⟩
+
+/--
+prepared arithmetic part の concrete theorem 名と CFBRC existence part があれば、
+prepared concrete 本体は閉じる。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_arithmeticConcrete_and_cfbrc
+    (hArith : ExceptionalBoundaryDatumPreparedArithmeticPartConcreteTarget)
+    (hCFBRC : ExceptionalBoundaryDatumPreparedCFBRCExistencePartTarget) :
+    ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget :=
+  exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_parts
+    (exceptional_boundary_datum_prepared_arithmetic_part_concrete_of_self hArith)
+    hCFBRC
 
 /--
 prepared concrete theorem 名の canonical proof skeleton。
