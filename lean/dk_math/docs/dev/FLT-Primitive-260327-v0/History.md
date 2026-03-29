@@ -2503,3 +2503,54 @@ Archive
      の concrete theorem 本体を、
      diffPow / `Nat.ModEq` / `GN`
      の 3 面を行き来しながら引き続き詰める。
+
+### 日時: 2026/03/29 16:57 JST
+
+1. 目的:
+   - `selectedCoreOnWitness`
+     から current practical body へ直接落ちる強い橋を追加し、
+     practical body concrete の本文候補をさらに絞る。
+   - あわせて
+     diffPow / `Nat.ModEq` / `GN`
+     の 3 面へ practical route を直接接続する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_selectedCoreOnWitness`
+     - `exceptional_boundary_datum_prepared_selectedDiffPowOnWitnessConcrete_of_selectedCoreOnWitness`
+     を追加した。
+   - 同ファイルに
+     - `primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_selectedCoreOnWitness`
+     - `primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_diffPow`
+     - `primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_diffPowModEq`
+     - `primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_congruenceKernel`
+     - `primeGe5BranchAExceptionalPracticalModEqConcrete_of_selectedCoreOnWitness`
+     - `primeGe5BranchAExceptionalPracticalGNConcrete_of_selectedCoreOnWitness`
+     を追加した。
+
+3. 結論:
+   - `selectedCoreOnWitness`
+     は、existential witness 版を経由せず、
+     直接 `selectedDiffPowOnWitness`
+     へ落とせるようになった。
+   - したがって current practical body concrete は、
+     selected-core / diffPow / `Nat.ModEq` / `GN`
+     の各 local kernel から直接読む橋を持つようになった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - 最初は practical wrapper 群を依存定理より前に置いてしまい、
+     forward reference で build が落ちた。
+   - 定理群を
+     `selectedDiffPowOnWitness_of_*`
+     の後ろへ移して解消した。
+
+6. 次の課題:
+   - `PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget`
+     の concrete theorem 本体そのものを、
+     current practical route の主目標として引き続き詰める。

@@ -1304,6 +1304,26 @@ theorem exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_congruen
     (exceptional_boundary_datum_prepared_diffPow_modEq_on_witness_of_congruenceKernel hKernel)
 
 /--
+witness-aware core divisibility があれば、
+selected diffPow-on-witness も直接従う。
+
+[CFBRC] `cyclotomicPrimeCore d 1 (u - 1)` divisibility から
+差冪 divisibility へ戻す一番直接の橋。
+-/
+theorem exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_selectedCoreOnWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessTarget := by
+  intro d x u q hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x
+  have hq_dvd_core :=
+    hCore hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x
+  have hq_dvd_diff : q ∣ (1 + (u - 1)) ^ d - (u - 1) ^ d := by
+    exact (DkMath.CFBRC.prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
+      (p := d) (x := 1) (u := u - 1) (q := q) hqprime hqprime.not_dvd_one).2 hq_dvd_core
+  have hu_eq : 1 + (u - 1) = u := by
+    simpa [Nat.succ_eq_add_one, Nat.add_comm] using Nat.succ_pred_eq_of_pos hu
+  simpa [hu_eq] using hq_dvd_diff
+
+/--
 selected diffPow-on-witness の concrete theorem 名に対する canonical proof skeleton。
 
 [CFBRC] direct body を差冪 divisibility で書くなら、
@@ -1353,6 +1373,71 @@ theorem exceptional_boundary_datum_prepared_selectedDiffPowOnWitnessConcrete_of_
     (hKernel : ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget) :
     ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget :=
   exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_congruenceKernel hKernel
+
+/--
+witness-aware core divisibility からも、
+selected diffPow concrete theorem 名へ直接戻れる。
+-/
+theorem exceptional_boundary_datum_prepared_selectedDiffPowOnWitnessConcrete_of_selectedCoreOnWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget :=
+  exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_selectedCoreOnWitness hCore
+
+/--
+witness-aware selected core divisibility から、
+practical body-on-witness concrete theorem 名へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_selectedCoreOnWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget :=
+  exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_selectedCoreOnWitness hCore
+
+/--
+既存の diffPow-on-witness route からも、
+practical body-on-witness concrete theorem 名へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_diffPow
+    (hDiff : ExceptionalBoundaryDatumPreparedDiffPowOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget :=
+  exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_diffPow hDiff
+
+/--
+既存の diffPow `ModEq` route からも、
+practical body-on-witness concrete theorem 名へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_diffPowModEq
+    (hMod : ExceptionalBoundaryDatumPreparedDiffPowModEqOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget :=
+  exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_diffPowModEq hMod
+
+/--
+additional congruence kernel からも、
+practical body-on-witness concrete theorem 名へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_congruenceKernel
+    (hKernel : ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget :=
+  exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_congruenceKernel hKernel
+
+/--
+witness-aware selected core divisibility から、
+practical `ModEq` concrete theorem 名へも直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalModEqConcrete_of_selectedCoreOnWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyOnWitnessModEqConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalModEq_of_bodyOnWitness
+    (primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_selectedCoreOnWitness hCore)
+
+/--
+witness-aware selected core divisibility から、
+practical `GN` concrete theorem 名へも直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalGNConcrete_of_selectedCoreOnWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalGNConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalGN_of_bodyOnWitness
+    (primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_selectedCoreOnWitness hCore)
 
 /--
 selected diffPow-on-witness があれば、arithmetic witness の既定値で existential diffPow witness 版も従う。
