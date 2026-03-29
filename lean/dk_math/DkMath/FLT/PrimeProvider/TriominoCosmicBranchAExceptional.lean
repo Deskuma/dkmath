@@ -933,6 +933,25 @@ theorem counterexample_not_dvd_selectedCore :
   decide
 
 /--
+counterexample datum では
+`2 ∤ cyclotomicPrimeCore 5 1 (7 - 1)`、
+したがって body/core datum も満たさない。
+-/
+theorem counterexample_not_dvd_bodyCore_two :
+    ¬ PrimeGe5BranchAExceptionalPracticalBodyCoreDatum 5 5 7 2 := by
+  simpa [PrimeGe5BranchAExceptionalPracticalBodyCoreDatum] using
+    counterexample_not_dvd_selectedCore
+
+/--
+counterexample datum では
+`3 ∤ cyclotomicPrimeCore 5 1 (7 - 1)`、
+したがって body/core datum も満たさない。
+-/
+theorem counterexample_not_dvd_bodyCore_three :
+    ¬ PrimeGe5BranchAExceptionalPracticalBodyCoreDatum 5 5 7 3 := by
+  decide
+
+/--
 current practical first direct body は universal theorem としては偽である。
 
 反例は
@@ -944,6 +963,50 @@ theorem not_primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget
   have hbad : 2 ∣ DkMath.CFBRC.cyclotomicPrimeCore 5 1 (7 - 1) := by
     exact h primeGe5BranchAExceptionalPracticalWitnessDatum_counterexample
   exact counterexample_not_dvd_selectedCore hbad
+
+/--
+counterexample datum `(d, x, u) = (5, 5, 7)` では、
+`q ∣ x + 1`
+を満たす prime witness は `2` か `3` に限られ、
+どちらも body/core datum にはなれない。
+-/
+theorem counterexample_no_same_q_bodyCoreWitness :
+    ∀ q : ℕ,
+      PrimeGe5BranchAExceptionalPracticalArithmeticDatum 5 5 7 q →
+      ¬ PrimeGe5BranchAExceptionalPracticalBodyCoreDatum 5 5 7 q := by
+  intro q hArith hBody
+  rcases hArith with
+    ⟨_hd_prime, _hd_ge, _hx, _hu, _hcop, _hdvd, _hWieferich,
+      hqprime, hq_dvd_x1, _hq_not_dvd_x⟩
+  have hq_dvd_six : q ∣ 6 := by
+    simpa using hq_dvd_x1
+  have hq_eq_two_or_three : q = 2 ∨ q = 3 := by
+    have hq_dvd_mul : q ∣ 2 * 3 := by
+      simpa using hq_dvd_six
+    rcases hqprime.dvd_mul.mp hq_dvd_mul with hq_dvd_two | hq_dvd_three
+    · left
+      exact (Nat.prime_dvd_prime_iff_eq hqprime Nat.prime_two).1 hq_dvd_two
+    · right
+      exact (Nat.prime_dvd_prime_iff_eq hqprime Nat.prime_three).1 hq_dvd_three
+  rcases hq_eq_two_or_three with rfl | rfl
+  · exact counterexample_not_dvd_bodyCore_two hBody
+  · exact counterexample_not_dvd_bodyCore_three hBody
+
+/--
+current same-`q` existential body/core witness route は universal theorem としては偽である。
+
+反例は
+`(d, x, u) = (5, 5, 7)`。
+このとき `x + 1 = 6` の prime divisors は `2, 3` だけだが、
+どちらも `cyclotomicPrimeCore 5 1 (7 - 1)` を割らない。
+-/
+theorem not_primeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget :
+    ¬ PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget := by
+  intro h
+  rcases h (d := 5) (x := 5) (u := 7)
+      (by decide) (by omega) (by omega) (by omega)
+      (by decide) (dvd_rfl) (by decide) with ⟨q, hArith, hBody⟩
+  exact counterexample_no_same_q_bodyCoreWitness q hArith hBody
 
 /--
 prepared selected-core witness は、
