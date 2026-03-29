@@ -820,6 +820,29 @@ abbrev PrimeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatumTarget : Prop
     (u - 1) ^ d ≡ u ^ d [MOD q]
 
 /--
+practical datum が抱えている witness `q` 自身について、
+`boundaryCyclotomicPrimeCore .right d x u`
+divisibility を返す局所 target。
+
+[CFBRC] datum-local core 本文を
+`x`
+を含む boundary 形で追いたいときの local face。
+-/
+abbrev PrimeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumTarget : Prop :=
+  ∀ {d x u q : ℕ},
+    PrimeGe5BranchAExceptionalPracticalWitnessDatum d x u q →
+    q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u
+
+/--
+datum-local boundary-core divisibility の concrete theorem 名。
+
+current practical first body は datum-local selected core concrete だが、
+同値な local face として boundary-core concrete 名も保持しておく。
+-/
+abbrev PrimeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumConcreteTarget : Prop :=
+  PrimeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumTarget
+
+/--
 datum-local selected core divisibility の concrete 本文を置く既定の theorem 名。
 
 [CFBRC] `review-059`
@@ -988,6 +1011,14 @@ theorem primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcrete_of_select
     PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget :=
   primeGe5BranchAExceptionalPracticalSelectedCoreOnDatum_of_selectedCongruenceOnDatum hCongr
 
+/--
+datum-local boundary-core divisibility の concrete theorem 名に対する canonical self bridge。
+-/
+theorem primeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumConcrete_of_self
+    (hBoundary : PrimeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumConcreteTarget) :
+    PrimeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumConcreteTarget :=
+  hBoundary
+
 /-- `cyclotomicPrimeCore d 1 (u - 1)` は residual sum に一致する。 -/
 private theorem cyclotomicPrimeCore_one_pred_eq_residual_sum
     (d u : ℕ) (hu : 0 < u) :
@@ -1011,6 +1042,105 @@ private theorem cyclotomicPrimeCore_one_pred_eq_residual_sum
           have h2 : d - 1 - k = d - 1 - k := rfl
           dsimp [f]
           rw [h1, h2, mul_comm]
+
+/--
+datum-local selected core divisibility があれば、
+同じ datum の boundary-core divisibility にも直ちに戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalBoundaryCoreOnDatum_of_selectedCoreOnDatum
+    (hCore : PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumTarget) :
+    PrimeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumTarget := by
+  intro d x u q hDatum
+  have hDatum0 := hDatum
+  rcases hDatum with
+    ⟨_hd_prime, _hd_ge, _hx, hu, _hcop, _hdvd, _hWieferich, hqprime, hq_dvd_x1, _hq_not_dvd_x⟩
+  have hq_dvd_core1 := hCore hDatum0
+  rw [cyclotomicPrimeCore_one_pred_eq_residual_sum d u hu] at hq_dvd_core1
+  have hx1_mod0 : x + 1 ≡ 0 [MOD q] := hq_dvd_x1.modEq_zero_nat
+  have hxu_mod : x + u ≡ u - 1 [MOD q] := by
+    have htmp := hx1_mod0.add_right (u - 1)
+    have hu_eq : 1 + (u - 1) = u := by omega
+    simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm, hu_eq] using htmp
+  have hsum_mod :
+      DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ≡
+        ∑ k ∈ Finset.range d, (u - 1) ^ k * u ^ (d - 1 - k) [MOD q] := by
+    unfold DkMath.CFBRC.boundaryCyclotomicPrimeCore DkMath.CFBRC.cyclotomicPrimeCore
+    exact sum_range_modEq (fun k hk =>
+      ((hxu_mod.pow k).mul_right (u ^ (d - 1 - k))))
+  have hres0 :
+      (∑ k ∈ Finset.range d, (u - 1) ^ k * u ^ (d - 1 - k)) ≡ 0 [MOD q] :=
+    hq_dvd_core1.modEq_zero_nat
+  exact Nat.modEq_zero_iff_dvd.mp (hsum_mod.trans hres0)
+
+/--
+datum-local boundary-core divisibility があれば、
+datum-local selected core divisibility にも直ちに戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalSelectedCoreOnDatum_of_boundaryCoreOnDatum
+    (hBoundary : PrimeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumTarget) :
+    PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumTarget := by
+  intro d x u q hDatum
+  have hDatum0 := hDatum
+  rcases hDatum with
+    ⟨_hd_prime, _hd_ge, _hx, hu, _hcop, _hdvd, _hWieferich, _hqprime, hq_dvd_x1, _hq_not_dvd_x⟩
+  have hq_dvd_boundary := hBoundary hDatum0
+  have hx1_mod0 : x + 1 ≡ 0 [MOD q] := hq_dvd_x1.modEq_zero_nat
+  have hxu_mod : x + u ≡ u - 1 [MOD q] := by
+    have htmp := hx1_mod0.add_right (u - 1)
+    have hu_eq : 1 + (u - 1) = u := by omega
+    simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm, hu_eq] using htmp
+  have hsum_mod :
+      DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ≡
+        ∑ k ∈ Finset.range d, (u - 1) ^ k * u ^ (d - 1 - k) [MOD q] := by
+    unfold DkMath.CFBRC.boundaryCyclotomicPrimeCore DkMath.CFBRC.cyclotomicPrimeCore
+    exact sum_range_modEq (fun k hk =>
+      ((hxu_mod.pow k).mul_right (u ^ (d - 1 - k))))
+  have hsum0 :
+      (∑ k ∈ Finset.range d, (u - 1) ^ k * u ^ (d - 1 - k)) ≡ 0 [MOD q] := by
+    exact hsum_mod.symm.trans hq_dvd_boundary.modEq_zero_nat
+  have hcore0 : DkMath.CFBRC.cyclotomicPrimeCore d 1 (u - 1) ≡ 0 [MOD q] := by
+    rw [cyclotomicPrimeCore_one_pred_eq_residual_sum d u hu]
+    exact hsum0
+  exact Nat.modEq_zero_iff_dvd.mp hcore0
+
+/--
+datum-local selected core concrete theorem 名が立てば、
+datum-local boundary-core concrete theorem 名としても読める。
+-/
+theorem primeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumConcrete_of_selectedCoreOnDatum
+    (hCore : PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget) :
+    PrimeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalBoundaryCoreOnDatum_of_selectedCoreOnDatum hCore
+
+/--
+datum-local boundary-core concrete theorem 名が立てば、
+datum-local selected core concrete theorem 名としても読める。
+-/
+theorem primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcrete_of_boundaryCoreOnDatum
+    (hBoundary : PrimeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumConcreteTarget) :
+    PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalSelectedCoreOnDatum_of_boundaryCoreOnDatum hBoundary
+
+/--
+datum-local boundary-core divisibility があれば、
+datum-local congruence にも直ちに戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatum_of_boundaryCoreOnDatum
+    (hBoundary : PrimeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumTarget) :
+    PrimeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatumTarget :=
+  primeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatum_of_selectedCoreOnDatum
+    (primeGe5BranchAExceptionalPracticalSelectedCoreOnDatum_of_boundaryCoreOnDatum hBoundary)
+
+/--
+datum-local boundary-core concrete theorem 名が立てば、
+datum-local congruence concrete の入口としても読める。
+-/
+theorem primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_boundaryCoreOnDatum
+    (hBoundary : PrimeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumConcreteTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyOnDatumConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalBodyOnDatum_of_selectedCongruenceOnDatum
+    (primeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatum_of_boundaryCoreOnDatum
+      hBoundary)
 
 /--
 ordinary branch における boundary-core prime existence の reference theorem。
@@ -2701,6 +2831,17 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreOnDatumConcre
     (primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_selectedCoreOnDatum hCore)
 
 /--
+datum-local boundary-core concrete theorem 名が立てば、
+selected core concrete を経由して proof file mainline へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_boundaryCoreOnDatumConcrete
+    (hBoundary : PrimeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumConcreteTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreOnDatumConcrete
+    (primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcrete_of_boundaryCoreOnDatum
+      hBoundary)
+
+/--
 `GN d 1 (u - 1)` divisibility だけが立てば、
 practical body を経由して proof file mainline へ直接戻れる。
 -/
@@ -3019,6 +3160,19 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_selectedCoreOnDatumConcrete_and
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_practicalDatumConcrete_and_restore
     (primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_selectedCoreOnDatum hCore)
+    hRestore
+
+/--
+datum-local boundary-core concrete theorem 名と restore theorem があれば、
+selected core concrete を経由して primitive packet descent まで直接閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_boundaryCoreOnDatumConcrete_and_restore
+    (hBoundary : PrimeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumConcreteTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_selectedCoreOnDatumConcrete_and_restore
+    (primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcrete_of_boundaryCoreOnDatum
+      hBoundary)
     hRestore
 
 /--

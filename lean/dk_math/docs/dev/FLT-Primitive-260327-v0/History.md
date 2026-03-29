@@ -2946,3 +2946,105 @@ Archive
 5. 次の課題:
    - `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
      の concrete 本体を書く。
+
+### 日時: 2026/03/30 00:42 JST
+
+1. 目的:
+   - datum-local boundary-core face を
+     concrete theorem 名まで持ち上げ、
+     current practical first body の
+     local faces を
+     selected-core / selected-congruence / boundary-core
+     の三角形として固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `PrimeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumConcreteTarget`
+     を追加した。
+   - あわせて
+     - `primeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumConcrete_of_selectedCoreOnDatum`
+     - `primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcrete_of_boundaryCoreOnDatum`
+     - `primeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatum_of_boundaryCoreOnDatum`
+     - `primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_boundaryCoreOnDatum`
+     を追加し、
+     boundary-core face が
+     selected-core / selected-congruence / datum-body
+     の各 concrete route に直接流れるようにした。
+   - mainline / primitive packet descent 側にも
+     - `primeGe5BranchAExceptionalExistenceMainline_of_boundaryCoreOnDatumConcrete`
+     - `primeGe5BranchAPrimitivePacketDescent_of_boundaryCoreOnDatumConcrete_and_restore`
+     を追加した。
+   - provider 側
+     `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも対応する alias / adapter を追加した。
+
+3. 結論:
+   - current practical first body は、
+     theorem 名の上でも
+     datum-local selected core だけでなく
+     datum-local boundary core からも
+     直接 mainline / packet descent へ流せるようになった。
+   - したがって
+     `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
+     の concrete 本体は、
+     selected-core を直接書いても、
+     boundary-core / congruence から押してもよい
+     状態になった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 次の課題:
+   - `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
+     の concrete 本体を書く。
+
+### 日時: 2026/03/30 00:16 JST
+
+1. 目的:
+   - datum-local selected core と
+     datum-local boundary core の往復を明示し、
+     current practical first body を
+     `x` を保った boundary-normalized face からも
+     追えるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `PrimeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumTarget`
+     を追加した。
+   - あわせて
+     - `primeGe5BranchAExceptionalPracticalBoundaryCoreOnDatum_of_selectedCoreOnDatum`
+     - `primeGe5BranchAExceptionalPracticalSelectedCoreOnDatum_of_boundaryCoreOnDatum`
+     を追加し、
+     datum-local selected core divisibility と
+     datum-local boundary-core divisibility
+     の双方向の橋を置いた。
+   - 後者の証明では、
+     `cyclotomicPrimeCore_one_pred_eq_residual_sum`
+     を `rw` で明示適用する形に直し、
+     `simp` による過剰展開で起きていた
+     residual sum の向き不一致を解消した。
+
+3. 結論:
+   - current practical first body は、
+     datum-local selected core だけでなく
+     datum-local boundary core からも
+     直接読めるようになった。
+   - したがって残る未完核は引き続き
+     `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
+     の concrete 本体だが、
+     その局所 face は
+     selected-core / selected-congruence / boundary-core
+     の三面から追える状態になった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 次の課題:
+   - `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
+     の concrete 本体を書く。
