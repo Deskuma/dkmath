@@ -1654,3 +1654,54 @@ Archive
      selected-core-on-witness の下に
      residual / diffPow local body
      を direct concrete theorem 名で切る。
+
+### 日時: 2026/03/29 13:37 JST
+
+1. 目的:
+   - `SelectedCoreOnWitness`
+     の直下に、
+     residual sum divisibility を direct concrete theorem 名として置けるかを試す。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `ExceptionalBoundaryDatumPreparedSelectedResidualOnWitnessTarget`
+     - `exceptional_boundary_datum_prepared_selectedCoreOnWitness_of_selectedResidual`
+     - `exceptional_boundary_datum_prepared_selectedResidualOnWitness_of_residual`
+     - `exceptional_boundary_datum_prepared_selectedResidualOnWitness_of_diffPow`
+     - `exceptional_boundary_datum_prepared_selectedResidualOnWitness_of_diffPowModEq`
+     - `exceptional_boundary_datum_prepared_selectedResidualOnWitness_of_congruenceKernel`
+     を追加した。
+   - さらに downstream wrapper として
+     - `primeGe5BranchAExceptionalExistenceMainline_of_selectedResidualOnWitness`
+     - `primeGe5BranchAPrimitivePacketDescent_of_selectedResidualOnWitness_and_restore`
+     を追加した。
+
+3. 結論:
+   - selected-core-on-witness の direct body は、
+     `cyclotomicPrimeCore d 1 (u - 1)`
+     divisibility そのものだけでなく、
+     residual sum divisibility
+     としても自然に追える。
+   - しかもこの route も、
+     既存の residual / diffPow / `Nat.ModEq` / congruence-kernel
+     群からそのまま降りてくる。
+   - したがって next direct concrete theorem 名の候補は、
+     `ExceptionalBoundaryDatumPreparedSelectedResidualOnWitnessTarget`
+     である。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedSelectedResidualOnWitnessTarget`
+     の concrete theorem 本体を切る。
+   - もし residual でもまだ重ければ、
+     selected residual-on-witness の下に
+     diffPow local body
+     を direct concrete theorem 名で切る。
