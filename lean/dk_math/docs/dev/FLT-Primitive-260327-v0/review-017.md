@@ -1,4 +1,4 @@
-# 2024-06-17: selection 側の first direct target を right branch に固定する
+# review: selection 側の first direct target を right branch に固定する
 
 うむ、今回は **「どれを先に直接実装するか」まで finally 固定した** 回じゃな。
 前回までで selection 側には

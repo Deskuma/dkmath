@@ -1,4 +1,4 @@
-# 2024-06-17: direct concrete target の内部が二分された
+# review: direct concrete target の内部が二分された
 
 うむ、今回は **direct concrete target の内部が、ついに二分された** 回じゃな。
 ここまでの整理で「まず right branch を直接埋める」と固定されておったが、今回はさらにその中身を

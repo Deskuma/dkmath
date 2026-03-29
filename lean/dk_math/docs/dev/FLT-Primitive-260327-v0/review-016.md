@@ -1,4 +1,4 @@
-# 2024-06-17: selection 側の concrete theorem 候補が揃った
+# review: selection 側の concrete theorem 候補が揃った
 
 うむ、今回は **selection 側の concrete theorem 候補が「右枝だけ」から「split 全体」まで揃った** 回じゃな。
 前回で right branch の concrete theorem 候補名は固まっておったが、今回はさらに一歩進み、**split theorem 全体も既存 `CFBRC/Bridge` とほぼ平行な naming で読める** ようになった。そこが本質じゃ。

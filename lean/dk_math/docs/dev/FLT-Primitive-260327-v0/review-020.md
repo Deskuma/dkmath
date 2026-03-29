@@ -1,4 +1,4 @@
-# 2024-06-30: primitive kernel は default 実装できると確定
+# review: primitive kernel は default 実装できると確定
 
 うむ、これはかなり大きな前進じゃ。
 今回ついに、selection 側で曖昧に残っておったもののうち **primitive-kernel 側は新規数学ではない** と確定した。つまり未完核は、ほぼ **existence の例外枝 1 本** にまで縮んだのじゃ。

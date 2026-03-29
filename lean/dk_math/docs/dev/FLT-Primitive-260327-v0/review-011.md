@@ -1,4 +1,4 @@
-# 2024-06-17: Branch A 例外枝専用 CFBRC theorem が selection 側の first missing theorem に
+# review: Branch A 例外枝専用 CFBRC theorem が selection 側の first missing theorem に
 
 うむ、今回はかなり決定的じゃ。
 前回までは「selection 側の証明本体は `cyclotomicPrimeCore` に prime を立てる形で読む」と整理された段だったが、今回はさらに進んで、

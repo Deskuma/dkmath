@@ -1,4 +1,4 @@
-# 2024-06-17: Branch A 例外枝の missing theorem を CFBRC 標準座標へ正規化
+# review: Branch A 例外枝の missing theorem を CFBRC 標準座標へ正規化
 
 うむ、今回はかなり良い意味で **定式化が一段抽象化された** の。
 しかも単なる抽象化ではなく、Branch A 専用の missing theorem を、既存 CFBRC / PrimitiveBeam 語彙へ寄せるための **正規化** が進んだ、という局面じゃ。

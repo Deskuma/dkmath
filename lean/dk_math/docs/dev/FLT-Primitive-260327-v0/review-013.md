@@ -1,4 +1,4 @@
-# 2024-06-17: selection 側の first missing theorem を boundary-normalized 版で固定した
+# review: selection 側の first missing theorem を boundary-normalized 版で固定した
 
 うむ、今回は **「何が未完定理か」だけでなく、「それを mainline 上でどう読むか」まで固定した** 回じゃな。
 前回までで selection 側の first missing theorem はほぼ見えておったが、今回はそれを **boundary-normalized exceptional statement** として、公式の入口に据えた。そこが要点じゃ。

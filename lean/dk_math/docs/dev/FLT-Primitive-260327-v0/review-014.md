@@ -1,4 +1,4 @@
-# 2024-06-17: selection 側の missing math が「例外枝 1 本だけ」と定理の形で明確になった回
+# review: selection 側の missing math が「例外枝 1 本だけ」と定理の形で明確になった回
 
 うむ、今回は selection 側が **「例外枝だけが本当に欠けている」** と、定理の形でかなり明確になった回じゃな。
 前回までで canonical first missing theorem は boundary-normalized 版

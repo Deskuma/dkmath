@@ -1,4 +1,4 @@
-# 2024-06-17: Branch A exceptional existence の実装が pack-local right branch existence へ一段進んだ
+# review: Branch A exceptional existence の実装が pack-local right branch existence へ一段進んだ
 
 うむ、かなり良い進み方をしておる。
 今回の差分で、証明実装は **「抽象 target の整理段階」から「pack-local な right branch 実装段階」へ一段進んだ** と見てよい。
