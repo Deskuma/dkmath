@@ -2444,3 +2444,62 @@ Archive
    - `PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget`
      の concrete theorem 本体を、
      practical route の current missing body として引き続き詰める。
+
+### 日時: 2026/03/29 16:43 JST
+
+1. 目的:
+   - practical route の current missing body を、
+     diffPow divisibility だけでなく
+     `Nat.ModEq`
+     の顔でも concrete theorem 名として追えるようにする。
+   - `GN`
+     は side window、
+     `ModEq`
+     は本文側の別顔として整理し、
+     どちらからでも mainline / packet descent へ戻れるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `PrimeGe5BranchAExceptionalPracticalBodyOnWitnessModEqTarget`
+     - `PrimeGe5BranchAExceptionalPracticalBodyOnWitnessModEqConcreteTarget`
+     - `primeGe5BranchAExceptionalPracticalBodyOnWitness_of_ModEq`
+     - `primeGe5BranchAExceptionalPracticalModEq_of_bodyOnWitness`
+     - `primeGe5BranchAExceptionalPracticalBodyOnWitnessModEqConcrete_of_self`
+     - `primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_ModEqConcrete`
+     - `primeGe5BranchAExceptionalPracticalModEqConcrete_of_bodyOnWitnessConcrete`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_practicalModEqConcrete`
+     - `primeGe5BranchAPrimitivePacketDescent_of_practicalModEqConcrete_and_restore`
+     を追加した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     に
+     - `BranchAExceptionalPracticalModEqConcreteAdapterTarget`
+     - `branchAExceptionalExistenceMainlineAdapter_of_practicalModEqConcrete`
+     - `branchAPrimitivePacketDescentAdapter_of_practicalModEqConcrete_and_restore`
+     を追加した。
+
+3. 結論:
+   - current practical missing body は theorem 名の上でも、
+     - diffPow concrete
+     - `Nat.ModEq` concrete
+     - `GN` concrete
+     の 3 つの顔で追えるようになった。
+   - ただし主戦場は依然として diffPow body であり、
+     `ModEq`
+     と
+     `GN`
+     はその同値な別読みとして扱っている。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget`
+     の concrete theorem 本体を、
+     diffPow / `Nat.ModEq` / `GN`
+     の 3 面を行き来しながら引き続き詰める。

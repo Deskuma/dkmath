@@ -585,6 +585,21 @@ abbrev PrimeGe5BranchAExceptionalPracticalBodyOnWitnessGNTarget : Prop :=
     q ∣ DkMath.CosmicFormulaBinom.GN d 1 (u - 1)
 
 /--
+practical body-on-witness を `Nat.ModEq` で読む local target。
+
+[CFBRC] diffPow divisibility の本文を合同の顔でも追えるようにするため、
+current missing body の同値な別読みとしてこれも保持する。
+-/
+abbrev PrimeGe5BranchAExceptionalPracticalBodyOnWitnessModEqTarget : Prop :=
+  ExceptionalBoundaryDatumPreparedDiffPowModEqOnWitnessTarget
+
+/--
+practical `ModEq` body の concrete 本文を置く既定の theorem 名。
+-/
+abbrev PrimeGe5BranchAExceptionalPracticalBodyOnWitnessModEqConcreteTarget : Prop :=
+  PrimeGe5BranchAExceptionalPracticalBodyOnWitnessModEqTarget
+
+/--
 practical GN slice の concrete 本文を置く既定の theorem 名。
 
 [CFBRC] diffPow body を main target から外さず、
@@ -665,6 +680,58 @@ theorem primeGe5BranchAExceptionalPracticalGN_of_bodyOnWitness
       (DkMath.CosmicFormulaCellDim.pow_sub_pow_eq_mul_GN d 1 (u - 1))
   rw [← hEq]
   exact hBody hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x
+
+/--
+practical body-on-witness の `Nat.ModEq` 読みがあれば、
+divisibility 版の practical body は直ちに従う。
+-/
+theorem primeGe5BranchAExceptionalPracticalBodyOnWitness_of_ModEq
+    (hMod : PrimeGe5BranchAExceptionalPracticalBodyOnWitnessModEqTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyOnWitnessTarget := by
+  intro d x u q hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x
+  have hle : (u - 1) ^ d ≤ u ^ d := by
+    exact Nat.pow_le_pow_left (Nat.sub_le _ _) d
+  exact (Nat.modEq_iff_dvd' hle).mp
+    (hMod hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x)
+
+/--
+practical body-on-witness が立てば、
+同じ内容を `Nat.ModEq` の practical body としても読める。
+-/
+theorem primeGe5BranchAExceptionalPracticalModEq_of_bodyOnWitness
+    (hBody : PrimeGe5BranchAExceptionalPracticalBodyOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyOnWitnessModEqTarget := by
+  intro d x u q hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x
+  have hle : (u - 1) ^ d ≤ u ^ d := by
+    exact Nat.pow_le_pow_left (Nat.sub_le _ _) d
+  exact (Nat.modEq_iff_dvd' hle).2
+    (hBody hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x)
+
+/--
+practical `ModEq` concrete theorem 名に対する canonical self bridge。
+-/
+theorem primeGe5BranchAExceptionalPracticalBodyOnWitnessModEqConcrete_of_self
+    (hMod : PrimeGe5BranchAExceptionalPracticalBodyOnWitnessModEqConcreteTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyOnWitnessModEqConcreteTarget :=
+  hMod
+
+/--
+practical `ModEq` concrete theorem 名が立てば、
+practical body-on-witness concrete theorem 名にも直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_ModEqConcrete
+    (hMod : PrimeGe5BranchAExceptionalPracticalBodyOnWitnessModEqConcreteTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalBodyOnWitness_of_ModEq hMod
+
+/--
+practical body-on-witness concrete theorem 名が立てば、
+同じ内容を practical `ModEq` concrete theorem 名としても読める。
+-/
+theorem primeGe5BranchAExceptionalPracticalModEqConcrete_of_bodyOnWitnessConcrete
+    (hBody : PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyOnWitnessModEqConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalModEq_of_bodyOnWitness hBody
 
 /--
 practical GN concrete theorem 名に対する canonical self bridge。
@@ -2208,6 +2275,16 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_practicalGNConcrete
   primeGe5BranchAExceptionalExistenceMainline_of_practicalGN hGN
 
 /--
+practical `ModEq` concrete theorem 名が立てば、
+proof file mainline へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_practicalModEqConcrete
+    (hMod : PrimeGe5BranchAExceptionalPracticalBodyOnWitnessModEqConcreteTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_practicalBodyOnWitness
+    (primeGe5BranchAExceptionalPracticalBodyOnWitness_of_ModEq hMod)
+
+/--
 selected-core diffPow route からも、
 practical diffPow witness concrete を経由して proof file mainline へ戻れる。
 -/
@@ -2496,6 +2573,18 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_practicalGNConcrete_and_restore
     (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_practicalGN_and_restore hGN hRestore
+
+/--
+practical `ModEq` concrete theorem 名と restore theorem があれば、
+primitive packet descent まで直接閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_practicalModEqConcrete_and_restore
+    (hMod : PrimeGe5BranchAExceptionalPracticalBodyOnWitnessModEqConcreteTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_practicalBodyOnWitness_and_restore
+    (primeGe5BranchAExceptionalPracticalBodyOnWitness_of_ModEq hMod)
+    hRestore
 
 /--
 selected-core diffPow route からも、

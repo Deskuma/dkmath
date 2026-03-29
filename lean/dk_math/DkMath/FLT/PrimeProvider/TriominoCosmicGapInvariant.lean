@@ -1386,6 +1386,10 @@ abbrev BranchAExceptionalPracticalGNAdapterTarget : Prop :=
 abbrev BranchAExceptionalPracticalGNConcreteAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAExceptionalPracticalGNConcreteTarget
 
+/-- practical `ModEq` concrete theorem 名の provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalModEqConcreteAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyOnWitnessModEqConcreteTarget
+
 /-- proof file exceptional existence mainline の provider 側 alias。 -/
 abbrev BranchAExceptionalExistenceMainlineAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAExceptionalExistenceMainlineTarget
@@ -2032,6 +2036,26 @@ theorem branchAPrimitivePacketDescentAdapter_of_practicalGNConcrete_and_restore
     BranchAPrimitivePacketDescentAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_practicalGNConcrete_and_restore
     hGN hRestore
+
+/--
+practical `ModEq` concrete theorem 名が立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_practicalModEqConcrete
+    (hMod : BranchAExceptionalPracticalModEqConcreteAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_practicalModEqConcrete hMod
+
+/--
+practical `ModEq` concrete theorem 名と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_practicalModEqConcrete_and_restore
+    (hMod : BranchAExceptionalPracticalModEqConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_practicalModEqConcrete_and_restore
+    hMod hRestore
 
 /--
 official direct body の concrete theorem 名が立てば、
