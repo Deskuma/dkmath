@@ -1798,3 +1798,42 @@ Archive
 6. 次の課題:
    - `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget`
      の concrete theorem 本体を切る。
+
+### 日時: 2026/03/29 14:03 JST
+
+1. 目的:
+   - `SelectedDiffPowOnWitnessConcreteTarget`
+     を、
+     direct theorem 名として使うだけでなく、
+     stronger route からの標準橋も揃えて
+     canonical 入口として固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `exceptional_boundary_datum_prepared_selectedDiffPowOnWitnessConcrete_of_self`
+     - `...Concrete_of_diffPow`
+     - `...Concrete_of_diffPowModEq`
+     - `...Concrete_of_congruenceKernel`
+     を追加した。
+
+3. 結論:
+   - `SelectedDiffPowOnWitnessConcreteTarget`
+     は、
+     単なる direct body 名ではなく、
+     既存
+     diffPow / `Nat.ModEq` / congruence-kernel
+     route から自然に戻ってこられる
+     canonical concrete 名として扱える。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget`
+     の concrete theorem 本体を切る。

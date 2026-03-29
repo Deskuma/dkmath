@@ -1061,6 +1061,44 @@ theorem exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_concrete
   hDiff
 
 /--
+selected diffPow-on-witness の concrete theorem 名に対する canonical self bridge。
+
+[CFBRC] direct body をこの concrete 名で実装したあと、
+以後の wrapper はまずこの theorem を起点に辿ればよい。
+-/
+theorem exceptional_boundary_datum_prepared_selectedDiffPowOnWitnessConcrete_of_self
+    (hDiff : ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget :=
+  hDiff
+
+/--
+既存の diffPow-on-witness route は、
+selected diffPow concrete theorem 名としてもそのまま読める。
+-/
+theorem exceptional_boundary_datum_prepared_selectedDiffPowOnWitnessConcrete_of_diffPow
+    (hDiff : ExceptionalBoundaryDatumPreparedDiffPowOnWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget :=
+  exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_diffPow hDiff
+
+/--
+既存の diffPow `ModEq` route は、
+selected diffPow concrete theorem 名へも直接落とせる。
+-/
+theorem exceptional_boundary_datum_prepared_selectedDiffPowOnWitnessConcrete_of_diffPowModEq
+    (hMod : ExceptionalBoundaryDatumPreparedDiffPowModEqOnWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget :=
+  exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_diffPowModEq hMod
+
+/--
+additional congruence kernel が立てば、
+selected diffPow concrete theorem 名まで直接戻れる。
+-/
+theorem exceptional_boundary_datum_prepared_selectedDiffPowOnWitnessConcrete_of_congruenceKernel
+    (hKernel : ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget :=
+  exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_congruenceKernel hKernel
+
+/--
 差冪 `ModEq` 版があれば、divisibility 版を経由して selected-core-on-witness target は従う。
 -/
 theorem exceptional_boundary_datum_prepared_selectedCoreOnWitness_of_diffPowModEq
