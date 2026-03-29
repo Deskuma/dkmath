@@ -1853,6 +1853,68 @@ Archive
      `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget`
      の concrete theorem 本体を切る。
 
+### 日時: 2026/03/29 15:03 JST
+
+1. 目的:
+   - official direct body
+     `SelectedDiffPowOnWitnessConcrete`
+     を残したまま、
+     実際の proof 探索で使う
+     practical entrance
+     を theorem 名として固定する。
+   - その entrance を
+     exceptional existence mainline
+     と
+     provider 側 packet descent / mainline
+     の両方へ直接流せるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `PrimeGe5BranchAExceptionalPracticalConcreteTarget`
+     を追加した。
+   - 同ファイルに
+     - `exceptional_boundary_datum_prepared_practicalConcrete_of_selectedDiffPowConcrete`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_practicalConcrete`
+     - `primeGe5BranchAPrimitivePacketDescent_of_practicalConcrete_and_restore`
+     を追加した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     に
+     - `BranchAExceptionalPracticalConcreteAdapterTarget`
+     - `BranchAExceptionalExistenceMainlineAdapterTarget`
+     を追加した。
+   - さらに provider 側に
+     - `branchAPrimitivePacketDescentAdapter_of_practicalConcrete_and_restore`
+     - `branchAExceptionalExistenceMainlineAdapter_of_practicalConcrete`
+     を追加した。
+
+3. 結論:
+   - official direct body は引き続き
+     `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget`
+     に残る。
+   - 一方で current practical entrance は、
+     `PrimeGe5BranchAExceptionalPracticalConcreteTarget`
+     として code 上でも固定された。
+   - したがって今後は、
+     direct body を攻める場合でも
+     practical entrance を攻める場合でも、
+     downstream の exceptional existence mainline / provider packet descent
+     へ同じ粒度で差し込める。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessConcreteTarget`
+     あるいは
+     `PrimeGe5BranchAExceptionalPracticalConcreteTarget`
+     の concrete theorem 本体を切る。
+
 ### 日時: 2026/03/29 14:03 JST
 
 1. 目的:
@@ -2023,6 +2085,58 @@ Archive
      のいずれの表現からでも
      `SelectedDiffPowWitnessConcrete`
      へ集約できる。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessConcreteTarget`
+     か
+     `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget`
+     の concrete theorem 本体を切る。
+
+### 日時: 2026/03/29 14:51 JST
+
+1. 目的:
+   - practical entrance の
+     `SelectedDiffPowWitnessConcrete`
+     を、
+     selected-congruence / selected-core
+     の両側から theorem 名のレベルで直接使えるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `exceptional_boundary_datum_prepared_selectedDiffPowWitnessConcrete_of_selectedCoreDiffPow`
+     - `...of_selectedCoreDiffPowModEq`
+     - `...of_selectedCoreCongruenceKernel`
+     を追加した。
+   - さらに downstream として
+     - `primeGe5BranchAExceptionalExistenceMainline_of_selectedCore_to_selectedDiffPowWitnessConcrete`
+     - `...of_selectedCoreDiffPowModEq_to_selectedDiffPowWitnessConcrete`
+     - `...of_selectedCoreCongruenceKernel_to_selectedDiffPowWitnessConcrete`
+     - `primeGe5BranchAPrimitivePacketDescent_of_selectedCore_to_selectedDiffPowWitnessConcrete_and_restore`
+     - `...of_selectedCoreDiffPowModEq_to_selectedDiffPowWitnessConcrete_and_restore`
+     - `...of_selectedCoreCongruenceKernel_to_selectedDiffPowWitnessConcrete_and_restore`
+     を追加した。
+
+3. 結論:
+   - practical route の
+     `SelectedDiffPowWitnessConcrete`
+     は、
+     selected-congruence 側だけでなく
+     selected-core 側からも
+     theorem 名のレベルで直接戻れる。
+   - したがって今後 concrete body を試す際は、
+     current proof exploration の上流表現を気にせず、
+     一旦
+     `SelectedDiffPowWitnessConcrete`
+     に落として考えればよい。
 
 4. 検証:
    - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`

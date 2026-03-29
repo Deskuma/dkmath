@@ -1362,6 +1362,14 @@ abbrev BranchASelectedDiffPowConcreteAdapterTarget : Prop :=
 abbrev BranchASelectedDiffPowWitnessConcreteAdapterTarget : Prop :=
   DkMath.FLT.ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessConcreteTarget
 
+/-- practical entrance の concrete theorem 名を表す provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalConcreteAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalConcreteTarget
+
+/-- proof file exceptional existence mainline の provider 側 alias。 -/
+abbrev BranchAExceptionalExistenceMainlineAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalExistenceMainlineTarget
+
 /-- `p ∤ t` primitive route の witness 付き local core を表す provider 側 alias。 -/
 abbrev BranchAPrimitiveWieferichPacketAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitiveWieferichPacketTarget
@@ -1904,6 +1912,26 @@ theorem branchAPrimitivePacketDescentAdapter_of_selectedDiffPowWitnessConcrete_a
     BranchAPrimitivePacketDescentAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_selectedDiffPowWitnessConcrete_and_restore
     hDiff hRestore
+
+/--
+practical entrance の concrete theorem 名と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_practicalConcrete_and_restore
+    (hDiff : BranchAExceptionalPracticalConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_practicalConcrete_and_restore
+    hDiff hRestore
+
+/--
+practical entrance の concrete theorem 名が立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_practicalConcrete
+    (hDiff : BranchAExceptionalPracticalConcreteAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_practicalConcrete hDiff
 
 /--
 暫定 concrete adapter for the Branch A Wieferich witness route.
