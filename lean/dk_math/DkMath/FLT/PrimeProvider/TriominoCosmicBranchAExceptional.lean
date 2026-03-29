@@ -1650,6 +1650,16 @@ theorem primeGe5BranchAExceptionalPracticalSelectedCoreOnDatum_of_selectedCoreOn
   exact hCore hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x
 
 /--
+datum-local selected core divisibility が立てば、
+既存の witness-aware selected core target へも直ちに戻れる。
+-/
+theorem exceptional_boundary_datum_prepared_selectedCoreOnWitness_of_practicalSelectedCoreOnDatum
+    (hCore : PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget := by
+  intro d x u q hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x
+  exact hCore ⟨hd_prime, hd_ge, hx, hu, hcop, hdvd, hWieferich, hqprime, hq_dvd_x1, hq_not_dvd_x⟩
+
+/--
 witness-aware selected core divisibility から、
 datum-local selected core concrete theorem 名へ直接戻れる。
 -/
