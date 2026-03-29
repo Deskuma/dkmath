@@ -1891,3 +1891,54 @@ Archive
 6. 次の課題:
    - `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget`
      の concrete theorem 本体を切る。
+
+### 日時: 2026/03/29 14:24 JST
+
+1. 目的:
+   - `review-053`
+     の判断に合わせて、
+     proof file 側だけでなく provider 側でも
+     - 正式な正本:
+       `SelectedDiffPowOnWitnessConcrete`
+     - 実戦着手点:
+       `SelectedDiffPowWitnessConcrete`
+     を同じ粒度で追えるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     に
+     - `BranchASelectedDiffPowConcreteAdapterTarget`
+     - `BranchASelectedDiffPowWitnessConcreteAdapterTarget`
+     を追加した。
+   - さらに
+     - `branchAPrimitivePacketDescentAdapter_of_selectedDiffPowConcrete_and_restore`
+     - `branchAPrimitivePacketDescentAdapter_of_selectedDiffPowWitnessConcrete_and_restore`
+     を追加し、
+     provider 側でも
+     selected diffPow concrete 2 形から
+     packet descent adapter
+     を直接閉じられるようにした。
+
+3. 結論:
+   - selected diffPow concrete route は、
+     proof file 内の整理に留まらず、
+     provider mainline 側の splice point としても固定された。
+   - したがって次に concrete 本体を試す際は、
+     on-witness 正本と
+     existential witness 実戦入口の
+     どちらを選んでも
+     provider 側まで一気に追える。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessConcreteTarget`
+     か
+     `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget`
+     の concrete theorem 本体を切る。

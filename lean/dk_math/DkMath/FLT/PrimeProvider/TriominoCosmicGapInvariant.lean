@@ -1354,6 +1354,14 @@ abbrev BranchAValuationPeelPacketFromErrorAdapterTarget : Prop :=
 abbrev BranchAPrimitivePacketDescentAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitivePacketDescentTarget
 
+/-- selected diffPow-on-witness concrete theorem の provider 側 alias。 -/
+abbrev BranchASelectedDiffPowConcreteAdapterTarget : Prop :=
+  DkMath.FLT.ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget
+
+/-- selected diffPow witness concrete theorem の provider 側 alias。 -/
+abbrev BranchASelectedDiffPowWitnessConcreteAdapterTarget : Prop :=
+  DkMath.FLT.ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessConcreteTarget
+
 /-- `p ∤ t` primitive route の witness 付き local core を表す provider 側 alias。 -/
 abbrev BranchAPrimitiveWieferichPacketAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitiveWieferichPacketTarget
@@ -1874,6 +1882,28 @@ theorem branchAPrimitivePacketDescentAdapter_of_splitExistence_and_restore
     BranchAPrimitivePacketDescentAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_splitExistence_and_restore
     hSplitExist hRestore
+
+/--
+selected diffPow-on-witness concrete theorem と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_selectedDiffPowConcrete_and_restore
+    (hDiff : BranchASelectedDiffPowConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_selectedDiffPowConcrete_and_restore
+    hDiff hRestore
+
+/--
+selected diffPow witness concrete theorem と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_selectedDiffPowWitnessConcrete_and_restore
+    (hDiff : BranchASelectedDiffPowWitnessConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_selectedDiffPowWitnessConcrete_and_restore
+    hDiff hRestore
 
 /--
 暫定 concrete adapter for the Branch A Wieferich witness route.
