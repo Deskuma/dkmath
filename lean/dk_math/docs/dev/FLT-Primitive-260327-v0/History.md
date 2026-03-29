@@ -2554,3 +2554,72 @@ Archive
    - `PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget`
      の concrete theorem 本体そのものを、
      current practical route の主目標として引き続き詰める。
+
+### 日時: 2026/03/29 17:09 JST
+
+1. 目的:
+   - current practical body の本文を、
+     長い on-witness `intro`
+     列ではなく局所 datum 1 個で追えるようにする。
+   - あわせて
+     `selectedCoreOnWitness`
+     から practical body へ直接落ちる橋を明示し、
+     本文候補をさらに狭める。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `PrimeGe5BranchAExceptionalPracticalWitnessDatum`
+     - `PrimeGe5BranchAExceptionalPracticalBodyOnDatumTarget`
+     - `PrimeGe5BranchAExceptionalPracticalBodyOnDatumConcreteTarget`
+     - `primeGe5BranchAExceptionalPracticalBodyOnDatum_of_bodyOnWitness`
+     - `primeGe5BranchAExceptionalPracticalBodyOnWitness_of_datum`
+     - `primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_self`
+     - `primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_datumConcrete`
+     - `primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_bodyOnWitnessConcrete`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_practicalDatumConcrete`
+     - `primeGe5BranchAPrimitivePacketDescent_of_practicalDatumConcrete_and_restore`
+     を追加した。
+   - 同ファイルに
+     - `exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_selectedCoreOnWitness`
+     - `exceptional_boundary_datum_prepared_selectedDiffPowOnWitnessConcrete_of_selectedCoreOnWitness`
+     - `primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_selectedCoreOnWitness`
+     - `primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_diffPow`
+     - `primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_diffPowModEq`
+     - `primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_congruenceKernel`
+     - `primeGe5BranchAExceptionalPracticalModEqConcrete_of_selectedCoreOnWitness`
+     - `primeGe5BranchAExceptionalPracticalGNConcrete_of_selectedCoreOnWitness`
+     を追加した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     に
+     - `BranchAExceptionalPracticalDatumConcreteAdapterTarget`
+     - `branchAExceptionalExistenceMainlineAdapter_of_practicalDatumConcrete`
+     - `branchAPrimitivePacketDescentAdapter_of_practicalDatumConcrete_and_restore`
+     を追加した。
+
+3. 結論:
+   - current practical missing body は、
+     on-witness concrete としてだけでなく
+     datum concrete としても追えるようになった。
+   - また
+     `selectedCoreOnWitness`
+     から practical body へ直接落ちる橋が入ったので、
+     selected-core / diffPow / `Nat.ModEq` / `GN`
+     の各局所 kernel から current practical body への導線が明示された。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - 最初は practical wrapper 群を依存定理より前に置いてしまい、
+     forward reference で build が落ちた。
+   - `selectedDiffPowOnWitness_of_*`
+     の後ろへ移して解消した。
+
+6. 次の課題:
+   - `PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget`
+     の concrete theorem 本体を、
+     datum / selected-core / diffPow / `Nat.ModEq` / `GN`
+     の各顔を行き来しながら引き続き詰める。

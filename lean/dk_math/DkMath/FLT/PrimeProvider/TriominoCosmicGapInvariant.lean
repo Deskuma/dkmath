@@ -1378,6 +1378,10 @@ abbrev BranchAExceptionalPracticalBodyOnWitnessAdapterTarget : Prop :=
 abbrev BranchAExceptionalPracticalBodyOnWitnessConcreteAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget
 
+/-- practical datum concrete theorem 名の provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalDatumConcreteAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyOnDatumConcreteTarget
+
 /-- practical body-on-witness を `GN d 1 (u - 1)` で読む provider 側 alias。 -/
 abbrev BranchAExceptionalPracticalGNAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyOnWitnessGNTarget
@@ -1987,6 +1991,15 @@ theorem branchAExceptionalExistenceMainlineAdapter_of_practicalBodyOnWitness
   DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_practicalBodyOnWitness hBody
 
 /--
+practical datum concrete theorem 名が立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_practicalDatumConcrete
+    (hBody : BranchAExceptionalPracticalDatumConcreteAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_practicalDatumConcrete hBody
+
+/--
 practical body-on-witness と restore theorem があれば、
 provider 側でも primitive packet descent adapter は直接閉じる。
 -/
@@ -1995,6 +2008,17 @@ theorem branchAPrimitivePacketDescentAdapter_of_practicalBodyOnWitness_and_resto
     (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
     BranchAPrimitivePacketDescentAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_practicalBodyOnWitness_and_restore
+    hBody hRestore
+
+/--
+practical datum concrete theorem 名と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_practicalDatumConcrete_and_restore
+    (hBody : BranchAExceptionalPracticalDatumConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_practicalDatumConcrete_and_restore
     hBody hRestore
 
 /--
