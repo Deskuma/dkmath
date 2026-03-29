@@ -2151,3 +2151,60 @@ Archive
      か
      `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget`
      の concrete theorem 本体を切る。
+
+### 日時: 2026/03/29 15:17 JST
+
+1. 目的:
+   - practical entrance
+     `PrimeGe5BranchAExceptionalPracticalConcreteTarget`
+     を、
+     ただの alias ではなく
+     canonical landing point
+     として theorem 名でも追えるようにする。
+   - あわせて provider 側でも、
+     practical / official の両 concrete 名から
+     exceptional existence mainline へ直接戻れるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `primeGe5BranchAExceptionalPracticalConcrete_of_self`
+     - `exceptional_boundary_datum_prepared_practicalConcrete_of_selectedCongruenceWitness`
+     - `..._of_selectedCoreWitness`
+     - `..._of_selectedCoreOnWitness`
+     - `..._of_diffPow`
+     - `..._of_diffPowModEq`
+     - `..._of_congruenceKernel`
+     を追加した。
+   - これにより、
+     selected-congruence / selected-core / diffPow / ModEq / congruence-kernel
+     の各表現から、
+     theorem 名の上でも直接
+     practical entrance
+     へ落とせるようになった。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     に
+     - `branchAExceptionalExistenceMainlineAdapter_of_selectedDiffPowConcrete`
+     - `branchAExceptionalExistenceMainlineAdapter_of_selectedDiffPowWitnessConcrete`
+     を追加した。
+
+3. 結論:
+   - current practical entrance は、
+     もはや単なる「実質 witness concrete と同じ alias」ではなく、
+     stronger route から戻る theorem 名の吸収点としても読める。
+   - provider 側でも、
+     official direct body と practical entrance の両方から
+     exceptional existence mainline
+     へ直接 splice できる。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `PrimeGe5BranchAExceptionalPracticalConcreteTarget`
+     の concrete theorem 本体を直接切る。

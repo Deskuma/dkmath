@@ -1934,6 +1934,24 @@ theorem branchAExceptionalExistenceMainlineAdapter_of_practicalConcrete
   DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_practicalConcrete hDiff
 
 /--
+official direct body の concrete theorem 名が立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_selectedDiffPowConcrete
+    (hDiff : BranchASelectedDiffPowConcreteAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_selectedDiffPowConcrete hDiff
+
+/--
+selected diffPow witness concrete theorem 名が立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_selectedDiffPowWitnessConcrete
+    (hDiff : BranchASelectedDiffPowWitnessConcreteAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_selectedDiffPowWitnessConcrete hDiff
+
+/--
 暫定 concrete adapter for the Branch A Wieferich witness route.
 
 付録:

@@ -537,6 +537,14 @@ proof file で practical entrance として使う canonical concrete theorem 名
 abbrev PrimeGe5BranchAExceptionalPracticalConcreteTarget : Prop :=
   ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessConcreteTarget
 
+/--
+practical entrance の canonical self bridge。
+-/
+theorem primeGe5BranchAExceptionalPracticalConcrete_of_self
+    (hDiff : PrimeGe5BranchAExceptionalPracticalConcreteTarget) :
+    PrimeGe5BranchAExceptionalPracticalConcreteTarget :=
+  hDiff
+
 /-- `cyclotomicPrimeCore d 1 (u - 1)` は residual sum に一致する。 -/
 private theorem cyclotomicPrimeCore_one_pred_eq_residual_sum
     (d u : ℕ) (hu : 0 < u) :
@@ -1219,6 +1227,63 @@ theorem exceptional_boundary_datum_prepared_practicalConcrete_of_selectedDiffPow
     (hDiff : ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget) :
     PrimeGe5BranchAExceptionalPracticalConcreteTarget :=
   exceptional_boundary_datum_prepared_selectedDiffPowWitness_of_selectedDiffPowOnWitness hDiff
+
+/--
+selected-witness congruence からも、
+practical entrance の concrete theorem 名へ直接戻れる。
+-/
+theorem exceptional_boundary_datum_prepared_practicalConcrete_of_selectedCongruenceWitness
+    (hSel : ExceptionalBoundaryDatumPreparedSelectedCongruenceWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalConcreteTarget :=
+  exceptional_boundary_datum_prepared_selectedDiffPowWitness_of_selectedCongruenceWitness hSel
+
+/--
+selected core witness からも、
+practical entrance の concrete theorem 名へ直接戻れる。
+-/
+theorem exceptional_boundary_datum_prepared_practicalConcrete_of_selectedCoreWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalConcreteTarget :=
+  exceptional_boundary_datum_prepared_selectedDiffPowWitness_of_selectedCoreWitness hCore
+
+/--
+witness-aware selected core divisibility からも、
+practical entrance の concrete theorem 名へ直接戻れる。
+-/
+theorem exceptional_boundary_datum_prepared_practicalConcrete_of_selectedCoreOnWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalConcreteTarget :=
+  exceptional_boundary_datum_prepared_selectedDiffPowWitness_of_selectedCoreOnWitness hCore
+
+/--
+差冪 divisibility からも、
+practical entrance の concrete theorem 名へ直接戻れる。
+-/
+theorem exceptional_boundary_datum_prepared_practicalConcrete_of_diffPow
+    (hDiff : ExceptionalBoundaryDatumPreparedDiffPowOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalConcreteTarget :=
+  exceptional_boundary_datum_prepared_selectedDiffPowWitness_of_selectedDiffPowOnWitness
+    (exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_diffPow hDiff)
+
+/--
+差冪 `ModEq` 版からも、
+practical entrance の concrete theorem 名へ直接戻れる。
+-/
+theorem exceptional_boundary_datum_prepared_practicalConcrete_of_diffPowModEq
+    (hMod : ExceptionalBoundaryDatumPreparedDiffPowModEqOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalConcreteTarget :=
+  exceptional_boundary_datum_prepared_practicalConcrete_of_diffPow
+    (exceptional_boundary_datum_prepared_diffPow_on_witness_of_modEq hMod)
+
+/--
+additional congruence kernel からも、
+practical entrance の concrete theorem 名へ直接戻れる。
+-/
+theorem exceptional_boundary_datum_prepared_practicalConcrete_of_congruenceKernel
+    (hKernel : ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget) :
+    PrimeGe5BranchAExceptionalPracticalConcreteTarget :=
+  exceptional_boundary_datum_prepared_practicalConcrete_of_diffPowModEq
+    (exceptional_boundary_datum_prepared_diffPow_modEq_on_witness_of_congruenceKernel hKernel)
 
 /--
 selected diffPow-on-witness からは、existential diffPow witness concrete 名へも戻れる。
