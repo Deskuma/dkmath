@@ -1071,3 +1071,57 @@ Archive
 6. 次の課題:
    - `ExceptionalBoundaryDatumPreparedCFBRCExistencePartTarget`
      の concrete theorem 本体を切る。
+
+### 日時: 2026/03/29 00:24 JST
+
+1. 目的:
+   - arithmetic concrete を踏まえて、
+     残る `CFBRC existence` 側の target を
+     実際の arithmetic witness と整合する形へ補正する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `ExceptionalBoundaryDatumPreparedArithmeticWitnessTarget`
+     - `exceptional_boundary_datum_prepared_arithmetic_witness_concrete`
+     - `exceptional_boundary_datum_prepared_arithmetic_part_of_witness`
+     - `ExceptionalBoundaryDatumPreparedCFBRCExistenceOnWitnessTarget`
+     を追加した。
+   - arithmetic concrete は
+     `q ∣ x + 1`
+     を本質的に使っていたので、
+     その情報を捨てずに
+     CFBRC side
+     へ渡す witness-aware 版を用意した。
+   - あわせて
+     - `exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_witnessAndCFBRC`
+     - `exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_cfbrcOnWitness`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_cfbrcOnWitness`
+     - `primeGe5BranchAPrimitivePacketDescent_of_cfbrcOnWitness_and_restore`
+     を追加し、
+     arithmetic witness を既定値に焼き付けた wrapper を揃えた。
+
+3. 結論:
+   - 従来の
+     `ExceptionalBoundaryDatumPreparedCFBRCExistencePartTarget`
+     は、
+     arithmetic part が選んだ
+     `q`
+     の出所を保持しないので弱かった。
+   - 現在の proof file で truly remaining な local kernel は、
+     `q ∣ x + 1`
+     まで含む
+     `ExceptionalBoundaryDatumPreparedCFBRCExistenceOnWitnessTarget`
+     と読むのが正しい。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedCFBRCExistenceOnWitnessTarget`
+     の concrete theorem 本体を切る。

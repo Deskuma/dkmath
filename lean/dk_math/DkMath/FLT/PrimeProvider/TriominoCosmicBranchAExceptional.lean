@@ -192,6 +192,22 @@ abbrev ExceptionalBoundaryDatumPreparedArithmeticPartConcreteTarget : Prop :=
   ExceptionalBoundaryDatumPreparedArithmeticPartTarget
 
 /--
+prepared arithmetic part の実際の witness を保持する強化版 target。
+
+[CFBRC] `review-044` の時点で arithmetic part 本体は閉じたが、
+その `q` がどこから来たかを CFBRC existence 側へ渡すには
+`q ∣ x + 1`
+まで持った witness-aware 版が必要になる。
+-/
+abbrev ExceptionalBoundaryDatumPreparedArithmeticWitnessTarget : Prop :=
+  ∀ {d x u : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ (x + 1) ∧ ¬ q ∣ x
+
+/--
 prepared concrete 本体のうち、候補 prime が boundary core を割ることを返す CFBRC existence 部。
 
 [CFBRC] arithmetic part で選んだ
@@ -246,6 +262,52 @@ theorem exceptional_boundary_datum_prepared_arithmetic_part_concrete
   have hq_dvd_one : q ∣ (x + 1) - x := Nat.dvd_sub hq_dvd_x1 hq_dvd_x
   have : q ∣ 1 := by simpa using hq_dvd_one
   exact hqprime.not_dvd_one this
+
+/--
+arithmetic part の concrete 証明は、
+`q ∣ x + 1`
+まで保持した witness-aware 版としても読める。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_witness_concrete
+    : ExceptionalBoundaryDatumPreparedArithmeticWitnessTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  have hx1_gt1 : 1 < x + 1 := by omega
+  obtain ⟨q, hqprime, hq_dvd_x1⟩ := Nat.exists_prime_and_dvd (Nat.ne_of_gt hx1_gt1)
+  refine ⟨q, hqprime, hq_dvd_x1, ?_⟩
+  intro hq_dvd_x
+  have hq_dvd_one : q ∣ (x + 1) - x := Nat.dvd_sub hq_dvd_x1 hq_dvd_x
+  have : q ∣ 1 := by simpa using hq_dvd_one
+  exact hqprime.not_dvd_one this
+
+/--
+witness-aware arithmetic part から、旧来の arithmetic part target は忘却で従う。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_part_of_witness
+    (hWitness : ExceptionalBoundaryDatumPreparedArithmeticWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedArithmeticPartTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  rcases hWitness hd_prime hd_ge hx hu hcop hdvd hWieferich with
+    ⟨q, hqprime, _hq_dvd_x1, hq_not_dvd_x⟩
+  exact ⟨q, hqprime, hq_not_dvd_x⟩
+
+/--
+witness-aware arithmetic part を受ける CFBRC existence 部。
+
+[CFBRC] 実際に残っている local kernel は、
+`arithmetic part` が選んだ
+`q ∣ x + 1`
+つきの prime に対して boundary-core divisibility を返す部分である。
+-/
+abbrev ExceptionalBoundaryDatumPreparedCFBRCExistenceOnWitnessTarget : Prop :=
+  ∀ {d x u q : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    Nat.Prime q →
+    q ∣ (x + 1) →
+    ¬ q ∣ x →
+    q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u
 
 /--
 ordinary branch における boundary-core prime existence の reference theorem。
@@ -516,6 +578,31 @@ theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_arithmet
   exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_parts
     (exceptional_boundary_datum_prepared_arithmetic_part_concrete_of_self hArith)
     hCFBRC
+
+/--
+witness-aware arithmetic part と witness-aware CFBRC existence part からも、
+prepared concrete 本体は閉じる。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_witnessAndCFBRC
+    (hWitness : ExceptionalBoundaryDatumPreparedArithmeticWitnessTarget)
+    (hCFBRC : ExceptionalBoundaryDatumPreparedCFBRCExistenceOnWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  rcases hWitness hd_prime hd_ge hx hu hcop hdvd hWieferich with
+    ⟨q, hqprime, hq_dvd_x1, hq_not_dvd_x⟩
+  exact ⟨q, hqprime,
+    hCFBRC hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x,
+    hq_not_dvd_x⟩
+
+/--
+concrete arithmetic witness を既定値に焼き付けると、
+残る missing math は witness-aware CFBRC existence part 1 本になる。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_cfbrcOnWitness
+    (hCFBRC : ExceptionalBoundaryDatumPreparedCFBRCExistenceOnWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget :=
+  exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_witnessAndCFBRC
+    exceptional_boundary_datum_prepared_arithmetic_witness_concrete hCFBRC
 
 /--
 arithmetic concrete 本体が閉じた後は、
@@ -899,6 +986,16 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_cfbrcPart
     (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_cfbrc hCFBRC)
 
 /--
+concrete arithmetic witness を既定値にすると、
+mainline へ戻る残りも witness-aware CFBRC existence part 1 本になる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_cfbrcOnWitness
+    (hCFBRC : ExceptionalBoundaryDatumPreparedCFBRCExistenceOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_preparedConcrete
+    (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_cfbrcOnWitness hCFBRC)
+
+/--
 prepared arithmetic core の concrete theorem 名と restore theorem があれば、
 primitive packet descent へもそのまま流せる。
 -/
@@ -920,6 +1017,18 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_cfbrcPart_and_restore
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_preparedConcrete_and_restore
     (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_cfbrc hCFBRC)
+    hRestore
+
+/--
+concrete arithmetic witness を既定値にすると、
+primitive packet descent に残る missing math も witness-aware CFBRC existence part 1 本になる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_cfbrcOnWitness_and_restore
+    (hCFBRC : ExceptionalBoundaryDatumPreparedCFBRCExistenceOnWitnessTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_preparedConcrete_and_restore
+    (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_cfbrcOnWitness hCFBRC)
     hRestore
 
 /--
