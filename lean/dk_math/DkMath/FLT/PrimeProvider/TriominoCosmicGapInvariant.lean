@@ -1378,6 +1378,26 @@ abbrev BranchAExceptionalPracticalBodyCoreWitnessAdapterTarget : Prop :=
 abbrev BranchAExceptionalPracticalBodyCoreWitnessConcreteAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget
 
+/-- same-`q` を捨てた body/core witness existence の provider 側 alias。 -/
+abbrev BranchAExceptionalBodyCoreWitnessExistenceAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceTarget
+
+/-- body/core witness existence concrete theorem 名の provider 側 alias。 -/
+abbrev BranchAExceptionalBodyCoreWitnessExistenceConcreteAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget
+
+/-- arithmetic witness と body/core witness を分離した two-witness route の provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalTwoWitnessAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalTwoWitnessConcreteTarget
+
+/-- body/core witness existence から mainline へ渡す clean interface の provider 側 alias。 -/
+abbrev BranchAExceptionalBodyCoreToExistenceMainlineAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalBodyCoreWitnessToExistenceMainlineTarget
+
+/-- body/core witness existence から packet descent へ渡す clean interface の provider 側 alias。 -/
+abbrev BranchAExceptionalBodyCoreToPacketDescentAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalBodyCoreWitnessToPrimitivePacketDescentTarget
+
 /-- practical entrance の on-witness body 部を表す provider 側 alias。 -/
 abbrev BranchAExceptionalPracticalBodyOnWitnessAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyOnWitnessTarget
@@ -1993,6 +2013,28 @@ theorem branchAPrimitivePacketDescentAdapter_of_bodyCoreWitnessConcrete_and_rest
     hCore hRestore
 
 /--
+body/core witness existence concrete theorem 名と clean bridge があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_bodyCoreWitnessExistenceBridge
+    (hCore : BranchAExceptionalBodyCoreWitnessExistenceConcreteAdapterTarget)
+    (hBridge : BranchAExceptionalBodyCoreToPacketDescentAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_bodyCoreWitnessExistenceBridge
+    hBridge hCore
+
+/--
+two-witness canonical target と body/core-packet bridge があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_twoWitness_and_bodyCoreBridge
+    (hTwo : BranchAExceptionalPracticalTwoWitnessAdapterTarget)
+    (hBridge : BranchAExceptionalBodyCoreToPacketDescentAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_twoWitness_and_bodyCoreBridge
+    hTwo hBridge
+
+/--
 practical entrance の concrete theorem 名が立てば、
 provider 側でも exceptional existence mainline へ直接戻れる。
 -/
@@ -2018,6 +2060,28 @@ theorem branchAExceptionalExistenceMainlineAdapter_of_bodyCoreWitnessConcrete
     (hCore : BranchAExceptionalPracticalBodyCoreWitnessConcreteAdapterTarget) :
     BranchAExceptionalExistenceMainlineAdapterTarget :=
   DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_bodyCoreWitnessConcrete hCore
+
+/--
+body/core witness existence concrete theorem 名と clean bridge があれば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_bodyCoreWitnessExistenceBridge
+    (hCore : BranchAExceptionalBodyCoreWitnessExistenceConcreteAdapterTarget)
+    (hBridge : BranchAExceptionalBodyCoreToExistenceMainlineAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_bodyCoreWitnessExistenceBridge
+    hBridge hCore
+
+/--
+two-witness canonical target と body/core-mainline bridge があれば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_twoWitness_and_bodyCoreBridge
+    (hTwo : BranchAExceptionalPracticalTwoWitnessAdapterTarget)
+    (hBridge : BranchAExceptionalBodyCoreToExistenceMainlineAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_twoWitness_and_bodyCoreBridge
+    hTwo hBridge
 
 /--
 practical entrance は、

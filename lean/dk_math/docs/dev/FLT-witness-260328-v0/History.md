@@ -55,3 +55,76 @@ Archive
      two-witness existential route を theorem 名として切り出す。
    - その body/core witness を primitive packet descent へ渡す
      clean interface を置く。
+
+### 日時: 2026/03/30 02:24 JST
+
+1. 目的:
+   - `review-002`
+     に従い、
+     same-`q` route を正式に捨てた後の本線を
+     theorem 名の上でも
+     two-witness existential route
+     へ切り替える。
+   - あわせて、
+     body/core witness を
+     primitive packet descent / existence mainline
+     へ渡す clean interface を
+     missing bridge として切り出す。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceTarget`
+     - `PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget`
+     - `PrimeGe5BranchAExceptionalPracticalTwoWitnessConcreteTarget`
+     - `PrimeGe5BranchAExceptionalBodyCoreWitnessToPrimitivePacketDescentTarget`
+     - `PrimeGe5BranchAExceptionalBodyCoreWitnessToExistenceMainlineTarget`
+     を追加した。
+   - あわせて
+     - `primeGe5BranchAExceptionalBodyCoreWitnessExistence_of_selectedCoreWitness`
+     - `primeGe5BranchAExceptionalPracticalTwoWitnessConcrete_of_witnessSupply_and_bodyCoreWitness`
+     - `primeGe5BranchAExceptionalPracticalTwoWitnessConcrete_of_selectedCoreWitness`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_bodyCoreWitnessExistenceBridge`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_twoWitness_and_bodyCoreBridge`
+     - `primeGe5BranchAPrimitivePacketDescent_of_bodyCoreWitnessExistenceBridge`
+     - `primeGe5BranchAPrimitivePacketDescent_of_twoWitness_and_bodyCoreBridge`
+     を追加した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     two-witness / body-core bridge 用 alias と adapter を追加した。
+
+3. 結論:
+   - current canonical route は、
+     もはや
+     same-`q` witness ではなく、
+     `arithmetic witness`
+     と
+     `body/core witness existence`
+     を分離した two-witness route として読める。
+   - さらに、
+     packet descent / mainline 側の次の missing math は、
+     `bodyCore witness existence`
+     から downstream へ渡す clean bridge
+     1 本だと整理できた。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - same-`q` route に戻る新しい定理は追加していない。
+   - 以後、
+     `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
+     と
+     `PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget`
+     は false route として保持する。
+
+6. 次の課題:
+   - `PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget`
+     の concrete 本体を切る。
+   - 併せて、
+     body/core witness から
+     primitive packet descent / existence mainline
+     へ渡す clean bridge の statement を
+     より薄い数論形へ正規化する。

@@ -904,6 +904,53 @@ abbrev PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget : Prop :
   PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessTarget
 
 /--
+same-`q` 条件を捨てた body/core witness existence target。
+
+[CFBRC] arithmetic witness とは独立に、
+`cyclotomicPrimeCore d 1 (u - 1)` を割る prime witness の存在だけを first target とする。
+-/
+abbrev PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceTarget : Prop :=
+  ∀ {d x u : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧ PrimeGe5BranchAExceptionalPracticalBodyCoreDatum d x u q
+
+/--
+body/core witness existence の concrete theorem 名。
+-/
+abbrev PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget : Prop :=
+  PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceTarget
+
+/--
+arithmetic witness と body/core witness を分離した two-witness route の canonical target。
+
+[CFBRC] same-`q` route が false と確定したので、
+今後の本線はこの two-witness existential route に置く。
+-/
+abbrev PrimeGe5BranchAExceptionalPracticalTwoWitnessConcreteTarget : Prop :=
+  PrimeGe5BranchAExceptionalPracticalWitnessSupplyTarget ∧
+  PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget
+
+/--
+body/core witness existence から primitive packet descent へ渡す clean interface。
+
+[CFBRC] restore / descent 側が本当に必要とするデータを audit するため、
+まず missing interface 自体を theorem target として切り出しておく。
+-/
+abbrev PrimeGe5BranchAExceptionalBodyCoreWitnessToPrimitivePacketDescentTarget : Prop :=
+  PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceTarget →
+    PrimeGe5BranchAPrimitivePacketDescentTarget
+
+/--
+body/core witness existence から exceptional existence mainline へ渡す clean interface。
+-/
+abbrev PrimeGe5BranchAExceptionalBodyCoreWitnessToExistenceMainlineTarget : Prop :=
+  PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceTarget →
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget
+
+/--
 current practical datum route の explicit counterexample datum。
 
 `(d, x, u, q) = (5, 5, 7, 2)` は
@@ -1037,6 +1084,55 @@ theorem primeGe5BranchAExceptionalPracticalBodyCoreWitnessConcrete_of_selectedCo
     (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget) :
     PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget :=
   primeGe5BranchAExceptionalPracticalBodyCoreWitness_of_selectedCoreWitness hCore
+
+/--
+same-`q` selected-core witness は、same-`q` 条件を忘れれば body/core witness existence になる。
+-/
+theorem primeGe5BranchAExceptionalBodyCoreWitnessExistence_of_selectedCoreWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget) :
+    PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  rcases hCore hd_prime hd_ge hx hu hcop hdvd hWieferich with
+    ⟨q, hqprime, _hq_dvd_x1, _hq_not_dvd_x, hq_dvd_core⟩
+  exact ⟨q, hqprime, hq_dvd_core⟩
+
+/--
+body/core witness existence concrete theorem 名に対する canonical self bridge。
+-/
+theorem primeGe5BranchAExceptionalBodyCoreWitnessExistenceConcrete_of_self
+    (hCore : PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget) :
+    PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget :=
+  hCore
+
+/--
+prepared selected-core witness が立てば、
+body/core witness existence concrete theorem 名にも直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalBodyCoreWitnessExistenceConcrete_of_selectedCoreWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget) :
+    PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget :=
+  primeGe5BranchAExceptionalBodyCoreWitnessExistence_of_selectedCoreWitness hCore
+
+/--
+arithmetic witness と body/core witness existence が揃えば、
+two-witness canonical target は橋だけで閉じる。
+-/
+theorem primeGe5BranchAExceptionalPracticalTwoWitnessConcrete_of_witnessSupply_and_bodyCoreWitness
+    (hArith : PrimeGe5BranchAExceptionalPracticalWitnessSupplyTarget)
+    (hBody : PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget) :
+    PrimeGe5BranchAExceptionalPracticalTwoWitnessConcreteTarget :=
+  ⟨hArith, hBody⟩
+
+/--
+selected-core witness からも、
+two-witness canonical target へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalTwoWitnessConcrete_of_selectedCoreWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalTwoWitnessConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalTwoWitnessConcrete_of_witnessSupply_and_bodyCoreWitness
+    exceptional_boundary_datum_prepared_arithmetic_witness_concrete
+    (primeGe5BranchAExceptionalBodyCoreWitnessExistenceConcrete_of_selectedCoreWitness hCore)
 
 /--
 分離された body/core witness があれば、
@@ -3057,6 +3153,26 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_bodyCoreWitnessConcrete
   primeGe5BranchAExceptionalExistenceMainline_of_bodyCoreWitness hCore
 
 /--
+body/core witness existence から exceptional existence mainline へ渡す clean bridge があれば、
+same-`q` route を経由せずに mainline を閉じられる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_bodyCoreWitnessExistenceBridge
+    (hBridge : PrimeGe5BranchAExceptionalBodyCoreWitnessToExistenceMainlineTarget)
+    (hCore : PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  hBridge hCore
+
+/--
+two-witness canonical target と body/core-mainline bridge があれば、
+proof file mainline へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_twoWitness_and_bodyCoreBridge
+    (hTwo : PrimeGe5BranchAExceptionalPracticalTwoWitnessConcreteTarget)
+    (hBridge : PrimeGe5BranchAExceptionalBodyCoreWitnessToExistenceMainlineTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_bodyCoreWitnessExistenceBridge hBridge hTwo.2
+
+/--
 practical body-on-witness だけが立てば、
 practical entrance を経由して proof file mainline へ直接戻れる。
 -/
@@ -3403,6 +3519,26 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_bodyCoreWitnessConcrete_and_res
     (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_bodyCoreWitness_and_restore hCore hRestore
+
+/--
+body/core witness existence から primitive packet descent へ渡す clean bridge があれば、
+same-`q` route を経由せずに packet descent を閉じられる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_bodyCoreWitnessExistenceBridge
+    (hBridge : PrimeGe5BranchAExceptionalBodyCoreWitnessToPrimitivePacketDescentTarget)
+    (hCore : PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  hBridge hCore
+
+/--
+two-witness canonical target と body/core-packet bridge があれば、
+primitive packet descent を直接閉じられる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_twoWitness_and_bodyCoreBridge
+    (hTwo : PrimeGe5BranchAExceptionalPracticalTwoWitnessConcreteTarget)
+    (hBridge : PrimeGe5BranchAExceptionalBodyCoreWitnessToPrimitivePacketDescentTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_bodyCoreWitnessExistenceBridge hBridge hTwo.2
 
 /--
 practical body-on-witness と restore theorem があれば、
