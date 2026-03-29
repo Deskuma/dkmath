@@ -585,6 +585,15 @@ abbrev PrimeGe5BranchAExceptionalPracticalBodyOnWitnessGNTarget : Prop :=
     q ∣ DkMath.CosmicFormulaBinom.GN d 1 (u - 1)
 
 /--
+practical GN slice の concrete 本文を置く既定の theorem 名。
+
+[CFBRC] diffPow body を main target から外さず、
+同値な `GN d 1 (u - 1)` 側の concrete 入口としてこれを使う。
+-/
+abbrev PrimeGe5BranchAExceptionalPracticalGNConcreteTarget : Prop :=
+  PrimeGe5BranchAExceptionalPracticalBodyOnWitnessGNTarget
+
+/--
 practical entrance の canonical self bridge。
 -/
 theorem primeGe5BranchAExceptionalPracticalConcrete_of_self
@@ -656,6 +665,32 @@ theorem primeGe5BranchAExceptionalPracticalGN_of_bodyOnWitness
       (DkMath.CosmicFormulaCellDim.pow_sub_pow_eq_mul_GN d 1 (u - 1))
   rw [← hEq]
   exact hBody hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x
+
+/--
+practical GN concrete theorem 名に対する canonical self bridge。
+-/
+theorem primeGe5BranchAExceptionalPracticalGNConcrete_of_self
+    (hGN : PrimeGe5BranchAExceptionalPracticalGNConcreteTarget) :
+    PrimeGe5BranchAExceptionalPracticalGNConcreteTarget :=
+  hGN
+
+/--
+practical GN concrete theorem 名が立てば、
+practical body-on-witness concrete theorem 名にも直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_GNConcrete
+    (hGN : PrimeGe5BranchAExceptionalPracticalGNConcreteTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalBodyOnWitness_of_GN hGN
+
+/--
+practical body-on-witness concrete theorem 名が立てば、
+同じ内容を practical GN concrete theorem 名としても読める。
+-/
+theorem primeGe5BranchAExceptionalPracticalGNConcrete_of_bodyOnWitnessConcrete
+    (hBody : PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget) :
+    PrimeGe5BranchAExceptionalPracticalGNConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalGN_of_bodyOnWitness hBody
 
 /-- `cyclotomicPrimeCore d 1 (u - 1)` は residual sum に一致する。 -/
 private theorem cyclotomicPrimeCore_one_pred_eq_residual_sum
@@ -2164,6 +2199,15 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_practicalGN
     (primeGe5BranchAExceptionalPracticalBodyOnWitness_of_GN hGN)
 
 /--
+practical GN concrete theorem 名が立てば、
+proof file mainline へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_practicalGNConcrete
+    (hGN : PrimeGe5BranchAExceptionalPracticalGNConcreteTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_practicalGN hGN
+
+/--
 selected-core diffPow route からも、
 practical diffPow witness concrete を経由して proof file mainline へ戻れる。
 -/
@@ -2442,6 +2486,16 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_practicalGN_and_restore
   primeGe5BranchAPrimitivePacketDescent_of_practicalBodyOnWitness_and_restore
     (primeGe5BranchAExceptionalPracticalBodyOnWitness_of_GN hGN)
     hRestore
+
+/--
+practical GN concrete theorem 名と restore theorem があれば、
+primitive packet descent まで直接閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_practicalGNConcrete_and_restore
+    (hGN : PrimeGe5BranchAExceptionalPracticalGNConcreteTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_practicalGN_and_restore hGN hRestore
 
 /--
 selected-core diffPow route からも、

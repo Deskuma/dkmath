@@ -2392,3 +2392,55 @@ Archive
      の concrete theorem 本体を、
      `GN`
      slice を含む current practical route の上で引き続き詰める。
+
+### 日時: 2026/03/29 16:29 JST
+
+1. 目的:
+   - practical route の `GN`
+     slice を、
+     side window であるだけでなく
+     theorem 名の上でも concrete 入口として固定する。
+   - diffPow concrete と
+     `GN`
+     concrete の両方から
+     exceptional mainline / primitive packet descent
+     へ戻れるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `PrimeGe5BranchAExceptionalPracticalGNConcreteTarget`
+     - `primeGe5BranchAExceptionalPracticalGNConcrete_of_self`
+     - `primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_GNConcrete`
+     - `primeGe5BranchAExceptionalPracticalGNConcrete_of_bodyOnWitnessConcrete`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_practicalGNConcrete`
+     - `primeGe5BranchAPrimitivePacketDescent_of_practicalGNConcrete_and_restore`
+     を追加した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     に
+     - `BranchAExceptionalPracticalGNConcreteAdapterTarget`
+     - `branchAExceptionalExistenceMainlineAdapter_of_practicalGNConcrete`
+     - `branchAPrimitivePacketDescentAdapter_of_practicalGNConcrete_and_restore`
+     を追加した。
+
+3. 結論:
+   - practical route は theorem 名の上でも、
+     diffPow concrete と
+     `GN`
+     concrete の 2 つの concrete entrance を持つようになった。
+   - ただし主戦場は依然として diffPow body であり、
+     `GN`
+     concrete はそれと同値な別読みとして保持している。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget`
+     の concrete theorem 本体を、
+     practical route の current missing body として引き続き詰める。
