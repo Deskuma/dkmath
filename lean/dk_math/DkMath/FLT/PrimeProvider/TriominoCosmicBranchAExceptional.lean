@@ -1056,6 +1056,39 @@ theorem not_primeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget :
   exact counterexample_no_same_q_bodyCoreWitness q hArith hBody
 
 /--
+`(d, x, u) = (5, 5, 1)` では
+`cyclotomicPrimeCore 5 1 (1 - 1) = 1`。
+-/
+theorem counterexample_u_one_bodyCore_eq_one :
+    DkMath.CFBRC.cyclotomicPrimeCore 5 1 (1 - 1) = 1 := by
+  decide
+
+/--
+`(d, x, u) = (5, 5, 1)` では
+body/core witness existence 自体が壊れる。
+-/
+theorem not_primeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget :
+    ¬ PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget := by
+  intro h
+  rcases h (d := 5) (x := 5) (u := 1)
+      (by decide) (by omega) (by omega) (by omega)
+      (by decide) (dvd_rfl) (by decide) with ⟨q, hqprime, hq_dvd_core⟩
+  have hq_dvd_core' : q ∣ DkMath.CFBRC.cyclotomicPrimeCore 5 1 (1 - 1) := by
+    simpa [PrimeGe5BranchAExceptionalPracticalBodyCoreDatum] using hq_dvd_core
+  rw [counterexample_u_one_bodyCore_eq_one] at hq_dvd_core'
+  have hq_eq_one : q = 1 := Nat.eq_one_of_dvd_one hq_dvd_core'
+  exact hqprime.ne_one hq_eq_one
+
+/--
+current two-witness canonical target も、
+body/core witness existence が偽である以上 false である。
+-/
+theorem not_primeGe5BranchAExceptionalPracticalTwoWitnessConcreteTarget :
+    ¬ PrimeGe5BranchAExceptionalPracticalTwoWitnessConcreteTarget := by
+  intro h
+  exact not_primeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget h.2
+
+/--
 prepared selected-core witness は、
 datum 分割後の body/core witness としてそのまま読める。
 -/

@@ -128,3 +128,57 @@ Archive
      primitive packet descent / existence mainline
      へ渡す clean bridge の statement を
      より薄い数論形へ正規化する。
+
+### 日時: 2026/03/30 02:42 JST
+
+1. 目的:
+   - `dev-report.md`
+     の指摘どおり、
+     current body-only witness route 自体が false かを
+     先に Lean 上で確定する。
+   - false なら two-witness canonical target も同時に閉じる。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `counterexample_u_one_bodyCore_eq_one`
+     - `not_primeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget`
+     - `not_primeGe5BranchAExceptionalPracticalTwoWitnessConcreteTarget`
+     を追加した。
+   - 反例は
+     `(d, x, u) = (5, 5, 1)`
+     である。
+     このとき
+     `cyclotomicPrimeCore 5 1 (1 - 1) = 1`
+     なので、
+     それを割る prime witness は存在しない。
+
+3. 結論:
+   - `PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget`
+     は false。
+   - したがって
+     `PrimeGe5BranchAExceptionalPracticalTwoWitnessConcreteTarget`
+     も false。
+   - same-`q` route に続き、
+     body-only witness / two-witness route も
+     current statement のままでは本線にならないと Lean 上で確定した。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - `u = 1`
+     では
+     `cyclotomicPrimeCore d 1 (u - 1) = 1`
+     となり、
+     body/core witness existence は構造的に壊れる。
+
+6. 次の課題:
+   - `cyclotomicPrimeCore d 1 (u - 1)` ではなく、
+     `cyclotomicPrimeCore d x u`
+     あるいは
+     `boundaryCyclotomicPrimeCore .right d x u`
+     を first target に据えた route へ切り替える。
+   - arithmetic core / boundary core 側の存在 theorem を
+     Mathlib.FLT 非依存で直接立てる。
