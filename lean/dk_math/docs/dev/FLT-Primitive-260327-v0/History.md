@@ -3048,3 +3048,44 @@ Archive
 5. 次の課題:
    - `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
      の concrete 本体を書く。
+
+### 日時: 2026/03/30 00:55 JST
+
+1. 目的:
+   - `review-060` の判断どおり、
+     datum-local practical body の first direct body は
+     公式には selected-core concrete のまま維持しつつ、
+     実際の押し込みは boundary-core face 先行で読めるよう
+     theorem 名の上でも直線化する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `primeGe5BranchAExceptionalPracticalBoundaryCoreOnDatum_of_selectedCongruenceOnDatum`
+     - `primeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumConcrete_of_selectedCongruenceOnDatum`
+     を追加した。
+   - これは既存の
+     `exceptional_boundary_datum_prepared_boundary_core_dvd_of_selected_modEq`
+     を datum-local congruence target に差し戻した thin bridge である。
+
+3. 結論:
+   - practical datum-local faces は
+     - selected-core
+     - selected-congruence
+     - boundary-core
+     の三面で相互往復できるだけでなく、
+     `selected-congruence -> boundary-core`
+     も direct に読めるようになった。
+   - したがって
+     `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
+     の本文は、
+     boundary-core 先行の proof sketch を
+     theorem 名の上でもそのままなぞれる状態になった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   を完了まで待って実行し、成功を確認した。
+
+5. 次の課題:
+   - `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
+     の concrete 本体を書く。

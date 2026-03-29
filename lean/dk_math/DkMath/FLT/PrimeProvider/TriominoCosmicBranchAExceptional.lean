@@ -2231,6 +2231,29 @@ theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_selected
     hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x hMod
 
 /--
+datum-local congruence があれば、
+prepared helper を通じて datum-local boundary-core divisibility に直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalBoundaryCoreOnDatum_of_selectedCongruenceOnDatum
+    (hCongr : PrimeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatumTarget) :
+    PrimeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumTarget := by
+  intro d x u q hDatum
+  rcases hDatum with
+    ⟨hd_prime, hd_ge, hx, hu, hcop, hdvd, hWieferich, hqprime, hq_dvd_x1, hq_not_dvd_x⟩
+  exact exceptional_boundary_datum_prepared_boundary_core_dvd_of_selected_modEq
+    hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x
+    (hCongr ⟨hd_prime, hd_ge, hx, hu, hcop, hdvd, hWieferich, hqprime, hq_dvd_x1, hq_not_dvd_x⟩)
+
+/--
+datum-local congruence が立てば、
+datum-local boundary-core concrete theorem 名としても読める。
+-/
+theorem primeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumConcrete_of_selectedCongruenceOnDatum
+    (hCongr : PrimeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatumTarget) :
+    PrimeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalBoundaryCoreOnDatum_of_selectedCongruenceOnDatum hCongr
+
+/--
 concrete arithmetic witness を既定値に焼き付けると、
 残る missing math は witness-aware CFBRC existence part 1 本になる。
 -/
