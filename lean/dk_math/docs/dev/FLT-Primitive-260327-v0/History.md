@@ -1019,3 +1019,55 @@ Archive
 6. 次の課題:
    - `ExceptionalBoundaryDatumPreparedArithmeticPartConcreteTarget`
      の concrete theorem 本体を切る。
+
+### 日時: 2026/03/29 00:10 JST
+
+1. 目的:
+   - `ExceptionalBoundaryDatumPreparedArithmeticPartConcreteTarget`
+     の concrete 本体を実装し、
+     prepared concrete の残りを
+     `CFBRC existence`
+     1 本へさらに局所化する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `exceptional_boundary_datum_prepared_arithmetic_part_concrete`
+     を追加した。
+   - 証明では
+     `x + 1`
+     の素因子
+     `q`
+     を
+     `Nat.exists_prime_and_dvd`
+     で取り、
+     もし
+     `q ∣ x`
+     なら
+     `q ∣ ((x+1)-x) = 1`
+     となることから矛盾を出した。
+   - さらに
+     - `exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_cfbrc`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_cfbrcPart`
+     - `primeGe5BranchAPrimitivePacketDescent_of_cfbrcPart_and_restore`
+     を追加し、
+     arithmetic concrete を既定値に焼き付けた wrapper を置いた。
+
+3. 結論:
+   - prepared concrete の arithmetic part は concrete に閉じた。
+   - proof file 上の残る missing math は、
+     実質
+     `ExceptionalBoundaryDatumPreparedCFBRCExistencePartTarget`
+     1 本だと読めるようになった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedCFBRCExistencePartTarget`
+     の concrete theorem 本体を切る。

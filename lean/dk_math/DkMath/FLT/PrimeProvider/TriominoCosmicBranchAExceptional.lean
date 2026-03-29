@@ -224,6 +224,30 @@ theorem exceptional_boundary_datum_prepared_arithmetic_part_concrete_of_self
   hArith
 
 /--
+prepared arithmetic part の concrete 本体。
+
+[CFBRC] arithmetic part は、
+`x + 1`
+の素因子を 1 つ取れば十分である。
+その prime がもし
+`x`
+も割るなら、
+差を取って
+`1`
+を割ってしまう。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_part_concrete
+    : ExceptionalBoundaryDatumPreparedArithmeticPartConcreteTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  have hx1_gt1 : 1 < x + 1 := by omega
+  obtain ⟨q, hqprime, hq_dvd_x1⟩ := Nat.exists_prime_and_dvd (Nat.ne_of_gt hx1_gt1)
+  refine ⟨q, hqprime, ?_⟩
+  intro hq_dvd_x
+  have hq_dvd_one : q ∣ (x + 1) - x := Nat.dvd_sub hq_dvd_x1 hq_dvd_x
+  have : q ∣ 1 := by simpa using hq_dvd_one
+  exact hqprime.not_dvd_one this
+
+/--
 ordinary branch における boundary-core prime existence の reference theorem。
 
 [CFBRC] exceptional proof は、この ordinary theorem と仮定・中間結論を
@@ -492,6 +516,20 @@ theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_arithmet
   exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_parts
     (exceptional_boundary_datum_prepared_arithmetic_part_concrete_of_self hArith)
     hCFBRC
+
+/--
+arithmetic concrete 本体が閉じた後は、
+残る prepared concrete の missing math は CFBRC existence part 1 本だけである。
+
+[CFBRC] arithmetic part の concrete 実装
+`exceptional_boundary_datum_prepared_arithmetic_part_concrete`
+を既定値として焼き付けた wrapper。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_cfbrc
+    (hCFBRC : ExceptionalBoundaryDatumPreparedCFBRCExistencePartTarget) :
+    ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget :=
+  exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_arithmeticConcrete_and_cfbrc
+    exceptional_boundary_datum_prepared_arithmetic_part_concrete hCFBRC
 
 /--
 prepared concrete theorem 名の canonical proof skeleton。
@@ -851,6 +889,16 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_preparedConcrete
     (exceptional_boundary_datum_prepared_arithmetic_core_of_concrete hConcrete)
 
 /--
+prepared arithmetic part の concrete 実装を既定値にすると、
+mainline へ戻るための missing math も CFBRC existence part 1 本に縮む。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_cfbrcPart
+    (hCFBRC : ExceptionalBoundaryDatumPreparedCFBRCExistencePartTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_preparedConcrete
+    (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_cfbrc hCFBRC)
+
+/--
 prepared arithmetic core の concrete theorem 名と restore theorem があれば、
 primitive packet descent へもそのまま流せる。
 -/
@@ -860,6 +908,18 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_preparedConcrete_and_restore
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_preparedArithmeticCore_and_restore
     (exceptional_boundary_datum_prepared_arithmetic_core_of_concrete hConcrete)
+    hRestore
+
+/--
+prepared arithmetic part を既定 concrete に固定すると、
+primitive packet descent に残る missing math も CFBRC existence part 1 本だけである。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_cfbrcPart_and_restore
+    (hCFBRC : ExceptionalBoundaryDatumPreparedCFBRCExistencePartTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_preparedConcrete_and_restore
+    (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_cfbrc hCFBRC)
     hRestore
 
 /--
