@@ -1754,3 +1754,47 @@ Archive
    - `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessTarget`
      の concrete theorem 本体を切るか、
      residual-on-witness 版を main direct target として維持するかを判断する。
+
+### 日時: 2026/03/29 13:55 JST
+
+1. 目的:
+   - `SelectedDiffPowOnWitness`
+     を、
+     単なる比較候補ではなく
+     proof file 上の direct concrete theorem 名として固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget`
+     を追加した。
+   - さらに
+     - `exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_concrete`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_selectedDiffPowConcrete`
+     - `primeGe5BranchAPrimitivePacketDescent_of_selectedDiffPowConcrete_and_restore`
+     を追加し、
+     mainline / packet descent の canonical wrapper も
+     concrete 名から直接読めるようにした。
+
+3. 結論:
+   - selected route の direct body は、
+     もはや
+     「target 候補」
+     ではなく、
+     `SelectedDiffPowOnWitnessConcreteTarget`
+     という concrete theorem 名で追える。
+   - したがって次に本文を書く場所は、
+     `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget`
+     1 箇所へさらに絞れた。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget`
+     の concrete theorem 本体を切る。
