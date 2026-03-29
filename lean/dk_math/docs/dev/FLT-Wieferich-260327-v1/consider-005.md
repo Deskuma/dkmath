@@ -1,4 +1,4 @@
-# 2024-06-17 PrimeGe5BranchA の攻め筋について
+# consider: PrimeGe5BranchA の攻め筋について
 
 うむ。わっちなら、 **いきなり packet を作りに行かず** 、まず
 

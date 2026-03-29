@@ -1,4 +1,4 @@
-# 2024-06-17: PowComparisonKernel をさらに分解する
+# Hint: PowComparisonKernel をさらに分解する
 
 ## 3. わっちの見立て
 
