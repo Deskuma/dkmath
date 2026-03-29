@@ -957,6 +957,37 @@ theorem primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcrete_of_self
     PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget :=
   hCore
 
+/--
+datum-local congruence が立てば、
+datum-local selected core divisibility へも直ちに戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalSelectedCoreOnDatum_of_selectedCongruenceOnDatum
+    (hCongr : PrimeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatumTarget) :
+    PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumTarget := by
+  intro d x u q hDatum
+  have hMod := hCongr hDatum
+  rcases hDatum with
+    ⟨_hd_prime, _hd_ge, _hx, hu, _hcop, _hdvd, _hWieferich, hqprime, _hq_dvd_x1, _hq_not_dvd_x⟩
+  have hle : (u - 1) ^ d ≤ u ^ d := by
+    exact Nat.pow_le_pow_left (Nat.sub_le _ _) d
+  have hq_dvd_diff : q ∣ u ^ d - (u - 1) ^ d := by
+    exact (Nat.modEq_iff_dvd' hle).mp hMod
+  have hu_eq : 1 + (u - 1) = u := by
+    simpa [Nat.succ_eq_add_one, Nat.add_comm] using Nat.succ_pred_eq_of_pos hu
+  have hq_dvd_diff' : q ∣ (1 + (u - 1)) ^ d - (u - 1) ^ d := by
+    simpa [hu_eq] using hq_dvd_diff
+  exact DkMath.CFBRC.prime_dvd_cyclotomicPrimeCore_of_dvd_sub_not_dvd_left
+    hqprime hq_dvd_diff' hqprime.not_dvd_one
+
+/--
+datum-local congruence からも、
+datum-local selected core concrete theorem 名へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcrete_of_selectedCongruenceOnDatum
+    (hCongr : PrimeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatumTarget) :
+    PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalSelectedCoreOnDatum_of_selectedCongruenceOnDatum hCongr
+
 /-- `cyclotomicPrimeCore d 1 (u - 1)` は residual sum に一致する。 -/
 private theorem cyclotomicPrimeCore_one_pred_eq_residual_sum
     (d u : ℕ) (hu : 0 < u) :

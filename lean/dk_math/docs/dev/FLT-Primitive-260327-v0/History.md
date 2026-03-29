@@ -2900,3 +2900,49 @@ Archive
 5. 次の課題:
    - `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
      の concrete 本体そのものを書く。
+
+### 日時: 2026/03/29 23:59 JST
+
+1. 目的:
+   - datum-local core route と
+     既存の prepared selected-core route
+     の往復を明示し、
+     current practical first body が
+     既存 route の別名であることを
+     theorem 名の上でも固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `exceptional_boundary_datum_prepared_selectedCoreOnWitness_of_practicalSelectedCoreOnDatum`
+     を追加した。
+   - これにより、
+     `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumTarget`
+     から
+     `ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget`
+     へ直接戻れるようにした。
+   - 同時に、
+     datum-local congruence から
+     datum-local core へ戻る橋
+     - `primeGe5BranchAExceptionalPracticalSelectedCoreOnDatum_of_selectedCongruenceOnDatum`
+     - `primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcrete_of_selectedCongruenceOnDatum`
+     も追加した。
+
+3. 結論:
+   - current practical first body は、
+     datum-local core / datum-local congruence /
+     prepared selected-core
+     の三者の間で往復できるところまで整理された。
+   - したがって残る作業は、
+     もはや routing ではなく
+     `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
+     の concrete 本体そのものだと
+     さらに明確になった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   を完了まで待って実行し、成功を確認した。
+
+5. 次の課題:
+   - `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
+     の concrete 本体を書く。
