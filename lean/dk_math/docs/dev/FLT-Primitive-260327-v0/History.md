@@ -833,3 +833,46 @@ Archive
 6. 次の課題:
    - `ExceptionalBoundaryDatumPreparedArithmeticCoreTarget`
      の concrete theorem 本体を切る。
+
+### 日時: 2026/03/29 JST
+
+1. 目的:
+   - prepared arithmetic core の concrete 本文を、
+     proof file 上で直接追える theorem 名として固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget`
+     を追加した。
+   - さらに
+     - `exceptional_boundary_datum_prepared_arithmetic_core_of_concrete`
+     - `exceptional_boundary_datum_arithmetic_core_of_preparedConcrete`
+     - `primeGe5BranchAPrimitivePacketDescent_of_preparedConcrete_and_restore`
+     を追加し、
+     prepared concrete 名から
+     canonical prepared target / arithmetic core / downstream
+     へ戻る橋を揃えた。
+
+3. 結論:
+   - 次に本文を書くべき場所は、
+     抽象 target
+     `ExceptionalBoundaryDatumPreparedArithmeticCoreTarget`
+     そのものでも追えるが、
+     proof file 上では
+     `ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget`
+     を concrete theorem 名として直接追ってよい。
+   - これにより、
+     prepared body も theorem 名の上で canonical な着手点を持った。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget`
+     の concrete theorem 本体を切る。

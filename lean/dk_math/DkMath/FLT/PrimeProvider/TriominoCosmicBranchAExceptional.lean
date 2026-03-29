@@ -156,6 +156,16 @@ abbrev ExceptionalBoundaryDatumPreparedArithmeticCoreTarget : Prop :=
       ¬ q ∣ x
 
 /--
+prepared arithmetic core の concrete 本文を置く既定の theorem 名。
+
+[CFBRC] `review-039` 以降は、
+`hdvd` と `hWieferich` が分離済みの concrete body を
+この theorem 名で追う。
+-/
+abbrev ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget : Prop :=
+  ExceptionalBoundaryDatumPreparedArithmeticCoreTarget
+
+/--
 ordinary branch における boundary-core prime existence の reference theorem。
 
 [CFBRC] exceptional proof は、この ordinary theorem と仮定・中間結論を
@@ -385,6 +395,25 @@ theorem exceptional_boundary_datum_arithmetic_core_of_prepared
   intro d x u hd_prime hd_ge hx hu hcop hDatum
   rcases hDatum with ⟨hdvd, hWieferich⟩
   exact hPrepared hd_prime hd_ge hx hu hcop hdvd hWieferich
+
+/--
+prepared arithmetic core の concrete theorem 名から、
+canonical prepared target へ戻る橋。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_core_of_concrete
+    (hConcrete : ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget) :
+    ExceptionalBoundaryDatumPreparedArithmeticCoreTarget :=
+  hConcrete
+
+/--
+prepared arithmetic core の concrete theorem 名から、
+canonical arithmetic core へ戻る橋。
+-/
+theorem exceptional_boundary_datum_arithmetic_core_of_preparedConcrete
+    (hConcrete : ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget) :
+    ExceptionalBoundaryDatumArithmeticCoreTarget :=
+  exceptional_boundary_datum_arithmetic_core_of_prepared
+    (exceptional_boundary_datum_prepared_arithmetic_core_of_concrete hConcrete)
 
 /--
 exceptional datum 形の concrete theorem 名から、
@@ -690,6 +719,18 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_preparedArithmeticCore_and_rest
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_arithmeticCore_and_restore
     (exceptional_boundary_datum_arithmetic_core_of_prepared hPrepared)
+    hRestore
+
+/--
+prepared arithmetic core の concrete theorem 名と restore theorem があれば、
+primitive packet descent へもそのまま流せる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_preparedConcrete_and_restore
+    (hConcrete : ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_preparedArithmeticCore_and_restore
+    (exceptional_boundary_datum_prepared_arithmetic_core_of_concrete hConcrete)
     hRestore
 
 /--
