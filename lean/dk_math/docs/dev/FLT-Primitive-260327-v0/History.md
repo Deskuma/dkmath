@@ -1250,3 +1250,62 @@ Archive
 6. 次の課題:
    - `ExceptionalBoundaryDatumPreparedDiffPowOnWitnessTarget`
      の concrete theorem 本体を切る。
+
+### 日時: 2026/03/29 01:18 JST
+
+1. 目的:
+   - 差冪 divisibility target を、
+     さらに
+     `Nat.ModEq`
+     で読む target へ落とし、
+     next body を合同条件として追えるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `ExceptionalBoundaryDatumPreparedDiffPowModEqOnWitnessTarget`
+     - `exceptional_boundary_datum_prepared_diffPow_on_witness_of_modEq`
+     を追加した。
+   - この橋では、
+     `Nat.modEq_iff_dvd'`
+     を
+     `((u - 1)^d ≤ u^d)`
+     の下で使い、
+     `(u - 1)^d ≡ u^d [MOD q]`
+     から
+     `q ∣ u^d - (u - 1)^d`
+     を回収している。
+   - さらに downstream wrapper として
+     - `exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_diffPowModEq`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_diffPowModEq`
+     - `primeGe5BranchAPrimitivePacketDescent_of_diffPowModEq_and_restore`
+     を追加した。
+
+3. 結論:
+   - current proof file の残核は、
+     divisibility 版
+     `ExceptionalBoundaryDatumPreparedDiffPowOnWitnessTarget`
+     だけでなく、
+     合同版
+     `ExceptionalBoundaryDatumPreparedDiffPowModEqOnWitnessTarget`
+     としても読める。
+   - したがって next body は、
+     `u^d - (u - 1)^d`
+     の可除性そのものを直接示す代わりに、
+     まず
+     `(u - 1)^d ≡ u^d [MOD q]`
+     を狙う route でもよい。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedDiffPowModEqOnWitnessTarget`
+     あるいは
+     `ExceptionalBoundaryDatumPreparedDiffPowOnWitnessTarget`
+     の concrete theorem 本体を切る。

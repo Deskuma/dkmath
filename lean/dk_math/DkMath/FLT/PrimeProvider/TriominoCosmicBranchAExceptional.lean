@@ -360,6 +360,25 @@ abbrev ExceptionalBoundaryDatumPreparedDiffPowOnWitnessTarget : Prop :=
     ¬ q ∣ x →
     q ∣ u ^ d - (u - 1) ^ d
 
+/--
+差冪 divisibility を `Nat.ModEq` で読む後段 target。
+
+[CFBRC] `review-047` 以降は、
+残る local kernel を
+`(u - 1)^d ≡ u^d [MOD q]`
+の形で追ってもよい。
+-/
+abbrev ExceptionalBoundaryDatumPreparedDiffPowModEqOnWitnessTarget : Prop :=
+  ∀ {d x u q : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    Nat.Prime q →
+    q ∣ (x + 1) →
+    ¬ q ∣ x →
+    (u - 1) ^ d ≡ u ^ d [MOD q]
+
 /-- `cyclotomicPrimeCore d 1 (u - 1)` は residual sum に一致する。 -/
 private theorem cyclotomicPrimeCore_one_pred_eq_residual_sum
     (d u : ℕ) (hu : 0 < u) :
@@ -719,6 +738,18 @@ theorem exceptional_boundary_datum_prepared_cfbrc_residual_on_witness_of_diffPow
   exact hq_dvd_core
 
 /--
+`Nat.ModEq` 版の差冪 target から divisibility 版の差冪 target を回収する橋。
+-/
+theorem exceptional_boundary_datum_prepared_diffPow_on_witness_of_modEq
+    (hMod : ExceptionalBoundaryDatumPreparedDiffPowModEqOnWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedDiffPowOnWitnessTarget := by
+  intro d x u q hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x
+  have hle : (u - 1) ^ d ≤ u ^ d := by
+    exact Nat.pow_le_pow_left (Nat.sub_le _ _) d
+  exact (Nat.modEq_iff_dvd' hle).mp
+    (hMod hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x)
+
+/--
 concrete arithmetic witness を既定値に焼き付けると、
 残る missing math は witness-aware CFBRC existence part 1 本になる。
 -/
@@ -745,6 +776,15 @@ theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_diffPow
     ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget :=
   exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_residual
     (exceptional_boundary_datum_prepared_cfbrc_residual_on_witness_of_diffPow hDiff)
+
+/--
+差冪の `Nat.ModEq` target が立てば、divisibility 版を経由して prepared concrete 本体は閉じる。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_diffPowModEq
+    (hMod : ExceptionalBoundaryDatumPreparedDiffPowModEqOnWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget :=
+  exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_diffPow
+    (exceptional_boundary_datum_prepared_diffPow_on_witness_of_modEq hMod)
 
 /--
 arithmetic concrete 本体が閉じた後は、
@@ -1156,6 +1196,15 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_diffPow
     (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_diffPow hDiff)
 
 /--
+差冪の `Nat.ModEq` target だけを示せば、divisibility 版を経由して proof file mainline へ戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_diffPowModEq
+    (hMod : ExceptionalBoundaryDatumPreparedDiffPowModEqOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_preparedConcrete
+    (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_diffPowModEq hMod)
+
+/--
 prepared arithmetic core の concrete theorem 名と restore theorem があれば、
 primitive packet descent へもそのまま流せる。
 -/
@@ -1211,6 +1260,17 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_diffPow_and_restore
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_preparedConcrete_and_restore
     (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_diffPow hDiff)
+    hRestore
+
+/--
+差冪の `Nat.ModEq` target と restore theorem があれば、primitive packet descent まで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_diffPowModEq_and_restore
+    (hMod : ExceptionalBoundaryDatumPreparedDiffPowModEqOnWitnessTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_preparedConcrete_and_restore
+    (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_diffPowModEq hMod)
     hRestore
 
 /--
