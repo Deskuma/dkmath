@@ -1419,3 +1419,55 @@ Archive
      `ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget`
      をまだ保持すべきか、
      selected-witness 版を canonical route に上げるかを判断する。
+
+### 日時: 2026/03/29 13:08 JST
+
+1. 目的:
+   - `review-050`
+     に合わせて、
+     universal congruence kernel から
+     selected-witness route への標準橋を置き、
+     現在の canonical route 候補が
+     selected-witness 版であることをコード上でも明示する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `exceptional_boundary_datum_prepared_selectedCongruenceWitness_of_congruenceKernel`
+     を追加した。
+   - この定理では、
+     `exceptional_boundary_datum_prepared_arithmetic_witness_concrete`
+     で得た
+     `q ∣ x + 1`
+     つき witness prime を使い、
+     stronger な
+     `ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget`
+     から
+     `ExceptionalBoundaryDatumPreparedSelectedCongruenceWitnessTarget`
+     を回収する。
+
+3. 結論:
+   - universal kernel は、
+     依然として stronger theorem として保持できるが、
+     proof file の current main route は
+     selected-witness 版へ自然に落ちる。
+   - したがって next body は、
+     universal kernel の concrete 本体よりも
+     `ExceptionalBoundaryDatumPreparedSelectedCongruenceWitnessTarget`
+     の concrete 本体を優先してよい。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedSelectedCongruenceWitnessTarget`
+     の concrete theorem 本体を切る。
+   - 必要なら、
+     selected-witness 版のさらに下に
+     `chosen q` 固定の local congruence target
+     を置いて missing math をもう 1 段だけ局所化する。

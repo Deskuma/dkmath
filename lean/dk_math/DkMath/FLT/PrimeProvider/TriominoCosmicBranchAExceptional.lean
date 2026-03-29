@@ -800,6 +800,23 @@ theorem exceptional_boundary_datum_prepared_diffPow_modEq_on_witness_of_congruen
   hKernel
 
 /--
+universal congruence kernel があれば、selected-witness 版は concrete arithmetic witness で直ちに従う。
+
+[CFBRC] current proof exploration では selected-witness 版を主戦場にしたいので、
+stronger な universal kernel からこちらへ落とす標準橋を先に置いておく。
+-/
+theorem exceptional_boundary_datum_prepared_selectedCongruenceWitness_of_congruenceKernel
+    (hKernel : ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedCongruenceWitnessTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  rcases exceptional_boundary_datum_prepared_arithmetic_witness_concrete
+      hd_prime hd_ge hx hu hcop hdvd hWieferich with
+    ⟨q, hqprime, hq_dvd_x1, hq_not_dvd_x⟩
+  refine ⟨q, hqprime, hq_dvd_x1, hq_not_dvd_x, ?_⟩
+  exact hKernel hd_prime hd_ge hx hu hcop hdvd hWieferich
+    hqprime hq_dvd_x1 hq_not_dvd_x
+
+/--
 選んだ witness prime 上の diffPow congruence があれば、boundary core divisibility は直接従う。
 
 [CFBRC] universal target を経由せず、
