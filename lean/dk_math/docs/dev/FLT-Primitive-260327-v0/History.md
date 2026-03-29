@@ -1705,3 +1705,52 @@ Archive
      selected residual-on-witness の下に
      diffPow local body
      を direct concrete theorem 名で切る。
+
+### 日時: 2026/03/29 13:42 JST
+
+1. 目的:
+   - `review-052`
+     に合わせて、
+     selected residual-on-witness のさらに下に
+     diffPow divisibility を direct concrete theorem 名として置けるかを試す。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessTarget`
+     - `exceptional_boundary_datum_prepared_selectedResidualOnWitness_of_selectedDiffPow`
+     - `exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_diffPow`
+     - `exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_diffPowModEq`
+     - `exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_congruenceKernel`
+     を追加した。
+   - さらに downstream wrapper として
+     - `primeGe5BranchAExceptionalExistenceMainline_of_selectedDiffPowOnWitness`
+     - `primeGe5BranchAPrimitivePacketDescent_of_selectedDiffPowOnWitness_and_restore`
+     を追加した。
+
+3. 結論:
+   - selected route の current direct body は、
+     residual sum だけでなく
+     `q ∣ u^d - (u - 1)^d`
+     という差冪 divisibility でも自然に追える。
+   - しかもこの route も、
+     既存の diffPow / `Nat.ModEq` / congruence-kernel
+     群からそのまま降りてくる。
+   - したがって current direct concrete theorem 候補は、
+     residual-on-witness か
+     selected diffPow-on-witness
+     の 2 つで比較できるが、
+     proof body の見通しは後者の方がよい可能性がある。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessTarget`
+     の concrete theorem 本体を切るか、
+     residual-on-witness 版を main direct target として維持するかを判断する。

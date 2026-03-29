@@ -474,6 +474,25 @@ abbrev ExceptionalBoundaryDatumPreparedSelectedResidualOnWitnessTarget : Prop :=
     ¬ q ∣ x →
     q ∣ ∑ k ∈ Finset.range d, (u - 1) ^ k * u ^ (d - 1 - k)
 
+/--
+選んだ witness prime に対する差冪 divisibility target。
+
+[CFBRC] residual sum divisibility がまだ重ければ、
+selected route の direct body を
+`q ∣ u^d - (u - 1)^d`
+として追ってよい。
+-/
+abbrev ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessTarget : Prop :=
+  ∀ {d x u q : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    Nat.Prime q →
+    q ∣ (x + 1) →
+    ¬ q ∣ x →
+    q ∣ u ^ d - (u - 1) ^ d
+
 /-- `cyclotomicPrimeCore d 1 (u - 1)` は residual sum に一致する。 -/
 private theorem cyclotomicPrimeCore_one_pred_eq_residual_sum
     (d u : ℕ) (hu : 0 < u) :
@@ -981,6 +1000,41 @@ theorem exceptional_boundary_datum_prepared_selectedResidualOnWitness_of_congrue
     (hKernel : ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget) :
     ExceptionalBoundaryDatumPreparedSelectedResidualOnWitnessTarget :=
   exceptional_boundary_datum_prepared_selectedResidualOnWitness_of_diffPowModEq
+    (exceptional_boundary_datum_prepared_diffPow_modEq_on_witness_of_congruenceKernel hKernel)
+
+/--
+selected diffPow-on-witness があれば、selected residual-on-witness は従う。
+-/
+theorem exceptional_boundary_datum_prepared_selectedResidualOnWitness_of_selectedDiffPow
+    (hDiff : ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedResidualOnWitnessTarget :=
+  exceptional_boundary_datum_prepared_selectedResidualOnWitness_of_diffPow hDiff
+
+/--
+既存の diffPow-on-witness route は、そのまま selected diffPow-on-witness としても読める。
+-/
+theorem exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_diffPow
+    (hDiff : ExceptionalBoundaryDatumPreparedDiffPowOnWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessTarget := by
+  intro d x u q hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x
+  exact hDiff hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x
+
+/--
+既存の diffPow `ModEq` route は、そのまま selected diffPow-on-witness へ落ちる。
+-/
+theorem exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_diffPowModEq
+    (hMod : ExceptionalBoundaryDatumPreparedDiffPowModEqOnWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessTarget :=
+  exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_diffPow
+    (exceptional_boundary_datum_prepared_diffPow_on_witness_of_modEq hMod)
+
+/--
+additional congruence kernel は、そのまま selected diffPow-on-witness まで落とせる。
+-/
+theorem exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_congruenceKernel
+    (hKernel : ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessTarget :=
+  exceptional_boundary_datum_prepared_selectedDiffPowOnWitness_of_diffPowModEq
     (exceptional_boundary_datum_prepared_diffPow_modEq_on_witness_of_congruenceKernel hKernel)
 
 /--
@@ -1577,6 +1631,15 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_selectedResidualOnWitness
     (exceptional_boundary_datum_prepared_selectedCoreOnWitness_of_selectedResidual hResidual)
 
 /--
+selected diffPow-on-witness だけを示せば、selected residual / core を経由して proof file mainline へ戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_selectedDiffPowOnWitness
+    (hDiff : ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_selectedResidualOnWitness
+    (exceptional_boundary_datum_prepared_selectedResidualOnWitness_of_selectedDiffPow hDiff)
+
+/--
 差冪 divisibility だけを示せば、selected-core-on-witness を経由して proof file mainline へ戻れる。
 -/
 theorem primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreDiffPow
@@ -1731,6 +1794,17 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_selectedResidualOnWitness_and_r
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_selectedCoreOnWitness_and_restore
     (exceptional_boundary_datum_prepared_selectedCoreOnWitness_of_selectedResidual hResidual)
+    hRestore
+
+/--
+selected diffPow-on-witness と restore theorem があれば、selected residual / core を経由して primitive packet descent まで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_selectedDiffPowOnWitness_and_restore
+    (hDiff : ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_selectedResidualOnWitness_and_restore
+    (exceptional_boundary_datum_prepared_selectedResidualOnWitness_of_selectedDiffPow hDiff)
     hRestore
 
 /--
