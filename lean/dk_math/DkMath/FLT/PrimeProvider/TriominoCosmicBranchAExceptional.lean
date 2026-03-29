@@ -450,6 +450,20 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_datumConcrete
     (exceptional_boundaryData_right_branch_supply_concrete_of_datum hDatum)
 
 /--
+datum theorem があれば、
+split assembler と datum skeleton の合成だけで proof file mainline は閉じる。
+
+[CFBRC] downstream 側はこの theorem を入口にすれば、
+ordinary/reference 側の配線を再度意識せずに済む。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_reference_and_datum
+    (hDatum : ExceptionalBoundaryDatumConcreteTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_datumConcrete
+    (exceptional_boundary_datum_concrete_of_split
+      (cfbrcBoundaryCorePrimeExistence_split_of_reference_and_datum hDatum))
+
+/--
 pack-local boundary existence があれば、
 proof file mainline target へは `boundaryCyclotomicPrimeCore` の展開だけで戻れる。
 
@@ -527,6 +541,18 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_datumConcrete_and_restore
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_boundaryConcrete_and_restore
     (exceptional_boundaryData_right_branch_supply_concrete_of_datum hDatum)
+    hRestore
+
+/--
+datum theorem と restore theorem があれば、
+primitive packet descent は ordinary/reference 側の assembler を含めて閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_reference_and_datum_and_restore
+    (hDatum : ExceptionalBoundaryDatumConcreteTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_exceptionalMainline_and_restore
+    (primeGe5BranchAExceptionalExistenceMainline_of_reference_and_datum hDatum)
     hRestore
 
 end DkMath.FLT

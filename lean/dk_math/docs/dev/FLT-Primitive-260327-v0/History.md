@@ -639,3 +639,50 @@ Archive
      datum theorem 自体の本文も
      exceptional-only arithmetic / CFBRC core
      にさらに局所化する。
+
+### 日時: 2026/03/29 JST
+
+1. 目的:
+   - downstream 側から見て、
+     datum theorem 1 本で mainline / packet descent が閉じることを
+     theorem 名で固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `primeGe5BranchAExceptionalExistenceMainline_of_reference_and_datum`
+     - `primeGe5BranchAPrimitivePacketDescent_of_reference_and_datum_and_restore`
+     を追加した。
+   - 前者は
+     `cfbrcBoundaryCorePrimeExistence_split_of_reference_and_datum`
+     と
+     `exceptional_boundary_datum_concrete_of_split`
+     の合成で
+     proof file mainline を閉じる。
+   - 後者はそこから
+     restore theorem
+     と既存 bridge を使って
+     primitive packet descent
+     まで流す thin wrapper である。
+
+3. 結論:
+   - proof file の missing math は引き続き
+     `ExceptionalBoundaryDatumConcreteTarget`
+     1 本であり、
+     その theorem が立てば downstream は ordinary/reference 側の配線込みで
+     自動的に閉じると読めるようになった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumConcreteTarget`
+     の concrete theorem 本体を切る。
+   - 必要なら、
+     その本文の中で使う exceptional-only arithmetic / CFBRC core
+     だけを別 theorem に切る。
