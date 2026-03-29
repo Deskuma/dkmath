@@ -1125,3 +1125,56 @@ Archive
 6. 次の課題:
    - `ExceptionalBoundaryDatumPreparedCFBRCExistenceOnWitnessTarget`
      の concrete theorem 本体を切る。
+
+### 日時: 2026/03/29 00:36 JST
+
+1. 目的:
+   - witness-aware `CFBRC existence`
+     をさらに residual sum divisibility へ還元し、
+     next body をより直接的な局所核 1 本へ絞る。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `sum_range_modEq`
+     - `ExceptionalBoundaryDatumPreparedCFBRCResidualOnWitnessTarget`
+     - `exceptional_boundary_datum_prepared_cfbrc_existence_on_witness_of_residual`
+     を追加した。
+   - この橋では、
+     `q ∣ x + 1`
+     から
+     `x + u ≡ u - 1 [MOD q]`
+     を作り、
+     `boundaryCyclotomicPrimeCore .right d x u`
+     の各項を
+     `((u - 1)^k * u^(d-1-k))`
+     へ項別合同で落とした。
+   - さらに
+     - `exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_residual`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_residual`
+     - `primeGe5BranchAPrimitivePacketDescent_of_residual_and_restore`
+     を追加し、
+     residual target から downstream 全体へ戻る wrapper を揃えた。
+
+3. 結論:
+   - witness-aware `CFBRC existence`
+     の next body は、
+     もはや boundary core 自体の divisibility を直接示す形ではなく、
+     `u - 1`
+     評価の residual sum を
+     `q`
+     が割ることを示す局所核
+     `ExceptionalBoundaryDatumPreparedCFBRCResidualOnWitnessTarget`
+     として読める。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedCFBRCResidualOnWitnessTarget`
+     の concrete theorem 本体を切る。

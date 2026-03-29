@@ -13,6 +13,20 @@ set_option linter.style.emptyLine false
 
 namespace DkMath.FLT
 
+/-- `Nat.ModEq` の下での `Finset.range` 和の項別合同。 -/
+private theorem sum_range_modEq
+    {n q : ℕ} {f g : ℕ → ℕ}
+    (hfg : ∀ i, i < n → f i ≡ g i [MOD q]) :
+    ((Finset.range n).sum f) ≡ ((Finset.range n).sum g) [MOD q] := by
+  induction n with
+  | zero =>
+      exact Nat.ModEq.rfl
+  | succ n ih =>
+      rw [Finset.sum_range_succ, Finset.sum_range_succ]
+      exact (ih (by
+        intro i hi
+        exact hfg i (Nat.lt_succ_of_lt hi))).add (hfg n (Nat.lt_succ_self n))
+
 /-!
 # Triomino/Cosmic Branch A Exceptional Existence
 
@@ -310,6 +324,24 @@ abbrev ExceptionalBoundaryDatumPreparedCFBRCExistenceOnWitnessTarget : Prop :=
     q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u
 
 /--
+`q ∣ x + 1` を用いて boundary core を residual sum へ還元した後段 target。
+
+[CFBRC] witness-aware existence の残核を、
+`x + u ≡ u - 1 [MOD q]`
+で得られる residual sum の divisibility 1 本に押し込む。
+-/
+abbrev ExceptionalBoundaryDatumPreparedCFBRCResidualOnWitnessTarget : Prop :=
+  ∀ {d x u q : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    Nat.Prime q →
+    q ∣ (x + 1) →
+    ¬ q ∣ x →
+    q ∣ ∑ k ∈ Finset.range d, (u - 1) ^ k * u ^ (d - 1 - k)
+
+/--
 ordinary branch における boundary-core prime existence の reference theorem。
 
 [CFBRC] exceptional proof は、この ordinary theorem と仮定・中間結論を
@@ -595,6 +627,33 @@ theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_witnessA
     hq_not_dvd_x⟩
 
 /--
+residual sum divisibility があれば、witness-aware CFBRC existence は boundary core へ戻せる。
+
+[CFBRC] `q ∣ x + 1` から
+`x + u ≡ u - 1 [MOD q]`
+を得て、boundary core の各項を residual sum の各項へ項別合同で落とす。
+-/
+theorem exceptional_boundary_datum_prepared_cfbrc_existence_on_witness_of_residual
+    (hResidual : ExceptionalBoundaryDatumPreparedCFBRCResidualOnWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedCFBRCExistenceOnWitnessTarget := by
+  intro d x u q hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x
+  have hx1_mod0 : x + 1 ≡ 0 [MOD q] := hq_dvd_x1.modEq_zero_nat
+  have hxu_mod : x + u ≡ u - 1 [MOD q] := by
+    have htmp := hx1_mod0.add_right (u - 1)
+    have hu_eq : 1 + (u - 1) = u := by omega
+    simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm, hu_eq] using htmp
+  have hsum_mod :
+      DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ≡
+        ∑ k ∈ Finset.range d, (u - 1) ^ k * u ^ (d - 1 - k) [MOD q] := by
+    unfold DkMath.CFBRC.boundaryCyclotomicPrimeCore DkMath.CFBRC.cyclotomicPrimeCore
+    exact sum_range_modEq (fun k hk =>
+      ((hxu_mod.pow k).mul_right (u ^ (d - 1 - k))))
+  have hres0 :
+      (∑ k ∈ Finset.range d, (u - 1) ^ k * u ^ (d - 1 - k)) ≡ 0 [MOD q] :=
+    (hResidual hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x).modEq_zero_nat
+  exact Nat.modEq_zero_iff_dvd.mp (hsum_mod.trans hres0)
+
+/--
 concrete arithmetic witness を既定値に焼き付けると、
 残る missing math は witness-aware CFBRC existence part 1 本になる。
 -/
@@ -603,6 +662,15 @@ theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_cfbrcOnW
     ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget :=
   exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_witnessAndCFBRC
     exceptional_boundary_datum_prepared_arithmetic_witness_concrete hCFBRC
+
+/--
+residual target が立てば、concrete arithmetic witness を既定値として prepared concrete 本体は閉じる。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_residual
+    (hResidual : ExceptionalBoundaryDatumPreparedCFBRCResidualOnWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget :=
+  exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_cfbrcOnWitness
+    (exceptional_boundary_datum_prepared_cfbrc_existence_on_witness_of_residual hResidual)
 
 /--
 arithmetic concrete 本体が閉じた後は、
@@ -996,6 +1064,15 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_cfbrcOnWitness
     (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_cfbrcOnWitness hCFBRC)
 
 /--
+residual divisibility だけを示せば、proof file mainline へ戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_residual
+    (hResidual : ExceptionalBoundaryDatumPreparedCFBRCResidualOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_preparedConcrete
+    (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_residual hResidual)
+
+/--
 prepared arithmetic core の concrete theorem 名と restore theorem があれば、
 primitive packet descent へもそのまま流せる。
 -/
@@ -1029,6 +1106,17 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_cfbrcOnWitness_and_restore
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_preparedConcrete_and_restore
     (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_cfbrcOnWitness hCFBRC)
+    hRestore
+
+/--
+residual divisibility と restore theorem があれば、primitive packet descent まで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_residual_and_restore
+    (hResidual : ExceptionalBoundaryDatumPreparedCFBRCResidualOnWitnessTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_preparedConcrete_and_restore
+    (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_residual hResidual)
     hRestore
 
 /--
