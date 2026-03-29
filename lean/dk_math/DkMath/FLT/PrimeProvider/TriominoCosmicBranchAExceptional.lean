@@ -139,6 +139,23 @@ abbrev ExceptionalBoundaryDatumArithmeticCoreTarget : Prop :=
   ExceptionalBoundaryDatumConcreteTarget
 
 /--
+datum の連言をほどいた後に残る prepared arithmetic core target。
+
+[CFBRC] `rcases hDatum with ⟨hdvd, hWieferich⟩`
+の直後から始まる concrete 本文は、
+以後この prepared 形の target として追ってよい。
+-/
+abbrev ExceptionalBoundaryDatumPreparedArithmeticCoreTarget : Prop :=
+  ∀ {d x u : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧
+      q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ∧
+      ¬ q ∣ x
+
+/--
 ordinary branch における boundary-core prime existence の reference theorem。
 
 [CFBRC] exceptional proof は、この ordinary theorem と仮定・中間結論を
@@ -344,6 +361,32 @@ theorem exceptional_boundary_datum_arithmetic_core_of_split
   exact hSplit hd_prime hd_ge hx hu hcop (Or.inr ⟨hdvd, hWieferich⟩)
 
 /--
+split theorem から prepared arithmetic core へ入る canonical skeleton。
+
+[CFBRC] concrete proof を `hdvd` と `hWieferich` が分かれた形から
+起こしたいときは、まずこの theorem 名を入口にすればよい。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_core_of_split
+    (hSplit : CFBRCBoundaryCorePrimeExistenceOnSplitTarget) :
+    ExceptionalBoundaryDatumPreparedArithmeticCoreTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  exact hSplit hd_prime hd_ge hx hu hcop (Or.inr ⟨hdvd, hWieferich⟩)
+
+/--
+prepared arithmetic core から canonical arithmetic core へ戻る橋。
+
+[CFBRC] 今後の concrete 本文は、
+この theorem を通じて `ExceptionalBoundaryDatumArithmeticCoreTarget`
+へ接続すれば十分である。
+-/
+theorem exceptional_boundary_datum_arithmetic_core_of_prepared
+    (hPrepared : ExceptionalBoundaryDatumPreparedArithmeticCoreTarget) :
+    ExceptionalBoundaryDatumArithmeticCoreTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hDatum
+  rcases hDatum with ⟨hdvd, hWieferich⟩
+  exact hPrepared hd_prime hd_ge hx hu hcop hdvd hWieferich
+
+/--
 exceptional datum 形の concrete theorem 名から、
 通常の boundary-normalized concrete target へ戻る橋。
 -/
@@ -406,6 +449,16 @@ theorem exceptional_boundary_datum_arithmetic_core_of_reference_and_datum
     (hDatum : ExceptionalBoundaryDatumConcreteTarget) :
     ExceptionalBoundaryDatumArithmeticCoreTarget :=
   exceptional_boundary_datum_arithmetic_core_of_split
+    (cfbrcBoundaryCorePrimeExistence_split_of_reference_and_datum hDatum)
+
+/--
+ordinary/reference theorem と datum theorem が揃えば、
+prepared arithmetic core も split skeleton 経由で回収できる。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_core_of_reference_and_datum
+    (hDatum : ExceptionalBoundaryDatumConcreteTarget) :
+    ExceptionalBoundaryDatumPreparedArithmeticCoreTarget :=
+  exceptional_boundary_datum_prepared_arithmetic_core_of_split
     (cfbrcBoundaryCorePrimeExistence_split_of_reference_and_datum hDatum)
 
 /--
@@ -625,6 +678,18 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_arithmeticCore_and_restore
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_boundaryConcrete_and_restore
     (exceptional_boundaryData_right_branch_supply_concrete_of_arithmeticCore hCore)
+    hRestore
+
+/--
+prepared arithmetic core と restore theorem があれば、
+primitive packet descent へもそのまま流せる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_preparedArithmeticCore_and_restore
+    (hPrepared : ExceptionalBoundaryDatumPreparedArithmeticCoreTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_arithmeticCore_and_restore
+    (exceptional_boundary_datum_arithmetic_core_of_prepared hPrepared)
     hRestore
 
 /--

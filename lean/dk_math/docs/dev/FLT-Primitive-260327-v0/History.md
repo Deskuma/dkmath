@@ -783,3 +783,53 @@ Archive
    - `ExceptionalBoundaryDatumArithmeticCoreTarget`
      の concrete theorem 本体を、
      proof file 上の canonical body として切る。
+
+### 日時: 2026/03/29 JST
+
+1. 目的:
+   - arithmetic core の concrete 本文を、
+     `hDatum` の連言をほどいた prepared 形で追えるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `ExceptionalBoundaryDatumPreparedArithmeticCoreTarget`
+     を追加した。
+   - さらに
+     - `exceptional_boundary_datum_prepared_arithmetic_core_of_split`
+     - `exceptional_boundary_datum_arithmetic_core_of_prepared`
+     - `exceptional_boundary_datum_prepared_arithmetic_core_of_reference_and_datum`
+     を追加し、
+     split / assembler から prepared 形へ入り、
+     prepared 形から canonical arithmetic core へ戻る橋を揃えた。
+   - あわせて
+     `primeGe5BranchAPrimitivePacketDescent_of_preparedArithmeticCore_and_restore`
+     も追加し、
+     prepared arithmetic core から downstream を閉じる配線を置いた。
+
+3. 結論:
+   - proof file の次の concrete body は、
+     もはや
+     `ExceptionalBoundaryDatumArithmeticCoreTarget`
+     だけでなく、
+     `hdvd`
+     と
+     `hWieferich`
+     が分離された
+     `ExceptionalBoundaryDatumPreparedArithmeticCoreTarget`
+     として追ってよい。
+   - したがって以後の本文は
+     `rcases hDatum with ⟨hdvd, hWieferich⟩`
+     の前処理を済ませた形から直接書き始められる。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedArithmeticCoreTarget`
+     の concrete theorem 本体を切る。
