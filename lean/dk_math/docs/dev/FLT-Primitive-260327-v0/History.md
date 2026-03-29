@@ -594,3 +594,48 @@ Archive
    - `ExceptionalBoundaryDatumConcreteTarget`
      を返す concrete theorem 本体を、
      `hSplit` 供給の local arithmetic / CFBRC exceptional 補題として切る。
+
+### 日時: 2026/03/29 JST
+
+1. 目的:
+   - `hSplit` 供給を、
+     ordinary reference と exceptional datum theorem の合成として固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `cfbrcBoundaryCorePrimeExistence_split_of_reference_and_datum`
+     を追加した。
+   - この定理は
+     - 通常枝 `Or.inl hOrd` では
+       `cfbrcBoundaryCorePrimeExistence_reference`
+     - 例外枝 `Or.inr hExc` では
+       `ExceptionalBoundaryDatumConcreteTarget`
+     を起動するだけの split assembler である。
+
+3. 結論:
+   - proof file の missing math は、
+     もはや
+     `CFBRCBoundaryCorePrimeExistenceOnSplitTarget`
+     全体ではなく、
+     `ExceptionalBoundaryDatumConcreteTarget`
+     1 本だと theorem の形でもさらに明確になった。
+   - `exceptional_boundary_datum_concrete_of_split`
+     の中で必要な `hSplit` は、
+     この assembler で供給すればよい。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumConcreteTarget`
+     を返す concrete theorem 本体を切る。
+   - 必要なら、
+     datum theorem 自体の本文も
+     exceptional-only arithmetic / CFBRC core
+     にさらに局所化する。

@@ -337,6 +337,24 @@ theorem exceptional_boundary_datum_concrete_of_split
   exact hSplit hd_prime hd_ge hx hu hcop (Or.inr ⟨hdvd, hWieferich⟩)
 
 /--
+ordinary reference theorem と exceptional datum theorem が揃えば、
+split theorem 全体は橋だけで閉じる。
+
+[CFBRC] これにより proof file の truly new math は、
+`CFBRCBoundaryCorePrimeExistenceOnSplitTarget`
+全体ではなく
+`ExceptionalBoundaryDatumConcreteTarget`
+1 本だと読める。
+-/
+theorem cfbrcBoundaryCorePrimeExistence_split_of_reference_and_datum
+    (hDatum : ExceptionalBoundaryDatumConcreteTarget) :
+    CFBRCBoundaryCorePrimeExistenceOnSplitTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hSplitCase
+  rcases hSplitCase with hOrd | hExc
+  · exact cfbrcBoundaryCorePrimeExistence_reference hd_prime hd_ge hx hu hcop hOrd
+  · exact hDatum hd_prime hd_ge hx hu hcop hExc
+
+/--
 right branch supply があれば、
 named kernel はそのまま閉じる。
 
