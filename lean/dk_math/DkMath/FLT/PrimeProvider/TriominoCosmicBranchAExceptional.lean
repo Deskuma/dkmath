@@ -1659,6 +1659,36 @@ theorem primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcrete_of_select
   primeGe5BranchAExceptionalPracticalSelectedCoreOnDatum_of_selectedCoreOnWitness hCore
 
 /--
+既存の diffPow-on-witness route からも、
+datum-local selected core concrete theorem 名へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcrete_of_diffPow
+    (hDiff : ExceptionalBoundaryDatumPreparedDiffPowOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalSelectedCoreOnDatum_of_selectedCoreOnWitness
+    (exceptional_boundary_datum_prepared_selectedCoreOnWitness_of_diffPow hDiff)
+
+/--
+既存の diffPow `ModEq` route からも、
+datum-local selected core concrete theorem 名へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcrete_of_diffPowModEq
+    (hMod : ExceptionalBoundaryDatumPreparedDiffPowModEqOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcrete_of_diffPow
+    (exceptional_boundary_datum_prepared_diffPow_on_witness_of_modEq hMod)
+
+/--
+additional congruence kernel からも、
+datum-local selected core concrete theorem 名へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcrete_of_congruenceKernel
+    (hKernel : ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget) :
+    PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcrete_of_diffPowModEq
+    (exceptional_boundary_datum_prepared_diffPow_modEq_on_witness_of_congruenceKernel hKernel)
+
+/--
 witness-aware selected core divisibility から、
 practical datum concrete theorem 名へ直接戻れる。
 -/

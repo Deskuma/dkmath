@@ -2854,3 +2854,49 @@ Archive
 5. 次の課題:
    - `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
      の concrete 本体を書く。
+
+### 日時: 2026/03/29 23:55 JST
+
+1. 目的:
+   - `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
+     を、
+     current upstream route
+     (`diffPow` / `ModEq` / congruence kernel)
+     からも直接回収できる
+     真の吸収点として揃える。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcrete_of_diffPow`
+     - `primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcrete_of_diffPowModEq`
+     - `primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcrete_of_congruenceKernel`
+     を追加した。
+   - 同ファイルの
+     `selectedCoreOnDatumConcrete`
+     から
+     mainline / packet descent
+     へ戻る wrapper 群
+     は既にあったので、
+     これで
+     `selectedCoreOnDatumConcrete`
+     が
+     upstream と downstream
+     の両側で実際の splice point として閉じた。
+
+3. 結論:
+   - `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
+     は、
+     theorem 名の上でも
+     selected-core / diffPow / `Nat.ModEq` / congruence-kernel
+     の各 upstream face を吸収する
+     current practical route の
+     first direct body となった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 次の課題:
+   - `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
+     の concrete 本体そのものを書く。
