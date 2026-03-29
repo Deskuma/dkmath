@@ -1799,6 +1799,60 @@ Archive
    - `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget`
      の concrete theorem 本体を切る。
 
+### 日時: 2026/03/29 14:14 JST
+
+1. 目的:
+   - universal な
+     `SelectedDiffPowOnWitnessConcrete`
+     だけでは本文がまだ遠いので、
+     arithmetic witness と直接噛む existential 版
+     diffPow route
+     を mainline に露出する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessTarget`
+     - `ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessConcreteTarget`
+     を追加した。
+   - さらに
+     - `exceptional_boundary_datum_prepared_selectedDiffPowWitness_of_selectedDiffPowOnWitness`
+     - `exceptional_boundary_datum_prepared_selectedCongruenceWitness_of_selectedDiffPowWitness`
+     - `...SelectedDiffPowWitnessConcrete_of_*`
+     を追加し、
+     existing route から existential witness 版へ戻れるようにした。
+   - mainline / packet descent 側にも
+     - `primeGe5BranchAExceptionalExistenceMainline_of_selectedDiffPowWitness`
+     - `...of_selectedDiffPowWitnessConcrete`
+     - `primeGe5BranchAPrimitivePacketDescent_of_selectedDiffPowWitness_and_restore`
+     - `...of_selectedDiffPowWitnessConcrete_and_restore`
+     を追加した。
+
+3. 結論:
+   - current direct body は、
+     universal on-witness concrete 名に加えて、
+     arithmetic witness と直接噛む
+     existential diffPow witness concrete 名でも追える。
+   - したがって next body は
+     `SelectedDiffPowOnWitnessConcrete`
+     だけでなく
+     `SelectedDiffPowWitnessConcrete`
+     からも試せる状態になった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessConcreteTarget`
+     か
+     `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget`
+     の concrete theorem 本体を切る。
+
 ### 日時: 2026/03/29 14:03 JST
 
 1. 目的:
