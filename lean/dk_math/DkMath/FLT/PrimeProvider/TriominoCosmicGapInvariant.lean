@@ -1382,6 +1382,10 @@ abbrev BranchAExceptionalPracticalBodyOnWitnessConcreteAdapterTarget : Prop :=
 abbrev BranchAExceptionalPracticalDatumConcreteAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyOnDatumConcreteTarget
 
+/-- datum-local selected core concrete theorem 名の provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalSelectedCoreOnDatumConcreteAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget
+
 /-- practical body-on-witness を `GN d 1 (u - 1)` で読む provider 側 alias。 -/
 abbrev BranchAExceptionalPracticalGNAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyOnWitnessGNTarget
@@ -2009,6 +2013,15 @@ theorem branchAExceptionalExistenceMainlineAdapter_of_practicalDatumConcrete
   DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_practicalDatumConcrete hBody
 
 /--
+datum-local selected core concrete theorem 名が立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_selectedCoreOnDatumConcrete
+    (hCore : BranchAExceptionalPracticalSelectedCoreOnDatumConcreteAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreOnDatumConcrete hCore
+
+/--
 practical body-on-witness と restore theorem があれば、
 provider 側でも primitive packet descent adapter は直接閉じる。
 -/
@@ -2029,6 +2042,17 @@ theorem branchAPrimitivePacketDescentAdapter_of_practicalDatumConcrete_and_resto
     BranchAPrimitivePacketDescentAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_practicalDatumConcrete_and_restore
     hBody hRestore
+
+/--
+datum-local selected core concrete theorem 名と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_selectedCoreOnDatumConcrete_and_restore
+    (hCore : BranchAExceptionalPracticalSelectedCoreOnDatumConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_selectedCoreOnDatumConcrete_and_restore
+    hCore hRestore
 
 /--
 `GN d 1 (u - 1)` divisibility が立てば、

@@ -2798,3 +2798,59 @@ Archive
      `PrimeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatumTarget`
      のどちらを datum concrete 本文の first direct body として採るかを決め、
      concrete 本体を書き始める。
+
+### 日時: 2026/03/29 23:44 JST
+
+1. 目的:
+   - `review-059`
+     の判断どおり、
+     datum concrete の
+     first direct body を
+     `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumTarget`
+     に固定する。
+   - その theorem 名を
+     proof file と provider 側の mainline / packet descent
+     まで通して、
+     実際の直行入口として扱えるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
+     を追加した。
+   - 同ファイルに
+     - `primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcrete_of_self`
+     - `primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcrete_of_selectedCoreOnWitness`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreOnDatumConcrete`
+     - `primeGe5BranchAPrimitivePacketDescent_of_selectedCoreOnDatumConcrete_and_restore`
+     を追加した。
+   - 既存の
+     `primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_selectedCoreOnWitness`
+     は、
+     `selectedCoreOnDatum`
+     を経由して datum concrete へ戻る形に整理した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     に
+     - `BranchAExceptionalPracticalSelectedCoreOnDatumConcreteAdapterTarget`
+     - `branchAExceptionalExistenceMainlineAdapter_of_selectedCoreOnDatumConcrete`
+     - `branchAPrimitivePacketDescentAdapter_of_selectedCoreOnDatumConcrete_and_restore`
+     を追加した。
+
+3. 結論:
+   - datum concrete の first direct body は、
+     theorem 名の上でも
+     `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
+     として固定された。
+   - よって practical exceptional route は、
+     `selectedCoreOnDatumConcrete`
+     を書けば
+     datum concrete / practical entrance / mainline / packet descent
+     まで全部 downstream が閉じる形になった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 次の課題:
+   - `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget`
+     の concrete 本体を書く。

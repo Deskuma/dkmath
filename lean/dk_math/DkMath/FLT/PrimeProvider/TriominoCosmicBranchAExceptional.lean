@@ -820,6 +820,17 @@ abbrev PrimeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatumTarget : Prop
     (u - 1) ^ d ≡ u ^ d [MOD q]
 
 /--
+datum-local selected core divisibility の concrete 本文を置く既定の theorem 名。
+
+[CFBRC] `review-059`
+以降、
+datum concrete の first direct body は
+まずこれを canonical な着手点としてよい。
+-/
+abbrev PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget : Prop :=
+  PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumTarget
+
+/--
 on-witness body が立てば、datum 版も直ちに従う。
 -/
 theorem primeGe5BranchAExceptionalPracticalBodyOnDatum_of_bodyOnWitness
@@ -937,6 +948,14 @@ theorem primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_selectedCongru
     (hCongr : PrimeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatumTarget) :
     PrimeGe5BranchAExceptionalPracticalBodyOnDatumConcreteTarget :=
   primeGe5BranchAExceptionalPracticalBodyOnDatum_of_selectedCongruenceOnDatum hCongr
+
+/--
+datum-local selected core divisibility の concrete theorem 名に対する canonical self bridge。
+-/
+theorem primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcrete_of_self
+    (hCore : PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget) :
+    PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget :=
+  hCore
 
 /-- `cyclotomicPrimeCore d 1 (u - 1)` は residual sum に一致する。 -/
 private theorem cyclotomicPrimeCore_one_pred_eq_residual_sum
@@ -1632,13 +1651,22 @@ theorem primeGe5BranchAExceptionalPracticalSelectedCoreOnDatum_of_selectedCoreOn
 
 /--
 witness-aware selected core divisibility から、
+datum-local selected core concrete theorem 名へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcrete_of_selectedCoreOnWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalSelectedCoreOnDatum_of_selectedCoreOnWitness hCore
+
+/--
+witness-aware selected core divisibility から、
 practical datum concrete theorem 名へ直接戻れる。
 -/
 theorem primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_selectedCoreOnWitness
     (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget) :
     PrimeGe5BranchAExceptionalPracticalBodyOnDatumConcreteTarget :=
-  primeGe5BranchAExceptionalPracticalBodyOnDatum_of_bodyOnWitness
-    (primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_selectedCoreOnWitness hCore)
+  primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_selectedCoreOnDatum
+    (primeGe5BranchAExceptionalPracticalSelectedCoreOnDatum_of_selectedCoreOnWitness hCore)
 
 /--
 既存の diffPow-on-witness route からも、
@@ -2592,6 +2620,16 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_practicalDatumConcrete
     (primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_datumConcrete hBody)
 
 /--
+datum-local selected core concrete theorem 名が立てば、
+datum concrete を経由して proof file mainline へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreOnDatumConcrete
+    (hCore : PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_practicalDatumConcrete
+    (primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_selectedCoreOnDatum hCore)
+
+/--
 `GN d 1 (u - 1)` divisibility だけが立てば、
 practical body を経由して proof file mainline へ直接戻れる。
 -/
@@ -2898,6 +2936,18 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_practicalDatumConcrete_and_rest
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_practicalBodyOnWitness_and_restore
     (primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_datumConcrete hBody)
+    hRestore
+
+/--
+datum-local selected core concrete theorem 名と restore theorem があれば、
+datum concrete を経由して primitive packet descent まで直接閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_selectedCoreOnDatumConcrete_and_restore
+    (hCore : PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_practicalDatumConcrete_and_restore
+    (primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_selectedCoreOnDatum hCore)
     hRestore
 
 /--
