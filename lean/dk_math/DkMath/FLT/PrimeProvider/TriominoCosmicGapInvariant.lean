@@ -1378,6 +1378,10 @@ abbrev BranchAExceptionalPracticalBodyOnWitnessAdapterTarget : Prop :=
 abbrev BranchAExceptionalPracticalBodyOnWitnessConcreteAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget
 
+/-- practical body-on-witness を `GN d 1 (u - 1)` で読む provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalGNAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyOnWitnessGNTarget
+
 /-- proof file exceptional existence mainline の provider 側 alias。 -/
 abbrev BranchAExceptionalExistenceMainlineAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAExceptionalExistenceMainlineTarget
@@ -1984,6 +1988,26 @@ theorem branchAPrimitivePacketDescentAdapter_of_practicalBodyOnWitness_and_resto
     BranchAPrimitivePacketDescentAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_practicalBodyOnWitness_and_restore
     hBody hRestore
+
+/--
+`GN d 1 (u - 1)` divisibility が立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_practicalGN
+    (hGN : BranchAExceptionalPracticalGNAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_practicalGN hGN
+
+/--
+`GN d 1 (u - 1)` divisibility と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_practicalGN_and_restore
+    (hGN : BranchAExceptionalPracticalGNAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_practicalGN_and_restore
+    hGN hRestore
 
 /--
 official direct body の concrete theorem 名が立てば、

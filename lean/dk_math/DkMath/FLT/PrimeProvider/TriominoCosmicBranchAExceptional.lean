@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.PrimeProvider.TriominoCosmicBranchA
+import DkMath.CosmicFormula.CosmicFormulaCellDim
 
 #print "file: DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional"
 
@@ -567,6 +568,23 @@ abbrev PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget : Prop :=
   PrimeGe5BranchAExceptionalPracticalBodyOnWitnessTarget
 
 /--
+practical body-on-witness を `GN d 1 (u - 1)` divisibility で読む local target。
+
+[CFBRC] `u^d - (u-1)^d = GN d 1 (u-1)` なので、
+on-witness body は宇宙式の `GN` slice としても追える。
+-/
+abbrev PrimeGe5BranchAExceptionalPracticalBodyOnWitnessGNTarget : Prop :=
+  ∀ {d x u q : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    Nat.Prime q →
+    q ∣ (x + 1) →
+    ¬ q ∣ x →
+    q ∣ DkMath.CosmicFormulaBinom.GN d 1 (u - 1)
+
+/--
 practical entrance の canonical self bridge。
 -/
 theorem primeGe5BranchAExceptionalPracticalConcrete_of_self
@@ -606,6 +624,38 @@ theorem primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_self
     (hBody : PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget) :
     PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget :=
   hBody
+
+/--
+`GN d 1 (u - 1)` divisibility があれば、
+practical body-on-witness は直ちに従う。
+-/
+theorem primeGe5BranchAExceptionalPracticalBodyOnWitness_of_GN
+    (hGN : PrimeGe5BranchAExceptionalPracticalBodyOnWitnessGNTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyOnWitnessTarget := by
+  intro d x u q hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x
+  have hu_eq : 1 + (u - 1) = u := by
+    simpa [Nat.succ_eq_add_one, Nat.add_comm] using Nat.succ_pred_eq_of_pos hu
+  have hEq : u ^ d - (u - 1) ^ d = DkMath.CosmicFormulaBinom.GN d 1 (u - 1) := by
+    simpa [hu_eq] using
+      (DkMath.CosmicFormulaCellDim.pow_sub_pow_eq_mul_GN d 1 (u - 1))
+  rw [hEq]
+  exact hGN hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x
+
+/--
+practical body-on-witness が立てば、
+同じ内容を `GN d 1 (u - 1)` divisibility としても読める。
+-/
+theorem primeGe5BranchAExceptionalPracticalGN_of_bodyOnWitness
+    (hBody : PrimeGe5BranchAExceptionalPracticalBodyOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyOnWitnessGNTarget := by
+  intro d x u q hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x
+  have hu_eq : 1 + (u - 1) = u := by
+    simpa [Nat.succ_eq_add_one, Nat.add_comm] using Nat.succ_pred_eq_of_pos hu
+  have hEq : u ^ d - (u - 1) ^ d = DkMath.CosmicFormulaBinom.GN d 1 (u - 1) := by
+    simpa [hu_eq] using
+      (DkMath.CosmicFormulaCellDim.pow_sub_pow_eq_mul_GN d 1 (u - 1))
+  rw [← hEq]
+  exact hBody hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x
 
 /-- `cyclotomicPrimeCore d 1 (u - 1)` は residual sum に一致する。 -/
 private theorem cyclotomicPrimeCore_one_pred_eq_residual_sum
@@ -2104,6 +2154,16 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_practicalBodyOnWitness
     (primeGe5BranchAExceptionalPracticalConcrete_of_bodyOnWitness hBody)
 
 /--
+`GN d 1 (u - 1)` divisibility だけが立てば、
+practical body を経由して proof file mainline へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_practicalGN
+    (hGN : PrimeGe5BranchAExceptionalPracticalBodyOnWitnessGNTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_practicalBodyOnWitness
+    (primeGe5BranchAExceptionalPracticalBodyOnWitness_of_GN hGN)
+
+/--
 selected-core diffPow route からも、
 practical diffPow witness concrete を経由して proof file mainline へ戻れる。
 -/
@@ -2369,6 +2429,18 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_practicalBodyOnWitness_and_rest
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_practicalConcrete_and_restore
     (primeGe5BranchAExceptionalPracticalConcrete_of_bodyOnWitness hBody)
+    hRestore
+
+/--
+`GN d 1 (u - 1)` divisibility と restore theorem があれば、
+practical body を経由して primitive packet descent まで直接閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_practicalGN_and_restore
+    (hGN : PrimeGe5BranchAExceptionalPracticalBodyOnWitnessGNTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_practicalBodyOnWitness_and_restore
+    (primeGe5BranchAExceptionalPracticalBodyOnWitness_of_GN hGN)
     hRestore
 
 /--

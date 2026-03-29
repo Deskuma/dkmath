@@ -2323,3 +2323,72 @@ Archive
 6. 次の課題:
    - `PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget`
      の concrete theorem 本体を切る。
+
+### 日時: 2026/03/29 16:08 JST
+
+1. 目的:
+   - practical body-on-witness を、
+     差冪 divisibility だけでなく
+     `GN d 1 (u - 1)`
+     divisibility としても読めるようにする。
+   - proof file と provider の両方で、
+     `GN`
+     slice から
+     exceptional mainline / primitive packet descent
+     へ戻れる splice point を固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `PrimeGe5BranchAExceptionalPracticalBodyOnWitnessGNTarget`
+     - `primeGe5BranchAExceptionalPracticalBodyOnWitness_of_GN`
+     - `primeGe5BranchAExceptionalPracticalGN_of_bodyOnWitness`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_practicalGN`
+     - `primeGe5BranchAPrimitivePacketDescent_of_practicalGN_and_restore`
+     を追加した。
+   - 同ファイルには
+     `DkMath.CosmicFormula.CosmicFormulaCellDim`
+     を import し、
+     `u > 0`
+     から
+     `1 + (u - 1) = u`
+     を明示して
+     `pow_sub_pow_eq_mul_GN`
+     を practical body の形へ畳んだ。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     に
+     - `BranchAExceptionalPracticalGNAdapterTarget`
+     - `branchAExceptionalExistenceMainlineAdapter_of_practicalGN`
+     - `branchAPrimitivePacketDescentAdapter_of_practicalGN_and_restore`
+     を追加した。
+
+3. 結論:
+   - current practical missing body は、
+     差冪 divisibility としてだけでなく
+     `GN d 1 (u - 1)`
+     divisibility としても追えるようになった。
+   - したがって Branch A exceptional proof の practical route は、
+     宇宙式の `GN`
+     slice を直接使う splice point も持った。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - 最初は
+     `CosmicFormulaCellDim.pow_sub_pow_eq_mul_GN`
+     の import が抜けていた。
+   - さらに
+     `1 + (u - 1) = u`
+     を `simpa`
+     が自動で畳まなかったため、
+     `u > 0`
+     からこの等式を明示する修正が必要だった。
+
+6. 次の課題:
+   - `PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget`
+     の concrete theorem 本体を、
+     `GN`
+     slice を含む current practical route の上で引き続き詰める。
