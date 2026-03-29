@@ -2751,3 +2751,50 @@ Archive
      既存の
      `ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget`
      からの帰着をさらに datum proof sketch に寄せる。
+
+### 日時: 2026/03/29 23:27 JST
+
+1. 目的:
+   - datum-local core divisibility と
+     practical datum body の間に、
+     同じ datum の `Nat.ModEq`
+     の顔を差し込む。
+   - これにより、
+     datum 本文の local route を
+     `core divisibility -> congruence -> diffPow divisibility`
+     の三段で読めるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `PrimeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatumTarget`
+     を追加した。
+   - 同ファイルに
+     - `primeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatum_of_selectedCoreOnDatum`
+     - `primeGe5BranchAExceptionalPracticalBodyOnDatum_of_selectedCongruenceOnDatum`
+     - `primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_selectedCongruenceOnDatum`
+     を追加した。
+
+3. 結論:
+   - datum concrete 本文は、
+     いまや
+     `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumTarget`
+     だけでなく、
+     `PrimeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatumTarget`
+     を経由する局所 route としても読める。
+   - したがって practical datum body の local picture は、
+     `cyclotomicPrimeCore` divisibility と
+     `Nat.ModEq`
+     のどちらの顔からでも
+     同じ差冪 divisibility に収束する形で固定された。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   を完了まで待って実行し、成功を確認した。
+
+5. 次の課題:
+   - `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumTarget`
+     と
+     `PrimeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatumTarget`
+     のどちらを datum concrete 本文の first direct body として採るかを決め、
+     concrete 本体を書き始める。

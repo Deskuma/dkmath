@@ -807,6 +807,19 @@ abbrev PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumTarget : Prop :=
     q ∣ DkMath.CFBRC.cyclotomicPrimeCore d 1 (u - 1)
 
 /--
+practical datum が抱えている witness `q` 自身について、
+`(u - 1)^d ≡ u^d [MOD q]`
+を返す局所 congruence target。
+
+[CFBRC] datum 本文の local kernel を
+divisibility だけでなく合同の顔でも保持しておく。
+-/
+abbrev PrimeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatumTarget : Prop :=
+  ∀ {d x u q : ℕ},
+    PrimeGe5BranchAExceptionalPracticalWitnessDatum d x u q →
+    (u - 1) ^ d ≡ u ^ d [MOD q]
+
+/--
 on-witness body が立てば、datum 版も直ちに従う。
 -/
 theorem primeGe5BranchAExceptionalPracticalBodyOnDatum_of_bodyOnWitness
@@ -878,6 +891,52 @@ theorem primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_selectedCoreOn
     (hCore : PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumTarget) :
     PrimeGe5BranchAExceptionalPracticalBodyOnDatumConcreteTarget :=
   primeGe5BranchAExceptionalPracticalBodyOnDatum_of_selectedCoreOnDatum hCore
+
+/--
+datum 上の selected core divisibility があれば、
+同じ datum の合同形へも直ちに戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatum_of_selectedCoreOnDatum
+    (hCore : PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumTarget) :
+    PrimeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatumTarget := by
+  intro d x u q hDatum
+  rcases hDatum with
+    ⟨hd_prime, hd_ge, hx, hu, hcop, hdvd, hWieferich, hqprime, hq_dvd_x1, hq_not_dvd_x⟩
+  have hq_dvd_diff : q ∣ (1 + (u - 1)) ^ d - (u - 1) ^ d := by
+    exact (DkMath.CFBRC.prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
+      (p := d) (x := 1) (u := u - 1) (q := q) hqprime hqprime.not_dvd_one).2
+      (hCore ⟨hd_prime, hd_ge, hx, hu, hcop, hdvd, hWieferich, hqprime, hq_dvd_x1, hq_not_dvd_x⟩)
+  have hu_eq : 1 + (u - 1) = u := by
+    simpa [Nat.succ_eq_add_one, Nat.add_comm] using Nat.succ_pred_eq_of_pos hu
+  have hDiff : q ∣ u ^ d - (u - 1) ^ d := by
+    simpa [hu_eq] using hq_dvd_diff
+  have hle : (u - 1) ^ d ≤ u ^ d := by
+    exact Nat.pow_le_pow_left (Nat.sub_le _ _) d
+  exact (Nat.modEq_iff_dvd' hle).2 hDiff
+
+/--
+datum 上の合同形があれば、
+practical datum body は直ちに従う。
+-/
+theorem primeGe5BranchAExceptionalPracticalBodyOnDatum_of_selectedCongruenceOnDatum
+    (hCongr : PrimeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatumTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyOnDatumTarget := by
+  intro d x u q hDatum
+  have hMod := hCongr hDatum
+  rcases hDatum with
+    ⟨_hd_prime, _hd_ge, _hx, hu, _hcop, _hdvd, _hWieferich, _hqprime, _hq_dvd_x1, _hq_not_dvd_x⟩
+  have hle : (u - 1) ^ d ≤ u ^ d := by
+    exact Nat.pow_le_pow_left (Nat.sub_le _ _) d
+  exact (Nat.modEq_iff_dvd' hle).mp hMod
+
+/--
+datum concrete 本文は、
+同じ datum の合同形から書き始めてもよい。
+-/
+theorem primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_selectedCongruenceOnDatum
+    (hCongr : PrimeGe5BranchAExceptionalPracticalSelectedCongruenceOnDatumTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyOnDatumConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalBodyOnDatum_of_selectedCongruenceOnDatum hCongr
 
 /-- `cyclotomicPrimeCore d 1 (u - 1)` は residual sum に一致する。 -/
 private theorem cyclotomicPrimeCore_one_pred_eq_residual_sum
