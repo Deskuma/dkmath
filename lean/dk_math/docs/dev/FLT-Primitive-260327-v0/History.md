@@ -2696,3 +2696,58 @@ Archive
      そこから
      `PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget`
      の concrete 本体へ収束させる。
+
+### 日時: 2026/03/29 22:56 JST
+
+1. 目的:
+   - datum concrete の本文を、
+     いきなり diffPow body 全体として書くのではなく、
+     同じ datum の witness `q`
+     が
+     `cyclotomicPrimeCore d 1 (u - 1)`
+     を割るという
+     first local kernel へ一段落として追えるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumTarget`
+     を追加した。
+   - 同ファイルに
+     - `primeGe5BranchAExceptionalPracticalBodyOnDatum_of_selectedCoreOnDatum`
+     - `primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_selectedCoreOnDatum`
+     を追加し、
+     datum 上の core divisibility
+     から practical datum body が直ちに従うことを示した。
+   - さらに
+     `primeGe5BranchAExceptionalPracticalSelectedCoreOnDatum_of_selectedCoreOnWitness`
+     を追加し、
+     既存の
+     `ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget`
+     から
+     datum-local core target へ戻れるようにした。
+
+3. 結論:
+   - `PrimeGe5BranchAExceptionalPracticalBodyOnDatumConcreteTarget`
+     の本文候補は、
+     いまや
+     diffPow body 全体ではなく、
+     `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumTarget`
+     という
+     さらに局所な core theorem としても追える。
+   - したがって datum concrete の実戦入口は、
+     「datum を unpack して、
+     その `q` で core divisibility を示し、
+     そこから差冪へ戻す」
+     という形で固定された。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   を完了まで待って実行し、成功を確認した。
+
+5. 次の課題:
+   - `PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumTarget`
+     の concrete 証明を直接書くか、
+     既存の
+     `ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget`
+     からの帰着をさらに datum proof sketch に寄せる。

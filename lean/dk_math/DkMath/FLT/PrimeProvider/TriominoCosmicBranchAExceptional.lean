@@ -795,6 +795,18 @@ abbrev PrimeGe5BranchAExceptionalPracticalBodyOnDatumConcreteTarget : Prop :=
   PrimeGe5BranchAExceptionalPracticalBodyOnDatumTarget
 
 /--
+practical datum が抱えている witness `q` 自身について、
+`cyclotomicPrimeCore d 1 (u - 1)` divisibility を返す局所 core target。
+
+[CFBRC] datum concrete 本文を直接書くときの first local kernel は、
+まずこの形に落とすのが自然である。
+-/
+abbrev PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumTarget : Prop :=
+  ∀ {d x u q : ℕ},
+    PrimeGe5BranchAExceptionalPracticalWitnessDatum d x u q →
+    q ∣ DkMath.CFBRC.cyclotomicPrimeCore d 1 (u - 1)
+
+/--
 on-witness body が立てば、datum 版も直ちに従う。
 -/
 theorem primeGe5BranchAExceptionalPracticalBodyOnDatum_of_bodyOnWitness
@@ -839,6 +851,33 @@ theorem primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_bodyOnWitnessC
     (hBody : PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget) :
     PrimeGe5BranchAExceptionalPracticalBodyOnDatumConcreteTarget :=
   primeGe5BranchAExceptionalPracticalBodyOnDatum_of_bodyOnWitness hBody
+
+/--
+datum 上の selected core divisibility があれば、
+practical datum body は直ちに従う。
+-/
+theorem primeGe5BranchAExceptionalPracticalBodyOnDatum_of_selectedCoreOnDatum
+    (hCore : PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyOnDatumTarget := by
+  intro d x u q hDatum
+  rcases hDatum with
+    ⟨hd_prime, hd_ge, hx, hu, hcop, hdvd, hWieferich, hqprime, hq_dvd_x1, hq_not_dvd_x⟩
+  have hq_dvd_diff : q ∣ (1 + (u - 1)) ^ d - (u - 1) ^ d := by
+    exact (DkMath.CFBRC.prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
+      (p := d) (x := 1) (u := u - 1) (q := q) hqprime hqprime.not_dvd_one).2
+      (hCore ⟨hd_prime, hd_ge, hx, hu, hcop, hdvd, hWieferich, hqprime, hq_dvd_x1, hq_not_dvd_x⟩)
+  have hu_eq : 1 + (u - 1) = u := by
+    simpa [Nat.succ_eq_add_one, Nat.add_comm] using Nat.succ_pred_eq_of_pos hu
+  simpa [hu_eq] using hq_dvd_diff
+
+/--
+datum concrete 本文は、
+同じ datum の selected core divisibility から書き始めてよい。
+-/
+theorem primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_selectedCoreOnDatum
+    (hCore : PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumTarget) :
+    PrimeGe5BranchAExceptionalPracticalBodyOnDatumConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalBodyOnDatum_of_selectedCoreOnDatum hCore
 
 /-- `cyclotomicPrimeCore d 1 (u - 1)` は residual sum に一致する。 -/
 private theorem cyclotomicPrimeCore_one_pred_eq_residual_sum
@@ -1519,6 +1558,18 @@ theorem primeGe5BranchAExceptionalPracticalGNConcrete_of_selectedCoreOnWitness
     PrimeGe5BranchAExceptionalPracticalGNConcreteTarget :=
   primeGe5BranchAExceptionalPracticalGN_of_bodyOnWitness
     (primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_selectedCoreOnWitness hCore)
+
+/--
+witness-aware selected core divisibility があれば、
+同じ datum 上の core divisibility として読める。
+-/
+theorem primeGe5BranchAExceptionalPracticalSelectedCoreOnDatum_of_selectedCoreOnWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumTarget := by
+  intro d x u q hDatum
+  rcases hDatum with
+    ⟨hd_prime, hd_ge, hx, hu, hcop, hdvd, hWieferich, hqprime, hq_dvd_x1, hq_not_dvd_x⟩
+  exact hCore hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x
 
 /--
 witness-aware selected core divisibility から、
