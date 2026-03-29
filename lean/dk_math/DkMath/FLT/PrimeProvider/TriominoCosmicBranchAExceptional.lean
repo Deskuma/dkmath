@@ -399,6 +399,25 @@ abbrev ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget : Prop :=
     ¬ q ∣ x →
     (u - 1) ^ d ≡ u ^ d [MOD q]
 
+/--
+選んだ witness prime 1 個についてだけ diffPow congruence を与える局所 target。
+
+[CFBRC] `review-049` 以降の universal kernel は強すぎる可能性があるので、
+まずは arithmetic part が実際に選ぶ
+`q ∣ x + 1`
+つき witness 1 個だけで downstream を閉じる weaker target も並べて追う。
+-/
+abbrev ExceptionalBoundaryDatumPreparedSelectedCongruenceWitnessTarget : Prop :=
+  ∀ {d x u : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧
+      q ∣ (x + 1) ∧
+      ¬ q ∣ x ∧
+      (u - 1) ^ d ≡ u ^ d [MOD q]
+
 /-- `cyclotomicPrimeCore d 1 (u - 1)` は residual sum に一致する。 -/
 private theorem cyclotomicPrimeCore_one_pred_eq_residual_sum
     (d u : ℕ) (hu : 0 < u) :
@@ -779,6 +798,69 @@ theorem exceptional_boundary_datum_prepared_diffPow_modEq_on_witness_of_congruen
     (hKernel : ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget) :
     ExceptionalBoundaryDatumPreparedDiffPowModEqOnWitnessTarget :=
   hKernel
+
+/--
+選んだ witness prime 上の diffPow congruence があれば、boundary core divisibility は直接従う。
+
+[CFBRC] universal target を経由せず、
+`∃ q, q ∣ x + 1 ∧ ¬ q ∣ x ∧ (u - 1)^d ≡ u^d [MOD q]`
+から prepared concrete 本体へ入るための直橋。
+-/
+theorem exceptional_boundary_datum_prepared_boundary_core_dvd_of_selected_modEq
+    {d x u q : ℕ}
+    (_hd_prime : Nat.Prime d) (_hd_ge : 5 ≤ d)
+    (_hx : 0 < x) (hu : 0 < u)
+    (_hcop : Nat.Coprime x u)
+    (_hdvd : d ∣ x)
+    (_hWieferich : u ^ (d - 1) ≡ 1 [MOD d ^ 2])
+    (hqprime : Nat.Prime q)
+    (hq_dvd_x1 : q ∣ (x + 1))
+    (_hq_not_dvd_x : ¬ q ∣ x)
+    (hMod : (u - 1) ^ d ≡ u ^ d [MOD q]) :
+    q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u := by
+  have hle : (u - 1) ^ d ≤ u ^ d := by
+    exact Nat.pow_le_pow_left (Nat.sub_le _ _) d
+  have hDiff : q ∣ u ^ d - (u - 1) ^ d := by
+    exact (Nat.modEq_iff_dvd' hle).mp hMod
+  have hu_eq : 1 + (u - 1) = u := by
+    simpa [Nat.succ_eq_add_one, Nat.add_comm] using Nat.succ_pred_eq_of_pos hu
+  have hq_dvd_core1 : q ∣ DkMath.CFBRC.cyclotomicPrimeCore d 1 (u - 1) := by
+    have hq_dvd_diff : q ∣ (1 + (u - 1)) ^ d - (u - 1) ^ d := by
+      simpa [hu_eq] using hDiff
+    exact DkMath.CFBRC.prime_dvd_cyclotomicPrimeCore_of_dvd_sub_not_dvd_left
+      hqprime hq_dvd_diff hqprime.not_dvd_one
+  rw [cyclotomicPrimeCore_one_pred_eq_residual_sum d u hu] at hq_dvd_core1
+  have hx1_mod0 : x + 1 ≡ 0 [MOD q] := hq_dvd_x1.modEq_zero_nat
+  have hxu_mod : x + u ≡ u - 1 [MOD q] := by
+    have htmp := hx1_mod0.add_right (u - 1)
+    have hu_eq' : 1 + (u - 1) = u := by omega
+    simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm, hu_eq'] using htmp
+  have hsum_mod :
+      DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ≡
+        ∑ k ∈ Finset.range d, (u - 1) ^ k * u ^ (d - 1 - k) [MOD q] := by
+    unfold DkMath.CFBRC.boundaryCyclotomicPrimeCore DkMath.CFBRC.cyclotomicPrimeCore
+    exact sum_range_modEq (fun k hk =>
+      ((hxu_mod.pow k).mul_right (u ^ (d - 1 - k))))
+  have hres0 :
+      (∑ k ∈ Finset.range d, (u - 1) ^ k * u ^ (d - 1 - k)) ≡ 0 [MOD q] :=
+    hq_dvd_core1.modEq_zero_nat
+  exact Nat.modEq_zero_iff_dvd.mp (hsum_mod.trans hres0)
+
+/--
+選んだ witness prime 1 個についての congruence だけでも、prepared concrete 本体は閉じる。
+
+[CFBRC] 現時点で最も現実的な missing theorem 候補は、
+universal kernel ではなくこちらの existential witness 版である。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_selectedCongruenceWitness
+    (hSel : ExceptionalBoundaryDatumPreparedSelectedCongruenceWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  rcases hSel hd_prime hd_ge hx hu hcop hdvd hWieferich with
+    ⟨q, hqprime, hq_dvd_x1, hq_not_dvd_x, hMod⟩
+  refine ⟨q, hqprime, ?_, hq_not_dvd_x⟩
+  exact exceptional_boundary_datum_prepared_boundary_core_dvd_of_selected_modEq
+    hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x hMod
 
 /--
 concrete arithmetic witness を既定値に焼き付けると、
@@ -1254,6 +1336,17 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_congruenceKernel
     (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_congruenceKernel hKernel)
 
 /--
+選んだ witness prime 1 個についての congruence だけでも、proof file mainline へ戻れる。
+
+[CFBRC] universal congruence kernel が重すぎる場合の weaker mainline 入口。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_selectedCongruenceWitness
+    (hSel : ExceptionalBoundaryDatumPreparedSelectedCongruenceWitnessTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_preparedConcrete
+    (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_selectedCongruenceWitness hSel)
+
+/--
 prepared arithmetic core の concrete theorem 名と restore theorem があれば、
 primitive packet descent へもそのまま流せる。
 -/
@@ -1331,6 +1424,21 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_congruenceKernel_and_restore
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_preparedConcrete_and_restore
     (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_congruenceKernel hKernel)
+    hRestore
+
+/--
+選んだ witness prime 1 個についての congruence と restore theorem があれば、
+primitive packet descent まで閉じる。
+
+[CFBRC] current proof exploration では、
+まずこちらの existential witness 版が立つかを優先して調べてよい。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_selectedCongruenceWitness_and_restore
+    (hSel : ExceptionalBoundaryDatumPreparedSelectedCongruenceWitnessTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_preparedConcrete_and_restore
+    (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_selectedCongruenceWitness hSel)
     hRestore
 
 /--

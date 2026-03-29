@@ -1357,3 +1357,65 @@ Archive
 6. 次の課題:
    - `ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget`
      の concrete theorem 本体を切る。
+
+### 日時: 2026/03/29 12:58 JST
+
+1. 目的:
+   - universal な
+     `ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget`
+     が強すぎる可能性に備え、
+     arithmetic part が実際に選ぶ
+     witness prime 1 個だけで downstream を閉じる weaker route を追加する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `ExceptionalBoundaryDatumPreparedSelectedCongruenceWitnessTarget`
+     - `exceptional_boundary_datum_prepared_boundary_core_dvd_of_selected_modEq`
+     - `exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_selectedCongruenceWitness`
+     を追加した。
+   - さらに downstream wrapper として
+     - `primeGe5BranchAExceptionalExistenceMainline_of_selectedCongruenceWitness`
+     - `primeGe5BranchAPrimitivePacketDescent_of_selectedCongruenceWitness_and_restore`
+     を追加した。
+   - `selected modEq`
+     から boundary core divisibility を直接戻す局所補題を入れ、
+     universal target を経由せず
+     prepared concrete 本体へ入れるようにした。
+
+3. 結論:
+   - current proof exploration では、
+     「任意の
+     `q ∣ x + 1`
+     に対して
+     `(u - 1)^d ≡ u^d [MOD q]`
+     を示す」
+     よりも、
+     「選んだ witness prime 1 個についてその合同を示す」
+     方が自然である。
+   - したがって missing theorem の本命候補は、
+     universal kernel
+     だけでなく
+     `ExceptionalBoundaryDatumPreparedSelectedCongruenceWitnessTarget`
+     としても追える。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - 初回追加時、
+     `exceptional_boundary_datum_prepared_boundary_core_dvd_of_selected_modEq`
+     に unused variable warning が出たため、
+     binder 名を `_...`
+     に直して解消した。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedSelectedCongruenceWitnessTarget`
+     の concrete theorem 本体を切る。
+   - 併行して、
+     universal kernel
+     `ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget`
+     をまだ保持すべきか、
+     selected-witness 版を canonical route に上げるかを判断する。
