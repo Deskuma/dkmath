@@ -130,6 +130,15 @@ abbrev ExceptionalBoundaryDatumConcreteTarget : Prop :=
       ¬ q ∣ x
 
 /--
+proof file の truly new math を担う exceptional-only arithmetic / CFBRC core。
+
+[CFBRC] `review-036` 以降は、
+この theorem 名を datum concrete 本体の canonical missing kernel とみなす。
+-/
+abbrev ExceptionalBoundaryDatumArithmeticCoreTarget : Prop :=
+  ExceptionalBoundaryDatumConcreteTarget
+
+/--
 ordinary branch における boundary-core prime existence の reference theorem。
 
 [CFBRC] exceptional proof は、この ordinary theorem と仮定・中間結論を
@@ -313,6 +322,14 @@ theorem exceptional_boundaryData_splitRight_concrete_of_datum
   exact hDatum hd_prime hd_ge hx hu hcop hExc
 
 /--
+exceptional-only arithmetic / CFBRC core から datum concrete target へ戻る橋。
+-/
+theorem exceptional_boundary_datum_concrete_of_arithmeticCore
+    (hCore : ExceptionalBoundaryDatumArithmeticCoreTarget) :
+    ExceptionalBoundaryDatumConcreteTarget :=
+  hCore
+
+/--
 exceptional datum 形の concrete theorem 名から、
 通常の boundary-normalized concrete target へ戻る橋。
 -/
@@ -321,6 +338,16 @@ theorem exceptional_boundaryData_right_branch_supply_concrete_of_datum
     ExceptionalBoundaryDataRightBranchSupplyConcreteTarget :=
   exceptional_boundaryData_right_branch_supply_concrete_of_splitRight
     (exceptional_boundaryData_splitRight_concrete_of_datum hDatum)
+
+/--
+exceptional-only arithmetic / CFBRC core から
+boundary-normalized concrete target へ戻る橋。
+-/
+theorem exceptional_boundaryData_right_branch_supply_concrete_of_arithmeticCore
+    (hCore : ExceptionalBoundaryDatumArithmeticCoreTarget) :
+    ExceptionalBoundaryDataRightBranchSupplyConcreteTarget :=
+  exceptional_boundaryData_right_branch_supply_concrete_of_datum
+    (exceptional_boundary_datum_concrete_of_arithmeticCore hCore)
 
 /--
 exceptional datum 形の concrete theorem の proof skeleton。
@@ -397,6 +424,16 @@ theorem exceptional_right_boundary_core_prime_of_wieferich_of_datumConcrete
     (exceptional_boundaryData_right_branch_supply_concrete_of_datum hDatum)
 
 /--
+exceptional-only arithmetic / CFBRC core からも、
+named kernel へは同じ配線で戻せる。
+-/
+theorem exceptional_right_boundary_core_prime_of_wieferich_of_arithmeticCore
+    (hCore : ExceptionalBoundaryDatumArithmeticCoreTarget) :
+    ExceptionalRightBoundaryCorePrimeOfWieferichTarget :=
+  exceptional_right_boundary_core_prime_of_wieferich_of_boundaryConcrete
+    (exceptional_boundaryData_right_branch_supply_concrete_of_arithmeticCore hCore)
+
+/--
 named kernel があれば、
 split right branch supply もそのまま回収できる。
 -/
@@ -448,6 +485,15 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_datumConcrete
     PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
   primeGe5BranchAExceptionalExistenceMainline_of_boundaryConcrete
     (exceptional_boundaryData_right_branch_supply_concrete_of_datum hDatum)
+
+/--
+exceptional-only arithmetic / CFBRC core から proof file mainline へ戻る橋。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_arithmeticCore
+    (hCore : ExceptionalBoundaryDatumArithmeticCoreTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_boundaryConcrete
+    (exceptional_boundaryData_right_branch_supply_concrete_of_arithmeticCore hCore)
 
 /--
 datum theorem があれば、
@@ -541,6 +587,18 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_datumConcrete_and_restore
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_boundaryConcrete_and_restore
     (exceptional_boundaryData_right_branch_supply_concrete_of_datum hDatum)
+    hRestore
+
+/--
+exceptional-only arithmetic / CFBRC core と restore theorem があれば、
+primitive packet descent へもそのまま流せる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_arithmeticCore_and_restore
+    (hCore : ExceptionalBoundaryDatumArithmeticCoreTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_boundaryConcrete_and_restore
+    (exceptional_boundaryData_right_branch_supply_concrete_of_arithmeticCore hCore)
     hRestore
 
 /--

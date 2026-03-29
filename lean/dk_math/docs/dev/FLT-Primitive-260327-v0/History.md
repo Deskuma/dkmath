@@ -686,3 +686,50 @@ Archive
    - 必要なら、
      その本文の中で使う exceptional-only arithmetic / CFBRC core
      だけを別 theorem に切る。
+
+### 日時: 2026/03/29 JST
+
+1. 目的:
+   - datum concrete 本体に、
+     exceptional-only arithmetic / CFBRC core
+     としての固有名を与える。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `ExceptionalBoundaryDatumArithmeticCoreTarget`
+     を追加した。
+   - さらに
+     - `exceptional_boundary_datum_concrete_of_arithmeticCore`
+     - `exceptional_boundaryData_right_branch_supply_concrete_of_arithmeticCore`
+     - `exceptional_right_boundary_core_prime_of_wieferich_of_arithmeticCore`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_arithmeticCore`
+     - `primeGe5BranchAPrimitivePacketDescent_of_arithmeticCore_and_restore`
+     を追加し、
+     arithmetic core から
+     datum concrete / boundary concrete / named kernel / mainline / packet descent
+     へ戻る橋を揃えた。
+
+3. 結論:
+   - proof file の missing math は引き続き
+     `ExceptionalBoundaryDatumConcreteTarget`
+     の concrete 本体だが、
+     今後はその本文を
+     `ExceptionalBoundaryDatumArithmeticCoreTarget`
+     の実装とみなして追ってよい。
+   - これにより、
+     “bridge ではない本当の新数学”
+     に固有名が付き、
+     残核の輪郭がさらに明確になった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumArithmeticCoreTarget`
+     の concrete theorem 本体を切る。
