@@ -1309,3 +1309,51 @@ Archive
      あるいは
      `ExceptionalBoundaryDatumPreparedDiffPowOnWitnessTarget`
      の concrete theorem 本体を切る。
+
+### 日時: 2026/03/29 01:29 JST
+
+1. 目的:
+   - `review-048`
+     に合わせて、
+     diffPow `ModEq`
+     本体をそのまま殴る前に、
+     追加で必要な合同入力を theorem 名で分離する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget`
+     - `exceptional_boundary_datum_prepared_diffPow_modEq_on_witness_of_congruenceKernel`
+     を追加した。
+   - さらに downstream wrapper として
+     - `exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_congruenceKernel`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_congruenceKernel`
+     - `primeGe5BranchAPrimitivePacketDescent_of_congruenceKernel_and_restore`
+     を追加し、
+     current missing math を
+     `congruence kernel`
+     1 本として追えるようにした。
+
+3. 結論:
+   - 現時点の exceptional datum だけでは
+     `(u - 1)^d ≡ u^d [MOD q]`
+     は強すぎる可能性があるので、
+     proof file では
+     additional local congruence kernel
+     を first-class に扱うのが自然である。
+   - したがって current missing theorem は、
+     いったん
+     `ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget`
+     として追うのがよい。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget`
+     の concrete theorem 本体を切る。

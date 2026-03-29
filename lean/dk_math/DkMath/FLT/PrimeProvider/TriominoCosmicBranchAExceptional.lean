@@ -379,6 +379,26 @@ abbrev ExceptionalBoundaryDatumPreparedDiffPowModEqOnWitnessTarget : Prop :=
     ¬ q ∣ x →
     (u - 1) ^ d ≡ u ^ d [MOD q]
 
+/--
+diffPow `ModEq` 版の next body を、
+additional local congruence kernel 1 本へ押し込む補助 target。
+
+[CFBRC] 現時点の exceptional datum だけでは
+`(u - 1)^d ≡ u^d [MOD q]`
+が直ちに出るとは限らないので、
+proof file ではまず「何を追加で供給すればよいか」をこの target 名に隔離する。
+-/
+abbrev ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget : Prop :=
+  ∀ {d x u q : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    Nat.Prime q →
+    q ∣ (x + 1) →
+    ¬ q ∣ x →
+    (u - 1) ^ d ≡ u ^ d [MOD q]
+
 /-- `cyclotomicPrimeCore d 1 (u - 1)` は residual sum に一致する。 -/
 private theorem cyclotomicPrimeCore_one_pred_eq_residual_sum
     (d u : ℕ) (hu : 0 < u) :
@@ -750,6 +770,17 @@ theorem exceptional_boundary_datum_prepared_diffPow_on_witness_of_modEq
     (hMod hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x)
 
 /--
+additional congruence kernel が立てば、diffPow の `ModEq` target はそのまま閉じる。
+
+[CFBRC] current proof file では、
+next body をまずこの congruence kernel 名で切っておけばよい。
+-/
+theorem exceptional_boundary_datum_prepared_diffPow_modEq_on_witness_of_congruenceKernel
+    (hKernel : ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget) :
+    ExceptionalBoundaryDatumPreparedDiffPowModEqOnWitnessTarget :=
+  hKernel
+
+/--
 concrete arithmetic witness を既定値に焼き付けると、
 残る missing math は witness-aware CFBRC existence part 1 本になる。
 -/
@@ -785,6 +816,15 @@ theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_diffPowM
     ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget :=
   exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_diffPow
     (exceptional_boundary_datum_prepared_diffPow_on_witness_of_modEq hMod)
+
+/--
+additional congruence kernel が立てば、prepared concrete 本体まで閉じる。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_congruenceKernel
+    (hKernel : ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget) :
+    ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget :=
+  exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_diffPowModEq
+    (exceptional_boundary_datum_prepared_diffPow_modEq_on_witness_of_congruenceKernel hKernel)
 
 /--
 arithmetic concrete 本体が閉じた後は、
@@ -1205,6 +1245,15 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_diffPowModEq
     (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_diffPowModEq hMod)
 
 /--
+additional congruence kernel が立てば、proof file mainline へ戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_congruenceKernel
+    (hKernel : ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_preparedConcrete
+    (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_congruenceKernel hKernel)
+
+/--
 prepared arithmetic core の concrete theorem 名と restore theorem があれば、
 primitive packet descent へもそのまま流せる。
 -/
@@ -1271,6 +1320,17 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_diffPowModEq_and_restore
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_preparedConcrete_and_restore
     (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_diffPowModEq hMod)
+    hRestore
+
+/--
+additional congruence kernel と restore theorem があれば、primitive packet descent まで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_congruenceKernel_and_restore
+    (hKernel : ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_preparedConcrete_and_restore
+    (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_congruenceKernel hKernel)
     hRestore
 
 /--
