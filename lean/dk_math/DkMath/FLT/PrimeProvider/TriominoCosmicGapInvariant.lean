@@ -1982,6 +1982,15 @@ theorem branchAExceptionalPracticalConcreteAdapter_of_bodyOnWitness
   DkMath.FLT.primeGe5BranchAExceptionalPracticalConcrete_of_bodyOnWitness hBody
 
 /--
+practical datum concrete theorem 名が立てば、
+provider 側でも current practical entrance に直接戻れる。
+-/
+theorem branchAExceptionalPracticalConcreteAdapter_of_practicalDatumConcrete
+    (hBody : BranchAExceptionalPracticalDatumConcreteAdapterTarget) :
+    BranchAExceptionalPracticalConcreteAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalPracticalConcrete_of_datumConcrete hBody
+
+/--
 practical body-on-witness だけが立てば、
 provider 側でも exceptional existence mainline へ直接戻れる。
 -/

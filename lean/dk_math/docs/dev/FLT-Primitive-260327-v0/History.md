@@ -2623,3 +2623,76 @@ Archive
      の concrete theorem 本体を、
      datum / selected-core / diffPow / `Nat.ModEq` / `GN`
      の各顔を行き来しながら引き続き詰める。
+
+### 日時: 2026/03/29 22:02 JST
+
+1. 目的:
+   - `review-058`
+     の整理どおり、
+     datum concrete を
+     current practical route の
+     実戦入口として
+     theorem 名の上でも固定する。
+   - あわせて、
+     直前に追加した
+     datum concrete への direct bridge 群の
+     build を completion line まで確認する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     で、
+     datum concrete への direct bridge
+     - `primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_selectedCoreOnWitness`
+     - `primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_diffPow`
+     - `primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_diffPowModEq`
+     - `primeGe5BranchAExceptionalPracticalBodyOnDatumConcrete_of_congruenceKernel`
+     を、
+     依存定理
+     `primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_*`
+     の後ろへ移した。
+   - 同ファイルに
+     `primeGe5BranchAExceptionalPracticalConcrete_of_datumConcrete`
+     を追加し、
+     datum concrete から
+     `PrimeGe5BranchAExceptionalPracticalConcreteTarget`
+     へ直接戻れるようにした。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     に
+     `branchAExceptionalPracticalConcreteAdapter_of_practicalDatumConcrete`
+     を追加し、
+     provider 側でも
+     datum concrete を
+     current practical entrance として読めるようにした。
+
+3. 結論:
+   - `review-058`
+     の「datum から書き始める」が、
+     もはや mainline への迂回路ではなく、
+     current practical entrance
+     そのものへ直結する形で固定された。
+   - したがって現在の proof sketch 入口は、
+     実装上も
+     `PrimeGe5BranchAExceptionalPracticalBodyOnDatumConcreteTarget`
+     を first writing surface と見てよい。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - 最初は datum concrete への direct bridge 4 本を
+     依存定理より前に置いてしまい、
+     forward reference で
+     `TriominoCosmicBranchAExceptional`
+     の build が落ちた。
+   - 定理群を
+     `primeGe5BranchAExceptionalPracticalBodyOnWitnessConcrete_of_*`
+     の後ろへ移して解消した。
+
+6. 次の課題:
+   - `PrimeGe5BranchAExceptionalPracticalBodyOnDatumConcreteTarget`
+     の proof sketch を先に書き、
+     そこから
+     `PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget`
+     の concrete 本体へ収束させる。
