@@ -903,6 +903,42 @@ theorem exceptional_boundary_datum_prepared_selectedCoreWitness_of_onWitness
     hqprime hq_dvd_x1 hq_not_dvd_x
 
 /--
+差冪 divisibility があれば、selected-core-on-witness target は直接従う。
+
+[CFBRC] selected route を最後に支えている core divisibility は、
+実際には既存の diffPow route から即座に回収できる。
+-/
+theorem exceptional_boundary_datum_prepared_selectedCoreOnWitness_of_diffPow
+    (hDiff : ExceptionalBoundaryDatumPreparedDiffPowOnWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget := by
+  intro d x u q hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x
+  have hu_eq : 1 + (u - 1) = u := by
+    simpa [Nat.succ_eq_add_one, Nat.add_comm] using Nat.succ_pred_eq_of_pos hu
+  have hq_dvd_diff : q ∣ (1 + (u - 1)) ^ d - (u - 1) ^ d := by
+    simpa [hu_eq] using
+      hDiff hd_prime hd_ge hx hu hcop hdvd hWieferich hqprime hq_dvd_x1 hq_not_dvd_x
+  exact DkMath.CFBRC.prime_dvd_cyclotomicPrimeCore_of_dvd_sub_not_dvd_left
+    hqprime hq_dvd_diff hqprime.not_dvd_one
+
+/--
+差冪 `ModEq` 版があれば、divisibility 版を経由して selected-core-on-witness target は従う。
+-/
+theorem exceptional_boundary_datum_prepared_selectedCoreOnWitness_of_diffPowModEq
+    (hMod : ExceptionalBoundaryDatumPreparedDiffPowModEqOnWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget :=
+  exceptional_boundary_datum_prepared_selectedCoreOnWitness_of_diffPow
+    (exceptional_boundary_datum_prepared_diffPow_on_witness_of_modEq hMod)
+
+/--
+additional congruence kernel が立てば、selected-core-on-witness target まで直接戻れる。
+-/
+theorem exceptional_boundary_datum_prepared_selectedCoreOnWitness_of_congruenceKernel
+    (hKernel : ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget :=
+  exceptional_boundary_datum_prepared_selectedCoreOnWitness_of_diffPowModEq
+    (exceptional_boundary_datum_prepared_diffPow_modEq_on_witness_of_congruenceKernel hKernel)
+
+/--
 選んだ witness prime 上の diffPow congruence があれば、boundary core divisibility は直接従う。
 
 [CFBRC] universal target を経由せず、
@@ -1469,6 +1505,33 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreOnWitness
     (exceptional_boundary_datum_prepared_selectedCoreWitness_of_onWitness hCore)
 
 /--
+差冪 divisibility だけを示せば、selected-core-on-witness を経由して proof file mainline へ戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreDiffPow
+    (hDiff : ExceptionalBoundaryDatumPreparedDiffPowOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreOnWitness
+    (exceptional_boundary_datum_prepared_selectedCoreOnWitness_of_diffPow hDiff)
+
+/--
+差冪 `ModEq` 版だけを示せば、selected-core-on-witness を経由して proof file mainline へ戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreDiffPowModEq
+    (hMod : ExceptionalBoundaryDatumPreparedDiffPowModEqOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreOnWitness
+    (exceptional_boundary_datum_prepared_selectedCoreOnWitness_of_diffPowModEq hMod)
+
+/--
+additional congruence kernel が立てば、selected-core-on-witness を経由して proof file mainline へ戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreCongruenceKernel
+    (hKernel : ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreOnWitness
+    (exceptional_boundary_datum_prepared_selectedCoreOnWitness_of_congruenceKernel hKernel)
+
+/--
 prepared arithmetic core の concrete theorem 名と restore theorem があれば、
 primitive packet descent へもそのまま流せる。
 -/
@@ -1585,6 +1648,39 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_selectedCoreOnWitness_and_resto
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_selectedCoreWitness_and_restore
     (exceptional_boundary_datum_prepared_selectedCoreWitness_of_onWitness hCore)
+    hRestore
+
+/--
+差冪 divisibility と restore theorem があれば、selected-core-on-witness を経由して primitive packet descent まで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_selectedCoreDiffPow_and_restore
+    (hDiff : ExceptionalBoundaryDatumPreparedDiffPowOnWitnessTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_selectedCoreOnWitness_and_restore
+    (exceptional_boundary_datum_prepared_selectedCoreOnWitness_of_diffPow hDiff)
+    hRestore
+
+/--
+差冪 `ModEq` 版と restore theorem があれば、selected-core-on-witness を経由して primitive packet descent まで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_selectedCoreDiffPowModEq_and_restore
+    (hMod : ExceptionalBoundaryDatumPreparedDiffPowModEqOnWitnessTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_selectedCoreOnWitness_and_restore
+    (exceptional_boundary_datum_prepared_selectedCoreOnWitness_of_diffPowModEq hMod)
+    hRestore
+
+/--
+additional congruence kernel と restore theorem があれば、selected-core-on-witness を経由して primitive packet descent まで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_selectedCoreCongruenceKernel_and_restore
+    (hKernel : ExceptionalBoundaryDatumPreparedDiffPowCongruenceKernelTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_selectedCoreOnWitness_and_restore
+    (exceptional_boundary_datum_prepared_selectedCoreOnWitness_of_congruenceKernel hKernel)
     hRestore
 
 /--

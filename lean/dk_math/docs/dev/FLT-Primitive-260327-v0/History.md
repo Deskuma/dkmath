@@ -1596,3 +1596,61 @@ Archive
      あるいは
      diffPow
      へ戻す局所補題へさらに分解する。
+
+### 日時: 2026/03/29 13:33 JST
+
+1. 目的:
+   - `review-051`
+     に合わせて、
+     selected-core-on-witness route が
+     実際には既存の
+     diffPow / `Nat.ModEq` / congruence-kernel
+     系から直接出ることを theorem 群として固定する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `exceptional_boundary_datum_prepared_selectedCoreOnWitness_of_diffPow`
+     - `exceptional_boundary_datum_prepared_selectedCoreOnWitness_of_diffPowModEq`
+     - `exceptional_boundary_datum_prepared_selectedCoreOnWitness_of_congruenceKernel`
+     を追加した。
+   - さらに downstream wrapper として
+     - `primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreDiffPow`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreDiffPowModEq`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreCongruenceKernel`
+     - `primeGe5BranchAPrimitivePacketDescent_of_selectedCoreDiffPow_and_restore`
+     - `primeGe5BranchAPrimitivePacketDescent_of_selectedCoreDiffPowModEq_and_restore`
+     - `primeGe5BranchAPrimitivePacketDescent_of_selectedCoreCongruenceKernel_and_restore`
+     を追加した。
+
+3. 結論:
+   - `ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget`
+     は、
+     新しい独立核というより、
+     既存の
+     diffPow / `Nat.ModEq` / congruence-kernel
+     route を
+     selected-core-on-witness 語彙で読むための canonical splice point と見なせる。
+   - したがって current proof exploration では、
+     current missing theorem を
+     `SelectedCoreOnWitness`
+     に置きつつも、
+     実際の数学探索は
+     diffPow / congruence 側で続ければよい。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget`
+     の concrete theorem 本体を、
+     既存 diffPow / congruence route に直接落とせるかを試す。
+   - もしそれが薄ければ、
+     selected-core-on-witness の下に
+     residual / diffPow local body
+     を direct concrete theorem 名で切る。
