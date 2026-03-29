@@ -1178,3 +1178,75 @@ Archive
 6. 次の課題:
    - `ExceptionalBoundaryDatumPreparedCFBRCResidualOnWitnessTarget`
      の concrete theorem 本体を切る。
+
+### 日時: 2026/03/29 01:05 JST
+
+1. 目的:
+   - residual sum divisibility
+     を、
+     既存の差冪 / `cyclotomicPrimeCore`
+     語彙へさらに還元し、
+     残る local kernel を
+     `u^d - (u - 1)^d`
+     の divisibility 1 本として読めるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `ExceptionalBoundaryDatumPreparedDiffPowOnWitnessTarget`
+     - `cyclotomicPrimeCore_one_pred_eq_residual_sum`
+     - `exceptional_boundary_datum_prepared_cfbrc_residual_on_witness_of_diffPow`
+     を追加した。
+   - ここでは
+     `prime_dvd_cyclotomicPrimeCore_of_dvd_sub_not_dvd_left`
+     を
+     `(x,u) := (1, u - 1)`
+     で使い、
+     `q ∣ u^d - (u - 1)^d`
+     から
+     `q ∣ cyclotomicPrimeCore d 1 (u - 1)`
+     を得た。
+   - さらに
+     `cyclotomicPrimeCore d 1 (u - 1)`
+     が residual sum
+     `∑ (u - 1)^k * u^(d-1-k)`
+     に一致する補題を追加し、
+     residual target に戻した。
+   - downstream wrapper として
+     - `exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_diffPow`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_diffPow`
+     - `primeGe5BranchAPrimitivePacketDescent_of_diffPow_and_restore`
+     を追加した。
+
+3. 結論:
+   - witness-aware `CFBRC residual`
+     の残核は、
+     もはや residual sum そのものではなく、
+     `q ∣ u^d - (u - 1)^d`
+     の差冪 divisibility 1 本として読める。
+   - したがって current proof file の next body は、
+     `ExceptionalBoundaryDatumPreparedDiffPowOnWitnessTarget`
+     を concrete に埋める方向で追ってよい。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - 初回実装では
+     `1 + (u - 1) = u`
+     を
+     `u = 0`
+     を許したまま private 補題で使ってしまい、
+     build error になった。
+   - `cyclotomicPrimeCore_one_pred_eq_residual_sum`
+     を
+     `0 < u`
+     前提に直し、
+     `Nat.succ_pred_eq_of_pos`
+     で明示処理して解消した。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedDiffPowOnWitnessTarget`
+     の concrete theorem 本体を切る。
