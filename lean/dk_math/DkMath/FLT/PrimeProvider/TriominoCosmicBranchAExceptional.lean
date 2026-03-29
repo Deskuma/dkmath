@@ -330,6 +330,20 @@ theorem exceptional_boundary_datum_concrete_of_arithmeticCore
   hCore
 
 /--
+split theorem から arithmetic core へ入る canonical skeleton。
+
+[CFBRC] proof file で concrete 本文を差し替える位置は
+最終的にはこの theorem 名だとみなし、
+現在は split assembler から供給する。
+-/
+theorem exceptional_boundary_datum_arithmetic_core_of_split
+    (hSplit : CFBRCBoundaryCorePrimeExistenceOnSplitTarget) :
+    ExceptionalBoundaryDatumArithmeticCoreTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hDatum
+  rcases hDatum with ⟨hdvd, hWieferich⟩
+  exact hSplit hd_prime hd_ge hx hu hcop (Or.inr ⟨hdvd, hWieferich⟩)
+
+/--
 exceptional datum 形の concrete theorem 名から、
 通常の boundary-normalized concrete target へ戻る橋。
 -/
@@ -380,6 +394,19 @@ theorem cfbrcBoundaryCorePrimeExistence_split_of_reference_and_datum
   rcases hSplitCase with hOrd | hExc
   · exact cfbrcBoundaryCorePrimeExistence_reference hd_prime hd_ge hx hu hcop hOrd
   · exact hDatum hd_prime hd_ge hx hu hcop hExc
+
+/--
+ordinary/reference 側の assembler と datum theorem が揃えば、
+arithmetic core は split skeleton 経由で回収できる。
+
+[CFBRC] downstream では datum concrete ではなく、
+できるだけ arithmetic core 名を経由して参照する。
+-/
+theorem exceptional_boundary_datum_arithmetic_core_of_reference_and_datum
+    (hDatum : ExceptionalBoundaryDatumConcreteTarget) :
+    ExceptionalBoundaryDatumArithmeticCoreTarget :=
+  exceptional_boundary_datum_arithmetic_core_of_split
+    (cfbrcBoundaryCorePrimeExistence_split_of_reference_and_datum hDatum)
 
 /--
 right branch supply があれば、
@@ -505,9 +532,8 @@ ordinary/reference 側の配線を再度意識せずに済む。
 theorem primeGe5BranchAExceptionalExistenceMainline_of_reference_and_datum
     (hDatum : ExceptionalBoundaryDatumConcreteTarget) :
     PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
-  primeGe5BranchAExceptionalExistenceMainline_of_datumConcrete
-    (exceptional_boundary_datum_concrete_of_split
-      (cfbrcBoundaryCorePrimeExistence_split_of_reference_and_datum hDatum))
+  primeGe5BranchAExceptionalExistenceMainline_of_arithmeticCore
+    (exceptional_boundary_datum_arithmetic_core_of_reference_and_datum hDatum)
 
 /--
 pack-local boundary existence があれば、
@@ -609,8 +635,8 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_reference_and_datum_and_restore
     (hDatum : ExceptionalBoundaryDatumConcreteTarget)
     (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
-  primeGe5BranchAPrimitivePacketDescent_of_exceptionalMainline_and_restore
-    (primeGe5BranchAExceptionalExistenceMainline_of_reference_and_datum hDatum)
+  primeGe5BranchAPrimitivePacketDescent_of_arithmeticCore_and_restore
+    (exceptional_boundary_datum_arithmetic_core_of_reference_and_datum hDatum)
     hRestore
 
 end DkMath.FLT

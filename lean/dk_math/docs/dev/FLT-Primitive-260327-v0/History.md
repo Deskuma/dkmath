@@ -733,3 +733,53 @@ Archive
 6. 次の課題:
    - `ExceptionalBoundaryDatumArithmeticCoreTarget`
      の concrete theorem 本体を切る。
+
+### 日時: 2026/03/29 JST
+
+1. 目的:
+   - proof file の datum-based wrapper を、
+     できるだけ
+     `ExceptionalBoundaryDatumArithmeticCoreTarget`
+     を canonical 入口として読む形に寄せる。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `exceptional_boundary_datum_arithmetic_core_of_split`
+     - `exceptional_boundary_datum_arithmetic_core_of_reference_and_datum`
+     を追加した。
+   - `primeGe5BranchAExceptionalExistenceMainline_of_reference_and_datum`
+     は、
+     datum concrete から直接 mainline へ戻すのではなく、
+     `exceptional_boundary_datum_arithmetic_core_of_reference_and_datum`
+     を経由して
+     `primeGe5BranchAExceptionalExistenceMainline_of_arithmeticCore`
+     へ流す形に直した。
+   - `primeGe5BranchAPrimitivePacketDescent_of_reference_and_datum_and_restore`
+     も同様に、
+     arithmetic core 入口を経由して
+     `...of_arithmeticCore_and_restore`
+     へ流す形に直した。
+
+3. 結論:
+   - downstream は依然として datum theorem から閉じるが、
+     proof file 内の canonical 読み筋は
+     `ExceptionalBoundaryDatumArithmeticCoreTarget`
+     を通る形にさらに揃った。
+   - したがって今後の concrete 本文は、
+     `exceptional_boundary_datum_arithmetic_core`
+     相当の内容として追えばよい、
+     という整理が theorem 配線の上でも明示された。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumArithmeticCoreTarget`
+     の concrete theorem 本体を、
+     proof file 上の canonical body として切る。
