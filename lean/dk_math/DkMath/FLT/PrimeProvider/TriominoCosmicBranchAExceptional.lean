@@ -1150,6 +1150,21 @@ theorem exceptional_boundary_datum_prepared_selectedCongruenceWitness_of_selecte
   exact (Nat.modEq_iff_dvd' hle).2 hq_dvd_diff
 
 /--
+選んだ witness prime 1 個についての congruence があれば、
+existential diffPow witness 版も直ちに従う。
+-/
+theorem exceptional_boundary_datum_prepared_selectedDiffPowWitness_of_selectedCongruenceWitness
+    (hSel : ExceptionalBoundaryDatumPreparedSelectedCongruenceWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  rcases hSel hd_prime hd_ge hx hu hcop hdvd hWieferich with
+    ⟨q, hqprime, hq_dvd_x1, hq_not_dvd_x, hq_mod⟩
+  refine ⟨q, hqprime, hq_dvd_x1, hq_not_dvd_x, ?_⟩
+  have hle : (u - 1) ^ d ≤ u ^ d := by
+    exact Nat.pow_le_pow_left (Nat.sub_le _ _) d
+  exact (Nat.modEq_iff_dvd' hle).mp hq_mod
+
+/--
 選んだ witness prime が `cyclotomicPrimeCore d 1 (u - 1)` を割れば、
 existential diffPow witness 版も直接従う。
 -/
@@ -1192,6 +1207,15 @@ theorem exceptional_boundary_datum_prepared_selectedDiffPowWitnessConcrete_of_se
     (hDiff : ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessTarget) :
     ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessConcreteTarget :=
   exceptional_boundary_datum_prepared_selectedDiffPowWitness_of_selectedDiffPowOnWitness hDiff
+
+/--
+selected-witness congruence からも、
+existential diffPow witness concrete 名へ直接戻れる。
+-/
+theorem exceptional_boundary_datum_prepared_selectedDiffPowWitnessConcrete_of_selectedCongruenceWitness
+    (hSel : ExceptionalBoundaryDatumPreparedSelectedCongruenceWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessConcreteTarget :=
+  exceptional_boundary_datum_prepared_selectedDiffPowWitness_of_selectedCongruenceWitness hSel
 
 /--
 既存の diffPow-on-witness route からも、
@@ -1864,6 +1888,16 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_selectedDiffPowWitness
     (exceptional_boundary_datum_prepared_selectedCongruenceWitness_of_selectedDiffPowWitness hDiff)
 
 /--
+selected-witness congruence からも、
+practical diffPow witness route を経由して proof file mainline へ戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_selectedCongruence_to_selectedDiffPowWitness
+    (hSel : ExceptionalBoundaryDatumPreparedSelectedCongruenceWitnessTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_selectedDiffPowWitness
+    (exceptional_boundary_datum_prepared_selectedDiffPowWitness_of_selectedCongruenceWitness hSel)
+
+/--
 selected diffPow witness の concrete theorem 名が立てば、
 proof file mainline へ直接戻れる。
 -/
@@ -2063,6 +2097,18 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_selectedDiffPowWitness_and_rest
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_selectedCongruenceWitness_and_restore
     (exceptional_boundary_datum_prepared_selectedCongruenceWitness_of_selectedDiffPowWitness hDiff)
+    hRestore
+
+/--
+selected-witness congruence と restore theorem からも、
+practical diffPow witness route を経由して primitive packet descent まで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_selectedCongruence_to_selectedDiffPowWitness_and_restore
+    (hSel : ExceptionalBoundaryDatumPreparedSelectedCongruenceWitnessTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_selectedDiffPowWitness_and_restore
+    (exceptional_boundary_datum_prepared_selectedDiffPowWitness_of_selectedCongruenceWitness hSel)
     hRestore
 
 /--

@@ -1991,3 +1991,49 @@ Archive
      か
      `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget`
      の concrete theorem 本体を切る。
+
+### 日時: 2026/03/29 14:42 JST
+
+1. 目的:
+   - practical entrance の
+     `SelectedDiffPowWitnessConcrete`
+     を、
+     selected-core だけでなく
+     selected-congruence
+     からも直接使えるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `exceptional_boundary_datum_prepared_selectedDiffPowWitness_of_selectedCongruenceWitness`
+     - `exceptional_boundary_datum_prepared_selectedDiffPowWitnessConcrete_of_selectedCongruenceWitness`
+     を追加した。
+   - さらに downstream として
+     - `primeGe5BranchAExceptionalExistenceMainline_of_selectedCongruence_to_selectedDiffPowWitness`
+     - `primeGe5BranchAPrimitivePacketDescent_of_selectedCongruence_to_selectedDiffPowWitness_and_restore`
+     を追加した。
+
+3. 結論:
+   - practical diffPow witness route は、
+     selected-core 側だけでなく
+     selected-congruence 側からも
+     直接戻れるようになった。
+   - したがって current practical entrance は、
+     congruence / core / diffPow
+     のいずれの表現からでも
+     `SelectedDiffPowWitnessConcrete`
+     へ集約できる。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessConcreteTarget`
+     か
+     `ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget`
+     の concrete theorem 本体を切る。
