@@ -439,6 +439,24 @@ abbrev ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget : Prop :=
       ¬ q ∣ x ∧
       q ∣ DkMath.CFBRC.cyclotomicPrimeCore d 1 (u - 1)
 
+/--
+arithmetic part が選んだ witness prime に対して、
+`cyclotomicPrimeCore d 1 (u - 1)` divisibility を返す局所 CFBRC target。
+
+[CFBRC] selected-core route の current missing math は、
+結局この witness-aware divisibility 1 本として追えばよい。
+-/
+abbrev ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget : Prop :=
+  ∀ {d x u q : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    Nat.Prime q →
+    q ∣ (x + 1) →
+    ¬ q ∣ x →
+    q ∣ DkMath.CFBRC.cyclotomicPrimeCore d 1 (u - 1)
+
 /-- `cyclotomicPrimeCore d 1 (u - 1)` は residual sum に一致する。 -/
 private theorem cyclotomicPrimeCore_one_pred_eq_residual_sum
     (d u : ℕ) (hu : 0 < u) :
@@ -864,6 +882,25 @@ theorem exceptional_boundary_datum_prepared_selectedCongruenceWitness_of_selecte
   have hle : (u - 1) ^ d ≤ u ^ d := by
     exact Nat.pow_le_pow_left (Nat.sub_le _ _) d
   exact (Nat.modEq_iff_dvd' hle).2 hDiff
+
+/--
+witness-aware core divisibility があれば、selected-core witness target は concrete arithmetic witness で従う。
+
+[CFBRC] selected route の missing theorem を
+`∃ q ...`
+全体ではなく、
+選んだ witness 上の core divisibility 1 本へ押し込むための橋。
+-/
+theorem exceptional_boundary_datum_prepared_selectedCoreWitness_of_onWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget) :
+    ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  rcases exceptional_boundary_datum_prepared_arithmetic_witness_concrete
+      hd_prime hd_ge hx hu hcop hdvd hWieferich with
+    ⟨q, hqprime, hq_dvd_x1, hq_not_dvd_x⟩
+  refine ⟨q, hqprime, hq_dvd_x1, hq_not_dvd_x, ?_⟩
+  exact hCore hd_prime hd_ge hx hu hcop hdvd hWieferich
+    hqprime hq_dvd_x1 hq_not_dvd_x
 
 /--
 選んだ witness prime 上の diffPow congruence があれば、boundary core divisibility は直接従う。
@@ -1423,6 +1460,15 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreWitness
     (exceptional_boundary_datum_prepared_selectedCongruenceWitness_of_selectedCoreWitness hCore)
 
 /--
+witness-aware core divisibility だけを示せば、selected-core witness を経由して proof file mainline へ戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreOnWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreWitness
+    (exceptional_boundary_datum_prepared_selectedCoreWitness_of_onWitness hCore)
+
+/--
 prepared arithmetic core の concrete theorem 名と restore theorem があれば、
 primitive packet descent へもそのまま流せる。
 -/
@@ -1527,6 +1573,18 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_selectedCoreWitness_and_restore
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_selectedCongruenceWitness_and_restore
     (exceptional_boundary_datum_prepared_selectedCongruenceWitness_of_selectedCoreWitness hCore)
+    hRestore
+
+/--
+witness-aware core divisibility と restore theorem があれば、
+primitive packet descent まで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_selectedCoreOnWitness_and_restore
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_selectedCoreWitness_and_restore
+    (exceptional_boundary_datum_prepared_selectedCoreWitness_of_onWitness hCore)
     hRestore
 
 /--

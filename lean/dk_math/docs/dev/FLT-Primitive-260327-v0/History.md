@@ -1532,3 +1532,67 @@ Archive
      `cyclotomicPrimeCore d 1 (u - 1)`
      を割る witness prime の arithmetic selection 部と
      CFBRC divisibility 部をさらに分離する。
+
+### 日時: 2026/03/29 13:14 JST
+
+1. 目的:
+   - `ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget`
+     の concrete 本体をさらに 1 段局所化し、
+     arithmetic witness が選んだ
+     `q`
+     に対する witness-aware core divisibility
+     1 本として追えるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget`
+     を追加した。
+   - さらに
+     `exceptional_boundary_datum_prepared_selectedCoreWitness_of_onWitness`
+     を追加し、
+     concrete arithmetic witness
+     `exceptional_boundary_datum_prepared_arithmetic_witness_concrete`
+     と合成して
+     `SelectedCoreWitness`
+     を回収できるようにした。
+   - downstream wrapper として
+     - `primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreOnWitness`
+     - `primeGe5BranchAPrimitivePacketDescent_of_selectedCoreOnWitness_and_restore`
+     を追加した。
+
+3. 結論:
+   - selected route の current missing math は、
+     もはや
+     `∃ q`
+     付きの target 全体ではなく、
+     「選んだ witness
+     `q`
+     に対して
+     `q ∣ cyclotomicPrimeCore d 1 (u - 1)`
+     を返す」
+     `ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget`
+     1 本として追える。
+   - したがって next body は、
+     arithmetic selection と existential packaging を忘れて、
+     witness-aware CFBRC divisibility だけに集中してよい。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `ExceptionalBoundaryDatumPreparedSelectedCoreOnWitnessTarget`
+     の concrete theorem 本体を切る。
+   - 必要なら、
+     その下で
+     `cyclotomicPrimeCore d 1 (u - 1)`
+     divisibility を
+     residual sum
+     あるいは
+     diffPow
+     へ戻す局所補題へさらに分解する。
