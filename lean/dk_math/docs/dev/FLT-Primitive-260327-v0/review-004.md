@@ -21,11 +21,11 @@
 
 $$
 \text{Zsigmondy existence}
-;\to;
+\;\to\;
 \text{distinguished prime}
-;\to;
+\;\to\;
 \text{arithmetic fallout}
-;\to;
+\;\to\;
 \text{restore from arithmetic}
 $$
 

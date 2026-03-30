@@ -6,7 +6,7 @@
 
 $$
 \text{datum concrete}
-;\to;
+\;\to\;
 \text{practical entrance}
 $$
 
@@ -14,9 +14,9 @@ $$
 
 $$
 \text{selected core on datum}
-;\to;
+\;\to\;
 \text{selected congruence on datum}
-;\to;
+\;\to\;
 \text{diffPow body}
 $$
 
@@ -56,9 +56,9 @@ $$
 
 $$
 \text{core divisibility}
-;\to;
+\;\to\;
 \text{congruence}
-;\to;
+\;\to\;
 \text{diffPow divisibility}
 $$
 
