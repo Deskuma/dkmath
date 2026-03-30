@@ -12,8 +12,113 @@ Archive
 ### 日時: 2026/03/30 13:18 JST
 
 1. 目的:
+   - `PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget`
+     の数学的構造を精密に解析し、証明可能性を判定する。
+   - 偽枝チェック（前回 `BodyCoreWitness` で有効だったパターン）。
+   - 証明戦略がある場合は、分割計画を立てる。
+
 2. 実施:
+   - `TriominoCosmicBranchA.lean` から target の full signature を精読。
+
+     ```
+     ∀ {p x y z t s}, Pack p x y z →
+       p ∣ (z-y) → z-y = p^(p-1)*t^p → GN = p*s^p → x = p*(t*s) →
+       Coprime(t,s) → Coprime(t,y) → Coprime(s,y) →
+       ¬p∣s → ¬p∣t → y^(p-1) ≡ 1 [MOD p²] →
+       ∀ {q}, Prime q → q∣s → ¬q∣t → Coprime(q,y) → q≠p →
+       ∃ pkt' : NormalFormPacket p, pkt'.z < z
+     ```
+
+   - 上流の dependency chain を 全て調査:
+     - `PrimitiveZsigmondyTarget` → cyclotomic existence → **証明済み**
+     - `DistinguishedPrimeArithmeticTarget` → **`..._default` で証明済み**
+     - `PrimitivePacketRestoreFromArithmeticTarget` → **未証明** ← ここ
+   - `NormalFormPacket` の構造を確認:
+     - `x', y', z', t', s'` + `Pack p x' y' z'`
+     - `p ∣ (z'-y')`, `z'-y' = p^{p-1}*t'^p`, `GN(p,z'-y',y') = p*s'^p`
+     - `x' = p*(t'*s')`, `z' < z`
+   - 偽枝チェック: 前回式の「前提が `u=1` で壊れる」パターンは非該当。
+     - 前提に FLT 反例の存在が含まれるため、Wiles の定理により前提自体が偽。
+     - したがって反例による偽判定は不可能（FLT 反例が存在しないため）。
+   - 数学的構造分析を実施（下記 §3 結論参照）。
+
 3. 結論:
+
+   **§A. target は偽ではない（前回の `BodyCoreWitness` とは異なる）**
+   - `BodyCoreWitness` は `(d,x,u)=(5,5,1)` という具体反例で偽と確定した。
+   - 一方 `RestoreFromArithmetic` の前提は FLT 反例の存在を含む。
+     Wiles の定理により FLT 反例は存在しないため、
+     前提が偽 → 命題は vacuously true。
+   - ただし我々は FLT の Lean 形式化中なので、Wiles は使えない。
+   - 具体的な偽反例を提示することは構造的に不可能。
+
+   **§B. target は FLT の infinite descent の深い核を encode している**
+   - 既存の architecture:
+
+     ```
+     SmallerPacket = ValuationPeel (p∣t) ∨ PrimitivePacketDescent (¬p∣t)
+     PrimitivePacketDescent ← WieferichPacket ← DistinguishedPrime + Restore
+     DistinguishedPrime ← Zsigmondy ← CyclotomicExistence [✅ 証明済み]
+     Restore ← Arithmetic [✅ 証明済み] + RestoreFromArithmetic [❌ ここ]
+     ```
+
+   - `RestoreFromArithmetic` は「原始素因子 witness q から、より小さい反例を再構成する」部分。
+   - これは classical FLT descent の本丸そのもの。
+
+   **§C. witness q の構造的性質（新発見）**
+   - `q ∣ s` → `q ∣ x` （∵ `x = p*t*s`）
+   - `q ∤ t` → `q ∤ (z-y)` （∵ `z-y = p^{p-1}*t^p`, `q ≠ p`）
+   - `Coprime(q,y)` → `q ∤ y`
+   - `x^p + y^p = z^p`, `q ∣ x`, `q ∤ y` → `z^p ≡ y^p [MOD q]` → `q ∤ z`
+   - **`q ∤ (z-y)` かつ `z^p ≡ y^p [MOD q]` のとき:**
+     - `(z·y⁻¹)^p ≡ 1 [MOD q]` で `z·y⁻¹ ≢ 1 [MOD q]`
+       （もし `z ≡ y [MOD q]` なら `q ∣ (z-y)` で矛盾）
+     - ゆえに `z·y⁻¹` は `(ℤ/qℤ)*` における非自明な p 乗根
+     - **これは `p ∣ (q-1)` すなわち `q ≡ 1 [MOD p]` を要求する**
+   - さらに `v_q(x^p) = p·v_q(s) ≥ p` なので `z^p ≡ y^p [MOD q^p]`
+   - つまり `z·y⁻¹` は `(ℤ/q^pℤ)*` における p 乗根でもある
+
+   **§D. 証明戦略候補**
+
+   (D1) **円分整数環 ℤ[ζ_p] 経由**（古典的 Kummer 理論）
+   - `q ≡ 1 [MOD p]` なので `q` は ℤ[ζ_p] で完全分解する
+   - `x^p + y^p = ∏(x + ζ^{2j+1}y)` のイデアル分解から smaller solution を抽出
+   - 必要: Mathlib の cyclotomic field / number field 基盤
+   - 障害: 正則素数仮定が必要（一般の p では class number 問題）
+
+   (D2) **Cosmic Formula の構造的 descent**（本プロジェクト独自）
+   - GN = p*s^p の内部構造と q の関係から新しい pack を構成
+   - `GTail` の再帰構造を使って因子を分離する
+   - 障害: NormalFormPacket の全フィールドを同時に満たす構成が必要
+
+   (D3) **target の分割・弱化**
+   - RestoreFromArithmetic を更に細かい sub-target に分割する
+   - 例: まず `∃ x' y' z', x'^p + y'^p = z'^p ∧ z' < z` だけを示し、
+     normal form は別の補題で保証する
+   - `PrimeGe5BranchASmallerCounterexampleTarget` への reduce も候補
+
+   (D4) **前提からの直接矛盾**
+   - 前提の組み合わせが inconsistent であることを示す
+     （= 本当に smaller packet を構成するのではなく、`False.elim` で閉じる）
+   - `q ≡ 1 [MOD p]` と他の条件から矛盾が導けるか？
+   - 現時点では矛盾は見つかっていない
+
 4. 検証:
+   - 上流 chain の sorry 状況を再確認:
+     - `BranchAExceptional.lean`: sorry 0
+     - `GapInvariant.lean`: sorry 0（コード内）
+     - `BranchA.lean`: sorry 1（L3936, comparison route 末端のマーカー）
+   - 全体の定理数: 1,316 (前回比 +53)
+   - `lake build` は前回セッションで全成功を確認済み
+
 5. 失敗事例:
+   - `BodyCoreWitness` 式の即座偽判定は適用不可（前提に FLT 反例を含む）
+   - valuation 引数（「各項の v_q = 0 なら和の v_q = 0」）は誤り:
+     正の整数の和では `v_q(a+b) ≥ min(v_q(a), v_q(b))` だが
+     `v_q(a+b) > min(...)` もありうる（例: `v_3(1+2) = v_3(3) = 1`）
+
 6. 次の課題:
+   - `q ≡ 1 [MOD p]` の Lean 補題を実装する（証明可能、有用）
+   - D3 route: target を sub-target に分割する設計
+   - D4 route: 前提矛盾の可能性をさらに深掘りする
+   - ValuationPeel 側の `PacketFromErrorTarget` の未実装状況も確認する

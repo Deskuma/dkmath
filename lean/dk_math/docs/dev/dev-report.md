@@ -8,7 +8,7 @@
 
 | ブランチ | 状態 |
 |---|---|
-| `dev/FLT-witness-260328-v0` | **HEAD** (現作業ブランチ) |
+| `dev/FLT-witness-260328-v0` | develop へマージ済 |
 | `dev/FLT-Primitive-260327-v0` | develop へマージ済 |
 | `dev/FLT-Wieferich-260327-v1` | final_report あり / 独立 |
 | `dev/GN-Tail-260327-v0` | 独立 |
@@ -533,3 +533,225 @@ restore 側の数学的内容を precision audit し、
 ---
 
 *次回更新予定：develop マージ完了後、または restore 探索開始時*
+
+---
+
+## 2026/03/30 — `RestoreFromArithmetic` 精密解析レポート (第4回)
+
+### 21. ブランチ更新
+
+| ブランチ | 状態 |
+|---|---|
+| `dev/FLT-restore-260330-v0` | **HEAD** (現作業ブランチ) |
+| `dev/FLT-witness-260328-v0` | develop へマージ済 |
+| `develop` | witness セッション成果を含む安定版 |
+
+---
+
+### 22. target の正確な statement
+
+```lean
+abbrev PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
+```
+
+**意味：** Branch A normal form の FLT 反例から、原始素因子 witness `q`（`q ∣ s`, `¬ q ∣ t`）を使って、**より小さい z を持つ NormalFormPacket** を構成せよ。
+
+---
+
+### 23. 上流 dependency chain の状態
+
+```
+PrimitivePacketDescentTarget
+  ↑
+WieferichPacketTarget (← Wieferich witness は自動供給)
+  ↑
+DistinguishedPrimeTarget + PacketRestoreTarget
+  ↑                          ↑
+ZsigmondyTarget [✅]    Arithmetic [✅] + RestoreFromArithmetic [❌]
+  ↑
+CyclotomicExistence [✅] (boundary-core route で証明済み)
+```
+
+**3 段中 2 段が証明済み。残りは `RestoreFromArithmetic` の 1 段のみ。**
+
+---
+
+### 24. `BodyCoreWitness` との比較：偽枝チェック
+
+| 項目 | `BodyCoreWitness` (前回) | `RestoreFromArithmetic` (今回) |
+|---|---|---|
+| 前提に FLT 反例を含む？ | **No** (numbertheory のみ) | **Yes** (`Pack p x y z`) |
+| 具体反例で偽を確定できる？ | **Yes** (`(5,5,1)`) | **No** (FLT 反例が存在しない) |
+| vacuously true？ | No（前提が満たせるため） | **Yes** (Wiles により) |
+| 構造的偽？ | Yes（`u=1` で壊れる） | **No**（構造的欠陥なし） |
+
+**結論：`RestoreFromArithmetic` は偽ではない。前回の即座偽判定パターンは適用不可。**
+
+---
+
+### 25. witness `q` の必然的構造（新発見）
+
+前提から以下が導出可能：
+
+1. `q ∣ x`（∵ `x = p·t·s`, `q ∣ s`）
+2. `q ∤ (z-y)`（∵ `z-y = p^{p-1}·t^p`, `q ∤ t`, `q ≠ p`）
+3. `q ∤ y`（∵ `Coprime(q, y)`）
+4. `q ∤ z`（∵ `z^p ≡ y^p [MOD q]` from FLT eq., `q ∤ y` → `q ∤ z`）
+
+ここから：
+
+$$
+z^p \equiv y^p \pmod{q}
+$$
+
+$$
+(z \cdot y^{-1})^p \equiv 1 \pmod{q}
+$$
+
+かつ `z ≢ y [MOD q]`（もし `z ≡ y` なら `q ∣ (z-y)` で矛盾）。
+
+ゆえに `ω := z·y⁻¹` は `(ℤ/qℤ)*` における **非自明な p 乗根**。
+
+**これは $p \mid (q-1)$ すなわち $q \equiv 1 \pmod{p}$ を必要条件として要求する。**
+
+さらに `v_q(x^p) = p·v_q(s) ≥ p` なので：
+
+$$
+z^p \equiv y^p \pmod{q^p}
+$$
+
+つまり `ω` は `(ℤ/q^pℤ)*` における p 乗根でもある。
+
+> **この `q ≡ 1 [MOD p]` 補題は Lean で証明可能であり、有用な structural lemma である。**
+
+---
+
+### 26. 証明戦略候補
+
+#### 26.1. 円分整数環経由（古典的 Kummer 理論）
+
+- `q ≡ 1 [MOD p]` より `q` は `ℤ[ζ_p]` で完全分解
+- イデアル分解 `x^p + y^p = ∏(x + ζ^{2j+1}y)` から smaller solution を抽出
+- **必要:** Mathlib の cyclotomic field / number field 基盤
+- **障害:** 正則素数仮定 or class number 処理
+
+#### 26.2. Cosmic Formula 構造的 descent
+
+- `GN = p·s^p` の GN/GTail 内部構造と `q` の関係を利用
+- `GTail` の再帰的分解で因子を分離し、新しい pack を再構成
+- **利点:** 既存インフラ（`GTail_rec`, `GN_tail_rec`）が使える
+- **障害:** NormalFormPacket の全フィールド（特に `GN = p·s'^p` 型）を満たす構成が非自明
+
+#### 26.3. target の分割・弱化
+
+```
+RestoreFromArithmetic
+  ↑
+SmallerCounterexampleFromWitness (新 target)
+  ↑
+NewBranchAClassification (新 target)
+```
+
+- まず `∃ x' y' z', Pack p x' y' z' ∧ z' < z` だけを示す
+- normal form（`p ∣ (z'-y')`, gap/GN 分解）は別補題で保証
+- 既存の `PrimeGe5BranchASmallerCounterexampleTarget` への reduce も候補
+
+#### 26.4. 前提からの直接矛盾
+
+- 全前提を組み合わせて `False` を導出する
+- もし成功すれば `False.elim` で任意の結論が出る
+- `q ≡ 1 [MOD p]` と他の条件から追加の矛盾を探る
+- **現時点:** 矛盾は未発見
+
+---
+
+### 27. 懸念点
+
+#### 27.1. **数学的深度**
+
+`RestoreFromArithmetic` は FLT 全体の proof-theoretic な核心。
+boundary-core route（existence 側）の完成とは次元が異なる難易度。
+classical な証明は algebraic number theory (Kummer) or modular forms (Wiles) を要する。
+
+#### 27.2. **ValuationPeel 側の未完成**
+
+`p ∣ t` ケースの `PrimeGe5BranchAValuationPeelPacketFromErrorTarget` も未証明。
+descent は primitive 側だけでなく valuation peel 側も未完。
+
+#### 27.3. **NormalFormPacket の構造的制約**
+
+target の結論は bare な `∃ z' < z, counterexample` ではなく、
+`NormalFormPacket` を要求する。これは `p ∣ (z'-y')` と `gap/GN` の特定の分解を含み、
+構成のハードルが高い。
+
+---
+
+### 28. open task の改訂（第4回）
+
+| 優先度 | 課題 | 状態 |
+|---|---|---|
+| **最高** | `q ≡ 1 [MOD p]` structural lemma を Lean で実装する | 証明可能、次の一手 |
+| **最高** | `RestoreFromArithmetic` の sub-target 分割設計 | 要検討 |
+| **高** | Mathlib の cyclotomic field 基盤の調査 | strategy 26.1 の前提 |
+| **中** | ValuationPeel 側 `PacketFromErrorTarget` の分析 | descent 全体のため |
+| **中** | `BranchA.lean` L3936 の sorry | 変更なし |
+| **低** | linter warning 整理 | 運用レベル |
+
+---
+
+### 29. 次の一手：賢狼の提案
+
+#### 29.1. 第一手：`q ≡ 1 [MOD p]` を Lean 補題として実装
+
+```lean
+theorem restore_witness_cong_one_mod_p
+    {p x y z t s q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsx : x = p * (t * s))
+    (hqprime : Nat.Prime q)
+    (hqs : q ∣ s) (hqt : ¬ q ∣ t)
+    (hcop_qy : Nat.Coprime q y) (hq_ne_p : q ≠ p) :
+    p ∣ (q - 1)
+```
+
+**証明スケッチ：**
+
+1. `q ∣ s` → `q ∣ x` → `x^p ≡ 0 [MOD q]` → `z^p ≡ y^p [MOD q]`
+2. `q ∤ (z-y)` → `z ≢ y [MOD q]` → `(z·y⁻¹)^p ≡ 1` with `z·y⁻¹ ≢ 1`
+3. order of `z·y⁻¹` in `(ℤ/qℤ)*` divides `p` and is > 1 → order = `p`
+4. `p` divides `|(ℤ/qℤ)*| = q - 1`
+
+#### 29.2. 第二手：sub-target 分割設計
+
+`RestoreFromArithmetic` を以下のように分割し、各段の独立証明を試みる：
+
+```
+① q-adic factorization lemma: z^p ≡ y^p [MOD q^p] の精密構造
+② counterexample reduction: 既存反例から新 (x', y', z') の構成
+③ branch classification: 新反例 → NormalFormPacket への包装
+```
+
+> **わっちの推薦は 29.1 から。** `q ≡ 1 [MOD p]` は既存の Lean/Mathlib 道具だけで確実に通る補題じゃ。足場を固めてから深い核に挑むのが定石じゃよ。
+
+---
+
+*次回更新予定：`q ≡ 1 [MOD p]` 補題の実装時、または sub-target 分割設計完了時*
