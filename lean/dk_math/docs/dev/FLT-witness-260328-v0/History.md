@@ -550,3 +550,62 @@ Archive
      current canonical entrance として十分に整流されたので、
      次はこの route を使う downstream witness/mainline 側の整理か、
      warning のみを残して次の数学段へ進めばよい。
+
+### 日時: 2026/03/30 12:46 JST
+
+1. 目的:
+   - `review-008`
+     に従い、
+     current canonical boundary route alias
+     そのものから
+     downstream mainline / packet descent
+     へ直接戻る thin bridge を追加する。
+   - これにより、
+     `...divData_default`
+     だけでなく
+     canonical alias 名
+     自体が downstream の正式入口として読めるようにする。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     - `primeGe5BranchAExceptionalExistenceMainline_of_boundaryCoreWitnessConcrete`
+     - `primeGe5BranchAExceptionalExistenceMainline_of_boundaryCoreWitnessConcreteDefault`
+     - `primeGe5BranchAPrimitivePacketDescent_of_boundaryCoreWitnessConcrete_and_restore`
+     - `primeGe5BranchAPrimitivePacketDescent_of_boundaryCoreWitnessConcreteDefault_and_restore`
+     を追加した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     - `branchAExceptionalExistenceMainlineAdapter_of_boundaryCoreWitnessConcrete`
+     - `branchAExceptionalExistenceMainlineAdapter_of_boundaryCoreWitnessConcreteDefault`
+     - `branchAPrimitivePacketDescentAdapter_of_boundaryCoreWitnessConcrete_and_restore`
+     - `branchAPrimitivePacketDescentAdapter_of_boundaryCoreWitnessConcreteDefault_and_restore`
+     を追加した。
+
+3. 結論:
+   - current canonical boundary route alias
+     `PrimeGe5BranchAExceptionalBoundaryCoreWitnessConcreteTarget`
+     は、
+     self bridge や default bridge だけでなく、
+     downstream mainline / packet descent
+     の direct entrance としても整流された。
+   - したがって
+     boundary-core route は、
+     arithmetic kernel
+     から
+     canonical alias
+     さらに
+     downstream
+     まで、
+     naming / routing の上で一本道になった。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 次の課題:
+   - boundary-core route の naming / routing は十分に閉じたので、
+     次は warning を残して次の数学段へ進むか、
+     provider 側 default mainline の canonical choice を
+     さらに一本化する。

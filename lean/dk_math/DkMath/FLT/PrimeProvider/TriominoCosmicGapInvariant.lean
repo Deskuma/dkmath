@@ -2117,6 +2117,23 @@ theorem branchAExceptionalExistenceMainlineAdapter_of_boundaryCoreDivDataDefault
   DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_divDataDefault
 
 /--
+provider 側 current canonical boundary route そのものから、
+exceptional existence mainline へ直接戻る橋。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_boundaryCoreWitnessConcrete
+    (hCore : BranchAExceptionalBoundaryCoreWitnessConcreteAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_boundaryCoreWitnessConcrete hCore
+
+/--
+provider 側 current canonical boundary route の default entrance から、
+exceptional existence mainline へ直接戻る版。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_boundaryCoreWitnessConcreteDefault :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_boundaryCoreWitnessConcreteDefault
+
+/--
 practical entrance は、
 provider 側から見ても witness supply と on-witness body が揃えば橋だけで閉じる。
 -/
@@ -2242,6 +2259,27 @@ theorem branchAPrimitivePacketDescentAdapter_of_boundaryCoreDivDataDefault_and_r
     (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
     BranchAPrimitivePacketDescentAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_divDataDefault_and_restore hRestore
+
+/--
+provider 側 current canonical boundary route と restore theorem があれば、
+primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_boundaryCoreWitnessConcrete_and_restore
+    (hCore : BranchAExceptionalBoundaryCoreWitnessConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_boundaryCoreWitnessConcrete_and_restore
+    hCore hRestore
+
+/--
+provider 側 current canonical boundary route の default entrance と restore theorem があれば、
+primitive packet descent adapter は直接閉じる版。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_boundaryCoreWitnessConcreteDefault_and_restore
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_boundaryCoreWitnessConcreteDefault_and_restore
+    hRestore
 
 /--
 `GN d 1 (u - 1)` divisibility が立てば、

@@ -3358,6 +3358,28 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_divDataDefault_and_restore
     hRestore
 
 /--
+current canonical boundary route そのものと restore theorem があれば、
+primitive packet descent へ直接流せる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_boundaryCoreWitnessConcrete_and_restore
+    (hCore : PrimeGe5BranchAExceptionalBoundaryCoreWitnessConcreteTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_preparedArithmeticCore_and_restore
+    hCore hRestore
+
+/--
+current canonical boundary route の default entrance と restore theorem があれば、
+primitive packet descent へ直接流せる版。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_boundaryCoreWitnessConcreteDefault_and_restore
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_boundaryCoreWitnessConcrete_and_restore
+    primeGe5BranchAExceptionalBoundaryCoreWitnessConcrete_of_divDataDefault
+    hRestore
+
+/--
 prepared arithmetic core から proof file mainline へ戻る橋。
 -/
 theorem primeGe5BranchAExceptionalExistenceMainline_of_preparedArithmeticCore
@@ -3391,6 +3413,24 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_divDataDefault :
     PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
   primeGe5BranchAExceptionalExistenceMainline_of_divData
     exceptional_boundary_datum_prepared_arithmetic_core_divData_default
+
+/--
+current canonical boundary route そのものから、
+proof file exceptional existence mainline へ直接戻る橋。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_boundaryCoreWitnessConcrete
+    (hCore : PrimeGe5BranchAExceptionalBoundaryCoreWitnessConcreteTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_preparedConcrete hCore
+
+/--
+current canonical boundary route の default entrance から、
+proof file exceptional existence mainline へ直接戻る版。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_boundaryCoreWitnessConcreteDefault :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_boundaryCoreWitnessConcrete
+    primeGe5BranchAExceptionalBoundaryCoreWitnessConcrete_of_divDataDefault
 
 /--
 prepared arithmetic part の concrete 実装を既定値にすると、
