@@ -754,4 +754,187 @@ theorem restore_witness_cong_one_mod_p
 
 ---
 
-*次回更新予定：`q ≡ 1 [MOD p]` 補題の実装時、または sub-target 分割設計完了時*
+## 2026/03/30 — q ≡ 1 [MOD p] 実装 + restore 構造分割 (第4回)
+
+### 30. ブランチ進行状況
+
+| 項目 | 前回 (第3回末) | 今回 (第4回) |
+|---|---|---|
+| 作業ブランチ | `dev/FLT-witness-260328-v0` | **`dev/FLT-restore-260330-v0`** |
+| コミット数 (develop→HEAD) | — | **19** |
+| `BranchA.lean` 行数 | 5,033 | **5,338** (+305) |
+| `BranchAExceptional.lean` 行数 | 4,159 | 4,159 (変更なし) |
+| `GapInvariant.lean` 行数 | 3,081 | **3,221** (+140) |
+| `BranchARestore.lean` 行数 | — (新規) | **575** |
+| **合計行数** | 12,273 → | **13,293** (+1,020) |
+| **定義・定理数 (4ファイル)** | — | **931** |
+| sorry（コード内） | 1 (`BranchA.lean`) | **1** (`BranchA.lean` 同一箇所) |
+
+---
+
+### 31. `dev/FLT-restore-260330-v0` 全コミット一覧
+
+| # | ハッシュ | 日時 | 内容 |
+|---|---|---|---|
+| 1 | `ec72e111` | 03/30 | History.md 作成 |
+| 2 | `8a7b4088` | 03/30 | History.md & dev-report.md 詳細分析追加 |
+| 3 | `972508b8` | 03/30 | review-001 作成（FLT restore 状況分析） |
+| 4 | `b39f01cf` | 03/30 | **§R `restore_witness_cong_one_mod_p` 等の構造補題実装** |
+| 5 | `da5b3152` | 03/30 | review-002 作成 |
+| 6 | `31bb616f` | 03/30 | `PrimeGe5BranchAPrimitivePacketRestore` target 分割 |
+| 7 | `1c9a7545` | 03/30 | `TriominoCosmicBranchARestore.lean` 新規作成 |
+| 8 | `54e34fea` | 03/30 | *(tag: snapshot 260330-1540)* |
+| 9 | `0aaf092f` | 03/30 | `FLT-restore-260330-v0` dev note 作成 |
+| 10 | `bf0c22ec` | 03/30 | review-004 作成（restore 責任分離分析） |
+| 11 | `ac3e121d` | 03/30 | **residue/root 段と descent assembly 段へ分割** |
+| 12 | `f486e0c9` | 03/30 | review-005 作成 |
+| 13 | `63864da7` | 03/30 | 数式スペース調整 |
+| 14 | `86e3a892` | 03/30 | **descent seed / smaller counterexample assembly 段追加** |
+| 15 | `e3ca4e9a` | 03/30 | **descent datum / smaller counterexample assembly 段追加** |
+| 16 | `1729afb4` | 03/30 | review-006 作成（restore arithmetic core 構造分析） |
+| 17 | `5119b9ec` | 03/30 | review-007 作成（restore core さらなる局所化分析） |
+| 18 | `47f897ad` | 03/30 | **realization seed / verification 段追加** |
+| 19 | `a77aa3f1` | 03/30 | review-008 作成（判定：statement 修正方向提案） |
+
+---
+
+### 32. `q ≡ 1 [MOD p]` 補題の実装（§R 新設）
+
+`TriominoCosmicBranchA.lean` 末尾に §R セクション（Restore structural lemmas）を新設。
+以下 5 定理 + 1 構造体を **sorry なし** で実装した。
+
+| 定理名 | 内容 | 状態 |
+|---|---|---|
+| `flt_zpow_congr_mod_of_dvd_x` | `q ∣ x` → `z^p ≡ y^p [MOD q]` | ✅ no-sorry |
+| `flt_not_dvd_z_of_dvd_x_not_dvd_y` | `q ∣ x`, `q ∤ y` → `q ∤ z` | ✅ no-sorry |
+| `flt_zmod_ne_of_not_dvd_gap` | ZMod q 上の非等式 | ✅ no-sorry |
+| `restore_witness_cong_one_mod_p` | **`p ∣ (q - 1)` — 本丸** | ✅ no-sorry |
+| `RestoreWitnessProperties` | witness の全性質バンドル（構造体） | ✅ no-sorry |
+| `restore_witness_properties_default` | 上記一括構成 | ✅ no-sorry |
+
+**証明の核心：** `ZMod q` 上で `ω := z·y⁻¹` を定義。
+`ω^p = 1` かつ `ω ≠ 1` → `orderOf ω = p`（`orderOf_eq_prime`）→
+`ZMod.pow_card_sub_one_eq_one` により `orderOf ω ∣ (q-1)` → `p ∣ (q-1)`。
+
+使用 Mathlib API：
+
+- `orderOf_eq_prime`, `ZMod.pow_card_sub_one_eq_one`
+- `ZMod.isUnit_iff_coprime`, `ZMod.natCast_eq_zero_iff`
+- `Nat.ModEq.add_right`, `mul_inv_cancel₀`
+
+---
+
+### 33. `TriominoCosmicBranchARestore.lean` の設計と現状
+
+新規ファイル（575 行 / 27 定義）。
+`RestoreFromArithmeticTarget` を 6 段の sub-target に分割し、前 5 段の bridge を実装済み。
+
+```
+PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget
+  ↕ (= SmallerCounterexampleFromArithmetic + PacketPackaging)
+  ├─ [★ ✅] ResidueRootTarget         ← restore_witness_properties_default で閉じる
+  ├─ [★ ✅] QAdicLiftTarget           ← ω := z·y⁻¹ seed を ZMod q 上で構成して閉じる
+  ├─ [★ ✅] DescentDatumTarget        ← ResidueRoot + QAdicLift を bundle 化
+  ├─ [★ ✅] DescentSeedTarget         ← Datum を minimal 包装
+  ├─ [★ ✅] RealizationSeedTarget     ← thin wrapper (x,y,z を仮候補として保持)
+  └─ [★ ⬛] VerificationTarget        ← 現在の genuinely new kernel（未証明）
+```
+
+**前 5 段はすべて `default` theorem / bridge で閉じている。**
+未証明の本丸は `PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerificationTarget` 1 本。
+
+---
+
+### 34. `PrimeGe5BranchAPrimitiveRestoreQAdicLiftSeed` — q-adic lift seed
+
+Restore ファイルに以下の structure も定義済み：
+
+```lean
+structure PrimeGe5BranchAPrimitiveRestoreQAdicLiftSeed (p x y z t s q : ℕ) where
+  ω     : ZMod q
+  hω_pow   : ω ^ p = 1
+  hω_ne_one : ω ≠ 1
+```
+
+これが smaller counterexample 構成の数学的起点。
+`ω = z·y⁻¹` の nontrivial `p`-torsion 性を evidence として保持する。
+
+---
+
+### 35. review-008 の分析と次の方向
+
+review-008 の判定は：
+
+$$
+\boxed{\text{statement 修正 + RealizationSeed 精密化へ舵を切る}}
+$$
+
+**理由：** 現行の `VerificationTarget` は `(x', y', z') := (x, y, z)` であるため、
+`z' < z` という strict descent の証明が $z < z$ となり成立不能。
+これは statement が「まだ何も絞り込んでいない仮候補」を受け取る設計のまま
+verification を要求する構造的問題。
+
+**次のアクション：**
+
+1. `RealizationSeed` の `x', y', z'` フィールドを数学的根拠のある式に置き換える
+   （`q` や `ω` の情報から実際の降下先を構成）
+2. `VerificationTarget` を 3 分割：
+   - `StrictDescentTarget`（`z' < z`）
+   - `GapDivisibilityTarget`（`p ∣ (z' - y')`）
+   - `CounterexamplePackTarget`（`PrimeGe5CounterexamplePack` の検証）
+
+---
+
+### 36. proof pipeline 全体像（現時点）
+
+```
+FLT 仮定: x^p + y^p = z^p, p ≥ 5 prime
+  ↓
+Branch A normal form (GN factorization)
+  → z - y = p^{p-1} · t^p, GN p gap y = p · s^p, x = p · t · s
+  ↓
+arithmetic witness q (q ∣ s, ¬q ∣ t, Coprime q y, q ≠ p)
+  ↓ [★ ✅ q ≡ 1 [MOD p] 実装済 — restore_witness_cong_one_mod_p]
+RestoreWitnessProperties (q ∣ x, q ∤ y, q ∤ z, q ∤ gap, p ∣ (q-1))
+  ↓ [★ ✅ QAdicLiftSeed 実装済]
+ω ∈ ZMod q, ω^p = 1, ω ≠ 1  (nontrivial p-torsion)
+  ↓ [★ ⬛ VerificationTarget — 未証明]
+smaller counterexample (x', y', z') with z' < z
+  ↓
+infinite descent → contradiction
+  ↓
+FermatLastTheoremFor p ✓
+```
+
+---
+
+### 37. ファイル規模サマリ（第4回時点）
+
+```
+lean/dk_math/DkMath/FLT/PrimeProvider/
+├── TriominoCosmicBranchA.lean              5,338行  (sorry×1, §R追加)
+├── TriominoCosmicBranchAExceptional.lean   4,159行  (sorry×0)
+├── TriominoCosmicGapInvariant.lean         3,221行  (sorry×0, Restore adapter追加)
+├── TriominoCosmicBranchARestore.lean         575行  (sorry×0, 新規)    ← 今回作成
+└── ... (他 PrimeProvider ファイル多数)
+合計（4ファイル）: 13,293行 / 定義・定理981本
+```
+
+---
+
+### 38. open task の改訂（第4回）
+
+| 優先度 | 課題 | 状態 |
+|---|---|---|
+| ~~最高~~ | ~~`q ≡ 1 [MOD p]` 補題の実装~~ | **✅ 完了 (no-sorry)** |
+| ~~最高~~ | ~~`RestoreFromArithmetic` sub-target 分割~~ | **✅ 完了（6段化、前5段閉）** |
+| **最高** | `RealizationSeed` を数学的根拠のある `(x', y', z')` に精密化 | 未着手 |
+| **最高** | `VerificationTarget` の 3 分割（StrictDescent / GapDiv / Pack） | 未着手 |
+| **高** | `VerificationTarget` → `StrictDescentTarget` を閉じる（`z' < z` の証明） | 未着手 |
+| **中** | `BranchA.lean` L3958 の sorry（comparison route マーカー） | 変更なし |
+| **中** | `dev/FLT-restore-260330-v0` を develop へマージ / 新ブランチ移行 | 判断待ち |
+| **低** | linter warning の整理 | 運用レベル |
+
+---
+
+*次回更新予定：`RealizationSeed` 精密化または `StrictDescentTarget` 着手時*
