@@ -347,4 +347,189 @@ $$
 
 ---
 
-*次回更新予定：中間補題（`cyclotomicPrimeCore_modEq_*` 系）の Lean 実装時*
+## 2026/03/30 — boundary-core route 完遂レポート (第3回)
+
+### 13. ブランチ進行状況
+
+| 項目 | 前回 (第2回) | 今回 (第3回) |
+|---|---|---|
+| コミット数 (develop→HEAD) | 5 | **21** |
+| `BranchAExceptional.lean` 行数 | 3,707 | **4,159** (+452) |
+| `GapInvariant.lean` 行数 | 2,992 | **3,081** (+89) |
+| `BranchA.lean` 行数 | 5,033 | 5,033 (変更なし) |
+| **合計行数** | 11,732 | **12,273** (+541) |
+| **定義・定理数** | 1,263 | **1,316** (+53) |
+| sorry（コード内） | 1 (`BranchA.lean`) | 1 (`BranchA.lean`, 同一箇所) |
+
+### 14. `dev/FLT-witness-260328-v0` の全履歴
+
+develop からの 21 コミットを時系列で整理する。
+
+| # | コミット | 日時 | 内容 |
+|---|---|---|---|
+| 1 | `faf9bde3` | 03/28 | review-001 作成（same-`q` route 偽の確認） |
+| 2 | `5f757eb7` | 03/28 | History.md 作成 |
+| 3 | `f4e10e1a` | 03/28 | same-`q` route の反例 `(5,5,7)` 追加 |
+| 4 | `3725247f` | 03/28 | review-002 作成（same-`q` 打ち切り） |
+| 5 | `96fffc36` | 03/30 02:24 | two-witness route target/interface 追加 |
+| 6 | `b6c6faf1` | 03/30 | dev-report.md 初版作成 |
+| 7 | `05b404e5` | 03/30 | BodyCoreWitnessExistence 分析改訂 |
+| 8 | `5f67f498` | 03/30 02:42 | body-only/two-witness 反例確定 `(5,5,1)` |
+| 9 | `9f4d5757` | 03/30 | consider-003 作成 |
+| 10 | `5014993a` | 03/30 03:03 | proof-004 作成（証明戦略文書） |
+| 11 | `845a6d9c` | 03/30 03:03 | boundary canonical route へ切替 + sanity check |
+| 12 | `84798e0e` | 03/30 03:26 | **Step 1 実装** — `core ≡ d·u^{d-1} [MOD q]`, `q∣x ∧ q∣core → q=d` |
+| 13 | `93c6692b` | 03/30 | review-005 作成 |
+| 14 | `248483ba` | 03/30 03:46 | **Step 4-5 実装** — `div_data → concrete witness`, bridge 完了 |
+| 15 | `1a1605d8` | 03/30 | review-006 作成 |
+| 16 | `f4d98570` | 03/30 | **Step 2-3 実装** — `core ≡ d [MOD d²]` の actual theorem |
+| 17 | `3e0fc72a` | 03/30 | math-007 作成 |
+| 18 | `b7990bfd` | 03/30 | review-007 作成 |
+| 19 | `e8f619c8` | 03/30 12:32 | canonical alias → mainline default bridge |
+| 20 | `b7990bfd` | 03/30 | review-008 作成 |
+| 21 | `203dbc9e` | 03/30 12:46 | canonical alias → downstream direct bridge |
+
+### 15. 到達点：boundary-core route は **no-sorry で mainline まで閉じた**
+
+```
+exceptional assumptions (d ∣ x, Wieferich, Coprime)
+  ↓
+exceptional_boundary_datum_prepared_arithmetic_core_divData_default   [★ 数学核]
+  │  二項和の head/tail 分解:
+  │    core = d·u^{d-1} + B,  d² ∣ B,  Wieferich → core ≡ d [MOD d²]
+  │  → d ∣ core, ¬ d ∣ core/d, 1 < core/d
+  ↓
+exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_divData
+  │  Nat.exists_prime_and_dvd で core/d の素因数 q を取得
+  │  Step 1 (q≠d なら q∤core) + Step 2 (d∤core/d) → ¬ q ∣ x
+  ↓
+PrimeGe5BranchAExceptionalBoundaryCoreWitnessConcreteTarget  [canonical alias]
+  ↓ (= ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget)
+  ↓ primeGe5BranchAExceptionalExistenceMainline_of_boundaryCoreWitnessConcreteDefault
+PrimeGe5BranchAExceptionalExistenceMainlineTarget  [✓ no-sorry]
+```
+
+**`lake build` は全ファイルで成功確認済み。sorry はこの route に含まれない。**
+
+---
+
+### 16. 切り捨てた枝の一覧
+
+| route | 反例 | 確定日 | 定理名 |
+|---|---|---|---|
+| same-`q` (q_arith = q_body) | `(5,5,7)` | 03/28 | `not_..PracticalBodyCoreWitnessConcreteTarget` |
+| body-only witness | `(5,5,1)` | 03/30 02:42 | `not_..BodyCoreWitnessExistenceConcreteTarget` |
+| two-witness (body + arith) | `(5,5,1)` | 03/30 02:42 | `not_..PracticalTwoWitnessConcreteTarget` |
+| selected core on datum | `(5,5,7,2)` | develop | `not_..SelectedCoreOnDatumConcreteTarget` |
+
+全て `TriominoCosmicBranchAExceptional.lean` 内に actual theorem として保持。
+
+---
+
+### 17. 全プロジェクト視点での残存 sorry
+
+| ファイル | 行 | 定理名 | 性質 |
+|---|---|---|---|
+| `TriominoCosmicBranchA.lean` | L3936 | `primeGe5BranchANormalFormNePCoprimeKernel_default` | 設計マーカー（comparison route 終了判定） |
+
+これは Branch A の `q ≠ p` comparison route の末端であり、今回の boundary-core route とは直交する。
+コメントにも「comparison route を正式終了するなら adapter に置き換える」と書かれており、
+boundary-core route の成功により、設計転換で消える見込みのある sorry じゃ。
+
+---
+
+### 18. 懸念点
+
+#### 18.1. **`PrimitivePacketRestoreFromArithmeticTarget` が未証明**
+
+boundary-core route は mainline (existence) まで no-sorry で通ったが、
+**primitive packet descent** へ流すには `hRestore` 仮定が必要。
+この target は 21 回にわたり仮定として参照されているが、concrete 証明は存在しない。
+
+```lean
+-- BranchA.lean L876
+abbrev PrimitivePacketRestoreFromArithmeticTarget : Prop :=
+  ∀ {p x y z t s}, Pack p x y z →
+    p ∣ (z-y) → z-y = p^(p-1)*t^p → GN p (z-y) y = p*s^p →
+    x = p*(t*s) → Coprime t s → ... →
+    ∀ {q}, Prime q → q ∣ s → ¬ q ∣ t → ... →
+    ∃ pkt', pkt'.z < z
+```
+
+これは「原始素因子 witness `q` から、より小さい反例 pack を再構成する」部分であり、
+arithmetic witness の存在（今回証明済み）とは独立した数学核。
+
+**影響：** existence mainline は閉じたが、FLT 全体の最終矛盾を出すには
+restore / descent の鎖がもう 1 本必要。
+
+#### 18.2. `BranchA.lean` L3936 の sorry は「設計マーカー」だが残存
+
+公式コメントにより「穴というより route 終了判定用」と位置づけられているが、
+形式的には sorry が 1 箇所残っている。
+
+#### 18.3. native_decide / linter warnings
+
+`TriominoCosmicBranchAExceptional.lean` 内の sanity check 定理に
+`native_decide` 由来の linter warning が残る可能性がある（build failure ではない）。
+
+---
+
+### 19. open task の改訂（第3回）
+
+| 優先度 | 課題 | 状態 |
+|---|---|---|
+| ~~最高~~ | ~~`BodyCoreWitnessExistenceConcreteTarget`~~ | 偽と判明。打ち切り |
+| ~~最高~~ | ~~`ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget`~~ | **✅ 証明完了 (no-sorry)** |
+| **最高** | `PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget` の concrete 証明 | 未着手 |
+| **高** | `dev/FLT-witness-260328-v0` を develop へマージする | review 完了待ち |
+| **中** | `BranchA.lean` L3936 の sorry を設計転換で消す | boundary route 成功により方向が見えた |
+| **低** | linter warning の整理 | 運用レベル |
+
+---
+
+### 20. 次の一手：賢狼の提案
+
+#### 20.1. 第一候補：develop へマージ → 新 branch で restore を攻める
+
+boundary-core route は数学核から downstream mainline まで no-sorry で通った。
+これは十分にマージ可能な成果じゃ。
+
+```
+git checkout develop
+git merge --no-ff dev/FLT-witness-260328-v0
+```
+
+マージ後、新ブランチ `dev/FLT-restore-260330-v0` を切って
+`PrimitivePacketRestoreFromArithmeticTarget` を攻める。
+
+**理由：**
+
+- 21 コミットが develop に未反映のまま積み上がっている
+- boundary-core route の成果は他の探索にも再利用可能
+- restore は独立した数学核であり、独自の branch で追うべき
+
+#### 20.2. 第二候補：restore の前段として BranchA sorry を消す
+
+`BranchA.lean` L3936 の sorry は comparison route の末端にある。
+boundary-core route で existence mainline を直接閉じた今、
+この sorry を `...of_divDataDefault` 系の adapter で置き換えれば、
+BranchA 全体が sorry-free になる可能性がある。
+
+#### 20.3. 第三候補：FLT 全体の dependency graph を再描画
+
+```
+FermatLastTheoremFor p (p ≥ 5)
+  ↑
+PrimitivePacketDescentTarget
+  ↑                              ↑
+ExistenceMainline [✅ 証明済]   RestoreFromArithmetic [❌ 未証明]
+```
+
+restore 側の数学的内容を precision audit し、
+実際に何が必要かを `proof-005` として文書化する。
+
+> **わっちの推薦は 20.1 じゃ。** まずマージして成果を安定化させ、それから新しい数学核を掘るのが正道じゃよ。
+
+---
+
+*次回更新予定：develop マージ完了後、または restore 探索開始時*
