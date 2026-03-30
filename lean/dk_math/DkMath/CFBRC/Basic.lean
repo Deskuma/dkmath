@@ -110,6 +110,14 @@ theorem cyclotomicPrimeCore_eq_GN_nat
   exact Nat.eq_of_mul_eq_mul_left hx hmul
 
 /--
+Gap 形 `x = z - y`（`y < z`）での `cyclotomicPrimeCore = GN` specialization。
+-/
+theorem cyclotomicPrimeCore_eq_GN_of_gap
+    {p y z : ℕ} (hyz : y < z) :
+    cyclotomicPrimeCore p (z - y) y = GN p (z - y) y :=
+  cyclotomicPrimeCore_eq_GN_nat (p := p) (x := z - y) (u := y) (Nat.sub_pos_of_lt hyz)
+
+/--
 `x > 0` の下での除法同値：
 `q ∣ cyclotomicPrimeCore p x u` と `q ∣ GN p x u` は同値。
 -/
@@ -135,6 +143,40 @@ lemma sub_eq_mul_cyclotomicPrimeCore_nat (p x u : ℕ) :
   have hpow : u ^ p ≤ (x + u) ^ p := by
     exact Nat.pow_le_pow_left (Nat.le_add_left u x) p
   omega
+
+/--
+`x > 0` の下で `GN` は差分商
+`((x+u)^p - u^p) / x` に一致する。
+-/
+theorem GN_eq_diffQuot_of_pow
+    {p x u : ℕ} (hx : 0 < x) :
+    GN p x u = ((x + u) ^ p - u ^ p) / x := by
+  have hmul : (x + u) ^ p - u ^ p = x * GN p x u := by
+    calc
+      (x + u) ^ p - u ^ p = x * cyclotomicPrimeCore p x u :=
+        sub_eq_mul_cyclotomicPrimeCore_nat p x u
+      _ = x * GN p x u := by
+        rw [cyclotomicPrimeCore_eq_GN_nat (p := p) (x := x) (u := u) hx]
+  have hmul' : (x + u) ^ p - u ^ p = GN p x u * x := by
+    simpa [Nat.mul_comm] using hmul
+  exact (Nat.div_eq_of_eq_mul_left hx hmul').symm
+
+/--
+`x > 0` の下で `cyclotomicPrimeCore` も同じ差分商に一致する。
+-/
+theorem cyclotomicPrimeCore_eq_diffPowQuot
+    {p x u : ℕ} (hx : 0 < x) :
+    cyclotomicPrimeCore p x u = ((x + u) ^ p - u ^ p) / x := by
+  rw [cyclotomicPrimeCore_eq_GN_nat (p := p) (x := x) (u := u) hx]
+  exact GN_eq_diffQuot_of_pow (p := p) (x := x) (u := u) hx
+
+/--
+実装計画名 `GN_eq_dividedDifference_pow` との互換 alias。
+-/
+theorem GN_eq_dividedDifference_pow
+    {p x u : ℕ} (hx : 0 < x) :
+    GN p x u = ((x + u) ^ p - u ^ p) / x :=
+  GN_eq_diffQuot_of_pow (p := p) (x := x) (u := u) hx
 
 /--
 素数 `q` について、

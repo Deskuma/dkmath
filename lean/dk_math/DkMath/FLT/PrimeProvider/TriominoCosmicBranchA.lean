@@ -97,6 +97,18 @@ abbrev PrimeGe5BranchAWieferichRefuterTarget : Prop :=
     False
 
 /--
+Phase B 名寄せ: witness route 側 bundle target。
+-/
+abbrev BranchAWitnessRouteBundleTarget : Prop :=
+  PrimeGe5BranchAWieferichOnYTarget
+
+/--
+Phase B 名寄せ: contradiction route 側 bundle target。
+-/
+abbrev BranchAContradictionRouteBundleTarget : Prop :=
+  PrimeGe5BranchAWieferichRefuterTarget
+
+/--
 Branch A / Wieferich route の local kernel。
 
 Wieferich witness 単独ではなく、
@@ -2007,6 +2019,31 @@ theorem primeGe5BranchA_spow_congr_head_mod_p_sq
   exact hmod.symm
 
 /--
+計画名 `branchA_spow_congr_head_mod_p2` との互換 alias。
+-/
+theorem branchA_spow_congr_head_mod_p2
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    s ^ p ≡ y ^ (p - 1) [MOD p ^ 2] :=
+  primeGe5BranchA_spow_congr_head_mod_p_sq hpack hp_dvd_gap hgap hsGN
+
+/--
+mod `p^2` head congruence とその否定が同時に成り立つことはない。
+-/
+theorem branchA_contradiction_of_mod_p2_conflict
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hconf : ¬ s ^ p ≡ y ^ (p - 1) [MOD p ^ 2]) :
+    False :=
+  hconf (branchA_spow_congr_head_mod_p2 hpack hp_dvd_gap hgap hsGN)
+
+/--
 Branch A の `q ≠ p` 側本丸:
 `q ∣ gap` かつ `q ≠ p` なら `q ∤ GN p gap y`。
 -/
@@ -2812,6 +2849,19 @@ theorem primeGe5BranchANormalForm_y_wieferich_mod_p_sq
       s ^ p ≡ 1 [MOD p ^ 2] :=
     primeGe5BranchANormalForm_spow_congr_one_mod_p_sq hpack hp_dvd_gap hgap hsGN
   exact hhead.symm.trans hspow_one
+
+/--
+計画名 `branchA_Wieferich_head_conflict_mod_p2` の concrete 版。
+-/
+theorem branchA_Wieferich_head_conflict_mod_p2
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hnot : ¬ y ^ (p - 1) ≡ 1 [MOD p ^ 2]) :
+    False :=
+  hnot (primeGe5BranchANormalForm_y_wieferich_mod_p_sq hpack hp_dvd_gap hgap hsGN)
 
 /--
 Branch A 全体から直接取り出す、`y` 上の Wieferich-style witness。

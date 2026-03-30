@@ -1044,3 +1044,81 @@ Archive
    - Phase C の延長: Wieferich 条件 `u^{p-1} ≡ 1 [MOD p^2]` と `GN_mod_p2_head` の結合
      - `branchA_spow_congr_head_mod_p2` 等
    - `ContradictionTarget` に向けた具体的な mod p^2 矛盾探索
+
+### 日時: 2026/03/31 01:12:56 JST
+
+1. 目的:
+   - 直前の「次の課題」(Phase A/B/C 延長) を実装側で前進させる。
+   - 既存 API を壊さず、計画名で呼べる橋定理・接続補題を補強する。
+   - `ContradictionTarget` 本丸の前段として、mod p^2 衝突を `False` に落とす局所補題を追加する。
+
+2. 実施:
+
+   **Phase A: 円分核 ↔ GN ↔ 差分商**
+
+   `[DkMath/CFBRC/Basic.lean]` に以下を追加:
+
+   - `cyclotomicPrimeCore_eq_GN_of_gap`  
+     `y < z`（すなわち gap 正）を仮定した
+     `cyclotomicPrimeCore p (z-y) y = GN p (z-y) y` の specialization。
+
+   - `GN_eq_diffQuot_of_pow`  
+     `x > 0` の下で
+     `GN p x u = ((x+u)^p - u^p) / x` を与える差分商 bridge。
+     （`sub_eq_mul_cyclotomicPrimeCore_nat` + `cyclotomicPrimeCore_eq_GN_nat` を合成）
+
+   - `cyclotomicPrimeCore_eq_diffPowQuot`  
+     同条件で core 側も同じ差分商に一致。
+
+   - `GN_eq_dividedDifference_pow`  
+     計画書名との互換 alias。
+
+   **Phase B: witness route / contradiction route bundle 名寄せ**
+
+   `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]` に以下を追加:
+
+   - `BranchAWitnessRouteBundleTarget := PrimeGe5BranchAWieferichOnYTarget`
+   - `BranchAContradictionRouteBundleTarget := PrimeGe5BranchAWieferichRefuterTarget`
+
+   既存 target を維持したまま、route 分離を API 名で明示。
+
+   **Phase C 延長: Wieferich 条件と GN_mod_p2_head 接続**
+
+   同ファイルに以下を追加:
+
+   - `branchA_spow_congr_head_mod_p2`  
+     既存 `primeGe5BranchA_spow_congr_head_mod_p_sq` の計画名 alias。
+
+   - `branchA_contradiction_of_mod_p2_conflict`  
+     `¬ (s^p ≡ y^(p-1) [MOD p^2])` を仮定すれば `False` を返す局所衝突補題。
+
+   - `branchA_Wieferich_head_conflict_mod_p2`  
+     `¬ (y^(p-1) ≡ 1 [MOD p^2])` と normal form から `False` を返す concrete 版。
+
+3. 結論:
+   - 直前ログの「次の課題」4 項目のうち、Phase A と Phase C 延長は実装完了。
+   - Phase B はまず bundle 名寄せを導入し、route 分離を statement レベルで固定。
+   - `ContradictionTarget` 本体は未解決だが、mod p^2 矛盾探索の入口補題
+     (`branchA_contradiction_of_mod_p2_conflict`, `branchA_Wieferich_head_conflict_mod_p2`)
+     を追加し、次段で仮定衝突を直接差し込める形になった。
+
+4. 検証:
+   - `lake build DkMath.CFBRC.Basic` 成功 (exit 0)
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA` 成功 (exit 0)
+   - 既存 warning:
+     - `TriominoCosmicBranchA.lean:4008` の `sorry` warning は継続（今回差分起因ではない）
+
+5. 失敗事例 / 修正:
+   - `GN_eq_diffQuot_of_pow` で `Nat.div_eq_of_eq_mul_left` の向きが合わず、
+     `... = x * GN` ではなく `... = GN * x` が要求された。
+   - `Nat.mul_comm` で式向きを整えた `hmul'` を導入して解消。
+
+6. 次の課題:
+   - Phase B の実体化:
+     - `BranchAWitnessRouteBundleTarget` / `BranchAContradictionRouteBundleTarget`
+       を受け取る adapter 群を追加し、既存 refuter 合成点へ接続する。
+   - Phase C 深化:
+     - `branchA_spow_congr_head_mod_p3` 相当の API 化と、`mod p^3` 衝突補題の concrete 化。
+   - `ContradictionTarget` 直接攻略に向けた入口:
+     - `branchA_contradiction_of_mod_p2_conflict` へ実際に入る
+       「矛盾側前提」をどの下流 statement で要求するかを設計する。
