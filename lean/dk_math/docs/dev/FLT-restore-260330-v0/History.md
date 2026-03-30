@@ -386,3 +386,63 @@ Archive
      から直接得るべき
      arithmetic descent datum
      を structure 化する。
+
+### 日時: 2026/03/30 16:11:49 JST
+
+1. 目的:
+   - `review-005`
+     の見立てどおり、
+     `PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleAssemblyTarget`
+     を
+     - bundled descent datum の作成段
+     - datum から smaller counterexample を作る段
+     にさらに分割する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]`
+     に
+     - `PrimeGe5BranchAPrimitiveRestoreDescentDatum`
+     - `PrimeGe5BranchAPrimitiveRestoreDescentDatumTarget`
+     - `PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumTarget`
+     - `primeGe5BranchAPrimitiveRestoreDescentDatum_default`
+     - `primeGe5BranchAPrimitiveRestoreSmallerCounterexampleAssembly_of_descentDatum_and_fromDatum`
+     を追加した。
+   - datum は
+     `RestoreWitnessProperties`
+     と
+     `PrimeGe5BranchAPrimitiveRestoreQAdicLiftSeed`
+     を 1 つに束ねる structure とした。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     - `BranchAPrimitiveRestoreDescentDatumAdapterTarget`
+     - `BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumAdapterTarget`
+     - `branchAPrimitiveRestoreDescentDatumAdapter_default`
+     - `branchAPrimitiveRestoreSmallerCounterexampleAssemblyAdapter_of_descentDatum_and_fromDatum`
+     を追加した。
+
+3. 結論:
+   - restore arithmetic core は、
+     もはや
+     - residue/root
+     - q-adic lift
+     - descent datum bundling
+     - datum consumer
+     の 4 段へ読める。
+   - しかも前 3 段は default / bridge で閉じるので、
+     現在の genuinely new kernel は
+     `PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumTarget`
+     1 本として読める。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 次の課題:
+   - `PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumTarget`
+     の statement を、
+     さらに smaller-counterexample seed へ削れるか検討する。
+   - あるいは
+     `PrimeGe5BranchAPrimitiveRestoreDescentDatum`
+     自体の field を、
+     実際の descent 組立てで必要な arithmetic datum に寄せて精密化する。

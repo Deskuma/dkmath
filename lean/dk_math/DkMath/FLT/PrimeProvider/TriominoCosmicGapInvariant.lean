@@ -1571,6 +1571,14 @@ abbrev BranchAPrimitiveRestoreQAdicLiftAdapterTarget : Prop :=
 abbrev BranchAPrimitiveRestoreSmallerCounterexampleAssemblyAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleAssemblyTarget
 
+/-- restore assembly の bundled descent datum 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveRestoreDescentDatumAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreDescentDatumTarget
+
+/-- restore assembly の datum-consumer 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumTarget
+
 /--
 local kernel から最後の witness adapter を回収する thin bridge。
 -/
@@ -1778,6 +1786,11 @@ theorem branchAPrimitiveRestoreQAdicLiftAdapter_default :
     BranchAPrimitiveRestoreQAdicLiftAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitiveRestoreQAdicLift_default
 
+/-- restore descent datum 段は provider 側から見ても default 実装済みである。 -/
+theorem branchAPrimitiveRestoreDescentDatumAdapter_default :
+    BranchAPrimitiveRestoreDescentDatumAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreDescentDatum_default
+
 /--
 restore residue/root 段と descent assembly 段が揃えば、
 provider 側 arithmetic core は橋だけで閉じる。
@@ -1799,6 +1812,17 @@ theorem branchAPrimitiveRestoreDescentAssemblyAdapter_of_qAdicLift_and_smallerCo
     BranchAPrimitiveRestoreDescentAssemblyAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitiveRestoreDescentAssembly_of_qAdicLift_and_smallerCounterexampleAssembly
     hLift hAsm
+
+/--
+restore descent datum 段と datum-consumer 段が揃えば、
+provider 側 smaller-counterexample assembly は橋だけで閉じる。
+-/
+theorem branchAPrimitiveRestoreSmallerCounterexampleAssemblyAdapter_of_descentDatum_and_fromDatum
+    (hDatum : BranchAPrimitiveRestoreDescentDatumAdapterTarget)
+    (hAsm : BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumAdapterTarget) :
+    BranchAPrimitiveRestoreSmallerCounterexampleAssemblyAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreSmallerCounterexampleAssembly_of_descentDatum_and_fromDatum
+    hDatum hAsm
 
 /--
 Zsigmondy-lite existence と arithmetic-aware restoration から、

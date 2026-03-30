@@ -156,6 +156,72 @@ abbrev PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleAssemblyTarget : Prop
         PrimeGe5CounterexamplePack p x' y' z' ∧ p ∣ (z' - y') ∧ z' < z
 
 /--
+restore assembly の最後で消費される bundled datum。
+
+付録:
+- `RestoreWitnessProperties`
+  と `QAdicLiftSeed`
+  をひとつの data object に束ねる。
+- smaller-counterexample assembly を
+  「datum を作る段」
+  と
+  「datum から counterexample を作る段」
+  に分けるときの中間媒体である。
+-/
+structure PrimeGe5BranchAPrimitiveRestoreDescentDatum
+    (p x y z t s q : ℕ) where
+  hData : RestoreWitnessProperties p x y z t s q
+  hLift : PrimeGe5BranchAPrimitiveRestoreQAdicLiftSeed p x y z t s q
+
+/--
+q-adic lift seed から descent datum を bundle 化する段。
+-/
+abbrev PrimeGe5BranchAPrimitiveRestoreDescentDatumTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      RestoreWitnessProperties p x y z t s q →
+      PrimeGe5BranchAPrimitiveRestoreQAdicLiftSeed p x y z t s q →
+      Nonempty (PrimeGe5BranchAPrimitiveRestoreDescentDatum p x y z t s q)
+
+/--
+bundled descent datum から smaller counterexample を作る本丸段。
+-/
+abbrev PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      PrimeGe5BranchAPrimitiveRestoreDescentDatum p x y z t s q →
+      ∃ x' y' z' : ℕ,
+        PrimeGe5CounterexamplePack p x' y' z' ∧ p ∣ (z' - y') ∧ z' < z
+
+/--
 restore 後半の packet packaging core を表す canonical alias。
 
 付録:
@@ -243,6 +309,16 @@ theorem primeGe5BranchAPrimitiveRestoreQAdicLift_default :
   exact ⟨⟨ω, hω_pow, hω_ne_one⟩⟩
 
 /--
+descent datum 段は、既に得られた data を bundle 化するだけなので default 実装済みである。
+-/
+theorem primeGe5BranchAPrimitiveRestoreDescentDatum_default :
+    PrimeGe5BranchAPrimitiveRestoreDescentDatumTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hq_prime hqs hqt hcop_qy hq_ne_p hData hLift
+  exact ⟨⟨hData, hLift⟩⟩
+
+/--
 residue/root 段と descent assembly 段が揃えば、
 restore arithmetic core は橋だけで閉じる。
 
@@ -286,5 +362,26 @@ theorem primeGe5BranchAPrimitiveRestoreDescentAssembly_of_qAdicLift_and_smallerC
   exact hAsm hpack hp_dvd_gap hgap hsGN hsx
     hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
     hqprime hqs hqt hcop_qy hq_ne_p hData hLiftSeed
+
+/--
+descent datum 段と、datum から smaller counterexample を作る段が揃えば、
+smaller-counterexample assembly は橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitiveRestoreSmallerCounterexampleAssembly_of_descentDatum_and_fromDatum
+    (hDatum : PrimeGe5BranchAPrimitiveRestoreDescentDatumTarget)
+    (hAsm : PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumTarget) :
+    PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleAssemblyTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p hData hLift
+  have hDatum' :
+      Nonempty (PrimeGe5BranchAPrimitiveRestoreDescentDatum p x y z t s q) :=
+    hDatum hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hData hLift
+  rcases hDatum' with ⟨hDatum'⟩
+  exact hAsm hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    hqprime hqs hqt hcop_qy hq_ne_p hDatum'
 
 end DkMath.FLT
