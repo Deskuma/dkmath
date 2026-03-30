@@ -4212,6 +4212,17 @@ theorem primeGe5BranchARefuter_of_wieferich
   exact hRefute hpack hp_dvd_gap (hWieferich hpack hp_dvd_gap)
 
 /--
+Phase B 名寄せ bundle 2 本が揃えば、Branch A refuter は即座に閉じる。
+-/
+theorem primeGe5BranchARefuter_of_routeBundles
+    (hWitness : BranchAWitnessRouteBundleTarget)
+    (hContra : BranchAContradictionRouteBundleTarget) :
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      p ∣ (z - y) →
+      False :=
+  primeGe5BranchARefuter_of_wieferich hWitness hContra
+
+/--
 local kernel が与えられれば、Wieferich witness refuter は既存 normal form 抽出だけで得られる。
 
 付録:
@@ -4231,6 +4242,14 @@ theorem primeGe5BranchAWieferichRefuter_of_localKernel
     (primeGe5BranchANormalForm_coprime_s_right hpack hsx)
     (primeGe5BranchANormalForm_prime_not_dvd_s_default hpack hp_dvd_gap hgap hsGN)
     hWieferich
+
+/--
+Wieferich local kernel から contradiction-route bundle target へ渡す thin adapter。
+-/
+theorem branchAContradictionRouteBundle_of_localKernel
+    (hK : PrimeGe5BranchAWieferichLocalKernelTarget) :
+    BranchAContradictionRouteBundleTarget :=
+  primeGe5BranchAWieferichRefuter_of_localKernel hK
 
 /--
 arithmetic kernel が与えられれば、Wieferich local kernel は自動で閉じる。
@@ -4264,6 +4283,41 @@ theorem primeGe5BranchANormalFormArithmeticKernel_of_wieferichLocalKernel
   exact hK hpack hp_dvd_gap hgap hsGN hsx
     hcop_ts hcop_ty hcop_sy hp_not_dvd_s
     (primeGe5BranchANormalForm_y_wieferich_mod_p_sq hpack hp_dvd_gap hgap hsGN)
+
+/--
+arithmetic kernel から contradiction-route bundle target へ渡す thin adapter。
+-/
+theorem branchAContradictionRouteBundle_of_arithmeticKernel
+    (hK : PrimeGe5BranchANormalFormArithmeticKernelTarget) :
+    BranchAContradictionRouteBundleTarget :=
+  branchAContradictionRouteBundle_of_localKernel
+    (primeGe5BranchAWieferichLocalKernel_of_arithmeticKernel hK)
+
+/--
+Branch A witness route bundle の default 実装。
+-/
+theorem branchAWitnessRouteBundle_default :
+    BranchAWitnessRouteBundleTarget :=
+  primeGe5BranchAWieferichOnY_default
+
+/--
+Branch A contradiction route bundle の default 実装。
+-/
+theorem branchAContradictionRouteBundle_default :
+    BranchAContradictionRouteBundleTarget :=
+  branchAContradictionRouteBundle_of_arithmeticKernel
+    primeGe5BranchANormalFormArithmeticKernel_default
+
+/--
+Phase B bundle 入口から直接読む Branch A refuter default。
+-/
+theorem primeGe5BranchARefuter_of_routeBundles_default :
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      p ∣ (z - y) →
+      False :=
+  primeGe5BranchARefuter_of_routeBundles
+    branchAWitnessRouteBundle_default
+    branchAContradictionRouteBundle_default
 
 /-- Branch A 条件付きで、`z` 最小の反例 pack を no-`sorry` で選べる。 -/
 theorem minimalPrimeGe5CounterexampleSelectionA_impl :

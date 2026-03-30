@@ -1122,3 +1122,52 @@ Archive
    - `ContradictionTarget` 直接攻略に向けた入口:
      - `branchA_contradiction_of_mod_p2_conflict` へ実際に入る
        「矛盾側前提」をどの下流 statement で要求するかを設計する。
+
+### 日時: 2026/03/31 01:46:50 JST
+
+1. 目的:
+   - Phase B の「名寄せだけ」状態を進め、
+     bundle target を既存 refuter 合成点に実際に接続する。
+   - witness route / contradiction route の API 分離を
+     theorem レベルで運用可能にする。
+
+2. 実施:
+   `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]` に以下を追加:
+
+   - `primeGe5BranchARefuter_of_routeBundles`
+     - `BranchAWitnessRouteBundleTarget` と
+       `BranchAContradictionRouteBundleTarget` を直接受ける refuter adapter。
+   - `branchAContradictionRouteBundle_of_localKernel`
+     - `PrimeGe5BranchAWieferichLocalKernelTarget` から contradiction bundle へ。
+   - `branchAContradictionRouteBundle_of_arithmeticKernel`
+     - `PrimeGe5BranchANormalFormArithmeticKernelTarget` から contradiction bundle へ。
+   - `branchAWitnessRouteBundle_default`
+     - witness bundle の default 入口 (`primeGe5BranchAWieferichOnY_default`)。
+   - `branchAContradictionRouteBundle_default`
+     - arithmetic kernel default を経由した contradiction bundle の default。
+   - `primeGe5BranchARefuter_of_routeBundles_default`
+     - 上記 2 つの default bundle から直接読む refuter default（bundle 経路版）。
+
+3. 結論:
+   - review-012 で指摘されていた
+     「Phase B は名寄せのみで adapter 群が未整備」
+     の点を解消した。
+   - witness / contradiction の bundle API から
+     既存 `primeGe5BranchARefuter_of_wieferich` への接続が固定された。
+   - 既存の `primeGe5BranchARefuter_default`（shape pipeline 経路）は保持し、
+     bundle 経路を並行で導入した。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA` 成功 (exit 0)
+   - 既存 warning:
+     - `TriominoCosmicBranchA.lean:4008` の `sorry` warning は継続（今回差分起因ではない）
+
+5. 失敗事例:
+   - なし（今回追加分で新規エラーは発生せず）。
+
+6. 次の課題:
+   - bundle 経路版をどこまで公開 default として昇格するかを決める
+     （`primeGe5BranchARefuter_default` の経路統一方針）。
+   - `branchA_spow_congr_head_mod_p3` 相当 API と
+     mod `p^3` concrete conflict の追加。
+   - `ContradictionTarget` に入る「矛盾側前提」の供給元 statement 設計。
