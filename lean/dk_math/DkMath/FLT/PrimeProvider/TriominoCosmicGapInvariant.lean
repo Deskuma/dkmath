@@ -1546,6 +1546,14 @@ abbrev BranchAPrimitiveDistinguishedPrimeArithmeticAdapterTarget : Prop :=
 abbrev BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget
 
+/-- arithmetic witness から smaller counterexample を返す restore 前半段。 -/
+abbrev BranchAPrimitiveSmallerCounterexampleFromArithmeticAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveSmallerCounterexampleFromArithmeticTarget
+
+/-- smaller counterexample を smaller packet へ包装する restore 後半段。 -/
+abbrev BranchAPrimitivePacketOfSmallerCounterexampleAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitivePacketOfSmallerCounterexampleTarget
+
 /--
 local kernel から最後の witness adapter を回収する thin bridge。
 -/
@@ -1731,6 +1739,17 @@ theorem branchAPrimitivePacketRestoreAdapter_of_arithmetic
     (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
     BranchAPrimitivePacketRestoreAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitivePacketRestore_of_arithmetic hArith hRestore
+
+/--
+restore-from-arithmetic を
+smaller counterexample 段と packet 包装段に分けて読む provider 側再合成橋。
+-/
+theorem branchAPrimitivePacketRestoreFromArithmeticAdapter_of_smallerCounterexample_and_packet
+    (hSmall : BranchAPrimitiveSmallerCounterexampleFromArithmeticAdapterTarget)
+    (hPack : BranchAPrimitivePacketOfSmallerCounterexampleAdapterTarget) :
+    BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketRestoreFromArithmetic_of_smallerCounterexample_and_packet
+    hSmall hPack
 
 /--
 Zsigmondy-lite existence と arithmetic-aware restoration から、

@@ -157,3 +157,63 @@ Archive
    - `RestoreFromArithmetic` の sub-target 分割設計
    - q-adic valuation 精密化の形式化
    - `(z·y⁻¹)` の `(ℤ/q^pℤ)*` における p 乗根としての性質
+
+### 日時: 2026/03/30 15:24:23 JST
+
+1. 目的:
+   - `dev-report.md`
+     の方針どおり、
+     `PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget`
+     を
+     sub-target に分割する。
+   - 特に、
+     「smaller counterexample の構成」
+     と
+     「normal-form packet への包装」
+     を別 target として切り出す。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     に
+     - `PrimeGe5BranchAPrimitiveSmallerCounterexampleFromArithmeticTarget`
+     - `PrimeGe5BranchAPrimitivePacketOfSmallerCounterexampleTarget`
+     を追加した。
+   - さらに
+     `primeGe5BranchAPrimitivePacketRestoreFromArithmetic_of_smallerCounterexample_and_packet`
+     を追加し、
+     2 段の sub-target から
+     `PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget`
+     を再合成できるようにした。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     対応する provider 側 alias
+     - `BranchAPrimitiveSmallerCounterexampleFromArithmeticAdapterTarget`
+     - `BranchAPrimitivePacketOfSmallerCounterexampleAdapterTarget`
+     と、
+     再合成橋
+     `branchAPrimitivePacketRestoreFromArithmeticAdapter_of_smallerCounterexample_and_packet`
+     を追加した。
+
+3. 結論:
+   - `RestoreFromArithmetic`
+     の未完核は、
+     もはや 1 本の巨大 target ではなく、
+     - smaller counterexample existence
+     - smaller packet packaging
+     の 2 段へ局所化された。
+   - したがって今後の concrete 証明探索では、
+     「どちらの段が真の難所か」を
+     個別に追跡できる。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 次の課題:
+   - `PrimeGe5BranchAPrimitiveSmallerCounterexampleFromArithmeticTarget`
+     の statement をさらに弱化できるか検討する。
+   - あるいは
+     `PrimeGe5BranchAPrimitivePacketOfSmallerCounterexampleTarget`
+     を別ファイル / 別 route へ移して、
+     packaging 専用 kernel として育てる。

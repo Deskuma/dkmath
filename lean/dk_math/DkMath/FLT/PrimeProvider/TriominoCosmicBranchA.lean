@@ -893,6 +893,51 @@ abbrev PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget : Prop :=
       ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
 
 /--
+restore-from-arithmetic の前半だけを切り出した smaller-counterexample target。
+
+付録:
+- arithmetic witness `q` から、
+  まず smaller Branch A counterexample の bare existence だけを返す段である。
+- normal-form packet への包装は、ここではまだ要求しない。
+-/
+abbrev PrimeGe5BranchAPrimitiveSmallerCounterexampleFromArithmeticTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      ∃ x' y' z' : ℕ,
+        PrimeGe5CounterexamplePack p x' y' z' ∧ p ∣ (z' - y') ∧ z' < z
+
+/--
+smaller counterexample を smaller normal-form packet へ包装する後半 target。
+
+付録:
+- restore の deepest kernel を
+  「smaller counterexample の構成」と
+  「normal-form packet への包装」
+  の 2 段に分けるために置く。
+- arithmetic witness `q` の情報はここでは消えており、
+  purely structural な包装段だけを表す。
+-/
+abbrev PrimeGe5BranchAPrimitivePacketOfSmallerCounterexampleTarget : Prop :=
+  ∀ {p z x' y' z' : ℕ}, PrimeGe5CounterexamplePack p x' y' z' →
+    p ∣ (z' - y') →
+    z' < z →
+    ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
+
+/--
 Branch A normal form から直接、
 より小さい Branch A 反例を構成する stronger target。
 
@@ -4596,6 +4641,32 @@ theorem primeGe5BranchAPrimitivePacketRestore_of_arithmetic
     ⟨hqs, hqt, hcop_qy, hq_ne_p⟩
   exact hRestore hpack hp_dvd_gap hgap hsGN hsx
     hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich hqprime hqs hqt hcop_qy hq_ne_p
+
+/--
+restore-from-arithmetic を
+smaller counterexample 段と packet 包装段に分けて読める再合成橋。
+
+付録:
+- `RestoreFromArithmetic`
+  の最終未完を
+  1 本の巨大 target としてではなく、
+  `smaller counterexample`
+  と
+  `normal-form packet packaging`
+  の 2 段へ切り分けるための canonical wrapper である。
+-/
+theorem primeGe5BranchAPrimitivePacketRestoreFromArithmetic_of_smallerCounterexample_and_packet
+    (hSmall : PrimeGe5BranchAPrimitiveSmallerCounterexampleFromArithmeticTarget)
+    (hPack : PrimeGe5BranchAPrimitivePacketOfSmallerCounterexampleTarget) :
+    PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p
+  rcases hSmall hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p with
+    ⟨x', y', z', hpack', hp_dvd_gap', hz'lt⟩
+  exact hPack hpack' hp_dvd_gap' hz'lt
 
 /--
 Zsigmondy-lite existence と arithmetic fallout 付き restoration が揃えば、
