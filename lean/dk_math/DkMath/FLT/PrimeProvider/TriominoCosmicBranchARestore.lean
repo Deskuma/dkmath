@@ -174,6 +174,20 @@ structure PrimeGe5BranchAPrimitiveRestoreDescentDatum
   hLift : PrimeGe5BranchAPrimitiveRestoreQAdicLiftSeed p x y z t s q
 
 /--
+descent datum から smaller counterexample へ行く直前の seed。
+
+付録:
+- ここではまだ actual な
+  `x' y' z'`
+  は作らず、
+  それを組み立てるための arithmetic seed だけを bundle 化する。
+- 現段階では datum 自体をそのまま持ち上げた minimal seed として置く。
+-/
+structure PrimeGe5BranchAPrimitiveRestoreDescentSeed
+    (p x y z t s q : ℕ) where
+  hDatum : PrimeGe5BranchAPrimitiveRestoreDescentDatum p x y z t s q
+
+/--
 q-adic lift seed から descent datum を bundle 化する段。
 -/
 abbrev PrimeGe5BranchAPrimitiveRestoreDescentDatumTarget : Prop :=
@@ -218,6 +232,53 @@ abbrev PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumTarge
       Nat.Coprime q y →
       q ≠ p →
       PrimeGe5BranchAPrimitiveRestoreDescentDatum p x y z t s q →
+      ∃ x' y' z' : ℕ,
+        PrimeGe5CounterexamplePack p x' y' z' ∧ p ∣ (z' - y') ∧ z' < z
+
+/--
+descent datum から smaller-counterexample seed を抽出する段。
+-/
+abbrev PrimeGe5BranchAPrimitiveRestoreDescentSeedTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      PrimeGe5BranchAPrimitiveRestoreDescentDatum p x y z t s q →
+      Nonempty (PrimeGe5BranchAPrimitiveRestoreDescentSeed p x y z t s q)
+
+/--
+smaller-counterexample seed から actual smaller counterexample を作る最後の段。
+-/
+abbrev PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromSeedTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      PrimeGe5BranchAPrimitiveRestoreDescentSeed p x y z t s q →
       ∃ x' y' z' : ℕ,
         PrimeGe5CounterexamplePack p x' y' z' ∧ p ∣ (z' - y') ∧ z' < z
 
@@ -319,6 +380,16 @@ theorem primeGe5BranchAPrimitiveRestoreDescentDatum_default :
   exact ⟨⟨hData, hLift⟩⟩
 
 /--
+descent seed 段は、現在は datum を minimal に包み直すだけなので default 実装済みである。
+-/
+theorem primeGe5BranchAPrimitiveRestoreDescentSeed_default :
+    PrimeGe5BranchAPrimitiveRestoreDescentSeedTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hq_prime hqs hqt hcop_qy hq_ne_p hDatum
+  exact ⟨⟨hDatum⟩⟩
+
+/--
 residue/root 段と descent assembly 段が揃えば、
 restore arithmetic core は橋だけで閉じる。
 
@@ -383,5 +454,26 @@ theorem primeGe5BranchAPrimitiveRestoreSmallerCounterexampleAssembly_of_descentD
   exact hAsm hpack hp_dvd_gap hgap hsGN hsx
     hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
     hqprime hqs hqt hcop_qy hq_ne_p hDatum'
+
+/--
+descent seed 段と seed から smaller counterexample を作る段が揃えば、
+datum consumer は橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatum_of_descentSeed_and_fromSeed
+    (hSeed : PrimeGe5BranchAPrimitiveRestoreDescentSeedTarget)
+    (hAsm : PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromSeedTarget) :
+    PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p hDatum
+  have hSeed' :
+      Nonempty (PrimeGe5BranchAPrimitiveRestoreDescentSeed p x y z t s q) :=
+    hSeed hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hDatum
+  rcases hSeed' with ⟨hSeed'⟩
+  exact hAsm hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    hqprime hqs hqt hcop_qy hq_ne_p hSeed'
 
 end DkMath.FLT

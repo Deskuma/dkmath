@@ -446,3 +446,63 @@ Archive
      `PrimeGe5BranchAPrimitiveRestoreDescentDatum`
      自体の field を、
      実際の descent 組立てで必要な arithmetic datum に寄せて精密化する。
+
+### 日時: 2026/03/30 16:22:14 JST
+
+1. 目的:
+   - `review-006`
+     の方針どおり、
+     datum consumer
+     `PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumTarget`
+     を
+     - descent seed 抽出段
+     - seed realization 段
+     にさらに分割する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]`
+     に
+     - `PrimeGe5BranchAPrimitiveRestoreDescentSeed`
+     - `PrimeGe5BranchAPrimitiveRestoreDescentSeedTarget`
+     - `PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromSeedTarget`
+     - `primeGe5BranchAPrimitiveRestoreDescentSeed_default`
+     - `primeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatum_of_descentSeed_and_fromSeed`
+     を追加した。
+   - 現段階の `DescentSeed` は、
+     `DescentDatum`
+     を minimal に包み直す seed として置いた。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     - `BranchAPrimitiveRestoreDescentSeedAdapterTarget`
+     - `BranchAPrimitiveRestoreSmallerCounterexampleFromSeedAdapterTarget`
+     - `branchAPrimitiveRestoreDescentSeedAdapter_default`
+     - `branchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumAdapter_of_descentSeed_and_fromSeed`
+     を追加した。
+
+3. 結論:
+   - restore arithmetic core は、
+     もはや
+     - residue/root
+     - q-adic lift
+     - descent datum bundling
+     - descent seed extraction
+     - seed realization
+     の 5 段へ読める。
+   - しかも前 4 段は default / bridge で閉じるので、
+     現在の genuinely new kernel は
+     `PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromSeedTarget`
+     1 本へさらに局所化された。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 次の課題:
+   - `PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromSeedTarget`
+     の statement を、
+     さらに actual smaller-counterexample realization の局所 kernel へ削れるか検討する。
+   - あるいは
+     `PrimeGe5BranchAPrimitiveRestoreDescentSeed`
+     自体の field を、
+     seed realization に必要な arithmetic data に寄せて精密化する。

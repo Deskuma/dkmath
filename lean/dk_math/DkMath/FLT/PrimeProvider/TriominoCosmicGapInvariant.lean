@@ -1579,6 +1579,14 @@ abbrev BranchAPrimitiveRestoreDescentDatumAdapterTarget : Prop :=
 abbrev BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumTarget
 
+/-- restore assembly の descent seed 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveRestoreDescentSeedAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreDescentSeedTarget
+
+/-- restore assembly の seed-consumer 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveRestoreSmallerCounterexampleFromSeedAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromSeedTarget
+
 /--
 local kernel から最後の witness adapter を回収する thin bridge。
 -/
@@ -1791,6 +1799,11 @@ theorem branchAPrimitiveRestoreDescentDatumAdapter_default :
     BranchAPrimitiveRestoreDescentDatumAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitiveRestoreDescentDatum_default
 
+/-- restore descent seed 段は provider 側から見ても default 実装済みである。 -/
+theorem branchAPrimitiveRestoreDescentSeedAdapter_default :
+    BranchAPrimitiveRestoreDescentSeedAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreDescentSeed_default
+
 /--
 restore residue/root 段と descent assembly 段が揃えば、
 provider 側 arithmetic core は橋だけで閉じる。
@@ -1823,6 +1836,17 @@ theorem branchAPrimitiveRestoreSmallerCounterexampleAssemblyAdapter_of_descentDa
     BranchAPrimitiveRestoreSmallerCounterexampleAssemblyAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitiveRestoreSmallerCounterexampleAssembly_of_descentDatum_and_fromDatum
     hDatum hAsm
+
+/--
+restore descent seed 段と seed-consumer 段が揃えば、
+provider 側 datum-consumer は橋だけで閉じる。
+-/
+theorem branchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumAdapter_of_descentSeed_and_fromSeed
+    (hSeed : BranchAPrimitiveRestoreDescentSeedAdapterTarget)
+    (hAsm : BranchAPrimitiveRestoreSmallerCounterexampleFromSeedAdapterTarget) :
+    BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatum_of_descentSeed_and_fromSeed
+    hSeed hAsm
 
 /--
 Zsigmondy-lite existence と arithmetic-aware restoration から、
