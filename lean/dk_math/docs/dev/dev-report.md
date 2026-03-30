@@ -1032,3 +1032,176 @@ Branch B では `q^p ∣ GN` と `q ∤ (z-y)` から同じ構造が利用でき
 ---
 
 *次回更新予定：`CounterexamplePackTarget` 攻略開始時、または `StrictDescentTarget` 証明時*
+
+---
+
+## 2026/03/30 — 矛盾路線設計と矛盾源探索 (第6回)
+
+### 43. セッション概要
+
+第 5 回の分析で `RealizationSeedTarget`（z' の存在構成）が genuine undischarged kernel と確認された。
+第 6 回では以下の 2 つを並行して実施した:
+
+1. **矛盾路線（Contradiction Route）のアーキテクチャ設計・Lean 実装**
+   - `ContradictionTarget` を新設し、6 段チェーン全体を bypass する設計
+2. **矛盾源の体系的探索（5 角度）**
+   - 純粋な初等的 arithmetic で矛盾が導出可能かを検証
+   - アーキテクチャ全体像の精密な把握
+
+---
+
+### 44. 矛盾路線の設計と実装
+
+#### 44.1. 設計背景
+
+`RealizationSeedTarget` は「`(x/q)^p + y^p = z'^p` なる z' の存在」を要求する。
+これは FLT の反例を `z' < z` で再構成する要求であり、直接構成は不可能。
+
+Branch B の先例では `NoWieferich bridge` による前提矛盾（`False.elim`）で同様の問題を解決している。
+→ Branch A でも **前提そのものが矛盾していることを示す** のが正しい攻略方向。
+
+#### 44.2. 新設した target と bridge
+
+**`[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]` §F セクション追加:**
+
+| 定理名 | 内容 |
+|---|---|
+| `PrimeGe5BranchAPrimitiveRestoreContradictionTarget` | Branch A 全前提 + RestoreWitnessProperties → False（新 open kernel） |
+| `primeGe5BranchAPrimitiveRestoreRealizationSeed_of_contradiction` | Contradiction → RealizationSeedTarget（False.elim） |
+| `primeGe5BranchAPrimitiveSmallerCounterexampleFromArithmetic_of_contradiction` | Contradiction → SmallerCounterexample（6 段 bypass） |
+| `primeGe5BranchAPrimitivePacketRestoreFromArithmetic_of_contradiction` | Contradiction → RestoreFromArithmeticTarget（最上位 bypass） |
+
+**`[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]` adapter 追加:**
+
+| 定理名 | 内容 |
+|---|---|
+| `BranchAPrimitiveRestoreContradictionAdapterTarget` | alias |
+| `branchAPrimitiveRestoreFromArithmeticAdapter_of_contradiction` | Contradiction → RestoreFromArithmetic adapter |
+| `branchAPrimitivePacketDescentAdapter_of_contradiction` | Contradiction → PacketDescent（最短 bridge） |
+
+全て no-sorry。ビルド成功。
+
+#### 44.3. open kernel の移行
+
+| 旧 kernel | 新 kernel |
+|---|---|
+| `RealizationSeedTarget`（z' の存在構成） | `ContradictionTarget`（前提矛盾） |
+
+---
+
+### 45. 矛盾源の体系的探索
+
+#### 45.1. 前提の全容
+
+`ContradictionTarget` の前提を再掲する:
+
+```
+FLT counterexample: x^p + y^p = z^p, p ≥ 5 (prime), gcd(x,y)=1
+Branch A:           gap = p^{p-1} * t^p, GN = p * s^p, x = p*t*s
+Coprimality:        gcd(t,s)=1, gcd(t,y)=1, gcd(s,y)=1, ¬p∣s, ¬p∣t
+Wieferich:          y^{p-1} ≡ 1 [MOD p^2]
+Primitive prime q:  Prime q, q∣s, ¬q∣t, gcd(q,y)=1, q≠p
+RestoreWitness:     q∣x, ¬q∣y, ¬q∣z, ¬q∣(z-y), p∣(q-1), q^p∣GN
+```
+
+#### 45.2. 探索した 5 角度
+
+**角度 1: p-adic / q-adic valuation argument**
+
+- `v_q(z^p - y^p) = p * v_q(s)`, `v_p(GN) = 1` — 全て consistent
+- **結論: 矛盾なし**
+
+**角度 2: $s^p \equiv 1 \pmod{p^2}$ + Wieferich 条件**
+
+- `s^p ≡ y^{p-1} [MOD p^2]`（既存補題）+ Wieferich → `s^p ≡ 1 [MOD p^2]`
+- → `s ≡ 1 [MOD p]`（Fermat 小定理経由）
+- `s = 1 + pa` → `s^p ≡ 1 + p^2 a [MOD p^3]` — consistent
+- **結論: 矛盾なし**
+
+**角度 3: cyclotomicPrimeCore の mod q 展開**
+
+- `ω = z/y mod q`, `ω^p ≡ 1`, `ω ≢ 1`（`q ∤ (z-y)` より）
+- → geometric sum が `0 mod q` → `q ∣ core` — `q^p ∣ GN` と consistent
+- **結論: 矛盾なし**
+
+**角度 4: dev-report §9 の `gcd(core/d, x) = 1` を Branch A に適用**
+
+- 全仮定（`Coprime(gap, y)`, `p ∣ gap`, Wieferich）が Branch A で成立することを確認
+- しかし `gcd(s^p, gap) = 1` は `gcd(t,s)=1, ¬p∣s` から自明の既知事実
+- **結論: 矛盾なし** — 既知事実の再確認にすぎない
+
+**角度 5: $s = 1$ の場合の ExistenceMainline 矛盾**
+
+- `s = 1` → `GN = p` → ExistenceMainline が `q ∤ gap` を要求 → `¬ p ∣ gap` → Branch A 矛盾
+- しかし `ContradictionTarget` の前提 `q ∣ s`（prime q）が `s = 1` を既に排除している
+- **結論: 使えない**
+
+#### 45.3. 総合結論
+
+> **純粋な初等的 arithmetic（valuation, 合同式, coprimality）では Branch A の全前提は consistent。**
+> 矛盾を導くには円分体 ℤ[ζ_p]、Kummer 理論、正則素数理論レベルの深い数論が必要。
+
+---
+
+### 46. アーキテクチャ全体像の精密な把握
+
+#### 46.1. FLT clean route 全体フロー
+
+```
+ExistenceMainline (✅ no-sorry — boundary-core route)
+  +
+ContradictionTarget (OPEN — 数学的核心)
+  │
+  ├─→ RestoreFromArithmeticTarget (bypass via False.elim)
+  └─→ PacketDescentTarget (直接合成)
+        │
+        └─→ + ValuationPeelPacketTarget → SmallerPacket
+              → SmallerCounterexample
+              → DistinguishedPrimeDescent
+              → (minimality) → BranchARefuterTarget
+              → + BranchBRefuterTarget → FLTPrimeGe5Target
+```
+
+#### 46.2. clean 証明に必要な remaining missing pieces
+
+| 優先度 | target | 備考 |
+|---|---|---|
+| **最高** | `ContradictionTarget` | 数学的核心。円分体理論が必要 |
+| **高** | `ValuationPeelPacketTarget` | $p \mid t$ の場合の descent。Contradiction と独立 |
+| **中** | `ExistingDescentRefuterTarget` clean 化 | 現在 via_FLT（循環参照）。PacketDescent chain 完成で自動 clean 化 |
+
+#### 46.3. 判明した副産物
+
+- `ExistenceMainline` が構成する `q'`（`q' ∣ s, q' ∤ gap, q' ≠ p`）は
+  `RestoreFromArithmetic` の `q` として全前提を自動的に満たす
+  → 両 target は独立ではなく、`q'` を通じて整合的に接続されている
+
+---
+
+### 47. ファイル規模サマリ（第6回時点）
+
+```
+├── TriominoCosmicBranchA.lean          5,366行  (sorry×1 — 既存のみ)
+├── TriominoCosmicBranchAExceptional.lean 4,159行 (sorry×0)
+├── TriominoCosmicBranchARestore.lean   1,114行  (sorry×0) ← §F 矛盾路線追加
+└── TriominoCosmicGapInvariant.lean     3,264行  (sorry×0) ← Contradiction adapter 追加
+```
+
+**ビルド：** error 0。sorry 数は増加していない。
+
+---
+
+### 48. 新 open task（第6回）
+
+| 優先度 | 課題 | 状態 |
+|---|---|---|
+| ~~最高~~ | ~~`RealizationSeed` 攻略（z' 直接構成）~~ | **設計転換。矛盾路線へ** |
+| **最高** | `ContradictionTarget` の証明 | 円分体 / Kummer 理論が必要 |
+| **高** | `ValuationPeelPacketTarget`（p ∣ t の場合） | Contradiction と独立した open kernel |
+| **中** | GTail higher-order analysis（mod p^3 超）の可能性探索 | Contradiction 攻略の候補ルート |
+| **低** | `ExistingDescentRefuterTarget` clean 化（via_FLT 除去） | PacketDescent chain 完成で自動化 |
+| **低** | `BranchA.lean` L3981 の sorry（既存設計マーカー） | 変更なし |
+
+---
+
+*次回更新予定：`ContradictionTarget` 攻略開始時、または `ValuationPeelPacketTarget` 証明時*
