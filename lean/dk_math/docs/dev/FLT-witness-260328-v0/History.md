@@ -1,5 +1,8 @@
 # History
 
+- 時刻の打刻は時間(時分秒)まで正確に行うこと。
+- 新規履歴は最終末尾に追加すること。
+
 ## History Log
 
 Archive
@@ -412,7 +415,7 @@ Archive
      `ExceptionalBoundaryDatumPreparedArithmeticCoreDivDataTarget`
      を直接埋めて本線を前へ進められる。
 
-### 日時: 2026/03/30 JST
+### 日時: 2026/03/30 00:00 JST
 
 1. 目的:
    - `proof-004` の valuation / `mod d^2` 残核そのものを埋め、
@@ -479,3 +482,71 @@ Archive
      lint warning と
      `simpa` 推奨 warning が 1 件残るが、
      build failure ではない。
+
+### 日時: 2026/03/30 12:32 JST
+
+1. 目的:
+   - `math-007` / `review-007`
+     に沿って、
+     `proof-004`
+     で勝った boundary-core route を
+     theorem 名の上でも
+     current canonical entrance として読めるようにする。
+   - 具体的には、
+     `...divData_default`
+     から
+     current canonical boundary route alias
+     と
+     provider 側 alias
+     へ直接戻る thin bridge を置く。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `primeGe5BranchAExceptionalBoundaryCoreWitnessConcrete_of_divDataDefault`
+     を追加した。
+   - これは
+     `exceptional_boundary_datum_prepared_arithmetic_core_divData_default`
+     を
+     `exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_divData`
+     に流して、
+     current canonical alias
+     `PrimeGe5BranchAExceptionalBoundaryCoreWitnessConcreteTarget`
+     を直接返す default bridge である。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     `branchAExceptionalBoundaryCoreWitnessConcreteAdapter_of_divDataDefault`
+     を追加し、
+     provider 側 current canonical alias
+     `BranchAExceptionalBoundaryCoreWitnessConcreteAdapterTarget`
+     を
+     同じ粒度で直接回収できるようにした。
+
+3. 結論:
+   - `proof-004`
+     の arithmetic 核である
+     `...divData_default`
+     は、
+     mainline / packet descent だけでなく、
+     current canonical boundary route alias
+     自体の default entrance としても読めるようになった。
+   - よって
+     boundary-core route は、
+     数学核だけでなく naming / routing の上でも
+     current canonical route として整流された。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+     を完了まで待って実行し、
+     `Build completed successfully (8064 jobs).`
+     を確認した。
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+     を完了まで待って実行し、
+     `Build completed successfully (8080 jobs).`
+     を確認した。
+
+5. 次の課題:
+   - boundary-core route は
+     current canonical entrance として十分に整流されたので、
+     次はこの route を使う downstream witness/mainline 側の整理か、
+     warning のみを残して次の数学段へ進めばよい。

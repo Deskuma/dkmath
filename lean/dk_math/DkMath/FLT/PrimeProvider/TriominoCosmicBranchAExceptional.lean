@@ -1404,6 +1404,15 @@ theorem primeGe5BranchAExceptionalBoundaryCoreWitnessConcrete_of_self
   hCore
 
 /--
+`proof-004` で閉じた div-data actual theorem から、
+current canonical boundary route へ直接戻る default bridge。
+-/
+theorem primeGe5BranchAExceptionalBoundaryCoreWitnessConcrete_of_divDataDefault :
+    PrimeGe5BranchAExceptionalBoundaryCoreWitnessConcreteTarget :=
+  exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_divData
+    exceptional_boundary_datum_prepared_arithmetic_core_divData_default
+
+/--
 `(d, x, u) = (5, 5, 1)` では
 boundary route 自体は壊れておらず、
 `q = 311`
@@ -3339,6 +3348,16 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_divData_and_restore
     hRestore
 
 /--
+boundary-core route の actual theorem を canonical entrance として使う default 版。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_divDataDefault_and_restore
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_divData_and_restore
+    exceptional_boundary_datum_prepared_arithmetic_core_divData_default
+    hRestore
+
+/--
 prepared arithmetic core から proof file mainline へ戻る橋。
 -/
 theorem primeGe5BranchAExceptionalExistenceMainline_of_preparedArithmeticCore
@@ -3364,6 +3383,14 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_divData
     PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
   primeGe5BranchAExceptionalExistenceMainline_of_preparedConcrete
     (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_divData hDiv)
+
+/--
+boundary-core route の actual theorem を canonical entrance として使う default mainline 版。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_divDataDefault :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_divData
+    exceptional_boundary_datum_prepared_arithmetic_core_divData_default
 
 /--
 prepared arithmetic part の concrete 実装を既定値にすると、

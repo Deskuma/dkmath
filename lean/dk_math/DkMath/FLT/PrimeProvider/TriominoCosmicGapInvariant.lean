@@ -1440,6 +1440,14 @@ abbrev BranchAExceptionalExistenceMainlineAdapterTarget : Prop :=
 abbrev BranchAExceptionalBoundaryCoreWitnessConcreteAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAExceptionalBoundaryCoreWitnessConcreteTarget
 
+/--
+`proof-004` で閉じた div-data actual theorem から、
+provider 側 current canonical boundary route へ直接戻る default bridge。
+-/
+theorem branchAExceptionalBoundaryCoreWitnessConcreteAdapter_of_divDataDefault :
+    BranchAExceptionalBoundaryCoreWitnessConcreteAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalBoundaryCoreWitnessConcrete_of_divDataDefault
+
 /-- `proof-004` step 4-5 までを切り出した provider 側 alias。 -/
 abbrev BranchAExceptionalBoundaryCoreDivDataAdapterTarget : Prop :=
   DkMath.FLT.ExceptionalBoundaryDatumPreparedArithmeticCoreDivDataTarget
@@ -2102,6 +2110,13 @@ theorem branchAExceptionalExistenceMainlineAdapter_of_boundaryCoreDivData
     (DkMath.FLT.exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_divData hDiv)
 
 /--
+boundary-core route の actual theorem を provider 側 canonical entrance として読む default 版。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_boundaryCoreDivDataDefault :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_divDataDefault
+
+/--
 practical entrance は、
 provider 側から見ても witness supply と on-witness body が揃えば橋だけで閉じる。
 -/
@@ -2219,6 +2234,14 @@ theorem branchAPrimitivePacketDescentAdapter_of_boundaryCoreDivData_and_restore
     (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
     BranchAPrimitivePacketDescentAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_divData_and_restore hDiv hRestore
+
+/--
+boundary-core route の actual theorem を provider 側 canonical entrance として読む default packet 版。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_boundaryCoreDivDataDefault_and_restore
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_divDataDefault_and_restore hRestore
 
 /--
 `GN d 1 (u - 1)` divisibility が立てば、
