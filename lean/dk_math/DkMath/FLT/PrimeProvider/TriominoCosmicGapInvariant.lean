@@ -1587,6 +1587,14 @@ abbrev BranchAPrimitiveRestoreDescentSeedAdapterTarget : Prop :=
 abbrev BranchAPrimitiveRestoreSmallerCounterexampleFromSeedAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromSeedTarget
 
+/-- restore assembly の realization-seed 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveRestoreRealizationSeedAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget
+
+/-- restore assembly の realization verification 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveRestoreSmallerCounterexampleVerificationAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerificationTarget
+
 /--
 local kernel から最後の witness adapter を回収する thin bridge。
 -/
@@ -1804,6 +1812,11 @@ theorem branchAPrimitiveRestoreDescentSeedAdapter_default :
     BranchAPrimitiveRestoreDescentSeedAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitiveRestoreDescentSeed_default
 
+/-- restore realization-seed 段は provider 側から見ても default 実装済みである。 -/
+theorem branchAPrimitiveRestoreRealizationSeedAdapter_default :
+    BranchAPrimitiveRestoreRealizationSeedAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreRealizationSeed_default
+
 /--
 restore residue/root 段と descent assembly 段が揃えば、
 provider 側 arithmetic core は橋だけで閉じる。
@@ -1847,6 +1860,17 @@ theorem branchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumAdapter_of_d
     BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatum_of_descentSeed_and_fromSeed
     hSeed hAsm
+
+/--
+restore realization-seed 段と verification 段が揃えば、
+provider 側 seed realization は橋だけで閉じる。
+-/
+theorem branchAPrimitiveRestoreSmallerCounterexampleFromSeedAdapter_of_realizationSeed_and_verification
+    (hSeed : BranchAPrimitiveRestoreRealizationSeedAdapterTarget)
+    (hVerify : BranchAPrimitiveRestoreSmallerCounterexampleVerificationAdapterTarget) :
+    BranchAPrimitiveRestoreSmallerCounterexampleFromSeedAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromSeed_of_realizationSeed_and_verification
+    hSeed hVerify
 
 /--
 Zsigmondy-lite existence と arithmetic-aware restoration から、

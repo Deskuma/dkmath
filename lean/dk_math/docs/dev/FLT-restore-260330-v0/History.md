@@ -506,3 +506,70 @@ Archive
      `PrimeGe5BranchAPrimitiveRestoreDescentSeed`
      自体の field を、
      seed realization に必要な arithmetic data に寄せて精密化する。
+
+### 日時: 2026/03/30 16:38:51 JST
+
+1. 目的:
+   - `review-007`
+     の方針どおり、
+     seed realization
+     `PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromSeedTarget`
+     を
+     - realization-seed 抽出段
+     - candidate verification 段
+     にさらに分割する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]`
+     に
+     - `PrimeGe5BranchAPrimitiveRestoreRealizationSeed`
+     - `PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget`
+     - `PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerificationTarget`
+     - `primeGe5BranchAPrimitiveRestoreRealizationSeed_default`
+     - `primeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromSeed_of_realizationSeed_and_verification`
+     を追加した。
+   - `RealizationSeed`
+     には
+     `DescentSeed`
+     と candidate triple
+     `x' y' z'`
+     を束ねる形を採った。
+   - 現段階の default 実装は、
+     `x' := x`, `y' := y`, `z' := z`
+     を仮候補として包む thin wrapper である。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     - `BranchAPrimitiveRestoreRealizationSeedAdapterTarget`
+     - `BranchAPrimitiveRestoreSmallerCounterexampleVerificationAdapterTarget`
+     - `branchAPrimitiveRestoreRealizationSeedAdapter_default`
+     - `branchAPrimitiveRestoreSmallerCounterexampleFromSeedAdapter_of_realizationSeed_and_verification`
+     を追加した。
+
+3. 結論:
+   - restore arithmetic core は、
+     もはや
+     - residue/root
+     - q-adic lift
+     - descent datum bundling
+     - descent seed extraction
+     - realization-seed extraction
+     - candidate verification
+     の 6 段へ読める。
+   - しかも前 5 段は default / bridge で閉じるので、
+     現在の genuinely new kernel は
+     `PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerificationTarget`
+     1 本へさらに局所化された。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 次の課題:
+   - `PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerificationTarget`
+     の statement を、
+     candidate triple の個別 field 検証へさらに割れるか検討する。
+   - あるいは
+     `PrimeGe5BranchAPrimitiveRestoreRealizationSeed`
+     の field を、
+     verification に必要な partial proof data に寄せて精密化する。

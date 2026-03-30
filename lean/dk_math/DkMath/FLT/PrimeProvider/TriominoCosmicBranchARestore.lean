@@ -188,6 +188,22 @@ structure PrimeGe5BranchAPrimitiveRestoreDescentSeed
   hDatum : PrimeGe5BranchAPrimitiveRestoreDescentDatum p x y z t s q
 
 /--
+actual smaller counterexample を実現する直前の候補データ。
+
+付録:
+- `x' y' z'`
+  の候補だけを bundle 化する。
+- 以後の realization 段は、
+  候補の抽出と候補の検証の 2 段へ分けて読める。
+-/
+structure PrimeGe5BranchAPrimitiveRestoreRealizationSeed
+    (p x y z t s q : ℕ) where
+  hSeed : PrimeGe5BranchAPrimitiveRestoreDescentSeed p x y z t s q
+  x' : ℕ
+  y' : ℕ
+  z' : ℕ
+
+/--
 q-adic lift seed から descent datum を bundle 化する段。
 -/
 abbrev PrimeGe5BranchAPrimitiveRestoreDescentDatumTarget : Prop :=
@@ -281,6 +297,54 @@ abbrev PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromSeedTarget : Prop
       PrimeGe5BranchAPrimitiveRestoreDescentSeed p x y z t s q →
       ∃ x' y' z' : ℕ,
         PrimeGe5CounterexamplePack p x' y' z' ∧ p ∣ (z' - y') ∧ z' < z
+
+/--
+descent seed から actual candidate triple を抽出する段。
+-/
+abbrev PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      PrimeGe5BranchAPrimitiveRestoreDescentSeed p x y z t s q →
+      Nonempty (PrimeGe5BranchAPrimitiveRestoreRealizationSeed p x y z t s q)
+
+/--
+candidate triple を actual smaller counterexample として検証する最後の段。
+-/
+abbrev PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerificationTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      ∀ hR : PrimeGe5BranchAPrimitiveRestoreRealizationSeed p x y z t s q,
+        PrimeGe5CounterexamplePack p hR.x' hR.y' hR.z' ∧
+        p ∣ (hR.z' - hR.y') ∧
+        hR.z' < z
 
 /--
 restore 後半の packet packaging core を表す canonical alias。
@@ -390,6 +454,16 @@ theorem primeGe5BranchAPrimitiveRestoreDescentSeed_default :
   exact ⟨⟨hDatum⟩⟩
 
 /--
+realization seed 段は、現段階では元の triple を仮候補として包むだけなので default 実装済みである。
+-/
+theorem primeGe5BranchAPrimitiveRestoreRealizationSeed_default :
+    PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hq_prime hqs hqt hcop_qy hq_ne_p hSeed
+  exact ⟨⟨hSeed, x, y, z⟩⟩
+
+/--
 residue/root 段と descent assembly 段が揃えば、
 restore arithmetic core は橋だけで閉じる。
 
@@ -475,5 +549,27 @@ theorem primeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatum_of_
   exact hAsm hpack hp_dvd_gap hgap hsGN hsx
     hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
     hqprime hqs hqt hcop_qy hq_ne_p hSeed'
+
+/--
+realization seed 段と verification 段が揃えば、
+seed realization は橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromSeed_of_realizationSeed_and_verification
+    (hSeed : PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget)
+    (hVerify : PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerificationTarget) :
+    PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromSeedTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p hSeed0
+  have hRealization :
+      Nonempty (PrimeGe5BranchAPrimitiveRestoreRealizationSeed p x y z t s q) :=
+    hSeed hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hSeed0
+  rcases hRealization with ⟨hRealization⟩
+  rcases hVerify hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hRealization with ⟨hpack', hp_gap', hzlt⟩
+  exact ⟨hRealization.x', hRealization.y', hRealization.z', hpack', hp_gap', hzlt⟩
 
 end DkMath.FLT
