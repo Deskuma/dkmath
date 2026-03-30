@@ -955,3 +955,92 @@ Archive
      - これは ContradictionTarget とは独立した open kernel
    - **ExistingDescentRefuterTarget の clean 化**:
      PacketDescent chain が完成すれば自動的に clean 化される
+
+### 日時: 2026/03/31 00:09:57 JST
+
+1. 目的:
+   - `GTail-impl-plan.md` の Phase C（GTail / GN 高次解析）を実装する。
+   - `GTail.lean` に合同性補題と mod p^2 / mod p^3 展開補題を追加し、  
+     Branch A の Wieferich 解析や円分核橋への接続基盤を整える。
+
+2. 実施:
+
+   **Phase C1: 合同性基礎補題の整備**
+
+   `[DkMath/CosmicFormula/GTail.lean]` に以下を追加した:
+
+   - `sum_range_modEq` (private helper):
+     `Finset.range m` の和の合同性を帰納法で確立する補助補題。
+     Mathlib に直接使える `Finset.sum + Nat.ModEq` 組合せ補題が
+     なかったため、局所で定義した。
+
+   - `GTail_congr_of_modEq`:
+     `x ≡ x' [MOD n]`, `u ≡ u' [MOD n]` → `GTail d r x u ≡ GTail d r x' u' [MOD n]`。
+     GTail が x, u の多項式であることから導く congruence 伝播補題。
+
+   - `GTail_modEq_eval_zero_of_dvd_x`:
+     `n ∣ x` → `GTail d r x u ≡ GTail d r 0 u [MOD n]`。
+     `GTail_congr_of_modEq` の x ≡ 0 特殊化。
+
+   **Phase C2: GN mod n 基本定理**
+
+   - `GN_modEq_choose_mul_pow_of_dvd_x`:
+     `n ∣ x` → `GTail d 1 x u ≡ C(d,1) * u^{d-1} [MOD n]`。
+     `GTail_modEq_eval_zero_of_dvd_x` + `GTail_eval_zero` の合成。
+     任意の n 倍数 x に対して成立する、宇宙式の "mod n 崩壊" 定理。
+
+   - `GN_modEq_head_of_dvd_x`:
+     同上の alias（引数名を整理した版）。
+
+   - `GN_modEq_mul_pow_self_of_dvd_x`:
+     `d ∣ x` → `GTail d 1 x u ≡ d * u^{d-1} [MOD d]`。
+     `C(d,1) = d` を使った自己 modulus 版。
+
+   **Phase C3: mod p^2 精密展開**
+
+   - `GN_modEq_head_mod_sq_of_prime_dvd_x` (別名 `GN_mod_p2_head`):
+     `p ∣ x`, prime p ≥ 5 → `GTail p 1 x u ≡ p * u^{p-1} [MOD p^2]`。
+     証明: `GN_tail_rec` で展開 → `p^2 ∣ x * GTail p 2`。
+     `x * C(p,2) * ...` 部は `p ∣ x` かつ `p ∣ C(p,2) = p(p-1)/2` より `p^2` 整除、
+     `x^2 * ...` 部も `p ∣ x` 2 重で `p^2` 整除。
+
+   - `GN_eq_head_add_p_sq_mul_of_prime_dvd_x`:
+     `∃ M, GTail p 1 x u = p * u^{p-1} + p^2 * M`。
+     mod p^2 合同式を explicit な等式へ持ち上げた版。
+
+   **Phase C4: mod p^3 条件付き展開**
+
+   - `GN_mod_p3_head`:
+     `p^3 ∣ x * GTail p 2 x u` → `GTail p 1 x u ≡ p * u^{p-1} [MOD p^3]`。
+     三次精度の mod 展開（三次尾項の整除性を仮定として受け取る形）。
+
+   - `GN_eq_head_add_p_cube_mul_of_dvd_tail`:
+     同上の explicit 等式版 `∃ M, GTail p 1 x u = p * u^{p-1} + p^3 * M`。
+
+3. 結論:
+   - `GTail.lean` に合同性 4 系 + mod p^2/p^3 展開 5 系、計 **9 + 1 (private) 補題**を sorry なしで実装した。
+   - `lake build DkMath.CosmicFormula.GTail` 成功、error 0。
+   - `lake build`（全体）も成功。
+   - 実装計画書 `GTail-impl-plan.md` Phase C1〜C4 を完了。
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.GTail`: exit 0
+   - `lake build`（全体）: exit 0
+   - GTail.lean: 416 行 → 650 行（+234 行）
+
+5. 失敗事例 (Copilot 試行過程で判明した障壁):
+   - `Finset.sum_nat_modEq_sum_nat`, `Finset.sum_modEq_nonneg_congr`:
+     そのような補題は Mathlib に存在しなかった。
+   - `Finset.sum_nat_mod` は `@[simp]` ループを引き起こすため `simp only` 禁止。
+   - `Nat.cast_id`, `Int.natCast_modEq`, `Nat.modEq_comm` も存在しない API 名だった。
+   - 最終的に `sum_range_modEq` を private helper として手実装し、
+     `GTail_congr_of_modEq` を帰納法ベースで確立した。
+
+6. 次の課題:
+   - Phase A: 円分核 ↔ GN ↔ 差分商の橋を theorem 化する
+     - `cyclotomicPrimeCore_eq_GN_of_gap`
+     - `GN_eq_diffQuot_of_pow` 等
+   - Phase B: witness route / contradiction route bundle 分離
+   - Phase C の延長: Wieferich 条件 `u^{p-1} ≡ 1 [MOD p^2]` と `GN_mod_p2_head` の結合
+     - `branchA_spow_congr_head_mod_p2` 等
+   - `ContradictionTarget` に向けた具体的な mod p^2 矛盾探索
