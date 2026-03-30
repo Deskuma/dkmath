@@ -191,10 +191,10 @@ structure PrimeGe5BranchAPrimitiveRestoreDescentSeed
 actual smaller counterexample を実現する直前の候補データ。
 
 付録:
-- `x' y' z'`
-  の候補だけを bundle 化する。
-- 以後の realization 段は、
-  候補の抽出と候補の検証の 2 段へ分けて読める。
+- `x' y' z'` の候補を bundle 化する。
+- `x' = x / q`（`hxMul : x = q * x'`）と `y' = y`（`hyEq`）は数学的根拠により固定。
+- `z'` は genuine mathematical unknown であり、
+  `z'^p = (x/q)^p + y^p` の p 乗根の存在証明が未完核。
 -/
 structure PrimeGe5BranchAPrimitiveRestoreRealizationSeed
     (p x y z t s q : ℕ) where
@@ -202,6 +202,10 @@ structure PrimeGe5BranchAPrimitiveRestoreRealizationSeed
   x' : ℕ
   y' : ℕ
   z' : ℕ
+  -- x' = x / q の数学的根拠（q ∣ x から）
+  hxMul : x = q * x'
+  -- y' = y（arithmetic witness q は y を割らないので降下先でも y は不変）
+  hyEq  : y' = y
 
 /--
 q-adic lift seed から descent datum を bundle 化する段。
@@ -346,6 +350,126 @@ abbrev PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerificationTarget : 
         p ∣ (hR.z' - hR.y') ∧
         hR.z' < z
 
+/-!
+## VerificationTarget の 3 分割
+
+`SmallerCounterexampleVerificationTarget` を以下の 3 段に分割する：
+1. `StrictDescentTarget`      : `z' < z`
+2. `GapDivisibilityTarget`    : `p ∣ (z' - y')`
+3. `CounterexamplePackTarget` : `PrimeGe5CounterexamplePack p x' y' z'`
+
+現在の未完核はこの 3 段のうち **どれが hardest kernel か** を特定する段にある。
+いずれも `RealizationSeed.hxMul`（`x = q * x'`）と `hyEq`（`y' = y`）を利用できる。
+-/
+
+/--
+strict descent 検証段：`hR.z' < z`。
+
+付録:
+- `x' = x / q < x ≤ z - p*... ≤ z` のような chain で示すことが期待される。
+- `hR.z'^p = (x/q)^p + y^p < x^p + y^p = z^p` から `z' < z` を導く方針もある。
+  （p 乗は単調なので `a^p < b^p ↔ a < b`）
+- ただし `(x/q)^p + y^p = z'^p` 自体を持っていないので、現段階では target のみ。
+-/
+abbrev PrimeGe5BranchAPrimitiveRestoreStrictDescentTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      ∀ hR : PrimeGe5BranchAPrimitiveRestoreRealizationSeed p x y z t s q,
+        hR.z' < z
+
+/--
+gap divisibility 検証段：`p ∣ (hR.z' - hR.y')`。
+
+付録:
+- `hR.hyEq : y' = y` により `hR.z' - hR.y' = hR.z' - y`。
+- Branch A を維持するためには `p ∣ (z' - y)` が必要。
+- `z'^p = (x/q)^p + y^p` と `x/q = p * t * (s/q)` から
+  `z' - y ≡ 0 [MOD p]` を示す方針がある。
+-/
+abbrev PrimeGe5BranchAPrimitiveRestoreGapDivisibilityTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      ∀ hR : PrimeGe5BranchAPrimitiveRestoreRealizationSeed p x y z t s q,
+        p ∣ (hR.z' - hR.y')
+
+/--
+counterexample pack 検証段：`PrimeGe5CounterexamplePack p hR.x' hR.y' hR.z'`。
+
+付録:
+- `hR.hxMul : x = q * hR.x'` と `hR.hyEq : y' = y` を使い、
+  `hR.x'^p + hR.y'^p = hR.z'^p` と各種 positivity / coprimality を確認する段。
+- `hR.x'^p + y^p = z'^p` が成立するかが真の核心。
+  現状ではこの等式は evidence として `RealizationSeed` 内に持っていない。
+-/
+abbrev PrimeGe5BranchAPrimitiveRestoreCounterexamplePackTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      ∀ hR : PrimeGe5BranchAPrimitiveRestoreRealizationSeed p x y z t s q,
+        PrimeGe5CounterexamplePack p hR.x' hR.y' hR.z'
+
+/--
+3 段の sub-verification が揃えば、verification target は橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerification_of_three_parts
+    (hStrictDescent : PrimeGe5BranchAPrimitiveRestoreStrictDescentTarget)
+    (hGapDiv       : PrimeGe5BranchAPrimitiveRestoreGapDivisibilityTarget)
+    (hContrPack    : PrimeGe5BranchAPrimitiveRestoreCounterexamplePackTarget) :
+    PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerificationTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hq_prime hqs hqt hcop_qy hq_ne_p hR
+  exact ⟨hContrPack hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hq_prime hqs hqt hcop_qy hq_ne_p hR,
+    hGapDiv hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hq_prime hqs hqt hcop_qy hq_ne_p hR,
+    hStrictDescent hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hq_prime hqs hqt hcop_qy hq_ne_p hR⟩
+
 /--
 restore 後半の packet packaging core を表す canonical alias。
 
@@ -379,7 +503,7 @@ theorem primeGe5BranchAPrimitiveRestoreResidueRoot_default :
   intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
     hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
     q hq_prime hqs hqt hcop_qy hq_ne_p
-  exact restore_witness_properties_default hpack hp_dvd_gap hgap hsx
+  exact restore_witness_properties_default hpack hp_dvd_gap hgap hsGN hsx
     hq_prime hqs hqt hcop_qy hq_ne_p
 
 /--
@@ -454,14 +578,22 @@ theorem primeGe5BranchAPrimitiveRestoreDescentSeed_default :
   exact ⟨⟨hDatum⟩⟩
 
 /--
-realization seed 段は、現段階では元の triple を仮候補として包むだけなので default 実装済みである。
+realization seed 構成段。
+
+`x' := x / q`（`q ∣ x` から `hxMul` を回収）、`y' := y` は数学的根拠で固定。
+`z'` は `(x/q)^p + y^p` の p 乗根として存在するはずの genuine unknown であり、
+現段階では `z` を暫定値として保持する（verification が残存未完核）。
 -/
 theorem primeGe5BranchAPrimitiveRestoreRealizationSeed_default :
     PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget := by
   intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
     hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
     q hq_prime hqs hqt hcop_qy hq_ne_p hSeed
-  exact ⟨⟨hSeed, x, y, z⟩⟩
+  -- x' := x / q (q ∣ x から導出)
+  have hData := hSeed.hDatum.hData
+  have hq_dvd_x := hData.hq_dvd_x
+  obtain ⟨k, hk⟩ := hq_dvd_x
+  exact ⟨⟨hSeed, k, y, z, hk, rfl⟩⟩
 
 /--
 residue/root 段と descent assembly 段が揃えば、

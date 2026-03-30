@@ -938,3 +938,97 @@ lean/dk_math/DkMath/FLT/PrimeProvider/
 ---
 
 *次回更新予定：`RealizationSeed` 精密化または `StrictDescentTarget` 着手時*
+
+---
+
+## 2026/03/30 — RealizationSeed 精密化 + VerificationTarget 3 分割 (第5回)
+
+### 39. 実施内容
+
+#### 39.1. `q^p ∣ GN p (z-y) y` 補題の追加（`branchA_qpow_dvd_GN`）
+
+Branch A の設定（`GN p (z-y) y = p * s^p`, `q ∣ s`, `q ≠ p`）から `q^p ∣ GN` が言える。
+証明：`q^p ∣ s^p` かつ `gcd(q^p, p) = 1` → `q^p ∣ p * s^p = GN`。
+
+```lean
+theorem branchA_qpow_dvd_GN
+    {p x y z s q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hq_prime : Nat.Prime q) (hqs : q ∣ s) (hq_ne_p : q ≠ p) :
+    q ^ p ∣ GN p (z - y) y
+```
+
+これを `RestoreWitnessProperties` の新 field `hqp_dvd_GN` として追加した。
+
+#### 39.2. `RealizationSeed` の精密化
+
+旧構造：`(hSeed, x', y', z')` — `(x, y, z)` の無意味なプレースホルダ。  
+新構造：`(hSeed, x', y', z', hxMul, hyEq)` — 数学的根拠付き。
+
+| フィールド | 型 | 意味 |
+|---|---|---|
+| `hxMul` | `x = q * x'` | `x' = x/q` の証拠（`q ∣ x` から `obtain ⟨k, hk⟩`） |
+| `hyEq`  | `y' = y`     | `y` は不変（`q ∤ y` なので降下後も同じ） |
+
+`default` 実装は `x' := k`（`x = q * k` を展開）、`y' := y`、`z' := z`（暫定）。
+これにより「任意の `hR`」が受け渡された場合でも `hR.hxMul`, `hR.hyEq` が保証される。
+
+#### 39.3. `VerificationTarget` の 3 分割
+
+旧 `SmallerCounterexampleVerificationTarget` を以下 3 段に分割し、橋定理で統合：
+
+| Target | 内容 | 数学的難易度 |
+|---|---|---|
+| `StrictDescentTarget` | `hR.z' < z` | 中（`(x/q)^p + y^p < x^p + y^p = z^p` から） |
+| `GapDivisibilityTarget` | `p ∣ (hR.z' - hR.y')` | 中（`x' = p*t*(s/q)` から `p ∣ x'` を使う） |
+| `CounterexamplePackTarget` | `PrimeGe5CounterexamplePack p x' y' z'` | 高（`x'^p + y'^p = z'^p` が必要） |
+
+橋定理 `primeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerification_of_three_parts` で统合。
+
+---
+
+### 40. 現在の genuinely new kernel の所在
+
+```
+6 段の分割（前5段 default で閉）
+  └─ [⬛] VerificationTarget
+       ├─ [⬛] CounterexamplePackTarget  ← 最硬核: x'^p + y'^p = z'^p の存在
+       ├─ [⬛] GapDivisibilityTarget     ← 中核: p ∣ (z' - y')
+       └─ [⬛] StrictDescentTarget       ← 中核: z' < z
+```
+
+**`CounterexamplePackTarget` が genuinely hardest kernel** じゃ。  
+これは `(x/q)^p + y^p = z'^p` を満たす `z'` が存在すること、かつ `z'` がちゃんとした counterexample pack を構成することを示す。
+
+Branch B では `q^p ∣ GN` と `q ∤ (z-y)` から同じ構造が利用できるが、Branch A では
+`hpB : ¬ p ∣ (z-y)` が偽なので Branch B のカーネルをそのまま使えない。
+
+---
+
+### 41. ファイル規模サマリ（第5回時点）
+
+```
+├── TriominoCosmicBranchA.lean       5,366行 (sorry×1 — 既存のみ) ← branchA_qpow_dvd_GN 追加
+├── TriominoCosmicBranchARestore.lean   707行 (sorry×0)            ← RealizationSeed 精密化
+└── TriominoCosmicGapInvariant.lean   3,221行 (sorry×0)
+```
+
+**ビルド：** error 0。sorry 数は増加していない。
+
+---
+
+### 42. 新 open task（第5回）
+
+| 優先度 | 課題 | 状態 |
+|---|---|---|
+| ~~最高~~ | ~~`RealizationSeed` を x'/y' 精密化~~ | **✅ 完了** |
+| ~~高~~ | ~~`VerificationTarget` を 3 分割~~ | **✅ 完了** |
+| **最高** | `CounterexamplePackTarget`：`(x/q)^p + y^p = z'^p` の p 乗根 `z'` の存在証明 | 未着手 |
+| **高** | `StrictDescentTarget`：`z' < z` の証明（`(x/q)^p + y^p < z^p` から） | 未着手 |
+| **高** | `GapDivisibilityTarget`：`p ∣ (z' - y)` の証明（`x' = p*t*(s/q)` から） | 未着手 |
+| **中** | `BranchA.lean` L3981 の sorry（既存マーカー） | 変更なし |
+
+---
+
+*次回更新予定：`CounterexamplePackTarget` 攻略開始時、または `StrictDescentTarget` 証明時*

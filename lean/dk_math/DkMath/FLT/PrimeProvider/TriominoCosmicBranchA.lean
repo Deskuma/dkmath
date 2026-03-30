@@ -5302,6 +5302,32 @@ structure RestoreWitnessProperties (p x y z t s q : ℕ) : Prop where
   hq_not_dvd_z : ¬ q ∣ z
   hq_not_dvd_gap : ¬ q ∣ (z - y)
   hq_cong : p ∣ (q - 1)
+  hqp_dvd_GN : q ^ p ∣ GN p (z - y) y
+
+/--
+Branch A の設定で `q^p ∣ GN p (z-y) y` が成立することを示す補題。
+
+GN p (z-y) y = p * s^p と q ∣ s, q ≠ p から従う。
+-/
+theorem branchA_qpow_dvd_GN
+    {p x y z s q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hq_prime : Nat.Prime q)
+    (hqs : q ∣ s)
+    (hq_ne_p : q ≠ p) :
+    q ^ p ∣ GN p (z - y) y := by
+  rw [hsGN]
+  -- q^p ∣ s^p (from q ∣ s)
+  have hqp_dvd_sp : q ^ p ∣ s ^ p := pow_dvd_pow_of_dvd hqs p
+  -- q ∤ p (distinct primes)
+  have hq_ne_p_prime : q ≠ p := hq_ne_p
+  -- gcd(q^p, p) = 1 なので q^p ∣ p * s^p
+  have hcop : Nat.Coprime (q ^ p) p := by
+    apply Nat.Coprime.pow_left
+    exact (Nat.Prime.coprime_iff_not_dvd hq_prime).mpr
+      (fun h => hq_ne_p ((Nat.dvd_prime hpack.hp).mp h |>.resolve_left hq_prime.ne_one))
+  exact dvd_mul_of_dvd_right hqp_dvd_sp p
 
 /--
 全ての RestoreWitnessProperties を一度に構成するバンドル定理。
@@ -5311,6 +5337,7 @@ theorem restore_witness_properties_default
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hp_dvd_gap : p ∣ (z - y))
     (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
     (hsx : x = p * (t * s))
     (hq_prime : Nat.Prime q)
     (hqs : q ∣ s)
@@ -5334,5 +5361,6 @@ theorem restore_witness_properties_default
     · exact hqt (hq_prime.dvd_of_dvd_pow hq_dvd_tpow)
   hq_cong := restore_witness_cong_one_mod_p hpack hp_dvd_gap hgap hsx
     hq_prime hqs hqt hcop_qy hq_ne_p
+  hqp_dvd_GN := branchA_qpow_dvd_GN hpack hsGN hq_prime hqs hq_ne_p
 
 end DkMath.FLT
