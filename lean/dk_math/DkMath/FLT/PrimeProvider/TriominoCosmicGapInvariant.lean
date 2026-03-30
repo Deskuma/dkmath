@@ -8,6 +8,7 @@ import DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5
 import DkMath.FLT.CosmicPetalBridge
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN
 import DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional
+import DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore
 
 #print "file: DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant"
 

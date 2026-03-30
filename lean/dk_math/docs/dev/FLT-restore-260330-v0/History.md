@@ -217,3 +217,51 @@ Archive
      `PrimeGe5BranchAPrimitivePacketOfSmallerCounterexampleTarget`
      を別ファイル / 別 route へ移して、
      packaging 専用 kernel として育てる。
+
+### 日時: 2026/03/30 15:37:45 JST
+
+1. 目的:
+   - `review-003`
+     の指摘どおり、
+     ここから先の restore work を
+     新しい `*.lean` file
+     に切り出して進める。
+   - `TriominoCosmicBranchA.lean`
+     本体は base definitions を保持し、
+     restore 固有の今後の構築先だけを別 module に分離する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]`
+     を新規作成した。
+   - この file では
+     - `PrimeGe5BranchAPrimitiveRestoreArithmeticCoreTarget`
+     - `PrimeGe5BranchAPrimitiveRestorePacketPackagingTarget`
+     - `primeGe5BranchAPrimitivePacketRestoreFromArithmetic_of_restoreSubtargets`
+     を定義し、
+     restore の sub-target 2 本と再合成橋を
+     canonical 名で受け直せるようにした。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     `TriominoCosmicBranchARestore`
+     を import 追加した。
+
+3. 結論:
+   - 以後の restore 段の concrete 実装は、
+     `TriominoCosmicBranchARestore.lean`
+     を主たる構築先として進められる。
+   - `TriominoCosmicBranchA.lean`
+     には base target 群を残しつつ、
+     新しい proof exploration の edit surface を
+     別 file に分離できた。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 次の課題:
+   - `TriominoCosmicBranchARestore.lean`
+     で
+     `PrimeGe5BranchAPrimitiveRestoreArithmeticCoreTarget`
+     の更なる分割、
+     ないし concrete 補題化を進める。
