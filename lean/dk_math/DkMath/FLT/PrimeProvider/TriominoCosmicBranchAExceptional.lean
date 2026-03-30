@@ -450,6 +450,146 @@ abbrev ExceptionalBoundaryDatumPreparedArithmeticCoreDivDataTarget : Prop :=
     1 < DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u / d
 
 /--
+`proof-004` step 2-5 の boundary-core valuation data は、二項和の head/tail 分解で直接得られる。
+
+- head は `d * u^(d-1)`
+- tail は `d^2` を因数にもつ
+- Wieferich により head は `d [MOD d^2]`
+
+したがって `v_d(core) = 1` と `core / d > 1` が従う。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_core_divData_default :
+    ExceptionalBoundaryDatumPreparedArithmeticCoreDivDataTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  let core := DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u
+  let A : ℕ := d * u ^ (d - 1)
+  let B : ℕ := Finset.sum ((Finset.range d).erase 0) (fun k =>
+    (Nat.choose d (k + 1) : ℕ) * x ^ k * u ^ (d - 1 - k))
+  have hd_pos : 0 < d := hd_prime.pos
+  have hd_gt_one : 1 < d := lt_of_lt_of_le (by decide : 1 < 5) hd_ge
+  have hcore_eq : core = A + B := by
+    let f : ℕ → ℕ := fun k =>
+      (Nat.choose d (k + 1) : ℕ) * x ^ k * u ^ (d - 1 - k)
+    have hsum :
+        Finset.sum ((Finset.range d).erase 0) f + f 0 = Finset.sum (Finset.range d) f := by
+      simpa using
+        (Finset.sum_erase_add (s := Finset.range d) (f := f) (a := 0)
+          (by simpa using hd_pos))
+    have hsum' :
+        Finset.sum (Finset.range d) f = f 0 + Finset.sum ((Finset.range d).erase 0) f := by
+      simpa [Nat.add_comm] using hsum.symm
+    unfold core DkMath.CFBRC.boundaryCyclotomicPrimeCore
+    rw [DkMath.CFBRC.cyclotomicPrimeCore_eq_GN_nat hx, DkMath.CosmicFormulaBinom.GN_eq_sum]
+    unfold A B
+    simpa [f, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using hsum'
+  have hB_sq : d ^ 2 ∣ B := by
+    unfold B
+    refine Finset.dvd_sum ?_
+    intro k hk
+    have hk_mem : k ∈ Finset.range d := Finset.mem_of_mem_erase hk
+    have hk_lt : k < d := Finset.mem_range.mp hk_mem
+    have hk_ne_zero : k ≠ 0 := (Finset.mem_erase.mp hk).1
+    by_cases hk_last : k = d - 1
+    · have hdd_dvd_xsq : d ^ 2 ∣ x ^ k := by
+        rw [hk_last]
+        have hdd_dvd_x2 : d ^ 2 ∣ x ^ 2 := by
+          simpa [pow_two] using Nat.mul_dvd_mul hdvd hdvd
+        have hk_ge_two : 2 ≤ d - 1 := by omega
+        exact dvd_trans hdd_dvd_x2 (pow_dvd_pow x hk_ge_two)
+      have hchoose_self : Nat.choose d (k + 1) = 1 := by
+        have hk1 : k + 1 = d := by omega
+        rw [hk1, Nat.choose_self]
+      have hmul : d ^ 2 ∣ (Nat.choose d (k + 1) : ℕ) * x ^ k := by
+        simpa [hchoose_self] using hdd_dvd_xsq
+      exact dvd_mul_of_dvd_left hmul _
+    · have hk_succ_ne_zero : k + 1 ≠ 0 := Nat.succ_ne_zero k
+      have hk_succ_lt_d : k + 1 < d := by omega
+      have hd_dvd_choose : d ∣ Nat.choose d (k + 1) := by
+        exact hd_prime.dvd_choose_self hk_succ_ne_zero hk_succ_lt_d
+      have hk_ge_one : 1 ≤ k := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hk_ne_zero)
+      have hd_dvd_xk : d ∣ x ^ k := by
+        have hx_dvd_xk : x ∣ x ^ k := by
+          simpa using (pow_dvd_pow x hk_ge_one)
+        exact dvd_trans hdvd hx_dvd_xk
+      have hdd_dvd_prefix : d ^ 2 ∣ (Nat.choose d (k + 1) : ℕ) * x ^ k := by
+        simpa [pow_two] using Nat.mul_dvd_mul hd_dvd_choose hd_dvd_xk
+      exact dvd_mul_of_dvd_left hdd_dvd_prefix _
+  have hA_mod : A ≡ d [MOD d ^ 2] := by
+    simpa [A, Nat.mul_one, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using
+      hWieferich.mul_left d
+  have hcore_mod : core ≡ d [MOD d ^ 2] := by
+    rw [hcore_eq]
+    exact hA_mod.add hB_sq.modEq_zero_nat
+  have hA_ge_d : d ≤ A := by
+    unfold A
+    have hu_pow_ge_one : 1 ≤ u ^ (d - 1) := Nat.succ_le_of_lt (Nat.pow_pos hu)
+    simpa using Nat.mul_le_mul_left d hu_pow_ge_one
+  have hB_pos : 0 < B := by
+    have hk_mem : d - 1 ∈ (Finset.range d).erase 0 := by
+      refine Finset.mem_erase.mpr ?_
+      constructor
+      · omega
+      · exact Finset.mem_range.mpr (by omega)
+    have hterm_pos :
+        0 < (Nat.choose d ((d - 1) + 1) : ℕ) * x ^ (d - 1) * u ^ (d - 1 - (d - 1)) := by
+      have hchoose_self : Nat.choose d ((d - 1) + 1) = 1 := by
+        have : (d - 1) + 1 = d := by omega
+        rw [this, Nat.choose_self]
+      calc
+        0 < x ^ (d - 1) := Nat.pow_pos hx
+        _ = (Nat.choose d ((d - 1) + 1) : ℕ) * x ^ (d - 1) * u ^ (d - 1 - (d - 1)) := by
+          simp [hchoose_self]
+    unfold B
+    exact lt_of_lt_of_le hterm_pos
+      (Finset.single_le_sum
+        (s := (Finset.range d).erase 0)
+        (f := fun k => (Nat.choose d (k + 1) : ℕ) * x ^ k * u ^ (d - 1 - k))
+        (fun _ _ => Nat.zero_le _)
+        hk_mem)
+  have hcore_ge_d : d ≤ core := by
+    rw [hcore_eq]
+    omega
+  have hcore_gt_d : d < core := by
+    rw [hcore_eq]
+    omega
+  have hsq_dvd_sub : d ^ 2 ∣ core - d := by
+    exact (Nat.modEq_iff_dvd' hcore_ge_d).mp hcore_mod.symm
+  obtain ⟨t, ht⟩ := exists_eq_mul_left_of_dvd hsq_dvd_sub
+  have hcore_eq_mod : core = d + d ^ 2 * t := by
+    calc
+      core = (core - d) + d := by omega
+      _ = t * d ^ 2 + d := by rw [ht]
+      _ = d ^ 2 * t + d := by rw [Nat.mul_comm]
+      _ = d + d ^ 2 * t := by rw [Nat.add_comm]
+  have hd_dvd_core : d ∣ core := by
+    rw [hcore_eq_mod]
+    exact dvd_add (dvd_refl d) (by simp only [pow_two, Nat.mul_assoc, dvd_mul_right])
+  have hcore_div_eq : core / d = 1 + d * t := by
+    apply Nat.eq_of_mul_eq_mul_left hd_pos
+    calc
+      d * (core / d) = core := Nat.mul_div_cancel' hd_dvd_core
+      _ = d * (1 + d * t) := by
+        rw [hcore_eq_mod, pow_two]
+        ring
+  have hcore_div_not_dvd_d : ¬ d ∣ core / d := by
+    rw [hcore_div_eq]
+    intro hd_dvd_div
+    have : d ∣ 1 := by
+      have hd_dvd_sub : d ∣ (1 + d * t) - d * t := Nat.dvd_sub hd_dvd_div (dvd_mul_right d t)
+      simpa using hd_dvd_sub
+    exact hd_prime.not_dvd_one this
+  have ht_pos : 0 < t := by
+    by_contra ht_nonpos
+    have ht_zero : t = 0 := Nat.eq_zero_of_not_pos ht_nonpos
+    rw [hcore_eq_mod, ht_zero, pow_two, Nat.mul_zero, Nat.add_zero] at hcore_gt_d
+    exact lt_irrefl _ hcore_gt_d
+  have hcore_div_gt1 : 1 < core / d := by
+    rw [hcore_div_eq]
+    have hd_mul_pos : 0 < d * t := Nat.mul_pos hd_pos ht_pos
+    omega
+  exact ⟨hd_dvd_core, hcore_div_not_dvd_d, hcore_div_gt1⟩
+
+/--
 div-data target が立てば、prepared arithmetic core concrete は橋だけで閉じる。
 -/
 theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_divData
@@ -1274,10 +1414,10 @@ theorem primeGe5BranchAExceptionalBoundaryCoreWitness_sanity_u_one :
       q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right 5 5 1 ∧
       ¬ q ∣ 5 := by
   refine ⟨311, ?_, ?_, ?_⟩
-  · native_decide
+  · norm_num
   · change 311 ∣ 1555
     decide
-  · decide
+  · norm_num
 
 /--
 prepared selected-core witness は、

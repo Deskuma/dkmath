@@ -411,3 +411,71 @@ Archive
    - そこが通れば、
      `ExceptionalBoundaryDatumPreparedArithmeticCoreDivDataTarget`
      を直接埋めて本線を前へ進められる。
+
+### 日時: 2026/03/30 JST
+
+1. 目的:
+   - `proof-004` の valuation / `mod d^2` 残核そのものを埋め、
+     `ExceptionalBoundaryDatumPreparedArithmeticCoreDivDataTarget`
+     を actual theorem で閉じる。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchAExceptional.lean]`
+     に
+     `exceptional_boundary_datum_prepared_arithmetic_core_divData_default`
+     を追加した。
+   - 証明は、
+     `boundaryCyclotomicPrimeCore .right d x u`
+     を
+     `A := d * u^(d-1)`
+     と
+     `B := Σ_{k≥1}`
+     に分け、
+     `d ∣ x`
+     と
+     `d` prime
+     から
+     `d^2 ∣ B`
+     を termwise に示す形で組んだ。
+   - さらに
+     `u^(d-1) ≡ 1 [MOD d^2]`
+     から
+     `A ≡ d [MOD d^2]`
+     を得て、
+     全体として
+     `core ≡ d [MOD d^2]`
+     を回収した。
+   - そこから
+     `d ∣ core`,
+     `¬ d ∣ core / d`,
+     `1 < core / d`
+     を導き、
+     `ExceptionalBoundaryDatumPreparedArithmeticCoreDivDataTarget`
+     を直接返すようにした。
+
+3. 結論:
+   - `proof-004` の step 2-5 は、
+     boundary-core route 上で actual theorem として閉じた。
+   - したがって
+     `ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget`
+     は
+     `...of_divData`
+     経由で no-sorry で到達できる。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional`
+     を完了まで待って実行し、
+     `Build completed successfully (8064 jobs).`
+     を確認した。
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+     を完了まで待って実行し、
+     `Build completed successfully (8080 jobs).`
+     を確認した。
+
+5. 備考:
+   - `TriominoCosmicBranchAExceptional.lean`
+     には引き続き
+     `native_decide`
+     lint warning と
+     `simpa` 推奨 warning が 1 件残るが、
+     build failure ではない。
