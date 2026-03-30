@@ -265,3 +265,124 @@ Archive
      `PrimeGe5BranchAPrimitiveRestoreArithmeticCoreTarget`
      の更なる分割、
      ないし concrete 補題化を進める。
+
+### 日時: 2026/03/30 15:49:37 JST
+
+1. 目的:
+   - `review-004`
+     の方針どおり、
+     restore arithmetic core を
+     さらに
+     - residue/root 段
+     - descent assembly 段
+     に分割する。
+   - 既に証明済みの
+     `RestoreWitnessProperties`
+     を canonical datum として固定し、
+     真の未完核を assembly 側 1 本へ押し込む。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]`
+     に
+     - `PrimeGe5BranchAPrimitiveRestoreResidueRootTarget`
+     - `PrimeGe5BranchAPrimitiveRestoreDescentAssemblyTarget`
+     - `primeGe5BranchAPrimitiveRestoreResidueRoot_default`
+     - `primeGe5BranchAPrimitiveRestoreArithmeticCore_of_residueRoot_and_descentAssembly`
+     を追加した。
+   - residue/root 段の default 実装は
+     `restore_witness_properties_default`
+     をそのまま用いた。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     対応する provider alias / adapter を追加した。
+
+3. 結論:
+   - restore arithmetic core は、
+     もはや巨大な 1 本ではなく、
+     - residue/root data の抽出
+     - datum から smaller counterexample を組む assembly
+     の 2 段へ局所化された。
+   - しかも前者は default 実装済みなので、
+     現在の genuinely new kernel は
+     `PrimeGe5BranchAPrimitiveRestoreDescentAssemblyTarget`
+     1 本として読める。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 次の課題:
+   - `PrimeGe5BranchAPrimitiveRestoreDescentAssemblyTarget`
+     の statement をさらに arithmetic-only seed へ削れるか検討する。
+   - あるいは
+     `RestoreWitnessProperties`
+     から smaller counterexample へ行く中間 datum を structure 化する。
+
+### 日時: 2026/03/30 15:58:20 JST
+
+1. 目的:
+   - `PrimeGe5BranchAPrimitiveRestoreDescentAssemblyTarget`
+     を、
+     `review-004`
+     の見立てどおり
+     - q-adic lift 段
+     - smaller-counterexample assembly 段
+     にさらに分割する。
+   - residue/root から
+     `ZMod q`
+     上の nontrivial `p`-torsion witness が
+     default で回収できることを明示する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]`
+     に
+     - `PrimeGe5BranchAPrimitiveRestoreQAdicLiftSeed`
+     - `PrimeGe5BranchAPrimitiveRestoreQAdicLiftTarget`
+     - `PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleAssemblyTarget`
+     - `primeGe5BranchAPrimitiveRestoreQAdicLift_default`
+     - `primeGe5BranchAPrimitiveRestoreDescentAssembly_of_qAdicLift_and_smallerCounterexampleAssembly`
+     を追加した。
+   - `primeGe5BranchAPrimitiveRestoreQAdicLift_default`
+     では
+     `restore_witness_cong_one_mod_p`
+     の証明内容と同型の
+     `ω := z * y⁻¹ ∈ ZMod q`
+     を再構成し、
+     `ω ^ p = 1` かつ `ω ≠ 1`
+     を返すようにした。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     にも
+     - `BranchAPrimitiveRestoreQAdicLiftAdapterTarget`
+     - `BranchAPrimitiveRestoreSmallerCounterexampleAssemblyAdapterTarget`
+     - `branchAPrimitiveRestoreQAdicLiftAdapter_default`
+     - `branchAPrimitiveRestoreDescentAssemblyAdapter_of_qAdicLift_and_smallerCounterexampleAssembly`
+     を追加した。
+
+3. 結論:
+   - restore arithmetic core は、
+     もはや
+     - residue/root
+     - q-adic lift
+     - smaller-counterexample assembly
+     の 3 段へ読める。
+   - しかも前 2 段は default 実装済みなので、
+     現在の genuinely new kernel は
+     `PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleAssemblyTarget`
+     1 本へさらに局所化された。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore`
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant`
+   を完了まで待って実行し、成功を確認した。
+
+5. 次の課題:
+   - `PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleAssemblyTarget`
+     の statement をさらに
+     smaller-counterexample seed
+     へ削れるか検討する。
+   - あるいは
+     `PrimeGe5BranchAPrimitiveRestoreQAdicLiftSeed`
+     から直接得るべき
+     arithmetic descent datum
+     を structure 化する。

@@ -1555,6 +1555,22 @@ abbrev BranchAPrimitiveSmallerCounterexampleFromArithmeticAdapterTarget : Prop :
 abbrev BranchAPrimitivePacketOfSmallerCounterexampleAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitivePacketOfSmallerCounterexampleTarget
 
+/-- restore arithmetic core の residue/root 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveRestoreResidueRootAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreResidueRootTarget
+
+/-- restore arithmetic core の descent assembly 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveRestoreDescentAssemblyAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreDescentAssemblyTarget
+
+/-- restore descent assembly の q-adic lift 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveRestoreQAdicLiftAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreQAdicLiftTarget
+
+/-- restore descent assembly の smaller-counterexample assembly 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveRestoreSmallerCounterexampleAssemblyAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleAssemblyTarget
+
 /--
 local kernel から最後の witness adapter を回収する thin bridge。
 -/
@@ -1751,6 +1767,38 @@ theorem branchAPrimitivePacketRestoreFromArithmeticAdapter_of_smallerCounterexam
     BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitivePacketRestoreFromArithmetic_of_smallerCounterexample_and_packet
     hSmall hPack
+
+/-- restore residue/root 段は provider 側から見ても default 実装済みである。 -/
+theorem branchAPrimitiveRestoreResidueRootAdapter_default :
+    BranchAPrimitiveRestoreResidueRootAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreResidueRoot_default
+
+/-- restore q-adic lift 段は provider 側から見ても default 実装済みである。 -/
+theorem branchAPrimitiveRestoreQAdicLiftAdapter_default :
+    BranchAPrimitiveRestoreQAdicLiftAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreQAdicLift_default
+
+/--
+restore residue/root 段と descent assembly 段が揃えば、
+provider 側 arithmetic core は橋だけで閉じる。
+-/
+theorem branchAPrimitiveRestoreArithmeticCoreAdapter_of_residueRoot_and_descentAssembly
+    (hResidue : BranchAPrimitiveRestoreResidueRootAdapterTarget)
+    (hAsm : BranchAPrimitiveRestoreDescentAssemblyAdapterTarget) :
+    BranchAPrimitiveSmallerCounterexampleFromArithmeticAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreArithmeticCore_of_residueRoot_and_descentAssembly
+    hResidue hAsm
+
+/--
+restore q-adic lift 段と smaller-counterexample assembly 段が揃えば、
+provider 側 descent assembly は橋だけで閉じる。
+-/
+theorem branchAPrimitiveRestoreDescentAssemblyAdapter_of_qAdicLift_and_smallerCounterexampleAssembly
+    (hLift : BranchAPrimitiveRestoreQAdicLiftAdapterTarget)
+    (hAsm : BranchAPrimitiveRestoreSmallerCounterexampleAssemblyAdapterTarget) :
+    BranchAPrimitiveRestoreDescentAssemblyAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreDescentAssembly_of_qAdicLift_and_smallerCounterexampleAssembly
+    hLift hAsm
 
 /--
 Zsigmondy-lite existence と arithmetic-aware restoration から、
