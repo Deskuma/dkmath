@@ -683,3 +683,108 @@ Archive
      1. Kummer 理論経由：ℤ[ζ_p] でのイデアル分解
      2. q-adic 持ち上げ：`q^p ∣ GN` の構造を使った z' 構成
      3. Cosmic Formula 独自の降下構造
+
+### 日時: 2026/03/30 18:30:00 JST
+
+1. 目的:
+   - `review-010` の方針「q-adic / GN 側から `RealizationSeedTarget` に切り込む」
+     の実現可能性を推論・検証する。
+   - 実装可能な部分は Lean で書く。
+
+2. 実施:
+
+   **§A. Branch B の z' 構成メカニズムの完全解析**
+
+   - `[CosmicPetalBridgeGNDescentB.lean]` を精読し、
+     Branch B の `z'` 構成が **`False.elim`** であることを発見した。
+   - Branch B の矛盾メカニズム:
+     1. `¬ p ∣ (z-y)` → `gap ⊥ GN`（互いに素）→ 素因数分解の一意性から
+        `gap = u^p`, `GN = v^p`（ともに p 乗数）
+     2. NoWieferich bridge → GN に平方で割れない素因子が存在
+     3. `GN = v^p` と矛盾 → `False`
+     4. `False.elim` で任意の型（`z'` を含む）を構成
+   - **Branch B は z' を直接構成していない。矛盾からの空虚な存在射。**
+
+   **§B. Branch A での同路線の適用不可性の確認**
+
+   - Branch A の前提: `p ∣ (z-y)` → `gap` と `GN` は `p` で共通因子を持つ
+   - したがって `gcd(gap, GN) ≠ 1` → 互いに素分解は不可能
+   - NoWieferich bridge は `¬ p ∣ (z-y)` を要求 → Branch A には直接使えない
+   - Branch A では `gap = p^{p-1} * t^p`, `GN = p * s^p` で、
+     `v_p(gap) = p-1`, `v_p(GN) = 1` と p 以外の因子は p 乗構造を持つが、
+     `p` 自体が clean な p 乗にならず、Branch B の矛盾が再現しない
+
+   **§C. 数学的純粋推論の結果**
+
+   - `(x/q)^p + y^p = z'^p` が ℕ 上で p 乗数であることは、
+     **FLT の新しい（より小さい）反例の存在** と同値。
+   - FLT が真であれば、`a^p + b^p` は `p ≥ 3` で p 乗数にならない。
+   - したがって **直接的な z' 構成は不可能**。
+   - 正しい攻略路線は Branch B と同じく **前提矛盾（`False.elim`）** である。
+   - つまり `RealizationSeedTarget` は「存在を構成する」のではなく
+     「前提が矛盾することを示す」ことで vacuously satisfiable にする。
+   - 矛盾源の候補:
+     - Branch A 固有の Wieferich 条件 `y^{p-1} ≡ 1 [MOD p^2]`
+     - `q ≡ 1 [MOD p]` + `q^p ∣ GN` + `gap = p^{p-1} * t^p` の組み合わせ
+     - Kummer 理論（円分体のクラス群の構造）
+
+   **§D. 実装した補題群（no-sorry, §Q セクション）**
+
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]` に
+     以下の構造体 + 定理を追加した:
+     1. `BranchAQFreeQuotient s q` : `s = q * s'` の明示分解
+     2. `branchAQFreeQuotient_of_dvd` : `q ∣ s` → 分解の構成
+     3. `BranchAQAdicDescentData p x y z t s q` : q-adic 降下データ bundle
+     4. `branchA_qadic_descent_data` : 正規形 + `RestoreWitnessProperties` から構成
+     5. `branchA_xdiv_eq_p_mul_t_mul_s'` : `x' = p * (t * (s/q))`
+     6. `branchA_xdiv_pow_expansion` : `x'^p = p^p * (t*s')^p`
+     7. `branchA_realization_reduced_form` :
+        `hzEq → p^p * (t*s')^p + y^p = z'^p`（最終還元式）
+
+3. 結論:
+
+   **§1. `RealizationSeedTarget` は q-adic 構造から直接 z' を構成する路線では閉じない。**
+
+   理由: `(x/q)^p + y^p` が ℕ 上で p 乗数になることは FLT の反例存在と同値であり、
+   FLT 証明中の文脈では構成不能。
+
+   **§2. 正しい路線は矛盾（`False.elim`）であり、Branch B と同じ精神。**
+
+   Branch B は NoWieferich bridge で`gap` と `GN` の同時 p 乗化から矛盾を導く。
+   Branch A では同じ tool は使えないが、別の矛盾源が存在するはず。
+
+   **§3. 実装した足場補題により、`RealizationSeedTarget` は以下に還元された:**
+
+   $$\exists z',\; p^p \cdot (t \cdot s')^p + y^p = z'^p$$
+
+   ここで `s = q * s'`, `x/q = p * t * s'`。
+   この式の impossibility を示せば `False` が得られ、
+   `RealizationSeedTarget` は vacuously satisfied。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore` 成功
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant` 成功
+   - sorry 数: BranchARestore.lean = 0（コード内）
+   - BranchARestore.lean: 862 行 → 991 行（+129 行）
+
+5. 失敗事例:
+   - `rw [hs']` で `s = q*(s/q)` を代入 → `s/q` 内の `s` も再帰的に書き換わり diverge
+     → `set s' := s / q` で名前束縛して回避
+   - `pow_succ` の引数パターンが `a^n * a` で `a * a^n` ではない
+     → `ring` + `pow_succ` + `congr 1; omega` の組み合わせで解決
+   - `Nat.dvd_of_dvd_of_eq` が存在しない → `Nat.mul_div_cancel'` 直接使用
+   - `BranchAQAdicDescentData` を `theorem` にしたら Prop elimination error
+     → `def` に変更
+
+6. 次の課題:
+   - **矛盾路線の設計探索**:
+     Branch A の前提から `False` を導く矛盾源を特定する。
+     候補:
+     1. `y^{p-1} ≡ 1 [MOD p^2]` （Wieferich on y）+ `q ≡ 1 [MOD p]` の組み合わせ
+     2. Kummer 理論: ℤ[ζ_p] における `x^p + y^p` のイデアル分解
+     3. `RealizationSeedTarget` を bypass して直接 `False` を target にする
+        アーキテクチャ変更
+   - **Branch A 全体の矛盾チェーン再設計**:
+     現在の descent 設計は「smaller packet を構成する」だが、
+     真の攻略は「前提矛盾を示す」こと。
+     これは Branch A のアーキテクチャそのものの設計転換を示唆する。

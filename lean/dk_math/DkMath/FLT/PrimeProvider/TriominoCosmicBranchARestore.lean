@@ -457,8 +457,8 @@ abbrev PrimeGe5BranchAPrimitiveRestoreCounterexamplePackTarget : Prop :=
 -/
 theorem primeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerification_of_three_parts
     (hStrictDescent : PrimeGe5BranchAPrimitiveRestoreStrictDescentTarget)
-    (hGapDiv       : PrimeGe5BranchAPrimitiveRestoreGapDivisibilityTarget)
-    (hContrPack    : PrimeGe5BranchAPrimitiveRestoreCounterexamplePackTarget) :
+    (hGapDiv : PrimeGe5BranchAPrimitiveRestoreGapDivisibilityTarget)
+    (hContrPack : PrimeGe5BranchAPrimitiveRestoreCounterexamplePackTarget) :
     PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerificationTarget := by
   intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
     hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
@@ -858,5 +858,134 @@ theorem primeGe5BranchAPrimitiveRestoreCounterexamplePack_of_hzEq :
     hy0   := Nat.pos_iff_ne_zero.mp hy'_pos
     hz0   := Nat.pos_iff_ne_zero.mp hz'_pos
   }
+
+/-!
+## §Q. q-adic descent 構造補題群
+
+`RealizationSeedTarget` の攻略に向けた足場補題。
+Branch A 固有の `gap = p^{p-1}*t^p`, `GN = p*s^p`, `x = p*t*s` の構造から
+q-adic 降下データを明示的に露出させる。
+
+### 数学的背景
+
+`q ∣ s` → `s = q * s'` と書くと：
+- `GN = p * (q*s')^p = p * q^p * s'^p`
+- `x = p * t * q * s' = q * (p * t * s')`（→ `x/q = p * t * s'`）
+- `(x/q)^p = (p * t * s')^p = p^p * t^p * s'^p = p^p * (t*s')^p`
+- `(x/q)^p + y^p = p^p * (t*s')^p + y^p`
+
+これらの identity は `RealizationSeedTarget` を
+「`p^p * (t*s')^p + y^p` が p 乗数であるか」に還元する。
+-/
+
+/--
+`q ∣ s` から `s = q * s'` を明示分解する。
+`s'` は `s` の q-free quotient。
+-/
+structure BranchAQFreeQuotient (s q : ℕ) where
+  s' : ℕ
+  hs_eq : s = q * s'
+
+/--
+`q ∣ s` であれば `s = q * s'` なる `s'` が取れる。
+-/
+def branchAQFreeQuotient_of_dvd
+    {s q : ℕ} (hqs : q ∣ s) : BranchAQFreeQuotient s q := by
+  exact ⟨s / q, (Nat.mul_div_cancel' hqs).symm⟩
+
+/--
+Branch A の q-adic 降下構造を明示的に束ねたデータ。
+
+`q ∣ s` から `s = q * s'` を取り、以下の identity を同時に保持する。
+-/
+structure BranchAQAdicDescentData (p x y z t s q : ℕ) where
+  s' : ℕ
+  hs_eq  : s = q * s'
+  hx_eq  : x = q * (p * (t * s'))
+  hxq_eq : p * (t * s') * (p * (t * s')) ^ (p - 1) = (p * (t * s')) ^ p
+
+/--
+`RestoreWitnessProperties` + 正規形から、q-adic descent data を構成する。
+
+`sorry` なし。
+-/
+def branchA_qadic_descent_data
+    {p x y z t s q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hsx : x = p * (t * s))
+    (hq_prime : Nat.Prime q)
+    (hqs : q ∣ s)
+    (hData : RestoreWitnessProperties p x y z t s q) :
+    BranchAQAdicDescentData p x y z t s q := by
+  set s' := s / q with hs'_def
+  have hs_eq : s = q * s' := by
+    rw [hs'_def]; exact (Nat.mul_div_cancel' hqs).symm
+  have hx_eq : x = q * (p * (t * s')) := by
+    rw [hsx, hs_eq]; ring
+  have hxq_eq : p * (t * s') * (p * (t * s')) ^ (p - 1) = (p * (t * s')) ^ p := by
+    set a := p * (t * s')
+    have hp_pos : 0 < p := hpack.hp.pos
+    calc a * a ^ (p - 1)
+        = a ^ (p - 1) * a := by ring
+      _ = a ^ (p - 1 + 1) := pow_succ a (p - 1)
+      _ = a ^ p           := by congr 1; omega
+  exact ⟨s', hs_eq, hx_eq, hxq_eq⟩
+
+/--
+`x = q * x'` から `x' = p * (t * s')` を回収する。
+
+`q ∣ s` → `s = q * s'` → `x = p * t * q * s' = q * (p * t * s')` → `x/q = p * t * s'`。
+-/
+theorem branchA_xdiv_eq_p_mul_t_mul_s'
+    {p x y z t s q : ℕ}
+    (hsx : x = p * (t * s))
+    (hqs : q ∣ s)
+    (hq_prime : Nat.Prime q)
+    (hxMul : x = q * x') :
+    x' = p * (t * (s / q)) := by
+  set s' := s / q with hs'_def
+  have hs_eq : s = q * s' := by
+    rw [hs'_def]; exact (Nat.mul_div_cancel' hqs).symm
+  have hx_q : x = q * (p * (t * s')) := by
+    rw [hsx, hs_eq]; ring
+  have h_mul_eq : q * x' = q * (p * (t * s')) := by linarith
+  exact Nat.eq_of_mul_eq_mul_left hq_prime.pos h_mul_eq
+
+/--
+`(x/q)^p + y^p` の展開式。
+
+Branch A setting: `x/q = p * t * s'` なので
+`(x/q)^p = (p * t * s')^p = p^p * (t * s')^p`。
+
+ゆえに `(x/q)^p + y^p = p^p * (t * s')^p + y^p`。
+
+この identity は、`RealizationSeedTarget` を
+**「`p^p * (t*s')^p + y^p` が p 乗数であるか」**
+に直接還元する。
+-/
+theorem branchA_xdiv_pow_expansion
+    {p t s' : ℕ}
+    (x' : ℕ)
+    (hx'_eq : x' = p * (t * s')) :
+    x' ^ p = p ^ p * (t * s') ^ p := by
+  subst hx'_eq
+  ring
+
+/--
+Branch A の最終還元：`z'^p = (x/q)^p + y^p` は以下と等価。
+
+  `z'^p = p^p * (t*s')^p + y^p`
+
+ここで `s = q * s'`。
+
+これが `RealizationSeedTarget` の数学的核心への最小距離の identity。
+-/
+theorem branchA_realization_reduced_form
+    {p y t s' : ℕ}
+    (x' z' : ℕ)
+    (hx'_eq : x' = p * (t * s'))
+    (hzEq : x' ^ p + y ^ p = z' ^ p) :
+    p ^ p * (t * s') ^ p + y ^ p = z' ^ p := by
+  rwa [branchA_xdiv_pow_expansion x' hx'_eq] at hzEq
 
 end DkMath.FLT
