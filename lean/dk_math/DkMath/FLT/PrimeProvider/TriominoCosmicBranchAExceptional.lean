@@ -306,6 +306,302 @@ theorem exceptional_boundary_datum_prepared_arithmetic_part_of_witness
   exact ⟨q, hqprime, hq_not_dvd_x⟩
 
 /--
+`q ∣ x` なら boundary core は `d * u^(d-1)` に合同である。
+
+`x + u ≡ u [MOD q]` を各項へ入れるだけの、proof-004 step 1 の基礎補題。
+-/
+theorem exceptional_boundary_core_modEq_mul_u_pow_pred_of_dvd
+    {d x u q : ℕ}
+    (hq_dvd_x : q ∣ x) :
+    DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ≡ d * u ^ (d - 1) [MOD q] := by
+  have hxu_mod : x + u ≡ u [MOD q] := by
+    exact ((Nat.modEq_iff_dvd' (Nat.le_add_left u x)).2 (by simpa using hq_dvd_x)).symm
+  have hsum_mod :
+      DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ≡
+        ∑ _k ∈ Finset.range d, u ^ (d - 1) [MOD q] := by
+    unfold DkMath.CFBRC.boundaryCyclotomicPrimeCore DkMath.CFBRC.cyclotomicPrimeCore
+    exact sum_range_modEq (fun k hk => by
+      calc
+        (x + u) ^ k * u ^ (d - 1 - k) ≡ u ^ k * u ^ (d - 1 - k) [MOD q] :=
+          (hxu_mod.pow k).mul_right (u ^ (d - 1 - k))
+        _ = u ^ (d - 1) := by
+          rw [← Nat.pow_add]
+          have hk_sum : k + (d - 1 - k) = d - 1 := by omega
+          simp [hk_sum])
+  calc
+    DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ≡
+        ∑ _k ∈ Finset.range d, u ^ (d - 1) [MOD q] := hsum_mod
+    _ = d * u ^ (d - 1) := by simp
+
+/--
+`q` が prime で `q ∣ x` かつ boundary core も割るなら、`q` は distinguished prime `d` に限られる。
+
+proof-004 step 1 の `p ≠ d` 側を切る local kernel。
+-/
+theorem exceptional_boundary_prime_dvd_x_and_core_imp_eq_d
+    {d x u q : ℕ}
+    (hd_prime : Nat.Prime d)
+    (_hd_ge : 5 ≤ d)
+    (_hx : 0 < x) (_hu : 0 < u)
+    (hcop : Nat.Coprime x u)
+    (hqprime : Nat.Prime q)
+    (hq_dvd_x : q ∣ x)
+    (hq_dvd_core : q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u) :
+    q = d := by
+  have hmod :
+      DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ≡
+        d * u ^ (d - 1) [MOD q] :=
+    exceptional_boundary_core_modEq_mul_u_pow_pred_of_dvd hq_dvd_x
+  have hmul0 : d * u ^ (d - 1) ≡ 0 [MOD q] := by
+    exact hmod.symm.trans hq_dvd_core.modEq_zero_nat
+  have hq_dvd_mul : q ∣ d * u ^ (d - 1) :=
+    Nat.modEq_zero_iff_dvd.mp hmul0
+  rcases hqprime.dvd_mul.mp hq_dvd_mul with hq_dvd_d | hq_dvd_upow
+  · exact (Nat.prime_dvd_prime_iff_eq hqprime hd_prime).mp hq_dvd_d
+  · have hq_dvd_u : q ∣ u := hqprime.dvd_of_dvd_pow hq_dvd_upow
+    have hq_dvd_gcd : q ∣ Nat.gcd x u := Nat.dvd_gcd hq_dvd_x hq_dvd_u
+    have hgcd_one : Nat.gcd x u = 1 := Nat.coprime_iff_gcd_eq_one.mp hcop
+    have : q ∣ 1 := by simpa [hgcd_one] using hq_dvd_gcd
+    exact False.elim (hqprime.not_dvd_one this)
+
+/--
+distinguished prime 以外の prime は、`x` を割るなら boundary core を割れない。
+-/
+theorem exceptional_boundary_prime_not_dvd_core_of_dvd_x_ne_d
+    {d x u q : ℕ}
+    (hd_prime : Nat.Prime d)
+    (hd_ge : 5 ≤ d)
+    (hx : 0 < x) (hu : 0 < u)
+    (hcop : Nat.Coprime x u)
+    (hqprime : Nat.Prime q)
+    (hq_dvd_x : q ∣ x)
+    (hq_ne_d : q ≠ d) :
+    ¬ q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u := by
+  intro hq_dvd_core
+  exact hq_ne_d
+    (exceptional_boundary_prime_dvd_x_and_core_imp_eq_d
+      hd_prime hd_ge hx hu hcop hqprime hq_dvd_x hq_dvd_core)
+
+/--
+`core / d` の prime divisor は、`d ∤ core / d` が分かっていれば `x` を割れない。
+
+proof-004 step 4 のうち、
+`gcd(core / d, x) = 1`
+へ向かう prime-local kernel。
+-/
+theorem exceptional_boundary_prime_not_dvd_x_of_dvd_core_div
+    {d x u q : ℕ}
+    (hd_prime : Nat.Prime d)
+    (hd_ge : 5 ≤ d)
+    (hx : 0 < x) (hu : 0 < u)
+    (hcop : Nat.Coprime x u)
+    (hcore_dvd : d ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u)
+    (hcore_div_not_dvd_d : ¬ d ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u / d)
+    (hqprime : Nat.Prime q)
+    (hq_dvd_core_div : q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u / d) :
+    ¬ q ∣ x := by
+  intro hq_dvd_x
+  have hq_dvd_core : q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u := by
+    exact dvd_trans hq_dvd_core_div (Nat.div_dvd_of_dvd hcore_dvd)
+  have hq_eq_d :
+      q = d :=
+    exceptional_boundary_prime_dvd_x_and_core_imp_eq_d
+      hd_prime hd_ge hx hu hcop hqprime hq_dvd_x hq_dvd_core
+  exact hcore_div_not_dvd_d (hq_eq_d ▸ hq_dvd_core_div)
+
+/--
+`d ∣ core`, `d ∤ core / d`, `1 < core / d`
+まで来れば、`core / d` の prime divisorから concrete witness が取れる。
+
+proof-004 step 4-5 を current boundary-core route 用にまとめた wrapper。
+-/
+theorem exceptional_boundary_core_concrete_of_div_data
+    {d x u : ℕ}
+    (hd_prime : Nat.Prime d)
+    (hd_ge : 5 ≤ d)
+    (hx : 0 < x) (hu : 0 < u)
+    (hcop : Nat.Coprime x u)
+    (hcore_dvd : d ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u)
+    (hcore_div_not_dvd_d : ¬ d ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u / d)
+    (hcore_div_gt1 : 1 < DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u / d) :
+    ∃ q : ℕ, Nat.Prime q ∧
+      q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ∧
+      ¬ q ∣ x := by
+  obtain ⟨q, hqprime, hq_dvd_core_div⟩ :=
+    Nat.exists_prime_and_dvd (Nat.ne_of_gt hcore_div_gt1)
+  refine ⟨q, hqprime, ?_, ?_⟩
+  · exact dvd_trans hq_dvd_core_div (Nat.div_dvd_of_dvd hcore_dvd)
+  · exact exceptional_boundary_prime_not_dvd_x_of_dvd_core_div
+      hd_prime hd_ge hx hu hcop hcore_dvd hcore_div_not_dvd_d hqprime hq_dvd_core_div
+
+/--
+proof-004 route の残核を valuation / `mod d^2` だけに押し込んだ concrete target。
+
+ここまで来れば、下流の existence mainline / primitive descent は橋だけで閉じる。
+-/
+abbrev ExceptionalBoundaryDatumPreparedArithmeticCoreDivDataTarget : Prop :=
+  ∀ {d x u : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    d ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ∧
+    ¬ d ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u / d ∧
+    1 < DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u / d
+
+/--
+`proof-004` step 2-5 の boundary-core valuation data は、二項和の head/tail 分解で直接得られる。
+
+- head は `d * u^(d-1)`
+- tail は `d^2` を因数にもつ
+- Wieferich により head は `d [MOD d^2]`
+
+したがって `v_d(core) = 1` と `core / d > 1` が従う。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_core_divData_default :
+    ExceptionalBoundaryDatumPreparedArithmeticCoreDivDataTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  let core := DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u
+  let A : ℕ := d * u ^ (d - 1)
+  let B : ℕ := Finset.sum ((Finset.range d).erase 0) (fun k =>
+    (Nat.choose d (k + 1) : ℕ) * x ^ k * u ^ (d - 1 - k))
+  have hd_pos : 0 < d := hd_prime.pos
+  have hd_gt_one : 1 < d := lt_of_lt_of_le (by decide : 1 < 5) hd_ge
+  have hcore_eq : core = A + B := by
+    let f : ℕ → ℕ := fun k =>
+      (Nat.choose d (k + 1) : ℕ) * x ^ k * u ^ (d - 1 - k)
+    have hsum :
+        Finset.sum ((Finset.range d).erase 0) f + f 0 = Finset.sum (Finset.range d) f := by
+      simpa using
+        (Finset.sum_erase_add (s := Finset.range d) (f := f) (a := 0)
+          (by simpa using hd_pos))
+    have hsum' :
+        Finset.sum (Finset.range d) f = f 0 + Finset.sum ((Finset.range d).erase 0) f := by
+      simpa [Nat.add_comm] using hsum.symm
+    unfold core DkMath.CFBRC.boundaryCyclotomicPrimeCore
+    rw [DkMath.CFBRC.cyclotomicPrimeCore_eq_GN_nat hx, DkMath.CosmicFormulaBinom.GN_eq_sum]
+    unfold A B
+    simpa [f, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using hsum'
+  have hB_sq : d ^ 2 ∣ B := by
+    unfold B
+    refine Finset.dvd_sum ?_
+    intro k hk
+    have hk_mem : k ∈ Finset.range d := Finset.mem_of_mem_erase hk
+    have hk_lt : k < d := Finset.mem_range.mp hk_mem
+    have hk_ne_zero : k ≠ 0 := (Finset.mem_erase.mp hk).1
+    by_cases hk_last : k = d - 1
+    · have hdd_dvd_xsq : d ^ 2 ∣ x ^ k := by
+        rw [hk_last]
+        have hdd_dvd_x2 : d ^ 2 ∣ x ^ 2 := by
+          simpa [pow_two] using Nat.mul_dvd_mul hdvd hdvd
+        have hk_ge_two : 2 ≤ d - 1 := by omega
+        exact dvd_trans hdd_dvd_x2 (pow_dvd_pow x hk_ge_two)
+      have hchoose_self : Nat.choose d (k + 1) = 1 := by
+        have hk1 : k + 1 = d := by omega
+        rw [hk1, Nat.choose_self]
+      have hmul : d ^ 2 ∣ (Nat.choose d (k + 1) : ℕ) * x ^ k := by
+        simpa [hchoose_self] using hdd_dvd_xsq
+      exact dvd_mul_of_dvd_left hmul _
+    · have hk_succ_ne_zero : k + 1 ≠ 0 := Nat.succ_ne_zero k
+      have hk_succ_lt_d : k + 1 < d := by omega
+      have hd_dvd_choose : d ∣ Nat.choose d (k + 1) := by
+        exact hd_prime.dvd_choose_self hk_succ_ne_zero hk_succ_lt_d
+      have hk_ge_one : 1 ≤ k := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hk_ne_zero)
+      have hd_dvd_xk : d ∣ x ^ k := by
+        have hx_dvd_xk : x ∣ x ^ k := by
+          simpa using (pow_dvd_pow x hk_ge_one)
+        exact dvd_trans hdvd hx_dvd_xk
+      have hdd_dvd_prefix : d ^ 2 ∣ (Nat.choose d (k + 1) : ℕ) * x ^ k := by
+        simpa [pow_two] using Nat.mul_dvd_mul hd_dvd_choose hd_dvd_xk
+      exact dvd_mul_of_dvd_left hdd_dvd_prefix _
+  have hA_mod : A ≡ d [MOD d ^ 2] := by
+    simpa [A, Nat.mul_one, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using
+      hWieferich.mul_left d
+  have hcore_mod : core ≡ d [MOD d ^ 2] := by
+    rw [hcore_eq]
+    exact hA_mod.add hB_sq.modEq_zero_nat
+  have hA_ge_d : d ≤ A := by
+    unfold A
+    have hu_pow_ge_one : 1 ≤ u ^ (d - 1) := Nat.succ_le_of_lt (Nat.pow_pos hu)
+    simpa using Nat.mul_le_mul_left d hu_pow_ge_one
+  have hB_pos : 0 < B := by
+    have hk_mem : d - 1 ∈ (Finset.range d).erase 0 := by
+      refine Finset.mem_erase.mpr ?_
+      constructor
+      · omega
+      · exact Finset.mem_range.mpr (by omega)
+    have hterm_pos :
+        0 < (Nat.choose d ((d - 1) + 1) : ℕ) * x ^ (d - 1) * u ^ (d - 1 - (d - 1)) := by
+      have hchoose_self : Nat.choose d ((d - 1) + 1) = 1 := by
+        have : (d - 1) + 1 = d := by omega
+        rw [this, Nat.choose_self]
+      calc
+        0 < x ^ (d - 1) := Nat.pow_pos hx
+        _ = (Nat.choose d ((d - 1) + 1) : ℕ) * x ^ (d - 1) * u ^ (d - 1 - (d - 1)) := by
+          simp [hchoose_self]
+    unfold B
+    exact lt_of_lt_of_le hterm_pos
+      (Finset.single_le_sum
+        (s := (Finset.range d).erase 0)
+        (f := fun k => (Nat.choose d (k + 1) : ℕ) * x ^ k * u ^ (d - 1 - k))
+        (fun _ _ => Nat.zero_le _)
+        hk_mem)
+  have hcore_ge_d : d ≤ core := by
+    rw [hcore_eq]
+    omega
+  have hcore_gt_d : d < core := by
+    rw [hcore_eq]
+    omega
+  have hsq_dvd_sub : d ^ 2 ∣ core - d := by
+    exact (Nat.modEq_iff_dvd' hcore_ge_d).mp hcore_mod.symm
+  obtain ⟨t, ht⟩ := exists_eq_mul_left_of_dvd hsq_dvd_sub
+  have hcore_eq_mod : core = d + d ^ 2 * t := by
+    calc
+      core = (core - d) + d := by omega
+      _ = t * d ^ 2 + d := by rw [ht]
+      _ = d ^ 2 * t + d := by rw [Nat.mul_comm]
+      _ = d + d ^ 2 * t := by rw [Nat.add_comm]
+  have hd_dvd_core : d ∣ core := by
+    rw [hcore_eq_mod]
+    exact dvd_add (dvd_refl d) (by simp only [pow_two, Nat.mul_assoc, dvd_mul_right])
+  have hcore_div_eq : core / d = 1 + d * t := by
+    apply Nat.eq_of_mul_eq_mul_left hd_pos
+    calc
+      d * (core / d) = core := Nat.mul_div_cancel' hd_dvd_core
+      _ = d * (1 + d * t) := by
+        rw [hcore_eq_mod, pow_two]
+        ring
+  have hcore_div_not_dvd_d : ¬ d ∣ core / d := by
+    rw [hcore_div_eq]
+    intro hd_dvd_div
+    have : d ∣ 1 := by
+      have hd_dvd_sub : d ∣ (1 + d * t) - d * t := Nat.dvd_sub hd_dvd_div (dvd_mul_right d t)
+      simpa using hd_dvd_sub
+    exact hd_prime.not_dvd_one this
+  have ht_pos : 0 < t := by
+    by_contra ht_nonpos
+    have ht_zero : t = 0 := Nat.eq_zero_of_not_pos ht_nonpos
+    rw [hcore_eq_mod, ht_zero, pow_two, Nat.mul_zero, Nat.add_zero] at hcore_gt_d
+    exact lt_irrefl _ hcore_gt_d
+  have hcore_div_gt1 : 1 < core / d := by
+    rw [hcore_div_eq]
+    have hd_mul_pos : 0 < d * t := Nat.mul_pos hd_pos ht_pos
+    omega
+  exact ⟨hd_dvd_core, hcore_div_not_dvd_d, hcore_div_gt1⟩
+
+/--
+div-data target が立てば、prepared arithmetic core concrete は橋だけで閉じる。
+-/
+theorem exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_divData
+    (hDiv : ExceptionalBoundaryDatumPreparedArithmeticCoreDivDataTarget) :
+    ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  rcases hDiv hd_prime hd_ge hx hu hcop hdvd hWieferich with
+    ⟨hcore_dvd, hcore_div_not_dvd_d, hcore_div_gt1⟩
+  exact exceptional_boundary_core_concrete_of_div_data
+    hd_prime hd_ge hx hu hcop hcore_dvd hcore_div_not_dvd_d hcore_div_gt1
+
+/--
 witness-aware arithmetic part を受ける CFBRC existence 部。
 
 [CFBRC] 実際に残っている local kernel は、
@@ -904,6 +1200,53 @@ abbrev PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget : Prop :
   PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessTarget
 
 /--
+same-`q` 条件を捨てた body/core witness existence target。
+
+[CFBRC] arithmetic witness とは独立に、
+`cyclotomicPrimeCore d 1 (u - 1)` を割る prime witness の存在だけを first target とする。
+-/
+abbrev PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceTarget : Prop :=
+  ∀ {d x u : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧ PrimeGe5BranchAExceptionalPracticalBodyCoreDatum d x u q
+
+/--
+body/core witness existence の concrete theorem 名。
+-/
+abbrev PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget : Prop :=
+  PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceTarget
+
+/--
+arithmetic witness と body/core witness を分離した two-witness route の canonical target。
+
+[CFBRC] same-`q` route が false と確定したので、
+今後の本線はこの two-witness existential route に置く。
+-/
+abbrev PrimeGe5BranchAExceptionalPracticalTwoWitnessConcreteTarget : Prop :=
+  PrimeGe5BranchAExceptionalPracticalWitnessSupplyTarget ∧
+  PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget
+
+/--
+body/core witness existence から primitive packet descent へ渡す clean interface。
+
+[CFBRC] restore / descent 側が本当に必要とするデータを audit するため、
+まず missing interface 自体を theorem target として切り出しておく。
+-/
+abbrev PrimeGe5BranchAExceptionalBodyCoreWitnessToPrimitivePacketDescentTarget : Prop :=
+  PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceTarget →
+    PrimeGe5BranchAPrimitivePacketDescentTarget
+
+/--
+body/core witness existence から exceptional existence mainline へ渡す clean interface。
+-/
+abbrev PrimeGe5BranchAExceptionalBodyCoreWitnessToExistenceMainlineTarget : Prop :=
+  PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceTarget →
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget
+
+/--
 current practical datum route の explicit counterexample datum。
 
 `(d, x, u, q) = (5, 5, 7, 2)` は
@@ -933,6 +1276,25 @@ theorem counterexample_not_dvd_selectedCore :
   decide
 
 /--
+counterexample datum では
+`2 ∤ cyclotomicPrimeCore 5 1 (7 - 1)`、
+したがって body/core datum も満たさない。
+-/
+theorem counterexample_not_dvd_bodyCore_two :
+    ¬ PrimeGe5BranchAExceptionalPracticalBodyCoreDatum 5 5 7 2 := by
+  simpa [PrimeGe5BranchAExceptionalPracticalBodyCoreDatum] using
+    counterexample_not_dvd_selectedCore
+
+/--
+counterexample datum では
+`3 ∤ cyclotomicPrimeCore 5 1 (7 - 1)`、
+したがって body/core datum も満たさない。
+-/
+theorem counterexample_not_dvd_bodyCore_three :
+    ¬ PrimeGe5BranchAExceptionalPracticalBodyCoreDatum 5 5 7 3 := by
+  decide
+
+/--
 current practical first direct body は universal theorem としては偽である。
 
 反例は
@@ -944,6 +1306,127 @@ theorem not_primeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget
   have hbad : 2 ∣ DkMath.CFBRC.cyclotomicPrimeCore 5 1 (7 - 1) := by
     exact h primeGe5BranchAExceptionalPracticalWitnessDatum_counterexample
   exact counterexample_not_dvd_selectedCore hbad
+
+/--
+counterexample datum `(d, x, u) = (5, 5, 7)` では、
+`q ∣ x + 1`
+を満たす prime witness は `2` か `3` に限られ、
+どちらも body/core datum にはなれない。
+-/
+theorem counterexample_no_same_q_bodyCoreWitness :
+    ∀ q : ℕ,
+      PrimeGe5BranchAExceptionalPracticalArithmeticDatum 5 5 7 q →
+      ¬ PrimeGe5BranchAExceptionalPracticalBodyCoreDatum 5 5 7 q := by
+  intro q hArith hBody
+  rcases hArith with
+    ⟨_hd_prime, _hd_ge, _hx, _hu, _hcop, _hdvd, _hWieferich,
+      hqprime, hq_dvd_x1, _hq_not_dvd_x⟩
+  have hq_dvd_six : q ∣ 6 := by
+    simpa using hq_dvd_x1
+  have hq_eq_two_or_three : q = 2 ∨ q = 3 := by
+    have hq_dvd_mul : q ∣ 2 * 3 := by
+      simpa using hq_dvd_six
+    rcases hqprime.dvd_mul.mp hq_dvd_mul with hq_dvd_two | hq_dvd_three
+    · left
+      exact (Nat.prime_dvd_prime_iff_eq hqprime Nat.prime_two).1 hq_dvd_two
+    · right
+      exact (Nat.prime_dvd_prime_iff_eq hqprime Nat.prime_three).1 hq_dvd_three
+  rcases hq_eq_two_or_three with rfl | rfl
+  · exact counterexample_not_dvd_bodyCore_two hBody
+  · exact counterexample_not_dvd_bodyCore_three hBody
+
+/--
+current same-`q` existential body/core witness route は universal theorem としては偽である。
+
+反例は
+`(d, x, u) = (5, 5, 7)`。
+このとき `x + 1 = 6` の prime divisors は `2, 3` だけだが、
+どちらも `cyclotomicPrimeCore 5 1 (7 - 1)` を割らない。
+-/
+theorem not_primeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget :
+    ¬ PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget := by
+  intro h
+  rcases h (d := 5) (x := 5) (u := 7)
+      (by decide) (by omega) (by omega) (by omega)
+      (by decide) (dvd_rfl) (by decide) with ⟨q, hArith, hBody⟩
+  exact counterexample_no_same_q_bodyCoreWitness q hArith hBody
+
+/--
+`(d, x, u) = (5, 5, 1)` では
+`cyclotomicPrimeCore 5 1 (1 - 1) = 1`。
+-/
+theorem counterexample_u_one_bodyCore_eq_one :
+    DkMath.CFBRC.cyclotomicPrimeCore 5 1 (1 - 1) = 1 := by
+  decide
+
+/--
+`(d, x, u) = (5, 5, 1)` では
+body/core witness existence 自体が壊れる。
+-/
+theorem not_primeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget :
+    ¬ PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget := by
+  intro h
+  rcases h (d := 5) (x := 5) (u := 1)
+      (by decide) (by omega) (by omega) (by omega)
+      (by decide) (dvd_rfl) (by decide) with ⟨q, hqprime, hq_dvd_core⟩
+  have hq_dvd_core' : q ∣ DkMath.CFBRC.cyclotomicPrimeCore 5 1 (1 - 1) := by
+    simpa [PrimeGe5BranchAExceptionalPracticalBodyCoreDatum] using hq_dvd_core
+  rw [counterexample_u_one_bodyCore_eq_one] at hq_dvd_core'
+  have hq_eq_one : q = 1 := Nat.eq_one_of_dvd_one hq_dvd_core'
+  exact hqprime.ne_one hq_eq_one
+
+/--
+current two-witness canonical target も、
+body/core witness existence が偽である以上 false である。
+-/
+theorem not_primeGe5BranchAExceptionalPracticalTwoWitnessConcreteTarget :
+    ¬ PrimeGe5BranchAExceptionalPracticalTwoWitnessConcreteTarget := by
+  intro h
+  exact not_primeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget h.2
+
+/--
+`proof-004` で採用する current canonical route。
+
+[CFBRC] same-`q` / body-only / two-witness の各 route が false と確定したので、
+以後の first target は
+`ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget`
+に戻す。
+-/
+abbrev PrimeGe5BranchAExceptionalBoundaryCoreWitnessConcreteTarget : Prop :=
+  ExceptionalBoundaryDatumPreparedArithmeticCoreConcreteTarget
+
+/--
+current canonical boundary route の self bridge。
+-/
+theorem primeGe5BranchAExceptionalBoundaryCoreWitnessConcrete_of_self
+    (hCore : PrimeGe5BranchAExceptionalBoundaryCoreWitnessConcreteTarget) :
+    PrimeGe5BranchAExceptionalBoundaryCoreWitnessConcreteTarget :=
+  hCore
+
+/--
+`proof-004` で閉じた div-data actual theorem から、
+current canonical boundary route へ直接戻る default bridge。
+-/
+theorem primeGe5BranchAExceptionalBoundaryCoreWitnessConcrete_of_divDataDefault :
+    PrimeGe5BranchAExceptionalBoundaryCoreWitnessConcreteTarget :=
+  exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_divData
+    exceptional_boundary_datum_prepared_arithmetic_core_divData_default
+
+/--
+`(d, x, u) = (5, 5, 1)` では
+boundary route 自体は壊れておらず、
+`q = 311`
+が concrete witness になる。
+-/
+theorem primeGe5BranchAExceptionalBoundaryCoreWitness_sanity_u_one :
+    ∃ q : ℕ, Nat.Prime q ∧
+      q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right 5 5 1 ∧
+      ¬ q ∣ 5 := by
+  refine ⟨311, ?_, ?_, ?_⟩
+  · norm_num
+  · change 311 ∣ 1555
+    decide
+  · norm_num
 
 /--
 prepared selected-core witness は、
@@ -974,6 +1457,55 @@ theorem primeGe5BranchAExceptionalPracticalBodyCoreWitnessConcrete_of_selectedCo
     (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget) :
     PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget :=
   primeGe5BranchAExceptionalPracticalBodyCoreWitness_of_selectedCoreWitness hCore
+
+/--
+same-`q` selected-core witness は、same-`q` 条件を忘れれば body/core witness existence になる。
+-/
+theorem primeGe5BranchAExceptionalBodyCoreWitnessExistence_of_selectedCoreWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget) :
+    PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hdvd hWieferich
+  rcases hCore hd_prime hd_ge hx hu hcop hdvd hWieferich with
+    ⟨q, hqprime, _hq_dvd_x1, _hq_not_dvd_x, hq_dvd_core⟩
+  exact ⟨q, hqprime, hq_dvd_core⟩
+
+/--
+body/core witness existence concrete theorem 名に対する canonical self bridge。
+-/
+theorem primeGe5BranchAExceptionalBodyCoreWitnessExistenceConcrete_of_self
+    (hCore : PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget) :
+    PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget :=
+  hCore
+
+/--
+prepared selected-core witness が立てば、
+body/core witness existence concrete theorem 名にも直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalBodyCoreWitnessExistenceConcrete_of_selectedCoreWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget) :
+    PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget :=
+  primeGe5BranchAExceptionalBodyCoreWitnessExistence_of_selectedCoreWitness hCore
+
+/--
+arithmetic witness と body/core witness existence が揃えば、
+two-witness canonical target は橋だけで閉じる。
+-/
+theorem primeGe5BranchAExceptionalPracticalTwoWitnessConcrete_of_witnessSupply_and_bodyCoreWitness
+    (hArith : PrimeGe5BranchAExceptionalPracticalWitnessSupplyTarget)
+    (hBody : PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget) :
+    PrimeGe5BranchAExceptionalPracticalTwoWitnessConcreteTarget :=
+  ⟨hArith, hBody⟩
+
+/--
+selected-core witness からも、
+two-witness canonical target へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalPracticalTwoWitnessConcrete_of_selectedCoreWitness
+    (hCore : ExceptionalBoundaryDatumPreparedSelectedCoreWitnessTarget) :
+    PrimeGe5BranchAExceptionalPracticalTwoWitnessConcreteTarget :=
+  primeGe5BranchAExceptionalPracticalTwoWitnessConcrete_of_witnessSupply_and_bodyCoreWitness
+    exceptional_boundary_datum_prepared_arithmetic_witness_concrete
+    (primeGe5BranchAExceptionalBodyCoreWitnessExistenceConcrete_of_selectedCoreWitness hCore)
 
 /--
 分離された body/core witness があれば、
@@ -2804,6 +3336,50 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_preparedArithmeticCore_and_rest
     hRestore
 
 /--
+div-data target と restore theorem があれば、
+primitive packet descent へもそのまま流せる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_divData_and_restore
+    (hDiv : ExceptionalBoundaryDatumPreparedArithmeticCoreDivDataTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_preparedArithmeticCore_and_restore
+    (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_divData hDiv)
+    hRestore
+
+/--
+boundary-core route の actual theorem を canonical entrance として使う default 版。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_divDataDefault_and_restore
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_divData_and_restore
+    exceptional_boundary_datum_prepared_arithmetic_core_divData_default
+    hRestore
+
+/--
+current canonical boundary route そのものと restore theorem があれば、
+primitive packet descent へ直接流せる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_boundaryCoreWitnessConcrete_and_restore
+    (hCore : PrimeGe5BranchAExceptionalBoundaryCoreWitnessConcreteTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_preparedArithmeticCore_and_restore
+    hCore hRestore
+
+/--
+current canonical boundary route の default entrance と restore theorem があれば、
+primitive packet descent へ直接流せる版。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_boundaryCoreWitnessConcreteDefault_and_restore
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_boundaryCoreWitnessConcrete_and_restore
+    primeGe5BranchAExceptionalBoundaryCoreWitnessConcrete_of_divDataDefault
+    hRestore
+
+/--
 prepared arithmetic core から proof file mainline へ戻る橋。
 -/
 theorem primeGe5BranchAExceptionalExistenceMainline_of_preparedArithmeticCore
@@ -2820,6 +3396,41 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_preparedConcrete
     PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
   primeGe5BranchAExceptionalExistenceMainline_of_preparedArithmeticCore
     (exceptional_boundary_datum_prepared_arithmetic_core_of_concrete hConcrete)
+
+/--
+div-data target が立てば、proof file mainline へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_divData
+    (hDiv : ExceptionalBoundaryDatumPreparedArithmeticCoreDivDataTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_preparedConcrete
+    (exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_divData hDiv)
+
+/--
+boundary-core route の actual theorem を canonical entrance として使う default mainline 版。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_divDataDefault :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_divData
+    exceptional_boundary_datum_prepared_arithmetic_core_divData_default
+
+/--
+current canonical boundary route そのものから、
+proof file exceptional existence mainline へ直接戻る橋。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_boundaryCoreWitnessConcrete
+    (hCore : PrimeGe5BranchAExceptionalBoundaryCoreWitnessConcreteTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_preparedConcrete hCore
+
+/--
+current canonical boundary route の default entrance から、
+proof file exceptional existence mainline へ直接戻る版。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_boundaryCoreWitnessConcreteDefault :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_boundaryCoreWitnessConcrete
+    primeGe5BranchAExceptionalBoundaryCoreWitnessConcrete_of_divDataDefault
 
 /--
 prepared arithmetic part の concrete 実装を既定値にすると、
@@ -2992,6 +3603,26 @@ theorem primeGe5BranchAExceptionalExistenceMainline_of_bodyCoreWitnessConcrete
     (hCore : PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget) :
     PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
   primeGe5BranchAExceptionalExistenceMainline_of_bodyCoreWitness hCore
+
+/--
+body/core witness existence から exceptional existence mainline へ渡す clean bridge があれば、
+same-`q` route を経由せずに mainline を閉じられる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_bodyCoreWitnessExistenceBridge
+    (hBridge : PrimeGe5BranchAExceptionalBodyCoreWitnessToExistenceMainlineTarget)
+    (hCore : PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  hBridge hCore
+
+/--
+two-witness canonical target と body/core-mainline bridge があれば、
+proof file mainline へ直接戻れる。
+-/
+theorem primeGe5BranchAExceptionalExistenceMainline_of_twoWitness_and_bodyCoreBridge
+    (hTwo : PrimeGe5BranchAExceptionalPracticalTwoWitnessConcreteTarget)
+    (hBridge : PrimeGe5BranchAExceptionalBodyCoreWitnessToExistenceMainlineTarget) :
+    PrimeGe5BranchAExceptionalExistenceMainlineTarget :=
+  primeGe5BranchAExceptionalExistenceMainline_of_bodyCoreWitnessExistenceBridge hBridge hTwo.2
 
 /--
 practical body-on-witness だけが立てば、
@@ -3340,6 +3971,26 @@ theorem primeGe5BranchAPrimitivePacketDescent_of_bodyCoreWitnessConcrete_and_res
     (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
     PrimeGe5BranchAPrimitivePacketDescentTarget :=
   primeGe5BranchAPrimitivePacketDescent_of_bodyCoreWitness_and_restore hCore hRestore
+
+/--
+body/core witness existence から primitive packet descent へ渡す clean bridge があれば、
+same-`q` route を経由せずに packet descent を閉じられる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_bodyCoreWitnessExistenceBridge
+    (hBridge : PrimeGe5BranchAExceptionalBodyCoreWitnessToPrimitivePacketDescentTarget)
+    (hCore : PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  hBridge hCore
+
+/--
+two-witness canonical target と body/core-packet bridge があれば、
+primitive packet descent を直接閉じられる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_twoWitness_and_bodyCoreBridge
+    (hTwo : PrimeGe5BranchAExceptionalPracticalTwoWitnessConcreteTarget)
+    (hBridge : PrimeGe5BranchAExceptionalBodyCoreWitnessToPrimitivePacketDescentTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_bodyCoreWitnessExistenceBridge hBridge hTwo.2
 
 /--
 practical body-on-witness と restore theorem があれば、
