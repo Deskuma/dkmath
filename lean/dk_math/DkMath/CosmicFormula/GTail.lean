@@ -164,6 +164,16 @@ theorem GN_tail_rec
   simpa using GTail_rec d 1 x u hd
 
 /--
+Compatibility alias matching the implementation-plan naming.
+-/
+theorem GN_tail_decomposition
+    {R : Type _} [CommSemiring R]
+    (d : ℕ) (x u : R) (hd : 1 < d) :
+    GTail d 1 x u =
+      (Nat.choose d 1 : R) * u ^ (d - 1) + x * GTail d 2 x u :=
+  GN_tail_rec d x u hd
+
+/--
 Compatibility alias for the old `Gbinom`-flavored recursion name.
 
 [GNZC] New code should prefer `GN_tail_rec`.
@@ -486,9 +496,12 @@ This is the fundamental "mod-`n` collapse" of the cosmic formula:
 Valid for any `d ≥ 1` and any modulus `n ∣ x`.
 -/
 theorem GN_modEq_choose_mul_pow_of_dvd_x
-    {d : ℕ} (x u : ℕ)
-    (hd : 1 ≤ d) (hn : ∀ {m : ℕ}, m ∣ x → GTail d 1 x u ≡ Nat.choose d 1 * u ^ (d - 1) [MOD m])
-    : True := trivial  -- placeholder; see below
+    {d n : ℕ} (x u : ℕ)
+    (_hd : 1 ≤ d) (hnx : n ∣ x) :
+    GTail d 1 x u ≡ Nat.choose d 1 * u ^ (d - 1) [MOD n] := by
+  have h0 := GTail_modEq_eval_zero_of_dvd_x x u hnx (d := d) (r := 1)
+  rw [GTail_eval_zero d 1 u] at h0
+  exact h0
 
 -- The clean version without the circular hypothesis:
 
@@ -503,9 +516,7 @@ theorem GN_modEq_head_of_dvd_x
     (hdpos : 1 ≤ d)
     (hnx : n ∣ x) :
     GTail d 1 x u ≡ Nat.choose d 1 * u ^ (d - 1) [MOD n] := by
-  have h0 := GTail_modEq_eval_zero_of_dvd_x x u hnx (d := d) (r := 1)
-  rw [GTail_eval_zero d 1 u] at h0
-  exact h0
+  exact GN_modEq_choose_mul_pow_of_dvd_x x u hdpos hnx
 
 /--
 Specialization: when `d` is itself the modulus and `d ∣ x`, then
@@ -548,7 +559,7 @@ theorem GN_modEq_head_mod_sq_of_prime_dvd_x
   simp only [Nat.choose_one_right]
   -- it suffices to show p^2 ∣ x * GTail p 2 x u
   suffices h : p ^ 2 ∣ x * GTail p 2 x u by
-    show (p * u ^ (p - 1) + x * GTail p 2 x u) % p ^ 2 = (p * u ^ (p - 1)) % p ^ 2
+    change (p * u ^ (p - 1) + x * GTail p 2 x u) % p ^ 2 = (p * u ^ (p - 1)) % p ^ 2
     have hmod := Nat.dvd_iff_mod_eq_zero.mp h
     rw [Nat.add_mod, hmod, Nat.add_zero, Nat.mod_mod]
   -- expand GTail p 2: C(p,2) * u^{p-2} + x * GTail p 3
@@ -572,5 +583,68 @@ theorem GN_modEq_head_mod_sq_of_prime_dvd_x
       x * (Nat.choose p 2 * u ^ (p - 2)) + x * (x * GTail p 3 x u) := by ring
   rw [heq]
   exact Nat.dvd_add h1 h2
+
+/--
+Plan-name alias: `mod p^2` head congruence for `GN`.
+-/
+theorem GN_mod_p2_head
+    {p : ℕ} (x u : ℕ)
+    (hp : Nat.Prime p) (hp5 : 5 ≤ p)
+    (hpx : p ∣ x) :
+    GTail p 1 x u ≡ p * u ^ (p - 1) [MOD p ^ 2] :=
+  GN_modEq_head_mod_sq_of_prime_dvd_x x u hp hp5 hpx
+
+/--
+`mod p^2` congruence rewritten as a concrete equality with an explicit tail.
+-/
+theorem GN_eq_head_add_p_sq_mul_of_prime_dvd_x
+    {p : ℕ} (x u : ℕ)
+    (hp : Nat.Prime p) (hp5 : 5 ≤ p)
+    (hpx : p ∣ x) :
+    ∃ M : ℕ, GTail p 1 x u = p * u ^ (p - 1) + p ^ 2 * M := by
+  have hmod : GTail p 1 x u ≡ p * u ^ (p - 1) [MOD p ^ 2] :=
+    GN_modEq_head_mod_sq_of_prime_dvd_x x u hp hp5 hpx
+  have hle : p * u ^ (p - 1) ≤ GTail p 1 x u := by
+    rw [GN_tail_rec p x u hp.one_lt]
+    simp [Nat.choose_one_right]
+  have hdiv : p ^ 2 ∣ GTail p 1 x u - (p * u ^ (p - 1)) :=
+    (Nat.modEq_iff_dvd' hle).mp hmod.symm
+  rcases exists_eq_mul_left_of_dvd hdiv with ⟨M, hM⟩
+  refine ⟨M, ?_⟩
+  calc
+    GTail p 1 x u = p * u ^ (p - 1) + (GTail p 1 x u - (p * u ^ (p - 1))) := by
+      exact (Nat.add_sub_of_le hle).symm
+    _ = p * u ^ (p - 1) + p ^ 2 * M := by
+      rw [hM]
+      ring
+
+/--
+Plan-name `mod p^3` head congruence under an explicit third-order tail divisibility hypothesis.
+-/
+theorem GN_mod_p3_head
+    {p : ℕ} (x u : ℕ)
+    (hp1 : 1 < p)
+    (htail : p ^ 3 ∣ x * GTail p 2 x u) :
+    GTail p 1 x u ≡ p * u ^ (p - 1) [MOD p ^ 3] := by
+  rw [GN_tail_rec p x u hp1]
+  simp only [Nat.choose_one_right]
+  change (p * u ^ (p - 1) + x * GTail p 2 x u) % p ^ 3 = (p * u ^ (p - 1)) % p ^ 3
+  have hmod := Nat.dvd_iff_mod_eq_zero.mp htail
+  rw [Nat.add_mod, hmod, Nat.add_zero, Nat.mod_mod]
+
+/--
+`mod p^3` head congruence rewritten as a concrete equality with an explicit tail.
+-/
+theorem GN_eq_head_add_p_cube_mul_of_dvd_tail
+    {p : ℕ} (x u : ℕ)
+    (hp1 : 1 < p)
+    (htail : p ^ 3 ∣ x * GTail p 2 x u) :
+    ∃ M : ℕ, GTail p 1 x u = p * u ^ (p - 1) + p ^ 3 * M := by
+  rw [GN_tail_rec p x u hp1]
+  simp only [Nat.choose_one_right]
+  rcases exists_eq_mul_left_of_dvd htail with ⟨M, hM⟩
+  refine ⟨M, ?_⟩
+  rw [hM]
+  simp [Nat.mul_comm]
 
 end DkMath.CosmicFormula
