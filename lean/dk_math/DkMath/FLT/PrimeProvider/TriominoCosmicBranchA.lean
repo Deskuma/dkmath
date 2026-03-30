@@ -109,6 +109,19 @@ abbrev BranchAContradictionRouteBundleTarget : Prop :=
   PrimeGe5BranchAWieferichRefuterTarget
 
 /--
+`ContradictionTarget` へ入れる「矛盾側前提」の供給元仕様（mod `p^3` 版）。
+
+Branch A normal form (`gap` shape + `GN` shape) が与えられたときに、
+`s^p ≡ y^(p-1) [MOD p^3]` の否定を供給する外部 statement を表す。
+-/
+abbrev BranchAContradictionModP3SourceTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    ¬ s ^ p ≡ y ^ (p - 1) [MOD p ^ 3]
+
+/--
 Branch A / Wieferich route の local kernel。
 
 Wieferich witness 単独ではなく、
@@ -2042,6 +2055,77 @@ theorem branchA_contradiction_of_mod_p2_conflict
     (hconf : ¬ s ^ p ≡ y ^ (p - 1) [MOD p ^ 2]) :
     False :=
   hconf (branchA_spow_congr_head_mod_p2 hpack hp_dvd_gap hgap hsGN)
+
+/--
+gap-shape の強い `p`-冪因子を使うと、`s^p` の head 分解は `p^3` 精度まで上がる。
+-/
+theorem primeGe5BranchA_spow_eq_head_add_p_cube_mul
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    ∃ M : ℕ, s ^ p = y ^ (p - 1) + p ^ 3 * M := by
+  rcases primeGe5BranchA_spow_eq_head_add_gapShape_mul hpack hp_dvd_gap hgap hsGN with ⟨B, hB⟩
+  have h3_le : 3 ≤ p - 1 := by
+    have hp_ge5 : 5 ≤ p := hpack.hp5
+    omega
+  have hp3_dvd_shape : p ^ 3 ∣ p ^ (p - 1) * t ^ p :=
+    dvd_mul_of_dvd_left (pow_dvd_pow p h3_le) _
+  have hp3_dvd_tail : p ^ 3 ∣ (p ^ (p - 1) * t ^ p) * B :=
+    dvd_mul_of_dvd_left hp3_dvd_shape _
+  rcases exists_eq_mul_left_of_dvd hp3_dvd_tail with ⟨M, hM⟩
+  refine ⟨M, ?_⟩
+  calc
+    s ^ p = y ^ (p - 1) + (p ^ (p - 1) * t ^ p) * B := hB
+    _ = y ^ (p - 1) + p ^ 3 * M := by
+      rw [hM]
+      ring
+
+/--
+`s^p ≡ y^(p-1) [MOD p^3]` の Branch A normal-form 版。
+-/
+theorem primeGe5BranchA_spow_congr_head_mod_p_cube
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    s ^ p ≡ y ^ (p - 1) [MOD p ^ 3] := by
+  rcases primeGe5BranchA_spow_eq_head_add_p_cube_mul hpack hp_dvd_gap hgap hsGN with ⟨M, hM⟩
+  have hle : y ^ (p - 1) ≤ s ^ p := by
+    rw [hM]
+    exact Nat.le_add_right _ _
+  have hmod : y ^ (p - 1) ≡ s ^ p [MOD p ^ 3] := by
+    exact (Nat.modEq_iff_dvd' hle).2 ⟨M, by
+      rw [hM]
+      simp⟩
+  exact hmod.symm
+
+/--
+計画名 `branchA_spow_congr_head_mod_p3` との互換 alias。
+-/
+theorem branchA_spow_congr_head_mod_p3
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    s ^ p ≡ y ^ (p - 1) [MOD p ^ 3] :=
+  primeGe5BranchA_spow_congr_head_mod_p_cube hpack hp_dvd_gap hgap hsGN
+
+/--
+mod `p^3` head congruence とその否定は両立しない。
+-/
+theorem branchA_contradiction_of_mod_p3_conflict
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hconf : ¬ s ^ p ≡ y ^ (p - 1) [MOD p ^ 3]) :
+    False :=
+  hconf (branchA_spow_congr_head_mod_p3 hpack hp_dvd_gap hgap hsGN)
 
 /--
 Branch A の `q ≠ p` 側本丸:
@@ -4221,6 +4305,21 @@ theorem primeGe5BranchARefuter_of_routeBundles
       p ∣ (z - y) →
       False :=
   primeGe5BranchARefuter_of_wieferich hWitness hContra
+
+/--
+mod `p^3` の矛盾側前提供給 statement があれば、Branch A refuter を閉じられる。
+-/
+theorem primeGe5BranchARefuter_of_modP3Source
+    (hSource : BranchAContradictionModP3SourceTarget) :
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      p ∣ (z - y) →
+      False := by
+  intro p x y z hpack hp_dvd_gap
+  rcases primeGe5BranchAShapeValue_of_factorization
+      primeGe5BranchAShapeFactorization_default hpack hp_dvd_gap with ⟨t, hgap⟩
+  rcases primeGe5BranchANormalForm_of_witness hpack hp_dvd_gap hgap with ⟨s, hsGN, _hsx⟩
+  exact branchA_contradiction_of_mod_p3_conflict hpack hp_dvd_gap hgap hsGN
+    (hSource hpack hp_dvd_gap hgap hsGN)
 
 /--
 local kernel が与えられれば、Wieferich witness refuter は既存 normal form 抽出だけで得られる。

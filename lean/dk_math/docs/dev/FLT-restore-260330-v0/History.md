@@ -1171,3 +1171,83 @@ Archive
    - `branchA_spow_congr_head_mod_p3` 相当 API と
      mod `p^3` concrete conflict の追加。
    - `ContradictionTarget` に入る「矛盾側前提」の供給元 statement 設計。
+
+### 日時: 2026/03/31 01:54:09 JST
+
+1. 目的:
+   - `primeGe5BranchARefuter_default` の経路統一方針を確定する。
+
+2. 実施:
+   - 方針決定:
+     - **並行維持**を採用。
+     - 既存 default (`shape pipeline` 経路) は現状維持。
+     - 新規 `route bundles` 経路 (`primeGe5BranchARefuter_of_routeBundles_default`) は並行で維持。
+
+3. 結論:
+   - `TriominoCosmicBranchA` の refuter 入口は当面 2 経路併存とする。
+   - 将来、`ContradictionTarget` 側の concrete kernel が固まった段階で統一可否を再判定する。
+
+4. 検証:
+   - 方針決定のみ（コード変更なし）。
+
+5. 失敗事例:
+   - なし。
+
+6. 次の課題:
+   - `branchA_spow_congr_head_mod_p3` 相当 API と mod `p^3` concrete conflict の追加。
+   - `ContradictionTarget` に入る「矛盾側前提」の供給元 statement 設計。
+
+### 日時: 2026/03/31 02:00:28 JST
+
+1. 目的:
+   - 直前ログの次課題 2 点を実装する:
+     1) `branchA_spow_congr_head_mod_p3` 相当 API と mod `p^3` concrete conflict
+     2) `ContradictionTarget` に入る「矛盾側前提」の供給元 statement 設計
+
+2. 実施:
+   `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]` に以下を追加:
+
+   - 新 target（供給元 statement）:
+     - `BranchAContradictionModP3SourceTarget`
+       - Branch A normal form 入力から
+         `¬ (s^p ≡ y^(p-1) [MOD p^3])`
+         を供給する契約を定義。
+
+   - mod `p^3` head API:
+     - `primeGe5BranchA_spow_eq_head_add_p_cube_mul`
+       - `∃ M, s^p = y^(p-1) + p^3 * M`
+     - `primeGe5BranchA_spow_congr_head_mod_p_cube`
+       - `s^p ≡ y^(p-1) [MOD p^3]`
+     - `branchA_spow_congr_head_mod_p3`
+       - 計画名互換 alias
+
+   - mod `p^3` concrete conflict:
+     - `branchA_contradiction_of_mod_p3_conflict`
+       - `¬ (s^p ≡ y^(p-1) [MOD p^3])` を仮定すれば `False`
+
+   - 供給元 statement から refuter への接続:
+     - `primeGe5BranchARefuter_of_modP3Source`
+       - `BranchAContradictionModP3SourceTarget` を受け取り、
+         normal form 抽出 + `branchA_contradiction_of_mod_p3_conflict`
+         で Branch A refuter を閉じる adapter。
+
+3. 結論:
+   - review-014 で指摘された「次段の焦点」を、そのまま API と target に落とし込んだ。
+   - `mod p^3` 側は、単なる命名追加ではなく
+     `eq` 版 (`...add_p_cube_mul`) → `ModEq` 版 (`...mod_p_cube`) → conflict 版
+     の 3 層で運用可能になった。
+   - `ContradictionTarget` の入口設計として、
+     「何を外部から供給すれば refuter が閉じるか」を
+     `BranchAContradictionModP3SourceTarget` で明示できた。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA` 成功 (exit 0)
+   - 既存 warning:
+     - `TriominoCosmicBranchA.lean:4092` の `sorry` warning は継続（今回差分起因ではない）
+
+5. 失敗事例:
+   - なし（追加分で新規ビルドエラーは発生せず）。
+
+6. 次の課題:
+   - `BranchAContradictionModP3SourceTarget` を満たす concrete 数学（negation 供給）をどの層で構成するか決める。
+   - `mod p^3` conflict を `PrimeGe5BranchAPrimitiveRestoreContradictionTarget` 系へどう注入するか（restore/gap-invariant 側 adapter 設計）。
