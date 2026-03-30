@@ -1111,4 +1111,30 @@ theorem branchA_realization_reduced_form
     p ^ p * (t * s') ^ p + y ^ p = z' ^ p := by
   rwa [branchA_xdiv_pow_expansion x' hx'_eq] at hzEq
 
+/-!
+### Witness source → Contradiction adapter
+
+`BranchAContradictionWithWitnessSourceTarget` は witness `q` の構造的性質を
+個々の引数として受け取る。これを `RestoreWitnessProperties` structure 経由で
+`PrimeGe5BranchAPrimitiveRestoreContradictionTarget` に変換する thin adapter。
+-/
+
+/--
+`BranchAContradictionWithWitnessSourceTarget` から
+`PrimeGe5BranchAPrimitiveRestoreContradictionTarget` への thin adapter。
+
+witness `q` の個別引数は `RestoreWitnessProperties` の各 field に対応する。
+-/
+theorem primeGe5BranchAPrimitiveRestoreContradiction_of_witnessSource
+    (hSource : BranchAContradictionWithWitnessSourceTarget) :
+    PrimeGe5BranchAPrimitiveRestoreContradictionTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p hData
+  exact hSource hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    hqprime hqs hqt hcop_qy hq_ne_p
+    hData.hq_dvd_x hData.hq_not_dvd_y hData.hq_not_dvd_z
+    hData.hq_not_dvd_gap hData.hq_cong hData.hqp_dvd_GN
+
 end DkMath.FLT

@@ -113,6 +113,13 @@ abbrev BranchAContradictionRouteBundleTarget : Prop :=
 
 Branch A normal form (`gap` shape + `GN` shape) が与えられたときに、
 `s^p ≡ y^(p-1) [MOD p^3]` の否定を供給する外部 statement を表す。
+
+**DEPRECATED / FALSE**: `branchA_spow_congr_head_mod_p3` により
+`s^p ≡ y^(p-1) [MOD p^3]` が Branch A normal form から自動で従うことが
+証明済みであるため、否定を供給することは不可能。
+この target は偽命題であり、満たすことはできない。
+代わりに witness `q` の情報を含む
+`BranchAContradictionWithWitnessSourceTarget` を使うこと。
 -/
 abbrev BranchAContradictionModP3SourceTarget : Prop :=
   ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
@@ -4308,6 +4315,10 @@ theorem primeGe5BranchARefuter_of_routeBundles
 
 /--
 mod `p^3` の矛盾側前提供給 statement があれば、Branch A refuter を閉じられる。
+
+**NOTE**: `BranchAContradictionModP3SourceTarget` は偽命題であることが判明した
+（`branchA_spow_congr_head_mod_p3` 参照）。このため本 theorem の前提は
+実質的に満たされない。歴史的記録として残す。
 -/
 theorem primeGe5BranchARefuter_of_modP3Source
     (hSource : BranchAContradictionModP3SourceTarget) :
@@ -4320,6 +4331,46 @@ theorem primeGe5BranchARefuter_of_modP3Source
   rcases primeGe5BranchANormalForm_of_witness hpack hp_dvd_gap hgap with ⟨s, hsGN, _hsx⟩
   exact branchA_contradiction_of_mod_p3_conflict hpack hp_dvd_gap hgap hsGN
     (hSource hpack hp_dvd_gap hgap hsGN)
+
+/--
+`ContradictionTarget` への矛盾供給元（witness `q` 情報込み版）。
+
+`BranchAContradictionModP3SourceTarget` の後継。
+mod (p^k) の head congruence は Branch A normal form から自動で従い、
+否定を供給することは不可能である（`branchA_spow_congr_head_mod_p3` 参照）。
+一方、witness `q` の情報（`q ∣ s`, `q ∤ t`, `p ∣ (q-1)`, `q^p ∣ GN` 等）
+を組み合わせれば、より深い矛盾が得られる可能性がある。
+
+**関係**: `PrimeGe5BranchAPrimitiveRestoreContradictionTarget` と概ね等価。
+違いは witness の性質を structure bundle ではなく個々の引数で受け取る点。
+GapInvariant 側からは `BranchAPrimitiveRestoreContradictionAdapterTarget`
+経由で注入できる。
+-/
+abbrev BranchAContradictionWithWitnessSourceTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      -- witness q の構造的性質（個別引数版）
+      (q ∣ x) →
+      (¬ q ∣ y) →
+      (¬ q ∣ z) →
+      (¬ q ∣ (z - y)) →
+      (p ∣ (q - 1)) →
+      (q ^ p ∣ GN p (z - y) y) →
+      False
 
 /--
 local kernel が与えられれば、Wieferich witness refuter は既存 normal form 抽出だけで得られる。

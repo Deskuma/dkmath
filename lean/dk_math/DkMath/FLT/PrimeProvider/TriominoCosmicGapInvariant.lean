@@ -1831,6 +1831,28 @@ abbrev BranchAPrimitiveRestoreContradictionAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreContradictionTarget
 
 /--
+witness `q` 情報込み版の矛盾供給元 adapter。
+
+`BranchAContradictionModP3SourceTarget` は偽命題と判明した
+（`branchA_spow_congr_head_mod_p3` で肯定側が証明済み）。
+代わりに、witness `q` の構造的性質（`q ∣ x`, `q ∤ y`, `q ∤ z`,
+`q ∤ gap`, `p ∣ (q-1)`, `q^p ∣ GN`）を使った矛盾探索の入口となる。
+-/
+abbrev BranchAContradictionWithWitnessSourceAdapterTarget : Prop :=
+  DkMath.FLT.BranchAContradictionWithWitnessSourceTarget
+
+/--
+witness source → contradiction adapter bridge。
+
+witness source が得られれば、`RestoreWitnessProperties` 経由で
+`RestoreContradictionTarget` へ注入し、restore 全体を bypass できる。
+-/
+theorem branchAPrimitiveRestoreContradictionAdapter_of_witnessSource
+    (hSource : BranchAContradictionWithWitnessSourceAdapterTarget) :
+    BranchAPrimitiveRestoreContradictionAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreContradiction_of_witnessSource hSource
+
+/--
 矛盾路線 → `RestoreFromArithmeticTarget` adapter。
 -/
 theorem branchAPrimitiveRestoreFromArithmeticAdapter_of_contradiction
@@ -2463,6 +2485,29 @@ theorem branchAPrimitivePacketDescentAdapter_of_contradiction
     BranchAPrimitivePacketDescentAdapterTarget :=
   branchAPrimitivePacketDescentAdapter_of_boundaryCoreWitnessConcreteDefault_and_restore
     (branchAPrimitiveRestoreFromArithmeticAdapter_of_contradiction hContra)
+
+/--
+witness source → `RestoreFromArithmeticTarget` adapter（short-circuit 版）。
+
+witness source があれば、contradiction adapter を経由して
+restore 6 段チェーン全体を一気に bypass する。
+-/
+theorem branchAPrimitiveRestoreFromArithmeticAdapter_of_witnessSource
+    (hSource : BranchAContradictionWithWitnessSourceAdapterTarget) :
+    BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget :=
+  branchAPrimitiveRestoreFromArithmeticAdapter_of_contradiction
+    (branchAPrimitiveRestoreContradictionAdapter_of_witnessSource hSource)
+
+/--
+witness source → `PacketDescentTarget` adapter（最上位 short-circuit）。
+
+witness source + ExistenceMainline (no-sorry) → PacketDescent。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_witnessSource
+    (hSource : BranchAContradictionWithWitnessSourceAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  branchAPrimitivePacketDescentAdapter_of_contradiction
+    (branchAPrimitiveRestoreContradictionAdapter_of_witnessSource hSource)
 
 /--
 `GN d 1 (u - 1)` divisibility が立てば、

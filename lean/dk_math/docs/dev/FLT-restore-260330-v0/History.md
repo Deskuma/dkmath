@@ -1251,3 +1251,127 @@ Archive
 6. 次の課題:
    - `BranchAContradictionModP3SourceTarget` を満たす concrete 数学（negation 供給）をどの層で構成するか決める。
    - `mod p^3` conflict を `PrimeGe5BranchAPrimitiveRestoreContradictionTarget` 系へどう注入するか（restore/gap-invariant 側 adapter 設計）。
+
+### 日時: 2026/03/31 08:30:00 JST
+
+1. 目的:
+   - 前回の「次の課題」2 項を解決する:
+     - `BranchAContradictionModP3SourceTarget` の実現可能性を判定する。
+     - `mod p^3` conflict の `RestoreContradictionTarget` への注入設計。
+   - adapter 設計を確定し、3 ファイルに実装する。
+
+2. 実施:
+
+   **§A. `BranchAContradictionModP3SourceTarget` の偽命題判定**
+
+   数学的分析により、`BranchAContradictionModP3SourceTarget` は **偽命題** であることが確定した。
+
+   - `branchA_spow_congr_head_mod_p3` により
+     `s^p ≡ y^{p-1} [MOD p^3]` が Branch A normal form から
+     **自動で従う** ことが前回コミットで証明済み。
+   - したがって `¬ (s^p ≡ y^{p-1} [MOD p^3])` を供給することは不可能。
+   - さらに一般に、mod p^k (k ≤ p-1) の head congruence も
+     gap shape `z - y = p^{p-1} * t^p` から自動で従う。
+   - Wieferich 条件 `y^{p-1} ≡ 1 [MOD p^2]` と合わせると
+     `s^p ≡ 1 [MOD p^2]` が得られるが、`s ≡ 1 [MOD p]` と
+     `¬ p ∣ s` は両立するため矛盾しない。
+   - **結論**: mod p^k 合同式のみからの矛盾導出は不可能。
+     矛盾には witness q の情報が必須。
+
+   **§B. `ModP3SourceTarget` の docstring に DEPRECATED/FALSE 注釈を追加**
+
+   `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`:
+   - `BranchAContradictionModP3SourceTarget` の docstring に
+     `**DEPRECATED / FALSE**` 注釈を追加。
+   - `primeGe5BranchARefuter_of_modP3Source` の docstring にも
+     前提が満たされない旨の NOTE を追加。
+   - 歴史的記録として残す（削除はしない）。
+
+   **§C. `BranchAContradictionWithWitnessSourceTarget` の新設**
+
+   `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`:
+   - `BranchAContradictionWithWitnessSourceTarget` を新設:
+     - Branch A normal form + witness `q` の全構造的性質を個別引数で受け取る形
+     - `RestoreWitnessProperties` structure への前方参照を避けるため、
+       `q ∣ x`, `¬ q ∣ y`, `¬ q ∣ z`, `¬ q ∣ (z-y)`, `p ∣ (q-1)`,
+       `q^p ∣ GN` を個別引数として展開する設計にした
+   - `PrimeGe5BranchAPrimitiveRestoreContradictionTarget` との関係:
+     同一 signature（witness 性質の渡し方が structure vs 個別引数の差のみ）
+
+   **§D. thin adapter の配置**
+
+   `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]`:
+   - `primeGe5BranchAPrimitiveRestoreContradiction_of_witnessSource`:
+     `WithWitnessSourceTarget` → `RestoreContradictionTarget` への bridge。
+     個別引数を `RestoreWitnessProperties` の field に再包装する。
+
+   `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`:
+   - `BranchAContradictionWithWitnessSourceAdapterTarget`:
+     provider 側 alias。
+   - `branchAPrimitiveRestoreContradictionAdapter_of_witnessSource`:
+     witness source → contradiction adapter bridge。
+   - `branchAPrimitiveRestoreFromArithmeticAdapter_of_witnessSource`:
+     restore 6 段チェーン全体を bypass する short-circuit adapter。
+   - `branchAPrimitivePacketDescentAdapter_of_witnessSource`:
+     ExistenceMainline + witness source → PacketDescent の最上位 adapter。
+
+3. 結論:
+
+   **到達した contradiction route の全体図:**
+
+   ```
+   BranchAContradictionWithWitnessSourceTarget  [OPEN KERNEL - 新設]
+     │
+     ├─(BranchARestore)─→ RestoreContradictionTarget
+     │                       │
+     │                       └──→ RestoreFromArithmeticTarget (bypass)
+     │
+     ├─(GapInvariant)──→ ContradictionAdapter
+     │                       │
+     │                       ├──→ RestoreFromArithmeticAdapter (bypass)
+     │                       │
+     │                       └──→ PacketDescentAdapter (最上位 short-circuit)
+     │
+     └─ [DEPRECATED] BranchAContradictionModP3SourceTarget (偽命題)
+   ```
+
+   **open kernel の現状:**
+   - `BranchAContradictionWithWitnessSourceTarget` 1 本
+   - これは witness q の全性質（`q ∣ x`, `q ∤ y`, `p ∣ (q-1)`, `q^p ∣ GN` 等）
+     を前提として受け取り、`False` を導く命題。
+   - mod p^k 路線ではなく、witness q の構造的衝突から矛盾を導く新路線が必要。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA` 成功 (exit 0)
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore` 成功 (exit 0)
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant` 成功 (exit 0)
+   - `lake build`（全体）成功 (exit 0)
+   - sorry: L4099（comparison route 末端マーカー）の 1 箇所のみ、増加なし
+   - BranchA.lean: 5569 → 5620 (+51 行)
+   - BranchARestore.lean: 1114 → 1140 (+26 行)
+   - GapInvariant.lean: 3264 → 3309 (+45 行)
+   - 合計: 9947 → 10069 (+122 行)
+
+5. 失敗事例:
+   - `BranchAContradictionWithWitnessSourceTarget` の abbrev を L4334
+     （`primeGe5BranchARefuter_of_modP3Source` の直後）に初配置した際、
+     `RestoreWitnessProperties` への前方参照エラーが発生。
+     → signature を structure 参照ではなく個別引数展開に変更して解決。
+   - thin adapter `primeGe5BranchAPrimitiveRestoreContradiction_of_witnessSource` を
+     BranchA.lean 内に配置しようとしたが、
+     `PrimeGe5BranchAPrimitiveRestoreContradictionTarget` が
+     BranchARestore.lean で定義されており逆方向 import エラー。
+     → adapter を BranchARestore.lean に配置して解決。
+   - GapInvariant 側の witness source adapter が
+     `branchAPrimitiveRestoreFromArithmeticAdapter_of_contradiction` /
+     `branchAPrimitivePacketDescentAdapter_of_contradiction` を前方参照。
+     → adapter 定義を `of_contradiction` の直後に再配置して解決。
+
+6. 次の課題:
+   - **`BranchAContradictionWithWitnessSourceTarget` の証明**:
+     witness q の構造的性質から `False` を導く具体的数学の発見。
+     候補:
+     - Wieferich 条件の高次化: `y^{p-1} ≡ 1 + cp^2 [MOD p^3]` の係数 c と witness q の関係
+     - GN の q-adic 構造: `q^p ∣ GN` と `q ∤ gap` の組み合わせから GTail 内部の因子関係
+     - 円分体理論: `q ≡ 1 [MOD p]` と ℤ[ζ_p] でのイデアル分解
+   - mod p^k 路線は行き止まりと確定したため、今後は witness q 側の解析に集中する。
