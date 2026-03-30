@@ -573,3 +573,113 @@ Archive
      `PrimeGe5BranchAPrimitiveRestoreRealizationSeed`
      の field を、
      verification に必要な partial proof data に寄せて精密化する。
+
+### 日時: 2026/03/30 17:10:00 JST
+
+1. 目的:
+   - VSCode クラッシュからの作業継続。
+   - `review-008` の判定どおり、
+     `RealizationSeed` を `x'/y'` の数学的根拠付き構造体へ精密化する。
+   - `VerificationTarget` を 3 分割する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean]`
+     - `RestoreWitnessProperties` に `hqp_dvd_GN : q^p ∣ GN p (z-y) y`
+       を追加し（6 フィールド化）、
+       対応する補題 `branchA_qpow_dvd_GN` を no-sorry で実装した（6 フィールド化）。
+     - `restore_witness_properties_default` に `hsGN` 引数を追加し、
+       `hqp_dvd_GN` フィールドへの供給路を確立した。
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]`
+     - `PrimeGe5BranchAPrimitiveRestoreRealizationSeed` に
+       `hxMul : x = q * x'`（`q ∣ x` の証拠）と
+       `hyEq : y' = y`（y 不変の証拠）を追加した。
+     - `primeGe5BranchAPrimitiveRestoreRealizationSeed_default` を更新し、
+       `x' := k`（`x = q * k` を展開）、`y' := y` を数学的根拠で固定した。
+     - `VerificationTarget` を以下 3 段に分割した：
+       - `PrimeGe5BranchAPrimitiveRestoreStrictDescentTarget`（`z' < z`）
+       - `PrimeGe5BranchAPrimitiveRestoreGapDivisibilityTarget`（`p ∣ (z' - y')`）
+       - `PrimeGe5BranchAPrimitiveRestoreCounterexamplePackTarget`（`Pack p x' y' z'`）
+     - 橋定理 `primeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerification_of_three_parts`
+       で旧 `VerificationTarget` を統合した。
+
+3. 結論:
+   - `x' = x/q`, `y' = y` が `RealizationSeed` に数学的根拠付きで固定された。
+   - verification の 3 段分割が完了し、hardest kernel が
+     `CounterexamplePackTarget` に局所化された。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA` 成功
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore` 成功
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant` 成功
+   - sorry 増加なし（`BranchA.lean` の L3981 のみ）
+
+5. 次の課題:
+   - `RealizationSeed` に `hzEq : x'^p + y'^p = z'^p` を追加し、
+     3 段を no-sorry で閉じる。
+
+### 日時: 2026/03/30 17:40:00 JST
+
+1. 目的:
+   - `review-009` の方針どおり、
+     `RealizationSeed` に `hzEq : x'^p + y'^p = z'^p` を追加して
+     `z'` の算術的定義式を evidence として持たせる。
+   - `hzEq` を前提として
+     `StrictDescentTarget`・`GapDivisibilityTarget`・`CounterexamplePackTarget`
+     の 3 段を no-sorry で証明する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]`
+     - `PrimeGe5BranchAPrimitiveRestoreRealizationSeed` に
+       `hzEq : x'^p + y'^p = z'^p` を追加した。
+     - `primeGe5BranchAPrimitiveRestoreRealizationSeed_default` を削除
+       （`hzEq` を持てないため薄い wrapper が成立しなくなった）。
+       代わりに open kernel であることをコメントで明示した。
+     - 以下の 3 定理を no-sorry で実装した：
+       - `primeGe5BranchAPrimitiveRestoreStrictDescent_of_hzEq`
+         - `z^p = q^p * x'^p + y^p`、`z'^p = x'^p + y'^p`
+         - 差は `(q^p - 1) * x'^p > 0` → `z' < z`（冪単調性）
+       - `primeGe5BranchAPrimitiveRestoreGapDivisibility_of_hzEq`
+         - `gcd(p,q) = 1` → `p ∣ x'`
+         - ZMod Frobenius（フェルマーの小定理）`a^p = a`
+         - `hzEq` を ZMod p へ cast → `z' ≡ y' (mod p)` → `p ∣ (z' - y')`
+       - `primeGe5BranchAPrimitiveRestoreCounterexamplePack_of_hzEq`
+         - `hzEq` そのものが `hEq`
+         - `x' ∣ x` と `Coprime x y` → `Coprime x' y'`
+         - `0 < x'` と `hzEq` → `y' < z'`（冪単調性）
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     - 削除された `primeGe5BranchAPrimitiveRestoreRealizationSeed_default` への
+       参照を open kernel コメントで置換した。
+
+3. 結論:
+   - `RealizationSeed` が「candidate triple + arithmetic evidence」の
+     構造体として完成した。
+   - 3 段の verification がすべて no-sorry で証明された。
+   - genuinely undischarged kernel は以下の 1 本のみに収束した：
+
+     ```
+     PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget
+       : ∃ z', (x/q)^p + y^p = z'^p
+     ```
+
+     この命題の existence 証明が FLT descent の真の核心である。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore` 成功
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant` 成功
+   - sorry 数：BranchARestore.lean = 0（コード内）
+   - BranchA.lean の既存 sorry は L3981 の 1 箇所のみ（変更なし）
+
+5. 失敗事例:
+   - `hR.hxMul ▸ hx_pos` → Lean の依存型問題で motive error
+     → `hR.hxMul ▸` を使わず `Nat.pos_of_mul_pos_left` で回避
+   - `Nat.pos_pow_of_pos` が Mathlib に存在しない → `pow_pos` を使用
+   - `Nat.one_le_iff_ne_zero.mpr hpack.hp.ne_zero` → `omega` で `1 ≤ p` を使い回避
+   - `congr 1; omega` でフェルマーの小定理の exponent 計算 `p - 1 + 1 = p` が成立
+   - `hpack.hy0 : y ≠ 0` を `hR.y' ≠ 0` に使えない → `rw [hR.hyEq]` で変換
+   - `rw [hR.hxMul]; ring` → motive error → `⟨q, hR.hxMul.trans (mul_comm q hR.x')⟩`
+
+6. 次の課題:
+   - `PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget` の証明戦略の検討：
+     1. Kummer 理論経由：ℤ[ζ_p] でのイデアル分解
+     2. q-adic 持ち上げ：`q^p ∣ GN` の構造を使った z' 構成
+     3. Cosmic Formula 独自の降下構造

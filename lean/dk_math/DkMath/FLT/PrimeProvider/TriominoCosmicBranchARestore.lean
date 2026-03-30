@@ -193,8 +193,9 @@ actual smaller counterexample を実現する直前の候補データ。
 付録:
 - `x' y' z'` の候補を bundle 化する。
 - `x' = x / q`（`hxMul : x = q * x'`）と `y' = y`（`hyEq`）は数学的根拠により固定。
-- `z'` は genuine mathematical unknown であり、
-  `z'^p = (x/q)^p + y^p` の p 乗根の存在証明が未完核。
+- `hzEq : x'^p + y'^p = z'^p` が `z'` の算術的定義式。
+  これが RealizationSeed を "arithmetic evidence 付き入れ物" にする核心 field。
+  この field の存在証明が、残存する genuinely hard kernel そのものである。
 -/
 structure PrimeGe5BranchAPrimitiveRestoreRealizationSeed
     (p x y z t s q : ℕ) where
@@ -206,6 +207,8 @@ structure PrimeGe5BranchAPrimitiveRestoreRealizationSeed
   hxMul : x = q * x'
   -- y' = y（arithmetic witness q は y を割らないので降下先でも y は不変）
   hyEq  : y' = y
+  -- z' の算術的定義：x'^p + y'^p = z'^p を満たす p 乗根（これが本丸の evidence）
+  hzEq  : x' ^ p + y' ^ p = z' ^ p
 
 /--
 q-adic lift seed から descent datum を bundle 化する段。
@@ -577,23 +580,20 @@ theorem primeGe5BranchAPrimitiveRestoreDescentSeed_default :
     q hq_prime hqs hqt hcop_qy hq_ne_p hDatum
   exact ⟨⟨hDatum⟩⟩
 
-/--
-realization seed 構成段。
+/- NOTE: realization seed 構成段のターゲット。
 
-`x' := x / q`（`q ∣ x` から `hxMul` を回収）、`y' := y` は数学的根拠で固定。
-`z'` は `(x/q)^p + y^p` の p 乗根として存在するはずの genuine unknown であり、
-現段階では `z` を暫定値として保持する（verification が残存未完核）。
+`RealizationSeed` に `hzEq : x'^p + y'^p = z'^p` が加わったため、
+このターゲットは実質的に「`(x/q)^p + y^p` の p 乗根 `z'` の存在」を要求する。
+これが現在の **genuinely undischarged kernel** である。
+
+前回までの thin-wrapper default はもはや意味を持たないため、
+このターゲットはまだ open のまま保持する。
+
+証明戦略候補:
+  1. Kummer 理論経由: ℤ[ζ_p] でのイデアル分解
+  2. q-adic 持ち上げ: GN の q^p 因子を使って z' を構成
+  3. Cosmic Formula 独自の降下構造を使う手法（研究中）
 -/
-theorem primeGe5BranchAPrimitiveRestoreRealizationSeed_default :
-    PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget := by
-  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
-    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
-    q hq_prime hqs hqt hcop_qy hq_ne_p hSeed
-  -- x' := x / q (q ∣ x から導出)
-  have hData := hSeed.hDatum.hData
-  have hq_dvd_x := hData.hq_dvd_x
-  obtain ⟨k, hk⟩ := hq_dvd_x
-  exact ⟨⟨hSeed, k, y, z, hk, rfl⟩⟩
 
 /--
 residue/root 段と descent assembly 段が揃えば、
@@ -703,5 +703,160 @@ theorem primeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromSeed_of_realizat
       hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
       hqprime hqs hqt hcop_qy hq_ne_p hRealization with ⟨hpack', hp_gap', hzlt⟩
   exact ⟨hRealization.x', hRealization.y', hRealization.z', hpack', hp_gap', hzlt⟩
+
+/-!
+## hzEq を前提とした 3 つの verification 定理
+
+`RealizationSeed.hzEq : x'^p + y'^p = z'^p` を所与として、
+`StrictDescentTarget`・`GapDivisibilityTarget`・`CounterexamplePackTarget`
+の 3 段を no-sorry で証明する。
+
+これにより、genuinely undischarged kernel は `RealizationSeedTarget`
+（= `(x/q)^p + y^p` の p 乗根 z' の存在）1 本へ収束する。
+-/
+
+/--
+strict descent 定理：`hzEq` から `z' < z` を証明する。
+
+証明の核心：
+- `x = q * x'`, `q ≥ 2` より `x' < x`
+- `z^p = q^p * x'^p + y^p` と `z'^p = x'^p + y^p` の差が `(q^p - 1) * x'^p > 0`
+- `z'^p < z^p` → `z' < z` (p 乗は`ℕ`上で単調)
+-/
+theorem primeGe5BranchAPrimitiveRestoreStrictDescent_of_hzEq :
+    PrimeGe5BranchAPrimitiveRestoreStrictDescentTarget := by
+  intro p x y z t s hpack _ _ _ hsx _ _ _ _ _ _
+    q hq_prime _ _ _ _ hR
+  -- x' > 0
+  have hx'_pos : 0 < hR.x' := by
+    have hx_pos : 0 < x := Nat.pos_of_ne_zero hpack.hx0
+    have : 0 < q * hR.x' := hR.hxMul ▸ hx_pos
+    exact Nat.pos_of_mul_pos_left this
+  -- z^p = q^p * x'^p + y^p
+  have hz_pow_eq : z ^ p = q ^ p * hR.x' ^ p + hR.y' ^ p := by
+    have hxp : x ^ p = q ^ p * hR.x' ^ p := by
+      calc x ^ p = (q * hR.x') ^ p := by congr 1; exact hR.hxMul
+        _ = q ^ p * hR.x' ^ p     := mul_pow q hR.x' p
+    rw [← hpack.hEq, hxp, hR.hyEq]
+  -- z'^p < z^p  (hR.z'^p = x'^p + y'^p < q^p * x'^p + y'^p = z^p)
+  have hqp_ge2 : 2 ≤ q ^ p :=
+    le_trans hq_prime.two_le (Nat.le_self_pow hpack.hp.ne_zero q)
+  have hx'p_pos : 0 < hR.x' ^ p := pow_pos hx'_pos p
+  have hz'_lt_z_pow : hR.z' ^ p < z ^ p := by
+    rw [hz_pow_eq]
+    linarith [hR.hzEq.symm, Nat.mul_le_mul_right (hR.x' ^ p) hqp_ge2]
+  -- z'^p < z^p → z' < z
+  by_contra h
+  push_neg at h
+  exact Nat.not_lt.mpr (Nat.pow_le_pow_left h p) hz'_lt_z_pow
+
+/--
+gap divisibility 定理：`hzEq` + フェルマーの小定理から `p ∣ (z' - y')` を証明する。
+
+証明の核心：
+1. `p ∣ x'`（`x = p*(t*s) = q*x'` と `gcd(p,q)=1` より）
+2. ZMod p で Frobenius: `a^p = a` (= フェルマーの小定理)
+3. `hzEq` を ZMod p へ降ろすと `z' ≡ y' (mod p)`
+4. `z' ≥ y'`（`hzEq` と `x' > 0` より）→ `p ∣ (z' - y')`
+-/
+theorem primeGe5BranchAPrimitiveRestoreGapDivisibility_of_hzEq :
+    PrimeGe5BranchAPrimitiveRestoreGapDivisibilityTarget := by
+  intro p x y z t s hpack _ _ _ hsx _ _ _ _ _ _
+    q hq_prime _ _ _ hq_ne_p hR
+  -- Step 1: p ∣ x' (x = q*x' = p*(t*s) と gcd(p,q)=1 より)
+  have hcop_pq : Nat.Coprime p q := by
+    apply (Nat.Prime.coprime_iff_not_dvd hpack.hp).mpr
+    intro h
+    exact hq_ne_p.symm
+      ((Nat.dvd_prime hq_prime).mp h |>.resolve_left hpack.hp.ne_one)
+  have hp_dvd_x' : p ∣ hR.x' := by
+    have h_eq : q * hR.x' = p * (t * s) := by
+      rw [← hR.hxMul, hsx]
+    have hp_dvd_mul : p ∣ q * hR.x' := ⟨t * s, h_eq⟩
+    exact hcop_pq.dvd_of_dvd_mul_left hp_dvd_mul
+  -- Step 2: ZMod p で Frobenius (フェルマーの小定理)
+  haveI : Fact (Nat.Prime p) := ⟨hpack.hp⟩
+  have frobenius : ∀ (a : ZMod p), a ^ p = a := fun a => by
+    by_cases ha : a = 0
+    · exact ha ▸ zero_pow hpack.hp.ne_zero
+    · have hcard := ZMod.pow_card_sub_one_eq_one ha
+      have hp_pos : 0 < p := hpack.hp.pos
+      calc a ^ p = a ^ (p - 1 + 1) := by congr 1; omega
+        _ = a ^ (p - 1) * a     := pow_succ a (p - 1)
+        _ = 1 * a               := by rw [hcard]
+        _ = a                   := one_mul a
+  -- Step 3: hzEq を ZMod p へ cast — z' ≡ y' (mod p)
+  have hx'_zmod : (hR.x' : ZMod p) = 0 :=
+    (ZMod.natCast_eq_zero_iff hR.x' p).mpr hp_dvd_x'
+  have hzEq_mod : (hR.z' : ZMod p) = (hR.y' : ZMod p) := by
+    have h := congr_arg (Nat.cast : ℕ → ZMod p) hR.hzEq
+    push_cast at h
+    rw [frobenius, frobenius, frobenius, hx'_zmod, zero_add] at h
+    exact h.symm
+  -- Step 4: y' ≤ z' (hzEq と x' > 0 より)
+  have hx'_pos : 0 < hR.x' := by
+    have hx_pos : 0 < x := Nat.pos_of_ne_zero hpack.hx0
+    have : 0 < q * hR.x' := hR.hxMul ▸ hx_pos
+    exact Nat.pos_of_mul_pos_left this
+  have hy'_le_z' : hR.y' ≤ hR.z' := by
+    by_contra h
+    push_neg at h
+    have hlt : hR.z' ^ p < hR.y' ^ p :=
+      Nat.pow_lt_pow_left h hpack.hp.ne_zero
+    linarith [hR.hzEq, Nat.zero_le (hR.x' ^ p)]
+  -- Step 5: p ∣ (z' - y')
+  have h_sub : (↑(hR.z' - hR.y') : ZMod p) = 0 := by
+    rw [Nat.cast_sub hy'_le_z']
+    rw [hzEq_mod, sub_self]
+  exact (ZMod.natCast_eq_zero_iff (hR.z' - hR.y') p).mp h_sub
+
+/--
+counterexample pack 定理：`hzEq` から `PrimeGe5CounterexamplePack p x' y' z'` を構成する。
+
+証明の核心：
+- `hEq` : `hzEq` そのもの
+- `Coprime x' y'` : `x' ∣ x` と `hpack.hxy : Coprime x y` より
+- `y' < z'` : `0 < x'` と `hzEq : x'^p + y'^p = z'^p` より
+- `p ≥ 5`, `x' ≠ 0`, `y' ≠ 0`, `z' ≠ 0` : 各条件より
+-/
+theorem primeGe5BranchAPrimitiveRestoreCounterexamplePack_of_hzEq :
+    PrimeGe5BranchAPrimitiveRestoreCounterexamplePackTarget := by
+  intro p x y z t s hpack _ _ _ _ _ _ _ _ _ _
+    q hq_prime _ _ _ _ hR
+  -- x' > 0
+  have hx'_pos : 0 < hR.x' := by
+    have hx_pos : 0 < x := Nat.pos_of_ne_zero hpack.hx0
+    have : 0 < q * hR.x' := hR.hxMul ▸ hx_pos
+    exact Nat.pos_of_mul_pos_left this
+  -- y' > 0 (= y > 0)
+  have hy'_pos : 0 < hR.y' := by
+    rw [hR.hyEq]; exact Nat.pos_of_ne_zero hpack.hy0
+  -- Coprime x' y'
+  have hcop_x'y' : Nat.Coprime hR.x' hR.y' := by
+    rw [hR.hyEq]
+    exact hpack.hxy.coprime_dvd_left
+      ⟨q, hR.hxMul.trans (mul_comm q hR.x')⟩
+  -- y' < z'
+  have hy'_lt_z' : hR.y' < hR.z' := by
+    have h : hR.y' ^ p < hR.z' ^ p := by
+      rw [← hR.hzEq]
+      linarith [pow_pos hx'_pos p]
+    by_contra hle
+    push_neg at hle
+    exact Nat.not_lt.mpr (Nat.pow_le_pow_left hle p) h
+  -- z' > 0
+  have hz'_pos : 0 < hR.z' := Nat.lt_trans hy'_pos hy'_lt_z'
+  -- PrimeGe5CounterexamplePack p x' y' z'
+  exact {
+    hp    := hpack.hp
+    hxy   := hcop_x'y'
+    hyz   := Nat.le_of_lt hy'_lt_z'
+    hyz_lt := hy'_lt_z'
+    hEq   := hR.hzEq
+    hp5   := hpack.hp5
+    hx0   := Nat.pos_iff_ne_zero.mp hx'_pos
+    hy0   := Nat.pos_iff_ne_zero.mp hy'_pos
+    hz0   := Nat.pos_iff_ne_zero.mp hz'_pos
+  }
 
 end DkMath.FLT

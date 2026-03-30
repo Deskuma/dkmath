@@ -1812,10 +1812,9 @@ theorem branchAPrimitiveRestoreDescentSeedAdapter_default :
     BranchAPrimitiveRestoreDescentSeedAdapterTarget :=
   DkMath.FLT.primeGe5BranchAPrimitiveRestoreDescentSeed_default
 
-/-- restore realization-seed 段は provider 側から見ても default 実装済みである。 -/
-theorem branchAPrimitiveRestoreRealizationSeedAdapter_default :
-    BranchAPrimitiveRestoreRealizationSeedAdapterTarget :=
-  DkMath.FLT.primeGe5BranchAPrimitiveRestoreRealizationSeed_default
+/- NOTE: restore realization-seed 段は `hzEq` フィールド追加により
+   `primeGe5BranchAPrimitiveRestoreRealizationSeed_default` が削除された。
+   `BranchAPrimitiveRestoreRealizationSeedAdapterTarget` は現在 open kernel として保持する。 -/
 
 /--
 restore residue/root 段と descent assembly 段が揃えば、
