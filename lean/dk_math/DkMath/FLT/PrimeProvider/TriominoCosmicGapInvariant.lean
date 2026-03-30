@@ -1814,7 +1814,30 @@ theorem branchAPrimitiveRestoreDescentSeedAdapter_default :
 
 /- NOTE: restore realization-seed 段は `hzEq` フィールド追加により
    `primeGe5BranchAPrimitiveRestoreRealizationSeed_default` が削除された。
-   `BranchAPrimitiveRestoreRealizationSeedAdapterTarget` は現在 open kernel として保持する。 -/
+   `BranchAPrimitiveRestoreRealizationSeedAdapterTarget` は現在 open kernel として保持する。
+
+   ただし矛盾路線（ContradictionTarget）が証明されれば、
+   `branchAPrimitiveRestoreFromArithmeticAdapter_of_contradiction` により
+   realization seed を含む 6 段チェーン全体を bypass して
+   `RestoreFromArithmeticTarget` に直接接続できる。 -/
+
+/--
+矛盾路線 adapter。
+
+Branch A の前提から直接 `False` を導ける場合、
+6 段チェーン全体を bypass して `RestoreFromArithmeticTarget` に接続する。
+-/
+abbrev BranchAPrimitiveRestoreContradictionAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreContradictionTarget
+
+/--
+矛盾路線 → `RestoreFromArithmeticTarget` adapter。
+-/
+theorem branchAPrimitiveRestoreFromArithmeticAdapter_of_contradiction
+    (hContra : BranchAPrimitiveRestoreContradictionAdapterTarget) :
+    BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketRestoreFromArithmetic_of_contradiction
+    hContra
 
 /--
 restore residue/root 段と descent assembly 段が揃えば、

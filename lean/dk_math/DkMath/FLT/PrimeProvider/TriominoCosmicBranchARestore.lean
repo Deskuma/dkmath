@@ -860,6 +860,129 @@ theorem primeGe5BranchAPrimitiveRestoreCounterexamplePack_of_hzEq :
   }
 
 /-!
+## §F. 矛盾路線（Contradiction Route）
+
+### 設計背景
+
+`RealizationSeedTarget` は「`(x/q)^p + y^p = z'^p` なる z' の存在」を要求する。
+しかし Branch B の分析から、Branch B の z' 構成は `False.elim`
+（NoWieferich bridge による前提矛盾）で行われていることが判明した。
+
+Branch A でも同様に、前提から直接 `False` を導くのが正しい攻略路線である。
+`False` が得られれば `RealizationSeedTarget` は vacuously satisfied になり、
+6 段の分割チェーン全体を bypass できる。
+
+### 数学的根拠
+
+Branch A の前提には FLT 反例の存在が含まれる。
+Wiles の定理により FLT 反例は存在しないため、前提は数学的に矛盾している。
+ゆえに `ContradictionTarget` は数学的には真であるが、
+Lean で形式的に証明するには Wiles 定理とは独立な矛盾源が必要。
+
+候補:
+1. Wieferich 条件 `y^{p-1} ≡ 1 [MOD p^2]` と `q ≡ 1 [MOD p]` の組み合わせ
+2. Kummer 理論: ℤ[ζ_p] のイデアル分解と正則素数理論
+3. Cosmic Formula / GN 構造の deeper analysis
+
+現段階ではこの矛盾源は open kernel として保持する。
+-/
+
+/--
+Branch A primitive restore の前提から直接 `False` を導く target。
+
+これは `RealizationSeedTarget`（z' の存在構成）の **代替路線** であり、
+前提そのものが矛盾していることを示せば 6 段チェーン全体を bypass できる。
+
+数学的には「FLT の反例 + Branch A 正規形 + 原始素因子の全性質」
+が inconsistent であることの形式証明に相当する。
+
+用語: 「矛盾路線」（contradiction route）。
+-/
+abbrev PrimeGe5BranchAPrimitiveRestoreContradictionTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      RestoreWitnessProperties p x y z t s q →
+      False
+
+/--
+矛盾路線 → `RealizationSeedTarget`。
+
+`False` が得られれば、z' の存在は vacuously 構成できる。
+-/
+theorem primeGe5BranchAPrimitiveRestoreRealizationSeed_of_contradiction
+    (hContra : PrimeGe5BranchAPrimitiveRestoreContradictionTarget) :
+    PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p hSeed
+  have hData : RestoreWitnessProperties p x y z t s q :=
+    restore_witness_properties_default
+      hpack hp_dvd_gap hgap hsGN hsx
+      hqprime hqs hqt hcop_qy hq_ne_p
+  exact absurd
+    (hContra hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hData)
+    id
+
+/--
+矛盾路線 → `SmallerCounterexampleFromArithmeticTarget`。
+
+6 段チェーン全体を bypass する最も直截な bridge。
+`False` が得られれば smaller counterexample は trivially 構成できる。
+-/
+theorem primeGe5BranchAPrimitiveSmallerCounterexampleFromArithmetic_of_contradiction
+    (hContra : PrimeGe5BranchAPrimitiveRestoreContradictionTarget) :
+    PrimeGe5BranchAPrimitiveSmallerCounterexampleFromArithmeticTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p
+  have hData : RestoreWitnessProperties p x y z t s q :=
+    restore_witness_properties_default
+      hpack hp_dvd_gap hgap hsGN hsx
+      hqprime hqs hqt hcop_qy hq_ne_p
+  exact absurd
+    (hContra hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hData)
+    id
+
+/--
+矛盾路線 → `RestoreFromArithmeticTarget`。
+
+6 段チェーン + packet packaging を含めて全て bypass する最上位 bridge。
+-/
+theorem primeGe5BranchAPrimitivePacketRestoreFromArithmetic_of_contradiction
+    (hContra : PrimeGe5BranchAPrimitiveRestoreContradictionTarget) :
+    PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p
+  have hData : RestoreWitnessProperties p x y z t s q :=
+    restore_witness_properties_default
+      hpack hp_dvd_gap hgap hsGN hsx
+      hqprime hqs hqt hcop_qy hq_ne_p
+  exact absurd
+    (hContra hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hData)
+    id
+
+/-!
 ## §Q. q-adic descent 構造補題群
 
 `RealizationSeedTarget` の攻略に向けた足場補題。
@@ -913,9 +1036,9 @@ def branchA_qadic_descent_data
     {p x y z t s q : ℕ}
     (hpack : PrimeGe5CounterexamplePack p x y z)
     (hsx : x = p * (t * s))
-    (hq_prime : Nat.Prime q)
+    (_hq_prime : Nat.Prime q)
     (hqs : q ∣ s)
-    (hData : RestoreWitnessProperties p x y z t s q) :
+    (_hData : RestoreWitnessProperties p x y z t s q) :
     BranchAQAdicDescentData p x y z t s q := by
   set s' := s / q with hs'_def
   have hs_eq : s = q * s' := by
@@ -937,7 +1060,7 @@ def branchA_qadic_descent_data
 `q ∣ s` → `s = q * s'` → `x = p * t * q * s' = q * (p * t * s')` → `x/q = p * t * s'`。
 -/
 theorem branchA_xdiv_eq_p_mul_t_mul_s'
-    {p x y z t s q : ℕ}
+    {p x _y _z t s q : ℕ}
     (hsx : x = p * (t * s))
     (hqs : q ∣ s)
     (hq_prime : Nat.Prime q)

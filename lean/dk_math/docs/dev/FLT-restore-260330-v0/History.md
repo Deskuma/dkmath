@@ -788,3 +788,74 @@ Archive
      現在の descent 設計は「smaller packet を構成する」だが、
      真の攻略は「前提矛盾を示す」こと。
      これは Branch A のアーキテクチャそのものの設計転換を示唆する。
+
+### 日時: 2026/03/30 19:20:00 JST
+
+1. 目的:
+   - 前回の分析結果「正しい路線は矛盾（`False.elim`）」を受けて、
+     矛盾路線のアーキテクチャを設計・実装する。
+   - `RealizationSeedTarget`（z' 存在構成）を bypass し、
+     `ContradictionTarget`（前提矛盾）に open kernel を移行する。
+   - 既存の 6 段チェーンを壊さず、代替路線として接続する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]`
+     §F セクション「矛盾路線（Contradiction Route）」を追加した。
+     1. `PrimeGe5BranchAPrimitiveRestoreContradictionTarget` — 新設 target
+        - Branch A 全前提 + `RestoreWitnessProperties` → `False`
+     2. `primeGe5BranchAPrimitiveRestoreRealizationSeed_of_contradiction`
+        - `ContradictionTarget → RealizationSeedTarget`（`False.elim`）
+     3. `primeGe5BranchAPrimitiveSmallerCounterexampleFromArithmetic_of_contradiction`
+        - `ContradictionTarget → SmallerCounterexampleFromArithmeticTarget`
+        - 6 段チェーン全体を bypass する直截な bridge
+     4. `primeGe5BranchAPrimitivePacketRestoreFromArithmetic_of_contradiction`
+        - `ContradictionTarget → RestoreFromArithmeticTarget`
+        - packet 包装含めて最上位まで bypass する bridge
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     provider 側 adapter を追加した。
+     1. `BranchAPrimitiveRestoreContradictionAdapterTarget` — alias
+     2. `branchAPrimitiveRestoreFromArithmeticAdapter_of_contradiction`
+        - `ContradictionTarget → RestoreFromArithmeticTarget` adapter
+
+3. 結論:
+   - open kernel が以下のように移行した：
+     - 旧: `RealizationSeedTarget`
+           = `∃ z', (x/q)^p + y^p = z'^p`（z' の存在構成）
+     - 新: `ContradictionTarget`
+           = `[Branch A 全前提 + RestoreWitnessProperties] → False`（前提矛盾）
+   - `ContradictionTarget` が証明されれば：
+     - `RealizationSeedTarget` は `False.elim` で satisfied
+     - 6 段チェーン（residue/root → q-adic → datum → seed → realization → verification）
+       全体が bypass される
+     - `RestoreFromArithmeticTarget` → `SmallerPacket` → Branch A refuter が完成する
+   - sorry 増加なし。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore` 成功
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant` 成功
+   - sorry 数：BranchA.lean L3981 の 1 箇所のみ（変更なし）
+   - BranchARestore.lean: 991 行 → 1114 行（+123 行）
+
+5. アーキテクチャ図:
+
+   ```
+   ContradictionTarget (NEW, open)
+     │
+     ├─→ RealizationSeedTarget        (bypass via False.elim)
+     ├─→ SmallerCounterexampleTarget   (bypass via False.elim)
+     └─→ RestoreFromArithmeticTarget   (bypass via False.elim)
+           │
+           └─→ SmallerPacket → descent → minimal 矛盾 → False
+   ```
+
+   既存の 6 段分割チェーンは保持されるが、
+   `ContradictionTarget` 1 本で全体が short-circuit される。
+
+6. 次の課題:
+   - `ContradictionTarget` の証明（= Branch A の数学的矛盾源の特定と形式化）
+   - 候補:
+     1. Wieferich 条件 `y^{p-1} ≡ 1 [MOD p^2]` からの構造的矛盾
+     2. GN の p^2 可除性と gap 構造の不整合
+     3. Cosmic Formula のさらに深い構造（GN の mod p^p 展開）
+     4. `q^p ∣ GN` + `gcd(q, gap) = 1` + `gap = p^{p-1} * t^p`
+        の p-adic valuation 不整合
