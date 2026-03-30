@@ -5030,4 +5030,238 @@ theorem primeGe5BranchARefuter_default :
     primeGe5BranchAShapeFactorization_default
     primeGe5BranchAShapeValueToRefuter_default
 
+/-! ### §R. Restore structural lemmas
+
+Branch A normal form の primitive packet restore に向けた構造的補題群。
+ここでは、原始素因子 witness `q` の持つ必然的な性質を形式化する。
+-/
+
+/--
+FLT 等式 `x^p + y^p = z^p` と `q ∣ x` から、`z^p ≡ y^p [MOD q]` が従う。
+-/
+theorem flt_zpow_congr_mod_of_dvd_x
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hq_dvd_x : q ∣ x) :
+    z ^ p ≡ y ^ p [MOD q] := by
+  have hxp : q ∣ x ^ p := dvd_pow hq_dvd_x hpack.hp.ne_zero
+  have hEq := hpack.hEq  -- x^p + y^p = z^p
+  -- x^p ≡ 0 [MOD q] なので z^p = x^p + y^p ≡ 0 + y^p = y^p [MOD q]
+  have hmod_x : x ^ p ≡ 0 [MOD q] := Nat.modEq_zero_iff_dvd.mpr hxp
+  -- x^p + y^p ≡ 0 + y^p = y^p [MOD q]
+  have hmod_sum : x ^ p + y ^ p ≡ y ^ p [MOD q] := by
+    have := hmod_x.add_right (y ^ p)
+    simpa using this
+  rw [hEq] at hmod_sum
+  exact hmod_sum
+
+/--
+FLT 反例で `q ∣ x`, `q ∤ y` なら `q ∤ z`。
+-/
+theorem flt_not_dvd_z_of_dvd_x_not_dvd_y
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hq_prime : Nat.Prime q)
+    (hq_dvd_x : q ∣ x)
+    (hq_not_dvd_y : ¬ q ∣ y) :
+    ¬ q ∣ z := by
+  intro hq_dvd_z
+  have hq_dvd_zp : q ∣ z ^ p := dvd_pow hq_dvd_z hpack.hp.ne_zero
+  have hq_dvd_xp : q ∣ x ^ p := dvd_pow hq_dvd_x hpack.hp.ne_zero
+  have hq_dvd_yp : q ∣ y ^ p := by
+    have hEq : x ^ p + y ^ p = z ^ p := hpack.hEq
+    -- z^p ≡ y^p [MOD q] (from above-style)
+    have hmod : z ^ p ≡ y ^ p [MOD q] :=
+      flt_zpow_congr_mod_of_dvd_x hpack hq_dvd_x
+    -- q ∣ z → q ∣ z^p → z^p ≡ 0 [MOD q]
+    have hmod_z : z ^ p ≡ 0 [MOD q] :=
+      Nat.modEq_zero_iff_dvd.mpr hq_dvd_zp
+    -- 0 ≡ z^p [MOD q] → z^p ≡ y^p [MOD q] → 0 ≡ y^p [MOD q]
+    have hmod_y : y ^ p ≡ 0 [MOD q] := hmod.symm.trans hmod_z
+    exact (Nat.modEq_zero_iff_dvd).mp hmod_y
+  have hq_dvd_y : q ∣ y := hq_prime.dvd_of_dvd_pow hq_dvd_yp
+  exact hq_not_dvd_y hq_dvd_y
+
+/--
+FLT 反例で `q ∣ x`, `q ∤ y`, `q ∤ (z-y)` なら、
+`ZMod q` 上で `(z : ZMod q) ≠ (y : ZMod q)` かつ両方 0 でない。
+-/
+theorem flt_zmod_ne_of_not_dvd_gap
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (_hq_prime : Nat.Prime q)
+    (_hq_dvd_x : q ∣ x)
+    (hq_not_dvd_y : ¬ q ∣ y)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y)) :
+    (z : ZMod q) ≠ (y : ZMod q) ∧ (y : ZMod q) ≠ 0 := by
+  constructor
+  · intro heq
+    have : q ∣ (z - y) := by
+      have hsub : (z : ZMod q) - (y : ZMod q) = 0 := sub_eq_zero.mpr heq
+      rw [← Nat.cast_sub hpack.hyz] at hsub
+      exact (ZMod.natCast_eq_zero_iff (z - y) q).mp hsub
+    exact hq_not_dvd_gap this
+  · intro heq
+    have := (ZMod.natCast_eq_zero_iff y q).mp heq
+    exact hq_not_dvd_y this
+
+/--
+Branch A の restore witness `q` は必ず `p ∣ (q - 1)` を満たす。
+
+**証明スケッチ：**
+1. `q ∣ s` → `q ∣ x`（∵ `x = p·t·s`）
+2. FLT 等式 `x^p + y^p = z^p` + `q ∣ x` → `z^p ≡ y^p [MOD q]`
+3. `ZMod q` 上で `(z·y⁻¹)^p = 1` かつ `z·y⁻¹ ≠ 1`
+4. `orderOf(z·y⁻¹) = p`（orderOf_eq_prime）
+5. Lagrange → `p ∣ |(ZMod q)*| = q - 1`
+-/
+theorem restore_witness_cong_one_mod_p
+    {p x y z t s q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (_hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsx : x = p * (t * s))
+    (hq_prime : Nat.Prime q)
+    (hqs : q ∣ s)
+    (hqt : ¬ q ∣ t)
+    (hcop_qy : Nat.Coprime q y)
+    (hq_ne_p : q ≠ p) :
+    p ∣ (q - 1) := by
+  -- Step 0: 前提の性質を導出
+  have hq_gt_one : 1 < q := hq_prime.one_lt
+  have hq_pos : 0 < q := hq_prime.pos
+  have hp_prime := hpack.hp
+  have hp_pos := hp_prime.pos
+  -- q ∣ x (from x = p * (t * s) and q ∣ s)
+  have hq_dvd_x : q ∣ x := by
+    rw [hsx]
+    exact dvd_mul_of_dvd_right (dvd_mul_of_dvd_right hqs t) p
+  -- q ∤ y (from Coprime q y)
+  have hq_not_dvd_y : ¬ q ∣ y := by
+    exact (Nat.Prime.coprime_iff_not_dvd hq_prime).mp hcop_qy
+  -- q ∤ (z - y) (from z - y = p^{p-1} * t^p, q ∤ t, q ≠ p)
+  have hq_not_dvd_gap : ¬ q ∣ (z - y) := by
+    rw [hgap]
+    intro hq_dvd_mul
+    rcases (hq_prime.dvd_mul).mp hq_dvd_mul with hq_dvd_ppow | hq_dvd_tpow
+    · have hq_dvd_p : q ∣ p := hq_prime.dvd_of_dvd_pow hq_dvd_ppow
+      exact hq_ne_p ((Nat.dvd_prime hp_prime).mp hq_dvd_p |>.resolve_left hq_prime.ne_one)
+    · exact hqt (hq_prime.dvd_of_dvd_pow hq_dvd_tpow)
+  -- q ∤ z
+  have hq_not_dvd_z : ¬ q ∣ z :=
+    flt_not_dvd_z_of_dvd_x_not_dvd_y hpack hq_prime hq_dvd_x hq_not_dvd_y
+  -- Step 1: ZMod q 上での計算
+  haveI : Fact (Nat.Prime q) := ⟨hq_prime⟩
+  haveI : Fact (Nat.Prime p) := ⟨hp_prime⟩
+  -- y は ZMod q で可逆
+  have hy_ne_zero : (y : ZMod q) ≠ 0 := by
+    intro heq
+    exact hq_not_dvd_y ((ZMod.natCast_eq_zero_iff y q).mp heq)
+  have hz_ne_zero : (z : ZMod q) ≠ 0 := by
+    intro heq
+    exact hq_not_dvd_z ((ZMod.natCast_eq_zero_iff z q).mp heq)
+  have hx_eq_zero : (x : ZMod q) = 0 := by
+    exact (ZMod.natCast_eq_zero_iff x q).mpr hq_dvd_x
+  -- z^p ≡ y^p in ZMod q
+  have hzp_eq_yp : (z : ZMod q) ^ p = (y : ZMod q) ^ p := by
+    have hFLT : (x : ZMod q) ^ p + (y : ZMod q) ^ p = (z : ZMod q) ^ p := by
+      have hEq := hpack.hEq
+      have : (↑(x ^ p + y ^ p) : ZMod q) = (↑(z ^ p) : ZMod q) := by
+        congr 1
+      simpa [Nat.cast_add, Nat.cast_pow] using this
+    rw [hx_eq_zero, zero_pow hpack.hp.ne_zero, zero_add] at hFLT
+    exact hFLT.symm
+  -- z ≠ y in ZMod q
+  have hz_ne_y : (z : ZMod q) ≠ (y : ZMod q) := by
+    intro heq
+    have : (z : ZMod q) - (y : ZMod q) = 0 := sub_eq_zero.mpr heq
+    have hq_dvd : q ∣ (z - y) := by
+      have hsub : (z : ZMod q) - (y : ZMod q) = 0 := sub_eq_zero.mpr heq
+      rw [← Nat.cast_sub hpack.hyz] at hsub
+      exact (ZMod.natCast_eq_zero_iff (z - y) q).mp hsub
+    exact hq_not_dvd_gap hq_dvd
+  -- Step 2: y は ZMod q の単元なので y⁻¹ が存在する
+  -- (z * y⁻¹)^p = z^p * (y⁻¹)^p = y^p * (y⁻¹)^p = 1
+  have hy_unit : IsUnit (y : ZMod q) := by
+    rw [ZMod.isUnit_iff_coprime]
+    exact hcop_qy.symm
+  -- z * y⁻¹ の p 乗を計算
+  let ω : ZMod q := (z : ZMod q) * (↑y : ZMod q)⁻¹
+  have hω_pow : ω ^ p = 1 := by
+    change ((z : ZMod q) * (↑y : ZMod q)⁻¹) ^ p = 1
+    rw [mul_pow, hzp_eq_yp, ← mul_pow]
+    rw [mul_inv_cancel₀ hy_ne_zero, one_pow]
+  -- ω ≠ 1
+  have hω_ne_one : ω ≠ 1 := by
+    change (z : ZMod q) * (↑y : ZMod q)⁻¹ ≠ 1
+    intro heq
+    have : (z : ZMod q) = (y : ZMod q) := by
+      have h := heq
+      field_simp at h
+      exact h
+    exact hz_ne_y this
+  -- Step 3: orderOf ω = p
+  have hω_order : orderOf ω = p := by
+    exact orderOf_eq_prime hω_pow hω_ne_one
+  -- Step 4: orderOf ω ∣ (q - 1) by Fermat's Little Theorem
+  -- ZMod q is a field when q is prime, and ω ≠ 0
+  have hω_ne_zero : ω ≠ 0 := by
+    change (z : ZMod q) * (↑y : ZMod q)⁻¹ ≠ 0
+    exact mul_ne_zero hz_ne_zero (inv_ne_zero hy_ne_zero)
+  have horder_dvd : orderOf ω ∣ (q - 1) := by
+    -- ω は ZMod q の非零元なので、Fermat の小定理 / 群の位数で q-1 を割る
+    -- ZMod q is a field, so (ZMod q)* has order q-1
+    -- orderOf ω | |(ZMod q)*| = q - 1
+    -- ω^(q-1) = 1 by ZMod.pow_card_sub_one_eq_one
+    have hω_pow_card : ω ^ (q - 1) = 1 := by
+      exact ZMod.pow_card_sub_one_eq_one hω_ne_zero
+    exact orderOf_dvd_of_pow_eq_one hω_pow_card
+  -- Step 5: p ∣ (q - 1)
+  rw [← hω_order]
+  exact horder_dvd
+
+/--
+Branch A restore witness `q` の必然的性質をまとめた構造体。
+
+`q ∣ s, ¬ q ∣ t, Coprime q y, q ≠ p` の組から導かれる全ての性質を束ねる。
+-/
+structure RestoreWitnessProperties (p x y z t s q : ℕ) : Prop where
+  hq_dvd_x : q ∣ x
+  hq_not_dvd_y : ¬ q ∣ y
+  hq_not_dvd_z : ¬ q ∣ z
+  hq_not_dvd_gap : ¬ q ∣ (z - y)
+  hq_cong : p ∣ (q - 1)
+
+/--
+全ての RestoreWitnessProperties を一度に構成するバンドル定理。
+-/
+theorem restore_witness_properties_default
+    {p x y z t s q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsx : x = p * (t * s))
+    (hq_prime : Nat.Prime q)
+    (hqs : q ∣ s)
+    (hqt : ¬ q ∣ t)
+    (hcop_qy : Nat.Coprime q y)
+    (hq_ne_p : q ≠ p) :
+    RestoreWitnessProperties p x y z t s q where
+  hq_dvd_x := by
+    rw [hsx]; exact dvd_mul_of_dvd_right (dvd_mul_of_dvd_right hqs t) p
+  hq_not_dvd_y := (Nat.Prime.coprime_iff_not_dvd hq_prime).mp hcop_qy
+  hq_not_dvd_z :=
+    flt_not_dvd_z_of_dvd_x_not_dvd_y hpack hq_prime
+      (by rw [hsx]; exact dvd_mul_of_dvd_right (dvd_mul_of_dvd_right hqs t) p)
+      ((Nat.Prime.coprime_iff_not_dvd hq_prime).mp hcop_qy)
+  hq_not_dvd_gap := by
+    rw [hgap]
+    intro hq_dvd_mul
+    rcases (hq_prime.dvd_mul).mp hq_dvd_mul with hq_dvd_ppow | hq_dvd_tpow
+    · have hq_dvd_p : q ∣ p := hq_prime.dvd_of_dvd_pow hq_dvd_ppow
+      exact hq_ne_p ((Nat.dvd_prime hpack.hp).mp hq_dvd_p |>.resolve_left hq_prime.ne_one)
+    · exact hqt (hq_prime.dvd_of_dvd_pow hq_dvd_tpow)
+  hq_cong := restore_witness_cong_one_mod_p hpack hp_dvd_gap hgap hsx
+    hq_prime hqs hqt hcop_qy hq_ne_p
+
 end DkMath.FLT

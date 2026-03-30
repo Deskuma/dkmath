@@ -122,3 +122,38 @@ Archive
    - D3 route: target を sub-target に分割する設計
    - D4 route: 前提矛盾の可能性をさらに深掘りする
    - ValuationPeel 側の `PacketFromErrorTarget` の未実装状況も確認する
+
+### 日時: 2026/03/30 14:30 JST
+
+1. 目的:
+   - `q ≡ 1 [MOD p]` structural lemma を Lean で実装する。
+   - FLT 等式から ZMod q での計算を経由し、orderOf 理論で `p ∣ (q-1)` を形式化する。
+
+2. 実施:
+   - `TriominoCosmicBranchA.lean` に §R (Restore structural lemmas) セクションを新設。
+   - 以下の 5 定理 + 1 構造体を sorry なしで実装：
+   - (a) `flt_zpow_congr_mod_of_dvd_x`: `q ∣ x` → `z^p ≡ y^p [MOD q]`
+   - (b) `flt_not_dvd_z_of_dvd_x_not_dvd_y`: `q ∣ x`, `q ∤ y` → `q ∤ z`
+   - (c) `flt_zmod_ne_of_not_dvd_gap`: ZMod q 上の非等式
+   - (d) `restore_witness_cong_one_mod_p` (本丸): `p ∣ (q - 1)`
+   - (e) `RestoreWitnessProperties` (構造体): witness q の全性質バンドル
+   - (f) `restore_witness_properties_default`: 一括構成
+
+3. 結論:
+   - 5 定理 + 1 構造体、sorry 0 で全て通った。
+   - `lake build` 成功。error 0、新しい warning 0。
+   - BranchA.lean: 5033 行 → 5267 行（+234 行）
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA` 成功
+
+5. 失敗事例:
+   - Nat 上の `z^p - y^p = x^p` を omega で通そうとして失敗（非線形）
+   - `Nat.modEq_iff_dvd'` 経由が不発 → `Nat.ModEq.add_right` + `simpa` が正解
+   - 旧 API 名との格闘: natCast_zmod_eq_zero_iff_dvd → natCast_eq_zero_iff
+   - `Fact (Nat.Prime q)` が orderOf_eq_prime に必要（haveI で局所設定）
+
+6. 次の課題:
+   - `RestoreFromArithmetic` の sub-target 分割設計
+   - q-adic valuation 精密化の形式化
+   - `(z·y⁻¹)` の `(ℤ/q^pℤ)*` における p 乗根としての性質
