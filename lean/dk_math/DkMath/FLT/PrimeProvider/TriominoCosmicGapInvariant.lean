@@ -2443,6 +2443,27 @@ theorem branchAPrimitivePacketDescentAdapter_of_boundaryCoreWitnessConcreteDefau
   DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_boundaryCoreWitnessConcreteDefault_and_restore
     hRestore
 
+/-!
+### 矛盾路線 adapter — ExistenceMainline + Contradiction → PacketDescent
+
+`ContradictionTarget` が証明されれば、`RestoreFromArithmetic` が bypass され、
+`ExistenceMainline`（既に no-sorry で完成）と組み合わせて
+`PacketDescentTarget` が直接閉じる。
+-/
+
+/--
+ExistenceMainline (no-sorry) + Contradiction → PacketDescent。
+
+ExistenceMainline の default concrete は
+`branchAExceptionalExistenceMainlineAdapter_of_boundaryCoreWitnessConcreteDefault`
+で parameter-free に供給済み。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_contradiction
+    (hContra : BranchAPrimitiveRestoreContradictionAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  branchAPrimitivePacketDescentAdapter_of_boundaryCoreWitnessConcreteDefault_and_restore
+    (branchAPrimitiveRestoreFromArithmeticAdapter_of_contradiction hContra)
+
 /--
 `GN d 1 (u - 1)` divisibility が立てば、
 provider 側でも exceptional existence mainline へ直接戻れる。

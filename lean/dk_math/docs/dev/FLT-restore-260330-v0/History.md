@@ -859,3 +859,99 @@ Archive
      3. Cosmic Formula のさらに深い構造（GN の mod p^p 展開）
      4. `q^p ∣ GN` + `gcd(q, gap) = 1` + `gap = p^{p-1} * t^p`
         の p-adic valuation 不整合
+
+### 日時: 2026/03/30 20:30:00 JST
+
+1. 目的:
+   - `ContradictionTarget` の数学的矛盾源を体系的に探索する。
+   - 可能ならば Lean 実装に到達する。少なくとも利用可能な全角度を網羅的に分析する。
+   - 全体アーキテクチャとの接続を clean 化する。
+
+2. 数学的分析（試行と結果）:
+
+   以下の 5 つの角度から矛盾源を探索した:
+
+   **角度 1: p-adic / q-adic valuation argument**
+   - `v_q(z^p - y^p) = p * v_q(s)` — 全て consistent
+   - 結論: **矛盾なし**
+
+   **角度 2: s^p mod p² + Wieferich 条件**
+   - `s^p ≡ y^{p-1} ≡ 1 [MOD p²]`（既存補題の組合せ）
+   - → `s ≡ 1 [MOD p]`（Fermat 小定理経由）
+   - `s = 1 + pa` → `s^p ≡ 1 + p²a [MOD p³]`
+   - 結論: **矛盾なし** — 全条件は consistent
+
+   **角度 3: cyclotomicPrimeCore の mod q 展開**
+   - `ω = z/y mod q`, `ω^p ≡ 1 mod q`, `ω ≢ 1 mod q` （`q ∤ (z-y)` より）
+   - → `Σ ω^k ≡ (ω^p - 1)/(ω - 1) ≡ 0 [MOD q]`
+   - → `q ∣ core` — これは `q^p ∣ GN` と consistent
+   - mod q² へ進めても q-adic valuation が consistent
+   - 結論: **矛盾なし**
+
+   **角度 4: dev-report §9 の `gcd(core/d, x) = 1` を Branch A に適用**
+   - 全仮定（`Coprime(gap, y)`, `p ∣ gap`, Wieferich）が Branch A で成立
+   - しかし結論 `gcd(s^p, gap) = 1` は `gcd(t,s)=1, ¬p∣s` から自明
+   - 結論: **矛盾なし** — 既知事実の再確認にすぎない
+
+   **角度 5: s = 1 の場合の ExistenceMainline 矛盾**
+   - `s = 1` → `GN = p` → ExistenceMainline が要求する `q ∤ gap` は `p ∤ gap` を意味 → 矛盾
+   - しかし `s = 1` は `ContradictionTarget` の前提 `q ∣ s`（prime q）で既に排除済み
+   - 結論: **使えない**
+
+   **総合結論:**
+   純粋な初等的 arithmetic（valuation, congruence, coprimality）では
+   Branch A の全前提が consistent であり、矛盾は導出できない。
+   FLT が真であるため前提は意味論的に矛盾しているが、
+   利用可能な初等的道具からの finite-step proof は見つからなかった。
+   矛盾を導くには円分体理論や Kummer 理論レベルの深い数論が必要。
+
+3. アーキテクチャ clean 化の実施:
+
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]`
+     `branchAPrimitivePacketDescentAdapter_of_contradiction` を追加した。
+     - `ContradictionTarget` 1 本で `ExistenceMainline`（no-sorry）と合成し
+       `PacketDescentTarget` を直接閉じる parameter-free bridge。
+     - 内部実装:
+       1. `branchAPrimitiveRestoreFromArithmeticAdapter_of_contradiction` で
+          `RestoreFromArithmeticTarget` を bypass
+       2. `boundaryCoreWitnessConcreteDefault_and_restore` で
+          `ExistenceMainline` の default concrete と合成
+     - ビルド成功。sorry 増加なし。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant` 成功
+   - sorry: GapInvariant 0（コメント内 3 箇所のみ）
+   - 行数: GapInvariant 3081 → 3264 (+183)
+
+5. 到達した clean route 全体図:
+
+   ```
+   ExistenceMainline (no-sorry, boundary-core route)
+     +
+   ContradictionTarget (OPEN KERNEL)
+     │
+     ├─→ RestoreFromArithmeticTarget (bypass via False.elim)
+     │
+     └─→ PacketDescentTarget (直接合成)
+           │
+           └─→ (+ ValuationPeel) → SmallerPacket
+                 → SmallerCounterexample
+                 → DistinguishedPrimeDescent
+                 → (minimality) → BranchARefuterTarget
+                 → (+ BranchB) → FLTPrimeGe5Target
+   ```
+
+   **FLT for p ≥ 5 の clean 証明に必要な missing pieces:**
+   1. `ContradictionTarget` — Branch A 前提矛盾（数学的核心）
+   2. `ValuationPeelPacketTarget` — p ∣ t の場合の peel 側
+   3. `ExistingDescentRefuterTarget` — 現在 via_FLT（循環的暫定）
+      ただし PacketDescent route が完成すれば、via_FLT を bypass して clean 化可能
+
+6. 次の課題:
+   - **ContradictionTarget の証明**: 深い数論（Kummer, 正則素数, 円分体）が必要
+     - 初等的道具では不足していることが本セッションで確認された
+     - GTail の higher-order analysis（mod p^p 展開）の可能性は残る
+   - **ValuationPeelPacketTarget**: p ∣ t の場合の descent
+     - これは ContradictionTarget とは独立した open kernel
+   - **ExistingDescentRefuterTarget の clean 化**:
+     PacketDescent chain が完成すれば自動的に clean 化される
