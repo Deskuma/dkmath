@@ -2399,3 +2399,108 @@ Archive
      あるいは
      「valuation に必要な unit × distinguished factor 形への弱化」
      で再設計する。
+
+### 日時: 2026/03/31 20:00:38 JST
+
+1. 目的:
+   - `review-029.md` の提案に従い、
+     `branchA_GN_cyclotomic_ring_identity`
+     を exact product ではなく
+     **`distinguished factor × unit`**
+     へ弱化して進められるか検証する。
+   - 可能ならそのまま
+     `branchA_distinguished_factor_valuation_eq_kummer`
+     まで接続する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]`
+     で一度、
+     `branchA_GN_cyclotomic_ring_identity`
+     の statement を
+
+     ```
+     ∃ U : ZMod (q ^ k), IsUnit U ∧ GN = δ * U
+     ```
+
+     型へ差し替えて試した。
+   - その中で
+
+     ```
+     Q := GN p ((z : ZMod (q^k)) - ω_k * y) (ω_k * y)
+     ```
+
+     を置き、
+     `z^p - y^p = δ * Q`
+     と
+     `(z - y) * GN = z^p - y^p`
+     を `cosmic_id_csr'` から結んで、
+     gap factor `(z - y)` を unit として剥がす方針を実装した。
+   - さらに同時に
+     `branchA_distinguished_factor_valuation_eq_kummer`
+     まで接続しようとし、
+     `ZMod.val_mul`,
+     `branchA_GN_zmod_padicValNat`,
+     `padicValNat.eq_zero_of_not_dvd`
+     で最終 valuation 等式を閉じる形まで試した。
+
+3. 失敗内容:
+   - 上記 2 本を一度に大きく書き換えると、
+     Lean 上では
+     **`GN_eq_sum` の展開位置** と
+     **`ZMod.val` / `ZMod.natCast_zmod_val` / `Nat.cast_sub`**
+     の橋渡しが散って、
+     補題の本質より coercion 整理で証明が崩れた。
+   - 特に詰まったのは次の点:
+     - `φ Q = GN p 0 z` を `simp` 一発で落とせず、
+       `GN_eq_sum` 展開後の index / cast 整理が必要になった。
+     - `IsUnit ((Q.val : ℕ) : ZMod (q^k))` から `IsUnit Q`
+       への復元で、
+       `ZMod.natCast_zmod_val` の向き合わせが必要になった。
+     - `congrArg ZMod.val hfactor`
+       の後に
+       `ZMod.val_mul`
+       へ正規化する段で、
+       term の definitional equality が足りず詰まった。
+     - valuation theorem 側でも
+       `let G : ZMod (q^k) := (GN : ZMod (q^k))`
+       と元の cast 項の間で
+       `rfl` が効かず、
+       `ZMod.val G` と
+       `ZMod.val ((GN : ℕ) : ZMod (q^k))`
+       の橋が想定以上に重くなった。
+
+4. 対応:
+   - build を壊さないため、
+     `branchA_GN_cyclotomic_ring_identity`
+     と
+     `branchA_distinguished_factor_valuation_eq_kummer`
+     は
+     **元の sorry 付き状態へ戻した**。
+   - 一方で今回の試行により、
+     `review-029` route 自体の数学的方向は妥当だが、
+     Lean 実装は
+     **大定理 2 本を同時に差し替えるのではなく、
+     薄い補題へ分割して積む必要がある**
+     と判断した。
+
+5. 検証:
+   - rollback 後に
+     `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore`
+     成功。
+   - `TriominoCosmicBranchARestore.lean`
+     の warning 上の `sorry` は引き続き 3 箇所:
+     - `branchA_hensel_lift_exists`
+     - `branchA_GN_cyclotomic_ring_identity`
+     - `branchA_distinguished_factor_valuation_eq_kummer`
+
+6. 次の課題:
+   - `review-029` route を再試行する場合は、
+     次の薄い補題へ分割して入れる:
+     - `Q := GN p δ (ω_k * y)` の mod `q` 射影が `GN p 0 z` になる補題
+     - そこから `Q` が unit であることを返す補題
+     - `z^p - y^p = δ * Q` を返す補題
+     - gap factor `(z - y)` が unit であることを使って
+       `GN = δ * U` を返す補題
+   - その後に
+     `branchA_distinguished_factor_valuation_eq_kummer`
+     を別定理として閉じるのが安全。
