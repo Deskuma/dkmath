@@ -56,9 +56,9 @@ $$
 $$
 
 が sorry なしで立ち、`QAdicLiftSeed` へ直接つながった。
-つまり今や (\omega) は、単なる記号ではなく **primitive (p)-th root of unity mod (q)** として形式的に確定しておる。
+つまり今や \(\omega\) は、単なる記号ではなく **primitive \(p\)-th root of unity mod \(q\)** として形式的に確定しておる。
 
-なお、以前の `BranchAContradictionModP3SourceTarget` は、DEPRECATED / FALSE コメントが入ったが、Lean の中で (\neg) その target を独立定理として潰したわけではない。今の本線は、すでに witness 付き source 側へ移っておる。
+なお、以前の `BranchAContradictionModP3SourceTarget` は、DEPRECATED / FALSE コメントが入ったが、Lean の中で \(\neg\) その target を独立定理として潰したわけではない。今の本線は、すでに witness 付き source 側へ移っておる。
 
 ## 2. 数学的解説
 
@@ -71,7 +71,7 @@ s^p = y^{p-1} + p^3 M
 $$
 
 という形に固定されておる。
-第二縞は witness (q) 側で、
+第二縞は witness \(q\) 側で、
 
 $$
 q \mid s,\quad q \nmid y,\quad q \nmid (z-y),\quad p \mid (q-1),\quad q^p \mid GN
@@ -91,22 +91,22 @@ v_q(y^{p-1})=0,\qquad v_q(p^3M)=0
 $$
 
 という極端な状況になる。
-つまり、**(q)-進評価 0 の 2 項の和が、いきなり (q^p) まで持ち上がる**。これが今の branch A の「干渉縞」の核じゃ。
+つまり、**\(q\)-進評価 0 の 2 項の和が、いきなり \(q^p\) まで持ち上がる**。これが今の branch A の「干渉縞」の核じゃ。
 
-さらに、(\omega) が primitive (p)-th root of unity mod (q) と確定したことで、この cancellation は単なる偶然の和ではなく、円分核
+さらに、\(\omega\) が primitive \(p\)-th root of unity mod \(q\) と確定したことで、この cancellation は単なる偶然の和ではなく、円分核
 
 $$
 \Phi_p(z,y)=\frac{z^p-y^p}{z-y}
 $$
 
-の (q)-進構造に由来する、と読む準備が整った。
+の \(q\)-進構造に由来する、と読む準備が整った。
 つまり今後の本線は、
 
 $$
 v_q\bigl(\Phi_p(z,y)\bigr)
 $$
 
-を (\omega) を通して読む道じゃ。
+を \(\omega\) を通して読む道じゃ。
 
 ## 3. 次の作業の選択
 
@@ -147,7 +147,7 @@ $$
 
 が立っておる。
 これは cyclotomic valuation に入るための前提そのものじゃ。
-Hensel lifting はその次の層であって、まず mod (q) 上で「どの因子が (q)-進的に特別か」を確定した方が自然じゃ。
+Hensel lifting はその次の層であって、まず mod \(q\) 上で「どの因子が \(q\)-進的に特別か」を確定した方が自然じゃ。
 
 ### 4.2. massive cancellation と直結する
 
@@ -158,7 +158,7 @@ q^p \mid \bigl(y^{p-1}+p^3 M\bigr),\qquad q \nmid M
 $$
 
 という異常な cancellation じゃ。
-これを「(\Phi_p(z,y)) の中で、1 本の linear factor だけが深くなる」という言葉に翻訳できれば、現在の bundle と root-of-unity 構造が一気に繋がる。
+これを「\(\Phi_p(z,y)\) の中で、1 本の linear factor だけが深くなる」という言葉に翻訳できれば、現在の bundle と root-of-unity 構造が一気に繋がる。
 
 ### 4.3. terminal case より前にやるべき
 
@@ -169,14 +169,14 @@ s' < s,\qquad s' \equiv 1 \pmod p
 $$
 
 まで揃っておる。
-じゃが terminal case (s'=1) を殴るには、「何が descent で不変で、何が valuation 的に削れるか」の図がもう一段必要じゃ。
+じゃが terminal case \(s'=1\) を殴るには、「何が descent で不変で、何が valuation 的に削れるか」の図がもう一段必要じゃ。
 cyclotomic valuation が入れば、
 
 $$
 v_q(\Phi_p(z,y)) = p,v_q(s)
 $$
 
-が 1 step ごとに (p) ずつ減る、という量が見える。
+が 1 step ごとに \(p\) ずつ減る、という量が見える。
 そこまで見えてから terminal case を詰める方が筋がよい。
 
 ## 5. 次に狙う定理の形
@@ -203,8 +203,8 @@ i\neq 1 \Rightarrow q \nmid (z-\omega^i y)
 $$
 
 を示す。
-これは (\omega) の位数 (p) が効くはずじゃ。
-そして distinguished factor (z-\omega y) だけが (q)-進的に深くなると出れば、
+これは \(\omega\) の位数 \(p\) が効くはずじゃ。
+そして distinguished factor \(z-\omega y\) だけが \(q\)-進的に深くなると出れば、
 
 $$
 v_q\bigl(\Phi_p(z,y)\bigr)=v_q(z-\omega y)
@@ -217,7 +217,7 @@ $$
 
 ひとことで言えば、こうじゃ。
 
-**いまは root-of-unity 構造が確定し、descent の strict decrease も揃った。ゆえに次の最善手は Hensel lifting の一般論へ飛ぶことではなく、(\omega) を使って cyclotomic valuation を精密化し、現在見えている massive cancellation を「円分核の 1 因子集中」として読み直すことじゃ。**
+**いまは root-of-unity 構造が確定し、descent の strict decrease も揃った。ゆえに次の最善手は Hensel lifting の一般論へ飛ぶことではなく、\(\omega\) を使って cyclotomic valuation を精密化し、現在見えている massive cancellation を「円分核の 1 因子集中」として読み直すことじゃ。**
 
 順番を短く言えば、
 

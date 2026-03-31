@@ -40,7 +40,7 @@ $$
 s = q s' ;\Rightarrow; s^p = q^p s'^p
 $$
 
-も定理化され、降下 1 step ごとに q-adic 因子が (q^p) ずつ剥がれる算術基盤まで揃った。
+も定理化され、降下 1 step ごとに \(q\)-adic 因子が \(q^p\) ずつ剥がれる算術基盤まで揃った。
 
 第三に、前段で得た **干渉縞の cross-analysis** が生きておる。
 すでに
@@ -62,7 +62,7 @@ q^p \mid \bigl(y^{p-1}+p^3 M\bigr)
 $$
 
 でもある。
-つまり (q)-進評価 0 の 2 項の和が、(q^p) まで持ち上がる **massive cancellation** が見えておる。これが今の数学の芯じゃ。
+つまり \(q\)-進評価 0 の 2 項の和が、\(q^p\) まで持ち上がる **massive cancellation** が見えておる。これが今の数学の芯じゃ。
 
 ## 2. 数学的解説
 
@@ -75,7 +75,7 @@ s^p = y^{p-1} + p^3 M
 $$
 
 という形に固定されておる。
-第二縞は witness (q) 側で、
+第二縞は witness \(q\) 側で、
 
 $$
 q \mid s,\quad q \nmid y,\quad q \nmid (z-y),\quad p \mid (q-1),\quad q^p \mid GN
@@ -92,7 +92,7 @@ q^p \mid \bigl(y^{p-1}+p^3M\bigr)
 $$
 
 が起こる。
-したがって、問題の本質はもう mod (p^k) 単独の合同式ではない。
+したがって、問題の本質はもう mod \(p^k\) 単独の合同式ではない。
 本丸は
 
 $$
@@ -115,7 +115,7 @@ $$
 
 これを **最優先** に勧める。
 
-## 4. なぜ (\omega) からか
+## 4. なぜ \(\omega\) からか
 
 理由は 3 つある。
 
@@ -147,7 +147,7 @@ $$
 $$
 
 が自然に出る。
-さらに (q \nmid (z-y)) だから
+さらに \(q \nmid (z-y)\) だから
 
 $$
 z \not\equiv y \pmod q
@@ -162,11 +162,11 @@ $$
 じゃ。
 
 これは、今の bundle の field だけでかなり直接的に狙える。
-しかも出てくる内容は「(\omega) は非自明な (p)-th root of unity mod (q)」という、円分核ど真ん中の主張じゃ。
+しかも出てくる内容は「\(\omega\) は非自明な \(p\)-th root of unity mod \(q\)」という、円分核ど真ん中の主張じゃ。
 
 ### 4.2. Hensel の高次化の前提になる
 
-(\mathbb Z/q\mathbb Z) で
+\(\mathbb Z/q\mathbb Z\) で
 
 $$
 \omega^p = 1,\qquad \omega \ne 1
@@ -183,16 +183,13 @@ $$
 
 ### 4.3. cyclotomic valuation と直結する
 
-(\omega) が primitive (p)-th root と分かれば、
+\(\omega\) が primitive \(p\)-th root と分かれば、
 
 $$
-\Phi_p(z,y)
-===========
-
-\prod_{i=1}^{p-1}(z-\zeta^i y)
+\Phi_p(z,y) = \prod_{i=1}^{p-1}(z-\zeta^i y)
 $$
 
-のどの因子が (q)-進的に深くなるのか、という Kummer 型の見え方へ入れる。
+のどの因子が \(q\)-進的に深くなるのか、という Kummer 型の見え方へ入れる。
 いま見えている massive cancellation を、「たまたまの和」ではなく **円分核の因子構造の反映** として読む道が開く。
 これは今の理論資産を一番よく活かす。
 
@@ -205,7 +202,7 @@ s' < s,\qquad s' \equiv 1 \pmod p
 $$
 
 は出た。
-じゃが、停止条件 (s'=1) を殴るには、まだ少し足りぬ。
+じゃが、停止条件 \(s'=1\) を殴るには、まだ少し足りぬ。
 
 なぜなら、`s'=1` に到達したとき
 
@@ -219,7 +216,7 @@ $$
 
 だから順番としては、
 
-1. (\omega) の位数構造を確定
+1. \(\omega\) の位数構造を確定
 2. その lift と valuation を強化
 3. それを使って停止条件を刺す
 
@@ -230,28 +227,28 @@ $$
 次に書くべき定理名の叩き台は、こんなところじゃ。
 
 $$
-\texttt{branchA_omega_pow_eq_one}
+\texttt{branchA\_omega\_pow\_eq\_one}
 $$
 
 $$
-\texttt{branchA_omega_ne_one}
+\texttt{branchA\_omega\_ne\_one}
 $$
 
 $$
-\texttt{branchA_omega_order_eq_p}
+\texttt{branchA\_omega\_order\_eq\_p}
 $$
 
 最初の 2 本が立てば、3 本目は `orderOf` につなぐ橋になる。
 その次が
 
 $$
-\texttt{branchA_omega_hensel_lift}
+\texttt{branchA\_omega\_hensel\_lift}
 $$
 
 あるいは
 
 $$
-\texttt{branchA_qadic_lift_of_omega}
+\texttt{branchA\_qadic\_lift\_of\_omega}
 $$
 
 のような高次化じゃな。
@@ -260,8 +257,8 @@ $$
 
 したがって、いまの FLT Branch A 証明への道はこうじゃ。
 
-まず、干渉縞 bundle から (\omega) を **非自明な (p)-th root of unity mod (q)** として確定する。
-次に、その (\omega) を q-adic / Hensel 側へ持ち上げる。
+まず、干渉縞 bundle から \(\omega\) を **非自明な \(p\)-th root of unity mod \(q\)** として確定する。
+次に、その \(\omega\) を q-adic / Hensel 側へ持ち上げる。
 その上で
 
 $$
