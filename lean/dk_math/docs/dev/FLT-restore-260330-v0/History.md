@@ -2334,3 +2334,68 @@ Archive
    - その後
      `branchA_distinguished_factor_valuation_eq_kummer`
      を unit valuation 0 の補題と合わせて閉じる。
+
+### 日時: 2026/03/31 18:27:38 JST
+
+1. 目的:
+   - `branchA_GN_cyclotomic_ring_identity`
+     を **`IsPrimitiveRoot` route** で実装できるか検証する。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]`
+     に
+     `import Mathlib.FieldTheory.KummerExtension`
+     を追加。
+   - 同ファイルで
+     **`branchA_hensel_lift_isPrimitiveRoot`**
+     を追加した。
+     内容は
+     `hLift.hω_k_pow : ω_k ^ p = 1`
+     と
+     `branchA_hensel_lift_omega_k_ne_one`
+     から
+     `orderOf_eq_prime`
+     を使って
+     `IsPrimitiveRoot hLift.ω_k p`
+     を確定するもの。
+
+3. 失敗内容:
+   - `branchA_GN_cyclotomic_ring_identity`
+     本体を
+     `X_pow_sub_C_eq_prod`
+     で直接証明する方針を試したが失敗。
+   - 失敗理由は、
+     この定理が **`IsDomain R`** を要求する一方で、
+     今回の対象環
+     `R = ZMod (q ^ k)`
+     は一般に `k > 1` で整域ではないため。
+   - その結果、
+     `ω_k` が primitive であること自体は示せても、
+     `ZMod (q^k)` 上での exact product identity
+     `GN = (z - ω_k * y) * ...`
+     まではそのまま落ちないことを確認した。
+
+4. 対応:
+   - `branchA_hensel_lift_isPrimitiveRoot`
+     は有用なので保持。
+   - `branchA_GN_cyclotomic_ring_identity`
+     本体は `sorry` のまま戻し、
+     file 全体の build は通る状態を維持した。
+
+5. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore`
+     成功。
+   - warning 上の `sorry` は引き続き 3 箇所
+     (`branchA_hensel_lift_exists`,
+     `branchA_GN_cyclotomic_ring_identity`,
+     `branchA_distinguished_factor_valuation_eq_kummer`)。
+
+6. 次の課題:
+   - `branchA_GN_cyclotomic_ring_identity`
+     は
+     `ZMod (q^k)` を直接整域扱いしない route、
+     すなわち
+     「local Artinian ring 上の分解」
+     あるいは
+     「valuation に必要な unit × distinguished factor 形への弱化」
+     で再設計する。

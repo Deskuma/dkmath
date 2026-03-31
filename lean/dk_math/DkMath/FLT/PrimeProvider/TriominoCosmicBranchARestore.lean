@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import Mathlib.FieldTheory.KummerExtension
 import DkMath.FLT.PrimeProvider.TriominoCosmicBranchA
 
 #print "file: DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore"
@@ -2284,6 +2285,26 @@ theorem branchA_hensel_lift_omega_k_ne_one
   exact branchA_omega_ne_one hBundle this.symm
 
 /--
+**ω_k は primitive p-th root**:
+`ω_k^p = 1` と `ω_k ≠ 1`、および `p` の素数性から `IsPrimitiveRoot ω_k p` を得る。
+-/
+theorem branchA_hensel_lift_isPrimitiveRoot
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q)
+    {k : ℕ} (hk : 0 < k)
+    (hLift : let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩;
+             let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹);
+             BranchAHenselLiftData p q k hk ω) :
+    let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+    IsPrimitiveRoot hLift.ω_k p := by
+  intro _inst
+  haveI : Fact (Nat.Prime p) := ⟨hBundle.padic.pack.hp⟩
+  rw [IsPrimitiveRoot.iff_orderOf]
+  exact orderOf_eq_prime
+    hLift.hω_k_pow
+    (branchA_hensel_lift_omega_k_ne_one hBundle hk hLift)
+
+/--
 **Valuation 集中の central structure**:
 fringe bundle + Hensel lift data から得られる全情報を集約した structure。
 
@@ -2557,8 +2578,12 @@ theorem branchA_GN_cyclotomic_ring_identity
       ((z : ZMod (q ^ k)) - hLift.ω_k * y) *
         ∏ i ∈ Finset.range (p - 2), ((z : ZMod (q ^ k)) - hLift.ω_k ^ (i + 2) * y) := by
   intro _inst
-  -- 数学的根拠: GN = Φ_p(z/y) * y^(p-1) = ∏_{i=1}^{p-1} (z - ω_k^i * y)
-  -- = (z - ω_k * y) * ∏_{i=2}^{p-1} (z - ω_k^i * y)
+  -- `IsPrimitiveRoot hLift.ω_k p` 自体は
+  -- `branchA_hensel_lift_isPrimitiveRoot` で確立できる。
+  -- ただし exact product identity を `ZMod (q^k)` 上で直接出すには、
+  -- 使いたい `X_pow_sub_C_eq_prod` が `IsDomain` を要求し、
+  -- `ZMod (q^k)` (`k > 1`) ではそのまま適用できない。
+  -- この段は local Artinian ring 上の分解へ言い換えて埋める必要がある。
   sorry
 
 /--
