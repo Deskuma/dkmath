@@ -2273,3 +2273,64 @@ Archive
 6. 次の課題:
    - **sorry の段階的除去** (上記順序に従い)
    - **terminal case** の矛盾分析
+
+### 日時: 2026/03/31 18:04:27 JST
+
+1. 目的:
+   - `review-026.md` の valuation route を前進させ、
+     `TriominoCosmicBranchARestore.lean` 内の低リスクな `sorry`
+     を先に除去する。
+   - 特に
+     `branchA_padicValNat_mod_pow_eq`
+     と
+     `branchA_GN_zmod_padicValNat`
+     の技術的穴を埋める。
+
+2. 実施:
+   - `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]`
+     で
+     **`branchA_padicValNat_mod_pow_eq`**
+     を sorry なしで実装した。
+     証明は
+     `padicValNat_dvd_iff_le`,
+     `pow_padicValNat_dvd`,
+     `Nat.mod_add_div`,
+     `Nat.mod_eq_sub_mul_div`
+     を使い、
+     `q^v ∣ N ↔ q^v ∣ N % q^k`
+     を `v < k` の範囲で両方向に示す構成。
+   - 同ファイルで
+     **`branchA_GN_zmod_padicValNat`**
+     の `GN ≠ 0` の sorry を除去した。
+     これは
+     `branchA_s_pos`
+     と
+     `GN = p * s^p`
+     から
+     `Nat.mul_ne_zero`
+     で直接処理した。
+
+3. 結論:
+   - 今回の valuation 節で消えた `sorry` は 2 箇所。
+   - `branchA_GN_zmod_padicValNat`
+     は now sorry-free となり、
+     `GN % q^k` 側の valuation 等式は安定した。
+   - 残る本質的な `sorry` は
+     - `branchA_hensel_lift_exists`
+     - `branchA_GN_cyclotomic_ring_identity`
+     - `branchA_distinguished_factor_valuation_eq_kummer`
+     の 3 本に整理された。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore`
+     成功。
+   - build warning 上の当該 file の `sorry` は
+     L2155, L2548, L2576 の 3 箇所のみ。
+
+5. 次の課題:
+   - `branchA_GN_cyclotomic_ring_identity`
+     を `IsPrimitiveRoot` / `Polynomial.cyclotomic`
+     どちらの route で潰すか決める。
+   - その後
+     `branchA_distinguished_factor_valuation_eq_kummer`
+     を unit valuation 0 の補題と合わせて閉じる。

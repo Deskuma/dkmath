@@ -2458,10 +2458,44 @@ theorem branchA_padicValNat_mod_pow_eq
     {q k N : ℕ} (hq : Nat.Prime q) (hN : N ≠ 0) (hk : padicValNat q N < k) :
     padicValNat q (N % q ^ k) = padicValNat q N := by
   haveI : Fact (Nat.Prime q) := ⟨hq⟩
-  -- 証明: q^i ∣ N ↔ q^i ∣ N % q^k (for i ≤ v_q(N) < k)
-  -- Nat.dvd_mod_iff と padicValNat_dvd_iff_le の組み合わせ。
-  -- 数学的に正当: v_q(N) < k ならば N % q^k の q-adic 構造は N と同じ。
-  sorry
+  have hqk_dvd_N_false : ¬ q ^ k ∣ N := by
+    intro hqk_dvd_N
+    exact (not_le_of_gt hk) ((padicValNat_dvd_iff_le (p := q) (a := N) (n := k) hN).1 hqk_dvd_N)
+  have hmod_ne : N % q ^ k ≠ 0 := by
+    intro hmod
+    exact hqk_dvd_N_false (Nat.dvd_of_mod_eq_zero hmod)
+  have hqk_pos : 0 < q ^ k := Nat.pow_pos hq.pos
+  have hmod_lt : N % q ^ k < q ^ k := Nat.mod_lt _ hqk_pos
+  have hmod_val_lt : padicValNat q (N % q ^ k) < k := by
+    by_contra hge
+    have hqk_dvd_mod : q ^ k ∣ N % q ^ k :=
+      (padicValNat_dvd_iff_le (p := q) (a := N % q ^ k) (n := k) hmod_ne).2
+        (not_lt.mp hge)
+    have hle : q ^ k ≤ N % q ^ k := Nat.le_of_dvd (Nat.pos_iff_ne_zero.mpr hmod_ne) hqk_dvd_mod
+    exact (not_le_of_gt hmod_lt) hle
+  apply le_antisymm
+  · have hpow_dvd_mod : q ^ padicValNat q (N % q ^ k) ∣ N % q ^ k := pow_padicValNat_dvd
+    have hpow_dvd_qk : q ^ padicValNat q (N % q ^ k) ∣ q ^ k := by
+      exact pow_dvd_pow q (Nat.le_of_lt hmod_val_lt)
+    have hpow_dvd_Ndiv : q ^ padicValNat q (N % q ^ k) ∣ q ^ k * (N / q ^ k) :=
+      dvd_mul_of_dvd_left hpow_dvd_qk (N / q ^ k)
+    have hpow_dvd_N : q ^ padicValNat q (N % q ^ k) ∣ N := by
+      have hsum : q ^ padicValNat q (N % q ^ k) ∣ N % q ^ k + q ^ k * (N / q ^ k) :=
+        Nat.dvd_add hpow_dvd_mod hpow_dvd_Ndiv
+      simpa [Nat.mod_add_div] using hsum
+    exact (padicValNat_dvd_iff_le (p := q) (a := N) (n := padicValNat q (N % q ^ k)) hN).1
+      hpow_dvd_N
+  · have hpow_dvd_N : q ^ padicValNat q N ∣ N := pow_padicValNat_dvd
+    have hpow_dvd_qk : q ^ padicValNat q N ∣ q ^ k := by
+      exact pow_dvd_pow q (Nat.le_of_lt hk)
+    have hpow_dvd_Ndiv : q ^ padicValNat q N ∣ q ^ k * (N / q ^ k) :=
+      dvd_mul_of_dvd_left hpow_dvd_qk (N / q ^ k)
+    have hpow_dvd_mod : q ^ padicValNat q N ∣ N % q ^ k := by
+      have hpow_dvd_sub : q ^ padicValNat q N ∣ N - q ^ k * (N / q ^ k) :=
+        Nat.dvd_sub hpow_dvd_N hpow_dvd_Ndiv
+      simpa [Nat.mod_eq_sub_mul_div] using hpow_dvd_sub
+    exact (padicValNat_dvd_iff_le (p := q) (a := N % q ^ k) (n := padicValNat q N) hmod_ne).1
+      hpow_dvd_mod
 
 /-- `GN` の ZMod (q^k) への cast の val = GN % q^k (sorry-free). -/
 theorem branchA_GN_zmod_val_eq_mod
@@ -2492,8 +2526,11 @@ theorem branchA_GN_zmod_padicValNat
     haveI : Fact (Nat.Prime q) := _inst
     have := branchA_kummer_valuation hBundle
     rwa [branchA_padicValNat_sub_pow_eq_GN hBundle] at this
-  have hmod_eq := branchA_padicValNat_mod_pow_eq hBundle.witness.hqprime (by
-    intro h; simp [DkMath.CosmicFormulaBinom.GN] at h; sorry) (hGN_val ▸ hk_large)
+  have hs_ne : s ≠ 0 := Nat.pos_iff_ne_zero.mp (branchA_s_pos hBundle.padic.pack hBundle.padic.hsx)
+  have hGN_ne : DkMath.CosmicFormulaBinom.GN p (z - y) y ≠ 0 := by
+    rw [hBundle.padic.hsGN]
+    exact Nat.mul_ne_zero hBundle.padic.pack.hp.ne_zero (pow_ne_zero p hs_ne)
+  have hmod_eq := branchA_padicValNat_mod_pow_eq hBundle.witness.hqprime hGN_ne (hGN_val ▸ hk_large)
   rw [hmod_eq, hGN_val]
 
 /--
