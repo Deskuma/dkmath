@@ -1477,3 +1477,114 @@ Archive
      - `hqp_dvd_GN` (`q^p ∣ GN`) と `hhead_mod_p3` (`s^p ≡ y^{p-1} [MOD p^3]`) の結合
      - `hq_cong` (`p ∣ (q-1)`) と Wieferich の相互作用
      - `hq_not_dvd_gap` (`q ∤ (z-y)`) と gap shape の衝突可能性
+
+### 日時: 2026/03/31 10:30:00 JST
+
+1. 目的:
+   - 前回の「次の課題」3 ルートを数学的に精査する:
+     - ルート 1: `q^p ∣ GN` + `s^p ≡ y^{p-1} [MOD p^3]` の結合
+     - ルート 2: `p ∣ (q-1)` + Wieferich の相互作用
+     - ルート 3: `q ∤ (z-y)` + gap shape の衝突可能性
+   - 各ルートから導出可能な新規補題を実装する。
+
+2. 実施:
+
+   **§A. 3 ルートの数学的分析**
+
+   **ルート 1** (`q^p ∣ GN` + head congruence):
+   - `∃ M, s^p = y^{p-1} + p^3*M` と `q ∣ s` を結合。
+   - `q ∣ s^p` から `q ∣ (y^{p-1} + p^3*M)`。
+   - 仮に `q ∣ M` なら `q ∣ (p^3*M)` → `q ∣ y^{p-1}` → `q ∣ y`。
+     しかし `q ∤ y` (witness fringe)。矛盾。
+   - **結論**: `q ∤ M` が証明可能。
+   - さらに `q^p ∣ s^p` から `q^p ∣ (y^{p-1} + p^3*M)`。
+     v_q(y^{p-1}) = 0 かつ v_q(M) = 0 なのに和の v_q ≥ p。
+     **massive cancellation** を意味する構造的制約。
+   - 直接的矛盾には至らないが、tail 係数 M の q-adic 構造が固定される。
+
+   **ルート 2** (`p ∣ (q-1)` + Wieferich):
+   - Wieferich `y^{p-1} ≡ 1 [MOD p^2]` は p-adic 世界。
+   - `p ∣ (q-1)` は (Z/qZ)* に p-torsion を保証。
+   - CRT: Z/p^2Z と Z/q^jZ の制約は独立。
+   - **直接的矛盾なし**。
+   - ただし `q ≡ 1 [MOD p]` と `s ≡ 1 [MOD p]` の組み合わせから
+     **`s' ≡ 1 [MOD p]`** が導ける（descent 不変量）。
+
+   **ルート 3** (`q ∤ (z-y)` + gap shape):
+   - `z-y = p^{p-1}*t^p` で `q ∤ (z-y)` → `q ∤ t^p` → `q ∤ t`。
+   - これは coprimality から既知。**新規なし**。
+
+   **§B. 新規補題の実装（7 本, 全て sorry なし）**
+
+   `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]`:
+
+   - `branchA_fringe_q_congr_one_mod_p`:
+     `p ∣ (q-1)` → `q ≡ 1 [MOD p]` (ModEq 形式変換)
+
+   - `branchA_fringe_q_dvd_head_sum`:
+     `q ∣ s` → `q ∣ (y^{p-1} + p^3*M)` (基本 cross-modular 制約)
+
+   - `branchA_fringe_qpow_dvd_head_sum`:
+     `q ∣ s` → `q^p ∣ (y^{p-1} + p^3*M)` (深層 cross-modular 制約)
+     massive cancellation の形式的表現。
+
+   - **`branchA_fringe_q_not_dvd_tail_coeff`**:
+     `q ∣ s` ∧ `q ∤ y` → **`q ∤ M`** (核心的 cross-modular 制約)
+     p-adic head 縞と q-adic witness 縞の干渉の直接的帰結。
+
+   - **`branchA_fringe_sprime_congr_one_mod_p`**:
+     `s ≡ 1 [MOD p]` ∧ `q ≡ 1 [MOD p]` ∧ `s = q*s'` → **`s' ≡ 1 [MOD p]`**
+     descent 不変量: 降下の各段で mod p 合同が保存される。
+
+   - `branchA_fringe_tail_coeff_coprime_to_witness`:
+     fringe bundle → `∃ M, s^p = y^{p-1} + p^3*M ∧ ¬ q ∣ M` (統合版)
+
+   - `branchA_fringe_descent_preserves_mod_p`:
+     fringe bundle + `s = q*s'` → `s' ≡ 1 [MOD p]` (統合版)
+
+3. 結論:
+
+   **数学的到達点:**
+
+   ルート 1 から **2 つの新知見** を得た:
+   - `q ∤ M` (tail 係数は witness q に coprime)
+   - `q^p ∣ (y^{p-1} + p^3*M)` (v_q = 0 + v_q = 0 の和が v_q ≥ p の massive cancellation)
+
+   ルート 2 から **1 つの新知見** を得た:
+   - `s' ≡ 1 [MOD p]` (descent 不変量)
+
+   ルート 3 は既知の帰結のみ。
+
+   **未到達の矛盾:**
+
+   3 ルート単独では矛盾に至らない。矛盾には以下のいずれかが必要:
+   - GN の q-adic 内部構造のさらなる精密化
+     （cyclotomic core としての解析 — Kummer / Mihailescu 型の議論）
+   - `q^p ∣ (y^{p-1} + p^3*M)` の cancellation が実は不可能であることの証明
+     （これは本質的に cyclotomic valuation の理論）
+   - 円分体 Q(ζ_p) での ideal factorization の Lean 形式化
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore` 成功
+   - `lake build`（全体）成功 (exit 0)
+   - sorry 増加なし
+   - BranchARestore.lean: 1352 → 1510 (+158 行)
+
+5. 失敗事例:
+   - `branchA_fringe_q_not_dvd_tail_coeff` の証明で `dvd_add_right` を使おうとしたが、
+     これは Ring.Divisibility の補題で ℕ には直接適用不可。
+     → `Nat.dvd_sub` + `Nat.add_sub_cancel` で解決。
+   - `branchA_fringe_q_congr_one_mod_p` で `Nat.modEq_iff_dvd'` の引数順序が
+     `Nat.ModEq p 1 q` を返し、期待の `Nat.ModEq p q 1` と逆。
+     → `.symm` で対称性を適用して解決。
+
+6. 次の課題:
+   - **cyclotomic valuation theory**: `q^p ∣ (y^{p-1} + p^3*M)` の
+     massive cancellation が実際に成立しうるかどうかの判定。
+     これは円分核 Φ_p(z, y) の q-adic 展開の理論（Kummer 型）に直結する。
+   - **Hensel lifting**: ZMod q での primitive p-th root ω の
+     ZMod q^p への lift の形式化。
+     既存の `PrimeGe5BranchAPrimitiveRestoreQAdicLiftSeed` の拡張として。
+   - **descent chain 分析**: `s' ≡ 1 [MOD p]` の不変量と、
+     各 descent step での `s → s' = s/q` の値の厳密減少から、
+     有限ステップでの停止条件（s' = 1 のケース分析）を調べる。

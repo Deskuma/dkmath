@@ -1324,6 +1324,164 @@ theorem branchAFringeContradiction_of_witnessSource
     hW.hq_dvd_x hW.hq_not_dvd_y hW.hq_not_dvd_z hW.hq_not_dvd_gap hW.hq_cong hW.hqp_dvd_GN
 
 /-!
+### 干渉縞 Cross-Analysis
+
+干渉縞集合の field を組み合わせて得られる cross-modular 制約。
+p-adic head 展開 (`s^p = y^{p-1} + p^3 * M`) と
+witness `q` の整除性 (`q ∣ s`) を結合することで、
+tail 係数 `M` の q-adic 構造を決定する。
+
+主要結果:
+- `branchA_fringe_q_not_dvd_tail_coeff`: `q ∤ M`
+  tail 係数は witness q に coprime。
+  これは p-adic head 縞と q-adic witness 縞の干渉の直接的帰結。
+- `branchA_fringe_sprime_congr_one_mod_p`: `s' ≡ 1 [MOD p]`
+  q-free 商 `s' = s/q` は s と同じ mod p 合同類を保つ。
+  descent の各段で mod p 合同が不変に保たれることの証拠。
+-/
+
+/--
+`p ∣ (q - 1)` の `Nat.ModEq` 版: `q ≡ 1 [MOD p]`。
+
+witness q の合同条件を ModEq 形式に変換する。
+-/
+theorem branchA_fringe_q_congr_one_mod_p
+    {p q : ℕ}
+    (hqprime : Nat.Prime q)
+    (hq_cong : p ∣ (q - 1)) :
+    q ≡ 1 [MOD p] :=
+  ((Nat.modEq_iff_dvd' (Nat.one_le_iff_ne_zero.mpr hqprime.ne_zero)).mpr hq_cong).symm
+
+/--
+干渉縞の cross-modular 制約 (基本):
+`q ∣ s` のとき、head sum `y^{p-1} + p^3 * M` は `q` の倍数。
+-/
+theorem branchA_fringe_q_dvd_head_sum
+    {p y s q M : ℕ}
+    (hpack_hp : Nat.Prime p)
+    (hqs : q ∣ s)
+    (hexp : s ^ p = y ^ (p - 1) + p ^ 3 * M) :
+    q ∣ (y ^ (p - 1) + p ^ 3 * M) := by
+  rw [← hexp]
+  exact dvd_pow hqs hpack_hp.ne_zero
+
+/--
+干渉縞の cross-modular 制約 (深層):
+`q^p ∣ (y^{p-1} + p^3 * M)` — head sum は `q^p` の倍数。
+
+`s^p = y^{p-1} + p^3*M` で `q ∣ s` → `q^p ∣ s^p` から従う。
+v_q(y^{p-1}) = 0 かつ v_q(p^3*M) = 0 であるため、
+`q^p` の深さでの整除は **二項の massive cancellation** を意味する。
+-/
+theorem branchA_fringe_qpow_dvd_head_sum
+    {p y s q M : ℕ}
+    (hqs : q ∣ s)
+    (hexp : s ^ p = y ^ (p - 1) + p ^ 3 * M) :
+    q ^ p ∣ (y ^ (p - 1) + p ^ 3 * M) := by
+  rw [← hexp]
+  exact pow_dvd_pow_of_dvd hqs p
+
+/--
+干渉縞の核心的 cross-modular 制約:
+**witness `q` は tail 係数 `M` を割らない。**
+
+`s^p = y^{p-1} + p^3 * M` で `q ∣ s` のとき、仮に `q ∣ M` ならば:
+- `q ∣ (p^3 * M)` (trivial)
+- `q ∣ s^p = y^{p-1} + p^3*M` (from `q ∣ s`)
+- → `q ∣ y^{p-1}` → `q ∣ y` (since `q` is prime)
+- しかし `q ∤ y` (witness fringe) なので矛盾。
+
+この補題は p-adic head 縞と q-adic witness 縞の **干渉** の直接的帰結:
+二系統の縞が tail 係数の q-adic 構造を完全に決定する。
+-/
+theorem branchA_fringe_q_not_dvd_tail_coeff
+    {p y s q M : ℕ}
+    (hqprime : Nat.Prime q)
+    (hqs : q ∣ s)
+    (hq_not_dvd_y : ¬ q ∣ y)
+    (hpack_hp : Nat.Prime p)
+    (hexp : s ^ p = y ^ (p - 1) + p ^ 3 * M) :
+    ¬ q ∣ M := by
+  intro hqM
+  have h_q_dvd_sp : q ∣ s ^ p := dvd_pow hqs hpack_hp.ne_zero
+  rw [hexp] at h_q_dvd_sp
+  have h_q_dvd_p3M : q ∣ p ^ 3 * M := dvd_mul_of_dvd_right hqM (p ^ 3)
+  have h_q_dvd_ypow : q ∣ y ^ (p - 1) := by
+    have h := Nat.dvd_sub h_q_dvd_sp h_q_dvd_p3M
+    simp only [add_tsub_cancel_right] at h
+    exact h
+  exact hq_not_dvd_y (hqprime.dvd_of_dvd_pow h_q_dvd_ypow)
+
+/--
+`q + 1 ≤ q` ではなく `1 ≤ q` を witness prime から get する補助。
+-/
+private theorem one_le_of_prime {q : ℕ} (hq : Nat.Prime q) : 1 ≤ q :=
+  Nat.one_le_iff_ne_zero.mpr hq.ne_zero
+
+/--
+descent 不変量: q-free 商 `s'` は `s` と同じ mod `p` 合同類を保つ。
+
+`s ≡ 1 [MOD p]` と `q ≡ 1 [MOD p]` と `s = q * s'` から
+`s' ≡ 1 [MOD p]` が従う。
+
+これは descent の各段で **mod p 合同が不変** であることの証拠:
+反例からの降下操作 (`s → s' = s/q`) は
+`1 [MOD p]` 合同類を保存する。
+-/
+theorem branchA_fringe_sprime_congr_one_mod_p
+    {p s q s' : ℕ}
+    (hs_cong : s ≡ 1 [MOD p])
+    (hqprime : Nat.Prime q)
+    (hq_cong_dvd : p ∣ (q - 1))
+    (hqs : s = q * s') :
+    s' ≡ 1 [MOD p] := by
+  have hq_cong : q ≡ 1 [MOD p] :=
+    branchA_fringe_q_congr_one_mod_p hqprime hq_cong_dvd
+  have h1 : q * s' ≡ 1 [MOD p] := hqs ▸ hs_cong
+  have h2 : q * s' ≡ 1 * s' [MOD p] := Nat.ModEq.mul_right s' hq_cong
+  rw [one_mul] at h2
+  exact h2.symm.trans h1
+
+/--
+干渉縞集合からの cross-analysis:
+fringe bundle を受け取り、tail 係数の非整除性を導く統合補題。
+
+`BranchAInterferenceFringeBundle` の field だけから、
+`∃ M, s^p = y^{p-1} + p^3 * M ∧ ¬ q ∣ M` を構成する。
+-/
+theorem branchA_fringe_tail_coeff_coprime_to_witness
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q) :
+    ∃ M : ℕ, s ^ p = y ^ (p - 1) + p ^ 3 * M ∧ ¬ q ∣ M := by
+  rcases primeGe5BranchA_spow_eq_head_add_p_cube_mul
+    hBundle.padic.pack hBundle.padic.hp_dvd_gap
+    hBundle.padic.hgap hBundle.padic.hsGN with ⟨M, hM⟩
+  exact ⟨M, hM, branchA_fringe_q_not_dvd_tail_coeff
+    hBundle.witness.hqprime
+    hBundle.witness.hqs
+    hBundle.witness.hq_not_dvd_y
+    hBundle.padic.pack.hp
+    hM⟩
+
+/--
+干渉縞集合からの cross-analysis:
+fringe bundle を受け取り、q-free 商の mod p 合同を導く統合補題。
+
+`s = q * s'` (q-free quotient) なら `s' ≡ 1 [MOD p]`。
+descent 不変量として、降下の各段で合同類が保存されることを示す。
+-/
+theorem branchA_fringe_descent_preserves_mod_p
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q)
+    {s' : ℕ} (hqs : s = q * s') :
+    s' ≡ 1 [MOD p] :=
+  branchA_fringe_sprime_congr_one_mod_p
+    hBundle.padic.hs_cong_one
+    hBundle.witness.hqprime
+    hBundle.witness.hq_cong
+    hqs
+
+/-!
 ### Witness source → Contradiction adapter
 
 `BranchAContradictionWithWitnessSourceTarget` は witness `q` の構造的性質を
