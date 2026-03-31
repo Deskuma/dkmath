@@ -1954,3 +1954,91 @@ Archive
      今回の `v_q(z^p - y^p) = p * v_q(s)` と
      前回の `z - ω*y ≡ 0 [MOD q]` を結合し、
      `v_q(z - ω*y) = p * v_q(s)` を得る（他の因子は v_q = 0 なので）。
+
+### 日時: 2026/03/31 14:30:00 JST
+
+1. 目的:
+   - `review-023.md` の方針に従い、Hensel lifting を実装する。
+   - ω を `ZMod q` から `ZMod (q^k)` へ持ち上げるための基盤を構築する。
+
+2. 実施:
+
+   `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]` に以下を追加:
+
+   **§A. Simple root 条件の証明 (sorry なし)**
+
+   - **`branchA_omega_derivative_ne_zero`**:
+     `(p : ZMod q) * ω^(p-1) ≠ 0`
+     `X^p - 1` の導関数 `p * X^{p-1}` を ω で評価。
+     `p ≠ 0 [MOD q]` (← `q ≠ p`, 両方素数 → `q ∤ p`) と
+     `ω^(p-1) ≠ 0` (← `ω ≠ 0`, field なので冪も非零) から、
+     `mul_eq_zero` の case split で証明。
+     これが Hensel lifting 可能性の **数学的根拠**。
+
+   **§B. castHom 接続**
+
+   - **`branchA_castHom_qpow_to_q`**: `noncomputable def`
+     `ZMod (q^k) →+* ZMod q` の射影。
+     `dvd_pow_self q` を利用して `ZMod.castHom` を構成。
+
+   **§C. 高次 Hensel lift seed**
+
+   - **`BranchAHenselLiftData`**: `structure`
+     parametrized by `(p q k : ℕ) (hk : 0 < k) [Fact (Nat.Prime q)] (ω : ZMod q)`。
+     fields:
+       - `ω_k : ZMod (q^k)` — lifted root
+       - `hω_k_pow : ω_k^p = 1` — root 条件
+       - `hω_k_proj : castHom(...) ω_k = ω` — 射影との整合性
+
+   - **`branchA_hensel_lift_exists`**: `def` (sorry 1 個)
+     BranchAHenselLiftData の存在:
+     fringe bundle + `k ≥ 1` → lift data。
+     **sorry の理由**: Mathlib に `ZMod (q^k)` の `HenselianRing` instance が
+     直接実装されていない。数学的正当性は `branchA_omega_derivative_ne_zero`
+     (simple root 条件) により担保される。
+     この sorry は Mathlib 拡張 or 直接的 Newton 帰納構成で除去可能。
+
+3. 結論:
+
+   **Hensel lifting の状況:**
+
+   ```
+   branchA_omega_derivative_ne_zero   [PROVEN]
+      ↓  (simple root 条件)
+   BranchAHenselLiftData             [STRUCTURE]
+      ↓  (existence)
+   branchA_hensel_lift_exists         [sorry: Mathlib gap]
+      ↓  (使用時)
+   ω_k^p = 1  in ZMod (q^k)
+   castHom(ω_k) = ω  in ZMod q
+   ```
+
+   - simple root 条件は **sorry なし**で確定。
+   - lift の存在は数学的に正当だが、**Mathlib 接続の gap** のため sorry 1 個。
+   - この sorry は `ZMod (q^k)` の Henselian 性の直接証明で将来除去可能。
+
+4. 検証:
+   - `lake build`（全体）成功 (exit 0)
+   - sorry: BranchARestore.lean に **+1** (L2166, Hensel lift existence)
+     (BranchA.lean L4099 の既存 1 箇所は変化なし)
+   - BranchARestore.lean: 2077 → 2194 (+117 行)
+
+5. 失敗事例:
+   - `ZMod.natCast_zmod_eq_zero_iff_dvd` は存在しない。
+     `ZMod.natCast_eq_zero_iff` が正しい名前。
+   - `pow_eq_zero_iff (by omega : p - 1 ≠ 0)` — omega が p ≥ 5 を見えなかった。
+     → `Nat.sub_ne_zero_of_lt hBundle.padic.pack.hp.one_lt` で明示的に供給。
+   - `Nat.not_eq_zero_of_lt` は存在しない。`Nat.pos_iff_ne_zero.mp hk` で代替。
+   - `BranchAHenselLiftData` の field 内で `hk` を使うには structure パラメータに
+     `(hk : 0 < k)` が必要。最初は忘れていた。
+   - `branchA_hensel_lift_exists` を `theorem` で定義したが、
+     `BranchAHenselLiftData` は非 Prop なので `def` が必要。
+
+6. 次の課題:
+   - **sorry 除去 (Hensel lift)**:
+     Newton 法の帰納構成で `ZMod (q^k)` 上の root lift を直接構成する。
+     `ZMod.castHom` + `ZMod.lift` を使った手動帰納が一つのルート。
+   - **distinguished factor valuation equality**:
+     Hensel lift data を使って `v_q(z - ω_k*y) = v_q(Φ_p(z,y))` を証明。
+   - **terminal case**:
+     降下鎖の停止条件の矛盾分析。

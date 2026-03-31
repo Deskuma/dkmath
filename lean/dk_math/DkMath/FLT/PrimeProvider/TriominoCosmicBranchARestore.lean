@@ -2049,6 +2049,123 @@ theorem branchA_descent_padicValNat_s
   rw [hs_eq, padicValNat.mul hq_ne hs'_ne, padicValNat_self]
 
 /-!
+### Hensel Lifting — ω の高次 q-adic 世界への接続
+
+#### 数学的背景
+
+`ω ∈ ZMod q` は `X^p - 1` の根であり、しかも **simple root** である:
+  `f(X) = X^p - 1`, `f(ω) = 0`, `f'(ω) = p * ω^(p-1) ≠ 0 [MOD q]`
+最後の非零性は `p ≠ q` (→ `p ≠ 0 [MOD q]`) かつ `ω ≠ 0 [MOD q]` から出る。
+
+Hensel の補題により、この simple root は `ZMod (q^k)` へ一意に持ち上がる:
+  `∃! ω_k ∈ ZMod (q^k), ω_k^p = 1 ∧ castHom(ω_k) = ω`
+
+ただし、Mathlib に `ZMod (q^k)` の `HenselianRing` インスタンスが
+直接実装されていないため、lift の構成は axiom として記述する。
+数学的正当性は simple root 条件によって担保される。
+
+#### 実装内容
+
+1. **simple root 条件の証明** (sorry なし):
+   `p * ω^(p-1) ≠ 0 [MOD q]`
+2. **castHom 接続**: `ZMod (q^k) → ZMod q` の explicit 使用
+3. **高次 lift seed structure**: lifted root のデータ型
+4. **lift existence**: 数学的に正当な axiom（Hensel 補題の帰結）
+-/
+
+/--
+**Simple root 条件**: `ω` は `X^p - 1` の simple root in `ZMod q`。
+
+`f'(ω) = p * ω^(p-1)` は ZMod q で非零:
+- `p ≠ 0 [MOD q]` ← `q ≠ p` かつ両方素数 → `q ∤ p` → `(p : ZMod q) ≠ 0`
+- `ω ≠ 0 [MOD q]` ← `q ∤ z` かつ `q ∤ y`
+
+これが Hensel lifting 可能性の数学的根拠。
+-/
+theorem branchA_omega_derivative_ne_zero
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q) :
+    let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+    let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹)
+    (p : ZMod q) * ω ^ (p - 1) ≠ 0 := by
+  intro _inst ω hcontra
+  -- p * ω^(p-1) = 0 in ZMod q (field, zero divisor free)
+  -- → p = 0 or ω^(p-1) = 0
+  have hfield := mul_eq_zero.mp hcontra
+  rcases hfield with hp_zero | hpow_zero
+  · -- p = 0 in ZMod q → q ∣ p → q = p (both prime) → contradiction
+    have hq_dvd_p : q ∣ p := (ZMod.natCast_eq_zero_iff p q).mp hp_zero
+    exact hBundle.witness.hq_ne_p
+      ((Nat.dvd_prime hBundle.padic.pack.hp).mp hq_dvd_p |>.resolve_left
+        hBundle.witness.hqprime.ne_one)
+  · -- ω^(p-1) = 0 in ZMod q → ω = 0 (field, zero only if base is zero)
+    have hω_ne_zero : ω ≠ 0 := by
+      change (z : ZMod q) * (↑y : ZMod q)⁻¹ ≠ 0
+      have hz_ne_zero : (z : ZMod q) ≠ 0 := by
+        intro heq
+        exact hBundle.witness.hq_not_dvd_z ((ZMod.natCast_eq_zero_iff z q).mp heq)
+      have hy_ne_zero : (y : ZMod q) ≠ 0 := by
+        intro heq
+        exact hBundle.witness.hq_not_dvd_y ((ZMod.natCast_eq_zero_iff y q).mp heq)
+      exact mul_ne_zero hz_ne_zero (inv_ne_zero hy_ne_zero)
+    exact hω_ne_zero (pow_eq_zero_iff (show p - 1 ≠ 0 from
+      Nat.sub_ne_zero_of_lt hBundle.padic.pack.hp.one_lt) |>.mp hpow_zero)
+
+/--
+`ZMod (q^k)` から `ZMod q` への射影。
+
+`q ∣ q^k` (dvd_pow_self) を利用して `ZMod.castHom` を構成。
+-/
+noncomputable def branchA_castHom_qpow_to_q
+    (q : ℕ) (k : ℕ) (hk : 0 < k) [Fact (Nat.Prime q)] :
+    ZMod (q ^ k) →+* ZMod q :=
+  ZMod.castHom (dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk)) (ZMod q)
+
+/--
+高次 Hensel lift seed の structure。
+
+`ZMod (q^k)` 上に `ω_k^p = 1` を満たす元が存在し、
+`ZMod q` への射影が元の `ω` に一致する、というデータ。
+-/
+structure BranchAHenselLiftData
+    (p q k : ℕ) (hk : 0 < k) [Fact (Nat.Prime q)] (ω : ZMod q) where
+  /-- lifted root in ZMod (q^k) -/
+  ω_k : ZMod (q ^ k)
+  /-- ω_k は X^p - 1 の根 -/
+  hω_k_pow : ω_k ^ p = 1
+  /-- ω_k の ZMod q への射影は元の ω に一致 -/
+  hω_k_proj : ZMod.castHom (dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk)) (ZMod q) ω_k = ω
+
+/--
+**Hensel lifting existence (axiom)**:
+`ω` が `X^p - 1` の simple root in `ZMod q` であるとき、
+任意の `k ≥ 1` に対して `ZMod (q^k)` へ一意に持ち上がる。
+
+**数学的正当性**: Hensel の補題。
+`ZMod (q^k)` は `(q) · ZMod (q^k)` を maximal ideal とする local ring であり、
+`ZMod (q^k) / (q) ≅ ZMod q` (field) 上で `ω` は `X^p - 1` の simple root
+(∵ `branchA_omega_derivative_ne_zero`)。
+したがって Hensel の補題により `ZMod (q^k)` への一意な lift が存在する。
+
+**Lean 接続状況**: Mathlib に `ZMod (q^k)` の `HenselianRing` instance が
+直接的には用意されていないため、現時点では sorry として記述する。
+この sorry は今後 Mathlib 側の拡張、あるいは直接的な Newton 法の
+帰納構成により除去可能。
+-/
+def branchA_hensel_lift_exists
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q)
+    {k : ℕ} (hk : 0 < k) :
+    let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+    let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹)
+    BranchAHenselLiftData p q k hk ω := by
+  intro _inst ω
+  -- Hensel 補題による lift の存在。
+  -- 数学的正当性: branchA_omega_derivative_ne_zero により simple root 条件が成立。
+  -- Lean 接続: ZMod (q^k) の HenselianRing instance が Mathlib にないため sorry。
+  sorry
+
+/-!
 ### Witness source → Contradiction adapter
 
 `BranchAContradictionWithWitnessSourceTarget` は witness `q` の構造的性質を
