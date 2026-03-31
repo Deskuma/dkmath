@@ -2127,3 +2127,79 @@ Archive
      これにより `padicValNat q (ZMod.val(z - ω_k * y)) ≥ 1` が得られる。
    - **terminal case**:
      降下鎖の停止条件の矛盾分析。
+
+### 日時: 2026/03/31 16:00:00 JST
+
+1. 目的:
+   - `review-025.md` の方針に従い、valuation 等式の ℕ 翻訳を実装する。
+   - `castHom(δ) = 0` ↔ `q ∣ δ.val` → `padicValNat` の接続を構築する。
+
+2. 実施:
+
+   `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]` に以下を追加:
+
+   **§A. castHom kernel → divisibility 変換 (sorry なし)**
+
+   接続チェーン:
+
+   ```
+   castHom(δ) = 0       [ZMod q]
+   → cast δ = 0         [castHom_apply]
+   → (δ.val : ZMod q) = 0  [cast_eq_val, NeZero (q^k)]
+   → q ∣ δ.val           [natCast_eq_zero_iff]
+   ```
+
+   - **`branchA_castHom_zero_implies_dvd_val`**:
+     `castHom(δ) = 0` → `q ∣ δ.val`
+     `NeZero (q^k)` は `pow_ne_zero k hq.ne_zero` から構成。
+
+   - **`branchA_castHom_ne_zero_implies_not_dvd_val`**:
+     `castHom(δ) ≠ 0` → `¬ q ∣ δ.val`
+     対偶を使って同じチェーンで証明。
+
+   **§B. padicValNat への翻訳 (sorry なし)**
+
+   - **`branchA_non_distinguished_padicValNat_eq_zero`**:
+     `i ≢ 1 [MOD p]` → `padicValNat q (ZMod.val(z - ω_k^i * y)) = 0`
+     castHom ≠ 0 → ¬ q ∣ val → `padicValNat.eq_zero_of_not_dvd`。
+
+   - **`branchA_distinguished_dvd_val`**:
+     `q ∣ ZMod.val(z - ω_k * y)`
+     castHom = 0 → `branchA_castHom_zero_implies_dvd_val`。
+
+   - **`branchA_distinguished_padicValNat_ge_one`**:
+     `δ.val = 0 ∨ 1 ≤ padicValNat q δ.val`
+     `δ.val = 0` は `δ = 0 in ZMod (q^k)` つまり `q^k | (z - ω_k*y)` に対応。
+     `δ.val ≠ 0` なら `q ∣ val` + `one_le_padicValNat_of_dvd` で `≥ 1`。
+
+3. 結論:
+
+   **ℕ 翻訳の全体像:**
+
+   ```
+   ZMod (q^k) 世界                    ℕ 世界
+   ─────────────────                ─────────────────
+   castHom(z - ω_k * y) = 0    →   q ∣ val(δ)
+                                →   padicValNat q val(δ) ≥ 1
+
+   castHom(z - ω_k^i * y) ≠ 0  →   ¬ q ∣ val(δ_i)
+                                →   padicValNat q val(δ_i) = 0
+   ```
+
+   これにより **ZMod 世界の因子分離** と **ℕ 世界の padicValNat** が接続された。
+
+4. 検証:
+   - `lake build`（全体）成功 (exit 0)
+   - sorry 増加なし（Hensel lift existence の 1 箇所のみ）
+   - **新しい 5 定理は全て sorry なし**
+   - BranchARestore.lean: 2341 → 2452 (+111 行)
+
+5. 失敗事例:
+   - `positivity` が `q^k ≠ 0` を解けなかった（`hq : Nat.Prime q` から自動推論不能）。
+     `pow_ne_zero k hq.ne_zero` で手動構成して解決。
+
+6. 次の課題:
+   - **Hensel lift sorry の除去**: Newton 帰納構成。
+   - **terminal case**: 降下停止の矛盾分析。
+   - **v_q(z - ω_k*y) = p * v_q(s) の直接証明**:
+     全体 Kummer + non-distinguished = 0 の組合せから。

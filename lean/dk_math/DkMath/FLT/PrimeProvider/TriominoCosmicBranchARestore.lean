@@ -2313,6 +2313,117 @@ structure BranchACyclotomicValuationData
       (ZMod q) _ _ ((z : ZMod (q ^ k)) - liftData.ω_k ^ i * (y : ZMod (q ^ k))) ≠ 0
 
 /-!
+### ℕ 翻訳 — castHom kernel と padicValNat の接続
+
+`castHom(δ) = 0 in ZMod q` を `q ∣ δ.val` → `padicValNat q δ.val ≥ 1` へ翻訳する。
+
+接続チェーン:
+  `castHom(δ) = 0`
+  → `(cast δ : ZMod q) = 0`         [castHom_apply]
+  → `(δ.val : ZMod q) = 0`          [cast_eq_val]
+  → `q ∣ δ.val`                     [natCast_eq_zero_iff]
+  → `padicValNat q δ.val ≥ 1`       [one_le_padicValNat_of_dvd]
+
+逆に non-distinguished factor:
+  `castHom(δ') ≠ 0`
+  → `¬ q ∣ δ'.val`
+  → `padicValNat q δ'.val = 0`      [eq_zero_of_not_dvd]
+-/
+
+/--
+**castHom kernel → divisibility 変換**:
+`castHom h (ZMod q) δ = 0` ⟹ `q ∣ δ.val`。
+
+経路: `castHom_apply` → `cast_eq_val` → `natCast_eq_zero_iff`。
+-/
+theorem branchA_castHom_zero_implies_dvd_val
+    {q k : ℕ} (hq : Nat.Prime q) (hk : 0 < k)
+    (δ : ZMod (q ^ k))
+    (hzero : ZMod.castHom (dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk)) (ZMod q) δ = 0) :
+    q ∣ δ.val := by
+  haveI : NeZero (q ^ k) := ⟨(Nat.pos_of_ne_zero (pow_ne_zero k hq.ne_zero)).ne'⟩
+  rw [ZMod.castHom_apply, ZMod.cast_eq_val] at hzero
+  exact (ZMod.natCast_eq_zero_iff δ.val q).mp hzero
+
+/--
+**castHom nonzero → non-divisibility 変換**:
+`castHom h (ZMod q) δ ≠ 0` ⟹ `¬ q ∣ δ.val`。
+-/
+theorem branchA_castHom_ne_zero_implies_not_dvd_val
+    {q k : ℕ} (hq : Nat.Prime q) (hk : 0 < k)
+    (δ : ZMod (q ^ k))
+    (hne : ZMod.castHom (dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk)) (ZMod q) δ ≠ 0) :
+    ¬ q ∣ δ.val := by
+  haveI : NeZero (q ^ k) := ⟨(Nat.pos_of_ne_zero (pow_ne_zero k hq.ne_zero)).ne'⟩
+  intro hdvd
+  exact hne (by rwa [ZMod.castHom_apply, ZMod.cast_eq_val, ZMod.natCast_eq_zero_iff])
+
+/--
+**Non-distinguished factor の padicValNat が 0**:
+`i ≢ 1 [MOD p]` のとき、因子 `z - ω_k^i * y` の `ZMod.val` は `q` で割れない。
+よって `padicValNat q (ZMod.val(...)) = 0`。
+-/
+theorem branchA_non_distinguished_padicValNat_eq_zero
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q)
+    {k : ℕ} (hk : 0 < k)
+    (hLift : let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩;
+             let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹);
+             BranchAHenselLiftData p q k hk ω)
+    {i : ℕ} (hi : ¬ i ≡ 1 [MOD p]) :
+    let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+    let δ_i := (z : ZMod (q ^ k)) - hLift.ω_k ^ i * (y : ZMod (q ^ k))
+    padicValNat q δ_i.val = 0 := by
+  intro _inst δ_i
+  apply padicValNat.eq_zero_of_not_dvd
+  exact branchA_castHom_ne_zero_implies_not_dvd_val hBundle.witness.hqprime hk δ_i
+    (branchA_hensel_non_distinguished_proj_ne_zero hBundle hk hLift hi)
+
+/--
+**Distinguished factor は q で割れる**:
+因子 `z - ω_k * y` の `ZMod.val` は `q` の倍数。
+-/
+theorem branchA_distinguished_dvd_val
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q)
+    {k : ℕ} (hk : 0 < k)
+    (hLift : let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩;
+             let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹);
+             BranchAHenselLiftData p q k hk ω) :
+    let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+    let δ := (z : ZMod (q ^ k)) - hLift.ω_k * (y : ZMod (q ^ k))
+    q ∣ δ.val := by
+  intro _inst δ
+  exact branchA_castHom_zero_implies_dvd_val hBundle.witness.hqprime hk δ
+    (branchA_hensel_distinguished_proj_zero hBundle hk hLift)
+
+/--
+**Distinguished factor の padicValNat ≥ 1**:
+`δ.val ≠ 0` を仮定すれば `padicValNat q δ.val ≥ 1` が得られる。
+
+`δ.val = 0` のケースは `δ = 0 in ZMod (q^k)` を意味し、
+これは `z ≡ ω_k * y [MOD q^k]` つまり `q^k ∣ (z - ω_k*y)` で、
+valuation はさらに高い。いずれにせよ `v_q ≥ 1`。
+-/
+theorem branchA_distinguished_padicValNat_ge_one
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q)
+    {k : ℕ} (hk : 0 < k)
+    (hLift : let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩;
+             let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹);
+             BranchAHenselLiftData p q k hk ω) :
+    let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+    let δ := (z : ZMod (q ^ k)) - hLift.ω_k * (y : ZMod (q ^ k))
+    δ.val = 0 ∨ 1 ≤ padicValNat q δ.val := by
+  intro _inst δ
+  by_cases hval : δ.val = 0
+  · left; exact hval
+  · right
+    haveI : Fact (Nat.Prime q) := _inst
+    exact one_le_padicValNat_of_dvd hval
+      (branchA_distinguished_dvd_val hBundle hk hLift)
+
+/-!
 ### Witness source → Contradiction adapter
 
 `BranchAContradictionWithWitnessSourceTarget` は witness `q` の構造的性質を
