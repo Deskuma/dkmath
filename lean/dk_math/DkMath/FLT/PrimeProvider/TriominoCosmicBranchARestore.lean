@@ -1923,6 +1923,132 @@ theorem branchA_non_distinguished_factor_nonzero
   exact branchA_omega_i_ne_omega hBundle hi hωi_eq_ω
 
 /-!
+### Kummer Valuation — padicValNat への翻訳
+
+ZMod q 上での因子分離を ℕ の `padicValNat` に翻訳する。
+
+核心は Kummer 型の valuation 集中定理:
+  `v_q(z^p - y^p) = v_q(GN p (z-y) y) = v_q(p * s^p) = p * v_q(s)`
+
+これは 3 段の橋で構成される:
+  1. `v_q(z^p - y^p) = v_q(GN)` ← `q ∤ (z-y)` と既存定理
+  2. `GN = p * s^p` ← normal form の定義
+  3. `v_q(p * s^p) = v_q(p) + p * v_q(s) = 0 + p * v_q(s)` ← `q ≠ p`
+
+さらに `q ∣ s` から `v_q(s) ≥ 1` なので `v_q(z^p - y^p) ≥ p`。
+これが massive cancellation の padicValNat による正確な表現。
+-/
+
+/--
+**Kummer valuation 第 1 段**: `v_q(z^p - y^p) = v_q(GN p (z-y) y)`。
+
+`q ∤ (z-y)` が干渉縞集合の witness 側に含まれているので、
+既存の `padicValNat_sub_pow_eq_padicValNat_GN_of_not_dvd_gap` を直接適用。
+-/
+theorem branchA_padicValNat_sub_pow_eq_GN
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q) :
+    padicValNat q (z ^ p - y ^ p) =
+      padicValNat q (GN p (z - y) y) := by
+  exact DkMath.NumberTheory.Gcd.padicValNat_sub_pow_eq_padicValNat_GN_of_not_dvd_gap
+    hBundle.padic.pack.hp.two_le
+    hBundle.padic.pack.hyz_lt
+    hBundle.padic.pack.hy0.bot_lt
+    hBundle.witness.hqprime
+    hBundle.witness.hq_not_dvd_gap
+
+/--
+**Kummer valuation 第 2 段**: `v_q(GN) = v_q(p) + v_q(s^p)`。
+
+`GN p (z-y) y = p * s^p` (正規形) なので
+`v_q(GN) = v_q(p) + v_q(s^p) = v_q(p) + p * v_q(s)`。
+-/
+theorem branchA_padicValNat_GN_decomp
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q) :
+    padicValNat q (GN p (z - y) y) =
+      padicValNat q p + p * padicValNat q s := by
+  have hsGN := hBundle.padic.hsGN  -- GN p (z-y) y = p * s^p
+  haveI : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+  have hp_pos := hBundle.padic.pack.hp.pos
+  have hs_pos := branchA_s_pos hBundle.padic.pack hBundle.padic.hsx
+  -- GN = p * s^p ≠ 0
+  have hp_ne : p ≠ 0 := hBundle.padic.pack.hp.ne_zero
+  have hs_ne : s ≠ 0 := Nat.pos_iff_ne_zero.mp hs_pos
+  have hsp_ne : s ^ p ≠ 0 := pow_ne_zero p hs_ne
+  rw [hsGN, padicValNat.mul hp_ne hsp_ne, padicValNat.pow p hs_ne]
+
+/--
+**Kummer valuation 第 2.5 段**: `v_q(p) = 0` (q ≠ p のとき)。
+
+`q` と `p` は異なる素数なので、`q ∤ p` → `v_q(p) = 0`。
+-/
+theorem branchA_padicValNat_p_eq_zero
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q) :
+    padicValNat q p = 0 := by
+  apply padicValNat.eq_zero_of_not_dvd
+  intro hqp
+  exact hBundle.witness.hq_ne_p
+    ((Nat.dvd_prime hBundle.padic.pack.hp).mp hqp |>.resolve_left hBundle.witness.hqprime.ne_one)
+
+/--
+**Kummer valuation 統合**: `v_q(z^p - y^p) = p * v_q(s)`。
+
+3 段の橋を合成した central statement。
+GN = 円分核 = p * s^p の q-adic 構造を 1 式に集約。
+-/
+theorem branchA_kummer_valuation
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q) :
+    padicValNat q (z ^ p - y ^ p) = p * padicValNat q s := by
+  rw [branchA_padicValNat_sub_pow_eq_GN hBundle,
+      branchA_padicValNat_GN_decomp hBundle,
+      branchA_padicValNat_p_eq_zero hBundle, zero_add]
+
+/--
+`v_q(s) ≥ 1`: `q ∣ s` から q-adic valuation は少なくとも 1。
+-/
+theorem branchA_padicValNat_s_ge_one
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q) :
+    1 ≤ padicValNat q s := by
+  haveI : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+  have hs_ne : s ≠ 0 := Nat.pos_iff_ne_zero.mp (branchA_s_pos hBundle.padic.pack hBundle.padic.hsx)
+  exact one_le_padicValNat_of_dvd hs_ne hBundle.witness.hqs
+
+/--
+**Kummer valuation 下界**: `v_q(z^p - y^p) ≥ p`。
+
+massive cancellation を padicValNat で表現した核心定理。
+`v_q(z^p - y^p) = p * v_q(s) ≥ p * 1 = p`。
+-/
+theorem branchA_kummer_valuation_ge_p
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q) :
+    p ≤ padicValNat q (z ^ p - y ^ p) := by
+  rw [branchA_kummer_valuation hBundle]
+  exact Nat.le_mul_of_pos_right p (branchA_padicValNat_s_ge_one hBundle)
+
+/--
+**降下と Kummer valuation の接続**:
+`s = q * s'` のとき `v_q(s) = 1 + v_q(s')`。よって
+各降下 step で `v_q(z^p - y^p)` が `p` ずつ減る。
+-/
+theorem branchA_descent_padicValNat_s
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q) :
+    padicValNat q s = 1 + padicValNat q (s / q) := by
+  haveI : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+  have hs_ne := Nat.pos_iff_ne_zero.mp (branchA_s_pos hBundle.padic.pack hBundle.padic.hsx)
+  set s' := s / q with hs'_def
+  have hs_eq : s = q * s' := (Nat.mul_div_cancel' hBundle.witness.hqs).symm
+  have hs'_ne : s' ≠ 0 := Nat.pos_iff_ne_zero.mp
+    (branchA_descent_s_prime_pos (branchA_s_pos hBundle.padic.pack hBundle.padic.hsx) hs_eq)
+  have hq_ne : q ≠ 0 := hBundle.witness.hqprime.ne_zero
+  rw [hs_eq, padicValNat.mul hq_ne hs'_ne, padicValNat_self]
+
+/-!
 ### Witness source → Contradiction adapter
 
 `BranchAContradictionWithWitnessSourceTarget` は witness `q` の構造的性質を

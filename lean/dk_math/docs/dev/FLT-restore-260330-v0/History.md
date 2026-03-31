@@ -1857,3 +1857,100 @@ Archive
      `ω^p = 1, ω ≠ 1` in `ZMod q` → `ω' ^p = 1` in `ZMod (q^k)` の lift。
    - **descent terminal case**:
      降下鎖の停止条件 `s' = 1` の構造分析。
+
+### 日時: 2026/03/31 13:45:00 JST
+
+1. 目的:
+   - `review-022.md` の方針に従い、Kummer valuation を実装する。
+   - ZMod q 上の因子分離結果を ℕ の `padicValNat` に翻訳し、
+     massive cancellation の定量的表現を得る。
+
+2. 実施:
+
+   `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]` に以下を追加:
+
+   **§A. Kummer Valuation — padicValNat への翻訳**
+
+   3 段の橋を組み立てた:
+
+   - **`branchA_padicValNat_sub_pow_eq_GN`** [第 1 段]:
+     `v_q(z^p - y^p) = v_q(GN p (z-y) y)`
+     既存の `padicValNat_sub_pow_eq_padicValNat_GN_of_not_dvd_gap` を
+     fringe bundle interface で wrap。`q ∤ (z-y)` は bundle の witness 側に含まれる。
+
+   - **`branchA_padicValNat_GN_decomp`** [第 2 段]:
+     `v_q(GN) = v_q(p) + p * v_q(s)`
+     `GN = p * s^p` (正規形) + `padicValNat.mul` + `padicValNat.pow` で分解。
+
+   - **`branchA_padicValNat_p_eq_zero`** [第 2.5 段]:
+     `v_q(p) = 0`
+     `q ≠ p` (異なる素数) → `q ∤ p` → `padicValNat.eq_zero_of_not_dvd`。
+
+   - **`branchA_kummer_valuation`** [統合]:
+     `v_q(z^p - y^p) = p * v_q(s)`
+     3 段の橋の合成。Central statement。
+
+   - **`branchA_padicValNat_s_ge_one`**:
+     `v_q(s) ≥ 1`
+     `q ∣ s` → `one_le_padicValNat_of_dvd`。
+
+   - **`branchA_kummer_valuation_ge_p`** [下界]:
+     `p ≤ v_q(z^p - y^p)`
+     `v_q(z^p - y^p) = p * v_q(s) ≥ p * 1 = p`。
+
+   **§B. 降下と Kummer valuation の接続**
+
+   - **`branchA_descent_padicValNat_s`**:
+     `v_q(s) = 1 + v_q(s/q)`
+     `s = q * s'` → `padicValNat.mul` + `padicValNat_self`。
+     各降下 step で `v_q(s)` が 1 ずつ、`v_q(z^p - y^p)` が p ずつ減る。
+
+3. 結論:
+
+   **Kummer valuation の全体像:**
+
+   ```
+   v_q(z^p - y^p)
+     = v_q(GN p (z-y) y)           [第 1 段: q ∤ gap]
+     = v_q(p) + p * v_q(s)         [第 2 段: GN = p * s^p]
+     = 0 + p * v_q(s)              [第 2.5 段: q ≠ p]
+     = p * v_q(s)                  [統合]
+     ≥ p                           [下界: q ∣ s → v_q(s) ≥ 1]
+   ```
+
+   **降下との接続:**
+
+   ```
+   s = q * s'  →  v_q(s) = 1 + v_q(s')
+                →  v_q(z^p - y^p) が p ずつ減少
+   ```
+
+   - **7 定理** を新設（全て sorry なし）
+   - massive cancellation の定量的表現が `padicValNat` で確定した。
+   - 降下 1 step ごとの valuation 変化が定理化された。
+
+4. 検証:
+   - `lake build`（全体）成功 (exit 0)
+   - sorry 増加なし（BranchA.lean L4099 の既存 1 箇所のみ）
+   - BranchARestore.lean: 1951 → 2077 (+126 行)
+
+5. 失敗事例:
+   - `DkMath.NumberTheory.GcdNext.padicValNat_sub_pow_...` — namespace が
+     `GcdNext` ではなく `Gcd` だった。→ 修正。
+   - `hBundle.padic.pack.hyz` は `y ≤ z` だが、外部定理は `y < z` を要求。
+     `hyz_lt` field を使うよう修正。`.hy0` は `y ≠ 0` で `.hy0.bot_lt` で `0 < y` が取れた。
+   - `padicValNat.mul` / `.pow` は `Fact (Nat.Prime q)` instance を要求するが、
+     haveI で bundle から供給が必要だった。
+   - `prime_pow_self` は存在しない。`padicValNat_self` が正しい名前。
+
+6. 次の課題:
+   - **Hensel lifting**:
+     `ω^p = 1, ω ≠ 1` in `ZMod q` を `ZMod (q^k)` へ lift する。
+     これにより `v_q(z - ω*y)` の正確な値が決定できる。
+   - **descent terminal case**:
+     `v_q(s) = 0` (= `s' = 1` に対応) のとき、
+     `v_q(z^p - y^p) = 0` → `q ∤ (z^p - y^p)` → 矛盾の可能性。
+   - **Kummer valuation と distinguished factor の接続**:
+     今回の `v_q(z^p - y^p) = p * v_q(s)` と
+     前回の `z - ω*y ≡ 0 [MOD q]` を結合し、
+     `v_q(z - ω*y) = p * v_q(s)` を得る（他の因子は v_q = 0 なので）。
