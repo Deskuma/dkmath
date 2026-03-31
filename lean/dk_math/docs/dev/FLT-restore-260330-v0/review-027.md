@@ -198,7 +198,7 @@ $$
 
 $$
 \boxed{
-\text{まず } \texttt{branchA_padicValNat_mod_pow_eq} \text{ から。}
+\text{まず } \texttt{branchA\_padicValNat\_mod\_pow\_eq} \text{ から。}
 }
 $$
 
