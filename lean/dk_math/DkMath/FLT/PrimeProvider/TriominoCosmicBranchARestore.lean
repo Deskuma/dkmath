@@ -1689,6 +1689,128 @@ theorem branchA_descent_spow_factorization
   rw [hs_eq, mul_pow]
 
 /-!
+### ω の位数構造 (Root of Unity Analysis)
+
+干渉縞集合から `ω := z * y⁻¹ ∈ ZMod q` を構成し、
+`ω` が **非自明な p-th root of unity** であることを確定する。
+
+- `ω^p = 1` : FLT 等式 `x^p + y^p = z^p` と `q ∣ x` から、
+  `z^p ≡ y^p [MOD q]` ⟹ `(z*y⁻¹)^p = 1`。
+- `ω ≠ 1` : `q ∤ (z-y)` から `z ≢ y [MOD q]` ⟹ `z*y⁻¹ ≠ 1`。
+- `orderOf ω = p` : `ω^p = 1` かつ `ω ≠ 1` で `p` が素数なので
+  `orderOf_eq_prime` により直接得られる。
+
+これは円分核 Φ_p(z,y) の q-adic 構造の入口:
+`ω` が primitive ⟹ `q` は Q(ζ_p) で完全分解する。
+Hensel lifting の高次化はこの 3 定理の上に構築される。
+
+既存の `restore_witness_cong_one_mod_p` は同じ計算を
+`p ∣ (q-1)` の導出に使っているが、
+ここでは ω そのものの性質を fringe bundle interface で公開する。
+-/
+
+/--
+**ω^p = 1**: `ω := z * y⁻¹ ∈ ZMod q` は p-th root of unity。
+
+FLT 等式 `x^p + y^p = z^p` で `q ∣ x` → `z^p ≡ y^p [MOD q]` から：
+  `ω^p = (z*y⁻¹)^p = z^p * (y⁻¹)^p = y^p * (y⁻¹)^p = (y*y⁻¹)^p = 1^p = 1`
+-/
+theorem branchA_omega_pow_eq_one
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q) :
+    let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+    let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹)
+    ω ^ p = 1 := by
+  intro _inst ω
+  change ((z : ZMod q) * (↑y : ZMod q)⁻¹) ^ p = 1
+  haveI : Fact (Nat.Prime p) := ⟨hBundle.padic.pack.hp⟩
+  -- y ≠ 0 in ZMod q
+  have hy_ne_zero : (y : ZMod q) ≠ 0 := by
+    intro heq
+    exact hBundle.witness.hq_not_dvd_y ((ZMod.natCast_eq_zero_iff y q).mp heq)
+  -- x = 0 in ZMod q
+  have hx_eq_zero : (x : ZMod q) = 0 :=
+    (ZMod.natCast_eq_zero_iff x q).mpr hBundle.witness.hq_dvd_x
+  -- z^p = y^p in ZMod q (from FLT + q ∣ x)
+  have hzp_eq_yp : (z : ZMod q) ^ p = (y : ZMod q) ^ p := by
+    have hFLT : (x : ZMod q) ^ p + (y : ZMod q) ^ p = (z : ZMod q) ^ p := by
+      have : (↑(x ^ p + y ^ p) : ZMod q) = (↑(z ^ p) : ZMod q) := by
+        congr 1; exact hBundle.padic.pack.hEq
+      simpa [Nat.cast_add, Nat.cast_pow] using this
+    rw [hx_eq_zero, zero_pow hBundle.padic.pack.hp.ne_zero, zero_add] at hFLT
+    exact hFLT.symm
+  -- ω^p = z^p * (y⁻¹)^p = y^p * (y⁻¹)^p = 1
+  rw [mul_pow, hzp_eq_yp, ← mul_pow, mul_inv_cancel₀ hy_ne_zero, one_pow]
+
+/--
+**ω ≠ 1**: `ω := z * y⁻¹ ∈ ZMod q` は非自明。
+
+`q ∤ (z - y)` → `z ≢ y [MOD q]` → `z * y⁻¹ ≠ 1`。
+-/
+theorem branchA_omega_ne_one
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q) :
+    let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+    let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹)
+    ω ≠ 1 := by
+  intro _inst ω
+  change (z : ZMod q) * (↑y : ZMod q)⁻¹ ≠ 1
+  intro heq
+  -- z = y in ZMod q
+  have hy_ne_zero : (y : ZMod q) ≠ 0 := by
+    intro hy_zero
+    exact hBundle.witness.hq_not_dvd_y ((ZMod.natCast_eq_zero_iff y q).mp hy_zero)
+  have hz_eq_y : (z : ZMod q) = (y : ZMod q) := by
+    have h := mul_inv_cancel₀ hy_ne_zero  -- y * y⁻¹ = 1
+    rw [← heq] at h  -- y * (z * y⁻¹) = y * 1 ... ではなく、直接:
+    -- z * y⁻¹ = 1 → z = 1 * y = y
+    calc (z : ZMod q) = (z : ZMod q) * (↑y : ZMod q)⁻¹ * (↑y : ZMod q) := by
+            rw [mul_assoc, inv_mul_cancel₀ hy_ne_zero, mul_one]
+      _ = 1 * (↑y : ZMod q) := by rw [heq]
+      _ = (y : ZMod q) := one_mul _
+  -- → q ∣ (z - y)
+  have hq_dvd_gap : q ∣ (z - y) := by
+    have hsub : (z : ZMod q) - (y : ZMod q) = 0 := sub_eq_zero.mpr hz_eq_y
+    rw [← Nat.cast_sub hBundle.padic.pack.hyz] at hsub
+    exact (ZMod.natCast_eq_zero_iff (z - y) q).mp hsub
+  exact hBundle.witness.hq_not_dvd_gap hq_dvd_gap
+
+/--
+**orderOf ω = p**: `ω` の位数は厳密に `p`。
+
+`ω^p = 1` かつ `ω ≠ 1` で `p` が素数なので、
+`orderOf_eq_prime` により `orderOf ω = p` が直接得られる。
+
+これは `ω` が **primitive p-th root of unity** in `ZMod q` であることの証明。
+-/
+theorem branchA_omega_order_eq_p
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q) :
+    let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+    let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹)
+    orderOf ω = p := by
+  intro _inst ω
+  haveI : Fact (Nat.Prime p) := ⟨hBundle.padic.pack.hp⟩
+  exact orderOf_eq_prime
+    (branchA_omega_pow_eq_one hBundle)
+    (branchA_omega_ne_one hBundle)
+
+/--
+干渉縞集合から `QAdicLiftSeed` を直接構成する。
+
+`ω := z * y⁻¹ ∈ ZMod q` が `ω^p = 1`, `ω ≠ 1` を満たすので、
+既存の `PrimeGe5BranchAPrimitiveRestoreQAdicLiftSeed` の全 field が供給される。
+-/
+def branchA_qadic_lift_seed_of_fringe
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q) :
+    let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+    PrimeGe5BranchAPrimitiveRestoreQAdicLiftSeed p x y z t s q where
+  ω := (z : ZMod q) * ((y : ZMod q)⁻¹)
+  hω_pow := branchA_omega_pow_eq_one hBundle
+  hω_ne_one := branchA_omega_ne_one hBundle
+
+/-!
 ### Witness source → Contradiction adapter
 
 `BranchAContradictionWithWitnessSourceTarget` は witness `q` の構造的性質を

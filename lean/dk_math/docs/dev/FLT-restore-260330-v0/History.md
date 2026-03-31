@@ -1688,3 +1688,98 @@ Archive
    - **Hensel lifting の高次化**:
      `ZMod q` → `ZMod (q^p)` への ω の lift。
      既存の `PrimeGe5BranchAPrimitiveRestoreQAdicLiftSeed` との接続。
+
+### 日時: 2026/03/31 12:30:00 JST
+
+1. 目的:
+   - `review-020.md` の方針に従い、`ω := z * y⁻¹ ∈ ZMod q` の
+     位数構造を干渉縞集合 interface で明示的に確定する:
+     - `ω^p = 1` (p-th root of unity)
+     - `ω ≠ 1` (非自明性)
+     - `orderOf ω = p` (primitive)
+   - 既存の `PrimeGe5BranchAPrimitiveRestoreQAdicLiftSeed` との直接接続。
+
+2. 実施:
+
+   `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]` に以下を追加:
+
+   **§A. ω の位数構造 (Root of Unity Analysis)**
+
+   - **`branchA_omega_pow_eq_one`**: `ω^p = 1`
+     FLT 等式 `x^p + y^p = z^p` と `q ∣ x` から ZMod q 上で
+     `z^p = y^p` を導き、`(z*y⁻¹)^p = z^p*(y⁻¹)^p = y^p*(y⁻¹)^p = 1` を構成。
+
+   - **`branchA_omega_ne_one`**: `ω ≠ 1`
+     `q ∤ (z-y)` → `z ≢ y [MOD q]` → `z*y⁻¹ ≠ 1`。
+     `ω = 1` と仮定すると `z = z*y⁻¹*y = 1*y = y` (in ZMod q) → `q ∣ (z-y)` → 矛盾。
+
+   - **`branchA_omega_order_eq_p`**: `orderOf ω = p`
+     `ω^p = 1` かつ `ω ≠ 1` で `p` が素数なので
+     `orderOf_eq_prime` により直接得られる。
+     これは `ω` が **primitive p-th root of unity** であることの確定。
+
+   **§B. QAdicLiftSeed への直接接続**
+
+   - **`branchA_qadic_lift_seed_of_fringe`**: `def` (データ構成)
+     干渉縞集合 → `PrimeGe5BranchAPrimitiveRestoreQAdicLiftSeed` の全 field 供給。
+     `ω`, `hω_pow`, `hω_ne_one` を fringe bundle の定理から直接構成。
+
+3. 結論:
+
+   **到達した円分構造の全体像:**
+
+   ```
+   BranchAInterferenceFringeBundle
+     │
+     ├──→ branchA_omega_pow_eq_one   : ω^p = 1
+     ├──→ branchA_omega_ne_one       : ω ≠ 1
+     ├──→ branchA_omega_order_eq_p   : orderOf ω = p
+     │
+     └──→ branchA_qadic_lift_seed_of_fringe
+           └── PrimeGe5BranchAPrimitiveRestoreQAdicLiftSeed
+                ├── ω : ZMod q
+                ├── hω_pow : ω^p = 1
+                └── hω_ne_one : ω ≠ 1
+   ```
+
+   これにより:
+   - `ω` が **primitive p-th root of unity mod q** であることが形式的に確定した。
+   - 既存の `QAdicLiftSeed` が fringe bundle から sorry なしで構成可能になった。
+   - `p ∣ (q-1)` は `orderOf ω = p` と `orderOf ω ∣ (q-1)` の合成として
+     改めて理解される — 同じ計算が `restore_witness_cong_one_mod_p` にあるが、
+     ω そのものが fringe interface で公開されたのが今回の進歩。
+
+   **数学的意味:**
+
+   `ω` が primitive ⟹ `q` は $\mathbb{Q}(\zeta_p)$ で完全分解する。
+   Hensel lifting の高次化（`ZMod q` → `ZMod (q^p)`）は
+   この 3 定理の上に構築される。
+
+   - **4 定理/定義** を新設（全て sorry なし）:
+     `branchA_omega_pow_eq_one`, `branchA_omega_ne_one`,
+     `branchA_omega_order_eq_p`, `branchA_qadic_lift_seed_of_fringe`
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore` 成功
+   - `lake build`（全体）成功 (exit 0)
+   - sorry 増加なし（BranchA.lean L4099 の既存 1 箇所のみ）
+   - BranchARestore.lean: 1717 → 1839 (+122 行)
+
+5. 失敗事例:
+   - `branchA_omega_ne_one` で `field_simp` を使ったところ、
+     `z/y = 1` の形に正規化され `z = y` ではなく `↑z / ↑y = 1` が出力された。
+     → `mul_assoc + inv_mul_cancel₀ + one_mul` による explicit 計算で解決。
+   - `branchA_qadic_lift_seed_of_fringe` を `theorem` で定義したが、
+     `QAdicLiftSeed` はデータ structure (non-Prop) なので型エラー。
+     → `def` に変更。
+
+6. 次の課題:
+   - **Hensel lifting の高次化**:
+     `ω^p = 1` ∧ `ω ≠ 1` in `ZMod q` を `ZMod (q^p)` へ lift する。
+     Hensel の補題の Lean 形式化が必要。
+   - **cyclotomic valuation の精密化**:
+     `orderOf ω = p` から `v_q(Φ_p(z,y))` の正確な値を決定する。
+     Kummer の定理: `v_q(Φ_p(z,y)) = v_q(z - ωy)` (他の因子は q-coprime)。
+   - **descent chain の terminal case**:
+     `s' = 1` のとき `x' = p*t` → `ω' = z'*(y')⁻¹` の位数と
+     新しい fringe bundle の構造分析。
