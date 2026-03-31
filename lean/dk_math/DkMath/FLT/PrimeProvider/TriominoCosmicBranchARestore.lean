@@ -2166,6 +2166,153 @@ def branchA_hensel_lift_exists
   sorry
 
 /-!
+### Distinguished Factor Valuation Equality — Hensel lift を用いた因子分離
+
+`BranchAHenselLiftData` の lifted root `ω_k ∈ ZMod (q^k)` を仮定して、
+円分核の因子構造を `ZMod (q^k)` 上で読み解く。
+
+核心は `castHom : ZMod (q^k) →+* ZMod q` が ring hom であること:
+  `castHom(a - b) = castHom(a) - castHom(b)`
+  `castHom(a * b) = castHom(a) * castHom(b)`
+  `castHom(a ^ n) = castHom(a) ^ n`
+  `castHom(n : ZMod (q^k)) = (n : ZMod q)` (for n : ℕ)
+
+これにより:
+  `castHom(z - ω_k * y) = z - ω * y = 0`  (distinguished)
+  `castHom(z - ω_k^i * y) = z - ω^i * y ≠ 0`  (non-distinguished, i ≢ 1)
+
+つまり mod q への射影で distinguished factor だけが
+ker(castHom) = q · ZMod(q^k) に入る。
+-/
+
+/--
+**Distinguished factor の ZMod q 射影が 0**:
+`castHom(z - ω_k * y) = (z : ZMod q) - ω * (y : ZMod q) = 0`。
+
+`castHom` は ring hom なので sub/mul/natCast を保存する。
+`castHom(ω_k) = ω` は `BranchAHenselLiftData.hω_k_proj` から直接。
+結論は `branchA_distinguished_factor_vanishes` と合わせて得る。
+-/
+theorem branchA_hensel_distinguished_proj_zero
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q)
+    {k : ℕ} (hk : 0 < k)
+    (hLift : let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩;
+             let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹);
+             BranchAHenselLiftData p q k hk ω) :
+    let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+    let φ := ZMod.castHom (dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk)) (ZMod q)
+    φ ((z : ZMod (q ^ k)) - hLift.ω_k * (y : ZMod (q ^ k))) = 0 := by
+  intro _inst φ
+  -- castHom は ring hom なので分配する
+  simp only [map_sub, map_mul, map_natCast]
+  -- castHom(ω_k) = ω
+  rw [hLift.hω_k_proj]
+  -- z - ω * y = 0 (distinguished factor vanishes)
+  exact branchA_distinguished_factor_vanishes hBundle
+
+/--
+**Non-distinguished factor の ZMod q 射影が非零**:
+`i ≢ 1 [MOD p]` → `castHom(z - ω_k^i * y) ≠ 0`。
+
+`castHom(ω_k^i) = castHom(ω_k)^i = ω^i` なので、
+`castHom(z - ω_k^i * y) = z - ω^i * y ≠ 0` が
+`branchA_non_distinguished_factor_nonzero` から出る。
+-/
+theorem branchA_hensel_non_distinguished_proj_ne_zero
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q)
+    {k : ℕ} (hk : 0 < k)
+    (hLift : let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩;
+             let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹);
+             BranchAHenselLiftData p q k hk ω)
+    {i : ℕ} (hi : ¬ i ≡ 1 [MOD p]) :
+    let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+    let φ := ZMod.castHom (dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk)) (ZMod q)
+    φ ((z : ZMod (q ^ k)) - hLift.ω_k ^ i * (y : ZMod (q ^ k))) ≠ 0 := by
+  intro _inst φ hcontra
+  -- castHom で分配
+  simp only [map_sub, map_mul, map_pow, map_natCast] at hcontra
+  -- castHom(ω_k)^i = ω^i
+  rw [hLift.hω_k_proj] at hcontra
+  -- z - ω^i * y = 0 → 矛盾
+  exact branchA_non_distinguished_factor_nonzero hBundle hi hcontra
+
+/--
+**Distinguished factor は q の倍数**:
+`castHom` の kernel は `q · ZMod (q^k)` に対応するので、
+`z - ω_k * y` の ZMod q 射影が 0 ⟹ `z - ω_k * y` は
+`ZMod (q^k)` の中で q の倍数（`ZMod.val` が q で割り切れる）。
+
+これは ker(ZMod (q^k) → ZMod q) = q · ZMod (q^k) の直接的帰結。
+-/
+theorem branchA_hensel_distinguished_in_kernel
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q)
+    {k : ℕ} (hk : 0 < k)
+    (hLift : let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩;
+             let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹);
+             BranchAHenselLiftData p q k hk ω) :
+    let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+    let φ := ZMod.castHom (dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk)) (ZMod q)
+    let δ := (z : ZMod (q ^ k)) - hLift.ω_k * (y : ZMod (q ^ k))
+    φ δ = (0 : ZMod q) ∧ ∀ (j : ℕ), ¬ j ≡ 1 [MOD p] →
+      φ ((z : ZMod (q ^ k)) - hLift.ω_k ^ j * (y : ZMod (q ^ k))) ≠ 0 := by
+  intro _inst φ δ
+  exact ⟨branchA_hensel_distinguished_proj_zero hBundle hk hLift,
+         fun j hj => branchA_hensel_non_distinguished_proj_ne_zero hBundle hk hLift hj⟩
+
+/--
+**ω_k は ZMod (q^k) で primitive p-th root of unity**:
+`hLift.hω_k_pow : ω_k ^ p = 1` と `castHom(ω_k) = ω ≠ 1` から、
+`ω_k ≠ 1` in `ZMod (q^k)` が従う。
+-/
+theorem branchA_hensel_lift_omega_k_ne_one
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q)
+    {k : ℕ} (hk : 0 < k)
+    (hLift : let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩;
+             let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹);
+             BranchAHenselLiftData p q k hk ω) :
+    let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+    hLift.ω_k ≠ 1 := by
+  intro _inst hcontra
+  -- ω_k = 1 → castHom(ω_k) = castHom(1) = 1
+  have := hLift.hω_k_proj
+  rw [hcontra, map_one] at this
+  -- ω = 1 → contradiction with branchA_omega_ne_one
+  exact branchA_omega_ne_one hBundle this.symm
+
+/--
+**Valuation 集中の central structure**:
+fringe bundle + Hensel lift data から得られる全情報を集約した structure。
+
+これが Kummer valuation と distinguished factor 分離の合体点:
+- `v_q(z^p - y^p) = p * v_q(s)` (全体: branchA_kummer_valuation)
+- `q | (z - ω_k * y)` (distinguished: proj = 0)
+- `q ∤ (z - ω_k^i * y)` for i ≢ 1 [MOD p] (non-distinguished: proj ≠ 0)
+-/
+structure BranchACyclotomicValuationData
+    (p x y z t s q k : ℕ) (hk : 0 < k) where
+  /-- Fact instance for q prime -/
+  hqprime_fact : Fact (Nat.Prime q)
+  /-- ω in ZMod q -/
+  ω : ZMod q
+  /-- ω = z * y⁻¹ -/
+  hω_def : ω = (z : ZMod q) * ((y : ZMod q)⁻¹)
+  /-- Hensel lift data -/
+  liftData : @BranchAHenselLiftData p q k hk hqprime_fact ω
+  /-- 全体 Kummer valuation: v_q(z^p - y^p) = p * v_q(s) -/
+  hkummer : padicValNat q (z ^ p - y ^ p) = p * padicValNat q s
+  /-- distinguished factor の射影が零 -/
+  hproj_zero : @ZMod.castHom _ _ (dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk))
+    (ZMod q) _ _ ((z : ZMod (q ^ k)) - liftData.ω_k * (y : ZMod (q ^ k))) = 0
+  /-- non-distinguished factor の射影が非零 -/
+  hproj_ne : ∀ (i : ℕ), ¬ i ≡ 1 [MOD p] →
+    @ZMod.castHom _ _ (dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk))
+      (ZMod q) _ _ ((z : ZMod (q ^ k)) - liftData.ω_k ^ i * (y : ZMod (q ^ k))) ≠ 0
+
+/-!
 ### Witness source → Contradiction adapter
 
 `BranchAContradictionWithWitnessSourceTarget` は witness `q` の構造的性質を

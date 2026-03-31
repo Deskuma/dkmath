@@ -2042,3 +2042,88 @@ Archive
      Hensel lift data を使って `v_q(z - ω_k*y) = v_q(Φ_p(z,y))` を証明。
    - **terminal case**:
      降下鎖の停止条件の矛盾分析。
+
+### 日時: 2026/03/31 15:20:00 JST
+
+1. 目的:
+   - `review-024.md` の方針に従い、distinguished factor valuation equality を
+     Hensel lift data を仮定した局所版として実装する。
+   - Hensel lift existence の sorry には依存せず、
+     `hLift : BranchAHenselLiftData` を引数に取る形で進める。
+
+2. 実施:
+
+   `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]` に以下を追加:
+
+   **§A. Distinguished Factor の ZMod (q^k) 射影 (全て sorry なし)**
+
+   - **`branchA_hensel_distinguished_proj_zero`**:
+     `castHom(z - ω_k * y) = 0` in ZMod q
+     castHom は ring hom なので `map_sub`, `map_mul`, `map_natCast` で分配し、
+     `hLift.hω_k_proj` で `castHom(ω_k) = ω` を代入。
+     `branchA_distinguished_factor_vanishes` で結論。
+
+   - **`branchA_hensel_non_distinguished_proj_ne_zero`**:
+     `i ≢ 1 [MOD p]` → `castHom(z - ω_k^i * y) ≠ 0` in ZMod q
+     同様に castHom で分配し、`map_pow` + `hω_k_proj` で ω^i に帰着。
+     `branchA_non_distinguished_factor_nonzero` で矛盾。
+
+   - **`branchA_hensel_distinguished_in_kernel`**:
+     上 2 つの合成。`φ δ = 0 ∧ ∀ j, ¬ j ≡ 1 [MOD p] → φ(z - ω_k^j * y) ≠ 0`。
+     因子分離の完全な形。
+
+   **§B. Lifted root の性質**
+
+   - **`branchA_hensel_lift_omega_k_ne_one`**:
+     `ω_k ≠ 1` in ZMod (q^k)
+     castHom(ω_k) = ω ≠ 1 なので ω_k = 1 は矛盾。
+     `map_one` + `branchA_omega_ne_one` で証明。
+
+   **§C. Valuation 集中の統合 structure**
+
+   - **`BranchACyclotomicValuationData`**: structure
+     fringe bundle + Hensel lift data から得られる全情報を集約:
+     - `hkummer`: v_q(z^p - y^p) = p * v_q(s) [Kummer valuation]
+     - `hproj_zero`: castHom(z - ω_k * y) = 0 [distinguished]
+     - `hproj_ne`: castHom(z - ω_k^i * y) ≠ 0 for i ≢ 1 [non-distinguished]
+     Kummer valuation と distinguished factor 分離の合体点。
+
+3. 結論:
+
+   **因子分離の全体像 (ZMod (q^k) 上):**
+
+   ```
+   castHom : ZMod (q^k) → ZMod q
+
+   castHom(z - ω_k   * y) = z - ω   * y = 0     [distinguished]
+   castHom(z - ω_k^i * y) = z - ω^i * y ≠ 0     [non-distinguished, i ≢ 1]
+   ```
+
+   これは: distinguished factor `z - ω_k * y` だけが
+   `ker(castHom) = q · ZMod(q^k)` に入る、つまり **q の倍数**。
+   他の因子は q の倍数でない。
+
+   Kummer valuation `v_q(z^p - y^p) = p * v_q(s)` と合わせて、
+   **valuation の 1 因子集中** が `ZMod (q^k)` レベルで完成した。
+
+4. 検証:
+   - `lake build`（全体）成功 (exit 0)
+   - sorry 増加なし（Hensel lift existence の 1 箇所のみ、変化なし）
+   - **新しい 4 定理 + 1 structure は全て sorry なし**
+   - BranchARestore.lean: 2194 → 2341 (+147 行)
+
+5. 技術的特記:
+   - `castHom` の ring hom 性質 (`map_sub`, `map_mul`, `map_pow`, `map_natCast`)
+     と `simp` の組み合わせで、ZMod (q^k) → ZMod q の分配が自動化された。
+   - structure の field 内で `@ZMod.castHom` の explicit な instance 引数が必要だったが、
+     `dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk)` で統一的に処理。
+   - 一発でビルド成功。API 名のミスなし。
+
+6. 次の課題:
+   - **Hensel lift sorry の除去**:
+     Newton 帰納構成で `ZMod (q^k)` 上の root lift を直接構成する。
+   - **valuation 等式の ℕ 翻訳**:
+     `castHom(δ) = 0` ↔ `q | ZMod.val(δ)` の接続。
+     これにより `padicValNat q (ZMod.val(z - ω_k * y)) ≥ 1` が得られる。
+   - **terminal case**:
+     降下鎖の停止条件の矛盾分析。
