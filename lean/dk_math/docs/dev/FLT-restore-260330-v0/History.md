@@ -2504,3 +2504,81 @@ Archive
    - その後に
      `branchA_distinguished_factor_valuation_eq_kummer`
      を別定理として閉じるのが安全。
+
+## 2026/03/31 20:43:46 JST
+
+### review-030 route 成功: exact product を捨てて central valuation theorem を先に閉じた
+
+1. 作業対象:
+   - `review-030.md` の方針に従い、
+     `branchA_GN_cyclotomic_ring_identity`
+     を直接潰す代わりに
+     `GN = distinguished factor × unit`
+     を局所補題へ分解して積む route を実装した。
+
+2. 実装:
+   - `TriominoCosmicBranchARestore.lean` に次の 4 補題を追加:
+     - `branchA_local_Q_proj_eq_GN_zero_z`
+     - `branchA_local_Q_isUnit`
+     - `branchA_local_sub_pow_eq_delta_mul_Q`
+     - `branchA_local_GN_eq_distinguished_mul_unit`
+   - これらを使って
+     `branchA_distinguished_factor_valuation_eq_kummer`
+     の `sorry` を除去した。
+
+3. Lean 実装上の要点:
+   - `branchA_GN_zmod_padicValNat` は nat-side の
+     `GN % q^k`
+     を返すので、
+     ring-side の
+     `(GN : ZMod (q^k)).val`
+     とは直接 `simpa` で繋がらなかった。
+   - そこで
+     `hGN_cast :
+       (GN : ZMod (q^k)) = ((GN : ℕ) : ZMod (q^k))`
+     を明示し、
+     `ZMod.val_natCast`
+     で
+     `val = % q^k`
+     へ橋を掛けた。
+   - valuation theorem 本体は、
+     `GN = δ * U`
+     (`U` unit)
+     から
+     `padicValNat q U.val = 0`
+     を取り、
+     `padicValNat.mul`
+     と
+     `branchA_padicValNat_mod_pow_eq`
+     を組み合わせて閉じた。
+   - `δ.val < q^k`
+     から
+     `padicValNat q δ.val < k`
+     を引く箇所は、
+     `padicValNat_dvd_iff_le`
+     と
+     `ZMod.val_lt`
+     の反対向き衝突で処理した。
+
+4. 影響:
+   - 本件で
+     `branchA_distinguished_factor_valuation_eq_kummer`
+     が解決し、
+     本質的 `sorry` は 2 本へ減少:
+     - `branchA_hensel_lift_exists`
+     - `branchA_GN_cyclotomic_ring_identity`
+
+5. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore`
+     成功。
+   - 対象ファイル上の warning は
+     上記 2 本の `sorry` のみ。
+
+6. 次の課題:
+   - `branchA_GN_cyclotomic_ring_identity`
+     は今や central theorem の blocker ではなくなった。
+   - したがって次は、
+     この定理を
+     exact product の記録定理として残すか、
+     あるいは statement 自体を local factorization 版へ弱化するか、
+     方針整理を先に行うのがよい。
