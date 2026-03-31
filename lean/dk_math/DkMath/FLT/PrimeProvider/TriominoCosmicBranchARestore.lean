@@ -1603,7 +1603,7 @@ theorem branchA_descent_x_strict_decrease
 - mod p 合同保存: `s' ≡ 1 [MOD p]`
 - x decrease: `p * (t * s') < x`
 -/
-def BranchADescentStep (p x y z t s q : ℕ) : Prop :=
+def BranchADescentStep (p x _y _z t s q : ℕ) : Prop :=
   let s' := s / q
   s = q * s' ∧ 0 < s' ∧ s' < s ∧ s' ≡ 1 [MOD p] ∧ p * (t * s') < x
 
@@ -1650,7 +1650,7 @@ QAdicLiftSeed の `ω` は `z * y⁻¹` in `ZMod q` であり、
 -/
 theorem branchA_lift_seed_z_eq_omega_mul_y
     {p x y z t s q : ℕ}
-    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (_hpack : PrimeGe5CounterexamplePack p x y z)
     (hData : RestoreWitnessProperties p x y z t s q)
     (hqprime : Nat.Prime q) :
     let _inst : Fact (Nat.Prime q) := ⟨hqprime⟩
@@ -1809,6 +1809,118 @@ def branchA_qadic_lift_seed_of_fringe
   ω := (z : ZMod q) * ((y : ZMod q)⁻¹)
   hω_pow := branchA_omega_pow_eq_one hBundle
   hω_ne_one := branchA_omega_ne_one hBundle
+
+/-!
+### Cyclotomic Valuation の精密化
+
+`ω := z * y⁻¹ ∈ ZMod q` が primitive p-th root of unity と確定した。
+ここでは円分核 Φ_p(z, y) の因子構造を ZMod q 上で読み解く。
+
+円分核の形式的因子分解:
+  `Φ_p(z, y) = ∏_{i=1}^{p-1} (z - ω^i * y)` (in ZMod q)
+
+ω の定義より `z ≡ ω * y [MOD q]` なので:
+  `z - ω^i * y ≡ y * (ω - ω^i) [MOD q]`
+
+したがって:
+  - `i = 1` のとき: `z - ω * y ≡ 0 [MOD q]` — **distinguished factor**
+  - `i ≠ 1 (mod p)` のとき: `ω ≠ ω^i` (∵ ord(ω) = p) かつ `y ≠ 0`
+    → `z - ω^i * y ≠ 0 [MOD q]` — **q-coprime factors**
+
+これにより、Φ_p(z,y) の q-adic valuation は
+distinguished factor `z - ω*y` に完全に集中する:
+  `v_q(Φ_p(z,y)) = v_q(z - ω*y)`
+
+この「1 因子集中」が massive cancellation の正体。
+-/
+
+/--
+primitive root の基本性質:
+`orderOf ω = p` かつ `i ≢ 1 [MOD p]` ならば `ω^i ≠ ω`。
+
+`ω^i = ω^1` ⟹ `i ≡ 1 [MOD orderOf ω]` ⟹ `i ≡ 1 [MOD p]`、矛盾。
+`pow_eq_pow_iff_modEq` を使用。
+-/
+theorem branchA_omega_i_ne_omega
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q)
+    {i : ℕ} (hi : ¬ i ≡ 1 [MOD p]) :
+    let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+    let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹)
+    ω ^ i ≠ ω := by
+  intro _inst ω hcontra
+  have hω_ne_one := branchA_omega_ne_one hBundle
+  have hord := branchA_omega_order_eq_p hBundle
+  -- ω ≠ 0
+  have hy_ne_zero : (y : ZMod q) ≠ 0 := by
+    intro heq
+    exact hBundle.witness.hq_not_dvd_y ((ZMod.natCast_eq_zero_iff y q).mp heq)
+  have hz_ne_zero : (z : ZMod q) ≠ 0 := by
+    intro heq
+    exact hBundle.witness.hq_not_dvd_z ((ZMod.natCast_eq_zero_iff z q).mp heq)
+  have hω_ne_zero : ω ≠ 0 := mul_ne_zero hz_ne_zero (inv_ne_zero hy_ne_zero)
+  -- Case split: i = 0 vs i > 0
+  by_cases hi0 : i = 0
+  · -- i = 0: ω^0 = 1 = ω → ω = 1, contradiction
+    subst hi0; simp at hcontra; exact hω_ne_one hcontra.symm
+  · -- i > 0: ω^i = ω → ω^(i-1) = 1 → orderOf ω ∣ (i-1) → p ∣ (i-1) → i ≡ 1 [MOD p]
+    have hi_pos : 0 < i := Nat.pos_of_ne_zero hi0
+    have h_pred : ω ^ (i - 1) = 1 := by
+      have := hcontra  -- ω^i = ω
+      rw [show i = (i - 1) + 1 from by omega, pow_succ] at this
+      exact mul_right_cancel₀ hω_ne_zero (this.trans (one_mul ω).symm)
+    have h_dvd : orderOf ω ∣ (i - 1) := orderOf_dvd_of_pow_eq_one h_pred
+    rw [hord] at h_dvd
+    -- p ∣ (i - 1) → i ≡ 1 [MOD p]
+    have hmod : i ≡ 1 [MOD p] :=
+      ((Nat.modEq_iff_dvd' (by omega : 1 ≤ i)).mpr h_dvd).symm
+    exact hi hmod
+
+/--
+ZMod q 上で `z - ω * y = 0` — distinguished factor は q で消える。
+
+`ω = z * y⁻¹` の定義から直接 `z = ω * y` なので `z - ω * y = 0`。
+-/
+theorem branchA_distinguished_factor_vanishes
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q) :
+    let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+    let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹)
+    (z : ZMod q) - ω * (y : ZMod q) = 0 := by
+  intro _inst ω
+  -- z = ω * y (from ω の定義)
+  have hy_ne_zero : (y : ZMod q) ≠ 0 := by
+    intro heq
+    exact hBundle.witness.hq_not_dvd_y ((ZMod.natCast_eq_zero_iff y q).mp heq)
+  change (z : ZMod q) - (z : ZMod q) * (↑y : ZMod q)⁻¹ * (y : ZMod q) = 0
+  rw [mul_assoc, inv_mul_cancel₀ hy_ne_zero, mul_one, sub_self]
+
+/--
+ZMod q 上で `i ≢ 1 [MOD p]` ならば `z - ω^i * y ≠ 0` — non-distinguished factors は q-coprime。
+
+証明: `z = ω * y` なので `z - ω^i * y = y * (ω - ω^i)`。
+`y ≠ 0 [MOD q]` かつ `ω ≠ ω^i` (∵ ord(ω) = p, i ≢ 1) なので非零。
+-/
+theorem branchA_non_distinguished_factor_nonzero
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q)
+    {i : ℕ} (hi : ¬ i ≡ 1 [MOD p]) :
+    let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+    let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹)
+    (z : ZMod q) - ω ^ i * (y : ZMod q) ≠ 0 := by
+  intro _inst ω hcontra
+  -- z - ω^i * y = 0 → z = ω^i * y → ω * y = ω^i * y → ω = ω^i
+  have hy_ne_zero : (y : ZMod q) ≠ 0 := by
+    intro heq
+    exact hBundle.witness.hq_not_dvd_y ((ZMod.natCast_eq_zero_iff y q).mp heq)
+  have hz_eq_ω_y : (z : ZMod q) = ω * (y : ZMod q) := by
+    change (z : ZMod q) = (z : ZMod q) * (↑y : ZMod q)⁻¹ * (y : ZMod q)
+    rw [mul_assoc, inv_mul_cancel₀ hy_ne_zero, mul_one]
+  have hz_eq_ωi_y : (z : ZMod q) = ω ^ i * (y : ZMod q) :=
+    sub_eq_zero.mp hcontra
+  have hωi_eq_ω : ω ^ i = ω :=
+    mul_right_cancel₀ hy_ne_zero (hz_eq_ωi_y.symm.trans hz_eq_ω_y)
+  exact branchA_omega_i_ne_omega hBundle hi hωi_eq_ω
 
 /-!
 ### Witness source → Contradiction adapter

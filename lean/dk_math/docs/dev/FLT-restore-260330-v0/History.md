@@ -1783,3 +1783,77 @@ Archive
    - **descent chain の terminal case**:
      `s' = 1` のとき `x' = p*t` → `ω' = z'*(y')⁻¹` の位数と
      新しい fringe bundle の構造分析。
+
+### 日時: 2026/03/31 13:00:00 JST
+
+1. 目的:
+   - `review-021.md` の方針に従い、cyclotomic valuation を精密化する。
+   - 具体的には、円分核 Φ_p(z,y) の因子分解において
+     **distinguished factor `z - ω*y` だけが q で消え、他は消えない**
+     ことを ZMod q 上で形式化する。
+
+2. 実施:
+
+   `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]` に以下を追加:
+
+   **§A. Cyclotomic Valuation の精密化**
+
+   - **`branchA_omega_i_ne_omega`**: `i ≢ 1 [MOD p]` → `ω^i ≠ ω`
+     primitive root の基本性質。
+     証明: `ω^i = ω` → (i=0 の場合) `ω = 1` 矛盾、(i>0 の場合)
+     `ω^(i-1) = 1` → `orderOf ω ∣ (i-1)` → `p ∣ (i-1)` → `i ≡ 1 [MOD p]` 矛盾。
+     `orderOf_dvd_of_pow_eq_one` と `Nat.modEq_iff_dvd'` を使用。
+
+   - **`branchA_distinguished_factor_vanishes`**: `(z : ZMod q) - ω * y = 0`
+     ω の定義 `ω = z*y⁻¹` から直接。`z = ω*y` なので `z - ω*y = 0`。
+     `inv_mul_cancel₀` で explicit に計算。
+
+   - **`branchA_non_distinguished_factor_nonzero`**: `i ≢ 1 [MOD p]` → `z - ω^i * y ≠ 0`
+     `z = ω*y` と `z = ω^i*y` を仮定すると `ω^i = ω` → 上の補題に矛盾。
+     `mul_right_cancel₀ hy_ne_zero` で `ω^i*y = ω*y` → `ω^i = ω` を導出。
+
+3. 結論:
+
+   **円分核の因子構造 (ZMod q 上):**
+
+   ```
+   Φ_p(z, y) = ∏_{i=1}^{p-1} (z - ω^i * y)
+
+   i = 1:         z - ω * y = 0    [MOD q]  — distinguished
+   i ≢ 1 [MOD p]: z - ω^i * y ≠ 0  [MOD q]  — q-coprime
+   ```
+
+   これにより:
+   - **q は 1 つの因子 `z - ω*y` のみを割る** ことが確定した。
+   - Kummer 型の valuation 定理 `v_q(Φ_p(z,y)) = v_q(z - ω*y)` への
+     道が開かれた（ZMod q 上では q-coprime 因子は q-adic valuation 0）。
+   - massive cancellation の正体が「1 因子集中」として見えた。
+
+   **3 定理** を新設（全て sorry なし）:
+   `branchA_omega_i_ne_omega`, `branchA_distinguished_factor_vanishes`,
+   `branchA_non_distinguished_factor_nonzero`
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore` 成功
+   - `lake build`（全体）成功 (exit 0)
+   - sorry 増加なし（BranchA.lean L4099 の既存 1 箇所のみ）
+   - BranchARestore.lean: 1839 → 1951 (+112 行)
+
+5. 失敗事例:
+   - `pow_eq_pow_iff_modEq` は `LeftCancelMonoid` を要求するが、
+     `ZMod q` は field であっても零元があるため `LeftCancelMonoid` ではない。
+     → case split (`i=0` vs `i>0`) + `orderOf_dvd_of_pow_eq_one` で回避。
+   - `Nat.modEq_iff_dvd'` は `1 ≡ i [MOD p]` を返す（方向注意）。
+     → `.symm` で `i ≡ 1 [MOD p]` に変換。
+   - `mul_right_cancel₀` の引数順: `ω^i*y = ω*y` を要求されたが
+     `ω*y = ω^i*y` を渡していた。→ `.symm.trans` の順序を修正。
+   - `show` tactic は Lean linter で `change` 推奨。→ `change` に修正。
+
+6. 次の課題:
+   - **Kummer valuation 定理の形式化**:
+     `v_q(Φ_p(z,y)) = v_q(z - ω*y)` を ℕ の `padicValNat` で表現する。
+     ZMod q 上の因子分離（今回）から、q-adic valuation の完全集中を導く。
+   - **Hensel lifting**:
+     `ω^p = 1, ω ≠ 1` in `ZMod q` → `ω' ^p = 1` in `ZMod (q^k)` の lift。
+   - **descent terminal case**:
+     降下鎖の停止条件 `s' = 1` の構造分析。
