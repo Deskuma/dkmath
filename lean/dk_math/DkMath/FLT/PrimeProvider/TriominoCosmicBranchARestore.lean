@@ -2555,16 +2555,11 @@ theorem branchA_GN_zmod_padicValNat
   rw [hmod_eq, hGN_val]
 
 /--
-**GN の ZMod (q^k) での ring identity** (sorry — 円分核分解):
-`(GN p (z-y) y : ZMod (q^k)) = (z - ω_k * y) * ∏_{i=2}^{p-1} (z - ω_k^i * y)`
+**GN の ZMod (q^k) での local factorization**:
+`(GN p (z-y) y : ZMod (q^k)) = (z - ω_k * y) * U` with `U` a unit.
 
-数学的根拠:
-`GN p (z-y) y = ∑_{j=0}^{p-1} z^j * y^(p-1-j)` = Φ_p(z/y) * y^(p-1)` で、
-`Φ_p(T) = (T^p - 1) / (T - 1) = ∏_{i=1}^{p-1} (T - ω_k^i)` (ω_k: primitive p-th root)。
-よって `GN = ∏_{i=1}^{p-1} (z - ω_k^i * y)`.
-
-sorry 除去: `Polynomial.cyclotomic p R` の評価 + ω_k の primitivity を使った
-`ZMod (q^k)[T]` 上の多項式等式。
+exact product までは要求せず、local ring `ZMod (q^k)` 上で valuation に必要な
+「distinguished factor × unit」だけを抽出する版。
 -/
 theorem branchA_GN_cyclotomic_ring_identity
     {p x y z t s q : ℕ}
@@ -2574,29 +2569,105 @@ theorem branchA_GN_cyclotomic_ring_identity
              let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹);
              BranchAHenselLiftData p q k hk ω) :
     let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
-    (DkMath.CosmicFormulaBinom.GN p (z - y) y : ZMod (q ^ k)) =
-      ((z : ZMod (q ^ k)) - hLift.ω_k * y) *
-        ∏ i ∈ Finset.range (p - 2), ((z : ZMod (q ^ k)) - hLift.ω_k ^ (i + 2) * y) := by
+    ∃ U : ZMod (q ^ k), IsUnit U ∧
+      (DkMath.CosmicFormulaBinom.GN p (z - y) y : ZMod (q ^ k)) =
+        ((z : ZMod (q ^ k)) - hLift.ω_k * y) * U := by
   intro _inst
-  -- `IsPrimitiveRoot hLift.ω_k p` 自体は
-  -- `branchA_hensel_lift_isPrimitiveRoot` で確立できる。
-  -- ただし exact product identity を `ZMod (q^k)` 上で直接出すには、
-  -- 使いたい `X_pow_sub_C_eq_prod` が `IsDomain` を要求し、
-  -- `ZMod (q^k)` (`k > 1`) ではそのまま適用できない。
-  -- この段は local Artinian ring 上の分解へ言い換えて埋める必要がある。
-  sorry
+  haveI : Fact (Nat.Prime q) := _inst
+  haveI : NeZero (q ^ k) := ⟨pow_ne_zero k hBundle.witness.hqprime.ne_zero⟩
+  let R := ZMod (q ^ k)
+  let φ : R →+* ZMod q :=
+    ZMod.castHom (dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk)) (ZMod q)
+  let δ : R := (z : R) - hLift.ω_k * (y : R)
+  let Q : R := DkMath.CosmicFormulaBinom.GN p δ (hLift.ω_k * (y : R))
+  have hz_ne_zero : (z : ZMod q) ≠ 0 := by
+    intro hz
+    exact hBundle.witness.hq_not_dvd_z ((ZMod.natCast_eq_zero_iff z q).mp hz)
+  have hp_ne_zero_mod : (p : ZMod q) ≠ 0 := by
+    intro hp0
+    have hq_dvd_p : q ∣ p := (ZMod.natCast_eq_zero_iff p q).mp hp0
+    exact hBundle.witness.hq_ne_p
+      ((Nat.dvd_prime hBundle.padic.pack.hp).mp hq_dvd_p |>.resolve_left hBundle.witness.hqprime.ne_one)
+  have hωy_eq_z : (((z : ZMod q) * ((y : ZMod q)⁻¹)) * (y : ZMod q)) = (z : ZMod q) := by
+    exact (sub_eq_zero.mp (branchA_distinguished_factor_vanishes hBundle)).symm
+  have hQ_proj :
+      φ Q = DkMath.CosmicFormulaBinom.GN p (0 : ZMod q) (z : ZMod q) := by
+    rw [DkMath.CosmicFormulaBinom.GN_eq_sum]
+    simp [Q, δ, φ, branchA_hensel_distinguished_proj_zero hBundle hk hLift, hLift.hω_k_proj, hωy_eq_z]
+  have hQ_proj_ne : φ Q ≠ 0 := by
+    rw [hQ_proj, DkMath.GN_eq_head_of_x_eq_zero (R := ZMod q) p hBundle.padic.pack.hp.one_le (u := (z : ZMod q))]
+    simp [hp_ne_zero_mod, hz_ne_zero]
+  have hQ_not_dvd : ¬ q ∣ Q.val := by
+    exact branchA_castHom_ne_zero_implies_not_dvd_val hBundle.witness.hqprime hk Q hQ_proj_ne
+  have hQ_coprime_q : Nat.Coprime Q.val q := by
+    simpa [Nat.coprime_comm] using
+      (Nat.Prime.coprime_iff_not_dvd hBundle.witness.hqprime).2 hQ_not_dvd
+  have hQ_coprime_qk : Nat.Coprime Q.val (q ^ k) := by
+    rw [Nat.coprime_pow_right_iff hk]
+    exact hQ_coprime_q
+  have hQ_unit_nat : IsUnit ((Q.val : ℕ) : R) := by
+    exact (ZMod.isUnit_iff_coprime Q.val (q ^ k)).2 hQ_coprime_qk
+  have hQ_unit : IsUnit Q := by
+    simpa only [ZMod.natCast_zmod_val] using hQ_unit_nat
+  have hgap_coprime_q : Nat.Coprime (z - y) q := by
+    simpa [Nat.coprime_comm] using
+      (Nat.Prime.coprime_iff_not_dvd hBundle.witness.hqprime).2 hBundle.witness.hq_not_dvd_gap
+  have hgap_coprime_qk : Nat.Coprime (z - y) (q ^ k) := by
+    rw [Nat.coprime_pow_right_iff hk]
+    exact hgap_coprime_q
+  have hgap_unit_nat : IsUnit (((z - y : ℕ) : R)) := by
+    exact (ZMod.isUnit_iff_coprime (z - y) (q ^ k)).2 hgap_coprime_qk
+  have hgap_unit : IsUnit ((z : R) - (y : R)) := by
+    simpa [R, Nat.cast_sub hBundle.padic.pack.hyz] using hgap_unit_nat
+  obtain ⟨ugap, hugap⟩ := hgap_unit
+  let U : R := (↑(ugap⁻¹) : R) * Q
+  have hU_unit : IsUnit U := by
+    dsimp [U]
+    exact (ugap⁻¹).isUnit.mul hQ_unit
+  have hleft0 :
+      (z : R) ^ p =
+        ((z : R) - (y : R)) * DkMath.CosmicFormulaBinom.GN p ((z : R) - (y : R)) (y : R) +
+          (y : R) ^ p := by
+    simpa [R, sub_add_cancel] using
+      (DkMath.CosmicFormulaBinom.cosmic_id_csr' (R := R) p ((z : R) - (y : R)) (y : R))
+  have hleft :
+      ((z : R) - (y : R)) * (DkMath.CosmicFormulaBinom.GN p (z - y) y : R) =
+        (z : R) ^ p - (y : R) ^ p := by
+    have hsub := congrArg (fun t : R => t - (y : R) ^ p) hleft0
+    have htmp :
+        ((z : R) - (y : R)) * DkMath.CosmicFormulaBinom.GN p ((z : R) - (y : R)) (y : R) =
+          (z : R) ^ p - (y : R) ^ p := by
+      simpa [sub_eq_add_neg, add_assoc, add_left_comm, add_comm] using hsub.symm
+    simpa [R, Nat.cast_sub hBundle.padic.pack.hyz] using htmp
+  have hright0 :
+      (z : R) ^ p = δ * Q + (y : R) ^ p := by
+    simpa [R, δ, Q, sub_add_cancel, mul_pow, hLift.hω_k_pow, mul_assoc, mul_left_comm, mul_comm]
+      using (DkMath.CosmicFormulaBinom.cosmic_id_csr' (R := R) p δ (hLift.ω_k * (y : R)))
+  have hright :
+      δ * Q = (z : R) ^ p - (y : R) ^ p := by
+    have hsub := congrArg (fun t : R => t - (y : R) ^ p) hright0
+    simpa [sub_eq_add_neg, add_assoc, add_left_comm, add_comm] using hsub.symm
+  have hgap_inv_mul : (↑(ugap⁻¹) : R) * ((z : R) - (y : R)) = 1 := by
+    simpa [hugap] using (show (↑(ugap⁻¹) : R) * (↑ugap : R) = 1 by simp)
+  refine ⟨U, hU_unit, ?_⟩
+  calc
+    (DkMath.CosmicFormulaBinom.GN p (z - y) y : R)
+        = ((↑(ugap⁻¹) : R) * ((z : R) - (y : R))) *
+            (DkMath.CosmicFormulaBinom.GN p (z - y) y : R) := by
+              rw [hgap_inv_mul, one_mul]
+    _ = (↑(ugap⁻¹) : R) *
+          (((z : R) - (y : R)) * (DkMath.CosmicFormulaBinom.GN p (z - y) y : R)) := by
+            ring
+    _ = (↑(ugap⁻¹) : R) * (δ * Q) := by rw [hleft, hright]
+    _ = δ * U := by
+          dsimp [U]
+          ring
 
 /--
 **Distinguished factor の valuation 等式 (central theorem)**:
 `padicValNat q (ZMod.val(z - ω_k * y : ZMod (q^k))) = p * padicValNat q s`
 
 **hLift を仮定した局所版** (Hensel existence に依存しない)。
-
-sorry の理由:
-1. `branchA_GN_cyclotomic_ring_identity` の ring identity (sorry)
-2. val の乗法性 mod q^k: `val(a * b).val = (a.val * b.val) % q^k`
-   と `v_q((a.val * b.val) % q^k) = v_q(a.val) + v_q(b.val)` when unit (sorry)
-これらが ZMod.val の乗法 + padicValNat の加法性から得られる。
 -/
 theorem branchA_distinguished_factor_valuation_eq_kummer
     {p x y z t s q : ℕ}
@@ -2610,8 +2681,89 @@ theorem branchA_distinguished_factor_valuation_eq_kummer
     let δ := (z : ZMod (q ^ k)) - hLift.ω_k * (y : ZMod (q ^ k))
     padicValNat q δ.val = p * padicValNat q s := by
   intro _inst δ
-  -- sorry: ring identity + val 乗法性 + unit v_q = 0
-  sorry
+  haveI : Fact (Nat.Prime q) := _inst
+  haveI : NeZero (q ^ k) := ⟨pow_ne_zero k hBundle.witness.hqprime.ne_zero⟩
+  let R := ZMod (q ^ k)
+  let G : R := (DkMath.CosmicFormulaBinom.GN p (z - y) y : R)
+  rcases branchA_GN_cyclotomic_ring_identity hBundle hk hLift with ⟨U, hU_unit, hfactor⟩
+  have hfactor' : G = δ * U := by
+    simpa [R, G, Nat.cast_sub hBundle.padic.pack.hyz] using hfactor
+  have hG_val_eq_mod :
+      G.val = DkMath.CosmicFormulaBinom.GN p (z - y) y % q ^ k := by
+    simpa [R, G] using (branchA_GN_zmod_val_eq_mod (p := p) (x := z - y) (y := y) (q := q) (k := k))
+  have hGN_val :
+      padicValNat q G.val =
+        p * padicValNat q s := by
+    rw [hG_val_eq_mod]
+    exact branchA_GN_zmod_padicValNat hBundle hk_large
+  have hs_val_pos : 0 < padicValNat q s := by
+    exact lt_of_lt_of_le Nat.zero_lt_one (branchA_padicValNat_s_ge_one hBundle)
+  have hGN_val_pos :
+      0 < padicValNat q G.val := by
+    rw [hGN_val]
+    exact Nat.mul_pos hBundle.padic.pack.hp.pos hs_val_pos
+  have hGN_ne_zero : G ≠ 0 := by
+    intro hzero
+    have hval_zero : G.val = 0 := by
+      simpa [G, hzero] using (ZMod.val_zero : ((0 : R).val = 0))
+    have : padicValNat q G.val = 0 := by
+      rw [hval_zero]
+      simp
+    exact (Nat.ne_of_gt hGN_val_pos) this
+  have hδ_ne_zero : δ ≠ 0 := by
+    intro hδ_zero
+    have : G = 0 := by
+      simpa [hδ_zero] using hfactor'
+    exact hGN_ne_zero this
+  have hδ_val_ne_zero : δ.val ≠ 0 := by
+    intro hzero
+    have : ((δ.val : ℕ) : R) = 0 := by simpa [hzero]
+    exact hδ_ne_zero (by simpa using (ZMod.natCast_zmod_val δ).symm.trans this)
+  have hU_ne_zero : U ≠ 0 := hU_unit.ne_zero
+  have hU_val_ne_zero : U.val ≠ 0 := by
+    intro hzero
+    have : ((U.val : ℕ) : R) = 0 := by simpa [hzero]
+    exact hU_ne_zero (by simpa using (ZMod.natCast_zmod_val U).symm.trans this)
+  have hU_unit_nat : IsUnit ((U.val : ℕ) : R) := by
+    simpa only [ZMod.natCast_zmod_val] using hU_unit
+  have hU_coprime_qk : Nat.Coprime U.val (q ^ k) := by
+    exact (ZMod.isUnit_iff_coprime U.val (q ^ k)).mp hU_unit_nat
+  have hU_coprime_q : Nat.Coprime U.val q := by
+    rw [Nat.coprime_pow_right_iff hk] at hU_coprime_qk
+    exact hU_coprime_qk
+  have hU_not_dvd : ¬ q ∣ U.val := by
+    simpa [Nat.coprime_comm] using
+      (Nat.Prime.coprime_iff_not_dvd hBundle.witness.hqprime).2 hU_coprime_q
+  have hU_val_zero : padicValNat q U.val = 0 := by
+    exact padicValNat.eq_zero_of_not_dvd hU_not_dvd
+  have hGN_val_eq_mod :
+      G.val =
+        (δ.val * U.val) % q ^ k := by
+    simpa [G] using congrArg ZMod.val hfactor'
+  have hprod_ne_zero : δ.val * U.val ≠ 0 := Nat.mul_ne_zero hδ_val_ne_zero hU_val_ne_zero
+  have hprod_val_lt_k : padicValNat q (δ.val * U.val) < k := by
+    by_contra hge
+    have hqk_dvd :
+        q ^ k ∣ δ.val * U.val := by
+      exact (padicValNat_dvd_iff_le (p := q) (a := δ.val * U.val) (n := k) hprod_ne_zero).2
+        (le_of_not_gt hge)
+    have hmod_zero : (δ.val * U.val) % q ^ k = 0 := Nat.mod_eq_zero_of_dvd hqk_dvd
+    have : padicValNat q (((DkMath.CosmicFormulaBinom.GN p (z - y) y : ℕ) : R).val) = 0 := by
+      rw [show (((DkMath.CosmicFormulaBinom.GN p (z - y) y : ℕ) : R).val) = G.val by rfl,
+        hGN_val_eq_mod, hmod_zero]
+      simp
+    exact (Nat.ne_of_gt hGN_val_pos) this
+  have hmod_eq :
+      padicValNat q ((δ.val * U.val) % q ^ k) = padicValNat q (δ.val * U.val) := by
+    exact branchA_padicValNat_mod_pow_eq hBundle.witness.hqprime hprod_ne_zero hprod_val_lt_k
+  calc
+    padicValNat q δ.val
+        = padicValNat q (δ.val * U.val) := by
+            rw [padicValNat.mul hδ_val_ne_zero hU_val_ne_zero, hU_val_zero, add_zero]
+    _ = padicValNat q (((DkMath.CosmicFormulaBinom.GN p (z - y) y : ℕ) : R).val) := by
+          rw [show (((DkMath.CosmicFormulaBinom.GN p (z - y) y : ℕ) : R).val) = G.val by rfl,
+            hGN_val_eq_mod, hmod_eq]
+    _ = p * padicValNat q s := hGN_val
 
 /-!
 ### Witness source → Contradiction adapter
