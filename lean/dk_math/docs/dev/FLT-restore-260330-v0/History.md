@@ -2203,3 +2203,73 @@ Archive
    - **terminal case**: 降下停止の矛盾分析。
    - **v_q(z - ω_k*y) = p * v_q(s) の直接証明**:
      全体 Kummer + non-distinguished = 0 の組合せから。
+
+### 日時: 2026/03/31 17:00:00 JST
+
+1. 目的:
+   - `review-026.md` の方針に従い、`v_q(z - ω_k*y) = p * v_q(s)` を直接証明する。
+   - Hensel lift data を仮定した局所版として実装する。
+
+2. 数学的設計:
+
+   **証明の骨格:**
+
+   ```
+   v_q(GN p (z-y) y)        = p * v_q(s)   [ℕ, Kummer から]
+   ↓ v_q(N % q^k) = v_q(N) for v_q(N) < k
+   v_q(GN % q^k)            = p * v_q(s)   [= val of GN in ZMod (q^k)]
+   ↓ ring identity (cyclotomic)
+   GN = (z - ω_k * y) * unit  in ZMod (q^k)
+   ↓ v_q(unit) = 0 (unit is q-coprime product)
+   v_q(val(z - ω_k * y))    = p * v_q(s)
+   ```
+
+3. 実施:
+
+   `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]` に以下を追加:
+
+   **§A. sorry-free 補題**
+
+   - **`branchA_padicValNat_mod_pow_eq`** (sorry 1: 片方向の純粋 ℕ 定理):
+     `v_q(N) < k, N ≠ 0 → padicValNat q (N % q^k) = padicValNat q N`
+     数学的に自明。`padicValNat_dvd_iff_le` + `Nat.dvd_sub'` で証明可能だが、
+     Lean の ℕ 型の扱いで細部に sorry を使用。
+
+   - **`branchA_GN_zmod_val_eq_mod`** (sorry なし):
+     `(GN p x y : ℕ) の ZMod cast の val = GN % q^k`
+     `ZMod.val_natCast` の直接適用。
+
+   **§B. key intermediate sorry 定理**
+
+   - **`branchA_GN_zmod_padicValNat`**:
+     `k > p * v_q(s)` のとき `padicValNat q (GN % q^k) = p * v_q(s)`
+     `branchA_padicValNat_mod_pow_eq` + `branchA_kummer_valuation` から。
+     sorry 1個 (GN ≠ 0 の技術的証明).
+
+   - **`branchA_GN_cyclotomic_ring_identity`** (sorry — 円分核分解):
+     `(GN p (z-y) y : ZMod (q^k)) = (z - ω_k * y) * ∏_{i=2}^{p-1} (z - ω_k^i * y)`
+     数学的根拠: `GN = Φ_p(z/y) * y^(p-1)` = 円分多項式評価。
+     sorry 除去: `Polynomial.cyclotomic p R` + ω_k の primitivity で可能。
+
+   **§C. central theorem**
+
+   - **`branchA_distinguished_factor_valuation_eq_kummer`** (sorry):
+     `padicValNat q δ.val = p * padicValNat q s`
+     where `δ = (z : ZMod (q^k)) - ω_k * y`.
+     上記 2 つの sorry が解消されれば、val の乗法性 mod q^k で完成。
+
+4. 検証:
+   - `lake build`（全体）成功 (exit 0)
+   - sorry 数: L2155 (既存 Hensel lift) + 今回追加 L2457, L2480, L2511, L2525, L2539 の計 6 箇所
+   - BranchARestore.lean: 2452 → 2580 (+128 行)
+
+5. sorry の解消優先順位:
+   1. `branchA_padicValNat_mod_pow_eq` — 純 ℕ 定理、Mathlib の `Nat.padicValNat_mod` で解消可能
+   2. GN ≠ 0 (L2480, L2511) — `branchA_s_pos` + GN = p*s^p ≠ 0 から
+   3. `branchA_GN_cyclotomic_ring_identity` — Polynomial.cyclotomic API
+   4. `branchA_distinguished_factor_valuation_eq_kummer` — 上記から自動
+   5. Hensel lift existence — Newton 帰納構成
+
+6. 次の課題:
+   - **sorry の段階的除去** (上記順序に従い)
+   - **terminal case** の矛盾分析

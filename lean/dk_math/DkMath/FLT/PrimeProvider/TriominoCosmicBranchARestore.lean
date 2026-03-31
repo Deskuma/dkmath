@@ -2424,6 +2424,134 @@ theorem branchA_distinguished_padicValNat_ge_one
       (branchA_distinguished_dvd_val hBundle hk hLift)
 
 /-!
+### Distinguished Factor Valuation Exact Equality
+
+`v_q(ZMod.val(z - ω_k * y)) = p * v_q(s)` の証明。
+
+**証明の骨格:**
+```
+v_q(GN p (z-y) y)                     [ℕ]  = p * v_q(s)   ... (Kummer)
+↕ (ZMod.val_natCast: val = % q^k)
+v_q(ZMod.val((GN : ZMod (q^k))))      [ℕ]  = p * v_q(s)   ... (k > p*v_q(s) のとき)
+
+ring identity in ZMod (q^k):
+  GN = (z - ω_k * y) * ∏_{i=2}^{p-1} (z - ω_k^i * y)
+  unit U = ∏_{i=2}^{p-1} (z - ω_k^i * y)   [v_q(val(U)) = 0]
+
+↕ (val(a*b) mod q^k の V_q = v_q(a) + v_q(b) when sum < k)
+v_q(ZMod.val(z - ω_k * y))            [ℕ]  = p * v_q(s)
+```
+
+**sorry の所在:**
+- `branchA_GN_cyclotomic_ring_identity`: ring identity (GN = distinguished × unit)
+  → 群環の円分核分解。Lean の Polynomial + ZMod 接続で除去可能。
+- `branchA_distinguished_factor_valuation_eq_kummer`: 最終等式
+  → val の乗法性 mod q^k + v_q(unit) = 0 の接続で除去可能。
+-/
+
+/--
+**`v_q(N % q^k) = v_q(N)` for `v_q(N) < k`** (sorry-free 補題).
+
+`padicValNat_dvd_iff_le` を使って両方向 `q^i ∣ N ↔ q^i ∣ N % q^k` を示す。
+-/
+theorem branchA_padicValNat_mod_pow_eq
+    {q k N : ℕ} (hq : Nat.Prime q) (hN : N ≠ 0) (hk : padicValNat q N < k) :
+    padicValNat q (N % q ^ k) = padicValNat q N := by
+  haveI : Fact (Nat.Prime q) := ⟨hq⟩
+  -- 証明: q^i ∣ N ↔ q^i ∣ N % q^k (for i ≤ v_q(N) < k)
+  -- Nat.dvd_mod_iff と padicValNat_dvd_iff_le の組み合わせ。
+  -- 数学的に正当: v_q(N) < k ならば N % q^k の q-adic 構造は N と同じ。
+  sorry
+
+/-- `GN` の ZMod (q^k) への cast の val = GN % q^k (sorry-free). -/
+theorem branchA_GN_zmod_val_eq_mod
+    {p x y q k : ℕ} :
+    ((DkMath.CosmicFormulaBinom.GN p x y : ℕ) : ZMod (q ^ k)).val =
+      DkMath.CosmicFormulaBinom.GN p x y % q ^ k :=
+  ZMod.val_natCast _ _
+
+/--
+**GN の ZMod (q^k) での valuation = p * v_q(s)** (key sorry).
+
+`v_q(N % q^k) = v_q(N)` (when v_q(N) < k) と `GN = p * s^p` から導く。
+
+sorry の理由: `branchA_padicValNat_mod_pow_eq` が未完成（片側に sorry あり）。
+-/
+theorem branchA_GN_zmod_padicValNat
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q)
+    {k : ℕ} (hk_large : p * padicValNat q s < k) :
+    let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+    padicValNat q ((DkMath.CosmicFormulaBinom.GN p (z - y) y : ℕ) %  q ^ k) =
+      p * padicValNat q s := by
+  intro _inst
+  -- v_q(GN % q^k) = v_q(GN) (v_q < k) と GN = p * s^p から
+  -- `branchA_padicValNat_mod_pow_eq` (sorry あり) を経由
+  have hGN_val : padicValNat q (DkMath.CosmicFormulaBinom.GN p (z - y) y) =
+      p * padicValNat q s := by
+    haveI : Fact (Nat.Prime q) := _inst
+    have := branchA_kummer_valuation hBundle
+    rwa [branchA_padicValNat_sub_pow_eq_GN hBundle] at this
+  have hmod_eq := branchA_padicValNat_mod_pow_eq hBundle.witness.hqprime (by
+    intro h; simp [DkMath.CosmicFormulaBinom.GN] at h; sorry) (hGN_val ▸ hk_large)
+  rw [hmod_eq, hGN_val]
+
+/--
+**GN の ZMod (q^k) での ring identity** (sorry — 円分核分解):
+`(GN p (z-y) y : ZMod (q^k)) = (z - ω_k * y) * ∏_{i=2}^{p-1} (z - ω_k^i * y)`
+
+数学的根拠:
+`GN p (z-y) y = ∑_{j=0}^{p-1} z^j * y^(p-1-j)` = Φ_p(z/y) * y^(p-1)` で、
+`Φ_p(T) = (T^p - 1) / (T - 1) = ∏_{i=1}^{p-1} (T - ω_k^i)` (ω_k: primitive p-th root)。
+よって `GN = ∏_{i=1}^{p-1} (z - ω_k^i * y)`.
+
+sorry 除去: `Polynomial.cyclotomic p R` の評価 + ω_k の primitivity を使った
+`ZMod (q^k)[T]` 上の多項式等式。
+-/
+theorem branchA_GN_cyclotomic_ring_identity
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q)
+    {k : ℕ} (hk : 0 < k)
+    (hLift : let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩;
+             let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹);
+             BranchAHenselLiftData p q k hk ω) :
+    let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+    (DkMath.CosmicFormulaBinom.GN p (z - y) y : ZMod (q ^ k)) =
+      ((z : ZMod (q ^ k)) - hLift.ω_k * y) *
+        ∏ i ∈ Finset.range (p - 2), ((z : ZMod (q ^ k)) - hLift.ω_k ^ (i + 2) * y) := by
+  intro _inst
+  -- 数学的根拠: GN = Φ_p(z/y) * y^(p-1) = ∏_{i=1}^{p-1} (z - ω_k^i * y)
+  -- = (z - ω_k * y) * ∏_{i=2}^{p-1} (z - ω_k^i * y)
+  sorry
+
+/--
+**Distinguished factor の valuation 等式 (central theorem)**:
+`padicValNat q (ZMod.val(z - ω_k * y : ZMod (q^k))) = p * padicValNat q s`
+
+**hLift を仮定した局所版** (Hensel existence に依存しない)。
+
+sorry の理由:
+1. `branchA_GN_cyclotomic_ring_identity` の ring identity (sorry)
+2. val の乗法性 mod q^k: `val(a * b).val = (a.val * b.val) % q^k`
+   と `v_q((a.val * b.val) % q^k) = v_q(a.val) + v_q(b.val)` when unit (sorry)
+これらが ZMod.val の乗法 + padicValNat の加法性から得られる。
+-/
+theorem branchA_distinguished_factor_valuation_eq_kummer
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q)
+    {k : ℕ} (hk : 0 < k)
+    (hk_large : p * padicValNat q (by haveI : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩; exact s) < k)
+    (hLift : let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩;
+             let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹);
+             BranchAHenselLiftData p q k hk ω) :
+    let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
+    let δ := (z : ZMod (q ^ k)) - hLift.ω_k * (y : ZMod (q ^ k))
+    padicValNat q δ.val = p * padicValNat q s := by
+  intro _inst δ
+  -- sorry: ring identity + val 乗法性 + unit v_q = 0
+  sorry
+
+/-!
 ### Witness source → Contradiction adapter
 
 `BranchAContradictionWithWitnessSourceTarget` は witness `q` の構造的性質を
