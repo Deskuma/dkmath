@@ -1205,3 +1205,272 @@ ContradictionTarget (OPEN — 数学的核心)
 ---
 
 *次回更新予定：`ContradictionTarget` 攻略開始時、または `ValuationPeelPacketTarget` 証明時*
+
+---
+
+## 2026/04/01 — `dev/FLT-restore-260330-v0` 完了レポート (第7回)
+
+### 49. ブランチ進行状況
+
+| 項目 | 前回 (第6回) | 今回 (第7回) |
+|---|---|---|
+| ブランチ | `dev/FLT-restore-260330-v0` | same（develop へマージ済） |
+| コミット数 (develop→HEAD) | 記載なし | **78** |
+| `BranchA.lean` 行数 | 5,366 | **5,620** (+254) |
+| `BranchAExceptional.lean` 行数 | 4,159 | 4,159 (変更なし) |
+| `BranchARestore.lean` 行数 | 1,114 | **2,982** (+1,868) ← **新規作成・主戦場** |
+| `GapInvariant.lean` 行数 | 3,264 | **3,338** (+74) |
+| `GTail.lean` 行数 | 416 | **650** (+234) |
+| **合計行数** | 14,319 | **16,749** (+2,430) |
+| **定義・定理数** | 記載なし | **1,068** (5ファイル合計) |
+| sorry（コード内） | 1 (`BranchA.lean`) | **1** (`BranchA.lean` L4122, 同一箇所) |
+
+### 50. `dev/FLT-restore-260330-v0` の全履歴
+
+develop からの 78 コミット（2026/03/30 13:19 ～ 2026/04/01 01:19 JST）を主要実装で整理する。
+
+| 期間 | 主要コミット | 内容 |
+|---|---|---|
+| 03/30 13:19–14:30 | `ec72e111`–`b39f01cf` | 初期分析。`RestoreFromArithmeticTarget` の構造解析、偽枝チェック（FLT 反例前提のため不可）、witness $q$ の構造発見（$q \equiv 1 \pmod{p}$） |
+| 03/30 14:30–15:04 | `b39f01cf` | `q \equiv 1 \pmod{p}` の structural lemma 5+1 本を no-sorry で実装（`restore_witness_cong_one_mod_p` 等） |
+| 03/30 15:24–16:39 | `31bb616f`–`47f897ad` | `RestoreFromArithmetic` を sub-target に 6 段分割（residue/root → q-adic lift → datum → seed → realization → verification） |
+| 03/30 17:10–17:40 | `0e54f77e`–`65b30b25` | `RealizationSeed` 精密化。`hzEq : x'^p + y'^p = z'^p` 追加、3 段 verification を no-sorry で完了 |
+| 03/30 18:30 | `427bd817` | q-adic descent 構造体・定理群を実装。**z' 直接構成は不可能**（FLT 反例同値）と判明。**正しい路線は矛盾（`False.elim`）** |
+| 03/30 19:20 | `f7bb2196`–`d0ec0799` | **矛盾路線（Contradiction Route）へアーキテクチャ転換**。`ContradictionTarget` を新設。6 段チェーンを bypass する bridge 群を配置 |
+| 03/30 20:30 | `58dbc334` | 矛盾源の体系的探索。5 角度から分析 → **初等的 arithmetic（valuation, congruence, coprimality）では矛盾導出不可**と確定 |
+| 03/30 22:14–03/31 01:01 | `a24811f1`–`ab1bbf22` | **GTail.lean の Phase C**: 合同性 4 系 + mod $p^2/p^3$ 展開 5 系、計 10 補題を no-sorry で実装 |
+| 03/31 01:12–01:54 | `bdbad9d5`–`4d455ed4` | Phase A（円分核 ↔ GN ↔ 差分商の橋）、Phase B（witness/contradiction route bundle 名寄せ + adapter 実装） |
+| 03/31 02:00 | `eb8630a7` | mod $p^3$ conflict handling + `BranchAContradictionModP3SourceTarget`（後に **偽命題と判明**） |
+| 03/31 08:30 | `655d7269` | `ModP3SourceTarget` が偽であることを確定。**mod $p^k$ 路線は行き止まり**。witness $q$ 情報が必須。`BranchAContradictionWithWitnessSourceTarget` を新設 |
+| 03/31 09:30 | `baf4dad7` | **干渉縞集合（Interference Fringe Bundle）** 3 structure + 7 theorem を no-sorry で実装。p-adic 縞と witness $q$ 縞を統合 |
+| 03/31 10:30 | `14efc65d`–`6f5ccf28` | cross-modular 制約 7 本を no-sorry で実装（`q \nmid M`、`s' \equiv 1 \pmod{p}` 等） |
+| 03/31 12:14 | `2134cc85` | descent chain 分析（`BranchADescentStep`）+ cyclotomic valuation 構造体 |
+| 03/31 12:30 | `32bf3048` | ω の位数構造: `ω^p = 1`, `ω \neq 1`, `\mathrm{orderOf} \omega = p` を no-sorry で確定 |
+| 03/31 13:00 | `9419266c` | 円分核因子分離: distinguished factor `z - \omega y \equiv 0 \pmod{q}`, 他は $q$-coprime |
+| 03/31 13:34 | `5fb69278` | **Kummer valuation**: $v_q(z^p - y^p) = p \cdot v_q(s)$ を no-sorry で 7 定理として実装 |
+| 03/31 13:58 | `08e54dd0` | Hensel lifting: simple root 条件を no-sorry で確定、lift 構造体を設計 |
+| 03/31 14:30–17:03 | `a649b072`–`7f128bc9` | distinguished factor valuation: ZMod → ℕ 翻訳チェーン 5 定理 + `BranchACyclotomicValuationData` |
+| 03/31 17:56–18:05 | `c07cb3d7`–`ed1a9ba7` | `branchA_padicValNat_mod_pow_eq` と `branchA_GN_zmod_padicValNat` の sorry 除去 |
+| 03/31 18:34 | `10c353d6` | `branchA_hensel_lift_isPrimitiveRoot` 実装 + `IsPrimitiveRoot` route 試行 |
+| 03/31 19:52–20:27 | `943c49cb`–`a2466d1a` | `GN_cyclotomic_ring_identity` の exact product 試行 → **ZMod($q^k$) は整域でないため失敗** |
+| 03/31 23:29 | `14ad0ae9` | local factorization 路線: `GN = δ * U` (U unit) の薄い補題 4 本を実装 |
+| 04/01 00:18–01:00 | `02213f1a`–`e48b24df` | **Hensel lift sorry 除去**: `ZMod.unitsMap_surjective` + 群論的累乗構成で実装 |
+| 04/01 01:13 | `e5fa4040` | **exact product → local factorization へ弱化**。`branchA_GN_cyclotomic_ring_identity` の最後の sorry を除去 |
+| 04/01 01:19 | `608ad619` | review-033 作成。**Restore file 全体が no-sorry 化** |
+
+---
+
+### 51. 到達点：`TriominoCosmicBranchARestore.lean` は **no-sorry で完成**
+
+```
+Branch A 正規形（Pack, Wieferich, Gap shape）
+  ↓
+BranchAInterferenceFringeBundle（干渉縞集合）
+  ├── BranchAPadicFringe（p-adic head 縞: mod p^2, mod p^3, Wieferich）
+  └── BranchAWitnessFringe（witness q 縞: q ≡ 1 [MOD p], q^p ∣ GN, q ∤ gap）
+        ↓
+  ω := z·y⁻¹ ∈ ZMod q
+  ├── ω^p = 1, ω ≠ 1, orderOf ω = p（primitive p-th root of unity）
+  ├── distinguished factor: z - ω·y ≡ 0 [MOD q]（1 因子集中）
+  └── non-distinguished: z - ω^i·y ≢ 0 [MOD q] for i ≢ 1 [MOD p]
+        ↓
+  Kummer valuation: v_q(z^p - y^p) = p · v_q(s)
+        ↓
+  Hensel lift: ω_k ∈ ZMod(q^k), ω_k^p = 1
+        ↓
+  Local factorization: GN = δ · U (U unit in ZMod(q^k))
+        ↓
+  Central valuation theorem: v_q(δ.val) = p · v_q(s)
+        ↓
+  BranchADescentStep（降下 1 step: s' < s, s' ≡ 1 [MOD p], x' < x）
+```
+
+**全定理が no-sorry。`lake build` 成功確認済み。**
+
+---
+
+### 52. 切り捨てた枝の一覧（本ブランチ内）
+
+| route | 判定根拠 | 確定日 |
+|---|---|---|
+| z' 直接構成路線 | $(x/q)^p + y^p = z'^p$ は FLT 反例と同値 | 03/30 |
+| mod $p^k$ 矛盾路線 | `branchA_spow_congr_head_mod_p3` が Branch A から自動で従い、否定を供給不能 | 03/31 |
+| 初等 arithmetic 矛盾 | valuation / congruence / coprimality の 5 角度で consistent と確認 | 03/30 |
+| exact product identity (ZMod$(q^k)$) | $k > 1$ で ZMod$(q^k)$ は整域でないため `X_pow_sub_C_eq_prod` 不適用 | 03/31 |
+
+---
+
+### 53. 新規作成ファイルと行数
+
+| ファイル | 行数 | 定義・定理数 | sorry | 役割 |
+|---|---|---|---|---|
+| `TriominoCosmicBranchARestore.lean` | 2,982 | 107 | **0** | restore 固有の descent / valuation 理論 |
+
+### 54. 既存ファイルの変更
+
+| ファイル | 行数 | 定義・定理数 | sorry | 主な追加内容 |
+|---|---|---|---|---|
+| `TriominoCosmicBranchA.lean` | 5,620 (+254) | 271 | 1 (既存) | §R structural lemmas, Phase B bundles, mod $p^3$ APIs |
+| `TriominoCosmicGapInvariant.lean` | 3,338 (+74) | 333 | 0 | Contradiction / WitnessSource adapter 群 |
+| `GTail.lean` | 650 (+234) | 30 | 0 | Phase C: 合同性 + mod $p^2/p^3$ 展開 10 補題 |
+
+---
+
+### 55. `TriominoCosmicBranchARestore.lean` の主要構成要素
+
+#### 55.1. 構造体（structures / bundles）
+
+| 名前 | 内容 |
+|---|---|
+| `BranchAPadicFringe` | p-adic head 縞 (正規形 + Wieferich + head congruences) |
+| `BranchAWitnessFringe` | witness q 縞 ($q \mid s$, $q \nmid t$, $q \equiv 1 \pmod{p}$, $q^p \mid \mathrm{GN}$) |
+| `BranchAInterferenceFringeBundle` | 干渉縞集合 (padic + witness) |
+| `BranchADescentStep` | 降下 1 step の全性質 ($s' < s$, $s' \equiv 1 \pmod{p}$) |
+| `BranchAHenselLiftData` | Hensel lift data ($\omega_k \in \mathrm{ZMod}(q^k)$, $\omega_k^p = 1$, 射影整合) |
+| `BranchACyclotomicValuationData` | Kummer valuation + factor 分離の統合情報 |
+| `BranchAQFreeQuotient`, `BranchAQAdicDescentData` | q-adic 降下用のデータ bundle |
+
+#### 55.2. 主要定理群
+
+| カテゴリ | 代表定理 | 内容 |
+|---|---|---|
+| Structural | `restore_witness_cong_one_mod_p` | witness $q \equiv 1 \pmod{p}$ |
+| ω 解析 | `branchA_omega_pow_eq_one`, `_ne_one`, `_order_eq_p` | primitive root |
+| 因子分離 | `branchA_distinguished_factor_vanishes` | $z - \omega y \equiv 0 \pmod{q}$ |
+| Kummer | `branchA_kummer_valuation` | $v_q(z^p - y^p) = p \cdot v_q(s)$ |
+| Hensel | `branchA_hensel_lift_exists` | 群論的 lift（sorry なし） |
+| Local decomp | `branchA_local_GN_eq_distinguished_mul_unit` | $\mathrm{GN} = \delta \cdot U$ ($U$ unit) |
+| Central | `branchA_distinguished_factor_valuation_eq_kummer` | $v_q(\delta.\mathit{val}) = p \cdot v_q(s)$ |
+| 降下 | `branchA_descent_s_strict_decrease` | $s' < s$ (well-founded) |
+| Cross-mod | `branchA_fringe_q_not_dvd_tail_coeff` | massive cancellation 制約 |
+
+---
+
+### 56. アーキテクチャ全体図（第7回時点）
+
+```
+ExistenceMainline (no-sorry, boundary-core route)
+  +
+BranchAContradictionWithWitnessSourceTarget  [OPEN KERNEL]
+  │  ↕ (双方向変換)
+  │ BranchAFringeContradictionTarget  [OPEN KERNEL, bundle 版]
+  │
+  ├─(BranchARestore)─→ RestoreContradictionTarget (bypass via False.elim)
+  │                       └──→ RestoreFromArithmeticTarget
+  │
+  └─(GapInvariant)───→ ContradictionAdapter
+                          ├──→ RestoreFromArithmeticAdapter
+                          └──→ PacketDescentAdapter
+                                │
+                                └─→ (+ ValuationPeel) → SmallerPacket
+                                      → descent → BranchARefuterTarget
+                                      → (+ BranchB) → FLTPrimeGe5Target
+```
+
+**FLT for $p \geq 5$ の clean 証明に必要な missing pieces:**
+
+| # | open kernel | 数学的内容 |
+|---|---|---|
+| 1. | `ContradictionTarget` / `FringeContradictionTarget` | Branch A 全前提 + witness $q$ → `False`（数学的核心） |
+| 2. | `ValuationPeelPacketTarget` | $p \mid t$ の場合の peel 側 descent |
+| 3. | `BranchA.lean` L4122 sorry | comparison route 末端マーカー（設計転換で消える見込み） |
+
+---
+
+### 57. 全プロジェクト視点での残存 sorry
+
+| ファイル | 行 | 定理名 | 性質 |
+|---|---|---|---|
+| `TriominoCosmicBranchA.lean` | L4122 | `primeGe5BranchANormalFormNePCoprimeKernel_default` | 設計マーカー（comparison route 終了判定） |
+
+`TriominoCosmicBranchARestore.lean` — sorry **0** ← 本ブランチの成果
+
+---
+
+### 58. 数学的成果のまとめ
+
+#### 58.1. 新発見
+
+1. **witness $q \equiv 1 \pmod{p}$**: FLT 等式から $\omega = z \cdot y^{-1} \in (\mathbb{Z}/q\mathbb{Z})^*$ が非自明な $p$ 乗根であることから必然
+2. **Kummer valuation**: $v_q(z^p - y^p) = p \cdot v_q(s)$（全 $q$-整除が distinguished factor 1 本に集中）
+3. **初等的 arithmetic 矛盾は不可能**: valuation / congruence / coprimality の 5 角度で Branch A 前提は consistent — 矛盾には円分体理論または witness $q$ の deeper structure が必須
+4. **mod $p^k$ 路線は行き止まり**: head congruence は Branch A 正規形から自動で従い、否定を供給できない
+5. **z' 直接構成は不可能**: $(x/q)^p + y^p = z'^p$ は FLT 反例の存在と同値 — 正しい路線は矛盾 (`False.elim`)
+
+#### 58.2. 実装技法
+
+1. **群論的 Hensel lift**: `ZMod.unitsMap_surjective` + 累乗消去で `HenselianRing` API を回避
+2. **local factorization**: exact product identity を諦め、`GN = δ · U` ($U$ unit) だけで valuation を完遂
+3. **干渉縞集合 (Interference Fringe Bundle)**: p-adic 縞と witness q 縞を統合する structure 設計パターン
+
+---
+
+### 59. 懸念点
+
+#### 59.1. `ContradictionTarget` は深い数論を要求する
+
+初等的 arithmetic では矛盾が導出できないことが体系的に確認された（5 角度分析）。
+矛盾を導くには以下のいずれかが必要:
+
+- 円分体 $\mathbb{Q}(\zeta_p)$ でのイデアル分解（Kummer 理論）
+- witness $q$ の deeper structure（$q$-adic Hensel lift の高次解析）
+- GTail の higher-order analysis（Cosmic Formula 独自の新構造）
+- descent terminal case（$s' = 1$ 到達時の矛盾分析）
+
+#### 59.2. `ValuationPeelPacketTarget` は `ContradictionTarget` と独立
+
+$p \mid t$ の場合の peel 側 descent は、本ブランチでは未着手。
+ただし `ContradictionTarget` が解決すれば Branch A の primitive side は完結する。
+
+---
+
+### 60. open task の改訂（第7回）
+
+| 優先度 | 課題 | 状態 |
+|---|---|---|
+| ~~最高~~ | ~~restore file の no-sorry 化~~ | **✅ 完了** |
+| **最高** | `ContradictionTarget` の証明（Branch A 前提矛盾） | 未着手。初等路線は行き止まり確定。深い数論が必要 |
+| **高** | `ValuationPeelPacketTarget`（$p \mid t$ の場合） | 未着手。Contradiction と独立 |
+| **中** | `BranchA.lean` L4122 の sorry（設計マーカー） | 変更なし。boundary route 成功により方向が見えている |
+| **低** | exact product identity の記録 | appendix 的ファイルに分離して将来追加可能 |
+
+---
+
+### 61. 次の一手：賢狼の提案
+
+#### 61.1. 第一候補：descent terminal case の分析
+
+降下連鎖は well-founded（$s' < s$）であり、有限ステップで $s' = 1$ に到達する。
+このとき $x' = p \cdot t$ となり、Kummer valuation $v_q(\delta.\mathit{val}) = p \cdot v_q(s)$ が
+$v_q(s) = 0$ を強制する — これは $q \mid s$ と矛盾する可能性がある。
+完成した local valuation 理論を terminal case へ直接流し込む路線が最も自然。
+
+#### 61.2. 第二候補：円分体理論の Lean 基盤整備
+
+Mathlib の `Polynomial.cyclotomic` / `IsCyclotomicExtension` を使い、
+$\mathbb{Q}(\zeta_p)$ でのイデアル分解の形式化に着手する。
+これは `ContradictionTarget` の本命路線だが、Mathlib 依存度が高い。
+
+---
+
+### 62. ファイル規模サマリ（第7回時点）
+
+```
+lean/dk_math/DkMath/FLT/PrimeProvider/
+├── TriominoCosmicBranchA.lean              5,620行  (sorry×1 — 既存設計マーカー)
+├── TriominoCosmicBranchAExceptional.lean   4,159行  (sorry×0)
+├── TriominoCosmicBranchARestore.lean       2,982行  (sorry×0) ← 本ブランチで新規作成・完成
+├── TriominoCosmicGapInvariant.lean         3,338行  (sorry×0)
+└── ... (他 PrimeProvider ファイル多数)
+
+lean/dk_math/DkMath/CosmicFormula/
+└── GTail.lean                                650行  (sorry×0) ← Phase C 追加
+
+合計: 16,749行、1,068 定義・定理
+```
+
+**ビルド：** `lake build` 全体成功。error 0。
+
+---
+
+*次回更新予定：`ContradictionTarget` への descent terminal case 適用時、または `ValuationPeelPacketTarget` 証明時*
