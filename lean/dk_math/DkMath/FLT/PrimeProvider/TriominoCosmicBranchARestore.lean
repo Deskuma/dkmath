@@ -1112,6 +1112,218 @@ theorem branchA_realization_reduced_form
   rwa [branchA_xdiv_pow_expansion x' hx'_eq] at hzEq
 
 /-!
+## 干渉縞集合 (Interference Fringe Bundle)
+
+Branch A の二系統の構造的縞を統一的に束ねる structure 群。
+
+- **第一縞 (p-adic head fringe)**: Branch A normal form から自動で従う p-adic 側の全制約
+  - gap shape, GN shape, x-shape
+  - coprimality (t ⟂ s, t ⟂ y, s ⟂ y)
+  - 非整除性 (p ∤ s, p ∤ t)
+  - Wieferich 条件 y^{p-1} ≡ 1 [MOD p^2]
+  - head congruence s^p ≡ y^{p-1} [MOD p^2] および [MOD p^3]
+  - s ≡ 1 [MOD p], s^p ≡ 1 [MOD p^2]
+
+- **第二縞 (witness q / cyclotomic fringe)**: witness q の構造的性質
+  - q の基本性質 (Prime q, q ∣ s, q ∤ t, Coprime q y, q ≠ p)
+  - RestoreWitnessProperties (q ∣ x, q ∤ y, q ∤ z, q ∤ gap, p ∣ (q-1), q^p ∣ GN)
+
+干渉縞の共存不可能性（= False）が FLT Branch A 側の本丸 open kernel。
+-/
+
+/--
+Branch A の **第一縞**: p-adic head fringe。
+
+Branch A normal form pack に加え、normal form から自動で導かれる
+coprimality、非整除性、Wieferich 条件、head congruence を全て束ねる。
+これらは全て既存 default 補題で sorry なしに構成可能。
+-/
+structure BranchAPadicFringe (p x y z t s : ℕ) : Prop where
+  -- Normal form base
+  pack : PrimeGe5CounterexamplePack p x y z
+  hp_dvd_gap : p ∣ (z - y)
+  hgap : z - y = p ^ (p - 1) * t ^ p
+  hsGN : GN p (z - y) y = p * s ^ p
+  hsx : x = p * (t * s)
+  -- Coprimality
+  hcop_ts : Nat.Coprime t s
+  hcop_ty : Nat.Coprime t y
+  hcop_sy : Nat.Coprime s y
+  -- p-divisibility
+  hp_not_dvd_s : ¬ p ∣ s
+  hp_not_dvd_t : ¬ p ∣ t
+  -- Wieferich condition
+  hWieferich : y ^ (p - 1) ≡ 1 [MOD p ^ 2]
+  -- Head congruences
+  hhead_mod_p2 : s ^ p ≡ y ^ (p - 1) [MOD p ^ 2]
+  hhead_mod_p3 : s ^ p ≡ y ^ (p - 1) [MOD p ^ 3]
+  -- Derived: s ≡ 1 [MOD p]
+  hs_cong_one : s ≡ 1 [MOD p]
+  -- Derived: s^p ≡ 1 [MOD p^2]
+  hspow_cong_one : s ^ p ≡ 1 [MOD p ^ 2]
+
+/--
+Branch A の **第二縞**: witness q / cyclotomic fringe。
+
+witness prime q の基本性質と、q から導かれる全構造的性質を束ねる。
+第二縞は第一縞の存在を前提として、その上に追加的制約層を形成する。
+-/
+structure BranchAWitnessFringe (p x y z t s q : ℕ) : Prop where
+  -- witness q basic
+  hqprime : Nat.Prime q
+  hqs : q ∣ s
+  hqt : ¬ q ∣ t
+  hcop_qy : Nat.Coprime q y
+  hq_ne_p : q ≠ p
+  -- Structural properties (RestoreWitnessProperties fields)
+  hq_dvd_x : q ∣ x
+  hq_not_dvd_y : ¬ q ∣ y
+  hq_not_dvd_z : ¬ q ∣ z
+  hq_not_dvd_gap : ¬ q ∣ (z - y)
+  hq_cong : p ∣ (q - 1)
+  hqp_dvd_GN : q ^ p ∣ GN p (z - y) y
+
+/--
+Branch A の **干渉縞集合**: p-adic head 縞と witness q 縞の全体。
+
+FLT 反例の存在は、この bundle の全 field が同時に成立することを要求する。
+逆に、FLT の Branch A 側証明とは、この bundle から `False` を導くことに他ならない。
+
+`BranchAContradictionWithWitnessSourceTarget` は、
+この束の全 field を引数として受け取り `False` を返す target と見てよい。
+-/
+structure BranchAInterferenceFringeBundle (p x y z t s q : ℕ) : Prop where
+  padic : BranchAPadicFringe p x y z t s
+  witness : BranchAWitnessFringe p x y z t s q
+
+/--
+第一縞 (p-adic fringe) の default 構成。
+
+Branch A normal form pack とcoprime / Wieferich / head congruence は
+全て既存 default 補題で自動供給される。`¬ p ∣ t` のみ外部引数。
+-/
+theorem branchAPadicFringe_default
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hsx : x = p * (t * s))
+    (hp_not_dvd_t : ¬ p ∣ t) :
+    BranchAPadicFringe p x y z t s where
+  pack := hpack
+  hp_dvd_gap := hp_dvd_gap
+  hgap := hgap
+  hsGN := hsGN
+  hsx := hsx
+  hcop_ts := primeGe5BranchANormalForm_coprime_ts_default hpack hp_dvd_gap hgap hsGN
+  hcop_ty := primeGe5BranchANormalForm_coprime_t_right hpack hsx
+  hcop_sy := primeGe5BranchANormalForm_coprime_s_right hpack hsx
+  hp_not_dvd_s := primeGe5BranchANormalForm_prime_not_dvd_s_default hpack hp_dvd_gap hgap hsGN
+  hp_not_dvd_t := hp_not_dvd_t
+  hWieferich := primeGe5BranchANormalForm_y_wieferich_mod_p_sq hpack hp_dvd_gap hgap hsGN
+  hhead_mod_p2 := branchA_spow_congr_head_mod_p2 hpack hp_dvd_gap hgap hsGN
+  hhead_mod_p3 := branchA_spow_congr_head_mod_p3 hpack hp_dvd_gap hgap hsGN
+  hs_cong_one := primeGe5BranchANormalForm_s_congr_one_mod_p hpack hp_dvd_gap hgap hsGN
+  hspow_cong_one := primeGe5BranchANormalForm_spow_congr_one_mod_p_sq hpack hp_dvd_gap hgap hsGN
+
+/--
+第二縞 (witness q fringe) の default 構成。
+
+`RestoreWitnessProperties` が構成済みなら、全 field を展開するだけ。
+-/
+theorem branchAWitnessFringe_of_restoreProperties
+    {p x y z t s q : ℕ}
+    (hqprime : Nat.Prime q)
+    (hqs : q ∣ s)
+    (hqt : ¬ q ∣ t)
+    (hcop_qy : Nat.Coprime q y)
+    (hq_ne_p : q ≠ p)
+    (hData : RestoreWitnessProperties p x y z t s q) :
+    BranchAWitnessFringe p x y z t s q where
+  hqprime := hqprime
+  hqs := hqs
+  hqt := hqt
+  hcop_qy := hcop_qy
+  hq_ne_p := hq_ne_p
+  hq_dvd_x := hData.hq_dvd_x
+  hq_not_dvd_y := hData.hq_not_dvd_y
+  hq_not_dvd_z := hData.hq_not_dvd_z
+  hq_not_dvd_gap := hData.hq_not_dvd_gap
+  hq_cong := hData.hq_cong
+  hqp_dvd_GN := hData.hqp_dvd_GN
+
+/--
+干渉縞集合の一括構成。
+
+第一縞 + 第二縞を同時に構成する。
+-/
+theorem branchAInterferenceFringeBundle_default
+    {p x y z t s q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hsx : x = p * (t * s))
+    (hp_not_dvd_t : ¬ p ∣ t)
+    (hqprime : Nat.Prime q)
+    (hqs : q ∣ s)
+    (hqt : ¬ q ∣ t)
+    (hcop_qy : Nat.Coprime q y)
+    (hq_ne_p : q ≠ p)
+    (hData : RestoreWitnessProperties p x y z t s q) :
+    BranchAInterferenceFringeBundle p x y z t s q where
+  padic := branchAPadicFringe_default hpack hp_dvd_gap hgap hsGN hsx hp_not_dvd_t
+  witness := branchAWitnessFringe_of_restoreProperties hqprime hqs hqt hcop_qy hq_ne_p hData
+
+/--
+干渉縞集合から `False` を導く target。
+
+`BranchAContradictionWithWitnessSourceTarget` の bundle 版。
+干渉縞集合の共存不可能性を 1 つの structure 引数で表現する。
+-/
+abbrev BranchAFringeContradictionTarget : Prop :=
+  ∀ {p x y z t s q : ℕ},
+    BranchAInterferenceFringeBundle p x y z t s q → False
+
+/--
+fringe contradiction → witness source。
+
+bundle 版から個別引数版への unbundle。
+-/
+theorem branchAContradictionWithWitnessSource_of_fringeContradiction
+    (hContra : BranchAFringeContradictionTarget) :
+    BranchAContradictionWithWitnessSourceTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p
+    hq_dvd_x hq_not_dvd_y hq_not_dvd_z hq_not_dvd_gap hq_cong hqp_dvd_GN
+  exact hContra ⟨
+    ⟨hpack, hp_dvd_gap, hgap, hsGN, hsx,
+     hcop_ts, hcop_ty, hcop_sy, hp_not_dvd_s, hp_not_dvd_t,
+     hWieferich,
+     branchA_spow_congr_head_mod_p2 hpack hp_dvd_gap hgap hsGN,
+     branchA_spow_congr_head_mod_p3 hpack hp_dvd_gap hgap hsGN,
+     primeGe5BranchANormalForm_s_congr_one_mod_p hpack hp_dvd_gap hgap hsGN,
+     primeGe5BranchANormalForm_spow_congr_one_mod_p_sq hpack hp_dvd_gap hgap hsGN⟩,
+    ⟨hqprime, hqs, hqt, hcop_qy, hq_ne_p,
+     hq_dvd_x, hq_not_dvd_y, hq_not_dvd_z, hq_not_dvd_gap, hq_cong, hqp_dvd_GN⟩⟩
+
+/--
+witness source → fringe contradiction。
+
+個別引数版から bundle 版への逆方向（bundle 構成を内部で行う）。
+-/
+theorem branchAFringeContradiction_of_witnessSource
+    (hSource : BranchAContradictionWithWitnessSourceTarget) :
+    BranchAFringeContradictionTarget := by
+  intro p x y z t s q ⟨hP, hW⟩
+  exact hSource hP.pack hP.hp_dvd_gap hP.hgap hP.hsGN hP.hsx
+    hP.hcop_ts hP.hcop_ty hP.hcop_sy hP.hp_not_dvd_s hP.hp_not_dvd_t hP.hWieferich
+    hW.hqprime hW.hqs hW.hqt hW.hcop_qy hW.hq_ne_p
+    hW.hq_dvd_x hW.hq_not_dvd_y hW.hq_not_dvd_z hW.hq_not_dvd_gap hW.hq_cong hW.hqp_dvd_GN
+
+/-!
 ### Witness source → Contradiction adapter
 
 `BranchAContradictionWithWitnessSourceTarget` は witness `q` の構造的性質を

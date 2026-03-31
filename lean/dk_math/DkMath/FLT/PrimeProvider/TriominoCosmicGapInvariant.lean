@@ -1853,6 +1853,35 @@ theorem branchAPrimitiveRestoreContradictionAdapter_of_witnessSource
   DkMath.FLT.primeGe5BranchAPrimitiveRestoreContradiction_of_witnessSource hSource
 
 /--
+干渉縞集合の bundle 版 contradiction adapter。
+
+`BranchAFringeContradictionTarget` は `BranchAInterferenceFringeBundle` を受けて
+`False` を返す target。witness source 版と等価であり、相互変換可能。
+-/
+abbrev BranchAFringeContradictionAdapterTarget : Prop :=
+  DkMath.FLT.BranchAFringeContradictionTarget
+
+/--
+fringe contradiction → witness source adapter。
+-/
+theorem branchAContradictionWithWitnessSourceAdapter_of_fringeContradiction
+    (hContra : BranchAFringeContradictionAdapterTarget) :
+    BranchAContradictionWithWitnessSourceAdapterTarget :=
+  DkMath.FLT.branchAContradictionWithWitnessSource_of_fringeContradiction hContra
+
+/--
+fringe contradiction → contradiction adapter bridge（short-circuit）。
+
+干渉縞集合の矛盾から、restore 全体を bypass して
+`RestoreContradictionTarget` へ直接接続する。
+-/
+theorem branchAPrimitiveRestoreContradictionAdapter_of_fringeContradiction
+    (hContra : BranchAFringeContradictionAdapterTarget) :
+    BranchAPrimitiveRestoreContradictionAdapterTarget :=
+  branchAPrimitiveRestoreContradictionAdapter_of_witnessSource
+    (branchAContradictionWithWitnessSourceAdapter_of_fringeContradiction hContra)
+
+/--
 矛盾路線 → `RestoreFromArithmeticTarget` adapter。
 -/
 theorem branchAPrimitiveRestoreFromArithmeticAdapter_of_contradiction

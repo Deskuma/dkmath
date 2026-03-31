@@ -1375,3 +1375,105 @@ Archive
      - GN の q-adic 構造: `q^p ∣ GN` と `q ∤ gap` の組み合わせから GTail 内部の因子関係
      - 円分体理論: `q ≡ 1 [MOD p]` と ℤ[ζ_p] でのイデアル分解
    - mod p^k 路線は行き止まりと確定したため、今後は witness q 側の解析に集中する。
+
+### 日時: 2026/03/31 09:30:00 JST
+
+1. 目的:
+   - `design-017.md` / `consider-017.md` の「干渉縞」像に基づき、
+     Branch A の二系統の構造的縞を統一的に束ねる
+     **干渉縞集合 (Interference Fringe Bundle)** を Lean で形式化する。
+   - p-adic head 縞と witness q 縞を個別の structure に分離しつつ、
+     両者を合成する bundle structure を定義する。
+   - 既存の default 補題と `RestoreWitnessProperties` から
+     sorry なしで一括構成できることを検証する。
+   - `BranchAContradictionWithWitnessSourceTarget` との双方向変換を実装する。
+
+2. 実施:
+
+   **§A. 干渉縞集合の structure 設計と実装**
+
+   `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]` に以下を追加:
+
+   - `BranchAPadicFringe (p x y z t s : ℕ) : Prop` — **第一縞**
+     - Normal form base: pack, hp_dvd_gap, hgap, hsGN, hsx
+     - Coprimality: hcop_ts, hcop_ty, hcop_sy
+     - p-divisibility: hp_not_dvd_s, hp_not_dvd_t
+     - Wieferich: hWieferich
+     - Head congruences: hhead_mod_p2, hhead_mod_p3
+     - Derived: hs_cong_one, hspow_cong_one
+
+   - `BranchAWitnessFringe (p x y z t s q : ℕ) : Prop` — **第二縞**
+     - Witness basic: hqprime, hqs, hqt, hcop_qy, hq_ne_p
+     - Structural: hq_dvd_x, hq_not_dvd_y, hq_not_dvd_z,
+       hq_not_dvd_gap, hq_cong, hqp_dvd_GN
+
+   - `BranchAInterferenceFringeBundle (p x y z t s q : ℕ) : Prop`
+     — **干渉縞集合**: `padic` + `witness` の合成
+
+   **§B. Constructor theorems**
+
+   - `branchAPadicFringe_default`: 第一縞の一括構成（`¬ p ∣ t` のみ外部引数）
+   - `branchAWitnessFringe_of_restoreProperties`: 第二縞の構成
+   - `branchAInterferenceFringeBundle_default`: 両縞の一括構成
+
+   **§C. 双方向変換 theorems**
+
+   - `BranchAFringeContradictionTarget`: bundle 版の矛盾 target
+   - `branchAContradictionWithWitnessSource_of_fringeContradiction`:
+     bundle → 個別引数 (unbundle)
+   - `branchAFringeContradiction_of_witnessSource`:
+     個別引数 → bundle (bundle)
+
+   **§D. GapInvariant 側 adapter**
+
+   `[DkMath/FLT/PrimeProvider/TriominoCosmicGapInvariant.lean]` に以下を追加:
+
+   - `BranchAFringeContradictionAdapterTarget`: provider 側 alias
+   - `branchAContradictionWithWitnessSourceAdapter_of_fringeContradiction`:
+     fringe → witness source
+   - `branchAPrimitiveRestoreContradictionAdapter_of_fringeContradiction`:
+     fringe → restore contradiction (short-circuit)
+
+3. 結論:
+
+   **到達したアーキテクチャ:**
+
+   ```
+   BranchAFringeContradictionTarget  [OPEN KERNEL - bundle 版]
+     ↕ (双方向変換)
+   BranchAContradictionWithWitnessSourceTarget  [OPEN KERNEL - 個別引数版]
+     │
+     ├─(BranchARestore)─→ RestoreContradictionTarget
+     │
+     └─(GapInvariant)───→ ContradictionAdapter
+                             ├──→ RestoreFromArithmeticAdapter
+                             └──→ PacketDescentAdapter
+   ```
+
+   - **3 structure** を新設:
+     `BranchAPadicFringe`, `BranchAWitnessFringe`,
+     `BranchAInterferenceFringeBundle`
+   - **7 theorem** を新設（全て sorry なし）:
+     default 構成 3 本、双方向変換 2 本、GapInvariant adapter 3 本
+   - **1 target** を新設: `BranchAFringeContradictionTarget`
+   - bundle 版と個別引数版は **等価** であることが双方向 theorem で保証された。
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore` 成功
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant` 成功
+   - `lake build`（全体）成功 (exit 0)
+   - sorry 増加なし
+   - BranchARestore.lean: 1140 → 1352 (+212 行)
+   - GapInvariant.lean: 3309 → 3338 (+29 行)
+
+5. 失敗事例:
+   - なし（設計段階で前方参照問題を回避するために
+     BranchARestore.lean に配置する判断を済ませていた）。
+
+6. 次の課題:
+   - `BranchAFringeContradictionTarget` の証明:
+     干渉縞集合の共存不可能性（= `False`）を導く concrete 数学。
+   - 干渉縞集合の field を活用した新しい矛盾候補の探索:
+     - `hqp_dvd_GN` (`q^p ∣ GN`) と `hhead_mod_p3` (`s^p ≡ y^{p-1} [MOD p^3]`) の結合
+     - `hq_cong` (`p ∣ (q-1)`) と Wieferich の相互作用
+     - `hq_not_dvd_gap` (`q ∤ (z-y)`) と gap shape の衝突可能性
