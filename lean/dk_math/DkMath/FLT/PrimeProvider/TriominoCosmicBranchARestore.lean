@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import Mathlib.FieldTheory.KummerExtension
+import Mathlib.RingTheory.ZMod.UnitsCyclic
 import DkMath.FLT.PrimeProvider.TriominoCosmicBranchA
 
 #print "file: DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore"
@@ -2146,14 +2147,13 @@ structure BranchAHenselLiftData
 `ZMod (q^k)` は `(q) · ZMod (q^k)` を maximal ideal とする local ring であり、
 `ZMod (q^k) / (q) ≅ ZMod q` (field) 上で `ω` は `X^p - 1` の simple root
 (∵ `branchA_omega_derivative_ne_zero`)。
-したがって Hensel の補題により `ZMod (q^k)` への一意な lift が存在する。
-
-**Lean 接続状況**: Mathlib に `ZMod (q^k)` の `HenselianRing` instance が
-直接的には用意されていないため、現時点では sorry として記述する。
-この sorry は今後 Mathlib 側の拡張、あるいは直接的な Newton 法の
-帰納構成により除去可能。
+ここでは HenselianRing API を直接使わず、
+`(ZMod (q^k))ˣ → (ZMod q)ˣ` の全射と kernel の位数計算から
+`ω` の unit lift を構成し、
+さらに `q^(k-1)` 乗で `q`-primary 部分を殺して
+`p`-torsion の lift `ω_k` を得る。
 -/
-def branchA_hensel_lift_exists
+noncomputable def branchA_hensel_lift_exists
     {p x y z t s q : ℕ}
     (hBundle : BranchAInterferenceFringeBundle p x y z t s q)
     {k : ℕ} (hk : 0 < k) :
@@ -2161,10 +2161,102 @@ def branchA_hensel_lift_exists
     let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹)
     BranchAHenselLiftData p q k hk ω := by
   intro _inst ω
-  -- Hensel 補題による lift の存在。
-  -- 数学的正当性: branchA_omega_derivative_ne_zero により simple root 条件が成立。
-  -- Lean 接続: ZMod (q^k) の HenselianRing instance が Mathlib にないため sorry。
-  sorry
+  classical
+  let f : (ZMod (q ^ k))ˣ →* (ZMod q)ˣ :=
+    ZMod.unitsMap (dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk))
+  haveI : NeZero (q ^ k) := ⟨pow_ne_zero k hBundle.witness.hqprime.ne_zero⟩
+  have hω_ne_zero : ω ≠ 0 := by
+    change (z : ZMod q) * (↑y : ZMod q)⁻¹ ≠ 0
+    have hz_ne_zero : (z : ZMod q) ≠ 0 := by
+      intro hz
+      exact hBundle.witness.hq_not_dvd_z ((ZMod.natCast_eq_zero_iff z q).mp hz)
+    have hy_ne_zero : (y : ZMod q) ≠ 0 := by
+      intro hy
+      exact hBundle.witness.hq_not_dvd_y ((ZMod.natCast_eq_zero_iff y q).mp hy)
+    exact mul_ne_zero hz_ne_zero (inv_ne_zero hy_ne_zero)
+  have hω_coprime : Nat.Coprime ω.val q := by
+    refine ((Nat.Prime.coprime_iff_not_dvd hBundle.witness.hqprime).2 ?_).symm
+    intro hdvd
+    apply hω_ne_zero
+    rw [← ZMod.natCast_zmod_val ω, ZMod.natCast_eq_zero_iff]
+    exact hdvd
+  let c : (ZMod q)ˣ := ZMod.unitOfCoprime ω.val hω_coprime
+  have hc_coe : (c : ZMod q) = ω := by
+    simp only [ZMod.coe_unitOfCoprime, (ZMod.natCast_zmod_val ω), c]
+  let b : (ZMod (q ^ k))ˣ := Classical.choose <|
+    ZMod.unitsMap_surjective (m := q ^ k) (n := q)
+      (h := dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk)) c
+  have hb : f b = c := by
+    dsimp [f, b]
+    exact Classical.choose_spec <|
+      ZMod.unitsMap_surjective (m := q ^ k) (n := q)
+        (h := dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk)) c
+  let u : (ZMod (q ^ k))ˣ := b ^ (q ^ (k - 1))
+  have hc_order : orderOf c = p := by
+    rw [← orderOf_units, hc_coe]
+    exact branchA_omega_order_eq_p hBundle
+  have hc_pow_one : c ^ p = 1 := by
+    apply Units.ext
+    simpa [hc_coe] using branchA_omega_pow_eq_one hBundle
+  have hq_cong : q ≡ 1 [MOD p] :=
+    branchA_fringe_q_congr_one_mod_p hBundle.witness.hqprime hBundle.witness.hq_cong
+  have hqpow_cong : q ^ (k - 1) ≡ 1 [MOD p] := by
+    simpa using hq_cong.pow (k - 1)
+  have hc_pow_fix : c ^ (q ^ (k - 1)) = c := by
+    have hqpow_cong' : q ^ (k - 1) ≡ 1 [MOD orderOf c] := by
+      simpa [hc_order] using hqpow_cong
+    simpa [pow_one] using
+      (pow_eq_pow_iff_modEq (x := c) (n := q ^ (k - 1)) (m := 1)).2 hqpow_cong'
+  have hu_proj_unit : f u = c := by
+    dsimp [u, f]
+    rw [map_pow, hb, hc_pow_fix]
+  have hbpow_mem_ker : b ^ p ∈ f.ker := by
+    rw [MonoidHom.mem_ker]
+    dsimp [f]
+    rw [map_pow, hb, hc_pow_one]
+  have hcard_source : Nat.card ((ZMod (q ^ k))ˣ) = q ^ (k - 1) * (q - 1) := by
+    rw [Nat.card_eq_fintype_card, ZMod.card_units_eq_totient, Nat.totient_prime_pow hBundle.witness.hqprime hk]
+  have hcard_target : Nat.card (ZMod q)ˣ = q - 1 := by
+    rw [Nat.card_eq_fintype_card, ZMod.card_units_eq_totient]
+    simpa using (Nat.totient_prime_pow hBundle.witness.hqprime (show 0 < 1 by decide))
+  have hf_surj : Function.Surjective f := by
+    dsimp [f]
+    exact ZMod.unitsMap_surjective (m := q ^ k) (n := q)
+      (h := dvd_pow_self q (Nat.pos_iff_ne_zero.mp hk))
+  have hrange_top : f.range = ⊤ := MonoidHom.range_eq_top.2 hf_surj
+  have hcard_mul :
+      Nat.card ((ZMod (q ^ k))ˣ) = Nat.card f.ker * Nat.card (ZMod q)ˣ := by
+    calc
+      Nat.card ((ZMod (q ^ k))ˣ) = Nat.card f.ker * f.ker.index := by
+        rw [Subgroup.card_mul_index]
+      _ = Nat.card f.ker * Nat.card f.range := by
+        rw [Subgroup.index_ker]
+      _ = Nat.card f.ker * Nat.card (ZMod q)ˣ := by
+        simp [hrange_top]
+  have hker_card : Nat.card f.ker = q ^ (k - 1) := by
+    have hcard_mul' := hcard_mul
+    rw [hcard_source, hcard_target] at hcard_mul'
+    have htmp : q ^ (k - 1) * (q - 1) = Nat.card f.ker * (q - 1) := by
+      simpa using hcard_mul'
+    exact (Nat.eq_of_mul_eq_mul_right (Nat.sub_pos_of_lt hBundle.witness.hqprime.one_lt) htmp).symm
+  have hord_bpow_dvd : orderOf (b ^ p) ∣ q ^ (k - 1) := by
+    exact (Subgroup.orderOf_dvd_natCard f.ker hbpow_mem_ker).trans (by rw [hker_card])
+  have hu_pow_unit : u ^ p = 1 := by
+    calc
+      u ^ p = b ^ (q ^ (k - 1) * p) := by
+        dsimp [u]
+        rw [pow_mul]
+      _ = b ^ (p * q ^ (k - 1)) := by rw [Nat.mul_comm]
+      _ = (b ^ p) ^ (q ^ (k - 1)) := by rw [pow_mul]
+      _ = 1 := by
+        exact (orderOf_dvd_iff_pow_eq_one.mp hord_bpow_dvd)
+  refine
+    { ω_k := (u : ZMod (q ^ k))
+      hω_k_pow := ?_
+      hω_k_proj := ?_ }
+  · simpa using congrArg (fun x : (ZMod (q ^ k))ˣ => (x : ZMod (q ^ k))) hu_pow_unit
+  · simpa [f, ZMod.unitsMap_val, hc_coe] using
+      congrArg (fun x : (ZMod q)ˣ => (x : ZMod q)) hu_proj_unit
 
 /-!
 ### Distinguished Factor Valuation Equality — Hensel lift を用いた因子分離

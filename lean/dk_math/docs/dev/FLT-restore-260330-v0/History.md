@@ -2582,3 +2582,118 @@ Archive
      exact product の記録定理として残すか、
      あるいは statement 自体を local factorization 版へ弱化するか、
      方針整理を先に行うのがよい。
+
+## 2026/04/01 00:59:04 JST
+
+### review-031 route 成功: `branchA_hensel_lift_exists` を群論的 lift で実装
+
+1. 作業対象:
+   - `review-031.md` に従い、
+     `branchA_hensel_lift_exists`
+     を HenselianRing API に頼らず解消する方針を採用した。
+
+2. 実装:
+   - `TriominoCosmicBranchARestore.lean`
+     に `Mathlib.RingTheory.ZMod.UnitsCyclic` を導入済みの前提で、
+     `branchA_hensel_lift_exists`
+     の `sorry` を完全に置換した。
+   - `ω : ZMod q` から
+     `c : (ZMod q)ˣ`
+     を作り、
+     `ZMod.unitsMap_surjective`
+     で
+     `b : (ZMod (q^k))ˣ`
+     を持ち上げた。
+   - さらに
+     `u := b ^ (q^(k-1))`
+     と置き、
+     reduction は `c` のまま保ちつつ
+     kernel の `q`-primary 部分を殺して
+     `u^p = 1`
+     を示した。
+   - 最後に
+     `ω_k := (u : ZMod (q^k))`
+     として
+     `BranchAHenselLiftData`
+     を構成した。
+
+3. Lean 実装上の要点:
+   - `Exists` の witness 取り出しは
+     `obtain`
+     ではなく
+     `Classical.choose`
+     を用いた。
+     これにより
+     `unitsMap_surjective`
+     の存在証明を
+     `def`
+     本体へ安全に落とし込めた。
+   - `c^(q^(k-1)) = c`
+     は
+     `q^(k-1) ≡ 1 [MOD p]`
+     を
+     `orderOf c = p`
+     で
+     `MOD orderOf c`
+     に移し替え、
+     `pow_eq_pow_iff_modEq`
+     で処理した。
+   - `ker(f)` の位数は
+     `Subgroup.card_mul_index`
+     と
+     `Subgroup.index_ker`
+     から
+     `Nat.card ker = q^(k-1)`
+     を取り出し、
+     `b^p ∈ ker`
+     の位数が
+     `q^(k-1)`
+     を割ることへ落とした。
+   - その結果
+     `orderOf_dvd_iff_pow_eq_one`
+     で
+     `u^p = 1`
+     を得た。
+
+4. 途中で詰まった点:
+   - 初回実装では
+     `obtain ⟨b, hb⟩ := ZMod.unitsMap_surjective ...`
+     が
+     `Exists.casesOn can only eliminate into Prop`
+     で止まった。
+   - また
+     `pow_eq_pow_iff_modEq`
+     の法が自動では
+     `p`
+     に一致せず、
+     `orderOf c`
+     への明示的な変換が必要だった。
+   - コメント整備の途中で一度
+     `simp ... using`
+     を入れて parser を壊したが、
+     これは直ちに戻して build 緑へ復帰した。
+
+5. 影響:
+   - 本件で
+     `branchA_hensel_lift_exists`
+     の `sorry` は消えた。
+   - 対象ファイルの本質的 `sorry` は
+     `branchA_GN_cyclotomic_ring_identity`
+     1 本のみになった。
+
+6. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore`
+     成功。
+   - 対象ファイル上の warning は
+     `branchA_GN_cyclotomic_ring_identity`
+     に由来する `declaration uses sorry`
+     と、
+     `simpa` を `simp` に出来るという linter 1 件のみ。
+
+7. 次の課題:
+   - 次は残る
+     `branchA_GN_cyclotomic_ring_identity`
+     の statement を、
+     exact product として残すのか、
+     あるいは既に使えている local factorization 補題群へ吸収するのか、
+     先に整理してから着手するのがよい。
