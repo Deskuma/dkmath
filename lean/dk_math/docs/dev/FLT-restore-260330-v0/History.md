@@ -1588,3 +1588,103 @@ Archive
    - **descent chain 分析**: `s' ≡ 1 [MOD p]` の不変量と、
      各 descent step での `s → s' = s/q` の値の厳密減少から、
      有限ステップでの停止条件（s' = 1 のケース分析）を調べる。
+
+### 日時: 2026/03/31 11:45:00 JST
+
+1. 目的:
+   - 前回の「次の課題」3 ルートを全て実装する:
+     - cyclotomic valuation theory
+     - Hensel lifting（ω の接続定理）
+     - descent chain 分析（strict decrease + 停止条件）
+
+2. 実施:
+
+   **§A. Descent chain 分析（降下連鎖の形式化）**
+
+   `[DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean]` に以下を追加:
+
+   - `branchA_s_pos`: `x = p*(t*s)` ∧ `x ≠ 0` → `0 < s`
+   - `branchA_t_pos`: 同上 → `0 < t`
+   - `branchA_descent_s_prime_pos`: `0 < s` ∧ `s = q*s'` → `0 < s'`
+   - `branchA_descent_s_strict_decrease`: `q` prime ∧ `s = q*s'` → `s' < s`
+     （well-founded の基盤。`q ≥ 2` から `s' < 2*s' ≤ q*s' = s`）
+   - `branchA_descent_x_strict_decrease`: `s' < s` → `p*(t*s') < x`
+   - `BranchADescentStep (p x y z t s q : ℕ) : Prop` — 降下 1 step の全性質
+     (`s = q*s'`, `0 < s'`, `s' < s`, `s' ≡ 1 [MOD p]`, `p*(t*s') < x`)
+   - `branchA_descent_step_of_fringe`: fringe bundle → `BranchADescentStep` の一括構成
+
+   **§B. Cyclotomic valuation の構造定理**
+
+   - `branchA_lift_seed_z_eq_omega_mul_y`:
+     `ω = z * y⁻¹ ∈ ZMod q` として `(z : ZMod q) = ω * (y : ZMod q)`
+     — QAdicLiftSeed の `ω` と witness properties の接続。
+     `y ≠ 0 [MOD q]` は `hq_not_dvd_y` から直接得られる。
+   - `branchA_cyclotomic_q_valuation_ge_p`:
+     `q^p ∣ GN p (z-y) y` — v_q(GN) ≥ p の形式的表現。
+     fringe bundle の alias。
+   - `branchA_descent_spow_factorization`:
+     `s = q*s'` → `s^p = q^p * s'^p`
+     — 降下 1 step で GN の q-adic 因子が `q^p` ずつ剥がれることの算術的基盤。
+
+   **§C. Docstring 重複修正**
+
+   `BranchADescentStep` の定義直前に重複していた 2 つの docstring を
+   1 つに統合（コンテキスト適合側を残した）。
+
+3. 結論:
+
+   **到達した降下構造:**
+
+   ```
+   BranchAInterferenceFringeBundle
+     │
+     ├──→ BranchADescentStep (1 step の全性質)
+     │     ├── s' < s        (strict decrease, well-founded)
+     │     ├── 0 < s'        (正値保存)
+     │     ├── s' ≡ 1 [MOD p] (合同保存)
+     │     └── p*(t*s') < x  (x の strict decrease)
+     │
+     ├──→ ω = z*y⁻¹ [ZMod q]  (Hensel lifting 基盤)
+     │     └── (z : ZMod q) = ω * (y : ZMod q)
+     │
+     └──→ s^p = q^p * s'^p    (q-valuation 因子分解)
+           └── q^p ∣ GN       (v_q(GN) ≥ p)
+   ```
+
+   - **9 定義/定理** を新設（全て sorry なし）:
+     `branchA_s_pos`, `branchA_t_pos`, `branchA_descent_s_prime_pos`,
+     `branchA_descent_s_strict_decrease`, `branchA_descent_x_strict_decrease`,
+     `BranchADescentStep`, `branchA_descent_step_of_fringe`,
+     `branchA_lift_seed_z_eq_omega_mul_y`, `branchA_cyclotomic_q_valuation_ge_p`,
+     `branchA_descent_spow_factorization`
+   - 降下連鎖の well-foundedness（`s' < s`）と不変量保存（`s' ≡ 1 [MOD p]`）が
+     同時に形式化された。
+   - ω の ZMod q 上での接続が explicit theorem として固定された。
+
+4. 検証:
+   - `lake build`（全体）成功 (exit 0)
+   - sorry 増加なし（BranchA.lean L4099 の既存 1 箇所のみ）
+   - BranchARestore.lean: 1510 → 1717 (+207 行)
+
+5. 失敗事例:
+   - `Nat.mul_lt_mul_left` は Lean 4 / Mathlib v4.26 では `Iff` を返す。
+     → `Nat.mul_lt_mul_of_pos_left` に変更して解決。
+   - `BranchADescentStep` を最初 `structure : Prop` で定義しようとしたが、
+     `s' : ℕ` のデータ field は Prop structure に入れられない。
+     → `def ... : Prop := let s' := s / q; ...` の形に変更。
+   - docstring の重複（2 つの /-- ... --/ が連続）が発生していた。
+     → コンテキスト適合側を残して統合。
+
+6. 次の課題:
+   - **descent chain の停止条件分析**:
+     well-founded な `s' < s` の降下連鎖は有限ステップで
+     `s' = 1` に到達する。このとき `x' = p*t` となり、
+     `x'^p + y^p = z'^p` の解は `Coprime x' y'` を保ちながら
+     p-free な `x'` を持つ — これは Branch A の前提 `p ∣ x` に矛盾する可能性がある。
+   - **ω^p = 1 の明示的証明**:
+     `branchA_lift_seed_z_eq_omega_mul_y` を拡張し、
+     `ω^p = 1` かつ `ω ≠ 1` を `ZMod q` 上で示す。
+     （`restore_witness_cong_one_mod_p` の orderOf 理論を接続）
+   - **Hensel lifting の高次化**:
+     `ZMod q` → `ZMod (q^p)` への ω の lift。
+     既存の `PrimeGe5BranchAPrimitiveRestoreQAdicLiftSeed` との接続。

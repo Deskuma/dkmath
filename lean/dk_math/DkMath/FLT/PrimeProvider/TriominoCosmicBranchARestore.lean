@@ -1482,6 +1482,213 @@ theorem branchA_fringe_descent_preserves_mod_p
     hqs
 
 /-!
+### 降下連鎖分析 (Descent Chain Analysis)
+
+干渉縞集合の descent 不変量と strict decrease を組み合わせ、
+降下連鎖の構造を形式化する。
+
+Branch A の降下操作 `s → s' = s/q` は以下の不変量を保存する:
+- `s' ≡ 1 [MOD p]` (mod p 合同の保存)
+- `0 < s'` (正値性)
+
+同時に以下の厳密減少を実現する:
+- `s' < s` (q ≥ 2 から)
+- `x' < x` (x = p*t*s に比例)
+
+#### Cyclotomic valuation の視点
+
+GN = p * s^p であり、q ∣ s, q ≠ p のとき
+- v_q(GN) = p * v_q(s) (q-adic valuation)
+- s^p = y^{p-1} + p^3*M で v_q(y^{p-1}) = 0, v_q(M) = 0
+- 和 y^{p-1} + p^3*M の v_q ≥ p — massive cancellation
+- cyclotomic core Φ_p(z,y) = GN(p, z-y, y) = p*s^p なので
+  v_q(Φ_p(z,y)) = p * v_q(s)
+- Φ_p(z,y) = Π_{i=1}^{p-1}(z - ζ^i y) の因子分解で、
+  ω = z/y mod q が ZMod q での p-th root of unity (lift seed) に対応し、
+  v_q(Φ_p(z,y)) = v_q(z - ωy) (残りの因子は q-coprime)
+- よって v_q(z - ωy) = p * v_q(s)
+
+この等式は、降下 1 step ごとに v_q(s) が 1 以上減るので
+v_q(z - ωy) も p ずつ減ることを意味する。
+-/
+
+/--
+Branch A normal form で `s` は正値。
+
+`x = p * (t * s)` と `x ≠ 0` から従う。
+-/
+theorem branchA_s_pos
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hsx : x = p * (t * s)) :
+    0 < s := by
+  by_contra hs
+  push_neg at hs
+  interval_cases s
+  simp only [mul_zero] at hsx
+  exact hpack.hx0 hsx
+
+/--
+Branch A normal form で `t` は正値。
+
+`x = p * (t * s)` と `x ≠ 0` から従う。
+-/
+theorem branchA_t_pos
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hsx : x = p * (t * s)) :
+    0 < t := by
+  by_contra ht
+  push_neg at ht
+  interval_cases t
+  simp only [zero_mul, mul_zero] at hsx
+  exact hpack.hx0 hsx
+
+/--
+降下連鎖: q-free 商 `s'` は正値。
+
+`s > 0` かつ `s = q * s'` から従う。
+-/
+theorem branchA_descent_s_prime_pos
+    {s q s' : ℕ}
+    (hs_pos : 0 < s)
+    (hs_eq : s = q * s') :
+    0 < s' := by
+  by_contra hs'
+  push_neg at hs'
+  interval_cases s'
+  simp at hs_eq
+  omega
+
+/--
+降下連鎖: **strict decrease** — `s'` は `s` より厳密に小さい。
+
+`s = q * s'` で `q ≥ 2` (prime) かつ `s > 0` から `s' < s` が従う。
+これは降下連鎖が well-founded であることの基盤。
+-/
+theorem branchA_descent_s_strict_decrease
+    {s q s' : ℕ}
+    (hq_prime : Nat.Prime q)
+    (hs_pos : 0 < s)
+    (hs_eq : s = q * s') :
+    s' < s := by
+  have hs'_pos := branchA_descent_s_prime_pos hs_pos hs_eq
+  calc s' < 2 * s' := by omega
+    _ ≤ q * s' := by
+        apply Nat.mul_le_mul_right
+        exact hq_prime.two_le
+    _ = s := hs_eq.symm
+
+/--
+降下連鎖: `x` の strict decrease。
+
+`x = p * (t * s)` と `s' < s` から `x' = p * (t * s') < x` が従う。
+-/
+theorem branchA_descent_x_strict_decrease
+    {p x y z t s s' : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hsx : x = p * (t * s))
+    (hs'_lt : s' < s) :
+    p * (t * s') < x := by
+  rw [hsx]
+  apply Nat.mul_lt_mul_of_pos_left _ hpack.hp.pos
+  apply Nat.mul_lt_mul_of_pos_left hs'_lt (branchA_t_pos hpack hsx)
+
+/--
+降下連鎖 1 step の全データ。
+
+干渉縞集合の `s = q * s'` 分解に伴う:
+- strict decrease: `s' < s`
+- 正値保存: `0 < s'`
+- mod p 合同保存: `s' ≡ 1 [MOD p]`
+- x decrease: `p * (t * s') < x`
+-/
+def BranchADescentStep (p x y z t s q : ℕ) : Prop :=
+  let s' := s / q
+  s = q * s' ∧ 0 < s' ∧ s' < s ∧ s' ≡ 1 [MOD p] ∧ p * (t * s') < x
+
+/--
+干渉縞集合からの降下 1 step の一括構成。
+-/
+theorem branchA_descent_step_of_fringe
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q) :
+    BranchADescentStep p x y z t s q := by
+  change let s' := s / q; s = q * s' ∧ 0 < s' ∧ s' < s ∧ s' ≡ 1 [MOD p] ∧ p * (t * s') < x
+  set s' := s / q with hs'_def
+  have hs_eq : s = q * s' := (Nat.mul_div_cancel' hBundle.witness.hqs).symm
+  have hs_pos : 0 < s := branchA_s_pos hBundle.padic.pack hBundle.padic.hsx
+  have hs'_pos := branchA_descent_s_prime_pos hs_pos hs_eq
+  have hs'_lt := branchA_descent_s_strict_decrease
+    hBundle.witness.hqprime hs_pos hs_eq
+  have hs'_cong := branchA_fringe_sprime_congr_one_mod_p
+    hBundle.padic.hs_cong_one hBundle.witness.hqprime
+    hBundle.witness.hq_cong hs_eq
+  have hx'_lt := branchA_descent_x_strict_decrease
+    hBundle.padic.pack hBundle.padic.hsx hs'_lt
+  exact ⟨hs_eq, hs'_pos, hs'_lt, hs'_cong, hx'_lt⟩
+
+/-!
+### Cyclotomic valuation の構造定理
+
+GN = cyclotomicPrimeCore の視点から、
+q-adic valuation と p-th root of unity の接続を形式化する。
+
+`ω = z * y⁻¹ ∈ ZMod q` (QAdicLiftSeed の構成) に基づき:
+- `z ≡ ω * y [MOD q]` が成立
+- `Φ_p(z, y) = GN(p, z-y, y)` (円分核 = GN)
+- `v_q(GN) = p * v_q(s)` (GN = p * s^p, q ≠ p)
+
+ω の明示的な接続を補題として固定する。
+-/
+
+/--
+QAdicLiftSeed の `ω` は `z * y⁻¹` in `ZMod q` であり、
+`z ≡ ω * y [MOD q]` を満たす。
+
+より正確には、ZMod q 上で `(z : ZMod q) = ω * (y : ZMod q)`。
+-/
+theorem branchA_lift_seed_z_eq_omega_mul_y
+    {p x y z t s q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hData : RestoreWitnessProperties p x y z t s q)
+    (hqprime : Nat.Prime q) :
+    let _inst : Fact (Nat.Prime q) := ⟨hqprime⟩
+    let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹)
+    (z : ZMod q) = ω * (y : ZMod q) := by
+  intro _inst ω
+  change (z : ZMod q) = (z : ZMod q) * ((y : ZMod q)⁻¹) * (y : ZMod q)
+  have hy_ne_zero : (y : ZMod q) ≠ 0 := by
+    intro hy_zero
+    exact hData.hq_not_dvd_y ((ZMod.natCast_eq_zero_iff y q).mp hy_zero)
+  rw [mul_assoc, inv_mul_cancel₀ hy_ne_zero, mul_one]
+
+/--
+q-adic valuation の基本制約:
+`GN = p * s^p` と `q ≠ p` と `q ∣ s` から `q^p ∣ GN`。
+
+これは `branchA_qpow_dvd_GN` の alias で、
+cyclotomic valuation の言葉では `v_q(GN) ≥ p` を意味する。
+-/
+theorem branchA_cyclotomic_q_valuation_ge_p
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q) :
+    q ^ p ∣ GN p (z - y) y :=
+  hBundle.witness.hqp_dvd_GN
+
+/--
+降下 1 step 後の q-valuation 減少:
+`s = q * s'` なら `s'^p * q^p = s^p`。
+
+降下ごとに GN の q-adic 因子が `q^p` ずつ剥がれることの算術的基盤。
+-/
+theorem branchA_descent_spow_factorization
+    {s q s' p : ℕ}
+    (hs_eq : s = q * s') :
+    s ^ p = q ^ p * s' ^ p := by
+  rw [hs_eq, mul_pow]
+
+/-!
 ### Witness source → Contradiction adapter
 
 `BranchAContradictionWithWitnessSourceTarget` は witness `q` の構造的性質を
