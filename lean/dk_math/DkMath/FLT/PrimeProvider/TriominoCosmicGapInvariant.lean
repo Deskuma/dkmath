@@ -1831,6 +1831,57 @@ abbrev BranchAPrimitiveRestoreContradictionAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreContradictionTarget
 
 /--
+witness `q` 情報込み版の矛盾供給元 adapter。
+
+`BranchAContradictionModP3SourceTarget` は偽命題と判明した
+（`branchA_spow_congr_head_mod_p3` で肯定側が証明済み）。
+代わりに、witness `q` の構造的性質（`q ∣ x`, `q ∤ y`, `q ∤ z`,
+`q ∤ gap`, `p ∣ (q-1)`, `q^p ∣ GN`）を使った矛盾探索の入口となる。
+-/
+abbrev BranchAContradictionWithWitnessSourceAdapterTarget : Prop :=
+  DkMath.FLT.BranchAContradictionWithWitnessSourceTarget
+
+/--
+witness source → contradiction adapter bridge。
+
+witness source が得られれば、`RestoreWitnessProperties` 経由で
+`RestoreContradictionTarget` へ注入し、restore 全体を bypass できる。
+-/
+theorem branchAPrimitiveRestoreContradictionAdapter_of_witnessSource
+    (hSource : BranchAContradictionWithWitnessSourceAdapterTarget) :
+    BranchAPrimitiveRestoreContradictionAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreContradiction_of_witnessSource hSource
+
+/--
+干渉縞集合の bundle 版 contradiction adapter。
+
+`BranchAFringeContradictionTarget` は `BranchAInterferenceFringeBundle` を受けて
+`False` を返す target。witness source 版と等価であり、相互変換可能。
+-/
+abbrev BranchAFringeContradictionAdapterTarget : Prop :=
+  DkMath.FLT.BranchAFringeContradictionTarget
+
+/--
+fringe contradiction → witness source adapter。
+-/
+theorem branchAContradictionWithWitnessSourceAdapter_of_fringeContradiction
+    (hContra : BranchAFringeContradictionAdapterTarget) :
+    BranchAContradictionWithWitnessSourceAdapterTarget :=
+  DkMath.FLT.branchAContradictionWithWitnessSource_of_fringeContradiction hContra
+
+/--
+fringe contradiction → contradiction adapter bridge（short-circuit）。
+
+干渉縞集合の矛盾から、restore 全体を bypass して
+`RestoreContradictionTarget` へ直接接続する。
+-/
+theorem branchAPrimitiveRestoreContradictionAdapter_of_fringeContradiction
+    (hContra : BranchAFringeContradictionAdapterTarget) :
+    BranchAPrimitiveRestoreContradictionAdapterTarget :=
+  branchAPrimitiveRestoreContradictionAdapter_of_witnessSource
+    (branchAContradictionWithWitnessSourceAdapter_of_fringeContradiction hContra)
+
+/--
 矛盾路線 → `RestoreFromArithmeticTarget` adapter。
 -/
 theorem branchAPrimitiveRestoreFromArithmeticAdapter_of_contradiction
@@ -2463,6 +2514,29 @@ theorem branchAPrimitivePacketDescentAdapter_of_contradiction
     BranchAPrimitivePacketDescentAdapterTarget :=
   branchAPrimitivePacketDescentAdapter_of_boundaryCoreWitnessConcreteDefault_and_restore
     (branchAPrimitiveRestoreFromArithmeticAdapter_of_contradiction hContra)
+
+/--
+witness source → `RestoreFromArithmeticTarget` adapter（short-circuit 版）。
+
+witness source があれば、contradiction adapter を経由して
+restore 6 段チェーン全体を一気に bypass する。
+-/
+theorem branchAPrimitiveRestoreFromArithmeticAdapter_of_witnessSource
+    (hSource : BranchAContradictionWithWitnessSourceAdapterTarget) :
+    BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget :=
+  branchAPrimitiveRestoreFromArithmeticAdapter_of_contradiction
+    (branchAPrimitiveRestoreContradictionAdapter_of_witnessSource hSource)
+
+/--
+witness source → `PacketDescentTarget` adapter（最上位 short-circuit）。
+
+witness source + ExistenceMainline (no-sorry) → PacketDescent。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_witnessSource
+    (hSource : BranchAContradictionWithWitnessSourceAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  branchAPrimitivePacketDescentAdapter_of_contradiction
+    (branchAPrimitiveRestoreContradictionAdapter_of_witnessSource hSource)
 
 /--
 `GN d 1 (u - 1)` divisibility が立てば、
