@@ -2697,3 +2697,67 @@ Archive
      exact product として残すのか、
      あるいは既に使えている local factorization 補題群へ吸収するのか、
      先に整理してから着手するのがよい。
+
+## 2026/04/01 01:13:06 JST
+
+### review-032 route 成功: exact product 定理を local factorization 版へ弱化して file を no-sorry 化
+
+1. 作業対象:
+   - `review-032.md` に従い、
+     残っていた
+     `branchA_GN_cyclotomic_ring_identity`
+     の exact product statement を維持するのではなく、
+     valuation に必要十分な local factorization statement へ弱化した。
+
+2. 実装:
+   - `TriominoCosmicBranchARestore.lean`
+     の
+     `branchA_GN_cyclotomic_ring_identity`
+     を
+     「`GN = δ * U` with `U` a unit」
+     を返す theorem へ差し替えた。
+   - 証明本体は新規構成をせず、
+     既存の
+     `branchA_local_GN_eq_distinguished_mul_unit`
+     をそのまま wrapper として使った。
+   - これに合わせて、
+     直上の説明コメントと
+     central theorem の説明文も
+     exact product 前提から local factorization 前提へ書き換えた。
+
+3. Lean 実装上の要点:
+   - theorem 名は互換性のため維持し、
+     statement だけを変更した。
+     これにより、
+     「以前 exact product を狙っていた箇所」
+     という履歴は残しつつ、
+     restore file の現在の主線と一致させた。
+   - 証明は
+     `simpa`
+     で
+     `branchA_local_GN_eq_distinguished_mul_unit`
+     へ接続するだけで足りた。
+     実際、下流の central theorem もすでにこの local factorization を使っていたため、
+     論理の重複が解消された。
+
+4. 影響:
+   - `TriominoCosmicBranchARestore.lean`
+     内の `sorry` は消滅した。
+   - Hensel lift existence,
+     local valuation theory,
+     distinguished factor valuation theorem
+     まで含めて restore file 全体が clean になった。
+
+5. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore`
+     成功。
+   - `grep -n "sorry$" DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean`
+     はヒットなし。
+   - 対象 build における warning は
+     restore file 由来ではなくなった。
+
+6. 次の課題:
+   - これで局所 valuation 側の restore は片付いたので、
+     次は terminal case / descent 側へ進める。
+   - もし将来 exact product 自体を記録したければ、
+     restore 本線とは別名 theorem か appendix 的ファイルに分離して扱うのがよい。

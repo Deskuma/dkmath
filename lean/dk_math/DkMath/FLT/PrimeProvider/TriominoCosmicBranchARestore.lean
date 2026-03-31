@@ -2547,19 +2547,13 @@ v_q(GN p (z-y) y)                     [ℕ]  = p * v_q(s)   ... (Kummer)
 ↕ (ZMod.val_natCast: val = % q^k)
 v_q(ZMod.val((GN : ZMod (q^k))))      [ℕ]  = p * v_q(s)   ... (k > p*v_q(s) のとき)
 
-ring identity in ZMod (q^k):
-  GN = (z - ω_k * y) * ∏_{i=2}^{p-1} (z - ω_k^i * y)
-  unit U = ∏_{i=2}^{p-1} (z - ω_k^i * y)   [v_q(val(U)) = 0]
+local factorization in ZMod (q^k):
+  GN = (z - ω_k * y) * U
+  U is a unit   [v_q(val(U)) = 0]
 
 ↕ (val(a*b) mod q^k の V_q = v_q(a) + v_q(b) when sum < k)
 v_q(ZMod.val(z - ω_k * y))            [ℕ]  = p * v_q(s)
 ```
-
-**sorry の所在:**
-- `branchA_GN_cyclotomic_ring_identity`: ring identity (GN = distinguished × unit)
-  → 群環の円分核分解。Lean の Polynomial + ZMod 接続で除去可能。
-- `branchA_distinguished_factor_valuation_eq_kummer`: 最終等式
-  → val の乗法性 mod q^k + v_q(unit) = 0 の接続で除去可能。
 -/
 
 /--
@@ -2830,16 +2824,12 @@ theorem branchA_local_GN_eq_distinguished_mul_unit
           ring
 
 /--
-**GN の ZMod (q^k) での ring identity** (sorry — 円分核分解):
-`(GN p (z-y) y : ZMod (q^k)) = (z - ω_k * y) * ∏_{i=2}^{p-1} (z - ω_k^i * y)`
+**GN の ZMod (q^k) での local factorization**:
+`(GN p (z-y) y : ZMod (q^k)) = (z - ω_k * y) * U` with `U` a unit.
 
-数学的根拠:
-`GN p (z-y) y = ∑_{j=0}^{p-1} z^j * y^(p-1-j)` = Φ_p(z/y) * y^(p-1)` で、
-`Φ_p(T) = (T^p - 1) / (T - 1) = ∏_{i=1}^{p-1} (T - ω_k^i)` (ω_k: primitive p-th root)。
-よって `GN = ∏_{i=1}^{p-1} (z - ω_k^i * y)`.
-
-sorry 除去: `Polynomial.cyclotomic p R` の評価 + ω_k の primitivity を使った
-`ZMod (q^k)[T]` 上の多項式等式。
+旧来の exact product statement は `ZMod (q^k)` が一般には整域でないため重すぎる。
+本 restore file では、valuation に必要十分な local factorization 版を
+`branchA_local_GN_eq_distinguished_mul_unit` から取り出して使う。
 -/
 theorem branchA_GN_cyclotomic_ring_identity
     {p x y z t s q : ℕ}
@@ -2849,17 +2839,13 @@ theorem branchA_GN_cyclotomic_ring_identity
              let ω : ZMod q := (z : ZMod q) * ((y : ZMod q)⁻¹);
              BranchAHenselLiftData p q k hk ω) :
     let _inst : Fact (Nat.Prime q) := ⟨hBundle.witness.hqprime⟩
-    (DkMath.CosmicFormulaBinom.GN p (z - y) y : ZMod (q ^ k)) =
-      ((z : ZMod (q ^ k)) - hLift.ω_k * y) *
-        ∏ i ∈ Finset.range (p - 2), ((z : ZMod (q ^ k)) - hLift.ω_k ^ (i + 2) * y) := by
-  intro _inst
-  -- `IsPrimitiveRoot hLift.ω_k p` 自体は
-  -- `branchA_hensel_lift_isPrimitiveRoot` で確立できる。
-  -- ただし exact product identity を `ZMod (q^k)` 上で直接出すには、
-  -- 使いたい `X_pow_sub_C_eq_prod` が `IsDomain` を要求し、
-  -- `ZMod (q^k)` (`k > 1`) ではそのまま適用できない。
-  -- この段は local Artinian ring 上の分解へ言い換えて埋める必要がある。
-  sorry
+    let R := ZMod (q ^ k)
+    let δ : R := (z : R) - hLift.ω_k * (y : R)
+    ∃ U : R, IsUnit U ∧
+      (DkMath.CosmicFormulaBinom.GN p (z - y) y : R) = δ * U := by
+  intro _inst R δ
+  simpa [R, δ, sub_eq_add_neg, add_comm, add_left_comm, add_assoc, mul_comm, mul_left_comm, mul_assoc]
+    using branchA_local_GN_eq_distinguished_mul_unit hBundle hk hLift
 
 /--
 **Distinguished factor の valuation 等式 (central theorem)**:
@@ -2867,11 +2853,11 @@ theorem branchA_GN_cyclotomic_ring_identity
 
 **hLift を仮定した局所版** (Hensel existence に依存しない)。
 
-sorry の理由:
-1. `branchA_GN_cyclotomic_ring_identity` の ring identity (sorry)
-2. val の乗法性 mod q^k: `val(a * b).val = (a.val * b.val) % q^k`
-   と `v_q((a.val * b.val) % q^k) = v_q(a.val) + v_q(b.val)` when unit (sorry)
-これらが ZMod.val の乗法 + padicValNat の加法性から得られる。
+証明は local factorization
+`GN = (z - ω_k * y) * U`
+with `U` a unit と、
+`branchA_padicValNat_mod_pow_eq`
+を組み合わせて行う。
 -/
 theorem branchA_distinguished_factor_valuation_eq_kummer
     {p x y z t s q : ℕ}
