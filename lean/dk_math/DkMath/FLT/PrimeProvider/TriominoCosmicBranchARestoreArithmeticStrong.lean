@@ -448,4 +448,519 @@ theorem primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong_nonCircular
   · exact primeGe5BranchAPrimitiveRestoreArithmeticCoreStrong_of_withProvenance hProvCore
   · exact primeGe5BranchAPrimitiveRestorePacketPackagingStrong
 
+/-!
+## WithProvenance concrete provider chain
+
+`WithProvenanceTarget` の concrete provider を descent chain から構成する。
+
+### Chain 構成:
+- DescentDatum_default: concrete ✅ (non-circular)
+- DescentSeed_default: concrete ✅ (non-circular)
+- RealizationSeedTarget: **仮定として受ける** (concrete は矛盾路線のみ)
+- Verification 3段: concrete ✅ (non-circular)
+
+`RealizationSeed.hxMul : x = q * x'` が provenance の唯一の source。
+-/
+
+/--
+FromSeed の WithProvenance 版。
+
+`RealizationSeed` が `hxMul : x = q * x'` を直接フィールドに持つので、
+既存 `FromSeed` の proof に `.hxMul` を追加するだけ。
+-/
+theorem primeGe5BranchAPrimitiveRestoreFromSeedWithProvenance
+    (hRealSeed : PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget)
+    (hVerify : PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerificationTarget) :
+    ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      p ∣ (z - y) →
+      z - y = p ^ (p - 1) * t ^ p →
+      GN p (z - y) y = p * s ^ p →
+      x = p * (t * s) →
+      Nat.Coprime t s →
+      Nat.Coprime t y →
+      Nat.Coprime s y →
+      ¬ p ∣ s →
+      ¬ p ∣ t →
+      y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+      ∀ {q : ℕ}, Nat.Prime q →
+        q ∣ s →
+        ¬ q ∣ t →
+        Nat.Coprime q y →
+        q ≠ p →
+        PrimeGe5BranchAPrimitiveRestoreDescentSeed p x y z t s q →
+        ∃ x' y' z' : ℕ,
+          PrimeGe5CounterexamplePack p x' y' z' ∧
+          p ∣ (z' - y') ∧ z' < z ∧ x = q * x' := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p hSeed0
+  have hRealization :
+      Nonempty (PrimeGe5BranchAPrimitiveRestoreRealizationSeed p x y z t s q) :=
+    hRealSeed hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hSeed0
+  rcases hRealization with ⟨hR⟩
+  rcases hVerify hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hR with ⟨hpack', hp_gap', hzlt⟩
+  exact ⟨hR.x', hR.y', hR.z', hpack', hp_gap', hzlt, hR.hxMul⟩
+
+/--
+WithProvenanceTarget の concrete provider。
+
+`RealizationSeedTarget` を仮定として受け、他は全て既存 concrete を使用。
+descent chain: RestoreWitnessProperties → DescentDatum → DescentSeed → RealizationSeed → Verification
+のうち、最初の 3 段は concrete default が存在し、Verification も concrete。
+-/
+theorem primeGe5BranchAPrimitiveRestoreArithmeticCoreWithProvenance_of_realizationSeed
+    (hRealSeed : PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget) :
+    PrimeGe5BranchAPrimitiveRestoreArithmeticCoreWithProvenanceTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p
+  -- Step 1: RestoreWitnessProperties を構成
+  have hData : RestoreWitnessProperties p x y z t s q :=
+    restore_witness_properties_default
+      hpack hp_dvd_gap hgap hsGN hsx
+      hqprime hqs hqt hcop_qy hq_ne_p
+  -- Step 2: QAdicLiftSeed を構成
+  have hLift :
+      Nonempty (PrimeGe5BranchAPrimitiveRestoreQAdicLiftSeed p x y z t s q) :=
+    primeGe5BranchAPrimitiveRestoreQAdicLift_default
+      hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hData
+  rcases hLift with ⟨hLift⟩
+  -- Step 3: DescentDatum を構成
+  have hDatum :
+      Nonempty (PrimeGe5BranchAPrimitiveRestoreDescentDatum p x y z t s q) :=
+    primeGe5BranchAPrimitiveRestoreDescentDatum_default
+      hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hData hLift
+  rcases hDatum with ⟨hDatum⟩
+  -- Step 4: DescentSeed を構成
+  have hSeed :
+      Nonempty (PrimeGe5BranchAPrimitiveRestoreDescentSeed p x y z t s q) :=
+    primeGe5BranchAPrimitiveRestoreDescentSeed_default
+      hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hDatum
+  rcases hSeed with ⟨hSeed⟩
+  -- Step 5: RealizationSeed + Verification で x=q*x' を取り出す
+  exact primeGe5BranchAPrimitiveRestoreFromSeedWithProvenance hRealSeed
+    (primeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerification_of_three_parts
+      primeGe5BranchAPrimitiveRestoreStrictDescent_of_hzEq
+      primeGe5BranchAPrimitiveRestoreGapDivisibility_of_hzEq
+      primeGe5BranchAPrimitiveRestoreCounterexamplePack_of_hzEq)
+    hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    hqprime hqs hqt hcop_qy hq_ne_p hSeed
+
+/-!
+## RealizationSeedTarget の二分構造化
+
+`RealizationSeedTarget` の genuine hard kernel は `hzEq : x'^p + y'^p = z'^p` のみ。
+残り（x', y', hxMul, hyEq, hSeed）は bookkeeping で concrete に構成可能。
+
+二分する:
+- **quotient side**: `x' = x/q`, `y' = y` — trivial
+- **p-th root side**: `∃ z', x'^p + y^p = z'^p` — genuine kernel
+
+`PthRootTarget` が真の最終 open kernel。他は全て concrete。
+-/
+
+/--
+P-th root target: descent の genuine hard kernel。
+
+「今の Branch A descent data から生じる特殊形 `(x/q)^p + y^p` が
+  perfect p-th power であるか」だけを問う。
+
+NOTE: `x/q` は `hq_dvd_x : q ∣ x` (from `RestoreWitnessProperties`) と
+`hsx : x = p*(t*s)`, `hqs : q ∣ s` から `x/q = p*(t*(s/q))` と
+具体的に記述できる。ゆえに target の実質は
+
+  ∃ z', (p*(t*(s/q)))^p + y^p = z'^p
+
+である。
+-/
+abbrev PrimeGe5BranchAPrimitiveRestorePthRootTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      PrimeGe5BranchAPrimitiveRestoreDescentSeed p x y z t s q →
+      let x' := x / q
+      ∃ z' : ℕ, x' ^ p + y ^ p = z' ^ p
+
+/--
+PthRootTarget → RealizationSeedTarget 橋。
+
+quotient side (x', y', hxMul, hyEq) は concrete に構成し、
+p-th root side (hzEq) は PthRootTarget から取る。
+-/
+theorem primeGe5BranchAPrimitiveRestoreRealizationSeed_of_pthRoot
+    (hPthRoot : PrimeGe5BranchAPrimitiveRestorePthRootTarget) :
+    PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p hSeed
+  -- quotient side: x' = x / q
+  set x' := x / q with hx'_def
+  have hq_dvd_x : q ∣ x := by
+    rw [hsx]; exact dvd_mul_of_dvd_right (dvd_mul_of_dvd_right hqs t) p
+  have hxMul : x = q * x' := by
+    rw [hx'_def]; exact (Nat.mul_div_cancel' hq_dvd_x).symm
+  -- p-th root side: ∃ z', x'^p + y^p = z'^p
+  rcases hPthRoot hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hSeed with ⟨z', hzEq⟩
+  -- assemble RealizationSeed
+  exact ⟨⟨hSeed, x', y, z', hxMul, rfl, hzEq⟩⟩
+
+/--
+PthRootTarget → WithProvenanceTarget 一気通貫橋。
+
+PthRootTarget → RealizationSeedTarget → WithProvenanceTarget の chain を
+1 本の theorem として提供。
+-/
+theorem primeGe5BranchAPrimitiveRestoreArithmeticCoreWithProvenance_of_pthRoot
+    (hPthRoot : PrimeGe5BranchAPrimitiveRestorePthRootTarget) :
+    PrimeGe5BranchAPrimitiveRestoreArithmeticCoreWithProvenanceTarget :=
+  primeGe5BranchAPrimitiveRestoreArithmeticCoreWithProvenance_of_realizationSeed
+    (primeGe5BranchAPrimitiveRestoreRealizationSeed_of_pthRoot hPthRoot)
+
+/--
+PthRootTarget → 非循環 mainline 全 chain 一気通貫。
+
+PthRootTarget → WithProvenance → CoreStrong → PacketPackagingStrong
+→ RestoreFromArithmeticStrong_nonCircular
+-/
+theorem primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong_of_pthRoot
+    (hPthRoot : PrimeGe5BranchAPrimitiveRestorePthRootTarget) :
+    PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticStrongTarget :=
+  primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong_nonCircular
+    (primeGe5BranchAPrimitiveRestoreArithmeticCoreWithProvenance_of_pthRoot hPthRoot)
+
+/--
+矛盾路線 → PthRootTarget（vacuously true）。
+
+ContradictionTarget があれば全て False から出るので、PthRootTarget も vacuously 成立。
+これにより既存の矛盾 route と新 PthRoot route の互換が取れる。
+-/
+theorem primeGe5BranchAPrimitiveRestorePthRoot_of_contradiction
+    (hContra : PrimeGe5BranchAPrimitiveRestoreContradictionTarget) :
+    PrimeGe5BranchAPrimitiveRestorePthRootTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p hSeed
+  have hData : RestoreWitnessProperties p x y z t s q :=
+    restore_witness_properties_default
+      hpack hp_dvd_gap hgap hsGN hsx
+      hqprime hqs hqt hcop_qy hq_ne_p
+  exact absurd
+    (hContra hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hData)
+    id
+
+/-!
+## PthRootTarget の足場補題群
+
+PthRootTarget の直接証明に向けた preparatory lemmas。
+今の Branch A descent data の特殊構造を最大限に活用する。
+
+### 数学的背景
+
+元 FLT: `x^p + y^p = z^p` で `x = q * x'`, `x' = p * (t * s')`, `s = q * s'`。
+`z^p = q^p * x'^p + y^p` から:
+- `z^p - y^p = q^p * x'^p`
+- `q ∤ y`, `q ∤ z`, `q ∤ (z-y)` （RestoreWitnessProperties）
+- `z ≡ ω*y (mod q)` where `ω^p = 1`, `ω ≠ 1` in ZMod q
+
+PthRootTarget が問うのは:
+  `∃ z', x'^p + y^p = z'^p`
+等価形: `∃ z', p^p * (t*s')^p + y^p = z'^p`
+
+### 攻略戦略
+
+Route B: q-adic/Hensel 持ち上げ
+- `z^p ≡ y^p (mod q^p)` は FLT equation から直接
+- `z^p - y^p = (z-y) * GN p (z-y) y` で `q ∤ (z-y)` → q の power は GN 側に集中
+- `GN = p * s^p = p * q^p * s'^p` → q^p factor が GN から剥がれる
+- この q^p stripping が descent を駆動する
+-/
+
+/--
+PthRootTarget の還元形 (GN descent 等価)。
+
+`∃ z', x'^p + y^p = z'^p` を `∃ z', p^p * (t*s')^p + y^p = z'^p` に還元。
+x' = p*(t*s') の特殊構造を use。
+-/
+abbrev PrimeGe5BranchAPrimitiveRestorePthRootReducedTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      PrimeGe5BranchAPrimitiveRestoreDescentSeed p x y z t s q →
+      let s' := s / q
+      ∃ z' : ℕ, p ^ p * (t * s') ^ p + y ^ p = z' ^ p
+
+/--
+PthRootReducedTarget → PthRootTarget 橋。
+
+`x' = x/q = p*(t*s')` の identity を使い、reduced form から original form へ戻す。
+-/
+theorem primeGe5BranchAPrimitiveRestorePthRoot_of_reduced
+    (hReduced : PrimeGe5BranchAPrimitiveRestorePthRootReducedTarget) :
+    PrimeGe5BranchAPrimitiveRestorePthRootTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p hSeed
+  set x' := x / q with hx'_def
+  set s' := s / q with hs'_def
+  have hq_dvd_x : q ∣ x := by
+    rw [hsx]; exact dvd_mul_of_dvd_right (dvd_mul_of_dvd_right hqs t) p
+  have hxMul : x = q * x' := by
+    rw [hx'_def]; exact (Nat.mul_div_cancel' hq_dvd_x).symm
+  have hs_eq : s = q * s' := by
+    rw [hs'_def]; exact (Nat.mul_div_cancel' hqs).symm
+  have hx'_eq : x' = p * (t * s') := by
+    have h : x = q * (p * (t * s')) := by rw [hsx, hs_eq]; ring
+    have : q * x' = q * (p * (t * s')) := by linarith
+    exact Nat.eq_of_mul_eq_mul_left hqprime.pos this
+  -- hReduced は let s' := s/q を使うが、こちらの s' は s/q そのもの
+  rcases hReduced hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hSeed with ⟨z', hz'⟩
+  refine ⟨z', ?_⟩
+  -- hz' : p^p * (t * (s/q))^p + y^p = z'^p
+  -- goal : (x/q)^p + y^p = z'^p
+  -- x/q = x' = p*(t*s') と s' = s/q から
+  show x' ^ p + y ^ p = z' ^ p
+  rw [hx'_eq, mul_pow, mul_pow]
+  -- 目標: p ^ p * (t ^ p * s' ^ p) + y ^ p = z' ^ p
+  -- hz' を同じ形に変形
+  convert hz' using 2
+  ring
+
+/--
+PthRootTarget → PthRootReducedTarget 橋（逆方向）。
+
+2 つの target は等価。
+-/
+theorem primeGe5BranchAPrimitiveRestorePthRootReduced_of_pthRoot
+    (hPthRoot : PrimeGe5BranchAPrimitiveRestorePthRootTarget) :
+    PrimeGe5BranchAPrimitiveRestorePthRootReducedTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p hSeed
+  set x' := x / q with hx'_def
+  set s' := s / q with hs'_def
+  have hq_dvd_x : q ∣ x := by
+    rw [hsx]; exact dvd_mul_of_dvd_right (dvd_mul_of_dvd_right hqs t) p
+  have hxMul : x = q * x' := by
+    rw [hx'_def]; exact (Nat.mul_div_cancel' hq_dvd_x).symm
+  have hs_eq : s = q * s' := by
+    rw [hs'_def]; exact (Nat.mul_div_cancel' hqs).symm
+  have hx'_eq : x' = p * (t * s') := by
+    have h : x = q * (p * (t * s')) := by rw [hsx, hs_eq]; ring
+    have : q * x' = q * (p * (t * s')) := by linarith
+    exact Nat.eq_of_mul_eq_mul_left hqprime.pos this
+  rcases hPthRoot hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hSeed with ⟨z', hz'⟩
+  refine ⟨z', ?_⟩
+  -- hz' : (x/q)^p + y^p = z'^p  where x/q = x' = p*(t*s')
+  -- goal : p^p * (t * (s/q))^p + y^p = z'^p
+  show p ^ p * (t * s') ^ p + y ^ p = z' ^ p
+  have : x' ^ p + y ^ p = z' ^ p := hz'
+  rw [hx'_eq, mul_pow, mul_pow] at this
+  convert this using 2
+  ring
+
+/--
+PthRoot 還元形の z^p identity。
+
+元 FLT equation `z^p = x^p + y^p` から:
+`z^p = q^p * p^p * (t*s')^p + y^p`
+
+これは `z^p = q^p * x'^p + y^p` の展開形。
+-/
+theorem branchA_zpow_eq_qpow_mul_reduced_plus_ypow
+    {p x y z t s q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hsx : x = p * (t * s))
+    (hqs : q ∣ s) :
+    let s' := s / q
+    z ^ p = q ^ p * (p ^ p * (t * s') ^ p) + y ^ p := by
+  intro s'
+  have hEq := hpack.hEq
+  have hs_eq : s = q * s' := (Nat.mul_div_cancel' hqs).symm
+  calc z ^ p = x ^ p + y ^ p := hEq.symm
+    _ = (p * (t * s)) ^ p + y ^ p := by rw [hsx]
+    _ = (p * (t * (q * s'))) ^ p + y ^ p := by rw [hs_eq]
+    _ = (q * (p * (t * s'))) ^ p + y ^ p := by ring_nf
+    _ = q ^ p * (p * (t * s')) ^ p + y ^ p := by rw [mul_pow]
+    _ = q ^ p * (p ^ p * (t * s') ^ p) + y ^ p := by rw [mul_pow]
+
+/-!
+## GN Reduced Gap Target — Cosmic Formula native な open kernel
+
+PthRootReducedTarget を GN (Gcd-Next 多項式) の言葉に翻訳する。
+
+核心公式: `(g'+y)^p = g' * GN p g' y + y^p` （Cosmic Formula: Big = Body + Gap）
+
+PthRootReduced が「∃ z', p^p*(t*s')^p + y^p = z'^p」と問うのに対し、
+GNReducedGap は「∃ g', g' * GN p g' y = p^p*(t*s')^p」と問う。
+
+g' = z' - y, z' = g' + y の関係で等価。
+GN が DkMath のコア理論であるため、この形式化が project-native な攻略の起点。
+-/
+
+/--
+GN Reduced Gap Target: **Cosmic Formula native な PthRootTarget の等価形式**。
+
+「descent 後の gap g' が存在して `g' * GN p g' y = p^p * (t*s')^p` を満たす」
+
+これは：
+- `g' * GN p g' y = (g' + y)^p - y^p` （Cosmic Body = Big - Gap）
+- `z' := g' + y` と置けば `z'^p = p^p*(t*s')^p + y^p` （PthRootReduced）
+
+のため、PthRootReducedTarget と等価。GN 路線での攻略の起点。
+-/
+abbrev PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      PrimeGe5BranchAPrimitiveRestoreDescentSeed p x y z t s q →
+      let s' := s / q
+      ∃ g' : ℕ, g' * GN p g' y = p ^ p * (t * s') ^ p
+
+/--
+GNReducedGapTarget → PthRootReducedTarget 橋。
+
+Cosmic Formula `(g'+y)^p = g' * GN p g' y + y^p` を使い、
+`z' := g' + y` で p 乗根を構成する。
+-/
+theorem primeGe5BranchAPrimitiveRestorePthRootReduced_of_gnReducedGap
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget) :
+    PrimeGe5BranchAPrimitiveRestorePthRootReducedTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p hSeed
+  rcases hGNGap hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hSeed with ⟨g', hGN⟩
+  -- z' := g' + y として構成
+  refine ⟨g' + y, ?_⟩
+  -- Cosmic Formula: (g'+y)^p = g' * GN p g' y + y^p
+  have hCosmic := DkMath.CosmicFormulaBinom.cosmic_id_csr' (R := ℕ) p g' y
+  -- hCosmic : (g' + y) ^ p = g' * GN p g' y + y ^ p
+  rw [hGN] at hCosmic
+  -- hCosmic : (g' + y) ^ p = p ^ p * (t * (s / q)) ^ p + y ^ p
+  exact hCosmic.symm
+
+/--
+PthRootReducedTarget → GNReducedGapTarget 橋（逆方向）。
+
+`z'` が与えられたとき `g' := z' - y` で GN gap を構成。
+Cosmic Formula `(g'+y)^p - y^p = g' * GN p g' y` を使って identity を得る。
+-/
+theorem primeGe5BranchAPrimitiveRestoreGNReducedGap_of_pthRootReduced
+    (hReduced : PrimeGe5BranchAPrimitiveRestorePthRootReducedTarget) :
+    PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p hSeed
+  rcases hReduced hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hSeed with ⟨z', hz'⟩
+  -- hz' : p^p * (t * (s/q))^p + y^p = z'^p
+  -- z'^p ≥ y^p → z' ≥ y
+  have hz'_ge_y : y ≤ z' := by
+    by_contra h
+    push_neg at h
+    have : z' ^ p < y ^ p := Nat.pow_lt_pow_left h hpack.hp.ne_zero
+    omega
+  -- g' := z' - y
+  refine ⟨z' - y, ?_⟩
+  -- Cosmic Formula: (g'+y)^p = g' * GN p g' y + y^p
+  have hCosmic := DkMath.CosmicFormulaBinom.cosmic_id_csr' (R := ℕ) p (z' - y) y
+  -- (z' - y + y) = z'
+  rw [Nat.sub_add_cancel hz'_ge_y] at hCosmic
+  -- hCosmic : z' ^ p = (z' - y) * GN p (z' - y) y + y ^ p
+  omega
+
+/--
+GNReducedGapTarget → PthRootTarget 一気通貫橋。
+
+GNReducedGap → PthRootReduced → PthRoot の chain を 1 本にまとめる。
+-/
+theorem primeGe5BranchAPrimitiveRestorePthRoot_of_gnReducedGap
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget) :
+    PrimeGe5BranchAPrimitiveRestorePthRootTarget :=
+  primeGe5BranchAPrimitiveRestorePthRoot_of_reduced
+    (primeGe5BranchAPrimitiveRestorePthRootReduced_of_gnReducedGap hGNGap)
+
+/--
+GNReducedGapTarget → RestoreFromArithmeticStrong 全 chain 直通。
+
+GN native target から非循環 mainline 最終段までの canonical path。
+-/
+theorem primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong_of_gnReducedGap
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget) :
+    PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticStrongTarget :=
+  primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong_of_pthRoot
+    (primeGe5BranchAPrimitiveRestorePthRoot_of_gnReducedGap hGNGap)
+
+/--
+矛盾路線 → GNReducedGapTarget（vacuously true）。
+
+ContradictionTarget → PthRoot → PthRootReduced → GNReducedGap chain。
+-/
+theorem primeGe5BranchAPrimitiveRestoreGNReducedGap_of_contradiction
+    (hContra : PrimeGe5BranchAPrimitiveRestoreContradictionTarget) :
+    PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget :=
+  primeGe5BranchAPrimitiveRestoreGNReducedGap_of_pthRootReduced
+    (primeGe5BranchAPrimitiveRestorePthRootReduced_of_pthRoot
+      (primeGe5BranchAPrimitiveRestorePthRoot_of_contradiction hContra))
+
 end DkMath.FLT
