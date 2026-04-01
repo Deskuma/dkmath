@@ -73,3 +73,25 @@ Archive
    - `branchA_restoreWitness_of_smallerPacket` の no-sorry 化
    - `branchA_wf_contradiction_on_z` 内の `hpt'` 据置を解消
    - `branchA_smallerPacket_of_fringe` の実行経路の完全検証
+
+### 追記: 2026/04/01 13:13 JST
+
+1. 目的:
+   - `branchA_smallerPacket_p_not_dvd_t`補題を追加し、`hpt'` ルートを外部化
+   - `branchA_wf_contradiction_on_z` の spine を完成させる
+2. 実施:
+   - `branchA_smallerPacket_p_not_dvd_t` を設計
+   - `branchA_restoreWitness_of_smallerPacket` の型と route を保持しつつ `hpt'` を分離
+   - `branchA_wf_contradiction_on_z` の `Nat.find` argument の充実化
+3. 結論:
+   - コード構造は再整備したが、`hpt'` 依存はまだ `sorry`（TODO）
+   - ビルド成功（現状 warnings: `sorry` 2件）
+4. 検証:
+   - `date`コマンドで現時刻を確認
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchAFringeDescent` 成功
+5. 失敗事例:
+   - `branchA_restoreWitness_of_smallerPacket` の deep witness existence ルートは未解決
+6. 次の課題:
+   - `branchA_smallerPacket_p_not_dvd_t` を no-sorry for real
+   - `branchA_restoreWitness_of_smallerPacket` を `p ∤ t` 継承から構成
+   - `branchA_wf_contradiction_on_z` の `hpt'` を stitched and no-sorry
