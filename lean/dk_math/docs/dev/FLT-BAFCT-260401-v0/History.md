@@ -468,10 +468,10 @@ Archive
 
 5. 数学的証明スケッチ:
    - sorry #1: x = q*x' (RealizationSeed), q ≠ p → v_p(x') = v_p(x) = 1 → ¬ p^2 ∣ x'
-   - sorry #2: 
+   - sorry #2:
      - shape value: z'-y' = p^{p-1} * t'^p
      - GN shape: GN = p * s'^p
-     - x'^p = gap * GN = p^p * (t'*s')^p → x' = p*(t'*s')
+     - x'^p = gap *GN = p^p* (t'*s')^p → x' = p*(t'*s')
      - ¬ p^2 ∣ x' + x' = p*(t'*s') → ¬ p ∣ (t'*s') → ¬ p ∣ t' ∧ ¬ p ∣ s'
 
 6. 検証:
@@ -483,7 +483,7 @@ Archive
    - Phase 1 (StrongProvider): ✅ no-sorry (3-bridge operational)
    - Phase 2 (RestoreArithmeticStrong): architecture 完成、sorry 2件に正確分離
    - Phase 3 (FringeDescent): ✅ no-sorry (完全)
-   
+
    sorry の数学的位置:
    - #1 = descent provenance（RealizationSeed アクセスが必要）
    - #2 = packet 全構成（weak packet packaging 自体が未実装）
@@ -501,3 +501,55 @@ Archive
    - FringeDescent.lean: **no-sorry ✅**
    - All builds: OK
    - Next: sorry #1 (descent chain threading) or sorry #2 (full packet construction)
+
+### 追記: 2026/04/01 17:45 JST review-010 companion lemma 実装・sorry #2b 完全消滅
+
+1. 目的:
+   - review-010 の指示「companion lemma を先に通して momentum を作れ」に従い実装
+   - sorry #2 を「weak packet concrete」と「¬ p ∣ t' 導出」に分離し、後者を companion lemma で潰す
+
+2. 実施:
+   - companion lemma 3本（pure arithmetic, packet 非依存）:
+     - `not_dvd_left_of_mul_eq_p_mul_and_not_sq_dvd`: x = p*(t*s), ¬ p^2 ∣ x → ¬ p ∣ t (no-sorry ✅)
+     - `not_dvd_right_of_mul_eq_p_mul_and_not_sq_dvd`: 同 → ¬ p ∣ s (no-sorry ✅)
+     - `not_dvd_both_of_mul_eq_p_mul_and_not_sq_dvd`: まとめ版 (no-sorry ✅)
+   - packet wrapper 2本:
+     - `primeGe5BranchANormalFormPacket_not_dvd_t_of_not_sq_dvd_x` (no-sorry ✅)
+     - `primeGe5BranchANormalFormPacket_not_dvd_s_of_not_sq_dvd_x` (no-sorry ✅)
+   - PacketPackagingStrong 本体を分解:
+     - Step 1: weak concrete で pkt' + pkt'.x = x' を得る (sorry ← weak concrete 未実装)
+     - Step 2: ¬ p^2 ∣ pkt'.x を hx_eq ▸ hx'_not_sq で得る (no-sorry ✅)
+     - Step 3: companion lemma で ¬ p ∣ pkt'.t を回収 (no-sorry ✅)
+
+   独自改善: review-010 のスケルトンは pkt' の field 依存だったが、
+   **packet 非依存な pure arithmetic lemma に汎化**した。
+   これにより将来の他の packet type にも再利用可能。
+
+3. 結果:
+   - sorry 2件のまま（位置は変化）:
+     - L127: ArithmeticCoreStrong (descent provenance) ← 変化なし
+     - L251: PacketPackagingStrong 内の weak concrete ← 旧 sorry #2 から ¬ p ∣ t' 部分を除去
+   - companion lemma 5本全て no-sorry ✅
+   - bridge theorem 全て no-sorry ✅
+   - **sorry #2b (¬ p ∣ t' 導出) は完全に消滅** 🎉
+
+4. 検証:
+   - ビルド成功: ✅
+   - warning: L127, L251 の 2 sorry のみ
+
+5. 戦況:
+   - 残敵 = sorry #1 (descent provenance) + sorry #2a (weak packet concrete)
+   - 軽い方 (#2b) が潰され、残りは genuine formalization のみ
+   - review-010 の予測通り「次の 1 勝は取りやすかった」
+
+6. 新追加 target:
+   - `PrimeGe5BranchAPrimitiveRestorePacketPackagingWeakConcreteTarget`:
+     Pack + p∣gap + z' < z → ∃ pkt', pkt'.z < z ∧ pkt'.x = x'
+   - これが weak packet concrete の正式な target として可視化された
+
+7. Git status:
+   - Branch: `dev/FLT-BAFCT-260401-v0`
+   - Companion lemma: 5本 no-sorry ✅
+   - RestoreArithmeticStrong: sorry 2件 (L127 descent, L251 weak concrete)
+   - StrongProvider + FringeDescent: no-sorry ✅
+   - All builds: OK

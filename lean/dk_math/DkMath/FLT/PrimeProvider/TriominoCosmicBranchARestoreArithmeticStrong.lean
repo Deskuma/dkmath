@@ -142,20 +142,120 @@ theorem primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong_of_coreStrong_
     ⟨x', y', z', hpack', hp_dvd_gap', hz'lt, hx'_not_sq⟩
   exact hPackS hpack' hp_dvd_gap' hx'_not_sq hz'lt
 
+/-!
+## Companion Lemmas: `¬ p^2 ∣ x` → `¬ p ∣ t` and `¬ p ∣ s`
+
+packet 非依存な pure arithmetic lemma として切り出す。
+packet の `hsx : x = p * (t * s)` を直接差し込める。
+-/
+
+/--
+`x = p * (t * s)` かつ `¬ p^2 ∣ x` ならば `¬ p ∣ t`。
+
+もし `p ∣ t` ならば `p ∣ (t * s)` で `p^2 ∣ p * (t * s) = x`。矛盾。
+-/
+theorem not_dvd_left_of_mul_eq_p_mul_and_not_sq_dvd
+    {p x t s : ℕ}
+    (hsx : x = p * (t * s))
+    (hx_not_sq : ¬ p ^ 2 ∣ x) :
+    ¬ p ∣ t := by
+  intro hp_t
+  apply hx_not_sq
+  rw [hsx]
+  calc p ^ 2 = p * p := by ring
+    _ ∣ p * (t * s) := by
+        exact Nat.mul_dvd_mul_left p (dvd_mul_of_dvd_left hp_t s)
+
+/--
+`x = p * (t * s)` かつ `¬ p^2 ∣ x` ならば `¬ p ∣ s`。
+
+もし `p ∣ s` ならば `p ∣ (t * s)` で `p^2 ∣ p * (t * s) = x`。矛盾。
+-/
+theorem not_dvd_right_of_mul_eq_p_mul_and_not_sq_dvd
+    {p x t s : ℕ}
+    (hsx : x = p * (t * s))
+    (hx_not_sq : ¬ p ^ 2 ∣ x) :
+    ¬ p ∣ s := by
+  intro hp_s
+  apply hx_not_sq
+  rw [hsx]
+  calc p ^ 2 = p * p := by ring
+    _ ∣ p * (t * s) := by
+        exact Nat.mul_dvd_mul_left p (dvd_mul_of_dvd_right hp_s t)
+
+/--
+まとめ版。
+`x = p * (t * s)` かつ `¬ p^2 ∣ x` ならば `¬ p ∣ t ∧ ¬ p ∣ s`。
+-/
+theorem not_dvd_both_of_mul_eq_p_mul_and_not_sq_dvd
+    {p x t s : ℕ}
+    (hsx : x = p * (t * s))
+    (hx_not_sq : ¬ p ^ 2 ∣ x) :
+    ¬ p ∣ t ∧ ¬ p ∣ s :=
+  ⟨not_dvd_left_of_mul_eq_p_mul_and_not_sq_dvd hsx hx_not_sq,
+   not_dvd_right_of_mul_eq_p_mul_and_not_sq_dvd hsx hx_not_sq⟩
+
+/--
+Packet 専用の wrapper: `pkt'.hsx` と `¬ p^2 ∣ pkt'.x` から `¬ p ∣ pkt'.t`。
+-/
+theorem primeGe5BranchANormalFormPacket_not_dvd_t_of_not_sq_dvd_x
+    {p : ℕ} (pkt' : PrimeGe5BranchANormalFormPacket p)
+    (hx_not_sq : ¬ p ^ 2 ∣ pkt'.x) :
+    ¬ p ∣ pkt'.t :=
+  not_dvd_left_of_mul_eq_p_mul_and_not_sq_dvd pkt'.hsx hx_not_sq
+
+/--
+Packet 専用の wrapper: `pkt'.hsx` と `¬ p^2 ∣ pkt'.x` から `¬ p ∣ pkt'.s`。
+-/
+theorem primeGe5BranchANormalFormPacket_not_dvd_s_of_not_sq_dvd_x
+    {p : ℕ} (pkt' : PrimeGe5BranchANormalFormPacket p)
+    (hx_not_sq : ¬ p ^ 2 ∣ pkt'.x) :
+    ¬ p ∣ pkt'.s :=
+  not_dvd_right_of_mul_eq_p_mul_and_not_sq_dvd pkt'.hsx hx_not_sq
+
+/-!
+## PacketPackagingStrong: sorry #2 の分解
+
+`sorry` を「weak packet concrete」と「`¬ p ∣ t'` 導出」に分離する。
+companion lemma が通ったので、`¬ p ∣ t'` 側は packet さえあれば自動。
+残る sorry は weak packet concrete の構成のみ。
+-/
+
+/--
+weak packet packaging の concrete provider target (再掲)。
+
+counterexample pack + p ∣ gap + z' < z から
+normal form packet を concrete に構成する。
+-/
+abbrev PrimeGe5BranchAPrimitiveRestorePacketPackagingWeakConcreteTarget : Prop :=
+  ∀ {p z x' y' z' : ℕ},
+    PrimeGe5CounterexamplePack p x' y' z' →
+    p ∣ (z' - y') →
+    z' < z →
+    ∃ pkt' : PrimeGe5BranchANormalFormPacket p,
+      pkt'.z < z ∧ pkt'.x = x'
+
 /--
 PacketPackagingStrong の concrete provider。
 
-Claims:
-- from CounterexamplePack + p ∣ gap + ¬ p^2 ∣ x' + z' < z
-- derive v_p(x') = 1
-- derive v_p(z'-y') = p-1
-- extract t' with ¬ p ∣ t'
-- build normal form packet
+新 architecture:
+1. weak concrete で `pkt'` + `pkt'.x = x'` を得る
+2. `¬ p^2 ∣ x'` → `¬ p^2 ∣ pkt'.x` → companion lemma で `¬ p ∣ pkt'.t`
 -/
 theorem primeGe5BranchAPrimitiveRestorePacketPackagingStrong
     : PrimeGe5BranchAPrimitiveRestorePacketPackagingStrongTarget := by
   intro p z x' y' z' hpack' hp_dvd_gap' hx'_not_sq hz'lt
-  sorry
+  -- Step 1: weak concrete で packet を取る
+  have hWeak : ∃ pkt' : PrimeGe5BranchANormalFormPacket p,
+      pkt'.z < z ∧ pkt'.x = x' := by
+    sorry
+  rcases hWeak with ⟨pkt', hlt, hx_eq⟩
+  -- Step 2: ¬ p^2 ∣ pkt'.x を得る
+  have hpkt_not_sq : ¬ p ^ 2 ∣ pkt'.x := hx_eq ▸ hx'_not_sq
+  -- Step 3: companion lemma で ¬ p ∣ pkt'.t
+  have hpt' : ¬ p ∣ pkt'.t :=
+    primeGe5BranchANormalFormPacket_not_dvd_t_of_not_sq_dvd_x pkt' hpkt_not_sq
+  exact ⟨pkt', hlt, hpt'⟩
 
 /--
 最終 exported theorem. sorry は 2 個に分離:
