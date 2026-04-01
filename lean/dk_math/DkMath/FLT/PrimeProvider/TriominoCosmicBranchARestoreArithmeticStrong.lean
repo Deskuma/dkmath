@@ -676,4 +676,156 @@ theorem primeGe5BranchAPrimitiveRestorePthRoot_of_contradiction
       hqprime hqs hqt hcop_qy hq_ne_p hData)
     id
 
+/-!
+## PthRootTarget の足場補題群
+
+PthRootTarget の直接証明に向けた preparatory lemmas。
+今の Branch A descent data の特殊構造を最大限に活用する。
+
+### 数学的背景
+
+元 FLT: `x^p + y^p = z^p` で `x = q * x'`, `x' = p * (t * s')`, `s = q * s'`。
+`z^p = q^p * x'^p + y^p` から:
+- `z^p - y^p = q^p * x'^p`
+- `q ∤ y`, `q ∤ z`, `q ∤ (z-y)` （RestoreWitnessProperties）
+- `z ≡ ω*y (mod q)` where `ω^p = 1`, `ω ≠ 1` in ZMod q
+
+PthRootTarget が問うのは:
+  `∃ z', x'^p + y^p = z'^p`
+等価形: `∃ z', p^p * (t*s')^p + y^p = z'^p`
+
+### 攻略戦略
+
+Route B: q-adic/Hensel 持ち上げ
+- `z^p ≡ y^p (mod q^p)` は FLT equation から直接
+- `z^p - y^p = (z-y) * GN p (z-y) y` で `q ∤ (z-y)` → q の power は GN 側に集中
+- `GN = p * s^p = p * q^p * s'^p` → q^p factor が GN から剥がれる
+- この q^p stripping が descent を駆動する
+-/
+
+/--
+PthRootTarget の還元形 (GN descent 等価)。
+
+`∃ z', x'^p + y^p = z'^p` を `∃ z', p^p * (t*s')^p + y^p = z'^p` に還元。
+x' = p*(t*s') の特殊構造を use。
+-/
+abbrev PrimeGe5BranchAPrimitiveRestorePthRootReducedTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      PrimeGe5BranchAPrimitiveRestoreDescentSeed p x y z t s q →
+      let s' := s / q
+      ∃ z' : ℕ, p ^ p * (t * s') ^ p + y ^ p = z' ^ p
+
+/--
+PthRootReducedTarget → PthRootTarget 橋。
+
+`x' = x/q = p*(t*s')` の identity を使い、reduced form から original form へ戻す。
+-/
+theorem primeGe5BranchAPrimitiveRestorePthRoot_of_reduced
+    (hReduced : PrimeGe5BranchAPrimitiveRestorePthRootReducedTarget) :
+    PrimeGe5BranchAPrimitiveRestorePthRootTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p hSeed
+  set x' := x / q with hx'_def
+  set s' := s / q with hs'_def
+  have hq_dvd_x : q ∣ x := by
+    rw [hsx]; exact dvd_mul_of_dvd_right (dvd_mul_of_dvd_right hqs t) p
+  have hxMul : x = q * x' := by
+    rw [hx'_def]; exact (Nat.mul_div_cancel' hq_dvd_x).symm
+  have hs_eq : s = q * s' := by
+    rw [hs'_def]; exact (Nat.mul_div_cancel' hqs).symm
+  have hx'_eq : x' = p * (t * s') := by
+    have h : x = q * (p * (t * s')) := by rw [hsx, hs_eq]; ring
+    have : q * x' = q * (p * (t * s')) := by linarith
+    exact Nat.eq_of_mul_eq_mul_left hqprime.pos this
+  -- hReduced は let s' := s/q を使うが、こちらの s' は s/q そのもの
+  rcases hReduced hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hSeed with ⟨z', hz'⟩
+  refine ⟨z', ?_⟩
+  -- hz' : p^p * (t * (s/q))^p + y^p = z'^p
+  -- goal : (x/q)^p + y^p = z'^p
+  -- x/q = x' = p*(t*s') と s' = s/q から
+  show x' ^ p + y ^ p = z' ^ p
+  rw [hx'_eq, mul_pow, mul_pow]
+  -- 目標: p ^ p * (t ^ p * s' ^ p) + y ^ p = z' ^ p
+  -- hz' を同じ形に変形
+  convert hz' using 2
+  ring
+
+/--
+PthRootTarget → PthRootReducedTarget 橋（逆方向）。
+
+2 つの target は等価。
+-/
+theorem primeGe5BranchAPrimitiveRestorePthRootReduced_of_pthRoot
+    (hPthRoot : PrimeGe5BranchAPrimitiveRestorePthRootTarget) :
+    PrimeGe5BranchAPrimitiveRestorePthRootReducedTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p hSeed
+  set x' := x / q with hx'_def
+  set s' := s / q with hs'_def
+  have hq_dvd_x : q ∣ x := by
+    rw [hsx]; exact dvd_mul_of_dvd_right (dvd_mul_of_dvd_right hqs t) p
+  have hxMul : x = q * x' := by
+    rw [hx'_def]; exact (Nat.mul_div_cancel' hq_dvd_x).symm
+  have hs_eq : s = q * s' := by
+    rw [hs'_def]; exact (Nat.mul_div_cancel' hqs).symm
+  have hx'_eq : x' = p * (t * s') := by
+    have h : x = q * (p * (t * s')) := by rw [hsx, hs_eq]; ring
+    have : q * x' = q * (p * (t * s')) := by linarith
+    exact Nat.eq_of_mul_eq_mul_left hqprime.pos this
+  rcases hPthRoot hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hSeed with ⟨z', hz'⟩
+  refine ⟨z', ?_⟩
+  -- hz' : (x/q)^p + y^p = z'^p  where x/q = x' = p*(t*s')
+  -- goal : p^p * (t * (s/q))^p + y^p = z'^p
+  show p ^ p * (t * s') ^ p + y ^ p = z' ^ p
+  have : x' ^ p + y ^ p = z' ^ p := hz'
+  rw [hx'_eq, mul_pow, mul_pow] at this
+  convert this using 2
+  ring
+
+/--
+PthRoot 還元形の z^p identity。
+
+元 FLT equation `z^p = x^p + y^p` から:
+`z^p = q^p * p^p * (t*s')^p + y^p`
+
+これは `z^p = q^p * x'^p + y^p` の展開形。
+-/
+theorem branchA_zpow_eq_qpow_mul_reduced_plus_ypow
+    {p x y z t s q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hsx : x = p * (t * s))
+    (hqs : q ∣ s) :
+    let s' := s / q
+    z ^ p = q ^ p * (p ^ p * (t * s') ^ p) + y ^ p := by
+  intro s'
+  have hEq := hpack.hEq
+  have hs_eq : s = q * s' := (Nat.mul_div_cancel' hqs).symm
+  calc z ^ p = x ^ p + y ^ p := hEq.symm
+    _ = (p * (t * s)) ^ p + y ^ p := by rw [hsx]
+    _ = (p * (t * (q * s'))) ^ p + y ^ p := by rw [hs_eq]
+    _ = (q * (p * (t * s'))) ^ p + y ^ p := by ring_nf
+    _ = q ^ p * (p * (t * s')) ^ p + y ^ p := by rw [mul_pow]
+    _ = q ^ p * (p ^ p * (t * s') ^ p) + y ^ p := by rw [mul_pow]
+
 end DkMath.FLT

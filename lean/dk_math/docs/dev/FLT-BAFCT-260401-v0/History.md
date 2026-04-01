@@ -818,3 +818,62 @@ Archive
    PthRootTarget = ∃ z', (x/q)^p + y^p = z'^p
    「today の Branch A descent data の特殊形について p乗根 z' が存在するか」
    これが FLT Branch A 証明の genuinely undischarged kernel の全て
+
+### 追記: 2026/04/01 23:51 JST review-016 PthRootTarget 攻略足場
+
+1. 目的:
+   - PthRootTarget の直接攻略に向けた足場整備
+   - Branch A descent data の特殊構造を最大限活用する identity 群
+
+2. 数学的分析:
+   - PthRootTarget の本質: ∃ z', (x/q)^p + y^p = z'^p
+   - 等価形(reduced): ∃ z', p^p *(t*s')^p + y^p = z'^p
+     (x/q = p*(t*s'), s' = s/q の特殊構造を use)
+   - z^p identity: z^p = q^p *p^p* (t*s')^p + y^p
+     (元 FLT eq の q-adic 展開)
+
+   攻略の feasibility 判定:
+   - Route A (Kummer/ℤ[ζ_p]): ❌ Mathlib インフラ不足、年単位
+   - Route B (q-adic/Hensel): ⚠️ 補題群は育っているが核心step未到達
+   - Route C (Cosmic Formula): ⚠️ 研究中
+
+   BranchA.lean の唯一の sorry (L4137 NePCoprimeKernel) は PthRoot とは別系統
+
+3. 実装した定理群（全て no-sorry）:
+
+   **PthRootReducedTarget** (等価形):
+   - `PrimeGe5BranchAPrimitiveRestorePthRootReducedTarget`:
+     p^p *(t*s')^p + y^p = z'^p 形の target
+   - PthRootTarget と等価（双方向 bridge 証明済み）
+
+   **等価性 bridge**:
+   - `primeGe5BranchAPrimitiveRestorePthRoot_of_reduced`:
+     ReducedTarget → PthRootTarget (no-sorry)
+   - `primeGe5BranchAPrimitiveRestorePthRootReduced_of_pthRoot`:
+     PthRootTarget → ReducedTarget (no-sorry)
+
+   **z^p identity**:
+   - `branchA_zpow_eq_qpow_mul_reduced_plus_ypow`:
+     z^p = q^p *(p^p* (t*s')^p) + y^p (no-sorry)
+
+4. 攻略の構造分析:
+   PthRootTarget が TRUE:
+   → descent 1 step 成功 → z' < z → well-founded で矛盾 (FringeDescentToRefuter)
+   = 古典的 Kummer infinite descent
+
+   PthRootTarget が FALSE:
+   → 反例があるのに descent が blocked → 直接矛盾の別ルート
+
+   どちらにしても FLT が成立するが、
+   現在の non-circular mainline は Route 1 (descent 成功) を採用。
+
+5. Open Kernel 最終形:
+   PthRootTarget (= PthRootReducedTarget):
+   ∃ z', p^p *(t*s')^p + y^p = z'^p
+   「descent data の特殊形で p乗根が実在するか」
+   = Kummer descent の核心 1 step
+   = FLT Branch A 証明の genuinely undischarged kernel
+
+6. 結果:
+   sorry = 0, 全ビルド成功 ✅
+   攻略足場完成、PthRootTarget 直接攻略は次 phase
