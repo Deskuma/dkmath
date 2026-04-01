@@ -448,4 +448,113 @@ theorem primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong_nonCircular
   · exact primeGe5BranchAPrimitiveRestoreArithmeticCoreStrong_of_withProvenance hProvCore
   · exact primeGe5BranchAPrimitiveRestorePacketPackagingStrong
 
+/-!
+## WithProvenance concrete provider chain
+
+`WithProvenanceTarget` の concrete provider を descent chain から構成する。
+
+### Chain 構成:
+- DescentDatum_default: concrete ✅ (non-circular)
+- DescentSeed_default: concrete ✅ (non-circular)
+- RealizationSeedTarget: **仮定として受ける** (concrete は矛盾路線のみ)
+- Verification 3段: concrete ✅ (non-circular)
+
+`RealizationSeed.hxMul : x = q * x'` が provenance の唯一の source。
+-/
+
+/--
+FromSeed の WithProvenance 版。
+
+`RealizationSeed` が `hxMul : x = q * x'` を直接フィールドに持つので、
+既存 `FromSeed` の proof に `.hxMul` を追加するだけ。
+-/
+theorem primeGe5BranchAPrimitiveRestoreFromSeedWithProvenance
+    (hRealSeed : PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget)
+    (hVerify : PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerificationTarget) :
+    ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      p ∣ (z - y) →
+      z - y = p ^ (p - 1) * t ^ p →
+      GN p (z - y) y = p * s ^ p →
+      x = p * (t * s) →
+      Nat.Coprime t s →
+      Nat.Coprime t y →
+      Nat.Coprime s y →
+      ¬ p ∣ s →
+      ¬ p ∣ t →
+      y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+      ∀ {q : ℕ}, Nat.Prime q →
+        q ∣ s →
+        ¬ q ∣ t →
+        Nat.Coprime q y →
+        q ≠ p →
+        PrimeGe5BranchAPrimitiveRestoreDescentSeed p x y z t s q →
+        ∃ x' y' z' : ℕ,
+          PrimeGe5CounterexamplePack p x' y' z' ∧
+          p ∣ (z' - y') ∧ z' < z ∧ x = q * x' := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p hSeed0
+  have hRealization :
+      Nonempty (PrimeGe5BranchAPrimitiveRestoreRealizationSeed p x y z t s q) :=
+    hRealSeed hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hSeed0
+  rcases hRealization with ⟨hR⟩
+  rcases hVerify hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hR with ⟨hpack', hp_gap', hzlt⟩
+  exact ⟨hR.x', hR.y', hR.z', hpack', hp_gap', hzlt, hR.hxMul⟩
+
+/--
+WithProvenanceTarget の concrete provider。
+
+`RealizationSeedTarget` を仮定として受け、他は全て既存 concrete を使用。
+descent chain: RestoreWitnessProperties → DescentDatum → DescentSeed → RealizationSeed → Verification
+のうち、最初の 3 段は concrete default が存在し、Verification も concrete。
+-/
+theorem primeGe5BranchAPrimitiveRestoreArithmeticCoreWithProvenance_of_realizationSeed
+    (hRealSeed : PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget) :
+    PrimeGe5BranchAPrimitiveRestoreArithmeticCoreWithProvenanceTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p
+  -- Step 1: RestoreWitnessProperties を構成
+  have hData : RestoreWitnessProperties p x y z t s q :=
+    restore_witness_properties_default
+      hpack hp_dvd_gap hgap hsGN hsx
+      hqprime hqs hqt hcop_qy hq_ne_p
+  -- Step 2: QAdicLiftSeed を構成
+  have hLift :
+      Nonempty (PrimeGe5BranchAPrimitiveRestoreQAdicLiftSeed p x y z t s q) :=
+    primeGe5BranchAPrimitiveRestoreQAdicLift_default
+      hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hData
+  rcases hLift with ⟨hLift⟩
+  -- Step 3: DescentDatum を構成
+  have hDatum :
+      Nonempty (PrimeGe5BranchAPrimitiveRestoreDescentDatum p x y z t s q) :=
+    primeGe5BranchAPrimitiveRestoreDescentDatum_default
+      hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hData hLift
+  rcases hDatum with ⟨hDatum⟩
+  -- Step 4: DescentSeed を構成
+  have hSeed :
+      Nonempty (PrimeGe5BranchAPrimitiveRestoreDescentSeed p x y z t s q) :=
+    primeGe5BranchAPrimitiveRestoreDescentSeed_default
+      hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hDatum
+  rcases hSeed with ⟨hSeed⟩
+  -- Step 5: RealizationSeed + Verification で x=q*x' を取り出す
+  exact primeGe5BranchAPrimitiveRestoreFromSeedWithProvenance hRealSeed
+    (primeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerification_of_three_parts
+      primeGe5BranchAPrimitiveRestoreStrictDescent_of_hzEq
+      primeGe5BranchAPrimitiveRestoreGapDivisibility_of_hzEq
+      primeGe5BranchAPrimitiveRestoreCounterexamplePack_of_hzEq)
+    hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    hqprime hqs hqt hcop_qy hq_ne_p hSeed
+
 end DkMath.FLT

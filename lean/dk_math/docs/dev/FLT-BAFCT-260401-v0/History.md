@@ -2,7 +2,7 @@
 
 cid: 69ca1b34-0bcc-83a2-bcfd-529624b85356
 
-- 時刻の打刻は時間(時分秒)まで正確に行うこと。
+- 時刻の打刻は `date` コマンドを使用して時間(時分秒)まで正確に行うこと。
 - 新規履歴は最終末尾に追加すること。
 
 ## History Log
@@ -10,6 +10,12 @@ cid: 69ca1b34-0bcc-83a2-bcfd-529624b85356
 Archive
 
 - None
+
+## Note
+
+タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
+
+※コミット時間がより正確であり、異なる場合は、コミット時間を優先とする。
 
 ### 日時: 2026/04/01 12:12 JST
 
@@ -696,3 +702,57 @@ Archive
    - StrongProvider.lean: **sorry = 0 ✅**
    - FringeDescent.lean: **sorry = 0 ✅**
    - All builds: OK
+
+### 追記: 2026/04/01 21:57 JST review-013 WithProvenance concrete provider 実装
+
+1. 目的:
+   - review-013 の指示「WithProvenanceTarget concrete provider」を実装
+   - non-circular route の最後の open kernel を特定
+
+2. 重大な発見:
+
+   **発見 F**: `RealizationSeed` 構造体が `hxMul : x = q * x'` を直接フィールドに保持
+   - descent chain の L686-706 (`FromSeed_of_realizationSeed_and_verification`) で
+     `hRealization.x', .y', .z'` がそのまま existential witness として返されている
+   - provenance `x = q * x'` は `hRealization.hxMul` で取得可能
+
+   **発見 G**: descent chain の concrete 分布
+   - DescentDatum_default: concrete ✅ (non-circular)
+   - DescentSeed_default: concrete ✅ (non-circular)
+   - Verification 3段 (_of_hzEq): concrete ✅ (non-circular)
+   - QAdicLift_default: concrete ✅ (non-circular)
+   - **RealizationSeedTarget: 矛盾路線のみ** (唯一の open kernel)
+
+3. 実装:
+   - `primeGe5BranchAPrimitiveRestoreFromSeedWithProvenance`:
+     FromSeed の WithProvenance 版。RealizationSeed.hxMul を追加して返す (no-sorry ✅)
+   - `primeGe5BranchAPrimitiveRestoreArithmeticCoreWithProvenance_of_realizationSeed`:
+     WithProvenanceTarget の concrete provider。RealizationSeedTarget のみを仮定 (no-sorry ✅)
+     内部で DescentDatum_default, DescentSeed_default, Verification 3段 を concrete に chain
+
+4. chain 構造:
+
+   ```
+   RealizationSeedTarget (唯一の仮定)
+   → primeGe5BranchAPrimitiveRestoreArithmeticCoreWithProvenance_of_realizationSeed
+     (内部 chain: RestoreWitnessProperties → QAdicLift → DescentDatum → DescentSeed 全 concrete)
+   → WithProvenanceTarget (concrete)
+   → CoreStrong_of_withProvenance (no-sorry)
+   → PacketPackagingStrong (no-sorry)
+   → RestoreFromArithmeticStrong_nonCircular (no-sorry)
+   → StrongProvider (no-sorry)
+   → FringeDescentToRefuter (no-sorry)
+   ```
+
+5. 結果:
+   - RestoreArithmeticStrong.lean: sorry = 0 ✅
+   - StrongProvider.lean: sorry = 0 ✅
+   - FringeDescent.lean: sorry = 0 ✅
+   - 全ビルド成功: ✅
+
+6. 真の Open Kernel:
+   **PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget** の非循環 concrete
+   = descent seed から actual candidate triple (x', y', z') を抽出する段
+   = x'^p + y'^p = z'^p の p乗根 z' の存在
+
+   これが唯一の genuine open kernel。他は全て concrete で chain 済み。
