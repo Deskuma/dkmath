@@ -1,5 +1,7 @@
 # developer note: FLT-BAFCT-260401-v2
 
+cid: 69ccb052-e100-83a6-bdc6-3372db93e5b0
+
 わっちなら、ここからは **もう `FringeDescent` を触らぬ**。
 次は、上流 2 核を順に供給して、せっかく完成した terminal-case の spine に実弾を流し込む。いまの戦況では、それが最も自然じゃ。`FringeDescent` は sorry-free になり、残敵は `PrimeGe5BranchAPrimitivePacketDescentStrongTarget` と `PrimeGe5BranchACyclotomicExistenceTarget` の concrete 実装へ整理されたのだからの。
 
