@@ -67,6 +67,10 @@ theorem branchA_smallerFringe_of_smallerPacket
 
 /--
 smaller packet から witness q' を再取得する補題（bridge）。
+
+付録:
+- Step 1: distinguished prime q' の存在 (sorry: Fermat/Cyclotomic 経路)
+- Step 2: `restore_witness_properties_default` で RestoreWitnessProperties を no-sorry 構成
 -/
 theorem branchA_restoreWitness_of_smallerPacket
     {p : ℕ}
@@ -79,7 +83,50 @@ theorem branchA_restoreWitness_of_smallerPacket
       Nat.Coprime q' pkt'.y ∧
       q' ≠ p ∧
       RestoreWitnessProperties p pkt'.x pkt'.y pkt'.z pkt'.t pkt'.s q' := by
-  -- TODO: 実装（存在性は Fermat/Cyclotomic 経路による）
+  -- Step 1: distinguished prime q' の存在証明（open kernel）
+  -- pkt'.hsGN : GN p (pkt'.z - pkt'.y) pkt'.y = p * pkt'.s ^ p および ¬ p ∣ pkt'.t から、
+  -- Zsigmondy/cyclotomic 経路で q' ∣ pkt'.s かつ ¬ q' ∣ pkt'.t なる素数 q' を取り出す。
+  obtain ⟨q', hqprime', hqs', hqt', hcop_qy', hq_ne_p'⟩ :
+      ∃ q' : ℕ,
+        Nat.Prime q' ∧
+        q' ∣ pkt'.s ∧
+        ¬ q' ∣ pkt'.t ∧
+        Nat.Coprime q' pkt'.y ∧
+        q' ≠ p := by
+    -- TODO: GN 側の cyclotomic/Zsigmondy distinguished prime existence
+    -- 具体的には GN p (z-y) y = p * s^p と ¬ p ∤ t から s の素因数 q' で
+    -- q' ≠ p, Coprime q' y, ¬ q' ∣ t を満たすものを取り出す。
+    sorry
+  -- Step 2: RestoreWitnessProperties を restore_witness_properties_default で構成（no sorry）
+  exact ⟨q', hqprime', hqs', hqt', hcop_qy', hq_ne_p',
+    restore_witness_properties_default
+      pkt'.pack pkt'.hp_dvd_gap pkt'.hgap pkt'.hsGN pkt'.hsx
+      hqprime' hqs' hqt' hcop_qy' hq_ne_p'⟩
+
+/--
+PrimitivePacketDescentTarget から降下した smaller packet において
+`¬ p ∣ pkt'.t` が維持されることを要求する独立補題。
+
+付録:
+- `PrimeGe5BranchANormalFormPacket` はフィールドに `hp_not_dvd_t` を持たない。
+- `PrimeGe5BranchAPrimitivePacketDescentTarget` の入力では `¬ p ∣ t` が仮定されるが、
+  返す packet の `t'` フィールドへの継承は construct の具体経路によって保証される必要がある。
+- Kummer/Zsigmondy による concrete descent では `¬ p ∣ t'` が保持されると期待されるが、
+  現在の抽象 target 型ではこれを型から直接読み出せないため open kernel として置く。
+- `branchA_wf_contradiction_on_z` の `hpt'` をこの補題へ委譲することで、
+  本体の証明骨格を明確に保ちながらこのギャップを外部化する。
+-/
+theorem branchA_smallerPacket_p_not_dvd_t
+    (hPrim : PrimeGe5BranchAPrimitivePacketDescentTarget)
+    {p x y z t s q : ℕ}
+    (hBundle : BranchAInterferenceFringeBundle p x y z t s q)
+    {pkt' : PrimeGe5BranchANormalFormPacket p}
+    (hlt : pkt'.z < z) :
+    ¬ p ∣ pkt'.t := by
+  -- TODO: PrimitivePacketDescentTarget の p ∤ t 前提が降下後 packet でも保持されることの証明。
+  -- pkt' は hPrim を hBundle の各フィールドに適用した結果として出てくる packet であり、
+  -- concrete realization (Kummer descent) では p ∤ t' が保持されることが知られているが、
+  -- 現状の抽象 target 経由ではこれを型から直接導出できない open kernel である。
   sorry
 
 /--
@@ -104,9 +151,9 @@ theorem branchA_wf_contradiction_on_z
     exact Nat.find_min' hP hz
   -- smaller packet from fringe bundle
   rcases branchA_smallerPacket_of_fringe hPrim hB0 with ⟨pkt', hzp⟩
-  have hpt' : ¬ p ∣ pkt'.t := by
-    -- TODO: `p ∤ t` を smaller packet で維持することを保証する lemma を適用
-    sorry
+  -- `p ∤ pkt'.t` を独立補題 branchA_smallerPacket_p_not_dvd_t へ委譲
+  have hpt' : ¬ p ∣ pkt'.t :=
+    branchA_smallerPacket_p_not_dvd_t hPrim hB0 hzp
   rcases branchA_restoreWitness_of_smallerPacket (p := p) (pkt' := pkt') hpt' with
     ⟨q', hqprime', hqs', hqt', hcop_qy', hq_ne_p', hData'⟩
   have hB' : BranchAInterferenceFringeBundle p pkt'.x pkt'.y pkt'.z pkt'.t pkt'.s q' :=
