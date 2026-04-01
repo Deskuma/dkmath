@@ -33,3 +33,22 @@ Archive
    - `branchA_smallerFringe_of_smallerPacket` の具体的証明を実装
    - `branchA_wf_contradiction_on_z` を `Nat.lt_wfRel` と `branchA_smallerPacket_of_fringe`/`branchA_smallerFringe_of_smallerPacket` で完全に証明
    - `sorry` 完全除去および再ビルド確認
+
+### 追記: 2026/04/01 13:05 JST
+
+1. 目的:
+   - review-001 指示に従い、定理の型を強化しつつ `branchA_smallerFringe_of_smallerPacket` への遷移を無理なく明確化
+2. 実施:
+   - `branchA_smallerPacket_of_fringe` を `PrimeGe5BranchAPrimitivePacketDescentTarget` 依存とする橋として更新
+   - `branchA_smallerFringe_of_smallerPacket` を `RestoreWitnessProperties` 系引数付きに型定義
+   - `branchA_wf_contradiction_on_z` と `branchAFringeContradiction_of_descent` に `hPrim` 引数を追加
+3. 結論:
+   - 追加型安全化完了
+   - ビルド成否: OK (警告: `branchA_wf_contradiction_on_z` に `sorry` 1件)
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchAFringeDescent` 結果成功
+5. 失敗事例:
+   - なし（既存まで含めて現時点で no-sorry にはまだ残りあり）
+6. 次の課題:
+   - `branchA_wf_contradiction_on_z` の concrete 実装完了
+   - `branchA_smallerPacket_of_fringe`/`branchA_smallerFringe_of_smallerPacket` の no-sorry 化

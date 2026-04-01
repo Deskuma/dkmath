@@ -19,26 +19,57 @@ open DkMath.CosmicFormulaBinom
 干渉縞 bundle から smaller packet を得る目標。
 -/
 theorem branchA_smallerPacket_of_fringe
+    (hPrim : PrimeGe5BranchAPrimitivePacketDescentTarget)
     {p x y z t s q : ℕ}
     (hBundle : BranchAInterferenceFringeBundle p x y z t s q) :
     ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z := by
-  -- TODO: 既存の降下ステップ + packet 生成ルートで構成・証明
-  sorry
+  have hpack : PrimeGe5CounterexamplePack p x y z := hBundle.padic.pack
+  exact hPrim
+    hpack
+    hBundle.padic.hp_dvd_gap
+    hBundle.padic.hgap
+    hBundle.padic.hsGN
+    hBundle.padic.hsx
+    hBundle.padic.hcop_ts
+    hBundle.padic.hcop_ty
+    hBundle.padic.hcop_sy
+    hBundle.padic.hp_not_dvd_s
+    hBundle.padic.hp_not_dvd_t
 
 /--
-smaller packet から再び干渉縞 bundle を構成する目標。
+smaller packet から再び干渉縞 bundle を構成する橋。
 -/
 theorem branchA_smallerFringe_of_smallerPacket
     {p : ℕ}
-    {pkt' : PrimeGe5BranchANormalFormPacket p} :
-    ∃ q' : ℕ, BranchAInterferenceFringeBundle p pkt'.x pkt'.y pkt'.z pkt'.t pkt'.s q' := by
-  -- TODO: 既存 witness 生成・restoreProperties ルートで構成・証明
-  sorry
+    {pkt' : PrimeGe5BranchANormalFormPacket p}
+    (hp_not_dvd_t' : ¬ p ∣ pkt'.t)
+    {q' : ℕ}
+    (hqprime' : Nat.Prime q')
+    (hqs' : q' ∣ pkt'.s)
+    (hqt' : ¬ q' ∣ pkt'.t)
+    (hcop_qy' : Nat.Coprime q' pkt'.y)
+    (hq_ne_p' : q' ≠ p)
+    (hData' : RestoreWitnessProperties p pkt'.x pkt'.y pkt'.z pkt'.t pkt'.s q') :
+    BranchAInterferenceFringeBundle p pkt'.x pkt'.y pkt'.z pkt'.t pkt'.s q' := by
+  exact branchAInterferenceFringeBundle_default
+    pkt'.pack
+    pkt'.hp_dvd_gap
+    pkt'.hgap
+    pkt'.hsGN
+    pkt'.hsx
+    hp_not_dvd_t'
+    hqprime'
+    hqs'
+    hqt'
+    hcop_qy'
+    hq_ne_p'
+    hData'
 
 /--
 `z` に関する well-founded descent による矛盾導出。
 -/
 theorem branchA_wf_contradiction_on_z
+    (hPrim : PrimeGe5BranchAPrimitivePacketDescentTarget)
     {p : ℕ} :
     ¬ ∃ x y z t s q : ℕ, BranchAInterferenceFringeBundle p x y z t s q := by
   -- TODO: branchA_smallerPacket_of_fringe + branchA_smallerFringe_of_smallerPacket
@@ -48,10 +79,12 @@ theorem branchA_wf_contradiction_on_z
 /--
 干渉縞矛盾 target の確定。
 -/
-theorem branchAFringeContradiction_of_descent : BranchAFringeContradictionTarget := by
+theorem branchAFringeContradiction_of_descent
+    (hPrim : PrimeGe5BranchAPrimitivePacketDescentTarget) :
+    BranchAFringeContradictionTarget := by
   intro p x y z t s q hBundle
   have hNoInf : ¬ ∃ x y z t s q : ℕ, BranchAInterferenceFringeBundle p x y z t s q :=
-    branchA_wf_contradiction_on_z (p := p)
+    branchA_wf_contradiction_on_z (hPrim := hPrim) (p := p)
   have hExists : ∃ x y z t s q : ℕ, BranchAInterferenceFringeBundle p x y z t s q :=
     ⟨x, y, z, t, s, q, hBundle⟩
   exact hNoInf hExists
