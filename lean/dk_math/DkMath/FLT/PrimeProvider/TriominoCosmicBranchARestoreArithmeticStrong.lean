@@ -828,4 +828,139 @@ theorem branchA_zpow_eq_qpow_mul_reduced_plus_ypow
     _ = q ^ p * (p * (t * s')) ^ p + y ^ p := by rw [mul_pow]
     _ = q ^ p * (p ^ p * (t * s') ^ p) + y ^ p := by rw [mul_pow]
 
+/-!
+## GN Reduced Gap Target — Cosmic Formula native な open kernel
+
+PthRootReducedTarget を GN (Gcd-Next 多項式) の言葉に翻訳する。
+
+核心公式: `(g'+y)^p = g' * GN p g' y + y^p` （Cosmic Formula: Big = Body + Gap）
+
+PthRootReduced が「∃ z', p^p*(t*s')^p + y^p = z'^p」と問うのに対し、
+GNReducedGap は「∃ g', g' * GN p g' y = p^p*(t*s')^p」と問う。
+
+g' = z' - y, z' = g' + y の関係で等価。
+GN が DkMath のコア理論であるため、この形式化が project-native な攻略の起点。
+-/
+
+/--
+GN Reduced Gap Target: **Cosmic Formula native な PthRootTarget の等価形式**。
+
+「descent 後の gap g' が存在して `g' * GN p g' y = p^p * (t*s')^p` を満たす」
+
+これは：
+- `g' * GN p g' y = (g' + y)^p - y^p` （Cosmic Body = Big - Gap）
+- `z' := g' + y` と置けば `z'^p = p^p*(t*s')^p + y^p` （PthRootReduced）
+
+のため、PthRootReducedTarget と等価。GN 路線での攻略の起点。
+-/
+abbrev PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      PrimeGe5BranchAPrimitiveRestoreDescentSeed p x y z t s q →
+      let s' := s / q
+      ∃ g' : ℕ, g' * GN p g' y = p ^ p * (t * s') ^ p
+
+/--
+GNReducedGapTarget → PthRootReducedTarget 橋。
+
+Cosmic Formula `(g'+y)^p = g' * GN p g' y + y^p` を使い、
+`z' := g' + y` で p 乗根を構成する。
+-/
+theorem primeGe5BranchAPrimitiveRestorePthRootReduced_of_gnReducedGap
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget) :
+    PrimeGe5BranchAPrimitiveRestorePthRootReducedTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p hSeed
+  rcases hGNGap hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hSeed with ⟨g', hGN⟩
+  -- z' := g' + y として構成
+  refine ⟨g' + y, ?_⟩
+  -- Cosmic Formula: (g'+y)^p = g' * GN p g' y + y^p
+  have hCosmic := DkMath.CosmicFormulaBinom.cosmic_id_csr' (R := ℕ) p g' y
+  -- hCosmic : (g' + y) ^ p = g' * GN p g' y + y ^ p
+  rw [hGN] at hCosmic
+  -- hCosmic : (g' + y) ^ p = p ^ p * (t * (s / q)) ^ p + y ^ p
+  exact hCosmic.symm
+
+/--
+PthRootReducedTarget → GNReducedGapTarget 橋（逆方向）。
+
+`z'` が与えられたとき `g' := z' - y` で GN gap を構成。
+Cosmic Formula `(g'+y)^p - y^p = g' * GN p g' y` を使って identity を得る。
+-/
+theorem primeGe5BranchAPrimitiveRestoreGNReducedGap_of_pthRootReduced
+    (hReduced : PrimeGe5BranchAPrimitiveRestorePthRootReducedTarget) :
+    PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p hSeed
+  rcases hReduced hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hSeed with ⟨z', hz'⟩
+  -- hz' : p^p * (t * (s/q))^p + y^p = z'^p
+  -- z'^p ≥ y^p → z' ≥ y
+  have hz'_ge_y : y ≤ z' := by
+    by_contra h
+    push_neg at h
+    have : z' ^ p < y ^ p := Nat.pow_lt_pow_left h hpack.hp.ne_zero
+    omega
+  -- g' := z' - y
+  refine ⟨z' - y, ?_⟩
+  -- Cosmic Formula: (g'+y)^p = g' * GN p g' y + y^p
+  have hCosmic := DkMath.CosmicFormulaBinom.cosmic_id_csr' (R := ℕ) p (z' - y) y
+  -- (z' - y + y) = z'
+  rw [Nat.sub_add_cancel hz'_ge_y] at hCosmic
+  -- hCosmic : z' ^ p = (z' - y) * GN p (z' - y) y + y ^ p
+  omega
+
+/--
+GNReducedGapTarget → PthRootTarget 一気通貫橋。
+
+GNReducedGap → PthRootReduced → PthRoot の chain を 1 本にまとめる。
+-/
+theorem primeGe5BranchAPrimitiveRestorePthRoot_of_gnReducedGap
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget) :
+    PrimeGe5BranchAPrimitiveRestorePthRootTarget :=
+  primeGe5BranchAPrimitiveRestorePthRoot_of_reduced
+    (primeGe5BranchAPrimitiveRestorePthRootReduced_of_gnReducedGap hGNGap)
+
+/--
+GNReducedGapTarget → RestoreFromArithmeticStrong 全 chain 直通。
+
+GN native target から非循環 mainline 最終段までの canonical path。
+-/
+theorem primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong_of_gnReducedGap
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget) :
+    PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticStrongTarget :=
+  primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong_of_pthRoot
+    (primeGe5BranchAPrimitiveRestorePthRoot_of_gnReducedGap hGNGap)
+
+/--
+矛盾路線 → GNReducedGapTarget（vacuously true）。
+
+ContradictionTarget → PthRoot → PthRootReduced → GNReducedGap chain。
+-/
+theorem primeGe5BranchAPrimitiveRestoreGNReducedGap_of_contradiction
+    (hContra : PrimeGe5BranchAPrimitiveRestoreContradictionTarget) :
+    PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget :=
+  primeGe5BranchAPrimitiveRestoreGNReducedGap_of_pthRootReduced
+    (primeGe5BranchAPrimitiveRestorePthRootReduced_of_pthRoot
+      (primeGe5BranchAPrimitiveRestorePthRoot_of_contradiction hContra))
+
 end DkMath.FLT

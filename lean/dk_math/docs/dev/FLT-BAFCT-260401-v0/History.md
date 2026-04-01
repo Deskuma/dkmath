@@ -877,3 +877,53 @@ Archive
 6. 結果:
    sorry = 0, 全ビルド成功 ✅
    攻略足場完成、PthRootTarget 直接攻略は次 phase
+
+### 追記: 2026/04/02 review-017 GNReducedGapTarget — Cosmic Formula native な open kernel
+
+1. 目的:
+   - PthRootTarget を GN の言葉に翻訳する
+   - DkMath のコア理論 (Cosmic Formula) を使った project-native な攻略の起点を確立
+
+2. 数学的変換:
+   PthRootReducedTarget: ∃ z', p^p*(t*s')^p + y^p = z'^p
+   ↕ (g' = z'-y, z' = g'+y)
+   GNReducedGapTarget: ∃ g', g' * GN p g' y = p^p*(t*s')^p
+
+   橋の核心公式: Cosmic Formula `(g'+y)^p = g' * GN p g' y + y^p`
+   (Big = Body + Gap, cosmic_id_csr')
+
+3. 実装した定理群（全て no-sorry）:
+
+   **GNReducedGapTarget** (GN native target):
+   - `PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget`:
+     ∃ g', g' * GN p g' y = p^p * (t*s')^p
+
+   **等価性 bridge（双方向）**:
+   - `primeGe5BranchAPrimitiveRestorePthRootReduced_of_gnReducedGap`:
+     GNReducedGap → PthRootReduced (Cosmic identity で z'=g'+y 構成)
+   - `primeGe5BranchAPrimitiveRestoreGNReducedGap_of_pthRootReduced`:
+     PthRootReduced → GNReducedGap (g'=z'-y で GN 等式を取得)
+
+   **一気通貫橋**:
+   - `primeGe5BranchAPrimitiveRestorePthRoot_of_gnReducedGap`:
+     GNReducedGap → PthRootTarget 直通
+   - `primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong_of_gnReducedGap`:
+     GNReducedGap → RestoreFromArithmeticStrong 全 chain 直通
+
+   **矛盾路線互換**:
+   - `primeGe5BranchAPrimitiveRestoreGNReducedGap_of_contradiction`:
+     ContradictionTarget → GNReducedGap (vacuously)
+
+4. Chain 構造:
+   GN mainline (canonical route):
+   GNReducedGapTarget (GN native open kernel)
+   → PthRootReducedTarget (Cosmic identity)
+   → PthRootTarget (x'=p*(t*s'))
+   → RealizationSeedTarget (quotient side)
+   → WithProvenanceTarget → CoreStrong → PacketPackagingStrong
+   → RestoreFromArithmeticStrong
+   → StrongProvider → FringeDescentToRefuter
+
+5. 結果:
+   sorry = 0, 全ビルド成功 ✅
+   GN native target 確立、Cosmic Formula の恒等式が証明で活用された
