@@ -325,3 +325,50 @@ Archive
    - TriominoCosmicBranchAPrimitiveStrongProvider.lean: **sorry-free ✅** (builds)
    - FringeDescent.lean: sorry-free (unchanged)
    - Next: RestoreFromArithmeticStrongTarget の concrete provider
+
+### 追記: 2026/04/01 16:00 JST RestoreArithmeticStrong スケルトン設計
+
+1. 目的:
+   - review-007 の指示に従い、`RestoreFromArithmeticStrongTarget` の concrete provider スケルトンを新規作成
+   - Phase 1 (StrongProvider) に続く Phase 2 の設計メモを確立
+
+2. 実施:
+   - 新規ファイル `TriominoCosmicBranchARestoreArithmeticStrong.lean` を作成
+   - スケルトン定理 `primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong` を設定
+   - design コメント: 既存 weak route (SmallerCounterexample + Packet) を参考に、
+     Packet 段で `¬ p ∣ pkt'.t` を保持させる強化アーキテクチャを記述
+
+3. 結論:
+   - ビルド成功（sorry 1件：スケルトン） ✅
+   - 次段階への設計メモが確立
+   - 実装ロードマップ:
+     1. SmallerCounterexampleStrong target 定義
+     2. PacketOfSmallerCounterexampleStrong target 定義
+     3. 両者を chaining する theorem 実装
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestoreArithmeticStrong` 成功
+   - ビルドログ: warning 1件 (L29 sorry)
+
+5. ファイル構成:
+
+   ```
+   RestoreArithmeticStrong.lean
+   ├─ primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong (main skeleton)
+   │  ├─ Input: SmallerCounterexample weak, Packet strong provider
+   │  └─ Output: RestoreFromArithmeticStrongTarget
+   └─ [TBA] Smaller counterexample / packet strong targets（次段階）
+   ```
+
+6. 戦況:
+   - **StrongProvider chain 完成**: desktop→wieferich→descent の 3-tier bridge が sorry-free で機能 ✅
+   - **RestoreArithmetic skeleton 確立**: main battle clause の設計が明確化
+   - **次の priority**:
+     - RestoreArithmeticStrong の詳細 target 定義と theorem 実装
+     - 最後に FringeDescent へ concrete `hStrong + hEx` を流し込み、terminal-case を fully operational にする
+
+7. Git status:
+   - Branch: `dev/FLT-BAFCT-260401-v0`
+   - Files: StrongProvider (sorry-free), RestoreArithmeticStrong (skeleton), FringeDescent (sorry-free)
+   - Builds: All 3 files OK
+   - Next: RestoreArithmetic concrete implementation
