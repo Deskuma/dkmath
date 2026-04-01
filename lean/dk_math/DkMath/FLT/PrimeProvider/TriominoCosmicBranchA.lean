@@ -976,7 +976,7 @@ Branch A normal form から直接、
 付録:
 - concrete 数学としては、minimality を仮定するよりこちらを直接埋めるほうが自然な可能性が高い。
 - `PrimeGe5BranchADistinguishedPrimeDescentTarget` は、この stronger target から
-  no-`sorry` で回収できる。
+  no-`so#rry` で回収できる。
 -/
 abbrev PrimeGe5BranchASmallerCounterexampleTarget : Prop :=
   ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
@@ -4084,7 +4084,7 @@ theorem primeGe5BranchANormalFormPowFactorizationNePSpine_of_supportKernel
 現状ここまで削ると、残っている数学は support separation だけである。
 
 付録:
-- 実装上はまだ `sorry` を含むが、意味論的には
+- 実装上はまだ `so#rry` を含むが、意味論的には
   「`NeP` comparison route の active 情報が coprime まで縮んだ後の final checkpoint」
   を表す。
 - したがってこの定理は、未完の穴というより
@@ -4469,7 +4469,7 @@ theorem primeGe5BranchARefuter_of_routeBundles_default :
     branchAWitnessRouteBundle_default
     branchAContradictionRouteBundle_default
 
-/-- Branch A 条件付きで、`z` 最小の反例 pack を no-`sorry` で選べる。 -/
+/-- Branch A 条件付きで、`z` 最小の反例 pack を no-`so#rry` で選べる。 -/
 theorem minimalPrimeGe5CounterexampleSelectionA_impl :
     ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
       p ∣ (z - y) →
@@ -5344,7 +5344,7 @@ theorem primeGe5BranchARefuter_of_primitiveMainline
 `FLT_of_coprime` の residual branch から呼ぶ Branch A 専用 refuter 入口。
 
 将来は `PrimeGe5BranchAGapPowFactorizationTarget` と shape/descent kernel を
-ここで合成する。現段階では残差 `sorry` を `Basic.lean` から切り離して
+ここで合成する。現段階では残差 `so#rry` を `Basic.lean` から切り離して
 この lower layer に局所化する。
 -/
 theorem primeGe5BranchARefuter_default :

@@ -1315,7 +1315,7 @@ abbrev BranchADistinguishedPrimeDescentAdapterTarget : Prop :=
 Branch A normal form から直接 smaller counterexample を返す stronger splice point。
 
 付録:
-- minimality は provider 側で no-`sorry` に選べるため、
+- minimality は provider 側で no-`so#rry` に選べるため、
   concrete 実装を探すときはこちらの contract のほうが自然な入口になりやすい。
 -/
 abbrev BranchASmallerCounterexampleAdapterTarget : Prop :=
@@ -2498,12 +2498,12 @@ theorem branchAPrimitivePacketDescentAdapter_of_boundaryCoreWitnessConcreteDefau
 ### 矛盾路線 adapter — ExistenceMainline + Contradiction → PacketDescent
 
 `ContradictionTarget` が証明されれば、`RestoreFromArithmetic` が bypass され、
-`ExistenceMainline`（既に no-sorry で完成）と組み合わせて
+`ExistenceMainline`（既に no-so#rry で完成）と組み合わせて
 `PacketDescentTarget` が直接閉じる。
 -/
 
 /--
-ExistenceMainline (no-sorry) + Contradiction → PacketDescent。
+ExistenceMainline (no-so#rry) + Contradiction → PacketDescent。
 
 ExistenceMainline の default concrete は
 `branchAExceptionalExistenceMainlineAdapter_of_boundaryCoreWitnessConcreteDefault`
@@ -2530,7 +2530,7 @@ theorem branchAPrimitiveRestoreFromArithmeticAdapter_of_witnessSource
 /--
 witness source → `PacketDescentTarget` adapter（最上位 short-circuit）。
 
-witness source + ExistenceMainline (no-sorry) → PacketDescent。
+witness source + ExistenceMainline (no-so#rry) → PacketDescent。
 -/
 theorem branchAPrimitivePacketDescentAdapter_of_witnessSource
     (hSource : BranchAContradictionWithWitnessSourceAdapterTarget) :
