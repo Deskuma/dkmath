@@ -34,7 +34,7 @@ Archive
    - `branchA_wf_contradiction_on_z` を `Nat.lt_wfRel` と `branchA_smallerPacket_of_fringe`/`branchA_smallerFringe_of_smallerPacket` で完全に証明
    - `sorry` 完全除去および再ビルド確認
 
-### 追記: 2026/04/01 13:05 JST
+### 追記: 2026/04/01 13:00 JST
 
 1. 目的:
    - review-001 指示に従い、定理の型を強化しつつ `branchA_smallerFringe_of_smallerPacket` への遷移を無理なく明確化
@@ -52,3 +52,24 @@ Archive
 6. 次の課題:
    - `branchA_wf_contradiction_on_z` の concrete 実装完了
    - `branchA_smallerPacket_of_fringe`/`branchA_smallerFringe_of_smallerPacket` の no-sorry 化
+
+### 追記: 2026/04/01 13:03 JST
+
+1. 目的:
+   - `branchA_restoreWitness_of_smallerPacket` 定理を追加し、exists q' witness を型で明示する
+   - `branchA_wf_contradiction_on_z` を `Nat.find` による最小性 argument で書き下ろし
+2. 実施:
+   - `branchA_restoreWitness_of_smallerPacket` 追加（現時点 `sorry` あり）
+   - `branchA_wf_contradiction_on_z` に `p` 関連性と `hPrim` 依存の完全な proof sketch を実装
+   - `branchAFringeContradiction_of_descent` を `hPrim` 依存の conditional form に更新
+3. 結論:
+   - 型設計と論理構造は十分改善
+   - ビルド成功 (warning: `sorry` 2箇所)
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchAFringeDescent` 成功
+5. 失敗事例:
+   - `primeGe5BranchANormalForm_prime_not_dvd_t_default` は存在せず、`hpt'` の直接導出を `TODO` とした
+6. 次の課題:
+   - `branchA_restoreWitness_of_smallerPacket` の no-sorry 化
+   - `branchA_wf_contradiction_on_z` 内の `hpt'` 据置を解消
+   - `branchA_smallerPacket_of_fringe` の実行経路の完全検証

@@ -66,15 +66,56 @@ theorem branchA_smallerFringe_of_smallerPacket
     hData'
 
 /--
+smaller packet から witness q' を再取得する補題（bridge）。
+-/
+theorem branchA_restoreWitness_of_smallerPacket
+    {p : ℕ}
+    {pkt' : PrimeGe5BranchANormalFormPacket p}
+    (hp_not_dvd_t' : ¬ p ∣ pkt'.t) :
+    ∃ q' : ℕ,
+      Nat.Prime q' ∧
+      q' ∣ pkt'.s ∧
+      ¬ q' ∣ pkt'.t ∧
+      Nat.Coprime q' pkt'.y ∧
+      q' ≠ p ∧
+      RestoreWitnessProperties p pkt'.x pkt'.y pkt'.z pkt'.t pkt'.s q' := by
+  -- TODO: 実装（存在性は Fermat/Cyclotomic 経路による）
+  sorry
+
+/--
 `z` に関する well-founded descent による矛盾導出。
 -/
 theorem branchA_wf_contradiction_on_z
     (hPrim : PrimeGe5BranchAPrimitivePacketDescentTarget)
     {p : ℕ} :
     ¬ ∃ x y z t s q : ℕ, BranchAInterferenceFringeBundle p x y z t s q := by
-  -- TODO: branchA_smallerPacket_of_fringe + branchA_smallerFringe_of_smallerPacket
-  -- を使って、`Nat.lt_wfRel` の無限降下を否定
-  sorry
+  classical
+  intro hExists
+  let P : ℕ → Prop := fun z =>
+    ∃ x y t s q : ℕ, BranchAInterferenceFringeBundle p x y z t s q
+  have hP : ∃ z : ℕ, P z := by
+    rcases hExists with ⟨x, y, z, t, s, q, hB⟩
+    exact ⟨z, ⟨x, y, t, s, q, hB⟩⟩
+  let z0 : ℕ := Nat.find hP
+  have hz0 : P z0 := Nat.find_spec hP
+  rcases hz0 with ⟨x0, y0, t0, s0, q0, hB0⟩
+  have hMin : ∀ z, P z → z0 ≤ z := by
+    intro z hz
+    exact Nat.find_min' hP hz
+  -- smaller packet from fringe bundle
+  rcases branchA_smallerPacket_of_fringe hPrim hB0 with ⟨pkt', hzp⟩
+  have hpt' : ¬ p ∣ pkt'.t := by
+    -- TODO: `p ∤ t` を smaller packet で維持することを保証する lemma を適用
+    sorry
+  rcases branchA_restoreWitness_of_smallerPacket (p := p) (pkt' := pkt') hpt' with
+    ⟨q', hqprime', hqs', hqt', hcop_qy', hq_ne_p', hData'⟩
+  have hB' : BranchAInterferenceFringeBundle p pkt'.x pkt'.y pkt'.z pkt'.t pkt'.s q' :=
+    branchA_smallerFringe_of_smallerPacket (p := p) (pkt' := pkt') hpt' (q' := q')
+      hqprime' hqs' hqt' hcop_qy' hq_ne_p' hData'
+  have hP' : P pkt'.z := ⟨pkt'.x, pkt'.y, pkt'.t, pkt'.s, q', hB'⟩
+  have hz0le : z0 ≤ pkt'.z := hMin pkt'.z hP'
+  exact Nat.not_lt_of_ge hz0le hzp
+
 
 /--
 干渉縞矛盾 target の確定。
