@@ -201,3 +201,67 @@ Archive
      `∃ pkt', pkt'.z < z ∧ ¬ p ∣ pkt'.t` を返すよう型強化し、各実装を修正する
    - `branchA_restoreWitness_of_smallerPacket` の witness 存在の no-sorry 化:
      `PrimeGe5BranchACyclotomicExistenceTarget` または Zsigmondy 系の既存インフラを活用
+
+### 追記: 2026/04/01 14:30 JST 実装準備フェーズ
+
+1. 目的:
+   - dev-note-FLT-BAFCT-260401-v2 の指針に従い、upstream 2 核の concrete provider ファイルを新設
+   - FringeDescent terminal-case の supply line を準備する
+   - 次の 4-phase implementation 計画を立案・記録
+
+2. 実施:
+   - 新規ファイル `TriominoCosmicBranchAPrimitiveStrongProvider.lean` を作成
+   - Phase 1 の skeleton theorem `primeGe5BranchAPrimitivePacketDescentStrong_of_wieferichPacket` を実装
+     - 入力: `PrimeGe5BranchAPrimitiveWieferichPacketTarget`
+     - 出力: `PrimeGe5BranchAPrimitivePacketDescentStrongTarget` (∃ pkt', pkt'.z < z ∧ ¬ p ∣ pkt'.t)
+     - sorry 1件: L23 `hpt' : ¬ p ∣ pkt'.t` (open kernel: Kummer descent property)
+
+3. 結論:
+   - ファイル作成・ビルド成功 ✅
+   - FringeDescent は no-sorry (完全) のまま保護 ✅
+   - 上流 supply 準備開始 ✅
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAPrimitiveStrongProvider` 成功
+   - ビルドログ: warning 1件 (L23 の sorry のみ)
+
+5. 次の 4-phase 実装計画:
+
+   | Phase | 目標 | 場所 | 状態 |
+   |-------|------|------|------|
+   | **1** | StrongTarget concrete provider (1本) | StrongProvider.lean | sorry 1件 (open kernel) |
+   | **2** | CyclotomicExistenceTarget concrete | [TBA] | 設計未着手 |
+   | **3** | 両者統合で動作確認 | FringeDescent.lean | 準備完了 (no sorry) |
+   | **4** | 既存 refuter 基盤へ統合 | チェーン通す | 下流 |
+
+   - Phase 1 優先: StrongTarget が concrete になると、well-founded descent が本体稼働 → 下流が動く
+   - Phase 2 並行: Cyclotomic 既存インフラを活用（新しい数論ではなく「供給線を通す」）
+   - FringeDescent 保護: already no-sorry、触らない
+   - 戦略: 「証明を書く」より「供給線を通す」(dev-note-v2 より)
+
+6. 失敗事例:
+   - markdown comment syntax (`/-! ... -!/`) が Lean 4 で構文エラー → doc string + 最小化で解決
+
+7. ファイル構造:
+
+   ```
+   TriominoCosmicBranchAPrimitiveStrongProvider.lean
+   ├─ Phase 1: primeGe5BranchAPrimitivePacketDescentStrong_of_wieferichPacket
+   │  ├─ Input: hWief : PrimitiveWieferichPacketTarget
+   │  ├─ Sorry: hpt' (Kummer property)
+   │  └─ Output: StrongTarget
+   ├─ Phase 2 TBA: branchACyclotomicExistence_of_*
+   └─ Utilities: [as needed]
+   ```
+
+8. 実装者への指針:
+   - `hpt'` (L23): Kummer descent では `¬ p ∣ t'` が保持される既知の事実 → 形式化が鍵
+   - Cyclotomic: 新 theorem ではなく既存 Zsigmondy 系との接続
+   - Terminal-case spine は完成済み (FringeDescent no-sorry)
+   - 次: Phase 1 の hpt' を no-sorry にするか、Kummer property の形式化を追求
+
+9. Git status:
+   - Branch: `dev/FLT-BAFCT-260401-v0`
+   - New file: TriominoCosmicBranchAPrimitiveStrongProvider.lean (builds)
+   - FringeDescent.lean: no-sorry (protected from changes)
+   - Next milestone: Phase 1 + Phase 2 concrete ⟹ potential v1 tag
