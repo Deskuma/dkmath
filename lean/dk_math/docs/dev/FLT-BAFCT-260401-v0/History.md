@@ -424,3 +424,80 @@ Archive
    - TriominoCosmicBranchAFringeDescent.lean: **no-sorry ✅**
    - All builds: OK
    - Next: PacketPackagingStrong concrete provider (main battle) OR CyclotomicExistenceTarget concrete
+
+### 追記: 2026/04/01 17:15 JST review-009 深層解析・v_p による architecture 改善
+
+1. 目的:
+   - review-009 の指示「packet の出生証明を掘れ」に従い、workspace を広く調査
+   - `PacketPackagingStrong` の sorry をどう埋めるかの解析と architecture 改善
+
+2. 調査結果（重大な発見 3 件）:
+
+   **発見 A**: weak packet packaging (PacketOfSmallerCounterexampleTarget) の concrete 実装が **存在しない**
+   - `TriominoCosmicBranchA.lean` にも `TriominoCosmicBranchARestore.lean` にも concrete provider がない
+   - これは「将来の実装予定」として空けられた open kernel
+
+   **発見 B**: `¬ p ∣ t'` は `PrimeGe5CounterexamplePack + p ∣ gap` だけからは **導出不可能**
+   - 数学的に: `¬ p ∣ t' ⟺ v_p(z'-y') = p-1 ⟺ v_p(x') = 1`
+   - counterexample pack は v_p(x') に関する情報を持たない
+   - v_p(x') = 1 は descent 構成由来の性質（RealizationSeed で x = q * x', q ≠ p から）
+
+   **発見 C**: descent で v_p が保存される理由
+   - 元の normal form: x = p*t*s, ¬p∣t, ¬p∣s → v_p(x) = 1
+   - descent: x' = x/q (q ≠ p) → v_p(x') = v_p(x) = 1
+   - よって ¬ p^2 ∣ x' が成立
+   - しかしこの情報は ArithmeticCore の abstract 出力 (∃ x' y' z', ...) で **失われる**
+
+3. 対策（architecture 改善）:
+   - `PacketPackagingStrongTarget` に `¬ p^2 ∣ x'` を追加入力
+   - `ArithmeticCoreStrongTarget` を新設（weak の返り値に `¬ p^2 ∣ x'` を追加）
+   - bridge theorem で両者を合成
+
+4. 実装:
+   - `TriominoCosmicBranchARestoreArithmeticStrong.lean` を完全に書き直し
+   - 新 target 定義:
+     - `RestorePacketPackagingStrongTarget`: +¬ p^2 ∣ x' 入力
+     - `RestoreArithmeticCoreStrongTarget`: +¬ p^2 ∣ x' 出力
+   - 橋 theorem:
+     - `...CoreWeak_of_strong`: strong → weak 緩和橋 (no-sorry ✅)
+     - `...CoreStrong_of_weak_and_descent`: weak ArithmeticCore → strong (sorry: descent provenance)
+     - `..._of_coreStrong_and_packetStrong`: core strong + packet strong → restore strong (no-sorry ✅)
+   - sorry 2 個に正確分離:
+     - sorry #1 (L114): `¬ p^2 ∣ x'` の回収（descent chain provenance が必要）
+     - sorry #2 (L155): packet 構成 + `¬ p ∣ t'` 導出（v_p argument + 全 packet 構成）
+
+5. 数学的証明スケッチ:
+   - sorry #1: x = q*x' (RealizationSeed), q ≠ p → v_p(x') = v_p(x) = 1 → ¬ p^2 ∣ x'
+   - sorry #2: 
+     - shape value: z'-y' = p^{p-1} * t'^p
+     - GN shape: GN = p * s'^p
+     - x'^p = gap * GN = p^p * (t'*s')^p → x' = p*(t'*s')
+     - ¬ p^2 ∣ x' + x' = p*(t'*s') → ¬ p ∣ (t'*s') → ¬ p ∣ t' ∧ ¬ p ∣ s'
+
+6. 検証:
+   - ビルド成功: ✅
+   - sorry 2件: L114 (CoreStrong), L155 (PacketPackagingStrong)
+   - bridge theorems 全て no-sorry
+
+7. 戦況整理:
+   - Phase 1 (StrongProvider): ✅ no-sorry (3-bridge operational)
+   - Phase 2 (RestoreArithmeticStrong): architecture 完成、sorry 2件に正確分離
+   - Phase 3 (FringeDescent): ✅ no-sorry (完全)
+   
+   sorry の数学的位置:
+   - #1 = descent provenance（RealizationSeed アクセスが必要）
+   - #2 = packet 全構成（weak packet packaging 自体が未実装）
+   → いずれも genuine formalization work であり、architectural change では解消できない
+
+8. 教訓:
+   - **「packet の出生証明を掘れ」は正しかった**—weak concrete がないことが根本原因と判明
+   - **v_p 解析が architectural 改善の鍵** — `¬ p^2 ∣ x'` という条件が `¬ p ∣ t'` への必要十分な bridge
+   - sorry を正確に分離することで、次の作業者が攻めるべき点が明確になった
+
+9. Git status:
+   - Branch: `dev/FLT-BAFCT-260401-v0`
+   - StrongProvider.lean: **no-sorry ✅**
+   - RestoreArithmeticStrong.lean: **architecture 完成** (sorry 2件: descent provenance + packet 構成)
+   - FringeDescent.lean: **no-sorry ✅**
+   - All builds: OK
+   - Next: sorry #1 (descent chain threading) or sorry #2 (full packet construction)
