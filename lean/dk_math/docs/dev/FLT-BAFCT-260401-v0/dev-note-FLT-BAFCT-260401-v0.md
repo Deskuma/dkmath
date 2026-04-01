@@ -1,5 +1,7 @@
 # Dev Note 001: terminal case 用の新ファイル設計
 
+[前提資料](../FLT-restore-260330-v0/!_final_report-999.md)
+
 > 👩‍⚕️私D.:
 
 定理一覧と依存順
