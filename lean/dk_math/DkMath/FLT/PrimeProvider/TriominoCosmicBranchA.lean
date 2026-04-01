@@ -469,6 +469,44 @@ abbrev PrimeGe5BranchAPrimitivePacketDescentTarget : Prop :=
     ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
 
 /--
+`PrimeGe5BranchAPrimitivePacketDescentTarget` の強化版。
+
+付録:
+- `PrimitivePacketDescentTarget` は `∃ pkt', pkt'.z < z` を返すだけで、
+  smaller packet の `t'` が `p` で割れないことを型から保証しない。
+- `FringeDescent` の well-founded descent では `¬ p ∣ pkt'.t'` が次の bundle 構成に必要であり、
+  これを具体 target から取り出すために強化版を別立てする。
+- 既存の `PrimitivePacketDescentTarget` は変えず、強化版は追加のみ。
+- 強化版から弱化版への橋は `primeGe5BranchAPrimitivePacketDescent_of_strong` で閉じる。
+-/
+abbrev PrimeGe5BranchAPrimitivePacketDescentStrongTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z ∧ ¬ p ∣ pkt'.t
+
+/--
+`StrongTarget` は `PrimitivePacketDescentTarget` より強い。
+
+付録:
+- `∃ pkt', pkt'.z < z ∧ ¬ p ∣ pkt'.t` → `∃ pkt', pkt'.z < z` は自明な緩和。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_strong
+    (hStrong : PrimeGe5BranchAPrimitivePacketDescentStrongTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t
+  rcases hStrong hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t with ⟨pkt', hlt, _⟩
+  exact ⟨pkt', hlt⟩
+
+/--
 primitive route の first-order local target。
 
 付録:
