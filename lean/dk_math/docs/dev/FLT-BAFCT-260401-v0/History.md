@@ -495,7 +495,7 @@ Archive
    - sorry を正確に分離することで、次の作業者が攻めるべき点が明確になった
 
 9. Git status:
-   - Branch: `dev/FLT-BAFCT-260401-v0`
+   - Branch: `dev/FLT-BAFCT-260401-v2`
    - StrongProvider.lean: **no-sorry ✅**
    - RestoreArithmeticStrong.lean: **architecture 完成** (sorry 2件: descent provenance + packet 構成)
    - FringeDescent.lean: **no-sorry ✅**
@@ -548,7 +548,7 @@ Archive
    - これが weak packet concrete の正式な target として可視化された
 
 7. Git status:
-   - Branch: `dev/FLT-BAFCT-260401-v0`
+   - Branch: `dev/FLT-BAFCT-260401-v2`
    - Companion lemma: 5本 no-sorry ✅
    - RestoreArithmeticStrong: sorry 2件 (L127 descent, L251 weak concrete)
    - StrongProvider + FringeDescent: no-sorry ✅
@@ -610,8 +610,89 @@ Archive
    ```
 
 7. Git status:
-   - Branch: `dev/FLT-BAFCT-260401-v0`
+   - Branch: `dev/FLT-BAFCT-260401-v2`
    - StrongProvider.lean: **no-sorry ✅**
    - RestoreArithmeticStrong.lean: **主要 path no-sorry ✅** (互換用 1 sorry)
    - FringeDescent.lean: **no-sorry ✅**
+   - All builds: OK
+
+### 追記: 2026/04/01 19:30 JST review-012 RestoreArithmeticStrong.lean 完全 sorry-free 化
+
+1. 目的:
+   - review-012 の作戦「descent provenance を thread して非循環 route を開く」を実行
+   - 互換用 `_of_weak_and_descent` の sorry を含め、ファイル内の sorry を全滅させる
+
+2. 実装した定理群（全て no-sorry）:
+
+   **converse companion lemma** (review-012 Step 1):
+   - `not_sq_dvd_of_eq_p_mul_and_not_dvd_factors`:
+     x = p*(t*s), Nat.Prime p, ¬p∣t, ¬p∣s → ¬ p^2 ∣ x
+   - 既存 companion lemma の逆方向。元の正規形側で v_p(x)=1 を示すのに使用
+
+   **descent preservation** (review-012 Step 2):
+   - `not_sq_dvd_of_mul_left`:
+     x = q*x', ¬ p^2 ∣ x → ¬ p^2 ∣ x'
+   - p^2 ∣ x' → p^2 ∣ q*x' の対偶。一行で落ちた
+
+   **WithProvenance target** (review-012 §4 sharpen 版):
+   - `PrimeGe5BranchAPrimitiveRestoreArithmeticCoreWithProvenanceTarget`:
+     weak core と同じ witness (x',y',z') に descent provenance `x = q*x'` を追加
+   - `primeGe5BranchAPrimitiveRestoreArithmeticCoreWeak_of_withProvenance`:
+     WithProvenance → weak 緩和橋 (no-sorry)
+   - `primeGe5BranchAPrimitiveRestoreArithmeticCoreStrong_of_withProvenance`:
+     WithProvenance → CoreStrong 橋 (no-sorry) — converse companion + descent preservation を使用
+
+   **非循環 exported path**:
+   - `primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong_nonCircular`:
+     WithProvenanceTarget → full chain (no-sorry)
+   - `_of_weak_and_descent` を WithProvenance 経由に書き換え (no-sorry) — sorry 完全消滅
+
+3. 独自改善:
+   - review-012 のスケルトンは `_of_weak_and_descent` の sorry を残す設計だったが、
+     **WithProvenance target を alias として使うことで完全消滅**させた
+   - `not_sq_dvd_of_mul_left` は review で `q ≠ p` を仮定する案だったが、
+     **`q` の性質に依存しない形** (単なる dvd_mul_of_dvd_right の対偶) で証明
+   - `not_sq_dvd_of_eq_p_mul_and_not_dvd_factors` は `Nat.mul_dvd_mul_iff_left` で
+     omega 不要の clean 証明を実現
+
+4. 結果:
+   - **RestoreArithmeticStrong.lean: sorry = 0 ✅** (完全 sorry-free)
+   - StrongProvider.lean: sorry = 0 ✅
+   - FringeDescent.lean: sorry = 0 ✅
+   - 全ビルド成功: ✅
+
+5. 戦況:
+   3 ファイル全て sorry-free:
+
+   矛盾路線 (既存):
+
+   ```
+   ContradictionTarget
+   → ArithmeticCoreStrong_of_contradiction (no-sorry)
+   → PacketPackagingStrong (no-sorry)
+   → RestoreFromArithmeticStrong (no-sorry)
+   → StrongProvider (no-sorry)
+   → FringeDescentToRefuter (no-sorry)
+   ```
+
+   非循環路線 (NEW):
+
+   ```
+   WithProvenanceTarget
+   → ArithmeticCoreStrong_of_withProvenance (no-sorry)
+     uses: not_sq_dvd_of_eq_p_mul_and_not_dvd_factors + not_sq_dvd_of_mul_left
+   → PacketPackagingStrong (no-sorry)
+   → RestoreFromArithmeticStrong_nonCircular (no-sorry)
+   → StrongProvider (no-sorry)
+   → FringeDescentToRefuter (no-sorry)
+   ```
+
+   次の主戦場: WithProvenanceTarget の concrete provider
+   (= descent chain から x = q*x' を取り出す)
+
+6. Git status:
+   - Branch: `dev/FLT-BAFCT-260401-v2`
+   - RestoreArithmeticStrong.lean: **sorry = 0 ✅** (完全 sorry-free!)
+   - StrongProvider.lean: **sorry = 0 ✅**
+   - FringeDescent.lean: **sorry = 0 ✅**
    - All builds: OK
