@@ -7,7 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5
 import DkMath.FLT.CosmicPetalBridge
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN
-import DkMath.FLT.PrimeProvider.TriominoCosmicBranchA
+import DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional
+import DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore
 
 #print "file: DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant"
 
@@ -1314,7 +1315,7 @@ abbrev BranchADistinguishedPrimeDescentAdapterTarget : Prop :=
 Branch A normal form から直接 smaller counterexample を返す stronger splice point。
 
 付録:
-- minimality は provider 側で no-`sorry` に選べるため、
+- minimality は provider 側で no-`so#rry` に選べるため、
   concrete 実装を探すときはこちらの contract のほうが自然な入口になりやすい。
 -/
 abbrev BranchASmallerCounterexampleAdapterTarget : Prop :=
@@ -1353,6 +1354,246 @@ abbrev BranchAValuationPeelPacketFromErrorAdapterTarget : Prop :=
 /-- `p ∤ t` の primitive/cyclotomic packet descent route を表す provider 側 alias。 -/
 abbrev BranchAPrimitivePacketDescentAdapterTarget : Prop :=
   DkMath.FLT.PrimeGe5BranchAPrimitivePacketDescentTarget
+
+/-- selected diffPow-on-witness concrete theorem の provider 側 alias。 -/
+abbrev BranchASelectedDiffPowConcreteAdapterTarget : Prop :=
+  DkMath.FLT.ExceptionalBoundaryDatumPreparedSelectedDiffPowOnWitnessConcreteTarget
+
+/-- selected diffPow witness concrete theorem の provider 側 alias。 -/
+abbrev BranchASelectedDiffPowWitnessConcreteAdapterTarget : Prop :=
+  DkMath.FLT.ExceptionalBoundaryDatumPreparedSelectedDiffPowWitnessConcreteTarget
+
+/-- practical entrance の concrete theorem 名を表す provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalConcreteAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalConcreteTarget
+
+/-- practical entrance の witness supply 部を表す provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalWitnessSupplyAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalWitnessSupplyTarget
+
+/-- arithmetic datum と body/core datum を分離して持つ existential witness の provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalBodyCoreWitnessAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessTarget
+
+/-- body/core witness concrete theorem 名の provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalBodyCoreWitnessConcreteAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyCoreWitnessConcreteTarget
+
+/-- same-`q` を捨てた body/core witness existence の provider 側 alias。 -/
+abbrev BranchAExceptionalBodyCoreWitnessExistenceAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceTarget
+
+/-- body/core witness existence concrete theorem 名の provider 側 alias。 -/
+abbrev BranchAExceptionalBodyCoreWitnessExistenceConcreteAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalBodyCoreWitnessExistenceConcreteTarget
+
+/-- arithmetic witness と body/core witness を分離した two-witness route の provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalTwoWitnessAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalTwoWitnessConcreteTarget
+
+/-- body/core witness existence から mainline へ渡す clean interface の provider 側 alias。 -/
+abbrev BranchAExceptionalBodyCoreToExistenceMainlineAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalBodyCoreWitnessToExistenceMainlineTarget
+
+/-- body/core witness existence から packet descent へ渡す clean interface の provider 側 alias。 -/
+abbrev BranchAExceptionalBodyCoreToPacketDescentAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalBodyCoreWitnessToPrimitivePacketDescentTarget
+
+/-- practical entrance の on-witness body 部を表す provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalBodyOnWitnessAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyOnWitnessTarget
+
+/-- practical body-on-witness concrete theorem 名の provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalBodyOnWitnessConcreteAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyOnWitnessConcreteTarget
+
+/-- practical datum concrete theorem 名の provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalDatumConcreteAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyOnDatumConcreteTarget
+
+/-- datum-local selected core concrete theorem 名の provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalSelectedCoreOnDatumConcreteAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalSelectedCoreOnDatumConcreteTarget
+
+/--
+datum-local boundary-core concrete theorem 名の provider 側 alias。
+-/
+abbrev BranchAExceptionalPracticalBoundaryCoreOnDatumConcreteAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBoundaryCoreOnDatumConcreteTarget
+
+/-- practical body-on-witness を `GN d 1 (u - 1)` で読む provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalGNAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyOnWitnessGNTarget
+
+/-- practical GN concrete theorem 名の provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalGNConcreteAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalGNConcreteTarget
+
+/-- practical `ModEq` concrete theorem 名の provider 側 alias。 -/
+abbrev BranchAExceptionalPracticalModEqConcreteAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalPracticalBodyOnWitnessModEqConcreteTarget
+
+/-- proof file exceptional existence mainline の provider 側 alias。 -/
+abbrev BranchAExceptionalExistenceMainlineAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalExistenceMainlineTarget
+
+/-- `proof-004` 以降の current canonical boundary route の provider 側 alias。 -/
+abbrev BranchAExceptionalBoundaryCoreWitnessConcreteAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAExceptionalBoundaryCoreWitnessConcreteTarget
+
+/--
+`proof-004` で閉じた div-data actual theorem から、
+provider 側 current canonical boundary route へ直接戻る default bridge。
+-/
+theorem branchAExceptionalBoundaryCoreWitnessConcreteAdapter_of_divDataDefault :
+    BranchAExceptionalBoundaryCoreWitnessConcreteAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalBoundaryCoreWitnessConcrete_of_divDataDefault
+
+/-- `proof-004` step 4-5 までを切り出した provider 側 alias。 -/
+abbrev BranchAExceptionalBoundaryCoreDivDataAdapterTarget : Prop :=
+  DkMath.FLT.ExceptionalBoundaryDatumPreparedArithmeticCoreDivDataTarget
+
+/-- `p ∤ t` primitive route の witness 付き local core を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveWieferichPacketAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveWieferichPacketTarget
+
+/-- primitive distinguished-prime selection 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveDistinguishedPrimeAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveDistinguishedPrimeTarget
+
+/-- primitive route の Zsigmondy-lite existence 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveZsigmondyAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveZsigmondyTarget
+
+/-- `z^p - y^p` 側で prime を取る primitive/cyclotomic existence target。 -/
+abbrev BranchAPrimitiveCyclotomicPrimeAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveCyclotomicPrimeTarget
+
+/-- Branch A 専用の最小 diff-side existence wrapper。 -/
+abbrev BranchACyclotomicExistenceAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchACyclotomicExistenceTarget
+
+/-- Branch A の Wieferich witness を明示入力に取る diff-side existence wrapper。 -/
+abbrev BranchACyclotomicExistenceOnWieferichAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchACyclotomicExistenceOnWieferichTarget
+
+/-- Branch A の cyclotomic factor 上で prime を取る concrete-ready selection kernel。 -/
+abbrev BranchACyclotomicCoreExistenceOnWieferichAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchACyclotomicCoreExistenceOnWieferichTarget
+
+/--
+Branch A の CFBRC 例外枝 existence theorem を表す provider 側 alias。
+
+[CFBRC] まずはこの local theorem を canonical 入口として使い、
+bridge 層への昇格は後続タスクとして保留する。
+-/
+abbrev BranchACFBRCExceptionalExistenceOnWieferichAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget
+
+/-- CFBRC 座標に正規化した boundary exceptional existence theorem の provider 側 alias。 -/
+abbrev CFBRCExceptionalPrimeExpBoundaryOnWieferichAdapterTarget : Prop :=
+  DkMath.FLT.CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget
+
+/-- `CFBRC/Bridge` 標準 theorem に最も近い primitive-boundary exceptional target の provider 側 alias。 -/
+abbrev CFBRCExceptionalPrimitiveBoundaryOnWieferichAdapterTarget : Prop :=
+  DkMath.FLT.CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget
+
+/-- `CFBRC/Bridge` naming に揃えた例外枝 concrete theorem 候補の provider 側 alias。 -/
+abbrev CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichAdapterTarget : Prop :=
+  DkMath.FLT.CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget
+
+/-- 通常枝と Wieferich 例外枝の split で読む primitive boundary selection target の provider 側 alias。 -/
+abbrev CFBRCPrimitiveBoundarySelectionOnSplitAdapterTarget : Prop :=
+  DkMath.FLT.CFBRCPrimitiveBoundarySelectionOnSplitTarget
+
+/-- `CFBRC/Bridge` naming に揃えた split concrete theorem 候補の provider 側 alias。 -/
+abbrev CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitAdapterTarget : Prop :=
+  DkMath.FLT.CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitTarget
+
+/-- selection 側で first に direct concrete 実装を狙う既定入口の provider 側 alias。 -/
+abbrev CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteAdapterTarget : Prop :=
+  DkMath.FLT.CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteTarget
+
+/-- direct concrete target の existence-part を表す provider 側 alias。 -/
+abbrev CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichAdapterTarget : Prop :=
+  DkMath.FLT.CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget
+
+/--
+ordinary branch theorem と平行な exceptional existence concrete 候補の provider 側 alias。
+
+[CFBRC] ここでは Branch A 局所 theorem をそのまま再公開し、
+`CFBRC/Bridge` への昇格は後続タスクとして保留する。
+-/
+abbrev CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichAdapterTarget : Prop :=
+  DkMath.FLT.CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichTarget
+
+/-- boundary-core prime existence の split theorem を表す provider 側 alias。 -/
+abbrev CFBRCBoundaryCorePrimeExistenceOnSplitAdapterTarget : Prop :=
+  DkMath.FLT.CFBRCBoundaryCorePrimeExistenceOnSplitTarget
+
+/-- direct concrete target の primitive-part を表す provider 側 alias。 -/
+abbrev CFBRCExceptionalPrimitiveKernelOnWieferichAdapterTarget : Prop :=
+  DkMath.FLT.CFBRCExceptionalPrimitiveKernelOnWieferichTarget
+
+/-- primitive packet restoration 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitivePacketRestoreAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitivePacketRestoreTarget
+
+/-- distinguished prime 後の arithmetic fallout を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveDistinguishedPrimeArithmeticAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveDistinguishedPrimeArithmeticTarget
+
+/-- arithmetic fallout 付き primitive restoration 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget
+
+/-- arithmetic witness から smaller counterexample を返す restore 前半段。 -/
+abbrev BranchAPrimitiveSmallerCounterexampleFromArithmeticAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveSmallerCounterexampleFromArithmeticTarget
+
+/-- smaller counterexample を smaller packet へ包装する restore 後半段。 -/
+abbrev BranchAPrimitivePacketOfSmallerCounterexampleAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitivePacketOfSmallerCounterexampleTarget
+
+/-- restore arithmetic core の residue/root 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveRestoreResidueRootAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreResidueRootTarget
+
+/-- restore arithmetic core の descent assembly 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveRestoreDescentAssemblyAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreDescentAssemblyTarget
+
+/-- restore descent assembly の q-adic lift 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveRestoreQAdicLiftAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreQAdicLiftTarget
+
+/-- restore descent assembly の smaller-counterexample assembly 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveRestoreSmallerCounterexampleAssemblyAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleAssemblyTarget
+
+/-- restore assembly の bundled descent datum 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveRestoreDescentDatumAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreDescentDatumTarget
+
+/-- restore assembly の datum-consumer 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumTarget
+
+/-- restore assembly の descent seed 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveRestoreDescentSeedAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreDescentSeedTarget
+
+/-- restore assembly の seed-consumer 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveRestoreSmallerCounterexampleFromSeedAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromSeedTarget
+
+/-- restore assembly の realization-seed 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveRestoreRealizationSeedAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget
+
+/-- restore assembly の realization verification 段を表す provider 側 alias。 -/
+abbrev BranchAPrimitiveRestoreSmallerCounterexampleVerificationAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreSmallerCounterexampleVerificationTarget
 
 /--
 local kernel から最後の witness adapter を回収する thin bridge。
@@ -1432,6 +1673,948 @@ theorem branchAWieferichAdapter_of_primitiveMainline
     (hPrim : BranchAPrimitivePacketDescentAdapterTarget) :
     BranchAWieferichAdapterTarget :=
   branchAWieferichAdapter_of_errorLift_and_primitive hErr hLift hPrim
+
+/--
+witness 付き primitive local core から、
+primitive packet descent adapter を回収する thin bridge。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_wieferichPacket
+    (hPrim : BranchAPrimitiveWieferichPacketAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_wieferichPacket hPrim
+
+/--
+primitive distinguished-prime selection と restoration から、
+witness 付き primitive packet adapter を回収する thin bridge。
+-/
+theorem branchAPrimitiveWieferichPacketAdapter_of_distinguishedPrime_and_restore
+    (hPrime : BranchAPrimitiveDistinguishedPrimeAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreAdapterTarget) :
+    BranchAPrimitiveWieferichPacketAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveWieferichPacket_of_distinguishedPrime_and_restore
+    hPrime hRestore
+
+/--
+Zsigmondy-lite existence から、
+primitive distinguished-prime adapter を回収する thin bridge。
+-/
+theorem branchAPrimitiveDistinguishedPrimeAdapter_of_zsigmondy
+    (hZ : BranchAPrimitiveZsigmondyAdapterTarget) :
+    BranchAPrimitiveDistinguishedPrimeAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveDistinguishedPrime_of_zsigmondy hZ
+
+/--
+cyclotomic / diff-power 側の prime existence から、
+primitive Zsigmondy adapter を回収する thin bridge。
+-/
+theorem branchAPrimitiveZsigmondyAdapter_of_cyclotomicPrime
+    (hCyc : BranchAPrimitiveCyclotomicPrimeAdapterTarget) :
+    BranchAPrimitiveZsigmondyAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveZsigmondy_of_cyclotomicPrime hCyc
+
+/--
+Branch A 専用 existence wrapper から、
+primitive cyclotomic-prime adapter を回収する thin bridge。
+-/
+theorem branchAPrimitiveCyclotomicPrimeAdapter_of_existence
+    (hEx : BranchACyclotomicExistenceAdapterTarget) :
+    BranchAPrimitiveCyclotomicPrimeAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveCyclotomicPrime_of_existence hEx
+
+/--
+Wieferich witness 付き existence wrapper から、
+Branch A 専用の最小 cyclotomic existence adapter を回収する thin bridge。
+-/
+theorem branchACyclotomicExistenceAdapter_of_wieferich
+    (hWieferichEx : BranchACyclotomicExistenceOnWieferichAdapterTarget) :
+    BranchACyclotomicExistenceAdapterTarget :=
+  DkMath.FLT.primeGe5BranchACyclotomicExistence_of_wieferich hWieferichEx
+
+/--
+cyclotomic factor 上の concrete existence theorem から、
+公開 diff-side existence wrapper を回収する thin bridge。
+-/
+theorem branchACyclotomicExistenceOnWieferichAdapter_of_coreExistence
+    (hCore : BranchACyclotomicCoreExistenceOnWieferichAdapterTarget) :
+    BranchACyclotomicExistenceOnWieferichAdapterTarget :=
+  DkMath.FLT.primeGe5BranchACyclotomicExistenceOnWieferich_of_coreExistence hCore
+
+/--
+CFBRC 例外枝 existence theorem から、
+Branch A の core-existence adapter を回収する thin bridge。
+-/
+theorem branchACyclotomicCoreExistenceOnWieferichAdapter_of_cfbrcExceptional
+    (hExc : BranchACFBRCExceptionalExistenceOnWieferichAdapterTarget) :
+    BranchACyclotomicCoreExistenceOnWieferichAdapterTarget :=
+  DkMath.FLT.primeGe5BranchACyclotomicCoreExistenceOnWieferich_of_cfbrcExceptional hExc
+
+/--
+boundary-normalized exceptional existence theorem から、
+Branch A 専用 CFBRC exceptional adapter を回収する thin bridge。
+-/
+theorem branchACFBRCExceptionalExistenceOnWieferichAdapter_of_boundaryExceptional
+    (hBoundary : CFBRCExceptionalPrimeExpBoundaryOnWieferichAdapterTarget) :
+    BranchACFBRCExceptionalExistenceOnWieferichAdapterTarget :=
+  DkMath.FLT.primeGe5BranchACFBRCExceptionalExistence_of_boundaryExceptional hBoundary
+
+/--
+primitive-boundary exceptional theorem から、
+canonical first missing theorem を回収する thin bridge。
+-/
+theorem cfbrcExceptionalBoundaryOnWieferichAdapter_of_primitiveBoundary
+    (hPrim : CFBRCExceptionalPrimitiveBoundaryOnWieferichAdapterTarget) :
+    CFBRCExceptionalPrimeExpBoundaryOnWieferichAdapterTarget :=
+  DkMath.FLT.cfbrcExceptionalBoundaryOnWieferich_of_primitiveBoundary hPrim
+
+/-- distinguished prime selection から arithmetic fallout adapter を回収する thin bridge。 -/
+theorem branchAPrimitiveDistinguishedPrimeArithmeticAdapter_default :
+    BranchAPrimitiveDistinguishedPrimeArithmeticAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveDistinguishedPrimeArithmetic_default
+
+/--
+arithmetic fallout 付き restoration target から、
+primitive packet restoration adapter を回収する thin bridge。
+-/
+theorem branchAPrimitivePacketRestoreAdapter_of_arithmetic
+    (hArith : BranchAPrimitiveDistinguishedPrimeArithmeticAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketRestoreAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketRestore_of_arithmetic hArith hRestore
+
+/--
+restore-from-arithmetic を
+smaller counterexample 段と packet 包装段に分けて読む provider 側再合成橋。
+-/
+theorem branchAPrimitivePacketRestoreFromArithmeticAdapter_of_smallerCounterexample_and_packet
+    (hSmall : BranchAPrimitiveSmallerCounterexampleFromArithmeticAdapterTarget)
+    (hPack : BranchAPrimitivePacketOfSmallerCounterexampleAdapterTarget) :
+    BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketRestoreFromArithmetic_of_smallerCounterexample_and_packet
+    hSmall hPack
+
+/-- restore residue/root 段は provider 側から見ても default 実装済みである。 -/
+theorem branchAPrimitiveRestoreResidueRootAdapter_default :
+    BranchAPrimitiveRestoreResidueRootAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreResidueRoot_default
+
+/-- restore q-adic lift 段は provider 側から見ても default 実装済みである。 -/
+theorem branchAPrimitiveRestoreQAdicLiftAdapter_default :
+    BranchAPrimitiveRestoreQAdicLiftAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreQAdicLift_default
+
+/-- restore descent datum 段は provider 側から見ても default 実装済みである。 -/
+theorem branchAPrimitiveRestoreDescentDatumAdapter_default :
+    BranchAPrimitiveRestoreDescentDatumAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreDescentDatum_default
+
+/-- restore descent seed 段は provider 側から見ても default 実装済みである。 -/
+theorem branchAPrimitiveRestoreDescentSeedAdapter_default :
+    BranchAPrimitiveRestoreDescentSeedAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreDescentSeed_default
+
+/- NOTE: restore realization-seed 段は `hzEq` フィールド追加により
+   `primeGe5BranchAPrimitiveRestoreRealizationSeed_default` が削除された。
+   `BranchAPrimitiveRestoreRealizationSeedAdapterTarget` は現在 open kernel として保持する。
+
+   ただし矛盾路線（ContradictionTarget）が証明されれば、
+   `branchAPrimitiveRestoreFromArithmeticAdapter_of_contradiction` により
+   realization seed を含む 6 段チェーン全体を bypass して
+   `RestoreFromArithmeticTarget` に直接接続できる。 -/
+
+/--
+矛盾路線 adapter。
+
+Branch A の前提から直接 `False` を導ける場合、
+6 段チェーン全体を bypass して `RestoreFromArithmeticTarget` に接続する。
+-/
+abbrev BranchAPrimitiveRestoreContradictionAdapterTarget : Prop :=
+  DkMath.FLT.PrimeGe5BranchAPrimitiveRestoreContradictionTarget
+
+/--
+witness `q` 情報込み版の矛盾供給元 adapter。
+
+`BranchAContradictionModP3SourceTarget` は偽命題と判明した
+（`branchA_spow_congr_head_mod_p3` で肯定側が証明済み）。
+代わりに、witness `q` の構造的性質（`q ∣ x`, `q ∤ y`, `q ∤ z`,
+`q ∤ gap`, `p ∣ (q-1)`, `q^p ∣ GN`）を使った矛盾探索の入口となる。
+-/
+abbrev BranchAContradictionWithWitnessSourceAdapterTarget : Prop :=
+  DkMath.FLT.BranchAContradictionWithWitnessSourceTarget
+
+/--
+witness source → contradiction adapter bridge。
+
+witness source が得られれば、`RestoreWitnessProperties` 経由で
+`RestoreContradictionTarget` へ注入し、restore 全体を bypass できる。
+-/
+theorem branchAPrimitiveRestoreContradictionAdapter_of_witnessSource
+    (hSource : BranchAContradictionWithWitnessSourceAdapterTarget) :
+    BranchAPrimitiveRestoreContradictionAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreContradiction_of_witnessSource hSource
+
+/--
+干渉縞集合の bundle 版 contradiction adapter。
+
+`BranchAFringeContradictionTarget` は `BranchAInterferenceFringeBundle` を受けて
+`False` を返す target。witness source 版と等価であり、相互変換可能。
+-/
+abbrev BranchAFringeContradictionAdapterTarget : Prop :=
+  DkMath.FLT.BranchAFringeContradictionTarget
+
+/--
+fringe contradiction → witness source adapter。
+-/
+theorem branchAContradictionWithWitnessSourceAdapter_of_fringeContradiction
+    (hContra : BranchAFringeContradictionAdapterTarget) :
+    BranchAContradictionWithWitnessSourceAdapterTarget :=
+  DkMath.FLT.branchAContradictionWithWitnessSource_of_fringeContradiction hContra
+
+/--
+fringe contradiction → contradiction adapter bridge（short-circuit）。
+
+干渉縞集合の矛盾から、restore 全体を bypass して
+`RestoreContradictionTarget` へ直接接続する。
+-/
+theorem branchAPrimitiveRestoreContradictionAdapter_of_fringeContradiction
+    (hContra : BranchAFringeContradictionAdapterTarget) :
+    BranchAPrimitiveRestoreContradictionAdapterTarget :=
+  branchAPrimitiveRestoreContradictionAdapter_of_witnessSource
+    (branchAContradictionWithWitnessSourceAdapter_of_fringeContradiction hContra)
+
+/--
+矛盾路線 → `RestoreFromArithmeticTarget` adapter。
+-/
+theorem branchAPrimitiveRestoreFromArithmeticAdapter_of_contradiction
+    (hContra : BranchAPrimitiveRestoreContradictionAdapterTarget) :
+    BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketRestoreFromArithmetic_of_contradiction
+    hContra
+
+/--
+restore residue/root 段と descent assembly 段が揃えば、
+provider 側 arithmetic core は橋だけで閉じる。
+-/
+theorem branchAPrimitiveRestoreArithmeticCoreAdapter_of_residueRoot_and_descentAssembly
+    (hResidue : BranchAPrimitiveRestoreResidueRootAdapterTarget)
+    (hAsm : BranchAPrimitiveRestoreDescentAssemblyAdapterTarget) :
+    BranchAPrimitiveSmallerCounterexampleFromArithmeticAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreArithmeticCore_of_residueRoot_and_descentAssembly
+    hResidue hAsm
+
+/--
+restore q-adic lift 段と smaller-counterexample assembly 段が揃えば、
+provider 側 descent assembly は橋だけで閉じる。
+-/
+theorem branchAPrimitiveRestoreDescentAssemblyAdapter_of_qAdicLift_and_smallerCounterexampleAssembly
+    (hLift : BranchAPrimitiveRestoreQAdicLiftAdapterTarget)
+    (hAsm : BranchAPrimitiveRestoreSmallerCounterexampleAssemblyAdapterTarget) :
+    BranchAPrimitiveRestoreDescentAssemblyAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreDescentAssembly_of_qAdicLift_and_smallerCounterexampleAssembly
+    hLift hAsm
+
+/--
+restore descent datum 段と datum-consumer 段が揃えば、
+provider 側 smaller-counterexample assembly は橋だけで閉じる。
+-/
+theorem branchAPrimitiveRestoreSmallerCounterexampleAssemblyAdapter_of_descentDatum_and_fromDatum
+    (hDatum : BranchAPrimitiveRestoreDescentDatumAdapterTarget)
+    (hAsm : BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumAdapterTarget) :
+    BranchAPrimitiveRestoreSmallerCounterexampleAssemblyAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreSmallerCounterexampleAssembly_of_descentDatum_and_fromDatum
+    hDatum hAsm
+
+/--
+restore descent seed 段と seed-consumer 段が揃えば、
+provider 側 datum-consumer は橋だけで閉じる。
+-/
+theorem branchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumAdapter_of_descentSeed_and_fromSeed
+    (hSeed : BranchAPrimitiveRestoreDescentSeedAdapterTarget)
+    (hAsm : BranchAPrimitiveRestoreSmallerCounterexampleFromSeedAdapterTarget) :
+    BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatumAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromDescentDatum_of_descentSeed_and_fromSeed
+    hSeed hAsm
+
+/--
+restore realization-seed 段と verification 段が揃えば、
+provider 側 seed realization は橋だけで閉じる。
+-/
+theorem branchAPrimitiveRestoreSmallerCounterexampleFromSeedAdapter_of_realizationSeed_and_verification
+    (hSeed : BranchAPrimitiveRestoreRealizationSeedAdapterTarget)
+    (hVerify : BranchAPrimitiveRestoreSmallerCounterexampleVerificationAdapterTarget) :
+    BranchAPrimitiveRestoreSmallerCounterexampleFromSeedAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveRestoreSmallerCounterexampleFromSeed_of_realizationSeed_and_verification
+    hSeed hVerify
+
+/--
+Zsigmondy-lite existence と arithmetic-aware restoration から、
+witness 付き primitive packet adapter を回収する thin bridge。
+-/
+theorem branchAPrimitiveWieferichPacketAdapter_of_zsigmondy_arithmetic_and_restore
+    (hZ : BranchAPrimitiveZsigmondyAdapterTarget)
+    (hArith : BranchAPrimitiveDistinguishedPrimeArithmeticAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitiveWieferichPacketAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitiveWieferichPacket_of_zsigmondy_arithmetic_and_restore
+    hZ hArith hRestore
+
+/--
+primitive packet descent adapter は、
+`zsigmondy existence + arithmetic fallout + restore-from-arithmetic`
+の 3 段から橋だけで閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_zsigmondy_arithmetic_and_restore
+    (hZ : BranchAPrimitiveZsigmondyAdapterTarget)
+    (hArith : BranchAPrimitiveDistinguishedPrimeArithmeticAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_zsigmondy_arithmetic_and_restore
+    hZ hArith hRestore
+
+/--
+primitive packet descent adapter は、
+Branch A 専用 cyclotomic prime existence と restore-from-arithmetic
+の 2 本だけがあれば橋で閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_cyclotomicPrime_and_restore
+    (hCyc : BranchAPrimitiveCyclotomicPrimeAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_cyclotomicPrime_and_restore
+    hCyc hRestore
+
+/--
+primitive packet descent adapter は、
+Branch A 専用 existence wrapper と restore-from-arithmetic
+の 2 本だけがあれば橋で閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_existence_and_restore
+    (hEx : BranchACyclotomicExistenceAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_existence_and_restore
+    hEx hRestore
+
+/--
+Wieferich witness 付き diff-side existence wrapper と restore-from-arithmetic から、
+primitive packet descent adapter を回収する thin bridge。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_wieferichExistence_and_restore
+    (hWieferichEx : BranchACyclotomicExistenceOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_wieferichExistence_and_restore
+    hWieferichEx hRestore
+
+/--
+primitive route の concrete-ready selection statement を provider 側で読む canonical wrapper。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_concreteSelection_and_restore
+    (hConcrete : BranchACyclotomicExistenceOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  branchAPrimitivePacketDescentAdapter_of_wieferichExistence_and_restore
+    hConcrete hRestore
+
+/--
+primitive route の concrete-ready mainline を、
+cyclotomic factor existence の形で実装する provider wrapper。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_coreExistence_and_restore
+    (hCore : BranchACyclotomicCoreExistenceOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_coreExistence_and_restore
+    hCore hRestore
+
+/--
+primitive route の concrete-ready mainline を、
+CFBRC 例外枝 existence theorem から読む provider wrapper。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_cfbrcExceptional_and_restore
+    (hExc : BranchACFBRCExceptionalExistenceOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_cfbrcExceptional_and_restore
+    hExc hRestore
+
+/--
+primitive route の concrete-ready mainline を、
+boundary-normalized exceptional existence theorem から読む provider wrapper。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_boundaryExceptional_and_restore
+    (hBoundary : CFBRCExceptionalPrimeExpBoundaryOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_boundaryExceptional_and_restore
+    hBoundary hRestore
+
+/--
+primitive route の selection 側 first missing theorem を
+boundary-normalized exceptional statement として読む provider wrapper。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_firstMissingSelection_and_restore
+    (hFirst : CFBRCExceptionalPrimeExpBoundaryOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  branchAPrimitivePacketDescentAdapter_of_boundaryExceptional_and_restore
+    hFirst hRestore
+
+/--
+primitive-boundary exceptional theorem を直接実装できれば、
+primitive packet descent adapter は restore と合わせて橋だけで閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_primitiveBoundaryExceptional_and_restore
+    (hPrim : CFBRCExceptionalPrimitiveBoundaryOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_primitiveBoundaryExceptional_and_restore
+    hPrim hRestore
+
+/--
+通常枝は既存 `CFBRC/Bridge`、例外枝だけ新 theorem とする split selection があれば、
+primitive packet descent adapter は restore と合わせて橋だけで閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_splitSelection_and_restore
+    (hSplit : CFBRCPrimitiveBoundarySelectionOnSplitAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_splitSelection_and_restore
+    hSplit hRestore
+
+/--
+`CFBRC/Bridge` naming に揃えた例外枝 concrete theorem 候補があれば、
+primitive packet descent adapter は restore と合わせて橋だけで閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_coreExceptional_and_restore
+    (hCore : CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_coreExceptional_and_restore
+    hCore hRestore
+
+/--
+`CFBRC/Bridge` naming に揃えた split concrete theorem 候補があれば、
+primitive packet descent adapter は restore と合わせて橋だけで閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_coreSplitSelection_and_restore
+    (hSplitCore : CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_coreSplitSelection_and_restore
+    hSplitCore hRestore
+
+/--
+right branch を direct concrete theorem の既定入口と見た provider-side bridge。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_directConcreteSelection_and_restore
+    (hDirect : CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_directConcreteSelection_and_restore
+    hDirect hRestore
+
+/--
+direct concrete の existence-part と primitive-part が揃えば、
+provider 側でも packet descent adapter は restore と合わせて橋だけで閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_directConcreteParts_and_restore
+    (hExist : CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichAdapterTarget)
+    (hKernel : CFBRCExceptionalPrimitiveKernelOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_directConcreteParts_and_restore
+    hExist hKernel hRestore
+
+/--
+primitive kernel が default 実装できるなら、
+provider 側でも direct concrete missing math は existence-part だけで読める。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_directConcreteExistence_and_restore
+    (hExist : CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_directConcreteExistence_and_restore
+    hExist hRestore
+
+/--
+ordinary branch theorem と平行な exceptional existence concrete 候補があれば、
+provider 側でも packet descent adapter は restore と合わせて橋だけで閉じる。
+
+[CFBRC] local theorem を provider mainline に差し込むための橋であり、
+bridge 層への本格移設はまだ行っていない。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_parallelExceptionalExistence_and_restore
+    (hPar : CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_parallelExceptionalExistence_and_restore
+    hPar hRestore
+
+/--
+Branch A 局所 exceptional existence theorem を canonical 入口と見る provider adapter。
+
+[CFBRC] 現段階では local theorem を先に実装し、
+boundary-normalized / parallel naming は bridge として扱う。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_localExceptionalExistence_and_restore
+    (hLocal : BranchACFBRCExceptionalExistenceOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_localExceptionalExistence_and_restore
+    hLocal hRestore
+
+/--
+split existence と primitive kernel が揃えば、
+provider 側でも packet descent adapter は橋だけで閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_splitExistence_kernel_and_restore
+    (hSplitExist : CFBRCBoundaryCorePrimeExistenceOnSplitAdapterTarget)
+    (hKernel : CFBRCExceptionalPrimitiveKernelOnWieferichAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_splitExistence_kernel_and_restore
+    hSplitExist hKernel hRestore
+
+/--
+split existence の右枝だけが新 theorem で、primitive kernel が default 実装できるなら、
+provider 側でも packet descent adapter は split existence と restore だけで閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_splitExistence_and_restore
+    (hSplitExist : CFBRCBoundaryCorePrimeExistenceOnSplitAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_splitExistence_and_restore
+    hSplitExist hRestore
+
+/--
+selected diffPow-on-witness concrete theorem と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_selectedDiffPowConcrete_and_restore
+    (hDiff : BranchASelectedDiffPowConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_selectedDiffPowConcrete_and_restore
+    hDiff hRestore
+
+/--
+selected diffPow witness concrete theorem と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_selectedDiffPowWitnessConcrete_and_restore
+    (hDiff : BranchASelectedDiffPowWitnessConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_selectedDiffPowWitnessConcrete_and_restore
+    hDiff hRestore
+
+/--
+practical entrance の concrete theorem 名と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_practicalConcrete_and_restore
+    (hDiff : BranchAExceptionalPracticalConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_practicalConcrete_and_restore
+    hDiff hRestore
+
+/--
+body/core witness と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_bodyCoreWitness_and_restore
+    (hCore : BranchAExceptionalPracticalBodyCoreWitnessAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_bodyCoreWitness_and_restore
+    hCore hRestore
+
+/--
+body/core witness concrete theorem 名と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_bodyCoreWitnessConcrete_and_restore
+    (hCore : BranchAExceptionalPracticalBodyCoreWitnessConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_bodyCoreWitnessConcrete_and_restore
+    hCore hRestore
+
+/--
+body/core witness existence concrete theorem 名と clean bridge があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_bodyCoreWitnessExistenceBridge
+    (hCore : BranchAExceptionalBodyCoreWitnessExistenceConcreteAdapterTarget)
+    (hBridge : BranchAExceptionalBodyCoreToPacketDescentAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_bodyCoreWitnessExistenceBridge
+    hBridge hCore
+
+/--
+two-witness canonical target と body/core-packet bridge があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_twoWitness_and_bodyCoreBridge
+    (hTwo : BranchAExceptionalPracticalTwoWitnessAdapterTarget)
+    (hBridge : BranchAExceptionalBodyCoreToPacketDescentAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_twoWitness_and_bodyCoreBridge
+    hTwo hBridge
+
+/--
+practical entrance の concrete theorem 名が立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_practicalConcrete
+    (hDiff : BranchAExceptionalPracticalConcreteAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_practicalConcrete hDiff
+
+/--
+body/core witness が立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_bodyCoreWitness
+    (hCore : BranchAExceptionalPracticalBodyCoreWitnessAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_bodyCoreWitness hCore
+
+/--
+body/core witness concrete theorem 名が立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_bodyCoreWitnessConcrete
+    (hCore : BranchAExceptionalPracticalBodyCoreWitnessConcreteAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_bodyCoreWitnessConcrete hCore
+
+/--
+body/core witness existence concrete theorem 名と clean bridge があれば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_bodyCoreWitnessExistenceBridge
+    (hCore : BranchAExceptionalBodyCoreWitnessExistenceConcreteAdapterTarget)
+    (hBridge : BranchAExceptionalBodyCoreToExistenceMainlineAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_bodyCoreWitnessExistenceBridge
+    hBridge hCore
+
+/--
+two-witness canonical target と body/core-mainline bridge があれば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_twoWitness_and_bodyCoreBridge
+    (hTwo : BranchAExceptionalPracticalTwoWitnessAdapterTarget)
+    (hBridge : BranchAExceptionalBodyCoreToExistenceMainlineAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_twoWitness_and_bodyCoreBridge
+    hTwo hBridge
+
+/--
+boundary-core route の div-data が立てば、
+provider 側でも exceptional existence mainline は直接回収できる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_boundaryCoreDivData
+    (hDiv : BranchAExceptionalBoundaryCoreDivDataAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_preparedConcrete
+    (DkMath.FLT.exceptional_boundary_datum_prepared_arithmetic_core_concrete_of_divData hDiv)
+
+/--
+boundary-core route の actual theorem を provider 側 canonical entrance として読む default 版。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_boundaryCoreDivDataDefault :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_divDataDefault
+
+/--
+provider 側 current canonical boundary route そのものから、
+exceptional existence mainline へ直接戻る橋。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_boundaryCoreWitnessConcrete
+    (hCore : BranchAExceptionalBoundaryCoreWitnessConcreteAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_boundaryCoreWitnessConcrete hCore
+
+/--
+provider 側 current canonical boundary route の default entrance から、
+exceptional existence mainline へ直接戻る版。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_boundaryCoreWitnessConcreteDefault :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_boundaryCoreWitnessConcreteDefault
+
+/--
+practical entrance は、
+provider 側から見ても witness supply と on-witness body が揃えば橋だけで閉じる。
+-/
+theorem branchAExceptionalPracticalConcreteAdapter_of_witnessSupply_and_bodyOnWitness
+    (hWitness : BranchAExceptionalPracticalWitnessSupplyAdapterTarget)
+    (hBody : BranchAExceptionalPracticalBodyOnWitnessAdapterTarget) :
+    BranchAExceptionalPracticalConcreteAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalPracticalConcrete_of_witnessSupply_and_bodyOnWitness
+    hWitness hBody
+
+/--
+practical body-on-witness だけが立てば、
+provider 側でも practical entrance が直接回収できる。
+-/
+theorem branchAExceptionalPracticalConcreteAdapter_of_bodyOnWitness
+    (hBody : BranchAExceptionalPracticalBodyOnWitnessConcreteAdapterTarget) :
+    BranchAExceptionalPracticalConcreteAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalPracticalConcrete_of_bodyOnWitness hBody
+
+/--
+practical datum concrete theorem 名が立てば、
+provider 側でも current practical entrance に直接戻れる。
+-/
+theorem branchAExceptionalPracticalConcreteAdapter_of_practicalDatumConcrete
+    (hBody : BranchAExceptionalPracticalDatumConcreteAdapterTarget) :
+    BranchAExceptionalPracticalConcreteAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalPracticalConcrete_of_datumConcrete hBody
+
+/--
+practical body-on-witness だけが立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_practicalBodyOnWitness
+    (hBody : BranchAExceptionalPracticalBodyOnWitnessConcreteAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_practicalBodyOnWitness hBody
+
+/--
+practical datum concrete theorem 名が立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_practicalDatumConcrete
+    (hBody : BranchAExceptionalPracticalDatumConcreteAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_practicalDatumConcrete hBody
+
+/--
+datum-local selected core concrete theorem 名が立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_selectedCoreOnDatumConcrete
+    (hCore : BranchAExceptionalPracticalSelectedCoreOnDatumConcreteAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_selectedCoreOnDatumConcrete hCore
+
+/--
+datum-local boundary-core concrete theorem 名が立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_boundaryCoreOnDatumConcrete
+    (hBoundary : BranchAExceptionalPracticalBoundaryCoreOnDatumConcreteAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_boundaryCoreOnDatumConcrete hBoundary
+
+/--
+practical body-on-witness と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_practicalBodyOnWitness_and_restore
+    (hBody : BranchAExceptionalPracticalBodyOnWitnessConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_practicalBodyOnWitness_and_restore
+    hBody hRestore
+
+/--
+practical datum concrete theorem 名と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_practicalDatumConcrete_and_restore
+    (hBody : BranchAExceptionalPracticalDatumConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_practicalDatumConcrete_and_restore
+    hBody hRestore
+
+/--
+datum-local selected core concrete theorem 名と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_selectedCoreOnDatumConcrete_and_restore
+    (hCore : BranchAExceptionalPracticalSelectedCoreOnDatumConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_selectedCoreOnDatumConcrete_and_restore
+    hCore hRestore
+
+/--
+datum-local boundary-core concrete theorem 名と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_boundaryCoreOnDatumConcrete_and_restore
+    (hBoundary : BranchAExceptionalPracticalBoundaryCoreOnDatumConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_boundaryCoreOnDatumConcrete_and_restore
+    hBoundary hRestore
+
+/--
+boundary-core route の div-data と restore theorem があれば、
+provider 側でも primitive packet descent へ直接戻れる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_boundaryCoreDivData_and_restore
+    (hDiv : BranchAExceptionalBoundaryCoreDivDataAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_divData_and_restore hDiv hRestore
+
+/--
+boundary-core route の actual theorem を provider 側 canonical entrance として読む default packet 版。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_boundaryCoreDivDataDefault_and_restore
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_divDataDefault_and_restore hRestore
+
+/--
+provider 側 current canonical boundary route と restore theorem があれば、
+primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_boundaryCoreWitnessConcrete_and_restore
+    (hCore : BranchAExceptionalBoundaryCoreWitnessConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_boundaryCoreWitnessConcrete_and_restore
+    hCore hRestore
+
+/--
+provider 側 current canonical boundary route の default entrance と restore theorem があれば、
+primitive packet descent adapter は直接閉じる版。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_boundaryCoreWitnessConcreteDefault_and_restore
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_boundaryCoreWitnessConcreteDefault_and_restore
+    hRestore
+
+/-!
+### 矛盾路線 adapter — ExistenceMainline + Contradiction → PacketDescent
+
+`ContradictionTarget` が証明されれば、`RestoreFromArithmetic` が bypass され、
+`ExistenceMainline`（既に no-so#rry で完成）と組み合わせて
+`PacketDescentTarget` が直接閉じる。
+-/
+
+/--
+ExistenceMainline (no-so#rry) + Contradiction → PacketDescent。
+
+ExistenceMainline の default concrete は
+`branchAExceptionalExistenceMainlineAdapter_of_boundaryCoreWitnessConcreteDefault`
+で parameter-free に供給済み。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_contradiction
+    (hContra : BranchAPrimitiveRestoreContradictionAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  branchAPrimitivePacketDescentAdapter_of_boundaryCoreWitnessConcreteDefault_and_restore
+    (branchAPrimitiveRestoreFromArithmeticAdapter_of_contradiction hContra)
+
+/--
+witness source → `RestoreFromArithmeticTarget` adapter（short-circuit 版）。
+
+witness source があれば、contradiction adapter を経由して
+restore 6 段チェーン全体を一気に bypass する。
+-/
+theorem branchAPrimitiveRestoreFromArithmeticAdapter_of_witnessSource
+    (hSource : BranchAContradictionWithWitnessSourceAdapterTarget) :
+    BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget :=
+  branchAPrimitiveRestoreFromArithmeticAdapter_of_contradiction
+    (branchAPrimitiveRestoreContradictionAdapter_of_witnessSource hSource)
+
+/--
+witness source → `PacketDescentTarget` adapter（最上位 short-circuit）。
+
+witness source + ExistenceMainline (no-so#rry) → PacketDescent。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_witnessSource
+    (hSource : BranchAContradictionWithWitnessSourceAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  branchAPrimitivePacketDescentAdapter_of_contradiction
+    (branchAPrimitiveRestoreContradictionAdapter_of_witnessSource hSource)
+
+/--
+`GN d 1 (u - 1)` divisibility が立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_practicalGN
+    (hGN : BranchAExceptionalPracticalGNAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_practicalGN hGN
+
+/--
+`GN d 1 (u - 1)` divisibility と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_practicalGN_and_restore
+    (hGN : BranchAExceptionalPracticalGNAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_practicalGN_and_restore
+    hGN hRestore
+
+/--
+practical GN concrete theorem 名が立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_practicalGNConcrete
+    (hGN : BranchAExceptionalPracticalGNConcreteAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_practicalGNConcrete hGN
+
+/--
+practical GN concrete theorem 名と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_practicalGNConcrete_and_restore
+    (hGN : BranchAExceptionalPracticalGNConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_practicalGNConcrete_and_restore
+    hGN hRestore
+
+/--
+practical `ModEq` concrete theorem 名が立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_practicalModEqConcrete
+    (hMod : BranchAExceptionalPracticalModEqConcreteAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_practicalModEqConcrete hMod
+
+/--
+practical `ModEq` concrete theorem 名と restore theorem があれば、
+provider 側でも primitive packet descent adapter は直接閉じる。
+-/
+theorem branchAPrimitivePacketDescentAdapter_of_practicalModEqConcrete_and_restore
+    (hMod : BranchAExceptionalPracticalModEqConcreteAdapterTarget)
+    (hRestore : BranchAPrimitivePacketRestoreFromArithmeticAdapterTarget) :
+    BranchAPrimitivePacketDescentAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAPrimitivePacketDescent_of_practicalModEqConcrete_and_restore
+    hMod hRestore
+
+/--
+official direct body の concrete theorem 名が立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_selectedDiffPowConcrete
+    (hDiff : BranchASelectedDiffPowConcreteAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_selectedDiffPowConcrete hDiff
+
+/--
+selected diffPow witness concrete theorem 名が立てば、
+provider 側でも exceptional existence mainline へ直接戻れる。
+-/
+theorem branchAExceptionalExistenceMainlineAdapter_of_selectedDiffPowWitnessConcrete
+    (hDiff : BranchASelectedDiffPowWitnessConcreteAdapterTarget) :
+    BranchAExceptionalExistenceMainlineAdapterTarget :=
+  DkMath.FLT.primeGe5BranchAExceptionalExistenceMainline_of_selectedDiffPowWitnessConcrete hDiff
 
 /--
 暫定 concrete adapter for the Branch A Wieferich witness route.

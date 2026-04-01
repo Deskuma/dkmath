@@ -11,9 +11,9 @@
 
 $$
 \texttt{PrimeGe5BranchAWieferichOnYTarget}
-;\to;
+\;\to\;
 \texttt{PrimeGe5BranchAWieferichRefuterTarget}
-;\to;
+\;\to\;
 \texttt{BranchARefuterTarget}
 $$
 

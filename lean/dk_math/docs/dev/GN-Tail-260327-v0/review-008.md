@@ -88,7 +88,7 @@ $$
 
 $$
 \text{Branch A witness}
-;\to;
+\;\to\;
 \text{WieferichLift / TriominoWieferichBranchBridge input}
 $$
 

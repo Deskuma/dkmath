@@ -4,7 +4,7 @@
 >
 > 注：nightly ブランチは `sorry` を含み得る（ビルドは通っている前提）。このドキュメントは \*\*現状の“地図”\*\*であり、証明完了度のラベル（✅/🚧/⚠️）は後で埋められるようにしてある。
 >
-> **最終更新**: 2026-03-10（`logs/summary_report` と `DkMath.lean` の実データで更新）
+> **最終更新**: 2026-04-01（`logs/summary_report` と `DkMath.lean` の実データで更新）
 ---
 
 ## 1. トップレベル（リポジトリ直下）
@@ -46,6 +46,10 @@
   - 推奨導線サンプル: `DkMath.Samples.UniqueFactorizationGNFacade`
   - 最終推奨入口（NumberTheory 側）:
     `DkMath.NumberTheory.unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcNonExcMK`
+- `DkMath.PowerSwap`  -- PowerSwap: pow-swapping relations
+- `DkMath.NumberTheory.PowerSums`  -- Number theory power sum fillability
+- `DkMath.CFBRC`  -- Cosmic Formula Binomial Real Complex
+- `DkMath.Research`  -- 研究用エントリポイント（補助/実験用）
 
 ### 3.2 ABC まわり
 
@@ -60,6 +64,9 @@
 ### 3.4 宇宙式（Cosmic Formula）
 
 - `DkMath.CosmicFormula`
+- `DkMath.PowerSwap`  -- 次元間の冪交換と調和構造
+- `DkMath.NumberTheory.PowerSums`  -- power sums 関連理論
+- `DkMath.CFBRC`  -- Cosmic Formula Binomial Real Complex
 
 ### 3.4.1 Zsigmondy ブリッジ
 

@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5Core
+import DkMath.CFBRC.Bridge
 import DkMath.NumberTheory.Gcd.GN
 import Mathlib.FieldTheory.Finite.Basic
 
@@ -94,6 +95,38 @@ abbrev PrimeGe5BranchAWieferichRefuterTarget : Prop :=
     p ∣ (z - y) →
     y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
     False
+
+/--
+Phase B 名寄せ: witness route 側 bundle target。
+-/
+abbrev BranchAWitnessRouteBundleTarget : Prop :=
+  PrimeGe5BranchAWieferichOnYTarget
+
+/--
+Phase B 名寄せ: contradiction route 側 bundle target。
+-/
+abbrev BranchAContradictionRouteBundleTarget : Prop :=
+  PrimeGe5BranchAWieferichRefuterTarget
+
+/--
+`ContradictionTarget` へ入れる「矛盾側前提」の供給元仕様（mod `p^3` 版）。
+
+Branch A normal form (`gap` shape + `GN` shape) が与えられたときに、
+`s^p ≡ y^(p-1) [MOD p^3]` の否定を供給する外部 statement を表す。
+
+**DEPRECATED / FALSE**: `branchA_spow_congr_head_mod_p3` により
+`s^p ≡ y^(p-1) [MOD p^3]` が Branch A normal form から自動で従うことが
+証明済みであるため、否定を供給することは不可能。
+この target は偽命題であり、満たすことはできない。
+代わりに witness `q` の情報を含む
+`BranchAContradictionWithWitnessSourceTarget` を使うこと。
+-/
+abbrev BranchAContradictionModP3SourceTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    ¬ s ^ p ≡ y ^ (p - 1) [MOD p ^ 3]
 
 /--
 Branch A / Wieferich route の local kernel。
@@ -436,13 +469,552 @@ abbrev PrimeGe5BranchAPrimitivePacketDescentTarget : Prop :=
     ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
 
 /--
+`PrimeGe5BranchAPrimitivePacketDescentTarget` の強化版。
+
+付録:
+- `PrimitivePacketDescentTarget` は `∃ pkt', pkt'.z < z` を返すだけで、
+  smaller packet の `t'` が `p` で割れないことを型から保証しない。
+- `FringeDescent` の well-founded descent では `¬ p ∣ pkt'.t'` が次の bundle 構成に必要であり、
+  これを具体 target から取り出すために強化版を別立てする。
+- 既存の `PrimitivePacketDescentTarget` は変えず、強化版は追加のみ。
+- 強化版から弱化版への橋は `primeGe5BranchAPrimitivePacketDescent_of_strong` で閉じる。
+-/
+abbrev PrimeGe5BranchAPrimitivePacketDescentStrongTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z ∧ ¬ p ∣ pkt'.t
+
+/--
+`StrongTarget` は `PrimitivePacketDescentTarget` より強い。
+
+付録:
+- `∃ pkt', pkt'.z < z ∧ ¬ p ∣ pkt'.t` → `∃ pkt', pkt'.z < z` は自明な緩和。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_strong
+    (hStrong : PrimeGe5BranchAPrimitivePacketDescentStrongTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t
+  rcases hStrong hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t with ⟨pkt', hlt, _⟩
+  exact ⟨pkt', hlt⟩
+
+/--
+primitive route の first-order local target。
+
+付録:
+- `¬ p ∣ t`
+  だけではなく、
+  Branch A normal form から既に得られる
+  `y^(p-1) ≡ 1 [MOD p^2]`
+  を明示入力として受ける。
+- primitive mainline の本体が本当に欲している追加数論情報を、
+  packet descent 契約から一段切り出した形である。
+-/
+abbrev PrimeGe5BranchAPrimitiveWieferichPacketTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
+
+/--
+primitive mainline の distinguished-prime selection 段。
+
+付録:
+- primitive route で本当に新しく必要なのは、
+  まず `GN p (z-y) y`
+  側に distinguished prime `q`
+  を 1 つ取ることである。
+- ここでは `q ∣ GN` かつ `¬ q ∣ (z-y)` だけを要求し、
+  packet restoration とは分離して扱う。
+-/
+abbrev PrimeGe5BranchAPrimitiveDistinguishedPrimeTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ GN p (z - y) y ∧ ¬ q ∣ (z - y)
+
+/--
+primitive route の Zsigmondy-lite / cyclotomic existence 段。
+
+付録:
+- `GN p (z-y) y`
+  に対して、
+  gap 側に埋もれない新しい素数 `q`
+  が存在することだけを表す。
+- `PrimitiveBeam` や `ZsigmondyCyclotomic`
+  の既存存在論をここへ接続するのが自然である。
+-/
+abbrev PrimeGe5BranchAPrimitiveZsigmondyTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ GN p (z - y) y ∧ ¬ q ∣ (z - y)
+
+/--
+primitive route の cyclotomic / diff-power existence 段。
+
+付録:
+- distinguished-prime をいきなり `GN`
+  側で取る代わりに、
+  まず
+  `z^p - y^p`
+  の側で
+  `q ∤ (z-y)`
+  な prime divisor を取る target を独立させる。
+- その後の `GN`
+  側への移送は
+  `pow_sub_pow_factor_cosmic_N`
+  による薄い橋で処理できる。
+-/
+abbrev PrimeGe5BranchAPrimitiveCyclotomicPrimeTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ (z ^ p - y ^ p) ∧ ¬ q ∣ (z - y)
+
+/--
+Branch A 専用の diff-side / cyclotomic existence wrapper。
+
+付録:
+- primitive route の selection 側で本当に欲しい未完核を、
+  normal-form の局所情報をすべて隠した
+  `hpack + p ∣ (z-y)`
+  だけの存在論として切り出す。
+- これが concrete に埋まれば、
+  primitive mainline の selection 側は以後すべて既存橋で閉じる。
+-/
+abbrev PrimeGe5BranchACyclotomicExistenceTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ (z ^ p - y ^ p) ∧ ¬ q ∣ (z - y)
+
+/--
+Branch A の Wieferich witness を明示入力に取る diff-side existence target。
+
+付録:
+- Branch A では
+  `y^(p-1) ≡ 1 [MOD p^2]`
+  が lower layer で既に得られるので、
+  selection 側の concrete theorem 候補として
+  まずこの形を置いておく。
+- これが埋まれば、
+  最小 wrapper
+  `PrimeGe5BranchACyclotomicExistenceTarget`
+  へは既存 witness 供給だけで戻せる。
+-/
+abbrev PrimeGe5BranchACyclotomicExistenceOnWieferichTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ (z ^ p - y ^ p) ∧ ¬ q ∣ (z - y)
+
+/--
+Branch A の concrete-ready selection theorem の内部核。
+
+付録:
+- 公開 statement は diff-side existence でよいが、
+  証明の本体は `cyclotomicPrimeCore p (z-y) y`
+  に prime が立つ形で書いた方が既存 CFBRC / Zsigmondy 語彙へ寄せやすい。
+- したがって concrete 実装探索では、
+  まずこの target を埋めてから
+  `PrimeGe5BranchACyclotomicExistenceOnWieferichTarget`
+  へ戻す。
+-/
+abbrev PrimeGe5BranchACyclotomicCoreExistenceOnWieferichTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ DkMath.CFBRC.cyclotomicPrimeCore p (z - y) y ∧ ¬ q ∣ (z - y)
+
+/--
+Branch A の例外枝で CFBRC/core 側 existence theorem を与える target。
+
+[CFBRC] まずはこの Branch A 局所 target を canonical 入口として使い、
+boundary-normalized theorem や `CFBRC/Bridge` への昇格は後続で行う。
+
+付録:
+- 標準の `CFBRC/Bridge` existence API は `¬ p ∣ (z-y)` 側に立っているため、
+  Branch A (`p ∣ (z-y)`) ではそのまま使えない。
+- したがって concrete 実装探索では、
+  この「exceptional core existence」target を
+  CFBRC 側の本当の missing theorem と見なす。
+-/
+abbrev PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ DkMath.CFBRC.cyclotomicPrimeCore p (z - y) y ∧ ¬ q ∣ (z - y)
+
+/--
+CFBRC 座標に正規化した prime-exponent exceptional existence target。
+
+付録:
+- `x := z-y`, `u := y`, `d := p` と置いたとき、
+  Branch A の selection 側 missing theorem を
+  counterexample pack 非依存の boundary-normalized 形で読む。
+- `CFBRC/Bridge` や `PrimitiveBeam` 既存語彙へ寄せるなら、
+  まずこの target を concrete theorem 候補とみなすのが自然である。
+-/
+abbrev CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget : Prop :=
+  ∀ {d x u : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧ q ∣ DkMath.CFBRC.cyclotomicPrimeCore d x u ∧ ¬ q ∣ x
+
+/--
+`CFBRC/Bridge` の標準 primitive-boundary existence theorem に最も近い
+Branch A 例外枝版 target。
+
+付録:
+- 結論は `boundaryCyclotomicPrimeCore` と `boundaryDiffPow` を使って書き、
+  既存 theorem
+  `exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime`
+  との差を
+  `¬ d ∣ x`
+  ではなく
+  `d ∣ x` と Wieferich witness を仮定する一点に寄せる。
+- current first missing theorem を薄い補強で済ませられるかを見るなら、
+  まずこの stronger target を経由するのが自然である。
+-/
+abbrev CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget : Prop :=
+  ∀ {d x u : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧
+      q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ∧
+      ¬ q ∣ x ∧
+      (∀ {k : ℕ}, 0 < k → k < d → ¬ q ∣ DkMath.CFBRC.boundaryDiffPow .right k x u)
+
+/--
+既存 `CFBRC/Bridge` theorem
+`exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime`
+に対応する、Wieferich 例外枝版の concrete theorem 候補。
+
+付録:
+- statement 自体は
+  `CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget`
+  と同型だが、
+  「split theorem の右枝をどの theorem 名で concrete 実装するか」を
+  既存 `CFBRC/Bridge` 語彙に揃えて固定するために独立名を与える。
+- 以後、selection 側の right branch を concrete theorem として立てるなら、
+  まずこの target 名を本命候補とみなす。
+-/
+abbrev CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget : Prop :=
+  CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget
+
+/--
+primitive boundary selection を、通常枝と Wieferich 例外枝の split で読む target。
+
+付録:
+- `¬ d ∣ x` 側は既存 `CFBRC/Bridge`
+  `exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime`
+  がそのまま供給する。
+- `d ∣ x` 側では `u^(d-1) ≡ 1 [MOD d^2]` を伴う例外枝だけを新 target として要求する。
+- したがって「既存語彙への薄い補強で済むか」を mainline 上で読むなら、
+  まずこの split target を見るのが自然である。
+-/
+abbrev CFBRCPrimitiveBoundarySelectionOnSplitTarget : Prop :=
+  ∀ {d x u : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    (¬ d ∣ x ∨ (d ∣ x ∧ u ^ (d - 1) ≡ 1 [MOD d ^ 2])) →
+    ∃ q : ℕ, Nat.Prime q ∧
+      q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ∧
+      ¬ q ∣ x ∧
+      (∀ {k : ℕ}, 0 < k → k < d → ¬ q ∣ DkMath.CFBRC.boundaryDiffPow .right k x u)
+
+/--
+既存 `CFBRC/Bridge` の primitive-boundary theorem と平行に読むための
+split concrete theorem 候補。
+
+付録:
+- 通常枝 `¬ d ∣ x` は既存 theorem、
+  例外枝 `d ∣ x ∧ Wieferich` は
+  `CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget`
+  が担当する、という split をそのまま theorem 名に反映する。
+- これにより、selection 側の concrete theorem 探索を
+  `core exceptional` と `core split` の二層で固定できる。
+-/
+abbrev CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitTarget : Prop :=
+  CFBRCPrimitiveBoundarySelectionOnSplitTarget
+
+/--
+selection 側で first に direct concrete 実装を狙う既定入口。
+
+付録:
+- `review-016` の判断に沿って、
+  split 全体ではなく right branch
+  `CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget`
+  を first direct target として固定する。
+- split concrete theorem 候補は保持するが、
+  mainline 上の「まず埋めるべき concrete theorem」は
+  この target と読む。
+-/
+abbrev CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteTarget : Prop :=
+  CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget
+
+/--
+direct concrete target の existence-part。
+
+付録:
+- まず `boundaryCyclotomicPrimeCore .right d x u` を割る prime `q` と
+  `¬ q ∣ x` を回収する段だけを切り出す。
+- primitive 条件（低次 boundary 差分を割らないこと）はここでは要求しない。
+- したがって direct concrete 実装の missing math を
+  「prime existence」と「primitive kernel」
+  に二分したいときの前半 target である。
+-/
+abbrev CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget : Prop :=
+  ∀ {d x u : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    ∃ q : ℕ, Nat.Prime q ∧
+      q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ∧
+      ¬ q ∣ x
+
+/--
+既存
+`exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime`
+と最も平行な exceptional concrete theorem 候補。
+
+[CFBRC] まずは Branch A 局所 theorem として実装し、
+`CFBRC/Bridge` への昇格は statement が十分薄いと確認できてから後回しにする。
+
+付録:
+- 今回は primitive 条件を含まない existence-only 版なので、
+  statement は
+  `CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget`
+  と同型である。
+- ただし「ordinary branch theorem の例外枝差し替え版を
+  どの concrete 名で呼ぶか」を固定するために独立名を与える。
+- selection 側の truly new kernel を theorem 名で指すなら、
+  まずこの target を canonical 候補と見る。
+-/
+abbrev CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichTarget : Prop :=
+  CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget
+
+/--
+boundary-core prime existence を、通常枝と Wieferich 例外枝の split で読む target。
+
+付録:
+- `¬ d ∣ x` 側は既存 `CFBRC/Bridge`
+  `exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime`
+  から primitive 条件を忘れるだけで従う。
+- `d ∣ x` 側では
+  `CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget`
+  だけを新 target として要求する。
+- したがって existence 側 missing math も、
+  theorem の形で right branch 1 本へ局所化できる。
+-/
+abbrev CFBRCBoundaryCorePrimeExistenceOnSplitTarget : Prop :=
+  ∀ {d x u : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    (¬ d ∣ x ∨ (d ∣ x ∧ u ^ (d - 1) ≡ 1 [MOD d ^ 2])) →
+    ∃ q : ℕ, Nat.Prime q ∧
+      q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u ∧
+      ¬ q ∣ x
+
+/--
+direct concrete target の primitive-part。
+
+付録:
+- `q` が既に
+  `boundaryCyclotomicPrimeCore .right d x u`
+  を割り、
+  かつ `q ∤ x`
+  であるとき、
+  低次 boundary 差分を割らないことだけを要求する。
+- existence-part と組み合わせれば
+  `CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteTarget`
+  全体が橋だけで閉じる。
+-/
+abbrev CFBRCExceptionalPrimitiveKernelOnWieferichTarget : Prop :=
+  ∀ {d x u q : ℕ}, Nat.Prime d → 5 ≤ d →
+    0 < x → 0 < u →
+    Nat.Coprime x u →
+    d ∣ x →
+    u ^ (d - 1) ≡ 1 [MOD d ^ 2] →
+    Nat.Prime q →
+    q ∣ DkMath.CFBRC.boundaryCyclotomicPrimeCore .right d x u →
+    ¬ q ∣ x →
+    (∀ {k : ℕ}, 0 < k → k < d → ¬ q ∣ DkMath.CFBRC.boundaryDiffPow .right k x u)
+
+/--
+distinguished prime が取れた後の smaller-packet restoration 段。
+
+付録:
+- primitive route の後半だけを isolated に表す target である。
+- distinguished prime の existence と、
+  actual な smaller packet 復元を分離するために置く。
+-/
+abbrev PrimeGe5BranchAPrimitivePacketRestoreTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ GN p (z - y) y →
+      ¬ q ∣ (z - y) →
+      ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
+
+/--
+distinguished prime を取った後の arithmetic fallout をまとめた local target。
+
+付録:
+- restoration 側が本当に使うであろう
+  `q ∣ s`, `q ∤ t`, `q ⟂ y`, `q ≠ p`
+  を、prime selection から独立に切り出す。
+-/
+abbrev PrimeGe5BranchAPrimitiveDistinguishedPrimeArithmeticTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ GN p (z - y) y →
+      ¬ q ∣ (z - y) →
+      q ∣ s ∧ ¬ q ∣ t ∧ Nat.Coprime q y ∧ q ≠ p
+
+/--
+arithmetic fallout まで明示した primitive restoration target。
+
+付録:
+- `PrimeGe5BranchAPrimitivePacketRestoreTarget`
+  をさらに local arithmetic 入力付きへ切り出した形である。
+-/
+abbrev PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
+
+/--
+restore-from-arithmetic の前半だけを切り出した smaller-counterexample target。
+
+付録:
+- arithmetic witness `q` から、
+  まず smaller Branch A counterexample の bare existence だけを返す段である。
+- normal-form packet への包装は、ここではまだ要求しない。
+-/
+abbrev PrimeGe5BranchAPrimitiveSmallerCounterexampleFromArithmeticTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      ∃ x' y' z' : ℕ,
+        PrimeGe5CounterexamplePack p x' y' z' ∧ p ∣ (z' - y') ∧ z' < z
+
+/--
+smaller counterexample を smaller normal-form packet へ包装する後半 target。
+
+付録:
+- restore の deepest kernel を
+  「smaller counterexample の構成」と
+  「normal-form packet への包装」
+  の 2 段に分けるために置く。
+- arithmetic witness `q` の情報はここでは消えており、
+  purely structural な包装段だけを表す。
+-/
+abbrev PrimeGe5BranchAPrimitivePacketOfSmallerCounterexampleTarget : Prop :=
+  ∀ {p z x' y' z' : ℕ}, PrimeGe5CounterexamplePack p x' y' z' →
+    p ∣ (z' - y') →
+    z' < z →
+    ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
+
+/--
 Branch A normal form から直接、
 より小さい Branch A 反例を構成する stronger target。
 
 付録:
 - concrete 数学としては、minimality を仮定するよりこちらを直接埋めるほうが自然な可能性が高い。
 - `PrimeGe5BranchADistinguishedPrimeDescentTarget` は、この stronger target から
-  no-`sorry` で回収できる。
+  no-`so#rry` で回収できる。
 -/
 abbrev PrimeGe5BranchASmallerCounterexampleTarget : Prop :=
   ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
@@ -1505,6 +2077,102 @@ theorem primeGe5BranchA_spow_congr_head_mod_p_sq
   exact hmod.symm
 
 /--
+計画名 `branchA_spow_congr_head_mod_p2` との互換 alias。
+-/
+theorem branchA_spow_congr_head_mod_p2
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    s ^ p ≡ y ^ (p - 1) [MOD p ^ 2] :=
+  primeGe5BranchA_spow_congr_head_mod_p_sq hpack hp_dvd_gap hgap hsGN
+
+/--
+mod `p^2` head congruence とその否定が同時に成り立つことはない。
+-/
+theorem branchA_contradiction_of_mod_p2_conflict
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hconf : ¬ s ^ p ≡ y ^ (p - 1) [MOD p ^ 2]) :
+    False :=
+  hconf (branchA_spow_congr_head_mod_p2 hpack hp_dvd_gap hgap hsGN)
+
+/--
+gap-shape の強い `p`-冪因子を使うと、`s^p` の head 分解は `p^3` 精度まで上がる。
+-/
+theorem primeGe5BranchA_spow_eq_head_add_p_cube_mul
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    ∃ M : ℕ, s ^ p = y ^ (p - 1) + p ^ 3 * M := by
+  rcases primeGe5BranchA_spow_eq_head_add_gapShape_mul hpack hp_dvd_gap hgap hsGN with ⟨B, hB⟩
+  have h3_le : 3 ≤ p - 1 := by
+    have hp_ge5 : 5 ≤ p := hpack.hp5
+    omega
+  have hp3_dvd_shape : p ^ 3 ∣ p ^ (p - 1) * t ^ p :=
+    dvd_mul_of_dvd_left (pow_dvd_pow p h3_le) _
+  have hp3_dvd_tail : p ^ 3 ∣ (p ^ (p - 1) * t ^ p) * B :=
+    dvd_mul_of_dvd_left hp3_dvd_shape _
+  rcases exists_eq_mul_left_of_dvd hp3_dvd_tail with ⟨M, hM⟩
+  refine ⟨M, ?_⟩
+  calc
+    s ^ p = y ^ (p - 1) + (p ^ (p - 1) * t ^ p) * B := hB
+    _ = y ^ (p - 1) + p ^ 3 * M := by
+      rw [hM]
+      ring
+
+/--
+`s^p ≡ y^(p-1) [MOD p^3]` の Branch A normal-form 版。
+-/
+theorem primeGe5BranchA_spow_congr_head_mod_p_cube
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    s ^ p ≡ y ^ (p - 1) [MOD p ^ 3] := by
+  rcases primeGe5BranchA_spow_eq_head_add_p_cube_mul hpack hp_dvd_gap hgap hsGN with ⟨M, hM⟩
+  have hle : y ^ (p - 1) ≤ s ^ p := by
+    rw [hM]
+    exact Nat.le_add_right _ _
+  have hmod : y ^ (p - 1) ≡ s ^ p [MOD p ^ 3] := by
+    exact (Nat.modEq_iff_dvd' hle).2 ⟨M, by
+      rw [hM]
+      simp⟩
+  exact hmod.symm
+
+/--
+計画名 `branchA_spow_congr_head_mod_p3` との互換 alias。
+-/
+theorem branchA_spow_congr_head_mod_p3
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p) :
+    s ^ p ≡ y ^ (p - 1) [MOD p ^ 3] :=
+  primeGe5BranchA_spow_congr_head_mod_p_cube hpack hp_dvd_gap hgap hsGN
+
+/--
+mod `p^3` head congruence とその否定は両立しない。
+-/
+theorem branchA_contradiction_of_mod_p3_conflict
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hconf : ¬ s ^ p ≡ y ^ (p - 1) [MOD p ^ 3]) :
+    False :=
+  hconf (branchA_spow_congr_head_mod_p3 hpack hp_dvd_gap hgap hsGN)
+
+/--
 Branch A の `q ≠ p` 側本丸:
 `q ∣ gap` かつ `q ≠ p` なら `q ∤ GN p gap y`。
 -/
@@ -2310,6 +2978,19 @@ theorem primeGe5BranchANormalForm_y_wieferich_mod_p_sq
       s ^ p ≡ 1 [MOD p ^ 2] :=
     primeGe5BranchANormalForm_spow_congr_one_mod_p_sq hpack hp_dvd_gap hgap hsGN
   exact hhead.symm.trans hspow_one
+
+/--
+計画名 `branchA_Wieferich_head_conflict_mod_p2` の concrete 版。
+-/
+theorem branchA_Wieferich_head_conflict_mod_p2
+    {p x y z t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hnot : ¬ y ^ (p - 1) ≡ 1 [MOD p ^ 2]) :
+    False :=
+  hnot (primeGe5BranchANormalForm_y_wieferich_mod_p_sq hpack hp_dvd_gap hgap hsGN)
 
 /--
 Branch A 全体から直接取り出す、`y` 上の Wieferich-style witness。
@@ -3441,7 +4122,7 @@ theorem primeGe5BranchANormalFormPowFactorizationNePSpine_of_supportKernel
 現状ここまで削ると、残っている数学は support separation だけである。
 
 付録:
-- 実装上はまだ `sorry` を含むが、意味論的には
+- 実装上はまだ `so#rry` を含むが、意味論的には
   「`NeP` comparison route の active 情報が coprime まで縮んだ後の final checkpoint」
   を表す。
 - したがってこの定理は、未完の穴というより
@@ -3660,6 +4341,76 @@ theorem primeGe5BranchARefuter_of_wieferich
   exact hRefute hpack hp_dvd_gap (hWieferich hpack hp_dvd_gap)
 
 /--
+Phase B 名寄せ bundle 2 本が揃えば、Branch A refuter は即座に閉じる。
+-/
+theorem primeGe5BranchARefuter_of_routeBundles
+    (hWitness : BranchAWitnessRouteBundleTarget)
+    (hContra : BranchAContradictionRouteBundleTarget) :
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      p ∣ (z - y) →
+      False :=
+  primeGe5BranchARefuter_of_wieferich hWitness hContra
+
+/--
+mod `p^3` の矛盾側前提供給 statement があれば、Branch A refuter を閉じられる。
+
+**NOTE**: `BranchAContradictionModP3SourceTarget` は偽命題であることが判明した
+（`branchA_spow_congr_head_mod_p3` 参照）。このため本 theorem の前提は
+実質的に満たされない。歴史的記録として残す。
+-/
+theorem primeGe5BranchARefuter_of_modP3Source
+    (hSource : BranchAContradictionModP3SourceTarget) :
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      p ∣ (z - y) →
+      False := by
+  intro p x y z hpack hp_dvd_gap
+  rcases primeGe5BranchAShapeValue_of_factorization
+      primeGe5BranchAShapeFactorization_default hpack hp_dvd_gap with ⟨t, hgap⟩
+  rcases primeGe5BranchANormalForm_of_witness hpack hp_dvd_gap hgap with ⟨s, hsGN, _hsx⟩
+  exact branchA_contradiction_of_mod_p3_conflict hpack hp_dvd_gap hgap hsGN
+    (hSource hpack hp_dvd_gap hgap hsGN)
+
+/--
+`ContradictionTarget` への矛盾供給元（witness `q` 情報込み版）。
+
+`BranchAContradictionModP3SourceTarget` の後継。
+mod (p^k) の head congruence は Branch A normal form から自動で従い、
+否定を供給することは不可能である（`branchA_spow_congr_head_mod_p3` 参照）。
+一方、witness `q` の情報（`q ∣ s`, `q ∤ t`, `p ∣ (q-1)`, `q^p ∣ GN` 等）
+を組み合わせれば、より深い矛盾が得られる可能性がある。
+
+**関係**: `PrimeGe5BranchAPrimitiveRestoreContradictionTarget` と概ね等価。
+違いは witness の性質を structure bundle ではなく個々の引数で受け取る点。
+GapInvariant 側からは `BranchAPrimitiveRestoreContradictionAdapterTarget`
+経由で注入できる。
+-/
+abbrev BranchAContradictionWithWitnessSourceTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      -- witness q の構造的性質（個別引数版）
+      (q ∣ x) →
+      (¬ q ∣ y) →
+      (¬ q ∣ z) →
+      (¬ q ∣ (z - y)) →
+      (p ∣ (q - 1)) →
+      (q ^ p ∣ GN p (z - y) y) →
+      False
+
+/--
 local kernel が与えられれば、Wieferich witness refuter は既存 normal form 抽出だけで得られる。
 
 付録:
@@ -3679,6 +4430,14 @@ theorem primeGe5BranchAWieferichRefuter_of_localKernel
     (primeGe5BranchANormalForm_coprime_s_right hpack hsx)
     (primeGe5BranchANormalForm_prime_not_dvd_s_default hpack hp_dvd_gap hgap hsGN)
     hWieferich
+
+/--
+Wieferich local kernel から contradiction-route bundle target へ渡す thin adapter。
+-/
+theorem branchAContradictionRouteBundle_of_localKernel
+    (hK : PrimeGe5BranchAWieferichLocalKernelTarget) :
+    BranchAContradictionRouteBundleTarget :=
+  primeGe5BranchAWieferichRefuter_of_localKernel hK
 
 /--
 arithmetic kernel が与えられれば、Wieferich local kernel は自動で閉じる。
@@ -3713,7 +4472,42 @@ theorem primeGe5BranchANormalFormArithmeticKernel_of_wieferichLocalKernel
     hcop_ts hcop_ty hcop_sy hp_not_dvd_s
     (primeGe5BranchANormalForm_y_wieferich_mod_p_sq hpack hp_dvd_gap hgap hsGN)
 
-/-- Branch A 条件付きで、`z` 最小の反例 pack を no-`sorry` で選べる。 -/
+/--
+arithmetic kernel から contradiction-route bundle target へ渡す thin adapter。
+-/
+theorem branchAContradictionRouteBundle_of_arithmeticKernel
+    (hK : PrimeGe5BranchANormalFormArithmeticKernelTarget) :
+    BranchAContradictionRouteBundleTarget :=
+  branchAContradictionRouteBundle_of_localKernel
+    (primeGe5BranchAWieferichLocalKernel_of_arithmeticKernel hK)
+
+/--
+Branch A witness route bundle の default 実装。
+-/
+theorem branchAWitnessRouteBundle_default :
+    BranchAWitnessRouteBundleTarget :=
+  primeGe5BranchAWieferichOnY_default
+
+/--
+Branch A contradiction route bundle の default 実装。
+-/
+theorem branchAContradictionRouteBundle_default :
+    BranchAContradictionRouteBundleTarget :=
+  branchAContradictionRouteBundle_of_arithmeticKernel
+    primeGe5BranchANormalFormArithmeticKernel_default
+
+/--
+Phase B bundle 入口から直接読む Branch A refuter default。
+-/
+theorem primeGe5BranchARefuter_of_routeBundles_default :
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      p ∣ (z - y) →
+      False :=
+  primeGe5BranchARefuter_of_routeBundles
+    branchAWitnessRouteBundle_default
+    branchAContradictionRouteBundle_default
+
+/-- Branch A 条件付きで、`z` 最小の反例 pack を no-`so#rry` で選べる。 -/
 theorem minimalPrimeGe5CounterexampleSelectionA_impl :
     ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
       p ∣ (z - y) →
@@ -3765,6 +4559,724 @@ theorem primeGe5BranchASmallerPacket_of_routes
   by_cases hpt : p ∣ t
   · exact hPeel hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hpt
   · exact hPrim hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hpt
+
+/--
+Wieferich witness 付き primitive local target があれば、
+primitive packet descent 契約は自動で従う。
+
+付録:
+- `PrimeGe5BranchAPrimitivePacketDescentTarget`
+  の truly new 部分を、
+  `y^(p-1) ≡ 1 [MOD p^2]`
+  を明示引数に取る primitive core 1 本へ局所化する。
+- witness 自体は Branch A normal form から既に得られる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_wieferichPacket
+    (hPrim : PrimeGe5BranchAPrimitiveWieferichPacketTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t
+  exact hPrim hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t
+    (primeGe5BranchANormalForm_y_wieferich_mod_p_sq hpack hp_dvd_gap hgap hsGN)
+
+/--
+primitive distinguished-prime selection と packet restoration が揃えば、
+primitive witness-packet target は橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitiveWieferichPacket_of_distinguishedPrime_and_restore
+    (hPrime : PrimeGe5BranchAPrimitiveDistinguishedPrimeTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreTarget) :
+    PrimeGe5BranchAPrimitiveWieferichPacketTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+  rcases hPrime hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich with
+    ⟨q, hqprime, hqGN, hqgap⟩
+  exact hRestore hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich hqprime hqGN hqgap
+
+/--
+Zsigmondy-lite existence 段があれば、distinguished-prime target は薄い橋で閉じる。
+
+付録:
+- 現段階では statement は同型だが、
+  役割を
+  「existing number-theory existence layer」
+  と
+  「primitive route internal target」
+  で分けるために名前を分離する。
+-/
+theorem primeGe5BranchAPrimitiveDistinguishedPrime_of_zsigmondy
+    (hZ : PrimeGe5BranchAPrimitiveZsigmondyTarget) :
+    PrimeGe5BranchAPrimitiveDistinguishedPrimeTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+  exact hZ hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+
+/--
+`z^p - y^p`
+側の cyclotomic prime existence があれば、
+因数分解を通して `GN`
+側の distinguished-prime target は薄い橋で閉じる。
+-/
+theorem primeGe5BranchAPrimitiveZsigmondy_of_cyclotomicPrime
+    (hCyc : PrimeGe5BranchAPrimitiveCyclotomicPrimeTarget) :
+    PrimeGe5BranchAPrimitiveZsigmondyTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+  rcases hCyc hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich with
+    ⟨q, hqprime, hqdiff, hqgap⟩
+  have hfactor : z ^ p - y ^ p = (z - y) * GN p (z - y) y := by
+    simpa using DkMath.NumberTheory.GcdNext.pow_sub_pow_factor_cosmic_N
+      (a := z) (b := y) (d := p) hpack.hp.pos hpack.hyz_lt
+  have hqmul : q ∣ (z - y) * GN p (z - y) y := by
+    rw [← hfactor]
+    exact hqdiff
+  have hqGN : q ∣ GN p (z - y) y := by
+    rcases (hqprime.dvd_mul).mp hqmul with hqgap' | hqGN
+    · exact False.elim (hqgap hqgap')
+    · exact hqGN
+  exact ⟨q, hqprime, hqGN, hqgap⟩
+
+/--
+Branch A 専用の diff-side existence wrapper があれば、
+primitive cyclotomic-prime target は thin bridge で閉じる。
+
+付録:
+- `PrimeGe5BranchAPrimitiveCyclotomicPrimeTarget`
+  に入っている normal-form / Wieferich 仮定は、
+  existence 自体には不要だと明示するための橋である。
+-/
+theorem primeGe5BranchAPrimitiveCyclotomicPrime_of_existence
+    (hEx : PrimeGe5BranchACyclotomicExistenceTarget) :
+    PrimeGe5BranchAPrimitiveCyclotomicPrimeTarget := by
+  intro p x y z t s hpack hp_dvd_gap _hgap _hsGN _hsx _hcop_ts _hcop_ty _hcop_sy _hp_not_dvd_s _hp_not_dvd_t _hWieferich
+  exact hEx hpack hp_dvd_gap
+
+/--
+Wieferich witness 付き existence theorem があれば、
+Branch A 専用の最小 cyclotomic existence wrapper は既存 witness 供給だけで閉じる。
+-/
+theorem primeGe5BranchACyclotomicExistence_of_wieferich
+    (hWieferichEx : PrimeGe5BranchACyclotomicExistenceOnWieferichTarget) :
+    PrimeGe5BranchACyclotomicExistenceTarget := by
+  intro p x y z hpack hp_dvd_gap
+  exact hWieferichEx hpack hp_dvd_gap
+    (primeGe5BranchAWieferichOnY_default hpack hp_dvd_gap)
+
+/--
+cyclotomic factor 上の concrete existence theorem があれば、
+Branch A の公開 diff-side existence theorem は thin bridge で閉じる。
+-/
+theorem primeGe5BranchACyclotomicExistenceOnWieferich_of_coreExistence
+    (hCore : PrimeGe5BranchACyclotomicCoreExistenceOnWieferichTarget) :
+    PrimeGe5BranchACyclotomicExistenceOnWieferichTarget := by
+  intro p x y z hpack hp_dvd_gap hWieferich
+  rcases hCore hpack hp_dvd_gap hWieferich with ⟨q, hqprime, hqcore, hqgap⟩
+  have hqdiff :
+      q ∣ ((z - y) + y) ^ p - y ^ p :=
+    (DkMath.CFBRC.prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
+      (p := p) (x := z - y) (u := y) (q := q) hqprime hqgap).2 hqcore
+  have hzy : (z - y) + y = z := Nat.sub_add_cancel hpack.hyz
+  refine ⟨q, hqprime, ?_, hqgap⟩
+  simpa [hzy] using hqdiff
+
+/--
+CFBRC 例外枝 existence theorem があれば、
+Branch A の core-existence target は thin bridge で閉じる。
+
+[CFBRC] local Branch A target を先に埋め、
+境界正規化された theorem 群はそこから回収する。
+-/
+theorem primeGe5BranchACyclotomicCoreExistenceOnWieferich_of_cfbrcExceptional
+    (hExc : PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget) :
+    PrimeGe5BranchACyclotomicCoreExistenceOnWieferichTarget := by
+  intro p x y z hpack hp_dvd_gap hWieferich
+  exact hExc hpack hp_dvd_gap hWieferich
+
+/--
+boundary-normalized exceptional existence theorem があれば、
+Branch A 専用の CFBRC exceptional theorem は thin bridge で閉じる。
+-/
+theorem primeGe5BranchACFBRCExceptionalExistence_of_boundaryExceptional
+    (hBoundary : CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget) :
+    PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget := by
+  intro p x y z hpack hp_dvd_gap hWieferich
+  exact hBoundary hpack.hp hpack.hp5 hpack.gap_pos hpack.y_pos
+    hpack.gap_coprime_right hp_dvd_gap hWieferich
+
+/--
+stronger な primitive-boundary exceptional theorem があれば、
+first missing theorem は primitive 条件を忘れるだけで閉じる。
+-/
+theorem cfbrcExceptionalBoundaryOnWieferich_of_primitiveBoundary
+    (hPrim : CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget) :
+    CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich
+  rcases hPrim hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich with
+    ⟨q, hqprime, hqcore, hq_not_dvd_x, _hprim⟩
+  refine ⟨q, hqprime, ?_, hq_not_dvd_x⟩
+  simpa [DkMath.CFBRC.boundaryCyclotomicPrimeCore] using hqcore
+
+/--
+primitive boundary の split theorem があれば、
+Wieferich 例外枝 target は右側の場合分けだけで回収できる。
+-/
+theorem cfbrcExceptionalPrimitiveBoundaryOnWieferich_of_split
+    (hSplit : CFBRCPrimitiveBoundarySelectionOnSplitTarget) :
+    CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich
+  exact hSplit hd_prime hd_ge hx hu hcop (Or.inr ⟨hd_dvd_x, hWieferich⟩)
+
+/--
+`CFBRC/Bridge` と同じ naming の concrete theorem 候補があれば、
+current exceptional target は単なる alias bridge で回収できる。
+-/
+theorem cfbrcExceptionalPrimitiveBoundaryOnWieferich_of_coreExceptional
+    (hCore : CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget) :
+    CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget :=
+  hCore
+
+/--
+current exceptional target があれば、
+`CFBRC/Bridge` 語彙に揃えた concrete theorem 候補もそのまま満たされる。
+-/
+theorem cfbrcExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferich_of_exceptional
+    (hExc : CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget) :
+    CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget :=
+  hExc
+
+/--
+通常枝の既存 `CFBRC/Bridge` theorem と、
+Wieferich 例外枝 target が揃えば split theorem を得る。
+-/
+theorem cfbrcPrimitiveBoundarySelectionOnSplit_of_exceptional
+    (hExc : CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget) :
+    CFBRCPrimitiveBoundarySelectionOnSplitTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hsplit
+  rcases hsplit with hOrd | ⟨hd_dvd_x, hWieferich⟩
+  · have hd_ge3 : 3 ≤ d := by omega
+    simpa using
+      (DkMath.CFBRC.exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime
+        DkMath.CFBRC.BoundarySide.right
+        (d := d) (x := x) (u := u)
+        hd_prime hd_ge3 hx hu hcop hOrd)
+  · exact hExc hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich
+
+/--
+`CFBRC/Bridge` naming に揃えた core exceptional theorem 候補があれば、
+split theorem も同じ concrete naming で読める。
+-/
+theorem cfbrcPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplit_of_coreExceptional
+    (hCore : CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget) :
+    CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitTarget :=
+  cfbrcPrimitiveBoundarySelectionOnSplit_of_exceptional
+    (cfbrcExceptionalPrimitiveBoundaryOnWieferich_of_coreExceptional hCore)
+
+/--
+current split target があれば、
+`CFBRC/Bridge` naming に揃えた split concrete theorem 候補もそのまま満たされる。
+-/
+theorem cfbrcPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplit_of_split
+    (hSplit : CFBRCPrimitiveBoundarySelectionOnSplitTarget) :
+    CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitTarget :=
+  hSplit
+
+/--
+direct concrete target があれば、existence-part は primitive 条件を忘れるだけで従う。
+-/
+theorem cfbrcExceptionalBoundaryCorePrimeExistenceOnWieferich_of_directConcrete
+    (hDirect : CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteTarget) :
+    CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich
+  rcases hDirect hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich with
+    ⟨q, hqprime, hqcore, hq_not_dvd_x, _hprim⟩
+  exact ⟨q, hqprime, hqcore, hq_not_dvd_x⟩
+
+/--
+existence-only exceptional target があれば、
+parallel concrete theorem 候補もそのまま満たされる。
+
+[CFBRC] この橋は local naming 固定のために置いており、
+昇格前の段階では Branch A 局所 route を canonical とする。
+-/
+theorem cfbrcExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferich_of_existence
+    (hExist : CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget) :
+    CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichTarget :=
+  hExist
+
+/--
+parallel concrete theorem 候補があれば、
+existence-only exceptional target へは thin alias で戻せる。
+-/
+theorem cfbrcExceptionalBoundaryCorePrimeExistenceOnWieferich_of_parallelExceptional
+    (hPar : CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichTarget) :
+    CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget :=
+  hPar
+
+/--
+existence-part と primitive-part が揃えば、
+direct concrete target は橋だけで閉じる。
+-/
+theorem cfbrcPrimitiveBoundaryCoreOfPrimeExpDirectConcrete_of_existence_and_kernel
+    (hExist : CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget)
+    (hKernel : CFBRCExceptionalPrimitiveKernelOnWieferichTarget) :
+    CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich
+  rcases hExist hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich with
+    ⟨q, hqprime, hqcore, hq_not_dvd_x⟩
+  refine ⟨q, hqprime, hqcore, hq_not_dvd_x, ?_⟩
+  exact hKernel hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich
+    hqprime hqcore hq_not_dvd_x
+
+/--
+split existence theorem があれば、Wieferich 例外枝 existence は右枝の抽出だけで回収できる。
+-/
+theorem cfbrcExceptionalBoundaryCorePrimeExistenceOnWieferich_of_split
+    (hSplit : CFBRCBoundaryCorePrimeExistenceOnSplitTarget) :
+    CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich
+  exact hSplit hd_prime hd_ge hx hu hcop (Or.inr ⟨hd_dvd_x, hWieferich⟩)
+
+/--
+通常枝の既存 `CFBRC/Bridge` theorem と、
+Wieferich 例外枝 existence が揃えば split existence theorem を得る。
+-/
+theorem cfbrcBoundaryCorePrimeExistenceOnSplit_of_exceptional
+    (hExc : CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget) :
+    CFBRCBoundaryCorePrimeExistenceOnSplitTarget := by
+  intro d x u hd_prime hd_ge hx hu hcop hsplit
+  rcases hsplit with hOrd | ⟨hd_dvd_x, hWieferich⟩
+  · have hd_ge3 : 3 ≤ d := by omega
+    rcases DkMath.CFBRC.exists_primitive_prime_factor_dvd_boundaryCore_of_prime_exp_boundary_of_coprime
+        DkMath.CFBRC.BoundarySide.right
+        (d := d) (x := x) (u := u)
+        hd_prime hd_ge3 hx hu hcop hOrd with
+      ⟨q, hqprime, hqcore, hq_not_dvd_x, _hprim⟩
+    exact ⟨q, hqprime, hqcore, hq_not_dvd_x⟩
+  · exact hExc hd_prime hd_ge hx hu hcop hd_dvd_x hWieferich
+
+/--
+direct concrete の primitive-part は、既存 primitive 条件定理から default 実装できる。
+
+付録:
+- `q ∣ boundaryCyclotomicPrimeCore .right d x u` と `¬ q ∣ x`
+  から `q ∣ ((x+u)^d-u^d)` を戻し、
+  `prime_exp_not_dvd_diff_imp_primitive`
+  をそのまま適用するだけでよい。
+- したがって selection 側で truly new な kernel は、
+  高い確率で existence-part に偏っている。
+-/
+theorem cfbrcExceptionalPrimitiveKernelOnWieferich_default :
+    CFBRCExceptionalPrimitiveKernelOnWieferichTarget := by
+  intro d x u q hd_prime hd_ge hx hu hcop _hd_dvd_x _hWieferich hqprime hqcore hq_not_dvd_x
+  have hd1 : 1 < d := by omega
+  have hu_lt : u < x + u := by omega
+  have hqdiff :
+      q ∣ (x + u) ^ d - u ^ d :=
+    (DkMath.CFBRC.prime_dvd_sub_pow_iff_dvd_cyclotomicPrimeCore_nat
+      (p := d) (x := x) (u := u) (q := q) hqprime hq_not_dvd_x).2 hqcore
+  have hcop_add : Nat.Coprime (x + u) u :=
+    (Nat.coprime_add_self_left).2 hcop
+  intro k hk0 hkd
+  simpa [DkMath.CFBRC.boundaryDiffPow] using
+    (DkMath.NumberTheory.GcdNext.prime_exp_not_dvd_diff_imp_primitive
+      (a := x + u) (b := u) (d := d) (q := q)
+      hd_prime hd1 hqprime hcop_add hu_lt hu hqdiff (by simpa using hq_not_dvd_x)
+      hk0 hkd)
+
+/--
+distinguished prime が取れれば、
+primitive restoration に必要な arithmetic fallout は機械的に従う。
+-/
+theorem primeGe5BranchAPrimitiveDistinguishedPrimeArithmetic_default :
+    PrimeGe5BranchAPrimitiveDistinguishedPrimeArithmeticTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t _hWieferich q hqprime hqGN hqgap
+  have hq_ne_p : q ≠ p := by
+    intro hqp
+    exact hqgap (hqp ▸ hp_dvd_gap)
+  have hq_not_dvd_p : ¬ q ∣ p := by
+    intro hqp
+    rcases (Nat.dvd_prime hpack.hp).mp hqp with hq_one | hq_eq
+    · exact hqprime.ne_one hq_one
+    · exact hq_ne_p hq_eq
+  have hq_not_dvd_t : ¬ q ∣ t := by
+    intro hqt
+    have hq_dvd_gap' : q ∣ z - y := by
+      rw [hgap]
+      exact dvd_mul_of_dvd_right (dvd_pow hqt hpack.hp.ne_zero) (p ^ (p - 1))
+    exact hqgap hq_dvd_gap'
+  have hq_dvd_s : q ∣ s := by
+    have hq_dvd_pspow : q ∣ p * s ^ p := by
+      rw [← hsGN]
+      exact hqGN
+    rcases (hqprime.dvd_mul).mp hq_dvd_pspow with hqp | hqspow
+    · exact False.elim (hq_not_dvd_p hqp)
+    · exact hqprime.dvd_of_dvd_pow hqspow
+  have hcop_qy : Nat.Coprime q y := by
+    exact (Nat.Prime.coprime_iff_not_dvd hqprime).2 (by
+      intro hqy
+      have hq_dvd_gcd : q ∣ Nat.gcd s y := Nat.dvd_gcd hq_dvd_s hqy
+      rw [(Nat.coprime_iff_gcd_eq_one).mp hcop_sy] at hq_dvd_gcd
+      exact hqprime.not_dvd_one hq_dvd_gcd)
+  exact ⟨hq_dvd_s, hq_not_dvd_t, hcop_qy, hq_ne_p⟩
+
+/--
+arithmetic fallout まで明示した restoration target があれば、
+primitive packet restoration 契約は薄い橋で閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketRestore_of_arithmetic
+    (hArith : PrimeGe5BranchAPrimitiveDistinguishedPrimeArithmeticTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketRestoreTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich q hqprime hqGN hqgap
+  rcases hArith hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich hqprime hqGN hqgap with
+    ⟨hqs, hqt, hcop_qy, hq_ne_p⟩
+  exact hRestore hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich hqprime hqs hqt hcop_qy hq_ne_p
+
+/--
+restore-from-arithmetic を
+smaller counterexample 段と packet 包装段に分けて読める再合成橋。
+
+付録:
+- `RestoreFromArithmetic`
+  の最終未完を
+  1 本の巨大 target としてではなく、
+  `smaller counterexample`
+  と
+  `normal-form packet packaging`
+  の 2 段へ切り分けるための canonical wrapper である。
+-/
+theorem primeGe5BranchAPrimitivePacketRestoreFromArithmetic_of_smallerCounterexample_and_packet
+    (hSmall : PrimeGe5BranchAPrimitiveSmallerCounterexampleFromArithmeticTarget)
+    (hPack : PrimeGe5BranchAPrimitivePacketOfSmallerCounterexampleTarget) :
+    PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p
+  rcases hSmall hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p with
+    ⟨x', y', z', hpack', hp_dvd_gap', hz'lt⟩
+  exact hPack hpack' hp_dvd_gap' hz'lt
+
+/--
+Zsigmondy-lite existence と arithmetic fallout 付き restoration が揃えば、
+primitive witness-packet target は arithmetic-aware route だけで閉じる。
+
+付録:
+- concrete 実装の残核を
+  `PrimeGe5BranchAPrimitiveZsigmondyTarget`
+  と
+  `PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget`
+  の 2 本へ明示的に絞るための橋である。
+- distinguished-prime target 自体と packet-restore target 自体は、
+  ここではどちらも中間 API としてしか使わない。
+-/
+theorem primeGe5BranchAPrimitiveWieferichPacket_of_zsigmondy_arithmetic_and_restore
+    (hZ : PrimeGe5BranchAPrimitiveZsigmondyTarget)
+    (hArith : PrimeGe5BranchAPrimitiveDistinguishedPrimeArithmeticTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitiveWieferichPacketTarget :=
+  primeGe5BranchAPrimitiveWieferichPacket_of_distinguishedPrime_and_restore
+    (primeGe5BranchAPrimitiveDistinguishedPrime_of_zsigmondy hZ)
+    (primeGe5BranchAPrimitivePacketRestore_of_arithmetic hArith hRestore)
+
+/--
+primitive packet descent は、
+`zsigmondy existence + arithmetic fallout + restore-from-arithmetic`
+の 3 段が揃えば橋だけで閉じる。
+
+付録:
+- primitive route の concrete 実装を探すとき、
+  truly missing な数学をこの 3 本へ限定して読むための canonical wrapper である。
+- valuation peel route を使わない mainline を明示する役割も持つ。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_zsigmondy_arithmetic_and_restore
+    (hZ : PrimeGe5BranchAPrimitiveZsigmondyTarget)
+    (hArith : PrimeGe5BranchAPrimitiveDistinguishedPrimeArithmeticTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_wieferichPacket
+    (primeGe5BranchAPrimitiveWieferichPacket_of_zsigmondy_arithmetic_and_restore
+      hZ hArith hRestore)
+
+/--
+primitive packet descent は、
+Branch A 専用の cyclotomic-prime existence と
+restore-from-arithmetic
+の 2 本だけがあれば橋で閉じる。
+
+付録:
+- arithmetic fallout は既に default 実装で回収できるため、
+  primitive mainline の concretely missing kernel を
+  本当に 2 本へ見せる canonical wrapper である。
+- `zsigmondy` 層は中間 API としてのみ経由する。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_cyclotomicPrime_and_restore
+    (hCyc : PrimeGe5BranchAPrimitiveCyclotomicPrimeTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_zsigmondy_arithmetic_and_restore
+    (primeGe5BranchAPrimitiveZsigmondy_of_cyclotomicPrime hCyc)
+    primeGe5BranchAPrimitiveDistinguishedPrimeArithmetic_default
+    hRestore
+
+/--
+primitive packet descent は、
+Branch A 専用の cyclotomic existence wrapper と
+restore-from-arithmetic
+の 2 本だけがあれば橋で閉じる。
+
+付録:
+- selection 側の truly missing kernel を
+  `PrimeGe5BranchACyclotomicExistenceTarget`
+  1 本にさらに押し込めた canonical wrapper である。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_existence_and_restore
+    (hEx : PrimeGe5BranchACyclotomicExistenceTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_cyclotomicPrime_and_restore
+    (primeGe5BranchAPrimitiveCyclotomicPrime_of_existence hEx)
+    hRestore
+
+/--
+Branch A の Wieferich witness 付き cyclotomic existence と restore-from-arithmetic があれば、
+primitive packet descent は橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_wieferichExistence_and_restore
+    (hWieferichEx : PrimeGe5BranchACyclotomicExistenceOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_existence_and_restore
+    (primeGe5BranchACyclotomicExistence_of_wieferich hWieferichEx)
+    hRestore
+
+/--
+primitive route の selection 側を cyclotomic factor existence として実装できれば、
+packet descent は restore と合わせて橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_coreExistence_and_restore
+    (hCore : PrimeGe5BranchACyclotomicCoreExistenceOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_wieferichExistence_and_restore
+    (primeGe5BranchACyclotomicExistenceOnWieferich_of_coreExistence hCore)
+    hRestore
+
+/--
+primitive route の concrete-ready mainline は、
+CFBRC 例外枝 existence theorem と restore があれば橋だけで閉じる。
+
+[CFBRC] ここで使う existence theorem は local Branch A 版を既定とし、
+bridge 層への昇格は後回しにする。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_cfbrcExceptional_and_restore
+    (hExc : PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_coreExistence_and_restore
+    (primeGe5BranchACyclotomicCoreExistenceOnWieferich_of_cfbrcExceptional hExc)
+    hRestore
+
+/--
+Branch A 局所 exceptional existence theorem を canonical 入口と見る packet-descent wrapper。
+
+[CFBRC] 現段階ではこの local theorem を先に実装し、
+parallel / normalized naming は薄い bridge として扱う。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_localExceptionalExistence_and_restore
+    (hLocal : PrimeGe5BranchACFBRCExceptionalExistenceOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_cfbrcExceptional_and_restore
+    hLocal hRestore
+
+/--
+primitive route の concrete-ready mainline は、
+boundary-normalized exceptional existence theorem と restore からでも閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_boundaryExceptional_and_restore
+    (hBoundary : CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_cfbrcExceptional_and_restore
+    (primeGe5BranchACFBRCExceptionalExistence_of_boundaryExceptional hBoundary)
+    hRestore
+
+/--
+primitive route の selection 側 first missing theorem を
+boundary-normalized exceptional statement として読む canonical wrapper。
+
+付録:
+- 現時点では
+  `CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget`
+  が selection 側の実装本命 statement だと見てよい。
+- したがって primitive mainline の concrete 実装探索では、
+  この theorem を入口に restore 側と組み合わせる読みを既定にする。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_firstMissingSelection_and_restore
+    (hFirst : CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_boundaryExceptional_and_restore
+    hFirst hRestore
+
+/--
+primitive-boundary exceptional theorem を直接実装できれば、
+primitive packet descent は restore と合わせて橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_primitiveBoundaryExceptional_and_restore
+    (hPrim : CFBRCExceptionalPrimitiveBoundaryOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_firstMissingSelection_and_restore
+    (cfbrcExceptionalBoundaryOnWieferich_of_primitiveBoundary hPrim)
+    hRestore
+
+/--
+通常枝は既存 `CFBRC/Bridge`、例外枝だけ新 theorem とする split selection があれば、
+primitive packet descent は restore と合わせて橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_splitSelection_and_restore
+    (hSplit : CFBRCPrimitiveBoundarySelectionOnSplitTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_primitiveBoundaryExceptional_and_restore
+    (cfbrcExceptionalPrimitiveBoundaryOnWieferich_of_split hSplit)
+    hRestore
+
+/--
+`CFBRC/Bridge` naming に揃えた例外枝 concrete theorem 候補があれば、
+primitive packet descent は restore と合わせて橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_coreExceptional_and_restore
+    (hCore : CFBRCExceptionalPrimitiveBoundaryCoreOfPrimeExpOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_primitiveBoundaryExceptional_and_restore
+    (cfbrcExceptionalPrimitiveBoundaryOnWieferich_of_coreExceptional hCore)
+    hRestore
+
+/--
+`CFBRC/Bridge` naming に揃えた split concrete theorem 候補があれば、
+primitive packet descent は restore と合わせて橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_coreSplitSelection_and_restore
+    (hSplitCore : CFBRCPrimitiveBoundaryCoreOfPrimeExpSelectionOnSplitTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_splitSelection_and_restore
+    hSplitCore hRestore
+
+/--
+right branch を direct concrete theorem の既定入口と見た primitive packet descent bridge。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_directConcreteSelection_and_restore
+    (hDirect : CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_coreExceptional_and_restore
+    hDirect hRestore
+
+/--
+direct concrete の existence-part と primitive-part が揃えば、
+primitive packet descent は restore と合わせて橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_directConcreteParts_and_restore
+    (hExist : CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget)
+    (hKernel : CFBRCExceptionalPrimitiveKernelOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_directConcreteSelection_and_restore
+    (cfbrcPrimitiveBoundaryCoreOfPrimeExpDirectConcrete_of_existence_and_kernel
+      hExist hKernel)
+    hRestore
+
+/--
+primitive kernel が default 実装できるなら、
+direct concrete target は existence-part だけで閉じる。
+-/
+theorem cfbrcPrimitiveBoundaryCoreOfPrimeExpDirectConcrete_of_existence
+    (hExist : CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget) :
+    CFBRCPrimitiveBoundaryCoreOfPrimeExpDirectConcreteTarget :=
+  cfbrcPrimitiveBoundaryCoreOfPrimeExpDirectConcrete_of_existence_and_kernel
+    hExist
+    cfbrcExceptionalPrimitiveKernelOnWieferich_default
+
+/--
+direct concrete の missing math が existence-part に寄るなら、
+primitive packet descent は existence と restore だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_directConcreteExistence_and_restore
+    (hExist : CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_directConcreteSelection_and_restore
+    (cfbrcPrimitiveBoundaryCoreOfPrimeExpDirectConcrete_of_existence hExist)
+    hRestore
+
+/--
+ordinary branch theorem と平行な exceptional concrete theorem 候補があれば、
+primitive packet descent は restore と合わせて橋だけで閉じる。
+
+[CFBRC] 現段階では local Branch A theorem を入口にし、
+`CFBRC/Bridge` 側への配置は後続の整理課題として保留する。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_parallelExceptionalExistence_and_restore
+    (hPar : CFBRCExceptionalPrimeFactorDvdBoundaryCoreOfPrimeExpBoundaryOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_directConcreteExistence_and_restore
+    (cfbrcExceptionalBoundaryCorePrimeExistenceOnWieferich_of_parallelExceptional hPar)
+    hRestore
+
+/--
+split existence と primitive kernel が揃えば、
+direct concrete target は right branch の抽出経由で橋だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_splitExistence_kernel_and_restore
+    (hSplitExist : CFBRCBoundaryCorePrimeExistenceOnSplitTarget)
+    (hKernel : CFBRCExceptionalPrimitiveKernelOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_directConcreteParts_and_restore
+    (cfbrcExceptionalBoundaryCorePrimeExistenceOnWieferich_of_split hSplitExist)
+    hKernel
+    hRestore
+
+/--
+split existence の左枝が既存 theorem、右枝だけ新 theorem であり、
+primitive kernel は default 実装できるなら、
+primitive packet descent は split existence と restore だけで閉じる。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_splitExistence_and_restore
+    (hSplitExist : CFBRCBoundaryCorePrimeExistenceOnSplitTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_directConcreteExistence_and_restore
+    (cfbrcExceptionalBoundaryCorePrimeExistenceOnWieferich_of_split hSplitExist)
+    hRestore
+
+/--
+primitive route の concrete-ready mainline。
+
+付録:
+- selection 側の theorem statement は最小 wrapper と witness 付き wrapper の
+  2 形まで整理されたが、実装本命は後者と見る。
+- したがって concrete 実装探索の canonical 入口は、
+  `PrimeGe5BranchACyclotomicExistenceOnWieferichTarget`
+  と
+  `PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget`
+  の 2 本で読む。
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_concreteSelection_and_restore
+    (hConcrete : PrimeGe5BranchACyclotomicExistenceOnWieferichTarget)
+    (hRestore : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_wieferichExistence_and_restore
+    hConcrete hRestore
 
 /--
 valuation peel を error-lift 1 本に局所化した smaller-packet bridge。
@@ -3870,7 +5382,7 @@ theorem primeGe5BranchARefuter_of_primitiveMainline
 `FLT_of_coprime` の residual branch から呼ぶ Branch A 専用 refuter 入口。
 
 将来は `PrimeGe5BranchAGapPowFactorizationTarget` と shape/descent kernel を
-ここで合成する。現段階では残差 `sorry` を `Basic.lean` から切り離して
+ここで合成する。現段階では残差 `so#rry` を `Basic.lean` から切り離して
 この lower layer に局所化する。
 -/
 theorem primeGe5BranchARefuter_default :
@@ -3880,5 +5392,267 @@ theorem primeGe5BranchARefuter_default :
   exact primeGe5BranchARefuter_of_shape_pipeline
     primeGe5BranchAShapeFactorization_default
     primeGe5BranchAShapeValueToRefuter_default
+
+/-! ### §R. Restore structural lemmas
+
+Branch A normal form の primitive packet restore に向けた構造的補題群。
+ここでは、原始素因子 witness `q` の持つ必然的な性質を形式化する。
+-/
+
+/--
+FLT 等式 `x^p + y^p = z^p` と `q ∣ x` から、`z^p ≡ y^p [MOD q]` が従う。
+-/
+theorem flt_zpow_congr_mod_of_dvd_x
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hq_dvd_x : q ∣ x) :
+    z ^ p ≡ y ^ p [MOD q] := by
+  have hxp : q ∣ x ^ p := dvd_pow hq_dvd_x hpack.hp.ne_zero
+  have hEq := hpack.hEq  -- x^p + y^p = z^p
+  -- x^p ≡ 0 [MOD q] なので z^p = x^p + y^p ≡ 0 + y^p = y^p [MOD q]
+  have hmod_x : x ^ p ≡ 0 [MOD q] := Nat.modEq_zero_iff_dvd.mpr hxp
+  -- x^p + y^p ≡ 0 + y^p = y^p [MOD q]
+  have hmod_sum : x ^ p + y ^ p ≡ y ^ p [MOD q] := by
+    have := hmod_x.add_right (y ^ p)
+    simpa using this
+  rw [hEq] at hmod_sum
+  exact hmod_sum
+
+/--
+FLT 反例で `q ∣ x`, `q ∤ y` なら `q ∤ z`。
+-/
+theorem flt_not_dvd_z_of_dvd_x_not_dvd_y
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hq_prime : Nat.Prime q)
+    (hq_dvd_x : q ∣ x)
+    (hq_not_dvd_y : ¬ q ∣ y) :
+    ¬ q ∣ z := by
+  intro hq_dvd_z
+  have hq_dvd_zp : q ∣ z ^ p := dvd_pow hq_dvd_z hpack.hp.ne_zero
+  have hq_dvd_xp : q ∣ x ^ p := dvd_pow hq_dvd_x hpack.hp.ne_zero
+  have hq_dvd_yp : q ∣ y ^ p := by
+    have hEq : x ^ p + y ^ p = z ^ p := hpack.hEq
+    -- z^p ≡ y^p [MOD q] (from above-style)
+    have hmod : z ^ p ≡ y ^ p [MOD q] :=
+      flt_zpow_congr_mod_of_dvd_x hpack hq_dvd_x
+    -- q ∣ z → q ∣ z^p → z^p ≡ 0 [MOD q]
+    have hmod_z : z ^ p ≡ 0 [MOD q] :=
+      Nat.modEq_zero_iff_dvd.mpr hq_dvd_zp
+    -- 0 ≡ z^p [MOD q] → z^p ≡ y^p [MOD q] → 0 ≡ y^p [MOD q]
+    have hmod_y : y ^ p ≡ 0 [MOD q] := hmod.symm.trans hmod_z
+    exact (Nat.modEq_zero_iff_dvd).mp hmod_y
+  have hq_dvd_y : q ∣ y := hq_prime.dvd_of_dvd_pow hq_dvd_yp
+  exact hq_not_dvd_y hq_dvd_y
+
+/--
+FLT 反例で `q ∣ x`, `q ∤ y`, `q ∤ (z-y)` なら、
+`ZMod q` 上で `(z : ZMod q) ≠ (y : ZMod q)` かつ両方 0 でない。
+-/
+theorem flt_zmod_ne_of_not_dvd_gap
+    {p x y z q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (_hq_prime : Nat.Prime q)
+    (_hq_dvd_x : q ∣ x)
+    (hq_not_dvd_y : ¬ q ∣ y)
+    (hq_not_dvd_gap : ¬ q ∣ (z - y)) :
+    (z : ZMod q) ≠ (y : ZMod q) ∧ (y : ZMod q) ≠ 0 := by
+  constructor
+  · intro heq
+    have : q ∣ (z - y) := by
+      have hsub : (z : ZMod q) - (y : ZMod q) = 0 := sub_eq_zero.mpr heq
+      rw [← Nat.cast_sub hpack.hyz] at hsub
+      exact (ZMod.natCast_eq_zero_iff (z - y) q).mp hsub
+    exact hq_not_dvd_gap this
+  · intro heq
+    have := (ZMod.natCast_eq_zero_iff y q).mp heq
+    exact hq_not_dvd_y this
+
+/--
+Branch A の restore witness `q` は必ず `p ∣ (q - 1)` を満たす。
+
+**証明スケッチ：**
+1. `q ∣ s` → `q ∣ x`（∵ `x = p·t·s`）
+2. FLT 等式 `x^p + y^p = z^p` + `q ∣ x` → `z^p ≡ y^p [MOD q]`
+3. `ZMod q` 上で `(z·y⁻¹)^p = 1` かつ `z·y⁻¹ ≠ 1`
+4. `orderOf(z·y⁻¹) = p`（orderOf_eq_prime）
+5. Lagrange → `p ∣ |(ZMod q)*| = q - 1`
+-/
+theorem restore_witness_cong_one_mod_p
+    {p x y z t s q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (_hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsx : x = p * (t * s))
+    (hq_prime : Nat.Prime q)
+    (hqs : q ∣ s)
+    (hqt : ¬ q ∣ t)
+    (hcop_qy : Nat.Coprime q y)
+    (hq_ne_p : q ≠ p) :
+    p ∣ (q - 1) := by
+  -- Step 0: 前提の性質を導出
+  have hq_gt_one : 1 < q := hq_prime.one_lt
+  have hq_pos : 0 < q := hq_prime.pos
+  have hp_prime := hpack.hp
+  have hp_pos := hp_prime.pos
+  -- q ∣ x (from x = p * (t * s) and q ∣ s)
+  have hq_dvd_x : q ∣ x := by
+    rw [hsx]
+    exact dvd_mul_of_dvd_right (dvd_mul_of_dvd_right hqs t) p
+  -- q ∤ y (from Coprime q y)
+  have hq_not_dvd_y : ¬ q ∣ y := by
+    exact (Nat.Prime.coprime_iff_not_dvd hq_prime).mp hcop_qy
+  -- q ∤ (z - y) (from z - y = p^{p-1} * t^p, q ∤ t, q ≠ p)
+  have hq_not_dvd_gap : ¬ q ∣ (z - y) := by
+    rw [hgap]
+    intro hq_dvd_mul
+    rcases (hq_prime.dvd_mul).mp hq_dvd_mul with hq_dvd_ppow | hq_dvd_tpow
+    · have hq_dvd_p : q ∣ p := hq_prime.dvd_of_dvd_pow hq_dvd_ppow
+      exact hq_ne_p ((Nat.dvd_prime hp_prime).mp hq_dvd_p |>.resolve_left hq_prime.ne_one)
+    · exact hqt (hq_prime.dvd_of_dvd_pow hq_dvd_tpow)
+  -- q ∤ z
+  have hq_not_dvd_z : ¬ q ∣ z :=
+    flt_not_dvd_z_of_dvd_x_not_dvd_y hpack hq_prime hq_dvd_x hq_not_dvd_y
+  -- Step 1: ZMod q 上での計算
+  haveI : Fact (Nat.Prime q) := ⟨hq_prime⟩
+  haveI : Fact (Nat.Prime p) := ⟨hp_prime⟩
+  -- y は ZMod q で可逆
+  have hy_ne_zero : (y : ZMod q) ≠ 0 := by
+    intro heq
+    exact hq_not_dvd_y ((ZMod.natCast_eq_zero_iff y q).mp heq)
+  have hz_ne_zero : (z : ZMod q) ≠ 0 := by
+    intro heq
+    exact hq_not_dvd_z ((ZMod.natCast_eq_zero_iff z q).mp heq)
+  have hx_eq_zero : (x : ZMod q) = 0 := by
+    exact (ZMod.natCast_eq_zero_iff x q).mpr hq_dvd_x
+  -- z^p ≡ y^p in ZMod q
+  have hzp_eq_yp : (z : ZMod q) ^ p = (y : ZMod q) ^ p := by
+    have hFLT : (x : ZMod q) ^ p + (y : ZMod q) ^ p = (z : ZMod q) ^ p := by
+      have hEq := hpack.hEq
+      have : (↑(x ^ p + y ^ p) : ZMod q) = (↑(z ^ p) : ZMod q) := by
+        congr 1
+      simpa [Nat.cast_add, Nat.cast_pow] using this
+    rw [hx_eq_zero, zero_pow hpack.hp.ne_zero, zero_add] at hFLT
+    exact hFLT.symm
+  -- z ≠ y in ZMod q
+  have hz_ne_y : (z : ZMod q) ≠ (y : ZMod q) := by
+    intro heq
+    have : (z : ZMod q) - (y : ZMod q) = 0 := sub_eq_zero.mpr heq
+    have hq_dvd : q ∣ (z - y) := by
+      have hsub : (z : ZMod q) - (y : ZMod q) = 0 := sub_eq_zero.mpr heq
+      rw [← Nat.cast_sub hpack.hyz] at hsub
+      exact (ZMod.natCast_eq_zero_iff (z - y) q).mp hsub
+    exact hq_not_dvd_gap hq_dvd
+  -- Step 2: y は ZMod q の単元なので y⁻¹ が存在する
+  -- (z * y⁻¹)^p = z^p * (y⁻¹)^p = y^p * (y⁻¹)^p = 1
+  have hy_unit : IsUnit (y : ZMod q) := by
+    rw [ZMod.isUnit_iff_coprime]
+    exact hcop_qy.symm
+  -- z * y⁻¹ の p 乗を計算
+  let ω : ZMod q := (z : ZMod q) * (↑y : ZMod q)⁻¹
+  have hω_pow : ω ^ p = 1 := by
+    change ((z : ZMod q) * (↑y : ZMod q)⁻¹) ^ p = 1
+    rw [mul_pow, hzp_eq_yp, ← mul_pow]
+    rw [mul_inv_cancel₀ hy_ne_zero, one_pow]
+  -- ω ≠ 1
+  have hω_ne_one : ω ≠ 1 := by
+    change (z : ZMod q) * (↑y : ZMod q)⁻¹ ≠ 1
+    intro heq
+    have : (z : ZMod q) = (y : ZMod q) := by
+      have h := heq
+      field_simp at h
+      exact h
+    exact hz_ne_y this
+  -- Step 3: orderOf ω = p
+  have hω_order : orderOf ω = p := by
+    exact orderOf_eq_prime hω_pow hω_ne_one
+  -- Step 4: orderOf ω ∣ (q - 1) by Fermat's Little Theorem
+  -- ZMod q is a field when q is prime, and ω ≠ 0
+  have hω_ne_zero : ω ≠ 0 := by
+    change (z : ZMod q) * (↑y : ZMod q)⁻¹ ≠ 0
+    exact mul_ne_zero hz_ne_zero (inv_ne_zero hy_ne_zero)
+  have horder_dvd : orderOf ω ∣ (q - 1) := by
+    -- ω は ZMod q の非零元なので、Fermat の小定理 / 群の位数で q-1 を割る
+    -- ZMod q is a field, so (ZMod q)* has order q-1
+    -- orderOf ω | |(ZMod q)*| = q - 1
+    -- ω^(q-1) = 1 by ZMod.pow_card_sub_one_eq_one
+    have hω_pow_card : ω ^ (q - 1) = 1 := by
+      exact ZMod.pow_card_sub_one_eq_one hω_ne_zero
+    exact orderOf_dvd_of_pow_eq_one hω_pow_card
+  -- Step 5: p ∣ (q - 1)
+  rw [← hω_order]
+  exact horder_dvd
+
+/--
+Branch A restore witness `q` の必然的性質をまとめた構造体。
+
+`q ∣ s, ¬ q ∣ t, Coprime q y, q ≠ p` の組から導かれる全ての性質を束ねる。
+-/
+structure RestoreWitnessProperties (p x y z t s q : ℕ) : Prop where
+  hq_dvd_x : q ∣ x
+  hq_not_dvd_y : ¬ q ∣ y
+  hq_not_dvd_z : ¬ q ∣ z
+  hq_not_dvd_gap : ¬ q ∣ (z - y)
+  hq_cong : p ∣ (q - 1)
+  hqp_dvd_GN : q ^ p ∣ GN p (z - y) y
+
+/--
+Branch A の設定で `q^p ∣ GN p (z-y) y` が成立することを示す補題。
+
+GN p (z-y) y = p * s^p と q ∣ s, q ≠ p から従う。
+-/
+theorem branchA_qpow_dvd_GN
+    {p x y z s q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hq_prime : Nat.Prime q)
+    (hqs : q ∣ s)
+    (hq_ne_p : q ≠ p) :
+    q ^ p ∣ GN p (z - y) y := by
+  rw [hsGN]
+  -- q^p ∣ s^p (from q ∣ s)
+  have hqp_dvd_sp : q ^ p ∣ s ^ p := pow_dvd_pow_of_dvd hqs p
+  -- q ∤ p (distinct primes)
+  have hq_ne_p_prime : q ≠ p := hq_ne_p
+  -- gcd(q^p, p) = 1 なので q^p ∣ p * s^p
+  have hcop : Nat.Coprime (q ^ p) p := by
+    apply Nat.Coprime.pow_left
+    exact (Nat.Prime.coprime_iff_not_dvd hq_prime).mpr
+      (fun h => hq_ne_p ((Nat.dvd_prime hpack.hp).mp h |>.resolve_left hq_prime.ne_one))
+  exact dvd_mul_of_dvd_right hqp_dvd_sp p
+
+/--
+全ての RestoreWitnessProperties を一度に構成するバンドル定理。
+-/
+theorem restore_witness_properties_default
+    {p x y z t s q : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hsx : x = p * (t * s))
+    (hq_prime : Nat.Prime q)
+    (hqs : q ∣ s)
+    (hqt : ¬ q ∣ t)
+    (hcop_qy : Nat.Coprime q y)
+    (hq_ne_p : q ≠ p) :
+    RestoreWitnessProperties p x y z t s q where
+  hq_dvd_x := by
+    rw [hsx]; exact dvd_mul_of_dvd_right (dvd_mul_of_dvd_right hqs t) p
+  hq_not_dvd_y := (Nat.Prime.coprime_iff_not_dvd hq_prime).mp hcop_qy
+  hq_not_dvd_z :=
+    flt_not_dvd_z_of_dvd_x_not_dvd_y hpack hq_prime
+      (by rw [hsx]; exact dvd_mul_of_dvd_right (dvd_mul_of_dvd_right hqs t) p)
+      ((Nat.Prime.coprime_iff_not_dvd hq_prime).mp hcop_qy)
+  hq_not_dvd_gap := by
+    rw [hgap]
+    intro hq_dvd_mul
+    rcases (hq_prime.dvd_mul).mp hq_dvd_mul with hq_dvd_ppow | hq_dvd_tpow
+    · have hq_dvd_p : q ∣ p := hq_prime.dvd_of_dvd_pow hq_dvd_ppow
+      exact hq_ne_p ((Nat.dvd_prime hpack.hp).mp hq_dvd_p |>.resolve_left hq_prime.ne_one)
+    · exact hqt (hq_prime.dvd_of_dvd_pow hq_dvd_tpow)
+  hq_cong := restore_witness_cong_one_mod_p hpack hp_dvd_gap hgap hsx
+    hq_prime hqs hqt hcop_qy hq_ne_p
+  hqp_dvd_GN := branchA_qpow_dvd_GN hpack hsGN hq_prime hqs hq_ne_p
 
 end DkMath.FLT

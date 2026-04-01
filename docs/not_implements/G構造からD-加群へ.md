@@ -52,8 +52,7 @@ $$
 二項展開より
 
 $$
-(x+u)^d-x^d
-=
+(x+u)^d-x^d =
 \sum_{k=1}^{d}\binom{d}{k}x^{d-k}u^k
 $$
 
@@ -67,8 +66,7 @@ $$
 
 $$
 G_{d-1}(x,u):=
-\sum_{k=1}^{d}\binom{d}{k}x^{d-k}u^{k-1}
-=
+\sum_{k=1}^{d}\binom{d}{k}x^{d-k}u^{k-1} =
 \sum_{j=0}^{d-1}\binom{d}{j+1}x^{d-1-j}u^j
 $$
 

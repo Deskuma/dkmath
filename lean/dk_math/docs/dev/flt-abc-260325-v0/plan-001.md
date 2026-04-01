@@ -307,9 +307,9 @@ theorem primeGe5BranchAShapeWitnessKernel_of_normalFormRefuter ...
 
 \[
 \text{GN の shape}
-;\to;
+\;\to\;
 \text{normal form}
-;\to;
+\;\to\;
 \text{local refuter}
 \]
 
