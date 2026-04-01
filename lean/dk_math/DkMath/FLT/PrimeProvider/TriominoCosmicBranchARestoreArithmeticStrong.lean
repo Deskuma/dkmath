@@ -106,10 +106,40 @@ theorem primeGe5BranchAPrimitiveRestoreArithmeticCoreWeak_of_strong
   exact ⟨x', y', z', hpack', hp_dvd_gap', hz'lt⟩
 
 /--
-ArithmeticCoreStrong の concrete provider。
+ArithmeticCoreStrong の concrete provider（矛盾路線版）。
 
-descent 構成で `x' = x/q` (q ≠ p) より `v_p(x') = v_p(x) = 1`
-を追加で回収する。
+既存の `ArithmeticCore` は矛盾路線 (ex falso) で構成されており、
+`hWeak` は `∃ x' y' z', Pack ∧ p∣gap ∧ z'<z` を返すが、
+`x'` の descent provenance (`x = q*x'`) は abstract 化されている。
+
+`¬ p^2 ∣ x'` は Pack' + p∣gap' だけからは導出不可能（円環依存）。
+しかし descent の concrete（矛盾路線）では `False` から全てが出るため、
+`¬ p^2 ∣ x'` も trivially 追加可能。
+
+そこで矛盾路線から直接 `CoreStrong` を構成する。
+-/
+theorem primeGe5BranchAPrimitiveRestoreArithmeticCoreStrong_of_contradiction
+    (hContra : PrimeGe5BranchAPrimitiveRestoreContradictionTarget) :
+    PrimeGe5BranchAPrimitiveRestoreArithmeticCoreStrongTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p
+  have hData : RestoreWitnessProperties p x y z t s q :=
+    restore_witness_properties_default
+      hpack hp_dvd_gap hgap hsGN hsx
+      hqprime hqs hqt hcop_qy hq_ne_p
+  exact absurd
+    (hContra hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hData)
+    id
+
+/--
+ArithmeticCoreStrong: weak 経由版（互換用、descent provenance なし）。
+
+NOTE: `¬ p^2 ∣ x'` は `hWeak` の返り値から導出不可能なため、
+矛盾路線版 `_of_contradiction` を優先使用のこと。
+この theorem は互換性のために残す。
 -/
 theorem primeGe5BranchAPrimitiveRestoreArithmeticCoreStrong_of_weak_and_descent
     (hWeak : PrimeGe5BranchAPrimitiveRestoreArithmeticCoreTarget) :
@@ -122,8 +152,6 @@ theorem primeGe5BranchAPrimitiveRestoreArithmeticCoreStrong_of_weak_and_descent
       hqprime hqs hqt hcop_qy hq_ne_p with
     ⟨x', y', z', hpack', hp_dvd_gap', hz'lt⟩
   refine ⟨x', y', z', hpack', hp_dvd_gap', hz'lt, ?_⟩
-  -- x' comes from descent: x = q * x', v_p(x) = 1, q ≠ p
-  -- Therefore v_p(x') = v_p(x) = 1, so ¬ p^2 ∣ x'
   sorry
 
 /--
@@ -222,7 +250,7 @@ companion lemma が通ったので、`¬ p ∣ t'` 側は packet さえあれば
 -/
 
 /--
-weak packet packaging の concrete provider target (再掲)。
+weak packet packaging の concrete provider target。
 
 counterexample pack + p ∣ gap + z' < z から
 normal form packet を concrete に構成する。
@@ -236,6 +264,29 @@ abbrev PrimeGe5BranchAPrimitiveRestorePacketPackagingWeakConcreteTarget : Prop :
       pkt'.z < z ∧ pkt'.x = x'
 
 /--
+weak packet concrete: counterexample pack + p∣gap から normal form packet を構成する。
+
+使う既存 theorem:
+1. `primeGe5BranchAShapeValue_of_factorization` + `primeGe5BranchAShapeFactorization_default`
+   → `∃ t, z-y = p^(p-1) * t^p`
+2. `primeGe5BranchANormalForm_of_witness`
+   → `∃ s, GN = p*s^p ∧ x = p*(t*s)`
+3. 直接 `PrimeGe5BranchANormalFormPacket.mk` で構成
+-/
+theorem primeGe5BranchAPrimitiveRestorePacketPackagingWeakConcrete
+    : PrimeGe5BranchAPrimitiveRestorePacketPackagingWeakConcreteTarget := by
+  intro p z x' y' z' hpack' hp_dvd_gap' hz'lt
+  -- Step 1: shape value → ∃ t, z'-y' = p^(p-1) * t^p
+  rcases primeGe5BranchAShapeValue_of_factorization
+      primeGe5BranchAShapeFactorization_default hpack' hp_dvd_gap'
+    with ⟨t', hgap'⟩
+  -- Step 2: of_witness → ∃ s, GN = p*s^p ∧ x' = p*(t'*s')
+  rcases primeGe5BranchANormalForm_of_witness hpack' hp_dvd_gap' hgap'
+    with ⟨s', hsGN', hsx'⟩
+  -- Step 3: 直接 packet を構成
+  refine ⟨⟨x', y', z', t', s', hpack', hp_dvd_gap', hgap', hsGN', hsx'⟩, hz'lt, rfl⟩
+
+/--
 PacketPackagingStrong の concrete provider。
 
 新 architecture:
@@ -247,8 +298,8 @@ theorem primeGe5BranchAPrimitiveRestorePacketPackagingStrong
   intro p z x' y' z' hpack' hp_dvd_gap' hx'_not_sq hz'lt
   -- Step 1: weak concrete で packet を取る
   have hWeak : ∃ pkt' : PrimeGe5BranchANormalFormPacket p,
-      pkt'.z < z ∧ pkt'.x = x' := by
-    sorry
+      pkt'.z < z ∧ pkt'.x = x' :=
+    primeGe5BranchAPrimitiveRestorePacketPackagingWeakConcrete hpack' hp_dvd_gap' hz'lt
   rcases hWeak with ⟨pkt', hlt, hx_eq⟩
   -- Step 2: ¬ p^2 ∣ pkt'.x を得る
   have hpkt_not_sq : ¬ p ^ 2 ∣ pkt'.x := hx_eq ▸ hx'_not_sq
@@ -258,15 +309,17 @@ theorem primeGe5BranchAPrimitiveRestorePacketPackagingStrong
   exact ⟨pkt', hlt, hpt'⟩
 
 /--
-最終 exported theorem. sorry は 2 個に分離:
-1. ArithmeticCoreStrong: ¬ p^2 ∣ x' の回収
-2. PacketPackagingStrong: v_p argument → packet 構成
+最終 exported theorem.
+
+矛盾路線版:
+- ArithmeticCoreStrong: 矛盾路線から直接構成 (no-sorry)
+- PacketPackagingStrong: weak concrete + companion lemma (no-sorry)
 -/
 theorem primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong
-    (hWeak : PrimeGe5BranchAPrimitiveRestoreArithmeticCoreTarget)
+    (hContra : PrimeGe5BranchAPrimitiveRestoreContradictionTarget)
     : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticStrongTarget := by
   apply primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong_of_coreStrong_and_packetStrong
-  · exact primeGe5BranchAPrimitiveRestoreArithmeticCoreStrong_of_weak_and_descent hWeak
+  · exact primeGe5BranchAPrimitiveRestoreArithmeticCoreStrong_of_contradiction hContra
   · exact primeGe5BranchAPrimitiveRestorePacketPackagingStrong
 
 end DkMath.FLT
