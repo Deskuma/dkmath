@@ -261,7 +261,7 @@ Archive
    - 次: Phase 1 の hpt' を no-sorry にするか、Kummer property の形式化を追求
 
 9. Git status:
-   - Branch: `dev/FLT-BAFCT-260401-v0`
+   - Branch: `dev/FLT-BAFCT-260401-v2`
    - New file: TriominoCosmicBranchAPrimitiveStrongProvider.lean (builds)
    - FringeDescent.lean: no-sorry (protected from changes)
    - Next milestone: Phase 1 + Phase 2 concrete ⟹ potential v1 tag
@@ -321,7 +321,7 @@ Archive
    - strong target の chain = data flow を正確に制御して初めて no-sorry が達成される
 
 8. Git status:
-   - Branch: `dev/FLT-BAFCT-260401-v0`
+   - Branch: `dev/FLT-BAFCT-260401-v2`
    - TriominoCosmicBranchAPrimitiveStrongProvider.lean: **sorry-free ✅** (builds)
    - FringeDescent.lean: sorry-free (unchanged)
    - Next: RestoreFromArithmeticStrongTarget の concrete provider
@@ -368,7 +368,59 @@ Archive
      - 最後に FringeDescent へ concrete `hStrong + hEx` を流し込み、terminal-case を fully operational にする
 
 7. Git status:
-   - Branch: `dev/FLT-BAFCT-260401-v0`
+   - Branch: `dev/FLT-BAFCT-260401-v2`
    - Files: StrongProvider (sorry-free), RestoreArithmeticStrong (skeleton), FringeDescent (sorry-free)
    - Builds: All 3 files OK
    - Next: RestoreArithmetic concrete implementation
+
+### 追記: 2026/04/01 16:30 JST review-008 実装・RestoreStrong bridge no-sorry 化
+
+1. 目的:
+   - review-008 の戦術（ArithmeticCore weak 再利用 + PacketPackaging strong 化）を実装
+   - 橋 theorem だけを敏感に管理し、no-sorry で通すことに専念
+
+2. 実施:
+   - review-008 のスケルトン Lean コードをそのまま実装
+   - 新 target: `RestorePacketPackagingStrongTarget` (1 本に圧縮)
+   - 橋 theorem: `primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong_of_arithmeticCore_and_packetStrong`
+     - weak `hArithCore` + strong `hPackStrong` を受け → RestoreFromArithmeticStrongTarget を返す
+     - **no-sorry で通った** ✅
+   - open kernel provider: `primeGe5BranchAPrimitiveRestorePacketPackagingStrong` (sorry 1件)
+
+3. 結論:
+   - **StrongProvider chain 完全稼働**: desktop→wieferich→descent の3-tier が now operational ✅
+   - **RestoreArithmetic bridge が no-sorry** で通った ✅
+   - 本戦場が 1 箇所に圧縮: `PacketPackagingStrong` の concrete realization だけ
+
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestoreArithmeticStrong` 成功
+   - ビルドログ: warning 1件 (L58 sorry のみ)
+   - 橋 theorem 2 本は warning なし（no-sorry ✅）
+
+5. design の要点:
+   - ArithmeticCore は既存 weak をそのまま `RestoreArithmeticCoreTarget` として使用（変更なし）
+   - PacketPackaging だけ strong 化（`¬ p ∣ pkt'.t` 保持）
+   - 橋で両者を合成：weak × strong → full strong target
+   - 責務が 1 箇所に集中 ← これが review-008 の本意
+
+6. 戦況:
+   - Phase 1 (StrongProvider): ✅ no-sorry, 3-bridge operational
+   - Phase 2 (RestoreArithmetic): ✅ bridge no-sorry, kitchen-sink 1 sorry
+   - Phase 3 (FringeDescent): ✅ ready, concrete `hStrong + hEx` 待機中
+
+   次のステップ: CyclotomicExistenceTarget を concrete 化 OR RestorePackagingStrong を埋める
+
+7. History timeline:
+   - 12:12: FringeDescent 新規ファイル作成
+   - 14:30: StrongProvider skeleton 準備
+   - 15:45: RestoreArithmetic skeleton 準備
+   - 15:45→15:50: review-006 via review-008 指摘で full redesign
+   - 16:30: RestoreArithmetic bridge 実装・no-sorry 化完了
+
+8. Git status:
+   - Branch: `dev/FLT-BAFCT-260401-v2`
+   - TriominoCosmicBranchAPrimitiveStrongProvider.lean: **no-sorry ✅**
+   - TriominoCosmicBranchARestoreArithmeticStrong.lean: **bridge no-sorry ✅** (sorry 1件: PacketPackagingStrong)
+   - TriominoCosmicBranchAFringeDescent.lean: **no-sorry ✅**
+   - All builds: OK
+   - Next: PacketPackagingStrong concrete provider (main battle) OR CyclotomicExistenceTarget concrete
