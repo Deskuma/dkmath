@@ -756,3 +756,65 @@ Archive
    = x'^p + y'^p = z'^p の p乗根 z' の存在
 
    これが唯一の genuine open kernel。他は全て concrete で chain 済み。
+
+### 追記: 2026/04/01 21:15 JST review-015 RealizationSeedTarget 二分構造化
+
+1. 目的:
+   - review-015 の指示「RealizationSeedTarget を二分せよ」を実行
+   - genuine hard kernel を PthRootTarget として 1 行に孤立させる
+
+2. 実装した定理群（全て no-sorry）:
+
+   **PthRootTarget** (genuine kernel isolate):
+   - `PrimeGe5BranchAPrimitiveRestorePthRootTarget`:
+     descent data から `∃ z', (x/q)^p + y^p = z'^p` を問う target
+   - これが非循環路線の **唯一の genuine open kernel**
+
+   **quotient side → RealizationSeed 橋**:
+   - `primeGe5BranchAPrimitiveRestoreRealizationSeed_of_pthRoot`:
+     PthRootTarget → RealizationSeedTarget
+     quotient side (x' = x/q, y' = y, hxMul, hyEq) を concrete 構成
+     hzEq は PthRootTarget から取得
+
+   **一気通貫橋 2 本**:
+   - `primeGe5BranchAPrimitiveRestoreArithmeticCoreWithProvenance_of_pthRoot`:
+     PthRootTarget → WithProvenanceTarget 直通
+   - `primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong_of_pthRoot`:
+     PthRootTarget → RestoreFromArithmeticStrong 直通（非循環 mainline 全 chain）
+
+   **矛盾路線との互換**:
+   - `primeGe5BranchAPrimitiveRestorePthRoot_of_contradiction`:
+     ContradictionTarget → PthRootTarget (vacuously true)
+     矛盾路線と PthRoot route の互換を確保
+
+3. chain 構造の最終形:
+
+   非循環 mainline (canonical route):
+
+   ```
+   PthRootTarget (唯一の genuine open kernel)
+   → RealizationSeedTarget (quotient side concrete)
+   → WithProvenanceTarget (concrete)
+   → CoreStrong_of_withProvenance (no-sorry)
+   → PacketPackagingStrong (no-sorry)
+   → RestoreFromArithmeticStrong_of_pthRoot (no-sorry, 直通)
+   → StrongProvider (no-sorry)
+   → FringeDescentToRefuter (no-sorry)
+   ```
+
+   矛盾路線 (fallback/oracle):
+
+   ```
+   ContradictionTarget → PthRootTarget (vacuously) → ... same chain
+   ```
+
+4. 結果:
+   - RestoreArithmeticStrong.lean: sorry = 0 ✅
+   - StrongProvider.lean: sorry = 0 ✅
+   - FringeDescent.lean: sorry = 0 ✅
+   - 全ビルド成功: ✅
+
+5. Open Kernel の最終形:
+   PthRootTarget = ∃ z', (x/q)^p + y^p = z'^p
+   「today の Branch A descent data の特殊形について p乗根 z' が存在するか」
+   これが FLT Branch A 証明の genuinely undischarged kernel の全て

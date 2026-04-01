@@ -557,4 +557,123 @@ theorem primeGe5BranchAPrimitiveRestoreArithmeticCoreWithProvenance_of_realizati
     hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
     hqprime hqs hqt hcop_qy hq_ne_p hSeed
 
+/-!
+## RealizationSeedTarget の二分構造化
+
+`RealizationSeedTarget` の genuine hard kernel は `hzEq : x'^p + y'^p = z'^p` のみ。
+残り（x', y', hxMul, hyEq, hSeed）は bookkeeping で concrete に構成可能。
+
+二分する:
+- **quotient side**: `x' = x/q`, `y' = y` — trivial
+- **p-th root side**: `∃ z', x'^p + y^p = z'^p` — genuine kernel
+
+`PthRootTarget` が真の最終 open kernel。他は全て concrete。
+-/
+
+/--
+P-th root target: descent の genuine hard kernel。
+
+「今の Branch A descent data から生じる特殊形 `(x/q)^p + y^p` が
+  perfect p-th power であるか」だけを問う。
+
+NOTE: `x/q` は `hq_dvd_x : q ∣ x` (from `RestoreWitnessProperties`) と
+`hsx : x = p*(t*s)`, `hqs : q ∣ s` から `x/q = p*(t*(s/q))` と
+具体的に記述できる。ゆえに target の実質は
+
+  ∃ z', (p*(t*(s/q)))^p + y^p = z'^p
+
+である。
+-/
+abbrev PrimeGe5BranchAPrimitiveRestorePthRootTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      PrimeGe5BranchAPrimitiveRestoreDescentSeed p x y z t s q →
+      let x' := x / q
+      ∃ z' : ℕ, x' ^ p + y ^ p = z' ^ p
+
+/--
+PthRootTarget → RealizationSeedTarget 橋。
+
+quotient side (x', y', hxMul, hyEq) は concrete に構成し、
+p-th root side (hzEq) は PthRootTarget から取る。
+-/
+theorem primeGe5BranchAPrimitiveRestoreRealizationSeed_of_pthRoot
+    (hPthRoot : PrimeGe5BranchAPrimitiveRestorePthRootTarget) :
+    PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p hSeed
+  -- quotient side: x' = x / q
+  set x' := x / q with hx'_def
+  have hq_dvd_x : q ∣ x := by
+    rw [hsx]; exact dvd_mul_of_dvd_right (dvd_mul_of_dvd_right hqs t) p
+  have hxMul : x = q * x' := by
+    rw [hx'_def]; exact (Nat.mul_div_cancel' hq_dvd_x).symm
+  -- p-th root side: ∃ z', x'^p + y^p = z'^p
+  rcases hPthRoot hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hSeed with ⟨z', hzEq⟩
+  -- assemble RealizationSeed
+  exact ⟨⟨hSeed, x', y, z', hxMul, rfl, hzEq⟩⟩
+
+/--
+PthRootTarget → WithProvenanceTarget 一気通貫橋。
+
+PthRootTarget → RealizationSeedTarget → WithProvenanceTarget の chain を
+1 本の theorem として提供。
+-/
+theorem primeGe5BranchAPrimitiveRestoreArithmeticCoreWithProvenance_of_pthRoot
+    (hPthRoot : PrimeGe5BranchAPrimitiveRestorePthRootTarget) :
+    PrimeGe5BranchAPrimitiveRestoreArithmeticCoreWithProvenanceTarget :=
+  primeGe5BranchAPrimitiveRestoreArithmeticCoreWithProvenance_of_realizationSeed
+    (primeGe5BranchAPrimitiveRestoreRealizationSeed_of_pthRoot hPthRoot)
+
+/--
+PthRootTarget → 非循環 mainline 全 chain 一気通貫。
+
+PthRootTarget → WithProvenance → CoreStrong → PacketPackagingStrong
+→ RestoreFromArithmeticStrong_nonCircular
+-/
+theorem primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong_of_pthRoot
+    (hPthRoot : PrimeGe5BranchAPrimitiveRestorePthRootTarget) :
+    PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticStrongTarget :=
+  primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong_nonCircular
+    (primeGe5BranchAPrimitiveRestoreArithmeticCoreWithProvenance_of_pthRoot hPthRoot)
+
+/--
+矛盾路線 → PthRootTarget（vacuously true）。
+
+ContradictionTarget があれば全て False から出るので、PthRootTarget も vacuously 成立。
+これにより既存の矛盾 route と新 PthRoot route の互換が取れる。
+-/
+theorem primeGe5BranchAPrimitiveRestorePthRoot_of_contradiction
+    (hContra : PrimeGe5BranchAPrimitiveRestoreContradictionTarget) :
+    PrimeGe5BranchAPrimitiveRestorePthRootTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p hSeed
+  have hData : RestoreWitnessProperties p x y z t s q :=
+    restore_witness_properties_default
+      hpack hp_dvd_gap hgap hsGN hsx
+      hqprime hqs hqt hcop_qy hq_ne_p
+  exact absurd
+    (hContra hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p hData)
+    id
+
 end DkMath.FLT
