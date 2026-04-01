@@ -265,3 +265,63 @@ Archive
    - New file: TriominoCosmicBranchAPrimitiveStrongProvider.lean (builds)
    - FringeDescent.lean: no-sorry (protected from changes)
    - Next milestone: Phase 1 + Phase 2 concrete ⟹ potential v1 tag
+
+### 追記: 2026/04/01 15:45 JST review-006 対応・StrongProvider 構造改善
+
+1. 目的:
+   - review-006 の指摘に従い、`sorry` の埋め方を「証明」から「入口修正」へ転換
+   - `PrimitiveWieferichPacketTarget → StrongTarget` の無理筋を捨て、
+     `RestoreFromArithmeticStrongTarget` を新設して parallel chain を引く
+
+2. 問題分析（review-006 より）:
+   - `PrimitiveWieferichPacketTarget` は `∃ pkt', pkt'.z < z` しか返さない
+   - `¬ p ∣ pkt'.t` は返さず、packet structure にもそのフィールドがない
+   - よって `hpt' : ¬ p ∣ pkt'.t` は局所で埋まらない（情報落ちによる詰まり）
+   - 結論: この `sorry` は「証明待ち」ではなく「**theorem の入口が弱い**」ことが原因
+
+3. 実施:
+   - `TriominoCosmicBranchAPrimitiveStrongProvider.lean` を完全に書き直し（review-006 skeleton ベース）
+   - 新 target 定義:
+     - `PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticStrongTarget`:
+       restore/arithmetic 層で主張。入力に `q ∣ s, ¬ q ∣ t, Coprime q y, q ≠ p` を受け、
+       `∃ pkt', pkt'.z < z ∧ ¬ p ∣ pkt'.t` を返す。
+     - `PrimeGe5BranchAPrimitiveWieferichPacketStrongTarget`:
+       wieferich layer での strong 版。weak の return を strong へ。
+
+   - 新 theorem chain:
+     - `primeGe5BranchAPrimitiveWieferichPacket_of_strong`: strong → weak 緩和橋
+     - `primeGe5BranchAPrimitiveWieferichPacketStrong_of_zsigmondy_arithmetic_and_restoreStrong`:
+       **本命・主戦場。Zsigmondy + arithmetic + RestoreStrong を chaining。**
+       Step 1-4 で hZ → hArith → restore_witness_default → hRestoreS → pkt'
+     - `primeGe5BranchAPrimitivePacketDescentStrong_of_wieferichPacketStrong`:
+       wieferich strong → descent strong の薄い wrapper（no sorry ✅）
+     - `primeGe5BranchAPrimitivePacketDescentStrong_of_zsigmondy_arithmetic_restore`:
+       export wrapper（no sorry ✅）
+
+4. 結論:
+   - `TriominoCosmicBranchAPrimitiveStrongProvider.lean` が **sorry ゼロ** でビルド成功 ✅
+   - Entry を `RestoreFromArithmeticStrongTarget` に変えることで、
+     `¬ p ∣ pkt'.t` が仮定側に入り、wrapper たちが no-sorry で通るように。
+   - 旧 `primeGe5BranchAPrimitivePacketDescentStrong_of_wieferichPacket` は削除
+
+5. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchAPrimitiveStrongProvider` 成功
+   - ビルドログ: warning なし（zero sorry in StrongProvider）
+   - FringeDescent.lean との integration 準備完了
+
+6. 戦況:
+   - Phase 1: StrongTarget concrete provider ファイルが **完成** ✅
+     残る課題: `PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticStrongTarget` 自体の concrete 実装
+   - Phase 2: CyclotomicExistenceTarget は既存インフラで no-sorry 可能（FringeDescent で実証済み）
+   - 次: RestoreStrong の concrete provider を作るか、FringeDescent へ直結するか判断
+
+7. 教訓:
+   - **review-006 の指摘「入口を 1 段上げよ」は完全に正しかった**
+   - **情報落ちによる詰まりは、局所証明では解けない**
+   - strong target の chain = data flow を正確に制御して初めて no-sorry が達成される
+
+8. Git status:
+   - Branch: `dev/FLT-BAFCT-260401-v0`
+   - TriominoCosmicBranchAPrimitiveStrongProvider.lean: **sorry-free ✅** (builds)
+   - FringeDescent.lean: sorry-free (unchanged)
+   - Next: RestoreFromArithmeticStrongTarget の concrete provider
