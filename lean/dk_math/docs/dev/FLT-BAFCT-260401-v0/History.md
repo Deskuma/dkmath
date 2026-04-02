@@ -896,7 +896,7 @@ Archive
 
    **GNReducedGapTarget** (GN native target):
    - `PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget`:
-     ∃ g', g' * GN p g' y = p^p * (t*s')^p
+     ∃ g', g' *GN p g' y = p^p* (t*s')^p
 
    **等価性 bridge（双方向）**:
    - `primeGe5BranchAPrimitiveRestorePthRootReduced_of_gnReducedGap`:
@@ -927,3 +927,35 @@ Archive
 5. 結果:
    sorry = 0, 全ビルド成功 ✅
    GN native target 確立、Cosmic Formula の恒等式が証明で活用された
+
+### 追記: 2026/04/03 00:39 JST
+
+1. 目的:
+   - `#2` の作業（Primitive/Strong/Restore/Gap/Fringe chain）を History に集約しておく
+   - 進捗と未解完 kernel を明確に可視化する
+
+2. 実施:
+   - `TriominoCosmicBranchARestoreArithmeticStrong.lean` に 5 本の橋定理追加
+     - Strong → non-Strong 弱化
+     - GNReducedGap → RestoreFromArithmetic
+     - GNReducedGap + CyclotomicExistence → PrimitivePacketDescent
+     - Strong version (¬p ∣ t' 保持)
+     - FringeContradiction (Chain completion)
+   - `TriominoCosmicBranchADescentChain.lean` 新規作成
+     - BranchB concrete (gap-not-pow + gap-pow) ※むしろ gap-not-pow には ZsigmondyResearch sorry 依存あり
+     - 3 kernel conditional chain (GN/Cyclotomic/Peel)
+     - 4 kernel conditional chain ( + GapNotIsPow) で `sorryAx` 排除達成
+   - 依存評価
+     - BranchA route: sorryAx なし（propext, Classical.choice, Quot.sound）
+     - BranchB route: `triominoCosmicGapInvariant_default` 経由で `sorryAx` が残存 (Zsigmondy noWieferich case)
+   - 重要:  `ZsigmondyCyclotomicResearch` に `squarefree_implies_padic_val_le_one` で sorry 残存
+
+3. 結論:
+   - 全体 chain が Lean で可視化され、「残りの open kernel 4 本」が明確化
+   - BranchA primitive path は完全に closed (conditional chain, sorryAx 0)
+   - BranchB path は実質 `GapNotIsPowTarget` の Zsigmondy 見直しで completion
+
+4. 次の課題:
+   - `ZsigmondyCyclotomicResearch` で `squarefree_implies_padic_val_le_one` を理想的な前提に修正し `sorry` 消去
+   - `PrimeGe5BranchAValuationPeelPacketTarget` (p|t peel) の concrete construction
+   - `BranchARefuterTarget` 完全化 (peel + primitive 合流)
