@@ -1085,3 +1085,86 @@ Archive
    2. `NonLiftableGNBridge`: primitive prime が GN に深刺ししない (BranchB)
 
 9. 全体ビルド: `lake build` 成功, FLT 関連 sorry は既知 2 箇所のみ
+
+---
+
+### Session 22: CyclotomicExistence concrete 証明 & 4→3 kernel 圧縮 (2026-04-03)
+
+#### 成果概要
+
+`CFBRCExceptionalBoundaryCorePrimeExistenceOnWieferichTarget` の **完全証明** を達成。
+これにより **CyclotomicExistence kernel が concrete に閉じた**。
+4-kernel chain → **3-kernel chain v3** に圧縮。
+
+#### 数学的発見
+
+**定理**: d prime ≥ 5, d | x, Coprime(x,u), Wieferich u^{d-1} ≡ 1 (mod d²) のとき
+cyclotomicPrimeCore d x u に x を割らない素因子が存在する。
+
+**証明の核心**:
+
+1. `gcd(GN d x u, x) = d`:
+   - `d | GN` (各 summand で d | C(d,k+1)*x^k)
+   - `gcd(x, GN) | d` (既存 gcd_gap_GN_dvd_exp)
+   - sandwich → `gcd = d`
+
+2. `GN ≡ d·u^{d-1} (mod d²)`:
+   - k=0 項: `d·u^{d-1}`
+   - k≥1 項: 各 `d² | C(d,k+1)·x^k·u^{d-1-k}`
+     - k < d-1: `d | C(d,k+1)` (prime property) ∧ `d | x^k` → `d² | product`
+     - k = d-1: `d² | x^{d-1}` (since d|x, d-1 ≥ 4)
+
+3. `d ∤ (GN/d)`:
+   - 仮に `d | GN/d` → `d² | GN`
+   - `GN ≡ d·u^{d-1} (mod d²)` → `d² | d·u^{d-1}` → `d | u^{d-1}`
+   - `Coprime(u, d)` と矛盾
+
+4. `GN/d > 1`:
+   - `cyclotomicPrimeCore > d·u^{d-1}` (binomial expansion strict inequality)
+   - `GN/d > u^{d-1} ≥ 1`
+
+5. Main: `GN/d > 1` かつ `d ∤ GN/d` かつ `gcd(GN, x) = d`
+   - GN/d の素因子 q は q | GN, q ≠ d (∵ d ∤ GN/d), gcd(GN,x)=d → q ∤ x
+
+#### 新規ファイル・定理
+
+| ファイル | 定理 | axioms |
+|---|---|---|
+| `CFBRC/ExceptionalExistence.lean` | `prime_dvd_GN_of_dvd_gap` | clean ✅ |
+| 同上 | `gcd_GN_eq_prime` | clean ✅ |
+| 同上 | `GN_congr_mul_pow_mod_sq` | clean ✅ |
+| 同上 | `not_prime_dvd_GN_div_prime` | clean ✅ |
+| 同上 | `cyclotomicPrimeCore_gt_mul_pow` | clean ✅ |
+| 同上 | `GN_div_prime_gt_one` | clean ✅ |
+| 同上 | `exists_prime_factor_cyclotomicPrimeCore_not_dvd_gap_exceptional` | clean ✅ |
+| 同上 | `exists_prime_factor_boundaryCyclotomicPrimeCore_right_exceptional` | clean ✅ |
+| `BranchADescentChain.lean` §11 | `cfbrcExceptionalPrimeExpBoundaryOnWieferich_concrete` | clean ✅ |
+| 同上 §11 | `primeGe5BranchACyclotomicExistence_concrete` | clean ✅ |
+| 同上 §12 | `branchARefuter_of_2kernels_gnGap_peel` | clean ✅ |
+| 同上 §12 | `FLTPrimeGe5Target_of_3kernels_v3` | clean ✅ |
+| 同上 §12 | `globalProvider_of_3kernels_v3` | clean ✅ |
+| 同上 §12 | `triominoPrimeProvider_of_3kernels_v3` | clean ✅ |
+
+#### Chain 階層更新
+
+| Chain | Kernels | BranchA | BranchB | Clean? |
+|---|---|---|---|---|
+| **2-kernel** (最小) | 2 | NePCoprimeKernel | NonLiftableGNBridge | ✅ |
+| **3-kernel v3** (NEW) | 3 | GNGap + Peel | NonLiftableGNBridge | ✅ |
+| 4-kernel v2 | 4 | GNGap + CycloEx + Peel | NonLiftableGNBridge | ✅ |
+| 4-kernel v1 | 4 | GNGap + CycloEx + Peel | GapNotIsPow | ✅ |
+
+3-kernel v3 は CyclotomicExistence を concrete 化した結果。
+4-kernel から CyclotomicExistence 列を除去して得た。
+
+#### 残る open kernel (更新)
+
+1. `NePCoprimeKernelTarget`: Pack + normal form + Coprime(t,s) → False (BranchA comparison)
+2. `NonLiftableGNBridge`: primitive prime の GN 深刺し禁止 (BranchB)
+3. `GNReducedGapTarget`: GN tail 降下構造 (BranchA descent, 3-kernel v3 用)
+4. `ValuationPeelPacketTarget`: p ∣ t 側パケット縮小 (BranchA peel, 3-kernel v3 用)
+
+2-kernel route: 1 + 2 で FLT p≥5
+3-kernel v3 route: 3 + 4 + 2 で FLT p≥5 (CyclotomicExistence は concrete!)
+
+#### ビルド: `lake build` 成功。FLT 関連 sorry は `TriominoCosmicBranchA.lean:4137` (NePCoprimeKernel) の 1 箇所のみ

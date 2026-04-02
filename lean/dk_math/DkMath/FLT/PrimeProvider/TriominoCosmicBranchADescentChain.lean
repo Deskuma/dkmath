@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestoreArithmeticStrong
 import DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant
+import DkMath.CFBRC.ExceptionalExistence
 
 #print "file: DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain"
 
@@ -425,5 +426,84 @@ theorem smallerPacketTarget_of_nePCoprimeKernel
   primeGe5BranchASmallerPacket_of_routes
     (valuationPeelPacketTarget_of_nePCoprimeKernel hKernel)
     (primitivePacketDescentTarget_of_nePCoprimeKernel hKernel)
+
+end DkMath.FLT
+
+/-!
+## §11. CyclotomicExistence の concrete 供給
+
+CFBRC ExceptionalExistence の Lean 証明により、
+`CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget` が concrete に閉じた。
+（d | x かつ Wieferich のとき、cyclotomicPrimeCore に x を割らない素因子が存在する。）
+
+bridge chain 経由で `PrimeGe5BranchACyclotomicExistenceTarget` まで concrete 化される。
+-/
+
+namespace DkMath.FLT
+
+/--
+`CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget` の concrete 実装。
+-/
+theorem cfbrcExceptionalPrimeExpBoundaryOnWieferich_concrete :
+    CFBRCExceptionalPrimeExpBoundaryOnWieferichTarget :=
+  fun hd hd5 hx hu hcop hdx hW =>
+    DkMath.CFBRC.exists_prime_factor_cyclotomicPrimeCore_not_dvd_gap_exceptional
+      hd hd5 hx hu hcop hdx hW
+
+/--
+`PrimeGe5BranchACyclotomicExistenceTarget` の concrete 実装。
+
+ExceptionalExistence → bridge chain を full 経由。
+-/
+theorem primeGe5BranchACyclotomicExistence_concrete :
+    PrimeGe5BranchACyclotomicExistenceTarget :=
+  primeGe5BranchACyclotomicExistence_of_wieferich
+    (primeGe5BranchACyclotomicExistenceOnWieferich_of_coreExistence
+      (primeGe5BranchACyclotomicCoreExistenceOnWieferich_of_cfbrcExceptional
+        (primeGe5BranchACFBRCExceptionalExistence_of_boundaryExceptional
+          cfbrcExceptionalPrimeExpBoundaryOnWieferich_concrete)))
+
+/-!
+## §12. 3-kernel chain v3: GNReducedGap + ValuationPeel + NonLiftableGNBridge
+
+CyclotomicExistence が concrete に閉じたため、4-kernel chain で
+CyclotomicExistence kernel を除去し、3-kernel に圧縮。
+
+3 open kernels:
+1. `GNReducedGapTarget`: GN tail 降下構造
+2. `ValuationPeelPacketTarget`: p ∣ t 側のパケット縮小
+3. `NonLiftableGNBridge`: primitive prime の GN 深刺し禁止
+-/
+
+theorem branchARefuter_of_2kernels_gnGap_peel
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget)
+    (hPeel : PrimeGe5BranchAValuationPeelPacketTarget) :
+    BranchARefuterTarget :=
+  branchARefuter_of_3kernels hGNGap primeGe5BranchACyclotomicExistence_concrete hPeel
+
+theorem FLTPrimeGe5Target_of_3kernels_v3
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget)
+    (hPeel : PrimeGe5BranchAValuationPeelPacketTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_branch_split_refuter_with_normalizer_impl
+    (branchARefuter_of_2kernels_gnGap_peel hGNGap hPeel)
+    (branchBRefuter_of_nonLiftableGNBridge hNoLift)
+
+theorem globalProvider_of_3kernels_v3
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget)
+    (hPeel : PrimeGe5BranchAValuationPeelPacketTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    GlobalPrimeExponentFLTProvider :=
+  triominoCosmic_globalProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_3kernels_v3 hGNGap hPeel hNoLift)
+
+theorem triominoPrimeProvider_of_3kernels_v3
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget)
+    (hPeel : PrimeGe5BranchAValuationPeelPacketTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    TriominoPrimeProvider :=
+  triominoPrimeProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_3kernels_v3 hGNGap hPeel hNoLift)
 
 end DkMath.FLT
