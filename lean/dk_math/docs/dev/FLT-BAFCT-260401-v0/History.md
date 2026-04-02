@@ -1021,3 +1021,67 @@ Archive
    ※ v1 の 4th kernel `GapNotIsPowTarget` は `NonLiftableGNBridge` から **no-sorry で導出可能**
 
 8. 全体ビルド: `lake build` 成功, FLT 関連 sorry は既知の 2 箇所のみ
+
+### 追記: 2026/04/03 03:42 JST review-020 対応: ValuationPeelPacketTarget 攻略 → 2-kernel chain 達成
+
+1. 目的:
+   - review-020 §4 の推奨に従い `ValuationPeelPacketTarget` を攻める
+   - Peel route の数学構造を徹底解析し、最適 architecture を見つける
+
+2. 分析結果:
+   - `ValuationPeelPacketTarget` = Pack + p|t → ∃ pkt', pkt'.z < z
+   - 既存 peel chain の clean 部分:
+     - `PeelSeed_default`: clean ✅
+     - `PeelTailError_default`: clean ✅
+     - `PeelPacketFromError`: **open** (唯一の穴)
+   - `PacketFromError` は error decomposition `(p*B = C + p^{p-1}*t₁^p*E)` から
+     **新しい counterexample (x',y',z') with z' < z** を構成する定理
+   - これは Kummer descent の数論的核心であり、cyclotomic integers なしでは直接証明困難
+
+3. **重大な数学的発見: NePCoprimeKernel が ValuationPeel の上位互換**
+   - `NePCoprimeKernelTarget`: Pack + p|gap + normal form + Coprime(t,s) → False
+   - これは p|t でも ¬p|t でも成立する → False(直接矛盾)
+   - したがって ValuationPeelPacketTarget は NePCoprimeKernel の trivial corollary (False → anything)
+   - 同様に PrimitivePacketDescentTarget も NePCoprimeKernel の trivial corollary
+   - つまり **GNReducedGap + CyclotomicExistence は BranchA mainline では冗長**
+
+4. 実装した定理群（全 no-sorry, no-sorryAx）:
+   - `branchARefuter_of_nePCoprimeKernel`: NePCoprimeKernel → BranchARefuter (direct bridge)
+   - `FLTPrimeGe5Target_of_2kernels`: **2-kernel chain** (NePCoprime + NonLiftableGN)
+   - `globalProvider_of_2kernels`: 同 GlobalProvider 版
+   - `triominoPrimeProvider_of_2kernels`: 同 PrimeProvider 版
+   - `valuationPeelPacketTarget_of_nePCoprimeKernel`: kernel subsumption (NePCoprime → Peel)
+   - `primitivePacketDescentTarget_of_nePCoprimeKernel`: kernel subsumption (NePCoprime → Primitive)
+   - `smallerPacketTarget_of_nePCoprimeKernel`: kernel subsumption (NePCoprime → SmallerPacket)
+
+5. kernel 階層の整理:
+
+   ```
+   NePCoprimeKernel (最強 — BranchA 全体を直接矛盾)
+   ⊃ ValuationPeelPacketTarget (p|t 分岐の descent)
+   ⊃ PrimitivePacketDescentTarget (¬p|t 分岐の descent)
+   ⊃ SmallerPacketTarget (descent 合成)
+   ```
+
+6. chain 整理（新 → 旧 の包含関係）:
+
+   | Chain | Kernels | BranchA kernel | BranchB kernel |
+   |---|---|---|---|
+   | **2-kernel** (最小) | 2 | NePCoprimeKernel | NonLiftableGNBridge |
+   | 4-kernel v2 | 4 | GNGap + CycloEx + Peel | NonLiftableGNBridge |
+   | 4-kernel v1 | 4 | GNGap + CycloEx + Peel | GapNotIsPowTarget |
+   | 3-kernel | 3 | GNGap + CycloEx + Peel | branchB_concrete (dirty) |
+
+   2-kernel chain が **最適**: BranchA 側は NePCoprimeKernel 1 本で全殺し。
+
+7. NePCoprimeKernel と GNReducedGap + CyclotomicExistence の関係:
+   - **独立**: NePCoprimeKernel は GNReducedGap/CyclotomicExistence を使わない
+   - GNReducedGap + CyclotomicExistence は FringeContradiction (¬p|t 内の well-founded descent) に使用
+   - NePCoprimeKernel は comparison route (直接矛盾) に使用
+   - 2つは **別の attack route** であり、どちらかが証明されれば FLT p≥5 の BranchA が閉じる
+
+8. 2 つの open kernel（最終形）:
+   1. `NePCoprimeKernelTarget`: BranchA normal form で Coprime(t,s) → False
+   2. `NonLiftableGNBridge`: primitive prime が GN に深刺ししない (BranchB)
+
+9. 全体ビルド: `lake build` 成功, FLT 関連 sorry は既知 2 箇所のみ

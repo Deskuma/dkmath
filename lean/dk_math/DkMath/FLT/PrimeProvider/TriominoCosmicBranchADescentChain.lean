@@ -316,4 +316,114 @@ primitive descent の完全性を保証する formal certificate として機能
 -- `branchAFringeContradiction_of_gnReducedGap_and_cyclotomicExistence` は
 -- RestoreArithmeticStrong.lean で確立済み。direct re-export。
 
+/-!
+## §8. NePCoprimeKernel: ValuationPeelPacketTarget の上位互換
+
+`NePCoprimeKernel` は Branch A normal form で `Coprime(t, s) → False` を主張する。
+これは `p | t` の場合も `¬ p | t` の場合も包含するため、
+`ValuationPeelPacketTarget` + `PrimitivePacketDescentTarget` の **両方の上位互換** である。
+
+したがって NePCoprimeKernel 1 本で BranchARefuter が直接構成でき、
+3-kernel chain (GNGap + CycloEx + Peel) の Peel を **完全に bypass** する。
+-/
+
+/--
+`NePCoprimeKernel` から `BranchARefuterTarget` を直接構成する。
+
+NePCoprimeKernel は「normal form で Coprime(t, s) → False」を主張するが、
+Coprime(t, s) は BranchA normal form で concrete に派生する (`coprime_ts_default`)。
+したがって BranchA 反例は存在できず、BranchARefuterTarget が出る。
+
+ValuationPeel route 全体を bypass する。
+-/
+theorem branchARefuter_of_nePCoprimeKernel
+    (hKernel : PrimeGe5BranchANormalFormNePCoprimeKernelTarget) :
+    BranchARefuterTarget := by
+  intro p x y z hpack hp_dvd_gap
+  rcases primeGe5BranchAShapeValue_of_factorization
+    primeGe5BranchAShapeFactorization_default hpack hp_dvd_gap with ⟨t, ht⟩
+  rcases primeGe5BranchANormalForm_of_witness hpack hp_dvd_gap ht with ⟨s, hsGN, hsx⟩
+  exact hKernel hpack hp_dvd_gap
+    (primeGe5BranchAShapeWitness_to_descent_input hpack hp_dvd_gap ht).gapShape
+    hsGN
+    (primeGe5BranchANormalForm_coprime_ts_default hpack hp_dvd_gap
+      (primeGe5BranchAShapeWitness_to_descent_input hpack hp_dvd_gap ht).gapShape hsGN)
+
+/-!
+## §9. 2-kernel chain: NePCoprimeKernel + NonLiftableGNBridge → FLTPrimeGe5
+
+ValuationPeel と GNReducedGap/CyclotomicExistence を **全て bypass** し、
+必要な open kernel を **2 本** に圧縮した最小 chain。
+
+1. `NePCoprimeKernelTarget`: BranchA normal form で Coprime(t,s) → False
+2. `NonLiftableGNBridge`: primitive prime が GN に深刺ししない
+
+NePCoprimeKernel が BranchA 全体を殺し、NonLiftableGNBridge が BranchB を殺す。
+-/
+
+theorem FLTPrimeGe5Target_of_2kernels
+    (hKernel : PrimeGe5BranchANormalFormNePCoprimeKernelTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_branch_split_refuter_with_normalizer_impl
+    (branchARefuter_of_nePCoprimeKernel hKernel)
+    (branchBRefuter_of_nonLiftableGNBridge hNoLift)
+
+theorem globalProvider_of_2kernels
+    (hKernel : PrimeGe5BranchANormalFormNePCoprimeKernelTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    GlobalPrimeExponentFLTProvider :=
+  triominoCosmic_globalProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_2kernels hKernel hNoLift)
+
+theorem triominoPrimeProvider_of_2kernels
+    (hKernel : PrimeGe5BranchANormalFormNePCoprimeKernelTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    TriominoPrimeProvider :=
+  triominoPrimeProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_2kernels hKernel hNoLift)
+
+/-!
+## §10. kernel 間の包含関係の形式化
+
+Open kernel の階層を明示する。
+-/
+
+/--
+`NePCoprimeKernel` は `ValuationPeelPacketTarget` の上位互換。
+
+NePCoprimeKernel は全 BranchA normal form で False を出すため、
+p ∣ t 条件下の pkt'.z < z 要求は trivially satisfied（False → anything）。
+-/
+theorem valuationPeelPacketTarget_of_nePCoprimeKernel
+    (hKernel : PrimeGe5BranchANormalFormNePCoprimeKernelTarget) :
+    PrimeGe5BranchAValuationPeelPacketTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts _ _ _ hpt
+  exfalso
+  exact hKernel hpack hp_dvd_gap hgap hsGN hcop_ts
+
+/--
+`NePCoprimeKernel` は `PrimitivePacketDescentTarget` の上位互換。
+
+同様に、¬ p ∣ t 条件下の pkt'.z < z 要求も trivially satisfied。
+-/
+theorem primitivePacketDescentTarget_of_nePCoprimeKernel
+    (hKernel : PrimeGe5BranchANormalFormNePCoprimeKernelTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx hcop_ts _ _ _ _
+  exfalso
+  exact hKernel hpack hp_dvd_gap hgap hsGN hcop_ts
+
+/--
+`NePCoprimeKernel` は `SmallerPacketTarget` の上位互換。
+
+Peel + Primitive の両方を殺す。
+-/
+theorem smallerPacketTarget_of_nePCoprimeKernel
+    (hKernel : PrimeGe5BranchANormalFormNePCoprimeKernelTarget) :
+    PrimeGe5BranchASmallerPacketTarget :=
+  primeGe5BranchASmallerPacket_of_routes
+    (valuationPeelPacketTarget_of_nePCoprimeKernel hKernel)
+    (primitivePacketDescentTarget_of_nePCoprimeKernel hKernel)
+
 end DkMath.FLT
