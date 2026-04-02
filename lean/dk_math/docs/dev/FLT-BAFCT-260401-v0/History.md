@@ -959,3 +959,65 @@ Archive
    - `ZsigmondyCyclotomicResearch` で `squarefree_implies_padic_val_le_one` を理想的な前提に修正し `sorry` 消去
    - `PrimeGe5BranchAValuationPeelPacketTarget` (p|t peel) の concrete construction
    - `BranchARefuterTarget` 完全化 (peel + primitive 合流)
+
+### 追記: 2026/04/03 02:38 JST review-019 対応: GapNotIsPowTarget clean 化
+
+1. 目的:
+   - review-019 推奨の優先順位に従い `GapNotIsPowTarget` の `sorryAx` 汚染を除去する
+   - `FLTPrimeGe5Target_of_4kernels_v2` を `NonLiftableGNBridge` ベースで構成し完全 clean 化
+
+2. 汚染源の特定結果:
+   - `gapNotIsPowTarget_default`
+     → `triominoCosmicGapInvariant_default`
+     → `triominoCosmicBodyInvariant_default`
+     → `triominoCosmicNoPowOnGN_default`
+     → `triominoWieferichBranchBridge_default`
+     → `triominoWieferichDescent_impl` (Quarantine)
+     → `CosmicPetalBridgeGNNoWieferichResearch.lean`
+     → `GcdNext.padicValNat_primitive_prime_factor_le_one`
+     → `ZsigmondyCyclotomicResearch.squarefree_implies_padic_val_le_one` **(sorry, 命題自体が偽)**
+
+3. 重大な数学的発見:
+   - `squarefree_implies_padic_val_le_one` の命題は **一般形では偽**
+   - 反例: d=5, a=3, b=1 で GN 5 2 1 = 121 = 11², v_11(3^5-1^5) = 2
+   - 既存 clean 代替: `padicValNat_primitive_prime_factor_le_one_of_squarefree_G` (Squarefree(GN) 仮定付き)
+
+4. 解決アーキテクチャ:
+   - Branch A 側の `NoSqPrimeOnGN_when_p_dvd_u_impl` は **完全 clean** (p | gap なら pure arithmetic で閉じる)
+   - Branch B 側のみ `TriominoCosmicNonLiftableGNBridge` (= primitive prime の GN 深刺り禁止) が必要
+   - 既存の clean chain:
+
+     ```
+     NonLiftableGNBridge
+     → triominoCosmicNoPowOnGN_of_nonLiftableGNBridge (no-sorry)
+     → bodyInvariant_of_NoPowOnGN (no-sorry)
+     → gapInvariant_of_bodyInvariant = GapNotIsPowTarget (no-sorry)
+     ```
+
+   - 全中間定理は `#print axioms` 確認済み: `[propext, Classical.choice, Quot.sound]` のみ
+
+5. 実装した定理群（全て no-sorry, no-sorryAx）:
+   - `gapNotIsPowTarget_of_nonLiftableGNBridge`: NonLiftableGNBridge → GapNotIsPowTarget
+   - `branchBRefuter_of_nonLiftableGNBridge`: clean 版 BranchB refuter
+   - `FLTPrimeGe5Target_of_4kernels_v2`: 4 kernel chain (4th = NonLiftableGNBridge)
+   - `globalProvider_of_4kernels_v2`: 同 GlobalProvider 版
+   - `triominoPrimeProvider_of_4kernels_v2`: 同 PrimeProvider 版
+
+6. v1 vs v2 比較:
+
+   | 定理 | sorryAx | 4th kernel |
+   |---|---|---|
+   | `_of_4kernels` (v1) | なし | `GapNotIsPowTarget` |
+   | `_of_4kernels_v2` | なし | `NonLiftableGNBridge` (より根源的) |
+   | `branchBRefuter_concrete` | **あり** | (dirty, 旧 chain) |
+   | `branchBRefuter_of_nonLiftableGNBridge` | なし | (clean, 新 chain) |
+
+7. 4 つの open kernel（v2 最終形）:
+   1. `GNReducedGapTarget`: descent gap の GN Body 一致 (Branch A primitive)
+   2. `CyclotomicExistenceTarget`: Wieferich 条件下の原始素因子存在 (Branch A)
+   3. `ValuationPeelPacketTarget`: p ∣ t 側の smaller packet 構成 (Branch A peel)
+   4. `NonLiftableGNBridge`: primitive prime が GN を深刺ししない (Branch B)
+
+   ※ v1 の 4th kernel `GapNotIsPowTarget` は `NonLiftableGNBridge` から **no-sorry で導出可能**
+
+8. 全体ビルド: `lake build` 成功, FLT 関連 sorry は既知の 2 箇所のみ

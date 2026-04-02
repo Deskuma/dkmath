@@ -220,7 +220,90 @@ theorem triominoPrimeProvider_of_4kernels
     (FLTPrimeGe5Target_of_4kernels hGNGap hEx hPeel hGapNotIsPow)
 
 /-!
-## §5. Primitive-only route: 2 kernel → BranchA FringeContradiction
+## §5. GapNotIsPowTarget の clean 化: NonLiftableGNBridge → GapNotIsPowTarget
+
+`gapNotIsPowTarget_default` は `triominoWieferichBranchBridge_default` 経由で
+`ZsigmondyCyclotomicResearch.squarefree_implies_padic_val_le_one`（sorry あり、命題自体が偽）
+に依存しており `sorryAx` 汚染がある。
+
+ここでは、`TriominoCosmicNonLiftableGNBridge`（= primitive prime が GN に深刺ししない）
+を仮定として外出しし、clean な `GapNotIsPowTarget` を構成する。
+
+chain:
+  NonLiftableGNBridge
+  → NoPowOnGN (Branch A は concrete、Branch B は NonLiftableGNBridge)
+  → BodyInvariant → GapInvariant = GapNotIsPowTarget
+
+全中間定理は既存の no-sorry 定理のみを使用。
+-/
+
+/--
+`TriominoCosmicNonLiftableGNBridge` から `GapNotIsPowTarget` を clean に構成する。
+
+`sorryAx` なし。Branch A 側は `noSqPrimeOnGN_when_p_dvd_u_impl` (concrete) で、
+Branch B 側は NonLiftableGNBridge 仮定で、合成して全 Pack をカバーする。
+-/
+theorem gapNotIsPowTarget_of_nonLiftableGNBridge
+    (hBridge : TriominoCosmicNonLiftableGNBridge) :
+    GapNotIsPowTarget :=
+  gapInvariant_of_bodyInvariant
+    (bodyInvariant_of_NoPowOnGN
+      (triominoCosmicNoPowOnGN_of_nonLiftableGNBridge hBridge))
+
+/--
+`TriominoCosmicNonLiftableGNBridge` から `BranchBRefuterTarget` を clean に構成する。
+
+3-kernel 版で使っていた `branchBRefuter_concrete`（sorryAx 汚染）の代替。
+-/
+theorem branchBRefuter_of_nonLiftableGNBridge
+    (hBridge : TriominoCosmicNonLiftableGNBridge) :
+    BranchBRefuterTarget := fun hpack hpB =>
+  (gapNotIsPowTarget_of_nonLiftableGNBridge hBridge hpack)
+    (gapPowFromPrimeGe5Counterexample_branchB_impl hpack hpB)
+
+/-!
+## §6. 4-kernel chain v2: NonLiftableGNBridge による clean 統合
+
+4 つの open kernel:
+1. `GNReducedGapTarget`: descent gap の GN Body 一致
+2. `CyclotomicExistenceTarget`: Wieferich 条件下の原始素因子存在
+3. `ValuationPeelPacketTarget`: p ∣ t 側の smaller packet 構成
+4. `NonLiftableGNBridge`: primitive prime が GN に深刺ししない
+
+4 番目は `GapNotIsPowTarget`（v1）を **より根源的な仮定** に置き換えたもの。
+NonLiftableGNBridge → GapNotIsPowTarget の導出は clean (no-sorry)。
+-/
+
+theorem FLTPrimeGe5Target_of_4kernels_v2
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget)
+    (hEx : PrimeGe5BranchACyclotomicExistenceTarget)
+    (hPeel : PrimeGe5BranchAValuationPeelPacketTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_branch_split_refuter_with_normalizer_impl
+    (branchARefuter_of_3kernels hGNGap hEx hPeel)
+    (branchBRefuter_of_nonLiftableGNBridge hNoLift)
+
+theorem globalProvider_of_4kernels_v2
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget)
+    (hEx : PrimeGe5BranchACyclotomicExistenceTarget)
+    (hPeel : PrimeGe5BranchAValuationPeelPacketTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    GlobalPrimeExponentFLTProvider :=
+  triominoCosmic_globalProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_4kernels_v2 hGNGap hEx hPeel hNoLift)
+
+theorem triominoPrimeProvider_of_4kernels_v2
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget)
+    (hEx : PrimeGe5BranchACyclotomicExistenceTarget)
+    (hPeel : PrimeGe5BranchAValuationPeelPacketTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    TriominoPrimeProvider :=
+  triominoPrimeProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_4kernels_v2 hGNGap hEx hPeel hNoLift)
+
+/-!
+## §7. Primitive-only route: 2 kernel → BranchA FringeContradiction
 
 Peel route を使わず、primitive route のみで
 `BranchAInterferenceFringeBundle → False` を確定する。
