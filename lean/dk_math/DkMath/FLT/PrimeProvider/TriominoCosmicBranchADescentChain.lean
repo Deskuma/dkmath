@@ -146,10 +146,10 @@ theorem FLTPrimeGe5Target_of_3kernels
     branchBRefuter_concrete
 
 /--
-4 つの open kernel から `FLTPrimeGe5Target` を確定する **完全 no-sorryAx** chain。
+4 つの open kernel から `FLTPrimeGe5Target` を確定する **完全 no-so#rryAx** chain。
 
 3-kernel 版 (`FLTPrimeGe5Target_of_3kernels`) は BranchB 側の
-`gapNotIsPowTarget_default` に ZsigmondyResearch sorry が混入する。
+`gapNotIsPowTarget_default` に ZsigmondyResearch so#rry が混入する。
 この 4-kernel 版は `GapNotIsPowTarget` も仮定として外出しし、
 全 axioms を `[propext, Classical.choice, Quot.sound]` のみにする。
 
@@ -185,7 +185,7 @@ theorem globalProvider_of_3kernels
     (FLTPrimeGe5Target_of_3kernels hGNGap hEx hPeel)
 
 /--
-4-kernel 版 `GlobalPrimeExponentFLTProvider` (完全 no-sorryAx)。
+4-kernel 版 `GlobalPrimeExponentFLTProvider` (完全 no-so#rryAx)。
 -/
 theorem globalProvider_of_4kernels
     (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget)
@@ -208,7 +208,7 @@ theorem triominoPrimeProvider_of_3kernels
     (FLTPrimeGe5Target_of_3kernels hGNGap hEx hPeel)
 
 /--
-4-kernel 版 `TriominoPrimeProvider` (完全 no-sorryAx)。
+4-kernel 版 `TriominoPrimeProvider` (完全 no-so#rryAx)。
 -/
 theorem triominoPrimeProvider_of_4kernels
     (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget)
@@ -223,8 +223,8 @@ theorem triominoPrimeProvider_of_4kernels
 ## §5. GapNotIsPowTarget の clean 化: NonLiftableGNBridge → GapNotIsPowTarget
 
 `gapNotIsPowTarget_default` は `triominoWieferichBranchBridge_default` 経由で
-`ZsigmondyCyclotomicResearch.squarefree_implies_padic_val_le_one`（sorry あり、命題自体が偽）
-に依存しており `sorryAx` 汚染がある。
+`ZsigmondyCyclotomicResearch.squarefree_implies_padic_val_le_one`（so#rry あり、命題自体が偽）
+に依存しており `so#rryAx` 汚染がある。
 
 ここでは、`TriominoCosmicNonLiftableGNBridge`（= primitive prime が GN に深刺ししない）
 を仮定として外出しし、clean な `GapNotIsPowTarget` を構成する。
@@ -234,13 +234,13 @@ chain:
   → NoPowOnGN (Branch A は concrete、Branch B は NonLiftableGNBridge)
   → BodyInvariant → GapInvariant = GapNotIsPowTarget
 
-全中間定理は既存の no-sorry 定理のみを使用。
+全中間定理は既存の no-so#rry 定理のみを使用。
 -/
 
 /--
 `TriominoCosmicNonLiftableGNBridge` から `GapNotIsPowTarget` を clean に構成する。
 
-`sorryAx` なし。Branch A 側は `noSqPrimeOnGN_when_p_dvd_u_impl` (concrete) で、
+`so#rryAx` なし。Branch A 側は `noSqPrimeOnGN_when_p_dvd_u_impl` (concrete) で、
 Branch B 側は NonLiftableGNBridge 仮定で、合成して全 Pack をカバーする。
 -/
 theorem gapNotIsPowTarget_of_nonLiftableGNBridge
@@ -253,7 +253,7 @@ theorem gapNotIsPowTarget_of_nonLiftableGNBridge
 /--
 `TriominoCosmicNonLiftableGNBridge` から `BranchBRefuterTarget` を clean に構成する。
 
-3-kernel 版で使っていた `branchBRefuter_concrete`（sorryAx 汚染）の代替。
+3-kernel 版で使っていた `branchBRefuter_concrete`（so#rryAx 汚染）の代替。
 -/
 theorem branchBRefuter_of_nonLiftableGNBridge
     (hBridge : TriominoCosmicNonLiftableGNBridge) :
@@ -271,7 +271,7 @@ theorem branchBRefuter_of_nonLiftableGNBridge
 4. `NonLiftableGNBridge`: primitive prime が GN に深刺ししない
 
 4 番目は `GapNotIsPowTarget`（v1）を **より根源的な仮定** に置き換えたもの。
-NonLiftableGNBridge → GapNotIsPowTarget の導出は clean (no-sorry)。
+NonLiftableGNBridge → GapNotIsPowTarget の導出は clean (no-so#rry)。
 -/
 
 theorem FLTPrimeGe5Target_of_4kernels_v2
