@@ -1381,6 +1381,25 @@ abbrev StrongSuperWieferichCongruenceTarget : Prop :=
           (∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i = 0) ∧
           ((z : ZMod (q ^ p)) = R * (y : ZMod (q ^ p)))
 
+/--
+`castHom` を使った StrongSuperWieferich の正規形。
+
+`R mod q = ω^j` を `ZMod.castHom (q ∣ q^p)` で明示することで、
+Hensel step（mod `q^n` から mod `q^(n+1)` への持ち上げ）との接続を
+そのまま書ける形にする。
+-/
+abbrev StrongSuperWieferichCongruenceV2Target : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {gap : ℕ}, gap = z - y →
+    ∀ {q : ℕ}, Nat.Prime q → q ≠ p →
+      q ^ p ∣ GN p gap y → ¬ q ∣ gap → Nat.Coprime q y →
+      ∀ (ω : ZMod q), ω ^ p = 1 → ω ≠ 1 →
+      ∃ j : Fin p, 0 < j.val ∧
+        ∃ (hqpow : q ∣ q ^ p), ∃ (R : ZMod (q ^ p)),
+          ((ZMod.castHom hqpow (ZMod q)) R = ω ^ j.val) ∧
+          (∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i = 0) ∧
+          ((z : ZMod (q ^ p)) = R * (y : ZMod (q ^ p)))
+
 /-- 既存名は weak 版への alias として維持する。 -/
 abbrev SuperWieferichCongruenceTarget : Prop :=
   WeakSuperWieferichCongruenceTarget
@@ -1416,6 +1435,38 @@ theorem weakSuperWieferich_of_strong :
     ⟨j, hjpos, R, hmodq, hphi, hzRy⟩
   exact ⟨j, hjpos, R, hzRy⟩
 
+/-- castHom 正規形の Strong 版から Weak 版を得る。 -/
+theorem weakSuperWieferich_of_strongV2 :
+    StrongSuperWieferichCongruenceV2Target → WeakSuperWieferichCongruenceTarget := by
+  intro h p x y z hPack gap hgap q hq hq_ne hpow hndvd hcoprime ω hω hω_ne
+  rcases h hPack hgap hq hq_ne hpow hndvd hcoprime ω hω hω_ne with
+    ⟨j, hjpos, hqpow, R, hmodq, hphi, hzRy⟩
+  exact ⟨j, hjpos, R, hzRy⟩
+
+/--
+1-step Hensel 持ち上げの専用 target（Strong Level 1 の中核）。
+
+`Φ_p(R_n)=0 mod q^n` を満たす近似根 `R_n` から、
+`Φ_p(R_{n+1})=0 mod q^(n+1)` を満たす持ち上げ `R_{n+1}` を与える。
+branch は `castHom` で保存する。
+-/
+abbrev HenselLiftStepGeomSumTarget : Prop :=
+  ∀ {p q n : ℕ}, Nat.Prime q → 1 ≤ n →
+    ∀ (Rn : ZMod (q ^ n)),
+      (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+      ∃ (hdiv : q ^ n ∣ q ^ (n + 1)), ∃ (Rn1 : ZMod (q ^ (n + 1))),
+        ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) ∧
+        (∑ i ∈ Finset.range p, (Rn1 : ZMod (q ^ (n + 1))) ^ i = 0)
+
+/--
+StrongSuperWieferich の provider target。
+
+`QAdicResidue`（mod q branch）と `HenselLiftStepGeomSumTarget` を材料に、
+`StrongSuperWieferichCongruenceV2Target` を供給するための接続口。
+-/
+abbrev StrongSuperWieferichProviderTarget : Prop :=
+  HenselLiftStepGeomSumTarget → StrongSuperWieferichCongruenceV2Target
+
 /--
 **GNReducedGap の q-adic 等価形**: x'^p + y^p が完全 p 乗。
 
@@ -1447,13 +1498,15 @@ abbrev QAdicDescentExistenceTarget : Prop :=
 GNReducedGap を q-adic 視点で分解すると:
 
 ```
-Level 0: QAdicResidue (z ≡ ω^j·y mod q)          — concrete, provable ✅
-Level 1: SuperWieferichCongruence (z ≡ R·y mod q^p)  — Hensel, provable ✅
-Level 2: QAdicDescentExistence (∃z', z'^p = x'^p+y^p) — LOCAL-GLOBAL GAP ★OPEN★
+Level 0: QAdicResidue (z ≡ ω^j·y mod q)                      — concrete ✅
+Level 1w: WeakSuperWieferich (z ≡ R·y mod q^p)               — concrete ✅
+Level 1s: StrongSuperWieferich (branch + Φ_p(R)=0 mod q^p)   — Hensel 本丸 ★OPEN★
+Level 2: QAdicDescentExistence (∃z', z'^p = x'^p+y^p)         — LOCAL-GLOBAL GAP ★OPEN★
 ```
 
-Level 0, 1 は初等的に証明可能（ZMod 算術 + Hensel の補題）。
-Level 2 が **GNReducedGap の真の核心** であり、
+Level 0 と Level 1w は現時点で concrete。
+Level 1s（Hensel 強化）と Level 2 が open kernel。
+Level 2 は **GNReducedGap の真の核心** であり、
 Z[ζ_p] の ideal class group 構造に依存する深い問題。
 
 **数値検証**:

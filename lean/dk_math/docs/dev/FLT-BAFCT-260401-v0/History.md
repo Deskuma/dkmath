@@ -1481,6 +1481,34 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
    - Strong 版の concrete 証明（branch preserving + Φ_p(R)=0 mod q^p）
    - Hensel step を specialized lemma 群として切り出し、反復で `q^p` 精度へ昇格
 
+### 追記: 2026/04/03 18:30:35 JST review-031 フォローアップ
+
+1. 目的:
+   - `SuperWieferich` の weak/strong 分離を次段実装へ接続し、
+     Level 1 本丸を Hensel step 単位で攻められる形にする
+2. 実施:
+   - `StrongSuperWieferichCongruenceV2Target` を追加し、
+     branch 条件を `ZMod.castHom` で正規化
+   - `weakSuperWieferich_of_strongV2` を追加し、StrongV2 ⇒ Weak の橋を構築
+   - `HenselLiftStepGeomSumTarget` を追加し、
+     `Φ_p(R_n)=0 mod q^n` から `mod q^(n+1)` へ持ち上げる 1-step 目標を明示
+   - `StrongSuperWieferichProviderTarget` を追加し、
+     Hensel step 供給から StrongV2 を組み上げる接続口を設計
+   - §20 のレイヤー記述を更新:
+     `Level 1w (Weak)` と `Level 1s (Strong)` を分離表示
+3. 結論:
+   - Level 1 の本命が「型として」完全に分離され、
+     以後は Hensel step 実装を逐次積み上げる形で攻められる状態になった ✅
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - 新規追加定義・ブリッジに由来するエラーなし
+5. 失敗事例:
+   - 初版の `castHom` 条件に `q ∣ q^p` を直接埋め込んだ際、`dvd_pow` の型が合わず失敗
+   - `∃ hqpow : q ∣ q^p` を StrongV2 の中に内包して解消
+6. 次の課題:
+   - `HenselLiftStepGeomSumTarget` の concrete 証明（specialized one-step）
+   - 反復補題を追加して `StrongSuperWieferichCongruenceV2Target` を供給
+
 ## Template
 
 ### 日時: `タイムスタンプ date コマンドを使用して年月日時分まで` JST (template)

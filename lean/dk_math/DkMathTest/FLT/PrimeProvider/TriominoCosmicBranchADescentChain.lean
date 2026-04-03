@@ -19,3 +19,7 @@ set_option linter.style.longLine false
 -- OK: 2026/04/03 18:14
 -- 'DkMath.FLT.weakSuperWieferich_of_strong'
 -- depends on axioms: [propext, Classical.choice, Quot.sound]
+#print axioms DkMath.FLT.weakSuperWieferich_of_strongV2
+-- OK: 2026/04/03 18:39
+-- 'DkMath.FLT.weakSuperWieferich_of_strongV2'
+-- depends on axioms: [propext, Classical.choice, Quot.sound]
