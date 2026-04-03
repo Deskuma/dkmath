@@ -1487,6 +1487,42 @@ abbrev HenselLiftStepArithmeticKernelTarget : Prop :=
           (∑ i ∈ Finset.range p, (Rn1' : ZMod (q ^ (n + 1))) ^ i = 0)
 
 /--
+one-step 算術 kernel の「心臓」: 補正項 `Δ` の存在。
+
+`Rn1` が `Rn` の持ち上げであるとき、
+`castHom Δ = 0` を満たす補正 `Δ` を足して
+幾何和ゼロを回復できれば、ArithmeticKernel は成立する。
+-/
+abbrev HenselLiftStepCorrectionTarget : Prop :=
+  ∀ {p q n : ℕ}, Nat.Prime q → 1 ≤ n →
+    ∀ (Rn : ZMod (q ^ n)),
+      (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+      ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (Rn1 : ZMod (q ^ (n + 1))),
+        ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) →
+        ∃ (Δ : ZMod (q ^ (n + 1))),
+          ((ZMod.castHom hdiv (ZMod (q ^ n))) Δ = 0) ∧
+          (∑ i ∈ Finset.range p, ((Rn1 + Δ : ZMod (q ^ (n + 1)))) ^ i = 0)
+
+/--
+補正項 `Δ` が構成できれば ArithmeticKernel は従う。
+
+よって one-step 本丸は `HenselLiftStepCorrectionTarget` の実装に帰着する。
+-/
+theorem henselLiftStepArithmeticKernel_of_correction
+    (hCorr : HenselLiftStepCorrectionTarget) :
+    HenselLiftStepArithmeticKernelTarget := by
+  intro p q n hq hn Rn hsum hdiv Rn1 hcast
+  rcases hCorr hq hn Rn hsum hdiv Rn1 hcast with ⟨Δ, hΔ0, hphi⟩
+  refine ⟨Rn1 + Δ, ?_, hphi⟩
+  have hmap_add := (ZMod.castHom hdiv (ZMod (q ^ n))).map_add Rn1 Δ
+  calc
+    (ZMod.castHom hdiv (ZMod (q ^ n))) (Rn1 + Δ)
+        = (ZMod.castHom hdiv (ZMod (q ^ n))) Rn1
+          + (ZMod.castHom hdiv (ZMod (q ^ n))) Δ := hmap_add
+    _ = Rn + 0 := by simp [hcast, hΔ0]
+    _ = Rn := by simp
+
+/--
 構造 one-step は `ZMod.castHom_surjective` から concrete に得られる。
 -/
 theorem henselLiftStepStructural_concrete : HenselLiftStepStructuralTarget := by

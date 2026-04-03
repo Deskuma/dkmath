@@ -31,3 +31,7 @@ set_option linter.style.longLine false
 -- OK: 2026/04/03 18:59
 -- 'DkMath.FLT.henselLiftStepGeomSum_of_structural_and_kernel'
 -- depends on axioms: [propext, Classical.choice, Quot.sound]
+#print axioms DkMath.FLT.henselLiftStepArithmeticKernel_of_correction
+-- OK: 2026/04/03 19:19
+-- 'DkMath.FLT.henselLiftStepArithmeticKernel_of_correction'
+-- depends on axioms: [propext, Classical.choice, Quot.sound]

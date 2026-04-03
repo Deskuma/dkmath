@@ -1534,6 +1534,30 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
    - `HenselLiftStepArithmeticKernelTarget` の concrete 証明
    - 反復補題を追加して `StrongSuperWieferichCongruenceV2Target` の provider を構築
 
+### 追記: 2026/04/03 19:10:45 JST one-step arithmetic heart 実装
+
+1. 目的:
+   - `HenselLiftStepArithmeticKernelTarget` の「心臓」を定理化し、
+     one-step 本丸を補正項構成問題へ純化する
+2. 実施:
+   - `HenselLiftStepCorrectionTarget` を追加:
+     `castHom Δ = 0` を満たす補正項 `Δ` により
+     `Rn1 + Δ` を幾何和ゼロへ補正できることを要求
+   - `henselLiftStepArithmeticKernel_of_correction` を追加:
+     上記補正 target から `HenselLiftStepArithmeticKernelTarget` を導出
+3. 結論:
+   - ArithmeticKernel の中核が「補正項 Δ の存在」へ明示的に還元された ✅
+   - one-step の残 open は Newton/Hensel 補正式の concrete 構成に集中
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - 初版で `castHom` の加法像展開が `simp` で閉じず、
+     `(castHom ...).map_add` を明示して解消
+6. 次の課題:
+   - `HenselLiftStepCorrectionTarget` の concrete 証明
+   - `F(T)=∑T^i` の一次補正 `F(R+q^n c)` の専用補題を追加し、
+     one-step kernel を実際に閉じる
+
 ## Template
 
 ### 日時: `タイムスタンプ date コマンドを使用して年月日時分まで` JST (template)
