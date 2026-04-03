@@ -1696,3 +1696,28 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
 6. 次の課題:
    - `HenselLiftStepNewtonCorrectionTarget` の concrete 証明
    - そこから `HenselLiftStepZeroLiftTarget` を concrete 化し、Level 1s を閉じる
+
+### 追記: 2026/04/03 23:15:55 JST Newton本丸の線形化還元
+
+1. 目的:
+   - `HenselLiftStepNewtonCorrectionTarget` を concrete 証明へ寄せるため、
+     残りを線形可解性 1 本に圧縮する
+2. 実施:
+   - `HenselLiftStepLinearizedSolveTarget` を追加
+   - `henselLiftStepNewtonCorrection_of_linearizedSolve` を追加
+     （線形方程式の可解性 ⇒ NewtonCorrection）
+   - `DkMathTest/.../TriominoCosmicBranchADescentChain.lean` に
+     新定理の `#print axioms` を追加
+3. 結論:
+   - Newton 補正本丸は
+     `LinearizedSolveTarget` の concrete 化問題として明示された ✅
+   - one-step 導線はさらに明確化
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - 定理配置順（Newton target 定義前参照）で一時的にエラー
+   - 定理を target 定義後へ移設して解消
+6. 次の課題:
+   - `HenselLiftStepLinearizedSolveTarget` の concrete 証明
+   - その後 `HenselLiftStepNewtonCorrectionTarget` → `ZeroLiftTarget` を concrete 化

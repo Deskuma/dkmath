@@ -1546,6 +1546,23 @@ theorem geomSum_first_order_qpow_correction_concrete
   geomSum_first_order_qpow_correction geomSumFirstOrderSqZero_concrete hn R c
 
 /--
+一次補正後の線形方程式が可解であることを要求する target。
+
+`F(T)=∑ T^i` の one-step Newton 補正は、この線形式が解ければ成立する。
+-/
+abbrev HenselLiftStepLinearizedSolveTarget : Prop :=
+  ∀ {p q n : ℕ}, Nat.Prime q → q ≠ p → 1 ≤ n →
+    ∀ (Rn : ZMod (q ^ n)),
+      (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+      ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (Rn1 : ZMod (q ^ (n + 1))),
+        ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) →
+        ∃ c : ZMod (q ^ (n + 1)),
+          (∑ i ∈ Finset.range p,
+              ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1)))
+            * ((q ^ n : ZMod (q ^ (n + 1))) * c)
+            = - (∑ i ∈ Finset.range p, Rn1 ^ i)
+
+/--
 Newton 補正（`Δ = q^n * c`）を直接要求する one-step target。
 -/
 abbrev HenselLiftStepNewtonCorrectionTarget : Prop :=
@@ -1557,6 +1574,25 @@ abbrev HenselLiftStepNewtonCorrectionTarget : Prop :=
         ∃ c : ZMod (q ^ (n + 1)),
           (∑ i ∈ Finset.range p,
             (Rn1 + (q ^ n : ZMod (q ^ (n + 1))) * c) ^ i = 0)
+
+/--
+線形化方程式が解ければ NewtonCorrection target は従う。
+-/
+theorem henselLiftStepNewtonCorrection_of_linearizedSolve
+    (hSolve : HenselLiftStepLinearizedSolveTarget) :
+    HenselLiftStepNewtonCorrectionTarget := by
+  intro p q n hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  rcases hSolve hq hq_ne_p hn Rn hsum hdiv Rn1 hcast with ⟨c, hc⟩
+  refine ⟨c, ?_⟩
+  calc
+    (∑ i ∈ Finset.range p, (Rn1 + (q ^ n : ZMod (q ^ (n + 1))) * c) ^ i)
+        = (∑ i ∈ Finset.range p, Rn1 ^ i)
+          + (∑ i ∈ Finset.range p,
+              ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1)))
+              * ((q ^ n : ZMod (q ^ (n + 1))) * c) :=
+            geomSum_first_order_qpow_correction_concrete (p := p) (q := q) (n := n) hn Rn1 c
+    _ = (∑ i ∈ Finset.range p, Rn1 ^ i) + (-(∑ i ∈ Finset.range p, Rn1 ^ i)) := by rw [hc]
+    _ = 0 := by abel
 
 /--
 1-step Hensel 持ち上げの専用 target（Strong Level 1 の中核）。
