@@ -506,4 +506,36 @@ theorem triominoPrimeProvider_of_3kernels_v3
   triominoPrimeProvider_of_FLTPrimeGe5
     (FLTPrimeGe5Target_of_3kernels_v3 hGNGap hPeel hNoLift)
 
+/-!
+## §13. Primitive PacketDescent の GNReducedGap 1-kernel 化
+
+CyclotomicExistence が concrete 化されたため、
+Primitive descent は GNReducedGap 1 本の仮定で完結する。
+
+chain: GNReducedGap + CyclotomicExistence(concrete) → PrimitivePacketDescent
+-/
+
+/--
+GNReducedGap だけで PrimitivePacketDescent を供給する。
+
+CyclotomicExistence は `primeGe5BranchACyclotomicExistence_concrete` で concrete 化済み。
+-/
+theorem primitivePacketDescent_of_gnReducedGap
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_gnReducedGap_and_cyclotomicExistence
+    hGNGap primeGe5BranchACyclotomicExistence_concrete
+
+/--
+GNReducedGap + ValuationPeel → SmallerPacket。
+
+BranchA 内の case split (p∣t / ¬p∣t) を GNReducedGap 1 本と Peel 1 本で fully cover。
+-/
+theorem smallerPacket_of_gnReducedGap_and_peel
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget)
+    (hPeel : PrimeGe5BranchAValuationPeelPacketTarget) :
+    PrimeGe5BranchASmallerPacketTarget :=
+  primeGe5BranchASmallerPacket_of_routes
+    hPeel (primitivePacketDescent_of_gnReducedGap hGNGap)
+
 end DkMath.FLT

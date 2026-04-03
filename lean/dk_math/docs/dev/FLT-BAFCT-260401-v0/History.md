@@ -1168,3 +1168,69 @@ cyclotomicPrimeCore d x u に x を割らない素因子が存在する。
 3-kernel v3 route: 3 + 4 + 2 で FLT p≥5 (CyclotomicExistence は concrete!)
 
 #### ビルド: `lake build` 成功。FLT 関連 sorry は `TriominoCosmicBranchA.lean:4137` (NePCoprimeKernel) の 1 箇所のみ
+
+---
+
+### Session 23: 深層構造分析 & Primitive Descent 1-kernel 化 (2026-04-03)
+
+#### 戦略分析: NePCoprimeKernel の本質
+
+NePCoprimeKernel の sorry TODO に重要な知見が記載されている:
+
+> comparison-based refuter の active 情報はここで尽きている。
+> 最終矛盾は、minimality / descent / 別 arithmetic kernel へ設計転換して取りに行く必要がある。
+
+これは **comparison route (NeP support separation) だけでは BranchA を閉じられない** ことを意味する。
+NePCoprimeKernel を直接証明するには、内部で **well-founded descent** を組む必要がある。
+
+#### 帰結: 3-kernel v3 route が実質的な proof path
+
+NePCoprimeKernel ≒ 「BranchA 全体が False」は FLT 自体と同等の難度。
+よって、3-kernel v3 route (GNReducedGap + ValuationPeel + NonLiftableGNBridge) で
+descent を分離して攻めるのが建設的。
+
+#### 新たな成果: Primitive descent の GNReducedGap 1-kernel 化
+
+CyclotomicExistence が concrete 化されたことにより:
+
+| 定理 | 内容 | axioms |
+|---|---|---|
+| `primitivePacketDescent_of_gnReducedGap` | GNReducedGap **1本で** PrimitivePacketDescent | clean ✅ |
+| `smallerPacket_of_gnReducedGap_and_peel` | GNReducedGap + Peel で SmallerPacket | clean ✅ |
+
+これは CyclotomicExistence concrete 化の **即時的な帰結** であり、
+「primitive descent の open kernel = GNReducedGap のみ」が定理レベルで確定した。
+
+#### Descent chain 全体の依存関係
+
+```
+ExceptionalExistence.lean [COMPLETE]
+  → CyclotomicExistence [CONCRETE]
+    → PrimitivePacketDescent = GNReducedGap 1本 [conditional, clean]
+      ↓
+    SmallerPacket = GNReducedGap + ValuationPeel [conditional, clean]
+      ↓
+    BranchA Refuter = SmallerPacket + well-founded [conditional, clean]
+      ↓
+    FLT p≥5 = BranchA + BranchB(NonLiftableGNBridge) [conditional, clean]
+
+全条件付き chain:
+  GNReducedGap + ValuationPeel + NonLiftableGNBridge → FLT p≥5
+  CyclotomicExistence は全て concrete で chain 内に含まれない
+```
+
+#### 残 open kernel の依存分析
+
+| Kernel | 側 | 数学内容 | 依存 |
+|---|---|---|---|
+| GNReducedGapTarget | BranchA (¬p∣t) | q-adic descent で g'*GN(g',y)=p^p*(t*s/q)^p | DescentSeed (concrete) + CycloEx (concrete) |
+| ValuationPeelPacketFromError | BranchA (p∣t) | error term から smaller packet を構成 | TailError (concrete) |
+| NonLiftableGNBridge | BranchB | primitive q に対し q²∤GN | 独立 |
+
+#### 次の攻撃優先度
+
+1. **GNReducedGapTarget** — 最も構造が見え、CycloEx concrete 化の利益が直接効く
+2. **ValuationPeelPacketFromError** — p∣t 側の descent。error term 利用
+3. **NonLiftableGNBridge** — BranchB。独立して進められる
+
+#### ビルド: `lake build` 成功。全体構造は健全
