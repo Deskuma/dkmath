@@ -1774,3 +1774,33 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
 6. 次の課題:
    - `HenselLiftStepDerivativeUnitTarget` の concrete 証明
    - 連結して `HenselLiftStepNewtonCorrectionTarget` / `ZeroLiftTarget` を concrete 化
+
+### 追記: 2026/04/04 00:40:44 JST Derivative→ZeroLift 連結 concrete
+
+1. 目的:
+   - `DerivativeUnit` の concrete 化に向けて、
+     `mod q` 非零性から unit を得る局所補題を実装し、
+     `NewtonCorrection` / `ZeroLift` まで連結する
+2. 実施:
+   - `isUnit_of_nonzero_mod_q_primepow` を実装
+     （`q` prime, `mod q` 非零 ⇒ `ZMod (q^(n+1))` で unit）
+   - `HenselLiftStepDerivativeNonzeroModQPrimeTarget` を追加
+   - `henselLiftStepDerivativeUnitPrime_of_nonzeroModQ` を証明
+   - `henselLiftStepLinearizedSolve_of_nonzeroModQ_prime` を concrete 証明
+   - `henselLiftStepZeroLift_of_newtonCorrection` を実装
+   - `henselLiftStepZeroLift_of_nonzeroModQ_prime` を実装
+3. 結論:
+   - prime 文脈で
+     `DerivativeNonzeroModQ` → `DerivativeUnit` → `LinearizedSolve`
+     → `NewtonCorrection` → `ZeroLift`
+     の concrete 連結を確立 ✅
+   - ただし `DerivativeNonzeroModQPrimeTarget` 自体の concrete 証明は未完
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - ZeroLift 定理を target 定義前に置いて依存順エラー
+   - 定理を `HenselLiftStepZeroLiftTarget` 定義後へ移設して解消
+6. 次の課題:
+   - `HenselLiftStepDerivativeNonzeroModQPrimeTarget` の concrete 証明
+   - それを通じた `HenselLiftStepDerivativeUnitTarget`（prime文脈）の実質 concrete 化完了

@@ -1629,6 +1629,58 @@ theorem henselLiftStepDerivativeUnit_of_prime
   exact hPrime hp hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
 
 /--
+`mod q` で非零なら `ZMod (q^(n+1))` では unit（`q` prime）。
+-/
+theorem isUnit_of_nonzero_mod_q_primepow
+    {q n : ℕ} (hq : Nat.Prime q) (a : ZMod (q ^ (n + 1)))
+    (ha : (ZMod.castHom (show q ∣ q ^ (n + 1) from ⟨q ^ n, by simp [pow_succ, Nat.mul_comm]⟩)
+            (ZMod q)) a ≠ 0) :
+    IsUnit a := by
+  have hqpow_pos : 0 < q ^ (n + 1) := pow_pos hq.pos _
+  have hqpow_ne : NeZero (q ^ (n + 1)) := ⟨Nat.ne_of_gt hqpow_pos⟩
+  let b : ℕ := a.val
+  have hb_not_dvd_q : ¬ q ∣ b := by
+    intro hqdb
+    have hb_zero_q : (b : ZMod q) = 0 := (ZMod.natCast_eq_zero_iff b q).2 hqdb
+    have hcast_a_q :
+        (ZMod.castHom (show q ∣ q ^ (n + 1) from ⟨q ^ n, by simp [pow_succ, Nat.mul_comm]⟩)
+            (ZMod q)) a = (b : ZMod q) := by
+      rw [ZMod.castHom_apply, ZMod.cast_eq_val]
+    exact ha (hcast_a_q.trans hb_zero_q)
+  have hb_coprime : Nat.Coprime b (q ^ (n + 1)) := hq.coprime_pow_of_not_dvd hb_not_dvd_q
+  have hb_unit : IsUnit (b : ZMod (q ^ (n + 1))) := (ZMod.isUnit_iff_coprime b (q ^ (n + 1))).2 hb_coprime
+  simpa [b, ZMod.natCast_zmod_val] using hb_unit
+
+/--
+導関数係数の `mod q` 非零性を仮定する prime 文脈 target。
+-/
+abbrev HenselLiftStepDerivativeNonzeroModQPrimeTarget : Prop :=
+  ∀ {p q n : ℕ}, Nat.Prime p → Nat.Prime q → q ≠ p → 1 ≤ n →
+    ∀ (Rn : ZMod (q ^ n)),
+      (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+      ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (Rn1 : ZMod (q ^ (n + 1))),
+        ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) →
+        (ZMod.castHom (show q ∣ q ^ (n + 1) from ⟨q ^ n, by simp [pow_succ, Nat.mul_comm]⟩)
+            (ZMod q))
+          (∑ i ∈ Finset.range p, ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1))) ≠ 0
+
+/--
+`mod q` 非零性 target から derivative-unit prime target を得る。
+-/
+theorem henselLiftStepDerivativeUnitPrime_of_nonzeroModQ
+    (hNonzero : HenselLiftStepDerivativeNonzeroModQPrimeTarget) :
+    HenselLiftStepDerivativeUnitPrimeTarget := by
+  intro p q n hp hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  let B : ZMod (q ^ (n + 1)) :=
+    ∑ i ∈ Finset.range p, ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1))
+  have hB_nonzero_q :
+      (ZMod.castHom (show q ∣ q ^ (n + 1) from ⟨q ^ n, by simp [pow_succ, Nat.mul_comm]⟩)
+          (ZMod q)) B ≠ 0 := by
+    dsimp [B]
+    exact hNonzero hp hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  exact isUnit_of_nonzero_mod_q_primepow hq B hB_nonzero_q
+
+/--
 kernel 分解と導関数係数の unit 性があれば線形化方程式は可解。
 -/
 theorem henselLiftStepLinearizedSolve_of_kernelDivision_and_derivativeUnit
@@ -1682,6 +1734,50 @@ theorem henselLiftStepLinearizedSolve_of_derivativeUnit
     HenselLiftStepLinearizedSolveTarget :=
   henselLiftStepLinearizedSolve_of_kernelDivision_and_derivativeUnit
     henselLiftStepKernelDivision_concrete hDerivUnit
+
+/-- prime 文脈の `DerivativeNonzeroModQ` から `LinearizedSolve` へ接続。 -/
+theorem henselLiftStepLinearizedSolve_of_nonzeroModQ_prime
+    (hNonzero : HenselLiftStepDerivativeNonzeroModQPrimeTarget) :
+    ∀ {p q n : ℕ}, Nat.Prime p → Nat.Prime q → q ≠ p → 1 ≤ n →
+      ∀ (Rn : ZMod (q ^ n)),
+        (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+        ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (Rn1 : ZMod (q ^ (n + 1))),
+          ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) →
+          ∃ c : ZMod (q ^ (n + 1)),
+            (∑ i ∈ Finset.range p,
+                ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1)))
+              * ((q ^ n : ZMod (q ^ (n + 1))) * c)
+              = - (∑ i ∈ Finset.range p, Rn1 ^ i) := by
+  intro p q n hp hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  let B : ZMod (q ^ (n + 1)) :=
+    ∑ i ∈ Finset.range p, ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1))
+  let S : ZMod (q ^ (n + 1)) := ∑ i ∈ Finset.range p, Rn1 ^ i
+  have hS_cast : (ZMod.castHom hdiv (ZMod (q ^ n))) S = 0 := by
+    dsimp [S]
+    calc
+      (ZMod.castHom hdiv (ZMod (q ^ n))) (∑ i ∈ Finset.range p, Rn1 ^ i)
+          = ∑ i ∈ Finset.range p, ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1) ^ i := by
+              simp [map_sum, map_pow]
+      _ = ∑ i ∈ Finset.range p, Rn ^ i := by simp [hcast]
+      _ = 0 := hsum
+  have hnegS_cast : (ZMod.castHom hdiv (ZMod (q ^ n))) (-S) = 0 := by
+    simp [map_neg, hS_cast]
+  rcases henselLiftStepKernelDivision_concrete hq hn hdiv (-S) hnegS_cast with ⟨t, ht⟩
+  have hB_unit : IsUnit B := by
+    have hPrimeDeriv : HenselLiftStepDerivativeUnitPrimeTarget :=
+      henselLiftStepDerivativeUnitPrime_of_nonzeroModQ hNonzero
+    dsimp [B]
+    exact hPrimeDeriv hp hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  rcases hB_unit with ⟨u, hu⟩
+  refine ⟨↑u⁻¹ * t, ?_⟩
+  calc
+    B * ((q ^ n : ZMod (q ^ (n + 1))) * (↑u⁻¹ * t))
+        = (q ^ n : ZMod (q ^ (n + 1))) * (B * (↑u⁻¹ * t)) := by ring
+    _ = (q ^ n : ZMod (q ^ (n + 1))) * ((B * ↑u⁻¹) * t) := by ring
+    _ = (q ^ n : ZMod (q ^ (n + 1))) * ((1 : ZMod (q ^ (n + 1))) * t) := by
+          rw [← hu]
+          simp
+    _ = -S := by simp [ht]
 
 /--
 Newton 補正（`Δ = q^n * c`）を直接要求する one-step target。
@@ -1801,6 +1897,69 @@ abbrev HenselLiftStepZeroLiftTarget : Prop :=
         ∃ (Rlift : ZMod (q ^ (n + 1))),
           ((ZMod.castHom hdiv (ZMod (q ^ n))) Rlift = Rn) ∧
           (∑ i ∈ Finset.range p, (Rlift : ZMod (q ^ (n + 1))) ^ i = 0)
+
+/-- NewtonCorrection target から ZeroLift target を得る。 -/
+theorem henselLiftStepZeroLift_of_newtonCorrection
+    (hNewton : HenselLiftStepNewtonCorrectionTarget) :
+    HenselLiftStepZeroLiftTarget := by
+  intro p q n hq hq_ne_p hn Rn hsum hdiv
+  rcases (ZMod.castHom_surjective hdiv) Rn with ⟨Rn1, hcast⟩
+  rcases hNewton hq hq_ne_p hn Rn hsum hdiv Rn1 hcast with ⟨c, hc⟩
+  have hqpowc0 :
+      (ZMod.castHom hdiv (ZMod (q ^ n))) ((q ^ n : ZMod (q ^ (n + 1))) * c) = 0 :=
+    castHom_qpow_mul_eq_zero hdiv c
+  have hmap_add :
+      (ZMod.castHom hdiv (ZMod (q ^ n))) (Rn1 + (q ^ n : ZMod (q ^ (n + 1))) * c)
+        = (ZMod.castHom hdiv (ZMod (q ^ n))) Rn1
+            + (ZMod.castHom hdiv (ZMod (q ^ n))) ((q ^ n : ZMod (q ^ (n + 1))) * c) :=
+    (ZMod.castHom hdiv (ZMod (q ^ n))).map_add Rn1 ((q ^ n : ZMod (q ^ (n + 1))) * c)
+  refine ⟨Rn1 + (q ^ n : ZMod (q ^ (n + 1))) * c, ?_, ?_⟩
+  · calc
+      (ZMod.castHom hdiv (ZMod (q ^ n))) (Rn1 + (q ^ n : ZMod (q ^ (n + 1))) * c)
+          = (ZMod.castHom hdiv (ZMod (q ^ n))) Rn1
+              + (ZMod.castHom hdiv (ZMod (q ^ n))) ((q ^ n : ZMod (q ^ (n + 1))) * c) := hmap_add
+      _ = Rn + 0 := by simp [hcast, hqpowc0]
+      _ = Rn := by simp
+  · exact hc
+
+/-- prime 文脈の `DerivativeNonzeroModQ` から ZeroLift までの concrete 連結。 -/
+theorem henselLiftStepZeroLift_of_nonzeroModQ_prime
+    (hNonzero : HenselLiftStepDerivativeNonzeroModQPrimeTarget) :
+    ∀ {p q n : ℕ}, Nat.Prime p → Nat.Prime q → q ≠ p → 1 ≤ n →
+      ∀ (Rn : ZMod (q ^ n)),
+        (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+        ∀ (hdiv : q ^ n ∣ q ^ (n + 1)),
+          ∃ (Rlift : ZMod (q ^ (n + 1))),
+            ((ZMod.castHom hdiv (ZMod (q ^ n))) Rlift = Rn) ∧
+            (∑ i ∈ Finset.range p, (Rlift : ZMod (q ^ (n + 1))) ^ i = 0) := by
+  intro p q n hp hq hq_ne_p hn Rn hsum hdiv
+  rcases (ZMod.castHom_surjective hdiv) Rn with ⟨Rn1, hcast⟩
+  rcases (henselLiftStepLinearizedSolve_of_nonzeroModQ_prime hNonzero
+      (p := p) (q := q) (n := n) hp hq hq_ne_p hn Rn hsum hdiv Rn1 hcast) with ⟨c, hc⟩
+  have hqpowc0 :
+      (ZMod.castHom hdiv (ZMod (q ^ n))) ((q ^ n : ZMod (q ^ (n + 1))) * c) = 0 :=
+    castHom_qpow_mul_eq_zero hdiv c
+  have hmap_add :
+      (ZMod.castHom hdiv (ZMod (q ^ n))) (Rn1 + (q ^ n : ZMod (q ^ (n + 1))) * c)
+        = (ZMod.castHom hdiv (ZMod (q ^ n))) Rn1
+            + (ZMod.castHom hdiv (ZMod (q ^ n))) ((q ^ n : ZMod (q ^ (n + 1))) * c) :=
+    (ZMod.castHom hdiv (ZMod (q ^ n))).map_add Rn1 ((q ^ n : ZMod (q ^ (n + 1))) * c)
+  refine ⟨Rn1 + (q ^ n : ZMod (q ^ (n + 1))) * c, ?_, ?_⟩
+  · calc
+      (ZMod.castHom hdiv (ZMod (q ^ n))) (Rn1 + (q ^ n : ZMod (q ^ (n + 1))) * c)
+          = (ZMod.castHom hdiv (ZMod (q ^ n))) Rn1
+              + (ZMod.castHom hdiv (ZMod (q ^ n))) ((q ^ n : ZMod (q ^ (n + 1))) * c) := hmap_add
+      _ = Rn + 0 := by simp [hcast, hqpowc0]
+      _ = Rn := by simp
+  · calc
+      (∑ i ∈ Finset.range p, (Rn1 + (q ^ n : ZMod (q ^ (n + 1))) * c) ^ i)
+          = (∑ i ∈ Finset.range p, Rn1 ^ i)
+            + (∑ i ∈ Finset.range p,
+                ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1)))
+                * ((q ^ n : ZMod (q ^ (n + 1))) * c) :=
+              geomSum_first_order_qpow_correction_concrete (p := p) (q := q) (n := n) hn Rn1 c
+      _ = (∑ i ∈ Finset.range p, Rn1 ^ i) + (-(∑ i ∈ Finset.range p, Rn1 ^ i)) := by rw [hc]
+      _ = 0 := by abel
 
 /--
 零点持ち上げが存在すれば、任意の初期持ち上げ `Rn1` から `Δ` 補正で到達できる。

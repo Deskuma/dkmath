@@ -47,3 +47,8 @@ set_option linter.style.longLine false
 #print axioms DkMath.FLT.henselLiftStepLinearizedSolve_of_kernelDivision_and_derivativeUnit -- OK
 #print axioms DkMath.FLT.henselLiftStepKernelDivision_concrete -- OK
 #print axioms DkMath.FLT.henselLiftStepLinearizedSolve_of_derivativeUnit -- OK
+#print axioms DkMath.FLT.isUnit_of_nonzero_mod_q_primepow -- OK
+#print axioms DkMath.FLT.henselLiftStepDerivativeUnitPrime_of_nonzeroModQ -- OK
+#print axioms DkMath.FLT.henselLiftStepLinearizedSolve_of_nonzeroModQ_prime -- OK
+#print axioms DkMath.FLT.henselLiftStepZeroLift_of_newtonCorrection -- OK
+#print axioms DkMath.FLT.henselLiftStepZeroLift_of_nonzeroModQ_prime -- OK
