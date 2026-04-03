@@ -44,3 +44,4 @@ set_option linter.style.longLine false
 #print axioms DkMath.FLT.geomSumFirstOrderSqZero_concrete -- OK
 #print axioms DkMath.FLT.geomSum_first_order_qpow_correction_concrete -- OK
 #print axioms DkMath.FLT.henselLiftStepNewtonCorrection_of_linearizedSolve -- OK
+#print axioms DkMath.FLT.henselLiftStepLinearizedSolve_of_kernelDivision_and_derivativeUnit -- OK

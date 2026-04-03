@@ -1563,6 +1563,72 @@ abbrev HenselLiftStepLinearizedSolveTarget : Prop :=
             = - (∑ i ∈ Finset.range p, Rn1 ^ i)
 
 /--
+`castHom` の kernel 元を `q^n` 倍として表せることを要求する target。
+-/
+abbrev HenselLiftStepKernelDivisionTarget : Prop :=
+  ∀ {q n : ℕ},
+    ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (x : ZMod (q ^ (n + 1))),
+      (ZMod.castHom hdiv (ZMod (q ^ n))) x = 0 →
+      ∃ t : ZMod (q ^ (n + 1)), x = (q ^ n : ZMod (q ^ (n + 1))) * t
+
+/--
+線形化係数 `∑ i * R^(i-1)` が unit であることを要求する target。
+-/
+abbrev HenselLiftStepDerivativeUnitTarget : Prop :=
+  ∀ {p q n : ℕ}, Nat.Prime q → q ≠ p → 1 ≤ n →
+    ∀ (Rn : ZMod (q ^ n)),
+      (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+      ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (Rn1 : ZMod (q ^ (n + 1))),
+        ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) →
+        IsUnit (∑ i ∈ Finset.range p, ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1)))
+
+/--
+kernel 分解と導関数係数の unit 性があれば線形化方程式は可解。
+-/
+theorem henselLiftStepLinearizedSolve_of_kernelDivision_and_derivativeUnit
+    (hKernelDiv : HenselLiftStepKernelDivisionTarget)
+    (hDerivUnit : HenselLiftStepDerivativeUnitTarget) :
+    HenselLiftStepLinearizedSolveTarget := by
+  intro p q n hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  let B : ZMod (q ^ (n + 1)) :=
+    ∑ i ∈ Finset.range p, ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1))
+  let S : ZMod (q ^ (n + 1)) := ∑ i ∈ Finset.range p, Rn1 ^ i
+  have hcast_pow : ∀ i : ℕ,
+      (ZMod.castHom hdiv (ZMod (q ^ n))) (Rn1 ^ i) = Rn ^ i := by
+    intro i
+    simp [map_pow, hcast]
+  have hS_cast : (ZMod.castHom hdiv (ZMod (q ^ n))) S = 0 := by
+    dsimp [S]
+    calc
+      (ZMod.castHom hdiv (ZMod (q ^ n))) (∑ i ∈ Finset.range p, Rn1 ^ i)
+          = ∑ i ∈ Finset.range p, (ZMod.castHom hdiv (ZMod (q ^ n))) (Rn1 ^ i) := by
+              simp [map_sum]
+      _ = ∑ i ∈ Finset.range p, Rn ^ i := by
+            refine Finset.sum_congr rfl ?_
+            intro i hi
+            exact hcast_pow i
+      _ = 0 := hsum
+  have hnegS_cast : (ZMod.castHom hdiv (ZMod (q ^ n))) (-S) = 0 := by
+    calc
+      (ZMod.castHom hdiv (ZMod (q ^ n))) (-S)
+          = -((ZMod.castHom hdiv (ZMod (q ^ n))) S) := by rw [map_neg]
+      _ = 0 := by simp [hS_cast]
+  obtain ⟨t, ht⟩ := hKernelDiv hdiv (-S) hnegS_cast
+  have hB_unit : IsUnit B := by
+    dsimp [B]
+    exact hDerivUnit hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  rcases hB_unit with ⟨u, hu⟩
+  refine ⟨↑u⁻¹ * t, ?_⟩
+  calc
+    B * ((q ^ n : ZMod (q ^ (n + 1))) * (↑u⁻¹ * t))
+        = (q ^ n : ZMod (q ^ (n + 1))) * (B * (↑u⁻¹ * t)) := by ring
+    _ = (q ^ n : ZMod (q ^ (n + 1))) * ((B * ↑u⁻¹) * t) := by ring
+    _ = (q ^ n : ZMod (q ^ (n + 1))) * ((1 : ZMod (q ^ (n + 1))) * t) := by
+          rw [← hu]
+          simp
+    _ = -S := by simp [ht]
+
+/--
 Newton 補正（`Δ = q^n * c`）を直接要求する one-step target。
 -/
 abbrev HenselLiftStepNewtonCorrectionTarget : Prop :=

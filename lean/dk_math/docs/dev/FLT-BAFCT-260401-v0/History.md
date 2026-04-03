@@ -1721,3 +1721,31 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
 6. 次の課題:
    - `HenselLiftStepLinearizedSolveTarget` の concrete 証明
    - その後 `HenselLiftStepNewtonCorrectionTarget` → `ZeroLiftTarget` を concrete 化
+
+### 追記: 2026/04/03 23:39:49 JST 線形可解性の二分還元
+
+1. 目的:
+   - `HenselLiftStepLinearizedSolveTarget` を concrete 証明へ進めるため、
+     残課題を局所算術 2 本へ分解する
+2. 実施:
+   - `HenselLiftStepKernelDivisionTarget` を追加
+     （castHom kernel 元を `q^n` 倍として表す）
+   - `HenselLiftStepDerivativeUnitTarget` を追加
+     （線形化係数 `∑ i*R^(i-1)` の unit 性）
+   - `henselLiftStepLinearizedSolve_of_kernelDivision_and_derivativeUnit` を証明
+     （上記2 target から `HenselLiftStepLinearizedSolveTarget` を導出）
+   - テストに `#print axioms` を追加
+3. 結論:
+   - `LinearizedSolve` は
+     `KernelDivision` + `DerivativeUnit`
+     の concrete 化問題へ還元完了 ✅
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - `castHom` の和・冪像の展開で `simp` が進まず一時停止
+   - `hcast_pow` 補助を導入し、`sum_congr` で明示展開して解消
+6. 次の課題:
+   - `HenselLiftStepKernelDivisionTarget` の concrete 証明
+   - `HenselLiftStepDerivativeUnitTarget` の concrete 証明
+   - 連結して `HenselLiftStepNewtonCorrectionTarget` / `ZeroLiftTarget` を concrete 化
