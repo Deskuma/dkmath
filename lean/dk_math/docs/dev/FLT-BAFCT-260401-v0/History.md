@@ -34,6 +34,35 @@ Archive
 6. 次の課題:
    - （内容）
 
+### 追記: 2026/04/04 02:11:15 JST DerivativeNonzero concrete 化
+
+1. 目的:
+   - `HenselLiftStepDerivativeNonzeroModQPrimeTarget` を concrete に閉じ、
+     prime 文脈で `DerivativeUnit` から `ZeroLift` までの連結を実装完了する
+2. 実施:
+   - `henselLiftStepDerivativeNonzeroModQPrime_concrete` を実装
+     （`∑ r^i = 0` から `r ≠ 1`, `r^p = 1` を得て、
+      微分恒等式を `ZMod q` で評価して導関数和の `mod q` 非零を示す）
+   - `henselLiftStepDerivativeUnitPrime_of_nonzeroModQ` を concrete 接続
+   - `henselLiftStepLinearizedSolve_of_nonzeroModQ_prime` を concrete 化
+   - `henselLiftStepZeroLift_of_newtonCorrection` と
+     `henselLiftStepZeroLift_of_nonzeroModQ_prime` を実装
+3. 結論:
+   - prime 文脈では
+     `DerivativeNonzeroModQ` → `DerivativeUnit` → `LinearizedSolve`
+     → `NewtonCorrection` → `ZeroLift`
+     の concrete chain が確立した ✅
+   - これにより、以前の TODO にあった
+     `HenselLiftStepDerivativeUnitTarget`（prime 文脈）の実質 concrete 化は完了
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - `castHom` 合成・`map_add`・定理配置順の不整合で一時的にビルド停止
+   - `HenselLiftStepZeroLiftTarget` 定義後への移設と明示補題導入で解消
+6. 次の課題:
+   - prime 文脈 concrete chain を one-step `GeomSum` / `ArithmeticKernel` の FLT 側使用箇所へ接続
+   - 必要なら一般形 target と prime 文脈 target の役割分担を整理して命名を安定化
+
 ### 追記: 2026/04/03 20:06:59 JST zero-lift 条件精密化
 
 1. 目的:

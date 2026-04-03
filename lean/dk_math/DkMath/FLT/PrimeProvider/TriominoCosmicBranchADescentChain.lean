@@ -1678,9 +1678,17 @@ theorem henselLiftStepDerivativeNonzeroModQPrime_concrete :
     · exact (False.elim (Nat.not_succ_le_zero 0 hn))
     · exact ⟨q ^ k, by simp [pow_succ, Nat.mul_comm]⟩
   let hq_div_qnp1 : q ∣ q ^ (n + 1) := ⟨q ^ n, by simp [pow_succ, Nat.mul_comm]⟩
-  let r : ZMod q := (ZMod.castHom hq_div_qn (ZMod q)) ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1)
+  let r : ZMod q := (ZMod.castHom hq_div_qnp1 (ZMod q)) Rn1
   have hcast_q : r = (ZMod.castHom hq_div_qn (ZMod q)) Rn := by
-    simp [r, hcast]
+    have hstep :
+        (ZMod.castHom hq_div_qn (ZMod q))
+            ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1) = r := by
+      change (((ZMod.castHom hq_div_qn (ZMod q)).comp (ZMod.castHom hdiv (ZMod (q ^ n)))) Rn1) = r
+      rw [ZMod.castHom_comp]
+    calc
+      r = (ZMod.castHom hq_div_qn (ZMod q)) ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1) := by
+            symm; exact hstep
+      _ = (ZMod.castHom hq_div_qn (ZMod q)) Rn := by simp [hcast]
   have hsum_q_Rn :
       ∑ i ∈ Finset.range p, ((ZMod.castHom hq_div_qn (ZMod q)) Rn) ^ i = 0 := by
     have := congrArg (ZMod.castHom hq_div_qn (ZMod q)) hsum
