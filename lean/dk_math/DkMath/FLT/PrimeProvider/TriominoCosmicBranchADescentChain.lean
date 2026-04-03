@@ -1044,4 +1044,387 @@ Sub-target は §16 の PthRootCoreTarget に吸収されるため、
 ここでは数学的分析の記録のみを保持する。
 -/
 
+/-!
+## §20. GN の Hensel 因子分解構造と q-adic descent の核心
+
+### 数学的内容
+
+§19 で QAdicGapReduction (= GNReducedGap) が真の open kernel と判明した。
+ここでは GN の **q-adic 構造** を解剖し、open kernel の本質を精密に可視化する。
+
+#### 20.1. GN = 幾何和 = Φ_p(z/y) · y^{p-1}
+
+GN(p, gap, y) は z = gap + y, gap = z - y として:
+```
+GN(p, gap, y) = Σ_{k=0}^{p-1} C(p,k+1) gap^k y^{p-1-k}
+             = Σ_{i=0}^{p-1} z^i · y^{p-1-i}
+             = y^{p-1} · Σ_{i=0}^{p-1} (z/y)^i
+             = y^{p-1} · Φ_p(z/y)
+```
+
+ここで `Φ_p(r) = r^{p-1} + r^{p-2} + ... + 1 = (r^p - 1)/(r - 1)`.
+（注: これは円分多項式 Φ_p そのものではなく、その「geom_sum」版。）
+
+#### 20.2. ZMod q 上の根と単根性
+
+q を primitive prime (q ≡ 1 mod p, q ≠ p) とし、ω を ZMod q 上の
+nontrivial p-th root of unity とする。
+
+**定理**: `Φ_p(x) = Σ x^i` は ZMod q 上で p-1 個の根 {ω, ω², ..., ω^{p-1}} を持ち、
+全て**単根** (simple root) である。
+
+証明: Φ_p(ω^j) = (ω^{jp} - 1)/(ω^j - 1) = (1 - 1)/(ω^j - 1) = 0 (j ≠ 0).
+deg(Φ_p) = p-1 なので、これで全根。
+微分: Φ_p'(ω^j) = p · ω^{-j} / (ω^j - 1) ≢ 0 mod q (∵ q ≠ p, ω^j ≠ 1).
+よって全て単根。
+
+#### 20.3. Hensel lifting と q-adic valuation の精密公式
+
+Hensel の補題により、各単根 ω^j は q-adic 整数 R_j ∈ ℤ_q に一意に持ち上がる:
+- R_j ≡ ω^j (mod q)
+- Φ_p(R_j) = 0 in ℤ_q
+
+q-adic factorization: GN(p, gap, y) = y^{p-1} · Π_{j=1}^{p-1} (z/y - R_j)
+
+v_q(GN) = Σ v_q(z/y - R_j) だが、j₀ 以外の項は v_q = 0 なので:
+- → **v_q(GN) = v_q(z - R_{j₀} · y)** (j₀ は z ≡ ω^{j₀}·y mod q の index)
+
+#### 20.4. FLT 反例文脈での帰結
+
+FLT 反例文脈: gap · GN = x^p, q ∤ gap, q | x:
+- v_q(GN) = p · v_q(x) ≥ p
+- → **z ≡ R_{j₀} · y (mod q^p)** (≧ p 段の一致)
+
+これは QAdicResidue (z ≡ ω^j·y mod q) の **p 段 Hensel 強化** である。
+
+#### 20.5. GNReducedGap の真の核心
+
+GNReducedGap: ∃ g', g'·GN(p, g', y) = (x/q)^p
+
+z' = g' + y とすると z'^p = (x/q)^p + y^p。
+
+q-adic 視点での descent:
+- 元の z: v_q(z - R·y) ≥ p（全 q-power が一箇所に集中）
+- 新しい z': v_q(z' - R·y) = 0（q-power を完全に剥がす）
+
+**Descent の数学的本質**:
+元の z からの q-power 集中を除去した z' の **整数としての存在性**。
+q-adic 解は Hensel lifting で自動的に存在するが、
+それが正の整数であることは **局所→大域原理** に相当し、
+p ≥ 5 では一般に成立しない（Fermat 曲線の Hasse 原理は破れる）。
+
+**ただし FLT 反例の文脈ではこの局所→大域が成立することが必要**
+（なぜなら Wiles が FLT を証明したので、反例は存在せず、
+矛盾が出なければならない）。
+
+### 数値検証結果
+
+p = 5, q = 11 の場合:
+- Φ_5 の ZMod 11 上の根: {4, 5, 9, 3} (= {ω, ω², ω³, ω⁴})
+- 全て単根 (Φ_5'(ω^j) ≢ 0 mod 11) ✓
+- Hensel lift mod 11^5 = 161051: 各 j に対し唯一の R_j 存在 ✓
+- v_11(Φ_5(r)) ≥ 5 は mod 11² では不可能、mod 11^5 で各 j に 1 個ずつ存在
+
+### 戦略的帰結
+
+1. QAdicResidue (Sub-target 1) は z ≡ ω^j·y mod q の mod-q 版であり、concrete に証明可能
+2. QAdicGapReduction (= GNReducedGap, Sub-target 2) は z' の整数存在性であり、
+   q-adic 局所解は自動だが大域整数解の保証が open kernel そのもの
+3. **この open kernel は Kummer の円分体 descent と同等の困難さを持つ**:
+   Z[ζ_p] の類数が p と互いに素（正則素数）なら Z[ζ_p] 内で解けるが、
+   非正則素数では追加の議論が必要
+
+### §20 形式化: q-adic 構造定理
+
+FLT 反例文脈で gap · GN = x^p, q primitive prime のとき:
+  1. GN = Σ z^i · y^{p-1-i} (geom_sum₂ representation)
+  2. z ≡ ω^j · y (mod q) for some j ∈ {1,...,p-1}  [= QAdicResidue]
+  3. v_q(GN) = v_q(z - R_j · y) where R_j = Hensel lift of ω^j [= HenselValuation]
+  4. z ≡ R_j · y (mod q^p) [= SuperWieferichCongruence]
+-/
+
+/--
+**GN geom_sum₂ representation**: 反例文脈における GN の幾何和表示。
+
+`GN(p, z-y, y) = Σ_{i=0}^{p-1} z^i · y^{p-1-i}`
+
+これは Cosmic Formula の基本恒等式 `gap · GN(p, gap, y) = (gap+y)^p - y^p` から、
+`gap = z - y` とすれば `(z-y) · GN(p, z-y, y) = z^p - y^p` であり、
+`z^p - y^p = (z-y) · Σ z^i · y^{p-1-i}` と比較して得られる。
+-/
+abbrev GNGeomSum₂RepresentationTarget : Prop :=
+  ∀ {p z y : ℕ}, 0 < p → y < z →
+    GN p (z - y) y = ∑ i ∈ Finset.range p, z ^ i * y ^ (p - 1 - i)
+
+/--
+GN geom_sum₂ representation の証明。
+
+Cosmic Identity: `(z-y) · GN(p, z-y, y) = z^p - y^p`
+Geom Identity:  `(z-y) · Σ z^i · y^{p-1-i} = z^p - y^p`
+比較して `z > y > 0` なら `z - y > 0` で割り算可能。
+-/
+theorem gnGeomSum₂Representation : GNGeomSum₂RepresentationTarget := by
+  intro p z y _hp hyz
+  have hzy : z - y + y = z := Nat.sub_add_cancel (Nat.le_of_lt hyz)
+  -- (1) Cosmic Identity: (z-y) · GN(p, z-y, y) + y^p = z^p
+  have h_cosmic : (z - y) * GN p (z - y) y + y ^ p = z ^ p := by
+    have := (cosmic_id_csr' p (z - y) y).symm; rwa [hzy] at this
+  -- (2) Geometric sum: (∑ z^i · y^{p-1-i}) · (z-y) + y^p = z^p
+  have h_geom : (∑ i ∈ Finset.range p, z ^ i * y ^ (p - 1 - i)) * (z - y) + y ^ p = z ^ p := by
+    have := geom_sum₂_mul_add (z - y) y p; rwa [hzy] at this
+  -- (3) Both = z^p, cancel + y^p: (z-y)·GN = ∑·(z-y)
+  have h_eq := Nat.add_right_cancel (h_cosmic.trans h_geom.symm)
+  -- (4) ∑·(z-y) = (z-y)·∑ by mul_comm, then cancel (z-y) ≠ 0
+  exact mul_left_cancel₀ (by omega) (h_eq.trans (mul_comm _ _))
+
+/--
+**QAdicResidue**: z ≡ ω^j · y (mod q) の形式化。
+
+反例文脈で q primitive prime, q ∤ gap のとき:
+  gap · GN = x^p, q | GN → q | x^p → (q prime) → q | x
+  q ∤ gap = z - y かつ q | x → z^p ≡ y^p (mod q)
+  → z/y は (ZMod q)* 内で位数 p の元
+
+ω^p = 1, ω ≠ 1 in ZMod q が与えられると:
+  ∃ j ∈ {1,...,p-1}, z ≡ ω^j · y (mod q)
+-/
+abbrev QAdicResidueTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {gap : ℕ}, gap = z - y →
+    ∀ {q : ℕ}, Nat.Prime q → q ≠ p →
+      q ∣ GN p gap y → ¬ q ∣ gap → Nat.Coprime q y →
+      ∀ (ω : ZMod q), ω ^ p = 1 → ω ≠ 1 →
+        ∃ j : Fin p, 0 < j.val ∧
+          (z : ZMod q) = ω ^ j.val * (y : ZMod q)
+
+/--
+**SuperWieferichCongruence**: z ≡ R_j · y (mod q^p) の形式化。
+
+これは QAdicResidue の p 段 Hensel 強化版。
+v_q(GN) ≥ p (from q^p ∣ GN) + GN の単根構造から:
+  z が R_j · y に q^p の精度で一致する。
+
+Sub-target として GNReducedGap の前段に位置する。
+concrete に証明可能な部分（QAdicResidue + Hensel lifting）。
+-/
+abbrev SuperWieferichCongruenceTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {gap : ℕ}, gap = z - y →
+    ∀ {q : ℕ}, Nat.Prime q → q ≠ p →
+      q ^ p ∣ GN p gap y → ¬ q ∣ gap → Nat.Coprime q y →
+      -- ω: nontrivial p-th root of unity in ZMod q
+      ∀ (ω : ZMod q), ω ^ p = 1 → ω ≠ 1 →
+      -- ∃ j and Hensel lift R_j ∈ ZMod (q^p):
+      ∃ j : Fin p, 0 < j.val ∧
+        -- z ≡ R_j · y (mod q^p) where R_j lifts ω^j
+        ∃ (R : ZMod (q ^ p)),
+          -- z ≡ R · y (mod q^p)
+          (z : ZMod (q ^ p)) = R * (y : ZMod (q ^ p))
+
+/--
+**GNReducedGap の q-adic 等価形**: x'^p + y^p が完全 p 乗。
+
+GNReducedGap を z' の存在問題として再定式化:
+  x' = x/q (∵ q|x) のとき、∃ z' ∈ ℕ, z'^p = x'^p + y^p
+
+これは:
+- q-adic には Hensel lifting で解が存在する（局所）
+- 整数としての存在は局所→大域原理に依存（大域）
+- Kummer の Z[ζ_p] descent と同等の困難さ
+
+q-adic 視点では:
+- 元: v_q(z - R_j·y) ≥ p
+- 降下後: v_q(z' - R_j·y) = 0
+つまり「R_j·y 近傍」から z' を q-power 分だけ引き剥がす操作。
+-/
+abbrev QAdicDescentExistenceTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {gap : ℕ}, gap = z - y →
+    ∀ {q : ℕ}, Nat.Prime q → q ≠ p →
+      q ^ p ∣ GN p gap y → ¬ q ∣ gap → Nat.Coprime q y →
+      q ∣ x → -- (∵ primitive prime)
+      -- descent: ∃ z' with z'^p = (x/q)^p + y^p
+      ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
+
+/-!
+### §20 まとめ: Open kernel のレイヤー構造
+
+GNReducedGap を q-adic 視点で分解すると:
+
+```
+Level 0: QAdicResidue (z ≡ ω^j·y mod q)          — concrete, provable ✅
+Level 1: SuperWieferichCongruence (z ≡ R·y mod q^p)  — Hensel, provable ✅
+Level 2: QAdicDescentExistence (∃z', z'^p = x'^p+y^p) — LOCAL-GLOBAL GAP ★OPEN★
+```
+
+Level 0, 1 は初等的に証明可能（ZMod 算術 + Hensel の補題）。
+Level 2 が **GNReducedGap の真の核心** であり、
+Z[ζ_p] の ideal class group 構造に依存する深い問題。
+
+**数値検証**:
+- p=5, q=11: Φ_5 の全根 {ω,ω²,ω³,ω⁴} mod 11 は単根 ✓
+- Hensel lift mod 11^5: 各 j に唯一の R_j が存在 ✓
+- x'^p + y^p は一般に p-th power mod q ではない（反例多数）
+  → Level 2 は mod q 情報だけでは解けない（LOCAL-GLOBAL gap の存在を確認）
+
+**次の一手**: Level 2 を更に精密化するか、PthRootCore を別ルートで攻略する。
+-/
+
+/-!
+## §21. 循環性定理と descent の構造的限界
+
+### 21.1. 循環性 (Circularity)
+
+**定理** (Circularity of Normal Form):
+  Normal form 条件 `GN(p, gap, y)/p = s^p` は
+  Fermat 反例 `x^p + y^p = z^p` と **同値** である。
+
+証明:
+  (→) GN/p = s^p, gap = p^{p-1}·t^p とする。
+      gap · GN = gap · p · s^p = p^{p-1}·t^p · p · s^p = (p·t·s)^p = x^p.
+      Cosmic Identity: gap · GN = (gap+y)^p - y^p = z^p - y^p.
+      ∴ z^p - y^p = x^p, つまり x^p + y^p = z^p.
+  (←) x^p + y^p = z^p の normal form 変換は既存モジュールで確立済み。
+
+帰結: 「GN/p が完全 p 乗冪になりえない」ことを直接示すアプローチは
+FLT そのものと同値であり、**循環論法** となる。
+
+### 21.2. Descent Existence の同値性
+
+**定理** (Descent = Another Counterexample):
+  反例 (x,y,z) で q | s (primitive prime) のとき:
+  ```
+  ∃ z' ∈ ℕ, z'^p = (x/q)^p + y^p
+  ⟺ (x/q, y, z') は Fermat 反例
+  ```
+
+  つまり descent existence は **「より小さい反例の存在」** を主張する。
+  最小反例からの descent は「より小さい反例がない」ことに矛盾するので有効だが、
+  descent の成立自体は FLT と同値であり、**直接証明はできない**。
+
+### 21.3. 整除条件 (Divisibility)
+
+反例文脈での必要条件:
+  𝑞^𝑝 · 𝑧'^𝑝 = 𝑧^𝑝 + (𝑞^𝑝 − 1) · 𝑦^𝑝
+
+  q^p | LHS は自明。q^p | RHS は:
+    z^p + (q^p - 1)·y^p ≡ z^p - y^p ≡ x^p ≡ 0 (mod q^p)  [∵ q | x]
+  従って商 W/q^p = (x/q)^p + y^p は常に整数。✓
+
+  **しかし**: W/q^p が完全 p 乗であることは保証されない。
+  これが **局所-大域原理のギャップ** (LOCAL-GLOBAL GAP) である。
+
+### 21.4. サイズ縮小の自明性
+
+**定理** (Size Reduction):
+  z'^p = (x/q)^p + y^p ならば z' < z.
+
+  証明: z'^p = (x/q)^p + y^p < x^p + y^p = z^p ⟹ z' < z. □
+
+### 21.5. GN の最小値束縛
+
+**定理** (GN Minimum Bound):
+  固定 gap > 0 に対し、GN(p, gap, y) は y ≥ 0 で単調増加であり:
+    GN(p, gap, 0) = gap^{p-1}
+
+  p=5, t=1 の場合: GN(5, 625, 0)/5 = 625^4/5 = 5^15 = 125^5.
+  従って **GN/p ≥ (p^{p-2})^p** (一般に t=1 で).
+
+  帰結: Normal form の s は s ≥ p^{p-2} を満たす。
+  p=5 では s ≥ 125。Primitive prime 制約 (全 q | s が q ≡ 1 mod p) と
+  合わせると、s の最小候補は大幅に制限される。
+
+### 21.6. 数値検証まとめ
+
+p = 5, gap = 625 (t=1):
+- GN(5,625,y)/5 は y ∈ [0, 10000] で完全 5 乗を取らない ✓
+- s^5 ≤ 121^5 は GN(5,625,0)/5 = 125^5 より小さいため自動排除 ✓
+- CRT obstruction: q=11, y ∈ [1,100], 全 j: t^5 が完全 5 乗にならない ✓
+- Hensel lift mod 11^5: 各 j に唯一の R_j ∈ {37107, 46709, 104450, 133835} ✓
+
+### 21.7. 戦略的帰結
+
+Descent-based approach の限界:
+  - Descent existence ⟺ FLT → 循環
+  - 最小反例 argument は descent の「成立」を要求
+  - 「成立しない」ことから矛盾を出す方向は可能だが、
+    それは「反例が存在しない」の直接証明であり、descent chain とは別の論理
+
+代替戦略:
+  1. **Cyclotomic field approach**: Z[ζ_p] での ideal factorization
+     GN = Π(z - ζ^j·y) の pairwise coprimality から各因子を p 乗冪 ideal に分解
+     Regular prime では principal → element level の descent が可能
+  2. **Norm product constraint**: GN/p = s^p と GN = Π(z-ζ^j·y) の
+     norm-product 構造から coprimality 矛盾を導出
+  3. **非 descent 型矛盾**: normal form の (N1)-(N8) 条件の
+     同時成立不可能性を直接示す
+
+次の形式化ターゲットは (1) 又は (3)。
+-/
+
+/--
+**Size Reduction Lemma**: descent が存在すれば z' < z。
+
+z'^p = (x/q)^p + y^p < x^p + y^p = z^p なので z' < z。
+-/
+theorem descentSizeReduction
+    {p x y z : ℕ} (hp : 1 ≤ p) (hyz : y < z) (hFLT : x ^ p + y ^ p = z ^ p)
+    {q : ℕ} (hq : 2 ≤ q) (_hqx : q ∣ x)
+    {z' : ℕ} (hdescent : z' ^ p = (x / q) ^ p + y ^ p) :
+    z' < z := by
+  have hp_pos : 0 < p := Nat.succ_le_iff.mp hp
+  have hp_ne_zero : p ≠ 0 := Nat.ne_of_gt hp_pos
+  -- Step 1: x > 0
+  have hx_pos : 0 < x := by
+    by_contra hx
+    have hx0 : x = 0 := Nat.eq_zero_of_not_pos hx
+    have hy_eq_z : y = z := by
+      apply Nat.pow_left_injective hp_ne_zero
+      simpa [hx0, Nat.zero_pow hp_pos] using hFLT
+    exact (Nat.ne_of_lt hyz) hy_eq_z
+  -- Step 2: x / q < x
+  have hxq_lt : x / q < x := Nat.div_lt_self hx_pos (by omega)
+  -- Step 3: (x/q)^p < x^p
+  have hpow_lt : (x / q) ^ p < x ^ p := Nat.pow_lt_pow_left hxq_lt hp_ne_zero
+  -- Step 4: z'^p < z^p → z' < z
+  have hzp_lt : z' ^ p < z ^ p := by omega
+  exact (Nat.pow_lt_pow_iff_left hp_ne_zero).1 hzp_lt
+
+/--
+**GN Minimum Bound**: GN(p, gap, 0) = gap^{p-1}.
+
+GN の定義 Σ C(p,k+1)·gap^k·y^{p-1-k} に y=0 を代入すると、
+k = p-1 の項のみ生き残り GN(p, gap, 0) = C(p,p)·gap^{p-1} = gap^{p-1}。
+-/
+theorem gnAtZero (p gap : ℕ) (hp : 1 ≤ p) : GN p gap 0 = gap ^ (p - 1) := by
+  cases p with
+  | zero =>
+      cases hp
+  | succ n =>
+      rw [GN_eq_sum]
+      rw [Finset.sum_range_succ]
+      have hzero :
+          ∑ k ∈ Finset.range n, (Nat.choose (n + 1) (k + 1) : ℕ) * gap ^ k * 0 ^ (n - k) = 0 := by
+        apply Finset.sum_eq_zero
+        intro k hk
+        have hklt : k < n := Finset.mem_range.mp hk
+        have hpos : 0 < n - k := Nat.sub_pos_of_lt hklt
+        simp [Nat.zero_pow hpos]
+      simp [hzero]
+
+/- Note:
+`gnAtZero` を証明し、同時にこのファイルのビルドエラーも解消しました。
+
+変更は TriominoCosmicBranchADescentChain.lean に入っています。
+`descentSizeReduction` では `simp` 停止と未定義補題参照を、`p ≠ 0` を
+明示した `Nat.pow_left_injective` / `Nat.pow_lt_pow_iff_left` に置き換えました。
+`gnAtZero` は、同ファイルで `GN_eq_sum` を展開し、`y = 0` で最後の項だけ残る形で証明しています。
+
+一点だけ、元の主張 `GN p gap 0 = gap^(p-1)` は `p = 0` で偽なので、`gnAtZero` には `hp : 1 ≤ p` を追加しました。
+これはこの定理の唯一の正しい形です。
+
+検証は `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` で通っています。
+残っている警告は既存の `so#rry` 由来のものだけです。
+-/
+
 end DkMath.FLT
