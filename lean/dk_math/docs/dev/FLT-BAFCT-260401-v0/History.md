@@ -1430,21 +1430,6 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
    - `SuperWieferichCongruenceTarget` の concrete 化（Level 1 完遂）
    - `QAdicDescentExistenceTarget` の local-global gap を element-level 条件へ再定式化し、GNReducedGap 本丸へ接続
 
-### 日時: `タイムスタンプ date コマンドを使用して年月日時分まで` JST (template)
-
-1. 目的:
-   - （内容）
-2. 実施:
-   - （内容）
-3. 結論:
-   - （内容）
-4. 検証:
-   - （内容）
-5. 失敗事例:
-   - （内容）
-6. 次の課題:
-   - （内容）
-
 ### 追記: 2026/04/03 17:51:25 JST review-029 実装
 
 1. 目的:
@@ -1470,3 +1455,45 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
    - target コメントにある「R が ω^j の Hensel lift」の条件を型に昇格し、
      真の Level 1（Hensel 強化）を定理として分離
    - `QAdicDescentExistenceTarget` の local-global gap を独立 kernel として sharpen
+
+### 追記: 2026/04/03 18:07:38 JST review-030 対応
+
+1. 目的:
+   - `SuperWieferichCongruenceTarget` の weak/strong 差分を型で明示し、
+     Level 1 の本命（Hensel 強化）を分離する
+2. 実施:
+   - `WeakSuperWieferichCongruenceTarget` を導入し、既存 `SuperWieferichCongruenceTarget` を alias 化
+   - `StrongSuperWieferichCongruenceTarget` を新設し、次を結論に追加:
+     1) `(R.val : ZMod q) = ω^j`
+     2) `∑_{i=0}^{p-1} R^i = 0` in `ZMod (q^p)`（Φ_p 条件の幾何和表現）
+     3) `z = R*y` in `ZMod (q^p)`
+   - `weakSuperWieferich_of_strong` を追加し、Strong ⇒ Weak を no-sorry で橋渡し
+   - 既存 `superWieferichCongruence_concrete` は Weak 版として維持
+3. 結論:
+   - review-030 の指摘どおり、弱い達成と本命未達を Lean の型レベルで分離完了 ✅
+   - 以後は `StrongSuperWieferichCongruenceTarget` が Level 1 の主戦場として明示された
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - 追加分に由来するエラーなし
+5. 失敗事例:
+   - なし（型分離は一回で通過）
+6. 次の課題:
+   - Strong 版の concrete 証明（branch preserving + Φ_p(R)=0 mod q^p）
+   - Hensel step を specialized lemma 群として切り出し、反復で `q^p` 精度へ昇格
+
+## Template
+
+### 日時: `タイムスタンプ date コマンドを使用して年月日時分まで` JST (template)
+
+1. 目的:
+   - （内容）
+2. 実施:
+   - （内容）
+3. 結論:
+   - （内容）
+4. 検証:
+   - （内容）
+5. 失敗事例:
+   - （内容）
+6. 次の課題:
+   - （内容）

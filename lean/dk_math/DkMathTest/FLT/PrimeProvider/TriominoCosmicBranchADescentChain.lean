@@ -15,3 +15,7 @@ set_option linter.style.longLine false
 -- OK: 2026/04/03 17:55
 -- 'DkMath.FLT.superWieferichCongruence_concrete'
 -- depends on axioms: [propext, Classical.choice, Quot.sound]
+#print axioms DkMath.FLT.weakSuperWieferich_of_strong
+-- OK: 2026/04/03 18:14
+-- 'DkMath.FLT.weakSuperWieferich_of_strong'
+-- depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1348,7 +1348,7 @@ v_q(GN) ≥ p (from q^p ∣ GN) + GN の単根構造から:
 Sub-target として GNReducedGap の前段に位置する。
 concrete に証明可能な部分（QAdicResidue + Hensel lifting）。
 -/
-abbrev SuperWieferichCongruenceTarget : Prop :=
+abbrev WeakSuperWieferichCongruenceTarget : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
     ∀ {gap : ℕ}, gap = z - y →
     ∀ {q : ℕ}, Nat.Prime q → q ≠ p →
@@ -1363,13 +1363,36 @@ abbrev SuperWieferichCongruenceTarget : Prop :=
           (z : ZMod (q ^ p)) = R * (y : ZMod (q ^ p))
 
 /--
+Strong 版 SuperWieferich target。
+
+Weak 版に加えて、次の 2 条件を型で要求する:
+1. `R mod q = ω^j`（branch preserving）
+2. `Φ_p(R)=0 mod q^p`（ここでは幾何和 `∑ R^i = 0` で表現）
+-/
+abbrev StrongSuperWieferichCongruenceTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {gap : ℕ}, gap = z - y →
+    ∀ {q : ℕ}, Nat.Prime q → q ≠ p →
+      q ^ p ∣ GN p gap y → ¬ q ∣ gap → Nat.Coprime q y →
+      ∀ (ω : ZMod q), ω ^ p = 1 → ω ≠ 1 →
+      ∃ j : Fin p, 0 < j.val ∧
+        ∃ (R : ZMod (q ^ p)),
+          ((R.val : ZMod q) = ω ^ j.val) ∧
+          (∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i = 0) ∧
+          ((z : ZMod (q ^ p)) = R * (y : ZMod (q ^ p)))
+
+/-- 既存名は weak 版への alias として維持する。 -/
+abbrev SuperWieferichCongruenceTarget : Prop :=
+  WeakSuperWieferichCongruenceTarget
+
+/--
 `SuperWieferichCongruenceTarget` の現行型に対する concrete 実装。
 
 注意: 現行 target の結論は `R` が `ω^j` の Hensel lift である条件を
 型で要求していないため、`q ∤ y`（= `y` が `ZMod (q^p)` で可逆）だけで
 `z = R * y` を構成できる。
 -/
-theorem superWieferichCongruence_concrete : SuperWieferichCongruenceTarget := by
+theorem superWieferichCongruence_concrete : WeakSuperWieferichCongruenceTarget := by
   intro p x y z hPack gap hgap q hq_prime hq_ne_p hqpow_dvd_GN hq_ndvd_gap hq_coprime_y ω hω_pow hω_ne
   have hp_pos : 0 < p := hPack.hp.pos
   have hp_one_lt : 1 < p := lt_of_lt_of_le (by decide : 1 < 5) hPack.hp5
@@ -1383,7 +1406,15 @@ theorem superWieferichCongruence_concrete : SuperWieferichCongruenceTarget := by
   calc
     (z : ZMod (q ^ p)) = (z : ZMod (q ^ p)) * (↑u⁻¹ * ↑u) := by simp
     _ = ((z : ZMod (q ^ p)) * ↑u⁻¹) * ↑u := by rw [mul_assoc]
-    _ = ((z : ZMod (q ^ p)) * ↑u⁻¹) * (y : ZMod (q ^ p)) := by simpa [hu]
+    _ = ((z : ZMod (q ^ p)) * ↑u⁻¹) * (y : ZMod (q ^ p)) := by simp only [hu]
+
+/-- Strong 版が成立すれば Weak 版は自動的に従う。 -/
+theorem weakSuperWieferich_of_strong :
+    StrongSuperWieferichCongruenceTarget → WeakSuperWieferichCongruenceTarget := by
+  intro h p x y z hPack gap hgap q hq hq_ne hpow hndvd hcoprime ω hω hω_ne
+  rcases h hPack hgap hq hq_ne hpow hndvd hcoprime ω hω hω_ne with
+    ⟨j, hjpos, R, hmodq, hphi, hzRy⟩
+  exact ⟨j, hjpos, R, hzRy⟩
 
 /--
 **GNReducedGap の q-adic 等価形**: x'^p + y^p が完全 p 乗。
