@@ -2367,6 +2367,54 @@ abbrev QAdicDescentExistenceTarget : Prop :=
       -- descent: ∃ z' with z'^p = (x/q)^p + y^p
       ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
 
+/--
+Level 2 (`QAdicDescentExistenceTarget`) は primitive 側の `PthRootCoreTarget` を供給する。
+
+`PthRootCore` が要求する追加データ
+`ω`, `¬ q ∣ y`, `¬ q ∣ z`, `p ∣ (q - 1)` は、
+この local-global gap には不要なので単に捨ててよい。
+-/
+theorem pthRootCore_of_qAdicDescentExistence
+    (hDescent : QAdicDescentExistenceTarget) :
+    PrimeGe5BranchAPrimitivePthRootCoreTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hq hqs hqt hcop_qy hq_ne_p hq_dvd_x _hq_not_dvd_y _hq_not_dvd_z hq_not_dvd_gap
+    _hp_dvd_qsub1 hqp_dvd_GN ω hω hω_ne
+  have hgap' : z - y = z - y := rfl
+  rcases hDescent hpack hgap' hq hq_ne_p hqp_dvd_GN hq_not_dvd_gap hcop_qy hq_dvd_x with ⟨z', hz'⟩
+  refine ⟨z', ?_⟩
+  exact hz'.symm
+
+/-- Level 2 から PthRoot target を直接回収する。 -/
+theorem pthRoot_of_qAdicDescentExistence
+    (hDescent : QAdicDescentExistenceTarget) :
+    PrimeGe5BranchAPrimitiveRestorePthRootTarget :=
+  pthRootTarget_of_pthRootCore (pthRootCore_of_qAdicDescentExistence hDescent)
+
+/-- Level 2 から GNReducedGap target を直接回収する。 -/
+theorem gnReducedGap_of_qAdicDescentExistence
+    (hDescent : QAdicDescentExistenceTarget) :
+    PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget :=
+  gnReducedGap_of_pthRootCore (pthRootCore_of_qAdicDescentExistence hDescent)
+
+/-- Level 2 から primitive packet descent を供給する。 -/
+theorem primitivePacketDescent_of_qAdicDescentExistence
+    (hDescent : QAdicDescentExistenceTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primitivePacketDescent_of_pthRootCore (pthRootCore_of_qAdicDescentExistence hDescent)
+
+/--
+Level 2 (`QAdicDescentExistenceTarget`) を primitive 側 kernel として使う最精密版。
+-/
+theorem FLTPrimeGe5Target_of_qAdicDescentExistence_precise
+    (hDescent : QAdicDescentExistenceTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_pthRootCore_precise
+    (pthRootCore_of_qAdicDescentExistence hDescent) hPFE hNoLift
+
 /-!
 ### §20 まとめ: Open kernel のレイヤー構造
 

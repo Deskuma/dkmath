@@ -1885,3 +1885,32 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
 6. 次の課題:
    - Level 1s を open と書いているコメント/設計メモの更新
    - `QAdicDescentExistenceTarget` 以降の Level 2 主戦場へ集中
+
+### 追記: 2026/04/04 06:00:14 JST Level 2 の本線接続
+
+1. 目的:
+   - `QAdicDescentExistenceTarget` 側へ主戦場を移し、
+     これが既存 primitive / FLT chain のどこへ刺さるかを code 上で明示する
+2. 実施:
+   - `pthRootCore_of_qAdicDescentExistence` を追加
+   - `pthRoot_of_qAdicDescentExistence` を追加
+   - `gnReducedGap_of_qAdicDescentExistence` を追加
+   - `primitivePacketDescent_of_qAdicDescentExistence` を追加
+   - `FLTPrimeGe5Target_of_qAdicDescentExistence_precise` を追加
+   - テストへ `#print axioms` を追記
+3. 結論:
+   - `QAdicDescentExistenceTarget` は単なる分析メモではなく、
+     `PthRootCoreTarget` を経由して既存の primitive descent / FLT chain へ
+     直接流し込める open kernel として定着した ✅
+   - これにより Level 2 が、実際の本線ボトルネックであることが
+     Lean 上でも明示された
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - `QAdicDescentExistenceTarget` の等式向きが `PthRootCoreTarget` と逆で一時停止
+   - witness を取り出して `Eq.symm` で向きを合わせて解消
+6. 次の課題:
+   - `QAdicDescentExistenceTarget` 自体のさらなる分解
+   - Level 1s を open と書いている周辺コメントの整理
+   - Level 2 の local-global gap をどの語彙で最小核にするか設計する
