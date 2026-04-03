@@ -1749,3 +1749,28 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
    - `HenselLiftStepKernelDivisionTarget` の concrete 証明
    - `HenselLiftStepDerivativeUnitTarget` の concrete 証明
    - 連結して `HenselLiftStepNewtonCorrectionTarget` / `ZeroLiftTarget` を concrete 化
+
+### 追記: 2026/04/04 00:09:09 JST KernelDivision concrete 化
+
+1. 目的:
+   - `HenselLiftStepKernelDivisionTarget` の concrete 証明を通し、
+     `LinearizedSolve` 連結を実働化する
+2. 実施:
+   - `HenselLiftStepKernelDivisionTarget` を `Nat.Prime q` / `1 ≤ n` 前提に精密化
+   - `henselLiftStepKernelDivision_concrete` を実装
+     (`castHom x = 0` → `x.val` の `q^n` 可除性 → `x = q^n * t` 構成)
+   - `henselLiftStepLinearizedSolve_of_derivativeUnit` を追加
+     （KernelDivision concrete + DerivativeUnit ⇒ LinearizedSolve）
+   - テストへ `#print axioms` を追加
+3. 結論:
+   - TODO のうち `KernelDivision` は concrete 化完了 ✅
+   - 残る本丸は `HenselLiftStepDerivativeUnitTarget` concrete 証明
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - `cast_eq_val` 周辺で `simp` 再帰が発生
+   - `letI NeZero` + 明示 `rw` で安定化
+6. 次の課題:
+   - `HenselLiftStepDerivativeUnitTarget` の concrete 証明
+   - 連結して `HenselLiftStepNewtonCorrectionTarget` / `ZeroLiftTarget` を concrete 化

@@ -1566,10 +1566,30 @@ abbrev HenselLiftStepLinearizedSolveTarget : Prop :=
 `castHom` の kernel 元を `q^n` 倍として表せることを要求する target。
 -/
 abbrev HenselLiftStepKernelDivisionTarget : Prop :=
-  ∀ {q n : ℕ},
+  ∀ {q n : ℕ}, Nat.Prime q → 1 ≤ n →
     ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (x : ZMod (q ^ (n + 1))),
       (ZMod.castHom hdiv (ZMod (q ^ n))) x = 0 →
       ∃ t : ZMod (q ^ (n + 1)), x = (q ^ n : ZMod (q ^ (n + 1))) * t
+
+/-- `castHom` kernel の concrete 分解（`q` prime, `n ≥ 1`）。 -/
+theorem henselLiftStepKernelDivision_concrete : HenselLiftStepKernelDivisionTarget := by
+  intro q n hq hn hdiv x hx
+  have hqpow_pos : 0 < q ^ (n + 1) := pow_pos hq.pos _
+  have hne : NeZero (q ^ (n + 1)) := ⟨Nat.ne_of_gt hqpow_pos⟩
+  letI : NeZero (q ^ (n + 1)) := hne
+  have hx_cast : (ZMod.cast x : ZMod (q ^ n)) = 0 := by
+    simpa [ZMod.castHom_apply] using hx
+  have hx_val_mod : ((x.val : ZMod (q ^ n)) = 0) := by
+    rw [← ZMod.cast_eq_val (a := x)]
+    exact hx_cast
+  have hx_val_dvd : q ^ n ∣ x.val := (ZMod.natCast_eq_zero_iff x.val (q ^ n)).1 hx_val_mod
+  rcases hx_val_dvd with ⟨tNat, htNat⟩
+  refine ⟨(tNat : ZMod (q ^ (n + 1))), ?_⟩
+  calc
+    x = (x.val : ZMod (q ^ (n + 1))) := by symm; exact ZMod.natCast_zmod_val x
+    _ = ((q ^ n * tNat : ℕ) : ZMod (q ^ (n + 1))) := by simp [htNat]
+    _ = (q ^ n : ZMod (q ^ (n + 1))) * (tNat : ZMod (q ^ (n + 1))) := by
+          simp [Nat.cast_mul]
 
 /--
 線形化係数 `∑ i * R^(i-1)` が unit であることを要求する target。
@@ -1581,6 +1601,32 @@ abbrev HenselLiftStepDerivativeUnitTarget : Prop :=
       ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (Rn1 : ZMod (q ^ (n + 1))),
         ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) →
         IsUnit (∑ i ∈ Finset.range p, ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1)))
+
+/--
+FLT 文脈（`p` prime）に限定した derivative-unit target。
+
+`p` が合成数だと係数和導関数が非単元になる反例があるため、
+concrete 証明はこの版を主戦場にする。
+-/
+abbrev HenselLiftStepDerivativeUnitPrimeTarget : Prop :=
+  ∀ {p q n : ℕ}, Nat.Prime p → Nat.Prime q → q ≠ p → 1 ≤ n →
+    ∀ (Rn : ZMod (q ^ n)),
+      (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+      ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (Rn1 : ZMod (q ^ (n + 1))),
+        ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) →
+        IsUnit (∑ i ∈ Finset.range p, ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1)))
+
+/-- prime 文脈版から一般版（`p` prime 前提つき）へのブリッジ。 -/
+theorem henselLiftStepDerivativeUnit_of_prime
+    (hPrime : HenselLiftStepDerivativeUnitPrimeTarget) :
+    ∀ {p q n : ℕ}, Nat.Prime p → Nat.Prime q → q ≠ p → 1 ≤ n →
+      ∀ (Rn : ZMod (q ^ n)),
+        (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+        ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (Rn1 : ZMod (q ^ (n + 1))),
+          ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) →
+          IsUnit (∑ i ∈ Finset.range p, ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1))) := by
+  intro p q n hp hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  exact hPrime hp hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
 
 /--
 kernel 分解と導関数係数の unit 性があれば線形化方程式は可解。
@@ -1613,7 +1659,7 @@ theorem henselLiftStepLinearizedSolve_of_kernelDivision_and_derivativeUnit
       (ZMod.castHom hdiv (ZMod (q ^ n))) (-S)
           = -((ZMod.castHom hdiv (ZMod (q ^ n))) S) := by rw [map_neg]
       _ = 0 := by simp [hS_cast]
-  obtain ⟨t, ht⟩ := hKernelDiv hdiv (-S) hnegS_cast
+  obtain ⟨t, ht⟩ := hKernelDiv hq hn hdiv (-S) hnegS_cast
   have hB_unit : IsUnit B := by
     dsimp [B]
     exact hDerivUnit hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
@@ -1627,6 +1673,15 @@ theorem henselLiftStepLinearizedSolve_of_kernelDivision_and_derivativeUnit
           rw [← hu]
           simp
     _ = -S := by simp [ht]
+
+/--
+`KernelDivision` concrete + `DerivativeUnit` があれば `LinearizedSolve` は concrete に供給できる。
+-/
+theorem henselLiftStepLinearizedSolve_of_derivativeUnit
+    (hDerivUnit : HenselLiftStepDerivativeUnitTarget) :
+    HenselLiftStepLinearizedSolveTarget :=
+  henselLiftStepLinearizedSolve_of_kernelDivision_and_derivativeUnit
+    henselLiftStepKernelDivision_concrete hDerivUnit
 
 /--
 Newton 補正（`Δ = q^n * c`）を直接要求する one-step target。
