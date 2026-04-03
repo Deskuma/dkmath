@@ -1509,6 +1509,31 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
    - `HenselLiftStepGeomSumTarget` の concrete 証明（specialized one-step）
    - 反復補題を追加して `StrongSuperWieferichCongruenceV2Target` を供給
 
+### 追記: 2026/04/03 18:48:30 JST one-step 実装突入
+
+1. 目的:
+   - `HenselLiftStepGeomSumTarget` を実装可能単位へ分解し、
+     one-step の concrete 前進を確定する
+2. 実施:
+   - `HenselLiftStepStructuralTarget` を追加:
+     `q^n -> q^(n+1)` の持ち上げ存在だけを要求
+   - `HenselLiftStepArithmeticKernelTarget` を追加:
+     持ち上げ後に幾何和ゼロ（Φ_p root）へ補正できることを要求
+   - `henselLiftStepStructural_concrete` を実装:
+     `ZMod.castHom_surjective` で構造持ち上げを no-sorry で証明
+   - `henselLiftStepGeomSum_of_structural_and_kernel` を追加:
+     構造 + 算術 kernel の合成で one-step target を供給
+3. 結論:
+   - one-step の本丸が「算術 kernel のみ」に分離され、
+     何を証明すれば Level 1s が進むかがさらに明確化 ✅
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - なし（追加補題は一発で型整合）
+6. 次の課題:
+   - `HenselLiftStepArithmeticKernelTarget` の concrete 証明
+   - 反復補題を追加して `StrongSuperWieferichCongruenceV2Target` の provider を構築
+
 ## Template
 
 ### 日時: `タイムスタンプ date コマンドを使用して年月日時分まで` JST (template)

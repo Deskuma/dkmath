@@ -1459,6 +1459,55 @@ abbrev HenselLiftStepGeomSumTarget : Prop :=
         (∑ i ∈ Finset.range p, (Rn1 : ZMod (q ^ (n + 1))) ^ i = 0)
 
 /--
+Hensel one-step の構造部分のみを抽出した target。
+
+これは「`q^n` から `q^(n+1)` への持ち上げが存在する」ことだけを要求する。
+幾何和（= Φ_p）条件の保存は含まない。
+-/
+abbrev HenselLiftStepStructuralTarget : Prop :=
+  ∀ {q n : ℕ}, Nat.Prime q → 1 ≤ n →
+    ∀ (Rn : ZMod (q ^ n)),
+      ∃ (hdiv : q ^ n ∣ q ^ (n + 1)), ∃ (Rn1 : ZMod (q ^ (n + 1))),
+        ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn)
+
+/--
+Hensel one-step の算術 kernel。
+
+構造的持ち上げ `Rn1` を幾何和ゼロ（= Φ_p root）へ補正できることを要求する。
+この target が Level 1s の真の one-step 本丸。
+-/
+abbrev HenselLiftStepArithmeticKernelTarget : Prop :=
+  ∀ {p q n : ℕ}, Nat.Prime q → 1 ≤ n →
+    ∀ (Rn : ZMod (q ^ n)),
+      (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+      ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (Rn1 : ZMod (q ^ (n + 1))),
+        ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) →
+        ∃ (Rn1' : ZMod (q ^ (n + 1))),
+          ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1' = Rn) ∧
+          (∑ i ∈ Finset.range p, (Rn1' : ZMod (q ^ (n + 1))) ^ i = 0)
+
+/--
+構造 one-step は `ZMod.castHom_surjective` から concrete に得られる。
+-/
+theorem henselLiftStepStructural_concrete : HenselLiftStepStructuralTarget := by
+  intro q n hq hn Rn
+  refine ⟨?_, ?_⟩
+  · exact ⟨q, by simp [pow_succ, Nat.mul_comm]⟩
+  · exact (ZMod.castHom_surjective (show q ^ n ∣ q ^ (n + 1) from ⟨q, by simp [pow_succ, Nat.mul_comm]⟩)) Rn
+
+/--
+構造部分と算術 kernel を合成すれば、one-step Hensel target を得る。
+-/
+theorem henselLiftStepGeomSum_of_structural_and_kernel
+    (hStruct : HenselLiftStepStructuralTarget)
+    (hKernel : HenselLiftStepArithmeticKernelTarget) :
+    HenselLiftStepGeomSumTarget := by
+  intro p q n hq hn Rn hsum
+  rcases hStruct hq hn Rn with ⟨hdiv, Rn1, hcast⟩
+  rcases hKernel hq hn Rn hsum hdiv Rn1 hcast with ⟨Rn1', hcast', hphi'⟩
+  exact ⟨hdiv, Rn1', hcast', hphi'⟩
+
+/--
 StrongSuperWieferich の provider target。
 
 `QAdicResidue`（mod q branch）と `HenselLiftStepGeomSumTarget` を材料に、

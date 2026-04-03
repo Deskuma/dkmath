@@ -23,3 +23,11 @@ set_option linter.style.longLine false
 -- OK: 2026/04/03 18:39
 -- 'DkMath.FLT.weakSuperWieferich_of_strongV2'
 -- depends on axioms: [propext, Classical.choice, Quot.sound]
+#print axioms DkMath.FLT.henselLiftStepStructural_concrete
+-- OK: 2026/04/03 18:59
+-- 'DkMath.FLT.henselLiftStepStructural_concrete'
+-- depends on axioms: [propext, Quot.sound]
+#print axioms DkMath.FLT.henselLiftStepGeomSum_of_structural_and_kernel
+-- OK: 2026/04/03 18:59
+-- 'DkMath.FLT.henselLiftStepGeomSum_of_structural_and_kernel'
+-- depends on axioms: [propext, Classical.choice, Quot.sound]
