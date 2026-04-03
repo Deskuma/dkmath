@@ -1950,3 +1950,38 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
     - `PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget` 自体のさらなる分解
     - local-global gap の最小核を整数論的/幾何学的にどう表現するか設計を詰める
     - Level 2m を中心に、PthRootCore / innermost 3-kernel 記述を整理する
+
+### 追記: 2026/04/04 06:29:40 JST Level 2m の整数/幾何二分
+
+1. 目的:
+   - `PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget` をさらに分解し、
+     local-global gap の最小核を整数語彙と幾何語彙の二表現で整理する
+   - Level 2m を中心に `PthRootCore` / innermost 3-kernel 記述を詰める
+2. 実施:
+   - `PrimeGe5BranchAPrimitiveQAdicGapReductionTarget` を新設
+     （strong witness から reduced gap `g'` を回収する幾何語彙版）
+   - `qAdicGapReduction_of_qAdicLocalGlobalGap` を追加
+   - `qAdicLocalGlobalGap_of_qAdicGapReduction` を追加
+   - `pthRootCore_of_qAdicGapReduction` を追加
+   - `FLTPrimeGe5Target_of_qAdicGapReduction_precise` を追加
+   - §19/§20 のコメントを更新し、
+     Level 2m を `2m-int` / `2m-geom` の同値な二表現として整理
+3. 結論:
+   - Level 2m は
+     `PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget`
+     （整数語彙）と
+     `PrimeGe5BranchAPrimitiveQAdicGapReductionTarget`
+     （幾何語彙）
+     の同値な二形式で扱えるようになった ✅
+   - 幾何語彙版は `GNReducedGap` / Cosmic Formula により近く、
+     今後の最小核設計の中心語彙として使いやすくなった
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - 特になし（既存の Cosmic Formula 橋をそのまま転用できた）
+6. 次の課題:
+   - `PrimeGe5BranchAPrimitiveQAdicGapReductionTarget` をさらに分解し、
+     幾何語彙版の最終 1 核を探る
+   - `PthRootCore` / `FLTPrimeGe5Target_of_innermost_3kernels` 周辺の説明を
+     `2m-int` / `2m-geom` 中心へ更新する

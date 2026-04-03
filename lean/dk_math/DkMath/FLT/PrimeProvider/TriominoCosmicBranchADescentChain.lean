@@ -1040,8 +1040,11 @@ Show: ∃ g', g' · GN(p, g', y) = (x/q)^p
 
 ### 進捗: Sub-target 型の定義
 
-Sub-target は §16 の PthRootCoreTarget に吸収されるため、
-ここでは数学的分析の記録のみを保持する。
+Sub-target は後段で
+`PrimeGe5BranchAPrimitiveQAdicGapReductionTarget`
+（幾何語彙）として切り出し、
+さらに `PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget`
+（整数語彙）と同値な最小核として扱う。
 -/
 
 /-!
@@ -2409,6 +2412,43 @@ abbrev PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget : Prop :=
         ∃ z' : ℕ, x' ^ p + y ^ p = z' ^ p
 
 /--
+Level 2m の幾何語彙版: strong witness から reduced gap `g'` を直接回収する。
+
+これは `GNReducedGap` に最も近い形の最小核であり、
+整数語彙版 `PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget` と同値になる。
+-/
+abbrev PrimeGe5BranchAPrimitiveQAdicGapReductionTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      q ∣ x →
+      ¬ q ∣ y →
+      ¬ q ∣ z →
+      ¬ q ∣ (z - y) →
+      p ∣ (q - 1) →
+      q ^ p ∣ GN p (z - y) y →
+      ∀ (ω : ZMod q), ω ^ p = 1 → ω ≠ 1 →
+      ∀ {j : Fin p}, 0 < j.val →
+      ∀ {hqpow : q ∣ q ^ p} {R : ZMod (q ^ p)},
+        ((ZMod.castHom hqpow (ZMod q)) R = ω ^ j.val) →
+        (∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i = 0) →
+        ((z : ZMod (q ^ p)) = R * (y : ZMod (q ^ p))) →
+        ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p
+
+/--
 粗い Level 2 target は、最小核 target を自動的に含意する。
 
 追加の strong witness 仮定は単に捨てればよい。
@@ -2424,6 +2464,45 @@ theorem qAdicLocalGlobalGap_of_qAdicDescentExistence
   rcases hDescent hpack hgap' hq hq_ne_p hqp_dvd_GN hq_not_dvd_gap hcop_qy hq_dvd_x with ⟨z', hz'⟩
   refine ⟨z', ?_⟩
   exact hz'.symm
+
+/-- 整数語彙版 Level 2m から幾何語彙版 Level 2m を得る。 -/
+theorem qAdicGapReduction_of_qAdicLocalGlobalGap
+    (hGap : PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget) :
+    PrimeGe5BranchAPrimitiveQAdicGapReductionTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hq hqs hqt hcop_qy hq_ne_p hq_dvd_x hq_not_dvd_y hq_not_dvd_z hq_not_dvd_gap
+    hp_dvd_qsub1 hqp_dvd_GN ω hω hω_ne j hjpos hqpow R hmodq hphi hzRy
+  rcases hGap hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hq hqs hqt hcop_qy hq_ne_p hq_dvd_x hq_not_dvd_y hq_not_dvd_z hq_not_dvd_gap
+      hp_dvd_qsub1 hqp_dvd_GN ω hω hω_ne hjpos hmodq hphi hzRy with ⟨z', hz'⟩
+  have hz'_ge_y : y ≤ z' := by
+    by_contra hlt
+    push_neg at hlt
+    have : z' ^ p < y ^ p := Nat.pow_lt_pow_left hlt hpack.hp.ne_zero
+    omega
+  refine ⟨z' - y, ?_⟩
+  have hCosmic := DkMath.CosmicFormulaBinom.cosmic_id_csr' (R := ℕ) p (z' - y) y
+  rw [Nat.sub_add_cancel hz'_ge_y] at hCosmic
+  omega
+
+/-- 幾何語彙版 Level 2m から整数語彙版 Level 2m を得る。 -/
+theorem qAdicLocalGlobalGap_of_qAdicGapReduction
+    (hGeom : PrimeGe5BranchAPrimitiveQAdicGapReductionTarget) :
+    PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hq hqs hqt hcop_qy hq_ne_p hq_dvd_x hq_not_dvd_y hq_not_dvd_z hq_not_dvd_gap
+    hp_dvd_qsub1 hqp_dvd_GN ω hω hω_ne j hjpos hqpow R hmodq hphi hzRy
+  rcases hGeom hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hq hqs hqt hcop_qy hq_ne_p hq_dvd_x hq_not_dvd_y hq_not_dvd_z hq_not_dvd_gap
+      hp_dvd_qsub1 hqp_dvd_GN ω hω hω_ne hjpos hmodq hphi hzRy with ⟨g', hg'⟩
+  refine ⟨g' + y, ?_⟩
+  have hCosmic := DkMath.CosmicFormulaBinom.cosmic_id_csr' (R := ℕ) p g' y
+  rw [hg'] at hCosmic
+  exact hCosmic.symm
 
 /--
 最小局所-大域核と concrete Strong provider を合成すると `PthRootCore` が得られる。
@@ -2443,6 +2522,12 @@ theorem pthRootCore_of_qAdicLocalGlobalGap
     hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
     hq hqs hqt hcop_qy hq_ne_p hq_dvd_x hq_not_dvd_y hq_not_dvd_z hq_not_dvd_gap
     hp_dvd_qsub1 hqp_dvd_GN ω hω hω_ne hjpos hmodq hphi hzRy
+
+/-- 幾何語彙版最小核から `PthRootCore` を供給する。 -/
+theorem pthRootCore_of_qAdicGapReduction
+    (hGeom : PrimeGe5BranchAPrimitiveQAdicGapReductionTarget) :
+    PrimeGe5BranchAPrimitivePthRootCoreTarget :=
+  pthRootCore_of_qAdicLocalGlobalGap (qAdicLocalGlobalGap_of_qAdicGapReduction hGeom)
 
 /--
 Level 2 (`QAdicDescentExistenceTarget`) は primitive 側の `PthRootCoreTarget` を供給する。
@@ -2514,6 +2599,15 @@ theorem FLTPrimeGe5Target_of_qAdicLocalGlobalGap_precise
   FLTPrimeGe5Target_of_pthRootCore_precise
     (pthRootCore_of_qAdicLocalGlobalGap hGap) hPFE hNoLift
 
+/-- 幾何語彙版最小核を primitive 側 kernel として使う最精密版。 -/
+theorem FLTPrimeGe5Target_of_qAdicGapReduction_precise
+    (hGeom : PrimeGe5BranchAPrimitiveQAdicGapReductionTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_pthRootCore_precise
+    (pthRootCore_of_qAdicGapReduction hGeom) hPFE hNoLift
+
 /-!
 ### §20 まとめ: Open kernel のレイヤー構造
 
@@ -2523,12 +2617,15 @@ GNReducedGap を q-adic 視点で分解すると:
 Level 0: QAdicResidue (z ≡ ω^j·y mod q)                      — concrete ✅
 Level 1w: WeakSuperWieferich (z ≡ R·y mod q^p)               — concrete ✅
 Level 1s: StrongSuperWieferich (branch + Φ_p(R)=0 mod q^p)   — concrete ✅
-Level 2c: QAdicDescentExistence (coarse existence form)       — bridge vocabulary
-Level 2m: QAdicLocalGlobalGap (strong witness ⇒ integer z')   — LOCAL-GLOBAL GAP ★OPEN★
+Level 2c: QAdicDescentExistence (coarse existence form)         — bridge vocabulary
+Level 2m-int: QAdicLocalGlobalGap (strong witness ⇒ integer z') — integer formulation
+Level 2m-geom: QAdicGapReduction (strong witness ⇒ reduced gap) — geometric formulation ★OPEN★
 ```
 
 Level 0 / 1w / 1s は現時点で concrete。
-open kernel は本質的には Level 2m の local-global gap に集約される。
+open kernel は本質的には Level 2m に集約される。
+Level 2m-int と Level 2m-geom は同値で、
+後者がより GN/Cosmic Formula native な最小語彙である。
 Level 2m は **GNReducedGap の真の核心** であり、
 Z[ζ_p] の ideal class group 構造に依存する深い問題。
 

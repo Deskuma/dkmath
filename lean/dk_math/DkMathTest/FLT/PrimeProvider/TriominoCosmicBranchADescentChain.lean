@@ -63,8 +63,12 @@ set_option linter.style.longLine false
 #print axioms DkMath.FLT.primitivePacketDescent_of_qAdicDescentExistence -- OK
 #print axioms DkMath.FLT.FLTPrimeGe5Target_of_qAdicDescentExistence_precise -- OK
 #print axioms DkMath.FLT.qAdicLocalGlobalGap_of_qAdicDescentExistence -- OK
+#print axioms DkMath.FLT.qAdicGapReduction_of_qAdicLocalGlobalGap -- OK
+#print axioms DkMath.FLT.qAdicLocalGlobalGap_of_qAdicGapReduction -- OK
 #print axioms DkMath.FLT.pthRootCore_of_qAdicLocalGlobalGap -- OK
+#print axioms DkMath.FLT.pthRootCore_of_qAdicGapReduction -- OK
 #print axioms DkMath.FLT.pthRoot_of_qAdicLocalGlobalGap -- OK
 #print axioms DkMath.FLT.gnReducedGap_of_qAdicLocalGlobalGap -- OK
 #print axioms DkMath.FLT.primitivePacketDescent_of_qAdicLocalGlobalGap -- OK
 #print axioms DkMath.FLT.FLTPrimeGe5Target_of_qAdicLocalGlobalGap_precise -- OK
+#print axioms DkMath.FLT.FLTPrimeGe5Target_of_qAdicGapReduction_precise -- OK
