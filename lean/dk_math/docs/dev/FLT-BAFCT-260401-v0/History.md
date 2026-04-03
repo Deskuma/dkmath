@@ -2017,3 +2017,38 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
    - `PrimeGe5BranchAPrimitiveQAdicGapReductionCoreTarget` の仮定をさらに削れるか検討
    - `2m-core` の中で truly local な部分と genuinely global な部分を分離する
    - 以後の議論・コメントを `PthRootCore` 中心ではなく `2m-core` 中心へ寄せる
+
+### 追記: 2026/04/04 08:06:13 JST 2m-core の local/global 分離
+
+1. 目的:
+   - `PrimeGe5BranchAPrimitiveQAdicGapReductionCoreTarget` の仮定をさらに削れるかを検討し、
+     truly local な部分と genuinely global な部分を分離する
+   - 以後の議論・コメントを `PthRootCore` 中心ではなく `2m-core` 中心へ寄せる
+2. 実施:
+   - `PrimeGe5BranchAPrimitiveQAdicGapWitnessTarget` を新設
+     （2m-local: strong q-adic witness の供給）
+   - `PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget` を新設
+     （2m-global: witness から reduced gap `g'` を回収する genuinely global 部分）
+   - `qAdicGapWitness_concrete` を追加
+   - `qAdicGapReductionCore_of_global` を追加
+   - `pthRootCore_of_qAdicGapReductionGlobal` を追加
+   - `FLTPrimeGe5Target_of_qAdicGapReductionGlobal_precise` を追加
+   - §16 / §17.1 / §20 の説明を更新し、
+     `2m-core = 2m-local (concrete) + 2m-global (open)` という見取り図へ整理
+3. 結論:
+   - `2m-core` のうち truly local な部分は concrete に供給可能であり、
+     genuinely open な内容は
+     `PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget`
+     に集中することが Lean 上でも明示された ✅
+   - これにより現時点の最終 1 核候補は `2m-core` ではなく、
+     より鋭い `2m-global` と見なせるようになった
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - `2m-global` の型に不要な `hqpow` 隠し引数を残したため一時的に elaboration が停滞
+   - genuinely global 部分では不要なので型から除去して解消
+6. 次の課題:
+   - `PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget` の仮定をさらに削れるか点検
+   - `2m-global` の中でなお局所的に処理できる成分がないか洗う
+   - 以後の primitive 側 kernel の記述を `2m-global` 中心へ寄せる

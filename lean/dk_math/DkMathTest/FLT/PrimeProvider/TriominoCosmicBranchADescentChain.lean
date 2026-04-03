@@ -65,13 +65,17 @@ set_option linter.style.longLine false
 #print axioms DkMath.FLT.qAdicLocalGlobalGap_of_qAdicDescentExistence -- OK
 #print axioms DkMath.FLT.qAdicGapReduction_of_qAdicLocalGlobalGap -- OK
 #print axioms DkMath.FLT.qAdicLocalGlobalGap_of_qAdicGapReduction -- OK
+#print axioms DkMath.FLT.qAdicGapWitness_concrete -- OK
+#print axioms DkMath.FLT.qAdicGapReductionCore_of_global -- OK
 #print axioms DkMath.FLT.qAdicGapReduction_of_core -- OK
 #print axioms DkMath.FLT.pthRootCore_of_qAdicLocalGlobalGap -- OK
 #print axioms DkMath.FLT.pthRootCore_of_qAdicGapReduction -- OK
+#print axioms DkMath.FLT.pthRootCore_of_qAdicGapReductionGlobal -- OK
 #print axioms DkMath.FLT.pthRootCore_of_qAdicGapReductionCore -- OK
 #print axioms DkMath.FLT.pthRoot_of_qAdicLocalGlobalGap -- OK
 #print axioms DkMath.FLT.gnReducedGap_of_qAdicLocalGlobalGap -- OK
 #print axioms DkMath.FLT.primitivePacketDescent_of_qAdicLocalGlobalGap -- OK
 #print axioms DkMath.FLT.FLTPrimeGe5Target_of_qAdicLocalGlobalGap_precise -- OK
 #print axioms DkMath.FLT.FLTPrimeGe5Target_of_qAdicGapReduction_precise -- OK
+#print axioms DkMath.FLT.FLTPrimeGe5Target_of_qAdicGapReductionGlobal_precise -- OK
 #print axioms DkMath.FLT.FLTPrimeGe5Target_of_qAdicGapReductionCore_precise -- OK
