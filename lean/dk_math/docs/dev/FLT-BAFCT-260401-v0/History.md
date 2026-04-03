@@ -1914,3 +1914,39 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
    - `QAdicDescentExistenceTarget` 自体のさらなる分解
    - Level 1s を open と書いている周辺コメントの整理
    - Level 2 の local-global gap をどの語彙で最小核にするか設計する
+
+### 追記: 2026/04/04 06:16:03 JST Level 2 最小核化
+
+1. 目的:
+    - `QAdicDescentExistenceTarget` をさらに分解し、
+       Level 2 の open content を最小語彙へ圧縮する
+    - 併せて Level 1s を open と読める古いコメントを整理する
+2. 実施:
+    - `PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget` を新設
+       （StrongSuperWieferich witness から整数 descent を回収する最小局所-大域核）
+    - `qAdicLocalGlobalGap_of_qAdicDescentExistence` を追加
+       （粗い Level 2 target → 最小核）
+    - `pthRootCore_of_qAdicLocalGlobalGap` を追加
+    - `pthRoot_of_qAdicLocalGlobalGap` / `gnReducedGap_of_qAdicLocalGlobalGap`
+       / `primitivePacketDescent_of_qAdicLocalGlobalGap`
+       / `FLTPrimeGe5Target_of_qAdicLocalGlobalGap_precise` を追加
+    - Level 構造コメントを更新し、Level 1s を concrete、
+       open kernel を Level 2m に集約した表記へ修正
+3. 結論:
+    - `QAdicDescentExistenceTarget` は coarse bridge 語彙、
+       真の open content は
+       `PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget`
+       にある、という整理が Lean 上でも明示された ✅
+    - Level 1s はもはや open kernel ではなく、
+       local-global gap だけが主戦場であることがコメント上でも整合した
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+    - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+    - `strongSuperWieferichCongruenceV2_concrete` に渡す gap 等式として
+       reduced-gap 方程式を誤って渡し、一時的に型不一致
+    - `z - y = z - y` の自明式を別途立てて解消
+6. 次の課題:
+    - `PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget` 自体のさらなる分解
+    - local-global gap の最小核を整数論的/幾何学的にどう表現するか設計を詰める
+    - Level 2m を中心に、PthRootCore / innermost 3-kernel 記述を整理する

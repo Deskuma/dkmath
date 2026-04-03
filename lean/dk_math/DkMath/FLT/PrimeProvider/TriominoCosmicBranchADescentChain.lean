@@ -1970,7 +1970,8 @@ abbrev HenselLiftStepStructuralTarget : Prop :=
 Hensel one-step の算術 kernel。
 
 構造的持ち上げ `Rn1` を幾何和ゼロ（= Φ_p root）へ補正できることを要求する。
-この target が Level 1s の真の one-step 本丸。
+この target は abstract な one-step 算術 core であり、
+prime 文脈では既に concrete 供給線が確立済み。
 -/
 abbrev HenselLiftStepArithmeticKernelTarget : Prop :=
   ∀ {p q n : ℕ}, Nat.Prime q → q ≠ p → 1 ≤ n →
@@ -2182,7 +2183,8 @@ theorem henselLiftStepCorrection_of_zeroLift
 /--
 補正項 `Δ` が構成できれば ArithmeticKernel は従う。
 
-よって one-step 本丸は `HenselLiftStepCorrectionTarget` の実装に帰着する。
+よって abstract な one-step 算術 core は
+`HenselLiftStepCorrectionTarget` の実装に帰着する。
 -/
 theorem henselLiftStepArithmeticKernel_of_correction
     (hCorr : HenselLiftStepCorrectionTarget) :
@@ -2368,6 +2370,81 @@ abbrev QAdicDescentExistenceTarget : Prop :=
       ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
 
 /--
+Level 2 の最小核: StrongSuperWieferich witness から整数 descent を回収する局所-大域ギャップ。
+
+Level 1s provider は concrete になったため、open content は本質的に
+「strong witness `(R mod q, Φ_p(R)=0, z=Ry)` から整数解 `z'` を回収できるか」
+だけに圧縮できる。
+-/
+abbrev PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      q ∣ x →
+      ¬ q ∣ y →
+      ¬ q ∣ z →
+      ¬ q ∣ (z - y) →
+      p ∣ (q - 1) →
+      q ^ p ∣ GN p (z - y) y →
+      ∀ (ω : ZMod q), ω ^ p = 1 → ω ≠ 1 →
+      ∀ {j : Fin p}, 0 < j.val →
+      ∀ {hqpow : q ∣ q ^ p} {R : ZMod (q ^ p)},
+        ((ZMod.castHom hqpow (ZMod q)) R = ω ^ j.val) →
+        (∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i = 0) →
+        ((z : ZMod (q ^ p)) = R * (y : ZMod (q ^ p))) →
+        let x' := x / q
+        ∃ z' : ℕ, x' ^ p + y ^ p = z' ^ p
+
+/--
+粗い Level 2 target は、最小核 target を自動的に含意する。
+
+追加の strong witness 仮定は単に捨てればよい。
+-/
+theorem qAdicLocalGlobalGap_of_qAdicDescentExistence
+    (hDescent : QAdicDescentExistenceTarget) :
+    PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hq hqs hqt hcop_qy hq_ne_p hq_dvd_x _hq_not_dvd_y _hq_not_dvd_z hq_not_dvd_gap
+    _hp_dvd_qsub1 hqp_dvd_GN ω hω hω_ne j hjpos hqpow R hmodq hphi hzRy
+  have hgap' : z - y = z - y := rfl
+  rcases hDescent hpack hgap' hq hq_ne_p hqp_dvd_GN hq_not_dvd_gap hcop_qy hq_dvd_x with ⟨z', hz'⟩
+  refine ⟨z', ?_⟩
+  exact hz'.symm
+
+/--
+最小局所-大域核と concrete Strong provider を合成すると `PthRootCore` が得られる。
+-/
+theorem pthRootCore_of_qAdicLocalGlobalGap
+    (hGap : PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget) :
+    PrimeGe5BranchAPrimitivePthRootCoreTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hq hqs hqt hcop_qy hq_ne_p hq_dvd_x hq_not_dvd_y hq_not_dvd_z hq_not_dvd_gap
+    hp_dvd_qsub1 hqp_dvd_GN ω hω hω_ne
+  have hgap' : z - y = z - y := rfl
+  rcases strongSuperWieferichCongruenceV2_concrete
+      hpack hgap' hq hq_ne_p hqp_dvd_GN hq_not_dvd_gap hcop_qy ω hω hω_ne with
+    ⟨j, hjpos, hqpow, R, hmodq, hphi, hzRy⟩
+  exact hGap hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    hq hqs hqt hcop_qy hq_ne_p hq_dvd_x hq_not_dvd_y hq_not_dvd_z hq_not_dvd_gap
+    hp_dvd_qsub1 hqp_dvd_GN ω hω hω_ne hjpos hmodq hphi hzRy
+
+/--
 Level 2 (`QAdicDescentExistenceTarget`) は primitive 側の `PthRootCoreTarget` を供給する。
 
 `PthRootCore` が要求する追加データ
@@ -2376,15 +2453,26 @@ Level 2 (`QAdicDescentExistenceTarget`) は primitive 側の `PthRootCoreTarget`
 -/
 theorem pthRootCore_of_qAdicDescentExistence
     (hDescent : QAdicDescentExistenceTarget) :
-    PrimeGe5BranchAPrimitivePthRootCoreTarget := by
-  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
-    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
-    q hq hqs hqt hcop_qy hq_ne_p hq_dvd_x _hq_not_dvd_y _hq_not_dvd_z hq_not_dvd_gap
-    _hp_dvd_qsub1 hqp_dvd_GN ω hω hω_ne
-  have hgap' : z - y = z - y := rfl
-  rcases hDescent hpack hgap' hq hq_ne_p hqp_dvd_GN hq_not_dvd_gap hcop_qy hq_dvd_x with ⟨z', hz'⟩
-  refine ⟨z', ?_⟩
-  exact hz'.symm
+    PrimeGe5BranchAPrimitivePthRootCoreTarget :=
+  pthRootCore_of_qAdicLocalGlobalGap (qAdicLocalGlobalGap_of_qAdicDescentExistence hDescent)
+
+/-- 最小局所-大域核から PthRoot target を直接回収する。 -/
+theorem pthRoot_of_qAdicLocalGlobalGap
+    (hGap : PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget) :
+    PrimeGe5BranchAPrimitiveRestorePthRootTarget :=
+  pthRootTarget_of_pthRootCore (pthRootCore_of_qAdicLocalGlobalGap hGap)
+
+/-- 最小局所-大域核から GNReducedGap target を直接回収する。 -/
+theorem gnReducedGap_of_qAdicLocalGlobalGap
+    (hGap : PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget) :
+    PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget :=
+  gnReducedGap_of_pthRootCore (pthRootCore_of_qAdicLocalGlobalGap hGap)
+
+/-- 最小局所-大域核から primitive packet descent を供給する。 -/
+theorem primitivePacketDescent_of_qAdicLocalGlobalGap
+    (hGap : PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primitivePacketDescent_of_pthRootCore (pthRootCore_of_qAdicLocalGlobalGap hGap)
 
 /-- Level 2 から PthRoot target を直接回収する。 -/
 theorem pthRoot_of_qAdicDescentExistence
@@ -2415,6 +2503,17 @@ theorem FLTPrimeGe5Target_of_qAdicDescentExistence_precise
   FLTPrimeGe5Target_of_pthRootCore_precise
     (pthRootCore_of_qAdicDescentExistence hDescent) hPFE hNoLift
 
+/--
+最小局所-大域核を primitive 側 kernel として使う最精密版。
+-/
+theorem FLTPrimeGe5Target_of_qAdicLocalGlobalGap_precise
+    (hGap : PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_pthRootCore_precise
+    (pthRootCore_of_qAdicLocalGlobalGap hGap) hPFE hNoLift
+
 /-!
 ### §20 まとめ: Open kernel のレイヤー構造
 
@@ -2423,13 +2522,14 @@ GNReducedGap を q-adic 視点で分解すると:
 ```
 Level 0: QAdicResidue (z ≡ ω^j·y mod q)                      — concrete ✅
 Level 1w: WeakSuperWieferich (z ≡ R·y mod q^p)               — concrete ✅
-Level 1s: StrongSuperWieferich (branch + Φ_p(R)=0 mod q^p)   — Hensel 本丸 ★OPEN★
-Level 2: QAdicDescentExistence (∃z', z'^p = x'^p+y^p)         — LOCAL-GLOBAL GAP ★OPEN★
+Level 1s: StrongSuperWieferich (branch + Φ_p(R)=0 mod q^p)   — concrete ✅
+Level 2c: QAdicDescentExistence (coarse existence form)       — bridge vocabulary
+Level 2m: QAdicLocalGlobalGap (strong witness ⇒ integer z')   — LOCAL-GLOBAL GAP ★OPEN★
 ```
 
-Level 0 と Level 1w は現時点で concrete。
-Level 1s（Hensel 強化）と Level 2 が open kernel。
-Level 2 は **GNReducedGap の真の核心** であり、
+Level 0 / 1w / 1s は現時点で concrete。
+open kernel は本質的には Level 2m の local-global gap に集約される。
+Level 2m は **GNReducedGap の真の核心** であり、
 Z[ζ_p] の ideal class group 構造に依存する深い問題。
 
 **数値検証**:
@@ -2438,7 +2538,7 @@ Z[ζ_p] の ideal class group 構造に依存する深い問題。
 - x'^p + y^p は一般に p-th power mod q ではない（反例多数）
   → Level 2 は mod q 情報だけでは解けない（LOCAL-GLOBAL gap の存在を確認）
 
-**次の一手**: Level 2 を更に精密化するか、PthRootCore を別ルートで攻略する。
+**次の一手**: Level 2m を更に精密化するか、PthRootCore を別ルートで攻略する。
 -/
 
 /-!
