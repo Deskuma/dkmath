@@ -963,4 +963,94 @@ theorem primeGe5BranchAPrimitiveRestoreGNReducedGap_of_contradiction
     (primeGe5BranchAPrimitiveRestorePthRootReduced_of_pthRoot
       (primeGe5BranchAPrimitiveRestorePthRoot_of_contradiction hContra))
 
+/-!
+## RestoreFromArithmeticStrong → RestoreFromArithmetic (弱化橋)
+
+StrongTarget は `∃ pkt', pkt'.z < z ∧ ¬ p ∣ pkt'.t` を返すが、
+BranchA.lean の `PrimitivePacketRestoreFromArithmeticTarget` は
+`∃ pkt', pkt'.z < z` だけを要求する。
+
+ここでは Strong → nonStrong への弱化橋を固定し、
+GNReducedGapTarget から BranchA mainline への接続を確立する。
+-/
+
+/--
+`RestoreFromArithmeticStrong → RestoreFromArithmetic` の弱化。
+
+Strong 版は `¬ p ∣ pkt'.t` を追加で保証するが、
+BranchA mainline の `PrimitivePacketDescentTarget` / `SmallerPacketTarget` 系では
+bare `∃ pkt', pkt'.z < z` だけで十分な場面がある。
+-/
+theorem primeGe5BranchAPrimitivePacketRestoreFromArithmetic_of_strong
+    (hStrong : PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticStrongTarget) :
+    PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p
+  rcases hStrong hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hqprime hqs hqt hcop_qy hq_ne_p with
+    ⟨pkt', hlt, _hpt'⟩
+  exact ⟨pkt', hlt⟩
+
+/--
+`GNReducedGapTarget → RestoreFromArithmeticTarget` の non-circular chain。
+
+GN native open kernel から WithProvenance → CoreStrong → Strong → nonStrong
+の確立された chain を通じて、BranchA mainline の restore 入力を供給する。
+-/
+theorem primeGe5BranchAPrimitivePacketRestoreFromArithmetic_of_gnReducedGap
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget) :
+    PrimeGe5BranchAPrimitivePacketRestoreFromArithmeticTarget :=
+  primeGe5BranchAPrimitivePacketRestoreFromArithmetic_of_strong
+    (primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong_of_gnReducedGap hGNGap)
+
+/--
+`GNReducedGapTarget + CyclotomicExistenceTarget → PrimitivePacketDescentTarget`
+
+2 つの open kernel を仮定として受け取り、
+primitive descent（¬p ∣ t 側）を完全に確立する conditional chain。
+
+これにより primitive descent の残る数学核が正確に 2 本であることが定理で保証される:
+1. `GNReducedGapTarget`: 新 gap の GN Body が reduced RHS に一致
+2. `CyclotomicExistenceTarget`: Wieferich 条件下の原始素因子存在
+-/
+theorem primeGe5BranchAPrimitivePacketDescent_of_gnReducedGap_and_cyclotomicExistence
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget)
+    (hEx : PrimeGe5BranchACyclotomicExistenceTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primeGe5BranchAPrimitivePacketDescent_of_existence_and_restore hEx
+    (primeGe5BranchAPrimitivePacketRestoreFromArithmetic_of_gnReducedGap hGNGap)
+
+/--
+`GNReducedGapTarget + CyclotomicExistenceTarget → PrimitivePacketDescentStrongTarget`
+
+同上だが、Strong 版（`¬ p ∣ pkt'.t` 保証付き）。
+FringeDescent の well-founded descent で使う。
+-/
+theorem primeGe5BranchAPrimitivePacketDescentStrong_of_gnReducedGap_and_cyclotomicExistence
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget)
+    (hEx : PrimeGe5BranchACyclotomicExistenceTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentStrongTarget :=
+  primeGe5BranchAPrimitivePacketDescentStrong_of_zsigmondy_arithmetic_restore
+    (primeGe5BranchAPrimitiveZsigmondy_of_cyclotomicPrime
+      (primeGe5BranchAPrimitiveCyclotomicPrime_of_existence hEx))
+    primeGe5BranchAPrimitiveDistinguishedPrimeArithmetic_default
+    (primeGe5BranchAPrimitivePacketRestoreFromArithmeticStrong_of_gnReducedGap hGNGap)
+
+/--
+`GNReducedGapTarget + CyclotomicExistenceTarget → BranchAFringeContradictionTarget`
+
+2 つの open kernel があれば、FringeDescent の well-founded descent が回り、
+`BranchAInterferenceFringeBundle` が存在しえないことを確定する。
+-/
+theorem branchAFringeContradiction_of_gnReducedGap_and_cyclotomicExistence
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget)
+    (hEx : PrimeGe5BranchACyclotomicExistenceTarget) :
+    BranchAFringeContradictionTarget :=
+  branchAFringeContradiction_of_descent
+    (primeGe5BranchAPrimitivePacketDescentStrong_of_gnReducedGap_and_cyclotomicExistence
+      hGNGap hEx)
+    hEx
+
 end DkMath.FLT
