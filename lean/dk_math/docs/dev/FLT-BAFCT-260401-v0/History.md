@@ -1985,3 +1985,35 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
      幾何語彙版の最終 1 核を探る
    - `PthRootCore` / `FLTPrimeGe5Target_of_innermost_3kernels` 周辺の説明を
      `2m-int` / `2m-geom` 中心へ更新する
+
+### 追記: 2026/04/04 06:45:47 JST 2m-core の切り出し
+
+1. 目的:
+   - `PrimeGe5BranchAPrimitiveQAdicGapReductionTarget` をさらに分解し、
+     幾何語彙版の最終 1 核候補を切り出す
+   - `PthRootCore` / `FLTPrimeGe5Target_of_innermost_3kernels` 周辺の説明を
+     `2m-int` / `2m-geom` / `2m-core` 中心へ更新する
+2. 実施:
+   - `PrimeGe5BranchAPrimitiveQAdicGapReductionCoreTarget` を新設
+     （pack + strong witness から reduced gap `g'` を回収する pure q-adic core）
+   - `qAdicGapReduction_of_core` を追加
+   - `pthRootCore_of_qAdicGapReductionCore` を追加
+   - `FLTPrimeGe5Target_of_qAdicGapReductionCore_precise` を追加
+   - §16 / §17.1 / §20 の説明を更新し、
+     primitive 側 kernel の主戦場が `2m-geom/core` にあることを明示
+   - テストへ `#print axioms` を追加
+3. 結論:
+   - Level 2m-geom からさらに bookkeeping を剥がした
+     `PrimeGe5BranchAPrimitiveQAdicGapReductionCoreTarget`
+     が、現時点での **最終 1 核候補** として定着した ✅
+   - `PthRootCore` は open kernel そのものというより、
+     `2m-core` を既存 primitive/FLT chain へ運ぶ wrapper 語彙として整理された
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - 特になし（既存の 2m-geom → PthRootCore 供給線をそのまま利用できた）
+6. 次の課題:
+   - `PrimeGe5BranchAPrimitiveQAdicGapReductionCoreTarget` の仮定をさらに削れるか検討
+   - `2m-core` の中で truly local な部分と genuinely global な部分を分離する
+   - 以後の議論・コメントを `PthRootCore` 中心ではなく `2m-core` 中心へ寄せる
