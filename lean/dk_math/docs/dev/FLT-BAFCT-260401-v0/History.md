@@ -1833,3 +1833,28 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
 6. 次の課題:
    - prime 文脈 concrete chain を one-step `GeomSum` / `ArithmeticKernel` の FLT 側使用箇所へ接続
    - 必要なら一般形 target と prime 文脈 target の役割分担を整理して命名を安定化
+
+### 追記: 2026/04/04 02:37:01 JST prime Hensel chain の one-step 接続
+
+1. 目的:
+   - prime 文脈で concrete 化済みの Hensel chain を、
+     FLT 側の one-step 使用箇所へ clean に接続する
+2. 実施:
+   - `henselLiftStepCorrection_of_nonzeroModQ_prime` を追加
+   - `henselLiftStepArithmeticKernel_of_nonzeroModQ_prime` を追加
+   - `henselLiftStepGeomSum_of_nonzeroModQ_prime` を追加
+   - テストに新定理の `#print axioms` を追記
+3. 結論:
+   - prime 文脈 concrete chain は
+     `ZeroLift` で止まらず、FLT 側 one-step 受け口である
+     `Correction` / `ArithmeticKernel` / `GeomSum` まで接続完了 ✅
+   - 残る主戦場は、これを `StrongSuperWieferichProviderTarget` など
+     FLT 本線の provider 語彙へどう昇格するかに移った
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - 特になし（既存 chain の再利用で素直に接続できた）
+6. 次の課題:
+   - `StrongSuperWieferichProviderTarget` への clean bridge 設計
+   - 必要なら one-step の反復補題を整備して `q^p` レベルまでの provider を concrete 化
