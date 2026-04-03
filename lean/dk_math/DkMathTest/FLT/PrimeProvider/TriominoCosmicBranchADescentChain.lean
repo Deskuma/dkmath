@@ -38,3 +38,6 @@ set_option linter.style.longLine false
 #print axioms DkMath.FLT.henselLiftStepCorrection_of_zeroLift  -- OK
 #print axioms DkMath.FLT.henselLiftStepArithmeticKernel_of_zeroLift  -- OK
 #print axioms DkMath.FLT.henselLiftStepGeomSum_of_zeroLift  -- OK
+#print axioms DkMath.FLT.qpow_mul_sq_eq_zero_in_next_mod -- OK
+#print axioms DkMath.FLT.castHom_qpow_mul_eq_zero -- OK
+#print axioms DkMath.FLT.geomSum_first_order_qpow_correction -- OK

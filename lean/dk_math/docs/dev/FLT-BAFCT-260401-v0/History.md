@@ -1622,3 +1622,52 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
 6. 次の課題:
    - `HenselLiftStepZeroLiftTarget` の concrete 証明（specialized Newton/Hensel 補題）
    - `F(T)=∑T^i` の一次補正公式を Lean 補題として追加
+
+### 追記: 2026/04/03 20:40:33 JST 一次補正公式の target 化
+
+1. 目的:
+   - `F(R+q^n c)` の一次補正公式を Lean へ接続し、zero-lift concrete 化の入口を固定する
+2. 実施:
+   - `GeomSumFirstOrderSqZeroTarget` を追加:
+     `Δ^2=0` 下での幾何和一次補正公式を target として明示
+   - `qpow_mul_sq_eq_zero_in_next_mod` を利用し、
+     `geomSum_first_order_qpow_correction` を
+     `GeomSumFirstOrderSqZeroTarget` から導出する形で実装
+   - one-step 系 target 群の `q ≠ p` 仮定整合を維持したままビルド通過を確認
+3. 結論:
+   - 一次補正公式は「`SqZero` を示せば `q^n*c` 版へ直結」の形に整理された ✅
+   - 残る本丸は `GeomSumFirstOrderSqZeroTarget` の concrete 証明に集中
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - 直接証明を試みた際に ring 正規化と指数項の同値変形が不安定化
+   - 先に target 化して依存関係を固定する方針に切替
+6. 次の課題:
+   - `GeomSumFirstOrderSqZeroTarget` の concrete 実装
+   - その後 `HenselLiftStepZeroLiftTarget` を concrete に閉じる
+
+### 追記: 2026/04/03 21:17:35 JST Newton補正ターゲット追加
+
+1. 目的:
+   - `F(R + q^n c)` 型の一次補正を one-step へ接続する
+   - `ZeroLift` concrete 化に向けた Newton 供給線を明示する
+2. 実施:
+   - `HenselLiftStepNewtonCorrectionTarget` を追加
+   - `castHom_qpow_mul_eq_zero` を実装（`q^n*c` は mod `q^n` で 0）
+   - `henselLiftStepCorrection_of_newtonCorrection` を追加し、
+     Newton補正 target から `HenselLiftStepCorrectionTarget` を導出
+   - `geomSum_first_order_qpow_correction` を
+     `GeomSumFirstOrderSqZeroTarget` 依存で維持
+3. 結論:
+   - one-step の導線が
+     `GeomSumFirstOrderSqZeroTarget` → NewtonCorrection → Correction
+     へ拡張され、zero-lift 本丸へ接続する準備が整った ✅
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - `castHom` と `natCast` の coercion で複数回型不一致
+   - `map_pow` + `cast_natCast` + `natCast_pow_eq_zero_of_le` の組合せで解消
+6. 次の課題:
+   - `GeomSumFirstOrderSqZeroTarget` の concrete 証明
+   - そこから `HenselLiftStepNewtonCorrectionTarget` を concrete 化し、
+     `HenselLiftStepZeroLiftTarget` へ進む

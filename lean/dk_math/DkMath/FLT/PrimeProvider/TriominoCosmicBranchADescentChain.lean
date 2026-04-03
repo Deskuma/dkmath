@@ -1444,6 +1444,84 @@ theorem weakSuperWieferich_of_strongV2 :
   exact ⟨j, hjpos, R, hzRy⟩
 
 /--
+`Δ^2 = 0` のときの一次補正公式（幾何和版）の target。
+
+`F(T)=∑_{i=0}^{p-1} T^i` に対し、`F(R+Δ)` は `Δ` に関して一次で止まる。
+この target を concrete に閉じれば、specialized Newton/Hensel の核が通る。
+-/
+abbrev GeomSumFirstOrderSqZeroTarget : Prop :=
+  ∀ {m p : ℕ} (R Δ : ZMod m),
+    Δ ^ 2 = 0 →
+      (∑ i ∈ Finset.range p, (R + Δ) ^ i)
+        = (∑ i ∈ Finset.range p, R ^ i)
+          + (∑ i ∈ Finset.range p, ((i : ZMod m) * R ^ (i - 1))) * Δ
+
+/--
+`Δ = q^n * c`（mod `q^(n+1)`）では `Δ^2 = 0`。
+-/
+theorem qpow_mul_sq_eq_zero_in_next_mod
+    {q n : ℕ} (hn : 1 ≤ n) (c : ZMod (q ^ (n + 1))) :
+    (((q ^ n : ZMod (q ^ (n + 1))) * c) ^ 2 = 0) := by
+  have hdiv : q ^ (n + 1) ∣ q ^ (n * 2) := by
+    have hle : n + 1 ≤ n * 2 := by omega
+    exact pow_dvd_pow q hle
+  have hq2 : ((q ^ n : ZMod (q ^ (n + 1))) ^ 2) = 0 := by
+    simpa [pow_mul, Nat.cast_pow] using
+      (ZMod.natCast_eq_zero_iff (q ^ (n * 2)) (q ^ (n + 1))).2 hdiv
+  calc
+    (((q ^ n : ZMod (q ^ (n + 1))) * c) ^ 2)
+        = ((q ^ n : ZMod (q ^ (n + 1))) ^ 2) * (c ^ 2) := by ring
+    _ = 0 := by simp [hq2]
+
+/--
+`q^n * c` は `ZMod (q^n)` へ落とすと 0 になる。
+-/
+theorem castHom_qpow_mul_eq_zero
+    {q n : ℕ} (hdiv : q ^ n ∣ q ^ (n + 1)) (c : ZMod (q ^ (n + 1))) :
+    (ZMod.castHom hdiv (ZMod (q ^ n))) ((q ^ n : ZMod (q ^ (n + 1))) * c) = 0 := by
+  have hqpow_zero :
+      (ZMod.castHom hdiv (ZMod (q ^ n))) (q ^ n : ZMod (q ^ (n + 1))) = 0 := by
+    rw [show (q ^ n : ZMod (q ^ (n + 1))) = (q : ZMod (q ^ (n + 1))) ^ n by simp]
+    rw [map_pow, ZMod.castHom_apply]
+    rw [ZMod.cast_natCast hdiv]
+    simpa [Nat.cast_pow] using
+      (ZMod.natCast_pow_eq_zero_of_le (p := q) (m := n) (n := n) le_rfl)
+  calc
+    (ZMod.castHom hdiv (ZMod (q ^ n))) ((q ^ n : ZMod (q ^ (n + 1))) * c)
+        = (ZMod.castHom hdiv (ZMod (q ^ n))) (q ^ n : ZMod (q ^ (n + 1)))
+            * (ZMod.castHom hdiv (ZMod (q ^ n))) c := by
+              rw [map_mul]
+    _ = 0 := by simp [hqpow_zero]
+
+/--
+specialized Newton/Hensel 一次補正公式:
+`F(T)=∑ T^i` に対し `T = R + q^n*c` の一次展開。
+-/
+theorem geomSum_first_order_qpow_correction
+    (hFirstOrder : GeomSumFirstOrderSqZeroTarget)
+    {p q n : ℕ} (hn : 1 ≤ n) (R c : ZMod (q ^ (n + 1))) :
+    (∑ i ∈ Finset.range p, (R + (q ^ n : ZMod (q ^ (n + 1))) * c) ^ i)
+      = (∑ i ∈ Finset.range p, R ^ i)
+        + (∑ i ∈ Finset.range p,
+            ((i : ZMod (q ^ (n + 1))) * R ^ (i - 1)))
+            * ((q ^ n : ZMod (q ^ (n + 1))) * c) := by
+  apply hFirstOrder
+  exact qpow_mul_sq_eq_zero_in_next_mod hn c
+
+/--
+Newton 補正（`Δ = q^n * c`）を直接要求する one-step target。
+-/
+abbrev HenselLiftStepNewtonCorrectionTarget : Prop :=
+  ∀ {p q n : ℕ}, Nat.Prime q → q ≠ p → 1 ≤ n →
+    ∀ (Rn : ZMod (q ^ n)),
+      (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+      ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (Rn1 : ZMod (q ^ (n + 1))),
+        ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) →
+        ∃ c : ZMod (q ^ (n + 1)),
+          (∑ i ∈ Finset.range p,
+            (Rn1 + (q ^ n : ZMod (q ^ (n + 1))) * c) ^ i = 0)
+
+/--
 1-step Hensel 持ち上げの専用 target（Strong Level 1 の中核）。
 
 `Φ_p(R_n)=0 mod q^n` を満たす近似根 `R_n` から、
@@ -1502,6 +1580,18 @@ abbrev HenselLiftStepCorrectionTarget : Prop :=
         ∃ (Δ : ZMod (q ^ (n + 1))),
           ((ZMod.castHom hdiv (ZMod (q ^ n))) Δ = 0) ∧
           (∑ i ∈ Finset.range p, ((Rn1 + Δ : ZMod (q ^ (n + 1)))) ^ i = 0)
+
+/--
+Newton 補正 target があれば correction target は従う。
+-/
+theorem henselLiftStepCorrection_of_newtonCorrection
+    (hNewton : HenselLiftStepNewtonCorrectionTarget) :
+    HenselLiftStepCorrectionTarget := by
+  intro p q n hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  rcases hNewton hq hq_ne_p hn Rn hsum hdiv Rn1 hcast with ⟨c, hc⟩
+  refine ⟨(q ^ n : ZMod (q ^ (n + 1))) * c, ?_, ?_⟩
+  · exact castHom_qpow_mul_eq_zero hdiv c
+  · simpa [add_assoc, add_comm, add_left_comm, mul_assoc] using hc
 
 /--
 one-step で「幾何和ゼロの持ち上げ自体」が得られることを表す target。
