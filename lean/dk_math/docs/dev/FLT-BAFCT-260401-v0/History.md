@@ -1408,6 +1408,28 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
    - `pow_eq_one_imp_eq_omega_pow` の proof を `rootsOfUnity.isCyclic` を使って完成
    - GNReducedGap→QAdicGapReduction→PthRoot chain の理論完結
 
+### 追記: 2026/04/03 17:27 JST review-027/028 フォローアップ
+
+1. 目的:
+   - review-027 / review-028 の方針に従い、`QAdicResidue` の残り依存補題を埋めて `DescentChain` を clean 化する
+   - `pow_eq_one_imp_eq_omega_pow` を Mathlib の roots-of-unity 理論に接続して 100% 証明へ前進する
+2. 実施:
+   - `pow_eq_one_imp_eq_omega_pow` を `orderOf_dvd_of_pow_eq_one` + `Nat.dvd_prime` + `IsPrimitiveRoot.iff_orderOf` + `eq_pow_of_pow_eq_one` で実装
+   - `ω^p = 1` と `ω ≠ 1` から `orderOf ω = p` を導出し、`r^p = 1` から `r = ω^j` を抽出
+   - 既存 `qAdicResidue` はこの補題依存で接続される状態を維持したままビルド確認
+3. 結論:
+   - `TriominoCosmicBranchADescentChain.lean` の `sorry` は **0 件** を達成 ✅
+   - Level 0 (`QAdicResidue`) の入口層は形式化上ほぼ完了し、open kernel の焦点がさらに明確化
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `grep -n "sorry" DkMath/FLT/PrimeProvider/TriominoCosmicBranchADescentChain.lean` で出力なし（0件）
+5. 失敗事例:
+   - 途中で `ZMod.natCast_zmod_eq_zero_iff_dvd` など API 名差異により型エラーが発生
+   - `ZMod.natCast_eq_zero_iff` への置換と `orderOf` 系補題への切替で解消
+6. 次の課題:
+   - `SuperWieferichCongruenceTarget` の concrete 化（Level 1 完遂）
+   - `QAdicDescentExistenceTarget` の local-global gap を element-level 条件へ再定式化し、GNReducedGap 本丸へ接続
+
 ### 日時: `タイムスタンプ date コマンドを使用して年月日時分まで` JST (template)
 
 1. 目的:

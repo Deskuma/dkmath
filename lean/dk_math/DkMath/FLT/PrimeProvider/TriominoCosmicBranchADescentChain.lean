@@ -1231,13 +1231,18 @@ theorem pow_eq_one_imp_eq_omega_pow
     (r ω : ZMod q) (hω_pow : ω ^ p = 1) (hω_ne : ω ≠ 1)
     (hr_pow : r ^ p = 1) :
     ∃ j : Fin p, r = ω ^ j.val := by
-  -- r^p = 1 → r is a root of X^p - 1
-  -- ω^p = 1, ω ≠ 1 → ω has order exactly p (since p is prime)
-  -- The p-th roots of unity {1, ω, ω², ..., ω^{p-1}} are all roots of X^p - 1
-  -- In a field, X^p - 1 has at most p roots
-  -- So the roots are exactly {ω^j | j = 0,...,p-1}
-  -- Hence r = ω^j for some j
-  sorry
+  have hω_dvd : orderOf ω ∣ p := orderOf_dvd_of_pow_eq_one hω_pow
+  have hω_ne_one_order : orderOf ω ≠ 1 := by
+    intro hord
+    exact hω_ne (orderOf_eq_one_iff.mp hord)
+  have hω_order : orderOf ω = p := by
+    rcases (Nat.dvd_prime hp).mp hω_dvd with h1 | hp'
+    · exact (hω_ne_one_order h1).elim
+    · exact hp'
+  have hprim : IsPrimitiveRoot ω p := (IsPrimitiveRoot.iff_orderOf).2 hω_order
+  haveI : NeZero p := ⟨hp.ne_zero⟩
+  obtain ⟨i, hi_lt, hi_eq⟩ := hprim.eq_pow_of_pow_eq_one hr_pow
+  exact ⟨⟨i, hi_lt⟩, hi_eq.symm⟩
 
 /--
 **QAdicResidue**: z ≡ ω^j · y (mod q) の形式化。
