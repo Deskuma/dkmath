@@ -1311,6 +1311,44 @@ PthRootTarget 語彙で言えば: `∃ z', (x/q)^p + y^p = z'^p`
 
 #### ビルド: `lake build` 成功。全体構造は健全
 
+---
+
+### Session 25: PthRootCore 語彙の形式化と PeelPthRootCore 展開 (2026-04-03)
+
+#### 目的
+
+review-024 の設計書に従い、open kernel を「最も攻めやすい語彙」で Lean 上に露出させる。
+
+#### 深層分析結果
+
+1. **PthRootTarget の全引数で DescentSeed 以降は concrete に供給可能**
+   - RestoreWitnessProperties + QAdicLiftSeed (ω) 全て concrete default あり
+   - DescentSeed 内部を展開すれば、ω と q^p∣GN を直接使う攻撃面が見える
+
+2. **q-adic descent の数学的正体は Kummer 降下の核心**
+   - z ≡ ω^j * y (mod q) : 元の反例から z/y が ZMod q 上で p-th root of unity
+   - 古典的には ℤ[ζ_p] の ideal factorization が必要
+   - elementary shortcut は既知文献に存在しない → genuine math challenge
+
+3. **PacketFromError と GNReducedGap は同等の数学的難度**
+   - peel 後 GN(gap', y) ≠ p*s^p (数値確認済み)
+   - 両方とも Kummer descent の核心、flavor が q-adic vs p-adic で異なる
+
+#### 新規追加定理 (DescentChain §16-17)
+
+| 定理 | 内容 | clean |
+|---|---|:---:|
+| `PrimitivePthRootCoreTarget` (abbrev) | DescentSeed 展開版 PthRoot | ✅ |
+| `pthRootTarget_of_pthRootCore` | PthRootCore → PthRoot | ✅ |
+| `gnReducedGap_of_pthRootCore` | PthRootCore → GNReducedGap | ✅ |
+| `primitivePacketDescent_of_pthRootCore` | PthRootCore → PrimitiveDescent | ✅ |
+| `FLTPrimeGe5Target_of_pthRootCore_precise` | PthRootCore+PFE+Bridge → FLT | ✅ |
+| `PeelPthRootCoreTarget` (abbrev) | error data 展開版 peel target | ✅ |
+| `peelPthRootCore_of_packetFromError` | PacketFromError → PeelPthRootCore | ✅ |
+| `FLTPrimeGe5Target_of_innermost_3kernels` | PthRootCore+PFE+Bridge → FLT | ✅ |
+
+#### DescentChain sections §14-§17 完了。全体ビルド成功。DescentChain に新規 sorry なし
+
 ### 日時: `タイムスタンプ date コマンドを使用して年月日時分まで` JST (template)
 
 1. 目的:

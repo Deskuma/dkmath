@@ -13,6 +13,8 @@ import DkMath.CFBRC.ExceptionalExistence
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
 
+open DkMath.CosmicFormulaBinom
+
 /-!
 # Branch A Descent Chain — Open Kernels → FLTPrimeGe5Target
 
@@ -698,5 +700,229 @@ theorem triominoPrimeProvider_of_3kernels_precise
     TriominoPrimeProvider :=
   triominoPrimeProvider_of_FLTPrimeGe5
     (FLTPrimeGe5Target_of_3kernels_precise hGNGap hPFE hNoLift)
+
+/-!
+## §16. PthRoot Core — DescentSeed 展開による q-adic 攻撃面の露出
+
+### 目的
+
+`PthRootTarget` (≡ `GNReducedGapTarget`) の内部では、
+`DescentSeed` が opaque bundle として渡される。
+しかし q-adic lifting の数学を具体的に攻めるには、
+その中身 — `RestoreWitnessProperties` と `QAdicLiftSeed (ω)` —
+を直接使う形の sub-target が必要。
+
+ここでは:
+1. DescentSeed を展開した `PthRootCoreTarget` を定義
+2. PthRootCore → PthRoot への concrete bridge を確立
+3. PthRootCore の入力が全て concrete に供給可能であることを確認
+
+### 数学的内容
+
+`PthRootCoreTarget` は:
+  Pack + normal form + ¬p∣t + Wieferich + primitive q
+  + **RestoreWitnessProperties (q∣x, ¬q∣y, ¬q∣z, ¬q∣gap, p∣(q-1), q^p∣GN)**
+  + **QAdicLiftSeed (ω^p = 1, ω ≠ 1 in ZMod q)**
+  → ∃ z', (x/q)^p + y^p = z'^p
+
+これは DescentSeed の中身を剥き出しにしたもので、
+q-adic lifting の数学にダイレクトにアクセスする語彙を提供する。
+
+### QAdicLiftSeed の concrete 供給
+
+`primeGe5BranchAPrimitiveRestoreQAdicLift_default` が concrete に構成する:
+- `p ∣ (q-1)` から `(ZMod q)*` に order p の元が存在
+- その元を ω として取り出す
+-/
+
+/--
+DescentSeed 展開版 PthRoot Core。
+
+ω (nontrivial p-th root of unity in ZMod q) と
+RestoreWitnessProperties (q^p | GN 等) を明示入力にして、
+z' の存在を直接求める。
+-/
+abbrev PrimeGe5BranchAPrimitivePthRootCoreTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      -- RestoreWitnessProperties 展開
+      q ∣ x →
+      ¬ q ∣ y →
+      ¬ q ∣ z →
+      ¬ q ∣ (z - y) →
+      p ∣ (q - 1) →
+      q ^ p ∣ GN p (z - y) y →
+      -- QAdicLiftSeed 展開
+      ∀ (ω : ZMod q), ω ^ p = 1 → ω ≠ 1 →
+      let x' := x / q
+      ∃ z' : ℕ, x' ^ p + y ^ p = z' ^ p
+
+/--
+PthRootCore → PthRoot。
+
+DescentSeed の concrete 構成で内部を埋めて、
+展開版の Core target から opaque 版の PthRoot target を回収する。
+-/
+theorem pthRootTarget_of_pthRootCore
+    (hCore : PrimeGe5BranchAPrimitivePthRootCoreTarget) :
+    PrimeGe5BranchAPrimitiveRestorePthRootTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hqprime hqs hqt hcop_qy hq_ne_p hSeed
+  -- DescentSeed を展開
+  have hDatum := hSeed.hDatum
+  have hWitness := hDatum.hData
+  have hLift := hDatum.hLift
+  exact hCore hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    hqprime hqs hqt hcop_qy hq_ne_p
+    hWitness.hq_dvd_x hWitness.hq_not_dvd_y hWitness.hq_not_dvd_z
+    hWitness.hq_not_dvd_gap hWitness.hq_cong hWitness.hqp_dvd_GN
+    hLift.ω hLift.hω_pow hLift.hω_ne_one
+
+/--
+PthRootCore → GNReducedGap（直通）。
+-/
+theorem gnReducedGap_of_pthRootCore
+    (hCore : PrimeGe5BranchAPrimitivePthRootCoreTarget) :
+    PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget :=
+  gnReducedGap_of_pthRoot (pthRootTarget_of_pthRootCore hCore)
+
+/--
+PthRootCore → PrimitivePacketDescent（CyclotomicExistence concrete 経由）。
+-/
+theorem primitivePacketDescent_of_pthRootCore
+    (hCore : PrimeGe5BranchAPrimitivePthRootCoreTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primitivePacketDescent_of_gnReducedGap (gnReducedGap_of_pthRootCore hCore)
+
+/--
+PthRootCore + PacketFromError + NonLiftableGNBridge → FLT p ≥ 5。
+
+primitive 側を PthRootCore 語彙で書いた最精密版。
+-/
+theorem FLTPrimeGe5Target_of_pthRootCore_precise
+    (hCore : PrimeGe5BranchAPrimitivePthRootCoreTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_3kernels_precise
+    (gnReducedGap_of_pthRootCore hCore) hPFE hNoLift
+
+/-!
+## §17. PacketFromError の数学的核心: PeelPthRootCore
+
+### 構造比較
+
+| 側 | 条件 | target | descent 種 |
+|---|---|---|---|
+| primitive (¬p∣t) | q∣s, q∤gap | PthRootCoreTarget | q-adic |
+| peel (p∣t) | p∣t, p∣gap | PeelPthRootCoreTarget | p-adic |
+| branchB (¬p∣gap) | 別構造 | NonLiftableGNBridge | — |
+
+### 数学的内容
+
+PacketFromError の error 方程式 `p*B = C + u*E` (u = p^{p-1}*t1^p) は、
+gap を p^p 分の 1 にスケールしたときの GN の変化を記述する。
+
+数学的に最も直観的な語彙では、peel descent の核心は:
+
+  ``p ∣ t (i.e. p^2 ∣ x) のとき、(x/p)^p + y^p が完全 p 乗``
+
+ということ。これを error data 付きの sub-target として露出する。
+
+### 注意
+
+peel で gap だけ変えても GN(gap', y) ≠ p*s^p (数値で確認済み)。
+つまり NormalFormPacket を直接構成するには、新しい (t', s') を error data から構築する必要がある。
+-/
+
+/--
+p-adic peel 版 PthRoot Core。
+
+error 方程式の全データを展開して受け取り、
+smaller NormalFormPacket の存在を直接求める。
+
+PacketFromError と同値だが、error data の出自を明記した形。
+-/
+abbrev PrimeGe5BranchAPeelPthRootCoreTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    -- peel data 展開
+    ∀ {t1 : ℕ},
+      t = p * t1 →
+      -- error data (from TailError chain, all concrete)
+      ∀ {B C E : ℕ},
+        -- seed side: s^p = y^{p-1} + p^{2p-1} * t1^p * B
+        s ^ p = y ^ (p - 1) + p ^ (2 * p - 1) * t1 ^ p * B →
+        -- canonical side: GN(p, p^{p-1}*t1^p, y) = p * y^{p-1} + (p^{p-1}*t1^p) * C
+        GN p (p ^ (p - 1) * t1 ^ p) y = p * y ^ (p - 1) + (p ^ (p - 1) * t1 ^ p) * C →
+        -- error relation: p*B = C + (p^{p-1}*t1^p) * E
+        p * B = C + (p ^ (p - 1) * t1 ^ p) * E →
+        ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
+
+/--
+PacketFromError → PeelPthRootCore（弱化）。
+
+PacketFromError は B,C,E を任意に受け取るので、
+PeelPthRootCore が追加的に要求する seed/canonical detail は単に無視できる。
+-/
+theorem peelPthRootCore_of_packetFromError
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget) :
+    PrimeGe5BranchAPeelPthRootCoreTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t
+    t1 ht _B _C E _hSeed _hCanon hErrEq
+  -- PacketFromError は seed/canonical detail を受け取らず、
+  -- error equation だけで pkt' を構成する。
+  -- PeelPthRootCore の仮定を弱めて PacketFromError に渡す。
+  exact hPFE hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t
+    ht hErrEq
+
+/-!
+### §17.1. 真の 3-kernel (最精密)
+
+以下は、3 つの open kernel の最も内側の数学的核心だけを仮定する版。
+-/
+
+/--
+FLT p ≥ 5 の最内核版。
+
+3 つの数学的核心のみを仮定:
+1. PthRootCore: q-adic descent (¬p∣t side)
+2. PacketFromError: p-adic peel descent (p∣t side)
+3. NonLiftableGNBridge: BranchB
+
+bridges は全て既存 concrete chain で処理。
+-/
+theorem FLTPrimeGe5Target_of_innermost_3kernels
+    (hPrimCore : PrimeGe5BranchAPrimitivePthRootCoreTarget)
+    (hPeelCore : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_pthRootCore_precise hPrimCore hPeelCore hNoLift
 
 end DkMath.FLT
