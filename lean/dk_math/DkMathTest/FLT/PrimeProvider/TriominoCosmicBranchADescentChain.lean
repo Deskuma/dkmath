@@ -55,3 +55,5 @@ set_option linter.style.longLine false
 #print axioms DkMath.FLT.henselLiftStepCorrection_of_nonzeroModQ_prime -- OK
 #print axioms DkMath.FLT.henselLiftStepArithmeticKernel_of_nonzeroModQ_prime -- OK
 #print axioms DkMath.FLT.henselLiftStepGeomSum_of_nonzeroModQ_prime -- OK
+#print axioms DkMath.FLT.strongSuperWieferichCongruenceV2_concrete -- OK
+#print axioms DkMath.FLT.strongSuperWieferichProvider_concrete -- OK

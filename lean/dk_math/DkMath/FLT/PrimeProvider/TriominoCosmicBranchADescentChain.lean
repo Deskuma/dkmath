@@ -2249,6 +2249,100 @@ abbrev StrongSuperWieferichProviderTarget : Prop :=
   HenselLiftStepGeomSumTarget → StrongSuperWieferichCongruenceV2Target
 
 /--
+StrongSuperWieferich の `castHom` 正規形は prime 文脈で concrete に構成できる。
+
+`R := z / y` を `ZMod (q^p)` で取り、
+`GN = y^(p-1) * ∑ R^i` と `q^p ∣ GN` から `Φ_p(R)=0 mod q^p` を得る。
+branch 情報 `R mod q = ω^j` は `QAdicResidue` から供給する。
+-/
+theorem strongSuperWieferichCongruenceV2_concrete : StrongSuperWieferichCongruenceV2Target := by
+  intro p x y z hPack gap hgap q hq hq_ne_p hqpow_dvd_GN hq_ndvd_gap hq_coprime_y ω hω hω_ne
+  have hp_pos : 0 < p := hPack.hp.pos
+  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  have hqpow : q ∣ q ^ p := by
+    exact dvd_pow_self q hp_pos.ne'
+  have hq_dvd_GN : q ∣ GN p gap y := dvd_trans hqpow hqpow_dvd_GN
+  obtain ⟨j, hjpos, hz_mod_q⟩ :=
+    qAdicResidue hPack hgap hq hq_ne_p hq_dvd_GN hq_ndvd_gap hq_coprime_y ω hω hω_ne
+  have hy_ne_q : (y : ZMod q) ≠ 0 := by
+    intro h
+    have h1 : q ∣ 1 := hq_coprime_y ▸ Nat.dvd_gcd dvd_rfl ((ZMod.natCast_eq_zero_iff y q).mp h)
+    have h2 : q ≤ 1 := Nat.le_of_dvd one_pos h1
+    exact absurd hq.one_lt (by omega)
+  have hy_coprime_qpow : Nat.Coprime y (q ^ p) := by
+    exact (Nat.coprime_pow_right_iff hp_pos y q).2 (Nat.Coprime.symm hq_coprime_y)
+  have hy_unit : IsUnit (y : ZMod (q ^ p)) :=
+    (ZMod.isUnit_iff_coprime y (q ^ p)).2 hy_coprime_qpow
+  rcases hy_unit with ⟨u, hu⟩
+  let R : ZMod (q ^ p) := (z : ZMod (q ^ p)) * ↑u⁻¹
+  have hzRy : (z : ZMod (q ^ p)) = R * (y : ZMod (q ^ p)) := by
+    calc
+      (z : ZMod (q ^ p)) = (z : ZMod (q ^ p)) * (↑u⁻¹ * ↑u) := by simp
+      _ = ((z : ZMod (q ^ p)) * ↑u⁻¹) * ↑u := by rw [mul_assoc]
+      _ = R * (y : ZMod (q ^ p)) := by simp [R, hu]
+  have hzRy_q :
+      (z : ZMod q) = (ZMod.castHom hqpow (ZMod q)) R * (y : ZMod q) := by
+    simpa [R, map_mul] using congrArg (ZMod.castHom hqpow (ZMod q)) hzRy
+  have hmodq : (ZMod.castHom hqpow (ZMod q)) R = ω ^ j.val := by
+    apply mul_right_cancel₀ hy_ne_q
+    calc
+      (ZMod.castHom hqpow (ZMod q)) R * (y : ZMod q) = (z : ZMod q) := hzRy_q.symm
+      _ = ω ^ j.val * (y : ZMod q) := hz_mod_q
+  have hGeomNat : GN p gap y = ∑ i ∈ Finset.range p, z ^ i * y ^ (p - 1 - i) := by
+    simpa [hgap] using gnGeomSum₂Representation (p := p) (z := z) (y := y) hp_pos hPack.hyz_lt
+  have hGN_zero : ((GN p gap y : ℕ) : ZMod (q ^ p)) = 0 := by
+    exact (ZMod.natCast_eq_zero_iff (GN p gap y) (q ^ p)).2 hqpow_dvd_GN
+  have hGeomZero :
+      (∑ i ∈ Finset.range p, ((z ^ i * y ^ (p - 1 - i) : ℕ) : ZMod (q ^ p))) = 0 := by
+    calc
+      (∑ i ∈ Finset.range p, ((z ^ i * y ^ (p - 1 - i) : ℕ) : ZMod (q ^ p)))
+        = (((∑ i ∈ Finset.range p, z ^ i * y ^ (p - 1 - i) : ℕ)) : ZMod (q ^ p)) := by
+            simp [Nat.cast_mul, Nat.cast_pow]
+      _ = ((GN p gap y : ℕ) : ZMod (q ^ p)) := by rw [hGeomNat]
+      _ = 0 := hGN_zero
+  have hGeomFactor :
+      (∑ i ∈ Finset.range p, ((z ^ i * y ^ (p - 1 - i) : ℕ) : ZMod (q ^ p)))
+        = (∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i) * (y : ZMod (q ^ p)) ^ (p - 1) := by
+    calc
+      (∑ i ∈ Finset.range p, ((z ^ i * y ^ (p - 1 - i) : ℕ) : ZMod (q ^ p)))
+          = ∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i * (y : ZMod (q ^ p)) ^ (p - 1) := by
+              refine Finset.sum_congr rfl ?_
+              intro i hi
+              have hi_le : i ≤ p - 1 := Nat.le_pred_of_lt (Finset.mem_range.mp hi)
+              calc
+                (((z ^ i * y ^ (p - 1 - i) : ℕ) : ZMod (q ^ p)))
+                    = (z : ZMod (q ^ p)) ^ i * (y : ZMod (q ^ p)) ^ (p - 1 - i) := by
+                        simp [Nat.cast_mul, Nat.cast_pow]
+                _ = (R * (y : ZMod (q ^ p))) ^ i * (y : ZMod (q ^ p)) ^ (p - 1 - i) := by rw [hzRy]
+                _ = ((R : ZMod (q ^ p)) ^ i * (y : ZMod (q ^ p)) ^ i) * (y : ZMod (q ^ p)) ^ (p - 1 - i) := by
+                      rw [mul_pow]
+                _ = (R : ZMod (q ^ p)) ^ i * ((y : ZMod (q ^ p)) ^ i * (y : ZMod (q ^ p)) ^ (p - 1 - i)) := by ring
+                _ = (R : ZMod (q ^ p)) ^ i * (y : ZMod (q ^ p)) ^ (p - 1) := by
+                      rw [← pow_add, Nat.add_sub_of_le hi_le]
+      _ = (∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i) * (y : ZMod (q ^ p)) ^ (p - 1) := by
+            rw [← Finset.sum_mul]
+  have hphi : ∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i = 0 := by
+    have hprod_zero :
+        (∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i) * (y : ZMod (q ^ p)) ^ (p - 1) = 0 := by
+      rw [← hGeomFactor]
+      exact hGeomZero
+    have hprod_zero' :
+        (∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i) * ↑(u ^ (p - 1)) = 0 := by
+      simpa [hu] using hprod_zero
+    exact (Units.mul_left_eq_zero (u ^ (p - 1))).1 hprod_zero'
+  exact ⟨j, hjpos, hqpow, R, hmodq, hphi, hzRy⟩
+
+/--
+FLT 側の provider target は concrete に満たされる。
+
+現時点では one-step 入力を明示的に使わずとも、
+`QAdicResidue` と `GN` の geom_sum 表現から直接 Strong 版を構成できる。
+-/
+theorem strongSuperWieferichProvider_concrete : StrongSuperWieferichProviderTarget := by
+  intro _hGeom
+  exact strongSuperWieferichCongruenceV2_concrete
+
+/--
 **GNReducedGap の q-adic 等価形**: x'^p + y^p が完全 p 乗。
 
 GNReducedGap を z' の存在問題として再定式化:

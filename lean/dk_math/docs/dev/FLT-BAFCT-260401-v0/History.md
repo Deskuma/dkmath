@@ -1858,3 +1858,30 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
 6. 次の課題:
    - `StrongSuperWieferichProviderTarget` への clean bridge 設計
    - 必要なら one-step の反復補題を整備して `q^p` レベルまでの provider を concrete 化
+
+### 追記: 2026/04/04 04:40:22 JST StrongSuperWieferich provider concrete 化
+
+1. 目的:
+   - `StrongSuperWieferichProviderTarget` への clean bridge を実装し、
+     prime 文脈 one-step chain を FLT 本線の provider 語彙へ昇格する
+2. 実施:
+   - `strongSuperWieferichCongruenceV2_concrete` を実装
+     (`QAdicResidue` + `GN` の geom_sum₂ 表現 + `y` の unit 性から
+      `R := z / y` を `ZMod (q^p)` で構成し、
+      branch preserving と `Φ_p(R)=0 mod q^p` を同時に証明)
+   - `strongSuperWieferichProvider_concrete` を追加
+     （provider target を direct concrete で充足）
+   - テストに `#print axioms` を追加
+3. 結論:
+   - `StrongSuperWieferichProviderTarget` は concrete に閉じた ✅
+   - 想定していた one-step 反復補題は、この段階では不要だった
+   - Level 1s の FLT 本線への接続は provider 語彙まで到達
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - `q ∣ q^p` witness と cast-sum 書き換えで Lean が素直に簡約せず一時停止
+   - `dvd_pow_self` と cast-of-sum の明示変形で解消
+6. 次の課題:
+   - Level 1s を open と書いているコメント/設計メモの更新
+   - `QAdicDescentExistenceTarget` 以降の Level 2 主戦場へ集中
