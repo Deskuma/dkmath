@@ -17,6 +17,23 @@ Archive
 
 ※コミット時間がより正確であり、異なる場合は、コミット時間を優先とする。
 
+## Template
+
+### 日時: `タイムスタンプ date コマンドを使用して年月日時分まで` JST (template)
+
+1. 目的:
+   - （内容）
+2. 実施:
+   - （内容）
+3. 結論:
+   - （内容）
+4. 検証:
+   - （内容）
+5. 失敗事例:
+   - （内容）
+6. 次の課題:
+   - （内容）
+
 ### 日時: 2026/04/01 12:12 JST
 
 1. 目的:
@@ -1558,19 +1575,27 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
    - `F(T)=∑T^i` の一次補正 `F(R+q^n c)` の専用補題を追加し、
      one-step kernel を実際に閉じる
 
-## Template
-
-### 日時: `タイムスタンプ date コマンドを使用して年月日時分まで` JST (template)
+### 追記: 2026/04/03 19:41:43 JST correction target 具体化
 
 1. 目的:
-   - （内容）
+   - `HenselLiftStepCorrectionTarget` の concrete proof に向けて、
+     心臓部（Δ補正）を実装可能な橋定理へ落とす
 2. 実施:
-   - （内容）
+   - `HenselLiftStepZeroLiftTarget` を追加:
+     「幾何和ゼロを満たす持ち上げそのものの存在」を one-step 目標化
+   - `henselLiftStepCorrection_of_zeroLift` を証明:
+     `Δ := Rlift - Rn1` で補正 target を構成
+   - `henselLiftStepArithmeticKernel_of_zeroLift` を証明:
+     zero-lift target から arithmetic kernel を直接供給
 3. 結論:
-   - （内容）
+   - correction 本丸は
+     `ZeroLift existence` ⇒ `Δ correction` ⇒ `ArithmeticKernel`
+     という concrete な一本道に整理された ✅
 4. 検証:
-   - （内容）
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
 5. 失敗事例:
-   - （内容）
+   - `castHom` の減法像で `simp` が閉じず、`map_sub` を明示して解決
+   - 宣言順依存で参照エラーが出たため、`of_zeroLift` 定理を後置して解消
 6. 次の課題:
-   - （内容）
+   - `HenselLiftStepZeroLiftTarget` の concrete 証明（specialized Newton/Hensel 補題）
+   - `F(T)=∑T^i` の一次補正公式を Lean 補題として追加

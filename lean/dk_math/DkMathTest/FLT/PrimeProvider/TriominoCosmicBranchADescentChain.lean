@@ -35,3 +35,5 @@ set_option linter.style.longLine false
 -- OK: 2026/04/03 19:19
 -- 'DkMath.FLT.henselLiftStepArithmeticKernel_of_correction'
 -- depends on axioms: [propext, Classical.choice, Quot.sound]
+#print axioms DkMath.FLT.henselLiftStepCorrection_of_zeroLift  -- OK
+#print axioms DkMath.FLT.henselLiftStepArithmeticKernel_of_zeroLift  -- OK

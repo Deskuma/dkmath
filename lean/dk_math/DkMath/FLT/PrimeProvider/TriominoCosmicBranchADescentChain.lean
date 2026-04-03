@@ -1504,6 +1504,39 @@ abbrev HenselLiftStepCorrectionTarget : Prop :=
           (∑ i ∈ Finset.range p, ((Rn1 + Δ : ZMod (q ^ (n + 1)))) ^ i = 0)
 
 /--
+one-step で「幾何和ゼロの持ち上げ自体」が得られることを表す target。
+
+これは `Δ` 補正前の基準点 `Rn1` に依存しない形の existence であり、
+通常の Hensel 叙述（root lift の存在）に対応する。
+-/
+abbrev HenselLiftStepZeroLiftTarget : Prop :=
+  ∀ {p q n : ℕ}, Nat.Prime q → 1 ≤ n →
+    ∀ (Rn : ZMod (q ^ n)),
+      (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+      ∀ (hdiv : q ^ n ∣ q ^ (n + 1)),
+        ∃ (Rlift : ZMod (q ^ (n + 1))),
+          ((ZMod.castHom hdiv (ZMod (q ^ n))) Rlift = Rn) ∧
+          (∑ i ∈ Finset.range p, (Rlift : ZMod (q ^ (n + 1))) ^ i = 0)
+
+/--
+零点持ち上げが存在すれば、任意の初期持ち上げ `Rn1` から `Δ` 補正で到達できる。
+-/
+theorem henselLiftStepCorrection_of_zeroLift
+    (hLift : HenselLiftStepZeroLiftTarget) :
+    HenselLiftStepCorrectionTarget := by
+  intro p q n hq hn Rn hsum hdiv Rn1 hcast
+  rcases hLift hq hn Rn hsum hdiv with ⟨Rlift, hcast_lift, hphi_lift⟩
+  refine ⟨Rlift - Rn1, ?_, ?_⟩
+  · calc
+      (ZMod.castHom hdiv (ZMod (q ^ n))) (Rlift - Rn1)
+          = (ZMod.castHom hdiv (ZMod (q ^ n))) Rlift
+            - (ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 := by
+              simpa using (ZMod.castHom hdiv (ZMod (q ^ n))).map_sub Rlift Rn1
+      _ = Rn - Rn := by simp [hcast_lift, hcast]
+      _ = 0 := by simp
+  · simpa [sub_eq_add_neg, add_assoc, add_left_comm, add_comm] using hphi_lift
+
+/--
 補正項 `Δ` が構成できれば ArithmeticKernel は従う。
 
 よって one-step 本丸は `HenselLiftStepCorrectionTarget` の実装に帰着する。
@@ -1521,6 +1554,15 @@ theorem henselLiftStepArithmeticKernel_of_correction
           + (ZMod.castHom hdiv (ZMod (q ^ n))) Δ := hmap_add
     _ = Rn + 0 := by simp [hcast, hΔ0]
     _ = Rn := by simp
+
+/--
+零点持ち上げ target から arithmetic kernel を直接供給する。
+-/
+theorem henselLiftStepArithmeticKernel_of_zeroLift
+    (hLift : HenselLiftStepZeroLiftTarget) :
+    HenselLiftStepArithmeticKernelTarget :=
+  henselLiftStepArithmeticKernel_of_correction
+    (henselLiftStepCorrection_of_zeroLift hLift)
 
 /--
 構造 one-step は `ZMod.castHom_surjective` から concrete に得られる。
