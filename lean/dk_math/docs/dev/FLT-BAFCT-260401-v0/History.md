@@ -1388,6 +1388,26 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
 | `nonLiftableGNBridge_iff_branchBRefuter` | 等価性 iff | ✅ |
 | `FLTPrimeGe5Target_of_2kernels_with_branchB` | 2-kernel + BranchB → FLT | ✅ |
 
+### 追記: 2026/04/03 16:53 JST
+
+1. 目的:
+   - `TriominoCosmicBranchADescentChain.lean` における GNReducedGap / QAdicResidue の証明進捗を記録
+   - 既存の sorry 3個を削減し、最終的に 1個にまで絞り込む
+2. 実施:
+   - `gnGeomSum₂Representation` を完全証明（Cosmic Formula + Mathlib geom_sum₂）の形で実装
+   - `geomSum_zero_imp_pow_eq_one` を新規定理として追加し、ZMod q 上の和と p 乗根を解析
+   - `qAdicResidue` を証明スケルトンで実装し、具体的な依存は `pow_eq_one_imp_eq_omega_pow` のみとする
+   - 単数群 / Kummer coset の数値実験を `tmp/kummer_unit_coset_analysis.py` で実施
+3. 結論:
+   - `TriominoCosmicBranchADescentChain` ビルド成功
+   - `sorry` に残るのは `pow_eq_one_imp_eq_omega_pow` 1件のみ
+4. 検証:
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - 走査: `q=11,31,41` で単数余弦コセットが全体群をカバー
+5. 次の課題:
+   - `pow_eq_one_imp_eq_omega_pow` の proof を `rootsOfUnity.isCyclic` を使って完成
+   - GNReducedGap→QAdicGapReduction→PthRoot chain の理論完結
+
 ### 日時: `タイムスタンプ date コマンドを使用して年月日時分まで` JST (template)
 
 1. 目的:

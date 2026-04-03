@@ -1177,6 +1177,68 @@ theorem gnGeomSum₂Representation : GNGeomSum₂RepresentationTarget := by
   -- (4) ∑·(z-y) = (z-y)·∑ by mul_comm, then cancel (z-y) ≠ 0
   exact mul_left_cancel₀ (by omega) (h_eq.trans (mul_comm _ _))
 
+/-!
+### §22. QAdicResidue の証明
+
+**定理**: FLT 反例文脈で q primitive prime のとき z/y は ZMod q 上で
+ω^j (nontrivial p-th root of unity) である。
+
+**証明戦略**:
+1. GN = ∑ z^i · y^{p-1-i} (gnGeomSum₂Representation)
+2. q | GN → ∑ z^i · y^{p-1-i} ≡ 0 (mod q)
+3. y ≢ 0 (mod q) → y invertible → ∑ (z/y)^i = 0
+4. z/y = 1 → sum = p ≠ 0 (since q ≠ p) → contradiction → z/y ≠ 1
+5. (z/y - 1) · ∑ = (z/y)^p - 1 = 0 → (z/y)^p = 1
+6. z/y ∈ {ω^j | j=0,...,p-1} (p-th roots of unity)
+7. z/y ≠ 1 → z/y = ω^j for some j > 0
+
+各ステップは ZMod q = GF(q) 上の有限体算術。
+-/
+
+/--
+**補助定理**: ZMod q 上で幾何和が0 ⟹ 比は p 乗根。
+
+有限体 F_q 上で `∑_{i=0}^{p-1} r^i = 0` かつ `(p : F_q) ≠ 0` ならば
+`r ≠ 1` かつ `r^p = 1`。
+-/
+theorem geomSum_zero_imp_pow_eq_one
+    {q p : ℕ} [Fact (Nat.Prime q)] (r : ZMod q)
+    (_hp_pos : 0 < p)
+    (hp_ne_zero : (p : ZMod q) ≠ 0)
+    (h_sum : ∑ i ∈ Finset.range p, r ^ i = 0) :
+    r ≠ 1 ∧ r ^ p = 1 := by
+  constructor
+  · -- r = 1 → sum = p ≠ 0, contradiction
+    intro hr
+    rw [hr] at h_sum
+    simp only [one_pow] at h_sum
+    rw [Finset.sum_const, Finset.card_range, nsmul_eq_mul, mul_one] at h_sum
+    exact hp_ne_zero h_sum
+  · -- geom_sum_mul: (∑ r^i) * (r - 1) = r^p - 1
+    -- sum = 0 なので 0 * (r-1) = r^p - 1, つまり r^p = 1
+    have h_id := geom_sum_mul r p
+    rw [h_sum, zero_mul] at h_id
+    exact sub_eq_zero.mp h_id.symm
+
+/--
+**補助定理**: p 乗根が ω^j の形。
+
+ZMod q 上で `r^p = 1`, `ω^p = 1`, `ω ≠ 1` (ω は位数 p),
+`Nat.Prime p` ならば r = ω^j for some j ∈ Fin p。
+-/
+theorem pow_eq_one_imp_eq_omega_pow
+    {q : ℕ} [Fact (Nat.Prime q)] {p : ℕ} (hp : Nat.Prime p)
+    (r ω : ZMod q) (hω_pow : ω ^ p = 1) (hω_ne : ω ≠ 1)
+    (hr_pow : r ^ p = 1) :
+    ∃ j : Fin p, r = ω ^ j.val := by
+  -- r^p = 1 → r is a root of X^p - 1
+  -- ω^p = 1, ω ≠ 1 → ω has order exactly p (since p is prime)
+  -- The p-th roots of unity {1, ω, ω², ..., ω^{p-1}} are all roots of X^p - 1
+  -- In a field, X^p - 1 has at most p roots
+  -- So the roots are exactly {ω^j | j = 0,...,p-1}
+  -- Hence r = ω^j for some j
+  sorry
+
 /--
 **QAdicResidue**: z ≡ ω^j · y (mod q) の形式化。
 
@@ -1196,6 +1258,80 @@ abbrev QAdicResidueTarget : Prop :=
       ∀ (ω : ZMod q), ω ^ p = 1 → ω ≠ 1 →
         ∃ j : Fin p, 0 < j.val ∧
           (z : ZMod q) = ω ^ j.val * (y : ZMod q)
+
+/--
+QAdicResidue の証明。
+
+直接的アプローチ: x^p + y^p = z^p, q | x → z^p ≡ y^p (mod q)。
+geom_sum₂ representation は不要。
+
+1. q | x (from gap·GN=x^p, q|GN, q∤gap, q prime)
+2. z^p = y^p in ZMod q (from x^p + y^p = z^p, (x : ZMod q) = 0)
+3. z ≠ y in ZMod q (from q ∤ (z-y))
+4. r := z·y⁻¹, r^p = z^p·(y^p)⁻¹ = y^p·(y^p)⁻¹ = 1
+5. r ≠ 1 (from z ≠ y)
+6. r = ω^j (pow_eq_one_imp_eq_omega_pow)→ j > 0 since r ≠ 1
+7. z = ω^j · y
+-/
+theorem qAdicResidue : QAdicResidueTarget := by
+  intro p x y z hPack gap hgap q hq_prime hq_ne_p hq_dvd_GN hq_ndvd_gap hq_coprime_y ω hω_pow hω_ne_one
+  haveI : Fact (Nat.Prime q) := Fact.mk hq_prime
+  -- (y : ZMod q) ≠ 0 (from coprimality with q)
+  have hy_ne : (y : ZMod q) ≠ 0 := by
+    intro h
+    have h1 : q ∣ 1 := hq_coprime_y ▸ Nat.dvd_gcd dvd_rfl ((ZMod.natCast_eq_zero_iff y q).mp h)
+    have h2 : q ≤ 1 := Nat.le_of_dvd one_pos h1
+    exact absurd hq_prime.one_lt (by omega)
+  -- Step 1: q | x (from gap * GN = x^p, q | GN, q ∤ gap, q prime)
+  have hq_dvd_x : q ∣ x := by
+    have h_xp := hPack.xpow_eq_gap_mul_GN -- x^p = gap * GN
+    rw [show hPack.gap = z - y from rfl, ← hgap] at h_xp
+    exact hq_prime.dvd_of_dvd_pow (h_xp ▸ dvd_mul_of_dvd_right hq_dvd_GN gap)
+  -- Step 2: (z : ZMod q)^p = (y : ZMod q)^p
+  have hzp_eq_yp : (z : ZMod q) ^ p = (y : ZMod q) ^ p := by
+    have hx_zero : (x : ZMod q) = 0 :=
+      (ZMod.natCast_eq_zero_iff x q).mpr hq_dvd_x
+    have : (x : ZMod q) ^ p + (y : ZMod q) ^ p = (z : ZMod q) ^ p := by
+      have hEq := hPack.hEq -- x^p + y^p = z^p
+      have := congr_arg (Nat.cast : ℕ → ZMod q) hEq
+      simp only [Nat.cast_add, Nat.cast_pow] at this
+      exact this
+    rw [hx_zero, zero_pow hPack.hp.ne_zero, zero_add] at this
+    exact this.symm
+  -- Step 3: z ≢ y (mod q) (from q ∤ (z - y))
+  have hz_ne_y : (z : ZMod q) ≠ (y : ZMod q) := by
+    intro h
+    rw [hgap] at hq_ndvd_gap
+    apply hq_ndvd_gap
+    have : ((z - y : ℕ) : ZMod q) = 0 := by
+      rw [Nat.cast_sub (Nat.le_of_lt hPack.hyz_lt)]
+      exact sub_eq_zero_of_eq h
+    exact (ZMod.natCast_eq_zero_iff _ q).mp this
+  -- Step 4: r := z · y⁻¹ satisfies r^p = 1
+  set r := (z : ZMod q) * (y : ZMod q)⁻¹ with hr_def
+  have hr_pow : r ^ p = 1 := by
+    rw [hr_def, mul_pow, inv_pow, hzp_eq_yp, mul_inv_cancel₀ (pow_ne_zero p hy_ne)]
+  -- Step 5: r ≠ 1 (from z ≠ y)
+  have hr_ne_one : r ≠ 1 := by
+    intro h
+    apply hz_ne_y
+    have : (z : ZMod q) * (y : ZMod q)⁻¹ = 1 := h
+    rwa [mul_inv_eq_one₀ hy_ne] at this
+  -- Step 6: r = ω^j for some j (finite field root structure)
+  obtain ⟨j, hj⟩ := pow_eq_one_imp_eq_omega_pow hPack.hp r ω hω_pow hω_ne_one hr_pow
+  -- Step 7: j > 0 (since r ≠ 1 = ω^0)
+  have hj_pos : 0 < j.val := by
+    by_contra h
+    push_neg at h
+    have : j.val = 0 := by omega
+    rw [this, pow_zero] at hj
+    exact hr_ne_one hj
+  -- Conclusion: z = ω^j · y
+  refine ⟨j, hj_pos, ?_⟩
+  -- r = ω^j → z · y⁻¹ = ω^j → z = ω^j · y
+  have := hj -- r = ω^j
+  rw [hr_def] at this
+  rwa [mul_inv_eq_iff_eq_mul₀ hy_ne] at this
 
 /--
 **SuperWieferichCongruence**: z ≡ R_j · y (mod q^p) の形式化。
