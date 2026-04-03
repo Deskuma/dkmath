@@ -1457,6 +1457,33 @@ abbrev GeomSumFirstOrderSqZeroTarget : Prop :=
           + (∑ i ∈ Finset.range p, ((i : ZMod m) * R ^ (i - 1))) * Δ
 
 /--
+`GeomSumFirstOrderSqZeroTarget` の concrete 実装。
+
+`P(X)=∑_{i=0}^{p-1}X^i` に対して
+`Polynomial.eval_add_of_sq_eq_zero` を適用し、
+`P'(X)=∑ i*X^(i-1)` を展開して得る。
+-/
+theorem geomSumFirstOrderSqZero_concrete : GeomSumFirstOrderSqZeroTarget := by
+  intro m p R Δ hΔ2
+  let P : Polynomial (ZMod m) :=
+    ∑ i ∈ Finset.range p, (Polynomial.X : Polynomial (ZMod m)) ^ i
+  have hlin := Polynomial.eval_add_of_sq_eq_zero P R Δ hΔ2
+  have hderiv :
+      Polynomial.eval R
+        (∑ x ∈ Finset.range p, Polynomial.derivative ((Polynomial.X : Polynomial (ZMod m)) ^ x))
+      = ∑ i ∈ Finset.range p, ((i : ZMod m) * R ^ (i - 1)) := by
+    simp [Polynomial.derivative_X_pow, Polynomial.eval_finset_sum]
+  calc
+    (∑ i ∈ Finset.range p, (R + Δ) ^ i)
+        = (∑ i ∈ Finset.range p, R ^ i)
+            + Polynomial.eval R
+                (∑ x ∈ Finset.range p, Polynomial.derivative ((Polynomial.X : Polynomial (ZMod m)) ^ x)) * Δ := by
+                  simpa [P] using hlin
+    _ = (∑ i ∈ Finset.range p, R ^ i)
+          + (∑ i ∈ Finset.range p, ((i : ZMod m) * R ^ (i - 1))) * Δ := by
+            rw [hderiv]
+
+/--
 `Δ = q^n * c`（mod `q^(n+1)`）では `Δ^2 = 0`。
 -/
 theorem qpow_mul_sq_eq_zero_in_next_mod
@@ -1507,6 +1534,16 @@ theorem geomSum_first_order_qpow_correction
             * ((q ^ n : ZMod (q ^ (n + 1))) * c) := by
   apply hFirstOrder
   exact qpow_mul_sq_eq_zero_in_next_mod hn c
+
+/-- 一次補正公式の concrete 版。 -/
+theorem geomSum_first_order_qpow_correction_concrete
+    {p q n : ℕ} (hn : 1 ≤ n) (R c : ZMod (q ^ (n + 1))) :
+    (∑ i ∈ Finset.range p, (R + (q ^ n : ZMod (q ^ (n + 1))) * c) ^ i)
+      = (∑ i ∈ Finset.range p, R ^ i)
+        + (∑ i ∈ Finset.range p,
+            ((i : ZMod (q ^ (n + 1))) * R ^ (i - 1)))
+            * ((q ^ n : ZMod (q ^ (n + 1))) * c) :=
+  geomSum_first_order_qpow_correction geomSumFirstOrderSqZero_concrete hn R c
 
 /--
 Newton 補正（`Δ = q^n * c`）を直接要求する one-step target。

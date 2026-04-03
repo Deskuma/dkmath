@@ -1671,3 +1671,28 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
    - `GeomSumFirstOrderSqZeroTarget` の concrete 証明
    - そこから `HenselLiftStepNewtonCorrectionTarget` を concrete 化し、
      `HenselLiftStepZeroLiftTarget` へ進む
+
+### 追記: 2026/04/03 22:51:52 JST SqZero 具体化達成
+
+1. 目的:
+   - `GeomSumFirstOrderSqZeroTarget` を concrete に閉じ、
+     Newton 補正の一次公式を実際に使える状態へ進める
+2. 実施:
+   - `geomSumFirstOrderSqZero_concrete` を実装
+     (`Polynomial.eval_add_of_sq_eq_zero` + `derivative_X_pow` 展開)
+   - `geomSum_first_order_qpow_correction_concrete` を追加し、
+     SqZero concrete から `q^n*c` 版一次補正公式を即導出
+   - `DkMathTest/.../TriominoCosmicBranchADescentChain.lean` に
+     新定理の `#print axioms` チェックを追加
+3. 結論:
+   - one-step の主 open だった `GeomSumFirstOrderSqZeroTarget` は concrete 化完了 ✅
+   - 一次補正公式チェーンが concrete で接続された
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - `castHom_qpow_mul_eq_zero` で `cast`/`natCast` coercion が不安定
+   - `map_pow` + `cast_natCast` + `natCast_pow_eq_zero_of_le` で安定化
+6. 次の課題:
+   - `HenselLiftStepNewtonCorrectionTarget` の concrete 証明
+   - そこから `HenselLiftStepZeroLiftTarget` を concrete 化し、Level 1s を閉じる
