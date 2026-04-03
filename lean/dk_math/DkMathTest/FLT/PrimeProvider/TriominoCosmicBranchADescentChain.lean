@@ -37,3 +37,4 @@ set_option linter.style.longLine false
 -- depends on axioms: [propext, Classical.choice, Quot.sound]
 #print axioms DkMath.FLT.henselLiftStepCorrection_of_zeroLift  -- OK
 #print axioms DkMath.FLT.henselLiftStepArithmeticKernel_of_zeroLift  -- OK
+#print axioms DkMath.FLT.henselLiftStepGeomSum_of_zeroLift  -- OK

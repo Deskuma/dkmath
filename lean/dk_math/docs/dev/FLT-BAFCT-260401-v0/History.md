@@ -34,6 +34,29 @@ Archive
 6. 次の課題:
    - （内容）
 
+### 追記: 2026/04/03 20:06:59 JST zero-lift 条件精密化
+
+1. 目的:
+   - `HenselLiftStepZeroLiftTarget` を数学的に正しい仮定へ精密化し、
+     one-step への直結ブリッジを追加する
+2. 実施:
+   - `ZeroLift` / `Correction` / `ArithmeticKernel` / `GeomSum` の one-step 系 target に
+     `q ≠ p` 仮定を導入（q=p 反例を排除）
+   - `henselLiftStepGeomSum_of_zeroLift` を追加:
+     `ZeroLiftTarget` から one-step target を直接供給
+   - `henselLiftStepCorrection_of_zeroLift` の補正同値変形を安定化
+3. 結論:
+   - one-step 系の仮定が現実の Hensel 条件に整合し、
+     `ZeroLift` を中心にした供給線がより堅牢になった ✅
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - `simp/simpa` と `calc` の組み合わせで構文エラーが発生
+   - `map_sub` の明示 + `simpa using` で解消
+6. 次の課題:
+   - `HenselLiftStepZeroLiftTarget` の concrete 証明（specialized Newton step）
+   - 一次補正公式 `F(R+q^n c)` を Lean 補題化して zero-lift を閉じる
+
 ### 日時: 2026/04/01 12:12 JST
 
 1. 目的:
