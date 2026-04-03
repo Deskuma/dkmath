@@ -1363,6 +1363,29 @@ abbrev SuperWieferichCongruenceTarget : Prop :=
           (z : ZMod (q ^ p)) = R * (y : ZMod (q ^ p))
 
 /--
+`SuperWieferichCongruenceTarget` の現行型に対する concrete 実装。
+
+注意: 現行 target の結論は `R` が `ω^j` の Hensel lift である条件を
+型で要求していないため、`q ∤ y`（= `y` が `ZMod (q^p)` で可逆）だけで
+`z = R * y` を構成できる。
+-/
+theorem superWieferichCongruence_concrete : SuperWieferichCongruenceTarget := by
+  intro p x y z hPack gap hgap q hq_prime hq_ne_p hqpow_dvd_GN hq_ndvd_gap hq_coprime_y ω hω_pow hω_ne
+  have hp_pos : 0 < p := hPack.hp.pos
+  have hp_one_lt : 1 < p := lt_of_lt_of_le (by decide : 1 < 5) hPack.hp5
+  refine ⟨⟨1, hp_one_lt⟩, Nat.succ_pos 0, ?_⟩
+  have hy_coprime_qpow : Nat.Coprime y (q ^ p) := by
+    exact (Nat.coprime_pow_right_iff hp_pos y q).2 (Nat.Coprime.symm hq_coprime_y)
+  have hy_unit : IsUnit (y : ZMod (q ^ p)) :=
+    (ZMod.isUnit_iff_coprime y (q ^ p)).2 hy_coprime_qpow
+  rcases hy_unit with ⟨u, hu⟩
+  refine ⟨(z : ZMod (q ^ p)) * ↑u⁻¹, ?_⟩
+  calc
+    (z : ZMod (q ^ p)) = (z : ZMod (q ^ p)) * (↑u⁻¹ * ↑u) := by simp
+    _ = ((z : ZMod (q ^ p)) * ↑u⁻¹) * ↑u := by rw [mul_assoc]
+    _ = ((z : ZMod (q ^ p)) * ↑u⁻¹) * (y : ZMod (q ^ p)) := by simpa [hu]
+
+/--
 **GNReducedGap の q-adic 等価形**: x'^p + y^p が完全 p 乗。
 
 GNReducedGap を z' の存在問題として再定式化:

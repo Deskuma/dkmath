@@ -1444,3 +1444,29 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
    - （内容）
 6. 次の課題:
    - （内容）
+
+### 追記: 2026/04/03 17:51:25 JST review-029 実装
+
+1. 目的:
+   - `SuperWieferichCongruenceTarget` を concrete に攻め落とし、Level 1 の形式化前進を確定する
+   - review-029 の補題マップに沿って、現行 target 型での到達可能性を評価する
+2. 実施:
+   - `TriominoCosmicBranchADescentChain.lean` に
+     `theorem superWieferichCongruence_concrete : SuperWieferichCongruenceTarget` を追加
+   - `Nat.Coprime q y` から `Nat.Coprime y (q^p)` を導出し、
+     `ZMod.isUnit_iff_coprime` で `(y : ZMod (q^p))` の可逆性を確立
+   - 可逆元 `u` を取り `R := z * u⁻¹` と置いて
+     `(z : ZMod (q^p)) = R * (y : ZMod (q^p))` を構成
+3. 結論:
+   - 現行の `SuperWieferichCongruenceTarget` は **no-sorry で concrete 化完了** ✅
+   - `TriominoCosmicBranchADescentChain.lean` は引き続き `sorry = 0`
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - 既知 warning は他ファイル (`ZsigmondyCyclotomicResearch`, `TriominoCosmicBranchA`, `GcdNextResearch`) のみ
+5. 失敗事例:
+   - 初回実装で `omega` 補助証明と `Fin` 側の positivity 証明が詰まり
+   - `lt_of_lt_of_le (1<5) hp5` と `Nat.succ_pos 0` の明示で解消
+6. 次の課題:
+   - target コメントにある「R が ω^j の Hensel lift」の条件を型に昇格し、
+     真の Level 1（Hensel 強化）を定理として分離
+   - `QAdicDescentExistenceTarget` の local-global gap を独立 kernel として sharpen
