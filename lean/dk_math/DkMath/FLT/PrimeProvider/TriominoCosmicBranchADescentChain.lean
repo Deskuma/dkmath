@@ -1665,6 +1665,126 @@ abbrev HenselLiftStepDerivativeNonzeroModQPrimeTarget : Prop :=
           (∑ i ∈ Finset.range p, ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1))) ≠ 0
 
 /--
+`DerivativeNonzeroModQPrimeTarget` の concrete 候補。
+
+`∑ r^i = 0` から `r ≠ 1` かつ `r^p = 1` を得て、
+積の微分恒等式を `ZMod q` で評価して導関数和の非零を示す。
+-/
+theorem henselLiftStepDerivativeNonzeroModQPrime_concrete :
+    HenselLiftStepDerivativeNonzeroModQPrimeTarget := by
+  intro p q n hp hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  let hq_div_qn : q ∣ q ^ n := by
+    rcases n with _ | k
+    · exact (False.elim (Nat.not_succ_le_zero 0 hn))
+    · exact ⟨q ^ k, by simp [pow_succ, Nat.mul_comm]⟩
+  let hq_div_qnp1 : q ∣ q ^ (n + 1) := ⟨q ^ n, by simp [pow_succ, Nat.mul_comm]⟩
+  let r : ZMod q := (ZMod.castHom hq_div_qn (ZMod q)) ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1)
+  have hcast_q : r = (ZMod.castHom hq_div_qn (ZMod q)) Rn := by
+    simp [r, hcast]
+  have hsum_q_Rn :
+      ∑ i ∈ Finset.range p, ((ZMod.castHom hq_div_qn (ZMod q)) Rn) ^ i = 0 := by
+    have := congrArg (ZMod.castHom hq_div_qn (ZMod q)) hsum
+    simpa [map_sum, map_pow] using this
+  have hsum_q : ∑ i ∈ Finset.range p, r ^ i = 0 := by
+    simpa [hcast_q] using hsum_q_Rn
+  have hq_not_dvd_p : ¬ q ∣ p := by
+    intro hqp
+    rcases (Nat.dvd_prime hp).1 hqp with hq1 | hqp_eq
+    · exact hq.ne_one hq1
+    · exact hq_ne_p hqp_eq
+  have hp_ne_zero_q : (p : ZMod q) ≠ 0 := by
+    intro hp0
+    exact hq_not_dvd_p ((ZMod.natCast_eq_zero_iff p q).1 hp0)
+  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  have hroot : r ≠ 1 ∧ r ^ p = 1 :=
+    geomSum_zero_imp_pow_eq_one (q := q) (p := p) r (Nat.pos_of_ne_zero hp.ne_zero) hp_ne_zero_q hsum_q
+  have hr_ne_one : r ≠ 1 := hroot.1
+  have hr_pow_one : r ^ p = 1 := hroot.2
+  let Bq : ZMod q := ∑ i ∈ Finset.range p, ((i : ZMod q) * r ^ (i - 1))
+  have hprod :
+      (∑ i ∈ Finset.range p, ((Polynomial.X : Polynomial (ZMod q)) ^ i))
+        * ((Polynomial.X : Polynomial (ZMod q)) - 1)
+      = (Polynomial.X : Polynomial (ZMod q)) ^ p - 1 := by
+    simpa using (geom_sum_mul (Polynomial.X : Polynomial (ZMod q)) p)
+  have hderiv_eval :
+      Bq * (r - 1) + (∑ i ∈ Finset.range p, r ^ i)
+        = (p : ZMod q) * r ^ (p - 1) := by
+    have hderiv := congrArg Polynomial.derivative hprod
+    have heval := congrArg (Polynomial.eval r) hderiv
+    have hEvalDeriv :
+        Polynomial.eval r
+          (∑ x ∈ Finset.range p, Polynomial.derivative ((Polynomial.X : Polynomial (ZMod q)) ^ x))
+        = Bq := by
+      calc
+        Polynomial.eval r
+            (∑ x ∈ Finset.range p, Polynomial.derivative ((Polynomial.X : Polynomial (ZMod q)) ^ x))
+            = ∑ x ∈ Finset.range p,
+                Polynomial.eval r (Polynomial.derivative ((Polynomial.X : Polynomial (ZMod q)) ^ x)) := by
+                    simpa using
+                      (Polynomial.eval_finset_sum
+                        (s := Finset.range p)
+                        (g := fun x => Polynomial.derivative ((Polynomial.X : Polynomial (ZMod q)) ^ x))
+                        (x := r)
+                      )
+        _ = ∑ x ∈ Finset.range p, ((x : ZMod q) * r ^ (x - 1)) := by
+              refine Finset.sum_congr rfl ?_
+              intro i hi
+              simp [Polynomial.derivative_X_pow]
+        _ = Bq := by rfl
+    have hraw :
+        (r - 1)
+            * Polynomial.eval r
+                (∑ x ∈ Finset.range p, Polynomial.derivative ((Polynomial.X : Polynomial (ZMod q)) ^ x))
+          + (∑ i ∈ Finset.range p, r ^ i)
+          = (p : ZMod q) * r ^ (p - 1) := by
+      simpa [Polynomial.derivative_mul, Polynomial.derivative_sub, Polynomial.derivative_X_pow,
+      Polynomial.eval_add, Polynomial.eval_mul, Polynomial.eval_sub, Polynomial.eval_pow,
+      Polynomial.eval_sum, Polynomial.eval_X, Polynomial.eval_one, Polynomial.eval_natCast,
+      Finset.sum_add_distrib, mul_assoc, mul_comm, mul_left_comm] using heval
+    calc
+      Bq * (r - 1) + (∑ i ∈ Finset.range p, r ^ i)
+          = (r - 1) * Bq + (∑ i ∈ Finset.range p, r ^ i) := by ring
+      _ = (r - 1)
+            * Polynomial.eval r
+                (∑ x ∈ Finset.range p, Polynomial.derivative ((Polynomial.X : Polynomial (ZMod q)) ^ x))
+            + (∑ i ∈ Finset.range p, r ^ i) := by rw [hEvalDeriv]
+      _ = (p : ZMod q) * r ^ (p - 1) := hraw
+  have hr_ne_zero : r ≠ 0 := by
+    intro hr0
+    rw [hr0] at hsum_q
+    have hzero : (∑ i ∈ Finset.range p, (0 : ZMod q) ^ i) = 1 := by
+      simp [hp.ne_zero, (zero_geom_sum (R := ZMod q) (n := p))]
+    exact (by simp [hzero] at hsum_q)
+  have hpow_ne_zero : r ^ (p - 1) ≠ 0 := pow_ne_zero _ hr_ne_zero
+  have hrhs_ne_zero : (p : ZMod q) * r ^ (p - 1) ≠ 0 := mul_ne_zero hp_ne_zero_q hpow_ne_zero
+  have hBq_ne_zero : Bq ≠ 0 := by
+    intro hB0
+    have : (p : ZMod q) * r ^ (p - 1) = 0 := by
+      have hs : ∑ i ∈ Finset.range p, r ^ i = 0 := hsum_q
+      calc
+        (p : ZMod q) * r ^ (p - 1)
+            = Bq * (r - 1) + (∑ i ∈ Finset.range p, r ^ i) := by
+            exact ZMod.valMinAbs_inj.mp (
+              congrArg ZMod.valMinAbs (id (Eq.symm hderiv_eval))
+            )
+        _ = 0 := by simp [hB0, hs]
+    exact hrhs_ne_zero this
+  have hB_cast :
+      (ZMod.castHom hq_div_qnp1 (ZMod q))
+        (∑ i ∈ Finset.range p, ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1)))
+      = Bq := by
+    simp [Bq, r,
+      (show
+        (ZMod.castHom hq_div_qnp1 (ZMod q))
+          (∑ i ∈ Finset.range p, ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1)))
+          =
+        ∑ i ∈ Finset.range p,
+          ((i : ZMod q) * ((ZMod.castHom hq_div_qnp1 (ZMod q)) Rn1) ^ (i - 1)) by
+            simp [map_sum, map_mul, map_pow])]
+  intro hzero
+  exact hBq_ne_zero (hB_cast ▸ hzero)
+
+/--
 `mod q` 非零性 target から derivative-unit prime target を得る。
 -/
 theorem henselLiftStepDerivativeUnitPrime_of_nonzeroModQ
