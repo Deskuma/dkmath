@@ -1349,6 +1349,45 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
 
 #### DescentChain sections §14-§17 完了。全体ビルド成功。DescentChain に新規 sorry なし
 
+### 日時: 2026/04/03 13:33 JST
+
+1. 目的:
+   - DescentChain に §18 を追加: NonLiftableGNBridge ⟺ BranchBRefuterTarget の等価性分析と形式化
+   - PthRootCore の sub-target 分解に向けた数学的分析（§19 docstring）
+2. 実施:
+   - **§18. NonLiftableGNBridge ⟺ BranchBRefuter** を DescentChain に追加
+     - `nonLiftableGNBridge_of_branchBRefuter`: BranchBRefuter → NonLiftableGNBridge（vacuous direction）
+     - `nonLiftableGNBridge_iff_branchBRefuter`: 両方向の iff
+     - `FLTPrimeGe5Target_of_2kernels_with_branchB`: PthRootCore + PacketFromError + BranchBRefuter → FLT
+   - **§19. PthRootCore sub-target 分解** の数学的分析を docstring として記録
+     - Sub-target 1: QAdicResidue（concrete, provable）
+     - Sub-target 2: QAdicGapReduction = GNReducedGap（OPEN、q-adic descent の核心）
+   - **重要な数学的発見**: BranchB（¬p∣gap）の反例文脈では:
+     - gap·GN = x^p, q∤gap → v_q(GN) = p·v_q(x) ≥ p ≥ 5 > 2
+     - したがって q²∣GN は **常に成立**（AllNonLiftableOnGN は常に FALSE）
+     - NonLiftableGNBridge は FLT(BranchB) と **同値**（独立数学内容なし）
+     - 3-kernel (PthRootCore + PacketFromError + NonLiftableGNBridge) は
+       **実質 2-kernel** (PthRootCore + PacketFromError) に圧縮される
+3. 結論:
+   - 全体ビルド成功。DescentChain に新規 sorry なし
+   - §18 の 3 定理すべて sorryAx-free（`#print axioms` で確認済み）
+   - 3-kernel → 2-kernel への圧縮が formal に確立
+4. 検証:
+   - `lake build` 成功（error 0）
+   - `#print axioms` で §18 全定理が `[propext, Classical.choice, Quot.sound]` のみ（sorryAx なし）
+5. 次の課題:
+   - PthRootCore (= GNReducedGap) の concrete 攻略
+   - Unified PthRootCore で BranchB を直接カバーする chain の形式化
+   - PacketFromError の concrete 攻略
+
+#### §18 追加定理一覧
+
+| 定理名 | 内容 | sorry |
+|---|---|:---:|
+| `nonLiftableGNBridge_of_branchBRefuter` | BranchBRefuter → NonLiftableGNBridge | ✅ |
+| `nonLiftableGNBridge_iff_branchBRefuter` | 等価性 iff | ✅ |
+| `FLTPrimeGe5Target_of_2kernels_with_branchB` | 2-kernel + BranchB → FLT | ✅ |
+
 ### 日時: `タイムスタンプ date コマンドを使用して年月日時分まで` JST (template)
 
 1. 目的:

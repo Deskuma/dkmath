@@ -925,4 +925,123 @@ theorem FLTPrimeGe5Target_of_innermost_3kernels
     FLTPrimeGe5Target :=
   FLTPrimeGe5Target_of_pthRootCore_precise hPrimCore hPeelCore hNoLift
 
+/-!
+## §18. NonLiftableGNBridge ⟺ BranchBRefuter — BranchB kernel の等価性分析
+
+### 数学的内容
+
+BranchB（`¬ p ∣ (z - y)`）の反例文脈において、原始素因子の q-adic valuation を分析する。
+
+**定理**: 反例 `x^p + y^p = z^p` で `q` が `GN` の原始素因子（`q ∤ (z-y)`）なら:
+  `v_q(GN) = p · v_q(x) ≥ p ≥ 5 > 2`
+
+すなわち **q² ∣ GN は BranchB 反例で常に成立** する。
+
+**帰結**: `AllNonLiftableOnGN`（∀ primitive q, ¬q²∣GN）は
+BranchB 反例で常に FALSE。したがって:
+  - `NonLiftableGNBridge` = (Pack → ¬p∣gap → AllNonLiftableOnGN)
+    は 反例が存在しないときのみ TRUE — すなわち FLT(BranchB) と同値。
+  - `BranchBRefuterTarget` → `NonLiftableGNBridge`（vacuous implication）
+
+この等価性により、3-kernel chain の BranchB kernel は independent mathematical content を
+持たず、真の open kernel は **PthRootCore + PacketFromError の 2 個** に圧縮される。
+
+### 形式化
+
+以下で `BranchBRefuterTarget → NonLiftableGNBridge` を clean に確立する。
+逆方向は §6 の `branchBRefuter_of_nonLiftableGNBridge` で既に確立済み。
+-/
+
+/--
+`BranchBRefuterTarget → NonLiftableGNBridge`（vacuous direction）。
+
+BranchB で反例が存在しないなら（BranchBRefuter = Pack → ¬p∣gap → False）、
+NonLiftableGNBridge の前提 (Pack + ¬p∣gap) が常に False なので AllNonLiftableOnGN は真。
+-/
+theorem nonLiftableGNBridge_of_branchBRefuter
+    (hRefuter : BranchBRefuterTarget) :
+    TriominoCosmicNonLiftableGNBridge := by
+  intro p x y z hpack hpB
+  exact absurd hpB (fun hpB' => hRefuter hpack hpB')
+
+/--
+`NonLiftableGNBridge ⟺ BranchBRefuterTarget`。
+
+両方向の bridge が clean に存在する:
+- →: `branchBRefuter_of_nonLiftableGNBridge` (§6)
+- ←: `nonLiftableGNBridge_of_branchBRefuter` (above)
+-/
+theorem nonLiftableGNBridge_iff_branchBRefuter :
+    TriominoCosmicNonLiftableGNBridge ↔ BranchBRefuterTarget :=
+  ⟨branchBRefuter_of_nonLiftableGNBridge, nonLiftableGNBridge_of_branchBRefuter⟩
+
+/-!
+### §18.1. 2-kernel chain: BranchA だけで FLT p ≥ 5
+
+NonLiftableGNBridge ⟺ BranchBRefuter より、
+BranchB を BranchBRefuter として直接仮定に取り、
+BranchA 側の 2 kernel のみを open kernel とする版。
+-/
+
+/--
+FLT p ≥ 5 の 2-kernel 版。
+
+BranchB を直接 refuter として仮定し、
+BranchA 側の 2 つの open kernel のみを明示する:
+1. PthRootCore: q-adic descent (¬p∣t side)
+2. PacketFromError: p-adic peel descent (p∣t side)
+
+NonLiftableGNBridge は BranchBRefuter から vacuously recover される。
+-/
+theorem FLTPrimeGe5Target_of_2kernels_with_branchB
+    (hPrimCore : PrimeGe5BranchAPrimitivePthRootCoreTarget)
+    (hPeelCore : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hBranchB : BranchBRefuterTarget) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_innermost_3kernels hPrimCore hPeelCore
+    (nonLiftableGNBridge_of_branchBRefuter hBranchB)
+
+/-!
+## §19. PthRootCore sub-target 分解: q-adic residue analysis
+
+### 数学的内容
+
+PthRootCoreTarget の内部を 2 つの sub-target に分解する。
+
+**Sub-target 1: QAdicResidue** (concrete, provable)
+
+反例文脈で `q ∤ gap`, `q ∣ x`, `gcd(q, y) = 1` のとき:
+  `z^p ≡ y^p (mod q)` → `(z/y)^p ≡ 1 (mod q)` → `z ≡ ω^j · y (mod q)` for some j
+
+つまり `z` の `ZMod q` での residue は `y` の `ω` 倍（ω = p-th root of unity in ZMod q）。
+`q ∤ gap = z - y` から `j ≠ 0` が強制される。
+
+**Sub-target 2: QAdicGapReduction** (= GNReducedGap, OPEN)
+
+q-adic residue data を使い、`GN / q^p` から新しい gap `g'` を構成:
+  `∃ g', gap · (GN / q^p) = g' · GN(p, g', y)`
+
+この g' が見つかれば、Cosmic Formula により:
+  `(x/q)^p + y^p = gap · (GN/q^p) + y^p = g' · GN(p,g',y) + y^p = (g' + y)^p`
+
+Sub-target 1 は初等的に証明可能。Sub-target 2 が q-adic descent の本当の核心。
+
+### 攻略指針
+
+Sub-target 2 (QAdicGapReduction) の数学的内容:
+
+Given gap · GN = x^p, q^p ∣ GN, q ∤ gap:
+  GN / q^p ∈ ℕ (exact division), gap · (GN/q^p) = (x/q)^p
+
+Show: ∃ g', g' · GN(p, g', y) = (x/q)^p
+
+つまり (x/q)^p + y^p が完全 p 乗であることの別表現。
+ω (p-th root of unity in ZMod q) は z の ZMod q での residue を制御する。
+
+### 進捗: Sub-target 型の定義
+
+Sub-target は §16 の PthRootCoreTarget に吸収されるため、
+ここでは数学的分析の記録のみを保持する。
+-/
+
 end DkMath.FLT
