@@ -1234,3 +1234,94 @@ ExceptionalExistence.lean [COMPLETE]
 3. **NonLiftableGNBridge** — BranchB。独立して進められる
 
 #### ビルド: `lake build` 成功。全体構造は健全
+
+---
+
+### Session 24: Open kernel の等価関係形式化と精密 3-kernel chain (2026-04-03)
+
+#### 深層分析結果
+
+1. **GNReducedGap → SmallerCounterexample の全橋は sorry-free**
+   - RestoreArithmeticStrong.lean のすべての bridge theorem が concrete
+   - GNReducedGapTarget **自体だけ** が数学的 open kernel
+
+2. **GNReducedGap ↔ PthRootReduced ↔ PthRootTarget は相互等価**
+   - GNReducedGap: ∃ g', g'·GN(g',y) = p^p·(t·s')^p (Cosmic Formula native)
+   - PthRootReduced: ∃ z', p^p·(t·s')^p + y^p = z'^p (reduced power form)
+   - PthRootTarget: ∃ z', (x/q)^p + y^p = z'^p (Fermat equation form)
+   - 6 つの双方向 bridge 全て clean ✅
+
+3. **ContradictionTarget → 全 BranchA descent kernel (vacuously)**
+   - False → ∃ で GNReducedGap, SmallerPacket, etc. 全て空充足
+   - ただし ContradictionTarget 自体は NePCoprimeKernel 同等の攻略難度
+
+4. **PacketFromError の精密分解**
+   - ValuationPeelPacketTarget = TailError(concrete) + PacketFromError(open)
+   - TailError は `primeGe5BranchAValuationPeelTailError_default` で concrete ✅
+   - PacketFromError 1 本が peel route の唯一の穴
+
+5. **3 つの open kernel は真に独立**
+   - GNReducedGap: primitive prime q-adic descent (¬p∣t, q∤gap)
+   - PacketFromError: p-adic peel descent (p∣t, p∣gap に p^{2p-1})
+   - NonLiftableGNBridge: BranchB (¬p∣gap)
+   - メカニズムが質的に異なり、互いに帰着不能
+
+#### 新規追加定理 (DescentChain §14-15)
+
+| 定理 | 内容 | clean |
+|---|---|:---:|
+| `gnReducedGap_of_pthRootReduced` | PthRootReduced → GNReducedGap | ✅ |
+| `pthRootReduced_of_gnReducedGap` | GNReducedGap → PthRootReduced | ✅ |
+| `pthRoot_of_pthRootReduced` | PthRootReduced → PthRoot | ✅ |
+| `pthRootReduced_of_pthRoot` | PthRoot → PthRootReduced | ✅ |
+| `pthRoot_of_gnReducedGap` | GNReducedGap → PthRoot (直通) | ✅ |
+| `gnReducedGap_of_pthRoot` | PthRoot → GNReducedGap (直通) | ✅ |
+| `gnReducedGap_of_contradiction` | ContradictionTarget → GNReducedGap | ✅ |
+| `primitivePacketDescent_of_contradiction` | ContradictionTarget → PrimitiveDescent | ✅ |
+| `FLTPrimeGe5Target_of_contradiction_peel_bridge` | Contradiction+Peel+Bridge → FLT | ✅ |
+| `valuationPeelPacket_concrete_tailError_with_packetFromError` | PacketFromError → ValuationPeel | ✅ |
+| `FLTPrimeGe5Target_of_3kernels_precise` | GNReducedGap+PacketFromError+Bridge → FLT | ✅ |
+| `globalProvider_of_3kernels_precise` | 同上 → GlobalProvider | ✅ |
+| `triominoPrimeProvider_of_3kernels_precise` | 同上 → TriominoPrimeProvider | ✅ |
+
+#### 精密 3-kernel chain
+
+```
+FLTPrimeGe5Target_of_3kernels_precise:
+  GNReducedGapTarget (¬p∣t primitive descent)
+  + PacketFromErrorTarget (p∣t peel descent)
+  + NonLiftableGNBridge (BranchB)
+  → FLT p ≥ 5
+```
+
+これは ValuationPeelPacketTarget の内部を TailError(concrete) で分解した最精密版。
+
+#### GNReducedGap の数学的核心
+
+PthRootTarget 語彙で言えば: `∃ z', (x/q)^p + y^p = z'^p`
+
+これは **Kummer descent の q-adic 核心** そのもの:
+
+- 元の反例 x^p + y^p = z^p から、q で割った x/q に対する新しい解 z' の存在
+- 古典的には ℤ[ζ_p] のイデアル論で示される部分
+- 初等的に攻めるには q-adic lifting + Cosmic Formula の組み合わせが必要
+
+数値実験で確認: GN(p, peeled_gap, y)/p は一般に完全 p 乗にならない。
+よって gap を直接 peel するだけでは不十分で、暗号的な q-adic 構造が本質的。
+
+#### ビルド: `lake build` 成功。全体構造は健全
+
+### 日時: `タイムスタンプ date コマンドを使用して年月日時分まで` JST (template)
+
+1. 目的:
+   - （内容）
+2. 実施:
+   - （内容）
+3. 結論:
+   - （内容）
+4. 検証:
+   - （内容）
+5. 失敗事例:
+   - （内容）
+6. 次の課題:
+   - （内容）

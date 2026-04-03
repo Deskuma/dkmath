@@ -538,4 +538,165 @@ theorem smallerPacket_of_gnReducedGap_and_peel
   primeGe5BranchASmallerPacket_of_routes
     hPeel (primitivePacketDescent_of_gnReducedGap hGNGap)
 
+/-!
+## §14. Open kernel 等価関係と ContradictionTarget
+
+### 14.1. GNReducedGap ↔ PthRootReduced ↔ PthRoot (双方向 clean bridge)
+
+3 つの target は Lean 上で相互帰着可能であり、数学的に等価。
+語彙の選択に自由度がある:
+- `GNReducedGapTarget`: ∃ g', g'·GN(g',y) = p^p·(t·s')^p — Cosmic Formula native
+- `PthRootReducedTarget`: ∃ z', p^p·(t·s')^p + y^p = z'^p — reduced power form
+- `PthRootTarget`: ∃ z', x'^p + y^p = z'^p  (x' = x/q) — Fermat equation form
+-/
+
+/--
+PthRootReduced → GNReducedGap。z' → g' := z' - y via Cosmic Formula。
+-/
+theorem gnReducedGap_of_pthRootReduced
+    (h : PrimeGe5BranchAPrimitiveRestorePthRootReducedTarget) :
+    PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget :=
+  primeGe5BranchAPrimitiveRestoreGNReducedGap_of_pthRootReduced h
+
+/--
+GNReducedGap → PthRootReduced。g' → z' := g' + y via Cosmic Formula。
+-/
+theorem pthRootReduced_of_gnReducedGap
+    (h : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget) :
+    PrimeGe5BranchAPrimitiveRestorePthRootReducedTarget :=
+  primeGe5BranchAPrimitiveRestorePthRootReduced_of_gnReducedGap h
+
+/--
+PthRoot → PthRootReduced。x' = p·(t·s') の代入で reduced form に変換。
+-/
+theorem pthRootReduced_of_pthRoot
+    (h : PrimeGe5BranchAPrimitiveRestorePthRootTarget) :
+    PrimeGe5BranchAPrimitiveRestorePthRootReducedTarget :=
+  primeGe5BranchAPrimitiveRestorePthRootReduced_of_pthRoot h
+
+/--
+PthRootReduced → PthRoot。reduced form から Fermat equation form へ展開。
+-/
+theorem pthRoot_of_pthRootReduced
+    (h : PrimeGe5BranchAPrimitiveRestorePthRootReducedTarget) :
+    PrimeGe5BranchAPrimitiveRestorePthRootTarget :=
+  primeGe5BranchAPrimitiveRestorePthRoot_of_reduced h
+
+/--
+GNReducedGap → PthRoot（直通）。Cosmic Formula → x' 語彙。
+-/
+theorem pthRoot_of_gnReducedGap
+    (h : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget) :
+    PrimeGe5BranchAPrimitiveRestorePthRootTarget :=
+  primeGe5BranchAPrimitiveRestorePthRoot_of_gnReducedGap h
+
+/--
+PthRoot → GNReducedGap（直通）。x' 語彙 → Cosmic Formula。
+-/
+theorem gnReducedGap_of_pthRoot
+    (h : PrimeGe5BranchAPrimitiveRestorePthRootTarget) :
+    PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget :=
+  gnReducedGap_of_pthRootReduced (pthRootReduced_of_pthRoot h)
+
+/-!
+### 14.2. ContradictionTarget → 全 BranchA descent kernel (vacuously)
+
+ContradictionTarget が落ちれば、GNReducedGap と SmallerPacket が
+vacuously 確定する（False → ∃）。
+さらに、ContradictionTarget は peel/primitive の case split を bypass するため、
+PacketFromError も vacuously 閉じる。
+
+### 14.3. ContradictionTarget + NonLiftableGNBridge → FLT p ≥ 5
+
+これは 2-kernel chain と同等の最短勝ち筋をもう一つ提供する。
+ただし ContradictionTarget は NePCoprimeKernel 同様に
+「BranchA ¬p∣t 内で直接矛盾」を求めるため、攻略難度は高い。
+-/
+
+/--
+ContradictionTarget → GNReducedGapTarget。
+
+False が得られるので g' の存在は vacuously true。
+-/
+theorem gnReducedGap_of_contradiction
+    (hContra : PrimeGe5BranchAPrimitiveRestoreContradictionTarget) :
+    PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget :=
+  primeGe5BranchAPrimitiveRestoreGNReducedGap_of_contradiction hContra
+
+/--
+ContradictionTarget → PrimitivePacketDescent（CyclotomicExistence 不要で直接到達）。
+
+chain: ContradictionTarget → GNReducedGap(vacuously)
+       → PrimitivePacketDescent(via concrete CyclotomicExistence)
+-/
+theorem primitivePacketDescent_of_contradiction
+    (hContra : PrimeGe5BranchAPrimitiveRestoreContradictionTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primitivePacketDescent_of_gnReducedGap (gnReducedGap_of_contradiction hContra)
+
+/--
+ContradictionTarget + ValuationPeel + NonLiftableGNBridge → FLT p ≥ 5。
+
+ContradictionTarget は primitive 側(¬p∣t)の矛盾を直接供給し、
+peel 側(p∣t)は ValuationPeel で、BranchB は NonLiftableGNBridge で処理。
+-/
+theorem FLTPrimeGe5Target_of_contradiction_peel_bridge
+    (hContra : PrimeGe5BranchAPrimitiveRestoreContradictionTarget)
+    (hPeel : PrimeGe5BranchAValuationPeelPacketTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_3kernels_v3
+    (gnReducedGap_of_contradiction hContra) hPeel hNoLift
+
+/-!
+## §15. PacketFromError の精密分解
+
+ValuationPeelPacketTarget は次の 2 段で構成される:
+1. TailError: concrete (error 方程式の抽出) ✅
+2. PacketFromError: open (error term → smaller packet) ❌
+
+TailError が concrete なので、PacketFromError 1 本が peel route の唯一の穴。
+-/
+
+/--
+TailError(concrete) + PacketFromError → ValuationPeelPacketTarget。
+
+これにより、ValuationPeel 全体の open kernel は PacketFromError 1 本に集約。
+-/
+theorem valuationPeelPacket_concrete_tailError_with_packetFromError
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget) :
+    PrimeGe5BranchAValuationPeelPacketTarget :=
+  primeGe5BranchAValuationPeelPacket_of_tailErrorLift
+    primeGe5BranchAValuationPeelTailError_default hPFE
+
+/--
+GNReducedGap + PacketFromError + NonLiftableGNBridge → FLT p ≥ 5。
+
+3-kernel v3 を PacketFromError 語彙で書き直した最精密版。
+ValuationPeelPacketTarget 全体ではなく、真の open 成分 PacketFromError だけを仮定。
+-/
+theorem FLTPrimeGe5Target_of_3kernels_precise
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_3kernels_v3 hGNGap
+    (valuationPeelPacket_concrete_tailError_with_packetFromError hPFE) hNoLift
+
+theorem globalProvider_of_3kernels_precise
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    GlobalPrimeExponentFLTProvider :=
+  triominoCosmic_globalProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_3kernels_precise hGNGap hPFE hNoLift)
+
+theorem triominoPrimeProvider_of_3kernels_precise
+    (hGNGap : PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    TriominoPrimeProvider :=
+  triominoPrimeProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_3kernels_precise hGNGap hPFE hNoLift)
+
 end DkMath.FLT
