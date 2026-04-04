@@ -170,6 +170,56 @@ Archive
        concrete witness 形式を設計して、下流から埋め始めるか判断する
     - ここが次の分岐点
 
+### 日時: 2026/04/05 07:24 JST — Stage 1 の細分化と最薄 kernel の露出
+
+1. 目的:
+    - review-002 に沿って、Stage 1 (`CyclotomicIdealPthPowerTarget`) をさらに薄く裂き、
+       `sorryAx` の最小発生源を theorem 名レベルで露出させる。
+    - `ideal p 乗性` を 1a / 1b / 1c の責務へ分解し、下流 route を clean に保つ。
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `CyclotomicIdealClassPTorsionWitnessTarget` (Stage 1a)
+       - `CyclotomicPTorsionAnnihilationTarget` (Stage 1b)
+       - `CyclotomicPrincipalIdealExtractionTarget` (Stage 1c)
+       - `cyclotomicIdealPthPower_of_stage1Split`
+       - `cyclotomicIdealClassPTorsionWitness_of_gapDivisibleGeometry` (sorry)
+       - `cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree` (clean)
+       - `cyclotomicPrincipalIdealExtraction_of_classTrivialization` (clean)
+       - `cyclotomicIdealPthPower_of_refinedStage1Route` (clean composition)
+    - `RegularPrimeRoute.lean` に
+       `FLTPrimeGe5Target_of_refinedStage1Route` を追加
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` に
+       Stage 1a / 1b / 1c と refined Stage 1 route の axioms 監視を追加
+    - `ClassGroupBridge.lean` / `RegularPrimeRoute.lean` のコメント崩れ
+       (`so#rry`, `isolatｅ`) を修正し、説明を最新状態へ同期
+3. 結論:
+    - `sorryAx` は Stage 1 broad wrapper ではなく、
+       **`cyclotomicIdealClassPTorsionWitness_of_gapDivisibleGeometry`** にまで局所化できた ✅
+    - Stage 1b (`PTorsionAnnihilation`) と Stage 1c (`PrincipalIdealExtraction`) は
+       placeholder ではあるが clean route として分離された ✅
+    - `FLTPrimeGe5Target_of_refinedStage1Route` は clean assumptions の下で
+       `sorryAx` なしを維持した ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.RegularPrimeRoute DkMath.FLT.Kummer.ClassGroupBridge` 成功
+    - `#print axioms cyclotomicIdealClassPTorsionWitness_of_gapDivisibleGeometry`
+       → `sorryAx` あり
+    - `#print axioms cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree`
+       → `sorryAx` なし
+    - `#print axioms cyclotomicPrincipalIdealExtraction_of_classTrivialization`
+       → `sorryAx` なし
+    - `#print axioms FLTPrimeGe5Target_of_refinedStage1Route`
+       → `[propext, Classical.choice, Quot.sound]`（sorryAx なし）
+5. 失敗事例:
+    - Stage 1 の subtarget は依然 placeholder なので、
+       theorem 名だけ先行して concrete 数学内容はまだ空
+       → ただし今回は open kernel の最小位置特定が目的なので、この段階でも意味がある
+6. 次の課題:
+    - `cyclotomicIdealClassPTorsionWitness_of_gapDivisibleGeometry` をさらに
+       Dedekind / class-group / cyclotomic ideal arithmetic のどこで裂けるか監査
+    - Stage 1c (`PrincipalIdealExtraction`) を Mathlib の
+       `ClassGroup.mk_eq_one_of_coe_ideal` 系 API で concrete 化できるか点検
+    - ここが次の分岐点
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。

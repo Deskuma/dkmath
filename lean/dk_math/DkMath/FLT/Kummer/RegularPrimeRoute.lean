@@ -26,7 +26,13 @@ DkMath FLT 幹線の `2m-pure` → FLT chain に接続する。
 ```
      ClassGroupPTorsionFree                     (placeholder)
         ↓
-     IdealPthPower                              (genuinely global open kernel)
+     IdealClassPTorsionWitness                  (thinnest open kernel)
+       ↓
+     PTorsionAnnihilation                       (class-group side)
+       ↓
+     PrincipalIdealExtraction                   (Dedekind / class-group API side)
+       ↓
+     IdealPthPower                              (Stage 1 composition)
        ↓
      UnitNormalization                          (abstract stage)
        ↓
@@ -38,11 +44,11 @@ DkMath FLT 幹線の `2m-pure` → FLT chain に接続する。
         ↕
    Regular branch + GapDivisible branch       (by_cases q ∣ (z-y))
         ↓
-   2m-pure                                    (no so#rry ✅)
+  2m-pure                                    (no sorry ✅)
         ↓
    2m-global                                  (from 2m-pure, auto)
         ↓
-   PthRootCore → GNReducedGap → 無限降下法   (existing chain, no so#rry)
+  PthRootCore → GNReducedGap → 無限降下法   (existing chain, no sorry)
         ↓
    FLTPrimeGe5Target                          ✅
 ```
@@ -52,12 +58,16 @@ DkMath FLT 幹線の `2m-pure` → FLT chain に接続する。
 Kummer branch 導入後の open kernel は **1 つ**に集約された:
 1. ~~Regular branch~~: `qAdicGapReductionRegularBranch_of_global` **CLOSED** ✅
    → witness R の自動構成が ZMod unit 理論で完了。
-2. **Gap-divisible global stage**: `cyclotomicIdealPthPower_of_classGroupPTorsionFree`
-  → Kummer 理論 / ideal class group の formal 化が必要（唯一の genuinely global kernel）。
+2. **Gap-divisible global stage**: `cyclotomicIdealClassPTorsionWitness_of_gapDivisibleGeometry`
+   → Kummer 理論 / 円分体 ideal arithmetic の formal 化が必要（現時点で最薄の open kernel）。
 
 `CyclotomicUnitNormalizationTarget` と `CyclotomicNormDescentTarget` は
 現時点では abstract stage として明示化した。今後は各 stage ごとに
 Mathlib 既存資産で concrete 化できるかを独立に監査する。
+
+`CyclotomicPTorsionAnnihilationTarget` と `CyclotomicPrincipalIdealExtractionTarget` は
+Stage 1 内部の責務分離として追加した。将来的には
+class-group API / Dedekind domain API の concrete 化先になる。
 
 それぞれ独立に攻略可能。
 -/
@@ -176,9 +186,34 @@ theorem FLTPrimeGe5Target_of_refinedKummerRoute
     hPFE hNoLift
 
 /-!
-## §5. Refined class-group route
+## §5. Refined Stage 1 route
 
-class group 側の genuinely global kernel を Stage 1 theorem に isolatｅした版。
+Stage 1 自体をさらに 1a / 1b / 1c へ裂いた版。
+最薄の open kernel は `hWitness` に局所化される。
+-/
+
+/--
+Refined Stage 1 route: p-torsion witness + annihilation + extraction + unit / norm → FLT。
+-/
+theorem FLTPrimeGe5Target_of_refinedStage1Route
+    (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+    (hReg : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+    (hWitness : CyclotomicIdealClassPTorsionWitnessTarget)
+    (hKill : CyclotomicPTorsionAnnihilationTarget)
+    (hExtract : CyclotomicPrincipalIdealExtractionTarget)
+    (hUnit : CyclotomicUnitNormalizationTarget)
+    (hNorm : CyclotomicNormDescentTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_refinedKummerRoute hPeq hReg
+    (cyclotomicIdealPthPower_of_refinedStage1Route hWitness hKill hExtract)
+    hUnit hNorm hPFE hNoLift
+
+/-!
+## §6. Refined class-group route
+
+class group 側の genuinely global kernel を Stage 1 theorem に isolate した版。
 legacy one-shot route (`FLTPrimeGe5Target_of_kummerRoute`) より責務分離が明確。
 -/
 
@@ -200,7 +235,7 @@ theorem FLTPrimeGe5Target_of_refinedClassGroupRoute
     hPFE hNoLift
 
 /-!
-## §6. Kummer route: ClassGroup → GapDivisible → 2m-pure → FLT
+## §7. Kummer route: ClassGroup → GapDivisible → 2m-pure → FLT
 
 ClassGroupPTorsionFree + Regular branch + PEquals branch → FLT の
 one-shot theorem。

@@ -20,7 +20,7 @@ set_option linter.style.emptyLine false
 `CyclotomicIdealPthPowerTarget` への橋を明示的に固定する。
 
 現時点では `cyclotomicPrincipalization_of_classGroupPTorsionFree` が
-CyclotomicPrincipalization.lean に直接置かれている（so#rry）。
+CyclotomicPrincipalization.lean に直接置かれている（sorry）。
 ただし意味論的には、class group が supply する本丸は
 full principalization 全体ではなく **ideal の p 乗性** である。
 
@@ -90,7 +90,7 @@ theorem classGroupPTorsionFree_of_regularPrime
 ## §2. Full chain: Regular prime → Principalization → GapDivisible
 
 上の要素を単に合成。
-ただし現時点で `so#rry` が残るのは class-group 側の global theorem だけである。
+ただし現時点で `sorry` が残るのは class-group 側の global theorem だけである。
 -/
 
 /--
