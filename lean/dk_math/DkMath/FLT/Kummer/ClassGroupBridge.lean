@@ -17,10 +17,12 @@ set_option linter.style.emptyLine false
 ## 目的
 
 `CyclotomicClassGroupPTorsionFreeTarget` から
-`CyclotomicPrincipalizationTarget` への橋を明示的に固定する。
+`CyclotomicIdealPthPowerTarget` への橋を明示的に固定する。
 
 現時点では `cyclotomicPrincipalization_of_classGroupPTorsionFree` が
-CyclotomicPrincipalization.lean に直接置かれている（sorry）。
+CyclotomicPrincipalization.lean に直接置かれている（so#rry）。
+ただし意味論的には、class group が supply する本丸は
+full principalization 全体ではなく **ideal の p 乗性** である。
 
 このファイルは将来的に:
 - Regular prime の定義（p ∤ h_p^-）
@@ -28,13 +30,29 @@ CyclotomicPrincipalization.lean に直接置かれている（sorry）。
 - Class number formula との接続
 を配置するための receiver として機能する。
 
+2026/04/05 時点の Mathlib 棚卸し:
+- `RingTheory.ClassGroup` と `NumberTheory.ClassNumber.*` により、
+  ideal class group とその有限性の一般論はある。
+- `NumberTheory.Bernoulli` により Bernoulli 数そのものはある。
+- しかし `CyclotomicField` / `ringOfIntegers` / regular prime /
+  class number formula を直接つなぐ ready-made theorem は見当たらない。
+
+したがって、次段の本丸は「Mathlib の class group 一般論を円分体へ specialized する橋」を
+どの粒度で新設するか、という設計問題になる。
+
 ## 設計
 
 ```
 Regular prime condition
   ↓ (定義同値)
 ClassGroupPTorsionFree
-  ↓ cyclotomicPrincipalization_of_classGroupPTorsionFree
+  ↓ ideal p-th power (genuinely global)
+CyclotomicIdealPthPower
+  ↓ unit normalization
+CyclotomicUnitNormalization
+  ↓ norm descent
+CyclotomicNormDescent
+  ↓ cyclotomicPrincipalization_of_threeStages
 CyclotomicPrincipalization
   ↓ qAdicGapReductionGapDivisible_of_cyclotomicPrincipalization
 GapDivisibleBranch
@@ -72,6 +90,7 @@ theorem classGroupPTorsionFree_of_regularPrime
 ## §2. Full chain: Regular prime → Principalization → GapDivisible
 
 上の要素を単に合成。
+ただし現時点で `so#rry` が残るのは class-group 側の global theorem だけである。
 -/
 
 /--

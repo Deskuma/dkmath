@@ -24,19 +24,25 @@ DkMath FLT 幹線の `2m-pure` → FLT chain に接続する。
 ## 全体の chain 概略
 
 ```
-   ClassGroupPTorsionFree                     (sorry: open kernel)
+     ClassGroupPTorsionFree                     (placeholder)
         ↓
-   CyclotomicPrincipalization                 (sorry → ClassGroup)
+     IdealPthPower                              (genuinely global open kernel)
+       ↓
+     UnitNormalization                          (abstract stage)
+       ↓
+     NormDescent                                (abstract stage)
+       ↓
+     CyclotomicPrincipalization                 (3-stage composition)
         ↓
    GapDivisibleBranch                         (= Principalization)
         ↕
    Regular branch + GapDivisible branch       (by_cases q ∣ (z-y))
         ↓
-   2m-pure                                    (no sorry ✅)
+   2m-pure                                    (no so#rry ✅)
         ↓
    2m-global                                  (from 2m-pure, auto)
         ↓
-   PthRootCore → GNReducedGap → 無限降下法   (existing chain, no sorry)
+   PthRootCore → GNReducedGap → 無限降下法   (existing chain, no so#rry)
         ↓
    FLTPrimeGe5Target                          ✅
 ```
@@ -46,8 +52,12 @@ DkMath FLT 幹線の `2m-pure` → FLT chain に接続する。
 Kummer branch 導入後の open kernel は **1 つ**に集約された:
 1. ~~Regular branch~~: `qAdicGapReductionRegularBranch_of_global` **CLOSED** ✅
    → witness R の自動構成が ZMod unit 理論で完了。
-2. **Gap-divisible branch**: `cyclotomicPrincipalization_of_classGroupPTorsionFree` (sorry)
-   → Kummer 理論の formal 化が必要（唯一の open kernel）。
+2. **Gap-divisible global stage**: `cyclotomicIdealPthPower_of_classGroupPTorsionFree`
+  → Kummer 理論 / ideal class group の formal 化が必要（唯一の genuinely global kernel）。
+
+`CyclotomicUnitNormalizationTarget` と `CyclotomicNormDescentTarget` は
+現時点では abstract stage として明示化した。今後は各 stage ごとに
+Mathlib 既存資産で concrete 化できるかを独立に監査する。
 
 それぞれ独立に攻略可能。
 -/
@@ -137,7 +147,60 @@ theorem FLTPrimeGe5Target_of_kummerThreeWaySplit
     hPFE hNoLift
 
 /-!
-## §4. Kummer route: ClassGroup → GapDivisible → 2m-pure → FLT
+## §4. Refined Kummer route: ideal / unit / norm の 3 段
+
+唯一の genuinely global kernel を `CyclotomicIdealPthPowerTarget` として明示し、
+その下流の unit / norm stage を別 target に分けた refined route。
+`CyclotomicPrincipalizationTarget` を直接仮定する版より、
+今後の formalization の責務分離が明確になる。
+-/
+
+/--
+Refined Kummer route: ideal p-th power + unit normalization + norm descent → FLT。
+
+ここで class group 側の genuinely global 入力は `hIdeal` だけ。
+`hUnit` / `hNorm` は下流 stage を別々に監査できるように切り出した。
+-/
+theorem FLTPrimeGe5Target_of_refinedKummerRoute
+    (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+    (hReg : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+    (hIdeal : CyclotomicIdealPthPowerTarget)
+    (hUnit : CyclotomicUnitNormalizationTarget)
+    (hNorm : CyclotomicNormDescentTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_kummerThreeWaySplit hPeq hReg
+    (qAdicGapReductionGapDivisible_of_cyclotomicPrincipalization
+      (cyclotomicPrincipalization_of_threeStages hIdeal hUnit hNorm))
+    hPFE hNoLift
+
+/-!
+## §5. Refined class-group route
+
+class group 側の genuinely global kernel を Stage 1 theorem に isolatｅした版。
+legacy one-shot route (`FLTPrimeGe5Target_of_kummerRoute`) より責務分離が明確。
+-/
+
+/--
+Refined class-group route: class group → ideal p-th power → unit / norm → FLT。
+-/
+theorem FLTPrimeGe5Target_of_refinedClassGroupRoute
+    (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+    (hReg : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget)
+    (hUnit : CyclotomicUnitNormalizationTarget)
+    (hNorm : CyclotomicNormDescentTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_kummerThreeWaySplit hPeq hReg
+    (qAdicGapReductionGapDivisible_of_cyclotomicPrincipalization
+      (cyclotomicPrincipalization_of_refinedClassGroupRoute hCl hUnit hNorm))
+    hPFE hNoLift
+
+/-!
+## §6. Kummer route: ClassGroup → GapDivisible → 2m-pure → FLT
 
 ClassGroupPTorsionFree + Regular branch + PEquals branch → FLT の
 one-shot theorem。
