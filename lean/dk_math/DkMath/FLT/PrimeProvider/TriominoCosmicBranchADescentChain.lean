@@ -2522,6 +2522,99 @@ theorem qAdicGapWitness_concrete : PrimeGe5BranchAPrimitiveQAdicGapWitnessTarget
   exact strongSuperWieferichCongruenceV2_concrete
     hpack hgap hq hq_ne_p hqp_dvd_GN hq_not_dvd_gap hcop_qy ω hω hω_ne
 
+/-!
+### §20.1. `2m-global` の仮定監査と `2m-pure` の切り出し
+
+`2m-global` の結論 `∃ g', g' · GN(p, g', y) = (x/q)^p` は
+witness `R : ZMod (q^p)` に **依存しない**。
+右辺 `(x/q)^p` は pack + `q ∣ x` だけで決まり、
+左辺 `GN p g' y` も `g'` と `y` だけで決まる。
+
+したがって、witness R の仮定を完全に除去した `2m-pure` を定義できる。
+`2m-pure → 2m-global` は自明に成り立つ（R を受け取って捨てるだけ）。
+逆方向 `2m-global → 2m-pure` は **一般には成立しない**。
+`2m-pure` は `2m-global` より **真に強い** 主張。
+
+### §20.1.1. `2m-global` と `2m-pure` の gap の正体
+
+分析の結果、`2m-global → 2m-pure` が成立しない正確な理由が判明した:
+
+`R = z · y⁻¹ mod q^p` とする。pack の `Coprime x y` と `q ∣ x` から `gcd(y,q) = 1` が出て、
+y は `ZMod (q^p)` で可逆なので R は一意に定まる。`z ≡ R·y (mod q^p)` は定義から成立。
+しかし `Φ_p(R) = 0 (mod q^p)` が成り立つかは q と gap の関係に依存する:
+
+- **`q ∤ gap`** (= `q ∤ (z-y)`): R ≢ 1 (mod q)。
+  `R^p ≡ 1 (mod q^p)` と `R - 1` が `ZMod q` で可逆であることから、
+  `Φ_p(R) ≡ 0 (mod q^p)` が **自動的に成立**。
+  このケースで `2m-global` は非 vacuous な情報を与える。
+
+- **`q | gap` かつ `q ≠ p`**: R ≡ 1 (mod q)。
+  `Φ_p(R) ≡ Φ_p(1) = p (mod q)` で、`q ≠ p` なら `Φ_p(R) ≢ 0 (mod q)`。
+  よって `Φ_p(R) = 0 (mod q^p)` を満たす R が **存在しない**。
+  `2m-global` は vacuously true になり、何の情報も与えない。
+
+- **`q = p` かつ `p | gap`**: `Φ_p(R) ≡ 0 (mod p)` だが `mod p^p` かは非自明
+  （Wieferich/Kummer 理論に依存）。
+
+重要: DescentChain の actual usage path では、q は `CyclotomicExistenceTarget` から来る
+**distinguished prime** であり、`¬ q ∣ (z-y)` が保証される（= 第1ケース）。
+したがって **actual chain 上では `2m-global` の witness 条件は自動的に充足される**。
+
+**結論**: `2m-pure` と `2m-global` の formal な gap は `q | gap` ケースで生じるが、
+このケースは DescentChain 本線では起きない。`2m-global` を攻める A ルートが正しい。
+-/
+
+/--
+2m-pure: witness R を完全に除去した最鋭 target。
+
+pack + `Prime q` + `q ∣ x` だけから reduced gap `g'` の存在を要求する。
+`2m-global` より **厳密に強い**（witness R を仮定しない）。
+`2m-pure → 2m-global` は自明だが、逆は一般には不成立。
+-/
+abbrev PrimeGe5BranchAPrimitiveQAdicGapReductionPureTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ x →
+      ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p
+
+/--
+`2m-pure` の GN 等式と descent existence の同値性。
+
+Cosmic Formula 恒等式 `(g' + y)^p = g' * GN(p, g', y) + y^p` により、
+`g' * GN(p, g', y) = (x/q)^p` ↔ `(g' + y)^p = (x/q)^p + y^p`。
+
+つまり `2m-pure` は **descent existence そのもの** である。
+-/
+theorem descentExistence_iff_gnReduction (p g' y xq : ℕ) :
+    g' * GN p g' y = xq ^ p ↔ (g' + y) ^ p = xq ^ p + y ^ p := by
+  constructor
+  · intro h
+    have hCosmic := DkMath.CosmicFormulaBinom.cosmic_id_csr' (R := ℕ) p g' y
+    omega
+  · intro h
+    have hCosmic := DkMath.CosmicFormulaBinom.cosmic_id_csr' (R := ℕ) p g' y
+    omega
+
+/-- `2m-pure` → `2m-global`（witness を受け取って捨てるだけ）。 -/
+theorem qAdicGapReductionGlobal_of_pure
+    (hPure : PrimeGe5BranchAPrimitiveQAdicGapReductionPureTarget) :
+    PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget := by
+  intro p x y z hpack q hq hq_dvd_x R _hphi _hzRy
+  exact hPure hpack hq hq_dvd_x
+
+/-
+`2m-global` → `2m-pure`（結論が R-free なので witness 仮定は不要）。
+
+注意: この方向は **一般には成立しない**。
+`2m-global` は「witness R が与えられたとき `g'` が存在する」と言い、
+`2m-pure` は「witness R なしに `g'` が存在する」と言う。
+`2m-pure` は `2m-global` より **真に強い** 主張。
+
+ただし `2m-local` (concrete) が witness R を構成できる文脈では
+`2m-global` から `2m-pure` を得ることは可能。
+その経路は `pthRootCore_of_qAdicGapReductionGlobal` を参照。
+-/
+
 /-- 2m-global があれば 2m-core は直ちに従う。 -/
 theorem qAdicGapReductionCore_of_global
     (hGlobal : PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget) :
@@ -2757,7 +2850,8 @@ Level 2m-int: QAdicLocalGlobalGap (strong witness ⇒ integer z')      — integ
 Level 2m-geom: QAdicGapReduction (strong witness ⇒ reduced gap)      — geometric formulation
 Level 2m-core: QAdicGapReductionCore (pack + strong witness ⇒ g')    — thin wrapper
 Level 2m-local: QAdicGapWitness (strong witness existence)           — concrete ✅
-Level 2m-global: QAdicGapReductionGlobal (witness ⇒ reduced gap)     — final 1-kernel candidate ★OPEN★
+Level 2m-global: QAdicGapReductionGlobal (witness ⇒ reduced gap)     — ★OPEN★
+Level 2m-pure: QAdicGapReductionPure (pack + q∣x ⇒ reduced gap)     — stronger, R-free ★OPEN★
 ```
 
 Level 0 / 1w / 1s は現時点で concrete。
@@ -2767,6 +2861,9 @@ Level 2m-int と Level 2m-geom は同値で、
 さらに `2m-core` は
 `2m-local`（concrete）と `2m-global`（open）へ分離でき、
 実際の最終 1 核候補は `2m-global` である。
+`2m-pure` は `2m-global` より強い（witness R を仮定しない）が、
+`2m-pure → 2m-global` は自明。逆は一般には成立しない。
+どちらを攻めるかは証明戦略に依存する。
 Level 2m は **GNReducedGap の真の核心** であり、
 Z[ζ_p] の ideal class group 構造に依存する深い問題。
 
@@ -3025,5 +3122,34 @@ theorem FLTPrimeGe5Target_of_qAdicGapReductionGlobal_infiniteDescent
   FLTPrimeGe5Target_of_branch_split_refuter_with_normalizer_impl
     (branchARefuter_of_qAdicGapReductionGlobal hGlobal hPFE)
     (branchBRefuter_of_nonLiftableGNBridge hNoLift)
+
+/-!
+### §22.1. 2m-pure → 無限降下法 → FLT
+
+`2m-pure` は `2m-global` より強い（witness R を仮定しない）。
+`2m-pure → 2m-global` が自明なので、§22 の全経路がそのまま使える。
+-/
+
+/-- `2m-pure` → PthRootCore（`2m-global` 経由）。 -/
+theorem pthRootCore_of_qAdicGapReductionPure
+    (hPure : PrimeGe5BranchAPrimitiveQAdicGapReductionPureTarget) :
+    PrimeGe5BranchAPrimitivePthRootCoreTarget :=
+  pthRootCore_of_qAdicGapReductionGlobal (qAdicGapReductionGlobal_of_pure hPure)
+
+/-- `2m-pure` → 無限降下法。 -/
+theorem branchAFringeContradiction_of_qAdicGapReductionPure
+    (hPure : PrimeGe5BranchAPrimitiveQAdicGapReductionPureTarget) :
+    BranchAFringeContradictionTarget :=
+  branchAFringeContradiction_of_qAdicGapReductionGlobal
+    (qAdicGapReductionGlobal_of_pure hPure)
+
+/-- `2m-pure` + Peel + BranchB → FLT（無限降下法経由）。 -/
+theorem FLTPrimeGe5Target_of_qAdicGapReductionPure_infiniteDescent
+    (hPure : PrimeGe5BranchAPrimitiveQAdicGapReductionPureTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_qAdicGapReductionGlobal_infiniteDescent
+    (qAdicGapReductionGlobal_of_pure hPure) hPFE hNoLift
 
 end DkMath.FLT
