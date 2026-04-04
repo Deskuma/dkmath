@@ -220,6 +220,47 @@ Archive
        `ClassGroup.mk_eq_one_of_coe_ideal` 系 API で concrete 化できるか点検
     - ここが次の分岐点
 
+### 日時: 2026/04/05 08:02 JST — Stage 1c の concrete API 化
+
+1. 目的:
+    - review-003 の提案どおり、Stage 1c を `ClassGroup.mk_eq_one_of_coe_ideal` 系 API で
+       実際に concrete 化できるか短距離で検査する。
+    - 成功した場合、Stage 1a / 1b / 1c のうち truly new theory が必要な場所をさらに絞る。
+2. 実施:
+    - scratch で以下の型を確認:
+       - `ClassGroup.mk_eq_one_of_coe_ideal`
+       - `ClassGroup.mk0_eq_one_iff`
+       - `ClassGroup.mk0`
+       - `FractionalIdeal.mk0`
+    - `CyclotomicPrincipalIdealExtractionTarget` を placeholder `True` から、
+       `ClassGroup.mk_eq_one_of_coe_ideal` と同型の generic target へ置換
+    - `cyclotomicPrincipalIdealExtraction_of_classTrivialization` を
+       `ClassGroup.mk_eq_one_of_coe_ideal` で no-sorry 実装
+    - 補助定理 `idealIsPrincipal_of_classGroupMk0_eq_one` を追加し、
+       integral ideal 版 (`ClassGroup.mk0_eq_one_iff`) の concrete 足場も固定
+    - test コメントを更新し、Stage 1c が placeholder ではなく
+       generic principal-ideal extraction API になったことを反映
+3. 結論:
+    - Stage 1c は **placeholder ではなく concrete generic API** として固定できた ✅
+    - これにより、genuinely new theory が必要な場所は
+       ほぼ Stage 1a（必要なら Stage 1b の specialization）へ絞られた ✅
+    - `ClassGroup.mk_eq_one_of_coe_ideal` と `ClassGroup.mk0_eq_one_iff` の両方に
+       将来の specialization 足場があることを確認した ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `#print axioms cyclotomicPrincipalIdealExtraction_of_classTrivialization`
+       → `[propext, Classical.choice, Quot.sound]`（sorryAx なし）
+    - `#print axioms idealIsPrincipal_of_classGroupMk0_eq_one`
+       → `[propext, Classical.choice, Quot.sound]`（sorryAx なし）
+5. 失敗事例:
+    - `CyclotomicIdealPthPowerTarget` 自体は依然 placeholder なので、
+       Stage 1a / 1b / 1c → Stage 1 の合成はまだ abstract composition のまま
+       → これは Stage 1a 側の cyclotomic specialization が未供給なためで、想定どおり
+6. 次の課題:
+    - `cyclotomicIdealClassPTorsionWitness_of_gapDivisibleGeometry` をさらに裂けるか調査
+    - Stage 1b を class-group 一般 API の concrete statement に寄せられるか再評価
+    - ここが次の判断分岐点
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
