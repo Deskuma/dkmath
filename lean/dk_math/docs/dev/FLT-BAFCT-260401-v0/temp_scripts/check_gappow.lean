@@ -1,2 +1,0 @@
-import DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant
-#print axioms DkMath.FLT.gapPowFromPrimeGe5Counterexample_branchB_impl

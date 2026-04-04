@@ -1,3 +1,0 @@
-import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine
-#print axioms DkMath.FLT.triominoWieferichDescentStepB_impl
-#print axioms DkMath.FLT.triominoWieferichDescentCoreB_impl

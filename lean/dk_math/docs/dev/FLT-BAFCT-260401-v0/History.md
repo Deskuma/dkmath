@@ -3,7 +3,7 @@
 cid: 69ca1b34-0bcc-83a2-bcfd-529624b85356
 
 - 時刻の打刻は `date` コマンドを使用して時間(時分秒)まで正確に行うこと。
-- 新規履歴は最終末尾に追加すること。
+- 新規履歴は **ファイル末尾** に追加すること。
 
 ## History Log
 
@@ -16,6 +16,23 @@ Archive
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
 
 ※コミット時間がより正確であり、異なる場合は、コミット時間を優先とする。
+
+## Template
+
+### 日時: `タイムスタンプ date コマンドを使用して年月日時分まで` JST (template)
+
+1. 目的:
+   - （内容）
+2. 実施:
+   - （内容）
+3. 結論:
+   - （内容）
+4. 検証:
+   - （内容）
+5. 失敗事例:
+   - （内容）
+6. 次の課題:
+   - （内容）
 
 ### 日時: 2026/04/01 12:12 JST
 
@@ -1509,19 +1526,564 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
    - `HenselLiftStepGeomSumTarget` の concrete 証明（specialized one-step）
    - 反復補題を追加して `StrongSuperWieferichCongruenceV2Target` を供給
 
-## Template
-
-### 日時: `タイムスタンプ date コマンドを使用して年月日時分まで` JST (template)
+### 追記: 2026/04/03 18:48:30 JST one-step 実装突入
 
 1. 目的:
-   - （内容）
+   - `HenselLiftStepGeomSumTarget` を実装可能単位へ分解し、
+     one-step の concrete 前進を確定する
 2. 実施:
-   - （内容）
+   - `HenselLiftStepStructuralTarget` を追加:
+     `q^n -> q^(n+1)` の持ち上げ存在だけを要求
+   - `HenselLiftStepArithmeticKernelTarget` を追加:
+     持ち上げ後に幾何和ゼロ（Φ_p root）へ補正できることを要求
+   - `henselLiftStepStructural_concrete` を実装:
+     `ZMod.castHom_surjective` で構造持ち上げを no-sorry で証明
+   - `henselLiftStepGeomSum_of_structural_and_kernel` を追加:
+     構造 + 算術 kernel の合成で one-step target を供給
 3. 結論:
-   - （内容）
+   - one-step の本丸が「算術 kernel のみ」に分離され、
+     何を証明すれば Level 1s が進むかがさらに明確化 ✅
 4. 検証:
-   - （内容）
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
 5. 失敗事例:
-   - （内容）
+   - なし（追加補題は一発で型整合）
 6. 次の課題:
-   - （内容）
+   - `HenselLiftStepArithmeticKernelTarget` の concrete 証明
+   - 反復補題を追加して `StrongSuperWieferichCongruenceV2Target` の provider を構築
+
+### 追記: 2026/04/03 19:10:45 JST one-step arithmetic heart 実装
+
+1. 目的:
+   - `HenselLiftStepArithmeticKernelTarget` の「心臓」を定理化し、
+     one-step 本丸を補正項構成問題へ純化する
+2. 実施:
+   - `HenselLiftStepCorrectionTarget` を追加:
+     `castHom Δ = 0` を満たす補正項 `Δ` により
+     `Rn1 + Δ` を幾何和ゼロへ補正できることを要求
+   - `henselLiftStepArithmeticKernel_of_correction` を追加:
+     上記補正 target から `HenselLiftStepArithmeticKernelTarget` を導出
+3. 結論:
+   - ArithmeticKernel の中核が「補正項 Δ の存在」へ明示的に還元された ✅
+   - one-step の残 open は Newton/Hensel 補正式の concrete 構成に集中
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - 初版で `castHom` の加法像展開が `simp` で閉じず、
+     `(castHom ...).map_add` を明示して解消
+6. 次の課題:
+   - `HenselLiftStepCorrectionTarget` の concrete 証明
+   - `F(T)=∑T^i` の一次補正 `F(R+q^n c)` の専用補題を追加し、
+     one-step kernel を実際に閉じる
+
+### 追記: 2026/04/03 19:41:43 JST correction target 具体化
+
+1. 目的:
+   - `HenselLiftStepCorrectionTarget` の concrete proof に向けて、
+     心臓部（Δ補正）を実装可能な橋定理へ落とす
+2. 実施:
+   - `HenselLiftStepZeroLiftTarget` を追加:
+     「幾何和ゼロを満たす持ち上げそのものの存在」を one-step 目標化
+   - `henselLiftStepCorrection_of_zeroLift` を証明:
+     `Δ := Rlift - Rn1` で補正 target を構成
+   - `henselLiftStepArithmeticKernel_of_zeroLift` を証明:
+     zero-lift target から arithmetic kernel を直接供給
+3. 結論:
+   - correction 本丸は
+     `ZeroLift existence` ⇒ `Δ correction` ⇒ `ArithmeticKernel`
+     という concrete な一本道に整理された ✅
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - `castHom` の減法像で `simp` が閉じず、`map_sub` を明示して解決
+   - 宣言順依存で参照エラーが出たため、`of_zeroLift` 定理を後置して解消
+6. 次の課題:
+   - `HenselLiftStepZeroLiftTarget` の concrete 証明（specialized Newton/Hensel 補題）
+   - `F(T)=∑T^i` の一次補正公式を Lean 補題として追加
+
+### 追記: 2026/04/03 20:06:59 JST zero-lift 条件精密化
+
+1. 目的:
+   - `HenselLiftStepZeroLiftTarget` を数学的に正しい仮定へ精密化し、
+     one-step への直結ブリッジを追加する
+2. 実施:
+   - `ZeroLift` / `Correction` / `ArithmeticKernel` / `GeomSum` の one-step 系 target に
+     `q ≠ p` 仮定を導入（q=p 反例を排除）
+   - `henselLiftStepGeomSum_of_zeroLift` を追加:
+     `ZeroLiftTarget` から one-step target を直接供給
+   - `henselLiftStepCorrection_of_zeroLift` の補正同値変形を安定化
+3. 結論:
+   - one-step 系の仮定が現実の Hensel 条件に整合し、
+     `ZeroLift` を中心にした供給線がより堅牢になった ✅
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - `simp/simpa` と `calc` の組み合わせで構文エラーが発生
+   - `map_sub` の明示 + `simpa using` で解消
+6. 次の課題:
+   - `HenselLiftStepZeroLiftTarget` の concrete 証明（specialized Newton step）
+   - 一次補正公式 `F(R+q^n c)` を Lean 補題化して zero-lift を閉じる
+
+### 追記: 2026/04/03 20:40:33 JST 一次補正公式の target 化
+
+1. 目的:
+   - `F(R+q^n c)` の一次補正公式を Lean へ接続し、zero-lift concrete 化の入口を固定する
+2. 実施:
+   - `GeomSumFirstOrderSqZeroTarget` を追加:
+     `Δ^2=0` 下での幾何和一次補正公式を target として明示
+   - `qpow_mul_sq_eq_zero_in_next_mod` を利用し、
+     `geomSum_first_order_qpow_correction` を
+     `GeomSumFirstOrderSqZeroTarget` から導出する形で実装
+   - one-step 系 target 群の `q ≠ p` 仮定整合を維持したままビルド通過を確認
+3. 結論:
+   - 一次補正公式は「`SqZero` を示せば `q^n*c` 版へ直結」の形に整理された ✅
+   - 残る本丸は `GeomSumFirstOrderSqZeroTarget` の concrete 証明に集中
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - 直接証明を試みた際に ring 正規化と指数項の同値変形が不安定化
+   - 先に target 化して依存関係を固定する方針に切替
+6. 次の課題:
+   - `GeomSumFirstOrderSqZeroTarget` の concrete 実装
+   - その後 `HenselLiftStepZeroLiftTarget` を concrete に閉じる
+
+### 追記: 2026/04/03 21:17:35 JST Newton補正ターゲット追加
+
+1. 目的:
+   - `F(R + q^n c)` 型の一次補正を one-step へ接続する
+   - `ZeroLift` concrete 化に向けた Newton 供給線を明示する
+2. 実施:
+   - `HenselLiftStepNewtonCorrectionTarget` を追加
+   - `castHom_qpow_mul_eq_zero` を実装（`q^n*c` は mod `q^n` で 0）
+   - `henselLiftStepCorrection_of_newtonCorrection` を追加し、
+     Newton補正 target から `HenselLiftStepCorrectionTarget` を導出
+   - `geomSum_first_order_qpow_correction` を
+     `GeomSumFirstOrderSqZeroTarget` 依存で維持
+3. 結論:
+   - one-step の導線が
+     `GeomSumFirstOrderSqZeroTarget` → NewtonCorrection → Correction
+     へ拡張され、zero-lift 本丸へ接続する準備が整った ✅
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - `castHom` と `natCast` の coercion で複数回型不一致
+   - `map_pow` + `cast_natCast` + `natCast_pow_eq_zero_of_le` の組合せで解消
+6. 次の課題:
+   - `GeomSumFirstOrderSqZeroTarget` の concrete 証明
+   - そこから `HenselLiftStepNewtonCorrectionTarget` を concrete 化し、
+     `HenselLiftStepZeroLiftTarget` へ進む
+
+### 追記: 2026/04/03 22:51:52 JST SqZero 具体化達成
+
+1. 目的:
+   - `GeomSumFirstOrderSqZeroTarget` を concrete に閉じ、
+     Newton 補正の一次公式を実際に使える状態へ進める
+2. 実施:
+   - `geomSumFirstOrderSqZero_concrete` を実装
+     (`Polynomial.eval_add_of_sq_eq_zero` + `derivative_X_pow` 展開)
+   - `geomSum_first_order_qpow_correction_concrete` を追加し、
+     SqZero concrete から `q^n*c` 版一次補正公式を即導出
+   - `DkMathTest/.../TriominoCosmicBranchADescentChain.lean` に
+     新定理の `#print axioms` チェックを追加
+3. 結論:
+   - one-step の主 open だった `GeomSumFirstOrderSqZeroTarget` は concrete 化完了 ✅
+   - 一次補正公式チェーンが concrete で接続された
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - `castHom_qpow_mul_eq_zero` で `cast`/`natCast` coercion が不安定
+   - `map_pow` + `cast_natCast` + `natCast_pow_eq_zero_of_le` で安定化
+6. 次の課題:
+   - `HenselLiftStepNewtonCorrectionTarget` の concrete 証明
+   - そこから `HenselLiftStepZeroLiftTarget` を concrete 化し、Level 1s を閉じる
+
+### 追記: 2026/04/03 23:15:55 JST Newton本丸の線形化還元
+
+1. 目的:
+   - `HenselLiftStepNewtonCorrectionTarget` を concrete 証明へ寄せるため、
+     残りを線形可解性 1 本に圧縮する
+2. 実施:
+   - `HenselLiftStepLinearizedSolveTarget` を追加
+   - `henselLiftStepNewtonCorrection_of_linearizedSolve` を追加
+     （線形方程式の可解性 ⇒ NewtonCorrection）
+   - `DkMathTest/.../TriominoCosmicBranchADescentChain.lean` に
+     新定理の `#print axioms` を追加
+3. 結論:
+   - Newton 補正本丸は
+     `LinearizedSolveTarget` の concrete 化問題として明示された ✅
+   - one-step 導線はさらに明確化
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - 定理配置順（Newton target 定義前参照）で一時的にエラー
+   - 定理を target 定義後へ移設して解消
+6. 次の課題:
+   - `HenselLiftStepLinearizedSolveTarget` の concrete 証明
+   - その後 `HenselLiftStepNewtonCorrectionTarget` → `ZeroLiftTarget` を concrete 化
+
+### 追記: 2026/04/03 23:39:49 JST 線形可解性の二分還元
+
+1. 目的:
+   - `HenselLiftStepLinearizedSolveTarget` を concrete 証明へ進めるため、
+     残課題を局所算術 2 本へ分解する
+2. 実施:
+   - `HenselLiftStepKernelDivisionTarget` を追加
+     （castHom kernel 元を `q^n` 倍として表す）
+   - `HenselLiftStepDerivativeUnitTarget` を追加
+     （線形化係数 `∑ i*R^(i-1)` の unit 性）
+   - `henselLiftStepLinearizedSolve_of_kernelDivision_and_derivativeUnit` を証明
+     （上記2 target から `HenselLiftStepLinearizedSolveTarget` を導出）
+   - テストに `#print axioms` を追加
+3. 結論:
+   - `LinearizedSolve` は
+     `KernelDivision` + `DerivativeUnit`
+     の concrete 化問題へ還元完了 ✅
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - `castHom` の和・冪像の展開で `simp` が進まず一時停止
+   - `hcast_pow` 補助を導入し、`sum_congr` で明示展開して解消
+6. 次の課題:
+   - `HenselLiftStepKernelDivisionTarget` の concrete 証明
+   - `HenselLiftStepDerivativeUnitTarget` の concrete 証明
+   - 連結して `HenselLiftStepNewtonCorrectionTarget` / `ZeroLiftTarget` を concrete 化
+
+### 追記: 2026/04/04 00:09:09 JST KernelDivision concrete 化
+
+1. 目的:
+   - `HenselLiftStepKernelDivisionTarget` の concrete 証明を通し、
+     `LinearizedSolve` 連結を実働化する
+2. 実施:
+   - `HenselLiftStepKernelDivisionTarget` を `Nat.Prime q` / `1 ≤ n` 前提に精密化
+   - `henselLiftStepKernelDivision_concrete` を実装
+     (`castHom x = 0` → `x.val` の `q^n` 可除性 → `x = q^n * t` 構成)
+   - `henselLiftStepLinearizedSolve_of_derivativeUnit` を追加
+     （KernelDivision concrete + DerivativeUnit ⇒ LinearizedSolve）
+   - テストへ `#print axioms` を追加
+3. 結論:
+   - TODO のうち `KernelDivision` は concrete 化完了 ✅
+   - 残る本丸は `HenselLiftStepDerivativeUnitTarget` concrete 証明
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - `cast_eq_val` 周辺で `simp` 再帰が発生
+   - `letI NeZero` + 明示 `rw` で安定化
+6. 次の課題:
+   - `HenselLiftStepDerivativeUnitTarget` の concrete 証明
+   - 連結して `HenselLiftStepNewtonCorrectionTarget` / `ZeroLiftTarget` を concrete 化
+
+### 追記: 2026/04/04 00:40:44 JST Derivative→ZeroLift 連結 concrete
+
+1. 目的:
+   - `DerivativeUnit` の concrete 化に向けて、
+     `mod q` 非零性から unit を得る局所補題を実装し、
+     `NewtonCorrection` / `ZeroLift` まで連結する
+2. 実施:
+   - `isUnit_of_nonzero_mod_q_primepow` を実装
+     （`q` prime, `mod q` 非零 ⇒ `ZMod (q^(n+1))` で unit）
+   - `HenselLiftStepDerivativeNonzeroModQPrimeTarget` を追加
+   - `henselLiftStepDerivativeUnitPrime_of_nonzeroModQ` を証明
+   - `henselLiftStepLinearizedSolve_of_nonzeroModQ_prime` を concrete 証明
+   - `henselLiftStepZeroLift_of_newtonCorrection` を実装
+   - `henselLiftStepZeroLift_of_nonzeroModQ_prime` を実装
+3. 結論:
+   - prime 文脈で
+     `DerivativeNonzeroModQ` → `DerivativeUnit` → `LinearizedSolve`
+     → `NewtonCorrection` → `ZeroLift`
+     の concrete 連結を確立 ✅
+   - ただし `DerivativeNonzeroModQPrimeTarget` 自体の concrete 証明は未完
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - ZeroLift 定理を target 定義前に置いて依存順エラー
+   - 定理を `HenselLiftStepZeroLiftTarget` 定義後へ移設して解消
+6. 次の課題:
+   - `HenselLiftStepDerivativeNonzeroModQPrimeTarget` の concrete 証明
+   - それを通じた `HenselLiftStepDerivativeUnitTarget`（prime文脈）の実質 concrete 化完了
+
+### 追記: 2026/04/04 02:11:15 JST DerivativeNonzero concrete 化
+
+1. 目的:
+   - `HenselLiftStepDerivativeNonzeroModQPrimeTarget` を concrete に閉じ、
+     prime 文脈で `DerivativeUnit` から `ZeroLift` までの連結を実装完了する
+2. 実施:
+   - `henselLiftStepDerivativeNonzeroModQPrime_concrete` を実装
+     （`∑ r^i = 0` から `r ≠ 1`, `r^p = 1` を得て、
+      微分恒等式を `ZMod q` で評価して導関数和の `mod q` 非零を示す）
+   - `henselLiftStepDerivativeUnitPrime_of_nonzeroModQ` を concrete 接続
+   - `henselLiftStepLinearizedSolve_of_nonzeroModQ_prime` を concrete 化
+   - `henselLiftStepZeroLift_of_newtonCorrection` と
+     `henselLiftStepZeroLift_of_nonzeroModQ_prime` を実装
+3. 結論:
+   - prime 文脈では
+     `DerivativeNonzeroModQ` → `DerivativeUnit` → `LinearizedSolve`
+     → `NewtonCorrection` → `ZeroLift`
+     の concrete chain が確立した ✅
+   - これにより、以前の TODO にあった
+     `HenselLiftStepDerivativeUnitTarget`（prime 文脈）の実質 concrete 化は完了
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - `castHom` 合成・`map_add`・定理配置順の不整合で一時的にビルド停止
+   - `HenselLiftStepZeroLiftTarget` 定義後への移設と明示補題導入で解消
+6. 次の課題:
+   - prime 文脈 concrete chain を one-step `GeomSum` / `ArithmeticKernel` の FLT 側使用箇所へ接続
+   - 必要なら一般形 target と prime 文脈 target の役割分担を整理して命名を安定化
+
+### 追記: 2026/04/04 02:37:01 JST prime Hensel chain の one-step 接続
+
+1. 目的:
+   - prime 文脈で concrete 化済みの Hensel chain を、
+     FLT 側の one-step 使用箇所へ clean に接続する
+2. 実施:
+   - `henselLiftStepCorrection_of_nonzeroModQ_prime` を追加
+   - `henselLiftStepArithmeticKernel_of_nonzeroModQ_prime` を追加
+   - `henselLiftStepGeomSum_of_nonzeroModQ_prime` を追加
+   - テストに新定理の `#print axioms` を追記
+3. 結論:
+   - prime 文脈 concrete chain は
+     `ZeroLift` で止まらず、FLT 側 one-step 受け口である
+     `Correction` / `ArithmeticKernel` / `GeomSum` まで接続完了 ✅
+   - 残る主戦場は、これを `StrongSuperWieferichProviderTarget` など
+     FLT 本線の provider 語彙へどう昇格するかに移った
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - 特になし（既存 chain の再利用で素直に接続できた）
+6. 次の課題:
+   - `StrongSuperWieferichProviderTarget` への clean bridge 設計
+   - 必要なら one-step の反復補題を整備して `q^p` レベルまでの provider を concrete 化
+
+### 追記: 2026/04/04 04:40:22 JST StrongSuperWieferich provider concrete 化
+
+1. 目的:
+   - `StrongSuperWieferichProviderTarget` への clean bridge を実装し、
+     prime 文脈 one-step chain を FLT 本線の provider 語彙へ昇格する
+2. 実施:
+   - `strongSuperWieferichCongruenceV2_concrete` を実装
+     (`QAdicResidue` + `GN` の geom_sum₂ 表現 + `y` の unit 性から
+      `R := z / y` を `ZMod (q^p)` で構成し、
+      branch preserving と `Φ_p(R)=0 mod q^p` を同時に証明)
+   - `strongSuperWieferichProvider_concrete` を追加
+     （provider target を direct concrete で充足）
+   - テストに `#print axioms` を追加
+3. 結論:
+   - `StrongSuperWieferichProviderTarget` は concrete に閉じた ✅
+   - 想定していた one-step 反復補題は、この段階では不要だった
+   - Level 1s の FLT 本線への接続は provider 語彙まで到達
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - `q ∣ q^p` witness と cast-sum 書き換えで Lean が素直に簡約せず一時停止
+   - `dvd_pow_self` と cast-of-sum の明示変形で解消
+6. 次の課題:
+   - Level 1s を open と書いているコメント/設計メモの更新
+   - `QAdicDescentExistenceTarget` 以降の Level 2 主戦場へ集中
+
+### 追記: 2026/04/04 06:00:14 JST Level 2 の本線接続
+
+1. 目的:
+   - `QAdicDescentExistenceTarget` 側へ主戦場を移し、
+     これが既存 primitive / FLT chain のどこへ刺さるかを code 上で明示する
+2. 実施:
+   - `pthRootCore_of_qAdicDescentExistence` を追加
+   - `pthRoot_of_qAdicDescentExistence` を追加
+   - `gnReducedGap_of_qAdicDescentExistence` を追加
+   - `primitivePacketDescent_of_qAdicDescentExistence` を追加
+   - `FLTPrimeGe5Target_of_qAdicDescentExistence_precise` を追加
+   - テストへ `#print axioms` を追記
+3. 結論:
+   - `QAdicDescentExistenceTarget` は単なる分析メモではなく、
+     `PthRootCoreTarget` を経由して既存の primitive descent / FLT chain へ
+     直接流し込める open kernel として定着した ✅
+   - これにより Level 2 が、実際の本線ボトルネックであることが
+     Lean 上でも明示された
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - `QAdicDescentExistenceTarget` の等式向きが `PthRootCoreTarget` と逆で一時停止
+   - witness を取り出して `Eq.symm` で向きを合わせて解消
+6. 次の課題:
+   - `QAdicDescentExistenceTarget` 自体のさらなる分解
+   - Level 1s を open と書いている周辺コメントの整理
+   - Level 2 の local-global gap をどの語彙で最小核にするか設計する
+
+### 追記: 2026/04/04 06:16:03 JST Level 2 最小核化
+
+1. 目的:
+    - `QAdicDescentExistenceTarget` をさらに分解し、
+       Level 2 の open content を最小語彙へ圧縮する
+    - 併せて Level 1s を open と読める古いコメントを整理する
+2. 実施:
+    - `PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget` を新設
+       （StrongSuperWieferich witness から整数 descent を回収する最小局所-大域核）
+    - `qAdicLocalGlobalGap_of_qAdicDescentExistence` を追加
+       （粗い Level 2 target → 最小核）
+    - `pthRootCore_of_qAdicLocalGlobalGap` を追加
+    - `pthRoot_of_qAdicLocalGlobalGap` / `gnReducedGap_of_qAdicLocalGlobalGap`
+       / `primitivePacketDescent_of_qAdicLocalGlobalGap`
+       / `FLTPrimeGe5Target_of_qAdicLocalGlobalGap_precise` を追加
+    - Level 構造コメントを更新し、Level 1s を concrete、
+       open kernel を Level 2m に集約した表記へ修正
+3. 結論:
+    - `QAdicDescentExistenceTarget` は coarse bridge 語彙、
+       真の open content は
+       `PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget`
+       にある、という整理が Lean 上でも明示された ✅
+    - Level 1s はもはや open kernel ではなく、
+       local-global gap だけが主戦場であることがコメント上でも整合した
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+    - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+    - `strongSuperWieferichCongruenceV2_concrete` に渡す gap 等式として
+       reduced-gap 方程式を誤って渡し、一時的に型不一致
+    - `z - y = z - y` の自明式を別途立てて解消
+6. 次の課題:
+    - `PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget` 自体のさらなる分解
+    - local-global gap の最小核を整数論的/幾何学的にどう表現するか設計を詰める
+    - Level 2m を中心に、PthRootCore / innermost 3-kernel 記述を整理する
+
+### 追記: 2026/04/04 06:29:40 JST Level 2m の整数/幾何二分
+
+1. 目的:
+   - `PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget` をさらに分解し、
+     local-global gap の最小核を整数語彙と幾何語彙の二表現で整理する
+   - Level 2m を中心に `PthRootCore` / innermost 3-kernel 記述を詰める
+2. 実施:
+   - `PrimeGe5BranchAPrimitiveQAdicGapReductionTarget` を新設
+     （strong witness から reduced gap `g'` を回収する幾何語彙版）
+   - `qAdicGapReduction_of_qAdicLocalGlobalGap` を追加
+   - `qAdicLocalGlobalGap_of_qAdicGapReduction` を追加
+   - `pthRootCore_of_qAdicGapReduction` を追加
+   - `FLTPrimeGe5Target_of_qAdicGapReduction_precise` を追加
+   - §19/§20 のコメントを更新し、
+     Level 2m を `2m-int` / `2m-geom` の同値な二表現として整理
+3. 結論:
+   - Level 2m は
+     `PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget`
+     （整数語彙）と
+     `PrimeGe5BranchAPrimitiveQAdicGapReductionTarget`
+     （幾何語彙）
+     の同値な二形式で扱えるようになった ✅
+   - 幾何語彙版は `GNReducedGap` / Cosmic Formula により近く、
+     今後の最小核設計の中心語彙として使いやすくなった
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - 特になし（既存の Cosmic Formula 橋をそのまま転用できた）
+6. 次の課題:
+   - `PrimeGe5BranchAPrimitiveQAdicGapReductionTarget` をさらに分解し、
+     幾何語彙版の最終 1 核を探る
+   - `PthRootCore` / `FLTPrimeGe5Target_of_innermost_3kernels` 周辺の説明を
+     `2m-int` / `2m-geom` 中心へ更新する
+
+### 追記: 2026/04/04 06:45:47 JST 2m-core の切り出し
+
+1. 目的:
+   - `PrimeGe5BranchAPrimitiveQAdicGapReductionTarget` をさらに分解し、
+     幾何語彙版の最終 1 核候補を切り出す
+   - `PthRootCore` / `FLTPrimeGe5Target_of_innermost_3kernels` 周辺の説明を
+     `2m-int` / `2m-geom` / `2m-core` 中心へ更新する
+2. 実施:
+   - `PrimeGe5BranchAPrimitiveQAdicGapReductionCoreTarget` を新設
+     （pack + strong witness から reduced gap `g'` を回収する pure q-adic core）
+   - `qAdicGapReduction_of_core` を追加
+   - `pthRootCore_of_qAdicGapReductionCore` を追加
+   - `FLTPrimeGe5Target_of_qAdicGapReductionCore_precise` を追加
+   - §16 / §17.1 / §20 の説明を更新し、
+     primitive 側 kernel の主戦場が `2m-geom/core` にあることを明示
+   - テストへ `#print axioms` を追加
+3. 結論:
+   - Level 2m-geom からさらに bookkeeping を剥がした
+     `PrimeGe5BranchAPrimitiveQAdicGapReductionCoreTarget`
+     が、現時点での **最終 1 核候補** として定着した ✅
+   - `PthRootCore` は open kernel そのものというより、
+     `2m-core` を既存 primitive/FLT chain へ運ぶ wrapper 語彙として整理された
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - 特になし（既存の 2m-geom → PthRootCore 供給線をそのまま利用できた）
+6. 次の課題:
+   - `PrimeGe5BranchAPrimitiveQAdicGapReductionCoreTarget` の仮定をさらに削れるか検討
+   - `2m-core` の中で truly local な部分と genuinely global な部分を分離する
+   - 以後の議論・コメントを `PthRootCore` 中心ではなく `2m-core` 中心へ寄せる
+
+### 追記: 2026/04/04 08:06:13 JST 2m-core の local/global 分離
+
+1. 目的:
+   - `PrimeGe5BranchAPrimitiveQAdicGapReductionCoreTarget` の仮定をさらに削れるかを検討し、
+     truly local な部分と genuinely global な部分を分離する
+   - 以後の議論・コメントを `PthRootCore` 中心ではなく `2m-core` 中心へ寄せる
+2. 実施:
+   - `PrimeGe5BranchAPrimitiveQAdicGapWitnessTarget` を新設
+     （2m-local: strong q-adic witness の供給）
+   - `PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget` を新設
+     （2m-global: witness から reduced gap `g'` を回収する genuinely global 部分）
+   - `qAdicGapWitness_concrete` を追加
+   - `qAdicGapReductionCore_of_global` を追加
+   - `pthRootCore_of_qAdicGapReductionGlobal` を追加
+   - `FLTPrimeGe5Target_of_qAdicGapReductionGlobal_precise` を追加
+   - §16 / §17.1 / §20 の説明を更新し、
+     `2m-core = 2m-local (concrete) + 2m-global (open)` という見取り図へ整理
+3. 結論:
+   - `2m-core` のうち truly local な部分は concrete に供給可能であり、
+     genuinely open な内容は
+     `PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget`
+     に集中することが Lean 上でも明示された ✅
+   - これにより現時点の最終 1 核候補は `2m-core` ではなく、
+     より鋭い `2m-global` と見なせるようになった
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - `2m-global` の型に不要な `hqpow` 隠し引数を残したため一時的に elaboration が停滞
+   - genuinely global 部分では不要なので型から除去して解消
+6. 次の課題:
+   - `PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget` の仮定をさらに削れるか点検
+   - `2m-global` の中でなお局所的に処理できる成分がないか洗う
+   - 以後の primitive 側 kernel の記述を `2m-global` 中心へ寄せる
+
+### 追記: 2026/04/04 09:11:51 JST §22. 2m-global → 無限降下法への直通道
+
+1. 目的:
+   - `2m-global` から無限降下法 (`branchA_wf_contradiction_on_z`) への
+     接続経路を明示的に Lean 上で固定する
+   - primitive 側 kernel の記述を `2m-global` 中心へ完全に寄せる
+2. 実施:
+   - `primitivePacketDescentStrong_of_qAdicGapReductionGlobal` を追加
+     （2m-global → PacketDescentStrongTarget、`¬p∣t` 保証付き strict descent）
+   - `branchAFringeContradiction_of_qAdicGapReductionGlobal` を追加
+     （2m-global → BranchAFringeContradictionTarget、内部で `Nat.find` 無限降下法）
+   - `branchARefuter_of_qAdicGapReductionGlobal` を追加
+     （2m-global + Peel → BranchARefuterTarget）
+   - `FLTPrimeGe5Target_of_qAdicGapReductionGlobal_infiniteDescent` を追加
+     （2m-global + Peel + BranchB → FLT、無限降下法経路を明示的に通る版）
+   - §22 セクションを新設し、経路図・docstring を整備
+   - テストへ `#print axioms` を追加
+3. 結論:
+   - `2m-global` が concrete 化されれば、primitive 側の **無限降下法が回る** ことが
+     Lean 上で formal に保証された ✅
+   - 経路: 2m-global → PthRootCore → GNReducedGap
+     → PacketDescentStrong (CyclotomicExistence は concrete)
+     → `branchA_wf_contradiction_on_z` (= `Nat.find` による well-founded descent)
+     → BranchAFringeContradiction
+   - primitive 側に限れば open kernel は **`2m-global` 1 本だけ**
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - 特になし（既存橋の合成で全て通った）
+6. 次の課題:
+   - `2m-global` の concrete 化に向けた数学的分析
+   - Peel 側 (`PacketFromError`) / BranchB (`NonLiftableGNBridge`) の並行攻略
+   - 全体の open kernel 一覧を §22 の経路図中心で最終整理する

@@ -728,6 +728,10 @@ theorem triominoPrimeProvider_of_3kernels_precise
 これは DescentSeed の中身を剥き出しにしたもので、
 q-adic lifting の数学にダイレクトにアクセスする語彙を提供する。
 
+ただし現在は Level 1s provider が concrete 化されたため、
+真の open content はこの `PthRootCoreTarget` 全体ではなく、
+後段の `2m-geom/core`、さらにその中の genuinely global 部分に圧縮できる。
+
 ### QAdicLiftSeed の concrete 供給
 
 `primeGe5BranchAPrimitiveRestoreQAdicLift_default` が concrete に構成する:
@@ -917,6 +921,10 @@ FLT p ≥ 5 の最内核版。
 3. NonLiftableGNBridge: BranchB
 
 bridges は全て既存 concrete chain で処理。
+
+現在の見取り図では、primitive 側 kernel 1. はさらに
+`2m-int` / `2m-geom` / `2m-core` / `2m-global` へ圧縮可能であり、
+実際の主戦場は `2m-global` にある。
 -/
 theorem FLTPrimeGe5Target_of_innermost_3kernels
     (hPrimCore : PrimeGe5BranchAPrimitivePthRootCoreTarget)
@@ -1040,8 +1048,11 @@ Show: ∃ g', g' · GN(p, g', y) = (x/q)^p
 
 ### 進捗: Sub-target 型の定義
 
-Sub-target は §16 の PthRootCoreTarget に吸収されるため、
-ここでは数学的分析の記録のみを保持する。
+Sub-target は後段で
+`PrimeGe5BranchAPrimitiveQAdicGapReductionTarget`
+（幾何語彙）として切り出し、
+さらに `PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget`
+（整数語彙）と同値な最小核として扱う。
 -/
 
 /-!
@@ -1444,6 +1455,502 @@ theorem weakSuperWieferich_of_strongV2 :
   exact ⟨j, hjpos, R, hzRy⟩
 
 /--
+`Δ^2 = 0` のときの一次補正公式（幾何和版）の target。
+
+`F(T)=∑_{i=0}^{p-1} T^i` に対し、`F(R+Δ)` は `Δ` に関して一次で止まる。
+この target を concrete に閉じれば、specialized Newton/Hensel の核が通る。
+-/
+abbrev GeomSumFirstOrderSqZeroTarget : Prop :=
+  ∀ {m p : ℕ} (R Δ : ZMod m),
+    Δ ^ 2 = 0 →
+      (∑ i ∈ Finset.range p, (R + Δ) ^ i)
+        = (∑ i ∈ Finset.range p, R ^ i)
+          + (∑ i ∈ Finset.range p, ((i : ZMod m) * R ^ (i - 1))) * Δ
+
+/--
+`GeomSumFirstOrderSqZeroTarget` の concrete 実装。
+
+`P(X)=∑_{i=0}^{p-1}X^i` に対して
+`Polynomial.eval_add_of_sq_eq_zero` を適用し、
+`P'(X)=∑ i*X^(i-1)` を展開して得る。
+-/
+theorem geomSumFirstOrderSqZero_concrete : GeomSumFirstOrderSqZeroTarget := by
+  intro m p R Δ hΔ2
+  let P : Polynomial (ZMod m) :=
+    ∑ i ∈ Finset.range p, (Polynomial.X : Polynomial (ZMod m)) ^ i
+  have hlin := Polynomial.eval_add_of_sq_eq_zero P R Δ hΔ2
+  have hderiv :
+      Polynomial.eval R
+        (∑ x ∈ Finset.range p, Polynomial.derivative ((Polynomial.X : Polynomial (ZMod m)) ^ x))
+      = ∑ i ∈ Finset.range p, ((i : ZMod m) * R ^ (i - 1)) := by
+    simp [Polynomial.derivative_X_pow, Polynomial.eval_finset_sum]
+  calc
+    (∑ i ∈ Finset.range p, (R + Δ) ^ i)
+        = (∑ i ∈ Finset.range p, R ^ i)
+            + Polynomial.eval R
+                (∑ x ∈ Finset.range p, Polynomial.derivative ((Polynomial.X : Polynomial (ZMod m)) ^ x)) * Δ := by
+                  simpa [P] using hlin
+    _ = (∑ i ∈ Finset.range p, R ^ i)
+          + (∑ i ∈ Finset.range p, ((i : ZMod m) * R ^ (i - 1))) * Δ := by
+            rw [hderiv]
+
+/--
+`Δ = q^n * c`（mod `q^(n+1)`）では `Δ^2 = 0`。
+-/
+theorem qpow_mul_sq_eq_zero_in_next_mod
+    {q n : ℕ} (hn : 1 ≤ n) (c : ZMod (q ^ (n + 1))) :
+    (((q ^ n : ZMod (q ^ (n + 1))) * c) ^ 2 = 0) := by
+  have hdiv : q ^ (n + 1) ∣ q ^ (n * 2) := by
+    have hle : n + 1 ≤ n * 2 := by omega
+    exact pow_dvd_pow q hle
+  have hq2 : ((q ^ n : ZMod (q ^ (n + 1))) ^ 2) = 0 := by
+    simpa [pow_mul, Nat.cast_pow] using
+      (ZMod.natCast_eq_zero_iff (q ^ (n * 2)) (q ^ (n + 1))).2 hdiv
+  calc
+    (((q ^ n : ZMod (q ^ (n + 1))) * c) ^ 2)
+        = ((q ^ n : ZMod (q ^ (n + 1))) ^ 2) * (c ^ 2) := by ring
+    _ = 0 := by simp [hq2]
+
+/--
+`q^n * c` は `ZMod (q^n)` へ落とすと 0 になる。
+-/
+theorem castHom_qpow_mul_eq_zero
+    {q n : ℕ} (hdiv : q ^ n ∣ q ^ (n + 1)) (c : ZMod (q ^ (n + 1))) :
+    (ZMod.castHom hdiv (ZMod (q ^ n))) ((q ^ n : ZMod (q ^ (n + 1))) * c) = 0 := by
+  have hqpow_zero :
+      (ZMod.castHom hdiv (ZMod (q ^ n))) (q ^ n : ZMod (q ^ (n + 1))) = 0 := by
+    rw [show (q ^ n : ZMod (q ^ (n + 1))) = (q : ZMod (q ^ (n + 1))) ^ n by simp]
+    rw [map_pow, ZMod.castHom_apply]
+    rw [ZMod.cast_natCast hdiv]
+    simpa [Nat.cast_pow] using
+      (ZMod.natCast_pow_eq_zero_of_le (p := q) (m := n) (n := n) le_rfl)
+  calc
+    (ZMod.castHom hdiv (ZMod (q ^ n))) ((q ^ n : ZMod (q ^ (n + 1))) * c)
+        = (ZMod.castHom hdiv (ZMod (q ^ n))) (q ^ n : ZMod (q ^ (n + 1)))
+            * (ZMod.castHom hdiv (ZMod (q ^ n))) c := by
+              rw [map_mul]
+    _ = 0 := by simp [hqpow_zero]
+
+/--
+specialized Newton/Hensel 一次補正公式:
+`F(T)=∑ T^i` に対し `T = R + q^n*c` の一次展開。
+-/
+theorem geomSum_first_order_qpow_correction
+    (hFirstOrder : GeomSumFirstOrderSqZeroTarget)
+    {p q n : ℕ} (hn : 1 ≤ n) (R c : ZMod (q ^ (n + 1))) :
+    (∑ i ∈ Finset.range p, (R + (q ^ n : ZMod (q ^ (n + 1))) * c) ^ i)
+      = (∑ i ∈ Finset.range p, R ^ i)
+        + (∑ i ∈ Finset.range p,
+            ((i : ZMod (q ^ (n + 1))) * R ^ (i - 1)))
+            * ((q ^ n : ZMod (q ^ (n + 1))) * c) := by
+  apply hFirstOrder
+  exact qpow_mul_sq_eq_zero_in_next_mod hn c
+
+/-- 一次補正公式の concrete 版。 -/
+theorem geomSum_first_order_qpow_correction_concrete
+    {p q n : ℕ} (hn : 1 ≤ n) (R c : ZMod (q ^ (n + 1))) :
+    (∑ i ∈ Finset.range p, (R + (q ^ n : ZMod (q ^ (n + 1))) * c) ^ i)
+      = (∑ i ∈ Finset.range p, R ^ i)
+        + (∑ i ∈ Finset.range p,
+            ((i : ZMod (q ^ (n + 1))) * R ^ (i - 1)))
+            * ((q ^ n : ZMod (q ^ (n + 1))) * c) :=
+  geomSum_first_order_qpow_correction geomSumFirstOrderSqZero_concrete hn R c
+
+/--
+一次補正後の線形方程式が可解であることを要求する target。
+
+`F(T)=∑ T^i` の one-step Newton 補正は、この線形式が解ければ成立する。
+-/
+abbrev HenselLiftStepLinearizedSolveTarget : Prop :=
+  ∀ {p q n : ℕ}, Nat.Prime q → q ≠ p → 1 ≤ n →
+    ∀ (Rn : ZMod (q ^ n)),
+      (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+      ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (Rn1 : ZMod (q ^ (n + 1))),
+        ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) →
+        ∃ c : ZMod (q ^ (n + 1)),
+          (∑ i ∈ Finset.range p,
+              ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1)))
+            * ((q ^ n : ZMod (q ^ (n + 1))) * c)
+            = - (∑ i ∈ Finset.range p, Rn1 ^ i)
+
+/--
+`castHom` の kernel 元を `q^n` 倍として表せることを要求する target。
+-/
+abbrev HenselLiftStepKernelDivisionTarget : Prop :=
+  ∀ {q n : ℕ}, Nat.Prime q → 1 ≤ n →
+    ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (x : ZMod (q ^ (n + 1))),
+      (ZMod.castHom hdiv (ZMod (q ^ n))) x = 0 →
+      ∃ t : ZMod (q ^ (n + 1)), x = (q ^ n : ZMod (q ^ (n + 1))) * t
+
+/-- `castHom` kernel の concrete 分解（`q` prime, `n ≥ 1`）。 -/
+theorem henselLiftStepKernelDivision_concrete : HenselLiftStepKernelDivisionTarget := by
+  intro q n hq hn hdiv x hx
+  have hqpow_pos : 0 < q ^ (n + 1) := pow_pos hq.pos _
+  have hne : NeZero (q ^ (n + 1)) := ⟨Nat.ne_of_gt hqpow_pos⟩
+  letI : NeZero (q ^ (n + 1)) := hne
+  have hx_cast : (ZMod.cast x : ZMod (q ^ n)) = 0 := by
+    simpa [ZMod.castHom_apply] using hx
+  have hx_val_mod : ((x.val : ZMod (q ^ n)) = 0) := by
+    rw [← ZMod.cast_eq_val (a := x)]
+    exact hx_cast
+  have hx_val_dvd : q ^ n ∣ x.val := (ZMod.natCast_eq_zero_iff x.val (q ^ n)).1 hx_val_mod
+  rcases hx_val_dvd with ⟨tNat, htNat⟩
+  refine ⟨(tNat : ZMod (q ^ (n + 1))), ?_⟩
+  calc
+    x = (x.val : ZMod (q ^ (n + 1))) := by symm; exact ZMod.natCast_zmod_val x
+    _ = ((q ^ n * tNat : ℕ) : ZMod (q ^ (n + 1))) := by simp [htNat]
+    _ = (q ^ n : ZMod (q ^ (n + 1))) * (tNat : ZMod (q ^ (n + 1))) := by
+          simp [Nat.cast_mul]
+
+/--
+線形化係数 `∑ i * R^(i-1)` が unit であることを要求する target。
+-/
+abbrev HenselLiftStepDerivativeUnitTarget : Prop :=
+  ∀ {p q n : ℕ}, Nat.Prime q → q ≠ p → 1 ≤ n →
+    ∀ (Rn : ZMod (q ^ n)),
+      (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+      ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (Rn1 : ZMod (q ^ (n + 1))),
+        ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) →
+        IsUnit (∑ i ∈ Finset.range p, ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1)))
+
+/--
+FLT 文脈（`p` prime）に限定した derivative-unit target。
+
+`p` が合成数だと係数和導関数が非単元になる反例があるため、
+concrete 証明はこの版を主戦場にする。
+-/
+abbrev HenselLiftStepDerivativeUnitPrimeTarget : Prop :=
+  ∀ {p q n : ℕ}, Nat.Prime p → Nat.Prime q → q ≠ p → 1 ≤ n →
+    ∀ (Rn : ZMod (q ^ n)),
+      (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+      ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (Rn1 : ZMod (q ^ (n + 1))),
+        ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) →
+        IsUnit (∑ i ∈ Finset.range p, ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1)))
+
+/-- prime 文脈版から一般版（`p` prime 前提つき）へのブリッジ。 -/
+theorem henselLiftStepDerivativeUnit_of_prime
+    (hPrime : HenselLiftStepDerivativeUnitPrimeTarget) :
+    ∀ {p q n : ℕ}, Nat.Prime p → Nat.Prime q → q ≠ p → 1 ≤ n →
+      ∀ (Rn : ZMod (q ^ n)),
+        (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+        ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (Rn1 : ZMod (q ^ (n + 1))),
+          ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) →
+          IsUnit (∑ i ∈ Finset.range p, ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1))) := by
+  intro p q n hp hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  exact hPrime hp hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+
+/--
+`mod q` で非零なら `ZMod (q^(n+1))` では unit（`q` prime）。
+-/
+theorem isUnit_of_nonzero_mod_q_primepow
+    {q n : ℕ} (hq : Nat.Prime q) (a : ZMod (q ^ (n + 1)))
+    (ha : (ZMod.castHom (show q ∣ q ^ (n + 1) from ⟨q ^ n, by simp [pow_succ, Nat.mul_comm]⟩)
+            (ZMod q)) a ≠ 0) :
+    IsUnit a := by
+  have hqpow_pos : 0 < q ^ (n + 1) := pow_pos hq.pos _
+  have hqpow_ne : NeZero (q ^ (n + 1)) := ⟨Nat.ne_of_gt hqpow_pos⟩
+  let b : ℕ := a.val
+  have hb_not_dvd_q : ¬ q ∣ b := by
+    intro hqdb
+    have hb_zero_q : (b : ZMod q) = 0 := (ZMod.natCast_eq_zero_iff b q).2 hqdb
+    have hcast_a_q :
+        (ZMod.castHom (show q ∣ q ^ (n + 1) from ⟨q ^ n, by simp [pow_succ, Nat.mul_comm]⟩)
+            (ZMod q)) a = (b : ZMod q) := by
+      rw [ZMod.castHom_apply, ZMod.cast_eq_val]
+    exact ha (hcast_a_q.trans hb_zero_q)
+  have hb_coprime : Nat.Coprime b (q ^ (n + 1)) := hq.coprime_pow_of_not_dvd hb_not_dvd_q
+  have hb_unit : IsUnit (b : ZMod (q ^ (n + 1))) := (ZMod.isUnit_iff_coprime b (q ^ (n + 1))).2 hb_coprime
+  simpa [b, ZMod.natCast_zmod_val] using hb_unit
+
+/--
+導関数係数の `mod q` 非零性を仮定する prime 文脈 target。
+-/
+abbrev HenselLiftStepDerivativeNonzeroModQPrimeTarget : Prop :=
+  ∀ {p q n : ℕ}, Nat.Prime p → Nat.Prime q → q ≠ p → 1 ≤ n →
+    ∀ (Rn : ZMod (q ^ n)),
+      (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+      ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (Rn1 : ZMod (q ^ (n + 1))),
+        ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) →
+        (ZMod.castHom (show q ∣ q ^ (n + 1) from ⟨q ^ n, by simp [pow_succ, Nat.mul_comm]⟩)
+            (ZMod q))
+          (∑ i ∈ Finset.range p, ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1))) ≠ 0
+
+/--
+`DerivativeNonzeroModQPrimeTarget` の concrete 候補。
+
+`∑ r^i = 0` から `r ≠ 1` かつ `r^p = 1` を得て、
+積の微分恒等式を `ZMod q` で評価して導関数和の非零を示す。
+-/
+theorem henselLiftStepDerivativeNonzeroModQPrime_concrete :
+    HenselLiftStepDerivativeNonzeroModQPrimeTarget := by
+  intro p q n hp hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  let hq_div_qn : q ∣ q ^ n := by
+    rcases n with _ | k
+    · exact (False.elim (Nat.not_succ_le_zero 0 hn))
+    · exact ⟨q ^ k, by simp [pow_succ, Nat.mul_comm]⟩
+  let hq_div_qnp1 : q ∣ q ^ (n + 1) := ⟨q ^ n, by simp [pow_succ, Nat.mul_comm]⟩
+  let r : ZMod q := (ZMod.castHom hq_div_qnp1 (ZMod q)) Rn1
+  have hcast_q : r = (ZMod.castHom hq_div_qn (ZMod q)) Rn := by
+    have hstep :
+        (ZMod.castHom hq_div_qn (ZMod q))
+            ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1) = r := by
+      change (((ZMod.castHom hq_div_qn (ZMod q)).comp (ZMod.castHom hdiv (ZMod (q ^ n)))) Rn1) = r
+      rw [ZMod.castHom_comp]
+    calc
+      r = (ZMod.castHom hq_div_qn (ZMod q)) ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1) := by
+            symm; exact hstep
+      _ = (ZMod.castHom hq_div_qn (ZMod q)) Rn := by simp [hcast]
+  have hsum_q_Rn :
+      ∑ i ∈ Finset.range p, ((ZMod.castHom hq_div_qn (ZMod q)) Rn) ^ i = 0 := by
+    have := congrArg (ZMod.castHom hq_div_qn (ZMod q)) hsum
+    simpa [map_sum, map_pow] using this
+  have hsum_q : ∑ i ∈ Finset.range p, r ^ i = 0 := by
+    simpa [hcast_q] using hsum_q_Rn
+  have hq_not_dvd_p : ¬ q ∣ p := by
+    intro hqp
+    rcases (Nat.dvd_prime hp).1 hqp with hq1 | hqp_eq
+    · exact hq.ne_one hq1
+    · exact hq_ne_p hqp_eq
+  have hp_ne_zero_q : (p : ZMod q) ≠ 0 := by
+    intro hp0
+    exact hq_not_dvd_p ((ZMod.natCast_eq_zero_iff p q).1 hp0)
+  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  have hroot : r ≠ 1 ∧ r ^ p = 1 :=
+    geomSum_zero_imp_pow_eq_one (q := q) (p := p) r (Nat.pos_of_ne_zero hp.ne_zero) hp_ne_zero_q hsum_q
+  have hr_ne_one : r ≠ 1 := hroot.1
+  have hr_pow_one : r ^ p = 1 := hroot.2
+  let Bq : ZMod q := ∑ i ∈ Finset.range p, ((i : ZMod q) * r ^ (i - 1))
+  have hprod :
+      (∑ i ∈ Finset.range p, ((Polynomial.X : Polynomial (ZMod q)) ^ i))
+        * ((Polynomial.X : Polynomial (ZMod q)) - 1)
+      = (Polynomial.X : Polynomial (ZMod q)) ^ p - 1 := by
+    simpa using (geom_sum_mul (Polynomial.X : Polynomial (ZMod q)) p)
+  have hderiv_eval :
+      Bq * (r - 1) + (∑ i ∈ Finset.range p, r ^ i)
+        = (p : ZMod q) * r ^ (p - 1) := by
+    have hderiv := congrArg Polynomial.derivative hprod
+    have heval := congrArg (Polynomial.eval r) hderiv
+    have hEvalDeriv :
+        Polynomial.eval r
+          (∑ x ∈ Finset.range p, Polynomial.derivative ((Polynomial.X : Polynomial (ZMod q)) ^ x))
+        = Bq := by
+      calc
+        Polynomial.eval r
+            (∑ x ∈ Finset.range p, Polynomial.derivative ((Polynomial.X : Polynomial (ZMod q)) ^ x))
+            = ∑ x ∈ Finset.range p,
+                Polynomial.eval r (Polynomial.derivative ((Polynomial.X : Polynomial (ZMod q)) ^ x)) := by
+                    simpa using
+                      (Polynomial.eval_finset_sum
+                        (s := Finset.range p)
+                        (g := fun x => Polynomial.derivative ((Polynomial.X : Polynomial (ZMod q)) ^ x))
+                        (x := r)
+                      )
+        _ = ∑ x ∈ Finset.range p, ((x : ZMod q) * r ^ (x - 1)) := by
+              refine Finset.sum_congr rfl ?_
+              intro i hi
+              simp [Polynomial.derivative_X_pow]
+        _ = Bq := by rfl
+    have hraw :
+        (r - 1)
+            * Polynomial.eval r
+                (∑ x ∈ Finset.range p, Polynomial.derivative ((Polynomial.X : Polynomial (ZMod q)) ^ x))
+          + (∑ i ∈ Finset.range p, r ^ i)
+          = (p : ZMod q) * r ^ (p - 1) := by
+      simpa [Polynomial.derivative_mul, Polynomial.derivative_sub, Polynomial.derivative_X_pow,
+      Polynomial.eval_add, Polynomial.eval_mul, Polynomial.eval_sub, Polynomial.eval_pow,
+      Polynomial.eval_sum, Polynomial.eval_X, Polynomial.eval_one, Polynomial.eval_natCast,
+      Finset.sum_add_distrib, mul_assoc, mul_comm, mul_left_comm] using heval
+    calc
+      Bq * (r - 1) + (∑ i ∈ Finset.range p, r ^ i)
+          = (r - 1) * Bq + (∑ i ∈ Finset.range p, r ^ i) := by ring
+      _ = (r - 1)
+            * Polynomial.eval r
+                (∑ x ∈ Finset.range p, Polynomial.derivative ((Polynomial.X : Polynomial (ZMod q)) ^ x))
+            + (∑ i ∈ Finset.range p, r ^ i) := by rw [hEvalDeriv]
+      _ = (p : ZMod q) * r ^ (p - 1) := hraw
+  have hr_ne_zero : r ≠ 0 := by
+    intro hr0
+    rw [hr0] at hsum_q
+    have hzero : (∑ i ∈ Finset.range p, (0 : ZMod q) ^ i) = 1 := by
+      simp [hp.ne_zero, (zero_geom_sum (R := ZMod q) (n := p))]
+    exact (by simp [hzero] at hsum_q)
+  have hpow_ne_zero : r ^ (p - 1) ≠ 0 := pow_ne_zero _ hr_ne_zero
+  have hrhs_ne_zero : (p : ZMod q) * r ^ (p - 1) ≠ 0 := mul_ne_zero hp_ne_zero_q hpow_ne_zero
+  have hBq_ne_zero : Bq ≠ 0 := by
+    intro hB0
+    have : (p : ZMod q) * r ^ (p - 1) = 0 := by
+      have hs : ∑ i ∈ Finset.range p, r ^ i = 0 := hsum_q
+      calc
+        (p : ZMod q) * r ^ (p - 1)
+            = Bq * (r - 1) + (∑ i ∈ Finset.range p, r ^ i) := by
+            exact ZMod.valMinAbs_inj.mp (
+              congrArg ZMod.valMinAbs (id (Eq.symm hderiv_eval))
+            )
+        _ = 0 := by simp [hB0, hs]
+    exact hrhs_ne_zero this
+  have hB_cast :
+      (ZMod.castHom hq_div_qnp1 (ZMod q))
+        (∑ i ∈ Finset.range p, ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1)))
+      = Bq := by
+    simp [Bq, r,
+      (show
+        (ZMod.castHom hq_div_qnp1 (ZMod q))
+          (∑ i ∈ Finset.range p, ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1)))
+          =
+        ∑ i ∈ Finset.range p,
+          ((i : ZMod q) * ((ZMod.castHom hq_div_qnp1 (ZMod q)) Rn1) ^ (i - 1)) by
+            simp [map_sum, map_mul, map_pow])]
+  intro hzero
+  exact hBq_ne_zero (hB_cast ▸ hzero)
+
+/--
+`mod q` 非零性 target から derivative-unit prime target を得る。
+-/
+theorem henselLiftStepDerivativeUnitPrime_of_nonzeroModQ
+    (hNonzero : HenselLiftStepDerivativeNonzeroModQPrimeTarget) :
+    HenselLiftStepDerivativeUnitPrimeTarget := by
+  intro p q n hp hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  let B : ZMod (q ^ (n + 1)) :=
+    ∑ i ∈ Finset.range p, ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1))
+  have hB_nonzero_q :
+      (ZMod.castHom (show q ∣ q ^ (n + 1) from ⟨q ^ n, by simp [pow_succ, Nat.mul_comm]⟩)
+          (ZMod q)) B ≠ 0 := by
+    dsimp [B]
+    exact hNonzero hp hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  exact isUnit_of_nonzero_mod_q_primepow hq B hB_nonzero_q
+
+/--
+kernel 分解と導関数係数の unit 性があれば線形化方程式は可解。
+-/
+theorem henselLiftStepLinearizedSolve_of_kernelDivision_and_derivativeUnit
+    (hKernelDiv : HenselLiftStepKernelDivisionTarget)
+    (hDerivUnit : HenselLiftStepDerivativeUnitTarget) :
+    HenselLiftStepLinearizedSolveTarget := by
+  intro p q n hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  let B : ZMod (q ^ (n + 1)) :=
+    ∑ i ∈ Finset.range p, ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1))
+  let S : ZMod (q ^ (n + 1)) := ∑ i ∈ Finset.range p, Rn1 ^ i
+  have hcast_pow : ∀ i : ℕ,
+      (ZMod.castHom hdiv (ZMod (q ^ n))) (Rn1 ^ i) = Rn ^ i := by
+    intro i
+    simp [map_pow, hcast]
+  have hS_cast : (ZMod.castHom hdiv (ZMod (q ^ n))) S = 0 := by
+    dsimp [S]
+    calc
+      (ZMod.castHom hdiv (ZMod (q ^ n))) (∑ i ∈ Finset.range p, Rn1 ^ i)
+          = ∑ i ∈ Finset.range p, (ZMod.castHom hdiv (ZMod (q ^ n))) (Rn1 ^ i) := by
+              simp [map_sum]
+      _ = ∑ i ∈ Finset.range p, Rn ^ i := by
+            refine Finset.sum_congr rfl ?_
+            intro i hi
+            exact hcast_pow i
+      _ = 0 := hsum
+  have hnegS_cast : (ZMod.castHom hdiv (ZMod (q ^ n))) (-S) = 0 := by
+    calc
+      (ZMod.castHom hdiv (ZMod (q ^ n))) (-S)
+          = -((ZMod.castHom hdiv (ZMod (q ^ n))) S) := by rw [map_neg]
+      _ = 0 := by simp [hS_cast]
+  obtain ⟨t, ht⟩ := hKernelDiv hq hn hdiv (-S) hnegS_cast
+  have hB_unit : IsUnit B := by
+    dsimp [B]
+    exact hDerivUnit hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  rcases hB_unit with ⟨u, hu⟩
+  refine ⟨↑u⁻¹ * t, ?_⟩
+  calc
+    B * ((q ^ n : ZMod (q ^ (n + 1))) * (↑u⁻¹ * t))
+        = (q ^ n : ZMod (q ^ (n + 1))) * (B * (↑u⁻¹ * t)) := by ring
+    _ = (q ^ n : ZMod (q ^ (n + 1))) * ((B * ↑u⁻¹) * t) := by ring
+    _ = (q ^ n : ZMod (q ^ (n + 1))) * ((1 : ZMod (q ^ (n + 1))) * t) := by
+          rw [← hu]
+          simp
+    _ = -S := by simp [ht]
+
+/--
+`KernelDivision` concrete + `DerivativeUnit` があれば `LinearizedSolve` は concrete に供給できる。
+-/
+theorem henselLiftStepLinearizedSolve_of_derivativeUnit
+    (hDerivUnit : HenselLiftStepDerivativeUnitTarget) :
+    HenselLiftStepLinearizedSolveTarget :=
+  henselLiftStepLinearizedSolve_of_kernelDivision_and_derivativeUnit
+    henselLiftStepKernelDivision_concrete hDerivUnit
+
+/-- prime 文脈の `DerivativeNonzeroModQ` から `LinearizedSolve` へ接続。 -/
+theorem henselLiftStepLinearizedSolve_of_nonzeroModQ_prime
+    (hNonzero : HenselLiftStepDerivativeNonzeroModQPrimeTarget) :
+    ∀ {p q n : ℕ}, Nat.Prime p → Nat.Prime q → q ≠ p → 1 ≤ n →
+      ∀ (Rn : ZMod (q ^ n)),
+        (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+        ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (Rn1 : ZMod (q ^ (n + 1))),
+          ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) →
+          ∃ c : ZMod (q ^ (n + 1)),
+            (∑ i ∈ Finset.range p,
+                ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1)))
+              * ((q ^ n : ZMod (q ^ (n + 1))) * c)
+              = - (∑ i ∈ Finset.range p, Rn1 ^ i) := by
+  intro p q n hp hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  let B : ZMod (q ^ (n + 1)) :=
+    ∑ i ∈ Finset.range p, ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1))
+  let S : ZMod (q ^ (n + 1)) := ∑ i ∈ Finset.range p, Rn1 ^ i
+  have hS_cast : (ZMod.castHom hdiv (ZMod (q ^ n))) S = 0 := by
+    dsimp [S]
+    calc
+      (ZMod.castHom hdiv (ZMod (q ^ n))) (∑ i ∈ Finset.range p, Rn1 ^ i)
+          = ∑ i ∈ Finset.range p, ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1) ^ i := by
+              simp [map_sum, map_pow]
+      _ = ∑ i ∈ Finset.range p, Rn ^ i := by simp [hcast]
+      _ = 0 := hsum
+  have hnegS_cast : (ZMod.castHom hdiv (ZMod (q ^ n))) (-S) = 0 := by
+    simp [map_neg, hS_cast]
+  rcases henselLiftStepKernelDivision_concrete hq hn hdiv (-S) hnegS_cast with ⟨t, ht⟩
+  have hB_unit : IsUnit B := by
+    have hPrimeDeriv : HenselLiftStepDerivativeUnitPrimeTarget :=
+      henselLiftStepDerivativeUnitPrime_of_nonzeroModQ hNonzero
+    dsimp [B]
+    exact hPrimeDeriv hp hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  rcases hB_unit with ⟨u, hu⟩
+  refine ⟨↑u⁻¹ * t, ?_⟩
+  calc
+    B * ((q ^ n : ZMod (q ^ (n + 1))) * (↑u⁻¹ * t))
+        = (q ^ n : ZMod (q ^ (n + 1))) * (B * (↑u⁻¹ * t)) := by ring
+    _ = (q ^ n : ZMod (q ^ (n + 1))) * ((B * ↑u⁻¹) * t) := by ring
+    _ = (q ^ n : ZMod (q ^ (n + 1))) * ((1 : ZMod (q ^ (n + 1))) * t) := by
+          rw [← hu]
+          simp
+    _ = -S := by simp [ht]
+
+/--
+Newton 補正（`Δ = q^n * c`）を直接要求する one-step target。
+-/
+abbrev HenselLiftStepNewtonCorrectionTarget : Prop :=
+  ∀ {p q n : ℕ}, Nat.Prime q → q ≠ p → 1 ≤ n →
+    ∀ (Rn : ZMod (q ^ n)),
+      (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+      ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (Rn1 : ZMod (q ^ (n + 1))),
+        ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) →
+        ∃ c : ZMod (q ^ (n + 1)),
+          (∑ i ∈ Finset.range p,
+            (Rn1 + (q ^ n : ZMod (q ^ (n + 1))) * c) ^ i = 0)
+
+/--
+線形化方程式が解ければ NewtonCorrection target は従う。
+-/
+theorem henselLiftStepNewtonCorrection_of_linearizedSolve
+    (hSolve : HenselLiftStepLinearizedSolveTarget) :
+    HenselLiftStepNewtonCorrectionTarget := by
+  intro p q n hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  rcases hSolve hq hq_ne_p hn Rn hsum hdiv Rn1 hcast with ⟨c, hc⟩
+  refine ⟨c, ?_⟩
+  calc
+    (∑ i ∈ Finset.range p, (Rn1 + (q ^ n : ZMod (q ^ (n + 1))) * c) ^ i)
+        = (∑ i ∈ Finset.range p, Rn1 ^ i)
+          + (∑ i ∈ Finset.range p,
+              ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1)))
+              * ((q ^ n : ZMod (q ^ (n + 1))) * c) :=
+            geomSum_first_order_qpow_correction_concrete (p := p) (q := q) (n := n) hn Rn1 c
+    _ = (∑ i ∈ Finset.range p, Rn1 ^ i) + (-(∑ i ∈ Finset.range p, Rn1 ^ i)) := by rw [hc]
+    _ = 0 := by abel
+
+/--
 1-step Hensel 持ち上げの専用 target（Strong Level 1 の中核）。
 
 `Φ_p(R_n)=0 mod q^n` を満たす近似根 `R_n` から、
@@ -1451,12 +1958,299 @@ theorem weakSuperWieferich_of_strongV2 :
 branch は `castHom` で保存する。
 -/
 abbrev HenselLiftStepGeomSumTarget : Prop :=
-  ∀ {p q n : ℕ}, Nat.Prime q → 1 ≤ n →
+  ∀ {p q n : ℕ}, Nat.Prime q → q ≠ p → 1 ≤ n →
     ∀ (Rn : ZMod (q ^ n)),
       (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
       ∃ (hdiv : q ^ n ∣ q ^ (n + 1)), ∃ (Rn1 : ZMod (q ^ (n + 1))),
         ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) ∧
         (∑ i ∈ Finset.range p, (Rn1 : ZMod (q ^ (n + 1))) ^ i = 0)
+
+/--
+Hensel one-step の構造部分のみを抽出した target。
+
+これは「`q^n` から `q^(n+1)` への持ち上げが存在する」ことだけを要求する。
+幾何和（= Φ_p）条件の保存は含まない。
+-/
+abbrev HenselLiftStepStructuralTarget : Prop :=
+  ∀ {q n : ℕ}, Nat.Prime q → 1 ≤ n →
+    ∀ (Rn : ZMod (q ^ n)),
+      ∃ (hdiv : q ^ n ∣ q ^ (n + 1)), ∃ (Rn1 : ZMod (q ^ (n + 1))),
+        ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn)
+
+/--
+Hensel one-step の算術 kernel。
+
+構造的持ち上げ `Rn1` を幾何和ゼロ（= Φ_p root）へ補正できることを要求する。
+この target は abstract な one-step 算術 core であり、
+prime 文脈では既に concrete 供給線が確立済み。
+-/
+abbrev HenselLiftStepArithmeticKernelTarget : Prop :=
+  ∀ {p q n : ℕ}, Nat.Prime q → q ≠ p → 1 ≤ n →
+    ∀ (Rn : ZMod (q ^ n)),
+      (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+      ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (Rn1 : ZMod (q ^ (n + 1))),
+        ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) →
+        ∃ (Rn1' : ZMod (q ^ (n + 1))),
+          ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1' = Rn) ∧
+          (∑ i ∈ Finset.range p, (Rn1' : ZMod (q ^ (n + 1))) ^ i = 0)
+
+/--
+one-step 算術 kernel の「心臓」: 補正項 `Δ` の存在。
+
+`Rn1` が `Rn` の持ち上げであるとき、
+`castHom Δ = 0` を満たす補正 `Δ` を足して
+幾何和ゼロを回復できれば、ArithmeticKernel は成立する。
+-/
+abbrev HenselLiftStepCorrectionTarget : Prop :=
+  ∀ {p q n : ℕ}, Nat.Prime q → q ≠ p → 1 ≤ n →
+    ∀ (Rn : ZMod (q ^ n)),
+      (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+      ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (Rn1 : ZMod (q ^ (n + 1))),
+        ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) →
+        ∃ (Δ : ZMod (q ^ (n + 1))),
+          ((ZMod.castHom hdiv (ZMod (q ^ n))) Δ = 0) ∧
+          (∑ i ∈ Finset.range p, ((Rn1 + Δ : ZMod (q ^ (n + 1)))) ^ i = 0)
+
+/--
+Newton 補正 target があれば correction target は従う。
+-/
+theorem henselLiftStepCorrection_of_newtonCorrection
+    (hNewton : HenselLiftStepNewtonCorrectionTarget) :
+    HenselLiftStepCorrectionTarget := by
+  intro p q n hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  rcases hNewton hq hq_ne_p hn Rn hsum hdiv Rn1 hcast with ⟨c, hc⟩
+  refine ⟨(q ^ n : ZMod (q ^ (n + 1))) * c, ?_, ?_⟩
+  · exact castHom_qpow_mul_eq_zero hdiv c
+  · simpa [add_assoc, add_comm, add_left_comm, mul_assoc] using hc
+
+/--
+one-step で「幾何和ゼロの持ち上げ自体」が得られることを表す target。
+
+これは `Δ` 補正前の基準点 `Rn1` に依存しない形の existence であり、
+通常の Hensel 叙述（root lift の存在）に対応する。
+-/
+abbrev HenselLiftStepZeroLiftTarget : Prop :=
+  ∀ {p q n : ℕ}, Nat.Prime q → q ≠ p → 1 ≤ n →
+    ∀ (Rn : ZMod (q ^ n)),
+      (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+      ∀ (hdiv : q ^ n ∣ q ^ (n + 1)),
+        ∃ (Rlift : ZMod (q ^ (n + 1))),
+          ((ZMod.castHom hdiv (ZMod (q ^ n))) Rlift = Rn) ∧
+          (∑ i ∈ Finset.range p, (Rlift : ZMod (q ^ (n + 1))) ^ i = 0)
+
+/-- NewtonCorrection target から ZeroLift target を得る。 -/
+theorem henselLiftStepZeroLift_of_newtonCorrection
+    (hNewton : HenselLiftStepNewtonCorrectionTarget) :
+    HenselLiftStepZeroLiftTarget := by
+  intro p q n hq hq_ne_p hn Rn hsum hdiv
+  rcases (ZMod.castHom_surjective hdiv) Rn with ⟨Rn1, hcast⟩
+  rcases hNewton hq hq_ne_p hn Rn hsum hdiv Rn1 hcast with ⟨c, hc⟩
+  have hqpowc0 :
+      (ZMod.castHom hdiv (ZMod (q ^ n))) ((q ^ n : ZMod (q ^ (n + 1))) * c) = 0 :=
+    castHom_qpow_mul_eq_zero hdiv c
+  have hmap_add :
+      (ZMod.castHom hdiv (ZMod (q ^ n))) (Rn1 + (q ^ n : ZMod (q ^ (n + 1))) * c)
+        = (ZMod.castHom hdiv (ZMod (q ^ n))) Rn1
+            + (ZMod.castHom hdiv (ZMod (q ^ n))) ((q ^ n : ZMod (q ^ (n + 1))) * c) :=
+    (ZMod.castHom hdiv (ZMod (q ^ n))).map_add Rn1 ((q ^ n : ZMod (q ^ (n + 1))) * c)
+  refine ⟨Rn1 + (q ^ n : ZMod (q ^ (n + 1))) * c, ?_, ?_⟩
+  · calc
+      (ZMod.castHom hdiv (ZMod (q ^ n))) (Rn1 + (q ^ n : ZMod (q ^ (n + 1))) * c)
+          = (ZMod.castHom hdiv (ZMod (q ^ n))) Rn1
+              + (ZMod.castHom hdiv (ZMod (q ^ n))) ((q ^ n : ZMod (q ^ (n + 1))) * c) := hmap_add
+      _ = Rn + 0 := by simp [hcast, hqpowc0]
+      _ = Rn := by simp
+  · exact hc
+
+/-- prime 文脈の `DerivativeNonzeroModQ` から ZeroLift までの concrete 連結。 -/
+theorem henselLiftStepZeroLift_of_nonzeroModQ_prime
+    (hNonzero : HenselLiftStepDerivativeNonzeroModQPrimeTarget) :
+    ∀ {p q n : ℕ}, Nat.Prime p → Nat.Prime q → q ≠ p → 1 ≤ n →
+      ∀ (Rn : ZMod (q ^ n)),
+        (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+        ∀ (hdiv : q ^ n ∣ q ^ (n + 1)),
+          ∃ (Rlift : ZMod (q ^ (n + 1))),
+            ((ZMod.castHom hdiv (ZMod (q ^ n))) Rlift = Rn) ∧
+            (∑ i ∈ Finset.range p, (Rlift : ZMod (q ^ (n + 1))) ^ i = 0) := by
+  intro p q n hp hq hq_ne_p hn Rn hsum hdiv
+  rcases (ZMod.castHom_surjective hdiv) Rn with ⟨Rn1, hcast⟩
+  rcases (henselLiftStepLinearizedSolve_of_nonzeroModQ_prime hNonzero
+      (p := p) (q := q) (n := n) hp hq hq_ne_p hn Rn hsum hdiv Rn1 hcast) with ⟨c, hc⟩
+  have hqpowc0 :
+      (ZMod.castHom hdiv (ZMod (q ^ n))) ((q ^ n : ZMod (q ^ (n + 1))) * c) = 0 :=
+    castHom_qpow_mul_eq_zero hdiv c
+  have hmap_add :
+      (ZMod.castHom hdiv (ZMod (q ^ n))) (Rn1 + (q ^ n : ZMod (q ^ (n + 1))) * c)
+        = (ZMod.castHom hdiv (ZMod (q ^ n))) Rn1
+            + (ZMod.castHom hdiv (ZMod (q ^ n))) ((q ^ n : ZMod (q ^ (n + 1))) * c) :=
+    (ZMod.castHom hdiv (ZMod (q ^ n))).map_add Rn1 ((q ^ n : ZMod (q ^ (n + 1))) * c)
+  refine ⟨Rn1 + (q ^ n : ZMod (q ^ (n + 1))) * c, ?_, ?_⟩
+  · calc
+      (ZMod.castHom hdiv (ZMod (q ^ n))) (Rn1 + (q ^ n : ZMod (q ^ (n + 1))) * c)
+          = (ZMod.castHom hdiv (ZMod (q ^ n))) Rn1
+              + (ZMod.castHom hdiv (ZMod (q ^ n))) ((q ^ n : ZMod (q ^ (n + 1))) * c) := hmap_add
+      _ = Rn + 0 := by simp [hcast, hqpowc0]
+      _ = Rn := by simp
+  · calc
+      (∑ i ∈ Finset.range p, (Rn1 + (q ^ n : ZMod (q ^ (n + 1))) * c) ^ i)
+          = (∑ i ∈ Finset.range p, Rn1 ^ i)
+            + (∑ i ∈ Finset.range p,
+                ((i : ZMod (q ^ (n + 1))) * Rn1 ^ (i - 1)))
+                * ((q ^ n : ZMod (q ^ (n + 1))) * c) :=
+              geomSum_first_order_qpow_correction_concrete (p := p) (q := q) (n := n) hn Rn1 c
+      _ = (∑ i ∈ Finset.range p, Rn1 ^ i) + (-(∑ i ∈ Finset.range p, Rn1 ^ i)) := by rw [hc]
+      _ = 0 := by abel
+
+/--
+prime 文脈の `DerivativeNonzeroModQ` から correction one-step へ直接接続する。
+-/
+theorem henselLiftStepCorrection_of_nonzeroModQ_prime
+    (hNonzero : HenselLiftStepDerivativeNonzeroModQPrimeTarget) :
+    ∀ {p q n : ℕ}, Nat.Prime p → Nat.Prime q → q ≠ p → 1 ≤ n →
+      ∀ (Rn : ZMod (q ^ n)),
+        (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+        ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (Rn1 : ZMod (q ^ (n + 1))),
+          ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) →
+          ∃ (Δ : ZMod (q ^ (n + 1))),
+            ((ZMod.castHom hdiv (ZMod (q ^ n))) Δ = 0) ∧
+            (∑ i ∈ Finset.range p, ((Rn1 + Δ : ZMod (q ^ (n + 1)))) ^ i = 0) := by
+  intro p q n hp hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  rcases henselLiftStepZeroLift_of_nonzeroModQ_prime hNonzero hp hq hq_ne_p hn Rn hsum hdiv with
+    ⟨Rlift, hcast_lift, hphi_lift⟩
+  refine ⟨Rlift - Rn1, ?_, ?_⟩
+  · calc
+      (ZMod.castHom hdiv (ZMod (q ^ n))) (Rlift - Rn1)
+          = (ZMod.castHom hdiv (ZMod (q ^ n))) Rlift
+            - (ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 := by
+              simpa using (ZMod.castHom hdiv (ZMod (q ^ n))).map_sub Rlift Rn1
+      _ = Rn - Rn := by simp [hcast_lift, hcast]
+      _ = 0 := by simp
+  · have h_rewrite : (Rn1 + (Rlift - Rn1) : ZMod (q ^ (n + 1))) = Rlift := by
+      abel
+    simpa [h_rewrite] using hphi_lift
+
+/--
+prime 文脈の `DerivativeNonzeroModQ` から arithmetic kernel one-step へ直接接続する。
+-/
+theorem henselLiftStepArithmeticKernel_of_nonzeroModQ_prime
+    (hNonzero : HenselLiftStepDerivativeNonzeroModQPrimeTarget) :
+    ∀ {p q n : ℕ}, Nat.Prime p → Nat.Prime q → q ≠ p → 1 ≤ n →
+      ∀ (Rn : ZMod (q ^ n)),
+        (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+        ∀ (hdiv : q ^ n ∣ q ^ (n + 1)) (Rn1 : ZMod (q ^ (n + 1))),
+          ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) →
+          ∃ (Rn1' : ZMod (q ^ (n + 1))),
+            ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1' = Rn) ∧
+            (∑ i ∈ Finset.range p, (Rn1' : ZMod (q ^ (n + 1))) ^ i = 0) := by
+  intro p q n hp hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  rcases henselLiftStepCorrection_of_nonzeroModQ_prime hNonzero hp hq hq_ne_p hn Rn hsum hdiv Rn1 hcast with
+    ⟨Δ, hΔ0, hphi⟩
+  refine ⟨Rn1 + Δ, ?_, hphi⟩
+  have hmap_add := (ZMod.castHom hdiv (ZMod (q ^ n))).map_add Rn1 Δ
+  calc
+    (ZMod.castHom hdiv (ZMod (q ^ n))) (Rn1 + Δ)
+        = (ZMod.castHom hdiv (ZMod (q ^ n))) Rn1
+          + (ZMod.castHom hdiv (ZMod (q ^ n))) Δ := hmap_add
+    _ = Rn + 0 := by simp [hcast, hΔ0]
+    _ = Rn := by simp
+
+/--
+prime 文脈の `DerivativeNonzeroModQ` から FLT 側 one-step `GeomSum` 使用箇所へ直接接続する。
+-/
+theorem henselLiftStepGeomSum_of_nonzeroModQ_prime
+    (hNonzero : HenselLiftStepDerivativeNonzeroModQPrimeTarget) :
+    ∀ {p q n : ℕ}, Nat.Prime p → Nat.Prime q → q ≠ p → 1 ≤ n →
+      ∀ (Rn : ZMod (q ^ n)),
+        (∑ i ∈ Finset.range p, (Rn : ZMod (q ^ n)) ^ i = 0) →
+        ∃ (hdiv : q ^ n ∣ q ^ (n + 1)), ∃ (Rn1 : ZMod (q ^ (n + 1))),
+          ((ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 = Rn) ∧
+          (∑ i ∈ Finset.range p, (Rn1 : ZMod (q ^ (n + 1))) ^ i = 0) := by
+  intro p q n hp hq hq_ne_p hn Rn hsum
+  let hdiv : q ^ n ∣ q ^ (n + 1) := ⟨q, by simp [pow_succ, Nat.mul_comm]⟩
+  rcases henselLiftStepZeroLift_of_nonzeroModQ_prime hNonzero hp hq hq_ne_p hn Rn hsum hdiv with
+    ⟨Rlift, hcast, hphi⟩
+  exact ⟨hdiv, Rlift, hcast, hphi⟩
+
+/--
+零点持ち上げが存在すれば、任意の初期持ち上げ `Rn1` から `Δ` 補正で到達できる。
+-/
+theorem henselLiftStepCorrection_of_zeroLift
+    (hLift : HenselLiftStepZeroLiftTarget) :
+    HenselLiftStepCorrectionTarget := by
+  intro p q n hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  rcases hLift hq hq_ne_p hn Rn hsum hdiv with ⟨Rlift, hcast_lift, hphi_lift⟩
+  refine ⟨Rlift - Rn1, ?_, ?_⟩
+  · calc
+      (ZMod.castHom hdiv (ZMod (q ^ n))) (Rlift - Rn1)
+          = (ZMod.castHom hdiv (ZMod (q ^ n))) Rlift
+            - (ZMod.castHom hdiv (ZMod (q ^ n))) Rn1 := by
+              simpa using (ZMod.castHom hdiv (ZMod (q ^ n))).map_sub Rlift Rn1
+      _ = Rn - Rn := by simp [hcast_lift, hcast]
+      _ = 0 := by simp
+  · have h_rewrite : (Rn1 + (Rlift - Rn1) : ZMod (q ^ (n + 1))) = Rlift := by
+      abel
+    simpa [h_rewrite] using hphi_lift
+
+/--
+補正項 `Δ` が構成できれば ArithmeticKernel は従う。
+
+よって abstract な one-step 算術 core は
+`HenselLiftStepCorrectionTarget` の実装に帰着する。
+-/
+theorem henselLiftStepArithmeticKernel_of_correction
+    (hCorr : HenselLiftStepCorrectionTarget) :
+    HenselLiftStepArithmeticKernelTarget := by
+  intro p q n hq hq_ne_p hn Rn hsum hdiv Rn1 hcast
+  rcases hCorr hq hq_ne_p hn Rn hsum hdiv Rn1 hcast with ⟨Δ, hΔ0, hphi⟩
+  refine ⟨Rn1 + Δ, ?_, hphi⟩
+  have hmap_add := (ZMod.castHom hdiv (ZMod (q ^ n))).map_add Rn1 Δ
+  calc
+    (ZMod.castHom hdiv (ZMod (q ^ n))) (Rn1 + Δ)
+        = (ZMod.castHom hdiv (ZMod (q ^ n))) Rn1
+          + (ZMod.castHom hdiv (ZMod (q ^ n))) Δ := hmap_add
+    _ = Rn + 0 := by simp [hcast, hΔ0]
+    _ = Rn := by simp
+
+/--
+零点持ち上げ target から arithmetic kernel を直接供給する。
+-/
+theorem henselLiftStepArithmeticKernel_of_zeroLift
+    (hLift : HenselLiftStepZeroLiftTarget) :
+    HenselLiftStepArithmeticKernelTarget :=
+  henselLiftStepArithmeticKernel_of_correction
+    (henselLiftStepCorrection_of_zeroLift hLift)
+
+/--
+`ZeroLift` が直接与えられれば one-step Hensel target は直ちに成立する。
+-/
+theorem henselLiftStepGeomSum_of_zeroLift
+    (hLift : HenselLiftStepZeroLiftTarget) :
+    HenselLiftStepGeomSumTarget := by
+  intro p q n hq hq_ne_p hn Rn hsum
+  let hdiv : q ^ n ∣ q ^ (n + 1) := ⟨q, by simp [pow_succ, Nat.mul_comm]⟩
+  rcases hLift hq hq_ne_p hn Rn hsum hdiv with ⟨Rlift, hcast, hphi⟩
+  exact ⟨hdiv, Rlift, hcast, hphi⟩
+
+/--
+構造 one-step は `ZMod.castHom_surjective` から concrete に得られる。
+-/
+theorem henselLiftStepStructural_concrete : HenselLiftStepStructuralTarget := by
+  intro q n hq hn Rn
+  refine ⟨?_, ?_⟩
+  · exact ⟨q, by simp [pow_succ, Nat.mul_comm]⟩
+  · exact (ZMod.castHom_surjective (show q ^ n ∣ q ^ (n + 1) from ⟨q, by simp [pow_succ, Nat.mul_comm]⟩)) Rn
+
+/--
+構造部分と算術 kernel を合成すれば、one-step Hensel target を得る。
+-/
+theorem henselLiftStepGeomSum_of_structural_and_kernel
+    (hStruct : HenselLiftStepStructuralTarget)
+    (hKernel : HenselLiftStepArithmeticKernelTarget) :
+    HenselLiftStepGeomSumTarget := by
+  intro p q n hq hq_ne_p hn Rn hsum
+  rcases hStruct hq hn Rn with ⟨hdiv, Rn1, hcast⟩
+  rcases hKernel hq hq_ne_p hn Rn hsum hdiv Rn1 hcast with ⟨Rn1', hcast', hphi'⟩
+  exact ⟨hdiv, Rn1', hcast', hphi'⟩
 
 /--
 StrongSuperWieferich の provider target。
@@ -1466,6 +2260,100 @@ StrongSuperWieferich の provider target。
 -/
 abbrev StrongSuperWieferichProviderTarget : Prop :=
   HenselLiftStepGeomSumTarget → StrongSuperWieferichCongruenceV2Target
+
+/--
+StrongSuperWieferich の `castHom` 正規形は prime 文脈で concrete に構成できる。
+
+`R := z / y` を `ZMod (q^p)` で取り、
+`GN = y^(p-1) * ∑ R^i` と `q^p ∣ GN` から `Φ_p(R)=0 mod q^p` を得る。
+branch 情報 `R mod q = ω^j` は `QAdicResidue` から供給する。
+-/
+theorem strongSuperWieferichCongruenceV2_concrete : StrongSuperWieferichCongruenceV2Target := by
+  intro p x y z hPack gap hgap q hq hq_ne_p hqpow_dvd_GN hq_ndvd_gap hq_coprime_y ω hω hω_ne
+  have hp_pos : 0 < p := hPack.hp.pos
+  letI : Fact (Nat.Prime q) := ⟨hq⟩
+  have hqpow : q ∣ q ^ p := by
+    exact dvd_pow_self q hp_pos.ne'
+  have hq_dvd_GN : q ∣ GN p gap y := dvd_trans hqpow hqpow_dvd_GN
+  obtain ⟨j, hjpos, hz_mod_q⟩ :=
+    qAdicResidue hPack hgap hq hq_ne_p hq_dvd_GN hq_ndvd_gap hq_coprime_y ω hω hω_ne
+  have hy_ne_q : (y : ZMod q) ≠ 0 := by
+    intro h
+    have h1 : q ∣ 1 := hq_coprime_y ▸ Nat.dvd_gcd dvd_rfl ((ZMod.natCast_eq_zero_iff y q).mp h)
+    have h2 : q ≤ 1 := Nat.le_of_dvd one_pos h1
+    exact absurd hq.one_lt (by omega)
+  have hy_coprime_qpow : Nat.Coprime y (q ^ p) := by
+    exact (Nat.coprime_pow_right_iff hp_pos y q).2 (Nat.Coprime.symm hq_coprime_y)
+  have hy_unit : IsUnit (y : ZMod (q ^ p)) :=
+    (ZMod.isUnit_iff_coprime y (q ^ p)).2 hy_coprime_qpow
+  rcases hy_unit with ⟨u, hu⟩
+  let R : ZMod (q ^ p) := (z : ZMod (q ^ p)) * ↑u⁻¹
+  have hzRy : (z : ZMod (q ^ p)) = R * (y : ZMod (q ^ p)) := by
+    calc
+      (z : ZMod (q ^ p)) = (z : ZMod (q ^ p)) * (↑u⁻¹ * ↑u) := by simp
+      _ = ((z : ZMod (q ^ p)) * ↑u⁻¹) * ↑u := by rw [mul_assoc]
+      _ = R * (y : ZMod (q ^ p)) := by simp [R, hu]
+  have hzRy_q :
+      (z : ZMod q) = (ZMod.castHom hqpow (ZMod q)) R * (y : ZMod q) := by
+    simpa [R, map_mul] using congrArg (ZMod.castHom hqpow (ZMod q)) hzRy
+  have hmodq : (ZMod.castHom hqpow (ZMod q)) R = ω ^ j.val := by
+    apply mul_right_cancel₀ hy_ne_q
+    calc
+      (ZMod.castHom hqpow (ZMod q)) R * (y : ZMod q) = (z : ZMod q) := hzRy_q.symm
+      _ = ω ^ j.val * (y : ZMod q) := hz_mod_q
+  have hGeomNat : GN p gap y = ∑ i ∈ Finset.range p, z ^ i * y ^ (p - 1 - i) := by
+    simpa [hgap] using gnGeomSum₂Representation (p := p) (z := z) (y := y) hp_pos hPack.hyz_lt
+  have hGN_zero : ((GN p gap y : ℕ) : ZMod (q ^ p)) = 0 := by
+    exact (ZMod.natCast_eq_zero_iff (GN p gap y) (q ^ p)).2 hqpow_dvd_GN
+  have hGeomZero :
+      (∑ i ∈ Finset.range p, ((z ^ i * y ^ (p - 1 - i) : ℕ) : ZMod (q ^ p))) = 0 := by
+    calc
+      (∑ i ∈ Finset.range p, ((z ^ i * y ^ (p - 1 - i) : ℕ) : ZMod (q ^ p)))
+        = (((∑ i ∈ Finset.range p, z ^ i * y ^ (p - 1 - i) : ℕ)) : ZMod (q ^ p)) := by
+            simp [Nat.cast_mul, Nat.cast_pow]
+      _ = ((GN p gap y : ℕ) : ZMod (q ^ p)) := by rw [hGeomNat]
+      _ = 0 := hGN_zero
+  have hGeomFactor :
+      (∑ i ∈ Finset.range p, ((z ^ i * y ^ (p - 1 - i) : ℕ) : ZMod (q ^ p)))
+        = (∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i) * (y : ZMod (q ^ p)) ^ (p - 1) := by
+    calc
+      (∑ i ∈ Finset.range p, ((z ^ i * y ^ (p - 1 - i) : ℕ) : ZMod (q ^ p)))
+          = ∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i * (y : ZMod (q ^ p)) ^ (p - 1) := by
+              refine Finset.sum_congr rfl ?_
+              intro i hi
+              have hi_le : i ≤ p - 1 := Nat.le_pred_of_lt (Finset.mem_range.mp hi)
+              calc
+                (((z ^ i * y ^ (p - 1 - i) : ℕ) : ZMod (q ^ p)))
+                    = (z : ZMod (q ^ p)) ^ i * (y : ZMod (q ^ p)) ^ (p - 1 - i) := by
+                        simp [Nat.cast_mul, Nat.cast_pow]
+                _ = (R * (y : ZMod (q ^ p))) ^ i * (y : ZMod (q ^ p)) ^ (p - 1 - i) := by rw [hzRy]
+                _ = ((R : ZMod (q ^ p)) ^ i * (y : ZMod (q ^ p)) ^ i) * (y : ZMod (q ^ p)) ^ (p - 1 - i) := by
+                      rw [mul_pow]
+                _ = (R : ZMod (q ^ p)) ^ i * ((y : ZMod (q ^ p)) ^ i * (y : ZMod (q ^ p)) ^ (p - 1 - i)) := by ring
+                _ = (R : ZMod (q ^ p)) ^ i * (y : ZMod (q ^ p)) ^ (p - 1) := by
+                      rw [← pow_add, Nat.add_sub_of_le hi_le]
+      _ = (∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i) * (y : ZMod (q ^ p)) ^ (p - 1) := by
+            rw [← Finset.sum_mul]
+  have hphi : ∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i = 0 := by
+    have hprod_zero :
+        (∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i) * (y : ZMod (q ^ p)) ^ (p - 1) = 0 := by
+      rw [← hGeomFactor]
+      exact hGeomZero
+    have hprod_zero' :
+        (∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i) * ↑(u ^ (p - 1)) = 0 := by
+      simpa [hu] using hprod_zero
+    exact (Units.mul_left_eq_zero (u ^ (p - 1))).1 hprod_zero'
+  exact ⟨j, hjpos, hqpow, R, hmodq, hphi, hzRy⟩
+
+/--
+FLT 側の provider target は concrete に満たされる。
+
+現時点では one-step 入力を明示的に使わずとも、
+`QAdicResidue` と `GN` の geom_sum 表現から直接 Strong 版を構成できる。
+-/
+theorem strongSuperWieferichProvider_concrete : StrongSuperWieferichProviderTarget := by
+  intro _hGeom
+  exact strongSuperWieferichCongruenceV2_concrete
 
 /--
 **GNReducedGap の q-adic 等価形**: x'^p + y^p が完全 p 乗。
@@ -1492,6 +2380,369 @@ abbrev QAdicDescentExistenceTarget : Prop :=
       -- descent: ∃ z' with z'^p = (x/q)^p + y^p
       ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
 
+/--
+Level 2 の最小核: StrongSuperWieferich witness から整数 descent を回収する局所-大域ギャップ。
+
+Level 1s provider は concrete になったため、open content は本質的に
+「strong witness `(R mod q, Φ_p(R)=0, z=Ry)` から整数解 `z'` を回収できるか」
+だけに圧縮できる。
+-/
+abbrev PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      q ∣ x →
+      ¬ q ∣ y →
+      ¬ q ∣ z →
+      ¬ q ∣ (z - y) →
+      p ∣ (q - 1) →
+      q ^ p ∣ GN p (z - y) y →
+      ∀ (ω : ZMod q), ω ^ p = 1 → ω ≠ 1 →
+      ∀ {j : Fin p}, 0 < j.val →
+      ∀ {hqpow : q ∣ q ^ p} {R : ZMod (q ^ p)},
+        ((ZMod.castHom hqpow (ZMod q)) R = ω ^ j.val) →
+        (∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i = 0) →
+        ((z : ZMod (q ^ p)) = R * (y : ZMod (q ^ p))) →
+        let x' := x / q
+        ∃ z' : ℕ, x' ^ p + y ^ p = z' ^ p
+
+/--
+Level 2m の幾何語彙版: strong witness から reduced gap `g'` を直接回収する。
+
+これは `GNReducedGap` に最も近い形の最小核であり、
+整数語彙版 `PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget` と同値になる。
+-/
+abbrev PrimeGe5BranchAPrimitiveQAdicGapReductionTarget : Prop :=
+  ∀ {p x y z t s : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    ¬ p ∣ t →
+    y ^ (p - 1) ≡ 1 [MOD p ^ 2] →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ s →
+      ¬ q ∣ t →
+      Nat.Coprime q y →
+      q ≠ p →
+      q ∣ x →
+      ¬ q ∣ y →
+      ¬ q ∣ z →
+      ¬ q ∣ (z - y) →
+      p ∣ (q - 1) →
+      q ^ p ∣ GN p (z - y) y →
+      ∀ (ω : ZMod q), ω ^ p = 1 → ω ≠ 1 →
+      ∀ {j : Fin p}, 0 < j.val →
+      ∀ {hqpow : q ∣ q ^ p} {R : ZMod (q ^ p)},
+        ((ZMod.castHom hqpow (ZMod q)) R = ω ^ j.val) →
+        (∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i = 0) →
+        ((z : ZMod (q ^ p)) = R * (y : ZMod (q ^ p))) →
+        ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p
+
+/--
+Level 2m-geom の最終 1 核候補: normal-form の荷物を剥がした pure q-adic gap-reduction core。
+
+`PrimeGe5BranchAPrimitiveQAdicGapReductionTarget` から `t,s` や Wieferich 条件などの
+bookkeeping を除き、
+「counterexample pack + strong witness から reduced gap `g'` を回収する」
+部分だけを残したもの。
+-/
+abbrev PrimeGe5BranchAPrimitiveQAdicGapReductionCoreTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ≠ p →
+      q ∣ x →
+      ¬ q ∣ y →
+      ¬ q ∣ z →
+      ¬ q ∣ (z - y) →
+      q ^ p ∣ GN p (z - y) y →
+      ∀ (ω : ZMod q), ω ^ p = 1 → ω ≠ 1 →
+      ∀ {j : Fin p}, 0 < j.val →
+      ∀ {hqpow : q ∣ q ^ p} {R : ZMod (q ^ p)},
+        ((ZMod.castHom hqpow (ZMod q)) R = ω ^ j.val) →
+        (∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i = 0) →
+        ((z : ZMod (q ^ p)) = R * (y : ZMod (q ^ p))) →
+        ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p
+
+/--
+2m-local: q-adic strong witness を供給する purely local target。
+
+これは `2m-core` の local 部分であり、
+現時点では `strongSuperWieferichCongruenceV2_concrete` から concrete に供給できる。
+-/
+abbrev PrimeGe5BranchAPrimitiveQAdicGapWitnessTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ≠ p →
+      q ^ p ∣ GN p (z - y) y →
+      ¬ q ∣ (z - y) →
+      Nat.Coprime q y →
+      ∀ (ω : ZMod q), ω ^ p = 1 → ω ≠ 1 →
+      ∃ j : Fin p, 0 < j.val ∧
+        ∃ (hqpow : q ∣ q ^ p), ∃ (R : ZMod (q ^ p)),
+          ((ZMod.castHom hqpow (ZMod q)) R = ω ^ j.val) ∧
+          (∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i = 0) ∧
+          ((z : ZMod (q ^ p)) = R * (y : ZMod (q ^ p)))
+
+/--
+2m-global: strong q-adic witness から reduced gap `g'` を回収する genuinely global target。
+
+`2m-core` から bookkeeping を除くと、本当に open なのはこの部分だけである。
+-/
+abbrev PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ x →
+      ∀ {R : ZMod (q ^ p)},
+        (∑ i ∈ Finset.range p, (R : ZMod (q ^ p)) ^ i = 0) →
+        ((z : ZMod (q ^ p)) = R * (y : ZMod (q ^ p))) →
+        ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p
+
+/-- 2m-local は concrete。 -/
+theorem qAdicGapWitness_concrete : PrimeGe5BranchAPrimitiveQAdicGapWitnessTarget := by
+  intro p x y z hpack q hq hq_ne_p hqp_dvd_GN hq_not_dvd_gap hcop_qy ω hω hω_ne
+  have hgap : z - y = z - y := rfl
+  exact strongSuperWieferichCongruenceV2_concrete
+    hpack hgap hq hq_ne_p hqp_dvd_GN hq_not_dvd_gap hcop_qy ω hω hω_ne
+
+/-- 2m-global があれば 2m-core は直ちに従う。 -/
+theorem qAdicGapReductionCore_of_global
+    (hGlobal : PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget) :
+    PrimeGe5BranchAPrimitiveQAdicGapReductionCoreTarget := by
+  intro p x y z hpack q hq hq_ne_p hq_dvd_x hq_not_dvd_y hq_not_dvd_z hq_not_dvd_gap
+    hqp_dvd_GN ω hω hω_ne j hjpos hqpow R hmodq hphi hzRy
+  exact hGlobal hpack hq hq_dvd_x hphi hzRy
+
+/--
+粗い Level 2 target は、最小核 target を自動的に含意する。
+
+追加の strong witness 仮定は単に捨てればよい。
+-/
+theorem qAdicLocalGlobalGap_of_qAdicDescentExistence
+    (hDescent : QAdicDescentExistenceTarget) :
+    PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hq hqs hqt hcop_qy hq_ne_p hq_dvd_x _hq_not_dvd_y _hq_not_dvd_z hq_not_dvd_gap
+    _hp_dvd_qsub1 hqp_dvd_GN ω hω hω_ne j hjpos hqpow R hmodq hphi hzRy
+  have hgap' : z - y = z - y := rfl
+  rcases hDescent hpack hgap' hq hq_ne_p hqp_dvd_GN hq_not_dvd_gap hcop_qy hq_dvd_x with ⟨z', hz'⟩
+  refine ⟨z', ?_⟩
+  exact hz'.symm
+
+/-- 整数語彙版 Level 2m から幾何語彙版 Level 2m を得る。 -/
+theorem qAdicGapReduction_of_qAdicLocalGlobalGap
+    (hGap : PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget) :
+    PrimeGe5BranchAPrimitiveQAdicGapReductionTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hq hqs hqt hcop_qy hq_ne_p hq_dvd_x hq_not_dvd_y hq_not_dvd_z hq_not_dvd_gap
+    hp_dvd_qsub1 hqp_dvd_GN ω hω hω_ne j hjpos hqpow R hmodq hphi hzRy
+  rcases hGap hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hq hqs hqt hcop_qy hq_ne_p hq_dvd_x hq_not_dvd_y hq_not_dvd_z hq_not_dvd_gap
+      hp_dvd_qsub1 hqp_dvd_GN ω hω hω_ne hjpos hmodq hphi hzRy with ⟨z', hz'⟩
+  have hz'_ge_y : y ≤ z' := by
+    by_contra hlt
+    push_neg at hlt
+    have : z' ^ p < y ^ p := Nat.pow_lt_pow_left hlt hpack.hp.ne_zero
+    omega
+  refine ⟨z' - y, ?_⟩
+  have hCosmic := DkMath.CosmicFormulaBinom.cosmic_id_csr' (R := ℕ) p (z' - y) y
+  rw [Nat.sub_add_cancel hz'_ge_y] at hCosmic
+  omega
+
+/-- 幾何語彙版 Level 2m から整数語彙版 Level 2m を得る。 -/
+theorem qAdicLocalGlobalGap_of_qAdicGapReduction
+    (hGeom : PrimeGe5BranchAPrimitiveQAdicGapReductionTarget) :
+    PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hq hqs hqt hcop_qy hq_ne_p hq_dvd_x hq_not_dvd_y hq_not_dvd_z hq_not_dvd_gap
+    hp_dvd_qsub1 hqp_dvd_GN ω hω hω_ne j hjpos hqpow R hmodq hphi hzRy
+  rcases hGeom hpack hp_dvd_gap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+      hq hqs hqt hcop_qy hq_ne_p hq_dvd_x hq_not_dvd_y hq_not_dvd_z hq_not_dvd_gap
+      hp_dvd_qsub1 hqp_dvd_GN ω hω hω_ne hjpos hmodq hphi hzRy with ⟨g', hg'⟩
+  refine ⟨g' + y, ?_⟩
+  have hCosmic := DkMath.CosmicFormulaBinom.cosmic_id_csr' (R := ℕ) p g' y
+  rw [hg'] at hCosmic
+  exact hCosmic.symm
+
+/-- full 2m-geom target は pure core target を自動的に含意する。 -/
+theorem qAdicGapReduction_of_core
+    (hCore : PrimeGe5BranchAPrimitiveQAdicGapReductionCoreTarget) :
+    PrimeGe5BranchAPrimitiveQAdicGapReductionTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hq hqs hqt hcop_qy hq_ne_p hq_dvd_x hq_not_dvd_y hq_not_dvd_z hq_not_dvd_gap
+    hp_dvd_qsub1 hqp_dvd_GN ω hω hω_ne j hjpos hqpow R hmodq hphi hzRy
+  exact hCore hpack hq hq_ne_p hq_dvd_x hq_not_dvd_y hq_not_dvd_z hq_not_dvd_gap
+    hqp_dvd_GN ω hω hω_ne hjpos hmodq hphi hzRy
+
+/-- 2m-global と concrete 2m-local を合成して `PthRootCore` を供給する。 -/
+theorem pthRootCore_of_qAdicGapReductionGlobal
+    (hGlobal : PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget) :
+    PrimeGe5BranchAPrimitivePthRootCoreTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hq hqs hqt hcop_qy hq_ne_p hq_dvd_x hq_not_dvd_y hq_not_dvd_z hq_not_dvd_gap
+    hp_dvd_qsub1 hqp_dvd_GN ω hω hω_ne
+  have hgap' : z - y = z - y := rfl
+  rcases qAdicGapWitness_concrete hpack hq hq_ne_p hqp_dvd_GN hq_not_dvd_gap hcop_qy ω hω hω_ne with
+    ⟨j, hjpos, hqpow, R, hmodq, hphi, hzRy⟩
+  rcases hGlobal hpack hq hq_dvd_x hphi hzRy with ⟨g', hg'⟩
+  dsimp
+  refine ⟨g' + y, ?_⟩
+  have hCosmic := DkMath.CosmicFormulaBinom.cosmic_id_csr' (R := ℕ) p g' y
+  rw [hg'] at hCosmic
+  exact hCosmic.symm
+
+/--
+最小局所-大域核と concrete Strong provider を合成すると `PthRootCore` が得られる。
+-/
+theorem pthRootCore_of_qAdicLocalGlobalGap
+    (hGap : PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget) :
+    PrimeGe5BranchAPrimitivePthRootCoreTarget := by
+  intro p x y z t s hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    q hq hqs hqt hcop_qy hq_ne_p hq_dvd_x hq_not_dvd_y hq_not_dvd_z hq_not_dvd_gap
+    hp_dvd_qsub1 hqp_dvd_GN ω hω hω_ne
+  have hgap' : z - y = z - y := rfl
+  rcases strongSuperWieferichCongruenceV2_concrete
+      hpack hgap' hq hq_ne_p hqp_dvd_GN hq_not_dvd_gap hcop_qy ω hω hω_ne with
+    ⟨j, hjpos, hqpow, R, hmodq, hphi, hzRy⟩
+  exact hGap hpack hp_dvd_gap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_not_dvd_t hWieferich
+    hq hqs hqt hcop_qy hq_ne_p hq_dvd_x hq_not_dvd_y hq_not_dvd_z hq_not_dvd_gap
+    hp_dvd_qsub1 hqp_dvd_GN ω hω hω_ne hjpos hmodq hphi hzRy
+
+/-- 幾何語彙版最小核から `PthRootCore` を供給する。 -/
+theorem pthRootCore_of_qAdicGapReduction
+    (hGeom : PrimeGe5BranchAPrimitiveQAdicGapReductionTarget) :
+    PrimeGe5BranchAPrimitivePthRootCoreTarget :=
+  pthRootCore_of_qAdicLocalGlobalGap (qAdicLocalGlobalGap_of_qAdicGapReduction hGeom)
+
+/-- pure q-adic gap-reduction core から `PthRootCore` を供給する。 -/
+theorem pthRootCore_of_qAdicGapReductionCore
+    (hCore : PrimeGe5BranchAPrimitiveQAdicGapReductionCoreTarget) :
+    PrimeGe5BranchAPrimitivePthRootCoreTarget :=
+  pthRootCore_of_qAdicGapReduction (qAdicGapReduction_of_core hCore)
+
+/--
+Level 2 (`QAdicDescentExistenceTarget`) は primitive 側の `PthRootCoreTarget` を供給する。
+
+`PthRootCore` が要求する追加データ
+`ω`, `¬ q ∣ y`, `¬ q ∣ z`, `p ∣ (q - 1)` は、
+この local-global gap には不要なので単に捨ててよい。
+-/
+theorem pthRootCore_of_qAdicDescentExistence
+    (hDescent : QAdicDescentExistenceTarget) :
+    PrimeGe5BranchAPrimitivePthRootCoreTarget :=
+  pthRootCore_of_qAdicLocalGlobalGap (qAdicLocalGlobalGap_of_qAdicDescentExistence hDescent)
+
+/-- 最小局所-大域核から PthRoot target を直接回収する。 -/
+theorem pthRoot_of_qAdicLocalGlobalGap
+    (hGap : PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget) :
+    PrimeGe5BranchAPrimitiveRestorePthRootTarget :=
+  pthRootTarget_of_pthRootCore (pthRootCore_of_qAdicLocalGlobalGap hGap)
+
+/-- 最小局所-大域核から GNReducedGap target を直接回収する。 -/
+theorem gnReducedGap_of_qAdicLocalGlobalGap
+    (hGap : PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget) :
+    PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget :=
+  gnReducedGap_of_pthRootCore (pthRootCore_of_qAdicLocalGlobalGap hGap)
+
+/-- 最小局所-大域核から primitive packet descent を供給する。 -/
+theorem primitivePacketDescent_of_qAdicLocalGlobalGap
+    (hGap : PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primitivePacketDescent_of_pthRootCore (pthRootCore_of_qAdicLocalGlobalGap hGap)
+
+/-- Level 2 から PthRoot target を直接回収する。 -/
+theorem pthRoot_of_qAdicDescentExistence
+    (hDescent : QAdicDescentExistenceTarget) :
+    PrimeGe5BranchAPrimitiveRestorePthRootTarget :=
+  pthRootTarget_of_pthRootCore (pthRootCore_of_qAdicDescentExistence hDescent)
+
+/-- Level 2 から GNReducedGap target を直接回収する。 -/
+theorem gnReducedGap_of_qAdicDescentExistence
+    (hDescent : QAdicDescentExistenceTarget) :
+    PrimeGe5BranchAPrimitiveRestoreGNReducedGapTarget :=
+  gnReducedGap_of_pthRootCore (pthRootCore_of_qAdicDescentExistence hDescent)
+
+/-- Level 2 から primitive packet descent を供給する。 -/
+theorem primitivePacketDescent_of_qAdicDescentExistence
+    (hDescent : QAdicDescentExistenceTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentTarget :=
+  primitivePacketDescent_of_pthRootCore (pthRootCore_of_qAdicDescentExistence hDescent)
+
+/--
+Level 2 (`QAdicDescentExistenceTarget`) を primitive 側 kernel として使う最精密版。
+-/
+theorem FLTPrimeGe5Target_of_qAdicDescentExistence_precise
+    (hDescent : QAdicDescentExistenceTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_pthRootCore_precise
+    (pthRootCore_of_qAdicDescentExistence hDescent) hPFE hNoLift
+
+/--
+最小局所-大域核を primitive 側 kernel として使う最精密版。
+-/
+theorem FLTPrimeGe5Target_of_qAdicLocalGlobalGap_precise
+    (hGap : PrimeGe5BranchAPrimitiveQAdicLocalGlobalGapTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_pthRootCore_precise
+    (pthRootCore_of_qAdicLocalGlobalGap hGap) hPFE hNoLift
+
+/-- 幾何語彙版最小核を primitive 側 kernel として使う最精密版。 -/
+theorem FLTPrimeGe5Target_of_qAdicGapReduction_precise
+    (hGeom : PrimeGe5BranchAPrimitiveQAdicGapReductionTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_pthRootCore_precise
+    (pthRootCore_of_qAdicGapReduction hGeom) hPFE hNoLift
+
+/-- pure q-adic gap-reduction core を primitive 側 kernel として使う最精密版。 -/
+theorem FLTPrimeGe5Target_of_qAdicGapReductionCore_precise
+    (hCore : PrimeGe5BranchAPrimitiveQAdicGapReductionCoreTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_pthRootCore_precise
+    (pthRootCore_of_qAdicGapReductionCore hCore) hPFE hNoLift
+
+/-- genuinely global 部分だけを primitive 側 kernel として使う最精密版。 -/
+theorem FLTPrimeGe5Target_of_qAdicGapReductionGlobal_precise
+    (hGlobal : PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_pthRootCore_precise
+    (pthRootCore_of_qAdicGapReductionGlobal hGlobal) hPFE hNoLift
+
 /-!
 ### §20 まとめ: Open kernel のレイヤー構造
 
@@ -1500,13 +2751,23 @@ GNReducedGap を q-adic 視点で分解すると:
 ```
 Level 0: QAdicResidue (z ≡ ω^j·y mod q)                      — concrete ✅
 Level 1w: WeakSuperWieferich (z ≡ R·y mod q^p)               — concrete ✅
-Level 1s: StrongSuperWieferich (branch + Φ_p(R)=0 mod q^p)   — Hensel 本丸 ★OPEN★
-Level 2: QAdicDescentExistence (∃z', z'^p = x'^p+y^p)         — LOCAL-GLOBAL GAP ★OPEN★
+Level 1s: StrongSuperWieferich (branch + Φ_p(R)=0 mod q^p)   — concrete ✅
+Level 2c: QAdicDescentExistence (coarse existence form)         — bridge vocabulary
+Level 2m-int: QAdicLocalGlobalGap (strong witness ⇒ integer z')      — integer formulation
+Level 2m-geom: QAdicGapReduction (strong witness ⇒ reduced gap)      — geometric formulation
+Level 2m-core: QAdicGapReductionCore (pack + strong witness ⇒ g')    — thin wrapper
+Level 2m-local: QAdicGapWitness (strong witness existence)           — concrete ✅
+Level 2m-global: QAdicGapReductionGlobal (witness ⇒ reduced gap)     — final 1-kernel candidate ★OPEN★
 ```
 
-Level 0 と Level 1w は現時点で concrete。
-Level 1s（Hensel 強化）と Level 2 が open kernel。
-Level 2 は **GNReducedGap の真の核心** であり、
+Level 0 / 1w / 1s は現時点で concrete。
+open kernel は本質的には Level 2m に集約される。
+Level 2m-int と Level 2m-geom は同値で、
+後者は `GNReducedGap` / Cosmic Formula native な語彙である。
+さらに `2m-core` は
+`2m-local`（concrete）と `2m-global`（open）へ分離でき、
+実際の最終 1 核候補は `2m-global` である。
+Level 2m は **GNReducedGap の真の核心** であり、
 Z[ζ_p] の ideal class group 構造に依存する深い問題。
 
 **数値検証**:
@@ -1515,7 +2776,7 @@ Z[ζ_p] の ideal class group 構造に依存する深い問題。
 - x'^p + y^p は一般に p-th power mod q ではない（反例多数）
   → Level 2 は mod q 情報だけでは解けない（LOCAL-GLOBAL gap の存在を確認）
 
-**次の一手**: Level 2 を更に精密化するか、PthRootCore を別ルートで攻略する。
+**次の一手**: Level 2m を更に精密化するか、PthRootCore を別ルートで攻略する。
 -/
 
 /-!
@@ -1674,5 +2935,95 @@ theorem gnAtZero (p gap : ℕ) (hp : 1 ≤ p) : GN p gap 0 = gap ^ (p - 1) := by
 検証は `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` で通っています。
 残っている警告は既存の `so#rry` 由来のものだけです。
 -/
+
+/-!
+## §22. 2m-global → 無限降下法への直通道
+
+### 経路図
+
+```
+2m-global (QAdicGapReductionGlobalTarget)                ★OPEN★
+  ↓ pthRootCore_of_qAdicGapReductionGlobal
+PthRootCore
+  ↓ gnReducedGap_of_pthRootCore
+GNReducedGapTarget
+  ↓ + CyclotomicExistence (concrete ✅)
+PacketDescentStrongTarget
+  ↓ + CyclotomicExistence (concrete ✅)
+branchA_wf_contradiction_on_z                            = 無限降下法
+  ↓
+BranchAFringeContradictionTarget
+  ↓ + ValuationPeelPacket + BranchBRefuter
+FLTPrimeGe5Target
+```
+
+`2m-global` が concrete 化されれば、上の経路が **全て concrete で接続** し、
+primitive 側の無限降下法が回る。
+
+Peel 側 (`PacketFromError`) と BranchB 側 (`NonLiftableGNBridge`) は別経路。
+primitive 側に限れば、`2m-global` **1 本だけ** が open kernel。
+-/
+
+/--
+`2m-global` → `PacketDescentStrongTarget`。
+
+CyclotomicExistence は concrete なので、
+`2m-global` だけで `¬p∣t` 保証付き strict descent が出る。
+
+これは無限降下法 (`branchA_wf_contradiction_on_z`) の直接の入力。
+-/
+theorem primitivePacketDescentStrong_of_qAdicGapReductionGlobal
+    (hGlobal : PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentStrongTarget :=
+  primeGe5BranchAPrimitivePacketDescentStrong_of_gnReducedGap_and_cyclotomicExistence
+    (gnReducedGap_of_pthRootCore (pthRootCore_of_qAdicGapReductionGlobal hGlobal))
+    primeGe5BranchACyclotomicExistence_concrete
+
+/--
+`2m-global` → `BranchAFringeContradictionTarget`。
+
+CyclotomicExistence は concrete なので、
+`2m-global` だけで `BranchAInterferenceFringeBundle → False` が出る。
+
+proof の中核は `branchA_wf_contradiction_on_z`：
+`Nat.find` で最小の `z₀` を取り、`PacketDescentStrongTarget` で `z' < z₀` を得て矛盾。
+これが FLT primitive 側の **無限降下法** そのもの。
+-/
+theorem branchAFringeContradiction_of_qAdicGapReductionGlobal
+    (hGlobal : PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget) :
+    BranchAFringeContradictionTarget :=
+  branchAFringeContradiction_of_descent
+    (primitivePacketDescentStrong_of_qAdicGapReductionGlobal hGlobal)
+    primeGe5BranchACyclotomicExistence_concrete
+
+/--
+`2m-global` + Peel → `BranchARefuterTarget`。
+
+primitive 側は `2m-global` から無限降下法で落ち、
+peel 側は `PacketFromError` で落ち、合成して Pack → False。
+-/
+theorem branchARefuter_of_qAdicGapReductionGlobal
+    (hGlobal : PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget) :
+    BranchARefuterTarget :=
+  branchARefuter_of_2kernels_gnGap_peel
+    (gnReducedGap_of_pthRootCore (pthRootCore_of_qAdicGapReductionGlobal hGlobal))
+    (valuationPeelPacket_concrete_tailError_with_packetFromError hPFE)
+
+/--
+`2m-global` + Peel + BranchB → `FLTPrimeGe5Target`。
+
+これは `FLTPrimeGe5Target_of_qAdicGapReductionGlobal_precise` と等価だが、
+無限降下法経路を経由する点で意味が異なる:
+primitive 側は `branchA_wf_contradiction_on_z` で well-founded descent。
+-/
+theorem FLTPrimeGe5Target_of_qAdicGapReductionGlobal_infiniteDescent
+    (hGlobal : PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_branch_split_refuter_with_normalizer_impl
+    (branchARefuter_of_qAdicGapReductionGlobal hGlobal hPFE)
+    (branchBRefuter_of_nonLiftableGNBridge hNoLift)
 
 end DkMath.FLT
