@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.GEisensteinBridge
+import DkMath.FLT.Kummer
 import DkMath.FLT.Main
 import DkMath.FLT.PrimeProvider
 
