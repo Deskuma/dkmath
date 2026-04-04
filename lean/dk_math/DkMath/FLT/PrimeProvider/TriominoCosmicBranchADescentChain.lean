@@ -2531,26 +2531,69 @@ witness `R : ZMod (q^p)` に **依存しない**。
 左辺 `GN p g' y` も `g'` と `y` だけで決まる。
 
 したがって、witness R の仮定を完全に除去した `2m-pure` を定義できる。
-`2m-global ↔ 2m-pure` は自明に成り立つ（R を受け取って捨てるだけ、逆は R 不在でも結論は同じ）。
+`2m-pure → 2m-global` は自明に成り立つ（R を受け取って捨てるだけ）。
+逆方向 `2m-global → 2m-pure` は **一般には成立しない**。
+`2m-pure` は `2m-global` より **真に強い** 主張。
 
-これは数学的には、**`g'` の存在は witness R の構成に依存しない**
-ことの formal certificate じゃ。
-つまり `2m-global` の仮定 4–5（`∑ R^i = 0` と `z = R·y`）は
-open kernel の本質ではなく、単に `2m-local` から concrete に供給される
-付随データにすぎない。
+### §20.1.1. `2m-global` と `2m-pure` の gap の正体
+
+分析の結果、`2m-global → 2m-pure` が成立しない正確な理由が判明した:
+
+`R = z · y⁻¹ mod q^p` とする。pack の `Coprime x y` と `q ∣ x` から `gcd(y,q) = 1` が出て、
+y は `ZMod (q^p)` で可逆なので R は一意に定まる。`z ≡ R·y (mod q^p)` は定義から成立。
+しかし `Φ_p(R) = 0 (mod q^p)` が成り立つかは q と gap の関係に依存する:
+
+- **`q ∤ gap`** (= `q ∤ (z-y)`): R ≢ 1 (mod q)。
+  `R^p ≡ 1 (mod q^p)` と `R - 1` が `ZMod q` で可逆であることから、
+  `Φ_p(R) ≡ 0 (mod q^p)` が **自動的に成立**。
+  このケースで `2m-global` は非 vacuous な情報を与える。
+
+- **`q | gap` かつ `q ≠ p`**: R ≡ 1 (mod q)。
+  `Φ_p(R) ≡ Φ_p(1) = p (mod q)` で、`q ≠ p` なら `Φ_p(R) ≢ 0 (mod q)`。
+  よって `Φ_p(R) = 0 (mod q^p)` を満たす R が **存在しない**。
+  `2m-global` は vacuously true になり、何の情報も与えない。
+
+- **`q = p` かつ `p | gap`**: `Φ_p(R) ≡ 0 (mod p)` だが `mod p^p` かは非自明
+  （Wieferich/Kummer 理論に依存）。
+
+重要: DescentChain の actual usage path では、q は `CyclotomicExistenceTarget` から来る
+**distinguished prime** であり、`¬ q ∣ (z-y)` が保証される（= 第1ケース）。
+したがって **actual chain 上では `2m-global` の witness 条件は自動的に充足される**。
+
+**結論**: `2m-pure` と `2m-global` の formal な gap は `q | gap` ケースで生じるが、
+このケースは DescentChain 本線では起きない。`2m-global` を攻める A ルートが正しい。
 -/
 
 /--
 2m-pure: witness R を完全に除去した最鋭 target。
 
 pack + `Prime q` + `q ∣ x` だけから reduced gap `g'` の存在を要求する。
-`2m-global` と同値だが、witness 仮定を持たない点でより鋭い。
+`2m-global` より **厳密に強い**（witness R を仮定しない）。
+`2m-pure → 2m-global` は自明だが、逆は一般には不成立。
 -/
 abbrev PrimeGe5BranchAPrimitiveQAdicGapReductionPureTarget : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
     ∀ {q : ℕ}, Nat.Prime q →
       q ∣ x →
       ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p
+
+/--
+`2m-pure` の GN 等式と descent existence の同値性。
+
+Cosmic Formula 恒等式 `(g' + y)^p = g' * GN(p, g', y) + y^p` により、
+`g' * GN(p, g', y) = (x/q)^p` ↔ `(g' + y)^p = (x/q)^p + y^p`。
+
+つまり `2m-pure` は **descent existence そのもの** である。
+-/
+theorem descentExistence_iff_gnReduction (p g' y xq : ℕ) :
+    g' * GN p g' y = xq ^ p ↔ (g' + y) ^ p = xq ^ p + y ^ p := by
+  constructor
+  · intro h
+    have hCosmic := DkMath.CosmicFormulaBinom.cosmic_id_csr' (R := ℕ) p g' y
+    omega
+  · intro h
+    have hCosmic := DkMath.CosmicFormulaBinom.cosmic_id_csr' (R := ℕ) p g' y
+    omega
 
 /-- `2m-pure` → `2m-global`（witness を受け取って捨てるだけ）。 -/
 theorem qAdicGapReductionGlobal_of_pure

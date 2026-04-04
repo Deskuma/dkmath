@@ -2119,3 +2119,48 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
    - `2m-pure` の結論を Cosmic Formula で書き直すと descent existence と **完全に等価**
      であることの formal 化（`g' + y` が `z'` に対応）
    - `2m-global` の witness R が構成的証明で本質的に必要かの数学的分析
+
+### 追記: 2026/04/04 16:08:31 JST §20.1 深層解析 — 2m-global 仮定監査・witness 依存性・2段分解
+
+see: [Agent Note](/lean/dk_math/notes/Agent-note-260404-1535.md)
+
+1. 目的:
+   - review-051 の 3 つのステップに沿い、A ルート（証明優先）を最大推論で推進
+   - §20.1 のコメント修正、`2m-pure` の宇宙式同値 formal 化、witness 依存性の解剖
+2. 実施:
+   - **§20.1 コメント修正**: `2m-global ↔ 2m-pure` と読める記述を一方向に修正
+   - **`descentExistence_iff_gnReduction` (no-axioms)** を追加:
+     `g' · GN(p, g', y) = xq^p ↔ (g'+y)^p = xq^p + y^p` を `omega` で証明
+     → `2m-pure` = descent existence の formal certificate
+   - **§20.1.1 追加**: `2m-global` と `2m-pure` の gap の正体を解析
+     - `q ∤ gap` のとき: R ≢ 1 (mod q) → Φ_p(R) = 0 自動 → `2m-global` 非 vacuous
+     - `q | gap` かつ `q ≠ p` のとき: R ≡ 1 (mod q^p) → Φ_p(R) ≡ p ≠ 0 → `2m-global` vacuously true
+     - DescentChain の actual path では CyclotomicExistence が `¬ q ∣ (z-y)` を保証するため第1ケース
+   - **数値実験** (`tmp/witness_to_gap_analysis.py`, `tmp/witness_dependency_deep.py`,
+     `tmp/two_stage_decomposition.py`) で構造を数値的に確認
+3. 結論:
+   - **`2m-global` と `2m-pure` は formal には非同値**: `q | gap` ケースで genuine gap がある
+   - **DescentChain actual path 上では同値**: CyclotomicExistence が `q ∤ gap` を保証
+   - **A ルート（`2m-global` を攻める）が正しい**: witness R は proof data として実際に使える
+   - **`2m-global` は 2 段に分解される**:
+     - Stage 1 (LOCAL): z' mod q^p の Hensel lift → `2m-local` が concrete に担当済み ✅
+     - Stage 2 (GLOBAL): z' mod q^p → z' ∈ ℤ → **Kummer 理論 / ℤ[ζ_p] ideal class group に帰着**
+   - Stage 2 が **genuinely global** な跳躍点。q-adic 局所情報だけでは解決不可能
+   - `descentExistence_iff_gnReduction` は no-axioms で通った ✅
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - 数値実験: p=5, q=11 で Φ_5(R) = 0 の根は 4 つ（Hensel lift で q^5 まで一意）
+   - FLT により z'^p = c^p + y^p の整数解は 0 個（c, y ∈ [1..49] で全数検索）
+5. 失敗事例:
+   - `2m-global → 2m-pure` を pack 文脈で同値と誤認 → `q | gap` ケースの分析で否定
+     → コメント修正で正しい記述に更新
+6. 判断分岐点:
+   - **`2m-global` の concrete 化は ℤ[ζ_p] の代数的整数論に帰着する**
+   - Kummer 理論: ideal factorization `(x+ζ^j·y)` の主イデアル性
+   - regular prime なら class number h_p = 1 で descent が回る
+   - irregular prime では Kummer の第二基準 / Vandiver 予想が必要
+   - **次の選択肢**:
+     a. ℤ[ζ_p] の ideal class group を Lean で形式化し、Kummer descent を実装
+     b. `2m-global` を更に intermediate step に分解して攻めやすい形にする
+     c. 別の（非 Kummer 的）ルートで g' の存在を示す
