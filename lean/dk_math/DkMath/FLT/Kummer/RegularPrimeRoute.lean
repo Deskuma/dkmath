@@ -28,7 +28,7 @@ DkMath FLT 幹線の `2m-pure` → FLT chain に接続する。
         ↓
      IdealClassPTorsionWitness                  (thinnest open kernel)
        ↓
-     PTorsionAnnihilation                       (class-group side)
+    PTorsionAnnihilation                       (generic ClassGroup API)
        ↓
      PrincipalIdealExtraction                   (Dedekind / class-group API side)
        ↓
@@ -66,8 +66,9 @@ Kummer branch 導入後の open kernel は **1 つ**に集約された:
 Mathlib 既存資産で concrete 化できるかを独立に監査する。
 
 `CyclotomicPTorsionAnnihilationTarget` と `CyclotomicPrincipalIdealExtractionTarget` は
-Stage 1 内部の責務分離として追加した。将来的には
-class-group API / Dedekind domain API の concrete 化先になる。
+Stage 1 内部の責務分離として追加した。
+前者は generic ClassGroup API の target として、後者は principal-ideal extraction API として
+concrete 化済みだが、`CyclotomicClassGroupPTorsionFreeTarget` から前者を供給する橋は未解決である。
 
 それぞれ独立に攻略可能。
 -/

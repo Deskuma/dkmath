@@ -94,14 +94,14 @@ Stage 1b: class group p-torsion annihilation。
 
 Stage 1a で得た p-torsion class を、class group p-torsion freeness で潰す段。
 この段は class-group API 側の一般論に近い責務を持つ。
+
+review-004 を受け、Stage 1b も placeholder `True` ではなく、
+`ClassGroup R` 上の generic p-torsion annihilation API として定式化する。
 -/
 abbrev CyclotomicPTorsionAnnihilationTarget : Prop :=
-  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
-    ∀ {q : ℕ}, Nat.Prime q →
-      q ∣ x →
-      q ≠ p →
-      q ∣ (z - y) →
-      True
+  ∀ {R : Type*} [CommRing R] [IsDomain R],
+    ∀ (p : ℕ),
+    ∀ a : ClassGroup R, a ^ p = 1 → a = 1
 
 /--
 Stage 1c: principal ideal extraction。
@@ -139,7 +139,7 @@ abbrev CyclotomicIdealPthPowerTarget : Prop :=
 Stage 1a + 1b + 1c → ideal p-th power。
 
 Stage 1 の内部責務を明示化した composition theorem。
-Stage 1c は generic API へ concrete 化したが、
+Stage 1b / 1c は generic API へ concrete 化したが、
 cyclotomic pack への specialization はまだ Stage 1a 側で未供給なので、
 ここでは依然として abstract composition として保持する。
 -/
@@ -289,14 +289,17 @@ theorem cyclotomicIdealClassPTorsionWitness_of_gapDivisibleGeometry :
 /--
 Stage 1b: class group p-torsion free → p-torsion annihilation。
 
-現時点では target 自体が placeholder なので clean に接続する。
-将来は `hCl` から class-group API を用いてこの段を concrete 化する。
+`CyclotomicClassGroupPTorsionFreeTarget` 自体は placeholder だが、
+出力先の Stage 1b は generic API に concrete 化した。
+したがって将来は `hCl` からこの generic statement を供給する bridge を
+埋めればよい形になった。
 -/
 theorem cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree
     (_hCl : CyclotomicClassGroupPTorsionFreeTarget) :
     CyclotomicPTorsionAnnihilationTarget := by
-  intro p x y z _hpack q _hq _hqx _hqne _hgap
-  trivial
+  intro R _ _ p a ha
+  -- `hCl` はまだ placeholder なので、ここでは API の出口だけ固定する。
+  sorry
 
 /--
 Stage 1c: trivial class → principal ideal extraction。
@@ -327,7 +330,7 @@ Refined Stage 1 route: geometry witness + torsion annihilation + principal extra
 
 Stage 1 全体をさらに薄い 3 段へ裂いた refined route。
 ただし現時点では Stage 1 target 自体が placeholder なので、
-concrete 化されたのは Stage 1c の generic API までである。
+concrete 化されたのは Stage 1b / 1c の generic API までである。
 -/
 theorem cyclotomicIdealPthPower_of_refinedStage1Route
     (hWitness : CyclotomicIdealClassPTorsionWitnessTarget)

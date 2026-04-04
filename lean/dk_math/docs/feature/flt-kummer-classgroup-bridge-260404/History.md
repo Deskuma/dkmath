@@ -261,6 +261,46 @@ Archive
     - Stage 1b を class-group 一般 API の concrete statement に寄せられるか再評価
     - ここが次の判断分岐点
 
+### 日時: 2026/04/05 08:28 JST — Stage 1b の generic ClassGroup API 化
+
+1. 目的:
+    - review-004 に沿って、Stage 1b を class-group 一般 API 側へ寄せられるか短距離で検査する。
+    - Stage 1a / 1b / 1c のうち、どこが genuinely new theory で、どこが generic bridge かをさらに明確にする。
+2. 実施:
+    - scratch で `ClassGroup R` 上の `a ^ p = 1 → a = 1` 型が自然に書けることを確認
+    - `CyclotomicPTorsionAnnihilationTarget` を placeholder `True` から、
+       generic な `ClassGroup R` の p-torsion annihilation statement へ変更
+    - `cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree` は、
+       `CyclotomicClassGroupPTorsionFreeTarget` がまだ placeholder なので sorry theorem として残し、
+       target と bridge theorem を分離
+    - `RegularPrimeRoute.lean` と test コメントを更新し、
+       Stage 1b の target は concrete、bridge は open という現状へ同期
+3. 結論:
+    - Stage 1b も **target としては generic ClassGroup API に concrete 化** できた ✅
+    - しかし `CyclotomicClassGroupPTorsionFreeTarget` からその generic API を供給する bridge は未解決で、
+       `cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree` に `sorryAx` が残る ❌
+    - したがって今の genuinely hard な領域は、
+       Stage 1a と、Stage 1b への specialized bridge の 2 点に絞られた
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `#print axioms cyclotomicIdealClassPTorsionWitness_of_gapDivisibleGeometry`
+       → `sorryAx` あり
+    - `#print axioms cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree`
+       → `sorryAx` あり
+    - `#print axioms cyclotomicPrincipalIdealExtraction_of_classTrivialization`
+       → `[propext, Classical.choice, Quot.sound]`（sorryAx なし）
+    - `#print axioms idealIsPrincipal_of_classGroupMk0_eq_one`
+       → `[propext, Classical.choice, Quot.sound]`（sorryAx なし）
+5. 失敗事例:
+    - Stage 1b の theorem 自体を clean にするには、
+       `CyclotomicClassGroupPTorsionFreeTarget` を generic ClassGroup p-torsion free statement へ接続する
+       追加設計が要る
+    - つまり「target の concrete 化」と「cyclotomic 仮定からの供給」は別問題だと確定した
+6. 次の課題:
+    - `CyclotomicClassGroupPTorsionFreeTarget` を generic ClassGroup p-torsion free statement に寄せるか検討
+    - あるいは、ここで打ち切って Stage 1a の細分化へ戻るか判断
+    - ここが次の分岐点
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
