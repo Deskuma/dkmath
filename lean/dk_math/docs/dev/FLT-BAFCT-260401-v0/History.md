@@ -2087,3 +2087,35 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
    - `2m-global` の concrete 化に向けた数学的分析
    - Peel 側 (`PacketFromError`) / BranchB (`NonLiftableGNBridge`) の並行攻略
    - 全体の open kernel 一覧を §22 の経路図中心で最終整理する
+
+### 追記: 2026/04/04 09:32:09 JST §20.1 + §22.1. 2m-global 仮定監査と 2m-pure の切り出し
+
+1. 目的:
+   - `PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget` の仮定を監査し、
+     local に処理できる成分が残っていないか洗う
+   - witness R が結論に不要なことを利用して R-free target を定義する
+2. 実施:
+   - `PrimeGe5BranchAPrimitiveQAdicGapReductionPureTarget` を新設
+     （pack + `Prime q` + `q ∣ x` だけから `∃ g'` を要求する R-free target）
+   - `qAdicGapReductionGlobal_of_pure` を追加（`2m-pure → 2m-global`、自明）
+   - `pthRootCore_of_qAdicGapReductionPure` を追加
+   - `branchAFringeContradiction_of_qAdicGapReductionPure` を追加
+   - `FLTPrimeGe5Target_of_qAdicGapReductionPure_infiniteDescent` を追加
+   - §20 の地図に `2m-pure` を追加
+   - §20.1 / §22.1 セクションを新設
+3. 結論:
+   - `2m-global` の結論 `∃ g', g' · GN(p,g',y) = (x/q)^p` は witness R に依存しない ✅
+   - `2m-pure` は `2m-global` **より強い**（R-free）
+   - `2m-pure → 2m-global` は自明、逆は一般には成立しない
+   - `2m-pure` が通れば primitive 側の無限降下法 → FLT まで全て回る ✅
+   - これは「witness を使わずとも `g'` は存在する」という insight の formal 化
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - `2m-pure` 橋を `2m-global` 橋より前に配置して forward reference エラー → §22.1 へ移動して解消
+6. 次の課題:
+   - `2m-pure` と `2m-global` のどちらを攻めるかの戦略判断
+   - `2m-pure` の結論を Cosmic Formula で書き直すと descent existence と **完全に等価**
+     であることの formal 化（`g' + y` が `z'` に対応）
+   - `2m-global` の witness R が構成的証明で本質的に必要かの数学的分析

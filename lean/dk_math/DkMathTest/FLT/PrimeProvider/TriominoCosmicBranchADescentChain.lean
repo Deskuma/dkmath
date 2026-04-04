@@ -85,3 +85,9 @@ set_option linter.style.longLine false
 #print axioms DkMath.FLT.branchAFringeContradiction_of_qAdicGapReductionGlobal -- OK
 #print axioms DkMath.FLT.branchARefuter_of_qAdicGapReductionGlobal -- OK
 #print axioms DkMath.FLT.FLTPrimeGe5Target_of_qAdicGapReductionGlobal_infiniteDescent -- OK
+
+-- §20.1. 2m-pure
+#print axioms DkMath.FLT.qAdicGapReductionGlobal_of_pure -- OK
+#print axioms DkMath.FLT.pthRootCore_of_qAdicGapReductionPure -- OK
+#print axioms DkMath.FLT.branchAFringeContradiction_of_qAdicGapReductionPure -- OK
+#print axioms DkMath.FLT.FLTPrimeGe5Target_of_qAdicGapReductionPure_infiniteDescent -- OK
