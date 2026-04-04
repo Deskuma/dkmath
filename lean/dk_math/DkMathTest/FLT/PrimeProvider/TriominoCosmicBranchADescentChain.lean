@@ -79,3 +79,9 @@ set_option linter.style.longLine false
 #print axioms DkMath.FLT.FLTPrimeGe5Target_of_qAdicGapReduction_precise -- OK
 #print axioms DkMath.FLT.FLTPrimeGe5Target_of_qAdicGapReductionGlobal_precise -- OK
 #print axioms DkMath.FLT.FLTPrimeGe5Target_of_qAdicGapReductionCore_precise -- OK
+
+-- §22. 2m-global → 無限降下法
+#print axioms DkMath.FLT.primitivePacketDescentStrong_of_qAdicGapReductionGlobal -- OK
+#print axioms DkMath.FLT.branchAFringeContradiction_of_qAdicGapReductionGlobal -- OK
+#print axioms DkMath.FLT.branchARefuter_of_qAdicGapReductionGlobal -- OK
+#print axioms DkMath.FLT.FLTPrimeGe5Target_of_qAdicGapReductionGlobal_infiniteDescent -- OK

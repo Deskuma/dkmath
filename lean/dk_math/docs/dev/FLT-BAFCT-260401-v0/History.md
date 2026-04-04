@@ -2052,3 +2052,38 @@ review-024 の設計書に従い、open kernel を「最も攻めやすい語彙
    - `PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget` の仮定をさらに削れるか点検
    - `2m-global` の中でなお局所的に処理できる成分がないか洗う
    - 以後の primitive 側 kernel の記述を `2m-global` 中心へ寄せる
+
+### 追記: 2026/04/04 09:11:51 JST §22. 2m-global → 無限降下法への直通道
+
+1. 目的:
+   - `2m-global` から無限降下法 (`branchA_wf_contradiction_on_z`) への
+     接続経路を明示的に Lean 上で固定する
+   - primitive 側 kernel の記述を `2m-global` 中心へ完全に寄せる
+2. 実施:
+   - `primitivePacketDescentStrong_of_qAdicGapReductionGlobal` を追加
+     （2m-global → PacketDescentStrongTarget、`¬p∣t` 保証付き strict descent）
+   - `branchAFringeContradiction_of_qAdicGapReductionGlobal` を追加
+     （2m-global → BranchAFringeContradictionTarget、内部で `Nat.find` 無限降下法）
+   - `branchARefuter_of_qAdicGapReductionGlobal` を追加
+     （2m-global + Peel → BranchARefuterTarget）
+   - `FLTPrimeGe5Target_of_qAdicGapReductionGlobal_infiniteDescent` を追加
+     （2m-global + Peel + BranchB → FLT、無限降下法経路を明示的に通る版）
+   - §22 セクションを新設し、経路図・docstring を整備
+   - テストへ `#print axioms` を追加
+3. 結論:
+   - `2m-global` が concrete 化されれば、primitive 側の **無限降下法が回る** ことが
+     Lean 上で formal に保証された ✅
+   - 経路: 2m-global → PthRootCore → GNReducedGap
+     → PacketDescentStrong (CyclotomicExistence は concrete)
+     → `branchA_wf_contradiction_on_z` (= `Nat.find` による well-founded descent)
+     → BranchAFringeContradiction
+   - primitive 側に限れば open kernel は **`2m-global` 1 本だけ**
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+   - `./lean-build.sh DkMathTest.FLT.PrimeProvider.TriominoCosmicBranchADescentChain` 成功
+5. 失敗事例:
+   - 特になし（既存橋の合成で全て通った）
+6. 次の課題:
+   - `2m-global` の concrete 化に向けた数学的分析
+   - Peel 側 (`PacketFromError`) / BranchB (`NonLiftableGNBridge`) の並行攻略
+   - 全体の open kernel 一覧を §22 の経路図中心で最終整理する

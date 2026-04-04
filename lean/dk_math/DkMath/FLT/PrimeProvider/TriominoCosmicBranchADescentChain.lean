@@ -2936,4 +2936,94 @@ theorem gnAtZero (p gap : ℕ) (hp : 1 ≤ p) : GN p gap 0 = gap ^ (p - 1) := by
 残っている警告は既存の `so#rry` 由来のものだけです。
 -/
 
+/-!
+## §22. 2m-global → 無限降下法への直通道
+
+### 経路図
+
+```
+2m-global (QAdicGapReductionGlobalTarget)                ★OPEN★
+  ↓ pthRootCore_of_qAdicGapReductionGlobal
+PthRootCore
+  ↓ gnReducedGap_of_pthRootCore
+GNReducedGapTarget
+  ↓ + CyclotomicExistence (concrete ✅)
+PacketDescentStrongTarget
+  ↓ + CyclotomicExistence (concrete ✅)
+branchA_wf_contradiction_on_z                            = 無限降下法
+  ↓
+BranchAFringeContradictionTarget
+  ↓ + ValuationPeelPacket + BranchBRefuter
+FLTPrimeGe5Target
+```
+
+`2m-global` が concrete 化されれば、上の経路が **全て concrete で接続** し、
+primitive 側の無限降下法が回る。
+
+Peel 側 (`PacketFromError`) と BranchB 側 (`NonLiftableGNBridge`) は別経路。
+primitive 側に限れば、`2m-global` **1 本だけ** が open kernel。
+-/
+
+/--
+`2m-global` → `PacketDescentStrongTarget`。
+
+CyclotomicExistence は concrete なので、
+`2m-global` だけで `¬p∣t` 保証付き strict descent が出る。
+
+これは無限降下法 (`branchA_wf_contradiction_on_z`) の直接の入力。
+-/
+theorem primitivePacketDescentStrong_of_qAdicGapReductionGlobal
+    (hGlobal : PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget) :
+    PrimeGe5BranchAPrimitivePacketDescentStrongTarget :=
+  primeGe5BranchAPrimitivePacketDescentStrong_of_gnReducedGap_and_cyclotomicExistence
+    (gnReducedGap_of_pthRootCore (pthRootCore_of_qAdicGapReductionGlobal hGlobal))
+    primeGe5BranchACyclotomicExistence_concrete
+
+/--
+`2m-global` → `BranchAFringeContradictionTarget`。
+
+CyclotomicExistence は concrete なので、
+`2m-global` だけで `BranchAInterferenceFringeBundle → False` が出る。
+
+proof の中核は `branchA_wf_contradiction_on_z`：
+`Nat.find` で最小の `z₀` を取り、`PacketDescentStrongTarget` で `z' < z₀` を得て矛盾。
+これが FLT primitive 側の **無限降下法** そのもの。
+-/
+theorem branchAFringeContradiction_of_qAdicGapReductionGlobal
+    (hGlobal : PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget) :
+    BranchAFringeContradictionTarget :=
+  branchAFringeContradiction_of_descent
+    (primitivePacketDescentStrong_of_qAdicGapReductionGlobal hGlobal)
+    primeGe5BranchACyclotomicExistence_concrete
+
+/--
+`2m-global` + Peel → `BranchARefuterTarget`。
+
+primitive 側は `2m-global` から無限降下法で落ち、
+peel 側は `PacketFromError` で落ち、合成して Pack → False。
+-/
+theorem branchARefuter_of_qAdicGapReductionGlobal
+    (hGlobal : PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget) :
+    BranchARefuterTarget :=
+  branchARefuter_of_2kernels_gnGap_peel
+    (gnReducedGap_of_pthRootCore (pthRootCore_of_qAdicGapReductionGlobal hGlobal))
+    (valuationPeelPacket_concrete_tailError_with_packetFromError hPFE)
+
+/--
+`2m-global` + Peel + BranchB → `FLTPrimeGe5Target`。
+
+これは `FLTPrimeGe5Target_of_qAdicGapReductionGlobal_precise` と等価だが、
+無限降下法経路を経由する点で意味が異なる:
+primitive 側は `branchA_wf_contradiction_on_z` で well-founded descent。
+-/
+theorem FLTPrimeGe5Target_of_qAdicGapReductionGlobal_infiniteDescent
+    (hGlobal : PrimeGe5BranchAPrimitiveQAdicGapReductionGlobalTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_branch_split_refuter_with_normalizer_impl
+    (branchARefuter_of_qAdicGapReductionGlobal hGlobal hPFE)
+    (branchBRefuter_of_nonLiftableGNBridge hNoLift)
+
 end DkMath.FLT
