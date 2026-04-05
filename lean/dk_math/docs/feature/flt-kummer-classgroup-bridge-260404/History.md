@@ -776,6 +776,68 @@ Archive
     - ただし、この接続は新しい theorem 設計を要するため、
        次段では「count/multiplicity で押す」か「class-group target concretization へ切り替える」かの判断が再び現れる
 
+### 日時: 2026/04/05 18:57:13 JST — generic each-pth-power theorem と class-group witness bridge の実装
+
+1. 目的:
+    - review-012 の主定理候補
+       `pairwise-coprime ideal family の積が p 乗 ideal なら各因子も p 乗 ideal`
+       を DkMath-native な generic theorem として実装する。
+    - さらに、その結果から class-group p-torsion witness まで generic に渡る橋も定理化する。
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `dedekindIdealPrimeAssocNotBothDvdOfIsCoprime`
+       - `dedekindIdealEqPowOfMulEqPowOfIsCoprime`
+       - `dedekindIdealIsCoprimeProdErase`
+       - `dedekindIdealProdEraseNeBot`
+       - `dedekindIdealEqPowOfProdEqPowOfPairwise`
+       - `dedekindClassGroupMk0PowEqOneOfEqPowAndIsPrincipal`
+       - `dedekindClassGroupPowWitnessOfProdEqPowOfPairwise`
+    - 2-factor 版は `Associates.eq_pow_of_mul_eq_pow` を ideal へ specialization する形で実装
+    - finite-family 版は `erase` による product split と
+       `Ideal.IsPrime.prod_le` を使って、各 index ごとに 2-factor 版へ還元
+    - class-group bridge は
+       `I = K^p` と `I.IsPrincipal` から
+       `ClassGroup.mk0 K ^ p = 1` を generic に導く形で実装
+    - `RegularPrimeRoute.lean` / test のコメントと axioms 監視も同期
+3. 結論:
+    - review-012 の主定理候補は **no-sorry** で実装できた ✅
+    - 具体的には
+       `dedekindIdealEqPowOfProdEqPowOfPairwise`
+       により、class-group 側の最終橋の 1 本手前が generic theorem として固定できた ✅
+    - さらに
+       `dedekindClassGroupPowWitnessOfProdEqPowOfPairwise`
+       により、ideal p 乗性から class-group p-torsion witness までの generic bridge も得られた ✅
+    - direct `sorry` は引き続き
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree`
+       と `cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree`
+       の 2 本のみ ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMath.FLT.Kummer.ClassGroupBridge DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `#print axioms dedekindIdealEqPowOfMulEqPowOfIsCoprime` → no sorry
+    - `#print axioms dedekindIdealEqPowOfProdEqPowOfPairwise` → no sorry
+    - `#print axioms dedekindClassGroupMk0PowEqOneOfEqPowAndIsPrincipal` → no sorry
+    - `#print axioms dedekindClassGroupPowWitnessOfProdEqPowOfPairwise` → no sorry
+    - `#print axioms cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree` → `sorryAx` あり
+    - `#print axioms cyclotomicPrincipalization_of_classGroupPTorsionFree` → `sorryAx` あり
+5. 分岐と判断:
+    - 分岐候補:
+       - A. review-012 に忠実に、count / multiplicity を前面に出した theorem を新設する
+       - B. 既存 UFM theorem `Associates.eq_pow_of_mul_eq_pow` を ideal へ specialization して最短で主定理を通す
+    - 選択:
+       - **B を採用**
+    - 理由:
+       - 主体は FLT 証明を閉じることであり、抽象設計より最短実装が優先されるため
+       - review-012 の数学内容自体は保ちつつ、Mathlib の既存 UFM core を使う方が短距離で確実だったため
+       - その上で count / factor-count receiver 群は既に確保済みなので、必要なら後で別 theorem として追加できるため
+6. 次の課題:
+    - ここから先の本丸は、generic class-group witness を
+       `CyclotomicPTorsionAnnihilationTarget` と `CyclotomicClassGroupPTorsionFreeTarget` へどう落とし込むかじゃ
+    - 次段の有力候補は 2 つ:
+       - `CyclotomicClassGroupPTorsionFreeTarget` 自体を generic p-torsion-free 内容へ concrete 化する
+       - あるいは、現行 target を保ったまま
+          `cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree` の receiver theorem を新設する
+    - ここは class-group 側の仮定設計に踏み込む分岐なので、次サイクルで判断する
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。

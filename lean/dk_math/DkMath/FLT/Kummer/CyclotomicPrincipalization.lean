@@ -11,6 +11,8 @@ import DkMath.FLT.Kummer.GapDivisibleBranch
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
 
+open scoped nonZeroDivisors
+
 open DkMath.CosmicFormulaBinom
 
 /-!
@@ -287,6 +289,171 @@ theorem dedekindIdealCountNormalizedFactorsEq
   Multiset.count P (UniqueFactorizationMonoid.normalizedFactors I) = n := by
   classical
   exact Ideal.count_normalizedFactors_eq (p := P) (x := I) hle hlt
+
+/--
+互いに素な 2 つの ideals について、同じ prime associate が両方を割ることはない。
+
+`Associates.eq_pow_of_mul_eq_pow` を ideal へ適用するための補助定理。
+-/
+theorem dedekindIdealPrimeAssocNotBothDvdOfIsCoprime
+    {R : Type*} [CommRing R] [IsDedekindDomain R]
+    {I J : Ideal R} (hCoprime : IsCoprime I J) :
+    ∀ d : Associates (Ideal R), d ∣ Associates.mk I → d ∣ Associates.mk J → ¬ Prime d := by
+  intro d hdI hdJ hdPrime
+  obtain ⟨P, rfl⟩ := Associates.mk_surjective d
+  have hdvdI : P ∣ I := by
+    simpa [Associates.mk_dvd_mk] using hdI
+  have hdvdJ : P ∣ J := by
+    simpa [Associates.mk_dvd_mk] using hdJ
+  have hleI : I ≤ P := Ideal.dvd_iff_le.mp hdvdI
+  have hleJ : J ≤ P := Ideal.dvd_iff_le.mp hdvdJ
+  have hPprime : P.IsPrime :=
+    Ideal.isPrime_of_prime ((Associates.prime_mk).mp hdPrime)
+  exact (show ¬ P.IsPrime from by
+    intro h
+    have hsup : I ⊔ J = ⊤ := (Ideal.isCoprime_iff_sup_eq).mp hCoprime
+    have htop : ⊤ ≤ P := by
+      rw [← hsup]
+      exact sup_le hleI hleJ
+    exact h.ne_top (top_unique htop)) hPprime
+
+/--
+Dedekind 領域で、互いに素な 2 ideals の積が p 乗 ideal なら、片方も p 乗 ideal。
+
+review-012 の finite-family 主定理へ向かう最短の 2-factor 版。
+-/
+theorem dedekindIdealEqPowOfMulEqPowOfIsCoprime
+    {R : Type*} [CommRing R] [IsDedekindDomain R]
+    {I J K : Ideal R} (hI : I ≠ ⊥) (hJ : J ≠ ⊥)
+    (hCoprime : IsCoprime I J) {p : ℕ}
+    (hMul : I * J = K ^ p) :
+    ∃ L : Ideal R, I = L ^ p := by
+  have hAssoc : Associates.mk I * Associates.mk J = (Associates.mk K) ^ p := by
+    simpa [Associates.mk_mul_mk, Associates.mk_pow] using congrArg Associates.mk hMul
+  obtain ⟨d, hd⟩ := Associates.eq_pow_of_mul_eq_pow
+    (a := Associates.mk I) (b := Associates.mk J) (c := Associates.mk K)
+    (Associates.mk_ne_zero.mpr hI) (Associates.mk_ne_zero.mpr hJ)
+    (dedekindIdealPrimeAssocNotBothDvdOfIsCoprime hCoprime) hAssoc
+  obtain ⟨L, hL⟩ := Associates.mk_surjective d
+  refine ⟨L, ?_⟩
+  rw [← hL, ← Associates.mk_pow] at hd
+  exact associated_iff_eq.mp (Associates.mk_eq_mk_iff_associated.mp hd)
+
+/--
+pairwise に互いに素な ideal family では、1 つの ideal は残り全部の積と互いに素である。
+
+finite-family theorem を各 index ごとの 2-factor 版へ落とすための helper。
+-/
+theorem dedekindIdealIsCoprimeProdErase
+    {R : Type*} [CommRing R] [IsDomain R]
+    {ι : Type*} [DecidableEq ι]
+    {s : Finset ι} {I : ι → Ideal R}
+  (hPairwise : Set.Pairwise (↑s) fun i j => IsCoprime (I i) (I j))
+    {i : ι} (hi : i ∈ s) :
+    IsCoprime (I i) (∏ j ∈ s.erase i, I j) := by
+  refine Ideal.coprime_of_no_prime_ge ?_
+  intro P hIle hRestLe hPprime
+  obtain ⟨j, hj, hjle⟩ := (Ideal.IsPrime.prod_le hPprime).mp (by simpa using hRestLe)
+  have hj_mem : j ∈ s := Finset.mem_of_mem_erase hj
+  have hji : j ≠ i := Finset.ne_of_mem_erase hj
+  have hij : i ≠ j := by
+    intro h
+    exact hji h.symm
+  have hcop : IsCoprime (I i) (I j) := hPairwise hi hj_mem hij
+  have htop : ⊤ ≤ P := by
+    rw [← (Ideal.isCoprime_iff_sup_eq).mp hcop]
+    exact sup_le hIle hjle
+  exact hPprime.ne_top (top_unique htop)
+
+/--
+nonzero ideal family の各 index について、残り全部の積も nonzero である。
+
+pair theorem を finite-family へ適用する際の補助定理。
+-/
+theorem dedekindIdealProdEraseNeBot
+    {R : Type*} [CommRing R] [IsDomain R]
+    {ι : Type*} [DecidableEq ι]
+    {s : Finset ι} {I : ι → Ideal R}
+    (hNonzero : ∀ j ∈ s, I j ≠ ⊥)
+    {i : ι} (_hi : i ∈ s) :
+    ∏ j ∈ s.erase i, I j ≠ ⊥ := by
+  classical
+  simpa using Finset.prod_ne_zero_iff.mpr (fun j hj => hNonzero j (Finset.mem_of_mem_erase hj))
+
+/--
+pairwise に互いに素な ideal family の積が p 乗 ideal なら、各因子も p 乗 ideal。
+
+review-012 の主定理候補そのもの。
+local factorization から class group bridge へ渡る直前の generic Dedekind theorem として置く。
+-/
+theorem dedekindIdealEqPowOfProdEqPowOfPairwise
+    {R : Type*} [CommRing R] [IsDedekindDomain R]
+    {ι : Type*}
+    {s : Finset ι} {I : ι → Ideal R} {J : Ideal R} {p : ℕ}
+  (hPairwise : Set.Pairwise (↑s) fun i j => IsCoprime (I i) (I j))
+    (hNonzero : ∀ i ∈ s, I i ≠ ⊥)
+    (hProd : ∏ i ∈ s, I i = J ^ p) :
+    ∀ i ∈ s, ∃ K : Ideal R, I i = K ^ p := by
+  classical
+  intro i hi
+  have hRestCoprime : IsCoprime (I i) (∏ j ∈ s.erase i, I j) :=
+    dedekindIdealIsCoprimeProdErase hPairwise hi
+  have hRestNonzero : ∏ j ∈ s.erase i, I j ≠ ⊥ :=
+    dedekindIdealProdEraseNeBot hNonzero hi
+  have hMul : I i * ∏ j ∈ s.erase i, I j = J ^ p := by
+    calc
+      I i * ∏ j ∈ s.erase i, I j = ∏ j ∈ s, I j := Finset.mul_prod_erase s I hi
+      _ = J ^ p := hProd
+  exact dedekindIdealEqPowOfMulEqPowOfIsCoprime (hNonzero i hi) hRestNonzero hRestCoprime hMul
+
+/--
+`I = K^p` かつ `I` が principal ideal なら、class group では `[K]^p = 1`。
+
+review-012 の ideal arithmetic から class-group p-torsion witness へ渡る最小補題。
+-/
+theorem dedekindClassGroupMk0PowEqOneOfEqPowAndIsPrincipal
+    {R : Type*} [CommRing R] [IsDedekindDomain R]
+    {I K : Ideal R} (hK : K ∈ (Ideal R)⁰) {p : ℕ}
+    (hEq : I = K ^ p) (hIPrincipal : I.IsPrincipal) :
+    ClassGroup.mk0 ⟨K, hK⟩ ^ p = 1 := by
+  have hPow : K ^ p ∈ (Ideal R)⁰ := by
+    rw [mem_nonZeroDivisors_iff_ne_zero]
+    exact pow_ne_zero p (mem_nonZeroDivisors_iff_ne_zero.mp hK)
+  calc
+    ClassGroup.mk0 ⟨K, hK⟩ ^ p = ClassGroup.mk0 (⟨K, hK⟩ ^ p) := by
+      rw [← MonoidHom.map_pow]
+    _ = ClassGroup.mk0 ⟨K ^ p, hPow⟩ := by
+      rfl
+    _ = 1 := by
+      rw [ClassGroup.mk0_eq_one_iff hPow]
+      simpa [hEq] using hIPrincipal
+
+/--
+pairwise-coprime ideal family の積が p 乗 ideal で、各因子が principal なら、
+各 root ideal は class group 上で p-torsion witness を与える。
+
+これにより、review-012 の主定理から class-group bridge 直前までが generic theorem で接続される。
+-/
+theorem dedekindClassGroupPowWitnessOfProdEqPowOfPairwise
+    {R : Type*} [CommRing R] [IsDedekindDomain R]
+    {ι : Type*}
+    {s : Finset ι} {I : ι → Ideal R} {J : Ideal R} {p : ℕ} (hp : p ≠ 0)
+    (hPairwise : Set.Pairwise (↑s) fun i j => IsCoprime (I i) (I j))
+    (hNonzero : ∀ i ∈ s, I i ≠ ⊥)
+    (hPrincipal : ∀ i ∈ s, (I i).IsPrincipal)
+    (hProd : ∏ i ∈ s, I i = J ^ p) :
+    ∀ i ∈ s, ∃ K : Ideal R, ∃ hK : K ∈ (Ideal R)⁰,
+      I i = K ^ p ∧ ClassGroup.mk0 ⟨K, hK⟩ ^ p = 1 := by
+  intro i hi
+  obtain ⟨K, hKpow⟩ := dedekindIdealEqPowOfProdEqPowOfPairwise hPairwise hNonzero hProd i hi
+  have hK : K ∈ (Ideal R)⁰ := by
+    rw [mem_nonZeroDivisors_iff_ne_zero]
+    intro hk
+    have hKi : I i ≠ ⊥ := hNonzero i hi
+    rw [hKpow, hk, zero_pow hp] at hKi
+    exact hKi rfl
+  refine ⟨K, hK, hKpow, ?_⟩
+  exact dedekindClassGroupMk0PowEqOneOfEqPowAndIsPrincipal hK hKpow (hPrincipal i hi)
 
 /--
 DkMath-native な局所 factorization core。

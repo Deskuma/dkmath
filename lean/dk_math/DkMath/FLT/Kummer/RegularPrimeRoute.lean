@@ -104,6 +104,13 @@ product = inf の basic lemma を確保できた。
 `dedekindExistsRepresentativeModFinset` により、Chinese remainder 側の finite-family receiver も確保できた。
 加えて `dedekindIdealCountNormalizedFactorsEq` により、
 prime-power exponent を factor count として読む入口も取れた。
+さらに `dedekindIdealEqPowOfMulEqPowOfIsCoprime` と
+`dedekindIdealEqPowOfProdEqPowOfPairwise` により、
+review-012 の本丸である「pairwise-coprime な ideal family の積が p 乗 ideal なら各因子も p 乗 ideal」
+という generic Dedekind theorem を no-so#rry で起こせた。
+さらに `dedekindClassGroupMk0PowEqOneOfEqPowAndIsPrincipal` と
+`dedekindClassGroupPowWitnessOfProdEqPowOfPairwise` により、
+その ideal arithmetic から class-group p-torsion witness までの generic bridge も no-so#rry で接続できた。
 FLT を閉じる観点で残る本筋の open は class group 側、すなわち
 `cyclotomicIdealPthPower_of_classGroupPTorsionFree` と
 `cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree` である。
