@@ -968,6 +968,59 @@ abbrev CyclotomicUnitNormalizationTarget : Prop :=
         z - ctx.zeta * y = u * (Submodule.IsPrincipal.generator I) ^ ctx.p
 
 /--
+Stage 2 の pack-specialized receiver target。
+
+`PrimeGe5CounterexamplePack` と gap-divisible 条件のもとで、
+もし local linear factor ideal が principal ideal の p 乗として与えられれば、
+対応する元は unit 倍の p 乗として書ける。
+
+Stage 1 target がまだ placeholder のため、現段階では
+「explicit ideal equality を入力に取る exact receiver」として切り出しておく。
+-/
+abbrev CyclotomicUnitNormalizationPackSpecializationTarget : Prop :=
+  ∀ {R : Type*} [CommRing R] [IsDomain R],
+    ∀ ctx : CyclotomicLocalFactorizationContext R,
+    ∀ {I : Ideal R} [I.IsPrincipal],
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ x →
+      q ≠ p →
+      q ∣ (z - y) →
+      Ideal.span ({(z : R) - ctx.zeta * (y : R)} : Set R) = I ^ ctx.p →
+      ∃ u : R, IsUnit u ∧
+        (z : R) - ctx.zeta * (y : R) = u * (Submodule.IsPrincipal.generator I) ^ ctx.p
+
+/--
+Stage 1 が Stage 2 へ supply すべき exact boundary target。
+
+pack-specialized な文脈で、local linear factor ideal が principal ideal の p 乗として
+書けることだけを isolate する。review-017 の「Stage 1 の出力 theorem」に対応する器。
+-/
+abbrev CyclotomicLinearFactorIdealPthPowerTarget : Prop :=
+  ∀ {R : Type*} [CommRing R] [IsDomain R],
+    ∀ ctx : CyclotomicLocalFactorizationContext R,
+    ∀ {I : Ideal R} [I.IsPrincipal],
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ x →
+      q ≠ p →
+      q ∣ (z - y) →
+      Ideal.span ({(z : R) - ctx.zeta * (y : R)} : Set R) = I ^ ctx.p
+
+/--
+pack-specialized Stage 2 receiver。
+
+review-017 で狙っている
+`span(z - ζy) = I^p ⇒ z - ζy = u * β^p`
+の specialized theorem そのもの。
+まだ Stage 1 target 自体は placeholder なので、入力には explicit な ideal equality を要求する。
+-/
+theorem cyclotomicUnitNormalization_of_spanEqPowPrincipal :
+    CyclotomicUnitNormalizationPackSpecializationTarget := by
+  intro R _ _ ctx I _ p x y z _hpack q _hq _hqx _hqne _hgap hSpan
+  exact linearFactorEqUnitMulGeneratorPowOfSpanEqPowPrincipal ctx (z : R) (y : R) hSpan
+
+/--
 Stage 3: norm bridge。
 
 Stage 1 + Stage 2 で principalized / normalized された cyclotomic data から、

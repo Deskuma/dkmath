@@ -128,7 +128,13 @@ review-016 により local specialization
 `linearFactorEqUnitMulGeneratorPowOfSpanEqPowPrincipal` と
 `cyclotomicLocalUnitNormalizationCore` も no-so#rry で固定できた。
 さらに `CyclotomicUnitNormalizationTarget` 自体も local core へ concretize 済みとなった。
-残る open は cyclotomic pack への specialization と norm 側にさらに局所化された。
+review-017 により、pack + explicit ideal equality から
+`z - ζy = u * β^p` を出す exact receiver
+`cyclotomicUnitNormalization_of_spanEqPowPrincipal` も no-so#rry で追加できた。
+さらに `CyclotomicLinearFactorIdealPthPowerTarget` と
+いう exact boundary target により、
+Stage 1 が Stage 2 へ supply すべき hypothesis の形も明示できた。
+残る open は、この boundary target を Stage 1 側からどう供給するかと、norm 側である。
 
 `CyclotomicUnitNormalizationTarget` と `CyclotomicNormDescentTarget` は
 現時点では abstract stage として明示化した。今後は各 stage ごとに

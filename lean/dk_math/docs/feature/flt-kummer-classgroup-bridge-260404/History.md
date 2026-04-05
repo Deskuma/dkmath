@@ -1050,6 +1050,59 @@ Archive
        local factor `z - ζy = u * β^p` という element-level statement へ specialized する theorem を立てる
     - その後、`CyclotomicNormDescentTarget` の concrete 化へ入る
 
+### 日時: 2026/04/06 01:06:01 JST — pack-specialized Stage 2 receiver の証明
+
+1. 目的:
+    - review-017 に従い、Stage 2 の local core を「pack + explicit ideal equality」へ落とす
+       exact receiver theorem を no-so#rry で証明する。
+    - これにより、Stage 1 から Stage 2 へ supply すべき境界条件を theorem/target の形で固定する。
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に
+       `CyclotomicUnitNormalizationPackSpecializationTarget` を追加
+    - さらに
+       `cyclotomicUnitNormalization_of_spanEqPowPrincipal`
+       を no-so#rry で証明
+       - 入力: pack, gap-divisible 条件, local context, principal ideal `I`,
+          および explicit な ideal equality
+          `span(z - ζy) = I^p`
+       - 出力: `∃ u, IsUnit u ∧ z - ζy = u * generator(I)^p`
+    - 同時に、Stage 1 が Stage 2 へ supply すべき exact boundary を
+       `CyclotomicLinearFactorIdealPthPowerTarget` として明示
+3. 結論:
+    - review-017 の主眼だった
+       「Stage 2 の pack-specialized theorem」は no-so#rry で証明できた ✅
+    - したがって残る honest open は、
+       - `CyclotomicLinearFactorIdealPthPowerTarget` を Stage 1 側からどう供給するか
+       - `CyclotomicNormDescentTarget` をどう concrete 化するか
+       の 2 点へ縮んだ ✅
+    - これは「Stage 2 が未解決」ではなく、
+       「Stage 2 receiver は解決済みで、残るのは Stage 1 output の explicit 化と Stage 3」
+       という段に入ったことを意味する ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `#print axioms cyclotomicUnitNormalization_of_spanEqPowPrincipal` → no sorry
+    - refined mainline は引き続き no sorry
+    - direct so#rry は legacy one-shot theorem
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` のみ
+5. 分岐と判断:
+    - 分岐候補:
+       - A. `CyclotomicLinearFactorIdealPthPowerTarget` から Stage 2 receiver へ渡る composition theorem まで追加する
+       - B. exact boundary target と exact receiver theorem の 2 点だけを残し、composition theorem は足さない
+    - 選択:
+       - **B を採用**
+    - 理由:
+       - A は universe polymorphism の都合で theorem-level wrapper が濁り、
+          実益に比べて不安定だったため
+       - いま必要なのは「何を Stage 1 が supply すべきか」を明示することであり、
+          target と exact receiver theorem があれば十分に境界は固定できるため
+6. 次の課題:
+    - 次は `CyclotomicLinearFactorIdealPthPowerTarget` を Stage 1 側から供給する theorem じゃ
+    - つまり、Stage 1 の ideal p 乗性 placeholder を
+       local linear factor ideal の explicit equality
+       `span(z - ζy) = I^p`
+       へ concrete 化することが次の最短手になる
+    - その後に Stage 3 の norm descent concrete 化へ入る
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
