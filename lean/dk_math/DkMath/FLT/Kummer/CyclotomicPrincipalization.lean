@@ -30,20 +30,25 @@ Principal ideal の p 乗性が保証されると、
 
 ## 抽象化の方針
 
-1. Stage 1a-1a-i: pure cyclotomic factorization identity
-2. Stage 1a-1a-ii: gap-divisible specialization
-3. Stage 1a-1b: ideal equation packaging
-4. Stage 1a-2: ideal product が p 乗になることの抽出
-5. Stage 1a-3: class への落とし込み（p-torsion witness）
-6. Stage 1b: class group p-torsion annihilation
-7. Stage 1c: principal ideal extraction
-8. `CyclotomicIdealPthPowerTarget`: 上の Stage 1a-1c を合成した ideal p 乗性
-9. `CyclotomicUnitNormalizationTarget`: unit 側の調整
-10. `CyclotomicNormDescentTarget`: norm から整数 descent existence へ戻す橋
-11. `CyclotomicPrincipalizationTarget`: Stage 1 + Stage 2 + Stage 3 を合成した full target
-12. `CyclotomicClassGroupPTorsionFreeTarget`: class group の p-torsion が trivial と仮定
-13. 第 12 から Stage 1b への bridge（abstract theorem）
-14. 第 11 から GapDivisibleBranch への bridge（abstract theorem）
+1. generic algebraic factorization identity
+2. equation-only factorization identity
+3. prime specialization
+4. abstract factorization identity
+5. counterexample-pack specialization
+6. Stage 1a-1a-i: pure cyclotomic factorization identity
+7. Stage 1a-1a-ii: gap-divisible specialization
+8. Stage 1a-1b: ideal equation packaging
+9. Stage 1a-2: ideal product が p 乗になることの抽出
+10. Stage 1a-3: class への落とし込み（p-torsion witness）
+11. Stage 1b: class group p-torsion annihilation
+12. Stage 1c: principal ideal extraction
+13. `CyclotomicIdealPthPowerTarget`: 上の Stage 1a-1c を合成した ideal p 乗性
+14. `CyclotomicUnitNormalizationTarget`: unit 側の調整
+15. `CyclotomicNormDescentTarget`: norm から整数 descent existence へ戻す橋
+16. `CyclotomicPrincipalizationTarget`: Stage 1 + Stage 2 + Stage 3 を合成した full target
+17. `CyclotomicClassGroupPTorsionFreeTarget`: class group の p-torsion が trivial と仮定
+18. 第 17 から Stage 1b への bridge（abstract theorem）
+19. 第 16 から GapDivisibleBranch への bridge（abstract theorem）
 
 これにより、class group の concrete 構造に立ち入らずに、
 Kummer 語彙を DkMath 幹線に接続できる。
@@ -65,7 +70,7 @@ namespace DkMath.FLT
 
 Kummer 的 principalization は、実際には次の 3 段へ裂ける:
 
-1. Stage 1: ideal の p 乗性（さらに 1a-1a-i / 1a-1a-ii / 1a-1b / 1a-2 / 1a-3 / 1b / 1c へ分解）
+1. Stage 1: ideal の p 乗性（さらに generic identity / equation identity / prime specialization / abstract identity / pack specialization / 1a-1a-i / 1a-1a-ii / 1a-1b / 1a-2 / 1a-3 / 1b / 1c へ分解）
 2. Stage 2: 単数の調整（Kummer 単数 / cyclotomic unit の吸収）
 3. Stage 3: norm 計算から整数 descent existence へ戻す橋
 
@@ -78,13 +83,119 @@ class group の p-torsion = 0 + unit group の剰余類解析 から
 -/
 
 /--
+generic algebraic factorization identity。
+
+`ℕ` の方程式へ specialize する前に、可換半環上の純代数的な恒等式として
+取り出すべき cyclotomic factorization の器。
+
+review-009 の次段として、equation-only theorem から `ℕ` 依存もさらに剥がす。
+
+候補となる concrete proof ingredient:
+- `geom_sum₂_mul`
+- `IsCyclotomicExtension.zeta_spec`
+- `prod_cyclotomic_eq_X_pow_sub_one` 系の polynomial factorization
+- `Polynomial.cyclotomic_prime_mul_X_sub_one`
+-/
+abbrev CyclotomicGenericFactorizationIdentityTarget : Prop :=
+  ∀ {R : Type*} [CommSemiring R],
+    ∀ (p : ℕ) (x y z : R),
+      x ^ p + y ^ p = z ^ p →
+      True
+
+/--
+equation-only factorization identity。
+
+`p` が prime であることすら使わず、
+まず方程式 `x^p + y^p = z^p` そのものから取り出すべき factorization identity の器。
+
+review-009 の次段として、最上流 theorem から `hp` 依存もさらに剥がす。
+-/
+abbrev CyclotomicEquationFactorizationIdentityTarget : Prop :=
+  ∀ {p x y z : ℕ},
+    x ^ p + y ^ p = z ^ p →
+    True
+
+/--
+generic algebraic identity → equation-only factorization identity。
+
+可換半環上の一般恒等式を `ℕ` の Diophantine 方程式へ specialize する段。
+-/
+theorem cyclotomicEquationFactorizationIdentity_of_genericIdentity
+    (_hGeneric : CyclotomicGenericFactorizationIdentityTarget) :
+    CyclotomicEquationFactorizationIdentityTarget := by
+  intro p x y z hEq
+  trivial
+
+/--
+prime specialization。
+
+equation-only factorization identity を `p` が prime な状況へ specialization する段。
+-/
+abbrev CyclotomicPrimeFactorizationSpecializationTarget : Prop :=
+  ∀ {p x y z : ℕ}, Nat.Prime p →
+    x ^ p + y ^ p = z ^ p →
+    True
+
+/--
+abstract factorization identity。
+
+`PrimeCounterexamplePack` すら使わず、純粋に `p` の素数性と
+`x^p + y^p = z^p` だけから取り出すべき cyclotomic factorization identity の器。
+
+review-009 を受け、最上流 kernel から `PrimeGe5CounterexamplePack` 依存をさらに剥がし、
+この段では `hp` と `hEq` の責務も分離する。
+-/
+abbrev CyclotomicAbstractFactorizationIdentityTarget : Prop :=
+  ∀ {p x y z : ℕ}, Nat.Prime p →
+    x ^ p + y ^ p = z ^ p →
+    True
+
+/--
+equation-only identity → prime specialization。
+
+現時点では target 自体が placeholder なので clean に接続する。
+将来は「prime 条件がどこで初めて要るか」を pinpoint する段になる。
+-/
+theorem cyclotomicPrimeFactorizationSpecialization_of_equationIdentity
+    (_hEq : CyclotomicEquationFactorizationIdentityTarget) :
+    CyclotomicPrimeFactorizationSpecializationTarget := by
+  intro p x y z _hp hEq
+  trivial
+
+/--
+prime specialization → abstract factorization identity。
+
+現在の abstract target は `Nat.Prime p` と方程式だけを入力に取るので、
+prime specialization target と同型に見える。ここでは責務分離のため theorem を分ける。
+-/
+theorem cyclotomicAbstractFactorizationIdentity_of_primeSpecialization
+    (_hPrime : CyclotomicPrimeFactorizationSpecializationTarget) :
+    CyclotomicAbstractFactorizationIdentityTarget := by
+  intro p x y z hp hEq
+  trivial
+
+/--
+counterexample-pack specialization。
+
+abstract factorization identity を `PrimeCounterexamplePack` の状況へ specialization する段。
+ここでどの pack 成分が本当に要るかを監査できるようにする。
+-/
+abbrev CyclotomicCounterexampleFactorizationSpecializationTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeCounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ x →
+      q ≠ p →
+      True
+
+/--
 Stage 1a-1a-i: pure cyclotomic factorization identity。
 
 gap-divisible 条件をまだ使わず、まず純粋に cyclotomic な factorization identity を
 取り出す段。
 
-review-008 を受け、旧 Stage 1a-1a を
-`pure factorization identity → gap-divisible specialization` の 2 層へさらに分ける。
+review-009 を受け、上流を
+`abstract identity → counterexample-pack specialization → pure factorization identity`
+の 3 層へ分ける。
 -/
 abbrev CyclotomicPureFactorizationIdentityTarget : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
@@ -92,6 +203,30 @@ abbrev CyclotomicPureFactorizationIdentityTarget : Prop :=
       q ∣ x →
       q ≠ p →
       True
+
+/--
+abstract identity → counterexample-pack specialization。
+
+現時点では target 自体が placeholder なので clean に接続する。
+将来は「反例 pack のどの成分が本当に必要か」を pinpoint する段になる。
+-/
+theorem cyclotomicCounterexampleFactorizationSpecialization_of_abstractIdentity
+    (_hAbstract : CyclotomicAbstractFactorizationIdentityTarget) :
+    CyclotomicCounterexampleFactorizationSpecializationTarget := by
+  intro p x y z _hpack q _hq _hqx _hqne
+  trivial
+
+/--
+counterexample-pack specialization → prime-ge5 pure factorization identity。
+
+`PrimeGe5CounterexamplePack` は `PrimeCounterexamplePack` を拡張するので、
+ここでは単に上流 specialization を引き継ぐ。
+-/
+theorem cyclotomicPureFactorizationIdentity_of_counterexampleSpecialization
+    (hSpec : CyclotomicCounterexampleFactorizationSpecializationTarget) :
+    CyclotomicPureFactorizationIdentityTarget := by
+  intro p x y z hpack q hq hqx hqne
+  exact hSpec hpack.toPrimeCounterexamplePack hq hqx hqne
 
 /--
 Stage 1a-1a-ii: gap-divisible specialization。
@@ -413,16 +548,52 @@ theorem cyclotomicIdealPthPower_of_classGroupPTorsionFree
   sorry
 
 /--
-Stage 1a-1a-i: counterexample geometry → pure cyclotomic factorization identity。
+generic algebraic factorization identity theorem。
 
 Stage 1a の最上流にある genuinely cyclotomic な kernel。
-Dedekind 一般論ではなく、`x^p + y^p` の cyclotomic factorization そのものを担う。
+Dedekind 一般論ではなく、可換半環上の純代数的な cyclotomic factorization を担う。
 
-現時点では sorry。review-008 時点ではこれが theorem-level で最薄の kernel。
+現時点では sorry。review-009 時点ではこれが theorem-level で最薄の kernel。
+
+proof search の次候補は `geom_sum₂_mul` と cyclotomic polynomial 側の補題を
+どの statement に落とすと後段 wrapper 群へ自然に接続できるか、の設計である。
+-/
+theorem cyclotomicGenericFactorizationIdentity_overCommSemiring :
+    CyclotomicGenericFactorizationIdentityTarget := by
+  sorry
+
+/--
+Diophantine equation → equation-only factorization identity。
+
+generic algebraic identity を `ℕ` の方程式へ specialize して current target を得る。
+-/
+theorem cyclotomicEquationFactorizationIdentity_of_diophantineEquation :
+    CyclotomicEquationFactorizationIdentityTarget := by
+  intro p x y z hEq
+  exact cyclotomicGenericFactorizationIdentity_overCommSemiring (R := ℕ) p x y z hEq
+
+/--
+FLT equation → abstract factorization identity。
+
+equation-only theorem と prime specialization を合成して current abstract target を得る。
+-/
+theorem cyclotomicAbstractFactorizationIdentity_of_fltEquation :
+    CyclotomicAbstractFactorizationIdentityTarget :=
+  cyclotomicAbstractFactorizationIdentity_of_primeSpecialization
+    (cyclotomicPrimeFactorizationSpecialization_of_equationIdentity
+      cyclotomicEquationFactorizationIdentity_of_diophantineEquation)
+
+/--
+counterexample geometry → pure cyclotomic factorization identity。
+
+review-009 の提案どおり、abstract factorization identity を
+counterexample-pack specialization を通して prime-ge5 反例の状況へ落とす wrapper。
 -/
 theorem cyclotomicPureFactorizationIdentity_of_counterexampleGeometry :
-    CyclotomicPureFactorizationIdentityTarget := by
-  sorry
+    CyclotomicPureFactorizationIdentityTarget :=
+  cyclotomicPureFactorizationIdentity_of_counterexampleSpecialization
+    (cyclotomicCounterexampleFactorizationSpecialization_of_abstractIdentity
+      cyclotomicAbstractFactorizationIdentity_of_fltEquation)
 
 /--
 Stage 1a-1a-ii: pure factorization identity → gap-divisible specialization。
@@ -563,8 +734,11 @@ Refined Stage 1 route: geometry witness + torsion annihilation + principal extra
 Stage 1 全体をさらに薄い 3 段へ裂いた refined route。
 ただし現時点では Stage 1 target 自体が placeholder なので、
 concrete 化されたのは Stage 1b / 1c の generic API までであり、
-Stage 1a は pure factorization identity / gap-divisible specialization /
-ideal equation packaging / ideal product / class witness の 5 層へ薄化された。
+Stage 1a は generic algebraic factorization identity / equation-only factorization identity /
+prime specialization /
+abstract factorization identity / counterexample specialization /
+pure factorization identity / gap-divisible specialization /
+ideal equation packaging / ideal product / class witness の 10 層へ薄化された。
 -/
 theorem cyclotomicIdealPthPower_of_refinedStage1Route
     (hWitness : CyclotomicIdealClassPTorsionWitnessTarget)
@@ -593,10 +767,11 @@ theorem cyclotomicPrincipalization_of_refinedClassGroupRoute
 Regular prime (p ∤ h_p^-) → ClassGroupPTorsionFree は定義同値になる予定。
 ここでは forward reference を避け、別ファイルに分離する。
 
-重要: 現在 genuinely global に残っている open kernel は、
-Stage 1a-1 の `cyclotomicIdealFactorization_of_gapDivisibleGeometry` まで薄化された。
+重要: 現在 genuinely global に残っている open kernel は,
+最上流の `cyclotomicGenericFactorizationIdentity_overCommSemiring` まで薄化された。
 Stage 1b / 1c は generic API 側へ押し込む方向が見えており、
-次段の焦点は Stage 1a-1 を Dedekind / factorization / class witness の境界でどう具体化するかである。
+次段の焦点は generic algebraic factorization identity と
+Nat / prime / counterexample specialization の境界で、どの仮定が本当に必要かをどう具体化するかである。
 `CyclotomicUnitNormalizationTarget` と `CyclotomicNormDescentTarget` は
 今は abstract target の器だが、今後の formalization では
 Mathlib 既存資産でどこまで concrete 化できるかを個別に監査する。

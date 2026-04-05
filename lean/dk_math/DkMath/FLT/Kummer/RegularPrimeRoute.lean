@@ -26,7 +26,17 @@ DkMath FLT 幹線の `2m-pure` → FLT chain に接続する。
 ```
      ClassGroupPTorsionFree                     (placeholder)
         ↓
-     PureFactorizationIdentity                  (thinnest theorem-level kernel)
+     GenericAlgebraicIdentity                   (thinnest theorem-level kernel)
+       ↓
+     EquationOnlyFactorizationIdentity          (Nat specialization)
+       ↓
+     PrimeSpecialization                        (where primality first enters)
+       ↓
+     AbstractFactorizationIdentity              (prime+equation wrapper)
+       ↓
+     CounterexampleSpecialization               (pack audit layer)
+       ↓
+     PureFactorizationIdentity                  (prime-ge5 wrapper)
        ↓
      GapDivisibleSpecialization                 (where gap-divisible first enters)
        ↓
@@ -70,8 +80,8 @@ DkMath FLT 幹線の `2m-pure` → FLT chain に接続する。
 Kummer branch 導入後の open kernel は **1 つ**に集約された:
 1. ~~Regular branch~~: `qAdicGapReductionRegularBranch_of_global` **CLOSED** ✅
    → witness R の自動構成が ZMod unit 理論で完了。
-2. **Gap-divisible global stage**: `cyclotomicPureFactorizationIdentity_of_counterexampleGeometry`
-  → Kummer 理論 / 円分体の純 factorization identity の formal 化が必要（現時点で最薄の theorem-level kernel）。
+2. **Gap-divisible global stage**: `cyclotomicGenericFactorizationIdentity_overCommSemiring`
+  → Kummer 理論 / 円分体の generic algebraic factorization identity の formal 化が必要（現時点で最薄の theorem-level kernel）。
 
 `CyclotomicUnitNormalizationTarget` と `CyclotomicNormDescentTarget` は
 現時点では abstract stage として明示化した。今後は各 stage ごとに
@@ -86,9 +96,11 @@ concrete 化済みだが、`CyclotomicClassGroupPTorsionFreeTarget` から前者
 この未解決は target 形の問題ではなく、cyclotomic integer-ring parameterization を
 仮定側へどう露出するか、という infrastructure 側の問題である。
 
-Stage 1a 自体も、pure factorization identity / gap-divisible specialization /
-ideal equation packaging / ideal product / class witness の 5 層へ分離した。
-今後 genuinely new theory を載せるべき場所は、その最上流 pure factorization identity theorem である。
+Stage 1a 自体も、generic algebraic factorization identity / equation-only factorization identity / prime specialization /
+abstract factorization identity / counterexample specialization /
+pure factorization identity / gap-divisible specialization /
+ideal equation packaging / ideal product / class witness の 10 層へ分離した。
+今後 genuinely new theory を載せるべき場所は、その最上流 generic algebraic factorization identity theorem である。
 
 それぞれ独立に攻略可能。
 -/

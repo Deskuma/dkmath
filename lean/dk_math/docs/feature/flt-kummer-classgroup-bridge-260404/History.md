@@ -476,6 +476,137 @@ Archive
     - とくに「純 factorization identity」そのものと、「反例 pack を使う部分」を分離できるか検討
     - ここが次の分岐点
 
+### 日時: 2026/04/05 11:02 JST — equation-only identity と prime specialization の分離
+
+1. 目的:
+    - review-009 に沿って、`cyclotomicPureFactorizationIdentity_of_counterexampleGeometry` のさらに上流を
+       `equation-only factorization identity → prime specialization → abstract factorization identity`
+       へ裂く。
+    - `PrimeCounterexamplePack` を使う前に、最上流 theorem が本当に `hp` を要するかを theorem-level で監査できるようにする。
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `CyclotomicEquationFactorizationIdentityTarget`
+       - `CyclotomicPrimeFactorizationSpecializationTarget`
+       - `cyclotomicPrimeFactorizationSpecialization_of_equationIdentity` (clean)
+       - `cyclotomicAbstractFactorizationIdentity_of_primeSpecialization` (clean)
+       - `cyclotomicEquationFactorizationIdentity_of_diophantineEquation` (sorry)
+    - `cyclotomicAbstractFactorizationIdentity_of_fltEquation` を
+       equation-only theorem と prime specialization の wrapper に組み替えた
+    - `RegularPrimeRoute.lean` / `ClassGroupBridge.lean` / test の図と axioms 監視を更新し、
+       最薄 kernel を `cyclotomicEquationFactorizationIdentity_of_diophantineEquation` へ同期
+    - `CyclotomicPrincipalization.lean` の総括コメントも
+       equation-only / prime / abstract / pack specialization の 4 層上流へ同期
+3. 結論:
+    - theorem-level の最薄 kernel は、
+       **`cyclotomicEquationFactorizationIdentity_of_diophantineEquation`** にまで局所化できた ✅
+    - `Nat.Prime p` の利用は clean bridge `cyclotomicPrimeFactorizationSpecialization_of_equationIdentity` として分離された ✅
+    - これにより、pack 監査の前に prime 条件の責務も独立に追跡できるようになった ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.ClassGroupBridge DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `#print axioms cyclotomicEquationFactorizationIdentity_of_diophantineEquation` → `sorryAx` あり
+    - `#print axioms cyclotomicPrimeFactorizationSpecialization_of_equationIdentity` → `sorryAx` なし
+    - `#print axioms cyclotomicAbstractFactorizationIdentity_of_primeSpecialization` → `sorryAx` なし
+    - `#print axioms cyclotomicCounterexampleFactorizationSpecialization_of_abstractIdentity` → `sorryAx` なし
+5. 分岐と判断:
+    - 分岐候補:
+       - A. `cyclotomicAbstractFactorizationIdentity_of_fltEquation` をそのまま保持する
+       - B. equation-only identity と prime specialization にさらに裂く
+    - 選択:
+       - **B を採用**
+    - 理由:
+       - `PrimeCounterexamplePack` の監査に進む前に、`Nat.Prime p` 依存自体を theorem-level で分離できるから
+       - factorization identity の本体が prime 条件を本当に要するかを独立に監査できるようになるため、B が最善と判断した
+6. 次の課題:
+    - equation-only factorization identity をさらに一般の代数的 identity へ押し戻せるか検討
+    - あるいは、ここで止めて `PrimeCounterexamplePack` specialization の具体的必要成分監査へ進むか判断
+    - ここが次の分岐点
+
+### 日時: 2026/04/05 13:40 JST — generic algebraic identity への薄化と concrete proof search への切替
+
+1. 目的:
+    - equation-only factorization identity をさらに generic algebraic identity へ押し戻し、
+       theorem-level の最薄 kernel を `ℕ` の Diophantine equation から外す。
+    - 同時に、これ以上の抽象化を続けるより concrete proof search へ移るのが最善かを判定する。
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `CyclotomicGenericFactorizationIdentityTarget`
+       - `cyclotomicEquationFactorizationIdentity_of_genericIdentity` (clean)
+       - `cyclotomicGenericFactorizationIdentity_overCommSemiring` (sorry)
+    - `cyclotomicEquationFactorizationIdentity_of_diophantineEquation` を
+       generic algebraic identity の `ℕ` specialization wrapper へ組み替えた
+    - `RegularPrimeRoute.lean` / `ClassGroupBridge.lean` / test の図と axioms 監視を更新し、
+       最薄 kernel を `cyclotomicGenericFactorizationIdentity_overCommSemiring` へ同期
+    - 続いて proof search として Mathlib を検索し、
+       generic identity の concrete proof 候補として以下を確認:
+       - `geom_sum₂_mul`
+       - `IsCyclotomicExtension.zeta_spec`
+       - `prod_cyclotomic_eq_X_pow_sub_one` 系の polynomial factorization
+    - その結果を `CyclotomicPrincipalization.lean` のコメントへ反映
+3. 結論:
+    - theorem-level の最薄 kernel は、
+       **`cyclotomicGenericFactorizationIdentity_overCommSemiring`** にまで局所化できた ✅
+    - `ℕ` への specialization は clean bridge `cyclotomicEquationFactorizationIdentity_of_genericIdentity` として分離された ✅
+    - さらに、次の最善手は「抽象化を続けること」ではなく、
+       上記 Mathlib 補題を使った concrete proof search に移ることだと判断した ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.ClassGroupBridge DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `#print axioms cyclotomicGenericFactorizationIdentity_overCommSemiring` → `sorryAx` あり
+    - `#print axioms cyclotomicEquationFactorizationIdentity_of_genericIdentity` → `sorryAx` なし
+    - `#print axioms cyclotomicPrimeFactorizationSpecialization_of_equationIdentity` → `sorryAx` なし
+    - comment-only follow-up 後に `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 再成功
+5. 分岐と判断:
+    - 分岐候補:
+       - A. さらに抽象化を続け、より上流の generic target を追加する
+       - B. ここで abstraction は十分と見なし、Mathlib 既存補題の concrete proof search へ移る
+    - 選択:
+       - **B を採用**
+    - 理由:
+       - 最上流 kernel は既に `CommSemiring` 上の generic identity へ達しており、これ以上の抽象化は収穫逓減が大きい
+       - 一方で `geom_sum₂_mul` など concrete 候補補題が確認できたため、ここからは proof search の方が前進量が大きいと判断した
+6. 次の課題:
+    - `geom_sum₂_mul` と cyclotomic polynomial 補題を使って
+       `cyclotomicGenericFactorizationIdentity_overCommSemiring` の concrete 形を設計する
+    - その際、target を「どの ring / root-of-unity context で言うか」を絞り込む
+    - ここが次の分岐点
+
+### 日時: 2026/04/05 14:13 JST — Mathlib polynomial receiver 化の試行と撤収
+
+1. 目的:
+    - `Polynomial.cyclotomic_prime_mul_X_sub_one` を concrete receiver として導入し、
+       open kernel を generic theorem から「polynomial-level theorem を element-level identity へ specialize する段」へ押し込めるか試す。
+2. 実施:
+    - 一度 `CyclotomicPolynomialPrimeFactorizationTarget` と
+       `cyclotomicPolynomialPrimeFactorization_from_mathlib` を追加し、
+       `cyclotomicGenericFactorizationIdentity_of_polynomialPrimeFactorization` を open kernel 候補として導入
+    - さらに generic theorem / equation theorem をその receiver へ接続しようとした
+    - Mathlib search で以下を確認:
+       - `Polynomial.cyclotomic_prime_mul_X_sub_one`
+       - `Polynomial.cyclotomic_prime`
+       - `Polynomial.cyclotomic_prime_pow_eq_geom_sum`
+3. 結果:
+    - concrete theorem 名そのものは確認できた ✅
+    - しかし、既存の polymorphic global target へ receiver を直接 threading すると、
+       Lean の universe level metavariable 問題で安定に接続できなかった ❌
+    - このため、receiver 化の試行は **撤収** し、最後に build が通っていた
+       `cyclotomicGenericFactorizationIdentity_overCommSemiring` を最上流 kernel とする安定状態へ戻した
+4. 検証:
+    - receiver 化の途中段階では build failure（universe metavariable）を確認
+    - 撤収後、`./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.ClassGroupBridge DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 再成功
+5. 分岐と判断:
+    - 分岐候補:
+       - A. polymorphic global target のまま receiver を無理に接続し続ける
+       - B. いったん撤収し、安定状態を保ちながら target 設計を見直す
+    - 選択:
+       - **B を採用**
+    - 理由:
+       - 現状の global target 形と `Polynomial.cyclotomic_prime_mul_X_sub_one` の局所 receiver 形が噛み合っておらず、
+          無理に進めるより build を保ったうえで設計を見直す方が前進量が大きいと判断した
+6. 次の課題:
+    - `Polynomial.cyclotomic_prime_mul_X_sub_one` を受けるための
+       **局所的な ring-parameterized target** を別建てするか検討
+    - あるいは、generic theorem の concrete proof search を現行 target のまま継続するか判断
+    - ここが次の分岐点
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
