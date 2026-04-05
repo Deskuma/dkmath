@@ -22,7 +22,10 @@ set_option linter.style.emptyLine false
 現時点では `cyclotomicPrincipalization_of_classGroupPTorsionFree` が
 CyclotomicPrincipalization.lean に直接置かれている（sorry）。
 ただし意味論的には、class group が supply する本丸は
-full principalization 全体ではなく **ideal の p 乗性** である。
+full principalization 全体ではなく **ideal の p 乗性** であり、
+review-006 時点ではその上流はさらに
+`ideal factorization → ideal product p-th power → class p-torsion witness`
+へ分解されている。
 
 このファイルは将来的に:
 - Regular prime の定義（p ∤ h_p^-）
@@ -46,7 +49,12 @@ full principalization 全体ではなく **ideal の p 乗性** である。
 Regular prime condition
   ↓ (定義同値)
 ClassGroupPTorsionFree
-  ↓ ideal p-th power (genuinely global)
+  ↓ p-torsion annihilation bridge (open)
+CyclotomicPTorsionAnnihilation
+  ↖
+    IdealClassPTorsionWitness
+      ↑ ideal product p-th power
+      ↑ ideal factorization (thinnest theorem-level kernel)
 CyclotomicIdealPthPower
   ↓ unit normalization
 CyclotomicUnitNormalization

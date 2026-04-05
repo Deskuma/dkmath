@@ -337,6 +337,53 @@ Archive
    - とくに Dedekind ideal arithmetic / cyclotomic factorization / class への落とし込み の境界で薄化できるか監査
    - ここが次の分岐点
 
+### 日時: 2026/04/05 09:24 JST — Stage 1a の 3 層分解
+
+1. 目的:
+    - review-006 に沿って、Stage 1a を
+       `Dedekind / factorization / class witness` の 3 層へ裂き、
+       theorem-level の最薄 kernel をさらに露出させる。
+    - Stage 1b 側の generic 化を打ち切った後、 genuinely new theory を要する本丸を
+       Stage 1a 最上流へ押し込む。
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `CyclotomicIdealFactorizationTarget`
+       - `CyclotomicIdealProductPthPowerTarget`
+       - `cyclotomicIdealClassPTorsionWitness_of_stage1aSplit`
+       - `cyclotomicIdealFactorization_of_gapDivisibleGeometry` (sorry)
+       - `cyclotomicIdealProductPthPower_of_idealFactorization` (clean)
+       - `cyclotomicIdealClassPTorsionWitness_of_idealProductPthPower` (clean)
+    - 既存の `cyclotomicIdealClassPTorsionWitness_of_gapDivisibleGeometry` を
+       Stage 1a split の wrapper として組み直した
+    - `RegularPrimeRoute.lean` の chain 図と open-kernel 説明を更新し、
+       最薄 kernel を `cyclotomicIdealFactorization_of_gapDivisibleGeometry` へ同期
+    - `ClassGroupBridge.lean` の説明も Stage 1a split 後の構図へ更新
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の axioms 監視へ
+       Stage 1a の 3 層を追加
+3. 結論:
+    - theorem-level の最薄 kernel は、
+       **`cyclotomicIdealFactorization_of_gapDivisibleGeometry`** にまで局所化できた ✅
+    - Stage 1a-2 (`ideal product p-th power`) と Stage 1a-3 (`class witness`) は
+       現時点では placeholder target 上の clean bridge として分離された ✅
+    - これにより、Stage 1a の内部は
+       `factorization → ideal product → class witness` の 3 層地図で管理できるようになった ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.ClassGroupBridge DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `#print axioms cyclotomicIdealFactorization_of_gapDivisibleGeometry` → `sorryAx` あり
+    - `#print axioms cyclotomicIdealProductPthPower_of_idealFactorization` → `sorryAx` なし
+    - `#print axioms cyclotomicIdealClassPTorsionWitness_of_idealProductPthPower` → `sorryAx` なし
+    - `#print axioms cyclotomicIdealClassPTorsionWitness_of_gapDivisibleGeometry` → `sorryAx` あり
+5. 失敗事例:
+    - Stage 1a-2 / 1a-3 はまだ placeholder target の上にあるため、
+       concrete 数学内容を伴うわけではない
+    - ただし今回の目的は theorem-level kernel の局所化なので、
+       この段階でも architectural 価値は十分ある
+6. 次の課題:
+    - `cyclotomicIdealFactorization_of_gapDivisibleGeometry` をさらに裂けるか監査
+    - とくに Dedekind ideal arithmetic と cyclotomic factorization の境界で
+       追加 target を切るか判断する
+    - ここが次の分岐点
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
