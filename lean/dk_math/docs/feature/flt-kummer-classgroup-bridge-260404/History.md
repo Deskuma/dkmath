@@ -1003,6 +1003,53 @@ Archive
        element-level の `u * β^p` 形へ specialized する theorem を立てること
     - その後に `CyclotomicNormDescentTarget` の concrete 化へ入る
 
+### 日時: 2026/04/06 00:07:27 JST — Stage 2 target の concrete 化
+
+1. 目的:
+    - review-016 に従い、Stage 2 の generic core だけで止まらず、
+       `CyclotomicUnitNormalizationTarget` 自体を concrete statement に置き換える。
+    - これにより refined route の仮定を `True` から外し、
+       honest open をさらに Stage 3 側へ押し込む。
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に
+       - `linearFactorEqUnitMulGeneratorPowOfSpanEqPowPrincipal`
+       - `CyclotomicLocalUnitNormalizationCoreTarget`
+       - `cyclotomicLocalUnitNormalizationCore`
+       を追加し、local Stage 2 core を theorem / target として固定
+    - さらに `CyclotomicUnitNormalizationTarget` を
+       `True` placeholder ではなく、
+       `CyclotomicLocalUnitNormalizationCoreTarget` と同型の concrete statement 本文へ置換
+    - route / test / comment もこれに合わせて同期
+3. 結論:
+    - Stage 2 target はもはや placeholder ではなく、concrete な local unit-normalization statement になった ✅
+    - local Stage 2 core theorem
+       `linearFactorEqUnitMulGeneratorPowOfSpanEqPowPrincipal`
+       と `cyclotomicLocalUnitNormalizationCore`
+       は no-so#rry で通った ✅
+    - refined mainline の観点で残る honest open は、
+       Stage 2 の pack specialization と Stage 3 の norm descent にさらに局所化された ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `#print axioms linearFactorEqUnitMulGeneratorPowOfSpanEqPowPrincipal` → no sorry
+    - `#print axioms cyclotomicLocalUnitNormalizationCore` → no sorry
+    - direct so#rry は引き続き legacy one-shot theorem
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` のみ
+5. 分岐と判断:
+    - 分岐候補:
+       - A. Stage 2 target も local core へ concrete 化する
+       - B. generic/local core theorem だけ追加して target 自体は placeholder のまま保つ
+    - 選択:
+       - **A を採用**
+    - 理由:
+       - refined route の仮定自体を honest にする方が、残る open の位置が明確になり
+          次に Stage 3 を詰める際の見通しが良いため
+       - review-016 の「次は pack-specialization へ直接刺す段」という判断にも整合するため
+6. 次の課題:
+    - 次は本当に `CyclotomicUnitNormalizationTarget` の cyclotomic pack specialization じゃ
+    - すなわち、Stage 1 で得る ideal p 乗性を
+       local factor `z - ζy = u * β^p` という element-level statement へ specialized する theorem を立てる
+    - その後、`CyclotomicNormDescentTarget` の concrete 化へ入る
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。

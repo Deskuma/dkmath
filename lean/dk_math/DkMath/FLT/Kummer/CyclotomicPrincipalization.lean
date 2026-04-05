@@ -904,6 +904,45 @@ theorem unitMulPowOfSpanEqPowPrincipal
     (R := R) (a := a) (b := Submodule.IsPrincipal.generator I) h
 
 /--
+局所 cyclotomic context で、線型因子 ideal が principal ideal の p 乗なら、
+線型因子そのものは unit 倍の p 乗として書ける。
+
+review-016 でいう Stage 2 の pack-specialization に入る直前の local core。
+-/
+theorem linearFactorEqUnitMulGeneratorPowOfSpanEqPowPrincipal
+    {R : Type*} [CommRing R] [IsDomain R]
+    (ctx : CyclotomicLocalFactorizationContext R)
+    {I : Ideal R} [I.IsPrincipal] (z y : R)
+    (h : Ideal.span ({z - ctx.zeta * y} : Set R) = I ^ ctx.p) :
+    ∃ u : R, IsUnit u ∧
+      z - ctx.zeta * y = u * (Submodule.IsPrincipal.generator I) ^ ctx.p := by
+  exact unitMulPowOfSpanEqPowPrincipal
+    (R := R) (I := I) (a := z - ctx.zeta * y) h
+
+/--
+Stage 2 の DkMath-native な局所 core target。
+
+cyclotomic pack へ specialization する前に、
+`(z - ζy) = I^p` から `z - ζy = u * generator(I)^p` へ戻す責務だけを isolate する。
+-/
+abbrev CyclotomicLocalUnitNormalizationCoreTarget : Prop :=
+  ∀ {R : Type*} [CommRing R] [IsDomain R],
+    ∀ ctx : CyclotomicLocalFactorizationContext R,
+    ∀ {I : Ideal R} [I.IsPrincipal],
+    ∀ z y : R,
+      Ideal.span ({z - ctx.zeta * y} : Set R) = I ^ ctx.p →
+      ∃ u : R, IsUnit u ∧
+        z - ctx.zeta * y = u * (Submodule.IsPrincipal.generator I) ^ ctx.p
+
+/--
+局所 Stage 2 core は、generic helper `unitMulPowOfSpanEqPowPrincipal` の直接 specialization で得られる。
+-/
+theorem cyclotomicLocalUnitNormalizationCore :
+    CyclotomicLocalUnitNormalizationCoreTarget := by
+  intro R _ _ ctx I _ z y h
+  exact linearFactorEqUnitMulGeneratorPowOfSpanEqPowPrincipal ctx z y h
+
+/--
 Stage 2: unit normalization。
 
 Stage 1 で得た principal ideal p 乗性から、
@@ -912,17 +951,21 @@ unit 側のずれを吸収して「整数 p 乗根候補」の形へ正規化で
 generic core として
 `principalGeneratorsUnitMulOfSpanEq`・
 `unitMulPowOfSpanEqPowIdeal`・
-`unitMulPowOfSpanEqPowPrincipal`
+`unitMulPowOfSpanEqPowPrincipal`・
+`linearFactorEqUnitMulGeneratorPowOfSpanEqPowPrincipal`
 は既に no-so#rry で確保済み。
-現在は cyclotomic pack への specialization target だけが abstract のまま残っている。
+review-016 に従い、Stage 2 target 自体も local core へ concretize する。
+残る honest open は、この local core を cyclotomic pack へ specialized する段と
+Stage 3 の norm descent である。
 -/
 abbrev CyclotomicUnitNormalizationTarget : Prop :=
-  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
-    ∀ {q : ℕ}, Nat.Prime q →
-      q ∣ x →
-      q ≠ p →
-      q ∣ (z - y) →
-      True
+  ∀ {R : Type*} [CommRing R] [IsDomain R],
+    ∀ ctx : CyclotomicLocalFactorizationContext R,
+    ∀ {I : Ideal R} [I.IsPrincipal],
+    ∀ z y : R,
+      Ideal.span ({z - ctx.zeta * y} : Set R) = I ^ ctx.p →
+      ∃ u : R, IsUnit u ∧
+        z - ctx.zeta * y = u * (Submodule.IsPrincipal.generator I) ^ ctx.p
 
 /--
 Stage 3: norm bridge。
@@ -943,9 +986,9 @@ abbrev CyclotomicNormDescentTarget : Prop :=
 /--
 Stage 1 + Stage 2 + Stage 3 → full principalization target。
 
-`CyclotomicIdealPthPowerTarget` と `CyclotomicUnitNormalizationTarget` は
-現時点では witness の器だけだが、責務の分離を explicit にすることで
-class group 側 / unit 側 / norm 側の境界を固定する。
+`CyclotomicIdealPthPowerTarget` はなお placeholder target だが、
+`CyclotomicUnitNormalizationTarget` は review-016 により local core へ concrete 化された。
+したがって残る honest open は、Stage 1 の pack specialization と Stage 3 の norm 側である。
 -/
 abbrev CyclotomicPrincipalizationTarget : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
@@ -1254,14 +1297,14 @@ theorem cyclotomicPrincipalization_of_refinedClassGroupRoute
 Regular prime (p ∤ h_p^-) → ClassGroupPTorsionFree は定義同値になる予定。
 ここでは forward reference を避け、別ファイルに分離する。
 
-重要: FLT を閉じる観点で現在 genuinely global に残っている open kernel は、
-class group 側へ局所化されている。
-具体的には、class-group 側でまだ direct に残る open は
+重要: legacy one-shot theorem に direct `so#rry` は残っているが、
+refined mainline の観点では class group 側はすでに concrete 化された。
+具体的には、legacy 側でまだ direct に残る open は
 `cyclotomicPrincipalization_of_classGroupPTorsionFree` である。
 `cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree` は review-013 により no-so#rry 化できた。
-`CyclotomicUnitNormalizationTarget` と `CyclotomicNormDescentTarget` は
-今は abstract target の器だが、今後の formalization では
-Mathlib 既存資産でどこまで concrete 化できるかを個別に監査する。
+`CyclotomicUnitNormalizationTarget` は review-016 により concrete 化された。
+したがって今後の formalization で真に残る open は、
+その cyclotomic pack への specialization と `CyclotomicNormDescentTarget` の concrete 化である。
 -/
 
 end DkMath.FLT
