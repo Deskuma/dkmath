@@ -851,12 +851,70 @@ theorem cyclotomicIdealPthPower_of_stage1Split
   trivial
 
 /--
+principal ideals の生成元が一致するなら、その生成元どうしは unit 倍で一致する。
+
+Stage 2 で ideal-level の p 乗性を element-level の式へ戻す最小核。
+-/
+theorem principalGeneratorsUnitMulOfSpanEq
+    {R : Type*} [CommRing R] [IsDomain R] {a b : R}
+    (h : Ideal.span ({a} : Set R) = Ideal.span ({b} : Set R)) :
+    ∃ u : R, IsUnit u ∧ a = u * b := by
+  have hab : Associated a b := (Ideal.span_singleton_eq_span_singleton).mp h
+  rcases hab with ⟨u, hu⟩
+  refine ⟨↑(u⁻¹), (u⁻¹).isUnit, ?_⟩
+  calc
+    a = a * ↑u * ↑(u⁻¹) := by simp [mul_assoc]
+    _ = b * ↑(u⁻¹) := by rw [hu]
+    _ = ↑(u⁻¹) * b := by rw [mul_comm]
+
+/--
+`(a) = (b^n)` なら、`a = u * b^n` となる unit `u` が存在する。
+
+Stage 2 の unit normalization で直接使いたい p 乗版の generator lemma。
+-/
+theorem unitMulPowOfSpanEqPowSpan
+    {R : Type*} [CommRing R] [IsDomain R] {a b : R} {n : ℕ}
+    (h : Ideal.span ({a} : Set R) = Ideal.span ({b ^ n} : Set R)) :
+    ∃ u : R, IsUnit u ∧ a = u * b ^ n := by
+  simpa using principalGeneratorsUnitMulOfSpanEq (R := R) (a := a) (b := b ^ n) h
+
+/--
+`(a) = (b)^n` なら、`a = u * b^n` となる unit `u` が存在する。
+
+Mathlib の `Ideal.span_singleton_pow` を挟んだ Stage 2 の最小 generic theorem。
+-/
+theorem unitMulPowOfSpanEqPowIdeal
+    {R : Type*} [CommRing R] [IsDomain R] {a b : R} {n : ℕ}
+    (h : Ideal.span ({a} : Set R) = (Ideal.span ({b} : Set R)) ^ n) :
+    ∃ u : R, IsUnit u ∧ a = u * b ^ n := by
+  rw [Ideal.span_singleton_pow] at h
+  exact unitMulPowOfSpanEqPowSpan (R := R) (a := a) (b := b) h
+
+/--
+principal ideal `I` について `(a) = I^n` なら、`a = u * generator(I)^n` となる unit `u` が存在する。
+
+Stage 2 を principal ideal extraction の直後へ接続するための generator 版 helper。
+-/
+theorem unitMulPowOfSpanEqPowPrincipal
+    {R : Type*} [CommRing R] [IsDomain R] {I : Ideal R} [I.IsPrincipal] {a : R} {n : ℕ}
+    (h : Ideal.span ({a} : Set R) = I ^ n) :
+    ∃ u : R, IsUnit u ∧ a = u * (Submodule.IsPrincipal.generator I) ^ n := by
+  rw [← Ideal.span_singleton_generator I, Ideal.span_singleton_pow] at h
+  exact unitMulPowOfSpanEqPowSpan
+    (R := R) (a := a) (b := Submodule.IsPrincipal.generator I) h
+
+/--
 Stage 2: unit normalization。
 
 Stage 1 で得た principal ideal p 乗性から、
 unit 側のずれを吸収して「整数 p 乗根候補」の形へ正規化できることを表す。
 
-現在は abstract target の器だけ置く。
+generic core として
+`principalGeneratorsUnitMulOfSpanEq`・
+`unitMulPowOfSpanEqPowIdeal`・
+`unitMulPowOfSpanEqPowPrincipal`
+は既に no-so#rry で確保済み。
+現在は cyclotomic pack への specialization target だけが abstract のまま残っている。
 -/
 abbrev CyclotomicUnitNormalizationTarget : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →

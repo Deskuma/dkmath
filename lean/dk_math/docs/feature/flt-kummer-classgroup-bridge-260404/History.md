@@ -949,6 +949,60 @@ Archive
        - norm から整数 witness をどう回収するか
        の 2 点が main mathematical target になる
 
+### 日時: 2026/04/05 23:09:55 JST — Stage 2 generic core の証明
+
+1. 目的:
+    - review-015 に従い、Stage 2 の最短核、すなわち
+       ideal equality から generator-level の `unit * p-th power` 形へ戻す一般補題を証明する。
+    - `CyclotomicUnitNormalizationTarget` 自体はまだ pack-specialized target なので、
+       まずはその直下の generic theorem 群を固定する。
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下の no-so#rry theorem を追加:
+       - `principalGeneratorsUnitMulOfSpanEq`
+       - `unitMulPowOfSpanEqPowSpan`
+       - `unitMulPowOfSpanEqPowIdeal`
+       - `unitMulPowOfSpanEqPowPrincipal`
+    - 内容は順に:
+       - `(a) = (b)` なら `a = u * b` となる unit `u` が存在
+       - `(a) = (b^n)` なら `a = u * b^n`
+       - `(a) = (b)^n` なら `a = u * b^n`
+       - `(a) = I^n`, `I` principal なら `a = u * generator(I)^n`
+    - これは review-015 の提案していた
+       `principal_generators_associated_of_span_eq`
+       と `unit_mul_pow_of_ideal_eq_pow_ideal`
+       に相当する DkMath-native receiver 群である
+    - route コメントと axioms 監視にも同期
+3. 結論:
+    - Stage 2 の「ideal から元へ戻し、unit のずれを吸収する」generic core は no-so#rry で証明できた ✅
+    - したがって残る honest open は、
+       - この generic core を cyclotomic pack へどう specialized するか
+       - そこから norm descent をどう concrete 化するか
+       の 2 点へさらに縮んだ ✅
+    - class-group 側でも legacy one-shot route でもなく、
+       いまの本筋は明確に Stage 2 / Stage 3 であることが再確認できた ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `#print axioms principalGeneratorsUnitMulOfSpanEq` → no sorry
+    - `#print axioms unitMulPowOfSpanEqPowIdeal` → no sorry
+    - `#print axioms unitMulPowOfSpanEqPowPrincipal` → no sorry
+    - direct so#rry は引き続き `cyclotomicPrincipalization_of_classGroupPTorsionFree` のみ
+5. 分岐と判断:
+    - 分岐候補:
+       - A. すぐに `CyclotomicUnitNormalizationTarget` の pack-specialized concrete 化へ進む
+       - B. 先にその直下の generic core を theorem として固定する
+    - 選択:
+       - **B を採用**
+    - 理由:
+       - 現在の Stage 1 / Stage 2 target は pack-specialized statement をまだ保持しており、
+          まず generic core を切り出しておく方が次段の specialization が短く確実になるため
+       - AGENT 指示どおり、新しい接続点は使われる前に theorem 化しておく価値が高いため
+6. 次の課題:
+    - 次は `CyclotomicUnitNormalizationTarget` 自体の concrete 化じゃ
+    - その最短手は、今追加した generic core を使って
+       cyclotomic pack から得られる principal ideal p 乗性を
+       element-level の `u * β^p` 形へ specialized する theorem を立てること
+    - その後に `CyclotomicNormDescentTarget` の concrete 化へ入る
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
