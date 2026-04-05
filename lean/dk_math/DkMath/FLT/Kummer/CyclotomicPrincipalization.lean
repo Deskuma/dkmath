@@ -233,6 +233,13 @@ p が regular prime（p ∤ h_p^-）のとき成り立つ。
 
 ここでは abstract Prop として置き、concrete 意味は後で詰める。
 `hpack` の `p` に対する条件。
+
+review-005 時点の判定:
+- target を generic な `ClassGroup` p-torsion-free statement へ寄せる方向性自体は自然。
+- ただし現状の import / parameterization では、`CyclotomicField p ℚ` の整数環を
+  軽量に前面へ出せないため、仮定側の generic 化は number-field infrastructure の設計を伴う。
+
+ゆえに、ここは当面 placeholder のまま保持し、Stage 1a 細分化を優先する。
 -/
 abbrev CyclotomicClassGroupPTorsionFreeTarget : Prop :=
   ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → True
@@ -291,14 +298,18 @@ Stage 1b: class group p-torsion free → p-torsion annihilation。
 
 `CyclotomicClassGroupPTorsionFreeTarget` 自体は placeholder だが、
 出力先の Stage 1b は generic API に concrete 化した。
-したがって将来は `hCl` からこの generic statement を供給する bridge を
-埋めればよい形になった。
+ただし review-005 の短距離検査により、`hCl` からこの generic statement を供給するには
+`CyclotomicField` の整数環 parameterization まで露出させる追加設計が必要だと判明した。
+
+したがってこの theorem は「generic target の形が未定」ではなく、
+「cyclotomic 仮定を generic API に specialized する橋」が未解決、という位置づけになる。
 -/
 theorem cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree
     (_hCl : CyclotomicClassGroupPTorsionFreeTarget) :
     CyclotomicPTorsionAnnihilationTarget := by
   intro R _ _ p a ha
-  -- `hCl` はまだ placeholder なので、ここでは API の出口だけ固定する。
+  -- `hCl` はまだ placeholder で、軽量な cyclotomic integer-ring parameterization も未整備。
+  -- したがってここでは generic API の出口だけ固定する。
   sorry
 
 /--

@@ -69,6 +69,8 @@ Mathlib 既存資産で concrete 化できるかを独立に監査する。
 Stage 1 内部の責務分離として追加した。
 前者は generic ClassGroup API の target として、後者は principal-ideal extraction API として
 concrete 化済みだが、`CyclotomicClassGroupPTorsionFreeTarget` から前者を供給する橋は未解決である。
+この未解決は target 形の問題ではなく、cyclotomic integer-ring parameterization を
+仮定側へどう露出するか、という infrastructure 側の問題である。
 
 それぞれ独立に攻略可能。
 -/

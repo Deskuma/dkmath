@@ -301,6 +301,42 @@ Archive
     - あるいは、ここで打ち切って Stage 1a の細分化へ戻るか判断
     - ここが次の分岐点
 
+### 日時: 2026/04/05 08:57 JST — Stage 1b 仮定側 generic 化の短距離検査
+
+1. 目的:
+   - review-005 に沿って、`CyclotomicClassGroupPTorsionFreeTarget` を
+     generic ClassGroup p-torsion-free statement 側へ軽く寄せられるか確認する。
+   - Stage 1b bridge が「仮定の型の粗さ」なのか「本当に要る数学内容」なのかを見極める。
+2. 実施:
+   - scratch で generic target
+     `∀ a : ClassGroup R, a ^ p = 1 → a = 1`
+     の型が自然に書けることを確認
+   - 続いて `CyclotomicField p ℚ` の整数環を前面に出した仮定型を scratch で試行
+   - 結果:
+     - `CyclotomicField` 自体は見える
+     - `ringOfIntegers` 直指定 import はこの環境ではそのまま使えない
+     - `𝓞 K` 記法も現行 import 連鎖では即使用できない
+   - 以上を受け、`CyclotomicPrincipalization.lean` と `RegularPrimeRoute.lean` のコメントを更新し、
+     Stage 1b bridge の未解決が target 形ではなく cyclotomic integer-ring parameterization 側にあると明記
+3. 結論:
+   - Stage 1b の **target** は generic ClassGroup API として自然に定まる ✅
+   - しかし `CyclotomicClassGroupPTorsionFreeTarget` をそこへ軽量に落とすには、
+     number-field / ring-of-integers parameterization の追加設計が必要で、この段では軽く済まない ❌
+   - よって、この方向で深掘りはせず、**本丸は Stage 1a 細分化へ戻る** と判断した
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute` 成功
+   - scratch により以下を確認:
+     - generic ClassGroup p-torsion-free statement 自体は自然
+     - cyclotomic integer-ring を軽く前面化する import / notation は未整備
+5. 失敗事例:
+   - `ringOfIntegers` を直接 import する案は `.olean` 不在で失敗
+   - `𝓞 (CyclotomicField p ℚ)` 記法も現行 import では unknown identifier
+   - したがって、仮定側 generic 化は単なる rephrasing ではなく infrastructure 設計を伴うと確定
+6. 次の課題:
+   - Stage 1a `cyclotomicIdealClassPTorsionWitness_of_gapDivisibleGeometry` をさらに裂く
+   - とくに Dedekind ideal arithmetic / cyclotomic factorization / class への落とし込み の境界で薄化できるか監査
+   - ここが次の分岐点
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
