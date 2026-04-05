@@ -23,8 +23,8 @@ set_option linter.style.emptyLine false
 CyclotomicPrincipalization.lean に直接置かれている（sorry）。
 ただし意味論的には、class group が supply する本丸は
 full principalization 全体ではなく **ideal の p 乗性** であり、
-review-007 時点ではその上流はさらに
-`factorization identity → ideal equation packaging → ideal product p-th power → class p-torsion witness`
+review-008 時点ではその上流はさらに
+`pure factorization identity → gap-divisible specialization → ideal equation packaging → ideal product p-th power → class p-torsion witness`
 へ分解されている。
 
 このファイルは将来的に:
@@ -54,9 +54,9 @@ CyclotomicPTorsionAnnihilation
   ↖
     IdealClassPTorsionWitness
       ↑ ideal product p-th power
-      ↑ ideal factorization
       ↑ ideal equation packaging
-      ↑ factorization identity (thinnest theorem-level kernel)
+      ↑ gap-divisible specialization
+      ↑ pure factorization identity (thinnest theorem-level kernel)
 CyclotomicIdealPthPower
   ↓ unit normalization
 CyclotomicUnitNormalization

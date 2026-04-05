@@ -428,6 +428,54 @@ Archive
     - とくに「純 factorization identity」と「gap-divisible 条件の利用点」を分離できるか検討
     - ここが次の分岐点
 
+### 日時: 2026/04/05 10:10 JST — pure factorization と gap-divisible specialization の分離
+
+1. 目的:
+    - review-008 に沿って、`cyclotomicFactorizationIdentity_of_gapDivisibleGeometry` を
+       `pure factorization identity → gap-divisible specialization` の 2 層へ裂く。
+    - 「gap-divisible が factorization 本体に要るのか、specialization で初めて要るのか」を
+       theorem-level で見えるようにする。
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `CyclotomicPureFactorizationIdentityTarget`
+       - `CyclotomicGapDivisibleFactorizationSpecializationTarget`
+       - `cyclotomicFactorizationIdentity_of_stage1a1aSplit`
+       - `cyclotomicPureFactorizationIdentity_of_counterexampleGeometry` (sorry)
+       - `cyclotomicGapDivisibleFactorizationSpecialization_of_pureIdentity` (clean)
+    - `cyclotomicFactorizationIdentity_of_gapDivisibleGeometry` を
+       pure factorization と specialization の wrapper に組み替えた
+    - `RegularPrimeRoute.lean` / `ClassGroupBridge.lean` の chain 図と open-kernel 説明を更新し、
+       最薄 kernel を `cyclotomicPureFactorizationIdentity_of_counterexampleGeometry` へ同期
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の axioms 監視へ
+       pure factorization / specialization の 2 層を追加
+3. 結論:
+    - theorem-level の最薄 kernel は、
+       **`cyclotomicPureFactorizationIdentity_of_counterexampleGeometry`** にまで局所化できた ✅
+    - `cyclotomicGapDivisibleFactorizationSpecialization_of_pureIdentity` は clean bridge として分離された ✅
+    - これにより、Stage 1a の上流は
+       `pure factorization identity → gap-divisible specialization → ideal equation → ideal product → class witness`
+       の 5 層地図で管理できるようになった ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.ClassGroupBridge DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `#print axioms cyclotomicPureFactorizationIdentity_of_counterexampleGeometry` → `sorryAx` あり
+    - `#print axioms cyclotomicGapDivisibleFactorizationSpecialization_of_pureIdentity` → `sorryAx` なし
+    - `#print axioms cyclotomicFactorizationIdentity_of_gapDivisibleGeometry` → `sorryAx` あり
+    - `#print axioms cyclotomicIdealEquation_of_factorizationIdentity` → `sorryAx` なし
+5. 分岐と判断:
+    - 分岐候補:
+       - A. `cyclotomicFactorizationIdentity_of_gapDivisibleGeometry` をそのまま保持し、内部実装を考える
+       - B. pure factorization と gap-divisible specialization に裂く
+    - 選択:
+       - **B を採用**
+    - 理由:
+       - cyclotomic factorization の本体と gap-divisible 条件の利用点は責務が異なる
+       - この分離により「どこで初めて gap-divisible が必要か」を theorem-level で追跡できる
+       - したがって、最終的な genuinely cyclotomic kernel をさらに薄く露出できるため、B が最善と判断した
+6. 次の課題:
+    - `cyclotomicPureFactorizationIdentity_of_counterexampleGeometry` をさらに裂けるか監査
+    - とくに「純 factorization identity」そのものと、「反例 pack を使う部分」を分離できるか検討
+    - ここが次の分岐点
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。

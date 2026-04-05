@@ -30,19 +30,20 @@ Principal ideal の p 乗性が保証されると、
 
 ## 抽象化の方針
 
-1. Stage 1a-1a: cyclotomic factorization identity
-2. Stage 1a-1b: ideal equation packaging
-3. Stage 1a-2: ideal product が p 乗になることの抽出
-4. Stage 1a-3: class への落とし込み（p-torsion witness）
-5. Stage 1b: class group p-torsion annihilation
-6. Stage 1c: principal ideal extraction
-7. `CyclotomicIdealPthPowerTarget`: 上の Stage 1a-1c を合成した ideal p 乗性
-8. `CyclotomicUnitNormalizationTarget`: unit 側の調整
-9. `CyclotomicNormDescentTarget`: norm から整数 descent existence へ戻す橋
-10. `CyclotomicPrincipalizationTarget`: Stage 1 + Stage 2 + Stage 3 を合成した full target
-11. `CyclotomicClassGroupPTorsionFreeTarget`: class group の p-torsion が trivial と仮定
-12. 第 11 から Stage 1b への bridge（abstract theorem）
-13. 第 10 から GapDivisibleBranch への bridge（abstract theorem）
+1. Stage 1a-1a-i: pure cyclotomic factorization identity
+2. Stage 1a-1a-ii: gap-divisible specialization
+3. Stage 1a-1b: ideal equation packaging
+4. Stage 1a-2: ideal product が p 乗になることの抽出
+5. Stage 1a-3: class への落とし込み（p-torsion witness）
+6. Stage 1b: class group p-torsion annihilation
+7. Stage 1c: principal ideal extraction
+8. `CyclotomicIdealPthPowerTarget`: 上の Stage 1a-1c を合成した ideal p 乗性
+9. `CyclotomicUnitNormalizationTarget`: unit 側の調整
+10. `CyclotomicNormDescentTarget`: norm から整数 descent existence へ戻す橋
+11. `CyclotomicPrincipalizationTarget`: Stage 1 + Stage 2 + Stage 3 を合成した full target
+12. `CyclotomicClassGroupPTorsionFreeTarget`: class group の p-torsion が trivial と仮定
+13. 第 12 から Stage 1b への bridge（abstract theorem）
+14. 第 11 から GapDivisibleBranch への bridge（abstract theorem）
 
 これにより、class group の concrete 構造に立ち入らずに、
 Kummer 語彙を DkMath 幹線に接続できる。
@@ -64,7 +65,7 @@ namespace DkMath.FLT
 
 Kummer 的 principalization は、実際には次の 3 段へ裂ける:
 
-1. Stage 1: ideal の p 乗性（さらに 1a-1a / 1a-1b / 1a-2 / 1a-3 / 1b / 1c へ分解）
+1. Stage 1: ideal の p 乗性（さらに 1a-1a-i / 1a-1a-ii / 1a-1b / 1a-2 / 1a-3 / 1b / 1c へ分解）
 2. Stage 2: 単数の調整（Kummer 単数 / cyclotomic unit の吸収）
 3. Stage 3: norm 計算から整数 descent existence へ戻す橋
 
@@ -77,13 +78,41 @@ class group の p-torsion = 0 + unit group の剰余類解析 から
 -/
 
 /--
-Stage 1a-1a: cyclotomic factorization identity。
+Stage 1a-1a-i: pure cyclotomic factorization identity。
 
-gap-divisible な geometry から、まず純粋に cyclotomic な factorization identity を
+gap-divisible 条件をまだ使わず、まず純粋に cyclotomic な factorization identity を
 取り出す段。
 
-review-007 を受け、旧 Stage 1a-1 を
-`factorization identity → ideal equation packaging` の 2 層へさらに分ける。
+review-008 を受け、旧 Stage 1a-1a を
+`pure factorization identity → gap-divisible specialization` の 2 層へさらに分ける。
+-/
+abbrev CyclotomicPureFactorizationIdentityTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ x →
+      q ≠ p →
+      True
+
+/--
+Stage 1a-1a-ii: gap-divisible specialization。
+
+Stage 1a-1a-i の純 factorization identity から、
+`q ∣ (z - y)` のもとで後段に使う specialized factorization identity を取り出す段。
+
+ここで初めて gap-divisible 条件が前景化する。
+-/
+abbrev CyclotomicGapDivisibleFactorizationSpecializationTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ x →
+      q ≠ p →
+      q ∣ (z - y) →
+      True
+
+/--
+Stage 1a-1a: cyclotomic factorization identity。
+
+Stage 1a-1a-i と 1a-1a-ii をまとめた wrapper target。
 -/
 abbrev CyclotomicFactorizationIdentityTarget : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
@@ -92,6 +121,19 @@ abbrev CyclotomicFactorizationIdentityTarget : Prop :=
       q ≠ p →
       q ∣ (z - y) →
       True
+
+/--
+Stage 1a-1a-i + 1a-1a-ii → factorization identity。
+
+純 factorization identity と gap-divisible specialization を分離する。
+現時点では abstract composition の器として置く。
+-/
+theorem cyclotomicFactorizationIdentity_of_stage1a1aSplit
+    (_hPure : CyclotomicPureFactorizationIdentityTarget)
+    (_hSpecialize : CyclotomicGapDivisibleFactorizationSpecializationTarget) :
+    CyclotomicFactorizationIdentityTarget := by
+  intro p x y z hpack q hq hqx hqne hgap
+  trivial
 
 /--
 Stage 1a-1b: ideal equation packaging。
@@ -371,16 +413,41 @@ theorem cyclotomicIdealPthPower_of_classGroupPTorsionFree
   sorry
 
 /--
-Stage 1a-1a: gap-divisible geometry → cyclotomic factorization identity。
+Stage 1a-1a-i: counterexample geometry → pure cyclotomic factorization identity。
 
 Stage 1a の最上流にある genuinely cyclotomic な kernel。
 Dedekind 一般論ではなく、`x^p + y^p` の cyclotomic factorization そのものを担う。
 
-現時点では sorry。review-007 時点ではこれが theorem-level で最薄の kernel。
+現時点では sorry。review-008 時点ではこれが theorem-level で最薄の kernel。
+-/
+theorem cyclotomicPureFactorizationIdentity_of_counterexampleGeometry :
+    CyclotomicPureFactorizationIdentityTarget := by
+  sorry
+
+/--
+Stage 1a-1a-ii: pure factorization identity → gap-divisible specialization。
+
+現時点では target 自体が placeholder なので clean に接続する。
+将来は「どこで初めて gap-divisible 条件が要るか」を pinpoint する段になる。
+-/
+theorem cyclotomicGapDivisibleFactorizationSpecialization_of_pureIdentity
+    (_hPure : CyclotomicPureFactorizationIdentityTarget) :
+    CyclotomicGapDivisibleFactorizationSpecializationTarget := by
+  intro p x y z _hpack q _hq _hqx _hqne _hgap
+  trivial
+
+/--
+Stage 1a-1a full route: counterexample geometry → pure factorization identity
+→ gap-divisible specialization → factorization identity。
+
+review-008 の提案どおり、旧 factorization identity theorem の責務を 2 層へ分割した wrapper。
 -/
 theorem cyclotomicFactorizationIdentity_of_gapDivisibleGeometry :
-    CyclotomicFactorizationIdentityTarget := by
-  sorry
+    CyclotomicFactorizationIdentityTarget :=
+  cyclotomicFactorizationIdentity_of_stage1a1aSplit
+    (cyclotomicPureFactorizationIdentity_of_counterexampleGeometry)
+    (cyclotomicGapDivisibleFactorizationSpecialization_of_pureIdentity
+      cyclotomicPureFactorizationIdentity_of_counterexampleGeometry)
 
 /--
 Stage 1a-1b: factorization identity → ideal equation packaging。
@@ -496,8 +563,8 @@ Refined Stage 1 route: geometry witness + torsion annihilation + principal extra
 Stage 1 全体をさらに薄い 3 段へ裂いた refined route。
 ただし現時点では Stage 1 target 自体が placeholder なので、
 concrete 化されたのは Stage 1b / 1c の generic API までであり、
-Stage 1a は factorization identity / ideal equation packaging / ideal product / class witness
-の 4 層へ薄化された。
+Stage 1a は pure factorization identity / gap-divisible specialization /
+ideal equation packaging / ideal product / class witness の 5 層へ薄化された。
 -/
 theorem cyclotomicIdealPthPower_of_refinedStage1Route
     (hWitness : CyclotomicIdealClassPTorsionWitnessTarget)
