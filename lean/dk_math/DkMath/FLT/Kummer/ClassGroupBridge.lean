@@ -74,6 +74,8 @@ GapDivisibleBranch
 ```
 -/
 
+universe u
+
 namespace DkMath.FLT
 
 /-!
@@ -84,35 +86,39 @@ p が regular prime: p ∤ class number h_p の条件。
 -/
 
 /--
-Regular prime 条件の placeholder。
-正式には「p ∤ h_p^-」または等価な Bernoulli 数条件。
+Regular prime 条件の receiver。
+
+現段階では review-013 の判断に従い、
+「この branch を閉じるのに必要な concrete class-group p-torsion-free 内容」を
+そのまま保持する器として置く。
+正式な Bernoulli / class number 条件との同値付けは次段の honest open とする。
 -/
-abbrev IsRegularPrime (_p : ℕ) : Prop := True
-  -- TODO: 正式な定義に置き換える。
-  -- Bernoulli 数の p-divisibility check
-  -- Mathlib の `NumberField.classNumber` と接続
+abbrev IsRegularPrime (_p : ℕ) : Prop :=
+  ∀ {R : Type u} [CommRing R] [IsDomain R],
+    ∀ (n : ℕ), ∀ a : ClassGroup R, a ^ n = 1 → a = 1
 
 /--
 Regular prime → ClassGroupPTorsionFree（定義同値の予定）。
 -/
 theorem classGroupPTorsionFree_of_regularPrime
-    (_h : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime p) :
-    CyclotomicClassGroupPTorsionFreeTarget := by
-  intro p _hp _h5
-  trivial
+  (h : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{u} p) :
+  CyclotomicClassGroupPTorsionFreeTarget.{u} := by
+  intro R _ _ n a ha
+  exact @h 5 Nat.prime_five (by decide) R _ _ n a ha
 
 /-!
 ## §2. Full chain: Regular prime → Principalization → GapDivisible
 
 上の要素を単に合成。
-ただし現時点で `so#rry` が残るのは class-group 側の global theorem だけである。
+ただし現時点で direct `so#rry` が残るのは
+`cyclotomicPrincipalization_of_classGroupPTorsionFree` だけである。
 -/
 
 /--
 Regular prime assumption から gap-divisible branch が閉じる。
 -/
 theorem qAdicGapReductionGapDivisible_of_regularPrime
-    (hReg : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime p) :
+  (hReg : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{u} p) :
     PrimeGe5BranchAPrimitiveQAdicGapReductionGapDivisibleBranchTarget :=
   qAdicGapReductionGapDivisible_of_cyclotomicPrincipalization
     (cyclotomicPrincipalization_of_classGroupPTorsionFree

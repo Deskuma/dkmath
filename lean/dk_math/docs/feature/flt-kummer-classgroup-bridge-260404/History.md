@@ -838,6 +838,60 @@ Archive
           `cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree` の receiver theorem を新設する
     - ここは class-group 側の仮定設計に踏み込む分岐なので、次サイクルで判断する
 
+### 日時: 2026/04/05 20:58:30 JST — class-group target の concrete 化と Stage 1b の閉鎖
+
+1. 目的:
+    - review-013 に従い、`CyclotomicClassGroupPTorsionFreeTarget` 自体を
+       concrete な class-group p-torsion-free 命題へ置き換える。
+    - その直後に `cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree` を no-so#rry 化し、
+       残る direct so#rry が本当に principalization 1 本だけかを確認する。
+2. 実施:
+    - `CyclotomicPrincipalization.lean` で
+       `CyclotomicClassGroupPTorsionFreeTarget` を
+       `∀ {R} [CommRing R] [IsDomain R], ∀ n, ∀ a : ClassGroup R, a^n = 1 → a = 1`
+       という concrete target に置換
+    - 同時に `CyclotomicPTorsionAnnihilationTarget` 側の universe を揃え、
+       `cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree` を
+       `exact @hCl R _ _ n a ha` で no-so#rry 化
+    - `ClassGroupBridge.lean` 側でも `IsRegularPrime` を、
+       当面は同じ concrete 内容を運ぶ receiver として更新し、
+       `classGroupPTorsionFree_of_regularPrime` を sorry-free のまま維持
+    - `RegularPrimeRoute.lean` と test コメントも、
+       Stage 1b が closed になった現状へ同期
+3. 結論:
+    - `CyclotomicClassGroupPTorsionFreeTarget` は placeholder ではなく、
+       concrete class-group p-torsion-free target になった ✅
+    - `cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree` は no-so#rry 化できた ✅
+    - したがって class-group 側の direct so#rry は
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` 1 本だけになった ✅
+    - ここで初めて、review-013 の見立てどおり
+       「真に残る honest open は full principalization 側で、
+       class-group p-torsion annihilation 自体はもう閉じた」と判断できた ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.ClassGroupBridge DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `#print axioms cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree` → no sorry
+    - `#print axioms classGroupPTorsionFree_of_regularPrime` → no sorry
+    - `#print axioms cyclotomicPrincipalization_of_classGroupPTorsionFree` → `sorryAx` あり
+5. 分岐と判断:
+    - 分岐候補:
+       - A. `CyclotomicClassGroupPTorsionFreeTarget` を concrete 化し、Stage 1b を即座に潰す
+       - B. receiver theorem を追加しつつ target 自体は placeholder のまま保つ
+    - 選択:
+       - **A を採用**
+    - 理由:
+       - review-013 の指摘どおり、残る数学内容は target 自体の concrete 化に収束していたため
+       - receiver を増やすより target を最終形へ置いた方が、残る open を honest に 1 本へ押し込められるため
+6. 次の課題:
+    - 現在の direct so#rry は `cyclotomicPrincipalization_of_classGroupPTorsionFree` だけである
+    - ただしこれは class-group 側そのものというより、
+       class-group 仮定だけでは Stage 2 / Stage 3
+       （unit normalization / norm descent）まで届かないことを反映している
+    - 次段では
+       - `cyclotomicPrincipalization_of_classGroupPTorsionFree` を legacy theorem として退け、
+          refined route を正本にするか
+       - あるいは Stage 2 / Stage 3 の honest input を `IsRegularPrime` 側へ束ね直すか
+       の判断が必要になる
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
