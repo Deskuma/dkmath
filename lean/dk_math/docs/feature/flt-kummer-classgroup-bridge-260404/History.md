@@ -892,6 +892,63 @@ Archive
        - あるいは Stage 2 / Stage 3 の honest input を `IsRegularPrime` 側へ束ね直すか
        の判断が必要になる
 
+### 日時: 2026/04/05 21:58:09 JST — legacy principalization の降格と refined regular-prime mainline の昇格
+
+1. 目的:
+    - review-014 に従い、`cyclotomicPrincipalization_of_classGroupPTorsionFree` を
+       本筋から外し、refined route を public mainline へ押し上げる。
+    - これにより、残る honest open を Stage 2 / Stage 3 に集中させる。
+2. 実施:
+    - `ClassGroupBridge.lean` に
+       `qAdicGapReductionGapDivisible_of_refinedRegularPrimeRoute`
+       を追加
+       - regular prime → class-group target
+       - \+ unit normalization
+       - \+ norm descent
+       - → gap-divisible branch
+       という推奨 mainline を no-so#rry で固定
+    - `RegularPrimeRoute.lean` に
+       `FLTPrimeGe5Target_of_refinedRegularPrimeRoute`
+       を追加し、public 側の推奨 chain を
+       regular prime + Stage 2 + Stage 3 の refined route へ寄せた
+    - 同時に、old
+       - `qAdicGapReductionGapDivisible_of_regularPrime`
+       - `FLTPrimeGe5Target_of_kummerRoute`
+       を legacy one-shot wrapper としてコメント上で明示
+    - test / route commentary / 設計図も現状へ同期
+3. 結論:
+    - review-014 の判断どおり、legacy one-shot theorem を守るより
+       refined route を正本にした方が honest であり、しかも no-so#rry の mainline が得られることを確認した ✅
+    - `FLTPrimeGe5Target_of_refinedRegularPrimeRoute` は no-so#rry で通った ✅
+    - `qAdicGapReductionGapDivisible_of_refinedRegularPrimeRoute` も no-so#rry で通った ✅
+    - direct `so#rry` は引き続き
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree`
+       ただ 1 本のみであり、これは legacy one-shot wrapper の残骸として理解してよい ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.ClassGroupBridge DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `#print axioms qAdicGapReductionGapDivisible_of_refinedRegularPrimeRoute` → no sorry
+    - `#print axioms FLTPrimeGe5Target_of_refinedRegularPrimeRoute` → no sorry
+    - `#print axioms qAdicGapReductionGapDivisible_of_regularPrime` → `sorryAx` あり
+    - `#print axioms FLTPrimeGe5Target_of_kummerRoute` → `sorryAx` あり
+5. 分岐と判断:
+    - 分岐候補:
+       - A. legacy one-shot theorem を残しつつ、refined route を public mainline に昇格
+       - B. `IsRegularPrime` 側へ Stage 2 / Stage 3 を束ね直して one-shot theorem を閉じに行く
+    - 選択:
+       - **A を採用**
+    - 理由:
+       - review-014 の指摘どおり、B は theorem を減らすのではなく
+          異なる数学内容を 1 つの仮定へ押し込め直す方向であり、honest でも最短でもないため
+       - A なら、class-group が既に closed であり、残る open が unit / norm であることを
+          public API 上でも正確に表現できるため
+6. 次の課題:
+    - 次の honest open は class-group ではなく
+       `CyclotomicUnitNormalizationTarget` と `CyclotomicNormDescentTarget` の concrete 化である
+    - 特に
+       - principal ideal の p 乗性から unit のずれをどう吸収するか
+       - norm から整数 witness をどう回収するか
+       の 2 点が main mathematical target になる
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。

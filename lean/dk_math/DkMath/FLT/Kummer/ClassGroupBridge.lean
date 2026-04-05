@@ -49,7 +49,7 @@ review-009 時点ではその上流はさらに
 Regular prime condition
   ↓ (定義同値)
 ClassGroupPTorsionFree
-  ↓ p-torsion annihilation bridge (open)
+  ↓ p-torsion annihilation bridge (closed)
 CyclotomicPTorsionAnnihilation
   ↖
     IdealClassPTorsionWitness
@@ -107,15 +107,37 @@ theorem classGroupPTorsionFree_of_regularPrime
   exact @h 5 Nat.prime_five (by decide) R _ _ n a ha
 
 /-!
-## §2. Full chain: Regular prime → Principalization → GapDivisible
+## §2. Refined mainline: Regular prime + Stage 2 + Stage 3 → GapDivisible
 
-上の要素を単に合成。
-ただし現時点で direct `so#rry` が残るのは
-`cyclotomicPrincipalization_of_classGroupPTorsionFree` だけである。
+review-014 に従い、public な本筋は legacy one-shot route ではなく
+refined route に寄せる。
+regular prime から class-group 仮定までを供給し、その先の
+unit normalization / norm descent は honest な独立入力として保つ。
 -/
 
 /--
-Regular prime assumption から gap-divisible branch が閉じる。
+推奨 mainline: regular prime + unit normalization + norm descent から
+gap-divisible branch を得る。
+-/
+theorem qAdicGapReductionGapDivisible_of_refinedRegularPrimeRoute
+  (hReg : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{u} p)
+  (hUnit : CyclotomicUnitNormalizationTarget)
+  (hNorm : CyclotomicNormDescentTarget) :
+    PrimeGe5BranchAPrimitiveQAdicGapReductionGapDivisibleBranchTarget :=
+  qAdicGapReductionGapDivisible_of_cyclotomicPrincipalization
+    (cyclotomicPrincipalization_of_refinedClassGroupRoute
+      (classGroupPTorsionFree_of_regularPrime hReg) hUnit hNorm)
+
+/-!
+## §3. Legacy one-shot chain: Regular prime → Principalization → GapDivisible
+
+この route は historical / legacy wrapper として残す。
+direct `so#rry` が残る理由は、one-shot theorem が Stage 2 / Stage 3 まで
+暗に抱え込んでいるためである。
+-/
+
+/--
+Legacy one-shot wrapper。
 -/
 theorem qAdicGapReductionGapDivisible_of_regularPrime
   (hReg : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{u} p) :
