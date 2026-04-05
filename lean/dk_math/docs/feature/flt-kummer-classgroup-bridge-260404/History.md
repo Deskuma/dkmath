@@ -384,6 +384,50 @@ Archive
        追加 target を切るか判断する
     - ここが次の分岐点
 
+### 日時: 2026/04/05 09:45 JST — Stage 1a-1 の 2 層分解
+
+1. 目的:
+    - review-007 に沿って、Stage 1a-1 を
+       `factorization identity → ideal equation packaging`
+       の 2 層へさらに裂き、theorem-level kernel をもう一段薄くする。
+    - `cyclotomicIdealFactorization_of_gapDivisibleGeometry` に混在していた
+       cyclotomic factorization と Dedekind ideal packaging の責務を分離する。
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `CyclotomicFactorizationIdentityTarget`
+       - `CyclotomicIdealEquationTarget`
+       - `cyclotomicIdealFactorization_of_stage1a1Split`
+       - `cyclotomicFactorizationIdentity_of_gapDivisibleGeometry` (sorry)
+       - `cyclotomicIdealEquation_of_factorizationIdentity` (clean)
+    - `cyclotomicIdealFactorization_of_gapDivisibleGeometry` を
+       Stage 1a-1 split の wrapper に組み替えた
+    - `RegularPrimeRoute.lean` / `ClassGroupBridge.lean` の chain 図と説明を更新し、
+       最薄 kernel を factorization identity theorem へ同期
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の axioms 監視へ
+       Stage 1a-1a / 1a-1b を追加
+3. 結論:
+    - theorem-level の最薄 kernel は、
+       **`cyclotomicFactorizationIdentity_of_gapDivisibleGeometry`** にまで局所化できた ✅
+    - `cyclotomicIdealEquation_of_factorizationIdentity` は clean bridge として分離された ✅
+    - これにより Stage 1a の上流は
+       `factorization identity → ideal equation → ideal product → class witness`
+       の 4 層地図で管理できるようになった ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.ClassGroupBridge DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `#print axioms cyclotomicFactorizationIdentity_of_gapDivisibleGeometry` → `sorryAx` あり
+    - `#print axioms cyclotomicIdealEquation_of_factorizationIdentity` → `sorryAx` なし
+    - `#print axioms cyclotomicIdealFactorization_of_gapDivisibleGeometry` → `sorryAx` あり
+    - `#print axioms cyclotomicIdealProductPthPower_of_idealFactorization` → `sorryAx` なし
+5. 失敗事例:
+    - Stage 1a-1b はまだ placeholder target 上の clean bridge であり、
+       concrete integrality / ideal-generation 補題は未実装
+    - ただし今回の目的は theorem-level kernel のさらなる局所化なので、
+       この段階でも設計上の価値は十分ある
+6. 次の課題:
+    - `cyclotomicFactorizationIdentity_of_gapDivisibleGeometry` をさらに裂けるか監査
+    - とくに「純 factorization identity」と「gap-divisible 条件の利用点」を分離できるか検討
+    - ここが次の分岐点
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。

@@ -26,7 +26,11 @@ DkMath FLT 幹線の `2m-pure` → FLT chain に接続する。
 ```
      ClassGroupPTorsionFree                     (placeholder)
         ↓
-     IdealFactorization                         (thinnest theorem-level kernel)
+     FactorizationIdentity                      (thinnest theorem-level kernel)
+       ↓
+     IdealEquationPackaging                     (Dedekind / integrality side)
+       ↓
+     IdealFactorization                         (factorization wrapper)
        ↓
      IdealProductPthPower                       (Dedekind / ideal arithmetic side)
        ↓
@@ -62,22 +66,24 @@ DkMath FLT 幹線の `2m-pure` → FLT chain に接続する。
 Kummer branch 導入後の open kernel は **1 つ**に集約された:
 1. ~~Regular branch~~: `qAdicGapReductionRegularBranch_of_global` **CLOSED** ✅
    → witness R の自動構成が ZMod unit 理論で完了。
-2. **Gap-divisible global stage**: `cyclotomicIdealFactorization_of_gapDivisibleGeometry`
-  → Kummer 理論 / 円分体 factorization の formal 化が必要（現時点で最薄の theorem-level kernel）。
+2. **Gap-divisible global stage**: `cyclotomicFactorizationIdentity_of_gapDivisibleGeometry`
+  → Kummer 理論 / 円分体 factorization identity の formal 化が必要（現時点で最薄の theorem-level kernel）。
 
 `CyclotomicUnitNormalizationTarget` と `CyclotomicNormDescentTarget` は
 現時点では abstract stage として明示化した。今後は各 stage ごとに
 Mathlib 既存資産で concrete 化できるかを独立に監査する。
 
-`CyclotomicIdealProductPthPowerTarget`・`CyclotomicPTorsionAnnihilationTarget`・
-`CyclotomicPrincipalIdealExtractionTarget` は Stage 1 内部の責務分離として追加した。
+`CyclotomicIdealEquationTarget`・`CyclotomicIdealProductPthPowerTarget`・
+`CyclotomicPTorsionAnnihilationTarget`・`CyclotomicPrincipalIdealExtractionTarget` は
+Stage 1 内部の責務分離として追加した。
 前者は generic ClassGroup API の target として、後者は principal-ideal extraction API として
 concrete 化済みだが、`CyclotomicClassGroupPTorsionFreeTarget` から前者を供給する橋は未解決である。
 この未解決は target 形の問題ではなく、cyclotomic integer-ring parameterization を
 仮定側へどう露出するか、という infrastructure 側の問題である。
 
-Stage 1a 自体も、factorization / ideal product / class witness の 3 層へ分離した。
-今後 genuinely new theory を載せるべき場所は、その最上流 factorization theorem である。
+Stage 1a 自体も、factorization identity / ideal equation packaging / ideal product /
+class witness の 4 層へ分離した。
+今後 genuinely new theory を載せるべき場所は、その最上流 factorization identity theorem である。
 
 それぞれ独立に攻略可能。
 -/
@@ -198,7 +204,7 @@ theorem FLTPrimeGe5Target_of_refinedKummerRoute
 /-!
 ## §5. Refined Stage 1 route
 
-Stage 1 自体をさらに 1a-1 / 1a-2 / 1a-3 / 1b / 1c へ裂いた版。
+Stage 1 自体をさらに 1a-1a / 1a-1b / 1a-2 / 1a-3 / 1b / 1c へ裂いた版。
 最薄の open kernel は `hWitness` に局所化される。
 -/
 

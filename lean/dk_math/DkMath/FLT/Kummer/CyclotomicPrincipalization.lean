@@ -30,18 +30,19 @@ Principal ideal の p 乗性が保証されると、
 
 ## 抽象化の方針
 
-1. Stage 1a-1: cyclotomic ideal factorization
-2. Stage 1a-2: ideal product が p 乗になることの抽出
-3. Stage 1a-3: class への落とし込み（p-torsion witness）
-4. Stage 1b: class group p-torsion annihilation
-5. Stage 1c: principal ideal extraction
-6. `CyclotomicIdealPthPowerTarget`: 上の Stage 1a-1c を合成した ideal p 乗性
-7. `CyclotomicUnitNormalizationTarget`: unit 側の調整
-8. `CyclotomicNormDescentTarget`: norm から整数 descent existence へ戻す橋
-9. `CyclotomicPrincipalizationTarget`: Stage 1 + Stage 2 + Stage 3 を合成した full target
-10. `CyclotomicClassGroupPTorsionFreeTarget`: class group の p-torsion が trivial と仮定
-11. 第 10 から Stage 1b への bridge（abstract theorem）
-12. 第 9 から GapDivisibleBranch への bridge（abstract theorem）
+1. Stage 1a-1a: cyclotomic factorization identity
+2. Stage 1a-1b: ideal equation packaging
+3. Stage 1a-2: ideal product が p 乗になることの抽出
+4. Stage 1a-3: class への落とし込み（p-torsion witness）
+5. Stage 1b: class group p-torsion annihilation
+6. Stage 1c: principal ideal extraction
+7. `CyclotomicIdealPthPowerTarget`: 上の Stage 1a-1c を合成した ideal p 乗性
+8. `CyclotomicUnitNormalizationTarget`: unit 側の調整
+9. `CyclotomicNormDescentTarget`: norm から整数 descent existence へ戻す橋
+10. `CyclotomicPrincipalizationTarget`: Stage 1 + Stage 2 + Stage 3 を合成した full target
+11. `CyclotomicClassGroupPTorsionFreeTarget`: class group の p-torsion が trivial と仮定
+12. 第 11 から Stage 1b への bridge（abstract theorem）
+13. 第 10 から GapDivisibleBranch への bridge（abstract theorem）
 
 これにより、class group の concrete 構造に立ち入らずに、
 Kummer 語彙を DkMath 幹線に接続できる。
@@ -63,7 +64,7 @@ namespace DkMath.FLT
 
 Kummer 的 principalization は、実際には次の 3 段へ裂ける:
 
-1. Stage 1: ideal の p 乗性（さらに 1a-1 / 1a-2 / 1a-3 / 1b / 1c へ分解）
+1. Stage 1: ideal の p 乗性（さらに 1a-1a / 1a-1b / 1a-2 / 1a-3 / 1b / 1c へ分解）
 2. Stage 2: 単数の調整（Kummer 単数 / cyclotomic unit の吸収）
 3. Stage 3: norm 計算から整数 descent existence へ戻す橋
 
@@ -76,13 +77,42 @@ class group の p-torsion = 0 + unit group の剰余類解析 から
 -/
 
 /--
-Stage 1a-1: cyclotomic ideal factorization。
+Stage 1a-1a: cyclotomic factorization identity。
 
-gap-divisible な geometry から、円分体整数環で扱うべき ideal factorization を
+gap-divisible な geometry から、まず純粋に cyclotomic な factorization identity を
 取り出す段。
 
-review-006 を受け、Stage 1a の最上流を Dedekind / factorization / class witness の
-3 層へ分ける。
+review-007 を受け、旧 Stage 1a-1 を
+`factorization identity → ideal equation packaging` の 2 層へさらに分ける。
+-/
+abbrev CyclotomicFactorizationIdentityTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ x →
+      q ≠ p →
+      q ∣ (z - y) →
+      True
+
+/--
+Stage 1a-1b: ideal equation packaging。
+
+Stage 1a-1a で得た cyclotomic factorization identity を、
+円分体整数環の ideal factorization / ideal equation へ包装する段。
+
+この段で初めて Dedekind ideal arithmetic 側の責務が前景化する。
+-/
+abbrev CyclotomicIdealEquationTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ x →
+      q ≠ p →
+      q ∣ (z - y) →
+      True
+
+/--
+Stage 1a-1: cyclotomic ideal factorization。
+
+Stage 1a-1a と Stage 1a-1b をまとめた wrapper target。
 -/
 abbrev CyclotomicIdealFactorizationTarget : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
@@ -91,6 +121,19 @@ abbrev CyclotomicIdealFactorizationTarget : Prop :=
       q ≠ p →
       q ∣ (z - y) →
       True
+
+/--
+Stage 1a-1a + 1a-1b → ideal factorization。
+
+旧 Stage 1a-1 を factorization identity と ideal equation packaging に分離する。
+現時点では abstract composition の器として置く。
+-/
+theorem cyclotomicIdealFactorization_of_stage1a1Split
+    (_hIdentity : CyclotomicFactorizationIdentityTarget)
+    (_hIdealEq : CyclotomicIdealEquationTarget) :
+    CyclotomicIdealFactorizationTarget := by
+  intro p x y z hpack q hq hqx hqne hgap
+  trivial
 
 /--
 Stage 1a-2: ideal product が p 乗になることの抽出。
@@ -328,17 +371,41 @@ theorem cyclotomicIdealPthPower_of_classGroupPTorsionFree
   sorry
 
 /--
-Stage 1a-1: gap-divisible geometry → cyclotomic ideal factorization。
+Stage 1a-1a: gap-divisible geometry → cyclotomic factorization identity。
 
 Stage 1a の最上流にある genuinely cyclotomic な kernel。
-Dedekind 一般論ではなく、`x^p + y^p` の cyclotomic factorization と
-gap-divisible 条件がどの ideal equation を生むかを担う。
+Dedekind 一般論ではなく、`x^p + y^p` の cyclotomic factorization そのものを担う。
 
-現時点では sorry。review-006 時点ではこれが theorem-level で最薄の kernel。
+現時点では sorry。review-007 時点ではこれが theorem-level で最薄の kernel。
+-/
+theorem cyclotomicFactorizationIdentity_of_gapDivisibleGeometry :
+    CyclotomicFactorizationIdentityTarget := by
+  sorry
+
+/--
+Stage 1a-1b: factorization identity → ideal equation packaging。
+
+現時点では target 自体が placeholder なので clean に接続する。
+将来は integrality / ideal generation / ideal multiplication の補題群へ具体化される。
+-/
+theorem cyclotomicIdealEquation_of_factorizationIdentity
+    (_hIdentity : CyclotomicFactorizationIdentityTarget) :
+    CyclotomicIdealEquationTarget := by
+  intro p x y z _hpack q _hq _hqx _hqne _hgap
+  trivial
+
+/--
+Stage 1a-1 full route: gap-divisible geometry → factorization identity → ideal equation packaging
+→ cyclotomic ideal factorization。
+
+review-007 の提案どおり、旧 Stage 1a-1 の責務を 2 層へ分割した wrapper。
 -/
 theorem cyclotomicIdealFactorization_of_gapDivisibleGeometry :
-    CyclotomicIdealFactorizationTarget := by
-  sorry
+    CyclotomicIdealFactorizationTarget :=
+  cyclotomicIdealFactorization_of_stage1a1Split
+    (cyclotomicFactorizationIdentity_of_gapDivisibleGeometry)
+    (cyclotomicIdealEquation_of_factorizationIdentity
+      cyclotomicFactorizationIdentity_of_gapDivisibleGeometry)
 
 /--
 Stage 1a-2: factorization → ideal product が p 乗になる。
@@ -429,7 +496,8 @@ Refined Stage 1 route: geometry witness + torsion annihilation + principal extra
 Stage 1 全体をさらに薄い 3 段へ裂いた refined route。
 ただし現時点では Stage 1 target 自体が placeholder なので、
 concrete 化されたのは Stage 1b / 1c の generic API までであり、
-Stage 1a は factorization / ideal product / class witness の 3 層へ薄化された。
+Stage 1a は factorization identity / ideal equation packaging / ideal product / class witness
+の 4 層へ薄化された。
 -/
 theorem cyclotomicIdealPthPower_of_refinedStage1Route
     (hWitness : CyclotomicIdealClassPTorsionWitnessTarget)
