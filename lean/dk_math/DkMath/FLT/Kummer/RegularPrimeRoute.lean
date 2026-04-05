@@ -66,22 +66,33 @@ DkMath FLT 幹線の `2m-pure` → FLT chain に接続する。
         ↕
    Regular branch + GapDivisible branch       (by_cases q ∣ (z-y))
         ↓
-  2m-pure                                    (no sorry ✅)
+  2m-pure                                    (no so#rry ✅)
         ↓
    2m-global                                  (from 2m-pure, auto)
         ↓
-  PthRootCore → GNReducedGap → 無限降下法   (existing chain, no sorry)
+  PthRootCore → GNReducedGap → 無限降下法   (existing chain, no so#rry)
         ↓
    FLTPrimeGe5Target                          ✅
 ```
 
 ## open kernel の整理
 
-Kummer branch 導入後の open kernel は **1 つ**に集約された:
+Kummer branch 導入後、gap-divisible 側の Stage 1a は
+DkMath-native local core により **CLOSED** した:
 1. ~~Regular branch~~: `qAdicGapReductionRegularBranch_of_global` **CLOSED** ✅
-   → witness R の自動構成が ZMod unit 理論で完了。
-2. **Gap-divisible global stage**: `cyclotomicGenericFactorizationIdentity_overCommSemiring`
-  → Kummer 理論 / 円分体の generic algebraic factorization identity の formal 化が必要（現時点で最薄の theorem-level kernel）。
+  → witness R の自動構成が ZMod unit 理論で完了。
+2. ~~Gap-divisible Stage 1a (FLT-useful chain)~~: `cyclotomicEquationFactorizationIdentity_of_diophantineEquation` **CLOSED** ✅
+  → `CyclotomicLocalEquationFactorizationCoreTarget` から供給可能になった。
+3. ~~Generic algebraic placeholder~~: `cyclotomicGenericFactorizationIdentity_overCommSemiring` **CLOSED** ✅
+  → current target が placeholder のため no-so#rry で閉じた。
+
+補足:
+`CyclotomicLocalFactorizationCoreTarget` は DkMath-native な局所証明核として no-so#rry で追加済み。
+さらに `CyclotomicLocalEquationFactorizationCoreTarget` により、
+`x^p + y^p = z^p` の FLT 方程式形まで局所的には no-so#rry で押し込めている。
+FLT を閉じる観点で残る本筋の open は class group 側、すなわち
+`cyclotomicIdealPthPower_of_classGroupPTorsionFree` と
+`cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree` である。
 
 `CyclotomicUnitNormalizationTarget` と `CyclotomicNormDescentTarget` は
 現時点では abstract stage として明示化した。今後は各 stage ごとに

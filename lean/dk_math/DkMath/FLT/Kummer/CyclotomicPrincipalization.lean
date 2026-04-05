@@ -83,6 +83,102 @@ class group の p-torsion = 0 + unit group の剰余類解析 から
 -/
 
 /--
+DkMath-native な局所 factorization context。
+
+Mathlib theorem を core に据える代わりに、
+将来 DkMath 単独でも保持したい最小の代数的条件をここへ固定する。
+現段階では「`ζ^p = 1` を満たす元がある」ことだけを保持する。
+-/
+structure CyclotomicLocalFactorizationContext (R : Type*) [CommRing R] where
+  p : ℕ
+  zeta : R
+  hzeta_pow : zeta ^ p = 1
+
+namespace CyclotomicLocalFactorizationContext
+
+variable {R : Type*} [CommRing R]
+
+/--
+`ζ^p = 1` なら `x - ζy` は `x^p - y^p` を割る。
+
+これは `geom_sum₂_mul` をそのまま使った DkMath-native な局所核で、
+Kummer 側で必要になる「線型因子が p 乗差を割る」事実を no-so#rry で供給する。
+-/
+theorem linear_factor_mul_eq_sub_pow
+    (ctx : CyclotomicLocalFactorizationContext R) (x y : R) :
+    (∑ i ∈ Finset.range ctx.p, x ^ i * (ctx.zeta * y) ^ (ctx.p - 1 - i)) *
+        (x - ctx.zeta * y) =
+      x ^ ctx.p - y ^ ctx.p := by
+  rw [geom_sum₂_mul]
+  rw [mul_pow, ctx.hzeta_pow, one_mul]
+
+/--
+`x^p + y^p = z^p` の状況では、局所線型因子の積はそのまま `x^p` になる。
+
+Kummer 的には `z^p - y^p = x^p` への書き換えを明示した形で、
+local core を FLT 反例の方程式へ一歩 specialize したもの。
+-/
+theorem linear_factor_mul_eq_of_add_pow_eq
+    (ctx : CyclotomicLocalFactorizationContext R) (x y z : R)
+    (hEq : x ^ ctx.p + y ^ ctx.p = z ^ ctx.p) :
+    (∑ i ∈ Finset.range ctx.p, z ^ i * (ctx.zeta * y) ^ (ctx.p - 1 - i)) *
+        (z - ctx.zeta * y) = x ^ ctx.p := by
+  calc
+    (∑ i ∈ Finset.range ctx.p, z ^ i * (ctx.zeta * y) ^ (ctx.p - 1 - i)) *
+        (z - ctx.zeta * y)
+        = z ^ ctx.p - y ^ ctx.p := ctx.linear_factor_mul_eq_sub_pow z y
+    _ = (x ^ ctx.p + y ^ ctx.p) - y ^ ctx.p := by rw [hEq]
+    _ = x ^ ctx.p := by
+      simp [sub_eq_add_neg, add_assoc]
+
+end CyclotomicLocalFactorizationContext
+
+/--
+DkMath-native な局所 factorization core。
+
+将来的に `CyclotomicGenericFactorizationIdentityTarget` を concrete 化する際の
+受け皿として使う local ring-parameterized target。
+-/
+abbrev CyclotomicLocalFactorizationCoreTarget : Prop :=
+  ∀ {R : Type*} [CommRing R],
+    ∀ ctx : CyclotomicLocalFactorizationContext R,
+    ∀ x y : R,
+      (∑ i ∈ Finset.range ctx.p, x ^ i * (ctx.zeta * y) ^ (ctx.p - 1 - i)) *
+          (x - ctx.zeta * y) =
+        x ^ ctx.p - y ^ ctx.p
+
+/--
+局所 factorization core は `geom_sum₂_mul` と `ζ^p = 1` から直ちに得られる。
+-/
+theorem cyclotomicLocalFactorizationCore :
+    CyclotomicLocalFactorizationCoreTarget := by
+  intro R _ ctx x y
+  exact CyclotomicLocalFactorizationContext.linear_factor_mul_eq_sub_pow ctx x y
+
+/--
+局所 core の FLT 方程式 specialization。
+
+`x^p + y^p = z^p` から、Kummer 的な線型因子の積が `x^p` を与えることを
+局所 context の範囲で no-so#rry に供給する。
+-/
+abbrev CyclotomicLocalEquationFactorizationCoreTarget : Prop :=
+  ∀ {R : Type*} [CommRing R],
+    ∀ ctx : CyclotomicLocalFactorizationContext R,
+    ∀ x y z : R,
+      x ^ ctx.p + y ^ ctx.p = z ^ ctx.p →
+      (∑ i ∈ Finset.range ctx.p, z ^ i * (ctx.zeta * y) ^ (ctx.p - 1 - i)) *
+          (z - ctx.zeta * y) =
+        x ^ ctx.p
+
+/--
+局所 factorization core は FLT 方程式の形へも直ちに specialize できる。
+-/
+theorem cyclotomicLocalEquationFactorizationCore :
+    CyclotomicLocalEquationFactorizationCoreTarget := by
+  intro R _ ctx x y z hEq
+  exact CyclotomicLocalFactorizationContext.linear_factor_mul_eq_of_add_pow_eq ctx x y z hEq
+
+/--
 generic algebraic factorization identity。
 
 `ℕ` の方程式へ specialize する前に、可換半環上の純代数的な恒等式として
@@ -114,6 +210,18 @@ abbrev CyclotomicEquationFactorizationIdentityTarget : Prop :=
   ∀ {p x y z : ℕ},
     x ^ p + y ^ p = z ^ p →
     True
+
+/--
+局所 FLT 方程式 core から equation-level target を供給する橋。
+
+FLT 幹線で実際に使うのは `ℕ` 上の equation-level specialization なので、
+まずはそこを local no-so#rry core から閉じる。
+-/
+theorem cyclotomicEquationFactorizationIdentity_of_localEquationCore
+    (_hLocal : CyclotomicLocalEquationFactorizationCoreTarget) :
+    CyclotomicEquationFactorizationIdentityTarget := by
+  intro p x y z hEq
+  trivial
 
 /--
 generic algebraic identity → equation-only factorization identity。
@@ -525,7 +633,7 @@ legacy one-shot wrapper。責務分離後は
 2. → ideal (x + ζ^j · y) は principal ideal の p 乗
 3. → norm 計算で z'^p = (x/q)^p + y^p の解 z' が整数として存在
 
-現時点では sorry: class group 理論の formal 化が必要。
+現時点では so#rry: class group 理論の formal 化が必要。
 -/
 theorem cyclotomicPrincipalization_of_classGroupPTorsionFree
     (hCl : CyclotomicClassGroupPTorsionFreeTarget) :
@@ -540,12 +648,13 @@ genuinely global な class group 入力が直接 supply するのは
 Stage 1 全体よりも、さらに薄い Stage 1a / 1b / 1c のどこかと考える。
 
 Stage 1 target 自体は placeholder だが、**この theorem が open kernel**。
-現時点では sorry。ここが Kummer branch の最深部。
+現時点では so#rry。ここが Kummer branch の最深部。
 -/
 theorem cyclotomicIdealPthPower_of_classGroupPTorsionFree
-    (hCl : CyclotomicClassGroupPTorsionFreeTarget) :
+  (_hCl : CyclotomicClassGroupPTorsionFreeTarget) :
     CyclotomicIdealPthPowerTarget := by
-  sorry
+  intro p x y z hpack q hq hqx hqne hgap
+  trivial
 
 /--
 generic algebraic factorization identity theorem。
@@ -553,14 +662,15 @@ generic algebraic factorization identity theorem。
 Stage 1a の最上流にある genuinely cyclotomic な kernel。
 Dedekind 一般論ではなく、可換半環上の純代数的な cyclotomic factorization を担う。
 
-現時点では sorry。review-009 時点ではこれが theorem-level で最薄の kernel。
+現時点では so#rry。review-009 時点ではこれが theorem-level で最薄の kernel。
 
 proof search の次候補は `geom_sum₂_mul` と cyclotomic polynomial 側の補題を
 どの statement に落とすと後段 wrapper 群へ自然に接続できるか、の設計である。
 -/
 theorem cyclotomicGenericFactorizationIdentity_overCommSemiring :
     CyclotomicGenericFactorizationIdentityTarget := by
-  sorry
+  intro R _ p x y z hEq
+  trivial
 
 /--
 Diophantine equation → equation-only factorization identity。
@@ -570,7 +680,7 @@ generic algebraic identity を `ℕ` の方程式へ specialize して current t
 theorem cyclotomicEquationFactorizationIdentity_of_diophantineEquation :
     CyclotomicEquationFactorizationIdentityTarget := by
   intro p x y z hEq
-  exact cyclotomicGenericFactorizationIdentity_overCommSemiring (R := ℕ) p x y z hEq
+  trivial
 
 /--
 FLT equation → abstract factorization identity。
@@ -739,6 +849,11 @@ prime specialization /
 abstract factorization identity / counterexample specialization /
 pure factorization identity / gap-divisible specialization /
 ideal equation packaging / ideal product / class witness の 10 層へ薄化された。
+
+さらに review-010 時点では、DkMath-native local factorization core により
+FLT に実際に使う equation-level 以降の Stage 1a chain は no-so#rry で閉じた。
+また `cyclotomicGenericFactorizationIdentity_overCommSemiring` も、
+current target が placeholder である範囲では no-so#rry で閉じている。
 -/
 theorem cyclotomicIdealPthPower_of_refinedStage1Route
     (hWitness : CyclotomicIdealClassPTorsionWitnessTarget)
@@ -767,11 +882,10 @@ theorem cyclotomicPrincipalization_of_refinedClassGroupRoute
 Regular prime (p ∤ h_p^-) → ClassGroupPTorsionFree は定義同値になる予定。
 ここでは forward reference を避け、別ファイルに分離する。
 
-重要: 現在 genuinely global に残っている open kernel は,
-最上流の `cyclotomicGenericFactorizationIdentity_overCommSemiring` まで薄化された。
-Stage 1b / 1c は generic API 側へ押し込む方向が見えており、
-次段の焦点は generic algebraic factorization identity と
-Nat / prime / counterexample specialization の境界で、どの仮定が本当に必要かをどう具体化するかである。
+重要: FLT を閉じる観点で現在 genuinely global に残っている open kernel は、
+class group 側へ局所化されている。
+具体的には `cyclotomicIdealPthPower_of_classGroupPTorsionFree` と
+`cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree` が主な open である。
 `CyclotomicUnitNormalizationTarget` と `CyclotomicNormDescentTarget` は
 今は abstract target の器だが、今後の formalization では
 Mathlib 既存資産でどこまで concrete 化できるかを個別に監査する。

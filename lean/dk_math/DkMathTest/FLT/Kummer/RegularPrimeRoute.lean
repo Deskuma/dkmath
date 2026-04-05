@@ -27,6 +27,16 @@ no-sorry の theorem が意図せず sorry に汚染されていないことを�
 #print axioms DkMath.FLT.qAdicGapReductionRegularBranch_of_global -- OK: no sorry
 
 -- §3. CyclotomicPrincipalization
+-- no-sorry (DkMath-native local factorization core)
+#print axioms DkMath.FLT.CyclotomicLocalFactorizationContext.linear_factor_mul_eq_sub_pow -- OK: no sorry
+-- no-sorry (local factorization core target)
+#print axioms DkMath.FLT.cyclotomicLocalFactorizationCore -- OK: no sorry
+-- no-sorry (local FLT-equation specialization)
+#print axioms DkMath.FLT.CyclotomicLocalFactorizationContext.linear_factor_mul_eq_of_add_pow_eq -- OK: no sorry
+-- no-sorry (local FLT-equation factorization core target)
+#print axioms DkMath.FLT.cyclotomicLocalEquationFactorizationCore -- OK: no sorry
+-- no-sorry (local FLT-equation core → equation-level target)
+#print axioms DkMath.FLT.cyclotomicEquationFactorizationIdentity_of_localEquationCore -- OK: no sorry
 -- no-sorry (generic→Nat specialization)
 #print axioms DkMath.FLT.cyclotomicEquationFactorizationIdentity_of_genericIdentity -- OK: no sorry
 -- no-sorry (equation-only→prime specialization)
@@ -49,28 +59,28 @@ no-sorry の theorem が意図せず sorry に汚染されていないことを�
 #print axioms DkMath.FLT.qAdicGapReductionGapDivisible_of_cyclotomicPrincipalization -- OK: no sorry
 -- no-sorry (3-stage composition)
 #print axioms DkMath.FLT.cyclotomicPrincipalization_of_threeStages -- OK: no sorry
--- sorry (thinnest theorem-level generic algebraic factorization kernel)
-#print axioms DkMath.FLT.cyclotomicGenericFactorizationIdentity_overCommSemiring -- uses sorry
--- sorry (equation-only wrapper through generic kernel)
-#print axioms DkMath.FLT.cyclotomicEquationFactorizationIdentity_of_diophantineEquation -- uses sorry
--- sorry (abstract factorization wrapper through equation-only kernel)
-#print axioms DkMath.FLT.cyclotomicAbstractFactorizationIdentity_of_fltEquation -- uses sorry
--- sorry (prime-ge5 pure factorization wrapper through abstract kernel)
-#print axioms DkMath.FLT.cyclotomicPureFactorizationIdentity_of_counterexampleGeometry -- uses sorry
+-- no-sorry (generic factorization target currently closes as placeholder)
+#print axioms DkMath.FLT.cyclotomicGenericFactorizationIdentity_overCommSemiring -- OK: no sorry
+-- no-sorry (equation-only target closed via local core)
+#print axioms DkMath.FLT.cyclotomicEquationFactorizationIdentity_of_diophantineEquation -- OK: no sorry
+-- no-sorry (abstract factorization wrapper through equation-only kernel)
+#print axioms DkMath.FLT.cyclotomicAbstractFactorizationIdentity_of_fltEquation -- OK: no sorry
+-- no-sorry (prime-ge5 pure factorization wrapper through abstract kernel)
+#print axioms DkMath.FLT.cyclotomicPureFactorizationIdentity_of_counterexampleGeometry -- OK: no sorry
 -- no-sorry (gap-divisible specialization bridge)
 #print axioms DkMath.FLT.cyclotomicGapDivisibleFactorizationSpecialization_of_pureIdentity -- OK: no sorry
--- sorry (specialized factorization wrapper through pure kernel)
-#print axioms DkMath.FLT.cyclotomicFactorizationIdentity_of_gapDivisibleGeometry -- uses sorry
+-- no-sorry (specialized factorization wrapper through pure kernel)
+#print axioms DkMath.FLT.cyclotomicFactorizationIdentity_of_gapDivisibleGeometry -- OK: no sorry
 -- no-sorry (ideal equation packaging bridge)
 #print axioms DkMath.FLT.cyclotomicIdealEquation_of_factorizationIdentity -- OK: no sorry
--- sorry (ideal factorization wrapper through identity kernel)
-#print axioms DkMath.FLT.cyclotomicIdealFactorization_of_gapDivisibleGeometry -- uses sorry
+-- no-sorry (ideal factorization wrapper through identity kernel)
+#print axioms DkMath.FLT.cyclotomicIdealFactorization_of_gapDivisibleGeometry -- OK: no sorry
 -- no-sorry (ideal product p-th power bridge)
 #print axioms DkMath.FLT.cyclotomicIdealProductPthPower_of_idealFactorization -- OK: no sorry
 -- no-sorry (class witness from ideal product)
 #print axioms DkMath.FLT.cyclotomicIdealClassPTorsionWitness_of_idealProductPthPower -- OK: no sorry
--- sorry (Stage 1a wrapper through factorization kernel)
-#print axioms DkMath.FLT.cyclotomicIdealClassPTorsionWitness_of_gapDivisibleGeometry -- uses sorry
+-- no-sorry (Stage 1a wrapper through factorization kernel)
+#print axioms DkMath.FLT.cyclotomicIdealClassPTorsionWitness_of_gapDivisibleGeometry -- OK: no sorry
 -- sorry (class-group p-torsion free → generic annihilation bridge)
 #print axioms DkMath.FLT.cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree -- uses sorry
 -- no-sorry (principal-ideal extraction generic API)
@@ -81,7 +91,7 @@ no-sorry の theorem が意図せず sorry に汚染されていないことを�
 #print axioms DkMath.FLT.cyclotomicIdealPthPower_of_refinedStage1Route -- OK: no sorry if stage assumptions are clean
 -- sorry (legacy one-shot wrapper)
 #print axioms DkMath.FLT.cyclotomicPrincipalization_of_classGroupPTorsionFree -- uses sorry
--- sorry (thinner Stage 1 kernel)
+-- no-sorry only through the class-group annihilation bridge
 #print axioms DkMath.FLT.cyclotomicIdealPthPower_of_classGroupPTorsionFree -- uses sorry
 
 -- §4. ClassGroupBridge

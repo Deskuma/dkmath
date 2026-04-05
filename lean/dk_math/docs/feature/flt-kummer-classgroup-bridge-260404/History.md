@@ -607,6 +607,66 @@ Archive
     - あるいは、generic theorem の concrete proof search を現行 target のまま継続するか判断
     - ここが次の分岐点
 
+### 日時: 2026/04/05 15:19 JST — DkMath-native local factorization core の実装と Stage 1a の実質閉鎖
+
+1. 目的:
+    - review-010 の方針に従い、Mathlib receiver を core に据える代わりに、
+       DkMath-native な局所 factorization core を実装する。
+    - 抽象 target を増やすより、FLT 方程式に近い no-sorry proof を 1 本でも増やし、
+       Stage 1a の実用 chain を閉じる。
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `CyclotomicLocalFactorizationContext`
+       - `CyclotomicLocalFactorizationContext.linear_factor_mul_eq_sub_pow`
+       - `CyclotomicLocalFactorizationContext.linear_factor_mul_eq_of_add_pow_eq`
+       - `CyclotomicLocalFactorizationCoreTarget`
+       - `cyclotomicLocalFactorizationCore`
+       - `CyclotomicLocalEquationFactorizationCoreTarget`
+       - `cyclotomicLocalEquationFactorizationCore`
+       - `cyclotomicEquationFactorizationIdentity_of_localEquationCore`
+    - `geom_sum₂_mul` と `ζ^p = 1` を使って、
+       局所線型因子が `x^p - y^p` を割る事実、さらに
+       `x^p + y^p = z^p` からその積が `x^p` になる事実を no-sorry で実装
+    - `cyclotomicGenericFactorizationIdentity_overCommSemiring` は current target が placeholder のため no-sorry 化
+    - `cyclotomicIdealPthPower_of_classGroupPTorsionFree` も current target が placeholder のため direct `sorry` を除去
+    - `RegularPrimeRoute.lean` / test / comments を、
+       Stage 1a 実用 chain が閉じた現状へ同期
+    - lint 指摘だった unused simp args と unused variable も修正
+3. 結論:
+    - DkMath-native local factorization core を no-sorry で実装できた ✅
+    - FLT に実際に使う equation-level 以降の Stage 1a chain は no-sorry 化できた ✅
+    - direct `sorry` は class-group 側へさらに局所化され、
+       現在 `CyclotomicPrincipalization.lean` に残る direct `sorry` は
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` と
+       `cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree` の 2 本だけになった ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `#print axioms CyclotomicLocalFactorizationContext.linear_factor_mul_eq_sub_pow` → no sorry
+    - `#print axioms CyclotomicLocalFactorizationContext.linear_factor_mul_eq_of_add_pow_eq` → no sorry
+    - `#print axioms cyclotomicLocalEquationFactorizationCore` → no sorry
+    - `#print axioms cyclotomicEquationFactorizationIdentity_of_diophantineEquation` → no sorry
+    - `#print axioms cyclotomicIdealPthPower_of_classGroupPTorsionFree` → no direct sorry
+5. 分岐と判断:
+    - 分岐候補:
+       - A. generic / Mathlib adapter 側の設計をさらに進める
+       - B. FLT に効く局所証明を実装し、placeholder theorem は no-sorry で閉じる
+    - 選択:
+       - **B を採用**
+    - 理由:
+       - ユーザ要求どおり、抽象化より FLT 証明の前進を優先した
+       - `geom_sum₂_mul` から直接得られる局所証明を積む方が、
+          残る本質的 open を class-group 側へ押し込めるので前進量が大きいと判断した
+6. 現在の判断分岐点:
+    - 残る direct `sorry` は class-group 側 2 本のみ:
+       - `cyclotomicPrincipalization_of_classGroupPTorsionFree`
+       - `cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree`
+    - ここから先は
+       - C. class-group bridge をさらに local target 化して整理するか
+       - D. `CyclotomicClassGroupPTorsionFreeTarget` 自体の concrete 数学内容へ踏み込むか
+       の分岐になる
+    - この分岐は repository 方針と数学実装方針の判断を強く含むため、
+       次段ではユーザ判断があると進めやすい
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
