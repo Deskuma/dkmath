@@ -131,7 +131,162 @@ theorem linear_factor_mul_eq_of_add_pow_eq
     _ = x ^ ctx.p := by
       simp [sub_eq_add_neg, add_assoc]
 
+/--
+局所因数分解から principal ideal の積の式を得る。
+
+Kummer 第一場合で必要になる「線型因子 ideal の積が `x^p` を生成する ideal に等しい」
+という最初の concrete ideal identity。
+-/
+theorem linear_factor_ideal_mul_eq_span_x_pow_of_add_pow_eq
+    (ctx : CyclotomicLocalFactorizationContext R) (x y z : R)
+    (hEq : x ^ ctx.p + y ^ ctx.p = z ^ ctx.p) :
+    Ideal.span ({∑ i ∈ Finset.range ctx.p, z ^ i * (ctx.zeta * y) ^ (ctx.p - 1 - i)} : Set R) *
+        Ideal.span ({z - ctx.zeta * y} : Set R) =
+      Ideal.span ({x ^ ctx.p} : Set R) := by
+  rw [Ideal.span_singleton_mul_span_singleton]
+  simpa using congrArg (fun t : R => Ideal.span ({t} : Set R))
+    (ctx.linear_factor_mul_eq_of_add_pow_eq x y z hEq)
+
+/--
+局所因数分解から principal ideal の p 乗形を得る。
+
+上の theorem を `Ideal.span_singleton_pow` で言い換え、
+review-011 で目標とした `(x)^p` 型の ideal identity へ合わせる。
+-/
+theorem linear_factor_ideal_mul_eq_span_pow_of_add_pow_eq
+    (ctx : CyclotomicLocalFactorizationContext R) (x y z : R)
+    (hEq : x ^ ctx.p + y ^ ctx.p = z ^ ctx.p) :
+    Ideal.span ({∑ i ∈ Finset.range ctx.p, z ^ i * (ctx.zeta * y) ^ (ctx.p - 1 - i)} : Set R) *
+        Ideal.span ({z - ctx.zeta * y} : Set R) =
+      Ideal.span ({x} : Set R) ^ ctx.p := by
+  rw [Ideal.span_singleton_pow]
+  exact ctx.linear_factor_ideal_mul_eq_span_x_pow_of_add_pow_eq x y z hEq
+
+/--
+生成元の差が unit なら、対応する principal ideals は comaximal である。
+
+Kummer 的には、異なる線型因子の ideal が pairwise coprime になるための最小補題。
+-/
+theorem linear_factor_ideals_sup_eq_top_of_sub_isUnit
+    (z a b : R) (hUnit : IsUnit (b - a)) :
+    Ideal.span ({z - a} : Set R) ⊔ Ideal.span ({z - b} : Set R) = ⊤ := by
+  refine Ideal.eq_top_of_isUnit_mem _ ?_ hUnit
+  have h1 : z - a ∈ Ideal.span ({z - a} : Set R) ⊔ Ideal.span ({z - b} : Set R) :=
+    Ideal.mem_sup_left (Ideal.mem_span_singleton_self _)
+  have h2 : z - b ∈ Ideal.span ({z - a} : Set R) ⊔ Ideal.span ({z - b} : Set R) :=
+    Ideal.mem_sup_right (Ideal.mem_span_singleton_self _)
+  have hmem : (z - a) - (z - b) ∈ Ideal.span ({z - a} : Set R) ⊔ Ideal.span ({z - b} : Set R) := by
+    exact sub_mem h1 h2
+  have hEq : (z - a) - (z - b) = b - a := by
+    abel
+  rw [hEq] at hmem
+  exact hmem
+
+/--
+`z - αy` と `z - βy` の差が unit なら、対応する principal ideals は comaximal。
+
+pairwise-coprime の仮定を「差の unit 性」として明示した、Kummer 向け specialization。
+-/
+theorem linear_factor_ideals_sup_eq_top_of_mul_sub_isUnit
+    (z y α β : R) (hUnit : IsUnit (β * y - α * y)) :
+    Ideal.span ({z - α * y} : Set R) ⊔ Ideal.span ({z - β * y} : Set R) = ⊤ := by
+  exact linear_factor_ideals_sup_eq_top_of_sub_isUnit z (α * y) (β * y) hUnit
+
+/--
+差の unit 性から、対応する線型因子 ideals 自体が互いに素であることが従う。
+-/
+theorem linear_factor_ideals_isCoprime_of_mul_sub_isUnit
+    (z y α β : R) (hUnit : IsUnit (β * y - α * y)) :
+    IsCoprime (Ideal.span ({z - α * y} : Set R)) (Ideal.span ({z - β * y} : Set R)) :=
+  (Ideal.isCoprime_iff_sup_eq).2
+    (linear_factor_ideals_sup_eq_top_of_mul_sub_isUnit z y α β hUnit)
+
+/--
+差の unit 性のもとでは、対応する線型因子 ideals の積は交叉に等しい。
+
+Dedekind ideal arithmetic へ入る前の最小補題として、
+pairwise-coprime なら product = inf を concrete に固定する。
+-/
+theorem linear_factor_ideals_inf_eq_mul_of_mul_sub_isUnit
+    (z y α β : R) (hUnit : IsUnit (β * y - α * y)) :
+    Ideal.span ({z - α * y} : Set R) ⊓ Ideal.span ({z - β * y} : Set R) =
+      Ideal.span ({z - α * y} : Set R) * Ideal.span ({z - β * y} : Set R) :=
+  Ideal.inf_eq_mul_of_isCoprime
+    (linear_factor_ideals_isCoprime_of_mul_sub_isUnit z y α β hUnit)
+
+/--
+差の unit 性から、対応する線型因子そのものが互いに素であることが従う。
+
+後段で ideal の pairwise-coprime 条件を generator レベルへ戻す際の足場。
+-/
+theorem linear_factors_isCoprime_of_mul_sub_isUnit
+    (z y α β : R) (hUnit : IsUnit (β * y - α * y)) :
+    IsCoprime (z - α * y) (z - β * y) :=
+  (Ideal.sup_eq_top_iff_isCoprime _ _).mp
+    (linear_factor_ideals_sup_eq_top_of_mul_sub_isUnit z y α β hUnit)
+
 end CyclotomicLocalFactorizationContext
+
+/--
+Dedekind 領域では、pairwise に異なる prime ideals の冪の有限交叉は積に等しい。
+
+review-011 の 5.3 で必要になる finite-family ideal arithmetic の受け皿。
+Mathlib の `IsDedekindDomain.inf_prime_pow_eq_prod` を DkMath 側で明示化する。
+-/
+theorem dedekindInfPrimePowEqProd
+    {R : Type*} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {ι : Type*}
+    (s : Finset ι) (P : ι → Ideal R) (e : ι → ℕ)
+    (hPrime : ∀ i ∈ s, Prime (P i))
+    (hPairwise : ∀ᵉ (i ∈ s) (j ∈ s), i ≠ j → P i ≠ P j) :
+    (s.inf fun i => P i ^ e i) = ∏ i ∈ s, P i ^ e i := by
+  classical
+  exact IsDedekindDomain.inf_prime_pow_eq_prod s P e hPrime hPairwise
+
+/--
+Dedekind 領域における finite-family Chinese remainder theorem の DkMath 側 wrapper。
+
+pairwise に異なる prime-power ideals の積で割った剰余環が、各商環の直積へ分解する。
+-/
+noncomputable def dedekindQuotientEquivPiOfFinsetProdEq
+    {R : Type*} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {ι : Type*} {s : Finset ι}
+    (I : Ideal R) (P : ι → Ideal R) (e : ι → ℕ)
+    (hPrime : ∀ i ∈ s, Prime (P i))
+    (hPairwise : ∀ᵉ (i ∈ s) (j ∈ s), i ≠ j → P i ≠ P j)
+    (hProd : ∏ i ∈ s, P i ^ e i = I) :
+    R ⧸ I ≃+* ∀ i : s, R ⧸ P i ^ e i :=
+  IsDedekindDomain.quotientEquivPiOfFinsetProdEq I P e hPrime hPairwise hProd
+
+/--
+finite family の prime-power ideals に対し、各合同条件を同時に満たす代表元を取れる。
+
+Kummer 的には、pairwise-coprime な ideal family から具体的な元を取り直すときの入口。
+-/
+theorem dedekindExistsRepresentativeModFinset
+    {R : Type*} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {ι : Type*} {s : Finset ι}
+    (P : ι → Ideal R) (e : ι → ℕ)
+    (hPrime : ∀ i ∈ s, Prime (P i))
+    (hPairwise : ∀ᵉ (i ∈ s) (j ∈ s), i ≠ j → P i ≠ P j)
+    (x : s → R) :
+    ∃ y, ∀ (i) (hi : i ∈ s), y - x ⟨i, hi⟩ ∈ P i ^ e i :=
+  IsDedekindDomain.exists_forall_sub_mem_ideal P e hPrime hPairwise x
+
+/--
+Dedekind 領域で、prime ideal `P` による挟み込みから ideal の factor count を読む。
+
+`I ≤ P^n` だが `I ≤ P^(n+1)` ではないとき、`P` の normalized factor 個数はちょうど `n`。
+review-011 の 5.3 で、prime-power exponent を数えるための最小 receiver。
+-/
+theorem dedekindIdealCountNormalizedFactorsEq
+    {R : Type*} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+  [DecidableEq (Ideal R)]
+    {P I : Ideal R} [P.IsPrime] {n : ℕ}
+    (hle : I ≤ P ^ n) (hlt : ¬ I ≤ P ^ (n + 1)) :
+  Multiset.count P (UniqueFactorizationMonoid.normalizedFactors I) = n := by
+  classical
+  exact Ideal.count_normalizedFactors_eq (p := P) (x := I) hle hlt
 
 /--
 DkMath-native な局所 factorization core。

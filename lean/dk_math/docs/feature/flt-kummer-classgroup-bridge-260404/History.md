@@ -667,6 +667,115 @@ Archive
     - この分岐は repository 方針と数学実装方針の判断を強く含むため、
        次段ではユーザ判断があると進めやすい
 
+### 日時: 2026/04/05 17:06:57 JST — 中断点の復帰と local ideal arithmetic の継続実装
+
+1. 目的:
+    - 中断していた `linear_factor_ideals_inf_eq_mul_of_mul_sub_isUnit` 周辺の状況を回復し、
+       まず stable state を再確認する。
+    - review-011 の 5.1 / 5.2 を concrete theorem としてさらに押し進め、
+       5.3 の Dedekind ideal arithmetic へ接続する入口を作る。
+2. 実施:
+    - `CyclotomicPrincipalization.lean` を再確認し、
+       中断点までに追加されていた local ideal arithmetic を確認:
+       - `linear_factor_ideal_mul_eq_span_x_pow_of_add_pow_eq`
+       - `linear_factor_ideal_mul_eq_span_pow_of_add_pow_eq`
+       - `linear_factor_ideals_sup_eq_top_of_sub_isUnit`
+       - `linear_factor_ideals_sup_eq_top_of_mul_sub_isUnit`
+       - `linear_factor_ideals_isCoprime_of_mul_sub_isUnit`
+       - `linear_factor_ideals_inf_eq_mul_of_mul_sub_isUnit`
+       - `linear_factors_isCoprime_of_mul_sub_isUnit`
+    - その上で、review-011 の 5.3 に向けた generic receiver として
+       `dedekindInfPrimePowEqProd` を追加
+       （Mathlib の `IsDedekindDomain.inf_prime_pow_eq_prod` を DkMath 側へ固定）
+    - `RegularPrimeRoute.lean` と test に、
+       local ideal arithmetic と Dedekind finite-family lemma の進捗を反映
+    - Mathlib の追加棚卸しとして以下を確認:
+       - `IsDedekindDomain.inf_prime_pow_eq_prod`
+       - `IsDedekindDomain.quotientEquivPiOfFinsetProdEq`
+       - `NumberTheory/NumberField/Cyclotomic/Ideal.lean`
+       - `NumberTheory/NumberField/Cyclotomic/PID.lean`
+3. 結論:
+    - 中断点は正しく回復できた ✅
+    - review-011 の 5.1 は principal ideal の積 `(x)^p` として concrete 化済み ✅
+    - review-011 の 5.2 は comaximal / ideal-level coprime / `inf = product` まで concrete 化済み ✅
+    - review-011 の 5.3 に対して、Dedekind 領域の finite-family prime-power ideal arithmetic を
+       DkMath 側の theorem として受けられるようになった ✅
+    - 依然として direct `sorry` は class-group 側 2 本のみ:
+       - `cyclotomicPrincipalization_of_classGroupPTorsionFree`
+       - `cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree`
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMath.FLT.Kummer.ClassGroupBridge DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `#print axioms CyclotomicLocalFactorizationContext.linear_factor_ideals_inf_eq_mul_of_mul_sub_isUnit` → no sorry
+    - `#print axioms dedekindInfPrimePowEqProd` → no sorry
+    - `get_errors` で残存 compile issue は class-group 側の 2 本のみと再確認
+5. 分岐と判断:
+    - 分岐候補:
+       - A. `CyclotomicClassGroupPTorsionFreeTarget` を concrete 化して
+          `cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree` を先に消す
+       - B. さらに ideal arithmetic を積み、`I_j = K_j^p` の Dedekind 補題列を先に固める
+    - 選択:
+       - **B を継続**
+    - 理由:
+       - review-011 の最短経路に最も忠実であり、
+          class-group 側の最終 kernel へ到達するための前提列を先に concrete に固められるため
+       - いまの Mathlib 棚卸しでは cyclotomic integer-ring 周辺の露出はあるが、
+          general prime に対する ready-made class-group annihilation bridge は見当たらず、
+          先に ideal arithmetic を詰めるほうが前進量が大きいと判断した
+6. 次の課題:
+    - `coprime_product_eq_pth_power_implies_each_pth_power` に相当する Dedekind ideal arithmetic を
+       generic theorem として起こせるか詰める
+    - その際、Mathlib の `DedekindDomain/Ideal/Lemmas.lean` にある
+       prime-power / factorization / Chinese remainder 系 theorem をどう最短で流用するか判断する
+    - ここで generic ideal arithmetic だけでは不足すると判明した場合に限り、
+       `CyclotomicClassGroupPTorsionFreeTarget` の concrete 化へ切り替える
+
+### 日時: 2026/04/05 17:34:39 JST — Dedekind finite-family / factor-count receiver の追加
+
+1. 目的:
+    - review-011 の 5.3 へ進むため、local 2-ideal 補題だけでなく、
+       finite-family の Dedekind ideal arithmetic を DkMath 側で直接使える形にする。
+    - `each_pth_power` 補題の直前で必要になる Chinese remainder / factor-count の受け皿を先に固める。
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `dedekindInfPrimePowEqProd`
+       - `dedekindQuotientEquivPiOfFinsetProdEq`
+       - `dedekindExistsRepresentativeModFinset`
+       - `dedekindIdealCountNormalizedFactorsEq`
+    - いずれも Mathlib の既存 theorem を DkMath 側の名前で固定する wrapper として実装
+    - `RegularPrimeRoute.lean` と test の説明/axioms 監視へ上記 4 本を反映
+    - 実装途中で `dedekindIdealCountNormalizedFactorsEq` に
+       `normalizedFactors` の fully-qualified name と
+       `[DecidableEq (Ideal R)]` が必要だと判明し、その場で修正
+3. 結論:
+    - local 2-ideal 補題に加え、finite family に対する Dedekind receiver 群も no-sorry で確保できた ✅
+    - これにより 5.3 は
+       - pairwise-coprime の local lemma
+       - finite-family `inf = product`
+       - Chinese remainder
+       - ideal factor count
+       の 4 本柱まで concrete に前進した ✅
+    - direct `sorry` は引き続き class-group 側 2 本のみで不変 ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMath.FLT.Kummer.ClassGroupBridge DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `#print axioms dedekindInfPrimePowEqProd` → no sorry
+    - `#print axioms dedekindQuotientEquivPiOfFinsetProdEq` → no sorry
+    - `#print axioms dedekindExistsRepresentativeModFinset` → no sorry
+    - `#print axioms dedekindIdealCountNormalizedFactorsEq` → no sorry
+    - `#print axioms cyclotomicPrincipalization_of_classGroupPTorsionFree` → `sorryAx` あり
+    - `#print axioms cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree` → `sorryAx` あり
+5. 失敗事例:
+    - `get_errors` は一時的に `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の
+       `#print axioms` 行で unknown constant を返したが、`lake env lean` と build は通過
+    - よってこれは language server 側の同期遅延と判断し、build 成功を正とした
+6. 次の課題:
+    - ここから先の本丸は、これら receiver を実際につないで
+       `coprime_product_eq_pth_power_implies_each_pth_power` 相当の generic theorem を起こすこと
+    - 直近の有力素材は
+       - `DedekindDomain/Ideal/Lemmas.lean` の factor-count 系
+       - `DedekindDomain/Factorization.lean` の count_pow 系
+    - ただし、この接続は新しい theorem 設計を要するため、
+       次段では「count/multiplicity で押す」か「class-group target concretization へ切り替える」かの判断が再び現れる
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。

@@ -90,6 +90,20 @@ DkMath-native local core により **CLOSED** した:
 `CyclotomicLocalFactorizationCoreTarget` は DkMath-native な局所証明核として no-so#rry で追加済み。
 さらに `CyclotomicLocalEquationFactorizationCoreTarget` により、
 `x^p + y^p = z^p` の FLT 方程式形まで局所的には no-so#rry で押し込めている。
+また `linear_factor_ideal_mul_eq_span_pow_of_add_pow_eq` により、
+その局所核から principal ideal の積の式 `(x)^p` まで concrete に降ろせるようになった。
+さらに `linear_factor_ideals_sup_eq_top_of_mul_sub_isUnit` により、
+pairwise-coprime に必要な comaximal 性も explicit な unit 仮定のもとで実装できた。
+generator レベルでも `linear_factors_isCoprime_of_mul_sub_isUnit` が得られるため、
+後段の coprime arithmetic へ渡しやすくなった。
+ideal レベルでも `linear_factor_ideals_inf_eq_mul_of_mul_sub_isUnit` により
+product = inf の basic lemma を確保できた。
+加えて `dedekindInfPrimePowEqProd` により、Dedekind 領域での有限族 prime-power に対する
+`inf = product` の generic receiver も DkMath 側へ取り込めた。
+さらに `dedekindQuotientEquivPiOfFinsetProdEq` と
+`dedekindExistsRepresentativeModFinset` により、Chinese remainder 側の finite-family receiver も確保できた。
+加えて `dedekindIdealCountNormalizedFactorsEq` により、
+prime-power exponent を factor count として読む入口も取れた。
 FLT を閉じる観点で残る本筋の open は class group 側、すなわち
 `cyclotomicIdealPthPower_of_classGroupPTorsionFree` と
 `cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree` である。
