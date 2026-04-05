@@ -994,18 +994,20 @@ abbrev CyclotomicUnitNormalizationPackSpecializationTarget : Prop :=
 Stage 1 が Stage 2 へ supply すべき exact boundary target。
 
 pack-specialized な文脈で、local linear factor ideal が principal ideal の p 乗として
-書けることだけを isolate する。review-017 の「Stage 1 の出力 theorem」に対応する器。
+書けることだけを isolate する。review-018 に従い、これは
+「任意の principal ideal」ではなく「ある principal ideal が存在する」形にしておく。
+これが Stage 1 の natural な出力に対応する器である。
 -/
 abbrev CyclotomicLinearFactorIdealPthPowerTarget : Prop :=
   ∀ {R : Type*} [CommRing R] [IsDomain R],
     ∀ ctx : CyclotomicLocalFactorizationContext R,
-    ∀ {I : Ideal R} [I.IsPrincipal],
     ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
     ∀ {q : ℕ}, Nat.Prime q →
       q ∣ x →
       q ≠ p →
       q ∣ (z - y) →
-      Ideal.span ({(z : R) - ctx.zeta * (y : R)} : Set R) = I ^ ctx.p
+      ∃ I : Ideal R, ∃ _ : I.IsPrincipal,
+        Ideal.span ({(z : R) - ctx.zeta * (y : R)} : Set R) = I ^ ctx.p
 
 /--
 pack-specialized Stage 2 receiver。
@@ -1019,6 +1021,40 @@ theorem cyclotomicUnitNormalization_of_spanEqPowPrincipal :
     CyclotomicUnitNormalizationPackSpecializationTarget := by
   intro R _ _ ctx I _ p x y z _hpack q _hq _hqx _hqne _hgap hSpan
   exact linearFactorEqUnitMulGeneratorPowOfSpanEqPowPrincipal ctx (z : R) (y : R) hSpan
+
+/--
+Stage 1 の存在形 boundary target が与えられれば、Stage 2 の pack-specialized unit normalization が従う。
+
+review-018 の提案どおり、Stage 1 → Stage 2 の接続点を存在形にしておくと、
+ここはそのまま composition で閉じる。
+-/
+theorem cyclotomicUnitNormalization_of_existsLinearFactorIdealPthPower
+    (hIdeal :
+      ∀ {R : Type u} [CommRing R] [IsDomain R],
+        ∀ ctx : CyclotomicLocalFactorizationContext R,
+        ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ∀ {q : ℕ}, Nat.Prime q →
+          q ∣ x →
+          q ≠ p →
+          q ∣ (z - y) →
+          ∃ I : Ideal R, ∃ _ : I.IsPrincipal,
+            Ideal.span ({(z : R) - ctx.zeta * (y : R)} : Set R) = I ^ ctx.p) :
+    ∀ {R : Type u} [CommRing R] [IsDomain R],
+      ∀ ctx : CyclotomicLocalFactorizationContext R,
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      ∀ {q : ℕ}, Nat.Prime q →
+        q ∣ x →
+        q ≠ p →
+        q ∣ (z - y) →
+        ∃ β u : R, IsUnit u ∧ (z : R) - ctx.zeta * (y : R) = u * β ^ ctx.p := by
+  intro R _ _ ctx p x y z hpack q hq hqx hqne hgap
+  obtain ⟨I, hIPrincipal, hSpan⟩ := hIdeal (R := R) ctx hpack hq hqx hqne hgap
+  obtain ⟨u, huUnit, huEq⟩ :=
+    cyclotomicUnitNormalization_of_spanEqPowPrincipal
+      (R := R) (ctx := ctx) (I := I) (p := p) (x := x) (y := y) (z := z)
+      hpack hq hqx hqne hgap hSpan
+  refine ⟨Submodule.IsPrincipal.generator I, u, huUnit, ?_⟩
+  simpa using huEq
 
 /--
 Stage 3: norm bridge。

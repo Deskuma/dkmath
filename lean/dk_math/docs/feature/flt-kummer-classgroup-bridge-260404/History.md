@@ -1103,6 +1103,59 @@ Archive
        へ concrete 化することが次の最短手になる
     - その後に Stage 3 の norm descent concrete 化へ入る
 
+### 日時: 2026/04/06 02:15:05 JST — Stage 1→Stage 2 境界の存在形化と composition theorem
+
+1. 目的:
+    - review-018 に従い、`CyclotomicLinearFactorIdealPthPowerTarget` を
+       強すぎる全称形から、自然な存在形 boundary target に直す。
+    - そのうえで、その存在形 target から Stage 2 の element-level 正規化形まで到達する
+       no-so#rry composition theorem を追加する。
+2. 実施:
+    - `CyclotomicLinearFactorIdealPthPowerTarget` を
+       `∃ I, I.IsPrincipal ∧ span(z - ζy) = I^p`
+       型の存在形へ変更
+    - さらに
+       `cyclotomicUnitNormalization_of_existsLinearFactorIdealPthPower`
+       を no-so#rry で証明
+       - 入力: 上の存在形 boundary target
+       - 出力: `∃ β u, IsUnit u ∧ z - ζy = u * β^p`
+    - この theorem は theorem-level wrapper ではあるが、
+       alias 経由ではなく explicit body を theorem 引数へ直接書くことで
+       universe polymorphism の濁りを回避した
+    - route / test コメントも存在形 boundary に合わせて更新
+3. 結論:
+    - review-018 の指摘どおり、Stage 1→Stage 2 の boundary は存在形に直すのが正しかった ✅
+    - その存在形 boundary から Stage 2 の pack-specialized element-level statement までの
+       composition theorem も no-so#rry で通った ✅
+    - したがって残る honest open は、
+       - Stage 1 からこの存在形 boundary target を供給する theorem
+       - Stage 3 の norm descent concrete 化
+       の 2 点へさらに precise 化された ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `#print axioms cyclotomicUnitNormalization_of_existsLinearFactorIdealPthPower` → no sorry
+    - `#print axioms cyclotomicUnitNormalization_of_spanEqPowPrincipal` → no sorry
+    - refined mainline は引き続き no sorry
+    - direct so#rry は legacy one-shot theorem
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` のみ
+5. 分岐と判断:
+    - 分岐候補:
+       - A. `CyclotomicLinearFactorIdealPthPowerTarget` を全称形のまま維持する
+       - B. 存在形へ直し、その存在形から Stage 2 statement へ composition する
+    - 選択:
+       - **B を採用**
+    - 理由:
+       - Stage 1 の natural な出力は「ある principal ideal が存在して、その p 乗に等しい」形であり、
+          全称形は数学的にも実装上も強すぎるため
+       - B なら、Stage 1 と Stage 2 の境界が honest に表現でき、
+          以後の Stage 1 concrete 化も最短になるため
+6. 次の課題:
+    - 次は Stage 1 側から
+       `CyclotomicLinearFactorIdealPthPowerTarget`
+       を供給する theorem を立てることじゃ
+    - これが通れば、Stage 2 は theorem-level にも完了し、
+       残る honest open は Stage 3 の norm descent だけになる
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
