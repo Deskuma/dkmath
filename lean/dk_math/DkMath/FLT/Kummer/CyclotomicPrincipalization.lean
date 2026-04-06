@@ -1376,6 +1376,139 @@ theorem chosenLinearFactor_isCoprime_with_other_of_primeOrYContradiction_of_ring
     hζ (y := y) (z := z) hy hP hp2 hmemChosen ⟨j, hj_ne1, hj_lt, hmemOther⟩
   exact hNoPrimeOrY P hP hdisj
 
+/-! ### y ∈ P 分岐の contradiction を閉じる補題群
+
+pack 条件の `Nat.Coprime x y` から、y ∈ P は矛盾を導く。
+-/
+
+/--
+自然数の互いに素条件が ideal span の coprimality へ持ち上がる。
+
+Bezout の恒等式を介して span の sup が top になることを示す。
+-/
+lemma coprime_span_of_nat_coprime
+    {R : Type*} [CommRing R] {x y : ℕ}
+    (hxy : Nat.Coprime x y) :
+    IsCoprime (Ideal.span ({(x : R)} : Set R)) (Ideal.span ({(y : R)} : Set R)) := by
+  rw [Ideal.isCoprime_iff_sup_eq, Ideal.eq_top_iff_one]
+  have hab := Nat.gcd_eq_gcd_ab x y
+  rw [hxy] at hab
+  simp only [Nat.cast_one] at hab
+  have hR : (1 : R) = (x : R) * ↑(x.gcdA y) + (y : R) * ↑(x.gcdB y) := by
+    have h := congrArg (↑· : ℤ → R) hab
+    simp only [Int.cast_one, Int.cast_add, Int.cast_mul, Int.cast_natCast] at h
+    exact h
+  rw [hR]
+  apply Ideal.add_mem
+  · apply Submodule.mem_sup_left
+    rw [Ideal.mem_span_singleton']
+    exact ⟨↑(x.gcdA y), mul_comm _ _⟩
+  · apply Submodule.mem_sup_right
+    rw [Ideal.mem_span_singleton']
+    exact ⟨↑(x.gcdB y), mul_comm _ _⟩
+
+/--
+互いに素な自然数 x, y の元がどちらも prime ideal P に入ることはない。
+-/
+lemma false_of_nat_coprime_both_in_prime
+    {R : Type*} [CommRing R] {x y : ℕ}
+    (hxy : Nat.Coprime x y)
+    {P : Ideal R} (hP : P.IsPrime)
+    (hxP : (x : R) ∈ P)
+    (hyP : (y : R) ∈ P) :
+    False := by
+  have hcop : IsCoprime (Ideal.span ({(x : R)} : Set R)) (Ideal.span ({(y : R)} : Set R)) :=
+    coprime_span_of_nat_coprime hxy
+  rw [Ideal.isCoprime_iff_sup_eq] at hcop
+  have hsub_x : Ideal.span ({(x : R)} : Set R) ≤ P := by
+    rw [Ideal.span_singleton_le_iff_mem]; exact hxP
+  have hsub_y : Ideal.span ({(y : R)} : Set R) ≤ P := by
+    rw [Ideal.span_singleton_le_iff_mem]; exact hyP
+  have hsup : Ideal.span {(x : R)} ⊔ Ideal.span {(y : R)} ≤ P := sup_le hsub_x hsub_y
+  rw [hcop] at hsup
+  exact hP.ne_top (top_unique hsup)
+
+/--
+非空 Finset 上の積で、全要素が P に入れば積も P に入る。
+-/
+lemma ideal_prod_mem_of_all_mem
+    {R : Type*} [CommSemiring R] {ι : Type*}
+    {P : Ideal R} {s : Finset ι} {f : ι → R}
+    (h : ∀ i ∈ s, f i ∈ P) (hs : s.Nonempty) :
+    ∏ i ∈ s, f i ∈ P := by
+  classical
+  induction s using Finset.induction_on with
+  | empty => exact (Finset.not_nonempty_empty hs).elim
+  | @insert a s' ha ih =>
+    rw [Finset.prod_insert ha]
+    by_cases hs' : s'.Nonempty
+    · have hmem_a : f a ∈ P := h a (Finset.mem_insert_self a s')
+      have _hmem_rest : ∏ i ∈ s', f i ∈ P := ih (fun i hi => h i (Finset.mem_insert_of_mem hi)) hs'
+      rw [mul_comm]
+      exact P.mul_mem_left _ hmem_a
+    · simp only [Finset.not_nonempty_iff_eq_empty] at hs'
+      simp [hs', h a (Finset.mem_insert_self a s')]
+
+/--
+y ∈ P かつ chosen factor ∈ P なら z ∈ P。
+-/
+lemma y_in_P_implies_z_in_P
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    {y z : 𝓞 K}
+    {P : Ideal (𝓞 K)}
+    (hP_chosen : z - hζ.toInteger * y ∈ P)
+    (hP_y : y ∈ P) :
+    z ∈ P := by
+  have h : hζ.toInteger * y ∈ P := P.mul_mem_left _ hP_y
+  have h2 : z = (z - hζ.toInteger * y) + hζ.toInteger * y := by ring
+  rw [h2]
+  exact P.add_mem hP_chosen h
+
+/--
+y ∈ P なら任意の j について z - ζ^j y ∈ P。
+-/
+lemma y_in_P_implies_factor_j_in_P
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    {y z : 𝓞 K}
+    {P : Ideal (𝓞 K)}
+    (hP_chosen : z - hζ.toInteger * y ∈ P)
+    (hP_y : y ∈ P) (j : ℕ) :
+    z - (hζ.toInteger ^ j) * y ∈ P := by
+  have hz : z ∈ P := y_in_P_implies_z_in_P hζ hP_chosen hP_y
+  have hpow : (hζ.toInteger ^ j) * y ∈ P := P.mul_mem_left _ hP_y
+  exact P.sub_mem hz hpow
+
+/--
+y ∈ P から x ∈ P が導かれ、Nat.Coprime x y と矛盾する。
+
+これが `P ∣ (p) ∨ y ∈ P` の y 分岐を閉じる核心補題。
+∏ (z - ζ^j y) = x^p という cyclotomic identity を hypothesis として要求する。
+-/
+theorem noYInCommonPrime_of_chosenFactorInP_of_coprime_of_productEq
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    {x y : ℕ} (hxy : Nat.Coprime x y)
+    {z_int : 𝓞 K}
+    {P : Ideal (𝓞 K)} (hP : P.IsPrime)
+    (hP_chosen : z_int - hζ.toInteger * (y : 𝓞 K) ∈ P)
+    (hProduct : ∏ j ∈ Finset.range p, (z_int - (hζ.toInteger ^ j) * (y : 𝓞 K)) = (x : 𝓞 K) ^ p)
+    (hP_y : (y : 𝓞 K) ∈ P) :
+    False := by
+  have hp2 : 2 ≤ p := hp.out.two_le
+  have hne : (Finset.range p).Nonempty := Finset.nonempty_range_iff.mpr (by omega)
+  have h_all_in_P : ∀ j ∈ Finset.range p, z_int - (hζ.toInteger ^ j) * (y : 𝓞 K) ∈ P := fun j _ =>
+    y_in_P_implies_factor_j_in_P hζ hP_chosen hP_y j
+  have h_prod_in_P : ∏ j ∈ Finset.range p, (z_int - (hζ.toInteger ^ j) * (y : 𝓞 K)) ∈ P :=
+    ideal_prod_mem_of_all_mem h_all_in_P hne
+  rw [hProduct] at h_prod_in_P
+  have h_x_in_P : (x : 𝓞 K) ∈ P := hP.mem_of_pow_mem p h_prod_in_P
+  exact false_of_nat_coprime_both_in_prime hxy hP h_x_in_P hP_y
+
 /--
 局所線型因子 ideal が explicit に `K^p` と書ければ、
 class-group p-torsion annihilation から principal root ideal の存在が従う。

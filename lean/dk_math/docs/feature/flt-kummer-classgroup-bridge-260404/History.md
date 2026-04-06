@@ -1694,6 +1694,40 @@ Archive
        pack 条件からどう導くかを探る段じゃ
     - もしそこが重いなら、その contradiction 部分も target 化して API をさらに細くするのが次善じゃ
 
+### 日時: 2026/04/06 22:40:16 JST — y ∈ P 分岐の contradiction を no-sorry で完成
+
+1. 目的:
+   - review-028 の戦略に従い、`P ∣ (p) ∨ y ∈ P` の 2 分岐のうち、
+     y ∈ P 分岐を pack 条件 `Nat.Coprime x y` から閉じる
+2. 実施:
+   - `CyclotomicPrincipalization.lean` に以下を追加:
+     - `coprime_span_of_nat_coprime`: Bezout の恒等式から Ideal span の coprimality
+     - `false_of_nat_coprime_both_in_prime`: coprime な自然数が両方 prime ideal に入れば矛盾
+     - `ideal_prod_mem_of_all_mem`: 非空 Finset 上の積で全要素が P に入れば積も P
+     - `y_in_P_implies_z_in_P`: y ∈ P + chosen factor ∈ P → z ∈ P
+     - `y_in_P_implies_factor_j_in_P`: y ∈ P → 任意の j について z - ζ^j y ∈ P
+     - `noYInCommonPrime_of_chosenFactorInP_of_coprime_of_productEq`:
+        y ∈ P から全因子が P に入り、積 = x^p ∈ P から x ∈ P、coprime(x,y) と矛盾
+3. 結論:
+   - y ∈ P 分岐は pack の `Nat.Coprime x y` + cyclotomic product identity から
+     no-sorry で閉じることができた ✅
+   - これで `P ∣ (p) ∨ y ∈ P` の contradiction は、残り P ∣ (p) 分岐のみ
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - 追加した theorem は全て no sorry
+   - `DecidableEq` linter warning を `classical` で修正済み
+5. 分岐と判断:
+   - P ∣ (p) 分岐について:
+     - P ∣ (p) ⟺ P = (ζ - 1) (cyclotomic field で p が totally ramified なので)
+     - この場合、(ζ - 1) | gap となる
+     - first case 条件 (p ∤ xyz) と組み合わせて矛盾を導く route が必要
+   - 選択:
+     first case 条件を明示的に持つ context か、gap に関する条件から矛盾を導く route を探る
+6. 次の課題:
+   - P ∣ (p) 分岐を閉じるには、first case route 用の specialized adapter が必要
+   - または、gap-divisible branch の条件 (p | gap) と組み合わせて
+     P = (ζ - 1) ⟹ (ζ - 1) | (z - ζ y) ⟹ ??? という route を探る
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
