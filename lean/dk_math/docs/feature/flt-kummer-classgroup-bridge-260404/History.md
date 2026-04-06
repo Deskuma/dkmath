@@ -1825,3 +1825,32 @@ Archive
    - `PrimeOverPEqualsZetaMinusOneTarget` を Mathlib ramification API で埋める
    - `IntegerInZetaMinusOneIdealDivisibleByPTarget` を Mathlib norm API で埋める
    - または、両 target を仮定した形で Stage 1 coprimality を完成させる
+
+### 日時: 2026/04/07 04:37:13 JST — Stage 1 coprimality theorem 完成
+
+1. 目的:
+   - P|(p)∨y∈P の両分岐 combiner を作成し、Stage 1 coprimality へ繋ぐ
+2. 実施:
+   - `CyclotomicPrincipalization.lean` に追加:
+     - `noPrimeOrY_of_firstCase_of_coprime`:
+        first case (p∤gap) + pack coprimality + product identity から
+        P|(p)∨y∈P → False を導く combiner
+     - `chosenLinearFactor_isCoprime_with_other_of_firstCase_of_pack`:
+        2 target を仮定し、chosen factor と他の因子の coprimality を完成
+   - `linearFactorIdeals_isCoprime_of_noCommonPrime` を直接使い、
+     hmemChosen を context で capture して combiner を apply
+3. 結論:
+   - **Stage 1 coprimality theorem が 2 target を仮定して no-sorry で完成** ✅
+   - Chain: first case + coprime + product → no common prime → coprimality
+   - 残る open targets:
+     - `PrimeOverPEqualsZetaMinusOneTarget`: (p) = (ζ-1)^(p-1) ramification
+     - `IntegerInZetaMinusOneIdealDivisibleByPTarget`: N(ζ-1) = p norm theory
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - 追加 theorem: 2 本 (combiner + coprimality)、全て no-sorry (targets 仮定)
+5. 判断:
+   - Stage 1 の構造的部分は完成。残りは deep cyclotomic targets の埋め立て。
+   - Mathlib API (`norm_sub_one_of_prime_ne_two` 等) で埋められる見込み。
+6. 次の課題:
+   - Stage 1 → Stage 2 への接続: coprimality から pth power existence へ
+   - 2 target の Mathlib での埋め立て

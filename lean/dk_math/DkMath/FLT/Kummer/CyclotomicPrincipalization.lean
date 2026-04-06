@@ -1654,6 +1654,73 @@ theorem noPrimeOverP_of_firstCase_of_chosenFactorInP
   -- Step 6: contradiction with first case
   exact hFirstCase hp_dvd_gap
 
+/-! ### P | (p) ∨ y ∈ P の両分岐を統合する combiner -/
+
+/--
+P | (p) ∨ y ∈ P のどちらも起きないことを supply する combiner。
+
+first case (p ∤ gap) と pack coprimality を使う。
+-/
+theorem noPrimeOrY_of_firstCase_of_coprime
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hTarget1 : PrimeOverPEqualsZetaMinusOneTarget K p ζ hζ)
+    (hTarget2 : IntegerInZetaMinusOneIdealDivisibleByPTarget K p ζ hζ)
+    {x y : ℕ} (hxy : Nat.Coprime x y)
+    {z_int : 𝓞 K}
+    {gap : ℕ} (hgap_eq : z_int - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hProduct : ∏ j ∈ Finset.range p, (z_int - (hζ.toInteger ^ j) * (y : 𝓞 K)) = (x : 𝓞 K) ^ p)
+    (P : Ideal (𝓞 K)) (hP : P.IsPrime)
+    (hmemChosen : z_int - hζ.toInteger * (y : 𝓞 K) ∈ P)
+    (hLinNe : z_int - hζ.toInteger * (y : 𝓞 K) ≠ 0) :
+    P ∣ Ideal.span ({(p : 𝓞 K)} : Set (𝓞 K)) ∨ (y : 𝓞 K) ∈ P → False := by
+  intro hdisj
+  rcases hdisj with hP_dvd_p | hP_y
+  · -- P | (p) branch
+    have hP_ne_bot : P ≠ ⊥ := by
+      intro hbot
+      rw [hbot] at hmemChosen
+      exact hLinNe (Ideal.mem_bot.mp hmemChosen)
+    exact noPrimeOverP_of_firstCase_of_chosenFactorInP hζ hTarget1 hTarget2 hP hP_ne_bot
+      hP_dvd_p hmemChosen hgap_eq hFirstCase
+  · -- y ∈ P branch
+    exact noYInCommonPrime_of_chosenFactorInP_of_coprime_of_productEq hζ hxy hP
+      hmemChosen hProduct hP_y
+
+/-! ### Stage 1 coprimality theorem の完成形 -/
+
+/--
+first case + coprimality pack から chosen linear factor と他の因子の coprimality を導出。
+
+2 つの deep cyclotomic targets を仮定して、Stage 1 coprimality が完成する。
+-/
+theorem chosenLinearFactor_isCoprime_with_other_of_firstCase_of_pack
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hTarget1 : PrimeOverPEqualsZetaMinusOneTarget K p ζ hζ)
+    (hTarget2 : IntegerInZetaMinusOneIdealDivisibleByPTarget K p ζ hζ)
+    {x y : ℕ} (hxy : Nat.Coprime x y)
+    {z_int : 𝓞 K}
+    {gap : ℕ} (hgap_eq : z_int - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hy_ne : y ≠ 0)
+    (hLinNe : z_int - hζ.toInteger * (y : 𝓞 K) ≠ 0)
+    (hProduct : ∏ j ∈ Finset.range p, (z_int - (hζ.toInteger ^ j) * (y : 𝓞 K)) = (x : 𝓞 K) ^ p)
+    {j : ℕ} (hj_ne1 : j ≠ 1) (hj_lt : j < p) :
+    IsCoprime (Ideal.span ({z_int - hζ.toInteger * (y : 𝓞 K)} : Set (𝓞 K)))
+      (Ideal.span ({z_int - (hζ.toInteger ^ j) * (y : 𝓞 K)} : Set (𝓞 K))) := by
+  refine linearFactorIdeals_isCoprime_of_noCommonPrime ?_
+  intro P hP hmemChosen hmemOther
+  have hp2 : 2 ≤ p := (Fact.out : Nat.Prime p).two_le
+  have hy_ne' : (y : 𝓞 K) ≠ 0 := by simp [hy_ne]
+  have hdisj := commonPrimeDvdsPrimeOrY_of_ringOfIntegersCyclotomic
+    hζ (y := (y : 𝓞 K)) (z := z_int) hy_ne' hP hp2 hmemChosen ⟨j, hj_ne1, hj_lt, hmemOther⟩
+  exact noPrimeOrY_of_firstCase_of_coprime hζ hTarget1 hTarget2 hxy hgap_eq hFirstCase
+    hProduct P hP hmemChosen hLinNe hdisj
+
 /--
 局所線型因子 ideal が explicit に `K^p` と書ければ、
 class-group p-torsion annihilation から principal root ideal の存在が従う。
