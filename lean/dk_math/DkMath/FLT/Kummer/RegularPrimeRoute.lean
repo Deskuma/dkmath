@@ -144,6 +144,12 @@ review-021 に備え、receiver 直前の companion lemma
 root-ideal nonzero 版 receiver
 `linearFactorIdealPthPowerExistsOfSpanEqPowAndRootNeBot`
 も no-so#rry で追加した。
+review-022 により、Stage 1 の explicit equality / exponent nonzero / linear-factor nonzero から
+存在形 boundary を回収する
+`cyclotomicLinearFactorIdealPthPower_of_spanEqPow` と、
+そこから concrete Stage 2 target まで直接進む
+`cyclotomicUnitNormalization_of_linearFactorSpanEqPow`
+も no-so#rry で追加できた。
 残る open は、この存在形 boundary target を Stage 1 側からどう供給するかと、norm 側である。
 
 `CyclotomicUnitNormalizationTarget` はすでに concrete 化済みであり、

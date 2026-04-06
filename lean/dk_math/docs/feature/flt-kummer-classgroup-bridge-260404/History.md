@@ -1322,6 +1322,63 @@ Archive
        あるいはその存在形版を返す theorem を立てることじゃ
     - それが通れば、残る honest open は Stage 3 の norm descent だけになる
 
+### 日時: 2026/04/06 12:54:40 JST — explicit equality target から存在形 boundary / Stage 2 target へ流す composition 層を追加
+
+1. 目的:
+    - review-022 に従い、次の本命 theorem である
+       `span(z - ζy) = K^p`
+       型の explicit equality theorem を受け取ったあと、
+       それを存在形 boundary と concrete Stage 2 target へ流す exact composition 層を先に定理化する。
+    - これにより、Stage 1 本命 theorem が何を supply すべきかを API レベルで固定する。
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `CyclotomicLinearFactorSpanEqPowTarget`
+       - `CyclotomicLocalExponentNonzeroTarget`
+       - `CyclotomicLinearFactorNonzeroTarget`
+       - `cyclotomicLinearFactorIdealPthPower_of_spanEqPow`
+       - `cyclotomicUnitNormalization_of_linearFactorSpanEqPow`
+    - ここで exact には:
+       - explicit equality target: `∃ K, span(z - ζy) = K^p`
+       - companion targets: `ctx.p ≠ 0`, `z - ζy ≠ 0`
+       - p-torsion annihilation
+       から、存在形 boundary
+       `∃ I, I principal ∧ span(z - ζy) = I^p`
+       を回収し、さらに concrete Stage 2 target
+       `∃ β u, IsUnit u ∧ z - ζy = u * β^p`
+       まで進む theorem を no-so#rry で追加した
+    - これに合わせて、Stage 1 / Stage 2 exact-output targets は
+       Dedekind domain 仮定を honest に要求する形へ見直した
+3. 結論:
+    - explicit equality theorem の受け口が theorem-level でも完成した ✅
+    - したがって、次の Stage 1 本命 theorem が supply すべきものは
+       本当に explicit equality target とその companion data だけだと固定できた ✅
+    - 残る honest open は、
+       - Stage 1 本命 theorem 本体
+       - Stage 3 norm descent
+       の 2 点である ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - terminal 上で
+       `#print axioms cyclotomicLinearFactorIdealPthPower_of_spanEqPow` → no sorry
+    - terminal 上で
+       `#print axioms cyclotomicUnitNormalization_of_linearFactorSpanEqPow` → no sorry
+    - direct so#rry は引き続き legacy one-shot theorem
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` のみ
+5. 分岐と判断:
+    - 分岐候補:
+       - A. すぐに Stage 1 explicit-equality theorem 本体だけを書く
+       - B. その theorem が供給すべき exact target 群と、その後段 composition を先に定理化する
+    - 選択:
+       - **B を採用**
+    - 理由:
+       - AGENT 指示どおり、新しい接続点は使われる前に theorem 化しておく価値が高いため
+       - これにより、次の本命 theorem の責務が明瞭になり、以後の実装分岐も減るため
+6. 次の課題:
+    - 次は本当に Stage 1 pieces を束ねて、
+       `CyclotomicLinearFactorSpanEqPowTarget`
+       を supply する theorem を立てることじゃ
+    - それが通れば、残る honest open は Stage 3 の norm descent だけになる
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
