@@ -1156,6 +1156,55 @@ Archive
     - これが通れば、Stage 2 は theorem-level にも完了し、
        残る honest open は Stage 3 の norm descent だけになる
 
+### 日時: 2026/04/06 02:36:26 JST — Stage 2 target 自体の pack-specialized concrete 化
+
+1. 目的:
+    - review-019 の判断に従い、
+       `cyclotomicUnitNormalization_of_existsLinearFactorIdealPthPower` が得られた段階で
+       `CyclotomicUnitNormalizationTarget` 自体を pack-specialized element-level statement に引き上げる。
+    - これにより Stage 2 を theorem-level receiver だけでなく、
+       target 定義のレベルでも honest に完了させる。
+2. 実施:
+    - `CyclotomicUnitNormalizationTarget` を
+       local-core shape から
+       `∃ β u, IsUnit u ∧ z - ζy = u * β^p`
+       型の pack-specialized element-level statement へ変更
+    - `cyclotomicUnitNormalization_of_existsLinearFactorIdealPthPower` の返り値を
+       この concrete target へ合わせて調整
+    - stale comment も
+       - Stage 2 は local core のみ
+       - unit/norm は abstract stage
+       といった古い表現を現状へ同期
+3. 結論:
+    - Stage 2 は target 定義のレベルでも concrete 化された ✅
+    - `cyclotomicUnitNormalization_of_existsLinearFactorIdealPthPower` は
+       no-so#rry のまま新しい concrete target を供給できた ✅
+    - したがって残る honest open は、
+       - Stage 1 から存在形 boundary target を供給すること
+       - Stage 3 の norm descent concrete 化
+       の 2 点だけである ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `#print axioms cyclotomicUnitNormalization_of_existsLinearFactorIdealPthPower` → no sorry
+    - `#print axioms cyclotomicUnitNormalization_of_spanEqPowPrincipal` → no sorry
+    - direct so#rry は legacy one-shot theorem
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` のみ
+5. 分岐と判断:
+    - 分岐候補:
+       - A. Stage 2 target は local core のまま残し、receiver theorem だけ具体化する
+       - B. Stage 2 target 自体も pack-specialized element-level statement へ引き上げる
+    - 選択:
+       - **B を採用**
+    - 理由:
+       - review-019 の時点で Stage 2 receiver は実質的に完了しており、
+          target 定義だけが旧い抽象度に取り残されていたため
+       - B により、残る open が Stage 1 boundary と Stage 3 だと API 上も明確になるため
+6. 次の課題:
+    - 次は本当に Stage 1 側から
+       `CyclotomicLinearFactorIdealPthPowerTarget`
+       を返す theorem を立てる段じゃ
+    - これが通れば、残る honest open は Stage 3 の norm descent だけになる
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
