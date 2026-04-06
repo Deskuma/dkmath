@@ -164,6 +164,16 @@ review-024 により、actual cyclotomic supply 側でも
 honest な `CharZero` variant
 `cyclotomicXSpanNonzero_of_counterexamplePack_of_charZero`
 として切り出した。
+review-025 により、actual coprimality 側も
+`linearFactorIdealIsCoprimeProdEraseOfPairwiseMulSubIsUnit` と
+`cyclotomicTailLinearFactorCoprime_of_pairwiseUnitWitness`
+により、
+「full family の差の unit 性 + tail decomposition witness」
+を supply すれば chosen factor と tail の coprimality が generic に回収できる形へ sharpen された。
+さらに
+`cyclotomicUnitNormalization_of_exponentAgreementAndPairwiseUnitWitness`
+により、指数一致 + pairwise witness + `(x)` 非零 + 線型因子非零 + class-group kill から
+concrete Stage 2 target まで直接進めるようになった。
 残る open は、この存在形 boundary target を Stage 1 側からどう供給するかと、norm 側である。
 
 `CyclotomicUnitNormalizationTarget` はすでに concrete 化済みであり、

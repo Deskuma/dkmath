@@ -1170,6 +1170,27 @@ theorem linearFactorSpanEqPowOfTailMulEqSpanPowAndIsCoprime
     hFactor_ne hTail_ne hCoprime.symm (by simpa [mul_comm] using hMul)
 
 /--
+finite family の各差が unit なら、chosen linear factor ideal は残り全体の積と互いに素である。
+
+review-025 で残る本丸と見た actual cyclotomic coprimality の、generic receiver 部分。
+-/
+theorem linearFactorIdealIsCoprimeProdEraseOfPairwiseMulSubIsUnit
+    {R : Type u} [CommRing R] [IsDomain R]
+    {ι : Type*} [DecidableEq ι]
+    {s : Finset ι} {α : ι → R} {z y : R} {i : ι}
+    (hi : i ∈ s)
+    (hUnits : ∀ a ∈ s, ∀ b ∈ s, a ≠ b → IsUnit (α b * y - α a * y)) :
+    IsCoprime (Ideal.span ({z - α i * y} : Set R))
+      (∏ j ∈ s.erase i, Ideal.span ({z - α j * y} : Set R)) := by
+  have hPairwise : Set.Pairwise (↑s) fun a b =>
+      IsCoprime (Ideal.span ({z - α a * y} : Set R)) (Ideal.span ({z - α b * y} : Set R)) := by
+    intro a ha b hb hab
+    exact CyclotomicLocalFactorizationContext.linear_factor_ideals_isCoprime_of_mul_sub_isUnit
+      z y (α a) (α b) (hUnits a ha b hb hab)
+  exact dedekindIdealIsCoprimeProdErase
+    (I := fun j => Ideal.span ({z - α j * y} : Set R)) hPairwise hi
+
+/--
 局所線型因子 ideal が explicit に `K^p` と書ければ、
 class-group p-torsion annihilation から principal root ideal の存在が従う。
 
@@ -1237,6 +1258,66 @@ abbrev CyclotomicTailLinearFactorCoprimeTarget : Prop :=
       q ≠ p →
       q ∣ (z - y) →
       IsCoprime (Ideal.span ({tail} : Set R)) (Ideal.span ({(z : R) - ctx.zeta * (y : R)} : Set R))
+
+/--
+actual cyclotomic coprimality を供給するための full family witness target。
+
+chosen factor を含む finite family と、その差の unit 性・tail decomposition を supply すれば、
+chosen factor ideal と tail ideal の互いに素性は generic に回収できる。
+-/
+abbrev CyclotomicTailPairwiseUnitWitnessTarget : Prop :=
+  ∀ {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R],
+    ∀ ctx : CyclotomicLocalFactorizationContext R,
+    ∀ {tail : R} {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ x →
+      q ≠ p →
+      q ∣ (z - y) →
+      ∃ n : ℕ, ∃ i : Fin n, ∃ α : Fin n → R,
+        α i = ctx.zeta ∧
+        Ideal.span ({tail} : Set R) =
+          ∏ j ∈ (Finset.univ.erase i), Ideal.span ({(z : R) - α j * (y : R)} : Set R) ∧
+        ∀ a : Fin n, ∀ b : Fin n, a ≠ b → IsUnit (α b * (y : R) - α a * (y : R))
+
+/--
+pairwise unit-difference witness から、actual cyclotomic coprimality target を回収する theorem。
+
+review-025 の「残る本丸は actual coprimality 供給」という見立てを、
+さらに `full family witness` と `generic receiver` へ分解する。
+-/
+theorem cyclotomicTailLinearFactorCoprime_of_pairwiseUnitWitness
+    (hWitness :
+      ∀ {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R],
+        ∀ ctx : CyclotomicLocalFactorizationContext R,
+        ∀ {tail : R} {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ∀ {q : ℕ}, Nat.Prime q →
+          q ∣ x →
+          q ≠ p →
+          q ∣ (z - y) →
+          ∃ n : ℕ, ∃ i : Fin n, ∃ α : Fin n → R,
+            α i = ctx.zeta ∧
+            Ideal.span ({tail} : Set R) =
+              ∏ j ∈ (Finset.univ.erase i), Ideal.span ({(z : R) - α j * (y : R)} : Set R) ∧
+            ∀ a : Fin n, ∀ b : Fin n, a ≠ b → IsUnit (α b * (y : R) - α a * (y : R))) :
+    CyclotomicTailLinearFactorCoprimeTarget.{u} := by
+  intro R _ _ _ ctx tail p x y z hpack q hq hqx hqne hgap
+  obtain ⟨n, i, α, hAlpha, hTail, hUnits⟩ :=
+    hWitness (R := R) (ctx := ctx) (tail := tail) (p := p) (x := x) (y := y) (z := z) hpack
+      (q := q) hq hqx hqne hgap
+  have hcopProd :
+      IsCoprime (Ideal.span ({(z : R) - α i * (y : R)} : Set R))
+        (∏ j ∈ (Finset.univ.erase i), Ideal.span ({(z : R) - α j * (y : R)} : Set R)) :=
+    linearFactorIdealIsCoprimeProdEraseOfPairwiseMulSubIsUnit
+      (z := (z : R)) (y := (y : R)) (s := Finset.univ) (i := i) (by simp) (by
+        intro a ha b hb hab
+        exact hUnits a b hab)
+  have hcopProd' :
+      IsCoprime (∏ j ∈ (Finset.univ.erase i), Ideal.span ({(z : R) - α j * (y : R)} : Set R))
+        (Ideal.span ({(z : R) - α i * (y : R)} : Set R)) := hcopProd.symm
+  have hchosen : Ideal.span ({(z : R) - ctx.zeta * (y : R)} : Set R) =
+      Ideal.span ({(z : R) - α i * (y : R)} : Set R) := by
+    rw [hAlpha]
+  simpa [hTail, hchosen] using hcopProd'
 
 /--
 Stage 1 の 2-factor route で `(x)` が nonzero ideal を生成することを表す target。
@@ -1562,6 +1643,47 @@ theorem cyclotomicUnitNormalization_of_tailFactorCoprimeRoute
   cyclotomicUnitNormalization_of_linearFactorSpanEqPow
     (cyclotomicLinearFactorSpanEqPow_of_tailFactorCoprime hMul hCoprime hX_ne)
     hPne hNonzero hKill
+
+/--
+指数一致と pairwise unit-difference witness が与えられれば、
+残る actual gap は `(x)` 非零と線型因子非零だけになり、concrete Stage 2 target まで到達できる。
+
+review-025 の分析を theorem-level composition として固定したもの。
+-/
+theorem cyclotomicUnitNormalization_of_exponentAgreementAndPairwiseUnitWitness
+    (hCtxEq : CyclotomicLocalExponentAgreementTarget.{u})
+    (hWitness :
+      ∀ {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R],
+        ∀ ctx : CyclotomicLocalFactorizationContext R,
+        ∀ {tail : R} {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ∀ {q : ℕ}, Nat.Prime q →
+          q ∣ x →
+          q ≠ p →
+          q ∣ (z - y) →
+          ∃ n : ℕ, ∃ i : Fin n, ∃ α : Fin n → R,
+            α i = ctx.zeta ∧
+            Ideal.span ({tail} : Set R) =
+              ∏ j ∈ (Finset.univ.erase i), Ideal.span ({(z : R) - α j * (y : R)} : Set R) ∧
+            ∀ a : Fin n, ∀ b : Fin n, a ≠ b → IsUnit (α b * (y : R) - α a * (y : R)))
+    (hX_ne :
+      ∀ {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R],
+        ∀ _ctx : CyclotomicLocalFactorizationContext R,
+        ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ∀ {q : ℕ}, Nat.Prime q →
+          q ∣ x →
+          q ≠ p →
+          q ∣ (z - y) →
+          Ideal.span ({(x : R)} : Set R) ≠ ⊥)
+    (hNonzero : CyclotomicLinearFactorNonzeroTarget.{u})
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
+    CyclotomicUnitNormalizationTarget.{u} :=
+  cyclotomicUnitNormalization_of_tailFactorCoprimeRoute
+    (cyclotomicTailLinearFactorMulEqSpanPow_of_exponentAgreement hCtxEq)
+    (cyclotomicTailLinearFactorCoprime_of_pairwiseUnitWitness hWitness)
+    hX_ne
+    (cyclotomicLocalExponentNonzero_of_exponentAgreement hCtxEq)
+    hNonzero
+    hKill
 
 /--
 Stage 3: norm bridge。

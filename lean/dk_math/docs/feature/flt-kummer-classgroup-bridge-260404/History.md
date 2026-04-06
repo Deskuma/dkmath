@@ -1493,6 +1493,64 @@ Archive
        を supply する theorem を立てることじゃ
     - その際、tail を明示した形で差の unit 性へ落とす局所計算が本命になる見込みじゃ
 
+### 日時: 2026/04/06 17:11:02 JST — pairwise unit-difference witness から actual coprimality を回収する receiver 層を追加
+
+1. 目的:
+    - review-025 の判断どおり、Stage 1 の残る本丸を
+       「actual cyclotomic coprimality theorem 本体」そのものではなく、
+       `full family witness` と `generic receiver` にさらに分解する。
+    - これにより、残る actual arithmetic gap を
+       - full family の差の unit 性
+       - tail decomposition witness
+       の supply へさらに局所化する。
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `linearFactorIdealIsCoprimeProdEraseOfPairwiseMulSubIsUnit`
+       - `CyclotomicTailPairwiseUnitWitnessTarget`
+       - `cyclotomicTailLinearFactorCoprime_of_pairwiseUnitWitness`
+       - `cyclotomicUnitNormalization_of_exponentAgreementAndPairwiseUnitWitness`
+    - 内容としては:
+       - finite family の各差が unit なら、chosen linear factor ideal は残り全体の積と互いに素
+       - したがって、actual cyclotomic 側が
+          - chosen factor を含む finite family
+          - その差の unit 性
+          - tail ideal が残り因子積に等しいこと
+          を witness として supply すれば、
+          `CyclotomicTailLinearFactorCoprimeTarget` は generic に回収できる
+       - さらに exponent agreement / `(x)` 非零 / linear-factor 非零 / class-group kill と合成して、
+          concrete Stage 2 target まで直接進む theorem も追加した
+3. 結論:
+    - review-025 の「残る本丸は actual coprimality の一点」という判断を、
+       さらに theorem-level で
+       `full family pairwise unit witness` の supply 問題へ sharpen できた ✅
+    - したがって、残る Stage 1 の honest open は
+       actual cyclotomic arithmetic でその witness をどう出すか、という一点にさらに縮んだ ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+    - terminal 上で
+       `#print axioms linearFactorIdealIsCoprimeProdEraseOfPairwiseMulSubIsUnit` → no sorry
+    - terminal 上で
+       `#print axioms cyclotomicTailLinearFactorCoprime_of_pairwiseUnitWitness` → no sorry
+    - terminal 上で
+       `#print axioms cyclotomicUnitNormalization_of_exponentAgreementAndPairwiseUnitWitness` → no sorry
+    - direct so#rry は引き続き legacy one-shot theorem
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` のみ
+5. 分岐と判断:
+    - 分岐候補:
+       - A. いきなり actual cyclotomic coprimality theorem 本体を直接書く
+       - B. その直前の generic receiver と witness target を先に theorem 化する
+    - 選択:
+       - **B を採用**
+    - 理由:
+       - AGENT 指示どおり、新しい接続点は使われる前に theorem 化しておく価値が高いため
+       - これにより、残る actual arithmetic gap が何であるかを theorem API の形で固定できるため
+6. 次の課題:
+    - 次は actual cyclotomic setting で
+       `CyclotomicTailPairwiseUnitWitnessTarget`
+       を supply する theorem を立てることじゃ
+    - 特に、tail を明示した family の差が unit になる局所計算、
+       あるいは common prime ideal を `(p)` 側へ押し込む局所補題が本命になる見込みじゃ
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
