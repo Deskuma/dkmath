@@ -1602,6 +1602,104 @@ lemma zeta_sub_one_ideal_isPrime
   rw [Ideal.span_singleton_prime hne]
   exact zeta_sub_one_prime_of_p hζ
 
+/-! ### Target 2 Fill: N(ζ-1) = p から n ∈ (ζ-1) ⟹ p | n を導出 -/
+
+/--
+N(ζ-1) = p in ℚ。Mathlib の `IsPrimitiveRoot.norm_sub_one_of_prime_ne_two` を wrap。
+-/
+lemma norm_zeta_sub_one_eq_p_rat
+    {K : Type*} [Field K] [CharZero K]
+    {p : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) (hp2 : p ≠ 2) :
+    Algebra.norm ℚ ((hζ.toInteger - 1 : 𝓞 K) : K) = (p : ℚ) := by
+  haveI hcyc : IsCyclotomicExtension {p^(0+1)} ℚ K := by
+    simp only [zero_add, pow_one]; exact inferInstance
+  have hζ' : IsPrimitiveRoot ζ (p^(0+1)) := by simp only [zero_add, pow_one]; exact hζ
+  have hirr : Irreducible (Polynomial.cyclotomic (p^(0+1)) ℚ) := by
+    simp only [zero_add, pow_one]
+    exact Polynomial.cyclotomic.irreducible_rat (Nat.Prime.pos hp.out)
+  have h := IsPrimitiveRoot.norm_sub_one_of_prime_ne_two (k := 0) hζ' hirr hp2
+  have hcast : (hζ.toInteger : K) = ζ := IsPrimitiveRoot.coe_toInteger hζ
+  rw [show ((hζ.toInteger - 1 : 𝓞 K) : K) = (hζ.toInteger : K) - 1 from by push_cast; ring]
+  rw [hcast]
+  exact h
+
+/-- N(m) = m^deg for m : ℕ with norm to ℤ。 -/
+lemma norm_int_nat_cast_eq_pow
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [IsCyclotomicExtension {p} ℚ K] (m : ℕ) :
+    Algebra.norm ℤ (m : 𝓞 K) = (m : ℤ) ^ Module.finrank ℚ K := by
+  have h : ((Algebra.norm ℤ (m : 𝓞 K)) : ℚ) = (Algebra.norm ℚ ((m : 𝓞 K) : K)) :=
+    Algebra.coe_norm_int (m : 𝓞 K)
+  rw [show ((m : 𝓞 K) : K) = (m : K) from rfl] at h
+  rw [show (m : K) = algebraMap ℚ K (m : ℚ) from by simp] at h
+  rw [Algebra.norm_algebraMap] at h
+  have h' : (m : ℚ) ^ Module.finrank ℚ K = ((m ^ Module.finrank ℚ K : ℕ) : ℚ) := by
+    rw [Nat.cast_pow]
+  rw [h'] at h
+  have heq : (Algebra.norm ℤ (m : 𝓞 K) : ℚ) = (((m : ℕ) ^ Module.finrank ℚ K : ℕ) : ℚ) := h
+  have heq' : Algebra.norm ℤ (m : 𝓞 K) = ((m : ℕ) ^ Module.finrank ℚ K : ℤ) :=
+    Int.cast_injective heq
+  simp only [heq']
+
+/-- N(ζ-1) = p in ℤ。 -/
+lemma norm_int_zeta_sub_one_eq_p
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) (hp2 : p ≠ 2) :
+    Algebra.norm ℤ (hζ.toInteger - 1) = (p : ℤ) := by
+  have h : ((Algebra.norm ℤ (hζ.toInteger - 1)) : ℚ) = (Algebra.norm ℚ ((hζ.toInteger - 1 : 𝓞 K) : K)) :=
+    Algebra.coe_norm_int (hζ.toInteger - 1)
+  have hzeta : Algebra.norm ℚ ((hζ.toInteger - 1 : 𝓞 K) : K) = (p : ℚ) :=
+    norm_zeta_sub_one_eq_p_rat hζ hp2
+  rw [hzeta] at h
+  exact Int.cast_injective h
+
+/-- p と互いに素な m は (ζ-1) で割れない。 -/
+lemma zeta_sub_one_not_dvd_of_coprime
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) (hp2 : p ≠ 2)
+    {m : ℕ} (hm : Nat.Coprime m p) :
+    ¬ (hζ.toInteger - 1 ∣ (m : 𝓞 K)) := by
+  intro ⟨q, hq⟩
+  have hnorm_m : Algebra.norm ℤ (m : 𝓞 K) = (m : ℤ) ^ Module.finrank ℚ K :=
+    norm_int_nat_cast_eq_pow (p := p) m
+  have hnorm_zeta : Algebra.norm ℤ (hζ.toInteger - 1) = (p : ℤ) :=
+    norm_int_zeta_sub_one_eq_p hζ hp2
+  have hnorm_mul : Algebra.norm ℤ ((hζ.toInteger - 1) * q) =
+      Algebra.norm ℤ (hζ.toInteger - 1) * Algebra.norm ℤ q :=
+    (Algebra.norm ℤ).map_mul _ _
+  have heq : Algebra.norm ℤ (m : 𝓞 K) = Algebra.norm ℤ ((hζ.toInteger - 1) * q) := by
+    rw [hq]
+  rw [hnorm_m, hnorm_mul, hnorm_zeta] at heq
+  -- heq : m^deg = p * N(q) in ℤ
+  have hpdvd : (p : ℤ) ∣ (m : ℤ) ^ Module.finrank ℚ K := ⟨Algebra.norm ℤ q, heq⟩
+  have hpdvd_m : (p : ℤ) ∣ (m : ℤ) := by
+    have hp_prime : Prime (p : ℤ) := Nat.prime_iff_prime_int.mp hp.out
+    exact hp_prime.dvd_of_dvd_pow hpdvd
+  have hpdvd_nat : p ∣ m := Int.natCast_dvd_natCast.mp hpdvd_m
+  -- But m is coprime to p, contradiction
+  have hdvd_gcd : p ∣ Nat.gcd m p := Nat.dvd_gcd hpdvd_nat (dvd_refl p)
+  rw [hm] at hdvd_gcd
+  exact hp.out.not_dvd_one hdvd_gcd
+
+/-- n ∈ (ζ-1) ⟹ p | n。 -/
+lemma p_dvd_of_in_zeta_sub_one_ideal
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) (hp2 : p ≠ 2)
+    {n : ℕ} (hn : (n : 𝓞 K) ∈ Ideal.span ({hζ.toInteger - 1} : Set (𝓞 K))) :
+    p ∣ n := by
+  by_cases hn_zero : n = 0
+  · simp [hn_zero]
+  by_contra hp_not_dvd
+  have hcop : Nat.Coprime n p := by
+    rw [Nat.Coprime, Nat.gcd_comm]
+    exact (Nat.Prime.coprime_iff_not_dvd hp.out).mpr hp_not_dvd
+  have hdvd : hζ.toInteger - 1 ∣ (n : 𝓞 K) := Ideal.mem_span_singleton.mp hn
+  exact zeta_sub_one_not_dvd_of_coprime hζ hp2 hcop hdvd
+
 /--
 整数 n が (ζ - 1) ideal に入れば p | n を示す target。
 
@@ -1615,6 +1713,18 @@ abbrev IntegerInZetaMinusOneIdealDivisibleByPTarget (K : Type*) [Field K] [Numbe
   ∀ {n : ℕ},
     (n : 𝓞 K) ∈ Ideal.span ({hζ.toInteger - 1} : Set (𝓞 K)) →
     p ∣ n
+
+/--
+Target 2 fill theorem: N(ζ-1) = p から IntegerInZetaMinusOneIdealDivisibleByP を導出。
+
+FLT 第一場合は奇素数を扱うので hp2 : p ≠ 2 は pack 条件から自動的に満たされる。
+-/
+theorem integerInZetaMinusOneIdealDivisibleByP_fill
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) (hp2 : p ≠ 2) :
+    IntegerInZetaMinusOneIdealDivisibleByPTarget K p ζ hζ := fun hn =>
+  p_dvd_of_in_zeta_sub_one_ideal hζ hp2 hn
 
 /--
 P | (p) 分岐の contradiction: first case (p ∤ gap) と矛盾。
