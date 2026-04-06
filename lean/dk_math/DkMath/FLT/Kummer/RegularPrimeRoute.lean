@@ -155,6 +155,15 @@ review-023 により、さらに 2-factor route の exact receiver 層として
 `cyclotomicLinearFactorSpanEqPow_of_tailFactorCoprime`・
 `cyclotomicUnitNormalization_of_tailFactorCoprimeRoute`
 も no-so#rry で追加できた。
+review-024 により、actual cyclotomic supply 側でも
+`CyclotomicLocalExponentAgreementTarget` を仮定すれば
+`cyclotomicTailLinearFactorMulEqSpanPow_of_exponentAgreement` と
+`cyclotomicLocalExponentNonzero_of_exponentAgreement`
+が no-so#rry で追加できた。
+また `(x)` 非零は任意の domain では supply できぬため、
+honest な `CharZero` variant
+`cyclotomicXSpanNonzero_of_counterexamplePack_of_charZero`
+として切り出した。
 残る open は、この存在形 boundary target を Stage 1 側からどう供給するかと、norm 側である。
 
 `CyclotomicUnitNormalizationTarget` はすでに concrete 化済みであり、

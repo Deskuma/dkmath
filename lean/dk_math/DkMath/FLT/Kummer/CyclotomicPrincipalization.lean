@@ -1254,6 +1254,91 @@ abbrev CyclotomicXSpanNonzeroTarget : Prop :=
       Ideal.span ({(x : R)} : Set R) ≠ ⊥
 
 /--
+actual cyclotomic setting で local context の指数が counterexample-pack の指数と一致することを表す target。
+
+Stage 1 の product equality を local factorization theorem から回収するには、この橋が必要になる。
+-/
+abbrev CyclotomicLocalExponentAgreementTarget : Prop :=
+  ∀ {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R],
+    ∀ ctx : CyclotomicLocalFactorizationContext R,
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ x →
+      q ≠ p →
+      q ∣ (z - y) →
+      ctx.p = p
+
+/--
+`CharZero` のもとで `(x)` 非零を供給する target。
+
+`hx0 : x ≠ 0` から `(x : R) ≠ 0` は任意の domain では従わないので、
+ここでは honest に `CharZero R` を要求した variant を分けておく。
+-/
+abbrev CyclotomicXSpanNonzeroCharZeroTarget : Prop :=
+  ∀ {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R] [CharZero R],
+    ∀ _ctx : CyclotomicLocalFactorizationContext R,
+    ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ x →
+      q ≠ p →
+      q ∣ (z - y) →
+      Ideal.span ({(x : R)} : Set R) ≠ ⊥
+
+/--
+指数一致 `ctx.p = p` が与えられれば、counterexample pack から tail-product equality target を actual に供給できる。
+
+review-024 が述べる「product equality は local factorization theorem の延長として近い」ことを
+theorem-level に固定する。
+-/
+theorem cyclotomicTailLinearFactorMulEqSpanPow_of_exponentAgreement
+    (hCtxEq : CyclotomicLocalExponentAgreementTarget.{u}) :
+    ∀ {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R],
+      ∀ ctx : CyclotomicLocalFactorizationContext R,
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      ∀ {q : ℕ}, Nat.Prime q →
+        q ∣ x →
+        q ≠ p →
+        q ∣ (z - y) →
+        ∃ tail : R,
+          Ideal.span ({tail} : Set R) * Ideal.span ({(z : R) - ctx.zeta * (y : R)} : Set R) =
+            Ideal.span ({(x : R)} : Set R) ^ ctx.p := by
+  intro R _ _ _ ctx p x y z hpack q hq hqx hqne hgap
+  refine ⟨∑ i ∈ Finset.range ctx.p, (z : R) ^ i * (ctx.zeta * (y : R)) ^ (ctx.p - 1 - i), ?_⟩
+  have hctx : ctx.p = p :=
+    hCtxEq (R := R) (ctx := ctx) (p := p) (x := x) (y := y) (z := z) hpack
+      (q := q) hq hqx hqne hgap
+  have hEqR : (x : R) ^ ctx.p + (y : R) ^ ctx.p = (z : R) ^ ctx.p := by
+    subst hctx
+    simpa using congrArg (fun n : ℕ => (n : R)) hpack.hEq
+  exact ctx.linear_factor_ideal_mul_eq_span_pow_of_add_pow_eq
+    (x := (x : R)) (y := (y : R)) (z := (z : R)) hEqR
+
+/--
+指数一致 `ctx.p = p` が与えられれば、`ctx.p ≠ 0` は pack の prime 性から actual に供給できる。
+-/
+theorem cyclotomicLocalExponentNonzero_of_exponentAgreement
+    (hCtxEq : CyclotomicLocalExponentAgreementTarget.{u}) :
+    CyclotomicLocalExponentNonzeroTarget.{u} := by
+  intro R _ _ _ ctx p x y z hpack q hq hqx hqne hgap
+  have hctx : ctx.p = p :=
+    hCtxEq (R := R) (ctx := ctx) (p := p) (x := x) (y := y) (z := z) hpack
+      (q := q) hq hqx hqne hgap
+  rw [hctx]
+  exact hpack.hp.ne_zero
+
+/--
+`CharZero` のもとでは、counterexample pack の `hx0` から `(x)` 非零を actual に供給できる。
+
+generic `CyclotomicXSpanNonzeroTarget` をそのまま埋めるのは impossible な場合があるので、
+honest な `CharZero` variant として切り出す。
+-/
+theorem cyclotomicXSpanNonzero_of_counterexamplePack_of_charZero :
+    CyclotomicXSpanNonzeroCharZeroTarget.{u} := by
+  intro R _ _ _ _ _ctx p x y z hpack q _hq _hqx _hqne _hgap hbot
+  have hxR0 : (x : R) = 0 := Ideal.span_singleton_eq_bot.mp hbot
+  exact hpack.hx0 (Nat.cast_eq_zero.mp hxR0)
+
+/--
 tail-product equality + coprimality + `(x)` 非零から、Stage 1 explicit equality target を回収する。
 
 review-023 の 2-factor route をそのまま theorem 化した exact composition。

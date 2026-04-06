@@ -1444,6 +1444,55 @@ Archive
        を supply する theorem を立てることじゃ
     - そこが通れば、残る honest open は Stage 3 の norm descent だけになる可能性が高い
 
+### 日時: 2026/04/06 15:48:18 JST — actual supply 側で product equality / exponent nonzero を concrete 化し、`(x)` 非零の CharZero caveat を固定
+
+1. 目的:
+    - review-024 に従い、actual cyclotomic setting で今すぐ供給できるもの、すなわち
+       - tail-product equality
+       - `ctx.p ≠ 0`
+       を theorem 化する。
+    - あわせて、`hx0 : x ≠ 0` から generic domain 上で `(x : R) ≠ 0` は出ない、という
+       honest caveat を定理と設計に反映する。
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `CyclotomicLocalExponentAgreementTarget`
+       - `CyclotomicXSpanNonzeroCharZeroTarget`
+       - `cyclotomicTailLinearFactorMulEqSpanPow_of_exponentAgreement`
+       - `cyclotomicLocalExponentNonzero_of_exponentAgreement`
+       - `cyclotomicXSpanNonzero_of_counterexamplePack_of_charZero`
+    - 内容としては:
+       - `ctx.p = p` が供給されれば、counterexample-pack の nat 等式を ring 等式へ cast して
+          tail-product equality を actual に供給できる
+       - 同じ exponent agreement から `ctx.p ≠ 0` も actual に供給できる
+       - `(x)` 非零は `CharZero R` のもとなら `hx0` から供給できる
+    - 逆に言えば、generic `CyclotomicXSpanNonzeroTarget` は
+       任意の domain では honest に supply できぬことも明確になった
+3. 結論:
+    - actual Stage 1 supply のうち、product equality 側は no-so#rry で concrete 化できた ✅
+    - local exponent nonzero も no-so#rry で concrete 化できた ✅
+    - `(x)` 非零については、generic target ではなく `CharZero` variant が honest だと判明した ✅
+    - したがって残る本丸は、なお
+       `CyclotomicTailLinearFactorCoprimeTarget`
+       の actual theorem 化である ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+    - direct so#rry は引き続き legacy one-shot theorem
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` のみ
+5. 分岐と判断:
+    - 分岐候補:
+       - A. `CyclotomicXSpanNonzeroTarget` を generic のまま actual supply しようとする
+       - B. `hx0` から `(x : R) ≠ 0` は generic domain では出ないと認め、`CharZero` variant を切る
+    - 選択:
+       - **B を採用**
+    - 理由:
+       - characteristic が `x` を潰す domain は実際にありうるため、A は honest でないから
+       - review/History の方針どおり、target は truth-preserving に保つべきだから
+6. 次の課題:
+    - 次は actual cyclotomic setting で
+       `CyclotomicTailLinearFactorCoprimeTarget`
+       を supply する theorem を立てることじゃ
+    - その際、tail を明示した形で差の unit 性へ落とす局所計算が本命になる見込みじゃ
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
