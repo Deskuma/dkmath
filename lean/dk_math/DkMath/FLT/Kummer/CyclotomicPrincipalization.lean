@@ -1012,6 +1012,56 @@ abbrev CyclotomicLinearFactorIdealPthPowerTarget : Prop :=
         Ideal.span ({(z : R) - ctx.zeta * (y : R)} : Set R) = I ^ ctx.p
 
 /--
+principal ideal `I` が `K^p` に等しければ、class-group p-torsion annihilation により
+root ideal `K` も principal になる。
+
+Stage 1 の存在形 boundary を explicit equality から回収する generic receiver。
+-/
+theorem principalRootIdealExistsOfEqPowAndTorsionKill
+    {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    {I K : Ideal R} {p : ℕ}
+    (hp : p ≠ 0) (hIPrincipal : I.IsPrincipal) (hI_ne : I ≠ ⊥)
+    (hEq : I = K ^ p)
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
+    ∃ J : Ideal R, J.IsPrincipal ∧ I = J ^ p := by
+  have hKpow_ne : K ^ p ≠ ⊥ := by
+    simpa [hEq] using hI_ne
+  have hK_ne : K ≠ ⊥ := by
+    intro hK_bot
+    apply hKpow_ne
+    simpa [hK_bot] using (zero_pow hp : (0 : Ideal R) ^ p = (0 : Ideal R))
+  have hK_mem : K ∈ nonZeroDivisors (Ideal R) := by
+    rw [mem_nonZeroDivisors_iff_ne_zero, Ideal.zero_eq_bot]
+    exact hK_ne
+  have hPowOne : ClassGroup.mk0 ⟨K, hK_mem⟩ ^ p = 1 :=
+    dedekindClassGroupMk0PowEqOneOfEqPowAndIsPrincipal
+      (R := R) (I := I) (K := K) hK_mem hEq hIPrincipal
+  have hClassTriv : ClassGroup.mk0 ⟨K, hK_mem⟩ = 1 :=
+    hKill p (ClassGroup.mk0 ⟨K, hK_mem⟩) hPowOne
+  have hK_principal : K.IsPrincipal :=
+    (ClassGroup.mk0_eq_one_iff hK_mem).mp hClassTriv
+  exact ⟨K, hK_principal, hEq⟩
+
+/--
+局所線型因子 ideal が explicit に `K^p` と書ければ、
+class-group p-torsion annihilation から principal root ideal の存在が従う。
+
+Stage 1 の存在形 boundary theorem へ入る直前の local exact receiver。
+-/
+theorem linearFactorIdealPthPowerExistsOfSpanEqPowAndTorsionKill
+    {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    (ctx : CyclotomicLocalFactorizationContext R)
+    {z y : R} {K : Ideal R}
+    (hp : ctx.p ≠ 0) (hlin : z - ctx.zeta * y ≠ 0)
+    (hEq : Ideal.span ({z - ctx.zeta * y} : Set R) = K ^ ctx.p)
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
+    ∃ J : Ideal R, J.IsPrincipal ∧ Ideal.span ({z - ctx.zeta * y} : Set R) = J ^ ctx.p := by
+  refine principalRootIdealExistsOfEqPowAndTorsionKill
+    (R := R) (I := Ideal.span ({z - ctx.zeta * y} : Set R)) (K := K) hp ?_ ?_ hEq hKill
+  · infer_instance
+  · exact mt Ideal.span_singleton_eq_bot.mp hlin
+
+/--
 pack-specialized Stage 2 receiver。
 
 review-017 で狙っている

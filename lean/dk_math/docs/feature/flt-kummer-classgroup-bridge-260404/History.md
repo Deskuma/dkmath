@@ -1205,6 +1205,68 @@ Archive
        を返す theorem を立てる段じゃ
     - これが通れば、残る honest open は Stage 3 の norm descent だけになる
 
+### 日時: 2026/04/06 11:15:59 JST — explicit equality から存在形 boundary を回収する exact receiver 群
+
+1. 目的:
+    - review-020 の方針に沿い、Stage 1 theorem そのものへ行く前に、
+       explicit な ideal equality `I = K^p` から存在形 boundary
+       `∃ J, J principal ∧ I = J^p`
+       を回収する exact receiver を no-so#rry で固定する。
+    - これにより、残る Stage 1 の仕事を「その explicit equality を supply すること」へさらに局所化する。
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `principalRootIdealExistsOfEqPowAndTorsionKill`
+       - `linearFactorIdealPthPowerExistsOfSpanEqPowAndTorsionKill`
+    - 前者は generic theorem:
+       - `I` が principal
+       - `I = K^p`
+       - class-group p-torsion annihilation
+       から `K` も principal と結論し、
+       `∃ J, J principal ∧ I = J^p` を返す
+    - 後者は local linear factor への specialization:
+       - `span(z - ζy) = K^p`
+       - `z - ζy ≠ 0`
+       - `ctx.p ≠ 0`
+       - p-torsion annihilation
+       から、存在形 boundary を返す
+    - これは review-020 が求める
+       `CyclotomicLinearFactorIdealPthPowerTarget`
+       の直前に置く exact receiver である
+3. 結論:
+    - Stage 1 側でも、explicit equality さえ supply できれば
+       存在形 boundary までは no-so#rry で回収できることが確認できた ✅
+    - したがって残る honest open は、
+       - local linear factor ideal について explicit equality `span(z - ζy) = K^p` を
+          Stage 1 pieces からどう供給するか
+       - Stage 3 の norm descent
+       の 2 点へさらに sharpen された ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - terminal 上で
+       `#print axioms principalRootIdealExistsOfEqPowAndTorsionKill`
+       → no sorry
+    - terminal 上で
+       `#print axioms linearFactorIdealPthPowerExistsOfSpanEqPowAndTorsionKill`
+       → no sorry
+    - direct so#rry は引き続き legacy one-shot theorem
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` のみ
+5. 分岐と判断:
+    - 分岐候補:
+       - A. すぐに Stage 1 theorem 本体へ進む
+       - B. その前に、explicit equality から存在形 boundary を回収する exact receiver を theorem 化する
+    - 選択:
+       - **B を採用**
+    - 理由:
+       - AGENT 指示どおり、新たな接続点は使われる前に theorem 化しておく価値が高いため
+       - これにより、次の Stage 1 theorem が本当に supply すべきものが
+          explicit equality ただ 1 つだと明確になるため
+6. 次の課題:
+    - 次は Stage 1 pieces を束ねて、
+       local linear factor ideal についての explicit equality
+       `span(z - ζy) = K^p`
+       あるいはその存在形版を返す theorem を立てることじゃ
+    - それが通れば、残る honest open は Stage 3 の norm descent だけになる
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。

@@ -135,6 +135,10 @@ review-017 により、pack + explicit ideal equality から
 review-018 により `CyclotomicLinearFactorIdealPthPowerTarget` は存在形へ直され、
 `cyclotomicUnitNormalization_of_existsLinearFactorIdealPthPower` によって
 その boundary target から element-level の Stage 2 statement まで composition で到達できる。
+review-020 により、その一歩手前として
+`principalRootIdealExistsOfEqPowAndTorsionKill` と
+`linearFactorIdealPthPowerExistsOfSpanEqPowAndTorsionKill`
+も no-so#rry で追加できた。
 残る open は、この存在形 boundary target を Stage 1 側からどう供給するかと、norm 側である。
 
 `CyclotomicUnitNormalizationTarget` はすでに concrete 化済みであり、
