@@ -1379,6 +1379,71 @@ Archive
        を supply する theorem を立てることじゃ
     - それが通れば、残る honest open は Stage 3 の norm descent だけになる
 
+### 日時: 2026/04/06 14:34:45 JST — 2-factor route の exact receiver 層を追加
+
+1. 目的:
+    - review-023 の判断に従い、Stage 1 の本丸を full family ではなく 2-factor route で狙うため、
+       tail ideal と chosen linear factor ideal の
+       - 積の equality
+       - coprimality
+       から explicit equality target を回収する theorem 群を no-so#rry で固定する。
+    - そのうえで、この 2-factor route から concrete Stage 2 target へ直接流す wrapper まで作る。
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `idealFactorsNeBotOfMulEqPowOfNeBot`
+       - `linearFactorSpanEqPowOfTailMulEqSpanPowAndIsCoprime`
+       - `CyclotomicTailLinearFactorMulEqSpanPowTarget`
+       - `CyclotomicTailLinearFactorCoprimeTarget`
+       - `CyclotomicXSpanNonzeroTarget`
+       - `cyclotomicLinearFactorSpanEqPow_of_tailFactorCoprime`
+       - `cyclotomicUnitNormalization_of_tailFactorCoprimeRoute`
+    - 意味としては:
+       - tail ideal と chosen factor ideal の積が `(x)^p`
+       - 両者が互いに素
+       - `(x)` が nonzero ideal
+       なら、generic Dedekind theorem
+       `dedekindIdealEqPowOfMulEqPowOfIsCoprime`
+       から
+       `span(z - ζy) = K^p`
+       が落ちることを theorem 化した
+    - さらに、その explicit equality target から Stage 2 の concrete target までの流し込みを wrapper 化した
+3. 結論:
+    - review-023 の「2-factor route が最短」という判断を theorem-level に固定できた ✅
+    - したがって、Stage 1 本命 theorem が supply すべきものは、
+       - tail-product equality
+       - cyclotomic-specific coprimality
+       - `(x)` nonzero
+       の 3 点へさらに precise 化された ✅
+    - これらが actual cyclotomic 条件から供給されれば、explicit equality も Stage 2 も no-so#rry で閉じる ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+    - terminal 上で
+       `#print axioms linearFactorSpanEqPowOfTailMulEqSpanPowAndIsCoprime` → no sorry
+    - terminal 上で
+       `#print axioms cyclotomicLinearFactorSpanEqPow_of_tailFactorCoprime` → no sorry
+    - terminal 上で
+       `#print axioms cyclotomicUnitNormalization_of_tailFactorCoprimeRoute` → no sorry
+    - direct so#rry は引き続き legacy one-shot theorem
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` のみ
+5. 分岐と判断:
+    - 分岐候補:
+       - A. full family / pairwise-coprime route を先に theorem 化する
+       - B. chosen factor と complementary tail の 2-factor route を先に theorem 化する
+    - 選択:
+       - **B を採用**
+    - 理由:
+       - review-023 の見立てどおり、Stage 1 本命 theorem を閉じる最短路は 2-factor route であり、
+          full family 全体を持ち上げるより仮定管理が軽いため
+       - 既存 generic theorem
+          `dedekindIdealEqPowOfMulEqPowOfIsCoprime`
+          をそのまま活かせるため
+6. 次の課題:
+    - 次は本当に actual cyclotomic setting で
+       `CyclotomicTailLinearFactorCoprimeTarget`
+       と、できれば `CyclotomicTailLinearFactorMulEqSpanPowTarget`
+       を supply する theorem を立てることじゃ
+    - そこが通れば、残る honest open は Stage 3 の norm descent だけになる可能性が高い
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
