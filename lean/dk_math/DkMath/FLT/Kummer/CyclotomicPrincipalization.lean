@@ -1509,6 +1509,92 @@ theorem noYInCommonPrime_of_chosenFactorInP_of_coprime_of_productEq
   have h_x_in_P : (x : 𝓞 K) ∈ P := hP.mem_of_pow_mem p h_prod_in_P
   exact false_of_nat_coprime_both_in_prime hxy hP h_x_in_P hP_y
 
+/-! ### P ∣ (p) 分岐の contradiction を閉じる補題群
+
+first case (p ∤ gap) を仮定すれば P | (p) から矛盾が導ける。
+-/
+
+/--
+chosen factor ∈ (ζ - 1) なら z - y ∈ (ζ - 1)。
+
+ζ ≡ 1 (mod (ζ - 1)) を使う。
+-/
+lemma chosen_factor_in_zeta_sub_one_implies_gap_in_zeta_sub_one
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    {y z : 𝓞 K}
+    (hchosen : z - hζ.toInteger * y ∈ Ideal.span ({hζ.toInteger - 1} : Set (𝓞 K))) :
+    z - y ∈ Ideal.span ({hζ.toInteger - 1} : Set (𝓞 K)) := by
+  set I := Ideal.span ({hζ.toInteger - 1} : Set (𝓞 K)) with hI
+  have h1 : hζ.toInteger - 1 ∈ I := Ideal.subset_span (by simp)
+  have h2 : (hζ.toInteger - 1) * y ∈ I := I.mul_mem_right y h1
+  have heq : z - y = (z - hζ.toInteger * y) + (hζ.toInteger - 1) * y := by ring
+  rw [heq]
+  exact I.add_mem hchosen h2
+
+/--
+P | (p) かつ P prime なら P ⊆ (ζ - 1) を示す target。
+
+cyclotomic field では (p) = (ζ-1)^(p-1) (totally ramified) なので、
+P | (p) かつ P prime ⟹ P = (ζ - 1)。
+
+これは深い cyclotomic theory なので target として残す。
+-/
+abbrev PrimeOverPSubsetZetaMinusOneTarget (K : Type*) [Field K] [NumberField K] [CharZero K]
+    (p : ℕ) [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    (ζ : K) (hζ : IsPrimitiveRoot ζ p) : Prop :=
+  ∀ {P : Ideal (𝓞 K)}, P.IsPrime →
+    P ∣ Ideal.span ({(p : 𝓞 K)} : Set (𝓞 K)) →
+    P ≤ Ideal.span ({hζ.toInteger - 1} : Set (𝓞 K))
+
+/--
+整数 n が (ζ - 1) ideal に入れば p | n を示す target。
+
+N(ζ - 1) = p なので、n ∈ (ζ - 1) ⟹ N(ζ - 1) | N(n) = n^(p-1) ⟹ p | n^(p-1) ⟹ p | n。
+
+これは深い cyclotomic theory なので target として残す。
+-/
+abbrev IntegerInZetaMinusOneIdealDivisibleByPTarget (K : Type*) [Field K] [NumberField K] [CharZero K]
+    (p : ℕ) [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    (ζ : K) (hζ : IsPrimitiveRoot ζ p) : Prop :=
+  ∀ {n : ℕ},
+    (n : 𝓞 K) ∈ Ideal.span ({hζ.toInteger - 1} : Set (𝓞 K)) →
+    p ∣ n
+
+/--
+P | (p) 分岐の contradiction: first case (p ∤ gap) と矛盾。
+
+P | (p) で P prime なら P ⊆ (ζ-1)、よって z - ζy ∈ P ⊆ (ζ-1)。
+z - y ∈ (ζ-1) から p | gap が導かれ、first case と矛盾。
+
+`PrimeOverPSubsetZetaMinusOneTarget` と `IntegerInZetaMinusOneIdealDivisibleByPTarget`
+の 2 つの深い cyclotomic target を仮定する。
+-/
+theorem noPrimeOverP_of_firstCase_of_chosenFactorInP
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hTarget1 : PrimeOverPSubsetZetaMinusOneTarget K p ζ hζ)
+    (hTarget2 : IntegerInZetaMinusOneIdealDivisibleByPTarget K p ζ hζ)
+    {y z : 𝓞 K}
+    {P : Ideal (𝓞 K)} (hP : P.IsPrime)
+    (hP_dvd_p : P ∣ Ideal.span ({(p : 𝓞 K)} : Set (𝓞 K)))
+    (hP_chosen : z - hζ.toInteger * y ∈ P)
+    {gap : ℕ}
+    (hgap_eq : z - y = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap) :
+    False := by
+  have hP_subset_zeta : P ≤ Ideal.span ({hζ.toInteger - 1} : Set (𝓞 K)) :=
+    hTarget1 hP hP_dvd_p
+  have hchosen_in_zeta : z - hζ.toInteger * y ∈ Ideal.span ({hζ.toInteger - 1} : Set (𝓞 K)) :=
+    hP_subset_zeta hP_chosen
+  have hgap_in_zeta : z - y ∈ Ideal.span ({hζ.toInteger - 1} : Set (𝓞 K)) :=
+    chosen_factor_in_zeta_sub_one_implies_gap_in_zeta_sub_one hζ hchosen_in_zeta
+  rw [hgap_eq] at hgap_in_zeta
+  have hp_dvd_gap : p ∣ gap := hTarget2 hgap_in_zeta
+  exact hFirstCase hp_dvd_gap
+
 /--
 局所線型因子 ideal が explicit に `K^p` と書ければ、
 class-group p-torsion annihilation から principal root ideal の存在が従う。

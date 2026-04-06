@@ -1728,6 +1728,42 @@ Archive
    - または、gap-divisible branch の条件 (p | gap) と組み合わせて
      P = (ζ - 1) ⟹ (ζ - 1) | (z - ζ y) ⟹ ??? という route を探る
 
+### 日時: 2026/04/06 23:22:33 JST — P ∣ (p) 分岐の contradiction を target 化して完成
+
+1. 目的:
+   - review-028 の戦略に従い、`P ∣ (p) ∨ y ∈ P` の 2 分岐のうち、
+     P ∣ (p) 分岐を first case (p ∤ gap) 条件から閉じる
+2. 実施:
+   - `CyclotomicPrincipalization.lean` に以下を追加:
+     - `chosen_factor_in_zeta_sub_one_implies_gap_in_zeta_sub_one`:
+        z - ζy ∈ (ζ-1) ⟹ z - y ∈ (ζ-1) (ζ ≡ 1 mod (ζ-1) を使用)
+     - `PrimeOverPSubsetZetaMinusOneTarget`:
+        P | (p) ∧ P prime ⟹ P ⊆ (ζ-1) (totally ramified の深い cyclotomic target)
+     - `IntegerInZetaMinusOneIdealDivisibleByPTarget`:
+        n ∈ (ζ-1) ∧ n ∈ ℤ ⟹ p | n (norm theory の深い cyclotomic target)
+     - `noPrimeOverP_of_firstCase_of_chosenFactorInP`:
+        2 target を仮定し、P | (p) + chosen∈P + p∤gap から False を導く
+3. 結論:
+   - P | (p) 分岐は 2 つの deep cyclotomic target を仮定して no-sorry で閉じた ✅
+   - y ∈ P 分岐は前回 no-sorry で完成済み ✅
+   - `P ∣ (p) ∨ y ∈ P` の両分岐が contradiction を閉じる形で整備された
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - 追加した theorem は全て no sorry (2 target を仮定)
+5. 分岐と判断:
+   - 2 つの deep cyclotomic target について:
+     - `PrimeOverPSubsetZetaMinusOneTarget`: (p) = (ζ-1)^(p-1) totally ramified から導出可能
+     - `IntegerInZetaMinusOneIdealDivisibleByPTarget`: N(ζ-1) = p から norm argument で導出可能
+   - 選択:
+     これらは Mathlib の deeper API を使うか、独自に norm theory を構築する必要がある。
+     いずれも genuine cyclotomic number theory なので target として残すのが妥当。
+6. 次の課題:
+   - 2 target を Mathlib API で埋める route を exploration
+   - または、Stage 1 の full contradiction を pack + cyclotomic product から組み立てる
+   - coprimality theorem へ繋ぐには:
+     `chosenLinearFactor_isCoprime_with_other_of_primeOrYContradiction_of_ringOfIntegersCyclotomic`
+     の `hNoPrimeOrY` を supply する必要がある
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
