@@ -1267,6 +1267,61 @@ Archive
        あるいはその存在形版を返す theorem を立てることじゃ
     - それが通れば、残る honest open は Stage 3 の norm descent だけになる
 
+### 日時: 2026/04/06 12:01:39 JST — Stage 1 explicit-equality theorem の前処理として nonzero companion lemma 群を追加
+
+1. 目的:
+    - review-021 が指摘する receiver 直前の詰まり、すなわち
+       - root ideal `K ≠ ⊥`
+       - 線型因子 `z - ζy ≠ 0`
+       を theorem として先回りで固定する。
+    - これにより、次の Stage 1 explicit-equality theorem を立てるときに
+       receiver 接続で止まらぬようにする。
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `rootIdealNeBotOfEqPow`
+       - `linearFactorNeZeroOfSpanEqPow`
+       - `linearFactorIdealPthPowerExistsOfSpanEqPowAndRootNeBot`
+    - 内容は順に:
+       - `I = K^p` かつ `I ≠ ⊥` なら `K ≠ ⊥`
+       - `span(z - ζy) = K^p` かつ `K ≠ ⊥` なら `z - ζy ≠ 0`
+       - explicit equality と root ideal 非零から、存在形 boundary を回収する local exact receiver
+    - 既存の
+       `principalRootIdealExistsOfEqPowAndTorsionKill`
+       `linearFactorIdealPthPowerExistsOfSpanEqPowAndTorsionKill`
+       と合わせて、Stage 1 → Stage 2 接続前の exact receiver 群がさらに厚くなった
+3. 結論:
+    - review-021 の注意点だった companion lemma 群は no-so#rry で先回りできた ✅
+    - したがって、次の Stage 1 theorem が supply すべきものは本当に
+       explicit equality `span(z - ζy) = K^p` だけに近づいた ✅
+    - 残る honest open は、
+       - Stage 1 explicit-equality theorem 本体
+       - Stage 3 norm descent
+       の 2 点である ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - terminal 上で
+       `#print axioms rootIdealNeBotOfEqPow` → no sorry
+    - terminal 上で
+       `#print axioms linearFactorNeZeroOfSpanEqPow` → no sorry
+    - terminal 上で
+       `#print axioms linearFactorIdealPthPowerExistsOfSpanEqPowAndRootNeBot` → no sorry
+    - direct so#rry は引き続き legacy one-shot theorem
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` のみ
+5. 分岐と判断:
+    - 分岐候補:
+       - A. すぐに Stage 1 explicit-equality theorem 本体へ進む
+       - B. 先に nonzero companion lemma 群を theorem 化する
+    - 選択:
+       - **B を採用**
+    - 理由:
+       - AGENT 指示どおり、新たな接続点は使われる前に theorem 化しておく価値が高いため
+       - review-021 が明示した詰まり所を先に潰す方が、次の本命 theorem が短く clean になるため
+6. 次の課題:
+    - 次は本当に Stage 1 pieces を束ねて、
+       `span(z - ζy) = K^p`
+       あるいはその存在形版を返す theorem を立てることじゃ
+    - それが通れば、残る honest open は Stage 3 の norm descent だけになる
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。

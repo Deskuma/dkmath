@@ -139,6 +139,11 @@ review-020 により、その一歩手前として
 `principalRootIdealExistsOfEqPowAndTorsionKill` と
 `linearFactorIdealPthPowerExistsOfSpanEqPowAndTorsionKill`
 も no-so#rry で追加できた。
+review-021 に備え、receiver 直前の companion lemma
+`rootIdealNeBotOfEqPow`・`linearFactorNeZeroOfSpanEqPow` と、
+root-ideal nonzero 版 receiver
+`linearFactorIdealPthPowerExistsOfSpanEqPowAndRootNeBot`
+も no-so#rry で追加した。
 残る open は、この存在形 boundary target を Stage 1 側からどう供給するかと、norm 側である。
 
 `CyclotomicUnitNormalizationTarget` はすでに concrete 化済みであり、

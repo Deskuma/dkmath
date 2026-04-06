@@ -1043,6 +1043,41 @@ theorem principalRootIdealExistsOfEqPowAndTorsionKill
   exact ⟨K, hK_principal, hEq⟩
 
 /--
+`I = K^p` かつ `I ≠ ⊥` なら、root ideal `K` も nonzero である。
+
+Stage 1 の explicit equality から receiver 側の nonzero 仮定を回収する補助補題。
+-/
+theorem rootIdealNeBotOfEqPow
+    {R : Type u} [CommRing R] [IsDomain R]
+    {I K : Ideal R} {p : ℕ}
+    (hp : p ≠ 0) (hEq : I = K ^ p) (hI_ne : I ≠ ⊥) :
+    K ≠ ⊥ := by
+  intro hK_bot
+  apply hI_ne
+  rw [hEq, hK_bot]
+  simpa using (zero_pow hp : (⊥ : Ideal R) ^ p = (⊥ : Ideal R))
+
+/--
+`span(z - ζy) = K^p` で root ideal `K` が nonzero なら、線型因子そのものも nonzero である。
+
+review-021 で指摘された receiver 直前の companion lemma。
+-/
+theorem linearFactorNeZeroOfSpanEqPow
+    {R : Type u} [CommRing R] [IsDomain R]
+    (ctx : CyclotomicLocalFactorizationContext R)
+    {z y : R} {K : Ideal R}
+    (hEq : Ideal.span ({z - ctx.zeta * y} : Set R) = K ^ ctx.p)
+    (hK_ne : K ≠ ⊥) :
+    z - ctx.zeta * y ≠ 0 := by
+  intro hlin
+  have hSpanBot : Ideal.span ({z - ctx.zeta * y} : Set R) = ⊥ :=
+    Ideal.span_singleton_eq_bot.mpr hlin
+  have hKpow_ne : K ^ ctx.p ≠ ⊥ := by
+    exact pow_ne_zero ctx.p hK_ne
+  apply hKpow_ne
+  simpa [hEq] using hSpanBot
+
+/--
 局所線型因子 ideal が explicit に `K^p` と書ければ、
 class-group p-torsion annihilation から principal root ideal の存在が従う。
 
@@ -1060,6 +1095,24 @@ theorem linearFactorIdealPthPowerExistsOfSpanEqPowAndTorsionKill
     (R := R) (I := Ideal.span ({z - ctx.zeta * y} : Set R)) (K := K) hp ?_ ?_ hEq hKill
   · infer_instance
   · exact mt Ideal.span_singleton_eq_bot.mp hlin
+
+/--
+局所線型因子 ideal の explicit equality と root ideal の nonzero 性から、
+存在形 boundary を回収する variant。
+
+Stage 1 theorem が `K ≠ ⊥` を supply する場合は、こちらが最短 receiver になる。
+-/
+theorem linearFactorIdealPthPowerExistsOfSpanEqPowAndRootNeBot
+    {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R]
+    (ctx : CyclotomicLocalFactorizationContext R)
+    {z y : R} {K : Ideal R}
+    (hp : ctx.p ≠ 0)
+    (hEq : Ideal.span ({z - ctx.zeta * y} : Set R) = K ^ ctx.p)
+    (hK_ne : K ≠ ⊥)
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
+    ∃ J : Ideal R, J.IsPrincipal ∧ Ideal.span ({z - ctx.zeta * y} : Set R) = J ^ ctx.p := by
+  exact linearFactorIdealPthPowerExistsOfSpanEqPowAndTorsionKill
+    ctx hp (linearFactorNeZeroOfSpanEqPow ctx hEq hK_ne) hEq hKill
 
 /--
 pack-specialized Stage 2 receiver。
