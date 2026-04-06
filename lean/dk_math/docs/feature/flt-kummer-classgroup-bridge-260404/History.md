@@ -1786,3 +1786,42 @@ Archive
    - （内容）
 6. 次の課題:
    - （内容）
+
+### 日時: 2026/04/07 04:11:31 JST — Prime (ζ-1) 導出と Target 修正
+
+1. 目的:
+   - P | (p) 分岐の target を正しい形に修正
+   - Prime (ζ-1) の Mathlib API 接続を mainline に追加
+2. 実施:
+   - Target 1 を `P ⊆ (ζ-1)` から `P = (ζ-1)` に修正
+     - Ideal.dvd_iff_le: P | (p) ⟺ (p) ≤ P (つまり p ∈ P)
+     - totally ramified では P | (p) ∧ P prime ⟹ P = (ζ-1) (唯一の素因子)
+   - `CyclotomicPrincipalization.lean` に追加:
+     - `IsCyclotomicExtension_p_as_pow1`: {p} を {p^(0+1)} に変換する instance
+     - `IsPrimitiveRoot_p_as_pow1`: IsPrimitiveRoot ζ p を p^(0+1) 形式に変換
+     - `zeta_sub_one_prime_of_p`: Prime (ζ-1) を {p} 形式の cyclotomic から導出
+     - `zeta_sub_one_ideal_isPrime`: (ζ-1) が prime ideal を生成
+     - `PrimeOverPEqualsZetaMinusOneTarget`: P | (p) ∧ P prime ⟹ P = (ζ-1)
+   - `noPrimeOverP_of_firstCase_of_chosenFactorInP` を修正して target equality を使用
+3. 結論:
+   - Prime (ζ-1) が Mathlib API から正しく導出される ✅
+   - (ζ-1) が prime ideal を生成することが確立 ✅
+   - Target 1 (`PrimeOverPEqualsZetaMinusOneTarget`) は (p) = (ζ-1)^(p-1) ramification が必要
+   - Target 2 (`IntegerInZetaMinusOneIdealDivisibleByPTarget`) は norm theory が必要
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - 追加した lemma は全て no-sorry
+5. 分岐と判断:
+   - Target 1 埋め立て: (p) = (ζ-1)^(p-1) の ramification theorem が必要
+     - Mathlib に `IsPrimitiveRoot.norm_sub_one_of_prime_ne_two` がある
+     - これは N(ζ-1) = p を示す (Target 2 向け)
+     - Target 1 には prime ideal factorization API が必要
+   - Target 2 埋め立て: N(ζ-1) = p から n ∈ (ζ-1) ⟹ p | n を導く
+     - Chain: (ζ-1)|n ⟹ N(ζ-1)|N(n) ⟹ p|n^(p-1) ⟹ p|n
+     - Mathlib norm API の接続が必要
+   - 選択:
+     両 target は deep cyclotomic theory。target として残し、Stage 1 の構造を先に完成させる。
+6. 次の課題:
+   - `PrimeOverPEqualsZetaMinusOneTarget` を Mathlib ramification API で埋める
+   - `IntegerInZetaMinusOneIdealDivisibleByPTarget` を Mathlib norm API で埋める
+   - または、両 target を仮定した形で Stage 1 coprimality を完成させる

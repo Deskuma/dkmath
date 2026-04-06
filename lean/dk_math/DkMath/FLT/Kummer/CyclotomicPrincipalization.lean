@@ -1534,19 +1534,73 @@ lemma chosen_factor_in_zeta_sub_one_implies_gap_in_zeta_sub_one
   exact I.add_mem hchosen h2
 
 /--
-P | (p) かつ P prime なら P ⊆ (ζ - 1) を示す target。
+P | (p) かつ P prime なら P = (ζ - 1) を示す target。
 
 cyclotomic field では (p) = (ζ-1)^(p-1) (totally ramified) なので、
-P | (p) かつ P prime ⟹ P = (ζ - 1)。
+P | (p) かつ P prime ⟹ P は (p) の唯一の素因子 = (ζ - 1)。
 
-これは深い cyclotomic theory なので target として残す。
+注: Ideal.dvd_iff_le により P | (p) ⟺ (p) ≤ P (つまり p ∈ P)。
+totally ramified では P | (p) かつ P prime なら P = (ζ-1) が成り立つ。
 -/
-abbrev PrimeOverPSubsetZetaMinusOneTarget (K : Type*) [Field K] [NumberField K] [CharZero K]
+abbrev PrimeOverPEqualsZetaMinusOneTarget (K : Type*) [Field K] [NumberField K] [CharZero K]
     (p : ℕ) [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
     (ζ : K) (hζ : IsPrimitiveRoot ζ p) : Prop :=
-  ∀ {P : Ideal (𝓞 K)}, P.IsPrime →
+  ∀ {P : Ideal (𝓞 K)}, P.IsPrime → P ≠ ⊥ →
     P ∣ Ideal.span ({(p : 𝓞 K)} : Set (𝓞 K)) →
-    P ≤ Ideal.span ({hζ.toInteger - 1} : Set (𝓞 K))
+    P = Ideal.span ({hζ.toInteger - 1} : Set (𝓞 K))
+
+/-!
+### Prime (ζ - 1) の導出
+
+IsPrimitiveRoot.zeta_sub_one_prime は `{p^(k+1)}` 形式を要求。
+`{p}` = `{p^(0+1)}` なので変換して使用。
+-/
+
+/-- `{p}` を `{p^(0+1)}` として解釈するための instance。 -/
+noncomputable def IsCyclotomicExtension_p_as_pow1
+    {K : Type*} [Field K] [CharZero K]
+    {p : ℕ} [IsCyclotomicExtension {p} ℚ K] :
+    IsCyclotomicExtension {p^(0+1)} ℚ K := by
+  simp only [zero_add, pow_one]
+  infer_instance
+
+/-- `IsPrimitiveRoot ζ p` を `IsPrimitiveRoot ζ (p^(0+1))` に変換。 -/
+noncomputable def IsPrimitiveRoot_p_as_pow1
+    {K : Type*} [Field K]
+    {p : ℕ} {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
+    IsPrimitiveRoot ζ (p^(0+1)) := by
+  simp only [zero_add, pow_one]
+  exact hζ
+
+/--
+Prime (ζ - 1) を `{p}` 形式の cyclotomic extension から導出。
+
+Mathlib の `IsPrimitiveRoot.zeta_sub_one_prime` は `{p^(k+1)}` を要求するが、
+`{p}` = `{p^1}` = `{p^(0+1)}` なので k=0 として使える。
+-/
+lemma zeta_sub_one_prime_of_p
+    {K : Type*} [Field K] [CharZero K]
+    {p : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
+    Prime (hζ.toInteger - 1) := by
+  haveI : IsCyclotomicExtension {p^(0+1)} ℚ K := IsCyclotomicExtension_p_as_pow1
+  have hζ' : IsPrimitiveRoot ζ (p^(0+1)) := IsPrimitiveRoot_p_as_pow1 hζ
+  have h := IsPrimitiveRoot.zeta_sub_one_prime (k := 0) hζ'
+  have heq : hζ'.toInteger = hζ.toInteger := by
+    unfold IsPrimitiveRoot.toInteger
+    simp only
+  rw [← heq]
+  exact h
+
+/-- (ζ - 1) が prime ideal を生成。 -/
+lemma zeta_sub_one_ideal_isPrime
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hne : hζ.toInteger - 1 ≠ 0) :
+    (Ideal.span ({hζ.toInteger - 1} : Set (𝓞 K))).IsPrime := by
+  rw [Ideal.span_singleton_prime hne]
+  exact zeta_sub_one_prime_of_p hζ
 
 /--
 整数 n が (ζ - 1) ideal に入れば p | n を示す target。
@@ -1565,34 +1619,39 @@ abbrev IntegerInZetaMinusOneIdealDivisibleByPTarget (K : Type*) [Field K] [Numbe
 /--
 P | (p) 分岐の contradiction: first case (p ∤ gap) と矛盾。
 
-P | (p) で P prime なら P ⊆ (ζ-1)、よって z - ζy ∈ P ⊆ (ζ-1)。
+P | (p) で P prime なら P = (ζ-1)、よって z - ζy ∈ P = (ζ-1)。
 z - y ∈ (ζ-1) から p | gap が導かれ、first case と矛盾。
 
-`PrimeOverPSubsetZetaMinusOneTarget` と `IntegerInZetaMinusOneIdealDivisibleByPTarget`
+`PrimeOverPEqualsZetaMinusOneTarget` と `IntegerInZetaMinusOneIdealDivisibleByPTarget`
 の 2 つの深い cyclotomic target を仮定する。
 -/
 theorem noPrimeOverP_of_firstCase_of_chosenFactorInP
     {K : Type*} [Field K] [NumberField K] [CharZero K]
     {p : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
     {ζ : K} (hζ : IsPrimitiveRoot ζ p)
-    (hTarget1 : PrimeOverPSubsetZetaMinusOneTarget K p ζ hζ)
+    (hTarget1 : PrimeOverPEqualsZetaMinusOneTarget K p ζ hζ)
     (hTarget2 : IntegerInZetaMinusOneIdealDivisibleByPTarget K p ζ hζ)
     {y z : 𝓞 K}
-    {P : Ideal (𝓞 K)} (hP : P.IsPrime)
+    {P : Ideal (𝓞 K)} (hP : P.IsPrime) (hP_ne_bot : P ≠ ⊥)
     (hP_dvd_p : P ∣ Ideal.span ({(p : 𝓞 K)} : Set (𝓞 K)))
     (hP_chosen : z - hζ.toInteger * y ∈ P)
     {gap : ℕ}
     (hgap_eq : z - y = (gap : 𝓞 K))
     (hFirstCase : ¬ p ∣ gap) :
     False := by
-  have hP_subset_zeta : P ≤ Ideal.span ({hζ.toInteger - 1} : Set (𝓞 K)) :=
-    hTarget1 hP hP_dvd_p
-  have hchosen_in_zeta : z - hζ.toInteger * y ∈ Ideal.span ({hζ.toInteger - 1} : Set (𝓞 K)) :=
-    hP_subset_zeta hP_chosen
+  -- Step 1: P = (ζ - 1) from target 1
+  have hP_eq_zeta : P = Ideal.span ({hζ.toInteger - 1} : Set (𝓞 K)) :=
+    hTarget1 hP hP_ne_bot hP_dvd_p
+  -- Step 2: z - ζy ∈ P = (ζ - 1)
+  rw [hP_eq_zeta] at hP_chosen
+  -- Step 3: z - y ∈ (ζ - 1)
   have hgap_in_zeta : z - y ∈ Ideal.span ({hζ.toInteger - 1} : Set (𝓞 K)) :=
-    chosen_factor_in_zeta_sub_one_implies_gap_in_zeta_sub_one hζ hchosen_in_zeta
+    chosen_factor_in_zeta_sub_one_implies_gap_in_zeta_sub_one hζ hP_chosen
+  -- Step 4: gap ∈ (ζ - 1) as nat
   rw [hgap_eq] at hgap_in_zeta
+  -- Step 5: p | gap from target 2
   have hp_dvd_gap : p ∣ gap := hTarget2 hgap_in_zeta
+  -- Step 6: contradiction with first case
   exact hFirstCase hp_dvd_gap
 
 /--
