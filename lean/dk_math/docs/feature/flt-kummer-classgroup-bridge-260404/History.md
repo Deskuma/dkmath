@@ -1551,6 +1551,54 @@ Archive
     - 特に、tail を明示した family の差が unit になる局所計算、
        あるいは common prime ideal を `(p)` 側へ押し込む局所補題が本命になる見込みじゃ
 
+### 日時: 2026/04/06 18:02:50 JST — Mathlib の associated 補題を活用して共通 prime ideal 分析の核心を no-sorry 化
+
+1. 目的:
+   - review-026 の判断どおり、actual cyclotomic coprimality 供給の核心を Mathlib で攻める
+   - `IsPrimitiveRoot.ntRootsFinset_pairwise_associated_sub_one_sub_of_prime` を活用して、
+     共通 prime ideal が (ζ - 1) または y を割ることを theorem-level で固定する
+2. 実施:
+   - `CyclotomicPrincipalization.lean` に以下を追加:
+     - `associated_span_eq`: Associated なら span も等しい
+     - `linearFactorDiffSpanEqSubOneSpan`: 異なる linear factor 差の span が (ζ-1)*y の span に等しい
+       (Mathlib の `ntRootsFinset_pairwise_associated_sub_one_sub_of_prime` を活用)
+     - `commonPrimeContainsSubOneY`: 共通 prime が chosen factor と別の因子の両方を含むなら、
+       (ζ - 1) * y も含む
+     - `commonPrimeDvdsSubOneOrY`: さらに prime ideal の性質から P | (ζ - 1) ∨ P | y
+     - `SubOneDividesPrimePTarget`: (ζ - 1) ∈ P → P | (p) は cyclotomic number theory の target として残す
+3. 結論:
+   - Mathlib の `ntRootsFinset_pairwise_associated_sub_one_sub_of_prime` が使えることを確認 ✅
+   - primitive root の差が associated であることから、
+     共通 prime ideal 分析の核心を no-so#rry で固められた ✅
+   - 残る honest open は `SubOneDividesPrimePTarget`（cyclotomic number theory の深い部分）と、
+     Stage 3 の norm descent である ✅
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - 追加した lemma は全て no sorry:
+     - `associated_span_eq`
+     - `linearFactorDiffSpanEqSubOneSpan`
+     - `commonPrimeContainsSubOneY`
+     - `commonPrimeDvdsSubOneOrY`
+   - direct so#rry は引き続き legacy one-shot theorem
+     `cyclotomicPrincipalization_of_classGroupPTorsionFree` のみ
+5. 分岐と判断:
+   - 分岐候補:
+     - A. 「差が unit」という route を直接攻める（今の pairwise unit witness target）
+     - B. 「共通 prime ideal の不存在」を contrapositive で攻める（今回の associated route）
+   - 選択:
+     - **B を採用**
+   - 理由:
+     - Mathlib に `ntRootsFinset_pairwise_associated_sub_one_sub_of_prime` という強力な補題があるため
+     - Associated は「unit 倍」なので、ideal level で見ると同じ ideal を生成する
+     - これにより、共通 prime が (ζ - 1) または y を割ることが言え、
+       pack の条件から矛盾を導ける可能性が高いため
+6. 次の課題:
+   - `SubOneDividesPrimePTarget` を実際に supply するか、
+     あるいは直接 coprimality を pack 条件から導くか、
+     のどちらかが次の最短手じゃ
+   - 前者は cyclotomic number theory の深い部分だが、Mathlib にある可能性もある
+   - 後者は pack の first case 条件 (p ∤ xyz) を使って矛盾を導く
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。

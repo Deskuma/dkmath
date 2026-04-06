@@ -1191,6 +1191,109 @@ theorem linearFactorIdealIsCoprimeProdEraseOfPairwiseMulSubIsUnit
     (I := fun j => Ideal.span ({z - α j * y} : Set R)) hPairwise hi
 
 /--
+Associated なら span も等しい。
+-/
+theorem associated_span_eq {R : Type u} [CommRing R] [IsDomain R] {a b : R}
+    (h : Associated a b) : Ideal.span ({a} : Set R) = Ideal.span ({b} : Set R) := by
+  obtain ⟨u, hu⟩ := h
+  rw [Ideal.span_singleton_eq_span_singleton]
+  exact ⟨u, hu⟩
+
+/--
+Mathlib の `ntRootsFinset_pairwise_associated_sub_one_sub_of_prime` を使って、
+異なる linear factor の差の span が (ζ - 1) * y の span に等しいことを示す。
+
+review-026 で残る本丸と見た actual cyclotomic coprimality への核心的補題。
+-/
+theorem linearFactorDiffSpanEqSubOneSpan
+    {R : Type u} [CommRing R] [IsDomain R]
+    {p : ℕ} {ζ : R} (hζ : IsPrimitiveRoot ζ p) (hp : Nat.Prime p)
+    {y : R} (_hy : y ≠ 0) (i j : ℕ) (hij : i ≠ j) (hi : i < p) (hj : j < p) :
+    Ideal.span ({(ζ ^ j) * y - (ζ ^ i) * y} : Set R) =
+      Ideal.span ({(ζ - 1) * y} : Set R) := by
+  have hdiff : Associated (ζ ^ j - ζ ^ i) (ζ - 1) := by
+    have hηi : (ζ ^ i) ∈ Polynomial.nthRootsFinset p (1 : R) := by
+      rw [Polynomial.mem_nthRootsFinset hp.pos]
+      rw [← pow_mul, mul_comm, pow_mul, hζ.pow_eq_one, one_pow]
+    have hηj : (ζ ^ j) ∈ Polynomial.nthRootsFinset p (1 : R) := by
+      rw [Polynomial.mem_nthRootsFinset hp.pos]
+      rw [← pow_mul, mul_comm, pow_mul, hζ.pow_eq_one, one_pow]
+    have hne : ζ ^ i ≠ ζ ^ j := fun h =>
+      hij (hζ.pow_inj hi hj h)
+    exact (IsPrimitiveRoot.ntRootsFinset_pairwise_associated_sub_one_sub_of_prime
+      hζ hp hηj hηi hne.symm).symm
+  simp only [← sub_mul]
+  exact associated_span_eq (hdiff.mul_right y)
+
+/--
+P が chosen factor (z - ζ y) と別の因子 (z - ζ^j y) の両方を含むなら、
+P は (ζ - 1) * y を含む (associated だから同じ ideal を通して)。
+
+共通 prime ideal 分析の核心。
+-/
+theorem commonPrimeContainsSubOneY
+    {R : Type u} [CommRing R] [IsDomain R]
+    {p : ℕ} {ζ : R} (hζ : IsPrimitiveRoot ζ p) (hp : Nat.Prime p)
+    {y z : R} (_hy : y ≠ 0)
+    {P : Ideal R} (_hP : P.IsPrime) (hp2 : 2 ≤ p)
+    (hP_contains_chosen : z - ζ * y ∈ P)
+    (hP_contains_another : ∃ j : ℕ, j ≠ 1 ∧ j < p ∧ z - (ζ ^ j) * y ∈ P) :
+    (ζ - 1) * y ∈ P := by
+  obtain ⟨j, hj_ne1, hj_lt, hP_contains_j⟩ := hP_contains_another
+  have h1lt : (1 : ℕ) < p := hp2
+  have hdiff_elem : (z - ζ * y) - (z - ζ ^ j * y) ∈ P :=
+    Ideal.sub_mem P hP_contains_chosen hP_contains_j
+  have hdiff_simp : (ζ ^ j - ζ) * y ∈ P := by
+    convert hdiff_elem using 1; ring
+  have h_root_assoc : Associated (ζ ^ j - ζ) (ζ - 1) := by
+    have hη1 : (ζ ^ 1) ∈ Polynomial.nthRootsFinset p (1 : R) := by
+      rw [Polynomial.mem_nthRootsFinset hp.pos, pow_one]; exact hζ.pow_eq_one
+    have hηj : (ζ ^ j) ∈ Polynomial.nthRootsFinset p (1 : R) := by
+      rw [Polynomial.mem_nthRootsFinset hp.pos]
+      rw [← pow_mul, mul_comm, pow_mul, hζ.pow_eq_one, one_pow]
+    have hne : ζ ^ 1 ≠ ζ ^ j := fun h =>
+      hj_ne1 (hζ.pow_inj h1lt hj_lt h).symm
+    have h := IsPrimitiveRoot.ntRootsFinset_pairwise_associated_sub_one_sub_of_prime
+      hζ hp hηj hη1 hne.symm
+    convert h.symm using 1; simp [pow_one]
+  have h_assoc : Associated ((ζ ^ j - ζ) * y) ((ζ - 1) * y) := h_root_assoc.mul_right y
+  obtain ⟨u, hu⟩ := h_assoc
+  have hmul : (ζ ^ j - ζ) * y * ↑u ∈ P := P.mul_mem_right ↑u hdiff_simp
+  rw [hu] at hmul
+  exact hmul
+
+/--
+共通 prime ideal が chosen factor と別の因子の両方を含むなら、
+prime ideal の性質から P | (ζ - 1) ∨ P | y が従う。
+
+coprimality 証明の核心的 disjunction。
+-/
+theorem commonPrimeDvdsSubOneOrY
+    {R : Type u} [CommRing R] [IsDomain R]
+    {p : ℕ} {ζ : R} (hζ : IsPrimitiveRoot ζ p) (hp : Nat.Prime p)
+    {y z : R} (hy : y ≠ 0)
+    {P : Ideal R} (hP : P.IsPrime) (hp2 : 2 ≤ p)
+    (hP_contains_chosen : z - ζ * y ∈ P)
+    (hP_contains_another : ∃ j : ℕ, j ≠ 1 ∧ j < p ∧ z - (ζ ^ j) * y ∈ P) :
+    (ζ - 1) ∈ P ∨ y ∈ P := by
+  have hSubOneY : (ζ - 1) * y ∈ P :=
+    commonPrimeContainsSubOneY hζ hp hy hP hp2 hP_contains_chosen hP_contains_another
+  exact hP.mem_or_mem hSubOneY
+
+/--
+cyclotomic の整数環で、(ζ - 1) は p の上の prime ideal と密接に関係する。
+(ζ - 1) ∈ P なら P は p を割る。
+
+これは cyclotomic number theory の深い結果なので、target として残す。
+-/
+abbrev SubOneDividesPrimePTarget : Prop :=
+  ∀ {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R],
+    ∀ {p : ℕ} {ζ : R}, IsPrimitiveRoot ζ p → Nat.Prime p →
+    ∀ {P : Ideal R}, P.IsPrime →
+    (ζ - 1) ∈ P →
+    P ∣ Ideal.span ({(p : R)} : Set R)
+
+/--
 局所線型因子 ideal が explicit に `K^p` と書ければ、
 class-group p-torsion annihilation から principal root ideal の存在が従う。
 

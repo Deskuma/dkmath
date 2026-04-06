@@ -174,6 +174,13 @@ review-025 により、actual coprimality 側も
 `cyclotomicUnitNormalization_of_exponentAgreementAndPairwiseUnitWitness`
 により、指数一致 + pairwise witness + `(x)` 非零 + 線型因子非零 + class-group kill から
 concrete Stage 2 target まで直接進めるようになった。
+review-026 により、Mathlib の `ntRootsFinset_pairwise_associated_sub_one_sub_of_prime` を活用して
+共通 prime ideal 分析の核心が no-so#rry で固められた:
+- `associated_span_eq`: Associated なら span も等しい
+- `linearFactorDiffSpanEqSubOneSpan`: 異なる linear factor 差の span が (ζ-1)*y の span に等しい
+- `commonPrimeContainsSubOneY`: 共通 prime が chosen と別因子の両方を含むなら (ζ-1)*y も含む
+- `commonPrimeDvdsSubOneOrY`: さらに prime の性質から P | (ζ-1) ∨ P | y
+- `SubOneDividesPrimePTarget`: (ζ-1) ∈ P → P | (p) は cyclotomic number theory の target として残す
 残る open は、この存在形 boundary target を Stage 1 側からどう供給するかと、norm 側である。
 
 `CyclotomicUnitNormalizationTarget` はすでに concrete 化済みであり、
