@@ -1764,29 +1764,6 @@ Archive
      `chosenLinearFactor_isCoprime_with_other_of_primeOrYContradiction_of_ringOfIntegersCyclotomic`
      の `hNoPrimeOrY` を supply する必要がある
 
-## Note
-
-タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
-
-※コミット時間がより正確であり、異なる場合は、コミット時間を優先とする。
-
-## Template
-
-### 日時: `タイムスタンプ date コマンドを使用して年月日時分まで` JST (template)
-
-1. 目的:
-   - （内容）
-2. 実施:
-   - （内容）
-3. 結論:
-   - （内容）
-4. 検証:
-   - （内容）
-5. 失敗事例:
-   - （内容）
-6. 次の課題:
-   - （内容）
-
 ### 日時: 2026/04/07 04:11:31 JST — Prime (ζ-1) 導出と Target 修正
 
 1. 目的:
@@ -1854,3 +1831,64 @@ Archive
 6. 次の課題:
    - Stage 1 → Stage 2 への接続: coprimality から pth power existence へ
    - 2 target の Mathlib での埋め立て
+
+### 日時: 2026/04/07 06:57:00 JST — Target 2 完全埋め立て
+
+1. 目的:
+   - `IntegerInZetaMinusOneIdealDivisibleByPTarget` を Mathlib API で埋め立て
+   - N(ζ-1) = p からの norm argument を formal 化
+2. 実施:
+   - `CyclotomicPrincipalization.lean` に以下を追加:
+     - `norm_zeta_sub_one_eq_p_rat`:
+        Mathlib の `IsPrimitiveRoot.norm_sub_one_of_prime_ne_two` を wrap
+        N(ζ-1) = p in ℚ を導出
+     - `norm_int_nat_cast_eq_pow`:
+        Algebra.norm ℤ (m : 𝓞 K) = m^deg を導出
+        `Algebra.coe_norm_int` と `Algebra.norm_algebraMap` を使用
+     - `norm_int_zeta_sub_one_eq_p`:
+        N(ζ-1) = p in ℤ (Int.cast_injective で ℚ から ℤ へ)
+     - `zeta_sub_one_not_dvd_of_coprime`:
+        (m, p) = 1 ⟹ (ζ-1) ∤ m
+        Proof: (ζ-1)|m ⟹ p|N(m)=m^deg ⟹ p prime ⟹ p|m ⟹ contradiction
+     - `p_dvd_of_in_zeta_sub_one_ideal`:
+        n ∈ (ζ-1) ⟹ p | n (contrapositive of above)
+     - `integerInZetaMinusOneIdealDivisibleByP_fill`:
+        Target 2 を完全に埋め立て
+3. 結論:
+   - **Target 2 (`IntegerInZetaMinusOneIdealDivisibleByPTarget`) が no-sorry で完成** 🎉
+   - 残る open target は 1 つのみ:
+     - `PrimeOverPEqualsZetaMinusOneTarget`: P | (p) ⟹ P = (ζ-1) (ramification theory)
+4. 検証:
+   - `lake build DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - 追加 lemma: 6 本、全て no-sorry
+5. 判断理由:
+   - Target 2 は norm theory で完結するため Mathlib API で埋められた
+   - Target 1 は (p) の prime ideal factorization = (ζ-1)^(p-1) が必要
+     - これは ramification theory の深い部分で、Mathlib に直接 API があるか要調査
+6. 次の課題:
+   - Target 1 を Mathlib ramification API で埋める
+   - 具体的には totally ramified の証明: (p) の唯一の prime divisor is (ζ-1)
+   - または Target 1 を仮定した形で Stage 2/3 接続を先行構築
+
+## Note
+
+タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
+
+※コミット時間がより正確であり、異なる場合は、コミット時間を優先とする。
+
+## Template
+
+### 日時: `タイムスタンプ date コマンドを使用して年月日時分まで` JST (template)
+
+1. 目的:
+   - （内容）
+2. 実施:
+   - （内容）
+3. 結論:
+   - （内容）
+4. 検証:
+   - （内容）
+5. 失敗事例:
+   - （内容）
+6. 次の課題:
+   - （内容）
