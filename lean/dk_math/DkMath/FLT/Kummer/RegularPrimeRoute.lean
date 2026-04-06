@@ -181,6 +181,19 @@ review-026 により、Mathlib の `ntRootsFinset_pairwise_associated_sub_one_su
 - `commonPrimeContainsSubOneY`: 共通 prime が chosen と別因子の両方を含むなら (ζ-1)*y も含む
 - `commonPrimeDvdsSubOneOrY`: さらに prime の性質から P | (ζ-1) ∨ P | y
 - `SubOneDividesPrimePTarget`: (ζ-1) ∈ P → P | (p) は cyclotomic number theory の target として残す
+review-027 により、Mathlib の
+`IsPrimitiveRoot.toInteger_sub_one_dvd_prime'` と `toInteger_isPrimitiveRoot`
+を使った ring-of-integers specialization adapter も no-so#rry で追加できた:
+- `subOneDividesPrimeP_of_toInteger_sub_one_dvd_prime'`: `hζ.toInteger - 1 ∈ P` から `P ∣ (p)`
+- `commonPrimeDvdsPrimeOrY_of_ringOfIntegersCyclotomic`: 共通 prime ideal 分析の `(ζ-1)` 分岐を `P ∣ (p)` に変換
+- `linearFactorIdeals_isCoprime_of_noCommonPrime`: common-prime contradiction を coprimality へ戻す generic receiver
+- `chosenLinearFactor_isCoprime_with_other_of_primeOrYContradiction_of_ringOfIntegersCyclotomic`:
+  ring of integers specialization で、`P ∣ (p) ∨ y ∈ P` の contradiction target から
+  chosen factor と別の 1 因子の pairwise coprimality を回収
+
+したがって残る Stage 1 の honest open は、
+`P ∣ (p) ∨ y ∈ P` が起きないことを actual pack 条件からどう supply するか、
+あるいは generic local context を Mathlib の ring-of-integers specialization へどう降ろすか、の二択にさらに縮んだ。
 残る open は、この存在形 boundary target を Stage 1 側からどう供給するかと、norm 側である。
 
 `CyclotomicUnitNormalizationTarget` はすでに concrete 化済みであり、

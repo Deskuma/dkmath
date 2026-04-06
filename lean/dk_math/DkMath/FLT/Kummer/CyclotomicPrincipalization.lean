@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.Kummer.GapDivisibleBranch
+import Mathlib.NumberTheory.NumberField.Cyclotomic.Basic
 
 #print "file: DkMath.FLT.Kummer.CyclotomicPrincipalization"
 
@@ -14,6 +15,7 @@ set_option linter.style.emptyLine false
 open scoped nonZeroDivisors
 
 open DkMath.CosmicFormulaBinom
+open NumberField
 
 /-!
 # Cyclotomic Principalization Target
@@ -1292,6 +1294,87 @@ abbrev SubOneDividesPrimePTarget : Prop :=
     ∀ {P : Ideal R}, P.IsPrime →
     (ζ - 1) ∈ P →
     P ∣ Ideal.span ({(p : R)} : Set R)
+
+/--
+Mathlib の `toInteger_sub_one_dvd_prime'` を ideal divisibility へ持ち上げた specialized adapter。
+
+generic `SubOneDividesPrimePTarget` そのものではなく、まず ring of integers of a `p`-th
+cyclotomic extension over `ℚ` で成立する concrete bridge を固定する。
+-/
+theorem subOneDividesPrimeP_of_toInteger_sub_one_dvd_prime'
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    {P : Ideal (𝓞 K)}
+    (hmem : hζ.toInteger - 1 ∈ P) :
+    P ∣ Ideal.span ({(p : 𝓞 K)} : Set (𝓞 K)) := by
+  rw [Ideal.dvd_span_singleton]
+  rcases hζ.toInteger_sub_one_dvd_prime' with ⟨c, hc⟩
+  rw [hc]
+  exact P.mul_mem_right c hmem
+
+/--
+ring of integers specialization では、common prime ideal analysis の `(ζ - 1)` 分岐は
+Mathlib adapter により `P ∣ (p)` へ直ちに変換できる。
+
+review-027 の「最短手は adapter 1 本」という判断を theorem-level に固定する。
+-/
+theorem commonPrimeDvdsPrimeOrY_of_ringOfIntegersCyclotomic
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    {y z : 𝓞 K} (hy : y ≠ 0)
+    {P : Ideal (𝓞 K)} (hP : P.IsPrime)
+    (hp2 : 2 ≤ p)
+    (hP_contains_chosen : z - hζ.toInteger * y ∈ P)
+    (hP_contains_another : ∃ j : ℕ, j ≠ 1 ∧ j < p ∧ z - (hζ.toInteger ^ j) * y ∈ P) :
+    P ∣ Ideal.span ({(p : 𝓞 K)} : Set (𝓞 K)) ∨ y ∈ P := by
+  have hdisj : (hζ.toInteger - 1) ∈ P ∨ y ∈ P :=
+    commonPrimeDvdsSubOneOrY (R := 𝓞 K) (p := p) (ζ := hζ.toInteger)
+      hζ.toInteger_isPrimitiveRoot (Fact.out : Nat.Prime p) hy hP hp2 hP_contains_chosen
+      hP_contains_another
+  rcases hdisj with hsub | hyP
+  · exact Or.inl (subOneDividesPrimeP_of_toInteger_sub_one_dvd_prime' hζ hsub)
+  · exact Or.inr hyP
+
+/--
+共通 prime ideal が存在しないことを示せれば、対応する 2 つの linear factor ideals は互いに素。
+
+common-prime contradiction を coprimality へ戻す generic receiver。
+-/
+theorem linearFactorIdeals_isCoprime_of_noCommonPrime
+    {R : Type*} [CommRing R] [IsDomain R]
+    {z y α β : R}
+    (hNoCommon : ∀ P : Ideal R, P.IsPrime → z - α * y ∈ P → z - β * y ∈ P → False) :
+    IsCoprime (Ideal.span ({z - α * y} : Set R)) (Ideal.span ({z - β * y} : Set R)) := by
+  refine Ideal.coprime_of_no_prime_ge ?_
+  intro P hleA hleB hP
+  exact hNoCommon P hP
+    (hleA (Ideal.subset_span (by simp)))
+    (hleB (Ideal.subset_span (by simp)))
+
+/--
+ring of integers specialization では、`P ∣ (p) ∨ y ∈ P` のどちらも起きないことを supply できれば、
+chosen linear factor と別の 1 因子は互いに素になる。
+
+review-027 の adapter route を pairwise coprimality theorem として固定したもの。
+-/
+theorem chosenLinearFactor_isCoprime_with_other_of_primeOrYContradiction_of_ringOfIntegersCyclotomic
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    {y z : 𝓞 K} (hy : y ≠ 0)
+    {j : ℕ} (hj_ne1 : j ≠ 1) (hj_lt : j < p)
+    (hNoPrimeOrY : ∀ P : Ideal (𝓞 K), P.IsPrime →
+      P ∣ Ideal.span ({(p : 𝓞 K)} : Set (𝓞 K)) ∨ y ∈ P → False) :
+    IsCoprime (Ideal.span ({z - hζ.toInteger * y} : Set (𝓞 K)))
+      (Ideal.span ({z - (hζ.toInteger ^ j) * y} : Set (𝓞 K))) := by
+  refine linearFactorIdeals_isCoprime_of_noCommonPrime ?_
+  intro P hP hmemChosen hmemOther
+  have hp2 : 2 ≤ p := (Fact.out : Nat.Prime p).two_le
+  have hdisj := commonPrimeDvdsPrimeOrY_of_ringOfIntegersCyclotomic
+    hζ (y := y) (z := z) hy hP hp2 hmemChosen ⟨j, hj_ne1, hj_lt, hmemOther⟩
+  exact hNoPrimeOrY P hP hdisj
 
 /--
 局所線型因子 ideal が explicit に `K^p` と書ければ、

@@ -1599,6 +1599,101 @@ Archive
    - 前者は cyclotomic number theory の深い部分だが、Mathlib にある可能性もある
    - 後者は pack の first case 条件 (p ∤ xyz) を使って矛盾を導く
 
+### 日時: 2026/04/06 19:21:44 JST — Mathlib の ring-of-integers theorem から `(ζ-1) ∈ P → P | (p)` を specialized adapter 化
+
+1. 目的:
+    - review-027 の判断に従い、`SubOneDividesPrimePTarget` を generic に掘るのではなく、
+       まず Mathlib の cyclotomic number field theorem を ring-of-integers specialization として接続する
+    - 具体的には `IsPrimitiveRoot.toInteger_sub_one_dvd_prime'` と `toInteger_isPrimitiveRoot` を使って、
+       common-prime disjunction の `(ζ-1)` 分岐を `P ∣ (p)` へ変換する theorem を作る
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に import
+       `Mathlib.NumberTheory.NumberField.Cyclotomic.Basic` を追加
+    - 同ファイルに以下を追加:
+       - `subOneDividesPrimeP_of_toInteger_sub_one_dvd_prime'`
+          : `hζ.toInteger - 1 ∈ P` から `P ∣ Ideal.span {(p : 𝓞 K)}`
+       - `commonPrimeDvdsPrimeOrY_of_ringOfIntegersCyclotomic`
+          : ring of integers specialization で
+             `P ∣ (p) ∨ y ∈ P`
+             まで落とす theorem
+    - これにより、review-026 で追加した
+       `commonPrimeDvdsSubOneOrY`
+       と Mathlib cyclotomic theorem 群が no-so#rry で接続された
+3. 結論:
+    - review-027 の「最短手は adapter 1 本」という判断は正しかった ✅
+    - generic `SubOneDividesPrimePTarget` はなお target として残るが、
+       ring-of-integers specialization では既に concrete theorem が得られた ✅
+    - 残る Stage 1 の honest open は、
+       generic local context をこの specialization へどう降ろすか、
+       または first-case 条件とどう合成するかにさらに縮んだ ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+    - 追加した theorem は no sorry:
+       - `subOneDividesPrimeP_of_toInteger_sub_one_dvd_prime'`
+       - `commonPrimeDvdsPrimeOrY_of_ringOfIntegersCyclotomic`
+    - direct so#rry は引き続き legacy one-shot theorem
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` のみ
+5. 分岐と判断:
+    - 分岐候補:
+       - A. generic `SubOneDividesPrimePTarget` を先に証明する
+       - B. Mathlib の specialized theorem を adapter 化してから、必要なら generic 側へ戻す
+    - 選択:
+       - **B を採用**
+    - 理由:
+       - `IsPrimitiveRoot.toInteger_sub_one_dvd_prime'` が element-level で既に存在しており、
+          ideal-level adapter は短く書けるため
+       - 「使える既存理論を 먼저つなぐ」という AGENT 方針にも合うため
+6. 次の課題:
+    - 次は、generic local context から ring-of-integers specialization へ降ろす adapter を考えるか、
+       もしくは `P ∣ (p) ∨ y ∈ P` と first-case 条件を直接合成して
+       actual coprimality theorem へ押し切るか、の二択じゃ
+    - わっちの現時点の見立てでは、後者、つまり first-case 条件との直接合成の方が短い可能性が高い
+
+### 日時: 2026/04/06 19:38:07 JST — `P ∣ (p) ∨ y ∈ P` contradiction から pairwise coprimality を回収する receiver を追加
+
+1. 目的:
+    - review-027 の延長として、ring-of-integers specialization で
+       `P ∣ (p) ∨ y ∈ P`
+       が起きないことさえ supply できれば pairwise coprimality が出る形へ、残る open をさらに薄くする
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `linearFactorIdeals_isCoprime_of_noCommonPrime`
+          : common-prime contradiction を coprimality へ戻す generic receiver
+       - `chosenLinearFactor_isCoprime_with_other_of_primeOrYContradiction_of_ringOfIntegersCyclotomic`
+          : ring of integers specialization で、`P ∣ (p) ∨ y ∈ P` contradiction target から
+             chosen factor と別の 1 因子の pairwise coprimality を回収する theorem
+    - これにより、Mathlib adapter route は
+       - common prime analysis
+       - `(ζ-1)` 分岐の `P ∣ (p)` 化
+       - contradiction から pairwise coprimality
+       まで no-so#rry で一直線に繋がった
+3. 結論:
+    - 残る actual arithmetic gap は、
+       `P ∣ (p) ∨ y ∈ P`
+       が起きないことを pack 条件からどう supply するか、へさらに sharpen できた ✅
+    - つまり review-027 の二択のうち、
+       「first-case 条件との直接合成」がさらに有望になった ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+    - 追加した theorem は no sorry:
+       - `linearFactorIdeals_isCoprime_of_noCommonPrime`
+       - `chosenLinearFactor_isCoprime_with_other_of_primeOrYContradiction_of_ringOfIntegersCyclotomic`
+    - direct so#rry は引き続き legacy one-shot theorem
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` のみ
+5. 分岐と判断:
+    - 分岐候補:
+       - A. generic local context への adapter を先に詰める
+       - B. ring-of-integers specialization 上で first-case contradiction target を supply して押し切る
+    - 選択:
+       - **B を優先**
+    - 理由:
+       - 受け口側はもう十分細くなっており、追加で generic 化するより
+          actual contradiction target を supply する方が短い見込みだから
+6. 次の課題:
+    - 次は本当に、`P ∣ (p) ∨ y ∈ P` が起きないことを
+       pack 条件からどう導くかを探る段じゃ
+    - もしそこが重いなら、その contradiction 部分も target 化して API をさらに細くするのが次善じゃ
+
 ## Note
 
 タイムスタンプの打刻は `date` コマンドを使用して、実際の日時を正確に記録してください。例: `date "+%Y/%m/%d %H:%M JST"` など。
