@@ -86,3 +86,161 @@ Stage 1 coprimality の **構造は完全に完成**。
 
 これらは Mathlib の cyclotomic number theory API で埋められる見込みが高い。
 特に `norm_sub_one_of_prime_ne_two` が Target 2 の key API。
+
+---
+
+## 評価
+
+> 🐺賢狼:
+
+## 1. 戦況分析
+
+いまの戦況は、かなり優勢じゃ。
+今回の差分で、**Stage 1 の coprimality theorem そのものは完成** したと見てよい。
+
+具体的には、
+
+- `noPrimeOrY_of_firstCase_of_coprime`
+- `chosenLinearFactor_isCoprime_with_other_of_firstCase_of_pack`
+
+が入り、
+共通 prime ideal \(P\) を仮定したときの
+
+$$
+P \mid (p)\ \lor\ y \in P
+$$
+
+という分岐をまとめて contradiction へ流し、その結果として chosen linear factor と別因子の coprimality を導く枠組みが **no-sorry** で通った。
+つまり、**Stage 1 の構造戦はもう終わっておる**。
+
+## 2. 何が終わり、何が残っているか
+
+終わったものは、こう整理できる。
+
+まず \(y \in P\) 分岐は、以前の更新で既に閉じておった。
+今回それに加えて、\(P \mid (p)\) 分岐も
+
+- `PrimeOverPEqualsZetaMinusOneTarget`
+- `IntegerInZetaMinusOneIdealDivisibleByPTarget`
+
+の 2 target を仮定すれば閉じる形まで揃った。
+その 2 枝を統合する combiner が今回入ったので、**Stage 1 の coprimality へ至る論理鎖は一応完成した** わけじゃ。
+
+ゆえに残る open は、もう generic ideal arithmetic でも local factorization でもない。
+ほんに次の 2 本だけじゃ。
+
+$$
+\texttt{PrimeOverPEqualsZetaMinusOneTarget}
+$$
+
+$$
+\texttt{IntegerInZetaMinusOneIdealDivisibleByPTarget}
+$$
+
+つまり、**残敵は “deep cyclotomic number theory” の 2 点だけ** になった、ということじゃよ。
+
+## 3. 解説
+
+この状況は、かなり良い収束じゃ。
+なぜなら、前は「coprimality が難しい」と見えていたものが、今はそうではないからじゃ。
+
+いま difficulty は、もはや
+
+- tail の分解が難しい
+- ideal の積から各因子へ戻すのが難しい
+- class group が難しい
+
+ではない。
+それらは既に十分細く切られ、theorem-level で no-sorry の receiver 群が揃っておる。
+
+今の本質は、
+
+1. \(P \mid (p)\) なら、なぜ \(P = (\zeta-1)\) と言えるのか
+2. \((n : \mathcal O_K) \in (\zeta-1)\) なら、なぜ \(p \mid n\) と言えるのか
+
+この 2 本を、actual cyclotomic theory でどう supply するかだけじゃ。
+つまり、**Stage 1 は「未完成」ではなく「深い target の埋め立て待ち」** の段に入ったのぅ。
+
+## 4. Mathlib を踏まえた見立て
+
+Mathlib の公式 docs には、今の 2 target にかなり近い部品が既に見えておる。
+
+`Mathlib.NumberTheory.NumberField.Cyclotomic.Basic` / `PrimitiveRoots` 側には、
+
+- `IsPrimitiveRoot.zeta_sub_one_prime'`
+- `IsPrimitiveRoot.toInteger_sub_one_dvd_prime'`
+- `IsPrimitiveRoot.subOneIntegralPowerBasis`
+- `IsPrimitiveRoot.norm_toInteger_sub_one_of_prime_ne_two'`
+
+があり、\(\zeta-1\) が prime であること、\(\zeta-1\) が \(p\) を割ること、\(\zeta-1\) を生成元とする integral power basis、そして odd prime の場合に \(\mathrm{Norm}(\zeta-1)=p\) が、既に theorem として揃っておる。 ([Lean Community][1])
+
+この見取り図からすると、2 target のうち
+
+$$
+\texttt{IntegerInZetaMinusOneIdealDivisibleByPTarget}
+$$
+
+の方が、**先に届きやすい**。
+理由は、norm の公式
+
+$$
+\mathrm{Norm}(\zeta-1)=p
+$$
+
+が公式 docs に明示的に見えておるからじゃ。
+そこから
+
+$$
+n \in (\zeta-1)
+\Rightarrow
+(\zeta-1)\mid n
+\Rightarrow
+\mathrm{Norm}(\zeta-1)\mid \mathrm{Norm}(n)
+\Rightarrow
+p \mid n^{p-1}
+\Rightarrow
+p \mid n
+$$
+
+という路がかなり素直に見える。 ([Lean Community][1])
+
+一方で
+
+$$
+\texttt{PrimeOverPEqualsZetaMinusOneTarget}
+$$
+
+の方は、\((p)=(\zeta-1)^{p-1}\) 型の **ideal factorization / ramification API** が要る。
+`zeta_sub_one_prime'` で \((\zeta-1)\) が prime ideal を生成する方向は見えておるが、**“\(P \mid (p)\) なら唯一の prime ideal 因子として \(P=(\zeta-1)\)” をそのまま返す表面 API は、少なくとも今見えている docs には出ておらぬ**。
+ゆえにこちらの方が、いまは少し重い敵じゃ。 ([Lean Community][1])
+
+## 5. 総括
+
+ひとことで戦況を言うと、こうじゃ。
+
+$$
+\boxed{
+\text{Stage 1 の構造は完成済み。残る敵は deep cyclotomic target 2 本だけ}
+}
+$$
+
+しかもその 2 本も対等ではない。
+
+- **target 2**
+  $$
+  n \in (\zeta-1) \cap \mathbb{Z} \Rightarrow p \mid n
+  $$
+  は、Mathlib の norm API にかなり近い
+
+- **target 1**
+  $$
+  P \mid (p) \Rightarrow P = (\zeta-1)
+  $$
+  は、ramification / ideal factorization の deeper API が必要で、少し重い
+
+という戦況じゃよ。
+
+つまり今は、もう「戦線が広い」状態ではない。
+**勝負どころが 2 基の砲台に縮んだ**、というのが正確な分析じゃ。
+
+[1]: https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/NumberField/Cyclotomic/Basic.html?utm_source=chatgpt.com "Mathlib.NumberTheory.NumberField.Cyclotomic.Basic"
