@@ -975,3 +975,43 @@ Archive
 6. 次の課題:
    - local factorization 由来の tail-sum ideal と chosen factor ideal について、first-case から coprimality を返す bridge を試す
    - それが立てば `chosenLinearFactorMulTailEqSpanPow_of_productEq` を経由せずに unit-normalization chain へ入れる見込みが強い
+
+### 日時: 2026/04/08 05:41:28 JST — local tailsum route で Stage 1/2/3 first-case chain をほぼ hProduct-free 化
+
+1. 目的:
+   - local factorization 由来の tail-sum ideal について、first-case から coprimality bridge を返せるか試す
+   - それが立った場合、Stage 1 explicit equality / Stage 1 existence boundary / unit-normalization / Stage 3 GN-power wrapper まで
+     `hProduct` をどこまで押し出せるかを実コードで確認する
+2. 実施:
+   - `CyclotomicPrincipalization.lean` に以下を追加した:
+     - `spanSingletons_isCoprime_of_noCommonPrime`
+     - `primeOrY_of_chosenFactorInP_and_tailSumInP_of_counterexamplePack`
+     - `chosenLinearFactor_isCoprime_with_tailSum_of_firstCase_of_pack_withoutProduct`
+     - `chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin_withoutProduct`
+     - `cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin_withoutProduct`
+     - `cyclotomicUnitNormalization_of_firstCase_of_pack_thin_withoutProduct`
+   - さらに product-free unit-normalization を使うように
+     - `CyclotomicNormGNPowerFirstCasePackThinTarget`
+     - `cyclotomicNormGNPower_of_firstCase_of_pack_thin`
+     - `cyclotomicNormGNPower_concrete_firstCase_packThin`
+     - `false_of_cyclotomicNormGNPower_of_firstCase_of_pack_thin`
+     - `false_of_cyclotomicNormGNPower_concrete_firstCase_pack_thin`
+     の interface / wiring を更新した
+   - class-group から first-case contradiction へ戻す wrapper も新 signature に同期した
+   - `RegularPrimeRoute.lean` の axiom 監視と `todo-044` を更新した
+3. 結論:
+   - local tailsum route だけで、first-case の
+     Stage 1 explicit equality → Stage 1 existence boundary → unit-normalization
+     が no-sorry で通った ✅
+   - その結果、Stage 3 の concrete GN-power wrapper と contradiction wrapper からも `hProduct` を外せた ✅
+   - したがって current first-case concrete chain は、実質的に `hProduct` 依存を追放したと見てよい段階へ到達した ✅
+4. 検証:
+   - `lake build DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+5. 失敗事例:
+   - tailsum bridge の初回実装では、`sum_sub_distrib` の向きと unit witness の扱いで proof plumbing が崩れた
+   - また local tailsum equality を old tail-product abbrev へ無理に合わせると型が合わず、
+     product-free wrapper は direct composition として書き直す必要があった
+6. 次の課題:
+   - 次は、この first-case product-free chain を legacy route / class-group one-shot の縮約へどう注入するかを詰める
+   - 特に `cyclotomicPrincipalization_of_classGroupPTorsionFree` や `FLTPrimeGe5Target_of_kummerRoute` 側で、
+     old `hProduct` 前提を今回の chain へ置き換える導線を整理する

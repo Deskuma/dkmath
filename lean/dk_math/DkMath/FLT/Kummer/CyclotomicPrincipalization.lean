@@ -1415,6 +1415,20 @@ theorem linearFactorIdeals_isCoprime_of_noCommonPrime
     (hleB (Ideal.subset_span (by simp)))
 
 /--
+2 つの singleton principal ideals について、共通 prime ideal が存在しないことから互いに素性を返す generic receiver。
+-/
+theorem spanSingletons_isCoprime_of_noCommonPrime
+    {R : Type*} [CommRing R] [IsDomain R]
+    {a b : R}
+    (hNoCommon : ∀ P : Ideal R, P.IsPrime → a ∈ P → b ∈ P → False) :
+    IsCoprime (Ideal.span ({a} : Set R)) (Ideal.span ({b} : Set R)) := by
+  refine Ideal.coprime_of_no_prime_ge ?_
+  intro P hleA hleB hP
+  exact hNoCommon P hP
+    (hleA (Ideal.subset_span (by simp)))
+    (hleB (Ideal.subset_span (by simp)))
+
+/--
 ring of integers specialization では、`P ∣ (p) ∨ y ∈ P` のどちらも起きないことを supply できれば、
 chosen linear factor と別の 1 因子は互いに素になる。
 
@@ -1700,6 +1714,67 @@ theorem noYInCommonPrime_of_chosenFactorInP_of_coprime_of_counterexamplePack
     hζ hpack.hxy hP hP_chosen
     (chosenCyclotomicLinearFactor_mul_tailSum_eq_x_pow_of_counterexamplePack hζ hpack)
     hP_y
+
+/--
+chosen factor と local tail-sum がともに prime ideal `P` に入るなら、`P ∣ (p)` または `y ∈ P`。
+
+tail-sum は chosen factor で割った余りが `p * (ζ y)^(p-1)` になるため、
+first-case contradiction の combiner へ渡せる disjunction が product-free に得られる。
+-/
+theorem primeOrY_of_chosenFactorInP_and_tailSumInP_of_counterexamplePack
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+  {p y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    {P : Ideal (𝓞 K)} (hP : P.IsPrime)
+    (hP_chosen : (z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K) ∈ P)
+    (hP_tail :
+      ∑ i ∈ Finset.range p,
+        ((z : 𝓞 K) ^ i) * ((hζ.toInteger * (y : 𝓞 K)) ^ (p - 1 - i)) ∈ P) :
+    P ∣ Ideal.span ({(p : 𝓞 K)} : Set (𝓞 K)) ∨ (y : 𝓞 K) ∈ P := by
+  let t : 𝓞 K := hζ.toInteger * (y : 𝓞 K)
+  have hsum_diff :
+      ∑ i ∈ Finset.range p,
+        (((z : 𝓞 K) ^ i) * (t ^ (p - 1 - i)) - t ^ (p - 1)) ∈ P := by
+    refine P.sum_mem ?_
+    intro i hi
+    have hi_le : i ≤ p - 1 := Nat.le_pred_of_lt (Finset.mem_range.mp hi)
+    have hpow_diff : ((z : 𝓞 K) ^ i - t ^ i) ∈ P := by
+      rcases sub_dvd_pow_sub_pow (z : 𝓞 K) t i with ⟨c, hc⟩
+      rw [hc]
+      exact P.mul_mem_right c hP_chosen
+    have hmul : (((z : 𝓞 K) ^ i - t ^ i) * t ^ (p - 1 - i)) ∈ P :=
+      P.mul_mem_right _ hpow_diff
+    have hEqTerm :
+        ((z : 𝓞 K) ^ i) * t ^ (p - 1 - i) - t ^ (p - 1) =
+          (((z : 𝓞 K) ^ i - t ^ i) * t ^ (p - 1 - i)) := by
+      rw [sub_mul, ← pow_add, Nat.add_sub_of_le hi_le]
+    exact hEqTerm.symm ▸ hmul
+  have htail_diff :
+      (∑ i ∈ Finset.range p, ((z : 𝓞 K) ^ i) * (t ^ (p - 1 - i))) -
+          (p : 𝓞 K) * t ^ (p - 1) ∈ P := by
+    simpa [Finset.sum_sub_distrib, Finset.sum_const, Finset.card_range, nsmul_eq_mul] using hsum_diff
+  have hpmul_in_P : (p : 𝓞 K) * t ^ (p - 1) ∈ P := by
+    have htmp :
+        (∑ i ∈ Finset.range p, ((z : 𝓞 K) ^ i) * (t ^ (p - 1 - i))) -
+          ((∑ i ∈ Finset.range p, ((z : 𝓞 K) ^ i) * (t ^ (p - 1 - i))) -
+            (p : 𝓞 K) * t ^ (p - 1)) ∈ P := by
+      exact P.sub_mem hP_tail htail_diff
+    simpa [sub_eq_add_neg, add_assoc, add_left_comm, add_comm] using htmp
+  rcases hP.mem_or_mem hpmul_in_P with hp_in_P | htpow_in_P
+  · left
+    rw [Ideal.dvd_span_singleton]
+    exact hp_in_P
+  · have ht_in_P : t ∈ P := hP.mem_of_pow_mem (p - 1) htpow_in_P
+    have hunit : IsUnit (hζ.toInteger : 𝓞 K) :=
+      IsUnit.of_pow_eq_one hζ.toInteger_isPrimitiveRoot.pow_eq_one hp.out.ne_zero
+    rcases hunit with ⟨u, hu⟩
+    right
+    have hy_mul_in_P : ((↑u⁻¹ : 𝓞 K) * t) ∈ P := P.mul_mem_left _ ht_in_P
+    have hy_eq : (y : 𝓞 K) = ((↑u⁻¹ : 𝓞 K) * t) := by
+      dsimp [t]
+      rw [← hu]
+      simp
+    exact hy_eq.symm ▸ hy_mul_in_P
 
 /-! ### P ∣ (p) 分岐の contradiction を閉じる補題群
 
@@ -2349,6 +2424,51 @@ theorem chosenLinearFactor_isCoprime_with_other_of_firstCase_of_pack_withoutProd
       hζ hpack hP hmemChosen hP_y
 
 /--
+first-case pack から、chosen linear factor ideal と local tail-sum ideal の互いに素性を導く。
+
+これは local factorization ベースの責務 A 候補を Stage 1 receiver へ接続するための bridge である。
+-/
+theorem chosenLinearFactor_isCoprime_with_tailSum_of_firstCase_of_pack_withoutProduct
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : (z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K) ≠ 0) :
+    IsCoprime
+      (Ideal.span ({(z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)} : Set (𝓞 K)))
+      (Ideal.span ({∑ i ∈ Finset.range p,
+          ((z : 𝓞 K) ^ i) * ((hζ.toInteger * (y : 𝓞 K)) ^ (p - 1 - i))} : Set (𝓞 K))) := by
+  have hp_ne_two : p ≠ 2 := by
+    have hp_gt_two : 2 < p := lt_of_lt_of_le (by decide : 2 < 5) hpack.hp5
+    exact ne_of_gt hp_gt_two
+  refine spanSingletons_isCoprime_of_noCommonPrime ?_
+  intro P hP hmemChosen hmemTail
+  have hmemChosen : ((z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)) ∈ P :=
+    hmemChosen
+  have hmemTail :
+      ∑ i ∈ Finset.range p,
+        ((z : 𝓞 K) ^ i) * ((hζ.toInteger * (y : 𝓞 K)) ^ (p - 1 - i)) ∈ P :=
+    hmemTail
+  rcases primeOrY_of_chosenFactorInP_and_tailSumInP_of_counterexamplePack
+      (K := K) (p := p) (y := y) (z := z) hζ hP hmemChosen hmemTail with
+    hP_dvd_p | hP_y
+  · have hP_ne_bot : P ≠ ⊥ := by
+      intro hbot
+      rw [hbot] at hmemChosen
+      exact hLinNe (Ideal.mem_bot.mp hmemChosen)
+    exact noPrimeOverP_of_firstCase_of_chosenFactorInP
+      hζ
+      (fun {P} hP' _hP_ne hP'_dvd_p => by
+        let _ : P.IsPrime := hP'
+        exact primeOverPEqualsZetaMinusOne_fill hζ P hP'_dvd_p)
+      (integerInZetaMinusOneIdealDivisibleByP_fill hζ hp_ne_two)
+      hP hP_ne_bot hP_dvd_p hmemChosen hgap_eq hFirstCase
+  · exact noYInCommonPrime_of_chosenFactorInP_of_coprime_of_counterexamplePack
+      hζ hpack hP hmemChosen hP_y
+
+/--
 cyclotomic の整数環 specialization で使う j 番目の linear factor。
 -/
 abbrev cyclotomicLinearFactorInRingOfIntegers
@@ -2674,6 +2794,56 @@ theorem chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin
       (K := K) (p := p) (x := x) (y := y) (z := z) hζ hpack hProduct)
 
 /--
+first-case pack から、full product identity を使わずに chosen linear factor ideal が `p` 乗 ideal であることを返す。
+
+local factorization の tail-sum ideal と product-free coprimality bridge を経由する。
+-/
+theorem chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin_withoutProduct
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
+      (hζ := hζ) (y := y) (z := z)) :
+    ChosenCyclotomicLinearFactorSpanEqPowInRingOfIntegers
+      (hζ := hζ) (p := p) (y := y) (z := z) := by
+  let ctx : CyclotomicLocalFactorizationContext (𝓞 K) := {
+    p := p
+    zeta := hζ.toInteger
+    hzeta_pow := by
+      simpa using hζ.toInteger_isPrimitiveRoot.pow_eq_one
+  }
+  let tail : 𝓞 K :=
+    ∑ i ∈ Finset.range p,
+      ((z : 𝓞 K) ^ i) * ((hζ.toInteger * (y : 𝓞 K)) ^ (p - 1 - i))
+  have hMul :
+      Ideal.span ({chosenCyclotomicLinearFactorInRingOfIntegers hζ y z} : Set (𝓞 K)) *
+          Ideal.span ({tail} : Set (𝓞 K)) =
+        Ideal.span ({(x : 𝓞 K)} : Set (𝓞 K)) ^ p := by
+    simpa [tail, chosenCyclotomicLinearFactorInRingOfIntegers, mul_comm] using
+      chosenCyclotomicTailSumMulChosenLinearFactorEqSpanPow_of_counterexamplePack hζ hpack
+  have hCoprime :
+      IsCoprime
+        (Ideal.span ({chosenCyclotomicLinearFactorInRingOfIntegers hζ y z} : Set (𝓞 K)))
+        (Ideal.span ({tail} : Set (𝓞 K))) := by
+    simpa [tail, chosenCyclotomicLinearFactorInRingOfIntegers] using
+      chosenLinearFactor_isCoprime_with_tailSum_of_firstCase_of_pack_withoutProduct
+        (K := K) (p := p) (x := x) (y := y) (z := z)
+        hζ hpack hgap_eq hFirstCase hLinNe
+  have hSpanEq :
+      ∃ K' : Ideal (𝓞 K),
+        Ideal.span ({(z : 𝓞 K) - ctx.zeta * (y : 𝓞 K)} : Set (𝓞 K)) = K' ^ ctx.p := by
+    exact linearFactorSpanEqPowOfChosenMulTailEqSpanPowAndIsCoprime
+      (R := 𝓞 K) (ctx := ctx) (tail := tail) (x := (x : 𝓞 K))
+      (y := (y : 𝓞 K)) (z := (z : 𝓞 K))
+      (xSpanNonzero_of_counterexamplePack_of_ringOfIntegers
+        (K := K) (p := p) (x := x) (y := y) (z := z) hpack)
+      hMul hCoprime
+  simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hSpanEq
+
+/--
 mul-tail ideal equality core と torsion-kill から、chosen linear factor ideal の
 principal `p` 乗存在を返す isolated receiver。
 -/
@@ -2738,6 +2908,42 @@ theorem cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin
     hKill
 
 /--
+first-case pack から、full product identity を使わずに chosen linear factor ideal の principal `p` 乗存在を返す。
+-/
+theorem cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin_withoutProduct
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
+      (hζ := hζ) (y := y) (z := z))
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
+    ChosenCyclotomicLinearFactorIdealPthPowerInRingOfIntegers
+      (hζ := hζ) (p := p) (y := y) (z := z) := by
+  let ctx : CyclotomicLocalFactorizationContext (𝓞 K) := {
+    p := p
+    zeta := hζ.toInteger
+    hzeta_pow := by
+      simpa using hζ.toInteger_isPrimitiveRoot.pow_eq_one
+  }
+  obtain hSpan := chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin_withoutProduct
+    (K := K) (p := p) (x := x) (y := y) (z := z)
+    hζ hpack hgap_eq hFirstCase hLinNe
+  obtain ⟨K', hEq⟩ := hSpan
+  have hExists :
+      ∃ J : Ideal (𝓞 K), J.IsPrincipal ∧
+        Ideal.span ({(z : 𝓞 K) - ctx.zeta * (y : 𝓞 K)} : Set (𝓞 K)) = J ^ ctx.p := by
+    exact linearFactorIdealPthPowerExistsOfSpanEqPowAndTorsionKill
+      (R := 𝓞 K) (ctx := ctx) (K := K') hp.out.ne_zero
+      (by simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hLinNe)
+      (by simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hEq)
+      hKill
+  simpa [ChosenCyclotomicLinearFactorIdealPthPowerInRingOfIntegers,
+    ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hExists
+
+/--
 mul-tail ideal equality core と principal `p` 乗存在から、chosen linear factor 自体を
 unit 倍の `p` 乗として返す isolated receiver。
 -/
@@ -2795,6 +3001,37 @@ theorem cyclotomicUnitNormalization_of_firstCase_of_pack_thin
     (chosenLinearFactorMulTailEqSpanPow_of_productEq
       (K := K) (p := p) (x := x) (y := y) (z := z) hζ hpack hProduct)
     hKill
+
+/--
+first-case pack から、full product identity を使わずに chosen linear factor 自体を unit 倍の `p` 乗として返す。
+-/
+theorem cyclotomicUnitNormalization_of_firstCase_of_pack_thin_withoutProduct
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
+      (hζ := hζ) (y := y) (z := z))
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
+    ∃ β unitFactor : 𝓞 K, IsUnit unitFactor ∧
+      chosenCyclotomicLinearFactorInRingOfIntegers hζ y z = unitFactor * β ^ p := by
+  let ctx : CyclotomicLocalFactorizationContext (𝓞 K) := {
+    p := p
+    zeta := hζ.toInteger
+    hzeta_pow := by
+      simpa using hζ.toInteger_isPrimitiveRoot.pow_eq_one
+  }
+  obtain ⟨I, hIPrincipal, hSpan⟩ :=
+    cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin_withoutProduct
+      (K := K) (p := p) (x := x) (y := y) (z := z)
+      hζ hpack hgap_eq hFirstCase hLinNe hKill
+  let _ : I.IsPrincipal := hIPrincipal
+  obtain ⟨unitFactor, hUnit, hEq⟩ :=
+    linearFactorEqUnitMulGeneratorPowOfSpanEqPowPrincipal ctx (z : 𝓞 K) (y : 𝓞 K) hSpan
+  refine ⟨Submodule.IsPrincipal.generator I, unitFactor, hUnit, ?_⟩
+  simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hEq
 
 /--
 Stage 3a-1 の最初の中間補題:
@@ -3157,8 +3394,6 @@ abbrev CyclotomicNormGNPowerFirstCasePackThinTarget : Prop :=
       ¬ p ∣ gap →
       ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
         (y := y) (z := z) →
-      CyclotomicLinearFactorProductEqInRingOfIntegers (hζ := hζ)
-        (x := x) (y := y) (z := z) →
       ∃ s : ℕ, GN p (z - y) y = s ^ p
 
 /--
@@ -3179,14 +3414,12 @@ theorem cyclotomicNormGNPower_of_firstCase_of_pack_thin
     {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
     (hFirstCase : ¬ p ∣ gap)
     (hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
-      (y := y) (z := z))
-    (hProduct : CyclotomicLinearFactorProductEqInRingOfIntegers
-      (hζ := hζ) (x := x) (y := y) (z := z)) :
+      (y := y) (z := z)) :
     ∃ s : ℕ, GN p (z - y) y = s ^ p := by
   obtain ⟨β, unitFactor, hUnit, hEq⟩ :=
-    cyclotomicUnitNormalization_of_firstCase_of_pack_thin
+    cyclotomicUnitNormalization_of_firstCase_of_pack_thin_withoutProduct
       (K := K) (p := p) (x := x) (y := y) (z := z)
-      hζ hpack hgap_eq hFirstCase hLinNe hProduct hKill
+      hζ hpack hgap_eq hFirstCase hLinNe hKill
   have hNorm :
       Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) =
         (GN p (z - y) y : ℤ) :=
@@ -3202,12 +3435,12 @@ first-case pack-thin での Stage 3 concrete wrapper。
 theorem cyclotomicNormGNPower_concrete_firstCase_packThin
     (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
     CyclotomicNormGNPowerFirstCasePackThinTarget.{u} := by
-  intro K _ _ _ p x y z _ _ ζ hζ hpack gap hgap_eq hFirstCase hLinNe hProduct
+  intro K _ _ _ p x y z _ _ ζ hζ hpack gap hgap_eq hFirstCase hLinNe
   exact cyclotomicNormGNPower_of_firstCase_of_pack_thin
     hKill
     cyclotomicNormEqGN_concrete_firstCase_packThin
     cyclotomicNormUnitAbsorb_concrete_firstCase_packThin
-    hζ hpack hgap_eq hFirstCase hLinNe hProduct
+    hζ hpack hgap_eq hFirstCase hLinNe
 
 /--
 `GN p (z - y) y` が `p` 乗になるなら、既存の no-pow target と即座に衝突する。
@@ -3232,13 +3465,11 @@ theorem false_of_cyclotomicNormGNPower_of_firstCase_of_pack_thin
         ¬ p ∣ gap →
         ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
           (y := y) (z := z) →
-        CyclotomicLinearFactorProductEqInRingOfIntegers (hζ := hζ)
-          (x := x) (y := y) (z := z) →
         False := by
-  intro K _ _ _ p x y z _ _ ζ hζ hpack gap hgap_eq hFirstCase hLinNe hProduct
+  intro K _ _ _ p x y z _ _ ζ hζ hpack gap hgap_eq hFirstCase hLinNe
   obtain ⟨s, hs⟩ :=
     cyclotomicNormGNPower_of_firstCase_of_pack_thin
-      hKill hNormEqGN hUnitAbsorb hζ hpack hgap_eq hFirstCase hLinNe hProduct
+      hKill hNormEqGN hUnitAbsorb hζ hpack hgap_eq hFirstCase hLinNe
   exact hNoPow hpack ⟨s, hs⟩
 
 /--
@@ -3259,8 +3490,6 @@ theorem false_of_cyclotomicNormGNPower_concrete_firstCase_pack_thin
         ¬ p ∣ gap →
         ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
           (y := y) (z := z) →
-        CyclotomicLinearFactorProductEqInRingOfIntegers (hζ := hζ)
-          (x := x) (y := y) (z := z) →
         False := by
   exact false_of_cyclotomicNormGNPower_of_firstCase_of_pack_thin
     hKill
@@ -4095,8 +4324,6 @@ theorem false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionF
         ¬ p ∣ gap →
         ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
           (y := y) (z := z) →
-        CyclotomicLinearFactorProductEqInRingOfIntegers (hζ := hζ)
-          (x := x) (y := y) (z := z) →
         False := by
   exact false_of_cyclotomicNormGNPower_concrete_firstCase_pack_thin
     (hKill := cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree hCl)
@@ -4129,7 +4356,7 @@ theorem false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionF
   exact false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree
     (hCl := hCl) (hNoPow := hNoPow)
     (K := K) (p := p) (x := x) (y := y) (z := z) (ζ := ζ) (gap := gap)
-    hζ hpack hgap_eq hFirstCase hLinNe hProduct
+    hζ hpack hgap_eq hFirstCase hLinNe
 
 /--
 gap-divisible branch のうち first-case (`¬ p ∣ z - y`) では、
@@ -4165,7 +4392,7 @@ theorem qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree
     false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree
       (hCl := hCl) (hNoPow := hNoPow)
       (K := K) (p := p) (x := x) (y := y) (z := z) (ζ := ζ) (gap := gap)
-      hζ hpack hgap_eq hFirstCase hLinNe hProduct
+      hζ hpack hgap_eq hFirstCase hLinNe
 
 /--
 `hLinNe` を product identity から自動供給する版の first-case gap-divisible witness theorem。

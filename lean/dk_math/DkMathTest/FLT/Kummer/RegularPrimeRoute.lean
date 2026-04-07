@@ -179,6 +179,12 @@ no-sorry の theorem が意図せず sorry に汚染されていないことを�
 #print axioms DkMath.FLT.chosenLinearFactor_isCoprime_with_tail_of_firstCase_of_pack -- OK: no sorry
 -- no-sorry (first-case chosen factor is coprime to the full complementary tail, product-free variant)
 #print axioms DkMath.FLT.chosenLinearFactor_isCoprime_with_tail_of_firstCase_of_pack_withoutProduct -- OK: no sorry
+-- no-sorry (generic singleton-ideal coprime receiver)
+#print axioms DkMath.FLT.spanSingletons_isCoprime_of_noCommonPrime -- OK: no sorry
+-- no-sorry (chosen + tailsum in a common prime ideal imply P | (p) or y ∈ P)
+#print axioms DkMath.FLT.primeOrY_of_chosenFactorInP_and_tailSumInP_of_counterexamplePack -- OK: no sorry
+-- no-sorry (first-case chosen factor is coprime to the local tailsum ideal)
+#print axioms DkMath.FLT.chosenLinearFactor_isCoprime_with_tailSum_of_firstCase_of_pack_withoutProduct -- OK: no sorry
 -- no-sorry (chosen-first 2-factor equality adapter)
 #print axioms DkMath.FLT.linearFactorSpanEqPowOfChosenMulTailEqSpanPowAndIsCoprime -- OK: no sorry
 -- no-sorry (pack product identity -> chosen/tail ideal equation)
@@ -189,14 +195,20 @@ no-sorry の theorem が意図せず sorry に汚染されていないことを�
 #print axioms DkMath.FLT.xSpanNonzero_of_counterexamplePack_of_ringOfIntegers -- OK: no sorry
 -- no-sorry (first-case pack -> chosen factor ideal explicit p-th power equality)
 #print axioms DkMath.FLT.chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin -- OK: no sorry
+-- no-sorry (first-case pack -> chosen factor ideal explicit p-th power equality, product-free local-tailsum route)
+#print axioms DkMath.FLT.chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin_withoutProduct -- OK: no sorry
 -- no-sorry (isolated receiver: mul-tail ideal equality + torsion-kill -> Stage 1 existence boundary)
 #print axioms DkMath.FLT.cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin_of_mulTailEqSpanPow -- OK: no sorry
 -- no-sorry (first-case pack -> Stage 1 existence boundary)
 #print axioms DkMath.FLT.cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin -- OK: no sorry
+-- no-sorry (first-case pack -> Stage 1 existence boundary, product-free local-tailsum route)
+#print axioms DkMath.FLT.cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin_withoutProduct -- OK: no sorry
 -- no-sorry (isolated receiver: mul-tail ideal equality + principality -> norm-pre boundary)
 #print axioms DkMath.FLT.cyclotomicUnitNormalization_of_firstCase_of_pack_thin_of_mulTailEqSpanPow -- OK: no sorry
 -- no-sorry (first-case pack -> norm-pre boundary `z - ζy = u * β^p`)
 #print axioms DkMath.FLT.cyclotomicUnitNormalization_of_firstCase_of_pack_thin -- OK: no sorry
+-- no-sorry (first-case pack -> norm-pre boundary, product-free local-tailsum route)
+#print axioms DkMath.FLT.cyclotomicUnitNormalization_of_firstCase_of_pack_thin_withoutProduct -- OK: no sorry
 -- no-sorry (Stage 3a-1 core: chosen factor norm -> Gal(K/ℚ)-product)
 #print axioms DkMath.FLT.chosenCyclotomicLinearFactor_norm_eq_prod_gal_of_firstCase_of_pack_thin -- OK: no sorry
 -- no-sorry (Stage 3a-1 reindex atom: Galois conjugate of chosen factor -> cyclotomic factor)
@@ -281,6 +293,8 @@ no-sorry の theorem が意図せず sorry に汚染されていないことを�
 #print axioms DkMath.NumberTheory.Gcd.gn_natCast -- OK: no sorry
 -- no-sorry (generic natAbs-based integer pth-power recovery)
 #print axioms DkMath.NumberTheory.Gcd.nat_exists_pow_of_intEq_unit_mul_pow -- OK: no sorry
+-- no-sorry (Stage 3 concrete GN-power wrapper is now hProduct-free)
+#print axioms DkMath.FLT.cyclotomicNormGNPower_concrete_firstCase_packThin -- OK: no sorry
 -- no-sorry (concrete contradiction bridge from GN-power)
 #print axioms DkMath.FLT.false_of_cyclotomicNormGNPower_concrete_firstCase_pack_thin -- OK: no sorry
 -- no-sorry (class-group -> first-case concrete contradiction wrapper)
