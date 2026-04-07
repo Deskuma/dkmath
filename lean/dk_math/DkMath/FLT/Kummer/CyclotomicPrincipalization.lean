@@ -1988,6 +1988,33 @@ abbrev ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
   chosenCyclotomicLinearFactorInRingOfIntegers hζ y z ≠ 0
 
 /--
+full product identity があれば、chosen cyclotomic linear factor は自動的に非零である。
+
+`∏_{j < p} (z - ζ^j y) = x^p` と `x ≠ 0` から、1 番目の因子が 0 なら積全体が 0 になって矛盾する。
+-/
+theorem chosenCyclotomicLinearFactorNonzero_of_productEq_of_counterexamplePack
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hProduct : CyclotomicLinearFactorProductEqInRingOfIntegers
+      (hζ := hζ) (x := x) (y := y) (z := z)) :
+    ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ) (y := y) (z := z) := by
+  intro hChosenZero
+  have hone_mem : 1 ∈ Finset.range p := by
+    exact Finset.mem_range.mpr (lt_of_lt_of_le (by decide : 1 < 5) hpack.hp5)
+  have hprod_zero :
+      ∏ j ∈ Finset.range p, cyclotomicLinearFactorInRingOfIntegers hζ y z j = 0 := by
+    exact Finset.prod_eq_zero_iff.mpr ⟨1, hone_mem, by
+      simpa [cyclotomicLinearFactorInRingOfIntegers,
+        chosenCyclotomicLinearFactorInRingOfIntegers, pow_one] using hChosenZero⟩
+  have hxpow_zero : ((x : 𝓞 K) ^ p) = 0 := by
+    rw [← hProduct]
+    exact hprod_zero
+  have hx_zero : (x : 𝓞 K) = 0 := eq_zero_of_pow_eq_zero hxpow_zero
+  exact hpack.hx0 (Nat.cast_eq_zero.mp hx_zero)
+
+/--
 chosen linear factor と tail ideal の積が `(x)^p` になることを表す shorthand。
 -/
 abbrev ChosenCyclotomicLinearFactorMulTailEqSpanPowInRingOfIntegers
@@ -3598,6 +3625,35 @@ theorem false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionF
     (hNoPow := hNoPow)
 
 /--
+`hLinNe` を product identity から自動供給する版の first-case concrete contradiction wrapper。
+-/
+theorem false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree_of_productEq
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p) :
+    ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+      ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+      ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {gap : ℕ},
+        (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+        ¬ p ∣ gap →
+        CyclotomicLinearFactorProductEqInRingOfIntegers (hζ := hζ)
+          (x := x) (y := y) (z := z) →
+        False := by
+  intro K _ _ _ p x y z _ _ ζ hζ hpack gap hgap_eq hFirstCase hProduct
+  have hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
+      (hζ := hζ) (y := y) (z := z) :=
+    chosenCyclotomicLinearFactorNonzero_of_productEq_of_counterexamplePack
+      (hζ := hζ) (x := x) hpack hProduct
+  exact false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree
+    (hCl := hCl) (hNoPow := hNoPow)
+    (K := K) (p := p) (x := x) (y := y) (z := z) (ζ := ζ) (gap := gap)
+    hζ hpack hgap_eq hFirstCase hLinNe hProduct
+
+/--
 gap-divisible branch のうち first-case (`¬ p ∣ z - y`) では、
 class-group 仮定と `NoPowOnGN` から即座に矛盾が出るので、descent witness は `False.elim` で返せる。
 
@@ -3632,6 +3688,39 @@ theorem qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree
       (hCl := hCl) (hNoPow := hNoPow)
       (K := K) (p := p) (x := x) (y := y) (z := z) (ζ := ζ) (gap := gap)
       hζ hpack hgap_eq hFirstCase hLinNe hProduct
+
+/--
+`hLinNe` を product identity から自動供給する版の first-case gap-divisible witness theorem。
+-/
+theorem qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_of_productEq
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p) :
+    ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+      ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+      ∀ {q : ℕ}, Nat.Prime q →
+        q ∣ x →
+        q ≠ p →
+        q ∣ (z - y) →
+      ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {gap : ℕ},
+        (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+        ¬ p ∣ gap →
+        CyclotomicLinearFactorProductEqInRingOfIntegers (hζ := hζ)
+          (x := x) (y := y) (z := z) →
+        ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p := by
+  intro K _ _ _ p x y z _ _ q hq hqx hqne hqgap ζ hζ hpack gap hgap_eq hFirstCase hProduct
+  have hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
+      (hζ := hζ) (y := y) (z := z) :=
+    chosenCyclotomicLinearFactorNonzero_of_productEq_of_counterexamplePack
+      (hζ := hζ) (x := x) hpack hProduct
+  exact qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree
+    (hCl := hCl) (hNoPow := hNoPow)
+    (K := K) (p := p) (x := x) (y := y) (z := z) (q := q) (ζ := ζ) (gap := gap)
+    hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase hLinNe hProduct
 
 /--
 `TriominoCosmicNonLiftableGNBridge` から `NoPowOnGN` を経由して、

@@ -673,3 +673,36 @@ Archive
     - `cyclotomicPrincipalization_of_classGroupPTorsionFree` の proof で first-case / non-first-case を切り、
        first-case 側を今回の branch-existence theorem へ接続する
     - その後、残る non-first-case / legacy one-shot 側の責任範囲をさらに局所化する
+
+### 日時: 2026/04/08 01:29:41 JST — first-case bridge の前提を `hProduct` まで圧縮した
+
+1. 目的:
+    - global pack から `hProduct` と `hLinNe` の両方が要る、という current blocker を減らせるかを確認し、
+       少なくとも `hLinNe` は product identity から自動供給できる形へ整理する
+    - future case split の first-case 枝が、最終的に何を supply すればよいかをさらに明確化する
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に
+       `chosenCyclotomicLinearFactorNonzero_of_productEq_of_counterexamplePack`
+       を追加した
+    - この theorem で
+       `∏ j < p, (z - ζ^j y) = x^p` と `x ≠ 0` から、chosen factor が 0 なら積全体が 0 になって矛盾することを formalized した
+    - さらに productEq-only 版として以下を追加:
+       - `false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree_of_productEq`
+       - `qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_of_productEq`
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` に上記 theorem の axiom 監視を追加した
+3. 結論:
+    - first-case bridge 群に必要な追加入力は、もはや
+       `hLinNe` と `hProduct` の 2 本ではなく、実質 `hProduct` 1 本だけになった ✅
+    - したがって `cyclotomicPrincipalization_of_classGroupPTorsionFree` を切り裂く最後の concrete blocker は、
+       global pack から `CyclotomicLinearFactorProductEqInRingOfIntegers` を canonical に供給する theorem の不在だと、より明確に言える ✅
+4. 検証:
+    - `lake build DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+    - `lake build DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+5. 失敗事例:
+    - 上流 target 群を再確認したところ、
+       `CyclotomicPureFactorizationIdentityTarget` から `CyclotomicIdealEquationTarget` までは依然 `True` placeholder のため、
+       現段階ではそこから `hProduct` を canonical に引くことはできなかった
+6. 次の課題:
+    - `CyclotomicLinearFactorProductEqInRingOfIntegers` を global pack から供給する direct theorem を探すか、
+       あるいは local factorization core から ring-of-integers product identity への bridge を新設する
+    - それが揃い次第、`cyclotomicPrincipalization_of_classGroupPTorsionFree` の first-case 枝を productEq-only bridge へ接続する
