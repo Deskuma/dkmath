@@ -581,3 +581,95 @@ Archive
     - `FLTPrimeGe5Target_of_kummerRoute` を将来 case split 化する際、
        first-case 枝は今回の bridge theorem を通して concrete contradiction へ差し替える
     - 残る本丸は依然として `cyclotomicPrincipalization_of_classGroupPTorsionFree` の legacy one-shot 設計の縮約じゃ
+
+### 日時: 2026/04/08 00:54:07 JST — route 側にも first-case replacement point の alias を戻した
+
+1. 目的:
+   - stable bridge 自体は `CyclotomicPrincipalization.lean` 側へ安定配置できたので、
+      review-043 で意図していた route-level の theorem 名も薄い alias として回復する
+   - `RegularPrimeRoute.lean` を将来 case split 化するとき、first-case 枝の差し替え先が route ファイル上でも読めるようにする
+2. 実施:
+   - `RegularPrimeRoute.lean` に
+      `fltPrimeGe5Target_of_kummerRoute_firstCase_concrete` を追加した
+   - 実装は bridge の再構築をせず、
+      `false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree`
+      をそのまま呼ぶ thin alias とした
+   - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` に axiom 監視を追加した
+3. 結論:
+   - first-case の差し替え先は、
+      `CyclotomicPrincipalization.lean` 側の stable bridge と
+      `RegularPrimeRoute.lean` 側の route alias の 2 箇所で theorem 名つきに読める状態になった ✅
+   - これにより、今後 `FLTPrimeGe5Target_of_kummerRoute` を case split 化する作業の入口は十分に整った ✅
+4. 検証:
+   - `lake build DkMath.FLT.Kummer.RegularPrimeRoute` を実行して no-sorry alias として通ることを確認する
+   - `#print axioms DkMath.FLT.fltPrimeGe5Target_of_kummerRoute_firstCase_concrete` を監視対象へ追加した
+5. 失敗事例:
+   - 直接 bridge を route ファイル内で再構築すると universe 推論が崩れたため、
+      alias 化へ切り替えた
+6. 次の課題:
+   - `FLTPrimeGe5Target_of_kummerRoute` 本体を case split 化し、first-case 枝を今回の alias へ接続する
+   - その後、本丸である `cyclotomicPrincipalization_of_classGroupPTorsionFree` の legacy one-shot 設計を縮約する
+
+### 日時: 2026/04/08 00:58:49 JST — route-level alias は見送り、stable bridge のみ維持
+
+1. 目的:
+    - `RegularPrimeRoute.lean` 側にも first-case replacement point の alias を公開できるか試し、
+       build を崩さず route-level theorem 名を残せるか確認する
+2. 実施:
+    - `fltPrimeGe5Target_of_kummerRoute_firstCase_concrete` を route 側 alias として追加し、
+       `false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree` を
+       呼ぶだけの thin wrapper にして build を試した
+    - しかし route ファイル側では、`CyclotomicClassGroupPTorsionFreeTarget` を経由する時点で
+       universe 推論が不安定化し、`K` / `ClassGroup R` 周りの型一致に失敗した
+    - そのため alias は撤回し、stable bridge を
+       `CyclotomicPrincipalization.lean` 側にのみ残す構成へ戻した
+3. 結論:
+    - first-case replacement point として必要な theorem は、
+       `false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree`
+       1 本で十分であり、現時点では route-level alias を無理に置かない方が堅い ✅
+    - `RegularPrimeRoute.lean` と test 監視は、alias 撤回後に元の clean build 状態へ戻した ✅
+4. 検証:
+    - `lake build DkMath.FLT.Kummer.RegularPrimeRoute` 成功
+    - `lake build DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+5. 失敗事例:
+    - stable bridge 自体は no-sorry で compile するが、
+       それを route 側 theorem として再包装すると universe 推論が崩れる
+    - このため、route-level alias を残す案は現時点では compile-safe ではないと判断した
+6. 次の課題:
+    - `FLTPrimeGe5Target_of_kummerRoute` の case split 化は、
+       route-level alias ではなく `CyclotomicPrincipalization.lean` 側の stable bridge を直接呼ぶ形で設計する
+    - 引き続き本丸は `cyclotomicPrincipalization_of_classGroupPTorsionFree` の legacy one-shot 設計の縮約じゃ
+
+### 日時: 2026/04/08 01:05:38 JST — first-case gap-divisible branch も stable bridge から返せる形にした
+
+1. 目的:
+    - route-level alias に頼らずとも、future case split でそのまま使える形へ一歩進めるため、
+       first-case では contradiction から gap-divisible branch の witness existence を返す theorem を mainline に追加する
+    - `hNoLift` から `NoPowOnGN` を取り出す wrapper も合わせて用意し、
+       将来 `FLTPrimeGe5Target_of_kummerRoute` が持つ既存引数へ自然に接続できるようにする
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree`
+       - `qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_nonLiftable`
+    - 前者は
+       `false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree`
+       を `False.elim` で branch target の witness existence へ持ち上げる thin wrapper
+    - 後者は
+       `triominoCosmicNoPowOnGN_of_nonLiftableGNBridge`
+       で `hNoLift` から `NoPowOnGN` を供給する wrapper
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` に上記 2 theorem の axiom 監視を追加した
+3. 結論:
+    - future case split で必要になる first-case gap-divisible branch の戻り値
+       `∃ g'` は、もう stable bridge 群だけで返せる状態になった ✅
+    - これにより、`FLTPrimeGe5Target_of_kummerRoute` の first-case 枝は
+       contradiction theorem ではなく branch target の形で直接差し替えられる見通しが立った ✅
+4. 検証:
+    - `lake build DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+    - `lake build DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+5. 失敗事例:
+    - なし。今回は existing stable bridge 群の再配線のみで、
+       new theorem は `False.elim` と既存 `NoPowOnGN` wrapper の合成で閉じた
+6. 次の課題:
+    - `cyclotomicPrincipalization_of_classGroupPTorsionFree` の proof で first-case / non-first-case を切り、
+       first-case 側を今回の branch-existence theorem へ接続する
+    - その後、残る non-first-case / legacy one-shot 側の責任範囲をさらに局所化する

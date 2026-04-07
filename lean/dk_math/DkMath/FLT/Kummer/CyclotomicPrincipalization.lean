@@ -3598,6 +3598,78 @@ theorem false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionF
     (hNoPow := hNoPow)
 
 /--
+gap-divisible branch のうち first-case (`¬ p ∣ z - y`) では、
+class-group 仮定と `NoPowOnGN` から即座に矛盾が出るので、descent witness は `False.elim` で返せる。
+
+この theorem は future case split で legacy one-shot route の first-case 枝を
+差し替えるための direct landing point になる。
+-/
+theorem qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p) :
+    ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+      ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+      ∀ {q : ℕ}, Nat.Prime q →
+        q ∣ x →
+        q ≠ p →
+        q ∣ (z - y) →
+      ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {gap : ℕ},
+        (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+        ¬ p ∣ gap →
+        ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
+          (y := y) (z := z) →
+        CyclotomicLinearFactorProductEqInRingOfIntegers (hζ := hζ)
+          (x := x) (y := y) (z := z) →
+        ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p := by
+  intro K _ _ _ p x y z _ _ q hq hqx hqne hqgap ζ hζ hpack gap hgap_eq hFirstCase hLinNe hProduct
+  exact False.elim <|
+    false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree
+      (hCl := hCl) (hNoPow := hNoPow)
+      (K := K) (p := p) (x := x) (y := y) (z := z) (ζ := ζ) (gap := gap)
+      hζ hpack hgap_eq hFirstCase hLinNe hProduct
+
+/--
+`TriominoCosmicNonLiftableGNBridge` から `NoPowOnGN` を経由して、
+first-case gap-divisible branch の descent witness を返す concrete wrapper。
+-/
+theorem qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_nonLiftable
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+      ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+      ∀ {q : ℕ}, Nat.Prime q →
+        q ∣ x →
+        q ≠ p →
+        q ∣ (z - y) →
+      ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {gap : ℕ},
+        (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+        ¬ p ∣ gap →
+        ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
+          (y := y) (z := z) →
+        CyclotomicLinearFactorProductEqInRingOfIntegers (hζ := hζ)
+          (x := x) (y := y) (z := z) →
+        ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p := by
+  let hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p :=
+    bodyInvariant_of_NoPowOnGN
+      (triominoCosmicNoPowOnGN_of_nonLiftableGNBridge hNoLift)
+  intro K _ _ _ p x y z _ _ q hq hqx hqne hqgap ζ hζ hpack gap hgap_eq hFirstCase hLinNe hProduct
+  exact qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree
+    (hCl := hCl)
+    (hNoPow := hNoPow)
+    (K := K) (p := p) (x := x) (y := y) (z := z) (q := q) (ζ := ζ) (gap := gap)
+    hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase hLinNe hProduct
+
+/--
 Stage 1c: trivial class → principal ideal extraction。
 
 `ClassGroup.mk_eq_one_of_coe_ideal` により、ここは既に concrete な generic API で閉じる。
