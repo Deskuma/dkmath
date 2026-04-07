@@ -812,3 +812,44 @@ Archive
     - ここから先は `a := z / y` の specialized application と、
        `y^(p-1) * Φ_p(z/y)` を DkMath 側の homogeneous evaluation / `quotientPrimePow` / `GN` へ戻す橋を作ればよい
     - それができれば、Stage 3 concrete contradiction bridge の `hProduct` 依存をさらに外せる見込みが強い
+
+### 日時: 2026/04/08 03:18:28 JST — direct route で chosen factor の Norm = GN まで到達した
+
+1. 目的:
+    - option 2 をさらに進め、Stage 3a-2 の full product identity を使わずに
+       chosen cyclotomic linear factor の整数 norm を直接 `GN p (z - y) y` へ戻せるかを検証する
+    - そのために、`Φ_p(z / y)` の評価、shifted homogeneous evaluation、
+       そして `z - ζy = y * (z/y - ζ)` の norm 分解を no-sorry で接続する
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に次の direct-route helper を追加した
+       - `ratCast_eval_cyclotomic_eq_cyclotomicEval`
+       - `cyclotomicEval_div_natCast_mul_pow_eq_gn`
+    - さらに raw chosen-factor expression
+       `((z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K))`
+       に対して
+       - `chosenCyclotomicLinearFactor_norm_eq_gn_ratCast_direct`
+       - `chosenCyclotomicLinearFactor_norm_eq_gn_direct`
+       を追加した
+    - proof では
+       - `norm_sub_primitiveRoot_eq_eval_cyclotomic_rat`
+       - `ratCast_eval_cyclotomic_eq_cyclotomicEval`
+       - `cyclotomicEval_div_natCast_mul_pow_eq_gn`
+       - `Algebra.norm_algebraMap`
+       - `IsCyclotomicExtension.finrank`
+       を連結している
+    - `RegularPrimeRoute.lean` に axiom 監視を追加した
+3. 結論:
+    - chosen factor の整数 norm 自体は、すでに hProduct なしで `GN` へ直接戻せる ✅
+    - つまり Stage 3 の `norm = GN` ノードは full product identity 非依存で standalone 化できた ✅
+    - これにより `hProduct` が残る箇所は、もはや old concrete proof chain の Stage 3a-2 側だけであり、
+       direct route では不要とみなせる状態になった ✅
+4. 検証:
+    - `lake build DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+5. 失敗事例:
+    - `z / y` の rational cast を field-side quotient に合わせる部分と、
+       raw chosen-factor expression の field-side 展開で proof plumbing が数回詰まった
+    - ただし数学的な obstruction はなく、最終的には cast と multiplication reassociation の整理で解決した
+6. 次の課題:
+    - 次は既存の `CyclotomicNormEqGNFirstCasePackThinTarget` を direct theorem 側へ差し替え、
+       `hProduct` をその interface から外せるかを詰める段階じゃ
+    - その際、raw chosen-factor direct theorem を alias / existing Stage 3 wrapper へどう注入するかを整理するとよい

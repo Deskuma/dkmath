@@ -1838,6 +1838,185 @@ lemma norm_sub_primitiveRoot_eq_eval_cyclotomic_rat
           simpa using
             (Polynomial.eval₂_at_apply (p := Polynomial.cyclotomic p ℚ) (algebraMap ℚ E) a)
 
+/--
+有理点での `Φ_p` 評価を K 上の `cyclotomicEval` へ持ち上げるための補題。
+
+direct norm-eval route で `Polynomial.eval a (cyclotomic p ℚ)` を
+CFBRC 側の evaluator へ接続する。
+-/
+lemma ratCast_eval_cyclotomic_eq_cyclotomicEval
+    {K : Type*} [Field K] [CharZero K]
+    {p : ℕ} [Fact p.Prime] (a : ℚ) :
+    ((Polynomial.eval a (Polynomial.cyclotomic p ℚ) : ℚ) : K) =
+      DkMath.CFBRC.cyclotomicEval p (a : K) := by
+  unfold DkMath.CFBRC.cyclotomicEval
+  calc
+    ((Polynomial.eval a (Polynomial.cyclotomic p ℚ) : ℚ) : K)
+        = Polynomial.eval₂ (algebraMap ℚ K) (a : K) (Polynomial.cyclotomic p ℚ) := by
+            simpa using
+              (Polynomial.eval₂_at_apply (p := Polynomial.cyclotomic p ℚ) (algebraMap ℚ K) a).symm
+    _ = Polynomial.eval (a : K)
+          (Polynomial.map (algebraMap ℚ K) (Polynomial.cyclotomic p ℚ)) := by
+            symm
+            exact (Polynomial.eval₂_eq_eval_map (p := Polynomial.cyclotomic p ℚ)
+              (f := algebraMap ℚ K) (x := (a : K))).symm
+    _ = Polynomial.eval (a : K)
+          (Polynomial.map (Int.castRingHom K) (Polynomial.cyclotomic p ℤ)) := by
+            congr 1
+            ext n
+            simp
+    _ = Polynomial.eval₂ (Int.castRingHom K) (a : K) (Polynomial.cyclotomic p ℤ) := by
+          symm
+          exact (Polynomial.eval₂_eq_eval_map (p := Polynomial.cyclotomic p ℤ)
+            (f := Int.castRingHom K) (x := (a : K)))
+
+/--
+prime case では、`Φ_p(z / y) * y^(p-1)` は product-free に `GN p (z - y) y` へ戻る。
+
+これは CFBRC 側の shifted evaluator bridge を prime divisor の singleton case へ
+specialize したもの。
+-/
+theorem cyclotomicEval_div_natCast_mul_pow_eq_gn
+    {K : Type*} [Field K] [CharZero K]
+    {p z y : ℕ} [Fact p.Prime]
+    (hy0 : y ≠ 0) (hyz : y < z) :
+    DkMath.CFBRC.cyclotomicEval p ((z : K) / (y : K)) * (y : K) ^ (p - 1) =
+      (DkMath.CosmicFormulaBinom.GN p (z - y) y : K) := by
+  have hp0 : 0 < p := (Fact.out : Nat.Prime p).pos
+  have hyK : (y : K) ≠ 0 := by exact_mod_cast hy0
+  have hgapK : ((z - y : ℕ) : K) ≠ 0 := by
+    exact_mod_cast (Nat.ne_of_gt (Nat.sub_pos_of_lt hyz))
+  have hratio : ((((z - y : ℕ) : K) + (y : K)) / (y : K)) = ((z : K) / (y : K)) := by
+    have hsum : ((z - y : ℕ) : K) + (y : K) = (z : K) := by
+      exact_mod_cast (Nat.sub_add_cancel (Nat.le_of_lt hyz))
+    rw [hsum]
+  have hdeg : (Polynomial.cyclotomic p ℤ).natDegree = p - 1 := by
+    simpa [Nat.totient_prime (Fact.out : Nat.Prime p)] using
+      (Polynomial.natDegree_cyclotomic p ℤ)
+  have hshift :=
+    DkMath.CFBRC.cyclotomicShiftedEval_eq_cyclotomicEval_div_mul_pow
+      (m := p) ((z - y : ℕ) : K) (y : K) hyK
+  have hprimeProd :
+      DkMath.CFBRC.cyclotomicDivisorsProductShifted p ((z - y : ℕ) : K) (y : K) =
+        DkMath.CFBRC.cyclotomicShiftedEval p ((z - y : ℕ) : K) (y : K) := by
+    have hpne1 : p ≠ 1 := (Fact.out : Nat.Prime p).ne_one
+    have hpne1' : ¬ 1 = p := by
+      intro h
+      exact hpne1 h.symm
+    unfold DkMath.CFBRC.cyclotomicDivisorsProductShifted
+    rw [(Fact.out : Nat.Prime p).divisors]
+    simp [hpne1']
+  have hGN :
+      DkMath.CFBRC.cyclotomicShiftedEval p ((z - y : ℕ) : K) (y : K) =
+        (DkMath.CosmicFormulaBinom.GN p (z - y) y : K) := by
+    have hgap_cast : ((z - y : ℕ) : K) = (z : K) - (y : K) := by
+      rw [Nat.cast_sub (Nat.le_of_lt hyz)]
+    calc
+      DkMath.CFBRC.cyclotomicShiftedEval p ((z - y : ℕ) : K) (y : K)
+          = DkMath.CFBRC.cyclotomicDivisorsProductShifted p ((z - y : ℕ) : K) (y : K) :=
+            hprimeProd.symm
+      _ = DkMath.CosmicFormulaBinom.GN p (((z - y : ℕ) : K)) (y : K) :=
+            DkMath.CFBRC.cyclotomicDivisorsProductShifted_eq_GN_of_ne_zero
+              (R := K) (d := p) hp0 hgapK hyK
+      _ = (DkMath.CosmicFormulaBinom.GN p (z - y) y : K) := by
+        simp [hgap_cast]
+  calc
+    DkMath.CFBRC.cyclotomicEval p ((z : K) / (y : K)) * (y : K) ^ (p - 1)
+        = DkMath.CFBRC.cyclotomicEval p ((((z - y : ℕ) : K) + (y : K)) / (y : K)) *
+            (y : K) ^ (Polynomial.cyclotomic p ℤ).natDegree := by
+              rw [hratio, hdeg]
+    _ = DkMath.CFBRC.cyclotomicShiftedEval p ((z - y : ℕ) : K) (y : K) := hshift.symm
+    _ = (DkMath.CosmicFormulaBinom.GN p (z - y) y : K) := hGN
+
+/--
+chosen cyclotomic linear factor の整数 norm は、full product identity を使わずとも
+直接 `GN p (z - y) y` に一致する（まずは ℚ cast 版）。
+
+proof は
+`z - ζy = y * (z/y - ζ)`
+と direct norm-eval route、そして prime-case shifted evaluator bridge を合成する。
+-/
+theorem chosenCyclotomicLinearFactor_norm_eq_gn_ratCast_direct
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p z y : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hy0 : y ≠ 0) (hyz : y < z) :
+    ((Algebra.norm ℤ ((z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)) : ℤ) : ℚ) =
+      ((DkMath.CosmicFormulaBinom.GN p (z - y) y : ℕ) : ℚ) := by
+  let lin : 𝓞 K := (z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)
+  have hyK : (y : K) ≠ 0 := by
+    exact_mod_cast hy0
+  have hirr : Irreducible (Polynomial.cyclotomic p ℚ) :=
+    Polynomial.cyclotomic.irreducible_rat (Nat.Prime.pos (Fact.out : Nat.Prime p))
+  have hfinrank : Module.finrank ℚ K = p - 1 := by
+    rw [IsCyclotomicExtension.finrank K hirr]
+    simp [Nat.totient_prime (Fact.out : Nat.Prime p)]
+  have hChosenK :
+      ((lin : 𝓞 K) : K) =
+        (y : K) * ((((z : ℚ) / (y : ℚ) : ℚ) : K) - ζ) := by
+    have hrat : ((((z : ℚ) / (y : ℚ) : ℚ) : K)) = (z : K) / (y : K) := by
+      norm_num [hy0]
+    have hdiv : (y : K) * ((((z : ℚ) / (y : ℚ) : ℚ) : K)) = (z : K) := by
+      rw [hrat, div_eq_mul_inv]
+      rw [← mul_assoc]
+      calc
+        (y : K) * (z : K) * (y : K)⁻¹ = (z : K) * ((y : K) * (y : K)⁻¹) := by ring
+        _ = (z : K) * 1 := by rw [mul_inv_cancel₀ hyK]
+        _ = (z : K) := by ring
+    calc
+      ((lin : 𝓞 K) : K)
+          = (z : K) - ζ * (y : K) := by
+            simp [lin]
+      _ = (y : K) * ((((z : ℚ) / (y : ℚ) : ℚ) : K) - ζ) := by
+            rw [mul_sub, hdiv]
+            ring
+  have hNormY : Algebra.norm ℚ (y : K) = (y : ℚ) ^ (p - 1) := by
+    calc
+      Algebra.norm ℚ (y : K) = (y : ℚ) ^ Module.finrank ℚ K := by
+        rw [show (y : K) = algebraMap ℚ K (y : ℚ) by simp, Algebra.norm_algebraMap]
+      _ = (y : ℚ) ^ (p - 1) := by rw [hfinrank]
+  have hNormField :
+      Algebra.norm ℚ ((lin : 𝓞 K) : K) =
+        (y : ℚ) ^ (p - 1) * Polynomial.eval ((z : ℚ) / (y : ℚ)) (Polynomial.cyclotomic p ℚ) := by
+    rw [hChosenK, map_mul, hNormY,
+      norm_sub_primitiveRoot_eq_eval_cyclotomic_rat hζ ((z : ℚ) / (y : ℚ))]
+  have hEvalQ :
+      Polynomial.eval ((z : ℚ) / (y : ℚ)) (Polynomial.cyclotomic p ℚ) =
+        DkMath.CFBRC.cyclotomicEval p ((z : ℚ) / (y : ℚ)) := by
+    simpa using
+      (ratCast_eval_cyclotomic_eq_cyclotomicEval (K := ℚ) (p := p) ((z : ℚ) / (y : ℚ)))
+  have hGNQ :
+      DkMath.CFBRC.cyclotomicEval p ((z : ℚ) / (y : ℚ)) * (y : ℚ) ^ (p - 1) =
+        ((DkMath.CosmicFormulaBinom.GN p (z - y) y : ℕ) : ℚ) := by
+    simpa [Nat.cast_sub (Nat.le_of_lt hyz)] using
+      (cyclotomicEval_div_natCast_mul_pow_eq_gn (K := ℚ) (p := p) (z := z) (y := y) hy0 hyz)
+  have hNormField' :
+      Algebra.norm ℚ ((lin : 𝓞 K) : K) =
+        ((DkMath.CosmicFormulaBinom.GN p (z - y) y : ℕ) : ℚ) := by
+    calc
+      Algebra.norm ℚ ((lin : 𝓞 K) : K)
+          = (y : ℚ) ^ (p - 1) * Polynomial.eval ((z : ℚ) / (y : ℚ)) (Polynomial.cyclotomic p ℚ) :=
+              hNormField
+      _ = (y : ℚ) ^ (p - 1) * DkMath.CFBRC.cyclotomicEval p ((z : ℚ) / (y : ℚ)) := by
+            rw [hEvalQ]
+      _ = DkMath.CFBRC.cyclotomicEval p ((z : ℚ) / (y : ℚ)) * (y : ℚ) ^ (p - 1) := by
+            ring
+      _ = ((DkMath.CosmicFormulaBinom.GN p (z - y) y : ℕ) : ℚ) := hGNQ
+  exact (Algebra.coe_norm_int lin).trans hNormField'
+
+/--
+chosen cyclotomic linear factor の整数 norm を、そのまま `GN p (z - y) y` へ戻す direct theorem。
+-/
+theorem chosenCyclotomicLinearFactor_norm_eq_gn_direct
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p z y : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hy0 : y ≠ 0) (hyz : y < z) :
+    Algebra.norm ℤ ((z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)) =
+      ((DkMath.CosmicFormulaBinom.GN p (z - y) y : ℕ) : ℤ) := by
+  exact Int.cast_injective
+    (chosenCyclotomicLinearFactor_norm_eq_gn_ratCast_direct hζ hy0 hyz)
+
 /-- N(ζ-1) = p in ℤ。 -/
 lemma norm_int_zeta_sub_one_eq_p
     {K : Type*} [Field K] [NumberField K] [CharZero K]
