@@ -344,3 +344,54 @@ Archive
        残る本丸である「chosen factor の整数 norm を nontrivial factor product に一致させる片」を整備する
     - その後、既に concrete 化された Stage 3a-2 / 3a-3 を接いで
        `CyclotomicNormEqGNFirstCasePackThinTarget` 本体を閉じる
+
+### 日時: 2026/04/07 19:03:56 JST — Stage 3a-1 の norm → Gal-product → units-product を concrete 化
+
+1. 目的:
+    - `CyclotomicNormEqGNFirstCasePackThinTarget` のうち、review-040 で切り出した
+       Stage 3a-1「norm を共役積へ落とす片」を、さらに
+       norm → `Gal(K/ℚ)` product → `(ZMod p)ˣ` product
+       の 2 段へ分けて concrete 化する
+    - まずは norm の一般論と cyclotomic Galois reindex だけを theorem 名つきで固定し、
+       まだ残る combinatorial bridge と切り離す
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `chosenCyclotomicLinearFactor_norm_eq_prod_gal_of_firstCase_of_pack_thin`
+       - `gal_apply_chosenCyclotomicLinearFactor_eq_factor_of_firstCase_of_pack_thin`
+       - `chosenCyclotomicLinearFactor_norm_eq_prod_units_of_firstCase_of_pack_thin`
+    - 証明では Mathlib の既存資産を再利用:
+       - `Algebra.coe_norm_int`
+       - `Algebra.norm_eq_prod_automorphisms`
+       - `IsCyclotomicExtension.Rat.galEquivZMod_apply_of_pow_eq`
+    - これにより、chosen factor の整数 norm をまず `Gal(K/ℚ)` 上の積へ、
+       さらに cyclotomic Galois の単位剰余類表示 `(ZMod p)ˣ` 上の積へ
+       落とすところまで no-sorry で固定した
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` に
+       上記 3 theorem の axiom 監視を追加し、
+       `.trace` 上で新 theorem 名が解決することを確認した
+    - `RegularPrimeRoute.lean` の戦況コメントも更新し、
+       Stage 3a-1/2/3 の到達点が読めるようにした
+3. 結論:
+    - Stage 3a-1 のうち、norm の一般論と cyclotomic Galois reindex は
+       concrete theorem として mainline に固定できた ✅
+    - これで `CyclotomicNormEqGNFirstCasePackThinTarget` の残りは、
+       `(ZMod p)ˣ` product を actual nontrivial factor product へ落とす
+       combinatorial bridge と、その最終合成へさらに絞られた ✅
+    - review-040 の 3 片は、Stage 3a-1/2/3 のいずれも部分 concrete 化が進み、
+       open の形がかなり透明になった ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `lake build DkMathTest.FLT.Kummer.RegularPrimeRoute` 実行後、
+       `.lake/build/lib/lean/DkMathTest/FLT/Kummer/RegularPrimeRoute.trace` に
+       追加 3 theorem の監視結果が生成されることを確認
+    - editor diagnostics 上で残る `sorry` は既存の
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` と研究用ファイル側のみ
+5. 失敗事例:
+    - 初回実装では、`Gal(K/ℚ)` の作用を ring-of-integers 値で直接書いたため、
+       `toInteger` coercion と `simp` が噛み合わず proof state が不安定化した
+    - K 値の等式に落とし、`σζ = ζ^k` を別補題として先に受ける形へ直すことで安定化した
+6. 次の課題:
+    - `(ZMod p)ˣ` product を `Finset.range p |>.erase 0` の actual factor product へ落とす
+       combinatorial bridge を整備する
+    - その後、既に concrete 化された Stage 3a-1/2/3 を束ねて
+       `CyclotomicNormEqGNFirstCasePackThinTarget` 本体を閉じる

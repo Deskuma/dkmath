@@ -7,7 +7,9 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Kummer.GapDivisibleBranch
 import DkMath.NumberTheory.Gcd.GN
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Basic
+import Mathlib.NumberTheory.NumberField.Cyclotomic.Galois
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Ideal
+import Mathlib.NumberTheory.NumberField.Norm
 
 #print "file: DkMath.FLT.Kummer.CyclotomicPrincipalization"
 
@@ -2271,6 +2273,89 @@ theorem cyclotomicUnitNormalization_of_firstCase_of_pack_thin
     linearFactorEqUnitMulGeneratorPowOfSpanEqPowPrincipal ctx (z : 𝓞 K) (y : 𝓞 K) hSpan
   refine ⟨Submodule.IsPrincipal.generator I, unitFactor, hUnit, ?_⟩
   simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hEq
+
+/--
+Stage 3a-1 の最初の中間補題:
+chosen cyclotomic linear factor の整数 norm を、
+`Gal(K/ℚ)` 上の共役積へ持ち上げる。
+
+ここではまだ cyclotomic reindex はせず、norm の一般論だけを isolate する。
+-/
+theorem chosenCyclotomicLinearFactor_norm_eq_prod_gal_of_firstCase_of_pack_thin
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
+    (((Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) : ℚ) : K)) =
+      ∏ σ : Gal(K/ℚ), σ (((chosenCyclotomicLinearFactorInRingOfIntegers hζ y z : 𝓞 K) : K)) := by
+  let x : 𝓞 K := chosenCyclotomicLinearFactorInRingOfIntegers hζ y z
+  have hcoe : ((Algebra.norm ℤ x : ℚ) : K) = algebraMap ℚ K (Algebra.norm ℚ ((x : 𝓞 K) : K)) := by
+    exact congrArg (algebraMap ℚ K) (Algebra.coe_norm_int x)
+  letI := IsCyclotomicExtension.finiteDimensional {p} ℚ K
+  letI := IsCyclotomicExtension.isGalois {p} ℚ K
+  calc
+    ((Algebra.norm ℤ x : ℚ) : K) = algebraMap ℚ K (Algebra.norm ℚ ((x : 𝓞 K) : K)) := hcoe
+    _ = ∏ σ : Gal(K/ℚ), σ (((x : 𝓞 K) : K)) := by
+          rw [Algebra.norm_eq_prod_automorphisms]
+
+/--
+Stage 3a-1 の cyclotomic reindex 用補題:
+`Gal(K/ℚ)` の元は chosen factor を、対応する `ζ^k` factor へ送る。
+-/
+theorem gal_apply_chosenCyclotomicLinearFactor_eq_factor_of_firstCase_of_pack_thin
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (σ : Gal(K/ℚ)) :
+    σ (((chosenCyclotomicLinearFactorInRingOfIntegers hζ y z : 𝓞 K) : K)) =
+      ((cyclotomicLinearFactorInRingOfIntegers hζ y z
+        (IsCyclotomicExtension.Rat.galEquivZMod p K σ).val.val : 𝓞 K) : K) := by
+  letI : NeZero p := ⟨hp.out.ne_zero⟩
+  let k : ℕ := (IsCyclotomicExtension.Rat.galEquivZMod p K σ).val.val
+  have hsigma_base : σ ζ = ζ ^ k := by
+    simpa [k] using
+      (IsCyclotomicExtension.Rat.galEquivZMod_apply_of_pow_eq (n := p) (K := K) σ hζ.pow_eq_one)
+  have hsigma_zeta :
+      σ (((hζ.toInteger : 𝓞 K) : K)) = (((hζ.toInteger : 𝓞 K) : K)) ^ k := by
+    have htoInteger : (((hζ.toInteger : 𝓞 K) : K)) = ζ := IsPrimitiveRoot.coe_toInteger hζ
+    calc
+      σ (((hζ.toInteger : 𝓞 K) : K)) = σ ζ := by rw [htoInteger]
+      _ = ζ ^ k := hsigma_base
+      _ = (((hζ.toInteger : 𝓞 K) : K)) ^ k := by rw [htoInteger]
+  rw [chosenCyclotomicLinearFactorInRingOfIntegers, cyclotomicLinearFactorInRingOfIntegers]
+  change σ ((z : K) - (((hζ.toInteger : 𝓞 K) : K) * (y : K))) =
+    (z : K) - ((((hζ.toInteger : 𝓞 K) : K) ^ k) * (y : K))
+  calc
+    σ ((z : K) - (((hζ.toInteger : 𝓞 K) : K) * (y : K))) =
+        σ (z : K) - σ (((hζ.toInteger : 𝓞 K) : K) * (y : K)) := by
+          rw [map_sub]
+    _ = σ (z : K) - σ (((hζ.toInteger : 𝓞 K) : K)) * σ (y : K) := by rw [map_mul]
+    _ = (z : K) - (((hζ.toInteger : 𝓞 K) : K) ^ k) * (y : K) := by
+          rw [hsigma_zeta]
+          simp
+
+/--
+Stage 3a-1 の reindex 補題:
+chosen factor の Gal-product は、そのまま `(ZMod p)ˣ` 上の factor 積に一致する。
+-/
+theorem chosenCyclotomicLinearFactor_norm_eq_prod_units_of_firstCase_of_pack_thin
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
+    (((Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) : ℚ) : K)) =
+      ∏ u : (ZMod p)ˣ,
+        ((cyclotomicLinearFactorInRingOfIntegers hζ y z u.val.val : 𝓞 K) : K) := by
+  letI : NeZero p := ⟨hp.out.ne_zero⟩
+  rw [chosenCyclotomicLinearFactor_norm_eq_prod_gal_of_firstCase_of_pack_thin hζ]
+  simpa using
+    (Fintype.prod_equiv
+      (IsCyclotomicExtension.Rat.galEquivZMod p K)
+      (fun σ : Gal(K/ℚ) => σ (((chosenCyclotomicLinearFactorInRingOfIntegers hζ y z : 𝓞 K) : K)))
+      (fun u : (ZMod p)ˣ =>
+        ((cyclotomicLinearFactorInRingOfIntegers hζ y z u.val.val : 𝓞 K) : K))
+      (fun σ => by
+        simpa using
+          (gal_apply_chosenCyclotomicLinearFactor_eq_factor_of_firstCase_of_pack_thin
+            (hζ := hζ) (y := y) (z := z) (σ := σ))))
 
 /--
 Stage 3a-2 の concrete core:

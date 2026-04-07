@@ -229,6 +229,14 @@ first-case specialization に限れば Stage 3 の入口配線自体は
 既存の no-pow target があれば即座に矛盾へ戻せる abstract bridge も置けた。
 今後は Stage 1 の存在形 boundary と、
 この Stage 3 split の各片割れを個別に concretize していく。
+さらに current state では、`CyclotomicNormEqGNFirstCasePackThinTarget` 側も
+review-040 の内部 3 分割のうち
+- norm → `Gal(K/ℚ)` product
+- `Gal(K/ℚ)` product → `(ZMod p)ˣ` product
+- nontrivial factor product → `GN` / quotientPrimePow
+までは theorem 名つきで固定できた。
+ゆえに残る本丸は、`(ZMod p)ˣ` product を actual nontrivial factor product に落とす combinatorial bridge と、
+それらを束ねて `CyclotomicNormEqGNFirstCasePackThinTarget` 本体へ戻す合成である。
 
 `CyclotomicGapDivisibleFactorizationSpecializationTarget`・
 `CyclotomicIdealEquationTarget`・`CyclotomicIdealProductPthPowerTarget`・
