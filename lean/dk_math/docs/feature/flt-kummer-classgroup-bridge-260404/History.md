@@ -912,3 +912,37 @@ Archive
     - 次は `CyclotomicNormGNPower_of_firstCase_of_pack_thin` の外形をどこまで整理できるか、
        すなわち hProduct を Stage 3 power wrapper 側からもさらに押し出せるかを測る段階じゃ
     - その鍵は `UnitNormalization` / `UnitAbsorb` 層のどこで product identity が本当に必要かを局所化することじゃ
+
+### 日時: 2026/04/08 04:12:19 JST — unit-normalization chain での `hProduct` 使用を ideal-equality leg へ局所化
+
+1. 目的:
+    - review-044 / todo-044 の方針に従い、
+       `cyclotomicUnitNormalization_of_firstCase_of_pack_thin` 周辺で
+       `hProduct` がどの責務に残っているかを実コードで切り分ける
+    - とくに coprime leg が本当に full product identity を要するのかを判定する
+2. 実施:
+    - `chosenLinearFactor_isCoprime_with_tail_of_firstCase_of_pack_withoutProduct` を追加した
+    - これは既存の pairwise product-free theorem
+       `chosenLinearFactor_isCoprime_with_other_of_firstCase_of_pack_withoutProduct`
+       を tail product 全体へ畳み込む wrapper になっている
+    - `chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin` の `hCoprime` を、
+       old product-dependent theorem からこの product-free tail theorem へ差し替えた
+    - `todo-044-cyclotomicUnitNormalization_of_firstCase_of_pack_thin.md` に、
+       現時点の依存表を追記した
+    - `RegularPrimeRoute.lean` の監視に新 theorem を追加した
+3. 結論:
+    - `chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin` のうち、
+       coprime leg は full product identity 非依存と確定した ✅
+    - したがって unit-normalization chain で `hProduct` が残るのは、
+       chosen factor × tail ideal = `(x)^p` を供給する ideal-equality leg だけ、とかなり明確に言える ✅
+    - これは todo-044 の判定基準でいう「中勝利」にかなり近い状態じゃ ✅
+4. 検証:
+    - `lake build DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+5. 失敗事例:
+    - なし。今回は既存 product-free pairwise theorem を tail 版へ持ち上げる薄い wrapper で済み、
+       新しい数学的 obstruction は出ておらぬ
+6. 次の課題:
+    - 次は責務 A、すなわち `chosenLinearFactorMulTailEqSpanPow_of_productEq` を起点とする
+       ideal-level `p` 乗化入口だけを isolated theorem として剥き出しにする
+    - そのうえで `chosenCyclotomicLinearFactor_mul_tailSum_eq_x_pow_of_counterexamplePack`
+       から local factorization ベースの代替核が取れるかを試す

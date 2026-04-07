@@ -121,6 +121,23 @@ z - \zeta y = u \cdot \beta^p
 
 この表が、次の全作業の地図になる。
 
+### 4.1.1. 現時点の依存表（2026/04/08 04:12 JST 時点）
+
+| theorem 名 | 役割 | `hProduct` 直使用 | `hProduct` 間接使用 | local factorization 代替候補 |
+|---|---|---:|---:|---|
+| `chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin` | A+B bridge | yes | no | A は `chosenLinearFactorMulTailEqSpanPow_of_productEq`、B は product-free 化済み |
+| `cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin` | A→C receiver | no | yes | `chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin` の isolated core 化 |
+| `cyclotomicUnitNormalization_of_firstCase_of_pack_thin` | C 本体 | no | yes | ideal-level `p` 乗化の入口が product-free なら自動で軽くなる |
+
+補足:
+
+- `chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin` の `hCoprime` leg は、
+  `chosenLinearFactor_isCoprime_with_tail_of_firstCase_of_pack_withoutProduct`
+  へ差し替え済み。
+- よってこの theorem に残る `hProduct` は、chosen factor × tail ideal = `(x)^p`
+  を与える `hMul` 側に局在したと見てよい。
+- したがって現在の主戦場は、責務 A の ideal-level `p` 乗化入口じゃ。
+
 ### 4.2. Step B. `hProduct` 使用箇所を色分けする
 
 各 `have` / `obtain` / `exact` を次の 3 区分で分類する。

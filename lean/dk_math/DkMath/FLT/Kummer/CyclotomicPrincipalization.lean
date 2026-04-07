@@ -2430,6 +2430,38 @@ theorem chosenLinearFactor_isCoprime_with_tail_of_firstCase_of_pack
     hpack.hxy hgap_eq hFirstCase hpack.hy0 hLinNe hProduct hj_ne1 hj_lt
 
 /--
+first case + coprimality pack から、chosen linear factor と complementary tail 全体の coprimality を導出する
+product-free variant。
+
+ここで必要なのは first-case と chosen factor 非零性だけであり、
+full product identity は不要である。
+-/
+theorem chosenLinearFactor_isCoprime_with_tail_of_firstCase_of_pack_withoutProduct
+  {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : (z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K) ≠ 0) :
+    IsCoprime (Ideal.span ({(z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)} : Set (𝓞 K)))
+      (∏ j ∈ (Finset.range p).erase 1,
+        Ideal.span ({(z : 𝓞 K) - (hζ.toInteger ^ j) * (y : 𝓞 K)} : Set (𝓞 K))) := by
+  have hp_ne_two : p ≠ 2 := by
+    have hp_gt_two : 2 < p := lt_of_lt_of_le (by decide : 2 < 5) hpack.hp5
+    exact ne_of_gt hp_gt_two
+  apply idealIsCoprime_prod_of_forall
+  intro j hj
+  have hj_ne1 : j ≠ 1 := Finset.ne_of_mem_erase hj
+  have hj_lt : j < p := Finset.mem_range.mp (Finset.mem_of_mem_erase hj)
+  exact chosenLinearFactor_isCoprime_with_other_of_firstCase_of_pack_withoutProduct hζ
+    (fun {P} hP _hP_ne hP_dvd_p => by
+      let _ : P.IsPrime := hP
+      exact primeOverPEqualsZetaMinusOne_fill hζ P hP_dvd_p)
+    (integerInZetaMinusOneIdealDivisibleByP_fill hζ hp_ne_two)
+    hpack hgap_eq hFirstCase hpack.hy0 hLinNe hj_ne1 hj_lt rfl
+
+/--
 counterexample pack の product identity から、chosen linear factor と tail ideal の積等式を回収する。
 
 review-036 が要求する Stage 1 final wrapper 細分化の 1 本目。
@@ -2566,9 +2598,9 @@ theorem chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin
         (Ideal.span ({chosenCyclotomicLinearFactorInRingOfIntegers hζ y z} : Set (𝓞 K)))
         (Ideal.span ({tail} : Set (𝓞 K))) := by
     rw [← hTailSpan]
-    exact chosenLinearFactor_isCoprime_with_tail_of_firstCase_of_pack
+    exact chosenLinearFactor_isCoprime_with_tail_of_firstCase_of_pack_withoutProduct
       (K := K) (p := p) (x := x) (y := y) (z := z)
-      hζ hpack hgap_eq hFirstCase hLinNe hProduct
+      hζ hpack hgap_eq hFirstCase hLinNe
   have hSpanEq :
       ∃ K' : Ideal (𝓞 K),
         Ideal.span ({(z : 𝓞 K) - ctx.zeta * (y : 𝓞 K)} : Set (𝓞 K)) = K' ^ ctx.p := by
