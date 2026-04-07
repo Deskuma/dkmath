@@ -261,3 +261,42 @@ Archive
        chosen factor の整数ノルムを `GN p (z - y) y` へ落とす補題群を整備する
     - `CyclotomicNormUnitAbsorbFirstCasePackThinTarget` の concrete 化、すなわち
        unit norm と `p` 乗 norm から `GN = s^p` を回収する補題群を整備する
+
+### 日時: 2026/04/07 17:29:36 JST — Stage 3a-3 として差冪商 → GN の共通橋を追加
+
+1. 目的:
+    - review-040 の方針に従い、`CyclotomicNormEqGNFirstCasePackThinTarget` をいきなり埋めるのでなく、
+       まず最下流の整数側 rewriting
+       `((z^p - y^p) / (z - y)) = GN p (z - y) y`
+       を共通補題として切り出す
+    - Kummer 専用 theorem に閉じ込めず、今後の gcd / valuation / cyclotomic 再利用にも乗る位置へ置く
+2. 実施:
+    - `DkMath/NumberTheory/Gcd/GN.lean` に以下を追加:
+       - `quotientPrimePow_eq_gn_gap`
+       - `quotientPrimePow_natCast_eq_gn_int`
+       - `diffPowQuotient_eq_gn_int`
+    - 証明は既存資産のみを再利用:
+       - `pow_sub_pow_eq_diff_mul_quotient`
+       - `pow_sub_pow_factor_cosmic_N`
+       - `gn_natCast_int`
+    - これにより、自然数の差冪商と整数の差冪商の双方から
+       `GN p (z - y) y` への薄い橋が theorem 名つきで読めるようになった
+3. 結論:
+    - review-040 で予定した Stage 3a-3「差冪商を GN へ落とす片」は、
+       共通 NumberTheory 補題として no-sorry で追加できた ✅
+    - これで `CyclotomicNormEqGNFirstCasePackThinTarget` のうち、
+       cyclotomic product formula の最後の着地点は既存 theorem 名で参照できるようになった ✅
+    - 次に concrete 化すべき本丸は、norm を共役積へ落とす側と、
+       その積を差冪商へ寄せる側の 2 片にさらに絞られた ✅
+4. 検証:
+    - `./lean-build.sh DkMath.NumberTheory.Gcd.GN` 成功
+    - 残る warning は既存の `ZsigmondyCyclotomicResearch.lean` の `sorry` のみ
+5. 失敗事例:
+    - 初回実装では、`Int.ediv_eq_of_eq_mul_left` が要求する積の向きと
+       `Nat.cast_sub` の rewrite 位置がずれており、そのままでは elaboration しなかった
+    - `hcast_sub` を独立補題に切り、`mul_comm` で整数除法補題の期待形へ合わせることで解消した
+6. 次の課題:
+    - `CyclotomicNormEqGNFirstCasePackThinTarget` の concrete 化へ戻り、
+       残る 2 片、すなわち「norm を共役積へ落とす片」と
+       「共役積を差冪商へ寄せる片」を整備する
+    - その後、`CyclotomicNormUnitAbsorbFirstCasePackThinTarget` の concrete 化へ進む

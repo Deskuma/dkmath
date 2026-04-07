@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.Gcd.Basic
+import DkMath.NumberTheory.GcdDiffPow
 import DkMath.NumberTheory.GcdNext
 import DkMath.NumberTheory.PrimitiveBeam
 import DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
@@ -86,6 +87,62 @@ theorem gn_sub_eq_sd_int
         (((z - y : ℕ) : ℤ) * DkMath.Algebra.DiffPow.diffPowSum (z : ℤ) (y : ℤ) p) := by
     rw [← hGN_int, hSd]
   exact Int.eq_of_mul_eq_mul_left hgap_ne0 hmul
+
+/-- 差冪商 `((z^p - y^p) / (z - y))` は `GN p (z - y) y` に一致する。 -/
+theorem quotientPrimePow_eq_gn_gap
+    {p z y : ℕ} (hp : Nat.Prime p) (hyz : y < z) :
+    DkMath.NumberTheory.GcdDiffPow.quotientPrimePow z y p =
+      DkMath.CosmicFormulaBinom.GN p (z - y) y := by
+  have hquot :
+      z ^ p - y ^ p =
+        (z - y) * DkMath.NumberTheory.GcdDiffPow.quotientPrimePow z y p := by
+    exact DkMath.NumberTheory.GcdDiffPow.pow_sub_pow_eq_diff_mul_quotient hp hyz
+  have hgn :
+      z ^ p - y ^ p = (z - y) * DkMath.CosmicFormulaBinom.GN p (z - y) y := by
+    simpa using DkMath.NumberTheory.GcdNext.pow_sub_pow_factor_cosmic_N hp.pos hyz
+  have hgap_pos : 0 < z - y := Nat.sub_pos_of_lt hyz
+  apply Nat.eq_of_mul_eq_mul_left hgap_pos
+  calc
+    (z - y) * DkMath.NumberTheory.GcdDiffPow.quotientPrimePow z y p = z ^ p - y ^ p := hquot.symm
+    _ = (z - y) * DkMath.CosmicFormulaBinom.GN p (z - y) y := hgn
+
+/-- 自然数の差冪商を整数へ持ち上げても、`GN` の整数版に一致する。 -/
+theorem quotientPrimePow_natCast_eq_gn_int
+    {p z y : ℕ} (hp : Nat.Prime p) (hyz : y < z) :
+    (DkMath.NumberTheory.GcdDiffPow.quotientPrimePow z y p : ℤ) =
+      DkMath.CosmicFormulaBinom.GN p (((z - y : ℕ) : ℤ)) (y : ℤ) := by
+  rw [quotientPrimePow_eq_gn_gap hp hyz]
+  simp [DkMath.CosmicFormulaBinom.GN]
+
+/-- 整数環で見た差冪商も、`GN p (z - y) y` の整数版に一致する。 -/
+theorem diffPowQuotient_eq_gn_int
+    {p z y : ℕ} (hp : Nat.Prime p) (hyz : y < z) :
+    (((z : ℤ) ^ p - (y : ℤ) ^ p) / (((z - y : ℕ) : ℤ))) =
+      DkMath.CosmicFormulaBinom.GN p (((z - y : ℕ) : ℤ)) (y : ℤ) := by
+  have hyz_le : y ≤ z := Nat.le_of_lt hyz
+  have hyz_pow : y ^ p ≤ z ^ p := Nat.pow_le_pow_left hyz_le p
+  have hcast_sub :
+      (z : ℤ) ^ p - (y : ℤ) ^ p = ((z ^ p - y ^ p : ℕ) : ℤ) := by
+    calc
+      (z : ℤ) ^ p - (y : ℤ) ^ p = (↑(z ^ p) : ℤ) - ↑(y ^ p) := by
+        simp [Nat.cast_pow]
+      _ = ((z ^ p - y ^ p : ℕ) : ℤ) := by
+        rw [← Nat.cast_sub hyz_pow]
+  have hgap_ne0 : (((z - y : ℕ) : ℤ)) ≠ 0 := by
+    exact_mod_cast (Nat.ne_of_gt (Nat.sub_pos_of_lt hyz))
+  have hquot_mul :
+      ((z ^ p - y ^ p : ℕ) : ℤ) =
+        (((z - y : ℕ) : ℤ) *
+          (DkMath.NumberTheory.GcdDiffPow.quotientPrimePow z y p : ℤ)) := by
+    exact_mod_cast DkMath.NumberTheory.GcdDiffPow.pow_sub_pow_eq_diff_mul_quotient hp hyz
+  calc
+    (((z : ℤ) ^ p - (y : ℤ) ^ p) / (((z - y : ℕ) : ℤ))) =
+        (((z ^ p - y ^ p : ℕ) : ℤ) / (((z - y : ℕ) : ℤ))) := by
+        rw [hcast_sub]
+    _ = (DkMath.NumberTheory.GcdDiffPow.quotientPrimePow z y p : ℤ) := by
+        exact Int.ediv_eq_of_eq_mul_left hgap_ne0 (by simpa [mul_comm] using hquot_mul)
+    _ = DkMath.CosmicFormulaBinom.GN p (((z - y : ℕ) : ℤ)) (y : ℤ) :=
+          quotientPrimePow_natCast_eq_gn_int hp hyz
 
 /-- `z` と `y` が互いに素なら、`gcd(z - y, GN p (z - y) y)` は `p` を割る。 -/
 theorem gcd_gap_GN_dvd_exp_int
