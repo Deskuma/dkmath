@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.GapDivisibleBranch
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Basic
+import Mathlib.NumberTheory.NumberField.Cyclotomic.Ideal
 
 #print "file: DkMath.FLT.Kummer.CyclotomicPrincipalization"
 
@@ -1725,6 +1726,58 @@ theorem integerInZetaMinusOneIdealDivisibleByP_fill
     {ζ : K} (hζ : IsPrimitiveRoot ζ p) (hp2 : p ≠ 2) :
     IntegerInZetaMinusOneIdealDivisibleByPTarget K p ζ hζ := fun hn =>
   p_dvd_of_in_zeta_sub_one_ideal hζ hp2 hn
+
+/-! ### Target 1 Fill: P | (p) ⟹ P = (ζ - 1)
+
+Mathlib の `eq_span_zeta_sub_one_of_liesOver'` を使う。
+-/
+
+/--
+P | span {p} から LiesOver インスタンスを構築する。
+
+P | (p) ⟺ (p) ≤ P ⟺ p ∈ P。
+comap P は prime ideal、(p) は maximal、よって (p) = comap P。
+-/
+lemma liesOver_of_dvd_span_prime
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    (P : Ideal (𝓞 K)) [hP : P.IsPrime]
+    (hdvd : P ∣ Ideal.span ({(p : 𝓞 K)} : Set (𝓞 K))) :
+    P.LiesOver (Ideal.span ({(p : ℤ)} : Set ℤ)) := by
+  constructor
+  -- P | span {p} ⟹ span {p} ≤ P
+  rw [Ideal.dvd_iff_le] at hdvd
+  -- p ∈ P なので、(p) ⊆ comap P
+  have hp_in_P : (p : 𝓞 K) ∈ P := hdvd (Ideal.subset_span (by simp))
+  have hp_in_comap : (p : ℤ) ∈ P.under ℤ := by
+    change algebraMap ℤ (𝓞 K) (p : ℤ) ∈ P
+    simp only [algebraMap_int_eq, map_natCast, hp_in_P]
+  -- (p) ⊆ comap P
+  have hle : Ideal.span ({(p : ℤ)} : Set ℤ) ≤ P.under ℤ := by
+    rw [Ideal.span_singleton_le_iff_mem]
+    exact hp_in_comap
+  -- comap P は IsPrime
+  have hcomap_prime : (P.under ℤ).IsPrime := Ideal.IsPrime.under _ _
+  -- (p) は maximal なので、(p) ≤ comap P ∧ comap P ≠ ⊤ ⟹ (p) = comap P
+  have hp_maximal : (Ideal.span ({(p : ℤ)} : Set ℤ)).IsMaximal :=
+    PrincipalIdealRing.isMaximal_of_irreducible (Nat.prime_iff_prime_int.mp hp.out).irreducible
+  exact (Ideal.IsMaximal.eq_of_le hp_maximal hcomap_prime.ne_top hle)
+
+/--
+Target 1 fill theorem: P | (p) ⟹ P = span {ζ - 1}。
+
+Mathlib の `eq_span_zeta_sub_one_of_liesOver'` を利用。
+-/
+theorem primeOverPEqualsZetaMinusOne_fill
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [hp : Fact p.Prime] [hK : IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (P : Ideal (𝓞 K)) [hP : P.IsPrime]
+    (hdvd : P ∣ Ideal.span ({(p : 𝓞 K)} : Set (𝓞 K))) :
+    P = Ideal.span ({hζ.toInteger - 1} : Set (𝓞 K)) := by
+  have hLiesOver : P.LiesOver (Ideal.span ({(p : ℤ)} : Set ℤ)) :=
+    liesOver_of_dvd_span_prime P hdvd
+  exact IsCyclotomicExtension.Rat.eq_span_zeta_sub_one_of_liesOver' p K hζ P
 
 /--
 P | (p) 分岐の contradiction: first case (p ∤ gap) と矛盾。
