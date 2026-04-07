@@ -743,3 +743,72 @@ Archive
        残る主要用途は Stage 3 concrete contradiction bridge と Stage 1 の chosen-factor × tail packaging になる
     - 次手は、global pack から full product identity を供給する theorem を探すか、
        あるいは Stage 3 側を local factorization equality ベースへさらに薄く組み替えられるか調査する
+
+### 日時: 2026/04/08 01:51:00 JST — Stage 3a-1 を product-free theorem として固定した
+
+1. 目的:
+   - option 2 の調査結果をコードへ反映し、Stage 3 のうち `hProduct` に依存しない部分を theorem として明示分離する
+   - `cyclotomicNormEqGN_concrete_firstCase_packThin` の中で、`hProduct` が本当に Stage 3a-2 の 1 点にしか要らないことを見える形にする
+2. 実施:
+   - `CyclotomicPrincipalization.lean` に
+      `chosenCyclotomicLinearFactor_norm_eq_prod_range_erase_zero_of_firstCase_of_pack_thin`
+      を追加した
+   - この theorem は
+      - `chosenCyclotomicLinearFactor_norm_eq_prod_units_of_firstCase_of_pack_thin`
+      - `prod_units_zmod_eq_prod_range_erase_zero`
+      を合成し、chosen factor の整数 norm を erase-0 product へ持ち上げる product-free wrapper
+   - `cyclotomicNormEqGN_concrete_firstCase_packThin` はこの新 theorem を使うように書き換えた
+   - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` に axiom 監視を追加した
+3. 結論:
+   - Stage 3 は now theorem-level に
+      - product-free Stage 3a-1: norm -> erase-0 product
+      - product-dependent Stage 3a-2: erase-0 product -> GN
+      の 2 段へ明確に分離された ✅
+   - これにより、option 2 の調査結論、すなわち `hProduct` の残存用途は Stage 3a-2 側に局在する、という構図がコード上でも固定できた ✅
+4. 検証:
+   - `lake build DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - `lake build DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+5. 失敗事例:
+   - なし。今回は既存 no-sorry theorem 2 本の合成を named theorem として切り出しただけじゃ
+6. 次の課題:
+   - 次に削る候補は Stage 3a-2 の `cyclotomicNontrivialFactorProduct_eq_GN_of_firstCase_of_pack_thin`
+      そのものか、あるいはそれを置き換える primitive-root / cyclotomic-polynomial ベースの norm = quotientPrimePow direct theorem じゃ
+   - もし後者が立てば、Stage 3 concrete contradiction bridge は `hProduct` からさらに自由になれる
+
+### 日時: 2026/04/08 02:18:22 JST — direct norm-eval route の基礎補題が立った
+
+1. 目的:
+    - option 2 の本丸として、Stage 3a-2 を将来 bypass できるかを測るため、
+       `Norm(a - ζ)` を cyclotomic polynomial の評価へ直接戻す product-free 補題を先に立てる
+    - これにより `Norm(z - ζy)` を full product identity ではなく polynomial evaluation 側から扱う道筋が本当に formalizable かを確認する
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に
+       `norm_sub_primitiveRoot_eq_eval_cyclotomic_rat`
+       を追加した
+    - これは Mathlib の `sub_one_norm_eq_eval_cyclotomic` の証明パターンを一般の有理点 `a` へ拡張し、
+       `Algebra.norm ℚ ((a : K) - ζ) = Polynomial.eval a (Polynomial.cyclotomic p ℚ)`
+       を返す theorem になっている
+    - proof では
+       - `norm_eq_prod_embeddings`
+       - `embeddingsEquivPrimitiveRoots`
+       - `cyclotomic_eq_prod_X_sub_primitiveRoots`
+       - `eval₂_at_apply`
+       を接続した
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` に axiom 監視を追加した
+3. 結論:
+    - direct norm-eval route の土台は no-sorry theorem として成立した ✅
+    - しかもこの補題自体には first-case 仮定 `¬ p ∣ gap` は不要で、
+       primitive root と cyclotomic extension だけで動くと確認できた ✅
+    - したがって Stage 3a-2 の代替路として、
+       `Norm(z - ζy)` を cyclotomic polynomial の homogeneous evaluation へ落とし、
+       そこから `quotientPrimePow` / `GN` へ戻す構成は十分現実的じゃ ✅
+4. 検証:
+    - `lake build DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+5. 失敗事例:
+    - `cyclotomic'` と `cyclotomic` の橋、および `eval` / `eval₂` / `aeval` の顔違いで数回 proof が詰まった
+    - 最終的には Mathlib 本家と同じ `cyclotomic_eq_prod_X_sub_primitiveRoots` の rewrite path と
+       `eval₂_at_apply` の組み合わせで解決した
+6. 次の課題:
+    - ここから先は `a := z / y` の specialized application と、
+       `y^(p-1) * Φ_p(z/y)` を DkMath 側の homogeneous evaluation / `quotientPrimePow` / `GN` へ戻す橋を作ればよい
+    - それができれば、Stage 3 concrete contradiction bridge の `hProduct` 依存をさらに外せる見込みが強い

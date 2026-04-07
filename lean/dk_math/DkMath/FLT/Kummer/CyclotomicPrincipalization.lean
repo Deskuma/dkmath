@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.Kummer.GapDivisibleBranch
 import DkMath.NumberTheory.Gcd.GN
+import Mathlib.NumberTheory.Cyclotomic.PrimitiveRoots
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Basic
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Galois
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Ideal
@@ -1790,6 +1791,53 @@ lemma norm_int_nat_cast_eq_pow
     Int.cast_injective heq
   simp only [heq']
 
+/--
+Mathlib の `sub_one_norm_eq_eval_cyclotomic` を一般の有理点 `a` へ拡張した product-free 補題。
+
+`Algebra.norm ℚ (a - ζ)` を、`Φ_p(a)` の評価へ直接戻す。
+今は Stage 3 direct route の調査基盤として置く。
+-/
+lemma norm_sub_primitiveRoot_eq_eval_cyclotomic_rat
+    {K : Type*} [Field K] [CharZero K]
+    {p : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+  {ζ : K} (hζ : IsPrimitiveRoot ζ p) (a : ℚ) :
+    Algebra.norm ℚ ((a : K) - ζ) = Polynomial.eval a (Polynomial.cyclotomic p ℚ) := by
+  let E := AlgebraicClosure K
+  haveI : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
+  obtain ⟨z, hz⟩ := IsAlgClosed.exists_root
+    (Polynomial.cyclotomic p E)
+    (Polynomial.degree_cyclotomic_pos p E (NeZero.pos _)).ne.symm
+  have hirr : Irreducible (Polynomial.cyclotomic p ℚ) :=
+    Polynomial.cyclotomic.irreducible_rat (Nat.Prime.pos (Fact.out : Nat.Prime p))
+  apply (algebraMap ℚ E).injective
+  letI := IsCyclotomicExtension.finiteDimensional {p} ℚ K
+  letI := IsCyclotomicExtension.isGalois {p} ℚ K
+  rw [Algebra.norm_eq_prod_embeddings]
+  conv_lhs =>
+    congr
+    rfl
+    ext
+    rw [map_sub]
+    simp
+  have hProd :
+      ∏ σ : K →ₐ[ℚ] E, ((a : E) - σ ζ) =
+        Polynomial.eval (a : E) (Polynomial.cyclotomic' p E) := by
+    rw [Polynomial.cyclotomic', Polynomial.eval_prod, ← @Finset.prod_attach E E, ← Finset.univ_eq_attach]
+    refine Fintype.prod_equiv (hζ.embeddingsEquivPrimitiveRoots E hirr) _ _ ?_
+    intro σ
+    simp
+  rw [hProd, Polynomial.cyclotomic',
+    ← Polynomial.cyclotomic_eq_prod_X_sub_primitiveRoots
+      (Polynomial.isRoot_cyclotomic_iff.1 hz),
+    ← Polynomial.map_cyclotomic p (algebraMap ℚ E)]
+  calc
+    Polynomial.eval (a : E) (Polynomial.map (algebraMap ℚ E) (Polynomial.cyclotomic p ℚ))
+        = Polynomial.eval₂ (algebraMap ℚ E) (a : E) (Polynomial.cyclotomic p ℚ) := by
+            simpa using (Polynomial.eval_map_algebraMap (Polynomial.cyclotomic p ℚ) (a : E))
+    _ = (algebraMap ℚ E) (Polynomial.eval a (Polynomial.cyclotomic p ℚ)) := by
+          simpa using
+            (Polynomial.eval₂_at_apply (p := Polynomial.cyclotomic p ℚ) (algebraMap ℚ E) a)
+
 /-- N(ζ-1) = p in ℤ。 -/
 lemma norm_int_zeta_sub_one_eq_p
     {K : Type*} [Field K] [NumberField K] [CharZero K]
@@ -2546,6 +2594,28 @@ theorem prod_units_zmod_eq_prod_range_erase_zero
     rfl
 
 /--
+Stage 3a-1 の product-free wrapper:
+chosen factor の整数 norm を、`(Finset.range p).erase 0` 上の cyclotomic factor 積へ持ち上げる。
+
+ここではまだ `GN` への書き換えはしないため、full product identity は不要。
+-/
+theorem chosenCyclotomicLinearFactor_norm_eq_prod_range_erase_zero_of_firstCase_of_pack_thin
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
+    (((Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) : ℚ) : K)) =
+      ∏ j ∈ (Finset.range p).erase 0,
+        ((cyclotomicLinearFactorInRingOfIntegers hζ y z j : 𝓞 K) : K) := by
+  let factor := cyclotomicLinearFactorInRingOfIntegers hζ y z
+  have h_norm :=
+    chosenCyclotomicLinearFactor_norm_eq_prod_units_of_firstCase_of_pack_thin hζ
+      (K := K) (p := p) (y := y) (z := z)
+  have h_bridge :=
+    prod_units_zmod_eq_prod_range_erase_zero (p := p)
+      (fun j => ((factor j : 𝓞 K) : K))
+  simpa [factor] using h_norm.trans h_bridge
+
+/--
 Stage 3a-2 の concrete core:
 first-case pack-thin 文脈では、nontrivial cyclotomic linear factor 全体の積は
 そのまま `GN p (z - y) y` に一致する。
@@ -2680,14 +2750,10 @@ theorem cyclotomicNormEqGN_concrete_firstCase_packThin :
       (congrArg (fun t : 𝓞 K => ((t : 𝓞 K) : K)) hgap_eq).symm
   -- Assemble the chain in K, then inject back to ℤ
   let factor := cyclotomicLinearFactorInRingOfIntegers hζ y z
-  -- Stage 3a-1: norm (as K) = (ZMod p)ˣ product
+  -- Stage 3a-1: norm (as K) = erase-0 product (product-free)
   have h_norm :=
-    chosenCyclotomicLinearFactor_norm_eq_prod_units_of_firstCase_of_pack_thin hζ
-      (K := K) (p := p) (y := y) (z := z)
-  -- Combinatorial bridge: (ZMod p)ˣ product = erase-0 product
-  have h_bridge :=
-    prod_units_zmod_eq_prod_range_erase_zero (p := p)
-      (fun j => ((factor j : 𝓞 K) : K))
+    chosenCyclotomicLinearFactor_norm_eq_prod_range_erase_zero_of_firstCase_of_pack_thin
+      (K := K) (p := p) (y := y) (z := z) hζ
   -- Stage 3a-2: erase-0 product = GN (in 𝓞 K)
   have h_prod :=
     cyclotomicNontrivialFactorProduct_eq_GN_of_firstCase_of_pack_thin
@@ -2705,7 +2771,7 @@ theorem cyclotomicNormEqGN_concrete_firstCase_packThin :
           ((Finset.range p).erase 0)).symm
       · exact congrArg (fun x : 𝓞 K => (x : K)) h_prod
     -- Step B: chain all pieces
-    rw [h_norm, h_bridge, h_erase_eq_GN_K, hgap_nat]
+    rw [h_norm, h_erase_eq_GN_K, hgap_nat]
     -- Goal: ↑↑(GN p (z-y) y) = ↑↑(GN p (↑z - ↑y) ↑y)
     -- Convert ↑z - ↑y → ↑(z-y) then norm_cast closes it
     simp only [← Nat.cast_sub hpack.hyz]; norm_cast
