@@ -2532,6 +2532,33 @@ theorem chosenCyclotomicLinearFactorNonzero_of_productEq_of_counterexamplePack
   exact hpack.hx0 (Nat.cast_eq_zero.mp hx_zero)
 
 /--
+counterexample pack だけから、chosen cyclotomic linear factor の非零性を direct norm 計算で回収する。
+
+first-case concrete mainline では `hLinNe` はもはや extra input ではなく、
+`norm = GN` と `GN ≠ 0` から自動供給できる。
+-/
+theorem chosenCyclotomicLinearFactorNonzero_of_counterexamplePack
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z) :
+    ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ) (y := y) (z := z) := by
+  intro hZero
+  have hNormEq :
+      Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) =
+        ((DkMath.CosmicFormulaBinom.GN p (z - y) y : ℕ) : ℤ) :=
+    chosenCyclotomicLinearFactor_norm_eq_gn_direct hζ hpack.hy0 hpack.hyz_lt
+  have hp_two_le : 2 ≤ p := le_trans (by decide : 2 ≤ 5) hpack.hp5
+  have hgap_pos : 0 < z - y := Nat.sub_pos_of_lt hpack.hyz_lt
+  have hGN_ne_zero : DkMath.CosmicFormulaBinom.GN p (z - y) y ≠ 0 := by
+    exact DkMath.CosmicFormulaBinom.GN_ne_zero_nat_of_two_le hp_two_le hgap_pos hpack.y_pos
+  have hNormZero : Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) = 0 := by
+    simp [chosenCyclotomicLinearFactorInRingOfIntegers, hZero]
+  have hGNCastNeZero : ((DkMath.CosmicFormulaBinom.GN p (z - y) y : ℕ) : ℤ) ≠ 0 := by
+    exact_mod_cast hGN_ne_zero
+  exact hGNCastNeZero (hNormEq ▸ hNormZero)
+
+/--
 chosen linear factor と tail ideal の積が `(x)^p` になることを表す shorthand。
 -/
 abbrev ChosenCyclotomicLinearFactorMulTailEqSpanPowInRingOfIntegers
@@ -4322,12 +4349,17 @@ theorem false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionF
       ∀ {gap : ℕ},
         (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
         ¬ p ∣ gap →
-        ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
-          (y := y) (z := z) →
         False := by
+  intro K _ _ _ p x y z _ _ ζ hζ hpack gap hgap_eq hFirstCase
+  have hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
+      (hζ := hζ) (y := y) (z := z) :=
+    chosenCyclotomicLinearFactorNonzero_of_counterexamplePack
+      (K := K) (p := p) (x := x) (y := y) (z := z) hζ hpack
   exact false_of_cyclotomicNormGNPower_concrete_firstCase_pack_thin
     (hKill := cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree hCl)
     (hNoPow := hNoPow)
+    (K := K) (p := p) (x := x) (y := y) (z := z) (ζ := ζ) (gap := gap)
+    hζ hpack hgap_eq hFirstCase hLinNe
 
 /--
 `hLinNe` を product identity から自動供給する版の first-case concrete contradiction wrapper。
@@ -4348,15 +4380,11 @@ theorem false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionF
         CyclotomicLinearFactorProductEqInRingOfIntegers (hζ := hζ)
           (x := x) (y := y) (z := z) →
         False := by
-  intro K _ _ _ p x y z _ _ ζ hζ hpack gap hgap_eq hFirstCase hProduct
-  have hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
-      (hζ := hζ) (y := y) (z := z) :=
-    chosenCyclotomicLinearFactorNonzero_of_productEq_of_counterexamplePack
-      (hζ := hζ) (x := x) hpack hProduct
+  intro K _ _ _ p x y z _ _ ζ hζ hpack gap hgap_eq hFirstCase _hProduct
   exact false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree
     (hCl := hCl) (hNoPow := hNoPow)
     (K := K) (p := p) (x := x) (y := y) (z := z) (ζ := ζ) (gap := gap)
-    hζ hpack hgap_eq hFirstCase hLinNe
+    hζ hpack hgap_eq hFirstCase
 
 /--
 gap-divisible branch のうち first-case (`¬ p ∣ z - y`) では、
@@ -4382,17 +4410,13 @@ theorem qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree
       ∀ {gap : ℕ},
         (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
         ¬ p ∣ gap →
-        ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
-          (y := y) (z := z) →
-        CyclotomicLinearFactorProductEqInRingOfIntegers (hζ := hζ)
-          (x := x) (y := y) (z := z) →
         ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p := by
-  intro K _ _ _ p x y z _ _ q hq hqx hqne hqgap ζ hζ hpack gap hgap_eq hFirstCase hLinNe hProduct
+  intro K _ _ _ p x y z _ _ q hq hqx hqne hqgap ζ hζ hpack gap hgap_eq hFirstCase
   exact False.elim <|
     false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree
       (hCl := hCl) (hNoPow := hNoPow)
       (K := K) (p := p) (x := x) (y := y) (z := z) (ζ := ζ) (gap := gap)
-      hζ hpack hgap_eq hFirstCase hLinNe
+      hζ hpack hgap_eq hFirstCase
 
 /--
 `hLinNe` を product identity から自動供給する版の first-case gap-divisible witness theorem。
@@ -4417,15 +4441,11 @@ theorem qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_of_
         CyclotomicLinearFactorProductEqInRingOfIntegers (hζ := hζ)
           (x := x) (y := y) (z := z) →
         ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p := by
-  intro K _ _ _ p x y z _ _ q hq hqx hqne hqgap ζ hζ hpack gap hgap_eq hFirstCase hProduct
-  have hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
-      (hζ := hζ) (y := y) (z := z) :=
-    chosenCyclotomicLinearFactorNonzero_of_productEq_of_counterexamplePack
-      (hζ := hζ) (x := x) hpack hProduct
+  intro K _ _ _ p x y z _ _ q hq hqx hqne hqgap ζ hζ hpack gap hgap_eq hFirstCase _hProduct
   exact qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree
     (hCl := hCl) (hNoPow := hNoPow)
     (K := K) (p := p) (x := x) (y := y) (z := z) (q := q) (ζ := ζ) (gap := gap)
-    hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase hLinNe hProduct
+    hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase
 
 /--
 `TriominoCosmicNonLiftableGNBridge` から `NoPowOnGN` を経由して、
@@ -4446,22 +4466,18 @@ theorem qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and
       ∀ {gap : ℕ},
         (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
         ¬ p ∣ gap →
-        ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
-          (y := y) (z := z) →
-        CyclotomicLinearFactorProductEqInRingOfIntegers (hζ := hζ)
-          (x := x) (y := y) (z := z) →
         ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p := by
   let hNoPow :
       ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
         ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p :=
     bodyInvariant_of_NoPowOnGN
       (triominoCosmicNoPowOnGN_of_nonLiftableGNBridge hNoLift)
-  intro K _ _ _ p x y z _ _ q hq hqx hqne hqgap ζ hζ hpack gap hgap_eq hFirstCase hLinNe hProduct
+  intro K _ _ _ p x y z _ _ q hq hqx hqne hqgap ζ hζ hpack gap hgap_eq hFirstCase
   exact qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree
     (hCl := hCl)
     (hNoPow := hNoPow)
     (K := K) (p := p) (x := x) (y := y) (z := z) (q := q) (ζ := ζ) (gap := gap)
-    hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase hLinNe hProduct
+    hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase
 
 /--
 Stage 1c: trivial class → principal ideal extraction。

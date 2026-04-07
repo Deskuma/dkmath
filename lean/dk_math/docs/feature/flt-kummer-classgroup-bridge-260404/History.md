@@ -1015,3 +1015,53 @@ Archive
    - 次は、この first-case product-free chain を legacy route / class-group one-shot の縮約へどう注入するかを詰める
    - 特に `cyclotomicPrincipalization_of_classGroupPTorsionFree` や `FLTPrimeGe5Target_of_kummerRoute` 側で、
      old `hProduct` 前提を今回の chain へ置き換える導線を整理する
+
+### 日時: 2026/04/08 06:11:36 JST — first-case stable bridge から `hLinNe` / `hProduct` の残骸を除去
+
+1. 目的:
+    - current first-case concrete chain がすでに product-free で閉じているなら、
+       class-group から contradiction / branch witness へ戻す stable bridge 側にも
+       vestigial な `hLinNe` / `hProduct` 仮定が残っていないかを整理する
+    - あわせて、chosen factor 非零性 `hLinNe` が本当に extra input なのか、
+       それとも pack から自動供給できるのかを theorem 名つきで固定する
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に
+       `chosenCyclotomicLinearFactorNonzero_of_counterexamplePack` を追加した
+    - この theorem では
+       - `chosenCyclotomicLinearFactor_norm_eq_gn_direct`
+       - `GN_ne_zero_nat_of_two_le`
+       を接続し、chosen factor の norm が nonzero な `GN` に等しいことから
+       chosen factor 自体の非零性を direct に回収した
+    - そのうえで以下の first-case stable bridge 群の signature を簡約した:
+       - `false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree`
+       - `qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree`
+       - `qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_nonLiftable`
+    - 具体的には、base theorem 群から不要になった
+       `ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers ...` と
+       `CyclotomicLinearFactorProductEqInRingOfIntegers ...` を外し、
+       productEq-only variant は compatibility wrapper として残した
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` に
+       `chosenCyclotomicLinearFactorNonzero_of_counterexamplePack` の axiom 監視を追加した
+3. 結論:
+    - first-case stable bridge 群は、もう `hLinNe` も `hProduct` も外部入力として要求しない形へ整理できた ✅
+    - とくに `hLinNe` は pack から direct norm route で自動供給できると確定したため、
+       first-case replacement point の interface はさらに薄くなった ✅
+    - これで current blocker は、first-case bridge の補助仮定ではなく、
+       依然として `cyclotomicPrincipalization_of_classGroupPTorsionFree` 本体を
+       global target の形で切り裂けていない点へ、より明確に集中した ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `get_errors` 上でも、今回追加分の新規 error は解消
+    - 残る `declaration uses sorry` は既存の
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` と研究用ファイル側のみ
+5. 失敗事例:
+    - `GN_ne_zero_nat_of_two_le` の前提は `gap ≠ 0` / `y ≠ 0` ではなく
+       `0 < gap` / `0 < y` なので、最初の実装では `PrimeGe5CounterexamplePack` からの
+       positivity 供給が不足して型エラーになった
+    - `simp` でも `chosenCyclotomicLinearFactorInRingOfIntegers` だけで十分な箇所に
+       abbrev 名を混ぜると unused simp arg warning が出たため、最小 rewrite に整えた
+6. 次の課題:
+    - 次は `cyclotomicPrincipalization_of_classGroupPTorsionFree` の first-case / non-first-case split を、
+       いま薄くなった stable bridge 群を使って再設計する
+    - その際の実 blocker は、global pack から直接使える case predicate と
+       non-first-case 側へ責任を押し込む theorem 境界の設計じゃ
