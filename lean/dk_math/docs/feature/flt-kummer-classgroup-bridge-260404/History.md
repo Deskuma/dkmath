@@ -853,3 +853,62 @@ Archive
     - 次は既存の `CyclotomicNormEqGNFirstCasePackThinTarget` を direct theorem 側へ差し替え、
        `hProduct` をその interface から外せるかを詰める段階じゃ
     - その際、raw chosen-factor direct theorem を alias / existing Stage 3 wrapper へどう注入するかを整理するとよい
+
+### 日時: 2026/04/08 03:37:33 JST — UnitAbsorb interface からも hProduct を外した
+
+1. 目的:
+    - `NormEqGN` target に続いて、Stage 3 後半の
+       `CyclotomicNormUnitAbsorbFirstCasePackThinTarget`
+       でも `hProduct` が本当に不要かを確認する
+    - もし concrete theorem が `hProduct` を使っていなければ、
+       interface から削って Stage 3 の責務分離をさらに明確にする
+2. 実施:
+    - target definition を見直し、`CyclotomicNormUnitAbsorbFirstCasePackThinTarget` の
+       引数列から `CyclotomicLinearFactorProductEqInRingOfIntegers ...` を削除した
+    - `cyclotomicNormUnitAbsorb_concrete_firstCase_packThin` の intro 列から `hProduct` を削除した
+    - downstream の `cyclotomicNormGNPower_of_firstCase_of_pack_thin` における
+       `hUnitAbsorb` 適用からも `hProduct` を除去した
+3. 結論:
+    - Stage 3 の 2 つの中核 interface
+       - `CyclotomicNormEqGNFirstCasePackThinTarget`
+       - `CyclotomicNormUnitAbsorbFirstCasePackThinTarget`
+       の両方が hProduct-free になった ✅
+    - したがって current Stage 3 で `hProduct` が残る本質箇所は、
+       `cyclotomicUnitNormalization_of_firstCase_of_pack_thin` を通る unit-normalization chain にほぼ局在したと見てよい ✅
+4. 検証:
+    - `lake build DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+5. 次の課題:
+    - 次は `cyclotomicNormGNPower_of_firstCase_of_pack_thin` の残る `hProduct` が
+       normalization のためだけに必要なのか、あるいは normalization 自体も別 route へ置き換えられるのかを詰める
+    - その観点では `cyclotomicUnitNormalization_of_firstCase_of_pack_thin` と、
+       そこへ流れ込む pairwise / coprime route の dependency を再分解するのが自然じゃ
+
+### 日時: 2026/04/08 03:37:33 JST — NormEqGN interface から hProduct を外した
+
+1. 目的:
+    - 前段で direct theorem として立てた
+       `chosenCyclotomicLinearFactor_norm_eq_gn_direct`
+       を既存 Stage 3 wrapper へ注入し、
+       `CyclotomicNormEqGNFirstCasePackThinTarget` 自体から `hProduct` を外せるかを確認する
+2. 実施:
+    - `CyclotomicNormEqGNFirstCasePackThinTarget` の引数列から
+       `CyclotomicLinearFactorProductEqInRingOfIntegers ...` を削除した
+    - `cyclotomicNormEqGN_concrete_firstCase_packThin` の proof を、
+       old Stage 3a-1 / 3a-2 chain ではなく
+       `chosenCyclotomicLinearFactor_norm_eq_gn_direct`
+       の直接適用へ差し替えた
+    - downstream の `cyclotomicNormGNPower_of_firstCase_of_pack_thin` では、
+       `hNormEqGN` への適用から `hProduct` を除去した
+    - monitoring comment も「NormEqGN concrete は interface 上 hProduct-free」と分かるよう更新した
+3. 結論:
+    - `CyclotomicNormEqGNFirstCasePackThinTarget` は、ついに interface レベルで hProduct-free になった ✅
+    - つまり Stage 3 の `norm = GN` ノードは、theorem 本体だけでなく public target の形でも
+       full product identity に依存しないと確認できた ✅
+    - いま `hProduct` が残るのは主に unit-normalization / unit-absorb を含む後続 chain 側であり、
+       NormEqGN 自体は完全に direct route へ移行した ✅
+4. 検証:
+    - `lake build DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+5. 次の課題:
+    - 次は `CyclotomicNormGNPower_of_firstCase_of_pack_thin` の外形をどこまで整理できるか、
+       すなわち hProduct を Stage 3 power wrapper 側からもさらに押し出せるかを測る段階じゃ
+    - その鍵は `UnitNormalization` / `UnitAbsorb` 層のどこで product identity が本当に必要かを局所化することじゃ
