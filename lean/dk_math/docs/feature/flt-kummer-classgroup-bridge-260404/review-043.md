@@ -136,3 +136,258 @@ $$
 $$
 
 必要なら次に、`FLTPrimeGe5Target_of_kummerRoute` をどう切り分けて current split architecture に差し替えるか、その差し替え設計書を起こすぞい。
+
+---
+
+## 1. 目的
+
+わっちの見立てでは、次に起こすべきは **「legacy one-shot route を、いま concrete 化された first-case split architecture へ差し替えるための設計書」** じゃ。
+
+現状は、first-case の Stage 3 そのものは concrete theorem 群で閉じており、残る `sorry` は主に legacy wrapper / one-shot route 側へ押し込まれておる。したがって、いま必要なのは新しい数学の発明ではなく、 **古い配線を新しい concrete 部品へ差し替える縮約戦** じゃ。
+
+---
+
+## 2. 現在地の整理
+
+今回までで、first-case specialization については次が concrete 化済みじゃ。
+
+* `CyclotomicNormEqGNFirstCasePackThinTarget`
+* `CyclotomicNormUnitAbsorbFirstCasePackThinTarget`
+* `cyclotomicNormGNPower_concrete_firstCase_packThin`
+* `false_of_cyclotomicNormGNPower_concrete_firstCase_pack_thin`
+
+ゆえに、first-case 側では
+
+$$
+\text{pack-thin} \to \text{NormEqGN} \to \text{UnitAbsorb} \to GN=s^p \to \text{contradiction}
+$$
+
+という鎖が theorem 名つきで mainline に揃ったと見てよい。残る `sorry` は、この split された Stage 3 ではなく、legacy 側の wrapper 群と downstream routing 側にある、というのが現状整理じゃ。
+
+---
+
+## 3. 置換対象
+
+主たる置換対象は次の 2 系統じゃ。
+
+### 3.1. `FLTPrimeGe5Target_of_kummerRoute`
+
+ここは現在も `uses sorry` の代表として監視されておる。
+ゆえに、まずここを **first-case / non-first-case の分岐が見える形へ露出** し、first-case 側だけでも concrete route に差し替えるのが第一目標じゃ。
+
+### 3.2. `cyclotomicPrincipalization_of_classGroupPTorsionFree`
+
+これも legacy 側の代表残件として挙がっておる。
+one-shot に全部を背負わせる形が重さの源になっておるので、将来的には split architecture に沿う薄い wrapper へ置換すべきじゃ。
+
+---
+
+## 4. 目標形
+
+目標は、旧 one-shot chain を「分岐ごとの薄い wrapper の束」に変えることじゃ。
+
+具体的には、`FLTPrimeGe5Target_of_kummerRoute` の first-case 枝が最終的にこう読める状態を狙う。
+
+```text
+pack
+  → first-case 判定
+  → chosen factor nonzero
+  → product equality
+  → false_of_cyclotomicNormGNPower_concrete_firstCase_pack_thin
+  → False
+```
+
+ここで大事なのは、 **first-case の中ではもう `sorry` を呼ばぬ** ことじゃ。
+first-case を concrete に抜いてしまえば、残る `sorry` は non-first-case や旧 wrapper の残骸へ局所化できる。
+
+---
+
+## 5. 差し替え方針
+
+## 5.1. 方針 A. first-case 枝を theorem として独立抽出する
+
+いきなり `FLTPrimeGe5Target_of_kummerRoute` を書き換えるより、まず
+
+* `fltPrimeGe5Target_of_kummerRoute_firstCase_concrete`
+* `fltPrimeGe5Target_of_kummerRoute_nonFirstCase_legacy`
+
+の 2 本へ分けるのがよい。
+
+これにより、first-case 枝の concrete 化が旧本体の複雑さに巻き込まれず、`#print axioms` でも効果が見えやすい。
+
+### 推奨 skeleton
+
+```lean
+/--
+`FLTPrimeGe5Target_of_kummerRoute` の first-case 部分だけを、
+current concrete split architecture で処理する薄い wrapper。
+-/
+theorem fltPrimeGe5Target_of_kummerRoute_firstCase_concrete
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u})
+    (hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p) :
+    ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+      ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+      ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      (hpack : PrimeGe5CounterexamplePack p x y z) →
+      ∀ {gap : ℕ},
+        (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K)) →
+        (hFirstCase : ¬ p ∣ gap) →
+        (hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
+          (hζ := hζ) (y := y) (z := z)) →
+        (hProduct : CyclotomicLinearFactorProductEqInRingOfIntegers
+          (hζ := hζ) (x := x) (y := y) (z := z)) →
+        False := by
+  intro K _ _ _ p x y z _ _ ζ hζ hpack gap hgap_eq hFirstCase hLinNe hProduct
+  exact false_of_cyclotomicNormGNPower_concrete_firstCase_pack_thin
+    (hKill := hKill) (hNoPow := hNoPow)
+    hζ hpack hgap_eq hFirstCase hLinNe hProduct
+```
+
+この theorem が no-sorry で立てば、first-case 枝は旧ルートから切り離せる。
+
+---
+
+## 5.2. 方針 B. 旧本体は first-case / non-first-case の case split だけに縮める
+
+次に `FLTPrimeGe5Target_of_kummerRoute` 本体を、「場合分けだけをする薄い合成器」に変える。
+
+```lean
+theorem FLTPrimeGe5Target_of_kummerRoute
+    ... := by
+  intro ...
+  by_cases hFirstCase : ¬ p ∣ gap
+  · exact fltPrimeGe5Target_of_kummerRoute_firstCase_concrete
+      (hKill := hKill) (hNoPow := hNoPow)
+      hζ hpack hgap_eq hFirstCase hLinNe hProduct
+  · exact fltPrimeGe5Target_of_kummerRoute_nonFirstCase_legacy
+      ...
+```
+
+ここで non-first-case 側は、最初はそのまま legacy theorem を呼んでよい。
+大切なのは、 **first-case 側だけでも旧 `sorry` 依存から切り離す** ことじゃ。
+
+---
+
+## 5.3. 方針 C. `cyclotomicPrincipalization_of_classGroupPTorsionFree` は一気に潰さず、入口を薄くする
+
+これを直ちに全面改修すると森が燃える。
+なので、まずは旧 theorem をそのまま残しつつ、first-case で必要な部分だけを current split architecture に切り出した薄い wrapper を追加するのがよい。
+
+つまり、旧 theorem を消すのではなく、
+
+* current split を優先導線にする
+* 旧 theorem は fallback / legacy として残す
+
+という移行戦略じゃ。
+
+---
+
+## 6. 実装タスク一覧
+
+## 6.1. Phase 1. first-case concrete wrapper を追加
+
+追加対象
+
+* `fltPrimeGe5Target_of_kummerRoute_firstCase_concrete`
+
+検証
+
+* `#print axioms ...firstCase_concrete`
+* `lake build DkMath.FLT...`
+
+成功条件
+
+* no-sorry
+* existing assumptions のみで閉じる
+
+## 6.2. Phase 2. 旧本体に case split を導入
+
+修正対象
+
+* `FLTPrimeGe5Target_of_kummerRoute`
+
+作業
+
+* first-case 分岐を新 wrapper へ差し替え
+* non-first-case は legacy のまま
+
+検証
+
+* `#print axioms DkMath.FLT.FLTPrimeGe5Target_of_kummerRoute`
+
+期待
+
+* `uses sorry` が残っても、first-case 起因の依存が消える
+
+## 6.3. Phase 3. legacy principalization wrapper の分解
+
+対象
+
+* `cyclotomicPrincipalization_of_classGroupPTorsionFree`
+* その周辺 one-shot theorem
+
+作業
+
+* split architecture ベースの薄い wrapper 群を追加
+* 旧 theorem を徐々に置換
+
+---
+
+## 7. 成功判定
+
+この差し替え設計の成功判定は明確じゃ。
+
+### 7.1. 局所成功
+
+`fltPrimeGe5Target_of_kummerRoute_firstCase_concrete` が no-sorry で build すること。
+
+### 7.2. 中間成功
+
+`FLTPrimeGe5Target_of_kummerRoute` の `uses sorry` が減る、または少なくとも **残る `sorry` の責任範囲が non-first-case / legacy に限定される** こと。
+
+### 7.3. 最終成功
+
+first-case specialization に由来する `sorry` が legacy chain から消え、残件一覧が
+
+* non-first-case
+* class-group legacy wrapper
+* research files
+
+に整理されること。
+
+---
+
+## 8. リスク
+
+### 8.1. 旧 theorem の引数が肥大していて、first-case 枝の抽出だけでも型合わせが重い
+
+対策として、まずは theorem を「完全抽出」せず、旧 proof 中の first-case 部分をローカル `have` で切り、そのあと独立 theorem へ持ち上げるのがよい。
+
+### 8.2. `hgap_eq`, `hLinNe`, `hProduct` の入手元が旧ルートの深い場所にあり、case split 後に再配線が要る
+
+これはありうる。
+その場合は「first-case contradiction wrapper」を直接呼ぶのでなく、その入力をまとめた小さな `FirstCaseConcreteInput` 的 lemma を 1 本置くとよい。
+
+---
+
+## 9. 最終提案指示
+
+よって、次の号令はこれじゃ。
+
+1. `FLTPrimeGe5Target_of_kummerRoute` の first-case 枝だけを抽出した
+   `fltPrimeGe5Target_of_kummerRoute_firstCase_concrete` を追加せよ。
+2. それを使って旧本体へ case split を導入し、first-case 側を concrete wrapper 群へ差し替えよ。
+3. その後 `#print axioms DkMath.FLT.FLTPrimeGe5Target_of_kummerRoute` を再監視し、
+   `uses sorry` の責任範囲が non-first-case / legacy に縮んだか確認せよ。
+4. 次段として `cyclotomicPrincipalization_of_classGroupPTorsionFree` を同様に薄い split wrapper 群へ寄せよ。
+
+ひとことで言えば、
+
+$$
+\text{次は数学を掘るのではなく、旧配線を concrete first-case route へ差し替える戦じゃ。}
+$$
+
+必要なら次に、その `fltPrimeGe5Target_of_kummerRoute_firstCase_concrete` と case split 本体の Lean 雛形を、そのまま貼れる形で起こすぞい。
