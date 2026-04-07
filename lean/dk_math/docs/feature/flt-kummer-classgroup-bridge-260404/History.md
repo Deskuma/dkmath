@@ -151,3 +151,36 @@ Archive
     - `RegularPrimeRoute.lean` の editor diagnostics が build 成功後もしばらく stale に見える点は、
        LSP 側の再同期を別途確認する
     - 残る honest open である `CyclotomicNormDescentTarget` の concrete 化へ進む
+
+### 日時: 2026/04/07 15:28:39 JST — first-case thin wrapper で Stage 1 existence boundary を concrete 化
+
+1. 目的:
+   - review-037 の方針に沿って、重い wrapper を resurrect せずに、first-case pack から Stage 1 完了を読める薄い theorem を追加する
+   - chosen factor の explicit ideal equality と principal `p` 乗存在を、既存 helper 群だけで compile-safe に固定する
+2. 実施:
+   - `CyclotomicPrincipalization.lean` に以下を追加:
+     - `chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin`
+     - `cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin`
+   - 上記 2 本では、既存の helper / receiver のみを接続:
+     - `chosenLinearFactorMulTailEqSpanPow_of_productEq`
+     - `chosenLinearFactor_isCoprime_with_tail_of_firstCase_of_pack`
+     - `xSpanNonzero_of_counterexamplePack_of_ringOfIntegers`
+     - `linearFactorSpanEqPowOfChosenMulTailEqSpanPowAndIsCoprime`
+     - `linearFactorIdealPthPowerExistsOfSpanEqPowAndTorsionKill`
+   - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の axiom 監視へ上記 theorem を追加
+   - `CyclotomicPrincipalization.lean` 内の status comment を同期し、first-case specialization では Stage 1 existence boundary が concrete 化されたことを明記
+3. 結論:
+   - first-case pack から chosen factor ideal の explicit `K^p` equality を返す thin wrapper を no-sorry で追加できた ✅
+   - そこから principal ideal の `p` 乗存在まで返す Stage 1 finished wrapper を no-sorry で追加できた ✅
+   - よって first-case specialization に限れば、Stage 1 existence boundary は theorem として concrete に読める状態になった ✅
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+   - `lake build DkMathTest.FLT.Kummer.RegularPrimeRoute` で test module 側の新規監視も解決
+   - editor diagnostics 上で残る `sorry` は既存 legacy theorem `cyclotomicPrincipalization_of_classGroupPTorsionFree` のみ
+5. 失敗事例:
+   - 初回 build では、`ChosenCyclotomicLinearFactorIdealPthPowerInRingOfIntegers` の abbrev 展開が不足し、
+     thin wrapper の最終 `simpa` で goal が合わなかった
+   - abbrev を明示して修正後は build 成功
+6. 次の課題:
+   - この first-case pack-specialized 供給を、placeholder の `CyclotomicIdealPthPowerTarget` へどう昇格させるかを詰める
+   - その後、残る honest open である `CyclotomicNormDescentTarget` の concrete 化へ進む
