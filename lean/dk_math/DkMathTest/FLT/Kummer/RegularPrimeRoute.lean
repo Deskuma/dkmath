@@ -177,16 +177,62 @@ no-sorry の theorem が意図せず sorry に汚染されていないことを�
 #print axioms DkMath.FLT.chosenLinearFactor_isCoprime_with_other_of_primeOrYContradiction_of_ringOfIntegersCyclotomic -- OK: no sorry
 -- no-sorry (first-case chosen factor is coprime to the full complementary tail)
 #print axioms DkMath.FLT.chosenLinearFactor_isCoprime_with_tail_of_firstCase_of_pack -- OK: no sorry
+-- no-sorry (first-case chosen factor is coprime to the full complementary tail, product-free variant)
+#print axioms DkMath.FLT.chosenLinearFactor_isCoprime_with_tail_of_firstCase_of_pack_withoutProduct -- OK: no sorry
+-- no-sorry (generic singleton-ideal coprime receiver)
+#print axioms DkMath.FLT.spanSingletons_isCoprime_of_noCommonPrime -- OK: no sorry
+-- no-sorry (chosen + tailsum in a common prime ideal imply P | (p) or y ∈ P)
+#print axioms DkMath.FLT.primeOrY_of_chosenFactorInP_and_tailSumInP_of_counterexamplePack -- OK: no sorry
+-- no-sorry (first-case chosen factor is coprime to the local tailsum ideal)
+#print axioms DkMath.FLT.chosenLinearFactor_isCoprime_with_tailSum_of_firstCase_of_pack_withoutProduct -- OK: no sorry
 -- no-sorry (chosen-first 2-factor equality adapter)
 #print axioms DkMath.FLT.linearFactorSpanEqPowOfChosenMulTailEqSpanPowAndIsCoprime -- OK: no sorry
 -- no-sorry (pack product identity -> chosen/tail ideal equation)
 #print axioms DkMath.FLT.chosenLinearFactorMulTailEqSpanPow_of_productEq -- OK: no sorry
+-- no-sorry (isolated receiver: mul-tail ideal equality + product-free coprime -> chosen span = p-th power)
+#print axioms DkMath.FLT.chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin_of_mulTailEqSpanPow -- OK: no sorry
 -- no-sorry (pack -> x-span nonzero in ring of integers)
 #print axioms DkMath.FLT.xSpanNonzero_of_counterexamplePack_of_ringOfIntegers -- OK: no sorry
 -- no-sorry (first-case pack -> chosen factor ideal explicit p-th power equality)
 #print axioms DkMath.FLT.chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin -- OK: no sorry
+-- no-sorry (first-case pack -> chosen factor ideal explicit p-th power equality, product-free local-tailsum route)
+#print axioms DkMath.FLT.chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin_withoutProduct -- OK: no sorry
+-- no-sorry (isolated receiver: mul-tail ideal equality + torsion-kill -> Stage 1 existence boundary)
+#print axioms DkMath.FLT.cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin_of_mulTailEqSpanPow -- OK: no sorry
 -- no-sorry (first-case pack -> Stage 1 existence boundary)
 #print axioms DkMath.FLT.cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin -- OK: no sorry
+-- no-sorry (first-case pack -> Stage 1 existence boundary, product-free local-tailsum route)
+#print axioms DkMath.FLT.cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin_withoutProduct -- OK: no sorry
+-- no-sorry (isolated receiver: mul-tail ideal equality + principality -> norm-pre boundary)
+#print axioms DkMath.FLT.cyclotomicUnitNormalization_of_firstCase_of_pack_thin_of_mulTailEqSpanPow -- OK: no sorry
+-- no-sorry (first-case pack -> norm-pre boundary `z - ζy = u * β^p`)
+#print axioms DkMath.FLT.cyclotomicUnitNormalization_of_firstCase_of_pack_thin -- OK: no sorry
+-- no-sorry (first-case pack -> norm-pre boundary, product-free local-tailsum route)
+#print axioms DkMath.FLT.cyclotomicUnitNormalization_of_firstCase_of_pack_thin_withoutProduct -- OK: no sorry
+-- no-sorry (Stage 3a-1 core: chosen factor norm -> Gal(K/ℚ)-product)
+#print axioms DkMath.FLT.chosenCyclotomicLinearFactor_norm_eq_prod_gal_of_firstCase_of_pack_thin -- OK: no sorry
+-- no-sorry (Stage 3a-1 reindex atom: Galois conjugate of chosen factor -> cyclotomic factor)
+#print axioms DkMath.FLT.gal_apply_chosenCyclotomicLinearFactor_eq_factor_of_firstCase_of_pack_thin -- OK: no sorry
+-- no-sorry (Stage 3a-1 wrapper: chosen factor norm -> units-product)
+#print axioms DkMath.FLT.chosenCyclotomicLinearFactor_norm_eq_prod_units_of_firstCase_of_pack_thin -- OK: no sorry
+-- no-sorry (Stage 3a-1 product-free wrapper: chosen factor norm -> erase-0 product)
+#print axioms DkMath.FLT.chosenCyclotomicLinearFactor_norm_eq_prod_range_erase_zero_of_firstCase_of_pack_thin -- OK: no sorry
+-- no-sorry (direct groundwork: norm of a - primitive root = cyclotomic eval at a)
+#print axioms DkMath.FLT.norm_sub_primitiveRoot_eq_eval_cyclotomic_rat -- OK: no sorry
+-- no-sorry (direct helper: rat-eval of Φ_p lifts to field-side cyclotomicEval)
+#print axioms DkMath.FLT.ratCast_eval_cyclotomic_eq_cyclotomicEval -- OK: no sorry
+-- no-sorry (direct helper: Φ_p(z/y) * y^(p-1) = GN in the prime-gap specialization)
+#print axioms DkMath.FLT.cyclotomicEval_div_natCast_mul_pow_eq_gn -- OK: no sorry
+-- no-sorry (direct route: chosen factor norm = GN without hProduct)
+#print axioms DkMath.FLT.chosenCyclotomicLinearFactor_norm_eq_gn_direct -- OK: no sorry
+-- no-sorry (Stage 3a-2 core: nontrivial factor product -> GN gap-kernel)
+#print axioms DkMath.FLT.cyclotomicNontrivialFactorProduct_eq_GN_of_firstCase_of_pack_thin -- OK: no sorry
+-- no-sorry (Stage 3a-2 wrapper: nontrivial factor product -> quotientPrimePow)
+#print axioms DkMath.FLT.cyclotomicNontrivialFactorProduct_eq_quotientPrimePow_of_firstCase_of_pack_thin -- OK: no sorry
+-- no-sorry (Stage 3 split -> first concrete GN p-th-power boundary)
+#print axioms DkMath.FLT.cyclotomicNormGNPower_of_firstCase_of_pack_thin -- OK: no sorry
+-- no-sorry (Stage 3 GN p-th-power boundary + no-pow target -> abstract contradiction bridge)
+#print axioms DkMath.FLT.false_of_cyclotomicNormGNPower_of_firstCase_of_pack_thin -- OK: no sorry
 -- no-sorry (actual witness -> tail/factor coprimality target)
 #print axioms DkMath.FLT.cyclotomicTailLinearFactorCoprime_of_pairwiseUnitWitness -- OK: no sorry
 -- no-sorry (pack-specialized Stage 2 receiver with explicit ideal equality)
@@ -231,5 +277,50 @@ no-sorry の theorem が意図せず sorry に汚染されていないことを�
 #print axioms DkMath.FLT.FLTPrimeGe5Target_of_refinedRegularPrimeRoute -- OK: no sorry if stage assumptions are clean
 -- no-sorry (chain through class-group principalization)
 #print axioms DkMath.FLT.FLTPrimeGe5Target_of_kummerThreeWaySplit -- OK: no sorry
+
+-- §5a. Stage 3a combinatorial bridge + NormEqGN concrete
+-- no-sorry (combinatorial bridge: (ZMod p)ˣ product = erase-0 product)
+#print axioms DkMath.FLT.prod_units_zmod_eq_prod_range_erase_zero -- OK: no sorry
+-- no-sorry (NormEqGN concrete: chosen factor norm = GN, now hProduct-free at this interface)
+#print axioms DkMath.FLT.cyclotomicNormEqGN_concrete_firstCase_packThin -- OK: no sorry
+-- no-sorry (norm of unit-times-pth-power splits multiplicatively)
+#print axioms DkMath.FLT.norm_eq_normUnit_mul_normPow_of_eq_unit_mul_pow -- OK: no sorry
+-- no-sorry (UnitAbsorb concrete: natAbs-based pth-power recovery, now hProduct-free at this interface)
+#print axioms DkMath.FLT.cyclotomicNormUnitAbsorb_concrete_firstCase_packThin -- OK: no sorry
+-- no-sorry (Stage 3 concrete GN-power wrapper)
+#print axioms DkMath.FLT.cyclotomicNormGNPower_concrete_firstCase_packThin -- OK: no sorry
+-- no-sorry (GN natCast general)
+#print axioms DkMath.NumberTheory.Gcd.gn_natCast -- OK: no sorry
+-- no-sorry (generic natAbs-based integer pth-power recovery)
+#print axioms DkMath.NumberTheory.Gcd.nat_exists_pow_of_intEq_unit_mul_pow -- OK: no sorry
+-- no-sorry (Stage 3 concrete GN-power wrapper is now hProduct-free)
+#print axioms DkMath.FLT.cyclotomicNormGNPower_concrete_firstCase_packThin -- OK: no sorry
+-- no-sorry (concrete contradiction bridge from GN-power)
+#print axioms DkMath.FLT.false_of_cyclotomicNormGNPower_concrete_firstCase_pack_thin -- OK: no sorry
+-- no-sorry (class-group -> first-case concrete contradiction wrapper)
+#print axioms DkMath.FLT.false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree -- OK: no sorry
+-- no-sorry (productEq gives chosen-factor nonzero)
+#print axioms DkMath.FLT.chosenCyclotomicLinearFactorNonzero_of_productEq_of_counterexamplePack -- OK: no sorry
+-- no-sorry (counterexample pack -> local tail-sum factorization for chosen factor)
+#print axioms DkMath.FLT.chosenCyclotomicLinearFactor_mul_tailSum_eq_x_pow_of_counterexamplePack -- OK: no sorry
+-- no-sorry (counterexample pack -> local tail-sum ideal times chosen-factor ideal = (x)^p)
+#print axioms DkMath.FLT.chosenCyclotomicTailSumMulChosenLinearFactorEqSpanPow_of_counterexamplePack -- OK: no sorry
+-- no-sorry (counterexample pack -> existential local tail ideal candidate)
+#print axioms DkMath.FLT.exists_tailMulChosenLinearFactorEqSpanPow_of_counterexamplePack -- OK: no sorry
+-- no-sorry (y-branch contradiction from local factorization only)
+#print axioms DkMath.FLT.noYInCommonPrime_of_chosenFactorInP_of_coprime_of_localFactorizationEq -- OK: no sorry
+-- no-sorry (y-branch contradiction from counterexample pack without full product)
+#print axioms DkMath.FLT.noYInCommonPrime_of_chosenFactorInP_of_coprime_of_counterexamplePack -- OK: no sorry
+-- no-sorry (product-free first-case pairwise coprimality)
+#print axioms DkMath.FLT.chosenLinearFactor_isCoprime_with_other_of_firstCase_of_pack_withoutProduct -- OK: no sorry
+-- no-sorry (class-group -> first-case contradiction, productEq-only variant)
+#print axioms DkMath.FLT.false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree_of_productEq -- OK: no sorry
+-- no-sorry (class-group + NoPow -> first-case gap-divisible witness by contradiction)
+#print axioms DkMath.FLT.qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree -- OK: no sorry
+-- no-sorry (class-group + NoPow -> first-case gap-divisible witness, productEq-only variant)
+#print axioms DkMath.FLT.qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_of_productEq -- OK: no sorry
+-- no-sorry (class-group + nonliftable GN -> first-case gap-divisible witness)
+#print axioms DkMath.FLT.qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_nonLiftable -- OK: no sorry
+
 -- `sorry` (chain through cyclotomicPrincipalization)
 #print axioms DkMath.FLT.FLTPrimeGe5Target_of_kummerRoute -- uses sorry

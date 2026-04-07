@@ -132,6 +132,10 @@ review-016 により local specialization
 review-017 により、pack + explicit ideal equality から
 `z - ζy = u * β^p` を出す exact receiver
 `cyclotomicUnitNormalization_of_spanEqPowPrincipal` も no-so#rry で追加できた。
+さらに first-case specialization では
+`cyclotomicUnitNormalization_of_firstCase_of_pack_thin` により、
+chosen factor について `z - ζy = u * β^p` を直接返す
+norm 直前の thin wrapper も no-so#rry で固定できた。
 review-018 により `CyclotomicLinearFactorIdealPthPowerTarget` は存在形へ直され、
 `cyclotomicUnitNormalization_of_existsLinearFactorIdealPthPower` によって
 その boundary target から element-level の Stage 2 statement まで composition で到達できる。
@@ -211,7 +215,28 @@ review-027 により、Mathlib の
 
 `CyclotomicUnitNormalizationTarget` はすでに concrete 化済みであり、
 `CyclotomicNormDescentTarget` が未解決 stage として残っている。
-今後は Stage 1 の存在形 boundary と Stage 3 norm descent を個別に監査する。
+ただし review-039 / review-040 相当の current state では、
+first-case specialization に限れば Stage 3 の入口配線自体は
+さらに 2 本へ分割できるところまで進んだ。
+具体的には
+`CyclotomicNormEqGNFirstCasePackThinTarget` と
+`CyclotomicNormUnitAbsorbFirstCasePackThinTarget` を分離し、
+それらを current thin wrapper へ接ぐ
+`cyclotomicNormGNPower_of_firstCase_of_pack_thin` を追加したことで、
+まず `GN p (z - y) y = s^p` を返す最初の concrete 境界が定義できた。
+さらに
+`false_of_cyclotomicNormGNPower_of_firstCase_of_pack_thin` により、
+既存の no-pow target があれば即座に矛盾へ戻せる abstract bridge も置けた。
+今後は Stage 1 の存在形 boundary と、
+この Stage 3 split の各片割れを個別に concretize していく。
+さらに current state では、`CyclotomicNormEqGNFirstCasePackThinTarget` 側も
+review-040 の内部 3 分割のうち
+- norm → `Gal(K/ℚ)` product
+- `Gal(K/ℚ)` product → `(ZMod p)ˣ` product
+- nontrivial factor product → `GN` / quotientPrimePow
+までは theorem 名つきで固定できた。
+ゆえに残る本丸は、`(ZMod p)ˣ` product を actual nontrivial factor product に落とす combinatorial bridge と、
+それらを束ねて `CyclotomicNormEqGNFirstCasePackThinTarget` 本体へ戻す合成である。
 
 `CyclotomicGapDivisibleFactorizationSpecializationTarget`・
 `CyclotomicIdealEquationTarget`・`CyclotomicIdealProductPthPowerTarget`・
