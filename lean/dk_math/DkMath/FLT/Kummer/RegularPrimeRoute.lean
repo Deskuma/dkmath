@@ -191,10 +191,23 @@ review-027 により、Mathlib の
   ring of integers specialization で、`P ∣ (p) ∨ y ∈ P` の contradiction target から
   chosen factor と別の 1 因子の pairwise coprimality を回収
 
-したがって残る Stage 1 の honest open は、
-`P ∣ (p) ∨ y ∈ P` が起きないことを actual pack 条件からどう supply するか、
-あるいは generic local context を Mathlib の ring-of-integers specialization へどう降ろすか、の二択にさらに縮んだ。
-残る open は、この存在形 boundary target を Stage 1 側からどう供給するかと、norm 側である。
+その後の更新で Stage 1 の coprimality leg もさらに concrete 化された:
+- `noYInCommonPrime_of_chosenFactorInP_of_coprime_of_productEq`:
+  y ∈ P 分岐を pack の `Nat.Coprime x y` と product identity から no-so#rry で閉じる
+- `primeOverPEqualsZetaMinusOne_fill`:
+  Mathlib `eq_span_zeta_sub_one_of_liesOver'` を使って
+  `PrimeOverPEqualsZetaMinusOneTarget` を concrete に充足
+- `integerInZetaMinusOneIdealDivisibleByP_fill`:
+  norm 計算から `IntegerInZetaMinusOneIdealDivisibleByPTarget` を concrete に充足
+- `noPrimeOverP_of_firstCase_of_chosenFactorInP` / `noPrimeOrY_of_firstCase_of_coprime`:
+  first-case 条件のもとで `P ∣ (p) ∨ y ∈ P` の両分岐を統合して矛盾へ戻す
+- `chosenLinearFactor_isCoprime_with_other_of_firstCase_of_pack`:
+  chosen factor と別因子の coprimality を pack-specialized に回収
+
+したがって、以前 honest open だった
+`P ∣ (p) ∨ y ∈ P` contradiction 自体は、少なくとも Stage 1 coprimality leg では整理済みじゃ。
+現在の実際の open は、この coprimality を存在形 boundary target へどう押し込み、
+さらに Stage 3 norm descent をどう concrete 化するかに寄っておる。
 
 `CyclotomicUnitNormalizationTarget` はすでに concrete 化済みであり、
 `CyclotomicNormDescentTarget` が未解決 stage として残っている。

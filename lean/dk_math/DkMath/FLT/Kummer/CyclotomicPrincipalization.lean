@@ -1542,6 +1542,9 @@ P | (p) かつ P prime ⟹ P は (p) の唯一の素因子 = (ζ - 1)。
 
 注: Ideal.dvd_iff_le により P | (p) ⟺ (p) ≤ P (つまり p ∈ P)。
 totally ramified では P | (p) かつ P prime なら P = (ζ-1) が成り立つ。
+
+この interface 自体は downstream theorem がまだ受け取るが、
+concrete fill theorem `primeOverPEqualsZetaMinusOne_fill` は後で与える。
 -/
 abbrev PrimeOverPEqualsZetaMinusOneTarget (K : Type*) [Field K] [NumberField K] [CharZero K]
     (p : ℕ) [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
@@ -1706,7 +1709,8 @@ lemma p_dvd_of_in_zeta_sub_one_ideal
 
 N(ζ - 1) = p なので、n ∈ (ζ - 1) ⟹ N(ζ - 1) | N(n) = n^(p-1) ⟹ p | n^(p-1) ⟹ p | n。
 
-これは深い cyclotomic theory なので target として残す。
+この interface 自体は downstream theorem がまだ受け取るが、
+concrete fill theorem `integerInZetaMinusOneIdealDivisibleByP_fill` は下で与える。
 -/
 abbrev IntegerInZetaMinusOneIdealDivisibleByPTarget (K : Type*) [Field K] [NumberField K] [CharZero K]
     (p : ℕ) [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
@@ -1785,8 +1789,10 @@ P | (p) 分岐の contradiction: first case (p ∤ gap) と矛盾。
 P | (p) で P prime なら P = (ζ-1)、よって z - ζy ∈ P = (ζ-1)。
 z - y ∈ (ζ-1) から p | gap が導かれ、first case と矛盾。
 
-`PrimeOverPEqualsZetaMinusOneTarget` と `IntegerInZetaMinusOneIdealDivisibleByPTarget`
-の 2 つの深い cyclotomic target を仮定する。
+定理の interface としては
+`PrimeOverPEqualsZetaMinusOneTarget` と
+`IntegerInZetaMinusOneIdealDivisibleByPTarget` を受け取るが、
+現状の mainline では両者とも fill theorem が既に用意されている。
 -/
 theorem noPrimeOverP_of_firstCase_of_chosenFactorInP
     {K : Type*} [Field K] [NumberField K] [CharZero K]
@@ -1857,7 +1863,9 @@ theorem noPrimeOrY_of_firstCase_of_coprime
 /--
 first case + coprimality pack から chosen linear factor と他の因子の coprimality を導出。
 
-2 つの deep cyclotomic targets を仮定して、Stage 1 coprimality が完成する。
+theorem statement は target interface を保っているが、
+mainline 上では Target 1/2 の fill が既に存在するので、
+Stage 1 coprimality の cyclotomic 側素材は concrete に揃っている。
 -/
 theorem chosenLinearFactor_isCoprime_with_other_of_firstCase_of_pack
     {K : Type*} [Field K] [NumberField K] [CharZero K]
