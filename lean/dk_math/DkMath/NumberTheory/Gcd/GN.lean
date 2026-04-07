@@ -61,6 +61,26 @@ theorem natAbs_gn_gap_natCast_int
       DkMath.CosmicFormulaBinom.GN p (z - y) y := by
   exact natAbs_gn_natCast_int (d := p) (x := z - y) (u := y)
 
+/--
+自然数 `n` が整数環で unit 倍の `p` 乗に見えれば、自然数としても `p` 乗である。
+
+証明は符号の分岐をせず、`Int.natAbs` で一気に unit を吸収する。
+-/
+theorem nat_exists_pow_of_intEq_unit_mul_pow
+    {n p : ℕ} {unitFactor m : ℤ}
+    (hUnit : IsUnit unitFactor)
+    (hEq : (n : ℤ) = unitFactor * m ^ p) :
+    ∃ s : ℕ, n = s ^ p := by
+  refine ⟨m.natAbs, ?_⟩
+  have hUnitNatAbs : unitFactor.natAbs = 1 := Int.isUnit_iff_natAbs_eq.mp hUnit
+  have hnatAbs : (n : ℤ).natAbs = m.natAbs ^ p := by
+    calc
+      (n : ℤ).natAbs = Int.natAbs (unitFactor * m ^ p) := by rw [hEq]
+      _ = Int.natAbs unitFactor * Int.natAbs (m ^ p) := by rw [Int.natAbs_mul]
+      _ = Int.natAbs unitFactor * m.natAbs ^ p := by rw [Int.natAbs_pow]
+      _ = m.natAbs ^ p := by rw [hUnitNatAbs, one_mul]
+  simpa using hnatAbs
+
 /-- `gap = z - y` と置くと、整数環の `GN` は差の冪和 `Sd z y p` と一致する。 -/
 theorem gn_sub_eq_sd_int
     {p z y : ℕ} (hp : 0 < p) (hyz : y < z) :

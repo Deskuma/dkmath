@@ -2591,6 +2591,51 @@ abbrev CyclotomicNormUnitAbsorbFirstCasePackThinTarget : Prop :=
         ∃ s : ℕ, GN p (z - y) y = s ^ p
 
 /--
+Unit normalization で得た `z - ζy = unitFactor * β^p` に norm をかけると、
+そのまま `norm(unitFactor) * norm(β)^p` へ分解できる。
+-/
+theorem norm_eq_normUnit_mul_normPow_of_eq_unit_mul_pow
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    {β unitFactor : 𝓞 K}
+    (hEq : chosenCyclotomicLinearFactorInRingOfIntegers hζ y z = unitFactor * β ^ p) :
+    Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) =
+      Algebra.norm ℤ unitFactor * (Algebra.norm ℤ β) ^ p := by
+  rw [hEq, map_mul, map_pow]
+
+/--
+`CyclotomicNormUnitAbsorbFirstCasePackThinTarget` の concrete 化。
+
+`norm = GN` を既に得たあと、unit norm を `Int.natAbs` で吸収して
+自然数 witness を回収する。
+-/
+theorem cyclotomicNormUnitAbsorb_concrete_firstCase_packThin :
+    CyclotomicNormUnitAbsorbFirstCasePackThinTarget.{u} := by
+  intro K _ _ _ p x y z _ _ ζ hζ hpack gap hgap_eq hFirstCase hLinNe hProduct
+    β unitFactor hUnit hEq hNorm
+  have hNormMul :=
+    norm_eq_normUnit_mul_normPow_of_eq_unit_mul_pow
+      (K := K) (p := p) (y := y) (z := z) (hζ := hζ) (β := β)
+      (unitFactor := unitFactor) hEq
+  have hNormUnit : IsUnit (Algebra.norm ℤ unitFactor) :=
+    IsUnit.map (Algebra.norm ℤ) hUnit
+  have hNormGN :
+      ((GN p (z - y) y : ℕ) : ℤ) =
+        Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) := by
+    simpa [← Nat.cast_sub hpack.hyz] using hNorm.symm
+  have hEqInt :
+      ((GN p (z - y) y : ℕ) : ℤ) =
+        Algebra.norm ℤ unitFactor * (Algebra.norm ℤ β) ^ p := by
+    exact hNormGN.trans hNormMul
+  simpa using
+    (DkMath.NumberTheory.Gcd.nat_exists_pow_of_intEq_unit_mul_pow
+      (n := GN p (z - y) y) (p := p)
+      (unitFactor := Algebra.norm ℤ unitFactor)
+      (m := Algebra.norm ℤ β)
+      hNormUnit hEqInt)
+
+/--
 Stage 3 の最初の concrete 境界。
 
 first-case pack-thin 文脈から、最終 descent existence に飛ぶ前に
@@ -2644,6 +2689,22 @@ theorem cyclotomicNormGNPower_of_firstCase_of_pack_thin
   exact hUnitAbsorb hζ hpack hgap_eq hFirstCase hLinNe hProduct hUnit hEq hNorm
 
 /--
+first-case pack-thin での Stage 3 concrete wrapper。
+
+既に concrete 化された `NormEqGN` と `UnitAbsorb` を束ねて、
+`GN p (z - y) y = s^p` を assumption-free に返す。
+-/
+theorem cyclotomicNormGNPower_concrete_firstCase_packThin
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
+    CyclotomicNormGNPowerFirstCasePackThinTarget.{u} := by
+  intro K _ _ _ p x y z _ _ ζ hζ hpack gap hgap_eq hFirstCase hLinNe hProduct
+  exact cyclotomicNormGNPower_of_firstCase_of_pack_thin
+    hKill
+    cyclotomicNormEqGN_concrete_firstCase_packThin
+    cyclotomicNormUnitAbsorb_concrete_firstCase_packThin
+    hζ hpack hgap_eq hFirstCase hLinNe hProduct
+
+/--
 `GN p (z - y) y` が `p` 乗になるなら、既存の no-pow target と即座に衝突する。
 
 `TriominoCosmicBodyInvariant` への bridge を import せずに、
@@ -2674,6 +2735,33 @@ theorem false_of_cyclotomicNormGNPower_of_firstCase_of_pack_thin
     cyclotomicNormGNPower_of_firstCase_of_pack_thin
       hKill hNormEqGN hUnitAbsorb hζ hpack hgap_eq hFirstCase hLinNe hProduct
   exact hNoPow hpack ⟨s, hs⟩
+
+/--
+concrete `NormEqGN` / `UnitAbsorb` を使った first-case contradiction wrapper。
+-/
+theorem false_of_cyclotomicNormGNPower_concrete_firstCase_pack_thin
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u})
+    (hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p) :
+    ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+      ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+      ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {gap : ℕ},
+        (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+        ¬ p ∣ gap →
+        ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
+          (y := y) (z := z) →
+        CyclotomicLinearFactorProductEqInRingOfIntegers (hζ := hζ)
+          (x := x) (y := y) (z := z) →
+        False := by
+  exact false_of_cyclotomicNormGNPower_of_firstCase_of_pack_thin
+    hKill
+    cyclotomicNormEqGN_concrete_firstCase_packThin
+    cyclotomicNormUnitAbsorb_concrete_firstCase_packThin
+    hNoPow
 
 /--
 Stage 1 の 2-factor route がまず返すべき tail-product equality target。

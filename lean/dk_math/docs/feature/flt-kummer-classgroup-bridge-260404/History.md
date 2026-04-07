@@ -438,3 +438,77 @@ Archive
     - `CyclotomicNormUnitAbsorbFirstCasePackThinTarget` の concrete 化に移る。
        NormEqGN が閉じたことで、unit 吸収側は「GN = norm 値から p 乗性を回収する」
        だけの責務に絞られた
+
+### 日時: 2026/04/07 23:38:10 JST — UnitAbsorb を natAbs 主導で concrete 化
+
+1. 目的:
+   - review-042 の方針に従い、`CyclotomicNormUnitAbsorbFirstCasePackThinTarget` を
+      sign case split ではなく `Int.natAbs` 主導で concrete 化する
+   - Kummer 局所の norm 乗法性と、整数一般の「unit 倍の `p` 乗から自然数 `p` 乗を回収する」補題を分離する
+2. 実施:
+   - `DkMath/NumberTheory/Gcd/GN.lean` に以下を追加:
+      - `nat_exists_pow_of_intEq_unit_mul_pow`
+       : `(n : ℤ) = unitFactor * m^p` かつ `IsUnit unitFactor` から
+         `∃ s : ℕ, n = s^p` を返す一般整数補題
+       : 証明は `Int.natAbs_mul`, `Int.natAbs_pow`, `IsUnit.natAbs_eq` のみを使用
+   - `CyclotomicPrincipalization.lean` に以下を追加:
+      - `norm_eq_normUnit_mul_normPow_of_eq_unit_mul_pow`
+      - `cyclotomicNormUnitAbsorb_concrete_firstCase_packThin`
+   - 後者では
+      - `norm_eq_normUnit_mul_normPow_of_eq_unit_mul_pow`
+      - `IsUnit.map (Algebra.norm ℤ)`
+      - `DkMath.NumberTheory.Gcd.nat_exists_pow_of_intEq_unit_mul_pow`
+      を接続し、`GN p (z - y) y = s^p` を自然数 witness つきで回収した
+   - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` に上記 theorem 群の axiom 監視を追加した
+3. 結論:
+   - `CyclotomicNormUnitAbsorbFirstCasePackThinTarget` が no-sorry concrete theorem として閉じた ✅
+   - これにより first-case specialization の Stage 3 は、NormEqGN と UnitAbsorb の両輪が concrete に揃った ✅
+   - 残る open は Stage 3 split そのものではなく、既存 legacy wrapper と downstream routing 側に限られる ✅
+4. 検証:
+   - `lake build DkMath.NumberTheory.Gcd.GN` 成功
+   - `lake build DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - `lake build DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+   - 残る `sorry` は既存の `cyclotomicPrincipalization_of_classGroupPTorsionFree` と研究用ファイル側のみ
+5. 失敗事例:
+   - なし。今回の中核は `natAbs` で unit を吸収する設計が最初から安定しており、
+      ±1 の場合分けは不要だった
+6. 次の課題:
+   - `cyclotomicNormGNPower_of_firstCase_of_pack_thin` と
+      `false_of_cyclotomicNormGNPower_of_firstCase_of_pack_thin` を concrete theorem 群へ繋ぐ downstream routing を整理する
+   - 既存の legacy wrapper / one-shot route のうち、まだ `sorry` を抱える箇所を current split architecture に寄せて縮約する
+
+### 日時: 2026/04/07 23:49:03 JST — concrete Stage 3 wrappers へ配線を戻した
+
+1. 目的:
+    - concrete 化済みの `CyclotomicNormEqGNFirstCasePackThinTarget` と
+       `CyclotomicNormUnitAbsorbFirstCasePackThinTarget` を、
+       既存 Stage 3 配線と contradiction bridge へ直接差し戻す
+    - first-case specialization では「Stage 3 split が concrete に閉じている」ことを theorem 名で読めるようにする
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `cyclotomicNormGNPower_concrete_firstCase_packThin`
+       - `false_of_cyclotomicNormGNPower_concrete_firstCase_pack_thin`
+    - 前者は
+       `cyclotomicNormGNPower_of_firstCase_of_pack_thin`
+       に concrete `NormEqGN` / `UnitAbsorb` 実装を渡す薄い wrapper とした
+    - 後者は
+       `false_of_cyclotomicNormGNPower_of_firstCase_of_pack_thin`
+       に同じ concrete 実装群を渡す contradiction wrapper とした
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` に上記 2 theorem の axiom 監視を追加した
+3. 結論:
+    - first-case specialization では、Stage 3 の
+       `GN p (z - y) y = s^p` 回収と contradiction bridge まで
+       concrete theorem として mainline に揃った ✅
+    - 残る `sorry` は、Stage 3 split ではなく既存 legacy route / one-shot wrapper 側に限られることがより明瞭になった ✅
+4. 検証:
+    - `lake build DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+    - `lake build DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+5. 失敗事例:
+    - `hNorm` の右辺が整数版 `GN p (↑z - ↑y) ↑y` なので、
+       直接 `rw [← hNorm]` では自然数版 cast に一致しなかった
+    - `simpa [← Nat.cast_sub hpack.hyz] using hNorm.symm` で
+       `((GN p (z - y) y : ℕ) : ℤ)` へ先に正規化してから `hNormMul` と接続することで安定化した
+6. 次の課題:
+    - `FLTPrimeGe5Target_of_kummerRoute` など legacy chain の `sorry` を、
+       いま concrete になった Stage 3 wrappers を使う形へ徐々に置換する
+    - first-case 以外の routing でも、同様に split architecture へ寄せて open を縮める
