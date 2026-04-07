@@ -1569,6 +1569,91 @@ theorem noYInCommonPrime_of_chosenFactorInP_of_coprime_of_productEq
   have h_x_in_P : (x : 𝓞 K) ∈ P := hP.mem_of_pow_mem p h_prod_in_P
   exact false_of_nat_coprime_both_in_prime hxy hP h_x_in_P hP_y
 
+/--
+counterexample pack から、chosen cyclotomic factor に対する局所 tail-sum factorization を
+整数環 specialization で回収する。
+
+これは full product identity を使わずに得られる、最短の element-level factorization である。
+-/
+theorem chosenCyclotomicLinearFactor_mul_tailSum_eq_x_pow_of_counterexamplePack
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z) :
+    (∑ i ∈ Finset.range p,
+        ((z : 𝓞 K) ^ i) * ((hζ.toInteger * (y : 𝓞 K)) ^ (p - 1 - i))) *
+        ((z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)) =
+      (x : 𝓞 K) ^ p := by
+  let ctx : CyclotomicLocalFactorizationContext (𝓞 K) := {
+    p := p
+    zeta := hζ.toInteger
+    hzeta_pow := by
+      simpa using hζ.toInteger_isPrimitiveRoot.pow_eq_one
+  }
+  have hEqO : (x : 𝓞 K) ^ p + (y : 𝓞 K) ^ p = (z : 𝓞 K) ^ p := by
+    simpa using congrArg (fun n : ℕ => (n : 𝓞 K)) hpack.hEq
+  simpa [ctx] using
+    ctx.linear_factor_mul_eq_of_add_pow_eq (x := (x : 𝓞 K)) (y := (y : 𝓞 K)) (z := (z : 𝓞 K)) hEqO
+
+/--
+`y ∈ P` 分岐は、full product identity ではなく chosen factor の局所 tail-sum factorization だけでも閉じる。
+
+したがって y-branch contradiction 自体は `hProduct` に依存していない。
+-/
+theorem noYInCommonPrime_of_chosenFactorInP_of_coprime_of_localFactorizationEq
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    {x y : ℕ} (hxy : Nat.Coprime x y)
+    {z_int : 𝓞 K}
+    {P : Ideal (𝓞 K)} (hP : P.IsPrime)
+    (hP_chosen : z_int - hζ.toInteger * (y : 𝓞 K) ∈ P)
+    (hLocalEq :
+      (∑ i ∈ Finset.range p,
+          z_int ^ i * ((hζ.toInteger * (y : 𝓞 K)) ^ (p - 1 - i))) *
+          (z_int - hζ.toInteger * (y : 𝓞 K)) =
+        (x : 𝓞 K) ^ p)
+    (hP_y : (y : 𝓞 K) ∈ P) :
+    False := by
+  have hp2 : 2 ≤ p := hp.out.two_le
+  have hz_in_P : z_int ∈ P := y_in_P_implies_z_in_P hζ hP_chosen hP_y
+  have htail_in_P :
+      ∑ i ∈ Finset.range p,
+          z_int ^ i * ((hζ.toInteger * (y : 𝓞 K)) ^ (p - 1 - i)) ∈ P := by
+    refine P.sum_mem ?_
+    intro i hi
+    by_cases hi0 : i = 0
+    · subst hi0
+      have hy_mul_in_P : hζ.toInteger * (y : 𝓞 K) ∈ P := P.mul_mem_left _ hP_y
+      have hpow_in_P : (hζ.toInteger * (y : 𝓞 K)) ^ (p - 1) ∈ P := by
+        exact Ideal.pow_mem_of_mem _ hy_mul_in_P _ (by omega)
+      simpa using hpow_in_P
+    · have hi_pos : 0 < i := Nat.pos_of_ne_zero hi0
+      have hzpow_in_P : z_int ^ i ∈ P := Ideal.pow_mem_of_mem _ hz_in_P _ hi_pos
+      exact Ideal.mul_mem_right _ _ hzpow_in_P
+  have h_xpow_in_P : (x : 𝓞 K) ^ p ∈ P := by
+    rw [← hLocalEq]
+    exact Ideal.mul_mem_left _ _ hP_chosen
+  have h_x_in_P : (x : 𝓞 K) ∈ P := hP.mem_of_pow_mem p h_xpow_in_P
+  exact false_of_nat_coprime_both_in_prime hxy hP h_x_in_P hP_y
+
+/--
+counterexample pack から得る局所 factorization を使って、`y ∈ P` 分岐を閉じる wrapper。
+-/
+theorem noYInCommonPrime_of_chosenFactorInP_of_coprime_of_counterexamplePack
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {P : Ideal (𝓞 K)} (hP : P.IsPrime)
+    (hP_chosen : (z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K) ∈ P)
+    (hP_y : (y : 𝓞 K) ∈ P) :
+    False := by
+  exact noYInCommonPrime_of_chosenFactorInP_of_coprime_of_localFactorizationEq
+    hζ hpack.hxy hP hP_chosen
+    (chosenCyclotomicLinearFactor_mul_tailSum_eq_x_pow_of_counterexamplePack hζ hpack)
+    hP_y
+
 /-! ### P ∣ (p) 分岐の contradiction を閉じる補題群
 
 first case (p ∤ gap) を仮定すれば P | (p) から矛盾が導ける。
@@ -1950,6 +2035,45 @@ theorem chosenLinearFactor_isCoprime_with_other_of_firstCase_of_pack
     hζ (y := (y : 𝓞 K)) (z := z_int) hy_ne' hP hp2 hmemChosen ⟨j, hj_ne1, hj_lt, hmemOther⟩
   exact noPrimeOrY_of_firstCase_of_coprime hζ hTarget1 hTarget2 hxy hgap_eq hFirstCase
     hProduct P hP hmemChosen hLinNe hdisj
+
+/--
+first-case pack から chosen linear factor と他の因子の coprimality を導く product-free variant。
+
+ここで必要なのは first-case と chosen factor 非零性だけであり、
+full product identity は y-branch contradiction には不要である。
+-/
+theorem chosenLinearFactor_isCoprime_with_other_of_firstCase_of_pack_withoutProduct
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hTarget1 : PrimeOverPEqualsZetaMinusOneTarget K p ζ hζ)
+    (hTarget2 : IntegerInZetaMinusOneIdealDivisibleByPTarget K p ζ hζ)
+  {x y z : ℕ} (hpack : PrimeGe5CounterexamplePack p x y z)
+    {z_int : 𝓞 K}
+    {gap : ℕ} (hgap_eq : z_int - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hy_ne : y ≠ 0)
+    (hLinNe : z_int - hζ.toInteger * (y : 𝓞 K) ≠ 0)
+    {j : ℕ} (hj_ne1 : j ≠ 1) (hj_lt : j < p)
+  (hz_eq : z_int = (z : 𝓞 K)) :
+    IsCoprime (Ideal.span ({z_int - hζ.toInteger * (y : 𝓞 K)} : Set (𝓞 K)))
+      (Ideal.span ({z_int - (hζ.toInteger ^ j) * (y : 𝓞 K)} : Set (𝓞 K))) := by
+  refine linearFactorIdeals_isCoprime_of_noCommonPrime ?_
+  intro P hP hmemChosen hmemOther
+  have hp2 : 2 ≤ p := (Fact.out : Nat.Prime p).two_le
+  have hy_ne' : (y : 𝓞 K) ≠ 0 := by simp [hy_ne]
+  have hdisj := commonPrimeDvdsPrimeOrY_of_ringOfIntegersCyclotomic
+    hζ (y := (y : 𝓞 K)) (z := z_int) hy_ne' hP hp2 hmemChosen ⟨j, hj_ne1, hj_lt, hmemOther⟩
+  rcases hdisj with hP_dvd_p | hP_y
+  · have hP_ne_bot : P ≠ ⊥ := by
+      intro hbot
+      rw [hbot] at hmemChosen
+      exact hLinNe (Ideal.mem_bot.mp hmemChosen)
+    exact noPrimeOverP_of_firstCase_of_chosenFactorInP hζ hTarget1 hTarget2 hP hP_ne_bot
+      hP_dvd_p (hz_eq ▸ hmemChosen) hgap_eq hFirstCase
+  · subst hz_eq
+    exact noYInCommonPrime_of_chosenFactorInP_of_coprime_of_counterexamplePack
+      hζ hpack hP hmemChosen hP_y
 
 /--
 cyclotomic の整数環 specialization で使う j 番目の linear factor。

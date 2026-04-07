@@ -706,3 +706,40 @@ Archive
     - `CyclotomicLinearFactorProductEqInRingOfIntegers` を global pack から供給する direct theorem を探すか、
        あるいは local factorization core から ring-of-integers product identity への bridge を新設する
     - それが揃い次第、`cyclotomicPrincipalization_of_classGroupPTorsionFree` の first-case 枝を productEq-only bridge へ接続する
+
+### 日時: 2026/04/08 01:41:16 JST — y-branch contradiction は full product identity なしで閉じると確定
+
+1. 目的:
+    - `hProduct` が first-case 全体の blocker なのかをさらに精査し、
+       y-branch contradiction と pairwise coprimality まで full product identity が必要かを切り分ける
+    - local factorization core の一因子版 equality だけで閉じる部分を theorem として分離する
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `chosenCyclotomicLinearFactor_mul_tailSum_eq_x_pow_of_counterexamplePack`
+       - `noYInCommonPrime_of_chosenFactorInP_of_coprime_of_localFactorizationEq`
+       - `noYInCommonPrime_of_chosenFactorInP_of_coprime_of_counterexamplePack`
+       - `chosenLinearFactor_isCoprime_with_other_of_firstCase_of_pack_withoutProduct`
+    - これにより、`y ∈ P` 分岐は
+       `∏ (z - ζ^j y) = x^p` ではなく、
+       local factorization core から来る
+       `tail-sum * chosen-factor = x^p`
+       だけで contradiction へ戻せる形になった
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` に上記 theorem の axiom 監視を追加した
+3. 結論:
+    - first-case の y-branch contradiction と pairwise coprimality 自体は、
+       もはや `hProduct` に依存していないと theorem-level に確定した ✅
+    - したがって現時点で `hProduct` が必要なのは、
+       Stage 3 の norm/GN chain と chosen-factor × tail の specific multiplicative packaging 側であり、
+       common-prime / y-branch reasoning 側ではない ✅
+4. 検証:
+    - `lake build DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+5. 失敗事例:
+    - 途中で新 theorem を定義順より前に置いてしまい、
+       `chosenCyclotomicLinearFactorInRingOfIntegers` 未定義エラーが出た
+    - また `P.mul_mem` ではなく `Ideal.mul_mem_left` を使う必要があった
+    - いずれも修正後に build は復旧した
+6. 次の課題:
+    - `CyclotomicLinearFactorProductEqInRingOfIntegers` の必要箇所をさらに限定すると、
+       残る主要用途は Stage 3 concrete contradiction bridge と Stage 1 の chosen-factor × tail packaging になる
+    - 次手は、global pack から full product identity を供給する theorem を探すか、
+       あるいは Stage 3 側を local factorization equality ベースへさらに薄く組み替えられるか調査する
