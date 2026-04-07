@@ -38,6 +38,14 @@ theorem gn_natCast_int
       (DkMath.CosmicFormulaBinom.GN d x u : ℤ) := by
   simp [DkMath.CosmicFormulaBinom.GN]
 
+/-- `GN` は自然数から任意の `CommSemiring` へのキャストと可換。 -/
+@[simp, norm_cast]
+theorem gn_natCast {R : Type*} [CommSemiring R]
+    {d x u : ℕ} :
+    DkMath.CosmicFormulaBinom.GN d (x : R) (u : R) =
+      (DkMath.CosmicFormulaBinom.GN d x u : ℕ) := by
+  simp [DkMath.CosmicFormulaBinom.GN]
+
 /-- 自然数入力を整数へ持ち上げた `GN` の `natAbs` は自然数版 `GN` に戻る。 -/
 theorem natAbs_gn_natCast_int
     {d x u : ℕ} :

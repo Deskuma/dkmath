@@ -395,3 +395,46 @@ Archive
        combinatorial bridge を整備する
     - その後、既に concrete 化された Stage 3a-1/2/3 を束ねて
        `CyclotomicNormEqGNFirstCasePackThinTarget` 本体を閉じる
+
+### 日時: 2026/04/07 JST — combinatorial bridge + NormEqGN concrete 化
+
+1. 目的:
+    - review-041 の方針に従い、`(ZMod p)ˣ` 上の積と
+       `(Finset.range p).erase 0` 上の積の一致を示す combinatorial bridge を追加する
+    - その bridge と既存の Stage 3a-1/2/3 を束ねて
+       `CyclotomicNormEqGNFirstCasePackThinTarget` を concrete theorem として閉じる
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `prod_units_zmod_eq_prod_range_erase_zero`:
+         `(ZMod p)ˣ` 上の積と `{1,...,p-1}` 上の積の一致。
+         `Finset.prod_nbij` で、写像 `u ↦ u.val.val` の全単射性を示して証明。
+         `ZMod.val_coe_unit_coprime`, `ZMod.val_injective`, `ZMod.unitOfCoprime` を使用。
+       - `cyclotomicNormEqGN_concrete_firstCase_packThin`:
+         `CyclotomicNormEqGNFirstCasePackThinTarget` の concrete 化。
+         K 上で等式チェーンを組み、`(algebraMap ℚ K).injective` で ℤ に戻す。
+    - `DkMath/NumberTheory/Gcd/GN.lean` に以下を追加:
+       - `gn_natCast`: `GN` の自然数→任意 `CommSemiring` へのキャスト互換性
+         (`@[simp, norm_cast]` 付き)。`gn_natCast_int` の一般化。
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` に
+       上記 3 theorem の axiom 監視を追加した
+3. 結論:
+    - `CyclotomicNormEqGNFirstCasePackThinTarget` が no-sorry concrete theorem として
+       閉じた ✅
+    - これにより Stage 3 前半（norm = GN）は完全に concrete 化された ✅
+    - Stage 3 の残り open は `CyclotomicNormUnitAbsorbFirstCasePackThinTarget`
+       （unit norm 吸収 → GN が p 乗）のみ ✅
+4. 検証:
+    - `lake build DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+    - `lake build DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - 残る `sorry` は既存の `cyclotomicPrincipalization_of_classGroupPTorsionFree` と
+       研究用ファイル側のみ — 新規の sorry 増加なし
+5. 失敗事例:
+    - 𝓞 K → K の coercion と `algebraMap (𝓞 K) K` が Lean 上で一致せず
+       `change` が失敗。`SubmonoidClass.coe_finset_prod` と `congrArg` の組合せで回避した
+    - `GN` が異なる ring で instantiate されると cast 経路が diverge する問題。
+       `gn_natCast` を追加し、`← Nat.cast_sub` で引数を合わせてから
+       `norm_cast` で close した
+6. 次の課題:
+    - `CyclotomicNormUnitAbsorbFirstCasePackThinTarget` の concrete 化に移る。
+       NormEqGN が閉じたことで、unit 吸収側は「GN = norm 値から p 乗性を回収する」
+       だけの責務に絞られた

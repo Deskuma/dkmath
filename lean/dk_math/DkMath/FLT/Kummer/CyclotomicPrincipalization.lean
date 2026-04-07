@@ -2358,6 +2358,43 @@ theorem chosenCyclotomicLinearFactor_norm_eq_prod_units_of_firstCase_of_pack_thi
             (hζ := hζ) (y := y) (z := z) (σ := σ))))
 
 /--
+Combinatorial bridge: `(ZMod p)ˣ` 上の積と `(Finset.range p).erase 0` 上の積の一致。
+
+素数 `p` に対し、写像 `u ↦ u.val.val : (ZMod p)ˣ → ℕ` は
+`{1, 2, …, p − 1}` への全単射であり、この添字変換で任意の積が一致する。
+これは Stage 3a-1 と Stage 3a-2 を繋ぐ純 combinatorial な補題。
+-/
+theorem prod_units_zmod_eq_prod_range_erase_zero
+    {p : ℕ} [hp : Fact p.Prime]
+    {M : Type*} [CommMonoid M] (f : ℕ → M) :
+    ∏ u : (ZMod p)ˣ, f u.val.val = ∏ j ∈ (Finset.range p).erase 0, f j := by
+  letI : NeZero p := ⟨hp.out.ne_zero⟩
+  apply Finset.prod_nbij (fun u : (ZMod p)ˣ => u.val.val)
+  · -- hi: image lands in (Finset.range p).erase 0
+    intro u _
+    refine Finset.mem_erase.mpr ⟨?_, Finset.mem_range.mpr (ZMod.val_lt _)⟩
+    intro h
+    have hcop := ZMod.val_coe_unit_coprime u
+    simp only [h, Nat.Coprime, Nat.gcd_zero_left] at hcop
+    exact absurd hcop (ne_of_gt hp.out.one_lt)
+  · -- i_inj: injective
+    intro u₁ _ u₂ _ h
+    exact Units.ext (ZMod.val_injective p h)
+  · -- i_surj: surjective onto (Finset.range p).erase 0
+    intro j hj
+    rw [Finset.mem_coe] at hj
+    have hj_ne := (Finset.mem_erase.mp hj).1
+    have hj_lt := Finset.mem_range.mp (Finset.mem_erase.mp hj).2
+    have hcoprime : Nat.Coprime j p :=
+      (hp.out.coprime_iff_not_dvd.mpr
+        (fun hdvd => absurd (Nat.le_of_dvd (by omega) hdvd) (by omega))).symm
+    exact ⟨ZMod.unitOfCoprime j hcoprime, Finset.mem_coe.mpr (Finset.mem_univ _),
+      by simp [ZMod.coe_unitOfCoprime, ZMod.val_natCast_of_lt hj_lt]⟩
+  · -- h: f values agree (trivially rfl)
+    intro _ _
+    rfl
+
+/--
 Stage 3a-2 の concrete core:
 first-case pack-thin 文脈では、nontrivial cyclotomic linear factor 全体の積は
 そのまま `GN p (z - y) y` に一致する。
@@ -2472,6 +2509,57 @@ abbrev CyclotomicNormEqGNFirstCasePackThinTarget : Prop :=
         Algebra.norm ℤ
             (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) =
           (GN p (z - y) y : ℤ)
+
+/--
+`CyclotomicNormEqGNFirstCasePackThinTarget` の concrete 化。
+
+Stage 3a-1 (norm → `(ZMod p)ˣ` product) と combinatorial bridge
+(`(ZMod p)ˣ` → `(Finset.range p).erase 0`) と
+Stage 3a-2 (nontrivial factor product → GN) を束ねて、
+chosen factor の整数ノルムを `GN p (z - y) y` へ同定する。
+-/
+theorem cyclotomicNormEqGN_concrete_firstCase_packThin :
+    CyclotomicNormEqGNFirstCasePackThinTarget.{u} := by
+  intro K _ _ _ p x y z _ _ ζ hζ hpack gap hgap_eq hFirstCase hLinNe hProduct
+    β unitFactor _ _
+  -- gap = z - y in ℕ
+  have hgap_nat : gap = z - y := by
+    apply Nat.cast_injective (R := K)
+    simpa [Nat.cast_sub hpack.hyz] using
+      (congrArg (fun t : 𝓞 K => ((t : 𝓞 K) : K)) hgap_eq).symm
+  -- Assemble the chain in K, then inject back to ℤ
+  let factor := cyclotomicLinearFactorInRingOfIntegers hζ y z
+  -- Stage 3a-1: norm (as K) = (ZMod p)ˣ product
+  have h_norm :=
+    chosenCyclotomicLinearFactor_norm_eq_prod_units_of_firstCase_of_pack_thin hζ
+      (K := K) (p := p) (y := y) (z := z)
+  -- Combinatorial bridge: (ZMod p)ˣ product = erase-0 product
+  have h_bridge :=
+    prod_units_zmod_eq_prod_range_erase_zero (p := p)
+      (fun j => ((factor j : 𝓞 K) : K))
+  -- Stage 3a-2: erase-0 product = GN (in 𝓞 K)
+  have h_prod :=
+    cyclotomicNontrivialFactorProduct_eq_GN_of_firstCase_of_pack_thin
+      hζ hpack hgap_eq hFirstCase hProduct
+  -- Chain in K: norm → units product → erase-0 product → GN
+  have hK : (((Algebra.norm ℤ
+      (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) : ℤ) : ℚ) : K) =
+      (((GN p (z - y) y : ℤ) : ℚ) : K) := by
+    -- Step A: erase-0 product (K-valued) = GN (𝓞 K → K)
+    have h_erase_eq_GN_K :
+        ∏ j ∈ (Finset.range p).erase 0, ((factor j : 𝓞 K) : K) =
+          ((GN p gap y : 𝓞 K) : K) := by
+      trans ((∏ j ∈ (Finset.range p).erase 0, factor j : 𝓞 K) : K)
+      · exact (SubmonoidClass.coe_finset_prod factor
+          ((Finset.range p).erase 0)).symm
+      · exact congrArg (fun x : 𝓞 K => (x : K)) h_prod
+    -- Step B: chain all pieces
+    rw [h_norm, h_bridge, h_erase_eq_GN_K, hgap_nat]
+    -- Goal: ↑↑(GN p (z-y) y) = ↑↑(GN p (↑z - ↑y) ↑y)
+    -- Convert ↑z - ↑y → ↑(z-y) then norm_cast closes it
+    simp only [← Nat.cast_sub hpack.hyz]; norm_cast
+  -- Inject from K (via ℚ) back to ℤ
+  exact_mod_cast (algebraMap ℚ K).injective hK
 
 /--
 Stage 3 後半: first-case pack-thin 文脈で、
