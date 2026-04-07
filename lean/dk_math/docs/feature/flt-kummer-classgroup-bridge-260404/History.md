@@ -101,3 +101,53 @@ Archive
 6. 次の課題:
    - first-case specialization から `CyclotomicLinearFactorIdealPthPowerTarget` 相当の concrete existence boundary を、より軽い補題分解で再挑戦する
    - その後、`CyclotomicNormDescentTarget` の concrete 化へ進む
+
+### 日時: 2026/04/07 14:56:02 JST — 40万 heartbeat 制約に合わせて first-case wrapper 群を再設計
+
+1. 目的:
+    - `chosenLinearFactorSpanEqPow_of_firstCase_of_pack` 系の TODO / sorry 細分化作業について、
+       40 万 heartbeat を超える wrapper をそのまま育てるのでなく、
+       ロジック自体を見直して compile-safe な形へ落とし直す
+    - 特に ring-of-integers specialization の 1-use wrapper / 0-use wrapper を削り、
+       helper theorem のみで downstream 合成が通る形へ整理する
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下の helper を追加・整理:
+       - `linearFactorSpanEqPowOfChosenMulTailEqSpanPowAndIsCoprime`
+       - `cyclotomicLinearFactorInRingOfIntegers`
+       - `chosenCyclotomicLinearFactorInRingOfIntegers`
+       - `CyclotomicLinearFactorProductEqInRingOfIntegers`
+       - `ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers`
+       - `chosenLinearFactorMulTailEqSpanPow_of_productEq`
+       - `xSpanNonzero_of_counterexamplePack_of_ringOfIntegers`
+    - `chosenLinearFactor_isCoprime_with_tail_of_firstCase_of_pack` から、実際には使っていなかった
+       `q` 系の仮定を削除して theorem header を軽量化した
+    - 40 万 heartbeat を超えていた 1-use / 0-use wrapper は維持しない方針へ変更:
+       - `chosenLinearFactorSpanEqPow_of_firstCase_of_pack` を削除
+       - `cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack` を削除
+       - `cyclotomicUnitNormalization_of_firstCase_of_pack` を削除
+    - 代わりに、必要だった downstream 合成は
+       `cyclotomicUnitNormalization_of_firstCase_of_pack` の使用箇所ではなく、
+       実際に残す theorem 本体へ直接 inline した
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` では、削除した wrapper への
+       `#print axioms` 監視を外し、残した helper theorem の監視だけを残した
+3. 結論:
+    - 「40 万を超えたら heartbeat を盛る」のではなく、
+       1-use / 0-use wrapper を削って helper 直結へ戻す方針へ切り替えられた ✅
+    - ring-of-integers specialization の Stage 1 細分化は、
+       theorem 数を増やすより、残す theorem を最小限にする設計が有効だと確認できた ✅
+    - 現在の mainline では、first-case 側は helper 群で十分に downstream 合成でき、
+       heartbeat 超過していた wrapper 群は repository から外せた ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+    - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `CyclotomicPrincipalization.lean` 側で残る `sorry` 警告は、既存の
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` のみ
+5. 失敗事例:
+    - `chosenLinearFactorSpanEqPow_of_firstCase_of_pack` と
+       `cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack` を public theorem として残す設計は、
+       alias 化や binder 整理を行っても build で 40 万 heartbeat を超えた
+    - そのため、wrapper 自体を維持する設計をやめ、use-site inline へ切り替えた
+6. 次の課題:
+    - `RegularPrimeRoute.lean` の editor diagnostics が build 成功後もしばらく stale に見える点は、
+       LSP 側の再同期を別途確認する
+    - 残る honest open である `CyclotomicNormDescentTarget` の concrete 化へ進む
