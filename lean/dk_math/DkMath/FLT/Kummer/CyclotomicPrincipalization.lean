@@ -2272,6 +2272,147 @@ theorem cyclotomicUnitNormalization_of_firstCase_of_pack_thin
   simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hEq
 
 /--
+Stage 3 前半: first-case pack-thin 文脈で、chosen linear factor の整数ノルムを
+`GN p (z - y) y` へ同定する target。
+
+ここで新しい数論はまだ入れず、norm 計算本体を独立責務として切り出す。
+-/
+abbrev CyclotomicNormEqGNFirstCasePackThinTarget : Prop :=
+  ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+    ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+    ∀ {ζ : K},
+    (hζ : IsPrimitiveRoot ζ p) →
+    PrimeGe5CounterexamplePack p x y z →
+    ∀ {gap : ℕ},
+      (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+      ¬ p ∣ gap →
+      ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
+        (y := y) (z := z) →
+      CyclotomicLinearFactorProductEqInRingOfIntegers (hζ := hζ)
+        (x := x) (y := y) (z := z) →
+      ∀ {β unitFactor : 𝓞 K},
+        IsUnit unitFactor →
+        chosenCyclotomicLinearFactorInRingOfIntegers hζ y z =
+          unitFactor * β ^ p →
+        Algebra.norm ℤ
+            (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) =
+          (GN p (z - y) y : ℤ)
+
+/--
+Stage 3 後半: first-case pack-thin 文脈で、
+`z - ζy = unitFactor * β^p` と norm 計算結果から
+`GN p (z - y) y` が整数の `p` 乗になることを回収する target。
+
+unit norm 吸収と `p` 乗性の責務だけをここへ隔離する。
+-/
+abbrev CyclotomicNormUnitAbsorbFirstCasePackThinTarget : Prop :=
+  ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+    ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+    ∀ {ζ : K},
+    (hζ : IsPrimitiveRoot ζ p) →
+    PrimeGe5CounterexamplePack p x y z →
+    ∀ {gap : ℕ},
+      (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+      ¬ p ∣ gap →
+      ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
+        (y := y) (z := z) →
+      CyclotomicLinearFactorProductEqInRingOfIntegers (hζ := hζ)
+        (x := x) (y := y) (z := z) →
+      ∀ {β unitFactor : 𝓞 K},
+        IsUnit unitFactor →
+        chosenCyclotomicLinearFactorInRingOfIntegers hζ y z =
+          unitFactor * β ^ p →
+        Algebra.norm ℤ
+            (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) =
+          (GN p (z - y) y : ℤ) →
+        ∃ s : ℕ, GN p (z - y) y = s ^ p
+
+/--
+Stage 3 の最初の concrete 境界。
+
+first-case pack-thin 文脈から、最終 descent existence に飛ぶ前に
+まず `GN p (z - y) y` が整数の `p` 乗になることだけを返す。
+-/
+abbrev CyclotomicNormGNPowerFirstCasePackThinTarget : Prop :=
+  ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+    ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+    ∀ {ζ : K},
+    (hζ : IsPrimitiveRoot ζ p) →
+    PrimeGe5CounterexamplePack p x y z →
+    ∀ {gap : ℕ},
+      (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+      ¬ p ∣ gap →
+      ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
+        (y := y) (z := z) →
+      CyclotomicLinearFactorProductEqInRingOfIntegers (hζ := hζ)
+        (x := x) (y := y) (z := z) →
+      ∃ s : ℕ, GN p (z - y) y = s ^ p
+
+/--
+first-case pack-thin の Stage 3 配線:
+norm 計算 target と unit norm 吸収 target を合成して、
+`GN p (z - y) y` の `p` 乗性を返す。
+
+これで Stage 3 の open は、honest に 2 本へ分離される。
+-/
+theorem cyclotomicNormGNPower_of_firstCase_of_pack_thin
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u})
+  (hNormEqGN : CyclotomicNormEqGNFirstCasePackThinTarget.{u})
+  (hUnitAbsorb : CyclotomicNormUnitAbsorbFirstCasePackThinTarget.{u})
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
+      (y := y) (z := z))
+    (hProduct : CyclotomicLinearFactorProductEqInRingOfIntegers
+      (hζ := hζ) (x := x) (y := y) (z := z)) :
+    ∃ s : ℕ, GN p (z - y) y = s ^ p := by
+  obtain ⟨β, unitFactor, hUnit, hEq⟩ :=
+    cyclotomicUnitNormalization_of_firstCase_of_pack_thin
+      (K := K) (p := p) (x := x) (y := y) (z := z)
+      hζ hpack hgap_eq hFirstCase hLinNe hProduct hKill
+  have hNorm :
+      Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) =
+        (GN p (z - y) y : ℤ) :=
+    hNormEqGN hζ hpack hgap_eq hFirstCase hLinNe hProduct hUnit hEq
+  exact hUnitAbsorb hζ hpack hgap_eq hFirstCase hLinNe hProduct hUnit hEq hNorm
+
+/--
+`GN p (z - y) y` が `p` 乗になるなら、既存の no-pow target と即座に衝突する。
+
+`TriominoCosmicBodyInvariant` への bridge を import せずに、
+Kummer 側では最小の abstract contradiction interface だけを固定する。
+-/
+theorem false_of_cyclotomicNormGNPower_of_firstCase_of_pack_thin
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u})
+  (hNormEqGN : CyclotomicNormEqGNFirstCasePackThinTarget.{u})
+  (hUnitAbsorb : CyclotomicNormUnitAbsorbFirstCasePackThinTarget.{u})
+    (hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p) :
+    ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+      ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+      ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {gap : ℕ},
+        (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+        ¬ p ∣ gap →
+        ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
+          (y := y) (z := z) →
+        CyclotomicLinearFactorProductEqInRingOfIntegers (hζ := hζ)
+          (x := x) (y := y) (z := z) →
+        False := by
+  intro K _ _ _ p x y z _ _ ζ hζ hpack gap hgap_eq hFirstCase hLinNe hProduct
+  obtain ⟨s, hs⟩ :=
+    cyclotomicNormGNPower_of_firstCase_of_pack_thin
+      hKill hNormEqGN hUnitAbsorb hζ hpack hgap_eq hFirstCase hLinNe hProduct
+  exact hNoPow hpack ⟨s, hs⟩
+
+/--
 Stage 1 の 2-factor route がまず返すべき tail-product equality target。
 
 chosen linear factor と complementary tail の積が `(x)^p` を生成する ideal に等しいことだけを表す。

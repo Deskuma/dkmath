@@ -215,7 +215,20 @@ review-027 により、Mathlib の
 
 `CyclotomicUnitNormalizationTarget` はすでに concrete 化済みであり、
 `CyclotomicNormDescentTarget` が未解決 stage として残っている。
-今後は Stage 1 の存在形 boundary と Stage 3 norm descent を個別に監査する。
+ただし review-039 / review-040 相当の current state では、
+first-case specialization に限れば Stage 3 の入口配線自体は
+さらに 2 本へ分割できるところまで進んだ。
+具体的には
+`CyclotomicNormEqGNFirstCasePackThinTarget` と
+`CyclotomicNormUnitAbsorbFirstCasePackThinTarget` を分離し、
+それらを current thin wrapper へ接ぐ
+`cyclotomicNormGNPower_of_firstCase_of_pack_thin` を追加したことで、
+まず `GN p (z - y) y = s^p` を返す最初の concrete 境界が定義できた。
+さらに
+`false_of_cyclotomicNormGNPower_of_firstCase_of_pack_thin` により、
+既存の no-pow target があれば即座に矛盾へ戻せる abstract bridge も置けた。
+今後は Stage 1 の存在形 boundary と、
+この Stage 3 split の各片割れを個別に concretize していく。
 
 `CyclotomicGapDivisibleFactorizationSpecializationTarget`・
 `CyclotomicIdealEquationTarget`・`CyclotomicIdealProductPthPowerTarget`・

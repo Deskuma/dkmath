@@ -214,3 +214,50 @@ Archive
 6. 次の課題:
    - first-case specialization の Stage 3 を、まず norm 前 boundary から受ける pack-thin receiver として切り出す
    - `N(z - ζy)` を `GN p (z - y) y` へ落とす補題群と、unit norm 吸収の分離を進める
+
+### 日時: 2026/04/07 16:48:30 JST — Stage 3 を norm 計算 target と unit 吸収 target へ分割
+
+1. 目的:
+    - review-039 の方針に従い、Stage 3 を一気に解くのでなく、
+       first-case specialization の入口を theorem 名つきの subtarget 群へ分割する
+    - 特に、current thin wrapper から直ちに受けられる最初の concrete 境界を
+       `GN p (z - y) y` の `p` 乗性として固定する
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `CyclotomicNormEqGNFirstCasePackThinTarget`
+       - `CyclotomicNormUnitAbsorbFirstCasePackThinTarget`
+       - `CyclotomicNormGNPowerFirstCasePackThinTarget`
+       - `cyclotomicNormGNPower_of_firstCase_of_pack_thin`
+       - `false_of_cyclotomicNormGNPower_of_firstCase_of_pack_thin`
+    - 設計は、Stage 2 の thin wrapper
+       `cyclotomicUnitNormalization_of_firstCase_of_pack_thin`
+       を入口とし、
+       1. chosen factor の norm を `GN` に同定する責務
+       2. unit norm 吸収から `GN` の `p` 乗性を回収する責務
+       の 2 本を分離する形にした
+    - `RegularPrimeRoute.lean` の status comment を更新し、
+       Stage 3 は「未解決」ではあるが、first-case では split point と
+       最初の concrete boundary が定義済みになったことを明記
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` に
+       新しい Stage 3 composition theorem / contradiction bridge の axiom 監視を追加
+3. 結論:
+    - Stage 3 の honest open を、norm 計算本体と unit 吸収の 2 本へ
+       theorem 名つきに分離できた ✅
+    - current thin wrapper から、まず `GN p (z - y) y = s^p` という
+       concrete な最初の境界まで進む composition theorem を no-sorry で追加できた ✅
+    - 既存の no-pow target と衝突させる abstract bridge も置けたため、
+       downstream の contradiction routing が見通しやすくなった ✅
+4. 検証:
+    - editor diagnostics 上で今回追加分の新規 error は解消
+    - 残る `declaration uses sorry` は既存の
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` のみ
+    - 次に `lean-build.sh` / `lake build` でモジュール確認を行う段階まで到達
+5. 失敗事例:
+    - 初回実装では、target に `hKill` を直接含めたことで universe 推論が不安定化した
+    - そのため、Stage 3 の subtarget 自体は軽く保ち、
+       current theorem 合成側だけが `hKill` を outer parameter として持つ形へ調整した
+6. 次の課題:
+    - `CyclotomicNormEqGNFirstCasePackThinTarget` の concrete 化、すなわち
+       chosen factor の整数ノルムを `GN p (z - y) y` へ落とす補題群を整備する
+    - `CyclotomicNormUnitAbsorbFirstCasePackThinTarget` の concrete 化、すなわち
+       unit norm と `p` 乗 norm から `GN = s^p` を回収する補題群を整備する
