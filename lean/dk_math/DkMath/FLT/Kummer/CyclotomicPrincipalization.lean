@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.Kummer.GapDivisibleBranch
+import DkMath.NumberTheory.Gcd.GN
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Basic
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Ideal
 
@@ -2270,6 +2271,95 @@ theorem cyclotomicUnitNormalization_of_firstCase_of_pack_thin
     linearFactorEqUnitMulGeneratorPowOfSpanEqPowPrincipal ctx (z : 𝓞 K) (y : 𝓞 K) hSpan
   refine ⟨Submodule.IsPrincipal.generator I, unitFactor, hUnit, ?_⟩
   simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hEq
+
+/--
+Stage 3a-2 の concrete core:
+first-case pack-thin 文脈では、nontrivial cyclotomic linear factor 全体の積は
+そのまま `GN p (z - y) y` に一致する。
+
+これは `hProduct` と `x^p = gap * GN` を `gap` で cancel しただけの薄い補題で、
+norm 計算へ入る前の product-level rewriting を担当する。
+-/
+theorem cyclotomicNontrivialFactorProduct_eq_GN_of_firstCase_of_pack_thin
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hProduct : CyclotomicLinearFactorProductEqInRingOfIntegers
+      (hζ := hζ) (x := x) (y := y) (z := z)) :
+    ∏ j ∈ (Finset.range p).erase 0,
+        cyclotomicLinearFactorInRingOfIntegers hζ y z j =
+      (GN p gap y : 𝓞 K) := by
+  let factor : ℕ → 𝓞 K := cyclotomicLinearFactorInRingOfIntegers hζ y z
+  have hgap_nat : gap = z - y := by
+    apply Nat.cast_injective (R := K)
+    simpa [Nat.cast_sub hpack.hyz] using
+      (congrArg (fun t : 𝓞 K => ((t : 𝓞 K) : K)) hgap_eq).symm
+  have hzero_mem : 0 ∈ Finset.range p := by
+    exact Finset.mem_range.mpr hp.out.pos
+  have hfactor_zero : factor 0 = (gap : 𝓞 K) := by
+    simpa [factor, cyclotomicLinearFactorInRingOfIntegers, pow_zero] using hgap_eq
+  have hxpow_nat_gap :
+      x ^ p = gap * GN p gap y := by
+    simpa [PrimeGe5CounterexamplePack.gap, hgap_nat] using hpack.xpow_eq_gap_mul_GN
+  have hxpow_eq_gap_mul_gn_gap :
+      (x : 𝓞 K) ^ p = (gap : 𝓞 K) * (GN p gap y : 𝓞 K) := by
+    calc
+      (x : 𝓞 K) ^ p = ((x ^ p : ℕ) : 𝓞 K) := by simp
+      _ = ((gap * GN p gap y : ℕ) : 𝓞 K) := by exact_mod_cast hxpow_nat_gap
+      _ = (gap : 𝓞 K) * (GN p gap y : 𝓞 K) := by simp [Nat.cast_mul]
+  have hgap_ne_zero_nat : gap ≠ 0 := by
+    intro hgap0
+    exact hFirstCase (hgap0 ▸ dvd_zero p)
+  have hgap_ne_zero : (gap : 𝓞 K) ≠ 0 := by
+    exact_mod_cast hgap_ne_zero_nat
+  have hfull :
+      (gap : 𝓞 K) * ∏ j ∈ (Finset.range p).erase 0, factor j = (x : 𝓞 K) ^ p := by
+    calc
+      (gap : 𝓞 K) * ∏ j ∈ (Finset.range p).erase 0, factor j
+          = factor 0 * ∏ j ∈ (Finset.range p).erase 0, factor j := by
+              rw [hfactor_zero]
+      _ = ∏ j ∈ Finset.range p, factor j := by
+            simpa [factor] using
+              (Finset.mul_prod_erase (s := Finset.range p) (f := factor) hzero_mem)
+      _ = (x : 𝓞 K) ^ p := hProduct
+  have hprod_gap :
+      ∏ j ∈ (Finset.range p).erase 0, factor j = (GN p gap y : 𝓞 K) := by
+    exact mul_left_cancel₀ hgap_ne_zero (hfull.trans hxpow_eq_gap_mul_gn_gap)
+  exact hprod_gap
+
+/--
+Stage 3a-2 の quotient 版:
+nontrivial cyclotomic linear factor 全体の積を、差冪商
+`((z^p - y^p) / (z - y))` の既存 shorthand へ寄せる。
+-/
+theorem cyclotomicNontrivialFactorProduct_eq_quotientPrimePow_of_firstCase_of_pack_thin
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hProduct : CyclotomicLinearFactorProductEqInRingOfIntegers
+      (hζ := hζ) (x := x) (y := y) (z := z)) :
+    ∏ j ∈ (Finset.range p).erase 0,
+        cyclotomicLinearFactorInRingOfIntegers hζ y z j =
+      (DkMath.NumberTheory.GcdDiffPow.quotientPrimePow z y p : 𝓞 K) := by
+  have hgap_nat : gap = z - y := by
+    apply Nat.cast_injective (R := K)
+    simpa [Nat.cast_sub hpack.hyz] using
+      (congrArg (fun t : 𝓞 K => ((t : 𝓞 K) : K)) hgap_eq).symm
+  calc
+    ∏ j ∈ (Finset.range p).erase 0, cyclotomicLinearFactorInRingOfIntegers hζ y z j
+        = (GN p gap y : 𝓞 K) :=
+            cyclotomicNontrivialFactorProduct_eq_GN_of_firstCase_of_pack_thin
+              (K := K) (p := p) (x := x) (y := y) (z := z)
+              hζ hpack hgap_eq hFirstCase hProduct
+    _ = (DkMath.NumberTheory.GcdDiffPow.quotientPrimePow z y p : 𝓞 K) := by
+          rw [hgap_nat, DkMath.NumberTheory.Gcd.quotientPrimePow_eq_gn_gap hp.out hpack.hyz_lt]
+          simp [DkMath.CosmicFormulaBinom.GN]
 
 /--
 Stage 3 前半: first-case pack-thin 文脈で、chosen linear factor の整数ノルムを

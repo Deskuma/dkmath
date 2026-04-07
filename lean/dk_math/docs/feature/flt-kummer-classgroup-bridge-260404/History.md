@@ -300,3 +300,47 @@ Archive
        残る 2 片、すなわち「norm を共役積へ落とす片」と
        「共役積を差冪商へ寄せる片」を整備する
     - その後、`CyclotomicNormUnitAbsorbFirstCasePackThinTarget` の concrete 化へ進む
+
+### 日時: 2026/04/07 18:20:18 JST — Stage 3a-2 の product-level rewriting を concrete 化
+
+1. 目的:
+    - review-040 の方針に従い、`CyclotomicNormEqGNFirstCasePackThinTarget` の中段、
+       すなわち nontrivial cyclotomic factor 全体の積を
+       `GN p (z - y) y` および差冪商へ寄せる product-level rewriting を concrete 化する
+    - norm 本体へ入る前に、`hProduct` と `x^p = gap * GN` から読める
+       first-case 専用の薄い core を theorem 名つきに固定する
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加:
+       - `cyclotomicNontrivialFactorProduct_eq_GN_of_firstCase_of_pack_thin`
+       - `cyclotomicNontrivialFactorProduct_eq_quotientPrimePow_of_firstCase_of_pack_thin`
+    - 前者では
+       - `CyclotomicLinearFactorProductEqInRingOfIntegers`
+       - `PrimeGe5CounterexamplePack.xpow_eq_gap_mul_GN`
+       - `Finset.mul_prod_erase`
+       を接続し、`gap` を左因子として cancel して
+       nontrivial factor product = `GN p gap y` を返す形にした
+    - 後者では、上の core と
+       `DkMath.NumberTheory.Gcd.quotientPrimePow_eq_gn_gap`
+       を接続し、同じ product を `quotientPrimePow z y p` へ寄せる wrapper を追加した
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` に
+       上記 2 theorem の axiom 監視を追加した
+3. 結論:
+    - Stage 3a-2 のうち、first-case pack-thin 文脈で必要な product-level rewriting は
+       no-sorry theorem として concrete 化できた ✅
+    - これにより `CyclotomicNormEqGNFirstCasePackThinTarget` の残る open は、
+       ほぼ「norm をその product に一致させる片」へ集中した ✅
+    - review-040 で切った 3 片のうち、Stage 3a-2 と Stage 3a-3 は
+       theorem 名つきで mainline に固定できた ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - build warning で残る `sorry` は既存の
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` と研究用ファイル側のみ
+5. 失敗事例:
+    - 初回実装では、`gap = z - y` の cast/injective 処理と
+       `mul_left_cancel₀` 前の形合わせが甘く、`simpa` だけでは goal が合わなかった
+    - `gap` 版の等式を一度明示し、cancel 後にのみ `hgap_nat` で戻す形へ整理して安定化した
+6. 次の課題:
+    - `CyclotomicNormEqGNFirstCasePackThinTarget` の concrete 化へ戻り、
+       残る本丸である「chosen factor の整数 norm を nontrivial factor product に一致させる片」を整備する
+    - その後、既に concrete 化された Stage 3a-2 / 3a-3 を接いで
+       `CyclotomicNormEqGNFirstCasePackThinTarget` 本体を閉じる
