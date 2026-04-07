@@ -59,6 +59,10 @@ no-sorry の theorem が意図せず sorry に汚染されていないことを�
 #print axioms DkMath.FLT.dedekindIdealIsCoprimeProdErase -- OK: no sorry
 -- no-sorry (rest-product nonvanishing helper)
 #print axioms DkMath.FLT.dedekindIdealProdEraseNeBot -- OK: no sorry
+-- no-sorry (coprime to each factor implies coprime to their product)
+#print axioms DkMath.FLT.idealIsCoprime_prod_of_forall -- OK: no sorry
+-- no-sorry (finite product of principal ideals is principal by product of generators)
+#print axioms DkMath.FLT.span_singleton_finset_prod -- OK: no sorry
 -- no-sorry (finite-family each-pth-power theorem)
 #print axioms DkMath.FLT.dedekindIdealEqPowOfProdEqPowOfPairwise -- OK: no sorry
 -- no-sorry (principal p-th power gives class-group p-torsion witness)
@@ -171,6 +175,8 @@ no-sorry の theorem が意図せず sorry に汚染されていないことを�
 #print axioms DkMath.FLT.linearFactorIdeals_isCoprime_of_noCommonPrime -- OK: no sorry
 -- no-sorry (ring-of-integers specialization: prime-or-y contradiction -> chosen/other pairwise coprimality)
 #print axioms DkMath.FLT.chosenLinearFactor_isCoprime_with_other_of_primeOrYContradiction_of_ringOfIntegersCyclotomic -- OK: no sorry
+-- no-sorry (first-case chosen factor is coprime to the full complementary tail)
+#print axioms DkMath.FLT.chosenLinearFactor_isCoprime_with_tail_of_firstCase_of_pack -- OK: no sorry
 -- no-sorry (actual witness -> tail/factor coprimality target)
 #print axioms DkMath.FLT.cyclotomicTailLinearFactorCoprime_of_pairwiseUnitWitness -- OK: no sorry
 -- no-sorry (pack-specialized Stage 2 receiver with explicit ideal equality)
@@ -179,10 +185,14 @@ no-sorry の theorem が意図せず sorry に汚染されていないことを�
 #print axioms DkMath.FLT.cyclotomicUnitNormalization_of_existsLinearFactorIdealPthPower -- OK: no sorry
 -- no-sorry (explicit Stage 1 output pieces -> concrete Stage 2 target)
 #print axioms DkMath.FLT.cyclotomicUnitNormalization_of_linearFactorSpanEqPow -- OK: no sorry
+-- no-sorry (2-factor route -> existential Stage 1 boundary target)
+#print axioms DkMath.FLT.cyclotomicLinearFactorIdealPthPower_of_tailFactorCoprimeRoute -- OK: no sorry
 -- no-sorry (2-factor route -> concrete Stage 2 target)
 #print axioms DkMath.FLT.cyclotomicUnitNormalization_of_tailFactorCoprimeRoute -- OK: no sorry
 -- no-sorry (exponent agreement + pairwise witness -> concrete Stage 2 target)
 #print axioms DkMath.FLT.cyclotomicUnitNormalization_of_exponentAgreementAndPairwiseUnitWitness -- OK: no sorry
+-- no-sorry (exponent agreement + pairwise witness -> existential Stage 1 boundary target)
+#print axioms DkMath.FLT.cyclotomicLinearFactorIdealPthPower_of_exponentAgreementAndPairwiseUnitWitness -- OK: no sorry
 -- no-sorry (refined Stage 1 composition)
 #print axioms DkMath.FLT.cyclotomicIdealPthPower_of_refinedStage1Route -- OK: no sorry if stage assumptions are clean
 -- `sorry` (legacy one-shot wrapper)

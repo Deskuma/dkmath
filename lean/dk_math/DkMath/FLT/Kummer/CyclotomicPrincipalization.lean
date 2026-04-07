@@ -386,6 +386,42 @@ theorem dedekindIdealProdEraseNeBot
   simpa using Finset.prod_ne_zero_iff.mpr (fun j hj => hNonzero j (Finset.mem_of_mem_erase hj))
 
 /--
+1 つの ideal が finite family の各因子と互いに素なら、その積全体とも互いに素である。
+
+first-case で chosen factor と各別因子の coprimality を得たあと、
+complementary tail 全体との coprimality へ畳み込むための generic helper。
+-/
+theorem idealIsCoprime_prod_of_forall
+    {R : Type*} [CommRing R]
+    {ι : Type*} {s : Finset ι}
+    {I : Ideal R} {J : ι → Ideal R}
+    (hCoprime : ∀ j ∈ s, IsCoprime I (J j)) :
+    IsCoprime I (∏ j ∈ s, J j) := by
+  refine Ideal.coprime_of_no_prime_ge ?_
+  intro P hIle hProdLe hPprime
+  obtain ⟨j, hj, hjle⟩ := (Ideal.IsPrime.prod_le hPprime).mp (by simpa using hProdLe)
+  have hcop : IsCoprime I (J j) := hCoprime j hj
+  have htop : ⊤ ≤ P := by
+    rw [← (Ideal.isCoprime_iff_sup_eq).mp hcop]
+    exact sup_le hIle hjle
+  exact hPprime.ne_top (top_unique htop)
+
+/--
+principal ideal の finite product は、生成元の積の span に等しい。
+
+first-case の product equality を ideal equality へ持ち上げるための補題。
+-/
+theorem span_singleton_finset_prod
+    {R : Type*} [CommRing R]
+    {ι : Type*} {s : Finset ι} {f : ι → R} :
+    ∏ i ∈ s, Ideal.span ({f i} : Set R) = Ideal.span ({∏ i ∈ s, f i} : Set R) := by
+  classical
+  induction s using Finset.induction_on with
+  | empty => simp
+  | @insert a s ha ih =>
+      simp [Finset.prod_insert ha, ih, Ideal.span_singleton_mul_span_singleton]
+
+/--
 pairwise に互いに素な ideal family の積が p 乗 ideal なら、各因子も p 乗 ideal。
 
 review-012 の主定理候補そのもの。
@@ -1893,6 +1929,149 @@ theorem chosenLinearFactor_isCoprime_with_other_of_firstCase_of_pack
     hProduct P hP hmemChosen hLinNe hdisj
 
 /--
+first case + coprimality pack から、chosen linear factor と complementary tail 全体の coprimality を導出。
+
+Stage 1 の actual cyclotomic coprimality leg を 2-factor route の入力へ畳み込む wrapper。
+-/
+theorem chosenLinearFactor_isCoprime_with_tail_of_firstCase_of_pack
+  {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {q : ℕ} (hq : Nat.Prime q)
+    (hqx : q ∣ x)
+    (hqne : q ≠ p)
+    (hgap : q ∣ (z - y))
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : (z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K) ≠ 0)
+    (hProduct : ∏ j ∈ Finset.range p, ((z : 𝓞 K) - (hζ.toInteger ^ j) * (y : 𝓞 K)) =
+      (x : 𝓞 K) ^ p) :
+    IsCoprime (Ideal.span ({(z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)} : Set (𝓞 K)))
+      (∏ j ∈ (Finset.range p).erase 1,
+        Ideal.span ({(z : 𝓞 K) - (hζ.toInteger ^ j) * (y : 𝓞 K)} : Set (𝓞 K))) := by
+  have hp_ne_two : p ≠ 2 := by
+    have hp_gt_two : 2 < p := lt_of_lt_of_le (by decide : 2 < 5) hpack.hp5
+    exact ne_of_gt hp_gt_two
+  apply idealIsCoprime_prod_of_forall
+  intro j hj
+  have hj_ne1 : j ≠ 1 := Finset.ne_of_mem_erase hj
+  have hj_lt : j < p := Finset.mem_range.mp (Finset.mem_of_mem_erase hj)
+  exact chosenLinearFactor_isCoprime_with_other_of_firstCase_of_pack hζ
+    (fun {P} hP _hP_ne hP_dvd_p => by
+      let _ : P.IsPrime := hP
+      exact primeOverPEqualsZetaMinusOne_fill hζ P hP_dvd_p)
+    (integerInZetaMinusOneIdealDivisibleByP_fill hζ hp_ne_two)
+    hpack.hxy hgap_eq hFirstCase hpack.hy0 hLinNe hProduct hj_ne1 hj_lt
+
+set_option maxHeartbeats 10000000 in
+/--
+first case + coprimality pack から、chosen linear factor ideal 自体が p 乗 ideal であることを回収する。
+
+deep target の fill と 2-factor receiver を結ぶ actual cyclotomic Stage 1 output。
+-/
+theorem chosenLinearFactorSpanEqPow_of_firstCase_of_pack
+  {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {q : ℕ} (hq : Nat.Prime q)
+    (hqx : q ∣ x)
+    (hqne : q ≠ p)
+    (hgap : q ∣ (z - y))
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : (z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K) ≠ 0)
+    (hProduct : ∏ j ∈ Finset.range p, ((z : 𝓞 K) - (hζ.toInteger ^ j) * (y : 𝓞 K)) =
+      (x : 𝓞 K) ^ p) :
+    ∃ K' : Ideal (𝓞 K),
+      Ideal.span ({(z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)} : Set (𝓞 K)) = K' ^ p := by
+  let ctx : CyclotomicLocalFactorizationContext (𝓞 K) := {
+    p := p
+    zeta := hζ.toInteger
+    hzeta_pow := by
+      simpa using hζ.toInteger_isPrimitiveRoot.pow_eq_one
+  }
+  let factor : ℕ → 𝓞 K := fun j => (z : 𝓞 K) - (hζ.toInteger ^ j) * (y : 𝓞 K)
+  have hone_mem : 1 ∈ Finset.range p := by
+    have hlt : 1 < p := lt_of_lt_of_le (by decide : 1 < 5) hpack.hp5
+    exact Finset.mem_range.mpr hlt
+  have hMulIdeal :
+      Ideal.span ({(z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)} : Set (𝓞 K)) *
+        ∏ j ∈ (Finset.range p).erase 1, Ideal.span ({factor j} : Set (𝓞 K)) =
+          Ideal.span ({(x : 𝓞 K)} : Set (𝓞 K)) ^ p := by
+    calc
+      Ideal.span ({(z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)} : Set (𝓞 K)) *
+          ∏ j ∈ (Finset.range p).erase 1, Ideal.span ({factor j} : Set (𝓞 K))
+          = ∏ j ∈ Finset.range p, Ideal.span ({factor j} : Set (𝓞 K)) := by
+              simpa [factor, pow_one] using
+                (Finset.mul_prod_erase (s := Finset.range p)
+                  (f := fun j => Ideal.span ({factor j} : Set (𝓞 K))) hone_mem)
+      _ = Ideal.span ({∏ j ∈ Finset.range p, factor j} : Set (𝓞 K)) := by
+            simpa [factor] using
+              (span_singleton_finset_prod (R := 𝓞 K) (s := Finset.range p) (f := factor))
+      _ = Ideal.span ({(x : 𝓞 K) ^ p} : Set (𝓞 K)) := by
+            rw [hProduct]
+      _ = Ideal.span ({(x : 𝓞 K)} : Set (𝓞 K)) ^ p := by
+            rw [Ideal.span_singleton_pow]
+  have hX_ne : Ideal.span ({(x : 𝓞 K)} : Set (𝓞 K)) ≠ ⊥ := by
+    intro hbot
+    have hx0 : ((x : 𝓞 K) : K) = 0 := by
+      exact congrArg (fun t : 𝓞 K => (t : K)) (Ideal.span_singleton_eq_bot.mp hbot)
+    exact hpack.hx0 (Nat.cast_eq_zero.mp hx0)
+  have hTailCoprime :
+      IsCoprime (Ideal.span ({(z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)} : Set (𝓞 K)))
+        (∏ j ∈ (Finset.range p).erase 1, Ideal.span ({factor j} : Set (𝓞 K))) := by
+    simpa [factor] using
+      chosenLinearFactor_isCoprime_with_tail_of_firstCase_of_pack
+        hζ hpack hq hqx hqne hgap hgap_eq hFirstCase hLinNe hProduct
+  sorry -- TODO: next statement maxHeartbeats overflowed, need to split off the final step of the argument
+  -- exact linearFactorSpanEqPowOfTailMulEqSpanPowAndIsCoprime ctx hX_ne hMulIdeal hTailCoprime
+
+/--
+first case + coprimality pack から、chosen linear factor ideal の principal p 乗性を回収する。
+
+review-035 が求める Stage 1 の存在形 boundary theorem に相当する。
+-/
+theorem cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack
+  {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {q : ℕ} (hq : Nat.Prime q)
+    (hqx : q ∣ x)
+    (hqne : q ≠ p)
+    (hgap : q ∣ (z - y))
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : (z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K) ≠ 0)
+    (hProduct : ∏ j ∈ Finset.range p, ((z : 𝓞 K) - (hζ.toInteger ^ j) * (y : 𝓞 K)) =
+      (x : 𝓞 K) ^ p)
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
+    ∃ I : Ideal (𝓞 K), ∃ _ : I.IsPrincipal,
+      Ideal.span ({(z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)} : Set (𝓞 K)) = I ^ p := by
+  let ctx : CyclotomicLocalFactorizationContext (𝓞 K) := {
+    p := p
+    zeta := hζ.toInteger
+    hzeta_pow := by
+      simpa using hζ.toInteger_isPrimitiveRoot.pow_eq_one
+  }
+  obtain ⟨K', hEq⟩ :=
+    chosenLinearFactorSpanEqPow_of_firstCase_of_pack
+      hζ hpack hq hqx hqne hgap hgap_eq hFirstCase hLinNe hProduct
+  obtain ⟨J, hJPrincipal, hJpow⟩ :=
+    principalRootIdealExistsOfEqPowAndTorsionKill
+      (R := 𝓞 K)
+      (I := Ideal.span ({(z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)} : Set (𝓞 K)))
+      (K := K')
+      hp.out.ne_zero
+      (by infer_instance)
+      (mt Ideal.span_singleton_eq_bot.mp hLinNe)
+      hEq
+      hKill
+  exact ⟨J, hJPrincipal, hJpow⟩
+
+/--
 局所線型因子 ideal が explicit に `K^p` と書ければ、
 class-group p-torsion annihilation から principal root ideal の存在が従う。
 
@@ -2231,6 +2410,49 @@ theorem cyclotomicLinearFactorIdealPthPower_of_spanEqPow
   exact ⟨J, hJPrincipal, hJpow⟩
 
 /--
+2-factor route の output を、そのまま Stage 1 の存在形 boundary target まで流す wrapper。
+
+Stage 1 → existence boundary の接続点を theorem として明示する。
+-/
+theorem cyclotomicLinearFactorIdealPthPower_of_tailFactorCoprimeRoute
+    (hMul :
+      ∀ {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R],
+        ∀ ctx : CyclotomicLocalFactorizationContext R,
+        ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ∀ {q : ℕ}, Nat.Prime q →
+          q ∣ x →
+          q ≠ p →
+          q ∣ (z - y) →
+          ∃ tail : R,
+            Ideal.span ({tail} : Set R) * Ideal.span ({(z : R) - ctx.zeta * (y : R)} : Set R) =
+              Ideal.span ({(x : R)} : Set R) ^ ctx.p)
+    (hCoprime :
+      ∀ {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R],
+        ∀ ctx : CyclotomicLocalFactorizationContext R,
+        ∀ {tail : R} {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ∀ {q : ℕ}, Nat.Prime q →
+          q ∣ x →
+          q ≠ p →
+          q ∣ (z - y) →
+          IsCoprime (Ideal.span ({tail} : Set R)) (Ideal.span ({(z : R) - ctx.zeta * (y : R)} : Set R)))
+    (hX_ne :
+      ∀ {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R],
+        ∀ _ctx : CyclotomicLocalFactorizationContext R,
+        ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ∀ {q : ℕ}, Nat.Prime q →
+          q ∣ x →
+          q ≠ p →
+          q ∣ (z - y) →
+          Ideal.span ({(x : R)} : Set R) ≠ ⊥)
+    (hPne : CyclotomicLocalExponentNonzeroTarget.{u})
+    (hNonzero : CyclotomicLinearFactorNonzeroTarget.{u})
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
+    CyclotomicLinearFactorIdealPthPowerTarget.{u} :=
+  cyclotomicLinearFactorIdealPthPower_of_spanEqPow
+    (cyclotomicLinearFactorSpanEqPow_of_tailFactorCoprime hMul hCoprime hX_ne)
+    hPne hNonzero hKill
+
+/--
 pack-specialized Stage 2 receiver。
 
 review-017 で狙っている
@@ -2386,6 +2608,83 @@ theorem cyclotomicUnitNormalization_of_exponentAgreementAndPairwiseUnitWitness
     (cyclotomicLocalExponentNonzero_of_exponentAgreement hCtxEq)
     hNonzero
     hKill
+
+/--
+指数一致と pairwise unit-difference witness が与えられれば、
+Stage 1 の存在形 boundary target まで concrete に到達できる。
+
+Stage 1 finished 判定を target comment ではなく theorem で固定するための wrapper。
+-/
+theorem cyclotomicLinearFactorIdealPthPower_of_exponentAgreementAndPairwiseUnitWitness
+    (hCtxEq : CyclotomicLocalExponentAgreementTarget.{u})
+    (hWitness :
+      ∀ {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R],
+        ∀ ctx : CyclotomicLocalFactorizationContext R,
+        ∀ {tail : R} {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ∀ {q : ℕ}, Nat.Prime q →
+          q ∣ x →
+          q ≠ p →
+          q ∣ (z - y) →
+          ∃ n : ℕ, ∃ i : Fin n, ∃ α : Fin n → R,
+            α i = ctx.zeta ∧
+            Ideal.span ({tail} : Set R) =
+              ∏ j ∈ (Finset.univ.erase i), Ideal.span ({(z : R) - α j * (y : R)} : Set R) ∧
+            ∀ a : Fin n, ∀ b : Fin n, a ≠ b → IsUnit (α b * (y : R) - α a * (y : R)))
+    (hX_ne :
+      ∀ {R : Type u} [CommRing R] [IsDomain R] [IsDedekindDomain R],
+        ∀ _ctx : CyclotomicLocalFactorizationContext R,
+        ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ∀ {q : ℕ}, Nat.Prime q →
+          q ∣ x →
+          q ≠ p →
+          q ∣ (z - y) →
+          Ideal.span ({(x : R)} : Set R) ≠ ⊥)
+    (hNonzero : CyclotomicLinearFactorNonzeroTarget.{u})
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
+    CyclotomicLinearFactorIdealPthPowerTarget.{u} :=
+  cyclotomicLinearFactorIdealPthPower_of_tailFactorCoprimeRoute
+    (cyclotomicTailLinearFactorMulEqSpanPow_of_exponentAgreement hCtxEq)
+    (cyclotomicTailLinearFactorCoprime_of_pairwiseUnitWitness hWitness)
+    hX_ne
+    (cyclotomicLocalExponentNonzero_of_exponentAgreement hCtxEq)
+    hNonzero
+    hKill
+
+/--
+first case + coprimality pack から、chosen linear factor を unit 倍の p 乗として正規化する。
+
+ring-of-integers specialization での Stage 1 → Stage 2 接続を 1 本の theorem として固定する。
+-/
+theorem cyclotomicUnitNormalization_of_firstCase_of_pack
+  {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {q : ℕ} (hq : Nat.Prime q)
+    (hqx : q ∣ x)
+    (hqne : q ≠ p)
+    (hgap : q ∣ (z - y))
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : (z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K) ≠ 0)
+    (hProduct : ∏ j ∈ Finset.range p, ((z : 𝓞 K) - (hζ.toInteger ^ j) * (y : 𝓞 K)) =
+      (x : 𝓞 K) ^ p)
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
+    ∃ β u : 𝓞 K, IsUnit u ∧ (z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K) = u * β ^ p := by
+  let ctx : CyclotomicLocalFactorizationContext (𝓞 K) := {
+    p := p
+    zeta := hζ.toInteger
+    hzeta_pow := by
+      simpa using hζ.toInteger_isPrimitiveRoot.pow_eq_one
+  }
+  obtain ⟨I, hIPrincipal, hSpan⟩ :=
+    cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack
+      hζ hpack hq hqx hqne hgap hgap_eq hFirstCase hLinNe hProduct hKill
+  obtain ⟨u, huUnit, huEq⟩ :=
+    cyclotomicUnitNormalization_of_spanEqPowPrincipal
+      (R := 𝓞 K) (ctx := ctx) (I := I) (p := p) (x := x) (y := y) (z := z)
+      hpack (q := q) hq hqx hqne hgap hSpan
+  exact ⟨Submodule.IsPrincipal.generator I, u, huUnit, by simpa using huEq⟩
 
 /--
 Stage 3: norm bridge。

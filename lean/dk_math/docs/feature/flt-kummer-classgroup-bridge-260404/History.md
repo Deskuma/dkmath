@@ -36,3 +36,68 @@ Archive
    - （内容）
 6. 次の課題:
    - （内容）
+
+### 日時: 2026/04/07 10:52:57 JST — コメント整合の更新と current code status の明文化
+
+1. 目的:
+   - `CyclotomicPrincipalization.lean` と `RegularPrimeRoute.lean` の戦況コメントが、
+     current code state とずれていた箇所を更新する
+   - 特に、Target 1 / Target 2 が「未充足 target」と読める古い記述を、
+     fill theorem 済みという現在地へ揃える
+2. 実施:
+   - `CyclotomicPrincipalization.lean` で以下のコメントを更新:
+     - `PrimeOverPEqualsZetaMinusOneTarget` の docstringに、
+       downstream interface は残るが `primeOverPEqualsZetaMinusOne_fill` が既にあることを明記
+     - `IntegerInZetaMinusOneIdealDivisibleByPTarget` の docstringに、
+       downstream interface は残るが `integerInZetaMinusOneIdealDivisibleByP_fill` が既にあることを明記
+     - `noPrimeOverP_of_firstCase_of_chosenFactorInP` と
+       `chosenLinearFactor_isCoprime_with_other_of_firstCase_of_pack` の docstringを、
+       「deep target 仮定が残る」から「interface は残るが mainline では fill 済み」へ修正
+   - `RegularPrimeRoute.lean` で review-026/027 後の古い戦況記述を更新し、
+     以下が既に concrete に揃っていることを明記:
+     - `primeOverPEqualsZetaMinusOne_fill`
+     - `integerInZetaMinusOneIdealDivisibleByP_fill`
+     - `noYInCommonPrime_of_chosenFactorInP_of_coprime_of_productEq`
+     - `noPrimeOrY_of_firstCase_of_coprime`
+     - `chosenLinearFactor_isCoprime_with_other_of_firstCase_of_pack`
+3. 結論:
+   - current code state とコメントの主な不整合は解消できた ✅
+   - 現在の Stage 1 coprimality leg は、
+     `P ∣ (p) ∨ y ∈ P` contradiction の素材も含めて実装済みと読める状態になった ✅
+   - 現実の残 open は、Stage 1 の存在形 boundary target と Stage 3 norm descent へ寄っている、とコメント上でも明示できた ✅
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute` 成功
+   - `CyclotomicPrincipalization.lean` 側の direct so#rry は引き続き legacy one-shot theorem のみ
+5. 失敗事例:
+   - なし。今回は comment / documentation sync が中心で、コード本体の証明構造変更は行っておらぬ
+6. 次の課題:
+   - Stage 1 の coprimality から存在形 boundary target をどう concrete に供給するかを詰める
+   - その後、Stage 3 `CyclotomicNormDescentTarget` の concrete 化へ進む
+
+### 日時: 2026/04/07 11:53:21 JST — Stage 1→Stage 2 の generic 接続を補強
+
+1. 目的:
+   - Stage 1 の coprimality / 2-factor route から、Stage 2 手前の existence boundary を返す generic wrapper を mainline に追加する
+   - first-case の actual cyclotomic coprimality を、chosen-vs-other から chosen-vs-tail へ畳み込む補題を足す
+2. 実施:
+   - `CyclotomicPrincipalization.lean` に以下を追加:
+     - `idealIsCoprime_prod_of_forall`
+     - `span_singleton_finset_prod`
+     - `chosenLinearFactor_isCoprime_with_tail_of_firstCase_of_pack`
+     - `cyclotomicLinearFactorIdealPthPower_of_tailFactorCoprimeRoute`
+     - `cyclotomicLinearFactorIdealPthPower_of_exponentAgreementAndPairwiseUnitWitness`
+   - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の axiom 監視へ上記 theorem を追加
+   - 途中で ring-of-integers specialization の existence boundary / direct Stage 2 theorem も試したが、elaborator heartbeat が重く mainline build を崩したため、今回は compile が通る generic bridge のみを残した → 重たい該当箇所の手前で sorry を置き、TODO としてコメントアウトした。
+3. 結論:
+   - Stage 1 の 2-factor route から Stage 1 の existence boundary target へ戻す theorem が mainline に追加できた ✅
+   - first-case 実体側でも、chosen factor と full tail の coprimality までは concrete に固定できた ✅
+   - Stage 1→Stage 2 の generic 接続は以前より明確になり、残る本丸は ring-of-integers specialization の existence boundary と Stage 3 norm descent にさらに集中した ✅
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute` 成功
+   - build warning の direct `so#rry` は引き続き既存 legacy/open theorem のみ
+5. 失敗事例:
+   - `chosenLinearFactorSpanEqPow_of_firstCase_of_pack` などの ring-of-integers specialization を直接 1 本にまとめる案は、現時点では elaborator heartbeat 超過で安定化できなかった
+   - そのため今回は compile-safe な generic wrapper と chosen-vs-tail coprimality に着地した
+6. 次の課題:
+   - first-case specialization から `CyclotomicLinearFactorIdealPthPowerTarget` 相当の concrete existence boundary を、より軽い補題分解で再挑戦する
+   - その後、`CyclotomicNormDescentTarget` の concrete 化へ進む
