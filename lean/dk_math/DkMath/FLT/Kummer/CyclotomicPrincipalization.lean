@@ -3571,6 +3571,33 @@ theorem cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree
   exact @hCl R _ _ n a ha
 
 /--
+class-group p-torsion free 仮定から、first-case concrete contradiction へ直接戻す wrapper。
+
+legacy route を差し替える際の first concrete landing point として使う。
+-/
+theorem false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p) :
+    ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+      ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+      ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {gap : ℕ},
+        (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+        ¬ p ∣ gap →
+        ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
+          (y := y) (z := z) →
+        CyclotomicLinearFactorProductEqInRingOfIntegers (hζ := hζ)
+          (x := x) (y := y) (z := z) →
+        False := by
+  exact false_of_cyclotomicNormGNPower_concrete_firstCase_pack_thin
+    (hKill := cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree hCl)
+    (hNoPow := hNoPow)
+
+/--
 Stage 1c: trivial class → principal ideal extraction。
 
 `ClassGroup.mk_eq_one_of_coe_ideal` により、ここは既に concrete な generic API で閉じる。

@@ -512,3 +512,72 @@ Archive
     - `FLTPrimeGe5Target_of_kummerRoute` など legacy chain の `sorry` を、
        いま concrete になった Stage 3 wrappers を使う形へ徐々に置換する
     - first-case 以外の routing でも、同様に split architecture へ寄せて open を縮める
+
+### 日時: 2026/04/08 00:19:33 JST — legacy route の first-case 差し替え先を public theorem 化
+
+1. 目的:
+    - review-043 の第一手として、legacy one-shot route を直ちに置換するのではなく、
+       まず first-case 枝だけを concrete split architecture へ落とす public theorem を追加する
+    - これにより、今後 `FLTPrimeGe5Target_of_kummerRoute` を case split 化するときの
+       first concrete landing point を theorem 名で固定する
+2. 実施:
+    - `DkMath/FLT/Kummer/RegularPrimeRoute.lean` に
+       `fltPrimeGe5Target_of_kummerRoute_firstCase_concrete` を追加した
+    - この theorem は
+       - `CyclotomicClassGroupPTorsionFreeTarget`
+       - `cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree`
+       - `false_of_cyclotomicNormGNPower_concrete_firstCase_pack_thin`
+       を接続し、class-group 仮定から first-case の concrete contradiction へ直結する薄い wrapper とした
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` に axiom 監視を追加した
+3. 結論:
+    - legacy route の first-case 枝は、もう old Stage 3 chain を通らずに concrete theorem 群へ差し替えられる状態になった ✅
+    - 一方で `FLTPrimeGe5Target_of_kummerRoute` 本体の `uses sorry` はまだ減らない。
+       理由は、根の `sorry` が `cyclotomicPrincipalization_of_classGroupPTorsionFree` にあり、
+       global `CyclotomicNormDescentTarget` 自体は未 concrete のままだからじゃ ✅
+4. 検証:
+    - `lake build DkMath.FLT.Kummer.RegularPrimeRoute` 相当の依存下で theorem 追加が型検査されることを確認する予定
+    - `#print axioms DkMath.FLT.fltPrimeGe5Target_of_kummerRoute_firstCase_concrete` を監視対象へ追加した
+5. 失敗事例:
+    - なし。今回は existing concrete theorem 群の薄い再配線のみで、新しい数学内容は追加しておらぬ
+6. 次の課題:
+    - `FLTPrimeGe5Target_of_kummerRoute` を first-case / non-first-case に分ける場合、
+       first-case 枝は今回の wrapper へ直結する
+    - その後の本丸は依然として `cyclotomicPrincipalization_of_classGroupPTorsionFree` の legacy one-shot 設計の縮約じゃ
+
+### 日時: 2026/04/08 00:31:30 JST — class-group から first-case concrete contradiction への bridge を安定配置した
+
+1. 目的:
+    - review-043 の第一手を維持しつつ、universe 推論で不安定だった route 側の実装を安定配置へ切り替える
+    - class-group 仮定から first-case concrete contradiction へ落ちる public theorem を、
+       今後の legacy route 差し替え先として mainline に残す
+2. 実施:
+    - `RegularPrimeRoute.lean` に一度追加した route-level wrapper は、
+       `CyclotomicClassGroupPTorsionFreeTarget` と `CyclotomicPTorsionAnnihilationTarget` の
+       universe 推論が不安定で build を崩したため撤回した
+    - 代わりに `CyclotomicPrincipalization.lean` へ
+       `false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree`
+       を追加した
+    - この theorem は
+       `cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree` と
+       `false_of_cyclotomicNormGNPower_concrete_firstCase_pack_thin` を接続し、
+       class-group 仮定から first-case concrete contradiction へ直接戻す bridge とした
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の axiom 監視も、
+       新しい theorem 名へ更新した
+3. 結論:
+    - review-043 の狙いだった「legacy route を差し替えるための first concrete landing point」は、
+       no-sorry theorem として mainline に固定できた ✅
+    - ただし配置先は `RegularPrimeRoute.lean` ではなく、
+       universe が安定している `CyclotomicPrincipalization.lean` 側が適切だと確認した ✅
+4. 検証:
+    - `lake build DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+    - `lake build DkMath.FLT.Kummer.RegularPrimeRoute` 成功
+    - `lake build DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+5. 失敗事例:
+    - route ファイル側で `CyclotomicClassGroupPTorsionFreeTarget` をそのまま
+       `CyclotomicPTorsionAnnihilationTarget` へ持ち上げようとすると、
+       `ClassGroup R` の universe 推論が崩れて build failure になった
+    - 同じ bridge を `CyclotomicPrincipalization.lean` 側へ置くと、既存 theorem 群との universe 文脈が一致し安定化した
+6. 次の課題:
+    - `FLTPrimeGe5Target_of_kummerRoute` を将来 case split 化する際、
+       first-case 枝は今回の bridge theorem を通して concrete contradiction へ差し替える
+    - 残る本丸は依然として `cyclotomicPrincipalization_of_classGroupPTorsionFree` の legacy one-shot 設計の縮約じゃ
