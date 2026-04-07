@@ -184,3 +184,33 @@ Archive
 6. 次の課題:
    - この first-case pack-specialized 供給を、placeholder の `CyclotomicIdealPthPowerTarget` へどう昇格させるかを詰める
    - その後、残る honest open である `CyclotomicNormDescentTarget` の concrete 化へ進む
+
+### 日時: 2026/04/07 16:03:41 JST — Stage 3 着手として norm 前 boundary を thin wrapper 化
+
+1. 目的:
+   - review-038 の方針に沿って、Stage 3 へ入る前に first-case specialization での
+     `z - ζy = u * β^p` を theorem として固定する
+   - norm descent の残 open を「norm をかける部分」へ限定し、Stage 2/Stage 3 境界を明瞭化する
+2. 実施:
+   - `CyclotomicPrincipalization.lean` に以下を追加:
+     - `cyclotomicUnitNormalization_of_firstCase_of_pack_thin`
+   - 上記 theorem では、既存の Stage 1 thin wrapper と local Stage 2 receiver のみを合成:
+     - `cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin`
+     - `linearFactorEqUnitMulGeneratorPowOfSpanEqPowPrincipal`
+   - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の axiom 監視へ新 theorem を追加
+   - `CyclotomicPrincipalization.lean` と `RegularPrimeRoute.lean` の status comment を更新し、
+     first-case specialization では norm 前 boundary まで concrete 化されたことを明記
+3. 結論:
+   - first-case pack から chosen factor 自体を unit 倍の `p` 乗として返す thin wrapper を no-sorry で追加できた ✅
+   - これにより、Stage 3 の first practical open は norm の押し出しとその整数 descent への回収に集中した ✅
+   - Stage 2/Stage 3 の境界が theorem 名つきで読めるようになった ✅
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - `.lake/build/lib/lean/DkMathTest/FLT/Kummer/RegularPrimeRoute.trace` に
+     `cyclotomicUnitNormalization_of_firstCase_of_pack_thin` の axiom 監視結果が生成されることを確認
+5. 失敗事例:
+   - editor diagnostics では一時的に test 側が `Unknown constant` を表示したが、
+     build artifact 側では theorem と監視結果の生成を確認できたため、今回は LSP stale diagnostics と判断した
+6. 次の課題:
+   - first-case specialization の Stage 3 を、まず norm 前 boundary から受ける pack-thin receiver として切り出す
+   - `N(z - ζy)` を `GN p (z - y) y` へ落とす補題群と、unit norm 吸収の分離を進める

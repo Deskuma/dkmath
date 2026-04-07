@@ -132,6 +132,10 @@ review-016 により local specialization
 review-017 により、pack + explicit ideal equality から
 `z - ζy = u * β^p` を出す exact receiver
 `cyclotomicUnitNormalization_of_spanEqPowPrincipal` も no-so#rry で追加できた。
+さらに first-case specialization では
+`cyclotomicUnitNormalization_of_firstCase_of_pack_thin` により、
+chosen factor について `z - ζy = u * β^p` を直接返す
+norm 直前の thin wrapper も no-so#rry で固定できた。
 review-018 により `CyclotomicLinearFactorIdealPthPowerTarget` は存在形へ直され、
 `cyclotomicUnitNormalization_of_existsLinearFactorIdealPthPower` によって
 その boundary target から element-level の Stage 2 statement まで composition で到達できる。
