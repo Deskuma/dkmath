@@ -946,3 +946,32 @@ Archive
        ideal-level `p` 乗化入口だけを isolated theorem として剥き出しにする
     - そのうえで `chosenCyclotomicLinearFactor_mul_tailSum_eq_x_pow_of_counterexamplePack`
        から local factorization ベースの代替核が取れるかを試す
+
+### 日時: 2026/04/08 04:49:00 JST — mul-tail equality core を isolated 化し、local-factorization ideal 候補を追加
+
+1. 目的:
+   - `hProduct` が残る責務 A をさらに切り分け、mul-tail ideal equality さえ与えれば
+     Stage 1 explicit equality / ideal p-th power / unit-normalization へ進めることを theorem 境界で固定する
+   - 同時に、local factorization core から ideal-level の product-free 代替核が取れるかを試す
+2. 実施:
+   - 以下の isolated receiver theorem を追加した:
+     - `chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin_of_mulTailEqSpanPow`
+     - `cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin_of_mulTailEqSpanPow`
+     - `cyclotomicUnitNormalization_of_firstCase_of_pack_thin_of_mulTailEqSpanPow`
+   - 既存の first-case wrapper 3 本は、`chosenLinearFactorMulTailEqSpanPow_of_productEq` を supply とする薄い composition に書き換えた
+   - さらに local factorization core から
+     - `chosenCyclotomicTailSumMulChosenLinearFactorEqSpanPow_of_counterexamplePack`
+     - `exists_tailMulChosenLinearFactorEqSpanPow_of_counterexamplePack`
+     を追加した
+3. 結論:
+   - unit-normalization chain の receiver 側は、完全に mul-tail ideal equality core 依存へ分解された ✅
+   - しかも local factorization から product-free な ideal-equality 候補そのものは no-sorry で取れた ✅
+   - よって残る本当の gap は、`hProduct` の有無それ自体ではなく、tail-sum ideal と chosen factor ideal の coprimality bridge だとさらに明確になった ✅
+4. 検証:
+   - `lake build DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+5. 失敗事例:
+   - 新しい ideal theorem を最初は `chosenCyclotomicLinearFactorInRingOfIntegers` alias で書いたが、定義順の都合で未知識別子になった
+   - raw expression `(z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)` に戻して解消した
+6. 次の課題:
+   - local factorization 由来の tail-sum ideal と chosen factor ideal について、first-case から coprimality を返す bridge を試す
+   - それが立てば `chosenLinearFactorMulTailEqSpanPow_of_productEq` を経由せずに unit-normalization chain へ入れる見込みが強い

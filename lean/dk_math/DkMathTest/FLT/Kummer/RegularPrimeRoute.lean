@@ -183,12 +183,18 @@ no-sorry の theorem が意図せず sorry に汚染されていないことを�
 #print axioms DkMath.FLT.linearFactorSpanEqPowOfChosenMulTailEqSpanPowAndIsCoprime -- OK: no sorry
 -- no-sorry (pack product identity -> chosen/tail ideal equation)
 #print axioms DkMath.FLT.chosenLinearFactorMulTailEqSpanPow_of_productEq -- OK: no sorry
+-- no-sorry (isolated receiver: mul-tail ideal equality + product-free coprime -> chosen span = p-th power)
+#print axioms DkMath.FLT.chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin_of_mulTailEqSpanPow -- OK: no sorry
 -- no-sorry (pack -> x-span nonzero in ring of integers)
 #print axioms DkMath.FLT.xSpanNonzero_of_counterexamplePack_of_ringOfIntegers -- OK: no sorry
 -- no-sorry (first-case pack -> chosen factor ideal explicit p-th power equality)
 #print axioms DkMath.FLT.chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin -- OK: no sorry
+-- no-sorry (isolated receiver: mul-tail ideal equality + torsion-kill -> Stage 1 existence boundary)
+#print axioms DkMath.FLT.cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin_of_mulTailEqSpanPow -- OK: no sorry
 -- no-sorry (first-case pack -> Stage 1 existence boundary)
 #print axioms DkMath.FLT.cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin -- OK: no sorry
+-- no-sorry (isolated receiver: mul-tail ideal equality + principality -> norm-pre boundary)
+#print axioms DkMath.FLT.cyclotomicUnitNormalization_of_firstCase_of_pack_thin_of_mulTailEqSpanPow -- OK: no sorry
 -- no-sorry (first-case pack -> norm-pre boundary `z - ζy = u * β^p`)
 #print axioms DkMath.FLT.cyclotomicUnitNormalization_of_firstCase_of_pack_thin -- OK: no sorry
 -- no-sorry (Stage 3a-1 core: chosen factor norm -> Gal(K/ℚ)-product)
@@ -283,6 +289,10 @@ no-sorry の theorem が意図せず sorry に汚染されていないことを�
 #print axioms DkMath.FLT.chosenCyclotomicLinearFactorNonzero_of_productEq_of_counterexamplePack -- OK: no sorry
 -- no-sorry (counterexample pack -> local tail-sum factorization for chosen factor)
 #print axioms DkMath.FLT.chosenCyclotomicLinearFactor_mul_tailSum_eq_x_pow_of_counterexamplePack -- OK: no sorry
+-- no-sorry (counterexample pack -> local tail-sum ideal times chosen-factor ideal = (x)^p)
+#print axioms DkMath.FLT.chosenCyclotomicTailSumMulChosenLinearFactorEqSpanPow_of_counterexamplePack -- OK: no sorry
+-- no-sorry (counterexample pack -> existential local tail ideal candidate)
+#print axioms DkMath.FLT.exists_tailMulChosenLinearFactorEqSpanPow_of_counterexamplePack -- OK: no sorry
 -- no-sorry (y-branch contradiction from local factorization only)
 #print axioms DkMath.FLT.noYInCommonPrime_of_chosenFactorInP_of_coprime_of_localFactorizationEq -- OK: no sorry
 -- no-sorry (y-branch contradiction from counterexample pack without full product)

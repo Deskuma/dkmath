@@ -138,6 +138,21 @@ z - \zeta y = u \cdot \beta^p
   を与える `hMul` 側に局在したと見てよい。
 - したがって現在の主戦場は、責務 A の ideal-level `p` 乗化入口じゃ。
 
+### 4.1.2. 追加で確定したこと（2026/04/08 04:49 JST 時点）
+
+- `chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin_of_mulTailEqSpanPow` を追加し、
+  mul-tail ideal equality さえあれば Stage 1 explicit equality へ進めることを theorem 名で切り出した。
+- さらに
+  - `cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin_of_mulTailEqSpanPow`
+  - `cyclotomicUnitNormalization_of_firstCase_of_pack_thin_of_mulTailEqSpanPow`
+  を追加し、receiver 側は完全に isolated になった。
+- 一方、local factorization core からは
+  - `chosenCyclotomicTailSumMulChosenLinearFactorEqSpanPow_of_counterexamplePack`
+  - `exists_tailMulChosenLinearFactorEqSpanPow_of_counterexamplePack`
+  が取れた。
+- したがって新しい主要 gap は、`hProduct` そのものではなく
+  **tail-sum ideal と chosen factor ideal の coprimality bridge** をどう supply するか、に縮んだと見てよい。
+
 ### 4.2. Step B. `hProduct` 使用箇所を色分けする
 
 各 `have` / `obtain` / `exact` を次の 3 区分で分類する。
@@ -227,6 +242,10 @@ coprime / y-branch 系を product-free 版へ差し替えた結果、
 
 local factorization ベースの代替核が立ち、
 unit-normalization chain 全体から `hProduct` を押し出せる見通しが立った。
+
+現時点では、代替核そのものは theorem として立ったが、
+まだ tail-sum ideal の coprimality bridge が不足しているため、
+大勝利の一歩手前と評価するのが正確じゃ。
 
 ---
 

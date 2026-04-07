@@ -1597,6 +1597,52 @@ theorem chosenCyclotomicLinearFactor_mul_tailSum_eq_x_pow_of_counterexamplePack
     ctx.linear_factor_mul_eq_of_add_pow_eq (x := (x : 𝓞 K)) (y := (y : 𝓞 K)) (z := (z : 𝓞 K)) hEqO
 
 /--
+counterexample pack から得る局所 factorization を使って、tail-sum ideal と chosen factor ideal の積が
+`(x)^p` を生成する ideal に一致することを回収する。
+
+これは full product identity を使わずに得られる、責務 A の最短 ideal-level 代替核である。
+-/
+theorem chosenCyclotomicTailSumMulChosenLinearFactorEqSpanPow_of_counterexamplePack
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z) :
+    Ideal.span
+        ({∑ i ∈ Finset.range p,
+            ((z : 𝓞 K) ^ i) * ((hζ.toInteger * (y : 𝓞 K)) ^ (p - 1 - i))} : Set (𝓞 K)) *
+      Ideal.span ({(z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)} : Set (𝓞 K)) =
+        Ideal.span ({(x : 𝓞 K)} : Set (𝓞 K)) ^ p := by
+  let ctx : CyclotomicLocalFactorizationContext (𝓞 K) := {
+    p := p
+    zeta := hζ.toInteger
+    hzeta_pow := by
+      simpa using hζ.toInteger_isPrimitiveRoot.pow_eq_one
+  }
+  have hEqO : (x : 𝓞 K) ^ p + (y : 𝓞 K) ^ p = (z : 𝓞 K) ^ p := by
+    simpa using congrArg (fun n : ℕ => (n : 𝓞 K)) hpack.hEq
+  simpa [ctx] using
+    ctx.linear_factor_ideal_mul_eq_span_pow_of_add_pow_eq
+      (x := (x : 𝓞 K)) (y := (y : 𝓞 K)) (z := (z : 𝓞 K)) hEqO
+
+/--
+局所 factorization core から、chosen factor ideal と何らかの tail ideal の積が `(x)^p` になることを返す。
+
+generic `CyclotomicTailLinearFactorMulEqSpanPowTarget` 型の受け口へ繋ぐための existential wrapper。
+-/
+theorem exists_tailMulChosenLinearFactorEqSpanPow_of_counterexamplePack
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z) :
+    ∃ tail : 𝓞 K,
+      Ideal.span ({tail} : Set (𝓞 K)) *
+        Ideal.span ({(z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)} : Set (𝓞 K)) =
+          Ideal.span ({(x : 𝓞 K)} : Set (𝓞 K)) ^ p := by
+  refine ⟨∑ i ∈ Finset.range p,
+      ((z : 𝓞 K) ^ i) * ((hζ.toInteger * (y : 𝓞 K)) ^ (p - 1 - i)), ?_⟩
+  exact chosenCyclotomicTailSumMulChosenLinearFactorEqSpanPow_of_counterexamplePack hζ hpack
+
+/--
 `y ∈ P` 分岐は、full product identity ではなく chosen factor の局所 tail-sum factorization だけでも閉じる。
 
 したがって y-branch contradiction 自体は `hProduct` に依存していない。
@@ -2547,10 +2593,13 @@ theorem linearFactorIdealPthPowerExistsOfSpanEqPowAndRootNeBot
     ctx hp (linearFactorNeZeroOfSpanEqPow ctx hEq hK_ne) hEq hKill
 
 /--
-first-case pack から chosen linear factor ideal が `p` 乗 ideal であることを返す、
-heartbeat-safe な薄い wrapper。
+chosen factor ideal × tail ideal = `(x)^p` と product-free な coprimality から、
+chosen factor ideal が `p` 乗 ideal であることを返す isolated receiver。
+
+これにより、first-case unit-normalization chain で `hProduct` が残るのは
+mul-tail ideal equality の供給だけだと theorem 境界で見えるようになる。
 -/
-theorem chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin
+theorem chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin_of_mulTailEqSpanPow
     {K : Type u} [Field K] [NumberField K] [CharZero K]
     {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
     {ζ : K} (hζ : IsPrimitiveRoot ζ p)
@@ -2559,7 +2608,7 @@ theorem chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin
     (hFirstCase : ¬ p ∣ gap)
     (hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
       (hζ := hζ) (y := y) (z := z))
-    (hProduct : CyclotomicLinearFactorProductEqInRingOfIntegers
+    (hMul : ChosenCyclotomicLinearFactorMulTailEqSpanPowInRingOfIntegers
       (hζ := hζ) (x := x) (y := y) (z := z)) :
     ChosenCyclotomicLinearFactorSpanEqPowInRingOfIntegers
       (hζ := hζ) (p := p) (y := y) (z := z) := by
@@ -2579,20 +2628,6 @@ theorem chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin
       (span_singleton_finset_prod (R := 𝓞 K)
         (s := (Finset.range p).erase 1)
         (f := cyclotomicLinearFactorInRingOfIntegers hζ y z))
-  have hMul :
-      Ideal.span ({chosenCyclotomicLinearFactorInRingOfIntegers hζ y z} : Set (𝓞 K)) *
-          Ideal.span ({tail} : Set (𝓞 K)) =
-        Ideal.span ({(x : 𝓞 K)} : Set (𝓞 K)) ^ p := by
-    calc
-      Ideal.span ({chosenCyclotomicLinearFactorInRingOfIntegers hζ y z} : Set (𝓞 K)) *
-          Ideal.span ({tail} : Set (𝓞 K)) =
-          Ideal.span ({chosenCyclotomicLinearFactorInRingOfIntegers hζ y z} : Set (𝓞 K)) *
-            ∏ j ∈ (Finset.range p).erase 1,
-              Ideal.span ({cyclotomicLinearFactorInRingOfIntegers hζ y z j} : Set (𝓞 K)) := by
-                rw [← hTailSpan]
-      _ = Ideal.span ({(x : 𝓞 K)} : Set (𝓞 K)) ^ p :=
-        chosenLinearFactorMulTailEqSpanPow_of_productEq
-          (K := K) (p := p) (x := x) (y := y) (z := z) hζ hpack hProduct
   have hCoprime :
       IsCoprime
         (Ideal.span ({chosenCyclotomicLinearFactorInRingOfIntegers hζ y z} : Set (𝓞 K)))
@@ -2609,8 +2644,73 @@ theorem chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin
       (y := (y : 𝓞 K)) (z := (z : 𝓞 K))
       (xSpanNonzero_of_counterexamplePack_of_ringOfIntegers
         (K := K) (p := p) (x := x) (y := y) (z := z) hpack)
-      hMul hCoprime
+      (by
+        rw [← hTailSpan]
+        simpa [ctx, tail, chosenCyclotomicLinearFactorInRingOfIntegers] using hMul)
+      hCoprime
   simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hSpanEq
+
+/--
+first-case pack から chosen linear factor ideal が `p` 乗 ideal であることを返す、
+heartbeat-safe な薄い wrapper。
+-/
+theorem chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
+      (hζ := hζ) (y := y) (z := z))
+    (hProduct : CyclotomicLinearFactorProductEqInRingOfIntegers
+      (hζ := hζ) (x := x) (y := y) (z := z)) :
+    ChosenCyclotomicLinearFactorSpanEqPowInRingOfIntegers
+      (hζ := hζ) (p := p) (y := y) (z := z) := by
+  exact chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin_of_mulTailEqSpanPow
+    (K := K) (p := p) (x := x) (y := y) (z := z)
+    hζ hpack hgap_eq hFirstCase hLinNe
+    (chosenLinearFactorMulTailEqSpanPow_of_productEq
+      (K := K) (p := p) (x := x) (y := y) (z := z) hζ hpack hProduct)
+
+/--
+mul-tail ideal equality core と torsion-kill から、chosen linear factor ideal の
+principal `p` 乗存在を返す isolated receiver。
+-/
+theorem cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin_of_mulTailEqSpanPow
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
+      (hζ := hζ) (y := y) (z := z))
+    (hMul : ChosenCyclotomicLinearFactorMulTailEqSpanPowInRingOfIntegers
+      (hζ := hζ) (x := x) (y := y) (z := z))
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
+    ChosenCyclotomicLinearFactorIdealPthPowerInRingOfIntegers
+      (hζ := hζ) (p := p) (y := y) (z := z) := by
+  let ctx : CyclotomicLocalFactorizationContext (𝓞 K) := {
+    p := p
+    zeta := hζ.toInteger
+    hzeta_pow := by
+      simpa using hζ.toInteger_isPrimitiveRoot.pow_eq_one
+  }
+  obtain ⟨K', hEq⟩ := chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin_of_mulTailEqSpanPow
+    (K := K) (p := p) (x := x) (y := y) (z := z)
+    hζ hpack hgap_eq hFirstCase hLinNe hMul
+  have hExists :
+      ∃ J : Ideal (𝓞 K), J.IsPrincipal ∧
+        Ideal.span ({(z : 𝓞 K) - ctx.zeta * (y : 𝓞 K)} : Set (𝓞 K)) = J ^ ctx.p := by
+    exact linearFactorIdealPthPowerExistsOfSpanEqPowAndTorsionKill
+      (R := 𝓞 K) (ctx := ctx) (K := K')
+      hp.out.ne_zero
+      (by simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hLinNe)
+      (by simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hEq)
+      hKill
+  simpa [ChosenCyclotomicLinearFactorIdealPthPowerInRingOfIntegers,
+    ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hExists
 
 /--
 first-case pack から chosen linear factor ideal の principal `p` 乗存在を返す、
@@ -2630,26 +2730,46 @@ theorem cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin
     (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
     ChosenCyclotomicLinearFactorIdealPthPowerInRingOfIntegers
       (hζ := hζ) (p := p) (y := y) (z := z) := by
+  exact cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin_of_mulTailEqSpanPow
+    (K := K) (p := p) (x := x) (y := y) (z := z)
+    hζ hpack hgap_eq hFirstCase hLinNe
+    (chosenLinearFactorMulTailEqSpanPow_of_productEq
+      (K := K) (p := p) (x := x) (y := y) (z := z) hζ hpack hProduct)
+    hKill
+
+/--
+mul-tail ideal equality core と principal `p` 乗存在から、chosen linear factor 自体を
+unit 倍の `p` 乗として返す isolated receiver。
+-/
+theorem cyclotomicUnitNormalization_of_firstCase_of_pack_thin_of_mulTailEqSpanPow
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
+      (hζ := hζ) (y := y) (z := z))
+    (hMul : ChosenCyclotomicLinearFactorMulTailEqSpanPowInRingOfIntegers
+      (hζ := hζ) (x := x) (y := y) (z := z))
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
+    ∃ β unitFactor : 𝓞 K, IsUnit unitFactor ∧
+      chosenCyclotomicLinearFactorInRingOfIntegers hζ y z = unitFactor * β ^ p := by
   let ctx : CyclotomicLocalFactorizationContext (𝓞 K) := {
     p := p
     zeta := hζ.toInteger
     hzeta_pow := by
       simpa using hζ.toInteger_isPrimitiveRoot.pow_eq_one
   }
-  obtain ⟨K', hEq⟩ := chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin
-    (K := K) (p := p) (x := x) (y := y) (z := z)
-    hζ hpack hgap_eq hFirstCase hLinNe hProduct
-  have hExists :
-      ∃ J : Ideal (𝓞 K), J.IsPrincipal ∧
-        Ideal.span ({(z : 𝓞 K) - ctx.zeta * (y : 𝓞 K)} : Set (𝓞 K)) = J ^ ctx.p := by
-    exact linearFactorIdealPthPowerExistsOfSpanEqPowAndTorsionKill
-      (R := 𝓞 K) (ctx := ctx) (K := K')
-      hp.out.ne_zero
-      (by simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hLinNe)
-      (by simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hEq)
-      hKill
-  simpa [ChosenCyclotomicLinearFactorIdealPthPowerInRingOfIntegers,
-    ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hExists
+  obtain ⟨I, hIPrincipal, hSpan⟩ :=
+    cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin_of_mulTailEqSpanPow
+      (K := K) (p := p) (x := x) (y := y) (z := z)
+      hζ hpack hgap_eq hFirstCase hLinNe hMul hKill
+  let _ : I.IsPrincipal := hIPrincipal
+  obtain ⟨unitFactor, hUnit, hEq⟩ :=
+    linearFactorEqUnitMulGeneratorPowOfSpanEqPowPrincipal ctx (z : 𝓞 K) (y : 𝓞 K) hSpan
+  refine ⟨Submodule.IsPrincipal.generator I, unitFactor, hUnit, ?_⟩
+  simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hEq
 
 /--
 first-case pack から chosen linear factor 自体を unit 倍の `p` 乗として返す、
@@ -2669,20 +2789,12 @@ theorem cyclotomicUnitNormalization_of_firstCase_of_pack_thin
     (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
     ∃ β unitFactor : 𝓞 K, IsUnit unitFactor ∧
       chosenCyclotomicLinearFactorInRingOfIntegers hζ y z = unitFactor * β ^ p := by
-  let ctx : CyclotomicLocalFactorizationContext (𝓞 K) := {
-    p := p
-    zeta := hζ.toInteger
-    hzeta_pow := by
-      simpa using hζ.toInteger_isPrimitiveRoot.pow_eq_one
-  }
-  obtain ⟨I, hIPrincipal, hSpan⟩ := cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin
+  exact cyclotomicUnitNormalization_of_firstCase_of_pack_thin_of_mulTailEqSpanPow
     (K := K) (p := p) (x := x) (y := y) (z := z)
-    hζ hpack hgap_eq hFirstCase hLinNe hProduct hKill
-  let _ : I.IsPrincipal := hIPrincipal
-  obtain ⟨unitFactor, hUnit, hEq⟩ :=
-    linearFactorEqUnitMulGeneratorPowOfSpanEqPowPrincipal ctx (z : 𝓞 K) (y : 𝓞 K) hSpan
-  refine ⟨Submodule.IsPrincipal.generator I, unitFactor, hUnit, ?_⟩
-  simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hEq
+    hζ hpack hgap_eq hFirstCase hLinNe
+    (chosenLinearFactorMulTailEqSpanPow_of_productEq
+      (K := K) (p := p) (x := x) (y := y) (z := z) hζ hpack hProduct)
+    hKill
 
 /--
 Stage 3a-1 の最初の中間補題:
