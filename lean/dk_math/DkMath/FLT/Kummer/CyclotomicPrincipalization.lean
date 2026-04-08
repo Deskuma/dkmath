@@ -4257,6 +4257,28 @@ abbrev CyclotomicPrincipalizationNonFirstCasePacketFromErrorTarget : Prop :=
       ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
 
 /--
+Kummer non-first-case のうち、`p ∣ t` な peel 側だけを受け持つ exact-error descent target。
+
+`TailError` datum から normal form と exact error equation を取り出した後、
+`(x / q)^p + y^p = z'^p` の existence を返す部分だけを isolated に置く。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCasePeelExactErrorDescentTarget : Prop :=
+  ∀ {p x y z q t s : ℕ},
+    CyclotomicPrincipalizationNonFirstCaseTailErrorDatum p x y z q →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∀ {t1 B C E : ℕ},
+      t = p * t1 →
+      p * B = C + (p ^ (p - 1) * t1 ^ p) * E →
+      ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
+
+/--
 TailError + PacketFromError の 2 段から packet kernel を再構成する。
 -/
 theorem cyclotomicPrincipalizationNonFirstCasePacket_of_tailErrorPacketFromErrorSplit
@@ -4861,24 +4883,58 @@ theorem cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_to_peelTailError
     base.hpack base.hpgap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t
 
 /--
-non-first-case (`p ∣ z - y`) 側だけを隔離した PacketFromError kernel。
+`¬ p ∣ t` branch では、Kummer tail-error datum は既存の `NePCoprimeKernel` 側へ落ちる。
 
-`cyclotomicPrincipalization_of_classGroupPTorsionFree` 系で残る direct `so#rry` は
-この theorem 1 本へ局所化される。
+したがって genuinely new な existence kernel は、この枝ではなく
+`p ∣ t` な peel exact-error 側だけに残る。
 -/
-theorem cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTorsionFree
-  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+theorem cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_false_of_not_p_dvd_t_of_nePCoprimeKernel
+    (hNeP : PrimeGe5BranchANormalFormNePCoprimeKernelTarget)
+    {p x y z q t s : ℕ}
+    (data : CyclotomicPrincipalizationNonFirstCaseTailErrorDatum p x y z q)
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hcop_ts : Nat.Coprime t s)
+    (hp_not_dvd_t : ¬ p ∣ t) :
+    False := by
+  let _ := hp_not_dvd_t
+  let base := data.error.valuation.data
+  exact hNeP base.hpack base.hpgap hgap hsGN hcop_ts
+
+/--
+Kummer `PacketFromError` kernel は、
+`p ∣ t` の peel exact-error descent と `¬ p ∣ t` の `NePCoprimeKernel` に分岐できる。
+
+これにより Kummer 側の genuinely new existence 内容は、
+normal form 上の `t`-split のうち peel 側だけへさらに局所化される。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePacketFromError_of_peelExactErrorDescent_and_nePCoprimeKernel
+    (hPeel : CyclotomicPrincipalizationNonFirstCasePeelExactErrorDescentTarget)
+    (hNeP : PrimeGe5BranchANormalFormNePCoprimeKernelTarget) :
     CyclotomicPrincipalizationNonFirstCasePacketFromErrorTarget := by
-  clear hCl
   intro p x y z q data
   rcases cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_normalForm data with
     ⟨t, s, hgap, hsGN, hsx, hcop_ts, hcop_ty, hcop_sy, hp_not_dvd_s⟩
-  have hqSupport :
-      q ∣ t ∧ ¬ q ∣ s :=
-    cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_q_dvd_t_not_dvd_s
-      data hgap hsGN hcop_ts
-  let _ := t
-  let _ := s
+  by_cases hp_dvd_t : p ∣ t
+  · rcases cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_to_peelTailError
+      data hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t with
+      ⟨t1, B, C, E, ht, hErrEq⟩
+    exact hPeel data hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t ht hErrEq
+  · exact False.elim <|
+      cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_false_of_not_p_dvd_t_of_nePCoprimeKernel
+        hNeP data hgap hsGN hcop_ts hp_dvd_t
+
+/--
+class-group 入力から、Kummer non-first-case の `p ∣ t` peel 側 exact-error descent を返す kernel。
+
+現在の genuinely open な数学内容は、`PacketFromError` 全体ではなくこの theorem に局所化される。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelExactErrorDescent_of_classGroupPTorsionFree
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCasePeelExactErrorDescentTarget := by
+  clear hCl
+  intro p x y z q t s data hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t t1 B C E ht hErrEq
+  let _ := data
   let _ := hgap
   let _ := hsGN
   let _ := hsx
@@ -4886,8 +4942,27 @@ theorem cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTors
   let _ := hcop_ty
   let _ := hcop_sy
   let _ := hp_not_dvd_s
-  let _ := hqSupport
+  let _ := hp_dvd_t
+  let _ := t1
+  let _ := B
+  let _ := C
+  let _ := E
+  let _ := ht
+  let _ := hErrEq
   sorry
+
+/--
+non-first-case (`p ∣ z - y`) 側だけを隔離した PacketFromError kernel。
+
+`PacketFromError` 全体の責務は、
+`p ∣ t` peel exact-error descent と `¬ p ∣ t` branch の既存 kernel へ分離される。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTorsionFree
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCasePacketFromErrorTarget :=
+  cyclotomicPrincipalizationNonFirstCasePacketFromError_of_peelExactErrorDescent_and_nePCoprimeKernel
+    (cyclotomicPrincipalizationNonFirstCasePeelExactErrorDescent_of_classGroupPTorsionFree hCl)
+    primeGe5BranchANormalFormNePCoprimeKernel_default
 
 /--
 non-first-case (`p ∣ z - y`) 側だけを隔離した packet kernel。
