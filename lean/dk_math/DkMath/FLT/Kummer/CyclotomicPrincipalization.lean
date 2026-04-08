@@ -4785,6 +4785,82 @@ def cyclotomicPrincipalizationNonFirstCaseTailError :
   exact ⟨data⟩
 
 /--
+Kummer non-first-case の tail-error datum から、
+Branch A normal form の `(t,s)` と基本的な局所算術を回収する。
+
+これにより、`PacketFromError` kernel の入力は
+既存 Branch A 語彙の normal form までは no-so#rry で翻訳できると読める。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_normalForm
+    {p x y z q : ℕ}
+    (data : CyclotomicPrincipalizationNonFirstCaseTailErrorDatum p x y z q) :
+    ∃ t s : ℕ,
+      z - y = p ^ (p - 1) * t ^ p ∧
+      GN p (z - y) y = p * s ^ p ∧
+      x = p * (t * s) ∧
+      Nat.Coprime t s ∧
+      Nat.Coprime t y ∧
+      Nat.Coprime s y ∧
+      ¬ p ∣ s := by
+  let base := data.error.valuation.data
+  rcases primeGe5BranchAShapeValue_of_factorization
+      primeGe5BranchAShapeFactorization_default base.hpack base.hpgap with ⟨t, hgap⟩
+  rcases primeGe5BranchANormalForm_of_witness base.hpack base.hpgap hgap with ⟨s, hsGN, hsx⟩
+  refine ⟨t, s, hgap, hsGN, hsx, ?_, ?_, ?_, ?_⟩
+  · exact primeGe5BranchANormalForm_coprime_ts_default base.hpack base.hpgap hgap hsGN
+  · exact primeGe5BranchANormalForm_coprime_t_right base.hpack hsx
+  · exact primeGe5BranchANormalForm_coprime_s_right base.hpack hsx
+  · exact primeGe5BranchANormalForm_prime_not_dvd_s_default base.hpack base.hpgap hgap hsGN
+
+/--
+Kummer datum に付随する prime `q` は、Branch A normal form では `t` 側を割る。
+
+すなわち `q ∣ x` かつ `q ∣ (z-y)` の non-first-case 入力は、
+normal form の support としては `s` 側ではなく `t` 側に乗る。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_q_dvd_t_not_dvd_s
+    {p x y z q t s : ℕ}
+    (data : CyclotomicPrincipalizationNonFirstCaseTailErrorDatum p x y z q)
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hcop_ts : Nat.Coprime t s) :
+    q ∣ t ∧ ¬ q ∣ s := by
+  let base := data.error.valuation.data
+  have hq_t : q ∣ t := by
+    have hq_gap : q ∣ z - y := base.hqgap
+    rw [hgap] at hq_gap
+    rcases (base.hq.dvd_mul).mp hq_gap with hq_ppow | hq_tpow
+    · have hq_p : q ∣ p := base.hq.dvd_of_dvd_pow hq_ppow
+      exact False.elim <|
+        base.hqne ((Nat.dvd_prime base.hpack.hp).mp hq_p |>.resolve_left base.hq.ne_one)
+    · exact base.hq.dvd_of_dvd_pow hq_tpow
+  refine ⟨hq_t, ?_⟩
+  exact primeGe5BranchANormalForm_neP_dvd_t_not_dvd_s_of_coprime
+    base.hpack base.hpgap hgap hsGN hcop_ts base.hq base.hqne hq_t
+
+/--
+Kummer tail-error datum が peel 側で必要な exact error equation までは、
+既存 Branch A tail-error machinery により no-so#rry で翻訳できる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_to_peelTailError
+    {p x y z q t s : ℕ}
+    (data : CyclotomicPrincipalizationNonFirstCaseTailErrorDatum p x y z q)
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hsx : x = p * (t * s))
+    (hcop_ts : Nat.Coprime t s)
+    (hcop_ty : Nat.Coprime t y)
+    (hcop_sy : Nat.Coprime s y)
+    (hp_not_dvd_s : ¬ p ∣ s)
+    (hp_dvd_t : p ∣ t) :
+    ∃ t1 B C E : ℕ,
+      t = p * t1 ∧
+      p * B = C + (p ^ (p - 1) * t1 ^ p) * E := by
+  let base := data.error.valuation.data
+  exact primeGe5BranchAValuationPeelTailError_default
+    base.hpack base.hpgap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t
+
+/--
 non-first-case (`p ∣ z - y`) 側だけを隔離した PacketFromError kernel。
 
 `cyclotomicPrincipalization_of_classGroupPTorsionFree` 系で残る direct `sorry` は
@@ -4795,6 +4871,22 @@ theorem cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTors
     CyclotomicPrincipalizationNonFirstCasePacketFromErrorTarget := by
   clear hCl
   intro p x y z q data
+  rcases cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_normalForm data with
+    ⟨t, s, hgap, hsGN, hsx, hcop_ts, hcop_ty, hcop_sy, hp_not_dvd_s⟩
+  have hqSupport :
+      q ∣ t ∧ ¬ q ∣ s :=
+    cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_q_dvd_t_not_dvd_s
+      data hgap hsGN hcop_ts
+  let _ := t
+  let _ := s
+  let _ := hgap
+  let _ := hsGN
+  let _ := hsx
+  let _ := hcop_ts
+  let _ := hcop_ty
+  let _ := hcop_sy
+  let _ := hp_not_dvd_s
+  let _ := hqSupport
   sorry
 
 /--

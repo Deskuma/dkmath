@@ -1368,3 +1368,49 @@ Archive
 6. 次の課題:
     - 次はこの PacketFromError 名の kernel を、既存の `PrimeGe5BranchAValuationPeelPacketFromErrorTarget` や `PrimeGe5BranchAPeelPthRootCoreTarget` とどの粒度で接続できるかをさらに詰める
     - その後 `RegularPrimeRoute.lean` の長い戦況コメントも、今の最深 open が PacketFromError 名であることに合わせて同期する
+
+### 日時: 2026/04/08 14:38:53 JST — Kummer TailError datum から Branch A normal form / q-support / peel exact-error を露出
+
+1. 目的:
+   - review-047 の方針に従い、`PacketFromError` kernel をこれ以上縦に割るのでなく、
+     Kummer 側の `TailError` datum を既存 Branch A / peel 語彙へ no-sorry で翻訳する接続点を作る
+   - 特に、`q ∣ x` かつ `q ∣ (z-y)` で入ってくる Kummer non-first-case の `q` が、
+     Branch A normal form ではどちら側の support に乗るかを theorem 名つきで固定する
+2. 実施:
+   - `CyclotomicPrincipalization.lean` に以下を追加した:
+     - `cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_normalForm`
+     - `cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_q_dvd_t_not_dvd_s`
+     - `cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_to_peelTailError`
+   - 上記により、Kummer tail-error datum から:
+     - Branch A normal form の `(t,s)`
+     - `Nat.Coprime t s`, `Nat.Coprime t y`, `Nat.Coprime s y`, `¬ p ∣ s`
+     - `q ∣ t ∧ ¬ q ∣ s`
+     - peel 側 exact error equation `p * B = C + (p^(p-1) * t1^p) * E`
+     までは no-sorry で回収できる形にした
+   - `cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTorsionFree` 本体も、
+     上記 adapter を先に呼んでから最後の `sorry` に入る形へ書き換え、
+     open が「normal form / q-support を取った後の真の descent 部分」だと読めるようにした
+   - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の axiom 監視へ
+     上記 3 theorem を追加した
+3. 結論:
+   - Kummer non-first-case の `TailError` datum は、
+     既存 Branch A 語彙へ no-sorry で翻訳できるところまで具体化できた ✅
+   - `q ∣ x` かつ `q ∣ (z-y)` の Kummer prime `q` は、
+     normal form では `s` 側でなく `t` 側に必ず乗ることが固定できた ✅
+   - よって current blocker は、bookkeeping や exact-error 抽出ではなく、
+     この `t`-side support から actual descent existence `z'^p = (x/q)^p + y^p` をどう起こすかに集中した ✅
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - `lake build DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+   - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` で、
+     新規 adapter 3 本はいずれも `sorry` なしで監視に載ることを確認した
+5. 失敗事例:
+   - 初回実装では、`q ∣ (z-y)` を `hgap` で書き換える箇所を datum 全体へ `rw` してしまい、
+     `q ∣ t` 抽出補題がそのままでは型検査に失敗した
+   - `hqgap` フィールドだけを書き換える形へ直すことで build は復旧した
+6. 次の課題:
+   - 次は、今回露出した `q ∣ t ∧ ¬ q ∣ s` と peel exact-error を起点に、
+     `PacketFromError` kernel の残差を
+     `p ∣ t` 側の peel descent / それ以外の枝との関係でどう existence 語彙へ回収するかを詰める
+   - `RegularPrimeRoute.lean` の長い戦況コメントも、
+     「Kummer prime は normal form の t-side support に乗る」ことまで同期すると監査しやすい
