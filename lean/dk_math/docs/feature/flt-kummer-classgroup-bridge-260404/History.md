@@ -1249,3 +1249,44 @@ Archive
        既存の peel / packet-from-error / q-adic existence 語彙との接続点を棚卸しする
     - public mainline と監視上は、`FLTPrimeGe5Target_of_kummerRoute_of_existenceKernelSplit` を
        non-first-case の最新監査線として前面に出す
+
+### 日時: 2026/04/08 13:54:27 JST — non-first-case existence kernel を valuation / reduction の 2 段へ分割
+
+1. 目的:
+    - 直前に導入した `CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget` をさらに裂き、
+       `p ∣ (z-y)` branch の bookkeeping と genuinely open な reduction を theorem 境界で分離する
+    - これにより direct `sorry` の所在を existence kernel ではなく reduction kernel へさらに押し下げる
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加した:
+       - `CyclotomicPrincipalizationNonFirstCaseValuationDatum`
+       - `CyclotomicPrincipalizationNonFirstCaseValuationTarget`
+       - `CyclotomicPrincipalizationNonFirstCaseReductionTarget`
+       - `cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_valuationReductionSplit`
+       - `cyclotomicPrincipalizationNonFirstCaseValuation`
+       - `cyclotomicPrincipalizationNonFirstCaseReduction_of_classGroupPTorsionFree`
+       - `cyclotomicPrincipalization_of_classGroupPTorsionFree_of_valuationReductionKernelSplit`
+    - `cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree` は、
+       canonical valuation packaging と reduction kernel を合成する thin wrapper へ書き換えた
+    - `RegularPrimeRoute.lean` には public mainline 側の最細 split として
+       `FLTPrimeGe5Target_of_kummerRoute_of_valuationReductionKernelSplit` を追加した
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の axiom 監視も、
+       valuation は clean、direct `sorry` は reduction kernel のみと読める形へ更新した
+3. 結論:
+    - non-first-case の open は、`prepare -> valuation -> reduction -> existence -> GN witness` の 5 段として監査できる形になった ✅
+    - valuation 段は canonical packaging で no-sorry に固定でき、direct `sorry` の所在は
+       `cyclotomicPrincipalizationNonFirstCaseReduction_of_classGroupPTorsionFree`
+       1 本へさらに押し下げられた ✅
+    - public route 側でも `FLTPrimeGe5Target_of_kummerRoute_of_valuationReductionKernelSplit` により、
+       same refined architecture を theorem 名つきで読めるようになった ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `lake build DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 実行でも split 追加後に downstream build が継続成功
+    - build warning の新規 `sorry` は `cyclotomicPrincipalizationNonFirstCaseReduction_of_classGroupPTorsionFree` のみ
+5. 失敗事例:
+    - editor diagnostics では今回も新 theorem 名が `Unknown constant` として残ったが、build 側では route/test downstream まで型検査が通っており stale diagnostics と判断した
+    - 先に reduction kernel ではなく existence kernel を direct placeholder にしたままだと、
+       valuation 段を theorem 名つきで監査できないため、wrapper / kernel の責務分離が曖昧になった
+6. 次の課題:
+    - 次は reduction kernel を、既存の peel / packet-from-error / exceptional existence 語彙のどこへ接続できるかをさらに刻む
+    - とくに `p ∣ (z-y)` 側の数学内容を、valuation packaging の下流で
+       `reduction -> packet/error` の向きに押し込めるかを調べる

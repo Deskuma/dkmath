@@ -4168,6 +4168,47 @@ abbrev CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget : Prop :=
       ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
 
 /--
+non-first-case existence kernel の valuation 段で保持する中間データ。
+
+現段階では theorem 境界を切るための minimal packaging のみを持ち、
+実際の p-adic / valuation 情報は後続の field 追加で受ける。
+-/
+structure CyclotomicPrincipalizationNonFirstCaseValuationDatum
+    (p x y z q : ℕ) where
+  data : CyclotomicPrincipalizationNonFirstCaseDatum p x y z q
+
+/--
+non-first-case datum から valuation 中間データを作る boundary。
+
+この段では `p ∣ (z-y)` branch の bookkeeping を整えるだけに留め、
+reduction / existence の open は下流へ押し下げる。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCaseValuationTarget :=
+  ∀ {p x y z q : ℕ},
+    CyclotomicPrincipalizationNonFirstCaseDatum p x y z q →
+      CyclotomicPrincipalizationNonFirstCaseValuationDatum p x y z q
+
+/--
+valuation 中間データから整数 descent existence を返す reduction kernel。
+
+non-first-case の genuinely open な数学内容は、まずこの reduction 段へ局所化する。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCaseReductionTarget : Prop :=
+  ∀ {p x y z q : ℕ},
+    CyclotomicPrincipalizationNonFirstCaseValuationDatum p x y z q →
+      ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
+
+/--
+valuation + reduction の 2 段から existence kernel を再構成する。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_valuationReductionSplit
+    (hVal : CyclotomicPrincipalizationNonFirstCaseValuationTarget)
+    (hRed : CyclotomicPrincipalizationNonFirstCaseReductionTarget) :
+    CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget := by
+  intro p x y z q data
+  exact hRed (hVal data)
+
+/--
 non-first-case の整数 descent existence から GN witness 語彙へ戻す clean bridge。
 -/
 theorem cyclotomicPrincipalizationNonFirstCaseDescent_of_existence
@@ -4636,17 +4677,40 @@ def cyclotomicPrincipalizationNonFirstCasePrepare :
       hpgap := hpgap }
 
 /--
-non-first-case (`p ∣ z - y`) 側だけを隔離した existence kernel。
+non-first-case datum を valuation datum へ持ち上げる canonical packaging。
+
+いまは trivial packaging だが、将来 p-adic valuation 補題で必要な荷物をここへ集約する。
+-/
+def cyclotomicPrincipalizationNonFirstCaseValuation :
+    CyclotomicPrincipalizationNonFirstCaseValuationTarget := by
+  intro p x y z q data
+  exact ⟨data⟩
+
+/--
+non-first-case (`p ∣ z - y`) 側だけを隔離した reduction kernel。
 
 `cyclotomicPrincipalization_of_classGroupPTorsionFree` 系で残る direct `sorry` は
 この theorem 1 本へ局所化される。
 -/
-theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree
+theorem cyclotomicPrincipalizationNonFirstCaseReduction_of_classGroupPTorsionFree
   (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
-    CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget := by
+    CyclotomicPrincipalizationNonFirstCaseReductionTarget := by
   clear hCl
   intro p x y z q data
   sorry
+
+/--
+non-first-case (`p ∣ z - y`) 側だけを隔離した existence kernel。
+
+valuation 自体は canonical packaging で閉じるため、direct `sorry` は
+reduction kernel を通して間接的にだけ現れる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget :=
+  cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_valuationReductionSplit
+    cyclotomicPrincipalizationNonFirstCaseValuation
+    (cyclotomicPrincipalizationNonFirstCaseReduction_of_classGroupPTorsionFree hCl)
 
 /--
 non-first-case (`p ∣ z - y`) 側だけを隔離した descent kernel。
@@ -4724,6 +4788,22 @@ theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_of_existenceKernelS
     CyclotomicPrincipalizationTarget :=
   cyclotomicPrincipalization_of_classGroupPTorsionFree_of_kernelSplit
     hCl hPrep (cyclotomicPrincipalizationNonFirstCaseDescent_of_existence hExist)
+
+/--
+class-group principalization を non-first-case prepare / valuation / reduction split で再構成する thin theorem。
+
+non-first-case の open を valuation packaging と reduction kernel へさらに刻んだ版。
+-/
+theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_of_valuationReductionKernelSplit
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hPrep : CyclotomicPrincipalizationNonFirstCasePrepareTarget)
+    (hVal : CyclotomicPrincipalizationNonFirstCaseValuationTarget)
+    (hRed : CyclotomicPrincipalizationNonFirstCaseReductionTarget) :
+    CyclotomicPrincipalizationTarget :=
+  cyclotomicPrincipalization_of_classGroupPTorsionFree_of_existenceKernelSplit
+    hCl hPrep
+    (cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_valuationReductionSplit
+      hVal hRed)
 
 /--
 Class group p-torsion free → Principalization（abstract bridge）。
