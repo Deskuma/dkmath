@@ -1461,3 +1461,60 @@ Archive
    - とくに `PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget` や
      restore 側 verification 群へ接げるかを調べ、
      `(x / q)^p + y^p = z'^p` を直接返す adapter を狙う
+
+### 日時: 2026/04/08 21:31:22 JST — restore への support mismatch と existing peel PacketFromError への接続を theorem 化
+
+1. 目的:
+   - 前回の次課題どおり、
+     `CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_classGroupPTorsionFree`
+     の仮定列を restore / realization seed / peel packet 側と突き合わせ、
+     どこまで既存 API に直接接げるかを theorem 名つきで固定する
+   - とくに `RealizationSeedTarget` の `q ∣ s`, `¬ q ∣ t` と、
+     Kummer peel branch の `q`-support が一致するかを形式的に確かめる
+2. 実施:
+   - `CyclotomicPrincipalization.lean` に以下を追加:
+     - `cyclotomicPrincipalizationNonFirstCasePeelNormalForm_q_dvd_t_not_dvd_s`
+     - `cyclotomicPrincipalizationNonFirstCasePeelNormalForm_false_of_q_dvd_s`
+     - `CyclotomicPrincipalizationNonFirstCasePeelPacketTarget`
+     - `cyclotomicPrincipalizationNonFirstCasePeelPacket_of_existingPacketFromError`
+   - 上記により、
+     Kummer peel normal form では distinguished prime `q` が
+     `t` 側に乗り `s` 側には乗らないことを、
+     datum を経由せず normal-form header だけで直接読めるようにした
+   - あわせて、
+     既存 Branch A の `PrimeGe5BranchAValuationPeelPacketFromErrorTarget`
+     へは default tail-error machinery を通して接げることを theorem 化した
+   - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の no-sorry 監視へ
+     上記 theorem を追加し、
+     `RegularPrimeRouteSorry.lean` では deepest open 名を
+     `PeelNormalFormDescent_of_classGroupPTorsionFree` に更新した
+3. 結論:
+   - `PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget` 直結は、
+     仮定列の support が逆向きであるため、
+     同じ distinguished prime `q` をそのまま流す route では使えぬと確定した ✅
+   - 一方で、existing peel 側の最短接続先は
+     `PrimeGe5BranchAValuationPeelPacketFromErrorTarget`
+     であり、ここまでは now theorem-level で接続できる ✅
+   - したがって current honest open は、
+     `restore / realization seed` への直結ではなく、
+     `pkt'` existence から Kummer の欲しい `z'` existence へ戻す新 adapter
+     もしくは peel 側で `z'` を直接返す新 kernel にあると判断した ✅
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRouteSorry` 成功
+   - build warning の direct `sorry` は引き続き
+     `cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_classGroupPTorsionFree`
+     のみ
+5. 失敗事例:
+   - `PrimeGe5BranchAPeelPthRootCoreTarget` へ直接接ぐ theorem も検討したが、
+     こちらは seed / canonical / error の 3 つを同じ `(t1,B,C,E)` で揃える必要があり、
+     今回のサイクルでは `PacketFromError` 経由の方が短く安全だった
+6. 次の課題:
+   - `cyclotomicPrincipalizationNonFirstCasePeelPacket_of_existingPacketFromError`
+     の先で得られる `∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z`
+     から、Kummer 側の欲しい
+     `∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p`
+     をどう回収するかを詰める
+   - 特に `PrimeGe5BranchANormalFormPacket` から `x' = x / q`, `y' = y` を伴う
+     smaller-counterexample realization を返す既存 restore / packaging 補題が再利用できるかを棚卸しする

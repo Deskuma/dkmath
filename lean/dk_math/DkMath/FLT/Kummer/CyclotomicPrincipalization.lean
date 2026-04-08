@@ -4308,6 +4308,101 @@ abbrev CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget : Prop 
     ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
 
 /--
+Kummer peel normal form に付随する prime `q` は、既に `t` 側 support に固定されている。
+
+したがって、この枝では primitive restore 側の `q ∣ s` / `¬ q ∣ t` とは
+support の向きが最初から一致しない。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelNormalForm_q_dvd_t_not_dvd_s
+    {p x y z q t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hq : Nat.Prime q)
+    (hqne : q ≠ p)
+    (hqgap : q ∣ (z - y))
+    (hpgap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hcop_ts : Nat.Coprime t s) :
+    q ∣ t ∧ ¬ q ∣ s := by
+  let _ := hpgap
+  have hq_t : q ∣ t := by
+    rw [hgap] at hqgap
+    rcases (hq.dvd_mul).mp hqgap with hq_ppow | hq_tpow
+    · have hq_p : q ∣ p := hq.dvd_of_dvd_pow hq_ppow
+      exact False.elim <|
+        hqne ((Nat.dvd_prime hpack.hp).mp hq_p |>.resolve_left hq.ne_one)
+    · exact hq.dvd_of_dvd_pow hq_tpow
+  refine ⟨hq_t, ?_⟩
+  exact primeGe5BranchANormalForm_neP_dvd_t_not_dvd_s_of_coprime
+    hpack hpgap hgap hsGN hcop_ts hq hqne hq_t
+
+/--
+Kummer peel normal-form branch では、primitive restore 側の `q ∣ s` support は即座に矛盾する。
+
+ゆえに `PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget` やその verification 群へ
+同じ distinguished prime `q` をそのまま流すことはできない。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelNormalForm_false_of_q_dvd_s
+    {p x y z q t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hq : Nat.Prime q)
+    (hqne : q ≠ p)
+    (hqgap : q ∣ (z - y))
+    (hpgap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hcop_ts : Nat.Coprime t s)
+    (hqs : q ∣ s) :
+    False := by
+  exact
+    (cyclotomicPrincipalizationNonFirstCasePeelNormalForm_q_dvd_t_not_dvd_s
+      hpack hq hqne hqgap hpgap hgap hsGN hcop_ts).2 hqs
+
+/--
+既存 Branch A peel `PacketFromError` kernel には、Kummer peel normal-form 仮定から直接接げる。
+
+ここで得られるのは smaller packet の存在であり、`z'` existence ではない。
+したがって既存 peel 側で最も近い接続先は restore / realization seed 群ではなく、
+まず `PacketFromError` 側である。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCasePeelPacketTarget : Prop :=
+  ∀ {p x y z q t s : ℕ},
+    PrimeGe5CounterexamplePack p x y z →
+    Nat.Prime q →
+    q ∣ x →
+    q ≠ p →
+    q ∣ (z - y) →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
+
+/--
+Kummer peel normal form から、既存 Branch A `PacketFromError` kernel へ接ぐ adapter。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelPacket_of_existingPacketFromError
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget) :
+    CyclotomicPrincipalizationNonFirstCasePeelPacketTarget := by
+  intro p x y z q t s hpack hq hqx hqne hqgap hpgap hgap hsGN hsx hcop_ts hcop_ty hcop_sy
+    hp_not_dvd_s hp_dvd_t
+  let _ := hq
+  let _ := hqx
+  let _ := hqne
+  let _ := hqgap
+  rcases primeGe5BranchAValuationPeelTailError_default
+      hpack hpgap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t with
+    ⟨t1, B, C, E, ht, hErrEq⟩
+  exact hPFE hpack hpgap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t
+    ht hErrEq
+
+/--
 Kummer exact-error peel target は、normal-form descent kernel があれば thin bridge で閉じる。
 
 exact-error tuple `(t1, B, C, E)` 自体はこの theorem では使わず、

@@ -36,7 +36,11 @@ no-sorry となった場合は `RegularPrimeRouteNoSorry.lean` へ写し `no-sor
 -- §5. RegularPrimeRoute
 
 -- §5a. Stage 3a combinatorial bridge + NormEqGN concrete
--- `sorry` (isolated non-first-case PacketFromError kernel)
+-- `sorry` (isolated non-first-case peel normal-form kernel)
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_classGroupPTorsionFree -- uses sorry
+-- `sorry` only via the isolated non-first-case peel normal-form kernel
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelExactErrorDescent_of_classGroupPTorsionFree -- uses sorry via peel normal-form target
+-- `sorry` only via the isolated non-first-case peel normal-form kernel
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTorsionFree -- uses sorry
 -- `sorry` only via the isolated non-first-case PacketFromError kernel
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePacket_of_classGroupPTorsionFree -- uses sorry via non-first-case packetFromError target
