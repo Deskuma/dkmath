@@ -4438,6 +4438,94 @@ theorem cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_namedSma
       hpack' hp_dvd_gap' hz'lt
 
 /--
+peel normal-form の descent equation `z'^p = (x/q)^p + y^p` が直接得られれば、
+named smaller counterexample の算術部分は no-sorry で検証できる。
+
+付録:
+- `PrimeGe5CounterexamplePack p (x / q) y z'` の構成
+- `p ∣ (z' - y)`
+- `z' < z`
+の 3 点は、class-group input ではなく純算術で閉じる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_hzEq
+    {p x y z q t s z' : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hq : Nat.Prime q)
+    (hqx : q ∣ x)
+    (hqne : q ≠ p)
+    (hsx : x = p * (t * s))
+    (hzEq : z' ^ p = (x / q) ^ p + y ^ p) :
+    PrimeGe5CounterexamplePack p (x / q) y z' ∧ p ∣ (z' - y) ∧ z' < z := by
+  have hx'_pos : 0 < x / q := by
+    have hx_pos : 0 < x := Nat.pos_of_ne_zero hpack.hx0
+    have : 0 < q * (x / q) := (Nat.mul_div_cancel' hqx).symm ▸ hx_pos
+    exact Nat.pos_of_mul_pos_left this
+  have hy_pos : 0 < y := hpack.y_pos
+  have hy_lt_z' : y < z' := by
+    have h : y ^ p < z' ^ p := by
+      rw [hzEq]
+      linarith [pow_pos hx'_pos p]
+    by_contra hle
+    push_neg at hle
+    exact Nat.not_lt.mpr (Nat.pow_le_pow_left hle p) h
+  have hz'_pos : 0 < z' := Nat.lt_trans hy_pos hy_lt_z'
+  have hpack' : PrimeGe5CounterexamplePack p (x / q) y z' := by
+    have hcop_xqy : Nat.Coprime (x / q) y := by
+      exact hpack.hxy.coprime_dvd_left
+        ⟨q, (Nat.mul_div_cancel' hqx).symm.trans (Nat.mul_comm q (x / q))⟩
+    exact
+      { hp := hpack.hp
+        hxy := hcop_xqy
+        hyz := Nat.le_of_lt hy_lt_z'
+        hyz_lt := hy_lt_z'
+        hEq := by simpa [Nat.add_comm] using hzEq.symm
+        hp5 := hpack.hp5
+        hx0 := Nat.pos_iff_ne_zero.mp hx'_pos
+        hy0 := hpack.hy0
+        hz0 := Nat.pos_iff_ne_zero.mp hz'_pos }
+  have hp_dvd_xq : p ∣ x / q := by
+    have hcop_pq : Nat.Coprime p q := by
+      apply (Nat.Prime.coprime_iff_not_dvd hpack.hp).mpr
+      intro h
+      exact hqne.symm
+        ((Nat.dvd_prime hq).mp h |>.resolve_left hpack.hp.ne_one)
+    have h_eq : q * (x / q) = p * (t * s) := by
+      rw [Nat.mul_div_cancel' hqx, hsx]
+    have hp_dvd_mul : p ∣ q * (x / q) := ⟨t * s, h_eq⟩
+    exact hcop_pq.dvd_of_dvd_mul_left hp_dvd_mul
+  have hp_dvd_gap' : p ∣ (z' - y) := by
+    haveI : Fact (Nat.Prime p) := ⟨hpack.hp⟩
+    have frobenius : ∀ a : ZMod p, a ^ p = a := fun a => ZMod.pow_card a
+    have hxq_zmod : ((x / q : ℕ) : ZMod p) = 0 :=
+      (ZMod.natCast_eq_zero_iff (x / q) p).mpr hp_dvd_xq
+    have hzEq_mod : (z' : ZMod p) = (y : ZMod p) := by
+      have h := congr_arg (Nat.cast : ℕ → ZMod p) hzEq
+      push_cast at h
+      rw [frobenius, frobenius, frobenius, hxq_zmod, zero_add] at h
+      exact h
+    have h_sub : (↑(z' - y) : ZMod p) = 0 := by
+      rw [Nat.cast_sub (Nat.le_of_lt hy_lt_z')]
+      rw [hzEq_mod, sub_self]
+    exact (ZMod.natCast_eq_zero_iff (z' - y) p).mp h_sub
+  have hz'lt : z' < z := by
+    have hz_pow_eq : z ^ p = q ^ p * (x / q) ^ p + y ^ p := by
+      have hxp : x ^ p = q ^ p * (x / q) ^ p := by
+        calc
+          x ^ p = (q * (x / q)) ^ p := by congr 1; exact (Nat.mul_div_cancel' hqx).symm
+          _ = q ^ p * (x / q) ^ p := mul_pow q (x / q) p
+      rw [← hpack.hEq, hxp]
+    have hqp_ge2 : 2 ≤ q ^ p :=
+      le_trans hq.two_le (Nat.le_self_pow hpack.hp.ne_zero q)
+    have hxqp_pos : 0 < (x / q) ^ p := pow_pos hx'_pos p
+    have hz'_lt_z_pow : z' ^ p < z ^ p := by
+      rw [hz_pow_eq]
+      linarith [hzEq.symm, Nat.mul_le_mul_right ((x / q) ^ p) hqp_ge2]
+    by_contra h
+    push_neg at h
+    exact Nat.not_lt.mpr (Nat.pow_le_pow_left h p) hz'_lt_z_pow
+  exact ⟨hpack', hp_dvd_gap', hz'lt⟩
+
+/--
 Kummer peel packet から quotient provenance つき smaller packet を返すべき最短の不足 target。
 
 existing peel 側の `PacketFromError` で `∃ pkt'` までは既に取れるので、
@@ -4503,6 +4591,31 @@ theorem cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_namedSma
     ⟨z', hpack', hp_dvd_gap', hz'lt⟩
   exact cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_namedSmallerCounterexample
     hpack' hp_dvd_gap' hz'lt
+
+/--
+peel normal-form descent existence が取れれば、named smaller counterexample への昇格は
+純算術の検証だけで閉じる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_normalFormDescent
+    (hNorm : CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget) :
+    CyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexampleTarget := by
+  intro p x y z q t s hpack hq hqx hqne hqgap hpgap hgap hsGN hsx hcop_ts hcop_ty hcop_sy
+    hp_not_dvd_s hp_dvd_t
+  let _ := hqgap
+  let _ := hpgap
+  let _ := hgap
+  let _ := hsGN
+  let _ := hcop_ts
+  let _ := hcop_ty
+  let _ := hcop_sy
+  let _ := hp_not_dvd_s
+  let _ := hp_dvd_t
+  rcases hNorm hpack hq hqx hqne hqgap hpgap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t with
+    ⟨z', hzEq⟩
+  exact
+    ⟨z', cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_hzEq
+      hpack hq hqx hqne hsx hzEq⟩
 
 /--
 quotient provenance つき smaller packet が得られれば、
@@ -5186,16 +5299,14 @@ theorem cyclotomicPrincipalizationNonFirstCasePacketFromError_of_peelExactErrorD
         hNeP data hgap hsGN hcop_ts hp_dvd_t
 
 /--
-class-group 入力から、Kummer peel named smaller counterexample を返す kernel。
+class-group 入力から、Kummer peel normal-form descent existence を返す core kernel。
 
-packet 生成と quotient provenance bookkeeping は既に structural に閉じたので、
-現在 genuinely open な数学内容は
-`PrimeGe5CounterexamplePack p (x / q) y z'`
-をどう直接作るかに局所化される。
+named smaller counterexample への包装は既に純算術で閉じたので、
+current direct `sorry` は `∃ z', z'^p = (x / q)^p + y^p` を返す一点に局所化する。
 -/
-theorem cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_classGroupPTorsionFree
+theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree
     (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
-    CyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexampleTarget := by
+    CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget := by
   clear hCl
   intro p x y z q t s hpack hq hqx hqne hqgap hpgap hgap hsGN hsx hcop_ts hcop_ty hcop_sy
     hp_not_dvd_s hp_dvd_t
@@ -5214,6 +5325,18 @@ theorem cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_
   let _ := hp_not_dvd_s
   let _ := hp_dvd_t
   sorry
+
+/--
+class-group 入力から、Kummer peel named smaller counterexample を返す wrapper。
+
+named smaller counterexample の算術検証は no-sorry で閉じたので、
+この theorem の `sorry` 依存は normal-form descent existence core を経由するだけである。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_classGroupPTorsionFree
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexampleTarget :=
+  cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_normalFormDescent
+    (cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree hCl)
 
 /--
 class-group 入力から、Kummer peel packet に quotient provenance を付ける kernel。
@@ -5236,8 +5359,7 @@ packet + quotient provenance kernel からの thin wrapper として扱う。
 theorem cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_classGroupPTorsionFree
     (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
     CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget :=
-  cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_packetQuotientLift
-    (cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_classGroupPTorsionFree hCl)
+  cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree hCl
 
 /--
 class-group 入力から、Kummer non-first-case の `p ∣ t` peel 側 exact-error descent を返す kernel。

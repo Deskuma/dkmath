@@ -1778,3 +1778,75 @@ Archive
    - もし `z'` existence 先行の方が短いなら、
      そこから named smaller counterexample へ戻す no-sorry bridge
      も追加検討する
+
+### 日時: 2026/04/09 04:04:29 JST — named smaller-counterexample arithmetic を no-sorry 化し、deepest open を descent-existence core へ移動
+
+1. 目的:
+   - Kummer peel で `∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p`
+     が得られた時点で、
+     named smaller counterexample
+     `PrimeGe5CounterexamplePack p (x / q) y z'`
+     への昇格が purely arithmetic に閉じるかを確定する
+   - その結果、direct `sorry` を
+     `...PeelNamedSmallerCounterexample_of_classGroupPTorsionFree`
+     からさらに 1 段押し下げ、
+     `z'` existence core へ局所化する
+2. 実施:
+   - `CyclotomicPrincipalization.lean` に
+     `cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_hzEq`
+     を追加し、
+     `hzEq : z' ^ p = (x / q) ^ p + y ^ p`
+     から
+     `PrimeGe5CounterexamplePack p (x / q) y z'`,
+     `p ∣ (z' - y)`,
+     `z' < z`
+     を no-sorry で構成できることを theorem 化した
+   - あわせて
+     `cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_normalFormDescent`
+     を追加し、
+     peel normal-form descent target から named smaller counterexample target への昇格を
+     thin wrapper 化した
+   - direct `sorry` は新設の
+     `cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree`
+     にだけ残し、
+     `...PeelNamedSmallerCounterexample_of_classGroupPTorsionFree`
+     および
+     `...PeelNormalFormDescent_of_classGroupPTorsionFree`
+     は wrapper 化した
+   - 監視ファイルも同期:
+     - `RegularPrimeRoute.lean` に
+       `...PeelNamedSmallerCounterexample_of_hzEq`
+       と
+       `...PeelNamedSmallerCounterexample_of_normalFormDescent`
+       の no-sorry 監視を追加
+     - `RegularPrimeRouteSorry.lean` では
+       deepest open を
+       `...PeelDescentExistenceCore_of_classGroupPTorsionFree`
+       として明示した
+3. 結論:
+   - named smaller counterexample の arithmetic verification 自体は honest open ではない ✅
+   - `PrimeGe5CounterexamplePack p (x / q) y z'`
+     と `p ∣ (z' - y)` と `z' < z` は、
+     class-group 理論とは独立に、
+     `hzEq` だけで閉じると分かった ✅
+   - current direct open は
+     `∃ z', z' ^ p = (x / q) ^ p + y ^ p`
+     を返す core theorem へ移動した ✅
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRouteSorry` 成功
+   - build warning の direct `sorry` は
+     `cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree`
+     に現れることを確認した
+5. 失敗事例:
+   - 最初の差分では `ZMod p` 上の Frobenius を手書きしていて、
+     exponent rewrite が instance dependency と衝突し build が落ちた
+   - `ZMod.pow_card` を直接使う形へ簡約して解消した
+6. 次の課題:
+   - `cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree`
+     の input 仮定列に対し、
+     class-group / principalization 側から `∃ z'` を返す最短 adapter を設計する
+   - 既存 restore 側の `RealizationSeed` ではなく、
+     Kummer peel normal-form 専用の `z'` existence theorem として閉じる方が
+     statement 的に薄いかを再比較する
