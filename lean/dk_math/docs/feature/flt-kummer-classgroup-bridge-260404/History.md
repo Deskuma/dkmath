@@ -1637,3 +1637,68 @@ Archive
      smaller-counterexample realization から
      上記 provenance を再構成できるものがないかを、
      target の入出力単位で再棚卸しする
+
+### 日時: 2026/04/09 03:07:14 JST — named smaller-counterexample route は structural に閉じると整理
+
+1. 目的:
+   - quotient provenance 問題を調べる中で、
+     既存 restore / packet packaging 群のどこまでが genuinely open で、
+     どこから先が purely structural かを theorem で固定する
+   - とくに
+     `PrimeGe5CounterexamplePack p (x / q) y z'`
+     のような named smaller counterexample が直接得られた場合、
+     Kummer peel 側の packet/provenance bookkeeping が即座に閉じるかを確認する
+2. 実施:
+   - `TriominoCosmicBranchA.lean` に以下を追加:
+     - `primeGe5BranchANormalFormPacket_of_counterexample`
+     - `primeGe5BranchANormalFormPacket_lt_of_namedSmallerCounterexample`
+   - これにより、
+     `PrimeGe5CounterexamplePack p x' y' z'` と `p ∣ (z' - y')`
+     があれば、same coordinates のまま
+     `PrimeGe5BranchANormalFormPacket p`
+     へ再包装できることを no-sorry で固定した
+   - `CyclotomicPrincipalization.lean` には
+     `cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_namedSmallerCounterexample`
+     を追加し、
+     named smaller counterexample
+     `PrimeGe5CounterexamplePack p (x / q) y z'`
+     から
+     `pkt'.x = x / q`, `pkt'.y = y`
+     つき packet を structural に回収できるようにした
+3. 結論:
+   - `packet` 生成自体はもう honest open ではない ✅
+   - すなわち、
+     `PrimeGe5CounterexamplePack p (x / q) y z'`
+     と `p ∣ (z' - y)` と `z' < z`
+     が直接出れば、
+     Kummer peel 側の `packet + quotient provenance` は
+     thin adapter だけで閉じると整理できた ✅
+   - したがって current arithmetic residue は、
+     existing `PacketFromError` output への provenance 付与に加えて、
+     named smaller counterexample をどう直接構成するか、
+     という route でも読めるようになった
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicBranchA` 成功
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRouteSorry` 成功
+   - build warning の direct `sorry` は引き続き
+     `cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_classGroupPTorsionFree`
+     のみ
+5. 失敗事例:
+   - 最初は新 theorem を `TriominoCosmicBranchA.lean` 前半へ置いたため、
+     後方で定義される
+     `primeGe5BranchAShapeValue_of_factorization`
+     を前方参照して build が落ちた
+   - theorem を normal-form 基本定理群の後ろへ移し、
+     依存順に整列することで解消した
+6. 次の課題:
+   - `cyclotomicPrincipalizationNonFirstCasePeelPacket_of_existingPacketFromError`
+     が返す arbitrary `pkt'` に provenance
+     `pkt'.x = x / q`, `pkt'.y = y`
+     を付ける route と、
+     named smaller counterexample
+     `PrimeGe5CounterexamplePack p (x / q) y z'`
+     を直接作る route のどちらが短いかを再比較する
+   - とくに existing error equation / tail-error data から、
+     packet を経由せず named smaller counterexample を先に立てられないかを調べる

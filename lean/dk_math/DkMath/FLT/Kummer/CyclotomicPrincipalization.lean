@@ -4416,6 +4416,28 @@ theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistence_of_packet_xyE
   simpa [hx, hy, Nat.add_comm] using pkt'.pack.hEq.symm
 
 /--
+named smaller counterexample `(x / q, y, z')` が直接得られれば、
+peel packet quotient-lift は purely structural な packaging だけで閉じる。
+
+付録:
+- これにより、Kummer peel 側の remaining work は
+  「arbitrary `pkt'` に provenance を付ける」だけでなく、
+  「named smaller counterexample を直接構成する」route でも閉じられる。
+- packet 生成そのものは `PrimeGe5BranchANormalFormPacket` の structural packaging であり、
+  genuinely hard な内容は含まない。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_namedSmallerCounterexample
+    {p x y z q z' : ℕ}
+    (hpack' : PrimeGe5CounterexamplePack p (x / q) y z')
+    (hp_dvd_gap' : p ∣ (z' - y))
+    (hz'lt : z' < z) :
+    ∃ pkt' : PrimeGe5BranchANormalFormPacket p,
+      pkt'.z < z ∧ pkt'.x = x / q ∧ pkt'.y = y := by
+  exact
+    primeGe5BranchANormalFormPacket_lt_of_namedSmallerCounterexample
+      hpack' hp_dvd_gap' hz'lt
+
+/--
 Kummer peel packet から quotient provenance つき smaller packet を返すべき最短の不足 target。
 
 existing peel 側の `PacketFromError` で `∃ pkt'` までは既に取れるので、
