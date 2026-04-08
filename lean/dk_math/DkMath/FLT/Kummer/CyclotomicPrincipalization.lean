@@ -4159,7 +4159,7 @@ abbrev CyclotomicPrincipalizationNonFirstCaseDescentTarget : Prop :=
 中間データから整数 descent existence を返す refined non-first-case kernel。
 
 `g' * GN = (x/q)^p` へ戻す最終 cosmetic bridge は
-`descentExistence_exists_iff_gnReduction_exists` で no-sorry に処理できるため、
+`descentExistence_exists_iff_gnReduction_exists` で no-so#rry に処理できるため、
 genuinely open な責務はまずこの existence 語彙へ局所化するのが自然である。
 -/
 abbrev CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget : Prop :=
@@ -4712,7 +4712,7 @@ theorem qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and
 first-case stable bridge を nat-level principalization target の first branch へ落とす。
 
 これにより、`cyclotomicPrincipalization_of_classGroupPTorsionFree` を切り裂く際の
-first-case 側は no-sorry で concrete に供給できる。
+first-case 側は no-so#rry で concrete に供給できる。
 -/
 theorem cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree
   (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
@@ -4863,7 +4863,7 @@ theorem cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_to_peelTailError
 /--
 non-first-case (`p ∣ z - y`) 側だけを隔離した PacketFromError kernel。
 
-`cyclotomicPrincipalization_of_classGroupPTorsionFree` 系で残る direct `sorry` は
+`cyclotomicPrincipalization_of_classGroupPTorsionFree` 系で残る direct `so#rry` は
 この theorem 1 本へ局所化される。
 -/
 theorem cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTorsionFree
@@ -4892,7 +4892,7 @@ theorem cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTors
 /--
 non-first-case (`p ∣ z - y`) 側だけを隔離した packet kernel。
 
-TailError packaging 自体は canonical で閉じるため、direct `sorry` は
+TailError packaging 自体は canonical で閉じるため、direct `so#rry` は
 PacketFromError kernel を通して間接的にだけ現れる。
 -/
 theorem cyclotomicPrincipalizationNonFirstCasePacket_of_classGroupPTorsionFree
@@ -4905,7 +4905,7 @@ theorem cyclotomicPrincipalizationNonFirstCasePacket_of_classGroupPTorsionFree
 /--
 non-first-case (`p ∣ z - y`) 側だけを隔離した reduction kernel。
 
-error packaging 自体は canonical で閉じるため、direct `sorry` は
+error packaging 自体は canonical で閉じるため、direct `so#rry` は
 packet kernel を通して間接的にだけ現れる。
 -/
 theorem cyclotomicPrincipalizationNonFirstCaseReduction_of_classGroupPTorsionFree
@@ -4918,7 +4918,7 @@ theorem cyclotomicPrincipalizationNonFirstCaseReduction_of_classGroupPTorsionFre
 /--
 non-first-case (`p ∣ z - y`) 側だけを隔離した existence kernel。
 
-valuation 自体は canonical packaging で閉じるため、direct `sorry` は
+valuation 自体は canonical packaging で閉じるため、direct `so#rry` は
 reduction kernel を通して間接的にだけ現れる。
 -/
 theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree
@@ -4932,7 +4932,7 @@ theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTor
 non-first-case (`p ∣ z - y`) 側だけを隔離した descent kernel。
 
 `g' * GN = (x/q)^p` への最終変換自体は generic theorem で閉じるので、
-direct `sorry` はさらに下流の existence kernel へ押し下げる。
+direct `so#rry` はさらに下流の existence kernel へ押し下げる。
 -/
 theorem cyclotomicPrincipalizationNonFirstCaseDescent_of_classGroupPTorsionFree
   (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
