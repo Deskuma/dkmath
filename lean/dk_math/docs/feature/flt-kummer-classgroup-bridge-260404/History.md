@@ -1518,3 +1518,58 @@ Archive
      をどう回収するかを詰める
    - 特に `PrimeGe5BranchANormalFormPacket` から `x' = x / q`, `y' = y` を伴う
      smaller-counterexample realization を返す既存 restore / packaging 補題が再利用できるかを棚卸しする
+
+### 日時: 2026/04/08 21:42:18 JST — `pkt' -> z'` は quotient provenance だけが残差だと theorem 化
+
+1. 目的:
+   - `cyclotomicPrincipalizationNonFirstCasePeelPacket_of_existingPacketFromError`
+     の先で得られる `∃ pkt'` から、
+     Kummer の欲しい `∃ z'` を返すために何が足りないかを theorem 境界で固定する
+   - とくに `PrimeGe5BranchANormalFormPacket` に
+     `pkt'.x = x / q`, `pkt'.y = y` が乗れば十分かどうかを明示化する
+2. 実施:
+   - `CyclotomicPrincipalization.lean` に以下を追加:
+     - `cyclotomicPrincipalizationNonFirstCasePeelDescentExistence_of_packet_xyEq`
+     - `CyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLiftTarget`
+     - `cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_packetQuotientLift`
+   - 上記により、
+     smaller packet `pkt'` に quotient provenance
+     `pkt'.x = x / q` と `pkt'.y = y`
+     が付けば、`pkt'.pack.hEq` を使うだけで
+     `pkt'.z ^ p = (x / q) ^ p + y ^ p`
+     が直ちに出ることを no-sorry で固定した
+   - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の no-sorry 監視へ
+     上記 2 theorem を追加した
+3. 結論:
+   - `∃ pkt'` から `∃ z'` への橋そのものは、実は難所ではなかった ✅
+   - 真に残っているのは、
+     `cyclotomicPrincipalizationNonFirstCasePeelPacket_of_existingPacketFromError`
+     の出力 packet に対して
+     `pkt'.x = x / q` と `pkt'.y = y`
+     をどう回収するか、その quotient provenance 1 点だと整理できた ✅
+   - 分岐判断:
+     - restore 側の `RealizationSeedTarget` や `PthRootTarget` の再利用も引き続き検討した
+     - しかし same-`q` route では `q ∣ s`, `¬ q ∣ t` が必要で、
+       Kummer peel 側の `q ∣ t`, `¬ q ∣ s` と support が逆向きである
+     - したがってこのサイクルでは restore 直結を追うより、
+       `pkt' -> z'` に必要な最小 provenance を theorem 化する方が先と判断した
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+   - build warning の direct `sorry` は引き続き
+     `cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_classGroupPTorsionFree`
+     のみ
+5. 失敗事例:
+   - 既存 restore / packet packaging 群の再利用だけで
+     `pkt'.x = x / q`, `pkt'.y = y` が即座に取れる補題は、このサイクルでは見つからなかった
+   - `PrimeGe5BranchAPrimitiveRestorePacketPackagingWeakConcrete` は
+     「smaller counterexample pack + p∣gap + z'<z から packet を作る」方向であり、
+     今回必要な「既存 packet に quotient provenance を付ける」方向とは逆だった
+6. 次の課題:
+   - `PrimeGe5BranchAValuationPeelPacketFromErrorTarget` が返す packet について、
+     original `(x,y,q)` に対する quotient provenance
+     `pkt'.x = x / q`, `pkt'.y = y`
+     を返す新 target / theorem を設計する
+   - あるいは existing peel packet を経由せず、
+     peel side で `∃ z'` を直接返す `PthRoot` 型 kernel を
+     Kummer normal-form 仮定向けに新設する

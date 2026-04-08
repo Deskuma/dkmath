@@ -4403,6 +4403,61 @@ theorem cyclotomicPrincipalizationNonFirstCasePeelPacket_of_existingPacketFromEr
     ht hErrEq
 
 /--
+smaller normal-form packet に quotient provenance `pkt'.x = x / q`, `pkt'.y = y` が乗れば、
+Kummer が欲しい整数 descent existence は直ちに回収できる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistence_of_packet_xyEq
+    {p x y q : ℕ}
+    (pkt' : PrimeGe5BranchANormalFormPacket p)
+    (hx : pkt'.x = x / q)
+    (hy : pkt'.y = y) :
+    ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p := by
+  refine ⟨pkt'.z, ?_⟩
+  simpa [hx, hy, Nat.add_comm] using pkt'.pack.hEq.symm
+
+/--
+Kummer peel packet から quotient provenance つき smaller packet を返すべき最短の不足 target。
+
+existing peel 側の `PacketFromError` で `∃ pkt'` までは既に取れるので、
+残る honest open は実質的に
+- `pkt'.x = x / q`
+- `pkt'.y = y`
+をどう回収するかに集約される。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLiftTarget : Prop :=
+  ∀ {p x y z q t s : ℕ},
+    PrimeGe5CounterexamplePack p x y z →
+    Nat.Prime q →
+    q ∣ x →
+    q ≠ p →
+    q ∣ (z - y) →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ pkt' : PrimeGe5BranchANormalFormPacket p,
+      pkt'.z < z ∧ pkt'.x = x / q ∧ pkt'.y = y
+
+/--
+quotient provenance つき smaller packet が得られれば、
+Kummer peel normal-form descent は thin bridge で閉じる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_packetQuotientLift
+    (hLift : CyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLiftTarget) :
+    CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget := by
+  intro p x y z q t s hpack hq hqx hqne hqgap hpgap hgap hsGN hsx hcop_ts hcop_ty hcop_sy
+    hp_not_dvd_s hp_dvd_t
+  rcases hLift hpack hq hqx hqne hqgap hpgap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t with
+    ⟨pkt', _hzlt, hx, hy⟩
+  exact cyclotomicPrincipalizationNonFirstCasePeelDescentExistence_of_packet_xyEq pkt' hx hy
+
+/--
 Kummer exact-error peel target は、normal-form descent kernel があれば thin bridge で閉じる。
 
 exact-error tuple `(t1, B, C, E)` 自体はこの theorem では使わず、
