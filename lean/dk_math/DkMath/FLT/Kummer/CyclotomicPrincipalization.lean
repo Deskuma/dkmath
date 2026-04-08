@@ -4092,6 +4092,38 @@ Stage 1 + Stage 2 + Stage 3 → full principalization target。
 したがって残る honest open は、その pack-specialized 供給を global target へ昇格させることと
 Stage 3 の norm 側である。
 -/
+abbrev CyclotomicPrincipalizationFirstCaseTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ x →
+      q ≠ p →
+      q ∣ (z - y) →
+      ¬ p ∣ (z - y) →
+      ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p
+
+/--
+`cyclotomicPrincipalization_of_classGroupPTorsionFree` を切り分けるための non-first-case 側 boundary。
+
+first-case (`¬ p ∣ z - y`) は current stable bridge 群で concrete に戻せるので、
+残る責務を `p ∣ z - y` 側だけへ押し込むための target として使う。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCaseTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ x →
+      q ≠ p →
+      q ∣ (z - y) →
+      p ∣ (z - y) →
+      ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p
+
+/--
+first-case / non-first-case split を合成して full principalization target を得る。
+
+これにより、legacy one-shot theorem の責務は
+- first-case: current stable bridge 群
+- non-first-case: 未解決 kernel
+へ分離できる。
+-/
 abbrev CyclotomicPrincipalizationTarget : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
     ∀ {q : ℕ}, Nat.Prime q →
@@ -4099,6 +4131,15 @@ abbrev CyclotomicPrincipalizationTarget : Prop :=
       q ≠ p →
       q ∣ (z - y) →
       ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p
+
+theorem cyclotomicPrincipalization_of_caseSplit
+    (hFirst : CyclotomicPrincipalizationFirstCaseTarget)
+    (hNonFirst : CyclotomicPrincipalizationNonFirstCaseTarget) :
+    CyclotomicPrincipalizationTarget := by
+  intro p x y z hpack q hq hqx hqne hqgap
+  by_cases hFirstCase : ¬ p ∣ (z - y)
+  · exact hFirst hpack hq hqx hqne hqgap hFirstCase
+  · exact hNonFirst hpack hq hqx hqne hqgap (not_not.mp hFirstCase)
 
 /--
 3-stage Kummer route を合成して full principalization を得る。
@@ -4478,6 +4519,48 @@ theorem qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and
     (hNoPow := hNoPow)
     (K := K) (p := p) (x := x) (y := y) (z := z) (q := q) (ζ := ζ) (gap := gap)
     hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase
+
+/--
+`CyclotomicField p ℚ` を canonical choice に取り、
+first-case stable bridge を nat-level principalization target の first branch へ落とす。
+
+これにより、`cyclotomicPrincipalization_of_classGroupPTorsionFree` を切り裂く際の
+first-case 側は no-sorry で concrete に供給できる。
+-/
+theorem cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_nonLiftable
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    CyclotomicPrincipalizationFirstCaseTarget := by
+  intro p x y z hpack q hq hqx hqne hqgap hFirstCase
+  let _ : Fact p.Prime := ⟨hpack.hp⟩
+  let ζ : CyclotomicField p ℚ :=
+    IsCyclotomicExtension.zeta p ℚ (CyclotomicField p ℚ)
+  let hζ : IsPrimitiveRoot ζ p := by
+    simp [ζ]
+  have hgap_eq :
+      (z : 𝓞 (CyclotomicField p ℚ)) - (y : 𝓞 (CyclotomicField p ℚ)) =
+        ((z - y : ℕ) : 𝓞 (CyclotomicField p ℚ)) := by
+    simp [Nat.cast_sub hpack.hyz]
+  exact qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_nonLiftable
+    (hCl := hCl) (hNoLift := hNoLift)
+    (K := CyclotomicField p ℚ) (p := p) (x := x) (y := y) (z := z) (q := q)
+    (ζ := ζ) (gap := z - y)
+    hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase
+
+/--
+class-group one-shot route を first-case / non-first-case split で再構成する thin theorem。
+
+current stable bridge 群により first-case は concrete に埋まるので、
+残る責務は non-first-case target 1 本へ局所化される。
+-/
+theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_of_caseSplit
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hNoLift : TriominoCosmicNonLiftableGNBridge)
+    (hNonFirst : CyclotomicPrincipalizationNonFirstCaseTarget) :
+    CyclotomicPrincipalizationTarget :=
+  cyclotomicPrincipalization_of_caseSplit
+    (cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_nonLiftable hCl hNoLift)
+    hNonFirst
 
 /--
 Stage 1c: trivial class → principal ideal extraction。

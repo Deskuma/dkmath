@@ -1065,3 +1065,53 @@ Archive
        いま薄くなった stable bridge 群を使って再設計する
     - その際の実 blocker は、global pack から直接使える case predicate と
        non-first-case 側へ責任を押し込む theorem 境界の設計じゃ
+
+### 日時: 2026/04/08 06:27:55 JST — principalization の case-split 境界を theorem として固定
+
+1. 目的:
+    - `cyclotomicPrincipalization_of_classGroupPTorsionFree` の first-case / non-first-case split を、
+       current stable bridge 群を使って theorem 境界として固定する
+    - そのうえで、first-case は canonical な `CyclotomicField p ℚ` instantiation で埋まり、
+       non-first-case だけが open kernel だと route level でも読めるようにする
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加した:
+       - `CyclotomicPrincipalizationFirstCaseTarget`
+       - `CyclotomicPrincipalizationNonFirstCaseTarget`
+       - `cyclotomicPrincipalization_of_caseSplit`
+       - `cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_nonLiftable`
+       - `cyclotomicPrincipalization_of_classGroupPTorsionFree_of_caseSplit`
+    - first-case canonical theorem では
+       `K := CyclotomicField p ℚ`、`ζ := IsCyclotomicExtension.zeta p ℚ K`
+       を取り、既存の
+       `qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_nonLiftable`
+       へ直接流した
+    - これにより nat-level target 上でも、
+       `¬ p ∣ (z - y)` は current stable bridge で concrete に処理できると固定できた
+    - さらに `RegularPrimeRoute.lean` に
+       `FLTPrimeGe5Target_of_kummerRoute_of_caseSplit`
+       を追加し、public route としても
+       「first-case は closed / non-first-case だけ open」を theorem 名で表せるようにした
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` に上記 theorem 群の axiom 監視を追加した
+3. 結論:
+    - `cyclotomicPrincipalization_of_classGroupPTorsionFree` の再設計に必要だった
+       case predicate と theorem 境界は、no-sorry theorem 群として mainline に固定できた ✅
+    - first-case はもう legacy one-shot theorem の内部事情ではなく、
+       `CyclotomicField p ℚ` を通じて nat-level target へ戻せる concrete branch として分離できた ✅
+    - その結果、残る open は truly `CyclotomicPrincipalizationNonFirstCaseTarget` に押し込められ、
+       old one-shot の責務がかなり明瞭になった ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - build warning の新規 `sorry` は増えず、残る `declaration uses sorry` は既存の
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` と研究用ファイル側のみ
+    - editor diagnostics では一時的に new theorem 名の `Unknown constant` が残ったが、
+       build 自体は成功しており stale diagnostics と判断できた
+5. 失敗事例:
+    - 初回実装では、`qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_nonLiftable`
+       の universe parameter と `CyclotomicField p ℚ` の universe が噛み合わず失敗した
+    - first-case canonical theorem 側の class-group 仮定を `.{0}` へ specialize し、
+       concrete type `CyclotomicField p ℚ` をそのまま使う形へ直して安定化した
+6. 次の課題:
+    - 次は legacy theorem `cyclotomicPrincipalization_of_classGroupPTorsionFree` 自体を、
+       いま作った split theorem へ実際に寄せ、`sorry` の責任範囲を non-first-case に局所化する
+    - そのためには `CyclotomicPrincipalizationNonFirstCaseTarget` をどの粒度でさらに割るか、
+       あるいは non-first-case を受ける route theorem 群をどこまで public mainline に昇格させるかを詰める

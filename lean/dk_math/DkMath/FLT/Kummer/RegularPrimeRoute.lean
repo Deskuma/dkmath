@@ -452,6 +452,27 @@ legacy one-shot theorem。
 -/
 
 /--
+Split class-group route: first-case は current stable bridge 群で処理し、
+non-first-case (`p ∣ z - y`) だけを open kernel として残す public mainline。
+
+`cyclotomicPrincipalization_of_classGroupPTorsionFree` の legacy one-shot に代えて、
+残責務を theorem 境界で明示する版。
+-/
+theorem FLTPrimeGe5Target_of_kummerRoute_of_caseSplit
+    (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+    (hReg : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hNonFirst : CyclotomicPrincipalizationNonFirstCaseTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_kummerThreeWaySplit hPeq hReg
+    (qAdicGapReductionGapDivisible_of_cyclotomicPrincipalization
+      (cyclotomicPrincipalization_of_classGroupPTorsionFree_of_caseSplit
+        hCl hNoLift hNonFirst))
+    hPFE hNoLift
+
+/--
 Legacy one-shot Kummer route: ClassGroup 仮定から FLT へ。
 
 open kernels:
