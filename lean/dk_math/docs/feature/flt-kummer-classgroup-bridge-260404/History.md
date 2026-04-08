@@ -1015,3 +1015,356 @@ Archive
    - 次は、この first-case product-free chain を legacy route / class-group one-shot の縮約へどう注入するかを詰める
    - 特に `cyclotomicPrincipalization_of_classGroupPTorsionFree` や `FLTPrimeGe5Target_of_kummerRoute` 側で、
      old `hProduct` 前提を今回の chain へ置き換える導線を整理する
+
+### 日時: 2026/04/08 06:11:36 JST — first-case stable bridge から `hLinNe` / `hProduct` の残骸を除去
+
+1. 目的:
+    - current first-case concrete chain がすでに product-free で閉じているなら、
+       class-group から contradiction / branch witness へ戻す stable bridge 側にも
+       vestigial な `hLinNe` / `hProduct` 仮定が残っていないかを整理する
+    - あわせて、chosen factor 非零性 `hLinNe` が本当に extra input なのか、
+       それとも pack から自動供給できるのかを theorem 名つきで固定する
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に
+       `chosenCyclotomicLinearFactorNonzero_of_counterexamplePack` を追加した
+    - この theorem では
+       - `chosenCyclotomicLinearFactor_norm_eq_gn_direct`
+       - `GN_ne_zero_nat_of_two_le`
+       を接続し、chosen factor の norm が nonzero な `GN` に等しいことから
+       chosen factor 自体の非零性を direct に回収した
+    - そのうえで以下の first-case stable bridge 群の signature を簡約した:
+       - `false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree`
+       - `qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree`
+       - `qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_nonLiftable`
+    - 具体的には、base theorem 群から不要になった
+       `ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers ...` と
+       `CyclotomicLinearFactorProductEqInRingOfIntegers ...` を外し、
+       productEq-only variant は compatibility wrapper として残した
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` に
+       `chosenCyclotomicLinearFactorNonzero_of_counterexamplePack` の axiom 監視を追加した
+3. 結論:
+    - first-case stable bridge 群は、もう `hLinNe` も `hProduct` も外部入力として要求しない形へ整理できた ✅
+    - とくに `hLinNe` は pack から direct norm route で自動供給できると確定したため、
+       first-case replacement point の interface はさらに薄くなった ✅
+    - これで current blocker は、first-case bridge の補助仮定ではなく、
+       依然として `cyclotomicPrincipalization_of_classGroupPTorsionFree` 本体を
+       global target の形で切り裂けていない点へ、より明確に集中した ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `get_errors` 上でも、今回追加分の新規 error は解消
+    - 残る `declaration uses sorry` は既存の
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` と研究用ファイル側のみ
+5. 失敗事例:
+    - `GN_ne_zero_nat_of_two_le` の前提は `gap ≠ 0` / `y ≠ 0` ではなく
+       `0 < gap` / `0 < y` なので、最初の実装では `PrimeGe5CounterexamplePack` からの
+       positivity 供給が不足して型エラーになった
+    - `simp` でも `chosenCyclotomicLinearFactorInRingOfIntegers` だけで十分な箇所に
+       abbrev 名を混ぜると unused simp arg warning が出たため、最小 rewrite に整えた
+6. 次の課題:
+    - 次は `cyclotomicPrincipalization_of_classGroupPTorsionFree` の first-case / non-first-case split を、
+       いま薄くなった stable bridge 群を使って再設計する
+    - その際の実 blocker は、global pack から直接使える case predicate と
+       non-first-case 側へ責任を押し込む theorem 境界の設計じゃ
+
+### 日時: 2026/04/08 06:27:55 JST — principalization の case-split 境界を theorem として固定
+
+1. 目的:
+    - `cyclotomicPrincipalization_of_classGroupPTorsionFree` の first-case / non-first-case split を、
+       current stable bridge 群を使って theorem 境界として固定する
+    - そのうえで、first-case は canonical な `CyclotomicField p ℚ` instantiation で埋まり、
+       non-first-case だけが open kernel だと route level でも読めるようにする
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加した:
+       - `CyclotomicPrincipalizationFirstCaseTarget`
+       - `CyclotomicPrincipalizationNonFirstCaseTarget`
+       - `cyclotomicPrincipalization_of_caseSplit`
+       - `cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_nonLiftable`
+       - `cyclotomicPrincipalization_of_classGroupPTorsionFree_of_caseSplit`
+    - first-case canonical theorem では
+       `K := CyclotomicField p ℚ`、`ζ := IsCyclotomicExtension.zeta p ℚ K`
+       を取り、既存の
+       `qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_nonLiftable`
+       へ直接流した
+    - これにより nat-level target 上でも、
+       `¬ p ∣ (z - y)` は current stable bridge で concrete に処理できると固定できた
+    - さらに `RegularPrimeRoute.lean` に
+       `FLTPrimeGe5Target_of_kummerRoute_of_caseSplit`
+       を追加し、public route としても
+       「first-case は closed / non-first-case だけ open」を theorem 名で表せるようにした
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` に上記 theorem 群の axiom 監視を追加した
+3. 結論:
+    - `cyclotomicPrincipalization_of_classGroupPTorsionFree` の再設計に必要だった
+       case predicate と theorem 境界は、no-sorry theorem 群として mainline に固定できた ✅
+    - first-case はもう legacy one-shot theorem の内部事情ではなく、
+       `CyclotomicField p ℚ` を通じて nat-level target へ戻せる concrete branch として分離できた ✅
+    - その結果、残る open は truly `CyclotomicPrincipalizationNonFirstCaseTarget` に押し込められ、
+       old one-shot の責務がかなり明瞭になった ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - build warning の新規 `sorry` は増えず、残る `declaration uses sorry` は既存の
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree` と研究用ファイル側のみ
+    - editor diagnostics では一時的に new theorem 名の `Unknown constant` が残ったが、
+       build 自体は成功しており stale diagnostics と判断できた
+5. 失敗事例:
+    - 初回実装では、`qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_nonLiftable`
+       の universe parameter と `CyclotomicField p ℚ` の universe が噛み合わず失敗した
+    - first-case canonical theorem 側の class-group 仮定を `.{0}` へ specialize し、
+       concrete type `CyclotomicField p ℚ` をそのまま使う形へ直して安定化した
+6. 次の課題:
+    - 次は legacy theorem `cyclotomicPrincipalization_of_classGroupPTorsionFree` 自体を、
+       いま作った split theorem へ実際に寄せ、`sorry` の責任範囲を non-first-case に局所化する
+    - そのためには `CyclotomicPrincipalizationNonFirstCaseTarget` をどの粒度でさらに割るか、
+       あるいは non-first-case を受ける route theorem 群をどこまで public mainline に昇格させるかを詰める
+
+### 日時: 2026/04/08 12:12:31 JST — legacy principalization の direct `sorry` を non-first-case kernel へ移した
+
+1. 目的:
+    - `cyclotomicPrincipalization_of_classGroupPTorsionFree` 自体を、直前に整えた split theorem 群へ実際に寄せ、
+       theorem 本体の direct `sorry` を除去する
+    - あわせて、その未解決責務を `CyclotomicPrincipalizationNonFirstCaseTarget` 専用 theorem 1 本へ局所化し、
+       historical bridge / route 側でもその形が読めるようにする
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に
+       `cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree`
+       を追加し、non-first-case 専用 kernel として `sorry` を隔離した
+    - 既定の `triominoCosmicNoPowOnGN_default` を使う
+       `cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree`
+       を追加し、first-case 側は `hNoLift` なしでも concrete に戻るようにした
+    - そのうえで legacy theorem
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree`
+       を `cyclotomicPrincipalization_of_caseSplit` の thin composition へ書き換えた
+    - split と legacy theorem の class-group 入力は `.{0}` に揃え、
+       historical wrapper 側もそれに合わせて
+       `ClassGroupBridge.lean` / `RegularPrimeRoute.lean` の legacy route を同期した
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の axiom 監視に
+       `cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree`
+       と、legacy theorem が「non-first-case target 経由で `sorry` を含む」ことを示す行を追加した
+3. 結論:
+    - `cyclotomicPrincipalization_of_classGroupPTorsionFree` 本体は、もはや direct `sorry` を持たぬ thin wrapper になった ✅
+    - direct `sorry` の所在は
+       `cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree`
+       1 本へ局所化された ✅
+    - したがって old one-shot theorem の未解決責務は theorem 名つきで non-first-case 側だけに可視化され、
+       first-case は design 上も implementation 上も閉じたと見てよい ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.ClassGroupBridge DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - editor diagnostics 上でも、この refactor で残る direct `sorry` は
+       `cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree` のみ
+5. 失敗事例:
+    - class-group target の universe を generic のまま `CyclotomicField p ℚ` へ接続しようとすると、
+       cumulative universe 推論が unstable で build を崩した
+    - このため split / legacy 系の class-group input は `.{0}` に固定し、
+       historical wrapper 側も同じ concrete universe へ揃える方針に切り替えた
+    - また途中で `CyclotomicLocalFactorizationContext` の field を comment で潰してしまい、
+       file 先頭から大規模に parser が壊れたが、`p / zeta / hzeta_pow` と namespace を戻して復旧した
+6. 次の課題:
+    - 次は `CyclotomicPrincipalizationNonFirstCaseTarget` 自体をさらに薄く分割し、
+       `p ∣ (z - y)` branch の中でもどこが genuinely open kernel なのかを theorem 境界で刻む
+    - あるいは public mainline としては、
+       `FLTPrimeGe5Target_of_kummerRoute_of_caseSplit`
+       を押し出しつつ、legacy route を historical wrapper として扱う整理を進める
+
+### 日時: 2026/04/08 13:26:58 JST — non-first-case kernel を prepare / descent の 2 段へ分割
+
+1. 目的:
+    - review-046 の方針に従い、`CyclotomicPrincipalizationNonFirstCaseTarget` を一塊の open kernel として抱えるのでなく、
+       theorem 境界を `prepare` と `descent` の 2 段へ分ける
+    - これにより `cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree` の direct `sorry` を、
+       さらに下流の non-first-case descent kernel へ押し下げる
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加した:
+       - `CyclotomicPrincipalizationNonFirstCaseDatum`
+       - `CyclotomicPrincipalizationNonFirstCasePrepareTarget`
+       - `CyclotomicPrincipalizationNonFirstCaseDescentTarget`
+       - `cyclotomicPrincipalizationNonFirstCase_of_kernelSplit`
+       - `cyclotomicPrincipalizationNonFirstCasePrepare`
+       - `cyclotomicPrincipalizationNonFirstCaseDescent_of_classGroupPTorsionFree`
+       - `cyclotomicPrincipalization_of_classGroupPTorsionFree_of_kernelSplit`
+    - `cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree` は、
+       canonical prepare definition と descent kernel を合成する thin wrapper へ書き換えた
+    - `RegularPrimeRoute.lean` には public mainline 側の finer split として
+       `FLTPrimeGe5Target_of_kummerRoute_of_kernelSplit` を追加した
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の axiom 監視も、
+       prepare は clean、descent kernel だけが `uses sorry` と読めるよう更新した
+3. 結論:
+    - non-first-case 側の open は、もはや target 1 本ではなく
+       `prepare` と `descent` の 2 段へ分解して監査できる形になった ✅
+    - canonical prepare は no-sorry で閉じ、direct `sorry` の所在は
+       `cyclotomicPrincipalizationNonFirstCaseDescent_of_classGroupPTorsionFree` 1 本へさらに局所化された ✅
+    - public route 側でも `FLTPrimeGe5Target_of_kummerRoute_of_kernelSplit` により、
+       same split architecture を theorem 名つきで読めるようになった ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `lake build DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 実行でも新 split 名が downstream から解決されることを確認
+    - build warning の新規 `sorry` は `cyclotomicPrincipalizationNonFirstCaseDescent_of_classGroupPTorsionFree` のみ
+5. 失敗事例:
+    - 初回実装では datum を入力変数から独立な record にしたため、
+       `hDesc data` の返り値を `∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p` へ戻せず型が合わなかった
+    - そのため datum を `(p x y z q)` で parameterize し、prepare target は Prop ではなく関数型 kernel として持つ設計へ修正した
+    - editor diagnostics では build success 後もしばらく `Unknown constant` が残ったが、今回も stale diagnostics と判断できた
+6. 次の課題:
+    - 次は `CyclotomicPrincipalizationNonFirstCaseDescentTarget` の中身をさらに valuation / reduction / witness の 2 段または 3 段へ刻めるかを調べる
+    - あわせて public mainline の説明では、`FLTPrimeGe5Target_of_kummerRoute_of_caseSplit` に加え
+       `FLTPrimeGe5Target_of_kummerRoute_of_kernelSplit` を non-first-case 監査線として前へ出す
+
+### 日時: 2026/04/08 13:44:24 JST — non-first-case descent kernel を existence 語彙へさらに refined した
+
+1. 目的:
+    - review-046 の次手として、`CyclotomicPrincipalizationNonFirstCaseDescentTarget` の open を
+       そのまま `g' * GN = (x/q)^p` で抱えるのでなく、まず整数 descent existence
+       `z'^p = (x/q)^p + y^p` へ押し下げる
+    - これにより direct `sorry` の所在を、GN witness kernel ではなく existence kernel へさらに局所化する
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加した:
+       - `CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget`
+       - `cyclotomicPrincipalizationNonFirstCaseDescent_of_existence`
+       - `cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree`
+       - `cyclotomicPrincipalization_of_classGroupPTorsionFree_of_existenceKernelSplit`
+    - `cyclotomicPrincipalizationNonFirstCaseDescent_of_classGroupPTorsionFree` は、
+       直接 `sorry` を持つのでなく
+       `cyclotomicPrincipalizationNonFirstCaseDescent_of_existence`
+       を通して existence kernel から GN witness を回収する thin theorem に書き換えた
+    - `RegularPrimeRoute.lean` には public mainline 側の refined split として
+       `FLTPrimeGe5Target_of_kummerRoute_of_existenceKernelSplit` を追加した
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の axiom 監視も、
+       direct `sorry` の所在が existence kernel であると読める形へ更新した
+3. 結論:
+    - non-first-case の open は、`prepare -> existence -> GN witness` の 3 段として監査できる形になった ✅
+    - `g' * GN = (x/q)^p` への変換自体は generic theorem
+       `descentExistence_exists_iff_gnReduction_exists` により no-sorry で閉じると固定できた ✅
+    - direct `sorry` の所在は
+       `cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree`
+       1 本へさらに押し下げられた ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `lake build DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 実行でも refined split 追加後に downstream build が継続成功
+    - build warning の新規 `sorry` は `cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree` のみ
+5. 失敗事例:
+    - editor diagnostics では今回も `Unknown constant` がしばらく残ったが、build 側では new theorem 群の型検査が通っており stale diagnostics と判断した
+    - theorem 順序を `descent_of_classGroupPTorsionFree` 先置きのままにすると、
+       まだ定義していない existence kernel を参照して elaboration が不安定になるため、
+       existence kernel -> descent bridge の順へ並べ直した
+6. 次の課題:
+    - 次は existence kernel 自体を valuation / reduction のどちらへさらに押し込めるか、
+       既存の peel / packet-from-error / q-adic existence 語彙との接続点を棚卸しする
+    - public mainline と監視上は、`FLTPrimeGe5Target_of_kummerRoute_of_existenceKernelSplit` を
+       non-first-case の最新監査線として前面に出す
+
+### 日時: 2026/04/08 13:54:27 JST — non-first-case existence kernel を valuation / reduction の 2 段へ分割
+
+1. 目的:
+    - 直前に導入した `CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget` をさらに裂き、
+       `p ∣ (z-y)` branch の bookkeeping と genuinely open な reduction を theorem 境界で分離する
+    - これにより direct `sorry` の所在を existence kernel ではなく reduction kernel へさらに押し下げる
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加した:
+       - `CyclotomicPrincipalizationNonFirstCaseValuationDatum`
+       - `CyclotomicPrincipalizationNonFirstCaseValuationTarget`
+       - `CyclotomicPrincipalizationNonFirstCaseReductionTarget`
+       - `cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_valuationReductionSplit`
+       - `cyclotomicPrincipalizationNonFirstCaseValuation`
+       - `cyclotomicPrincipalizationNonFirstCaseReduction_of_classGroupPTorsionFree`
+       - `cyclotomicPrincipalization_of_classGroupPTorsionFree_of_valuationReductionKernelSplit`
+    - `cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree` は、
+       canonical valuation packaging と reduction kernel を合成する thin wrapper へ書き換えた
+    - `RegularPrimeRoute.lean` には public mainline 側の最細 split として
+       `FLTPrimeGe5Target_of_kummerRoute_of_valuationReductionKernelSplit` を追加した
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の axiom 監視も、
+       valuation は clean、direct `sorry` は reduction kernel のみと読める形へ更新した
+3. 結論:
+    - non-first-case の open は、`prepare -> valuation -> reduction -> existence -> GN witness` の 5 段として監査できる形になった ✅
+    - valuation 段は canonical packaging で no-sorry に固定でき、direct `sorry` の所在は
+       `cyclotomicPrincipalizationNonFirstCaseReduction_of_classGroupPTorsionFree`
+       1 本へさらに押し下げられた ✅
+    - public route 側でも `FLTPrimeGe5Target_of_kummerRoute_of_valuationReductionKernelSplit` により、
+       same refined architecture を theorem 名つきで読めるようになった ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `lake build DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 実行でも split 追加後に downstream build が継続成功
+    - build warning の新規 `sorry` は `cyclotomicPrincipalizationNonFirstCaseReduction_of_classGroupPTorsionFree` のみ
+5. 失敗事例:
+    - editor diagnostics では今回も新 theorem 名が `Unknown constant` として残ったが、build 側では route/test downstream まで型検査が通っており stale diagnostics と判断した
+    - 先に reduction kernel ではなく existence kernel を direct placeholder にしたままだと、
+       valuation 段を theorem 名つきで監査できないため、wrapper / kernel の責務分離が曖昧になった
+6. 次の課題:
+    - 次は reduction kernel を、既存の peel / packet-from-error / exceptional existence 語彙のどこへ接続できるかをさらに刻む
+    - とくに `p ∣ (z-y)` 側の数学内容を、valuation packaging の下流で
+       `reduction -> packet/error` の向きに押し込めるかを調べる
+
+### 日時: 2026/04/08 14:04:38 JST — non-first-case reduction kernel を error / packet の 2 段へ分割
+
+1. 目的:
+    - valuation / reduction split の次段として、non-first-case reduction を peel 側の語彙に合わせて
+       `error` と `packet` の 2 段へさらに刻む
+    - これにより direct `sorry` の所在を reduction kernel ではなく packet kernel へ押し下げる
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加した:
+       - `CyclotomicPrincipalizationNonFirstCaseErrorDatum`
+       - `CyclotomicPrincipalizationNonFirstCaseErrorTarget`
+       - `CyclotomicPrincipalizationNonFirstCasePacketTarget`
+       - `cyclotomicPrincipalizationNonFirstCaseReduction_of_errorPacketSplit`
+       - `cyclotomicPrincipalizationNonFirstCaseError`
+       - `cyclotomicPrincipalizationNonFirstCasePacket_of_classGroupPTorsionFree`
+       - `cyclotomicPrincipalization_of_classGroupPTorsionFree_of_errorPacketKernelSplit`
+    - `cyclotomicPrincipalizationNonFirstCaseReduction_of_classGroupPTorsionFree` は、
+       canonical error packaging と packet kernel を合成する thin wrapper へ書き換えた
+    - `RegularPrimeRoute.lean` には public mainline 側の最細 split として
+       `FLTPrimeGe5Target_of_kummerRoute_of_errorPacketKernelSplit` を追加した
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の axiom 監視も、
+       error は clean、direct `sorry` は packet kernel のみと読める形へ更新した
+3. 結論:
+    - non-first-case の open は、`prepare -> valuation -> error -> packet -> reduction -> existence -> GN witness` の 7 段として監査できる形になった ✅
+    - error 段は canonical packaging で no-sorry に固定でき、direct `sorry` の所在は
+       `cyclotomicPrincipalizationNonFirstCasePacket_of_classGroupPTorsionFree`
+       1 本へさらに押し下げられた ✅
+    - public route 側でも `FLTPrimeGe5Target_of_kummerRoute_of_errorPacketKernelSplit` により、
+       peel 風の packet/error 語彙で non-first-case を監査できるようになった ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `lake build DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 実行でも split 追加後に downstream build が継続成功
+    - build warning の新規 `sorry` は `cyclotomicPrincipalizationNonFirstCasePacket_of_classGroupPTorsionFree` のみ
+5. 失敗事例:
+    - editor diagnostics では今回も route/test 側の新 theorem 名が `Unknown constant` として残ったが、build 側では downstream まで通っており stale diagnostics と判断した
+    - packet/error split を route 側だけ先に追加すると、monitoring の新 theorem 名が LSP 上で解決されず見通しが悪くなるため、principalization 側の theorem 境界追加と同時に更新する方が安定した
+6. 次の課題:
+    - 次は packet kernel を、既存の `PacketFromError` / `PeelPthRootCore` / `TailError` 語彙のどこへ接続できるかをさらに詰める
+    - そのうえで `RegularPrimeRoute.lean` の長い戦況コメントも、最新の packet/error split を主導線として同期する
+
+### 日時: 2026/04/08 14:11:41 JST — non-first-case packet kernel を TailError / PacketFromError 語彙へさらに refined した
+
+1. 目的:
+    - 直前の packet/error split を、既存 peel 側の naming に揃えて
+       `TailError` と `PacketFromError` の 2 段へさらに刻む
+    - これにより direct `sorry` の所在を generic packet kernel ではなく、peel 側と対応の取りやすい PacketFromError 名の theorem へ押し下げる
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加した:
+       - `CyclotomicPrincipalizationNonFirstCaseTailErrorDatum`
+       - `CyclotomicPrincipalizationNonFirstCaseTailErrorTarget`
+       - `CyclotomicPrincipalizationNonFirstCasePacketFromErrorTarget`
+       - `cyclotomicPrincipalizationNonFirstCasePacket_of_tailErrorPacketFromErrorSplit`
+       - `cyclotomicPrincipalizationNonFirstCaseTailError`
+       - `cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTorsionFree`
+       - `cyclotomicPrincipalization_of_classGroupPTorsionFree_of_tailErrorPacketFromErrorKernelSplit`
+    - `cyclotomicPrincipalizationNonFirstCasePacket_of_classGroupPTorsionFree` は、
+       canonical TailError packaging と PacketFromError kernel を合成する thin wrapper へ書き換えた
+    - `RegularPrimeRoute.lean` には public mainline 側の最細 split として
+       `FLTPrimeGe5Target_of_kummerRoute_of_tailErrorPacketFromErrorKernelSplit` を追加した
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の axiom 監視も、
+       TailError は clean、direct `sorry` は PacketFromError kernel のみと読める形へ更新した
+3. 結論:
+    - non-first-case の open は、`prepare -> valuation -> error -> tailError -> packetFromError -> packet -> reduction -> existence -> GN witness` の 9 段として監査できる形になった ✅
+    - direct `sorry` の所在は
+       `cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTorsionFree`
+       1 本へさらに押し下げられ、既存 peel 語彙との対応が読みやすくなった ✅
+    - public route 側でも `FLTPrimeGe5Target_of_kummerRoute_of_tailErrorPacketFromErrorKernelSplit` により、
+       non-first-case 側の最新 split を theorem 名つきで追えるようになった ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `lake build DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 実行でも split 追加後に downstream build が継続成功
+    - build warning の新規 `sorry` は `cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTorsionFree` のみ
+5. 失敗事例:
+    - editor diagnostics では今回も route/test 側の新 theorem 名が `Unknown constant` として残ったが、build 側では downstream まで通っており stale diagnostics と判断した
+    - TailError/PacketFromError 名を route/test 側へ先に追加すると stale diagnostics のノイズが増えるため、principalization 側の theorem 境界追加と同時に入れる方が安定した
+6. 次の課題:
+    - 次はこの PacketFromError 名の kernel を、既存の `PrimeGe5BranchAValuationPeelPacketFromErrorTarget` や `PrimeGe5BranchAPeelPthRootCoreTarget` とどの粒度で接続できるかをさらに詰める
+    - その後 `RegularPrimeRoute.lean` の長い戦況コメントも、今の最深 open が PacketFromError 名であることに合わせて同期する

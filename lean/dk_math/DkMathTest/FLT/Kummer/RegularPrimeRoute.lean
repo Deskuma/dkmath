@@ -299,6 +299,8 @@ no-sorry の theorem が意図せず sorry に汚染されていないことを�
 #print axioms DkMath.FLT.false_of_cyclotomicNormGNPower_concrete_firstCase_pack_thin -- OK: no sorry
 -- no-sorry (class-group -> first-case concrete contradiction wrapper)
 #print axioms DkMath.FLT.false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree -- OK: no sorry
+-- no-sorry (counterexample pack alone already supplies chosen-factor nonzero)
+#print axioms DkMath.FLT.chosenCyclotomicLinearFactorNonzero_of_counterexamplePack -- OK: no sorry
 -- no-sorry (productEq gives chosen-factor nonzero)
 #print axioms DkMath.FLT.chosenCyclotomicLinearFactorNonzero_of_productEq_of_counterexamplePack -- OK: no sorry
 -- no-sorry (counterexample pack -> local tail-sum factorization for chosen factor)
@@ -321,6 +323,66 @@ no-sorry の theorem が意図せず sorry に汚染されていないことを�
 #print axioms DkMath.FLT.qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_of_productEq -- OK: no sorry
 -- no-sorry (class-group + nonliftable GN -> first-case gap-divisible witness)
 #print axioms DkMath.FLT.qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_nonLiftable -- OK: no sorry
+-- no-sorry (full principalization = first-case + non-first-case split)
+#print axioms DkMath.FLT.cyclotomicPrincipalization_of_caseSplit -- OK: no sorry
+-- no-sorry (canonical CyclotomicField p ℚ instantiation gives the first-case branch)
+#print axioms DkMath.FLT.cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_nonLiftable -- OK: no sorry
+-- no-sorry (non-first-case input packaging into the canonical datum)
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePrepare -- OK: no sorry
+-- no-sorry (non-first-case valuation packaging into the canonical valuation datum)
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCaseValuation -- OK: no sorry
+-- no-sorry (non-first-case error packaging into the canonical error datum)
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCaseError -- OK: no sorry
+-- no-sorry (non-first-case TailError packaging into the canonical tail-error datum)
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCaseTailError -- OK: no sorry
+-- no-sorry if valuation/reduction kernels are clean
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_valuationReductionSplit -- OK: no sorry if valuation/reduction kernels are clean
+-- no-sorry if error/packet kernels are clean
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCaseReduction_of_errorPacketSplit -- OK: no sorry if error/packet kernels are clean
+-- no-sorry if tailError/packetFromError kernels are clean
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePacket_of_tailErrorPacketFromErrorSplit -- OK: no sorry if tailError/packetFromError kernels are clean
+-- no-sorry if the refined existence kernel is clean
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCaseDescent_of_existence -- OK: no sorry if existence kernel is clean
+-- no-sorry if prepare/descent kernels are clean
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCase_of_kernelSplit -- OK: no sorry if kernels are clean
+-- `sorry` (isolated non-first-case PacketFromError kernel)
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTorsionFree -- uses sorry
+-- `sorry` only via the isolated non-first-case PacketFromError kernel
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePacket_of_classGroupPTorsionFree -- uses sorry via non-first-case packetFromError target
+-- `sorry` only via the isolated non-first-case PacketFromError kernel
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCaseReduction_of_classGroupPTorsionFree -- uses sorry via non-first-case packetFromError target
+-- `sorry` only via the isolated non-first-case PacketFromError kernel
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree -- uses sorry via non-first-case packetFromError target
+-- `sorry` only via the isolated non-first-case existence kernel
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCaseDescent_of_classGroupPTorsionFree -- uses sorry via non-first-case existence target
+-- `sorry` only via the isolated non-first-case existence kernel
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree -- uses sorry via non-first-case existence target
+-- no-sorry if the non-first-case input is clean (class-group one-shot redesigned via split)
+#print axioms DkMath.FLT.cyclotomicPrincipalization_of_classGroupPTorsionFree_of_caseSplit -- OK: no sorry if non-first-case target is clean
+-- no-sorry if the non-first-case prepare/descent kernels are clean
+#print axioms DkMath.FLT.cyclotomicPrincipalization_of_classGroupPTorsionFree_of_kernelSplit -- OK: no sorry if non-first-case kernels are clean
+-- no-sorry if the non-first-case prepare/existence kernels are clean
+#print axioms DkMath.FLT.cyclotomicPrincipalization_of_classGroupPTorsionFree_of_existenceKernelSplit -- OK: no sorry if non-first-case refined kernels are clean
+-- no-sorry if the non-first-case prepare/valuation/reduction kernels are clean
+#print axioms DkMath.FLT.cyclotomicPrincipalization_of_classGroupPTorsionFree_of_valuationReductionKernelSplit -- OK: no sorry if non-first-case valuation/reduction kernels are clean
+-- no-sorry if the non-first-case prepare/valuation/error/packet kernels are clean
+#print axioms DkMath.FLT.cyclotomicPrincipalization_of_classGroupPTorsionFree_of_errorPacketKernelSplit -- OK: no sorry if non-first-case error/packet kernels are clean
+-- no-sorry if the non-first-case prepare/valuation/error/tailError/packetFromError kernels are clean
+#print axioms DkMath.FLT.cyclotomicPrincipalization_of_classGroupPTorsionFree_of_tailErrorPacketFromErrorKernelSplit -- OK: no sorry if non-first-case tailError/packetFromError kernels are clean
 
--- `sorry` (chain through cyclotomicPrincipalization)
-#print axioms DkMath.FLT.FLTPrimeGe5Target_of_kummerRoute -- uses sorry
+-- `sorry` only via the isolated non-first-case existence kernel
+#print axioms DkMath.FLT.cyclotomicPrincipalization_of_classGroupPTorsionFree -- uses sorry via non-first-case existence target
+-- `sorry` only via the isolated non-first-case existence kernel
+#print axioms DkMath.FLT.FLTPrimeGe5Target_of_kummerRoute -- uses sorry via non-first-case existence target
+-- no-sorry if the non-first-case input is clean (public route through the split theorem)
+#print axioms DkMath.FLT.FLTPrimeGe5Target_of_kummerRoute_of_caseSplit -- OK: no sorry if non-first-case target is clean
+-- no-sorry if the non-first-case prepare/descent kernels are clean (public route through the finer split theorem)
+#print axioms DkMath.FLT.FLTPrimeGe5Target_of_kummerRoute_of_kernelSplit -- OK: no sorry if non-first-case kernels are clean
+-- no-sorry if the non-first-case prepare/existence kernels are clean (public route through the refined split theorem)
+#print axioms DkMath.FLT.FLTPrimeGe5Target_of_kummerRoute_of_existenceKernelSplit -- OK: no sorry if non-first-case refined kernels are clean
+-- no-sorry if the non-first-case prepare/valuation/reduction kernels are clean (public route through the most refined split theorem)
+#print axioms DkMath.FLT.FLTPrimeGe5Target_of_kummerRoute_of_valuationReductionKernelSplit -- OK: no sorry if non-first-case valuation/reduction kernels are clean
+-- no-sorry if the non-first-case prepare/valuation/error/packet kernels are clean (public route through the packet/error split theorem)
+#print axioms DkMath.FLT.FLTPrimeGe5Target_of_kummerRoute_of_errorPacketKernelSplit -- OK: no sorry if non-first-case error/packet kernels are clean
+-- no-sorry if the non-first-case prepare/valuation/error/tailError/packetFromError kernels are clean (public route through the peel-like split theorem)
+#print axioms DkMath.FLT.FLTPrimeGe5Target_of_kummerRoute_of_tailErrorPacketFromErrorKernelSplit -- OK: no sorry if non-first-case tailError/packetFromError kernels are clean
