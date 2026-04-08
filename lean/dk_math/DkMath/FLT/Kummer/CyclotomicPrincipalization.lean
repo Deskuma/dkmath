@@ -4117,6 +4117,56 @@ abbrev CyclotomicPrincipalizationNonFirstCaseTarget : Prop :=
       ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p
 
 /--
+non-first-case (`p ∣ z - y`) 専用の中間データ。
+
+まずは theorem 境界を切るための最小 packaging だけを保持し、
+genuinely new な数学データは後続の field 追加で受ける。
+-/
+structure CyclotomicPrincipalizationNonFirstCaseDatum
+    (p x y z q : ℕ) where
+  hpack : PrimeGe5CounterexamplePack p x y z
+  hq : Nat.Prime q
+  hqx : q ∣ x
+  hqne : q ≠ p
+  hqgap : q ∣ (z - y)
+  hpgap : p ∣ (z - y)
+
+/--
+non-first-case 入力を中間データへ詰め直す theorem-level packaging boundary。
+
+この段は未解決数学を増やさず、open kernel を下流の descent 側へ寄せる役割だけを持つ。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCasePrepareTarget :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ x →
+      q ≠ p →
+      q ∣ (z - y) →
+      p ∣ (z - y) →
+      CyclotomicPrincipalizationNonFirstCaseDatum p x y z q
+
+/--
+中間データから descent witness を返す non-first-case kernel。
+
+現在 genuinely open な責務は、最終的にこの theorem 境界へ局所化されるのが望ましい。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCaseDescentTarget : Prop :=
+  ∀ {p x y z q : ℕ},
+    CyclotomicPrincipalizationNonFirstCaseDatum p x y z q →
+      ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p
+
+/--
+prepare + descent の 2 段から non-first-case target を再構成する。
+-/
+theorem cyclotomicPrincipalizationNonFirstCase_of_kernelSplit
+    (hPrep : CyclotomicPrincipalizationNonFirstCasePrepareTarget)
+    (hDesc : CyclotomicPrincipalizationNonFirstCaseDescentTarget) :
+    CyclotomicPrincipalizationNonFirstCaseTarget := by
+  intro p x y z hpack q hq hqx hqne hqgap hpgap
+  let data := hPrep hpack hq hqx hqne hqgap hpgap
+  exact hDesc data
+
+/--
 first-case / non-first-case split を合成して full principalization target を得る。
 
 これにより、legacy one-shot theorem の責務は
@@ -4547,15 +4597,43 @@ theorem cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree
     hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase
 
 /--
-non-first-case (`p ∣ z - y`) 側だけを隔離した legacy kernel。
+non-first-case (`p ∣ z - y`) 入力を datum へ詰める canonical prepare definition。
 
-`cyclotomicPrincipalization_of_classGroupPTorsionFree` の direct `sorry` をここへ押し込める。
+この段は theorem-level packaging に徹し、未解決責務を descent 側へ押し下げる。
+-/
+def cyclotomicPrincipalizationNonFirstCasePrepare :
+    CyclotomicPrincipalizationNonFirstCasePrepareTarget := by
+  intro p x y z hpack q hq hqx hqne hqgap hpgap
+  exact
+    { hpack := hpack
+      hq := hq
+      hqx := hqx
+      hqne := hqne
+      hqgap := hqgap
+      hpgap := hpgap }
+
+/--
+non-first-case (`p ∣ z - y`) 側だけを隔離した descent kernel。
+
+`cyclotomicPrincipalization_of_classGroupPTorsionFree` 系で残る direct `sorry` は
+この theorem 1 本へ局所化される。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseDescent_of_classGroupPTorsionFree
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCaseDescentTarget := by
+  clear hCl
+  intro p x y z q data
+  sorry
+
+/--
+prepare + descent split を通して non-first-case target を再構成する wrapper。
 -/
 theorem cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree
   (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
-    CyclotomicPrincipalizationNonFirstCaseTarget := by
-  clear hCl
-  sorry
+    CyclotomicPrincipalizationNonFirstCaseTarget :=
+  cyclotomicPrincipalizationNonFirstCase_of_kernelSplit
+    cyclotomicPrincipalizationNonFirstCasePrepare
+    (cyclotomicPrincipalizationNonFirstCaseDescent_of_classGroupPTorsionFree hCl)
 
 /--
 `hNoLift` を使う first-case canonical bridge の wrapper。
@@ -4583,6 +4661,21 @@ theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_of_caseSplit
   cyclotomicPrincipalization_of_caseSplit
     (cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree hCl)
     hNonFirst
+
+/--
+class-group principalization を non-first-case kernel split で再構成する thin theorem。
+
+first-case は canonical bridge で concrete に埋まっているので、
+non-first-case の open は prepare / descent の 2 段へ分解して監査できる。
+-/
+theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_of_kernelSplit
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hPrep : CyclotomicPrincipalizationNonFirstCasePrepareTarget)
+    (hDesc : CyclotomicPrincipalizationNonFirstCaseDescentTarget) :
+    CyclotomicPrincipalizationTarget :=
+  cyclotomicPrincipalization_of_caseSplit
+    (cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree hCl)
+    (cyclotomicPrincipalizationNonFirstCase_of_kernelSplit hPrep hDesc)
 
 /--
 Class group p-torsion free → Principalization（abstract bridge）。

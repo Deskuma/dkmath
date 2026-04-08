@@ -1163,3 +1163,46 @@ Archive
     - あるいは public mainline としては、
        `FLTPrimeGe5Target_of_kummerRoute_of_caseSplit`
        を押し出しつつ、legacy route を historical wrapper として扱う整理を進める
+
+### 日時: 2026/04/08 13:26:58 JST — non-first-case kernel を prepare / descent の 2 段へ分割
+
+1. 目的:
+    - review-046 の方針に従い、`CyclotomicPrincipalizationNonFirstCaseTarget` を一塊の open kernel として抱えるのでなく、
+       theorem 境界を `prepare` と `descent` の 2 段へ分ける
+    - これにより `cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree` の direct `sorry` を、
+       さらに下流の non-first-case descent kernel へ押し下げる
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加した:
+       - `CyclotomicPrincipalizationNonFirstCaseDatum`
+       - `CyclotomicPrincipalizationNonFirstCasePrepareTarget`
+       - `CyclotomicPrincipalizationNonFirstCaseDescentTarget`
+       - `cyclotomicPrincipalizationNonFirstCase_of_kernelSplit`
+       - `cyclotomicPrincipalizationNonFirstCasePrepare`
+       - `cyclotomicPrincipalizationNonFirstCaseDescent_of_classGroupPTorsionFree`
+       - `cyclotomicPrincipalization_of_classGroupPTorsionFree_of_kernelSplit`
+    - `cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree` は、
+       canonical prepare definition と descent kernel を合成する thin wrapper へ書き換えた
+    - `RegularPrimeRoute.lean` には public mainline 側の finer split として
+       `FLTPrimeGe5Target_of_kummerRoute_of_kernelSplit` を追加した
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の axiom 監視も、
+       prepare は clean、descent kernel だけが `uses sorry` と読めるよう更新した
+3. 結論:
+    - non-first-case 側の open は、もはや target 1 本ではなく
+       `prepare` と `descent` の 2 段へ分解して監査できる形になった ✅
+    - canonical prepare は no-sorry で閉じ、direct `sorry` の所在は
+       `cyclotomicPrincipalizationNonFirstCaseDescent_of_classGroupPTorsionFree` 1 本へさらに局所化された ✅
+    - public route 側でも `FLTPrimeGe5Target_of_kummerRoute_of_kernelSplit` により、
+       same split architecture を theorem 名つきで読めるようになった ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `lake build DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 実行でも新 split 名が downstream から解決されることを確認
+    - build warning の新規 `sorry` は `cyclotomicPrincipalizationNonFirstCaseDescent_of_classGroupPTorsionFree` のみ
+5. 失敗事例:
+    - 初回実装では datum を入力変数から独立な record にしたため、
+       `hDesc data` の返り値を `∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p` へ戻せず型が合わなかった
+    - そのため datum を `(p x y z q)` で parameterize し、prepare target は Prop ではなく関数型 kernel として持つ設計へ修正した
+    - editor diagnostics では build success 後もしばらく `Unknown constant` が残ったが、今回も stale diagnostics と判断できた
+6. 次の課題:
+    - 次は `CyclotomicPrincipalizationNonFirstCaseDescentTarget` の中身をさらに valuation / reduction / witness の 2 段または 3 段へ刻めるかを調べる
+    - あわせて public mainline の説明では、`FLTPrimeGe5Target_of_kummerRoute_of_caseSplit` に加え
+       `FLTPrimeGe5Target_of_kummerRoute_of_kernelSplit` を non-first-case 監査線として前へ出す

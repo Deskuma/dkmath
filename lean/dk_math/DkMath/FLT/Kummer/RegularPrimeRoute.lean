@@ -473,6 +473,27 @@ theorem FLTPrimeGe5Target_of_kummerRoute_of_caseSplit
     hPFE hNoLift
 
 /--
+Split public route: first-case は canonical bridge を使い、
+non-first-case は prepare / descent kernel split で受ける版。
+
+これにより public mainline でも、未解決責務を theorem 境界 2 本で監査できる。
+-/
+theorem FLTPrimeGe5Target_of_kummerRoute_of_kernelSplit
+    (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+    (hReg : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hPrep : CyclotomicPrincipalizationNonFirstCasePrepareTarget)
+    (hDesc : CyclotomicPrincipalizationNonFirstCaseDescentTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_kummerThreeWaySplit hPeq hReg
+    (qAdicGapReductionGapDivisible_of_cyclotomicPrincipalization
+      (cyclotomicPrincipalization_of_classGroupPTorsionFree_of_kernelSplit
+        hCl hPrep hDesc))
+    hPFE hNoLift
+
+/--
 Legacy one-shot Kummer route: ClassGroup 仮定から FLT へ。
 
 open kernels:
