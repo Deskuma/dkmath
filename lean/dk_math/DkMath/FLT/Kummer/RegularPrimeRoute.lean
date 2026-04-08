@@ -560,6 +560,30 @@ theorem FLTPrimeGe5Target_of_kummerRoute_of_errorPacketKernelSplit
     hPFE hNoLift
 
 /--
+Split public route: first-case は canonical bridge を使い、
+non-first-case は prepare / valuation / error / tailError / packetFromError split で受ける版。
+
+これにより public mainline でも、残る direct open を packetFromError kernel へさらに押し下げて監査できる。
+-/
+theorem FLTPrimeGe5Target_of_kummerRoute_of_tailErrorPacketFromErrorKernelSplit
+    (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+    (hReg : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hPrep : CyclotomicPrincipalizationNonFirstCasePrepareTarget)
+    (hVal : CyclotomicPrincipalizationNonFirstCaseValuationTarget)
+    (hErr : CyclotomicPrincipalizationNonFirstCaseErrorTarget)
+    (hTail : CyclotomicPrincipalizationNonFirstCaseTailErrorTarget)
+    (hPFEKummer : CyclotomicPrincipalizationNonFirstCasePacketFromErrorTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_kummerThreeWaySplit hPeq hReg
+    (qAdicGapReductionGapDivisible_of_cyclotomicPrincipalization
+      (cyclotomicPrincipalization_of_classGroupPTorsionFree_of_tailErrorPacketFromErrorKernelSplit
+        hCl hPrep hVal hErr hTail hPFEKummer))
+    hPFE hNoLift
+
+/--
 Legacy one-shot Kummer route: ClassGroup 仮定から FLT へ。
 
 open kernels:

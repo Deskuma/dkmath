@@ -1329,3 +1329,42 @@ Archive
 6. 次の課題:
     - 次は packet kernel を、既存の `PacketFromError` / `PeelPthRootCore` / `TailError` 語彙のどこへ接続できるかをさらに詰める
     - そのうえで `RegularPrimeRoute.lean` の長い戦況コメントも、最新の packet/error split を主導線として同期する
+
+### 日時: 2026/04/08 14:11:41 JST — non-first-case packet kernel を TailError / PacketFromError 語彙へさらに refined した
+
+1. 目的:
+    - 直前の packet/error split を、既存 peel 側の naming に揃えて
+       `TailError` と `PacketFromError` の 2 段へさらに刻む
+    - これにより direct `sorry` の所在を generic packet kernel ではなく、peel 側と対応の取りやすい PacketFromError 名の theorem へ押し下げる
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加した:
+       - `CyclotomicPrincipalizationNonFirstCaseTailErrorDatum`
+       - `CyclotomicPrincipalizationNonFirstCaseTailErrorTarget`
+       - `CyclotomicPrincipalizationNonFirstCasePacketFromErrorTarget`
+       - `cyclotomicPrincipalizationNonFirstCasePacket_of_tailErrorPacketFromErrorSplit`
+       - `cyclotomicPrincipalizationNonFirstCaseTailError`
+       - `cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTorsionFree`
+       - `cyclotomicPrincipalization_of_classGroupPTorsionFree_of_tailErrorPacketFromErrorKernelSplit`
+    - `cyclotomicPrincipalizationNonFirstCasePacket_of_classGroupPTorsionFree` は、
+       canonical TailError packaging と PacketFromError kernel を合成する thin wrapper へ書き換えた
+    - `RegularPrimeRoute.lean` には public mainline 側の最細 split として
+       `FLTPrimeGe5Target_of_kummerRoute_of_tailErrorPacketFromErrorKernelSplit` を追加した
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の axiom 監視も、
+       TailError は clean、direct `sorry` は PacketFromError kernel のみと読める形へ更新した
+3. 結論:
+    - non-first-case の open は、`prepare -> valuation -> error -> tailError -> packetFromError -> packet -> reduction -> existence -> GN witness` の 9 段として監査できる形になった ✅
+    - direct `sorry` の所在は
+       `cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTorsionFree`
+       1 本へさらに押し下げられ、既存 peel 語彙との対応が読みやすくなった ✅
+    - public route 側でも `FLTPrimeGe5Target_of_kummerRoute_of_tailErrorPacketFromErrorKernelSplit` により、
+       non-first-case 側の最新 split を theorem 名つきで追えるようになった ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `lake build DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 実行でも split 追加後に downstream build が継続成功
+    - build warning の新規 `sorry` は `cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTorsionFree` のみ
+5. 失敗事例:
+    - editor diagnostics では今回も route/test 側の新 theorem 名が `Unknown constant` として残ったが、build 側では downstream まで通っており stale diagnostics と判断した
+    - TailError/PacketFromError 名を route/test 側へ先に追加すると stale diagnostics のノイズが増えるため、principalization 側の theorem 境界追加と同時に入れる方が安定した
+6. 次の課題:
+    - 次はこの PacketFromError 名の kernel を、既存の `PrimeGe5BranchAValuationPeelPacketFromErrorTarget` や `PrimeGe5BranchAPeelPthRootCoreTarget` とどの粒度で接続できるかをさらに詰める
+    - その後 `RegularPrimeRoute.lean` の長い戦況コメントも、今の最深 open が PacketFromError 名であることに合わせて同期する

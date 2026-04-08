@@ -4228,6 +4228,45 @@ abbrev CyclotomicPrincipalizationNonFirstCasePacketTarget : Prop :=
       ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
 
 /--
+non-first-case packet kernel の TailError 段で保持する中間データ。
+
+名前は peel 側の `PrimeGe5BranchAValuationPeelTailErrorTarget` に合わせる。
+-/
+structure CyclotomicPrincipalizationNonFirstCaseTailErrorDatum
+    (p x y z q : ℕ) where
+  error : CyclotomicPrincipalizationNonFirstCaseErrorDatum p x y z q
+
+/--
+error datum から TailError datum を作る boundary。
+
+この段は bookkeeping に留め、packet-from-error の open は下流へ押し下げる。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCaseTailErrorTarget :=
+  ∀ {p x y z q : ℕ},
+    CyclotomicPrincipalizationNonFirstCaseErrorDatum p x y z q →
+      CyclotomicPrincipalizationNonFirstCaseTailErrorDatum p x y z q
+
+/--
+TailError datum から整数 descent existence を返す PacketFromError kernel。
+
+名前は peel 側の `PrimeGe5BranchAValuationPeelPacketFromErrorTarget` に合わせる。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCasePacketFromErrorTarget : Prop :=
+  ∀ {p x y z q : ℕ},
+    CyclotomicPrincipalizationNonFirstCaseTailErrorDatum p x y z q →
+      ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
+
+/--
+TailError + PacketFromError の 2 段から packet kernel を再構成する。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePacket_of_tailErrorPacketFromErrorSplit
+    (hTail : CyclotomicPrincipalizationNonFirstCaseTailErrorTarget)
+    (hPFE : CyclotomicPrincipalizationNonFirstCasePacketFromErrorTarget) :
+    CyclotomicPrincipalizationNonFirstCasePacketTarget := by
+  intro p x y z q data
+  exact hPFE (hTail data)
+
+/--
 error + packet の 2 段から reduction kernel を再構成する。
 -/
 theorem cyclotomicPrincipalizationNonFirstCaseReduction_of_errorPacketSplit
@@ -4736,17 +4775,40 @@ def cyclotomicPrincipalizationNonFirstCaseError :
   exact ⟨data⟩
 
 /--
-non-first-case (`p ∣ z - y`) 側だけを隔離した packet kernel。
+error datum を TailError datum へ持ち上げる canonical packaging。
+
+将来 error-term 抽出の詳細をここへ集約できるよう、peel 側と同名の段を置く。
+-/
+def cyclotomicPrincipalizationNonFirstCaseTailError :
+    CyclotomicPrincipalizationNonFirstCaseTailErrorTarget := by
+  intro p x y z q data
+  exact ⟨data⟩
+
+/--
+non-first-case (`p ∣ z - y`) 側だけを隔離した PacketFromError kernel。
 
 `cyclotomicPrincipalization_of_classGroupPTorsionFree` 系で残る direct `sorry` は
 この theorem 1 本へ局所化される。
 -/
-theorem cyclotomicPrincipalizationNonFirstCasePacket_of_classGroupPTorsionFree
+theorem cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTorsionFree
   (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
-    CyclotomicPrincipalizationNonFirstCasePacketTarget := by
+    CyclotomicPrincipalizationNonFirstCasePacketFromErrorTarget := by
   clear hCl
   intro p x y z q data
   sorry
+
+/--
+non-first-case (`p ∣ z - y`) 側だけを隔離した packet kernel。
+
+TailError packaging 自体は canonical で閉じるため、direct `sorry` は
+PacketFromError kernel を通して間接的にだけ現れる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePacket_of_classGroupPTorsionFree
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCasePacketTarget :=
+  cyclotomicPrincipalizationNonFirstCasePacket_of_tailErrorPacketFromErrorSplit
+    cyclotomicPrincipalizationNonFirstCaseTailError
+    (cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTorsionFree hCl)
 
 /--
 non-first-case (`p ∣ z - y`) 側だけを隔離した reduction kernel。
@@ -4882,6 +4944,23 @@ theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_of_errorPacketKerne
   cyclotomicPrincipalization_of_classGroupPTorsionFree_of_valuationReductionKernelSplit
     hCl hPrep hVal
     (cyclotomicPrincipalizationNonFirstCaseReduction_of_errorPacketSplit hErr hPkt)
+
+/--
+class-group principalization を non-first-case prepare / valuation / error / tailError / packetFromError split で再構成する thin theorem。
+
+peel 側と同じ vocabulary で non-first-case packet open を監査する最細版。
+-/
+theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_of_tailErrorPacketFromErrorKernelSplit
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hPrep : CyclotomicPrincipalizationNonFirstCasePrepareTarget)
+    (hVal : CyclotomicPrincipalizationNonFirstCaseValuationTarget)
+    (hErr : CyclotomicPrincipalizationNonFirstCaseErrorTarget)
+    (hTail : CyclotomicPrincipalizationNonFirstCaseTailErrorTarget)
+    (hPFE : CyclotomicPrincipalizationNonFirstCasePacketFromErrorTarget) :
+    CyclotomicPrincipalizationTarget :=
+  cyclotomicPrincipalization_of_classGroupPTorsionFree_of_errorPacketKernelSplit
+    hCl hPrep hVal hErr
+    (cyclotomicPrincipalizationNonFirstCasePacket_of_tailErrorPacketFromErrorSplit hTail hPFE)
 
 /--
 Class group p-torsion free → Principalization（abstract bridge）。
