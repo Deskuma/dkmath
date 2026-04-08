@@ -485,7 +485,7 @@ open kernels:
 theorem FLTPrimeGe5Target_of_kummerRoute
     (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
     (hReg : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
-    (hCl : CyclotomicClassGroupPTorsionFreeTarget)
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
     (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
     (hNoLift : TriominoCosmicNonLiftableGNBridge) :
     FLTPrimeGe5Target :=

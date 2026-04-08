@@ -1115,3 +1115,51 @@ Archive
        いま作った split theorem へ実際に寄せ、`sorry` の責任範囲を non-first-case に局所化する
     - そのためには `CyclotomicPrincipalizationNonFirstCaseTarget` をどの粒度でさらに割るか、
        あるいは non-first-case を受ける route theorem 群をどこまで public mainline に昇格させるかを詰める
+
+### 日時: 2026/04/08 12:12:31 JST — legacy principalization の direct `sorry` を non-first-case kernel へ移した
+
+1. 目的:
+    - `cyclotomicPrincipalization_of_classGroupPTorsionFree` 自体を、直前に整えた split theorem 群へ実際に寄せ、
+       theorem 本体の direct `sorry` を除去する
+    - あわせて、その未解決責務を `CyclotomicPrincipalizationNonFirstCaseTarget` 専用 theorem 1 本へ局所化し、
+       historical bridge / route 側でもその形が読めるようにする
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に
+       `cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree`
+       を追加し、non-first-case 専用 kernel として `sorry` を隔離した
+    - 既定の `triominoCosmicNoPowOnGN_default` を使う
+       `cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree`
+       を追加し、first-case 側は `hNoLift` なしでも concrete に戻るようにした
+    - そのうえで legacy theorem
+       `cyclotomicPrincipalization_of_classGroupPTorsionFree`
+       を `cyclotomicPrincipalization_of_caseSplit` の thin composition へ書き換えた
+    - split と legacy theorem の class-group 入力は `.{0}` に揃え、
+       historical wrapper 側もそれに合わせて
+       `ClassGroupBridge.lean` / `RegularPrimeRoute.lean` の legacy route を同期した
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の axiom 監視に
+       `cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree`
+       と、legacy theorem が「non-first-case target 経由で `sorry` を含む」ことを示す行を追加した
+3. 結論:
+    - `cyclotomicPrincipalization_of_classGroupPTorsionFree` 本体は、もはや direct `sorry` を持たぬ thin wrapper になった ✅
+    - direct `sorry` の所在は
+       `cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree`
+       1 本へ局所化された ✅
+    - したがって old one-shot theorem の未解決責務は theorem 名つきで non-first-case 側だけに可視化され、
+       first-case は design 上も implementation 上も閉じたと見てよい ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.ClassGroupBridge DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - editor diagnostics 上でも、この refactor で残る direct `sorry` は
+       `cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree` のみ
+5. 失敗事例:
+    - class-group target の universe を generic のまま `CyclotomicField p ℚ` へ接続しようとすると、
+       cumulative universe 推論が unstable で build を崩した
+    - このため split / legacy 系の class-group input は `.{0}` に固定し、
+       historical wrapper 側も同じ concrete universe へ揃える方針に切り替えた
+    - また途中で `CyclotomicLocalFactorizationContext` の field を comment で潰してしまい、
+       file 先頭から大規模に parser が壊れたが、`p / zeta / hzeta_pow` と namespace を戻して復旧した
+6. 次の課題:
+    - 次は `CyclotomicPrincipalizationNonFirstCaseTarget` 自体をさらに薄く分割し、
+       `p ∣ (z - y)` branch の中でもどこが genuinely open kernel なのかを theorem 境界で刻む
+    - あるいは public mainline としては、
+       `FLTPrimeGe5Target_of_kummerRoute_of_caseSplit`
+       を押し出しつつ、legacy route を historical wrapper として扱う整理を進める

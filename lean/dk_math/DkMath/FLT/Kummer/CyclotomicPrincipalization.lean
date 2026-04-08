@@ -4185,7 +4185,7 @@ abbrev CyclotomicClassGroupPTorsionFreeTarget : Prop :=
     ∀ (n : ℕ),
     ∀ a : ClassGroup R, a ^ n = 1 → a = 1
 
-/--
+/-
 Class group p-torsion free → Principalization（abstract bridge）。
 
 legacy one-shot wrapper。責務分離後は
@@ -4196,14 +4196,9 @@ legacy one-shot wrapper。責務分離後は
 2. → ideal (x + ζ^j · y) は principal ideal の p 乗
 3. → norm 計算で z'^p = (x/q)^p + y^p の解 z' が整数として存在
 
-現時点で残る so#rry は、class-group 仮定だけでは Stage 2 / Stage 3
-（unit normalization / norm descent）まで供給できない点にある。
+現時点では theorem 本体の direct `so#rry` は除去され、
+残責務は `cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree` に局所化されている。
 -/
-theorem cyclotomicPrincipalization_of_classGroupPTorsionFree
-  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u}) :
-    CyclotomicPrincipalizationTarget := by
-  sorry
-
 /--
 Class group p-torsion free → Stage 1 (ideal p-th power)。
 
@@ -4527,10 +4522,13 @@ first-case stable bridge を nat-level principalization target の first branch 
 これにより、`cyclotomicPrincipalization_of_classGroupPTorsionFree` を切り裂く際の
 first-case 側は no-sorry で concrete に供給できる。
 -/
-theorem cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_nonLiftable
-    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
-    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+theorem cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
     CyclotomicPrincipalizationFirstCaseTarget := by
+  let hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p :=
+    bodyInvariant_of_NoPowOnGN triominoCosmicNoPowOnGN_default
   intro p x y z hpack q hq hqx hqne hqgap hFirstCase
   let _ : Fact p.Prime := ⟨hpack.hp⟩
   let ζ : CyclotomicField p ℚ :=
@@ -4541,11 +4539,35 @@ theorem cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_nonLif
       (z : 𝓞 (CyclotomicField p ℚ)) - (y : 𝓞 (CyclotomicField p ℚ)) =
         ((z - y : ℕ) : 𝓞 (CyclotomicField p ℚ)) := by
     simp [Nat.cast_sub hpack.hyz]
-  exact qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_nonLiftable
-    (hCl := hCl) (hNoLift := hNoLift)
+  exact qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree
+    (hCl := hCl)
+    (hNoPow := hNoPow)
     (K := CyclotomicField p ℚ) (p := p) (x := x) (y := y) (z := z) (q := q)
     (ζ := ζ) (gap := z - y)
     hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase
+
+/--
+non-first-case (`p ∣ z - y`) 側だけを隔離した legacy kernel。
+
+`cyclotomicPrincipalization_of_classGroupPTorsionFree` の direct `sorry` をここへ押し込める。
+-/
+theorem cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCaseTarget := by
+  clear hCl
+  sorry
+
+/--
+`hNoLift` を使う first-case canonical bridge の wrapper。
+
+first-case 本体は既定 bridge だけでも閉じるが、non-liftable 仮定つき route との対応のため
+theorem 名は残しておく。
+-/
+theorem cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_nonLiftable
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (_hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    CyclotomicPrincipalizationFirstCaseTarget :=
+  cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree hCl
 
 /--
 class-group one-shot route を first-case / non-first-case split で再構成する thin theorem。
@@ -4555,12 +4577,25 @@ current stable bridge 群により first-case は concrete に埋まるので、
 -/
 theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_of_caseSplit
   (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
-    (hNoLift : TriominoCosmicNonLiftableGNBridge)
+    (_hNoLift : TriominoCosmicNonLiftableGNBridge)
     (hNonFirst : CyclotomicPrincipalizationNonFirstCaseTarget) :
     CyclotomicPrincipalizationTarget :=
   cyclotomicPrincipalization_of_caseSplit
-    (cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_nonLiftable hCl hNoLift)
+    (cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree hCl)
     hNonFirst
+
+/--
+Class group p-torsion free → Principalization（abstract bridge）。
+
+legacy one-shot wrapper。current state では first-case が split theorem で concrete に戻り、
+残る direct open は non-first-case kernel へ局所化されている。
+-/
+theorem cyclotomicPrincipalization_of_classGroupPTorsionFree
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationTarget :=
+  cyclotomicPrincipalization_of_caseSplit
+    (cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree hCl)
+    (cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree hCl)
 
 /--
 Stage 1c: trivial class → principal ideal extraction。
