@@ -1206,3 +1206,46 @@ Archive
     - 次は `CyclotomicPrincipalizationNonFirstCaseDescentTarget` の中身をさらに valuation / reduction / witness の 2 段または 3 段へ刻めるかを調べる
     - あわせて public mainline の説明では、`FLTPrimeGe5Target_of_kummerRoute_of_caseSplit` に加え
        `FLTPrimeGe5Target_of_kummerRoute_of_kernelSplit` を non-first-case 監査線として前へ出す
+
+### 日時: 2026/04/08 13:44:24 JST — non-first-case descent kernel を existence 語彙へさらに refined した
+
+1. 目的:
+    - review-046 の次手として、`CyclotomicPrincipalizationNonFirstCaseDescentTarget` の open を
+       そのまま `g' * GN = (x/q)^p` で抱えるのでなく、まず整数 descent existence
+       `z'^p = (x/q)^p + y^p` へ押し下げる
+    - これにより direct `sorry` の所在を、GN witness kernel ではなく existence kernel へさらに局所化する
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加した:
+       - `CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget`
+       - `cyclotomicPrincipalizationNonFirstCaseDescent_of_existence`
+       - `cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree`
+       - `cyclotomicPrincipalization_of_classGroupPTorsionFree_of_existenceKernelSplit`
+    - `cyclotomicPrincipalizationNonFirstCaseDescent_of_classGroupPTorsionFree` は、
+       直接 `sorry` を持つのでなく
+       `cyclotomicPrincipalizationNonFirstCaseDescent_of_existence`
+       を通して existence kernel から GN witness を回収する thin theorem に書き換えた
+    - `RegularPrimeRoute.lean` には public mainline 側の refined split として
+       `FLTPrimeGe5Target_of_kummerRoute_of_existenceKernelSplit` を追加した
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の axiom 監視も、
+       direct `sorry` の所在が existence kernel であると読める形へ更新した
+3. 結論:
+    - non-first-case の open は、`prepare -> existence -> GN witness` の 3 段として監査できる形になった ✅
+    - `g' * GN = (x/q)^p` への変換自体は generic theorem
+       `descentExistence_exists_iff_gnReduction_exists` により no-sorry で閉じると固定できた ✅
+    - direct `sorry` の所在は
+       `cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree`
+       1 本へさらに押し下げられた ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `lake build DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 実行でも refined split 追加後に downstream build が継続成功
+    - build warning の新規 `sorry` は `cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree` のみ
+5. 失敗事例:
+    - editor diagnostics では今回も `Unknown constant` がしばらく残ったが、build 側では new theorem 群の型検査が通っており stale diagnostics と判断した
+    - theorem 順序を `descent_of_classGroupPTorsionFree` 先置きのままにすると、
+       まだ定義していない existence kernel を参照して elaboration が不安定になるため、
+       existence kernel -> descent bridge の順へ並べ直した
+6. 次の課題:
+    - 次は existence kernel 自体を valuation / reduction のどちらへさらに押し込めるか、
+       既存の peel / packet-from-error / q-adic existence 語彙との接続点を棚卸しする
+    - public mainline と監視上は、`FLTPrimeGe5Target_of_kummerRoute_of_existenceKernelSplit` を
+       non-first-case の最新監査線として前面に出す

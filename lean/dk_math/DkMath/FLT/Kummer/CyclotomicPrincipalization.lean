@@ -4156,6 +4156,28 @@ abbrev CyclotomicPrincipalizationNonFirstCaseDescentTarget : Prop :=
       ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p
 
 /--
+中間データから整数 descent existence を返す refined non-first-case kernel。
+
+`g' * GN = (x/q)^p` へ戻す最終 cosmetic bridge は
+`descentExistence_exists_iff_gnReduction_exists` で no-sorry に処理できるため、
+genuinely open な責務はまずこの existence 語彙へ局所化するのが自然である。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget : Prop :=
+  ∀ {p x y z q : ℕ},
+    CyclotomicPrincipalizationNonFirstCaseDatum p x y z q →
+      ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
+
+/--
+non-first-case の整数 descent existence から GN witness 語彙へ戻す clean bridge。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseDescent_of_existence
+    (hExist : CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget) :
+    CyclotomicPrincipalizationNonFirstCaseDescentTarget := by
+  intro p x y z q data
+  rcases hExist data with ⟨z', hz'⟩
+  exact (descentExistence_exists_iff_gnReduction_exists p y (x / q)).mpr ⟨z', hz'⟩
+
+/--
 prepare + descent の 2 段から non-first-case target を再構成する。
 -/
 theorem cyclotomicPrincipalizationNonFirstCase_of_kernelSplit
@@ -4247,7 +4269,8 @@ legacy one-shot wrapper。責務分離後は
 3. → norm 計算で z'^p = (x/q)^p + y^p の解 z' が整数として存在
 
 現時点では theorem 本体の direct `so#rry` は除去され、
-残責務は `cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree` に局所化されている。
+残責務は `cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree`
+に局所化されている。
 -/
 /--
 Class group p-torsion free → Stage 1 (ideal p-th power)。
@@ -4613,17 +4636,29 @@ def cyclotomicPrincipalizationNonFirstCasePrepare :
       hpgap := hpgap }
 
 /--
-non-first-case (`p ∣ z - y`) 側だけを隔離した descent kernel。
+non-first-case (`p ∣ z - y`) 側だけを隔離した existence kernel。
 
 `cyclotomicPrincipalization_of_classGroupPTorsionFree` 系で残る direct `sorry` は
 この theorem 1 本へ局所化される。
 -/
-theorem cyclotomicPrincipalizationNonFirstCaseDescent_of_classGroupPTorsionFree
+theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree
   (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
-    CyclotomicPrincipalizationNonFirstCaseDescentTarget := by
+    CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget := by
   clear hCl
   intro p x y z q data
   sorry
+
+/--
+non-first-case (`p ∣ z - y`) 側だけを隔離した descent kernel。
+
+`g' * GN = (x/q)^p` への最終変換自体は generic theorem で閉じるので、
+direct `sorry` はさらに下流の existence kernel へ押し下げる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseDescent_of_classGroupPTorsionFree
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCaseDescentTarget :=
+  cyclotomicPrincipalizationNonFirstCaseDescent_of_existence
+    (cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree hCl)
 
 /--
 prepare + descent split を通して non-first-case target を再構成する wrapper。
@@ -4676,6 +4711,19 @@ theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_of_kernelSplit
   cyclotomicPrincipalization_of_caseSplit
     (cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree hCl)
     (cyclotomicPrincipalizationNonFirstCase_of_kernelSplit hPrep hDesc)
+
+/--
+class-group principalization を non-first-case prepare / existence split で再構成する thin theorem。
+
+non-first-case の genuinely open 責務を existence 語彙へ一段押し下げた版。
+-/
+theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_of_existenceKernelSplit
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hPrep : CyclotomicPrincipalizationNonFirstCasePrepareTarget)
+    (hExist : CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget) :
+    CyclotomicPrincipalizationTarget :=
+  cyclotomicPrincipalization_of_classGroupPTorsionFree_of_kernelSplit
+    hCl hPrep (cyclotomicPrincipalizationNonFirstCaseDescent_of_existence hExist)
 
 /--
 Class group p-torsion free → Principalization（abstract bridge）。
