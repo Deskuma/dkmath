@@ -4279,6 +4279,56 @@ abbrev CyclotomicPrincipalizationNonFirstCasePeelExactErrorDescentTarget : Prop 
       ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
 
 /--
+Kummer non-first-case peel branch を、既存 Branch A normal-form 語彙へ戻した kernel。
+
+`TailError` datum と exact-error tuple `(t1, B, C, E)` はこの層では bookkeeping とみなし、
+本当に残る数学内容を
+- counterexample pack
+- distinguished prime `q`
+- Branch A normal form
+- `p ∣ t`
+から整数 descent existence を返す 1 本に集約する。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget : Prop :=
+  ∀ {p x y z q t s : ℕ},
+    PrimeGe5CounterexamplePack p x y z →
+    Nat.Prime q →
+    q ∣ x →
+    q ≠ p →
+    q ∣ (z - y) →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
+
+/--
+Kummer exact-error peel target は、normal-form descent kernel があれば thin bridge で閉じる。
+
+exact-error tuple `(t1, B, C, E)` 自体はこの theorem では使わず、
+既存 Branch A 語彙へ戻した kernel に責務を押し下げる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelExactErrorDescent_of_normalFormDescent
+    (hNorm : CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget) :
+    CyclotomicPrincipalizationNonFirstCasePeelExactErrorDescentTarget := by
+  intro p x y z q t s data hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t
+    t1 B C E ht hErrEq
+  let _ := t1
+  let _ := B
+  let _ := C
+  let _ := E
+  let _ := ht
+  let _ := hErrEq
+  let base := data.error.valuation.data
+  exact hNorm base.hpack base.hq base.hqx base.hqne base.hqgap base.hpgap
+    hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t
+
+/--
 TailError + PacketFromError の 2 段から packet kernel を再構成する。
 -/
 theorem cyclotomicPrincipalizationNonFirstCasePacket_of_tailErrorPacketFromErrorSplit
@@ -4925,16 +4975,23 @@ theorem cyclotomicPrincipalizationNonFirstCasePacketFromError_of_peelExactErrorD
         hNeP data hgap hsGN hcop_ts hp_dvd_t
 
 /--
-class-group 入力から、Kummer non-first-case の `p ∣ t` peel 側 exact-error descent を返す kernel。
+class-group 入力から、Kummer non-first-case の `p ∣ t` peel 側 normal-form descent を返す kernel。
 
-現在の genuinely open な数学内容は、`PacketFromError` 全体ではなくこの theorem に局所化される。
+現在の genuinely open な数学内容は、`PacketFromError` 全体でも
+exact-error theorem 全体でもなく、この normal-form kernel に局所化される。
 -/
-theorem cyclotomicPrincipalizationNonFirstCasePeelExactErrorDescent_of_classGroupPTorsionFree
+theorem cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_classGroupPTorsionFree
     (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
-    CyclotomicPrincipalizationNonFirstCasePeelExactErrorDescentTarget := by
+    CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget := by
   clear hCl
-  intro p x y z q t s data hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t t1 B C E ht hErrEq
-  let _ := data
+  intro p x y z q t s hpack hq hqx hqne hqgap hpgap hgap hsGN hsx hcop_ts hcop_ty hcop_sy
+    hp_not_dvd_s hp_dvd_t
+  let _ := hpack
+  let _ := hq
+  let _ := hqx
+  let _ := hqne
+  let _ := hqgap
+  let _ := hpgap
   let _ := hgap
   let _ := hsGN
   let _ := hsx
@@ -4943,13 +5000,19 @@ theorem cyclotomicPrincipalizationNonFirstCasePeelExactErrorDescent_of_classGrou
   let _ := hcop_sy
   let _ := hp_not_dvd_s
   let _ := hp_dvd_t
-  let _ := t1
-  let _ := B
-  let _ := C
-  let _ := E
-  let _ := ht
-  let _ := hErrEq
   sorry
+
+/--
+class-group 入力から、Kummer non-first-case の `p ∣ t` peel 側 exact-error descent を返す kernel。
+
+exact-error tuple 自体は adapter で bookkeeping に押し戻し、
+現在の genuinely open な数学内容は normal-form descent kernel へ局所化する。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelExactErrorDescent_of_classGroupPTorsionFree
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCasePeelExactErrorDescentTarget :=
+  cyclotomicPrincipalizationNonFirstCasePeelExactErrorDescent_of_normalFormDescent
+    (cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_classGroupPTorsionFree hCl)
 
 /--
 non-first-case (`p ∣ z - y`) 側だけを隔離した PacketFromError kernel。

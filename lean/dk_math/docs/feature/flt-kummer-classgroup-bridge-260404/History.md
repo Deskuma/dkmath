@@ -1414,3 +1414,50 @@ Archive
      `p ∣ t` 側の peel descent / それ以外の枝との関係でどう existence 語彙へ回収するかを詰める
    - `RegularPrimeRoute.lean` の長い戦況コメントも、
      「Kummer prime は normal form の t-side support に乗る」ことまで同期すると監査しやすい
+
+### 日時: 2026/04/08 20:44:22 JST — review-048 に従い Kummer peel open を normal-form kernel へ押し下げ
+
+1. 目的:
+   - `review-048.md` の方針どおり、`cyclotomicPrincipalizationNonFirstCasePeelExactErrorDescent_of_classGroupPTorsionFree`
+     をそのまま open とみなすのでなく、
+     TailError / exact-error の bookkeeping を剥がした薄い kernel へ責務を押し下げる
+   - `#print axioms` 監視でも、次に見るべき最深 open 名を明示化する
+2. 実施:
+   - `CyclotomicPrincipalization.lean` に以下を追加:
+     - `CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget`
+     - `cyclotomicPrincipalizationNonFirstCasePeelExactErrorDescent_of_normalFormDescent`
+     - `cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_classGroupPTorsionFree`
+   - 既存の
+     `cyclotomicPrincipalizationNonFirstCasePeelExactErrorDescent_of_classGroupPTorsionFree`
+     は direct `sorry` を持つ本体のままにせず、
+     新設した normal-form kernel からの thin wrapper に差し替えた
+   - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の axiom 監視へ
+     `cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_classGroupPTorsionFree`
+     を追加した
+3. 結論:
+   - review-048 の「exact-error data → existing Branch A peel vocabulary の adapter」を
+     theorem 名つきで mainline に追加できた ✅
+   - class-group 側の direct open は、
+     `PeelExactErrorDescent` 全体ではなく
+     `PeelNormalFormDescent_of_classGroupPTorsionFree`
+     へさらに押し下げられた ✅
+   - 分岐判断:
+     - exact-error から直ちに既存 peel packet theorem へ接ぐ案も検討した
+     - ただし既存 peel packet 側は `∃ pkt'` を返し、Kummer 側は `∃ z'` を返すため、
+       まずは exact-error / datum packaging を剥がす adapter を先に固定する方が
+       次の接続先比較をしやすいと判断してこちらを優先した
+4. 検証:
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+   - build warning 上の direct `sorry` は
+     `DkMath/FLT/Kummer/CyclotomicPrincipalization.lean` の新 kernel 側へ移動したことを確認
+5. 失敗事例:
+   - 既存 peel machinery の `PrimeGe5BranchAValuationPeelPacketFromErrorTarget` を
+     そのまま Kummer exact-error theorem に流し込む案は、
+     結論語彙が `pkt'` と `z'` で異なるため、このサイクルでは直接 adapter にできなかった
+6. 次の課題:
+   - `CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_classGroupPTorsionFree`
+     の仮定列と、既存 restore / realization seed / peel core の仮定列を並べ、
+     `z'` existence を返す最短の接続先を特定する
+   - とくに `PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget` や
+     restore 側 verification 群へ接げるかを調べ、
+     `(x / q)^p + y^p = z'^p` を直接返す adapter を狙う
