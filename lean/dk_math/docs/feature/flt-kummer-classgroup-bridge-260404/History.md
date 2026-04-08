@@ -1573,3 +1573,67 @@ Archive
    - あるいは existing peel packet を経由せず、
      peel side で `∃ z'` を直接返す `PthRoot` 型 kernel を
      Kummer normal-form 仮定向けに新設する
+
+### 日時: 2026/04/09 01:13:23 JST — deepest open を `PeelPacketQuotientLift` へ 1 段押し下げ
+
+1. 目的:
+   - `review-049.md` の方針に従い、
+     `cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_classGroupPTorsionFree`
+     を thin wrapper 化して、
+     direct `sorry` を `packet + quotient provenance` kernel に押し下げる
+   - 監視ファイル側でも、
+     deepest open がどこにあるかを theorem 名で固定する
+2. 実施:
+   - `CyclotomicPrincipalization.lean` に
+     `cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_classGroupPTorsionFree`
+     を追加し、
+     class-group 入力から
+     `CyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLiftTarget`
+     を返す新 kernel とした
+   - 既存の
+     `cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_classGroupPTorsionFree`
+     は
+     `cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_packetQuotientLift`
+     を通す thin wrapper に置き換えた
+   - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` では
+     `...PeelNormalFormDescent_of_classGroupPTorsionFree`
+     を no-sorry 監視へ移し、
+     `...PeelPacketQuotientLift_of_classGroupPTorsionFree`
+     を sorry 監視へ追加した
+   - `DkMathTest/FLT/Kummer/RegularPrimeRouteSorry.lean` でも
+     deepest open の説明を
+     `packet + quotient provenance kernel`
+     に更新した
+3. 結論:
+   - `∃ pkt'` から `∃ z'` への no-sorry adapter 群は維持したまま、
+     current honest open を
+     `cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_classGroupPTorsionFree`
+     の 1 theorem に局所化できた ✅
+   - これにより、
+     `PeelNormalFormDescent` は既に bookkeeping 層へ落ちており、
+     次に詰めるべき内容は
+     `pkt'.x = x / q`, `pkt'.y = y`
+     という quotient provenance の回収だけだと明確になった ✅
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRouteSorry` 成功
+   - build warning の direct `sorry` は
+     `cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_classGroupPTorsionFree`
+     に移動した
+5. 失敗事例:
+   - 最初の差分では旧 docstring が wrapper theorem の位置に残り、
+     新 kernel の docstring と連続して
+     `unexpected token '/--'; expected 'lemma'`
+     を引いた
+   - docstring を新 kernel と wrapper の各 theorem へ付け直すことで解消した
+6. 次の課題:
+   - `cyclotomicPrincipalizationNonFirstCasePeelPacket_of_existingPacketFromError`
+     の返す `pkt'` に対して、
+     original `(x,y,q)` との quotient provenance
+     `pkt'.x = x / q`, `pkt'.y = y`
+     を付与する最短の補題を設計する
+   - 既存 restore / packaging 群のうち、
+     smaller-counterexample realization から
+     上記 provenance を再構成できるものがないかを、
+     target の入出力単位で再棚卸しする

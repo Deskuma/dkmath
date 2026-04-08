@@ -5125,14 +5125,14 @@ theorem cyclotomicPrincipalizationNonFirstCasePacketFromError_of_peelExactErrorD
         hNeP data hgap hsGN hcop_ts hp_dvd_t
 
 /--
-class-group 入力から、Kummer non-first-case の `p ∣ t` peel 側 normal-form descent を返す kernel。
+class-group 入力から、Kummer peel packet に quotient provenance を付ける kernel。
 
-現在の genuinely open な数学内容は、`PacketFromError` 全体でも
-exact-error theorem 全体でもなく、この normal-form kernel に局所化される。
+existing peel 側では `∃ pkt'` までは既に取れているので、
+現在 genuinely open な数学内容はこの provenance 付与 1 点へ局所化される。
 -/
-theorem cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_classGroupPTorsionFree
+theorem cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_classGroupPTorsionFree
     (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
-    CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget := by
+    CyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLiftTarget := by
   clear hCl
   intro p x y z q t s hpack hq hqx hqne hqgap hpgap hgap hsGN hsx hcop_ts hcop_ty hcop_sy
     hp_not_dvd_s hp_dvd_t
@@ -5153,10 +5153,22 @@ theorem cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_classGrou
   sorry
 
 /--
+class-group 入力から、Kummer non-first-case の `p ∣ t` peel 側 normal-form descent を返す kernel。
+
+current state では direct `so#rry` をこの theorem に置かず、
+packet + quotient provenance kernel からの thin wrapper として扱う。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_classGroupPTorsionFree
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget :=
+  cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_packetQuotientLift
+    (cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_classGroupPTorsionFree hCl)
+
+/--
 class-group 入力から、Kummer non-first-case の `p ∣ t` peel 側 exact-error descent を返す kernel。
 
 exact-error tuple 自体は adapter で bookkeeping に押し戻し、
-現在の genuinely open な数学内容は normal-form descent kernel へ局所化する。
+現在の genuinely open な数学内容は packet + quotient provenance kernel へ局所化する。
 -/
 theorem cyclotomicPrincipalizationNonFirstCasePeelExactErrorDescent_of_classGroupPTorsionFree
     (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
