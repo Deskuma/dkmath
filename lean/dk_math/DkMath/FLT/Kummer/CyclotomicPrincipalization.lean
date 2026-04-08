@@ -4446,6 +4446,31 @@ existing peel 側の `PacketFromError` で `∃ pkt'` までは既に取れる�
 - `pkt'.y = y`
 をどう回収するかに集約される。
 -/
+abbrev CyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexampleTarget : Prop :=
+  ∀ {p x y z q t s : ℕ},
+    PrimeGe5CounterexamplePack p x y z →
+    Nat.Prime q →
+    q ∣ x →
+    q ≠ p →
+    q ∣ (z - y) →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ z' : ℕ,
+      PrimeGe5CounterexamplePack p (x / q) y z' ∧ p ∣ (z' - y) ∧ z' < z
+
+/--
+Kummer peel で quotient provenance つき packet を返す target。
+
+named smaller counterexample が直接得られるなら、
+この target 自体は structural packaging で閉じる。
+-/
 abbrev CyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLiftTarget : Prop :=
   ∀ {p x y z q t s : ℕ},
     PrimeGe5CounterexamplePack p x y z →
@@ -4464,6 +4489,20 @@ abbrev CyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLiftTarget : Prop
     p ∣ t →
     ∃ pkt' : PrimeGe5BranchANormalFormPacket p,
       pkt'.z < z ∧ pkt'.x = x / q ∧ pkt'.y = y
+
+/--
+named smaller counterexample が返せれば、packet quotient-lift は structural packaging だけで閉じる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_namedSmallerCounterexampleTarget
+    (hNamed : CyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexampleTarget) :
+    CyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLiftTarget := by
+  intro p x y z q t s hpack hq hqx hqne hqgap hpgap hgap hsGN hsx hcop_ts hcop_ty hcop_sy
+    hp_not_dvd_s hp_dvd_t
+  rcases hNamed hpack hq hqx hqne hqgap hpgap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t with
+    ⟨z', hpack', hp_dvd_gap', hz'lt⟩
+  exact cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_namedSmallerCounterexample
+    hpack' hp_dvd_gap' hz'lt
 
 /--
 quotient provenance つき smaller packet が得られれば、
@@ -5147,14 +5186,16 @@ theorem cyclotomicPrincipalizationNonFirstCasePacketFromError_of_peelExactErrorD
         hNeP data hgap hsGN hcop_ts hp_dvd_t
 
 /--
-class-group 入力から、Kummer peel packet に quotient provenance を付ける kernel。
+class-group 入力から、Kummer peel named smaller counterexample を返す kernel。
 
-existing peel 側では `∃ pkt'` までは既に取れているので、
-現在 genuinely open な数学内容はこの provenance 付与 1 点へ局所化される。
+packet 生成と quotient provenance bookkeeping は既に structural に閉じたので、
+現在 genuinely open な数学内容は
+`PrimeGe5CounterexamplePack p (x / q) y z'`
+をどう直接作るかに局所化される。
 -/
-theorem cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_classGroupPTorsionFree
+theorem cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_classGroupPTorsionFree
     (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
-    CyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLiftTarget := by
+    CyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexampleTarget := by
   clear hCl
   intro p x y z q t s hpack hq hqx hqne hqgap hpgap hgap hsGN hsx hcop_ts hcop_ty hcop_sy
     hp_not_dvd_s hp_dvd_t
@@ -5175,6 +5216,18 @@ theorem cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_classGro
   sorry
 
 /--
+class-group 入力から、Kummer peel packet に quotient provenance を付ける kernel。
+
+current state では direct `so#rry` をこの theorem に置かず、
+named smaller counterexample kernel からの thin wrapper として扱う。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_classGroupPTorsionFree
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLiftTarget :=
+  cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_namedSmallerCounterexampleTarget
+    (cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_classGroupPTorsionFree hCl)
+
+/--
 class-group 入力から、Kummer non-first-case の `p ∣ t` peel 側 normal-form descent を返す kernel。
 
 current state では direct `so#rry` をこの theorem に置かず、
@@ -5190,7 +5243,7 @@ theorem cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_classGrou
 class-group 入力から、Kummer non-first-case の `p ∣ t` peel 側 exact-error descent を返す kernel。
 
 exact-error tuple 自体は adapter で bookkeeping に押し戻し、
-現在の genuinely open な数学内容は packet + quotient provenance kernel へ局所化する。
+現在の genuinely open な数学内容は named smaller counterexample kernel へ局所化する。
 -/
 theorem cyclotomicPrincipalizationNonFirstCasePeelExactErrorDescent_of_classGroupPTorsionFree
     (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :

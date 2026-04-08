@@ -1702,3 +1702,79 @@ Archive
      を直接作る route のどちらが短いかを再比較する
    - とくに existing error equation / tail-error data から、
      packet を経由せず named smaller counterexample を先に立てられないかを調べる
+
+### 日時: 2026/04/09 03:20:48 JST — deepest open を named smaller-counterexample kernel へ再圧縮
+
+1. 目的:
+   - structural packaging が既に no-sorry で閉じたことを踏まえ、
+     direct `sorry` を
+     `cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_classGroupPTorsionFree`
+     からさらに 1 段押し下げる
+   - honest open を
+     `PrimeGe5CounterexamplePack p (x / q) y z'`
+     の直接構成へ寄せる
+2. 実施:
+   - `CyclotomicPrincipalization.lean` に
+     `CyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexampleTarget`
+     を追加し、
+     Kummer peel 仮定から
+     named smaller counterexample
+     `PrimeGe5CounterexamplePack p (x / q) y z'`
+     と
+     `p ∣ (z' - y)`, `z' < z`
+     を直接返す境界を切った
+   - あわせて
+     `cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_namedSmallerCounterexampleTarget`
+     を追加し、
+     named smaller counterexample から packet quotient-lift が
+     structural packaging だけで閉じることを theorem 化した
+   - 既存の
+     `cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_classGroupPTorsionFree`
+     は thin wrapper に置き換え、
+     direct `sorry` は
+     `cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_classGroupPTorsionFree`
+     へ移した
+   - 監視ファイルも同期:
+     - `RegularPrimeRoute.lean` では
+       `...PeelPacketQuotientLift_of_classGroupPTorsionFree`
+       を no-sorry 側へ移し、
+       `...PeelNamedSmallerCounterexample_of_classGroupPTorsionFree`
+       を sorry 側へ置いた
+     - `RegularPrimeRouteSorry.lean` でも
+       deepest open の説明を
+       `named smaller-counterexample kernel`
+       に更新した
+3. 結論:
+   - `packet + quotient provenance` 自体はもう honest open ではない ✅
+   - current direct open は、
+     class-group 入力から named smaller counterexample
+     `PrimeGe5CounterexamplePack p (x / q) y z'`
+     をどう直接作るか、その 1 theorem に圧縮できた ✅
+   - これにより、
+     arithmetic residue の読み方も
+     「arbitrary packet への provenance 付与」
+     ではなく
+     「named smaller counterexample の直接構成」
+     へ寄せられた
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRouteSorry` 成功
+   - build warning の direct `sorry` は
+     `cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_classGroupPTorsionFree`
+     に移動した
+5. 失敗事例:
+   - 最初の差分では
+     `cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_namedSmallerCounterexampleTarget`
+     を target 定義より前に置いてしまい、
+     未定義識別子エラーで build が落ちた
+   - theorem を target 定義の後ろへ移すことで解消した
+6. 次の課題:
+   - peel exact-error data
+     `p * B = C + (p ^ (p - 1) * t1 ^ p) * E`
+     と既存 tail 比較補題から、
+     `PrimeGe5CounterexamplePack p (x / q) y z'`
+     を直接構成する route が本当に切れないかを詰める
+   - もし `z'` existence 先行の方が短いなら、
+     そこから named smaller counterexample へ戻す no-sorry bridge
+     も追加検討する
