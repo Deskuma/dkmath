@@ -4199,6 +4199,45 @@ abbrev CyclotomicPrincipalizationNonFirstCaseReductionTarget : Prop :=
       ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
 
 /--
+non-first-case reduction kernel の error 段で保持する中間データ。
+
+peel 側の `TailError` と同様、まずは theorem 境界を切るための minimal packaging のみを置く。
+-/
+structure CyclotomicPrincipalizationNonFirstCaseErrorDatum
+    (p x y z q : ℕ) where
+  valuation : CyclotomicPrincipalizationNonFirstCaseValuationDatum p x y z q
+
+/--
+valuation 中間データから error 中間データを作る boundary。
+
+この段は bookkeeping に留め、reduction の genuine open は packet 段へ押し下げる。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCaseErrorTarget :=
+  ∀ {p x y z q : ℕ},
+    CyclotomicPrincipalizationNonFirstCaseValuationDatum p x y z q →
+      CyclotomicPrincipalizationNonFirstCaseErrorDatum p x y z q
+
+/--
+error 中間データから整数 descent existence を返す packet kernel。
+
+non-first-case reduction 段の genuinely open な数学内容は、まずこの packet 段へ局所化する。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCasePacketTarget : Prop :=
+  ∀ {p x y z q : ℕ},
+    CyclotomicPrincipalizationNonFirstCaseErrorDatum p x y z q →
+      ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
+
+/--
+error + packet の 2 段から reduction kernel を再構成する。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseReduction_of_errorPacketSplit
+    (hErr : CyclotomicPrincipalizationNonFirstCaseErrorTarget)
+    (hPkt : CyclotomicPrincipalizationNonFirstCasePacketTarget) :
+    CyclotomicPrincipalizationNonFirstCaseReductionTarget := by
+  intro p x y z q data
+  exact hPkt (hErr data)
+
+/--
 valuation + reduction の 2 段から existence kernel を再構成する。
 -/
 theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_valuationReductionSplit
@@ -4687,17 +4726,40 @@ def cyclotomicPrincipalizationNonFirstCaseValuation :
   exact ⟨data⟩
 
 /--
-non-first-case (`p ∣ z - y`) 側だけを隔離した reduction kernel。
+valuation datum を error datum へ持ち上げる canonical packaging。
+
+いまは trivial packaging だが、将来 error-term 抽出補題で必要な荷物をここへ集約する。
+-/
+def cyclotomicPrincipalizationNonFirstCaseError :
+    CyclotomicPrincipalizationNonFirstCaseErrorTarget := by
+  intro p x y z q data
+  exact ⟨data⟩
+
+/--
+non-first-case (`p ∣ z - y`) 側だけを隔離した packet kernel。
 
 `cyclotomicPrincipalization_of_classGroupPTorsionFree` 系で残る direct `sorry` は
 この theorem 1 本へ局所化される。
 -/
-theorem cyclotomicPrincipalizationNonFirstCaseReduction_of_classGroupPTorsionFree
+theorem cyclotomicPrincipalizationNonFirstCasePacket_of_classGroupPTorsionFree
   (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
-    CyclotomicPrincipalizationNonFirstCaseReductionTarget := by
+    CyclotomicPrincipalizationNonFirstCasePacketTarget := by
   clear hCl
   intro p x y z q data
   sorry
+
+/--
+non-first-case (`p ∣ z - y`) 側だけを隔離した reduction kernel。
+
+error packaging 自体は canonical で閉じるため、direct `sorry` は
+packet kernel を通して間接的にだけ現れる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseReduction_of_classGroupPTorsionFree
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCaseReductionTarget :=
+  cyclotomicPrincipalizationNonFirstCaseReduction_of_errorPacketSplit
+    cyclotomicPrincipalizationNonFirstCaseError
+    (cyclotomicPrincipalizationNonFirstCasePacket_of_classGroupPTorsionFree hCl)
 
 /--
 non-first-case (`p ∣ z - y`) 側だけを隔離した existence kernel。
@@ -4804,6 +4866,22 @@ theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_of_valuationReducti
     hCl hPrep
     (cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_valuationReductionSplit
       hVal hRed)
+
+/--
+class-group principalization を non-first-case prepare / valuation / error / packet split で再構成する thin theorem。
+
+non-first-case reduction の open を packet kernel へさらに押し下げた版。
+-/
+theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_of_errorPacketKernelSplit
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hPrep : CyclotomicPrincipalizationNonFirstCasePrepareTarget)
+    (hVal : CyclotomicPrincipalizationNonFirstCaseValuationTarget)
+    (hErr : CyclotomicPrincipalizationNonFirstCaseErrorTarget)
+    (hPkt : CyclotomicPrincipalizationNonFirstCasePacketTarget) :
+    CyclotomicPrincipalizationTarget :=
+  cyclotomicPrincipalization_of_classGroupPTorsionFree_of_valuationReductionKernelSplit
+    hCl hPrep hVal
+    (cyclotomicPrincipalizationNonFirstCaseReduction_of_errorPacketSplit hErr hPkt)
 
 /--
 Class group p-torsion free → Principalization（abstract bridge）。

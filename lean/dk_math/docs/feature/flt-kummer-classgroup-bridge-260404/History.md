@@ -1290,3 +1290,42 @@ Archive
     - 次は reduction kernel を、既存の peel / packet-from-error / exceptional existence 語彙のどこへ接続できるかをさらに刻む
     - とくに `p ∣ (z-y)` 側の数学内容を、valuation packaging の下流で
        `reduction -> packet/error` の向きに押し込めるかを調べる
+
+### 日時: 2026/04/08 14:04:38 JST — non-first-case reduction kernel を error / packet の 2 段へ分割
+
+1. 目的:
+    - valuation / reduction split の次段として、non-first-case reduction を peel 側の語彙に合わせて
+       `error` と `packet` の 2 段へさらに刻む
+    - これにより direct `sorry` の所在を reduction kernel ではなく packet kernel へ押し下げる
+2. 実施:
+    - `CyclotomicPrincipalization.lean` に以下を追加した:
+       - `CyclotomicPrincipalizationNonFirstCaseErrorDatum`
+       - `CyclotomicPrincipalizationNonFirstCaseErrorTarget`
+       - `CyclotomicPrincipalizationNonFirstCasePacketTarget`
+       - `cyclotomicPrincipalizationNonFirstCaseReduction_of_errorPacketSplit`
+       - `cyclotomicPrincipalizationNonFirstCaseError`
+       - `cyclotomicPrincipalizationNonFirstCasePacket_of_classGroupPTorsionFree`
+       - `cyclotomicPrincipalization_of_classGroupPTorsionFree_of_errorPacketKernelSplit`
+    - `cyclotomicPrincipalizationNonFirstCaseReduction_of_classGroupPTorsionFree` は、
+       canonical error packaging と packet kernel を合成する thin wrapper へ書き換えた
+    - `RegularPrimeRoute.lean` には public mainline 側の最細 split として
+       `FLTPrimeGe5Target_of_kummerRoute_of_errorPacketKernelSplit` を追加した
+    - `DkMathTest/FLT/Kummer/RegularPrimeRoute.lean` の axiom 監視も、
+       error は clean、direct `sorry` は packet kernel のみと読める形へ更新した
+3. 結論:
+    - non-first-case の open は、`prepare -> valuation -> error -> packet -> reduction -> existence -> GN witness` の 7 段として監査できる形になった ✅
+    - error 段は canonical packaging で no-sorry に固定でき、direct `sorry` の所在は
+       `cyclotomicPrincipalizationNonFirstCasePacket_of_classGroupPTorsionFree`
+       1 本へさらに押し下げられた ✅
+    - public route 側でも `FLTPrimeGe5Target_of_kummerRoute_of_errorPacketKernelSplit` により、
+       peel 風の packet/error 語彙で non-first-case を監査できるようになった ✅
+4. 検証:
+    - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+    - `lake build DkMath.FLT.Kummer.RegularPrimeRoute DkMathTest.FLT.Kummer.RegularPrimeRoute` 実行でも split 追加後に downstream build が継続成功
+    - build warning の新規 `sorry` は `cyclotomicPrincipalizationNonFirstCasePacket_of_classGroupPTorsionFree` のみ
+5. 失敗事例:
+    - editor diagnostics では今回も route/test 側の新 theorem 名が `Unknown constant` として残ったが、build 側では downstream まで通っており stale diagnostics と判断した
+    - packet/error split を route 側だけ先に追加すると、monitoring の新 theorem 名が LSP 上で解決されず見通しが悪くなるため、principalization 側の theorem 境界追加と同時に更新する方が安定した
+6. 次の課題:
+    - 次は packet kernel を、既存の `PacketFromError` / `PeelPthRootCore` / `TailError` 語彙のどこへ接続できるかをさらに詰める
+    - そのうえで `RegularPrimeRoute.lean` の長い戦況コメントも、最新の packet/error split を主導線として同期する
