@@ -2135,3 +2135,84 @@ Archive
      と
      `norm_eq_normUnit_mul_normPow_of_eq_unit_mul_pow`
      だけで返せる中間 target をもう 1 段切り出せないかを調べる
+
+## 2026/04/09 19:14:56 JST
+
+1. 背景:
+   - 次の試行として、
+     `cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_classGroupPTorsionFree`
+     の仮定列を
+     first-case 既存の
+     `NormEqGN` / `UnitAbsorb`
+     型へ寄せられるかを棚卸しした
+   - 目的は、
+     `chosenCyclotomicLinearFactor_norm_eq_gn_direct`
+     と
+     `norm_eq_normUnit_mul_normPow_of_eq_unit_mul_pow`
+     だけで no-sorry に閉じる部分を theorem 境界として切り出し、
+     deepest open をさらに pure arithmetic receiver へ押し下げること
+2. 実施:
+   - non-first-case receiver 向けに
+     `CyclotomicNormEqGNUnitNormalizedChosenFactorTarget`
+     `CyclotomicNormUnitAbsorbUnitNormalizedChosenFactorTarget`
+     `CyclotomicNormGNPowerUnitNormalizedChosenFactorTarget`
+     を追加した
+   - それぞれに対して
+     `cyclotomicNormEqGN_concrete_unitNormalizedChosenFactor`
+     `cyclotomicNormUnitAbsorb_concrete_unitNormalizedChosenFactor`
+     `cyclotomicNormGNPower_concrete_unitNormalizedChosenFactor`
+     を no-sorry で実装し、
+     unit-normalized chosen factor から
+     `∃ s, GN p (z - y) y = s^p`
+     までは既存 direct norm / unit 補題だけで閉じることを fixed した
+   - あわせて
+     `CyclotomicNormDescentNonFirstCaseGNPowerReceiverTarget`
+     を追加し、
+     current non-first-case Stage 3 open を
+     「`GN p (z - y) y = s^p` から final nat-level witness を返す pure arithmetic receiver」
+     として分離した
+   - そのうえで
+     `cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_gnPowerReceiver`
+     を no-sorry で追加し、
+     旧
+     `cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_classGroupPTorsionFree`
+     は thin wrapper に置き換えた
+   - direct `sorry` は
+     `cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree`
+     へ押し下げ、
+     監視も
+     `RegularPrimeRoute.lean`
+     `RegularPrimeRouteSorry.lean`
+     で追従させた
+3. 結論:
+   - 棚卸しの結果、
+     `chosenCyclotomicLinearFactor_norm_eq_gn_direct`
+     と
+     `norm_eq_normUnit_mul_normPow_of_eq_unit_mul_pow`
+     だけで no-sorry に届くのは
+     final witness 直前の
+     `∃ s, GN p (z - y) y = s^p`
+     までだと整理できた ✅
+   - したがって non-first-case Stage 3 の current honest open は、
+     もはや chosen-factor equality 全体ではなく
+     pure `GN = s^p` receiver 1 本に集約される ✅
+   - build warning 上の direct `sorry` も、
+     旧 peel core
+     `cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree`
+     と、
+     新 deepest Stage 3 receiver
+     `cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree`
+     の 2 箇所になった
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRouteSorry` 成功
+5. 次の課題:
+   - `cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree`
+     からさらに既存 Branch A no-sorry 部品へ接げるかを棚卸しする
+   - 特に
+     pure `GN = s^p`
+     を
+     Branch A 既存語彙の
+     `GN = p * s^p`
+     や named smaller-counterexample route へ変換する追加 arithmetic receiver が要るかを調べる
