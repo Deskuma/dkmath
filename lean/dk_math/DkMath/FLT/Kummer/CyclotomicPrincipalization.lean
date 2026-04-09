@@ -4618,6 +4618,37 @@ theorem cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_
       hpack hq hqx hqne hsx hzEq⟩
 
 /--
+global Stage 3 の `NormDescent` が供給されれば、
+Kummer peel normal-form descent target は local arithmetic を全く使わずに閉じる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_normDescent
+    (hNorm : CyclotomicNormDescentTarget) :
+    CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget := by
+  intro p x y z q t s hpack hq hqx hqne hqgap hpgap hgap hsGN hsx hcop_ts hcop_ty hcop_sy
+    hp_not_dvd_s hp_dvd_t
+  let _ := hpgap
+  let _ := hgap
+  let _ := hsGN
+  let _ := hsx
+  let _ := hcop_ts
+  let _ := hcop_ty
+  let _ := hcop_sy
+  let _ := hp_not_dvd_s
+  let _ := hp_dvd_t
+  rcases hNorm hpack hq hqx hqne hqgap with ⟨g', hg'⟩
+  exact (descentExistence_exists_iff_gnReduction_exists p y (x / q)).mp ⟨g', hg'⟩
+
+/--
+global Stage 3 の `NormDescent` が supply されれば、
+named smaller counterexample target も arithmetic wrapper だけで閉じる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_normDescent
+    (hNorm : CyclotomicNormDescentTarget) :
+    CyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexampleTarget :=
+  cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_normalFormDescent
+    (cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_normDescent hNorm)
+
+/--
 quotient provenance つき smaller packet が得られれば、
 Kummer peel normal-form descent は thin bridge で閉じる。
 -/
@@ -4691,6 +4722,17 @@ theorem cyclotomicPrincipalizationNonFirstCaseDescent_of_existence
   intro p x y z q data
   rcases hExist data with ⟨z', hz'⟩
   exact (descentExistence_exists_iff_gnReduction_exists p y (x / q)).mpr ⟨z', hz'⟩
+
+/--
+global Stage 3 の `NormDescent` が supply されれば、
+non-first-case existence kernel は generic equivalence だけで閉じる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_normDescent
+    (hNorm : CyclotomicNormDescentTarget) :
+    CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget := by
+  intro p x y z q data
+  rcases hNorm data.hpack data.hq data.hqx data.hqne data.hqgap with ⟨g', hg'⟩
+  exact (descentExistence_exists_iff_gnReduction_exists p y (x / q)).mp ⟨g', hg'⟩
 
 /--
 prepare + descent の 2 段から non-first-case target を再構成する。

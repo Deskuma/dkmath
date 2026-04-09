@@ -1850,3 +1850,60 @@ Archive
    - 既存 restore 側の `RealizationSeed` ではなく、
      Kummer peel normal-form 専用の `z'` existence theorem として閉じる方が
      statement 的に薄いかを再比較する
+
+### 日時: 2026/04/09 04:53:00 JST — Stage 3 `NormDescent` から non-first-case / peel core への adapter 群を追加
+
+1. 目的:
+   - current open である
+     `cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree`
+     が、本質的には global Stage 3
+     `CyclotomicNormDescentTarget`
+     にのみ依存しているのかを theorem-level に固定する
+   - これにより、peel local arithmetic が未解決なのではなく、
+     unresolved stage は norm descent 側だと明示する
+2. 実施:
+   - `CyclotomicPrincipalization.lean` に
+     `cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_normDescent`
+     を追加し、
+     `hNorm : CyclotomicNormDescentTarget`
+     から generic equivalence
+     `descentExistence_exists_iff_gnReduction_exists`
+     を通して
+     refined non-first-case existence target
+     `∃ z', z' ^ p = (x / q) ^ p + y ^ p`
+     を返す theorem を置いた
+   - あわせて
+     `cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_normDescent`
+     と
+     `cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_normDescent`
+     を追加し、
+     peel local 仮定列は `hNorm` があれば全て wrapper で閉じることを固定した
+   - `RegularPrimeRoute.lean` の no-sorry 監視にも、
+     上記 3 theorem を追加した
+3. 結論:
+   - non-first-case existence target は Stage 3 `NormDescent` から直接 supply できる ✅
+   - peel normal-form descent / named smaller-counterexample も、
+     local exact-error kernel の独自数学を要求せず、
+     `hNorm` があれば generic bridge + arithmetic wrapper だけで閉じる ✅
+   - したがって current class-group-side open は
+     「peel 固有 kernel」ではなく、
+     class-group / principalization mainline のどこで
+     `CyclotomicNormDescentTarget`
+     を concrete に supply するか、
+     その設計問題として読める ✅
+4. 検証:
+   - 次の 3 本を回して確認する:
+     `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization`
+     `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRoute`
+     `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRouteSorry`
+5. 次の課題:
+   - `CyclotomicNormDescentTarget` から
+     `cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree`
+     へ至る non-circular route を、
+     refined class-group route
+     (`hCl + hUnit + hNorm`)
+     と legacy one-shot route のどちらで first-class theorem 化するか決める
+   - 必要なら
+     `...of_refinedClassGroupRoute`
+     形式の theorem を追加して、
+     Stage 1 / Stage 2 / Stage 3 の依存関係をさらに明示する
