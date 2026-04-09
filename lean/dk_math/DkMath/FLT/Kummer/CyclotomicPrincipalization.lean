@@ -5668,6 +5668,45 @@ theorem cyclotomicPrincipalization_of_refinedClassGroupRoute
     (cyclotomicIdealPthPower_of_classGroupPTorsionFree hCl)
     hUnit hNorm
 
+/--
+refined class-group route において、Stage 3 の concrete receiver は `hNorm` そのものである。
+
+この theorem は内容的には thin wrapper だが、
+class-group / unit / norm の 3 段分解で
+non-first-case peel core がどの stage に依存しているかを theorem 名で固定する。
+-/
+theorem cyclotomicNormDescent_of_refinedClassGroupRoute
+    (_hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (_hUnit : CyclotomicUnitNormalizationTarget)
+    (hNorm : CyclotomicNormDescentTarget) :
+    CyclotomicNormDescentTarget :=
+  hNorm
+
+/--
+refined class-group route から refined non-first-case existence kernel を返す thin wrapper。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_refinedClassGroupRoute
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hUnit : CyclotomicUnitNormalizationTarget)
+    (hNorm : CyclotomicNormDescentTarget) :
+    CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget :=
+  cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_normDescent
+    (cyclotomicNormDescent_of_refinedClassGroupRoute hCl hUnit hNorm)
+
+/--
+refined class-group route から Kummer peel normal-form descent core を返す thin wrapper。
+
+これにより、current peel-side open は refined route の観点では
+`hNorm` receiver の未 concrete 化だけだと読める。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_refinedClassGroupRoute
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hUnit : CyclotomicUnitNormalizationTarget)
+    (hNorm : CyclotomicNormDescentTarget) :
+    CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget :=
+  cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_normDescent
+    (cyclotomicNormDescent_of_refinedClassGroupRoute hCl hUnit hNorm)
+
 /-!
 ## §3. ClassGroupBridge と RegularPrime route
 

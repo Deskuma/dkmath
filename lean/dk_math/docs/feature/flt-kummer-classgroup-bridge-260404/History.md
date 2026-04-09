@@ -1907,3 +1907,47 @@ Archive
      `...of_refinedClassGroupRoute`
      形式の theorem を追加して、
      Stage 1 / Stage 2 / Stage 3 の依存関係をさらに明示する
+
+### 日時: 2026/04/09 12:28:54 JST — refined class-group route から Stage 3 receiver / peel core への adapter 名を固定
+
+1. 目的:
+   - review-050 に従い、
+     current open を「peel 固有 kernel」ではなく
+     refined class-group route における Stage 3 receiver 問題として読むため、
+     `hCl + hUnit + hNorm`
+     から current peel core までの non-circular dependency を theorem 名で固定する
+2. 実施:
+   - `CyclotomicPrincipalization.lean` に
+     `cyclotomicNormDescent_of_refinedClassGroupRoute`
+     を追加し、
+     refined route 上の Stage 3 receiver は `hNorm` そのものだと明示した
+   - あわせて
+     `cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_refinedClassGroupRoute`
+     と
+     `cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_refinedClassGroupRoute`
+     を追加し、
+     refined route から
+     non-first-case existence / peel normal-form descent core へ落ちる chain を
+     wrapper として固定した
+   - `RegularPrimeRoute.lean` の no-sorry 監視にも上記 3 theorem を追加した
+3. 結論:
+   - current `sorry` は依然として
+     `cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree`
+     に残るが、
+     refined route 側では
+     `hNorm` が与えられれば peel core まで non-circular に閉じることが明示された ✅
+   - したがって、今後の mainline 作業対象は
+     「class-group / unit route から `CyclotomicNormDescentTarget` をどう concrete に supply するか」
+     であって、peel 局所算術ではないという読みがさらに強くなった ✅
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRouteSorry` 成功
+5. 次の課題:
+   - `cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization`
+     のような receiver theorem を新設するか、
+     あるいは `CyclotomicNormDescentTarget` の concrete 化を直接進めるかを決める
+   - もし receiver theorem を先に置くなら、
+     `hCl + hUnit`
+     から `hNorm` へ必要な残部品が本当に何かを棚卸しし、
+     theorem target を最薄に設計する
