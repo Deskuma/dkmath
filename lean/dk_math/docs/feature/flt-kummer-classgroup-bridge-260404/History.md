@@ -2006,3 +2006,62 @@ Archive
      それとも Stage 3 用の追加 receiver が 1 本要るかを棚卸しする
    - もし追加 receiver が必要なら、
      それを `CyclotomicNormDescentTarget` の直前にある最薄 theorem として isolated に切る
+
+### 日時: 2026/04/09 13:11:37 JST — Stage 3 receiver の棚卸しを theorem 分解で実装
+
+1. 目的:
+   - `hCl + hUnit ⟹ hNorm`
+     という receiver theorem に本当に何が不足しているかを棚卸しし、
+     direct `sorry` をより薄い branch-specific theorem へ押し下げる
+2. 実施:
+   - no-sorry bridge として
+     `cyclotomicNormDescent_of_caseSplit`
+     を追加し、
+     global `CyclotomicNormDescentTarget` は
+     first-case branch と non-first-case branch を束ねれば再構成できることを固定した
+   - あわせて
+     `cyclotomicNormDescent_of_classGroupPTorsionFree_and_nonFirstCase`
+     を追加し、
+     class-group 仮定のもとでは first-case branch は既に concrete なので、
+     残る Stage 3 open は non-first-case branch だけだと theorem 化した
+   - その上で direct `sorry` を持つ theorem として
+     `cyclotomicNormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNormalization`
+     を新設し、
+     旧
+     `cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization`
+     は thin wrapper に置き換えた
+   - 監視も更新し、
+     `RegularPrimeRoute.lean` では no-sorry 側に
+     `...NormDescent_of_caseSplit`
+     と
+     `...NormDescent_of_classGroupPTorsionFree_and_nonFirstCase`
+     を追加、
+     `RegularPrimeRouteSorry.lean` では new deepest Stage 3 receiver を
+     `...NormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNormalization`
+     として追跡する形にした
+3. 結論:
+   - 棚卸しの結果、
+     `hCl + hUnit ⟹ hNorm`
+     の missing piece は
+     global receiver 全体ではなく
+     non-first-case branch 専用 receiver 1 本だと整理できた ✅
+   - つまり Stage 3 の honest open は、
+     first / non-first split のうち
+     non-first-case branch にのみ残ると theorem-level に言えるようになった ✅
+   - build warning 上の direct `sorry` も、
+     旧 peel core
+     `cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree`
+     と、
+     新 Stage 3 branch receiver
+     `cyclotomicNormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNormalization`
+     の 2 箇所になった
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRouteSorry` 成功
+5. 次の課題:
+   - `cyclotomicNormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNormalization`
+     の proof に必要な最小追加 receiver を棚卸しし、
+     必要ならさらにその 1 theorem へ direct `sorry` を押し下げる
+   - あるいは current branch receiver 自体を、
+     existing Stage 1 / Stage 2 no-sorry 部品から直接埋められないかを再検討する

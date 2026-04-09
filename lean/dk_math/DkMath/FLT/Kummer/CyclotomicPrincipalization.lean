@@ -5683,6 +5683,58 @@ theorem cyclotomicNormDescent_of_refinedClassGroupRoute
   hNorm
 
 /--
+global Stage 3 `NormDescent` は、first-case / non-first-case の 2 分岐を束ねれば再構成できる。
+
+ここで non-first-case branch に必要なのは
+`CyclotomicPrincipalizationNonFirstCaseTarget`
+そのもの、すなわち
+`p ∣ (z - y)` の下での nat-level descent witness だけである。
+-/
+theorem cyclotomicNormDescent_of_caseSplit
+    (hFirst : CyclotomicPrincipalizationFirstCaseTarget)
+    (hNonFirst : CyclotomicPrincipalizationNonFirstCaseTarget) :
+    CyclotomicNormDescentTarget := by
+  intro p x y z hpack q hq hqx hqne hqgap
+  by_cases hpgap : p ∣ (z - y)
+  · exact hNonFirst hpack hq hqx hqne hqgap hpgap
+  · exact hFirst hpack hq hqx hqne hqgap hpgap
+
+/--
+class-group 仮定だけで first-case branch は既に concrete に閉じているので、
+global Stage 3 に残る honest open は non-first-case branch だけである。
+-/
+theorem cyclotomicNormDescent_of_classGroupPTorsionFree_and_nonFirstCase
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hNonFirst : CyclotomicPrincipalizationNonFirstCaseTarget) :
+    CyclotomicNormDescentTarget :=
+  cyclotomicNormDescent_of_caseSplit
+    (cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree hCl)
+    hNonFirst
+
+/--
+class-group 仮定と Stage 2 unit normalization のもとで、
+non-first-case branch の Stage 3 receiver を供給する最薄 theorem。
+
+review-051 の棚卸しに従い、
+`hCl + hUnit ⟹ hNorm`
+を直接証明するのではなく、
+まず branch-specific な honest open をここへ局所化する。
+-/
+theorem cyclotomicNormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNormalization
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hUnit : CyclotomicUnitNormalizationTarget) :
+    CyclotomicPrincipalizationNonFirstCaseTarget := by
+  clear hCl hUnit
+  intro p x y z hpack q hq hqx hqne hqgap hpgap
+  let _ := hpack
+  let _ := hq
+  let _ := hqx
+  let _ := hqne
+  let _ := hqgap
+  let _ := hpgap
+  sorry
+
+/--
 class-group 仮定と Stage 2 unit normalization から、
 global Stage 3 `NormDescent` を供給する最薄 receiver theorem。
 
@@ -5692,23 +5744,17 @@ review-051 に従い、current honest open を
 という receiver 問題として固定するための target である。
 -/
 theorem cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization
-    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
     (hUnit : CyclotomicUnitNormalizationTarget) :
-    CyclotomicNormDescentTarget := by
-  clear hCl hUnit
-  intro p x y z hpack q hq hqx hqne hqgap
-  let _ := hpack
-  let _ := hq
-  let _ := hqx
-  let _ := hqne
-  let _ := hqgap
-  sorry
+    CyclotomicNormDescentTarget :=
+  cyclotomicNormDescent_of_classGroupPTorsionFree_and_nonFirstCase hCl
+    (cyclotomicNormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNormalization hCl hUnit)
 
 /--
 `hCl + hUnit` が与えられれば、refined class-group route の Stage 3 は receiver theorem 1 本に局所化される。
 -/
 theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_and_unitNormalization
-    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
     (hUnit : CyclotomicUnitNormalizationTarget) :
     CyclotomicPrincipalizationTarget :=
   cyclotomicPrincipalization_of_refinedClassGroupRoute hCl hUnit
@@ -5743,7 +5789,7 @@ theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_refine
 `hCl + hUnit` から refined non-first-case existence kernel を返す thin wrapper。
 -/
 theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree_and_unitNormalization
-    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
     (hUnit : CyclotomicUnitNormalizationTarget) :
     CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget :=
   cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_normDescent
@@ -5753,7 +5799,7 @@ theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTor
 `hCl + hUnit` から Kummer peel normal-form descent core を返す thin wrapper。
 -/
 theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree_and_unitNormalization
-    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
     (hUnit : CyclotomicUnitNormalizationTarget) :
     CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget :=
   cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_normDescent
