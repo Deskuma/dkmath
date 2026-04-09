@@ -1951,3 +1951,58 @@ Archive
      `hCl + hUnit`
      から `hNorm` へ必要な残部品が本当に何かを棚卸しし、
      theorem target を最薄に設計する
+
+### 日時: 2026/04/09 12:56:25 JST — `hCl + hUnit ⟹ hNorm` receiver theorem を切り、Stage 3 open を first-class 化
+
+1. 目的:
+   - review-051 の提案どおり、
+     次の作業対象を
+     `CyclotomicNormDescentTarget`
+     の concrete receiver へ明示的に移す
+   - そのために
+     `cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization`
+     を theorem として立て、
+     `hCl + hUnit`
+     から downstream がどこまで wrapper で閉じるかを固定する
+2. 実施:
+   - `CyclotomicPrincipalization.lean` に
+     `cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization`
+     を追加した
+     これは現時点では direct `sorry` を含むが、
+     Stage 3 receiver 問題そのものを first-class theorem として隔離する役割を持つ
+   - あわせて downstream wrapper として
+     `cyclotomicPrincipalization_of_classGroupPTorsionFree_and_unitNormalization`
+     `cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree_and_unitNormalization`
+     `cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree_and_unitNormalization`
+     を追加し、
+     `hCl + hUnit + hNorm` ではなく
+     `hCl + hUnit`
+     だけを引数に取る mainline 名を先に確保した
+   - `RegularPrimeRoute.lean` と `RegularPrimeRouteSorry.lean` の監視にも、
+     上記 theorem 群を追加した
+3. 結論:
+   - Stage 3 receiver 問題
+     `hCl + hUnit ⟹ hNorm`
+     は theorem 名つきの独立 open として切り出せた ✅
+   - これにより、
+     今後の探索対象は
+     `CyclotomicNormDescentTarget` の concrete 化、
+     もしくはそのために不足している最小補題の棚卸しだと明確になった ✅
+   - 現在 build warning 上の direct `sorry` は
+     旧 core
+     `cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree`
+     と
+     新 receiver theorem
+     `cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization`
+     の 2 箇所に現れる
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRouteSorry` 成功
+5. 次の課題:
+   - `cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization`
+     の proof に本当に必要な残仮定が
+     `hCl + hUnit` だけか、
+     それとも Stage 3 用の追加 receiver が 1 本要るかを棚卸しする
+   - もし追加 receiver が必要なら、
+     それを `CyclotomicNormDescentTarget` の直前にある最薄 theorem として isolated に切る

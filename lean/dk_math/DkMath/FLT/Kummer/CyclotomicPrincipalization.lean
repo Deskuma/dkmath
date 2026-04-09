@@ -5683,6 +5683,38 @@ theorem cyclotomicNormDescent_of_refinedClassGroupRoute
   hNorm
 
 /--
+class-group 仮定と Stage 2 unit normalization から、
+global Stage 3 `NormDescent` を供給する最薄 receiver theorem。
+
+review-051 に従い、current honest open を
+「peel 固有 kernel」ではなく
+`hCl + hUnit ⟹ hNorm`
+という receiver 問題として固定するための target である。
+-/
+theorem cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hUnit : CyclotomicUnitNormalizationTarget) :
+    CyclotomicNormDescentTarget := by
+  clear hCl hUnit
+  intro p x y z hpack q hq hqx hqne hqgap
+  let _ := hpack
+  let _ := hq
+  let _ := hqx
+  let _ := hqne
+  let _ := hqgap
+  sorry
+
+/--
+`hCl + hUnit` が与えられれば、refined class-group route の Stage 3 は receiver theorem 1 本に局所化される。
+-/
+theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_and_unitNormalization
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hUnit : CyclotomicUnitNormalizationTarget) :
+    CyclotomicPrincipalizationTarget :=
+  cyclotomicPrincipalization_of_refinedClassGroupRoute hCl hUnit
+    (cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization hCl hUnit)
+
+/--
 refined class-group route から refined non-first-case existence kernel を返す thin wrapper。
 -/
 theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_refinedClassGroupRoute
@@ -5706,6 +5738,26 @@ theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_refine
     CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget :=
   cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_normDescent
     (cyclotomicNormDescent_of_refinedClassGroupRoute hCl hUnit hNorm)
+
+/--
+`hCl + hUnit` から refined non-first-case existence kernel を返す thin wrapper。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree_and_unitNormalization
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hUnit : CyclotomicUnitNormalizationTarget) :
+    CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget :=
+  cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_normDescent
+    (cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization hCl hUnit)
+
+/--
+`hCl + hUnit` から Kummer peel normal-form descent core を返す thin wrapper。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree_and_unitNormalization
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hUnit : CyclotomicUnitNormalizationTarget) :
+    CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget :=
+  cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_normDescent
+    (cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization hCl hUnit)
 
 /-!
 ## §3. ClassGroupBridge と RegularPrime route

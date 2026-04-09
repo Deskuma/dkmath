@@ -36,6 +36,14 @@ no-sorry となった場合は `RegularPrimeRouteNoSorry.lean` へ写し `no-sor
 -- §5. RegularPrimeRoute
 
 -- §5a. Stage 3a combinatorial bridge + NormEqGN concrete
+-- `sorry` (isolated Stage 3 receiver theorem from `hCl + hUnit`)
+#print axioms DkMath.FLT.cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization -- uses sorry
+-- `sorry` only via the isolated Stage 3 receiver theorem
+#print axioms DkMath.FLT.cyclotomicPrincipalization_of_classGroupPTorsionFree_and_unitNormalization -- uses sorry via norm-descent receiver theorem
+-- `sorry` only via the isolated Stage 3 receiver theorem
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree_and_unitNormalization -- uses sorry via norm-descent receiver theorem
+-- `sorry` only via the isolated Stage 3 receiver theorem
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree_and_unitNormalization -- uses sorry via norm-descent receiver theorem
 -- `sorry` (isolated non-first-case peel normal-form descent existence core)
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree -- uses sorry
 -- `sorry` only via the isolated non-first-case peel normal-form descent existence core
