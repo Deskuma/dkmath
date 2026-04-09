@@ -5668,6 +5668,373 @@ theorem cyclotomicPrincipalization_of_refinedClassGroupRoute
     (cyclotomicIdealPthPower_of_classGroupPTorsionFree hCl)
     hUnit hNorm
 
+/--
+refined class-group route において、Stage 3 の concrete receiver は `hNorm` そのものである。
+
+この theorem は内容的には thin wrapper だが、
+class-group / unit / norm の 3 段分解で
+non-first-case peel core がどの stage に依存しているかを theorem 名で固定する。
+-/
+theorem cyclotomicNormDescent_of_refinedClassGroupRoute
+    (_hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (_hUnit : CyclotomicUnitNormalizationTarget)
+    (hNorm : CyclotomicNormDescentTarget) :
+    CyclotomicNormDescentTarget :=
+  hNorm
+
+/--
+global Stage 3 `NormDescent` は、first-case / non-first-case の 2 分岐を束ねれば再構成できる。
+
+ここで non-first-case branch に必要なのは
+`CyclotomicPrincipalizationNonFirstCaseTarget`
+そのもの、すなわち
+`p ∣ (z - y)` の下での nat-level descent witness だけである。
+-/
+theorem cyclotomicNormDescent_of_caseSplit
+    (hFirst : CyclotomicPrincipalizationFirstCaseTarget)
+    (hNonFirst : CyclotomicPrincipalizationNonFirstCaseTarget) :
+    CyclotomicNormDescentTarget := by
+  intro p x y z hpack q hq hqx hqne hqgap
+  by_cases hpgap : p ∣ (z - y)
+  · exact hNonFirst hpack hq hqx hqne hqgap hpgap
+  · exact hFirst hpack hq hqx hqne hqgap hpgap
+
+/--
+class-group 仮定だけで first-case branch は既に concrete に閉じているので、
+global Stage 3 に残る honest open は non-first-case branch だけである。
+-/
+theorem cyclotomicNormDescent_of_classGroupPTorsionFree_and_nonFirstCase
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hNonFirst : CyclotomicPrincipalizationNonFirstCaseTarget) :
+    CyclotomicNormDescentTarget :=
+  cyclotomicNormDescent_of_caseSplit
+    (cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree hCl)
+    hNonFirst
+
+/--
+unit-normalized chosen factor の整数 norm を、そのまま `GN p (z - y) y` へ戻す target。
+
+`chosenCyclotomicLinearFactor_norm_eq_gn_direct` だけで concrete 化できるので、
+non-first-case receiver のうち norm 計算責務をここへ分離する。
+-/
+abbrev CyclotomicNormEqGNUnitNormalizedChosenFactorTarget : Prop :=
+  ∀ {K : Type*} [Field K] [NumberField K] [CharZero K],
+    ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+    ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {β unitFactor : 𝓞 K},
+        IsUnit unitFactor →
+        chosenCyclotomicLinearFactorInRingOfIntegers hζ y z =
+          unitFactor * β ^ p →
+        Algebra.norm ℤ
+          (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) =
+            (GN p (z - y) y : ℤ)
+
+/--
+unit-normalized chosen factor に norm をかけたあと、
+unit を吸収して `GN p (z - y) y = s^p` を返す target。
+
+`norm_eq_normUnit_mul_normPow_of_eq_unit_mul_pow` と
+`nat_exists_pow_of_intEq_unit_mul_pow` だけで concrete 化できる責務をここへ隔離する。
+-/
+abbrev CyclotomicNormUnitAbsorbUnitNormalizedChosenFactorTarget : Prop :=
+  ∀ {K : Type*} [Field K] [NumberField K] [CharZero K],
+    ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+    ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {β unitFactor : 𝓞 K},
+        IsUnit unitFactor →
+        chosenCyclotomicLinearFactorInRingOfIntegers hζ y z =
+          unitFactor * β ^ p →
+        Algebra.norm ℤ
+          (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) =
+            (GN p (z - y) y : ℤ) →
+        ∃ s : ℕ, GN p (z - y) y = s ^ p
+
+/--
+unit-normalized chosen factor から、`GN p (z - y) y = s^p` を返す中間 target。
+
+current non-first-case receiver を first-case と同じ
+`NormEqGN` / `UnitAbsorb` の 2 段へ分解したうえで、
+最終 witness 回収の手前で止めた器である。
+-/
+abbrev CyclotomicNormGNPowerUnitNormalizedChosenFactorTarget : Prop :=
+  ∀ {K : Type*} [Field K] [NumberField K] [CharZero K],
+    ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+    ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {β unitFactor : 𝓞 K},
+        IsUnit unitFactor →
+        chosenCyclotomicLinearFactorInRingOfIntegers hζ y z =
+          unitFactor * β ^ p →
+        ∃ s : ℕ, GN p (z - y) y = s ^ p
+
+/--
+`chosenCyclotomicLinearFactor_norm_eq_gn_direct` により、
+unit-normalized chosen factor の norm 計算自体は case split に依らず concrete である。
+-/
+theorem cyclotomicNormEqGN_concrete_unitNormalizedChosenFactor :
+    CyclotomicNormEqGNUnitNormalizedChosenFactorTarget := by
+  intro K _ _ _ p x y z _ _ ζ hζ hpack β unitFactor _ _
+  simpa [chosenCyclotomicLinearFactorInRingOfIntegers, Nat.cast_sub hpack.hyz] using
+    (chosenCyclotomicLinearFactor_norm_eq_gn_direct
+      (K := K) (p := p) (z := z) (y := y) hζ hpack.hy0 hpack.hyz_lt)
+
+/--
+unit-normalized chosen factor の norm 式から `GN p (z - y) y = s^p` を回収する concrete theorem。
+-/
+theorem cyclotomicNormUnitAbsorb_concrete_unitNormalizedChosenFactor :
+    CyclotomicNormUnitAbsorbUnitNormalizedChosenFactorTarget := by
+  intro K _ _ _ p x y z _ _ ζ hζ hpack β unitFactor hUnit hEq hNorm
+  have hNormMul :=
+    norm_eq_normUnit_mul_normPow_of_eq_unit_mul_pow
+      (K := K) (p := p) (y := y) (z := z) (hζ := hζ) (β := β)
+      (unitFactor := unitFactor) hEq
+  have hNormUnit : IsUnit (Algebra.norm ℤ unitFactor) :=
+    IsUnit.map (Algebra.norm ℤ) hUnit
+  have hNormGN :
+      ((GN p (z - y) y : ℕ) : ℤ) =
+        Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) := by
+    simpa [← Nat.cast_sub hpack.hyz] using hNorm.symm
+  have hEqInt :
+      ((GN p (z - y) y : ℕ) : ℤ) =
+        Algebra.norm ℤ unitFactor * (Algebra.norm ℤ β) ^ p := by
+    exact hNormGN.trans hNormMul
+  simpa using
+    (DkMath.NumberTheory.Gcd.nat_exists_pow_of_intEq_unit_mul_pow
+      (n := GN p (z - y) y) (p := p)
+      (unitFactor := Algebra.norm ℤ unitFactor)
+      (m := Algebra.norm ℤ β)
+      hNormUnit hEqInt)
+
+/--
+unit-normalized chosen factor から `GN p (z - y) y = s^p` を返す concrete wrapper。
+-/
+theorem cyclotomicNormGNPower_concrete_unitNormalizedChosenFactor :
+    CyclotomicNormGNPowerUnitNormalizedChosenFactorTarget := by
+  intro K _ _ _ p x y z _ _ ζ hζ hpack β unitFactor hUnit hEq
+  have hNorm :
+      Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) =
+        (GN p (z - y) y : ℤ) :=
+    cyclotomicNormEqGN_concrete_unitNormalizedChosenFactor
+      (K := K) (p := p) (x := x) (y := y) (z := z) (ζ := ζ)
+      hζ hpack hUnit hEq
+  exact cyclotomicNormUnitAbsorb_concrete_unitNormalizedChosenFactor
+    (K := K) (p := p) (x := x) (y := y) (z := z) (ζ := ζ)
+    hζ hpack hUnit hEq hNorm
+
+/--
+Stage 2 の chosen-factor unit normalization を受けて、
+non-first-case nat-level descent witness を返すべき最小 receiver target。
+
+既存 no-sorry 部品で `z - ζy = unitFactor * β^p` までは供給できるので、
+review-052 の棚卸しでは current Stage 3 open をまずここへ押し下げる。
+-/
+abbrev CyclotomicNormDescentNonFirstCaseUnitNormalizedReceiverTarget : Prop :=
+  ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+    ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+    ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {q : ℕ}, Nat.Prime q →
+        q ∣ x →
+        q ≠ p →
+        q ∣ (z - y) →
+        p ∣ (z - y) →
+        ∀ {β unitFactor : 𝓞 K},
+          IsUnit unitFactor →
+          chosenCyclotomicLinearFactorInRingOfIntegers hζ y z =
+            unitFactor * β ^ p →
+          ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p
+
+/--
+`GN p (z - y) y = s^p` から non-first-case の最終 nat-level descent witness を返すべき receiver target。
+
+norm 計算と unit 吸収は既存 no-sorry 補題で concrete 化できるため、
+current honest open をこの pure arithmetic receiver へさらに押し下げる。
+-/
+abbrev CyclotomicNormDescentNonFirstCaseGNPowerReceiverTarget : Prop :=
+  ∀ {p x y z : ℕ},
+    PrimeGe5CounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ x →
+      q ≠ p →
+      q ∣ (z - y) →
+      p ∣ (z - y) →
+      ∀ {s : ℕ},
+        GN p (z - y) y = s ^ p →
+        ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p
+
+theorem cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_gnPowerReceiver
+    (hPow : CyclotomicNormDescentNonFirstCaseGNPowerReceiverTarget) :
+    CyclotomicNormDescentNonFirstCaseUnitNormalizedReceiverTarget := by
+  intro K _ _ _ p x y z _ _ ζ hζ hpack q hq hqx hqne hqgap hpgap β unitFactor hUnitFactor hEq
+  rcases cyclotomicNormGNPower_concrete_unitNormalizedChosenFactor
+      (K := K) (p := p) (x := x) (y := y) (z := z) (ζ := ζ)
+      hζ hpack hUnitFactor hEq with
+    ⟨s, hs⟩
+  exact hPow hpack hq hqx hqne hqgap hpgap hs
+
+/--
+Stage 2 の generic unit normalization 出力が与えられれば、
+non-first-case branch receiver は chosen-factor receiver 1 本へ薄く還元できる。
+
+ここで使う cyclotomic input は canonical `CyclotomicField p ℚ` とその primitive root だけであり、
+existing Stage 1 / Stage 2 no-sorry mainline がどこまで直接届いているかを theorem 名で固定する。
+-/
+theorem cyclotomicNormDescentNonFirstCase_of_unitNormalizationAndReceiver
+    (hUnit : CyclotomicUnitNormalizationTarget.{0})
+    (hRecv : CyclotomicNormDescentNonFirstCaseUnitNormalizedReceiverTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCaseTarget := by
+  intro p x y z hpack q hq hqx hqne hqgap hpgap
+  let _ : Fact p.Prime := ⟨hpack.hp⟩
+  let ζ : CyclotomicField p ℚ :=
+    IsCyclotomicExtension.zeta p ℚ (CyclotomicField p ℚ)
+  let hζ : IsPrimitiveRoot ζ p := by
+    simp [ζ]
+  let ctx : CyclotomicLocalFactorizationContext (𝓞 (CyclotomicField p ℚ)) := {
+    p := p
+    zeta := hζ.toInteger
+    hzeta_pow := by
+      simpa using hζ.toInteger_isPrimitiveRoot.pow_eq_one
+  }
+  obtain ⟨β, unitFactor, hUnitFactor, hEq⟩ :=
+    hUnit (R := 𝓞 (CyclotomicField p ℚ)) (ctx := ctx)
+      (p := p) (x := x) (y := y) (z := z) hpack
+      (q := q) hq hqx hqne hqgap
+  exact hRecv (K := CyclotomicField p ℚ) (p := p) (x := x) (y := y) (z := z)
+    (ζ := ζ) hζ hpack hq hqx hqne hqgap hpgap hUnitFactor
+    (by simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hEq)
+
+/--
+class-group 仮定と Stage 2 unit normalization のもとで、
+non-first-case branch の Stage 3 receiver を供給する最薄 theorem。
+
+review-051 の棚卸しに従い、
+`hCl + hUnit ⟹ hNorm`
+を直接証明するのではなく、
+まず branch-specific な honest open をここへ局所化する。
+-/
+theorem cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicNormDescentNonFirstCaseGNPowerReceiverTarget := by
+  clear hCl
+  intro p x y z hpack q hq hqx hqne hqgap hpgap s hs
+  let _ := hpack
+  let _ := hq
+  let _ := hqx
+  let _ := hqne
+  let _ := hqgap
+  let _ := hpgap
+  let _ := s
+  let _ := hs
+  sorry
+
+/--
+class-group 仮定と Stage 2 unit normalization のもとで、
+non-first-case branch の Stage 3 receiver を供給する最薄 theorem。
+
+review-051 の棚卸しに従い、
+`hCl + hUnit ⟹ hNorm`
+を直接証明するのではなく、
+まず branch-specific な honest open をここへ局所化する。
+-/
+theorem cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_classGroupPTorsionFree
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicNormDescentNonFirstCaseUnitNormalizedReceiverTarget :=
+  cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_gnPowerReceiver
+    (cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree hCl)
+
+/--
+class-group 仮定と Stage 2 unit normalization のもとで、
+non-first-case branch の Stage 3 receiver を供給する最薄 theorem。
+
+review-051 の棚卸しに従い、
+`hCl + hUnit ⟹ hNorm`
+を直接証明するのではなく、
+まず branch-specific な honest open をここへ局所化する。
+-/
+theorem cyclotomicNormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNormalization
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hUnit : CyclotomicUnitNormalizationTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCaseTarget :=
+  cyclotomicNormDescentNonFirstCase_of_unitNormalizationAndReceiver hUnit
+    (cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_classGroupPTorsionFree hCl)
+
+/--
+class-group 仮定と Stage 2 unit normalization から、
+global Stage 3 `NormDescent` を供給する最薄 receiver theorem。
+
+review-051 に従い、current honest open を
+「peel 固有 kernel」ではなく
+`hCl + hUnit ⟹ hNorm`
+という receiver 問題として固定するための target である。
+-/
+theorem cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hUnit : CyclotomicUnitNormalizationTarget.{0}) :
+    CyclotomicNormDescentTarget :=
+  cyclotomicNormDescent_of_classGroupPTorsionFree_and_nonFirstCase hCl
+    (cyclotomicNormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNormalization hCl hUnit)
+
+/--
+`hCl + hUnit` が与えられれば、refined class-group route の Stage 3 は receiver theorem 1 本に局所化される。
+-/
+theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_and_unitNormalization
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hUnit : CyclotomicUnitNormalizationTarget.{0}) :
+    CyclotomicPrincipalizationTarget :=
+  cyclotomicPrincipalization_of_refinedClassGroupRoute hCl hUnit
+    (cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization hCl hUnit)
+
+/--
+refined class-group route から refined non-first-case existence kernel を返す thin wrapper。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_refinedClassGroupRoute
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hUnit : CyclotomicUnitNormalizationTarget)
+    (hNorm : CyclotomicNormDescentTarget) :
+    CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget :=
+  cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_normDescent
+    (cyclotomicNormDescent_of_refinedClassGroupRoute hCl hUnit hNorm)
+
+/--
+refined class-group route から Kummer peel normal-form descent core を返す thin wrapper。
+
+これにより、current peel-side open は refined route の観点では
+`hNorm` receiver の未 concrete 化だけだと読める。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_refinedClassGroupRoute
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hUnit : CyclotomicUnitNormalizationTarget)
+    (hNorm : CyclotomicNormDescentTarget) :
+    CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget :=
+  cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_normDescent
+    (cyclotomicNormDescent_of_refinedClassGroupRoute hCl hUnit hNorm)
+
+/--
+`hCl + hUnit` から refined non-first-case existence kernel を返す thin wrapper。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree_and_unitNormalization
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hUnit : CyclotomicUnitNormalizationTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget :=
+  cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_normDescent
+    (cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization hCl hUnit)
+
+/--
+`hCl + hUnit` から Kummer peel normal-form descent core を返す thin wrapper。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree_and_unitNormalization
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hUnit : CyclotomicUnitNormalizationTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget :=
+  cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_normDescent
+    (cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization hCl hUnit)
+
 /-!
 ## §3. ClassGroupBridge と RegularPrime route
 

@@ -38,12 +38,29 @@ no-sorry の theorem が意図せず sorry に汚染されていないことを�
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_normalFormDescent
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_normDescent
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_normDescent
+#print axioms DkMath.FLT.cyclotomicNormDescent_of_refinedClassGroupRoute
+#print axioms DkMath.FLT.cyclotomicNormDescent_of_caseSplit
+#print axioms DkMath.FLT.cyclotomicNormEqGN_concrete_unitNormalizedChosenFactor
+#print axioms DkMath.FLT.cyclotomicNormUnitAbsorb_concrete_unitNormalizedChosenFactor
+#print axioms DkMath.FLT.cyclotomicNormGNPower_concrete_unitNormalizedChosenFactor
+#print axioms DkMath.FLT.cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_gnPowerReceiver
+#print axioms DkMath.FLT.cyclotomicNormDescentNonFirstCase_of_unitNormalizationAndReceiver
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_refinedClassGroupRoute
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_refinedClassGroupRoute
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_namedSmallerCounterexampleTarget
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_packetQuotientLift
 
 -- ====================================================================================================================
 -- `sorry`
 -- ====================================================================================================================
+#print axioms DkMath.FLT.cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_classGroupPTorsionFree
+#print axioms DkMath.FLT.cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree
+#print axioms DkMath.FLT.cyclotomicNormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNormalization
+#print axioms DkMath.FLT.cyclotomicNormDescent_of_classGroupPTorsionFree_and_nonFirstCase
+#print axioms DkMath.FLT.cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization
+#print axioms DkMath.FLT.cyclotomicPrincipalization_of_classGroupPTorsionFree_and_unitNormalization
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree_and_unitNormalization
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree_and_unitNormalization
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_classGroupPTorsionFree
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_classGroupPTorsionFree
