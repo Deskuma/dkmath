@@ -5712,6 +5712,88 @@ theorem cyclotomicNormDescent_of_classGroupPTorsionFree_and_nonFirstCase
     hNonFirst
 
 /--
+Stage 2 の chosen-factor unit normalization を受けて、
+non-first-case nat-level descent witness を返すべき最小 receiver target。
+
+既存 no-sorry 部品で `z - ζy = unitFactor * β^p` までは供給できるので、
+review-052 の棚卸しでは current Stage 3 open をまずここへ押し下げる。
+-/
+abbrev CyclotomicNormDescentNonFirstCaseUnitNormalizedReceiverTarget : Prop :=
+  ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+    ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+    ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {q : ℕ}, Nat.Prime q →
+        q ∣ x →
+        q ≠ p →
+        q ∣ (z - y) →
+        p ∣ (z - y) →
+        ∀ {β unitFactor : 𝓞 K},
+          IsUnit unitFactor →
+          chosenCyclotomicLinearFactorInRingOfIntegers hζ y z =
+            unitFactor * β ^ p →
+          ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p
+
+/--
+Stage 2 の generic unit normalization 出力が与えられれば、
+non-first-case branch receiver は chosen-factor receiver 1 本へ薄く還元できる。
+
+ここで使う cyclotomic input は canonical `CyclotomicField p ℚ` とその primitive root だけであり、
+existing Stage 1 / Stage 2 no-sorry mainline がどこまで直接届いているかを theorem 名で固定する。
+-/
+theorem cyclotomicNormDescentNonFirstCase_of_unitNormalizationAndReceiver
+    (hUnit : CyclotomicUnitNormalizationTarget.{0})
+    (hRecv : CyclotomicNormDescentNonFirstCaseUnitNormalizedReceiverTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCaseTarget := by
+  intro p x y z hpack q hq hqx hqne hqgap hpgap
+  let _ : Fact p.Prime := ⟨hpack.hp⟩
+  let ζ : CyclotomicField p ℚ :=
+    IsCyclotomicExtension.zeta p ℚ (CyclotomicField p ℚ)
+  let hζ : IsPrimitiveRoot ζ p := by
+    simp [ζ]
+  let ctx : CyclotomicLocalFactorizationContext (𝓞 (CyclotomicField p ℚ)) := {
+    p := p
+    zeta := hζ.toInteger
+    hzeta_pow := by
+      simpa using hζ.toInteger_isPrimitiveRoot.pow_eq_one
+  }
+  obtain ⟨β, unitFactor, hUnitFactor, hEq⟩ :=
+    hUnit (R := 𝓞 (CyclotomicField p ℚ)) (ctx := ctx)
+      (p := p) (x := x) (y := y) (z := z) hpack
+      (q := q) hq hqx hqne hqgap
+  exact hRecv (K := CyclotomicField p ℚ) (p := p) (x := x) (y := y) (z := z)
+    (ζ := ζ) hζ hpack hq hqx hqne hqgap hpgap hUnitFactor
+    (by simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hEq)
+
+/--
+class-group 仮定と Stage 2 unit normalization のもとで、
+non-first-case branch の Stage 3 receiver を供給する最薄 theorem。
+
+review-051 の棚卸しに従い、
+`hCl + hUnit ⟹ hNorm`
+を直接証明するのではなく、
+まず branch-specific な honest open をここへ局所化する。
+-/
+theorem cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_classGroupPTorsionFree
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicNormDescentNonFirstCaseUnitNormalizedReceiverTarget := by
+  clear hCl
+  intro K _ _ _ p x y z _ _ ζ hζ hpack q hq hqx hqne hqgap hpgap β unitFactor hUnitFactor hEq
+  let _ := hζ
+  let _ := hpack
+  let _ := hq
+  let _ := hqx
+  let _ := hqne
+  let _ := hqgap
+  let _ := hpgap
+  let _ := β
+  let _ := unitFactor
+  let _ := hUnitFactor
+  let _ := hEq
+  sorry
+
+/--
 class-group 仮定と Stage 2 unit normalization のもとで、
 non-first-case branch の Stage 3 receiver を供給する最薄 theorem。
 
@@ -5722,17 +5804,10 @@ review-051 の棚卸しに従い、
 -/
 theorem cyclotomicNormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNormalization
     (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
-    (hUnit : CyclotomicUnitNormalizationTarget) :
-    CyclotomicPrincipalizationNonFirstCaseTarget := by
-  clear hCl hUnit
-  intro p x y z hpack q hq hqx hqne hqgap hpgap
-  let _ := hpack
-  let _ := hq
-  let _ := hqx
-  let _ := hqne
-  let _ := hqgap
-  let _ := hpgap
-  sorry
+    (hUnit : CyclotomicUnitNormalizationTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCaseTarget :=
+  cyclotomicNormDescentNonFirstCase_of_unitNormalizationAndReceiver hUnit
+    (cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_classGroupPTorsionFree hCl)
 
 /--
 class-group 仮定と Stage 2 unit normalization から、
@@ -5745,7 +5820,7 @@ review-051 に従い、current honest open を
 -/
 theorem cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization
     (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
-    (hUnit : CyclotomicUnitNormalizationTarget) :
+    (hUnit : CyclotomicUnitNormalizationTarget.{0}) :
     CyclotomicNormDescentTarget :=
   cyclotomicNormDescent_of_classGroupPTorsionFree_and_nonFirstCase hCl
     (cyclotomicNormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNormalization hCl hUnit)
@@ -5755,7 +5830,7 @@ theorem cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization
 -/
 theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_and_unitNormalization
     (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
-    (hUnit : CyclotomicUnitNormalizationTarget) :
+    (hUnit : CyclotomicUnitNormalizationTarget.{0}) :
     CyclotomicPrincipalizationTarget :=
   cyclotomicPrincipalization_of_refinedClassGroupRoute hCl hUnit
     (cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization hCl hUnit)
@@ -5790,7 +5865,7 @@ theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_refine
 -/
 theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree_and_unitNormalization
     (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
-    (hUnit : CyclotomicUnitNormalizationTarget) :
+    (hUnit : CyclotomicUnitNormalizationTarget.{0}) :
     CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget :=
   cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_normDescent
     (cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization hCl hUnit)
@@ -5800,7 +5875,7 @@ theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTor
 -/
 theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree_and_unitNormalization
     (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
-    (hUnit : CyclotomicUnitNormalizationTarget) :
+    (hUnit : CyclotomicUnitNormalizationTarget.{0}) :
     CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget :=
   cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_normDescent
     (cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization hCl hUnit)
