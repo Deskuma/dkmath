@@ -203,7 +203,7 @@ $$
 
 ## 7. 今やるべきでないこと
 
-ここで আবার cyclotomic 側や unit normalization 側を掘り返すのは筋が悪い。
+ここでまた cyclotomic 側や unit normalization 側を掘り返すのは筋が悪い。
 latest diff でそこはもう no-sorry concrete だと fixed された。つまり今そこをいじるのは、勝った前線へ兵を送り続けるようなものじゃ。
 
 ## 8. まとめ

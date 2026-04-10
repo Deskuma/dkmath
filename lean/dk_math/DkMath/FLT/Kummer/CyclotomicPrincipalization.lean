@@ -5919,19 +5919,14 @@ review-051 の棚卸しに従い、
 まず branch-specific な honest open をここへ局所化する。
 -/
 theorem cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree
-    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    (_hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
     CyclotomicNormDescentNonFirstCaseGNPowerReceiverTarget := by
-  clear hCl
+  let hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p :=
+    bodyInvariant_of_NoPowOnGN triominoCosmicNoPowOnGN_default
   intro p x y z hpack q hq hqx hqne hqgap hpgap s hs
-  let _ := hpack
-  let _ := hq
-  let _ := hqx
-  let _ := hqne
-  let _ := hqgap
-  let _ := hpgap
-  let _ := s
-  let _ := hs
-  sorry
+  exact False.elim <| hNoPow hpack ⟨s, hs⟩
 
 /--
 class-group 仮定と Stage 2 unit normalization のもとで、
@@ -6034,6 +6029,24 @@ theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classG
     CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget :=
   cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_normDescent
     (cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization hCl hUnit)
+
+/--
+old peel core theorem が新しい no-sorry norm route へ寄るとき、
+`hCl` 側で本当に不足している追加入力は `hUnit` だけである。
+
+inspection 用の theorem-level summary として、
+`hCl` から peel core を返す legacy theorem は
+`CyclotomicUnitNormalizationTarget` を 1 本足せば
+既存 no-sorry chain の thin wrapper に置き換わることを固定する。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree_reducesTo_unitNormalization
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicUnitNormalizationTarget.{0} →
+      CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget := by
+  intro hUnit
+  exact
+    cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree_and_unitNormalization
+      hCl hUnit
 
 /-!
 ## §3. ClassGroupBridge と RegularPrime route

@@ -27,6 +27,8 @@ no-sorry の theorem が意図せず sorry に汚染されていないことを�
 ここに置くべき `#print axioms` 監視は、`RegularPrimeRoute.lean` の定理の新規実装定理の確認限定である。
 -/
 
+section NoSorry
+#print "section: begin == no-sorry =="
 -- ====================================================================================================================
 -- no-sorry
 -- ====================================================================================================================
@@ -50,17 +52,25 @@ no-sorry の theorem が意図せず sorry に汚染されていないことを�
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_namedSmallerCounterexampleTarget
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_packetQuotientLift
 
+#print "section: end == no-sorry =="
+end NoSorry
+-- --------------------------------------------------------------------------------------------------------------------
+
+
+section viaSorryAx
+#print "section: begin == via-sorry =="
 -- ====================================================================================================================
 -- `sorry`
 -- ====================================================================================================================
-#print axioms DkMath.FLT.cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_classGroupPTorsionFree
 #print axioms DkMath.FLT.cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree
+#print axioms DkMath.FLT.cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_classGroupPTorsionFree
 #print axioms DkMath.FLT.cyclotomicNormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNormalization
 #print axioms DkMath.FLT.cyclotomicNormDescent_of_classGroupPTorsionFree_and_nonFirstCase
 #print axioms DkMath.FLT.cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization
 #print axioms DkMath.FLT.cyclotomicPrincipalization_of_classGroupPTorsionFree_and_unitNormalization
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree_and_unitNormalization
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree_and_unitNormalization
+#print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree_reducesTo_unitNormalization
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_classGroupPTorsionFree
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_classGroupPTorsionFree
@@ -69,3 +79,6 @@ no-sorry の theorem が意図せず sorry に汚染されていないことを�
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTorsionFree
 #print axioms DkMath.FLT.cyclotomicPrincipalization_of_classGroupPTorsionFree
 #print axioms DkMath.FLT.FLTPrimeGe5Target_of_kummerRoute
+
+#print "section: end == via-sorry =="
+end viaSorryAx
