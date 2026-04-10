@@ -2218,6 +2218,7 @@ Archive
      や named smaller-counterexample route へ変換する追加 arithmetic receiver が要るかを調べる
 
 ## 2026/04/10 12:41:44 JST
+
 1. 背景:
    - review-052 の提案どおり、
      `cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree`
@@ -2279,6 +2280,7 @@ Archive
      current honest open を 1 箇所として完全に揃える
 
 ## 2026/04/10 14:40:45 JST
+
 1. 背景:
    - review-053 の第一手として、
      `cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree`
@@ -2333,3 +2335,58 @@ Archive
      theorem 名と監視を
      「不足は `hUnit` だけ」
      という読みへさらに揃える
+
+## 2026/04/10 16:56:14 JST
+
+1. 背景:
+   - `RegularPrimeRoute.lean` の no-sorry 監視に移した Stage 3 receiver 群について、
+     verbose build の `#print axioms` 出力で `sorryAx` 混入が検出された
+   - そこで、なぜ no-sorry 扱いになっていたのかを再点検し、
+     transitive dependency まで含めて root cause を追跡した
+2. 実施:
+   - `RegularPrimeRoute.lean` の no-sorry / via-sorry 分類を見直し、
+     `cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree`
+     以降の Stage 3 receiver / wrapper 群を
+     no-sorry から via-sorry へ戻した
+   - `#print axioms` を個別に実行して依存を確認し、
+     `bodyInvariant_of_NoPowOnGN`
+     自体は no-sorry だが、
+     そこへ渡している
+     `triominoCosmicNoPowOnGN_default`
+     が `sorryAx` を含むことを確定した
+   - したがって、
+     `cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree`
+     の `sorryAx` は
+     `bodyInvariant_of_NoPowOnGN triominoCosmicNoPowOnGN_default`
+     経由の transitive 汚染であり、
+     「direct `sorry` が消えたので no-sorry」と見なした以前の移動は誤分類だったと整理した
+3. 結論:
+   - no-sorry へ移した理由は、
+     theorem 本体に direct `sorry` が無くなったことを根拠に
+     早計に no-sorry 扱いしたためであり、
+     transitive axiom dependency の確認が不足していた
+   - 実際の root source は
+     `TriominoCosmicGapInvariant.lean`
+     の
+     `triominoCosmicNoPowOnGN_default`
+     で、
+     そこから Stage 3 receiver 群へ `sorryAx` が伝播していた
+   - したがって current honest open の数学的意味は変わらないが、
+     監視分類としては via-sorry に戻すのが正しい
+4. 検証:
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRouteSorry` 成功
+   - `./lean-build.sh -v '/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMathTest/FLT/Kummer/RegularPrimeRoute.lean'`
+     を再実行し、
+     no-sorry section に `sorryAx` 混入 theorem が残っていないことを確認した
+   - `#print axioms DkMath.FLT.bodyInvariant_of_NoPowOnGN`
+     は no-sorry
+   - `#print axioms DkMath.FLT.triominoCosmicNoPowOnGN_default`
+     は `sorryAx` を含む
+   - `#print axioms DkMath.FLT.cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree`
+     も `sorryAx` を含む
+5. 次の課題:
+   - `triominoCosmicNoPowOnGN_default`
+     自体の `sorryAx` root をさらに掘るか、
+     ひとまず current monitoring を正した状態で
+     Kummer mainline の open に戻るかを判断する
