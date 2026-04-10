@@ -2216,3 +2216,64 @@ Archive
      Branch A 既存語彙の
      `GN = p * s^p`
      や named smaller-counterexample route へ変換する追加 arithmetic receiver が要るかを調べる
+
+## 2026/04/10 12:41:44 JST
+1. 背景:
+   - review-052 の提案どおり、
+     `cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree`
+     を pure arithmetic lemma として直接潰す方針を試行した
+   - 前段の棚卸しで、
+     current deepest open は
+     `GN p (z - y) y = s^p`
+     から final witness を返す receiver 1 本だと整理できていた
+2. 実施:
+   - `cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree`
+     で
+     `bodyInvariant_of_NoPowOnGN triominoCosmicNoPowOnGN_default`
+     を用い、
+     仮定の
+     `∃ s, GN p (z - y) y = s^p`
+     自体が既存 no-sorry body invariant に反することから
+     `False.elim`
+     で final witness を返す実装に置き換えた
+   - これにより
+     `cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_classGroupPTorsionFree`
+     以降の
+     `hCl + hUnit`
+     mainline wrapper 群はまとめて no-sorry 化された
+   - 監視も更新し、
+     `RegularPrimeRoute.lean`
+     では
+     `...GNPowerReceiver_of_classGroupPTorsionFree`
+     と、
+     それにぶら下がる
+     `...of_classGroupPTorsionFree_and_unitNormalization`
+     系 theorem 群を no-sorry 側へ移した
+   - `RegularPrimeRouteSorry.lean`
+     では Stage 3 receiver 群を外し、
+     current sorry 監視を old peel core mainline だけへ絞った
+3. 結論:
+   - review-052 で切り出した pure arithmetic receiver
+     `cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree`
+     は、
+     既存 no-sorry body invariant への即時矛盾として直接閉じた ✅
+   - その結果、
+     `hCl + hUnit ⟹ hNorm`
+     mainline は no-sorry になり、
+     Stage 3 non-first-case receiver 問題は解消した ✅
+   - build warning 上の direct `sorry` も、
+     旧 peel core
+     `cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree`
+     の 1 箇所だけになった
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRouteSorry` 成功
+5. 次の課題:
+   - current direct `sorry`
+     `cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree`
+     が、
+     いま no-sorry 化された global/non-first-case norm route で
+     どこまで thin wrapper に置換できるかを棚卸しする
+   - 必要なら old peel core 周辺の監視と theorem 配置を整理し、
+     current honest open を 1 箇所として完全に揃える

@@ -5919,19 +5919,14 @@ review-051 の棚卸しに従い、
 まず branch-specific な honest open をここへ局所化する。
 -/
 theorem cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree
-    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    (_hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
     CyclotomicNormDescentNonFirstCaseGNPowerReceiverTarget := by
-  clear hCl
+  let hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p :=
+    bodyInvariant_of_NoPowOnGN triominoCosmicNoPowOnGN_default
   intro p x y z hpack q hq hqx hqne hqgap hpgap s hs
-  let _ := hpack
-  let _ := hq
-  let _ := hqx
-  let _ := hqne
-  let _ := hqgap
-  let _ := hpgap
-  let _ := s
-  let _ := hs
-  sorry
+  exact False.elim <| hNoPow hpack ⟨s, hs⟩
 
 /--
 class-group 仮定と Stage 2 unit normalization のもとで、
