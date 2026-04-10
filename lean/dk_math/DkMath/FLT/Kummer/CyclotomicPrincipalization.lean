@@ -6030,6 +6030,24 @@ theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classG
   cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_normDescent
     (cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization hCl hUnit)
 
+/--
+old peel core theorem が新しい no-sorry norm route へ寄るとき、
+`hCl` 側で本当に不足している追加入力は `hUnit` だけである。
+
+inspection 用の theorem-level summary として、
+`hCl` から peel core を返す legacy theorem は
+`CyclotomicUnitNormalizationTarget` を 1 本足せば
+既存 no-sorry chain の thin wrapper に置き換わることを固定する。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree_reducesTo_unitNormalization
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicUnitNormalizationTarget.{0} →
+      CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget := by
+  intro hUnit
+  exact
+    cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree_and_unitNormalization
+      hCl hUnit
+
 /-!
 ## §3. ClassGroupBridge と RegularPrime route
 

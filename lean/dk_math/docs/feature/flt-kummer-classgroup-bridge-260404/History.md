@@ -2277,3 +2277,59 @@ Archive
      どこまで thin wrapper に置換できるかを棚卸しする
    - 必要なら old peel core 周辺の監視と theorem 配置を整理し、
      current honest open を 1 箇所として完全に揃える
+
+## 2026/04/10 14:40:45 JST
+1. 背景:
+   - review-053 の第一手として、
+     `cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree`
+     が、
+     いま no-sorry 化された global / non-first-case norm route で
+     そのまま thin wrapper に置換できるかを検査した
+   - 判定点は、
+     `hCl` 単独で old peel core を no-sorry chain へ載せ替えられるか、
+     それとも追加で `hUnit` supply が要るか、の一点
+2. 実施:
+   - 既存 theorem 群を点検し、
+     `cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree_and_unitNormalization`
+     が
+     new no-sorry norm route への thin wrapper である一方、
+     `hCl ⟹ hUnit`
+     を供給する既存 no-sorry theorem はまだ無いことを確認した
+   - その inspection 結果を theorem 名で固定するため、
+     `cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree_reducesTo_unitNormalization`
+     を追加し、
+     old peel core 側で本当に不足している追加入力は
+     `CyclotomicUnitNormalizationTarget`
+     1 本だけだと明示した
+   - 監視も更新し、
+     `RegularPrimeRoute.lean`
+     ではこの inspection-summary theorem を no-sorry 側へ追加し、
+     既に no-sorry 化済みの `hCl + hUnit` route 群も no-sorry 側へ整理した
+   - `RegularPrimeRouteSorry.lean`
+     では current sorry 監視を old peel core mainline にだけ揃えた
+3. 結論:
+   - inspection の結果、
+     old peel core theorem は
+     **`hCl` 単独ではまだ thin wrapper に置換できない** と分かった
+   - ただし不足しているものは新しい数学ではなく、
+     existing no-sorry chain に入るための
+     `hUnit : CyclotomicUnitNormalizationTarget`
+     の supply 1 本だけだと theorem-level に固定できた ✅
+   - したがって current honest open は引き続き
+     `cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree`
+     にあるが、
+     意味としては
+     「old peel core に `hUnit` をどう供給するか」
+     にかなり絞られた ✅
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRouteSorry` 成功
+5. 次の課題:
+   - `hCl ⟹ hUnit`
+     を existing Stage 1 / Stage 2 no-sorry chain でどこまで supply できるかを再点検する
+   - もしまだ直接 supply できないなら、
+     old peel core を current honest open として維持しつつ、
+     theorem 名と監視を
+     「不足は `hUnit` だけ」
+     という読みへさらに揃える
