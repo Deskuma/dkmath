@@ -304,6 +304,38 @@ lemma padicValNat_d3_boundary_eq_boundary_succ_of_three :
       padicValNat.mul hboundary_ne (Nat.ne_of_gt hS0_pos)
   simpa [hS0_eq1, Nat.add_comm] using hmul
 
+/--
+Canonical dispatcher for the `d = 3` valuation story.
+
+This is the intended public case-split entry for callers that start from a prime divisor of
+`a^3 - b^3`: either the prime stays on the primitive route (`q ∤ a - b`), or we are on one of the
+two honest boundary branches already classified above.
+-/
+lemma padicValNat_d3_canonical_case_split
+    {a b q : ℕ}
+    (hq : Nat.Prime q)
+    (hab_lt : b < a) (hab : Nat.Coprime a b)
+    (_hq_div : q ∣ a ^ 3 - b ^ 3) :
+    (¬ q ∣ a - b) ∨
+      (q ∣ a - b ∧
+        q ≠ 3 ∧
+        padicValNat q (a ^ 3 - b ^ 3) = padicValNat q (a - b)) ∨
+      (q = 3 ∧
+        3 ∣ a - b ∧
+        padicValNat q (a ^ 3 - b ^ 3) = padicValNat q (a - b) + 1) := by
+  by_cases hq_sub : q ∣ a - b
+  · by_cases hq_eq_three : q = 3
+    · right
+      right
+      subst hq_eq_three
+      refine ⟨rfl, hq_sub, ?_⟩
+      simpa using padicValNat_d3_boundary_eq_boundary_succ_of_three hab_lt hab hq_sub
+    · right
+      left
+      exact ⟨hq_sub, hq_eq_three, padicValNat_d3_boundary_eq_boundary_of_ne_three hq hab_lt hab hq_sub hq_eq_three⟩
+  · left
+    exact hq_sub
+
 /-- A fixed primitive prime factor already contradicts `a^d - b^d = t^d`. -/
 private lemma primitive_prime_contradicts_diff_dth_power
     {a b d q t : ℕ}
