@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.NumberTheory.GcdNext
 import DkMath.NumberTheory.PrimitiveBeam
 import DkMath.NumberTheory.ZsigmondyCyclotomicResearch
+import DkMath.NumberTheory.Gcd.GN
+import DkMath.FLT.GEisensteinBridge
 
 #print "file: DkMath.NumberTheory.GcdNextResearch"
 
@@ -105,10 +107,11 @@ private lemma primitive_prime_padic_bound_GN
   exact primitive_prime_padic_bound_diff hd_prime hd_ge hab_lt hb hab hpnd hq
 
 /--
-The `d = 3`, `q ∣ a - b` branch in `padicValNat_d3_upper_bound` is not a primitive-prime route,
-so it cannot be repaired merely by adding `Squarefree (GN 3 (a - b) b)`.
+Historical candidate receiver for the `d = 3`, `q ∣ a - b` branch.
 
-This target isolates the real remaining obligation for that caller family.
+This is not a primitive-prime route, so it cannot be repaired merely by adding
+`Squarefree (GN 3 (a - b) b)`. In fact, the full valuation-`≤ 1` statement below is false;
+see `padicValNatD3BoundaryReceiverTarget_is_false`.
 -/
 abbrev PadicValNatD3BoundaryReceiverTarget : Prop :=
   ∀ {a b q : ℕ},
@@ -117,6 +120,81 @@ abbrev PadicValNatD3BoundaryReceiverTarget : Prop :=
     q ∣ a - b →
     q ∣ a ^ 3 - b ^ 3 →
     padicValNat q (a ^ 3 - b ^ 3) ≤ 1
+
+/--
+Honest boundary-divisor target for `d = 3`.
+
+If a prime divides both the boundary `a - b` and the cyclotomic factor `S0(a,b)`,
+then that prime must be `3`.
+-/
+abbrev PadicValNatD3BoundarySharedPrimeTarget : Prop :=
+  ∀ {a b q : ℕ},
+    Nat.Prime q →
+    b < a → Nat.Coprime a b →
+    q ∣ a - b →
+    q ∣ DkMath.FLT.PetalDetect.S0_nat a b →
+    q = 3
+
+/--
+The actual clean structural fact behind the `d = 3` boundary branch:
+the boundary and `S0` can only share the prime `3`.
+-/
+lemma padicValNatD3BoundarySharedPrimeTarget_of_gcdBoundaryGNThree :
+    PadicValNatD3BoundarySharedPrimeTarget := by
+  intro a b q hq hab_lt hab hq_diff hq_s0
+  have hcop_gap_b : Nat.Coprime (a - b) b := by
+    have hcop_b_gap : Nat.Coprime b (a - b) :=
+      (Nat.coprime_sub_self_right (Nat.le_of_lt hab_lt)).2 (Nat.Coprime.symm hab)
+    simpa [Nat.coprime_comm] using hcop_b_gap
+  have hq_gn : q ∣ DkMath.CosmicFormulaBinom.GN 3 (a - b) b := by
+    rw [DkMath.FLT.GN3_sub_eq_S0 a b (Nat.le_of_lt hab_lt)]
+    exact hq_s0
+  have hq_gcd :
+      q ∣ Nat.gcd (a - b) (DkMath.CosmicFormulaBinom.GN 3 (a - b) b) := by
+    exact Nat.dvd_gcd hq_diff hq_gn
+  have hq_dvd_three : q ∣ 3 := by
+    exact dvd_trans hq_gcd
+      (DkMath.NumberTheory.Gcd.gcd_boundary_GN_three_dvd_three hcop_gap_b)
+  exact (Nat.prime_dvd_prime_iff_eq hq Nat.prime_three).1 hq_dvd_three
+
+/--
+Concrete counterexample showing that the old boundary receiver candidate is false.
+
+Take `(a,b,q) = (4,1,3)`. Then `q ∣ a - b` and `q ∣ a^3 - b^3`, but
+`padicValNat 3 (4^3 - 1^3) = 2`.
+-/
+lemma padicValNat_d3_boundary_counterexample :
+    ¬ (padicValNat 3 (4 ^ 3 - 1 ^ 3) ≤ 1) := by
+  have hdiff_ne : (4 ^ 3 - 1 ^ 3 : ℕ) ≠ 0 := by
+    decide
+  have hq2_dvd : (3 : ℕ) ^ 2 ∣ (4 ^ 3 - 1 ^ 3) := by
+    decide
+  have h2_le : 2 ≤ padicValNat 3 (4 ^ 3 - 1 ^ 3) := by
+    exact
+      (@padicValNat_dvd_iff_le 3 (Fact.mk (by decide : Nat.Prime 3))
+          (4 ^ 3 - 1 ^ 3) 2 hdiff_ne).1 hq2_dvd
+  intro hle
+  have : (2 : ℕ) ≤ 1 := le_trans h2_le hle
+  exact (by decide : ¬ ((2 : ℕ) ≤ 1)) this
+
+/--
+Therefore the historical boundary receiver target is false as stated.
+
+The right repair is not to search for a proof of this target, but to replace it with a more honest
+boundary theorem family such as `PadicValNatD3BoundarySharedPrimeTarget`.
+-/
+lemma padicValNatD3BoundaryReceiverTarget_is_false :
+    ¬ PadicValNatD3BoundaryReceiverTarget := by
+  intro h
+  have hinst : padicValNat 3 (4 ^ 3 - 1 ^ 3) ≤ 1 := by
+    exact h
+      (by decide : Nat.Prime 3)
+      (by decide : 1 < 4)
+      (by decide : 0 < 1)
+      (by decide : Nat.Coprime 4 1)
+      (by decide : 3 ∣ 4 - 1)
+      (by decide : 3 ∣ 4 ^ 3 - 1 ^ 3)
+  exact padicValNat_d3_boundary_counterexample hinst
 
 /-- A fixed primitive prime factor already contradicts `a^d - b^d = t^d`. -/
 private lemma primitive_prime_contradicts_diff_dth_power

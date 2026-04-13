@@ -2847,3 +2847,68 @@ Archive
 4. 検証:
    - `./lean-build.sh DkMath.NumberTheory.PrimitiveBeam` 成功
    - `./lean-build.sh DkMath.NumberTheory.GcdNextResearch` 成功
+
+## 2026/04/13 14:48:08 JST
+
+1. 背景:
+   - `review-057` の戦略に従い、
+     次の主戦場として
+     `PadicValNatD3BoundaryReceiverTarget`
+     を既存 no-`so#rry` 部品で concrete 化できるかを再点検した
+   - ただしこの target は
+     `d = 3` かつ `q ∣ a - b`
+     枝に対して
+     `padicValNat q (a^3 - b^3) ≤ 1`
+     を要求しており、
+     その statement 自体が正しいかを先に検査する必要があった
+2. 実施:
+   - `GcdNextResearch.lean`
+     に
+     `padicValNat_d3_boundary_counterexample`
+     を追加し、
+     concrete 反例
+     `(a,b,q) = (4,1,3)`
+     で
+     `padicValNat 3 (4^3 - 1^3) = 2`
+     すなわち
+     `¬ (padicValNat 3 (4^3 - 1^3) ≤ 1)`
+     を no-`so#rry` で固定した
+   - その上で
+     `padicValNatD3BoundaryReceiverTarget_is_false`
+     を追加し、
+     current boundary receiver target は
+     **証明未完ではなく statement が偽**
+     であることを theorem 名で明示した
+   - 同時に、
+     boundary family で本当に言える clean statement として
+     `PadicValNatD3BoundarySharedPrimeTarget`
+     を追加し、
+     `padicValNatD3BoundarySharedPrimeTarget_of_gcdBoundaryGNThree`
+     で
+     「`q ∣ a-b` かつ `q ∣ S0(a,b)` なら `q = 3`」
+     を
+     `gcd_boundary_GN_three_dvd_three`
+     から no-`so#rry` で回収した
+3. 結論:
+   - `review-057`
+     が主戦場として指していた boundary-divisor family について、
+     まず
+     `PadicValNatD3BoundaryReceiverTarget`
+     を直接埋める路線は成立しない、
+     と確定した
+   - ゆえに次段の repair は
+     「boundary branch の valuation 上界を無理に証明する」
+     ではなく、
+     **共有素因子分類 (`q = 3`) や boundary-special theorem へ
+     target を置き換える**
+     方向で進めるべきである
+   - これにより
+     primitive-prime family は引き続き
+     `Squarefree (GN ...)`
+     追加で移行、
+     boundary-divisor family は
+     `PadicValNatD3BoundarySharedPrimeTarget`
+     を起点にした別 theorem 群へ整理、
+     という二戦線分離がさらに確定した
+4. 検証:
+   - `./lean-build.sh DkMath.NumberTheory.GcdNextResearch` 成功
