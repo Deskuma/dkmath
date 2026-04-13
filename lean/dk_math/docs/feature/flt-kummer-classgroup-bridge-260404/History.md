@@ -2682,3 +2682,86 @@ Archive
      既に本体側にある true theorem
      `padicValNat_primitive_prime_factor_le_one_of_squarefree_G`
      へ public wrapper をどう寄せるかを先に棚卸しする
+
+## 2026/04/13 14:03:28 JST
+
+1. 背景:
+   - `review-056.md` 後の次課題として、
+     `ZsigmondyCyclotomicResearch.lean`
+     の legacy false API
+     `squarefree_implies_padic_val_le_one`
+     / `padicValNat_primitive_prime_factor_le_one`
+     を、
+     既存の true theorem
+     `padicValNat_primitive_prime_factor_le_one_of_squarefree_G`
+     へどう寄せるかを具体化した
+   - 分岐判断:
+     今この時点で legacy theorem の型を直接差し替えるのではなく、
+     **honest public wrapper を先に追加し、
+     legacy theorem は互換のため残す**
+     方を選んだ
+   - 理由:
+     `PrimitiveBeam.lean` と `GcdNextResearch.lean` に
+     legacy theorem の caller が残っており、
+     そこには現時点で
+     `Squarefree (GN d (a - b) b)`
+     を supply する既存 no-`so#rry` ルートが無いため
+2. 実施:
+   - `ZsigmondyCyclotomicResearch.lean`
+     に
+     `PrimitivePrimeFactorPadicValNatLeOneOfSquarefreeGTarget`
+     を追加し、
+     current honest statement を
+     theorem-level target として固定した
+   - 同ファイルに
+     `primitivePrimeFactorPadicValNatLeOneOfSquarefreeGTarget_of_trueTheorem`
+     を追加し、
+     `padicValNat_primitive_prime_factor_le_one_of_squarefree_G`
+     から public target へ戻れることを no-`so#rry` で示した
+   - さらに public replacement として
+     `squarefree_implies_padic_val_le_one_honest`
+     と
+     `padicValNat_primitive_prime_factor_le_one_honest`
+     を追加し、
+     「将来 caller が寄るべき true API」
+     を明示した
+   - legacy false placeholder 側の docstring も更新し、
+     以後の置換先が
+     `..._honest`
+     であることを明記した
+3. 結論:
+   - statement repair の具体化としては、
+     **直ちに既存 API を壊すのではなく、
+     true theorem に寄る public honest wrapper 群を先に立てる**
+     方針が妥当だと確定した
+   - これにより、
+     次の作業は
+     1. caller ごとに `Squarefree (GN ...)` を持てるかを点検し、
+        持てる箇所から `..._honest` へ移行する
+     2. 持てない caller については、
+        必要仮定の切り出し、または statement repair の追加段階を検討する
+     の 2 段で進められる
+   - したがって、
+     `ZsigmondyCyclotomicResearch` の main 戦略は
+     **honest wrapper 先行 + caller migration**
+     と読むのが適切である
+4. 検証:
+   - `./lean-build.sh DkMath.NumberTheory.ZsigmondyCyclotomicResearch` 成功
+   - `lean/dk_math/tmp/checkAxioms-review056c.lean`
+     で
+     `primitivePrimeFactorPadicValNatLeOneOfSquarefreeGTarget_of_trueTheorem`
+     `squarefree_implies_padic_val_le_one_honest`
+     `padicValNat_primitive_prime_factor_le_one_honest`
+     の `#print axioms` を確認し、
+     いずれも `sorryAx` を含まないことを確認した
+5. 次の課題:
+   - `PrimitiveBeam.lean`
+     と
+     `GcdNextResearch.lean`
+     の legacy caller ごとに、
+     `Squarefree (GN ...)` 仮定を持てるかを棚卸しする
+   - もし caller 側で `Squarefree (GN ...)` を持てないなら、
+     その caller は引き続き research placeholder 依存だと認め、
+     statement repair の次段
+     （仮定追加・target 分離・lemma 名変更）
+     を設計する
