@@ -2587,3 +2587,98 @@ Archive
    - もしやはり concrete provider が無いなら、
      `ZsigmondyCyclotomicResearch.lean`
      の statement repair を main 戦略として進める
+
+## 2026/04/13 13:48:32 JST
+
+1. 背景:
+   - `review-056.md` に従い、
+     default root 側に
+     `TriominoSquarefreeGNBridgeProvider`
+     / `TriominoNoLiftGNBridgeProvider`
+     の concrete provider が既に存在しないかを棚卸しした
+   - 目的は、
+     `triominoCosmicNoPowOnGN_default`
+     の dirty root を
+     statement repair に入る前に
+     既存 provider だけで clean 化できるかを判定すること
+2. 調査:
+   - repo 全体検索の結果、
+     `TriominoSquarefreeGNBridgeProvider`
+     と
+     `TriominoNoLiftGNBridgeProvider`
+     には
+     structure 定義と
+     `ImplTarget` / adapter theorem 群はあるが、
+     concrete value を与える declaration は見つからなかった
+   - したがって、
+     current codebase にあるのは
+     「provider があれば downstream は clean に戻る」
+     という wiring までであり、
+     provider そのものの本体実装は未着手だと判断した
+   - あわせて
+     `#print axioms`
+     でも
+     `triominoWieferichNoWieferichBridge_default`
+     `triominoNoWieferichBridge_default`
+     `triominoCosmicNoPowOnGN_default`
+     が依然 `sorryAx` を含むことを再確認した
+3. 実装:
+   - `TriominoSquarefreeGNBridgeProviderImpl.lean`
+     に
+     `triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_provider_impl`
+     と
+     `triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_noLift_provider_impl`
+     を追加した
+   - これにより、
+     default root の clean 化に必要な不足入力は
+     `TriominoSquarefreeGNBridgeProviderImplTarget`
+     もしくは
+     `TriominoNoLiftGNBridgeProviderImplTarget`
+     まで押し下げられた
+   - 一度
+     `TriominoCosmicGapInvariant.lean`
+     へ provider-impl import を入れて
+     no-pow / body invariant まで戻す theorem を試みたが、
+     既存の
+     `triominoNoWieferichBridge_impl`
+     名と環境衝突を起こしたため、
+     その import は戻した
+   - よって今回は
+     provider 側で
+     「target へ戻れる」
+     ところまでに留め、
+     default root 本体の clean 化は
+     concrete provider 供給か statement repair に委ねる整理とした
+4. 結論:
+   - 棚卸しの結果、
+     **既存の concrete provider は見つからなかった**
+   - ただし、
+     もし provider 実装が入れば
+     `TriominoPrimitivePrimeFactorPadicValNatLeOneTarget`
+     までは既存 no-`so#rry` route で直結できることを
+     theorem 名で固定できた
+   - したがって、
+     default root clean 化の主戦略は
+     予定どおり
+     `ZsigmondyCyclotomicResearch.lean`
+     の statement repair に移すのが妥当である
+5. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProviderImpl` 成功
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant` 成功
+   - `lean/dk_math/tmp/checkAxioms-review056.lean`
+     で
+     `triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_provider_impl`
+     と
+     `triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_noLift_provider_impl`
+     の `#print axioms` を確認し、
+     いずれも `sorryAx` を含まないことを確認した
+6. 次の課題:
+   - `ZsigmondyCyclotomicResearch.lean`
+     の
+     `squarefree_implies_padic_val_le_one`
+     / `padicValNat_primitive_prime_factor_le_one`
+     を honest statement へ修正する戦略を具体化する
+   - その際、
+     既に本体側にある true theorem
+     `padicValNat_primitive_prime_factor_le_one_of_squarefree_G`
+     へ public wrapper をどう寄せるかを先に棚卸しする
