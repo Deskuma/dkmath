@@ -5492,14 +5492,29 @@ theorem cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree
 /--
 `hNoLift` を使う first-case canonical bridge の wrapper。
 
-first-case 本体は既定 bridge だけでも閉じるが、non-liftable 仮定つき route との対応のため
-theorem 名は残しておく。
+review-055 に従い、
+non-liftable 仮定つき route を実際に使う配線へ修正する。
 -/
 theorem cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_nonLiftable
   (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
-    (_hNoLift : TriominoCosmicNonLiftableGNBridge) :
-    CyclotomicPrincipalizationFirstCaseTarget :=
-  cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree hCl
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    CyclotomicPrincipalizationFirstCaseTarget := by
+  intro p x y z hpack q hq hqx hqne hqgap hFirstCase
+  let _ : Fact p.Prime := ⟨hpack.hp⟩
+  let ζ : CyclotomicField p ℚ :=
+    IsCyclotomicExtension.zeta p ℚ (CyclotomicField p ℚ)
+  let hζ : IsPrimitiveRoot ζ p := by
+    simp [ζ]
+  have hgap_eq :
+      (z : 𝓞 (CyclotomicField p ℚ)) - (y : 𝓞 (CyclotomicField p ℚ)) =
+        ((z - y : ℕ) : 𝓞 (CyclotomicField p ℚ)) := by
+    simp [Nat.cast_sub hpack.hyz]
+  exact
+    qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_nonLiftable
+      (hCl := hCl) (hNoLift := hNoLift)
+      (K := CyclotomicField p ℚ) (p := p) (x := x) (y := y) (z := z) (q := q)
+      (ζ := ζ) (gap := z - y)
+      hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase
 
 /--
 class-group one-shot route を first-case / non-first-case split で再構成する thin theorem。
@@ -5509,11 +5524,11 @@ current stable bridge 群により first-case は concrete に埋まるので、
 -/
 theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_of_caseSplit
   (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
-    (_hNoLift : TriominoCosmicNonLiftableGNBridge)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge)
     (hNonFirst : CyclotomicPrincipalizationNonFirstCaseTarget) :
     CyclotomicPrincipalizationTarget :=
   cyclotomicPrincipalization_of_caseSplit
-    (cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree hCl)
+    (cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_nonLiftable hCl hNoLift)
     hNonFirst
 
 /--

@@ -51,6 +51,8 @@ section NoSorry
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_refinedClassGroupRoute
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_namedSmallerCounterexampleTarget
 #print axioms DkMath.FLT.cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_packetQuotientLift
+#print axioms DkMath.FLT.cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_nonLiftable
+#print axioms DkMath.FLT.cyclotomicPrincipalization_of_classGroupPTorsionFree_of_caseSplit
 
 #print "section: end == no-sorry =="
 end NoSorry

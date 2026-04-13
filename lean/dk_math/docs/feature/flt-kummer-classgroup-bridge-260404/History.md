@@ -2494,3 +2494,96 @@ Archive
      が current branch-B 文脈で使えないかを再点検する
    - もし既存 route で置換できないなら、
      research theorem 側の statement repair を主戦略として進める
+
+## 2026/04/13 13:20:38 JST
+
+1. 背景:
+   - `review-055.md` に従い、
+     current branch-B 文脈で
+     `padicValNat_primitive_prime_factor_le_one`
+     を使わずに済む既存 no-sorry route があるかを再点検した
+   - 特に
+     `..._of_squarefree_GN`
+     / `TriominoNoLiftGNBridge`
+     / `TriominoCosmicNonLiftableGNBridge`
+     から、
+     直前に切り出した
+     `TriominoPrimitivePrimeFactorPadicValNatLeOneTarget`
+     へ戻せるかを確認した
+2. 実施:
+   - `CosmicPetalBridgeGNNoWieferichResearch.lean`
+     に
+     `triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_squarefreeGNBridge`
+     と
+     `triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_noLiftGNBridge`
+     を追加した
+   - これにより、
+     existing honest route である
+     `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le_one_of_squarefree_GN_core`
+     と
+     `TriominoNoLiftGNBridge`
+     から、
+     research target を no-`so#rry` で直接埋められることを theorem 化した
+   - `TriominoCosmicGapInvariant.lean`
+     に
+     `triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_nonLiftableGNBridge`
+     を追加し、
+     current branch-B 文脈の
+     `TriominoCosmicNonLiftableGNBridge`
+     からも target を no-`so#rry` で回収できると固定した
+   - したがって、
+     current branch-B 文脈では
+     `padicValNat_primitive_prime_factor_le_one`
+     は **必須ではない**
+     と結論できた
+   - あわせて、
+     `CyclotomicPrincipalization.lean`
+     の
+     `cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_nonLiftable`
+     と
+     `cyclotomicPrincipalization_of_classGroupPTorsionFree_of_caseSplit`
+     が
+     `hNoLift` を受け取っていながら実際には捨てていたので、
+     review の指摘どおり
+     `qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_nonLiftable`
+     を経由する配線へ修正した
+3. 結論:
+   - review-055 の第一手は成立した
+   - 既存 no-sorry route により、
+     `TriominoPrimitivePrimeFactorPadicValNatLeOneTarget`
+     は
+     `TriominoSquarefreeGNBridge`
+     / `TriominoNoLiftGNBridge`
+     / `TriominoCosmicNonLiftableGNBridge`
+     から埋められる
+   - とくに Kummer first-case 側では
+     `hNoLift : TriominoCosmicNonLiftableGNBridge`
+     を already 持つ route があるため、
+     default dirty bridge に戻らず
+     existing clean route を使うよう復帰できた
+   - 一方で、
+     default global route を完全に clean 化する concrete provider は
+     まだ見つかっていない
+     ので、
+     non-default / first-case-specialized 側は救えたが、
+     full default root の clean 化は依然として upstream provider / statement repair の課題である
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch` 成功
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant` 成功
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+   - `lean/dk_math/tmp/checkAxioms-review055.lean`
+     で
+     `triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_squarefreeGNBridge`
+     `triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_noLiftGNBridge`
+     `triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_nonLiftableGNBridge`
+     `cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_nonLiftable`
+     `cyclotomicPrincipalization_of_classGroupPTorsionFree_of_caseSplit`
+     の `#print axioms` を確認し、
+     いずれも `sorryAx` を含まないことを確認した
+5. 次の課題:
+   - non-default / specialized route では既存 no-sorry bridge で置換できると分かったので、
+     次は default root 側に concrete provider が既にないかをさらに棚卸しする
+   - もしやはり concrete provider が無いなら、
+     `ZsigmondyCyclotomicResearch.lean`
+     の statement repair を main 戦略として進める
