@@ -44,7 +44,7 @@ private lemma primitive_prime_padic_bound_diff
   by_cases hd3 : d = 3
   · subst hd3
     exact
-      DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one
+      DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_research
         (a := a) (b := b) (d := 3) (q := q)
         Nat.prime_three
         (by norm_num)
@@ -62,7 +62,7 @@ private lemma primitive_prime_padic_bound_diff
         exact (by decide : ¬ Nat.Prime 4) this
       omega
     exact
-      DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one
+      DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_research
         (a := a) (b := b) (d := d) (q := q)
         hd_prime
         hd_ge
@@ -680,7 +680,7 @@ private lemma padicValNatD3BoundaryReceiverTarget_from_legacy_squarefree_researc
     PadicValNatD3BoundaryReceiverTarget := by
   intro a b q hq hbnd hb hab hq_dvd_boundary hq_div
   exact
-    squarefree_implies_padic_val_le_one
+    squarefree_implies_padic_val_le_one_research
       3 a b q
       Nat.prime_three
       hb

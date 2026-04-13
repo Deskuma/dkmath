@@ -197,7 +197,7 @@ theorem primitive_prime_factor_forbids_perfect_pow_diff
   have hq_ndiv_diff : ¬ q ∣ a - b :=
     primitive_prime_not_dvd_boundary hq hd1
   have hpadic_bound_diff : padicValNat q (a ^ d - b ^ d) ≤ 1 :=
-    DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one
+    DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_research
       (a := a) (b := b) (d := d) (q := q)
       hd_prime
       hd_ge
@@ -266,7 +266,7 @@ theorem primitive_prime_obstructs_GN_perfect_power
       d = d * 1 := (Nat.mul_one d).symm
       _ ≤ d * padicValNat q t := Nat.mul_le_mul_left d hvt_ge
   have hpadic_bound_diff : padicValNat q (a ^ d - b ^ d) ≤ 1 :=
-    DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one
+    DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_research
       (a := a) (b := b) (d := d) (q := q)
       hd_prime
       hd_ge

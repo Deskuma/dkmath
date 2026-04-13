@@ -45,7 +45,7 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le
   have hzy_coprime : Nat.Coprime z y := by
     exact (coprime_right_of_add_pow_eq_pow hpack.hp hpack.hxy hpack.hEq).symm
   exact
-    DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one
+    DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_research
       (a := z) (b := y) (d := p) (q := q)
       hpack.hp
       (le_trans (by decide : 3 ≤ 5) hpack.hp5)

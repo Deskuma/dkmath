@@ -3305,3 +3305,81 @@ Archive
      statement repair を進めることになる
 4. 検証:
    - `./lean-build.sh DkMath.NumberTheory.GcdNextResearch` 成功
+
+## 2026/04/13 22:40:42 JST
+
+1. 背景:
+   - `GcdNextResearch`
+     側の `d = 3` legacy 整理が済んだので、
+     主戦場を
+     `ZsigmondyCyclotomicResearch`
+     の honest migration へ戻した
+   - 現状の問題は、
+     true statement を表す
+     `..._honest`
+     が既にある一方で、
+     旧 public 名
+     `squarefree_implies_padic_val_le_one`
+     /
+     `padicValNat_primitive_prime_factor_le_one`
+     がそのまま research placeholder を背負っており、
+     downstream caller からは
+     honest 依存と research 依存が定理名の上で区別しにくかったことにある
+2. 実施:
+   - `ZsigmondyCyclotomicResearch.lean`
+     で
+     `squarefree_implies_padic_val_le_one_research`
+     と
+     `padicValNat_primitive_prime_factor_le_one_research`
+     を追加し、
+     unrepaired statement に依存する route を
+     theorem 名の上で research 専用に分離した
+   - 旧 public 名
+     `squarefree_implies_padic_val_le_one`
+     /
+     `padicValNat_primitive_prime_factor_le_one`
+     は
+     `@[deprecated ...]`
+     付きの compatibility alias とし、
+     置換先を
+     `..._honest`
+     へ向けた
+   - さらに
+     remaining caller の実コード参照も
+     旧 public 名から
+     `_research`
+     名へ差し替えた
+     :
+     `PrimitiveBeam.lean`
+     の 2 箇所、
+     `GcdNextResearch.lean`
+     の research-only boundary receiver 注入、
+     `CosmicPetalBridgeGNNoWieferichResearch.lean`
+     の primitive-core theorem
+   - これにより
+     actual code path 上で
+     research debt がある箇所だけが
+     `_research`
+     名を明示的に踏む構造になった
+3. 結論:
+   - `ZsigmondyCyclotomicResearch`
+     側の honest migration は、
+     「使える caller は `..._honest` へ寄せ、
+     まだ寄せられない caller は `_research` 名へ落とす」
+     という整理段階まで進んだ
+   - これで
+     unrepaired statement の root は依然
+     `squarefree_implies_padic_val_le_one_research`
+     に残るが、
+     旧 public 名を mainline API と誤認する余地はかなり減った
+   - 今後の作業は、
+     squarefree bridge を持てる caller をさらに
+     `..._honest`
+     へ移し、
+     持てない箇所だけを
+     `_research`
+     依存として追跡する、という形にしやすくなった
+4. 検証:
+   - `./lean-build.sh DkMath.NumberTheory.ZsigmondyCyclotomicResearch` 成功
+   - `./lean-build.sh DkMath.NumberTheory.GcdNextResearch` 成功
+   - `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch` 成功
