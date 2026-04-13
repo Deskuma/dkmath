@@ -3069,3 +3069,70 @@ Archive
      この canonical split へ順次 migration する段である
 4. 検証:
    - `./lean-build.sh DkMath.NumberTheory.GcdNextResearch` 成功
+
+## 2026/04/13 17:49:50 JST
+
+1. 背景:
+   - 直前の整理で
+     `padicValNat_d3_upper_bound`
+     は legacy wrapper と位置づけ直されたが、
+     新規 caller が使うべき replacement としては
+     boundary 側の exact theorem 群しか前に出ておらず、
+     primitive 側の着地点が theorem 名としてまだ薄かった
+   - `review-059`
+     の migration 方針に沿うなら、
+     `d = 3`
+     の primitive route
+     `q ∣ a^3 - b^3 ∧ ¬ q ∣ a - b`
+     に対する honest upper bound を
+     直接呼べる形で立てておくのが筋だった
+2. 実施:
+   - `GcdNextResearch.lean`
+     に
+     `padicValNat_d3_primitive_upper_bound`
+     を追加し、
+     `q ∣ a^3 - b^3`
+     かつ
+     `¬ q ∣ a - b`
+     の primitive branch で
+     `padicValNat q (a^3 - b^3) ≤ 1`
+     を no-`so#rry` で直接返す補題を固定した
+   - 証明は
+     `padicValNat_le_one_of_prime_divisor_case_three_strong`
+     と
+     `padicValNat_a2_ab_b2_upper_bound_stage1`
+     を束ねるだけの薄い wrapper に留め、
+     `b = 0`
+     の退避枝も
+     `q ∣ 1`
+     から `q = 1`
+     を導いて `Nat.Prime q` と矛盾させる形で閉じた
+   - そのうえで
+     `padicValNat_d3_upper_bound`
+     の docstring を更新し、
+     新規 caller 向けの recommended replacement 一覧に
+     `padicValNat_d3_primitive_upper_bound`
+     を追加した
+3. 結論:
+   - `d = 3`
+     の caller migration 先は、
+     これで
+     primitive route には
+     `padicValNat_d3_primitive_upper_bound`
+     、
+     boundary route には
+     `padicValNat_d3_canonical_case_split`
+     /
+     `padicValNat_d3_layer_b_case_split`
+     /
+     exact valuation theorem 群、
+     という形で見通しよく揃った
+   - これにより
+     `padicValNat_d3_upper_bound`
+     を温存する理由は
+     さらに
+     compatibility だけ
+     に縮み、
+     今後は実 caller をこの分配先へ順次寄せるだけの状態に近づいた
+4. 検証:
+   - `./lean-build.sh DkMath.NumberTheory.GcdNextResearch` 成功
