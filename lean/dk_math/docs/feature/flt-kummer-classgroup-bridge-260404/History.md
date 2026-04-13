@@ -3229,3 +3229,79 @@ Archive
      旧 theorem は compatibility のためだけに残る状態がより明確になった
 4. 検証:
    - `./lean-build.sh DkMath.NumberTheory.GcdNextResearch` 成功
+
+## 2026/04/13 22:32:03 JST
+
+1. 背景:
+   - 次の一手として、
+     `padicValNat_d3_upper_bound_of_boundaryReceiver`
+     を
+     legacy / research 専用の場所へ落とし、
+     `GcdNextResearch`
+     の残る debt を
+     `d = 3`
+     compatibility wrapper ではなく
+     `d > 3`
+     戦線へ押し出す方針を採った
+   - 直前の状態では、
+     `padicValNat_d3_upper_bound_of_boundaryReceiver`
+     という名前がまだ mainline helper 風に見える一方、
+     実態としては
+     historical boundary receiver target を引数に受ける
+     research helper だった
+2. 実施:
+   - `GcdNextResearch.lean`
+     の既存 helper を
+     `padicValNat_d3_upper_bound_of_boundaryReceiver_research`
+     へ改名し、
+     docstring でも
+     research-only helper
+     であることを明示した
+   - 旧名
+     `padicValNat_d3_upper_bound_of_boundaryReceiver`
+     は
+     `@[deprecated ...]`
+     付きの compatibility alias として残し、
+     `padicValNat_d3_upper_bound_of_boundaryReceiver_research`
+     への移行警告を出す形にした
+   - さらに
+     private lemma
+     `padicValNatD3BoundaryReceiverTarget_from_legacy_squarefree_research`
+     を追加し、
+     `squarefree_implies_padic_val_le_one`
+     に由来する
+     `d = 3`
+     legacy boundary receiver 注入を
+     research 専用の局所名の下へ隔離した
+   - その上で
+     `padicValNat_d3_upper_bound`
+     は
+     deprecated の旧 helper ではなく
+     `padicValNat_d3_upper_bound_of_boundaryReceiver_research`
+     と
+     上の private lemma
+     だけを使う形へ差し替えた
+3. 結論:
+   - これで
+     `GcdNextResearch`
+     における
+     `d = 3`
+     legacy debt は
+     theorem 名の上でも
+     **research-only helper + private compatibility injection**
+     に整理された
+   - build warning 上の direct `sorry` は引き続き
+     `padicValNat_upper_bound_layer_b_stub`
+     の
+     `d > 3`
+     戦線だけに残り、
+     `GcdNextResearch`
+     の主な honest migration 作業は
+     いったん整理完了と見てよい状態になった
+   - 次の主戦場は、
+     このまま
+     `ZsigmondyCyclotomicResearch`
+     側の honest migration と
+     statement repair を進めることになる
+4. 検証:
+   - `./lean-build.sh DkMath.NumberTheory.GcdNextResearch` 成功

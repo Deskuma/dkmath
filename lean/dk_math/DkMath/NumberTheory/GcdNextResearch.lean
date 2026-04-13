@@ -600,21 +600,19 @@ lemma padicValNat_d3_primitive_upper_bound
     ha_pos hb_pos hab_coprime hab_lt hq hq_div hq_ndiv
   exact padicValNat_a2_ab_b2_upper_bound_stage1 hq hab_lt hab_coprime h_Ag h_phi hq_not_sq
 
-/-- d=3 での上界補題
+/--
+Research-only helper for the legacy `d = 3` upper-bound route.
 
-Cosmic Formula と Lucas/Kummer 定理を組み合わせて、
-d=3 の場合に padicValNat q (a³ - b³) ≤ 1 を証明する。
+This theorem is intentionally phrased around the historical boundary receiver target. New callers
+should not depend on it; the honest `d = 3` API is split into:
+- `padicValNat_d3_primitive_upper_bound`
+- `padicValNat_d3_canonical_case_split`
+- `padicValNat_d3_layer_b_case_split`
 
-**証明戦略:**
-1. q ∣ a^3 - b^3 の場合：
-   - Cosmic Formula により a^3 - b^3 = (a - b) * GN_3(a-b, b)
-   - GN_3(a-b, b) = a^2 + ab + b^2 （古典因数分解）
-   - q ∤ a - b より padicValNat q (a^3 - b^3) = padicValNat q (a^2 + ab + b^2)
-   - a^2 + ab + b^2 の padicValNat が ≤ 1 であることを示す
-2. q ∤ a^3 - b^3 の場合：
-   - padicValNat q (a^3 - b^3) = 0 ≤ 1
+Its only purpose is to keep the old receiver-injection path alive while the remaining research debt
+is pushed out of `GcdNextResearch` and into explicit legacy wrappers.
 -/
-lemma padicValNat_d3_upper_bound_of_boundaryReceiver
+lemma padicValNat_d3_upper_bound_of_boundaryReceiver_research
     (hBoundary : PadicValNatD3BoundaryReceiverTarget)
     {a b q : ℕ}
     (hq : Nat.Prime q)
@@ -652,10 +650,50 @@ lemma padicValNat_d3_upper_bound_of_boundaryReceiver
       norm_num
 
 /--
+deprecated compatibility alias.
+
+Use `padicValNat_d3_upper_bound_of_boundaryReceiver_research` if this legacy receiver route is
+still required locally.
+-/
+@[deprecated padicValNat_d3_upper_bound_of_boundaryReceiver_research
+  (since := "2026-04-13")]
+lemma padicValNat_d3_upper_bound_of_boundaryReceiver
+    (hBoundary : PadicValNatD3BoundaryReceiverTarget)
+    {a b q : ℕ}
+    (hq : Nat.Prime q)
+    (hab_lt : b < a) (hab_coprime : Nat.Coprime a b)
+    (h_Ag : gcd_Ag a b = 1)
+    (h_phi : Nat.Coprime (a + b) b)
+    (hq_not_sq : ¬ q^2 ∣ S0_nat a b)
+    :
+    padicValNat q (a^3 - b^3) ≤ 1 :=
+  padicValNat_d3_upper_bound_of_boundaryReceiver_research
+    hBoundary hq hab_lt hab_coprime h_Ag h_phi hq_not_sq
+
+/--
+Research-only boundary receiver currently obtained from the legacy Zsigmondy placeholder.
+
+This is the only remaining `d = 3` compatibility injection in this file. The honest API should use
+the canonical split / exact valuation theorems instead.
+-/
+private lemma padicValNatD3BoundaryReceiverTarget_from_legacy_squarefree_research :
+    PadicValNatD3BoundaryReceiverTarget := by
+  intro a b q hq hbnd hb hab hq_dvd_boundary hq_div
+  exact
+    squarefree_implies_padic_val_le_one
+      3 a b q
+      Nat.prime_three
+      hb
+      hab
+      hq
+      hq_div
+
+/--
 Current compatibility wrapper.
 
 The primitive-prime branch is already no-`sorry`; the only remaining legacy dependency is the
-`d = 3`, `q ∣ a - b` receiver injected here.
+`d = 3`, `q ∣ a - b` receiver injected here through
+`padicValNatD3BoundaryReceiverTarget_from_legacy_squarefree_research`.
 
 New callers should avoid this lemma. Use:
 - `padicValNat_d3_primitive_upper_bound`
@@ -677,17 +715,9 @@ lemma padicValNat_d3_upper_bound {a b q : ℕ}
     :
     padicValNat q (a^3 - b^3) ≤ 1 := by
   refine
-    padicValNat_d3_upper_bound_of_boundaryReceiver
-      (hBoundary := ?_) hq hab_lt hab_coprime h_Ag h_phi hq_not_sq
-  intro a b q hq hbnd hb hab hq_dvd_boundary hq_div
-  exact
-    squarefree_implies_padic_val_le_one
-      3 a b q
-      Nat.prime_three
-      hb
-      hab
-      hq
-      hq_div
+    padicValNat_d3_upper_bound_of_boundaryReceiver_research
+      (hBoundary := padicValNatD3BoundaryReceiverTarget_from_legacy_squarefree_research)
+      hq hab_lt hab_coprime h_Ag h_phi hq_not_sq
 
 -- TODO: [DkMathTest]: #print axioms padicValNat_d3_upper_bound
 
