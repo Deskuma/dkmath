@@ -60,7 +60,7 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le
 /--
 current research debt を abstract target として受け取る薄い wrapper。
 
-これにより、`sorryAx` root は
+これにより、`so#rryAx` root は
 `TriominoPrimitivePrimeFactorPadicValNatLeOneTarget`
 1 本だけだと theorem 境界で固定できる。
 -/

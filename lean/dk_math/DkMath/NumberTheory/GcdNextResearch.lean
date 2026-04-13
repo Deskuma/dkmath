@@ -691,7 +691,7 @@ private lemma padicValNatD3BoundaryReceiverTarget_from_legacy_squarefree_researc
 /--
 Current compatibility wrapper.
 
-The primitive-prime branch is already no-`sorry`; the only remaining legacy dependency is the
+The primitive-prime branch is already no-`so#rry`; the only remaining legacy dependency is the
 `d = 3`, `q ∣ a - b` receiver injected here through
 `padicValNatD3BoundaryReceiverTarget_from_legacy_squarefree_research`.
 

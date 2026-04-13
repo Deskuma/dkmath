@@ -66,7 +66,7 @@ theorem triominoWieferichBranchBridge_default :
 /--
 research-side primitive-prime valuation target から作る clean branch bridge。
 
-`default` 版の `sorryAx` 汚染は固定注入に由来し、
+`default` 版の `so#rryAx` 汚染は固定注入に由来し、
 branch contract 自体はこの target があれば clean に充足できる。
 -/
 theorem triominoWieferichBranchBridge_of_padicValNatLeOneTarget
