@@ -9,6 +9,7 @@ import DkMath.NumberTheory.PrimitiveBeam
 import DkMath.NumberTheory.ZsigmondyCyclotomicResearch
 import DkMath.NumberTheory.Gcd.GN
 import DkMath.FLT.GEisensteinBridge
+import DkMath.FLT.PhaseLift
 
 #print "file: DkMath.NumberTheory.GcdNextResearch"
 
@@ -195,6 +196,113 @@ lemma padicValNatD3BoundaryReceiverTarget_is_false :
       (by decide : 3 ∣ 4 - 1)
       (by decide : 3 ∣ 4 ^ 3 - 1 ^ 3)
   exact padicValNat_d3_boundary_counterexample hinst
+
+/--
+Exact valuation target for the `d = 3` boundary branch away from the exceptional prime `3`.
+-/
+abbrev PadicValNatD3BoundaryNeThreeTarget : Prop :=
+  ∀ {a b q : ℕ},
+    Nat.Prime q →
+    b < a → Nat.Coprime a b →
+    q ∣ a - b →
+    q ≠ 3 →
+    padicValNat q (a ^ 3 - b ^ 3) = padicValNat q (a - b)
+
+/--
+Exact valuation target for the `q = 3` boundary branch.
+-/
+abbrev PadicValNatD3BoundaryThreeTarget : Prop :=
+  ∀ {a b : ℕ},
+    b < a → Nat.Coprime a b →
+    3 ∣ a - b →
+    padicValNat 3 (a ^ 3 - b ^ 3) = padicValNat 3 (a - b) + 1
+
+/--
+If `3 ∣ a - b`, then `3 ∣ S0(a,b)`.
+-/
+lemma three_dvd_S0_of_three_dvd_sub {a b : ℕ}
+    (hab_lt : b < a)
+    (h3_sub : 3 ∣ a - b) :
+    3 ∣ DkMath.FLT.PetalDetect.S0_nat a b := by
+  rcases h3_sub with ⟨k, hk⟩
+  have hab_eq : a = 3 * k + b := by
+    calc
+      a = (a - b) + b := (Nat.sub_add_cancel (Nat.le_of_lt hab_lt)).symm
+      _ = 3 * k + b := by simp [hk]
+  have hS0_eq_3mul :
+      DkMath.FLT.PetalDetect.S0_nat a b =
+        3 * (b ^ 2 + 3 * k * b + 3 * k ^ 2) := by
+    rw [hab_eq]
+    unfold DkMath.FLT.PetalDetect.S0_nat
+    ring
+  exact ⟨b ^ 2 + 3 * k * b + 3 * k ^ 2, hS0_eq_3mul⟩
+
+/--
+On the `d = 3` boundary branch, every prime `q ≠ 3` sees exactly the boundary valuation.
+-/
+lemma padicValNat_d3_boundary_eq_boundary_of_ne_three :
+    PadicValNatD3BoundaryNeThreeTarget := by
+  intro a b q hq hab_lt hab hq_sub hq_ne3
+  have ha_pos : 0 < a := Nat.lt_of_le_of_lt (Nat.zero_le b) hab_lt
+  have hS0_not_dvd : ¬ q ∣ DkMath.FLT.PetalDetect.S0_nat a b := by
+    intro hqS0
+    exact
+      (DkMath.FLT.prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three
+        (c := a) (b := b) (q := q)
+        (Nat.le_of_lt hab_lt) hab hq hqS0 hq_ne3) hq_sub
+  have hboundary_ne : a - b ≠ 0 := Nat.sub_ne_zero_of_lt hab_lt
+  have hS0_pos : 0 < DkMath.FLT.PetalDetect.S0_nat a b := by
+    have : 0 < a ^ 2 + (a * b + b ^ 2) := by positivity
+    simpa [DkMath.FLT.PetalDetect.S0_nat, Nat.add_assoc] using this
+  have hfact : a ^ 3 - b ^ 3 = (a - b) * DkMath.FLT.PetalDetect.S0_nat a b :=
+    DkMath.FLT.cube_sub_eq_mul_sub_S0 hab_lt
+  have hmul :
+      padicValNat q (a ^ 3 - b ^ 3) =
+        padicValNat q (a - b) + padicValNat q (DkMath.FLT.PetalDetect.S0_nat a b) := by
+    letI : Fact (Nat.Prime q) := ⟨hq⟩
+    exact congrArg (padicValNat q) hfact ▸
+      padicValNat.mul hboundary_ne (Nat.ne_of_gt hS0_pos)
+  have hzero : padicValNat q (DkMath.FLT.PetalDetect.S0_nat a b) = 0 :=
+    padicValNat.eq_zero_of_not_dvd hS0_not_dvd
+  simpa [hzero] using hmul
+
+/--
+On the `q = 3` boundary branch, the cubic difference picks up exactly one extra factor of `3`
+from `S0(a,b)`.
+-/
+lemma padicValNat_d3_boundary_eq_boundary_succ_of_three :
+    PadicValNatD3BoundaryThreeTarget := by
+  intro a b hab_lt hab h3_sub
+  have ha_pos : 0 < a := Nat.lt_of_le_of_lt (Nat.zero_le b) hab_lt
+  have hS0_dvd : 3 ∣ DkMath.FLT.PetalDetect.S0_nat a b :=
+    three_dvd_S0_of_three_dvd_sub hab_lt h3_sub
+  have hS0_not_sq : ¬ 3 ^ 2 ∣ DkMath.FLT.PetalDetect.S0_nat a b :=
+    DkMath.FLT.three_sq_not_dvd_S0_of_coprime (Nat.le_of_lt hab_lt) hab
+  have hS0_pos : 0 < DkMath.FLT.PetalDetect.S0_nat a b := by
+    have : 0 < a ^ 2 + (a * b + b ^ 2) := by positivity
+    simpa [DkMath.FLT.PetalDetect.S0_nat, Nat.add_assoc] using this
+  have hS0_ge1 : 1 ≤ padicValNat 3 (DkMath.FLT.PetalDetect.S0_nat a b) :=
+    DkMath.ABC.padicValNat_one_le_of_prime_dvd
+      Nat.prime_three (Nat.ne_of_gt hS0_pos) hS0_dvd
+  have hS0_le1 : padicValNat 3 (DkMath.FLT.PetalDetect.S0_nat a b) ≤ 1 := by
+    by_contra hgt
+    have h2 : 2 ≤ padicValNat 3 (DkMath.FLT.PetalDetect.S0_nat a b) := by omega
+    have : 3 ^ 2 ∣ DkMath.FLT.PetalDetect.S0_nat a b := by
+      exact
+        (@padicValNat_dvd_iff_le 3 (Fact.mk Nat.prime_three)
+          (DkMath.FLT.PetalDetect.S0_nat a b) 2 (Nat.ne_of_gt hS0_pos)).2 h2
+    exact hS0_not_sq this
+  have hS0_eq1 : padicValNat 3 (DkMath.FLT.PetalDetect.S0_nat a b) = 1 := by
+    omega
+  have hboundary_ne : a - b ≠ 0 := Nat.sub_ne_zero_of_lt hab_lt
+  have hfact : a ^ 3 - b ^ 3 = (a - b) * DkMath.FLT.PetalDetect.S0_nat a b :=
+    DkMath.FLT.cube_sub_eq_mul_sub_S0 hab_lt
+  have hmul :
+      padicValNat 3 (a ^ 3 - b ^ 3) =
+        padicValNat 3 (a - b) + padicValNat 3 (DkMath.FLT.PetalDetect.S0_nat a b) := by
+    exact congrArg (padicValNat 3) hfact ▸
+      padicValNat.mul hboundary_ne (Nat.ne_of_gt hS0_pos)
+  simpa [hS0_eq1, Nat.add_comm] using hmul
 
 /-- A fixed primitive prime factor already contradicts `a^d - b^d = t^d`. -/
 private lemma primitive_prime_contradicts_diff_dth_power

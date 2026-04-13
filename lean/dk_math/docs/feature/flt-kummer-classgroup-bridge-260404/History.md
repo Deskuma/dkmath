@@ -2912,3 +2912,81 @@ Archive
      という二戦線分離がさらに確定した
 4. 検証:
    - `./lean-build.sh DkMath.NumberTheory.GcdNextResearch` 成功
+
+## 2026/04/13 16:29:43 JST
+
+1. 背景:
+   - `review-058` に従い、
+     false と確定した
+     `PadicValNatD3BoundaryReceiverTarget`
+     を救命するのではなく、
+     boundary-divisor family を
+     exact valuation API へ置き換える段に進んだ
+   - 狙いは
+     `q ≠ 3` 枝と `q = 3` 枝を分離し、
+     「上界化」ではなく「分類化」で読むことだった
+2. 実施:
+   - `GcdNextResearch.lean`
+     に
+     `PadicValNatD3BoundaryNeThreeTarget`
+     と
+     `PadicValNatD3BoundaryThreeTarget`
+     を追加し、
+     boundary family の後継 API を
+     exact valuation statement として切り直した
+   - 同ファイルに
+     `three_dvd_S0_of_three_dvd_sub`
+     を追加し、
+     `3 ∣ a - b`
+     なら
+     `3 ∣ S0(a,b)`
+     を no-`so#rry` で回収した
+   - その上で
+     `padicValNat_d3_boundary_eq_boundary_of_ne_three`
+     を追加し、
+     `q ≠ 3`
+     かつ
+     `q ∣ a - b`
+     なら
+     `padicValNat q (a^3 - b^3) = padicValNat q (a - b)`
+     を
+     `prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three`
+     と因数分解から no-`so#rry` で示した
+   - さらに
+     `padicValNat_d3_boundary_eq_boundary_succ_of_three`
+     を追加し、
+     `3 ∣ a - b`
+     なら
+     `padicValNat 3 (a^3 - b^3) = padicValNat 3 (a - b) + 1`
+     を、
+     `three_sq_not_dvd_S0_of_coprime`
+     と上の `3 ∣ S0`
+     補題から no-`so#rry` で示した
+3. 結論:
+   - boundary-divisor family の次段は、
+     もはや
+     `≤ 1`
+     receiver を探すことではなく、
+     **exact valuation classification**
+     を canonical API として採用することだと確定した
+   - これで
+     `review-058`
+     の提案どおり、
+     `q ≠ 3`
+     枝と
+     `q = 3`
+     枝を別 theorem として扱う地盤ができた
+   - 次は
+     `padicValNat_d3_upper_bound`
+     など boundary caller 側が本当に必要としている仕事を、
+     これら 2 本の exact theorem と
+     primitive-prime route に分配して migration する段である
+4. 検証:
+   - `./lean-build.sh DkMath.NumberTheory.GcdNextResearch` 成功
+   - `lean/dk_math/tmp/check_axioms_review058.lean`
+     で
+     `padicValNat_d3_boundary_eq_boundary_of_ne_three`
+     と
+     `padicValNat_d3_boundary_eq_boundary_succ_of_three`
+     の `#print axioms` を確認し、
+     いずれも `sorryAx` を含まないことを確認した
