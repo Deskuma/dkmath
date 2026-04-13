@@ -17,6 +17,19 @@ namespace DkMath.FLT
 open DkMath.CosmicFormulaBinom
 
 /--
+phase-15 で current research debt として残っている最小入力仕様。
+
+primitive-prime branch で
+`padicValNat q (z^p - y^p) ≤ 1`
+が一様に供給できれば、PrimeProvider / Kummer 側の glue は clean に閉じる。
+-/
+abbrev TriominoPrimitivePrimeFactorPadicValNatLeOneTarget : Prop :=
+  ∀ {p x y z q : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ¬ p ∣ (z - y) →
+    Nat.Prime q → q ∣ (z ^ p - y ^ p) → ¬ q ∣ (z - y) →
+    padicValNat q (z ^ p - y ^ p) ≤ 1
+
+/--
 phase-15 の研究核（diff 版）:
 primitive prime divisor 文脈で `z^p - y^p` の `q`-進付値が高々 1 であることを示す。
 
@@ -45,6 +58,22 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le
       hq_not_dvd_gap
 
 /--
+current research debt を abstract target として受け取る薄い wrapper。
+
+これにより、`sorryAx` root は
+`TriominoPrimitivePrimeFactorPadicValNatLeOneTarget`
+1 本だけだと theorem 境界で固定できる。
+-/
+theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le_one_of_target
+    (hVal : TriominoPrimitivePrimeFactorPadicValNatLeOneTarget) :
+    ∀ {p x y z q : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      ¬ p ∣ (z - y) →
+      Nat.Prime q → q ∣ (z ^ p - y ^ p) → ¬ q ∣ (z - y) →
+      padicValNat q (z ^ p - y ^ p) ≤ 1 := by
+  intro p x y z q hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
+  exact hVal hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
+
+/--
 `padicValNat q (GN p (z - y) y) ≤ 1` が供給できれば、
 `padicValNat q (z^p - y^p) ≤ 1` は no-`so#rry` で従う。
 -/
@@ -57,6 +86,27 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_GN_le_o
   have hdiff_le :
       padicValNat q (z ^ p - y ^ p) ≤ 1 :=
     triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le_one_of_primitivePrime_core
+      hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
+  have hEq :
+      padicValNat q (z ^ p - y ^ p) = padicValNat q (GN p (z - y) y) :=
+    triominoWieferichShrink_padicValNat_diff_eq_GN_core
+      hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
+  rw [← hEq]
+  exact hdiff_le
+
+/--
+research target が供給されれば、`GN` 側 valuation 上界は clean に回収できる。
+-/
+theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_GN_le_one_of_target
+    (hVal : TriominoPrimitivePrimeFactorPadicValNatLeOneTarget) :
+    ∀ {p x y z q : ℕ}, PrimeGe5CounterexamplePack p x y z →
+      ¬ p ∣ (z - y) →
+      Nat.Prime q → q ∣ (z ^ p - y ^ p) → ¬ q ∣ (z - y) →
+      padicValNat q (GN p (z - y) y) ≤ 1 := by
+  intro p x y z q hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
+  have hdiff_le :
+      padicValNat q (z ^ p - y ^ p) ≤ 1 :=
+    triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le_one_of_target hVal
       hpack hpB hqP hq_dvd_diff hq_not_dvd_gap
   have hEq :
       padicValNat q (z ^ p - y ^ p) = padicValNat q (GN p (z - y) y) :=
@@ -91,5 +141,20 @@ theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core :
   exact
     triominoNoWieferichBridge_of_padicValNat_le_one
       triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_le_one_core
+
+/--
+current research debt を explicit に受け取る no-Wieferich bridge。
+
+これ以降の PrimeProvider glue は no-`so#rry` で閉じるので、
+upstream root の最小入力は
+`TriominoPrimitivePrimeFactorPadicValNatLeOneTarget`
+だけである。
+-/
+theorem triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core_of_target
+    (hVal : TriominoPrimitivePrimeFactorPadicValNatLeOneTarget) :
+    TriominoNoWieferichBridge := by
+  exact
+    triominoNoWieferichBridge_of_padicValNat_le_one
+      (triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_diff_le_one_of_target hVal)
 
 end DkMath.FLT

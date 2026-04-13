@@ -460,6 +460,21 @@ theorem triominoCosmicNoPowOnGN
   exact triominoCosmicNoPowOnGN_of_nonLiftableGNBridge
     (allNonLiftableOnGN_fromCounterexample_impl hBranch)
 
+/--
+current research debt を explicit に受け取る clean no-pow route。
+
+`triominoCosmicNoPowOnGN_default` の via-`so#rry` 性は fixed branch injection に由来し、
+parameterized route 自体は
+`TriominoPrimitivePrimeFactorPadicValNatLeOneTarget`
+があれば閉じる。
+-/
+theorem triominoCosmicNoPowOnGN_of_padicValNatLeOneTarget
+    (hVal : TriominoPrimitivePrimeFactorPadicValNatLeOneTarget) :
+    NoPowOnGN_fromCounterexample := by
+  exact
+    triominoCosmicNoPowOnGN
+      (triominoWieferichBranchBridge_of_padicValNatLeOneTarget hVal)
+
 /-- 既定の Branch bridge 注入から得る、引数なし版の `NoPowOnGN`。 -/
 theorem triominoCosmicNoPowOnGN_default :
     NoPowOnGN_fromCounterexample := by
@@ -470,6 +485,16 @@ theorem triominoCosmicBodyInvariant
     (hBranch : TriominoWieferichBranchBridge) :
     TriominoCosmicBodyInvariant := by
   exact bodyInvariant_of_NoPowOnGN (triominoCosmicNoPowOnGN hBranch)
+
+/--
+research-side primitive-prime valuation target から直に得る clean body invariant。
+-/
+theorem triominoCosmicBodyInvariant_of_padicValNatLeOneTarget
+    (hVal : TriominoPrimitivePrimeFactorPadicValNatLeOneTarget) :
+    TriominoCosmicBodyInvariant := by
+  exact
+    bodyInvariant_of_NoPowOnGN
+      (triominoCosmicNoPowOnGN_of_padicValNatLeOneTarget hVal)
 
 /-- 既定の Branch bridge 注入から得る、引数なし版の Body invariant。 -/
 theorem triominoCosmicBodyInvariant_default :

@@ -2390,3 +2390,107 @@ Archive
      自体の `sorryAx` root をさらに掘るか、
      ひとまず current monitoring を正した状態で
      Kummer mainline の open に戻るかを判断する
+
+## 2026/04/13 12:29:03 JST
+
+1. 背景:
+   - `review-054.md` に従い、
+     Kummer local theorem をさらに刻むのではなく、
+     `triominoCosmicNoPowOnGN_default`
+     の upstream root を掘って
+     **最小の unresolved input がどこか**
+     を theorem 境界で固定する方針を選んだ
+   - 分岐判断:
+     local wrapper 追加より upstream root の切り出しを優先した
+   - 理由:
+     現在の bottleneck は Kummer local ではなく、
+     `triominoWieferichBranchBridge_default`
+     から入る research-side valuation placeholder だと
+     `#print axioms` で確認できたため
+2. 調査:
+   - `#print axioms` により、
+     `triominoCosmicNoPowOnGN` 自体は clean で、
+     `triominoCosmicNoPowOnGN_default`
+     の `sorryAx` は
+     `triominoWieferichBranchBridge_default`
+     に限って入ることを確認した
+   - さらに掘ると、
+     `triominoWieferichDescent_impl_clean`
+     自体は clean で、
+     汚染は injected input
+     `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
+     にあると分かった
+   - その root は
+     `CosmicPetalBridgeGNNoWieferichResearch.lean`
+     の
+     `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_padicValNat_GN_le_one_core`
+     さらにその upstream である
+     `DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one`
+     に到達した
+   - そして direct `sorry` source は
+     `ZsigmondyCyclotomicResearch.lean`
+     の
+     `squarefree_implies_padic_val_le_one`
+     だと確定した
+3. 実装:
+   - `CosmicPetalBridgeGNNoWieferichResearch.lean`
+     に
+     `TriominoPrimitivePrimeFactorPadicValNatLeOneTarget`
+     を追加し、
+     current research debt を
+     「primitive-prime branch での `padicValNat ≤ 1` 供給」
+     1 本へ抽象化した
+   - 同ファイルに
+     `...padicValNat_diff_le_one_of_target`
+     `...padicValNat_GN_le_one_of_target`
+     `...noWieferich_core_of_target`
+     を追加し、
+     `TriominoNoWieferichBridge`
+     までは clean glue で閉じると固定した
+   - `CosmicPetalBridgeGNDescentBQuarantine.lean`
+     に
+     `triominoWieferichDescent_impl_of_padicValNatLeOneTarget`
+     を追加し、
+     public `WieferichDescentB`
+     まで clean に復元できるようにした
+   - `CosmicPetalBridgeGN.lean`
+     に
+     `triominoWieferichBranchBridge_of_padicValNatLeOneTarget`
+     を追加し、
+     branch contract 自体は target さえあれば clean だと明示した
+   - `TriominoCosmicGapInvariant.lean`
+     に
+     `triominoCosmicNoPowOnGN_of_padicValNatLeOneTarget`
+     と
+     `triominoCosmicBodyInvariant_of_padicValNatLeOneTarget`
+     を追加し、
+     Kummer から見える no-pow / body route の clean receiver を用意した
+4. 結論:
+   - `triominoCosmicNoPowOnGN_default`
+     の `sorryAx` は
+     default injection 全体が本質なのではなく、
+     **research-side primitive-prime valuation target 1 本**
+     に還元できることが分かった
+   - したがって、
+     review-054 の狙いどおり
+     「真の bottleneck は upstream debt」
+     を theorem 名で固定できた
+   - 次に genuine no-sorry を回復するには、
+     `DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one`
+     を honest statement へ差し替えるか、
+     それに代わる true target を供給すればよい
+5. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch` 成功
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant` 成功
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+   - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
+   - `lean/dk_math/tmp/checkAxioms-review054-new.lean`
+     で新設 theorem 群の `#print axioms` を確認し、
+     いずれも `sorryAx` を含まないことを確認した
+6. 次の課題:
+   - `DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one`
+     を使わずに済む既存 no-sorry route
+     （例: `..._of_squarefree_GN` / no-lift provider）
+     が current branch-B 文脈で使えないかを再点検する
+   - もし既存 route で置換できないなら、
+     research theorem 側の statement repair を主戦略として進める
