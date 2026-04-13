@@ -2765,3 +2765,85 @@ Archive
      statement repair の次段
      （仮定追加・target 分離・lemma 名変更）
      を設計する
+
+## 2026/04/13 14:29:13 JST
+
+1. 背景:
+   - `ZsigmondyCyclotomicResearch.lean`
+     には
+     `..._honest`
+     wrapper を立てたが、
+     実際に legacy caller が
+     `Squarefree (GN ...)`
+     を持てるかどうかは
+     `PrimitiveBeam.lean`
+     と
+     `GcdNextResearch.lean`
+     ごとに切り分ける必要があった
+2. 実施:
+   - `PrimitiveBeam.lean`
+     に
+     `primitive_prime_padic_bound_diff_of_squarefree_GN`
+     を追加し、
+     primitive-prime valuation caller 自体は
+     `Squarefree (GN d (a - b) b)`
+     が入れば
+     `padicValNat_primitive_prime_factor_le_one_honest`
+     へそのまま寄せられることを no-`so#rry` で固定した
+   - 同ファイルに
+     `primitive_prime_factor_forbids_perfect_pow_diff_of_squarefree_GN`
+     と
+     `primitive_prime_obstructs_GN_perfect_power_of_squarefree_GN`
+     を追加し、
+     `PrimitiveBeam` の 2 個の legacy caller は
+     「statement repair の次段 = `Squarefree (GN ...)` 仮定追加」
+     で移行できることを theorem 名で明示した
+   - `GcdNextResearch.lean`
+     には
+     `primitive_prime_padic_bound_diff_of_squarefree_GN`
+     を追加し、
+     同ファイル内の primitive-prime caller も
+     squarefree-GN route へは寄せられることを fixed した
+   - 一方で
+     `padicValNat_d3_upper_bound`
+     の
+     `d = 3` かつ `q ∣ a - b`
+     分岐は primitive-prime route ではないため、
+     `PadicValNatD3BoundaryReceiverTarget`
+     を新設し、
+     `padicValNat_d3_upper_bound_of_boundaryReceiver`
+     へ分解した
+   - 既存
+     `padicValNat_d3_upper_bound`
+     は、
+     その boundary receiver に
+     legacy
+     `squarefree_implies_padic_val_le_one`
+     を inject する thin wrapper に置換した
+3. 結論:
+   - `PrimitiveBeam.lean`
+     の legacy caller は
+     **current proof context だけでは**
+     `Squarefree (GN ...)`
+     を持っていないが、
+     repair 方向は明快で、
+     追加仮定を入れれば honest route に移行できる
+   - `GcdNextResearch.lean`
+     でも primitive-prime caller は同様に移行可能だが、
+     `padicValNat_d3_upper_bound`
+     の boundary-divisor branch は
+     `Squarefree (GN ...)`
+     では埋まらず、
+     **別 theorem / target に分離するのが正しい**
+     と確定した
+   - したがって statement repair の次段は
+     1. primitive-prime family:
+        `Squarefree (GN ...)`
+        仮定を足す rename / overload
+     2. boundary-divisor family:
+        `PadicValNatD3BoundaryReceiverTarget`
+        の concrete theorem 化
+     の 2 系統に分けて進めるべきだと判断した
+4. 検証:
+   - `./lean-build.sh DkMath.NumberTheory.PrimitiveBeam` 成功
+   - `./lean-build.sh DkMath.NumberTheory.GcdNextResearch` 成功

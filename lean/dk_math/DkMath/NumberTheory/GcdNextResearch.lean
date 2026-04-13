@@ -71,6 +71,23 @@ private lemma primitive_prime_padic_bound_diff
         hq_div_pow
         hq_ndiv_diff
 
+/--
+Honest repair path for the primitive-prime caller:
+if `Squarefree (GN d (a - b) b)` is supplied, this branch no longer depends on the research
+placeholder.
+-/
+private lemma primitive_prime_padic_bound_diff_of_squarefree_GN
+    {a b d q : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b)
+    (hq : DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow q a b d)
+    (hG_sq : Squarefree (GN d (a - b) b)) :
+    padicValNat q (a ^ d - b ^ d) ≤ 1 := by
+  exact
+    DkMath.NumberTheory.PrimitiveBeam.primitive_prime_padic_bound_diff_of_squarefree_GN
+      hd_prime hd_ge hab_lt hb hab hpnd hq hG_sq
+
 /-- Primitive prime factor gives the GN-side valuation upper bound. -/
 private lemma primitive_prime_padic_bound_GN
     {a b d q : ℕ}
@@ -86,6 +103,20 @@ private lemma primitive_prime_padic_bound_GN
     DkMath.NumberTheory.PrimitiveBeam.primitive_prime_padic_eq_GN hq hd_pos hd1 hab_lt
   rw [← hpadic_eq_GN]
   exact primitive_prime_padic_bound_diff hd_prime hd_ge hab_lt hb hab hpnd hq
+
+/--
+The `d = 3`, `q ∣ a - b` branch in `padicValNat_d3_upper_bound` is not a primitive-prime route,
+so it cannot be repaired merely by adding `Squarefree (GN 3 (a - b) b)`.
+
+This target isolates the real remaining obligation for that caller family.
+-/
+abbrev PadicValNatD3BoundaryReceiverTarget : Prop :=
+  ∀ {a b q : ℕ},
+    Nat.Prime q →
+    b < a → 0 < b → Nat.Coprime a b →
+    q ∣ a - b →
+    q ∣ a ^ 3 - b ^ 3 →
+    padicValNat q (a ^ 3 - b ^ 3) ≤ 1
 
 /-- A fixed primitive prime factor already contradicts `a^d - b^d = t^d`. -/
 private lemma primitive_prime_contradicts_diff_dth_power
@@ -329,7 +360,9 @@ d=3 の場合に padicValNat q (a³ - b³) ≤ 1 を証明する。
 2. q ∤ a^3 - b^3 の場合：
    - padicValNat q (a^3 - b^3) = 0 ≤ 1
 -/
-lemma padicValNat_d3_upper_bound {a b q : ℕ}
+lemma padicValNat_d3_upper_bound_of_boundaryReceiver
+    (hBoundary : PadicValNatD3BoundaryReceiverTarget)
+    {a b q : ℕ}
     (hq : Nat.Prime q)
     (hab_lt : b < a) (hab_coprime : Nat.Coprime a b)
     (h_Ag : gcd_Ag a b = 1) -- Phase 2 正規化
@@ -354,9 +387,7 @@ lemma padicValNat_d3_upper_bound {a b q : ℕ}
       -- Cosmic Formula による因数分解を使用
       by_cases hq_ndiv : q ∣ a - b
       · -- q | a - b の場合
-        -- 一般的な squarefree_implies を適用
-        exact squarefree_implies_padic_val_le_one
-          3 a b q (by decide : Nat.Prime 3) hb_pos hab_coprime hq hq_div
+        exact hBoundary hq hab_lt hb_pos hab_coprime hq_ndiv hq_div
       · -- q ∤ a - b の場合（原始素因子の条件）
         -- padicValNat_le_one_of_prime_divisor_case_three_strong を使用
         apply padicValNat_le_one_of_prime_divisor_case_three_strong
@@ -367,6 +398,33 @@ lemma padicValNat_d3_upper_bound {a b q : ℕ}
       have hzero : padicValNat q (a ^ 3 - b ^ 3) = 0 := padicValNat.eq_zero_of_not_dvd hq_div
       rw [hzero]
       norm_num
+
+/--
+Current compatibility wrapper.
+
+The primitive-prime branch is already no-`sorry`; the only remaining legacy dependency is the
+`d = 3`, `q ∣ a - b` receiver injected here.
+-/
+lemma padicValNat_d3_upper_bound {a b q : ℕ}
+    (hq : Nat.Prime q)
+    (hab_lt : b < a) (hab_coprime : Nat.Coprime a b)
+    (h_Ag : gcd_Ag a b = 1) -- Phase 2 正規化
+    (h_phi : Nat.Coprime (a + b) b) -- Phase 3 φビット判定
+    (hq_not_sq : ¬ q^2 ∣ S0_nat a b) -- 2026/02/22  7:08 追加
+    :
+    padicValNat q (a^3 - b^3) ≤ 1 := by
+  refine
+    padicValNat_d3_upper_bound_of_boundaryReceiver
+      (hBoundary := ?_) hq hab_lt hab_coprime h_Ag h_phi hq_not_sq
+  intro a b q hq hbnd hb hab hq_dvd_boundary hq_div
+  exact
+    squarefree_implies_padic_val_le_one
+      3 a b q
+      Nat.prime_three
+      hb
+      hab
+      hq
+      hq_div
 
 -- TODO: [DkMathTest]: #print axioms padicValNat_d3_upper_bound
 
