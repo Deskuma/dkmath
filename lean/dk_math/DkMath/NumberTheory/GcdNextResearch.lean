@@ -646,11 +646,35 @@ lemma padicValNat_d3_upper_bound {a b q : ℕ}
 
 -- TODO: [DkMathTest]: #print axioms padicValNat_d3_upper_bound
 
-/-- 層B統合フック：GcdAg + PetalDetect による前処理後の上界評価
+/--
+Honest `d = 3` entry for the layer-B context.
+
+This keeps the same ambient preprocessing assumptions as the old layer-B hook, but returns the
+canonical valuation split instead of the false global bound `≤ 1`.
+-/
+lemma padicValNat_d3_layer_b_case_split {a b q : ℕ}
+    (hq : Nat.Prime q)
+    (hab_lt : b < a) (hab_coprime : Nat.Coprime a b)
+    (_h_Ag : gcd_Ag a b = 1)
+    (_h_petal : Nat.Coprime (a + b) b)
+    (_hq_not_sq : ¬ q^2 ∣ S0_nat a b)
+    (hq_div : q ∣ a ^ 3 - b ^ 3)
+    :
+    (¬ q ∣ a - b) ∨
+      (q ∣ a - b ∧
+        q ≠ 3 ∧
+        padicValNat q (a ^ 3 - b ^ 3) = padicValNat q (a - b)) ∨
+      (q = 3 ∧
+        3 ∣ a - b ∧
+        padicValNat q (a ^ 3 - b ^ 3) = padicValNat q (a - b) + 1) := by
+  exact padicValNat_d3_canonical_case_split hq hab_lt hab_coprime hq_div
+
+/-- 層B統合フック：GcdAg + PetalDetect による前処理後の上界評価（`d ≠ 3` 版）
 
 **型シグネチャ:**
 - hd : d は素数
 - hd_ge : d ≥ 3
+- hd_ne_three : d ≠ 3
 - hq : q は素数
 - hab_lt, hab_coprime : a > b で互いに素
 - h_Ag（Phase 2）: gcd_Ag a b = 1
@@ -662,10 +686,12 @@ lemma padicValNat_d3_upper_bound {a b q : ℕ}
 - 証明：C ≤ 1
 
 **実装戦略:**
-d = 3 の具体計算と、一般的な d への拡張を組み合わせる。
+`d = 3` は `padicValNat_d3_layer_b_case_split` へ分離し、
+ここでは `d > 3` の研究スタブだけを扱う。
 -/
 lemma padicValNat_upper_bound_layer_b_stub {a b d q : ℕ}
     (hd : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hd_ne_three : d ≠ 3)
     (hq : Nat.Prime q)
     (hab_lt : b < a) (hab_coprime : Nat.Coprime a b)
     (h_Ag : gcd_Ag a b = 1)
@@ -673,52 +699,45 @@ lemma padicValNat_upper_bound_layer_b_stub {a b d q : ℕ}
     (hq_not_sq : ¬ q^2 ∣ S0_nat a b)
     :
     ∃ C : ℕ, padicValNat q (a^d - b^d) ≤ C ∧ C ≤ 1 := by
-  -- 場合分け：d = 3 と d > 3
-  by_cases hd_eq_three : d = 3
-  · -- d = 3 の場合
-    subst hd_eq_three
-    -- padicValNat_d3_upper_bound を使用
-    have hbound := padicValNat_d3_upper_bound hq hab_lt hab_coprime h_Ag h_petal hq_not_sq
-    exact ⟨1, hbound, by decide⟩
-  · -- d > 3 の場合（研究テーマ）
-    -- **実装予定（Phase 4.2/4.3）**
-    --
-    -- d = 5, 7, 11, ... 等の素数については、以下の統合が必要：
-    --
-    -- 1. **d=5 での個別実装流れ**
-    --    i) padicValNat_d5_upper_bound を実装
-    --    ii) Lucas/Kummer定理を d=5 に特化
-    --    iii) 検証： Cosmic Formula G_5(a,b) の因子分解
-    --    iv) 完成したら padicValNat_upper_bound_integrated へ統合
-    --
-    -- 2. **パターン認識（d=3, d=5 から一般化へ）**
-    --    - 古典的 Cosmic Formula: a^d - b^d = (a-b) · G_d(a,b)
-    --    - Lucas定理：C(a,b) mod p の p進展開
-    --    - Kummer定理：v_p(n choose k) の精密評価
-    --      （参考：ZsigmondyCyclotomic.kummer_theorem_for_binomial_coeff）
-    --    - 円分多項式：Φ_d(a/b) の既約性と因子分解
-    --    - 結果：padicValNat_q(G_d(a,b)) ≤ C（C は d に依存する定数）
-    --
-    -- 3. **実装難易度の見積もり**
-    --    - d=5: ⭐⭐⭐ （2～3日の集中作業）
-    --    - d=7: ⭐⭐⭐⭐ （個別計算が複雑化）
-    --    - 一般化：⭐⭐⭐⭐⭐ （Lucas/Kummer の完全統合）
-    --
-    -- 4. **当面の対応**
-    --    padicValNat_general_upper_bound 補題を「存在形」で定義し、
-    --    具体的な d に対しては case split で d=3 ケースへ削減する。
-    --    d > 3 は層Bへ隔離し、次フェーズでの並列開発を予定。
-    --
-    -- **次フェーズへの課題列**
-    -- A. d=5 での padicValNat上界計算（ZsigmondyCyclotomic連携）
-    -- B. 円分多項式の既約性（Mathlib/Cyclotomic検索）
-    -- C. Lucas/Kummer定理の d ≥ 5 への拡張
-    -- D. GcdAg+PetalDetect との統合フロー確認
-    --
-    -- [TODO] d ≥ 5 向けの一般化された上界評価。
-    --        具体的な一般化は GcdNextLayerB/Phase 4.2 として別タスクで
-    --        自前の定式化を進める必要があるため、現在はスタブとして so#rry としている。
-    sorry
+  have hd_gt_three : 3 < d := by omega
+  -- **実装予定（Phase 4.2/4.3）**
+  --
+  -- d = 5, 7, 11, ... 等の素数については、以下の統合が必要：
+  --
+  -- 1. **d=5 での個別実装流れ**
+  --    i) padicValNat_d5_upper_bound を実装
+  --    ii) Lucas/Kummer定理を d=5 に特化
+  --    iii) 検証： Cosmic Formula G_5(a,b) の因子分解
+  --    iv) 完成したら padicValNat_upper_bound_integrated へ統合
+  --
+  -- 2. **パターン認識（d=5 から一般化へ）**
+  --    - 古典的 Cosmic Formula: a^d - b^d = (a-b) · G_d(a,b)
+  --    - Lucas定理：C(a,b) mod p の p進展開
+  --    - Kummer定理：v_p(n choose k) の精密評価
+  --      （参考：ZsigmondyCyclotomic.kummer_theorem_for_binomial_coeff）
+  --    - 円分多項式：Φ_d(a/b) の既約性と因子分解
+  --    - 結果：padicValNat_q(G_d(a,b)) ≤ C（C は d に依存する定数）
+  --
+  -- 3. **実装難易度の見積もり**
+  --    - d=5: ⭐⭐⭐ （2～3日の集中作業）
+  --    - d=7: ⭐⭐⭐⭐ （個別計算が複雑化）
+  --    - 一般化：⭐⭐⭐⭐⭐ （Lucas/Kummer の完全統合）
+  --
+  -- 4. **当面の対応**
+  --    padicValNat_general_upper_bound 補題を「存在形」で定義し、
+  --    d > 3 は層Bへ隔離して並列開発を進める。
+  --
+  -- **次フェーズへの課題列**
+  -- A. d=5 での padicValNat上界計算（ZsigmondyCyclotomic連携）
+  -- B. 円分多項式の既約性（Mathlib/Cyclotomic検索）
+  -- C. Lucas/Kummer定理の d ≥ 5 への拡張
+  -- D. GcdAg+PetalDetect との統合フロー確認
+  --
+  -- [TODO] d > 3 向けの一般化された上界評価。
+  --        具体的な一般化は GcdNextLayerB/Phase 4.2 として別タスクで
+  --        自前の定式化を進める必要があるため、現在はスタブとして so#rry としている。
+  clear hd_gt_three
+  sorry
 
 /-- 一般的 d への上界補題
 
@@ -740,13 +759,13 @@ lemma padicValNat_general_upper_bound {a b d q : ℕ}
 /-! ### 8. 層B との最終統合：body_not_perfect_pow の証明完成
 
 **現在の状況:**
-Phase 1a-3 の補助仮定を満たすとき、
+Phase 1a-3 の補助仮定に加えて `d ≠ 3` を満たすとき、
 層B 補題により padicValNat q (a^d - b^d) ≤ 1 が得られる。
 
 これを body_not_perfect_pow で使用すれば、矛盾導出が完成する。
 -/
 
-/-- 最終統合：Phase 2 + Phase 3 + 層B の完全統合
+/-- 最終統合：Phase 2 + Phase 3 + 層B の完全統合（`d ≠ 3` 版）
 
 **入力:**
 - Phase 1a（Zsigmondy層A）: 原始素因子 q の存在
@@ -763,6 +782,7 @@ Phase 1a-3 の補助仮定を満たすとき、
 -/
 lemma padicValNat_upper_bound_integrated {a b d q : ℕ}
     (hd : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hd_ne_three : d ≠ 3)
     (hq : Nat.Prime q)
     (hab_lt : b < a) (hab_coprime : Nat.Coprime a b)
     (h_Ag : gcd_Ag a b = 1) -- Phase 2
@@ -772,7 +792,8 @@ lemma padicValNat_upper_bound_integrated {a b d q : ℕ}
     padicValNat q (a^d - b^d) ≤ 1 := by
   -- 層B統合スタブ補題を呼び出す
   obtain ⟨C, hC_upper, hC_le_one⟩ :=
-    padicValNat_upper_bound_layer_b_stub hd hd_ge hq hab_lt hab_coprime h_Ag h_petal hq_not_sq
+    padicValNat_upper_bound_layer_b_stub
+      hd hd_ge hd_ne_three hq hab_lt hab_coprime h_Ag h_petal hq_not_sq
   -- C ≤ 1 と padicValNat q (a^d - b^d) ≤ C より、padicValNat q (a^d - b^d) ≤ 1
   omega
 
