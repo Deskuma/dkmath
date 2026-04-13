@@ -2990,3 +2990,82 @@ Archive
      `padicValNat_d3_boundary_eq_boundary_succ_of_three`
      の `#print axioms` を確認し、
      いずれも `sorryAx` を含まないことを確認した
+
+## 2026/04/13 17:45:37 JST
+
+1. 背景:
+   - `review-059`
+     の方針に従い、
+     `d = 3`
+     については
+     false な一様上界
+     `padicValNat q (a^3 - b^3) ≤ 1`
+     を canonical API に置かず、
+     caller を
+     primitive route /
+     boundary-ne-three route /
+     boundary-three route
+     へ分配する段に入った
+   - 直前まで
+     `padicValNat_d3_upper_bound`
+     がその旧インターフェースを残していたため、
+     新しい exact valuation theorem 群を使う正規入口を
+     theorem 名で固定する必要があった
+2. 実施:
+   - `GcdNextResearch.lean`
+     に
+     `padicValNat_d3_canonical_case_split`
+     を追加し、
+     `q ∣ a^3 - b^3`
+     を入口にして
+     `¬ q ∣ a - b`
+     /
+     `q ∣ a - b ∧ q ≠ 3`
+     /
+     `q = 3 ∧ 3 ∣ a - b`
+     の三分岐を theorem として固定した
+   - 同ファイルに
+     `padicValNat_d3_layer_b_case_split`
+     を追加し、
+     GcdAg / PetalDetect の前処理を受けた layer-B 文脈でも
+     同じ canonical split を使えるようにした
+   - さらに
+     `padicValNat_upper_bound_layer_b_stub`
+     と
+     `padicValNat_upper_bound_integrated`
+     に
+     `d ≠ 3`
+     を追加し、
+     `d = 3`
+     ケースを false な global upper bound ルートから切り離した
+   - そのうえで
+     `padicValNat_d3_upper_bound`
+     の docstring を更新し、
+     新規 caller は
+     `padicValNat_d3_canonical_case_split`
+     /
+     `padicValNat_d3_layer_b_case_split`
+     を使うべき legacy wrapper であることを明示した
+3. 結論:
+   - `d = 3`
+     valuation story について、
+     **canonical API はもはや `≤ 1` ではなく三分岐分類**
+     だとファイル構造の上でも確定した
+   - これにより
+     `padicValNat_upper_bound_layer_b_stub`
+     系は
+     `d > 3`
+     研究スタブとして意味が明確になり、
+     `d = 3`
+     を混ぜたまま偽命題を主経路に残す状態を避けられた
+   - 次は
+     実際の caller 側で
+     `d = 3`
+     の必要仕事が
+     「primitive valuation 上界」
+     なのか
+     「boundary exact valuation」
+     なのかを見て、
+     この canonical split へ順次 migration する段である
+4. 検証:
+   - `./lean-build.sh DkMath.NumberTheory.GcdNextResearch` 成功

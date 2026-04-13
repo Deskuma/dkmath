@@ -622,6 +622,14 @@ Current compatibility wrapper.
 
 The primitive-prime branch is already no-`sorry`; the only remaining legacy dependency is the
 `d = 3`, `q ∣ a - b` receiver injected here.
+
+New callers should avoid this lemma. Use:
+- `padicValNat_d3_canonical_case_split`
+- `padicValNat_d3_layer_b_case_split`
+
+The old global conclusion `padicValNat q (a^3 - b^3) ≤ 1` is not the canonical `d = 3`
+interface because the boundary branch at `q = 3` is governed by the exact formula
+`padicValNat 3 (a^3 - b^3) = padicValNat 3 (a - b) + 1`.
 -/
 lemma padicValNat_d3_upper_bound {a b q : ℕ}
     (hq : Nat.Prime q)
