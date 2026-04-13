@@ -3190,3 +3190,42 @@ Archive
      すでに migration 先が実使用付きで固定された状態になった
 4. 検証:
    - `./lean-build.sh DkMath.NumberTheory.GcdNextResearch` 成功
+
+## 2026/04/13 22:22:43 JST
+
+1. 背景:
+   - `padicValNat_d3_upper_bound`
+     はすでに
+     docstring 上では legacy wrapper と明示され、
+     primitive route / canonical split / layer-B split への移行先も揃っていた
+   - ただし theorem 自体には
+     Lean の deprecation 属性が付いておらず、
+     将来の caller が警告なしに旧 API を掴める状態だった
+2. 実施:
+   - `GcdNextResearch.lean`
+     の
+     `padicValNat_d3_upper_bound`
+     に
+     `@[deprecated padicValNat_d3_canonical_case_split (since := "2026-04-13")]`
+     を追加した
+   - 置換先名は
+     `d = 3`
+     valuation story の正規入口として固定済みの
+     `padicValNat_d3_canonical_case_split`
+     を採用し、
+     詳細な分配先
+     `padicValNat_d3_primitive_upper_bound`
+     /
+     `padicValNat_d3_layer_b_case_split`
+     は引き続き docstring に残した
+3. 結論:
+   - これで
+     `padicValNat_d3_upper_bound`
+     は
+     **説明上だけでなく Lean 上も deprecated 相当**
+     の扱いになった
+   - 新規 caller は warning によって
+     canonical split への移行を促され、
+     旧 theorem は compatibility のためだけに残る状態がより明確になった
+4. 検証:
+   - `./lean-build.sh DkMath.NumberTheory.GcdNextResearch` 成功

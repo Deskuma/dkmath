@@ -666,6 +666,8 @@ The old global conclusion `padicValNat q (a^3 - b^3) ≤ 1` is not the canonical
 interface because the boundary branch at `q = 3` is governed by the exact formula
 `padicValNat 3 (a^3 - b^3) = padicValNat 3 (a - b) + 1`.
 -/
+@[deprecated padicValNat_d3_canonical_case_split
+  (since := "2026-04-13")]
 lemma padicValNat_d3_upper_bound {a b q : ℕ}
     (hq : Nat.Prime q)
     (hab_lt : b < a) (hab_coprime : Nat.Coprime a b)
