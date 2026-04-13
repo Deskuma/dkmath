@@ -3136,3 +3136,57 @@ Archive
      今後は実 caller をこの分配先へ順次寄せるだけの状態に近づいた
 4. 検証:
    - `./lean-build.sh DkMath.NumberTheory.GcdNextResearch` 成功
+
+## 2026/04/13 22:19:47 JST
+
+1. 背景:
+   - `padicValNat_d3_upper_bound`
+     の外部 caller はすでに消えており、
+     repo 内検索では実コード上の呼び出し先が残っていなかった
+   - そこで
+     `review-059`
+     の「最初の caller を 1 本だけ移植」
+     は、
+     まず
+     `GcdNextResearch.lean`
+     内の legacy helper が抱えていた primitive branch の重複証明を
+     新 API に差し替える形で着手することにした
+2. 実施:
+   - `padicValNat_d3_primitive_upper_bound`
+     の定義位置を
+     `padicValNat_d3_upper_bound_of_boundaryReceiver`
+     より前へ移し、
+     内部 caller から参照できるようにした
+   - その上で
+     `padicValNat_d3_upper_bound_of_boundaryReceiver`
+     の
+     `q ∤ a - b`
+     枝にあった
+     `padicValNat_le_one_of_prime_divisor_case_three_strong`
+     と
+     `padicValNat_a2_ab_b2_upper_bound_stage1`
+     の直書きを削り、
+     `padicValNat_d3_primitive_upper_bound`
+     を呼ぶ形へ差し替えた
+   - これにより、
+     旧 `padicValNat_d3_upper_bound`
+     family の内部でも
+     primitive route の仕事は
+     新 API 側へ一本化された
+3. 結論:
+   - 外部 caller はまだ無いが、
+     最初の migration 例として
+     **legacy helper 内の primitive branch を新 API 呼び出しへ置換**
+     できた
+   - 以後、
+     `padicValNat_d3_upper_bound`
+     周辺の残務は
+     boundary receiver 注入だけにさらに縮退し、
+     primitive 側のロジックは
+     `padicValNat_d3_primitive_upper_bound`
+     へ集約された
+   - 次に外部 caller が現れる場合も、
+     primitive branch については
+     すでに migration 先が実使用付きで固定された状態になった
+4. 検証:
+   - `./lean-build.sh DkMath.NumberTheory.GcdNextResearch` 成功

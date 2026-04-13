@@ -566,6 +566,42 @@ lemma padicValNat_a2_ab_b2_upper_bound_stage1 {a b q : ℕ}
 
 /-- d=3 での上界補題
 
+Honest primitive-route upper bound for `d = 3`.
+
+This is the intended replacement for the non-boundary branch of
+`padicValNat_d3_upper_bound`: once the caller knows `q ∣ a^3 - b^3` and `¬ q ∣ a - b`,
+the proof is already `no-so#rry`.
+-/
+lemma padicValNat_d3_primitive_upper_bound
+    {a b q : ℕ}
+    (hq : Nat.Prime q)
+    (hab_lt : b < a) (hab_coprime : Nat.Coprime a b)
+    (h_Ag : gcd_Ag a b = 1)
+    (h_phi : Nat.Coprime (a + b) b)
+    (hq_not_sq : ¬ q^2 ∣ S0_nat a b)
+    (hq_div : q ∣ a ^ 3 - b ^ 3)
+    (hq_ndiv : ¬ q ∣ a - b)
+    :
+    padicValNat q (a ^ 3 - b ^ 3) ≤ 1 := by
+  have hb0 : b ≠ 0 := by
+    intro hb0
+    subst hb0
+    have ha1 : a = 1 := by
+      simpa [Nat.coprime_zero_right] using hab_coprime
+    subst ha1
+    have hq_eq_one : q = 1 := by
+      simpa using hq_div
+    exact hq.ne_one hq_eq_one
+  have hb_pos : 0 < b := Nat.pos_of_ne_zero hb0
+  have ha_pos : 1 < a := by
+    have : 0 < a - b := Nat.sub_pos_of_lt hab_lt
+    omega
+  apply padicValNat_le_one_of_prime_divisor_case_three_strong
+    ha_pos hb_pos hab_coprime hab_lt hq hq_div hq_ndiv
+  exact padicValNat_a2_ab_b2_upper_bound_stage1 hq hab_lt hab_coprime h_Ag h_phi hq_not_sq
+
+/-- d=3 での上界補題
+
 Cosmic Formula と Lucas/Kummer 定理を組み合わせて、
 d=3 の場合に padicValNat q (a³ - b³) ≤ 1 を証明する。
 
@@ -607,50 +643,13 @@ lemma padicValNat_d3_upper_bound_of_boundaryReceiver
       · -- q | a - b の場合
         exact hBoundary hq hab_lt hb_pos hab_coprime hq_ndiv hq_div
       · -- q ∤ a - b の場合（原始素因子の条件）
-        -- padicValNat_le_one_of_prime_divisor_case_three_strong を使用
-        apply padicValNat_le_one_of_prime_divisor_case_three_strong
-          ha_pos hb_pos hab_coprime hab_lt hq hq_div hq_ndiv
-        -- a^2 + ab + b^2 の padicValNat ≤ 1 を示す
-        exact padicValNat_a2_ab_b2_upper_bound_stage1 hq hab_lt hab_coprime h_Ag h_phi hq_not_sq
+        exact
+          padicValNat_d3_primitive_upper_bound
+            hq hab_lt hab_coprime h_Ag h_phi hq_not_sq hq_div hq_ndiv
     · -- q ∤ a^3 - b^3 の場合
       have hzero : padicValNat q (a ^ 3 - b ^ 3) = 0 := padicValNat.eq_zero_of_not_dvd hq_div
       rw [hzero]
       norm_num
-
-/--
-Honest primitive-route upper bound for `d = 3`.
-
-This is the intended replacement for the non-boundary branch of
-`padicValNat_d3_upper_bound`: once the caller knows `q ∣ a^3 - b^3` and `¬ q ∣ a - b`,
-the proof is already `no-so#rry`.
--/
-lemma padicValNat_d3_primitive_upper_bound
-    {a b q : ℕ}
-    (hq : Nat.Prime q)
-    (hab_lt : b < a) (hab_coprime : Nat.Coprime a b)
-    (h_Ag : gcd_Ag a b = 1)
-    (h_phi : Nat.Coprime (a + b) b)
-    (hq_not_sq : ¬ q^2 ∣ S0_nat a b)
-    (hq_div : q ∣ a ^ 3 - b ^ 3)
-    (hq_ndiv : ¬ q ∣ a - b)
-    :
-    padicValNat q (a ^ 3 - b ^ 3) ≤ 1 := by
-  have hb0 : b ≠ 0 := by
-    intro hb0
-    subst hb0
-    have ha1 : a = 1 := by
-      simpa [Nat.coprime_zero_right] using hab_coprime
-    subst ha1
-    have hq_eq_one : q = 1 := by
-      simpa using hq_div
-    exact hq.ne_one hq_eq_one
-  have hb_pos : 0 < b := Nat.pos_of_ne_zero hb0
-  have ha_pos : 1 < a := by
-    have : 0 < a - b := Nat.sub_pos_of_lt hab_lt
-    omega
-  apply padicValNat_le_one_of_prime_divisor_case_three_strong
-    ha_pos hb_pos hab_coprime hab_lt hq hq_div hq_ndiv
-  exact padicValNat_a2_ab_b2_upper_bound_stage1 hq hab_lt hab_coprime h_Ag h_phi hq_not_sq
 
 /--
 Current compatibility wrapper.
