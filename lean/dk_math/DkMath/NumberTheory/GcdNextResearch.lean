@@ -431,7 +431,7 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
   have _hGN_not_pow :
       ¬ ∃ s : ℕ, GN d (a - b) b = s ^ d := by
     exact
-      DkMath.NumberTheory.PrimitiveBeam.primitive_prime_obstructs_GN_perfect_power
+      DkMath.NumberTheory.PrimitiveBeam.primitive_prime_obstructs_GN_perfect_power_research
         hd_prime hd_ge hab_lt hb_pos hab hpnd_ab
 
   obtain ⟨q, hq⟩ :=

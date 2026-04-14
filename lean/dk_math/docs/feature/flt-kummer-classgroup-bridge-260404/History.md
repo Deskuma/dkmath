@@ -370,4 +370,109 @@ Archive
 5. 失敗事例:
    - （未報告）
 6. 次の課題:
-   - （未報告）
+   - `PrimitiveBeam` の honest squarefree-GN 版を
+     実 caller へどこまで供給できるかを判定し、
+     可能な箇所から `..._of_squarefree_GN` へ migration する
+
+## 2026/04/15 01:32:38 JST
+
+1. 背景:
+   - `review-061`
+     の認識に従い、
+     次の本線は
+     `PrimitiveBeam`
+     の remaining research dependency を
+     honest route / research route の名札でさらに分けることだと判断した
+   - 判断の分岐点は
+     「すぐに caller を `..._of_squarefree_GN` へ移せるか」
+     と
+     「まず theorem 名の上で research 依存を露出させるべきか」
+     の二択だった
+   - 今回は後者を先に選んだ
+     :
+     `Gcd.GN` と `GcdNextResearch` の caller は
+     現時点では
+     `Squarefree (GN ...)`
+     を持っておらず、
+     そのまま honest theorem へ移すより
+     まず research 依存を明示する方が正確だからである
+2. 実施:
+   - `PrimitiveBeam.lean`
+     の research 依存 theorem
+     `primitive_prime_factor_forbids_perfect_pow_diff`
+     と
+     `primitive_prime_obstructs_GN_perfect_power`
+     を、
+     それぞれ
+     `_research`
+     名の本体へ改めた
+   - 旧 public 名は
+     `@[deprecated ...]`
+     付き compatibility alias として残し、
+     docstring で
+     `..._of_squarefree_GN`
+     を honest route、
+     `_research`
+     を未修復 route として使い分ける方針を明示した
+   - そのうえで実 caller も
+     旧 public 名から `_research` 名へ差し替えた
+     :
+     `Gcd/GN.lean`
+     の
+     `body_not_perfect_pow_of_primitive_prime_factor_of_coprime_add`
+     と、
+     `GcdNextResearch.lean`
+     の
+     `_hGN_not_pow`
+     生成箇所
+   - `primitive_prime_obstructs_GN_dth_power`
+     /
+     `primitive_prime_obstructs_beam_perfect_power`
+     も
+     `_research`
+     本体に寄せ、
+     `PrimitiveBeam`
+     内の依存線を一本化した
+3. 結論:
+   - これで
+     `PrimitiveBeam`
+     に残る primitive obstruction 系も、
+     honest 版
+     `..._of_squarefree_GN`
+     と
+     research 版
+     `_research`
+     の二系統に明示分離された
+   - 実コード上で
+     squarefree 仮定をまだ供給していない caller は
+     theorem 名の上でも
+     `_research`
+     依存だと見えるようになり、
+     次の honest migration 対象を追いやすくなった
+   - 今回の最善手は、
+     無理に仮定を増やして caller を壊すことではなく、
+     **research debt の位置を theorem 名で固定してから次段の移行準備を整える**
+     ことだった
+4. 検証:
+   - `./lean-build.sh DkMath.NumberTheory.PrimitiveBeam` 成功
+   - `./lean-build.sh DkMath.NumberTheory.Gcd.GN` 成功
+   - `./lean-build.sh DkMath.NumberTheory.GcdNextResearch` 成功
+5. 失敗事例:
+   - 旧 public 名へ付ける deprecation 属性の置換先として、
+     後ろで定義される
+     `..._of_squarefree_GN`
+     を直接指定したところ、
+     Lean が前方参照を解決できず build が失敗した
+   - そのため今回は、
+     deprecation 属性の置換先は先に存在する
+     `_research`
+     名へ向け、
+     honest route の案内は docstring で補う形に修正した
+6. 次の課題:
+   - `Gcd.GN` / `GcdNextResearch`
+     の research caller に対して
+     `Squarefree (GN ...)`
+     を局所供給できる経路があるかを調べ、
+     可能な 1 本から
+     `..._of_squarefree_GN`
+     へ実 migration する

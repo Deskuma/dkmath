@@ -167,7 +167,7 @@ It is mathematically FLT-shaped: the conclusion already has the form
 `¬ ∃ t, 0 < t ∧ a^d - b^d = t^d`, but the theorem stays in the lower
 primitive-prime layer so higher FLT files only need thin wrappers.
 -/
-theorem primitive_prime_factor_forbids_perfect_pow_diff
+theorem primitive_prime_factor_forbids_perfect_pow_diff_research
     {a b d : ℕ}
     (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
     (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
@@ -213,13 +213,30 @@ theorem primitive_prime_factor_forbids_perfect_pow_diff
   omega
 
 /--
+deprecated compatibility alias.
+
+Use `primitive_prime_factor_forbids_perfect_pow_diff_of_squarefree_GN` when the caller can supply
+`Squarefree (GN d (a - b) b)`, or `primitive_prime_factor_forbids_perfect_pow_diff_research`
+when the dependency is intentionally left on the research route.
+-/
+@[deprecated primitive_prime_factor_forbids_perfect_pow_diff_research
+  (since := "2026-04-15")]
+theorem primitive_prime_factor_forbids_perfect_pow_diff
+    {a b d : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b) :
+    ¬ ∃ t : ℕ, 0 < t ∧ a ^ d - b ^ d = t ^ d := by
+  exact primitive_prime_factor_forbids_perfect_pow_diff_research hd_prime hd_ge hab_lt hb hab hpnd
+
+/--
 A primitive prime factor forces the Beam factor `GN d (a-b) b` to fail being a perfect
 `d`-th power.
 
 This is the standalone obstruction theorem extracted from the `body_not_perfect_pow`
 proof spine.
 -/
-theorem primitive_prime_obstructs_GN_perfect_power
+theorem primitive_prime_obstructs_GN_perfect_power_research
     {a b d : ℕ}
     (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
     (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
@@ -286,6 +303,23 @@ theorem primitive_prime_obstructs_GN_perfect_power
       _ = padicValNat q (GN d (a - b) b) := by rw [← ht]
       _ ≤ 1 := hpadic_bound_GN
   omega
+
+/--
+deprecated compatibility alias.
+
+Use `primitive_prime_obstructs_GN_perfect_power_of_squarefree_GN` when the caller can supply
+`Squarefree (GN d (a - b) b)`, or `primitive_prime_obstructs_GN_perfect_power_research`
+when the dependency is intentionally left on the research route.
+-/
+@[deprecated primitive_prime_obstructs_GN_perfect_power_research
+  (since := "2026-04-15")]
+theorem primitive_prime_obstructs_GN_perfect_power
+    {a b d : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b) :
+    ¬ ∃ t : ℕ, GN d (a - b) b = t ^ d := by
+  exact primitive_prime_obstructs_GN_perfect_power_research hd_prime hd_ge hab_lt hb hab hpnd
 
 /--
 Honest squarefree-GN repair of `primitive_prime_factor_forbids_perfect_pow_diff`.
@@ -398,7 +432,7 @@ theorem primitive_prime_obstructs_GN_dth_power
     (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
     (hpnd : ¬ d ∣ a - b) :
     ¬ ∃ t : ℕ, GN d (a - b) b = t ^ d := by
-  exact primitive_prime_obstructs_GN_perfect_power hd_prime hd_ge hab_lt hb hab hpnd
+  exact primitive_prime_obstructs_GN_perfect_power_research hd_prime hd_ge hab_lt hb hab hpnd
 
 /-- Compatibility alias using the research-document `Beam` vocabulary. -/
 theorem primitive_prime_obstructs_beam_perfect_power
@@ -407,6 +441,6 @@ theorem primitive_prime_obstructs_beam_perfect_power
     (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
     (hpnd : ¬ d ∣ a - b) :
     ¬ ∃ t : ℕ, GN d (a - b) b = t ^ d := by
-  exact primitive_prime_obstructs_GN_perfect_power hd_prime hd_ge hab_lt hb hab hpnd
+  exact primitive_prime_obstructs_GN_perfect_power_research hd_prime hd_ge hab_lt hb hab hpnd
 
 end DkMath.NumberTheory.PrimitiveBeam
