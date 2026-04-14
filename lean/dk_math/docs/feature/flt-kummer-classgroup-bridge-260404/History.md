@@ -476,3 +476,72 @@ Archive
      可能な 1 本から
      `..._of_squarefree_GN`
      へ実 migration する
+
+## 2026/04/15 02:20:05 JST
+
+1. 背景:
+   - 前回の次課題に従い、
+     `Gcd.GN` / `GcdNextResearch`
+     の research caller について
+     `Squarefree (GN ...)`
+     を局所供給できるかを調べた
+   - 判断の分岐点は
+     「既存 theorem の仮定だけから local に `Squarefree (GN ...)` を作ってそのまま migration する」
+     か、
+     「local supply はできないと確定させたうえで、squarefree を受け取る honest route をこの層に増設する」
+     かの二択だった
+   - 今回は後者を選んだ
+     :
+     `Gcd.GN.body_not_perfect_pow_of_primitive_prime_factor_of_coprime_add`
+     と
+     `GcdNextResearch.body_not_perfect_pow`
+     は現状どちらも
+     `Squarefree (GN ...)`
+     を仮定に持たず、
+     既存の local 情報だけではそれを honest に導く経路が見当たらなかったためである
+2. 実施:
+   - `GcdNextResearch.lean`
+     に
+     `primitive_prime_contradicts_diff_dth_power_of_squarefree_GN`
+     を追加し、
+     primitive-prime valuation contradiction の
+     squarefree-GN 版を局所化した
+   - あわせて
+     `body_not_perfect_pow_of_squarefree_GN`
+     を追加し、
+     `Squarefree (GN d x u)`
+     を caller が供給できる場合の
+     honest route を
+     `GcdNextResearch`
+     側でも明示した
+   - この新 theorem は
+     `PrimitiveBeam.primitive_prime_padic_bound_diff_of_squarefree_GN`
+     を経由して閉じており、
+     research valuation placeholder を踏まない
+3. 結論:
+   - `GcdNextResearch`
+     でも
+     `body_not_perfect_pow`
+     に対する
+     squarefree-GN 付き honest migration 先ができた
+   - 一方で、
+     既存の research caller 本体から
+     `Squarefree (GN ...)`
+     を局所供給する経路は今回も確認できなかった
+   - したがって現時点の最善手は、
+     **無理に既存 theorem の仮定を捻じ曲げるのではなく、squarefree を渡せる caller の受け口を先に増やして migration 先を固定する**
+     ことだった
+4. 検証:
+   - `./lean-build.sh DkMath.NumberTheory.GcdNextResearch` 成功
+5. 失敗事例:
+   - （未報告）
+6. 次の課題:
+   - `Gcd.GN` / `GcdNextResearch`
+     の上位 caller 側で
+     `Squarefree (GN ...)`
+     を provider / bridge から受け取れる経路があるかを調べ、
+     実際に 1 本を
+     `body_not_perfect_pow_of_squarefree_GN`
+     もしくは既存の
+     `..._of_squarefree_GN`
+     へ差し替える
