@@ -7,6 +7,9 @@ Authors: D. and Wise Wolf.
 import DkMath.NumberTheory.GcdNext
 import DkMath.NumberTheory.PrimitiveBeam
 import DkMath.NumberTheory.ZsigmondyCyclotomicResearch
+import DkMath.NumberTheory.Gcd.GN
+import DkMath.FLT.GEisensteinBridge
+import DkMath.FLT.PhaseLift
 
 #print "file: DkMath.NumberTheory.GcdNextResearch"
 
@@ -41,7 +44,7 @@ private lemma primitive_prime_padic_bound_diff
   by_cases hd3 : d = 3
   · subst hd3
     exact
-      DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one
+      DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_research
         (a := a) (b := b) (d := 3) (q := q)
         Nat.prime_three
         (by norm_num)
@@ -59,7 +62,7 @@ private lemma primitive_prime_padic_bound_diff
         exact (by decide : ¬ Nat.Prime 4) this
       omega
     exact
-      DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one
+      DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_research
         (a := a) (b := b) (d := d) (q := q)
         hd_prime
         hd_ge
@@ -70,6 +73,23 @@ private lemma primitive_prime_padic_bound_diff
         hq_prime
         hq_div_pow
         hq_ndiv_diff
+
+/--
+Honest repair path for the primitive-prime caller:
+if `Squarefree (GN d (a - b) b)` is supplied, this branch no longer depends on the research
+placeholder.
+-/
+private lemma primitive_prime_padic_bound_diff_of_squarefree_GN
+    {a b d q : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b)
+    (hq : DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow q a b d)
+    (hG_sq : Squarefree (GN d (a - b) b)) :
+    padicValNat q (a ^ d - b ^ d) ≤ 1 := by
+  exact
+    DkMath.NumberTheory.PrimitiveBeam.primitive_prime_padic_bound_diff_of_squarefree_GN
+      hd_prime hd_ge hab_lt hb hab hpnd hq hG_sq
 
 /-- Primitive prime factor gives the GN-side valuation upper bound. -/
 private lemma primitive_prime_padic_bound_GN
@@ -86,6 +106,235 @@ private lemma primitive_prime_padic_bound_GN
     DkMath.NumberTheory.PrimitiveBeam.primitive_prime_padic_eq_GN hq hd_pos hd1 hab_lt
   rw [← hpadic_eq_GN]
   exact primitive_prime_padic_bound_diff hd_prime hd_ge hab_lt hb hab hpnd hq
+
+/--
+Historical candidate receiver for the `d = 3`, `q ∣ a - b` branch.
+
+This is not a primitive-prime route, so it cannot be repaired merely by adding
+`Squarefree (GN 3 (a - b) b)`. In fact, the full valuation-`≤ 1` statement below is false;
+see `padicValNatD3BoundaryReceiverTarget_is_false`.
+-/
+abbrev PadicValNatD3BoundaryReceiverTarget : Prop :=
+  ∀ {a b q : ℕ},
+    Nat.Prime q →
+    b < a → 0 < b → Nat.Coprime a b →
+    q ∣ a - b →
+    q ∣ a ^ 3 - b ^ 3 →
+    padicValNat q (a ^ 3 - b ^ 3) ≤ 1
+
+/--
+Honest boundary-divisor target for `d = 3`.
+
+If a prime divides both the boundary `a - b` and the cyclotomic factor `S0(a,b)`,
+then that prime must be `3`.
+-/
+abbrev PadicValNatD3BoundarySharedPrimeTarget : Prop :=
+  ∀ {a b q : ℕ},
+    Nat.Prime q →
+    b < a → Nat.Coprime a b →
+    q ∣ a - b →
+    q ∣ DkMath.FLT.PetalDetect.S0_nat a b →
+    q = 3
+
+/--
+The actual clean structural fact behind the `d = 3` boundary branch:
+the boundary and `S0` can only share the prime `3`.
+-/
+lemma padicValNatD3BoundarySharedPrimeTarget_of_gcdBoundaryGNThree :
+    PadicValNatD3BoundarySharedPrimeTarget := by
+  intro a b q hq hab_lt hab hq_diff hq_s0
+  have hcop_gap_b : Nat.Coprime (a - b) b := by
+    have hcop_b_gap : Nat.Coprime b (a - b) :=
+      (Nat.coprime_sub_self_right (Nat.le_of_lt hab_lt)).2 (Nat.Coprime.symm hab)
+    simpa [Nat.coprime_comm] using hcop_b_gap
+  have hq_gn : q ∣ DkMath.CosmicFormulaBinom.GN 3 (a - b) b := by
+    rw [DkMath.FLT.GN3_sub_eq_S0 a b (Nat.le_of_lt hab_lt)]
+    exact hq_s0
+  have hq_gcd :
+      q ∣ Nat.gcd (a - b) (DkMath.CosmicFormulaBinom.GN 3 (a - b) b) := by
+    exact Nat.dvd_gcd hq_diff hq_gn
+  have hq_dvd_three : q ∣ 3 := by
+    exact dvd_trans hq_gcd
+      (DkMath.NumberTheory.Gcd.gcd_boundary_GN_three_dvd_three hcop_gap_b)
+  exact (Nat.prime_dvd_prime_iff_eq hq Nat.prime_three).1 hq_dvd_three
+
+/--
+Concrete counterexample showing that the old boundary receiver candidate is false.
+
+Take `(a,b,q) = (4,1,3)`. Then `q ∣ a - b` and `q ∣ a^3 - b^3`, but
+`padicValNat 3 (4^3 - 1^3) = 2`.
+-/
+lemma padicValNat_d3_boundary_counterexample :
+    ¬ (padicValNat 3 (4 ^ 3 - 1 ^ 3) ≤ 1) := by
+  have hdiff_ne : (4 ^ 3 - 1 ^ 3 : ℕ) ≠ 0 := by
+    decide
+  have hq2_dvd : (3 : ℕ) ^ 2 ∣ (4 ^ 3 - 1 ^ 3) := by
+    decide
+  have h2_le : 2 ≤ padicValNat 3 (4 ^ 3 - 1 ^ 3) := by
+    exact
+      (@padicValNat_dvd_iff_le 3 (Fact.mk (by decide : Nat.Prime 3))
+          (4 ^ 3 - 1 ^ 3) 2 hdiff_ne).1 hq2_dvd
+  intro hle
+  have : (2 : ℕ) ≤ 1 := le_trans h2_le hle
+  exact (by decide : ¬ ((2 : ℕ) ≤ 1)) this
+
+/--
+Therefore the historical boundary receiver target is false as stated.
+
+The right repair is not to search for a proof of this target, but to replace it with a more honest
+boundary theorem family such as `PadicValNatD3BoundarySharedPrimeTarget`.
+-/
+lemma padicValNatD3BoundaryReceiverTarget_is_false :
+    ¬ PadicValNatD3BoundaryReceiverTarget := by
+  intro h
+  have hinst : padicValNat 3 (4 ^ 3 - 1 ^ 3) ≤ 1 := by
+    exact h
+      (by decide : Nat.Prime 3)
+      (by decide : 1 < 4)
+      (by decide : 0 < 1)
+      (by decide : Nat.Coprime 4 1)
+      (by decide : 3 ∣ 4 - 1)
+      (by decide : 3 ∣ 4 ^ 3 - 1 ^ 3)
+  exact padicValNat_d3_boundary_counterexample hinst
+
+/--
+Exact valuation target for the `d = 3` boundary branch away from the exceptional prime `3`.
+-/
+abbrev PadicValNatD3BoundaryNeThreeTarget : Prop :=
+  ∀ {a b q : ℕ},
+    Nat.Prime q →
+    b < a → Nat.Coprime a b →
+    q ∣ a - b →
+    q ≠ 3 →
+    padicValNat q (a ^ 3 - b ^ 3) = padicValNat q (a - b)
+
+/--
+Exact valuation target for the `q = 3` boundary branch.
+-/
+abbrev PadicValNatD3BoundaryThreeTarget : Prop :=
+  ∀ {a b : ℕ},
+    b < a → Nat.Coprime a b →
+    3 ∣ a - b →
+    padicValNat 3 (a ^ 3 - b ^ 3) = padicValNat 3 (a - b) + 1
+
+/--
+If `3 ∣ a - b`, then `3 ∣ S0(a,b)`.
+-/
+lemma three_dvd_S0_of_three_dvd_sub {a b : ℕ}
+    (hab_lt : b < a)
+    (h3_sub : 3 ∣ a - b) :
+    3 ∣ DkMath.FLT.PetalDetect.S0_nat a b := by
+  rcases h3_sub with ⟨k, hk⟩
+  have hab_eq : a = 3 * k + b := by
+    calc
+      a = (a - b) + b := (Nat.sub_add_cancel (Nat.le_of_lt hab_lt)).symm
+      _ = 3 * k + b := by simp [hk]
+  have hS0_eq_3mul :
+      DkMath.FLT.PetalDetect.S0_nat a b =
+        3 * (b ^ 2 + 3 * k * b + 3 * k ^ 2) := by
+    rw [hab_eq]
+    unfold DkMath.FLT.PetalDetect.S0_nat
+    ring
+  exact ⟨b ^ 2 + 3 * k * b + 3 * k ^ 2, hS0_eq_3mul⟩
+
+/--
+On the `d = 3` boundary branch, every prime `q ≠ 3` sees exactly the boundary valuation.
+-/
+lemma padicValNat_d3_boundary_eq_boundary_of_ne_three :
+    PadicValNatD3BoundaryNeThreeTarget := by
+  intro a b q hq hab_lt hab hq_sub hq_ne3
+  have ha_pos : 0 < a := Nat.lt_of_le_of_lt (Nat.zero_le b) hab_lt
+  have hS0_not_dvd : ¬ q ∣ DkMath.FLT.PetalDetect.S0_nat a b := by
+    intro hqS0
+    exact
+      (DkMath.FLT.prime_not_dvd_sub_of_prime_dvd_S0_coprime_ne_three
+        (c := a) (b := b) (q := q)
+        (Nat.le_of_lt hab_lt) hab hq hqS0 hq_ne3) hq_sub
+  have hboundary_ne : a - b ≠ 0 := Nat.sub_ne_zero_of_lt hab_lt
+  have hS0_pos : 0 < DkMath.FLT.PetalDetect.S0_nat a b := by
+    have : 0 < a ^ 2 + (a * b + b ^ 2) := by positivity
+    simpa [DkMath.FLT.PetalDetect.S0_nat, Nat.add_assoc] using this
+  have hfact : a ^ 3 - b ^ 3 = (a - b) * DkMath.FLT.PetalDetect.S0_nat a b :=
+    DkMath.FLT.cube_sub_eq_mul_sub_S0 hab_lt
+  have hmul :
+      padicValNat q (a ^ 3 - b ^ 3) =
+        padicValNat q (a - b) + padicValNat q (DkMath.FLT.PetalDetect.S0_nat a b) := by
+    letI : Fact (Nat.Prime q) := ⟨hq⟩
+    exact congrArg (padicValNat q) hfact ▸
+      padicValNat.mul hboundary_ne (Nat.ne_of_gt hS0_pos)
+  have hzero : padicValNat q (DkMath.FLT.PetalDetect.S0_nat a b) = 0 :=
+    padicValNat.eq_zero_of_not_dvd hS0_not_dvd
+  simpa [hzero] using hmul
+
+/--
+On the `q = 3` boundary branch, the cubic difference picks up exactly one extra factor of `3`
+from `S0(a,b)`.
+-/
+lemma padicValNat_d3_boundary_eq_boundary_succ_of_three :
+    PadicValNatD3BoundaryThreeTarget := by
+  intro a b hab_lt hab h3_sub
+  have ha_pos : 0 < a := Nat.lt_of_le_of_lt (Nat.zero_le b) hab_lt
+  have hS0_dvd : 3 ∣ DkMath.FLT.PetalDetect.S0_nat a b :=
+    three_dvd_S0_of_three_dvd_sub hab_lt h3_sub
+  have hS0_not_sq : ¬ 3 ^ 2 ∣ DkMath.FLT.PetalDetect.S0_nat a b :=
+    DkMath.FLT.three_sq_not_dvd_S0_of_coprime (Nat.le_of_lt hab_lt) hab
+  have hS0_pos : 0 < DkMath.FLT.PetalDetect.S0_nat a b := by
+    have : 0 < a ^ 2 + (a * b + b ^ 2) := by positivity
+    simpa [DkMath.FLT.PetalDetect.S0_nat, Nat.add_assoc] using this
+  have hS0_ge1 : 1 ≤ padicValNat 3 (DkMath.FLT.PetalDetect.S0_nat a b) :=
+    DkMath.ABC.padicValNat_one_le_of_prime_dvd
+      Nat.prime_three (Nat.ne_of_gt hS0_pos) hS0_dvd
+  have hS0_le1 : padicValNat 3 (DkMath.FLT.PetalDetect.S0_nat a b) ≤ 1 := by
+    by_contra hgt
+    have h2 : 2 ≤ padicValNat 3 (DkMath.FLT.PetalDetect.S0_nat a b) := by omega
+    have : 3 ^ 2 ∣ DkMath.FLT.PetalDetect.S0_nat a b := by
+      exact
+        (@padicValNat_dvd_iff_le 3 (Fact.mk Nat.prime_three)
+          (DkMath.FLT.PetalDetect.S0_nat a b) 2 (Nat.ne_of_gt hS0_pos)).2 h2
+    exact hS0_not_sq this
+  have hS0_eq1 : padicValNat 3 (DkMath.FLT.PetalDetect.S0_nat a b) = 1 := by
+    omega
+  have hboundary_ne : a - b ≠ 0 := Nat.sub_ne_zero_of_lt hab_lt
+  have hfact : a ^ 3 - b ^ 3 = (a - b) * DkMath.FLT.PetalDetect.S0_nat a b :=
+    DkMath.FLT.cube_sub_eq_mul_sub_S0 hab_lt
+  have hmul :
+      padicValNat 3 (a ^ 3 - b ^ 3) =
+        padicValNat 3 (a - b) + padicValNat 3 (DkMath.FLT.PetalDetect.S0_nat a b) := by
+    exact congrArg (padicValNat 3) hfact ▸
+      padicValNat.mul hboundary_ne (Nat.ne_of_gt hS0_pos)
+  simpa [hS0_eq1, Nat.add_comm] using hmul
+
+/--
+Canonical dispatcher for the `d = 3` valuation story.
+
+This is the intended public case-split entry for callers that start from a prime divisor of
+`a^3 - b^3`: either the prime stays on the primitive route (`q ∤ a - b`), or we are on one of the
+two honest boundary branches already classified above.
+-/
+lemma padicValNat_d3_canonical_case_split
+    {a b q : ℕ}
+    (hq : Nat.Prime q)
+    (hab_lt : b < a) (hab : Nat.Coprime a b)
+    (_hq_div : q ∣ a ^ 3 - b ^ 3) :
+    (¬ q ∣ a - b) ∨
+      (q ∣ a - b ∧
+        q ≠ 3 ∧
+        padicValNat q (a ^ 3 - b ^ 3) = padicValNat q (a - b)) ∨
+      (q = 3 ∧
+        3 ∣ a - b ∧
+        padicValNat q (a ^ 3 - b ^ 3) = padicValNat q (a - b) + 1) := by
+  by_cases hq_sub : q ∣ a - b
+  · by_cases hq_eq_three : q = 3
+    · right
+      right
+      subst hq_eq_three
+      refine ⟨rfl, hq_sub, ?_⟩
+      simpa using padicValNat_d3_boundary_eq_boundary_succ_of_three hab_lt hab hq_sub
+    · right
+      left
+      exact ⟨hq_sub, hq_eq_three, padicValNat_d3_boundary_eq_boundary_of_ne_three hq hab_lt hab hq_sub hq_eq_three⟩
+  · left
+    exact hq_sub
 
 /-- A fixed primitive prime factor already contradicts `a^d - b^d = t^d`. -/
 private lemma primitive_prime_contradicts_diff_dth_power
@@ -317,19 +566,55 @@ lemma padicValNat_a2_ab_b2_upper_bound_stage1 {a b q : ℕ}
 
 /-- d=3 での上界補題
 
-Cosmic Formula と Lucas/Kummer 定理を組み合わせて、
-d=3 の場合に padicValNat q (a³ - b³) ≤ 1 を証明する。
+Honest primitive-route upper bound for `d = 3`.
 
-**証明戦略:**
-1. q ∣ a^3 - b^3 の場合：
-   - Cosmic Formula により a^3 - b^3 = (a - b) * GN_3(a-b, b)
-   - GN_3(a-b, b) = a^2 + ab + b^2 （古典因数分解）
-   - q ∤ a - b より padicValNat q (a^3 - b^3) = padicValNat q (a^2 + ab + b^2)
-   - a^2 + ab + b^2 の padicValNat が ≤ 1 であることを示す
-2. q ∤ a^3 - b^3 の場合：
-   - padicValNat q (a^3 - b^3) = 0 ≤ 1
+This is the intended replacement for the non-boundary branch of
+`padicValNat_d3_upper_bound`: once the caller knows `q ∣ a^3 - b^3` and `¬ q ∣ a - b`,
+the proof is already `no-so#rry`.
 -/
-lemma padicValNat_d3_upper_bound {a b q : ℕ}
+lemma padicValNat_d3_primitive_upper_bound
+    {a b q : ℕ}
+    (hq : Nat.Prime q)
+    (hab_lt : b < a) (hab_coprime : Nat.Coprime a b)
+    (h_Ag : gcd_Ag a b = 1)
+    (h_phi : Nat.Coprime (a + b) b)
+    (hq_not_sq : ¬ q^2 ∣ S0_nat a b)
+    (hq_div : q ∣ a ^ 3 - b ^ 3)
+    (hq_ndiv : ¬ q ∣ a - b)
+    :
+    padicValNat q (a ^ 3 - b ^ 3) ≤ 1 := by
+  have hb0 : b ≠ 0 := by
+    intro hb0
+    subst hb0
+    have ha1 : a = 1 := by
+      simpa [Nat.coprime_zero_right] using hab_coprime
+    subst ha1
+    have hq_eq_one : q = 1 := by
+      simpa using hq_div
+    exact hq.ne_one hq_eq_one
+  have hb_pos : 0 < b := Nat.pos_of_ne_zero hb0
+  have ha_pos : 1 < a := by
+    have : 0 < a - b := Nat.sub_pos_of_lt hab_lt
+    omega
+  apply padicValNat_le_one_of_prime_divisor_case_three_strong
+    ha_pos hb_pos hab_coprime hab_lt hq hq_div hq_ndiv
+  exact padicValNat_a2_ab_b2_upper_bound_stage1 hq hab_lt hab_coprime h_Ag h_phi hq_not_sq
+
+/--
+Research-only helper for the legacy `d = 3` upper-bound route.
+
+This theorem is intentionally phrased around the historical boundary receiver target. New callers
+should not depend on it; the honest `d = 3` API is split into:
+- `padicValNat_d3_primitive_upper_bound`
+- `padicValNat_d3_canonical_case_split`
+- `padicValNat_d3_layer_b_case_split`
+
+Its only purpose is to keep the old receiver-injection path alive while the remaining research debt
+is pushed out of `GcdNextResearch` and into explicit legacy wrappers.
+-/
+lemma padicValNat_d3_upper_bound_of_boundaryReceiver_research
+    (hBoundary : PadicValNatD3BoundaryReceiverTarget)
+    {a b q : ℕ}
     (hq : Nat.Prime q)
     (hab_lt : b < a) (hab_coprime : Nat.Coprime a b)
     (h_Ag : gcd_Ag a b = 1) -- Phase 2 正規化
@@ -354,27 +639,117 @@ lemma padicValNat_d3_upper_bound {a b q : ℕ}
       -- Cosmic Formula による因数分解を使用
       by_cases hq_ndiv : q ∣ a - b
       · -- q | a - b の場合
-        -- 一般的な squarefree_implies を適用
-        exact squarefree_implies_padic_val_le_one
-          3 a b q (by decide : Nat.Prime 3) hb_pos hab_coprime hq hq_div
+        exact hBoundary hq hab_lt hb_pos hab_coprime hq_ndiv hq_div
       · -- q ∤ a - b の場合（原始素因子の条件）
-        -- padicValNat_le_one_of_prime_divisor_case_three_strong を使用
-        apply padicValNat_le_one_of_prime_divisor_case_three_strong
-          ha_pos hb_pos hab_coprime hab_lt hq hq_div hq_ndiv
-        -- a^2 + ab + b^2 の padicValNat ≤ 1 を示す
-        exact padicValNat_a2_ab_b2_upper_bound_stage1 hq hab_lt hab_coprime h_Ag h_phi hq_not_sq
+        exact
+          padicValNat_d3_primitive_upper_bound
+            hq hab_lt hab_coprime h_Ag h_phi hq_not_sq hq_div hq_ndiv
     · -- q ∤ a^3 - b^3 の場合
       have hzero : padicValNat q (a ^ 3 - b ^ 3) = 0 := padicValNat.eq_zero_of_not_dvd hq_div
       rw [hzero]
       norm_num
 
+/--
+deprecated compatibility alias.
+
+Use `padicValNat_d3_upper_bound_of_boundaryReceiver_research` if this legacy receiver route is
+still required locally.
+-/
+@[deprecated padicValNat_d3_upper_bound_of_boundaryReceiver_research
+  (since := "2026-04-13")]
+lemma padicValNat_d3_upper_bound_of_boundaryReceiver
+    (hBoundary : PadicValNatD3BoundaryReceiverTarget)
+    {a b q : ℕ}
+    (hq : Nat.Prime q)
+    (hab_lt : b < a) (hab_coprime : Nat.Coprime a b)
+    (h_Ag : gcd_Ag a b = 1)
+    (h_phi : Nat.Coprime (a + b) b)
+    (hq_not_sq : ¬ q^2 ∣ S0_nat a b)
+    :
+    padicValNat q (a^3 - b^3) ≤ 1 :=
+  padicValNat_d3_upper_bound_of_boundaryReceiver_research
+    hBoundary hq hab_lt hab_coprime h_Ag h_phi hq_not_sq
+
+/--
+Research-only boundary receiver currently obtained from the legacy Zsigmondy placeholder.
+
+This is the only remaining `d = 3` compatibility injection in this file. The honest API should use
+the canonical split / exact valuation theorems instead.
+-/
+private lemma padicValNatD3BoundaryReceiverTarget_from_legacy_squarefree_research :
+    PadicValNatD3BoundaryReceiverTarget := by
+  intro a b q hq hbnd hb hab hq_dvd_boundary hq_div
+  exact
+    squarefree_implies_padic_val_le_one_research
+      3 a b q
+      Nat.prime_three
+      hb
+      hab
+      hq
+      hq_div
+
+/--
+Current compatibility wrapper.
+
+The primitive-prime branch is already no-`so#rry`; the only remaining legacy dependency is the
+`d = 3`, `q ∣ a - b` receiver injected here through
+`padicValNatD3BoundaryReceiverTarget_from_legacy_squarefree_research`.
+
+New callers should avoid this lemma. Use:
+- `padicValNat_d3_primitive_upper_bound`
+- `padicValNat_d3_canonical_case_split`
+- `padicValNat_d3_layer_b_case_split`
+
+The old global conclusion `padicValNat q (a^3 - b^3) ≤ 1` is not the canonical `d = 3`
+interface because the boundary branch at `q = 3` is governed by the exact formula
+`padicValNat 3 (a^3 - b^3) = padicValNat 3 (a - b) + 1`.
+-/
+@[deprecated padicValNat_d3_canonical_case_split
+  (since := "2026-04-13")]
+lemma padicValNat_d3_upper_bound {a b q : ℕ}
+    (hq : Nat.Prime q)
+    (hab_lt : b < a) (hab_coprime : Nat.Coprime a b)
+    (h_Ag : gcd_Ag a b = 1) -- Phase 2 正規化
+    (h_phi : Nat.Coprime (a + b) b) -- Phase 3 φビット判定
+    (hq_not_sq : ¬ q^2 ∣ S0_nat a b) -- 2026/02/22  7:08 追加
+    :
+    padicValNat q (a^3 - b^3) ≤ 1 := by
+  refine
+    padicValNat_d3_upper_bound_of_boundaryReceiver_research
+      (hBoundary := padicValNatD3BoundaryReceiverTarget_from_legacy_squarefree_research)
+      hq hab_lt hab_coprime h_Ag h_phi hq_not_sq
+
 -- TODO: [DkMathTest]: #print axioms padicValNat_d3_upper_bound
 
-/-- 層B統合フック：GcdAg + PetalDetect による前処理後の上界評価
+/--
+Honest `d = 3` entry for the layer-B context.
+
+This keeps the same ambient preprocessing assumptions as the old layer-B hook, but returns the
+canonical valuation split instead of the false global bound `≤ 1`.
+-/
+lemma padicValNat_d3_layer_b_case_split {a b q : ℕ}
+    (hq : Nat.Prime q)
+    (hab_lt : b < a) (hab_coprime : Nat.Coprime a b)
+    (_h_Ag : gcd_Ag a b = 1)
+    (_h_petal : Nat.Coprime (a + b) b)
+    (_hq_not_sq : ¬ q^2 ∣ S0_nat a b)
+    (hq_div : q ∣ a ^ 3 - b ^ 3)
+    :
+    (¬ q ∣ a - b) ∨
+      (q ∣ a - b ∧
+        q ≠ 3 ∧
+        padicValNat q (a ^ 3 - b ^ 3) = padicValNat q (a - b)) ∨
+      (q = 3 ∧
+        3 ∣ a - b ∧
+        padicValNat q (a ^ 3 - b ^ 3) = padicValNat q (a - b) + 1) := by
+  exact padicValNat_d3_canonical_case_split hq hab_lt hab_coprime hq_div
+
+/-- 層B統合フック：GcdAg + PetalDetect による前処理後の上界評価（`d ≠ 3` 版）
 
 **型シグネチャ:**
 - hd : d は素数
 - hd_ge : d ≥ 3
+- hd_ne_three : d ≠ 3
 - hq : q は素数
 - hab_lt, hab_coprime : a > b で互いに素
 - h_Ag（Phase 2）: gcd_Ag a b = 1
@@ -386,10 +761,12 @@ lemma padicValNat_d3_upper_bound {a b q : ℕ}
 - 証明：C ≤ 1
 
 **実装戦略:**
-d = 3 の具体計算と、一般的な d への拡張を組み合わせる。
+`d = 3` は `padicValNat_d3_layer_b_case_split` へ分離し、
+ここでは `d > 3` の研究スタブだけを扱う。
 -/
 lemma padicValNat_upper_bound_layer_b_stub {a b d q : ℕ}
     (hd : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hd_ne_three : d ≠ 3)
     (hq : Nat.Prime q)
     (hab_lt : b < a) (hab_coprime : Nat.Coprime a b)
     (h_Ag : gcd_Ag a b = 1)
@@ -397,52 +774,45 @@ lemma padicValNat_upper_bound_layer_b_stub {a b d q : ℕ}
     (hq_not_sq : ¬ q^2 ∣ S0_nat a b)
     :
     ∃ C : ℕ, padicValNat q (a^d - b^d) ≤ C ∧ C ≤ 1 := by
-  -- 場合分け：d = 3 と d > 3
-  by_cases hd_eq_three : d = 3
-  · -- d = 3 の場合
-    subst hd_eq_three
-    -- padicValNat_d3_upper_bound を使用
-    have hbound := padicValNat_d3_upper_bound hq hab_lt hab_coprime h_Ag h_petal hq_not_sq
-    exact ⟨1, hbound, by decide⟩
-  · -- d > 3 の場合（研究テーマ）
-    -- **実装予定（Phase 4.2/4.3）**
-    --
-    -- d = 5, 7, 11, ... 等の素数については、以下の統合が必要：
-    --
-    -- 1. **d=5 での個別実装流れ**
-    --    i) padicValNat_d5_upper_bound を実装
-    --    ii) Lucas/Kummer定理を d=5 に特化
-    --    iii) 検証： Cosmic Formula G_5(a,b) の因子分解
-    --    iv) 完成したら padicValNat_upper_bound_integrated へ統合
-    --
-    -- 2. **パターン認識（d=3, d=5 から一般化へ）**
-    --    - 古典的 Cosmic Formula: a^d - b^d = (a-b) · G_d(a,b)
-    --    - Lucas定理：C(a,b) mod p の p進展開
-    --    - Kummer定理：v_p(n choose k) の精密評価
-    --      （参考：ZsigmondyCyclotomic.kummer_theorem_for_binomial_coeff）
-    --    - 円分多項式：Φ_d(a/b) の既約性と因子分解
-    --    - 結果：padicValNat_q(G_d(a,b)) ≤ C（C は d に依存する定数）
-    --
-    -- 3. **実装難易度の見積もり**
-    --    - d=5: ⭐⭐⭐ （2～3日の集中作業）
-    --    - d=7: ⭐⭐⭐⭐ （個別計算が複雑化）
-    --    - 一般化：⭐⭐⭐⭐⭐ （Lucas/Kummer の完全統合）
-    --
-    -- 4. **当面の対応**
-    --    padicValNat_general_upper_bound 補題を「存在形」で定義し、
-    --    具体的な d に対しては case split で d=3 ケースへ削減する。
-    --    d > 3 は層Bへ隔離し、次フェーズでの並列開発を予定。
-    --
-    -- **次フェーズへの課題列**
-    -- A. d=5 での padicValNat上界計算（ZsigmondyCyclotomic連携）
-    -- B. 円分多項式の既約性（Mathlib/Cyclotomic検索）
-    -- C. Lucas/Kummer定理の d ≥ 5 への拡張
-    -- D. GcdAg+PetalDetect との統合フロー確認
-    --
-    -- [TODO] d ≥ 5 向けの一般化された上界評価。
-    --        具体的な一般化は GcdNextLayerB/Phase 4.2 として別タスクで
-    --        自前の定式化を進める必要があるため、現在はスタブとして so#rry としている。
-    sorry
+  have hd_gt_three : 3 < d := by omega
+  -- **実装予定（Phase 4.2/4.3）**
+  --
+  -- d = 5, 7, 11, ... 等の素数については、以下の統合が必要：
+  --
+  -- 1. **d=5 での個別実装流れ**
+  --    i) padicValNat_d5_upper_bound を実装
+  --    ii) Lucas/Kummer定理を d=5 に特化
+  --    iii) 検証： Cosmic Formula G_5(a,b) の因子分解
+  --    iv) 完成したら padicValNat_upper_bound_integrated へ統合
+  --
+  -- 2. **パターン認識（d=5 から一般化へ）**
+  --    - 古典的 Cosmic Formula: a^d - b^d = (a-b) · G_d(a,b)
+  --    - Lucas定理：C(a,b) mod p の p進展開
+  --    - Kummer定理：v_p(n choose k) の精密評価
+  --      （参考：ZsigmondyCyclotomic.kummer_theorem_for_binomial_coeff）
+  --    - 円分多項式：Φ_d(a/b) の既約性と因子分解
+  --    - 結果：padicValNat_q(G_d(a,b)) ≤ C（C は d に依存する定数）
+  --
+  -- 3. **実装難易度の見積もり**
+  --    - d=5: ⭐⭐⭐ （2～3日の集中作業）
+  --    - d=7: ⭐⭐⭐⭐ （個別計算が複雑化）
+  --    - 一般化：⭐⭐⭐⭐⭐ （Lucas/Kummer の完全統合）
+  --
+  -- 4. **当面の対応**
+  --    padicValNat_general_upper_bound 補題を「存在形」で定義し、
+  --    d > 3 は層Bへ隔離して並列開発を進める。
+  --
+  -- **次フェーズへの課題列**
+  -- A. d=5 での padicValNat上界計算（ZsigmondyCyclotomic連携）
+  -- B. 円分多項式の既約性（Mathlib/Cyclotomic検索）
+  -- C. Lucas/Kummer定理の d ≥ 5 への拡張
+  -- D. GcdAg+PetalDetect との統合フロー確認
+  --
+  -- [TODO] d > 3 向けの一般化された上界評価。
+  --        具体的な一般化は GcdNextLayerB/Phase 4.2 として別タスクで
+  --        自前の定式化を進める必要があるため、現在はスタブとして so#rry としている。
+  clear hd_gt_three
+  sorry
 
 /-- 一般的 d への上界補題
 
@@ -464,13 +834,13 @@ lemma padicValNat_general_upper_bound {a b d q : ℕ}
 /-! ### 8. 層B との最終統合：body_not_perfect_pow の証明完成
 
 **現在の状況:**
-Phase 1a-3 の補助仮定を満たすとき、
+Phase 1a-3 の補助仮定に加えて `d ≠ 3` を満たすとき、
 層B 補題により padicValNat q (a^d - b^d) ≤ 1 が得られる。
 
 これを body_not_perfect_pow で使用すれば、矛盾導出が完成する。
 -/
 
-/-- 最終統合：Phase 2 + Phase 3 + 層B の完全統合
+/-- 最終統合：Phase 2 + Phase 3 + 層B の完全統合（`d ≠ 3` 版）
 
 **入力:**
 - Phase 1a（Zsigmondy層A）: 原始素因子 q の存在
@@ -487,6 +857,7 @@ Phase 1a-3 の補助仮定を満たすとき、
 -/
 lemma padicValNat_upper_bound_integrated {a b d q : ℕ}
     (hd : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hd_ne_three : d ≠ 3)
     (hq : Nat.Prime q)
     (hab_lt : b < a) (hab_coprime : Nat.Coprime a b)
     (h_Ag : gcd_Ag a b = 1) -- Phase 2
@@ -496,7 +867,8 @@ lemma padicValNat_upper_bound_integrated {a b d q : ℕ}
     padicValNat q (a^d - b^d) ≤ 1 := by
   -- 層B統合スタブ補題を呼び出す
   obtain ⟨C, hC_upper, hC_le_one⟩ :=
-    padicValNat_upper_bound_layer_b_stub hd hd_ge hq hab_lt hab_coprime h_Ag h_petal hq_not_sq
+    padicValNat_upper_bound_layer_b_stub
+      hd hd_ge hd_ne_three hq hab_lt hab_coprime h_Ag h_petal hq_not_sq
   -- C ≤ 1 と padicValNat q (a^d - b^d) ≤ C より、padicValNat q (a^d - b^d) ≤ 1
   omega
 

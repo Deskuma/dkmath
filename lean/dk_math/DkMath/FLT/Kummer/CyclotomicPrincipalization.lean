@@ -4439,7 +4439,7 @@ theorem cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_namedSma
 
 /--
 peel normal-form の descent equation `z'^p = (x/q)^p + y^p` が直接得られれば、
-named smaller counterexample の算術部分は no-sorry で検証できる。
+named smaller counterexample の算術部分は no-so#rry で検証できる。
 
 付録:
 - `PrimeGe5CounterexamplePack p (x / q) y z'` の構成
@@ -5371,8 +5371,8 @@ theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classG
 /--
 class-group 入力から、Kummer peel named smaller counterexample を返す wrapper。
 
-named smaller counterexample の算術検証は no-sorry で閉じたので、
-この theorem の `sorry` 依存は normal-form descent existence core を経由するだけである。
+named smaller counterexample の算術検証は no-so#rry で閉じたので、
+この theorem の `so#rry` 依存は normal-form descent existence core を経由するだけである。
 -/
 theorem cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_classGroupPTorsionFree
     (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
@@ -5492,14 +5492,29 @@ theorem cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree
 /--
 `hNoLift` を使う first-case canonical bridge の wrapper。
 
-first-case 本体は既定 bridge だけでも閉じるが、non-liftable 仮定つき route との対応のため
-theorem 名は残しておく。
+review-055 に従い、
+non-liftable 仮定つき route を実際に使う配線へ修正する。
 -/
 theorem cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_nonLiftable
   (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
-    (_hNoLift : TriominoCosmicNonLiftableGNBridge) :
-    CyclotomicPrincipalizationFirstCaseTarget :=
-  cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree hCl
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    CyclotomicPrincipalizationFirstCaseTarget := by
+  intro p x y z hpack q hq hqx hqne hqgap hFirstCase
+  let _ : Fact p.Prime := ⟨hpack.hp⟩
+  let ζ : CyclotomicField p ℚ :=
+    IsCyclotomicExtension.zeta p ℚ (CyclotomicField p ℚ)
+  let hζ : IsPrimitiveRoot ζ p := by
+    simp [ζ]
+  have hgap_eq :
+      (z : 𝓞 (CyclotomicField p ℚ)) - (y : 𝓞 (CyclotomicField p ℚ)) =
+        ((z - y : ℕ) : 𝓞 (CyclotomicField p ℚ)) := by
+    simp [Nat.cast_sub hpack.hyz]
+  exact
+    qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_nonLiftable
+      (hCl := hCl) (hNoLift := hNoLift)
+      (K := CyclotomicField p ℚ) (p := p) (x := x) (y := y) (z := z) (q := q)
+      (ζ := ζ) (gap := z - y)
+      hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase
 
 /--
 class-group one-shot route を first-case / non-first-case split で再構成する thin theorem。
@@ -5509,11 +5524,11 @@ current stable bridge 群により first-case は concrete に埋まるので、
 -/
 theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_of_caseSplit
   (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
-    (_hNoLift : TriominoCosmicNonLiftableGNBridge)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge)
     (hNonFirst : CyclotomicPrincipalizationNonFirstCaseTarget) :
     CyclotomicPrincipalizationTarget :=
   cyclotomicPrincipalization_of_caseSplit
-    (cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree hCl)
+    (cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_nonLiftable hCl hNoLift)
     hNonFirst
 
 /--
@@ -5830,7 +5845,7 @@ theorem cyclotomicNormGNPower_concrete_unitNormalizedChosenFactor :
 Stage 2 の chosen-factor unit normalization を受けて、
 non-first-case nat-level descent witness を返すべき最小 receiver target。
 
-既存 no-sorry 部品で `z - ζy = unitFactor * β^p` までは供給できるので、
+既存 no-so#rry 部品で `z - ζy = unitFactor * β^p` までは供給できるので、
 review-052 の棚卸しでは current Stage 3 open をまずここへ押し下げる。
 -/
 abbrev CyclotomicNormDescentNonFirstCaseUnitNormalizedReceiverTarget : Prop :=
@@ -5853,7 +5868,7 @@ abbrev CyclotomicNormDescentNonFirstCaseUnitNormalizedReceiverTarget : Prop :=
 /--
 `GN p (z - y) y = s^p` から non-first-case の最終 nat-level descent witness を返すべき receiver target。
 
-norm 計算と unit 吸収は既存 no-sorry 補題で concrete 化できるため、
+norm 計算と unit 吸収は既存 no-so#rry 補題で concrete 化できるため、
 current honest open をこの pure arithmetic receiver へさらに押し下げる。
 -/
 abbrev CyclotomicNormDescentNonFirstCaseGNPowerReceiverTarget : Prop :=
@@ -5883,7 +5898,7 @@ Stage 2 の generic unit normalization 出力が与えられれば、
 non-first-case branch receiver は chosen-factor receiver 1 本へ薄く還元できる。
 
 ここで使う cyclotomic input は canonical `CyclotomicField p ℚ` とその primitive root だけであり、
-existing Stage 1 / Stage 2 no-sorry mainline がどこまで直接届いているかを theorem 名で固定する。
+existing Stage 1 / Stage 2 no-so#rry mainline がどこまで直接届いているかを theorem 名で固定する。
 -/
 theorem cyclotomicNormDescentNonFirstCase_of_unitNormalizationAndReceiver
     (hUnit : CyclotomicUnitNormalizationTarget.{0})
@@ -6031,13 +6046,13 @@ theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classG
     (cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization hCl hUnit)
 
 /--
-old peel core theorem が新しい no-sorry norm route へ寄るとき、
+old peel core theorem が新しい no-so#rry norm route へ寄るとき、
 `hCl` 側で本当に不足している追加入力は `hUnit` だけである。
 
 inspection 用の theorem-level summary として、
 `hCl` から peel core を返す legacy theorem は
 `CyclotomicUnitNormalizationTarget` を 1 本足せば
-既存 no-sorry chain の thin wrapper に置き換わることを固定する。
+既存 no-so#rry chain の thin wrapper に置き換わることを固定する。
 -/
 theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree_reducesTo_unitNormalization
     (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :

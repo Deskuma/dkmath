@@ -101,6 +101,37 @@ lemma primitive_prime_padic_eq_GN
   have hzero : padicValNat q (a - b) = 0 := padicValNat.eq_zero_of_not_dvd hq_ndiv
   simpa [hzero] using hpadic
 
+/--
+Honest repair route for the primitive-prime valuation bound:
+once `Squarefree (GN d (a - b) b)` is available, the old research placeholder is unnecessary.
+-/
+lemma primitive_prime_padic_bound_diff_of_squarefree_GN
+    {q a b d : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b)
+    (hq : PrimitivePrimeFactorOfDiffPow q a b d)
+    (hG_sq : Squarefree (GN d (a - b) b)) :
+    padicValNat q (a ^ d - b ^ d) ≤ 1 := by
+  have hq_prime : Nat.Prime q := hq.1
+  have hq_div_pow : q ∣ a ^ d - b ^ d := hq.2.1
+  have hd1 : 1 < d := by omega
+  have hq_ndiv_diff : ¬ q ∣ a - b :=
+    primitive_prime_not_dvd_boundary hq hd1
+  exact
+    DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_honest
+      (a := a) (b := b) (d := d) (q := q)
+      hd_prime
+      hd_ge
+      hab_lt
+      hb
+      hab
+      hpnd
+      hq_prime
+      hq_div_pow
+      hq_ndiv_diff
+      hG_sq
+
 /-- Specialized `Body = x * GN d x u` form of `primitive_prime_dvd_GN`. -/
 lemma primitive_prime_dvd_GN_body
     {q x u d : ℕ}
@@ -166,7 +197,7 @@ theorem primitive_prime_factor_forbids_perfect_pow_diff
   have hq_ndiv_diff : ¬ q ∣ a - b :=
     primitive_prime_not_dvd_boundary hq hd1
   have hpadic_bound_diff : padicValNat q (a ^ d - b ^ d) ≤ 1 :=
-    DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one
+    DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_research
       (a := a) (b := b) (d := d) (q := q)
       hd_prime
       hd_ge
@@ -235,7 +266,7 @@ theorem primitive_prime_obstructs_GN_perfect_power
       d = d * 1 := (Nat.mul_one d).symm
       _ ≤ d * padicValNat q t := Nat.mul_le_mul_left d hvt_ge
   have hpadic_bound_diff : padicValNat q (a ^ d - b ^ d) ≤ 1 :=
-    DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one
+    DkMath.NumberTheory.GcdNext.padicValNat_primitive_prime_factor_le_one_research
       (a := a) (b := b) (d := d) (q := q)
       hd_prime
       hd_ge
@@ -246,6 +277,110 @@ theorem primitive_prime_obstructs_GN_perfect_power
       hq_prime
       hq_div_pow
       hq_ndiv_diff
+  have hpadic_bound_GN : padicValNat q (GN d (a - b) b) ≤ 1 := by
+    rw [← hpadic_eq_GN]
+    exact hpadic_bound_diff
+  have : d ≤ 1 := by
+    calc
+      d ≤ padicValNat q (t ^ d) := hvtd_ge
+      _ = padicValNat q (GN d (a - b) b) := by rw [← ht]
+      _ ≤ 1 := hpadic_bound_GN
+  omega
+
+/--
+Honest squarefree-GN repair of `primitive_prime_factor_forbids_perfect_pow_diff`.
+
+This is the migration shape for the two legacy callers in this file: if the caller can supply
+`Squarefree (GN d (a - b) b)`, the contradiction argument closes without the research placeholder.
+-/
+theorem primitive_prime_factor_forbids_perfect_pow_diff_of_squarefree_GN
+    {a b d : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b)
+    (hG_sq : Squarefree (GN d (a - b) b)) :
+    ¬ ∃ t : ℕ, 0 < t ∧ a ^ d - b ^ d = t ^ d := by
+  intro hpow
+  rcases hpow with ⟨t, ht, heq⟩
+  obtain ⟨q, hq⟩ :=
+    exists_primitive_prime_factor_as_prop hd_prime hd_ge hab_lt hb hab hpnd
+  have hq_prime : Nat.Prime q := hq.1
+  have hq_div_pow : q ∣ a ^ d - b ^ d := hq.2.1
+  have hq_div_td : q ∣ t ^ d := by
+    rw [← heq]
+    exact hq_div_pow
+  have hq_div_t : q ∣ t := hq_prime.dvd_of_dvd_pow hq_div_td
+  have ht_ne : t ≠ 0 := Nat.ne_of_gt ht
+  have hvt_ge : 1 ≤ padicValNat q t :=
+    DkMath.ABC.padicValNat_one_le_of_prime_dvd hq_prime ht_ne hq_div_t
+  have hvtd_eq : padicValNat q (t ^ d) = d * padicValNat q t :=
+    DkMath.ABC.padicValNat_pow hq_prime d ht_ne
+  have hvtd_ge : d ≤ padicValNat q (t ^ d) := by
+    rw [hvtd_eq]
+    calc
+      d = d * 1 := (Nat.mul_one d).symm
+      _ ≤ d * padicValNat q t := Nat.mul_le_mul_left d hvt_ge
+  have hpadic_bound_diff : padicValNat q (a ^ d - b ^ d) ≤ 1 :=
+    primitive_prime_padic_bound_diff_of_squarefree_GN
+      hd_prime hd_ge hab_lt hb hab hpnd hq hG_sq
+  have hvað_eq : padicValNat q (a ^ d - b ^ d) = padicValNat q (t ^ d) := by
+    rw [heq]
+  omega
+
+/--
+Honest squarefree-GN repair of `primitive_prime_obstructs_GN_perfect_power`.
+
+This makes the repair plan explicit: the current obstruction theorem can be recovered cleanly once
+the caller provides `Squarefree (GN d (a - b) b)`.
+-/
+theorem primitive_prime_obstructs_GN_perfect_power_of_squarefree_GN
+    {a b d : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b)
+    (hG_sq : Squarefree (GN d (a - b) b)) :
+    ¬ ∃ t : ℕ, GN d (a - b) b = t ^ d := by
+  intro hpow
+  have hd_pos : 0 < d := hd_prime.pos
+  have hd1 : 1 < d := by omega
+  obtain ⟨q, hq⟩ :=
+    exists_primitive_prime_factor_as_prop hd_prime hd_ge hab_lt hb hab hpnd
+  have hq_prime : Nat.Prime q := hq.1
+  have hq_div_GN : q ∣ GN d (a - b) b := primitive_prime_dvd_GN hq hd_pos hd1 hab_lt
+  have hpadic_eq_GN :
+      padicValNat q (a ^ d - b ^ d) = padicValNat q (GN d (a - b) b) :=
+    primitive_prime_padic_eq_GN hq hd_pos hd1 hab_lt
+  rcases hpow with ⟨t, ht⟩
+  have hdiff_ne : a ^ d - b ^ d ≠ 0 := by
+    have hd_ne : d ≠ 0 := Nat.pos_iff_ne_zero.mp hd_pos
+    exact Nat.sub_ne_zero_of_lt (Nat.pow_lt_pow_left hab_lt hd_ne)
+  have hGN_ne : GN d (a - b) b ≠ 0 := by
+    intro hGN0
+    have hfactor : a ^ d - b ^ d = (a - b) * GN d (a - b) b := by
+      simpa using pow_sub_pow_factor_cosmic_N (a := a) (b := b) (d := d) hd_pos hab_lt
+    rw [hfactor, hGN0, mul_zero] at hdiff_ne
+    exact hdiff_ne rfl
+  have ht_ne : t ≠ 0 := by
+    intro ht0
+    apply hGN_ne
+    rw [ht, ht0]
+    simp [hd_pos.ne']
+  have hq_div_td : q ∣ t ^ d := by
+    rw [← ht]
+    exact hq_div_GN
+  have hq_div_t : q ∣ t := hq_prime.dvd_of_dvd_pow hq_div_td
+  have hvt_ge : 1 ≤ padicValNat q t :=
+    DkMath.ABC.padicValNat_one_le_of_prime_dvd hq_prime ht_ne hq_div_t
+  have hvtd_eq : padicValNat q (t ^ d) = d * padicValNat q t :=
+    DkMath.ABC.padicValNat_pow hq_prime d ht_ne
+  have hvtd_ge : d ≤ padicValNat q (t ^ d) := by
+    rw [hvtd_eq]
+    calc
+      d = d * 1 := (Nat.mul_one d).symm
+      _ ≤ d * padicValNat q t := Nat.mul_le_mul_left d hvt_ge
+  have hpadic_bound_diff : padicValNat q (a ^ d - b ^ d) ≤ 1 :=
+    primitive_prime_padic_bound_diff_of_squarefree_GN
+      hd_prime hd_ge hab_lt hb hab hpnd hq hG_sq
   have hpadic_bound_GN : padicValNat q (GN d (a - b) b) ≤ 1 := by
     rw [← hpadic_eq_GN]
     exact hpadic_bound_diff
