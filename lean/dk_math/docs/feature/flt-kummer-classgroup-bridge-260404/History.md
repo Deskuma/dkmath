@@ -643,3 +643,76 @@ Archive
      `TriominoSquarefreeGNBridgeProvider`
      を持つ上位 route から
      default / target 注入経路を 1 本差し替える
+
+## 2026/04/15 14:11:12 JST
+
+1. 背景:
+   - 前回の次課題に従い、
+     `triominoCosmicNoPowOnGN_of_squarefreeGNProvider`
+     /
+     `triominoCosmicBodyInvariant_of_squarefreeGNProvider`
+     を
+     actual upper caller へ差し込める branch を探した
+   - 調査の結果、
+     `CyclotomicPrincipalization.lean`
+     で
+     `triominoCosmicNoPowOnGN_default`
+     を concrete に使っている箇所が 2 本あり、
+     特に non-first-case receiver は
+     theorem 本体が小さく、
+     provider 付き variant を立てる差し替え先として最も筋がよかった
+   - 分岐点は
+     「first-case 側の長い wrapper を provider 版へ複製する」
+     か、
+     「non-first-case receiver の default 注入を provider 版へ置き換える concrete variant を先に立てる」
+     かの二択だった
+   - 今回は後者を選んだ
+     :
+     変更範囲が小さく、
+     `triominoCosmicBodyInvariant_of_squarefreeGNProvider`
+     をそのまま使えて、
+     default 注入経路の置換先を明確に固定できるからである
+2. 実施:
+   - `CyclotomicPrincipalization.lean`
+     に
+     `cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree_and_squarefreeGNProvider`
+     を追加した
+   - この theorem は
+     旧
+     `cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree`
+     が
+     `bodyInvariant_of_NoPowOnGN triominoCosmicNoPowOnGN_default`
+     を使っていた箇所を、
+     `triominoCosmicBodyInvariant_of_squarefreeGNProvider hSqProv`
+     へ差し替えた provider-branch 版である
+   - あわせて
+     `cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_classGroupPTorsionFree_and_squarefreeGNProvider`
+     を追加し、
+     実際の downstream receiver 1 段ぶんも
+     provider route で繋がるようにした
+3. 結論:
+   - これで
+     `TriominoSquarefreeGNBridgeProvider`
+     を持つ upper route については、
+     `CyclotomicPrincipalization`
+     の non-first-case Stage 3 receiver まで
+     default / target 注入を経ずに到達できる
+   - つまり今回の 1 本目の concrete replacement は、
+     `TriominoCosmicGapInvariant`
+     で作った provider route を
+     `CyclotomicPrincipalization`
+     の actual caller 側へ引き上げる形で成立した
+   - 今回の最善手は、
+     **default theorem を直接書き換えて既存 caller を壊すことではなく、provider を持つ branch 専用の concrete variant を実 caller 層へ増設する**
+     ことだった
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+5. 失敗事例:
+   - （未報告）
+6. 次の課題:
+   - `CyclotomicPrincipalization`
+     で今回足した
+     `..._and_squarefreeGNProvider`
+     版をさらに上位の split / one-shot theorem へ繋げられるかを調べ、
+     first-case 側または non-first-case principalization 側でも
+     provider route を 1 段上へ引き上げる

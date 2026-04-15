@@ -5944,6 +5944,21 @@ theorem cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFr
   exact False.elim <| hNoPow hpack ⟨s, hs⟩
 
 /--
+class-group 仮定に加えて squarefree-GN provider が与えられれば、
+non-first-case branch の Stage 3 receiver は default / target 注入を経ずに閉じる。
+-/
+theorem cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree_and_squarefreeGNProvider
+    (_hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider) :
+    CyclotomicNormDescentNonFirstCaseGNPowerReceiverTarget := by
+  let hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p :=
+    triominoCosmicBodyInvariant_of_squarefreeGNProvider hSqProv
+  intro p x y z hpack q hq hqx hqne hqgap hpgap s hs
+  exact False.elim <| hNoPow hpack ⟨s, hs⟩
+
+/--
 class-group 仮定と Stage 2 unit normalization のもとで、
 non-first-case branch の Stage 3 receiver を供給する最薄 theorem。
 
@@ -5957,6 +5972,17 @@ theorem cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_classGroupPTo
     CyclotomicNormDescentNonFirstCaseUnitNormalizedReceiverTarget :=
   cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_gnPowerReceiver
     (cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree hCl)
+
+/--
+squarefree-GN provider を持つ branch 向けの non-first-case unit-normalized receiver。
+-/
+theorem cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_classGroupPTorsionFree_and_squarefreeGNProvider
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider) :
+    CyclotomicNormDescentNonFirstCaseUnitNormalizedReceiverTarget :=
+  cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_gnPowerReceiver
+    (cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree_and_squarefreeGNProvider
+      hCl hSqProv)
 
 /--
 class-group 仮定と Stage 2 unit normalization のもとで、
