@@ -1180,3 +1180,120 @@ Archive
      `DkMath.FLT`
      公開面または関連 doc/comment のどこで
      provider concrete route を推奨導線として明記するかを整理する
+
+## 2026/04/15 16:32:05 JST
+
+1. 背景:
+   - 前回の次課題に従い、
+     `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     /
+     `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     が
+     実際に top-level / public export として使えるかを調べた
+   - 調査の結果、
+     `DkMath.FLT`
+     は
+     `DkMath.FLT.Kummer`
+     と
+     `DkMath.FLT.PrimeProvider`
+     の両方を import しており、
+     theorem 自体はすでに top-level import 入口から到達可能だった
+   - したがって今回の分岐は
+     「さらに export theorem を増やす」
+     か
+     「`DkMath.FLT`
+     / `INDEX.md`
+     / README 群で
+     provider concrete route を推奨導線として明記する」
+     かの二択になった
+   - 今回は後者を選んだ
+     :
+     追加の wrapper/export は不要で、
+     現状の問題は public 面での discoverability だからである
+2. 実施:
+   - `DkMath/FLT.lean`
+     に module docstring を追加し、
+     `DkMath.FLT`
+     が
+     `Main`
+     /
+     `Kummer`
+     /
+     `PrimeProvider`
+     を束ねる top-level import 入口であること、
+     および
+     `TriominoSquarefreeGNBridgeProvider`
+     を concrete に持てる branch の canonical provider-facing route が
+     `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     /
+     `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     であることを明記した
+   - `DkMath/FLT.md`
+     冒頭に
+     「公開導線の更新メモ」
+     を追加し、
+     old status 文書を読む前に見るべき current route を固定した
+   - `lean/dk_math/INDEX.md`
+     の
+     `3.10 FLT`
+     節に、
+     abstract regular-prime mainline と
+     provider concrete public route の住み分けを追記した
+   - `lean/dk_math/README.md`
+     に、
+     `RegularPrimeRoute`
+     の provider concrete 公開導線と
+     `DkMath.FLT`
+     が top-level 入口である旨を追記した
+   - さらに project top
+     `README.md`
+     にも、
+     nightly 側で
+     `RegularPrimeRoute`
+     から
+     `GlobalPrimeExponentFLTProvider`
+     /
+     `TriominoPrimeProvider`
+     へ直結する public/provider route が案内されるようになったことを反映した
+3. 結論:
+   - 今回の判定は
+     **新しい export の追加ではなく、
+     既存 top-level import
+     `DkMath.FLT`
+     上で provider concrete route の案内を明記する方が自然**
+     だった
+   - これにより、
+     `TriominoSquarefreeGNBridgeProvider`
+     を concrete に持てる branch は
+     `DkMath.FLT`
+     を import した公開面から
+     `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     /
+     `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     をそのまま辿れることが、
+     Lean コード側と Markdown 案内の両方で明示された
+4. 検証:
+   - `./lean-build.sh DkMath.FLT` 成功
+5. 失敗事例:
+   - 既存 public export が弱いなら
+     `DkMath.FLT`
+     直下にさらに wrapper theorem を増やす案もありえたが、
+     import aggregator だけで十分到達可能であり、
+     theorem 名の重複導線を増やす方がむしろ公開面を散らすため採用しなかった
+6. 次の課題:
+   - 今回明記した provider concrete route が、
+     実際の利用者導線
+     （例:
+     `DkMath.FLT`
+     import 後の theorem discovery、
+     `DkMath/FLT/README.md`
+     や
+     `docs/PROJECT_STATUS.md`
+     の更新）
+     で十分かを見直す
+   - 必要なら、
+     `DkMath.FLT`
+     公開面からの推奨導線を
+     `FLT/README.md`
+     などの近接ドキュメントにも同期し、
+     old route と new provider route の住み分けをさらに揃える
