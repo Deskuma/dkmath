@@ -1297,3 +1297,139 @@ Archive
      `FLT/README.md`
      などの近接ドキュメントにも同期し、
      old route と new provider route の住み分けをさらに揃える
+
+## 2026/04/15 16:47:56 JST
+
+1. 背景:
+   - 前回の次課題に従い、
+     今回明記した provider concrete route が
+     実際の利用者導線で十分かを見直した
+   - この確認では、
+     ユーザー指示どおり
+     `logs/summary_report`
+     以下の既存レポートのみを参照し、
+     summary report の再生成は行っていない
+   - `__imports.txt`
+     から
+     `DkMath.FLT`
+     が
+     `DkMath.FLT.Kummer`
+     と
+     `DkMath.FLT.PrimeProvider`
+     の両方を import していることを再確認し、
+     `__theorems-heading.txt`
+     から
+     `FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     /
+     `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     /
+     `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     が theorem discovery 上も拾えることを確認した
+   - その一方で、
+     `DkMath/FLT/README.md`
+     は
+     `d=3`
+     中心の記述に偏っており、
+     `docs/PROJECT_STATUS.md`
+     も 2026-03-15 snapshot 評価のままなので、
+     provider concrete route の current status が近接ドキュメントに同期されていないことが分かった
+2. 実施:
+   - `DkMath/FLT/README.md`
+     冒頭に
+     「現在の公開導線」
+     節を追加し、
+     `DkMath.FLT`
+     import 後の current route を
+     `d = 3`
+     公開面
+     と
+     regular-prime / prime-ge5 provider 面
+     に分けて明記した
+   - 同ファイルの
+     「モジュール責務」
+     に
+     `Kummer/RegularPrimeRoute.lean`
+     と
+     `PrimeProvider/*.lean`
+     の役割を追記し、
+     `RegularPrimeRoute`
+     の provider concrete theorem 群と
+     `TriominoCosmicPrimeGe5Core`
+     の core bridge との関係を説明した
+   - さらに
+     「現在の入口」
+     節にも、
+     prime-ge5 / provider 向けの推奨入口
+     `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     /
+     `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     を追加した
+   - `docs/PROJECT_STATUS.md`
+     には
+     2026-04-15 の注記を追加し、
+     current nightly では
+     `DkMath.FLT`
+     が top-level 公開面であり、
+     `TriominoSquarefreeGNBridgeProvider`
+     を concrete に持てる branch の canonical public/provider route は
+     `RegularPrimeRoute`
+     側の provider concrete theorem 群であることを明記した
+   - 同ファイルの
+     `PrimeProvider`
+     節、
+     `n > 3`
+     実装状況節、
+     および末尾の
+     「次に打つべき手」
+     節にも current route の補足を追記し、
+     old snapshot 評価と new provider route の住み分けを同期した
+3. 結論:
+   - 今回の判定は
+     **利用者導線として不足していたのは theorem export ではなく、
+     `FLT/README.md`
+     と
+     `PROJECT_STATUS.md`
+     の近接案内だった**
+   - summary report 上でも、
+     theorem discovery と import 導線そのものはすでに成立している
+   - したがって現時点の最善手は、
+     `DkMath.FLT`
+     を import した利用者に対し、
+     `d=3`
+     なら `Main`、
+     `TriominoSquarefreeGNBridgeProvider`
+     を持つ prime-ge5 branch なら
+     `RegularPrimeRoute`
+     の provider concrete theorem 群、
+     という住み分けをドキュメントで先回りして示すことだった
+4. 検証:
+   - Lean コード変更なし
+   - summary report の既存出力
+     `logs/summary_report/__imports.txt`
+     /
+     `logs/summary_report/__theorems-heading.txt`
+     を参照して導線を確認
+5. 失敗事例:
+   - `PROJECT_STATUS.md`
+     全体を current state に全面書き換える案もあったが、
+     この文書は 2026-03-15 snapshot 評価としての価値も残っているため、
+     今回は上書きではなく
+     2026-04-15 注記を重ねる方針を採った
+6. 次の課題:
+   - 近接ドキュメントの同期は進んだので、
+     次は
+     `DkMath.FLT`
+     import 後に実際に theorem を探す利用者が
+     `RegularPrimeRoute`
+     側の provider concrete route へ迷わず到達できるかを、
+     必要なら
+     `DkMath/FLT/Samples.lean`
+     や
+     `DkMath/FLT` 配下の追加 README
+     で補強する
+   - 併せて、
+     high-exponent 側の current open が
+     「provider route の不在」ではなく
+     「その route を埋める数論核の未完」
+     であることを、
+     他の status 文書にも揃えるかを判定する
