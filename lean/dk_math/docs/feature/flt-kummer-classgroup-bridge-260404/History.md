@@ -791,3 +791,82 @@ Archive
      今回の squarefree provider route の住み分けを見直し、
      first-case 側にも provider variant を足すべきか、
      それとも non-first-case orchestration 側からさらに downstream caller を差し替えるべきかを判定する
+
+## 2026/04/15 15:45:21 JST
+
+1. 背景:
+   - 前回の次課題に従い、
+     `CyclotomicPrincipalization`
+     に残る
+     default / non-liftable route と
+     squarefree provider route の住み分けを見直した
+   - 調査の結果、
+     `TriominoSquarefreeGNBridgeProvider`
+     を値として受ける downstream caller はまだ薄く、
+     すぐに外側 caller を差し替えるよりも、
+     まず
+     `CyclotomicPrincipalization`
+     内で
+     first-case も含めて provider route を閉じる方が筋が良いと判断した
+   - 決定的だったのは、
+     既に追加していた
+     `cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization_and_squarefreeGNProvider`
+     が、
+     non-first-case 側は provider route でも、
+     first-case 側はなお
+     `cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree`
+     経由の default を踏んでいた点である
+   - したがって今回の分岐では
+     「downstream caller 差し替え」
+     より
+     「first-case 側へ provider variant を追加して one-shot provider theorem を本当に clean にする」
+     方を選んだ
+2. 実施:
+   - `CyclotomicPrincipalization.lean`
+     に
+     `qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_squarefreeGNProvider`
+     を追加し、
+     `triominoCosmicBodyInvariant_of_squarefreeGNProvider`
+     から first-case gap-divisible witness を返す thin wrapper を作った
+   - あわせて
+     `cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_squarefreeGNProvider`
+     を追加し、
+     first-case principalization target まで provider route を上げた
+   - さらに
+     `cyclotomicNormDescent_of_classGroupPTorsionFree_and_nonFirstCase_and_squarefreeGNProvider`
+     を追加し、
+     global Stage 3 `NormDescent`
+     の case-split でも first-case を provider route で束ねる形にした
+   - 最後に
+     `cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization_and_squarefreeGNProvider`
+     をこの新 route に差し替えた
+     :
+     これにより、
+     既存の one-shot provider theorem は
+     first-case / non-first-case の両枝で squarefree provider route を通るようになった
+3. 結論:
+   - 今回の判定は
+     **downstream caller 差し替えより first-case provider variant の追加が先**
+     で正しかった
+   - 理由は、
+     downstream に provider を渡せる actual caller がまだ乏しい一方で、
+     `CyclotomicPrincipalization`
+     内の provider one-shot theorem は
+     first-case 側が default のままだったからである
+   - これで
+     `CyclotomicPrincipalization`
+     における squarefree provider route は、
+     non-first-case だけでなく first-case も含めて
+     actual one-shot theorem まで clean に閉じた
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+5. 失敗事例:
+   - （未報告）
+6. 次の課題:
+   - `CyclotomicPrincipalization`
+     の provider one-shot theorem が閉じたので、
+     次はそれを実際に受け取れるさらに外側 caller があるかを調べる
+   - もし無ければ、
+     `TriominoSquarefreeGNBridgeProvider`
+     をどの orchestration / package 層で concrete に持たせるかを定め、
+     default route を使っている theorem を 1 本 provider route へ差し替える
