@@ -63,6 +63,11 @@ presented by D. and Wise Wolf
   - フェルマーの最終定理（FLT）関連 [FLT](./DkMath/FLT.lean)
     - 実装ガイド [FLT/README.md](./DkMath/FLT/README.md)
     - prime-ge5 provider 本丸 [TriominoCosmicPrimeGe5](./DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean)
+    - regular-prime provider concrete 公開導線
+      `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+      /
+      `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+      in [RegularPrimeRoute](./DkMath/FLT/Kummer/RegularPrimeRoute.lean)
   - Collatz予想関連 [Collatz](./DkMath/Collatz/Collatz2K26.lean)
   - 宇宙式×FLT 接続 [TriominoFLT](./DkMath/CosmicFormula/TriominoFLT.lean)
   - ABC 予想系入口 [ABC](./DkMath/ABC.lean)
@@ -85,6 +90,19 @@ presented by D. and Wise Wolf
 - これらは、本流からは外されています。補題・定理に sorry を含みます。
 - ファイル名は `*Research.lean` で終わるものが対象です。
 - 完成され次第、本流の `*.lean` ファイルに統合される予定です。
+
+### FLT public/provider 導線メモ
+
+- `DkMath.FLT` は `Main` / `Kummer` / `PrimeProvider` をまとめて import する top-level 入口です。
+- `RegularPrimeRoute` の abstract mainline は
+  `FLTPrimeGe5Target_of_refinedRegularPrimeRoute`
+  です。
+- `TriominoSquarefreeGNBridgeProvider` を concrete に持てる branch では、
+  provider-facing な推奨導線として
+  `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+  /
+  `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+  を使います。
 
 ## ドキュメント
 

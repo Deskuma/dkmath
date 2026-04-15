@@ -5146,6 +5146,39 @@ theorem qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and
     hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase
 
 /--
+`TriominoSquarefreeGNBridgeProvider` を使う first-case canonical bridge の wrapper。
+
+non-liftable 版より強い squarefree provider がある branch では、
+`NoPowOnGN` から first-case gap-divisible witness を clean に返せる。
+-/
+theorem qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_squarefreeGNProvider
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider) :
+    ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+      ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+      ∀ {q : ℕ}, Nat.Prime q →
+        q ∣ x →
+        q ≠ p →
+        q ∣ (z - y) →
+      ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {gap : ℕ},
+        (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+        ¬ p ∣ gap →
+        ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p := by
+  let hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p :=
+    triominoCosmicBodyInvariant_of_squarefreeGNProvider hSqProv
+  intro K _ _ _ p x y z _ _ q hq hqx hqne hqgap ζ hζ hpack gap hgap_eq hFirstCase
+  exact qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree
+    (hCl := hCl)
+    (hNoPow := hNoPow)
+    (K := K) (p := p) (x := x) (y := y) (z := z) (q := q) (ζ := ζ) (gap := gap)
+    hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase
+
+/--
 `CyclotomicField p ℚ` を canonical choice に取り、
 first-case stable bridge を nat-level principalization target の first branch へ落とす。
 
@@ -5517,6 +5550,30 @@ theorem cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_nonLif
       hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase
 
 /--
+squarefree-GN provider を使う first-case canonical bridge の wrapper。
+-/
+theorem cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_squarefreeGNProvider
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider) :
+    CyclotomicPrincipalizationFirstCaseTarget := by
+  intro p x y z hpack q hq hqx hqne hqgap hFirstCase
+  let _ : Fact p.Prime := ⟨hpack.hp⟩
+  let ζ : CyclotomicField p ℚ :=
+    IsCyclotomicExtension.zeta p ℚ (CyclotomicField p ℚ)
+  let hζ : IsPrimitiveRoot ζ p := by
+    simp [ζ]
+  have hgap_eq :
+      (z : 𝓞 (CyclotomicField p ℚ)) - (y : 𝓞 (CyclotomicField p ℚ)) =
+        ((z - y : ℕ) : 𝓞 (CyclotomicField p ℚ)) := by
+    simp [Nat.cast_sub hpack.hyz]
+  exact
+    qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_squarefreeGNProvider
+      (hCl := hCl) (hSqProv := hSqProv)
+      (K := CyclotomicField p ℚ) (p := p) (x := x) (y := y) (z := z) (q := q)
+      (ζ := ζ) (gap := z - y)
+      hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase
+
+/--
 class-group one-shot route を first-case / non-first-case split で再構成する thin theorem。
 
 current stable bridge 群により first-case は concrete に埋まるので、
@@ -5724,6 +5781,19 @@ theorem cyclotomicNormDescent_of_classGroupPTorsionFree_and_nonFirstCase
     CyclotomicNormDescentTarget :=
   cyclotomicNormDescent_of_caseSplit
     (cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree hCl)
+    hNonFirst
+
+/--
+class-group 仮定・squarefree-GN provider・non-first-case target から、
+global Stage 3 `NormDescent` を clean route で組み立てる。
+-/
+theorem cyclotomicNormDescent_of_classGroupPTorsionFree_and_nonFirstCase_and_squarefreeGNProvider
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider)
+    (hNonFirst : CyclotomicPrincipalizationNonFirstCaseTarget) :
+    CyclotomicNormDescentTarget :=
+  cyclotomicNormDescent_of_caseSplit
+    (cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_squarefreeGNProvider hCl hSqProv)
     hNonFirst
 
 /--
@@ -5944,6 +6014,21 @@ theorem cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFr
   exact False.elim <| hNoPow hpack ⟨s, hs⟩
 
 /--
+class-group 仮定に加えて squarefree-GN provider が与えられれば、
+non-first-case branch の Stage 3 receiver は default / target 注入を経ずに閉じる。
+-/
+theorem cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree_and_squarefreeGNProvider
+    (_hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider) :
+    CyclotomicNormDescentNonFirstCaseGNPowerReceiverTarget := by
+  let hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p :=
+    triominoCosmicBodyInvariant_of_squarefreeGNProvider hSqProv
+  intro p x y z hpack q hq hqx hqne hqgap hpgap s hs
+  exact False.elim <| hNoPow hpack ⟨s, hs⟩
+
+/--
 class-group 仮定と Stage 2 unit normalization のもとで、
 non-first-case branch の Stage 3 receiver を供給する最薄 theorem。
 
@@ -5957,6 +6042,17 @@ theorem cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_classGroupPTo
     CyclotomicNormDescentNonFirstCaseUnitNormalizedReceiverTarget :=
   cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_gnPowerReceiver
     (cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree hCl)
+
+/--
+squarefree-GN provider を持つ branch 向けの non-first-case unit-normalized receiver。
+-/
+theorem cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_classGroupPTorsionFree_and_squarefreeGNProvider
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider) :
+    CyclotomicNormDescentNonFirstCaseUnitNormalizedReceiverTarget :=
+  cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_gnPowerReceiver
+    (cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree_and_squarefreeGNProvider
+      hCl hSqProv)
 
 /--
 class-group 仮定と Stage 2 unit normalization のもとで、
@@ -5975,6 +6071,19 @@ theorem cyclotomicNormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNorm
     (cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_classGroupPTorsionFree hCl)
 
 /--
+class-group 仮定・Stage 2 unit normalization・squarefree-GN provider から、
+non-first-case principalization を clean route で供給する。
+-/
+theorem cyclotomicNormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNormalization_and_squarefreeGNProvider
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hUnit : CyclotomicUnitNormalizationTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider) :
+    CyclotomicPrincipalizationNonFirstCaseTarget :=
+  cyclotomicNormDescentNonFirstCase_of_unitNormalizationAndReceiver hUnit
+    (cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_classGroupPTorsionFree_and_squarefreeGNProvider
+      hCl hSqProv)
+
+/--
 class-group 仮定と Stage 2 unit normalization から、
 global Stage 3 `NormDescent` を供給する最薄 receiver theorem。
 
@@ -5991,6 +6100,19 @@ theorem cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization
     (cyclotomicNormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNormalization hCl hUnit)
 
 /--
+class-group 仮定・Stage 2 unit normalization・squarefree-GN provider から、
+global Stage 3 `NormDescent` を clean route で供給する。
+-/
+theorem cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization_and_squarefreeGNProvider
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hUnit : CyclotomicUnitNormalizationTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider) :
+    CyclotomicNormDescentTarget :=
+  cyclotomicNormDescent_of_classGroupPTorsionFree_and_nonFirstCase_and_squarefreeGNProvider hCl hSqProv
+    (cyclotomicNormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNormalization_and_squarefreeGNProvider
+      hCl hUnit hSqProv)
+
+/--
 `hCl + hUnit` が与えられれば、refined class-group route の Stage 3 は receiver theorem 1 本に局所化される。
 -/
 theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_and_unitNormalization
@@ -5999,6 +6121,19 @@ theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_and_unitNormalizati
     CyclotomicPrincipalizationTarget :=
   cyclotomicPrincipalization_of_refinedClassGroupRoute hCl hUnit
     (cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization hCl hUnit)
+
+/--
+class-group 仮定・Stage 2 unit normalization・squarefree-GN provider から、
+one-shot principalization を clean route で供給する。
+-/
+theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_and_unitNormalization_and_squarefreeGNProvider
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hUnit : CyclotomicUnitNormalizationTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider) :
+    CyclotomicPrincipalizationTarget :=
+  cyclotomicPrincipalization_of_refinedClassGroupRoute hCl hUnit
+    (cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization_and_squarefreeGNProvider
+      hCl hUnit hSqProv)
 
 /--
 refined class-group route から refined non-first-case existence kernel を返す thin wrapper。

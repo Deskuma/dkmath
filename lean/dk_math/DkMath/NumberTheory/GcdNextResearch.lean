@@ -368,6 +368,45 @@ private lemma primitive_prime_contradicts_diff_dth_power
     rw [heq]
   omega
 
+/--
+Honest squarefree-GN version of `primitive_prime_contradicts_diff_dth_power`.
+
+Once the caller supplies `Squarefree (GN d (a - b) b)`, the valuation contradiction closes
+without the research placeholder.
+-/
+private lemma primitive_prime_contradicts_diff_dth_power_of_squarefree_GN
+    {a b d q t : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b)
+    (hq : DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow q a b d)
+    (hG_sq : Squarefree (GN d (a - b) b))
+    (ht : 0 < t)
+    (heq : a ^ d - b ^ d = t ^ d) :
+    False := by
+  have hq_prime : Nat.Prime q := hq.1
+  have hq_div_pow : q ∣ a ^ d - b ^ d := hq.2.1
+  have hq_div_td : q ∣ t ^ d := by
+    rw [← heq]
+    exact hq_div_pow
+  have hq_div_t : q ∣ t := hq_prime.dvd_of_dvd_pow hq_div_td
+  have ht_ne : t ≠ 0 := Nat.ne_of_gt ht
+  have hvt_ge : 1 ≤ padicValNat q t :=
+    DkMath.ABC.padicValNat_one_le_of_prime_dvd hq_prime ht_ne hq_div_t
+  have hvtd_eq : padicValNat q (t ^ d) = d * padicValNat q t :=
+    DkMath.ABC.padicValNat_pow hq_prime d ht_ne
+  have hvtd_ge : d ≤ padicValNat q (t ^ d) := by
+    rw [hvtd_eq]
+    calc
+      d = d * 1 := (Nat.mul_one d).symm
+      _ ≤ d * padicValNat q t := Nat.mul_le_mul_left d hvt_ge
+  have hpadic_bound_diff : padicValNat q (a ^ d - b ^ d) ≤ 1 :=
+    primitive_prime_padic_bound_diff_of_squarefree_GN
+      hd_prime hd_ge hab_lt hb hab hpnd hq hG_sq
+  have hvað_eq : padicValNat q (a ^ d - b ^ d) = padicValNat q (t ^ d) := by
+    rw [heq]
+  omega
+
 /-- 目標定理：Body(x,u,d) は完全 d 乗にならない（d > 2）
 
 **証明構造（3層統合）:**
@@ -431,7 +470,7 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
   have _hGN_not_pow :
       ¬ ∃ s : ℕ, GN d (a - b) b = s ^ d := by
     exact
-      DkMath.NumberTheory.PrimitiveBeam.primitive_prime_obstructs_GN_perfect_power
+      DkMath.NumberTheory.PrimitiveBeam.primitive_prime_obstructs_GN_perfect_power_research
         hd_prime hd_ge hab_lt hb_pos hab hpnd_ab
 
   obtain ⟨q, hq⟩ :=
@@ -450,6 +489,50 @@ theorem body_not_perfect_pow (x u : ℕ) (d : ℕ)
   exact
     primitive_prime_contradicts_diff_dth_power
       hd_prime hd_ge hab_lt hb_pos hab hpnd_ab hq ht heq_nat
+
+/--
+Honest squarefree-GN route for `body_not_perfect_pow`.
+
+This is the migration target for callers that can locally supply `Squarefree (GN d x u)`.
+-/
+theorem body_not_perfect_pow_of_squarefree_GN (x u : ℕ) (d : ℕ)
+    (hd : 2 < d) (hd_prime : Nat.Prime d) (hx : 0 < x) (hu : 0 < u)
+    (hcop : Nat.Coprime (x + u) u) (hpnd : ¬ d ∣ x)
+    (hG_sq : Squarefree (GN d x u)) :
+    ¬ ∃ t : ℕ, 0 < t ∧ (x+u)^d - u^d = t^d := by
+  intro ⟨t, ht, heq⟩
+
+  set a := x + u with ha_def
+  set b := u with hb_def
+
+  have hab_lt : b < a := by
+    simp only [ha_def, hb_def]
+    omega
+  have hb_pos : 0 < b := hu
+  have hab : Nat.Coprime a b := hcop
+
+  have hd_ge : 3 ≤ d := by omega
+
+  have hpnd_ab : ¬ d ∣ a - b := by
+    simpa [ha_def, hb_def, Nat.add_sub_cancel_left] using hpnd
+  have hG_sq_ab : Squarefree (GN d (a - b) b) := by
+    simpa [ha_def, hb_def, Nat.add_sub_cancel_left] using hG_sq
+
+  obtain ⟨q, hq⟩ :=
+    DkMath.NumberTheory.PrimitiveBeam.exists_primitive_prime_factor_as_prop
+      hd_prime hd_ge hab_lt hb_pos hab hpnd_ab
+
+  have heq_nat : a^d - b^d = t^d := by
+    have hab_pow_le : b^d ≤ a^d := by
+      have : b ≤ a := by omega
+      exact Nat.pow_le_pow_left this d
+    calc a^d - b^d
+      _ = (x + u)^d - u^d := by simp only [ha_def, hb_def]
+      _ = t^d := heq
+
+  exact
+    primitive_prime_contradicts_diff_dth_power_of_squarefree_GN
+      hd_prime hd_ge hab_lt hb_pos hab hpnd_ab hq hG_sq_ab ht heq_nat
 
 /-! ### 6. 統合準備：GcdAg 正規化と PetalDetect 検出器
 

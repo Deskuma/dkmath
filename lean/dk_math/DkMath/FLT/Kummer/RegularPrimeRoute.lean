@@ -444,6 +444,65 @@ theorem FLTPrimeGe5Target_of_refinedRegularPrimeRoute
     (qAdicGapReductionGapDivisible_of_refinedRegularPrimeRoute hRegClass hUnit hNorm)
     hPFE hNoLift
 
+/--
+推奨 mainline の provider 具体化版。
+
+regular-prime route の Stage 3 を abstract `hNorm` で受ける代わりに、
+squarefree-GN provider から concrete に構成する。
+-/
+theorem FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
+    (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+    (hRegBranch : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+    (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{0} p)
+    (hUnit : CyclotomicUnitNormalizationTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_kummerThreeWaySplit hPeq hRegBranch
+    (qAdicGapReductionGapDivisible_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
+      hRegClass hUnit hSqProv)
+    hPFE hNoLift
+
+/--
+provider concrete な regular-prime mainline から global provider へ接続する public 入口。
+
+`TriominoSquarefreeGNBridgeProvider` を concrete に持てる branch では、
+abstract `FLTPrimeGe5Target` を経由して外へ渡す代わりに、
+この theorem を canonical default 相当の provider-facing route として使う。
+-/
+theorem triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
+    (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+    (hRegBranch : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+    (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{0} p)
+    (hUnit : CyclotomicUnitNormalizationTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    GlobalPrimeExponentFLTProvider := by
+  exact triominoCosmic_globalProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
+      hPeq hRegBranch hRegClass hUnit hSqProv hPFE hNoLift)
+
+/--
+provider concrete な regular-prime mainline から `TriominoPrimeProvider` へ接続する public 入口。
+
+global provider alias を直接返す最外側 API として使えるよう、
+`PrimeGe5FLTProvider` core bridge への合成をここで固定する。
+-/
+theorem triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
+    (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+    (hRegBranch : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+    (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{0} p)
+    (hUnit : CyclotomicUnitNormalizationTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    TriominoPrimeProvider := by
+  exact triominoPrimeProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
+      hPeq hRegBranch hRegClass hUnit hSqProv hPFE hNoLift)
+
 /-!
 ## §8. Kummer route: ClassGroup → GapDivisible → 2m-pure → FLT
 

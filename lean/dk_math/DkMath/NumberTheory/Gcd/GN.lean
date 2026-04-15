@@ -269,7 +269,7 @@ theorem body_not_perfect_pow_of_primitive_prime_factor_of_coprime_add
     ¬ ∃ t : ℕ, 0 < t ∧ (x + u) ^ d - u ^ d = t ^ d := by
   have hlt : u < x + u := by omega
   simpa [Nat.add_sub_cancel_left] using
-    (DkMath.NumberTheory.PrimitiveBeam.primitive_prime_factor_forbids_perfect_pow_diff
+    (DkMath.NumberTheory.PrimitiveBeam.primitive_prime_factor_forbids_perfect_pow_diff_research
       (a := x + u) (b := u) (d := d)
       hd_prime hd_ge hlt hu hcop_add (by simpa [Nat.add_sub_cancel_left] using hnd))
 
