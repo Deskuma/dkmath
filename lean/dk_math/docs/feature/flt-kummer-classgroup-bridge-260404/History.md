@@ -870,3 +870,96 @@ Archive
      `TriominoSquarefreeGNBridgeProvider`
      をどの orchestration / package 層で concrete に持たせるかを定め、
      default route を使っている theorem を 1 本 provider route へ差し替える
+
+## 2026/04/15 16:11:29 JST
+
+1. 背景:
+   - 前回の次課題に従い、
+     `CyclotomicPrincipalization`
+     の provider one-shot theorem を
+     さらに外で actual に受ける caller があるかを調べた
+   - 調査の結果、
+     直接それを受ける theorem は見当たらず、
+     外側では依然として
+     `CyclotomicNormDescentTarget`
+     や
+     `CyclotomicPrincipalizationTarget`
+     を abstract に受ける orchestration 層が主だった
+   - そこで分岐は
+     「caller 探索をさらに外へ続ける」
+     か
+     「`TriominoSquarefreeGNBridgeProvider` を orchestration 層で concrete に持たせる」
+     かになった
+   - 今回は後者を選んだ
+     :
+     `ClassGroupBridge`
+     と
+     `RegularPrimeRoute`
+     がまさに
+     `hUnit` / `hNorm`
+     を束ねて FLT 幹線へ渡す package 層であり、
+     ここが provider concrete 化の最初の着地点として最も自然だからである
+2. 実施:
+   - `ClassGroupBridge.lean`
+     に
+     `qAdicGapReductionGapDivisible_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     を追加し、
+     regular-prime route の Stage 3 `NormDescent` を
+     abstract target ではなく
+     `cyclotomicPrincipalization_of_classGroupPTorsionFree_and_unitNormalization_and_squarefreeGNProvider`
+     経由で concrete に供給する版を作った
+   - 続けて
+     `RegularPrimeRoute.lean`
+     に
+     `FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     を追加し、
+     既存の推奨 mainline
+     `FLTPrimeGe5Target_of_refinedRegularPrimeRoute`
+     に対する provider concrete 版を実装した
+   - これにより、
+     provider route は
+     `CyclotomicPrincipalization`
+     の one-shot theorem で止まらず、
+     `RegularPrimeRoute`
+     の actual FLT theorem 1 本まで引き上がった
+3. 結論:
+   - 今回の判定は
+     **外側 caller の探索継続より、`ClassGroupBridge` / `RegularPrimeRoute` を provider concrete orchestration 層として固定する方が正しい**
+     だった
+   - 理由は、
+     現状の outer layer は `CyclotomicPrincipalizationTarget` や `CyclotomicNormDescentTarget` を abstract に束ねる構造であり、
+     provider one-shot theorem を直接受ける caller より、
+     まずそこで concrete 化する方が mainline に近いからである
+   - これで
+     `TriominoSquarefreeGNBridgeProvider`
+     は
+     `TriominoCosmicGapInvariant`
+     →
+     `CyclotomicPrincipalization`
+     →
+     `ClassGroupBridge`
+     →
+     `RegularPrimeRoute`
+     と、FLT 幹線の orchestration 層まで届いた
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.ClassGroupBridge` 成功
+   - `./lean-build.sh DkMath.FLT.Kummer.RegularPrimeRoute` 成功
+5. 失敗事例:
+   - `ClassGroupBridge`
+     /
+     `RegularPrimeRoute`
+     の provider 版を最初は universe polymorphic なまま追加したが、
+     `CyclotomicPrincipalization`
+     側の provider theorem が `.{0}` 固定のため
+     `CyclotomicUnitNormalizationTarget`
+     の universe が噛み合わず build が失敗した
+   - そのため今回は、
+     provider concrete route を `.{0}` に揃えて実装し、
+     既存の abstract route はそのまま保持する方針に直した
+6. 次の課題:
+   - `FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     ができたので、
+     これをさらに使える top-level / public route があるかを調べる
+   - もし無ければ、
+     regular-prime mainline のどの theorem を provider concrete 版へ昇格させるのが最も自然かを決め、
+     legacy / abstract route との住み分けを整理する

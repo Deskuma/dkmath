@@ -128,6 +128,21 @@ theorem qAdicGapReductionGapDivisible_of_refinedRegularPrimeRoute
     (cyclotomicPrincipalization_of_refinedClassGroupRoute
       (classGroupPTorsionFree_of_regularPrime hReg) hUnit hNorm)
 
+/--
+Refined mainline with a concrete squarefree-GN provider.
+
+regular-prime route の Stage 3 `NormDescent` を abstract target で受けず、
+squarefree provider から concrete に供給する orchestration 版。
+-/
+theorem qAdicGapReductionGapDivisible_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
+  (hReg : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{0} p)
+  (hUnit : CyclotomicUnitNormalizationTarget.{0})
+  (hSqProv : TriominoSquarefreeGNBridgeProvider) :
+    PrimeGe5BranchAPrimitiveQAdicGapReductionGapDivisibleBranchTarget :=
+  qAdicGapReductionGapDivisible_of_cyclotomicPrincipalization
+    (cyclotomicPrincipalization_of_classGroupPTorsionFree_and_unitNormalization_and_squarefreeGNProvider
+      (classGroupPTorsionFree_of_regularPrime.{0} hReg) hUnit hSqProv)
+
 /-!
 ## §3. Legacy one-shot chain: Regular prime → Principalization → GapDivisible
 

@@ -444,6 +444,26 @@ theorem FLTPrimeGe5Target_of_refinedRegularPrimeRoute
     (qAdicGapReductionGapDivisible_of_refinedRegularPrimeRoute hRegClass hUnit hNorm)
     hPFE hNoLift
 
+/--
+推奨 mainline の provider 具体化版。
+
+regular-prime route の Stage 3 を abstract `hNorm` で受ける代わりに、
+squarefree-GN provider から concrete に構成する。
+-/
+theorem FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
+    (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+    (hRegBranch : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+    (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{0} p)
+    (hUnit : CyclotomicUnitNormalizationTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_kummerThreeWaySplit hPeq hRegBranch
+    (qAdicGapReductionGapDivisible_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
+      hRegClass hUnit hSqProv)
+    hPFE hNoLift
+
 /-!
 ## §8. Kummer route: ClassGroup → GapDivisible → 2m-pure → FLT
 
