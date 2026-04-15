@@ -385,7 +385,7 @@ Depth 5: 3.1（メイン定理）
 ## 🔗 ファイル格納箇所
 
 ```
-/home/deskuma/develop/lean/dkmath/
+($PROJECT_ROOT)/
 ├── lean/dk_math/
 │   ├── DkMath/FLT/Main.lean          ← メインソース
 │   └── docs/

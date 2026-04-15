@@ -2678,8 +2678,8 @@ status: 完了 - phase-14: 完全証明への道（pending 除去）
   - `Type` 側の最後の穴は消え、残る `sorry` は Prop 側の
     `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noPowGN_core` 1件だけに移動
 - ビルド確認:
-  - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
-  - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - 実行: `cd ($PROJECT_ROOT)ake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 実行: `cd ($PROJECT_ROOT)/lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - 結果: 成功（warning は `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noPowGN_core` の `sorry` 1件のみ）
 
 ### 2026-03-03 phase-14 継続（平方非整性ルートへ最終穴を再圧縮）
@@ -2708,8 +2708,8 @@ status: 完了 - phase-14: 完全証明への道（pending 除去）
     `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrime_dvd_GN_not_sq_core`
     1件のみ
 - ビルド確認:
-  - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
-  - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - 実行: `cd ($PROJECT_ROOT)/lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 実行: `cd ($PROJECT_ROOT)/lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - 結果: 成功（warning は `existsPrime_dvd_GN_not_sq_core` の `sorry` 1件のみ）
 
 ### 2026-03-03 phase-14 継続（primitive prime → not square on GN へ再分解）
@@ -2738,8 +2738,8 @@ status: 完了 - phase-14: 完全証明への道（pending 除去）
     `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_primitivePrime_not_sq_dvd_GN_core`
     1件のみ
 - ビルド確認:
-  - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
-  - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - 実行: `cd ($PROJECT_ROOT)/lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 実行: `cd ($PROJECT_ROOT)/lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - 結果: 成功（warning は `primitivePrime_not_sq_dvd_GN_core` の `sorry` 1件のみ）
 
 ### 2026-03-04 phase-14 継続（primitive prime の「任意」版を撤回し、存在版へ修正）
@@ -2772,8 +2772,8 @@ status: 完了 - phase-14: 完全証明への道（pending 除去）
     `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_existsPrimitivePrime_not_sq_dvd_GN_core`
     1件のみ
 - ビルド確認:
-  - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
-  - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - 実行: `cd ($PROJECT_ROOT)/lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 実行: `cd ($PROJECT_ROOT)/lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - 結果: 成功（warning は `existsPrimitivePrime_not_sq_dvd_GN_core` の `sorry` 1件のみ）
 
 ### 2026-03-04 phase-14 継続（NoWieferich bridge へ設計回帰）
@@ -2802,6 +2802,6 @@ status: 完了 - phase-14: 完全証明への道（pending 除去）
     `triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core`
     1件のみ
 - ビルド確認:
-  - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
-  - 実行: `cd /home/deskuma/develop/lean/dkmath/lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
+  - 実行: `cd ($PROJECT_ROOT)/lean/dk_math && lake env lean DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 実行: `cd ($PROJECT_ROOT)/lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB`
   - 結果: 成功（warning は `noWieferich_core` の `sorry` 1件のみ）

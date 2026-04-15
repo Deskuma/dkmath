@@ -116,7 +116,7 @@ cat docs/RESEARCH_UNIQUE_REPRESENTATION_IRRATIONAL.md
 
 ```bash
 # Lean 4 ファイルのコンパイル確認
-cd /home/deskuma/develop/lean/dkmath/lean/dk_math
+cd ($PROJECT_ROOT)/lean/dk_math
 lake env lean DkMath/UniqueRepSimple.lean
 
 # 警告のみ表示（エラーなし）
@@ -235,7 +235,7 @@ theorem Ag_rep_unique (x : ℝ) (hx : InQAdjSqrt2 x) :=
 
 ```
 ワークスペース構成:
-/home/deskuma/develop/lean/dkmath/lean/dk_math/
+($PROJECT_ROOT)/lean/dk_math/
 
 docs/
 ├─ RESEARCH_UNIQUE_REPRESENTATION_IRRATIONAL.md      ← 詳細研究ノート

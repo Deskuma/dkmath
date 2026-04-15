@@ -19,7 +19,7 @@ docstringは不要。定義と実装部。
 エラーは lint 機能を使う。もしくは、
 ビルドチェックを行うなら
 
-$ cd /home/deskuma/develop/lean/dkmath/lean/dk_math && ./lean-build.sh DkMath.FLT.docs.StandAlone.a
+$ cd ($PROJECT_ROOT)/lean/dk_math && ./lean-build.sh DkMath.FLT.docs.StandAlone.a
 
 これで、ログが確認できる。
 

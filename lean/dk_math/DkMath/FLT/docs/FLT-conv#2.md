@@ -709,7 +709,7 @@ Made changes.
 
 ---
 
-[](file:///home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/FLT/Basic.lean#100-100) の 100 から 130 行を読み取り
+[](file://($PROJECT_ROOT)/lean/dk_math/DkMath/FLT/Basic.lean#100-100) の 100 から 130 行を読み取り
 
 Ran terminal command:  lake build
 

@@ -1474,7 +1474,7 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
 
 - 失敗例:
   - 最初のビルドでプロジェクト root を 1 階層誤り
-    (`/home/deskuma/develop/lean/dkmath` で `lakefile` 不在)。
+    (`($PROJECT_ROOT)` で `lakefile` 不在)。
   - `workdir` を `lean/dk_math` へ修正して解消。
 
 - 確認:
@@ -2329,9 +2329,11 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine`
   - `cd lean/dk_math && lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN`
   - すべて成功（既知 warning のみ）。
+
 ## 2026-03-07: NumsInvCandidate no-arg 4本の Quarantine 移送（小バッチ）
 
 ### 目的
+
 - `DescentB` 側の no-arg 薄 wrapper をさらに外へ押し、`*_clean` 利用へ寄せる。
 - 対象は 4 本：
   - `triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack`
@@ -2340,27 +2342,33 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_z`
 
 ### 実施
+
 - `CosmicPetalBridgeGNDescentB.lean` から上記 4 本を削除。
 - 同名 wrapper を `CosmicPetalBridgeGNDescentBQuarantine.lean` に追加（fixed injection）。
 - `DescentB` 内の参照を `*_clean + triominoWieferichNoWieferichBridge_default` に置換。
 
 ### 失敗と復旧
+
 - 初回ビルドで 2 箇所失敗（`unsolved goals`）。
   - 原因：`div_eq_shadow_x/y/z` wrapper 除去で `simp` の書き換えが弱くなり、`x / q = ... ∨ q = 0` が残留。
   - 対応：該当 2 箇所を `simp [hxdiv]`（明示書き換え）へ変更して復旧。
 - 復旧後、`DescentB` / `Quarantine` / `CosmicPetalBridgeGN` を再ビルドし通過。
 
 ### 検証
+
 - `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
 - `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine` : OK
 - `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN` : OK
 
 ### 現在地
+
 - no-arg wrapper を 4 本追加で Quarantine 側へ移送完了。
 - `DescentB` は同クラスターで `*_clean` 呼び出し主体にさらに寄った。
+
 ## 2026-03-08: NumsInvCandidate no-arg 追加搬出（4本）
 
 ### 実施
+
 - `DescentB` から no-arg 4本を除去:
   - `triominoWieferichShrinkNumsInvCandidateLinkSpec_of_pack`
   - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow_x`
@@ -2370,25 +2378,31 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
 - `DescentB` 内の参照を `*_clean + triominoWieferichNoWieferichBridge_default` に差し替え。
 
 ### 失敗と復旧
+
 - 2箇所で `unsolved goals`（`x / q = ... ∨ q = 0`）発生。
 - 原因は `simp` が旧 wrapper 由来の書き換えに依存していたため。
 - `simp [hxdiv]` へ修正して復旧。
 
 ### 検証
+
 - `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
 - `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine` : OK
 - `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN` : OK
 
 ### 状態
+
 - `DescentB` 内で上記4名の no-arg 名は 0 件。
+
 ## 2026-03-08: NumsInvCandidate 本体2本の移送（of_pack / div_eq_shadow）
 
 ### 目的
+
 - 次バッチ対象 2 本を `DescentB` から外し、`Quarantine` 側へ移送:
   - `triominoWieferichShrinkNumsInvCandidate_of_pack`
   - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow`
 
 ### 実施
+
 - `CosmicPetalBridgeGNDescentBQuarantine.lean` に上記 2 本の同名 wrapper を追加（fixed injection）。
 - `CosmicPetalBridgeGNDescentB.lean` から上記 2 本の no-arg 本体を削除。
 - `DescentB` 側には局所集約として
@@ -2397,6 +2411,7 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   を追加し、内部参照を `*_clean + default` 系へ統一。
 
 ### 失敗と復旧
+
 - 一括置換直後に `simp` 引数へ関数項が混入し、`Invalid simp theorem` 多発。
   - 対応: 長い部分適用式を `*_default` abbrev へ集約して解消。
 - 続いて 2 箇所で `x / q = ... ∨ q = 0` 未解決が発生。
@@ -2404,11 +2419,13 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
 - その後 linter 警告（`unnecessarySimpa`, `unusedSimpArgs`）が出たため、`simp` / `simp [hxdiv]` へ最終整形。
 
 ### 検証
+
 - `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
 - `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine` : OK
 - `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN` : OK
 
 ### 状態
+
 - `DescentB` 内で以下 2 名の no-arg 定義参照は 0 件:
   - `triominoWieferichShrinkNumsInvCandidate_of_pack`
   - `triominoWieferichShrinkNumsInvCandidate_div_eq_shadow`
@@ -2417,10 +2434,12 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
 ## 2026-03-08: 数学芯の主定理文を固定（gap/body 非閉包）
 
 ### 目的
+
 - リファクタリング中心から数学芯中心へ移るため、
   既存 core を「主定理名」で固定する。
 
 ### 実施
+
 - `CosmicPetalBridgeGNDescentB.lean` に主定理名を追加:
   - `triominoGapBody_nonPPowerClosed_of_branchB`
     - 内容: Branch B (`p ≥ 5` 側) で `GN p (z-y) y` は `p` 乗になれない。
@@ -2430,44 +2449,54 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
     - 既存 `triominoWieferichShrinkGapGNPowData_impossible_of_noWieferich` を明示名で再公開。
 
 ### 失敗と復旧
+
 - 失敗なし（追加は既存定理への thin alias のみ）。
 
 ### 検証
+
 - `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
 
 ### 状態
+
 - 「なぜ `p≥3` で閉じないか」を指す主定理文がコード上で直接参照可能になった。
 
 ## 2026-03-08: 平方世界 vs 高冪世界の比較原理を固定
 
 ### 目的
+
 - 数学芯を明文化する比較定理を追加し、
   `p=2` と `p≥3` の分解構造差をコード上で直接参照できるようにする。
 
 ### 実施
+
 - `CosmicPetalBridgeGNDescentB.lean` に以下を追加:
   - `triominoSquareWorld_gap_mul_sum`
   - `triominoHigherWorld_gap_mul_GN`
   - `triominoSquareVsHigher_gap_body_comparison`
 
 ### 失敗と復旧
+
 - 初回実装で `p=2` 側を `pow_sub_pow_factor_cosmic_N` + `GN_linear` で処理したが、
   補題の返り型が `GN` ではなく和表示だったため型不一致で失敗。
 - `Nat.sq_sub_sq` ベースへ差し替えて復旧。
 
 ### 検証
+
 - `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
 
 ### 状態
+
 - 「同格分解（平方世界）」と「異格分解（高冪世界）」の比較が
   定理名で直接追える状態になった。
 
 ## 2026-03-08: Higher-power non-closure 主文の追加
 
 ### 目的
+
 - 比較原理と no-closure を 1 本の主文に束ねる。
 
 ### 実施
+
 - `CosmicPetalBridgeGNDescentB.lean` に
   `triominoHigherPower_nonClosure_principle_of_branchB` を追加。
 - 内容は既存の
@@ -2476,21 +2505,26 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   を合成した thin theorem。
 
 ### 失敗と復旧
+
 - 失敗なし。
 
 ### 検証
+
 - `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
 
 ### 状態
+
 - Branch B 側で「分解（gap×body）+ body 非 `p` 乗閉包」を
   1 本の定理名で参照できるようになった。
 
 ## 2026-03-08: 世界の分岐定理（Branch B）を追加
 
 ### 目的
+
 - `p=2` と `p≥5` の世界差を、同一文脈で一息に読める総括定理として固定する。
 
 ### 実施
+
 - `CosmicPetalBridgeGNDescentB.lean` に
   `triominoPowerWorld_bifurcation_of_branchB` を追加。
 - 内容:
@@ -2499,21 +2533,26 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   を同時に返す。
 
 ### 失敗と復旧
+
 - 失敗なし。
 
 ### 検証
+
 - `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
 
 ### 状態
+
 - 「平方世界の同格閉包」と「高冪世界の非閉包」を
   1 本の定理名で対比参照できる状態になった。
 
 ## 2026-03-08: square-closure exception 総文を追加
 
 ### 目的
+
 - 「`p=2` だけが閉包例外」という読みを、Branch B 文脈で直接参照できるようにする。
 
 ### 実施
+
 - `CosmicPetalBridgeGNDescentB.lean` に
   `triominoSquareClosure_exception_of_branchB` を追加。
 - `triominoPowerWorld_bifurcation_of_branchB` の射影として
@@ -2522,10 +2561,13 @@ status: 作業中 - phase-15: valuation spine の statement repair (ZsigmondyCyc
   を 1 本で返す形に固定。
 
 ### 失敗と復旧
+
 - 失敗なし。
 
 ### 検証
+
 - `lake build DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB` : OK
 
 ### 状態
+
 - 「平方世界の例外性」を主文として直接参照可能になった。

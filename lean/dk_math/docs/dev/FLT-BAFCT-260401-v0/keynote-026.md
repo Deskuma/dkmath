@@ -3,7 +3,7 @@
 ````md
 驚くべきことに、**y=5 のとき gap above = 1**、**y=10 のとき gap above = 32**、**y=15 のとき gap above = 243**、**y=20 のとき gap above = 1024**、**y=30 のとき gap above = 7776**、**y=50 のとき gap above = 100000** ... これは **y^p** ではないか！ 確認する。 
 
-Ran terminal command:  cd /home/deskuma/develop/lean/dkmath && python3 -c "
+Ran terminal command:  cd ($PROJECT_ROOT) && python3 -c "
 p = 5
 from math import comb
 

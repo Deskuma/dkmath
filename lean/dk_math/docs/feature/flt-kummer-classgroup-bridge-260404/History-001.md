@@ -4232,7 +4232,7 @@ Archive
 4. 検証:
    - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRoute` 成功
    - `./lean-build.sh DkMathTest.FLT.Kummer.RegularPrimeRouteSorry` 成功
-   - `./lean-build.sh -v '/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMathTest/FLT/Kummer/RegularPrimeRoute.lean'`
+   - `./lean-build.sh -v '($PROJECT_ROOT)/lean/dk_math/DkMathTest/FLT/Kummer/RegularPrimeRoute.lean'`
      を再実行し、
      no-sorry section に `sorryAx` 混入 theorem が残っていないことを確認した
    - `#print axioms DkMath.FLT.bodyInvariant_of_NoPowOnGN`
