@@ -716,3 +716,78 @@ Archive
      版をさらに上位の split / one-shot theorem へ繋げられるかを調べ、
      first-case 側または non-first-case principalization 側でも
      provider route を 1 段上へ引き上げる
+
+## 2026/04/15 15:26:04 JST
+
+1. 背景:
+   - `review-063`
+     の整理に従い、
+     いま重要なのは
+     provider route を branch-local receiver で止めず、
+     `CyclotomicPrincipalization`
+     の split / one-shot theorem へ 1 段上げることだと判断した
+   - 前回追加したのは
+     non-first-case Stage 3 receiver
+     (`...GNPowerReceiver...and_squarefreeGNProvider`,
+     `...UnitNormalizedReceiver...and_squarefreeGNProvider`)
+     までだったので、
+     次の自然な対象は
+     `cyclotomicNormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNormalization`
+     以降の composition 群だった
+   - 分岐点は
+     「first-case 側の長い wrapper に provider route を入れる」
+     か、
+     「non-first-case 側の composition theorem を連鎖的に provider 版へ持ち上げる」
+     かの二択だった
+   - 今回は後者を選んだ
+     :
+     既に追加した receiver provider 版をそのまま再利用でき、
+     変更が pure composition で済むため、
+     リスクが最小で一番高い位置まで clean route を押し上げられるからである
+2. 実施:
+   - `CyclotomicPrincipalization.lean`
+     に
+     `cyclotomicNormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNormalization_and_squarefreeGNProvider`
+     を追加し、
+     non-first-case principalization を
+     provider route で返す variant を作った
+   - 続けて
+     `cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization_and_squarefreeGNProvider`
+     を追加し、
+     global Stage 3 `NormDescent`
+     まで provider route を引き上げた
+   - さらに
+     `cyclotomicPrincipalization_of_classGroupPTorsionFree_and_unitNormalization_and_squarefreeGNProvider`
+     を追加し、
+     one-shot principalization まで
+     clean route で供給できる形にした
+3. 結論:
+   - これで
+     `TriominoSquarefreeGNBridgeProvider`
+     を持つ branch については、
+     non-first-case receiver だけでなく
+     `CyclotomicPrincipalization`
+     の non-first-case principalization /
+     norm descent /
+     one-shot principalization
+     まで provider route が届くようになった
+   - つまり provider route は
+     `TriominoCosmicGapInvariant`
+     → `CyclotomicPrincipalization` receiver
+     → split / one-shot theorem
+     と段階的に actual orchestration 層まで押し上がった
+   - 今回の最善手は、
+     **first-case 側の長い concrete wrapper を先に複製することではなく、
+     既に closed した non-first-case provider route を composition theorem 群へ連鎖的に昇格させる**
+     ことだった
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.CyclotomicPrincipalization` 成功
+5. 失敗事例:
+   - （未報告）
+6. 次の課題:
+   - `CyclotomicPrincipalization`
+     で残っている
+     default / non-liftable route と
+     今回の squarefree provider route の住み分けを見直し、
+     first-case 側にも provider variant を足すべきか、
+     それとも non-first-case orchestration 側からさらに downstream caller を差し替えるべきかを判定する
