@@ -8,6 +8,8 @@ import Mathlib
 import DkMath.CosmicFormula.CosmicFormulaGeom
 import DkMath.Tromino
 
+#print "file: DkMath.CosmicFormula.CosmicFormulaTrominoLink"
+
 open DkMath.CosmicFormulaGeom
 open DkMath.Polyomino.Tromino
 

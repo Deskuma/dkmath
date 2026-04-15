@@ -12,13 +12,17 @@ import DkMath.Algebra.BinomTail
 import DkMath.NumberTheory.GdcDivD
 import DkMath.NumberTheory.Gcd
 import DkMath.NumberTheory.GcdNext
+import DkMath.NumberTheory.GcdNextResearch
 import DkMath.NumberTheory.ZsigmondyCyclotomic
 import DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
 import DkMath.Zsigmondy
-import Mathlib.Algebra.Divisibility.Basic
 import DkMath.FLT.Core
-
+import DkMath.FLT.MathlibBridge.FLT34
+import DkMath.FLT.PrimeProvider.TriominoCosmicBranchA
+import Mathlib.Algebra.Divisibility.Basic
 import Mathlib.NumberTheory.FLT.Three
+
+#print "file: DkMath.FLT.Basic"
 
 set_option linter.style.longLine false
 set_option linter.style.multiGoal false
@@ -91,8 +95,6 @@ lemma GN3_one_not_cube_use_FLT3 {y : ℕ} (hy : 0 < y) : ¬ ∃ x, x^3 = GN 3 1 
   have hy_pos : y ≠ 0 := hy.ne'
   have hz_pos : y + 1 ≠ 0 := by omega
   exact fermatLastTheoremThree x y (y + 1) hx_pos hy_pos hz_pos h_flt
-
-#print axioms GN3_one_not_cube_use_FLT3  -- OK: 2026/02/22  6:59
 
 /-- 補題: 互いに素な因子の積が立方数ならば、両方とも立方数である（汎用補題）
     注: gcd(u, v) = 1 かつ u * v = w^3 ならば、u = a^3, v = b^3 となる a, b が存在する。
@@ -291,7 +293,7 @@ private lemma a6_lt_GN3_cube (a y : ℕ) (ha : 1 ≤ a) (hy : 1 ≤ y) :
     本線は `GN3_cube_not_cube_of_gt_one_of_provider`（非依存版）であり、
     この補題は fallback の比較検証・回帰確認用として残している。
 -/
-private lemma GN3_cube_not_cube_of_gt_one_use_FLT3 (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y) :
+lemma GN3_cube_not_cube_of_gt_one_use_FLT3 (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y) :
     ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
   rintro ⟨b, hb⟩
   have hy_pos : 0 < y := by omega
@@ -319,13 +321,11 @@ private lemma GN3_cube_not_cube_of_gt_one_use_FLT3 (a y : ℕ) (ha : 2 ≤ a) (h
     hz_pos.ne'
     hsum
 
-#print axioms GN3_cube_not_cube_of_gt_one_use_FLT3  -- OK: 2026/02/22  7:03
-
 /-
 `q` を 1 本だけ抜く（Zsigmondy で primitive prime factor を取り出し、
 `A^3 - B^3 = (A-B) * GN 3 (A-B) B` から `q ∣ GN ...` を押し出す）最小スニペット。
 -/
-private lemma pick_primitive_q_data_GN3
+lemma pick_primitive_q_data_GN3
     (A B : ℕ)
     (hAB_lt : B < A) (hB_pos : 0 < B)
     (hAB_coprime : Nat.Coprime A B)
@@ -366,8 +366,6 @@ private lemma pick_primitive_q_data_GN3
       (DkMath.Zsigmondy.primitivePrimeDivisor_body_three_imp_dvd_GN
         (x := x) (u := u) hx_pos hprim)
 
-#print axioms pick_primitive_q_data_GN3  -- OK: no Research link 2026/03/06  1:24
-
 /-- `¬ q^2 ∣ N` から `padicValNat q N ≤ 1` を得る汎用補助。 -/
 private lemma padicValNat_le_one_of_noLift
     {q N : ℕ}
@@ -388,7 +386,7 @@ private lemma padicValNat_le_one_of_noLift
     `(a^3 + y)^3 - y^3` の原始素因子 `q`（指数 3）を Zsigmondy で取り、
     `padicValNat q` の上下界を比較して矛盾を導く。
 -/
-private lemma GN3_cube_not_cube_of_gt_one_of_provider_core
+lemma GN3_cube_not_cube_of_gt_one_of_provider_core
     (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y)
     (hcop : Nat.Coprime a y) (h3a : ¬ 3 ∣ a)
     (hProv : DkMath.FLT.GN3NoLiftProvider a y) :
@@ -472,7 +470,7 @@ private lemma GN3_cube_not_cube_of_gt_one_of_provider_core
   omega
 
 /-- 補題: squarefree 仮定から provider を作って本線へ委譲する wrapper。 -/
-private lemma GN3_cube_not_cube_of_gt_one_of_squarefree
+lemma GN3_cube_not_cube_of_gt_one_of_squarefree
     (a y : ℕ) (ha : 2 ≤ a) (hy : 1 ≤ y)
     (hcop : Nat.Coprime a y) (h3a : ¬ 3 ∣ a)
     (hSq : Squarefree (GN 3 (a ^ 3) y)) :
@@ -502,9 +500,296 @@ lemma GN3_cube_not_cube_of_gt_one_of_provider
     ¬ ∃ b, GN 3 (a ^ 3) y = b ^ 3 := by
   exact GN3_cube_not_cube_of_gt_one_of_provider_core a y ha hy hcop h3a hProv
 
-#print axioms GN3_cube_not_cube_of_gt_one_of_provider_core  -- OK: no Research link 2026/03/05
-#print axioms GN3_cube_not_cube_of_gt_one_of_provider  -- OK: no Research link 2026/03/05
-#print axioms GN3_cube_not_cube_of_gt_one_of_squarefree  -- OK: no Research link 2026/03/05
+/--
+一般指数ルートで `body_not_perfect_pow` へ委譲するための薄い橋。
+
+`FLT_of_coprime` 本体ではまだ `Nat.Prime n` や `¬ n ∣ u` を supply していないため、
+この補題を直接適用するところまでは届いていないが、
+一般指数 branch の委譲先を code level で固定するために置いておく。
+-/
+private lemma body_not_perfect_pow_of_squarefree_GN_bridge
+    {u y n : ℕ}
+    (hn : 2 < n) (hn_prime : Nat.Prime n)
+    (hu : 0 < u)
+    (hcop : Nat.Coprime (u + y) y)
+    (hndiv : ¬ n ∣ u)
+    (hGN_gt : 1 < GN n u y)
+    (hSq : Squarefree (GN n u y)) :
+    ¬ ∃ t : ℕ, 0 < t ∧ (u + y) ^ n - y ^ n = t ^ n := by
+  have hcop_un' : Nat.Coprime n u :=
+    (Nat.Prime.coprime_iff_not_dvd hn_prime).2 hndiv
+  have hcop_un : Nat.Coprime u n := by
+    simpa [Nat.coprime_comm] using hcop_un'
+  exact DkMath.NumberTheory.Gcd.body_not_perfect_pow_of_squarefree_GN_of_coprime_add
+    (d := n) (x := u) (u := y)
+    (by omega)
+    hu
+    hcop
+    hcop_un
+    hGN_gt
+    hSq
+
+/--
+Primitive-prime route の `Body`-coordinate wrapper。
+
+`FLT.Basic` 本体では現状まだ mainline に配線していないが、
+high-exponent prime branch の non-research 差し込み点を目立つ形で固定しておく。
+-/
+private lemma body_not_perfect_pow_of_primitive_prime_factor_bridge
+    {u y n : ℕ}
+    (hn : 2 < n) (hn_prime : Nat.Prime n)
+    (hu : 0 < u) (hy : 0 < y)
+    (hcop : Nat.Coprime (u + y) y)
+    (hndiv : ¬ n ∣ u) :
+    ¬ ∃ t : ℕ, 0 < t ∧ (u + y) ^ n - y ^ n = t ^ n := by
+  exact DkMath.NumberTheory.Gcd.body_not_perfect_pow_of_primitive_prime_factor_of_coprime_add
+    (d := n) (x := u) (u := y)
+    hn_prime
+    (by omega)
+    hu
+    hy
+    hcop
+    hndiv
+
+/--
+一般指数ルートで `body_not_perfect_pow` へ委譲するための薄い橋。
+
+現在の mainline は依然として research route を使うが、
+この直前に置いた
+`body_not_perfect_pow_of_squarefree_GN_bridge` /
+`body_not_perfect_pow_of_primitive_prime_factor_bridge`
+が、今後の FLT 側 non-research 差し込み点である。
+-/
+private lemma body_not_perfect_pow_bridge
+    {u y n : ℕ}
+    (hn : 2 < n) (hn_prime : Nat.Prime n)
+    (hu : 0 < u) (hy : 0 < y)
+    (hcop : Nat.Coprime (u + y) y)
+    (hndiv : ¬ n ∣ u) :
+    ¬ ∃ t : ℕ, 0 < t ∧ (u + y) ^ n - y ^ n = t ^ n := by
+  exact DkMath.NumberTheory.GcdNext.body_not_perfect_pow u y n hn hn_prime hu hy hcop hndiv
+
+/-- `y ≤ z` かつ `y` と `z` が互いに素なら、gap `z - y` と `y` も互いに素。 -/
+private lemma coprime_sub_of_coprime
+    {y z : ℕ} (hyz : y ≤ z) (hcop : Nat.Coprime y z) :
+    Nat.Coprime (z - y) y := by
+  have hy_sub : Nat.Coprime y (z - y) :=
+    (Nat.coprime_sub_self_right hyz).2 hcop
+  simpa [Nat.coprime_comm] using hy_sub
+
+/-- `x^p + y^p = z^p` と `x ⟂ y` から `y ⟂ z` を回収する。 -/
+private lemma coprime_right_of_add_pow_eq_pow
+    {p x y z : ℕ}
+    (hp : Nat.Prime p)
+    (hxy : Nat.Coprime x y)
+    (hEq : x ^ p + y ^ p = z ^ p) :
+    Nat.Coprime y z := by
+  refine (Nat.coprime_iff_gcd_eq_one).2 ?_
+  by_contra hg1
+  have hg_ne1 : Nat.gcd y z ≠ 1 := by
+    simpa using hg1
+  rcases Nat.exists_prime_and_dvd (n := Nat.gcd y z) hg_ne1 with ⟨q, hqPrime, hq_dvd_g⟩
+  have hq_dvd_y : q ∣ y := dvd_trans hq_dvd_g (Nat.gcd_dvd_left y z)
+  have hq_dvd_z : q ∣ z := dvd_trans hq_dvd_g (Nat.gcd_dvd_right y z)
+  have hq_dvd_yp : q ∣ y ^ p :=
+    dvd_trans hq_dvd_y (dvd_pow_self y hp.ne_zero)
+  have hq_dvd_zp : q ∣ z ^ p :=
+    dvd_trans hq_dvd_z (dvd_pow_self z hp.ne_zero)
+  have hq_dvd_sum : q ∣ x ^ p + y ^ p := by
+    rw [hEq]
+    exact hq_dvd_zp
+  have hq_dvd_xp : q ∣ x ^ p := by
+    exact (Nat.dvd_add_left hq_dvd_yp).1 hq_dvd_sum
+  have hq_dvd_x : q ∣ x := hqPrime.dvd_of_dvd_pow hq_dvd_xp
+  have hnot : ¬ Nat.Coprime x y :=
+    Nat.not_coprime_of_dvd_of_dvd (Nat.Prime.one_lt hqPrime) hq_dvd_x hq_dvd_y
+  exact hnot hxy
+
+/--
+`FLT_of_coprime` の high-exponent residual のうち、
+prime branch A (`Nat.Prime n ∧ n ∣ u`) を lower layer へ委譲する薄い橋。
+-/
+private lemma flt_of_coprime_prime_branchA
+    {x y z n u : ℕ}
+    (hpos_xyz : 0 < x ∧ 0 < y ∧ 0 < z)
+    (hn_gt3 : 3 < n)
+    (hn_prime : Nat.Prime n)
+    (hxy_coprime : Nat.Coprime x y)
+    (hzy : y < z)
+    (hu_def : u = z - y)
+    (hn_dvd_u : n ∣ u)
+    (hEq : x ^ n + y ^ n = z ^ n) :
+    False := by
+  have hn_ge4 : 4 ≤ n := Nat.succ_le_of_lt hn_gt3
+  have hn_ne4 : n ≠ 4 := by
+    intro h4
+    subst h4
+    norm_num at hn_prime
+  have hn5 : 5 ≤ n := by
+    omega
+  let hpack : DkMath.FLT.PrimeGe5CounterexamplePack n x y z :=
+    { toPrimeCounterexamplePack :=
+        { hp := hn_prime
+          hxy := hxy_coprime
+          hyz := le_of_lt hzy
+          hyz_lt := hzy
+          hEq := hEq }
+      hp5 := hn5
+      hx0 := Nat.ne_of_gt hpos_xyz.1
+      hy0 := Nat.ne_of_gt hpos_xyz.2.1
+      hz0 := Nat.ne_of_gt hpos_xyz.2.2 }
+  have hn_dvd_gap : n ∣ (z - y) := by
+    simpa [hu_def] using hn_dvd_u
+  exact DkMath.FLT.primeGe5BranchARefuter_default hpack hn_dvd_gap
+
+/--
+Prime exponent case of `FLT_of_coprime`, isolated so composite reduction can
+reduce to it without recursive reference to the main theorem.
+-/
+private lemma flt_of_coprime_prime_exponent
+    {x y z n u : ℕ}
+    (hpos_xyz : 0 < x ∧ 0 < y ∧ 0 < z)
+    (hn : 3 ≤ n)
+    (hn_prime : Nat.Prime n)
+    (hxy_coprime : Nat.Coprime x y)
+    (hzy : y < z)
+    (hu_def : u = z - y)
+    (hEq : x ^ n + y ^ n = z ^ n) :
+    False := by
+  by_cases hn3 : n = 3
+  · subst hn3
+    exact
+      DkMath.FLT.FLT3_core x y z
+        (Nat.ne_of_gt hpos_xyz.1)
+        (Nat.ne_of_gt hpos_xyz.2.1)
+        (Nat.ne_of_gt hpos_xyz.2.2)
+        hEq
+  · have hn_gt3 : 3 < n := by omega
+    by_cases hn_dvd_u : n ∣ u
+    · exact
+        flt_of_coprime_prime_branchA
+          (x := x) (y := y) (z := z) (n := n) (u := u)
+          hpos_xyz hn_gt3 hn_prime hxy_coprime hzy hu_def hn_dvd_u hEq
+    · have hyz_coprime : Nat.Coprime y z :=
+          coprime_right_of_add_pow_eq_pow hn_prime hxy_coprime hEq
+      have hcop_u_y : Nat.Coprime (u + y) y := by
+        have hcop_gap : Nat.Coprime u y := by
+          simpa [hu_def] using coprime_sub_of_coprime hzy.le hyz_coprime
+        simpa [hu_def] using hcop_gap
+      have hu : 0 < u := by
+        simpa [hu_def] using Nat.sub_pos_of_lt hzy
+      have hbody_not_pow :
+          ¬ ∃ t : ℕ, 0 < t ∧ (u + y) ^ n - y ^ n = t ^ n := by
+        exact
+          body_not_perfect_pow_bridge
+            (u := u) (y := y) (n := n)
+            (by omega)
+            hn_prime
+            hu
+            hpos_xyz.2.1
+            hcop_u_y
+            hn_dvd_u
+      apply hbody_not_pow
+      refine ⟨x, hpos_xyz.1, ?_⟩
+      have hsub : x ^ n = z ^ n - y ^ n := by
+        have := congrArg (fun t => t - y ^ n) hEq
+        simpa [Nat.add_sub_cancel] using this
+      calc
+        (u + y) ^ n - y ^ n = z ^ n - y ^ n := by
+          simp [hu_def, Nat.sub_add_cancel hzy.le]
+        _ = x ^ n := hsub.symm
+
+/--
+If `n` is composite, `n ≥ 3`, and `4 ∤ n`, then `n` has a prime divisor other
+than `2`.
+-/
+private lemma exists_prime_dvd_of_composite_not_four_dvd
+    {n : ℕ}
+    (hn : 3 ≤ n)
+    (_hn_composite : ¬ Nat.Prime n)
+    (h4 : ¬ 4 ∣ n) :
+    ∃ p : ℕ, Nat.Prime p ∧ p ∣ n ∧ p ≠ 2 := by
+  by_cases h2 : 2 ∣ n
+  · obtain ⟨m, hm⟩ := exists_eq_mul_left_of_dvd h2
+    have hm_gt1 : 1 < m := by
+      have : 3 ≤ m * 2 := by simpa [hm] using hn
+      omega
+    have hm_not_dvd2 : ¬ 2 ∣ m := by
+      intro h2m
+      obtain ⟨k, hk⟩ := exists_eq_mul_left_of_dvd h2m
+      apply h4
+      refine ⟨k, ?_⟩
+      rw [hm, hk]
+      ring_nf
+    obtain ⟨p, hp_prime, hp_dvd_m⟩ := Nat.exists_prime_and_dvd (Nat.ne_of_gt hm_gt1)
+    refine ⟨p, hp_prime, ?_, ?_⟩
+    · rw [hm]
+      exact dvd_mul_of_dvd_left hp_dvd_m 2
+    · intro hp2
+      subst hp2
+      exact hm_not_dvd2 hp_dvd_m
+  · obtain ⟨p, hp_prime, hp_dvd_n⟩ := Nat.exists_prime_and_dvd (Nat.ne_of_gt (by omega : 1 < n))
+    refine ⟨p, hp_prime, hp_dvd_n, ?_⟩
+    intro hp2
+    subst hp2
+    exact h2 hp_dvd_n
+
+/--
+`FLT_of_coprime` の high-exponent residual のうち、
+composite exponent reduction を隔離する helper。
+-/
+private lemma flt_of_coprime_composite_reduction_residual
+    {x y z n u : ℕ}
+    (hpos_xyz : 0 < x ∧ 0 < y ∧ 0 < z)
+    (hn : 3 ≤ n)
+    (hn_composite : ¬ Nat.Prime n)
+    (hxy_coprime : Nat.Coprime x y)
+    (hzy : y < z)
+    (_hu_def : u = z - y)
+    (hEq : x ^ n + y ^ n = z ^ n) :
+    False := by
+  by_cases h4 : 4 ∣ n
+  · have hflt_n : FermatLastTheoremFor n :=
+      FermatLastTheoremFor.mono h4 DkMath.FLT.FLT4_core
+    exact hflt_n x y z
+      (Nat.ne_of_gt hpos_xyz.1)
+      (Nat.ne_of_gt hpos_xyz.2.1)
+      (Nat.ne_of_gt hpos_xyz.2.2)
+      hEq
+  · obtain ⟨p, hp_prime, hp_dvd_n, hp_ne2⟩ :=
+      exists_prime_dvd_of_composite_not_four_dvd hn hn_composite h4
+    obtain ⟨m, hm⟩ := exists_eq_mul_left_of_dvd hp_dvd_n
+    have hm_pos : 0 < m := by
+      exact Nat.pos_of_ne_zero (by
+        intro hm0
+        have : n = 0 := by simp [hm, hm0]
+        omega)
+    let X := x ^ m
+    let Y := y ^ m
+    let Z := z ^ m
+    have hpos_XYZ : 0 < X ∧ 0 < Y ∧ 0 < Z := by
+      refine ⟨Nat.pow_pos hpos_xyz.1, Nat.pow_pos hpos_xyz.2.1, Nat.pow_pos hpos_xyz.2.2⟩
+    have hXY_coprime : Nat.Coprime X Y := by
+      exact Nat.Coprime.pow m m hxy_coprime
+    have hZY : Y < Z := by
+      dsimp [Y, Z]
+      exact Nat.pow_lt_pow_left hzy hm_pos.ne'
+    have hp_ge3 : 3 ≤ p := by
+      have hp_two_le : 2 ≤ p := hp_prime.two_le
+      omega
+    have hXYZ : X ^ p + Y ^ p = Z ^ p := by
+      dsimp [X, Y, Z]
+      simpa [hm, pow_mul] using hEq
+    exact
+      flt_of_coprime_prime_exponent
+        (x := X) (y := Y) (z := Z) (n := p) (u := Z - Y)
+        hpos_XYZ
+        hp_ge3
+        hp_prime
+        hXY_coprime
+        hZY
+        rfl
+        hXYZ
 
 /-- 暫定 fallback 入口。squarefree 未供給の呼び出しは FLT(3) 参照へ明示的に落とす。 -/
 private lemma GN3_cube_not_cube_of_gt_one_fallback_use_FLT3
@@ -578,7 +863,7 @@ lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h
         simpa [ha] using h_gcd
       have h_gcd_sum :
           (a ^ 3).gcd (∑ x ∈ Finset.range 3, Nat.choose 3 (x + 1) * (a ^ 3) ^ x * y ^ (2 - x)) = 1 := by
-        simpa [GN] using h_gcd_a
+        simpa [GN_eq_sum] using h_gcd_a
       have hcop_ay : Nat.Coprime a y := by
         rw [Nat.coprime_iff_gcd_eq_one]
         apply Nat.eq_one_of_dvd_one
@@ -600,7 +885,10 @@ lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h
           rw [GN_quadratic]
           simpa [pow_mul, mul_assoc, mul_left_comm, mul_comm] using hdiv_right_poly
         have hdiv_gcd : a.gcd y ∣ (a ^ 3).gcd (GN 3 (a ^ 3) y) := Nat.dvd_gcd hdiv_left hdiv_right
-        have : a.gcd y ∣ 1 := by simpa [h_gcd_sum] using hdiv_gcd
+        have hdiv_gcd_sum :
+            a.gcd y ∣ (a ^ 3).gcd (∑ x ∈ Finset.range 3, Nat.choose 3 (x + 1) * (a ^ 3) ^ x * y ^ (2 - x)) := by
+          simpa [GN_eq_sum] using hdiv_gcd
+        have : a.gcd y ∣ 1 := by simpa [h_gcd_sum] using hdiv_gcd_sum
         exact this
       have h3a : ¬ 3 ∣ a := by
         intro h3
@@ -616,9 +904,11 @@ lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h
           rw [GN_quadratic]
           simpa [pow_mul, mul_assoc, mul_left_comm, mul_comm] using h3_right_poly
         have h3_gcd : 3 ∣ (a ^ 3).gcd (GN 3 (a ^ 3) y) := Nat.dvd_gcd h3_left h3_right
+        have h3_gcd_sum :
+            3 ∣ (a ^ 3).gcd (∑ x ∈ Finset.range 3, Nat.choose 3 (x + 1) * (a ^ 3) ^ x * y ^ (2 - x)) := by
+          simpa [GN_eq_sum] using h3_gcd
         have : 3 ∣ 1 := by
-          have h3_gcd' := h3_gcd
-          simp [h_gcd_sum] at h3_gcd'
+          simp [h_gcd_sum] at h3_gcd_sum
         omega
       -- u = a^3 を GN の引数として使う
       rw [ha] at hb
@@ -700,7 +990,9 @@ theorem FLT_case_3 (x y z : ℕ)
       h_xn_val
       h3
 
-#print axioms FLT_case_3  -- NG: 2026/02/22  7:39 so#rryAx
+/-- エイリアス: `gcd(u, GN 3 u y) = gcd(u, 3)`（古い命名、新実装は `gcd_boundary_GN_three_eq_gcd_boundary_three`） -/
+lemma gcd_u_GN3 {u y : ℕ} (h_gcd_uy : u.gcd y = 1) : u.gcd (GN 3 u y) = u.gcd 3 :=
+  DkMath.NumberTheory.Gcd.gcd_boundary_GN_three_eq_gcd_boundary_three h_gcd_uy
 
 /-- Fermat's Last Theorem (FLT)
 Cosmic Formula を用いた新しい証明
@@ -763,10 +1055,13 @@ theorem FLT_of_coprime
   -- ぬしよ、まずは gcd(x, y) = 1 と仮定しても一般性を失わないことを示す必要があるの。
 
   -- 観察: x^n = u * GN(n,u,y) の形は、u と GN の間に乗法的制約を課す。
-  -- 特に gcd(u,y)=1 の場合、GN に新しい素因子が現れるため GN が n 乗になるのは通常あり得ない。
-
-  -- 一般の y, u については、GN(n, u, y) が新しい素因数（Zsigmondy 原始素因子）を
-  -- 持つことを利用して、$x^n$ の $n$ 乗構造と矛盾することを示すのが本筋じゃな。
+  -- 一般指数側の整理方針は、`PrimitiveBeam` API を入口にして
+  --   primitive prime existence
+  --     -> `primitive_prime_dvd_GN`
+  --     -> `primitive_prime_padic_eq_GN`
+  -- の順で GN / Beam 側へ押し込み、そこで「GN は n 乗になれない」を示す流れに寄せる。
+  -- したがって一般 `n > 3` では、直接この場で raw Zsigmondy 展開を書くより、
+  -- `GcdNextResearch.body_not_perfect_pow` 相当の橋を整備してそこへ委譲するのが筋になる。
 
   have h_gcd_u_y : Nat.gcd u y = 1 := by
     -- g = gcd(y, z) とおく。g | y, g | z ならば g^n | y^n, z^n → g^n | x^n → g | x
@@ -908,12 +1203,23 @@ theorem FLT_of_coprime
         h3
 
   · -- n > 3 の場合
-    -- Zsigmondy 原始素因子などを利用した証明の隔離箇所。
-    -- [TODO] : 現在は n=3 の分岐のみが機能しており、n > 3 に関しては
-    --          `PrimeExponentFLTProvider n` 等の機構を別途呼び出して処理する方針。
-    --          あるいは Zsigmondy 原始素因子の存在から GN n u y が n 乗数に
-    --          なることが矛盾することを直接導く（Phase 4 以降）。
-    sorry
+    have hxy_coprime : Nat.Coprime x y := by
+      exact (Nat.coprime_iff_gcd_eq_one).2 h_coprime
+    by_cases hn_prime : Nat.Prime n
+    · exact
+        flt_of_coprime_prime_exponent
+          (x := x) (y := y) (z := z) (n := n) (u := u)
+          hpos_xyz
+          hn
+          hn_prime
+          hxy_coprime
+          hzy
+          rfl
+          hxy
+    · exact
+        flt_of_coprime_composite_reduction_residual
+          (x := x) (y := y) (z := z) (n := n) (u := u)
+          hpos_xyz hn hn_prime hxy_coprime hzy rfl hxy
 
 
 
@@ -992,8 +1298,6 @@ theorem FLT {x y z : ℕ} (n : ℕ) (hpos_xyz : 0 < x ∧ 0 < y ∧ 0 < z) (hn :
 
   -- 最終的に原始解に還元して `FLT_of_coprime` を適用
   exact FLT_of_coprime n (And.intro hx'_pos (And.intro hy'_pos hz'_pos)) hn h_gcd_x'y' hxy'
-
-#print axioms FLT  -- NG: 2026/02/22  7:39 so#rryAx
 
 end DkMath
 

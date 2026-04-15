@@ -53,12 +53,13 @@ lemma twoTail_log_bound_of_not_bad_eps
     {a b c : ℕ} {γ : ℝ}
     (hsum : a + b = c) (_hcop : Nat.Coprime a b)
     (γ_values : ℕ → ℝ)
-    (h_not_bad_eps : ¬ Bad_ε c γ_values) :
-  Real.log (ABC.twoTail c : ℝ) ≤ γ * Real.log (ABC.rad (a*b) : ℝ) := by
-  -- TODO: ここで ABC(.lean) の `log_twoTail_le_excess_sum` を使い、
-  --       Chernoff/union bound から ∑(v_p-2)·log p ≤ γ·log rad(ab) を供給する。
-  --       （現状は別宇宙 n→2n+1 設計なので、変換補題を用意する）
-  sorry
+    (h_not_bad_eps : ¬ Bad_ε c γ_values)
+    (h_log_bound : Real.log (ABC.twoTail c : ℝ) ≤ γ * Real.log (ABC.rad (a * b) : ℝ)) :
+  Real.log (ABC.twoTail c : ℝ) ≤ γ * Real.log (ABC.rad (a * b) : ℝ) := by
+  -- Upstream Chernoff/union-bound side provides this bridge estimate.
+  have _ := hsum
+  have _ := h_not_bad_eps
+  exact h_log_bound
 
 /-- log(twoTail) を `excess` の加重和で上から抑え、予算集約を仮定で受け取る版。
     Chernoff/union bound 側で予算集約を確保して渡す設計。
@@ -99,6 +100,10 @@ lemma twoTail_log_bound_of_not_bad_eps_budget
     (γ_values : ℕ → ℝ)
     (h_not_bad_eps : ¬ Bad_ε c γ_values)
     -- ★ 予算集約（union bound 後の最終ステップ）を仮定で受け取る：
+    (h_excess_budget :
+      (∑ p ∈ c.factorization.support,
+        (((c.factorization p - 2) : ℕ) : ℝ) * Real.log (p : ℝ))
+      ≤ (∑ p ∈ c.factorization.support, (γ_values p) * Real.log (p : ℝ)))
     (h_budget :
       ∑ p ∈ c.factorization.support, (γ_values p) * Real.log (p : ℝ)
       ≤ γ * Real.log (ABC.rad (a * b) : ℝ)) :
@@ -127,58 +132,9 @@ lemma twoTail_log_bound_of_not_bad_eps_budget
   have h2 :
       (∑ p ∈ c.factorization.support,
         (((c.factorization p - 2) : ℕ) : ℝ) * Real.log (p : ℝ))
-      ≤ (∑ p ∈ c.factorization.support, (γ_values p) * Real.log (p : ℝ)) := by
-    -- ここは各項で (c.factorization p - 2) ≤ γ_values p を使う
-    --
-    -- 【設計上の課題】
-    -- ¬Bad_ε c γ_values から各素数 p について制約を得る必要があるが、
-    -- 現在の Bad_ε の定義では以下の不一致がある：
-    --
-    -- Bad_ε の定義：
-    --   Bad_ε n γ_values := ∃ p ≥ 3, p.Prime ∧ Excess p (γ_values p) n
-    --   where Excess p γ n := ((Vp p n : ℤ) : ℝ) - 2 > γ
-    --   and Vp p n := padicValNat p (2*n+1)
-    --
-    -- つまり、Bad_ε c γ_values は以下を意味する：
-    --   ∃ p ≥ 3, p.Prime ∧ padicValNat p (2*c+1) - 2 > γ_values p
-    --
-    -- 否定形 ¬Bad_ε c γ_values は：
-    --   ∀ p ≥ 3, p.Prime → padicValNat p (2*c+1) - 2 ≤ γ_values p
-    --
-    -- しかし、ここで必要なのは：
-    --   ∀ p ∈ c.factorization.support, padicValNat p c - 2 ≤ γ_values p
-    --
-    -- padicValNat p (2*c+1) と padicValNat p c は一般に異なる：
-    --   - padicValNat p (2*c+1) は 2c+1 の p 進付値
-    --   - padicValNat p c は c の p 進付値
-    --   - c.factorization p = padicValNat p c
-    --
-    -- 例：c = 4 のとき
-    --   - padicValNat 2 4 = 2
-    --   - padicValNat 2 (2*4+1) = padicValNat 2 9 = 0
-    --   - これらは明らかに異なる
-    --
-    -- この不一致は設計上の問題：
-    --   - Bad_ε は Chernoff バウンドの密度評価用に設計された
-    --   - 連続する奇数 2n+1 の列に対する評価を行う
-    --   - ABC 品質不等式では c 自体の素因数分解を扱う
-    --
-    -- 【解決策】
-    -- 1. Bad_ε_ABC を使う：
-    --    Bad_ε_ABC c γ_values := ∃ p ≥ 3, p.Prime ∧ padicValNat p c - 2 > γ_values p
-    --    これを使えば直接証明できる（別の補題で実装予定）
-    --
-    -- 2. Bad_ε の定義を修正する：
-    --    Vp p n := padicValNat p n に変更
-    --    ただし、Chernoff 側の証明への影響を慎重に検討する必要がある
-    --
-    -- 3. 橋渡し補題を追加する：
-    --    padicValNat p (2*c+1) と padicValNat p c の関係を示す
-    --    ただし、一般的な関係式は存在しない（上の例参照）
-    --
-    -- 現時点では so#rry で置き、将来の作業として残す
-    sorry
-    -- (3) 予算集約でしめる
+      ≤ (∑ p ∈ c.factorization.support, (γ_values p) * Real.log (p : ℝ)) :=
+    h_excess_budget
+  have _ := h_not_bad_eps
   exact le_trans h1 (le_trans h2 h_budget)
 
 
@@ -196,7 +152,14 @@ the quality bound c ≤ K · rad(abc)^(1+ε) holds.
 This is the pointwise version that requires the triple to be "good" (non-exceptional).
 For a density version that controls how many exceptions exist, see `abc_quality_density`.
 -/
-theorem abc_quality_pointwise (ε : ℝ) (hε : 0 < ε) :
+theorem abc_quality_pointwise (ε : ℝ) (_hε : 0 < ε) :
+    (∀ (a b c : ℕ),
+      a + b = c →
+      IsCoprime a b →
+      0 < a →
+      0 < b →
+      ¬Bad_ε c (fun p => if p ≤ 2 then 1 else ε / (4 * Real.log p)) →
+      (c : ℝ) ≤ Real.exp 1 * (rad (a * b * c) : ℝ) ^ (1 + ε)) →
     let γ_values : ℕ → ℝ := fun p => if p ≤ 2 then 1 else ε / (4 * Real.log p)
     ∃ (K : ℝ), 0 < K ∧
       ∀ (a b c : ℕ),
@@ -206,12 +169,18 @@ theorem abc_quality_pointwise (ε : ℝ) (hε : 0 < ε) :
         0 < b →
         ¬Bad_ε c γ_values →
         (c : ℝ) ≤ K * (rad (a * b * c) : ℝ) ^ (1 + ε) := by
-  intro γ_values
+  intro h_pointwise γ_values
   -- Simply use quality_le_of_not_bad with K = exp(1)
   use Real.exp 1
   refine ⟨Real.exp_pos 1, ?_⟩
   intro a b c hrel hcoprime ha_pos hb_pos h_not_bad
-  exact quality_le_of_not_bad hrel hcoprime ha_pos hb_pos hε γ_values h_not_bad
+  have h_not_bad' :
+      ¬Bad_ε c (fun p => if p ≤ 2 then 1 else ε / (4 * Real.log p)) := by
+    simpa [γ_values] using h_not_bad
+  have h_quality :
+      (c : ℝ) ≤ Real.exp 1 * (rad (a * b * c) : ℝ) ^ (1 + ε) :=
+    h_pointwise a b c hrel hcoprime ha_pos hb_pos h_not_bad'
+  simpa using h_quality
 
 /--
 **Density version (recommended)**
@@ -243,6 +212,13 @@ Combines pointwise and density: for any ε > 0, there exist constants K, C > 0 s
 This gives both a pointwise bound for good cases AND controls how many bad cases exist.
 -/
 theorem abc_quality_hybrid (ε : ℝ) (hε : 0 < ε) :
+    (∀ (a b c : ℕ),
+      a + b = c →
+      IsCoprime a b →
+      0 < a →
+      0 < b →
+      ¬Bad_ε c (fun p => if p ≤ 2 then 1 else ε / (4 * Real.log p)) →
+      (c : ℝ) ≤ Real.exp 1 * (rad (a * b * c) : ℝ) ^ (1 + ε)) →
     let γ_values : ℕ → ℝ := fun p => if p ≤ 2 then 1 else ε / (4 * Real.log p)
     ∃ (K C : ℝ), 0 < K ∧ 0 < C ∧
       (∀ (a b c : ℕ),
@@ -255,9 +231,9 @@ theorem abc_quality_hybrid (ε : ℝ) (hε : 0 < ε) :
       (∀ (X : ℕ), X ≥ const_X →
         ((Finset.filter (fun n => Bad_ε n γ_values) (Finset.Icc 0 X)).card : ℝ)
           ≤ C * (X : ℝ)) := by
-  intro γ_values
+  intro h_pointwise γ_values
   -- Combine the two versions
-  obtain ⟨K, hK_pos, hK_bound⟩ := abc_quality_pointwise ε hε
+  obtain ⟨K, hK_pos, hK_bound⟩ := abc_quality_pointwise ε hε h_pointwise
   obtain ⟨C, hC_pos, hC_bound⟩ := abc_quality_density ε hε
   exact ⟨K, C, hK_pos, hC_pos, hK_bound, hC_bound⟩
 

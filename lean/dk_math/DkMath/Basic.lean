@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 
+#print "file: DkMath.Basic"
+
 namespace DkMath.Basic
 
 def hello := "world"

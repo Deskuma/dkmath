@@ -2,6 +2,99 @@
 
 ## History Log
 
+### 2026-03-15 / Work Unit 43. phase-29 Big/Body/Gap 3層分解 KUS 対応実装
+
+- `DkMath/KUS/CosmicBridge.lean` を拡張した。
+  - `cosmicGap` / `cosmicCore` / `cosmicBig` — Gap/Core/Big の GKUS 表現を定義。
+  - `toCoeff_cosmicBig_eq` — `Big = Body + Gap` の KUS 係数等式。
+  - `cosmicBeamCoeff` / `cosmicBeamCoeff_add_two` — Beam 係数と `Beam + 2 = 2^d` (d ≥ 2)。
+  - `CoreBeamGap` を import し、定理の根拠を 3 層構造に接続。
+- `./lean-test.sh` の成功を確認した。
+
+### 2026-03-15 / Work Unit 42. phase-28 CosmicFormula/KUS 接続実装
+
+- `DkMath/KUS/CosmicBridge.lean` を新設し、CosmicFormula と KUS Bridge の接続層を構築した。
+  - `cosmicTerm` / `cosmicBodyCoeffSum` / `cosmicBodyCoeffSum_eq` / `body_one_one` を実装。
+  - `sum_toCoeff_cosmicTerm` — 個別項の GKUS `toCoeff` 和 = `cosmicBodyCoeffSum` を証明。
+- `DkMath/KUS.lean` に `import DkMath.KUS.CosmicBridge` を追加して公開統合した。
+- `./lean-test.sh` の成功を確認した。
+
+### 2026-03-15 / Work Unit 41. phase-27 kusAbsVal / phiUnit 単調性実装
+
+- `DkMath/KUS/Bridge.lean` に KUS 実体値層を追加した。
+  - `kusAbsVal` — `toCoeff g * (extract_g g).unit` として定義。DHNT `absVal` の离散化版。
+  - `kusAbsVal_embedQty` / `kusAbsVal_harmonizeAdd` / `kusAbsVal_harmonizeMul` を証明。
+  - `phiUnit_mono` / `phiUnit_lt_succ` / `lt_phiUnit_succ` — `⌊⋅⌋₊` の単調性・不等式を証明。
+  - `kusAbsVal_embedQty_error_bound` — 离散化誤差上界「`kusAbsVal(embedQty q) ≤ absVal q`」を証明。
+- `./lean-test.sh` の成功を確認した。
+
+### 2026-03-15 / Work Unit 40. phase-26 addVia 自然性・乗法 bridge 実装
+
+- `DkMath/KUS/Bridge.lean` に以下を追加した。
+  - `addVia_natural_toCoeff` — 共通単位 `w₂` への re-encode が最初から `w₂` で合流した結果と係数上一致する補題。
+  - `addVia_natural_harmonizeAddTo` — decode の合成可換性（DHNT `addVia_natural` の KUS 対応）。
+  - `mulViaSpec` / `mulVia_toCoeff` / `mulVia_unit` — 乗法 bridge（係数積・ unit 場）。
+- `./lean-test.sh` の成功を確認した。
+
+### 2026-03-15 / Work Unit 39. phase-25 DHNT/KUS 最小接続実装
+
+- `DkMath/KUS/docs/KUS-bridge-design-spec.md` を新設し、DHNT 連続層→ KUS 依存型層の接続方針を 3 層図式で文書化した。
+- `DkMath/KUS/Bridge.lean` を新設し、`DHNT.Qty → GKUS ℝ ℕ DHNTBlueprint` の埋め込みと
+  `addViaSpec`（`mkHarmonizeFixed` ベース）を実装した。
+- `DHNTBlueprint`（trivial）、`phiUnit`（bed 離散化）、`encConst`（定数 `ScaleSpec`）を導入した。
+- `addVia_toCoeff`（係数和）・`addVia_unit`（unit 場）の基本補題を証明した。
+- `DkMath/KUS.lean` に `import DkMath.KUS.Bridge` を追加し公開入口に接続した。
+- `./lean-test.sh` の成功を確認した。
+
+### 2026-03-15 / Work Unit 38. phase-24 HarmonizeSpec builder APIの実装
+
+- `DkMath/KUS/Transport.lean` に `mkHarmonize` / `mkHarmonizeFixed` / `mkHarmonizeSameSpec` の 3 層構成の builder API を導入した。
+- `GSameSupport` を `scaleUS` 等式として直接受け取る設計に内部証明を統一し、等式証明の複雑性（依存型 blueprint の HEq）を呈示側で吸収できる構造にした。
+- `DkMathTest/KUS.lean` に `hs_via_mkHarmonize` / `hs_via_fixed` / `hs_via_same` の回帰テストを追加し、builder 期笧・係数演算・手動構築版との等価性を確認した。
+- `lake build DkMathTest.KUS` および `./lean-test.sh` の成功を確認した。
+
+### 2026-03-15 / Work Unit 37. phase-23 decode 戦略の型クラス選択
+
+- `DkMath/KUS/Transport.lean` に `LeftDecode` / `RightDecode` / `NormalizedDecode` を追加し、decode 戦略を型クラスで供給できるようにした。
+- 戦略タグ `UseLeft` / `UseRight` / `UseNormalized` と統一クラス `DecodeStrategy` を導入し、戦略選択を一元化した。
+- 汎用 API `harmonizeAddBy` / `harmonizeMulBy` と、自動選択 API `harmonizeAddAuto*` / `harmonizeMulAuto*` を追加した。
+- `DkMathTest/KUS.lean` の `DkMathTest.GKUSTransport` に型クラスインスタンスを追加し、`harmonize*By` / `harmonize*Auto*` の回帰を実装した。
+- `lake build DkMathTest.KUS` および `./lean-test.sh` の成功を確認した。
+
+### 2026-03-15 / Work Unit 36. phase-22 decode canonical choice の API 化
+
+- `DkMath/KUS/Transport.lean` の `DecodeSpec` に `ofScale` を追加し、decode 指定の記述を簡約した。
+- `harmonizeAddLeft` / `harmonizeAddRight` / `harmonizeAddNormalized` を追加し、加法の decode 先選択を API として明示化した。
+- `harmonizeMulLeft` / `harmonizeMulRight` / `harmonizeMulNormalized` を追加し、乗法でも同様の API 階層を整備した。
+- `DkMathTest/KUS.lean` の `DkMathTest.GKUSTransport` に API ラッパ回帰テストを追加し、係数計算と support 保持の整合を確認した。
+- `lake build DkMathTest.KUS` および `./lean-test.sh` の成功を確認した。
+
+### 2026-03-15 / Work Unit 35. phase-21 harmonizeMul と decode 自然性の導入
+
+- `DkMath/KUS/Transport.lean` に `harmonizeMul` / `harmonizeMulTo` を追加し、異 support 演算の 3 相合成を乗法にも拡張した。
+- `toCoeff_harmonizeMul` / `extract_g_harmonizeMul` / `toCoeff_harmonizeMulTo` / `extract_g_harmonizeMulTo` を追加し、係数計算と support 保持を補題として固定した。
+- decode 合成可換性として `harmonizeAddTo_decode_comp` と `harmonizeMulTo_decode_comp` を追加した。
+- `DkMathTest/KUS.lean` の `DkMathTest.GKUSTransport` に、乗法回帰と decode 合成自然性のテストを追加した。
+- `lake build DkMathTest.KUS` および `./lean-test.sh` の成功を確認した。
+
+### 2026-03-15 / Work Unit 34. phase-20 異 support 演算（transport 規則）Lean 最小導入
+
+- `DkMath/KUS/Scale.lean` に `scaleGKUS` を追加し、`GKUS` の unit/blueprint transport と係数保持を `toCoeff_scaleGKUS` / `extract_g_scaleGKUS` で固定した。
+- 同ファイルに `scaleGKUS_comp` を追加し、`ScaleSpec.comp` に対する合成整合を `GKUS` 側でも成立させた。
+- `DkMath/KUS/Transport.lean` を新規作成し、`HarmonizeSpec` / `DecodeSpec` と `harmonizeAdd` / `harmonizeAddTo` を実装した。
+- `toCoeff_harmonizeAdd` / `extract_g_harmonizeAdd` / `toCoeff_harmonizeAddTo` / `extract_g_harmonizeAddTo` を追加し、encode-confluence-decode の最小法則を補題として固定した。
+- 入口 `DkMath/KUS.lean` に `import DkMath.KUS.Transport` を追加した。
+- `DkMathTest/KUS.lean` に `DkMathTest.GKUSTransport` を追加し、異 support 入力を共通 support へ合流する回帰テストを実装した。
+- `lake build DkMathTest.KUS` と `./lean-test.sh` を実行し、`build succeeded` を確認した。
+
+### 2026-03-15 / Work Unit 33. phase-19 異 support 演算（transport 規則）設計初稿
+
+- `DkMath/KUS/docs/KUS-transport-design-spec.md` を新規作成し、異 support 演算の設計原理を `US₁ → H ← US₂` の span 図式として定義した。
+- 仕様を 3 層（`CosmicFormula` absolute layer / `DHNT` harmonic encoding layer / `KUS` typed transport layer）に分解し、接続責務を明確化した。
+- `HarmonizeSpec` / `DecodeSpec` と `harmonizeAdd` / `harmonizeAddTo` の Lean 擬似シグネチャを提示し、今後の実装の受け皿を固定した。
+- blueprint の不変量について「意味保存」と「依存型表現の transport」を分離する方針を明文化した。
+- phase-19 の実行計画を `docs-first → Lean 最小導入 → DHNT/Cosmic bridge` の 3 段へ分割し、次作業の導入順を確定した。
+
 ### 2026-03-14 / Work Unit 1. 内容把握
 
 - KUS の主題は、通常の数体系で単一の `0` に潰れて失われる構造を、`(K, U, S_U)` という依存型構造として保持することだと確認。

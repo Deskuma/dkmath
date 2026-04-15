@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.NumberTheory.ZsigmondyCyclotomic
 
+#print "file: DkMath.NumberTheory.ZsigmondyCyclotomicNoLift"
+
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
 

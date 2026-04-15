@@ -5,8 +5,12 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.Gcd.Basic
+import DkMath.NumberTheory.GcdDiffPow
 import DkMath.NumberTheory.GcdNext
+import DkMath.NumberTheory.PrimitiveBeam
 import DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
+
+#print "file: DkMath.NumberTheory.Gcd.GN"
 
 /-!
 # DkMath.NumberTheory.Gcd.GN
@@ -26,6 +30,56 @@ theorem gcd_boundary_sd_divides_exp_int
     (x u : ℤ) (d : ℕ) (hd : 1 ≤ d) (hcop : Int.gcd (x + u) u = 1) :
     Int.gcd x (Sd (x + u) u d) ∣ d := by
   simpa using DkMath.NumberTheory.GcdNext.gcd_specialized_divides_d x u d hd hcop
+
+/-- `GN` は自然数から整数へのキャストと可換。 -/
+theorem gn_natCast_int
+    {d x u : ℕ} :
+    DkMath.CosmicFormulaBinom.GN d (x : ℤ) (u : ℤ) =
+      (DkMath.CosmicFormulaBinom.GN d x u : ℤ) := by
+  simp [DkMath.CosmicFormulaBinom.GN]
+
+/-- `GN` は自然数から任意の `CommSemiring` へのキャストと可換。 -/
+@[simp, norm_cast]
+theorem gn_natCast {R : Type*} [CommSemiring R]
+    {d x u : ℕ} :
+    DkMath.CosmicFormulaBinom.GN d (x : R) (u : R) =
+      (DkMath.CosmicFormulaBinom.GN d x u : ℕ) := by
+  simp [DkMath.CosmicFormulaBinom.GN]
+
+/-- 自然数入力を整数へ持ち上げた `GN` の `natAbs` は自然数版 `GN` に戻る。 -/
+theorem natAbs_gn_natCast_int
+    {d x u : ℕ} :
+    (DkMath.CosmicFormulaBinom.GN d (x : ℤ) (u : ℤ)).natAbs =
+      DkMath.CosmicFormulaBinom.GN d x u := by
+  simpa [DkMath.CosmicFormulaBinom.GN] using
+    (Int.natAbs_natCast (DkMath.CosmicFormulaBinom.GN d x u))
+
+/-- `gap = z - y` の specialized `natAbs` 版。 -/
+theorem natAbs_gn_gap_natCast_int
+    {p z y : ℕ} :
+    (DkMath.CosmicFormulaBinom.GN p (((z - y : ℕ) : ℤ)) (y : ℤ)).natAbs =
+      DkMath.CosmicFormulaBinom.GN p (z - y) y := by
+  exact natAbs_gn_natCast_int (d := p) (x := z - y) (u := y)
+
+/--
+自然数 `n` が整数環で unit 倍の `p` 乗に見えれば、自然数としても `p` 乗である。
+
+証明は符号の分岐をせず、`Int.natAbs` で一気に unit を吸収する。
+-/
+theorem nat_exists_pow_of_intEq_unit_mul_pow
+    {n p : ℕ} {unitFactor m : ℤ}
+    (hUnit : IsUnit unitFactor)
+    (hEq : (n : ℤ) = unitFactor * m ^ p) :
+    ∃ s : ℕ, n = s ^ p := by
+  refine ⟨m.natAbs, ?_⟩
+  have hUnitNatAbs : unitFactor.natAbs = 1 := Int.isUnit_iff_natAbs_eq.mp hUnit
+  have hnatAbs : (n : ℤ).natAbs = m.natAbs ^ p := by
+    calc
+      (n : ℤ).natAbs = Int.natAbs (unitFactor * m ^ p) := by rw [hEq]
+      _ = Int.natAbs unitFactor * Int.natAbs (m ^ p) := by rw [Int.natAbs_mul]
+      _ = Int.natAbs unitFactor * m.natAbs ^ p := by rw [Int.natAbs_pow]
+      _ = m.natAbs ^ p := by rw [hUnitNatAbs, one_mul]
+  simpa using hnatAbs
 
 /-- `gap = z - y` と置くと、整数環の `GN` は差の冪和 `Sd z y p` と一致する。 -/
 theorem gn_sub_eq_sd_int
@@ -62,6 +116,62 @@ theorem gn_sub_eq_sd_int
     rw [← hGN_int, hSd]
   exact Int.eq_of_mul_eq_mul_left hgap_ne0 hmul
 
+/-- 差冪商 `((z^p - y^p) / (z - y))` は `GN p (z - y) y` に一致する。 -/
+theorem quotientPrimePow_eq_gn_gap
+    {p z y : ℕ} (hp : Nat.Prime p) (hyz : y < z) :
+    DkMath.NumberTheory.GcdDiffPow.quotientPrimePow z y p =
+      DkMath.CosmicFormulaBinom.GN p (z - y) y := by
+  have hquot :
+      z ^ p - y ^ p =
+        (z - y) * DkMath.NumberTheory.GcdDiffPow.quotientPrimePow z y p := by
+    exact DkMath.NumberTheory.GcdDiffPow.pow_sub_pow_eq_diff_mul_quotient hp hyz
+  have hgn :
+      z ^ p - y ^ p = (z - y) * DkMath.CosmicFormulaBinom.GN p (z - y) y := by
+    simpa using DkMath.NumberTheory.GcdNext.pow_sub_pow_factor_cosmic_N hp.pos hyz
+  have hgap_pos : 0 < z - y := Nat.sub_pos_of_lt hyz
+  apply Nat.eq_of_mul_eq_mul_left hgap_pos
+  calc
+    (z - y) * DkMath.NumberTheory.GcdDiffPow.quotientPrimePow z y p = z ^ p - y ^ p := hquot.symm
+    _ = (z - y) * DkMath.CosmicFormulaBinom.GN p (z - y) y := hgn
+
+/-- 自然数の差冪商を整数へ持ち上げても、`GN` の整数版に一致する。 -/
+theorem quotientPrimePow_natCast_eq_gn_int
+    {p z y : ℕ} (hp : Nat.Prime p) (hyz : y < z) :
+    (DkMath.NumberTheory.GcdDiffPow.quotientPrimePow z y p : ℤ) =
+      DkMath.CosmicFormulaBinom.GN p (((z - y : ℕ) : ℤ)) (y : ℤ) := by
+  rw [quotientPrimePow_eq_gn_gap hp hyz]
+  simp [DkMath.CosmicFormulaBinom.GN]
+
+/-- 整数環で見た差冪商も、`GN p (z - y) y` の整数版に一致する。 -/
+theorem diffPowQuotient_eq_gn_int
+    {p z y : ℕ} (hp : Nat.Prime p) (hyz : y < z) :
+    (((z : ℤ) ^ p - (y : ℤ) ^ p) / (((z - y : ℕ) : ℤ))) =
+      DkMath.CosmicFormulaBinom.GN p (((z - y : ℕ) : ℤ)) (y : ℤ) := by
+  have hyz_le : y ≤ z := Nat.le_of_lt hyz
+  have hyz_pow : y ^ p ≤ z ^ p := Nat.pow_le_pow_left hyz_le p
+  have hcast_sub :
+      (z : ℤ) ^ p - (y : ℤ) ^ p = ((z ^ p - y ^ p : ℕ) : ℤ) := by
+    calc
+      (z : ℤ) ^ p - (y : ℤ) ^ p = (↑(z ^ p) : ℤ) - ↑(y ^ p) := by
+        simp [Nat.cast_pow]
+      _ = ((z ^ p - y ^ p : ℕ) : ℤ) := by
+        rw [← Nat.cast_sub hyz_pow]
+  have hgap_ne0 : (((z - y : ℕ) : ℤ)) ≠ 0 := by
+    exact_mod_cast (Nat.ne_of_gt (Nat.sub_pos_of_lt hyz))
+  have hquot_mul :
+      ((z ^ p - y ^ p : ℕ) : ℤ) =
+        (((z - y : ℕ) : ℤ) *
+          (DkMath.NumberTheory.GcdDiffPow.quotientPrimePow z y p : ℤ)) := by
+    exact_mod_cast DkMath.NumberTheory.GcdDiffPow.pow_sub_pow_eq_diff_mul_quotient hp hyz
+  calc
+    (((z : ℤ) ^ p - (y : ℤ) ^ p) / (((z - y : ℕ) : ℤ))) =
+        (((z ^ p - y ^ p : ℕ) : ℤ) / (((z - y : ℕ) : ℤ))) := by
+        rw [hcast_sub]
+    _ = (DkMath.NumberTheory.GcdDiffPow.quotientPrimePow z y p : ℤ) := by
+        exact Int.ediv_eq_of_eq_mul_left hgap_ne0 (by simpa [mul_comm] using hquot_mul)
+    _ = DkMath.CosmicFormulaBinom.GN p (((z - y : ℕ) : ℤ)) (y : ℤ) :=
+          quotientPrimePow_natCast_eq_gn_int hp hyz
+
 /-- `z` と `y` が互いに素なら、`gcd(z - y, GN p (z - y) y)` は `p` を割る。 -/
 theorem gcd_gap_GN_dvd_exp_int
     {p z y : ℕ} (hp1 : 1 ≤ p) (hyz : y < z) (hcop : Nat.Coprime z y) :
@@ -77,6 +187,91 @@ theorem gcd_gap_GN_dvd_exp_int
       (DkMath.NumberTheory.GcdDiffPow.gcd_divides_d (a := (z : ℤ)) (b := (y : ℤ)) (d := p) hp1 hab)
   rw [gn_sub_eq_sd_int hp1 hyz]
   exact hSd
+
+/-- `gcd(z - y, GN p (z - y) y)` の自然数版は `p` を割る。 -/
+theorem gcd_gap_GN_dvd_exp
+    {p z y : ℕ} (hp1 : 1 ≤ p) (hyz : y < z) (hcop : Nat.Coprime z y) :
+    Nat.gcd (z - y) (DkMath.CosmicFormulaBinom.GN p (z - y) y) ∣ p := by
+  have hgcd_int :
+      Int.gcd (((z - y : ℕ) : ℤ))
+        (DkMath.CosmicFormulaBinom.GN p (((z - y : ℕ) : ℤ)) (y : ℤ)) ∣ p := by
+    exact gcd_gap_GN_dvd_exp_int (hp1 := hp1) (hyz := hyz) (hcop := hcop)
+  rw [Int.gcd_eq_natAbs] at hgcd_int
+  rw [natAbs_gn_gap_natCast_int] at hgcd_int
+  exact hgcd_int
+
+/--
+If `gcd(x + u, u) = 1` and the boundary `x` is coprime to the exponent `d`,
+then the boundary and `GN d x u` are coprime.
+
+This is the direct `gcd(x,GN) ∣ d` wrapper in the natural `Body` coordinates
+`(x + u, u)`.
+-/
+theorem coprime_boundary_GN_of_coprime_add_of_coprime_exp
+    {d x u : ℕ}
+    (hd1 : 1 ≤ d) (hx : 0 < x)
+    (hcop_add : Nat.Coprime (x + u) u)
+    (hcop_xd : Nat.Coprime x d) :
+    Nat.Coprime x (DkMath.CosmicFormulaBinom.GN d x u) := by
+  have hyz : u < x + u := by omega
+  have hgcd_dvd_d :
+      Nat.gcd x (DkMath.CosmicFormulaBinom.GN d x u) ∣ d := by
+    simpa [Nat.add_sub_cancel_left] using
+      (gcd_gap_GN_dvd_exp (p := d) (z := x + u) (y := u) hd1 hyz hcop_add)
+  have hgcd_dvd_x :
+      Nat.gcd x (DkMath.CosmicFormulaBinom.GN d x u) ∣ x := by
+    exact Nat.gcd_dvd_left x (DkMath.CosmicFormulaBinom.GN d x u)
+  have hgcd_dvd_one :
+      Nat.gcd x (DkMath.CosmicFormulaBinom.GN d x u) ∣ 1 := by
+    rw [← hcop_xd.gcd_eq_one]
+    exact Nat.dvd_gcd hgcd_dvd_x hgcd_dvd_d
+  exact (Nat.coprime_iff_gcd_eq_one).2 (Nat.eq_one_of_dvd_one hgcd_dvd_one)
+
+/--
+Wrapper from coprime `Body` coordinates to the squarefree-`GN` obstruction
+theorem on the `CosmicFormula` side.
+
+This is an FLT-shaped local refuter in `Body` coordinates:
+once the squarefree `GN` hypothesis is available, it directly rules out
+`(x + u)^d - u^d = t^d`.
+-/
+theorem body_not_perfect_pow_of_squarefree_GN_of_coprime_add
+    {d x u : ℕ}
+    (hd : 1 < d) (hx : 0 < x)
+    (hcop_add : Nat.Coprime (x + u) u)
+    (hcop_xd : Nat.Coprime x d)
+    (hGN_gt : 1 < DkMath.CosmicFormulaBinom.GN d x u)
+    (hSq : Squarefree (DkMath.CosmicFormulaBinom.GN d x u)) :
+    ¬ ∃ t : ℕ, 0 < t ∧ (x + u) ^ d - u ^ d = t ^ d := by
+  exact DkMath.CosmicFormulaBinom.body_not_perfect_pow_of_squarefree_GN
+    hd hGN_gt
+    (coprime_boundary_GN_of_coprime_add_of_coprime_exp
+      (hd1 := Nat.le_of_lt hd) (hx := hx)
+      (hcop_add := hcop_add) (hcop_xd := hcop_xd))
+    hSq
+
+/--
+Primitive-prime obstruction wrapper in `Body` coordinates.
+
+This is the `a := x + u`, `b := u` specialization of the pure diff-side
+primitive-prime obstruction.
+
+Again this is already FLT-shaped: it is not the global FLT theorem, but it
+directly kills one local branch with conclusion
+`¬ ∃ t, 0 < t ∧ (x + u)^d - u^d = t^d`.
+-/
+theorem body_not_perfect_pow_of_primitive_prime_factor_of_coprime_add
+    {d x u : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hx : 0 < x) (hu : 0 < u)
+    (hcop_add : Nat.Coprime (x + u) u)
+    (hnd : ¬ d ∣ x) :
+    ¬ ∃ t : ℕ, 0 < t ∧ (x + u) ^ d - u ^ d = t ^ d := by
+  have hlt : u < x + u := by omega
+  simpa [Nat.add_sub_cancel_left] using
+    (DkMath.NumberTheory.PrimitiveBeam.primitive_prime_factor_forbids_perfect_pow_diff_research
+      (a := x + u) (b := u) (d := d)
+      hd_prime hd_ge hlt hu hcop_add (by simpa [Nat.add_sub_cancel_left] using hnd))
 
 /-- `z` と `y` が互いに素で `p` が gap を割らなければ、`gap` と `GN` は互いに素。 -/
 theorem coprime_gap_GN_of_not_dvd_exp_prime

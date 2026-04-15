@@ -4,18 +4,17 @@
 
 ## 0. 目的
 
-二項展開に基づく「宇宙式（Cosmic Formula）」を、**G 多項式（G_binom）**として再利用可能な定理束に固定する。  
+二項展開に基づく「宇宙式（Cosmic Formula）」を、**G 多項式（G_binom）**として再利用可能な定理束に固定する。
 狙いは次の3点：
 
-1. **Big–Gap 分解（1つの Gap を抜く）**  
+1. **Big–Gap 分解（1つの Gap を抜く）**
    \((u+y)^n - y^n\) は必ず \(u\) を因子に持つ。
-2. **Big–Gap–Boundary–Tail 分解（一次まで吸収）**  
+2. **Big–Gap–Boundary–Tail 分解（一次まで吸収）**
    \((u+y)^n - y^n - n y^{n-1}u\) は必ず \(u^2\) を因子に持つ。
-3. **Gap の抜き方により“割れる因子”が変わる（操作の API 化）**  
+3. **Gap の抜き方により“割れる因子”が変わる（操作の API 化）**
    抜く Gap の種類・数（\(y^n\), \(x^d\), \(y^d\), \(x^d-y^d\) 等）で、出現する因子（\(u\), \(u^2\), \(xy\), \(x-y\), \(x+y\) …）が切り替わる。
 
 この資料は `G_binom → CosmicFormulaBinom` の**付属定理（aux theorems）**として固めるための設計メモ。
-
 
 ---
 
@@ -37,7 +36,7 @@
 
 ### 2.1 CommSemiring 版（存在型）
 
-**定理（尾項因数分解）**  
+**定理（尾項因数分解）**
 \(2 \le n\) のとき、ある \(H(n,u,y)\) が存在して
 
 \[
@@ -51,7 +50,7 @@
 
 ### 2.2 Nat 版（割り切り）
 
-**定理（Nat 版尾項割り切り）**  
+**定理（Nat 版尾項割り切り）**
 \[
 2 \le n \Rightarrow u^2 \mid \bigl((u+y)^n - y^n - n y^{n-1}u\bigr).
 \]
@@ -62,7 +61,7 @@
 
 ## 3. Big–Gap（1 Gap 抜き）：必ず \(u\) が割る
 
-**定理（差の一次因子）**  
+**定理（差の一次因子）**
 任意の \(n\ge 1\) について、ある \(G(n,u,y)\) が存在して
 
 \[
@@ -83,7 +82,7 @@
 
 ## 4. Big–Gap–Gap（2 Gap 抜き）：\(xy\) が割れる（\(d\ge 2\)）
 
-**定理（2 Gap 抽出）**  
+**定理（2 Gap 抽出）**
 \(d\ge 2\) のとき、
 
 \[
@@ -98,7 +97,7 @@
 
 ## 5. 差の冪：Boundary \((x-y)\) と Body（交代和）
 
-**定理（差の冪の因数分解）**  
+**定理（差の冪の因数分解）**
 \[
 x^d-y^d=(x-y)\cdot \Phi_d(x,y).
 \]
@@ -124,7 +123,7 @@ S_0(c,b)\equiv (c-b)^2\pmod 3
 3\mid S_0(c,b)\Rightarrow 3\mid(c-b).
 \]
 
-これは「primitive 側（\(\neg 3\mid(c-b)\)）には \(3\) が入って来られない」タイプの門前払いを説明する。  
+これは「primitive 側（\(\neg 3\mid(c-b)\)）には \(3\) が入って来られない」タイプの門前払いを説明する。
 ただし“万能の mod 刀”ではなく、実務的には **\(p\mid d\)** のときに valuation の持ち上げが起きる、という観点（LTE / padicValNat）に接続される。
 
 ---
@@ -148,8 +147,8 @@ graph TD
 
 ### 8.1 型クラス階層
 
-- `CommSemiring` レベルで存在型（\(H\) の存在）を出す  
-- `Nat` レベルでは witness を使って `dvd` に落とす  
+- `CommSemiring` レベルで存在型（\(H\) の存在）を出す
+- `Nat` レベルでは witness を使って `dvd` に落とす
 - `ℤ` 側の等式は `ring_nf` / `zify` が楽（必要なら）
 
 ### 8.2 命名案（最小 API）
@@ -164,11 +163,11 @@ graph TD
 
 ぬしの思想（操作手順重視）に合わせるなら、次の「抽出」関数（lemma）として揃えると強い：
 
-- `extractGap1`：Big - Gap から \(u\) を抽出  
-- `extractBoundary`：一次項 \(n y^{n-1}u\) を抽出  
-- `extractTail`：尾項に \(u^2\) があることを抽出  
-- `extractGap2`：Big - Gap - Gap から \(xy\) を抽出  
-- `extractDiffBoundary`：差の冪から \((x-y)\) を抽出  
+- `extractGap1`：Big - Gap から \(u\) を抽出
+- `extractBoundary`：一次項 \(n y^{n-1}u\) を抽出
+- `extractTail`：尾項に \(u^2\) があることを抽出
+- `extractGap2`：Big - Gap - Gap から \(xy\) を抽出
+- `extractDiffBoundary`：差の冪から \((x-y)\) を抽出
 
 ---
 

@@ -5,6 +5,9 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProvider
+import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch
+
+#print "file: DkMath.FLT.TriominoSquarefreeGNBridgeProviderImpl"
 
 namespace DkMath.FLT
 
@@ -59,5 +62,23 @@ theorem triominoNoWieferichBridge_impl
     (P : TriominoSquarefreeGNBridgeProviderImplTarget) :
     TriominoNoWieferichBridge := by
   exact triominoNoWieferichBridge_of_provider_impl P
+
+/--
+squarefree provider 実装が与えられれば、
+research-side primitive-prime valuation target へも既存 honest route で戻れる。
+-/
+theorem triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_provider_impl
+    (P : TriominoSquarefreeGNBridgeProviderImplTarget) :
+    TriominoPrimitivePrimeFactorPadicValNatLeOneTarget := by
+  exact triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_squarefreeGNBridge P.hSq
+
+/--
+より弱い no-lift provider 実装が与えられれば、
+research-side primitive-prime valuation target へも既存 honest route で戻れる。
+-/
+theorem triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_noLift_provider_impl
+    (P : TriominoNoLiftGNBridgeProviderImplTarget) :
+    TriominoPrimitivePrimeFactorPadicValNatLeOneTarget := by
+  exact triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_noLiftGNBridge P.hNoLift
 
 end DkMath.FLT

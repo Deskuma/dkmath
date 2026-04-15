@@ -10,6 +10,8 @@ import DkMath.CosmicFormula.Gap
 import DkMath.ABC.PadicValNat
 import Mathlib.NumberTheory.FLT.Three
 
+#print "file: DkMath.FLT.Core"
+
 set_option linter.style.longLine false
 
 /-!
@@ -71,15 +73,8 @@ lemma GN_eq_head_of_x_eq_zero
     {R : Type _} [CommSemiring R]
     (d : ℕ) (hd : 1 ≤ d) (u : R) :
     GN (R := R) d (0 : R) u = (Nat.choose d 1 : R) * u ^ (d - 1) := by
-  cases d with
-  | zero =>
-      cases (Nat.not_succ_le_zero 0 hd)
-  | succ d =>
-      -- `range (succ d)` を先頭 k=0 と残りに分解
-      unfold GN
-      rw [Finset.sum_range_succ']
-      -- k=0 項だけ残り、k≥1 項は `0^(k+1)=0` で全部消える
-      simp
+  let _ := hd
+  simpa [GN] using DkMath.CosmicFormula.GTail_eval_zero (R := R) d 1 u
 
 /-- ZMod 版：`p ∣ x` なら `x ≡ 0 (mod p)` なので `GN` が先頭項に潰れる。 -/
 lemma GN_zmod_eq_head_of_dvd

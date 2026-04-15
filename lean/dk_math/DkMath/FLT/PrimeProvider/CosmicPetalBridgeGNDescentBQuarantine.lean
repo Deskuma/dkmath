@@ -1,4 +1,4 @@
-/- 
+/-
 Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
 Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferichResearch
+
+#print "file: DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine"
 
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
@@ -576,6 +578,18 @@ Branch B の下降法本体（公開 wrapper）。
 -/
 theorem triominoWieferichDescent_impl : WieferichDescentB := by
   exact triominoWieferichDescent_impl_of_noWieferich_core
+
+/--
+research-side primitive-prime valuation target が供給されれば、
+public Branch B descent wrapper までは clean に閉じる。
+-/
+theorem triominoWieferichDescent_impl_of_padicValNatLeOneTarget
+    (hVal : TriominoPrimitivePrimeFactorPadicValNatLeOneTarget) :
+    WieferichDescentB := by
+  exact
+    triominoWieferichDescent_impl_clean <|
+      triominoWieferichDescentStepB_impl_clean <|
+        triominoWieferichShrinkKernelEqSeedTracePackB_kernel_noWieferich_core_of_target hVal
 
 end NoLiftKernel
 

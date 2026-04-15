@@ -11,6 +11,8 @@ import DkMath.Tromino
 import DkMath.FLT.PrimeProviderCore
 import DkMath.FLT.MathlibBridge.FLT34
 
+#print "file: DkMath.CosmicFormula.TriominoFLT"
+
 /-
 NOTE [Temporary Mathlib FLT3 bridge]:
 - このファイルでの `DkMath.FLT.FLT3_core/FLT4_core` 参照は「暫定」。
@@ -1794,24 +1796,6 @@ lemma color_balance_of_box_3k {d : ℕ} (hd : 2 ≤ d) (n : Fin d → ℕ)
                 hAxis2_toInsert1.symm
     exact ⟨by simpa [hs0, hs1] using hs_mod.1, by simpa [hs0, hs2] using hs_mod.2⟩
   exact ⟨by simpa [hR0, hR1] using hs.1, by simpa [hR0, hR2] using hs.2⟩
-
-/-! ## セクション 3：宇宙式 Body との接続 -/
-
-/--
-補題：Body(d, x, u) のセル数は x * Gbinom d x u
-これが Cosmic Formula と Cell 分解の接点じゃ。
--/
-theorem card_body_from_cosmic (d x u : ℕ) :
-    (Body d x u).card = x * Gbinom d x u := by
-  have h_big := card_Big_eq_card_Body_add_card_Gap d x u
-  have h_exp := pow_sub_pow_eq_mul_Gbinom d x u
-  simp only [Big, CellDim.card_Box, constVec, Finset.card_pi, Finset.card_range, Finset.prod_const,
-    Finset.card_univ, Fintype.card_fin, Gap] at h_big
-  -- (x + u) ^ d = (Body d x u).card + u ^ d
-  have h_eq : (x + u) ^ d = (Body d x u).card + u ^ d := by
-    simpa [Fintype.card_pi, Finset.card_fin] using h_big
-  rw [← h_exp, h_eq]
-  omega
 
 /--
 `n ≥ 4`, `¬ 3 ∣ n`, `¬ 4 ∣ n` なら、`n` は `2,3` 以外の素因子を持つ。

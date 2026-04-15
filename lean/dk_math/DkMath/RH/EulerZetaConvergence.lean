@@ -4,14 +4,15 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+--cid: 696f0dea-ce88-8322-9d20-8ce524dcd533
+
 import Mathlib.Analysis.PSeries
 import Mathlib.Analysis.SpecialFunctions.Log.Summable
 import Mathlib.Topology.Algebra.InfiniteSum.Ring
-
 import DkMath.RH.Defs
 import DkMath.RH.EulerZetaLemmas
 
---cid: 696f0dea-ce88-8322-9d20-8ce524dcd533
+#print "file: DkMath.RH.EulerZetaConvergence"
 
 -- ============================================================================
 

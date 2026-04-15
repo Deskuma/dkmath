@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 import DkMath.Algebra.BinomTail
+import DkMath.CosmicFormula.Defs
 import DkMath.CosmicFormula.CosmicFormulaDim  -- Cosmic Formula Dimensionality
 
 #print "file: DkMath.CosmicFormula.CosmicFormulaBinom"
@@ -55,9 +56,19 @@ open scoped BigOperators
 
 section CommRing
 
-/-! ### 無次元版: G と Z_d の定義と恒等式の証明 -/
+/-! ### 無次元版: G と Z_d の定義と恒等式の証明
 
-/-- d 次元の「無次元実体項」G の定義（係数は Nat.choose を射影したもの） -/
+[GNZC] Migration note:
+this `CommRing` section still exposes the legacy name `G`.
+Canonical naming is being centralized as `Defs.GZ`, so downstream comments and
+new code should prefer `GZ` when referring to the Body-normalized kernel.
+-/
+
+/-- d 次元の「無次元実体項」G の定義（係数は Nat.choose を射影したもの）.
+
+[GNZC] Legacy public name in the `CommRing` layer.
+Long term this vocabulary should align with `Defs.GZ`.
+-/
 def G {R : Type _} [CommRing R] (d : ℕ) (x u : R) : R :=
     ∑ k ∈ Finset.range d, (Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k)
 
@@ -70,7 +81,37 @@ def Gap {R : Type _} [CommRing R] (d : ℕ) (u : R) : R := u ^ d
 /-- 無次元版: Body の定義 -/
 def Body {R : Type _} [CommRing R] (d : ℕ) (x u : R) : R := x * G d x u
 
-/-- 無次元版: Big は Body と Gap の和に等しい -/
+/--
+`CommRing` legacy kernel `G` and canonical `Defs.GZ` differ by one boundary factor `x`.
+
+[GNZC] This is the key bridge showing why `CommRing.G` cannot be replaced by a
+mere alias of `Defs.GZ`: `G` is the pre-normalized kernel, while `GZ` is the
+Body-normalized kernel.
+-/
+theorem mul_G_eq_GZ {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
+    x * G d x u = DkMath.CosmicFormula.GZ R x u d := by
+  unfold G DkMath.CosmicFormula.GZ
+  rw [Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro k hk
+  simp [DkMath.CosmicFormula.d1k, DkMath.CosmicFormula.d_sub_one_k, DkMath.CosmicFormula.d_sub_n_k]
+  ring
+
+/--
+`CommRing` Body is exactly the canonical `Defs.GZ` kernel.
+
+[GNZC] New code that only needs the Body-normalized side should use this bridge
+instead of referring to the legacy `G` spelling.
+-/
+theorem Body_eq_GZ {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
+    Body d x u = DkMath.CosmicFormula.GZ R x u d := by
+  simp [Body, mul_G_eq_GZ]
+
+/-- 無次元版: Big は Body と Gap の和に等しい。
+
+[GNZC] Via `Body_eq_GZ`, this is also the canonical Body-normalized identity
+`Big = GZ + Gap` in the `CommRing` layer.
+-/
 theorem big_is_body_and_gap {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
     Big d x u = Body d x u + Gap d u := by
     unfold Big Body Gap G
@@ -103,7 +144,11 @@ theorem big_is_body_and_gap {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
 
 /-- 無次元宇宙式に対する恒等式：
 `CommRing` 上で任意の `d, x, u` について
-`(x + u) ^ d - x * G d x u = u ^ d` が成り立つことを示す定理。 -/
+`(x + u) ^ d - x * G d x u = u ^ d` が成り立つことを示す定理。
+
+[GNZC] Using `Body_eq_GZ`, the same statement can be read as
+`(x + u)^d - GZ = u^d`.
+-/
 theorem cosmic_id {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
     Big d x u - Body d x u = Gap d u := by
     unfold Big Body Gap G
@@ -134,11 +179,15 @@ theorem cosmic_id {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
     simp only [Nat.choose_zero_right, Nat.cast_one, pow_zero, mul_one]
     ring
 
+/-- `[GNZC]` Thin corollary form of `cosmic_id`, still phrased through `Body`.
+Use `Body_eq_GZ` if a downstream theorem wants the canonical `GZ` spelling. -/
 @[simp]
 theorem cosmic_formula_binom {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
         (x + u) ^ d - (Body d x u) = u ^ d := by
         simpa using cosmic_id d x u
 
+/-- `[GNZC]` Legacy duplicate of `cosmic_formula_binom`.
+Kept for compatibility while docstrings and theorem names are normalized. -/
 theorem cosmic_id' {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
         (x + u) ^ d - (Body d x u) = u ^ d := by
     unfold Body G
@@ -245,9 +294,9 @@ lemma f_eq_zero_iff {R : Type _} [CommRing R] (d : ℕ) (x u : R) :
 
 /-- 無次元宇宙式の恒等式の同値変形: dim_G_iff (加法形) -/
 lemma dim_G_iff (d : ℕ) (x u : ℝ) :
-    (x + u) ^ d = x * DkMath.CosmicFormulaDim.G d x u + u ^ d
+    (x + u) ^ d = x * DkMath.CosmicFormulaDim.GReal d x u + u ^ d
         ↔ (x + u) ^ d = Body d x u + u ^ d := by
-    simp [DkMath.CosmicFormulaDim.G, Body, G]
+    simp [DkMath.CosmicFormulaDim.GReal, Body, G]
 
 end CommRing
 
@@ -257,9 +306,29 @@ end CommRing
 
 section CommSemiring
 
-/-- d 次元の「無次元実体項」G (CommSemiring) の定義（係数は Nat.choose を射影したもの） -/
-@[simp] def GN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R :=
-    ∑ k ∈ Finset.range d, (Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k)
+/--
+`GTail` の `r = 1` specialization としての legacy `GN` wrapper。
+
+[GNZC] Migration note:
+the canonical naming home is now `DkMath.CosmicFormula.GN` in `Defs.lean`.
+This wrapper is kept to avoid breaking downstream imports during the transition.
+
+refactor 移行期のあいだはこの公開名を温存し、downstream は段階的に
+`GTail` 直接参照へ寄せていく。
+-/
+@[simp] abbrev GN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R :=
+  DkMath.CosmicFormula.GN R x u d
+
+/--
+Compatibility bridge to the legacy explicit sum shape of `GN`.
+
+This lemma is kept so that downstream files depending on the old expansion can
+be migrated incrementally instead of switching to `GTail` all at once.
+-/
+theorem GN_eq_sum {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
+    GN d x u =
+      ∑ k ∈ Finset.range d, (Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k) := by
+  simpa [GN] using DkMath.CosmicFormula.GTail_one_eq_sum (R := R) d x u
 
 /-- 無次元版: Big の定義 -/
 @[simp] def BigN {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) : R := (x + u) ^ d
@@ -274,65 +343,26 @@ section CommSemiring
 `(x + u) ^ d = x * G d x u + u ^ d` が成り立つことを示す定理。 -/
 theorem cosmic_id_csr {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
     BigN d x u = BodyN d x u + GapN d u := by
-    unfold BigN BodyN GapN GN
-    rw [add_pow, Finset.mul_sum]
-    -- 二項展開を k=0 項と k≥1 項に分ける（項の順序を `add_pow` の出力に合わせる）
-    have h1 : ∑ k ∈ Finset.range (d + 1), x ^ k * u ^ (d - k) * (Nat.choose d k : R)
-      = x ^ 0 * u ^ d * (Nat.choose d 0 : R)
-      + ∑ k ∈ Finset.range d, x ^ (k + 1) * u ^ (d - 1 - k) * (Nat.choose d (k + 1) : R) := by
-        rw [Finset.sum_range_succ']
-        simp only [pow_zero, Nat.sub_zero]
-        rw [add_comm]
-        congr 1
-        apply Finset.sum_congr rfl
-        intro k hk
-        congr 2
-        have hk' : k < d := Finset.mem_range.mp hk
-        have hss : k + 1 ≤ d := Nat.succ_le_of_lt hk'
-        have h2 : d - (k + 1) = d - k - 1 := Nat.sub_sub d k 1
-        have h3 : d - k - 1 = d - 1 - k := by omega
-        rw [h2, h3]
-    -- x * G を展開すると h1 の第2項と一致する（項順序を合わせる）
-    have h2 : ∑ k ∈ Finset.range d, x * ((Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k))
-      = ∑ k ∈ Finset.range d, x ^ (k + 1) * u ^ (d - 1 - k) * (Nat.choose d (k + 1) : R) := by
-        apply Finset.sum_congr rfl
-        intro k _
-        ring
-    rw [h1, h2]
-    simp only [Nat.choose_zero_right, Nat.cast_one, pow_zero, mul_one]
-    ring
+  by_cases hd : d = 0
+  · subst hd
+    simp [BigN, BodyN, GapN, GN]
+  · have hle : 1 ≤ d := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hd)
+    have htail :=
+      DkMath.CosmicFormula.add_pow_eq_prefix_add_xpow_mul_GTail (R := R) d 1 x u hle
+    simpa [BigN, BodyN, GapN, GN, Finset.range_one, Nat.choose_zero_right, Nat.cast_one,
+      pow_zero, pow_one, Nat.sub_zero, one_mul, add_comm, add_left_comm, add_assoc] using htail
 
 /-! 無減算形の恒等式: (x+u)^d = x * G d x u + u^d (CommSemiring) -/
 theorem cosmic_id_csr' {R : Type _} [CommSemiring R] (d : ℕ) (x u : R) :
         (x + u) ^ d = x * GN d x u + u ^ d := by
-    unfold GN
-    rw [add_pow, Finset.mul_sum]
-    -- 二項展開を k=0 項と k≥1 項に分ける（項の順序を `add_pow` の出力に合わせる）
-    have h1 : ∑ k ∈ Finset.range (d + 1), x ^ k * u ^ (d - k) * (Nat.choose d k : R)
-        = x ^ 0 * u ^ d * (Nat.choose d 0 : R)
-            + ∑ k ∈ Finset.range d, x ^ (k + 1) * u ^ (d - 1 - k) * (Nat.choose d (k + 1) : R) := by
-        rw [Finset.sum_range_succ']
-        simp only [pow_zero, Nat.sub_zero]
-        rw [add_comm]
-        congr 1
-        apply Finset.sum_congr rfl
-        intro k hk
-        congr 2
-        have hk' : k < d := Finset.mem_range.mp hk
-        have hss : k + 1 ≤ d := Nat.succ_le_of_lt hk'
-        have h2 : d - (k + 1) = d - k - 1 := Nat.sub_sub d k 1
-        have h3 : d - k - 1 = d - 1 - k := by omega
-        rw [h2, h3]
-    -- x * G を展開すると h1 の第2項と一致する（項順序を合わせる）
-    have h2 : ∑ k ∈ Finset.range d, x * ((Nat.choose d (k + 1) : R) * x ^ k * u ^ (d - 1 - k))
-        = ∑ k ∈ Finset.range d, x ^ (k + 1) * u ^ (d - 1 - k) * (Nat.choose d (k + 1) : R) := by
-        apply Finset.sum_congr rfl
-        intro k _
-        ring
-    -- 以上の等式から二項展開の和が x*G + u^d に一致する
-    rw [h1, h2]
-    simp only [Nat.choose_zero_right, Nat.cast_one, pow_zero, mul_one]
-    ring
+  by_cases hd : d = 0
+  · subst hd
+    simp [GN]
+  · have hle : 1 ≤ d := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hd)
+    have htail :=
+      DkMath.CosmicFormula.add_pow_eq_prefix_add_xpow_mul_GTail (R := R) d 1 x u hle
+    simpa [GN, Finset.range_one, Nat.choose_zero_right, Nat.cast_one, pow_zero, pow_one,
+      Nat.sub_zero, one_mul, add_comm, add_left_comm, add_assoc] using htail
 
 /--
 Big-Gap（1 Gap 抽出版）:
@@ -414,6 +444,87 @@ theorem one_le_GN_nat_of_two_le {d x u : ℕ}
     (hd : 2 ≤ d) (hx : 0 < x) (hu : 0 < u) :
     1 ≤ GN d x u := by
   exact Nat.succ_le_of_lt (Nat.pos_of_ne_zero (GN_ne_zero_nat_of_two_le (d := d) (x := x) (u := u) hd hx hu))
+
+/--
+If a squarefree natural number is divisible by a prime `p`, then its `p`-adic
+valuation is exactly `1`.
+-/
+private lemma padicValNat_eq_one_of_prime_dvd_of_squarefree
+    {p n : ℕ}
+    (hp : Nat.Prime p) (hn : n ≠ 0)
+    (hpd : p ∣ n) (hsq : Squarefree n) :
+    padicValNat p n = 1 := by
+  have hle : padicValNat p n ≤ 1 := by
+    by_contra hnot
+    have htwo : 2 ≤ padicValNat p n := by omega
+    have hp2dvd : p ^ 2 ∣ n := by
+      exact (DkMath.ABC.padicValNat_le_iff_dvd hp hn 2).mp htwo
+    have hfac_le : n.factorization p ≤ 1 := by
+      exact (Nat.squarefree_iff_factorization_le_one hn).mp hsq p
+    have hfac_ge : 2 ≤ n.factorization p := by
+      exact (hp.pow_dvd_iff_le_factorization hn).mp hp2dvd
+    exact (Nat.not_succ_le_self 1) (le_trans hfac_ge hfac_le)
+  have hge : 1 ≤ padicValNat p n := by
+    exact DkMath.ABC.padicValNat_one_le_of_prime_dvd hp hn hpd
+  omega
+
+/--
+Squarefree `GN` obstructs the corresponding Body difference from being a
+perfect `d`-th power.
+
+This is the direct `GN`-layer wrapper of the valuation argument:
+choose a prime factor `q` of the squarefree kernel `GN`, use coprimality to
+keep `q` out of the boundary factor `x`, and conclude that
+`v_q ((x+u)^d - u^d) = 1`, which is incompatible with a `d`-th power when
+`d > 1`.
+
+[GNZC] Although this theorem lives in `CosmicFormula`, its shape is already
+FLT-like: it directly refutes a local branch of
+`(x + u)^d - u^d = t^d`.
+-/
+theorem body_not_perfect_pow_of_squarefree_GN
+    {d x u : ℕ}
+    (hd : 1 < d)
+    (hGN_gt : 1 < GN d x u)
+    (hcop : Nat.Coprime x (GN d x u))
+    (hSq : Squarefree (GN d x u)) :
+    ¬ ∃ t : ℕ, 0 < t ∧ (x + u) ^ d - u ^ d = t ^ d := by
+  let N := GN d x u
+  have hN_ne1 : N ≠ 1 := Nat.ne_of_gt hGN_gt
+  have hN_ne0 : N ≠ 0 := Nat.ne_of_gt (lt_trans Nat.zero_lt_one hGN_gt)
+  obtain ⟨q, hq_prime, hq_dvd_N⟩ := Nat.exists_prime_and_dvd hN_ne1
+  have hq_not_dvd_x : ¬ q ∣ x := by
+    intro hq_dvd_x
+    have hq_dvd_gcd : q ∣ Nat.gcd x N := Nat.dvd_gcd hq_dvd_x hq_dvd_N
+    rw [hcop.gcd_eq_one] at hq_dvd_gcd
+    exact hq_prime.not_dvd_one hq_dvd_gcd
+  have hval_N_eq : padicValNat q N = 1 := by
+    exact padicValNat_eq_one_of_prime_dvd_of_squarefree hq_prime hN_ne0 hq_dvd_N (by simpa [N] using hSq)
+  have hx_ne : x ≠ 0 := by
+    intro hx0
+    exact hq_not_dvd_x (by simp [hx0])
+  have hbody_factor : (x + u) ^ d - u ^ d = x * N := by
+    rw [show N = GN d x u by rfl]
+    rw [add_pow_gap_factor]
+    exact Nat.add_sub_cancel_left _ _
+  letI : Fact (Nat.Prime q) := ⟨hq_prime⟩
+  have hval_body : padicValNat q ((x + u) ^ d - u ^ d) = 1 := by
+    rw [hbody_factor, padicValNat.mul hx_ne hN_ne0]
+    rw [padicValNat.eq_zero_of_not_dvd hq_not_dvd_x, hval_N_eq]
+  intro hpow
+  rcases hpow with ⟨t, ht_pos, ht_eq⟩
+  have ht_ne : t ≠ 0 := Nat.ne_of_gt ht_pos
+  have hdvd : d ∣ padicValNat q (t ^ d) := by
+    exact DkMath.ABC.dvd_padicValNat_pow hq_prime d ht_ne
+  have hone : padicValNat q (t ^ d) = 1 := by
+    calc
+      padicValNat q (t ^ d) = padicValNat q ((x + u) ^ d - u ^ d) := by
+        rw [ht_eq]
+      _ = 1 := hval_body
+  have hdvd_one : d ∣ 1 := by
+    simpa [hone] using hdvd
+  have hle_one : d ≤ 1 := Nat.le_of_dvd (by decide : 0 < 1) hdvd_one
+  omega
 
 /--
 `d=3` の Tail は `u^2` ではなく（変数名を `x,u` に取っているため）`x^2` を因子に持つ。

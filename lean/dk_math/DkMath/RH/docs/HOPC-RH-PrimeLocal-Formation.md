@@ -1,7 +1,7 @@
 # HOPC-RH 研究草稿: Prime-Local 寄与による非自明零点形成機構
 
-Status: Working Draft (GitHub Markdown)  
-Scope: `DkMath.RH` + `DkMath.CFBRC` の既実装 API に基づく形式化整理  
+Status: Working Draft (GitHub Markdown)
+Scope: `DkMath.RH` + `DkMath.CFBRC` の既実装 API に基づく形式化整理
 Non-claim: 本稿は RH の最終証明を主張しない
 
 ---

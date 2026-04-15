@@ -1,0 +1,1 @@
+/home/deskuma/develop/lean/dkmath/lean/dk_math/DkMath/CosmicFormula/docs/CosmicDifferenceKernel_Manual.md

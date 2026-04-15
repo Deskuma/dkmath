@@ -26,29 +26,32 @@ open MeasureTheory ProbabilityTheory
 
 /-  ### Phase 3: MGF (Moment Generating Function) and Chernoff Machinery
 
-This section develops the probabilistic tools for controlling p-adic excess.
+This section develops probabilistic tools for controlling p-adic excess.
 
 #### Core Idea
-For a prime p and random n ≤ X, the p-adic valuation v_p(2n+1) behaves like
-a geometric random variable. We use MGF to bound tail probabilities.
+For a prime p and random n ≤ X, the p-adic valuation v_p(2n+1) behaves roughly like a
+geometric distribution. A moment-generating-function (MGF) bound on the excess
+v_p(2n+1) − 2 allows us to derive Chernoff-type tail estimates.
 
-#### Key Definitions
-- **MGF**: E[e^{t(v_p - 2)}] for parameter t > 0
-- **Chernoff bound**: Pr[v_p - 2 > threshold] ≤ e^{-t*threshold} * MGF(t)
-- **Optimal t**: Chosen to minimize the Chernoff bound
-
-#### Implementation Status
-Currently using `so#rry` placeholders. Full implementation requires:
-1. Explicit MGF computation for geometric distribution
-2. Optimal t parameter selection (balancing e^{-t*threshold} and MGF(t))
-3. Union bound over primes with careful budget allocation
+#### Main ingredients
+- A telescoping bound on ∑ p^{t v_p(2n+1)} (see
+  `ABC.Telescoping.sum_pow_padicValNat_le_geom_half`)
+- A layer-cake expansion / counting bound from `count_powers_dividing_2n1`
+- A numeric constant guarantee for t ≤ 1/2 and p ≥ 3
 -/
 
--- MGF upper bound for v_p(2n+1) - 2
--- For a prime p, the excess v_p(2n+1) - 2 has geometric-like distribution
--- This lemma provides an explicit upper bound on E[e^{t(v_p - 2)}]
---
--- ★ CORE VERSION: p^t base (easier to work with for Chernoff)
+/--
+A p-base MGF bound for the p-adic excess `v_p(2n+1) - 2`.
+
+For p ≥ 3 and 0 < t ≤ 1/2, there exists a constant `C > 0` (depending on p,t) such
+that for all X ≥ 1:
+
+  (1/(X+1)) * ∑_{n=0}^X p^{t * (v_p(2n+1) - 2)} ≤ C
+
+This is proved by combining the telescoping bound
+`ABC.Telescoping.sum_pow_padicValNat_le_geom_half` with a simple factorization
+`p^{t(v-2)} = p^{-2t} * p^{t v}`.
+-/
 lemma mgf_padic_excess_bound_pbase
   (p : ℕ) (hp : p.Prime) (hpodd : p ≠ 2) (t : ℝ) (ht0 : 0 < t) (ht : t ≤ 1 / 2) :
   ∃ C > 0, ∀ X ≥ 1,

@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 
 import DkMath.ABC.ABC024
+import DkMath.ABC.ABC025_bound2
 
 #print "file: DkMath.ABC.ABC025"
 
@@ -76,9 +77,10 @@ lemma padicValNat_le_log (p n : ℕ) (_hn : n ≠ 0) : padicValNat p n ≤ Nat.l
 /-! ### Telescoping Identity -/
 
 /- For any v ≤ K, we have the telescoping identity:
-    p^{tv} = ∑_{k=0}^K p^{kt} · 𝟙_{v≥k}
 
-where 𝟙_{v≥k} = 1 if v ≥ k, else 0.
+  `p^{tv} = ∑_{k=0}^K p^{kt} · 𝟙_{v≥k}`
+
+where `𝟙_{v≥k} = 1 if v ≥ k, else 0.`
 
 **Mathematical explanation:**
 The indicator sum counts: p^0·1 + p^t·𝟙_{v≥1} + p^{2t}·𝟙_{v≥2} + ... + p^{Kt}·𝟙_{v≥K}
@@ -578,7 +580,7 @@ lemma pow_t_bound {X : ℕ} (hX : X ≥ 1) {t : ℝ} (_ht : 0 < t) (ht_half : t 
 
 /-! ### Main Telescoping Theorem -/
 
-/-- Main theorem: Bound on ∑_{n=0}^X p^{t·v(n)} using finite telescoping.
+/-- Main theorem: Bound on `∑_{n=0}^X p^{t·v(n)}` using finite telescoping.
 
 Given:
 - p ≥ 3 (odd prime)
@@ -586,64 +588,30 @@ Given:
 - X ≥ 1
 
 We prove:
-  ∑_{n=0}^X p^{t·padicValNat p (2n+1)} ≤ 3(X+1)
+  `∑_{n=0}^X p^{t·padicValNat p (2n+1)} ≤ 3(X+1)`
 
-**Full proof strategy:**
+Proof structure (high level):
 
-1. **Define K:** Let K = Nat.log p (2X+2). Then ∀n ∈ [0,X], v(n) ≤ K.
+1. Choose `K := Nat.log p (2X + 2)`, so that every `v(n) = padicValNat p (2n+1)`
+   satisfies `v(n) ≤ K`.
 
-2. **Apply telescoping:** For each n with v(n) ≤ K, use `sum_telescoping_correct`:
-   ```
-   p^{tv(n)} = 1 + (p^t - 1) · ∑_{k=1}^K 𝟙_{v(n)≥k} · p^{t(k-1)}
-   ```
+2. Apply `sum_telescoping_correct` to write each term as
+   `1 + (p^t - 1) · ∑_{k=1}^K 𝟙_{v(n)≥k} · p^{t(k-1)}`.
 
-3. **Sum over n:**
-   ```
-   ∑_n p^{tv(n)} = (X+1) + (p^t - 1) · ∑_n ∑_{k=1}^K 𝟙_{v(n)≥k} · p^{t(k-1)}
-   ```
+3. Exchange the sums over `n` and `k`.
 
-4. **Exchange summation:**
-   ```
-   = (X+1) + (p^t - 1) · ∑_{k=1}^K p^{t(k-1)} · #{n : v(n) ≥ k}
-   ```
+4. Use the counting bound `count_divisible_le`:
+   `#{n : v(n) ≥ k} ≤ (X+1)/p^k + 1`.
 
-5. **Apply counting bound:** Using `count_divisible_le`:
-   ```
-   #{n : v(n) ≥ k} ≤ (X+1)/p^k + 1
-   ```
+5. This yields a bound of the form
+   `(X+1) + (p^t - 1) · [(X+1)/p · ∑_{k=1}^K (p^{t-1})^k + (small term)]`.
 
-6. **Bound the sum:**
-   ```
-   ≤ (X+1) + (p^t - 1) · ∑_{k=1}^K p^{t(k-1)} · [(X+1)/p^k + 1]
-   = (X+1) + (p^t - 1) · [(X+1) · ∑_{k=1}^K p^{t(k-1)-k} + ∑_{k=1}^K p^{t(k-1)}]
-   = (X+1) + (p^t - 1) · [(X+1)/p · ∑_{k=1}^K (p^{t-1})^k + 1/p^t · ∑_{k=1}^K (p^t)^k]
-   ```
+6. Use geometric series bounds with `p^{t-1} < 1` (see `pow_t_minus_one_lt_one`) and
+   the quantitative estimate `rpow_main_term_le_two_thirds` to show the main
+   factor is at most `2/3`.
 
-7. **Geometric series:**
-   Since p^{t-1} < 1 (from `pow_t_minus_one_lt_one`):
-   ```
-   ∑_{k=1}^K (p^{t-1})^k ≤ ∑_{k=0}^∞ (p^{t-1})^k = 1/(1 - p^{t-1})
-   ```
-
-8. **Bound (p^t - 1) factor:**
-   For p ≥ 3, t ≤ 1/2:
-   ```
-   p^t ≤ 3^{1/2} ≈ 1.732, so p^t - 1 ≤ 0.732
-   ```
-
-9. **Final bound:**
-   Using `geom_bound_tight`:
-   ```
-   ∑_n p^{tv(n)} ≤ (X+1) + 0.732 · [(X+1)/3 · 2.4 + small term]
-                ≤ (X+1) + 0.6(X+1)
-                ≤ 1.6(X+1) < 3(X+1)
-   ```
-
-**Note:** This proof sketch shows the bound is actually much better than 3(X+1).
-With careful calculation, we can show ≤ 2(X+1) is achievable, which matches
-the original target in ABCFinal.lean.
-
-The detailed implementation requires ~80 lines but is entirely straightforward.
+At present this proof establishes the `3(X+1)` bound; improving the tail term
+further to reach `2(X+1)` is a natural next step.
 -/
 theorem sum_pow_padicValNat_le_geom_half {p : ℕ} [hp : Fact p.Prime] (hp3 : p ≥ 3)
     {t : ℝ} (ht : 0 < t) (ht_half : t ≤ 1 / 2)
@@ -750,8 +718,8 @@ theorem sum_pow_padicValNat_le_geom_half {p : ℕ} [hp : Fact p.Prime] (hp3 : p 
             rw [← Finset.sum_filter]
             simp only [Finset.sum_const, nsmul_eq_mul, mul_comm]
         _ ≤ (X + 1) + ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k) * ((X + 1) / (p : ℝ) ^ (k + 1) + 1) := by
-            -- Apply ceiling bound: card ≤ (X+1)/p^(k+1) + 1
-            -- This is the KEY step: split into main term (X+1)/p^(k+1) and correction term +1
+            -- Apply ceiling bound: `card ≤ (X+1)/p^(k+1) + 1`
+            -- This is the KEY step: split into main term `(X+1)/p^(k+1)` and correction term +1
             gcongr with k hk
             -- ⊢ 0 ≤ ↑p ^ t - 1
             · have hpt_pos : (p : ℝ) ^ t - 1 > 0 := by
@@ -763,8 +731,8 @@ theorem sum_pow_padicValNat_le_geom_half {p : ℕ} [hp : Fact p.Prime] (hp3 : p 
                   _ > 1 := Real.one_lt_rpow (by linarith : (1 : ℝ) < 3) ht
                 linarith
               · linarith
-            -- ⊢ ↑(#({n ∈ Finset.Icc 0 X | padicValNat p (2 * n + 1) ≥ k + 1})) ≤ (↑X + 1) / ↑p ^ (k + 1) + 1
-            -- Need to relate padicValNat p (2*n+1) ≥ k+1 to p^(k+1) | 2*n+1
+            -- ⊢ ↑{n ∈ Finset.Icc 0 X | padicValNat p (2 * n + 1) ≥ k + 1}.card ≤ (↑X + 1) / ↑p ^ (k + 1) + 1
+            -- Need to relate padicValNat p `(2*n+1) ≥ k+1 to p^(k+1) | 2*n+1`
             have h_equiv : {n ∈ Finset.Icc 0 X | padicValNat p (2 * n + 1) ≥ k + 1}
                          = {n ∈ Finset.Icc 0 X | (p : ℕ) ^ (k + 1) ∣ 2 * n + 1} := by
               ext n
@@ -965,13 +933,13 @@ theorem sum_pow_padicValNat_le_geom_half {p : ℕ} [hp : Fact p.Prime] (hp3 : p 
                 have h_step2 : Real.sqrt (2 * X + 2) ≤ X + 1 := by
                   rw [Real.sqrt_le_iff]
                   constructor
-                  · -- 0 ≤ X + 1
+                  · -- ⊢ 0 ≤ ↑X + 1
                     have : (0 : ℝ) ≤ X := Nat.cast_nonneg X
                     linarith
-                  · -- 2X+2 ≤ (X+1)^2
+                  · -- ⊢ 2 * ↑X + 2 ≤ (↑X + 1) ^ 2
                     have h_sq : (X + 1 : ℝ) ^ 2 = X ^ 2 + 2 * X + 1 := by ring
                     rw [h_sq]
-                    -- Need: 2X+2 ≤ X^2 + 2X + 1, i.e., 1 ≤ X^2
+                    -- Need: `2X+2 ≤ X^2 + 2X + 1`, i.e., `1 ≤ X^2`
                     have h_X_sq : 1 ≤ (X : ℝ) ^ 2 := by
                       have : 1 ≤ X := hX
                       calc (1 : ℝ)
@@ -988,14 +956,14 @@ theorem sum_pow_padicValNat_le_geom_half {p : ℕ} [hp : Fact p.Prime] (hp3 : p 
               exact le_trans h1 h2
             have h_sum2 : ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k)
                         ≤ (X + 1) := by
-              -- Let r = (p^t). For r > 1 we have (r - 1) * ∑_{k=0}^{K-1} r^k = r^K - 1.
+              -- Let `r = (p^t)`. For `r > 1` we have `(r - 1) * ∑_{k=0}^{K-1} r^k = r^K - 1`.
               have hp_pos : (0 : ℝ) < p := by positivity
               have h_r_gt1 : 1 < (p : ℝ) ^ t := by
                 apply one_lt_rpow
                 · have : (3 : ℝ) ≤ p := by exact_mod_cast hp3
                   linarith
                 · exact ht
-              -- Prove by induction that (r - 1) * ∑_{k=0}^{K-1} r^k = r^K - 1 where r = (p : ℝ) ^ t
+              -- Prove by induction that `(r - 1) * ∑_{k=0}^{K-1} r^k = r^K - 1` where `r = (p : ℝ) ^ t`
               let r := (p : ℝ) ^ t
               have mul_eq : (r - 1) * ∑ k ∈ Finset.range K, r ^ k = r ^ K - 1 := by
                 induction K with
@@ -1013,111 +981,48 @@ theorem sum_pow_padicValNat_le_geom_half {p : ℕ} [hp : Fact p.Prime] (hp3 : p 
                       calc (r ^ K - 1) + (r - 1) * r ^ K
                           = (r ^ K - 1) + (r ^ (K + 1) - r ^ K) := by { congr; ring }
                         _ = r ^ (K + 1) - 1 := by ring
-              -- Relate ((p^t)^K) to p^(t*K) and finish with h_pK
+              -- Relate `((p^t)^K)` to `p^(t*K)` and finish with `h_pK`
               have pow_eq : ((p : ℝ) ^ t) ^ K = (p : ℝ) ^ (t * K) := by
-                -- show nonnegativity of the base and apply the appropriate lemma
-                have hp_pos : 0 < (p : ℝ) := by positivity
-                have h_nonneg : 0 ≤ (p : ℝ) := le_of_lt hp_pos
+                have hp_pos' : 0 < (p : ℝ) := by positivity
+                have h_nonneg : 0 ≤ (p : ℝ) := le_of_lt hp_pos'
                 exact (Real.rpow_mul_natCast h_nonneg t K).symm
               rw [pow_eq] at mul_eq
-              -- Now mul_eq = (p : ℝ) ^ (t * K) - 1, and use h_pK
               have h_le : (p : ℝ) ^ (t * K) - 1 ≤ X + 1 := by
                 calc (p : ℝ) ^ (t * K) - 1 ≤ (p : ℝ) ^ (t * K) := by linarith
                   _ ≤ X + 1 := by linarith [h_pK]
-              -- Convert the sum ∑ r^k to ∑ p^(t*k) so we can apply `mul_eq` to the current goal.
               have h_nonneg : 0 ≤ (p : ℝ) := by positivity
               have h_sum_eq : ∑ k ∈ Finset.range K, r ^ k = ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k) := by
                 apply Finset.sum_congr rfl
                 intro k _
                 rw [Real.rpow_mul_natCast h_nonneg t k]
-              -- Rewrite `mul_eq` to use the same sum-shape as the goal, then finish with `h_le`.
               rw [h_sum_eq] at mul_eq
               rw [mul_eq]
               exact h_le
 
             -- Combine: main + correction ≤ bound
-            -- Strategy: We bound (p^t - 1) / (p * (1 - p^(t-1))) ≤ 1 (proved as h_main below)
-            -- This gives us (X+1) * (1 + ...) ≤ (X+1) * 2
-            -- Then the tail term +1 gives us total ≤ 3(X+1)
+            -- Use main-term 2/3 and tail-term ≤ (X+1) to get 2(X+1).
+            have hp_pos : (0 : ℝ) < p := by positivity
+            have h_denom_pos : 0 < 1 - (p : ℝ) ^ (t - 1) := by linarith [r_def]
+            have h_main :
+                ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) /
+                    (1 - (p : ℝ) ^ (t - 1)) ≤
+                  2 / 3 :=
+              rpow_main_term_le_two_thirds hp3 ht ht_half
+            have h_tail :
+                ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k) ≤
+                  (X + 1) :=
+              h_sum2
             calc (X + 1) * (1 + ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ ((t - 1) * (k : ℝ) - 1)) +
                   ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k)
                 ≤ (X + 1) * (1 + ((p : ℝ) ^ t - 1) * ((p : ℝ) ^ (-1 : ℝ) / (1 - (p : ℝ) ^ (t - 1)))) +
                   (X + 1) := by gcongr
-              _ = (X + 1) * (1 + ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) / (1 - (p : ℝ) ^ (t - 1))) +
+            _ = (X + 1) * (1 + ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) / (1 - (p : ℝ) ^ (t - 1))) +
                   (X + 1) := by ring
-              _ ≤ (X + 1) * (1 + 1) + (X + 1) := by
-                  -- Bound the main term: (p^t - 1) * p^(-1) / (1 - p^(t-1)) ≤ 1
-                  have hp_pos : (0 : ℝ) < p := by positivity
-                  have h_denom_pos : 0 < 1 - (p : ℝ) ^ (t - 1) := by linarith [r_def]
-
-                  -- Main bound: (p^t - 1) * p^(-1) / (1 - p^(t-1)) ≤ p^(t-1) / (1 - p^(t-1)) ≤ 1
-                  have h_main : ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) / (1 - (p : ℝ) ^ (t - 1)) ≤ 1 := by
-                    -- Step 1: (p^t - 1) * p^(-1) ≤ p^(t-1)
-                    have h_step1 : ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) ≤ (p : ℝ) ^ (t - 1) := by
-                      have : (p : ℝ) ^ t * (p : ℝ) ^ (-1 : ℝ) = (p : ℝ) ^ (t - 1) := by
-                        rw [← Real.rpow_add hp_pos]
-                        ring_nf
-                      calc ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ)
-                          ≤ (p : ℝ) ^ t * (p : ℝ) ^ (-1 : ℝ) := by
-                            gcongr
-                            linarith [Real.rpow_pos_of_pos hp_pos t]
-                        _ = (p : ℝ) ^ (t - 1) := this
-                    -- Step 2: For 0 < x < 1/2, we have x / (1 - x) ≤ 1
-                    have h_r_small : (p : ℝ) ^ (t - 1) < 1 / 2 := by
-                      have h_exp : t - 1 ≤ -1 / 2 := by linarith
-                      have h_p_gt1 : 1 < (p : ℝ) := by
-                        have : (3 : ℝ) ≤ p := by exact_mod_cast hp3
-                        linarith
-                      calc (p : ℝ) ^ (t - 1)
-                          ≤ (p : ℝ) ^ (-1 / 2 : ℝ) := by
-                            rw [Real.rpow_le_rpow_left_iff h_p_gt1]
-                            exact h_exp
-                        _ ≤ (3 : ℝ) ^ (-1 / 2 : ℝ) := by
-                            apply Real.rpow_le_rpow_of_nonpos
-                            · norm_num
-                            · exact_mod_cast hp3
-                            · norm_num
-                        _ < 1 / 2 := by
-                            -- NOTE: This claim is INCORRECT! 3^(-1/2) = 1/√3 ≈ 0.577 > 0.5
-                            -- The correct bound is 3^(-1/2) < 7/12 ≈ 0.583
-                            -- However, the overall proof strategy still works because:
-                            -- 1. The final bound uses ≤ 3(X+1), not a tighter constant
-                            -- 2. The proof can be reworked to use x/(1-x) ≤ 3 directly
-                            -- This so#rry is left as a marker for future improvement
-                            sorry -- KNOWN ISSUE: Claim is false; proof needs restructuring
-                    -- Step 3: Combine
-                    have h_div_lt : (p : ℝ) ^ (t - 1) / (1 - (p : ℝ) ^ (t - 1)) < 1 := by
-                      have h_pos : 0 < (p : ℝ) ^ (t - 1) := r_pos
-                      have h_lt_half : (p : ℝ) ^ (t - 1) < 1 / 2 := h_r_small
-                      -- For 0 < x < 1/2: x / (1 - x) < x / (1/2) = 2x < 1
-                      have h1 : (p : ℝ) ^ (t - 1) / (1 - (p : ℝ) ^ (t - 1)) < (p : ℝ) ^ (t - 1) / (1 / 2) := by
-                        gcongr
-                        linarith
-                      have h2 : (p : ℝ) ^ (t - 1) / (1 / 2) = 2 * (p : ℝ) ^ (t - 1) := by ring
-                      have h3 : 2 * (p : ℝ) ^ (t - 1) < 1 := by
-                        calc 2 * (p : ℝ) ^ (t - 1)
-                            < 2 * (1 / 2) := by gcongr
-                          _ = 1 := by norm_num
-                      linarith
-                    have h_main_le : ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) / (1 - (p : ℝ) ^ (t - 1)) ≤ (p : ℝ) ^ (t - 1) / (1 - (p : ℝ) ^ (t - 1)) := by
-                      have h_num : ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) ≤ (p : ℝ) ^ (t - 1) := by
-                        have : (p : ℝ) ^ t * (p : ℝ) ^ (-1 : ℝ) = (p : ℝ) ^ (t - 1) := by
-                          rw [← Real.rpow_add hp_pos]
-                          ring_nf
-                        calc ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ)
-                            ≤ (p : ℝ) ^ t * (p : ℝ) ^ (-1 : ℝ) := by
-                              gcongr
-                              linarith [Real.rpow_pos_of_pos hp_pos t]
-                          _ = (p : ℝ) ^ (t - 1) := this
-                      have h_denom_pos : 0 < 1 - (p : ℝ) ^ (t - 1) := by linarith [r_def]
-                      apply div_le_div_of_nonneg_right h_num h_denom_pos.le
-                    linarith
-                  -- Now use h_main to bound the expression
-                  have h_bound : 1 + ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) / (1 - (p : ℝ) ^ (t - 1)) ≤ 1 + 1 := by
-                    linarith
-                  gcongr
-              _ = (X + 1) * 2 + (X + 1) := by ring
-              _ = 3 * (X + 1) := by ring
+            _ ≤ (X + 1) * (1 + 2 / 3) + (X + 1) := by
+                nlinarith [h_main]
+            _ ≤ 3 * (X + 1) := by
+                have h_pos : 0 ≤ (X + 1 : ℝ) := by linarith
+                nlinarith [h_pos]
       -- end of calc "_ ≤ 3 * (X + 1)"
   -- end of proof
 
@@ -1127,6 +1032,301 @@ theorem sum_pow_padicValNat_le_geom_half {p : ℕ} [hp : Fact p.Prime] (hp3 : p 
 
 
 
+
+
+/-- For X ≥ 11, the telescoping bound can be refined to `2(X+1)`.
+
+This uses `sqrt_two_X_add_two_sub_one_le_third_X_add_one` to tighten the tail.
+-/
+lemma sum_pow_padicValNat_le_geom_two_for_large_X {p : ℕ} [hp : Fact p.Prime]
+    (hp3 : p ≥ 3) {t : ℝ} (ht : 0 < t) (ht_half : t ≤ 1 / 2) {X : ℕ} (hX : X ≥ 11) :
+    ∑ n ∈ Finset.Icc 0 X, (p : ℝ) ^ (t * (padicValNat p (2 * n + 1) : ℤ)) ≤
+      2 * (X + 1) := by
+  classical
+  let K := Nat.log p (2 * X + 2)
+  have hK : ∀ n ∈ Finset.Icc 0 X, padicValNat p (2 * n + 1) ≤ K := by
+    intro n hn
+    unfold K
+    have h1 : padicValNat p (2 * n + 1) ≤ Nat.log p (2 * n + 1) := by
+      apply padicValNat_le_log
+      omega
+    have h2 : 2 * n + 1 ≤ 2 * X + 2 := by
+      simp only [Finset.mem_Icc] at hn
+      omega
+    have h3 : Nat.log p (2 * n + 1) ≤ Nat.log p (2 * X + 2) := by
+      apply Nat.log_mono_right
+      exact h2
+    omega
+
+  have h_telescope : ∀ n ∈ Finset.Icc 0 X,
+      (p : ℝ) ^ (t * (padicValNat p (2 * n + 1) : ℤ)) =
+        1 + ((p : ℝ) ^ t - 1) *
+          ∑ k ∈ Finset.range K, if padicValNat p (2 * n + 1) ≥ k + 1 then (p : ℝ) ^ (t * k) else 0 := by
+    intro n hn
+    have h_cast : (t * (padicValNat p (2 * n + 1) : ℤ) : ℝ) = t * (padicValNat p (2 * n + 1) : ℝ) := by
+      simp only [Int.cast_natCast]
+    rw [h_cast]
+    exact sum_telescoping_correct hp3 t ht (padicValNat p (2 * n + 1)) K (hK n hn)
+
+  have hp_pos : (0 : ℝ) < p := by positivity
+  have h_main :
+      ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) /
+          (1 - (p : ℝ) ^ (t - 1)) ≤
+        2 / 3 :=
+    rpow_main_term_le_two_thirds hp3 ht ht_half
+
+  have h_tail :
+      ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k) ≤
+        (X + 1) / 3 := by
+    -- Bound p^{tK} by √(2X+2) and apply sqrt_two_X_add_two_sub_one_le_third_X_add_one.
+    have hK_def : p ^ K ≤ 2 * X + 2 := by
+      unfold K
+      have h_ne_zero : 2 * X + 2 ≠ 0 := by omega
+      exact Nat.pow_log_le_self p h_ne_zero
+    have h_nonneg : 0 ≤ (p : ℝ) := le_of_lt hp_pos
+    have h_pK_sqrt : (p : ℝ) ^ (t * K) ≤ Real.sqrt (2 * (X : ℝ) + 2) := by
+      have h_pow_eq : (p : ℝ) ^ (t * K) = ((p : ℝ) ^ K) ^ t := by
+        have h_comm : t * K = (↑K : ℝ) * t := by ring
+        calc (p : ℝ) ^ (t * K)
+            = (p : ℝ) ^ ((↑K : ℝ) * t) := by simp [h_comm]
+          _ = ((p : ℝ) ^ K) ^ t := by
+                have h_aux : (p : ℝ) ^ ((↑K : ℝ) * t) = ((p : ℝ) ^ K) ^ t := by
+                  exact (Real.rpow_natCast_mul h_nonneg K t)
+                exact h_aux
+      have h_pow_le : ((p : ℝ) ^ K) ^ t ≤ (2 * X + 2) ^ t := by
+        have h_nonneg_pK : 0 ≤ (p : ℝ) ^ K := by exact pow_nonneg (Nat.cast_nonneg p) K
+        have hpK_cast : (p : ℝ) ^ K ≤ 2 * X + 2 := by exact_mod_cast hK_def
+        exact Real.rpow_le_rpow h_nonneg_pK hpK_cast ht.le
+      have h_sqrt_bound : (2 * X + 2 : ℝ) ^ t ≤ Real.sqrt (2 * (X : ℝ) + 2) := by
+        have hbase : 1 ≤ 2 * (X : ℝ) + 2 := by
+          have hX1 : 1 ≤ X := by linarith [hX]
+          linarith
+        have h_step : (2 * (X : ℝ) + 2) ^ t ≤ (2 * (X : ℝ) + 2) ^ (1 / 2 : ℝ) :=
+          Real.rpow_le_rpow_of_exponent_le (by exact_mod_cast hbase) ht_half
+        have h_sqrt : (2 * (X : ℝ) + 2) ^ (1 / 2 : ℝ) = Real.sqrt (2 * (X : ℝ) + 2) := by
+          rw [Real.sqrt_eq_rpow]
+        calc (2 * (X : ℝ) + 2) ^ t
+            ≤ (2 * (X : ℝ) + 2) ^ (1 / 2 : ℝ) := h_step
+          _ = Real.sqrt (2 * (X : ℝ) + 2) := h_sqrt
+      calc (p : ℝ) ^ (t * K)
+          = ((p : ℝ) ^ K) ^ t := h_pow_eq
+        _ ≤ (2 * X + 2) ^ t := h_pow_le
+        _ ≤ Real.sqrt (2 * (X : ℝ) + 2) := h_sqrt_bound
+
+    have h_tail_eq :
+        ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k)
+          = (p : ℝ) ^ (t * K) - 1 := by
+      let r := (p : ℝ) ^ t
+      have mul_eq : (r - 1) * ∑ k ∈ Finset.range K, r ^ k = r ^ K - 1 := by
+        induction K with
+        | zero => simp [Finset.range_zero, Finset.sum_empty, sub_eq_add_neg]
+        | succ K ih =>
+          have : ∑ k ∈ Finset.range (K + 1), r ^ k = ∑ k ∈ Finset.range K, r ^ k + r ^ K := by
+            simp [Finset.sum_range_succ]
+          rw [this]
+          calc (r - 1) * (∑ k ∈ Finset.range K, r ^ k + r ^ K)
+              = (r - 1) * ∑ k ∈ Finset.range K, r ^ k + (r - 1) * r ^ K := by rw [mul_add]
+            _ = (r ^ K - 1) + (r - 1) * r ^ K := by rw [ih]
+            _ = r ^ (K + 1) - 1 := by
+              calc (r ^ K - 1) + (r - 1) * r ^ K
+                  = (r ^ K - 1) + (r ^ (K + 1) - r ^ K) := by { congr; ring }
+                _ = r ^ (K + 1) - 1 := by ring
+      have h_pow_eq : ((p : ℝ) ^ t) ^ K = (p : ℝ) ^ (t * K) := by
+        have h_nonneg' : 0 ≤ (p : ℝ) := le_of_lt hp_pos
+        exact (Real.rpow_mul_natCast h_nonneg' t K).symm
+      have h_pow_eq_k : ∀ k : ℕ, (p : ℝ) ^ (t * k) = r ^ k := by
+        intro k
+        have h_nonneg' : 0 ≤ (p : ℝ) := le_of_lt hp_pos
+        have htmp : (p : ℝ) ^ (t * k) = ((p : ℝ) ^ t) ^ k :=
+          (Real.rpow_mul_natCast h_nonneg' t k)
+        simpa [r] using htmp
+      calc ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k)
+          = (r - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k) := by
+              simp [r]
+        _ = (r - 1) * ∑ k ∈ Finset.range K, r ^ k := by
+              apply congrArg (fun s => (r - 1) * s)
+              apply Finset.sum_congr rfl
+              intro k hk
+              exact h_pow_eq_k k
+        _ = r ^ K - 1 := mul_eq
+        _ = (p : ℝ) ^ (t * K) - 1 := by rw [h_pow_eq]
+
+    have h_tail_le : ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k) ≤
+        (X + 1) / 3 := by
+      have h1 : (p : ℝ) ^ (t * K) - 1 ≤ Real.sqrt (2 * (X : ℝ) + 2) - 1 := by
+        nlinarith [h_pK_sqrt]
+      have h2 : Real.sqrt (2 * (X : ℝ) + 2) - 1 ≤ (X + 1) / 3 :=
+        sqrt_two_X_add_two_sub_one_le_third_X_add_one hX
+      nlinarith [h_tail_eq, h1, h2]
+    exact h_tail_le
+
+  have ht_sub_one_neg : t - 1 < 0 := by linarith [ht_half]
+  have r_def : (p : ℝ) ^ (t - 1) < 1 := by
+    have h2 : (1 : ℝ) < p := by
+      have : (3 : ℝ) ≤ p := by exact_mod_cast hp3
+      linarith
+    calc (p : ℝ) ^ (t - 1)
+        < (p : ℝ) ^ 0 := Real.rpow_lt_rpow_of_exponent_lt h2 ht_sub_one_neg
+      _ = 1 := by simp
+  have r_pos : (0 : ℝ) < (p : ℝ) ^ (t - 1) := by
+    exact Real.rpow_pos_of_pos hp_pos (t - 1)
+  have hpt_pos : (p : ℝ) ^ t - 1 > 0 := by
+    have : (1 : ℝ) < (p : ℝ) ^ t := by
+      apply one_lt_rpow
+      · have : (3 : ℝ) ≤ p := by exact_mod_cast hp3
+        linarith
+      · exact ht
+    linarith
+  have h_sum1 :
+      ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ ((t - 1) * (k : ℝ) - 1)
+        ≤ ((p : ℝ) ^ t - 1) * ((p : ℝ) ^ (-1 : ℝ) / (1 - (p : ℝ) ^ (t - 1))) := by
+    have h_rewrite : ∑ k ∈ Finset.range K, (p : ℝ) ^ ((t - 1) * (k : ℝ) - 1)
+         = (p : ℝ) ^ (-1 : ℝ) * ∑ k ∈ Finset.range K, (p : ℝ) ^ ((t - 1) * (k : ℝ)) := by
+      rw [Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro k _
+      rw [← Real.rpow_add hp_pos]
+      congr 1
+      ring
+    rw [h_rewrite]
+    have h_geom : ∑ k ∈ Finset.range K, (p : ℝ) ^ ((t - 1) * (k : ℝ))
+         = ∑ k ∈ Finset.range K, (p : ℝ) ^ ((t - 1) * k) := by
+      apply Finset.sum_congr rfl
+      intro k hk
+      ring
+    rw [h_geom]
+    have h_bound : ∑ k ∈ Finset.range K, (p : ℝ) ^ ((t - 1) * (k : ℝ))
+                ≤ 1 / (1 - (p : ℝ) ^ (t - 1)) := by
+      have h_eq : ∑ k ∈ Finset.range K, (p : ℝ) ^ ((t - 1) * (k : ℝ)) =
+          ∑ k ∈ Finset.range K, ((p : ℝ) ^ (t - 1)) ^ k := by
+        apply Finset.sum_congr rfl
+        intro k _
+        rw [Real.rpow_mul_natCast (le_of_lt hp_pos)]
+      rw [h_eq, Finset.range_eq_Ico]
+      exact geom_sum_Ico_le_of_lt_one r_pos.le r_def
+    have : (p : ℝ) ^ (-1 : ℝ) * (1 / (1 - (p : ℝ) ^ (t - 1)))
+         = (p : ℝ) ^ (-1 : ℝ) / (1 - (p : ℝ) ^ (t - 1)) := by ring
+    calc ((p : ℝ) ^ t - 1) * ((p : ℝ) ^ (-1 : ℝ) * ∑ k ∈ Finset.range K, (p : ℝ) ^ ((t - 1) * (k : ℝ)))
+        = ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) * ∑ k ∈ Finset.range K, (p : ℝ) ^ ((t - 1) * (k : ℝ)) := by ring
+      _ ≤ ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) * (1 / (1 - (p : ℝ) ^ (t - 1))) := by
+        have hp_inv_pos : (0 : ℝ) < (p : ℝ) ^ (-1 : ℝ) := by
+          apply Real.rpow_pos_of_pos hp_pos
+        gcongr
+      _ = ((p : ℝ) ^ t - 1) * ((p : ℝ) ^ (-1 : ℝ) / (1 - (p : ℝ) ^ (t - 1))) := by
+        rw [← this]
+        ring_nf
+  have h_split_le :
+      (∑ n ∈ Finset.Icc 0 X, (p : ℝ) ^ (t * (padicValNat p (2 * n + 1) : ℤ))) ≤
+        (X + 1) * (1 + ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ ((t - 1) * (k : ℝ) - 1)) +
+          ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k) := by
+    calc ∑ n ∈ Finset.Icc 0 X, (p : ℝ) ^ (t * (padicValNat p (2 * n + 1) : ℤ))
+        = ∑ n ∈ Finset.Icc 0 X, (1 + ((p : ℝ) ^ t - 1) *
+            ∑ k ∈ Finset.range K, if padicValNat p (2 * n + 1) ≥ k + 1 then (p : ℝ) ^ (t * k) else 0) := by
+          apply Finset.sum_congr rfl
+          intro n hn
+          exact h_telescope n hn
+      _ = ∑ n ∈ Finset.Icc 0 X, 1 + ∑ n ∈ Finset.Icc 0 X, ((p : ℝ) ^ t - 1) *
+            (∑ k ∈ Finset.range K, if padicValNat p (2 * n + 1) ≥ k + 1 then (p : ℝ) ^ (t * k) else 0) := by
+          rw [Finset.sum_add_distrib]
+      _ = (X + 1) + ((p : ℝ) ^ t - 1) * ∑ n ∈ Finset.Icc 0 X,
+            (∑ k ∈ Finset.range K, if padicValNat p (2 * n + 1) ≥ k + 1 then (p : ℝ) ^ (t * k) else 0) := by
+          rw [Finset.mul_sum]
+          congr 1
+          · simp only [Finset.sum_const, Nat.card_Icc, nsmul_eq_mul, mul_one]
+            norm_cast
+      _ = (X + 1) + ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, ∑ n ∈ Finset.Icc 0 X,
+            (if padicValNat p (2 * n + 1) ≥ k + 1 then (p : ℝ) ^ (t * k) else 0) := by
+          congr 2
+          exact Finset.sum_comm
+      _ = (X + 1) + ((p : ℝ) ^ t - 1) *
+            ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k) *
+              ((Finset.Icc 0 X).filter (fun n => padicValNat p (2 * n + 1) ≥ k + 1)).card := by
+          congr 2
+          apply Finset.sum_congr rfl
+          intro k hk
+          rw [← Finset.sum_filter]
+          simp only [Finset.sum_const, nsmul_eq_mul, mul_comm]
+      _ ≤ (X + 1) + ((p : ℝ) ^ t - 1) *
+            ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k) * ((X + 1) / (p : ℝ) ^ (k + 1) + 1) := by
+          gcongr with k hk
+          have h_equiv : {n ∈ Finset.Icc 0 X | padicValNat p (2 * n + 1) ≥ k + 1}
+                       = {n ∈ Finset.Icc 0 X | (p : ℕ) ^ (k + 1) ∣ 2 * n + 1} := by
+            ext n
+            simp only [Finset.mem_filter, Finset.mem_Icc]
+            constructor
+            · intro ⟨hn_mem, hv⟩
+              have h_odd : 2 * n + 1 ≠ 0 := by omega
+              have : (p : ℕ) ^ (k + 1) ∣ 2 * n + 1 := by
+                apply (padicValNat_dvd_iff_le h_odd).mpr
+                exact hv
+              exact ⟨hn_mem, this⟩
+            · intro ⟨hn_mem, hdiv⟩
+              have h_odd : 2 * n + 1 ≠ 0 := by omega
+              have : k + 1 ≤ padicValNat p (2 * n + 1) := by
+                apply (padicValNat_dvd_iff_le h_odd).mp
+                exact hdiv
+              exact ⟨hn_mem, this⟩
+          rw [h_equiv]
+          have hk1 : k + 1 ≥ 1 := by omega
+          convert count_divisible_le hp.out hp3 hk1 using 1
+      _ = (X + 1) + ((p : ℝ) ^ t - 1) *
+            (∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k) * ((X + 1) / (p : ℝ) ^ (k + 1)) +
+             ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k) * 1) := by
+          congr 2
+          rw [← Finset.sum_add_distrib]
+          apply Finset.sum_congr rfl
+          intro k _
+          ring
+      _ = (X + 1) + ((p : ℝ) ^ t - 1) *
+            ((X + 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k) / (p : ℝ) ^ (k + 1) +
+             ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k)) := by
+          congr 2
+          congr 1
+          · rw [Finset.mul_sum]
+            apply Finset.sum_congr rfl
+            intro k _
+            rw [mul_div_assoc']
+            ring_nf
+          · field_simp
+      _ = (X + 1) * (1 + ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * (k : ℝ) - (k : ℝ) - 1)) +
+            ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k) := by
+          have h_simp : ∀ k ∈ Finset.range K,
+              (p : ℝ) ^ (t * k) / (p : ℝ) ^ (k + 1) = (p : ℝ) ^ (t * (k : ℝ) - (k : ℝ) - 1) := by
+            intro k _
+            rw [div_eq_mul_inv]
+            conv_lhs => arg 2; rw [← Real.rpow_natCast]
+            rw [← Real.rpow_neg hp_pos.le]
+            rw [← Real.rpow_add hp_pos]
+            congr 1
+            push_cast
+            ring
+          rw [Finset.sum_congr rfl h_simp]
+          ring
+      _ = (X + 1) * (1 + ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ ((t - 1) * (k : ℝ) - 1)) +
+            ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k) := by
+          congr 1
+          congr 1
+          congr 2
+          apply Finset.sum_congr rfl
+          intro k _
+          have : (t * (k : ℝ) - (k : ℝ) - 1) = ((t - 1) * (k : ℝ) - 1) := by ring
+          rw [← this]
+  calc (∑ n ∈ Finset.Icc 0 X, (p : ℝ) ^ (t * (padicValNat p (2 * n + 1) : ℤ)))
+      ≤ (X + 1) * (1 + ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ ((t - 1) * (k : ℝ) - 1)) +
+          ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k) := h_split_le
+    _ ≤ (X + 1) * (1 + ((p : ℝ) ^ t - 1) * ((p : ℝ) ^ (-1 : ℝ) / (1 - (p : ℝ) ^ (t - 1)))) +
+          ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k) := by
+          gcongr
+    _ = (X + 1) * (1 + ((p : ℝ) ^ t - 1) * (p : ℝ) ^ (-1 : ℝ) /
+          (1 - (p : ℝ) ^ (t - 1))) +
+          ((p : ℝ) ^ t - 1) * ∑ k ∈ Finset.range K, (p : ℝ) ^ (t * k) := by
+          ring
+    _ ≤ (X + 1) * (1 + 2 / 3) + (X + 1) / 3 := by
+          have h_pos : 0 ≤ (X + 1 : ℝ) := by linarith
+          nlinarith [h_main, h_tail, h_pos]
+    _ = 2 * (X + 1) := by ring
+
+  -- end of proof
 
 
 variable {p : ℕ}
@@ -1196,7 +1396,28 @@ lemma ratio_over_one_minus_le_two {r : ℝ} (_hr0 : 0 ≤ r) (hr : r ≤ (2 : �
   -- ⊢ r / (1 - r) ≤ 2
   have h_step2 : (2 / 3) / (1 - r) ≤ (2 / 3) / (1 - (2 : ℝ) / 3) := by
     -- ⊢ 2 / 3 / (1 - r) ≤ 2 / 3 / (1 - 2 / 3)
-    gcongr
+    -- gcongr ← コレでも通る！
+    -- Since r ≤ 2/3 we have 1 - (2/3) ≤ 1 - r, and for positive denominators
+    -- this implies 1/(1 - r) ≤ 1/(1 - 2/3).
+    have hden_pos : 0 < 1 - (2 : ℝ) / 3 := by norm_num
+    have hden_pos_r : 0 < 1 - r := denom_pos_of_ratio_le_two_thirds hr
+    have h_le : 1 - (2 : ℝ) / 3 ≤ 1 - r := by linarith
+    have hden_pos : 0 < 1 - (2 : ℝ) / 3 := by norm_num
+    have h_le : 1 - (2 : ℝ) / 3 ≤ 1 - r := by linarith
+    have h_inv : 1 / (1 - r) ≤ 1 / (1 - (2 : ℝ) / 3) :=
+      one_div_le_one_div_of_le hden_pos h_le
+    have h_num_pos : 0 < (2 : ℝ) / 3 := by norm_num
+    have h_eq : (2 / 3) / (1 - r) = (2 / 3) * (1 / (1 - r)) := by
+      field_simp [denom_pos_of_ratio_le_two_thirds hr]
+    have h_eq' : (2 / 3) * (1 / (1 - (2 : ℝ) / 3)) = (2 / 3) / (1 - (2 : ℝ) / 3) := by
+      field_simp [hden_pos]
+    calc (2 / 3) / (1 - r)
+        = (2 / 3) * (1 / (1 - r)) := h_eq
+      _ ≤ (2 / 3) * (1 / (1 - (2 : ℝ) / 3)) := by
+            have h_tmp : 1 / (1 - r) * (2 / 3) ≤ 1 / (1 - (2 : ℝ) / 3) * (2 / 3) :=
+              mul_le_mul_of_nonneg_right h_inv (le_of_lt h_num_pos)
+            simpa [mul_comm] using h_tmp
+      _ = (2 / 3) / (1 - (2 : ℝ) / 3) := h_eq'
 
   have h_eq : (2 / 3) / (1 - (2 : ℝ) / 3) = 2 := by
     field_simp [h_denom_pos']
@@ -1266,6 +1487,52 @@ lemma inv_sqrt3_lt_7_12 : inv_sqrt_3 < (7 : ℝ) / 12 := by
   rw [h_rpow_eq]  -- ゴールを (√3)⁻¹ < 7/12 に変換
   simpa [one_div, inv_div] using h_one_div
 
+
+/-- `3 ^ (log 2 / log 3) = 2` を示す。
+
+これは `Real.log_rpow` を使って両辺のログを取り，
+`Real.log 2 = (log 2 / log 3) * log 3` になることを確認してから、
+`Real.log_inj` で元に戻す形で示す。
+-/
+lemma three_pow_log2_div_log3_eq_two :
+    (3 : ℝ) ^ (Real.log 2 / Real.log 3) = 2 := by
+  have h3pos : 0 < (3 : ℝ) := by norm_num
+  have h2pos : 0 < (2 : ℝ) := by norm_num
+  have h3nonneg : 0 ≤ (3 : ℝ) := by norm_num
+  have hlog : Real.log ((3 : ℝ) ^ (Real.log 2 / Real.log 3)) = Real.log 2 := by
+    -- log(x^y) = y * log x
+    have hcalc :
+      Real.log ((3 : ℝ) ^ (Real.log 2 / Real.log 3)) = (Real.log 2 / Real.log 3) * Real.log 3 :=
+      Real.log_rpow h3pos (Real.log 2 / Real.log 3)
+    -- RHS = (log 2 / log 3) * log 3 = log 2
+    have hright : (Real.log 2 / Real.log 3) * Real.log 3 = Real.log 2 := by
+      have hlog3_ne : Real.log (3 : ℝ) ≠ 0 := by
+        have : 0 < Real.log (3 : ℝ) := by
+          have : 1 < (3 : ℝ) := by norm_num
+          exact Real.log_pos this
+        exact ne_of_gt this
+      field_simp [hlog3_ne]
+    simpa [hright] using hcalc
+  have hpos_x : 0 < (3 : ℝ) ^ (Real.log 2 / Real.log 3) := by
+    have h := Real.rpow_pos_of_pos h3pos (Real.log 2 / Real.log 3)
+    exact h
+  exact Real.log_injOn_pos hpos_x h2pos hlog
+
+/-- `3 ^ (-(log 2 / log 3)) = 1/2` を示す。
+
+`Real.rpow_neg` を用いて `(3^a)^(-1)` に書き換え、
+前の補題を使って `2⁻¹` に帰着する。
+-/
+lemma three_pow_neg_log2_div_log3_eq_half :
+    (3 : ℝ) ^ (-(Real.log 2 / Real.log 3)) = 1 / 2 := by
+  have h3pos : 0 < (3 : ℝ) := by norm_num
+  have h3nonneg : 0 ≤ (3 : ℝ) := by norm_num
+  calc
+    (3 : ℝ) ^ (-(Real.log 2 / Real.log 3))
+        = ((3 : ℝ) ^ (Real.log 2 / Real.log 3))⁻¹ := by
+              simpa using (Real.rpow_neg h3nonneg (Real.log 2 / Real.log 3))
+    _ = (2 : ℝ)⁻¹ := by rw [three_pow_log2_div_log3_eq_two]
+    _ = 1 / 2 := by norm_num
 
 -- 以降は 1/(1 - r) ≤ 12/5 を使えば 3 の上界に組み込める：
 -- 1/(1 - (3 : ℝ) ^ (-(1/2 : ℝ))) ≤ 12/5

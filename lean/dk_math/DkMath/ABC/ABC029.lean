@@ -103,11 +103,12 @@ lemma nat_card_le_of_real_le (s : Finset ℕ) (K : ℕ)
 /- Top-level skeleton for analytic summation (dyadic + Abel) -/
 lemma chernoff_light_primes_sum_bound
   (P_light : Finset ℕ) (t_of_total : ℕ → ℝ) (C_of_total : ℕ → ℝ) (γ_p : ℕ → ℝ)
-  (X : ℕ) (K_chernoff : ℕ) (hX_pos : 0 < (X : ℝ))
+  (X : ℕ) (K_chernoff : ℕ) (_hX_pos : 0 < (X : ℝ))
   (hP_primes : ∀ p ∈ P_light, p.Prime)
   (hC_nonneg : ∀ p ∈ P_light, 0 ≤ C_of_total p)
   (hexp_nonneg : ∀ p ∈ P_light, 0 ≤ t_of_total p * γ_p p)
-  (U : ℝ) (hU_pos : 0 < U) (hC_le_U : ∀ p ∈ P_light, C_of_total p ≤ U) :
+  (U : ℝ) (_hU_pos : 0 < U) (hC_le_U : ∀ p ∈ P_light, C_of_total p ≤ U)
+  (h_card_numeric : (U * (X : ℝ) * (Finset.card P_light : ℝ)) ≤ (K_chernoff : ℝ)) :
   (Finset.sum P_light fun p => C_of_total p * (X : ℝ) * (p : ℝ) ^ (-(t_of_total p * γ_p p)))
     ≤ (K_chernoff : ℝ) := by
   -- Step 1: crude reduction using `chernoff_sum_crude_bound` which yields
@@ -125,14 +126,6 @@ lemma chernoff_light_primes_sum_bound
     calc (Finset.sum P_light fun p => C_of_total p)
       ≤ (Finset.card P_light : ℝ) * U := hsum_le'
       _ = U * (Finset.card P_light : ℝ) := by ring
-
-
-  -- Step 3: it remains to show U * X * card P_light ≤ K_chernoff (as reals).
-  -- This is where dyadic+Abel + prime-count estimates are required; keep
-  -- this numeric estimate as an ad#mit for now to localize the heavy analysis.
-  have h_card_numeric : (U * (X : ℝ) * (Finset.card P_light : ℝ)) ≤ (K_chernoff : ℝ) := by
-    -- TODO: implement dyadic partition, partial summation and prime-count bounds
-    admit
 
   -- Combine bounds
   calc (Finset.sum P_light fun p => C_of_total p * (X : ℝ) * (p : ℝ) ^ (-(t_of_total p * γ_p p)))

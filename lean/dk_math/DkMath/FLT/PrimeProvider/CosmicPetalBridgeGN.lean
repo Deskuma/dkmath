@@ -8,6 +8,8 @@ import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNCore
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentBQuarantine
 
+#print "file: DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN"
+
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
 
@@ -60,6 +62,17 @@ theorem triominoNoWieferichBridge_impl
 theorem triominoWieferichBranchBridge_default :
     TriominoWieferichBranchBridge := by
   exact ⟨triominoWieferichDescent_impl⟩
+
+/--
+research-side primitive-prime valuation target から作る clean branch bridge。
+
+`default` 版の `so#rryAx` 汚染は固定注入に由来し、
+branch contract 自体はこの target があれば clean に充足できる。
+-/
+theorem triominoWieferichBranchBridge_of_padicValNatLeOneTarget
+    (hVal : TriominoPrimitivePrimeFactorPadicValNatLeOneTarget) :
+    TriominoWieferichBranchBridge := by
+  exact ⟨triominoWieferichDescent_impl_of_padicValNatLeOneTarget hVal⟩
 
 /-- 既定の Branch bridge から得る、引数なし版の NoWieferich bridge。 -/
 theorem triominoNoWieferichBridge_default :

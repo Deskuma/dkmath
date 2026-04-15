@@ -10,6 +10,8 @@ Authors: D. and Wise Wolf.
 import Mathlib
 import DkMath.SilverRatio.Sqrt2Lemmas
 
+#print "file: DkMath.SilverRatio.SilverRatioUnit"
+
 /-!
   Silver Ratio Unit formalization (core lemmas)
 

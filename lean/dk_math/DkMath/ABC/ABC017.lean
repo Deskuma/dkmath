@@ -229,7 +229,14 @@ theorem borel_cantelli_one
 
     注：確率空間 Ω は任意に取れるので、結論は確率空間によらない。
 -/
-theorem eventually_not_is_bad_adjacent (δ : ℝ) (hδ : 0 < δ) :
+theorem eventually_not_is_bad_adjacent
+  (δ : ℝ) (hδ : 0 < δ)
+  (hTailProb :
+    ∀ (δ : ℝ), 0 < δ →
+      ∃ (C c β : ℝ) (n0 : ℕ),
+        0 < C ∧ 0 < c ∧ 1 < β ∧
+        ∀ n ≥ n0,
+          (Measure.dirac ()).real (BadAdj δ n Unit) ≤ C * Real.exp (-c * (Real.log n) ^ β)) :
   ∀ᶠ n in atTop, ¬is_bad_a δ (2*n+1) (n+1) n := by
   classical
   -- 任意確率空間で良いが、ここでは Unit 空間に固定
@@ -238,9 +245,15 @@ theorem eventually_not_is_bad_adjacent (δ : ℝ) (hδ : 0 < δ) :
   haveI : IsProbabilityMeasure μ := by infer_instance
 
   -- 尾確率の上界（既存 API を利用）
+  have hTailProbμ :
+      ∃ (C c β : ℝ) (n0 : ℕ),
+        0 < C ∧ 0 < c ∧ 1 < β ∧
+        ∀ n ≥ n0,
+          μ.real (BadAdj δ n Ω) ≤ C * Real.exp (-c * (Real.log n) ^ β) := by
+    simpa [Ω, μ] using hTailProb δ hδ
   obtain ⟨C, c, β, n0, hC_pos, hc_pos, hβ_gt, hBound⟩ :=
-    tail_prob_is_bad_adjacent μ δ hδ
-  -- hBound : ∀ n ≥ n0, μ.real (BadAdj δ n Ω) ≤ C * Real.exp (- c * (Real.log n) ^ β)
+    tail_prob_is_bad_adjacent μ δ hδ hTailProbμ
+  -- hBound : ∀ n ≥ n0, μ.real (BadAdj δ n Ω) ≤ C * Real.exp (-c * (Real.log n) ^ β)
 
   --------------------------------------------------------------------------------
   -- Step A: exp(-c (log n)^β) → 0 なので C倍しても 0 に収束。
@@ -263,7 +276,7 @@ theorem eventually_not_is_bad_adjacent (δ : ℝ) (hδ : 0 < δ) :
 
   -- よって、十分大きい n で `C * exp(...) < 1` が成り立つ
   have h_bound_small : ∀ᶠ n : ℕ in atTop,
-      C * Real.exp (- c * (Real.log n) ^ β) < 1 := by
+      C * Real.exp (-c * (Real.log n) ^ β) < 1 := by
     -- 0 に収束する関数は任意の正の ε（ここでは 1）より小さくなる
     rw [Metric.tendsto_atTop] at htend0_scaled
     have h1 : 0 < (1 : ℝ) := by norm_num
@@ -280,7 +293,7 @@ theorem eventually_not_is_bad_adjacent (δ : ℝ) (hδ : 0 < δ) :
     simp only [sub_zero] at this
     -- n ≥ 1 なので if は else になる
     have hn_ne_zero : n ≠ 0 := by omega
-    have hpos : 0 ≤ C * Real.exp (- c * (Real.log n) ^ β) := by
+    have hpos : 0 ≤ C * Real.exp (-c * (Real.log n) ^ β) := by
       apply mul_nonneg (le_of_lt hC_pos)
       exact Real.exp_nonneg _
     -- this : |C * (if n=0 then 0 else exp(...))| < 1
@@ -289,7 +302,7 @@ theorem eventually_not_is_bad_adjacent (δ : ℝ) (hδ : 0 < δ) :
     -- this : |C| * exp(-(c*...)) < 1
     -- C > 0 より |C| = C
     rw [abs_of_pos hC_pos] at this
-    -- -(c*x) = -c*x は自明
+    -- `-(c*x) = -c*x` は自明
     convert this using 2
     ring_nf
 
@@ -301,7 +314,7 @@ theorem eventually_not_is_bad_adjacent (δ : ℝ) (hδ : 0 < δ) :
 
   -- 2つの eventually を束ねる
   have h_small_and_ge : ∀ᶠ n : ℕ in atTop,
-      C * Real.exp (- c * (Real.log n) ^ β) < 1 ∧ n ≥ n0 :=
+      C * Real.exp (-c * (Real.log n) ^ β) < 1 ∧ n ≥ n0 :=
     h_bound_small.and h_ge_n0
 
   --------------------------------------------------------------------------------
@@ -323,7 +336,7 @@ theorem eventually_not_is_bad_adjacent (δ : ℝ) (hδ : 0 < δ) :
 
   -- 一方、尾確率上界より μ(BadAdj) ≤ C * exp(...)
   -- hBound が直接 log n で与えられているので、そのまま使う
-  have h_upper : μ.real (BadAdj δ n Ω) ≤ C * Real.exp (- c * (Real.log n) ^ β) := by
+  have h_upper : μ.real (BadAdj δ n Ω) ≤ C * Real.exp (-c * (Real.log n) ^ β) := by
     exact hBound n hn
 
   have : μ.real (BadAdj δ n Ω) < 1 :=

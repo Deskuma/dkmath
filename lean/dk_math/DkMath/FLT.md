@@ -1,5 +1,43 @@
 # FLT - Fermat's Last Theorem
 
+## 公開導線の更新メモ
+
+この文書は古い進捗説明を多く含むが、現在の公開導線については次を先に見るのがよい。
+
+- top-level import 入口:
+  `DkMath/FLT.lean`
+- regular-prime mainline:
+  `DkMath/FLT/Kummer/RegularPrimeRoute.lean`
+- prime-ge5 provider 本丸:
+  `DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean`
+
+とくに recent state では、
+`TriominoSquarefreeGNBridgeProvider`
+を concrete に持てる branch 向けに、
+`RegularPrimeRoute`
+から直接 provider 公開面へ上がる次の theorem が追加されている。
+
+- `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+- `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+
+位置づけは次の通り。
+
+- abstract route:
+  `FLTPrimeGe5Target_of_refinedRegularPrimeRoute`
+- provider concrete route:
+  `FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+  から上の 2 本で
+  `GlobalPrimeExponentFLTProvider`
+  /
+  `TriominoPrimeProvider`
+  へ接続
+
+したがって、
+`TriominoSquarefreeGNBridgeProvider`
+を具体的に持てる branch では、
+旧来の abstract `FLTPrimeGe5Target` を手で外へ渡すより、
+この provider concrete route を canonical な public/provider 導線として使うのが現行方針である。
+
 ## 進捗状況
 
 According to a document from **2026-02-13**

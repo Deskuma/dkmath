@@ -16,9 +16,9 @@ presented by D. and Wise Wolf
 - プロジェクト全体の進捗要約はルート [README.md](../../README.md) を参照してください。
 - FLT 最新進捗の正本は [../../docs/PROJECT_STATUS.md](../../docs/PROJECT_STATUS.md) です。
 
-## 最新ステータス（2026-03-08）
+## 最新ステータス（2026-03-15）
 
-- 要点はルート [README.md](../../README.md) の「最新ステータス（2026-03-08）」に集約しています。
+- 要点はルート [README.md](../../README.md) の「最新ステータス（2026-03-15）」に集約しています。
 - 詳細分析は [../../docs/PROJECT_STATUS.md](../../docs/PROJECT_STATUS.md) を参照してください。
 
 ## カテゴリ
@@ -56,10 +56,18 @@ presented by D. and Wise Wolf
   - 宇宙式とトロミノ構造の接続定理 [CosmicFormulaTrominoLink](./DkMath/CosmicFormula/CosmicFormulaTrominoLink.lean)
 - 基本定義とユーティリティ [Basic](./DkMath/Basic.lean)
 - サンプル定理と例 [Samples](./DkMath/Samples.lean)
+  - UniqueFactorizationGN facade 最小導線 [UniqueFactorizationGNFacade](./DkMath/Samples/UniqueFactorizationGNFacade.lean)
+    - 最終推奨入口:
+      `DkMath.NumberTheory.unique_factorization_nat_e2e_autoGNVal_nonExcFacade_boundaryFacade_autoExcNonExcMK`
 - 数学未解決問題（解決済み難問も含む）
   - フェルマーの最終定理（FLT）関連 [FLT](./DkMath/FLT.lean)
     - 実装ガイド [FLT/README.md](./DkMath/FLT/README.md)
     - prime-ge5 provider 本丸 [TriominoCosmicPrimeGe5](./DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean)
+    - regular-prime provider concrete 公開導線
+      `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+      /
+      `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+      in [RegularPrimeRoute](./DkMath/FLT/Kummer/RegularPrimeRoute.lean)
   - Collatz予想関連 [Collatz](./DkMath/Collatz/Collatz2K26.lean)
   - 宇宙式×FLT 接続 [TriominoFLT](./DkMath/CosmicFormula/TriominoFLT.lean)
   - ABC 予想系入口 [ABC](./DkMath/ABC.lean)
@@ -82,6 +90,19 @@ presented by D. and Wise Wolf
 - これらは、本流からは外されています。補題・定理に sorry を含みます。
 - ファイル名は `*Research.lean` で終わるものが対象です。
 - 完成され次第、本流の `*.lean` ファイルに統合される予定です。
+
+### FLT public/provider 導線メモ
+
+- `DkMath.FLT` は `Main` / `Kummer` / `PrimeProvider` をまとめて import する top-level 入口です。
+- `RegularPrimeRoute` の abstract mainline は
+  `FLTPrimeGe5Target_of_refinedRegularPrimeRoute`
+  です。
+- `TriominoSquarefreeGNBridgeProvider` を concrete に持てる branch では、
+  provider-facing な推奨導線として
+  `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+  /
+  `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+  を使います。
 
 ## ドキュメント
 

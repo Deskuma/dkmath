@@ -6,9 +6,8 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 
-open scoped BigOperators
-
 #print "file: DkMath.UnitCycle.Core"
+
 -- ----------------------------------------------------------------------------
 -- DkMath.UnitCycle.Core
 --
@@ -16,6 +15,8 @@ open scoped BigOperators
 -- ----------------------------------------------------------------------------
 
 namespace DkMath.UnitCycle
+
+open scoped BigOperators
 
 /-- `iterate` は Lean 4 の組み込み記法 `f^[n]`（`Function.iterate`）を利用する。 -/
 abbrev iterate {α : Type _} (f : α → α) : Nat → α → α := fun n x => f^[n] x

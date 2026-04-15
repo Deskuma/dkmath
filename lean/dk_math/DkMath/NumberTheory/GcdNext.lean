@@ -9,6 +9,8 @@ import DkMath.NumberTheory.ZsigmondyCyclotomic
 import DkMath.SilverRatio.GcdAg  -- Phase 2: 2進正規化
 import DkMath.FLT.PetalDetect  -- Phase 3: φビット構造・(a+b) 検出器
 
+#print "file: DkMath.NumberTheory.GcdNext"
+
 set_option linter.style.emptyLine false
 set_option linter.style.longLine false
 
