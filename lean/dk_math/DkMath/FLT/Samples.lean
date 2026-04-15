@@ -35,6 +35,7 @@ variable
   (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
   (hRegBranch : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
   (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{0} p)
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
   (hUnit0 : CyclotomicUnitNormalizationTarget.{0})
   (hNorm : CyclotomicNormDescentTarget)
   (hSqProv : TriominoSquarefreeGNBridgeProvider)
@@ -49,7 +50,7 @@ Stage 3 を abstract theorem parameter として渡す branch では、
 -/
 example : FLTPrimeGe5Target := by
   exact FLTPrimeGe5Target_of_refinedRegularPrimeRoute
-    hPeq hRegBranch hRegClass hUnit0 hNorm hPFE hNoLift
+    hPeq hRegBranch hRegClass hCl hUnit0 hNorm hPFE hNoLift
 
 /--
 Sample 2:
@@ -59,7 +60,7 @@ Sample 2:
 -/
 example : FLTPrimeGe5Target := by
   exact FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
-    hPeq hRegBranch hRegClass hUnit0 hSqProv hPFE hNoLift
+    hPeq hRegBranch hRegClass hCl hUnit0 hSqProv hPFE hNoLift
 
 /--
 Sample 3:
@@ -69,7 +70,7 @@ provider-facing な公開面へ直結したいときは、
 -/
 example : GlobalPrimeExponentFLTProvider := by
   exact triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
-    hPeq hRegBranch hRegClass hUnit0 hSqProv hPFE hNoLift
+    hPeq hRegBranch hRegClass hCl hUnit0 hSqProv hPFE hNoLift
 
 /--
 Sample 4:
@@ -79,7 +80,7 @@ Triomino 側の公開 API へ渡したいときは、
 -/
 example : TriominoPrimeProvider := by
   exact triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
-    hPeq hRegBranch hRegClass hUnit0 hSqProv hPFE hNoLift
+    hPeq hRegBranch hRegClass hCl hUnit0 hSqProv hPFE hNoLift
 
 end RegularPrimeRoute
 

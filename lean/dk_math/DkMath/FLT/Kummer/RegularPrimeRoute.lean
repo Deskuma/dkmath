@@ -429,19 +429,22 @@ Stage 2 / Stage 3 は独立入力として保つ。
 -/
 
 /--
-推奨 mainline: regular prime + Stage 2 + Stage 3 → FLT。
+推奨 mainline: regular prime receiver + concrete class-group input +
+Stage 2 + Stage 3 → FLT。
 -/
 theorem FLTPrimeGe5Target_of_refinedRegularPrimeRoute
     (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
     (hRegBranch : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
-    (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime p)
+    (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{0} p)
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
     (hUnit : CyclotomicUnitNormalizationTarget)
     (hNorm : CyclotomicNormDescentTarget)
     (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
     (hNoLift : TriominoCosmicNonLiftableGNBridge) :
     FLTPrimeGe5Target :=
   FLTPrimeGe5Target_of_kummerThreeWaySplit hPeq hRegBranch
-    (qAdicGapReductionGapDivisible_of_refinedRegularPrimeRoute hRegClass hUnit hNorm)
+    (qAdicGapReductionGapDivisible_of_refinedRegularPrimeRoute
+      hRegClass hCl hUnit hNorm)
     hPFE hNoLift
 
 /--
@@ -454,6 +457,7 @@ theorem FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
     (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
     (hRegBranch : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
     (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{0} p)
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
     (hUnit : CyclotomicUnitNormalizationTarget.{0})
     (hSqProv : TriominoSquarefreeGNBridgeProvider)
     (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
@@ -461,7 +465,7 @@ theorem FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
     FLTPrimeGe5Target :=
   FLTPrimeGe5Target_of_kummerThreeWaySplit hPeq hRegBranch
     (qAdicGapReductionGapDivisible_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
-      hRegClass hUnit hSqProv)
+      hRegClass hCl hUnit hSqProv)
     hPFE hNoLift
 
 /--
@@ -475,6 +479,7 @@ theorem triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefree
     (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
     (hRegBranch : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
     (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{0} p)
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
     (hUnit : CyclotomicUnitNormalizationTarget.{0})
     (hSqProv : TriominoSquarefreeGNBridgeProvider)
     (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
@@ -482,7 +487,7 @@ theorem triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefree
     GlobalPrimeExponentFLTProvider := by
   exact triominoCosmic_globalProvider_of_FLTPrimeGe5
     (FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
-      hPeq hRegBranch hRegClass hUnit hSqProv hPFE hNoLift)
+      hPeq hRegBranch hRegClass hCl hUnit hSqProv hPFE hNoLift)
 
 /--
 provider concrete な regular-prime mainline から `TriominoPrimeProvider` へ接続する public 入口。
@@ -494,6 +499,7 @@ theorem triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvid
     (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
     (hRegBranch : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
     (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{0} p)
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
     (hUnit : CyclotomicUnitNormalizationTarget.{0})
     (hSqProv : TriominoSquarefreeGNBridgeProvider)
     (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
@@ -501,7 +507,7 @@ theorem triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvid
     TriominoPrimeProvider := by
   exact triominoPrimeProvider_of_FLTPrimeGe5
     (FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
-      hPeq hRegBranch hRegClass hUnit hSqProv hPFE hNoLift)
+      hPeq hRegBranch hRegClass hCl hUnit hSqProv hPFE hNoLift)
 
 /-!
 ## §8. Kummer route: ClassGroup → GapDivisible → 2m-pure → FLT
