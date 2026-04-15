@@ -8,6 +8,7 @@ import DkMath.FLT.GEisensteinBridge
 import DkMath.FLT.Kummer
 import DkMath.FLT.Main
 import DkMath.FLT.PrimeProvider
+import DkMath.FLT.Samples
 
 #print "file: DkMath.FLT"
 
@@ -22,6 +23,7 @@ set_option linter.style.longLine false
 - `Main` 側の `d = 3` 公開 API を束ねる
 - `Kummer` 側の regular-prime / class-group route を公開面へ載せる
 - `PrimeProvider` 側の provider chain を同じ入口から辿れるようにする
+- `Samples` 側の discovery 用 example を同じ入口から辿れるようにする
 
 ## public/provider 導線の現状
 
@@ -52,4 +54,10 @@ provider-facing theorem として次を用意している。
 したがって、
 `TriominoSquarefreeGNBridgeProvider` を持てる branch では、
 上の provider concrete route を canonical な public/provider 導線として使う。
+
+sample ベースで入口を見たい場合は、
+`DkMath.FLT.Samples`
+と
+`DkMath/FLT/README-provider-route.md`
+を参照。
 -/

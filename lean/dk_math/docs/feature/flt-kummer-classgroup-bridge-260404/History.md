@@ -1433,3 +1433,128 @@ Archive
      「その route を埋める数論核の未完」
      であることを、
      他の status 文書にも揃えるかを判定する
+
+## 2026/04/15 16:58:33 JST
+
+1. 背景:
+   - 前回の次課題に従い、
+     `DkMath.FLT`
+     import 後に theorem を探す利用者が
+     `RegularPrimeRoute`
+     側の provider concrete route へ迷わず到達できるよう、
+     code 側の discovery 導線を補強するかを検討した
+   - 既存の
+     `DkMath/FLT/Samples.lean`
+     は、
+     current public route とは無関係な旧 sample / 計算メモが主であり、
+     今回必要な導線補強には使えない状態だった
+   - この時点での分岐は
+     「さらに status 文書を増やして案内する」
+     か
+     「`DkMath.FLT`
+     から辿れる Lean コード側に
+     sample module を置いて、
+     theorem discovery 自体を補強する」
+     かの二択になった
+   - 今回は後者を選んだ
+     :
+     利用者が実際に最初に触るのは
+     `DkMath.FLT`
+     import 後の theorem search / grep / IDE 補完であり、
+     そこに近い場所へ sample を置く方が実用的だからである
+2. 実施:
+   - `DkMath/FLT/Samples.lean`
+     を current route discovery 用に作り直した
+     :
+     `RegularPrimeRoute`
+     の
+     abstract route
+     `FLTPrimeGe5Target_of_refinedRegularPrimeRoute`
+     と、
+     provider concrete route
+     `FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     /
+     `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     /
+     `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     を、
+     そのまま example で引ける discovery 専用モジュールに整理した
+   - `DkMath/FLT.lean`
+     に
+     `import DkMath.FLT.Samples`
+     を追加し、
+     module docstring にも
+     `Samples`
+     と
+     `DkMath/FLT/README-provider-route.md`
+     を current route discovery 先として追記した
+   - `DkMath/FLT`
+     配下に
+     `README-provider-route.md`
+     を新規追加し、
+     `DkMath.FLT`
+     import 後に
+     「abstract route を使う場合」
+     と
+     「`TriominoSquarefreeGNBridgeProvider`
+     を持つので provider concrete route を使う場合」
+     の住み分けを短く固定した
+   - 既存の
+     `DkMath/FLT/README.md`
+     にも、
+     `Samples.lean`
+     と
+     `README-provider-route.md`
+     を current route の近接案内として参照するよう追記した
+3. 結論:
+   - 今回の判定は
+     **status 文書の追加更新より、
+     `DkMath.FLT`
+     import 後に直接触れる
+     Lean コード側へ sample discovery module を置く方が価値が高い**
+     だった
+   - これにより、
+     利用者は
+     `DkMath.FLT`
+     import 後に
+     `DkMath.FLT.Samples`
+     を開けば、
+     `RegularPrimeRoute`
+     側の provider concrete route をそのまま example から辿れる
+   - また追加 README により、
+     high-exponent 側の current open が
+     「provider route の不在」ではなく
+     「その provider concrete route を埋める数論核の未完」
+     であることも、短い案内として固定できた
+   - 他の status 文書については、
+     直近で
+     `PROJECT_STATUS.md`
+     まで current 注記を入れているため、
+     この段では追加更新は不要と判断した
+4. 検証:
+   - `./lean-build.sh DkMath.FLT` 成功
+5. 失敗事例:
+   - 既存
+     `Samples.lean`
+     を部分追記だけで済ませる案もあったが、
+     旧 sample 群が current route discovery をかえって埋もれさせるため、
+     discovery 用に全面整理し直す方針を採った
+6. 次の課題:
+   - `DkMath.FLT.Samples`
+     と
+     `README-provider-route.md`
+     を置いたので、
+     次は
+     `DkMath.FLT`
+     の top-level 公開面で
+     provider concrete route をさらに見つけやすくする必要があるか
+     :
+     たとえば
+     `DkMath/FLT.lean`
+     の docstring だけで十分か、
+     あるいは
+     short alias theorem を追加すべきかを判定する
+   - 併せて、
+     high-exponent 側の current open が
+     数論核の未完にあることを、
+     必要なら他の summary/status 文書へも広げるかを見直す
