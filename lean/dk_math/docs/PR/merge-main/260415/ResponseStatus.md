@@ -6,7 +6,7 @@ PR: <https://github.com/Deskuma/dkmath/pull/53>
 
 ### discussion_r3085207779
 
-[discussion](https://github.com/Deskuma/dkmath/pull/53#discussion_r3085207779)
+- [r3085207779](https://github.com/Deskuma/dkmath/pull/53#discussion_r3085207779)
 
 はい。今回の指摘 `discussion_r3085207779` については、ローカルで確認して修正まで入れました。
 
@@ -36,7 +36,7 @@ PR: <https://github.com/Deskuma/dkmath/pull/53>
 
 ### discussion_r3085207725
 
-[discussion](https://github.com/Deskuma/dkmath/pull/53#discussion_r3085207725)
+- [r3085207725](https://github.com/Deskuma/dkmath/pull/53#discussion_r3085207725)
 
 結論だけ言うと、今は「`classGroupPTorsionFree_of_regularPrime` だけを `p` 一般化する段階」ではないです。  
 やるなら `target` 側から一段下までまとめて `p` を通す必要があります。
@@ -86,3 +86,102 @@ PR: <https://github.com/Deskuma/dkmath/pull/53>
 ただ、現時点では theorem 単体だけを `{p : ℕ}` で一般化しても十分ではありません。というのも、上流の `IsRegularPrime` は `p` を持てても、下流の `CyclotomicClassGroupPTorsionFreeTarget` / `CyclotomicPTorsionAnnihilationTarget` 側がまだ「任意の `n` に対する generic statement」という形のままで、`p` を thread する target family にはなっていないためです。この状態で theorem だけ `p`-parameterized にしても、返り値側の意味論が追いついていません。
 
 そのため今回は、`p = 5` 固定の不正確な橋を残すのではなく、regular-prime 仮定だけから現在の強い `CyclotomicClassGroupPTorsionFreeTarget` を導くこと自体をやめ、refined route 側では class-group 仮定を明示入力として受ける形に整理しました。`p` を本当に一般化するなら、次の段階で `CyclotomicClassGroupPTorsionFreeTarget` などを含めて target 全体を `p` 付きに組み替える必要がある、という認識です。
+
+### discussion r3085681656 〜 r3085681790
+
+- [r3085681656](https://github.com/Deskuma/dkmath/pull/53#discussion_r3085681656)
+- [r3085681717](https://github.com/Deskuma/dkmath/pull/53#discussion_r3085681717)
+- [r3085681737](https://github.com/Deskuma/dkmath/pull/53#discussion_r3085681737)
+- [r3085681758](https://github.com/Deskuma/dkmath/pull/53#discussion_r3085681758)
+- [r3085681790](https://github.com/Deskuma/dkmath/pull/53#discussion_r3085681790)
+
+## 2026-04-15 作業メモ
+
+### `Basic.lean` の `z' < y` 分岐
+
+- 対象: `lean/dk_math/DkMath/FLT/Kummer/Basic.lean`
+- 指摘要旨: `z' < y` 分岐での反証が弱く、`simp at hz'` と `omega` では必要な矛盾が十分に示せていない。
+
+対応:
+
+- `descentExistence_exists_iff_gnReduction_exists` の `z' < y` 分岐を書き換えた。
+- `p = 0` の退化ケースを先に切り分けたうえで、
+  `y ^ p ≤ z' ^ p` は `hz'` から、
+  `z' ^ p < y ^ p` は `Nat.pow_lt_pow_left` から得て、
+  `not_le_of_gt` で矛盾を出す形へ変更した。
+
+検証:
+
+- `lake build DkMath.FLT.Kummer.Basic`
+
+### `Core.lean` の no-op 仮定
+
+- 対象: `lean/dk_math/DkMath/FLT/Core.lean`
+- 指摘要旨: `let _ := hd` は no-op であり、読み手を混乱させる。
+
+対応:
+
+- `GN_eq_head_of_x_eq_zero` から `let _ := hd` を削除した。
+- 未使用仮定として明確にするため、引数名を `hd` から `_hd` に変更した。
+
+検証:
+
+- `lake build DkMath.FLT.Core`
+
+### `ClassGroupBridge.lean` の placeholder 名
+
+- 対象: `lean/dk_math/DkMath/FLT/Kummer/ClassGroupBridge.lean`
+- 指摘要旨: `IsRegularPrime` という名前は classical regular prime と読み違えやすく、placeholder 名として強すぎる。
+
+対応:
+
+- `IsRegularPrime` を `IsRegularPrimeReceiver` に改名した。
+- 併せて [`RegularPrimeRoute.lean`](($PROJECT_ROOT)/lean/dk_math/DkMath/FLT/Kummer/RegularPrimeRoute.lean) と [`Samples.lean`](($PROJECT_ROOT)/lean/dk_math/DkMath/FLT/Samples.lean) の参照先も更新した。
+
+検証:
+
+- `lake build DkMath.FLT.Kummer.ClassGroupBridge`
+- `lake build DkMath.FLT.Kummer.RegularPrimeRoute`
+- `lake build DkMath.FLT.Samples`
+
+### `ClassGroupBridge.lean` の universe `{0}` 指摘
+
+- 対象: `lean/dk_math/DkMath/FLT/Kummer/ClassGroupBridge.lean`
+- 指摘要旨: `universe u` が導入されているのに theorem 側で `.{0}` を hard-code している。
+
+確認結果:
+
+- `ClassGroupBridge` / `RegularPrimeRoute` / `Samples` だけでなく、
+  下流の [`CyclotomicPrincipalization.lean`](($PROJECT_ROOT)/lean/dk_math/DkMath/FLT/Kummer/CyclotomicPrincipalization.lean) を含めて `.{u}` 化を試した。
+- しかしこの route では theorem 本体が `CyclotomicField p ℚ` を concrete に選んでおり、
+  `CyclotomicClassGroupPTorsionFreeTarget.{u}` に上げると
+  `@CyclotomicField p ℚ` の箇所で universe mismatch が発生した。
+- したがって、現状の設計では `.{0}` は単なる書き忘れではなく、
+  concrete specialization に引きずられて残っている固定であることを確認した。
+
+現時点の結論:
+
+- この指摘は「その場で `.{u}` に直せる」種類ではない。
+- 返信は、`CyclotomicField p ℚ` を使う route 全体の universe 設計を先に組み替える必要がある、という状況説明にする。
+- 作業ツリー上は `.{u}` 化の試行を戻し、build が通る元の設計に復帰済み。
+
+検証:
+
+- `lake build DkMath.FLT.Kummer.CyclotomicPrincipalization DkMath.FLT.Kummer.ClassGroupBridge DkMath.FLT.Kummer.RegularPrimeRoute DkMath.FLT.Samples`
+
+### `CoreBeamGap.lean` の `GN_eq_sum` 修飾
+
+- 対象: `lean/dk_math/DkMath/CosmicFormula/CoreBeamGap.lean`
+- 指摘要旨: `Defs.GN` 導入後、`GN_eq_sum` が import / open に依存して曖昧になりうる。
+
+対応:
+
+- `body_eq_core_add_beam` 内の
+  `rw [GN_eq_sum]`
+  を
+  `rw [DkMath.CosmicFormulaBinom.GN_eq_sum]`
+  に変更した。
+
+検証:
+
+- `lake build DkMath.CosmicFormula.CoreBeamGap`

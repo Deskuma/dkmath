@@ -71,9 +71,8 @@ lemma pow_eq_sub_mul_GN_of_add_pow_eq
 /-- 「ZMod に限らず」: `x = 0` なら `GN` は先頭項 `choose d 1 * u^(d-1)` に潰れる。 -/
 lemma GN_eq_head_of_x_eq_zero
     {R : Type _} [CommSemiring R]
-    (d : ℕ) (hd : 1 ≤ d) (u : R) :
+    (d : ℕ) (_hd : 1 ≤ d) (u : R) :
     GN (R := R) d (0 : R) u = (Nat.choose d 1 : R) * u ^ (d - 1) := by
-  let _ := hd
   simpa [GN] using DkMath.CosmicFormula.GTail_eval_zero (R := R) d 1 u
 
 /-- ZMod 版：`p ∣ x` なら `x ≡ 0 (mod p)` なので `GN` が先頭項に潰れる。 -/

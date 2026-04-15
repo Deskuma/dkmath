@@ -72,7 +72,10 @@ theorem descentExistence_exists_iff_gnReduction_exists (p y xq : ℕ) :
       exfalso
       by_cases hp : p = 0
       · subst hp; simp at hz'
-      · have : y ^ p ≤ z' ^ p := by omega
-        exact not_le.mpr (Nat.pow_lt_pow_left (by omega) (by omega)) this
+      · have hy_le : y ^ p ≤ z' ^ p := by
+          rw [hz']
+          exact Nat.le_add_left (y ^ p) (xq ^ p)
+        have hz_lt : z' ^ p < y ^ p := Nat.pow_lt_pow_left h hp
+        exact (not_le_of_gt hz_lt) hy_le
 
 end DkMath.FLT

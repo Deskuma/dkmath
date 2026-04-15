@@ -435,7 +435,7 @@ Stage 2 + Stage 3 → FLT。
 theorem FLTPrimeGe5Target_of_refinedRegularPrimeRoute
     (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
     (hRegBranch : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
-    (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{0} p)
+    (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrimeReceiver.{0} p)
     (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
     (hUnit : CyclotomicUnitNormalizationTarget)
     (hNorm : CyclotomicNormDescentTarget)
@@ -456,7 +456,7 @@ squarefree-GN provider から concrete に構成する。
 theorem FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
     (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
     (hRegBranch : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
-    (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{0} p)
+    (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrimeReceiver.{0} p)
     (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
     (hUnit : CyclotomicUnitNormalizationTarget.{0})
     (hSqProv : TriominoSquarefreeGNBridgeProvider)
@@ -478,7 +478,7 @@ abstract `FLTPrimeGe5Target` を経由して外へ渡す代わりに、
 theorem triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
     (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
     (hRegBranch : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
-    (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{0} p)
+    (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrimeReceiver.{0} p)
     (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
     (hUnit : CyclotomicUnitNormalizationTarget.{0})
     (hSqProv : TriominoSquarefreeGNBridgeProvider)
@@ -498,7 +498,7 @@ global provider alias を直接返す最外側 API として使えるよう、
 theorem triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
     (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
     (hRegBranch : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
-    (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{0} p)
+    (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrimeReceiver.{0} p)
     (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
     (hUnit : CyclotomicUnitNormalizationTarget.{0})
     (hSqProv : TriominoSquarefreeGNBridgeProvider)

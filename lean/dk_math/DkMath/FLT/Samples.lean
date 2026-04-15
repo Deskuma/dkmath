@@ -34,7 +34,7 @@ section RegularPrimeRoute
 variable
   (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
   (hRegBranch : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
-  (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{0} p)
+  (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrimeReceiver.{0} p)
   (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
   (hUnit0 : CyclotomicUnitNormalizationTarget.{0})
   (hNorm : CyclotomicNormDescentTarget)
