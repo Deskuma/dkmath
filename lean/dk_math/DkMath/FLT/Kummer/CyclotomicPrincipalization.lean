@@ -5,8 +5,12 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.FLT.Kummer.GapDivisibleBranch
+import DkMath.NumberTheory.Gcd.GN
+import Mathlib.NumberTheory.Cyclotomic.PrimitiveRoots
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Basic
+import Mathlib.NumberTheory.NumberField.Cyclotomic.Galois
 import Mathlib.NumberTheory.NumberField.Cyclotomic.Ideal
+import Mathlib.NumberTheory.NumberField.Norm
 
 #print "file: DkMath.FLT.Kummer.CyclotomicPrincipalization"
 
@@ -1411,6 +1415,20 @@ theorem linearFactorIdeals_isCoprime_of_noCommonPrime
     (hleB (Ideal.subset_span (by simp)))
 
 /--
+2 つの singleton principal ideals について、共通 prime ideal が存在しないことから互いに素性を返す generic receiver。
+-/
+theorem spanSingletons_isCoprime_of_noCommonPrime
+    {R : Type*} [CommRing R] [IsDomain R]
+    {a b : R}
+    (hNoCommon : ∀ P : Ideal R, P.IsPrime → a ∈ P → b ∈ P → False) :
+    IsCoprime (Ideal.span ({a} : Set R)) (Ideal.span ({b} : Set R)) := by
+  refine Ideal.coprime_of_no_prime_ge ?_
+  intro P hleA hleB hP
+  exact hNoCommon P hP
+    (hleA (Ideal.subset_span (by simp)))
+    (hleB (Ideal.subset_span (by simp)))
+
+/--
 ring of integers specialization では、`P ∣ (p) ∨ y ∈ P` のどちらも起きないことを supply できれば、
 chosen linear factor と別の 1 因子は互いに素になる。
 
@@ -1566,6 +1584,198 @@ theorem noYInCommonPrime_of_chosenFactorInP_of_coprime_of_productEq
   have h_x_in_P : (x : 𝓞 K) ∈ P := hP.mem_of_pow_mem p h_prod_in_P
   exact false_of_nat_coprime_both_in_prime hxy hP h_x_in_P hP_y
 
+/--
+counterexample pack から、chosen cyclotomic factor に対する局所 tail-sum factorization を
+整数環 specialization で回収する。
+
+これは full product identity を使わずに得られる、最短の element-level factorization である。
+-/
+theorem chosenCyclotomicLinearFactor_mul_tailSum_eq_x_pow_of_counterexamplePack
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z) :
+    (∑ i ∈ Finset.range p,
+        ((z : 𝓞 K) ^ i) * ((hζ.toInteger * (y : 𝓞 K)) ^ (p - 1 - i))) *
+        ((z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)) =
+      (x : 𝓞 K) ^ p := by
+  let ctx : CyclotomicLocalFactorizationContext (𝓞 K) := {
+    p := p
+    zeta := hζ.toInteger
+    hzeta_pow := by
+      simpa using hζ.toInteger_isPrimitiveRoot.pow_eq_one
+  }
+  have hEqO : (x : 𝓞 K) ^ p + (y : 𝓞 K) ^ p = (z : 𝓞 K) ^ p := by
+    simpa using congrArg (fun n : ℕ => (n : 𝓞 K)) hpack.hEq
+  simpa [ctx] using
+    ctx.linear_factor_mul_eq_of_add_pow_eq (x := (x : 𝓞 K)) (y := (y : 𝓞 K)) (z := (z : 𝓞 K)) hEqO
+
+/--
+counterexample pack から得る局所 factorization を使って、tail-sum ideal と chosen factor ideal の積が
+`(x)^p` を生成する ideal に一致することを回収する。
+
+これは full product identity を使わずに得られる、責務 A の最短 ideal-level 代替核である。
+-/
+theorem chosenCyclotomicTailSumMulChosenLinearFactorEqSpanPow_of_counterexamplePack
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z) :
+    Ideal.span
+        ({∑ i ∈ Finset.range p,
+            ((z : 𝓞 K) ^ i) * ((hζ.toInteger * (y : 𝓞 K)) ^ (p - 1 - i))} : Set (𝓞 K)) *
+      Ideal.span ({(z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)} : Set (𝓞 K)) =
+        Ideal.span ({(x : 𝓞 K)} : Set (𝓞 K)) ^ p := by
+  let ctx : CyclotomicLocalFactorizationContext (𝓞 K) := {
+    p := p
+    zeta := hζ.toInteger
+    hzeta_pow := by
+      simpa using hζ.toInteger_isPrimitiveRoot.pow_eq_one
+  }
+  have hEqO : (x : 𝓞 K) ^ p + (y : 𝓞 K) ^ p = (z : 𝓞 K) ^ p := by
+    simpa using congrArg (fun n : ℕ => (n : 𝓞 K)) hpack.hEq
+  simpa [ctx] using
+    ctx.linear_factor_ideal_mul_eq_span_pow_of_add_pow_eq
+      (x := (x : 𝓞 K)) (y := (y : 𝓞 K)) (z := (z : 𝓞 K)) hEqO
+
+/--
+局所 factorization core から、chosen factor ideal と何らかの tail ideal の積が `(x)^p` になることを返す。
+
+generic `CyclotomicTailLinearFactorMulEqSpanPowTarget` 型の受け口へ繋ぐための existential wrapper。
+-/
+theorem exists_tailMulChosenLinearFactorEqSpanPow_of_counterexamplePack
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z) :
+    ∃ tail : 𝓞 K,
+      Ideal.span ({tail} : Set (𝓞 K)) *
+        Ideal.span ({(z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)} : Set (𝓞 K)) =
+          Ideal.span ({(x : 𝓞 K)} : Set (𝓞 K)) ^ p := by
+  refine ⟨∑ i ∈ Finset.range p,
+      ((z : 𝓞 K) ^ i) * ((hζ.toInteger * (y : 𝓞 K)) ^ (p - 1 - i)), ?_⟩
+  exact chosenCyclotomicTailSumMulChosenLinearFactorEqSpanPow_of_counterexamplePack hζ hpack
+
+/--
+`y ∈ P` 分岐は、full product identity ではなく chosen factor の局所 tail-sum factorization だけでも閉じる。
+
+したがって y-branch contradiction 自体は `hProduct` に依存していない。
+-/
+theorem noYInCommonPrime_of_chosenFactorInP_of_coprime_of_localFactorizationEq
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    {x y : ℕ} (hxy : Nat.Coprime x y)
+    {z_int : 𝓞 K}
+    {P : Ideal (𝓞 K)} (hP : P.IsPrime)
+    (hP_chosen : z_int - hζ.toInteger * (y : 𝓞 K) ∈ P)
+    (hLocalEq :
+      (∑ i ∈ Finset.range p,
+          z_int ^ i * ((hζ.toInteger * (y : 𝓞 K)) ^ (p - 1 - i))) *
+          (z_int - hζ.toInteger * (y : 𝓞 K)) =
+        (x : 𝓞 K) ^ p)
+    (hP_y : (y : 𝓞 K) ∈ P) :
+    False := by
+  have hp2 : 2 ≤ p := hp.out.two_le
+  have hz_in_P : z_int ∈ P := y_in_P_implies_z_in_P hζ hP_chosen hP_y
+  have htail_in_P :
+      ∑ i ∈ Finset.range p,
+          z_int ^ i * ((hζ.toInteger * (y : 𝓞 K)) ^ (p - 1 - i)) ∈ P := by
+    refine P.sum_mem ?_
+    intro i hi
+    by_cases hi0 : i = 0
+    · subst hi0
+      have hy_mul_in_P : hζ.toInteger * (y : 𝓞 K) ∈ P := P.mul_mem_left _ hP_y
+      have hpow_in_P : (hζ.toInteger * (y : 𝓞 K)) ^ (p - 1) ∈ P := by
+        exact Ideal.pow_mem_of_mem _ hy_mul_in_P _ (by omega)
+      simpa using hpow_in_P
+    · have hi_pos : 0 < i := Nat.pos_of_ne_zero hi0
+      have hzpow_in_P : z_int ^ i ∈ P := Ideal.pow_mem_of_mem _ hz_in_P _ hi_pos
+      exact Ideal.mul_mem_right _ _ hzpow_in_P
+  have h_xpow_in_P : (x : 𝓞 K) ^ p ∈ P := by
+    rw [← hLocalEq]
+    exact Ideal.mul_mem_left _ _ hP_chosen
+  have h_x_in_P : (x : 𝓞 K) ∈ P := hP.mem_of_pow_mem p h_xpow_in_P
+  exact false_of_nat_coprime_both_in_prime hxy hP h_x_in_P hP_y
+
+/--
+counterexample pack から得る局所 factorization を使って、`y ∈ P` 分岐を閉じる wrapper。
+-/
+theorem noYInCommonPrime_of_chosenFactorInP_of_coprime_of_counterexamplePack
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {P : Ideal (𝓞 K)} (hP : P.IsPrime)
+    (hP_chosen : (z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K) ∈ P)
+    (hP_y : (y : 𝓞 K) ∈ P) :
+    False := by
+  exact noYInCommonPrime_of_chosenFactorInP_of_coprime_of_localFactorizationEq
+    hζ hpack.hxy hP hP_chosen
+    (chosenCyclotomicLinearFactor_mul_tailSum_eq_x_pow_of_counterexamplePack hζ hpack)
+    hP_y
+
+/--
+chosen factor と local tail-sum がともに prime ideal `P` に入るなら、`P ∣ (p)` または `y ∈ P`。
+
+tail-sum は chosen factor で割った余りが `p * (ζ y)^(p-1)` になるため、
+first-case contradiction の combiner へ渡せる disjunction が product-free に得られる。
+-/
+theorem primeOrY_of_chosenFactorInP_and_tailSumInP_of_counterexamplePack
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+  {p y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    {P : Ideal (𝓞 K)} (hP : P.IsPrime)
+    (hP_chosen : (z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K) ∈ P)
+    (hP_tail :
+      ∑ i ∈ Finset.range p,
+        ((z : 𝓞 K) ^ i) * ((hζ.toInteger * (y : 𝓞 K)) ^ (p - 1 - i)) ∈ P) :
+    P ∣ Ideal.span ({(p : 𝓞 K)} : Set (𝓞 K)) ∨ (y : 𝓞 K) ∈ P := by
+  let t : 𝓞 K := hζ.toInteger * (y : 𝓞 K)
+  have hsum_diff :
+      ∑ i ∈ Finset.range p,
+        (((z : 𝓞 K) ^ i) * (t ^ (p - 1 - i)) - t ^ (p - 1)) ∈ P := by
+    refine P.sum_mem ?_
+    intro i hi
+    have hi_le : i ≤ p - 1 := Nat.le_pred_of_lt (Finset.mem_range.mp hi)
+    have hpow_diff : ((z : 𝓞 K) ^ i - t ^ i) ∈ P := by
+      rcases sub_dvd_pow_sub_pow (z : 𝓞 K) t i with ⟨c, hc⟩
+      rw [hc]
+      exact P.mul_mem_right c hP_chosen
+    have hmul : (((z : 𝓞 K) ^ i - t ^ i) * t ^ (p - 1 - i)) ∈ P :=
+      P.mul_mem_right _ hpow_diff
+    have hEqTerm :
+        ((z : 𝓞 K) ^ i) * t ^ (p - 1 - i) - t ^ (p - 1) =
+          (((z : 𝓞 K) ^ i - t ^ i) * t ^ (p - 1 - i)) := by
+      rw [sub_mul, ← pow_add, Nat.add_sub_of_le hi_le]
+    exact hEqTerm.symm ▸ hmul
+  have htail_diff :
+      (∑ i ∈ Finset.range p, ((z : 𝓞 K) ^ i) * (t ^ (p - 1 - i))) -
+          (p : 𝓞 K) * t ^ (p - 1) ∈ P := by
+    simpa [Finset.sum_sub_distrib, Finset.sum_const, Finset.card_range, nsmul_eq_mul] using hsum_diff
+  have hpmul_in_P : (p : 𝓞 K) * t ^ (p - 1) ∈ P := by
+    have htmp :
+        (∑ i ∈ Finset.range p, ((z : 𝓞 K) ^ i) * (t ^ (p - 1 - i))) -
+          ((∑ i ∈ Finset.range p, ((z : 𝓞 K) ^ i) * (t ^ (p - 1 - i))) -
+            (p : 𝓞 K) * t ^ (p - 1)) ∈ P := by
+      exact P.sub_mem hP_tail htail_diff
+    simpa [sub_eq_add_neg, add_assoc, add_left_comm, add_comm] using htmp
+  rcases hP.mem_or_mem hpmul_in_P with hp_in_P | htpow_in_P
+  · left
+    rw [Ideal.dvd_span_singleton]
+    exact hp_in_P
+  · have ht_in_P : t ∈ P := hP.mem_of_pow_mem (p - 1) htpow_in_P
+    have hunit : IsUnit (hζ.toInteger : 𝓞 K) :=
+      IsUnit.of_pow_eq_one hζ.toInteger_isPrimitiveRoot.pow_eq_one hp.out.ne_zero
+    rcases hunit with ⟨u, hu⟩
+    right
+    have hy_mul_in_P : ((↑u⁻¹ : 𝓞 K) * t) ∈ P := P.mul_mem_left _ ht_in_P
+    have hy_eq : (y : 𝓞 K) = ((↑u⁻¹ : 𝓞 K) * t) := by
+      dsimp [t]
+      rw [← hu]
+      simp
+    exact hy_eq.symm ▸ hy_mul_in_P
+
 /-! ### P ∣ (p) 分岐の contradiction を閉じる補題群
 
 first case (p ∤ gap) を仮定すれば P | (p) から矛盾が導ける。
@@ -1701,6 +1911,232 @@ lemma norm_int_nat_cast_eq_pow
   have heq' : Algebra.norm ℤ (m : 𝓞 K) = ((m : ℕ) ^ Module.finrank ℚ K : ℤ) :=
     Int.cast_injective heq
   simp only [heq']
+
+/--
+Mathlib の `sub_one_norm_eq_eval_cyclotomic` を一般の有理点 `a` へ拡張した product-free 補題。
+
+`Algebra.norm ℚ (a - ζ)` を、`Φ_p(a)` の評価へ直接戻す。
+今は Stage 3 direct route の調査基盤として置く。
+-/
+lemma norm_sub_primitiveRoot_eq_eval_cyclotomic_rat
+    {K : Type*} [Field K] [CharZero K]
+    {p : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+  {ζ : K} (hζ : IsPrimitiveRoot ζ p) (a : ℚ) :
+    Algebra.norm ℚ ((a : K) - ζ) = Polynomial.eval a (Polynomial.cyclotomic p ℚ) := by
+  let E := AlgebraicClosure K
+  haveI : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
+  obtain ⟨z, hz⟩ := IsAlgClosed.exists_root
+    (Polynomial.cyclotomic p E)
+    (Polynomial.degree_cyclotomic_pos p E (NeZero.pos _)).ne.symm
+  have hirr : Irreducible (Polynomial.cyclotomic p ℚ) :=
+    Polynomial.cyclotomic.irreducible_rat (Nat.Prime.pos (Fact.out : Nat.Prime p))
+  apply (algebraMap ℚ E).injective
+  letI := IsCyclotomicExtension.finiteDimensional {p} ℚ K
+  letI := IsCyclotomicExtension.isGalois {p} ℚ K
+  rw [Algebra.norm_eq_prod_embeddings]
+  conv_lhs =>
+    congr
+    rfl
+    ext
+    rw [map_sub]
+    simp
+  have hProd :
+      ∏ σ : K →ₐ[ℚ] E, ((a : E) - σ ζ) =
+        Polynomial.eval (a : E) (Polynomial.cyclotomic' p E) := by
+    rw [Polynomial.cyclotomic', Polynomial.eval_prod, ← @Finset.prod_attach E E, ← Finset.univ_eq_attach]
+    refine Fintype.prod_equiv (hζ.embeddingsEquivPrimitiveRoots E hirr) _ _ ?_
+    intro σ
+    simp
+  rw [hProd, Polynomial.cyclotomic',
+    ← Polynomial.cyclotomic_eq_prod_X_sub_primitiveRoots
+      (Polynomial.isRoot_cyclotomic_iff.1 hz),
+    ← Polynomial.map_cyclotomic p (algebraMap ℚ E)]
+  calc
+    Polynomial.eval (a : E) (Polynomial.map (algebraMap ℚ E) (Polynomial.cyclotomic p ℚ))
+        = Polynomial.eval₂ (algebraMap ℚ E) (a : E) (Polynomial.cyclotomic p ℚ) := by
+            simpa using (Polynomial.eval_map_algebraMap (Polynomial.cyclotomic p ℚ) (a : E))
+    _ = (algebraMap ℚ E) (Polynomial.eval a (Polynomial.cyclotomic p ℚ)) := by
+          simpa using
+            (Polynomial.eval₂_at_apply (p := Polynomial.cyclotomic p ℚ) (algebraMap ℚ E) a)
+
+/--
+有理点での `Φ_p` 評価を K 上の `cyclotomicEval` へ持ち上げるための補題。
+
+direct norm-eval route で `Polynomial.eval a (cyclotomic p ℚ)` を
+CFBRC 側の evaluator へ接続する。
+-/
+lemma ratCast_eval_cyclotomic_eq_cyclotomicEval
+    {K : Type*} [Field K] [CharZero K]
+    {p : ℕ} [Fact p.Prime] (a : ℚ) :
+    ((Polynomial.eval a (Polynomial.cyclotomic p ℚ) : ℚ) : K) =
+      DkMath.CFBRC.cyclotomicEval p (a : K) := by
+  unfold DkMath.CFBRC.cyclotomicEval
+  calc
+    ((Polynomial.eval a (Polynomial.cyclotomic p ℚ) : ℚ) : K)
+        = Polynomial.eval₂ (algebraMap ℚ K) (a : K) (Polynomial.cyclotomic p ℚ) := by
+            simpa using
+              (Polynomial.eval₂_at_apply (p := Polynomial.cyclotomic p ℚ) (algebraMap ℚ K) a).symm
+    _ = Polynomial.eval (a : K)
+          (Polynomial.map (algebraMap ℚ K) (Polynomial.cyclotomic p ℚ)) := by
+            symm
+            exact (Polynomial.eval₂_eq_eval_map (p := Polynomial.cyclotomic p ℚ)
+              (f := algebraMap ℚ K) (x := (a : K))).symm
+    _ = Polynomial.eval (a : K)
+          (Polynomial.map (Int.castRingHom K) (Polynomial.cyclotomic p ℤ)) := by
+            congr 1
+            ext n
+            simp
+    _ = Polynomial.eval₂ (Int.castRingHom K) (a : K) (Polynomial.cyclotomic p ℤ) := by
+          symm
+          exact (Polynomial.eval₂_eq_eval_map (p := Polynomial.cyclotomic p ℤ)
+            (f := Int.castRingHom K) (x := (a : K)))
+
+/--
+prime case では、`Φ_p(z / y) * y^(p-1)` は product-free に `GN p (z - y) y` へ戻る。
+
+これは CFBRC 側の shifted evaluator bridge を prime divisor の singleton case へ
+specialize したもの。
+-/
+theorem cyclotomicEval_div_natCast_mul_pow_eq_gn
+    {K : Type*} [Field K] [CharZero K]
+    {p z y : ℕ} [Fact p.Prime]
+    (hy0 : y ≠ 0) (hyz : y < z) :
+    DkMath.CFBRC.cyclotomicEval p ((z : K) / (y : K)) * (y : K) ^ (p - 1) =
+      (DkMath.CosmicFormulaBinom.GN p (z - y) y : K) := by
+  have hp0 : 0 < p := (Fact.out : Nat.Prime p).pos
+  have hyK : (y : K) ≠ 0 := by exact_mod_cast hy0
+  have hgapK : ((z - y : ℕ) : K) ≠ 0 := by
+    exact_mod_cast (Nat.ne_of_gt (Nat.sub_pos_of_lt hyz))
+  have hratio : ((((z - y : ℕ) : K) + (y : K)) / (y : K)) = ((z : K) / (y : K)) := by
+    have hsum : ((z - y : ℕ) : K) + (y : K) = (z : K) := by
+      exact_mod_cast (Nat.sub_add_cancel (Nat.le_of_lt hyz))
+    rw [hsum]
+  have hdeg : (Polynomial.cyclotomic p ℤ).natDegree = p - 1 := by
+    simpa [Nat.totient_prime (Fact.out : Nat.Prime p)] using
+      (Polynomial.natDegree_cyclotomic p ℤ)
+  have hshift :=
+    DkMath.CFBRC.cyclotomicShiftedEval_eq_cyclotomicEval_div_mul_pow
+      (m := p) ((z - y : ℕ) : K) (y : K) hyK
+  have hprimeProd :
+      DkMath.CFBRC.cyclotomicDivisorsProductShifted p ((z - y : ℕ) : K) (y : K) =
+        DkMath.CFBRC.cyclotomicShiftedEval p ((z - y : ℕ) : K) (y : K) := by
+    have hpne1 : p ≠ 1 := (Fact.out : Nat.Prime p).ne_one
+    have hpne1' : ¬ 1 = p := by
+      intro h
+      exact hpne1 h.symm
+    unfold DkMath.CFBRC.cyclotomicDivisorsProductShifted
+    rw [(Fact.out : Nat.Prime p).divisors]
+    simp [hpne1']
+  have hGN :
+      DkMath.CFBRC.cyclotomicShiftedEval p ((z - y : ℕ) : K) (y : K) =
+        (DkMath.CosmicFormulaBinom.GN p (z - y) y : K) := by
+    have hgap_cast : ((z - y : ℕ) : K) = (z : K) - (y : K) := by
+      rw [Nat.cast_sub (Nat.le_of_lt hyz)]
+    calc
+      DkMath.CFBRC.cyclotomicShiftedEval p ((z - y : ℕ) : K) (y : K)
+          = DkMath.CFBRC.cyclotomicDivisorsProductShifted p ((z - y : ℕ) : K) (y : K) :=
+            hprimeProd.symm
+      _ = DkMath.CosmicFormulaBinom.GN p (((z - y : ℕ) : K)) (y : K) :=
+            DkMath.CFBRC.cyclotomicDivisorsProductShifted_eq_GN_of_ne_zero
+              (R := K) (d := p) hp0 hgapK hyK
+      _ = (DkMath.CosmicFormulaBinom.GN p (z - y) y : K) := by
+        simp [hgap_cast]
+  calc
+    DkMath.CFBRC.cyclotomicEval p ((z : K) / (y : K)) * (y : K) ^ (p - 1)
+        = DkMath.CFBRC.cyclotomicEval p ((((z - y : ℕ) : K) + (y : K)) / (y : K)) *
+            (y : K) ^ (Polynomial.cyclotomic p ℤ).natDegree := by
+              rw [hratio, hdeg]
+    _ = DkMath.CFBRC.cyclotomicShiftedEval p ((z - y : ℕ) : K) (y : K) := hshift.symm
+    _ = (DkMath.CosmicFormulaBinom.GN p (z - y) y : K) := hGN
+
+/--
+chosen cyclotomic linear factor の整数 norm は、full product identity を使わずとも
+直接 `GN p (z - y) y` に一致する（まずは ℚ cast 版）。
+
+proof は
+`z - ζy = y * (z/y - ζ)`
+と direct norm-eval route、そして prime-case shifted evaluator bridge を合成する。
+-/
+theorem chosenCyclotomicLinearFactor_norm_eq_gn_ratCast_direct
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p z y : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hy0 : y ≠ 0) (hyz : y < z) :
+    ((Algebra.norm ℤ ((z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)) : ℤ) : ℚ) =
+      ((DkMath.CosmicFormulaBinom.GN p (z - y) y : ℕ) : ℚ) := by
+  let lin : 𝓞 K := (z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)
+  have hyK : (y : K) ≠ 0 := by
+    exact_mod_cast hy0
+  have hirr : Irreducible (Polynomial.cyclotomic p ℚ) :=
+    Polynomial.cyclotomic.irreducible_rat (Nat.Prime.pos (Fact.out : Nat.Prime p))
+  have hfinrank : Module.finrank ℚ K = p - 1 := by
+    rw [IsCyclotomicExtension.finrank K hirr]
+    simp [Nat.totient_prime (Fact.out : Nat.Prime p)]
+  have hChosenK :
+      ((lin : 𝓞 K) : K) =
+        (y : K) * ((((z : ℚ) / (y : ℚ) : ℚ) : K) - ζ) := by
+    have hrat : ((((z : ℚ) / (y : ℚ) : ℚ) : K)) = (z : K) / (y : K) := by
+      norm_num [hy0]
+    have hdiv : (y : K) * ((((z : ℚ) / (y : ℚ) : ℚ) : K)) = (z : K) := by
+      rw [hrat, div_eq_mul_inv]
+      rw [← mul_assoc]
+      calc
+        (y : K) * (z : K) * (y : K)⁻¹ = (z : K) * ((y : K) * (y : K)⁻¹) := by ring
+        _ = (z : K) * 1 := by rw [mul_inv_cancel₀ hyK]
+        _ = (z : K) := by ring
+    calc
+      ((lin : 𝓞 K) : K)
+          = (z : K) - ζ * (y : K) := by
+            simp [lin]
+      _ = (y : K) * ((((z : ℚ) / (y : ℚ) : ℚ) : K) - ζ) := by
+            rw [mul_sub, hdiv]
+            ring
+  have hNormY : Algebra.norm ℚ (y : K) = (y : ℚ) ^ (p - 1) := by
+    calc
+      Algebra.norm ℚ (y : K) = (y : ℚ) ^ Module.finrank ℚ K := by
+        rw [show (y : K) = algebraMap ℚ K (y : ℚ) by simp, Algebra.norm_algebraMap]
+      _ = (y : ℚ) ^ (p - 1) := by rw [hfinrank]
+  have hNormField :
+      Algebra.norm ℚ ((lin : 𝓞 K) : K) =
+        (y : ℚ) ^ (p - 1) * Polynomial.eval ((z : ℚ) / (y : ℚ)) (Polynomial.cyclotomic p ℚ) := by
+    rw [hChosenK, map_mul, hNormY,
+      norm_sub_primitiveRoot_eq_eval_cyclotomic_rat hζ ((z : ℚ) / (y : ℚ))]
+  have hEvalQ :
+      Polynomial.eval ((z : ℚ) / (y : ℚ)) (Polynomial.cyclotomic p ℚ) =
+        DkMath.CFBRC.cyclotomicEval p ((z : ℚ) / (y : ℚ)) := by
+    simpa using
+      (ratCast_eval_cyclotomic_eq_cyclotomicEval (K := ℚ) (p := p) ((z : ℚ) / (y : ℚ)))
+  have hGNQ :
+      DkMath.CFBRC.cyclotomicEval p ((z : ℚ) / (y : ℚ)) * (y : ℚ) ^ (p - 1) =
+        ((DkMath.CosmicFormulaBinom.GN p (z - y) y : ℕ) : ℚ) := by
+    simpa [Nat.cast_sub (Nat.le_of_lt hyz)] using
+      (cyclotomicEval_div_natCast_mul_pow_eq_gn (K := ℚ) (p := p) (z := z) (y := y) hy0 hyz)
+  have hNormField' :
+      Algebra.norm ℚ ((lin : 𝓞 K) : K) =
+        ((DkMath.CosmicFormulaBinom.GN p (z - y) y : ℕ) : ℚ) := by
+    calc
+      Algebra.norm ℚ ((lin : 𝓞 K) : K)
+          = (y : ℚ) ^ (p - 1) * Polynomial.eval ((z : ℚ) / (y : ℚ)) (Polynomial.cyclotomic p ℚ) :=
+              hNormField
+      _ = (y : ℚ) ^ (p - 1) * DkMath.CFBRC.cyclotomicEval p ((z : ℚ) / (y : ℚ)) := by
+            rw [hEvalQ]
+      _ = DkMath.CFBRC.cyclotomicEval p ((z : ℚ) / (y : ℚ)) * (y : ℚ) ^ (p - 1) := by
+            ring
+      _ = ((DkMath.CosmicFormulaBinom.GN p (z - y) y : ℕ) : ℚ) := hGNQ
+  exact (Algebra.coe_norm_int lin).trans hNormField'
+
+/--
+chosen cyclotomic linear factor の整数 norm を、そのまま `GN p (z - y) y` へ戻す direct theorem。
+-/
+theorem chosenCyclotomicLinearFactor_norm_eq_gn_direct
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p z y : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hy0 : y ≠ 0) (hyz : y < z) :
+    Algebra.norm ℤ ((z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)) =
+      ((DkMath.CosmicFormulaBinom.GN p (z - y) y : ℕ) : ℤ) := by
+  exact Int.cast_injective
+    (chosenCyclotomicLinearFactor_norm_eq_gn_ratCast_direct hζ hy0 hyz)
 
 /-- N(ζ-1) = p in ℤ。 -/
 lemma norm_int_zeta_sub_one_eq_p
@@ -1949,6 +2385,90 @@ theorem chosenLinearFactor_isCoprime_with_other_of_firstCase_of_pack
     hProduct P hP hmemChosen hLinNe hdisj
 
 /--
+first-case pack から chosen linear factor と他の因子の coprimality を導く product-free variant。
+
+ここで必要なのは first-case と chosen factor 非零性だけであり、
+full product identity は y-branch contradiction には不要である。
+-/
+theorem chosenLinearFactor_isCoprime_with_other_of_firstCase_of_pack_withoutProduct
+    {K : Type*} [Field K] [NumberField K] [CharZero K]
+    {p : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hTarget1 : PrimeOverPEqualsZetaMinusOneTarget K p ζ hζ)
+    (hTarget2 : IntegerInZetaMinusOneIdealDivisibleByPTarget K p ζ hζ)
+  {x y z : ℕ} (hpack : PrimeGe5CounterexamplePack p x y z)
+    {z_int : 𝓞 K}
+    {gap : ℕ} (hgap_eq : z_int - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hy_ne : y ≠ 0)
+    (hLinNe : z_int - hζ.toInteger * (y : 𝓞 K) ≠ 0)
+    {j : ℕ} (hj_ne1 : j ≠ 1) (hj_lt : j < p)
+  (hz_eq : z_int = (z : 𝓞 K)) :
+    IsCoprime (Ideal.span ({z_int - hζ.toInteger * (y : 𝓞 K)} : Set (𝓞 K)))
+      (Ideal.span ({z_int - (hζ.toInteger ^ j) * (y : 𝓞 K)} : Set (𝓞 K))) := by
+  refine linearFactorIdeals_isCoprime_of_noCommonPrime ?_
+  intro P hP hmemChosen hmemOther
+  have hp2 : 2 ≤ p := (Fact.out : Nat.Prime p).two_le
+  have hy_ne' : (y : 𝓞 K) ≠ 0 := by simp [hy_ne]
+  have hdisj := commonPrimeDvdsPrimeOrY_of_ringOfIntegersCyclotomic
+    hζ (y := (y : 𝓞 K)) (z := z_int) hy_ne' hP hp2 hmemChosen ⟨j, hj_ne1, hj_lt, hmemOther⟩
+  rcases hdisj with hP_dvd_p | hP_y
+  · have hP_ne_bot : P ≠ ⊥ := by
+      intro hbot
+      rw [hbot] at hmemChosen
+      exact hLinNe (Ideal.mem_bot.mp hmemChosen)
+    exact noPrimeOverP_of_firstCase_of_chosenFactorInP hζ hTarget1 hTarget2 hP hP_ne_bot
+      hP_dvd_p (hz_eq ▸ hmemChosen) hgap_eq hFirstCase
+  · subst hz_eq
+    exact noYInCommonPrime_of_chosenFactorInP_of_coprime_of_counterexamplePack
+      hζ hpack hP hmemChosen hP_y
+
+/--
+first-case pack から、chosen linear factor ideal と local tail-sum ideal の互いに素性を導く。
+
+これは local factorization ベースの責務 A 候補を Stage 1 receiver へ接続するための bridge である。
+-/
+theorem chosenLinearFactor_isCoprime_with_tailSum_of_firstCase_of_pack_withoutProduct
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : (z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K) ≠ 0) :
+    IsCoprime
+      (Ideal.span ({(z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)} : Set (𝓞 K)))
+      (Ideal.span ({∑ i ∈ Finset.range p,
+          ((z : 𝓞 K) ^ i) * ((hζ.toInteger * (y : 𝓞 K)) ^ (p - 1 - i))} : Set (𝓞 K))) := by
+  have hp_ne_two : p ≠ 2 := by
+    have hp_gt_two : 2 < p := lt_of_lt_of_le (by decide : 2 < 5) hpack.hp5
+    exact ne_of_gt hp_gt_two
+  refine spanSingletons_isCoprime_of_noCommonPrime ?_
+  intro P hP hmemChosen hmemTail
+  have hmemChosen : ((z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)) ∈ P :=
+    hmemChosen
+  have hmemTail :
+      ∑ i ∈ Finset.range p,
+        ((z : 𝓞 K) ^ i) * ((hζ.toInteger * (y : 𝓞 K)) ^ (p - 1 - i)) ∈ P :=
+    hmemTail
+  rcases primeOrY_of_chosenFactorInP_and_tailSumInP_of_counterexamplePack
+      (K := K) (p := p) (y := y) (z := z) hζ hP hmemChosen hmemTail with
+    hP_dvd_p | hP_y
+  · have hP_ne_bot : P ≠ ⊥ := by
+      intro hbot
+      rw [hbot] at hmemChosen
+      exact hLinNe (Ideal.mem_bot.mp hmemChosen)
+    exact noPrimeOverP_of_firstCase_of_chosenFactorInP
+      hζ
+      (fun {P} hP' _hP_ne hP'_dvd_p => by
+        let _ : P.IsPrime := hP'
+        exact primeOverPEqualsZetaMinusOne_fill hζ P hP'_dvd_p)
+      (integerInZetaMinusOneIdealDivisibleByP_fill hζ hp_ne_two)
+      hP hP_ne_bot hP_dvd_p hmemChosen hgap_eq hFirstCase
+  · exact noYInCommonPrime_of_chosenFactorInP_of_coprime_of_counterexamplePack
+      hζ hpack hP hmemChosen hP_y
+
+/--
 cyclotomic の整数環 specialization で使う j 番目の linear factor。
 -/
 abbrev cyclotomicLinearFactorInRingOfIntegers
@@ -1983,6 +2503,60 @@ abbrev ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
     {p y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
     {ζ : K} (hζ : IsPrimitiveRoot ζ p) : Prop :=
   chosenCyclotomicLinearFactorInRingOfIntegers hζ y z ≠ 0
+
+/--
+full product identity があれば、chosen cyclotomic linear factor は自動的に非零である。
+
+`∏_{j < p} (z - ζ^j y) = x^p` と `x ≠ 0` から、1 番目の因子が 0 なら積全体が 0 になって矛盾する。
+-/
+theorem chosenCyclotomicLinearFactorNonzero_of_productEq_of_counterexamplePack
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hProduct : CyclotomicLinearFactorProductEqInRingOfIntegers
+      (hζ := hζ) (x := x) (y := y) (z := z)) :
+    ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ) (y := y) (z := z) := by
+  intro hChosenZero
+  have hone_mem : 1 ∈ Finset.range p := by
+    exact Finset.mem_range.mpr (lt_of_lt_of_le (by decide : 1 < 5) hpack.hp5)
+  have hprod_zero :
+      ∏ j ∈ Finset.range p, cyclotomicLinearFactorInRingOfIntegers hζ y z j = 0 := by
+    exact Finset.prod_eq_zero_iff.mpr ⟨1, hone_mem, by
+      simpa [cyclotomicLinearFactorInRingOfIntegers,
+        chosenCyclotomicLinearFactorInRingOfIntegers, pow_one] using hChosenZero⟩
+  have hxpow_zero : ((x : 𝓞 K) ^ p) = 0 := by
+    rw [← hProduct]
+    exact hprod_zero
+  have hx_zero : (x : 𝓞 K) = 0 := eq_zero_of_pow_eq_zero hxpow_zero
+  exact hpack.hx0 (Nat.cast_eq_zero.mp hx_zero)
+
+/--
+counterexample pack だけから、chosen cyclotomic linear factor の非零性を direct norm 計算で回収する。
+
+first-case concrete mainline では `hLinNe` はもはや extra input ではなく、
+`norm = GN` と `GN ≠ 0` から自動供給できる。
+-/
+theorem chosenCyclotomicLinearFactorNonzero_of_counterexamplePack
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z) :
+    ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ) (y := y) (z := z) := by
+  intro hZero
+  have hNormEq :
+      Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) =
+        ((DkMath.CosmicFormulaBinom.GN p (z - y) y : ℕ) : ℤ) :=
+    chosenCyclotomicLinearFactor_norm_eq_gn_direct hζ hpack.hy0 hpack.hyz_lt
+  have hp_two_le : 2 ≤ p := le_trans (by decide : 2 ≤ 5) hpack.hp5
+  have hgap_pos : 0 < z - y := Nat.sub_pos_of_lt hpack.hyz_lt
+  have hGN_ne_zero : DkMath.CosmicFormulaBinom.GN p (z - y) y ≠ 0 := by
+    exact DkMath.CosmicFormulaBinom.GN_ne_zero_nat_of_two_le hp_two_le hgap_pos hpack.y_pos
+  have hNormZero : Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) = 0 := by
+    simp [chosenCyclotomicLinearFactorInRingOfIntegers, hZero]
+  have hGNCastNeZero : ((DkMath.CosmicFormulaBinom.GN p (z - y) y : ℕ) : ℤ) ≠ 0 := by
+    exact_mod_cast hGN_ne_zero
+  exact hGNCastNeZero (hNormEq ▸ hNormZero)
 
 /--
 chosen linear factor と tail ideal の積が `(x)^p` になることを表す shorthand。
@@ -2047,6 +2621,38 @@ theorem chosenLinearFactor_isCoprime_with_tail_of_firstCase_of_pack
       exact primeOverPEqualsZetaMinusOne_fill hζ P hP_dvd_p)
     (integerInZetaMinusOneIdealDivisibleByP_fill hζ hp_ne_two)
     hpack.hxy hgap_eq hFirstCase hpack.hy0 hLinNe hProduct hj_ne1 hj_lt
+
+/--
+first case + coprimality pack から、chosen linear factor と complementary tail 全体の coprimality を導出する
+product-free variant。
+
+ここで必要なのは first-case と chosen factor 非零性だけであり、
+full product identity は不要である。
+-/
+theorem chosenLinearFactor_isCoprime_with_tail_of_firstCase_of_pack_withoutProduct
+  {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : (z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K) ≠ 0) :
+    IsCoprime (Ideal.span ({(z : 𝓞 K) - hζ.toInteger * (y : 𝓞 K)} : Set (𝓞 K)))
+      (∏ j ∈ (Finset.range p).erase 1,
+        Ideal.span ({(z : 𝓞 K) - (hζ.toInteger ^ j) * (y : 𝓞 K)} : Set (𝓞 K))) := by
+  have hp_ne_two : p ≠ 2 := by
+    have hp_gt_two : 2 < p := lt_of_lt_of_le (by decide : 2 < 5) hpack.hp5
+    exact ne_of_gt hp_gt_two
+  apply idealIsCoprime_prod_of_forall
+  intro j hj
+  have hj_ne1 : j ≠ 1 := Finset.ne_of_mem_erase hj
+  have hj_lt : j < p := Finset.mem_range.mp (Finset.mem_of_mem_erase hj)
+  exact chosenLinearFactor_isCoprime_with_other_of_firstCase_of_pack_withoutProduct hζ
+    (fun {P} hP _hP_ne hP_dvd_p => by
+      let _ : P.IsPrime := hP
+      exact primeOverPEqualsZetaMinusOne_fill hζ P hP_dvd_p)
+    (integerInZetaMinusOneIdealDivisibleByP_fill hζ hp_ne_two)
+    hpack hgap_eq hFirstCase hpack.hy0 hLinNe hj_ne1 hj_lt rfl
 
 /--
 counterexample pack の product identity から、chosen linear factor と tail ideal の積等式を回収する。
@@ -2134,10 +2740,13 @@ theorem linearFactorIdealPthPowerExistsOfSpanEqPowAndRootNeBot
     ctx hp (linearFactorNeZeroOfSpanEqPow ctx hEq hK_ne) hEq hKill
 
 /--
-first-case pack から chosen linear factor ideal が `p` 乗 ideal であることを返す、
-heartbeat-safe な薄い wrapper。
+chosen factor ideal × tail ideal = `(x)^p` と product-free な coprimality から、
+chosen factor ideal が `p` 乗 ideal であることを返す isolated receiver。
+
+これにより、first-case unit-normalization chain で `hProduct` が残るのは
+mul-tail ideal equality の供給だけだと theorem 境界で見えるようになる。
 -/
-theorem chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin
+theorem chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin_of_mulTailEqSpanPow
     {K : Type u} [Field K] [NumberField K] [CharZero K]
     {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
     {ζ : K} (hζ : IsPrimitiveRoot ζ p)
@@ -2146,7 +2755,7 @@ theorem chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin
     (hFirstCase : ¬ p ∣ gap)
     (hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
       (hζ := hζ) (y := y) (z := z))
-    (hProduct : CyclotomicLinearFactorProductEqInRingOfIntegers
+    (hMul : ChosenCyclotomicLinearFactorMulTailEqSpanPowInRingOfIntegers
       (hζ := hζ) (x := x) (y := y) (z := z)) :
     ChosenCyclotomicLinearFactorSpanEqPowInRingOfIntegers
       (hζ := hζ) (p := p) (y := y) (z := z) := by
@@ -2166,28 +2775,90 @@ theorem chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin
       (span_singleton_finset_prod (R := 𝓞 K)
         (s := (Finset.range p).erase 1)
         (f := cyclotomicLinearFactorInRingOfIntegers hζ y z))
-  have hMul :
-      Ideal.span ({chosenCyclotomicLinearFactorInRingOfIntegers hζ y z} : Set (𝓞 K)) *
-          Ideal.span ({tail} : Set (𝓞 K)) =
-        Ideal.span ({(x : 𝓞 K)} : Set (𝓞 K)) ^ p := by
-    calc
-      Ideal.span ({chosenCyclotomicLinearFactorInRingOfIntegers hζ y z} : Set (𝓞 K)) *
-          Ideal.span ({tail} : Set (𝓞 K)) =
-          Ideal.span ({chosenCyclotomicLinearFactorInRingOfIntegers hζ y z} : Set (𝓞 K)) *
-            ∏ j ∈ (Finset.range p).erase 1,
-              Ideal.span ({cyclotomicLinearFactorInRingOfIntegers hζ y z j} : Set (𝓞 K)) := by
-                rw [← hTailSpan]
-      _ = Ideal.span ({(x : 𝓞 K)} : Set (𝓞 K)) ^ p :=
-        chosenLinearFactorMulTailEqSpanPow_of_productEq
-          (K := K) (p := p) (x := x) (y := y) (z := z) hζ hpack hProduct
   have hCoprime :
       IsCoprime
         (Ideal.span ({chosenCyclotomicLinearFactorInRingOfIntegers hζ y z} : Set (𝓞 K)))
         (Ideal.span ({tail} : Set (𝓞 K))) := by
     rw [← hTailSpan]
-    exact chosenLinearFactor_isCoprime_with_tail_of_firstCase_of_pack
+    exact chosenLinearFactor_isCoprime_with_tail_of_firstCase_of_pack_withoutProduct
       (K := K) (p := p) (x := x) (y := y) (z := z)
-      hζ hpack hgap_eq hFirstCase hLinNe hProduct
+      hζ hpack hgap_eq hFirstCase hLinNe
+  have hSpanEq :
+      ∃ K' : Ideal (𝓞 K),
+        Ideal.span ({(z : 𝓞 K) - ctx.zeta * (y : 𝓞 K)} : Set (𝓞 K)) = K' ^ ctx.p := by
+    exact linearFactorSpanEqPowOfChosenMulTailEqSpanPowAndIsCoprime
+      (R := 𝓞 K) (ctx := ctx) (tail := tail) (x := (x : 𝓞 K))
+      (y := (y : 𝓞 K)) (z := (z : 𝓞 K))
+      (xSpanNonzero_of_counterexamplePack_of_ringOfIntegers
+        (K := K) (p := p) (x := x) (y := y) (z := z) hpack)
+      (by
+        rw [← hTailSpan]
+        simpa [ctx, tail, chosenCyclotomicLinearFactorInRingOfIntegers] using hMul)
+      hCoprime
+  simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hSpanEq
+
+/--
+first-case pack から chosen linear factor ideal が `p` 乗 ideal であることを返す、
+heartbeat-safe な薄い wrapper。
+-/
+theorem chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
+      (hζ := hζ) (y := y) (z := z))
+    (hProduct : CyclotomicLinearFactorProductEqInRingOfIntegers
+      (hζ := hζ) (x := x) (y := y) (z := z)) :
+    ChosenCyclotomicLinearFactorSpanEqPowInRingOfIntegers
+      (hζ := hζ) (p := p) (y := y) (z := z) := by
+  exact chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin_of_mulTailEqSpanPow
+    (K := K) (p := p) (x := x) (y := y) (z := z)
+    hζ hpack hgap_eq hFirstCase hLinNe
+    (chosenLinearFactorMulTailEqSpanPow_of_productEq
+      (K := K) (p := p) (x := x) (y := y) (z := z) hζ hpack hProduct)
+
+/--
+first-case pack から、full product identity を使わずに chosen linear factor ideal が `p` 乗 ideal であることを返す。
+
+local factorization の tail-sum ideal と product-free coprimality bridge を経由する。
+-/
+theorem chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin_withoutProduct
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
+      (hζ := hζ) (y := y) (z := z)) :
+    ChosenCyclotomicLinearFactorSpanEqPowInRingOfIntegers
+      (hζ := hζ) (p := p) (y := y) (z := z) := by
+  let ctx : CyclotomicLocalFactorizationContext (𝓞 K) := {
+    p := p
+    zeta := hζ.toInteger
+    hzeta_pow := by
+      simpa using hζ.toInteger_isPrimitiveRoot.pow_eq_one
+  }
+  let tail : 𝓞 K :=
+    ∑ i ∈ Finset.range p,
+      ((z : 𝓞 K) ^ i) * ((hζ.toInteger * (y : 𝓞 K)) ^ (p - 1 - i))
+  have hMul :
+      Ideal.span ({chosenCyclotomicLinearFactorInRingOfIntegers hζ y z} : Set (𝓞 K)) *
+          Ideal.span ({tail} : Set (𝓞 K)) =
+        Ideal.span ({(x : 𝓞 K)} : Set (𝓞 K)) ^ p := by
+    simpa [tail, chosenCyclotomicLinearFactorInRingOfIntegers, mul_comm] using
+      chosenCyclotomicTailSumMulChosenLinearFactorEqSpanPow_of_counterexamplePack hζ hpack
+  have hCoprime :
+      IsCoprime
+        (Ideal.span ({chosenCyclotomicLinearFactorInRingOfIntegers hζ y z} : Set (𝓞 K)))
+        (Ideal.span ({tail} : Set (𝓞 K))) := by
+    simpa [tail, chosenCyclotomicLinearFactorInRingOfIntegers] using
+      chosenLinearFactor_isCoprime_with_tailSum_of_firstCase_of_pack_withoutProduct
+        (K := K) (p := p) (x := x) (y := y) (z := z)
+        hζ hpack hgap_eq hFirstCase hLinNe
   have hSpanEq :
       ∃ K' : Ideal (𝓞 K),
         Ideal.span ({(z : 𝓞 K) - ctx.zeta * (y : 𝓞 K)} : Set (𝓞 K)) = K' ^ ctx.p := by
@@ -2198,6 +2869,45 @@ theorem chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin
         (K := K) (p := p) (x := x) (y := y) (z := z) hpack)
       hMul hCoprime
   simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hSpanEq
+
+/--
+mul-tail ideal equality core と torsion-kill から、chosen linear factor ideal の
+principal `p` 乗存在を返す isolated receiver。
+-/
+theorem cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin_of_mulTailEqSpanPow
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
+      (hζ := hζ) (y := y) (z := z))
+    (hMul : ChosenCyclotomicLinearFactorMulTailEqSpanPowInRingOfIntegers
+      (hζ := hζ) (x := x) (y := y) (z := z))
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
+    ChosenCyclotomicLinearFactorIdealPthPowerInRingOfIntegers
+      (hζ := hζ) (p := p) (y := y) (z := z) := by
+  let ctx : CyclotomicLocalFactorizationContext (𝓞 K) := {
+    p := p
+    zeta := hζ.toInteger
+    hzeta_pow := by
+      simpa using hζ.toInteger_isPrimitiveRoot.pow_eq_one
+  }
+  obtain ⟨K', hEq⟩ := chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin_of_mulTailEqSpanPow
+    (K := K) (p := p) (x := x) (y := y) (z := z)
+    hζ hpack hgap_eq hFirstCase hLinNe hMul
+  have hExists :
+      ∃ J : Ideal (𝓞 K), J.IsPrincipal ∧
+        Ideal.span ({(z : 𝓞 K) - ctx.zeta * (y : 𝓞 K)} : Set (𝓞 K)) = J ^ ctx.p := by
+    exact linearFactorIdealPthPowerExistsOfSpanEqPowAndTorsionKill
+      (R := 𝓞 K) (ctx := ctx) (K := K')
+      hp.out.ne_zero
+      (by simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hLinNe)
+      (by simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hEq)
+      hKill
+  simpa [ChosenCyclotomicLinearFactorIdealPthPowerInRingOfIntegers,
+    ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hExists
 
 /--
 first-case pack から chosen linear factor ideal の principal `p` 乗存在を返す、
@@ -2217,26 +2927,602 @@ theorem cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin
     (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
     ChosenCyclotomicLinearFactorIdealPthPowerInRingOfIntegers
       (hζ := hζ) (p := p) (y := y) (z := z) := by
+  exact cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin_of_mulTailEqSpanPow
+    (K := K) (p := p) (x := x) (y := y) (z := z)
+    hζ hpack hgap_eq hFirstCase hLinNe
+    (chosenLinearFactorMulTailEqSpanPow_of_productEq
+      (K := K) (p := p) (x := x) (y := y) (z := z) hζ hpack hProduct)
+    hKill
+
+/--
+first-case pack から、full product identity を使わずに chosen linear factor ideal の principal `p` 乗存在を返す。
+-/
+theorem cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin_withoutProduct
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
+      (hζ := hζ) (y := y) (z := z))
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
+    ChosenCyclotomicLinearFactorIdealPthPowerInRingOfIntegers
+      (hζ := hζ) (p := p) (y := y) (z := z) := by
   let ctx : CyclotomicLocalFactorizationContext (𝓞 K) := {
     p := p
     zeta := hζ.toInteger
     hzeta_pow := by
       simpa using hζ.toInteger_isPrimitiveRoot.pow_eq_one
   }
-  obtain ⟨K', hEq⟩ := chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin
+  obtain hSpan := chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin_withoutProduct
     (K := K) (p := p) (x := x) (y := y) (z := z)
-    hζ hpack hgap_eq hFirstCase hLinNe hProduct
+    hζ hpack hgap_eq hFirstCase hLinNe
+  obtain ⟨K', hEq⟩ := hSpan
   have hExists :
       ∃ J : Ideal (𝓞 K), J.IsPrincipal ∧
         Ideal.span ({(z : 𝓞 K) - ctx.zeta * (y : 𝓞 K)} : Set (𝓞 K)) = J ^ ctx.p := by
     exact linearFactorIdealPthPowerExistsOfSpanEqPowAndTorsionKill
-      (R := 𝓞 K) (ctx := ctx) (K := K')
-      hp.out.ne_zero
+      (R := 𝓞 K) (ctx := ctx) (K := K') hp.out.ne_zero
       (by simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hLinNe)
       (by simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hEq)
       hKill
   simpa [ChosenCyclotomicLinearFactorIdealPthPowerInRingOfIntegers,
     ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hExists
+
+/--
+mul-tail ideal equality core と principal `p` 乗存在から、chosen linear factor 自体を
+unit 倍の `p` 乗として返す isolated receiver。
+-/
+theorem cyclotomicUnitNormalization_of_firstCase_of_pack_thin_of_mulTailEqSpanPow
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
+      (hζ := hζ) (y := y) (z := z))
+    (hMul : ChosenCyclotomicLinearFactorMulTailEqSpanPowInRingOfIntegers
+      (hζ := hζ) (x := x) (y := y) (z := z))
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
+    ∃ β unitFactor : 𝓞 K, IsUnit unitFactor ∧
+      chosenCyclotomicLinearFactorInRingOfIntegers hζ y z = unitFactor * β ^ p := by
+  let ctx : CyclotomicLocalFactorizationContext (𝓞 K) := {
+    p := p
+    zeta := hζ.toInteger
+    hzeta_pow := by
+      simpa using hζ.toInteger_isPrimitiveRoot.pow_eq_one
+  }
+  obtain ⟨I, hIPrincipal, hSpan⟩ :=
+    cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin_of_mulTailEqSpanPow
+      (K := K) (p := p) (x := x) (y := y) (z := z)
+      hζ hpack hgap_eq hFirstCase hLinNe hMul hKill
+  let _ : I.IsPrincipal := hIPrincipal
+  obtain ⟨unitFactor, hUnit, hEq⟩ :=
+    linearFactorEqUnitMulGeneratorPowOfSpanEqPowPrincipal ctx (z : 𝓞 K) (y : 𝓞 K) hSpan
+  refine ⟨Submodule.IsPrincipal.generator I, unitFactor, hUnit, ?_⟩
+  simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hEq
+
+/--
+first-case pack から chosen linear factor 自体を unit 倍の `p` 乗として返す、
+Stage 3 の norm 計算へ入る直前の thin wrapper。
+-/
+theorem cyclotomicUnitNormalization_of_firstCase_of_pack_thin
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
+      (hζ := hζ) (y := y) (z := z))
+    (hProduct : CyclotomicLinearFactorProductEqInRingOfIntegers
+      (hζ := hζ) (x := x) (y := y) (z := z))
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
+    ∃ β unitFactor : 𝓞 K, IsUnit unitFactor ∧
+      chosenCyclotomicLinearFactorInRingOfIntegers hζ y z = unitFactor * β ^ p := by
+  exact cyclotomicUnitNormalization_of_firstCase_of_pack_thin_of_mulTailEqSpanPow
+    (K := K) (p := p) (x := x) (y := y) (z := z)
+    hζ hpack hgap_eq hFirstCase hLinNe
+    (chosenLinearFactorMulTailEqSpanPow_of_productEq
+      (K := K) (p := p) (x := x) (y := y) (z := z) hζ hpack hProduct)
+    hKill
+
+/--
+first-case pack から、full product identity を使わずに chosen linear factor 自体を unit 倍の `p` 乗として返す。
+-/
+theorem cyclotomicUnitNormalization_of_firstCase_of_pack_thin_withoutProduct
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
+      (hζ := hζ) (y := y) (z := z))
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
+    ∃ β unitFactor : 𝓞 K, IsUnit unitFactor ∧
+      chosenCyclotomicLinearFactorInRingOfIntegers hζ y z = unitFactor * β ^ p := by
+  let ctx : CyclotomicLocalFactorizationContext (𝓞 K) := {
+    p := p
+    zeta := hζ.toInteger
+    hzeta_pow := by
+      simpa using hζ.toInteger_isPrimitiveRoot.pow_eq_one
+  }
+  obtain ⟨I, hIPrincipal, hSpan⟩ :=
+    cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin_withoutProduct
+      (K := K) (p := p) (x := x) (y := y) (z := z)
+      hζ hpack hgap_eq hFirstCase hLinNe hKill
+  let _ : I.IsPrincipal := hIPrincipal
+  obtain ⟨unitFactor, hUnit, hEq⟩ :=
+    linearFactorEqUnitMulGeneratorPowOfSpanEqPowPrincipal ctx (z : 𝓞 K) (y : 𝓞 K) hSpan
+  refine ⟨Submodule.IsPrincipal.generator I, unitFactor, hUnit, ?_⟩
+  simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hEq
+
+/--
+Stage 3a-1 の最初の中間補題:
+chosen cyclotomic linear factor の整数 norm を、
+`Gal(K/ℚ)` 上の共役積へ持ち上げる。
+
+ここではまだ cyclotomic reindex はせず、norm の一般論だけを isolate する。
+-/
+theorem chosenCyclotomicLinearFactor_norm_eq_prod_gal_of_firstCase_of_pack_thin
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
+    (((Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) : ℚ) : K)) =
+      ∏ σ : Gal(K/ℚ), σ (((chosenCyclotomicLinearFactorInRingOfIntegers hζ y z : 𝓞 K) : K)) := by
+  let x : 𝓞 K := chosenCyclotomicLinearFactorInRingOfIntegers hζ y z
+  have hcoe : ((Algebra.norm ℤ x : ℚ) : K) = algebraMap ℚ K (Algebra.norm ℚ ((x : 𝓞 K) : K)) := by
+    exact congrArg (algebraMap ℚ K) (Algebra.coe_norm_int x)
+  letI := IsCyclotomicExtension.finiteDimensional {p} ℚ K
+  letI := IsCyclotomicExtension.isGalois {p} ℚ K
+  calc
+    ((Algebra.norm ℤ x : ℚ) : K) = algebraMap ℚ K (Algebra.norm ℚ ((x : 𝓞 K) : K)) := hcoe
+    _ = ∏ σ : Gal(K/ℚ), σ (((x : 𝓞 K) : K)) := by
+          rw [Algebra.norm_eq_prod_automorphisms]
+
+/--
+Stage 3a-1 の cyclotomic reindex 用補題:
+`Gal(K/ℚ)` の元は chosen factor を、対応する `ζ^k` factor へ送る。
+-/
+theorem gal_apply_chosenCyclotomicLinearFactor_eq_factor_of_firstCase_of_pack_thin
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (σ : Gal(K/ℚ)) :
+    σ (((chosenCyclotomicLinearFactorInRingOfIntegers hζ y z : 𝓞 K) : K)) =
+      ((cyclotomicLinearFactorInRingOfIntegers hζ y z
+        (IsCyclotomicExtension.Rat.galEquivZMod p K σ).val.val : 𝓞 K) : K) := by
+  letI : NeZero p := ⟨hp.out.ne_zero⟩
+  let k : ℕ := (IsCyclotomicExtension.Rat.galEquivZMod p K σ).val.val
+  have hsigma_base : σ ζ = ζ ^ k := by
+    simpa [k] using
+      (IsCyclotomicExtension.Rat.galEquivZMod_apply_of_pow_eq (n := p) (K := K) σ hζ.pow_eq_one)
+  have hsigma_zeta :
+      σ (((hζ.toInteger : 𝓞 K) : K)) = (((hζ.toInteger : 𝓞 K) : K)) ^ k := by
+    have htoInteger : (((hζ.toInteger : 𝓞 K) : K)) = ζ := IsPrimitiveRoot.coe_toInteger hζ
+    calc
+      σ (((hζ.toInteger : 𝓞 K) : K)) = σ ζ := by rw [htoInteger]
+      _ = ζ ^ k := hsigma_base
+      _ = (((hζ.toInteger : 𝓞 K) : K)) ^ k := by rw [htoInteger]
+  rw [chosenCyclotomicLinearFactorInRingOfIntegers, cyclotomicLinearFactorInRingOfIntegers]
+  change σ ((z : K) - (((hζ.toInteger : 𝓞 K) : K) * (y : K))) =
+    (z : K) - ((((hζ.toInteger : 𝓞 K) : K) ^ k) * (y : K))
+  calc
+    σ ((z : K) - (((hζ.toInteger : 𝓞 K) : K) * (y : K))) =
+        σ (z : K) - σ (((hζ.toInteger : 𝓞 K) : K) * (y : K)) := by
+          rw [map_sub]
+    _ = σ (z : K) - σ (((hζ.toInteger : 𝓞 K) : K)) * σ (y : K) := by rw [map_mul]
+    _ = (z : K) - (((hζ.toInteger : 𝓞 K) : K) ^ k) * (y : K) := by
+          rw [hsigma_zeta]
+          simp
+
+/--
+Stage 3a-1 の reindex 補題:
+chosen factor の Gal-product は、そのまま `(ZMod p)ˣ` 上の factor 積に一致する。
+-/
+theorem chosenCyclotomicLinearFactor_norm_eq_prod_units_of_firstCase_of_pack_thin
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
+    (((Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) : ℚ) : K)) =
+      ∏ u : (ZMod p)ˣ,
+        ((cyclotomicLinearFactorInRingOfIntegers hζ y z u.val.val : 𝓞 K) : K) := by
+  letI : NeZero p := ⟨hp.out.ne_zero⟩
+  rw [chosenCyclotomicLinearFactor_norm_eq_prod_gal_of_firstCase_of_pack_thin hζ]
+  simpa using
+    (Fintype.prod_equiv
+      (IsCyclotomicExtension.Rat.galEquivZMod p K)
+      (fun σ : Gal(K/ℚ) => σ (((chosenCyclotomicLinearFactorInRingOfIntegers hζ y z : 𝓞 K) : K)))
+      (fun u : (ZMod p)ˣ =>
+        ((cyclotomicLinearFactorInRingOfIntegers hζ y z u.val.val : 𝓞 K) : K))
+      (fun σ => by
+        simpa using
+          (gal_apply_chosenCyclotomicLinearFactor_eq_factor_of_firstCase_of_pack_thin
+            (hζ := hζ) (y := y) (z := z) (σ := σ))))
+
+/--
+Combinatorial bridge: `(ZMod p)ˣ` 上の積と `(Finset.range p).erase 0` 上の積の一致。
+
+素数 `p` に対し、写像 `u ↦ u.val.val : (ZMod p)ˣ → ℕ` は
+`{1, 2, …, p − 1}` への全単射であり、この添字変換で任意の積が一致する。
+これは Stage 3a-1 と Stage 3a-2 を繋ぐ純 combinatorial な補題。
+-/
+theorem prod_units_zmod_eq_prod_range_erase_zero
+    {p : ℕ} [hp : Fact p.Prime]
+    {M : Type*} [CommMonoid M] (f : ℕ → M) :
+    ∏ u : (ZMod p)ˣ, f u.val.val = ∏ j ∈ (Finset.range p).erase 0, f j := by
+  letI : NeZero p := ⟨hp.out.ne_zero⟩
+  apply Finset.prod_nbij (fun u : (ZMod p)ˣ => u.val.val)
+  · -- hi: image lands in (Finset.range p).erase 0
+    intro u _
+    refine Finset.mem_erase.mpr ⟨?_, Finset.mem_range.mpr (ZMod.val_lt _)⟩
+    intro h
+    have hcop := ZMod.val_coe_unit_coprime u
+    simp only [h, Nat.Coprime, Nat.gcd_zero_left] at hcop
+    exact absurd hcop (ne_of_gt hp.out.one_lt)
+  · -- i_inj: injective
+    intro u₁ _ u₂ _ h
+    exact Units.ext (ZMod.val_injective p h)
+  · -- i_surj: surjective onto (Finset.range p).erase 0
+    intro j hj
+    rw [Finset.mem_coe] at hj
+    have hj_ne := (Finset.mem_erase.mp hj).1
+    have hj_lt := Finset.mem_range.mp (Finset.mem_erase.mp hj).2
+    have hcoprime : Nat.Coprime j p :=
+      (hp.out.coprime_iff_not_dvd.mpr
+        (fun hdvd => absurd (Nat.le_of_dvd (by omega) hdvd) (by omega))).symm
+    exact ⟨ZMod.unitOfCoprime j hcoprime, Finset.mem_coe.mpr (Finset.mem_univ _),
+      by simp [ZMod.coe_unitOfCoprime, ZMod.val_natCast_of_lt hj_lt]⟩
+  · -- h: f values agree (trivially rfl)
+    intro _ _
+    rfl
+
+/--
+Stage 3a-1 の product-free wrapper:
+chosen factor の整数 norm を、`(Finset.range p).erase 0` 上の cyclotomic factor 積へ持ち上げる。
+
+ここではまだ `GN` への書き換えはしないため、full product identity は不要。
+-/
+theorem chosenCyclotomicLinearFactor_norm_eq_prod_range_erase_zero_of_firstCase_of_pack_thin
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p) :
+    (((Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) : ℚ) : K)) =
+      ∏ j ∈ (Finset.range p).erase 0,
+        ((cyclotomicLinearFactorInRingOfIntegers hζ y z j : 𝓞 K) : K) := by
+  let factor := cyclotomicLinearFactorInRingOfIntegers hζ y z
+  have h_norm :=
+    chosenCyclotomicLinearFactor_norm_eq_prod_units_of_firstCase_of_pack_thin hζ
+      (K := K) (p := p) (y := y) (z := z)
+  have h_bridge :=
+    prod_units_zmod_eq_prod_range_erase_zero (p := p)
+      (fun j => ((factor j : 𝓞 K) : K))
+  simpa [factor] using h_norm.trans h_bridge
+
+/--
+Stage 3a-2 の concrete core:
+first-case pack-thin 文脈では、nontrivial cyclotomic linear factor 全体の積は
+そのまま `GN p (z - y) y` に一致する。
+
+これは `hProduct` と `x^p = gap * GN` を `gap` で cancel しただけの薄い補題で、
+norm 計算へ入る前の product-level rewriting を担当する。
+-/
+theorem cyclotomicNontrivialFactorProduct_eq_GN_of_firstCase_of_pack_thin
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hProduct : CyclotomicLinearFactorProductEqInRingOfIntegers
+      (hζ := hζ) (x := x) (y := y) (z := z)) :
+    ∏ j ∈ (Finset.range p).erase 0,
+        cyclotomicLinearFactorInRingOfIntegers hζ y z j =
+      (GN p gap y : 𝓞 K) := by
+  let factor : ℕ → 𝓞 K := cyclotomicLinearFactorInRingOfIntegers hζ y z
+  have hgap_nat : gap = z - y := by
+    apply Nat.cast_injective (R := K)
+    simpa [Nat.cast_sub hpack.hyz] using
+      (congrArg (fun t : 𝓞 K => ((t : 𝓞 K) : K)) hgap_eq).symm
+  have hzero_mem : 0 ∈ Finset.range p := by
+    exact Finset.mem_range.mpr hp.out.pos
+  have hfactor_zero : factor 0 = (gap : 𝓞 K) := by
+    simpa [factor, cyclotomicLinearFactorInRingOfIntegers, pow_zero] using hgap_eq
+  have hxpow_nat_gap :
+      x ^ p = gap * GN p gap y := by
+    simpa [PrimeGe5CounterexamplePack.gap, hgap_nat] using hpack.xpow_eq_gap_mul_GN
+  have hxpow_eq_gap_mul_gn_gap :
+      (x : 𝓞 K) ^ p = (gap : 𝓞 K) * (GN p gap y : 𝓞 K) := by
+    calc
+      (x : 𝓞 K) ^ p = ((x ^ p : ℕ) : 𝓞 K) := by simp
+      _ = ((gap * GN p gap y : ℕ) : 𝓞 K) := by exact_mod_cast hxpow_nat_gap
+      _ = (gap : 𝓞 K) * (GN p gap y : 𝓞 K) := by simp [Nat.cast_mul]
+  have hgap_ne_zero_nat : gap ≠ 0 := by
+    intro hgap0
+    exact hFirstCase (hgap0 ▸ dvd_zero p)
+  have hgap_ne_zero : (gap : 𝓞 K) ≠ 0 := by
+    exact_mod_cast hgap_ne_zero_nat
+  have hfull :
+      (gap : 𝓞 K) * ∏ j ∈ (Finset.range p).erase 0, factor j = (x : 𝓞 K) ^ p := by
+    calc
+      (gap : 𝓞 K) * ∏ j ∈ (Finset.range p).erase 0, factor j
+          = factor 0 * ∏ j ∈ (Finset.range p).erase 0, factor j := by
+              rw [hfactor_zero]
+      _ = ∏ j ∈ Finset.range p, factor j := by
+            simpa [factor] using
+              (Finset.mul_prod_erase (s := Finset.range p) (f := factor) hzero_mem)
+      _ = (x : 𝓞 K) ^ p := hProduct
+  have hprod_gap :
+      ∏ j ∈ (Finset.range p).erase 0, factor j = (GN p gap y : 𝓞 K) := by
+    exact mul_left_cancel₀ hgap_ne_zero (hfull.trans hxpow_eq_gap_mul_gn_gap)
+  exact hprod_gap
+
+/--
+Stage 3a-2 の quotient 版:
+nontrivial cyclotomic linear factor 全体の積を、差冪商
+`((z^p - y^p) / (z - y))` の既存 shorthand へ寄せる。
+-/
+theorem cyclotomicNontrivialFactorProduct_eq_quotientPrimePow_of_firstCase_of_pack_thin
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [hp : Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hProduct : CyclotomicLinearFactorProductEqInRingOfIntegers
+      (hζ := hζ) (x := x) (y := y) (z := z)) :
+    ∏ j ∈ (Finset.range p).erase 0,
+        cyclotomicLinearFactorInRingOfIntegers hζ y z j =
+      (DkMath.NumberTheory.GcdDiffPow.quotientPrimePow z y p : 𝓞 K) := by
+  have hgap_nat : gap = z - y := by
+    apply Nat.cast_injective (R := K)
+    simpa [Nat.cast_sub hpack.hyz] using
+      (congrArg (fun t : 𝓞 K => ((t : 𝓞 K) : K)) hgap_eq).symm
+  calc
+    ∏ j ∈ (Finset.range p).erase 0, cyclotomicLinearFactorInRingOfIntegers hζ y z j
+        = (GN p gap y : 𝓞 K) :=
+            cyclotomicNontrivialFactorProduct_eq_GN_of_firstCase_of_pack_thin
+              (K := K) (p := p) (x := x) (y := y) (z := z)
+              hζ hpack hgap_eq hFirstCase hProduct
+    _ = (DkMath.NumberTheory.GcdDiffPow.quotientPrimePow z y p : 𝓞 K) := by
+          rw [hgap_nat, DkMath.NumberTheory.Gcd.quotientPrimePow_eq_gn_gap hp.out hpack.hyz_lt]
+          simp [DkMath.CosmicFormulaBinom.GN]
+
+/--
+Stage 3 前半: first-case pack-thin 文脈で、chosen linear factor の整数ノルムを
+`GN p (z - y) y` へ同定する target。
+
+ここで新しい数論はまだ入れず、norm 計算本体を独立責務として切り出す。
+-/
+abbrev CyclotomicNormEqGNFirstCasePackThinTarget : Prop :=
+  ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+    ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+    ∀ {ζ : K},
+    (hζ : IsPrimitiveRoot ζ p) →
+    PrimeGe5CounterexamplePack p x y z →
+    ∀ {gap : ℕ},
+      (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+      ¬ p ∣ gap →
+      ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
+        (y := y) (z := z) →
+      ∀ {β unitFactor : 𝓞 K},
+        IsUnit unitFactor →
+        chosenCyclotomicLinearFactorInRingOfIntegers hζ y z =
+          unitFactor * β ^ p →
+        Algebra.norm ℤ
+            (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) =
+          (GN p (z - y) y : ℤ)
+
+/--
+`CyclotomicNormEqGNFirstCasePackThinTarget` の concrete 化。
+
+direct route で、chosen factor の整数ノルムを
+そのまま `GN p (z - y) y` へ同定する。
+
+この concrete theorem 自体は、もはや `hProduct` を使わない。
+-/
+theorem cyclotomicNormEqGN_concrete_firstCase_packThin :
+    CyclotomicNormEqGNFirstCasePackThinTarget.{u} := by
+  intro K _ _ _ p x y z _ _ ζ hζ hpack gap hgap_eq hFirstCase hLinNe
+    β unitFactor _ _
+  simpa [chosenCyclotomicLinearFactorInRingOfIntegers, Nat.cast_sub hpack.hyz] using
+    (chosenCyclotomicLinearFactor_norm_eq_gn_direct
+      (K := K) (p := p) (z := z) (y := y) hζ hpack.hy0 hpack.hyz_lt)
+
+/--
+Stage 3 後半: first-case pack-thin 文脈で、
+`z - ζy = unitFactor * β^p` と norm 計算結果から
+`GN p (z - y) y` が整数の `p` 乗になることを回収する target。
+
+unit norm 吸収と `p` 乗性の責務だけをここへ隔離する。
+-/
+abbrev CyclotomicNormUnitAbsorbFirstCasePackThinTarget : Prop :=
+  ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+    ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+    ∀ {ζ : K},
+    (hζ : IsPrimitiveRoot ζ p) →
+    PrimeGe5CounterexamplePack p x y z →
+    ∀ {gap : ℕ},
+      (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+      ¬ p ∣ gap →
+      ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
+        (y := y) (z := z) →
+      ∀ {β unitFactor : 𝓞 K},
+        IsUnit unitFactor →
+        chosenCyclotomicLinearFactorInRingOfIntegers hζ y z =
+          unitFactor * β ^ p →
+        Algebra.norm ℤ
+            (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) =
+          (GN p (z - y) y : ℤ) →
+        ∃ s : ℕ, GN p (z - y) y = s ^ p
+
+/--
+Unit normalization で得た `z - ζy = unitFactor * β^p` に norm をかけると、
+そのまま `norm(unitFactor) * norm(β)^p` へ分解できる。
+-/
+theorem norm_eq_normUnit_mul_normPow_of_eq_unit_mul_pow
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    {β unitFactor : 𝓞 K}
+    (hEq : chosenCyclotomicLinearFactorInRingOfIntegers hζ y z = unitFactor * β ^ p) :
+    Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) =
+      Algebra.norm ℤ unitFactor * (Algebra.norm ℤ β) ^ p := by
+  rw [hEq, map_mul, map_pow]
+
+/--
+`CyclotomicNormUnitAbsorbFirstCasePackThinTarget` の concrete 化。
+
+`norm = GN` を既に得たあと、unit norm を `Int.natAbs` で吸収して
+自然数 witness を回収する。
+-/
+theorem cyclotomicNormUnitAbsorb_concrete_firstCase_packThin :
+    CyclotomicNormUnitAbsorbFirstCasePackThinTarget.{u} := by
+  intro K _ _ _ p x y z _ _ ζ hζ hpack gap hgap_eq hFirstCase hLinNe
+    β unitFactor hUnit hEq hNorm
+  have hNormMul :=
+    norm_eq_normUnit_mul_normPow_of_eq_unit_mul_pow
+      (K := K) (p := p) (y := y) (z := z) (hζ := hζ) (β := β)
+      (unitFactor := unitFactor) hEq
+  have hNormUnit : IsUnit (Algebra.norm ℤ unitFactor) :=
+    IsUnit.map (Algebra.norm ℤ) hUnit
+  have hNormGN :
+      ((GN p (z - y) y : ℕ) : ℤ) =
+        Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) := by
+    simpa [← Nat.cast_sub hpack.hyz] using hNorm.symm
+  have hEqInt :
+      ((GN p (z - y) y : ℕ) : ℤ) =
+        Algebra.norm ℤ unitFactor * (Algebra.norm ℤ β) ^ p := by
+    exact hNormGN.trans hNormMul
+  simpa using
+    (DkMath.NumberTheory.Gcd.nat_exists_pow_of_intEq_unit_mul_pow
+      (n := GN p (z - y) y) (p := p)
+      (unitFactor := Algebra.norm ℤ unitFactor)
+      (m := Algebra.norm ℤ β)
+      hNormUnit hEqInt)
+
+/--
+Stage 3 の最初の concrete 境界。
+
+first-case pack-thin 文脈から、最終 descent existence に飛ぶ前に
+まず `GN p (z - y) y` が整数の `p` 乗になることだけを返す。
+-/
+abbrev CyclotomicNormGNPowerFirstCasePackThinTarget : Prop :=
+  ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+    ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+    ∀ {ζ : K},
+    (hζ : IsPrimitiveRoot ζ p) →
+    PrimeGe5CounterexamplePack p x y z →
+    ∀ {gap : ℕ},
+      (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+      ¬ p ∣ gap →
+      ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
+        (y := y) (z := z) →
+      ∃ s : ℕ, GN p (z - y) y = s ^ p
+
+/--
+first-case pack-thin の Stage 3 配線:
+norm 計算 target と unit norm 吸収 target を合成して、
+`GN p (z - y) y` の `p` 乗性を返す。
+
+これで Stage 3 の open は、honest に 2 本へ分離される。
+-/
+theorem cyclotomicNormGNPower_of_firstCase_of_pack_thin
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u})
+  (hNormEqGN : CyclotomicNormEqGNFirstCasePackThinTarget.{u})
+  (hUnitAbsorb : CyclotomicNormUnitAbsorbFirstCasePackThinTarget.{u})
+    {K : Type u} [Field K] [NumberField K] [CharZero K]
+    {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K]
+    {ζ : K} (hζ : IsPrimitiveRoot ζ p)
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    {gap : ℕ} (hgap_eq : (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K))
+    (hFirstCase : ¬ p ∣ gap)
+    (hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
+      (y := y) (z := z)) :
+    ∃ s : ℕ, GN p (z - y) y = s ^ p := by
+  obtain ⟨β, unitFactor, hUnit, hEq⟩ :=
+    cyclotomicUnitNormalization_of_firstCase_of_pack_thin_withoutProduct
+      (K := K) (p := p) (x := x) (y := y) (z := z)
+      hζ hpack hgap_eq hFirstCase hLinNe hKill
+  have hNorm :
+      Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) =
+        (GN p (z - y) y : ℤ) :=
+    hNormEqGN hζ hpack hgap_eq hFirstCase hLinNe hUnit hEq
+  exact hUnitAbsorb hζ hpack hgap_eq hFirstCase hLinNe hUnit hEq hNorm
+
+/--
+first-case pack-thin での Stage 3 concrete wrapper。
+
+既に concrete 化された `NormEqGN` と `UnitAbsorb` を束ねて、
+`GN p (z - y) y = s^p` を assumption-free に返す。
+-/
+theorem cyclotomicNormGNPower_concrete_firstCase_packThin
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u}) :
+    CyclotomicNormGNPowerFirstCasePackThinTarget.{u} := by
+  intro K _ _ _ p x y z _ _ ζ hζ hpack gap hgap_eq hFirstCase hLinNe
+  exact cyclotomicNormGNPower_of_firstCase_of_pack_thin
+    hKill
+    cyclotomicNormEqGN_concrete_firstCase_packThin
+    cyclotomicNormUnitAbsorb_concrete_firstCase_packThin
+    hζ hpack hgap_eq hFirstCase hLinNe
+
+/--
+`GN p (z - y) y` が `p` 乗になるなら、既存の no-pow target と即座に衝突する。
+
+`TriominoCosmicBodyInvariant` への bridge を import せずに、
+Kummer 側では最小の abstract contradiction interface だけを固定する。
+-/
+theorem false_of_cyclotomicNormGNPower_of_firstCase_of_pack_thin
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u})
+  (hNormEqGN : CyclotomicNormEqGNFirstCasePackThinTarget.{u})
+  (hUnitAbsorb : CyclotomicNormUnitAbsorbFirstCasePackThinTarget.{u})
+    (hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p) :
+    ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+      ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+      ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {gap : ℕ},
+        (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+        ¬ p ∣ gap →
+        ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
+          (y := y) (z := z) →
+        False := by
+  intro K _ _ _ p x y z _ _ ζ hζ hpack gap hgap_eq hFirstCase hLinNe
+  obtain ⟨s, hs⟩ :=
+    cyclotomicNormGNPower_of_firstCase_of_pack_thin
+      hKill hNormEqGN hUnitAbsorb hζ hpack hgap_eq hFirstCase hLinNe
+  exact hNoPow hpack ⟨s, hs⟩
+
+/--
+concrete `NormEqGN` / `UnitAbsorb` を使った first-case contradiction wrapper。
+-/
+theorem false_of_cyclotomicNormGNPower_concrete_firstCase_pack_thin
+    (hKill : CyclotomicPTorsionAnnihilationTarget.{u})
+    (hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p) :
+    ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+      ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+      ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {gap : ℕ},
+        (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+        ¬ p ∣ gap →
+        ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers (hζ := hζ)
+          (y := y) (z := z) →
+        False := by
+  exact false_of_cyclotomicNormGNPower_of_firstCase_of_pack_thin
+    hKill
+    cyclotomicNormEqGN_concrete_firstCase_packThin
+    cyclotomicNormUnitAbsorb_concrete_firstCase_packThin
+    hNoPow
 
 /--
 Stage 1 の 2-factor route がまず返すべき tail-product equality target。
@@ -2806,6 +4092,667 @@ Stage 1 + Stage 2 + Stage 3 → full principalization target。
 したがって残る honest open は、その pack-specialized 供給を global target へ昇格させることと
 Stage 3 の norm 側である。
 -/
+abbrev CyclotomicPrincipalizationFirstCaseTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ x →
+      q ≠ p →
+      q ∣ (z - y) →
+      ¬ p ∣ (z - y) →
+      ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p
+
+/--
+`cyclotomicPrincipalization_of_classGroupPTorsionFree` を切り分けるための non-first-case 側 boundary。
+
+first-case (`¬ p ∣ z - y`) は current stable bridge 群で concrete に戻せるので、
+残る責務を `p ∣ z - y` 側だけへ押し込むための target として使う。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCaseTarget : Prop :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ x →
+      q ≠ p →
+      q ∣ (z - y) →
+      p ∣ (z - y) →
+      ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p
+
+/--
+non-first-case (`p ∣ z - y`) 専用の中間データ。
+
+まずは theorem 境界を切るための最小 packaging だけを保持し、
+genuinely new な数学データは後続の field 追加で受ける。
+-/
+structure CyclotomicPrincipalizationNonFirstCaseDatum
+    (p x y z q : ℕ) where
+  hpack : PrimeGe5CounterexamplePack p x y z
+  hq : Nat.Prime q
+  hqx : q ∣ x
+  hqne : q ≠ p
+  hqgap : q ∣ (z - y)
+  hpgap : p ∣ (z - y)
+
+/--
+non-first-case 入力を中間データへ詰め直す theorem-level packaging boundary。
+
+この段は未解決数学を増やさず、open kernel を下流の descent 側へ寄せる役割だけを持つ。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCasePrepareTarget :=
+  ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ x →
+      q ≠ p →
+      q ∣ (z - y) →
+      p ∣ (z - y) →
+      CyclotomicPrincipalizationNonFirstCaseDatum p x y z q
+
+/--
+中間データから descent witness を返す non-first-case kernel。
+
+現在 genuinely open な責務は、最終的にこの theorem 境界へ局所化されるのが望ましい。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCaseDescentTarget : Prop :=
+  ∀ {p x y z q : ℕ},
+    CyclotomicPrincipalizationNonFirstCaseDatum p x y z q →
+      ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p
+
+/--
+中間データから整数 descent existence を返す refined non-first-case kernel。
+
+`g' * GN = (x/q)^p` へ戻す最終 cosmetic bridge は
+`descentExistence_exists_iff_gnReduction_exists` で no-so#rry に処理できるため、
+genuinely open な責務はまずこの existence 語彙へ局所化するのが自然である。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget : Prop :=
+  ∀ {p x y z q : ℕ},
+    CyclotomicPrincipalizationNonFirstCaseDatum p x y z q →
+      ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
+
+/--
+non-first-case existence kernel の valuation 段で保持する中間データ。
+
+現段階では theorem 境界を切るための minimal packaging のみを持ち、
+実際の p-adic / valuation 情報は後続の field 追加で受ける。
+-/
+structure CyclotomicPrincipalizationNonFirstCaseValuationDatum
+    (p x y z q : ℕ) where
+  data : CyclotomicPrincipalizationNonFirstCaseDatum p x y z q
+
+/--
+non-first-case datum から valuation 中間データを作る boundary。
+
+この段では `p ∣ (z-y)` branch の bookkeeping を整えるだけに留め、
+reduction / existence の open は下流へ押し下げる。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCaseValuationTarget :=
+  ∀ {p x y z q : ℕ},
+    CyclotomicPrincipalizationNonFirstCaseDatum p x y z q →
+      CyclotomicPrincipalizationNonFirstCaseValuationDatum p x y z q
+
+/--
+valuation 中間データから整数 descent existence を返す reduction kernel。
+
+non-first-case の genuinely open な数学内容は、まずこの reduction 段へ局所化する。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCaseReductionTarget : Prop :=
+  ∀ {p x y z q : ℕ},
+    CyclotomicPrincipalizationNonFirstCaseValuationDatum p x y z q →
+      ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
+
+/--
+non-first-case reduction kernel の error 段で保持する中間データ。
+
+peel 側の `TailError` と同様、まずは theorem 境界を切るための minimal packaging のみを置く。
+-/
+structure CyclotomicPrincipalizationNonFirstCaseErrorDatum
+    (p x y z q : ℕ) where
+  valuation : CyclotomicPrincipalizationNonFirstCaseValuationDatum p x y z q
+
+/--
+valuation 中間データから error 中間データを作る boundary。
+
+この段は bookkeeping に留め、reduction の genuine open は packet 段へ押し下げる。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCaseErrorTarget :=
+  ∀ {p x y z q : ℕ},
+    CyclotomicPrincipalizationNonFirstCaseValuationDatum p x y z q →
+      CyclotomicPrincipalizationNonFirstCaseErrorDatum p x y z q
+
+/--
+error 中間データから整数 descent existence を返す packet kernel。
+
+non-first-case reduction 段の genuinely open な数学内容は、まずこの packet 段へ局所化する。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCasePacketTarget : Prop :=
+  ∀ {p x y z q : ℕ},
+    CyclotomicPrincipalizationNonFirstCaseErrorDatum p x y z q →
+      ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
+
+/--
+non-first-case packet kernel の TailError 段で保持する中間データ。
+
+名前は peel 側の `PrimeGe5BranchAValuationPeelTailErrorTarget` に合わせる。
+-/
+structure CyclotomicPrincipalizationNonFirstCaseTailErrorDatum
+    (p x y z q : ℕ) where
+  error : CyclotomicPrincipalizationNonFirstCaseErrorDatum p x y z q
+
+/--
+error datum から TailError datum を作る boundary。
+
+この段は bookkeeping に留め、packet-from-error の open は下流へ押し下げる。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCaseTailErrorTarget :=
+  ∀ {p x y z q : ℕ},
+    CyclotomicPrincipalizationNonFirstCaseErrorDatum p x y z q →
+      CyclotomicPrincipalizationNonFirstCaseTailErrorDatum p x y z q
+
+/--
+TailError datum から整数 descent existence を返す PacketFromError kernel。
+
+名前は peel 側の `PrimeGe5BranchAValuationPeelPacketFromErrorTarget` に合わせる。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCasePacketFromErrorTarget : Prop :=
+  ∀ {p x y z q : ℕ},
+    CyclotomicPrincipalizationNonFirstCaseTailErrorDatum p x y z q →
+      ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
+
+/--
+Kummer non-first-case のうち、`p ∣ t` な peel 側だけを受け持つ exact-error descent target。
+
+`TailError` datum から normal form と exact error equation を取り出した後、
+`(x / q)^p + y^p = z'^p` の existence を返す部分だけを isolated に置く。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCasePeelExactErrorDescentTarget : Prop :=
+  ∀ {p x y z q t s : ℕ},
+    CyclotomicPrincipalizationNonFirstCaseTailErrorDatum p x y z q →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∀ {t1 B C E : ℕ},
+      t = p * t1 →
+      p * B = C + (p ^ (p - 1) * t1 ^ p) * E →
+      ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
+
+/--
+Kummer non-first-case peel branch を、既存 Branch A normal-form 語彙へ戻した kernel。
+
+`TailError` datum と exact-error tuple `(t1, B, C, E)` はこの層では bookkeeping とみなし、
+本当に残る数学内容を
+- counterexample pack
+- distinguished prime `q`
+- Branch A normal form
+- `p ∣ t`
+から整数 descent existence を返す 1 本に集約する。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget : Prop :=
+  ∀ {p x y z q t s : ℕ},
+    PrimeGe5CounterexamplePack p x y z →
+    Nat.Prime q →
+    q ∣ x →
+    q ≠ p →
+    q ∣ (z - y) →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p
+
+/--
+Kummer peel normal form に付随する prime `q` は、既に `t` 側 support に固定されている。
+
+したがって、この枝では primitive restore 側の `q ∣ s` / `¬ q ∣ t` とは
+support の向きが最初から一致しない。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelNormalForm_q_dvd_t_not_dvd_s
+    {p x y z q t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hq : Nat.Prime q)
+    (hqne : q ≠ p)
+    (hqgap : q ∣ (z - y))
+    (hpgap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hcop_ts : Nat.Coprime t s) :
+    q ∣ t ∧ ¬ q ∣ s := by
+  let _ := hpgap
+  have hq_t : q ∣ t := by
+    rw [hgap] at hqgap
+    rcases (hq.dvd_mul).mp hqgap with hq_ppow | hq_tpow
+    · have hq_p : q ∣ p := hq.dvd_of_dvd_pow hq_ppow
+      exact False.elim <|
+        hqne ((Nat.dvd_prime hpack.hp).mp hq_p |>.resolve_left hq.ne_one)
+    · exact hq.dvd_of_dvd_pow hq_tpow
+  refine ⟨hq_t, ?_⟩
+  exact primeGe5BranchANormalForm_neP_dvd_t_not_dvd_s_of_coprime
+    hpack hpgap hgap hsGN hcop_ts hq hqne hq_t
+
+/--
+Kummer peel normal-form branch では、primitive restore 側の `q ∣ s` support は即座に矛盾する。
+
+ゆえに `PrimeGe5BranchAPrimitiveRestoreRealizationSeedTarget` やその verification 群へ
+同じ distinguished prime `q` をそのまま流すことはできない。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelNormalForm_false_of_q_dvd_s
+    {p x y z q t s : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hq : Nat.Prime q)
+    (hqne : q ≠ p)
+    (hqgap : q ∣ (z - y))
+    (hpgap : p ∣ (z - y))
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hcop_ts : Nat.Coprime t s)
+    (hqs : q ∣ s) :
+    False := by
+  exact
+    (cyclotomicPrincipalizationNonFirstCasePeelNormalForm_q_dvd_t_not_dvd_s
+      hpack hq hqne hqgap hpgap hgap hsGN hcop_ts).2 hqs
+
+/--
+既存 Branch A peel `PacketFromError` kernel には、Kummer peel normal-form 仮定から直接接げる。
+
+ここで得られるのは smaller packet の存在であり、`z'` existence ではない。
+したがって既存 peel 側で最も近い接続先は restore / realization seed 群ではなく、
+まず `PacketFromError` 側である。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCasePeelPacketTarget : Prop :=
+  ∀ {p x y z q t s : ℕ},
+    PrimeGe5CounterexamplePack p x y z →
+    Nat.Prime q →
+    q ∣ x →
+    q ≠ p →
+    q ∣ (z - y) →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ pkt' : PrimeGe5BranchANormalFormPacket p, pkt'.z < z
+
+/--
+Kummer peel normal form から、既存 Branch A `PacketFromError` kernel へ接ぐ adapter。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelPacket_of_existingPacketFromError
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget) :
+    CyclotomicPrincipalizationNonFirstCasePeelPacketTarget := by
+  intro p x y z q t s hpack hq hqx hqne hqgap hpgap hgap hsGN hsx hcop_ts hcop_ty hcop_sy
+    hp_not_dvd_s hp_dvd_t
+  let _ := hq
+  let _ := hqx
+  let _ := hqne
+  let _ := hqgap
+  rcases primeGe5BranchAValuationPeelTailError_default
+      hpack hpgap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t with
+    ⟨t1, B, C, E, ht, hErrEq⟩
+  exact hPFE hpack hpgap hgap hsGN hsx
+    hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t
+    ht hErrEq
+
+/--
+smaller normal-form packet に quotient provenance `pkt'.x = x / q`, `pkt'.y = y` が乗れば、
+Kummer が欲しい整数 descent existence は直ちに回収できる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistence_of_packet_xyEq
+    {p x y q : ℕ}
+    (pkt' : PrimeGe5BranchANormalFormPacket p)
+    (hx : pkt'.x = x / q)
+    (hy : pkt'.y = y) :
+    ∃ z' : ℕ, z' ^ p = (x / q) ^ p + y ^ p := by
+  refine ⟨pkt'.z, ?_⟩
+  simpa [hx, hy, Nat.add_comm] using pkt'.pack.hEq.symm
+
+/--
+named smaller counterexample `(x / q, y, z')` が直接得られれば、
+peel packet quotient-lift は purely structural な packaging だけで閉じる。
+
+付録:
+- これにより、Kummer peel 側の remaining work は
+  「arbitrary `pkt'` に provenance を付ける」だけでなく、
+  「named smaller counterexample を直接構成する」route でも閉じられる。
+- packet 生成そのものは `PrimeGe5BranchANormalFormPacket` の structural packaging であり、
+  genuinely hard な内容は含まない。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_namedSmallerCounterexample
+    {p x y z q z' : ℕ}
+    (hpack' : PrimeGe5CounterexamplePack p (x / q) y z')
+    (hp_dvd_gap' : p ∣ (z' - y))
+    (hz'lt : z' < z) :
+    ∃ pkt' : PrimeGe5BranchANormalFormPacket p,
+      pkt'.z < z ∧ pkt'.x = x / q ∧ pkt'.y = y := by
+  exact
+    primeGe5BranchANormalFormPacket_lt_of_namedSmallerCounterexample
+      hpack' hp_dvd_gap' hz'lt
+
+/--
+peel normal-form の descent equation `z'^p = (x/q)^p + y^p` が直接得られれば、
+named smaller counterexample の算術部分は no-so#rry で検証できる。
+
+付録:
+- `PrimeGe5CounterexamplePack p (x / q) y z'` の構成
+- `p ∣ (z' - y)`
+- `z' < z`
+の 3 点は、class-group input ではなく純算術で閉じる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_hzEq
+    {p x y z q t s z' : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hq : Nat.Prime q)
+    (hqx : q ∣ x)
+    (hqne : q ≠ p)
+    (hsx : x = p * (t * s))
+    (hzEq : z' ^ p = (x / q) ^ p + y ^ p) :
+    PrimeGe5CounterexamplePack p (x / q) y z' ∧ p ∣ (z' - y) ∧ z' < z := by
+  have hx'_pos : 0 < x / q := by
+    have hx_pos : 0 < x := Nat.pos_of_ne_zero hpack.hx0
+    have : 0 < q * (x / q) := (Nat.mul_div_cancel' hqx).symm ▸ hx_pos
+    exact Nat.pos_of_mul_pos_left this
+  have hy_pos : 0 < y := hpack.y_pos
+  have hy_lt_z' : y < z' := by
+    have h : y ^ p < z' ^ p := by
+      rw [hzEq]
+      linarith [pow_pos hx'_pos p]
+    by_contra hle
+    push_neg at hle
+    exact Nat.not_lt.mpr (Nat.pow_le_pow_left hle p) h
+  have hz'_pos : 0 < z' := Nat.lt_trans hy_pos hy_lt_z'
+  have hpack' : PrimeGe5CounterexamplePack p (x / q) y z' := by
+    have hcop_xqy : Nat.Coprime (x / q) y := by
+      exact hpack.hxy.coprime_dvd_left
+        ⟨q, (Nat.mul_div_cancel' hqx).symm.trans (Nat.mul_comm q (x / q))⟩
+    exact
+      { hp := hpack.hp
+        hxy := hcop_xqy
+        hyz := Nat.le_of_lt hy_lt_z'
+        hyz_lt := hy_lt_z'
+        hEq := by simpa [Nat.add_comm] using hzEq.symm
+        hp5 := hpack.hp5
+        hx0 := Nat.pos_iff_ne_zero.mp hx'_pos
+        hy0 := hpack.hy0
+        hz0 := Nat.pos_iff_ne_zero.mp hz'_pos }
+  have hp_dvd_xq : p ∣ x / q := by
+    have hcop_pq : Nat.Coprime p q := by
+      apply (Nat.Prime.coprime_iff_not_dvd hpack.hp).mpr
+      intro h
+      exact hqne.symm
+        ((Nat.dvd_prime hq).mp h |>.resolve_left hpack.hp.ne_one)
+    have h_eq : q * (x / q) = p * (t * s) := by
+      rw [Nat.mul_div_cancel' hqx, hsx]
+    have hp_dvd_mul : p ∣ q * (x / q) := ⟨t * s, h_eq⟩
+    exact hcop_pq.dvd_of_dvd_mul_left hp_dvd_mul
+  have hp_dvd_gap' : p ∣ (z' - y) := by
+    haveI : Fact (Nat.Prime p) := ⟨hpack.hp⟩
+    have frobenius : ∀ a : ZMod p, a ^ p = a := fun a => ZMod.pow_card a
+    have hxq_zmod : ((x / q : ℕ) : ZMod p) = 0 :=
+      (ZMod.natCast_eq_zero_iff (x / q) p).mpr hp_dvd_xq
+    have hzEq_mod : (z' : ZMod p) = (y : ZMod p) := by
+      have h := congr_arg (Nat.cast : ℕ → ZMod p) hzEq
+      push_cast at h
+      rw [frobenius, frobenius, frobenius, hxq_zmod, zero_add] at h
+      exact h
+    have h_sub : (↑(z' - y) : ZMod p) = 0 := by
+      rw [Nat.cast_sub (Nat.le_of_lt hy_lt_z')]
+      rw [hzEq_mod, sub_self]
+    exact (ZMod.natCast_eq_zero_iff (z' - y) p).mp h_sub
+  have hz'lt : z' < z := by
+    have hz_pow_eq : z ^ p = q ^ p * (x / q) ^ p + y ^ p := by
+      have hxp : x ^ p = q ^ p * (x / q) ^ p := by
+        calc
+          x ^ p = (q * (x / q)) ^ p := by congr 1; exact (Nat.mul_div_cancel' hqx).symm
+          _ = q ^ p * (x / q) ^ p := mul_pow q (x / q) p
+      rw [← hpack.hEq, hxp]
+    have hqp_ge2 : 2 ≤ q ^ p :=
+      le_trans hq.two_le (Nat.le_self_pow hpack.hp.ne_zero q)
+    have hxqp_pos : 0 < (x / q) ^ p := pow_pos hx'_pos p
+    have hz'_lt_z_pow : z' ^ p < z ^ p := by
+      rw [hz_pow_eq]
+      linarith [hzEq.symm, Nat.mul_le_mul_right ((x / q) ^ p) hqp_ge2]
+    by_contra h
+    push_neg at h
+    exact Nat.not_lt.mpr (Nat.pow_le_pow_left h p) hz'_lt_z_pow
+  exact ⟨hpack', hp_dvd_gap', hz'lt⟩
+
+/--
+Kummer peel packet から quotient provenance つき smaller packet を返すべき最短の不足 target。
+
+existing peel 側の `PacketFromError` で `∃ pkt'` までは既に取れるので、
+残る honest open は実質的に
+- `pkt'.x = x / q`
+- `pkt'.y = y`
+をどう回収するかに集約される。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexampleTarget : Prop :=
+  ∀ {p x y z q t s : ℕ},
+    PrimeGe5CounterexamplePack p x y z →
+    Nat.Prime q →
+    q ∣ x →
+    q ≠ p →
+    q ∣ (z - y) →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ z' : ℕ,
+      PrimeGe5CounterexamplePack p (x / q) y z' ∧ p ∣ (z' - y) ∧ z' < z
+
+/--
+Kummer peel で quotient provenance つき packet を返す target。
+
+named smaller counterexample が直接得られるなら、
+この target 自体は structural packaging で閉じる。
+-/
+abbrev CyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLiftTarget : Prop :=
+  ∀ {p x y z q t s : ℕ},
+    PrimeGe5CounterexamplePack p x y z →
+    Nat.Prime q →
+    q ∣ x →
+    q ≠ p →
+    q ∣ (z - y) →
+    p ∣ (z - y) →
+    z - y = p ^ (p - 1) * t ^ p →
+    GN p (z - y) y = p * s ^ p →
+    x = p * (t * s) →
+    Nat.Coprime t s →
+    Nat.Coprime t y →
+    Nat.Coprime s y →
+    ¬ p ∣ s →
+    p ∣ t →
+    ∃ pkt' : PrimeGe5BranchANormalFormPacket p,
+      pkt'.z < z ∧ pkt'.x = x / q ∧ pkt'.y = y
+
+/--
+named smaller counterexample が返せれば、packet quotient-lift は structural packaging だけで閉じる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_namedSmallerCounterexampleTarget
+    (hNamed : CyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexampleTarget) :
+    CyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLiftTarget := by
+  intro p x y z q t s hpack hq hqx hqne hqgap hpgap hgap hsGN hsx hcop_ts hcop_ty hcop_sy
+    hp_not_dvd_s hp_dvd_t
+  rcases hNamed hpack hq hqx hqne hqgap hpgap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t with
+    ⟨z', hpack', hp_dvd_gap', hz'lt⟩
+  exact cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_namedSmallerCounterexample
+    hpack' hp_dvd_gap' hz'lt
+
+/--
+peel normal-form descent existence が取れれば、named smaller counterexample への昇格は
+純算術の検証だけで閉じる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_normalFormDescent
+    (hNorm : CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget) :
+    CyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexampleTarget := by
+  intro p x y z q t s hpack hq hqx hqne hqgap hpgap hgap hsGN hsx hcop_ts hcop_ty hcop_sy
+    hp_not_dvd_s hp_dvd_t
+  let _ := hqgap
+  let _ := hpgap
+  let _ := hgap
+  let _ := hsGN
+  let _ := hcop_ts
+  let _ := hcop_ty
+  let _ := hcop_sy
+  let _ := hp_not_dvd_s
+  let _ := hp_dvd_t
+  rcases hNorm hpack hq hqx hqne hqgap hpgap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t with
+    ⟨z', hzEq⟩
+  exact
+    ⟨z', cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_hzEq
+      hpack hq hqx hqne hsx hzEq⟩
+
+/--
+global Stage 3 の `NormDescent` が供給されれば、
+Kummer peel normal-form descent target は local arithmetic を全く使わずに閉じる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_normDescent
+    (hNorm : CyclotomicNormDescentTarget) :
+    CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget := by
+  intro p x y z q t s hpack hq hqx hqne hqgap hpgap hgap hsGN hsx hcop_ts hcop_ty hcop_sy
+    hp_not_dvd_s hp_dvd_t
+  let _ := hpgap
+  let _ := hgap
+  let _ := hsGN
+  let _ := hsx
+  let _ := hcop_ts
+  let _ := hcop_ty
+  let _ := hcop_sy
+  let _ := hp_not_dvd_s
+  let _ := hp_dvd_t
+  rcases hNorm hpack hq hqx hqne hqgap with ⟨g', hg'⟩
+  exact (descentExistence_exists_iff_gnReduction_exists p y (x / q)).mp ⟨g', hg'⟩
+
+/--
+global Stage 3 の `NormDescent` が supply されれば、
+named smaller counterexample target も arithmetic wrapper だけで閉じる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_normDescent
+    (hNorm : CyclotomicNormDescentTarget) :
+    CyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexampleTarget :=
+  cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_normalFormDescent
+    (cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_normDescent hNorm)
+
+/--
+quotient provenance つき smaller packet が得られれば、
+Kummer peel normal-form descent は thin bridge で閉じる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_packetQuotientLift
+    (hLift : CyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLiftTarget) :
+    CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget := by
+  intro p x y z q t s hpack hq hqx hqne hqgap hpgap hgap hsGN hsx hcop_ts hcop_ty hcop_sy
+    hp_not_dvd_s hp_dvd_t
+  rcases hLift hpack hq hqx hqne hqgap hpgap hgap hsGN hsx
+      hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t with
+    ⟨pkt', _hzlt, hx, hy⟩
+  exact cyclotomicPrincipalizationNonFirstCasePeelDescentExistence_of_packet_xyEq pkt' hx hy
+
+/--
+Kummer exact-error peel target は、normal-form descent kernel があれば thin bridge で閉じる。
+
+exact-error tuple `(t1, B, C, E)` 自体はこの theorem では使わず、
+既存 Branch A 語彙へ戻した kernel に責務を押し下げる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelExactErrorDescent_of_normalFormDescent
+    (hNorm : CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget) :
+    CyclotomicPrincipalizationNonFirstCasePeelExactErrorDescentTarget := by
+  intro p x y z q t s data hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t
+    t1 B C E ht hErrEq
+  let _ := t1
+  let _ := B
+  let _ := C
+  let _ := E
+  let _ := ht
+  let _ := hErrEq
+  let base := data.error.valuation.data
+  exact hNorm base.hpack base.hq base.hqx base.hqne base.hqgap base.hpgap
+    hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t
+
+/--
+TailError + PacketFromError の 2 段から packet kernel を再構成する。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePacket_of_tailErrorPacketFromErrorSplit
+    (hTail : CyclotomicPrincipalizationNonFirstCaseTailErrorTarget)
+    (hPFE : CyclotomicPrincipalizationNonFirstCasePacketFromErrorTarget) :
+    CyclotomicPrincipalizationNonFirstCasePacketTarget := by
+  intro p x y z q data
+  exact hPFE (hTail data)
+
+/--
+error + packet の 2 段から reduction kernel を再構成する。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseReduction_of_errorPacketSplit
+    (hErr : CyclotomicPrincipalizationNonFirstCaseErrorTarget)
+    (hPkt : CyclotomicPrincipalizationNonFirstCasePacketTarget) :
+    CyclotomicPrincipalizationNonFirstCaseReductionTarget := by
+  intro p x y z q data
+  exact hPkt (hErr data)
+
+/--
+valuation + reduction の 2 段から existence kernel を再構成する。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_valuationReductionSplit
+    (hVal : CyclotomicPrincipalizationNonFirstCaseValuationTarget)
+    (hRed : CyclotomicPrincipalizationNonFirstCaseReductionTarget) :
+    CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget := by
+  intro p x y z q data
+  exact hRed (hVal data)
+
+/--
+non-first-case の整数 descent existence から GN witness 語彙へ戻す clean bridge。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseDescent_of_existence
+    (hExist : CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget) :
+    CyclotomicPrincipalizationNonFirstCaseDescentTarget := by
+  intro p x y z q data
+  rcases hExist data with ⟨z', hz'⟩
+  exact (descentExistence_exists_iff_gnReduction_exists p y (x / q)).mpr ⟨z', hz'⟩
+
+/--
+global Stage 3 の `NormDescent` が supply されれば、
+non-first-case existence kernel は generic equivalence だけで閉じる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_normDescent
+    (hNorm : CyclotomicNormDescentTarget) :
+    CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget := by
+  intro p x y z q data
+  rcases hNorm data.hpack data.hq data.hqx data.hqne data.hqgap with ⟨g', hg'⟩
+  exact (descentExistence_exists_iff_gnReduction_exists p y (x / q)).mp ⟨g', hg'⟩
+
+/--
+prepare + descent の 2 段から non-first-case target を再構成する。
+-/
+theorem cyclotomicPrincipalizationNonFirstCase_of_kernelSplit
+    (hPrep : CyclotomicPrincipalizationNonFirstCasePrepareTarget)
+    (hDesc : CyclotomicPrincipalizationNonFirstCaseDescentTarget) :
+    CyclotomicPrincipalizationNonFirstCaseTarget := by
+  intro p x y z hpack q hq hqx hqne hqgap hpgap
+  let data := hPrep hpack hq hqx hqne hqgap hpgap
+  exact hDesc data
+
+/--
+first-case / non-first-case split を合成して full principalization target を得る。
+
+これにより、legacy one-shot theorem の責務は
+- first-case: current stable bridge 群
+- non-first-case: 未解決 kernel
+へ分離できる。
+-/
 abbrev CyclotomicPrincipalizationTarget : Prop :=
   ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
     ∀ {q : ℕ}, Nat.Prime q →
@@ -2813,6 +4760,15 @@ abbrev CyclotomicPrincipalizationTarget : Prop :=
       q ≠ p →
       q ∣ (z - y) →
       ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p
+
+theorem cyclotomicPrincipalization_of_caseSplit
+    (hFirst : CyclotomicPrincipalizationFirstCaseTarget)
+    (hNonFirst : CyclotomicPrincipalizationNonFirstCaseTarget) :
+    CyclotomicPrincipalizationTarget := by
+  intro p x y z hpack q hq hqx hqne hqgap
+  by_cases hFirstCase : ¬ p ∣ (z - y)
+  · exact hFirst hpack hq hqx hqne hqgap hFirstCase
+  · exact hNonFirst hpack hq hqx hqne hqgap (not_not.mp hFirstCase)
 
 /--
 3-stage Kummer route を合成して full principalization を得る。
@@ -2858,7 +4814,7 @@ abbrev CyclotomicClassGroupPTorsionFreeTarget : Prop :=
     ∀ (n : ℕ),
     ∀ a : ClassGroup R, a ^ n = 1 → a = 1
 
-/--
+/-
 Class group p-torsion free → Principalization（abstract bridge）。
 
 legacy one-shot wrapper。責務分離後は
@@ -2869,14 +4825,10 @@ legacy one-shot wrapper。責務分離後は
 2. → ideal (x + ζ^j · y) は principal ideal の p 乗
 3. → norm 計算で z'^p = (x/q)^p + y^p の解 z' が整数として存在
 
-現時点で残る so#rry は、class-group 仮定だけでは Stage 2 / Stage 3
-（unit normalization / norm descent）まで供給できない点にある。
+現時点では theorem 本体の direct `so#rry` は除去され、
+残責務は `cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree`
+に局所化されている。
 -/
-theorem cyclotomicPrincipalization_of_classGroupPTorsionFree
-  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u}) :
-    CyclotomicPrincipalizationTarget := by
-  sorry
-
 /--
 Class group p-torsion free → Stage 1 (ideal p-th power)。
 
@@ -3046,6 +4998,687 @@ theorem cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree
   exact @hCl R _ _ n a ha
 
 /--
+class-group p-torsion free 仮定から、first-case concrete contradiction へ直接戻す wrapper。
+
+legacy route を差し替える際の first concrete landing point として使う。
+-/
+theorem false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p) :
+    ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+      ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+      ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {gap : ℕ},
+        (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+        ¬ p ∣ gap →
+        False := by
+  intro K _ _ _ p x y z _ _ ζ hζ hpack gap hgap_eq hFirstCase
+  have hLinNe : ChosenCyclotomicLinearFactorNonzeroInRingOfIntegers
+      (hζ := hζ) (y := y) (z := z) :=
+    chosenCyclotomicLinearFactorNonzero_of_counterexamplePack
+      (K := K) (p := p) (x := x) (y := y) (z := z) hζ hpack
+  exact false_of_cyclotomicNormGNPower_concrete_firstCase_pack_thin
+    (hKill := cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree hCl)
+    (hNoPow := hNoPow)
+    (K := K) (p := p) (x := x) (y := y) (z := z) (ζ := ζ) (gap := gap)
+    hζ hpack hgap_eq hFirstCase hLinNe
+
+/--
+`hLinNe` を product identity から自動供給する版の first-case concrete contradiction wrapper。
+-/
+theorem false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree_of_productEq
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p) :
+    ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+      ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+      ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {gap : ℕ},
+        (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+        ¬ p ∣ gap →
+        CyclotomicLinearFactorProductEqInRingOfIntegers (hζ := hζ)
+          (x := x) (y := y) (z := z) →
+        False := by
+  intro K _ _ _ p x y z _ _ ζ hζ hpack gap hgap_eq hFirstCase _hProduct
+  exact false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree
+    (hCl := hCl) (hNoPow := hNoPow)
+    (K := K) (p := p) (x := x) (y := y) (z := z) (ζ := ζ) (gap := gap)
+    hζ hpack hgap_eq hFirstCase
+
+/--
+gap-divisible branch のうち first-case (`¬ p ∣ z - y`) では、
+class-group 仮定と `NoPowOnGN` から即座に矛盾が出るので、descent witness は `False.elim` で返せる。
+
+この theorem は future case split で legacy one-shot route の first-case 枝を
+差し替えるための direct landing point になる。
+-/
+theorem qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p) :
+    ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+      ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+      ∀ {q : ℕ}, Nat.Prime q →
+        q ∣ x →
+        q ≠ p →
+        q ∣ (z - y) →
+      ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {gap : ℕ},
+        (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+        ¬ p ∣ gap →
+        ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p := by
+  intro K _ _ _ p x y z _ _ q hq hqx hqne hqgap ζ hζ hpack gap hgap_eq hFirstCase
+  exact False.elim <|
+    false_of_cyclotomicNormGNPower_concrete_firstCase_of_classGroupPTorsionFree
+      (hCl := hCl) (hNoPow := hNoPow)
+      (K := K) (p := p) (x := x) (y := y) (z := z) (ζ := ζ) (gap := gap)
+      hζ hpack hgap_eq hFirstCase
+
+/--
+`hLinNe` を product identity から自動供給する版の first-case gap-divisible witness theorem。
+-/
+theorem qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_of_productEq
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p) :
+    ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+      ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+      ∀ {q : ℕ}, Nat.Prime q →
+        q ∣ x →
+        q ≠ p →
+        q ∣ (z - y) →
+      ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {gap : ℕ},
+        (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+        ¬ p ∣ gap →
+        CyclotomicLinearFactorProductEqInRingOfIntegers (hζ := hζ)
+          (x := x) (y := y) (z := z) →
+        ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p := by
+  intro K _ _ _ p x y z _ _ q hq hqx hqne hqgap ζ hζ hpack gap hgap_eq hFirstCase _hProduct
+  exact qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree
+    (hCl := hCl) (hNoPow := hNoPow)
+    (K := K) (p := p) (x := x) (y := y) (z := z) (q := q) (ζ := ζ) (gap := gap)
+    hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase
+
+/--
+`TriominoCosmicNonLiftableGNBridge` から `NoPowOnGN` を経由して、
+first-case gap-divisible branch の descent witness を返す concrete wrapper。
+-/
+theorem qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_nonLiftable
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+      ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+      ∀ {q : ℕ}, Nat.Prime q →
+        q ∣ x →
+        q ≠ p →
+        q ∣ (z - y) →
+      ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {gap : ℕ},
+        (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+        ¬ p ∣ gap →
+        ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p := by
+  let hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p :=
+    bodyInvariant_of_NoPowOnGN
+      (triominoCosmicNoPowOnGN_of_nonLiftableGNBridge hNoLift)
+  intro K _ _ _ p x y z _ _ q hq hqx hqne hqgap ζ hζ hpack gap hgap_eq hFirstCase
+  exact qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree
+    (hCl := hCl)
+    (hNoPow := hNoPow)
+    (K := K) (p := p) (x := x) (y := y) (z := z) (q := q) (ζ := ζ) (gap := gap)
+    hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase
+
+/--
+`TriominoSquarefreeGNBridgeProvider` を使う first-case canonical bridge の wrapper。
+
+non-liftable 版より強い squarefree provider がある branch では、
+`NoPowOnGN` から first-case gap-divisible witness を clean に返せる。
+-/
+theorem qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_squarefreeGNProvider
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider) :
+    ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+      ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+      ∀ {q : ℕ}, Nat.Prime q →
+        q ∣ x →
+        q ≠ p →
+        q ∣ (z - y) →
+      ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {gap : ℕ},
+        (z : 𝓞 K) - (y : 𝓞 K) = (gap : 𝓞 K) →
+        ¬ p ∣ gap →
+        ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p := by
+  let hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p :=
+    triominoCosmicBodyInvariant_of_squarefreeGNProvider hSqProv
+  intro K _ _ _ p x y z _ _ q hq hqx hqne hqgap ζ hζ hpack gap hgap_eq hFirstCase
+  exact qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree
+    (hCl := hCl)
+    (hNoPow := hNoPow)
+    (K := K) (p := p) (x := x) (y := y) (z := z) (q := q) (ζ := ζ) (gap := gap)
+    hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase
+
+/--
+`CyclotomicField p ℚ` を canonical choice に取り、
+first-case stable bridge を nat-level principalization target の first branch へ落とす。
+
+これにより、`cyclotomicPrincipalization_of_classGroupPTorsionFree` を切り裂く際の
+first-case 側は no-so#rry で concrete に供給できる。
+-/
+theorem cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationFirstCaseTarget := by
+  let hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p :=
+    bodyInvariant_of_NoPowOnGN triominoCosmicNoPowOnGN_default
+  intro p x y z hpack q hq hqx hqne hqgap hFirstCase
+  let _ : Fact p.Prime := ⟨hpack.hp⟩
+  let ζ : CyclotomicField p ℚ :=
+    IsCyclotomicExtension.zeta p ℚ (CyclotomicField p ℚ)
+  let hζ : IsPrimitiveRoot ζ p := by
+    simp [ζ]
+  have hgap_eq :
+      (z : 𝓞 (CyclotomicField p ℚ)) - (y : 𝓞 (CyclotomicField p ℚ)) =
+        ((z - y : ℕ) : 𝓞 (CyclotomicField p ℚ)) := by
+    simp [Nat.cast_sub hpack.hyz]
+  exact qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree
+    (hCl := hCl)
+    (hNoPow := hNoPow)
+    (K := CyclotomicField p ℚ) (p := p) (x := x) (y := y) (z := z) (q := q)
+    (ζ := ζ) (gap := z - y)
+    hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase
+
+/--
+non-first-case (`p ∣ z - y`) 入力を datum へ詰める canonical prepare definition。
+
+この段は theorem-level packaging に徹し、未解決責務を descent 側へ押し下げる。
+-/
+def cyclotomicPrincipalizationNonFirstCasePrepare :
+    CyclotomicPrincipalizationNonFirstCasePrepareTarget := by
+  intro p x y z hpack q hq hqx hqne hqgap hpgap
+  exact
+    { hpack := hpack
+      hq := hq
+      hqx := hqx
+      hqne := hqne
+      hqgap := hqgap
+      hpgap := hpgap }
+
+/--
+non-first-case datum を valuation datum へ持ち上げる canonical packaging。
+
+いまは trivial packaging だが、将来 p-adic valuation 補題で必要な荷物をここへ集約する。
+-/
+def cyclotomicPrincipalizationNonFirstCaseValuation :
+    CyclotomicPrincipalizationNonFirstCaseValuationTarget := by
+  intro p x y z q data
+  exact ⟨data⟩
+
+/--
+valuation datum を error datum へ持ち上げる canonical packaging。
+
+いまは trivial packaging だが、将来 error-term 抽出補題で必要な荷物をここへ集約する。
+-/
+def cyclotomicPrincipalizationNonFirstCaseError :
+    CyclotomicPrincipalizationNonFirstCaseErrorTarget := by
+  intro p x y z q data
+  exact ⟨data⟩
+
+/--
+error datum を TailError datum へ持ち上げる canonical packaging。
+
+将来 error-term 抽出の詳細をここへ集約できるよう、peel 側と同名の段を置く。
+-/
+def cyclotomicPrincipalizationNonFirstCaseTailError :
+    CyclotomicPrincipalizationNonFirstCaseTailErrorTarget := by
+  intro p x y z q data
+  exact ⟨data⟩
+
+/--
+Kummer non-first-case の tail-error datum から、
+Branch A normal form の `(t,s)` と基本的な局所算術を回収する。
+
+これにより、`PacketFromError` kernel の入力は
+既存 Branch A 語彙の normal form までは no-so#rry で翻訳できると読める。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_normalForm
+    {p x y z q : ℕ}
+    (data : CyclotomicPrincipalizationNonFirstCaseTailErrorDatum p x y z q) :
+    ∃ t s : ℕ,
+      z - y = p ^ (p - 1) * t ^ p ∧
+      GN p (z - y) y = p * s ^ p ∧
+      x = p * (t * s) ∧
+      Nat.Coprime t s ∧
+      Nat.Coprime t y ∧
+      Nat.Coprime s y ∧
+      ¬ p ∣ s := by
+  let base := data.error.valuation.data
+  rcases primeGe5BranchAShapeValue_of_factorization
+      primeGe5BranchAShapeFactorization_default base.hpack base.hpgap with ⟨t, hgap⟩
+  rcases primeGe5BranchANormalForm_of_witness base.hpack base.hpgap hgap with ⟨s, hsGN, hsx⟩
+  refine ⟨t, s, hgap, hsGN, hsx, ?_, ?_, ?_, ?_⟩
+  · exact primeGe5BranchANormalForm_coprime_ts_default base.hpack base.hpgap hgap hsGN
+  · exact primeGe5BranchANormalForm_coprime_t_right base.hpack hsx
+  · exact primeGe5BranchANormalForm_coprime_s_right base.hpack hsx
+  · exact primeGe5BranchANormalForm_prime_not_dvd_s_default base.hpack base.hpgap hgap hsGN
+
+/--
+Kummer datum に付随する prime `q` は、Branch A normal form では `t` 側を割る。
+
+すなわち `q ∣ x` かつ `q ∣ (z-y)` の non-first-case 入力は、
+normal form の support としては `s` 側ではなく `t` 側に乗る。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_q_dvd_t_not_dvd_s
+    {p x y z q t s : ℕ}
+    (data : CyclotomicPrincipalizationNonFirstCaseTailErrorDatum p x y z q)
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hcop_ts : Nat.Coprime t s) :
+    q ∣ t ∧ ¬ q ∣ s := by
+  let base := data.error.valuation.data
+  have hq_t : q ∣ t := by
+    have hq_gap : q ∣ z - y := base.hqgap
+    rw [hgap] at hq_gap
+    rcases (base.hq.dvd_mul).mp hq_gap with hq_ppow | hq_tpow
+    · have hq_p : q ∣ p := base.hq.dvd_of_dvd_pow hq_ppow
+      exact False.elim <|
+        base.hqne ((Nat.dvd_prime base.hpack.hp).mp hq_p |>.resolve_left base.hq.ne_one)
+    · exact base.hq.dvd_of_dvd_pow hq_tpow
+  refine ⟨hq_t, ?_⟩
+  exact primeGe5BranchANormalForm_neP_dvd_t_not_dvd_s_of_coprime
+    base.hpack base.hpgap hgap hsGN hcop_ts base.hq base.hqne hq_t
+
+/--
+Kummer tail-error datum が peel 側で必要な exact error equation までは、
+既存 Branch A tail-error machinery により no-so#rry で翻訳できる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_to_peelTailError
+    {p x y z q t s : ℕ}
+    (data : CyclotomicPrincipalizationNonFirstCaseTailErrorDatum p x y z q)
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hsx : x = p * (t * s))
+    (hcop_ts : Nat.Coprime t s)
+    (hcop_ty : Nat.Coprime t y)
+    (hcop_sy : Nat.Coprime s y)
+    (hp_not_dvd_s : ¬ p ∣ s)
+    (hp_dvd_t : p ∣ t) :
+    ∃ t1 B C E : ℕ,
+      t = p * t1 ∧
+      p * B = C + (p ^ (p - 1) * t1 ^ p) * E := by
+  let base := data.error.valuation.data
+  exact primeGe5BranchAValuationPeelTailError_default
+    base.hpack base.hpgap hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t
+
+/--
+`¬ p ∣ t` branch では、Kummer tail-error datum は既存の `NePCoprimeKernel` 側へ落ちる。
+
+したがって genuinely new な existence kernel は、この枝ではなく
+`p ∣ t` な peel exact-error 側だけに残る。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_false_of_not_p_dvd_t_of_nePCoprimeKernel
+    (hNeP : PrimeGe5BranchANormalFormNePCoprimeKernelTarget)
+    {p x y z q t s : ℕ}
+    (data : CyclotomicPrincipalizationNonFirstCaseTailErrorDatum p x y z q)
+    (hgap : z - y = p ^ (p - 1) * t ^ p)
+    (hsGN : GN p (z - y) y = p * s ^ p)
+    (hcop_ts : Nat.Coprime t s)
+    (hp_not_dvd_t : ¬ p ∣ t) :
+    False := by
+  let _ := hp_not_dvd_t
+  let base := data.error.valuation.data
+  exact hNeP base.hpack base.hpgap hgap hsGN hcop_ts
+
+/--
+Kummer `PacketFromError` kernel は、
+`p ∣ t` の peel exact-error descent と `¬ p ∣ t` の `NePCoprimeKernel` に分岐できる。
+
+これにより Kummer 側の genuinely new existence 内容は、
+normal form 上の `t`-split のうち peel 側だけへさらに局所化される。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePacketFromError_of_peelExactErrorDescent_and_nePCoprimeKernel
+    (hPeel : CyclotomicPrincipalizationNonFirstCasePeelExactErrorDescentTarget)
+    (hNeP : PrimeGe5BranchANormalFormNePCoprimeKernelTarget) :
+    CyclotomicPrincipalizationNonFirstCasePacketFromErrorTarget := by
+  intro p x y z q data
+  rcases cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_normalForm data with
+    ⟨t, s, hgap, hsGN, hsx, hcop_ts, hcop_ty, hcop_sy, hp_not_dvd_s⟩
+  by_cases hp_dvd_t : p ∣ t
+  · rcases cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_to_peelTailError
+      data hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t with
+      ⟨t1, B, C, E, ht, hErrEq⟩
+    exact hPeel data hgap hsGN hsx hcop_ts hcop_ty hcop_sy hp_not_dvd_s hp_dvd_t ht hErrEq
+  · exact False.elim <|
+      cyclotomicPrincipalizationNonFirstCaseTailErrorDatum_false_of_not_p_dvd_t_of_nePCoprimeKernel
+        hNeP data hgap hsGN hcop_ts hp_dvd_t
+
+/--
+class-group 入力から、Kummer peel normal-form descent existence を返す core kernel。
+
+named smaller counterexample への包装は既に純算術で閉じたので、
+current direct `sorry` は `∃ z', z'^p = (x / q)^p + y^p` を返す一点に局所化する。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget := by
+  clear hCl
+  intro p x y z q t s hpack hq hqx hqne hqgap hpgap hgap hsGN hsx hcop_ts hcop_ty hcop_sy
+    hp_not_dvd_s hp_dvd_t
+  let _ := hpack
+  let _ := hq
+  let _ := hqx
+  let _ := hqne
+  let _ := hqgap
+  let _ := hpgap
+  let _ := hgap
+  let _ := hsGN
+  let _ := hsx
+  let _ := hcop_ts
+  let _ := hcop_ty
+  let _ := hcop_sy
+  let _ := hp_not_dvd_s
+  let _ := hp_dvd_t
+  sorry
+
+/--
+class-group 入力から、Kummer peel named smaller counterexample を返す wrapper。
+
+named smaller counterexample の算術検証は no-so#rry で閉じたので、
+この theorem の `so#rry` 依存は normal-form descent existence core を経由するだけである。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_classGroupPTorsionFree
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexampleTarget :=
+  cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_normalFormDescent
+    (cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree hCl)
+
+/--
+class-group 入力から、Kummer peel packet に quotient provenance を付ける kernel。
+
+current state では direct `so#rry` をこの theorem に置かず、
+named smaller counterexample kernel からの thin wrapper として扱う。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_classGroupPTorsionFree
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLiftTarget :=
+  cyclotomicPrincipalizationNonFirstCasePeelPacketQuotientLift_of_namedSmallerCounterexampleTarget
+    (cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_classGroupPTorsionFree hCl)
+
+/--
+class-group 入力から、Kummer non-first-case の `p ∣ t` peel 側 normal-form descent を返す kernel。
+
+current state では direct `so#rry` をこの theorem に置かず、
+packet + quotient provenance kernel からの thin wrapper として扱う。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_classGroupPTorsionFree
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget :=
+  cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree hCl
+
+/--
+class-group 入力から、Kummer non-first-case の `p ∣ t` peel 側 exact-error descent を返す kernel。
+
+exact-error tuple 自体は adapter で bookkeeping に押し戻し、
+現在の genuinely open な数学内容は named smaller counterexample kernel へ局所化する。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelExactErrorDescent_of_classGroupPTorsionFree
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCasePeelExactErrorDescentTarget :=
+  cyclotomicPrincipalizationNonFirstCasePeelExactErrorDescent_of_normalFormDescent
+    (cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_classGroupPTorsionFree hCl)
+
+/--
+non-first-case (`p ∣ z - y`) 側だけを隔離した PacketFromError kernel。
+
+`PacketFromError` 全体の責務は、
+`p ∣ t` peel exact-error descent と `¬ p ∣ t` branch の既存 kernel へ分離される。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTorsionFree
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCasePacketFromErrorTarget :=
+  cyclotomicPrincipalizationNonFirstCasePacketFromError_of_peelExactErrorDescent_and_nePCoprimeKernel
+    (cyclotomicPrincipalizationNonFirstCasePeelExactErrorDescent_of_classGroupPTorsionFree hCl)
+    primeGe5BranchANormalFormNePCoprimeKernel_default
+
+/--
+non-first-case (`p ∣ z - y`) 側だけを隔離した packet kernel。
+
+TailError packaging 自体は canonical で閉じるため、direct `so#rry` は
+PacketFromError kernel を通して間接的にだけ現れる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePacket_of_classGroupPTorsionFree
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCasePacketTarget :=
+  cyclotomicPrincipalizationNonFirstCasePacket_of_tailErrorPacketFromErrorSplit
+    cyclotomicPrincipalizationNonFirstCaseTailError
+    (cyclotomicPrincipalizationNonFirstCasePacketFromError_of_classGroupPTorsionFree hCl)
+
+/--
+non-first-case (`p ∣ z - y`) 側だけを隔離した reduction kernel。
+
+error packaging 自体は canonical で閉じるため、direct `so#rry` は
+packet kernel を通して間接的にだけ現れる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseReduction_of_classGroupPTorsionFree
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCaseReductionTarget :=
+  cyclotomicPrincipalizationNonFirstCaseReduction_of_errorPacketSplit
+    cyclotomicPrincipalizationNonFirstCaseError
+    (cyclotomicPrincipalizationNonFirstCasePacket_of_classGroupPTorsionFree hCl)
+
+/--
+non-first-case (`p ∣ z - y`) 側だけを隔離した existence kernel。
+
+valuation 自体は canonical packaging で閉じるため、direct `so#rry` は
+reduction kernel を通して間接的にだけ現れる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget :=
+  cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_valuationReductionSplit
+    cyclotomicPrincipalizationNonFirstCaseValuation
+    (cyclotomicPrincipalizationNonFirstCaseReduction_of_classGroupPTorsionFree hCl)
+
+/--
+non-first-case (`p ∣ z - y`) 側だけを隔離した descent kernel。
+
+`g' * GN = (x/q)^p` への最終変換自体は generic theorem で閉じるので、
+direct `so#rry` はさらに下流の existence kernel へ押し下げる。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseDescent_of_classGroupPTorsionFree
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCaseDescentTarget :=
+  cyclotomicPrincipalizationNonFirstCaseDescent_of_existence
+    (cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree hCl)
+
+/--
+prepare + descent split を通して non-first-case target を再構成する wrapper。
+-/
+theorem cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCaseTarget :=
+  cyclotomicPrincipalizationNonFirstCase_of_kernelSplit
+    cyclotomicPrincipalizationNonFirstCasePrepare
+    (cyclotomicPrincipalizationNonFirstCaseDescent_of_classGroupPTorsionFree hCl)
+
+/--
+`hNoLift` を使う first-case canonical bridge の wrapper。
+
+review-055 に従い、
+non-liftable 仮定つき route を実際に使う配線へ修正する。
+-/
+theorem cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_nonLiftable
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    CyclotomicPrincipalizationFirstCaseTarget := by
+  intro p x y z hpack q hq hqx hqne hqgap hFirstCase
+  let _ : Fact p.Prime := ⟨hpack.hp⟩
+  let ζ : CyclotomicField p ℚ :=
+    IsCyclotomicExtension.zeta p ℚ (CyclotomicField p ℚ)
+  let hζ : IsPrimitiveRoot ζ p := by
+    simp [ζ]
+  have hgap_eq :
+      (z : 𝓞 (CyclotomicField p ℚ)) - (y : 𝓞 (CyclotomicField p ℚ)) =
+        ((z - y : ℕ) : 𝓞 (CyclotomicField p ℚ)) := by
+    simp [Nat.cast_sub hpack.hyz]
+  exact
+    qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_nonLiftable
+      (hCl := hCl) (hNoLift := hNoLift)
+      (K := CyclotomicField p ℚ) (p := p) (x := x) (y := y) (z := z) (q := q)
+      (ζ := ζ) (gap := z - y)
+      hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase
+
+/--
+squarefree-GN provider を使う first-case canonical bridge の wrapper。
+-/
+theorem cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_squarefreeGNProvider
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider) :
+    CyclotomicPrincipalizationFirstCaseTarget := by
+  intro p x y z hpack q hq hqx hqne hqgap hFirstCase
+  let _ : Fact p.Prime := ⟨hpack.hp⟩
+  let ζ : CyclotomicField p ℚ :=
+    IsCyclotomicExtension.zeta p ℚ (CyclotomicField p ℚ)
+  let hζ : IsPrimitiveRoot ζ p := by
+    simp [ζ]
+  have hgap_eq :
+      (z : 𝓞 (CyclotomicField p ℚ)) - (y : 𝓞 (CyclotomicField p ℚ)) =
+        ((z - y : ℕ) : 𝓞 (CyclotomicField p ℚ)) := by
+    simp [Nat.cast_sub hpack.hyz]
+  exact
+    qAdicGapReductionGapDivisible_of_firstCase_of_classGroupPTorsionFree_and_squarefreeGNProvider
+      (hCl := hCl) (hSqProv := hSqProv)
+      (K := CyclotomicField p ℚ) (p := p) (x := x) (y := y) (z := z) (q := q)
+      (ζ := ζ) (gap := z - y)
+      hq hqx hqne hqgap hζ hpack hgap_eq hFirstCase
+
+/--
+class-group one-shot route を first-case / non-first-case split で再構成する thin theorem。
+
+current stable bridge 群により first-case は concrete に埋まるので、
+残る責務は non-first-case target 1 本へ局所化される。
+-/
+theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_of_caseSplit
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hNoLift : TriominoCosmicNonLiftableGNBridge)
+    (hNonFirst : CyclotomicPrincipalizationNonFirstCaseTarget) :
+    CyclotomicPrincipalizationTarget :=
+  cyclotomicPrincipalization_of_caseSplit
+    (cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_nonLiftable hCl hNoLift)
+    hNonFirst
+
+/--
+class-group principalization を non-first-case kernel split で再構成する thin theorem。
+
+first-case は canonical bridge で concrete に埋まっているので、
+non-first-case の open は prepare / descent の 2 段へ分解して監査できる。
+-/
+theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_of_kernelSplit
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hPrep : CyclotomicPrincipalizationNonFirstCasePrepareTarget)
+    (hDesc : CyclotomicPrincipalizationNonFirstCaseDescentTarget) :
+    CyclotomicPrincipalizationTarget :=
+  cyclotomicPrincipalization_of_caseSplit
+    (cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree hCl)
+    (cyclotomicPrincipalizationNonFirstCase_of_kernelSplit hPrep hDesc)
+
+/--
+class-group principalization を non-first-case prepare / existence split で再構成する thin theorem。
+
+non-first-case の genuinely open 責務を existence 語彙へ一段押し下げた版。
+-/
+theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_of_existenceKernelSplit
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hPrep : CyclotomicPrincipalizationNonFirstCasePrepareTarget)
+    (hExist : CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget) :
+    CyclotomicPrincipalizationTarget :=
+  cyclotomicPrincipalization_of_classGroupPTorsionFree_of_kernelSplit
+    hCl hPrep (cyclotomicPrincipalizationNonFirstCaseDescent_of_existence hExist)
+
+/--
+class-group principalization を non-first-case prepare / valuation / reduction split で再構成する thin theorem。
+
+non-first-case の open を valuation packaging と reduction kernel へさらに刻んだ版。
+-/
+theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_of_valuationReductionKernelSplit
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hPrep : CyclotomicPrincipalizationNonFirstCasePrepareTarget)
+    (hVal : CyclotomicPrincipalizationNonFirstCaseValuationTarget)
+    (hRed : CyclotomicPrincipalizationNonFirstCaseReductionTarget) :
+    CyclotomicPrincipalizationTarget :=
+  cyclotomicPrincipalization_of_classGroupPTorsionFree_of_existenceKernelSplit
+    hCl hPrep
+    (cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_valuationReductionSplit
+      hVal hRed)
+
+/--
+class-group principalization を non-first-case prepare / valuation / error / packet split で再構成する thin theorem。
+
+non-first-case reduction の open を packet kernel へさらに押し下げた版。
+-/
+theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_of_errorPacketKernelSplit
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hPrep : CyclotomicPrincipalizationNonFirstCasePrepareTarget)
+    (hVal : CyclotomicPrincipalizationNonFirstCaseValuationTarget)
+    (hErr : CyclotomicPrincipalizationNonFirstCaseErrorTarget)
+    (hPkt : CyclotomicPrincipalizationNonFirstCasePacketTarget) :
+    CyclotomicPrincipalizationTarget :=
+  cyclotomicPrincipalization_of_classGroupPTorsionFree_of_valuationReductionKernelSplit
+    hCl hPrep hVal
+    (cyclotomicPrincipalizationNonFirstCaseReduction_of_errorPacketSplit hErr hPkt)
+
+/--
+class-group principalization を non-first-case prepare / valuation / error / tailError / packetFromError split で再構成する thin theorem。
+
+peel 側と同じ vocabulary で non-first-case packet open を監査する最細版。
+-/
+theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_of_tailErrorPacketFromErrorKernelSplit
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hPrep : CyclotomicPrincipalizationNonFirstCasePrepareTarget)
+    (hVal : CyclotomicPrincipalizationNonFirstCaseValuationTarget)
+    (hErr : CyclotomicPrincipalizationNonFirstCaseErrorTarget)
+    (hTail : CyclotomicPrincipalizationNonFirstCaseTailErrorTarget)
+    (hPFE : CyclotomicPrincipalizationNonFirstCasePacketFromErrorTarget) :
+    CyclotomicPrincipalizationTarget :=
+  cyclotomicPrincipalization_of_classGroupPTorsionFree_of_errorPacketKernelSplit
+    hCl hPrep hVal hErr
+    (cyclotomicPrincipalizationNonFirstCasePacket_of_tailErrorPacketFromErrorSplit hTail hPFE)
+
+/--
+Class group p-torsion free → Principalization（abstract bridge）。
+
+legacy one-shot wrapper。current state では first-case が split theorem で concrete に戻り、
+残る direct open は non-first-case kernel へ局所化されている。
+-/
+theorem cyclotomicPrincipalization_of_classGroupPTorsionFree
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicPrincipalizationTarget :=
+  cyclotomicPrincipalization_of_caseSplit
+    (cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree hCl)
+    (cyclotomicPrincipalizationNonFirstCase_of_classGroupPTorsionFree hCl)
+
+/--
 Stage 1c: trivial class → principal ideal extraction。
 
 `ClassGroup.mk_eq_one_of_coe_ideal` により、ここは既に concrete な generic API で閉じる。
@@ -3107,6 +5740,464 @@ theorem cyclotomicPrincipalization_of_refinedClassGroupRoute
     (cyclotomicIdealPthPower_of_classGroupPTorsionFree hCl)
     hUnit hNorm
 
+/--
+refined class-group route において、Stage 3 の concrete receiver は `hNorm` そのものである。
+
+この theorem は内容的には thin wrapper だが、
+class-group / unit / norm の 3 段分解で
+non-first-case peel core がどの stage に依存しているかを theorem 名で固定する。
+-/
+theorem cyclotomicNormDescent_of_refinedClassGroupRoute
+    (_hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (_hUnit : CyclotomicUnitNormalizationTarget)
+    (hNorm : CyclotomicNormDescentTarget) :
+    CyclotomicNormDescentTarget :=
+  hNorm
+
+/--
+global Stage 3 `NormDescent` は、first-case / non-first-case の 2 分岐を束ねれば再構成できる。
+
+ここで non-first-case branch に必要なのは
+`CyclotomicPrincipalizationNonFirstCaseTarget`
+そのもの、すなわち
+`p ∣ (z - y)` の下での nat-level descent witness だけである。
+-/
+theorem cyclotomicNormDescent_of_caseSplit
+    (hFirst : CyclotomicPrincipalizationFirstCaseTarget)
+    (hNonFirst : CyclotomicPrincipalizationNonFirstCaseTarget) :
+    CyclotomicNormDescentTarget := by
+  intro p x y z hpack q hq hqx hqne hqgap
+  by_cases hpgap : p ∣ (z - y)
+  · exact hNonFirst hpack hq hqx hqne hqgap hpgap
+  · exact hFirst hpack hq hqx hqne hqgap hpgap
+
+/--
+class-group 仮定だけで first-case branch は既に concrete に閉じているので、
+global Stage 3 に残る honest open は non-first-case branch だけである。
+-/
+theorem cyclotomicNormDescent_of_classGroupPTorsionFree_and_nonFirstCase
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hNonFirst : CyclotomicPrincipalizationNonFirstCaseTarget) :
+    CyclotomicNormDescentTarget :=
+  cyclotomicNormDescent_of_caseSplit
+    (cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree hCl)
+    hNonFirst
+
+/--
+class-group 仮定・squarefree-GN provider・non-first-case target から、
+global Stage 3 `NormDescent` を clean route で組み立てる。
+-/
+theorem cyclotomicNormDescent_of_classGroupPTorsionFree_and_nonFirstCase_and_squarefreeGNProvider
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider)
+    (hNonFirst : CyclotomicPrincipalizationNonFirstCaseTarget) :
+    CyclotomicNormDescentTarget :=
+  cyclotomicNormDescent_of_caseSplit
+    (cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_squarefreeGNProvider hCl hSqProv)
+    hNonFirst
+
+/--
+unit-normalized chosen factor の整数 norm を、そのまま `GN p (z - y) y` へ戻す target。
+
+`chosenCyclotomicLinearFactor_norm_eq_gn_direct` だけで concrete 化できるので、
+non-first-case receiver のうち norm 計算責務をここへ分離する。
+-/
+abbrev CyclotomicNormEqGNUnitNormalizedChosenFactorTarget : Prop :=
+  ∀ {K : Type*} [Field K] [NumberField K] [CharZero K],
+    ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+    ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {β unitFactor : 𝓞 K},
+        IsUnit unitFactor →
+        chosenCyclotomicLinearFactorInRingOfIntegers hζ y z =
+          unitFactor * β ^ p →
+        Algebra.norm ℤ
+          (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) =
+            (GN p (z - y) y : ℤ)
+
+/--
+unit-normalized chosen factor に norm をかけたあと、
+unit を吸収して `GN p (z - y) y = s^p` を返す target。
+
+`norm_eq_normUnit_mul_normPow_of_eq_unit_mul_pow` と
+`nat_exists_pow_of_intEq_unit_mul_pow` だけで concrete 化できる責務をここへ隔離する。
+-/
+abbrev CyclotomicNormUnitAbsorbUnitNormalizedChosenFactorTarget : Prop :=
+  ∀ {K : Type*} [Field K] [NumberField K] [CharZero K],
+    ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+    ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {β unitFactor : 𝓞 K},
+        IsUnit unitFactor →
+        chosenCyclotomicLinearFactorInRingOfIntegers hζ y z =
+          unitFactor * β ^ p →
+        Algebra.norm ℤ
+          (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) =
+            (GN p (z - y) y : ℤ) →
+        ∃ s : ℕ, GN p (z - y) y = s ^ p
+
+/--
+unit-normalized chosen factor から、`GN p (z - y) y = s^p` を返す中間 target。
+
+current non-first-case receiver を first-case と同じ
+`NormEqGN` / `UnitAbsorb` の 2 段へ分解したうえで、
+最終 witness 回収の手前で止めた器である。
+-/
+abbrev CyclotomicNormGNPowerUnitNormalizedChosenFactorTarget : Prop :=
+  ∀ {K : Type*} [Field K] [NumberField K] [CharZero K],
+    ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+    ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {β unitFactor : 𝓞 K},
+        IsUnit unitFactor →
+        chosenCyclotomicLinearFactorInRingOfIntegers hζ y z =
+          unitFactor * β ^ p →
+        ∃ s : ℕ, GN p (z - y) y = s ^ p
+
+/--
+`chosenCyclotomicLinearFactor_norm_eq_gn_direct` により、
+unit-normalized chosen factor の norm 計算自体は case split に依らず concrete である。
+-/
+theorem cyclotomicNormEqGN_concrete_unitNormalizedChosenFactor :
+    CyclotomicNormEqGNUnitNormalizedChosenFactorTarget := by
+  intro K _ _ _ p x y z _ _ ζ hζ hpack β unitFactor _ _
+  simpa [chosenCyclotomicLinearFactorInRingOfIntegers, Nat.cast_sub hpack.hyz] using
+    (chosenCyclotomicLinearFactor_norm_eq_gn_direct
+      (K := K) (p := p) (z := z) (y := y) hζ hpack.hy0 hpack.hyz_lt)
+
+/--
+unit-normalized chosen factor の norm 式から `GN p (z - y) y = s^p` を回収する concrete theorem。
+-/
+theorem cyclotomicNormUnitAbsorb_concrete_unitNormalizedChosenFactor :
+    CyclotomicNormUnitAbsorbUnitNormalizedChosenFactorTarget := by
+  intro K _ _ _ p x y z _ _ ζ hζ hpack β unitFactor hUnit hEq hNorm
+  have hNormMul :=
+    norm_eq_normUnit_mul_normPow_of_eq_unit_mul_pow
+      (K := K) (p := p) (y := y) (z := z) (hζ := hζ) (β := β)
+      (unitFactor := unitFactor) hEq
+  have hNormUnit : IsUnit (Algebra.norm ℤ unitFactor) :=
+    IsUnit.map (Algebra.norm ℤ) hUnit
+  have hNormGN :
+      ((GN p (z - y) y : ℕ) : ℤ) =
+        Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) := by
+    simpa [← Nat.cast_sub hpack.hyz] using hNorm.symm
+  have hEqInt :
+      ((GN p (z - y) y : ℕ) : ℤ) =
+        Algebra.norm ℤ unitFactor * (Algebra.norm ℤ β) ^ p := by
+    exact hNormGN.trans hNormMul
+  simpa using
+    (DkMath.NumberTheory.Gcd.nat_exists_pow_of_intEq_unit_mul_pow
+      (n := GN p (z - y) y) (p := p)
+      (unitFactor := Algebra.norm ℤ unitFactor)
+      (m := Algebra.norm ℤ β)
+      hNormUnit hEqInt)
+
+/--
+unit-normalized chosen factor から `GN p (z - y) y = s^p` を返す concrete wrapper。
+-/
+theorem cyclotomicNormGNPower_concrete_unitNormalizedChosenFactor :
+    CyclotomicNormGNPowerUnitNormalizedChosenFactorTarget := by
+  intro K _ _ _ p x y z _ _ ζ hζ hpack β unitFactor hUnit hEq
+  have hNorm :
+      Algebra.norm ℤ (chosenCyclotomicLinearFactorInRingOfIntegers hζ y z) =
+        (GN p (z - y) y : ℤ) :=
+    cyclotomicNormEqGN_concrete_unitNormalizedChosenFactor
+      (K := K) (p := p) (x := x) (y := y) (z := z) (ζ := ζ)
+      hζ hpack hUnit hEq
+  exact cyclotomicNormUnitAbsorb_concrete_unitNormalizedChosenFactor
+    (K := K) (p := p) (x := x) (y := y) (z := z) (ζ := ζ)
+    hζ hpack hUnit hEq hNorm
+
+/--
+Stage 2 の chosen-factor unit normalization を受けて、
+non-first-case nat-level descent witness を返すべき最小 receiver target。
+
+既存 no-so#rry 部品で `z - ζy = unitFactor * β^p` までは供給できるので、
+review-052 の棚卸しでは current Stage 3 open をまずここへ押し下げる。
+-/
+abbrev CyclotomicNormDescentNonFirstCaseUnitNormalizedReceiverTarget : Prop :=
+  ∀ {K : Type u} [Field K] [NumberField K] [CharZero K],
+    ∀ {p x y z : ℕ} [Fact p.Prime] [IsCyclotomicExtension {p} ℚ K],
+    ∀ {ζ : K},
+      (hζ : IsPrimitiveRoot ζ p) →
+      PrimeGe5CounterexamplePack p x y z →
+      ∀ {q : ℕ}, Nat.Prime q →
+        q ∣ x →
+        q ≠ p →
+        q ∣ (z - y) →
+        p ∣ (z - y) →
+        ∀ {β unitFactor : 𝓞 K},
+          IsUnit unitFactor →
+          chosenCyclotomicLinearFactorInRingOfIntegers hζ y z =
+            unitFactor * β ^ p →
+          ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p
+
+/--
+`GN p (z - y) y = s^p` から non-first-case の最終 nat-level descent witness を返すべき receiver target。
+
+norm 計算と unit 吸収は既存 no-so#rry 補題で concrete 化できるため、
+current honest open をこの pure arithmetic receiver へさらに押し下げる。
+-/
+abbrev CyclotomicNormDescentNonFirstCaseGNPowerReceiverTarget : Prop :=
+  ∀ {p x y z : ℕ},
+    PrimeGe5CounterexamplePack p x y z →
+    ∀ {q : ℕ}, Nat.Prime q →
+      q ∣ x →
+      q ≠ p →
+      q ∣ (z - y) →
+      p ∣ (z - y) →
+      ∀ {s : ℕ},
+        GN p (z - y) y = s ^ p →
+        ∃ g' : ℕ, g' * GN p g' y = (x / q) ^ p
+
+theorem cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_gnPowerReceiver
+    (hPow : CyclotomicNormDescentNonFirstCaseGNPowerReceiverTarget) :
+    CyclotomicNormDescentNonFirstCaseUnitNormalizedReceiverTarget := by
+  intro K _ _ _ p x y z _ _ ζ hζ hpack q hq hqx hqne hqgap hpgap β unitFactor hUnitFactor hEq
+  rcases cyclotomicNormGNPower_concrete_unitNormalizedChosenFactor
+      (K := K) (p := p) (x := x) (y := y) (z := z) (ζ := ζ)
+      hζ hpack hUnitFactor hEq with
+    ⟨s, hs⟩
+  exact hPow hpack hq hqx hqne hqgap hpgap hs
+
+/--
+Stage 2 の generic unit normalization 出力が与えられれば、
+non-first-case branch receiver は chosen-factor receiver 1 本へ薄く還元できる。
+
+ここで使う cyclotomic input は canonical `CyclotomicField p ℚ` とその primitive root だけであり、
+existing Stage 1 / Stage 2 no-so#rry mainline がどこまで直接届いているかを theorem 名で固定する。
+-/
+theorem cyclotomicNormDescentNonFirstCase_of_unitNormalizationAndReceiver
+    (hUnit : CyclotomicUnitNormalizationTarget.{0})
+    (hRecv : CyclotomicNormDescentNonFirstCaseUnitNormalizedReceiverTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCaseTarget := by
+  intro p x y z hpack q hq hqx hqne hqgap hpgap
+  let _ : Fact p.Prime := ⟨hpack.hp⟩
+  let ζ : CyclotomicField p ℚ :=
+    IsCyclotomicExtension.zeta p ℚ (CyclotomicField p ℚ)
+  let hζ : IsPrimitiveRoot ζ p := by
+    simp [ζ]
+  let ctx : CyclotomicLocalFactorizationContext (𝓞 (CyclotomicField p ℚ)) := {
+    p := p
+    zeta := hζ.toInteger
+    hzeta_pow := by
+      simpa using hζ.toInteger_isPrimitiveRoot.pow_eq_one
+  }
+  obtain ⟨β, unitFactor, hUnitFactor, hEq⟩ :=
+    hUnit (R := 𝓞 (CyclotomicField p ℚ)) (ctx := ctx)
+      (p := p) (x := x) (y := y) (z := z) hpack
+      (q := q) hq hqx hqne hqgap
+  exact hRecv (K := CyclotomicField p ℚ) (p := p) (x := x) (y := y) (z := z)
+    (ζ := ζ) hζ hpack hq hqx hqne hqgap hpgap hUnitFactor
+    (by simpa [ctx, chosenCyclotomicLinearFactorInRingOfIntegers] using hEq)
+
+/--
+class-group 仮定と Stage 2 unit normalization のもとで、
+non-first-case branch の Stage 3 receiver を供給する最薄 theorem。
+
+review-051 の棚卸しに従い、
+`hCl + hUnit ⟹ hNorm`
+を直接証明するのではなく、
+まず branch-specific な honest open をここへ局所化する。
+-/
+theorem cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree
+    (_hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicNormDescentNonFirstCaseGNPowerReceiverTarget := by
+  let hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p :=
+    bodyInvariant_of_NoPowOnGN triominoCosmicNoPowOnGN_default
+  intro p x y z hpack q hq hqx hqne hqgap hpgap s hs
+  exact False.elim <| hNoPow hpack ⟨s, hs⟩
+
+/--
+class-group 仮定に加えて squarefree-GN provider が与えられれば、
+non-first-case branch の Stage 3 receiver は default / target 注入を経ずに閉じる。
+-/
+theorem cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree_and_squarefreeGNProvider
+    (_hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider) :
+    CyclotomicNormDescentNonFirstCaseGNPowerReceiverTarget := by
+  let hNoPow :
+      ∀ {p x y z : ℕ}, PrimeGe5CounterexamplePack p x y z →
+        ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p :=
+    triominoCosmicBodyInvariant_of_squarefreeGNProvider hSqProv
+  intro p x y z hpack q hq hqx hqne hqgap hpgap s hs
+  exact False.elim <| hNoPow hpack ⟨s, hs⟩
+
+/--
+class-group 仮定と Stage 2 unit normalization のもとで、
+non-first-case branch の Stage 3 receiver を供給する最薄 theorem。
+
+review-051 の棚卸しに従い、
+`hCl + hUnit ⟹ hNorm`
+を直接証明するのではなく、
+まず branch-specific な honest open をここへ局所化する。
+-/
+theorem cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_classGroupPTorsionFree
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicNormDescentNonFirstCaseUnitNormalizedReceiverTarget :=
+  cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_gnPowerReceiver
+    (cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree hCl)
+
+/--
+squarefree-GN provider を持つ branch 向けの non-first-case unit-normalized receiver。
+-/
+theorem cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_classGroupPTorsionFree_and_squarefreeGNProvider
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider) :
+    CyclotomicNormDescentNonFirstCaseUnitNormalizedReceiverTarget :=
+  cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_gnPowerReceiver
+    (cyclotomicNormDescentNonFirstCaseGNPowerReceiver_of_classGroupPTorsionFree_and_squarefreeGNProvider
+      hCl hSqProv)
+
+/--
+class-group 仮定と Stage 2 unit normalization のもとで、
+non-first-case branch の Stage 3 receiver を供給する最薄 theorem。
+
+review-051 の棚卸しに従い、
+`hCl + hUnit ⟹ hNorm`
+を直接証明するのではなく、
+まず branch-specific な honest open をここへ局所化する。
+-/
+theorem cyclotomicNormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNormalization
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hUnit : CyclotomicUnitNormalizationTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCaseTarget :=
+  cyclotomicNormDescentNonFirstCase_of_unitNormalizationAndReceiver hUnit
+    (cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_classGroupPTorsionFree hCl)
+
+/--
+class-group 仮定・Stage 2 unit normalization・squarefree-GN provider から、
+non-first-case principalization を clean route で供給する。
+-/
+theorem cyclotomicNormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNormalization_and_squarefreeGNProvider
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hUnit : CyclotomicUnitNormalizationTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider) :
+    CyclotomicPrincipalizationNonFirstCaseTarget :=
+  cyclotomicNormDescentNonFirstCase_of_unitNormalizationAndReceiver hUnit
+    (cyclotomicNormDescentNonFirstCaseUnitNormalizedReceiver_of_classGroupPTorsionFree_and_squarefreeGNProvider
+      hCl hSqProv)
+
+/--
+class-group 仮定と Stage 2 unit normalization から、
+global Stage 3 `NormDescent` を供給する最薄 receiver theorem。
+
+review-051 に従い、current honest open を
+「peel 固有 kernel」ではなく
+`hCl + hUnit ⟹ hNorm`
+という receiver 問題として固定するための target である。
+-/
+theorem cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hUnit : CyclotomicUnitNormalizationTarget.{0}) :
+    CyclotomicNormDescentTarget :=
+  cyclotomicNormDescent_of_classGroupPTorsionFree_and_nonFirstCase hCl
+    (cyclotomicNormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNormalization hCl hUnit)
+
+/--
+class-group 仮定・Stage 2 unit normalization・squarefree-GN provider から、
+global Stage 3 `NormDescent` を clean route で供給する。
+-/
+theorem cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization_and_squarefreeGNProvider
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hUnit : CyclotomicUnitNormalizationTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider) :
+    CyclotomicNormDescentTarget :=
+  cyclotomicNormDescent_of_classGroupPTorsionFree_and_nonFirstCase_and_squarefreeGNProvider hCl hSqProv
+    (cyclotomicNormDescentNonFirstCase_of_classGroupPTorsionFree_and_unitNormalization_and_squarefreeGNProvider
+      hCl hUnit hSqProv)
+
+/--
+`hCl + hUnit` が与えられれば、refined class-group route の Stage 3 は receiver theorem 1 本に局所化される。
+-/
+theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_and_unitNormalization
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hUnit : CyclotomicUnitNormalizationTarget.{0}) :
+    CyclotomicPrincipalizationTarget :=
+  cyclotomicPrincipalization_of_refinedClassGroupRoute hCl hUnit
+    (cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization hCl hUnit)
+
+/--
+class-group 仮定・Stage 2 unit normalization・squarefree-GN provider から、
+one-shot principalization を clean route で供給する。
+-/
+theorem cyclotomicPrincipalization_of_classGroupPTorsionFree_and_unitNormalization_and_squarefreeGNProvider
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hUnit : CyclotomicUnitNormalizationTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider) :
+    CyclotomicPrincipalizationTarget :=
+  cyclotomicPrincipalization_of_refinedClassGroupRoute hCl hUnit
+    (cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization_and_squarefreeGNProvider
+      hCl hUnit hSqProv)
+
+/--
+refined class-group route から refined non-first-case existence kernel を返す thin wrapper。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_refinedClassGroupRoute
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hUnit : CyclotomicUnitNormalizationTarget)
+    (hNorm : CyclotomicNormDescentTarget) :
+    CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget :=
+  cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_normDescent
+    (cyclotomicNormDescent_of_refinedClassGroupRoute hCl hUnit hNorm)
+
+/--
+refined class-group route から Kummer peel normal-form descent core を返す thin wrapper。
+
+これにより、current peel-side open は refined route の観点では
+`hNorm` receiver の未 concrete 化だけだと読める。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_refinedClassGroupRoute
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{u})
+    (hUnit : CyclotomicUnitNormalizationTarget)
+    (hNorm : CyclotomicNormDescentTarget) :
+    CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget :=
+  cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_normDescent
+    (cyclotomicNormDescent_of_refinedClassGroupRoute hCl hUnit hNorm)
+
+/--
+`hCl + hUnit` から refined non-first-case existence kernel を返す thin wrapper。
+-/
+theorem cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_classGroupPTorsionFree_and_unitNormalization
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hUnit : CyclotomicUnitNormalizationTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget :=
+  cyclotomicPrincipalizationNonFirstCaseDescentExistence_of_normDescent
+    (cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization hCl hUnit)
+
+/--
+`hCl + hUnit` から Kummer peel normal-form descent core を返す thin wrapper。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree_and_unitNormalization
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hUnit : CyclotomicUnitNormalizationTarget.{0}) :
+    CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget :=
+  cyclotomicPrincipalizationNonFirstCasePeelNormalFormDescent_of_normDescent
+    (cyclotomicNormDescent_of_classGroupPTorsionFree_and_unitNormalization hCl hUnit)
+
+/--
+old peel core theorem が新しい no-so#rry norm route へ寄るとき、
+`hCl` 側で本当に不足している追加入力は `hUnit` だけである。
+
+inspection 用の theorem-level summary として、
+`hCl` から peel core を返す legacy theorem は
+`CyclotomicUnitNormalizationTarget` を 1 本足せば
+既存 no-so#rry chain の thin wrapper に置き換わることを固定する。
+-/
+theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree_reducesTo_unitNormalization
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
+    CyclotomicUnitNormalizationTarget.{0} →
+      CyclotomicPrincipalizationNonFirstCasePeelNormalFormDescentTarget := by
+  intro hUnit
+  exact
+    cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree_and_unitNormalization
+      hCl hUnit
+
 /-!
 ## §3. ClassGroupBridge と RegularPrime route
 
@@ -3119,6 +6210,8 @@ refined mainline の観点では class group 側はすでに concrete 化され�
 `cyclotomicPrincipalization_of_classGroupPTorsionFree` である。
 `cyclotomicPTorsionAnnihilation_of_classGroupPTorsionFree` は review-013 により no-so#rry 化できた。
 `CyclotomicUnitNormalizationTarget` は review-019 により concrete 化された。
+さらに first-case specialization では Stage 2 の norm 前 boundary も
+`cyclotomicUnitNormalization_of_firstCase_of_pack_thin` により concrete 化された。
 first-case specialization の Stage 1 existence boundary も
 `chosenLinearFactorSpanEqPow_of_firstCase_of_pack_thin` と
 `cyclotomicLinearFactorIdealPthPower_of_firstCase_of_pack_thin` により concrete 化できた。

@@ -2812,6 +2812,57 @@ theorem primeGe5BranchANormalForm_prime_not_dvd_s_default
   exact hGN_not_sq hp2_dvd_GN
 
 /--
+与えられた Branch A counterexample は、座標を変えずに normal-form packet へ包装できる。
+
+付録:
+- `PrimeGe5BranchANormalFormPacket` は field に `x`,`y`,`z` を持つので、
+  packaging は existential な新座標の導入ではなく purely structural な再包装に過ぎない。
+- 後で provenance 付き smaller-counterexample から packet を作るときの基礎補題として使う。
+-/
+theorem primeGe5BranchANormalFormPacket_of_counterexample
+    {p x y z : ℕ}
+    (hpack : PrimeGe5CounterexamplePack p x y z)
+    (hp_dvd_gap : p ∣ (z - y)) :
+    ∃ pkt : PrimeGe5BranchANormalFormPacket p,
+      pkt.x = x ∧ pkt.y = y ∧ pkt.z = z := by
+  rcases primeGe5BranchAShapeValue_of_factorization
+      primeGe5BranchAShapeFactorization_default hpack hp_dvd_gap with ⟨t, hgap⟩
+  rcases primeGe5BranchANormalForm_of_witness hpack hp_dvd_gap hgap with ⟨s, hsGN, hsx⟩
+  refine ⟨{
+    x := x
+    y := y
+    z := z
+    t := t
+    s := s
+    pack := hpack
+    hp_dvd_gap := hp_dvd_gap
+    hgap := hgap
+    hsGN := hsGN
+    hsx := hsx
+  }, rfl, rfl, rfl⟩
+
+/--
+named smaller counterexample があれば、座標 provenance 付きの smaller packet へ直ちに上げられる。
+
+付録:
+- existing `PrimeGe5BranchAPrimitivePacketOfSmallerCounterexampleTarget`
+  は `∃ pkt'` までしか返さないが、
+  実際には input counterexample の座標を保ったまま packet を作れる。
+- Kummer 側で `x' = x / q`, `y' = y` を維持したいときの structural bridge。
+-/
+theorem primeGe5BranchANormalFormPacket_lt_of_namedSmallerCounterexample
+    {p z x' y' z' : ℕ}
+    (hpack' : PrimeGe5CounterexamplePack p x' y' z')
+    (hp_dvd_gap' : p ∣ (z' - y'))
+    (hz'lt : z' < z) :
+    ∃ pkt' : PrimeGe5BranchANormalFormPacket p,
+      pkt'.z < z ∧ pkt'.x = x' ∧ pkt'.y = y' := by
+  rcases primeGe5BranchANormalFormPacket_of_counterexample hpack' hp_dvd_gap' with
+    ⟨pkt', hx, hy, hz⟩
+  refine ⟨pkt', ?_, hx, hy⟩
+  simpa [hz] using hz'lt
+
+/--
 `p ∤ s` が取れれば、素数性から `p ⟂ s` へ直ちに上げられる。
 -/
 theorem primeGe5BranchANormalForm_coprime_p_s_default

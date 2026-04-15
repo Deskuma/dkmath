@@ -132,6 +132,10 @@ review-016 により local specialization
 review-017 により、pack + explicit ideal equality から
 `z - ζy = u * β^p` を出す exact receiver
 `cyclotomicUnitNormalization_of_spanEqPowPrincipal` も no-so#rry で追加できた。
+さらに first-case specialization では
+`cyclotomicUnitNormalization_of_firstCase_of_pack_thin` により、
+chosen factor について `z - ζy = u * β^p` を直接返す
+norm 直前の thin wrapper も no-so#rry で固定できた。
 review-018 により `CyclotomicLinearFactorIdealPthPowerTarget` は存在形へ直され、
 `cyclotomicUnitNormalization_of_existsLinearFactorIdealPthPower` によって
 その boundary target から element-level の Stage 2 statement まで composition で到達できる。
@@ -211,7 +215,28 @@ review-027 により、Mathlib の
 
 `CyclotomicUnitNormalizationTarget` はすでに concrete 化済みであり、
 `CyclotomicNormDescentTarget` が未解決 stage として残っている。
-今後は Stage 1 の存在形 boundary と Stage 3 norm descent を個別に監査する。
+ただし review-039 / review-040 相当の current state では、
+first-case specialization に限れば Stage 3 の入口配線自体は
+さらに 2 本へ分割できるところまで進んだ。
+具体的には
+`CyclotomicNormEqGNFirstCasePackThinTarget` と
+`CyclotomicNormUnitAbsorbFirstCasePackThinTarget` を分離し、
+それらを current thin wrapper へ接ぐ
+`cyclotomicNormGNPower_of_firstCase_of_pack_thin` を追加したことで、
+まず `GN p (z - y) y = s^p` を返す最初の concrete 境界が定義できた。
+さらに
+`false_of_cyclotomicNormGNPower_of_firstCase_of_pack_thin` により、
+既存の no-pow target があれば即座に矛盾へ戻せる abstract bridge も置けた。
+今後は Stage 1 の存在形 boundary と、
+この Stage 3 split の各片割れを個別に concretize していく。
+さらに current state では、`CyclotomicNormEqGNFirstCasePackThinTarget` 側も
+review-040 の内部 3 分割のうち
+- norm → `Gal(K/ℚ)` product
+- `Gal(K/ℚ)` product → `(ZMod p)ˣ` product
+- nontrivial factor product → `GN` / quotientPrimePow
+までは theorem 名つきで固定できた。
+ゆえに残る本丸は、`(ZMod p)ˣ` product を actual nontrivial factor product に落とす combinatorial bridge と、
+それらを束ねて `CyclotomicNormEqGNFirstCasePackThinTarget` 本体へ戻す合成である。
 
 `CyclotomicGapDivisibleFactorizationSpecializationTarget`・
 `CyclotomicIdealEquationTarget`・`CyclotomicIdealProductPthPowerTarget`・
@@ -419,12 +444,203 @@ theorem FLTPrimeGe5Target_of_refinedRegularPrimeRoute
     (qAdicGapReductionGapDivisible_of_refinedRegularPrimeRoute hRegClass hUnit hNorm)
     hPFE hNoLift
 
+/--
+推奨 mainline の provider 具体化版。
+
+regular-prime route の Stage 3 を abstract `hNorm` で受ける代わりに、
+squarefree-GN provider から concrete に構成する。
+-/
+theorem FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
+    (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+    (hRegBranch : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+    (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{0} p)
+    (hUnit : CyclotomicUnitNormalizationTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_kummerThreeWaySplit hPeq hRegBranch
+    (qAdicGapReductionGapDivisible_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
+      hRegClass hUnit hSqProv)
+    hPFE hNoLift
+
+/--
+provider concrete な regular-prime mainline から global provider へ接続する public 入口。
+
+`TriominoSquarefreeGNBridgeProvider` を concrete に持てる branch では、
+abstract `FLTPrimeGe5Target` を経由して外へ渡す代わりに、
+この theorem を canonical default 相当の provider-facing route として使う。
+-/
+theorem triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
+    (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+    (hRegBranch : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+    (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{0} p)
+    (hUnit : CyclotomicUnitNormalizationTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    GlobalPrimeExponentFLTProvider := by
+  exact triominoCosmic_globalProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
+      hPeq hRegBranch hRegClass hUnit hSqProv hPFE hNoLift)
+
+/--
+provider concrete な regular-prime mainline から `TriominoPrimeProvider` へ接続する public 入口。
+
+global provider alias を直接返す最外側 API として使えるよう、
+`PrimeGe5FLTProvider` core bridge への合成をここで固定する。
+-/
+theorem triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
+    (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+    (hRegBranch : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+    (hRegClass : ∀ {p : ℕ}, Nat.Prime p → 5 ≤ p → IsRegularPrime.{0} p)
+    (hUnit : CyclotomicUnitNormalizationTarget.{0})
+    (hSqProv : TriominoSquarefreeGNBridgeProvider)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    TriominoPrimeProvider := by
+  exact triominoPrimeProvider_of_FLTPrimeGe5
+    (FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider
+      hPeq hRegBranch hRegClass hUnit hSqProv hPFE hNoLift)
+
 /-!
 ## §8. Kummer route: ClassGroup → GapDivisible → 2m-pure → FLT
 
 ClassGroupPTorsionFree + Regular branch + PEquals branch → FLT の
 legacy one-shot theorem。
 -/
+
+/--
+Split class-group route: first-case は current stable bridge 群で処理し、
+non-first-case (`p ∣ z - y`) だけを open kernel として残す public mainline。
+
+`cyclotomicPrincipalization_of_classGroupPTorsionFree` の legacy one-shot に代えて、
+残責務を theorem 境界で明示する版。
+-/
+theorem FLTPrimeGe5Target_of_kummerRoute_of_caseSplit
+    (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+    (hReg : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hNonFirst : CyclotomicPrincipalizationNonFirstCaseTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_kummerThreeWaySplit hPeq hReg
+    (qAdicGapReductionGapDivisible_of_cyclotomicPrincipalization
+      (cyclotomicPrincipalization_of_classGroupPTorsionFree_of_caseSplit
+        hCl hNoLift hNonFirst))
+    hPFE hNoLift
+
+/--
+Split public route: first-case は canonical bridge を使い、
+non-first-case は prepare / descent kernel split で受ける版。
+
+これにより public mainline でも、未解決責務を theorem 境界 2 本で監査できる。
+-/
+theorem FLTPrimeGe5Target_of_kummerRoute_of_kernelSplit
+    (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+    (hReg : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hPrep : CyclotomicPrincipalizationNonFirstCasePrepareTarget)
+    (hDesc : CyclotomicPrincipalizationNonFirstCaseDescentTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_kummerThreeWaySplit hPeq hReg
+    (qAdicGapReductionGapDivisible_of_cyclotomicPrincipalization
+      (cyclotomicPrincipalization_of_classGroupPTorsionFree_of_kernelSplit
+        hCl hPrep hDesc))
+    hPFE hNoLift
+
+/--
+Split public route: first-case は canonical bridge を使い、
+non-first-case は prepare / existence kernel split で受ける版。
+
+これにより public mainline でも、残る direct open を existence 語彙へ一段押し下げて監査できる。
+-/
+theorem FLTPrimeGe5Target_of_kummerRoute_of_existenceKernelSplit
+    (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+    (hReg : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hPrep : CyclotomicPrincipalizationNonFirstCasePrepareTarget)
+    (hExist : CyclotomicPrincipalizationNonFirstCaseDescentExistenceTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_kummerThreeWaySplit hPeq hReg
+    (qAdicGapReductionGapDivisible_of_cyclotomicPrincipalization
+      (cyclotomicPrincipalization_of_classGroupPTorsionFree_of_existenceKernelSplit
+        hCl hPrep hExist))
+    hPFE hNoLift
+
+/--
+Split public route: first-case は canonical bridge を使い、
+non-first-case は prepare / valuation / reduction split で受ける版。
+
+これにより public mainline でも、残る direct open を reduction kernel へさらに押し下げて監査できる。
+-/
+theorem FLTPrimeGe5Target_of_kummerRoute_of_valuationReductionKernelSplit
+    (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+    (hReg : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hPrep : CyclotomicPrincipalizationNonFirstCasePrepareTarget)
+    (hVal : CyclotomicPrincipalizationNonFirstCaseValuationTarget)
+    (hRed : CyclotomicPrincipalizationNonFirstCaseReductionTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_kummerThreeWaySplit hPeq hReg
+    (qAdicGapReductionGapDivisible_of_cyclotomicPrincipalization
+      (cyclotomicPrincipalization_of_classGroupPTorsionFree_of_valuationReductionKernelSplit
+        hCl hPrep hVal hRed))
+    hPFE hNoLift
+
+/--
+Split public route: first-case は canonical bridge を使い、
+non-first-case は prepare / valuation / error / packet split で受ける版。
+
+これにより public mainline でも、残る direct open を packet kernel へさらに押し下げて監査できる。
+-/
+theorem FLTPrimeGe5Target_of_kummerRoute_of_errorPacketKernelSplit
+    (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+    (hReg : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hPrep : CyclotomicPrincipalizationNonFirstCasePrepareTarget)
+    (hVal : CyclotomicPrincipalizationNonFirstCaseValuationTarget)
+    (hErr : CyclotomicPrincipalizationNonFirstCaseErrorTarget)
+    (hPkt : CyclotomicPrincipalizationNonFirstCasePacketTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_kummerThreeWaySplit hPeq hReg
+    (qAdicGapReductionGapDivisible_of_cyclotomicPrincipalization
+      (cyclotomicPrincipalization_of_classGroupPTorsionFree_of_errorPacketKernelSplit
+        hCl hPrep hVal hErr hPkt))
+    hPFE hNoLift
+
+/--
+Split public route: first-case は canonical bridge を使い、
+non-first-case は prepare / valuation / error / tailError / packetFromError split で受ける版。
+
+これにより public mainline でも、残る direct open を packetFromError kernel へさらに押し下げて監査できる。
+-/
+theorem FLTPrimeGe5Target_of_kummerRoute_of_tailErrorPacketFromErrorKernelSplit
+    (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
+    (hReg : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
+    (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
+    (hPrep : CyclotomicPrincipalizationNonFirstCasePrepareTarget)
+    (hVal : CyclotomicPrincipalizationNonFirstCaseValuationTarget)
+    (hErr : CyclotomicPrincipalizationNonFirstCaseErrorTarget)
+    (hTail : CyclotomicPrincipalizationNonFirstCaseTailErrorTarget)
+    (hPFEKummer : CyclotomicPrincipalizationNonFirstCasePacketFromErrorTarget)
+    (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
+    (hNoLift : TriominoCosmicNonLiftableGNBridge) :
+    FLTPrimeGe5Target :=
+  FLTPrimeGe5Target_of_kummerThreeWaySplit hPeq hReg
+    (qAdicGapReductionGapDivisible_of_cyclotomicPrincipalization
+      (cyclotomicPrincipalization_of_classGroupPTorsionFree_of_tailErrorPacketFromErrorKernelSplit
+        hCl hPrep hVal hErr hTail hPFEKummer))
+    hPFE hNoLift
 
 /--
 Legacy one-shot Kummer route: ClassGroup 仮定から FLT へ。
@@ -439,7 +655,7 @@ open kernels:
 theorem FLTPrimeGe5Target_of_kummerRoute
     (hPeq : PrimeGe5BranchAPrimitiveQAdicGapReductionPEqualsBranchTarget)
     (hReg : PrimeGe5BranchAPrimitiveQAdicGapReductionRegularBranchTarget)
-    (hCl : CyclotomicClassGroupPTorsionFreeTarget)
+  (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0})
     (hPFE : PrimeGe5BranchAValuationPeelPacketFromErrorTarget)
     (hNoLift : TriominoCosmicNonLiftableGNBridge) :
     FLTPrimeGe5Target :=

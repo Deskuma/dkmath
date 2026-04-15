@@ -7,6 +7,48 @@
 - 導出補題は `PhaseLift.lean` / `CounterexamplePattern.lean` に集約する
 - `NoSqOnS0` を中心に、複数の入口（harmonic / classify / coprime support）を接続する
 
+## 0. 現在の公開導線
+
+この README は歴史的に `d=3` の説明が中心だが、現在の公開面はそれだけではない。
+top-level import は `DkMath.FLT` であり、ここから次の 2 系統を辿るのが現行導線である。
+
+- `d = 3` 公開面:
+  `DkMath.FLT.Main`
+  の
+  `FLT_d3_by_padicValNat`
+  およびその派生入口群
+- regular-prime / prime-ge5 provider 面:
+  `DkMath.FLT.Kummer.RegularPrimeRoute`
+  の
+  `FLTPrimeGe5Target_of_refinedRegularPrimeRoute`
+  と、
+  provider concrete 版
+  `FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+  から上がる
+  `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+  /
+  `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+
+住み分けは次の通り。
+
+- abstract theorem-parameterized route:
+  `FLTPrimeGe5Target_of_refinedRegularPrimeRoute`
+- provider concrete route:
+  `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+  /
+  `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+
+したがって、
+`TriominoSquarefreeGNBridgeProvider`
+を concrete に持てる branch では、
+上の provider concrete route を canonical な public/provider 導線として使う。
+
+sample と短い案内だけ先に見たい場合は、
+`Samples.lean`
+と
+`README-provider-route.md`
+を参照。
+
 ## 1. モジュール責務
 
 - `Main.lean`
@@ -90,6 +132,26 @@
 - `CosmicFormula/CosmicFormulaBinom.lean`
   - `add_pow_gap_factor`, `add_pow_tail_u2_*`, `two_gap_xy_factor*` を提供。
 
+- `Kummer/RegularPrimeRoute.lean`
+  - regular-prime mainline の公開面。
+  - 主要入口:
+    - `FLTPrimeGe5Target_of_refinedRegularPrimeRoute`
+    - `FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+    - `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+    - `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+
+- `PrimeProvider/*.lean`
+  - `PrimeGe5FLTProvider` / `GlobalPrimeExponentFLTProvider` /
+    `TriominoPrimeProvider` への staging と bridge。
+  - `TriominoCosmicPrimeGe5Core.lean`
+    が
+    `triominoCosmic_globalProvider_of_FLTPrimeGe5`
+    /
+    `triominoPrimeProvider_of_FLTPrimeGe5`
+    を提供し、
+    `RegularPrimeRoute`
+    の provider concrete theorem はそこへ合成される。
+
 ## 2. 推奨の証明導線
 
 実装上の標準導線は次の順です。
@@ -141,6 +203,14 @@ graph LR
   - `FLT_d3_by_padicValNat_of_NoSqInput`
   - `NoSqInput` に `hbc`, `coprime`, `hHarm`, `hNoSq` を束ねる
   - `*_coprimeSupport` 系は最小仮定版に整理済み（`mod3` 分離引数なし）
+
+prime-ge5 / provider 入口としては次を推奨します。
+
+- abstract route:
+  - `FLTPrimeGe5Target_of_refinedRegularPrimeRoute`
+- provider concrete route:
+  - `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+  - `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
 
 ## 5. 作業ログ
 

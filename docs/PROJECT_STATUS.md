@@ -4,6 +4,29 @@
 
 FLT 現状レポート 2026-03-15
 
+> [!NOTE]
+> 2026-04-15 時点の追記:
+> この文書の主本文は 2026-03-15 時点の snapshot 評価だが、
+> 現在の nightly では
+> `DkMath.FLT`
+> が
+> `DkMath.FLT.Kummer`
+> と
+> `DkMath.FLT.PrimeProvider`
+> をともに import する top-level 公開面になっている。
+> そのため、
+> `TriominoSquarefreeGNBridgeProvider`
+> を concrete に持てる branch では、
+> `RegularPrimeRoute`
+> の
+> `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+> /
+> `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+> を current public/provider route とみなすのが正しい。
+> 一方、
+> `FLTPrimeGe5Target_of_refinedRegularPrimeRoute`
+> は abstract theorem-parameterized route として残る。
+
 ## 1. 結論
 
 このスナップショット時点での FLT は、**\(d=3\) の公開導線はかなり固まり、高指数 \(n \ge 5\) 側が主ボトルネック** になっておる。
@@ -118,6 +141,20 @@ FLT 現状レポート 2026-03-15
 
 この分解は良い。以前のように「未解決の数論核が公開面へ漏れ出す」構造ではなく、**unresolved kernel を狭い部屋に追い込む構成** になっておる。
 
+2026-04-15 の current state では、さらに
+`RegularPrimeRoute`
+    →
+`triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+/
+`triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+という provider concrete public route が追加され、
+`TriominoSquarefreeGNBridgeProvider`
+を持てる branch は
+`GlobalPrimeExponentFLTProvider`
+/
+`TriominoPrimeProvider`
+へ直接つなげるようになった。
+
 ---
 
 ## 3.E. CFBRC → GN → RH bridge の導線が見えてきた
@@ -136,6 +173,21 @@ FLT 現状レポート 2026-03-15
 `DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5.lean` では、`primeGe5CounterexampleNormalizer_impl` と spec 合成（`FLTPrimeGe5Target_of_*`）により、provider へ接続する no-`so#rry` ルート（`triominoCosmic_globalProvider_of_specs`）まで到達しておる。
 
 一方で `FLT_prime_ge5` 本体は現状 `DkMath.FLT`（`DkMath/FLT/Basic.lean`）経由で閉じており、その `n > 3` 分岐と `DkMath/CosmicFormula/TriominoFLT.lean` の `FLT_highExponent_core_pending` が `so#rry` のまま残るため、一般指数の本線は未完という評価になる。
+
+ただし current nightly では、
+`FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+と、その provider-facing wrapper
+`triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+/
+`triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+が top-level import
+`DkMath.FLT`
+から辿れる。
+したがって現在の open は
+「provider concrete public route の不在」
+ではなく、
+「その route を埋める数論核と general-exponent final closure の未完」
+にある。
 
 ---
 
@@ -257,6 +309,24 @@ FLT 現状レポート 2026-03-15
 ## 7. 次に打つべき手
 
 優先順位はかなりはっきりしておる。
+
+## 7.A. 公開導線の見方（2026-04-15 追記）
+
+- `d = 3` の public route は引き続き
+  `DkMath.FLT.Main`
+  の theorem 群を見る。
+- prime-ge5 / regular-prime の public/provider route は
+  `DkMath.FLT.Kummer.RegularPrimeRoute`
+  を見る。
+- `TriominoSquarefreeGNBridgeProvider`
+  を持てる branch では、
+  `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+  /
+  `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+  を canonical な公開導線として使う。
+- abstract に theorem を合成したい場合だけ、
+  `FLTPrimeGe5Target_of_refinedRegularPrimeRoute`
+  を使う。
 
 ## 7.A. 最優先
 

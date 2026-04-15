@@ -99,6 +99,15 @@
 ### 3.10 FLT（フェルマー最終定理関連）
 
 - `DkMath.FLT`
+- public/provider 導線の現状:
+  - abstract regular-prime mainline:
+    `DkMath.FLT.Kummer.RegularPrimeRoute.FLTPrimeGe5Target_of_refinedRegularPrimeRoute`
+  - provider concrete public route:
+    `DkMath.FLT.Kummer.RegularPrimeRoute.triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+    /
+    `DkMath.FLT.Kummer.RegularPrimeRoute.triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+  - `TriominoSquarefreeGNBridgeProvider` を concrete に持てる branch では、
+    上の provider concrete route を canonical 導線として使う
 
 ### 3.11 KUS（単位構造演算）
 

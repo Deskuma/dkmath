@@ -72,15 +72,84 @@ lemma squarefree_implies_padic_val_le_one_is_false :
 end DkMath.NumberTheory.GcdNext
 
 /--
-Research placeholder.
+public wrapper が最終的に寄せるべき honest target。
+
+primitive-prime branch の valuation 上界は、
+現状では `Squarefree (GN d (a - b) b)` を追加仮定として受ければ
+既存 no-`so#rry` theorem によって閉じる。
+-/
+abbrev PrimitivePrimeFactorPadicValNatLeOneOfSquarefreeGTarget : Prop :=
+  ∀ {a b d q : ℕ},
+    Nat.Prime d → 3 ≤ d →
+    b < a → 0 < b → Nat.Coprime a b →
+    ¬ d ∣ a - b →
+    Nat.Prime q → q ∣ a ^ d - b ^ d → ¬ q ∣ a - b →
+    Squarefree (GN d (a - b) b) →
+    padicValNat q (a ^ d - b ^ d) ≤ 1
+
+/--
+true theorem `padicValNat_primitive_prime_factor_le_one_of_squarefree_G`
+から public honest target を回収する thin wrapper。
+-/
+theorem primitivePrimeFactorPadicValNatLeOneOfSquarefreeGTarget_of_trueTheorem :
+    PrimitivePrimeFactorPadicValNatLeOneOfSquarefreeGTarget := by
+  intro a b d q hd_prime hd_ge hab_lt hb hab hpnd hq_prime hq_div hq_ndiv hG_sq
+  exact
+    padicValNat_primitive_prime_factor_le_one_of_squarefree_G
+      (a := a) (b := b) (d := d) (q := q)
+      hd_prime hd_ge hab_lt hb hab hpnd hq_prime hq_div hq_ndiv hG_sq
+
+/--
+future public replacement for the false legacy theorem.
+
+この定理が current true statement であり、
+public wrapper の statement repair は最終的にこの形へ寄せる。
+-/
+lemma squarefree_implies_padic_val_le_one_honest (d a b q : ℕ)
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b)
+    (hq_prime : Nat.Prime q)
+    (hq_div : q ∣ a ^ d - b ^ d) (hq_ndiv : ¬ q ∣ a - b)
+    (hG_sq : Squarefree (GN d (a - b) b)) :
+    padicValNat q (a ^ d - b ^ d) ≤ 1 := by
+  exact
+    padicValNat_primitive_prime_factor_le_one_of_squarefree_G
+      (a := a) (b := b) (d := d) (q := q)
+      hd_prime hd_ge hab_lt hb hab hpnd hq_prime hq_div hq_ndiv hG_sq
+
+/--
+future public replacement for
+`padicValNat_primitive_prime_factor_le_one`.
+
+現時点の honest statement は
+`Squarefree (GN d (a - b) b)`
+を追加仮定として受ける形である。
+-/
+lemma padicValNat_primitive_prime_factor_le_one_honest {a b d q : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b)
+    (hq_prime : Nat.Prime q)
+    (hq_div : q ∣ a ^ d - b ^ d) (hq_ndiv : ¬ q ∣ a - b)
+    (hG_sq : Squarefree (GN d (a - b) b)) :
+    padicValNat q (a ^ d - b ^ d) ≤ 1 := by
+  exact
+    squarefree_implies_padic_val_le_one_honest
+      d a b q hd_prime hd_ge hab_lt hb hab hpnd hq_prime hq_div hq_ndiv hG_sq
+
+/--
+Research placeholder kept only for legacy callers that still lack the strengthened hypotheses.
 
 This statement is currently known to be too strong as written: there are counterexamples to
 the naive global implication "squarefree-like input implies `padicValNat ≤ 1`" in this level of
-generality. It is intentionally kept as a single research stub so phase-15 callers can point to
-one place while the final statement is repaired (typically by strengthening hypotheses or by
-replacing this with a more precise primitive-prime valuation theorem).
+generality.
+
+Current honest replacement:
+- `squarefree_implies_padic_val_le_one_honest`
+- `padicValNat_primitive_prime_factor_le_one_honest`
 -/
-lemma squarefree_implies_padic_val_le_one (d a b q : ℕ)
+lemma squarefree_implies_padic_val_le_one_research (d a b q : ℕ)
     (hd_prime : Nat.Prime d) (hb : 0 < b) (hab : Nat.Coprime a b)
     (hq_prime : Nat.Prime q) (hq_div : q ∣ a ^ d - b ^ d) :
     padicValNat q (a ^ d - b ^ d) ≤ 1 := by
@@ -95,15 +164,29 @@ lemma squarefree_implies_padic_val_le_one (d a b q : ℕ)
   sorry
 
 /--
-Thin wrapper used by phase-15 bridge code.
+deprecated compatibility alias.
 
-This currently delegates to `squarefree_implies_padic_val_le_one`, so the real unresolved work is
-statement repair in that theorem rather than local bridge construction.
+Use `squarefree_implies_padic_val_le_one_research` for the remaining research-only dependency,
+or migrate all the way to `squarefree_implies_padic_val_le_one_honest`.
+-/
+@[deprecated squarefree_implies_padic_val_le_one_honest
+  (since := "2026-04-13")]
+lemma squarefree_implies_padic_val_le_one (d a b q : ℕ)
+    (hd_prime : Nat.Prime d) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hq_prime : Nat.Prime q) (hq_div : q ∣ a ^ d - b ^ d) :
+    padicValNat q (a ^ d - b ^ d) ≤ 1 :=
+  squarefree_implies_padic_val_le_one_research d a b q hd_prime hb hab hq_prime hq_div
+
+/--
+Research-only thin wrapper used by the remaining phase-15 bridge code.
+
+This delegates to `squarefree_implies_padic_val_le_one_research`, so any caller that still uses it
+is explicitly depending on the unrepaired statement rather than the honest route.
 
 For a true statement with an explicit additional hypothesis, see
-`padicValNat_primitive_prime_factor_le_one_of_squarefree_G`.
+`padicValNat_primitive_prime_factor_le_one_honest`.
 -/
-lemma padicValNat_primitive_prime_factor_le_one {a b d q : ℕ}
+lemma padicValNat_primitive_prime_factor_le_one_research {a b d q : ℕ}
     (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
     (_hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
     (_hpnd : ¬ d ∣ a - b)
@@ -111,6 +194,25 @@ lemma padicValNat_primitive_prime_factor_le_one {a b d q : ℕ}
     (hq_div : q ∣ a ^ d - b ^ d) (_hq_ndiv : ¬ q ∣ a - b) :
     padicValNat q (a ^ d - b ^ d) ≤ 1 := by
   have _hd_pos : 0 < d := Nat.zero_lt_of_lt (by omega : 2 < d)
-  exact squarefree_implies_padic_val_le_one d a b q hd_prime hb hab hq_prime hq_div
+  exact squarefree_implies_padic_val_le_one_research d a b q hd_prime hb hab hq_prime hq_div
+
+/--
+deprecated compatibility alias.
+
+Use `padicValNat_primitive_prime_factor_le_one_research` for the remaining legacy/research route,
+or migrate to `padicValNat_primitive_prime_factor_le_one_honest` when
+`Squarefree (GN d (a - b) b)` is available.
+-/
+@[deprecated padicValNat_primitive_prime_factor_le_one_honest
+  (since := "2026-04-13")]
+lemma padicValNat_primitive_prime_factor_le_one {a b d q : ℕ}
+    (hd_prime : Nat.Prime d) (hd_ge : 3 ≤ d)
+    (hab_lt : b < a) (hb : 0 < b) (hab : Nat.Coprime a b)
+    (hpnd : ¬ d ∣ a - b)
+    (hq_prime : Nat.Prime q)
+    (hq_div : q ∣ a ^ d - b ^ d) (hq_ndiv : ¬ q ∣ a - b) :
+    padicValNat q (a ^ d - b ^ d) ≤ 1 :=
+  padicValNat_primitive_prime_factor_le_one_research
+    hd_prime hd_ge hab_lt hb hab hpnd hq_prime hq_div hq_ndiv
 
 end DkMath.NumberTheory.GcdNext
