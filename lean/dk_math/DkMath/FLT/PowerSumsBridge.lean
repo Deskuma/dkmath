@@ -9,6 +9,8 @@ Authors: D. and Wise Wolf.
 import DkMath.FLT.Basic
 import DkMath.NumberTheory.PowerSums
 
+#print "file: DkMath.FLT.PowerSumsBridge"
+
 namespace DkMath
 namespace FLT
 

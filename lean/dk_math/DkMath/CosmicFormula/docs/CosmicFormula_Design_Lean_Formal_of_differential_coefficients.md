@@ -30,7 +30,7 @@ f'(x)=\lim_{u\to 0}\frac{f(x+u)-f(x)}{u}
 
 ### 2.1. まず ℝ 上で閉じる
 
-最初から一般の normed field や normed ring へ抽象化しすぎない。  
+最初から一般の normed field や normed ring へ抽象化しすぎない。
 初版は \( \mathbb{R} \to \mathbb{R} \) で固定する。
 
 ### 2.2. exact factorization と limit theorem を分離する
@@ -144,7 +144,7 @@ def cosmicKernel (f : ℝ → ℝ) (x u : ℝ) : ℝ :=
 
 ### 4.1. 注意
 
-`cosmicKernel f x 0` の値を理論上の意味としては使わない。  
+`cosmicKernel f x 0` の値を理論上の意味としては使わない。
 実際の定理は常に
 
 ```lean
@@ -217,7 +217,7 @@ theorem hasDerivAt_iff_tendsto_cosmicKernel
 
 ### 6.1. 実装方針
 
-この定理は mathlib 側の既存 characterization を使ってもよいし、独立に組んでもよい。  
+この定理は mathlib 側の既存 characterization を使ってもよいし、独立に組んでもよい。
 ただし初版では「新定義の健全性確認」が主眼なので、既存定理への変換証明として実装するのが良い。
 
 ---
@@ -243,8 +243,8 @@ theorem sub_pow_eq_u_mul_powerKernel (d : ℕ) (x u : ℝ) :
 
 証明は次のいずれか。
 
-1. 二項展開から直接組む  
-2. 既存の `sub_eq_sum` 型の冪差補題を利用する  
+1. 二項展開から直接組む
+2. 既存の `sub_eq_sum` 型の冪差補題を利用する
 3. `ring_nf` が効く低次数版を先に作り、一般 \( d \) は finite sum で上げる
 
 初版は 1 または 3 が安全。
@@ -394,12 +394,12 @@ theorem cosmic_formula_basic (x u : ℝ) :
 
 ### 13.1. `u = 0` の扱いが混線する
 
-回避策として、定理は常に穿たれた近傍ベースで書く。  
+回避策として、定理は常に穿たれた近傍ベースで書く。
 `cosmicKernel` 自体は全域定義でも、意味論は `u ≠ 0` に置く。
 
 ### 13.2. power kernel の添字が煩雑
 
-最初は `j` を \( 0 \) から \( d-1 \) まで回す定義で固定する。  
+最初は `j` を \( 0 \) から \( d-1 \) まで回す定義で固定する。
 添字変換を増やしすぎない。
 
 ### 13.3. exact theorem と limit theorem が混ざる

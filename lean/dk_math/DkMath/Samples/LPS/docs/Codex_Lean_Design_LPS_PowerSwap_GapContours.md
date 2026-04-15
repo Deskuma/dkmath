@@ -1,4 +1,4 @@
-# Codex 向け Lean 実装設計図  
+# Codex 向け Lean 実装設計図
 
 ## LPS / PowerSwap / GapContours / Exchange
 
@@ -269,7 +269,7 @@ v^2-u^2
 
 ### Lean 実装方針
 
-ここは今すぐ完全 theorem 化しなくてよい。  
+ここは今すぐ完全 theorem 化しなくてよい。
 `GapContours.lean` に
 
 - 定義
@@ -347,7 +347,7 @@ ObservedMinTwo(d,n)
 
 ### 現段階での扱い
 
-`BigFamilyExamples.lean` 内に局所維持でよい。  
+`BigFamilyExamples.lean` 内に局所維持でよい。
 一般 API への昇格は保留。
 
 ### Lean で固定済み標本
@@ -620,7 +620,7 @@ GapFillRank / BigFamilyExamples
 
 ### 9.1. Real 冪は重い
 
-`Real.rpow` が絡むと証明コストが上がる。  
+`Real.rpow` が絡むと証明コストが上がる。
 最初は theorem より definition/comment を優先してよい。
 
 ### 9.2. Nat 減算は避ける
@@ -629,7 +629,7 @@ GapFillRank / BigFamilyExamples
 
 ### 9.3. サンプル層を壊さない
 
-`Samples/LPS` は理論完成版ではなく、戻り道を残す実験層である。  
+`Samples/LPS` は理論完成版ではなく、戻り道を残す実験層である。
 大改造より、最小補題追加を優先する。
 
 ---

@@ -8,6 +8,8 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 
+#print "file: DkMath.Samples.LPS.BigFamilyInt"
+
 namespace DkMath
 namespace Samples
 namespace BigFamilyInt

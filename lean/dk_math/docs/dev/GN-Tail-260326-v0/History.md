@@ -1,0 +1,15 @@
+# History of GN / G / GC Naming and Refactor Plan
+
+## Log
+
+- [History#001](History-001.md)
+
+### 日時: 2026/03/26 15:48 JST
+
+1. 目的:
+2. 実施:
+3. 結論:
+4. 検証:
+5. 失敗事例:
+6. 備考:
+7. 次の課題:

@@ -9,6 +9,8 @@ Authors: D. and Wise Wolf.
 -/
 import Mathlib
 
+#print "file: DkMath.DHNT.DHNT_Base"
+
 namespace DkMath
 
 namespace DHNT

@@ -27,22 +27,22 @@ status: 完了 - phase-11: 完全証明への道（下降法で `NonLiftableS0` 
 
 **現状評価**
 
-- [ ] 3. 未充足の本丸は `NonLiftableS0` の自動生成です。  
+- [ ] 3. 未充足の本丸は `NonLiftableS0` の自動生成です。
   今は `hNonLift` を入力で受けるか、`NoSq` から逆算しています。
 
 **phase-10 攻略法（本命）**
 
-- [ ] 3. 上の供給を下降法（または同等の反例縮小）で埋める。  
+- [ ] 3. 上の供給を下降法（または同等の反例縮小）で埋める。
   `GEisensteinBridge` はまだ導入段階（`lean/dk_math/DkMath/FLT/GEisensteinBridge.lean`）なので、ここが最大工数です。
-- [ ] 4. 最終入口を `NoSqBaseInput` 一発に統合。  
+- [ ] 4. 最終入口を `NoSqBaseInput` 一発に統合。
   `lean/dk_math/DkMath/FLT/Main.lean:334` を最終公開入口にし、他はラッパーに寄せる。
 
 **保険ルート**
 
-- [ ] 1. 「まず完全定理を公開したい」なら、既存 `Basic` 系（`FLT_case_3`, `FLT`）への橋定理を先に立てる。  
+- [ ] 1. 「まず完全定理を公開したい」なら、既存 `Basic` 系（`FLT_case_3`, `FLT`）への橋定理を先に立てる。
 - [ ] 2. その後に phase-11 本命（下降法）を段階置換する。
 
-この方針なら、短期で前進しつつ、最終的に“仮定なし NonLiftable”へ到達できます。  
+この方針なら、短期で前進しつつ、最終的に“仮定なし NonLiftable”へ到達できます。
 
 ## 状況
 

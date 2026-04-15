@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich
 
+#print "file: DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProvider"
+
 namespace DkMath.FLT
 
 /--

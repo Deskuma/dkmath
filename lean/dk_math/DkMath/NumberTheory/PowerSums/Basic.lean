@@ -8,6 +8,8 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 
+#print "file: DkMath.NumberTheory.PowerSums.Basic"
+
 open scoped BigOperators
 
 namespace DkMath

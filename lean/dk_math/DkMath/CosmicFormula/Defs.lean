@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 import DkMath.CellDim  -- Cell Dimensionality
+import DkMath.CosmicFormula.GTail
 
 #print "file: DkMath.CosmicFormula.Defs"
 
@@ -45,23 +46,62 @@ lemma d_sub_k_eq_d_sub_zero_k (d k : ℕ) :
 abbrev d1k := d_sub_one_k  -- d-1-k の略称
 abbrev dk := d_sub_n_k  -- d-k の略称
 
--- 二項定理公式の項 G の定義
+-- 二項定理公式の項 GZ / GN の定義
 
-/-- Cosmic Formula の項 G の定義 -/
-def G (R : Type*) [CommSemiring R] (x u : R) (d : ℕ) : R :=
+/--
+`GZ` は Body-normalized side の canonical kernel。
+
+[GNZC] Naming migration anchor:
+canonical names are being centralized in `Defs.lean`.
+
+将来的な命名では
+- `GN` : gap-normalized tail
+- `GZ` : body-normalized kernel
+- `GC` : complex side
+の 3 本柱に揃える。
+-/
+def GZ (R : Type*) [CommSemiring R] (x u : R) (d : ℕ) : R :=
   ∑ k ∈ Finset.range d, (Nat.choose d (k + 1) : R) * x ^ (k + 1) * u ^ (d1k d k)
 
-/-- Cosmic Formula の一般項 Gn の定義 -/
-def Gn (R : Type*) [CommSemiring R] (x u : R) (d n : ℕ) : R :=
-  ∑ k ∈ Finset.range d, (Nat.choose d (k + n) : R) * x ^ k * u ^ (d_sub_n_k d n k)
+/--
+Legacy alias kept during the `G -> GZ` migration.
 
-#eval G ℝ 2 1 1  -- テスト評価
+[GNZC] Search tag:
+old downstream references may still mention `G`; prefer `GZ` in new code.
+
+Downstream should gradually move to `GZ`.
+-/
+abbrev G (R : Type*) [CommSemiring R] (x u : R) (d : ℕ) : R :=
+  GZ R x u d
+
+/--
+Canonical gap-normalized kernel.
+
+[GNZC] Canonical entry point:
+`Defs.GN` is now the naming-stable home for the `r = 1` tail specialization.
+
+This is the `r = 1` specialization of the general tail family.
+-/
+@[simp] abbrev GN (R : Type*) [CommSemiring R] (x u : R) (d : ℕ) : R :=
+  GTail d 1 x u
+
+/--
+Minimal complex-side skeleton.
+
+[GNZC] Reserved seat for the future `GC` pillar.
+For now this is only the `ℂ` specialization of the canonical Body-normalized
+kernel; later work may refine its semantics without changing the public name.
+-/
+@[simp] abbrev GC (z u : ℂ) (d : ℕ) : ℂ :=
+  GZ ℂ z u d
+
+-- #eval G ℝ 2 1 1  -- テスト評価
 
 /-- 大宇宙式 Big Cosmic Formula -/
 def Big (x u : ℝ) (d : ℕ) : ℝ := (x + u)^d
 
 /-- 宇宙式の本体 Body of Cosmic Formula -/
-def Body (x u : ℝ) (d : ℕ) : ℝ := G ℝ x u d
+def Body (x u : ℝ) (d : ℕ) : ℝ := GZ ℝ x u d
 
 /-- 宇宙式の隙間 Gap of Cosmic Formula -/
 def Gap (_x u : ℝ) (d : ℕ) : ℝ := (u : ℝ)^d
@@ -69,7 +109,7 @@ def Gap (_x u : ℝ) (d : ℕ) : ℝ := (u : ℝ)^d
 /-- Cosmic Formula の恒等式 -/
 example (x u : ℝ) (d : ℕ) :
     Big x u d = Body x u d + Gap x u d := by
-  simp only [Big, Body, G, Gap]
+  simp only [Big, Body, GZ, Gap]
   rw [add_pow]
   -- split the sum over range (d + 1) into the sum over range d (shifted) and the k = 0 term
   rw [Finset.sum_range_succ']

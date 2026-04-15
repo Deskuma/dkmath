@@ -8,6 +8,8 @@ import DkMath.FLT.PrimeProviderCore
 import DkMath.FLT.Main
 import DkMath.CosmicFormula.TriominoFLT
 
+#print "file: DkMath.FLT.TriominoMainBridge"
+
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
 

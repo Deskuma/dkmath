@@ -8,6 +8,8 @@ import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNCore
 import DkMath.NumberTheory.Gcd
 import DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
 
+#print "file: DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNNoWieferich"
+
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
 

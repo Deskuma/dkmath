@@ -17,8 +17,13 @@ set_option linter.style.longLine false
 
 `CosmicFormula`（絶対量）と `KUS Bridge`（離散依存型 support）の接続層。
 
+[GNZC] Migration note:
+`Defs.GZ` is the canonical Body-normalized kernel, while legacy downstream text
+may still say `G`. This file keeps theorem names stable but is being migrated
+comment-by-comment toward the `GN / GZ / GC` naming split.
+
 ```
-CosmicFormula.G / Body / Big
+CosmicFormula.GZ (legacy `G`) / Body / Big
         │
         │  cosmicTerm k d x u  (個別項の分解)
         ↓
@@ -46,11 +51,14 @@ open DkMath.CosmicFormula
 /-! ## cosmicTerm — 個別項の GKUS 表現 -/
 
 /--
-`CosmicFormula.G` の第 `k` 項を `GKUS ℕ ℕ DHNTBlueprint` として表現する。
+`CosmicFormula.GZ` の第 `k` 項を `GKUS ℕ ℕ DHNTBlueprint` として表現する。
+
+[GNZC] Legacy text may still say `G`, but this file now treats `GZ` as the
+primary meaning and `G` as the temporary alias.
 
 元の定義:
 ```
-G R x u d = ∑ k ∈ range d, C(d,k+1) * x^(k+1) * u^(d-1-k)
+GZ R x u d = ∑ k ∈ range d, C(d,k+1) * x^(k+1) * u^(d-1-k)
 ```
 
 ここでは係数 `C(d,k+1)` を `GKUS` の coeff に対応させ、
@@ -68,7 +76,7 @@ noncomputable def cosmicTerm (d k : ℕ) : GKUS ℕ ℕ DHNTBlueprint :=
 /-! ## cosmicBody — Body の GKUS 和分解 -/
 
 /--
-`Body d 1 1 = G ℝ 1 1 d = ∑ k, C(d,k+1)` の整数版。
+`Body d 1 1 = GZ ℝ 1 1 d = ∑ k, C(d,k+1)` の整数版。
 単位を 1 に設定したときの Body の係数和が `2^d - 1` に等しいことを示す補題の
 下準備として `Finset.sum` ベースの表現を用意する。
 -/
@@ -106,21 +114,37 @@ theorem cosmicBodyCoeffSum_ge (d : ℕ) (_ : 1 ≤ d) :
 /--
 `G ℕ 1 1 d = cosmicBodyCoeffSum d`
 整数引数で評価した Body の係数和は `cosmicBodyCoeffSum` に等しい。
+
+[GNZC] The theorem name is kept stable for now, but semantically this is a
+`GZ` evaluation statement.
 -/
 theorem G_one_one_eq (d : ℕ) :
     G ℕ 1 1 d = cosmicBodyCoeffSum d := by
-  simp [G, cosmicBodyCoeffSum, d_sub_one_k, d_sub_n_k]
+  simp [G, GZ, cosmicBodyCoeffSum]
+
+/--
+Canonical-name version of `G_one_one_eq`.
+
+[GNZC] New code should prefer this theorem over the legacy `G_*` spelling.
+-/
+theorem GZ_one_one_eq (d : ℕ) :
+    GZ ℕ 1 1 d = cosmicBodyCoeffSum d := by
+  simp [GZ, cosmicBodyCoeffSum]
 
 /--
 `Body d 1 1 + 1 = 2^d` （ℝ 上）
-`B(d, 1, 1) = G ℝ 1 1 d = 2^d - 1`（実数でも成立）
+`B(d, 1, 1) = GZ ℝ 1 1 d = 2^d - 1`（実数でも成立）
+
+[GNZC] The theorem name stays stable, but the wording is now aligned to `GZ`.
 -/
 theorem body_one_one (d : ℕ) :
     Body 1 1 d + 1 = (2 : ℝ) ^ d := by
-  have h : cosmicBodyCoeffSum d + 1 = 2 ^ d := cosmicBodyCoeffSum_eq d
-  simp only [Body, G, cosmicBodyCoeffSum, d1k] at *
-  simp only [mul_one, one_pow] at *
-  norm_cast at h ⊢
+  have h : (cosmicBodyCoeffSum d : ℝ) + 1 = (2 : ℝ) ^ d := by
+    exact_mod_cast cosmicBodyCoeffSum_eq d
+  calc
+    Body 1 1 d + 1 = (cosmicBodyCoeffSum d : ℝ) + 1 := by
+      simp [Body, GZ, cosmicBodyCoeffSum]
+    _ = (2 : ℝ) ^ d := h
 
 /-! ## GKUS → CosmicFormula の方向 -/
 

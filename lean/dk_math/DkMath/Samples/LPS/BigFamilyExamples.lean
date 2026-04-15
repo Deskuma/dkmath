@@ -12,6 +12,8 @@ import DkMath.Samples.LPS.BigFamilyInt
 import DkMath.Samples.LPS.PowerSwap
 import DkMath.Samples.LPS.GapFillRank
 
+#print "file: DkMath.Samples.LPS.BigFamilyExamples"
+
 namespace DkMath
 namespace Samples
 namespace BigFamilyExamples

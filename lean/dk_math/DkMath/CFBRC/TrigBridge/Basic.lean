@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import Mathlib.Data.Complex.Basic
 import Mathlib.Tactic
 
+#print "file: DkMath.CFBRC.TrigBridge.Basic"
+
 namespace DkMath.CFBRC.TrigBridge
 
 /-! # CFBRC TrigBridge: Basic Layer

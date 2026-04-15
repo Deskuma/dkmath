@@ -4,6 +4,13 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import Mathlib
+
+#print "file: DkMath.Algebra.BinomTail"
+
+set_option linter.style.emptyLine true
+set_option linter.unusedTactic false
+
 -- see: [FLT/Basic.lean](/lean/dk_math/DkMath/FLT/Basic.lean)
 
 /-
@@ -17,11 +24,6 @@ BinomTail.lean — 二項展開の尾項（k≥2 部分）の共通補題群
 - Nat 版：割り切り（u^2 ∣ ...）が直接使える便利補題
 
 -/
-
-import Mathlib
-
-set_option linter.style.emptyLine true
-set_option linter.unusedTactic false
 
 namespace DkMath.Algebra.BinomTail
 

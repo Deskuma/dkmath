@@ -8,6 +8,8 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 
+#print "file: DkMath.Samples.LPS.PowerSwap"
+
 namespace DkMath
 namespace Samples
 

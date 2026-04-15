@@ -9,6 +9,8 @@ import DkMath.FLT.CounterexamplePattern
 import DkMath.NumberTheory.ZsigmondyCyclotomic
 import DkMath.CosmicFormula.CosmicFormulaBinom
 
+#print "file: DkMath.FLT.GEisensteinBridge"
+
 set_option linter.style.emptyLine false
 
 namespace DkMath.FLT

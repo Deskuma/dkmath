@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 -- import Mathlib
 import DkMath.Algebra.DiffPow
 
+#print "file: DkMath.NumberTheory.GcdDiffPow"
+
 set_option linter.style.longLine false
 
 namespace DkMath.NumberTheory.GcdDiffPow
@@ -360,7 +362,7 @@ lemma exists_prime_divisor_not_dividing_diff_of_prime_exp
     rw [hq_eq_p] at hq_div_diff
     exact hpnd hq_div_diff
 
-#print axioms exists_prime_divisor_not_dividing_diff_of_prime_exp  -- OK: 2026/02/22 23:20
+-- TODO: [DkMathTest]: #print axioms exists_prime_divisor_not_dividing_diff_of_prime_exp  -- OK: 2026/02/22 23:20
 -- 'DkMath.NumberTheory.GcdDiffPow.exists_prime_divisor_not_dividing_diff_of_prime_exp' depends on axioms: [propext, Classical.choice,  Quot.sound]
 
 end DkMath.NumberTheory.GcdDiffPow

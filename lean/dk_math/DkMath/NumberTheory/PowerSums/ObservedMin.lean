@@ -9,6 +9,8 @@ Authors: D. and Wise Wolf.
 import Mathlib
 import DkMath.NumberTheory.PowerSums.Basic
 
+#print "file: DkMath.NumberTheory.PowerSums.ObservedMin"
+
 namespace DkMath
 namespace NumberTheory
 namespace PowerSums

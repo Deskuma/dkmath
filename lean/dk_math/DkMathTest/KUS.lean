@@ -6,6 +6,8 @@ Authors: D. and Wise Wolf.
 
 import DkMath.KUS
 
+#print "file: DkMathTest.KUS"
+
 /-! ## GKUS（一般係数）回帰テスト -/
 
 #print "file: DkMathTest.KUS"

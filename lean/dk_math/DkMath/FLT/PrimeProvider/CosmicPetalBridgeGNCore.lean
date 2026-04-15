@@ -8,6 +8,8 @@ import DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5
 import DkMath.FLT.CosmicPetalBridge
 import DkMath.NumberTheory.ZsigmondyCyclotomic
 
+#print "file: DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNCore"
+
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
 

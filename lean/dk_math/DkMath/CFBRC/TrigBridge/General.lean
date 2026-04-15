@@ -7,6 +7,8 @@ Authors: D. and Wise Wolf.
 import DkMath.CFBRC.TrigBridge.Basic
 import Mathlib.Tactic
 
+#print "file: DkMath.CFBRC.TrigBridge.General"
+
 namespace DkMath.CFBRC.TrigBridge
 
 noncomputable section

@@ -9,6 +9,8 @@ Authors: D. and Wise Wolf.
 import Mathlib
 import DkMath.CosmicFormula.CoreBeamGap
 
+#print "file: DkMath.CosmicFormula.ResidualInt"
+
 namespace DkMath
 namespace CosmicFormula
 
