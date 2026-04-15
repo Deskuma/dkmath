@@ -963,3 +963,220 @@ Archive
    - もし無ければ、
      regular-prime mainline のどの theorem を provider concrete 版へ昇格させるのが最も自然かを決め、
      legacy / abstract route との住み分けを整理する
+
+## 2026/04/15 16:15:19 JST
+
+1. 背景:
+   - 前回の次課題に従い、
+     `FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     をさらに受ける top-level / public route があるかを調べた
+   - 調査の結果、
+     直接この theorem を受ける外側 caller は見当たらず、
+     その外側では
+     `CyclotomicNormDescentTarget`
+     や
+     `CyclotomicPrincipalizationTarget`
+     を abstract に束ねる orchestration 層が主であった
+   - したがって今回の分岐は
+     「さらに outer caller を探し続ける」
+     か
+     「`ClassGroupBridge` / `RegularPrimeRoute` を public orchestration 層として provider concrete 版を立てる」
+     かの二択になった
+   - 今回は後者を選んだ
+     :
+     `RegularPrimeRoute`
+     は review-014 以来の推奨 mainline であり、
+     ここを concrete 化するのが
+     provider route を public 側へ押し上げる最短手だからである
+2. 実施:
+   - `ClassGroupBridge.lean`
+     に
+     `qAdicGapReductionGapDivisible_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     を追加した
+     :
+     regular-prime route の gap-divisible branch 生成を、
+     abstract `hNorm`
+     ではなく
+     `cyclotomicPrincipalization_of_classGroupPTorsionFree_and_unitNormalization_and_squarefreeGNProvider`
+     から concrete に供給する版である
+   - つづいて
+     `RegularPrimeRoute.lean`
+     に
+     `FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     を追加し、
+     既存の推奨 mainline
+     `FLTPrimeGe5Target_of_refinedRegularPrimeRoute`
+     に対する provider concrete 版を actual FLT theorem として固定した
+3. 結論:
+   - 今回の判定は
+     **外側 caller の探索継続より、
+     `RegularPrimeRoute`
+     を provider concrete public mainline の最初の着地点として昇格させる方が自然**
+     だった
+   - これにより
+     `TriominoSquarefreeGNBridgeProvider`
+     は
+     `TriominoCosmicGapInvariant`
+     →
+     `CyclotomicPrincipalization`
+     →
+     `ClassGroupBridge`
+     →
+     `RegularPrimeRoute`
+     と、推奨 regular-prime mainline まで到達した
+   - したがって、現時点での public 側の住み分けは
+     「abstract mainline は従来どおり保持しつつ、
+     provider を concrete に持てる branch では
+     `_and_squarefreeGNProvider`
+     版を parallel mainline として立てる」
+     のが最善だと判断できる
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.ClassGroupBridge` 成功
+   - `./lean-build.sh DkMath.FLT.Kummer.RegularPrimeRoute` 成功
+5. 失敗事例:
+   - provider concrete 版を最初は universe polymorphic に保とうとしたが、
+     `CyclotomicPrincipalization`
+     側の provider theorem が `.{0}` 固定のため
+     `CyclotomicUnitNormalizationTarget`
+     の universe が一致せず build が失敗した
+   - そのため今回は、
+     provider concrete route は `.{0}` に揃え、
+     既存の abstract route の universe polymorphism は保つ方針に修正した
+6. 次の課題:
+   - `RegularPrimeRoute`
+     の provider concrete mainline が立ったので、
+     これを使うさらに上位の public/provider 接続
+     （例:
+     `PrimeGe5FLTProvider`
+     系や
+     `TriominoPrimeProvider`
+     系）
+     があるかを調べる
+   - もしそれらが abstract `FLTPrimeGe5Target` だけを受けるなら、
+     provider concrete 版をどこで canonical default 相当として案内するかを整理する
+
+## 2026/04/15 16:21:05 JST
+
+1. 背景:
+   - 前回の次課題に従い、
+     `RegularPrimeRoute`
+     の provider concrete mainline
+     `FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     をさらに受ける top-level / public provider 接続を調べた
+   - 調査の結果、
+     直接この theorem を呼ぶ外側 caller は見当たらなかったが、
+     `TriominoCosmicPrimeGe5Core`
+     には
+     `triominoCosmic_globalProvider_of_FLTPrimeGe5`
+     と
+     `triominoPrimeProvider_of_FLTPrimeGe5`
+     があり、
+     abstract `FLTPrimeGe5Target`
+     から
+     `GlobalPrimeExponentFLTProvider`
+     /
+     `TriominoPrimeProvider`
+     へ上げる canonical core bridge 自体は既に存在していた
+   - したがって今回の分岐は
+     「provider 側モジュールに regular-prime wrapper を追加する」
+     か
+     「依存循環を避けるため、
+     `RegularPrimeRoute`
+     側で provider-facing wrapper を立てる」
+     かの二択になった
+   - 今回は後者を選んだ
+     :
+     `PrimeProvider`
+     側から
+     `Kummer.RegularPrimeRoute`
+     を import すると、
+     既存の
+     `Kummer.Basic`
+     ←
+     `PrimeProvider`
+     依存と衝突して循環しうるため、
+     provider concrete route の案内位置は
+     `RegularPrimeRoute`
+     自身に置くのが最も自然だからである
+2. 実施:
+   - `RegularPrimeRoute.lean`
+     に
+     `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     を追加した
+     :
+     `FLTPrimeGe5Target_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     を
+     `triominoCosmic_globalProvider_of_FLTPrimeGe5`
+     へ合成し、
+     `GlobalPrimeExponentFLTProvider`
+     を直接返す public/provider 入口である
+   - つづいて
+     `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     を追加した
+     :
+     同じ regular-prime concrete mainline から
+     `triominoPrimeProvider_of_FLTPrimeGe5`
+     を経由して
+     `TriominoPrimeProvider`
+     へ直結する版である
+   - docstring にも、
+     `TriominoSquarefreeGNBridgeProvider`
+     を concrete に持てる branch では
+     これらを canonical default 相当の provider-facing route とみなす方針を明記した
+3. 結論:
+   - 今回の判定は
+     **さらに外側の caller を探し続けるより、
+     `RegularPrimeRoute`
+     を provider concrete public/provider 入口として閉じる方が自然**
+     だった
+   - これにより
+     `TriominoSquarefreeGNBridgeProvider`
+     は
+     `TriominoCosmicGapInvariant`
+     →
+     `CyclotomicPrincipalization`
+     →
+     `ClassGroupBridge`
+     →
+     `RegularPrimeRoute`
+     →
+     `GlobalPrimeExponentFLTProvider`
+     /
+     `TriominoPrimeProvider`
+     と、
+     provider 公開面まで到達した
+   - したがって現時点での住み分けは
+     「abstract `FLTPrimeGe5Target_of_refinedRegularPrimeRoute`
+     は theorem-parameterized route として保持しつつ、
+     provider を concrete に持てる branch では
+     `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     /
+     `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     を canonical public/provider route として案内する」
+     のが最善と判断できる
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.Kummer.RegularPrimeRoute` 成功
+5. 失敗事例:
+   - provider 側モジュール
+     （
+     `TriominoCosmicPrimeGe5Core`
+     や
+     `TriominoPrimeProvider`
+     系）
+     に直接 wrapper を置く案も考えたが、
+     `PrimeProvider`
+     → `Kummer`
+     の逆向き import が必要になり、
+     既存の依存方向と衝突するため採用しなかった
+6. 次の課題:
+   - いま追加した
+     `triominoCosmic_globalProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     /
+     `triominoPrimeProvider_of_refinedRegularPrimeRoute_and_squarefreeGNProvider`
+     を、
+     実際に使える top-level theorem /
+     package export があるかを調べる
+   - もし既存 public export が abstract route しか案内していないなら、
+     `DkMath.FLT`
+     公開面または関連 doc/comment のどこで
+     provider concrete route を推奨導線として明記するかを整理する
