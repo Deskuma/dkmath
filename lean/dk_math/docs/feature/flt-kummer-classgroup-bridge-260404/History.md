@@ -545,3 +545,101 @@ Archive
      もしくは既存の
      `..._of_squarefree_GN`
      へ差し替える
+
+## 2026/04/15 13:28:04 JST
+
+1. 背景:
+   - `review-062`
+     の方針に従い、
+     次は lower theorem をさらに磨くよりも
+     `Squarefree (GN ...)`
+     を already 持てる上位 branch / provider から
+     honest route を 1 本でも実配線する段だと判断した
+   - 分岐点は
+     「`ProviderImpl` をそのまま import して upper layer を繋ぐ」
+     か、
+     「name conflict を避けつつ provider 契約そのものから upper layer を繋ぐ」
+     かの二択だった
+   - 今回は後者を選んだ
+     :
+     `TriominoSquarefreeGNBridgeProviderImpl`
+     は既存の
+     `triominoNoWieferichBridge_impl`
+     と theorem 名が衝突するため、
+     `CosmicPetalBridgeGN`
+     / `TriominoCosmicGapInvariant`
+     から直接 import するのは筋が悪かったからである
+2. 実施:
+   - `TriominoCosmicGapInvariant.lean`
+     に
+     `triominoWieferichBranchBridge_of_squarefreeGNProvider`
+     を private で追加し、
+     `TriominoSquarefreeGNBridgeProvider`
+     から
+     `triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_squarefreeGNBridge`
+     を経由して
+     current branch contract
+     `TriominoWieferichBranchBridge`
+     へ注入する薄い橋を作った
+   - あわせて
+     `triominoCosmicNoPowOnGN_of_squarefreeGNProvider`
+     と
+     `triominoCosmicBodyInvariant_of_squarefreeGNProvider`
+     を追加し、
+     squarefree provider から
+     `NoPowOnGN`
+     /
+     `BodyInvariant`
+     まで直接届く honest route を固定した
+   - これにより、
+     既存の
+     `triominoCosmicNoPowOnGN_of_padicValNatLeOneTarget`
+     /
+     `triominoCosmicBodyInvariant_of_padicValNatLeOneTarget`
+     の generic target 注入に対して、
+     provider 契約そのものを受ける concrete な migration 先ができた
+3. 結論:
+   - 今回の 1 本目の実 migration は、
+     `PrimitiveBeam`
+     直上ではなく
+     `TriominoCosmicGapInvariant`
+     側で成立した
+   - つまり
+     `Squarefree (GN ...)`
+     を already 持てる上位 provider については、
+     もはや
+     `_research`
+     target を明示注入せずとも
+     `NoPowOnGN`
+     /
+     `BodyInvariant`
+     まで honest route で上げられる
+   - 今回の最善手は、
+     **`ProviderImpl` 名の import を無理に通すことではなく、provider 契約そのものを受ける clean wrapper を上位本丸へ置く**
+     ことだった
+4. 検証:
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProviderImpl` 成功
+   - `./lean-build.sh DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant` 成功
+5. 失敗事例:
+   - `TriominoCosmicGapInvariant`
+     から
+     `TriominoSquarefreeGNBridgeProviderImpl`
+     を直接 import して
+     wrapper を置こうとしたが、
+     環境内に既にある
+     `DkMath.FLT.triominoNoWieferichBridge_impl`
+     と同名 theorem がぶつかり、
+     import 時点で build が失敗した
+   - そのため、
+     implementation alias ではなく
+     `TriominoSquarefreeGNBridgeProvider`
+     契約そのものを受ける形へ切り替えた
+6. 次の課題:
+   - 今回追加した
+     `triominoCosmicNoPowOnGN_of_squarefreeGNProvider`
+     /
+     `triominoCosmicBodyInvariant_of_squarefreeGNProvider`
+     を実 caller が使える branch を探し、
+     `TriominoSquarefreeGNBridgeProvider`
+     を持つ上位 route から
+     default / target 注入経路を 1 本差し替える

@@ -9,6 +9,7 @@ import DkMath.FLT.CosmicPetalBridge
 import DkMath.FLT.PrimeProvider.CosmicPetalBridgeGN
 import DkMath.FLT.PrimeProvider.TriominoCosmicBranchAExceptional
 import DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore
+import DkMath.FLT.PrimeProvider.TriominoSquarefreeGNBridgeProvider
 
 #print "file: DkMath.FLT.PrimeProvider.TriominoCosmicGapInvariant"
 
@@ -476,6 +477,30 @@ theorem triominoCosmicNoPowOnGN_of_padicValNatLeOneTarget
       (triominoWieferichBranchBridge_of_padicValNatLeOneTarget hVal)
 
 /--
+squarefree-GN provider から branch bridge を作る局所 wrapper。
+
+provider が供給する honest valuation target を、そのまま current branch contract に注入する。
+-/
+private theorem triominoWieferichBranchBridge_of_squarefreeGNProvider
+    (P : TriominoSquarefreeGNBridgeProvider) :
+    TriominoWieferichBranchBridge := by
+  exact
+    triominoWieferichBranchBridge_of_padicValNatLeOneTarget
+      (triominoPrimitivePrimeFactorPadicValNatLeOneTarget_of_squarefreeGNBridge P.hSq)
+
+/--
+squarefree-GN provider から直に得る clean no-pow route。
+
+これが、provider / bridge 層から本丸の `NoPowOnGN` へ上がる最初の honest migration 入口である。
+-/
+theorem triominoCosmicNoPowOnGN_of_squarefreeGNProvider
+    (P : TriominoSquarefreeGNBridgeProvider) :
+    NoPowOnGN_fromCounterexample := by
+  exact
+    triominoCosmicNoPowOnGN
+      (triominoWieferichBranchBridge_of_squarefreeGNProvider P)
+
+/--
 current branch-B non-liftable bridge から research-side valuation target を回収する。
 
 これにより、
@@ -517,6 +542,16 @@ theorem triominoCosmicBodyInvariant_of_padicValNatLeOneTarget
   exact
     bodyInvariant_of_NoPowOnGN
       (triominoCosmicNoPowOnGN_of_padicValNatLeOneTarget hVal)
+
+/--
+squarefree-GN provider から直に得る clean body invariant。
+-/
+theorem triominoCosmicBodyInvariant_of_squarefreeGNProvider
+    (P : TriominoSquarefreeGNBridgeProvider) :
+    TriominoCosmicBodyInvariant := by
+  exact
+    bodyInvariant_of_NoPowOnGN
+      (triominoCosmicNoPowOnGN_of_squarefreeGNProvider P)
 
 /-- 既定の Branch bridge 注入から得る、引数なし版の Body invariant。 -/
 theorem triominoCosmicBodyInvariant_default :
