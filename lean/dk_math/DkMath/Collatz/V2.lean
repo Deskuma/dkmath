@@ -86,7 +86,7 @@ lemma v2_even (a : ℕ) (ha : a % 2 = 0) (h_pos : 0 < a) : 0 < v2 a := by
       -- a は偶数で 0 < a なので、a ≥ 2
       have ha_ge2 : 2 ≤ a := by
         by_contra h_contra
-        push_neg at h_contra
+        push Not at h_contra
         have : a < 2 := h_contra
         have : a ≤ 1 := by omega
         match a with
@@ -191,7 +191,7 @@ lemma le_v2_of_pow2_dvd (k a : ℕ) (ha : 0 < a) (hdiv : pow2 k ∣ a) :
     rw [h_assoc]
     have h_m_pos : 0 < m := by
       by_contra hm_neg
-      push_neg at hm_neg
+      push Not at hm_neg
       have : m = 0 := Nat.le_zero.mp hm_neg
       subst this
       simp at hm

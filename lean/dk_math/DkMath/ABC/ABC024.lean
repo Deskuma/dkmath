@@ -130,7 +130,7 @@ lemma mgf_padic_excess_bound_pbase_layercake
     have h4 : Nat.log p (2*X+1) ≤ X + 1 := by
       -- If log p n > k, then n ≥ p^{k+1}, contrapositive of this gives result
       by_contra h_not
-      push_neg at h_not
+      push Not at h_not
       -- log p (2X+1) > X+1, so log p (2X+1) ≥ X+2
       have : X + 2 ≤ Nat.log p (2*X+1) := by omega
       -- By definition of log: p^{log p n} ≤ n
@@ -179,7 +179,7 @@ lemma mgf_padic_excess_bound_pbase_layercake
 
   have hp_ge_3 : 3 ≤ p := by
     by_contra h
-    push_neg at h
+    push Not at h
     have hp2 : 2 ≤ p := hp.two_le
     have : p = 2 := by omega
     exact hpodd this
@@ -627,7 +627,7 @@ lemma mgf_padic_excess_bound_pbase_layercake
                           -- 1 - r^(X+1) ≤ 1 は r^(X+1) ≥ 0 から明らか
                           -- もし 1 < 1 - r^(X+1) なら、r^(X+1) < 0 となり矛盾
                           by_contra h_not
-                          push_neg at h_not
+                          push Not at h_not
                           -- h_not : 1 < 1 - r ^ (X + 1)
                           -- つまり r ^ (X + 1) < 0
                           have h_neg : r ^ (X + 1 : ℝ) < 0 := by
@@ -827,7 +827,7 @@ lemma mgf_padic_excess_bound_pbase_layercake
                 · -- For k ∈ Icc 1 (X+1) \ Icc 1 (min (X+1) K), the term is 0
                   intro k hk_in hk_not_in
                   simp only [Finset.mem_Icc] at hk_in hk_not_in
-                  push_neg at hk_not_in
+                  push Not at hk_not_in
                   -- k > min (X+1) K, so either k > X+1 or k > K
                   -- Since k ∈ Icc 1 (X+1), we have k ≤ X+1, so k > K
                   have hk_gt_K : K < k := by omega

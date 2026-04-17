@@ -68,7 +68,7 @@ theorem descentExistence_exists_iff_gnReduction_exists (p y xq : ℕ) :
     · exact ⟨z' - y, (descentExistence_iff_gnReduction p (z' - y) y xq).mpr
         (by rw [Nat.sub_add_cancel h]; exact hz')⟩
     · -- z' < y のとき z'^p = xq^p + y^p ≥ y^p > z'^p で矛盾
-      push_neg at h
+      push Not at h
       exfalso
       by_cases hp : p = 0
       · subst hp; simp at hz'

@@ -83,7 +83,7 @@ lemma v2_add_of_lower_val (a b : ℕ) (ha : 0 < a) (h : v2 a < v2 b) :
         contradiction
     have hb_pos : 0 < b := by
       by_contra hb0
-      push_neg at hb0
+      push Not at hb0
       have hb0' : b = 0 := Nat.le_zero.mp hb0
       subst hb0'
       have hlt : v2 a < 0 := by

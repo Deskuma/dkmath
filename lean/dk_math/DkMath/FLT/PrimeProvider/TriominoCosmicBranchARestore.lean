@@ -749,7 +749,7 @@ theorem primeGe5BranchAPrimitiveRestoreStrictDescent_of_hzEq :
     linarith [hR.hzEq.symm, Nat.mul_le_mul_right (hR.x' ^ p) hqp_ge2]
   -- z'^p < z^p → z' < z
   by_contra h
-  push_neg at h
+  push Not at h
   exact Nat.not_lt.mpr (Nat.pow_le_pow_left h p) hz'_lt_z_pow
 
 /--
@@ -802,7 +802,7 @@ theorem primeGe5BranchAPrimitiveRestoreGapDivisibility_of_hzEq :
     exact Nat.pos_of_mul_pos_left this
   have hy'_le_z' : hR.y' ≤ hR.z' := by
     by_contra h
-    push_neg at h
+    push Not at h
     have hlt : hR.z' ^ p < hR.y' ^ p :=
       Nat.pow_lt_pow_left h hpack.hp.ne_zero
     linarith [hR.hzEq, Nat.zero_le (hR.x' ^ p)]
@@ -844,7 +844,7 @@ theorem primeGe5BranchAPrimitiveRestoreCounterexamplePack_of_hzEq :
       rw [← hR.hzEq]
       linarith [pow_pos hx'_pos p]
     by_contra hle
-    push_neg at hle
+    push Not at hle
     exact Nat.not_lt.mpr (Nat.pow_le_pow_left hle p) h
   -- z' > 0
   have hz'_pos : 0 < hR.z' := Nat.lt_trans hy'_pos hy'_lt_z'
@@ -1525,7 +1525,7 @@ theorem branchA_s_pos
     (hsx : x = p * (t * s)) :
     0 < s := by
   by_contra hs
-  push_neg at hs
+  push Not at hs
   interval_cases s
   simp only [mul_zero] at hsx
   exact hpack.hx0 hsx
@@ -1541,7 +1541,7 @@ theorem branchA_t_pos
     (hsx : x = p * (t * s)) :
     0 < t := by
   by_contra ht
-  push_neg at ht
+  push Not at ht
   interval_cases t
   simp only [zero_mul, mul_zero] at hsx
   exact hpack.hx0 hsx
@@ -1557,7 +1557,7 @@ theorem branchA_descent_s_prime_pos
     (hs_eq : s = q * s') :
     0 < s' := by
   by_contra hs'
-  push_neg at hs'
+  push Not at hs'
   interval_cases s'
   simp at hs_eq
   omega

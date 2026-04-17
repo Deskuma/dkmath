@@ -55,7 +55,7 @@ lemma padic_val_two_of_even (n : ℕ) :
     (n ≠ 0 → padicValNat 2 (2 * n) = 1 + padicValNat 2 n) := by
   constructor
   · intro h
-    rw [h, Nat.mul_zero, padicValNat.zero, Nat.add_zero]
+    rw [h, Nat.mul_zero, padicValNat_zero_right, Nat.add_zero]
     exact ⟨rfl, rfl⟩
   · intro h
     have hn : 0 < n := Nat.pos_of_ne_zero h
@@ -91,7 +91,7 @@ Since p^v | n implies p^v ≤ n, we get v ≤ n.
 -/
 lemma padicValNat_le_self (n : ℕ) : padicValNat p n ≤ n := by
   cases n with
-  | zero => simp [padicValNat.zero]
+  | zero => simp [padicValNat_zero_right]
   | succ n =>
     -- For n+1 ≥ 1, we use the fact that v ≤ log_p(n+1) ≤ n+1
     have hn : n + 1 ≠ 0 := Nat.succ_ne_zero n
@@ -208,7 +208,7 @@ lemma padicValNat_pow' {p a : ℕ} (hp : p.Prime) (d : ℕ) (hpow : a ^ d ≠ 0)
   by_cases hd : d = 0
   · -- d = 0 の場合：a^0 = 1 で padicValNat p 1 = 0
     subst hd
-    simp [padicValNat.one]
+    simp [padicValNat_one_right]
   · -- d ≠ 0 の場合：a^d ≠ 0 から a ≠ 0 を導く
     have ha : a ≠ 0 := by
       intro ha_eq

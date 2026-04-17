@@ -183,7 +183,7 @@ lemma not_bad_abc_implies_vp_bound {c : ℕ} {γ_values : ℕ → ℝ}
     ∀ p ≥ 3, p.Prime → ((padicValNat p c : ℤ) : ℝ) ≤ γ_values p + 2 := by
   intro p hp3 hprime
   by_contra h_neg
-  push_neg at h_neg
+  push Not at h_neg
   -- h_neg : γ_values p + 2 < ((padicValNat p c : ℤ) : ℝ)
   have h_excess : Excess_ABC p (γ_values p) c := by
     unfold Excess_ABC

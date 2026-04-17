@@ -211,7 +211,7 @@ lemma count_n_with_high_vp_bound (p k X : ℕ) (hp : p.Prime) (_hk : k ≥ 1) :
     have hcop' : (a.factorization p = 0) ∨ (b.factorization p = 0) := by
       -- gcd(a,b) = 1 なので、p が両方を割ることはない
       by_contra h
-      push_neg at h
+      push Not at h
       have hpa' : p ∣ a := by
         rw [hp.dvd_iff_one_le_factorization ha]
         omega

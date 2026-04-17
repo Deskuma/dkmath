@@ -1338,7 +1338,7 @@ theorem qAdicResidue : QAdicResidueTarget := by
   -- Step 7: j > 0 (since r ≠ 1 = ω^0)
   have hj_pos : 0 < j.val := by
     by_contra h
-    push_neg at h
+    push Not at h
     have : j.val = 0 := by omega
     rw [this, pow_zero] at hj
     exact hr_ne_one hj
@@ -2654,7 +2654,7 @@ theorem qAdicGapReduction_of_qAdicLocalGlobalGap
       hp_dvd_qsub1 hqp_dvd_GN ω hω hω_ne hjpos hmodq hphi hzRy with ⟨z', hz'⟩
   have hz'_ge_y : y ≤ z' := by
     by_contra hlt
-    push_neg at hlt
+    push Not at hlt
     have : z' ^ p < y ^ p := Nat.pow_lt_pow_left hlt hpack.hp.ne_zero
     omega
   refine ⟨z' - y, ?_⟩

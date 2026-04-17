@@ -200,7 +200,7 @@ lemma coprime_of_mul_eq_cube {u v w : ℕ} (hgcd : u.gcd v = 1) (h_eq : u * v = 
 
   have ha_cube : a ^ 3 = u := by
     have hu_prod : u.factorization.support.prod (fun p => p ^ u.factorization p) = u :=
-      Nat.factorization_prod_pow_eq_self hu_ne0
+      Nat.prod_factorization_pow_eq_self hu_ne0
 
     calc a ^ 3
         = (u.factorization.support.prod (fun p => p ^ (u.factorization p / 3))) ^ 3 := rfl
@@ -214,7 +214,7 @@ lemma coprime_of_mul_eq_cube {u v w : ℕ} (hgcd : u.gcd v = 1) (h_eq : u * v = 
 
   have hb_cube : b ^ 3 = v := by
     have hv_prod : v.factorization.support.prod (fun p => p ^ v.factorization p) = v :=
-      Nat.factorization_prod_pow_eq_self hv_ne0
+      Nat.prod_factorization_pow_eq_self hv_ne0
 
     calc b ^ 3
         = (v.factorization.support.prod (fun p => p ^ (v.factorization p / 3))) ^ 3 := rfl
@@ -832,7 +832,7 @@ lemma u_eq_one_of_coprime_gcd (x u y : ℕ) (h_xn_val : x ^ 3 = u * GN 3 u y) (h
 
     -- Step 3: a = 1 の背理法
     by_contra ha1
-    push_neg at ha1
+    push Not at ha1
     -- a ≠ 1 かつ a ≥ 0 → a = 0 or a ≥ 2
     by_cases ha0 : a = 0
     · -- a = 0 → u = a^3 = 0^3 = 0 → gcd(0, GN) = GN = 1 → GN = 1

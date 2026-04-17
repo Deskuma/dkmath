@@ -461,7 +461,7 @@ lemma count_with_rad_eq_le_div (r X : ℕ) (hr : r ≠ 0) :
       have hn0 : a ≠ 0 := ha0
       let f := a.factorization
       let s := f.support
-      have hfac : a = s.prod (fun p => p ^ f p) := Eq.symm (Nat.factorization_prod_pow_eq_self hn0)
+      have hfac : a = s.prod (fun p => p ^ f p) := Eq.symm (Nat.prod_factorization_pow_eq_self hn0)
       have hdiv : s.prod (fun p => p) ∣ s.prod (fun p => p ^ f p) := by
         apply Finset.prod_dvd_prod_of_dvd
         intro p hp

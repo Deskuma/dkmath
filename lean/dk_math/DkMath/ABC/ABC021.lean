@@ -152,7 +152,7 @@ lemma chebyshev_inequality (X : (Γ → Bool) → ℝ) (t : ℝ) (M : JansonMode
         _ ≤ |X ω - mu| * |X ω - mu| := h1
         _ = (X ω - mu)^2 := h2
     simp [this]
-  · push_neg at h
+  · push Not at h
     simp only [Y]
     have : ¬(t^2 ≤ (X ω - mu)^2) := by
       intro hcontra
@@ -166,7 +166,7 @@ lemma chebyshev_inequality (X : (Γ → Bool) → ℝ) (t : ℝ) (M : JansonMode
           _ = |X ω - mu|^2 := (sq _).symm
       have h3 : t ≤ |X ω - mu| := by
         by_contra hneg
-        push_neg at hneg
+        push Not at hneg
         have : |X ω - mu| * |X ω - mu| < t * t := mul_self_lt_mul_self (abs_nonneg _) hneg
         rw [← sq, ← sq] at this
         linarith
@@ -318,7 +318,7 @@ lemma bound_v2_from_janson (M : JansonModel Γ) (A : Finset Γ) :
 
   case neg =>
     -- Δ̄ ≤ 0 case (pure independence or trivial)
-    push_neg at h_dbar
+    push Not at h_dbar
     simp only [Bool.not_eq_true]
     sorry -- When Δ̄ = 0, events are independent; use simpler bound
 

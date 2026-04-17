@@ -448,7 +448,7 @@ lemma padicValNat_le_one_of_not_sq_dvd (a b q : ℕ)
     have : 0 < a^2 := by positivity
     omega
   by_contra h
-  push_neg at h
+  push Not at h
   have : q^2 ∣ S0_nat a b := by
     rw [padicValNat_dvd_iff 2 (S0_nat a b)]
     right

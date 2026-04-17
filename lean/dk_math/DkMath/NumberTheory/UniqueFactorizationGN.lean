@@ -90,11 +90,11 @@ theorem unique_factorization_nat_via_prime_powers {m n : ℕ}
     factorization_eq_of_prime_pow_dvd_iff hm hn h
   calc
     m = m.factorization.support.prod (fun p => p ^ m.factorization p) := by
-      simpa using (Nat.factorization_prod_pow_eq_self hm).symm
+      simpa using (Nat.prod_factorization_pow_eq_self hm).symm
     _ = n.factorization.support.prod (fun p => p ^ n.factorization p) := by
       simp [hfac]
     _ = n := by
-      simpa using Nat.factorization_prod_pow_eq_self hn
+      simpa using Nat.prod_factorization_pow_eq_self hn
 
 /--
 例外素数レイヤ（`q ∣ d`）に限定した prime-power 比較 API。

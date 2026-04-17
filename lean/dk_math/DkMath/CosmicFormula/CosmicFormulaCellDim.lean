@@ -580,7 +580,7 @@ lemma prod_slabLen_split (d x u : ℕ) (i : Fin d) :
       · exact Or.inl (Or.inl h1)
       · by_cases h2 : j = i
         · exact Or.inl (Or.inr h2)
-        · push_neg at h1
+        · push Not at h1
           exact Or.inr (by
             have : i ≤ j := h1
             cases Nat.lt_or_eq_of_le this with

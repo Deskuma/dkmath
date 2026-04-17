@@ -133,7 +133,7 @@ lemma decomp_oddPart_evenPart (c : ℕ) (hc : c ≠ 0) :
   set S := c.factorization.support with hS
   have hbase : ∏ p ∈ S, p ^ c.factorization p = c := by
     -- mathlib standard: product of prime powers over support reconstructs the number
-    simpa [hS] using Nat.factorization_prod_pow_eq_self hc
+    simpa [hS] using Nat.prod_factorization_pow_eq_self hc
 
   -- Rewrite exponents using v = (v%2) + 2*(v/2)
   have hrewrite :
@@ -243,7 +243,7 @@ lemma decomp_piRad_twoTail (c : ℕ) (hc : c ≠ 0) :
 
   -- Base: ∏ p∈S, p^{v_p(c)} = c
   have hbase : ∏ p ∈ S, p ^ c.factorization p = c := by
-    simpa [hS] using Nat.factorization_prod_pow_eq_self hc
+    simpa [hS] using Nat.prod_factorization_pow_eq_self hc
 
   -- Exponent identity: v = 1_{v≥2} + 1_{v≥1} + (v-2)
   -- For each prime in support, v_p(c) > 0, so we can decompose

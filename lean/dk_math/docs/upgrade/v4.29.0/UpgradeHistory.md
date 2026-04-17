@@ -82,3 +82,69 @@ lake clean && lake update
 #### 未対応の警告
 
 - 今回は build break の解消を優先し、既存の deprecated warning / `push_neg` warning / `sorry` warning は未整理のままとした。
+
+### 2026-04-17: deprecated warning cleanup
+
+v4.29.0 移行後に残っていた deprecated warning を解消した。今回の対象は、build を壊してはいないが今後の追従コストが高くなる warning 群である。
+
+#### 修正内容
+
+- `padicValNat.zero` / `padicValNat.one`
+  - `DkMath/ABC/PadicValNat.lean`
+  - `DkMath/ABC/ABC025.lean`
+  - `padicValNat_zero_right`, `padicValNat_one_right` へ置換した。
+
+- `Nat.factorization_prod_pow_eq_self`
+  - `DkMath/ABC/Rad.lean`
+  - `DkMath/ABC/Core.lean`
+  - `DkMath/ABC/Square.lean`
+  - `DkMath/ABC/RatioBound.lean`
+  - `DkMath/ABC/ABC016.lean`
+  - `DkMath/NumberTheory/UniqueFactorizationGN.lean`
+  - `DkMath/FLT/Basic.lean`
+  - `DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5Core.lean`
+  - `DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean`
+  - 新しい定理名 `Nat.prod_factorization_pow_eq_self` へ置換した。
+
+- `push_neg`
+  - ABC / Collatz / CosmicFormula / FLT 系の使用箇所を `push Not` へ置換した。
+  - 置換対象:
+    `DkMath/ABC/ABC017.lean`,
+    `ABC018.lean`,
+    `ABC021.lean`,
+    `ABC024.lean`,
+    `ABC028.lean`,
+    `ABC031.lean`,
+    `ABC033.lean`,
+    `ABC038.lean`,
+    `ABCFinalChernoffPrototype.lean`,
+    `DkMath/Collatz/V2.lean`,
+    `Collatz/Shift.lean`,
+    `DkMath/CosmicFormula/CosmicFormulaCellDim.lean`,
+    `DkMath/FLT/Basic.lean`,
+    `FLT/Kummer/Basic.lean`,
+    `FLT/Kummer/CyclotomicPrincipalization.lean`,
+    `FLT/PetalDetect.lean`,
+    `FLT/PrimeProvider/TriominoCosmicBranchADescentChain.lean`,
+    `FLT/PrimeProvider/TriominoCosmicBranchARestore.lean`,
+    `FLT/PrimeProvider/TriominoCosmicBranchARestoreArithmeticStrong.lean`
+
+- Kummer 側の deprecated theorem
+  - `DkMath/FLT/Kummer/CyclotomicPrincipalization.lean`
+  - `Ideal.inf_eq_mul_of_isCoprime` を `Ideal.mul_eq_inf_of_isCoprime` に差し替え、向きは `.symm` で合わせた。
+  - `IsDedekindDomain.inf_prime_pow_eq_prod` を `IsDedekindDomain.inf_pow_eq_prod_of_prime` に差し替えた。
+
+#### 確認
+
+- 個別確認
+  - `lake build DkMath.ABC`
+  - `lake build DkMath.NumberTheory.UniqueFactorizationGN`
+  - `lake build DkMath.Collatz.V2`
+  - `lake build DkMath.Collatz.Shift`
+  - `lake build DkMath.CosmicFormula.CosmicFormulaCellDim`
+  - `lake build DkMath.FLT`
+
+- 全体確認
+  - `lake build > ./tmp/v429-deprecated-check.log 2>&1`
+  - `rg "deprecated:" ./tmp/v429-deprecated-check.log`
+  - full build ログ上で deprecated warning が 0 件であることを確認した。

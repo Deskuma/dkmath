@@ -917,7 +917,7 @@ theorem primeGe5BranchAPrimitiveRestoreGNReducedGap_of_pthRootReduced
   -- z'^p ≥ y^p → z' ≥ y
   have hz'_ge_y : y ≤ z' := by
     by_contra h
-    push_neg at h
+    push Not at h
     have : z' ^ p < y ^ p := Nat.pow_lt_pow_left h hpack.hp.ne_zero
     omega
   -- g' := z' - y

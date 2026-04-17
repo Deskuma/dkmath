@@ -93,7 +93,7 @@ lemma mgf_padic_excess_bound_pbase
     have ht_neg : t - 1 ≤ -1/2 := by linarith
     have hp_ge_3 : 3 ≤ p := by
       by_contra h
-      push_neg at h
+      push Not at h
       -- h : p < 3, so p ∈ {0, 1, 2}
       -- p is prime, so p ≥ 2
       have hp2 : 2 ≤ p := hp.two_le
@@ -182,7 +182,7 @@ lemma mgf_padic_excess_bound_pbase
   -- Use ABCTelescoping.sum_pow_padicValNat_le_geom: ∑ p^{tv(n)} ≤ 3(X+1)
   have hp_ge_3 : 3 ≤ p := by
     by_contra h
-    push_neg at h
+    push Not at h
     -- h : p < 3, so p ∈ {0, 1, 2}
     have hp2 : 2 ≤ p := hp.two_le
     interval_cases p
@@ -307,7 +307,7 @@ lemma mgf_padic_excess_bound_le_C (p : ℕ) (hp : p.Prime) (t : ℝ) (ht : 0 < t
       apply div_pos ht
       apply Real.log_pos
       have hp3 : 3 ≤ p := by
-        by_contra h_not; push_neg at h_not
+        by_contra h_not; push Not at h_not
         have hp2 : 2 ≤ p := hp.two_le
         have : p = 2 := by omega
         exact h2 this
@@ -324,7 +324,7 @@ lemma mgf_padic_excess_bound_le_C (p : ℕ) (hp : p.Prime) (t : ℝ) (ht : 0 < t
       -- For p≥3: log 2 < log 3 ≤ log p
       -- Therefore: 2*t < log 2 < log p, so t' = t/log(p) < (log 2)/(2·log p) < 1/2
       have hp3 : 3 ≤ p := by
-        by_contra h_not; push_neg at h_not
+        by_contra h_not; push Not at h_not
         have hp2 : 2 ≤ p := hp.two_le
         have : p = 2 := by omega
         exact h2 this

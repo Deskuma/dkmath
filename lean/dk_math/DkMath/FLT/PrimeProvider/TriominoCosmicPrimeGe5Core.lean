@@ -66,7 +66,7 @@ lemma exists_eq_pow_of_factorization_dvd
   refine ⟨t, ?_⟩
   have hu_prod :
       u.factorization.support.prod (fun q => q ^ u.factorization q) = u :=
-    Nat.factorization_prod_pow_eq_self hu0
+    Nat.prod_factorization_pow_eq_self hu0
   have ht : t ^ p = u := by
     calc
       t ^ p

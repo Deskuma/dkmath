@@ -40,7 +40,7 @@ lemma rad_eq_self_of_squarefree {n : ℕ} (hn0 : n ≠ 0) (hsf : squarefree n) :
       intro p hp
       rw [hfac p hp]
       simp
-    _ = n := Nat.factorization_prod_pow_eq_self hn0
+    _ = n := Nat.prod_factorization_pow_eq_self hn0
 
 /-- squarefree なら指数は 0/1 だけ → rad = 本体 -/
 lemma rad_eq_self_of_squarefree' {n : ℕ} (hn0 : n ≠ 0) (hsf : squarefree n) :
@@ -63,7 +63,7 @@ lemma rad_eq_self_of_squarefree' {n : ℕ} (hn0 : n ≠ 0) (hsf : squarefree n) 
       rw [hfac p hp]
       simp
     _ = n := by
-      exact Nat.factorization_prod_pow_eq_self hn0
+      exact Nat.prod_factorization_pow_eq_self hn0
 
 /-- squarefree ならば、rad n は n のすべての素因子を含む -/
 @[simp]
@@ -91,7 +91,7 @@ lemma rad_dvd {n : ℕ} (h : squarefree n) (p : ℕ) (hp : p.Prime) (hpd : p ∣
 lemma pow_dvd_of_factorization_ge_two {n p : ℕ} (hn0 : n ≠ 0)
   (h : 2 ≤ n.factorization p) : p ^ 2 ∣ n := by
   -- 素因数分解の積表示に書き換える
-  have hfac : n = n.factorization.support.prod (fun q => q ^ n.factorization q) := Eq.symm (Nat.factorization_prod_pow_eq_self hn0)
+  have hfac : n = n.factorization.support.prod (fun q => q ^ n.factorization q) := Eq.symm (Nat.prod_factorization_pow_eq_self hn0)
   rw [hfac]
   -- 指数が 2 以上なら support に入る（指数 ≠ 0）
   have hmem : p ∈ n.factorization.support := by
@@ -119,7 +119,7 @@ lemma square_factor_support_prod_dvd {n : ℕ} (hn0 : n ≠ 0) :
   (n.factorization.support.filter fun p => 2 ≤ n.factorization p).prod (fun p => p) ∣ n := by
   let s := n.factorization.support.filter fun p => 2 ≤ n.factorization p
   -- 展開: n = ∏_{q ∈ support} q ^ (f q)
-  have hfac : n = n.factorization.support.prod fun q => q ^ n.factorization q := Eq.symm (Nat.factorization_prod_pow_eq_self hn0)
+  have hfac : n = n.factorization.support.prod fun q => q ^ n.factorization q := Eq.symm (Nat.prod_factorization_pow_eq_self hn0)
   -- 各 p ∈ s に対して p ∣ p^(n.factorization p)
   have hpoint : ∀ p ∈ s, p ∣ p ^ n.factorization p := by
     intro p hp
@@ -551,8 +551,8 @@ lemma rad_mul_general (a b : ℕ) :
       _ = (rad (a*b) * rad (Nat.gcd a b)).factorization := (Rfac).symm
 
   -- reconstruct numbers from factorization equality
-  have lhs_prod := Nat.factorization_prod_pow_eq_self (Nat.pos_iff_ne_zero.mp (Nat.mul_pos rad_a_pos rad_b_pos))
-  have rhs_prod := Nat.factorization_prod_pow_eq_self (Nat.pos_iff_ne_zero.mp (Nat.mul_pos rad_ab_pos rad_g_pos))
+  have lhs_prod := Nat.prod_factorization_pow_eq_self (Nat.pos_iff_ne_zero.mp (Nat.mul_pos rad_a_pos rad_b_pos))
+  have rhs_prod := Nat.prod_factorization_pow_eq_self (Nat.pos_iff_ne_zero.mp (Nat.mul_pos rad_ab_pos rad_g_pos))
   have final_eq : rad a * rad b = rad (a*b) * rad (Nat.gcd a b) := by
     calc
       rad a * rad b = (rad a * rad b).factorization.support.prod fun p => p ^ ( (rad a * rad b).factorization p) := lhs_prod.symm

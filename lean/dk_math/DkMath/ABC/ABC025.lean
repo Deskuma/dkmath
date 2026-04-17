@@ -48,7 +48,7 @@ Since p^v | n implies p^v ≤ n, we get v ≤ n.
 -/
 lemma padicValNat_le_self (n : ℕ) : padicValNat p n ≤ n := by
   cases n with
-  | zero => simp [padicValNat.zero]
+  | zero => simp [padicValNat_zero_right]
   | succ n =>
     -- For n+1 ≥ 1, we use the fact that v ≤ log_p(n+1) ≤ n+1
     have hn : n + 1 ≠ 0 := Nat.succ_ne_zero n

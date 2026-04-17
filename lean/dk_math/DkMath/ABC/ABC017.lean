@@ -90,7 +90,7 @@ theorem borel_cantelli_one
           -- の逆を使いたいが、これは直接使えない
           -- 代わりに、全ての項が < ⊤ なら tsum < ⊤ を示す
           by_contra h_all_ne_top
-          push_neg at h_all_ne_top
+          push Not at h_all_ne_top
           -- 各項 ≠ ⊤ なので、tsum_toReal_eq が使える
           have h_eq : (∑' k, μ (E (N + k))).toReal = ∑' k, (μ (E (N + k))).toReal := by
             exact ENNReal.tsum_toReal_eq h_all_ne_top

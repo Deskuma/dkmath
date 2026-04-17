@@ -586,7 +586,7 @@ private lemma triominoWieferichShrink_pow_root_of_factorization_dvd_spec
   classical
   have hn_prod :
       n.factorization.support.prod (fun r => r ^ n.factorization r) = n :=
-    Nat.factorization_prod_pow_eq_self hn0
+    Nat.prod_factorization_pow_eq_self hn0
   calc
     n = n.factorization.support.prod (fun r => r ^ n.factorization r) := by
       exact hn_prod.symm

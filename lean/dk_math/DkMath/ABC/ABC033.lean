@@ -304,7 +304,7 @@ lemma mgf_padic_excess_bound_explicit -- (uniform proof)
       have hp_gt_1 : 1 < p := by omega
       -- 対偶で証明: log p (2X+1) > X+1 を仮定して矛盾を導く
       by_contra h_not
-      push_neg at h_not
+      push Not at h_not
       -- log p (2X+1) > X+1, so log p (2X+1) ≥ X+2
       have : X + 2 ≤ Nat.log p (2*X+1) := by omega
       -- By definition of log: p^{log p n} ≤ n

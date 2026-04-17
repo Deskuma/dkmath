@@ -222,8 +222,8 @@ theorem linear_factor_ideals_inf_eq_mul_of_mul_sub_isUnit
     (z y α β : R) (hUnit : IsUnit (β * y - α * y)) :
     Ideal.span ({z - α * y} : Set R) ⊓ Ideal.span ({z - β * y} : Set R) =
       Ideal.span ({z - α * y} : Set R) * Ideal.span ({z - β * y} : Set R) :=
-  Ideal.inf_eq_mul_of_isCoprime
-    (linear_factor_ideals_isCoprime_of_mul_sub_isUnit z y α β hUnit)
+  (Ideal.mul_eq_inf_of_isCoprime
+    (linear_factor_ideals_isCoprime_of_mul_sub_isUnit z y α β hUnit)).symm
 
 /--
 差の unit 性から、対応する線型因子そのものが互いに素であることが従う。
@@ -242,7 +242,7 @@ end CyclotomicLocalFactorizationContext
 Dedekind 領域では、pairwise に異なる prime ideals の冪の有限交叉は積に等しい。
 
 review-011 の 5.3 で必要になる finite-family ideal arithmetic の受け皿。
-Mathlib の `IsDedekindDomain.inf_prime_pow_eq_prod` を DkMath 側で明示化する。
+Mathlib の `IsDedekindDomain.inf_pow_eq_prod_of_prime` を DkMath 側で明示化する。
 -/
 theorem dedekindInfPrimePowEqProd
     {R : Type*} [CommRing R] [IsDomain R] [IsDedekindDomain R]
@@ -252,7 +252,7 @@ theorem dedekindInfPrimePowEqProd
     (hPairwise : ∀ᵉ (i ∈ s) (j ∈ s), i ≠ j → P i ≠ P j) :
     (s.inf fun i => P i ^ e i) = ∏ i ∈ s, P i ^ e i := by
   classical
-  exact IsDedekindDomain.inf_prime_pow_eq_prod s P e hPrime hPairwise
+  exact IsDedekindDomain.inf_pow_eq_prod_of_prime s P e hPrime hPairwise
 
 /--
 Dedekind 領域における finite-family Chinese remainder theorem の DkMath 側 wrapper。
@@ -4465,7 +4465,7 @@ theorem cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_
       rw [hzEq]
       linarith [pow_pos hx'_pos p]
     by_contra hle
-    push_neg at hle
+    push Not at hle
     exact Nat.not_lt.mpr (Nat.pow_le_pow_left hle p) h
   have hz'_pos : 0 < z' := Nat.lt_trans hy_pos hy_lt_z'
   have hpack' : PrimeGe5CounterexamplePack p (x / q) y z' := by
@@ -4520,7 +4520,7 @@ theorem cyclotomicPrincipalizationNonFirstCasePeelNamedSmallerCounterexample_of_
       rw [hz_pow_eq]
       linarith [hzEq.symm, Nat.mul_le_mul_right ((x / q) ^ p) hqp_ge2]
     by_contra h
-    push_neg at h
+    push Not at h
     exact Nat.not_lt.mpr (Nat.pow_le_pow_left h p) hz'_lt_z_pow
   exact ⟨hpack', hp_dvd_gap', hz'lt⟩
 

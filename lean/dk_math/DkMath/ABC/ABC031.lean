@@ -394,7 +394,7 @@ lemma adjacent_quality_le_ae_alt
     exact adjacent_quality_le_density_one ε hε h hTailProb hDiagR (hPolyBound ε hε h)
   case neg =>
     -- ε ≤ δ: Use density-one version with ε' = δ + (small positive value)
-    push_neg at h
+    push Not at h
     have hε_le_δ : ε ≤ δ := h
     exact hRefineLeDelta hε_le_δ
 

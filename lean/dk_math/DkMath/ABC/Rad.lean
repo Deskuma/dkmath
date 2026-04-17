@@ -51,7 +51,7 @@ lemma rad_dvd_nonzero (n : ℕ) (hn : n ≠ 0) : rad n ∣ n := by
   let f := n.factorization
   let s := f.support
   -- n = ∏_{p∈s} p^(f p)
-  have hfac : n = s.prod (fun p => p ^ f p) := Eq.symm (Nat.factorization_prod_pow_eq_self hn)
+  have hfac : n = s.prod (fun p => p ^ f p) := Eq.symm (Nat.prod_factorization_pow_eq_self hn)
   -- 各 p ∈ s について p ∣ p^(f p)
   have hpt : ∀ p ∈ s, p ∣ p ^ f p := by
     intro p hp

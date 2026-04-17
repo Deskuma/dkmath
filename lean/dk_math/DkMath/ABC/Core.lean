@@ -179,7 +179,7 @@ lemma rad_dvd_nonzero (n : ℕ) (hn : n ≠ 0) : rad n ∣ n := by
   let f := n.factorization
   let s := f.support
   -- n = ∏_{p∈s} p^(f p)
-  have hfac : n = s.prod (fun p => p ^ f p) := Eq.symm (Nat.factorization_prod_pow_eq_self hn)
+  have hfac : n = s.prod (fun p => p ^ f p) := Eq.symm (Nat.prod_factorization_pow_eq_self hn)
   -- 各 p ∈ s について p ∣ p^(f p)
   have hpt : ∀ p ∈ s, p ∣ p ^ f p := by
     intro p hp
@@ -450,7 +450,7 @@ lemma rad_le {n : ℕ} (hn : n ≠ 0) : rad n ≤ n := by
   let s := f.support
   -- 素因数分解の積表示: n = ∏ p ∈ s, p ^ (f p)
   have hfac : n = s.prod (fun p => p ^ f p) := by
-    exact Eq.symm (Nat.factorization_prod_pow_eq_self hn)
+    exact Eq.symm (Nat.prod_factorization_pow_eq_self hn)
   -- 各 p ∈ s について p ∣ p ^ (f p) が成り立つため，積に関しても成り立つ
   have hdiv : s.prod (fun p : ℕ => p) ∣ s.prod (fun p => p ^ f p) := by
     apply Finset.prod_dvd_prod_of_dvd
