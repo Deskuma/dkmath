@@ -1,0 +1,84 @@
+# v4.28.0 to v4.29.0 Upgrade History
+
+## Lakefile.toml
+
+- Updated the `rev` field for the `mathlib` dependency to point to the new version `v4.29.0`. This ensures that our project is using the latest compatible version of mathlib, which may include new features, bug fixes, and performance improvements.
+
+```toml
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.29.0"
+```
+
+### lake update
+
+After updating the `lakefile.toml`, run the following command in your terminal to update the dependencies:
+
+```bash
+lake clean && lake update
+```
+
+## `*.lean` Files
+
+### 2026-04-17: v4.29.0 build fix
+
+`upgrade-v4.28to29-build.log` に出ていたエラーを順に潰し、個別ターゲットの確認後に full `lake build` が通る状態まで修正した。
+
+#### 修正内容
+
+- `DkMath/DHNT/DHNT_Base.lean`
+  - `MulOneClass` の `mul_one` / `one_mul` で、`simp only [instMulUnit]` だけでは閉じなくなった。
+  - 期待する等式へ `change` で落としてから `simpa` で閉じる形に修正した。
+
+- `DkMath/RH/Lemmas.lean`
+  - `phaseVel_inv` で `deriv_fun_div` の簡約結果の形が変わり、そのままでは一致しなくなった。
+  - 中間補題 `hderiv₀`, `hone` を置き、`[one_div]` を明示して式変形する形に修正した。
+
+- `DkMath/KUS/Transport.lean`
+  - `DecodeStrategy` の outParam の扱いが v4.29 で厳密になり、class field 経由の構成が壊れた。
+  - `T`, `BT` を class parameter に持ち上げ、関連 instance と `harmonizeAddBy` / `harmonizeMulBy` / `toCoeff_*` を追従修正した。
+
+- `DkMath/ABC/ABC008.lean`
+  - `blocksOverlap` の decidable instance 構成がそのままでは通らなくなった。
+  - `dsimp [blocksOverlap]; infer_instance` に簡約した。
+
+- `DkMath/DHNT/UnitNatLayers.lean`
+  - `> 0` の自動簡約に依存していた bridge の positivity 証明が通らなくなった。
+  - `change ... + 1 > 0` の形へ落として `Nat.succ_pos _` を使う明示的な証明へ置き換えた。
+
+- `DkMath/RH/EulerZetaLemmas.lean`
+  - `ContinuousSMul ℝ ℂ` がそのままでは見つからない箇所があり、複数の微分補題も v4.29 の式展開に追従できなかった。
+  - `ContinuousSMul ℝ ℂ` の local instance を追加し、`hasDerivAt_vertical_mul_log_p`,
+    `hasDerivAt_eulerZeta_exp_s_log_p_sub_one`,
+    `phaseVel_eulerZeta_exp_s_log_p_sub_one_eq`,
+    `phaseVel_exp_vertical_mul_log_p_eq_log`
+    を明示的な `convert` / `change` / `field_simp` ベースへ修正した。
+
+- `DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean`
+  - `ZMod q` 上の逆元計算で、`y ≠ 0` と cast の一致を Lean が自動で拾えなくなった。
+  - `hy_ne_zero`, `hy_cast` を補助事実として追加し、`inv_mul_cancel₀` へつなぐ形に修正した。
+
+- `DkMath/RH/CFBRCBridge.lean`
+  - `Classical.choose` に依存する provider 構成が computable definition 扱いでは通らなくなった。
+  - 該当 3 定義を `noncomputable def` に変更した。
+
+- `DkMath/FLT/Kummer/CyclotomicPrincipalization.lean`
+  - `Ideal.count_normalizedFactors_eq` 周辺で `DecidableEq` instance の不一致が発生した。
+  - 補助定理 `dedekindIdealCountNormalizedFactorsEq` から明示的な `[DecidableEq (Ideal R)]` binder を外し、`classical` に委ねる形へ修正した。
+  - `CyclotomicField p ℚ` 上の `IsCyclotomicExtension {p} ℚ _` を `inferInstance` では取れない箇所があった。
+  - `CyclotomicField.isCyclotomicExtension (n := p) (K := ℚ)` を明示して canonical instance を与えるよう修正した。
+
+#### 確認
+
+- 個別確認
+  - `lake build DkMath.RH.CFBRCBridge`
+  - `lake build DkMath.FLT.Kummer.CyclotomicPrincipalization`
+
+- 全体確認
+  - `lake build`
+  - Lean `v4.29.0` 環境で build 完了を確認した。
+
+#### 未対応の警告
+
+- 今回は build break の解消を優先し、既存の deprecated warning / `push_neg` warning / `sorry` warning は未整理のままとした。

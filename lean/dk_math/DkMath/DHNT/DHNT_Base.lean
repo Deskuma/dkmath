@@ -33,14 +33,12 @@ open scoped Real
   one := 1
   mul_one u := by
     ext
-    simp only [instMulUnit]
-    -- u.val * 1 = u.val
-    exact mul_one u.val
+    change u.val * 1 = u.val
+    simpa
   one_mul u := by
     ext
-    simp only [instMulUnit]
-    -- 1 * u.val = u.val
-    exact one_mul u.val
+    change 1 * u.val = u.val
+    simpa
 
 namespace Unit
 

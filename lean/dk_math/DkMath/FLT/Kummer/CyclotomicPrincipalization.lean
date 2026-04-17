@@ -292,12 +292,11 @@ review-011 の 5.3 で、prime-power exponent を数えるための最小 receiv
 -/
 theorem dedekindIdealCountNormalizedFactorsEq
     {R : Type*} [CommRing R] [IsDomain R] [IsDedekindDomain R]
-  [DecidableEq (Ideal R)]
     {P I : Ideal R} [P.IsPrime] {n : ℕ}
     (hle : I ≤ P ^ n) (hlt : ¬ I ≤ P ^ (n + 1)) :
   Multiset.count P (UniqueFactorizationMonoid.normalizedFactors I) = n := by
   classical
-  exact Ideal.count_normalizedFactors_eq (p := P) (x := I) hle hlt
+  simpa using Ideal.count_normalizedFactors_eq (p := P) (x := I) hle hlt
 
 /--
 互いに素な 2 つの ideals について、同じ prime associate が両方を割ることはない。
@@ -5193,7 +5192,10 @@ theorem cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree
         ¬ ∃ s : ℕ, GN p (z - y) y = s ^ p :=
     bodyInvariant_of_NoPowOnGN triominoCosmicNoPowOnGN_default
   intro p x y z hpack q hq hqx hqne hqgap hFirstCase
-  let _ : Fact p.Prime := ⟨hpack.hp⟩
+  haveI : Fact p.Prime := ⟨hpack.hp⟩
+  haveI : NeZero p := ⟨hpack.hp.ne_zero⟩
+  haveI : IsCyclotomicExtension {p} ℚ (CyclotomicField p ℚ) :=
+    CyclotomicField.isCyclotomicExtension (n := p) (K := ℚ)
   let ζ : CyclotomicField p ℚ :=
     IsCyclotomicExtension.zeta p ℚ (CyclotomicField p ℚ)
   let hζ : IsPrimitiveRoot ζ p := by
@@ -5533,7 +5535,10 @@ theorem cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_nonLif
     (hNoLift : TriominoCosmicNonLiftableGNBridge) :
     CyclotomicPrincipalizationFirstCaseTarget := by
   intro p x y z hpack q hq hqx hqne hqgap hFirstCase
-  let _ : Fact p.Prime := ⟨hpack.hp⟩
+  haveI : Fact p.Prime := ⟨hpack.hp⟩
+  haveI : NeZero p := ⟨hpack.hp.ne_zero⟩
+  haveI : IsCyclotomicExtension {p} ℚ (CyclotomicField p ℚ) :=
+    CyclotomicField.isCyclotomicExtension (n := p) (K := ℚ)
   let ζ : CyclotomicField p ℚ :=
     IsCyclotomicExtension.zeta p ℚ (CyclotomicField p ℚ)
   let hζ : IsPrimitiveRoot ζ p := by
@@ -5557,7 +5562,10 @@ theorem cyclotomicPrincipalizationFirstCase_of_classGroupPTorsionFree_and_square
     (hSqProv : TriominoSquarefreeGNBridgeProvider) :
     CyclotomicPrincipalizationFirstCaseTarget := by
   intro p x y z hpack q hq hqx hqne hqgap hFirstCase
-  let _ : Fact p.Prime := ⟨hpack.hp⟩
+  haveI : Fact p.Prime := ⟨hpack.hp⟩
+  haveI : NeZero p := ⟨hpack.hp.ne_zero⟩
+  haveI : IsCyclotomicExtension {p} ℚ (CyclotomicField p ℚ) :=
+    CyclotomicField.isCyclotomicExtension (n := p) (K := ℚ)
   let ζ : CyclotomicField p ℚ :=
     IsCyclotomicExtension.zeta p ℚ (CyclotomicField p ℚ)
   let hζ : IsPrimitiveRoot ζ p := by
@@ -5975,7 +5983,10 @@ theorem cyclotomicNormDescentNonFirstCase_of_unitNormalizationAndReceiver
     (hRecv : CyclotomicNormDescentNonFirstCaseUnitNormalizedReceiverTarget.{0}) :
     CyclotomicPrincipalizationNonFirstCaseTarget := by
   intro p x y z hpack q hq hqx hqne hqgap hpgap
-  let _ : Fact p.Prime := ⟨hpack.hp⟩
+  haveI : Fact p.Prime := ⟨hpack.hp⟩
+  haveI : NeZero p := ⟨hpack.hp.ne_zero⟩
+  haveI : IsCyclotomicExtension {p} ℚ (CyclotomicField p ℚ) :=
+    CyclotomicField.isCyclotomicExtension (n := p) (K := ℚ)
   let ζ : CyclotomicField p ℚ :=
     IsCyclotomicExtension.zeta p ℚ (CyclotomicField p ℚ)
   let hζ : IsPrimitiveRoot ζ p := by

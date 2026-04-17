@@ -95,9 +95,8 @@ class DecodeStrategy
     (U₁ : Type u₁) (B₁ : BlueprintFamily U₁)
     (U₂ : Type u₂) (B₂ : BlueprintFamily U₂)
     (H : Type uH) (BH : BlueprintFamily H)
+    (T : outParam (Type uT)) (BT : outParam (BlueprintFamily T))
     (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH) where
-  T : outParam (Type _)
-  BT : outParam (BlueprintFamily T)
   dec : ScaleSpec H BH T BT
 
 instance instDecodeStrategyUseLeft
@@ -107,9 +106,7 @@ instance instDecodeStrategyUseLeft
     {H : Type uH} {BH : BlueprintFamily H}
     {hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH}
     [d : LeftDecode C U₁ B₁ U₂ B₂ H BH hs] :
-    DecodeStrategy UseLeft C U₁ B₁ U₂ B₂ H BH hs where
-  T := U₁
-  BT := B₁
+    DecodeStrategy UseLeft C U₁ B₁ U₂ B₂ H BH U₁ B₁ hs where
   dec := d.decLeft
 
 instance instDecodeStrategyUseRight
@@ -119,9 +116,7 @@ instance instDecodeStrategyUseRight
     {H : Type uH} {BH : BlueprintFamily H}
     {hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH}
     [d : RightDecode C U₁ B₁ U₂ B₂ H BH hs] :
-    DecodeStrategy UseRight C U₁ B₁ U₂ B₂ H BH hs where
-  T := U₂
-  BT := B₂
+    DecodeStrategy UseRight C U₁ B₁ U₂ B₂ H BH U₂ B₂ hs where
   dec := d.decRight
 
 instance instDecodeStrategyUseNormalized
@@ -132,9 +127,7 @@ instance instDecodeStrategyUseNormalized
     {T : Type uT} {BT : BlueprintFamily T}
     {hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH}
     [d : NormalizedDecode C U₁ B₁ U₂ B₂ H BH T BT hs] :
-    DecodeStrategy (UseNormalized T BT) C U₁ B₁ U₂ B₂ H BH hs where
-  T := T
-  BT := BT
+    DecodeStrategy (UseNormalized T BT) C U₁ B₁ U₂ B₂ H BH T BT hs where
   dec := d.decNorm
 
 namespace HarmonizeSpec
@@ -369,20 +362,23 @@ def mkHarmonizeSameSpec
 @[simp] def harmonizeAddBy [Add C] (S : Type*)
     (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
     (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂)
-    [d : DecodeStrategy S C U₁ B₁ U₂ B₂ H BH hs] : GKUS C d.T d.BT :=
+    {T : Type _} {BT : BlueprintFamily T}
+    [d : DecodeStrategy S C U₁ B₁ U₂ B₂ H BH T BT hs] : GKUS C T BT :=
   harmonizeAddTo hs (DecodeSpec.ofScale d.dec) x y
 
 /-- decode 戦略 `S` を型クラスで選ぶ乗算 API。 -/
 @[simp] def harmonizeMulBy [Mul C] (S : Type*)
     (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
     (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂)
-    [d : DecodeStrategy S C U₁ B₁ U₂ B₂ H BH hs] : GKUS C d.T d.BT :=
+    {T : Type _} {BT : BlueprintFamily T}
+    [d : DecodeStrategy S C U₁ B₁ U₂ B₂ H BH T BT hs] : GKUS C T BT :=
   harmonizeMulTo hs (DecodeSpec.ofScale d.dec) x y
 
 @[simp] theorem toCoeff_harmonizeAddBy [Add C] (S : Type*)
     (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
     (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂)
-    [d : DecodeStrategy S C U₁ B₁ U₂ B₂ H BH hs] :
+    {T : Type _} {BT : BlueprintFamily T}
+    [d : DecodeStrategy S C U₁ B₁ U₂ B₂ H BH T BT hs] :
     toCoeff (harmonizeAddBy (S := S) hs x y) = toCoeff x + toCoeff y := by
   unfold harmonizeAddBy
   simpa using toCoeff_harmonizeAddTo (hs := hs) (ds := DecodeSpec.ofScale d.dec) (x := x) (y := y)
@@ -390,7 +386,8 @@ def mkHarmonizeSameSpec
 @[simp] theorem toCoeff_harmonizeMulBy [Mul C] (S : Type*)
     (hs : HarmonizeSpec C U₁ B₁ U₂ B₂ H BH)
     (x : GKUS C U₁ B₁) (y : GKUS C U₂ B₂)
-    [d : DecodeStrategy S C U₁ B₁ U₂ B₂ H BH hs] :
+    {T : Type _} {BT : BlueprintFamily T}
+    [d : DecodeStrategy S C U₁ B₁ U₂ B₂ H BH T BT hs] :
     toCoeff (harmonizeMulBy (S := S) hs x y) = toCoeff x * toCoeff y := by
   unfold harmonizeMulBy
   simpa using toCoeff_harmonizeMulTo (hs := hs) (ds := DecodeSpec.ofScale d.dec) (x := x) (y := y)

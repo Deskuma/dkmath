@@ -393,10 +393,7 @@ def blocksOverlap (A B : Finset Γ) : Prop := (A ∩ B) ≠ (∅ : Finset Γ)
 
 instance decidable_blocksOverlap (A B : Finset Γ) : Decidable (blocksOverlap A B) := by
   dsimp [blocksOverlap]
-  have d := inferInstanceAs (Decidable (A ∩ B = (∅ : Finset Γ)))
-  cases d
-  case isTrue h => exact isFalse (fun H => H h)
-  case isFalse h => exact isTrue h
+  infer_instance
 
 /-- 交差ペアだけを数える（対角は除外するのが普通なので注意）。 -/
 def overlapPairs (Afamily : Finset (Finset Γ)) :

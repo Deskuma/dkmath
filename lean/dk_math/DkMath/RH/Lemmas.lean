@@ -132,18 +132,24 @@ lemma phaseVel_inv
     (hf : DifferentiableAt ℝ f t) (hf0 : f t ≠ 0) :
     phaseVel (fun u => (f u)⁻¹) t = - phaseVel f t := by
   unfold phaseVel
-  have hderiv :
+  have hderiv₀ :
       deriv (fun u : ℝ => (1 : ℂ) / f u) t =
         ((deriv (fun _ : ℝ => (1 : ℂ)) t * f t - (1 : ℂ) * deriv f t) / (f t) ^ 2) := by
-    simpa using
-      (deriv_fun_div (𝕜 := ℝ)
-        (c := fun _ : ℝ => (1 : ℂ)) (d := f) (x := t)
-        (differentiableAt_const (x := t) (c := (1 : ℂ))) hf hf0)
+    exact deriv_fun_div
+      (𝕜 := ℝ)
+      (c := fun _ : ℝ => (1 : ℂ))
+      (d := f)
+      (x := t)
+      (differentiableAt_const (x := t) (c := (1 : ℂ)))
+      hf
+      hf0
   have hone : deriv (fun _ : ℝ => (1 : ℂ)) t = 0 := by simp
-  rw [show (fun u => (f u)⁻¹) = (fun u : ℝ => (1 : ℂ) / f u) by
-      funext u; simp [one_div], hderiv, hone]
+  have hderiv :
+      deriv (fun u => (f u)⁻¹) t = -deriv f t / (f t) ^ 2 := by
+    simpa [one_div, hone] using hderiv₀
+  rw [hderiv]
   field_simp [hf0]
-  simp [neg_div, Complex.neg_im]
+  simp [Complex.neg_im]
 
 /--
 位相速度の除法則。

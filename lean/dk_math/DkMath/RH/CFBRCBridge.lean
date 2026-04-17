@@ -4230,7 +4230,7 @@ RH-O18: 一般有限集合 `S` での on-set provider 構成器（global witness
 `r` ごとの witness ではなく、共通 witness prime を 1 つ与えるだけで
 RH-O15 の on-set provider 構成器へ接続する。
 -/
-def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_global_witness_local0_and_local0_on_erase
+noncomputable def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_global_witness_local0_and_local0_on_erase
     (side : DkMath.CFBRC.BoundarySide)
     (S : Finset {q // Nat.Prime q})
     {d x u : ℕ} {σ t : ℝ}
@@ -4282,7 +4282,7 @@ RH-O18: 一般有限集合 `S` での on-set provider 構成器
 `r` ごとの witness を要求せず、共通 witness prime を 1 つ与えれば
 RH-O16 erase 除法版へ接続できる。
 -/
-def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase_of_global_witness
+noncomputable def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_erase_of_global_witness
     (side : DkMath.CFBRC.BoundarySide)
     (S : Finset {q // Nat.Prime q})
     {d x u : ℕ} {σ t : ℝ}
@@ -4334,7 +4334,7 @@ def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_f
 RH-O18: 一般有限集合 `S` での on-set provider 構成器
 （global witness + factor0 + `S` 全体除法版）。
 -/
-def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness
+noncomputable def boundaryOffDvdLocalZeroOnSetProvider_of_insertProvider_and_boundaryDiffPow_factor0_and_dvd_on_S_of_global_witness
     (side : DkMath.CFBRC.BoundarySide)
     (S : Finset {q // Nat.Prime q})
     {d x u : ℕ} {σ t : ℝ}

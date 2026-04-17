@@ -2667,14 +2667,19 @@ theorem branchA_local_Q_proj_eq_GN_zero_z
     exact branchA_hensel_distinguished_proj_zero hBundle hk hLift
   have hω_proj : φ hLift.ω_k = (z : ZMod q) * ((y : ZMod q)⁻¹) := by
     simpa [φ] using hLift.hω_k_proj
+  have hy_ne_zero : (y : ZMod q) ≠ 0 := by
+    intro hy0
+    exact hBundle.witness.hq_not_dvd_y ((ZMod.natCast_eq_zero_iff y q).mp hy0)
+  have hy_cast : φ (y : R) = (y : ZMod q) := by
+    exact map_natCast φ y
   have hωy_proj : φ (hLift.ω_k * (y : R)) = (z : ZMod q) := by
     calc
       φ (hLift.ω_k * (y : R)) = φ hLift.ω_k * φ (y : R) := by simp [φ]
       _ = (((z : ZMod q) * ((y : ZMod q)⁻¹)) * (y : ZMod q)) := by
             rw [hω_proj]
-            simp [φ]
+            rw [hy_cast]
       _ = (z : ZMod q) := by
-            simpa using (sub_eq_zero.mp (branchA_distinguished_factor_vanishes hBundle)).symm
+            rw [mul_assoc, inv_mul_cancel₀ hy_ne_zero, mul_one]
   dsimp [Q]
   simp only [map_sum, map_mul, map_natCast, map_pow, hδ_zero, hωy_proj, φ]
 

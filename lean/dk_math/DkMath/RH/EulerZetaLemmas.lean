@@ -22,6 +22,11 @@ open DkMath.Basic
 open scoped Real
 open Complex
 
+instance : ContinuousSMul ℝ ℂ where
+  continuous_smul := by
+    simpa [Algebra.smul_def] using
+      (Complex.continuous_ofReal.comp continuous_fst).mul continuous_snd
+
 /-
 補題のモジュール：Euler-zeta の等価性と基本変形
 
@@ -344,9 +349,10 @@ lemma hasDerivAt_vertical_mul_log_p
     HasDerivAt
       (fun u : ℝ => vertical σ u * (Real.log (p : ℝ) : ℂ))
       (Complex.I * (Real.log (p : ℝ) : ℂ)) t := by
+  have hmul : HasDerivAt (fun u : ℝ => (u : ℂ) * Complex.I) Complex.I t := by
+    simpa [one_mul] using (Complex.ofRealCLM.hasDerivAt (x := t)).mul_const Complex.I
   have hvertical : HasDerivAt (fun u : ℝ => vertical σ u) Complex.I t := by
-    simpa [vertical, one_mul] using
-      ((((hasDerivAt_id (t : ℂ)).mul_const Complex.I).comp_ofReal).const_add (σ : ℂ))
+    convert hmul.const_add (σ : ℂ) using 1
   simpa [mul_assoc] using hvertical.mul_const (Real.log (p : ℝ) : ℂ)
 
 /--
@@ -364,9 +370,10 @@ lemma hasDerivAt_eulerZeta_exp_s_log_p_sub_one
   unfold eulerZeta_exp_s_log_p_sub_one
   have hinner :=
     hasDerivAt_vertical_mul_log_p (p := p) (σ := σ) (t := t)
-  simpa [mul_comm, mul_left_comm, mul_assoc] using
-    ((Complex.hasDerivAt_exp
-      (vertical σ t * (Real.log (p : ℝ) : ℂ))).comp t hinner).sub_const (1 : ℂ)
+  convert
+      (((Complex.hasDerivAt_exp
+        (vertical σ t * (Real.log (p : ℝ) : ℂ))).comp t hinner).sub_const (1 : ℂ))
+      using 1
 
 /--
 `w_p` の導関数の `deriv` 版。
@@ -389,7 +396,15 @@ lemma phaseVel_eulerZeta_exp_s_log_p_sub_one_eq
       (((Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) *
           (Complex.I * (Real.log (p : ℝ) : ℂ))) /
         (eulerZeta_exp_s_log_p_sub_one p σ t)).im) := by
-  simp [DkMath.RH.phaseVel, deriv_eulerZeta_exp_s_log_p_sub_one]
+  unfold DkMath.RH.phaseVel
+  have hquot :
+      deriv (fun u : ℝ => eulerZeta_exp_s_log_p_sub_one p σ u) t /
+          eulerZeta_exp_s_log_p_sub_one p σ t =
+        (Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) *
+          (Complex.I * (Real.log (p : ℝ) : ℂ))) /
+          eulerZeta_exp_s_log_p_sub_one p σ t := by
+    simpa [deriv_eulerZeta_exp_s_log_p_sub_one (p := p) (σ := σ) (t := t)]
+  exact congrArg Complex.im hquot
 
 /--
 `w_p(t) ≠ 0` の下で、`driftFreeAt` と `phaseVel = 0` は同値。
@@ -693,17 +708,21 @@ lemma phaseVel_exp_vertical_mul_log_p_eq_log
     DkMath.RH.phaseVel
       (fun u : ℝ => Complex.exp (vertical σ u * (Real.log (p : ℝ) : ℂ))) t
       = Real.log (p : ℝ) := by
-  have hinner := hasDerivAt_vertical_mul_log_p (p := p) (σ := σ) (t := t)
   have hderiv :
       deriv (fun u : ℝ => Complex.exp (vertical σ u * (Real.log (p : ℝ) : ℂ))) t =
         Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) *
           (Complex.I * (Real.log (p : ℝ) : ℂ)) := by
-    simpa using ((Complex.hasDerivAt_exp
-      (vertical σ t * (Real.log (p : ℝ) : ℂ))).comp t hinner).deriv
+    let lp : ℂ := (Real.log (p : ℝ) : ℂ)
+    have hinner :
+        HasDerivAt (fun u : ℝ => vertical σ u * lp) (Complex.I * lp) t := by
+      simpa [lp] using hasDerivAt_vertical_mul_log_p (p := p) (σ := σ) (t := t)
+    simpa [lp] using ((Complex.hasDerivAt_exp (vertical σ t * lp)).comp t hinner).deriv
   unfold DkMath.RH.phaseVel
+  change
+    (((deriv (fun u : ℝ => Complex.exp (vertical σ u * (Real.log (p : ℝ) : ℂ))) t) /
+      Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ))).im) = Real.log (p : ℝ)
   rw [hderiv]
-  have hexp_ne : Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) ≠ 0 :=
-    Complex.exp_ne_zero _
+  have hexp_ne : Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) ≠ 0 := Complex.exp_ne_zero _
   have hcancel :
       (((Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) *
           (Complex.I * (Real.log (p : ℝ) : ℂ))) /
