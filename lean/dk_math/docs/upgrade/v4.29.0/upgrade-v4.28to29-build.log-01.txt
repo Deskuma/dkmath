@@ -1,0 +1,232 @@
+✖ [8259/8469] Building DkMath.DHNT.DHNT_Base (15s)
+info: DkMath/DHNT/DHNT_Base.lean:12:0: file: DkMath.DHNT.DHNT_Base
+error: DkMath/DHNT/DHNT_Base.lean:41:4: `simp` made no progress
+error: DkMath/DHNT/DHNT_Base.lean:36:4: `simp` made no progress
+warning: DkMath/DHNT/DHNT_Base.lean:31:2: declaration uses `sorry`
+error: Lean exited with code 1
+⚠ [8280/8469] Built DkMath.ABC.PadicValNat (13s)
+warning: DkMath/ABC/PadicValNat.lean:58:25: `padicValNat.zero` has been deprecated: Use `padicValNat_zero_right` instead
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.zero` to `padicValNat_zero_right x`).
+warning: DkMath/ABC/PadicValNat.lean:94:18: `padicValNat.zero` has been deprecated: Use `padicValNat_zero_right` instead
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.zero` to `padicValNat_zero_right x`).
+warning: DkMath/ABC/PadicValNat.lean:94:18: This simp argument is unused:
+  padicValNat.zero
+Hint: Omit it from the simp argument list.
+  simp ̵[̵p̵a̵d̵i̵c̵V̵a̵l̵N̵a̵t̵.̵z̵e̵r̵o̵]̵
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: DkMath/ABC/PadicValNat.lean:211:10: `padicValNat.one` has been deprecated: Use `padicValNat_one_right` instead
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.one` to `padicValNat_one_right x`).
+warning: DkMath/ABC/PadicValNat.lean:211:10: This simp argument is unused:
+  padicValNat.one
+Hint: Omit it from the simp argument list.
+  simp ̵[̵p̵a̵d̵i̵c̵V̵a̵l̵N̵a̵t̵.̵o̵n̵e̵]̵
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+✖ [8289/8469] Building DkMath.RH.Lemmas (17s)
+info: DkMath/RH/Lemmas.lean:13:0: file: DkMath.RH.Lemmas
+error: DkMath/RH/Lemmas.lean:138:4: Type mismatch: After simplification, term
+  deriv_fun_div (differentiableAt_const 1) hf hf0
+ has type
+  deriv (fun x ↦ (f x)⁻¹) t = (deriv (fun x ↦ 1) t * f t - deriv f t) / f t ^ 2
+but is expected to have type
+  deriv (fun u ↦ (f u)⁻¹) t = -deriv f t / f t ^ 2
+error: Lean exited with code 1
+⚠ [8304/8469] Built DkMath.ABC.Core (14s)
+warning: DkMath/ABC/Core.lean:182:56: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+warning: DkMath/ABC/Core.lean:453:19: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+⚠ [8305/8469] Built DkMath.Collatz.V2 (15s)
+warning: DkMath/Collatz/V2.lean:89:8: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/Collatz/V2.lean:194:6: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+⚠ [8307/8469] Built DkMath.ABC.Rad (11s)
+warning: DkMath/ABC/Rad.lean:54:56: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+⚠ [8329/8469] Built DkMath.Collatz.Shift (13s)
+warning: DkMath/Collatz/Shift.lean:86:6: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+⚠ [8330/8469] Built DkMath.ABC.Square (18s)
+warning: DkMath/ABC/Square.lean:43:13: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+warning: DkMath/ABC/Square.lean:66:12: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+warning: DkMath/ABC/Square.lean:94:92: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+warning: DkMath/ABC/Square.lean:122:90: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+warning: DkMath/ABC/Square.lean:554:19: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+warning: DkMath/ABC/Square.lean:555:19: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+⚠ [8339/8469] Built DkMath.ABC.RatioBound (21s)
+warning: DkMath/ABC/RatioBound.lean:464:60: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+⚠ [8348/8469] Built DkMath.CosmicFormula.CosmicFormulaCellDim (28s)
+warning: DkMath/CosmicFormula/CosmicFormulaCellDim.lean:583:10: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+⚠ [8357/8469] Built DkMath.FLT.PetalDetect (14s)
+warning: DkMath/FLT/PetalDetect.lean:451:2: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+⚠ [8366/8469] Built DkMath.NumberTheory.ZsigmondyCyclotomicResearch (13s)
+warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:152:6: declaration uses `sorry`
+⚠ [8373/8469] Built DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5Core (16s)
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5Core.lean:69:4: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+✖ [8379/8469] Building DkMath.KUS.Transport (10s)
+info: DkMath/KUS/Transport.lean:9:0: file: DkMath.KUS.Transport
+error: DkMath/KUS/Transport.lean:101:8: Failed to infer universe levels in type of field `dec`
+  ScaleSpec.{uH, ?u.6335, u_5, ?u.6339} H BH T BT
+error: DkMath/KUS/Transport.lean:100:7: Failed to infer universe levels in type of field `BT`
+  outParam.{max (?u.6339 + 2) (?u.6335 + 1)} (BlueprintFamily.{?u.6335, ?u.6339} T)
+error: DkMath/KUS/Transport.lean:99:6: Failed to infer universe levels in type of field `T`
+  outParam.{?u.6335 + 2} (Type ?u.6335)
+error: DkMath/KUS/Transport.lean:110:4: Unknown identifier `DecodeStrategy`
+Note: It is not possible to treat `DecodeStrategy` as an implicitly bound variable here because it has multiple characters while the `relaxedAutoImplicit` option is set to `false`.
+error: DkMath/KUS/Transport.lean:122:4: Unknown identifier `DecodeStrategy`
+Note: It is not possible to treat `DecodeStrategy` as an implicitly bound variable here because it has multiple characters while the `relaxedAutoImplicit` option is set to `false`.
+error: DkMath/KUS/Transport.lean:135:4: Unknown identifier `DecodeStrategy`
+Note: It is not possible to treat `DecodeStrategy` as an implicitly bound variable here because it has multiple characters while the `relaxedAutoImplicit` option is set to `false`.
+error: DkMath/KUS/Transport.lean:372:9: Unknown identifier `DecodeStrategy`
+Note: It is not possible to treat `DecodeStrategy` as an implicitly bound variable here because it has multiple characters while the `relaxedAutoImplicit` option is set to `false`.
+error: DkMath/KUS/Transport.lean:379:9: Unknown identifier `DecodeStrategy`
+Note: It is not possible to treat `DecodeStrategy` as an implicitly bound variable here because it has multiple characters while the `relaxedAutoImplicit` option is set to `false`.
+error: DkMath/KUS/Transport.lean:385:9: Unknown identifier `DecodeStrategy`
+Note: It is not possible to treat `DecodeStrategy` as an implicitly bound variable here because it has multiple characters while the `relaxedAutoImplicit` option is set to `false`.
+error: DkMath/KUS/Transport.lean:393:9: Unknown identifier `DecodeStrategy`
+Note: It is not possible to treat `DecodeStrategy` as an implicitly bound variable here because it has multiple characters while the `relaxedAutoImplicit` option is set to `false`.
+error: DkMath/KUS/Transport.lean:403:2: Unknown identifier `harmonizeAddBy`
+warning: DkMath/KUS/Transport.lean:399:2: declaration uses `sorry`
+error: DkMath/KUS/Transport.lean:410:2: Unknown identifier `harmonizeAddBy`
+warning: DkMath/KUS/Transport.lean:406:2: declaration uses `sorry`
+error: DkMath/KUS/Transport.lean:417:2: Unknown identifier `harmonizeAddBy`
+warning: DkMath/KUS/Transport.lean:413:2: declaration uses `sorry`
+error: DkMath/KUS/Transport.lean:424:2: Unknown identifier `harmonizeMulBy`
+warning: DkMath/KUS/Transport.lean:420:2: declaration uses `sorry`
+error: DkMath/KUS/Transport.lean:431:2: Unknown identifier `harmonizeMulBy`
+warning: DkMath/KUS/Transport.lean:427:2: declaration uses `sorry`
+error: DkMath/KUS/Transport.lean:438:2: Unknown identifier `harmonizeMulBy`
+warning: DkMath/KUS/Transport.lean:434:2: declaration uses `sorry`
+error: Lean exited with code 1
+⚠ [8386/8469] Built DkMath.CosmicFormula.TriominoFLT (51s)
+warning: DkMath/CosmicFormula/TriominoFLT.lean:1916:6: declaration uses `sorry`
+⚠ [8388/8469] Built DkMath.FLT.GEisensteinBridge (20s)
+warning: DkMath/FLT/GEisensteinBridge.lean:1394:0: Definition `DkMath.FLT.numberTheoryHasKernelFamily_of_hasStep` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/FLT/GEisensteinBridge.lean:1406:0: Definition `DkMath.FLT.numberTheoryHasKernelFamily_of_hasReduce` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/FLT/GEisensteinBridge.lean:1418:0: Definition `DkMath.FLT.numberTheoryHasKernelFamily_of_hasStepExists` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/FLT/GEisensteinBridge.lean:1430:0: Definition `DkMath.FLT.numberTheoryHasKernelFamily_of_hasLocalReduce` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/FLT/GEisensteinBridge.lean:1484:0: Definition `DkMath.FLT.numberTheoryHasKernelFamily_of_nonLiftableFamily` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/FLT/GEisensteinBridge.lean:1520:0: Definition `DkMath.FLT.numberTheoryHasKernelFamily_of_hasNoSqFamily` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+⚠ [8396/8469] Built DkMath.NumberTheory.GcdNextResearch (23s)
+warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+⚠ [8397/8469] Built DkMath.NumberTheory.UniqueFactorizationGN (40s)
+warning: DkMath/NumberTheory/UniqueFactorizationGN.lean:93:19: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+warning: DkMath/NumberTheory/UniqueFactorizationGN.lean:97:18: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+⚠ [8404/8469] Built DkMath.FLT.PrimeProvider.TriominoCosmicBranchA (48s)
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4188:8: declaration uses `sorry`
+✖ [8406/8469] Building DkMath.ABC.ABC008 (18s)
+info: DkMath/ABC/ABC008.lean:10:0: file: DkMath.ABC.ABC008
+error: DkMath/ABC/ABC008.lean:396:12: `inferInstanceAs` failed, expected type contains metavariables
+  ?m.5
+Note: `inferInstanceAs` requires full knowledge of the expected ("target") type to do its instance translation. If you do not intend to transport instances between two types, consider using `inferInstance` or `(inferInstance : expectedType)` instead.
+error: DkMath/ABC/ABC008.lean:394:85: unsolved goals
+Γ : Type u_1
+inst✝¹ : Fintype Γ
+inst✝ : DecidableEq Γ
+A B : Finset Γ
+⊢ Decidable ¬A ∩ B = ∅
+error: Lean exited with code 1
+⚠ [8443/8469] Built DkMath.FLT.Basic (24s)
+warning: DkMath/FLT/Basic.lean:203:6: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+warning: DkMath/FLT/Basic.lean:217:6: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+warning: DkMath/FLT/Basic.lean:835:4: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+✖ [8444/8469] Building DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore (26s)
+info: DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean:11:0: file: DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean:752:2: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean:805:4: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean:847:4: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean:1528:2: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean:1544:2: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean:1560:2: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+error: DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean:2673:64: unsolved goals
+p x y z t s q : ℕ
+hBundle : BranchAInterferenceFringeBundle p x y z t s q
+k : ℕ
+hk : 0 < k
+hLift :
+  let _inst := ⋯;
+  let ω := ↑z * (↑y)⁻¹;
+  BranchAHenselLiftData p q k hk ω
+_inst : Fact (Nat.Prime q) := { out := hBundle.witness.hqprime }
+R : Type := ZMod (q ^ k)
+φ : R →+* ZMod q := ZMod.castHom ⋯ (ZMod q)
+δ : R := ↑z - hLift.ω_k * ↑y
+Q : R := GN p δ (hLift.ω_k * ↑y)
+hδ_zero : φ δ = 0
+hω_proj : φ hLift.ω_k = ↑z * (↑y)⁻¹
+⊢ (ZMod.castHom ⋯ (ZMod q)) ↑y = ↑y ∨ ↑z = 0 ∨ ↑y = 0
+error: Lean exited with code 1
+⚠ [8454/8469] Built DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB (21s)
+warning: DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean:589:4: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+Some required targets logged failures:
+- DkMath.DHNT.DHNT_Base
+- DkMath.RH.Lemmas
+- DkMath.KUS.Transport
+- DkMath.ABC.ABC008
+- DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore
