@@ -1394,6 +1394,7 @@ lemma NoSqOnS0_of_numberTheoryHasLocalReduceFamily {c b : ℕ}
 /--
 `hasStep` family から `hasKernel` family を作る。
 -/
+@[implicit_reducible]
 def numberTheoryHasKernelFamily_of_hasStep
     (hasStep :
       ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
@@ -1406,6 +1407,7 @@ def numberTheoryHasKernelFamily_of_hasStep
 /--
 `hasReduce` family から `hasKernel` family を作る。
 -/
+@[implicit_reducible]
 def numberTheoryHasKernelFamily_of_hasReduce
     (hasReduce :
       ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
@@ -1418,6 +1420,7 @@ def numberTheoryHasKernelFamily_of_hasReduce
 /--
 `hasStepExists` family から `hasKernel` family を作る。
 -/
+@[implicit_reducible]
 def numberTheoryHasKernelFamily_of_hasStepExists
     (hasStepExists :
       ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
@@ -1430,6 +1433,7 @@ def numberTheoryHasKernelFamily_of_hasStepExists
 /--
 `hasLocalReduce` family から `hasKernel` family を作る。
 -/
+@[implicit_reducible]
 def numberTheoryHasKernelFamily_of_hasLocalReduce
     (hasLocalReduce :
       ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
@@ -1484,6 +1488,7 @@ def numberTheoryHasStepFamily_of_nonLiftableFamily
 /--
 `hasNonLiftable` family から `hasKernel` family を作る。
 -/
+@[implicit_reducible]
 def numberTheoryHasKernelFamily_of_nonLiftableFamily
     (hasNonLift :
       ∀ {c b : ℕ}, b < c → Nat.Coprime c b →
@@ -1520,6 +1525,7 @@ def numberTheoryHasStepFamily_of_hasNoSqFamily
 /--
 `hasNoSq` family から `hasKernel` family を作る。
 -/
+@[implicit_reducible]
 def numberTheoryHasKernelFamily_of_hasNoSqFamily
     (hasNoSq :
       ∀ {c b : ℕ}, b < c → Nat.Coprime c b →

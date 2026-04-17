@@ -78,6 +78,7 @@ open Real
 def piUnit : Unit := ⟨Real.pi, Real.pi_pos⟩
 
 /-- π を像とする Bridge -/
+@[implicit_reducible]
 def piBridge : Bridge where
   phi := fun _ => 1
   pi  := piUnit
@@ -89,6 +90,7 @@ theorem not_mixable_piBridge {State : Type} {T : State → State} {I : State →
 /-! 追加の具体例：floor による橋と倍率 10 のスケール橋 -/
 
 /-- floor によって Unit の大きさを Nat に落とし、常に 1 以上にする Bridge -/
+@[implicit_reducible]
 def floorBridge : Bridge where
   phi := fun u => Int.toNat (Int.floor u.val) + 1
   pi  := piUnit
@@ -99,6 +101,7 @@ theorem floorBridge_pos (u : Unit) : floorBridge.phi u > 0 := by
   exact Nat.succ_pos _
 
 /-- u.val * 10 の floor を取ることで小数帯域を粗く量子化する Bridge -/
+@[implicit_reducible]
 def scale10Bridge : Bridge where
   phi := fun u => Int.toNat (Int.floor (u.val * 10)) + 1
   pi  := piUnit
@@ -111,6 +114,7 @@ theorem scale10Bridge_pos (u : Unit) : scale10Bridge.phi u > 0 := by
 /-! 追加の具体化：有理近似（scale1000）と作図可能（sqrt による近似）の橋 -/
 
 /-- u.val を 1000 倍して floor を取り、1 を加える有理近似ベースの Bridge -/
+@[implicit_reducible]
 def rationalApproxBridge : Bridge where
   phi := fun u => Int.toNat (Int.floor (u.val * 1000)) + 1
   pi  := piUnit
@@ -121,6 +125,7 @@ theorem rationalApproxBridge_pos (u : Unit) : rationalApproxBridge.phi u > 0 := 
   exact Nat.succ_pos _
 
 /-- 作図可能な近似の簡易モデル：sqrt を使って一段階の平方根近似を取り、100 倍して floor を取る -/
+@[implicit_reducible]
 def constructibleBridge : Bridge where
   phi := fun u => Int.toNat (Int.floor (Real.sqrt u.val * 100)) + 1
   pi  := piUnit
