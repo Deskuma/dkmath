@@ -403,7 +403,7 @@ lemma phaseVel_eulerZeta_exp_s_log_p_sub_one_eq
         (Complex.exp (vertical σ t * (Real.log (p : ℝ) : ℂ)) *
           (Complex.I * (Real.log (p : ℝ) : ℂ))) /
           eulerZeta_exp_s_log_p_sub_one p σ t := by
-    simpa [deriv_eulerZeta_exp_s_log_p_sub_one (p := p) (σ := σ) (t := t)]
+    simp [deriv_eulerZeta_exp_s_log_p_sub_one (p := p) (σ := σ) (t := t)]
   exact congrArg Complex.im hquot
 
 /--

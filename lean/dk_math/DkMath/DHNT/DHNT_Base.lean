@@ -34,11 +34,11 @@ open scoped Real
   mul_one u := by
     ext
     change u.val * 1 = u.val
-    simpa
+    simp
   one_mul u := by
     ext
     change 1 * u.val = u.val
-    simpa
+    simp
 
 namespace Unit
 
