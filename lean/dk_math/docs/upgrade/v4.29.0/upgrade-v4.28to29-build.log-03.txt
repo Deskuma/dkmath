@@ -1,0 +1,41 @@
+⚠ [8300/8469] Replayed DkMath.NumberTheory.ZsigmondyCyclotomicResearch
+warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:152:6: declaration uses `sorry`
+⚠ [8331/8469] Replayed DkMath.ABC.ABC021
+warning: DkMath/ABC/ABC021.lean:183:6: declaration uses `sorry`
+warning: DkMath/ABC/ABC021.lean:190:6: declaration uses `sorry`
+warning: DkMath/ABC/ABC021.lean:197:6: declaration uses `sorry`
+warning: DkMath/ABC/ABC021.lean:204:6: declaration uses `sorry`
+warning: DkMath/ABC/ABC021.lean:212:6: declaration uses `sorry`
+warning: DkMath/ABC/ABC021.lean:222:6: declaration uses `sorry`
+warning: DkMath/ABC/ABC021.lean:232:6: declaration uses `sorry`
+warning: DkMath/ABC/ABC021.lean:291:6: declaration uses `sorry`
+⚠ [8387/8469] Replayed DkMath.DHNT.DHNT_Base
+warning: DkMath/DHNT/DHNT_Base.lean:41:4: try 'simp' instead of 'simpa'
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: DkMath/DHNT/DHNT_Base.lean:37:4: try 'simp' instead of 'simpa'
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [8389/8469] Replayed DkMath.DHNT.UnitNatLayers
+warning: DkMath/DHNT/UnitNatLayers.lean:80:0: Definition `DkMath.DHNT.piBridge` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/DHNT/UnitNatLayers.lean:91:0: Definition `DkMath.DHNT.floorBridge` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/DHNT/UnitNatLayers.lean:101:0: Definition `DkMath.DHNT.scale10Bridge` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/DHNT/UnitNatLayers.lean:113:0: Definition `DkMath.DHNT.rationalApproxBridge` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/DHNT/UnitNatLayers.lean:123:0: Definition `DkMath.DHNT.constructibleBridge` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+⚠ [8411/8469] Replayed DkMath.RH.EulerZetaLemmas
+warning: DkMath/RH/EulerZetaLemmas.lean:406:4: try 'simp' instead of 'simpa'
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [8429/8469] Replayed DkMath.FLT.GEisensteinBridge
+warning: DkMath/FLT/GEisensteinBridge.lean:1394:0: Definition `DkMath.FLT.numberTheoryHasKernelFamily_of_hasStep` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/FLT/GEisensteinBridge.lean:1406:0: Definition `DkMath.FLT.numberTheoryHasKernelFamily_of_hasReduce` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/FLT/GEisensteinBridge.lean:1418:0: Definition `DkMath.FLT.numberTheoryHasKernelFamily_of_hasStepExists` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/FLT/GEisensteinBridge.lean:1430:0: Definition `DkMath.FLT.numberTheoryHasKernelFamily_of_hasLocalReduce` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/FLT/GEisensteinBridge.lean:1484:0: Definition `DkMath.FLT.numberTheoryHasKernelFamily_of_nonLiftableFamily` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/FLT/GEisensteinBridge.lean:1520:0: Definition `DkMath.FLT.numberTheoryHasKernelFamily_of_hasNoSqFamily` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+⚠ [8433/8469] Replayed DkMath.FLT.PrimeProvider.TriominoCosmicBranchA
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4188:8: declaration uses `sorry`
+⚠ [8439/8469] Replayed DkMath.NumberTheory.GcdNextResearch
+warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+⚠ [8456/8469] Replayed DkMath.FLT.Kummer.CyclotomicPrincipalization
+warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:1828:0: Definition `DkMath.FLT.IsCyclotomicExtension_p_as_pow1` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5384:8: declaration uses `sorry`
+⚠ [8461/8469] Replayed DkMath.CosmicFormula.TriominoFLT
+warning: DkMath/CosmicFormula/TriominoFLT.lean:1916:6: declaration uses `sorry`
