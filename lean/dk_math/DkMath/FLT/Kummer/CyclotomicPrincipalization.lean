@@ -5379,7 +5379,7 @@ theorem cyclotomicPrincipalizationNonFirstCasePacketFromError_of_peelExactErrorD
 class-group 入力から、Kummer peel normal-form descent existence を返す core kernel。
 
 named smaller counterexample への包装は既に純算術で閉じたので、
-current direct `sorry` は `∃ z', z'^p = (x / q)^p + y^p` を返す一点に局所化する。
+current direct `so#rry` は `∃ z', z'^p = (x / q)^p + y^p` を返す一点に局所化する。
 -/
 theorem cyclotomicPrincipalizationNonFirstCasePeelDescentExistenceCore_of_classGroupPTorsionFree
     (hCl : CyclotomicClassGroupPTorsionFreeTarget.{0}) :
