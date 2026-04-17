@@ -1,0 +1,352 @@
+⚠ [8263/8469] Replayed DkMath.ABC.PadicValNat
+warning: DkMath/ABC/PadicValNat.lean:58:25: `padicValNat.zero` has been deprecated: Use `padicValNat_zero_right` instead
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.zero` to `padicValNat_zero_right x`).
+warning: DkMath/ABC/PadicValNat.lean:94:18: `padicValNat.zero` has been deprecated: Use `padicValNat_zero_right` instead
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.zero` to `padicValNat_zero_right x`).
+warning: DkMath/ABC/PadicValNat.lean:94:18: This simp argument is unused:
+  padicValNat.zero
+Hint: Omit it from the simp argument list.
+  simp ̵[̵p̵a̵d̵i̵c̵V̵a̵l̵N̵a̵t̵.̵z̵e̵r̵o̵]̵
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: DkMath/ABC/PadicValNat.lean:211:10: `padicValNat.one` has been deprecated: Use `padicValNat_one_right` instead
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.one` to `padicValNat_one_right x`).
+warning: DkMath/ABC/PadicValNat.lean:211:10: This simp argument is unused:
+  padicValNat.one
+Hint: Omit it from the simp argument list.
+  simp ̵[̵p̵a̵d̵i̵c̵V̵a̵l̵N̵a̵t̵.̵o̵n̵e̵]̵
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+⚠ [8284/8469] Replayed DkMath.ABC.Rad
+warning: DkMath/ABC/Rad.lean:54:56: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+⚠ [8294/8469] Replayed DkMath.FLT.PetalDetect
+warning: DkMath/FLT/PetalDetect.lean:451:2: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+⚠ [8297/8469] Replayed DkMath.ABC.Core
+warning: DkMath/ABC/Core.lean:182:56: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+warning: DkMath/ABC/Core.lean:453:19: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+⚠ [8298/8469] Replayed DkMath.ABC.Square
+warning: DkMath/ABC/Square.lean:43:13: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+warning: DkMath/ABC/Square.lean:66:12: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+warning: DkMath/ABC/Square.lean:94:92: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+warning: DkMath/ABC/Square.lean:122:90: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+warning: DkMath/ABC/Square.lean:554:19: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+warning: DkMath/ABC/Square.lean:555:19: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+⚠ [8300/8469] Replayed DkMath.NumberTheory.ZsigmondyCyclotomicResearch
+warning: DkMath/NumberTheory/ZsigmondyCyclotomicResearch.lean:152:6: declaration uses `sorry`
+⚠ [8305/8469] Replayed DkMath.NumberTheory.UniqueFactorizationGN
+warning: DkMath/NumberTheory/UniqueFactorizationGN.lean:93:19: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+warning: DkMath/NumberTheory/UniqueFactorizationGN.lean:97:18: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+⚠ [8310/8469] Replayed DkMath.ABC.RatioBound
+warning: DkMath/ABC/RatioBound.lean:464:60: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+⚠ [8326/8469] Replayed DkMath.ABC.ABC016
+warning: DkMath/ABC/ABC016.lean:136:21: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+warning: DkMath/ABC/ABC016.lean:246:21: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+⚠ [8327/8469] Replayed DkMath.ABC.ABC017
+warning: DkMath/ABC/ABC017.lean:93:10: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+⚠ [8328/8469] Replayed DkMath.ABC.ABC018
+warning: DkMath/ABC/ABC018.lean:214:6: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+⚠ [8331/8469] Replayed DkMath.ABC.ABC021
+warning: DkMath/ABC/ABC021.lean:155:4: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/ABC/ABC021.lean:169:8: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/ABC/ABC021.lean:183:6: declaration uses `sorry`
+warning: DkMath/ABC/ABC021.lean:190:6: declaration uses `sorry`
+warning: DkMath/ABC/ABC021.lean:197:6: declaration uses `sorry`
+warning: DkMath/ABC/ABC021.lean:204:6: declaration uses `sorry`
+warning: DkMath/ABC/ABC021.lean:212:6: declaration uses `sorry`
+warning: DkMath/ABC/ABC021.lean:222:6: declaration uses `sorry`
+warning: DkMath/ABC/ABC021.lean:232:6: declaration uses `sorry`
+warning: DkMath/ABC/ABC021.lean:321:4: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/ABC/ABC021.lean:291:6: declaration uses `sorry`
+⚠ [8334/8469] Replayed DkMath.ABC.ABC024
+warning: DkMath/ABC/ABC024.lean:133:6: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/ABC/ABC024.lean:182:4: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/ABC/ABC024.lean:630:26: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/ABC/ABC024.lean:830:18: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+⚠ [8336/8469] Replayed DkMath.ABC.ABC025
+warning: DkMath/ABC/ABC025.lean:51:18: `padicValNat.zero` has been deprecated: Use `padicValNat_zero_right` instead
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.zero` to `padicValNat_zero_right x`).
+warning: DkMath/ABC/ABC025.lean:51:18: This simp argument is unused:
+  padicValNat.zero
+Hint: Omit it from the simp argument list.
+  simp ̵[̵p̵a̵d̵i̵c̵V̵a̵l̵N̵a̵t̵.̵z̵e̵r̵o̵]̵
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+⚠ [8339/8469] Replayed DkMath.ABC.ABC028
+warning: DkMath/ABC/ABC028.lean:96:6: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/ABC/ABC028.lean:185:4: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/ABC/ABC028.lean:310:25: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/ABC/ABC028.lean:327:25: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+⚠ [8342/8469] Replayed DkMath.ABC.ABC031
+warning: DkMath/ABC/ABC031.lean:397:4: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+⚠ [8344/8469] Replayed DkMath.ABC.ABC033
+warning: DkMath/ABC/ABC033.lean:307:6: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+⚠ [8349/8469] Replayed DkMath.ABC.ABC038
+warning: DkMath/ABC/ABC038.lean:186:2: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+⚠ [8357/8469] Replayed DkMath.Collatz.V2
+warning: DkMath/Collatz/V2.lean:89:8: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/Collatz/V2.lean:194:6: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+⚠ [8359/8469] Replayed DkMath.Collatz.Shift
+warning: DkMath/Collatz/Shift.lean:86:6: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+⚠ [8373/8469] Replayed DkMath.CosmicFormula.CosmicFormulaCellDim
+warning: DkMath/CosmicFormula/CosmicFormulaCellDim.lean:583:10: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+⚠ [8387/8469] Replayed DkMath.DHNT.DHNT_Base
+warning: DkMath/DHNT/DHNT_Base.lean:41:4: try 'simp' instead of 'simpa'
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+warning: DkMath/DHNT/DHNT_Base.lean:37:4: try 'simp' instead of 'simpa'
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [8389/8469] Replayed DkMath.DHNT.UnitNatLayers
+warning: DkMath/DHNT/UnitNatLayers.lean:80:0: Definition `DkMath.DHNT.piBridge` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/DHNT/UnitNatLayers.lean:91:0: Definition `DkMath.DHNT.floorBridge` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/DHNT/UnitNatLayers.lean:101:0: Definition `DkMath.DHNT.scale10Bridge` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/DHNT/UnitNatLayers.lean:113:0: Definition `DkMath.DHNT.rationalApproxBridge` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/DHNT/UnitNatLayers.lean:123:0: Definition `DkMath.DHNT.constructibleBridge` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+⚠ [8411/8469] Replayed DkMath.RH.EulerZetaLemmas
+warning: DkMath/RH/EulerZetaLemmas.lean:406:4: try 'simp' instead of 'simpa'
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+⚠ [8429/8469] Replayed DkMath.FLT.GEisensteinBridge
+warning: DkMath/FLT/GEisensteinBridge.lean:1394:0: Definition `DkMath.FLT.numberTheoryHasKernelFamily_of_hasStep` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/FLT/GEisensteinBridge.lean:1406:0: Definition `DkMath.FLT.numberTheoryHasKernelFamily_of_hasReduce` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/FLT/GEisensteinBridge.lean:1418:0: Definition `DkMath.FLT.numberTheoryHasKernelFamily_of_hasStepExists` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/FLT/GEisensteinBridge.lean:1430:0: Definition `DkMath.FLT.numberTheoryHasKernelFamily_of_hasLocalReduce` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/FLT/GEisensteinBridge.lean:1484:0: Definition `DkMath.FLT.numberTheoryHasKernelFamily_of_nonLiftableFamily` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/FLT/GEisensteinBridge.lean:1520:0: Definition `DkMath.FLT.numberTheoryHasKernelFamily_of_hasNoSqFamily` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+⚠ [8432/8469] Replayed DkMath.FLT.PrimeProvider.TriominoCosmicPrimeGe5Core
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicPrimeGe5Core.lean:69:4: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+⚠ [8433/8469] Replayed DkMath.FLT.PrimeProvider.TriominoCosmicBranchA
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchA.lean:4188:8: declaration uses `sorry`
+⚠ [8434/8469] Replayed DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestore
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean:752:2: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean:805:4: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean:847:4: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean:1528:2: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean:1544:2: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestore.lean:1560:2: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+⚠ [8437/8469] Replayed DkMath.FLT.PrimeProvider.TriominoCosmicBranchARestoreArithmeticStrong
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchARestoreArithmeticStrong.lean:920:4: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+⚠ [8439/8469] Replayed DkMath.NumberTheory.GcdNextResearch
+warning: DkMath/NumberTheory/GcdNextResearch.lean:850:6: declaration uses `sorry`
+⚠ [8440/8469] Replayed DkMath.FLT.Basic
+warning: DkMath/FLT/Basic.lean:203:6: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+warning: DkMath/FLT/Basic.lean:217:6: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+warning: DkMath/FLT/Basic.lean:835:4: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+⚠ [8446/8469] Replayed DkMath.FLT.PrimeProvider.CosmicPetalBridgeGNDescentB
+warning: DkMath/FLT/PrimeProvider/CosmicPetalBridgeGNDescentB.lean:589:4: `Nat.factorization_prod_pow_eq_self` has been deprecated: Use `Nat.prod_factorization_pow_eq_self` instead
+⚠ [8453/8469] Replayed DkMath.FLT.PrimeProvider.TriominoCosmicBranchADescentChain
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchADescentChain.lean:1341:4: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/FLT/PrimeProvider/TriominoCosmicBranchADescentChain.lean:2657:4: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+⚠ [8454/8469] Replayed DkMath.FLT.Kummer.Basic
+warning: DkMath/FLT/Kummer/Basic.lean:71:6: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+⚠ [8457/8469] Replayed DkMath.CosmicFormula.TriominoFLT
+warning: DkMath/CosmicFormula/TriominoFLT.lean:1916:6: declaration uses `sorry`
+⚠ [8462/8469] Built DkMath.FLT.Kummer.CyclotomicPrincipalization (39s)
+warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:225:2: `Ideal.inf_eq_mul_of_isCoprime` has been deprecated: Use `Ideal.mul_eq_inf_of_isCoprime` instead
+Note: The updated constant has a different type:
+  ∀ {R : Type u} [inst : CommSemiring R] {I J : Ideal R}, IsCoprime I J → I * J = I ⊓ J
+instead of
+  ∀ {R : Type u} [inst : CommSemiring R] {I J : Ideal R}, IsCoprime I J → I ⊓ J = I * J
+warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:255:8: `IsDedekindDomain.inf_prime_pow_eq_prod` has been deprecated: Use `IsDedekindDomain.inf_pow_eq_prod_of_prime` instead
+warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:1828:0: Definition `DkMath.FLT.IsCyclotomicExtension_p_as_pow1` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:4468:4: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:4523:4: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+warning: DkMath/FLT/Kummer/CyclotomicPrincipalization.lean:5384:8: declaration uses `sorry`
