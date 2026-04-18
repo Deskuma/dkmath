@@ -180,3 +180,31 @@ Archive
 6. 次の課題:
    - `ABC.Main` などへの公開 import 導線を整えるか、
      あるいは `rad_lower_bound_of_disjoint_channels` に向けた最小補題設計へ進む。
+
+### 日時: 2026/04/18 17:47 JST (`supportMass` と distinct prime channels の接続)
+
+1. 目的:
+   - `review-003.md` の提案に従い、公開 import 整備より先に
+     `rad_lower_bound_of_disjoint_channels` に向けた最小補題を `MassBridge` 側へ追加する。
+2. 実施:
+   - `DkMath/ABC/MassBridge.lean` に次を追加した。
+     - `supportMass_pos`
+     - `supportMass_dvd_of_prime_channel`
+     - `pairwise_distinct_channels_mul_dvd_supportMass`
+     - `supportMass_ge_of_two_distinct_prime_channels`
+   - ここで channel は当面「prime divisor witness」を意味するものとして固定した。
+   - `DkMath/ABC/MassBridgeExamples.lean` に、
+     `2` と `3` が `12` の distinct prime channels であることから
+     `2 * 3 ≤ supportMass 12` を得る concrete example を追加した。
+3. 結論:
+   - `supportMass = rad` と prime channel counting を結ぶ最小の lower-bound spine が入った。
+   - これで bridge 群は「保存則」「valuation flow」「support mass 下界」の 3 点で一段つながった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.MassBridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.MassBridgeExamples`
+5. 失敗事例:
+   - なし。今回の補題追加は既存 `mem_support_factorization_iff` と prime coprime 補題でそのまま閉じた。
+6. 次の課題:
+   - `ValuationFlow` 側で「異なる primitive witness は異なる prime channel を与える」
+     という薄い補題設計へ進み、
+     support mass 下界と primitive channel counting をさらに接続する。
