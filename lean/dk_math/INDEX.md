@@ -54,6 +54,10 @@
 ### 3.2 ABC まわり
 
 - `DkMath.ABC`
+- 推奨 bridge 入口:
+  `DkMath.ABC.Bridge`
+  - Erdos #1196 系の bridge API (`supportMass`, prime-channel family lower bounds,
+    `PrimitiveWitnessFamily` とその counting / extraction API) を読む標準入口
 - `DkMath.ABC.PadicValNat`
 - `DkMath.ABC.CountPowersDividing2n1`
 
