@@ -87,4 +87,19 @@ example : 7 ∣ 8 ^ 1 - 1 ^ 1 := by
     primitiveWitnessFamilyPack_8_1_1
     (by simp [primitiveWitnessFamilyPack_8_1_1])
 
+/-- Counting API: channel count forces a lower bound on the channel product. -/
+example :
+    2 ^ primitiveWitnessFamilyPack_8_1_1.channelCount ≤
+      primitiveWitnessFamilyPack_8_1_1.channelProduct := by
+  exact PrimitiveWitnessFamily.pow_channelCount_le_channelProduct
+    primitiveWitnessFamilyPack_8_1_1
+
+/-- Counting API: channel count also forces a support-mass lower bound. -/
+example :
+    2 ^ primitiveWitnessFamilyPack_8_1_1.channelCount ≤
+      supportMass (8 ^ 1 - 1 ^ 1) := by
+  exact PrimitiveWitnessFamily.pow_channelCount_le_supportMass
+    primitiveWitnessFamilyPack_8_1_1
+    (by decide)
+
 end DkMath.ABC.BridgeExamples

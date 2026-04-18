@@ -161,6 +161,48 @@ theorem mem_support_implies_dvd_diff
     q ∣ a ^ d - b ^ d :=
   (F.mem_support_implies_prime_and_dvd_diff hq).2
 
+/-- Any support member of a packaged witness family is at least `2`. -/
+theorem mem_support_implies_two_le
+    {a b d q : ℕ}
+    (F : PrimitiveWitnessFamily a b d)
+    (hq : q ∈ F.support) :
+    2 ≤ q :=
+  (F.mem_support_implies_prime_channel hq).two_le
+
+/--
+Generic counting lemma: if every support member is at least `2`, then the
+product dominates `2 ^ card`.
+-/
+private theorem two_pow_card_le_prod_of_two_le
+    {S : Finset ℕ} :
+    (∀ q ∈ S, 2 ≤ q) → 2 ^ S.card ≤ S.prod id := by
+  classical
+  refine Finset.induction_on S ?_ ?_
+  · intro _
+    simp
+  · intro p s hp ih hS
+    have hp_two : 2 ≤ p := hS p (by simp [hp])
+    have hs_two : ∀ q ∈ s, 2 ≤ q := by
+      intro q hq
+      exact hS q (by simp [hq])
+    have ih' : 2 ^ s.card ≤ s.prod id := ih hs_two
+    calc
+      2 ^ (Finset.card (insert p s)) = 2 ^ s.card * 2 := by
+        simp [hp, Nat.pow_succ]
+      _ = 2 * 2 ^ s.card := by rw [Nat.mul_comm]
+      _ ≤ p * s.prod id := by
+        simpa [Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc] using
+          (Nat.mul_le_mul ih' hp_two)
+      _ = (insert p s).prod id := by simp [hp]
+
+/-- The channel count forces a lower bound on the channel product. -/
+theorem pow_channelCount_le_channelProduct
+    {a b d : ℕ}
+    (F : PrimitiveWitnessFamily a b d) :
+    2 ^ F.channelCount ≤ F.channelProduct := by
+  rw [F.channelCount_eq_support_card, F.channelProduct_eq_support_prod]
+  exact two_pow_card_le_prod_of_two_le (fun q hq => F.mem_support_implies_two_le hq)
+
 /--
 Packaged witness families inherit the support-mass lower bound on the diff.
 -/
@@ -181,6 +223,15 @@ theorem channelProduct_le_supportMass
     (hdiff_ne : a ^ d - b ^ d ≠ 0) :
     F.channelProduct ≤ supportMass (a ^ d - b ^ d) := by
   simpa [channelProduct] using F.supportMassLowerBound hdiff_ne
+
+/-- The channel count also forces a support-mass lower bound through the product. -/
+theorem pow_channelCount_le_supportMass
+    {a b d : ℕ}
+    (F : PrimitiveWitnessFamily a b d)
+    (hdiff_ne : a ^ d - b ^ d ≠ 0) :
+    2 ^ F.channelCount ≤ supportMass (a ^ d - b ^ d) := by
+  exact le_trans F.pow_channelCount_le_channelProduct
+    (F.channelProduct_le_supportMass hdiff_ne)
 
 end PrimitiveWitnessFamily
 
