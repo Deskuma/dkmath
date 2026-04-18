@@ -437,3 +437,41 @@ Archive
 6. 次の課題:
    - `channelCount` と `channelProduct` を併用する counting 補題へ進む。
    - あるいは `DkMath.ABC.Bridge` を推奨入口として文書側に明示する。
+
+### 日時: 2026/04/18 21:09 JST (`INDEX.md` 追記と `count -> product -> supportMass` の追加)
+
+1. 目的:
+   - ユーザー指示に従い、`DkMath.ABC.Bridge` を推奨入口として `INDEX.md` に明示する。
+   - あわせて `review-010.md` の提案に従い、
+     `channelCount` と `channelProduct` を結ぶ counting 補題を追加する。
+2. 実施:
+   - `INDEX.md` の `3.2 ABC まわり` 節に
+     `DkMath.ABC.Bridge` を Erdos #1196 系 bridge API の推奨入口として追記した。
+   - `DkMath/ABC/ValuationFlowBridge.lean` の `PrimitiveWitnessFamily` namespace に
+     - `mem_support_implies_two_le`
+     - `pow_channelCount_le_channelProduct`
+     - `pow_channelCount_le_supportMass`
+     を追加した。
+   - `pow_channelCount_le_channelProduct` の証明には、
+     support の各元が prime なので `2 ≤ q` を満たすことと、
+     `Finset` の card/product に対する帰納法だけを使った。
+   - `DkMath/ABC/BridgeExamples.lean` に public import 経由の usage example として
+     - `2 ^ channelCount ≤ channelProduct`
+     - `2 ^ channelCount ≤ supportMass (...)`
+     を追加した。
+3. 結論:
+   - 文書側では `DkMath.ABC.Bridge` が bridge API の標準入口として明示された。
+   - Lean 側では `channelCount -> channelProduct -> supportMass` の最小 counting spine が入った。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ValuationFlowBridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.BridgeExamples`
+   - build では既存 `ZsigmondyCyclotomicResearch.lean` の `sorry` 警告が replay されたが、
+     今回更新した bridge / example は成功した。
+5. 失敗事例:
+   - `pow_channelCount_le_channelProduct` の初版では、
+     `Nat.pow_succ` による積の向きが `2 ^ s.card * 2` になり、
+     `2 * 2 ^ s.card` への整形が不足して build が落ちた。
+   - 等式を `Nat.mul_comm` で明示的に繋ぐ形へ修正して解消した。
+6. 次の課題:
+   - `channelCount` と `supportMass` の下界を concrete family 例で増やすか、
+     あるいは `PrimitiveWitnessFamily` を既存 ABC 本体のどの命題へ差し込むか整理する。
