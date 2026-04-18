@@ -56,6 +56,10 @@ example :
 example : primitiveWitnessFamilyPack_8_1_1.channelProduct = 7 := by
   simp [PrimitiveWitnessFamily.channelProduct, primitiveWitnessFamilyPack_8_1_1]
 
+/-- The public package API also exposes the channel-count alias. -/
+example : primitiveWitnessFamilyPack_8_1_1.channelCount = 1 := by
+  simp [PrimitiveWitnessFamily.channelCount, primitiveWitnessFamilyPack_8_1_1]
+
 /-- The channel-product alias carries the same public lower bound. -/
 example :
     primitiveWitnessFamilyPack_8_1_1.channelProduct ≤
@@ -63,5 +67,24 @@ example :
   exact PrimitiveWitnessFamily.channelProduct_le_supportMass
     primitiveWitnessFamilyPack_8_1_1
     (by decide)
+
+/-- Public extraction API: support members are prime diff channels. -/
+example :
+    Nat.Prime 7 ∧ 7 ∣ 8 ^ 1 - 1 ^ 1 := by
+  exact PrimitiveWitnessFamily.mem_support_implies_prime_and_dvd_diff
+    primitiveWitnessFamilyPack_8_1_1
+    (by simp [primitiveWitnessFamilyPack_8_1_1])
+
+/-- Public extraction API: support members are prime. -/
+example : Nat.Prime 7 := by
+  exact PrimitiveWitnessFamily.mem_support_implies_prime_channel
+    primitiveWitnessFamilyPack_8_1_1
+    (by simp [primitiveWitnessFamilyPack_8_1_1])
+
+/-- Public extraction API: support members divide the diff. -/
+example : 7 ∣ 8 ^ 1 - 1 ^ 1 := by
+  exact PrimitiveWitnessFamily.mem_support_implies_dvd_diff
+    primitiveWitnessFamilyPack_8_1_1
+    (by simp [primitiveWitnessFamilyPack_8_1_1])
 
 end DkMath.ABC.BridgeExamples

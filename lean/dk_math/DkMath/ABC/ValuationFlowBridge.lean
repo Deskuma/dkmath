@@ -110,11 +110,23 @@ def channelProduct
     (F : PrimitiveWitnessFamily a b d) : ℕ :=
   F.support.prod id
 
+/-- The cardinality of the packaged prime-channel support. -/
+def channelCount
+    {a b d : ℕ}
+    (F : PrimitiveWitnessFamily a b d) : ℕ :=
+  F.support.card
+
 /-- The channel product is just the support product, exposed under a bridge name. -/
 @[simp] theorem channelProduct_eq_support_prod
     {a b d : ℕ}
     (F : PrimitiveWitnessFamily a b d) :
     F.channelProduct = F.support.prod id := rfl
+
+/-- The channel count is just the support cardinality, exposed under a bridge name. -/
+@[simp] theorem channelCount_eq_support_card
+    {a b d : ℕ}
+    (F : PrimitiveWitnessFamily a b d) :
+    F.channelCount = F.support.card := rfl
 
 /--
 Read a packaged witness family as a family of prime channels on the diff side.
@@ -124,6 +136,30 @@ theorem primeChannelFamily
     (F : PrimitiveWitnessFamily a b d) :
     ∀ q ∈ F.support, Nat.Prime q ∧ q ∣ a ^ d - b ^ d := by
   exact primitive_witness_family_gives_prime_channel_family_on_diff F.witness
+
+/-- Any support member of a packaged witness family is a prime diff channel. -/
+theorem mem_support_implies_prime_and_dvd_diff
+    {a b d q : ℕ}
+    (F : PrimitiveWitnessFamily a b d)
+    (hq : q ∈ F.support) :
+    Nat.Prime q ∧ q ∣ a ^ d - b ^ d := by
+  exact F.primeChannelFamily q hq
+
+/-- Any support member of a packaged witness family is prime. -/
+theorem mem_support_implies_prime_channel
+    {a b d q : ℕ}
+    (F : PrimitiveWitnessFamily a b d)
+    (hq : q ∈ F.support) :
+    Nat.Prime q :=
+  (F.mem_support_implies_prime_and_dvd_diff hq).1
+
+/-- Any support member of a packaged witness family divides the diff. -/
+theorem mem_support_implies_dvd_diff
+    {a b d q : ℕ}
+    (F : PrimitiveWitnessFamily a b d)
+    (hq : q ∈ F.support) :
+    q ∣ a ^ d - b ^ d :=
+  (F.mem_support_implies_prime_and_dvd_diff hq).2
 
 /--
 Packaged witness families inherit the support-mass lower bound on the diff.
