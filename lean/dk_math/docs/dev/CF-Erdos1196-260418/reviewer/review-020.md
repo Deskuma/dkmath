@@ -91,7 +91,7 @@ $$
 この補題の美しさは、`c` の既存分解
 
 $$
-c = \pi\mathrm{SqRad}(c),\mathrm{rad}(c),\mathrm{twoTail}(c)
+c = \pi\mathrm{SqRad}(c)\,\mathrm{rad}(c)\,\mathrm{twoTail}(c)
 $$
 
 をそのまま使っている点じゃな。
