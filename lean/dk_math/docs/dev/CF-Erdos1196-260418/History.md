@@ -35,3 +35,23 @@ Archive
    - （内容）
 6. 次の課題:
    - （内容）
+
+### 日時: 2026/04/18 16:50 JST (Erdos #1196 実装計画の固定)
+
+1. 目的:
+   - `CosmicFormula-Erdos1196-*` 文書を読み、既存ワークスペースを踏まえた実装順序を確定する。
+2. 実施:
+   - `docs/__AGENT.md` を確認し、`History.md` の継続更新と単体 build 方針を再確認した。
+   - `CosmicFormula-Erdos1196-design.md` と `CosmicFormula-Erdos1196-discussion.md` を読んだ。
+   - 既存コードとして `CoreBeamGap`, `ResidualNat`, `ResidualInt`, `PrimitiveBeam`, `ZsigmondyCyclotomicSquarefree`, `ABC/PadicValNat`, `ABC/Rad` を調査した。
+   - `ImplementsPlan.md` を更新し、Phase A-D の実装順序と build 対象を具体化した。
+3. 結論:
+   - 初手は確率 kernel の完全形式化ではなく、`CosmicFormula` の保存則 API と primitive/valuation flow の骨格を先に実装する方針で固定した。
+   - 既存資産が十分あるため、新設は wrapper / bridge 中心で進める。
+4. 検証:
+   - ドキュメントと関連 Lean ファイルの対応関係を確認した。
+   - `git status --short` は空で、作業木に未整理変更が無いことを確認した。
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `ImplementsPlan.md` の Phase A に従い、`CosmicFormula/Mass/Core.lean` と `Decompose.lean` から実装を開始する。
