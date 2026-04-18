@@ -208,3 +208,38 @@ Archive
    - `ValuationFlow` 側で「異なる primitive witness は異なる prime channel を与える」
      という薄い補題設計へ進み、
      support mass 下界と primitive channel counting をさらに接続する。
+
+### 日時: 2026/04/18 18:46 JST (primitive witness から support mass 下界への接続)
+
+1. 目的:
+   - `review-004.md` の提案に従い、`ValuationFlow` 側で
+     primitive witness から prime channel を取り出し、
+     support mass 下界へ流す最小 spine を追加する。
+2. 実施:
+   - `DkMath/NumberTheory/ValuationFlow/Primitive.lean` に次を追加した。
+     - `primitivePrimeFlow_prime`
+     - `primitivePrimeFlow_dvd_diff`
+   - `DkMath/ABC/ValuationFlowBridge.lean` に次を追加した。
+     - `primitive_witness_gives_prime_channel_on_diff`
+     - `distinct_primitive_witnesses_give_distinct_prime_channels`
+     - `primitive_channels_force_supportMass_lower_bound`
+   - `DkMath/ABC/ValuationFlowBridgeExamples.lean` に、
+     `6^3 - 5^3 = 91 = 7 * 13` を使った 2 本 primitive channel 例を追加した。
+     - `7` と `13` の primitive witness
+     - distinct primitive witnesses から diff 側の 2 本 prime channel を得る例
+     - `7 * 13 ≤ supportMass (6^3 - 5^3)` の例
+3. 結論:
+   - `primitive flow -> disjoint channels -> supportMass lower bound`
+     の最小核が Lean 上で一本つながった。
+   - これにより、prime divisor channel 版と primitive flow 版の lower-bound spine の対応が見えるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.ValuationFlow.Primitive`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ValuationFlowBridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ValuationFlowBridgeExamples`
+   - 各 build では既存 `ZsigmondyCyclotomicResearch.lean` の `sorry` 警告が replay されたが、
+     今回追加・更新したファイル自体の build は成功した。
+5. 失敗事例:
+   - なし。今回の追加は既存 primitive witness API と `supportMass` 下界補題の合成だけで閉じた。
+6. 次の課題:
+   - `ABC.Main` などへの公開 import 導線を整えるか、
+     あるいは 2 本 channel 版を `Finset` / pairwise family 版へ一般化する設計へ進む。
