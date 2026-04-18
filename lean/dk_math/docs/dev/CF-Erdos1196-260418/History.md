@@ -823,3 +823,64 @@ Archive
    - 特に `u + v = c` の nontrivial triple で、
      `rad c ≤ rad(u*v)` をどう supply するか、
      あるいは `rad c` 側 budget のまま質的不等式へ入る route がないかを比較検討する。
+
+### 日時: 2026/04/19 00:46 JST (`rad(abc)` analytic bridge への直結 route の追加)
+
+1. 目的:
+   - `review-019.md` の示唆に従い、`rad c` budget から
+     `rad(u*v)` transport を経ずに、
+     既存の `rad(a*b*c)` analytic bridge へ直接入る最小 route を追加する。
+2. 実施:
+   - `DkMath/ABC/ABC038Bridge.lean` に次を追加した。
+     - `radAbcBound_of_pi_targetRadTail`
+     - `quality_le_of_pi_targetRadTail_of_radAbc`
+     - `quality_le_of_not_bad_with_targetRadTail_on_radAbc`
+   - `radAbcBound_of_pi_targetRadTail` では
+     - `piSqRad c ≤ rad(a*b)^δ`
+     - `twoTail c ≤ (rad c)^γ`
+     - `a*b*c ≠ 0`
+     から
+     `c ≤ rad(a*b*c)^(1 + δ + γ)`
+     を導く中間補題を実装した。
+   - `quality_le_of_pi_targetRadTail_of_radAbc` では、
+     上の `rad(abc)` growth bound と
+     `δ + γ ≤ ε` を合成して
+     `quality_le_of_sqprod_pow_bound_analytic_axiom_to_lemma`
+     へ渡す route を追加した。
+   - `quality_le_of_not_bad_with_targetRadTail_on_radAbc` では、
+     `piSqRad_le_of_not_bad` を使って `¬Bad` 版 wrapper に薄く包み直した。
+3. 結論:
+   - `ABC038` 接続には、
+     `channelCount -> rad c -> rad(u*v) -> TailBound`
+     という transport route だけでなく、
+     `channelCount -> rad c -> rad(a*b*c) -> quality`
+     という analytic 直結 route も theorem 名で現れた。
+   - これにより、review-019 が求めていた
+     「`rad c` budget のまま quality 側へどこまで入れるか」
+     に対する最小の実装回答が入った。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ABC038Bridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ABC038BridgeExamples`
+   - build では既存 `ABC021.lean` と
+     `ZsigmondyCyclotomicResearch.lean` の `sorry` 警告が replay されたが、
+     今回更新したファイル自体は成功した。
+5. 失敗事例:
+   - `radAbcBound_of_pi_targetRadTail` 初版では
+     `c = piSqRad * rad * twoTail` の項の並び替えと
+     `hπ` の `rad(a*b*c)` への持ち上げが不足し、型が噛まなかった。
+   - ここは
+     - `hdec` を `calc` で並び替える
+     - `hπ_abc : piSqRad c ≤ rad(a*b*c)^δ`
+     を先に作る
+     形へ分解して解消した。
+   - 同 theorem 初版では `a*b*c ≠ 0` を暗に使っていたため、
+     仮定として明示し、quality wrapper 側で
+     `rad(a*b*c) > 1` から供給する形に整理した。
+   - `quality_le_of_sqprod_pow_bound_analytic_axiom_to_lemma` 呼び出しでは、
+     `hπ` の形が `rad(a*b)^δ` ではなく
+     `(rad a * rad b)^δ` を要求していたため、
+     `rad_mul_coprime' hcop` で整形した。
+6. 次の課題:
+   - 新しい `rad(abc)` 直結 route の concrete sample を追加する。
+   - その上で、`ABC038` 本体の convenience theorem 群のうち、
+     どこをこの route で置き換えるのが最も薄いかを見極める。
