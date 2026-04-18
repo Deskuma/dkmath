@@ -501,6 +501,21 @@ lemma count_with_rad_eq_le_div (r X : ℕ) (hr : r ≠ 0) :
     _ ≤ ((Finset.range (X / r + 1)).image (fun k => r * k)).card := hM_le_img
     _ = (X / r) + 1 := by rw [card_img]
 
+/-- Monotone corollary: an exact `rad = r` class is also bounded by any smaller positive lower bound `R ≤ r`. -/
+lemma count_with_rad_eq_le_div_of_lower_bound (r R X : ℕ)
+    (hR : R ≠ 0) (hR_le_r : R ≤ r) :
+  ((Finset.range (X+1)).filter fun a => a ≤ X ∧ rad a = r).card ≤ (X / R) + 1 := by
+  have hr : r ≠ 0 := by
+    exact Nat.ne_zero_of_lt (lt_of_lt_of_le (Nat.pos_of_ne_zero hR) hR_le_r)
+  have hbase : ((Finset.range (X+1)).filter fun a => a ≤ X ∧ rad a = r).card ≤ (X / r) + 1 :=
+    count_with_rad_eq_le_div r X hr
+  have hdiv : X / r ≤ X / R := by
+    refine (Nat.le_div_iff_mul_le (Nat.pos_of_ne_zero hR)).2 ?_
+    have hmul1 : (X / r) * R ≤ (X / r) * r := Nat.mul_le_mul_left _ hR_le_r
+    have hmul2 : (X / r) * r ≤ X := Nat.div_mul_le_self X r
+    exact le_trans hmul1 hmul2
+  exact le_trans hbase (Nat.add_le_add_right hdiv 1)
+
 /-- `0 ≤ M` のとき `M ≤ ↑⌈M⌉₊` を取り出す補題 -/
 private lemma ceil_ge_nonneg (M : ℝ) (hM : 0 ≤ M) : M ≤ (↑⌈M⌉₊ : ℝ) :=
   (Nat.ceil_spec M hM).right

@@ -155,4 +155,14 @@ example :
     primitiveWitnessFamilyPack_6_5_3
     (by decide)
 
+/-- RatioBound-facing bridge: the `rad` class shrinks by the counting spine. -/
+example :
+    ((Finset.range (100 + 1)).filter fun n =>
+      n ≤ 100 ∧ ABC.rad n = ABC.rad (6 ^ 3 - 5 ^ 3)).card
+        ≤ (100 / (2 ^ primitiveWitnessFamilyPack_6_5_3.channelCount)) + 1 := by
+  exact PrimitiveWitnessFamily.count_class_with_same_rad_as_diff_le_of_channelCount
+    (X := 100)
+    primitiveWitnessFamilyPack_6_5_3
+    (by decide)
+
 end DkMath.ABC.BridgeExamples

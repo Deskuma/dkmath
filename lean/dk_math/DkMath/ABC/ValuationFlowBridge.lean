@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC.MassBridge
 import DkMath.ABC.PadicValNat
+import DkMath.ABC.RatioBound
 import DkMath.NumberTheory.ValuationFlow.Primitive
 
 #print "file: DkMath.ABC.ValuationFlowBridge"
@@ -248,6 +249,26 @@ theorem pow_channelCount_le_abc_rad_diff
     (hdiff_ne : a ^ d - b ^ d ≠ 0) :
     2 ^ F.channelCount ≤ ABC.rad (a ^ d - b ^ d) := by
   simpa [supportMass_eq_abc_rad] using F.pow_channelCount_le_supportMass hdiff_ne
+
+/--
+The ABC radical lower bound from a witness family shrinks the corresponding
+exact-rad counting class in `RatioBound`.
+-/
+theorem count_class_with_same_rad_as_diff_le_of_channelCount
+    {a b d X : ℕ}
+    (F : PrimitiveWitnessFamily a b d)
+    (hdiff_ne : a ^ d - b ^ d ≠ 0) :
+    ((Finset.range (X + 1)).filter fun n =>
+      n ≤ X ∧ ABC.rad n = ABC.rad (a ^ d - b ^ d)).card
+        ≤ (X / (2 ^ F.channelCount)) + 1 := by
+  have hpow_ne : 2 ^ F.channelCount ≠ 0 := by
+    exact pow_ne_zero _ (by decide)
+  exact ABC.count_with_rad_eq_le_div_of_lower_bound
+    (r := ABC.rad (a ^ d - b ^ d))
+    (R := 2 ^ F.channelCount)
+    (X := X)
+    hpow_ne
+    (F.pow_channelCount_le_abc_rad_diff hdiff_ne)
 
 end PrimitiveWitnessFamily
 
