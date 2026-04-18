@@ -52,5 +52,16 @@ example :
     primitiveWitnessFamilyPack_8_1_1
     (by decide)
 
-end DkMath.ABC.BridgeExamples
+/-- The public package API exposes the channel product alias. -/
+example : primitiveWitnessFamilyPack_8_1_1.channelProduct = 7 := by
+  simp [PrimitiveWitnessFamily.channelProduct, primitiveWitnessFamilyPack_8_1_1]
 
+/-- The channel-product alias carries the same public lower bound. -/
+example :
+    primitiveWitnessFamilyPack_8_1_1.channelProduct ≤
+      supportMass (8 ^ 1 - 1 ^ 1) := by
+  exact PrimitiveWitnessFamily.channelProduct_le_supportMass
+    primitiveWitnessFamilyPack_8_1_1
+    (by decide)
+
+end DkMath.ABC.BridgeExamples

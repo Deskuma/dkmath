@@ -104,6 +104,18 @@ theorem primitive_witness_family_force_supportMass_lower_bound
 
 namespace PrimitiveWitnessFamily
 
+/-- The multiplicative size of the packaged prime-channel support. -/
+def channelProduct
+    {a b d : ℕ}
+    (F : PrimitiveWitnessFamily a b d) : ℕ :=
+  F.support.prod id
+
+/-- The channel product is just the support product, exposed under a bridge name. -/
+@[simp] theorem channelProduct_eq_support_prod
+    {a b d : ℕ}
+    (F : PrimitiveWitnessFamily a b d) :
+    F.channelProduct = F.support.prod id := rfl
+
 /--
 Read a packaged witness family as a family of prime channels on the diff side.
 -/
@@ -122,6 +134,17 @@ theorem supportMassLowerBound
     (hdiff_ne : a ^ d - b ^ d ≠ 0) :
     F.support.prod id ≤ supportMass (a ^ d - b ^ d) := by
   exact primitive_witness_family_force_supportMass_lower_bound F.witness hdiff_ne
+
+/--
+Public-facing alias of the packaged support-mass lower bound, phrased directly
+in terms of the channel product.
+-/
+theorem channelProduct_le_supportMass
+    {a b d : ℕ}
+    (F : PrimitiveWitnessFamily a b d)
+    (hdiff_ne : a ^ d - b ^ d ≠ 0) :
+    F.channelProduct ≤ supportMass (a ^ d - b ^ d) := by
+  simpa [channelProduct] using F.supportMassLowerBound hdiff_ne
 
 end PrimitiveWitnessFamily
 
