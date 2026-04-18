@@ -510,3 +510,39 @@ Archive
 6. 次の課題:
    - `PrimitiveWitnessFamily` の counting spine を既存 ABC 本体のどの命題へ差し込むか整理する。
    - あるいは concrete family をさらに追加して、public API の利用例を厚くする。
+
+### 日時: 2026/04/18 22:07 JST (`ABC.rad` 語彙への直接 alias 追加)
+
+1. 目的:
+   - `review-012.md` の流れに従い、bridge counting spine を
+     `supportMass` だけでなく既存 ABC 本体が直接使う `ABC.rad` 語彙でも読めるようにする。
+2. 実施:
+   - `DkMath/ABC/ValuationFlowBridge.lean` の `PrimitiveWitnessFamily` namespace に
+     - `channelProduct_le_abc_rad_diff`
+     - `pow_channelCount_le_abc_rad_diff`
+     を追加した。
+   - いずれも既存
+     - `channelProduct_le_supportMass`
+     - `pow_channelCount_le_supportMass`
+     と `supportMass_eq_abc_rad`
+     の合成だけで閉じた alias である。
+   - `DkMath/ABC/BridgeExamples.lean` に 2-channel sample `primitiveWitnessFamilyPack_6_5_3`
+     を使った public usage example として
+     - `channelProduct ≤ ABC.rad (6 ^ 3 - 5 ^ 3)`
+     - `2 ^ channelCount ≤ ABC.rad (6 ^ 3 - 5 ^ 3)`
+     を追加した。
+3. 結論:
+   - counting spine が bridge 専用語彙 `supportMass` だけでなく、
+     ABC 本体で広く使われる `ABC.rad` へ直接着地する形になった。
+   - これで既存 ABC コア命題へ差し込むための最小 alias が入った。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ValuationFlowBridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.BridgeExamples`
+   - build では既存 `ZsigmondyCyclotomicResearch.lean` の `sorry` 警告が replay されたが、
+     今回更新した bridge / example は成功した。
+5. 失敗事例:
+   - なし。今回の追加は既存 lower-bound spine と `supportMass_eq_abc_rad` の再包装だけで閉じた。
+6. 次の課題:
+   - `ABC016` / `ABC002` など既存 ABC コアの `rad`・quality 系命題で、
+     この alias を差し込める箇所を具体化する。
+   - あるいは `ABC.rad` 語彙での concrete family 例をさらに増やす。
