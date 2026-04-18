@@ -718,3 +718,57 @@ Archive
      `u + v = c` と両立する radical transport の自然な供給元を定理化する必要がある。
    - あるいは `TailBound` より手前で使う budget 語彙を `rad c` 側に寄せる中間補題を追加し、
      quality 側への接続条件を緩める。
+
+### 日時: 2026/04/18 23:17 JST (divisibility ベース radical transport の追加)
+
+1. 目的:
+   - `review-017.md` の提案に従い、`rad c ≤ rad (u * v)` の自然供給元として
+     divisibility ベースの transport route を bridge 層へ追加する。
+2. 実施:
+   - 既存 `ABC011.lean` に
+     - `rad_dvd_of_dvd`
+     - `rad_le_of_dvd`
+     があることを確認し、これを `ABC038Bridge` 側で薄く再公開する方針を採用した。
+   - `DkMath/ABC/ABC038Bridge.lean` に次を追加した。
+     - `rad_input_transport_of_target_dvd_mul`
+     - `tailBound_of_channelCount_tail_dvd`
+     - `quality_le_of_not_bad_with_channelCount_tail_dvd`
+   - `rad_input_transport_of_target_dvd_mul` では
+     `c ∣ u * v` と `u * v ≠ 0` から
+     `rad c ≤ rad (u * v)` を出す。
+   - `tailBound_of_channelCount_tail_dvd` / `quality_le_of_not_bad_with_channelCount_tail_dvd`
+     は、前回追加した generic transport wrapper を
+     divisibility 仮定つきの便利版へ specialization した。
+   - `DkMath/ABC/ABC038BridgeExamples.lean` には、
+     `14^1 - 7^1 = 7` の one-channel family
+     `primitiveWitnessFamilyPack_14_7_1` を追加し、
+     `7 ∣ 14 * 7` から `TailBound 1 14 7 7` を読む
+     divisibility-route sample を追加した。
+3. 結論:
+   - `ABC038` 向け radical transport について、
+     generic 仮定 `rad c ≤ rad (u * v)` だけでなく、
+     その自然供給元のひとつである
+     `c ∣ u * v` ルートを theorem 名で固定できた。
+   - これにより、transport route の候補は
+     「任意 transport 仮定」から
+     「divisibility ベースの自然仮定」へ一段具体化された。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ABC038Bridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ABC038BridgeExamples`
+   - build では既存 `ABC021.lean` と
+     `ZsigmondyCyclotomicResearch.lean` の `sorry` 警告が replay されたが、
+     今回更新したファイル自体は成功した。
+5. 失敗事例:
+   - `rad_input_transport_of_target_dvd_mul` 初版では
+     `ABC.rad_le_of_dvd` をそのまま使い、
+     実数版不等式を自然数版 goal に当てて型不一致で落ちた。
+   - ここは `ABC.rad_dvd_of_dvd` と `Nat.le_of_dvd` を使う
+     Nat 版の証明へ切り替えて解消した。
+   - `ABC038BridgeExamples` では
+     `primitiveWitnessFamilyPack_6_5_3` の second branch が
+     `primitiveWitnessFamilyPack_14_7_1` 定義に紛れ込み、
+     unsolved goal を出した。branch 配置を修正して解消した。
+6. 次の課題:
+   - divisibility ベース route が実際の `u + v = c` な quality sample に自然に現れるかを洗う。
+   - もし現れにくければ、次は `TailBound` 側の入力語彙を `rad c` 基準に寄せる
+     input-refactoring route の方が軽いかを比較検討する。
