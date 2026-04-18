@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import Mathlib.Tactic.IntervalCases
 import DkMath.ABC.Bridge
 
 #print "file: DkMath.ABC.BridgeExamples"
@@ -36,6 +37,19 @@ private def primitiveWitnessFamilyPack_8_1_1 : PrimitiveWitnessFamily 8 1 1 wher
     refine ⟨by decide, by decide, ?_⟩
     intro k hk_pos hk_lt
     omega
+
+/-- A two-channel public sample: `6^3 - 5^3 = 91 = 7 * 13`. -/
+private def primitiveWitnessFamilyPack_6_5_3 : PrimitiveWitnessFamily 6 5 3 where
+  support := ({7, 13} : Finset ℕ)
+  witness q hq := by
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hq
+    rcases hq with rfl | rfl
+    · refine ⟨by decide, by decide, ?_⟩
+      intro k hk_pos hk_lt
+      interval_cases k <;> decide
+    · refine ⟨by decide, by decide, ?_⟩
+      intro k hk_pos hk_lt
+      interval_cases k <;> decide
 
 /-- The packaged bridge API exposes prime channels through the public aggregator. -/
 example : Nat.Prime 7 ∧ 7 ∣ 8 ^ 1 - 1 ^ 1 := by
@@ -100,6 +114,29 @@ example :
       supportMass (8 ^ 1 - 1 ^ 1) := by
   exact PrimitiveWitnessFamily.pow_channelCount_le_supportMass
     primitiveWitnessFamilyPack_8_1_1
+    (by decide)
+
+/-- The two-channel sample exposes a nontrivial channel count. -/
+example : primitiveWitnessFamilyPack_6_5_3.channelCount = 2 := by
+  simp [PrimitiveWitnessFamily.channelCount, primitiveWitnessFamilyPack_6_5_3]
+
+/-- The two-channel sample exposes the expected channel product. -/
+example : primitiveWitnessFamilyPack_6_5_3.channelProduct = 7 * 13 := by
+  simp [PrimitiveWitnessFamily.channelProduct, primitiveWitnessFamilyPack_6_5_3]
+
+/-- Counting API on the two-channel sample: `2 ^ count ≤ product`. -/
+example :
+    2 ^ primitiveWitnessFamilyPack_6_5_3.channelCount ≤
+      primitiveWitnessFamilyPack_6_5_3.channelProduct := by
+  exact PrimitiveWitnessFamily.pow_channelCount_le_channelProduct
+    primitiveWitnessFamilyPack_6_5_3
+
+/-- Counting API on the two-channel sample: `2 ^ count ≤ supportMass`. -/
+example :
+    2 ^ primitiveWitnessFamilyPack_6_5_3.channelCount ≤
+      supportMass (6 ^ 3 - 5 ^ 3) := by
+  exact PrimitiveWitnessFamily.pow_channelCount_le_supportMass
+    primitiveWitnessFamilyPack_6_5_3
     (by decide)
 
 end DkMath.ABC.BridgeExamples
