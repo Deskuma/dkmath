@@ -360,3 +360,41 @@ Archive
    - `DkMath.ABC` 直下でどこまで bridge API を canonical import とみなすか整理する。
    - あるいは `PrimitiveWitnessFamily` に対する counting / extraction 補題を追加して、
      public API の中身をもう一段厚くする。
+
+### 日時: 2026/04/18 19:55 JST (public counting / extraction alias の追加)
+
+1. 目的:
+   - `review-008.md` の提案に従い、public surface を厚くしすぎずに
+     `PrimitiveWitnessFamily` の最小 counting / extraction API を 1 段だけ追加する。
+2. 実施:
+   - `DkMath/ABC/ValuationFlowBridge.lean` の `PrimitiveWitnessFamily` namespace に
+     - `channelProduct`
+     - `channelProduct_eq_support_prod`
+     - `channelProduct_le_supportMass`
+     を追加した。
+   - `channelProduct` は `support.prod id` の public-facing alias とし、
+     `channelProduct_le_supportMass` は既存 `supportMassLowerBound` の
+     channel-product 名による再公開に留めた。
+   - `DkMath/ABC/BridgeExamples.lean` に
+     - `primitiveWitnessFamilyPack_8_1_1.channelProduct = 7`
+     - `primitiveWitnessFamilyPack_8_1_1.channelProduct ≤ supportMass (8 ^ 1 - 1 ^ 1)`
+     の public usage example を追加した。
+3. 結論:
+   - public import から
+     - support 集合
+     - support の product
+     - supportMass 下界
+     の関係を method 名で読みやすくする最小 API が入った。
+   - これで `PrimitiveWitnessFamily` の公開面は、
+     structure / channel family / lower bound / channel product まで一通り揃った。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ValuationFlowBridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.BridgeExamples`
+   - build では既存 `ZsigmondyCyclotomicResearch.lean` の `sorry` 警告が replay されたが、
+     今回更新した bridge / example は成功した。
+5. 失敗事例:
+   - なし。今回の alias 追加は既存 lower-bound API の再包装だけで閉じた。
+6. 次の課題:
+   - `DkMath.ABC.Bridge` を推奨入口として文書側へ明示する。
+   - あるいは `PrimitiveWitnessFamily` の次の counting / extraction 段
+     （例えば support size や extracted channel family の読み出し）へ進む。
