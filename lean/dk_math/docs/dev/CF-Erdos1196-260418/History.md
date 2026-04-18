@@ -621,3 +621,39 @@ Archive
    - `ABC038` quality 系へ進む前段として、
      `rad(diff)` 下界を `rad(a*b)` 入力へ送る中間命題を設計する。
    - あるいは `RatioBound` 側で `rad ≥ R` class をさらにまとめて数える補題へ進む。
+
+### 日時: 2026/04/18 22:41 JST (`ABC038` 前段の dependency chain 整理)
+
+1. 目的:
+   - `review-015.md` の提案に従い、`ABC038` quality 系へ進む前段として
+     `rad(diff)` 下界を `rad(a*b)` 入力へ送る中間命題の dependency chain を theorem 名レベルで整理する。
+2. 実施:
+   - `ABC038.lean` の
+     - `quality_le_of_not_bad_with_tail`
+     - `quality_le_of_not_bad_with_log`
+     を再読し、quality 側が実際に欲している入力が
+     `ABC.rad (a * b)` であることを確認した。
+   - `ValuationFlowBridge.lean` と前回の候補整理を踏まえ、
+     bridge 側の `ABC.rad(diff)` 下界から quality 入力へ送るための
+     中間命題候補を整理した。
+   - 結果を
+     [ABC038BridgeDependency.md](ABC038BridgeDependency.md)
+     にまとめた。
+   - とくに次の 3 層を明示した。
+     - radical transport
+     - witness family on triple / target
+     - quality-input lower bound wrapper
+3. 結論:
+   - `ABC038` へ差し込む前に何が足りないかが、
+     theorem 名と仮定の粒度で切り分けられた。
+   - 次に実装すべき最小候補は
+     - `primitive_witness_family_gives_abc_rad_target_lower_bound`
+     - `primitive_channel_count_forces_quality_rad_input`
+     の 2 本である。
+4. 検証:
+   - 今回は設計整理のみで、Lean コードの追加や build は行っていない。
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - 上記 2 本の中間命題を Lean に実装する。
+   - あるいは `ABC038` 側へ入る前に、`rad(diff) ≤ rad(a*b)` 型 transport hypothesis の自然な供給元を決める。
