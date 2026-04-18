@@ -43,4 +43,17 @@ example : 31 ≤ supportMass 31 := by
 example : supportMass 12 ∣ 12 := by
   exact abc_supportMass_dvd_self (n := 12) (by decide)
 
+/-- Two distinct prime channels already force a lower bound on support mass. -/
+example : 2 * 3 ≤ supportMass 12 := by
+  exact supportMass_ge_of_two_distinct_prime_channels
+    (n := 12)
+    (p := 2)
+    (q := 3)
+    (by decide)
+    (by decide)
+    (by decide)
+    (by decide)
+    (by decide)
+    (by decide)
+
 end DkMath.ABC.MassBridgeExamples

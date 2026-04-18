@@ -67,4 +67,60 @@ theorem abc_supportMass_dvd_self {n : ℕ} (hn0 : n ≠ 0) :
     supportMass n ∣ n := by
   simpa [supportMass] using DkMath.ABC.Rad.rad_dvd_nonzero n hn0
 
+/-- Support mass is always positive. -/
+theorem supportMass_pos (n : ℕ) : 0 < supportMass n := by
+  unfold supportMass DkMath.ABC.Rad.rad
+  apply Finset.prod_pos
+  intro p hp
+  exact Nat.pos_of_ne_zero (Nat.Prime.ne_zero ((ABC.mem_support_factorization_iff.mp hp).2.1))
+
+/--
+Any prime channel of a nonzero natural number already divides the support mass.
+
+For now, a "channel" is simply a prime divisor witness.
+-/
+theorem supportMass_dvd_of_prime_channel
+    {n p : ℕ} (hn0 : n ≠ 0) (hp : Nat.Prime p) (hpd : p ∣ n) :
+    p ∣ supportMass n := by
+  unfold supportMass DkMath.ABC.Rad.rad
+  apply Finset.dvd_prod_of_mem
+  exact ABC.mem_support_factorization_iff.mpr ⟨hn0, hp, hpd⟩
+
+/--
+Two distinct prime channels contribute multiplicatively to the support mass.
+
+This is the first finite-channel version of the intended disjoint-channel lower
+bound principle.
+-/
+theorem pairwise_distinct_channels_mul_dvd_supportMass
+    {n p q : ℕ}
+    (hn0 : n ≠ 0)
+    (hp : Nat.Prime p) (hq : Nat.Prime q)
+    (hp_ne_hq : p ≠ q)
+    (hpd : p ∣ n) (hqd : q ∣ n) :
+    p * q ∣ supportMass n := by
+  have hp_mass : p ∣ supportMass n :=
+    supportMass_dvd_of_prime_channel hn0 hp hpd
+  have hq_mass : q ∣ supportMass n :=
+    supportMass_dvd_of_prime_channel hn0 hq hqd
+  have hcop : Nat.Coprime p q := by
+    exact (Nat.coprime_primes hp hq).2 hp_ne_hq
+  exact Nat.Coprime.mul_dvd_of_dvd_of_dvd hcop hp_mass hq_mass
+
+/--
+Numerical lower bound coming from two distinct prime channels.
+
+This is the `supportMass = rad` shadow of "disjoint channels force larger
+support".
+-/
+theorem supportMass_ge_of_two_distinct_prime_channels
+    {n p q : ℕ}
+    (hn0 : n ≠ 0)
+    (hp : Nat.Prime p) (hq : Nat.Prime q)
+    (hp_ne_hq : p ≠ q)
+    (hpd : p ∣ n) (hqd : q ∣ n) :
+    p * q ≤ supportMass n := by
+  exact Nat.le_of_dvd (supportMass_pos n)
+    (pairwise_distinct_channels_mul_dvd_supportMass hn0 hp hq hp_ne_hq hpd hqd)
+
 end DkMath.ABC
