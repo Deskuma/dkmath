@@ -87,6 +87,51 @@ theorem supportMass_dvd_of_prime_channel
   exact ABC.mem_support_factorization_iff.mpr ⟨hn0, hp, hpd⟩
 
 /--
+A finite family of prime channels contributes multiplicatively to the support
+mass.
+
+On the `Finset` side, pairwise distinctness is already encoded by membership,
+so the statement only asks that each member is a prime divisor of `n`.
+-/
+theorem prime_channel_family_prod_dvd_supportMass
+    {n : ℕ} (hn0 : n ≠ 0)
+    {S : Finset ℕ}
+    (hS : ∀ p ∈ S, Nat.Prime p ∧ p ∣ n) :
+    S.prod id ∣ supportMass n := by
+  unfold supportMass DkMath.ABC.Rad.rad
+  have hsubset : S ⊆ n.factorization.support := by
+    intro p hp
+    exact ABC.mem_support_factorization_iff.mpr ⟨hn0, (hS p hp).1, (hS p hp).2⟩
+  simpa only [id_eq] using
+    (Finset.prod_dvd_prod_of_subset S n.factorization.support (fun p => p) hsubset)
+
+/--
+Pairwise distinct prime channels force a finite-product lower bound on support
+mass.
+
+Because `S` is a `Finset`, no extra pairwise hypothesis is needed in the
+statement.
+-/
+theorem pairwise_distinct_prime_channel_family_lower_bound
+    {n : ℕ} (hn0 : n ≠ 0)
+    {S : Finset ℕ}
+    (hS : ∀ p ∈ S, Nat.Prime p ∧ p ∣ n) :
+    S.prod id ≤ supportMass n := by
+  exact Nat.le_of_dvd (supportMass_pos n)
+    (prime_channel_family_prod_dvd_supportMass hn0 hS)
+
+/--
+Alias of the finite-family support-mass lower bound, phrased in the intended
+ABC bridge vocabulary.
+-/
+theorem supportMass_ge_prod_of_prime_channel_family
+    {n : ℕ} (hn0 : n ≠ 0)
+    {S : Finset ℕ}
+    (hS : ∀ p ∈ S, Nat.Prime p ∧ p ∣ n) :
+    S.prod id ≤ supportMass n := by
+  exact pairwise_distinct_prime_channel_family_lower_bound hn0 hS
+
+/--
 Two distinct prime channels contribute multiplicatively to the support mass.
 
 This is the first finite-channel version of the intended disjoint-channel lower

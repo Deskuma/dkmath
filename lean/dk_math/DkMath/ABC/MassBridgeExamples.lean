@@ -56,4 +56,17 @@ example : 2 * 3 ≤ supportMass 12 := by
     (by decide)
     (by decide)
 
+/-- The same `2,3` sample also works in the finite-family statement. -/
+example : ({2, 3} : Finset ℕ).prod id ≤ supportMass 12 := by
+  exact supportMass_ge_prod_of_prime_channel_family
+    (n := 12)
+    (S := ({2, 3} : Finset ℕ))
+    (by decide)
+    (by
+      intro p hp
+      simp only [Finset.mem_insert, Finset.mem_singleton] at hp
+      rcases hp with rfl | rfl
+      · exact ⟨by decide, by decide⟩
+      · exact ⟨by decide, by decide⟩)
+
 end DkMath.ABC.MassBridgeExamples

@@ -41,6 +41,15 @@ private theorem primitiveWitness_13_6_5_3 :
   intro k hk_pos hk_lt
   interval_cases k <;> decide
 
+/-- Finite-family packaging of the `7,13` primitive witness sample. -/
+private theorem primitiveWitnessFamily_6_5_3
+    (q : ℕ) (hq : q ∈ ({7, 13} : Finset ℕ)) :
+    PrimitivePrimeFlowWitness q 6 5 3 := by
+  simp only [Finset.mem_insert, Finset.mem_singleton] at hq
+  rcases hq with rfl | rfl
+  · exact primitiveWitness_7_6_5_3
+  · exact primitiveWitness_13_6_5_3
+
 /-- Primitive primes give zero boundary load. -/
 example : boundaryMass 31 2 1 = 0 := by
   exact primitive_prime_gives_zero_boundary_load primitiveWitness_31_2_1_5 (by decide)
@@ -85,6 +94,17 @@ example : 7 * 13 ≤ DkMath.ABC.supportMass (6 ^ 3 - 5 ^ 3) := by
     primitiveWitness_7_6_5_3
     primitiveWitness_13_6_5_3
     (by decide)
+    hdiff_ne
+
+/-- The same `7,13` sample lifts directly to the finite-family lower bound. -/
+example : ({7, 13} : Finset ℕ).prod id ≤ DkMath.ABC.supportMass (6 ^ 3 - 5 ^ 3) := by
+  have hdiff_ne : 6 ^ 3 - 5 ^ 3 ≠ 0 := by decide
+  exact primitive_witness_family_force_supportMass_lower_bound
+    (S := ({7, 13} : Finset ℕ))
+    (a := 6)
+    (b := 5)
+    (d := 3)
+    primitiveWitnessFamily_6_5_3
     hdiff_ne
 
 end DkMath.ABC.ValuationFlowBridgeExamples

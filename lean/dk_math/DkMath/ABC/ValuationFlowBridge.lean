@@ -63,6 +63,35 @@ theorem primitive_channels_force_supportMass_lower_bound
     (primitivePrimeFlow_dvd_diff hq₁)
     (primitivePrimeFlow_dvd_diff hq₂)
 
+/--
+A family of primitive witnesses yields a family of prime channels on the diff
+side.
+
+Using a `Finset` of primes keeps distinctness in the index set itself.
+-/
+theorem primitive_witness_family_gives_prime_channel_family_on_diff
+    {a b d : ℕ}
+    {S : Finset ℕ}
+    (hS : ∀ q ∈ S, PrimitivePrimeFlowWitness q a b d) :
+    ∀ q ∈ S, Nat.Prime q ∧ q ∣ a ^ d - b ^ d := by
+  intro q hq
+  exact primitive_witness_gives_prime_channel_on_diff (hS q hq)
+
+/--
+A finite family of primitive witnesses forces the product lower bound on the
+support mass of the diff.
+-/
+theorem primitive_witness_family_force_supportMass_lower_bound
+    {a b d : ℕ}
+    {S : Finset ℕ}
+    (hS : ∀ q ∈ S, PrimitivePrimeFlowWitness q a b d)
+    (hdiff_ne : a ^ d - b ^ d ≠ 0) :
+    S.prod id ≤ supportMass (a ^ d - b ^ d) := by
+  exact supportMass_ge_prod_of_prime_channel_family
+    (n := a ^ d - b ^ d)
+    hdiff_ne
+    (primitive_witness_family_gives_prime_channel_family_on_diff hS)
+
 /-- Primitive primes contribute no boundary load. -/
 theorem primitive_prime_gives_zero_boundary_load
     {q a b d : ℕ}
