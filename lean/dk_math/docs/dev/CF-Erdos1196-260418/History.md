@@ -772,3 +772,54 @@ Archive
    - divisibility ベース route が実際の `u + v = c` な quality sample に自然に現れるかを洗う。
    - もし現れにくければ、次は `TailBound` 側の入力語彙を `rad c` 基準に寄せる
      input-refactoring route の方が軽いかを比較検討する。
+
+### 日時: 2026/04/19 00:24 JST (target-rad budget route の追加)
+
+1. 目的:
+   - `review-018.md` の示唆どおり、divisibility route をこれ以上厚くする前に、
+     `TailBound` の入力語彙を `rad c` 基準へ一段寄せる
+     input-refactoring route を bridge 層へ追加する。
+2. 実施:
+   - `DkMath/ABC/ABC038Bridge.lean` に次を追加した。
+     - `targetRadTailBound_of_channelCount_tail`
+     - `tailBound_of_targetRadTail_transport`
+     - `quality_le_of_not_bad_with_targetRadTail_transport`
+   - `targetRadTailBound_of_channelCount_tail` では、
+     `PrimitiveWitnessFamily` の counting spine と
+     `primitive_witness_family_gives_abc_rad_target_lower_bound`
+     を使って、
+     `twoTail c ≤ (2 ^ channelCount)^γ`
+     から
+     `twoTail c ≤ (rad c)^γ`
+     へ landing させた。
+   - `tailBound_of_channelCount_tail_transport` は、
+     直接 `2 ^ channelCount` から `rad (u * v)` へ飛ばす形をやめ、
+     いったん `rad c` 側 budget に landing してから
+     `TailBound` へ transport する構成へ整理した。
+   - `DkMath/ABC/ABC038BridgeExamples.lean` には
+     `6^3 - 5^3 = 91` の two-channel sample について、
+     `twoTail 91 ≤ (rad 91)^1`
+     を直接読む example を追加した。
+   - さらに、その target-rad budget を
+     `tailBound_of_targetRadTail_transport`
+     で `TailBound 1 91 1 91` へ流す example に更新した。
+3. 結論:
+   - `ABC038` 接続は、
+     `channelCount -> rad c -> rad(u*v) -> TailBound`
+     という二段 transport として見えるようになった。
+   - これにより、generic transport route と divisibility route に加えて、
+     transport 前の自然な中間 landing point として
+     `rad c` budget を theorem 名で固定できた。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ABC038Bridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ABC038BridgeExamples`
+   - build では既存 `ABC021.lean` と
+     `ZsigmondyCyclotomicResearch.lean` の `sorry` 警告が replay されたが、
+     今回更新したファイル自体は成功した。
+5. 失敗事例:
+   - なし。今回は theorem 追加後の build でそのまま通った。
+6. 次の課題:
+   - `rad c` budget が quality sample の自然入力としてどこまで使えるかを洗う。
+   - 特に `u + v = c` の nontrivial triple で、
+     `rad c ≤ rad(u*v)` をどう supply するか、
+     あるいは `rad c` 側 budget のまま質的不等式へ入る route がないかを比較検討する。
