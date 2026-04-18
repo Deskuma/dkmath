@@ -15,6 +15,16 @@ namespace DkMath.ABC
 open DkMath.NumberTheory.ValuationFlow
 
 /--
+Minimal package for a finite family of primitive-flow witnesses on a fixed diff.
+
+The support set is a `Finset`, so distinctness is already handled on the index
+side.
+-/
+structure PrimitiveWitnessFamily (a b d : ℕ) where
+  support : Finset ℕ
+  witness : ∀ q ∈ support, PrimitivePrimeFlowWitness q a b d
+
+/--
 Primitive witness viewed as a prime channel on the diff side.
 
 This is the minimal adapter from valuation-flow witnesses to the ABC
@@ -91,6 +101,29 @@ theorem primitive_witness_family_force_supportMass_lower_bound
     (n := a ^ d - b ^ d)
     hdiff_ne
     (primitive_witness_family_gives_prime_channel_family_on_diff hS)
+
+namespace PrimitiveWitnessFamily
+
+/--
+Read a packaged witness family as a family of prime channels on the diff side.
+-/
+theorem primeChannelFamily
+    {a b d : ℕ}
+    (F : PrimitiveWitnessFamily a b d) :
+    ∀ q ∈ F.support, Nat.Prime q ∧ q ∣ a ^ d - b ^ d := by
+  exact primitive_witness_family_gives_prime_channel_family_on_diff F.witness
+
+/--
+Packaged witness families inherit the support-mass lower bound on the diff.
+-/
+theorem supportMassLowerBound
+    {a b d : ℕ}
+    (F : PrimitiveWitnessFamily a b d)
+    (hdiff_ne : a ^ d - b ^ d ≠ 0) :
+    F.support.prod id ≤ supportMass (a ^ d - b ^ d) := by
+  exact primitive_witness_family_force_supportMass_lower_bound F.witness hdiff_ne
+
+end PrimitiveWitnessFamily
 
 /-- Primitive primes contribute no boundary load. -/
 theorem primitive_prime_gives_zero_boundary_load

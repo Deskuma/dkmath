@@ -50,6 +50,11 @@ private theorem primitiveWitnessFamily_6_5_3
   · exact primitiveWitness_7_6_5_3
   · exact primitiveWitness_13_6_5_3
 
+/-- Packaged version of the `{7,13}` primitive witness family. -/
+private def primitiveWitnessFamilyPack_6_5_3 : PrimitiveWitnessFamily 6 5 3 where
+  support := ({7, 13} : Finset ℕ)
+  witness := primitiveWitnessFamily_6_5_3
+
 /-- Primitive primes give zero boundary load. -/
 example : boundaryMass 31 2 1 = 0 := by
   exact primitive_prime_gives_zero_boundary_load primitiveWitness_31_2_1_5 (by decide)
@@ -106,5 +111,21 @@ example : ({7, 13} : Finset ℕ).prod id ≤ DkMath.ABC.supportMass (6 ^ 3 - 5 ^
     (d := 3)
     primitiveWitnessFamily_6_5_3
     hdiff_ne
+
+/-- The packaged family exposes the same prime-channel family API. -/
+example :
+    Nat.Prime 7 ∧ 7 ∣ 6 ^ 3 - 5 ^ 3 := by
+  exact PrimitiveWitnessFamily.primeChannelFamily
+    primitiveWitnessFamilyPack_6_5_3
+    7
+    (by simp [primitiveWitnessFamilyPack_6_5_3])
+
+/-- The packaged family also exposes the support-mass lower bound directly. -/
+example :
+    primitiveWitnessFamilyPack_6_5_3.support.prod id ≤
+      DkMath.ABC.supportMass (6 ^ 3 - 5 ^ 3) := by
+  exact PrimitiveWitnessFamily.supportMassLowerBound
+    primitiveWitnessFamilyPack_6_5_3
+    (by decide)
 
 end DkMath.ABC.ValuationFlowBridgeExamples
