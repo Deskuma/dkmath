@@ -398,3 +398,42 @@ Archive
    - `DkMath.ABC.Bridge` を推奨入口として文書側へ明示する。
    - あるいは `PrimitiveWitnessFamily` の次の counting / extraction 段
      （例えば support size や extracted channel family の読み出し）へ進む。
+
+### 日時: 2026/04/18 20:10 JST (`channelCount` と member-wise extraction の追加)
+
+1. 目的:
+   - `review-009.md` の提案に従い、`channelProduct` の次の counting / extraction 段として
+     `PrimitiveWitnessFamily` に card 語彙と member-wise extraction method を追加する。
+2. 実施:
+   - `DkMath/ABC/ValuationFlowBridge.lean` の `PrimitiveWitnessFamily` namespace に
+     - `channelCount`
+     - `channelCount_eq_support_card`
+     - `mem_support_implies_prime_and_dvd_diff`
+     - `mem_support_implies_prime_channel`
+     - `mem_support_implies_dvd_diff`
+     を追加した。
+   - いずれも既存
+     - `support.card`
+     - `primeChannelFamily`
+     の再包装に徹し、新しい heavy lemma は足していない。
+   - `DkMath/ABC/BridgeExamples.lean` に public import 経由の usage example として
+     - `primitiveWitnessFamilyPack_8_1_1.channelCount = 1`
+     - support member `7` が prime diff channel である例
+     - support member `7` が prime である例
+     - support member `7` が diff を割る例
+     を追加した。
+3. 結論:
+   - `PrimitiveWitnessFamily` の public surface に
+     multiplicative size (`channelProduct`) に加えて
+     cardinality (`channelCount`) と member-wise extraction が入った。
+   - これで counting / extraction 段の最小セットはかなり揃った。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ValuationFlowBridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.BridgeExamples`
+   - build では既存 `ZsigmondyCyclotomicResearch.lean` の `sorry` 警告が replay されたが、
+     今回更新した bridge / example は成功した。
+5. 失敗事例:
+   - なし。今回の counting / extraction 追加は既存 API の method 名再包装で閉じた。
+6. 次の課題:
+   - `channelCount` と `channelProduct` を併用する counting 補題へ進む。
+   - あるいは `DkMath.ABC.Bridge` を推奨入口として文書側に明示する。
