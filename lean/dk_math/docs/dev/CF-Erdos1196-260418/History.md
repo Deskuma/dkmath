@@ -138,3 +138,45 @@ Archive
 6. 次の課題:
    - Phase E として concrete example を追加するか、
      あるいは `ABC.Main` などへの公開 import 導線を整えて、利用側の import を簡略化する。
+
+### 日時: 2026/04/18 17:36 JST (Phase E: bridge concrete example の追加)
+
+1. 目的:
+   - `review-002.md` の提案に従い、まず bridge の concrete example を追加して、
+     今回の ABC bridge が空抽象ではなく既存 concrete 対象に使えることを確認する。
+2. 実施:
+   - `docs/dev/CF-Erdos1196-260418/reviewer/review-002.md` を確認し、
+     public import 整備より先に concrete example を通す方針を採用した。
+   - 新規追加:
+     - `DkMath/ABC/MassBridgeExamples.lean`
+     - `DkMath/ABC/ValuationFlowBridgeExamples.lean`
+   - `MassBridgeExamples` では
+     - `abc_big_eq_body_add_gap_mass`
+     - `abc_gap_mass_le_big_mass`
+     - `abc_residual_eq_gap_mass`
+     - `abc_squarefree_support_lower_bound`
+     - `abc_supportMass_dvd_self`
+     の concrete example を追加した。
+   - `ValuationFlowBridgeExamples` では、
+     `31` が `2^5 - 1` の primitive prime である具体例を使って
+     - `primitive_prime_gives_zero_boundary_load`
+     - `primitive_prime_transfers_diff_load_to_beam`
+     - `squarefree_beam_bounds_local_load`
+     の concrete example を追加した。
+3. 結論:
+   - bridge は concrete 例に対して実際に使えることを確認できた。
+   - これで「Mass API -> ABC bridge」「ValuationFlow primitive spine -> ABC bridge」の双方に、
+     最低限の使用例が付いた。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.MassBridgeExamples`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ValuationFlowBridgeExamples`
+   - `ValuationFlowBridgeExamples` の build では既存 `ZsigmondyCyclotomicResearch.lean` の `sorry` 警告が replay されたが、
+     追加した example ファイル自体の build は成功した。
+5. 失敗事例:
+   - `MassBridgeExamples` の初版では `Squarefree 30` を `decide` / `native_decide` で閉じようとして不適切だったため、
+     prime sample `31` に差し替えて `Prime.squarefree` で処理した。
+   - `ValuationFlowBridgeExamples` の初版では `GN` を直接展開して squarefree を示そうとして式が広がりすぎたため、
+     先に `GN 5 1 1 = 31` を固定してから `31` の squarefree を流す形へ修正した。
+6. 次の課題:
+   - `ABC.Main` などへの公開 import 導線を整えるか、
+     あるいは `rad_lower_bound_of_disjoint_channels` に向けた最小補題設計へ進む。
