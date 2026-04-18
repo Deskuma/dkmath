@@ -657,3 +657,64 @@ Archive
 6. 次の課題:
    - 上記 2 本の中間命題を Lean に実装する。
    - あるいは `ABC038` 側へ入る前に、`rad(diff) ≤ rad(a*b)` 型 transport hypothesis の自然な供給元を決める。
+
+### 日時: 2026/04/18 23:04 JST (`ABC038` 向け TailBound wrapper の追加)
+
+1. 目的:
+   - `review-016.md` の流れを受けて、直前に追加した
+     `primitive_witness_family_gives_abc_rad_target_lower_bound`
+     / `primitive_channel_count_forces_quality_rad_input`
+     を `ABC038` 側の既存 API に実際に接続する最小 wrapper を入れる。
+2. 実施:
+   - `DkMath/ABC/ValuationFlowBridge.lean` に
+     `PrimitiveWitnessFamily.primitive_channel_count_forces_rad_input_lower_bound`
+     を追加した。
+     - これは既存の quality-input 版を、family 側の基底 `(a,b)` に固定せず、
+       任意の radical input `(u,v)` に一般化した薄い transport 補題である。
+   - 既存
+     `PrimitiveWitnessFamily.primitive_channel_count_forces_quality_rad_input`
+     は上の一般化補題の specialization として書き直した。
+   - 新規追加:
+     - `DkMath/ABC/ABC038Bridge.lean`
+     - `DkMath/ABC/ABC038BridgeExamples.lean`
+   - `ABC038Bridge` では次を追加した。
+     - `tailBound_of_channelCount_tail_transport`
+     - `quality_le_of_not_bad_with_channelCount_tail_transport`
+   - これにより、`twoTail c ≤ (2 ^ channelCount)^γ` 型の budget と
+     `rad c ≤ rad (u * v)` 型 transport から、
+     既存 `ABC.TailBound γ u v c` と
+     `ABC.Chernoff.quality_le_of_not_bad_with_tail`
+     へ流せるようにした。
+   - `ABC038BridgeExamples` には
+     `6^3 - 5^3 = 91 = 7 * 13` の packaged witness family を再掲し、
+     `TailBound 1 91 1 91` を bridge wrapper から読む concrete example を追加した。
+3. 結論:
+   - `PrimitiveWitnessFamily` の counting spine は、
+     単なる `ABC.rad` 下界で止まらず、
+     `ABC038` が読む `TailBound` 入力まで届くようになった。
+   - これで quality 系との接続は theorem 名レベルでは一段前進した。
+   - ただし concrete example は現時点では `TailBound` までに留めた。
+     標準の `u + v = c` / `Nat.Coprime u v` を伴う quality sample では、
+     `rad c ≤ rad (u * v)` の自然供給がまだ未解決である。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ValuationFlowBridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ABC038Bridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ABC038BridgeExamples`
+   - `ABC038Bridge` / `ABC038BridgeExamples` の build では既存
+     `ABC021.lean` と `ZsigmondyCyclotomicResearch.lean` の `sorry` 警告が replay されたが、
+     今回追加・更新したファイル自体は成功した。
+5. 失敗事例:
+   - `ABC038Bridge` 初版では
+     `quality_le_of_not_bad_with_tail` を `ABC.` 直下にあると誤認し、
+     実際には `ABC.Chernoff` namespace 配下だったため build が落ちた。
+   - `ABC038BridgeExamples` 初版では `native_decide` と
+     `decide` による `twoTail 91 = 1` / `Squarefree 91` の直接計算に頼ったが、
+     linter と reduction の両面で不安定だった。
+   - ここは `twoTail_le_sqTail_real` と
+     `sqTail_eq_one_of_squarefree`、さらに
+     `Nat.squarefree_mul` を使う構成へ切り替えて解消した。
+6. 次の課題:
+   - `ABC038` quality sample を実際に閉じるには、
+     `u + v = c` と両立する radical transport の自然な供給元を定理化する必要がある。
+   - あるいは `TailBound` より手前で使う budget 語彙を `rad c` 側に寄せる中間補題を追加し、
+     quality 側への接続条件を緩める。
