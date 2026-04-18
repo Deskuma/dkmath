@@ -27,6 +27,17 @@ private def primitiveWitnessFamilyPack_6_5_3 : PrimitiveWitnessFamily 6 5 3 wher
       intro k hk_pos hk_lt
       interval_cases k <;> decide
 
+/-- A one-channel sample with diff target `7`. -/
+private def primitiveWitnessFamilyPack_14_7_1 : PrimitiveWitnessFamily 14 7 1 where
+  support := ({7} : Finset ℕ)
+  witness q hq := by
+    have hq7 : q = 7 := by
+      simpa only [Finset.mem_singleton] using hq
+    subst hq7
+    refine ⟨by decide, by decide, ?_⟩
+    intro k hk_pos hk_lt
+    omega
+
 /--
 The `ABC038` bridge reads a channel-count tail budget as an ordinary
 `TailBound`.
@@ -59,6 +70,38 @@ example : ABC.TailBound 1 91 1 91 := by
     (v := 1)
     (htarget := by decide)
     (htransport := by simp)
+    (hdiff_ne := by decide)
+    (hγ_nonneg := by norm_num)
+    htail_count
+
+/--
+The divisibility route supplies the radical transport automatically.
+-/
+example : ABC.TailBound 1 14 7 7 := by
+  have htail_count :
+      (ABC.twoTail 7 : ℝ) ≤
+        ((2 ^ primitiveWitnessFamilyPack_14_7_1.channelCount : ℕ) : ℝ) ^ (1 : ℝ) := by
+    have hsqtail_one : ABC.sqTail 7 = 1 := by
+      exact ABC.sqTail_eq_one_of_squarefree
+        (by decide)
+        ((show Nat.Prime 7 by decide).squarefree)
+    have htwoTail_le : (ABC.twoTail 7 : ℝ) ≤ (ABC.sqTail 7 : ℝ) := by
+      exact ABC.twoTail_le_sqTail_real 7 (by decide)
+    have hcount : primitiveWitnessFamilyPack_14_7_1.channelCount = 1 := by
+      simp [PrimitiveWitnessFamily.channelCount, primitiveWitnessFamilyPack_14_7_1]
+    calc
+      (ABC.twoTail 7 : ℝ) ≤ (ABC.sqTail 7 : ℝ) := htwoTail_le
+      _ = 1 := by norm_num [hsqtail_one]
+      _ ≤ ((2 ^ primitiveWitnessFamilyPack_14_7_1.channelCount : ℕ) : ℝ) ^ (1 : ℝ) := by
+        rw [hcount]
+        norm_num
+  exact tailBound_of_channelCount_tail_dvd
+    (F := primitiveWitnessFamilyPack_14_7_1)
+    (u := 14)
+    (v := 7)
+    (htarget := by decide)
+    (huv_ne := by decide)
+    (hcdvd := by decide)
     (hdiff_ne := by decide)
     (hγ_nonneg := by norm_num)
     htail_count
