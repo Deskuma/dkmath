@@ -224,6 +224,14 @@ theorem channelProduct_le_supportMass
     F.channelProduct ≤ supportMass (a ^ d - b ^ d) := by
   simpa [channelProduct] using F.supportMassLowerBound hdiff_ne
 
+/-- The channel product also gives a lower bound directly on the ABC radical. -/
+theorem channelProduct_le_abc_rad_diff
+    {a b d : ℕ}
+    (F : PrimitiveWitnessFamily a b d)
+    (hdiff_ne : a ^ d - b ^ d ≠ 0) :
+    F.channelProduct ≤ ABC.rad (a ^ d - b ^ d) := by
+  simpa [supportMass_eq_abc_rad] using F.channelProduct_le_supportMass hdiff_ne
+
 /-- The channel count also forces a support-mass lower bound through the product. -/
 theorem pow_channelCount_le_supportMass
     {a b d : ℕ}
@@ -232,6 +240,14 @@ theorem pow_channelCount_le_supportMass
     2 ^ F.channelCount ≤ supportMass (a ^ d - b ^ d) := by
   exact le_trans F.pow_channelCount_le_channelProduct
     (F.channelProduct_le_supportMass hdiff_ne)
+
+/-- The counting spine also lands directly in the ABC radical vocabulary. -/
+theorem pow_channelCount_le_abc_rad_diff
+    {a b d : ℕ}
+    (F : PrimitiveWitnessFamily a b d)
+    (hdiff_ne : a ^ d - b ^ d ≠ 0) :
+    2 ^ F.channelCount ≤ ABC.rad (a ^ d - b ^ d) := by
+  simpa [supportMass_eq_abc_rad] using F.pow_channelCount_le_supportMass hdiff_ne
 
 end PrimitiveWitnessFamily
 

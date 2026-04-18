@@ -139,4 +139,20 @@ example :
     primitiveWitnessFamilyPack_6_5_3
     (by decide)
 
+/-- ABC-core-facing alias: the channel product is bounded by the radical. -/
+example :
+    primitiveWitnessFamilyPack_6_5_3.channelProduct ≤
+      ABC.rad (6 ^ 3 - 5 ^ 3) := by
+  exact PrimitiveWitnessFamily.channelProduct_le_abc_rad_diff
+    primitiveWitnessFamilyPack_6_5_3
+    (by decide)
+
+/-- ABC-core-facing alias: the counting spine lands directly in `ABC.rad`. -/
+example :
+    2 ^ primitiveWitnessFamilyPack_6_5_3.channelCount ≤
+      ABC.rad (6 ^ 3 - 5 ^ 3) := by
+  exact PrimitiveWitnessFamily.pow_channelCount_le_abc_rad_diff
+    primitiveWitnessFamilyPack_6_5_3
+    (by decide)
+
 end DkMath.ABC.BridgeExamples
