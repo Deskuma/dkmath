@@ -284,3 +284,41 @@ Archive
    - family 版を public import へどう露出するか整理する。
    - あるいは primitive witness family をより構造的に管理する API
      (`Finset` 上の witness packaging や後続の counting lemma) へ進む。
+
+### 日時: 2026/04/18 19:13 JST (primitive witness family の package 化)
+
+1. 目的:
+   - `review-006.md` の提案に従い、public import 整備より先に
+     primitive witness family を再利用しやすい小さな package にまとめる。
+2. 実施:
+   - `DkMath/ABC/ValuationFlowBridge.lean` に
+     `PrimitiveWitnessFamily (a b d)` structure を追加した。
+     - `support : Finset ℕ`
+     - `witness : ∀ q ∈ support, PrimitivePrimeFlowWitness q a b d`
+   - あわせて package 経由の薄い API として
+     - `PrimitiveWitnessFamily.primeChannelFamily`
+     - `PrimitiveWitnessFamily.supportMassLowerBound`
+     を追加した。
+   - `DkMath/ABC/ValuationFlowBridgeExamples.lean` に
+     `{7, 13}` の既存 family を package 化した
+     `primitiveWitnessFamilyPack_6_5_3`
+     を追加し、
+     package 経由で prime-channel family と support-mass lower bound が読める例を足した。
+3. 結論:
+   - `∀ q ∈ S, PrimitivePrimeFlowWitness ...` を毎回直接渡さなくても、
+     family を一塊として扱う最小 API が入った。
+   - これで public import を整える前の段階として、
+     family bridge の重心が少し安定した。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ValuationFlowBridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ValuationFlowBridgeExamples`
+   - build では既存 `ZsigmondyCyclotomicResearch.lean` の `sorry` 警告が replay されたが、
+     今回更新した bridge / example は成功した。
+5. 失敗事例:
+   - package example の初版では、
+     `7 ∈ primitiveWitnessFamilyPack_6_5_3.support` の証明を
+     `simp only` で閉じ切れず goal が残った。
+   - ここは example 側だけ `simp [primitiveWitnessFamilyPack_6_5_3]` に変えて解消した。
+6. 次の課題:
+   - `ABC.Main` や公開 import 導線を整えて、新しい bridge API を表に出す。
+   - あるいは package 化した witness family を使う counting / extraction 補題へ進む。
