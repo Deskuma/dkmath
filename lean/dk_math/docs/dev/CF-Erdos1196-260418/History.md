@@ -243,3 +243,44 @@ Archive
 6. 次の課題:
    - `ABC.Main` などへの公開 import 導線を整えるか、
      あるいは 2 本 channel 版を `Finset` / pairwise family 版へ一般化する設計へ進む。
+
+### 日時: 2026/04/18 19:05 JST (`Finset` family 版 support-mass 下界の追加)
+
+1. 目的:
+   - `review-005.md` の提案に従い、2-channel 版で止まっていた
+     `supportMass` 下界を `Finset` family 版へ一般化する。
+   - あわせて、primitive witness family から同じ lower bound へ流す最小 adapter を追加する。
+2. 実施:
+   - `DkMath/ABC/MassBridge.lean` に次を追加した。
+     - `prime_channel_family_prod_dvd_supportMass`
+     - `pairwise_distinct_prime_channel_family_lower_bound`
+     - `supportMass_ge_prod_of_prime_channel_family`
+   - `Finset` を index に使うことで、distinctness は集合側に吸収し、
+     各 member が `Nat.Prime p ∧ p ∣ n` を満たすだけの statement に整理した。
+   - `DkMath/ABC/ValuationFlowBridge.lean` に次を追加した。
+     - `primitive_witness_family_gives_prime_channel_family_on_diff`
+     - `primitive_witness_family_force_supportMass_lower_bound`
+   - `DkMath/ABC/MassBridgeExamples.lean` に
+     `({2, 3} : Finset ℕ).prod id ≤ supportMass 12` を追加した。
+   - `DkMath/ABC/ValuationFlowBridgeExamples.lean` に
+     `({7, 13} : Finset ℕ).prod id ≤ supportMass (6 ^ 3 - 5 ^ 3)` を追加した。
+3. 結論:
+   - `supportMass = rad` 側の lower-bound spine が、
+     2 本 channel 版から有限 family 版へ上がった。
+   - 同時に `primitive witness family -> prime channel family -> supportMass lower bound`
+     という有限集合レベルの導線も最小形で入った。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.MassBridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.MassBridgeExamples`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ValuationFlowBridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ValuationFlowBridgeExamples`
+   - `ValuationFlowBridge` 系の build では既存 `ZsigmondyCyclotomicResearch.lean` の `sorry` 警告が replay されたが、
+     今回追加した bridge / example は成功した。
+5. 失敗事例:
+   - `ValuationFlowBridgeExamples` の初版では `({7, 13} : Finset ℕ)` の membership 展開順を取り違え、
+     `primitiveWitnessFamily_6_5_3` の branch が逆になって build が落ちた。
+   - branch 順を修正し、example は通るようにした。
+6. 次の課題:
+   - family 版を public import へどう露出するか整理する。
+   - あるいは primitive witness family をより構造的に管理する API
+     (`Finset` 上の witness packaging や後続の counting lemma) へ進む。
