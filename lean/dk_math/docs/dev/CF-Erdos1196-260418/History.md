@@ -1042,3 +1042,55 @@ Archive
    - あわせて、
      `rad(abc)` 直結 route を
      `with_log` 系 convenience theorem とどう住み分けるかを整理する。
+
+## 2026/04/19 05:59 JST
+
+1. 実施内容:
+   - `DkMath/ABC/Main.lean` に
+     `import DkMath.ABC.ABC038Bridge`
+     を追加し、
+     `DkMath.ABC.Main` 経由で
+     `ABC.Chernoff` の `rad(abc)` 直結 route が見えるようにした。
+   - `INDEX.md` の ABC セクションに
+     `DkMath.ABC.ABC038Bridge`
+     を追加し、
+     `ABC.Chernoff.quality_le_of_not_bad_with_targetRadTail_on_radAbc`
+     /
+     `ABC.Chernoff.quality_le_of_not_bad_with_channelCount_tail_on_radAbc`
+     を推奨定理として追記した。
+2. 意味:
+   - user が言う
+     「lake build のチェインに乗せる」
+     という観点では、
+     `DkMath.ABC` → `DkMath.ABC.Main` の公開導線に
+     `ABC038Bridge` を直接載せたので、
+     branch import だけで十分に目的を果たしている。
+   - あわせて `INDEX.md` に案内を置いたことで、
+     今後の資料化作業で
+     `Bridge`
+     と
+     `ABC038Bridge`
+     の役割分担を辿りやすくした。
+3. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.Main`
+   - `cd lean/dk_math && ./lean-build.sh DkMath`
+   - いずれも build 成功。
+   - `DkMath.ABC.Main` build では既存
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告が replay された。
+   - `DkMath` build ではさらに既存
+     `TriominoCosmicBranchA.lean`,
+     `GcdNextResearch.lean`,
+     `CyclotomicPrincipalization.lean`,
+     `TriominoFLT.lean`
+     の `sorry` 警告も replay されたが、
+     今回の変更自体は成功した。
+4. 次の課題:
+   - ここから先は、
+     `ABC038Bridge` 系 convenience theorem の命名整理と
+     文書側の導線整理を進める。
+   - あわせて、論文資料化に向けて
+     `Bridge` / `ABC038Bridge` / examples の役割を
+     再編しながらリファクタリングする。
