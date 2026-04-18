@@ -578,3 +578,46 @@ Archive
 6. 次の課題:
    - `RatioBound` 側に `rad lower bound -> count upper bound` の薄い corollary を足す。
    - あるいは `ABC038` へ進む前段として、`rad(diff)` を quality 入力へ送る中間命題を設計する。
+
+### 日時: 2026/04/18 22:31 JST (`RatioBound` 候補への最小差し込み)
+
+1. 目的:
+   - `review-014.md` の提案に従い、候補 1 だった `RatioBound.count_with_rad_eq_le_div`
+     周辺へ bridge spine を実際に差し込む。
+2. 実施:
+   - `DkMath/ABC/RatioBound.lean` に
+     `count_with_rad_eq_le_div_of_lower_bound`
+     を追加した。
+     - これは `rad a = r` の exact class に対して、
+       任意の正の lower bound `R ≤ r` から
+       `X / R + 1` 型の count upper bound を出す薄い単調性版である。
+   - `DkMath/ABC/ValuationFlowBridge.lean` には
+     `PrimitiveWitnessFamily.count_class_with_same_rad_as_diff_le_of_channelCount`
+     を追加した。
+     - `pow_channelCount_le_abc_rad_diff`
+       と上の `RatioBound` corollary を合成し、
+       `diff` と同じ `ABC.rad` を持つ count class が
+       `X / 2^channelCount + 1` 型で抑えられることを示す。
+   - `DkMath/ABC/BridgeExamples.lean` に
+     `primitiveWitnessFamilyPack_6_5_3` を使った public usage example として、
+     `rad` class の個数が `100 / 2^channelCount + 1` 型で抑えられる例を追加した。
+3. 結論:
+   - 前回候補整理した `RatioBound` ルートに対して、
+     bridge spine から実際の count upper bound へ流れる最小接続が入った。
+   - これで `PrimitiveWitnessFamily` の counting spine は、
+     `ABC.rad` 下界だけでなく count-class 上界へも到達するようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.RatioBound`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ValuationFlowBridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.BridgeExamples`
+   - `ValuationFlowBridge` / `BridgeExamples` の build では既存 `ZsigmondyCyclotomicResearch.lean` の
+     `sorry` 警告が replay されたが、今回更新したファイルは成功した。
+5. 失敗事例:
+   - `RatioBound` 初版では `Nat.div_le_div_right` を使って
+     `X / r ≤ X / R` を示そうとしたが、定理の向きが合わず build が落ちた。
+   - ここは `Nat.le_div_iff_mul_le` と `Nat.div_mul_le_self` を使う直接証明へ切り替えて解消した。
+   - `ValuationFlowBridge` 側では theorem 名解決で `ABC.` 修飾が必要だったため、明示して解消した。
+6. 次の課題:
+   - `ABC038` quality 系へ進む前段として、
+     `rad(diff)` 下界を `rad(a*b)` 入力へ送る中間命題を設計する。
+   - あるいは `RatioBound` 側で `rad ≥ R` class をさらにまとめて数える補題へ進む。
