@@ -42,7 +42,8 @@ private def primitiveWitnessFamilyPack_14_7_1 : PrimitiveWitnessFamily 14 7 1 wh
 The `ABC038` bridge reads a channel-count tail budget as an ordinary
 `TailBound`.
 -/
-example : ABC.TailBound 1 91 1 91 := by
+example :
+    (ABC.twoTail 91 : ℝ) ≤ (ABC.rad 91 : ℝ) ^ (1 : ℝ) := by
   have htail_count :
       (ABC.twoTail 91 : ℝ) ≤
         ((2 ^ primitiveWitnessFamilyPack_6_5_3.channelCount : ℕ) : ℝ) ^ (1 : ℝ) := by
@@ -64,15 +65,47 @@ example : ABC.TailBound 1 91 1 91 := by
       _ ≤ ((2 ^ primitiveWitnessFamilyPack_6_5_3.channelCount : ℕ) : ℝ) ^ (1 : ℝ) := by
         rw [hcount]
         norm_num
-  exact tailBound_of_channelCount_tail_transport
+  exact targetRadTailBound_of_channelCount_tail
     (F := primitiveWitnessFamilyPack_6_5_3)
-    (u := 91)
-    (v := 1)
     (htarget := by decide)
-    (htransport := by simp)
     (hdiff_ne := by decide)
     (hγ_nonneg := by norm_num)
     htail_count
+
+/--
+The generic route can now be factored through a target-rad tail budget.
+-/
+example : ABC.TailBound 1 91 1 91 := by
+  exact tailBound_of_targetRadTail_transport
+    (u := 91)
+    (v := 1)
+    (htransport := by simp)
+    (hγ_nonneg := by norm_num)
+    (htail_target := by
+      exact targetRadTailBound_of_channelCount_tail
+        (F := primitiveWitnessFamilyPack_6_5_3)
+        (htarget := by decide)
+        (hdiff_ne := by decide)
+        (hγ_nonneg := by norm_num)
+        (by
+          have hsqtail_one : ABC.sqTail 91 = 1 := by
+            have hsqf91 : Squarefree 91 := by
+              have hsq7 : Squarefree 7 := (show Nat.Prime 7 by decide).squarefree
+              have hsq13 : Squarefree 13 := (show Nat.Prime 13 by decide).squarefree
+              have hcop : Nat.Coprime 7 13 := by
+                decide
+              simpa using (Nat.squarefree_mul hcop).2 ⟨hsq7, hsq13⟩
+            exact ABC.sqTail_eq_one_of_squarefree (by decide) hsqf91
+          have htwoTail_le : (ABC.twoTail 91 : ℝ) ≤ (ABC.sqTail 91 : ℝ) := by
+            exact ABC.twoTail_le_sqTail_real 91 (by decide)
+          have hcount : primitiveWitnessFamilyPack_6_5_3.channelCount = 2 := by
+            simp [PrimitiveWitnessFamily.channelCount, primitiveWitnessFamilyPack_6_5_3]
+          calc
+            (ABC.twoTail 91 : ℝ) ≤ (ABC.sqTail 91 : ℝ) := htwoTail_le
+            _ = 1 := by norm_num [hsqtail_one]
+            _ ≤ ((2 ^ primitiveWitnessFamilyPack_6_5_3.channelCount : ℕ) : ℝ) ^ (1 : ℝ) := by
+              rw [hcount]
+              norm_num))
 
 /--
 The divisibility route supplies the radical transport automatically.
