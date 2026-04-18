@@ -322,3 +322,41 @@ Archive
 6. 次の課題:
    - `ABC.Main` や公開 import 導線を整えて、新しい bridge API を表に出す。
    - あるいは package 化した witness family を使う counting / extraction 補題へ進む。
+
+### 日時: 2026/04/18 19:21 JST (public import 導線の整備)
+
+1. 目的:
+   - `review-007.md` の提案に従い、package 化まで済ませた bridge API を
+     短い import で利用できるよう公開導線を整える。
+2. 実施:
+   - `DkMath/ABC/Bridge.lean` を新設し、
+     - `DkMath.ABC.MassBridge`
+     - `DkMath.ABC.ValuationFlowBridge`
+     を薄く集約する public-facing aggregator を追加した。
+   - `DkMath/ABC/Main.lean` に `import DkMath.ABC.Bridge` を追加し、
+     既存 top-level 導線 `DkMath.ABC -> DkMath.ABC.Main` から bridge API が見えるようにした。
+   - `DkMath/ABC/BridgeExamples.lean` を新設し、
+     `import DkMath.ABC.Bridge` だけで
+     - `supportMass_ge_prod_of_prime_channel_family`
+     - `PrimitiveWitnessFamily`
+     - `PrimitiveWitnessFamily.primeChannelFamily`
+     - `PrimitiveWitnessFamily.supportMassLowerBound`
+     が使えることを確認する usage example を追加した。
+   - primitive witness package の public example では、
+     構成を最小化するため `8^1 - 1^1 = 7` の singleton sample を採用した。
+3. 結論:
+   - bridge API を implementation file 名に依存せず、
+     `DkMath.ABC.Bridge` またはそれを含む `DkMath.ABC.Main` から読めるようになった。
+   - これで外部利用側の import 導線が一段整理された。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.Bridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.Main`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.BridgeExamples`
+   - `Bridge` / `BridgeExamples` の build では既存 `ZsigmondyCyclotomicResearch.lean` の `sorry` 警告が replay された。
+   - `Main` build では加えて既存 `ABC021.lean` の `sorry` 警告が replay されたが、今回の更新対象は成功した。
+5. 失敗事例:
+   - なし。public usage example も初回 build で通った。
+6. 次の課題:
+   - `DkMath.ABC` 直下でどこまで bridge API を canonical import とみなすか整理する。
+   - あるいは `PrimitiveWitnessFamily` に対する counting / extraction 補題を追加して、
+     public API の中身をもう一段厚くする。
