@@ -100,3 +100,41 @@ Archive
 6. 次の課題:
    - `ABC/MassBridge.lean` と `ABC/ValuationFlowBridge.lean` を追加し、
      `rad` / `squarefree` / `padicValNat` を今回の API へ橋渡しする。
+
+### 日時: 2026/04/18 17:24 JST (ABC bridge の追加)
+
+1. 目的:
+   - Phase D として `ABC/MassBridge.lean` および `ABC/ValuationFlowBridge.lean` を追加し、
+     既存の Mass API / ValuationFlow API を ABC 側の語彙で読めるようにする。
+2. 実施:
+   - `docs/dev/CF-Erdos1196-260418/reviewer/review-001.md` を確認し、
+     bridge 側の最初の補題候補をレビュー提案に合わせた。
+   - 新規追加:
+     - `DkMath/ABC/MassBridge.lean`
+     - `DkMath/ABC/ValuationFlowBridge.lean`
+   - `MassBridge` では
+     - `supportMass := DkMath.ABC.Rad.rad`
+     - `abc_big_eq_body_add_gap_mass`
+     - `abc_gap_mass_le_big_mass`
+     - `abc_residual_eq_gap_mass`
+     - `abc_squarefree_support_lower_bound`
+     - `abc_supportMass_dvd_self`
+     を追加した。
+   - `ValuationFlowBridge` では
+     - `primitive_prime_gives_zero_boundary_load`
+     - `primitive_prime_transfers_diff_load_to_beam`
+     - `squarefree_beam_bounds_local_load`
+     を追加した。
+3. 結論:
+   - 計画していた ABC bridge の最小核は入った。
+   - これで「宇宙式の保存則 API」と「primitive valuation spine」を、ABC 側で直接参照できる薄い翻訳層が揃った。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.MassBridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ValuationFlowBridge`
+   - `ValuationFlowBridge` build では既存 `ZsigmondyCyclotomicResearch.lean` の `sorry` 警告が replay されたが、
+     追加した bridge ファイル自体の build は成功した。
+5. 失敗事例:
+   - なし。今回の bridge 追加では型修正は不要だった。
+6. 次の課題:
+   - Phase E として concrete example を追加するか、
+     あるいは `ABC.Main` などへの公開 import 導線を整えて、利用側の import を簡略化する。
