@@ -20,6 +20,20 @@ open DkMath.NumberTheory.PrimitiveBeam
 abbrev PrimitivePrimeFlowWitness (q a b d : ℕ) : Prop :=
   PrimitivePrimeFactorOfDiffPow q a b d
 
+/-- A primitive-flow witness carries its prime channel. -/
+theorem primitivePrimeFlow_prime
+    {q a b d : ℕ}
+    (hq : PrimitivePrimeFlowWitness q a b d) :
+    Nat.Prime q :=
+  hq.1
+
+/-- A primitive-flow witness contributes a prime channel on the diff side. -/
+theorem primitivePrimeFlow_dvd_diff
+    {q a b d : ℕ}
+    (hq : PrimitivePrimeFlowWitness q a b d) :
+    q ∣ a ^ d - b ^ d :=
+  hq.2.1
+
 /-- A primitive prime contributes no boundary mass. -/
 theorem primitivePrimeFlow_boundaryMass_eq_zero
     {q a b d : ℕ}
