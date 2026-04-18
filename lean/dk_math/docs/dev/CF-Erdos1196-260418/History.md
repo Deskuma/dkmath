@@ -975,3 +975,70 @@ Archive
    - 特に、
      `quality_le_of_not_bad_with_tail`
      系の入口で `rad(a*b)` transport を省ける最小定理を見つける。
+
+## 2026/04/19 05:20 JST
+
+1. 実施内容:
+   - `DkMath/ABC/ABC038Bridge.lean` に
+     `ABC.Chernoff` namespace で読める convenience theorem を追加した。
+   - 追加したのは
+     `ABC.Chernoff.quality_le_of_not_bad_with_targetRadTail_on_radAbc`
+     と
+     `ABC.Chernoff.quality_le_of_not_bad_with_channelCount_tail_on_radAbc`
+     で、既存 `quality_le_of_not_bad_with_tail` / `...with_log`
+     と同じ層に
+     `rad(abc)` 直結 route の入口を並べた。
+   - `...with_channelCount_tail_on_radAbc` では、
+     witness family source `(a,b,d)` と
+     quality triple `(u,v,c)` を分離し、
+     `c = a^d - b^d` から得た channel-count tail budget を
+     `u + v = c` の quality input へ流せる形にした。
+   - `DkMath/ABC/ABC038BridgeExamples.lean` には
+     `triple_6_1_7`
+     と
+     `not_bad_6_1_7`
+     を追加し、
+     `PrimitiveWitnessFamily 14 7 1`
+     から
+     `ABC.Chernoff.quality_le_of_not_bad_with_channelCount_tail_on_radAbc`
+     を使って
+     `quality (6,1,7) ≤ 2`
+     を読む concrete sample を足した。
+2. 意味:
+   - これで `ABC038` convenience theorem 群に対する
+     `rad(abc)` 直結 insertion point が theorem 名で固定された。
+   - 特に `channelCount -> rad(c) budget -> rad(abc) -> quality`
+     の route が、
+     top-level bridge theorem だけでなく
+     `ABC.Chernoff` 層の public API として読めるようになった。
+3. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ABC038Bridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ABC038BridgeExamples`
+   - いずれも build 成功。
+   - build では既存
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+4. 失敗事例:
+   - 初版の `ABC.Chernoff.quality_le_of_not_bad_with_channelCount_tail_on_radAbc`
+     は witness family source と quality triple を同一視しており、
+     `(6,1,7)` sample に適用できなかった。
+   - これは theorem の引数を
+     `{a b c d u v}`
+     へ拡張し、
+     source `(a,b,d)` と quality input `(u,v,c)` を分離することで解消した。
+   - `not_bad_6_1_7` 初版では
+     `7.factorization`
+     の numeral field notation と
+     `Real.rpow_zero` rewrite が噛まず落ちた。
+   - ここは
+     `(7).factorization`
+     に直し、
+     `hlhs` の rewrite 後を `norm_num` に任せる形へ整理して解消した。
+5. 次の課題:
+   - この `ABC.Chernoff` 入口を
+     `ABC.Main` / 文書側でどう案内するかを決める。
+   - あわせて、
+     `rad(abc)` 直結 route を
+     `with_log` 系 convenience theorem とどう住み分けるかを整理する。
