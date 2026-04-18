@@ -434,6 +434,17 @@ lemma sqTail_eq_one_of_squarefree {n : ℕ} (hn0 : n ≠ 0) (hsf : Squarefree n)
   exact Nat.div_self (Nat.pos_of_ne_zero hn0)
 
 
+/-- Squarefree なら `piSqRad = 1`。 -/
+lemma piSqRad_eq_one_of_squarefree {n : ℕ} (hn0 : n ≠ 0) (hsf : Squarefree n) :
+    piSqRad n = 1 := by
+  have hsqTail : sqTail n = 1 := sqTail_eq_one_of_squarefree hn0 hsf
+  have hdecomp : sqTail n = piSqRad n * twoTail n := sqTail_eq_piSqRad_mul_twoTail n hn0
+  have hπ_dvd_one : piSqRad n ∣ 1 := by
+    refine ⟨twoTail n, ?_⟩
+    simpa [hsqTail] using hdecomp
+  exact Nat.eq_one_of_dvd_one hπ_dvd_one
+
+
 /-- sqTail ≤ n （自明な上界） -/
 lemma sqTail_le_self (n : ℕ) : sqTail n ≤ n := by
   unfold sqTail

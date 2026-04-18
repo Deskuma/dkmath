@@ -9,8 +9,6 @@ import DkMath.ABC.ABC038Bridge
 
 #print "file: DkMath.ABC.ABC038BridgeExamples"
 
-set_option linter.style.nativeDecide false
-
 namespace DkMath.ABC.ABC038BridgeExamples
 
 open DkMath.ABC
@@ -39,9 +37,6 @@ private def primitiveWitnessFamilyPack_14_7_1 : PrimitiveWitnessFamily 14 7 1 wh
     refine ⟨by decide, by decide, ?_⟩
     intro k hk_pos hk_lt
     omega
-
-private lemma piSqRad_7_eq_one : ABC.piSqRad 7 = 1 := by
-  native_decide
 
 private lemma targetRadTailBound_7 :
     (ABC.twoTail 7 : ℝ) ≤ (ABC.rad 7 : ℝ) ^ (1 : ℝ) := by
@@ -177,7 +172,8 @@ The `rad(abc)` analytic route already yields a concrete quality bound.
 example :
     ABC.quality (ABC.Triple.mk 6 1 7 (by decide) (by decide)) ≤ 2 := by
   have hpi : (ABC.piSqRad 7 : ℝ) ≤ (ABC.rad (6 * 1) : ℝ) ^ (0 : ℝ) := by
-    rw [piSqRad_7_eq_one, Real.rpow_zero]
+    rw [ABC.piSqRad_eq_one_of_squarefree (by decide) ((show Nat.Prime 7 by decide).squarefree),
+      Real.rpow_zero]
     norm_num
   have hrad_gt_one : 1 < (ABC.rad (6 * 1 * 7) : ℝ) := by
     have hsqf6 : Squarefree 6 := by
