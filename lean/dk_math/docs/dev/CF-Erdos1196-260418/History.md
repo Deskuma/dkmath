@@ -926,3 +926,52 @@ Archive
      `ABC038` 本体の convenience theorem 群へどう差し込むかを具体化する。
    - 特に、既存 wrapper のうち
      `rad(a*b)` transport を省ける箇所を洗い出す。
+
+## 2026/04/19 04:58 JST
+
+1. 実施内容:
+   - `DkMath/ABC/ABC016.lean` に一般補題
+     `piSqRad_eq_one_of_squarefree`
+     を追加した。
+   - 証明は
+     `sqTail_eq_one_of_squarefree`
+     と
+     `sqTail_eq_piSqRad_mul_twoTail`
+     を組み合わせ、
+     `piSqRad n ∣ 1`
+     から `Nat.eq_one_of_dvd_one` で落とす形にした。
+   - `DkMath/ABC/ABC038BridgeExamples.lean` では
+     file-local の `native_decide` 設定と
+     `piSqRad_7_eq_one`
+     を削除し、
+     `ABC.piSqRad_eq_one_of_squarefree`
+     を直接使う形へ置き換えた。
+2. 意味:
+   - `review-021` が指摘していた
+     「sample 層の closed computation は許容できるが、
+     reusable な部品なら構造的証明へ寄せたい」
+     という論点に対して、
+     `piSqRad 7 = 1`
+     を sample 専用計算ではなく
+     squarefree 一般補題の special case として読めるようにした。
+   - これで `rad(abc)` concrete sample は、
+     sample file 内の `native_decide` に依存しなくなった。
+3. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ABC016`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ABC038BridgeExamples`
+   - いずれも build 成功。
+   - `ABC038BridgeExamples` build では
+     既存 `ABC021.lean` と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+4. 失敗事例:
+   - 最初に `ABC016` と `ABC038BridgeExamples` を並列 build したところ、
+     古い `lake build` プロセスが残って待ち状態になった。
+   - これは旧 build を kill して、
+     `ABC038BridgeExamples` を直列で再実行することで解消した。
+5. 次の課題:
+   - `ABC038` 本体の convenience theorem 群に対して、
+     `rad(abc)` 直結 route を使う wrapper をどこへ差し込むか具体化する。
+   - 特に、
+     `quality_le_of_not_bad_with_tail`
+     系の入口で `rad(a*b)` transport を省ける最小定理を見つける。
