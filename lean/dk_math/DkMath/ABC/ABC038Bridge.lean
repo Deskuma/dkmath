@@ -1,4 +1,4 @@
-/- 
+/-
 Copyright (c) 2026 D. and Wise Wolf. All rights reserved.
 Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
@@ -256,6 +256,16 @@ theorem radAbcBound_of_pi_targetRadTail
       rw [show (1 + δ + γ) = δ + γ + 1 by ring]
       rw [Real.rpow_add (ABC.rad_pos_real (a * b * c)),
         Real.rpow_add (ABC.rad_pos_real (a * b * c))]
+
+
+
+
+#print axioms radAbcBound_of_pi_targetRadTail  -- OK: no-so#rry
+-- 'DkMath.ABC.radAbcBound_of_pi_targetRadTail'
+-- depends on axioms: [propext, Classical.choice, Quot.sound]
+
+
+
 
 /--
 Direct quality route from a target-rad tail budget, landing in the existing
