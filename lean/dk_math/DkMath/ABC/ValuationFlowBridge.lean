@@ -251,6 +251,51 @@ theorem pow_channelCount_le_abc_rad_diff
   simpa [supportMass_eq_abc_rad] using F.pow_channelCount_le_supportMass hdiff_ne
 
 /--
+Target rename for the ABC radical lower bound supplied by a primitive witness
+family.
+-/
+theorem primitive_witness_family_gives_abc_rad_target_lower_bound
+    {a b c d : ℕ}
+    (F : PrimitiveWitnessFamily a b d)
+    (htarget : c = a ^ d - b ^ d)
+    (hdiff_ne : a ^ d - b ^ d ≠ 0) :
+    2 ^ F.channelCount ≤ ABC.rad c := by
+  simpa [htarget] using F.pow_channelCount_le_abc_rad_diff hdiff_ne
+
+/--
+If the target radical is bounded above by an arbitrary radical input, then the
+primitive channel count forces the corresponding lower bound there as well.
+-/
+theorem primitive_channel_count_forces_rad_input_lower_bound
+    {a b c d u v : ℕ}
+    (F : PrimitiveWitnessFamily a b d)
+    (htarget : c = a ^ d - b ^ d)
+    (htransport : ABC.rad c ≤ ABC.rad (u * v))
+    (hdiff_ne : a ^ d - b ^ d ≠ 0) :
+    2 ^ F.channelCount ≤ ABC.rad (u * v) := by
+  exact le_trans
+    (F.primitive_witness_family_gives_abc_rad_target_lower_bound htarget hdiff_ne)
+    htransport
+
+/--
+If the target radical is bounded above by the quality input radical, then the
+primitive channel count forces the corresponding quality input lower bound.
+-/
+theorem primitive_channel_count_forces_quality_rad_input
+    {a b c d : ℕ}
+    (F : PrimitiveWitnessFamily a b d)
+    (htarget : c = a ^ d - b ^ d)
+    (htransport : ABC.rad c ≤ ABC.rad (a * b))
+    (hdiff_ne : a ^ d - b ^ d ≠ 0) :
+    2 ^ F.channelCount ≤ ABC.rad (a * b) := by
+  simpa using F.primitive_channel_count_forces_rad_input_lower_bound
+    (u := a)
+    (v := b)
+    htarget
+    htransport
+    hdiff_ne
+
+/--
 The ABC radical lower bound from a witness family shrinks the corresponding
 exact-rad counting class in `RatioBound`.
 -/

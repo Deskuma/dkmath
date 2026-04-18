@@ -51,6 +51,17 @@ private def primitiveWitnessFamilyPack_6_5_3 : PrimitiveWitnessFamily 6 5 3 wher
       intro k hk_pos hk_lt
       interval_cases k <;> decide
 
+/-- A transport-friendly sample: `14^1 - 7^1 = 7` and `rad 7 ≤ rad (14 * 7)`. -/
+private def primitiveWitnessFamilyPack_14_7_1 : PrimitiveWitnessFamily 14 7 1 where
+  support := ({7} : Finset ℕ)
+  witness q hq := by
+    have hq7 : q = 7 := by
+      simpa only [Finset.mem_singleton] using hq
+    subst hq7
+    refine ⟨by decide, by decide, ?_⟩
+    intro k hk_pos hk_lt
+    omega
+
 /-- The packaged bridge API exposes prime channels through the public aggregator. -/
 example : Nat.Prime 7 ∧ 7 ∣ 8 ^ 1 - 1 ^ 1 := by
   exact PrimitiveWitnessFamily.primeChannelFamily
@@ -154,6 +165,46 @@ example :
   exact PrimitiveWitnessFamily.pow_channelCount_le_abc_rad_diff
     primitiveWitnessFamilyPack_6_5_3
     (by decide)
+
+/-- Target rename layer: the diff radical lower bound can be read on a named target. -/
+example :
+    2 ^ primitiveWitnessFamilyPack_6_5_3.channelCount ≤
+      ABC.rad 91 := by
+  exact PrimitiveWitnessFamily.primitive_witness_family_gives_abc_rad_target_lower_bound
+    primitiveWitnessFamilyPack_6_5_3
+    (by decide)
+    (by decide)
+
+/--
+Quality-input layer: if the target radical transports forward, the count forces
+the quality input radical.
+-/
+example :
+    2 ^ primitiveWitnessFamilyPack_14_7_1.channelCount ≤
+      ABC.rad (14 * 7) := by
+  have hrad7 : ABC.rad 7 = 7 := by
+    simpa [ABC.squarefree] using
+      (ABC.rad_eq_self_of_squarefree (n := 7) (by decide)
+        ((show Nat.Prime 7 by decide).squarefree))
+  have htransport7 : 7 ≤ ABC.rad (14 * 7) := by
+    have h7dvd : 7 ∣ ABC.rad (14 * 7) := by
+      rw [← supportMass_eq_abc_rad]
+      exact supportMass_dvd_of_prime_channel
+        (n := 14 * 7)
+        (p := 7)
+        (by decide)
+        (by decide)
+        (by decide)
+    have hpos : 0 < ABC.rad (14 * 7) := by
+      rw [← supportMass_eq_abc_rad]
+      exact supportMass_pos (14 * 7)
+    exact Nat.le_of_dvd hpos h7dvd
+  exact PrimitiveWitnessFamily.primitive_channel_count_forces_quality_rad_input
+    primitiveWitnessFamilyPack_14_7_1
+    (c := 7)
+    (htarget := by decide)
+    (htransport := by simpa [hrad7] using htransport7)
+    (hdiff_ne := by decide)
 
 /-- RatioBound-facing bridge: the `rad` class shrinks by the counting spine. -/
 example :
