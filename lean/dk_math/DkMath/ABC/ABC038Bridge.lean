@@ -351,6 +351,74 @@ theorem quality_le_of_not_bad_with_targetRadTail_on_radAbc
     hδγ_le
     hrad_gt_one
 
+namespace Chernoff
+
+/--
+`ABC038` の convenience theorem 群に合わせた `rad(abc)` 直結版。
+`TailBound` の transport を経由せず、target-rad tail budget を直接受け取る。
+-/
+lemma quality_le_of_not_bad_with_targetRadTail_on_radAbc
+    {a b c : ℕ} {ε δ γ : ℝ}
+    (hsum : a + b = c)
+    (hcop : Nat.Coprime a b)
+    (hε_pos : 0 < ε)
+    (h_not_bad : ¬ ABC.Bad δ (ABC.Triple.mk a b c hsum hcop))
+    (htail_target : (ABC.twoTail c : ℝ) ≤ (ABC.rad c : ℝ) ^ γ)
+    (hδ_nonneg : 0 ≤ δ)
+    (hγ_nonneg : 0 ≤ γ)
+    (hδγ_le : δ + γ ≤ ε)
+    (hrad_gt_one : 1 < (ABC.rad (a * b * c) : ℝ)) :
+    ABC.quality (ABC.Triple.mk a b c hsum hcop) ≤ 1 + ε := by
+  exact DkMath.ABC.quality_le_of_not_bad_with_targetRadTail_on_radAbc
+    hsum
+    hcop
+    hε_pos
+    h_not_bad
+    htail_target
+    hδ_nonneg
+    hγ_nonneg
+    hδγ_le
+    hrad_gt_one
+
+/--
+`channelCount` budget をそのまま `ABC038` convenience theorem 風の入口へ流す版。
+`rad(c)` tail budget への landing は内部で行う。
+-/
+lemma quality_le_of_not_bad_with_channelCount_tail_on_radAbc
+    {a b c d u v : ℕ} {ε δ γ : ℝ}
+    (F : PrimitiveWitnessFamily a b d)
+    (htarget : c = a ^ d - b ^ d)
+    (hdiff_ne : a ^ d - b ^ d ≠ 0)
+    (hγ_nonneg : 0 ≤ γ)
+    (huv_sum : u + v = c)
+    (huv_cop : Nat.Coprime u v)
+    (hε_pos : 0 < ε)
+    (h_not_bad : ¬ ABC.Bad δ (ABC.Triple.mk u v c huv_sum huv_cop))
+    (htail_count : (ABC.twoTail c : ℝ) ≤ ((2 ^ F.channelCount : ℕ) : ℝ) ^ γ)
+    (hδ_nonneg : 0 ≤ δ)
+    (hδγ_le : δ + γ ≤ ε)
+    (hrad_gt_one : 1 < (ABC.rad (u * v * c) : ℝ)) :
+    ABC.quality (ABC.Triple.mk u v c huv_sum huv_cop) ≤ 1 + ε := by
+  have htail_target : (ABC.twoTail c : ℝ) ≤ (ABC.rad c : ℝ) ^ γ :=
+    DkMath.ABC.targetRadTailBound_of_channelCount_tail
+      (F := F)
+      htarget
+      hdiff_ne
+      hγ_nonneg
+      htail_count
+  exact quality_le_of_not_bad_with_targetRadTail_on_radAbc
+    huv_sum
+    huv_cop
+    hε_pos
+    h_not_bad
+    htail_target
+    hδ_nonneg
+    hγ_nonneg
+    hδγ_le
+    hrad_gt_one
+
+end Chernoff
+
 /--
 Divisibility-flavoured quality wrapper. This is the lightest route when
 `c ∣ u * v` is easier to prove than a standalone radical transport inequality.
