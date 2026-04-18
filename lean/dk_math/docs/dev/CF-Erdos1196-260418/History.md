@@ -884,3 +884,45 @@ Archive
    - 新しい `rad(abc)` 直結 route の concrete sample を追加する。
    - その上で、`ABC038` 本体の convenience theorem 群のうち、
      どこをこの route で置き換えるのが最も薄いかを見極める。
+
+## 2026/04/19 03:57 JST
+
+1. 実施内容:
+   - `DkMath/ABC/ABC038BridgeExamples.lean` に
+     `rad(abc)` analytic route の concrete sample を追加した。
+   - file local に
+     `set_option linter.style.nativeDecide false`
+     を置き、`piSqRad_7_eq_one : ABC.piSqRad 7 = 1`
+     を `native_decide` で固定した。
+   - `targetRadTailBound_7` を追加し、
+     `primitiveWitnessFamilyPack_14_7_1`
+     から `twoTail 7 ≤ (rad 7)^1` を theorem 名で再利用できるようにした。
+   - その上で
+     `quality_le_of_pi_targetRadTail_of_radAbc`
+     を使い、
+     `ABC.quality (ABC.Triple.mk 6 1 7 ...) ≤ 2`
+     という concrete quality sample を追加した。
+2. 補足:
+   - quality sample では
+     `piSqRad 7 ≤ rad(6*1)^0`,
+     `twoTail 7 ≤ rad 7`,
+     `1 < rad(6*1*7)`
+     を個別に与えて、
+     新しい `rad(abc)` 直結 route が実例で閉じることを確認した。
+3. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.ABC038BridgeExamples`
+   - build は成功した。
+   - 既存 `ABC021.lean` と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+4. 失敗事例:
+   - sample 初版では
+     `quality_le_of_pi_targetRadTail_of_radAbc`
+     の結論が `≤ 1 + 1` で返り、
+     目標 `≤ 2` と definitional に一致しなかった。
+   - これは一度 `hq` に受けて `norm_num at hq` で右辺を正規化する形にして解消した。
+5. 次の課題:
+   - `rad(abc)` 直結 route を
+     `ABC038` 本体の convenience theorem 群へどう差し込むかを具体化する。
+   - 特に、既存 wrapper のうち
+     `rad(a*b)` transport を省ける箇所を洗い出す。
