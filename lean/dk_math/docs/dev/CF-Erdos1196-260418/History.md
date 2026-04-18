@@ -546,3 +546,35 @@ Archive
    - `ABC016` / `ABC002` など既存 ABC コアの `rad`・quality 系命題で、
      この alias を差し込める箇所を具体化する。
    - あるいは `ABC.rad` 語彙での concrete family 例をさらに増やす。
+
+### 日時: 2026/04/18 22:14 JST (ABC コア差し込み候補の整理)
+
+1. 目的:
+   - `review-013.md` の提案に従い、bridge spine を既存 ABC コアへ差し込む候補を 3 箇所まで抽出し、
+     現 API で足りる点と不足補題を切り分ける。
+2. 実施:
+   - `ABC016.lean`, `ABC002.lean`, `ABC038.lean`, `RatioBound.lean` を点検し、
+     `rad`・quality・count 系で bridge が刺さる位置を確認した。
+   - 調査結果を
+     [ABCCoreInsertionCandidates.md](ABCCoreInsertionCandidates.md)
+     に整理した。
+   - 候補は次の 3 件に絞った。
+     - `ABC038.quality_le_of_not_bad_with_tail` / `quality_le_of_not_bad_with_log`
+     - `ABC016.twoTail_le_rad_pow_of_log_bound`
+     - `RatioBound.count_with_rad_eq_le_div`
+   - 各候補について、
+     - いまの bridge alias だけで足りるか
+     - `rad(diff)` と `rad(a*b)` のズレ
+     - family existence / packaging / count-class corollary のどれが不足か
+     を明記した。
+3. 結論:
+   - 既存 ABC コアへの差し込み候補と、その手前に要る補題の種類が整理された。
+   - 現時点で最も実装に近いのは `RatioBound.count_with_rad_eq_le_div` 周辺で、
+     quality 本体 (`ABC038`, `ABC016`) はもう 1 本中間命題が必要だと分かった。
+4. 検証:
+   - 今回は調査・文書整理のみで、Lean コードの追加は行っていない。
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `RatioBound` 側に `rad lower bound -> count upper bound` の薄い corollary を足す。
+   - あるいは `ABC038` へ進む前段として、`rad(diff)` を quality 入力へ送る中間命題を設計する。
