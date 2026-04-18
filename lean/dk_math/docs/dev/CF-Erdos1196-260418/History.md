@@ -475,3 +475,38 @@ Archive
 6. 次の課題:
    - `channelCount` と `supportMass` の下界を concrete family 例で増やすか、
      あるいは `PrimitiveWitnessFamily` を既存 ABC 本体のどの命題へ差し込むか整理する。
+
+### 日時: 2026/04/18 21:20 JST (2-channel concrete family の public sample 追加)
+
+1. 目的:
+   - `review-011.md` の提案に従い、singleton sample だけでなく
+     2-channel concrete family でも counting spine が public import 経由で読めることを確認する。
+2. 実施:
+   - `DkMath/ABC/BridgeExamples.lean` に
+     `primitiveWitnessFamilyPack_6_5_3 : PrimitiveWitnessFamily 6 5 3`
+     を追加した。
+   - support は `({7, 13} : Finset ℕ)` とし、
+     `6^3 - 5^3 = 91 = 7 * 13` に対応する 2 本 primitive witness を
+     `interval_cases` と `decide` で構成した。
+   - 同ファイルに public import 経由の usage example として
+     - `channelCount = 2`
+     - `channelProduct = 7 * 13`
+     - `2 ^ channelCount ≤ channelProduct`
+     - `2 ^ channelCount ≤ supportMass (6 ^ 3 - 5 ^ 3)`
+     を追加した。
+3. 結論:
+   - counting spine
+     `channelCount -> channelProduct -> supportMass`
+     が singleton だけでなく 2-channel concrete family でも public surface 上で読めるようになった。
+   - これで counting API の効き方が具体例としてかなり見えやすくなった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.ABC.BridgeExamples`
+   - build では既存 `ZsigmondyCyclotomicResearch.lean` の `sorry` 警告が replay されたが、
+     今回更新した example は成功した。
+5. 失敗事例:
+   - 初版では 2 本 primitive witness の構成に `omega` を使ったが、
+     divisibility を含む primitive 条件を処理できず build が落ちた。
+   - ここは `interval_cases k <;> decide` に切り替えて解消した。
+6. 次の課題:
+   - `PrimitiveWitnessFamily` の counting spine を既存 ABC 本体のどの命題へ差し込むか整理する。
+   - あるいは concrete family をさらに追加して、public API の利用例を厚くする。
