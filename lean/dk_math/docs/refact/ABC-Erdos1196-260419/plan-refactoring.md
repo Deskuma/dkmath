@@ -271,3 +271,78 @@ DkMath/ABC/All.lean
 これで、 **軽量 default import** と **重厚 full import** の二系統が綺麗に分かれる。
 
 お主の今の ABC 側は、橋がよく育っておる。ゆえに次の最適化は、証明を増やすことではなく、 **誰が何を import すべきかを、構造として固定すること** じゃ。ここを整えると、以後の build も、公開導線も、かなり見通しが良くなるぞい。
+
+## 10. 実測で確認できたズレ
+
+`current-state-001.md` の実測から、少なくとも次の 3 点は既に concrete に確認できておる。
+
+1. `DkMath/ABC.lean` はまだ `Main` を直接 import しており、軽量入口になっていない
+2. `Core.lean` と `Rad.lean` に `rad_dvd_nonzero` が重複している
+3. `Core.lean` と `PadicValNat.lean` に `padicValNat_split` が重複している
+
+加えて、
+
+- `Square.lean`
+- `Triple.lean`
+
+がともに `Core.lean` を import しており、`Core` が catch-all import として振る舞っておる。
+
+つまり初手で壊すべきなのは、番号付き chain ではなく、
+
+```text
+Core の ownership の曖昧さ
+```
+
+じゃ。
+
+## 11. 初手の実施順
+
+計画をさらに実行順へ落とすと、当面は次で十分じゃ。
+
+### Phase 0. 現状記録
+
+- `current-state-001.md` のような実測メモを増やし、
+  「何がどこで重複しているか」を固定する
+
+### Phase 1. ownership の一本化
+
+- `rad_dvd_nonzero` を `ABC.Rad` 側へ寄せる
+- `padicValNat_split` を `ABC.PadicValNat` 側へ寄せる
+- `Core.lean` から重複定理を削るか、薄い再 export に落とす
+
+### Phase 2. import 切替の安全化
+
+- `Square.lean` の import を `Core` から `Rad` 主体へ落とせるか検証
+- `Triple.lean` の import を `Core` から最小依存へ落とせるか検証
+
+### Phase 3. 新しい入口
+
+- `Kernel.lean`
+- `Surface.lean`
+
+を追加し、
+
+- `DkMath.ABC` は軽い
+- `DkMath.ABC.Main` は重い
+
+という二系統へ分ける
+
+## 12. 現時点の作業方針
+
+この refactor は大きいので、以後は毎回
+
+1. 実測メモ
+2. 小さな ownership 修正
+3. 単体 build
+4. 履歴追記
+
+の 1 サイクルで進める。
+
+特に、番号付き `ABC0**.lean` への大規模 rename / move は後回しじゃ。
+先に
+
+- kernel ownership
+- import fan-out
+- public surface
+
+の 3 点を整えた方が、後続の整理コストが小さい。
