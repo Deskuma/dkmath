@@ -11,7 +11,7 @@ Archive
 
 過去ログは、以下にアーカイブしてあります。
 
-- [001](History-001.md)
+- None
 
 ## Note
 
