@@ -16,7 +16,7 @@ set_option linter.style.emptyLine false
   ここでエラーを取り除いてから ABCNoError.lean に移動する。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
@@ -28,4 +28,4 @@ open MeasureTheory ProbabilityTheory
 
 -- -------------------------------------------------------
 
-end ABC
+end DkMath.ABC

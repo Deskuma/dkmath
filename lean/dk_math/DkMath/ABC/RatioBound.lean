@@ -11,7 +11,7 @@ import DkMath.ABC.Triple
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
@@ -605,4 +605,4 @@ lemma abs_div_lt_for_large_nat (α K eps : ℝ) (hα : 0 < α) (heps : 0 < eps) 
       rw [abs_div, abs_of_pos hpos_denom]
     _ < eps := hdiv
 
-end ABC
+end DkMath.ABC

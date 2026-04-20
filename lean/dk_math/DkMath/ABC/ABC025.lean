@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC.ABC024
 import DkMath.ABC.ABC025_bound2
+import DkMath.ABC.CountPowersDividing2n1
 
 #print "file: DkMath.ABC.ABC025"
 
@@ -18,7 +19,7 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 namespace Telescoping
 
@@ -198,9 +199,9 @@ lemma sum_telescoping_correct {p : ℕ} (hp : p ≥ 3) (t : ℝ) (ht : 0 < t) (v
 This is exactly `count_powers_dividing_2n1` from ABC.lean:15834.
 We don't need to reprove it here, just reference it.
 
-**From ABC.lean:**
+**From CountPowersDividing2n1.lean:**
 ```lean
-private lemma count_powers_dividing_2n1 (p : ℕ) [hp : Fact (Nat.Prime p)] (k : ℕ) (X : ℕ) (hk : k ≥ 1) :
+lemma count_powers_dividing_2n1 (p : ℕ) [hp : Fact (Nat.Prime p)] (k : ℕ) (X : ℕ) (hk : k ≥ 1) :
   #({n ∈ Finset.Icc 0 X | n ≤ X ∧ (p : ℕ) ^ k ∣ 2 * n + 1}) ≤ Nat.ceil ((X + 1 : ℝ) / (p : ℝ) ^ k) := by
   ...
 ```
@@ -218,8 +219,8 @@ lemma count_divisible_le (hp : p.Prime) (hp3 : p ≥ 3) {X k : ℕ} (hk : k ≥ 
     simp only [Finset.mem_filter, Finset.mem_Icc]
     tauto
   rw [h_filter_eq]
-  -- Apply count_powers_dividing_2n1 from ABC.lean
-  have h_ceil := ABC.count_powers_dividing_2n1 p hp hp_ne_2 k hk X
+  -- Apply count_powers_dividing_2n1 from CountPowersDividing2n1.lean
+  have h_ceil := count_powers_dividing_2n1 p hp hp_ne_2 k hk X
   -- Convert ℕ cast to ℝ cast
   have h_ceil' : (({n ∈ Finset.Icc 0 X | n ≤ X ∧ (p : ℕ) ^ k ∣ 2 * n + 1}).card : ℝ)
                ≤ (⌈((X : ℝ) + 1) / (p : ℝ) ^ k⌉₊ : ℝ) := by
@@ -2134,4 +2135,4 @@ theorem sum_pow_padicValNat_le_geom_log2_div_log3
 
 end Telescoping
 
-end ABC
+end DkMath.ABC

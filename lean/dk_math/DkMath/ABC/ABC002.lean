@@ -17,7 +17,7 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
@@ -417,4 +417,4 @@ theorem adj_quality_density_one (ε : ℝ) (hε : 0 < ε) :
 -- -------------------------------------------------------
 
 
-end ABC
+end DkMath.ABC

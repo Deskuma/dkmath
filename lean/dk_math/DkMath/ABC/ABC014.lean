@@ -17,7 +17,7 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
@@ -622,4 +622,4 @@ lemma quality_le_of_pi_tail_adj
     exact (div_le_iff (show 0 < _ by simpa using hden_pos)).mpr h_final'
   simpa using this
 
-end ABC
+end DkMath.ABC

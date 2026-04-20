@@ -62,7 +62,7 @@ Full-scratch prototype
 
 -- ABC.Core.lean
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
@@ -74,4 +74,4 @@ open MeasureTheory ProbabilityTheory
 
 
 
-end ABC
+end DkMath.ABC

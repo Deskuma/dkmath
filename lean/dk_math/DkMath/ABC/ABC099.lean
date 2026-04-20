@@ -60,11 +60,11 @@ Full-scratch prototype
 
 -- ABC.Core.lean
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
 open Nat Real Rat Filter Finset
 open MeasureTheory ProbabilityTheory
 
-end ABC
+end DkMath.ABC

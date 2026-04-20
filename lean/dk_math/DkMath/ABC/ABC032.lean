@@ -17,7 +17,7 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
@@ -99,4 +99,4 @@ theorem abc_main (ε : ℝ) (hε : 0 < ε) :
     (c : ℝ) ≤ K * (rad (a * b * c) : ℝ) ^ (1 + ε) :=
   abc_main_axiom ε hε
 
-end ABC
+end DkMath.ABC

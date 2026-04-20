@@ -19,7 +19,7 @@ set_option linter.style.emptyLine true
 - 2026/03/18 13:57  コメントの修正、警告の修正、check 削除
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
@@ -473,4 +473,4 @@ lemma exp_layer_cake'
                 omega
               · positivity
 
-end ABC
+end DkMath.ABC

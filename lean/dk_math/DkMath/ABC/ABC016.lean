@@ -17,7 +17,7 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
@@ -882,4 +882,4 @@ theorem summable_exp_neg_log_pow (c β : ℝ) (hc : 0 < c) (hβ : 1 < β) :
   -- Summable.of_norm_bounded_eventually_nat を適用
   exact Summable.of_norm_bounded_eventually_nat h_g_summable h_event
 
-end ABC
+end DkMath.ABC

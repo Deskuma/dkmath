@@ -17,7 +17,7 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
@@ -402,4 +402,4 @@ lemma log_rpow_pos {x t : ℝ} (hx : 0 < x) :
   Real.log (x ^ t) = t * Real.log x := by
   simp [Real.log_rpow hx]
 
-end ABC
+end DkMath.ABC

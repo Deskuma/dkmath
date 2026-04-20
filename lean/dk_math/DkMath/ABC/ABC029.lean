@@ -17,7 +17,7 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
@@ -448,4 +448,4 @@ lemma dyadic_block_sum_crude
 -- (Analytic summation lemmas removed for now; analytic content will be
 -- inlined as local ad#mits to avoid top-level `so#rry` declarations.)
 
-end ABC
+end DkMath.ABC

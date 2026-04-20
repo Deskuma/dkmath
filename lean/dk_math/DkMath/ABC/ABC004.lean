@@ -17,7 +17,7 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
@@ -361,4 +361,4 @@ theorem adjK_image_subset_R (X k : ℕ) (hk_lt : k < X) :
   -- conclude using same decider form for R
   exact Finset.mem_filter.2 ⟨hpair, ⟨hres, hBad⟩⟩
 
-end ABC
+end DkMath.ABC

@@ -17,7 +17,7 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
@@ -551,4 +551,4 @@ lemma absorb_constant_4_to_5 (X : ℕ) (hX : const_X ≤ X) :
 
 end Chernoff
 
-end ABC
+end DkMath.ABC

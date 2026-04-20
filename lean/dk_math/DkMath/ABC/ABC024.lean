@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 
 import DkMath.ABC.ABC023
+import DkMath.ABC.CountPowersDividing2n1
 
 #print "file: DkMath.ABC.ABC024"
 
@@ -17,19 +18,19 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
 open Nat Real Rat Filter Finset
 open MeasureTheory ProbabilityTheory
 
-#check ABC.div_le_iff
+#check div_le_iff
 
-#check ABC.count_powers_dividing_2n1
-#check ABC.natCeil_le_add_one_real
+#check count_powers_dividing_2n1
+#check natCeil_le_add_one_real
 
-#check ABC.rpow_layer_cake
+#check rpow_layer_cake
 
 
 /-
@@ -1261,4 +1262,4 @@ lemma mgf_padic_excess_bound_pbase_layercake
       最終的に、等式を証明するために `rfl` を使用する
 -/
 
-end ABC
+end DkMath.ABC

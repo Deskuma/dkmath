@@ -17,7 +17,7 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
@@ -446,4 +446,4 @@ lemma not_bad_of_not_is_bad_a {δ : ℝ} {X a b : ℕ}
   apply h
   exact ⟨hcop, ha, hb, hab, hbad⟩
 
-end ABC
+end DkMath.ABC

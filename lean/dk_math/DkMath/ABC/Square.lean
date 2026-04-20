@@ -11,7 +11,7 @@ import DkMath.ABC.Core
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
 
-namespace ABC
+namespace DkMath.ABC
 
 -- Squarefree / Squarefull の基本性質
 
@@ -653,4 +653,4 @@ lemma rad_neighbors_lower_bound {N : ℕ}
     N = N * 1         := this
     _ ≤ N * rad (N+1) := Nat.mul_le_mul_left N h_rad
 
-end ABC
+end DkMath.ABC
