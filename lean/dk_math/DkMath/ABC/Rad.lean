@@ -2,7 +2,7 @@ import DkMath.Basic
 
 #print "file: DkMath.ABC.Rad"
 
-namespace DkMath.ABC.Rad
+namespace DkMath.ABC
 
 /- ============================================================================
      2. rad: definition + basic facts
@@ -80,4 +80,4 @@ lemma rad_dvd_nonzero (n : ℕ) (hn : n ≠ 0) : rad n ∣ n := by
 -- #eval rad 840 -- 210 = 2 * 3 * 5 * 7
 -- #eval rad 1000 -- 10 = 2 * 5
 
-end DkMath.ABC.Rad
+end DkMath.ABC

@@ -9,3 +9,7 @@
   - 参照先である ABC024.lean で、インポートを追加
     - `import DkMath.ABC.CountPowersDividing2n1`
     - 以降の ABC025.lean, ABC028.lean も同様にインポートを追加
+- Core.lean で定義されていた rad 関数を `DkMath.ABC.Rad.rad` に１本化
+  - これに伴い、Core.lean での `rad` 定義を廃止
+  - 参照先である MassBridge.lean で、インポートを追加
+    - `import DkMath.ABC.Rad`

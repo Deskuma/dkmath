@@ -7,7 +7,7 @@ set_option linter.style.longLine false
 
 namespace DkMath.Basic.Nat
 
-open DkMath.ABC.Rad
+open DkMath.ABC
 
 /- ============================================================================
      1. gcd / coprimality lemmas

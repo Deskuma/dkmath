@@ -20,11 +20,11 @@ Canonical support-mass alias on the ABC side.
 At this stage the bridge reads support mass simply as the radical `rad`.
 -/
 def supportMass (n : ℕ) : ℕ :=
-  DkMath.ABC.Rad.rad n
+  rad n
 
 theorem supportMass_eq_abc_rad (n : ℕ) :
-    supportMass n = ABC.rad n := by
-  simp [supportMass, DkMath.ABC.Rad.rad, ABC.rad]
+    supportMass n = rad n := by
+  simp [supportMass, rad]
 
 /-- `Big = Body + Gap` re-exported on the ABC side. -/
 theorem abc_big_eq_body_add_gap_mass (d x u : ℕ) :
@@ -65,11 +65,11 @@ theorem abc_squarefree_support_lower_bound
 /-- The support mass still divides the original natural mass. -/
 theorem abc_supportMass_dvd_self {n : ℕ} (hn0 : n ≠ 0) :
     supportMass n ∣ n := by
-  simpa [supportMass] using DkMath.ABC.Rad.rad_dvd_nonzero n hn0
+  simpa [supportMass] using rad_dvd_nonzero n hn0
 
 /-- Support mass is always positive. -/
 theorem supportMass_pos (n : ℕ) : 0 < supportMass n := by
-  unfold supportMass DkMath.ABC.Rad.rad
+  unfold supportMass rad
   apply Finset.prod_pos
   intro p hp
   exact Nat.pos_of_ne_zero (Nat.Prime.ne_zero ((ABC.mem_support_factorization_iff.mp hp).2.1))
@@ -82,7 +82,7 @@ For now, a "channel" is simply a prime divisor witness.
 theorem supportMass_dvd_of_prime_channel
     {n p : ℕ} (hn0 : n ≠ 0) (hp : Nat.Prime p) (hpd : p ∣ n) :
     p ∣ supportMass n := by
-  unfold supportMass DkMath.ABC.Rad.rad
+  unfold supportMass rad
   apply Finset.dvd_prod_of_mem
   exact ABC.mem_support_factorization_iff.mpr ⟨hn0, hp, hpd⟩
 
@@ -98,7 +98,7 @@ theorem prime_channel_family_prod_dvd_supportMass
     {S : Finset ℕ}
     (hS : ∀ p ∈ S, Nat.Prime p ∧ p ∣ n) :
     S.prod id ∣ supportMass n := by
-  unfold supportMass DkMath.ABC.Rad.rad
+  unfold supportMass rad
   have hsubset : S ⊆ n.factorization.support := by
     intro p hp
     exact ABC.mem_support_factorization_iff.mpr ⟨hn0, (hS p hp).1, (hS p hp).2⟩
