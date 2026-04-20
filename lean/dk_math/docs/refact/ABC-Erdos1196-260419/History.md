@@ -79,3 +79,70 @@ Archive
    - `rad_dvd_nonzero` と `padicValNat_split` の ownership を整理し、
      `Core` からの依存をどこまで外せるかを小さく検証する。
    - その後に `Kernel.lean` / `Surface.lean` 新設へ進む。
+
+### 日時: 2026/04/20 22:26 JST (radical-kernel 補題群の `ABC.Rad` 集約)
+
+1. 目的:
+   - `rad` 本体の一本化に続いて、
+     radical-kernel に属する補題群の owner も
+     `DkMath.ABC.Rad`
+     に寄せ、
+     `Core` の catch-all 化を一段縮める。
+2. 実施:
+   - `ABC/Core.lean` と `ABC/Rad.lean` を再確認し、
+     `Core` に残っていた radical 系補題のうち、
+     `rad` の定義と factorization/support に直接依存するものを抽出した。
+   - `ABC/Rad.lean` に以下を移設した。
+     - `mem_support_factorization_iff`
+     - `support_prod_log_eq_sum_log`
+     - `support_prod_log_ge_sum_log`
+     - `rad_prod`
+     - `rad_log_eq_sum_prime_logs`
+     - `rad_log_ge_sum_prime_logs`
+     - `disjoint_support_of_coprime`
+     - `support_mul_coprime`
+     - `rad_mul_coprime`
+     - `rad_le`
+   - `ABC/Core.lean` から対応する重複ブロックを削除し、
+     radical kernel は `DkMath.ABC.Rad` に集約した旨の注記へ差し替えた。
+   - 証明修正として、
+     `Rad.rad_le`
+     は factorization product の整形後に
+     `Nat.le_of_dvd`
+     で閉じる形へ簡約した。
+   - 変更記録
+     `refact-changed-001.md`
+     に今回の移設一覧を追記した。
+3. 結論:
+   - `rad` 本体だけでなく、
+     `rad_prod` / `rad_mul_coprime` / `rad_le`
+     などの radical-kernel 補題も
+     `ABC.Rad`
+     に揃い、
+     `Core` は一段薄くなった。
+   - 次の import thinning では、
+     `Square` / `Triple`
+     が `Core` からどこまで離れられるかを実測しやすい状態になった。
+4. 検証:
+   - `./lean-build.sh DkMath.ABC.Rad`
+   - `./lean-build.sh DkMath.ABC.Core`
+   - `./lean-build.sh DkMath.ABC.Square`
+   - `./lean-build.sh DkMath.ABC.Triple`
+   - `./lean-build.sh DkMath.ABC.MassBridge`
+   - 以上はいずれも成功した。
+5. 失敗事例:
+   - 初回の `Rad.rad_le` 実装で、
+     witness `k` による書き換えが target を
+     `((∏ p ∈ s, p) * k).factorization.support`
+     側へ変形してしまい build が落ちた。
+   - これは `Nat.le_mul_of_pos_right` ではなく
+     `Nat.le_of_dvd`
+     を使う形へ直して解消した。
+6. 次の課題:
+   - `Square.lean` / `Triple.lean`
+     の import を棚卸しし、
+     moved radical lemmas の利用箇所が
+     `Core` 依存を不要にしている部分を切り出す。
+   - その後に
+     `padicValNat_split`
+     側の ownership 整理へ進む。

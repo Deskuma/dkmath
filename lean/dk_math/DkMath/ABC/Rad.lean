@@ -64,6 +64,176 @@ lemma rad_dvd_nonzero (n : ℕ) (hn : n ≠ 0) : rad n ∣ n := by
   rw [Eq.symm hfac] at hdiv
   exact hdiv
 
+/--
+`p ∈ n.factorization.support ↔ (n ≠ 0 ∧ Nat.Prime p ∧ p ∣ n)`。
+
+radical kernel の多くの補題で使う、factorization support の基本特徴付け。
+-/
+lemma mem_support_factorization_iff {n p : ℕ} :
+  p ∈ n.factorization.support ↔ (n ≠ 0 ∧ Nat.Prime p ∧ p ∣ n) := by
+  classical
+  have hsup : n.factorization.support = Nat.primeFactors n := by rfl
+  constructor <;> intro h
+  · have hpf : p ∈ Nat.primeFactors n := by
+      simpa [hsup] using h
+    rw [Nat.mem_primeFactors] at hpf
+    exact ⟨hpf.2.2, hpf.1, hpf.2.1⟩
+  · rcases h with ⟨hn, hp, hpd⟩
+    have hpf : p ∈ Nat.primeFactors n := by
+      rw [Nat.mem_primeFactors]
+      exact ⟨hp, hpd, hn⟩
+    simpa [hsup] using hpf
+
+/-- support 上の素数積の対数は、各素数対数の総和に等しい。 -/
+theorem support_prod_log_eq_sum_log (n : ℕ) :
+    Real.log ((Nat.factorization n).support.prod fun p => (p : ℝ))
+      = ∑ p ∈ (Nat.factorization n |>.support), Real.log (p : ℝ) := by
+  have h_nz : ∀ p ∈ (Nat.factorization n).support, (p : ℝ) ≠ 0 := by
+    intro p hp
+    rcases mem_support_factorization_iff.mp hp with ⟨_, hprime, _⟩
+    exact_mod_cast Nat.Prime.ne_zero hprime
+  simpa using
+    (Real.log_prod
+      (α := ℕ)
+      (s := (Nat.factorization n).support)
+      (f := fun p : ℕ => (p : ℝ))
+      h_nz)
+
+/-- support 上の素数積の対数は、各素数対数の総和以上である。 -/
+lemma support_prod_log_ge_sum_log (n : ℕ) :
+    Real.log ((Nat.factorization n).support.prod fun p => (p : ℝ))
+      ≥ ∑ p ∈ (Nat.factorization n |>.support), Real.log (p : ℝ) := by
+  exact le_of_eq (support_prod_log_eq_sum_log n).symm
+
+/-- radical は factorization support 上の素数積そのものである。 -/
+theorem rad_prod (n : ℕ) (_hn : n ≥ 2) :
+    rad n = ∏ p ∈ (Nat.factorization n |>.support), p := by
+  simp only [rad, Nat.support_factorization]
+
+/-- radical の対数は、support 上の素数対数和に等しい。 -/
+theorem rad_log_eq_sum_prime_logs (n : ℕ) (_hn : n ≥ 2) :
+    Real.log (rad n) = ∑ p ∈ (Nat.factorization n |>.support), Real.log p := by
+  have hprod : (rad n : ℝ) = (Nat.factorization n).support.prod fun p => (p : ℝ) := by
+    simp only [rad, Nat.support_factorization, Nat.cast_prod]
+  rw [hprod]
+  have h_nz : ∀ p ∈ (Nat.factorization n).support, (p : ℝ) ≠ 0 := by
+    intro p hp
+    rcases mem_support_factorization_iff.mp hp with ⟨_, hprime, _⟩
+    exact_mod_cast Nat.Prime.ne_zero hprime
+  exact Real.log_prod
+      (α := ℕ)
+      (s := (Nat.factorization n).support)
+      (f := fun p : ℕ => (p : ℝ))
+      h_nz
+
+/-- radical の対数は、support 上の素数対数和以上である。 -/
+lemma rad_log_ge_sum_prime_logs (n : ℕ) (hn : n ≥ 2) :
+    Real.log (rad n) ≥ ∑ p ∈ (Nat.factorization n |>.support), Real.log p := by
+  exact le_of_eq (rad_log_eq_sum_prime_logs n hn).symm
+
+/-- 互いに素なら factorization support は交わらない。 -/
+lemma disjoint_support_of_coprime {a b : ℕ} (h : Nat.Coprime a b) :
+  Disjoint a.factorization.support b.factorization.support := by
+  classical
+  refine Finset.disjoint_left.mpr ?_
+  intro p hpA hpB
+  have ⟨_, pp, p_div_a⟩ := mem_support_factorization_iff.mp hpA
+  have ⟨_, _, p_div_b⟩ := mem_support_factorization_iff.mp hpB
+  have hgd := Nat.dvd_gcd p_div_a p_div_b
+  rw [h] at hgd
+  exact pp.not_dvd_one hgd
+
+/-- 互いに素なら support は単純に和集合になる。 -/
+lemma support_mul_coprime {a b : ℕ} (h : Nat.Coprime a b) :
+  (a*b).factorization.support = a.factorization.support ∪ b.factorization.support := by
+  classical
+  by_cases ha0 : a = 0
+  · subst ha0
+    have hb1 : b = 1 := by
+      rw [Nat.coprime_iff_gcd_eq_one] at h
+      rw [Nat.gcd_zero_left] at h
+      exact h
+    subst hb1
+    simp
+  by_cases hb0 : b = 0
+  · subst hb0
+    have ha1 : a = 1 := by
+      rw [Nat.coprime_iff_gcd_eq_one] at h
+      rw [Nat.gcd_zero_right] at h
+      exact h
+    subst ha1
+    simp
+  have hfac :
+      (a * b).factorization = a.factorization + b.factorization :=
+    Nat.factorization_mul ha0 hb0
+  rw [hfac]
+  ext p
+  have add_iff :
+      (a.factorization p + b.factorization p ≠ 0) ↔
+        (a.factorization p ≠ 0 ∨ b.factorization p ≠ 0) := by
+    constructor
+    · intro hsum
+      by_cases ha' : a.factorization p = 0
+      · have hb_non : b.factorization p ≠ 0 := by
+          by_contra hb0'
+          simp [ha', hb0'] at hsum
+        exact Or.inr hb_non
+      · exact Or.inl ha'
+    · intro h'
+      rcases h' with (ha_non | hb_non)
+      · by_contra hsum
+        exact ha_non (Nat.add_eq_zero_iff.mp hsum).1
+      · by_contra hsum
+        exact hb_non (Nat.add_eq_zero_iff.mp hsum).2
+  rw [Finsupp.mem_support_iff, Finset.mem_union, Finsupp.mem_support_iff, Finsupp.mem_support_iff]
+  simp [add_iff]
+
+/-- [★] 互いに素での乗法性 `rad(ab) = rad(a) * rad(b)`。 -/
+lemma rad_mul_coprime {a b : ℕ} (h : Nat.Coprime a b) :
+  rad (a*b) = rad a * rad b := by
+  classical
+  by_cases ha0 : a = 0
+  · subst ha0
+    have hb1 : b = 1 := by
+      rw [Nat.coprime_iff_gcd_eq_one] at h
+      rw [Nat.gcd_zero_left] at h
+      exact h
+    subst hb1
+    simp
+  by_cases hb0 : b = 0
+  · subst hb0
+    have ha1 : a = 1 := by
+      rw [Nat.coprime_iff_gcd_eq_one] at h
+      rw [Nat.gcd_zero_right] at h
+      exact h
+    subst ha1
+    simp
+  have hsup := support_mul_coprime (a := a) (b := b) h
+  have hdis := disjoint_support_of_coprime (a := a) (b := b) h
+  unfold rad
+  rw [hsup]
+  exact Finset.prod_union hdis
+
+/-- 単調界：`rad n ≤ n` (`n ≠ 0`)。 -/
+lemma rad_le {n : ℕ} (hn : n ≠ 0) : rad n ≤ n := by
+  classical
+  unfold rad
+  let f := n.factorization
+  let s := f.support
+  have hfac : n = s.prod (fun p => p ^ f p) := by
+    exact Eq.symm (Nat.prod_factorization_pow_eq_self hn)
+  have hdiv : s.prod (fun p : ℕ => p) ∣ s.prod (fun p => p ^ f p) := by
+    apply Finset.prod_dvd_prod_of_dvd
+    intro p hp
+    have hf : f p ≠ 0 := by
+      rw [Finsupp.mem_support_iff] at hp
+      exact hp
+    exact dvd_pow_self p hf
+  have hrad_dvd_n : s.prod (fun p => p) ∣ n := by
+    rw [hfac]
+    exact hdiv
+  exact Nat.le_of_dvd (Nat.pos_of_ne_zero hn) hrad_dvd_n
+
 -- Quick sanity checks (equivalent to the original #eval tests)
 -- #eval rad 0 -- 1 (by definition)
 -- #eval rad 1 -- 1 (by definition)
