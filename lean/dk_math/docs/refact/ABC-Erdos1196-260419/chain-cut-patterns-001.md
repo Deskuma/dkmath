@@ -231,3 +231,21 @@ public entry build で unknown identifier として露出する型。
   は
   union-bound branch
   として分けて見たほうが依存実態に近い。
+- さらに
+  `ABC033`
+  自体は番号付き predecessor として保持する必要が薄く、
+  中身は
+  single-prime Chernoff kernel
+  そのものだった。
+  したがってこの層は
+  `ChernoffSinglePrime`
+  のような非連番 utility module を owner にし、
+  `ABC033`
+  は compatibility relay に落とすのが自然だった。
+  これは
+  `thin base + thematic band`
+  を
+  「帯の先頭番号 file」
+  ではなく
+  「非連番 thematic utility」
+  に置き換えるパターンの具体例になる。

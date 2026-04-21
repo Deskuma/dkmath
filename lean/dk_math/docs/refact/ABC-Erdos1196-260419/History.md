@@ -1381,3 +1381,90 @@ Archive
      の上に乗る
      union-bound branch
      として独立した seed file になれるかを点検する。
+
+### 日時: 2026/04/22 06:58 JST (`ABC033` の Chernoff kernel を utility module 化)
+
+1. 目的:
+   - `ABC034`
+     が依存している
+     single-prime Chernoff kernel
+     を、
+     番号付き file
+     `ABC033`
+     から切り離して thematic utility に落とす。
+   - これにより
+     `ABC033 -> ABC034`
+     の serial edge を切り、
+     `ABC034`
+     帯の seed を
+     non-numbered owner module
+     に載せ替える。
+2. 実施:
+   - `ABC033.lean`
+     の内容を新 file
+     `DkMath.ABC.ChernoffSinglePrime`
+     として切り出した。
+   - 旧
+     `ABC033.lean`
+     は
+     `import DkMath.ABC.ChernoffSinglePrime`
+     のみを持つ
+     compatibility relay
+     に縮小した。
+   - `ABC034.lean`
+     の import を
+     `DkMath.ABC.ABC033`
+     から
+     `DkMath.ABC.ChernoffSinglePrime`
+     へ置換した。
+   - first build では
+     relay 化した
+     `ABC033.lean`
+     の header comment が壊れて失敗したため、
+     comment delimiter を修正して再 build した。
+3. 結論:
+   - `ABC033 -> ABC034`
+     の serial edge は不要だった。
+   - `ABC033`
+     は theorem owner というより、
+     Chernoff single-prime kernel の実装コンテナだったので、
+     非連番 utility module 化するのが依存構造に合っていた。
+   - この帯では
+     `single-prime branch`
+     を番号付き predecessor chain から切り出し、
+     thematic utility
+     へ昇格させるパターンが有効だと確認できた。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffSinglePrime`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC033`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC034`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 失敗事例:
+   - relay 化した
+     `ABC033.lean`
+     の comment header が
+     `/- ... -/`
+     ではなく
+     `- ... -/`
+     に崩れ、
+     `unexpected token '-'`
+     で停止した。
+   - header を修正した後は build が通った。
+6. 次の課題:
+   - `ChernoffSinglePrime`
+     の中で、
+     truly common な
+     notation / constants / Markov lemma
+     と
+     MGF / engine 部分
+     をさらに二層に割れるかを点検する。
+   - `ABC035`
+     以降の union-bound branch が、
+     新 utility owner を前提に
+     さらに薄くなるかを確かめる。

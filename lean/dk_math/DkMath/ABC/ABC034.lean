@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
-import DkMath.ABC.ABC033
+import DkMath.ABC.ChernoffSinglePrime
 
 #print "file: DkMath.ABC.ABC034"
 

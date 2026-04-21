@@ -222,6 +222,36 @@
   - これにより
     `ABC035 -> ABC036`
     の serial edge を切断
+- single-prime Chernoff kernel を `DkMath.ABC.ChernoffSinglePrime` に切り出し
+  - 旧
+    `ABC033.lean`
+    が持っていた
+    `Vp`, `Excess`, `pge3`, `const_C`, `const_X`, `primesUpTo`,
+    `mgf_padic_excess_bound_uniform`, `card_filter_le_exp_markov`,
+    `t_bound_log2_div_log3`
+    などの Chernoff kernel 群を
+    新 utility module
+    `ChernoffSinglePrime.lean`
+    に移設
+  - `ABC033.lean`
+    自体は
+    `import DkMath.ABC.ChernoffSinglePrime`
+    だけを持つ compatibility relay に縮小
+  - `ABC034.lean`
+    は
+    `import DkMath.ABC.ABC033`
+    ではなく
+    `import DkMath.ABC.ChernoffSinglePrime`
+    を direct import する形へ変更
+  - これにより
+    `ABC033 -> ABC034`
+    の serial edge を切断し、
+    `ABC034`
+    帯を
+    番号 file
+    ではなく
+    thematic utility
+    に接続した
 - `DkMath.ABC.Main` build を再実行し成功
   - `ABC025` / `ABC028` / `ABC033`
     の owner import 明示化後、
