@@ -67,3 +67,7 @@
   `DkMath.ABC.PadicValNat` の lemma 名との重複を機械探索
   - この時点では追加の重複は検出されなかった
   - `ABCSolvedProofSamples.lean` / `ABCWorking.lean` は scratch/archive 系として別管理に切り分け
+- `DkMath.ABC.Demo` を新設し、以下のファイルを移設
+  - `lean/dk_math/DkMath/ABC/Demo/ABCSolvedProofSamples.lean` へ移設。
+  - `lean/dk_math/DkMath/ABC/Demo/ABCWorking.lean` へ移設。
+  - これらはリファクタリングの作業対象外。

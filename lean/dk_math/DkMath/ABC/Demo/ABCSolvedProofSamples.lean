@@ -6,7 +6,7 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 
-#print "file: DkMath.ABC.SolvedProofSamples"
+#print "file: DkMath.ABC.Demo.ABCSolvedProofSamples"
 
 set_option linter.style.whitespace false
 set_option linter.style.longLine false
