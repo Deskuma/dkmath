@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.ABC.Core
+import DkMath.ABC.Rad
 
 #print "file: DkMath.ABC.Square"
 
@@ -14,6 +14,21 @@ set_option linter.style.emptyLine false
 namespace DkMath.ABC
 
 -- Squarefree / Squarefull の基本性質
+
+/-- squarefull: 任意の素因子 p に対して p^2 ∣ n が成り立つこと -/
+def squarefull' (n : ℕ) : Prop :=
+  ∀ p : ℕ, p.Prime → p ∣ n → p^2 ∣ n
+
+/-- squarefree（mathlib の標準定義を本名前空間に鏡像として置く） -/
+def squarefree_prop (n : ℕ) : Prop :=
+  ∀ p : ℕ, p.Prime → p ∣ n → ¬ (p^2 ∣ n)
+
+/-- mathlib 標準を ℕ にエイリアス（再利用を最大化） -/
+abbrev squarefree (n : ℕ) : Prop := Squarefree n
+
+/-- squarefull: すべての素因子が指数 ≥ 2 -/
+def squarefull (n : ℕ) : Prop :=
+  ∀ p, p.Prime → p ∣ n → p^2 ∣ n
 
 -------------------------------------------------------------------------------
 -- 目標 1：squarefree / squarefull の残余補題

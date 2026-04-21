@@ -535,3 +535,95 @@ Archive
      の owner 固定と
      `Core`
      の re-export 境界整理へ進む。
+
+### 日時: 2026/04/21 14:00 JST (`squarefree` / `squarefull` の owner を `DkMath.ABC.Square` に固定)
+
+1. 目的:
+   - valuation 系に続いて、
+     `squarefree` / `squarefull`
+     の定義 owner を
+     `Core`
+     から切り離し、
+     `Square`
+     に固定する。
+   - そのうえで、
+     `Core`
+     は定義本体を持たず、
+     import 経由で公開する境界に整理する。
+2. 実施:
+   - `Core.lean`
+     と
+     `Square.lean`
+     を調査し、
+     `squarefree`
+     / `squarefull`
+     と mirror alias
+     `squarefull'`
+     / `squarefree_prop`
+     が
+     `Core`
+     にだけ存在し、
+     `Square`
+     はそれらを使う側になっていることを確認した。
+   - `Square.lean`
+     の import を
+     `DkMath.ABC.Core`
+     から
+     `DkMath.ABC.Rad`
+     へ変更し、
+     循環しない形で standalone 化した。
+   - `Square.lean`
+     に
+     `squarefull'`,
+     `squarefree_prop`,
+     `squarefree`,
+     `squarefull`
+     の定義を移設した。
+   - `Core.lean`
+     に
+     `import DkMath.ABC.Square`
+     を追加し、
+     上記定義の重複ブロックを削除した。
+   - 注記として、
+     squarefree / squarefull controls の owner は
+     `DkMath.ABC.Square`
+     であることを明記した。
+   - 下流互換の確認として
+     `MassBridge`
+     まで build を回した。
+   - なお、
+     user 移設済みの
+     `DkMath.ABC.Demo.ABCSolvedProofSamples`
+     と
+     `DkMath.ABC.Demo.ABCWorking`
+     は本サイクルでも非対象として触れていない。
+3. 結論:
+   - `squarefree` / `squarefull`
+     の owner は
+     `DkMath.ABC.Square`
+     に固定され、
+     `Core`
+     は catch-all からさらに一段薄くなった。
+   - `Square`
+     自身も
+     `Core`
+     非依存で立つようになり、
+     定義 owner と応用補題の所在が一致した。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Square`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Core`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MassBridge`
+   - 以上は成功した。
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `Core`
+     が `Square`
+     を import するようになったことで、
+     他ファイルの hidden import が露出していないかを点検する。
+   - 次の実装対象としては、
+     `Triple`
+     や `Main`
+     周辺で
+     `Core`
+     にまだ残る catch-all 依存を洗うのが自然である。

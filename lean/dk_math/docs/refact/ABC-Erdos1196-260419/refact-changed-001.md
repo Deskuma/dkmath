@@ -71,3 +71,12 @@
   - `lean/dk_math/DkMath/ABC/Demo/ABCSolvedProofSamples.lean` へ移設。
   - `lean/dk_math/DkMath/ABC/Demo/ABCWorking.lean` へ移設。
   - これらはリファクタリングの作業対象外。
+- `squarefree` / `squarefull` と mirror alias 群の owner を `DkMath.ABC.Square` に固定
+  - `Square.lean` の import を `DkMath.ABC.Core` から `DkMath.ABC.Rad` へ変更
+  - `Square.lean` に
+    `squarefull'`, `squarefree_prop`, `squarefree`, `squarefull`
+    の定義を集約
+  - `ABC.Core` から上記定義の重複を削除し、
+    `import DkMath.ABC.Square` を追加
+  - `Core` は squarefree / squarefull の owner ではなく、
+    import 経由で公開する境界に整理

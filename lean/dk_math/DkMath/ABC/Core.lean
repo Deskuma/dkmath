@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.ABC.Basic
 import DkMath.ABC.PadicValNat
 import DkMath.ABC.Rad
+import DkMath.ABC.Square
 import DkMath.Basic.Nat
 
 #print "file: DkMath.ABC.Core"
@@ -85,16 +86,7 @@ lemma three_pow_ge_linear (X : ℕ) : 3 ^ (X + 1) ≥ 2 * X + 1 := by
      0. Basic helpers & notations
    ============================================================================ -/
 
--- NOTE: the two definitions below currently have no references (2025/09/07)
-
-/-- squarefull: 任意の素因子 p に対して p^2 ∣ n が成り立つこと -/
-def squarefull' (n : ℕ) : Prop :=
-  ∀ p : ℕ, p.Prime → p ∣ n → p^2 ∣ n
-
-/-- squarefree（mathlib の標準定義を本ファイルに鏡像として置く） -/
--- alias to Mathlib's predicate
-def squarefree_prop (n : ℕ) : Prop :=
-  ∀ p : ℕ, p.Prime → p ∣ n → ¬ (p^2 ∣ n)
+-- squarefree / squarefull の定義は `DkMath.ABC.Square` に集約した (2026/04/21)。
 
 /- ============================================================================
      1. gcd / coprimality lemmas
@@ -116,27 +108,7 @@ def squarefree_prop (n : ℕ) : Prop :=
      3. squarefree / squarefull controls
    ============================================================================ -/
 
-
-/-- mathlib 標準を ℕ にエイリアス（再利用を最大化） -/
-/-
-An element of a monoid is squarefree if the only squares that
-divide it are the squares of units.
-
-def Squarefree [Monoid R] (r : R) : Prop :=
-  ∀ x : R, x * x ∣ r → IsUnit x
--/
--- #check Squarefree -- mathlib の定義を確認
--- Squarefree.{u_1} {R : Type u_1} [Monoid R] (r : R) : Prop
-abbrev squarefree (n : ℕ) : Prop := Squarefree n
-
-/-- squarefull: すべての素因子が指数 ≥ 2 -/
-def squarefull (n : ℕ) : Prop :=
-  ∀ p, p.Prime → p ∣ n → p^2 ∣ n
-
--- #eval squarefree 6  -- true
--- #eval squarefree 9  -- false
--- #eval squarefree 12 -- false
--- #eval squarefree 30 -- true
+-- squarefree / squarefull controls の定義 owner は `DkMath.ABC.Square` (2026/04/21)。
 
 end DkMath.ABC
 
