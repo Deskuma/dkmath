@@ -163,6 +163,18 @@
     は
     `ABC022` + `ABC025` + `Core`
     の owner import で閉じる形になった
+- `ABC090.lean` の empty relay import を整理
+  - `import DkMath.ABC.ABC040` を削除
+  - 代わりに最小環境として
+    `import DkMath.ABC.Basic`
+    を追加
+  - `ABC090`
+    自体は空 shell なので、
+    `ABC040`
+    を経由する必要はなかった
+  - これにより
+    `ABC090 -> ABC040`
+    の serial edge を切断
 - `DkMath.ABC.Main` build を再実行し成功
   - `ABC025` / `ABC028` / `ABC033`
     の owner import 明示化後、

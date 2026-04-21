@@ -1155,3 +1155,75 @@ Archive
    - 可能なら
      `ABC033`
      周辺の Chernoff kernel を thin utility module に再配置する構想も検討する。
+
+### 日時: 2026/04/22 05:09 JST (`ABC090 -> ABC040` empty relay edge を切り、最小環境 import に落とした)
+
+1. 目的:
+   - `ABC031`-`ABC040`
+     帯の整理と並行して、
+     その先で public chain を受けている
+     `ABC090`
+     の import が本当に必要かを確認する。
+   - 空 shell file が serial relay を引いているだけなら、
+     最小環境 import へ落として chain を短くする。
+2. 実施:
+   - `ABC090.lean`
+     を確認し、
+     実質的に空の shell file であることを確認した。
+   - top-level の
+     `import DkMath.ABC.ABC040`
+     を削除した。
+   - first build では、
+     option / namespace 解決に必要な環境まで失われたため停止した。
+   - そのため
+     `ABC040`
+     の代わりに最小環境として
+     `import DkMath.ABC.Basic`
+     を追加した。
+3. 結論:
+   - `ABC090 -> ABC040`
+     の serial edge は不要だった。
+   - `ABC090`
+     は thematic kernel にも依存しておらず、
+     最小環境 import だけで十分な shell file だった。
+   - これは
+     empty relay
+     を経由しているだけの file 群について、
+     `ABC.Basic`
+     への縮約という別種の cut が有効なことを示している。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC090`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 失敗事例:
+   - `ABC090`
+     から import を完全に外した first build では、
+     `linter.style.*`,
+     `BigOperators`,
+     `Real`,
+     `MeasureTheory`
+     などの環境が未解決となった。
+   - これは
+     `ABC040`
+     が theorem owner ではなく、
+     単に環境提供の役を transitively 果たしていたことを示していた。
+   - `ABC.Basic`
+     を direct import することで解消した。
+6. 次の課題:
+   - `ABC034`-`ABC039`
+     の実依存が
+     truly serial
+     なのか、
+     あるいは
+     `ABC033`
+     / `ABC025`
+     / utility 群への drift を含んでいるのかをさらに点検する。
+   - あわせて
+     `ABC040`
+     自体が空 relay のまま残るべきか、
+     あるいは別整理対象として扱うかを判断する。

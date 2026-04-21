@@ -4,10 +4,11 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-
-import DkMath.ABC.ABC040
+import DkMath.ABC.Basic
 
 #print "file: DkMath.ABC.ABC090"
+
+-- ※これは `ABC0**.lean` 取りまとめアンカーファイルなので将来的に不要となる。
 
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false

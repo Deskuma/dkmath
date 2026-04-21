@@ -189,3 +189,13 @@ public entry build で unknown identifier として露出する型。
   つまりこの帯では
   「直前 file を引いているが、実際にはもっと前の thematic kernel を使っている」
   という chain drift が起きている。
+- `ABC090`
+  では別パターンとして、
+  predecessor どころか
+  empty relay
+  しか引いていない shell file が確認できた。
+  この種の file は
+  thematic kernel
+  すら要らず、
+  `ABC.Basic`
+  のような最小環境 import に落とせる。
