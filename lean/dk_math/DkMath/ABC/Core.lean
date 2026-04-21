@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.ABC.Basic
+import DkMath.ABC.PadicValNat
 import DkMath.ABC.Rad
 import DkMath.Basic.Nat
 
@@ -78,17 +79,7 @@ lemma three_pow_ge_linear (X : ℕ) : 3 ^ (X + 1) ≥ 2 * X + 1 := by
         _ = 6 * n + 3 := by ring
         _ ≥ 2 * (n + 1) + 1 := by omega
 
--- 補助補題：v_p(n) の分解
-lemma padicValNat_split (p n : ℕ) :
-    padicValNat p n = min (padicValNat p n) 1 + max (padicValNat p n - 1) 0 := by
-  by_cases h : padicValNat p n = 0
-  · simp [h]
-  · by_cases h1 : padicValNat p n = 1
-    · simp [h1]
-    · have : padicValNat p n ≥ 2 := by omega
-      have : min (padicValNat p n) 1 = 1 := by omega
-      have : max (padicValNat p n - 1) 0 = padicValNat p n - 1 := by omega
-      omega
+-- valuation の基本補題は `DkMath.ABC.PadicValNat` に集約した (2026/04/21)。
 
 /- ============================================================================
      0. Basic helpers & notations
