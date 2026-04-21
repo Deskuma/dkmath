@@ -835,3 +835,69 @@ Archive
    - その後、
      `ABC024`-`ABC028`
      の utility-first 化候補を点検する。
+
+### 日時: 2026/04/21 18:00 JST (`RpowExtras` を専用 module 化し、`ABC009 -> Core` 依存を切断)
+
+1. 目的:
+   - `chain-cut-patterns-001.md`
+     で first cut 候補にした
+     `RpowExtras`
+     専用 module 化を実際に試す。
+   - これにより
+     `ABC009`
+     が
+     `Core`
+     を direct import しなくて済むかを確認する。
+2. 実施:
+   - 新規 file
+     `DkMath/ABC/RpowExtras.lean`
+     を作成し、
+     `RpowExtras.rpow_mul_nat`,
+     `RpowExtras.one_lt_rpow_two`,
+     `RpowExtras.denom_pos`
+     を移設した。
+   - `ABC/Core.lean`
+     に
+     `import DkMath.ABC.RpowExtras`
+     を追加し、
+     旧来の
+     `namespace RpowExtras`
+     ブロックを削除した。
+   - `ABC009.lean`
+     の import を
+     `DkMath.ABC.Core`
+     から
+     `DkMath.ABC.RpowExtras`
+     へ置き換えた。
+   - これにより
+     `ABC009`
+     は middle-band のためだけに
+     `Core`
+     を引く必要がなくなった。
+3. 結論:
+   - `RpowExtras`
+     は
+     `Core`
+     の catch-all から切り出せる独立 utility であることを確認した。
+   - `ABC009 -> Core`
+     依存を 1 本切れたので、
+     chain-cut memo に書いた
+     owner import 露出型
+     が実際に有効なことを示せた。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.RpowExtras`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Core`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC009`
+   - 以上は成功した。
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+     は実行継続中で、
+     本記録時点では新しい `error:` は観測されていない。
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `Main`
+     build の完走を確認し、
+     この切断が public entry まで波及して問題ないことを確定する。
+   - 次の chain-cut 候補として、
+     `ABC024`-`ABC028`
+     の utility-first 化を試す。

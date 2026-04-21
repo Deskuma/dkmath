@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.ABC.Basic
 import DkMath.ABC.PadicValNat
 import DkMath.ABC.Rad
+import DkMath.ABC.RpowExtras
 import DkMath.ABC.Square
 import DkMath.Basic.Nat
 
@@ -16,42 +17,7 @@ set_option linter.style.longLine false
 set_option linter.style.emptyLine false
 set_option linter.style.whitespace false
 
-/-
-  RpowExtras.lean
-  小さな補題群：Real.rpow に関する nat 乗換えと分母正性補題
-  目的：ABCMiddle の幾何和変形を安定化する
--/
-
-namespace RpowExtras
-
-open Real
-
-/-- x > 0 かつ任意の k : ℕ に対して x^{a * k} = (x^a)^k となる補題。 -/
-lemma rpow_mul_nat {x a : ℝ} (hx : 0 < x) :
-  ∀ k : ℕ, Real.rpow x (a * (k : ℝ)) = (Real.rpow x a) ^ k := by
-  intro k; induction k with
-  | zero => simp only [CharP.cast_eq_zero, mul_zero, rpow_eq_pow, rpow_zero, pow_zero]
-  | succ k ih =>
-      have : a * ((k + 1 : ℕ) : ℝ) = a * (k : ℝ) + a := by
-        simp [mul_add, Nat.cast_add, Nat.cast_one]
-      calc
-        Real.rpow x (a * ((k + 1 : ℕ) : ℝ)) = Real.rpow x (a * (k : ℝ) + a) := by rw [this]
-        _ = Real.rpow x (a * (k : ℝ)) * Real.rpow x a := by simp [Real.rpow_add hx]
-        _ = (Real.rpow x a) ^ (k + 1) := by
-          rw [ih]
-          rw [pow_succ]
-
-/-- 2^(α+ε) > 1 when α+ε > 0 (helper) -/
-lemma one_lt_rpow_two {a : ℝ} (h : 0 < a) : 1 < (2 : ℝ) ^ a := by
-  have : (1 : ℝ) < 2 := by norm_num
-  exact Real.one_lt_rpow this (by exact_mod_cast h)
-
-/-- (2^a - 1) > 0 when a > 0 -/
-lemma denom_pos {a : ℝ} (h : 0 < a) : 0 < (2 : ℝ) ^ a - 1 := by
-  have h1 := one_lt_rpow_two (a:=a) h
-  linarith
-
-end RpowExtras
+-- `RpowExtras` は `DkMath.ABC.RpowExtras` に切り出した (2026/04/21)。
 
 -- ------------------------------------------------------------------------------------------------------------------------------------
 
@@ -99,8 +65,6 @@ lemma three_pow_ge_linear (X : ℕ) : 3 ^ (X + 1) ≥ 2 * X + 1 := by
    ============================================================================ -/
 
 -- `DkMath.ABC.Rad` に `rad` 定義補題を移動した (2026/04/20 17:35)
-
-#check rad
 
 -- radical kernel の補題群は `DkMath.ABC.Rad` に集約した (2026/04/20)。
 

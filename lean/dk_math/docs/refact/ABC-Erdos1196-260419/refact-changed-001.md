@@ -98,3 +98,10 @@
     `ABC024`-`ABC028` utility-first 化,
     `ABC001`-`ABC003` base seam 固定
     をメモ化
+- `RpowExtras` を `DkMath.ABC.RpowExtras` に切り出し
+  - `rpow_mul_nat`, `one_lt_rpow_two`, `denom_pos` を `Core` から移設
+  - `ABC.Core` には `import DkMath.ABC.RpowExtras` を追加し、
+    ローカル namespace は削除
+  - `ABC009.lean` は `import DkMath.ABC.Core` ではなく
+    `import DkMath.ABC.RpowExtras` を使う形に変更
+  - これにより `ABC009 -> Core` 依存を 1 本切断
