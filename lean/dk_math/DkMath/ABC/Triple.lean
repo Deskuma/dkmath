@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.ABC.Core
+import DkMath.ABC.Rad
 
 #print "file: DkMath.ABC.Triple"
 
