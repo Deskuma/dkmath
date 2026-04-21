@@ -1227,3 +1227,88 @@ Archive
      `ABC040`
      自体が空 relay のまま残るべきか、
      あるいは別整理対象として扱うかを判断する。
+
+### 日時: 2026/04/22 05:49 JST (`ABC038 -> ABC037` serial edge を切り、`ABC039` の branch 依存を露出)
+
+1. 目的:
+   - `ABC034`-`ABC039`
+     帯が本当に直列なのかをさらに確認する。
+   - 特に
+     `ABC038`
+     が
+     `ABC037`
+     を必要としているのか、
+     それとももっと前の owner に直接依存しているだけなのかを切り分ける。
+2. 実施:
+   - `ABC038.lean`
+     を検索し、
+     `bad_set_density_bound_quality`
+     や
+     `construct_HΛ_for_quality`
+     を使っていないことを確認した。
+   - `ABC038.lean`
+     の import を
+     `DkMath.ABC.ABC037`
+     から
+     `DkMath.ABC.ABC036`
+     へ置換した。
+   - `ABC038`
+     単体 build は成功した。
+   - 続く
+     `ABC039`
+     build では
+     `bad_set_density_bound_quality`
+     未解決で停止したため、
+     owner を確認して
+     `DkMath.ABC.ABC037`
+     にあることを特定し、
+     `ABC039.lean`
+     に direct import を追加した。
+3. 結論:
+   - `ABC037 -> ABC038`
+     の serial edge は不要だった。
+   - 一方で
+     `ABC039`
+     は
+     `ABC038`
+     の quality 側 API と、
+     `ABC037`
+     の density 側 API の両方を使っていた。
+   - したがって
+     `ABC031`-`ABC040`
+     帯は一本の predecessor chain ではなく、
+     quality branch と density branch が途中で分岐して再合流する構造だと分かった。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC038`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC039`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 失敗事例:
+   - `ABC039`
+     の first build では
+     `bad_set_density_bound_quality`
+     未解決で停止した。
+   - これは
+     `ABC038`
+     を通して transitively 見えていた
+     `ABC037`
+     owner の symbol だった。
+   - `ABC039`
+     に
+     `import DkMath.ABC.ABC037`
+     を追加することで解消した。
+6. 次の課題:
+   - `ABC034`-`ABC037`
+     の前半についても、
+     直前 file 依存が本物か、
+     それとも
+     `ABC033`
+     owner 群への drift を含むかを点検する。
+   - `quality branch` と `density branch` を意識した
+     thin utility band
+     の再配置案を検討する。

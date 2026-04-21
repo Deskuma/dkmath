@@ -175,6 +175,36 @@
   - これにより
     `ABC090 -> ABC040`
     の serial edge を切断
+- `ABC038.lean` の serial predecessor import を整理
+  - `import DkMath.ABC.ABC037` を削除
+  - 代わりに
+    `import DkMath.ABC.ABC036`
+    を追加
+  - `ABC038`
+    が必要としていたのは
+    `Bad_ε`
+    など
+    `ABC036`
+    owner の記号であり、
+    `ABC037`
+    の density 補題自体は未使用だった
+  - これにより
+    `ABC037 -> ABC038`
+    の serial edge を切断
+- `ABC039.lean` に `import DkMath.ABC.ABC037` を追加
+  - `ABC038`
+    を薄くした結果、
+    `bad_set_density_bound_quality`
+    の owner が
+    `ABC037`
+    として露出したため、
+    direct import へ置き換えた
+  - `ABC039`
+    は
+    `ABC038`
+    の quality 側 API と
+    `ABC037`
+    の density 側 API の両方を使うことが明確になった
 - `DkMath.ABC.Main` build を再実行し成功
   - `ABC025` / `ABC028` / `ABC033`
     の owner import 明示化後、

@@ -199,3 +199,17 @@ public entry build で unknown identifier として露出する型。
   すら要らず、
   `ABC.Basic`
   のような最小環境 import に落とせる。
+- `ABC038`
+  では
+  `ABC037`
+  relay を外しても通った一方で、
+  `ABC039`
+  では
+  `ABC037`
+  owner の
+  `bad_set_density_bound_quality`
+  が direct import として必要になった。
+  つまり
+  `ABC031`-`ABC040`
+  帯は一本鎖ではなく、
+  quality branch と density branch が途中で分岐している。
