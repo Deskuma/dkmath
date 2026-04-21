@@ -145,6 +145,24 @@
   - `three_pow_ge_linear` の owner は `Core`
   - `rpow_layer_cake` の owner は `ABC022`
   - `Main` build の hidden import 停止点を explicit owner import 化して解消
+- `ABC033.lean` から `import DkMath.ABC.ABC032` を削除
+  - 代わりに
+    `import DkMath.ABC.ABC025`
+    を追加
+  - `ABC033`
+    が実際に使っていたのは
+    `ABC.Telescoping.sum_pow_padicValNat_le_geom_log2_div_log3`
+    であり、
+    owner は
+    `ABC025`
+    だった
+  - これにより
+    `ABC032 -> ABC033`
+    の serial edge を切断し、
+    `ABC033`
+    は
+    `ABC022` + `ABC025` + `Core`
+    の owner import で閉じる形になった
 - `DkMath.ABC.Main` build を再実行し成功
   - `ABC025` / `ABC028` / `ABC033`
     の owner import 明示化後、

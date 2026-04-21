@@ -1066,3 +1066,92 @@ Archive
      / `ABC022`
      由来の utility を direct import へ寄せる方針で
      次の seam を探す。
+
+### 日時: 2026/04/22 04:51 JST (`ABC033 -> ABC032` serial edge を切り、実依存を `ABC025` へ戻した)
+
+1. 目的:
+   - `ABC031`-`ABC040`
+     帯の次の seam として、
+     `ABC033`
+     が本当に
+     `ABC032`
+     を必要としているかを確定する。
+   - 直前 file 依存ではなく、
+     実際の thematic kernel owner へ寄せられるかを確認する。
+2. 実施:
+   - `ABC032.lean`
+     の定義を確認し、
+     `abc_main` / `K_eps`
+     しか持っていないことを確認した。
+   - `ABC033.lean`
+     を検索し、
+     それらを使っていないことを確認して
+     `import DkMath.ABC.ABC032`
+     を削除した。
+   - first build では
+     `ABC.Telescoping.sum_pow_padicValNat_le_geom_log2_div_log3`
+     未解決で停止したため、
+     owner を検索して
+     `DkMath.ABC.ABC025`
+     にあることを確認し、
+     `ABC033.lean`
+     に
+     `import DkMath.ABC.ABC025`
+     を追加した。
+   - 既存の
+     `ABC022`
+     / `Core`
+     explicit import と合わせて、
+     `ABC033`
+     を owner import 群で閉じる形に整理した。
+3. 結論:
+   - `ABC033 -> ABC032`
+     の serial edge は不要だった。
+   - `ABC033`
+     は直前の
+     `ABC032`
+     ではなく、
+     `ABC025`
+     の telescoping kernel と
+     `ABC022`
+     / `Core`
+     utility に依存していた。
+   - これは
+     `ABC031`-`ABC040`
+     帯に
+     chain drift
+     があることを示しており、
+     predecessor chain より
+     thematic kernel import
+     を優先すべきだという方針をさらに補強した。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC033`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 失敗事例:
+   - `ABC033`
+     の first build では
+     `ABC.Telescoping.sum_pow_padicValNat_le_geom_log2_div_log3`
+     未解決で停止した。
+   - これは
+     `ABC032`
+     に依存していたのではなく、
+     `ABC025`
+     の transitive import に依存していたことを示していた。
+   - owner import を
+     `ABC025`
+     に差し替えることで解消した。
+6. 次の課題:
+   - `ABC034` 以降についても、
+     本当に直前 file の API だけを使っているのか、
+     あるいは
+     `ABC033`
+     やさらに前の kernel に drift しているのかを点検する。
+   - 可能なら
+     `ABC033`
+     周辺の Chernoff kernel を thin utility module に再配置する構想も検討する。

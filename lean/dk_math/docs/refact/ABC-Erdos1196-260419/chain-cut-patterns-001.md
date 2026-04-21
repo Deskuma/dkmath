@@ -177,3 +177,15 @@ public entry build で unknown identifier として露出する型。
   この帯も
   predecessor chain
   より utility owner import を先に揃える方が良い。
+- 同じ `ABC033` で、
+  serial predecessor
+  `ABC032`
+  自体は不要で、
+  実依存は
+  `ABC025`
+  の
+  `ABC.Telescoping.sum_pow_padicValNat_le_geom_log2_div_log3`
+  だったことも確認できた。
+  つまりこの帯では
+  「直前 file を引いているが、実際にはもっと前の thematic kernel を使っている」
+  という chain drift が起きている。
