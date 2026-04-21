@@ -213,3 +213,21 @@ public entry build で unknown identifier として露出する型。
   `ABC031`-`ABC040`
   帯は一本鎖ではなく、
   quality branch と density branch が途中で分岐している。
+- 同じ帯の前半でも、
+  `ABC036`
+  は
+  `ABC035`
+  の union-bound layer を使っておらず、
+  実依存は
+  `ABC034`
+  の
+  `chernoff_single_prime_uniform_rpow`
+  だった。
+  つまり
+  `ABC034 -> ABC036`
+  は
+  single-prime branch、
+  `ABC035`
+  は
+  union-bound branch
+  として分けて見たほうが依存実態に近い。

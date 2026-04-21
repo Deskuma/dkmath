@@ -1312,3 +1312,72 @@ Archive
    - `quality branch` と `density branch` を意識した
      thin utility band
      の再配置案を検討する。
+
+### 日時: 2026/04/22 06:18 JST (`ABC035 -> ABC036` serial edge を切り、single-prime / union-bound 分岐を確認)
+
+1. 目的:
+   - `ABC034`-`ABC037`
+     前半の直列 import が本物かを確認する。
+   - 特に
+     `ABC036`
+     が
+     `ABC035`
+     の union-bound layer を必要としているのか、
+     それとも
+     `ABC034`
+     の single-prime Chernoff kernel にだけ依存しているのかを切り分ける。
+2. 実施:
+   - `ABC036.lean`
+     を検索し、
+     `chernoff_single_prime_explicit`,
+     `union_bound_chernoff`,
+     `union_bound_chernoff_pow`
+     を使っていないことを確認した。
+   - 一方で
+     `chernoff_single_prime_uniform_rpow`
+     は直接使っていることを確認した。
+   - `ABC036.lean`
+     の import を
+     `DkMath.ABC.ABC035`
+     から
+     `DkMath.ABC.ABC034`
+     へ置換した。
+3. 結論:
+   - `ABC035 -> ABC036`
+     の serial edge は不要だった。
+   - `ABC034`
+     は
+     single-prime Chernoff kernel の owner として機能し、
+     `ABC035`
+     はその上に乗る union-bound branch だと見なすのが自然だと分かった。
+   - したがって
+     `ABC031`-`ABC040`
+     帯は
+     density / quality
+     だけでなく、
+     `ABC034`
+     を起点にした
+     single-prime branch と union-bound branch
+     も区別して見るべき構造になっている。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC036`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC037`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 次の課題:
+   - `ABC034`
+     自体の owner をさらに分解できるか、
+     つまり
+     `ABC033`
+     から single-prime Chernoff kernel を薄い utility module として切り出せるかを検討する。
+   - `ABC035`
+     が
+     `ABC034`
+     の上に乗る
+     union-bound branch
+     として独立した seed file になれるかを点検する。

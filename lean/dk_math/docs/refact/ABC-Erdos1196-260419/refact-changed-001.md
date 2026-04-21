@@ -205,6 +205,23 @@
     の quality 側 API と
     `ABC037`
     の density 側 API の両方を使うことが明確になった
+- `ABC036.lean` の serial predecessor import を整理
+  - `import DkMath.ABC.ABC035`
+    を削除
+  - 代わりに
+    `import DkMath.ABC.ABC034`
+    を追加
+  - `ABC036`
+    が実際に使っていたのは
+    `chernoff_single_prime_uniform_rpow`
+    を中心とする
+    single-prime Chernoff kernel
+    であり、
+    `ABC035`
+    の union-bound API は未使用だった
+  - これにより
+    `ABC035 -> ABC036`
+    の serial edge を切断
 - `DkMath.ABC.Main` build を再実行し成功
   - `ABC025` / `ABC028` / `ABC033`
     の owner import 明示化後、
