@@ -124,3 +124,28 @@
     帯で
     utility-first cut
     が実際に成立することを確認
+- `ABC025.lean` から不要な serial predecessor import を削除
+  - `import DkMath.ABC.ABC024` は未使用だったため削除
+  - `ABC025` は
+    `ABC025_bound2`, `CountPowersDividing2n1`, `PadicValNat`
+    だけで build できることを確認
+  - これにより
+    `ABC024 -> ABC025`
+    の serial edge を 1 本切断
+- `ABC028.lean` に `import DkMath.ABC.ABC019` を追加
+  - `markov_card_bound` の hidden import が
+    `Main` build で露出したため owner import を明示
+  - `ABC025 -> ABC028`
+    cut 後でも
+    `ABC028`
+    は
+    `ABC019`
+    を direct import すれば通ることを確認
+- `ABC033.lean` に `import DkMath.ABC.ABC022` と `import DkMath.ABC.Core` を追加
+  - `three_pow_ge_linear` の owner は `Core`
+  - `rpow_layer_cake` の owner は `ABC022`
+  - `Main` build の hidden import 停止点を explicit owner import 化して解消
+- `DkMath.ABC.Main` build を再実行し成功
+  - `ABC025` / `ABC028` / `ABC033`
+    の owner import 明示化後、
+    public entry まで clean に通ることを確認

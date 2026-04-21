@@ -970,3 +970,99 @@ Archive
      `ABC025`
      に置くべきか、
      あるいは counting / layer-cake を別 utility に逃がすべきかを見極める。
+
+### 日時: 2026/04/22 00:24 JST (`ABC025 -> ABC024` serial edge を切り、`Main` build まで hidden import を追跡)
+
+1. 目的:
+   - 前サイクルで露出した seam をさらに進め、
+     `ABC025`
+     が本当に
+     `ABC024`
+     を必要としているかを確定する。
+   - あわせて
+     `Main`
+     build を回し、
+     次の hidden import 停止点まで owner import 化を進める。
+2. 実施:
+   - `ABC025.lean`
+     を検索し、
+     `ABC024`
+     由来の symbol を使っていないことを確認した上で
+     `import DkMath.ABC.ABC024`
+     を削除した。
+   - `ABC028`
+     build で
+     `markov_card_bound`
+     の hidden import が露出したため、
+     owner である
+     `DkMath.ABC.ABC019`
+     を
+     `ABC028.lean`
+     に direct import した。
+   - 続く
+     `Main`
+     build では
+     `ABC033`
+     が停止点となり、
+     `three_pow_ge_linear`
+     の owner
+     `DkMath.ABC.Core`
+     と
+     `rpow_layer_cake`
+     の owner
+     `DkMath.ABC.ABC022`
+     を
+     `ABC033.lean`
+     に追加した。
+3. 結論:
+   - `ABC025 -> ABC024`
+     の serial edge は不要だった。
+   - `ABC024`-`ABC028`
+     帯では、
+     predecessor chain を切ったあとも
+     hidden import を owner import に置き換えていけば
+     public chain まで回復できることを確認した。
+   - さらに
+     `ABC031`-`ABC040`
+     帯でも
+     `ABC033`
+     で同型の hidden import が露出したため、
+     thematic band ごとの owner import 整理という方針が補強された。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC025`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC028`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC033`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 失敗事例:
+   - `ABC028`
+     の first build では
+     `markov_card_bound`
+     未解決で停止した。
+   - `Main`
+     の first build では
+     `ABC033`
+     に
+     `three_pow_ge_linear`,
+     `rpow_layer_cake`
+     の hidden import が露出した。
+   - いずれも owner import の追加で解消した。
+6. 次の課題:
+   - `ABC024`-`ABC028`
+     帯について、
+     `ABC025`
+     自身が抱えている telescoping / counting kernel を
+     さらに utility 化できるかを点検する。
+   - `ABC031`-`ABC040`
+     帯では、
+     `ABC033`
+     を起点に
+     `Core`
+     / `ABC022`
+     由来の utility を direct import へ寄せる方針で
+     次の seam を探す。

@@ -136,6 +136,19 @@ public entry build で unknown identifier として露出する型。
   由来のものと
   `ABC025`
   自身の kernel をどう分離するか
+- 2026/04/22 の次段では
+  `ABC025.lean`
+  から
+  `import DkMath.ABC.ABC024`
+  を削除しても build が通ることを確認した
+- 同時に
+  `ABC028`
+  では
+  `markov_card_bound`
+  の owner が
+  `ABC019`
+  だと露出し、
+  thematic band 内でも hidden import 探索が有効に働くことを確認した
 
 ### 候補 C: `ABC001`-`ABC003` の base seam 固定
 
@@ -155,3 +168,12 @@ public entry build で unknown identifier として露出する型。
 - `DkMath.ABC.Demo.*` は standalone / 非対象としてこのメモから除外する。
 - `ABC090.lean` には comment block 内に `ABC041` 相当の残骸が見えるが、
   これは chain-cut とは別件の cleanup 候補である。
+- `ABC031`-`ABC040` 帯では、
+  `ABC033`
+  の時点で
+  `three_pow_ge_linear -> Core`,
+  `rpow_layer_cake -> ABC022`
+  という hidden import が露出した。
+  この帯も
+  predecessor chain
+  より utility owner import を先に揃える方が良い。
