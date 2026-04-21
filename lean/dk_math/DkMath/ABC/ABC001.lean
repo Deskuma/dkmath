@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
+import DkMath.Basic.Nat
 import DkMath.ABC.Square
 import DkMath.ABC.RatioBound
 

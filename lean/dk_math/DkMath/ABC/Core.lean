@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC.Basic
 import DkMath.ABC.Rad
+import DkMath.Basic.Nat
 
 #print "file: DkMath.ABC.Core"
 
@@ -53,6 +54,8 @@ end RpowExtras
 -- ------------------------------------------------------------------------------------------------------------------------------------
 
 namespace DkMath.ABC
+
+export DkMath.Basic.Nat (succ_sub_self dvd_one_iff gcd_succ coprime_succ)
 
 open scoped BigOperators
 
@@ -106,33 +109,7 @@ def squarefree_prop (n : ℕ) : Prop :=
      1. gcd / coprimality lemmas
    ============================================================================ -/
 
--- ※以下４つはここだけ 2025/09/07  3:37
-/-- (n + 1) - n = 1 であること -/
-def succ_sub_self (n : ℕ) : (n + 1) - n = 1 := by
-  rw [Nat.add_comm, Nat.add_sub_cancel]
-
-/-- n ∣ 1 ↔ n = 1 であること -/
-def dvd_one_iff (n : ℕ) : n ∣ 1 ↔ n = 1 := by
-  constructor
-  · rintro h
-    exact Nat.eq_one_of_dvd_one h
-  · rintro rfl
-    exact ⟨1, rfl⟩
-
-/-- (n, n + 1) が互いに素であること -/
-lemma gcd_succ (n : ℕ) : Nat.gcd n (n+1) = 1 := by
-  -- standard: gcd n (n+1) = 1
-  have h := Nat.dvd_sub (Nat.gcd_dvd_right n (n+1)) (Nat.gcd_dvd_left n (n+1))
-  have : Nat.gcd n (n+1) ∣ 1 := by
-    rw [succ_sub_self] at h
-    exact h
-  exact (dvd_one_iff (Nat.gcd n (n+1))).1 this
-
-/-- (n, n + 1) が互いに素であること -/
-lemma coprime_succ (n : ℕ) : Nat.Coprime n (n+1) := by
-  -- follows from gcd_succ
-  rw [Nat.coprime_iff_gcd_eq_one]
-  exact gcd_succ n
+-- gcd / coprimality の基本補題は `DkMath.Basic.Nat` に集約した (2026/04/21)。
 
 /- ============================================================================
      2. rad: definition + basic facts
