@@ -105,3 +105,22 @@
   - `ABC009.lean` は `import DkMath.ABC.Core` ではなく
     `import DkMath.ABC.RpowExtras` を使う形に変更
   - これにより `ABC009 -> Core` 依存を 1 本切断
+- `ABC024.lean` の serial predecessor import を utility owner import へ置換
+  - `import DkMath.ABC.ABC023` を削除
+  - 代わりに
+    `import DkMath.ABC.ABC022`,
+    `import DkMath.ABC.RatioBound`,
+    `import DkMath.ABC.CountPowersDividing2n1`
+    を明示
+  - `ABC023.lean` は実質 empty relay なので、
+    `ABC024`
+    は layer-cake / ceil / counting の owner を直接引く形へ整理
+  - build は
+    `ABC024`,
+    `ABC025`,
+    `ABC028`
+    まで通り、
+    `ABC024`-`ABC028`
+    帯で
+    utility-first cut
+    が実際に成立することを確認

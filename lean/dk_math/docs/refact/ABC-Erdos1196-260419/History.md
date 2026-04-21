@@ -901,3 +901,72 @@ Archive
    - 次の chain-cut 候補として、
      `ABC024`-`ABC028`
      の utility-first 化を試す。
+
+### 日時: 2026/04/21 21:05 JST (`ABC024` の empty relay import を外し、`ABC024`-`ABC028` 帯の first cut を確認)
+
+1. 目的:
+   - `chain-cut-patterns-001.md`
+     で候補化していた
+     `ABC024`-`ABC028`
+     の utility-first 化を小さく試す。
+   - 特に
+     `ABC024`
+     が実質 empty relay の
+     `ABC023`
+     を踏まずに、
+     owner import へ直接寄せられるかを確認する。
+2. 実施:
+   - `ABC023.lean`
+     を再確認し、
+     実体が
+     `import DkMath.ABC.ABC022`
+     だけの empty relay であることを確認した。
+   - `ABC024.lean`
+     の import を
+     `import DkMath.ABC.ABC023`
+     から、
+     `import DkMath.ABC.ABC022`,
+     `import DkMath.ABC.RatioBound`,
+     `import DkMath.ABC.CountPowersDividing2n1`
+     へ置換した。
+   - `ABC024`
+     内で実際に使っているのが
+     `rpow_layer_cake`,
+     `natCeil_le_add_one_real`,
+     `count_powers_dividing_2n1`
+     であることを検索で確認し、
+     内容本体は変更しなかった。
+3. 結論:
+   - `ABC024`
+     は serial predecessor に依存せず、
+     layer-cake / ceil / counting の owner を直接 import する形へ切り替え可能だった。
+   - これにより
+     `ABC024`-`ABC028`
+     帯について、
+     utility-first cut
+     が抽象案ではなく実際に効くことを示せた。
+   - 次は
+     `ABC025`
+     以降で、
+     `ABC024`
+     由来の layer-cake 部と
+     `ABC025`
+     自身の telescoping kernel をどう分離するかを見る段階である。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC024`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC025`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC028`
+   - 以上は成功した。
+   - 既知の `ABC021.lean` の `sorry` 警告のみ replay された。
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `ABC025`
+     から
+     `ABC024`
+     依存をどこまで utility import 化できるかを棚卸しする。
+   - `ABC024`-`ABC028`
+     帯の public seed を
+     `ABC025`
+     に置くべきか、
+     あるいは counting / layer-cake を別 utility に逃がすべきかを見極める。

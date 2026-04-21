@@ -116,6 +116,27 @@ public entry build で unknown identifier として露出する型。
 - p-adic / layer-cake 帯の chain を短くできる
 - `ABC025_bound2` を seed とする小 cluster 化がしやすい
 
+進捗:
+
+- 2026/04/21 の first cut で
+  `ABC024.lean`
+  から
+  `import DkMath.ABC.ABC023`
+  を外し、
+  `ABC022` + `RatioBound` + `CountPowersDividing2n1`
+  の direct import に置換した
+- `ABC024`, `ABC025`, `ABC028`
+  の build は成功
+- この帯では
+  empty relay
+  を飛ばして owner import へ寄せるパターンが有効だと確認できた
+- 次の観測点は、
+  `ABC025` 以降で
+  `ABC024`
+  由来のものと
+  `ABC025`
+  自身の kernel をどう分離するか
+
 ### 候補 C: `ABC001`-`ABC003` の base seam 固定
 
 理由:
