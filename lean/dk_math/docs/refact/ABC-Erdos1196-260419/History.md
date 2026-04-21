@@ -451,3 +451,87 @@ Archive
    - そのうえで、
      `squarefree` / `squarefull`
      の owner 固定と re-export 境界整理を進める。
+
+### 日時: 2026/04/21 13:38 JST (`ABC025` の valuation basic-bounds を owner module に寄せ、live chain の重複を点検)
+
+1. 目的:
+   - `ABC020`
+     の follow-up として、
+     live な
+     `ABC0**`
+     連鎖に valuation 系の旧断片がまだ残っていないかを確認する。
+   - 重複があれば、
+     `DkMath.ABC.PadicValNat`
+     へ寄せて
+     `ABC0**`
+     を薄くする。
+2. 実施:
+   - `rg`
+     で
+     `PadicValNat`
+     owner 側の lemma 名と
+     `ABC0**`
+     側の重複を調べた。
+   - その結果、
+     `ABC025.lean`
+     に
+     `padicValNat_le_self`
+     と
+     `padicValNat_le_log`
+     が残っていることを確認した。
+   - `ABC025.lean`
+     に
+     `import DkMath.ABC.PadicValNat`
+     を追加し、
+     上記 2 補題のローカル定義を削除した。
+   - 既存の telescoping 部分は変更せず、
+     参照側が owner module の定義をそのまま使う形に整理した。
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC025`
+     を実行し、
+     進捗付きで build を確認した。
+   - 追加で、
+     `PadicValNat.lean`
+     の lemma 名と
+     `ABC0*.lean`
+     の lemma 名の交差を機械探索し、
+     live chain には追加の重複がないことを確認した。
+   - `ABCSolvedProofSamples.lean`
+     と
+     `ABCWorking.lean`
+     に同名断片があることも検出したが、
+     これは scratch/archive 系として本サイクルでは触らず、
+     別管理とした。
+3. 結論:
+   - live chain 側の valuation basic-bounds の重複は、
+     現時点で
+     `ABC020`
+     と
+     `ABC025`
+     まで除去できた。
+   - `PadicValNat`
+     owner と
+     `ABC0**`
+     連鎖の境界はかなり明確になり、
+     次の対象を
+     `squarefree` / `squarefull`
+     へ移しやすくなった。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC025`
+   - 以上は成功した。
+   - build 出力では
+     `ABC021`
+     の既存 `sorry` 警告のみ replay された。
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - valuation 系については、
+     scratch/archive 枠
+     `ABCSolvedProofSamples.lean`
+     と
+     `ABCWorking.lean`
+     を live chain と切り分ける方針を文書化する。
+   - 実装作業としては、
+     `squarefree` / `squarefull`
+     の owner 固定と
+     `Core`
+     の re-export 境界整理へ進む。

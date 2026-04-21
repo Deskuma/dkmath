@@ -8,6 +8,7 @@ Authors: D. and Wise Wolf.
 import DkMath.ABC.ABC024
 import DkMath.ABC.ABC025_bound2
 import DkMath.ABC.CountPowersDividing2n1
+import DkMath.ABC.PadicValNat
 
 #print "file: DkMath.ABC.ABC025"
 
@@ -31,48 +32,7 @@ open MeasureTheory ProbabilityTheory
 
 variable {p : ℕ}
 
-/-! ### Basic Bounds on p-adic Valuation -/
-
-/-- The p-adic valuation of n is at most n itself.
-
-This follows from the fact that p ≥ 2, so p^v ≥ 2^v.
-For v ≥ 1: 2^v ≥ v+1 (by induction).
-Since p^v | n implies p^v ≤ n, we get v ≤ n.
-
-**Proof sketch:**
-1. If n = 0, then padicValNat p 0 = 0 ≤ 0 trivially.
-2. If n ≥ 1, let v = padicValNat p n.
-3. Then p^v | n, so p^v ≤ n.
-4. Since p ≥ 2, we have p^v ≥ 2^v.
-5. By induction: 2^v ≥ v+1 for all v ≥ 0.
-6. So v+1 ≤ 2^v ≤ p^v ≤ n, giving v ≤ n-1 < n.
--/
-lemma padicValNat_le_self (n : ℕ) : padicValNat p n ≤ n := by
-  cases n with
-  | zero => simp [padicValNat_zero_right]
-  | succ n =>
-    -- For n+1 ≥ 1, we use the fact that v ≤ log_p(n+1) ≤ n+1
-    have hn : n + 1 ≠ 0 := Nat.succ_ne_zero n
-    calc padicValNat p (n + 1)
-      _ ≤ Nat.log p (n + 1) := padicValNat_le_nat_log (n + 1)
-      _ ≤ n + 1 := Nat.log_le_self _ _
-
-/-- The p-adic valuation of n is at most the logarithm base p of n.
-
-This is a tighter bound than `padicValNat_le_self`.
-Note: Mathlib already has `padicValNat_le_nat_log` in
-Mathlib.NumberTheory.Padics.PadicVal.Basic:480
-
-**Proof sketch:**
-1. If n = 0, trivial.
-2. If n ≥ 1, let v = padicValNat p n.
-3. Then p^v | n, so p^v ≤ n.
-4. Taking log_p of both sides: v ≤ log_p(n).
-5. Since v is an integer, v ≤ ⌊log_p(n)⌋ = Nat.log p n.
--/
-lemma padicValNat_le_log (p n : ℕ) (_hn : n ≠ 0) : padicValNat p n ≤ Nat.log p n := by
-  -- This already exists in Mathlib as padicValNat_le_nat_log
-  exact padicValNat_le_nat_log n
+-- valuation の basic bounds は `DkMath.ABC.PadicValNat` に集約した (2026/04/21)。
 
 
 /-! ### Telescoping Identity -/

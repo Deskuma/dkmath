@@ -59,3 +59,11 @@
   - owner は `DkMath.ABC.PadicValNat` に固定
   - `ABC020` ではローカル定義を持たず、
     valuation/counting の基本補題は owner module を参照する形に整理
+- `ABC025.lean` に残っていた `padicValNat_le_self` / `padicValNat_le_log` の重複断片を削除
+  - `import DkMath.ABC.PadicValNat` を追加
+  - telescoping 本体はそのままにして、
+    valuation の basic bounds は owner module を参照する形へ整理
+- live chain の `ABC0**.lean` について、
+  `DkMath.ABC.PadicValNat` の lemma 名との重複を機械探索
+  - この時点では追加の重複は検出されなかった
+  - `ABCSolvedProofSamples.lean` / `ABCWorking.lean` は scratch/archive 系として別管理に切り分け
