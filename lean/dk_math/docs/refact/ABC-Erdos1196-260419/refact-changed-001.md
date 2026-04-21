@@ -27,3 +27,20 @@
     - `rad_le`
   - Core.lean 側の重複定義は削除し、
     radical kernel の owner を `DkMath.ABC.Rad` に固定
+- `Square.lean` に残っていた pure-rad 補題群を `DkMath.ABC.Rad` に追加集約
+  - 移設した補題
+    - `rad_eq_self_of_squarefree`
+    - `rad_eq_self_of_squarefree'`
+    - `factorization_prod_primes`
+    - `squarefree_of_rad_eq_self`
+    - `rad_pow_eq_rad`
+    - `rad_mul_general`
+    - `rad_mul_coprime'`
+    - `abc_one_le_rad`
+    - `rad_pos`
+  - `Square.lean` 側には squarefree / squarefull と近接積の応用補題だけを残した
+- `Triple.lean` の import を `DkMath.ABC.Core` から `DkMath.ABC.Rad` へ変更
+  - `Triple` 自身は radical kernel だけで足りることを確認
+- `RatioBound.lean` に `import DkMath.ABC.Basic` を追加
+  - `Nat.ceil_spec` / `div_lt_iff` を `Triple -> Core` の隠れ依存で拾っていたため、
+    import を明示化

@@ -146,3 +146,85 @@ Archive
    - その後に
      `padicValNat_split`
      側の ownership 整理へ進む。
+
+### 日時: 2026/04/21 12:37 JST (pure-rad API の `ABC.Rad` 集約と hidden import の顕在化)
+
+1. 目的:
+   - 前回の radical-kernel 集約に続き、
+     `Square.lean`
+     に残っていた pure-rad 補題群を
+     `DkMath.ABC.Rad`
+     へ寄せる。
+   - あわせて
+     `Triple -> Core`
+     の過剰依存を薄くし、
+     露出した hidden import を記録する。
+2. 実施:
+   - `ABC/Square.lean` と `ABC/Triple.lean` の使用箇所を棚卸しし、
+     `squarefull` に依存しない pure-rad 補題を抽出した。
+   - `ABC/Rad.lean` に以下を移設した。
+     - `rad_eq_self_of_squarefree`
+     - `rad_eq_self_of_squarefree'`
+     - `factorization_prod_primes`
+     - `squarefree_of_rad_eq_self`
+     - `rad_pow_eq_rad`
+     - `rad_mul_general`
+     - `rad_mul_coprime'`
+     - `abc_one_le_rad`
+     - `rad_pos`
+   - `ABC/Square.lean` から対応する定義群を削除し、
+     squarefree / squarefull と近接積応用だけを残した。
+   - `ABC/Triple.lean` の import を
+     `DkMath.ABC.Core`
+     から
+     `DkMath.ABC.Rad`
+     へ変更した。
+   - その結果、
+     `RatioBound.lean`
+     が `Nat.ceil_spec` と `div_lt_iff` を
+     `Triple -> Core`
+     の隠れ依存で拾っていたことが顕在化したため、
+     `import DkMath.ABC.Basic`
+     を追加して明示 import に修正した。
+   - `refact-changed-001.md`
+     に今回の移設内容と hidden import 修正を追記した。
+3. 結論:
+   - `rad_eq_self_of_squarefree` や `rad_mul_general` のような
+     公開 rad API は
+     `ABC.Rad`
+     に揃い、
+     `Square.lean`
+     は radical の owner ではなく応用層に近づいた。
+   - `Triple` を軽くしたことで、
+     `RatioBound`
+     の hidden import が明示化され、
+     今後の import thinning で見るべきパターンがはっきりした。
+4. 検証:
+   - `./lean-build.sh DkMath.ABC.Rad`
+   - `./lean-build.sh DkMath.ABC.Square`
+   - `./lean-build.sh DkMath.ABC.Triple`
+   - `./lean-build.sh DkMath.ABC.RatioBound`
+   - 以上は成功した。
+5. 失敗事例:
+   - 初回の `ABC038Bridge` 再 build で、
+     `RatioBound.lean`
+     が
+     `Nat.ceil_spec`
+     と
+     `div_lt_iff`
+     を見失って落ちた。
+   - 原因は
+     `Triple -> Core`
+     の transitively imported な `ABC.Basic` に依存していたためであり、
+     `RatioBound`
+     へ明示 import を追加して解消した。
+   - `ABC038Bridge` 全体 build は compile 時間が長すぎるため今回は打ち切り、
+     単体の下流確認は
+     `RatioBound`
+     までで止めた。
+6. 次の課題:
+   - `Triple`
+     を参照する他ファイルでも同種の hidden import がないかを洗い出す。
+   - `padicValNat_split`
+     と関連する補題群についても、
+     owner を固定しつつ transitively imported な依存を崩していく。
