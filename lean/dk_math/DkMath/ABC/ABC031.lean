@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
+import DkMath.Basic.Nat
 import DkMath.ABC.ABC030
 
 #print "file: DkMath.ABC.ABC031"
@@ -17,8 +18,9 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
+open DkMath.Basic.Nat
 open scoped BigOperators
 
 open Nat Real Rat Filter Finset
@@ -398,4 +400,4 @@ lemma adjacent_quality_le_ae_alt
     have hε_le_δ : ε ≤ δ := h
     exact hRefineLeDelta hε_le_δ
 
-end ABC
+end DkMath.ABC

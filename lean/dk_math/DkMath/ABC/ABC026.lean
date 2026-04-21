@@ -17,7 +17,7 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
@@ -179,4 +179,4 @@ lemma witness_n_for_S_heavy {γ : ℝ} {X p : ℕ} (h : p ∈ S_heavy_def γ X) 
 
   exact ⟨n, n_le, fac_ge_dot⟩
 
-end ABC
+end DkMath.ABC

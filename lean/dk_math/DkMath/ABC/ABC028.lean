@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 
 import DkMath.ABC.ABC027
+import DkMath.ABC.CountPowersDividing2n1
 
 #print "file: DkMath.ABC.ABC028"
 
@@ -17,7 +18,7 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
@@ -750,4 +751,4 @@ lemma chernoff_single_prime (p : ℕ) (hp : p.Prime) (γ : ℝ) (hγ : 0 < γ) :
 
       exact h_final_goal
 
-end ABC
+end DkMath.ABC

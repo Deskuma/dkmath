@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
+import DkMath.ABC.Core
 import DkMath.ABC.ABC008
 
 #print "file: DkMath.ABC.ABC009"
@@ -17,7 +18,7 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
@@ -267,9 +268,9 @@ lemma janson_block_exp_mono_dbar {μ d₁ d₂}
 
 -- -------------------------------------------------------
 
--- #check ABC.Janson.bound_v2
--- #check ABC.Janson.mu
--- #check ABC.Janson.dbar
+-- #check Janson.bound_v2
+-- #check Janson.mu
+-- #check Janson.dbar
 
 /-- v2 版：Pr[X_A=0] ≤ janson_block_exp (μ, dbar) -/
 /- Helpers: name alignment lemmas -/
@@ -589,4 +590,4 @@ theorem middle_band_bound_top
 
 end Middle
 
-end ABC
+end DkMath.ABC

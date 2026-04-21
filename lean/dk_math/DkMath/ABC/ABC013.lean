@@ -17,7 +17,7 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
@@ -332,4 +332,4 @@ lemma eventually_slice_heavy_sublinear_of_badcount_subquad
     exact le_trans heavy_le frac_le
   exact eventual_bound
 
-end ABC
+end DkMath.ABC

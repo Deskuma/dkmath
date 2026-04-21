@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
+import DkMath.Basic.Nat
 import DkMath.ABC.ABC014
 
 #print "file: DkMath.ABC.ABC015"
@@ -17,8 +18,9 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
+open DkMath.Basic.Nat
 open scoped BigOperators
 
 open Nat Real Rat Filter Finset
@@ -446,4 +448,4 @@ lemma not_bad_of_not_is_bad_a {δ : ℝ} {X a b : ℕ}
   apply h
   exact ⟨hcop, ha, hb, hab, hbad⟩
 
-end ABC
+end DkMath.ABC

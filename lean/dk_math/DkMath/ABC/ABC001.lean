@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
+import DkMath.Basic.Nat
 import DkMath.ABC.Square
 import DkMath.ABC.RatioBound
 
@@ -18,7 +19,7 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
@@ -662,7 +663,8 @@ theorem mem_image_g_mem_residue {X : ℕ} {b : ℕ}
   -/
 axiom adjacent_quality_le_ae (ε : ℝ) (hε : 0 < ε)
   (hDiag : ∀ ε' > 0, ∀ᶠ X in atTop, ((Finset.filter (fun b => b ≤ X ∧ is_bad_a 0.435 X b (b - 1)) (Finset.Icc 0 X)).card : ℝ) ≤ X ^ (3 / 4 + ε')) :
-  ∀ᶠ n in atTop, quality (Triple.mk n (n+1) (2*n+1) (by ring : n + (n + 1) = 2 * n + 1) (coprime_succ n)) ≤ 1 + ε
+  ∀ᶠ n in atTop, quality (Triple.mk n (n+1) (2*n+1) (by ring : n + (n + 1) = 2 * n + 1)
+    (DkMath.Basic.Nat.coprime_succ n)) ≤ 1 + ε
 
 /- k-parameterised diagonal control and analytic bridge -/
 /- NOTE: these are the k-general versions of the adjacent axioms used for AdjK. -/
@@ -801,10 +803,10 @@ theorem eventually_diagBadCount_oX
 
 /-- Adjacent triple （n, n+1, 2n+1） -/
 def Adj (n : ℕ) : Triple :=
-  Triple.mk n (n + 1) (2 * n + 1) (by ring) (coprime_succ n)
+  Triple.mk n (n + 1) (2 * n + 1) (by ring) (DkMath.Basic.Nat.coprime_succ n)
 
 def Adj' (n : ℕ) : Triple :=
-  Triple.mk n (n + 1) (n + (n + 1)) (by ring) (coprime_succ n)
+  Triple.mk n (n + 1) (n + (n + 1)) (by ring) (DkMath.Basic.Nat.coprime_succ n)
 
 @[simp]
 lemma Adj_eq_Adj' (n : ℕ) : Adj n = Adj' n := by
@@ -1020,4 +1022,4 @@ theorem density_one_of_complement_tendsto_zero
   simpa using (tendsto_const_nhds.sub hA)
 
 
-end ABC
+end DkMath.ABC

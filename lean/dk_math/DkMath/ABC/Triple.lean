@@ -4,14 +4,14 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.ABC.Core
+import DkMath.ABC.Rad
 
 #print "file: DkMath.ABC.Triple"
 
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
 
-namespace ABC
+namespace DkMath.ABC
 
 /-
   ABC/FormalBridge.lean
@@ -377,4 +377,4 @@ lemma ratio_bound_of_poly_upper {β : ℝ} (_ : β < 2) (hβ0 : 0 ≤ β) {C : �
   rw [prod_rpow] at final_le
   simpa [div_eq_mul_inv] using final_le
 
-end ABC
+end DkMath.ABC

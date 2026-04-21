@@ -17,7 +17,7 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
@@ -383,4 +383,4 @@ lemma heavy_primes_affect_sublinear_n
     _ ≤ ∑ p ∈ S, (A p).card := by apply union_le_sum
     _ ≤ ∑ p ∈ S, (2 * ⌈(X : ℝ) / (p ^ 3 : ℝ)⌉₊ + 2) := by exact_mod_cast sum_bound
 
-end ABC
+end DkMath.ABC

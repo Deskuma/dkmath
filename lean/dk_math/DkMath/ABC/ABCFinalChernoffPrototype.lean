@@ -19,7 +19,7 @@ open Filter
 #check @ABC.div_le_iff
 #check @ABC.ceil_spec
 
-namespace ABC
+namespace DkMath.ABC
 
 -- 便利略記：p-進評価
 @[simp] abbrev Vp (p n : ℕ) : ℕ := padicValNat p (2 * n + 1)
@@ -854,4 +854,4 @@ lemma bad_set_density_bound
 
   -- これで証明終了
 
-end ABC
+end DkMath.ABC

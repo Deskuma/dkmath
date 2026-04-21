@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
+import DkMath.Basic.Nat
 import DkMath.ABC.ABC002
 
 #print "file: DkMath.ABC.ABC003"
@@ -17,8 +18,9 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
+open DkMath.Basic.Nat
 open scoped BigOperators
 
 open Nat Real Rat Filter Finset
@@ -491,4 +493,4 @@ theorem eventually_log_rad_pos_adjK (k : Nat) :
     exact_mod_cast one_lt_prod_nat
   exact Real.log_pos one_lt_prod
 
-end ABC
+end DkMath.ABC

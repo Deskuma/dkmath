@@ -6,17 +6,18 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC
 
-#print "file: DkMath.ABC.Working"
+#print "file: DkMath.ABC.Demo.ABCWorking"
 
 set_option linter.style.whitespace false
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
 
-#check ABC.rad
 
 -- padicValNat_odd_prime_ge_two
 
-namespace ABC
+namespace DkMath.ABC
+
+#check rad
 
 namespace Nat
 
@@ -354,4 +355,4 @@ lemma padicValNat_odd_prime_ge_two {p n : ℕ} (hp : p.Prime) (hpodd : p ≠ 2) 
 
 end Nat
 
-end ABC
+end DkMath.ABC

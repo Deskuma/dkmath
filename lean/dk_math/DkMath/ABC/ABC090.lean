@@ -17,14 +17,14 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
 open Nat Real Rat Filter Finset
 open MeasureTheory ProbabilityTheory
 
-end ABC
+end DkMath.ABC
 
 /- ----------------------------------------------------------------------------
 /-
@@ -46,7 +46,7 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 namespace Chernoff
 
@@ -57,5 +57,5 @@ open MeasureTheory ProbabilityTheory
 
 end Chernoff
 
-end ABC
+end DkMath.ABC
 ---------------------------------------------------------------------------- -/

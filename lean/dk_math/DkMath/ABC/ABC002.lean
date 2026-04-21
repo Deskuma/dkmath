@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
+import DkMath.Basic.Nat
 import DkMath.ABC.ABC001
 
 #print "file: DkMath.ABC.ABC002"
@@ -17,8 +18,9 @@ set_option linter.style.emptyLine false
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
+open DkMath.Basic.Nat
 open scoped BigOperators
 
 open Nat Real Rat Filter Finset
@@ -417,4 +419,4 @@ theorem adj_quality_density_one (ε : ℝ) (hε : 0 < ε) :
 -- -------------------------------------------------------
 
 
-end ABC
+end DkMath.ABC
