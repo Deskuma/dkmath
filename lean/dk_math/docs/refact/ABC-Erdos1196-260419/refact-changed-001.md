@@ -50,3 +50,12 @@
     `export DkMath.Basic.Nat (succ_sub_self dvd_one_iff gcd_succ coprime_succ)`
     により既存の `DkMath.ABC.*` 呼び口だけを維持
   - hidden import の実例として `ABC001.lean` に `import DkMath.Basic.Nat` を追加
+- `padicValNat_split` の owner を `DkMath.ABC.PadicValNat` に固定
+  - `ABC.Core` の重複定義は削除
+  - `ABC.Core` には `import DkMath.ABC.PadicValNat` を追加し、
+    既存の `DkMath.ABC.*` 呼び口は import 経由で維持
+  - valuation 系の基本補題は `Core` ではなく `PadicValNat` が持つ方針を明示
+- `ABC020.lean` に残っていた `padic_val_two_of_odd` の重複断片を削除
+  - owner は `DkMath.ABC.PadicValNat` に固定
+  - `ABC020` ではローカル定義を持たず、
+    valuation/counting の基本補題は owner module を参照する形に整理

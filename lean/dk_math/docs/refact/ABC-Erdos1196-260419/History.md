@@ -305,3 +305,149 @@ Archive
    - その後に
      `padicValNat_split`
      系の owner 固定と hidden import 顕在化へ進む。
+
+### 日時: 2026/04/21 13:15 JST (valuation 補題 `padicValNat_split` の owner を `DkMath.ABC.PadicValNat` に固定)
+
+1. 目的:
+   - `ABC.Core`
+     と
+     `ABC.PadicValNat`
+     に二重定義されていた
+     `padicValNat_split`
+     を一本化し、
+     valuation 系の基本補題の owner を固定する。
+   - 既存の
+     `DkMath.ABC.*`
+     呼び口は壊さず、
+     `Core`
+     を catch-all から一段薄くする。
+2. 実施:
+   - `ABC/Core.lean`
+     と
+     `ABC/PadicValNat.lean`
+     を再確認し、
+     `padicValNat_split`
+     が同一内容で重複していることを確認した。
+   - `ABC/Core.lean`
+     に
+     `import DkMath.ABC.PadicValNat`
+     を追加した。
+   - `ABC/Core.lean`
+     からローカルの
+     `padicValNat_split`
+     定義を削除し、
+     valuation の基本補題は
+     `DkMath.ABC.PadicValNat`
+     に集約した旨の注記へ置き換えた。
+   - `refact-changed-001.md`
+     に今回の owner 固定内容を追記した。
+3. 結論:
+   - `padicValNat_split`
+     は
+     `DkMath.ABC.PadicValNat`
+     が owner、
+     `ABC.Core`
+     は import により見せるだけの層、
+     という役割分担に整理できた。
+   - これで
+     `rad`
+     と
+     gcd/coprime
+     のときと同じく、
+     「owner module に寄せて Core は薄くする」
+     方向を valuation 系にも適用できた。
+4. 検証:
+   - `./lean-build.sh DkMath.ABC.PadicValNat`
+   - `./lean-build.sh DkMath.ABC.Core`
+   - `./lean-build.sh DkMath.ABC.ABC001`
+   - 以上は成功した。
+5. 失敗事例:
+   - `./lean-build.sh DkMath.ABC.ABC016`
+     も下流確認として開始したが、
+     このサイクルの確認対象としては compile 時間が長すぎたため打ち切り、
+     より近い下流
+     `ABC001`
+     に切り替えた。
+   - build failure は発生していない。
+6. 次の課題:
+   - `padicValNat_split`
+     に続いて、
+     valuation 系で
+     `Core`
+     から剥がせる補題がまだあるかを棚卸しする。
+   - 並行して、
+     `squarefree` / `squarefull`
+     の owner と re-export 境界を整理し、
+     `Core`
+     依存をさらに薄くする。
+
+### 日時: 2026/04/21 13:28 JST (`ABC020` の valuation 重複断片を除去し、全体 build で確認)
+
+1. 目的:
+   - `padicValNat_split`
+     の owner 固定後に、
+     長い全体 build を最後まで待って実エラーを確認する。
+   - 露出した重複断片があれば、
+     その場で owner module 側へ寄せて再 build する。
+2. 実施:
+   - `__build.log`
+     を確認し、
+     `DkMath.ABC.ABC020`
+     で
+     `DkMath.ABC.padic_val_two_of_odd`
+     の重複宣言エラーが出ていることを確認した。
+   - `ABC020.lean`
+     を調べ、
+     `PadicValNat.lean`
+     に同名補題があるにもかかわらず、
+     ローカルにも同一内容の定義が残っていることを確認した。
+   - `ABC020.lean`
+     からローカルの
+     `padic_val_two_of_odd`
+     を削除し、
+     valuation/counting の基本補題は
+     `DkMath.ABC.PadicValNat`
+     に集約した旨の注記へ差し替えた。
+   - その後、
+     失敗していた局所 build
+     `DkMath.ABC.ABC020`
+     を通し、
+     続けて
+     `./lean-build.sh DkMath`
+     を最後まで待って結果を確認した。
+   - `refact-changed-001.md`
+     に今回の follow-up 修正を追記した。
+3. 結論:
+   - valuation 系の owner を
+     `DkMath.ABC.PadicValNat`
+     に寄せた結果として、
+     `ABC020`
+     に残っていた旧断片が露出した。
+   - これを除去したことで、
+     少なくとも今回の refactoring に起因する全体 build 停止点は解消し、
+     長い build も通ることを確認できた。
+4. 検証:
+   - `./lean-build.sh DkMath.ABC.ABC020`
+   - `./lean-build.sh DkMath`
+   - 以上は成功した。
+   - 全体 build では既存の `sorry` 警告のみ replay された。
+5. 失敗事例:
+   - `ABC020`
+     の局所 build 前に全体 build を確認したところ、
+     `padic_val_two_of_odd`
+     重複で停止した。
+   - これは
+     `PadicValNat`
+     へ寄せた owner と、
+     `ABC020`
+     に残存していた旧定義が衝突したためであり、
+     ローカル断片を削除して解消した。
+6. 次の課題:
+   - valuation 系について、
+     `ABC020`
+     と同様の旧断片が他の
+     `ABC0**`
+     に残っていないかを点検する。
+   - そのうえで、
+     `squarefree` / `squarefull`
+     の owner 固定と re-export 境界整理を進める。
