@@ -44,3 +44,9 @@
 - `RatioBound.lean` に `import DkMath.ABC.Basic` を追加
   - `Nat.ceil_spec` / `div_lt_iff` を `Triple -> Core` の隠れ依存で拾っていたため、
     import を明示化
+- `succ_sub_self` / `dvd_one_iff` / `gcd_succ` / `coprime_succ` の owner を `DkMath.Basic.Nat` に固定
+  - `ABC.Core` の重複定義は削除
+  - `ABC.Core` では
+    `export DkMath.Basic.Nat (succ_sub_self dvd_one_iff gcd_succ coprime_succ)`
+    により既存の `DkMath.ABC.*` 呼び口だけを維持
+  - hidden import の実例として `ABC001.lean` に `import DkMath.Basic.Nat` を追加

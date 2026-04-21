@@ -228,3 +228,80 @@ Archive
    - `padicValNat_split`
      と関連する補題群についても、
      owner を固定しつつ transitively imported な依存を崩していく。
+
+### 日時: 2026/04/21 12:56 JST (gcd/coprime 小補題の owner を `DkMath.Basic.Nat` に固定)
+
+1. 目的:
+   - `coprime_succ`
+     まわりの小補題群について、
+     `ABC.Core`
+     内の重複をやめ、
+     `DkMath.Basic.Nat`
+     を owner に固定する。
+   - その際、
+     既存の
+     `DkMath.ABC.coprime_succ`
+     呼び口を急に壊さず、
+     hidden import も 1 件顕在化させる。
+2. 実施:
+   - `DkMath.Basic.Nat`
+     にすでに存在する
+     `succ_sub_self`
+     `dvd_one_iff`
+     `gcd_succ`
+     `coprime_succ`
+     を確認した。
+   - `ABC/Core.lean`
+     に
+     `import DkMath.Basic.Nat`
+     を追加し、
+     上記 4 補題の重複定義を削除した。
+   - 互換維持のため、
+     `namespace DkMath.ABC`
+     内で
+     `export DkMath.Basic.Nat (succ_sub_self dvd_one_iff gcd_succ coprime_succ)`
+     を追加し、
+     既存コードからは
+     `DkMath.ABC.coprime_succ`
+     を引き続き見える形にした。
+   - owner 直参照の試しとして
+     `ABC001.lean`
+     に
+     `import DkMath.Basic.Nat`
+     を追加した。
+3. 結論:
+   - gcd/coprime の小補題群は
+     `Basic.Nat`
+     が owner、
+     `ABC.Core`
+     は再輸出だけを担う形に整理できた。
+   - radical 系で行った
+     「owner を寄せつつ public API はいったん維持」
+     の進め方を、
+     gcd/coprime 側にも適用できることを確認した。
+4. 検証:
+   - `./lean-build.sh DkMath.Basic.Nat`
+   - `./lean-build.sh DkMath.ABC.Core`
+   - `./lean-build.sh DkMath.ABC.ABC001`
+   - `./lean-build.sh DkMath.ABC.ABC016`
+   - 以上は成功した。
+5. 失敗事例:
+   - 初回は
+     `ABC.Core`
+     から重複定義を消しただけだったため、
+     `ABC001.lean`
+     で
+     `coprime_succ`
+     未解決エラーが発生した。
+   - これは
+     `ABC.Core`
+     での `export DkMath.Basic.Nat (...)`
+     を追加して public API を維持し、解消した。
+6. 次の課題:
+   - `coprime_succ`
+     と同様に、
+     `squarefree` / `squarefull`
+     についても owner と re-export の境界を整理する。
+   - その後に
+     `padicValNat_split`
+     系の owner 固定と hidden import 顕在化へ進む。
