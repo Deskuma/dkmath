@@ -89,3 +89,12 @@
   - `ABC009.lean` に `import DkMath.ABC.Core` を追加し、
     `RpowExtras.rpow_mul_nat` の owner 依存を明示
   - これにより `Main` 側の hidden import 探索を継続可能な状態に進めた
+- `chain-cut-patterns-001.md` を追加
+  - `ABC連番.lean` の切断パターンを
+    `owner import 露出型`, `shared utility 横刺し型`, `thin base + thematic band 型`
+    として整理
+  - 次の具体候補として
+    `RpowExtras` 専用 module 化,
+    `ABC024`-`ABC028` utility-first 化,
+    `ABC001`-`ABC003` base seam 固定
+    をメモ化

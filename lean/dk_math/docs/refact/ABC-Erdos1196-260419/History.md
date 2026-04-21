@@ -730,3 +730,108 @@ Archive
      `Core`
      に残る補助 namespace は、
      将来的に専用 module へ切り出す候補として整理する。
+
+### 日時: 2026/04/21 17:53 JST (`ABC連番` チェイン切断パターンのメモ化)
+
+1. 目的:
+   - 連番 chain の hidden import 探索を続けるだけでなく、
+     どの種類の依存が切りやすいかを文書として固定する。
+   - 次サイクルで
+     「どこから切るか」
+     を迷わないよう、
+     観測済みパターンと具体候補を 1 枚へまとめる。
+2. 実施:
+   - `ABC001`-`ABC040`
+     の import 列を機械抽出し、
+     直列 predecessor 以外の direct import がどこに現れているかを調べた。
+   - その結果、
+     既に serial chain を横切っている seed として
+     `Square`,
+     `RatioBound`,
+     `Core`,
+     `CountPowersDividing2n1`,
+     `PadicValNat`,
+     `ABC025_bound2`
+     を確認した。
+   - `ABC090.lean`
+     に comment block 内の残骸があることも確認したが、
+     これは chain-cut 本体とは別件の cleanup 候補として分離した。
+   - 新規文書
+     `chain-cut-patterns-001.md`
+     を作成し、
+     次の 3 パターンを整理した。
+     - owner import 露出型
+     - shared utility 横刺し型
+     - thin base + thematic band 型
+   - あわせて具体候補として
+     `RpowExtras`
+     専用 module 化、
+     `ABC024`-`ABC028`
+     の utility-first 化、
+     `ABC001`-`ABC003`
+     の base seam 固定
+     を記録した。
+3. 結論:
+   - `ABC連番`
+     の直列 chain は一気に壊すより、
+     すでに direct import が現れている箇所を seam として使うのが妥当である。
+   - 特に
+     `ABC009`
+     の
+     `RpowExtras`,
+     `ABC024`-`ABC028`
+     の p-adic utility 群、
+     `ABC001`-`ABC003`
+     の base band
+     が、次に切りやすい帯として見えた。
+4. 検証:
+   - 今回は調査と文書化が中心であり、
+     追加 build は行っていない。
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `Main`
+     build の hidden import 探索を継続しつつ、
+     文書で第一候補に挙げた
+     `RpowExtras`
+     専用 module 化を実際に試す。
+   - その後に、
+     `ABC024`-`ABC028`
+     を utility-first に寄せられるかを局所検証する。
+
+### 日時: 2026/04/21 17:54 JST (`Main` build の hidden import 探索が一巡し、公開入口まで再通過)
+
+1. 目的:
+   - 直前サイクルで露出した hidden import 修正が、
+     本当に
+     `DkMath.ABC.Main`
+     まで効いているかを確認する。
+2. 実施:
+   - 継続していた
+     `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+     の完走を確認した。
+   - build ログを確認し、
+     `ABC010`-`ABC040`, `ABC090`, `ABC038Bridge`
+     まで再通過していることを確認した。
+3. 結論:
+   - `coprime_succ`
+     系と
+     `RpowExtras`
+     系の explicit owner import 修正により、
+     現時点の
+     `Main`
+     build は再び通る状態へ戻った。
+   - hidden import 探索は、
+     public entry を壊さずに進められることを確認した。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - 次サイクルは予定どおり、
+     `RpowExtras`
+     の専用 module 化を first cut として試す。
+   - その後、
+     `ABC024`-`ABC028`
+     の utility-first 化候補を点検する。
