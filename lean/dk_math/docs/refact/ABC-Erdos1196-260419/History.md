@@ -627,3 +627,106 @@ Archive
      周辺で
      `Core`
      にまだ残る catch-all 依存を洗うのが自然である。
+
+### 日時: 2026/04/21 15:46 JST (`Main` の公開入口を明示化し、hidden import 探索を開始)
+
+1. 目的:
+   - `squarefree` / `squarefull`
+     の owner 固定を受けて、
+     `DkMath.ABC.Main`
+     がそれらを transitively ではなく direct import で公開するようにする。
+   - そのうえで
+     `Main`
+     build を回し、
+     catch-all 依存を外した結果として露出する hidden import を順に表へ出す。
+2. 実施:
+   - `Main.lean`
+     に
+     `import DkMath.ABC.Square`
+     を追加した。
+   - 進捗付き build
+     `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+     を実行し、
+     露出した停止点を順に確認した。
+   - まず
+     `ABC001`
+     で
+     `coprime_succ`
+     が未解決になったため、
+     owner module
+     `DkMath.Basic.Nat`
+     の補題であることを明示し、
+     3 箇所を
+     `DkMath.Basic.Nat.coprime_succ`
+     へ置き換えた。
+   - 次に同系統の hidden import を洗い、
+     `ABC002`, `ABC003`, `ABC014`, `ABC015`, `ABC016`, `ABC031`
+     に
+     `import DkMath.Basic.Nat`
+     と
+     `open DkMath.Basic.Nat`
+     を追加した。
+   - さらに
+     `ABC009`
+     で
+     `RpowExtras.rpow_mul_nat`
+     が未解決になったため、
+     owner がまだ
+     `ABC.Core`
+     にあることを認め、
+     `import DkMath.ABC.Core`
+     を追加して explicit import に直した。
+   - 局所検証として
+     `DkMath.ABC.ABC001`,
+     `DkMath.ABC.ABC002`,
+     `DkMath.ABC.ABC009`
+     を進捗付き build で通した。
+   - `Main`
+     build 自体はその後も継続しており、
+     本記録時点では新しい `error:` は出ていない。
+3. 結論:
+   - `Main`
+     の direct import 化により、
+     これまで transitive に隠れていた
+     `coprime_succ`
+     と
+     `RpowExtras`
+     の owner 依存が露出した。
+   - これらを explicit import / explicit qualification に直したことで、
+     public entry から見た hidden import の掃除が実際に進み始めた。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC001`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC002`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC009`
+   - 以上は成功した。
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+     は実行継続中で、
+     本記録時点では追加の `error:` は観測されていない。
+5. 失敗事例:
+   - `Main`
+     build 初回では
+     `ABC001`
+     の
+     `coprime_succ`
+     未解決で停止した。
+   - その修正後、
+     次の停止点として
+     `ABC002`
+     の同名未解決、
+     続いて
+     `ABC009`
+     の
+     `RpowExtras.rpow_mul_nat`
+     未解決が現れた。
+   - いずれも hidden import が表に出たものとして処理し、
+     explicit owner import に直して解消した。
+6. 次の課題:
+   - `Main`
+     build を最後まで観察し、
+     次に露出する hidden import があれば同じ方針で owner import へ寄せる。
+   - 並行して、
+     `RpowExtras`
+     のように
+     `Core`
+     に残る補助 namespace は、
+     将来的に専用 module へ切り出す候補として整理する。

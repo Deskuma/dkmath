@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
+import DkMath.Basic.Nat
 import DkMath.ABC.ABC013
 
 #print "file: DkMath.ABC.ABC014"
@@ -19,6 +20,7 @@ set_option linter.style.emptyLine false
 
 namespace DkMath.ABC
 
+open DkMath.Basic.Nat
 open scoped BigOperators
 
 open Nat Real Rat Filter Finset

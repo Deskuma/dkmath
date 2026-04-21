@@ -80,3 +80,12 @@
     `import DkMath.ABC.Square` を追加
   - `Core` は squarefree / squarefull の owner ではなく、
     import 経由で公開する境界に整理
+- `DkMath.ABC.Main` に `import DkMath.ABC.Square` を追加
+  - squarefree / squarefull surface を transitively ではなく direct import で公開
+- `Main` build で露出した hidden import を explicit owner import に修正
+  - `ABC001.lean` では `coprime_succ` を `DkMath.Basic.Nat.coprime_succ` に明示
+  - `ABC002.lean`, `ABC003.lean`, `ABC014.lean`, `ABC015.lean`, `ABC016.lean`, `ABC031.lean`
+    に `import DkMath.Basic.Nat` と `open DkMath.Basic.Nat` を追加
+  - `ABC009.lean` に `import DkMath.ABC.Core` を追加し、
+    `RpowExtras.rpow_mul_nat` の owner 依存を明示
+  - これにより `Main` 側の hidden import 探索を継続可能な状態に進めた

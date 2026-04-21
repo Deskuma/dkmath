@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMath.ABC.Square
 import DkMath.ABC.ABC090
 import DkMath.ABC.Bridge
 import DkMath.ABC.ABC038Bridge
