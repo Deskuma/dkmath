@@ -2091,3 +2091,79 @@ Archive
      の adjacent Chernoff / density-one utility を
      thematic owner
      へ上げられるかを確認する。
+
+### 日時: 2026/04/22 08:16 JST (`ABC031` の adjacent-quality 層を識別子付き owner へ昇格)
+
+1. 目的:
+   - `ABC031`
+     に残っている
+     adjacent-quality の eventual theorem 層を、
+     番号 file
+     ではなく
+     theorem-named file
+     へ持ち上げる。
+   - あわせて
+     `ABCMainTheorem`
+     側に残っていた
+     serial predecessor import
+     を落とす。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.AdjacentQuality`
+     を追加した。
+   - ここへ
+     `adjacent_quality_le_density_one`
+     と
+     `adjacent_quality_le_ae_alt`
+     を移した。
+   - `ABC031.lean`
+     は
+     `import DkMath.ABC.AdjacentQuality`
+     だけを持つ compatibility relay に縮小した。
+   - `ABCMainTheorem.lean`
+     は
+     `ABC031`
+     を import するのをやめ、
+     必要最小限の
+     `Rad`
+     import に薄くした。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC031 -> AdjacentQuality`
+     を追記した。
+3. 結論:
+   - adjacent branch も
+     `ABC0**`
+     ではなく
+     named theorem owner
+     に上げられることを確認した。
+   - これにより
+     `ABCMainTheorem`
+     は
+     `ABC031`
+     への serial 依存を持たなくなり、
+     `ABC032`
+     は relay として残っても
+     owner 構造は
+     `AdjacentQuality -> ABCMainTheorem`
+     の形に近づいた。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentQuality`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC031`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABCMainTheorem`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC032`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告だけ replay された。
+5. 次の課題:
+   - `ABC030`
+     の adjacent Chernoff / density-one utility 群を、
+     一つまたは二つの thematic owner に分けて昇格できるかを見る。
+   - あわせて
+     `ABC029`
+     の constants / dyadic helper 層との境界も整理する。

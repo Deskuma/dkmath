@@ -517,3 +517,23 @@
     public entry から
     `abc_main`
     系へ直接届く導線を作った
+- adjacent-quality 層を
+  `DkMath.ABC.AdjacentQuality`
+  として切り出し
+  - 新設:
+    `AdjacentQuality.lean`
+  - moved:
+    `adjacent_quality_le_density_one`
+  - moved:
+    `adjacent_quality_le_ae_alt`
+  - `ABC031.lean`
+    自体は
+    `import DkMath.ABC.AdjacentQuality`
+    だけを持つ compatibility relay に縮小
+  - `ABCMainTheorem.lean`
+    の import は
+    `ABC031`
+    ではなく
+    `Rad`
+    に薄くし、
+    final theorem 層の serial predecessor 依存を除去

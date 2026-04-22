@@ -411,3 +411,23 @@ public entry build で unknown identifier として露出する型。
   `Main`
   が識別子付き final theorem owner を import する
   形へ一歩寄せられた。
+- さらに
+  final theorem の一段下にある
+  eventual / adjacent-quality 層も、
+  theorem-named utility
+  に昇格できる。
+  今回は
+  `ABC031`
+  の
+  `adjacent_quality_le_density_one`
+  と
+  `adjacent_quality_le_ae_alt`
+  を
+  `AdjacentQuality`
+  に移した。
+  これにより
+  `ABC032 -> ABC031`
+  の serial edge も、
+  少なくとも owner 観点では
+  `ABCMainTheorem`
+  から外せることが確認できた。
