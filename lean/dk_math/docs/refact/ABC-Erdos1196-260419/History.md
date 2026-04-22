@@ -2512,3 +2512,94 @@ Archive
      `Main`
      ではなく
      具体 consumer だけが import する境界として維持できるかを確認する。
+
+### 日時: 2026/04/23 04:47 JST (`ABC026` の heavy-prime selection / witness 層を識別子付き owner へ昇格)
+
+1. 目的:
+   - `AdjacentTailDensity`
+     が transitively 見ていた
+     `ABC026`
+     の
+     heavy-prime selection / witness helper 群を、
+     branch-local thematic owner に切り出す。
+   - あわせて
+     adjacent branch の lower utility 依存を、
+     relay 経由ではなく
+     direct owner import
+     にさらに寄せる。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.HeavyPrimeSelection`
+     を追加した。
+   - ここへ
+     `K_of`
+     `S_heavy_def`
+     `mem_S_heavy_of_pow_le`
+     `S_heavy_subset_range`
+     `S_heavy_basic`
+     `witness_n_for_S_heavy`
+     を移した。
+   - `ABC026.lean`
+     は
+     `import DkMath.ABC.HeavyPrimeSelection`
+     だけを持つ compatibility relay に縮小した。
+   - `AdjacentTailDensity.lean`
+     は
+     `ABC026`
+     relay を経由せず、
+     `HeavyPrimeSelection`
+     を direct import する形へ寄せた。
+   - あわせて
+     `HeavyPrimeBudget.lean`
+     に残っていた不要な
+     `ABC026`
+     import を削除した。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC026 -> HeavyPrimeSelection`
+     を追記した。
+3. 結論:
+   - adjacent branch の lower utility 部は
+     `HeavyPrimeSelection`
+     と
+     `HeavyPrimeBudget`
+     を別 owner として扱うのが実態に近いと確認できた。
+   - これにより adjacent branch は
+     `HeavyPrimeSelection`
+     ->
+     `HeavyPrimeBudget`
+     ->
+     `ChernoffMgf`
+     ->
+     `ChernoffDyadic`
+     ->
+     `AdjacentTailDensity`
+     ->
+     `AdjacentQuality`
+     ->
+     `ABCMainTheorem`
+     と役割分解で読める状態になった。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.HeavyPrimeSelection`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC026`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.HeavyPrimeBudget`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentTailDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の既知の axioms note だけ replay された。
+5. 次の課題:
+   - `ABC025`
+     以下の telescoping / bound 層のうち、
+     さらに thematic owner に昇格できる部分があるかを見る。
+   - あるいは adjacent branch の named owner 群を
+     `Main`
+     から見た public story として、
+     文書側で一段整理する。

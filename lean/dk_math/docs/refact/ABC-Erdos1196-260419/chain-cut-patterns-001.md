@@ -540,3 +540,31 @@ public entry build で unknown identifier として露出する型。
   でなくても
   「branch 内の局所 budget helper」
   を名前付き owner に上げられることを示している。
+- 同じ adjacent branch のさらに下段では、
+  heavy-prime の選別集合と witness 構成も
+  thematic owner
+  に分離できる。
+  今回は
+  `ABC026`
+  を
+  `HeavyPrimeSelection`
+  に持ち上げた。
+  これにより branch は
+  `HeavyPrimeSelection`
+  ->
+  `HeavyPrimeBudget`
+  ->
+  `ChernoffMgf`
+  ->
+  `ChernoffDyadic`
+  ->
+  `AdjacentTailDensity`
+  ->
+  `AdjacentQuality`
+  ->
+  `ABCMainTheorem`
+  と読める。
+  したがって adjacent branch は、
+  number 連番ではなく
+  `selection / budget / mgf / dyadic / tail / quality / main`
+  という役割分解で追跡する方が自然だと確認できた。

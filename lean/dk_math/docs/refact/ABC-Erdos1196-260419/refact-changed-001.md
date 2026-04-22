@@ -668,3 +668,35 @@
     relay 経由ではなく
     `HeavyPrimeBudget`
     の direct import に変更した
+- heavy-prime selection / witness 層を
+  `DkMath.ABC.HeavyPrimeSelection`
+  として切り出し
+  - 新設:
+    `HeavyPrimeSelection.lean`
+  - moved:
+    `K_of`
+  - moved:
+    `S_heavy_def`
+  - moved:
+    `mem_S_heavy_of_pow_le`
+  - moved:
+    `S_heavy_subset_range`
+  - moved:
+    `S_heavy_basic`
+  - moved:
+    `witness_n_for_S_heavy`
+  - `ABC026.lean`
+    自体は
+    `import DkMath.ABC.HeavyPrimeSelection`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `AdjacentTailDensity.lean`
+    を
+    `ABC026`
+    relay 経由ではなく
+    `HeavyPrimeSelection`
+    の direct import に変更した
+  - `HeavyPrimeBudget.lean`
+    からは不要になった
+    `ABC026`
+    依存を削除した
