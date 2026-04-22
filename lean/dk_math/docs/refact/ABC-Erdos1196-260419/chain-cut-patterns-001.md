@@ -653,3 +653,26 @@ public entry build で unknown identifier として露出する型。
   `TailSquareBridge` と
   `FiniteChernoffBasic`
   へ再分割する余地も残す。
+- mixed helper band を一度 rescue した後で、
+  live consumer の import を見ながら
+  second cut を入れる型も有効だった。
+  今回
+  `TailAnalyticBasic`
+  を
+  `TailSquareBridge`
+  と
+  `FiniteChernoffBasic`
+  に割ったところ、
+  `ChernoffMgf`
+  と
+  `ABC020`
+  の direct consumer だけでなく、
+  `LayerCakeBasic`
+  に hidden import が残っていることも露出した。
+  したがって
+  mixed band の分割では
+  「owner の再配置」
+  と
+  「露出した transitive import の direct 化」
+  を
+  1 サイクルでまとめて処理するのが実践的である。

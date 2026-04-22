@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
-import DkMath.ABC.TailAnalyticBasic
+import DkMath.ABC.FiniteChernoffBasic
 import DkMath.ABC.PadicTelescoping
 import DkMath.ABC.CountPowersDividing2n1
 

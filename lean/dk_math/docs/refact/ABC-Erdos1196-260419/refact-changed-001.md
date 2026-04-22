@@ -792,3 +792,42 @@
     relay 経由ではなく
     `TailAnalyticBasic`
     の direct import に変更した
+- mixed basic band
+  `TailAnalyticBasic`
+  を二分割し、
+  `TailSquareBridge`
+  と
+  `FiniteChernoffBasic`
+  へ再配置
+  - 新設:
+    `TailSquareBridge.lean`
+  - moved:
+    `TailBound`, `sqPart`, `sqPart_eq_evenPart_pow2`,
+    `oddPart_le_rad`, `sqTail_le_sqPart`,
+    `c_le_sqPart_mul_rad`,
+    `quality_le_of_pi_tail_general`,
+    `log_twoTail_le_excess_sum`
+  - 新設:
+    `FiniteChernoffBasic.lean`
+  - moved:
+    `markov_card_bound`, `sum_Icc_telescope`, `exp_layer_cake`
+  - `TailAnalyticBasic.lean`
+    自体は
+    `import DkMath.ABC.TailSquareBridge`
+    と
+    `import DkMath.ABC.FiniteChernoffBasic`
+    を持つ compatibility relay / aggregator に縮小
+  - downstream では
+    `ChernoffMgf.lean`
+    を
+    `FiniteChernoffBasic`
+    の direct import に、
+    `ABC020.lean`
+    を
+    `TailSquareBridge`
+    の direct import に変更した
+  - 分割直後に
+    `LayerCakeBasic.lean`
+    の hidden import が露出したため、
+    `FiniteChernoffBasic`
+    を direct import する修正も併せて入れた

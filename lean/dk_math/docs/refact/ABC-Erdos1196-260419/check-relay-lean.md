@@ -23,6 +23,9 @@
 - [ ] [ABC018](../../../DkMath/ABC/ABC018.lean)
 - [x] [ABC019](../../../DkMath/ABC/ABC019.lean)
   - 移設先 → [TailAnalyticBasic.lean](../../../DkMath/ABC/TailAnalyticBasic.lean)
+  - 再分割先 →
+    [TailSquareBridge.lean](../../../DkMath/ABC/TailSquareBridge.lean),
+    [FiniteChernoffBasic.lean](../../../DkMath/ABC/FiniteChernoffBasic.lean)
 - [x] [ABC020](../../../DkMath/ABC/ABC020.lean)
 - [ ] [ABC021](../../../DkMath/ABC/ABC021.lean)
 - [x] [ABC022](../../../DkMath/ABC/ABC022.lean)

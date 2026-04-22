@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 
 import DkMath.ABC.ABC021
+import DkMath.ABC.FiniteChernoffBasic
 
 #print "file: DkMath.ABC.LayerCakeBasic"
 

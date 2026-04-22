@@ -2931,3 +2931,116 @@ Archive
    - あるいは
      `ABC021`
      以降の Janson branch を同じ方針で named owner 化する。
+
+## 2026/04/23 05:58 JST
+
+1. 実施:
+   - `TailAnalyticBasic`
+     を
+     `TailSquareBridge`
+     と
+     `FiniteChernoffBasic`
+     に再分割した。
+   - `TailSquareBridge.lean`
+     を新設し、
+     `TailBound`,
+     `sqPart`,
+     `quality_le_of_pi_tail_general`,
+     `log_twoTail_le_excess_sum`
+     など
+     tail / square bridge 側の helper を移した。
+   - `FiniteChernoffBasic.lean`
+     を新設し、
+     `markov_card_bound`,
+     `sum_Icc_telescope`,
+     `exp_layer_cake`
+     を移した。
+   - `TailAnalyticBasic.lean`
+     自体は
+     2 owner を束ねる compatibility relay / aggregator に縮小した。
+2. downstream 調整:
+   - `ChernoffMgf.lean`
+     は
+     `FiniteChernoffBasic`
+     を direct import するように変更した。
+   - `ABC020.lean`
+     は
+     `TailSquareBridge`
+     を direct import するように変更した。
+   - 分割後の
+     `Main`
+     build で
+     `LayerCakeBasic.lean`
+     が
+     `ABC021 -> ABC020`
+     経由で
+     `exp_layer_cake`
+     と
+     `sum_Icc_telescope`
+     を拾っていた hidden import が露出したため、
+     `FiniteChernoffBasic`
+     を direct import する修正を追加した。
+3. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `TailAnalyticBasic -> TailSquareBridge + FiniteChernoffBasic`
+     の再分割と
+     `LayerCakeBasic`
+     の hidden import 修正を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     mixed helper band を second cut した際に
+     transitive import が露出するパターンを追記した。
+   - relay:
+     `check-relay-lean.md`
+     の
+     `ABC019`
+     項目に
+     再分割先
+     `TailSquareBridge.lean`
+     と
+     `FiniteChernoffBasic.lean`
+     を追記した。
+4. 結論:
+   - `ABC019`
+     由来の mixed helper band は
+     tail / square bridge 層と
+     finite Chernoff basic 層に分離され、
+     direct owner import の形で追えるようになった。
+   - 一方で、
+     `LayerCakeBasic`
+     のような downstream helper に
+     旧 relay 経由の hidden import が残っていることも確認できた。
+     今後の分割では
+     live consumer の direct import 化までを
+     1 サイクルで閉じる方針が有効である。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.TailSquareBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.FiniteChernoffBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.TailAnalyticBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffMgf`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC020`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.LayerCakeBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffSinglePrime`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の axioms note だけ replay された。
+6. 次の課題:
+   - `ABC021`
+     以降の Janson branch を
+     named owner 化していく。
+   - あるいは
+     `TailSquareBridge`
+     と
+     `FiniteChernoffBasic`
+     の周辺 consumer を棚卸しして、
+     まだ残る relay 依存を direct import に寄せる。

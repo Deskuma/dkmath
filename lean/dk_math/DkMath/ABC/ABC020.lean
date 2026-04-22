@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
-import DkMath.ABC.TailAnalyticBasic
+import DkMath.ABC.TailSquareBridge
 
 #print "file: DkMath.ABC.ABC020"
 
