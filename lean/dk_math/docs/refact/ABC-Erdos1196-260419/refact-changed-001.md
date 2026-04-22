@@ -563,3 +563,51 @@
     relay 経由ではなく
     `AdjacentTailDensity`
     の direct import に変更した
+- dyadic / analytic Chernoff helper 層を
+  `DkMath.ABC.ChernoffDyadic`
+  として切り出し
+  - 新設:
+    `ChernoffDyadic.lean`
+  - moved:
+    `chernoff_single_prime_constants`
+  - moved:
+    `chernoff_constants_for_finset`
+  - moved:
+    `chernoff_sum_crude_bound`
+  - moved:
+    `nat_card_le_of_real_le`
+  - moved:
+    `chernoff_light_primes_sum_bound`
+  - moved:
+    `dyadic_block`
+  - moved:
+    `mem_dyadic_block_iff`
+  - moved:
+    `dyadic_block_subset_range`
+  - moved:
+    `dyadic_block_prime_subset`
+  - moved:
+    `dyadic_block_card_le_primes_upto`
+  - moved:
+    `dyadic_partition_skeleton`
+  - moved:
+    `finite_abel_partial_summation`
+  - moved:
+    `block_sum_le_Cmax_mul_sum`
+  - moved:
+    `block_sum_le_Cmax_chernoff`
+  - moved:
+    `dyadic_block_card_le_pow_two`
+  - moved:
+    `dyadic_block_sum_crude`
+  - `ABC029.lean`
+    自体は
+    `import DkMath.ABC.ChernoffDyadic`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `AdjacentTailDensity.lean`
+    を
+    `ABC029`
+    relay 経由ではなく
+    `ChernoffDyadic`
+    の direct import に変更した

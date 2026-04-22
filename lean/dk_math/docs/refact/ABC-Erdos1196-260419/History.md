@@ -2249,3 +2249,94 @@ Archive
      `ABC029`
      まで thematic owner 化できれば、
      relay file 削減の次段が見えやすくなる。
+
+### 日時: 2026/04/23 01:20 JST (`ABC029` の dyadic / analytic Chernoff helper 層を識別子付き owner へ昇格)
+
+1. 目的:
+   - adjacent branch の最下段に残っている
+     `ABC029`
+     を、
+     番号 file owner
+     ではなく
+     thematic utility owner
+     に置き換える。
+   - あわせて
+     `AdjacentTailDensity`
+     側の依存を
+     relay 経由ではなく
+     direct owner import
+     に切り替える。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.ChernoffDyadic`
+     を追加した。
+   - ここへ
+     `chernoff_single_prime_constants`
+     `chernoff_constants_for_finset`
+     `chernoff_sum_crude_bound`
+     `nat_card_le_of_real_le`
+     `chernoff_light_primes_sum_bound`
+     と、
+     `dyadic_block`
+     から
+     `dyadic_block_sum_crude`
+     までの dyadic partition / block-sum helper 群を移した。
+   - `ABC029.lean`
+     は
+     `import DkMath.ABC.ChernoffDyadic`
+     だけを持つ compatibility relay に縮小した。
+   - `AdjacentTailDensity.lean`
+     は
+     `ABC029`
+     を import するのをやめ、
+     `ChernoffDyadic`
+     を direct import する形へ寄せた。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC029 -> ChernoffDyadic`
+     を追記した。
+3. 結論:
+   - adjacent branch は
+     `ChernoffDyadic`
+     ->
+     `AdjacentTailDensity`
+     ->
+     `AdjacentQuality`
+     ->
+     `ABCMainTheorem`
+     と読む方が実態に近いと確認できた。
+   - これにより
+     `ABC029`
+     も relay 化され、
+     adjacent branch の owner 境界は
+     番号 file
+     ではなく
+     識別子付き file
+     で追える状態になった。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffDyadic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC029`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentTailDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC030`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC031`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の既知の axioms note だけ replay された。
+5. 次の課題:
+   - `ABC028`
+     の MGF / Chernoff machinery 層を、
+     `ChernoffBasic`
+     / `ChernoffSinglePrime`
+     と整合する named owner に昇格できるかを見る。
+   - adjacent branch だけでなく、
+     Chernoff branch 全体で
+     「番号 file を relay としてのみ残す」
+     状態へ寄せていく。

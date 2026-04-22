@@ -463,3 +463,33 @@ public entry build で unknown identifier として露出する型。
   ->
   global final theorem owner
   の三段構造へ近づいた。
+- この
+  `ABC029`
+  helper 層
+  自体も、
+  constants / dyadic partition / block-sum の thematic owner
+  として昇格できる。
+  今回は
+  `ABC029`
+  を
+  `ChernoffDyadic`
+  に持ち上げた。
+  これで adjacent branch は
+  `ChernoffDyadic`
+  ->
+  `AdjacentTailDensity`
+  ->
+  `AdjacentQuality`
+  ->
+  `ABCMainTheorem`
+  と読み直せる。
+  したがって
+  「lower utility owner
+  ->
+  branch-local theorem owner
+  ->
+  global final theorem owner」
+  の帯構造は、
+  adjacent branch でも
+  番号 file
+  を介さずに記述できる。
