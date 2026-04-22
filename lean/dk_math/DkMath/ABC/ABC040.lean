@@ -4,8 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-
-import DkMath.ABC.ABC039
+import DkMath.ABC.ChernoffQualityFinal
 
 #print "file: DkMath.ABC.ABC040"
 

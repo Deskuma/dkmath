@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.ABC.ABC038
+import DkMath.ABC.ChernoffQualityBridge
 import DkMath.ABC.ValuationFlowBridge
 
 #print "file: DkMath.ABC.ABC038Bridge"
