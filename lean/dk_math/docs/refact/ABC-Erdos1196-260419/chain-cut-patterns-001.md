@@ -431,3 +431,35 @@ public entry build で unknown identifier として露出する型。
   少なくとも owner 観点では
   `ABCMainTheorem`
   から外せることが確認できた。
+- adjacent branch のさらに下にある
+  tail / Chernoff budget 層も、
+  thematic owner
+  として切り出せる。
+  今回は
+  `ABC030`
+  の
+  `union_bound_chernoff_log_rad`
+  /
+  `EventuallyChernoffBudgetAdjacentHypothesis`
+  /
+  `twoTail_log_bound_adjacent_density_one`
+  などを
+  `AdjacentTailDensity`
+  に移した。
+  その結果、
+  adjacent branch は
+  `ABC029`
+  helper 層
+  ->
+  `AdjacentTailDensity`
+  ->
+  `AdjacentQuality`
+  ->
+  `ABCMainTheorem`
+  という
+  lower utility owner
+  ->
+  eventual-quality owner
+  ->
+  global final theorem owner
+  の三段構造へ近づいた。

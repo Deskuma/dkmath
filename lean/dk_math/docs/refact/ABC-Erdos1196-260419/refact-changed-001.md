@@ -537,3 +537,29 @@
     `Rad`
     に薄くし、
     final theorem 層の serial predecessor 依存を除去
+- adjacent tail / Chernoff budget 層を
+  `DkMath.ABC.AdjacentTailDensity`
+  として切り出し
+  - 新設:
+    `AdjacentTailDensity.lean`
+  - moved:
+    `union_bound_chernoff_log_rad`
+  - moved:
+    `chernoff_single_prime_uniform`
+  - moved:
+    `chernoff_single_prime_uniform_easy`
+  - moved:
+    `EventuallyChernoffBudgetAdjacentHypothesis`
+  - moved:
+    `twoTail_log_bound_adjacent_density_one`
+  - `ABC030.lean`
+    自体は
+    `import DkMath.ABC.AdjacentTailDensity`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `AdjacentQuality.lean`
+    を
+    `ABC030`
+    relay 経由ではなく
+    `AdjacentTailDensity`
+    の direct import に変更した

@@ -2167,3 +2167,85 @@ Archive
    - あわせて
      `ABC029`
      の constants / dyadic helper 層との境界も整理する。
+
+### 日時: 2026/04/23 00:55 JST (`ABC030` の adjacent tail / Chernoff budget 層を識別子付き owner へ昇格)
+
+1. 目的:
+   - adjacent branch の下端に残っている
+     `ABC030`
+     を、
+     番号 file owner
+     ではなく
+     thematic owner
+     へ昇格させる。
+   - あわせて
+     `AdjacentQuality`
+     側の依存を
+     relay 経由ではなく
+     direct owner import
+     に切り替える。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.AdjacentTailDensity`
+     を追加した。
+   - ここへ
+     `union_bound_chernoff_log_rad`
+     `chernoff_single_prime_uniform`
+     `chernoff_single_prime_uniform_easy`
+     `EventuallyChernoffBudgetAdjacentHypothesis`
+     `twoTail_log_bound_adjacent_density_one`
+     を移した。
+   - `ABC030.lean`
+     は
+     `import DkMath.ABC.AdjacentTailDensity`
+     だけを持つ compatibility relay に縮小した。
+   - `AdjacentQuality.lean`
+     は
+     `ABC030`
+     を import するのをやめ、
+     `AdjacentTailDensity`
+     を direct import する形へ寄せた。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC030 -> AdjacentTailDensity`
+     を追記した。
+3. 結論:
+   - adjacent branch は
+     `ABC029`
+     helper 層
+     ->
+     `AdjacentTailDensity`
+     ->
+     `AdjacentQuality`
+     ->
+     `ABCMainTheorem`
+     と読む方が実態に近いと確認できた。
+   - これにより
+     `ABC030`
+     も relay 化され、
+     adjacent branch の owner は
+     番号 file
+     ではなく
+     識別子付き file
+     に寄り始めた。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentTailDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC030`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentQuality`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC031`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告だけ replay された。
+5. 次の課題:
+   - `ABC029`
+     の constants / dyadic helper 層を、
+     一つまたは二つの named utility owner に昇格できるかを見る。
+   - adjacent branch の下端を
+     `ABC029`
+     まで thematic owner 化できれば、
+     relay file 削減の次段が見えやすくなる。
