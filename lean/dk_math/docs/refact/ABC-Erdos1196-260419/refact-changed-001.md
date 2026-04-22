@@ -393,3 +393,36 @@
 - `DkMath.ABC.Main` build を再実行し成功
   - `ChernoffDensity`
     を含む public chain が通ることを確認
+- quality-specific density 層を
+  `DkMath.ABC.ChernoffQualityDensity`
+  として切り出し
+  - 新設:
+    `ChernoffQualityDensity.lean`
+  - moved:
+    `construct_HΛ_for_quality`
+  - moved:
+    `bad_set_density_bound_quality`
+  - `ChernoffQualityDensity`
+    は
+    `ChernoffDensity`
+    を import して、
+    quality 用 Λ 構成と density specialization の owner を持つ構成にした
+  - `ABC037.lean`
+    自体は
+    `import DkMath.ABC.ChernoffQualityDensity`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC039.lean`
+    を
+    `ABC037`
+    relay 経由ではなく
+    `ChernoffQualityDensity`
+    の direct import に変更した
+  - relay 追跡用の
+    `check-relay-lean.md`
+    にも
+    `ABC034` / `ABC035` / `ABC036` / `ABC037`
+    の移設先を追記した
+- `DkMath.ABC.Main` build を再実行し成功
+  - `ChernoffQualityDensity`
+    を含む public chain が通ることを確認

@@ -337,3 +337,28 @@ public entry build で unknown identifier として露出する型。
   だけでなく、
   downstream を順次 direct owner import へ付け替える
   段まで含む。
+- quality-specific specialization も、
+  density owner の上に
+  さらに一段 utility を重ねる形で分離できる。
+  今回は
+  `ABC037`
+  の
+  `construct_HΛ_for_quality`
+  と
+  `bad_set_density_bound_quality`
+  を
+  `ChernoffQualityDensity`
+  に移し、
+  `ABC037`
+  を relay 化した。
+  さらに
+  `ABC039`
+  は
+  `ABC037`
+  ではなく
+  `ChernoffQualityDensity`
+  を direct import する形へ寄せられた。
+  したがって
+  Chernoff 帯は
+  `Basic -> SinglePrime -> UnionBound -> Density -> QualityDensity`
+  の多段 thematic band として持ち上げられる。

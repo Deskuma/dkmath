@@ -1815,3 +1815,87 @@ Archive
      と
      quality owner
      の境界をどこまで direct import で明示できるかを整理する。
+
+### 日時: 2026/04/22 07:24 JST (`ABC037` の quality-specific density 層を utility owner へ移設)
+
+1. 目的:
+   - `ABC037`
+     に残っている
+     quality-specific density 補題を、
+     `ChernoffDensity`
+     の上位層として分離する。
+   - あわせて
+     relay 化した番号 file
+     の移設先を追跡する
+     `check-relay-lean.md`
+     を埋め始め、
+     将来の削除判断に備える。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.ChernoffQualityDensity`
+     を追加した。
+   - ここへ
+     `construct_HΛ_for_quality`
+     と
+     `bad_set_density_bound_quality`
+     を移した。
+   - `ChernoffQualityDensity`
+     は
+     `ChernoffDensity`
+     を import して、
+     quality 用 Λ 構成と density specialization の owner を持つ構成にした。
+   - `ABC037.lean`
+     は全文を縮小し、
+     `import DkMath.ABC.ChernoffQualityDensity`
+     と
+     `#print`
+     だけを持つ compatibility relay にした。
+   - downstream として
+     `ABC039.lean`
+     の import を
+     `ABC037`
+     から
+     `ChernoffQualityDensity`
+     へ切り替えた。
+   - ドキュメント
+     `check-relay-lean.md`
+     に
+     `ABC034` / `ABC035` / `ABC036` / `ABC037`
+     の移設先を追記した。
+3. 結論:
+   - Chernoff 帯は
+     `ChernoffBasic -> ChernoffSinglePrime -> ChernoffUnionBound -> ChernoffDensity -> ChernoffQualityDensity`
+     という多段 thematic band に整理できた。
+   - `ABC037`
+     も
+     owner file
+     ではなく relay file となり、
+     `ABC039`
+     まで direct owner import に寄せられた。
+   - relay 追跡表も、
+     `History`
+     や
+     `refact-changed`
+     とは別に
+     「どの番号 file がどの識別子付き file へ上がったか」
+     を機械的に辿れる状態へ入り始めた。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffQualityDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC037`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC039`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 次の課題:
+   - `ABC038`
+     側の quality / bridge 補題について、
+     `ChernoffQualityDensity`
+     とは別の owner
+     にさらに切り出せる部分があるかを点検する。
+   - `check-relay-lean.md`
+     を今後の各サイクルで継続更新し、
+     relay 化済み file の移設先を漏れなく記録する。
