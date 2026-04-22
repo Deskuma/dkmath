@@ -4,10 +4,12 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-
-import DkMath.ABC.ABC039
+import DkMath.ABC.ChernoffQualityFinal
 
 #print "file: DkMath.ABC.ABC040"
+
+-- ※これは `ABC039.lean` 以降の新規実装分を書く予定のファイル。
+-- 特に新規性の定理がなければ、将来的に不要となる。
 
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false

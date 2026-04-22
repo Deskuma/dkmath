@@ -730,3 +730,2317 @@ Archive
      `Core`
      に残る補助 namespace は、
      将来的に専用 module へ切り出す候補として整理する。
+
+### 日時: 2026/04/21 17:53 JST (`ABC連番` チェイン切断パターンのメモ化)
+
+1. 目的:
+   - 連番 chain の hidden import 探索を続けるだけでなく、
+     どの種類の依存が切りやすいかを文書として固定する。
+   - 次サイクルで
+     「どこから切るか」
+     を迷わないよう、
+     観測済みパターンと具体候補を 1 枚へまとめる。
+2. 実施:
+   - `ABC001`-`ABC040`
+     の import 列を機械抽出し、
+     直列 predecessor 以外の direct import がどこに現れているかを調べた。
+   - その結果、
+     既に serial chain を横切っている seed として
+     `Square`,
+     `RatioBound`,
+     `Core`,
+     `CountPowersDividing2n1`,
+     `PadicValNat`,
+     `ABC025_bound2`
+     を確認した。
+   - `ABC090.lean`
+     に comment block 内の残骸があることも確認したが、
+     これは chain-cut 本体とは別件の cleanup 候補として分離した。
+   - 新規文書
+     `chain-cut-patterns-001.md`
+     を作成し、
+     次の 3 パターンを整理した。
+     - owner import 露出型
+     - shared utility 横刺し型
+     - thin base + thematic band 型
+   - あわせて具体候補として
+     `RpowExtras`
+     専用 module 化、
+     `ABC024`-`ABC028`
+     の utility-first 化、
+     `ABC001`-`ABC003`
+     の base seam 固定
+     を記録した。
+3. 結論:
+   - `ABC連番`
+     の直列 chain は一気に壊すより、
+     すでに direct import が現れている箇所を seam として使うのが妥当である。
+   - 特に
+     `ABC009`
+     の
+     `RpowExtras`,
+     `ABC024`-`ABC028`
+     の p-adic utility 群、
+     `ABC001`-`ABC003`
+     の base band
+     が、次に切りやすい帯として見えた。
+4. 検証:
+   - 今回は調査と文書化が中心であり、
+     追加 build は行っていない。
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `Main`
+     build の hidden import 探索を継続しつつ、
+     文書で第一候補に挙げた
+     `RpowExtras`
+     専用 module 化を実際に試す。
+   - その後に、
+     `ABC024`-`ABC028`
+     を utility-first に寄せられるかを局所検証する。
+
+### 日時: 2026/04/21 17:54 JST (`Main` build の hidden import 探索が一巡し、公開入口まで再通過)
+
+1. 目的:
+   - 直前サイクルで露出した hidden import 修正が、
+     本当に
+     `DkMath.ABC.Main`
+     まで効いているかを確認する。
+2. 実施:
+   - 継続していた
+     `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+     の完走を確認した。
+   - build ログを確認し、
+     `ABC010`-`ABC040`, `ABC090`, `ABC038Bridge`
+     まで再通過していることを確認した。
+3. 結論:
+   - `coprime_succ`
+     系と
+     `RpowExtras`
+     系の explicit owner import 修正により、
+     現時点の
+     `Main`
+     build は再び通る状態へ戻った。
+   - hidden import 探索は、
+     public entry を壊さずに進められることを確認した。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - 次サイクルは予定どおり、
+     `RpowExtras`
+     の専用 module 化を first cut として試す。
+   - その後、
+     `ABC024`-`ABC028`
+     の utility-first 化候補を点検する。
+
+### 日時: 2026/04/21 18:00 JST (`RpowExtras` を専用 module 化し、`ABC009 -> Core` 依存を切断)
+
+1. 目的:
+   - `chain-cut-patterns-001.md`
+     で first cut 候補にした
+     `RpowExtras`
+     専用 module 化を実際に試す。
+   - これにより
+     `ABC009`
+     が
+     `Core`
+     を direct import しなくて済むかを確認する。
+2. 実施:
+   - 新規 file
+     `DkMath/ABC/RpowExtras.lean`
+     を作成し、
+     `RpowExtras.rpow_mul_nat`,
+     `RpowExtras.one_lt_rpow_two`,
+     `RpowExtras.denom_pos`
+     を移設した。
+   - `ABC/Core.lean`
+     に
+     `import DkMath.ABC.RpowExtras`
+     を追加し、
+     旧来の
+     `namespace RpowExtras`
+     ブロックを削除した。
+   - `ABC009.lean`
+     の import を
+     `DkMath.ABC.Core`
+     から
+     `DkMath.ABC.RpowExtras`
+     へ置き換えた。
+   - これにより
+     `ABC009`
+     は middle-band のためだけに
+     `Core`
+     を引く必要がなくなった。
+3. 結論:
+   - `RpowExtras`
+     は
+     `Core`
+     の catch-all から切り出せる独立 utility であることを確認した。
+   - `ABC009 -> Core`
+     依存を 1 本切れたので、
+     chain-cut memo に書いた
+     owner import 露出型
+     が実際に有効なことを示せた。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.RpowExtras`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Core`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC009`
+   - 以上は成功した。
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+     は実行継続中で、
+     本記録時点では新しい `error:` は観測されていない。
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `Main`
+     build の完走を確認し、
+     この切断が public entry まで波及して問題ないことを確定する。
+   - 次の chain-cut 候補として、
+     `ABC024`-`ABC028`
+     の utility-first 化を試す。
+
+### 日時: 2026/04/21 21:05 JST (`ABC024` の empty relay import を外し、`ABC024`-`ABC028` 帯の first cut を確認)
+
+1. 目的:
+   - `chain-cut-patterns-001.md`
+     で候補化していた
+     `ABC024`-`ABC028`
+     の utility-first 化を小さく試す。
+   - 特に
+     `ABC024`
+     が実質 empty relay の
+     `ABC023`
+     を踏まずに、
+     owner import へ直接寄せられるかを確認する。
+2. 実施:
+   - `ABC023.lean`
+     を再確認し、
+     実体が
+     `import DkMath.ABC.ABC022`
+     だけの empty relay であることを確認した。
+   - `ABC024.lean`
+     の import を
+     `import DkMath.ABC.ABC023`
+     から、
+     `import DkMath.ABC.ABC022`,
+     `import DkMath.ABC.RatioBound`,
+     `import DkMath.ABC.CountPowersDividing2n1`
+     へ置換した。
+   - `ABC024`
+     内で実際に使っているのが
+     `rpow_layer_cake`,
+     `natCeil_le_add_one_real`,
+     `count_powers_dividing_2n1`
+     であることを検索で確認し、
+     内容本体は変更しなかった。
+3. 結論:
+   - `ABC024`
+     は serial predecessor に依存せず、
+     layer-cake / ceil / counting の owner を直接 import する形へ切り替え可能だった。
+   - これにより
+     `ABC024`-`ABC028`
+     帯について、
+     utility-first cut
+     が抽象案ではなく実際に効くことを示せた。
+   - 次は
+     `ABC025`
+     以降で、
+     `ABC024`
+     由来の layer-cake 部と
+     `ABC025`
+     自身の telescoping kernel をどう分離するかを見る段階である。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC024`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC025`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC028`
+   - 以上は成功した。
+   - 既知の `ABC021.lean` の `sorry` 警告のみ replay された。
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `ABC025`
+     から
+     `ABC024`
+     依存をどこまで utility import 化できるかを棚卸しする。
+   - `ABC024`-`ABC028`
+     帯の public seed を
+     `ABC025`
+     に置くべきか、
+     あるいは counting / layer-cake を別 utility に逃がすべきかを見極める。
+
+### 日時: 2026/04/22 00:24 JST (`ABC025 -> ABC024` serial edge を切り、`Main` build まで hidden import を追跡)
+
+1. 目的:
+   - 前サイクルで露出した seam をさらに進め、
+     `ABC025`
+     が本当に
+     `ABC024`
+     を必要としているかを確定する。
+   - あわせて
+     `Main`
+     build を回し、
+     次の hidden import 停止点まで owner import 化を進める。
+2. 実施:
+   - `ABC025.lean`
+     を検索し、
+     `ABC024`
+     由来の symbol を使っていないことを確認した上で
+     `import DkMath.ABC.ABC024`
+     を削除した。
+   - `ABC028`
+     build で
+     `markov_card_bound`
+     の hidden import が露出したため、
+     owner である
+     `DkMath.ABC.ABC019`
+     を
+     `ABC028.lean`
+     に direct import した。
+   - 続く
+     `Main`
+     build では
+     `ABC033`
+     が停止点となり、
+     `three_pow_ge_linear`
+     の owner
+     `DkMath.ABC.Core`
+     と
+     `rpow_layer_cake`
+     の owner
+     `DkMath.ABC.ABC022`
+     を
+     `ABC033.lean`
+     に追加した。
+3. 結論:
+   - `ABC025 -> ABC024`
+     の serial edge は不要だった。
+   - `ABC024`-`ABC028`
+     帯では、
+     predecessor chain を切ったあとも
+     hidden import を owner import に置き換えていけば
+     public chain まで回復できることを確認した。
+   - さらに
+     `ABC031`-`ABC040`
+     帯でも
+     `ABC033`
+     で同型の hidden import が露出したため、
+     thematic band ごとの owner import 整理という方針が補強された。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC025`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC028`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC033`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 失敗事例:
+   - `ABC028`
+     の first build では
+     `markov_card_bound`
+     未解決で停止した。
+   - `Main`
+     の first build では
+     `ABC033`
+     に
+     `three_pow_ge_linear`,
+     `rpow_layer_cake`
+     の hidden import が露出した。
+   - いずれも owner import の追加で解消した。
+6. 次の課題:
+   - `ABC024`-`ABC028`
+     帯について、
+     `ABC025`
+     自身が抱えている telescoping / counting kernel を
+     さらに utility 化できるかを点検する。
+   - `ABC031`-`ABC040`
+     帯では、
+     `ABC033`
+     を起点に
+     `Core`
+     / `ABC022`
+     由来の utility を direct import へ寄せる方針で
+     次の seam を探す。
+
+### 日時: 2026/04/22 04:51 JST (`ABC033 -> ABC032` serial edge を切り、実依存を `ABC025` へ戻した)
+
+1. 目的:
+   - `ABC031`-`ABC040`
+     帯の次の seam として、
+     `ABC033`
+     が本当に
+     `ABC032`
+     を必要としているかを確定する。
+   - 直前 file 依存ではなく、
+     実際の thematic kernel owner へ寄せられるかを確認する。
+2. 実施:
+   - `ABC032.lean`
+     の定義を確認し、
+     `abc_main` / `K_eps`
+     しか持っていないことを確認した。
+   - `ABC033.lean`
+     を検索し、
+     それらを使っていないことを確認して
+     `import DkMath.ABC.ABC032`
+     を削除した。
+   - first build では
+     `ABC.Telescoping.sum_pow_padicValNat_le_geom_log2_div_log3`
+     未解決で停止したため、
+     owner を検索して
+     `DkMath.ABC.ABC025`
+     にあることを確認し、
+     `ABC033.lean`
+     に
+     `import DkMath.ABC.ABC025`
+     を追加した。
+   - 既存の
+     `ABC022`
+     / `Core`
+     explicit import と合わせて、
+     `ABC033`
+     を owner import 群で閉じる形に整理した。
+3. 結論:
+   - `ABC033 -> ABC032`
+     の serial edge は不要だった。
+   - `ABC033`
+     は直前の
+     `ABC032`
+     ではなく、
+     `ABC025`
+     の telescoping kernel と
+     `ABC022`
+     / `Core`
+     utility に依存していた。
+   - これは
+     `ABC031`-`ABC040`
+     帯に
+     chain drift
+     があることを示しており、
+     predecessor chain より
+     thematic kernel import
+     を優先すべきだという方針をさらに補強した。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC033`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 失敗事例:
+   - `ABC033`
+     の first build では
+     `ABC.Telescoping.sum_pow_padicValNat_le_geom_log2_div_log3`
+     未解決で停止した。
+   - これは
+     `ABC032`
+     に依存していたのではなく、
+     `ABC025`
+     の transitive import に依存していたことを示していた。
+   - owner import を
+     `ABC025`
+     に差し替えることで解消した。
+6. 次の課題:
+   - `ABC034` 以降についても、
+     本当に直前 file の API だけを使っているのか、
+     あるいは
+     `ABC033`
+     やさらに前の kernel に drift しているのかを点検する。
+   - 可能なら
+     `ABC033`
+     周辺の Chernoff kernel を thin utility module に再配置する構想も検討する。
+
+### 日時: 2026/04/22 05:09 JST (`ABC090 -> ABC040` empty relay edge を切り、最小環境 import に落とした)
+
+1. 目的:
+   - `ABC031`-`ABC040`
+     帯の整理と並行して、
+     その先で public chain を受けている
+     `ABC090`
+     の import が本当に必要かを確認する。
+   - 空 shell file が serial relay を引いているだけなら、
+     最小環境 import へ落として chain を短くする。
+2. 実施:
+   - `ABC090.lean`
+     を確認し、
+     実質的に空の shell file であることを確認した。
+   - top-level の
+     `import DkMath.ABC.ABC040`
+     を削除した。
+   - first build では、
+     option / namespace 解決に必要な環境まで失われたため停止した。
+   - そのため
+     `ABC040`
+     の代わりに最小環境として
+     `import DkMath.ABC.Basic`
+     を追加した。
+3. 結論:
+   - `ABC090 -> ABC040`
+     の serial edge は不要だった。
+   - `ABC090`
+     は thematic kernel にも依存しておらず、
+     最小環境 import だけで十分な shell file だった。
+   - これは
+     empty relay
+     を経由しているだけの file 群について、
+     `ABC.Basic`
+     への縮約という別種の cut が有効なことを示している。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC090`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 失敗事例:
+   - `ABC090`
+     から import を完全に外した first build では、
+     `linter.style.*`,
+     `BigOperators`,
+     `Real`,
+     `MeasureTheory`
+     などの環境が未解決となった。
+   - これは
+     `ABC040`
+     が theorem owner ではなく、
+     単に環境提供の役を transitively 果たしていたことを示していた。
+   - `ABC.Basic`
+     を direct import することで解消した。
+6. 次の課題:
+   - `ABC034`-`ABC039`
+     の実依存が
+     truly serial
+     なのか、
+     あるいは
+     `ABC033`
+     / `ABC025`
+     / utility 群への drift を含んでいるのかをさらに点検する。
+   - あわせて
+     `ABC040`
+     自体が空 relay のまま残るべきか、
+     あるいは別整理対象として扱うかを判断する。
+
+### 日時: 2026/04/22 05:49 JST (`ABC038 -> ABC037` serial edge を切り、`ABC039` の branch 依存を露出)
+
+1. 目的:
+   - `ABC034`-`ABC039`
+     帯が本当に直列なのかをさらに確認する。
+   - 特に
+     `ABC038`
+     が
+     `ABC037`
+     を必要としているのか、
+     それとももっと前の owner に直接依存しているだけなのかを切り分ける。
+2. 実施:
+   - `ABC038.lean`
+     を検索し、
+     `bad_set_density_bound_quality`
+     や
+     `construct_HΛ_for_quality`
+     を使っていないことを確認した。
+   - `ABC038.lean`
+     の import を
+     `DkMath.ABC.ABC037`
+     から
+     `DkMath.ABC.ABC036`
+     へ置換した。
+   - `ABC038`
+     単体 build は成功した。
+   - 続く
+     `ABC039`
+     build では
+     `bad_set_density_bound_quality`
+     未解決で停止したため、
+     owner を確認して
+     `DkMath.ABC.ABC037`
+     にあることを特定し、
+     `ABC039.lean`
+     に direct import を追加した。
+3. 結論:
+   - `ABC037 -> ABC038`
+     の serial edge は不要だった。
+   - 一方で
+     `ABC039`
+     は
+     `ABC038`
+     の quality 側 API と、
+     `ABC037`
+     の density 側 API の両方を使っていた。
+   - したがって
+     `ABC031`-`ABC040`
+     帯は一本の predecessor chain ではなく、
+     quality branch と density branch が途中で分岐して再合流する構造だと分かった。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC038`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC039`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 失敗事例:
+   - `ABC039`
+     の first build では
+     `bad_set_density_bound_quality`
+     未解決で停止した。
+   - これは
+     `ABC038`
+     を通して transitively 見えていた
+     `ABC037`
+     owner の symbol だった。
+   - `ABC039`
+     に
+     `import DkMath.ABC.ABC037`
+     を追加することで解消した。
+6. 次の課題:
+   - `ABC034`-`ABC037`
+     の前半についても、
+     直前 file 依存が本物か、
+     それとも
+     `ABC033`
+     owner 群への drift を含むかを点検する。
+   - `quality branch` と `density branch` を意識した
+     thin utility band
+     の再配置案を検討する。
+
+### 日時: 2026/04/22 06:18 JST (`ABC035 -> ABC036` serial edge を切り、single-prime / union-bound 分岐を確認)
+
+1. 目的:
+   - `ABC034`-`ABC037`
+     前半の直列 import が本物かを確認する。
+   - 特に
+     `ABC036`
+     が
+     `ABC035`
+     の union-bound layer を必要としているのか、
+     それとも
+     `ABC034`
+     の single-prime Chernoff kernel にだけ依存しているのかを切り分ける。
+2. 実施:
+   - `ABC036.lean`
+     を検索し、
+     `chernoff_single_prime_explicit`,
+     `union_bound_chernoff`,
+     `union_bound_chernoff_pow`
+     を使っていないことを確認した。
+   - 一方で
+     `chernoff_single_prime_uniform_rpow`
+     は直接使っていることを確認した。
+   - `ABC036.lean`
+     の import を
+     `DkMath.ABC.ABC035`
+     から
+     `DkMath.ABC.ABC034`
+     へ置換した。
+3. 結論:
+   - `ABC035 -> ABC036`
+     の serial edge は不要だった。
+   - `ABC034`
+     は
+     single-prime Chernoff kernel の owner として機能し、
+     `ABC035`
+     はその上に乗る union-bound branch だと見なすのが自然だと分かった。
+   - したがって
+     `ABC031`-`ABC040`
+     帯は
+     density / quality
+     だけでなく、
+     `ABC034`
+     を起点にした
+     single-prime branch と union-bound branch
+     も区別して見るべき構造になっている。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC036`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC037`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 次の課題:
+   - `ABC034`
+     自体の owner をさらに分解できるか、
+     つまり
+     `ABC033`
+     から single-prime Chernoff kernel を薄い utility module として切り出せるかを検討する。
+   - `ABC035`
+     が
+     `ABC034`
+     の上に乗る
+     union-bound branch
+     として独立した seed file になれるかを点検する。
+
+### 日時: 2026/04/22 06:58 JST (`ABC033` の Chernoff kernel を utility module 化)
+
+1. 目的:
+   - `ABC034`
+     が依存している
+     single-prime Chernoff kernel
+     を、
+     番号付き file
+     `ABC033`
+     から切り離して thematic utility に落とす。
+   - これにより
+     `ABC033 -> ABC034`
+     の serial edge を切り、
+     `ABC034`
+     帯の seed を
+     non-numbered owner module
+     に載せ替える。
+2. 実施:
+   - `ABC033.lean`
+     の内容を新 file
+     `DkMath.ABC.ChernoffSinglePrime`
+     として切り出した。
+   - 旧
+     `ABC033.lean`
+     は
+     `import DkMath.ABC.ChernoffSinglePrime`
+     のみを持つ
+     compatibility relay
+     に縮小した。
+   - `ABC034.lean`
+     の import を
+     `DkMath.ABC.ABC033`
+     から
+     `DkMath.ABC.ChernoffSinglePrime`
+     へ置換した。
+   - first build では
+     relay 化した
+     `ABC033.lean`
+     の header comment が壊れて失敗したため、
+     comment delimiter を修正して再 build した。
+3. 結論:
+   - `ABC033 -> ABC034`
+     の serial edge は不要だった。
+   - `ABC033`
+     は theorem owner というより、
+     Chernoff single-prime kernel の実装コンテナだったので、
+     非連番 utility module 化するのが依存構造に合っていた。
+   - この帯では
+     `single-prime branch`
+     を番号付き predecessor chain から切り出し、
+     thematic utility
+     へ昇格させるパターンが有効だと確認できた。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffSinglePrime`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC033`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC034`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 失敗事例:
+   - relay 化した
+     `ABC033.lean`
+     の comment header が
+     `/- ... -/`
+     ではなく
+     `- ... -/`
+     に崩れ、
+     `unexpected token '-'`
+     で停止した。
+   - header を修正した後は build が通った。
+6. 次の課題:
+   - `ChernoffSinglePrime`
+     の中で、
+     truly common な
+     notation / constants / Markov lemma
+     と
+     MGF / engine 部分
+     をさらに二層に割れるかを点検する。
+   - `ABC035`
+     以降の union-bound branch が、
+     新 utility owner を前提に
+     さらに薄くなるかを確かめる。
+
+### 日時: 2026/04/22 06:58 JST (`ChernoffSinglePrime` を `basic + engine` に分割)
+
+1. 目的:
+   - utility 化した
+     `ChernoffSinglePrime`
+     の中をさらに薄くし、
+     notation/constants/Markov
+     と
+     MGF / engine
+     の owner を分ける。
+   - これにより
+     Chernoff 系 utility の再利用境界を明確にし、
+     `ABC034` / `ABC035` / `ABC036`
+     以降が
+     どこまで basic layer だけで済むかを見やすくする。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.ChernoffBasic`
+     を追加した。
+   - ここへ
+     `Vp`, `Excess`, `pge3`, `const_C`, `const_X`, `primesUpTo`,
+     `prime_mem_primesUpTo_of_dvd_odd`,
+     `card_filter_le_exp_markov`,
+     `t_bound_log2_div_log3`,
+     `absorb_constant_4_to_5`
+     などを移した。
+   - `ChernoffSinglePrime.lean`
+     は
+     `ChernoffBasic`
+     を import する形にして、
+     `mgf_padic_excess_bound_uniform`,
+     `mgf_padic_excess_bound_explicit`,
+     `mgf_padic_excess_bound`,
+     `chernoff_engine`
+     のみを保持する file へ縮小した。
+3. 結論:
+   - `ChernoffSinglePrime`
+     は
+     MGF / engine owner、
+     `ChernoffBasic`
+     は
+     notation/constants/Markov owner
+     として分離できた。
+   - したがって
+     `thin base + thematic utility`
+     の整理は、
+     `ABC0**`
+     から utility module を起こす段だけでなく、
+     utility module 自体を
+     `basic + engine`
+     に分解する段まで進められると確認できた。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffSinglePrime`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC034`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 途中で
+     `ChernoffBasic`
+     の style warning を 2 箇所修正し、
+     最後に
+     `DkMath.ABC.ChernoffBasic`
+     を再 build して warning が消えたことも確認した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 次の課題:
+   - `ABC034`
+     がまだ local に持っている
+     single-prime Chernoff proof 本体を、
+     `ChernoffSinglePrime`
+     の convenience theorem としてどこまで吸い上げられるかを検討する。
+   - `ABC035`
+     の union-bound branch についても、
+     `ChernoffBasic`
+     への依存と
+     `ChernoffSinglePrime`
+     への依存を切り分け、
+     branch の境界をさらに明確化する。
+
+### 日時: 2026/04/22 07:00 JST (`ABC034` の single-prime convenience 層を utility owner へ移設)
+
+1. 目的:
+   - `ChernoffBasic`
+     と
+     `ChernoffSinglePrime`
+     の二層化を受けて、
+     まだ
+     `ABC034`
+     に残っている
+     single-prime convenience theorem
+     を owner 側へ吸い上げる。
+   - これにより
+     `ABC034`
+     を
+     relay file
+     へ降格し、
+     numbered chain
+     ではなく
+     thematic utility
+     が convenience 層まで持つ形を確定させる。
+2. 実施:
+   - `DkMath.ABC.ChernoffSinglePrime`
+     に
+     `chernoff_single_prime_uniform`
+     と
+     `chernoff_single_prime_uniform_rpow`
+     を移した。
+   - 各 proof で局所的に書いていた
+     `4 -> 5`
+     の吸収は、
+     すでに
+     `ChernoffBasic`
+     にある
+     `absorb_constant_4_to_5`
+     を使う形へ整理した。
+   - `ABC034.lean`
+     は全文を縮小し、
+     `import DkMath.ABC.ChernoffSinglePrime`
+     と
+     `#print`
+     だけを持つ compatibility relay にした。
+3. 結論:
+   - single-prime branch の convenience 層は
+     `ABC034`
+     ではなく
+     `ChernoffSinglePrime`
+     が owner になった。
+   - したがって
+     `ABC034`
+     は
+     branch seed
+     ですらなく、
+     互換入口としてだけ残すのが自然だと確認できた。
+   - これは
+     `ABC0**`
+     の chain cut が、
+     import 置換だけでなく
+     theorem owner の移設と relay 化まで進められることを示す。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC034`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC035`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC036`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - `Main`
+     build では
+     `ABC038Bridge`
+     まで含めて通ることを確認した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 次の課題:
+   - `ABC035`
+     の union-bound convenience 層も、
+     `ChernoffSinglePrime`
+     と同様に
+     thematic owner
+     へ寄せられるかを点検する。
+   - `ABC034` / `ABC035` / `ABC036`
+     の branch 分離を踏まえ、
+     Chernoff 系帯の
+     convenience theorem
+     をどこまで非連番 utility へ吸い上げられるかを整理する。
+
+### 日時: 2026/04/22 07:08 JST (`ABC035` の union-bound convenience 層を utility owner へ移設)
+
+1. 目的:
+   - `ABC034`
+     を relay 化した流れを一段進め、
+     `ABC035`
+     に残っている
+     explicit specialization / union-bound convenience 層も
+     非連番 utility owner
+     へ移す。
+   - これにより
+     Chernoff 帯を
+     `basic -> single-prime -> union-bound`
+     の thematic band として見える形にし、
+     `ABC033` / `ABC034` / `ABC035`
+     を連続して relay 化する。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.ChernoffUnionBound`
+     を追加した。
+   - ここへ
+     `chernoff_single_prime_explicit'`,
+     `chernoff_single_prime_explicit`,
+     `union_bound_chernoff`,
+     `union_bound_chernoff'`,
+     `union_bound_chernoff_pow`,
+     `union_bound_chernoff_pow'`
+     を移した。
+   - `ChernoffUnionBound`
+     は
+     `ChernoffSinglePrime`
+     を import して、
+     explicit specialization と union-bound 層の owner を持つ構成にした。
+   - `ABC035.lean`
+     は全文を縮小し、
+     `import DkMath.ABC.ChernoffUnionBound`
+     と
+     `#print`
+     だけを持つ compatibility relay にした。
+3. 結論:
+   - Chernoff 帯の
+     union-bound branch
+     も
+     番号 file
+     ではなく
+     thematic utility
+     が owner になる形に整理できた。
+   - これにより
+     `ABC033`, `ABC034`, `ABC035`
+     はいずれも
+     utility owner
+     に接続する relay として扱える。
+   - `thin base + thematic utility`
+     のパターンは、
+     単発の切り出しではなく、
+     branch を上へ登りながら連鎖的に適用できると確認できた。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffUnionBound`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC035`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 次の課題:
+   - `ABC036`
+     以降の
+     density / quality branch
+     についても、
+     `ChernoffUnionBound`
+     を下位 owner としてさらに utility 化できるかを点検する。
+   - とくに
+     `bad_set_density_bound_param`
+     が
+     `ABC036`
+     に残るべきか、
+     それとも
+     density utility
+     として切り出せるかを調べる。
+
+### 日時: 2026/04/22 07:16 JST (`ABC036` の density 層を utility owner へ移設)
+
+1. 目的:
+   - `ABC033` / `ABC034` / `ABC035`
+     に続いて、
+     density branch
+     の owner も
+     番号 file
+     から外す。
+   - `Bad_ε`
+     と
+     `bad_set_density_bound_param`
+     を中心とする層を
+     非連番 utility
+     に昇格させ、
+     downstream を
+     relay 経由ではなく
+     direct owner import
+     に寄せる。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.ChernoffDensity`
+     を追加した。
+   - ここへ
+     `Bad_ε`,
+     `bad_iff_exists_excess`,
+     `exp_one_gt_one`,
+     `decidable_Bad_ε`,
+     `p_lt_X_to_p_lt_X_succ`,
+     `bad_set_density_bound_param`,
+     `bad_set_density_bound'`
+     を移した。
+   - `ChernoffDensity`
+     は
+     `ChernoffUnionBound`
+     を import して、
+     bad-set / density 層の owner を持つ構成にした。
+   - `ABC036.lean`
+     は全文を縮小し、
+     `import DkMath.ABC.ChernoffDensity`
+     と
+     `#print`
+     だけを持つ compatibility relay にした。
+   - downstream として
+     `ABC037.lean`
+     と
+     `ABC038.lean`
+     の import を
+     `ABC036`
+     から
+     `ChernoffDensity`
+     へ切り替えた。
+3. 結論:
+   - density branch も
+     `ChernoffBasic -> ChernoffSinglePrime -> ChernoffUnionBound -> ChernoffDensity`
+     という thematic band の一部として整理できた。
+   - これにより
+     `ABC036`
+     も
+     owner file
+     ではなく relay file になった。
+   - さらに
+     chain cut
+     は relay 化だけでなく、
+     downstream を
+     direct owner import
+     へ順次付け替える段まで含めて進められると確認できた。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC036`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC037`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC038`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 次の課題:
+   - `ABC037`
+     に残っている
+     quality-specific density 補題
+     を、
+     `ChernoffDensity`
+     の上位 utility
+     としてさらに分離できるかを点検する。
+   - `ABC038`
+     の
+     quality / bridge branch
+     についても、
+     density owner
+     と
+     quality owner
+     の境界をどこまで direct import で明示できるかを整理する。
+
+### 日時: 2026/04/22 07:24 JST (`ABC037` の quality-specific density 層を utility owner へ移設)
+
+1. 目的:
+   - `ABC037`
+     に残っている
+     quality-specific density 補題を、
+     `ChernoffDensity`
+     の上位層として分離する。
+   - あわせて
+     relay 化した番号 file
+     の移設先を追跡する
+     `check-relay-lean.md`
+     を埋め始め、
+     将来の削除判断に備える。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.ChernoffQualityDensity`
+     を追加した。
+   - ここへ
+     `construct_HΛ_for_quality`
+     と
+     `bad_set_density_bound_quality`
+     を移した。
+   - `ChernoffQualityDensity`
+     は
+     `ChernoffDensity`
+     を import して、
+     quality 用 Λ 構成と density specialization の owner を持つ構成にした。
+   - `ABC037.lean`
+     は全文を縮小し、
+     `import DkMath.ABC.ChernoffQualityDensity`
+     と
+     `#print`
+     だけを持つ compatibility relay にした。
+   - downstream として
+     `ABC039.lean`
+     の import を
+     `ABC037`
+     から
+     `ChernoffQualityDensity`
+     へ切り替えた。
+   - ドキュメント
+     `check-relay-lean.md`
+     に
+     `ABC034` / `ABC035` / `ABC036` / `ABC037`
+     の移設先を追記した。
+3. 結論:
+   - Chernoff 帯は
+     `ChernoffBasic -> ChernoffSinglePrime -> ChernoffUnionBound -> ChernoffDensity -> ChernoffQualityDensity`
+     という多段 thematic band に整理できた。
+   - `ABC037`
+     も
+     owner file
+     ではなく relay file となり、
+     `ABC039`
+     まで direct owner import に寄せられた。
+   - relay 追跡表も、
+     `History`
+     や
+     `refact-changed`
+     とは別に
+     「どの番号 file がどの識別子付き file へ上がったか」
+     を機械的に辿れる状態へ入り始めた。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffQualityDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC037`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC039`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 次の課題:
+   - `ABC038`
+     側の quality / bridge 補題について、
+     `ChernoffQualityDensity`
+     とは別の owner
+     にさらに切り出せる部分があるかを点検する。
+   - `check-relay-lean.md`
+     を今後の各サイクルで継続更新し、
+     relay 化済み file の移設先を漏れなく記録する。
+
+### 日時: 2026/04/22 07:46 JST (`ABC038` / `ABC039` の quality 終端を識別子付き owner へ昇格)
+
+1. 目的:
+   - `ABC038`
+     に残っていた
+     quality / bridge 層を
+     thematic owner
+     へ切り出す。
+   - 続けて
+     `ABC039`
+     の final quality theorem 群も
+     識別子付き file
+     へ昇格し、
+     serial tail
+     を relay / shell だけに近づける。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.ChernoffQualityBridge`
+     を追加し、
+     `abc_c_pos`,
+     `Excess_ABC`,
+     `Bad_ε_ABC`,
+     `not_bad_abc_implies_vp_bound`,
+     `quality_le_of_not_bad_with_tail`,
+     `tailbound_of_log_bound`,
+     `quality_le_of_not_bad_with_log`
+     など
+     `ABC038`
+     の quality / bridge 補題群を移した。
+   - `ABC038.lean`
+     は
+     `ChernoffQualityBridge`
+     を import する relay に縮小した。
+   - downstream として
+     `ABC039.lean`
+     と
+     `ABC038Bridge.lean`
+     の import を
+     `ABC038`
+     から
+     `ChernoffQualityBridge`
+     へ切り替えた。
+   - さらに新 file
+     `DkMath.ABC.ChernoffQualityFinal`
+     を追加し、
+     `twoTail_log_bound_of_not_bad_eps`,
+     `twoTail_log_bound_of_not_bad_eps_budget`,
+     `abc_quality_pointwise`,
+     `abc_quality_density`,
+     `abc_quality_hybrid`
+     を
+     `ABC039`
+     から移した。
+   - `ABC039.lean`
+     は
+     `ChernoffQualityFinal`
+     を import する relay に縮小した。
+   - `ABC040.lean`
+     も
+     `ABC039`
+     ではなく
+     `ChernoffQualityFinal`
+     を direct import する shell に整理した。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC038 -> ChernoffQualityBridge`
+     と
+     `ABC039 -> ChernoffQualityFinal`
+     を記録し、
+     `ABC040`
+     の参照先も明記した。
+3. 結論:
+   - Chernoff 帯は
+     `ChernoffBasic -> ChernoffSinglePrime -> ChernoffUnionBound -> ChernoffDensity -> ChernoffQualityDensity -> ChernoffQualityBridge -> ChernoffQualityFinal`
+     という thematic chain に整理できた。
+   - `ABC038`
+     と
+     `ABC039`
+     は owner file ではなく relay file になり、
+     `ABC040`
+     は final owner 直参照の shell に寄った。
+   - これで
+     quality branch
+     の終端にも
+     「番号 file ではなく識別子付き file」
+     の方針を適用できることが確認できた。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffQualityBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC038`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC039`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC038Bridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffQualityFinal`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC040`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告だけ replay された。
+5. 次の課題:
+   - `ABC040+`
+     側に本当に owner として残すべき中身があるのか、
+     それとも shell / public entry だけなのかを見極める。
+   - 文書側でも
+     `ABC038`-`ABC040`
+     の旧番号参照を、
+     可能な範囲で
+     `ChernoffQualityBridge`
+     / `ChernoffQualityFinal`
+     へ言い換えていく。
+
+### 日時: 2026/04/22 08:02 JST (`ABC032` の global main theorem 層を識別子付き owner へ昇格)
+
+1. 目的:
+   - `ABC032`
+     に残っていた
+     global final theorem 層を、
+     番号 file
+     ではなく
+     識別子付き owner file
+     に移す。
+   - あわせて
+     `DkMath.ABC.Main`
+     が
+     `abc_main`
+     系の named owner を import する形へ寄せる。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.ABCMainTheorem`
+     を追加した。
+   - ここへ
+     `K_eps`,
+     `abc_main_axiom`,
+     `abc_main`
+     を移した。
+   - `ABC032.lean`
+     は
+     `import DkMath.ABC.ABCMainTheorem`
+     だけを持つ compatibility relay に縮小した。
+   - `DkMath.ABC.Main`
+     には
+     `import DkMath.ABC.ABCMainTheorem`
+     を追加し、
+     public entry
+     から
+     global final theorem owner
+     に直接届く導線を作った。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC032 -> ABCMainTheorem`
+     を追記した。
+3. 結論:
+   - `abc_main`
+     のような最終大域定理も、
+     `ABC0**`
+     ではなく
+     theorem-named file
+     へ昇格できることを確認した。
+   - `DkMath.ABC.Main`
+     は
+     `Bridge`
+     / `ABC038Bridge`
+     に加えて
+     `ABCMainTheorem`
+     を import する形となり、
+     理想形
+     「`Main` が各種最終定理 owner を集約する」
+     方向へ一歩進んだ。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABCMainTheorem`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC032`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告だけ replay された。
+5. 次の課題:
+   - `ABC031`
+     の adjacent-quality 層を
+     named owner
+     へ昇格できるかを点検する。
+   - その次段として
+     `ABC030`
+     の adjacent Chernoff / density-one utility を
+     thematic owner
+     へ上げられるかを確認する。
+
+### 日時: 2026/04/22 08:16 JST (`ABC031` の adjacent-quality 層を識別子付き owner へ昇格)
+
+1. 目的:
+   - `ABC031`
+     に残っている
+     adjacent-quality の eventual theorem 層を、
+     番号 file
+     ではなく
+     theorem-named file
+     へ持ち上げる。
+   - あわせて
+     `ABCMainTheorem`
+     側に残っていた
+     serial predecessor import
+     を落とす。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.AdjacentQuality`
+     を追加した。
+   - ここへ
+     `adjacent_quality_le_density_one`
+     と
+     `adjacent_quality_le_ae_alt`
+     を移した。
+   - `ABC031.lean`
+     は
+     `import DkMath.ABC.AdjacentQuality`
+     だけを持つ compatibility relay に縮小した。
+   - `ABCMainTheorem.lean`
+     は
+     `ABC031`
+     を import するのをやめ、
+     必要最小限の
+     `Rad`
+     import に薄くした。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC031 -> AdjacentQuality`
+     を追記した。
+3. 結論:
+   - adjacent branch も
+     `ABC0**`
+     ではなく
+     named theorem owner
+     に上げられることを確認した。
+   - これにより
+     `ABCMainTheorem`
+     は
+     `ABC031`
+     への serial 依存を持たなくなり、
+     `ABC032`
+     は relay として残っても
+     owner 構造は
+     `AdjacentQuality -> ABCMainTheorem`
+     の形に近づいた。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentQuality`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC031`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABCMainTheorem`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC032`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告だけ replay された。
+5. 次の課題:
+   - `ABC030`
+     の adjacent Chernoff / density-one utility 群を、
+     一つまたは二つの thematic owner に分けて昇格できるかを見る。
+   - あわせて
+     `ABC029`
+     の constants / dyadic helper 層との境界も整理する。
+
+### 日時: 2026/04/23 00:55 JST (`ABC030` の adjacent tail / Chernoff budget 層を識別子付き owner へ昇格)
+
+1. 目的:
+   - adjacent branch の下端に残っている
+     `ABC030`
+     を、
+     番号 file owner
+     ではなく
+     thematic owner
+     へ昇格させる。
+   - あわせて
+     `AdjacentQuality`
+     側の依存を
+     relay 経由ではなく
+     direct owner import
+     に切り替える。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.AdjacentTailDensity`
+     を追加した。
+   - ここへ
+     `union_bound_chernoff_log_rad`
+     `chernoff_single_prime_uniform`
+     `chernoff_single_prime_uniform_easy`
+     `EventuallyChernoffBudgetAdjacentHypothesis`
+     `twoTail_log_bound_adjacent_density_one`
+     を移した。
+   - `ABC030.lean`
+     は
+     `import DkMath.ABC.AdjacentTailDensity`
+     だけを持つ compatibility relay に縮小した。
+   - `AdjacentQuality.lean`
+     は
+     `ABC030`
+     を import するのをやめ、
+     `AdjacentTailDensity`
+     を direct import する形へ寄せた。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC030 -> AdjacentTailDensity`
+     を追記した。
+3. 結論:
+   - adjacent branch は
+     `ABC029`
+     helper 層
+     ->
+     `AdjacentTailDensity`
+     ->
+     `AdjacentQuality`
+     ->
+     `ABCMainTheorem`
+     と読む方が実態に近いと確認できた。
+   - これにより
+     `ABC030`
+     も relay 化され、
+     adjacent branch の owner は
+     番号 file
+     ではなく
+     識別子付き file
+     に寄り始めた。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentTailDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC030`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentQuality`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC031`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告だけ replay された。
+5. 次の課題:
+   - `ABC029`
+     の constants / dyadic helper 層を、
+     一つまたは二つの named utility owner に昇格できるかを見る。
+   - adjacent branch の下端を
+     `ABC029`
+     まで thematic owner 化できれば、
+     relay file 削減の次段が見えやすくなる。
+
+### 日時: 2026/04/23 01:20 JST (`ABC029` の dyadic / analytic Chernoff helper 層を識別子付き owner へ昇格)
+
+1. 目的:
+   - adjacent branch の最下段に残っている
+     `ABC029`
+     を、
+     番号 file owner
+     ではなく
+     thematic utility owner
+     に置き換える。
+   - あわせて
+     `AdjacentTailDensity`
+     側の依存を
+     relay 経由ではなく
+     direct owner import
+     に切り替える。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.ChernoffDyadic`
+     を追加した。
+   - ここへ
+     `chernoff_single_prime_constants`
+     `chernoff_constants_for_finset`
+     `chernoff_sum_crude_bound`
+     `nat_card_le_of_real_le`
+     `chernoff_light_primes_sum_bound`
+     と、
+     `dyadic_block`
+     から
+     `dyadic_block_sum_crude`
+     までの dyadic partition / block-sum helper 群を移した。
+   - `ABC029.lean`
+     は
+     `import DkMath.ABC.ChernoffDyadic`
+     だけを持つ compatibility relay に縮小した。
+   - `AdjacentTailDensity.lean`
+     は
+     `ABC029`
+     を import するのをやめ、
+     `ChernoffDyadic`
+     を direct import する形へ寄せた。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC029 -> ChernoffDyadic`
+     を追記した。
+3. 結論:
+   - adjacent branch は
+     `ChernoffDyadic`
+     ->
+     `AdjacentTailDensity`
+     ->
+     `AdjacentQuality`
+     ->
+     `ABCMainTheorem`
+     と読む方が実態に近いと確認できた。
+   - これにより
+     `ABC029`
+     も relay 化され、
+     adjacent branch の owner 境界は
+     番号 file
+     ではなく
+     識別子付き file
+     で追える状態になった。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffDyadic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC029`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentTailDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC030`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC031`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の既知の axioms note だけ replay された。
+5. 次の課題:
+   - `ABC028`
+     の MGF / Chernoff machinery 層を、
+     `ChernoffBasic`
+     / `ChernoffSinglePrime`
+     と整合する named owner に昇格できるかを見る。
+   - adjacent branch だけでなく、
+     Chernoff branch 全体で
+     「番号 file を relay としてのみ残す」
+     状態へ寄せていく。
+
+### 日時: 2026/04/23 04:36 JST (`ABC028` の MGF / single-prime Chernoff core を識別子付き owner へ昇格)
+
+1. 目的:
+   - lower Chernoff branch に残っている
+     `ABC028`
+     を、
+     番号 file owner
+     ではなく
+     MGF / single-prime Chernoff core
+     の thematic owner に置き換える。
+   - あわせて
+     `ChernoffDyadic`
+     側の依存を
+     relay 経由ではなく
+     direct owner import
+     に切り替える。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.ChernoffMgf`
+     を追加した。
+   - ここへ
+     `mgf_padic_excess_bound_pbase`
+     `mgf_padic_excess_bound_two`
+     `mgf_padic_excess_bound_le_C`
+     `chernoff_single_prime`
+     を移した。
+   - `ABC028.lean`
+     は
+     `import DkMath.ABC.ChernoffMgf`
+     だけを持つ compatibility relay に縮小した。
+   - `ChernoffDyadic.lean`
+     は
+     `ABC028`
+     を import するのをやめ、
+     `ChernoffMgf`
+     を direct import する形へ寄せた。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC028 -> ChernoffMgf`
+     を追記した。
+3. 結論:
+   - lower Chernoff branch は
+     `ChernoffMgf`
+     ->
+     `ChernoffDyadic`
+     ->
+     `AdjacentTailDensity`
+     ->
+     `AdjacentQuality`
+     ->
+     `ABCMainTheorem`
+     と読む方が実態に近いと確認できた。
+   - これにより
+     `ABC028`
+     も relay 化され、
+     MGF 層の owner を番号 file ではなく
+     識別子付き file
+     で追える状態になった。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffMgf`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC028`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffDyadic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentTailDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の既知の axioms note だけ replay された。
+5. 次の課題:
+   - `ABC027`
+     の heavy-prime counting / budget helper 層も、
+     direct owner import へ寄せられるかを見る。
+   - lower Chernoff branch の
+     hidden import
+     をさらに減らし、
+     adjacent branch から numbered relay を外しやすくする。
+
+### 日時: 2026/04/23 04:36 JST (`ABC027` の heavy-prime budget helper 層を識別子付き owner へ昇格)
+
+1. 目的:
+   - `AdjacentTailDensity`
+     が transitively 見ていた
+     `ABC027`
+     の heavy-prime budget helper 群を、
+     branch-local thematic owner に切り出す。
+   - あわせて
+     `AdjacentTailDensity`
+     の依存を
+     relay 経由ではなく
+     direct owner import
+     に切り替える。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.HeavyPrimeBudget`
+     を追加した。
+   - ここへ
+     `ceil_div_le_one_of_p3_gt_X`
+     `term_le_four_of_p3_gt_X`
+     `four_le_two_ceil_quarter_add_two`
+     `B_mul_ceil_div_le_ceil_of_large`
+     `eventually_pow_ge_twenty`
+     を移した。
+   - `ABC027.lean`
+     は
+     `import DkMath.ABC.HeavyPrimeBudget`
+     だけを持つ compatibility relay に縮小した。
+   - `AdjacentTailDensity.lean`
+     は
+     `ABC027`
+     relay を経由せず、
+     `HeavyPrimeBudget`
+     を direct import する形へ寄せた。
+   - 途中で
+     `ChernoffMgf`
+     が
+     `ABC025`
+     owner の telescoping theorem を
+     `ABC027`
+     経由で拾っていたことが露出したため、
+     `import DkMath.ABC.ABC025`
+     を追加して hidden import を explicit 化した。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC027 -> HeavyPrimeBudget`
+     を追記した。
+3. 結論:
+   - adjacent branch の lower utility 部は
+     `HeavyPrimeBudget`
+     と
+     `ChernoffMgf`
+     を別 owner として扱うのが実態に近いと確認できた。
+   - これにより
+     `ABC027`
+     も relay 化され、
+     numbered file を branch-local helper owner として残す必要がさらに減った。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.HeavyPrimeBudget`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC027`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffMgf`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentTailDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の既知の axioms note だけ replay された。
+5. 次の課題:
+   - `ABC026`
+     以下の heavy-prime seed / witness 側を、
+     同じ方針で thematic owner に持ち上げられるかを見る。
+   - その際、
+     `ChernoffMgf`
+     と
+     `HeavyPrimeBudget`
+     のような
+     branch-local owner
+     を、
+     `Main`
+     ではなく
+     具体 consumer だけが import する境界として維持できるかを確認する。
+
+### 日時: 2026/04/23 04:47 JST (`ABC026` の heavy-prime selection / witness 層を識別子付き owner へ昇格)
+
+1. 目的:
+   - `AdjacentTailDensity`
+     が transitively 見ていた
+     `ABC026`
+     の
+     heavy-prime selection / witness helper 群を、
+     branch-local thematic owner に切り出す。
+   - あわせて
+     adjacent branch の lower utility 依存を、
+     relay 経由ではなく
+     direct owner import
+     にさらに寄せる。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.HeavyPrimeSelection`
+     を追加した。
+   - ここへ
+     `K_of`
+     `S_heavy_def`
+     `mem_S_heavy_of_pow_le`
+     `S_heavy_subset_range`
+     `S_heavy_basic`
+     `witness_n_for_S_heavy`
+     を移した。
+   - `ABC026.lean`
+     は
+     `import DkMath.ABC.HeavyPrimeSelection`
+     だけを持つ compatibility relay に縮小した。
+   - `AdjacentTailDensity.lean`
+     は
+     `ABC026`
+     relay を経由せず、
+     `HeavyPrimeSelection`
+     を direct import する形へ寄せた。
+   - あわせて
+     `HeavyPrimeBudget.lean`
+     に残っていた不要な
+     `ABC026`
+     import を削除した。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC026 -> HeavyPrimeSelection`
+     を追記した。
+3. 結論:
+   - adjacent branch の lower utility 部は
+     `HeavyPrimeSelection`
+     と
+     `HeavyPrimeBudget`
+     を別 owner として扱うのが実態に近いと確認できた。
+   - これにより adjacent branch は
+     `HeavyPrimeSelection`
+     ->
+     `HeavyPrimeBudget`
+     ->
+     `ChernoffMgf`
+     ->
+     `ChernoffDyadic`
+     ->
+     `AdjacentTailDensity`
+     ->
+     `AdjacentQuality`
+     ->
+     `ABCMainTheorem`
+     と役割分解で読める状態になった。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.HeavyPrimeSelection`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC026`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.HeavyPrimeBudget`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentTailDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の既知の axioms note だけ replay された。
+5. 次の課題:
+   - `ABC025`
+     以下の telescoping / bound 層のうち、
+     さらに thematic owner に昇格できる部分があるかを見る。
+   - あるいは adjacent branch の named owner 群を
+     `Main`
+     から見た public story として、
+     文書側で一段整理する。
+
+### 日時: 2026/04/23 05:02 JST (`ABC025` の telescoping / p-adic sum-bound 層を識別子付き owner へ昇格)
+
+1. 目的:
+   - `ABC025`
+     が実質
+     `namespace DkMath.ABC.Telescoping`
+     の owner になっている状態を解消し、
+     番号 file
+     ではなく
+     namespace に沿った named owner に置き換える。
+   - あわせて
+     telescoping theorem を使う consumer を
+     relay 経由ではなく
+     direct owner import
+     に寄せる。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.PadicTelescoping`
+     を追加した。
+   - ここへ
+     `ABC025.lean`
+     の内容を丸ごと移し、
+     `#print`
+     だけ
+     `DkMath.ABC.PadicTelescoping`
+     に更新した。
+   - `ABC025.lean`
+     は
+     `import DkMath.ABC.PadicTelescoping`
+     だけを持つ compatibility relay に縮小した。
+   - `ChernoffMgf.lean`,
+     `ChernoffSinglePrime.lean`,
+     `ABC025_allX.lean`
+     は
+     `ABC025`
+     relay を経由せず、
+     `PadicTelescoping`
+     を direct import する形へ寄せた。
+   - `HeavyPrimeBudget.lean`
+     と
+     `HeavyPrimeSelection.lean`
+     は
+     `ABC025`
+     依存が不要だったため、
+     `DkMath.ABC.Basic`
+     を import する形へ薄くした。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC025 -> PadicTelescoping`
+     を追記した。
+3. 結論:
+   - `ABC025`
+     は
+     番号 file のまま細かく切り始めるより前に、
+     まず
+     `PadicTelescoping`
+     という namespace 準拠の owner に持ち上げる方が自然だと確認できた。
+   - これにより
+     `ChernoffMgf`
+     と
+     `ChernoffSinglePrime`
+     の両 branch が、
+     telescoping 層へ
+     named owner
+     で直接届くようになった。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.PadicTelescoping`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC025`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffSinglePrime`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffMgf`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の既知の axioms note だけ replay された。
+5. 次の課題:
+   - `PadicTelescoping`
+     の内部で、
+     `sum_pow_padicValNat_le_geom_half`
+     系と
+     `..._log2_div_log3`
+     系をさらに thematic owner に割る価値があるかを見る。
+   - あるいは adjacent / Chernoff branch の named owner 群を、
+     文書側で一本の dependency spine として整理する。
+
+### 日時: 2026/04/23 05:12 JST (`ABC024` の layer-cake MGF 代替証明層を識別子付き owner へ昇格)
+
+1. 背景:
+   - `ABC024`
+     は
+     `ABC022`
+     上の layer-cake primitive を使った
+     alternative MGF proof
+     の owner 候補だった。
+   - すでに live code import は残っていなかったが、
+     番号 file を最終的に削除するには
+     relay 化と移設先の明示が必要だった。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.ChernoffMgfLayercake`
+     を追加した。
+   - ここへ
+     `ABC024.lean`
+     の内容を丸ごと移し、
+     `#print`
+     を
+     `DkMath.ABC.ChernoffMgfLayercake`
+     に更新した。
+   - `ABC024.lean`
+     は
+     `import DkMath.ABC.ChernoffMgfLayercake`
+     だけを持つ compatibility relay に縮小した。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC024 -> ChernoffMgfLayercake`
+     を追記した。
+3. 結論:
+   - 今回は downstream import の付け替えは無かったが、
+     `ABC024`
+     の役割を
+     `ChernoffMgfLayercake`
+     という owner 名で追えるようになった。
+   - これにより
+     `ABC022`
+     の layer-cake primitive 群の上に乗る
+     alternative MGF proof
+     という branch 上の位置づけが、
+     番号依存なしで見えるようになった。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffMgfLayercake`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC024`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の既知の axioms note だけ replay された。
+5. 次の課題:
+   - `ABC022`
+     自体を
+     layer-cake primitive owner
+     として昇格させるか、
+     あるいは
+     `PadicTelescoping`
+     の内部細分化を先に進めるかを比較する。
+
+### 日時: 2026/04/23 05:20 JST (`ABC022` の layer-cake helper / primitive 層を識別子付き owner へ昇格)
+
+1. 背景:
+   - `ABC022`
+     は
+     `ABC019`
+     の
+     `exp_layer_cake`
+     上に乗る
+     `rpow_layer_cake`
+     と周辺 helper 群の束になっていた。
+   - これは theorem file というより
+     layer-cake primitive band
+     なので、
+     branch-specific 名より
+     technique 名で owner を付ける方が自然だった。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.LayerCakeBasic`
+     を追加した。
+   - ここへ
+     `ABC022.lean`
+     の内容を丸ごと移し、
+     `#print`
+     を
+     `DkMath.ABC.LayerCakeBasic`
+     に更新した。
+   - `ABC022.lean`
+     は
+     `import DkMath.ABC.LayerCakeBasic`
+     だけを持つ compatibility relay に縮小した。
+   - downstream では
+     `ABC023.lean`,
+     `ChernoffMgfLayercake.lean`,
+     `ChernoffSinglePrime.lean`
+     を
+     `ABC022`
+     relay を経由せず、
+     `LayerCakeBasic`
+     を direct import する形へ寄せた。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC022 -> LayerCakeBasic`
+     を追記した。
+3. 結論:
+   - `LayerCakeBasic`
+     により、
+     `ABC019`
+     の exp-layer-cake 層と
+     `ChernoffMgfLayercake` /
+     `ChernoffSinglePrime`
+     の間にある
+     reusable primitive band
+     を番号なしで追えるようになった。
+   - あわせて
+     `ABC023`
+     も
+     relay 先を
+     `LayerCakeBasic`
+     に揃えたため、
+     `ABC022`
+     relay を噛む serial edge も減った。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.LayerCakeBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC022`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffSinglePrime`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffMgfLayercake`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の既知の axioms note だけ replay された。
+5. 次の課題:
+   - `ABC019`
+     の
+     `exp_layer_cake`
+     層も同様に named owner 化して、
+     layer-cake spine を
+     `ABC019 -> LayerCakeBasic -> ChernoffMgfLayercake`
+     ではなく
+     完全に番号なしで読める形へ寄せる。
+   - あるいは
+     `PadicTelescoping`
+     の内部細分化を先に進める。
+
+### 日時: 2026/04/23 05:36 JST (`ABC019` の tail / analytic helper 層を識別子付き owner へ昇格)
+
+1. 背景:
+   - `ABC019`
+     は
+     `TailBound`
+     や
+     `quality_le_of_pi_tail_general`
+     のような tail bridge と、
+     `markov_card_bound`
+     / `exp_layer_cake`
+     のような finite Chernoff helper が同居する mixed file だった。
+   - すぐに二分割することも可能だが、
+     まず relay 依存を落とす first cut として
+     named owner 化を優先する方が安全だった。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.TailAnalyticBasic`
+     を追加した。
+   - ここへ
+     `ABC019.lean`
+     の内容を丸ごと移し、
+     `#print`
+     を
+     `DkMath.ABC.TailAnalyticBasic`
+     に更新した。
+   - `ABC019.lean`
+     は
+     `import DkMath.ABC.TailAnalyticBasic`
+     だけを持つ compatibility relay に縮小した。
+   - downstream では
+     `ChernoffMgf.lean`
+     と
+     `ABC020.lean`
+     を
+     `ABC019`
+     relay を経由せず、
+     `TailAnalyticBasic`
+     を direct import する形へ寄せた。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC019 -> TailAnalyticBasic`
+     を追記した。
+3. 結論:
+   - `TailAnalyticBasic`
+     により、
+     tail bridge 側と finite Chernoff 側の共通 helper band を
+     番号なしで追えるようになった。
+   - 今回は mixed owner として救出し、
+     その上で後続サイクルで
+     `TailSquareBridge`
+     と
+     `FiniteChernoffBasic`
+     のように再分割する余地を残している。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.TailAnalyticBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC019`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffMgf`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の既知の axioms note だけ replay された。
+5. 次の課題:
+   - `TailAnalyticBasic`
+     を
+     `TailSquareBridge`
+     と
+     `FiniteChernoffBasic`
+     に再分割できるかを点検する。
+   - あるいは
+     `ABC021`
+     以降の Janson branch を同じ方針で named owner 化する。
+
+## 2026/04/23 05:58 JST
+
+1. 実施:
+   - `TailAnalyticBasic`
+     を
+     `TailSquareBridge`
+     と
+     `FiniteChernoffBasic`
+     に再分割した。
+   - `TailSquareBridge.lean`
+     を新設し、
+     `TailBound`,
+     `sqPart`,
+     `quality_le_of_pi_tail_general`,
+     `log_twoTail_le_excess_sum`
+     など
+     tail / square bridge 側の helper を移した。
+   - `FiniteChernoffBasic.lean`
+     を新設し、
+     `markov_card_bound`,
+     `sum_Icc_telescope`,
+     `exp_layer_cake`
+     を移した。
+   - `TailAnalyticBasic.lean`
+     自体は
+     2 owner を束ねる compatibility relay / aggregator に縮小した。
+2. downstream 調整:
+   - `ChernoffMgf.lean`
+     は
+     `FiniteChernoffBasic`
+     を direct import するように変更した。
+   - `ABC020.lean`
+     は
+     `TailSquareBridge`
+     を direct import するように変更した。
+   - 分割後の
+     `Main`
+     build で
+     `LayerCakeBasic.lean`
+     が
+     `ABC021 -> ABC020`
+     経由で
+     `exp_layer_cake`
+     と
+     `sum_Icc_telescope`
+     を拾っていた hidden import が露出したため、
+     `FiniteChernoffBasic`
+     を direct import する修正を追加した。
+3. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `TailAnalyticBasic -> TailSquareBridge + FiniteChernoffBasic`
+     の再分割と
+     `LayerCakeBasic`
+     の hidden import 修正を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     mixed helper band を second cut した際に
+     transitive import が露出するパターンを追記した。
+   - relay:
+     `check-relay-lean.md`
+     の
+     `ABC019`
+     項目に
+     再分割先
+     `TailSquareBridge.lean`
+     と
+     `FiniteChernoffBasic.lean`
+     を追記した。
+4. 結論:
+   - `ABC019`
+     由来の mixed helper band は
+     tail / square bridge 層と
+     finite Chernoff basic 層に分離され、
+     direct owner import の形で追えるようになった。
+   - 一方で、
+     `LayerCakeBasic`
+     のような downstream helper に
+     旧 relay 経由の hidden import が残っていることも確認できた。
+     今後の分割では
+     live consumer の direct import 化までを
+     1 サイクルで閉じる方針が有効である。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.TailSquareBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.FiniteChernoffBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.TailAnalyticBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffMgf`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC020`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.LayerCakeBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffSinglePrime`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の axioms note だけ replay された。
+6. 次の課題:
+   - `ABC021`
+     以降の Janson branch を
+     named owner 化していく。
+   - あるいは
+     `TailSquareBridge`
+     と
+     `FiniteChernoffBasic`
+     の周辺 consumer を棚卸しして、
+     まだ残る relay 依存を direct import に寄せる。

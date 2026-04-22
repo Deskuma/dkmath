@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.ABC.ABC025
+import DkMath.ABC.PadicTelescoping
 
 #print "file: DkMath.ABC.ABC025_allX"
 
