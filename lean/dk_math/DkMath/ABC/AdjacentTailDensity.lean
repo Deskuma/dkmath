@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.ABC.ABC029
+import DkMath.ABC.ChernoffDyadic
 
 #print "file: DkMath.ABC.AdjacentTailDensity"
 
