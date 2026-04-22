@@ -6,7 +6,7 @@ Authors: D. and Wise Wolf.
 
 
 import DkMath.ABC.ABC022
-import DkMath.ABC.ABC025
+import DkMath.ABC.PadicTelescoping
 import DkMath.ABC.ChernoffBasic
 
 #print "file: DkMath.ABC.ChernoffSinglePrime"

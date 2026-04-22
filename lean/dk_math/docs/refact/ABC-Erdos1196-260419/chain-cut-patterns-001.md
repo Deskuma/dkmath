@@ -568,3 +568,22 @@ public entry build で unknown identifier として露出する型。
   number 連番ではなく
   `selection / budget / mgf / dyadic / tail / quality / main`
   という役割分解で追跡する方が自然だと確認できた。
+- `ABC025`
+  のように file 全体が
+  ほぼ一つの namespace owner
+  になっている場合は、
+  小さく裂くより先に
+  namespace 名を反映した named owner
+  に丸ごと昇格させるのが自然だった。
+  今回は
+  `ABC025`
+  を
+  `PadicTelescoping`
+  に持ち上げた。
+  これは
+  `thin base + thematic band`
+  の別パターンで、
+  「局所 helper 群を複数 owner に砕く」
+  前に
+  「既存 namespace そのものを relay から救い出す」
+  という first cut が有効だと示している。

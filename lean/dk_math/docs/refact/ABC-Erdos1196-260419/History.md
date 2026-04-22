@@ -2603,3 +2603,94 @@ Archive
      `Main`
      から見た public story として、
      文書側で一段整理する。
+
+### 日時: 2026/04/23 05:02 JST (`ABC025` の telescoping / p-adic sum-bound 層を識別子付き owner へ昇格)
+
+1. 目的:
+   - `ABC025`
+     が実質
+     `namespace DkMath.ABC.Telescoping`
+     の owner になっている状態を解消し、
+     番号 file
+     ではなく
+     namespace に沿った named owner に置き換える。
+   - あわせて
+     telescoping theorem を使う consumer を
+     relay 経由ではなく
+     direct owner import
+     に寄せる。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.PadicTelescoping`
+     を追加した。
+   - ここへ
+     `ABC025.lean`
+     の内容を丸ごと移し、
+     `#print`
+     だけ
+     `DkMath.ABC.PadicTelescoping`
+     に更新した。
+   - `ABC025.lean`
+     は
+     `import DkMath.ABC.PadicTelescoping`
+     だけを持つ compatibility relay に縮小した。
+   - `ChernoffMgf.lean`,
+     `ChernoffSinglePrime.lean`,
+     `ABC025_allX.lean`
+     は
+     `ABC025`
+     relay を経由せず、
+     `PadicTelescoping`
+     を direct import する形へ寄せた。
+   - `HeavyPrimeBudget.lean`
+     と
+     `HeavyPrimeSelection.lean`
+     は
+     `ABC025`
+     依存が不要だったため、
+     `DkMath.ABC.Basic`
+     を import する形へ薄くした。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC025 -> PadicTelescoping`
+     を追記した。
+3. 結論:
+   - `ABC025`
+     は
+     番号 file のまま細かく切り始めるより前に、
+     まず
+     `PadicTelescoping`
+     という namespace 準拠の owner に持ち上げる方が自然だと確認できた。
+   - これにより
+     `ChernoffMgf`
+     と
+     `ChernoffSinglePrime`
+     の両 branch が、
+     telescoping 層へ
+     named owner
+     で直接届くようになった。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.PadicTelescoping`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC025`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffSinglePrime`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffMgf`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の既知の axioms note だけ replay された。
+5. 次の課題:
+   - `PadicTelescoping`
+     の内部で、
+     `sum_pow_padicValNat_le_geom_half`
+     系と
+     `..._log2_div_log3`
+     系をさらに thematic owner に割る価値があるかを見る。
+   - あるいは adjacent / Chernoff branch の named owner 群を、
+     文書側で一本の dependency spine として整理する。

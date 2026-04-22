@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
-import DkMath.ABC.ABC025
+import DkMath.ABC.Basic
 
 #print "file: DkMath.ABC.HeavyPrimeSelection"
 

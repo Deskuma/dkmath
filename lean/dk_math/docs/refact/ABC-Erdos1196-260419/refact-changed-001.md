@@ -700,3 +700,32 @@
     からは不要になった
     `ABC026`
     依存を削除した
+- telescoping / p-adic sum-bound 層を
+  `DkMath.ABC.PadicTelescoping`
+  として切り出し
+  - 新設:
+    `PadicTelescoping.lean`
+  - moved:
+    `ABC025.lean`
+    全体
+    (`namespace DkMath.ABC.Telescoping`)
+  - `ABC025.lean`
+    自体は
+    `import DkMath.ABC.PadicTelescoping`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ChernoffMgf.lean`,
+    `ChernoffSinglePrime.lean`,
+    `ABC025_allX.lean`
+    を
+    `ABC025`
+    relay 経由ではなく
+    `PadicTelescoping`
+    の direct import に変更した
+  - `HeavyPrimeBudget.lean`,
+    `HeavyPrimeSelection.lean`
+    は
+    `ABC025`
+    ではなく
+    `DkMath.ABC.Basic`
+    を import する形へ薄くした
