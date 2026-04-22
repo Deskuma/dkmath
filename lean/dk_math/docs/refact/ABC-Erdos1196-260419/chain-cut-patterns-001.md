@@ -269,3 +269,25 @@ public entry build で unknown identifier として露出する型。
   utility owner 自体を
   `basic + engine`
   に薄く割る段まで進められる。
+- utility owner 化の次段として、
+  番号 file 自体を compatibility relay に降格できる。
+  今回は
+  `ABC034`
+  がその具体例になった。
+  `chernoff_single_prime_uniform`
+  と
+  `chernoff_single_prime_uniform_rpow`
+  を
+  `ChernoffSinglePrime`
+  へ移した結果、
+  `ABC034`
+  は
+  `import DkMath.ABC.ChernoffSinglePrime`
+  だけを持つ thin relay に落とせた。
+  つまり
+  `thin base + thematic utility`
+  は
+  「番号 file の import を owner import に置き換える」
+  段で終わらず、
+  「番号 file から convenience theorem も吸い上げて relay 化する」
+  段まで進められる。

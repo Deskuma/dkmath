@@ -281,7 +281,34 @@
     は
     notation/constants/Markov owner
     という役割に整理された
-- `DkMath.ABC.Main` build を再実行し成功
+  - `DkMath.ABC.Main` build を再実行し成功
   - `ABC025` / `ABC028` / `ABC033`
     の owner import 明示化後、
     public entry まで clean に通ることを確認
+- `ABC034.lean` の single-prime convenience theorem を
+  `DkMath.ABC.ChernoffSinglePrime`
+  へ移設
+  - moved:
+    `chernoff_single_prime_uniform`
+  - moved:
+    `chernoff_single_prime_uniform_rpow`
+  - 吸収定数
+    `4 -> 5`
+    の局所証明は
+    `absorb_constant_4_to_5`
+    を使う形へ整理し、
+    convenience layer 側の重複も減らした
+  - `ABC034.lean`
+    自体は
+    `import DkMath.ABC.ChernoffSinglePrime`
+    だけを持つ compatibility relay に縮小
+  - これにより
+    `ABC034`
+    は owner file ではなく relay file となり、
+    single-prime branch の convenience 層は
+    `ChernoffSinglePrime`
+    が一括して持つ構成になった
+- `DkMath.ABC.Main` build を再実行し成功
+  - `ABC034` の owner 降格後も
+    `ABC035` / `ABC036` / `ABC038Bridge`
+    を含む public chain が通ることを確認

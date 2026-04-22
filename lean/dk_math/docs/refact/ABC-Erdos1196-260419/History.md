@@ -1550,3 +1550,90 @@ Archive
      `ChernoffSinglePrime`
      への依存を切り分け、
      branch の境界をさらに明確化する。
+
+### 日時: 2026/04/22 07:00 JST (`ABC034` の single-prime convenience 層を utility owner へ移設)
+
+1. 目的:
+   - `ChernoffBasic`
+     と
+     `ChernoffSinglePrime`
+     の二層化を受けて、
+     まだ
+     `ABC034`
+     に残っている
+     single-prime convenience theorem
+     を owner 側へ吸い上げる。
+   - これにより
+     `ABC034`
+     を
+     relay file
+     へ降格し、
+     numbered chain
+     ではなく
+     thematic utility
+     が convenience 層まで持つ形を確定させる。
+2. 実施:
+   - `DkMath.ABC.ChernoffSinglePrime`
+     に
+     `chernoff_single_prime_uniform`
+     と
+     `chernoff_single_prime_uniform_rpow`
+     を移した。
+   - 各 proof で局所的に書いていた
+     `4 -> 5`
+     の吸収は、
+     すでに
+     `ChernoffBasic`
+     にある
+     `absorb_constant_4_to_5`
+     を使う形へ整理した。
+   - `ABC034.lean`
+     は全文を縮小し、
+     `import DkMath.ABC.ChernoffSinglePrime`
+     と
+     `#print`
+     だけを持つ compatibility relay にした。
+3. 結論:
+   - single-prime branch の convenience 層は
+     `ABC034`
+     ではなく
+     `ChernoffSinglePrime`
+     が owner になった。
+   - したがって
+     `ABC034`
+     は
+     branch seed
+     ですらなく、
+     互換入口としてだけ残すのが自然だと確認できた。
+   - これは
+     `ABC0**`
+     の chain cut が、
+     import 置換だけでなく
+     theorem owner の移設と relay 化まで進められることを示す。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC034`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC035`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC036`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - `Main`
+     build では
+     `ABC038Bridge`
+     まで含めて通ることを確認した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 次の課題:
+   - `ABC035`
+     の union-bound convenience 層も、
+     `ChernoffSinglePrime`
+     と同様に
+     thematic owner
+     へ寄せられるかを点検する。
+   - `ABC034` / `ABC035` / `ABC036`
+     の branch 分離を踏まえ、
+     Chernoff 系帯の
+     convenience theorem
+     をどこまで非連番 utility へ吸い上げられるかを整理する。
