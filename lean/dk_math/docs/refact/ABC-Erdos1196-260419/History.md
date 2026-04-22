@@ -1637,3 +1637,85 @@ Archive
      Chernoff 系帯の
      convenience theorem
      をどこまで非連番 utility へ吸い上げられるかを整理する。
+
+### 日時: 2026/04/22 07:08 JST (`ABC035` の union-bound convenience 層を utility owner へ移設)
+
+1. 目的:
+   - `ABC034`
+     を relay 化した流れを一段進め、
+     `ABC035`
+     に残っている
+     explicit specialization / union-bound convenience 層も
+     非連番 utility owner
+     へ移す。
+   - これにより
+     Chernoff 帯を
+     `basic -> single-prime -> union-bound`
+     の thematic band として見える形にし、
+     `ABC033` / `ABC034` / `ABC035`
+     を連続して relay 化する。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.ChernoffUnionBound`
+     を追加した。
+   - ここへ
+     `chernoff_single_prime_explicit'`,
+     `chernoff_single_prime_explicit`,
+     `union_bound_chernoff`,
+     `union_bound_chernoff'`,
+     `union_bound_chernoff_pow`,
+     `union_bound_chernoff_pow'`
+     を移した。
+   - `ChernoffUnionBound`
+     は
+     `ChernoffSinglePrime`
+     を import して、
+     explicit specialization と union-bound 層の owner を持つ構成にした。
+   - `ABC035.lean`
+     は全文を縮小し、
+     `import DkMath.ABC.ChernoffUnionBound`
+     と
+     `#print`
+     だけを持つ compatibility relay にした。
+3. 結論:
+   - Chernoff 帯の
+     union-bound branch
+     も
+     番号 file
+     ではなく
+     thematic utility
+     が owner になる形に整理できた。
+   - これにより
+     `ABC033`, `ABC034`, `ABC035`
+     はいずれも
+     utility owner
+     に接続する relay として扱える。
+   - `thin base + thematic utility`
+     のパターンは、
+     単発の切り出しではなく、
+     branch を上へ登りながら連鎖的に適用できると確認できた。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffUnionBound`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC035`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 次の課題:
+   - `ABC036`
+     以降の
+     density / quality branch
+     についても、
+     `ChernoffUnionBound`
+     を下位 owner としてさらに utility 化できるかを点検する。
+   - とくに
+     `bad_set_density_bound_param`
+     が
+     `ABC036`
+     に残るべきか、
+     それとも
+     density utility
+     として切り出せるかを調べる。

@@ -312,3 +312,38 @@
   - `ABC034` の owner 降格後も
     `ABC035` / `ABC036` / `ABC038Bridge`
     を含む public chain が通ることを確認
+- union-bound convenience 層を
+  `DkMath.ABC.ChernoffUnionBound`
+  として切り出し
+  - 新設:
+    `ChernoffUnionBound.lean`
+  - moved:
+    `chernoff_single_prime_explicit'`
+  - moved:
+    `chernoff_single_prime_explicit`
+  - moved:
+    `union_bound_chernoff`
+  - moved:
+    `union_bound_chernoff'`
+  - moved:
+    `union_bound_chernoff_pow`
+  - moved:
+    `union_bound_chernoff_pow'`
+  - `ChernoffUnionBound`
+    は
+    `ChernoffSinglePrime`
+    を import して、
+    explicit specialization と union-bound 層の owner を持つ構成にした
+  - `ABC035.lean`
+    自体は
+    `import DkMath.ABC.ChernoffUnionBound`
+    だけを持つ compatibility relay に縮小
+  - これにより
+    `ABC035`
+    も owner file ではなく relay file となり、
+    Chernoff 帯の union-bound branch は
+    非連番 utility module
+    に乗った
+- `DkMath.ABC.Main` build を再実行し成功
+  - `ABC035` の owner 降格後も
+    public chain が通ることを確認

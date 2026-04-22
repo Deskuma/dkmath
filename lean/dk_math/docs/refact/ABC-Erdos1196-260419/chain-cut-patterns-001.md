@@ -291,3 +291,20 @@ public entry build で unknown identifier として露出する型。
   段で終わらず、
   「番号 file から convenience theorem も吸い上げて relay 化する」
   段まで進められる。
+- この relay 化パターンは
+  単一 branch だけでなく、
+  その上位 branch にも連鎖適用できる。
+  今回は
+  `ABC035`
+  の
+  explicit specialization / union-bound 層を
+  `ChernoffUnionBound`
+  に移し、
+  `ABC035`
+  自体を relay に落とした。
+  つまり
+  `ChernoffBasic -> ChernoffSinglePrime -> ChernoffUnionBound`
+  の thematic band を先に立ててから、
+  `ABC033`, `ABC034`, `ABC035`
+  を順に compatibility relay 化する、
+  という階段状の chain cut が実際に機能する。
