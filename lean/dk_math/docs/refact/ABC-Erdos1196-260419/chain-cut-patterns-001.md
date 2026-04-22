@@ -604,3 +604,23 @@ public entry build で unknown identifier として露出する型。
   最終的に
   `ABC0*.lean`
   を削除していくための前提整備として必要な型である。
+- `ABC022`
+  のように branch 上流の helper 束を持つ file は、
+  branch-specific theorem 名より
+  technique 名で owner を付けるのが自然だった。
+  今回は
+  `LayerCakeBasic`
+  として昇格させたことで、
+  `rpow_layer_cake`
+  とその周辺補題が
+  `ABC019`
+  の exp-layer-cake 層と
+  `ChernoffMgfLayercake` / `ChernoffSinglePrime`
+  の間にある
+  reusable primitive band
+  だと追えるようになった。
+  これは
+  `thin base + thematic band`
+  の典型例で、
+  上流 helper を先に番号なし化すると
+  下流 theorem owner 側も relay import を減らしやすい。

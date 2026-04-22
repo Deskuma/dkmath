@@ -2760,3 +2760,94 @@ Archive
      あるいは
      `PadicTelescoping`
      の内部細分化を先に進めるかを比較する。
+
+### 日時: 2026/04/23 05:20 JST (`ABC022` の layer-cake helper / primitive 層を識別子付き owner へ昇格)
+
+1. 背景:
+   - `ABC022`
+     は
+     `ABC019`
+     の
+     `exp_layer_cake`
+     上に乗る
+     `rpow_layer_cake`
+     と周辺 helper 群の束になっていた。
+   - これは theorem file というより
+     layer-cake primitive band
+     なので、
+     branch-specific 名より
+     technique 名で owner を付ける方が自然だった。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.LayerCakeBasic`
+     を追加した。
+   - ここへ
+     `ABC022.lean`
+     の内容を丸ごと移し、
+     `#print`
+     を
+     `DkMath.ABC.LayerCakeBasic`
+     に更新した。
+   - `ABC022.lean`
+     は
+     `import DkMath.ABC.LayerCakeBasic`
+     だけを持つ compatibility relay に縮小した。
+   - downstream では
+     `ABC023.lean`,
+     `ChernoffMgfLayercake.lean`,
+     `ChernoffSinglePrime.lean`
+     を
+     `ABC022`
+     relay を経由せず、
+     `LayerCakeBasic`
+     を direct import する形へ寄せた。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC022 -> LayerCakeBasic`
+     を追記した。
+3. 結論:
+   - `LayerCakeBasic`
+     により、
+     `ABC019`
+     の exp-layer-cake 層と
+     `ChernoffMgfLayercake` /
+     `ChernoffSinglePrime`
+     の間にある
+     reusable primitive band
+     を番号なしで追えるようになった。
+   - あわせて
+     `ABC023`
+     も
+     relay 先を
+     `LayerCakeBasic`
+     に揃えたため、
+     `ABC022`
+     relay を噛む serial edge も減った。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.LayerCakeBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC022`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffSinglePrime`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffMgfLayercake`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の既知の axioms note だけ replay された。
+5. 次の課題:
+   - `ABC019`
+     の
+     `exp_layer_cake`
+     層も同様に named owner 化して、
+     layer-cake spine を
+     `ABC019 -> LayerCakeBasic -> ChernoffMgfLayercake`
+     ではなく
+     完全に番号なしで読める形へ寄せる。
+   - あるいは
+     `PadicTelescoping`
+     の内部細分化を先に進める。

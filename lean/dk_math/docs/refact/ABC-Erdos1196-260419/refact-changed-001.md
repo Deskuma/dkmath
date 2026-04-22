@@ -745,3 +745,26 @@
   - 今回は code consumer 側の import 変更は無く、
     relay / owner 境界の確定と
     追跡可能化が主眼
+- layer-cake helper / primitive 層を
+  `DkMath.ABC.LayerCakeBasic`
+  として切り出し
+  - 新設:
+    `LayerCakeBasic.lean`
+  - moved:
+    `ABC022.lean`
+    全体
+    (`rpow_layer_cake`, `div_le_iff`, `ceil_spec`,
+    `natCeil_le_add_one_real'`, `sum_Icc_telescope'`, `exp_layer_cake'`)
+  - `ABC022.lean`
+    自体は
+    `import DkMath.ABC.LayerCakeBasic`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC023.lean`,
+    `ChernoffMgfLayercake.lean`,
+    `ChernoffSinglePrime.lean`
+    を
+    `ABC022`
+    relay 経由ではなく
+    `LayerCakeBasic`
+    の direct import に変更した
