@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
-import DkMath.ABC.ABC028
+import DkMath.ABC.ChernoffMgf
 
 #print "file: DkMath.ABC.ChernoffDyadic"
 
