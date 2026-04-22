@@ -4,8 +4,8 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMath.ABC.ABC025
 
-import DkMath.ABC.ABC026
 
 #print "file: DkMath.ABC.HeavyPrimeBudget"
 
