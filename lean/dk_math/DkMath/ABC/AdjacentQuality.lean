@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Basic.Nat
-import DkMath.ABC.ABC030
+import DkMath.ABC.AdjacentTailDensity
 
 #print "file: DkMath.ABC.AdjacentQuality"
 
