@@ -1468,3 +1468,85 @@ Archive
      以降の union-bound branch が、
      新 utility owner を前提に
      さらに薄くなるかを確かめる。
+
+### 日時: 2026/04/22 06:58 JST (`ChernoffSinglePrime` を `basic + engine` に分割)
+
+1. 目的:
+   - utility 化した
+     `ChernoffSinglePrime`
+     の中をさらに薄くし、
+     notation/constants/Markov
+     と
+     MGF / engine
+     の owner を分ける。
+   - これにより
+     Chernoff 系 utility の再利用境界を明確にし、
+     `ABC034` / `ABC035` / `ABC036`
+     以降が
+     どこまで basic layer だけで済むかを見やすくする。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.ChernoffBasic`
+     を追加した。
+   - ここへ
+     `Vp`, `Excess`, `pge3`, `const_C`, `const_X`, `primesUpTo`,
+     `prime_mem_primesUpTo_of_dvd_odd`,
+     `card_filter_le_exp_markov`,
+     `t_bound_log2_div_log3`,
+     `absorb_constant_4_to_5`
+     などを移した。
+   - `ChernoffSinglePrime.lean`
+     は
+     `ChernoffBasic`
+     を import する形にして、
+     `mgf_padic_excess_bound_uniform`,
+     `mgf_padic_excess_bound_explicit`,
+     `mgf_padic_excess_bound`,
+     `chernoff_engine`
+     のみを保持する file へ縮小した。
+3. 結論:
+   - `ChernoffSinglePrime`
+     は
+     MGF / engine owner、
+     `ChernoffBasic`
+     は
+     notation/constants/Markov owner
+     として分離できた。
+   - したがって
+     `thin base + thematic utility`
+     の整理は、
+     `ABC0**`
+     から utility module を起こす段だけでなく、
+     utility module 自体を
+     `basic + engine`
+     に分解する段まで進められると確認できた。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffSinglePrime`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC034`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 途中で
+     `ChernoffBasic`
+     の style warning を 2 箇所修正し、
+     最後に
+     `DkMath.ABC.ChernoffBasic`
+     を再 build して warning が消えたことも確認した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 次の課題:
+   - `ABC034`
+     がまだ local に持っている
+     single-prime Chernoff proof 本体を、
+     `ChernoffSinglePrime`
+     の convenience theorem としてどこまで吸い上げられるかを検討する。
+   - `ABC035`
+     の union-bound branch についても、
+     `ChernoffBasic`
+     への依存と
+     `ChernoffSinglePrime`
+     への依存を切り分け、
+     branch の境界をさらに明確化する。

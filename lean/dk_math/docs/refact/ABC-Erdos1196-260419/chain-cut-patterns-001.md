@@ -249,3 +249,23 @@ public entry build で unknown identifier として露出する型。
   ではなく
   「非連番 thematic utility」
   に置き換えるパターンの具体例になる。
+- 同じパターンは utility module の内部にも適用できる。
+  今回は
+  `ChernoffSinglePrime`
+  をさらに
+  `ChernoffBasic`
+  と
+  `ChernoffSinglePrime`
+  に割り、
+  notation/constants/Markov
+  と
+  MGF/engine
+  を分離した。
+  つまり
+  chain cut
+  は
+  `ABC0**`
+  から utility owner へ寄せる段だけでなく、
+  utility owner 自体を
+  `basic + engine`
+  に薄く割る段まで進められる。

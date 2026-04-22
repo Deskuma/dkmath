@@ -252,6 +252,35 @@
     ではなく
     thematic utility
     に接続した
+- `ChernoffSinglePrime.lean` を `ChernoffBasic` + `ChernoffSinglePrime` の二層に再分割
+  - 新設:
+    `DkMath.ABC.ChernoffBasic`
+  - `ChernoffBasic.lean`
+    に移したもの
+    - notation / arithmetic helper:
+      `n2a1`, `Vp`, `Excess`
+    - threshold / constant / index helper:
+      `pge3`, `const_C`, `const_X`, `primesUpTo`,
+      `prime_mem_primesUpTo_of_dvd_odd`
+    - analytic helper:
+      `card_filter_le_exp_markov`,
+      `t_bound_log2_div_log3`,
+      `absorb_constant_4_to_5`
+  - `ChernoffSinglePrime.lean`
+    側には
+    `mgf_padic_excess_bound_uniform`,
+    `mgf_padic_excess_bound_explicit`,
+    `mgf_padic_excess_bound`,
+    `chernoff_engine`
+    だけを残した
+  - これにより
+    `ChernoffSinglePrime`
+    は
+    MGF / engine owner、
+    `ChernoffBasic`
+    は
+    notation/constants/Markov owner
+    という役割に整理された
 - `DkMath.ABC.Main` build を再実行し成功
   - `ABC025` / `ABC028` / `ABC033`
     の owner import 明示化後、
