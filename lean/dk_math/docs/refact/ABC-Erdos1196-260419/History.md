@@ -3044,3 +3044,110 @@ Archive
      `FiniteChernoffBasic`
      の周辺 consumer を棚卸しして、
      まだ残る relay 依存を direct import に寄せる。
+
+## 2026/04/23 08:26 JST
+
+1. 実施:
+   - `ABC021`
+     を
+     `JansonRoadmap`
+     に昇格した。
+   - `JansonRoadmap.lean`
+     を新設し、
+     `PMF.expect_mono`,
+     `markov_inequality`,
+     `chebyshev_inequality`,
+     `Janson.mgf`,
+     `exp_sum_eq_prod_exp`,
+     `expect_prod_eq_prod_expect`,
+     `mgf_sum_indep`,
+     `second_moment_zero_prob`,
+     `variance_indicator_sum`,
+     `janson_core_inequality`,
+     `bound_v2_from_janson`
+     を含む
+     Janson roadmap 本体を移した。
+   - `ABC021.lean`
+     自体は
+     `import DkMath.ABC.JansonRoadmap`
+     だけを持つ compatibility relay に縮小した。
+2. chain-cut:
+   - `LayerCakeBasic.lean`
+     から
+     `ABC021`
+     import を削除した。
+     調査の結果、
+     live chain 上では
+     `ABC021`
+     の API は未使用だったため、
+     Janson branch は main spine から切り離したまま
+     named owner として保存できると判断した。
+3. hidden import 修正:
+   - `Main`
+     build を通したところ、
+     `ChernoffQualityBridge.lean`
+     が
+     `ABC.TailBound`
+     と
+     `ABC.quality_le_of_pi_tail_general`
+     を
+     transitively 拾っていた hidden import が露出した。
+   - そのため
+     `ChernoffQualityBridge.lean`
+     に
+     `import DkMath.ABC.TailSquareBridge`
+     を追加し、
+     tail bridge owner を direct import する形に直した。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC021 -> JansonRoadmap`
+     と
+     `ChernoffQualityBridge`
+     の hidden import 修正を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     live chain で未使用になった numbered file を
+     named owner 化して保存する型と、
+     その際も
+     `Main`
+     build で別 branch の transitive import 崩れを確認すべきことを追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC021 -> JansonRoadmap`
+     を追加した。
+5. 結論:
+   - `ABC021`
+     は relay 化され、
+     Janson branch は
+     `JansonRoadmap`
+     として番号なし owner で追えるようになった。
+   - 同時に、
+     `ChernoffQualityBridge`
+     の
+     `TailSquareBridge`
+     依存が明示化され、
+     main spine の owner 境界も 1 本明確になった。
+6. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.JansonRoadmap`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC021`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.LayerCakeBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffQualityBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `JansonRoadmap.lean`
+     の `sorry` 警告、
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の axioms note だけ replay された。
+7. 次の課題:
+   - Janson branch の下流 / 上流をさらに named owner 化するか、
+     あるいは
+     `ChernoffQualityBridge`
+     以外にも残る direct owner import 化の余地を洗う。

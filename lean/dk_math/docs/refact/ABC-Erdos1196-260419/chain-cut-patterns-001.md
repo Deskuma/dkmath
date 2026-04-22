@@ -676,3 +676,24 @@ public entry build で unknown identifier として露出する型。
   「露出した transitive import の direct 化」
   を
   1 サイクルでまとめて処理するのが実践的である。
+- live chain で未使用になっている numbered file も、
+  先に named owner へ昇格して relay 化しておく価値がある。
+  今回の
+  `ABC021 -> JansonRoadmap`
+  はその型で、
+  `LayerCakeBasic`
+  から
+  `ABC021`
+  import を削ったことで
+  main spine から切り離された Janson branch を
+  番号なし owner として保存できた。
+  ただし、
+  この cleanup によって別 branch の
+  `ChernoffQualityBridge`
+  で
+  `TailSquareBridge`
+  hidden import が露出したため、
+  dead branch 救出でも
+  `Main`
+  build を最後まで通して
+  transitive 依存の崩れを確認する必要がある。

@@ -831,3 +831,36 @@
     の hidden import が露出したため、
     `FiniteChernoffBasic`
     を direct import する修正も併せて入れた
+- Janson roadmap / expectation helper 層を
+  `DkMath.ABC.JansonRoadmap`
+  として昇格
+  - 新設:
+    `JansonRoadmap.lean`
+  - moved:
+    `ABC021.lean`
+    全体
+    (`PMF.expect_mono`, `markov_inequality`,
+    `chebyshev_inequality`, `Janson.mgf`,
+    `exp_sum_eq_prod_exp`,
+    `expect_prod_eq_prod_expect`,
+    `mgf_sum_indep`,
+    `second_moment_zero_prob`,
+    `variance_indicator_sum`,
+    `janson_core_inequality`,
+    `bound_v2_from_janson`)
+  - `ABC021.lean`
+    自体は
+    `import DkMath.ABC.JansonRoadmap`
+    だけを持つ compatibility relay に縮小
+  - `LayerCakeBasic.lean`
+    からは
+    `ABC021`
+    import を削除した
+    （live chain では未使用だったため）
+  - この結果
+    `ChernoffQualityBridge.lean`
+    の
+    `TailSquareBridge`
+    hidden import が露出したため、
+    `import DkMath.ABC.TailSquareBridge`
+    を direct 化して復旧した
