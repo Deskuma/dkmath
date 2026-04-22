@@ -1899,3 +1899,116 @@ Archive
    - `check-relay-lean.md`
      を今後の各サイクルで継続更新し、
      relay 化済み file の移設先を漏れなく記録する。
+
+### 日時: 2026/04/22 07:46 JST (`ABC038` / `ABC039` の quality 終端を識別子付き owner へ昇格)
+
+1. 目的:
+   - `ABC038`
+     に残っていた
+     quality / bridge 層を
+     thematic owner
+     へ切り出す。
+   - 続けて
+     `ABC039`
+     の final quality theorem 群も
+     識別子付き file
+     へ昇格し、
+     serial tail
+     を relay / shell だけに近づける。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.ChernoffQualityBridge`
+     を追加し、
+     `abc_c_pos`,
+     `Excess_ABC`,
+     `Bad_ε_ABC`,
+     `not_bad_abc_implies_vp_bound`,
+     `quality_le_of_not_bad_with_tail`,
+     `tailbound_of_log_bound`,
+     `quality_le_of_not_bad_with_log`
+     など
+     `ABC038`
+     の quality / bridge 補題群を移した。
+   - `ABC038.lean`
+     は
+     `ChernoffQualityBridge`
+     を import する relay に縮小した。
+   - downstream として
+     `ABC039.lean`
+     と
+     `ABC038Bridge.lean`
+     の import を
+     `ABC038`
+     から
+     `ChernoffQualityBridge`
+     へ切り替えた。
+   - さらに新 file
+     `DkMath.ABC.ChernoffQualityFinal`
+     を追加し、
+     `twoTail_log_bound_of_not_bad_eps`,
+     `twoTail_log_bound_of_not_bad_eps_budget`,
+     `abc_quality_pointwise`,
+     `abc_quality_density`,
+     `abc_quality_hybrid`
+     を
+     `ABC039`
+     から移した。
+   - `ABC039.lean`
+     は
+     `ChernoffQualityFinal`
+     を import する relay に縮小した。
+   - `ABC040.lean`
+     も
+     `ABC039`
+     ではなく
+     `ChernoffQualityFinal`
+     を direct import する shell に整理した。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC038 -> ChernoffQualityBridge`
+     と
+     `ABC039 -> ChernoffQualityFinal`
+     を記録し、
+     `ABC040`
+     の参照先も明記した。
+3. 結論:
+   - Chernoff 帯は
+     `ChernoffBasic -> ChernoffSinglePrime -> ChernoffUnionBound -> ChernoffDensity -> ChernoffQualityDensity -> ChernoffQualityBridge -> ChernoffQualityFinal`
+     という thematic chain に整理できた。
+   - `ABC038`
+     と
+     `ABC039`
+     は owner file ではなく relay file になり、
+     `ABC040`
+     は final owner 直参照の shell に寄った。
+   - これで
+     quality branch
+     の終端にも
+     「番号 file ではなく識別子付き file」
+     の方針を適用できることが確認できた。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffQualityBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC038`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC039`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC038Bridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffQualityFinal`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC040`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告だけ replay された。
+5. 次の課題:
+   - `ABC040+`
+     側に本当に owner として残すべき中身があるのか、
+     それとも shell / public entry だけなのかを見極める。
+   - 文書側でも
+     `ABC038`-`ABC040`
+     の旧番号参照を、
+     可能な範囲で
+     `ChernoffQualityBridge`
+     / `ChernoffQualityFinal`
+     へ言い換えていく。

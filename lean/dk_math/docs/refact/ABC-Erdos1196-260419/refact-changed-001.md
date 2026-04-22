@@ -426,3 +426,72 @@
 - `DkMath.ABC.Main` build を再実行し成功
   - `ChernoffQualityDensity`
     を含む public chain が通ることを確認
+- quality / bridge 層を
+  `DkMath.ABC.ChernoffQualityBridge`
+  として切り出し
+  - 新設:
+    `ChernoffQualityBridge.lean`
+  - moved:
+    `abc_c_pos`
+  - moved:
+    `not_isCoprime_zero_nonzero`
+  - moved:
+    `not_isCoprime_nonzero_zero`
+  - moved:
+    `prime_of_mem_factorization_support`
+  - moved:
+    `Excess_ABC`
+  - moved:
+    `Bad_ε_ABC`
+  - moved:
+    `not_bad_abc_implies_vp_bound`
+  - moved:
+    `twoTail_log_bound_of_not_bad_abc`
+  - moved:
+    `quality_le_of_not_bad`
+  - moved:
+    `quality_le_of_not_bad_abc`
+  - moved:
+    `quality_le_of_not_bad_with_tail`
+  - moved:
+    `tailbound_of_log_bound`
+  - moved:
+    `quality_le_of_not_bad_with_log`
+  - `ABC038.lean`
+    自体は
+    `import DkMath.ABC.ChernoffQualityBridge`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC039.lean`
+    と
+    `ABC038Bridge.lean`
+    を
+    `ABC038`
+    relay 経由ではなく
+    `ChernoffQualityBridge`
+    の direct import に変更した
+- final quality theorem 層を
+  `DkMath.ABC.ChernoffQualityFinal`
+  として切り出し
+  - 新設:
+    `ChernoffQualityFinal.lean`
+  - moved:
+    `twoTail_log_bound_of_not_bad_eps`
+  - moved:
+    `twoTail_log_bound_of_not_bad_eps_budget`
+  - moved:
+    `abc_quality_pointwise`
+  - moved:
+    `abc_quality_density`
+  - moved:
+    `abc_quality_hybrid`
+  - `ABC039.lean`
+    自体は
+    `import DkMath.ABC.ChernoffQualityFinal`
+    だけを持つ compatibility relay に縮小
+  - `ABC040.lean`
+    は
+    `ABC039`
+    経由ではなく
+    `ChernoffQualityFinal`
+    を direct import する shell に整理

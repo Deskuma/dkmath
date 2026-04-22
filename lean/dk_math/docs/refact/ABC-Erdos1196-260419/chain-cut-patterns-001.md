@@ -362,3 +362,36 @@ public entry build で unknown identifier として露出する型。
   Chernoff 帯は
   `Basic -> SinglePrime -> UnionBound -> Density -> QualityDensity`
   の多段 thematic band として持ち上げられる。
+- この quality branch は
+  さらに
+  `Bridge`
+  と
+  `Final`
+  に二段分解できる。
+  今回は
+  `ABC038`
+  を
+  `ChernoffQualityBridge`
+  へ、
+  `ABC039`
+  を
+  `ChernoffQualityFinal`
+  へ昇格させた。
+  したがって
+  Chernoff 帯の終端は
+  `Basic -> SinglePrime -> UnionBound -> Density -> QualityDensity -> QualityBridge -> QualityFinal`
+  と読める。
+- この時点で
+  `ABC038` / `ABC039`
+  は compatibility relay に落ち、
+  `ABC040`
+  も
+  `ChernoffQualityFinal`
+  直参照の shell に整理できた。
+  つまり
+  serial tail
+  の最終三本も
+  「番号 file が owner」
+  ではなく
+  「番号 file は relay / shell」
+  という形に寄せられる。
