@@ -493,3 +493,50 @@ public entry build で unknown identifier として露出する型。
   adjacent branch でも
   番号 file
   を介さずに記述できる。
+- 同じ lower Chernoff 帯の一段下も、
+  さらに thematic owner に分割できる。
+  今回は
+  `ABC028`
+  を
+  `ChernoffMgf`
+  に持ち上げ、
+  `mgf_padic_excess_bound_pbase`
+  /
+  `mgf_padic_excess_bound_two`
+  /
+  `mgf_padic_excess_bound_le_C`
+  /
+  `chernoff_single_prime`
+  を owner 側へ移した。
+  これで adjacent / Chernoff lower branch は
+  `ChernoffMgf`
+  ->
+  `ChernoffDyadic`
+  ->
+  `AdjacentTailDensity`
+  ->
+  `AdjacentQuality`
+  ->
+  `ABCMainTheorem`
+  と読める。
+- さらに
+  `ABC027`
+  も
+  heavy-prime budget 専用の thematic owner
+  として切り出せた。
+  今回の
+  `HeavyPrimeBudget`
+  は
+  `AdjacentTailDensity`
+  にだけ刺さる local utility だが、
+  それでも
+  relay 経由の hidden import
+  より
+  direct owner import
+  を優先する、
+  という切断パターンが有効だと確認できた。
+  この型は
+  「branch 全体の共通 kernel」
+  でなくても
+  「branch 内の局所 budget helper」
+  を名前付き owner に上げられることを示している。

@@ -2340,3 +2340,175 @@ Archive
      Chernoff branch 全体で
      「番号 file を relay としてのみ残す」
      状態へ寄せていく。
+
+### 日時: 2026/04/23 04:36 JST (`ABC028` の MGF / single-prime Chernoff core を識別子付き owner へ昇格)
+
+1. 目的:
+   - lower Chernoff branch に残っている
+     `ABC028`
+     を、
+     番号 file owner
+     ではなく
+     MGF / single-prime Chernoff core
+     の thematic owner に置き換える。
+   - あわせて
+     `ChernoffDyadic`
+     側の依存を
+     relay 経由ではなく
+     direct owner import
+     に切り替える。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.ChernoffMgf`
+     を追加した。
+   - ここへ
+     `mgf_padic_excess_bound_pbase`
+     `mgf_padic_excess_bound_two`
+     `mgf_padic_excess_bound_le_C`
+     `chernoff_single_prime`
+     を移した。
+   - `ABC028.lean`
+     は
+     `import DkMath.ABC.ChernoffMgf`
+     だけを持つ compatibility relay に縮小した。
+   - `ChernoffDyadic.lean`
+     は
+     `ABC028`
+     を import するのをやめ、
+     `ChernoffMgf`
+     を direct import する形へ寄せた。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC028 -> ChernoffMgf`
+     を追記した。
+3. 結論:
+   - lower Chernoff branch は
+     `ChernoffMgf`
+     ->
+     `ChernoffDyadic`
+     ->
+     `AdjacentTailDensity`
+     ->
+     `AdjacentQuality`
+     ->
+     `ABCMainTheorem`
+     と読む方が実態に近いと確認できた。
+   - これにより
+     `ABC028`
+     も relay 化され、
+     MGF 層の owner を番号 file ではなく
+     識別子付き file
+     で追える状態になった。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffMgf`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC028`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffDyadic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentTailDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の既知の axioms note だけ replay された。
+5. 次の課題:
+   - `ABC027`
+     の heavy-prime counting / budget helper 層も、
+     direct owner import へ寄せられるかを見る。
+   - lower Chernoff branch の
+     hidden import
+     をさらに減らし、
+     adjacent branch から numbered relay を外しやすくする。
+
+### 日時: 2026/04/23 04:36 JST (`ABC027` の heavy-prime budget helper 層を識別子付き owner へ昇格)
+
+1. 目的:
+   - `AdjacentTailDensity`
+     が transitively 見ていた
+     `ABC027`
+     の heavy-prime budget helper 群を、
+     branch-local thematic owner に切り出す。
+   - あわせて
+     `AdjacentTailDensity`
+     の依存を
+     relay 経由ではなく
+     direct owner import
+     に切り替える。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.HeavyPrimeBudget`
+     を追加した。
+   - ここへ
+     `ceil_div_le_one_of_p3_gt_X`
+     `term_le_four_of_p3_gt_X`
+     `four_le_two_ceil_quarter_add_two`
+     `B_mul_ceil_div_le_ceil_of_large`
+     `eventually_pow_ge_twenty`
+     を移した。
+   - `ABC027.lean`
+     は
+     `import DkMath.ABC.HeavyPrimeBudget`
+     だけを持つ compatibility relay に縮小した。
+   - `AdjacentTailDensity.lean`
+     は
+     `ABC027`
+     relay を経由せず、
+     `HeavyPrimeBudget`
+     を direct import する形へ寄せた。
+   - 途中で
+     `ChernoffMgf`
+     が
+     `ABC025`
+     owner の telescoping theorem を
+     `ABC027`
+     経由で拾っていたことが露出したため、
+     `import DkMath.ABC.ABC025`
+     を追加して hidden import を explicit 化した。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC027 -> HeavyPrimeBudget`
+     を追記した。
+3. 結論:
+   - adjacent branch の lower utility 部は
+     `HeavyPrimeBudget`
+     と
+     `ChernoffMgf`
+     を別 owner として扱うのが実態に近いと確認できた。
+   - これにより
+     `ABC027`
+     も relay 化され、
+     numbered file を branch-local helper owner として残す必要がさらに減った。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.HeavyPrimeBudget`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC027`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffMgf`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentTailDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の既知の axioms note だけ replay された。
+5. 次の課題:
+   - `ABC026`
+     以下の heavy-prime seed / witness 側を、
+     同じ方針で thematic owner に持ち上げられるかを見る。
+   - その際、
+     `ChernoffMgf`
+     と
+     `HeavyPrimeBudget`
+     のような
+     branch-local owner
+     を、
+     `Main`
+     ではなく
+     具体 consumer だけが import する境界として維持できるかを確認する。

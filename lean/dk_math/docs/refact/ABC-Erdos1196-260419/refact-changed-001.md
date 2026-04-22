@@ -611,3 +611,60 @@
     relay 経由ではなく
     `ChernoffDyadic`
     の direct import に変更した
+- MGF / single-prime Chernoff core 層を
+  `DkMath.ABC.ChernoffMgf`
+  として切り出し
+  - 新設:
+    `ChernoffMgf.lean`
+  - moved:
+    `mgf_padic_excess_bound_pbase`
+  - moved:
+    `mgf_padic_excess_bound_two`
+  - moved:
+    `mgf_padic_excess_bound_le_C`
+  - moved:
+    `chernoff_single_prime`
+  - `ABC028.lean`
+    自体は
+    `import DkMath.ABC.ChernoffMgf`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ChernoffDyadic.lean`
+    を
+    `ABC028`
+    relay 経由ではなく
+    `ChernoffMgf`
+    の direct import に変更した
+  - あわせて
+    `ChernoffMgf.lean`
+    に
+    `import DkMath.ABC.ABC025`
+    を追加し、
+    `ABC.Telescoping.sum_pow_padicValNat_le_geom_half`
+    の owner 依存を explicit import 化した
+- heavy-prime budget / ceiling helper 層を
+  `DkMath.ABC.HeavyPrimeBudget`
+  として切り出し
+  - 新設:
+    `HeavyPrimeBudget.lean`
+  - moved:
+    `ceil_div_le_one_of_p3_gt_X`
+  - moved:
+    `term_le_four_of_p3_gt_X`
+  - moved:
+    `four_le_two_ceil_quarter_add_two`
+  - moved:
+    `B_mul_ceil_div_le_ceil_of_large`
+  - moved:
+    `eventually_pow_ge_twenty`
+  - `ABC027.lean`
+    自体は
+    `import DkMath.ABC.HeavyPrimeBudget`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `AdjacentTailDensity.lean`
+    を
+    `ABC027`
+    relay 経由ではなく
+    `HeavyPrimeBudget`
+    の direct import に変更した
