@@ -395,3 +395,19 @@ public entry build で unknown identifier として露出する型。
   ではなく
   「番号 file は relay / shell」
   という形に寄せられる。
+- 同じ方針は
+  final theorem file
+  にも適用できる。
+  今回は
+  `ABC032`
+  の
+  `K_eps` / `abc_main_axiom` / `abc_main`
+  を
+  `ABCMainTheorem`
+  へ昇格させた。
+  これにより
+  「番号 file に最後の大域定理が残る」
+  状態から、
+  `Main`
+  が識別子付き final theorem owner を import する
+  形へ一歩寄せられた。

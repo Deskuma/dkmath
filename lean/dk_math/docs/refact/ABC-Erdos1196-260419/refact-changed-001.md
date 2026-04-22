@@ -495,3 +495,25 @@
     経由ではなく
     `ChernoffQualityFinal`
     を direct import する shell に整理
+- `abc_main` 最終定理層を
+  `DkMath.ABC.ABCMainTheorem`
+  として切り出し
+  - 新設:
+    `ABCMainTheorem.lean`
+  - moved:
+    `K_eps`
+  - moved:
+    `abc_main_axiom`
+  - moved:
+    `abc_main`
+  - `ABC032.lean`
+    自体は
+    `import DkMath.ABC.ABCMainTheorem`
+    だけを持つ compatibility relay に縮小
+  - `DkMath.ABC.Main`
+    には
+    `import DkMath.ABC.ABCMainTheorem`
+    を追加し、
+    public entry から
+    `abc_main`
+    系へ直接届く導線を作った

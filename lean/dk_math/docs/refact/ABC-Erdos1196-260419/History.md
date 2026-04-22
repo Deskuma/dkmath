@@ -2012,3 +2012,82 @@ Archive
      `ChernoffQualityBridge`
      / `ChernoffQualityFinal`
      へ言い換えていく。
+
+### 日時: 2026/04/22 08:02 JST (`ABC032` の global main theorem 層を識別子付き owner へ昇格)
+
+1. 目的:
+   - `ABC032`
+     に残っていた
+     global final theorem 層を、
+     番号 file
+     ではなく
+     識別子付き owner file
+     に移す。
+   - あわせて
+     `DkMath.ABC.Main`
+     が
+     `abc_main`
+     系の named owner を import する形へ寄せる。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.ABCMainTheorem`
+     を追加した。
+   - ここへ
+     `K_eps`,
+     `abc_main_axiom`,
+     `abc_main`
+     を移した。
+   - `ABC032.lean`
+     は
+     `import DkMath.ABC.ABCMainTheorem`
+     だけを持つ compatibility relay に縮小した。
+   - `DkMath.ABC.Main`
+     には
+     `import DkMath.ABC.ABCMainTheorem`
+     を追加し、
+     public entry
+     から
+     global final theorem owner
+     に直接届く導線を作った。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC032 -> ABCMainTheorem`
+     を追記した。
+3. 結論:
+   - `abc_main`
+     のような最終大域定理も、
+     `ABC0**`
+     ではなく
+     theorem-named file
+     へ昇格できることを確認した。
+   - `DkMath.ABC.Main`
+     は
+     `Bridge`
+     / `ABC038Bridge`
+     に加えて
+     `ABCMainTheorem`
+     を import する形となり、
+     理想形
+     「`Main` が各種最終定理 owner を集約する」
+     方向へ一歩進んだ。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABCMainTheorem`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC032`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告だけ replay された。
+5. 次の課題:
+   - `ABC031`
+     の adjacent-quality 層を
+     named owner
+     へ昇格できるかを点検する。
+   - その次段として
+     `ABC030`
+     の adjacent Chernoff / density-one utility を
+     thematic owner
+     へ上げられるかを確認する。
