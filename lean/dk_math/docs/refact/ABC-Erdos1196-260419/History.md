@@ -2694,3 +2694,69 @@ Archive
      系をさらに thematic owner に割る価値があるかを見る。
    - あるいは adjacent / Chernoff branch の named owner 群を、
      文書側で一本の dependency spine として整理する。
+
+### 日時: 2026/04/23 05:12 JST (`ABC024` の layer-cake MGF 代替証明層を識別子付き owner へ昇格)
+
+1. 背景:
+   - `ABC024`
+     は
+     `ABC022`
+     上の layer-cake primitive を使った
+     alternative MGF proof
+     の owner 候補だった。
+   - すでに live code import は残っていなかったが、
+     番号 file を最終的に削除するには
+     relay 化と移設先の明示が必要だった。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.ChernoffMgfLayercake`
+     を追加した。
+   - ここへ
+     `ABC024.lean`
+     の内容を丸ごと移し、
+     `#print`
+     を
+     `DkMath.ABC.ChernoffMgfLayercake`
+     に更新した。
+   - `ABC024.lean`
+     は
+     `import DkMath.ABC.ChernoffMgfLayercake`
+     だけを持つ compatibility relay に縮小した。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC024 -> ChernoffMgfLayercake`
+     を追記した。
+3. 結論:
+   - 今回は downstream import の付け替えは無かったが、
+     `ABC024`
+     の役割を
+     `ChernoffMgfLayercake`
+     という owner 名で追えるようになった。
+   - これにより
+     `ABC022`
+     の layer-cake primitive 群の上に乗る
+     alternative MGF proof
+     という branch 上の位置づけが、
+     番号依存なしで見えるようになった。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffMgfLayercake`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC024`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の既知の axioms note だけ replay された。
+5. 次の課題:
+   - `ABC022`
+     自体を
+     layer-cake primitive owner
+     として昇格させるか、
+     あるいは
+     `PadicTelescoping`
+     の内部細分化を先に進めるかを比較する。

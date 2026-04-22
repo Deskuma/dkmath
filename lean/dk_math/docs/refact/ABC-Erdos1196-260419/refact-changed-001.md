@@ -729,3 +729,19 @@
     ではなく
     `DkMath.ABC.Basic`
     を import する形へ薄くした
+- layer-cake MGF の代替証明層を
+  `DkMath.ABC.ChernoffMgfLayercake`
+  として切り出し
+  - 新設:
+    `ChernoffMgfLayercake.lean`
+  - moved:
+    `ABC024.lean`
+    全体
+    (`mgf_padic_excess_bound_pbase_layercake`)
+  - `ABC024.lean`
+    自体は
+    `import DkMath.ABC.ChernoffMgfLayercake`
+    だけを持つ compatibility relay に縮小
+  - 今回は code consumer 側の import 変更は無く、
+    relay / owner 境界の確定と
+    追跡可能化が主眼

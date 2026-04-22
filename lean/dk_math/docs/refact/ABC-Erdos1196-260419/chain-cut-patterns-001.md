@@ -587,3 +587,20 @@ public entry build で unknown identifier として露出する型。
   前に
   「既存 namespace そのものを relay から救い出す」
   という first cut が有効だと示している。
+- `ABC024`
+  のように downstream code import が
+  すでに消えている file でも、
+  relay 化して owner 名を与える価値がある。
+  今回は
+  `ChernoffMgfLayercake`
+  へ昇格させることで、
+  `ABC022`
+  の layer-cake primitive 群の上に乗る
+  alternative MGF proof
+  という役割を番号なしで追えるようにした。
+  これは chain-cut というより
+  archive / ownership cleanup
+  だが、
+  最終的に
+  `ABC0*.lean`
+  を削除していくための前提整備として必要な型である。
