@@ -2851,3 +2851,83 @@ Archive
    - あるいは
      `PadicTelescoping`
      の内部細分化を先に進める。
+
+### 日時: 2026/04/23 05:36 JST (`ABC019` の tail / analytic helper 層を識別子付き owner へ昇格)
+
+1. 背景:
+   - `ABC019`
+     は
+     `TailBound`
+     や
+     `quality_le_of_pi_tail_general`
+     のような tail bridge と、
+     `markov_card_bound`
+     / `exp_layer_cake`
+     のような finite Chernoff helper が同居する mixed file だった。
+   - すぐに二分割することも可能だが、
+     まず relay 依存を落とす first cut として
+     named owner 化を優先する方が安全だった。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.TailAnalyticBasic`
+     を追加した。
+   - ここへ
+     `ABC019.lean`
+     の内容を丸ごと移し、
+     `#print`
+     を
+     `DkMath.ABC.TailAnalyticBasic`
+     に更新した。
+   - `ABC019.lean`
+     は
+     `import DkMath.ABC.TailAnalyticBasic`
+     だけを持つ compatibility relay に縮小した。
+   - downstream では
+     `ChernoffMgf.lean`
+     と
+     `ABC020.lean`
+     を
+     `ABC019`
+     relay を経由せず、
+     `TailAnalyticBasic`
+     を direct import する形へ寄せた。
+   - relay 追跡表
+     `check-relay-lean.md`
+     に
+     `ABC019 -> TailAnalyticBasic`
+     を追記した。
+3. 結論:
+   - `TailAnalyticBasic`
+     により、
+     tail bridge 側と finite Chernoff 側の共通 helper band を
+     番号なしで追えるようになった。
+   - 今回は mixed owner として救出し、
+     その上で後続サイクルで
+     `TailSquareBridge`
+     と
+     `FiniteChernoffBasic`
+     のように再分割する余地を残している。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.TailAnalyticBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC019`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffMgf`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の既知の axioms note だけ replay された。
+5. 次の課題:
+   - `TailAnalyticBasic`
+     を
+     `TailSquareBridge`
+     と
+     `FiniteChernoffBasic`
+     に再分割できるかを点検する。
+   - あるいは
+     `ABC021`
+     以降の Janson branch を同じ方針で named owner 化する。

@@ -624,3 +624,32 @@ public entry build で unknown identifier として露出する型。
   の典型例で、
   上流 helper を先に番号なし化すると
   下流 theorem owner 側も relay import を減らしやすい。
+- `ABC019`
+  のように
+  tail bridge と finite Chernoff helper が
+  同居している file では、
+  無理に theorem ごとへ細断せず、
+  まず
+  `TailAnalyticBasic`
+  のような mixed basic band
+  に持ち上げる first cut も有効だった。
+  今回は
+  `TailBound`
+  / `quality_le_of_pi_tail_general`
+  / `log_twoTail_le_excess_sum`
+  と
+  `markov_card_bound`
+  / `exp_layer_cake`
+  が同居する owner として整理し、
+  downstream では
+  `ChernoffMgf`
+  と
+  `ABC020`
+  の relay 依存だけ先に落とした。
+  これは
+  「完全分解の前に mixed helper band として救出する」
+  型で、
+  後続サイクルで
+  `TailSquareBridge` と
+  `FiniteChernoffBasic`
+  へ再分割する余地も残す。

@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
-import DkMath.ABC.ABC019
+import DkMath.ABC.TailAnalyticBasic
 
 #print "file: DkMath.ABC.ABC020"
 

@@ -768,3 +768,27 @@
     relay 経由ではなく
     `LayerCakeBasic`
     の direct import に変更した
+- tail / analytic helper 層を
+  `DkMath.ABC.TailAnalyticBasic`
+  として切り出し
+  - 新設:
+    `TailAnalyticBasic.lean`
+  - moved:
+    `ABC019.lean`
+    全体
+    (`TailBound`, `sqPart`, `quality_le_of_pi_tail_general`,
+    `log_twoTail_le_excess_sum`, `markov_card_bound`,
+    `sum_Icc_telescope`, `exp_layer_cake`)
+  - `ABC019.lean`
+    自体は
+    `import DkMath.ABC.TailAnalyticBasic`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ChernoffMgf.lean`
+    と
+    `ABC020.lean`
+    を
+    `ABC019`
+    relay 経由ではなく
+    `TailAnalyticBasic`
+    の direct import に変更した
