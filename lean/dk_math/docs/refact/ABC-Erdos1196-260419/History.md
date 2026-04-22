@@ -1719,3 +1719,99 @@ Archive
      それとも
      density utility
      として切り出せるかを調べる。
+
+### 日時: 2026/04/22 07:16 JST (`ABC036` の density 層を utility owner へ移設)
+
+1. 目的:
+   - `ABC033` / `ABC034` / `ABC035`
+     に続いて、
+     density branch
+     の owner も
+     番号 file
+     から外す。
+   - `Bad_ε`
+     と
+     `bad_set_density_bound_param`
+     を中心とする層を
+     非連番 utility
+     に昇格させ、
+     downstream を
+     relay 経由ではなく
+     direct owner import
+     に寄せる。
+2. 実施:
+   - 新 file
+     `DkMath.ABC.ChernoffDensity`
+     を追加した。
+   - ここへ
+     `Bad_ε`,
+     `bad_iff_exists_excess`,
+     `exp_one_gt_one`,
+     `decidable_Bad_ε`,
+     `p_lt_X_to_p_lt_X_succ`,
+     `bad_set_density_bound_param`,
+     `bad_set_density_bound'`
+     を移した。
+   - `ChernoffDensity`
+     は
+     `ChernoffUnionBound`
+     を import して、
+     bad-set / density 層の owner を持つ構成にした。
+   - `ABC036.lean`
+     は全文を縮小し、
+     `import DkMath.ABC.ChernoffDensity`
+     と
+     `#print`
+     だけを持つ compatibility relay にした。
+   - downstream として
+     `ABC037.lean`
+     と
+     `ABC038.lean`
+     の import を
+     `ABC036`
+     から
+     `ChernoffDensity`
+     へ切り替えた。
+3. 結論:
+   - density branch も
+     `ChernoffBasic -> ChernoffSinglePrime -> ChernoffUnionBound -> ChernoffDensity`
+     という thematic band の一部として整理できた。
+   - これにより
+     `ABC036`
+     も
+     owner file
+     ではなく relay file になった。
+   - さらに
+     chain cut
+     は relay 化だけでなく、
+     downstream を
+     direct owner import
+     へ順次付け替える段まで含めて進められると確認できた。
+4. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC036`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC037`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC038`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ABC021.lean`
+     と
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告のみ replay された。
+5. 次の課題:
+   - `ABC037`
+     に残っている
+     quality-specific density 補題
+     を、
+     `ChernoffDensity`
+     の上位 utility
+     としてさらに分離できるかを点検する。
+   - `ABC038`
+     の
+     quality / bridge branch
+     についても、
+     density owner
+     と
+     quality owner
+     の境界をどこまで direct import で明示できるかを整理する。

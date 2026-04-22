@@ -347,3 +347,49 @@
 - `DkMath.ABC.Main` build を再実行し成功
   - `ABC035` の owner 降格後も
     public chain が通ることを確認
+- density 層を
+  `DkMath.ABC.ChernoffDensity`
+  として切り出し
+  - 新設:
+    `ChernoffDensity.lean`
+  - moved:
+    `Bad_ε`
+  - moved:
+    `bad_iff_exists_excess`
+  - moved:
+    `exp_one_gt_one`
+  - moved:
+    `decidable_Bad_ε`
+  - moved:
+    `p_lt_X_to_p_lt_X_succ`
+  - moved:
+    `bad_set_density_bound_param`
+  - moved:
+    `bad_set_density_bound'`
+  - `ChernoffDensity`
+    は
+    `ChernoffUnionBound`
+    を import して、
+    bad-set / density 層の owner を持つ構成にした
+  - `ABC036.lean`
+    自体は
+    `import DkMath.ABC.ChernoffDensity`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC037.lean`
+    と
+    `ABC038.lean`
+    を
+    `ABC036`
+    relay 経由ではなく
+    `ChernoffDensity`
+    の direct import に変更した
+  - これにより
+    `ABC036`
+    も owner file ではなく relay file となり、
+    density branch が
+    非連番 utility module
+    に昇格した
+- `DkMath.ABC.Main` build を再実行し成功
+  - `ChernoffDensity`
+    を含む public chain が通ることを確認

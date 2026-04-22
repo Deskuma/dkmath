@@ -308,3 +308,32 @@ public entry build で unknown identifier として露出する型。
   `ABC033`, `ABC034`, `ABC035`
   を順に compatibility relay 化する、
   という階段状の chain cut が実際に機能する。
+- 同じ階段を
+  density branch
+  にも延長できる。
+  今回は
+  `ABC036`
+  の
+  `Bad_ε` / `bad_set_density_bound_param`
+  などを
+  `ChernoffDensity`
+  に移し、
+  `ABC036`
+  を relay 化した。
+  さらに
+  `ABC037`
+  と
+  `ABC038`
+  は
+  `ABC036`
+  を経由せず、
+  owner module
+  `ChernoffDensity`
+  を direct import する形に寄せられた。
+  つまり
+  chain cut
+  の完成形は
+  「relay を残す」
+  だけでなく、
+  downstream を順次 direct owner import へ付け替える
+  段まで含む。
