@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC.ABC018
 import DkMath.ABC.QualityTailBridge
+import DkMath.ABC.SquareTailBasic
 
 #print "file: DkMath.ABC.TailSquareBridge"
 

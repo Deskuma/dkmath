@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
-import DkMath.ABC.ABC016
+import DkMath.ABC.SquareTailBasic
 
 #print "file: DkMath.ABC.ABC017"
 

@@ -169,30 +169,8 @@ lemma quality_le_of_sqprod_pow_bound_analytic_proof' -- 2025/10/04 14:14 ABC.lea
   (hrad_gt_one : 1 < (rad (a * b * c) : ℝ))
   (hbound : (c : ℝ) ≤ (rad (a * b * c) : ℝ) ^ (1 + ε)) :
   quality (Triple.mk a b c hsum hcop) ≤ 1 + ε := by
-  -- Under the extra assumption c ≤ rad(abc)^(1+ε) and rad(abc) > 1,
-  -- taking logs gives log c ≤ (1+ε) * log rad(abc), hence the quality ≤ 1+ε.
-  have hrad_pos : 0 < (rad (a * b * c) : ℝ) := by linarith [hrad_gt_one]
-  -- positivity of c from a,b nonzero
-  have hc_pos : 0 < (c : ℝ) := by
-    have ha_pos : 0 < (a : ℝ) := by exact_mod_cast Nat.pos_of_ne_zero ha_nonzero
-    have hb_pos : 0 < (b : ℝ) := by exact_mod_cast Nat.pos_of_ne_zero hb_nonzero
-    have hsum_cast : (c : ℝ) = (a + b : ℝ) := by norm_cast; rw [hsum]
-    linarith [ha_pos, hb_pos, hsum_cast]
-  -- apply log monotonicity to the provided bound
-  have hlog_bound : Real.log (c : ℝ) ≤ Real.log ((rad (a * b * c) : ℝ) ^ (1 + ε)) :=
-    Real.log_le_log hc_pos hbound
-  -- rewrite log of power
-  have hlog_rpow : Real.log ((rad (a * b * c) : ℝ) ^ (1 + ε)) = (1 + ε) * Real.log (rad (a * b * c) : ℝ) := by
-    exact Real.log_rpow hrad_pos (1 + ε)
-  rw [hlog_rpow] at hlog_bound
-  -- quality = log c / log rad(abc)
-  have hqual_eq : quality (Triple.mk a b c hsum hcop) = Real.log (c : ℝ) / Real.log (rad (a * b * c) : ℝ) := by
-    -- definition of quality uses log (rad (a*b*c)) in denominator
-    simp [quality]
-  -- divide both sides by positive log(rad(abc))
-  have hDpos : 0 < Real.log (rad (a * b * c) : ℝ) := Real.log_pos hrad_gt_one
-  have hres := (div_le_iff₀ hDpos).mpr hlog_bound
-  simpa [hqual_eq] using hres
+  exact quality_le_of_sqprod_pow_bound_analytic_proof
+    ε δ _hε hcop hsum ha_nonzero hb_nonzero _H hrad_gt_one hbound
 
 
 -- NOTE: This lemma is currently implemented using the _proof version below,

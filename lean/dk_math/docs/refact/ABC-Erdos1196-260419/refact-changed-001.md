@@ -1118,3 +1118,55 @@
     owner である
     `TailSquareBridge`
     の direct import に変更した
+- sqTail / odd-even decomposition / adjacent square-tail wrapper 層を
+  `DkMath.ABC.SquareTailBasic`
+  に昇格
+  - 新設:
+    `SquareTailBasic.lean`
+  - moved:
+    `ABC016.lean`
+    全体
+    (`rad_pow_ge_one`,
+    `sqTail`,
+    `nat_eq_sqTail_mul_rad`,
+    `nat_eq_sqTail_mul_rad_real`,
+    `oddPart`,
+    `evenPart`,
+    `decomp_oddPart_evenPart`,
+    `decomp_oddPart_evenPart_real`,
+    `twoTail`,
+    `decomp_piRad_twoTail`,
+    `decomp_piRad_twoTail_real`,
+    `sqTail_eq_piSqRad_mul_twoTail`,
+    `sqTail_eq_piSqRad_mul_twoTail_real`,
+    `twoTail_le_sqTail_real`,
+    `sqTail_eq_one_of_squarefree`,
+    `sqTail_le_self_real`,
+    `sqTail_adjacent_le_rad_pow_of_squarefree`,
+    `log_twoTail_eq_sum_vplus`,
+    `twoTail_le_rad_pow_of_log_bound`,
+    `piSqRad_adjacent_le_of_not_is_bad_a'`,
+    `piSqRad_adjacent_le_of_not_is_bad_a`)
+  - `ABC016.lean`
+    自体は
+    `import DkMath.ABC.SquareTailBasic`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC017.lean`,
+    `TailSquareBridge.lean`,
+    `AdjacentTailDensity.lean`,
+    `AdjacentQuality.lean`,
+    `ABC038Bridge.lean`,
+    `ABC038BridgeExamples.lean`
+    を
+    `SquareTailBasic`
+    の direct import に変更した
+- `QualityTailBridge`
+  内の
+  `quality_le_of_sqprod_pow_bound_analytic_proof'`
+  は、
+  `AnalyticQualityBridge`
+  側の
+  `quality_le_of_sqprod_pow_bound_analytic_proof`
+  を呼ぶ wrapper に置き換え、
+  実装重複を除去した

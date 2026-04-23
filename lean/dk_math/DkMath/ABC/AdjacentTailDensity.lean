@@ -8,6 +8,7 @@ import DkMath.ABC.ChernoffDyadic
 import DkMath.ABC.HeavyPrimeBudget
 import DkMath.ABC.HeavyPrimeSelection
 import DkMath.ABC.TailSquareBridge
+import DkMath.ABC.SquareTailBasic
 
 #print "file: DkMath.ABC.AdjacentTailDensity"
 

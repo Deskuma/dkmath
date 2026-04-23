@@ -817,3 +817,14 @@ public entry build で unknown identifier として露出する型。
   のような downstream-facing API を含むため、
   relay file に隠さず、
   呼び出し側の named owner から direct import させるのがよい。
+- その次段の
+  sqTail / odd-even decomposition / twoTail / adjacent extraction は
+  `SquareTailBasic`
+  のような broad owner へ whole-file promotion するのが安全だった。
+  ここは
+  `TailSquareBridge`
+  と
+  `AdjacentQuality`
+  の両 branch から再利用されるため、
+  relay に依存させず direct import を広げると
+  hidden dependency が露出しやすい。

@@ -3944,3 +3944,101 @@ Archive
      と
      `AnalyticQualityBridge.quality_le_of_sqprod_pow_bound_analytic_proof`
      の重複削減を検討する。
+
+## 2026/04/24 04:44 JST
+
+1. 実施:
+   - `ABC016`
+     を
+     `SquareTailBasic`
+     に昇格した。
+   - `SquareTailBasic.lean`
+     を新設し、
+     `sqTail`,
+     `oddPart`,
+     `evenPart`,
+     `twoTail`,
+     それらの分解補題、
+     `twoTail_le_rad_pow_of_log_bound`,
+     `piSqRad_adjacent_le_of_not_is_bad_a`
+     を含む square-tail decomposition / adjacent extraction 本体を移した。
+   - `ABC016.lean`
+     自体は
+     `import DkMath.ABC.SquareTailBasic`
+     だけを持つ compatibility relay に縮小した。
+2. downstream 調整:
+   - `ABC017.lean`
+     を
+     `ABC016`
+     relay 経由ではなく
+     `SquareTailBasic`
+     の direct import に変更した。
+   - square-tail API を直接参照している named owner 側にも
+     `SquareTailBasic`
+     direct import を追加した。
+   - 対象:
+     `TailSquareBridge.lean`,
+     `AdjacentTailDensity.lean`,
+     `AdjacentQuality.lean`,
+     `ABC038Bridge.lean`,
+     `ABC038BridgeExamples.lean`。
+3. 重複削減:
+   - `QualityTailBridge`
+     内の
+     `quality_le_of_sqprod_pow_bound_analytic_proof'`
+     は、
+     実装本体を重複保持せず、
+     `AnalyticQualityBridge.quality_le_of_sqprod_pow_bound_analytic_proof`
+     を呼ぶ wrapper に置き換えた。
+   - これにより
+     analytic proof 実装の owner は
+     `AnalyticQualityBridge`
+     に一本化された。
+4. 結論:
+   - quality / tail branch の接続部は
+     `QualityTailBridge`
+     -> `SquareTailBasic`
+     -> `TailSquareBridge | AdjacentQuality`
+     という番号なし spine で読めるようになった。
+   - `SquareTailBasic`
+     は broad owner だが、
+     現状の再利用境界に対しては分解しすぎない方が安全である。
+5. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC016 -> SquareTailBasic`
+     と direct import 化、
+     および analytic proof 重複削減を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     square-tail basic owner の切り方を追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC016 -> SquareTailBasic`
+     を追加した。
+6. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.SquareTailBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC016`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC017`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.TailSquareBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentTailDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentQuality`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC038Bridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC038BridgeExamples`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+     と
+     `ABC038Bridge.lean`
+     の axioms note。
+7. 次の課題:
+   - `ABC017`
+     の Borel-Cantelli / density extraction 層を named owner 化する。
+   - `SquareTailBasic`
+     内で adjacent wrapper と pure decomposition をさらに分ける価値があるかを、
+     downstream の import 安定性を見ながら判断する。
