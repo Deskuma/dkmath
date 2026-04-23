@@ -3550,3 +3550,77 @@ Archive
    - その後
      `ABC012`
      以降の independent branch を同じ spine で整理する。
+
+## 2026/04/23 15:01 JST
+
+1. 実施:
+   - `ABC011`
+     を
+     `TailRadicalBasic`
+     に昇格した。
+   - `TailRadicalBasic.lean`
+     を新設し、
+     `measure_union_over_k`,
+     `summable_exp_neg_two_pow_mul`,
+     `midblockCstarIndep`,
+     `few_heavy_slices`,
+     `piSqRad`,
+     `rad_dvd_of_dvd`,
+     `rad_le_of_dvd`,
+     `log_mul_eq`,
+     `log_rpow_pos`
+     を含む
+     finite union / independent absorption / π-radical utility 本体を移した。
+   - `ABC011.lean`
+     自体は
+     `import DkMath.ABC.TailRadicalBasic`
+     だけを持つ compatibility relay に縮小した。
+2. downstream 調整:
+   - `ABC012.lean`
+     を
+     `ABC011`
+     relay 経由ではなく
+     `TailRadicalBasic`
+     の direct import に変更した。
+3. 結論:
+   - middle-band の independent branch は
+     `MiddleBlockTail`
+     を tail owner、
+     `TailRadicalBasic`
+     を utility owner、
+     `ABC012+`
+     を downstream、
+     という named owner 構成で追えるようになった。
+   - `ABC011`
+     は relay になり、
+     independent 側の吸収定数と π-radical 補題も番号なし owner に寄った。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC011 -> TailRadicalBasic`
+     と
+     `ABC012`
+     の direct import 化を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     tail owner -> utility owner -> downstream
+     の切り方を追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC011 -> TailRadicalBasic`
+     を追加した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.TailRadicalBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC011`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC012`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認する。
+6. 次の課題:
+   - `ABC012`
+     の independent density / absorb 層を named owner 化する。
+   - その後
+     `ABC013+`
+     を同じ independent spine で整理する。

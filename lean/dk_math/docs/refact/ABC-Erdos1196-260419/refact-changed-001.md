@@ -963,3 +963,31 @@
     relay 経由ではなく
     `MiddleBlockTail`
     の direct import に変更した
+- finite union / independent absorption / π-radical utility 層を
+  `DkMath.ABC.TailRadicalBasic`
+  に昇格
+  - 新設:
+    `TailRadicalBasic.lean`
+  - moved:
+    `ABC011.lean`
+    全体
+    (`measure_union_over_k`,
+    `summable_exp_neg_two_pow_mul`,
+    `midblockCstarIndep`,
+    `few_heavy_slices`,
+    `piSqRad`,
+    `rad_dvd_of_dvd`,
+    `rad_le_of_dvd`,
+    `log_mul_eq`,
+    `log_rpow_pos`)
+  - `ABC011.lean`
+    自体は
+    `import DkMath.ABC.TailRadicalBasic`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC012.lean`
+    を
+    `ABC011`
+    relay 経由ではなく
+    `TailRadicalBasic`
+    の direct import に変更した

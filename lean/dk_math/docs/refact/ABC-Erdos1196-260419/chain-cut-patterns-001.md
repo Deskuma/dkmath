@@ -761,3 +761,15 @@ public entry build で unknown identifier として露出する型。
   -> tail owner (`MiddleBlockTail`)
   -> union / density downstream (`ABC011+`)
   と読むのが自然である。
+- その次の utility 混在層も、
+  まずは
+  `TailRadicalBasic`
+  のような broad owner へ whole-file promotion してから、
+  必要なら後で
+  union/basic と pi-radical/basic
+  に再分割するのが安全だった。
+  つまり
+  tail owner (`MiddleBlockTail`)
+  -> utility owner (`TailRadicalBasic`)
+  -> independent branch (`ABC012+`)
+  という一段追加の spine で切れる。
