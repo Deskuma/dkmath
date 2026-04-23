@@ -27,6 +27,7 @@
     [TailSquareBridge.lean](../../../DkMath/ABC/TailSquareBridge.lean),
     [FiniteChernoffBasic.lean](../../../DkMath/ABC/FiniteChernoffBasic.lean)
 - [x] [ABC020](../../../DkMath/ABC/ABC020.lean)
+  - 参照先 → [TailSquareBridge.lean](../../../DkMath/ABC/TailSquareBridge.lean)
 - [x] [ABC021](../../../DkMath/ABC/ABC021.lean)
   - 移設先 → [JansonRoadmap.lean](../../../DkMath/ABC/JansonRoadmap.lean)
 - [x] [ABC022](../../../DkMath/ABC/ABC022.lean)

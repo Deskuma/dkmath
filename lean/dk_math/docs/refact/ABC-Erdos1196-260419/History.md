@@ -3151,3 +3151,77 @@ Archive
      あるいは
      `ChernoffQualityBridge`
      以外にも残る direct owner import 化の余地を洗う。
+
+## 2026/04/23 08:34 JST
+
+1. 実施:
+   - `JansonRoadmap.lean`
+     の import を
+     `ABC020`
+     relay 経由から
+     `ABC008`
+     への direct import に変更した。
+   - これにより
+     Janson branch は
+     `ABC021 -> JansonRoadmap -> ABC008`
+     と読めるようになり、
+     `ABC020`
+     は Janson 側の transitively pulled relay から外れた。
+2. 影響整理:
+   - `ABC020`
+     は
+     `TailSquareBridge`
+     への relay としてのみ残る構図が明確になった。
+   - これは owner 昇格後の second-step thinning であり、
+     「まず named owner 化し、その後 relay import を最小の上流へ直す」
+     という型の確認でもある。
+3. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `JansonRoadmap`
+     の
+     `ABC020 -> ABC008`
+     import thinning を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     named owner 化の次サイクルで relay import をさらに薄くする型を追記した。
+   - relay:
+     `check-relay-lean.md`
+     の
+     `ABC020`
+     項目に
+     `TailSquareBridge.lean`
+     を参照先として追記した。
+4. 結論:
+   - `JansonRoadmap`
+     は
+     `ABC020`
+     relay に依存しなくなり、
+     Janson branch の spine は 1 本短くなった。
+   - relay file 追跡表も、
+     `ABC020`
+     と
+     `ABC021`
+     の役割差
+     （tail bridge relay と Janson roadmap relay）
+     が読みやすくなった。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.JansonRoadmap`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC021`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `JansonRoadmap.lean`
+     の `sorry` 警告、
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の axioms note だけ replay された。
+6. 次の課題:
+   - `ABC008`
+     自体を Janson basic owner として昇格させるか、
+     あるいは
+     他の relay file でも同様の import thinning を進める。

@@ -697,3 +697,18 @@ public entry build で unknown identifier として露出する型。
   `Main`
   build を最後まで通して
   transitive 依存の崩れを確認する必要がある。
+- named owner 化のあとも、
+  直後に relay を踏んでいる import が残ることがある。
+  今回の
+  `JansonRoadmap`
+  では
+  `ABC020`
+  relay を経由していたが、
+  実際に必要なのは
+  `ABC008`
+  側の Janson 基本定義だった。
+  この型では
+  「owner 昇格の次サイクルで、
+  relay 経由 import を最小の上流へ直接寄せる」
+  ことで、
+  numbered chain をもう一段短くできる。

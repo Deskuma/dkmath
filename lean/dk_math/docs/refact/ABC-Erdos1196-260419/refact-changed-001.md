@@ -864,3 +864,16 @@
     hidden import が露出したため、
     `import DkMath.ABC.TailSquareBridge`
     を direct 化して復旧した
+- Janson branch の import spine を 1 本薄くした
+  - `JansonRoadmap.lean`
+    の import を
+    `ABC020`
+    relay 経由から
+    `ABC008`
+    への direct import に変更した
+  - これにより
+    `ABC020`
+    は
+    `TailSquareBridge`
+    への relay としてのみ残る状態が、
+    import 実態と追跡表の両方で一致した
