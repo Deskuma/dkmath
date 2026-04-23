@@ -3313,3 +3313,84 @@ Archive
      他 branch の base / roadmap でも
      whole-file promotion
      を進める。
+
+## 2026/04/23 09:10 JST
+
+1. 実施:
+   - `ABC008`
+     を
+     `JansonBasic`
+     に昇格した。
+   - `JansonBasic.lean`
+     を新設し、
+     Janson / PMF infrastructure の本体を移した。
+   - `ABC008.lean`
+     自体は
+     `import DkMath.ABC.JansonBasic`
+     だけを持つ compatibility relay に縮小した。
+2. downstream 調整:
+   - `ABC009.lean`
+     を
+     `ABC008`
+     relay 経由ではなく
+     `JansonBasic`
+     の direct import に変更した。
+   - `JansonRoadmap.lean`
+     も
+     `ABC008`
+     relay ではなく
+     `JansonBasic`
+     を direct import する形に変更した。
+3. 結論:
+   - Janson branch の infrastructure base は
+     `JansonBasic`
+     として番号なし owner に固定された。
+   - これにより
+     `ABC008`
+     は base relay、
+     `ABC021`
+     は roadmap relay、
+     `ABC020`
+     は tail bridge relay、
+     という三者の役割分担が明確になった。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC008 -> JansonBasic`
+     と
+     relay 役割分担の明確化を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     Janson branch の
+     infrastructure base / roadmap / tail relay
+     の三層構成を追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC008 -> JansonBasic`
+     を追加した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.JansonBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC008`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC009`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.JansonRoadmap`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `JansonRoadmap.lean`
+     の `sorry` 警告、
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の axioms note だけ replay された。
+6. 次の課題:
+   - `ABC009`
+     を named owner 化して
+     Janson downstream API を番号なしへ上げる。
+   - あるいは
+     Janson branch 以外でも
+     whole-file promotion
+     が有効な base file を探す。

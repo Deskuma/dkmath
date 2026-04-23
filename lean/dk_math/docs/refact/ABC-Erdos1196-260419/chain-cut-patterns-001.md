@@ -730,3 +730,14 @@ public entry build で unknown identifier として露出する型。
   「branch base を named owner で固定してから、
   下流を順に relay 離れさせる」
   型として再利用できる。
+- Janson branch では、
+  基底 owner と roadmap owner を分けたうえで
+  relay file を
+  `ABC008`, `ABC021`, `ABC020`
+  の三者で役割分担させると、
+  追跡表が読みやすくなる。
+  つまり
+  infrastructure base,
+  theorem roadmap,
+  tail bridge relay
+  を別々に見せる構図である。

@@ -901,3 +901,17 @@
     relay 経由ではなく
     `JansonBasic`
     の direct import に変更した
+- Janson branch の relay 追跡をさらに明確化
+  - `ABC008.lean`
+    は
+    `JansonBasic`
+    への relay、
+    `ABC021.lean`
+    は
+    `JansonRoadmap`
+    への relay、
+    `ABC020.lean`
+    は
+    `TailSquareBridge`
+    への relay、
+    という 3 本の役割分担が成立した
