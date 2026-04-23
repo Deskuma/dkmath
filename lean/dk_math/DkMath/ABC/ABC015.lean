@@ -6,7 +6,7 @@ Authors: D. and Wise Wolf.
 
 
 import DkMath.Basic.Nat
-import DkMath.ABC.ABC014
+import DkMath.ABC.AnalyticQualityBridge
 
 #print "file: DkMath.ABC.ABC015"
 

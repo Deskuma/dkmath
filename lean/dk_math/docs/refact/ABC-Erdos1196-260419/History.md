@@ -3765,3 +3765,77 @@ Archive
    - `ABC015`
      以降の piSqRad / tail bridge と重複している部分があれば、
      owner 境界を再設計する。
+
+## 2026/04/23 21:54 JST
+
+1. 実施:
+   - `ABC014`
+     を
+     `AnalyticQualityBridge`
+     に昇格した。
+   - `AnalyticQualityBridge.lean`
+     を新設し、
+     `quality_le_of_sqprod_pow_bound_analytic_proof`,
+     `quality_le_of_sqprod_pow_bound_analytic`,
+     `quality_le_of_sqprod_pow_bound`,
+     `quality_le_of_not_bad_diag`,
+     `log_rad_adj_pos_of_two_le`,
+     `coprime_n_two_n_add_one`,
+     `coprime_succ_mul_two_add_one`,
+     `quality_le_of_pi_tail_adj`
+     を含む analytic/log quality bridge 本体を移した。
+   - `ABC014.lean`
+     自体は
+     `import DkMath.ABC.AnalyticQualityBridge`
+     だけを持つ compatibility relay に縮小した。
+2. downstream 調整:
+   - `ABC015.lean`
+     を
+     `ABC014`
+     relay 経由ではなく
+     `AnalyticQualityBridge`
+     の direct import に変更した。
+3. 結論:
+   - counting branch から quality branch への接続部は
+     `SliceDiagonalCounting`
+     -> `AnalyticQualityBridge`
+     -> `ABC015+`
+     という番号なし spine で読めるようになった。
+   - `ABC015`
+     側には同系統の axiom-to-lemma wrapper が残っているため、
+     次サイクルでは重複を整理しながら owner 名を決める。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC014 -> AnalyticQualityBridge`
+     と
+     `ABC015`
+     の direct import 化を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     analytic/log quality bridge owner の切り方を追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC014 -> AnalyticQualityBridge`
+     を追加した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AnalyticQualityBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC014`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC015`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+     と
+     `ABC038Bridge.lean`
+     の axioms note。
+6. 次の課題:
+   - `ABC015`
+     の rad₀ / analytic wrapper / axiom-to-lemma 層を named owner 化する。
+   - `AnalyticQualityBridge`
+     と重複している quality wrapper を整理し、
+     可能なら downstream から直接 owner API を参照させる。

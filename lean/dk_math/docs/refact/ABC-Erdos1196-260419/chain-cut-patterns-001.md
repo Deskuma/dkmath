@@ -792,3 +792,17 @@ public entry build で unknown identifier として露出する型。
   adjacent-quality branch からも参照されるため、
   relay 経由ではなく direct import を広げると
   hidden dependency が明確になる。
+- slice/diagonal counting の直後にある
+  analytic/log quality bridge は
+  `AnalyticQualityBridge`
+  として切れる。
+  ここでは
+  `piSqRad` bound,
+  `quality`,
+  `rad` の log positivity,
+  adjacent diagonal specialization
+  が混在するため、
+  counting owner とは分けつつ、
+  downstream の
+  `ABC015+`
+  からは relay ではなく direct import させるのが読みやすい。

@@ -1045,3 +1045,30 @@
     relay 経由ではなく
     `SliceDiagonalCounting`
     の direct import に変更した
+- analytic/log quality bridge 層を
+  `DkMath.ABC.AnalyticQualityBridge`
+  に昇格
+  - 新設:
+    `AnalyticQualityBridge.lean`
+  - moved:
+    `ABC014.lean`
+    全体
+    (`quality_le_of_sqprod_pow_bound_analytic_proof`,
+    `quality_le_of_sqprod_pow_bound_analytic`,
+    `quality_le_of_sqprod_pow_bound`,
+    `quality_le_of_not_bad_diag`,
+    `log_rad_adj_pos_of_two_le`,
+    `coprime_n_two_n_add_one`,
+    `coprime_succ_mul_two_add_one`,
+    `quality_le_of_pi_tail_adj`)
+  - `ABC014.lean`
+    自体は
+    `import DkMath.ABC.AnalyticQualityBridge`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC015.lean`
+    を
+    `ABC014`
+    relay 経由ではなく
+    `AnalyticQualityBridge`
+    の direct import に変更した
