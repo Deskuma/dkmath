@@ -712,3 +712,21 @@ public entry build で unknown identifier として露出する型。
   relay 経由 import を最小の上流へ直接寄せる」
   ことで、
   numbered chain をもう一段短くできる。
+- `ABC008`
+  のように
+  branch 基底の巨大ファイルが
+  既に thematic にまとまっている場合は、
+  無理に細断せず
+  whole-file promotion
+  を先に入れるのが有効だった。
+  今回は
+  `JansonBasic`
+  として丸ごと昇格させ、
+  `ABC009`
+  と
+  `JansonRoadmap`
+  を direct import に寄せた。
+  これは
+  「branch base を named owner で固定してから、
+  下流を順に relay 離れさせる」
+  型として再利用できる。

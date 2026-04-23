@@ -877,3 +877,27 @@
     `TailSquareBridge`
     への relay としてのみ残る状態が、
     import 実態と追跡表の両方で一致した
+- Janson basic / PMF infrastructure 層を
+  `DkMath.ABC.JansonBasic`
+  に昇格
+  - 新設:
+    `JansonBasic.lean`
+  - moved:
+    `ABC008.lean`
+    全体
+    (`JansonModel`, `JansonSetup`, `mu`, `dbar`,
+    `bernoulli_pmf`, `product_pmf`,
+    `expect_indicator_prod` など)
+  - `ABC008.lean`
+    自体は
+    `import DkMath.ABC.JansonBasic`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC009.lean`
+    と
+    `JansonRoadmap.lean`
+    を
+    `ABC008`
+    relay 経由ではなく
+    `JansonBasic`
+    の direct import に変更した
