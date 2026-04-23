@@ -1072,3 +1072,49 @@
     relay 経由ではなく
     `AnalyticQualityBridge`
     の direct import に変更した
+- rad₀ / quality tail bridge / axiom-to-lemma wrapper 層を
+  `DkMath.ABC.QualityTailBridge`
+  に昇格
+  - 新設:
+    `QualityTailBridge.lean`
+  - moved:
+    `ABC015.lean`
+    全体
+    (`delta_0435_final`,
+    `rad₀`,
+    `rad₀_zero`,
+    `rad₀_one`,
+    `rad₀_pos_iff`,
+    `rad₀_ne_zero_iff`,
+    `rad₀_eq_rad_of_ne_zero`,
+    `rad₀_mul_coprime'`,
+    `log_rad₀_eq`,
+    `log_rad₀_adj_pos_of_two_le`,
+    `quality_le_of_sqprod_pow_bound_analytic_proof'`,
+    `quality_le_of_sqprod_pow_bound_analytic_axiom_to_lemma`,
+    `quality_le_of_pi_tail`,
+    `adjacent_quality_bridge`,
+    `piSqRad_le_of_not_bad`,
+    `not_bad_of_not_is_bad_a`)
+  - `ABC015.lean`
+    自体は
+    `import DkMath.ABC.QualityTailBridge`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC016.lean`,
+    `AdjacentTailDensity.lean`,
+    `TailSquareBridge.lean`,
+    `ChernoffQualityBridge.lean`,
+    `AdjacentQuality.lean`,
+    `ABC038Bridge.lean`
+    を
+    `QualityTailBridge`
+    の direct import に変更した
+  - hidden dependency として露出した
+    `AdjacentTailDensity.lean`
+    の
+    `log_twoTail_le_excess_sum`
+    参照は、
+    owner である
+    `TailSquareBridge`
+    の direct import に変更した

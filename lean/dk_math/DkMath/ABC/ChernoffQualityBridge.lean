@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC.ChernoffDensity
 import DkMath.ABC.TailSquareBridge
+import DkMath.ABC.QualityTailBridge
 
 #print "file: DkMath.ABC.ChernoffQualityBridge"
 

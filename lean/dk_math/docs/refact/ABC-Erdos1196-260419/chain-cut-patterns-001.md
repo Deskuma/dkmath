@@ -806,3 +806,14 @@ public entry build で unknown identifier として露出する型。
   downstream の
   `ABC015+`
   からは relay ではなく direct import させるのが読みやすい。
+- analytic bridge の直後にある
+  rad₀ / quality tail bridge / axiom-to-lemma wrapper は
+  `QualityTailBridge`
+  として whole-file promotion できる。
+  ここは
+  `quality_le_of_pi_tail`,
+  `adjacent_quality_bridge`,
+  `piSqRad_le_of_not_bad`
+  のような downstream-facing API を含むため、
+  relay file に隠さず、
+  呼び出し側の named owner から direct import させるのがよい。

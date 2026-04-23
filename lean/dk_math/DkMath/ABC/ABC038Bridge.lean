@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.ABC.ChernoffQualityBridge
 import DkMath.ABC.ValuationFlowBridge
+import DkMath.ABC.QualityTailBridge
 
 #print "file: DkMath.ABC.ABC038Bridge"
 

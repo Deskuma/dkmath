@@ -3839,3 +3839,108 @@ Archive
    - `AnalyticQualityBridge`
      と重複している quality wrapper を整理し、
      可能なら downstream から直接 owner API を参照させる。
+
+## 2026/04/24 00:54 JST
+
+1. 実施:
+   - `ABC015`
+     を
+     `QualityTailBridge`
+     に昇格した。
+   - `QualityTailBridge.lean`
+     を新設し、
+     `rad₀`
+     系補題、
+     `quality_le_of_sqprod_pow_bound_analytic_proof'`,
+     `quality_le_of_sqprod_pow_bound_analytic_axiom_to_lemma`,
+     `quality_le_of_pi_tail`,
+     `adjacent_quality_bridge`,
+     `piSqRad_le_of_not_bad`,
+     `not_bad_of_not_is_bad_a`
+     を含む quality tail bridge 本体を移した。
+   - `ABC015.lean`
+     自体は
+     `import DkMath.ABC.QualityTailBridge`
+     だけを持つ compatibility relay に縮小した。
+2. downstream 調整:
+   - `ABC016.lean`
+     を
+     `ABC015`
+     relay 経由ではなく
+     `QualityTailBridge`
+     の direct import に変更した。
+   - `quality_le_of_pi_tail`,
+     `adjacent_quality_bridge`,
+     `piSqRad_le_of_not_bad`,
+     `quality_le_of_sqprod_pow_bound_analytic_axiom_to_lemma`
+     を直接参照している named owner 側にも
+     `QualityTailBridge`
+     direct import を追加した。
+   - 対象:
+     `AdjacentTailDensity.lean`,
+     `TailSquareBridge.lean`,
+     `ChernoffQualityBridge.lean`,
+     `AdjacentQuality.lean`,
+     `ABC038Bridge.lean`。
+   - `AdjacentQuality`
+     の検証中に
+     `AdjacentTailDensity.lean`
+     で
+     `log_twoTail_le_excess_sum`
+     の hidden dependency が露出したため、
+     owner である
+     `TailSquareBridge`
+     を direct import に追加した。
+3. 結論:
+   - quality branch の接続部は
+     `AnalyticQualityBridge`
+     -> `QualityTailBridge`
+     -> `ABC016+`
+     という番号なし spine で読めるようになった。
+   - `QualityTailBridge`
+     には
+     `AnalyticQualityBridge`
+     と意味的に重複する wrapper が残っているが、
+     旧 API 名を downstream が参照しているため、
+     このサイクルでは owner 固定に留めた。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC015 -> QualityTailBridge`
+     と downstream direct import 化を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     quality tail bridge owner の切り方を追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC015 -> QualityTailBridge`
+     を追加した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.QualityTailBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC015`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC016`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.TailSquareBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffQualityBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentTailDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentQuality`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC038Bridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+     と
+     `ABC038Bridge.lean`
+     の axioms note。
+6. 次の課題:
+   - `ABC016`
+     の sqTail / odd-even decomposition / adjacent quality wrapper 層を named owner 化する。
+   - `QualityTailBridge`
+     内の
+     `quality_le_of_sqprod_pow_bound_analytic_proof'`
+     と
+     `AnalyticQualityBridge.quality_le_of_sqprod_pow_bound_analytic_proof`
+     の重複削減を検討する。

@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Basic.Nat
 import DkMath.ABC.AdjacentTailDensity
+import DkMath.ABC.QualityTailBridge
 
 #print "file: DkMath.ABC.AdjacentQuality"
 

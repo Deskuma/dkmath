@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.ABC.ChernoffDyadic
 import DkMath.ABC.HeavyPrimeBudget
 import DkMath.ABC.HeavyPrimeSelection
+import DkMath.ABC.TailSquareBridge
 
 #print "file: DkMath.ABC.AdjacentTailDensity"
 
