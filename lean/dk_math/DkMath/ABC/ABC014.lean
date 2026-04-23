@@ -6,7 +6,7 @@ Authors: D. and Wise Wolf.
 
 
 import DkMath.Basic.Nat
-import DkMath.ABC.ABC013
+import DkMath.ABC.SliceDiagonalCounting
 
 #print "file: DkMath.ABC.ABC014"
 

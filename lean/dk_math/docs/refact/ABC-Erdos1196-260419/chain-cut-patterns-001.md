@@ -785,3 +785,10 @@ public entry build で unknown identifier として露出する型。
   -> `MiddleBlockIndependentTail`
   -> `ABC013+`
   という番号なし spine になる。
+- slice/diagonal counting 層は
+  `SliceDiagonalCounting`
+  として独立に昇格できる。
+  ここは downstream の
+  adjacent-quality branch からも参照されるため、
+  relay 経由ではなく direct import を広げると
+  hidden dependency が明確になる。

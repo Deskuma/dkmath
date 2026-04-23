@@ -3694,3 +3694,74 @@ Archive
    - その後
      adjacent / piSqRad 側へ接続する `ABC014+`
      を整理する。
+
+## 2026/04/23 15:34 JST
+
+1. 実施:
+   - `ABC013`
+     を
+     `SliceDiagonalCounting`
+     に昇格した。
+   - `SliceDiagonalCounting.lean`
+     を新設し、
+     `slice_heavy_card_le`,
+     `eventually_slice_heavy_sublinear`,
+     `range_succ_eq_Icc`,
+     `sliceBadCount_eq_card_filter_Icc`,
+     `diagCount`,
+     `diagCountFwd`,
+     `diagCountFwd_le_diagCount_shift`,
+     `diag_badcount_le_badcount`,
+     `eventually_slice_heavy_sublinear_of_badcount_subquad`
+     を含む
+     slice-heavy / diagonal counting 本体を移した。
+   - `ABC013.lean`
+     自体は
+     `import DkMath.ABC.SliceDiagonalCounting`
+     だけを持つ compatibility relay に縮小した。
+2. downstream 調整:
+   - `ABC014.lean`
+     を
+     `ABC013`
+     relay 経由ではなく
+     `SliceDiagonalCounting`
+     の direct import に変更した。
+3. 結論:
+   - independent / adjacent branch の接続部は
+     `MiddleBlockIndependentTail`
+     -> `SliceDiagonalCounting`
+     -> `ABC014+`
+     という番号なし spine で読めるようになった。
+   - `AdjacentQuality`
+     も同じ counting API を参照しているため、
+     `Main`
+     build で hidden import が露出すれば direct import を追加する。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC013 -> SliceDiagonalCounting`
+     と
+     `ABC014`
+     の direct import 化を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     slice / diagonal counting owner の切り方を追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC013 -> SliceDiagonalCounting`
+     を追加した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.SliceDiagonalCounting`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC013`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC014`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認する。
+6. 次の課題:
+   - `ABC014`
+     の analytic quality bridge 層を named owner 化する。
+   - `ABC015`
+     以降の piSqRad / tail bridge と重複している部分があれば、
+     owner 境界を再設計する。

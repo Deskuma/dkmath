@@ -1017,3 +1017,31 @@
     relay 経由ではなく
     `MiddleBlockIndependentTail`
     の direct import に変更した
+- slice-heavy / diagonal counting 層を
+  `DkMath.ABC.SliceDiagonalCounting`
+  に昇格
+  - 新設:
+    `SliceDiagonalCounting.lean`
+  - moved:
+    `ABC013.lean`
+    全体
+    (`slice_heavy_card_le`,
+    `eventually_slice_heavy_sublinear`,
+    `range_succ_eq_Icc`,
+    `sliceBadCount_eq_card_filter_Icc`,
+    `diagCount`,
+    `diagCountFwd`,
+    `diagCountFwd_le_diagCount_shift`,
+    `diag_badcount_le_badcount`,
+    `eventually_slice_heavy_sublinear_of_badcount_subquad`)
+  - `ABC013.lean`
+    自体は
+    `import DkMath.ABC.SliceDiagonalCounting`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC014.lean`
+    を
+    `ABC013`
+    relay 経由ではなく
+    `SliceDiagonalCounting`
+    の direct import に変更した
