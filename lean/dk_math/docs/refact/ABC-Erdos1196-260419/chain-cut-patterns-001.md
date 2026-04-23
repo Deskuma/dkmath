@@ -750,3 +750,14 @@ public entry build で unknown identifier として露出する型。
   -> bridge (`MiddleJansonBridge`)
   -> downstream (`ABC010` 以降)
   の三層で切る型である。
+- さらにその先の
+  mid-block MGF / tail / GoodX
+  までは
+  `MiddleBlockTail`
+  として一段まとめに昇格できた。
+  この型では
+  base (`JansonBasic`)
+  -> bridge (`MiddleJansonBridge`)
+  -> tail owner (`MiddleBlockTail`)
+  -> union / density downstream (`ABC011+`)
+  と読むのが自然である。

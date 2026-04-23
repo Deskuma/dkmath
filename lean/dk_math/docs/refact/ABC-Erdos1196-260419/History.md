@@ -3474,3 +3474,79 @@ Archive
      他 branch でも
      base -> bridge -> downstream
      の三層化を進める。
+
+## 2026/04/23 14:46 JST
+
+1. 実施:
+   - `ABC010`
+     を
+     `MiddleBlockTail`
+     に昇格した。
+   - `MiddleBlockTail.lean`
+     を新設し、
+     `Zmid`,
+     `QuadMGF`,
+     `QuadMGFPos`,
+     `mgf_midblock_via_janson_pos`,
+     `mid_block_upper_hp_dep`,
+     `mid_block_upper_hp_indep`,
+     `Emid`,
+     `GoodX`,
+     `goodX_measure_ge_one_sub_midblockCstar`,
+     `GoodX_antitone`
+     を含む
+     mid-block MGF / tail / GoodX 本体を移した。
+   - `ABC010.lean`
+     自体は
+     `import DkMath.ABC.MiddleBlockTail`
+     だけを持つ compatibility relay に縮小した。
+2. downstream 調整:
+   - `ABC011.lean`
+     を
+     `ABC010`
+     relay 経由ではなく
+     `MiddleBlockTail`
+     の direct import に変更した。
+3. 結論:
+   - Janson middle-band branch は
+     `JansonBasic`
+     を base、
+     `MiddleJansonBridge`
+     を bridge、
+     `MiddleBlockTail`
+     を tail owner、
+     という named owner 構成で追えるようになった。
+   - `ABC010`
+     は relay になり、
+     `ABC011+`
+     は mid-block tail API を番号なし owner から受け取れるようになった。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC010 -> MiddleBlockTail`
+     と
+     `ABC011`
+     の direct import 化を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     base -> bridge -> tail owner -> downstream
+     の四層分解を追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC010 -> MiddleBlockTail`
+     を追加した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleBlockTail`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC010`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC011`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認する。
+6. 次の課題:
+   - `ABC011`
+     の finite union / absorption 層を named owner 化する。
+   - その後
+     `ABC012`
+     以降の independent branch を同じ spine で整理する。

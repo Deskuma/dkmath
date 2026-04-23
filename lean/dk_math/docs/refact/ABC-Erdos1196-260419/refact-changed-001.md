@@ -937,3 +937,29 @@
     relay 経由ではなく
     `MiddleJansonBridge`
     の direct import に変更した
+- mid-block MGF / tail / GoodX 層を
+  `DkMath.ABC.MiddleBlockTail`
+  に昇格
+  - 新設:
+    `MiddleBlockTail.lean`
+  - moved:
+    `ABC010.lean`
+    全体
+    (`Zmid`, `QuadMGF`, `QuadMGFPos`,
+    `mgf_midblock_via_janson_pos`,
+    `mid_block_upper_hp_dep`,
+    `mid_block_upper_hp_indep`,
+    `Emid`, `GoodX`,
+    `goodX_measure_ge_one_sub_midblockCstar`,
+    `GoodX_antitone`)
+  - `ABC010.lean`
+    自体は
+    `import DkMath.ABC.MiddleBlockTail`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC011.lean`
+    を
+    `ABC010`
+    relay 経由ではなく
+    `MiddleBlockTail`
+    の direct import に変更した

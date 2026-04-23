@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
-import DkMath.ABC.ABC010
+import DkMath.ABC.MiddleBlockTail
 
 #print "file: DkMath.ABC.ABC011"
 
