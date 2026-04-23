@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
-import DkMath.ABC.ABC009
+import DkMath.ABC.MiddleJansonBridge
 
 #print "file: DkMath.ABC.ABC010"
 

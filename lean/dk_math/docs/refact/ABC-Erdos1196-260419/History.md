@@ -3394,3 +3394,83 @@ Archive
      Janson branch 以外でも
      whole-file promotion
      が有効な base file を探す。
+
+## 2026/04/23 14:28 JST
+
+1. 実施:
+   - `ABC009`
+     を
+     `MiddleJansonBridge`
+     に昇格した。
+   - `MiddleJansonBridge.lean`
+     を新設し、
+     `JSProb`,
+     `Middle`,
+     `janson_mu`,
+     `janson_dbar`,
+     `janson_block_exp`,
+     `BlockJS`,
+     `middle_band_sum_bound`,
+     `middle_band_bound_top`
+     を含む
+     Janson/Suen middle-band bridge 本体を移した。
+   - `ABC009.lean`
+     自体は
+     `import DkMath.ABC.MiddleJansonBridge`
+     だけを持つ compatibility relay に縮小した。
+2. downstream 調整:
+   - `ABC010.lean`
+     を
+     `ABC009`
+     relay 経由ではなく
+     `MiddleJansonBridge`
+     の direct import に変更した。
+3. 結論:
+   - Janson branch は
+     `JansonBasic`
+     を base、
+     `MiddleJansonBridge`
+     を bridge、
+     `JansonRoadmap`
+     を theorem/roadmap、
+     という named owner 構成で追えるようになった。
+   - `ABC009`
+     は relay になり、
+     Janson downstream API も番号なし owner に吸い上げられた。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC009 -> MiddleJansonBridge`
+     と
+     `ABC010`
+     の direct import 化を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     base -> bridge -> downstream
+     の三層分解を追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC009 -> MiddleJansonBridge`
+     を追加した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleJansonBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC009`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC010`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の axioms note だけ replay された。
+6. 次の課題:
+   - `ABC010`
+     以降の downstream を named owner 化していく。
+   - あるいは
+     他 branch でも
+     base -> bridge -> downstream
+     の三層化を進める。

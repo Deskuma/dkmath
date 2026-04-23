@@ -741,3 +741,12 @@ public entry build で unknown identifier として露出する型。
   theorem roadmap,
   tail bridge relay
   を別々に見せる構図である。
+- その次段として、
+  Janson downstream の “使い方 API” 層を
+  `MiddleJansonBridge`
+  のような bridge 名で whole-file promotion するのも自然だった。
+  つまり
+  base (`JansonBasic`)
+  -> bridge (`MiddleJansonBridge`)
+  -> downstream (`ABC010` 以降)
+  の三層で切る型である。

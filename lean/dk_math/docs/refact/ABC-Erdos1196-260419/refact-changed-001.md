@@ -915,3 +915,25 @@
     `TailSquareBridge`
     への relay、
     という 3 本の役割分担が成立した
+- middle-band の Janson/Suen bridge 層を
+  `DkMath.ABC.MiddleJansonBridge`
+  に昇格
+  - 新設:
+    `MiddleJansonBridge.lean`
+  - moved:
+    `ABC009.lean`
+    全体
+    (`JSProb`, `Middle`, `janson_mu`, `janson_dbar`,
+    `janson_block_exp`, `BlockJS`,
+    `middle_band_sum_bound`, `middle_band_bound_top`)
+  - `ABC009.lean`
+    自体は
+    `import DkMath.ABC.MiddleJansonBridge`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC010.lean`
+    を
+    `ABC009`
+    relay 経由ではなく
+    `MiddleJansonBridge`
+    の direct import に変更した
