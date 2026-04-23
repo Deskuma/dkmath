@@ -991,3 +991,29 @@
     relay 経由ではなく
     `TailRadicalBasic`
     の direct import に変更した
+- independent mid-block dyadic tail / GoodX absorption 層を
+  `DkMath.ABC.MiddleBlockIndependentTail`
+  に昇格
+  - 新設:
+    `MiddleBlockIndependentTail.lean`
+  - moved:
+    `ABC012.lean`
+    全体
+    (`two_mul_sq_over_add_ge_self`,
+    `Ksmall`, `Klarge`,
+    `Kset_disjoint_union`,
+    `card_Ksmall_le_three`,
+    `midblock_tail_indep_dyadic_strong`,
+    `midblock_union_absorb_indep_const`,
+    `goodX_measure_ge_one_sub_midblockCstarIndep`)
+  - `ABC012.lean`
+    自体は
+    `import DkMath.ABC.MiddleBlockIndependentTail`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC013.lean`
+    を
+    `ABC012`
+    relay 経由ではなく
+    `MiddleBlockIndependentTail`
+    の direct import に変更した

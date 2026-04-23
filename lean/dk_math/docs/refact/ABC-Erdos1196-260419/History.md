@@ -3624,3 +3624,73 @@ Archive
    - その後
      `ABC013+`
      を同じ independent spine で整理する。
+
+## 2026/04/23 15:18 JST
+
+1. 実施:
+   - `ABC012`
+     を
+     `MiddleBlockIndependentTail`
+     に昇格した。
+   - `MiddleBlockIndependentTail.lean`
+     を新設し、
+     `two_mul_sq_over_add_ge_self`,
+     `Ksmall`,
+     `Klarge`,
+     `Kset_disjoint_union`,
+     `card_Ksmall_le_three`,
+     `midblock_tail_indep_dyadic_strong`,
+     `midblock_union_absorb_indep_const`,
+     `goodX_measure_ge_one_sub_midblockCstarIndep`
+     を含む
+     independent mid-block dyadic tail / GoodX absorption 本体を移した。
+   - `ABC012.lean`
+     自体は
+     `import DkMath.ABC.MiddleBlockIndependentTail`
+     だけを持つ compatibility relay に縮小した。
+2. downstream 調整:
+   - `ABC013.lean`
+     を
+     `ABC012`
+     relay 経由ではなく
+     `MiddleBlockIndependentTail`
+     の direct import に変更した。
+3. 結論:
+   - independent branch は
+     `MiddleBlockTail`
+     -> `TailRadicalBasic`
+     -> `MiddleBlockIndependentTail`
+     -> `ABC013+`
+     という番号なし spine で読めるようになった。
+   - `ABC012`
+     は relay になり、
+     Kset 分割と GoodX 吸収が thematic owner に固定された。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC012 -> MiddleBlockIndependentTail`
+     と
+     `ABC013`
+     の direct import 化を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     independent branch の番号なし spine を追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC012 -> MiddleBlockIndependentTail`
+     を追加した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleBlockIndependentTail`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC012`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC013`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認する。
+6. 次の課題:
+   - `ABC013`
+     の slice/diagonal counting 層を named owner 化する。
+   - その後
+     adjacent / piSqRad 側へ接続する `ABC014+`
+     を整理する。

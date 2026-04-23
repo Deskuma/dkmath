@@ -773,3 +773,15 @@ public entry build で unknown identifier として露出する型。
   -> utility owner (`TailRadicalBasic`)
   -> independent branch (`ABC012+`)
   という一段追加の spine で切れる。
+- independent branch の本体は、
+  `MiddleBlockIndependentTail`
+  として
+  Kset 分割、
+  dyadic tail、
+  GoodX 吸収を一つの owner にまとめられる。
+  これで
+  `MiddleBlockTail`
+  -> `TailRadicalBasic`
+  -> `MiddleBlockIndependentTail`
+  -> `ABC013+`
+  という番号なし spine になる。
