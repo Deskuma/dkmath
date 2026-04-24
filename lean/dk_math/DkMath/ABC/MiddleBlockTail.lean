@@ -5,7 +5,8 @@ Authors: D. and Wise Wolf.
 -/
 
 
-import DkMath.ABC.MiddleJansonBridge
+import DkMath.ABC.MiddleBandJansonSkeleton
+import DkMath.ABC.MiddleDyadicCompose
 
 #print "file: DkMath.ABC.MiddleBlockTail"
 

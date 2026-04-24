@@ -1098,3 +1098,38 @@ public entry build で unknown identifier として露出する型。
   と
   `MiddleDyadicCompose`
   を合流させる aggregation owner に寄る。
+- `ABC009`
+  relay target の次段では、
+  `JSProb`
+  から作った実数評価
+  (`janson_mu`, `janson_dbar`, `janson_block_exp`)
+  と
+  block record
+  (`Params`, `BlockJS`, `buildBlockJS`)
+  を
+  `MiddleBlockJS`
+  に分けられる。
+  これで
+  `MiddleJansonBridge`
+  は
+  `middle_band_sum_bound`
+  / `middle_band_bound_top`
+  の aggregation owner として読める。
+- この分割後、
+  downstream の `MiddleBlockTail`
+  が aggregation API を使っていない場合は、
+  `MiddleJansonBridge`
+  ではなく
+  `MiddleBandJansonSkeleton`
+  と
+  `MiddleDyadicCompose`
+  を direct import するのがよい。
+  ただし
+  `MiddleDyadicCompose`
+  単体では
+  `Prob.indR`,
+  `chernoff_lower_tail`,
+  `middleBandBlockBound`
+  を持たないため、
+  `MiddleBandJansonSkeleton`
+  を併記する必要がある。

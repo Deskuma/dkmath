@@ -1596,3 +1596,52 @@
     その内部境界として
     `MiddleJSProb`
     を追加した
+- `MiddleJansonBridge`
+  から block-level Janson/Suen API を
+  `DkMath.ABC.MiddleBlockJS`
+  に分離
+  - 新設:
+    `MiddleBlockJS.lean`
+  - moved:
+    `janson_mu`,
+    `janson_mu_nonneg`,
+    `janson_dbar`,
+    `janson_dbar_nonneg`,
+    `janson_block_cost`,
+    `janson_block_cost_le`,
+    `janson_block_exp`,
+    `janson_block_exp'`,
+    `janson_block_exp_nonneg`,
+    `janson_block_exp_nonneg'`,
+    `janson_block_exp_mono_mu`,
+    `janson_block_exp_mono_dbar`,
+    `mu_eq`,
+    `dbar_eq`,
+    `janson_bound_v2`,
+    `Params`,
+    `BlockJS`,
+    `buildBlockJS`,
+    `block_bound_from_janson`
+  - `MiddleJansonBridge.lean`
+    は
+    `MiddleBlockJS`
+    と
+    `MiddleDyadicCompose`
+    を import し、
+    `middle_band_sum_bound`
+    / `middle_band_bound_top`
+    の aggregation owner に縮小した
+  - `MiddleBlockTail.lean`
+    は
+    `MiddleJansonBridge`
+    relay 経由ではなく
+    `MiddleBandJansonSkeleton`
+    と
+    `MiddleDyadicCompose`
+    を direct import する形に変更した
+  - これにより
+    `ABC010`
+    側は
+    `ABC009`
+    aggregation relay を通らず、
+    mid-block tail / probability primitive owner を直接参照する

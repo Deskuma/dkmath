@@ -1273,3 +1273,137 @@ Archive
      / `middle_band_bound_top`
      を観察し、
      BlockJS owner と aggregation owner をさらに分ける価値があるか判断する。
+
+## 2026/04/25 04:22 JST
+
+1. 実施:
+   - `MiddleJansonBridge.lean`
+     から
+     block-level Janson/Suen API を
+     `MiddleBlockJS.lean`
+     に分離した。
+   - `MiddleJansonBridge.lean`
+     は
+     `middle_band_sum_bound`
+     と
+     `middle_band_bound_top`
+     を持つ aggregation owner に縮小した。
+   - `MiddleBlockTail.lean`
+     は
+     `MiddleJansonBridge`
+     relay 経由ではなく、
+     `MiddleBandJansonSkeleton`
+     と
+     `MiddleDyadicCompose`
+     を direct import する形に変更した。
+2. moved 内容:
+   - Janson real-evaluation layer:
+     `janson_mu`,
+     `janson_mu_nonneg`,
+     `janson_dbar`,
+     `janson_dbar_nonneg`
+   - block-cost / exponential layer:
+     `janson_block_cost`,
+     `janson_block_cost_le`,
+     `janson_block_exp`,
+     `janson_block_exp'`,
+     `janson_block_exp_nonneg`,
+     `janson_block_exp_nonneg'`,
+     `janson_block_exp_mono_mu`,
+     `janson_block_exp_mono_dbar`
+   - bridge alignment:
+     `mu_eq`,
+     `dbar_eq`,
+     `janson_bound_v2`
+   - block API:
+     `Params`,
+     `BlockJS`,
+     `buildBlockJS`,
+     `block_bound_from_janson`
+3. 判断:
+   - `MiddleBlockJS`
+     は
+     `MiddleJSProb`
+     と
+     `MiddleDyadicCompose`
+     を合流させ、
+     PMF→実数確率 wrapper を
+     block-level API に変換する owner とした。
+   - `MiddleJansonBridge`
+     は
+     `RpowExtras.rpow_mul_nat`,
+     `geom_sum_pow_two_le`,
+     `head_absorb`,
+     `tail_geom_bound`
+     を使う aggregation 層として残すのが自然。
+   - `MiddleBlockTail`
+     は
+     `middle_band_sum_bound`
+     / `middle_band_bound_top`
+     を使わず、
+     `Prob.indR`
+     と
+     mid-block dyadic primitive を使うため、
+     aggregation relay を経由させない方が依存境界が明確。
+4. 追跡文書:
+   - relay:
+     `check-relay-lean.md`
+     の
+     `ABC009`
+     に
+     `MiddleBlockJS`
+     を再分割先として追記した。
+   - changed:
+     `refact-changed-001.md`
+     に
+     `MiddleJansonBridge -> MiddleBlockJS`
+     分離と
+     `MiddleBlockTail`
+     の direct import 化を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     block-level owner 分離と
+     downstream direct import 化の注意点を追記した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleBlockJS`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleJansonBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleBlockTail`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC009`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC010`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知 info:
+     `ABC038Bridge.lean`
+     の axioms note
+6. 失敗事例:
+   - `MiddleBlockTail.lean`
+     を
+     `MiddleDyadicCompose`
+     単独 import に差し替えたところ、
+     `Prob.indR`,
+     `chernoff_lower_tail`,
+     `middleBandBlockBound`
+     が見えなくなり build error になった。
+   - 修正として
+     `MiddleBandJansonSkeleton`
+     を direct import に追加し、
+     `MiddleBlockTail`
+     の必要 owner を
+     finite-uniform / probability primitive 側と
+     dyadic compose 側に分けた。
+7. 次の課題:
+   - `ABC010`
+     relay target の
+     `MiddleBlockTail`
+     は大きい owner なので、
+     `Zmid` / `QuadMGF` / Chernoff wrapper / `GoodX`
+     周辺を観察し、
+     さらに named owner 化できる境界を探す。
+   - `MiddleJansonBridge`
+     は aggregation owner として残しつつ、
+     consumer が本当に aggregation API を使う場合だけ
+     direct import する方針にする。

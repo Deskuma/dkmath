@@ -25,6 +25,7 @@
 - [x] [ABC009](../../../DkMath/ABC/ABC009.lean)
   - 移設先 → [MiddleJansonBridge.lean](../../../DkMath/ABC/MiddleJansonBridge.lean)
   - 再分割先 → [MiddleJSProb.lean](../../../DkMath/ABC/MiddleJSProb.lean)
+  - 再分割先 → [MiddleBlockJS.lean](../../../DkMath/ABC/MiddleBlockJS.lean)
 - [x] [ABC010](../../../DkMath/ABC/ABC010.lean)
   - 移設先 → [MiddleBlockTail.lean](../../../DkMath/ABC/MiddleBlockTail.lean)
 - [x] [ABC011](../../../DkMath/ABC/ABC011.lean)
