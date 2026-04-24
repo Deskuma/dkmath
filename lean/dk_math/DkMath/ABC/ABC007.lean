@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
-import DkMath.ABC.ABC006
+import DkMath.ABC.MiddleDyadicScaffold
 import DkMath.ABC.AdjKBadDensity
 
 #print "file: DkMath.ABC.ABC007"

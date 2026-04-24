@@ -794,3 +794,96 @@ Archive
      から
      `ABC006`
      relay を介さずに済む direct import へ切る。
+
+## 2026/04/24 21:06 JST
+
+1. 実施:
+   - `ABC006`
+     を
+     `MiddleDyadicCompose`
+     に昇格した。
+   - `ABC006.lean`
+     自体は
+     `import DkMath.ABC.MiddleDyadicCompose`
+     だけを持つ compatibility relay に縮小した。
+2. moved 内容:
+   - head/tail helper:
+     `pow_two_mono`,
+     `one_le_X_pow`,
+     `MidBlock_card_le_pow_head`,
+     `head_absorb`
+   - dyadic composition:
+     `tail_geom_bound'`,
+     `tail_geom_bound`,
+     `dyadic_compose`
+3. downstream 調整:
+   - `ABC007.lean`
+     は
+     `ABC006`
+     relay 経由ではなく
+     `MiddleDyadicScaffold`
+     を direct import する形に変更した。
+     実際に必要だったのは
+     `BlockBound`,
+     `BadCountOn`,
+     `MidIdx`
+     側だったため。
+   - `MiddleJansonBridge.lean`
+     は
+     `head_absorb` / `tail_geom_bound`
+     を直接使うため
+     `MiddleDyadicCompose`
+     を direct import する形に変更した。
+4. 判断:
+   - `ABC006`
+     は
+     `MiddleDyadicTailBound`
+     を入力にして
+     head/tail 分割を合成し、
+     `dyadic_compose`
+     に到達する owner としてまとまっている。
+   - `ABC007`
+     には compose 層そのものへの依存はなかったため、
+     direct import はより浅い
+     `MiddleDyadicScaffold`
+     に留めた。
+5. 追跡文書:
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC006 -> MiddleDyadicCompose`
+     を追加した。
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC006`
+     promotion と downstream import cut を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     `ABC006`
+     の owner 化と
+     `ABC007` / `MiddleJansonBridge`
+     の import 判断を追記した。
+6. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleDyadicCompose`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC006`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC007`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleJansonBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知警告:
+     `ABC038Bridge.lean`
+     の axioms note
+7. 次の課題:
+   - `ABC007`
+     の
+     `middleBandBlockBound` / middle-band exception skeleton
+     層を named owner 化する。
+   - `JansonBasic`
+     から
+     `ABC007`
+     relay を介さずに済む direct import へ切る。

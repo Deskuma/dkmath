@@ -1454,3 +1454,36 @@
     relay 経由ではなく
     `MiddleDyadicTailBound`
     direct import に変更した
+- `ABC006`
+  を
+  `DkMath.ABC.MiddleDyadicCompose`
+  に昇格
+  - 新設:
+    `MiddleDyadicCompose.lean`
+  - moved:
+    `ABC006.lean`
+    全体
+    (`pow_two_mono`,
+    `one_le_X_pow`,
+    `MidBlock_card_le_pow_head`,
+    `head_absorb`,
+    `tail_geom_bound'`,
+    `tail_geom_bound`,
+    `dyadic_compose`)
+  - `ABC006.lean`
+    自体は
+    `import DkMath.ABC.MiddleDyadicCompose`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC007.lean`
+    を
+    `ABC006`
+    relay 経由ではなく
+    `MiddleDyadicScaffold`
+    direct import に変更した
+  - `MiddleJansonBridge.lean`
+    は
+    `head_absorb` / `tail_geom_bound`
+    を直接使うため
+    `MiddleDyadicCompose`
+    direct import を追加した

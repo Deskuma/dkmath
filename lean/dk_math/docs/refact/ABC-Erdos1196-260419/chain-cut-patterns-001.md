@@ -262,6 +262,27 @@ public entry build で unknown identifier として露出する型。
   relay ではなく
   `MiddleDyadicTailBound`
   を直接 import できる。
+- `ABC006`
+  は
+  `MiddleDyadicCompose`
+  として whole-file promotion した。
+  `ABC007`
+  は実際には
+  `BlockBound` / `BadCountOn` / `MidIdx`
+  側だけを参照していたため、
+  `ABC006`
+  relay ではなく
+  `MiddleDyadicScaffold`
+  を直接 import する形に切った。
+  一方で
+  `MiddleJansonBridge`
+  は
+  `head_absorb`
+  と
+  `tail_geom_bound`
+  を直接使っているため、
+  `MiddleDyadicCompose`
+  を明示 import する。
 
 ## ノート
 
