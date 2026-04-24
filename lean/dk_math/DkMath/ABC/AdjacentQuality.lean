@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Basic.Nat
 import DkMath.ABC.AdjacentTailDensity
+import DkMath.ABC.BorelCantelliDensity
 import DkMath.ABC.QualityTailBridge
 import DkMath.ABC.SquareTailBasic
 

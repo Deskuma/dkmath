@@ -828,3 +828,15 @@ public entry build で unknown identifier として露出する型。
   の両 branch から再利用されるため、
   relay に依存させず direct import を広げると
   hidden dependency が露出しやすい。
+- その外側の
+  Borel-Cantelli / density extraction は
+  `BorelCantelliDensity`
+  のような probability owner として
+  `SquareTailBasic`
+  から分離するのが自然である。
+  一方で
+  `SquareTailBasic`
+  自体の
+  adjacent wrapper と pure decomposition は、
+  まだ同じ consumer 群がまとめて使っているため、
+  今は分けない方が import 境界は安定する。

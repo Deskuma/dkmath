@@ -1170,3 +1170,43 @@
   `quality_le_of_sqprod_pow_bound_analytic_proof`
   を呼ぶ wrapper に置き換え、
   実装重複を除去した
+- Borel-Cantelli / density extraction 層を
+  `DkMath.ABC.BorelCantelliDensity`
+  に昇格
+  - 新設:
+    `BorelCantelliDensity.lean`
+  - moved:
+    `ABC017.lean`
+    全体
+    (`borel_cantelli_one`,
+    `eventually_not_is_bad_adjacent`)
+  - `ABC017.lean`
+    自体は
+    `import DkMath.ABC.BorelCantelliDensity`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC018.lean`
+    を
+    `ABC017`
+    relay 経由ではなく
+    `BorelCantelliDensity`
+    の direct import に変更した
+  - `AdjacentQuality.lean`
+    も
+    `eventually_not_is_bad_adjacent`
+    を直接参照しているため、
+    hidden dependency を避ける目的で
+    `BorelCantelliDensity`
+    を direct import に変更した
+- `SquareTailBasic`
+  の再分割については、
+  `TailSquareBridge`,
+  `AdjacentTailDensity`,
+  `AdjacentQuality`,
+  `ABC038Bridge`,
+  `ABC038BridgeExamples`
+  が同じ broad owner を共有しているため、
+  今回は見送った
+  - adjacent wrapper と pure decomposition を分けると、
+    現時点では import の本数だけが増え、
+    安定性の改善は小さいと判断した

@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
-import DkMath.ABC.ABC017
+import DkMath.ABC.BorelCantelliDensity
 
 #print "file: DkMath.ABC.ABC018"
 

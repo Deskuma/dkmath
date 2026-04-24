@@ -4042,3 +4042,101 @@ Archive
    - `SquareTailBasic`
      内で adjacent wrapper と pure decomposition をさらに分ける価値があるかを、
      downstream の import 安定性を見ながら判断する。
+
+## 2026/04/24 04:54 JST
+
+1. 実施:
+   - `ABC017`
+     を
+     `BorelCantelliDensity`
+     に昇格した。
+   - `BorelCantelliDensity.lean`
+     を新設し、
+     `borel_cantelli_one`,
+     `eventually_not_is_bad_adjacent`
+     を含む Borel-Cantelli / density extraction 本体を移した。
+   - `ABC017.lean`
+     自体は
+     `import DkMath.ABC.BorelCantelliDensity`
+     だけを持つ compatibility relay に縮小した。
+2. downstream 調整:
+   - `ABC018.lean`
+     を
+     `ABC017`
+     relay 経由ではなく
+     `BorelCantelliDensity`
+     の direct import に変更した。
+   - `AdjacentQuality.lean`
+     は
+     `eventually_not_is_bad_adjacent`
+     を直接参照しているため、
+     hidden dependency を避ける目的で
+     `BorelCantelliDensity`
+     direct import を追加した。
+3. `SquareTailBasic` 再分割の判断:
+   - adjacent wrapper と pure decomposition の分離は
+     今回は見送った。
+   - 理由:
+     `TailSquareBridge`,
+     `AdjacentTailDensity`,
+     `AdjacentQuality`,
+     `ABC038Bridge`,
+     `ABC038BridgeExamples`
+     が broad owner をまとめて利用しており、
+     ここで分けても import が増えるだけで
+     安定性の改善が小さいため。
+   - したがって現時点では
+     `SquareTailBasic`
+     を decomposition + adjacent extraction の共有 owner とみなす。
+4. 結論:
+   - density branch は
+     `SquareTailBasic`
+     -> `BorelCantelliDensity`
+     -> `ABC018+`
+     という番号なし spine で読めるようになった。
+   - `AdjacentQuality`
+     も density extraction owner を直接 import する形になり、
+     relay 依存が一段減った。
+5. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC017 -> BorelCantelliDensity`
+     と
+     `ABC018`
+     / `AdjacentQuality`
+     の direct import 化、
+     ならびに
+     `SquareTailBasic`
+     再分割見送り判断を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     probability owner の切り方と
+     `SquareTailBasic`
+     を今は分けない判断を追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC017 -> BorelCantelliDensity`
+     を追加した。
+6. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.BorelCantelliDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC017`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC018`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentQuality`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知警告:
+     `ABC038Bridge.lean`
+     の axioms note
+7. 次の課題:
+   - `ABC018`
+     の counting / prime-threshold / next relay 候補を named owner 化する。
+   - `SquareTailBasic`
+     の再分割は、
+     `ABC018+`
+     側の relay 縮小が進んでから再評価する。
