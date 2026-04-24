@@ -1487,3 +1487,30 @@
     を直接使うため
     `MiddleDyadicCompose`
     direct import を追加した
+- `ABC007`
+  を
+  `DkMath.ABC.MiddleBandJansonSkeleton`
+  に昇格
+  - 新設:
+    `MiddleBandJansonSkeleton.lean`
+  - moved:
+    `ABC007.lean`
+    全体
+    (`adjKBadCount_unfold`,
+    `AdjK_proof`,
+    `middleBandBlockBound`,
+    `MiddleBand_exception_bound'_via_dyadic`,
+    `MiddleBand_exception_bound'`,
+    Janson/Suen skeleton,
+    finite-uniform probability helper 群)
+  - `ABC007.lean`
+    自体は
+    `import DkMath.ABC.MiddleBandJansonSkeleton`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `JansonBasic.lean`
+    を
+    `ABC007`
+    relay 経由ではなく
+    `MiddleBandJansonSkeleton`
+    direct import に変更した

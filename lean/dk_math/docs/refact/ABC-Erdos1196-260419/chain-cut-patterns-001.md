@@ -1015,3 +1015,23 @@ public entry build で unknown identifier として露出する型。
   を点検すると、
   predecessor relay
   は少数の direct import 差し替えで落ちることが多い。
+- `ABC007`
+  は
+  middle-band exception API と
+  Janson/Suen finite-uniform helper が同居していたため、
+  whole-file promotion として
+  `MiddleBandJansonSkeleton`
+  に昇格するのが安全だった。
+  `JansonBasic`
+  は実際に
+  `S_of`,
+  `Prob.indR`,
+  `hoeffding_downward_indep01_indicator`
+  などを使うため、
+  `ABC007`
+  relay ではなく
+  `MiddleBandJansonSkeleton`
+  を direct import させる。
+  これにより
+  `ABC001` から `ABC007`
+  までの前段 relay 化が一通り完了する。

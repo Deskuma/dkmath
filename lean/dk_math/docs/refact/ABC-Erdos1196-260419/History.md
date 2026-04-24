@@ -887,3 +887,100 @@ Archive
      から
      `ABC007`
      relay を介さずに済む direct import へ切る。
+
+## 2026/04/25 00:31 JST
+
+1. 実施:
+   - `ABC007.lean`
+     の middle-band exception / Janson-Suen skeleton / finite-uniform probability helper 群を
+     `MiddleBandJansonSkeleton.lean`
+     に whole-file promotion した。
+   - `ABC007.lean`
+     自体は
+     `import DkMath.ABC.MiddleBandJansonSkeleton`
+     だけを持つ compatibility relay に縮小した。
+2. moved 内容:
+   - adjacent-k bridge:
+     `adjKBadCount_unfold`,
+     `AdjK_proof`
+   - middle-band exception API:
+     `middleBandBlockBound`,
+     `MiddleBand_exception_bound'_via_dyadic`,
+     `MiddleBand_exception_bound'`
+   - Janson/Suen skeleton:
+     `Janson_downward_tail_skeleton`,
+     `Suen_upper_tail_skeleton`
+   - finite-uniform probability helper:
+     `indicator`,
+     `S_of`,
+     `mu_of`,
+     `prob_of`,
+     `delta_of`,
+     `mgf_bound_unit01`,
+     `Prob.indR`,
+     `Prob.hoeffding_downward_indep01`,
+     `Prob.hoeffding_downward_indep01_indicator`
+     など。
+3. downstream 調整:
+   - `JansonBasic.lean`
+     を
+     `ABC007`
+     relay 経由ではなく
+     `MiddleBandJansonSkeleton`
+     direct import に変更した。
+   - 実コード側の
+     `import DkMath.ABC.ABC007`
+     は解消した。
+4. 判断:
+   - `ABC007`
+     は
+     `middleBandBlockBound`
+     だけでなく
+     `S_of` / `Prob.indR`
+     など
+     `JansonBasic`
+     が直接使う有限一様確率 helper も含んでいた。
+   - そのため今回は partial extraction ではなく whole-file promotion にして、
+     owner 名を
+     `MiddleBandJansonSkeleton`
+     とした。
+5. 追跡文書:
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC007 -> MiddleBandJansonSkeleton`
+     を追加した。
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC007`
+     promotion と
+     `JansonBasic`
+     import cut を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     `ABC007`
+     の whole-file promotion 判断を追記した。
+6. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleBandJansonSkeleton`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC007`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.JansonBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleJansonBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知警告:
+     `ABC038Bridge.lean`
+     の axioms note
+7. 次の課題:
+   - `ABC001` から `ABC007`
+     までの前段 numbered relay 化は一通り完了。
+   - 次は
+     `ABC008`
+     relay と
+     `JansonBasic`
+     の境界を見直し、
+     Janson 系 owner の再分割候補を整理する。
