@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
-import DkMath.ABC.ABC005
+import DkMath.ABC.MiddleDyadicTailBound
 
 #print "file: DkMath.ABC.ABC006"
 

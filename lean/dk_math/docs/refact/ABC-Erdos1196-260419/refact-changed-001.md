@@ -1432,3 +1432,25 @@
     に
     `AdjKBadDensity`
     direct import を追加した
+- `ABC005`
+  を
+  `DkMath.ABC.MiddleDyadicTailBound`
+  に昇格
+  - 新設:
+    `MiddleDyadicTailBound.lean`
+  - moved:
+    `ABC005.lean`
+    全体
+    (`dyadic_tail_bound`,
+    `head_absorb'`)
+  - `ABC005.lean`
+    自体は
+    `import DkMath.ABC.MiddleDyadicTailBound`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC006.lean`
+    を
+    `ABC005`
+    relay 経由ではなく
+    `MiddleDyadicTailBound`
+    direct import に変更した

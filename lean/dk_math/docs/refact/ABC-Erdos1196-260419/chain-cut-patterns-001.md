@@ -246,6 +246,22 @@ public entry build で unknown identifier として露出する型。
   の owner として
   `AdjKBadDensity`
   を明示 import する。
+- `ABC005`
+  は
+  `MiddleDyadicTailBound`
+  として whole-file promotion した。
+  内容は
+  `dyadic_tail_bound`
+  と
+  `head_absorb'`
+  の二本に絞られており、
+  downstream の
+  `ABC006`
+  は
+  `ABC005`
+  relay ではなく
+  `MiddleDyadicTailBound`
+  を直接 import できる。
 
 ## ノート
 

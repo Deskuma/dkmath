@@ -719,3 +719,78 @@ Archive
      から
      `ABC005`
      relay を介さずに済む direct import へ切る。
+
+## 2026/04/24 18:19 JST
+
+1. 実施:
+   - `ABC005`
+     を
+     `MiddleDyadicTailBound`
+     に昇格した。
+   - `ABC005.lean`
+     自体は
+     `import DkMath.ABC.MiddleDyadicTailBound`
+     だけを持つ compatibility relay に縮小した。
+2. moved 内容:
+   - dyadic tail:
+     `dyadic_tail_bound`
+   - finite head absorption:
+     `head_absorb'`
+3. downstream 調整:
+   - `ABC006.lean`
+     は
+     `ABC005`
+     relay 経由ではなく
+     `MiddleDyadicTailBound`
+     の direct import に変更した。
+4. 判断:
+   - `ABC005`
+     は
+     `MiddleDyadicScaffold`
+     上の tail bound / head absorption 層として責務が明確である。
+   - `ABC006`
+     の合成定理群は
+     `dyadic_tail_bound`
+     を直接参照しているため、
+     owner import に切るのが自然だった。
+5. 追跡文書:
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC005 -> MiddleDyadicTailBound`
+     を追加した。
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC005`
+     promotion と
+     `ABC006`
+     の direct import 化を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     middle dyadic tail bound
+     の owner 化を追記した。
+6. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleDyadicTailBound`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC005`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC006`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC007`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.JansonBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知警告:
+     `ABC038Bridge.lean`
+     の axioms note
+7. 次の課題:
+   - `ABC006`
+     の
+     `tail_geom_bound` / `dyadic_compose`
+     層を named owner 化する。
+   - `ABC007`
+     から
+     `ABC006`
+     relay を介さずに済む direct import へ切る。
