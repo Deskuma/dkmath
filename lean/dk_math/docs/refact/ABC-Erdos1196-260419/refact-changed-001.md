@@ -1299,3 +1299,35 @@
     owner の識別子であり、
     `ABC036`
     relay を経由する必要はなかった
+- 前段 chain の起点
+  `ABC001`
+  を
+  `DkMath.ABC.AdjacentDiagonalBasic`
+  に昇格
+  - 新設:
+    `AdjacentDiagonalBasic.lean`
+  - moved:
+    `ABC001.lean`
+    全体
+    (`T_zero_card_le_one`,
+    `Tr_card_le_div_plus_one`,
+    `sliceBadCount_le_sum_div_plus_one`,
+    `BadPair`,
+    `diagBadCount`,
+    `quality`,
+    `Adj`,
+    `adjBadCount`,
+    `eventually_diagBadCount_oX`,
+    `Keystone_bridge_quality_adjacent_imp`
+    など)
+  - `ABC001.lean`
+    自体は
+    `import DkMath.ABC.AdjacentDiagonalBasic`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC002.lean`
+    を
+    `ABC001`
+    relay 経由ではなく
+    `AdjacentDiagonalBasic`
+    direct import に変更した

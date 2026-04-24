@@ -3,7 +3,8 @@
 ## リファクタリング後に不要となる `ABC*.lean` ファイル
 
 - [x] [ABC](../../../DkMath/ABC/ABC.lean)
-- [ ] [ABC001](../../../DkMath/ABC/ABC001.lean)
+- [x] [ABC001](../../../DkMath/ABC/ABC001.lean)
+  - 移設先 → [AdjacentDiagonalBasic.lean](../../../DkMath/ABC/AdjacentDiagonalBasic.lean)
 - [ ] [ABC002](../../../DkMath/ABC/ABC002.lean)
 - [ ] [ABC003](../../../DkMath/ABC/ABC003.lean)
 - [ ] [ABC004](../../../DkMath/ABC/ABC004.lean)

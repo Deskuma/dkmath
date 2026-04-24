@@ -4461,3 +4461,89 @@ Archive
    - `SquareTailBasic`
      の再分割は、
      direct import cleanup がもう少し進んだ段階で再評価する。
+
+## 2026/04/24 11:40 JST
+
+1. 実施:
+   - 前段 chain の起点
+     `ABC001`
+     を
+     `AdjacentDiagonalBasic`
+     に昇格した。
+   - `AdjacentDiagonalBasic.lean`
+     を新設し、
+     `ABC001.lean`
+     にあった adjacent / diagonal / slice-radical helper 群を移した。
+   - `ABC001.lean`
+     自体は
+     `import DkMath.ABC.AdjacentDiagonalBasic`
+     だけを持つ compatibility relay に縮小した。
+2. moved 内容:
+   - adjacent / diagonal:
+     `Adj`,
+     `adjBadCount`,
+     `diagBadCount`,
+     `eventually_diagBadCount_oX`,
+     `Keystone_bridge_quality_adjacent_imp`
+   - slice / radical counting:
+     `T_zero_card_le_one`,
+     `Tr_card_le_div_plus_one`,
+     `sliceBadCount_le_sum_div_plus_one`,
+     `eventually_most_slices_light`
+   - pair predicate / quality:
+     `BadPair`,
+     `quality`
+3. downstream 調整:
+   - `ABC002.lean`
+     は
+     `ABC001`
+     relay 経由ではなく
+     `AdjacentDiagonalBasic`
+     の direct import に変更した。
+4. 判断:
+   - `ABC001`
+     は責務が広いが、
+     ここで細分化すると
+     `ABC002`
+     以降の検証範囲が広がる。
+   - まず whole-file promotion により
+     chain 起点を名前付き owner に固定し、
+     後続で
+     adjacent / diagonal / slice-radical
+     の再分割価値を判断する。
+5. 追跡文書:
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC001 -> AdjacentDiagonalBasic`
+     を追加した。
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC001`
+     whole-file promotion と
+     `ABC002`
+     の direct import 化を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     前段 chain 起点を named owner 化する判断を追記した。
+6. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentDiagonalBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC001`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC002`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知警告:
+     `ABC038Bridge.lean`
+     の axioms note
+7. 次の課題:
+   - `ABC002`
+     の adjacent bad density layer を named owner 化する。
+   - `AdjacentDiagonalBasic`
+     の細分化は、
+     `ABC002`
+     以降の owner 面が立ってから再評価する。

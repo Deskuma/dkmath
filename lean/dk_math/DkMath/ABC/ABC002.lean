@@ -6,7 +6,7 @@ Authors: D. and Wise Wolf.
 
 
 import DkMath.Basic.Nat
-import DkMath.ABC.ABC001
+import DkMath.ABC.AdjacentDiagonalBasic
 
 #print "file: DkMath.ABC.ABC002"
 

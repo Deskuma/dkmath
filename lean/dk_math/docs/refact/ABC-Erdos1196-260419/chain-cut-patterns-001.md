@@ -163,6 +163,31 @@ public entry build で unknown identifier として露出する型。
 - chain の先頭 3 本を「base combinatorial band」として扱える
 - 以後の `ABC004+` から predecessor reliance を段階的に観測しやすい
 
+進捗:
+
+- `ABC001`
+  は
+  `AdjacentDiagonalBasic`
+  として whole-file promotion するのが自然だった。
+  この file は
+  adjacent triple,
+  diagonal bad count,
+  slice-radical counting,
+  density bridge
+  が混在するが、
+  下流の
+  `ABC002`
+  はそれらをまとめて基礎環境として使うため、
+  初手では細分化より owner 名固定を優先した。
+- この段階では
+  `ABC002`
+  を
+  `ABC001`
+  relay 経由ではなく
+  `AdjacentDiagonalBasic`
+  direct import
+  へ変更するだけで chain の起点を名前付きにできた。
+
 ## ノート
 
 - `DkMath.ABC.Demo.*` は standalone / 非対象としてこのメモから除外する。
