@@ -4,8 +4,11 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+
 import DkMath.ABC.ChernoffQualityBridge
 import DkMath.ABC.ValuationFlowBridge
+import DkMath.ABC.QualityTailBridge
+import DkMath.ABC.SquareTailBasic
 
 #print "file: DkMath.ABC.ABC038Bridge"
 

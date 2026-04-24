@@ -4,8 +4,10 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+
 import Mathlib.Tactic.IntervalCases
 import DkMath.ABC.ABC038Bridge
+import DkMath.ABC.SquareTailBasic
 
 #print "file: DkMath.ABC.ABC038BridgeExamples"
 

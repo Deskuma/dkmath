@@ -199,6 +199,30 @@ public entry build で unknown identifier として露出する型。
   すら要らず、
   `ABC.Basic`
   のような最小環境 import に落とせる。
+- さらに
+  `Main`
+  や
+  `ABCError`
+  のような top-level shell consumer も、
+  この種の anchor file を経由せず
+  `Basic`
+  を直接 import するだけで閉じる。
+  したがって
+  anchor shell
+  は削除前に
+  「consumer を最小環境 import へ戻す」
+  段階を挟むのが安全である。
+- 同じ発想は
+  research / scratch file
+  にも適用できる。
+  `ABC#Research`
+  のような補助メモ実装でも、
+  relay import
+  ではなく
+  実際に使う owner
+  `ChernoffDensity`
+  を直接引いた方が、
+  後から依存面を読み直しやすい。
 - `ABC038`
   では
   `ABC037`
@@ -676,3 +700,197 @@ public entry build で unknown identifier として露出する型。
   「露出した transitive import の direct 化」
   を
   1 サイクルでまとめて処理するのが実践的である。
+- live chain で未使用になっている numbered file も、
+  先に named owner へ昇格して relay 化しておく価値がある。
+  今回の
+  `ABC021 -> JansonRoadmap`
+  はその型で、
+  `LayerCakeBasic`
+  から
+  `ABC021`
+  import を削ったことで
+  main spine から切り離された Janson branch を
+  番号なし owner として保存できた。
+  ただし、
+  この cleanup によって別 branch の
+  `ChernoffQualityBridge`
+  で
+  `TailSquareBridge`
+  hidden import が露出したため、
+  dead branch 救出でも
+  `Main`
+  build を最後まで通して
+  transitive 依存の崩れを確認する必要がある。
+- named owner 化のあとも、
+  直後に relay を踏んでいる import が残ることがある。
+  今回の
+  `JansonRoadmap`
+  では
+  `ABC020`
+  relay を経由していたが、
+  実際に必要なのは
+  `ABC008`
+  側の Janson 基本定義だった。
+  この型では
+  「owner 昇格の次サイクルで、
+  relay 経由 import を最小の上流へ直接寄せる」
+  ことで、
+  numbered chain をもう一段短くできる。
+- `ABC008`
+  のように
+  branch 基底の巨大ファイルが
+  既に thematic にまとまっている場合は、
+  無理に細断せず
+  whole-file promotion
+  を先に入れるのが有効だった。
+  今回は
+  `JansonBasic`
+  として丸ごと昇格させ、
+  `ABC009`
+  と
+  `JansonRoadmap`
+  を direct import に寄せた。
+  これは
+  「branch base を named owner で固定してから、
+  下流を順に relay 離れさせる」
+  型として再利用できる。
+- Janson branch では、
+  基底 owner と roadmap owner を分けたうえで
+  relay file を
+  `ABC008`, `ABC021`, `ABC020`
+  の三者で役割分担させると、
+  追跡表が読みやすくなる。
+  つまり
+  infrastructure base,
+  theorem roadmap,
+  tail bridge relay
+  を別々に見せる構図である。
+- その次段として、
+  Janson downstream の “使い方 API” 層を
+  `MiddleJansonBridge`
+  のような bridge 名で whole-file promotion するのも自然だった。
+  つまり
+  base (`JansonBasic`)
+  -> bridge (`MiddleJansonBridge`)
+  -> downstream (`ABC010` 以降)
+  の三層で切る型である。
+- さらにその先の
+  mid-block MGF / tail / GoodX
+  までは
+  `MiddleBlockTail`
+  として一段まとめに昇格できた。
+  この型では
+  base (`JansonBasic`)
+  -> bridge (`MiddleJansonBridge`)
+  -> tail owner (`MiddleBlockTail`)
+  -> union / density downstream (`ABC011+`)
+  と読むのが自然である。
+- その次の utility 混在層も、
+  まずは
+  `TailRadicalBasic`
+  のような broad owner へ whole-file promotion してから、
+  必要なら後で
+  union/basic と pi-radical/basic
+  に再分割するのが安全だった。
+  つまり
+  tail owner (`MiddleBlockTail`)
+  -> utility owner (`TailRadicalBasic`)
+  -> independent branch (`ABC012+`)
+  という一段追加の spine で切れる。
+- independent branch の本体は、
+  `MiddleBlockIndependentTail`
+  として
+  Kset 分割、
+  dyadic tail、
+  GoodX 吸収を一つの owner にまとめられる。
+  これで
+  `MiddleBlockTail`
+  -> `TailRadicalBasic`
+  -> `MiddleBlockIndependentTail`
+  -> `ABC013+`
+  という番号なし spine になる。
+- slice/diagonal counting 層は
+  `SliceDiagonalCounting`
+  として独立に昇格できる。
+  ここは downstream の
+  adjacent-quality branch からも参照されるため、
+  relay 経由ではなく direct import を広げると
+  hidden dependency が明確になる。
+- slice/diagonal counting の直後にある
+  analytic/log quality bridge は
+  `AnalyticQualityBridge`
+  として切れる。
+  ここでは
+  `piSqRad` bound,
+  `quality`,
+  `rad` の log positivity,
+  adjacent diagonal specialization
+  が混在するため、
+  counting owner とは分けつつ、
+  downstream の
+  `ABC015+`
+  からは relay ではなく direct import させるのが読みやすい。
+- analytic bridge の直後にある
+  rad₀ / quality tail bridge / axiom-to-lemma wrapper は
+  `QualityTailBridge`
+  として whole-file promotion できる。
+  ここは
+  `quality_le_of_pi_tail`,
+  `adjacent_quality_bridge`,
+  `piSqRad_le_of_not_bad`
+  のような downstream-facing API を含むため、
+  relay file に隠さず、
+  呼び出し側の named owner から direct import させるのがよい。
+- その次段の
+  sqTail / odd-even decomposition / twoTail / adjacent extraction は
+  `SquareTailBasic`
+  のような broad owner へ whole-file promotion するのが安全だった。
+  ここは
+  `TailSquareBridge`
+  と
+  `AdjacentQuality`
+  の両 branch から再利用されるため、
+  relay に依存させず direct import を広げると
+  hidden dependency が露出しやすい。
+- その外側の
+  Borel-Cantelli / density extraction は
+  `BorelCantelliDensity`
+  のような probability owner として
+  `SquareTailBasic`
+  から分離するのが自然である。
+  一方で
+  `SquareTailBasic`
+  自体の
+  adjacent wrapper と pure decomposition は、
+  まだ同じ consumer 群がまとめて使っているため、
+  今は分けない方が import 境界は安定する。
+- さらにその次段の
+  counting / prime-threshold / heavy-prime union-bound は、
+  `BorelCantelliDensity`
+  と別の責務を持つため
+  `HeavyPrimeCounting`
+  のような owner に切り出すのが自然である。
+  この型では
+  `AdjacentTailDensity`
+  のような consumer へ
+  direct import
+  を足すだけで
+  relay 依存を 1 本外せる。
+- 同時に
+  `FiniteChernoffBasic`
+  のように
+  predecessor relay import が残っていて、
+  owner import へ直接差し替えられる file もある。
+  したがって chain-cut では
+  named owner 化と並行して
+  「relay import の direct import 化」
+  自体を観測項目に入れるべきである。
+- このパターンは
+  `TailSquareBridge`
+  にもそのまま適用できた。
+  つまり
+  named owner 昇格の直後に
+  downstream bridge file
+  を点検すると、
+  predecessor relay
+  は少数の direct import 差し替えで落ちることが多い。

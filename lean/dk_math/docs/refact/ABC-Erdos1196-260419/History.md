@@ -3044,3 +3044,1420 @@ Archive
      `FiniteChernoffBasic`
      の周辺 consumer を棚卸しして、
      まだ残る relay 依存を direct import に寄せる。
+
+## 2026/04/23 08:26 JST
+
+1. 実施:
+   - `ABC021`
+     を
+     `JansonRoadmap`
+     に昇格した。
+   - `JansonRoadmap.lean`
+     を新設し、
+     `PMF.expect_mono`,
+     `markov_inequality`,
+     `chebyshev_inequality`,
+     `Janson.mgf`,
+     `exp_sum_eq_prod_exp`,
+     `expect_prod_eq_prod_expect`,
+     `mgf_sum_indep`,
+     `second_moment_zero_prob`,
+     `variance_indicator_sum`,
+     `janson_core_inequality`,
+     `bound_v2_from_janson`
+     を含む
+     Janson roadmap 本体を移した。
+   - `ABC021.lean`
+     自体は
+     `import DkMath.ABC.JansonRoadmap`
+     だけを持つ compatibility relay に縮小した。
+2. chain-cut:
+   - `LayerCakeBasic.lean`
+     から
+     `ABC021`
+     import を削除した。
+     調査の結果、
+     live chain 上では
+     `ABC021`
+     の API は未使用だったため、
+     Janson branch は main spine から切り離したまま
+     named owner として保存できると判断した。
+3. hidden import 修正:
+   - `Main`
+     build を通したところ、
+     `ChernoffQualityBridge.lean`
+     が
+     `ABC.TailBound`
+     と
+     `ABC.quality_le_of_pi_tail_general`
+     を
+     transitively 拾っていた hidden import が露出した。
+   - そのため
+     `ChernoffQualityBridge.lean`
+     に
+     `import DkMath.ABC.TailSquareBridge`
+     を追加し、
+     tail bridge owner を direct import する形に直した。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC021 -> JansonRoadmap`
+     と
+     `ChernoffQualityBridge`
+     の hidden import 修正を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     live chain で未使用になった numbered file を
+     named owner 化して保存する型と、
+     その際も
+     `Main`
+     build で別 branch の transitive import 崩れを確認すべきことを追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC021 -> JansonRoadmap`
+     を追加した。
+5. 結論:
+   - `ABC021`
+     は relay 化され、
+     Janson branch は
+     `JansonRoadmap`
+     として番号なし owner で追えるようになった。
+   - 同時に、
+     `ChernoffQualityBridge`
+     の
+     `TailSquareBridge`
+     依存が明示化され、
+     main spine の owner 境界も 1 本明確になった。
+6. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.JansonRoadmap`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC021`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.LayerCakeBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffQualityBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `JansonRoadmap.lean`
+     の `sorry` 警告、
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の axioms note だけ replay された。
+7. 次の課題:
+   - Janson branch の下流 / 上流をさらに named owner 化するか、
+     あるいは
+     `ChernoffQualityBridge`
+     以外にも残る direct owner import 化の余地を洗う。
+
+## 2026/04/23 08:34 JST
+
+1. 実施:
+   - `JansonRoadmap.lean`
+     の import を
+     `ABC020`
+     relay 経由から
+     `ABC008`
+     への direct import に変更した。
+   - これにより
+     Janson branch は
+     `ABC021 -> JansonRoadmap -> ABC008`
+     と読めるようになり、
+     `ABC020`
+     は Janson 側の transitively pulled relay から外れた。
+2. 影響整理:
+   - `ABC020`
+     は
+     `TailSquareBridge`
+     への relay としてのみ残る構図が明確になった。
+   - これは owner 昇格後の second-step thinning であり、
+     「まず named owner 化し、その後 relay import を最小の上流へ直す」
+     という型の確認でもある。
+3. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `JansonRoadmap`
+     の
+     `ABC020 -> ABC008`
+     import thinning を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     named owner 化の次サイクルで relay import をさらに薄くする型を追記した。
+   - relay:
+     `check-relay-lean.md`
+     の
+     `ABC020`
+     項目に
+     `TailSquareBridge.lean`
+     を参照先として追記した。
+4. 結論:
+   - `JansonRoadmap`
+     は
+     `ABC020`
+     relay に依存しなくなり、
+     Janson branch の spine は 1 本短くなった。
+   - relay file 追跡表も、
+     `ABC020`
+     と
+     `ABC021`
+     の役割差
+     （tail bridge relay と Janson roadmap relay）
+     が読みやすくなった。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.JansonRoadmap`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC021`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `JansonRoadmap.lean`
+     の `sorry` 警告、
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の axioms note だけ replay された。
+6. 次の課題:
+   - `ABC008`
+     自体を Janson basic owner として昇格させるか、
+     あるいは
+     他の relay file でも同様の import thinning を進める。
+
+## 2026/04/23 09:10 JST
+
+1. 実施:
+   - `ABC008`
+     を
+     `JansonBasic`
+     に昇格した。
+   - `JansonBasic.lean`
+     を新設し、
+     `JansonModel`,
+     `JansonSetup`,
+     `mu`,
+     `dbar`,
+     `bernoulli_pmf`,
+     `product_pmf`,
+     `expect_indicator_prod`
+     などを含む
+     Janson / PMF infrastructure 本体を移した。
+   - `ABC008.lean`
+     自体は
+     `import DkMath.ABC.JansonBasic`
+     だけを持つ compatibility relay に縮小した。
+2. downstream 調整:
+   - `ABC009.lean`
+     を
+     `ABC008`
+     relay 経由ではなく
+     `JansonBasic`
+     の direct import に変更した。
+   - `JansonRoadmap.lean`
+     も
+     `ABC008`
+     relay ではなく
+     `JansonBasic`
+     を direct import する形に変更した。
+3. 結論:
+   - Janson branch の基底は
+     `JansonBasic`
+     として番号なし owner に固定された。
+   - これにより
+     `ABC008`
+     は relay、
+     `ABC009`
+     は Janson downstream consumer、
+     `JansonRoadmap`
+     は roadmap / theorem-side helper
+     という役割分担が明確になった。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC008 -> JansonBasic`
+     と
+     downstream の direct import 化を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     branch 基底の巨大ファイルを
+     whole-file promotion
+     で番号なし owner に上げる型を追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC008 -> JansonBasic`
+     を追加した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.JansonBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC008`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC009`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.JansonRoadmap`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `JansonRoadmap.lean`
+     の `sorry` 警告、
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の axioms note だけ replay された。
+6. 次の課題:
+   - `ABC009`
+     以降の Janson downstream をさらに named owner 化するか、
+     あるいは
+     他 branch の base / roadmap でも
+     whole-file promotion
+     を進める。
+
+## 2026/04/23 09:10 JST
+
+1. 実施:
+   - `ABC008`
+     を
+     `JansonBasic`
+     に昇格した。
+   - `JansonBasic.lean`
+     を新設し、
+     Janson / PMF infrastructure の本体を移した。
+   - `ABC008.lean`
+     自体は
+     `import DkMath.ABC.JansonBasic`
+     だけを持つ compatibility relay に縮小した。
+2. downstream 調整:
+   - `ABC009.lean`
+     を
+     `ABC008`
+     relay 経由ではなく
+     `JansonBasic`
+     の direct import に変更した。
+   - `JansonRoadmap.lean`
+     も
+     `ABC008`
+     relay ではなく
+     `JansonBasic`
+     を direct import する形に変更した。
+3. 結論:
+   - Janson branch の infrastructure base は
+     `JansonBasic`
+     として番号なし owner に固定された。
+   - これにより
+     `ABC008`
+     は base relay、
+     `ABC021`
+     は roadmap relay、
+     `ABC020`
+     は tail bridge relay、
+     という三者の役割分担が明確になった。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC008 -> JansonBasic`
+     と
+     relay 役割分担の明確化を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     Janson branch の
+     infrastructure base / roadmap / tail relay
+     の三層構成を追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC008 -> JansonBasic`
+     を追加した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.JansonBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC008`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC009`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.JansonRoadmap`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `JansonRoadmap.lean`
+     の `sorry` 警告、
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の axioms note だけ replay された。
+6. 次の課題:
+   - `ABC009`
+     を named owner 化して
+     Janson downstream API を番号なしへ上げる。
+   - あるいは
+     Janson branch 以外でも
+     whole-file promotion
+     が有効な base file を探す。
+
+## 2026/04/23 14:28 JST
+
+1. 実施:
+   - `ABC009`
+     を
+     `MiddleJansonBridge`
+     に昇格した。
+   - `MiddleJansonBridge.lean`
+     を新設し、
+     `JSProb`,
+     `Middle`,
+     `janson_mu`,
+     `janson_dbar`,
+     `janson_block_exp`,
+     `BlockJS`,
+     `middle_band_sum_bound`,
+     `middle_band_bound_top`
+     を含む
+     Janson/Suen middle-band bridge 本体を移した。
+   - `ABC009.lean`
+     自体は
+     `import DkMath.ABC.MiddleJansonBridge`
+     だけを持つ compatibility relay に縮小した。
+2. downstream 調整:
+   - `ABC010.lean`
+     を
+     `ABC009`
+     relay 経由ではなく
+     `MiddleJansonBridge`
+     の direct import に変更した。
+3. 結論:
+   - Janson branch は
+     `JansonBasic`
+     を base、
+     `MiddleJansonBridge`
+     を bridge、
+     `JansonRoadmap`
+     を theorem/roadmap、
+     という named owner 構成で追えるようになった。
+   - `ABC009`
+     は relay になり、
+     Janson downstream API も番号なし owner に吸い上げられた。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC009 -> MiddleJansonBridge`
+     と
+     `ABC010`
+     の direct import 化を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     base -> bridge -> downstream
+     の三層分解を追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC009 -> MiddleJansonBridge`
+     を追加した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleJansonBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC009`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC010`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上は成功した。
+   - 既知の
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry` 警告、
+     および
+     `ABC038Bridge.lean`
+     の axioms note だけ replay された。
+6. 次の課題:
+   - `ABC010`
+     以降の downstream を named owner 化していく。
+   - あるいは
+     他 branch でも
+     base -> bridge -> downstream
+     の三層化を進める。
+
+## 2026/04/23 14:46 JST
+
+1. 実施:
+   - `ABC010`
+     を
+     `MiddleBlockTail`
+     に昇格した。
+   - `MiddleBlockTail.lean`
+     を新設し、
+     `Zmid`,
+     `QuadMGF`,
+     `QuadMGFPos`,
+     `mgf_midblock_via_janson_pos`,
+     `mid_block_upper_hp_dep`,
+     `mid_block_upper_hp_indep`,
+     `Emid`,
+     `GoodX`,
+     `goodX_measure_ge_one_sub_midblockCstar`,
+     `GoodX_antitone`
+     を含む
+     mid-block MGF / tail / GoodX 本体を移した。
+   - `ABC010.lean`
+     自体は
+     `import DkMath.ABC.MiddleBlockTail`
+     だけを持つ compatibility relay に縮小した。
+2. downstream 調整:
+   - `ABC011.lean`
+     を
+     `ABC010`
+     relay 経由ではなく
+     `MiddleBlockTail`
+     の direct import に変更した。
+3. 結論:
+   - Janson middle-band branch は
+     `JansonBasic`
+     を base、
+     `MiddleJansonBridge`
+     を bridge、
+     `MiddleBlockTail`
+     を tail owner、
+     という named owner 構成で追えるようになった。
+   - `ABC010`
+     は relay になり、
+     `ABC011+`
+     は mid-block tail API を番号なし owner から受け取れるようになった。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC010 -> MiddleBlockTail`
+     と
+     `ABC011`
+     の direct import 化を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     base -> bridge -> tail owner -> downstream
+     の四層分解を追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC010 -> MiddleBlockTail`
+     を追加した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleBlockTail`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC010`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC011`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認する。
+6. 次の課題:
+   - `ABC011`
+     の finite union / absorption 層を named owner 化する。
+   - その後
+     `ABC012`
+     以降の independent branch を同じ spine で整理する。
+
+## 2026/04/23 15:01 JST
+
+1. 実施:
+   - `ABC011`
+     を
+     `TailRadicalBasic`
+     に昇格した。
+   - `TailRadicalBasic.lean`
+     を新設し、
+     `measure_union_over_k`,
+     `summable_exp_neg_two_pow_mul`,
+     `midblockCstarIndep`,
+     `few_heavy_slices`,
+     `piSqRad`,
+     `rad_dvd_of_dvd`,
+     `rad_le_of_dvd`,
+     `log_mul_eq`,
+     `log_rpow_pos`
+     を含む
+     finite union / independent absorption / π-radical utility 本体を移した。
+   - `ABC011.lean`
+     自体は
+     `import DkMath.ABC.TailRadicalBasic`
+     だけを持つ compatibility relay に縮小した。
+2. downstream 調整:
+   - `ABC012.lean`
+     を
+     `ABC011`
+     relay 経由ではなく
+     `TailRadicalBasic`
+     の direct import に変更した。
+3. 結論:
+   - middle-band の independent branch は
+     `MiddleBlockTail`
+     を tail owner、
+     `TailRadicalBasic`
+     を utility owner、
+     `ABC012+`
+     を downstream、
+     という named owner 構成で追えるようになった。
+   - `ABC011`
+     は relay になり、
+     independent 側の吸収定数と π-radical 補題も番号なし owner に寄った。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC011 -> TailRadicalBasic`
+     と
+     `ABC012`
+     の direct import 化を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     tail owner -> utility owner -> downstream
+     の切り方を追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC011 -> TailRadicalBasic`
+     を追加した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.TailRadicalBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC011`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC012`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認する。
+6. 次の課題:
+   - `ABC012`
+     の independent density / absorb 層を named owner 化する。
+   - その後
+     `ABC013+`
+     を同じ independent spine で整理する。
+
+## 2026/04/23 15:18 JST
+
+1. 実施:
+   - `ABC012`
+     を
+     `MiddleBlockIndependentTail`
+     に昇格した。
+   - `MiddleBlockIndependentTail.lean`
+     を新設し、
+     `two_mul_sq_over_add_ge_self`,
+     `Ksmall`,
+     `Klarge`,
+     `Kset_disjoint_union`,
+     `card_Ksmall_le_three`,
+     `midblock_tail_indep_dyadic_strong`,
+     `midblock_union_absorb_indep_const`,
+     `goodX_measure_ge_one_sub_midblockCstarIndep`
+     を含む
+     independent mid-block dyadic tail / GoodX absorption 本体を移した。
+   - `ABC012.lean`
+     自体は
+     `import DkMath.ABC.MiddleBlockIndependentTail`
+     だけを持つ compatibility relay に縮小した。
+2. downstream 調整:
+   - `ABC013.lean`
+     を
+     `ABC012`
+     relay 経由ではなく
+     `MiddleBlockIndependentTail`
+     の direct import に変更した。
+3. 結論:
+   - independent branch は
+     `MiddleBlockTail`
+     -> `TailRadicalBasic`
+     -> `MiddleBlockIndependentTail`
+     -> `ABC013+`
+     という番号なし spine で読めるようになった。
+   - `ABC012`
+     は relay になり、
+     Kset 分割と GoodX 吸収が thematic owner に固定された。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC012 -> MiddleBlockIndependentTail`
+     と
+     `ABC013`
+     の direct import 化を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     independent branch の番号なし spine を追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC012 -> MiddleBlockIndependentTail`
+     を追加した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleBlockIndependentTail`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC012`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC013`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認する。
+6. 次の課題:
+   - `ABC013`
+     の slice/diagonal counting 層を named owner 化する。
+   - その後
+     adjacent / piSqRad 側へ接続する `ABC014+`
+     を整理する。
+
+## 2026/04/23 15:34 JST
+
+1. 実施:
+   - `ABC013`
+     を
+     `SliceDiagonalCounting`
+     に昇格した。
+   - `SliceDiagonalCounting.lean`
+     を新設し、
+     `slice_heavy_card_le`,
+     `eventually_slice_heavy_sublinear`,
+     `range_succ_eq_Icc`,
+     `sliceBadCount_eq_card_filter_Icc`,
+     `diagCount`,
+     `diagCountFwd`,
+     `diagCountFwd_le_diagCount_shift`,
+     `diag_badcount_le_badcount`,
+     `eventually_slice_heavy_sublinear_of_badcount_subquad`
+     を含む
+     slice-heavy / diagonal counting 本体を移した。
+   - `ABC013.lean`
+     自体は
+     `import DkMath.ABC.SliceDiagonalCounting`
+     だけを持つ compatibility relay に縮小した。
+2. downstream 調整:
+   - `ABC014.lean`
+     を
+     `ABC013`
+     relay 経由ではなく
+     `SliceDiagonalCounting`
+     の direct import に変更した。
+3. 結論:
+   - independent / adjacent branch の接続部は
+     `MiddleBlockIndependentTail`
+     -> `SliceDiagonalCounting`
+     -> `ABC014+`
+     という番号なし spine で読めるようになった。
+   - `AdjacentQuality`
+     も同じ counting API を参照しているため、
+     `Main`
+     build で hidden import が露出すれば direct import を追加する。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC013 -> SliceDiagonalCounting`
+     と
+     `ABC014`
+     の direct import 化を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     slice / diagonal counting owner の切り方を追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC013 -> SliceDiagonalCounting`
+     を追加した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.SliceDiagonalCounting`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC013`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC014`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認する。
+6. 次の課題:
+   - `ABC014`
+     の analytic quality bridge 層を named owner 化する。
+   - `ABC015`
+     以降の piSqRad / tail bridge と重複している部分があれば、
+     owner 境界を再設計する。
+
+## 2026/04/23 21:54 JST
+
+1. 実施:
+   - `ABC014`
+     を
+     `AnalyticQualityBridge`
+     に昇格した。
+   - `AnalyticQualityBridge.lean`
+     を新設し、
+     `quality_le_of_sqprod_pow_bound_analytic_proof`,
+     `quality_le_of_sqprod_pow_bound_analytic`,
+     `quality_le_of_sqprod_pow_bound`,
+     `quality_le_of_not_bad_diag`,
+     `log_rad_adj_pos_of_two_le`,
+     `coprime_n_two_n_add_one`,
+     `coprime_succ_mul_two_add_one`,
+     `quality_le_of_pi_tail_adj`
+     を含む analytic/log quality bridge 本体を移した。
+   - `ABC014.lean`
+     自体は
+     `import DkMath.ABC.AnalyticQualityBridge`
+     だけを持つ compatibility relay に縮小した。
+2. downstream 調整:
+   - `ABC015.lean`
+     を
+     `ABC014`
+     relay 経由ではなく
+     `AnalyticQualityBridge`
+     の direct import に変更した。
+3. 結論:
+   - counting branch から quality branch への接続部は
+     `SliceDiagonalCounting`
+     -> `AnalyticQualityBridge`
+     -> `ABC015+`
+     という番号なし spine で読めるようになった。
+   - `ABC015`
+     側には同系統の axiom-to-lemma wrapper が残っているため、
+     次サイクルでは重複を整理しながら owner 名を決める。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC014 -> AnalyticQualityBridge`
+     と
+     `ABC015`
+     の direct import 化を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     analytic/log quality bridge owner の切り方を追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC014 -> AnalyticQualityBridge`
+     を追加した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AnalyticQualityBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC014`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC015`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+     と
+     `ABC038Bridge.lean`
+     の axioms note。
+6. 次の課題:
+   - `ABC015`
+     の rad₀ / analytic wrapper / axiom-to-lemma 層を named owner 化する。
+   - `AnalyticQualityBridge`
+     と重複している quality wrapper を整理し、
+     可能なら downstream から直接 owner API を参照させる。
+
+## 2026/04/24 00:54 JST
+
+1. 実施:
+   - `ABC015`
+     を
+     `QualityTailBridge`
+     に昇格した。
+   - `QualityTailBridge.lean`
+     を新設し、
+     `rad₀`
+     系補題、
+     `quality_le_of_sqprod_pow_bound_analytic_proof'`,
+     `quality_le_of_sqprod_pow_bound_analytic_axiom_to_lemma`,
+     `quality_le_of_pi_tail`,
+     `adjacent_quality_bridge`,
+     `piSqRad_le_of_not_bad`,
+     `not_bad_of_not_is_bad_a`
+     を含む quality tail bridge 本体を移した。
+   - `ABC015.lean`
+     自体は
+     `import DkMath.ABC.QualityTailBridge`
+     だけを持つ compatibility relay に縮小した。
+2. downstream 調整:
+   - `ABC016.lean`
+     を
+     `ABC015`
+     relay 経由ではなく
+     `QualityTailBridge`
+     の direct import に変更した。
+   - `quality_le_of_pi_tail`,
+     `adjacent_quality_bridge`,
+     `piSqRad_le_of_not_bad`,
+     `quality_le_of_sqprod_pow_bound_analytic_axiom_to_lemma`
+     を直接参照している named owner 側にも
+     `QualityTailBridge`
+     direct import を追加した。
+   - 対象:
+     `AdjacentTailDensity.lean`,
+     `TailSquareBridge.lean`,
+     `ChernoffQualityBridge.lean`,
+     `AdjacentQuality.lean`,
+     `ABC038Bridge.lean`。
+   - `AdjacentQuality`
+     の検証中に
+     `AdjacentTailDensity.lean`
+     で
+     `log_twoTail_le_excess_sum`
+     の hidden dependency が露出したため、
+     owner である
+     `TailSquareBridge`
+     を direct import に追加した。
+3. 結論:
+   - quality branch の接続部は
+     `AnalyticQualityBridge`
+     -> `QualityTailBridge`
+     -> `ABC016+`
+     という番号なし spine で読めるようになった。
+   - `QualityTailBridge`
+     には
+     `AnalyticQualityBridge`
+     と意味的に重複する wrapper が残っているが、
+     旧 API 名を downstream が参照しているため、
+     このサイクルでは owner 固定に留めた。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC015 -> QualityTailBridge`
+     と downstream direct import 化を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     quality tail bridge owner の切り方を追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC015 -> QualityTailBridge`
+     を追加した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.QualityTailBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC015`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC016`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.TailSquareBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ChernoffQualityBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentTailDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentQuality`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC038Bridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+     と
+     `ABC038Bridge.lean`
+     の axioms note。
+6. 次の課題:
+   - `ABC016`
+     の sqTail / odd-even decomposition / adjacent quality wrapper 層を named owner 化する。
+   - `QualityTailBridge`
+     内の
+     `quality_le_of_sqprod_pow_bound_analytic_proof'`
+     と
+     `AnalyticQualityBridge.quality_le_of_sqprod_pow_bound_analytic_proof`
+     の重複削減を検討する。
+
+## 2026/04/24 04:44 JST
+
+1. 実施:
+   - `ABC016`
+     を
+     `SquareTailBasic`
+     に昇格した。
+   - `SquareTailBasic.lean`
+     を新設し、
+     `sqTail`,
+     `oddPart`,
+     `evenPart`,
+     `twoTail`,
+     それらの分解補題、
+     `twoTail_le_rad_pow_of_log_bound`,
+     `piSqRad_adjacent_le_of_not_is_bad_a`
+     を含む square-tail decomposition / adjacent extraction 本体を移した。
+   - `ABC016.lean`
+     自体は
+     `import DkMath.ABC.SquareTailBasic`
+     だけを持つ compatibility relay に縮小した。
+2. downstream 調整:
+   - `ABC017.lean`
+     を
+     `ABC016`
+     relay 経由ではなく
+     `SquareTailBasic`
+     の direct import に変更した。
+   - square-tail API を直接参照している named owner 側にも
+     `SquareTailBasic`
+     direct import を追加した。
+   - 対象:
+     `TailSquareBridge.lean`,
+     `AdjacentTailDensity.lean`,
+     `AdjacentQuality.lean`,
+     `ABC038Bridge.lean`,
+     `ABC038BridgeExamples.lean`。
+3. 重複削減:
+   - `QualityTailBridge`
+     内の
+     `quality_le_of_sqprod_pow_bound_analytic_proof'`
+     は、
+     実装本体を重複保持せず、
+     `AnalyticQualityBridge.quality_le_of_sqprod_pow_bound_analytic_proof`
+     を呼ぶ wrapper に置き換えた。
+   - これにより
+     analytic proof 実装の owner は
+     `AnalyticQualityBridge`
+     に一本化された。
+4. 結論:
+   - quality / tail branch の接続部は
+     `QualityTailBridge`
+     -> `SquareTailBasic`
+     -> `TailSquareBridge | AdjacentQuality`
+     という番号なし spine で読めるようになった。
+   - `SquareTailBasic`
+     は broad owner だが、
+     現状の再利用境界に対しては分解しすぎない方が安全である。
+5. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC016 -> SquareTailBasic`
+     と direct import 化、
+     および analytic proof 重複削減を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     square-tail basic owner の切り方を追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC016 -> SquareTailBasic`
+     を追加した。
+6. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.SquareTailBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC016`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC017`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.TailSquareBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentTailDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentQuality`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC038Bridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC038BridgeExamples`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+     と
+     `ABC038Bridge.lean`
+     の axioms note。
+7. 次の課題:
+   - `ABC017`
+     の Borel-Cantelli / density extraction 層を named owner 化する。
+   - `SquareTailBasic`
+     内で adjacent wrapper と pure decomposition をさらに分ける価値があるかを、
+     downstream の import 安定性を見ながら判断する。
+
+## 2026/04/24 04:54 JST
+
+1. 実施:
+   - `ABC017`
+     を
+     `BorelCantelliDensity`
+     に昇格した。
+   - `BorelCantelliDensity.lean`
+     を新設し、
+     `borel_cantelli_one`,
+     `eventually_not_is_bad_adjacent`
+     を含む Borel-Cantelli / density extraction 本体を移した。
+   - `ABC017.lean`
+     自体は
+     `import DkMath.ABC.BorelCantelliDensity`
+     だけを持つ compatibility relay に縮小した。
+2. downstream 調整:
+   - `ABC018.lean`
+     を
+     `ABC017`
+     relay 経由ではなく
+     `BorelCantelliDensity`
+     の direct import に変更した。
+   - `AdjacentQuality.lean`
+     は
+     `eventually_not_is_bad_adjacent`
+     を直接参照しているため、
+     hidden dependency を避ける目的で
+     `BorelCantelliDensity`
+     direct import を追加した。
+3. `SquareTailBasic` 再分割の判断:
+   - adjacent wrapper と pure decomposition の分離は
+     今回は見送った。
+   - 理由:
+     `TailSquareBridge`,
+     `AdjacentTailDensity`,
+     `AdjacentQuality`,
+     `ABC038Bridge`,
+     `ABC038BridgeExamples`
+     が broad owner をまとめて利用しており、
+     ここで分けても import が増えるだけで
+     安定性の改善が小さいため。
+   - したがって現時点では
+     `SquareTailBasic`
+     を decomposition + adjacent extraction の共有 owner とみなす。
+4. 結論:
+   - density branch は
+     `SquareTailBasic`
+     -> `BorelCantelliDensity`
+     -> `ABC018+`
+     という番号なし spine で読めるようになった。
+   - `AdjacentQuality`
+     も density extraction owner を直接 import する形になり、
+     relay 依存が一段減った。
+5. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC017 -> BorelCantelliDensity`
+     と
+     `ABC018`
+     / `AdjacentQuality`
+     の direct import 化、
+     ならびに
+     `SquareTailBasic`
+     再分割見送り判断を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     probability owner の切り方と
+     `SquareTailBasic`
+     を今は分けない判断を追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC017 -> BorelCantelliDensity`
+     を追加した。
+6. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.BorelCantelliDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC017`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC018`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentQuality`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知警告:
+     `ABC038Bridge.lean`
+     の axioms note
+7. 次の課題:
+   - `ABC018`
+     の counting / prime-threshold / next relay 候補を named owner 化する。
+   - `SquareTailBasic`
+     の再分割は、
+     `ABC018+`
+     側の relay 縮小が進んでから再評価する。
+
+## 2026/04/24 10:45 JST
+
+1. 実施:
+   - `ABC018`
+     を
+     `HeavyPrimeCounting`
+     に昇格した。
+   - `HeavyPrimeCounting.lean`
+     を新設し、
+     per-prime threshold counting と
+     heavy-prime union-bound 本体を移した。
+   - `ABC018.lean`
+     自体は
+     `import DkMath.ABC.HeavyPrimeCounting`
+     だけを持つ compatibility relay に縮小した。
+2. moved 内容:
+   - public:
+     `count_n_with_high_vp_bound`,
+     `heavy_primes_affect_sublinear_n`
+   - private helper:
+     `count_multiples_le_ceil`,
+     `count_shifted_multiples_le_ceil`
+3. downstream 調整:
+   - `AdjacentTailDensity.lean`
+     は
+     `heavy_primes_affect_sublinear_n`
+     を直接参照しているため、
+     hidden dependency を避ける目的で
+     `HeavyPrimeCounting`
+     direct import を追加した。
+   - `FiniteChernoffBasic.lean`
+     は
+     `ABC018`
+     relay ではなく
+     `HeavyPrimeCounting`
+     の direct import に差し替えた。
+4. `SquareTailBasic` 再分割の再評価:
+   - 今回も分割は見送った。
+   - 理由:
+     `ABC018+`
+     側では
+     `BorelCantelliDensity`
+     と
+     `HeavyPrimeCounting`
+     が独立 owner として立ち始めており、
+     先に relay 縮小を進めたほうが
+     downstream の import 安定性を測りやすいため。
+   - したがって
+     `SquareTailBasic`
+     の decomposition / adjacent wrapper 分離は
+     もう少し後段で再評価する。
+5. 結論:
+   - counting branch は
+     `BorelCantelliDensity`
+     の次段で
+     `HeavyPrimeCounting`
+     として独立に読めるようになった。
+   - また
+     `FiniteChernoffBasic`
+     に残っていた
+     relay 慣性 import を 1 本除去できた。
+6. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC018 -> HeavyPrimeCounting`
+     と
+     `AdjacentTailDensity`
+     の direct import 化、
+     `FiniteChernoffBasic`
+     の direct import 化、
+     ならびに
+     `SquareTailBasic`
+     再分割 defer を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     counting branch の owner 分離と
+     不要 import 削除パターンを追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC018 -> HeavyPrimeCounting`
+     を追加した。
+7. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.HeavyPrimeCounting`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC018`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.FiniteChernoffBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentTailDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知警告:
+     `ABC038Bridge.lean`
+     の axioms note
+8. 次の課題:
+   - `ABC019`
+     以降で
+     `HeavyPrimeCounting`
+     relay を介さずに済む箇所をさらに削る。
+   - `SquareTailBasic`
+     の再分割は、
+     counting / density / quality の owner 面が
+     もう一段整理された時点で再評価する。
+
+## 2026/04/24 10:56 JST
+
+1. 実施:
+   - `ABC019+`
+     側で残っていた
+     `ABC018`
+     relay 依存を追加で削減した。
+   - 対象は
+     `TailSquareBridge.lean`
+     で、
+     `import DkMath.ABC.ABC018`
+     を
+     `import DkMath.ABC.HeavyPrimeCounting`
+     に差し替えた。
+2. 判断:
+   - 現時点で
+     `ABC018`
+     relay を明示的に import していた
+     `ABC019+`
+     側の consumer は
+     `TailSquareBridge`
+     が最後だった。
+   - したがって
+     compatibility relay
+     `ABC018.lean`
+     は、
+     いまは後方互換のためだけに残る状態になった。
+3. `SquareTailBasic` 再分割の再評価:
+   - 今回も見送った。
+   - 理由:
+     counting / density / quality の owner 面は
+     `HeavyPrimeCounting`,
+     `BorelCantelliDensity`,
+     `AdjacentQuality`
+     系へ順に分離できている一方、
+     `SquareTailBasic`
+     の consumer 群はまだ
+     `TailSquareBridge`,
+     `AdjacentTailDensity`,
+     `AdjacentQuality`,
+     `ABC038Bridge`
+     にまたがって共有が残っているため。
+   - よって分割より先に、
+     owner direct import 化の残りを削る方を優先する。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `TailSquareBridge`
+     の
+     `ABC018 -> HeavyPrimeCounting`
+     差し替えを追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     downstream bridge file の relay import を
+     direct import に差し替えるパターンを追記した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.TailSquareBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentTailDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知警告:
+     `ABC038Bridge.lean`
+     の axioms note
+6. 次の課題:
+   - `ABC019+`
+     側で
+     `ABC017`
+     / `ABC018`
+     以外の relay import が
+     direct owner import に置換できる箇所を順次洗う。
+   - `SquareTailBasic`
+     の再分割は、
+     direct import 化の残りがさらに減った段階で再評価する。
+
+## 2026/04/24 11:00 JST
+
+1. 実施:
+   - anchor shell
+     `ABC090`
+     を参照していた consumer を
+     最小環境 import へ戻した。
+   - `Main.lean`
+     の
+     `import DkMath.ABC.ABC090`
+     を
+     `import DkMath.ABC.Basic`
+     に差し替えた。
+   - `ABCError.lean`
+     も同様に
+     `ABC090`
+     ではなく
+     `Basic`
+     を直接 import する形へ変更した。
+2. 判断:
+   - `ABC090`
+     自体は
+     すでに
+     `Basic`
+     だけを import する空 shell であり、
+     下流がこれを経由する意味は薄い。
+   - よって
+     owner 化というより
+     anchor consumer cleanup
+     として扱うのが自然だった。
+3. `SquareTailBasic` 再分割の再評価:
+   - 今回も見送った。
+   - 理由:
+     counting / density / quality の owner 面整理は進んでいるが、
+     `SquareTailBasic`
+     の consumer 群は依然として
+     bridge / density / quality
+     の複数枝で共有されているため。
+   - 先に
+     numbered shell / relay import
+     の cleanup を進める。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `Main`
+     / `ABCError`
+     の
+     `ABC090 -> Basic`
+     差し替えを追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     anchor shell consumer を
+     最小環境 import へ戻すパターンを追記した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABCError`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知警告:
+     `ABC038Bridge.lean`
+     の axioms note
+6. 次の課題:
+   - `ABC019+`
+     側で残る
+     numbered shell / relay import をさらに洗う。
+   - `SquareTailBasic`
+     の再分割は、
+     direct import cleanup がもう少し進んだ段階で再評価する。
+
+## 2026/04/24 11:03 JST
+
+1. 実施:
+   - research / scratch file でも
+     relay import を owner 直参照へ戻した。
+   - 対象は
+     `ABC#Research.lean`
+     で、
+     `import DkMath.ABC.ABC036`
+     を
+     `import DkMath.ABC.ChernoffDensity`
+     に差し替えた。
+2. 判断:
+   - `ABC#Research`
+     で実際に使っていた numbered 系識別子はなく、
+     必要なのは
+     `Bad_ε`
+     をはじめとする
+     `ChernoffDensity`
+     owner の記号だった。
+   - したがって
+     ここも relay cleanup の一環として扱える。
+3. `SquareTailBasic` 再分割の再評価:
+   - 今回も見送った。
+   - 理由:
+     まだ優先順位は
+     numbered shell / relay import
+     の cleanup 側にあるため。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC#Research`
+     の
+     `ABC036 -> ChernoffDensity`
+     差し替えを追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     research / scratch file
+     でも relay ではなく owner を直接引くパターンを追記した。
+5. 検証:
+   - `lake env lean DkMath/ABC/ABC#Research.lean`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ABC#Research.lean`
+     の `sorry`
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知警告:
+     `ABC038Bridge.lean`
+     の axioms note
+6. 次の課題:
+   - `ABC019+`
+     側で残る
+     numbered shell / relay import をさらに洗う。
+   - `SquareTailBasic`
+     の再分割は、
+     direct import cleanup がもう少し進んだ段階で再評価する。

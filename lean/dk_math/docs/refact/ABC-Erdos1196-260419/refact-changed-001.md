@@ -831,3 +831,471 @@
     の hidden import が露出したため、
     `FiniteChernoffBasic`
     を direct import する修正も併せて入れた
+- Janson roadmap / expectation helper 層を
+  `DkMath.ABC.JansonRoadmap`
+  として昇格
+  - 新設:
+    `JansonRoadmap.lean`
+  - moved:
+    `ABC021.lean`
+    全体
+    (`PMF.expect_mono`, `markov_inequality`,
+    `chebyshev_inequality`, `Janson.mgf`,
+    `exp_sum_eq_prod_exp`,
+    `expect_prod_eq_prod_expect`,
+    `mgf_sum_indep`,
+    `second_moment_zero_prob`,
+    `variance_indicator_sum`,
+    `janson_core_inequality`,
+    `bound_v2_from_janson`)
+  - `ABC021.lean`
+    自体は
+    `import DkMath.ABC.JansonRoadmap`
+    だけを持つ compatibility relay に縮小
+  - `LayerCakeBasic.lean`
+    からは
+    `ABC021`
+    import を削除した
+    （live chain では未使用だったため）
+  - この結果
+    `ChernoffQualityBridge.lean`
+    の
+    `TailSquareBridge`
+    hidden import が露出したため、
+    `import DkMath.ABC.TailSquareBridge`
+    を direct 化して復旧した
+- Janson branch の import spine を 1 本薄くした
+  - `JansonRoadmap.lean`
+    の import を
+    `ABC020`
+    relay 経由から
+    `ABC008`
+    への direct import に変更した
+  - これにより
+    `ABC020`
+    は
+    `TailSquareBridge`
+    への relay としてのみ残る状態が、
+    import 実態と追跡表の両方で一致した
+- Janson basic / PMF infrastructure 層を
+  `DkMath.ABC.JansonBasic`
+  に昇格
+  - 新設:
+    `JansonBasic.lean`
+  - moved:
+    `ABC008.lean`
+    全体
+    (`JansonModel`, `JansonSetup`, `mu`, `dbar`,
+    `bernoulli_pmf`, `product_pmf`,
+    `expect_indicator_prod` など)
+  - `ABC008.lean`
+    自体は
+    `import DkMath.ABC.JansonBasic`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC009.lean`
+    と
+    `JansonRoadmap.lean`
+    を
+    `ABC008`
+    relay 経由ではなく
+    `JansonBasic`
+    の direct import に変更した
+- Janson branch の relay 追跡をさらに明確化
+  - `ABC008.lean`
+    は
+    `JansonBasic`
+    への relay、
+    `ABC021.lean`
+    は
+    `JansonRoadmap`
+    への relay、
+    `ABC020.lean`
+    は
+    `TailSquareBridge`
+    への relay、
+    という 3 本の役割分担が成立した
+- middle-band の Janson/Suen bridge 層を
+  `DkMath.ABC.MiddleJansonBridge`
+  に昇格
+  - 新設:
+    `MiddleJansonBridge.lean`
+  - moved:
+    `ABC009.lean`
+    全体
+    (`JSProb`, `Middle`, `janson_mu`, `janson_dbar`,
+    `janson_block_exp`, `BlockJS`,
+    `middle_band_sum_bound`, `middle_band_bound_top`)
+  - `ABC009.lean`
+    自体は
+    `import DkMath.ABC.MiddleJansonBridge`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC010.lean`
+    を
+    `ABC009`
+    relay 経由ではなく
+    `MiddleJansonBridge`
+    の direct import に変更した
+- mid-block MGF / tail / GoodX 層を
+  `DkMath.ABC.MiddleBlockTail`
+  に昇格
+  - 新設:
+    `MiddleBlockTail.lean`
+  - moved:
+    `ABC010.lean`
+    全体
+    (`Zmid`, `QuadMGF`, `QuadMGFPos`,
+    `mgf_midblock_via_janson_pos`,
+    `mid_block_upper_hp_dep`,
+    `mid_block_upper_hp_indep`,
+    `Emid`, `GoodX`,
+    `goodX_measure_ge_one_sub_midblockCstar`,
+    `GoodX_antitone`)
+  - `ABC010.lean`
+    自体は
+    `import DkMath.ABC.MiddleBlockTail`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC011.lean`
+    を
+    `ABC010`
+    relay 経由ではなく
+    `MiddleBlockTail`
+    の direct import に変更した
+- finite union / independent absorption / π-radical utility 層を
+  `DkMath.ABC.TailRadicalBasic`
+  に昇格
+  - 新設:
+    `TailRadicalBasic.lean`
+  - moved:
+    `ABC011.lean`
+    全体
+    (`measure_union_over_k`,
+    `summable_exp_neg_two_pow_mul`,
+    `midblockCstarIndep`,
+    `few_heavy_slices`,
+    `piSqRad`,
+    `rad_dvd_of_dvd`,
+    `rad_le_of_dvd`,
+    `log_mul_eq`,
+    `log_rpow_pos`)
+  - `ABC011.lean`
+    自体は
+    `import DkMath.ABC.TailRadicalBasic`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC012.lean`
+    を
+    `ABC011`
+    relay 経由ではなく
+    `TailRadicalBasic`
+    の direct import に変更した
+- independent mid-block dyadic tail / GoodX absorption 層を
+  `DkMath.ABC.MiddleBlockIndependentTail`
+  に昇格
+  - 新設:
+    `MiddleBlockIndependentTail.lean`
+  - moved:
+    `ABC012.lean`
+    全体
+    (`two_mul_sq_over_add_ge_self`,
+    `Ksmall`, `Klarge`,
+    `Kset_disjoint_union`,
+    `card_Ksmall_le_three`,
+    `midblock_tail_indep_dyadic_strong`,
+    `midblock_union_absorb_indep_const`,
+    `goodX_measure_ge_one_sub_midblockCstarIndep`)
+  - `ABC012.lean`
+    自体は
+    `import DkMath.ABC.MiddleBlockIndependentTail`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC013.lean`
+    を
+    `ABC012`
+    relay 経由ではなく
+    `MiddleBlockIndependentTail`
+    の direct import に変更した
+- slice-heavy / diagonal counting 層を
+  `DkMath.ABC.SliceDiagonalCounting`
+  に昇格
+  - 新設:
+    `SliceDiagonalCounting.lean`
+  - moved:
+    `ABC013.lean`
+    全体
+    (`slice_heavy_card_le`,
+    `eventually_slice_heavy_sublinear`,
+    `range_succ_eq_Icc`,
+    `sliceBadCount_eq_card_filter_Icc`,
+    `diagCount`,
+    `diagCountFwd`,
+    `diagCountFwd_le_diagCount_shift`,
+    `diag_badcount_le_badcount`,
+    `eventually_slice_heavy_sublinear_of_badcount_subquad`)
+  - `ABC013.lean`
+    自体は
+    `import DkMath.ABC.SliceDiagonalCounting`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC014.lean`
+    を
+    `ABC013`
+    relay 経由ではなく
+    `SliceDiagonalCounting`
+    の direct import に変更した
+- analytic/log quality bridge 層を
+  `DkMath.ABC.AnalyticQualityBridge`
+  に昇格
+  - 新設:
+    `AnalyticQualityBridge.lean`
+  - moved:
+    `ABC014.lean`
+    全体
+    (`quality_le_of_sqprod_pow_bound_analytic_proof`,
+    `quality_le_of_sqprod_pow_bound_analytic`,
+    `quality_le_of_sqprod_pow_bound`,
+    `quality_le_of_not_bad_diag`,
+    `log_rad_adj_pos_of_two_le`,
+    `coprime_n_two_n_add_one`,
+    `coprime_succ_mul_two_add_one`,
+    `quality_le_of_pi_tail_adj`)
+  - `ABC014.lean`
+    自体は
+    `import DkMath.ABC.AnalyticQualityBridge`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC015.lean`
+    を
+    `ABC014`
+    relay 経由ではなく
+    `AnalyticQualityBridge`
+    の direct import に変更した
+- rad₀ / quality tail bridge / axiom-to-lemma wrapper 層を
+  `DkMath.ABC.QualityTailBridge`
+  に昇格
+  - 新設:
+    `QualityTailBridge.lean`
+  - moved:
+    `ABC015.lean`
+    全体
+    (`delta_0435_final`,
+    `rad₀`,
+    `rad₀_zero`,
+    `rad₀_one`,
+    `rad₀_pos_iff`,
+    `rad₀_ne_zero_iff`,
+    `rad₀_eq_rad_of_ne_zero`,
+    `rad₀_mul_coprime'`,
+    `log_rad₀_eq`,
+    `log_rad₀_adj_pos_of_two_le`,
+    `quality_le_of_sqprod_pow_bound_analytic_proof'`,
+    `quality_le_of_sqprod_pow_bound_analytic_axiom_to_lemma`,
+    `quality_le_of_pi_tail`,
+    `adjacent_quality_bridge`,
+    `piSqRad_le_of_not_bad`,
+    `not_bad_of_not_is_bad_a`)
+  - `ABC015.lean`
+    自体は
+    `import DkMath.ABC.QualityTailBridge`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC016.lean`,
+    `AdjacentTailDensity.lean`,
+    `TailSquareBridge.lean`,
+    `ChernoffQualityBridge.lean`,
+    `AdjacentQuality.lean`,
+    `ABC038Bridge.lean`
+    を
+    `QualityTailBridge`
+    の direct import に変更した
+  - hidden dependency として露出した
+    `AdjacentTailDensity.lean`
+    の
+    `log_twoTail_le_excess_sum`
+    参照は、
+    owner である
+    `TailSquareBridge`
+    の direct import に変更した
+- sqTail / odd-even decomposition / adjacent square-tail wrapper 層を
+  `DkMath.ABC.SquareTailBasic`
+  に昇格
+  - 新設:
+    `SquareTailBasic.lean`
+  - moved:
+    `ABC016.lean`
+    全体
+    (`rad_pow_ge_one`,
+    `sqTail`,
+    `nat_eq_sqTail_mul_rad`,
+    `nat_eq_sqTail_mul_rad_real`,
+    `oddPart`,
+    `evenPart`,
+    `decomp_oddPart_evenPart`,
+    `decomp_oddPart_evenPart_real`,
+    `twoTail`,
+    `decomp_piRad_twoTail`,
+    `decomp_piRad_twoTail_real`,
+    `sqTail_eq_piSqRad_mul_twoTail`,
+    `sqTail_eq_piSqRad_mul_twoTail_real`,
+    `twoTail_le_sqTail_real`,
+    `sqTail_eq_one_of_squarefree`,
+    `sqTail_le_self_real`,
+    `sqTail_adjacent_le_rad_pow_of_squarefree`,
+    `log_twoTail_eq_sum_vplus`,
+    `twoTail_le_rad_pow_of_log_bound`,
+    `piSqRad_adjacent_le_of_not_is_bad_a'`,
+    `piSqRad_adjacent_le_of_not_is_bad_a`)
+  - `ABC016.lean`
+    自体は
+    `import DkMath.ABC.SquareTailBasic`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC017.lean`,
+    `TailSquareBridge.lean`,
+    `AdjacentTailDensity.lean`,
+    `AdjacentQuality.lean`,
+    `ABC038Bridge.lean`,
+    `ABC038BridgeExamples.lean`
+    を
+    `SquareTailBasic`
+    の direct import に変更した
+- `QualityTailBridge`
+  内の
+  `quality_le_of_sqprod_pow_bound_analytic_proof'`
+  は、
+  `AnalyticQualityBridge`
+  側の
+  `quality_le_of_sqprod_pow_bound_analytic_proof`
+  を呼ぶ wrapper に置き換え、
+  実装重複を除去した
+- Borel-Cantelli / density extraction 層を
+  `DkMath.ABC.BorelCantelliDensity`
+  に昇格
+  - 新設:
+    `BorelCantelliDensity.lean`
+  - moved:
+    `ABC017.lean`
+    全体
+    (`borel_cantelli_one`,
+    `eventually_not_is_bad_adjacent`)
+  - `ABC017.lean`
+    自体は
+    `import DkMath.ABC.BorelCantelliDensity`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC018.lean`
+    を
+    `ABC017`
+    relay 経由ではなく
+    `BorelCantelliDensity`
+    の direct import に変更した
+  - `AdjacentQuality.lean`
+    も
+    `eventually_not_is_bad_adjacent`
+    を直接参照しているため、
+    hidden dependency を避ける目的で
+    `BorelCantelliDensity`
+    を direct import に変更した
+- `SquareTailBasic`
+  の再分割については、
+  `TailSquareBridge`,
+  `AdjacentTailDensity`,
+  `AdjacentQuality`,
+  `ABC038Bridge`,
+  `ABC038BridgeExamples`
+  が同じ broad owner を共有しているため、
+  今回は見送った
+  - adjacent wrapper と pure decomposition を分けると、
+    現時点では import の本数だけが増え、
+    安定性の改善は小さいと判断した
+- counting / prime-threshold / heavy-prime union-bound 層を
+  `DkMath.ABC.HeavyPrimeCounting`
+  に昇格
+  - 新設:
+    `HeavyPrimeCounting.lean`
+  - moved:
+    `ABC018.lean`
+    全体
+    (`count_n_with_high_vp_bound`,
+    `heavy_primes_affect_sublinear_n`
+    とその private counting helper 群)
+  - `ABC018.lean`
+    自体は
+    `import DkMath.ABC.HeavyPrimeCounting`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `AdjacentTailDensity.lean`
+    を
+    `HeavyPrimeCounting`
+    の direct import に変更した
+  - `FiniteChernoffBasic.lean`
+    については
+    `ABC018`
+    relay ではなく
+    `HeavyPrimeCounting`
+    の direct import に変更した
+- `SquareTailBasic`
+  の再分割は今回も再評価のみ行い、
+  実施は見送った
+  - `ABC018+`
+    側では
+    `BorelCantelliDensity`
+    と
+    `HeavyPrimeCounting`
+    が独立 owner として立ち始めており、
+    先に relay 縮小を進めるほうが
+    import 安定性の観測に有利と判断した
+- `ABC019+`
+  側で残っていた
+  `ABC018`
+  relay 依存をさらに 1 本削減
+  - `TailSquareBridge.lean`
+    の
+    `import DkMath.ABC.ABC018`
+    を
+    `import DkMath.ABC.HeavyPrimeCounting`
+    に差し替えた
+  - これにより
+    `HeavyPrimeCounting`
+    relay を介する consumer は
+    `ABC018`
+    compatibility file 自身を除くと
+    いったん解消した
+- `ABC090`
+  anchor shell を参照していた consumer を
+  `Basic`
+  直参照へ変更
+  - `Main.lean`
+    の
+    `import DkMath.ABC.ABC090`
+    を
+    `import DkMath.ABC.Basic`
+    に差し替えた
+  - `ABCError.lean`
+    も同様に
+    `ABC090`
+    ではなく
+    `Basic`
+    を直接 import する形に変更した
+  - これにより
+    `ABC090`
+    は実運用上さらに
+    compatibility shell
+    としてのみ残る状態になった
+- research / scratch file でも
+  relay import を owner 直参照へ変更
+  - `ABC#Research.lean`
+    の
+    `import DkMath.ABC.ABC036`
+    を
+    `import DkMath.ABC.ChernoffDensity`
+    に差し替えた
+  - 実際に使っていたのは
+    `Bad_ε`
+    など
+    `ChernoffDensity`
+    owner の識別子であり、
+    `ABC036`
+    relay を経由する必要はなかった

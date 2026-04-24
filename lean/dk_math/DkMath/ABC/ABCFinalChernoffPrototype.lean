@@ -15,9 +15,9 @@ open scoped BigOperators
 open Finset
 open Filter
 
-#check @ABC.rpow_layer_cake
-#check @ABC.div_le_iff
-#check @ABC.ceil_spec
+#check @DkMath.ABC.rpow_layer_cake
+#check @DkMath.ABC.div_le_iff
+#check @DkMath.ABC.ceil_spec
 
 namespace DkMath.ABC
 
