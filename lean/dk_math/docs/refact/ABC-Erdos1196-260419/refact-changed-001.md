@@ -1331,3 +1331,30 @@
     relay 経由ではなく
     `AdjacentDiagonalBasic`
     direct import に変更した
+- 前段 adjacent density 層
+  `ABC002`
+  を
+  `DkMath.ABC.AdjacentBadDensity`
+  に昇格
+  - 新設:
+    `AdjacentBadDensity.lean`
+  - moved:
+    `ABC002.lean`
+    全体
+    (`adjBadCount_le_diag`,
+    `tendsto_adj_bad_fraction_zero`,
+    `eventually_forall_on_Icc_of_eventually`,
+    `prefix_over_X_tendsto_zero`,
+    `adj_quality_density_one_no_equiv`,
+    `adj_quality_density_one`)
+  - `ABC002.lean`
+    自体は
+    `import DkMath.ABC.AdjacentBadDensity`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC003.lean`
+    を
+    `ABC002`
+    relay 経由ではなく
+    `AdjacentBadDensity`
+    direct import に変更した

@@ -187,6 +187,22 @@ public entry build で unknown identifier として露出する型。
   `AdjacentDiagonalBasic`
   direct import
   へ変更するだけで chain の起点を名前付きにできた。
+- 次段で
+  `ABC002`
+  は
+  `AdjacentBadDensity`
+  として whole-file promotion した。
+  内容は
+  adjacent bad count
+  の密度 0 と
+  adjacent quality density one
+  への転送でまとまっており、
+  `ABC003`
+  は
+  `ABC002`
+  relay ではなく
+  `AdjacentBadDensity`
+  を直接 import する形に切れた。
 
 ## ノート
 

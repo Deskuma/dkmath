@@ -6,7 +6,7 @@ Authors: D. and Wise Wolf.
 
 
 import DkMath.Basic.Nat
-import DkMath.ABC.ABC002
+import DkMath.ABC.AdjacentBadDensity
 
 #print "file: DkMath.ABC.ABC003"
 
