@@ -1056,3 +1056,24 @@ public entry build で unknown identifier として露出する型。
   以降は PMF product owner として
   `JansonBasic`
   に残すのが現時点では安定する。
+- `JansonBasic`
+  の残存本体はさらに
+  `JansonPMFProduct`
+  へ whole-file promotion できた。
+  この層は
+  `JansonSetup`,
+  `JansonModel`,
+  `product_pmf`,
+  `expect_indicator_prod`,
+  `bound_v2`
+  などを含む PMF product owner であり、
+  `MiddleJansonBridge`
+  と
+  `JansonRoadmap`
+  は
+  `JansonBasic`
+  relay を介さず direct import できる。
+  したがって
+  `ABC008 -> JansonBasic -> JansonPMFProduct`
+  の compatibility chain は残しつつ、
+  実装上の consumer は named owner へ寄せられる。

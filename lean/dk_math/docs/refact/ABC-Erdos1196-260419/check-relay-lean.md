@@ -21,6 +21,7 @@
 - [x] [ABC008](../../../DkMath/ABC/ABC008.lean)
   - 移設先 → [JansonBasic.lean](../../../DkMath/ABC/JansonBasic.lean)
   - 再分割先 → [JansonFiniteUniform.lean](../../../DkMath/ABC/JansonFiniteUniform.lean)
+  - 再分割先 → [JansonPMFProduct.lean](../../../DkMath/ABC/JansonPMFProduct.lean)
 - [x] [ABC009](../../../DkMath/ABC/ABC009.lean)
   - 移設先 → [MiddleJansonBridge.lean](../../../DkMath/ABC/MiddleJansonBridge.lean)
 - [x] [ABC010](../../../DkMath/ABC/ABC010.lean)

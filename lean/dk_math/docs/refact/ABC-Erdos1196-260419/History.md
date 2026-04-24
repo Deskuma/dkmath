@@ -1068,3 +1068,114 @@ Archive
      が本当に必要とする Janson API を確認し、
      `JansonBasic`
      全体 import を狭められるか検討する。
+
+## 2026/04/25 03:21 JST
+
+1. 実施:
+   - `JansonBasic.lean`
+     に残っていた Janson model / PMF product / expectation helper 本体を
+     `JansonPMFProduct.lean`
+     に whole-file promotion した。
+   - `JansonBasic.lean`
+     自体は
+     `import DkMath.ABC.JansonPMFProduct`
+     だけを持つ compatibility relay に縮小した。
+2. moved 内容:
+   - PMF expectation helpers:
+     `PMF.expect_ennreal`,
+     `PMF.expect`,
+     `PMF.expect_bind`,
+     `PMF.expect_const_mul`
+   - Janson abstract/model layer:
+     `JansonSetup`,
+     `JansonModel`,
+     `JansonModel'`,
+     `indicatorA`,
+     `mu`,
+     `dbar`
+   - PMF product layer:
+     `bernoulli_pmf`,
+     `product_pmf`,
+     `product_pmf_on`,
+     `expect_product_pmf_on`
+   - downstream-facing lemmas:
+     `expect_indicator_prod'`,
+     `expect_indicator_prod`,
+     `expect_indicator_joint`,
+     `bound_v2`
+   - middle-band prototype:
+     `MiddleBandParams`,
+     `middle_band_bound_proto`
+3. downstream 調整:
+   - `MiddleJansonBridge.lean`
+     を
+     `JansonBasic`
+     relay 経由ではなく
+     `JansonPMFProduct`
+     direct import に変更した。
+   - `JansonRoadmap.lean`
+     も
+     `JansonPMFProduct`
+     direct import に変更した。
+4. 判断:
+   - `MiddleJansonBridge`
+     は
+     `ABC.Janson.JansonModel`,
+     `ABC.Janson.product_pmf`,
+     `ABC.Janson.expect_indicator_prod'`,
+     `ABC.Janson.mu`,
+     `ABC.Janson.dbar`
+     を直接使っているため、
+     PMF product owner への direct import が自然。
+   - `JansonBasic`
+     は外部互換名として残し、
+     `ABC008`
+     relay からの compatibility chain は維持した。
+5. 追跡文書:
+   - relay:
+     `check-relay-lean.md`
+     の
+     `ABC008`
+     に
+     `JansonPMFProduct`
+     を再分割先として追記した。
+   - changed:
+     `refact-changed-001.md`
+     に
+     `JansonBasic -> JansonPMFProduct`
+     promotion と downstream import cut を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     `JansonBasic`
+     relay 化と
+     `JansonPMFProduct`
+     direct import パターンを追記した。
+6. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.JansonPMFProduct`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.JansonBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleJansonBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.JansonRoadmap`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC008`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `JansonRoadmap.lean`
+     の roadmap `sorry`
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知警告:
+     `ABC038Bridge.lean`
+     の axioms note
+7. 次の課題:
+   - `ABC008`
+     relay chain は
+     `ABC008 -> JansonBasic -> JansonPMFProduct`
+     として互換維持された。
+   - 次は
+     `MiddleJansonBridge`
+     内の
+     JSProb / BlockJS / aggregation bridge を観察し、
+     `ABC009`
+     relay 周辺の owner 境界をさらに切れるか確認する。

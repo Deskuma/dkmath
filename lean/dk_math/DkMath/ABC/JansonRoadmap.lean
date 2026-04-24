@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
-import DkMath.ABC.JansonBasic
+import DkMath.ABC.JansonPMFProduct
 
 #print "file: DkMath.ABC.JansonRoadmap"
 

@@ -1537,3 +1537,34 @@
     その内部境界として
     `JansonFiniteUniform`
     を追加した
+- `JansonBasic`
+  本体を
+  `DkMath.ABC.JansonPMFProduct`
+  に昇格
+  - 新設:
+    `JansonPMFProduct.lean`
+  - moved:
+    `JansonBasic.lean`
+    残存本体
+    (`JansonSetup`,
+    `JansonModel`,
+    `PMF.expect_*`,
+    `product_pmf`,
+    `product_pmf_on`,
+    `expect_indicator_prod'`,
+    `expect_indicator_joint`,
+    `bound_v2`,
+    middle-band prototype など)
+  - `JansonBasic.lean`
+    自体は
+    `import DkMath.ABC.JansonPMFProduct`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `MiddleJansonBridge.lean`
+    と
+    `JansonRoadmap.lean`
+    を
+    `JansonBasic`
+    relay 経由ではなく
+    `JansonPMFProduct`
+    direct import に変更した

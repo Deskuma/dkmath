@@ -6,7 +6,7 @@ Authors: D. and Wise Wolf.
 
 
 import DkMath.ABC.RpowExtras
-import DkMath.ABC.JansonBasic
+import DkMath.ABC.JansonPMFProduct
 import DkMath.ABC.MiddleDyadicCompose
 
 #print "file: DkMath.ABC.MiddleJansonBridge"
