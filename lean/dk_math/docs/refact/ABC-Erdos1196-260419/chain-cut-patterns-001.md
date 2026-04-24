@@ -212,6 +212,17 @@ public entry build で unknown identifier として露出する型。
   は削除前に
   「consumer を最小環境 import へ戻す」
   段階を挟むのが安全である。
+- 同じ発想は
+  research / scratch file
+  にも適用できる。
+  `ABC#Research`
+  のような補助メモ実装でも、
+  relay import
+  ではなく
+  実際に使う owner
+  `ChernoffDensity`
+  を直接引いた方が、
+  後から依存面を読み直しやすい。
 - `ABC038`
   では
   `ABC037`

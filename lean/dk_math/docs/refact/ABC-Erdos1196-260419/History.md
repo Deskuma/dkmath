@@ -4399,3 +4399,65 @@ Archive
    - `SquareTailBasic`
      の再分割は、
      direct import cleanup がもう少し進んだ段階で再評価する。
+
+## 2026/04/24 11:03 JST
+
+1. 実施:
+   - research / scratch file でも
+     relay import を owner 直参照へ戻した。
+   - 対象は
+     `ABC#Research.lean`
+     で、
+     `import DkMath.ABC.ABC036`
+     を
+     `import DkMath.ABC.ChernoffDensity`
+     に差し替えた。
+2. 判断:
+   - `ABC#Research`
+     で実際に使っていた numbered 系識別子はなく、
+     必要なのは
+     `Bad_ε`
+     をはじめとする
+     `ChernoffDensity`
+     owner の記号だった。
+   - したがって
+     ここも relay cleanup の一環として扱える。
+3. `SquareTailBasic` 再分割の再評価:
+   - 今回も見送った。
+   - 理由:
+     まだ優先順位は
+     numbered shell / relay import
+     の cleanup 側にあるため。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC#Research`
+     の
+     `ABC036 -> ChernoffDensity`
+     差し替えを追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     research / scratch file
+     でも relay ではなく owner を直接引くパターンを追記した。
+5. 検証:
+   - `lake env lean DkMath/ABC/ABC#Research.lean`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ABC#Research.lean`
+     の `sorry`
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知警告:
+     `ABC038Bridge.lean`
+     の axioms note
+6. 次の課題:
+   - `ABC019+`
+     側で残る
+     numbered shell / relay import をさらに洗う。
+   - `SquareTailBasic`
+     の再分割は、
+     direct import cleanup がもう少し進んだ段階で再評価する。

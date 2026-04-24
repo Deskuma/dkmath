@@ -1284,3 +1284,18 @@
     は実運用上さらに
     compatibility shell
     としてのみ残る状態になった
+- research / scratch file でも
+  relay import を owner 直参照へ変更
+  - `ABC#Research.lean`
+    の
+    `import DkMath.ABC.ABC036`
+    を
+    `import DkMath.ABC.ChernoffDensity`
+    に差し替えた
+  - 実際に使っていたのは
+    `Bad_ε`
+    など
+    `ChernoffDensity`
+    owner の識別子であり、
+    `ABC036`
+    relay を経由する必要はなかった
