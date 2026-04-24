@@ -1263,3 +1263,24 @@
     `ABC018`
     compatibility file 自身を除くと
     いったん解消した
+- `ABC090`
+  anchor shell を参照していた consumer を
+  `Basic`
+  直参照へ変更
+  - `Main.lean`
+    の
+    `import DkMath.ABC.ABC090`
+    を
+    `import DkMath.ABC.Basic`
+    に差し替えた
+  - `ABCError.lean`
+    も同様に
+    `ABC090`
+    ではなく
+    `Basic`
+    を直接 import する形に変更した
+  - これにより
+    `ABC090`
+    は実運用上さらに
+    compatibility shell
+    としてのみ残る状態になった

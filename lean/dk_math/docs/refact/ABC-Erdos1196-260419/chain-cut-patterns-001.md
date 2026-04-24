@@ -199,6 +199,19 @@ public entry build で unknown identifier として露出する型。
   すら要らず、
   `ABC.Basic`
   のような最小環境 import に落とせる。
+- さらに
+  `Main`
+  や
+  `ABCError`
+  のような top-level shell consumer も、
+  この種の anchor file を経由せず
+  `Basic`
+  を直接 import するだけで閉じる。
+  したがって
+  anchor shell
+  は削除前に
+  「consumer を最小環境 import へ戻す」
+  段階を挟むのが安全である。
 - `ABC038`
   では
   `ABC037`

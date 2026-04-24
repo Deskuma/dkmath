@@ -4326,3 +4326,76 @@ Archive
    - `SquareTailBasic`
      の再分割は、
      direct import 化の残りがさらに減った段階で再評価する。
+
+## 2026/04/24 11:00 JST
+
+1. 実施:
+   - anchor shell
+     `ABC090`
+     を参照していた consumer を
+     最小環境 import へ戻した。
+   - `Main.lean`
+     の
+     `import DkMath.ABC.ABC090`
+     を
+     `import DkMath.ABC.Basic`
+     に差し替えた。
+   - `ABCError.lean`
+     も同様に
+     `ABC090`
+     ではなく
+     `Basic`
+     を直接 import する形へ変更した。
+2. 判断:
+   - `ABC090`
+     自体は
+     すでに
+     `Basic`
+     だけを import する空 shell であり、
+     下流がこれを経由する意味は薄い。
+   - よって
+     owner 化というより
+     anchor consumer cleanup
+     として扱うのが自然だった。
+3. `SquareTailBasic` 再分割の再評価:
+   - 今回も見送った。
+   - 理由:
+     counting / density / quality の owner 面整理は進んでいるが、
+     `SquareTailBasic`
+     の consumer 群は依然として
+     bridge / density / quality
+     の複数枝で共有されているため。
+   - 先に
+     numbered shell / relay import
+     の cleanup を進める。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `Main`
+     / `ABCError`
+     の
+     `ABC090 -> Basic`
+     差し替えを追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     anchor shell consumer を
+     最小環境 import へ戻すパターンを追記した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABCError`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知警告:
+     `ABC038Bridge.lean`
+     の axioms note
+6. 次の課題:
+   - `ABC019+`
+     側で残る
+     numbered shell / relay import をさらに洗う。
+   - `SquareTailBasic`
+     の再分割は、
+     direct import cleanup がもう少し進んだ段階で再評価する。
