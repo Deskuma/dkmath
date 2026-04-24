@@ -1299,3 +1299,218 @@
     owner の識別子であり、
     `ABC036`
     relay を経由する必要はなかった
+- 前段 chain の起点
+  `ABC001`
+  を
+  `DkMath.ABC.AdjacentDiagonalBasic`
+  に昇格
+  - 新設:
+    `AdjacentDiagonalBasic.lean`
+  - moved:
+    `ABC001.lean`
+    全体
+    (`T_zero_card_le_one`,
+    `Tr_card_le_div_plus_one`,
+    `sliceBadCount_le_sum_div_plus_one`,
+    `BadPair`,
+    `diagBadCount`,
+    `quality`,
+    `Adj`,
+    `adjBadCount`,
+    `eventually_diagBadCount_oX`,
+    `Keystone_bridge_quality_adjacent_imp`
+    など)
+  - `ABC001.lean`
+    自体は
+    `import DkMath.ABC.AdjacentDiagonalBasic`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC002.lean`
+    を
+    `ABC001`
+    relay 経由ではなく
+    `AdjacentDiagonalBasic`
+    direct import に変更した
+- 前段 adjacent density 層
+  `ABC002`
+  を
+  `DkMath.ABC.AdjacentBadDensity`
+  に昇格
+  - 新設:
+    `AdjacentBadDensity.lean`
+  - moved:
+    `ABC002.lean`
+    全体
+    (`adjBadCount_le_diag`,
+    `tendsto_adj_bad_fraction_zero`,
+    `eventually_forall_on_Icc_of_eventually`,
+    `prefix_over_X_tendsto_zero`,
+    `adj_quality_density_one_no_equiv`,
+    `adj_quality_density_one`)
+  - `ABC002.lean`
+    自体は
+    `import DkMath.ABC.AdjacentBadDensity`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC003.lean`
+    を
+    `ABC002`
+    relay 経由ではなく
+    `AdjacentBadDensity`
+    direct import に変更した
+- 前段 base seam の
+  `ABC003`
+  を二系統に分割昇格
+  - 新設:
+    `MiddleDyadicScaffold.lean`
+  - moved:
+    `MidIdx`,
+    `MidBlock`,
+    `MidIdx_subset_blocks`,
+    `MidBlock_pairwise_disjoint`,
+    `BadCountOn`,
+    `BadCountOn_bind_le`,
+    `BadCountOn_mono`,
+    `BlockBound`,
+    `geom_sum_pow_two_le`
+  - 新設:
+    `AdjKBasic.lean`
+  - moved:
+    `AdjK_of_coprime`,
+    `AdjK`,
+    `AdjK'`,
+    `Bad_adjK_decidable`,
+    `Bad_adjK_pred`,
+    `rad_ge_two_of_two_le`,
+    `eventually_log_rad_pos_adjK`
+  - `ABC003.lean`
+    自体は
+    `MiddleDyadicScaffold`
+    と
+    `AdjKBasic`
+    を re-export する compatibility relay に縮小
+  - downstream では
+    `ABC004.lean`
+    を
+    `AdjKBasic`
+    direct import に変更し、
+    `ABC005.lean`
+    に
+    `MiddleDyadicScaffold`
+    direct import を追加した
+- `ABC004`
+  を
+  `DkMath.ABC.AdjKBadDensity`
+  に昇格
+  - 新設:
+    `AdjKBadDensity.lean`
+  - moved:
+    `ABC004.lean`
+    全体
+    (`eventually_log_rad_pos_adjK_one`,
+    `adjKBadCount`,
+    `adjKBadCount_le_half_range`,
+    `adjK_image_subset_R_with_dec`,
+    `tendsto_adjK_bad_fraction_zero`,
+    `finset_sum_tendsto_zero`,
+    `union_finite_density_zero`,
+    `gridBadCount`,
+    `adjK_image_subset_R_with_dec'`,
+    `adjK_image_subset_R`)
+  - `ABC004.lean`
+    自体は
+    `import DkMath.ABC.AdjKBadDensity`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC005.lean`
+    から不要になった
+    `ABC004`
+    import を削除し、
+    `ABC007.lean`
+    と
+    `JansonBasic.lean`
+    に
+    `AdjKBadDensity`
+    direct import を追加した
+- `ABC005`
+  を
+  `DkMath.ABC.MiddleDyadicTailBound`
+  に昇格
+  - 新設:
+    `MiddleDyadicTailBound.lean`
+  - moved:
+    `ABC005.lean`
+    全体
+    (`dyadic_tail_bound`,
+    `head_absorb'`)
+  - `ABC005.lean`
+    自体は
+    `import DkMath.ABC.MiddleDyadicTailBound`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC006.lean`
+    を
+    `ABC005`
+    relay 経由ではなく
+    `MiddleDyadicTailBound`
+    direct import に変更した
+- `ABC006`
+  を
+  `DkMath.ABC.MiddleDyadicCompose`
+  に昇格
+  - 新設:
+    `MiddleDyadicCompose.lean`
+  - moved:
+    `ABC006.lean`
+    全体
+    (`pow_two_mono`,
+    `one_le_X_pow`,
+    `MidBlock_card_le_pow_head`,
+    `head_absorb`,
+    `tail_geom_bound'`,
+    `tail_geom_bound`,
+    `dyadic_compose`)
+  - `ABC006.lean`
+    自体は
+    `import DkMath.ABC.MiddleDyadicCompose`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC007.lean`
+    を
+    `ABC006`
+    relay 経由ではなく
+    `MiddleDyadicScaffold`
+    direct import に変更した
+  - `MiddleJansonBridge.lean`
+    は
+    `head_absorb` / `tail_geom_bound`
+    を直接使うため
+    `MiddleDyadicCompose`
+    direct import を追加した
+- `ABC007`
+  を
+  `DkMath.ABC.MiddleBandJansonSkeleton`
+  に昇格
+  - 新設:
+    `MiddleBandJansonSkeleton.lean`
+  - moved:
+    `ABC007.lean`
+    全体
+    (`adjKBadCount_unfold`,
+    `AdjK_proof`,
+    `middleBandBlockBound`,
+    `MiddleBand_exception_bound'_via_dyadic`,
+    `MiddleBand_exception_bound'`,
+    Janson/Suen skeleton,
+    finite-uniform probability helper 群)
+  - `ABC007.lean`
+    自体は
+    `import DkMath.ABC.MiddleBandJansonSkeleton`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `JansonBasic.lean`
+    を
+    `ABC007`
+    relay 経由ではなく
+    `MiddleBandJansonSkeleton`
+    direct import に変更した

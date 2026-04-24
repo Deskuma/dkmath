@@ -163,6 +163,127 @@ public entry build で unknown identifier として露出する型。
 - chain の先頭 3 本を「base combinatorial band」として扱える
 - 以後の `ABC004+` から predecessor reliance を段階的に観測しやすい
 
+進捗:
+
+- `ABC001`
+  は
+  `AdjacentDiagonalBasic`
+  として whole-file promotion するのが自然だった。
+  この file は
+  adjacent triple,
+  diagonal bad count,
+  slice-radical counting,
+  density bridge
+  が混在するが、
+  下流の
+  `ABC002`
+  はそれらをまとめて基礎環境として使うため、
+  初手では細分化より owner 名固定を優先した。
+- この段階では
+  `ABC002`
+  を
+  `ABC001`
+  relay 経由ではなく
+  `AdjacentDiagonalBasic`
+  direct import
+  へ変更するだけで chain の起点を名前付きにできた。
+- 次段で
+  `ABC002`
+  は
+  `AdjacentBadDensity`
+  として whole-file promotion した。
+  内容は
+  adjacent bad count
+  の密度 0 と
+  adjacent quality density one
+  への転送でまとまっており、
+  `ABC003`
+  は
+  `ABC002`
+  relay ではなく
+  `AdjacentBadDensity`
+  を直接 import する形に切れた。
+- `ABC003`
+  は単一 owner ではなく二分割が自然だった。
+  前半の
+  dyadic middle scaffold
+  は
+  `MiddleDyadicScaffold`
+  に、
+  後半の
+  k-diagonal / AdjK
+  基礎層は
+  `AdjKBasic`
+  に分離した。
+  `ABC004`
+  は
+  `AdjKBasic`
+  だけを直接 import し、
+  `ABC005`
+  は
+  middle dyadic 側を必要とするため
+  `MiddleDyadicScaffold`
+  を明示 import する。
+- `ABC004`
+  は
+  `AdjKBadDensity`
+  として whole-file promotion した。
+  `ABC005`
+  は実際には
+  dyadic scaffold
+  のみを使うため
+  `ABC004`
+  import を削除できた。
+  `ABC007`
+  は
+  `adjKBadCount`
+  unfold helper を持つため
+  `AdjKBadDensity`
+  を direct import し、
+  `JansonBasic`
+  も
+  `gridBadCount`
+  の owner として
+  `AdjKBadDensity`
+  を明示 import する。
+- `ABC005`
+  は
+  `MiddleDyadicTailBound`
+  として whole-file promotion した。
+  内容は
+  `dyadic_tail_bound`
+  と
+  `head_absorb'`
+  の二本に絞られており、
+  downstream の
+  `ABC006`
+  は
+  `ABC005`
+  relay ではなく
+  `MiddleDyadicTailBound`
+  を直接 import できる。
+- `ABC006`
+  は
+  `MiddleDyadicCompose`
+  として whole-file promotion した。
+  `ABC007`
+  は実際には
+  `BlockBound` / `BadCountOn` / `MidIdx`
+  側だけを参照していたため、
+  `ABC006`
+  relay ではなく
+  `MiddleDyadicScaffold`
+  を直接 import する形に切った。
+  一方で
+  `MiddleJansonBridge`
+  は
+  `head_absorb`
+  と
+  `tail_geom_bound`
+  を直接使っているため、
+  `MiddleDyadicCompose`
+  を明示 import する。
+
 ## ノート
 
 - `DkMath.ABC.Demo.*` は standalone / 非対象としてこのメモから除外する。
@@ -894,3 +1015,23 @@ public entry build で unknown identifier として露出する型。
   を点検すると、
   predecessor relay
   は少数の direct import 差し替えで落ちることが多い。
+- `ABC007`
+  は
+  middle-band exception API と
+  Janson/Suen finite-uniform helper が同居していたため、
+  whole-file promotion として
+  `MiddleBandJansonSkeleton`
+  に昇格するのが安全だった。
+  `JansonBasic`
+  は実際に
+  `S_of`,
+  `Prob.indR`,
+  `hoeffding_downward_indep01_indicator`
+  などを使うため、
+  `ABC007`
+  relay ではなく
+  `MiddleBandJansonSkeleton`
+  を direct import させる。
+  これにより
+  `ABC001` から `ABC007`
+  までの前段 relay 化が一通り完了する。
