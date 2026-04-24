@@ -1247,3 +1247,19 @@
     が独立 owner として立ち始めており、
     先に relay 縮小を進めるほうが
     import 安定性の観測に有利と判断した
+- `ABC019+`
+  側で残っていた
+  `ABC018`
+  relay 依存をさらに 1 本削減
+  - `TailSquareBridge.lean`
+    の
+    `import DkMath.ABC.ABC018`
+    を
+    `import DkMath.ABC.HeavyPrimeCounting`
+    に差し替えた
+  - これにより
+    `HeavyPrimeCounting`
+    relay を介する consumer は
+    `ABC018`
+    compatibility file 自身を除くと
+    いったん解消した

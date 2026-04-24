@@ -861,3 +861,12 @@ public entry build で unknown identifier として露出する型。
   named owner 化と並行して
   「relay import の direct import 化」
   自体を観測項目に入れるべきである。
+- このパターンは
+  `TailSquareBridge`
+  にもそのまま適用できた。
+  つまり
+  named owner 昇格の直後に
+  downstream bridge file
+  を点検すると、
+  predecessor relay
+  は少数の direct import 差し替えで落ちることが多い。

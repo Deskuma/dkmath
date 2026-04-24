@@ -4247,3 +4247,82 @@ Archive
      の再分割は、
      counting / density / quality の owner 面が
      もう一段整理された時点で再評価する。
+
+## 2026/04/24 10:56 JST
+
+1. 実施:
+   - `ABC019+`
+     側で残っていた
+     `ABC018`
+     relay 依存を追加で削減した。
+   - 対象は
+     `TailSquareBridge.lean`
+     で、
+     `import DkMath.ABC.ABC018`
+     を
+     `import DkMath.ABC.HeavyPrimeCounting`
+     に差し替えた。
+2. 判断:
+   - 現時点で
+     `ABC018`
+     relay を明示的に import していた
+     `ABC019+`
+     側の consumer は
+     `TailSquareBridge`
+     が最後だった。
+   - したがって
+     compatibility relay
+     `ABC018.lean`
+     は、
+     いまは後方互換のためだけに残る状態になった。
+3. `SquareTailBasic` 再分割の再評価:
+   - 今回も見送った。
+   - 理由:
+     counting / density / quality の owner 面は
+     `HeavyPrimeCounting`,
+     `BorelCantelliDensity`,
+     `AdjacentQuality`
+     系へ順に分離できている一方、
+     `SquareTailBasic`
+     の consumer 群はまだ
+     `TailSquareBridge`,
+     `AdjacentTailDensity`,
+     `AdjacentQuality`,
+     `ABC038Bridge`
+     にまたがって共有が残っているため。
+   - よって分割より先に、
+     owner direct import 化の残りを削る方を優先する。
+4. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `TailSquareBridge`
+     の
+     `ABC018 -> HeavyPrimeCounting`
+     差し替えを追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     downstream bridge file の relay import を
+     direct import に差し替えるパターンを追記した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.TailSquareBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentTailDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知警告:
+     `ABC038Bridge.lean`
+     の axioms note
+6. 次の課題:
+   - `ABC019+`
+     側で
+     `ABC017`
+     / `ABC018`
+     以外の relay import が
+     direct owner import に置換できる箇所を順次洗う。
+   - `SquareTailBasic`
+     の再分割は、
+     direct import 化の残りがさらに減った段階で再評価する。
