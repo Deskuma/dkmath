@@ -224,6 +224,28 @@ public entry build で unknown identifier として露出する型。
   middle dyadic 側を必要とするため
   `MiddleDyadicScaffold`
   を明示 import する。
+- `ABC004`
+  は
+  `AdjKBadDensity`
+  として whole-file promotion した。
+  `ABC005`
+  は実際には
+  dyadic scaffold
+  のみを使うため
+  `ABC004`
+  import を削除できた。
+  `ABC007`
+  は
+  `adjKBadCount`
+  unfold helper を持つため
+  `AdjKBadDensity`
+  を direct import し、
+  `JansonBasic`
+  も
+  `gridBadCount`
+  の owner として
+  `AdjKBadDensity`
+  を明示 import する。
 
 ## ノート
 

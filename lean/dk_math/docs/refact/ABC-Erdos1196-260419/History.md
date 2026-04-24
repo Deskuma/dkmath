@@ -624,3 +624,98 @@ Archive
      relay を介して受けている
      `adjKBadCount`
      系を direct owner import へ切る。
+
+## 2026/04/24 12:48 JST
+
+1. 実施:
+   - `ABC004`
+     を
+     `AdjKBadDensity`
+     に昇格した。
+   - `ABC004.lean`
+     自体は
+     `import DkMath.ABC.AdjKBadDensity`
+     だけを持つ compatibility relay に縮小した。
+2. moved 内容:
+   - k-diagonal bad count:
+     `eventually_log_rad_pos_adjK_one`,
+     `adjKBadCount`,
+     `adjKBadCount_le_half_range`
+   - residue inclusion:
+     `adjK_image_subset_R_with_dec`,
+     `adjK_image_subset_R_with_dec'`,
+     `adjK_image_subset_R`
+   - density transfer:
+     `tendsto_adjK_bad_fraction_zero`,
+     `finset_sum_tendsto_zero`,
+     `union_finite_density_zero`,
+     `gridBadCount`
+3. downstream 調整:
+   - `ABC005.lean`
+     から
+     `ABC004`
+     import を削除した。
+     `ABC005`
+     は
+     `MiddleDyadicScaffold`
+     のみで build 可能だった。
+   - `ABC007.lean`
+     は
+     `adjKBadCount`
+     unfold helper を持つため
+     `AdjKBadDensity`
+     を direct import する形に変更した。
+   - `JansonBasic.lean`
+     は
+     `gridBadCount`
+     を使うため
+     `AdjKBadDensity`
+     を direct import する形に変更した。
+4. 判断:
+   - `ABC004`
+     は
+     `AdjK`
+     bad counting から finite-union density までの一枚の owner としてまとまっている。
+   - `ABC005`
+     には不要な numbered predecessor import が残っていたため、
+     dyadic 側の import だけに縮小した。
+5. 追跡文書:
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC004 -> AdjKBadDensity`
+     を追加した。
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC004`
+     promotion と downstream import cut を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     `ABC004`
+     owner 化と
+     `ABC005` / `ABC007` / `JansonBasic`
+     の import 判断を追記した。
+6. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjKBadDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC004`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC005`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC006`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC007`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.JansonBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知警告:
+     `ABC038Bridge.lean`
+     の axioms note
+7. 次の課題:
+   - `ABC005`
+     の dyadic tail bound / block aggregation 層を named owner 化する。
+   - `ABC006`
+     から
+     `ABC005`
+     relay を介さずに済む direct import へ切る。

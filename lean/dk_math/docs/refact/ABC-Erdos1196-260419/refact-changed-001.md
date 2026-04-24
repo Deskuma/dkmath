@@ -1398,3 +1398,37 @@
     に
     `MiddleDyadicScaffold`
     direct import を追加した
+- `ABC004`
+  を
+  `DkMath.ABC.AdjKBadDensity`
+  に昇格
+  - 新設:
+    `AdjKBadDensity.lean`
+  - moved:
+    `ABC004.lean`
+    全体
+    (`eventually_log_rad_pos_adjK_one`,
+    `adjKBadCount`,
+    `adjKBadCount_le_half_range`,
+    `adjK_image_subset_R_with_dec`,
+    `tendsto_adjK_bad_fraction_zero`,
+    `finset_sum_tendsto_zero`,
+    `union_finite_density_zero`,
+    `gridBadCount`,
+    `adjK_image_subset_R_with_dec'`,
+    `adjK_image_subset_R`)
+  - `ABC004.lean`
+    自体は
+    `import DkMath.ABC.AdjKBadDensity`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `ABC005.lean`
+    から不要になった
+    `ABC004`
+    import を削除し、
+    `ABC007.lean`
+    と
+    `JansonBasic.lean`
+    に
+    `AdjKBadDensity`
+    direct import を追加した
