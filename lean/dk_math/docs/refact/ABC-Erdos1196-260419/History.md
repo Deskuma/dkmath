@@ -524,3 +524,103 @@ Archive
      側で
      `ABC003`
      relay を介さずに済む direct import へ切る。
+
+## 2026/04/24 12:38 JST
+
+1. 実施:
+   - 前段
+     `ABC003`
+     を
+     `MiddleDyadicScaffold`
+     と
+     `AdjKBasic`
+     に分割昇格した。
+   - `ABC003.lean`
+     自体は両 owner を import する compatibility relay に縮小した。
+2. moved 内容:
+   - `MiddleDyadicScaffold.lean`:
+     `MidIdx`,
+     `MidBlock`,
+     `MidIdx_subset_blocks`,
+     `MidBlock_pairwise_disjoint`,
+     `BadCountOn`,
+     `BadCountOn_bind_le`,
+     `BadCountOn_mono`,
+     `BlockBound`,
+     `geom_sum_pow_two_le`
+   - `AdjKBasic.lean`:
+     `AdjK_of_coprime`,
+     `AdjK`,
+     `AdjK'`,
+     `Bad_adjK_decidable`,
+     `Bad_adjK_pred`,
+     `Bad_adjK_pred_general`,
+     `rad_ge_two_of_two_le`,
+     `eventually_log_rad_pos_adjK`
+3. downstream 調整:
+   - `ABC004.lean`
+     は
+     `ABC003`
+     relay 経由ではなく
+     `AdjKBasic`
+     を direct import する形に変更した。
+   - `ABC005.lean`
+     は
+     `MiddleDyadicScaffold`
+     を direct import する形にした。
+     `ABC004`
+     への import は、
+     `ABC007`
+     までの既存 chain が
+     `adjKBadCount`
+     系をまだ
+     `ABC004`
+     から受け取っているため今回は残した。
+4. 判断:
+   - `ABC003`
+     は whole-file promotion では owner 名が曖昧になる。
+   - dyadic middle scaffold と k-diagonal / AdjK basic は downstream が分かれているため、
+     初回から二分割した方が chain-cut の追跡が明確になる。
+5. 追跡文書:
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC003 -> MiddleDyadicScaffold, AdjKBasic`
+     を追加した。
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC003`
+     split promotion と
+     `ABC004` / `ABC005`
+     の direct import 化を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     `ABC003`
+     は二分割 owner が自然だったことを追記した。
+6. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleDyadicScaffold`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjKBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC003`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC004`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC005`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知警告:
+     `ABC038Bridge.lean`
+     の axioms note
+7. 次の課題:
+   - `ABC004`
+     の
+     `adjKBadCount` / residue inclusion / finite union density
+     層を named owner 化する。
+   - `ABC005+`
+     が
+     `ABC004`
+     relay を介して受けている
+     `adjKBadCount`
+     系を direct owner import へ切る。

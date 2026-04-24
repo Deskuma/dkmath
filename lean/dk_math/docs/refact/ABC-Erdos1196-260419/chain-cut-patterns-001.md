@@ -203,6 +203,27 @@ public entry build で unknown identifier として露出する型。
   relay ではなく
   `AdjacentBadDensity`
   を直接 import する形に切れた。
+- `ABC003`
+  は単一 owner ではなく二分割が自然だった。
+  前半の
+  dyadic middle scaffold
+  は
+  `MiddleDyadicScaffold`
+  に、
+  後半の
+  k-diagonal / AdjK
+  基礎層は
+  `AdjKBasic`
+  に分離した。
+  `ABC004`
+  は
+  `AdjKBasic`
+  だけを直接 import し、
+  `ABC005`
+  は
+  middle dyadic 側を必要とするため
+  `MiddleDyadicScaffold`
+  を明示 import する。
 
 ## ノート
 

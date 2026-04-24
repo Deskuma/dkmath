@@ -1358,3 +1358,43 @@
     relay 経由ではなく
     `AdjacentBadDensity`
     direct import に変更した
+- 前段 base seam の
+  `ABC003`
+  を二系統に分割昇格
+  - 新設:
+    `MiddleDyadicScaffold.lean`
+  - moved:
+    `MidIdx`,
+    `MidBlock`,
+    `MidIdx_subset_blocks`,
+    `MidBlock_pairwise_disjoint`,
+    `BadCountOn`,
+    `BadCountOn_bind_le`,
+    `BadCountOn_mono`,
+    `BlockBound`,
+    `geom_sum_pow_two_le`
+  - 新設:
+    `AdjKBasic.lean`
+  - moved:
+    `AdjK_of_coprime`,
+    `AdjK`,
+    `AdjK'`,
+    `Bad_adjK_decidable`,
+    `Bad_adjK_pred`,
+    `rad_ge_two_of_two_le`,
+    `eventually_log_rad_pos_adjK`
+  - `ABC003.lean`
+    自体は
+    `MiddleDyadicScaffold`
+    と
+    `AdjKBasic`
+    を re-export する compatibility relay に縮小
+  - downstream では
+    `ABC004.lean`
+    を
+    `AdjKBasic`
+    direct import に変更し、
+    `ABC005.lean`
+    に
+    `MiddleDyadicScaffold`
+    direct import を追加した

@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
-import DkMath.ABC.ABC003
+import DkMath.ABC.AdjKBasic
 
 #print "file: DkMath.ABC.ABC004"
 
