@@ -4,8 +4,10 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+
 import DkMath.ABC.ChernoffDyadic
 import DkMath.ABC.HeavyPrimeBudget
+import DkMath.ABC.HeavyPrimeCounting
 import DkMath.ABC.HeavyPrimeSelection
 import DkMath.ABC.TailSquareBridge
 import DkMath.ABC.SquareTailBasic

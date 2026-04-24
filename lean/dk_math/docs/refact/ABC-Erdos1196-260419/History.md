@@ -4140,3 +4140,110 @@ Archive
      の再分割は、
      `ABC018+`
      側の relay 縮小が進んでから再評価する。
+
+## 2026/04/24 10:45 JST
+
+1. 実施:
+   - `ABC018`
+     を
+     `HeavyPrimeCounting`
+     に昇格した。
+   - `HeavyPrimeCounting.lean`
+     を新設し、
+     per-prime threshold counting と
+     heavy-prime union-bound 本体を移した。
+   - `ABC018.lean`
+     自体は
+     `import DkMath.ABC.HeavyPrimeCounting`
+     だけを持つ compatibility relay に縮小した。
+2. moved 内容:
+   - public:
+     `count_n_with_high_vp_bound`,
+     `heavy_primes_affect_sublinear_n`
+   - private helper:
+     `count_multiples_le_ceil`,
+     `count_shifted_multiples_le_ceil`
+3. downstream 調整:
+   - `AdjacentTailDensity.lean`
+     は
+     `heavy_primes_affect_sublinear_n`
+     を直接参照しているため、
+     hidden dependency を避ける目的で
+     `HeavyPrimeCounting`
+     direct import を追加した。
+   - `FiniteChernoffBasic.lean`
+     は
+     `ABC018`
+     relay ではなく
+     `HeavyPrimeCounting`
+     の direct import に差し替えた。
+4. `SquareTailBasic` 再分割の再評価:
+   - 今回も分割は見送った。
+   - 理由:
+     `ABC018+`
+     側では
+     `BorelCantelliDensity`
+     と
+     `HeavyPrimeCounting`
+     が独立 owner として立ち始めており、
+     先に relay 縮小を進めたほうが
+     downstream の import 安定性を測りやすいため。
+   - したがって
+     `SquareTailBasic`
+     の decomposition / adjacent wrapper 分離は
+     もう少し後段で再評価する。
+5. 結論:
+   - counting branch は
+     `BorelCantelliDensity`
+     の次段で
+     `HeavyPrimeCounting`
+     として独立に読めるようになった。
+   - また
+     `FiniteChernoffBasic`
+     に残っていた
+     relay 慣性 import を 1 本除去できた。
+6. 追跡文書:
+   - changed:
+     `refact-changed-001.md`
+     に
+     `ABC018 -> HeavyPrimeCounting`
+     と
+     `AdjacentTailDensity`
+     の direct import 化、
+     `FiniteChernoffBasic`
+     の direct import 化、
+     ならびに
+     `SquareTailBasic`
+     再分割 defer を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     counting branch の owner 分離と
+     不要 import 削除パターンを追記した。
+   - relay:
+     `check-relay-lean.md`
+     に
+     `ABC018 -> HeavyPrimeCounting`
+     を追加した。
+7. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.HeavyPrimeCounting`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC018`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.FiniteChernoffBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.AdjacentTailDensity`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知警告:
+     `ABC038Bridge.lean`
+     の axioms note
+8. 次の課題:
+   - `ABC019`
+     以降で
+     `HeavyPrimeCounting`
+     relay を介さずに済む箇所をさらに削る。
+   - `SquareTailBasic`
+     の再分割は、
+     counting / density / quality の owner 面が
+     もう一段整理された時点で再評価する。

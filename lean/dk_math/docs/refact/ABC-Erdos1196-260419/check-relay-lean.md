@@ -30,7 +30,8 @@
   - 移設先 → [SquareTailBasic.lean](../../../DkMath/ABC/SquareTailBasic.lean)
 - [x] [ABC017](../../../DkMath/ABC/ABC017.lean)
   - 移設先 → [BorelCantelliDensity.lean](../../../DkMath/ABC/BorelCantelliDensity.lean)
-- [ ] [ABC018](../../../DkMath/ABC/ABC018.lean)
+- [x] [ABC018](../../../DkMath/ABC/ABC018.lean)
+  - 移設先 → [HeavyPrimeCounting.lean](../../../DkMath/ABC/HeavyPrimeCounting.lean)
 - [x] [ABC019](../../../DkMath/ABC/ABC019.lean)
   - 移設先 → [TailAnalyticBasic.lean](../../../DkMath/ABC/TailAnalyticBasic.lean)
   - 再分割先 →

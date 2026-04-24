@@ -840,3 +840,24 @@ public entry build で unknown identifier として露出する型。
   adjacent wrapper と pure decomposition は、
   まだ同じ consumer 群がまとめて使っているため、
   今は分けない方が import 境界は安定する。
+- さらにその次段の
+  counting / prime-threshold / heavy-prime union-bound は、
+  `BorelCantelliDensity`
+  と別の責務を持つため
+  `HeavyPrimeCounting`
+  のような owner に切り出すのが自然である。
+  この型では
+  `AdjacentTailDensity`
+  のような consumer へ
+  direct import
+  を足すだけで
+  relay 依存を 1 本外せる。
+- 同時に
+  `FiniteChernoffBasic`
+  のように
+  predecessor relay import が残っていて、
+  owner import へ直接差し替えられる file もある。
+  したがって chain-cut では
+  named owner 化と並行して
+  「relay import の direct import 化」
+  自体を観測項目に入れるべきである。

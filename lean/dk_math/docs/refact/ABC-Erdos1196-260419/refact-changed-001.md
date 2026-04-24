@@ -1210,3 +1210,40 @@
   - adjacent wrapper と pure decomposition を分けると、
     現時点では import の本数だけが増え、
     安定性の改善は小さいと判断した
+- counting / prime-threshold / heavy-prime union-bound 層を
+  `DkMath.ABC.HeavyPrimeCounting`
+  に昇格
+  - 新設:
+    `HeavyPrimeCounting.lean`
+  - moved:
+    `ABC018.lean`
+    全体
+    (`count_n_with_high_vp_bound`,
+    `heavy_primes_affect_sublinear_n`
+    とその private counting helper 群)
+  - `ABC018.lean`
+    自体は
+    `import DkMath.ABC.HeavyPrimeCounting`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `AdjacentTailDensity.lean`
+    を
+    `HeavyPrimeCounting`
+    の direct import に変更した
+  - `FiniteChernoffBasic.lean`
+    については
+    `ABC018`
+    relay ではなく
+    `HeavyPrimeCounting`
+    の direct import に変更した
+- `SquareTailBasic`
+  の再分割は今回も再評価のみ行い、
+  実施は見送った
+  - `ABC018+`
+    側では
+    `BorelCantelliDensity`
+    と
+    `HeavyPrimeCounting`
+    が独立 owner として立ち始めており、
+    先に relay 縮小を進めるほうが
+    import 安定性の観測に有利と判断した
