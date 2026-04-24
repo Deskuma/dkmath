@@ -1179,3 +1179,97 @@ Archive
      JSProb / BlockJS / aggregation bridge を観察し、
      `ABC009`
      relay 周辺の owner 境界をさらに切れるか確認する。
+
+## 2026/04/25 03:34 JST
+
+1. 実施:
+   - `MiddleJansonBridge.lean`
+     から
+     JSProb wrapper 層を
+     `MiddleJSProb.lean`
+     に分離した。
+   - `MiddleJansonBridge.lean`
+     は
+     `JansonPMFProduct`
+     direct import ではなく
+     `MiddleJSProb`
+     を import する形に変更した。
+2. moved 内容:
+   - `JSProb.Ibit`
+   - `JSProb.Setup`
+   - `JSProb.X`
+   - `JSProb.jPr_joint`
+   - `JSProb.jPr_zero`
+   - `JSProb.jPr_joint_eq`
+   - `JSProb.jPr_zero_nonneg`
+   - `JSProb.jPr_joint_nonneg`
+3. downstream 調整:
+   - `ABC009.lean`
+     は既に
+     `MiddleJansonBridge`
+     relay なので変更なし。
+   - `MiddleBlockTail.lean`
+     は
+     `MiddleJansonBridge`
+     経由のまま通ることを確認した。
+4. 判断:
+   - `JSProb`
+     は
+     `JansonPMFProduct`
+     の
+     `JansonModel`,
+     `product_pmf`,
+     `expect_indicator_prod'`,
+     `PMF.expect_nonneg`
+     を使って
+     middle-band 用の実数確率 API を作る薄い wrapper である。
+   - `MiddleJansonBridge`
+     本体の
+     `Middle`
+     namespace は
+     `Params`,
+     `BlockJS`,
+     `middle_band_sum_bound`,
+     `middle_band_bound_top`
+     など aggregation 側に寄るため、
+     JSProb と分けるのが import 境界として自然。
+5. 追跡文書:
+   - relay:
+     `check-relay-lean.md`
+     の
+     `ABC009`
+     に
+     `MiddleJSProb`
+     を再分割先として追記した。
+   - changed:
+     `refact-changed-001.md`
+     に
+     `MiddleJansonBridge -> MiddleJSProb`
+     分離を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     `ABC009`
+     relay target 内の JSProb 分離パターンを追記した。
+6. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleJSProb`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleJansonBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC009`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleBlockTail`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知警告:
+     `ABC038Bridge.lean`
+     の axioms note
+7. 次の課題:
+   - `MiddleJansonBridge`
+     に残る
+     `Middle`
+     namespace の
+     `Params` / `BlockJS` / `middle_band_sum_bound`
+     / `middle_band_bound_top`
+     を観察し、
+     BlockJS owner と aggregation owner をさらに分ける価値があるか判断する。

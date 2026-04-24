@@ -1077,3 +1077,24 @@ public entry build で unknown identifier として露出する型。
   `ABC008 -> JansonBasic -> JansonPMFProduct`
   の compatibility chain は残しつつ、
   実装上の consumer は named owner へ寄せられる。
+- `ABC009`
+  relay target の
+  `MiddleJansonBridge`
+  は、
+  PMF product を実数確率 API に包む
+  `JSProb`
+  と、
+  middle-band aggregation / BlockJS を同居させていた。
+  `JSProb`
+  は
+  `JansonPMFProduct`
+  だけを直接使う薄い wrapper なので、
+  `MiddleJSProb`
+  へ独立させられる。
+  これにより
+  `MiddleJansonBridge`
+  は
+  `MiddleJSProb`
+  と
+  `MiddleDyadicCompose`
+  を合流させる aggregation owner に寄る。

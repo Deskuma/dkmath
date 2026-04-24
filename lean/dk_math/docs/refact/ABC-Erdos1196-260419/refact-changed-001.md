@@ -1568,3 +1568,31 @@
     relay 経由ではなく
     `JansonPMFProduct`
     direct import に変更した
+- `MiddleJansonBridge`
+  から JSProb wrapper 層を
+  `DkMath.ABC.MiddleJSProb`
+  に分離
+  - 新設:
+    `MiddleJSProb.lean`
+  - moved:
+    `JSProb.Ibit`,
+    `JSProb.Setup`,
+    `JSProb.X`,
+    `JSProb.jPr_joint`,
+    `JSProb.jPr_zero`,
+    `JSProb.jPr_joint_eq`,
+    `JSProb.jPr_zero_nonneg`,
+    `JSProb.jPr_joint_nonneg`
+  - `MiddleJansonBridge.lean`
+    は
+    `JansonPMFProduct`
+    direct import ではなく
+    `MiddleJSProb`
+    を import する形に変更
+  - `ABC009.lean`
+    relay target は従来どおり
+    `MiddleJansonBridge`
+    だが、
+    その内部境界として
+    `MiddleJSProb`
+    を追加した
