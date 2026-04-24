@@ -1514,3 +1514,26 @@
     relay 経由ではなく
     `MiddleBandJansonSkeleton`
     direct import に変更した
+- `JansonBasic`
+  から finite-uniform wrapper 層を
+  `DkMath.ABC.JansonFiniteUniform`
+  に分離
+  - 新設:
+    `JansonFiniteUniform.lean`
+  - moved:
+    `Block_Janson_downward_skeleton_indep`,
+    `adjK_quality_density_one`,
+    `tendsto_grid_bad_fraction_zero`
+  - `JansonBasic.lean`
+    は
+    `MiddleBandJansonSkeleton` / `AdjKBadDensity`
+    の direct import ではなく
+    `JansonFiniteUniform`
+    を import する形に変更
+  - `ABC008.lean`
+    は従来どおり
+    `JansonBasic`
+    relay target を指すが、
+    その内部境界として
+    `JansonFiniteUniform`
+    を追加した

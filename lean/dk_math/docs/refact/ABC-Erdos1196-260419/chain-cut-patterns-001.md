@@ -1035,3 +1035,24 @@ public entry build で unknown identifier として露出する型。
   これにより
   `ABC001` から `ABC007`
   までの前段 relay 化が一通り完了する。
+- `ABC008`
+  は既に
+  `JansonBasic`
+  への relay になっていたため、
+  numbered file 側ではなく
+  `JansonBasic`
+  内部の責務境界を切るのが次の一手になる。
+  冒頭の
+  `Block_Janson_downward_skeleton_indep`
+  と adjacent density placeholders は
+  `MiddleBandJansonSkeleton`
+  の finite-uniform indicator API に直接依存するだけなので、
+  `JansonFiniteUniform`
+  へ分けられる。
+  一方で
+  `JansonModel`,
+  `product_pmf`,
+  `expect_indicator_prod`
+  以降は PMF product owner として
+  `JansonBasic`
+  に残すのが現時点では安定する。

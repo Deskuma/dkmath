@@ -984,3 +984,87 @@ Archive
      `JansonBasic`
      の境界を見直し、
      Janson 系 owner の再分割候補を整理する。
+
+## 2026/04/25 03:03 JST
+
+1. 実施:
+   - `ABC008`
+     relay の実体である
+     `JansonBasic.lean`
+     の冒頭 finite-uniform wrapper 層を
+     `JansonFiniteUniform.lean`
+     に分離した。
+   - `JansonBasic.lean`
+     は
+     `DkMath.ABC.JansonFiniteUniform`
+     を import し、
+     Janson model / PMF product / expectation helper owner として残した。
+2. moved 内容:
+   - `Block_Janson_downward_skeleton_indep`
+   - `adjK_quality_density_one`
+   - `tendsto_grid_bad_fraction_zero`
+3. downstream 調整:
+   - `JansonBasic.lean`
+     の import を
+     `MiddleBandJansonSkeleton` / `AdjKBadDensity`
+     から
+     `JansonFiniteUniform`
+     へ変更した。
+   - `ABC008.lean`
+     は既に
+     `JansonBasic`
+     relay なので変更なし。
+4. 判断:
+   - `Block_Janson_downward_skeleton_indep`
+     は
+     `MiddleBandJansonSkeleton`
+     の
+     `S_of` / `Prob.indR` / `Prob.hoeffding_downward_indep01_indicator`
+     だけを主に使う finite-uniform wrapper であり、
+     `JansonModel` / `product_pmf`
+     以降の PMF product 本体から分けられる。
+   - adjacent density placeholders は
+     `AdjKBadDensity`
+     側の API を使うため、
+     同じ finite-uniform 外側 owner に置いた。
+5. 追跡文書:
+   - relay:
+     `check-relay-lean.md`
+     の
+     `ABC008`
+     に
+     `JansonFiniteUniform`
+     を再分割先として追記した。
+   - changed:
+     `refact-changed-001.md`
+     に
+     `JansonBasic -> JansonFiniteUniform`
+     分離を追記した。
+   - pattern:
+     `chain-cut-patterns-001.md`
+     に
+     `ABC008`
+     relay 後の owner 内部再分割パターンを追記した。
+6. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.JansonFiniteUniform`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.JansonBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC008`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleJansonBridge`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知警告:
+     `ABC038Bridge.lean`
+     の axioms note
+7. 次の課題:
+   - `JansonBasic`
+     に残る
+     `JansonSetup` / `JansonModel` / `product_pmf`
+     系を観察し、
+     PMF product owner と abstract bound owner を分けられるか判断する。
+   - `MiddleJansonBridge`
+     が本当に必要とする Janson API を確認し、
+     `JansonBasic`
+     全体 import を狭められるか検討する。
