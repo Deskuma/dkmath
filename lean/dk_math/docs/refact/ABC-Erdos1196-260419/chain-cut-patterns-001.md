@@ -1311,3 +1311,28 @@ public entry build で unknown identifier として露出する型。
   推移 import に頼らず
   `TailRadicalBasic`
   を明示 import する。
+- `ABC012`
+  relay target の independent tail 層は、
+  `Kset`
+  の small/large decomposition,
+  independent Chernoff から dyadic tail への変換,
+  union absorption / GoodX 下界
+  に分けられる。
+  `Ksmall`,
+  `Klarge`,
+  `Kset_disjoint_union`,
+  `card_Ksmall_le_three`
+  は
+  `MiddleBlockKSplit`
+  に置ける。
+  `midblock_tail_indep_dyadic_strong`
+  は
+  `MiddleBlockIndependentDyadic`
+  に置ける。
+  その結果
+  `MiddleBlockIndependentTail`
+  は
+  `midblock_union_absorb_indep_const`
+  と
+  `goodX_measure_ge_one_sub_midblockCstarIndep`
+  だけを持つ absorption owner に縮小できる。

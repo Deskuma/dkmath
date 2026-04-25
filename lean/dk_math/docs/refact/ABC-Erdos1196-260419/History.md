@@ -2178,3 +2178,82 @@ Archive
      内の
      slice counting 層と rad / `piSqRad`
      解析層の境界を、downstream import を見ながら再評価する。
+
+## 2026/04/26 06:10 JST
+
+1. 目的:
+   - `ABC012`
+     の実体 owner である
+     `MiddleBlockIndependentTail`
+     をさらに分解し、
+     K-index decomposition,
+     independent dyadic tail,
+     absorption / GoodX 下界の境界を明確にする。
+2. 実施:
+   - `MiddleBlockKSplit.lean`
+     を新設した。
+   - `MiddleBlockIndependentTail.lean`
+     から次を移設した:
+     `Prob.Ksmall`,
+     `Prob.Klarge`,
+     `Prob.Kset_disjoint_union`,
+     `Prob.card_Ksmall_le_three`
+   - `MiddleBlockIndependentDyadic.lean`
+     を新設した。
+   - `MiddleBlockIndependentTail.lean`
+     から次を移設した:
+     `Prob.two_mul_sq_over_add_ge_self`,
+     `Prob.midblock_tail_indep_dyadic_strong`
+   - `MiddleBlockIndependentTail.lean`
+     は
+     `MiddleBlockIndependentDyadic`
+     import に切り替え、
+     `midblock_union_absorb_indep_const`
+     と
+     `goodX_measure_ge_one_sub_midblockCstarIndep`
+     を保持する absorption / GoodX 下界 owner に縮小した。
+3. 判断:
+   - `MiddleBlockKSplit`
+     は
+     `Kset`
+     の small/large decomposition だけを持つため、
+     independent tail 以外の downstream からも参照しやすい。
+   - `MiddleBlockIndependentDyadic`
+     は
+     independent Chernoff bound から dyadic tail へ落とす証明を保持し、
+     union absorption 本体から切り離せた。
+4. 追跡文書:
+   - `check-relay-lean.md`
+     の
+     `ABC012`
+     に
+     `MiddleBlockKSplit`
+     と
+     `MiddleBlockIndependentDyadic`
+     を再分割先として追記した。
+   - `refact-changed-001.md`
+     に今回の moved declaration と import 境界変更を追記した。
+   - `chain-cut-patterns-001.md`
+     に
+     Kset split / independent dyadic / absorption owner
+     の分離パターンを追記した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleBlockKSplit DkMath.ABC.MiddleBlockIndependentDyadic DkMath.ABC.MiddleBlockIndependentTail DkMath.ABC.ABC012 DkMath.ABC.Main`
+   - 以上を確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知 info:
+     `ABC038Bridge.lean`
+     の axioms note
+6. 次の課題:
+   - `ABC012`
+     を
+     `MiddleBlockIndependentTail`
+     relay のまま残すか、
+     downstream が必要とする owner へ直接向けるかを確認する。
+   - `ABC013`
+     / `SliceDiagonalCounting`
+     の counting extraction 層で、
+     `MiddleBlockIndependentTail`
+     依存をさらに狭められるか調査する。

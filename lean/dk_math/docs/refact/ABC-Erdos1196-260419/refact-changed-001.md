@@ -1880,3 +1880,39 @@
     を直接使うため、
     `TailRadicalBasic`
     を明示 import する形へ変更した
+- `MiddleBlockIndependentTail`
+  から Kset small/large decomposition 層を
+  `DkMath.ABC.MiddleBlockKSplit`
+  に分離
+  - 新設:
+    `MiddleBlockKSplit.lean`
+  - moved:
+    `Prob.Ksmall`,
+    `Prob.Klarge`,
+    `Prob.Kset_disjoint_union`,
+    `Prob.card_Ksmall_le_three`
+  - `TailUnionBasic`
+    の上に置き、
+    independent absorption 本体に依存しない K-index decomposition owner とした
+- `MiddleBlockIndependentTail`
+  から independent dyadic tail 層を
+  `DkMath.ABC.MiddleBlockIndependentDyadic`
+  に分離
+  - 新設:
+    `MiddleBlockIndependentDyadic.lean`
+  - moved:
+    `Prob.two_mul_sq_over_add_ge_self`,
+    `Prob.midblock_tail_indep_dyadic_strong`
+  - `MiddleBlockIndependentDyadic.lean`
+    は
+    `MiddleBlockKSplit`
+    を import し、
+    independent Chernoff から dyadic tail へ落とす owner とした
+  - `MiddleBlockIndependentTail.lean`
+    は
+    `MiddleBlockIndependentDyadic`
+    を import し、
+    `midblock_union_absorb_indep_const`
+    と
+    `goodX_measure_ge_one_sub_midblockCstarIndep`
+    の absorption / GoodX 下界 owner に縮小した
