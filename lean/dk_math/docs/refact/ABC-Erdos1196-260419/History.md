@@ -2026,3 +2026,72 @@ Archive
      `ABC011`
      / `TailRadicalBasic`
      周辺の owner 境界を確認する。
+
+## 2026/04/26 04:30 JST
+
+1. 目的:
+   - `ABC010.lean`
+     を thin relay の
+     `MiddleBlockTail`
+     経由ではなく、
+     実体 owner の
+     `MiddleBlockScaffoldTail`
+     へ直接向ける。
+   - `MiddleBlockTail`
+     をコード上未参照の互換 relay として切り離す。
+2. 実施:
+   - `ABC010.lean`
+     の import を
+     `DkMath.ABC.MiddleBlockTail`
+     から
+     `DkMath.ABC.MiddleBlockScaffoldTail`
+     へ変更した。
+   - `rg`
+     で
+     `import DkMath.ABC.MiddleBlockTail`
+     がコード上に残っていないことを確認した。
+   - `MiddleBlockTail.lean`
+     は削除せず、
+     旧互換用の未参照 thin relay として残した。
+3. 判断:
+   - `ABC010`
+     の実体移設先は
+     `MiddleBlockScaffoldTail`
+     と見なせる。
+   - `MiddleBlockTail`
+     は最終削除フェーズで削除候補にできるが、
+     今回は active file / 互換入口として残す。
+4. 追跡文書:
+   - `check-relay-lean.md`
+     の
+     `ABC010`
+     移設先を
+     `MiddleBlockScaffoldTail`
+     に更新し、
+     `MiddleBlockTail`
+     を旧互換 relay として記録した。
+   - `refact-changed-001.md`
+     に
+     `ABC010 -> MiddleBlockScaffoldTail`
+     direct import 化を追記した。
+   - `chain-cut-patterns-001.md`
+     に
+     番号付き relay から named owner へ直接向けるパターンを追記した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC010 DkMath.ABC.Main`
+   - 以上を確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知 info:
+     `ABC038Bridge.lean`
+     の axioms note
+6. 次の課題:
+   - `ABC011`
+     / `TailRadicalBasic`
+     周辺で同様に、
+     番号付き relay から direct owner import へ切れる箇所を確認する。
+   - 最終削除フェーズでは
+     未参照 thin relay の
+     `MiddleBlockTail`
+     を残すか削除するか判断する。

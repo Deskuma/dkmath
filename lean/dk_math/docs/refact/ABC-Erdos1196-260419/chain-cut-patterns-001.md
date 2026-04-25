@@ -1275,3 +1275,15 @@ public entry build で unknown identifier として露出する型。
   `ABC010.lean`
   の互換入口を保ったまま、
   実体 owner 群をすべて名前付きファイルへ移せる。
+- `ABC010.lean`
+  自体は、
+  実体 owner が確定した時点で
+  thin relay の
+  `MiddleBlockTail`
+  ではなく
+  `MiddleBlockScaffoldTail`
+  へ direct import できる。
+  この状態では
+  `MiddleBlockTail`
+  はコード上未参照の互換 relay となるため、
+  最終削除フェーズで残すか削るかを判断しやすい。

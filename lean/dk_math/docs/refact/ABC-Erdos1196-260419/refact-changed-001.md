@@ -1832,3 +1832,20 @@
     `MiddleBlockScaffoldTail`
     を import する薄い `ABC010` relay entry になり、
     実体定義を持たない re-export ファイルへ縮小された
+- `ABC010.lean`
+  の import を
+  `DkMath.ABC.MiddleBlockTail`
+  から
+  `DkMath.ABC.MiddleBlockScaffoldTail`
+  へ直接差し替え
+  - `MiddleBlockTail.lean`
+    はコード上の import 参照がなくなり、
+    旧互換用の未参照 thin relay になった
+  - `check-relay-lean.md`
+    では
+    `ABC010`
+    の現行移設先を
+    `MiddleBlockScaffoldTail.lean`
+    に更新し、
+    `MiddleBlockTail.lean`
+    を旧互換 relay として記録した

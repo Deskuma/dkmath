@@ -5,6 +5,6 @@ Authors: D. and Wise Wolf.
 -/
 
 
-import DkMath.ABC.MiddleBlockTail
+import DkMath.ABC.MiddleBlockScaffoldTail
 
 #print "file: DkMath.ABC.ABC010"
