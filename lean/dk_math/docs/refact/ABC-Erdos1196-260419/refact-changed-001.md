@@ -1775,3 +1775,37 @@
     を direct import する形へ変更し、
     `summable_exp_neg_two_pow`
     と event API だけを必要とする import 境界へ縮小した
+- `MiddleBlockTail`
+  から dependent union absorption 層を
+  `DkMath.ABC.MiddleBlockDepAbsorption`
+  に分離
+  - 新設:
+    `MiddleBlockDepAbsorption.lean`
+  - moved:
+    `Prob.midblockCstar`,
+    `Prob.midblockCstar_nonneg`,
+    `Prob.union_over_k_midblock_bound_dep`,
+    `Prob.union_over_k_midblock_bound_dep'`,
+    `Prob.midblock_union_absorb_dep`,
+    `Prob.midblock_union_absorb_dep_const`,
+    `Prob.goodX_measure_ge_one_sub_midblockCstar`
+  - `MiddleBlockDepAbsorption.lean`
+    は
+    `MiddleBlockDyadicTail`
+    を import し、
+    `MiddleBlockTail`
+    の scaffold / independent wrapper には依存しない owner とした
+  - `MiddleBlockTail.lean`
+    は
+    `MiddleBlockDepAbsorption`
+    direct import に差し替え、
+    `ABC010`
+    relay entry として dependent absorption API を re-export する
+  - `MiddleBlockTail.lean`
+    の残存本体は
+    `mid_block_chernoff_tail`,
+    `badcount_by_expect`,
+    `mid_block_chernoff_tail_indep`,
+    `union_over_k_midblock_bound_indep`,
+    `EZmid_expect_le_card_smul_q`
+    の scaffold / independent wrapper 層に縮小された

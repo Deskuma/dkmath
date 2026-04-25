@@ -1237,3 +1237,24 @@ public entry build で unknown identifier として露出する型。
   を direct import できる。
   これにより
   dependent union absorption owner と independent tail basic owner の import 鎖を切れる。
+- `ABC010`
+  relay target の dependent absorption 層は、
+  `midblockCstar`
+  と
+  `union_over_k_midblock_bound_dep`
+  / `goodX_measure_ge_one_sub_midblockCstar`
+  を束ねるが、
+  `mid_block_chernoff_tail`
+  や
+  independent scaffold wrapper には依存しない。
+  そのため
+  `MiddleBlockDepAbsorption`
+  として
+  `MiddleBlockDyadicTail`
+  の上に置ける。
+  `MiddleBlockTail`
+  は
+  ABC010 relay entry としてこれを import して re-export しつつ、
+  自身の本体は
+  scaffold / independent wrapper / expectation helper
+  に縮小できる。
