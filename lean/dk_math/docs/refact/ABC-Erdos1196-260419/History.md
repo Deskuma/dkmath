@@ -1507,3 +1507,120 @@ Archive
    - `GoodX`
      / union absorption 側は、
      MGF wrapper 分離後に import 安定性を見て切り出し可否を判断する。
+
+## 2026/04/25 11:55 JST
+
+1. 目的:
+   - `MiddleBlockTail`
+     内の
+     `QuadMGF` / `QuadMGFPos` / `SubGammaParam`
+     と Chernoff wrapper の境界を観察し、
+     MGF owner と tail absorption owner を分ける。
+   - `GoodX`
+     / union absorption 側は、
+     MGF wrapper 分離後に残責務として保持する。
+2. 実施:
+   - 新設:
+     `DkMath.ABC.MiddleBlockMGF`
+   - `MiddleBlockTail.lean`
+     から以下を移設した:
+     `Prob.QuadMGF`,
+     `Prob.QuadMGFPos`,
+     `Prob.SubGammaParam`,
+     `Prob.QuadMGFPosUpTo`,
+     `Prob.quad_from_subgamma_upto`,
+     `Prob.mgf_midblock_via_janson_pos`,
+     `Prob.chernoff_upper_from_quad_mgf_pos`,
+     `Prob.chernoff_from_quad_mgf`,
+     `Prob.chernoff_upper_from_local_mgf_pos`,
+     `Prob.chernoff_upper_from_quad_mgf_upto`,
+     `Prob.mid_block_upper_hp_dep`,
+     `Prob.chernoff_upper_from_quad_mgf_upto_linear`,
+     `Prob.mid_block_upper_hp_dep_expCard`,
+     `Prob.mid_block_upper_hp_dep_expCard_factor`,
+     `Prob.mid_block_upper_hp_dep_expCard_exists`,
+     `Prob.mid_block_upper_hp_dep_expCard_exists'`,
+     `Prob.mid_block_upper_hp_dep_card`,
+     `Prob.EZmid_eq_sum_probs`,
+     `Prob.mgf_midblock_via_indep`,
+     `Prob.mgf_midblock_via_indep_pos`,
+     `Prob.mid_block_upper_hp_indep`,
+     `Prob.mgf_midblock_via_janson`,
+     `Prob.mid_block_chernoff_fixed`
+   - private helper も
+     `MiddleBlockMGF`
+     内へ移した:
+     `Prob.indR_measurable_each`,
+     `Prob.indR_integrable_each`,
+     `Prob.mgf_bound_centered_each`,
+     `Prob.prod_mgf_bound_by_exp_card`
+   - `MiddleBlockTail.lean`
+     は
+     `import DkMath.ABC.MiddleBlockMGF`
+     に差し替え、
+     `mid_block_chernoff_tail`
+     以降の tail absorption / `midblockCstar` / `Kset` / `Emid` / `GoodX`
+     側を保持した。
+3. 判断:
+   - `MiddleBlockMGF`
+     は
+     `MiddleZmidBasic`
+     の
+     `Zmid`
+     と finite-sum integrability を使い、
+     fixed-block MGF witness から fixed-block Chernoff bound までを担当する owner とした。
+   - `MiddleBlockTail`
+     は
+     MGF wrapper ではなく、
+     dyadic two-pow absorption,
+     `midblockCstar`,
+     `Kset` / `Emid` / `GoodX`
+     union absorption を束ねる owner に縮小した。
+   - `GoodX`
+     周辺は
+     `Emid`,
+     `Kset`,
+     `midblockCstar`,
+     `midblock_union_absorb_dep`
+     と相互参照が強いため、
+     今回は切り出さず import 安定性を優先した。
+4. 追跡文書:
+   - `check-relay-lean.md`
+     の
+     `ABC010`
+     に
+     `MiddleBlockMGF`
+     を再分割先として追記した。
+   - `refact-changed-001.md`
+     に
+     `MiddleBlockTail -> MiddleBlockMGF`
+     分離内容を追記した。
+   - `chain-cut-patterns-001.md`
+     に
+     MGF owner と tail absorption owner の切り分けパターンを追記した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleBlockMGF`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleBlockTail`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC010`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleBlockIndependentTail`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知 info:
+     `ABC038Bridge.lean`
+     の axioms note
+6. 次の課題:
+   - `MiddleBlockTail`
+     の残存本体を観察し、
+     `Kset` / `Emid` / `GoodX`
+     の定義層と
+     `midblock_union_absorb_dep`
+     以降の union absorption 証明層を分けられるか確認する。
+   - `MiddleBlockIndependentTail`
+     が
+     `GoodX`
+     / `Emid`
+     を参照しているため、
+     次回はこの downstream import も同時に確認する。

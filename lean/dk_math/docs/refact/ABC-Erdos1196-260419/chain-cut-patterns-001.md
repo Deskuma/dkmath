@@ -1157,3 +1157,30 @@ public entry build で unknown identifier として露出する型。
   `MiddleZmidBasic`
   を入口として、
   MGF / tail probability API の owner に寄せられる。
+- `ABC010`
+  relay target の次段では、
+  `MiddleBlockTail`
+  から
+  `QuadMGF` / `QuadMGFPos` / `SubGammaParam`
+  と
+  fixed-block Chernoff wrapper を
+  `MiddleBlockMGF`
+  に分けられる。
+  この層は
+  `MiddleZmidBasic`
+  の
+  `Zmid`
+  と finite-sum integrability を使うが、
+  `Kset`,
+  `Emid`,
+  `GoodX`
+  の union absorption には依存しない。
+  したがって
+  `MiddleBlockTail`
+  は
+  `MiddleBlockMGF`
+  を入口として、
+  dyadic two-pow absorption,
+  `midblockCstar`,
+  `Kset` / `Emid` / `GoodX`
+  を束ねる tail owner に縮小できる。

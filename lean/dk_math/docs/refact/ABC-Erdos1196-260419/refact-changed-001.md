@@ -1674,3 +1674,45 @@
     その内部境界として
     `MiddleZmidBasic`
     を追加した
+- `MiddleBlockTail`
+  から MGF / Chernoff wrapper 層を
+  `DkMath.ABC.MiddleBlockMGF`
+  に分離
+  - 新設:
+    `MiddleBlockMGF.lean`
+  - moved:
+    `Prob.QuadMGF`,
+    `Prob.QuadMGFPos`,
+    `Prob.SubGammaParam`,
+    `Prob.QuadMGFPosUpTo`,
+    `Prob.quad_from_subgamma_upto`,
+    `Prob.mgf_midblock_via_janson_pos`,
+    `Prob.chernoff_upper_from_quad_mgf_pos`,
+    `Prob.chernoff_from_quad_mgf`,
+    `Prob.chernoff_upper_from_local_mgf_pos`,
+    `Prob.chernoff_upper_from_quad_mgf_upto`,
+    `Prob.mid_block_upper_hp_dep`,
+    `Prob.chernoff_upper_from_quad_mgf_upto_linear`,
+    `Prob.mid_block_upper_hp_dep_expCard`,
+    `Prob.mid_block_upper_hp_dep_expCard_factor`,
+    `Prob.mid_block_upper_hp_dep_expCard_exists`,
+    `Prob.mid_block_upper_hp_dep_expCard_exists'`,
+    `Prob.mid_block_upper_hp_dep_card`,
+    `Prob.EZmid_eq_sum_probs`,
+    `Prob.mgf_midblock_via_indep`,
+    `Prob.mgf_midblock_via_indep_pos`,
+    `Prob.mid_block_upper_hp_indep`,
+    `Prob.mgf_midblock_via_janson`,
+    `Prob.mid_block_chernoff_fixed`
+  - private moved:
+    `Prob.indR_measurable_each`,
+    `Prob.indR_integrable_each`,
+    `Prob.mgf_bound_centered_each`,
+    `Prob.prod_mgf_bound_by_exp_card`
+  - `MiddleBlockTail.lean`
+    は
+    `MiddleBlockMGF`
+    direct import に差し替え、
+    `mid_block_chernoff_tail`
+    以降の tail absorption / `midblockCstar` / `Kset` / `Emid` / `GoodX`
+    owner として残した
