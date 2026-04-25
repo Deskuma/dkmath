@@ -1184,3 +1184,31 @@ public entry build で unknown identifier として露出する型。
   `midblockCstar`,
   `Kset` / `Emid` / `GoodX`
   を束ねる tail owner に縮小できる。
+- `ABC010`
+  relay target のさらに次段では、
+  `Kset`,
+  `Emid`,
+  `GoodX`
+  と、
+  それらの集合論的・点ごと補題
+  (`goodX_compl_eq_union`,
+  `goodX_pointwise`,
+  `Kset_mono`,
+  `GoodX_antitone`)
+  を
+  `MiddleBlockEvents`
+  に分けられる。
+  この層は
+  `MiddleBlockMGF`
+  の `Zmid` API を使うが、
+  `midblockCstar`
+  や dependent union absorption には依存しない。
+  したがって
+  `MiddleBlockTail`
+  は
+  event 定義を import した上で、
+  dyadic summability,
+  `midblockCstar`,
+  `union_over_k_midblock_bound_dep`,
+  `goodX_measure_ge_one_sub_midblockCstar`
+  を持つ absorption owner としてさらに狭められる。

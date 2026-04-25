@@ -1624,3 +1624,117 @@ Archive
      / `Emid`
      を参照しているため、
      次回はこの downstream import も同時に確認する。
+
+## 2026/04/25 13:07 JST
+
+1. 目的:
+   - `MiddleBlockTail`
+     の残存本体から、
+     `Kset` / `Emid` / `GoodX`
+     の定義層と点ごと補題を分離する。
+   - dependent union absorption と
+     `GoodX`
+     測度下界は、
+     import 安定性を見ながら
+     `MiddleBlockTail`
+     に残す。
+2. 実施:
+   - 新設:
+     `DkMath.ABC.MiddleBlockEvents`
+   - `MiddleBlockTail.lean`
+     から以下を移設した:
+     `Prob.Kset`,
+     `Prob.Emid`,
+     `Prob.GoodX`,
+     `Prob.goodX_compl_eq_union`,
+     `Prob.goodX_pointwise`,
+     `Prob.goodX_pointwise_qaddδ_card`,
+     `Prob.goodX_sum_over_k_qaddδ_card`,
+     `Prob.Kset_mono`,
+     `Prob.GoodX_antitone`
+   - `MiddleBlockTail.lean`
+     は
+     `import DkMath.ABC.MiddleBlockEvents`
+     に差し替え、
+     `midblockCstar`,
+     `union_over_k_midblock_bound_dep`,
+     `midblock_union_absorb_dep`,
+     `midblock_union_absorb_dep_const`,
+     `goodX_measure_ge_one_sub_midblockCstar`
+     側を保持した。
+3. 判断:
+   - `MiddleBlockEvents`
+     は
+     `MiddleBlockMGF`
+     の
+     `Zmid`
+     API を使う event definition owner とした。
+   - `goodX_pointwise`
+     や
+     `Kset_mono`
+     は union absorption ではなく、
+     `Kset` / `Emid` / `GoodX`
+     の定義から直接出る基本 API なので、
+     event owner 側に置く方が downstream から参照しやすい。
+   - `midblockCstar`
+     と dependent union absorption は
+     `summable_exp_neg_two_pow`,
+     `mid_block_upper_hp_dep_expCard_factor`,
+     Boole bound を束ねるため、
+     今回は
+     `MiddleBlockTail`
+     に残すのが自然。
+4. downstream 確認:
+   - `TailRadicalBasic`
+     は従来どおり
+     `MiddleBlockTail`
+     を import し、
+     `summable_exp_neg_two_pow`
+     と
+     event API を参照できる。
+   - `MiddleBlockIndependentTail`
+     は
+     `TailRadicalBasic`
+     経由で
+     `Kset` / `Emid` / `GoodX`
+     を参照できることを build で確認した。
+5. 追跡文書:
+   - `check-relay-lean.md`
+     の
+     `ABC010`
+     に
+     `MiddleBlockEvents`
+     を再分割先として追記した。
+   - `refact-changed-001.md`
+     に
+     `MiddleBlockTail -> MiddleBlockEvents`
+     分離内容を追記した。
+   - `chain-cut-patterns-001.md`
+     に
+     event definition owner と tail absorption owner の切り分けパターンを追記した。
+6. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleBlockEvents`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleBlockTail`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.TailRadicalBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleBlockIndependentTail`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC010`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知 info:
+     `ABC038Bridge.lean`
+     の axioms note
+7. 次の課題:
+   - `MiddleBlockTail`
+     の残りを、
+     dyadic summability / dependent union absorption / scaffold tail theorem
+     のどこで切るか再評価する。
+   - `TailRadicalBasic`
+     が
+     `summable_exp_neg_two_pow`
+     だけを必要としているなら、
+     次回以降に dyadic summability owner を分けて
+     `TailRadicalBasic -> MiddleBlockTail`
+     の依存を薄くできるか確認する。

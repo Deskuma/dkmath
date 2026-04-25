@@ -1716,3 +1716,33 @@
     `mid_block_chernoff_tail`
     以降の tail absorption / `midblockCstar` / `Kset` / `Emid` / `GoodX`
     owner として残した
+- `MiddleBlockTail`
+  から mid-block event 定義層を
+  `DkMath.ABC.MiddleBlockEvents`
+  に分離
+  - 新設:
+    `MiddleBlockEvents.lean`
+  - moved:
+    `Prob.Kset`,
+    `Prob.Emid`,
+    `Prob.GoodX`,
+    `Prob.goodX_compl_eq_union`,
+    `Prob.goodX_pointwise`,
+    `Prob.goodX_pointwise_qaddδ_card`,
+    `Prob.goodX_sum_over_k_qaddδ_card`,
+    `Prob.Kset_mono`,
+    `Prob.GoodX_antitone`
+  - `MiddleBlockTail.lean`
+    は
+    `MiddleBlockEvents`
+    direct import に差し替え、
+    `midblockCstar`,
+    dependent union absorption,
+    `goodX_measure_ge_one_sub_midblockCstar`
+    を保持した
+  - `MiddleBlockIndependentTail.lean`
+    も
+    `TailRadicalBasic`
+    経由で
+    `Kset` / `Emid` / `GoodX`
+    を参照できることを確認した
