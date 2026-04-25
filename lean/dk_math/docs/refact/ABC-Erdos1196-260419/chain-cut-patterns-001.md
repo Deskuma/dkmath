@@ -1212,3 +1212,28 @@ public entry build で unknown identifier として露出する型。
   `union_over_k_midblock_bound_dep`,
   `goodX_measure_ge_one_sub_midblockCstar`
   を持つ absorption owner としてさらに狭められる。
+- `ABC010`
+  relay target の dyadic tail 層は、
+  `2^k`
+  への指数吸収と
+  `exp(-c * 2^k)`
+  の可和性だけを必要とする downstream から独立に参照される。
+  そのため
+  `mid_block_upper_hp_dep_twoPow_exists`,
+  `summable_exp_neg_two_pow`,
+  `midblock_tail_dep_dyadic`
+  は
+  `MiddleBlockDyadicTail`
+  に分けられる。
+  `TailRadicalBasic`
+  のように finite union / independent absorption 側で
+  `summable_exp_neg_two_pow`
+  と
+  `Kset` / `Emid`
+  だけを使うファイルは、
+  `MiddleBlockTail`
+  を通さず
+  `MiddleBlockDyadicTail`
+  を direct import できる。
+  これにより
+  dependent union absorption owner と independent tail basic owner の import 鎖を切れる。

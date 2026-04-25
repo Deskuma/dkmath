@@ -1746,3 +1746,32 @@
     経由で
     `Kset` / `Emid` / `GoodX`
     を参照できることを確認した
+- `MiddleBlockTail`
+  から dyadic tail / two-power summability 層を
+  `DkMath.ABC.MiddleBlockDyadicTail`
+  に分離
+  - 新設:
+    `MiddleBlockDyadicTail.lean`
+  - moved:
+    `Prob.mid_block_upper_hp_dep_twoPow_exists`,
+    `Prob.mid_block_upper_hp_dep_twoPow_exists_of_2k_le_X`,
+    `Prob.exp_neg_two_pow_ratio_le`,
+    `Prob.exp_neg_two_pow_le_geom`,
+    `Prob.summable_exp_neg_two_pow`,
+    `Prob.midblock_tail_dep_dyadic`
+  - `MiddleBlockTail.lean`
+    は
+    `MiddleBlockDyadicTail`
+    direct import に差し替え、
+    `midblockCstar`,
+    dependent union absorption,
+    `goodX_measure_ge_one_sub_midblockCstar`
+    を保持した
+  - `TailRadicalBasic.lean`
+    は
+    `MiddleBlockTail`
+    ではなく
+    `MiddleBlockDyadicTail`
+    を direct import する形へ変更し、
+    `summable_exp_neg_two_pow`
+    と event API だけを必要とする import 境界へ縮小した

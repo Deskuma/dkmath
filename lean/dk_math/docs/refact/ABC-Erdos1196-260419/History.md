@@ -1738,3 +1738,106 @@ Archive
      次回以降に dyadic summability owner を分けて
      `TailRadicalBasic -> MiddleBlockTail`
      の依存を薄くできるか確認する。
+
+## 2026/04/25 16:11 JST
+
+1. 目的:
+   - `MiddleBlockTail`
+     の残りから、
+     dyadic two-power tail と
+     `exp(-c * 2^k)`
+     可和性を owner 化する。
+   - `TailRadicalBasic`
+     が
+     `MiddleBlockTail`
+     全体を import しなくてよいか確認する。
+2. 実施:
+   - 新設:
+     `DkMath.ABC.MiddleBlockDyadicTail`
+   - `MiddleBlockTail.lean`
+     から以下を移設した:
+     `Prob.mid_block_upper_hp_dep_twoPow_exists`,
+     `Prob.mid_block_upper_hp_dep_twoPow_exists_of_2k_le_X`,
+     `Prob.exp_neg_two_pow_ratio_le`,
+     `Prob.exp_neg_two_pow_le_geom`,
+     `Prob.summable_exp_neg_two_pow`,
+     `Prob.midblock_tail_dep_dyadic`
+   - `MiddleBlockTail.lean`
+     は
+     `import DkMath.ABC.MiddleBlockDyadicTail`
+     に差し替え、
+     independent scaffold tail,
+     expectation wrapper,
+     `midblockCstar`,
+     dependent union absorption,
+     `GoodX`
+     測度下界を保持した。
+   - `TailRadicalBasic.lean`
+     は
+     `MiddleBlockTail`
+     ではなく
+     `MiddleBlockDyadicTail`
+     を direct import するよう変更した。
+3. 判断:
+   - `MiddleBlockDyadicTail`
+     は
+     `MiddleBlockEvents`
+     を入口とし、
+     `Zmid`
+     / `Emid`
+     と
+     `SubGammaParam`
+     には依存するが、
+     `midblockCstar`
+     や
+     dependent union absorption には依存しない。
+   - `TailRadicalBasic`
+     が必要としているのは
+     `summable_exp_neg_two_pow`
+     と event API であり、
+     `MiddleBlockTail`
+     の上位 absorption 本体ではない。
+     そのため
+     `TailRadicalBasic -> MiddleBlockTail`
+     の依存は切断できた。
+   - `midblockCstar`
+     は可和性と dependent union bound を束ねる上位定数なので、
+     今回は
+     `MiddleBlockTail`
+     に残す。
+4. 追跡文書:
+   - `check-relay-lean.md`
+     の
+     `ABC010`
+     に
+     `MiddleBlockDyadicTail`
+     を再分割先として追記した。
+   - `refact-changed-001.md`
+     に
+     `MiddleBlockTail -> MiddleBlockDyadicTail`
+     分離内容を追記した。
+   - `chain-cut-patterns-001.md`
+     に
+     dyadic tail owner と independent tail basic owner の import 切断パターンを追記した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleBlockDyadicTail`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleBlockTail DkMath.ABC.TailRadicalBasic DkMath.ABC.MiddleBlockIndependentTail DkMath.ABC.ABC010 DkMath.ABC.Main`
+   - 以上を確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知 info:
+     `ABC038Bridge.lean`
+     の axioms note
+6. 次の課題:
+   - `MiddleBlockTail`
+     に残る
+     independent scaffold tail,
+     `EZmid_expect_le_card_smul_q`,
+     dependent union absorption,
+     `goodX_measure_ge_one_sub_midblockCstar`
+     を見直す。
+   - dependent union absorption を
+     `MiddleBlockDepAbsorption`
+     のような owner に分ける価値があるか、
+     downstream import を見て判断する。
