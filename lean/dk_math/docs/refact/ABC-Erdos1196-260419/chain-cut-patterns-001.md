@@ -1133,3 +1133,27 @@ public entry build で unknown identifier として露出する型。
   を持たないため、
   `MiddleBandJansonSkeleton`
   を併記する必要がある。
+- `ABC010`
+  relay target の
+  `MiddleBlockTail`
+  は、
+  `Zmid` / finite mid-block sum 基礎層と、
+  `QuadMGF` / Chernoff wrapper / `GoodX` tail absorption 層が同居していた。
+  前者は
+  `MiddleBandJansonSkeleton`
+  の
+  `Prob.indR`,
+  `middleBandBlockBound`
+  と
+  `MiddleDyadicCompose`
+  の
+  `MidBlock`
+  dyadic primitive だけに依存するため、
+  `MiddleZmidBasic`
+  に分けられる。
+  これにより
+  `MiddleBlockTail`
+  は
+  `MiddleZmidBasic`
+  を入口として、
+  MGF / tail probability API の owner に寄せられる。

@@ -1407,3 +1407,103 @@ Archive
      は aggregation owner として残しつつ、
      consumer が本当に aggregation API を使う場合だけ
      direct import する方針にする。
+
+## 2026/04/25 04:38 JST
+
+1. 目的:
+   - `ABC010`
+     relay target の
+     `MiddleBlockTail`
+     から、
+     `Zmid` / mid-block finite-sum 基礎層を分離する。
+   - `MiddleBlockTail`
+     を
+     `QuadMGF` / Chernoff wrapper / tail absorption / `GoodX`
+     側の owner に寄せる。
+2. 実施:
+   - 新設:
+     `DkMath.ABC.MiddleZmidBasic`
+   - `MiddleBlockTail.lean`
+     から以下を移設した:
+     `MidBlock_card_lower_when_2k_le_X`,
+     `Prob.middleBandBlockBound_alt`,
+     `Prob.mid_block_sum_ae_bounds`,
+     `Prob.mid_block_sum_ae_bounds'`,
+     `Prob.mid_block_sum_aestronglyMeasurable`,
+     `Prob.mid_block_sum_integrable`,
+     `Prob.Zmid`,
+     `Prob.BadCountOnRV`,
+     `Prob.integrable_exp_of_mid_block`,
+     `Prob.BadCountOnRV_eq_Zmid`
+   - `MiddleBlockTail.lean`
+     は
+     `import DkMath.ABC.MiddleZmidBasic`
+     に差し替え、
+     以降の
+     `QuadMGF`,
+     `QuadMGFPos`,
+     `SubGammaParam`,
+     `QuadMGFPosUpTo`,
+     `mgf_midblock_via_janson_pos`,
+     Chernoff wrapper,
+     tail absorption,
+     `GoodX`
+     周辺を保持した。
+3. 判断:
+   - `MiddleZmidBasic`
+     は
+     `MiddleBandJansonSkeleton`
+     と
+     `MiddleDyadicCompose`
+     のみを直接 import し、
+     `Prob.indR`
+     finite-sum の可測性・可積分性と
+     `Zmid`
+     の owner として読むのが自然。
+   - `MiddleBlockTail`
+     は
+     MGF witness から tail bound へ進む層であり、
+     finite-sum の基礎補題を持たせない方が後続分割しやすい。
+   - `ABC010.lean`
+     relay target は引き続き
+     `MiddleBlockTail`
+     だが、
+     その内部境界として
+     `MiddleZmidBasic`
+     を追跡可能にした。
+4. 追跡文書:
+   - `check-relay-lean.md`
+     の
+     `ABC010`
+     に
+     `MiddleZmidBasic`
+     を再分割先として追記した。
+   - `refact-changed-001.md`
+     に
+     `MiddleBlockTail -> MiddleZmidBasic`
+     分離内容を追記した。
+   - `chain-cut-patterns-001.md`
+     に
+     `Zmid` / finite mid-block sum 層の切り出しパターンを追記した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleZmidBasic`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleBlockTail`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.ABC010`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleBlockIndependentTail`
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.Main`
+   - 以上をこの順で確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知 info:
+     `ABC038Bridge.lean`
+     の axioms note
+6. 次の課題:
+   - `MiddleBlockTail`
+     内の
+     `QuadMGF` / `QuadMGFPos` / `SubGammaParam`
+     と Chernoff wrapper の境界を観察し、
+     MGF owner と tail absorption owner を分けられるか確認する。
+   - `GoodX`
+     / union absorption 側は、
+     MGF wrapper 分離後に import 安定性を見て切り出し可否を判断する。

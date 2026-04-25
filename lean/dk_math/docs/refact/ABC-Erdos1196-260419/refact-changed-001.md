@@ -1645,3 +1645,32 @@
     `ABC009`
     aggregation relay を通らず、
     mid-block tail / probability primitive owner を直接参照する
+- `MiddleBlockTail`
+  から Zmid / mid-block finite-sum 基礎層を
+  `DkMath.ABC.MiddleZmidBasic`
+  に分離
+  - 新設:
+    `MiddleZmidBasic.lean`
+  - moved:
+    `MidBlock_card_lower_when_2k_le_X`,
+    `Prob.middleBandBlockBound_alt`,
+    `Prob.mid_block_sum_ae_bounds`,
+    `Prob.mid_block_sum_ae_bounds'`,
+    `Prob.mid_block_sum_aestronglyMeasurable`,
+    `Prob.mid_block_sum_integrable`,
+    `Prob.Zmid`,
+    `Prob.BadCountOnRV`,
+    `Prob.integrable_exp_of_mid_block`,
+    `Prob.BadCountOnRV_eq_Zmid`
+  - `MiddleBlockTail.lean`
+    は
+    `MiddleZmidBasic`
+    direct import に差し替え、
+    `QuadMGF` / Chernoff wrapper / tail absorption / GoodX 側の owner として残した
+  - `ABC010.lean`
+    relay target は従来どおり
+    `MiddleBlockTail`
+    だが、
+    その内部境界として
+    `MiddleZmidBasic`
+    を追加した
