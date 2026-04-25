@@ -1336,3 +1336,25 @@ public entry build で unknown identifier として露出する型。
   と
   `goodX_measure_ge_one_sub_midblockCstarIndep`
   だけを持つ absorption owner に縮小できる。
+- `ABC013`
+  relay target の counting extraction 層は、
+  slice-average / Markov 側と
+  diagonal counting 側に分けられる。
+  `slice_heavy_card_le`
+  と
+  `eventually_slice_heavy_sublinear`
+  系は
+  `RatioBound`
+  までの依存で閉じるため、
+  `SliceAverageBasic`
+  に置ける。
+  `SliceDiagonalCounting`
+  は
+  `MiddleBlockIndependentTail`
+  を通さず
+  `SliceAverageBasic`
+  を import し、
+  `diagCount`,
+  `diagCountFwd`,
+  `diag_badcount_le_badcount`
+  などの diagonal extraction owner に寄せられる。

@@ -2257,3 +2257,80 @@ Archive
      の counting extraction 層で、
      `MiddleBlockIndependentTail`
      依存をさらに狭められるか調査する。
+
+## 2026/04/26 06:27 JST
+
+1. 目的:
+   - `ABC013`
+     の実体 owner である
+     `SliceDiagonalCounting`
+     から、
+     slice-average / Markov 層を分離する。
+   - `SliceDiagonalCounting`
+     が
+     `MiddleBlockIndependentTail`
+     を経由せず、
+     counting / ratio owner だけに依存する形にする。
+2. 実施:
+   - `SliceAverageBasic.lean`
+     を新設した。
+   - `SliceDiagonalCounting.lean`
+     から次を移設した:
+     `slice_heavy_card_le`,
+     `eventually_slice_heavy_sublinear`,
+     `eventually_slice_heavy_sublinear_of_badcount_subquad`
+   - `SliceAverageBasic.lean`
+     は
+     `RatioBound`
+     を import し、
+     `sliceBadCount`,
+     `BadCount`,
+     `eventually_badcount_le_eps`
+     による slice-average / Markov owner とした。
+   - `SliceDiagonalCounting.lean`
+     の import を
+     `MiddleBlockIndependentTail`
+     から
+     `SliceAverageBasic`
+     へ変更した。
+3. 判断:
+   - `SliceDiagonalCounting`
+     は independent tail / GoodX absorption に依存しておらず、
+     `RatioBound`
+     系の counting API だけで成立する。
+   - `SliceAverageBasic`
+     は downstream から slice-heavy sublinear 補題だけを参照したい場合の軽い入口になる。
+4. 追跡文書:
+   - `check-relay-lean.md`
+     の
+     `ABC013`
+     に
+     `SliceAverageBasic`
+     を再分割先として追記した。
+   - `refact-changed-001.md`
+     に今回の moved declaration と import 境界変更を追記した。
+   - `chain-cut-patterns-001.md`
+     に
+     slice-average owner と diagonal counting owner の分離パターンを追記した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.SliceAverageBasic DkMath.ABC.SliceDiagonalCounting DkMath.ABC.ABC013 DkMath.ABC.Main`
+   - 以上を確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知 info:
+     `ABC038Bridge.lean`
+     の axioms note
+6. 次の課題:
+   - `ABC014`
+     / `AnalyticQualityBridge`
+     で
+     diagonal counting,
+     `piSqRad`,
+     analytic quality wrapper
+     の import 境界を確認する。
+   - `SliceDiagonalCounting`
+     内の rad-log helper は
+     `TailRadicalBasic`
+     / `Rad`
+     系 owner に移す価値があるか、downstream 参照を見て判断する。

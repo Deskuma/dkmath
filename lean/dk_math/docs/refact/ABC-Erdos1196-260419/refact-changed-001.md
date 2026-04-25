@@ -1916,3 +1916,28 @@
     と
     `goodX_measure_ge_one_sub_midblockCstarIndep`
     の absorption / GoodX 下界 owner に縮小した
+- `SliceDiagonalCounting`
+  から slice-average / Markov 層を
+  `DkMath.ABC.SliceAverageBasic`
+  に分離
+  - 新設:
+    `SliceAverageBasic.lean`
+  - moved:
+    `slice_heavy_card_le`,
+    `eventually_slice_heavy_sublinear`,
+    `eventually_slice_heavy_sublinear_of_badcount_subquad`
+  - `SliceAverageBasic.lean`
+    は
+    `RatioBound`
+    を import し、
+    `sliceBadCount` / `BadCount`
+    と
+    `eventually_badcount_le_eps`
+    だけで閉じる slice-average owner とした
+  - `SliceDiagonalCounting.lean`
+    は
+    `MiddleBlockIndependentTail`
+    ではなく
+    `SliceAverageBasic`
+    を import する形へ変更し、
+    diagonal count / Icc rewrite / rad-log helper 側に縮小した

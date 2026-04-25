@@ -44,6 +44,7 @@
   - 再分割先 → [MiddleBlockIndependentDyadic.lean](../../../DkMath/ABC/MiddleBlockIndependentDyadic.lean)
 - [x] [ABC013](../../../DkMath/ABC/ABC013.lean)
   - 移設先 → [SliceDiagonalCounting.lean](../../../DkMath/ABC/SliceDiagonalCounting.lean)
+  - 再分割先 → [SliceAverageBasic.lean](../../../DkMath/ABC/SliceAverageBasic.lean)
 - [x] [ABC014](../../../DkMath/ABC/ABC014.lean)
   - 移設先 → [AnalyticQualityBridge.lean](../../../DkMath/ABC/AnalyticQualityBridge.lean)
 - [x] [ABC015](../../../DkMath/ABC/ABC015.lean)
