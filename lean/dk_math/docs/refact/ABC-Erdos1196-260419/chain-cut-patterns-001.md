@@ -1258,3 +1258,20 @@ public entry build で unknown identifier として露出する型。
   自身の本体は
   scaffold / independent wrapper / expectation helper
   に縮小できる。
+- `ABC010`
+  relay target の最後の残存本体は、
+  witness scaffold,
+  independent wrapper,
+  expectation helper
+  だけで構成される。
+  これは
+  `MiddleBlockScaffoldTail`
+  に分けられる。
+  その後の
+  `MiddleBlockTail`
+  は
+  `MiddleBlockScaffoldTail`
+  を import するだけの thin relay になり、
+  `ABC010.lean`
+  の互換入口を保ったまま、
+  実体 owner 群をすべて名前付きファイルへ移せる。

@@ -1940,3 +1940,89 @@ Archive
      `union_over_k_midblock_bound_indep`,
      `EZmid_expect_le_card_smul_q`
      を移す。
+
+## 2026/04/25 22:37 JST
+
+1. 目的:
+   - `MiddleBlockTail`
+     に残った scaffold / independent wrapper / expectation helper を named owner 化する。
+   - `MiddleBlockTail`
+     を
+     `ABC010`
+     互換の thin relay にする。
+2. 実施:
+   - 新設:
+     `DkMath.ABC.MiddleBlockScaffoldTail`
+   - `MiddleBlockTail.lean`
+     から以下を移設した:
+     `Prob.mid_block_chernoff_tail`,
+     `Prob.badcount_by_expect`,
+     `Prob.mid_block_chernoff_tail_indep`,
+     `Prob.union_over_k_midblock_bound_indep`,
+     `Prob.EZmid_expect_le_card_smul_q`
+   - `MiddleBlockScaffoldTail.lean`
+     は
+     `MiddleBlockDepAbsorption`
+     を import し、
+     旧 `MiddleBlockTail`
+     の最後の実体定義群を保持する owner とした。
+   - `MiddleBlockTail.lean`
+     は
+     `import DkMath.ABC.MiddleBlockScaffoldTail`
+     のみを持つ thin relay へ縮小した。
+3. 判断:
+   - `MiddleBlockTail`
+     の実体定義はすべて named owner へ移った。
+   - `ABC010.lean`
+     は従来どおり
+     `MiddleBlockTail`
+     を import するため、
+     downstream 互換性は維持される。
+   - 実体 owner の流れは概ね
+     `MiddleZmidBasic`
+     →
+     `MiddleBlockMGF`
+     →
+     `MiddleBlockEvents`
+     →
+     `MiddleBlockDyadicTail`
+     →
+     `MiddleBlockDepAbsorption`
+     →
+     `MiddleBlockScaffoldTail`
+     →
+     `MiddleBlockTail`
+     となった。
+4. 追跡文書:
+   - `check-relay-lean.md`
+     の
+     `ABC010`
+     に
+     `MiddleBlockScaffoldTail`
+     を再分割先として追記した。
+   - `refact-changed-001.md`
+     に
+     `MiddleBlockTail -> MiddleBlockScaffoldTail`
+     分離内容を追記した。
+   - `chain-cut-patterns-001.md`
+     に
+     scaffold owner と thin relay 化のパターンを追記した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.MiddleBlockScaffoldTail DkMath.ABC.MiddleBlockTail DkMath.ABC.ABC010 DkMath.ABC.Main`
+   - 以上を確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知 info:
+     `ABC038Bridge.lean`
+     の axioms note
+6. 次の課題:
+   - `ABC010.lean`
+     を最終的に
+     `MiddleBlockTail`
+     relay ではなく
+     named owner へ直接向けるか検討する。
+   - あるいは次の番号付き relay の薄化へ進み、
+     `ABC011`
+     / `TailRadicalBasic`
+     周辺の owner 境界を確認する。

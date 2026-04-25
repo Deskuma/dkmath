@@ -1809,3 +1809,26 @@
     `union_over_k_midblock_bound_indep`,
     `EZmid_expect_le_card_smul_q`
     の scaffold / independent wrapper 層に縮小された
+- `MiddleBlockTail`
+  から scaffold / independent wrapper 層を
+  `DkMath.ABC.MiddleBlockScaffoldTail`
+  に分離
+  - 新設:
+    `MiddleBlockScaffoldTail.lean`
+  - moved:
+    `Prob.mid_block_chernoff_tail`,
+    `Prob.badcount_by_expect`,
+    `Prob.mid_block_chernoff_tail_indep`,
+    `Prob.union_over_k_midblock_bound_indep`,
+    `Prob.EZmid_expect_le_card_smul_q`
+  - `MiddleBlockScaffoldTail.lean`
+    は
+    `MiddleBlockDepAbsorption`
+    を import し、
+    旧 `MiddleBlockTail`
+    に残っていた scaffold / independent wrapper / expectation helper を保持する owner とした
+  - `MiddleBlockTail.lean`
+    は
+    `MiddleBlockScaffoldTail`
+    を import する薄い `ABC010` relay entry になり、
+    実体定義を持たない re-export ファイルへ縮小された
