@@ -1849,3 +1849,34 @@
     に更新し、
     `MiddleBlockTail.lean`
     を旧互換 relay として記録した
+- `TailRadicalBasic`
+  から finite-union / independent Cstar 層を
+  `DkMath.ABC.TailUnionBasic`
+  に分離
+  - 新設:
+    `TailUnionBasic.lean`
+  - moved:
+    `measure_union_over_k`,
+    `measure_union_over_k_bound`,
+    `summable_exp_neg_two_pow_mul`,
+    `midblockCstarIndep`,
+    `prob_real_le_one`
+  - `TailRadicalBasic.lean`
+    は
+    `TailUnionBasic`
+    を import し、
+    `slice_sum_eq_badcount`
+    以降の slice / rad / piSqRad 解析 owner に縮小した
+  - `MiddleBlockIndependentTail.lean`
+    は
+    `TailRadicalBasic`
+    経由ではなく
+    `TailUnionBasic`
+    を direct import する形へ変更し、
+    independent tail 側から rad / piSqRad owner への不要な依存を切った
+  - `AnalyticQualityBridge.lean`
+    は
+    `piSqRad`
+    を直接使うため、
+    `TailRadicalBasic`
+    を明示 import する形へ変更した

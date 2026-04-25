@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
-import DkMath.ABC.TailRadicalBasic
+import DkMath.ABC.TailUnionBasic
 
 #print "file: DkMath.ABC.MiddleBlockIndependentTail"
 

@@ -2095,3 +2095,86 @@ Archive
      未参照 thin relay の
      `MiddleBlockTail`
      を残すか削除するか判断する。
+
+## 2026/04/26 04:53 JST
+
+1. 目的:
+   - `ABC011`
+     の実体 owner である
+     `TailRadicalBasic`
+     から、
+     rad / `piSqRad`
+     解析ではない finite-union / independent Cstar 層を分離する。
+   - `MiddleBlockIndependentTail`
+     が
+     `TailRadicalBasic`
+     を経由せず、
+     必要な確率 union API だけを import する形にする。
+2. 実施:
+   - `TailUnionBasic.lean`
+     を新設した。
+   - `TailRadicalBasic.lean`
+     から次を移設した:
+     `measure_union_over_k`,
+     `measure_union_over_k_bound`,
+     `summable_exp_neg_two_pow_mul`,
+     `midblockCstarIndep`,
+     `prob_real_le_one`
+   - `TailRadicalBasic.lean`
+     は
+     `TailUnionBasic`
+     import に切り替え、
+     `slice_sum_eq_badcount`
+     以降の slice / rad / `piSqRad`
+     owner として縮小した。
+   - `MiddleBlockIndependentTail.lean`
+     の import を
+     `TailRadicalBasic`
+     から
+     `TailUnionBasic`
+     へ変更した。
+   - `AnalyticQualityBridge.lean`
+     は
+     `piSqRad`
+     を直接使っていたため、
+     `TailRadicalBasic`
+     を明示 import するようにした。
+3. 判断:
+   - `MiddleBlockIndependentTail`
+     は independent union / Cstar API だけを必要とし、
+     rad / `piSqRad`
+     owner には依存しない。
+   - `AnalyticQualityBridge`
+     の `piSqRad`
+     利用は推移 import ではなく直接 import で表現すべき依存である。
+4. 追跡文書:
+   - `check-relay-lean.md`
+     の
+     `ABC011`
+     に
+     `TailUnionBasic`
+     を再分割先として追記した。
+   - `refact-changed-001.md`
+     に今回の moved declaration と import 境界変更を追記した。
+   - `chain-cut-patterns-001.md`
+     に
+     finite-union / independent Cstar owner と rad / `piSqRad`
+     owner を分けるパターンを追記した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.TailUnionBasic DkMath.ABC.TailRadicalBasic DkMath.ABC.MiddleBlockIndependentTail DkMath.ABC.AnalyticQualityBridge DkMath.ABC.ABC011 DkMath.ABC.Main`
+   - 以上を確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知 info:
+     `ABC038Bridge.lean`
+     の axioms note
+6. 次の課題:
+   - `ABC012`
+     / `MiddleBlockIndependentTail`
+     側で、
+     independent tail wrapper からさらに確率分割・small/large Kset 補題を named owner 化できるか確認する。
+   - `TailRadicalBasic`
+     内の
+     slice counting 層と rad / `piSqRad`
+     解析層の境界を、downstream import を見ながら再評価する。

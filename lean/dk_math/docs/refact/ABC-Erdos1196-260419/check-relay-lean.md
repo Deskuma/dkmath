@@ -37,6 +37,7 @@
   - 再分割先 → [MiddleBlockScaffoldTail.lean](../../../DkMath/ABC/MiddleBlockScaffoldTail.lean)
 - [x] [ABC011](../../../DkMath/ABC/ABC011.lean)
   - 移設先 → [TailRadicalBasic.lean](../../../DkMath/ABC/TailRadicalBasic.lean)
+  - 再分割先 → [TailUnionBasic.lean](../../../DkMath/ABC/TailUnionBasic.lean)
 - [x] [ABC012](../../../DkMath/ABC/ABC012.lean)
   - 移設先 → [MiddleBlockIndependentTail.lean](../../../DkMath/ABC/MiddleBlockIndependentTail.lean)
 - [x] [ABC013](../../../DkMath/ABC/ABC013.lean)

@@ -1287,3 +1287,27 @@ public entry build で unknown identifier として露出する型。
   `MiddleBlockTail`
   はコード上未参照の互換 relay となるため、
   最終削除フェーズで残すか削るかを判断しやすい。
+- `ABC011`
+  relay target の先頭にある finite-union / independent Cstar 層は、
+  rad / `piSqRad`
+  解析補題とは独立に
+  `TailUnionBasic`
+  へ分けられる。
+  `MiddleBlockIndependentTail`
+  のように
+  `midblockCstarIndep`,
+  `prob_real_le_one`,
+  `summable_exp_neg_two_pow_mul`
+  だけを使う downstream は、
+  `TailRadicalBasic`
+  を通さず
+  `TailUnionBasic`
+  を direct import できる。
+  逆に
+  `AnalyticQualityBridge`
+  のように
+  `piSqRad`
+  を直接使う downstream は、
+  推移 import に頼らず
+  `TailRadicalBasic`
+  を明示 import する。

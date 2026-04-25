@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Basic.Nat
 import DkMath.ABC.SliceDiagonalCounting
+import DkMath.ABC.TailRadicalBasic
 
 #print "file: DkMath.ABC.AnalyticQualityBridge"
 
