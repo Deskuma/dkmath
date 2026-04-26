@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 
-import DkMath.ABC.MiddleBlockTail
+import DkMath.ABC.TailUnionBasic
 
 #print "file: DkMath.ABC.TailRadicalBasic"
 
@@ -23,126 +23,6 @@ open scoped BigOperators
 
 open Nat Real Rat Filter Finset
 open MeasureTheory ProbabilityTheory
-
--- -------------------------------------------------------------------------------------------------------------------
-
-
--- Finite union (Boole) lemma: measure of finite union ≤ sum of measures
-/--
-有限集合 K に対する有限和の半加法（和に関する上界）を述べる補題。
-
-仮定として Ω は測度空間であり，μ は確率測度（特に有限測度）である．
-このとき，任意の集合列 A : ℕ → Set Ω に対して
-K に含まれる全ての k についての合併の測度は，各 k に対する測度の和以下である：
-μ.real (⋃ k ∈ K, A k) ≤ ∑ k ∈ K, μ.real (A k)。
-直感的には有限個の集合に対して成り立つ「和の上界」あるいは有限半加性を表している．
-
-証明は Finset に関する帰納法や，測度の単調性と有限可加性／半加法性を使って行うことができる．
-また，もし A k が互いに素（互いに交わらない）であれば，上式は等号となる（有限可加性）．
--/
-lemma measure_union_over_k
-  {Ω} [MeasurableSpace Ω] {μ : Measure Ω} [IsProbabilityMeasure μ]
-  (K : Finset ℕ) (A : ℕ → Set Ω) :
-  μ.real (⋃ k ∈ K, A k) ≤ ∑ k ∈ K, μ.real (A k) := by
-  -- Use the existing mathlib lemma which proves the same statement for finite biUnion
-  exact MeasureTheory.measureReal_biUnion_finset_le K A
-
-
--- If we have an upper bound B k for each μ.real (A k) on k ∈ K, then the
--- measure of the finite union is bounded by the sum of those upper bounds.
-/--
-有限なインデックス集合 K にわたる集合族 A の合併の測度は、
-各集合の測度に対する上界 B の和で抑えられることを主張する補題の説明。
-
-概要：
-- 仮定 h により各 k ∈ K について μ.real (A k) ≤ B k が成り立つ。
-- 測度は有限合併に対して部分加法（subadditivity）を満たすので
-  μ.real (⋃ k ∈ K, A k) ≤ ∑ k ∈ K, μ.real (A k) が成り立つ。
-- これに仮定 h を適用して各項を B k で上界すれば、
-  μ.real (⋃ k ∈ K, A k) ≤ ∑ k ∈ K, B k となる。
-
-備考：
-- 仮定 [IsProbabilityMeasure μ] は文脈上用意されているが、
-  本補題の結論自体は測度の部分加法性のみから導ける。
-- K が有限であることにより有限和を扱える点が重要である。
-- 記法として μ.real は実数値に変換した測度を表す。
--/
-lemma measure_union_over_k_bound
-  {Ω} [MeasurableSpace Ω] {μ : Measure Ω} [IsProbabilityMeasure μ]
-  (K : Finset ℕ) (A : ℕ → Set Ω) (B : ℕ → ℝ)
-  (h : ∀ k ∈ K, μ.real (A k) ≤ B k) :
-  μ.real (⋃ k ∈ K, A k) ≤ ∑ k ∈ K, B k := by
-  calc
-    μ.real (⋃ k ∈ K, A k) ≤ ∑ k ∈ K, μ.real (A k) := MeasureTheory.measureReal_biUnion_finset_le K A
-    _ ≤ ∑ k ∈ K, B k := Finset.sum_le_sum (fun k hk => h k hk)
-
-
--- 補助: C * exp(-c * 2^k) の可和性（c>0, C≥0）
-/--
-C ≥ 0 かつ c > 0 のとき、列 k ↦ C * Real.exp (- c * (2 : ℝ) ^ k) は総和可能（Summable）であることを主張する補題。
-
-説明（概略）:
-Real.exp (- c * 2^k) = (Real.exp (-c))^(2^k) であり、0 < Real.exp (-c) < 1 であるため,
-この項は k に対して超指数的に減衰する。従って適当な 0 < r < 1, A > 0 が存在して
-Real.exp (- c * 2^k) ≤ A * r^k と評価でき、幾何級数との比較により総和可能となる。
-C ≥ 0 を掛けても総和可能性は保たれる。
--/
-lemma summable_exp_neg_two_pow_mul {C c : ℝ} (_hC : 0 ≤ C) (hc : 0 < c) :
-  Summable (fun k : ℕ => C * Real.exp (- c * ((2 : ℝ) ^ k))) := by
-  -- use the summability proved in MathlibHello.ABC (Prob.summable_exp_neg_two_pow) and multiply by C
-  have hsum := Prob.summable_exp_neg_two_pow c hc
-  exact Summable.mul_left C hsum
-
-
-/- Independent-version constants and absorption lemmas -/
-
-
-/- 中域・独立版の合併確率を吸収する X 非依存定数（C⋆₍indep₎）。 -/
-/--
-δ : ℝ に対して次を返す非計算的な実数値関数。
-
-midblockCstarIndep δ = 3 + ∑' (k : ℕ), Real.exp (-(δ^2) * 2^k)
-
-説明と基本的性質（直感的説明）:
-- 定義は 3 に、指数関数 exp(−(δ^2) 2^k) の k に関する無限和を加えたものです。
-- 式は δ^2 にのみ依存するため偶関数です（δ と −δ で同じ値を取ります）。
-- |δ| が大きくなると各項は急速に 0 に近づくので、関数値は単調に小さくなり（δ^2 に対して単調）、δ → ∞ のとき 3 に収束します。
-- δ = 0 のとき各項が 1 になるため和は発散します（∑ 1 = ∞）。したがって収束を考える際は一般に δ ≠ 0 を想定します。
-- δ ≠ 0 の場合は 2^k による二重的な増加により項が超指数的に減少し、和は非常に速く収束します。
-
-実装上の注意:
-- 無限和を含むため noncomputable として定義されています。
-- 必要に応じて δ ≠ 0 の下での収束性・連続性・単調性などを補題として形式化できます。
-- この関数は解析的な見地からは |δ| に対して滑らかであり、特に δ ≠ 0 の領域で良質な性質を持ちます。
-- 記法上の ∑' は tsum（可測な無限和）を表します。
--/
-noncomputable def midblockCstarIndep (δ : ℝ) : ℝ :=
-  (3 : ℝ) + (∑' k : ℕ, Real.exp (-(δ ^ 2) * (2 : ℝ) ^ k))
-
--- Simple helper: probability-measure の下で任意事象の実数化測度は ≤ 1.
-/--
-確率測度 μ に対する基本的な評価補題。
-
-任意の可測集合 A に対して μ.real A ≤ 1 が成り立つ。
-これは IsProbabilityMeasure の仮定により μ.real univ = 1 であり、
-集合 A が univ の部分集合であることと測度の単調性から直ちに従う。
-
-引数:
-- `μ` : `Measure Ω` で `IsProbabilityMeasure μ` を満たす確率測度
-- `A` : 可測集合
-
-結論: `μ.real A ≤ 1`
--/
-lemma prob_real_le_one {Ω : Type*} [MeasurableSpace Ω] [MeasureSpace Ω] (μ : Measure Ω) [IsProbabilityMeasure μ]
-  (A : Set Ω) : μ.real A ≤ 1 := by
-  have hle := MeasureTheory.measure_mono (μ := μ) (Set.subset_univ A)
-  have htop : μ (Set.univ : Set Ω) ≠ ⊤ := by simp [IsProbabilityMeasure.measure_univ]
-  have : (μ A).toReal ≤ (μ (Set.univ : Set Ω)).toReal := ENNReal.toReal_mono htop hle
-  calc
-    μ.real A = (μ A).toReal := rfl
-    _ ≤ (μ (Set.univ : Set Ω)).toReal := this
-    _ = 1 := by simp [IsProbabilityMeasure.measure_univ]
-
 
 /- Slice の和恒等式と Markov による重いスライスの個数上界 -/
 /--

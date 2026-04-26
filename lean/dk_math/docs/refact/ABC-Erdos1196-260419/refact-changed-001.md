@@ -1514,3 +1514,459 @@
     relay 経由ではなく
     `MiddleBandJansonSkeleton`
     direct import に変更した
+- `JansonBasic`
+  から finite-uniform wrapper 層を
+  `DkMath.ABC.JansonFiniteUniform`
+  に分離
+  - 新設:
+    `JansonFiniteUniform.lean`
+  - moved:
+    `Block_Janson_downward_skeleton_indep`,
+    `adjK_quality_density_one`,
+    `tendsto_grid_bad_fraction_zero`
+  - `JansonBasic.lean`
+    は
+    `MiddleBandJansonSkeleton` / `AdjKBadDensity`
+    の direct import ではなく
+    `JansonFiniteUniform`
+    を import する形に変更
+  - `ABC008.lean`
+    は従来どおり
+    `JansonBasic`
+    relay target を指すが、
+    その内部境界として
+    `JansonFiniteUniform`
+    を追加した
+- `JansonBasic`
+  本体を
+  `DkMath.ABC.JansonPMFProduct`
+  に昇格
+  - 新設:
+    `JansonPMFProduct.lean`
+  - moved:
+    `JansonBasic.lean`
+    残存本体
+    (`JansonSetup`,
+    `JansonModel`,
+    `PMF.expect_*`,
+    `product_pmf`,
+    `product_pmf_on`,
+    `expect_indicator_prod'`,
+    `expect_indicator_joint`,
+    `bound_v2`,
+    middle-band prototype など)
+  - `JansonBasic.lean`
+    自体は
+    `import DkMath.ABC.JansonPMFProduct`
+    だけを持つ compatibility relay に縮小
+  - downstream では
+    `MiddleJansonBridge.lean`
+    と
+    `JansonRoadmap.lean`
+    を
+    `JansonBasic`
+    relay 経由ではなく
+    `JansonPMFProduct`
+    direct import に変更した
+- `MiddleJansonBridge`
+  から JSProb wrapper 層を
+  `DkMath.ABC.MiddleJSProb`
+  に分離
+  - 新設:
+    `MiddleJSProb.lean`
+  - moved:
+    `JSProb.Ibit`,
+    `JSProb.Setup`,
+    `JSProb.X`,
+    `JSProb.jPr_joint`,
+    `JSProb.jPr_zero`,
+    `JSProb.jPr_joint_eq`,
+    `JSProb.jPr_zero_nonneg`,
+    `JSProb.jPr_joint_nonneg`
+  - `MiddleJansonBridge.lean`
+    は
+    `JansonPMFProduct`
+    direct import ではなく
+    `MiddleJSProb`
+    を import する形に変更
+  - `ABC009.lean`
+    relay target は従来どおり
+    `MiddleJansonBridge`
+    だが、
+    その内部境界として
+    `MiddleJSProb`
+    を追加した
+- `MiddleJansonBridge`
+  から block-level Janson/Suen API を
+  `DkMath.ABC.MiddleBlockJS`
+  に分離
+  - 新設:
+    `MiddleBlockJS.lean`
+  - moved:
+    `janson_mu`,
+    `janson_mu_nonneg`,
+    `janson_dbar`,
+    `janson_dbar_nonneg`,
+    `janson_block_cost`,
+    `janson_block_cost_le`,
+    `janson_block_exp`,
+    `janson_block_exp'`,
+    `janson_block_exp_nonneg`,
+    `janson_block_exp_nonneg'`,
+    `janson_block_exp_mono_mu`,
+    `janson_block_exp_mono_dbar`,
+    `mu_eq`,
+    `dbar_eq`,
+    `janson_bound_v2`,
+    `Params`,
+    `BlockJS`,
+    `buildBlockJS`,
+    `block_bound_from_janson`
+  - `MiddleJansonBridge.lean`
+    は
+    `MiddleBlockJS`
+    と
+    `MiddleDyadicCompose`
+    を import し、
+    `middle_band_sum_bound`
+    / `middle_band_bound_top`
+    の aggregation owner に縮小した
+  - `MiddleBlockTail.lean`
+    は
+    `MiddleJansonBridge`
+    relay 経由ではなく
+    `MiddleBandJansonSkeleton`
+    と
+    `MiddleDyadicCompose`
+    を direct import する形に変更した
+  - これにより
+    `ABC010`
+    側は
+    `ABC009`
+    aggregation relay を通らず、
+    mid-block tail / probability primitive owner を直接参照する
+- `MiddleBlockTail`
+  から Zmid / mid-block finite-sum 基礎層を
+  `DkMath.ABC.MiddleZmidBasic`
+  に分離
+  - 新設:
+    `MiddleZmidBasic.lean`
+  - moved:
+    `MidBlock_card_lower_when_2k_le_X`,
+    `Prob.middleBandBlockBound_alt`,
+    `Prob.mid_block_sum_ae_bounds`,
+    `Prob.mid_block_sum_ae_bounds'`,
+    `Prob.mid_block_sum_aestronglyMeasurable`,
+    `Prob.mid_block_sum_integrable`,
+    `Prob.Zmid`,
+    `Prob.BadCountOnRV`,
+    `Prob.integrable_exp_of_mid_block`,
+    `Prob.BadCountOnRV_eq_Zmid`
+  - `MiddleBlockTail.lean`
+    は
+    `MiddleZmidBasic`
+    direct import に差し替え、
+    `QuadMGF` / Chernoff wrapper / tail absorption / GoodX 側の owner として残した
+  - `ABC010.lean`
+    relay target は従来どおり
+    `MiddleBlockTail`
+    だが、
+    その内部境界として
+    `MiddleZmidBasic`
+    を追加した
+- `MiddleBlockTail`
+  から MGF / Chernoff wrapper 層を
+  `DkMath.ABC.MiddleBlockMGF`
+  に分離
+  - 新設:
+    `MiddleBlockMGF.lean`
+  - moved:
+    `Prob.QuadMGF`,
+    `Prob.QuadMGFPos`,
+    `Prob.SubGammaParam`,
+    `Prob.QuadMGFPosUpTo`,
+    `Prob.quad_from_subgamma_upto`,
+    `Prob.mgf_midblock_via_janson_pos`,
+    `Prob.chernoff_upper_from_quad_mgf_pos`,
+    `Prob.chernoff_from_quad_mgf`,
+    `Prob.chernoff_upper_from_local_mgf_pos`,
+    `Prob.chernoff_upper_from_quad_mgf_upto`,
+    `Prob.mid_block_upper_hp_dep`,
+    `Prob.chernoff_upper_from_quad_mgf_upto_linear`,
+    `Prob.mid_block_upper_hp_dep_expCard`,
+    `Prob.mid_block_upper_hp_dep_expCard_factor`,
+    `Prob.mid_block_upper_hp_dep_expCard_exists`,
+    `Prob.mid_block_upper_hp_dep_expCard_exists'`,
+    `Prob.mid_block_upper_hp_dep_card`,
+    `Prob.EZmid_eq_sum_probs`,
+    `Prob.mgf_midblock_via_indep`,
+    `Prob.mgf_midblock_via_indep_pos`,
+    `Prob.mid_block_upper_hp_indep`,
+    `Prob.mgf_midblock_via_janson`,
+    `Prob.mid_block_chernoff_fixed`
+  - private moved:
+    `Prob.indR_measurable_each`,
+    `Prob.indR_integrable_each`,
+    `Prob.mgf_bound_centered_each`,
+    `Prob.prod_mgf_bound_by_exp_card`
+  - `MiddleBlockTail.lean`
+    は
+    `MiddleBlockMGF`
+    direct import に差し替え、
+    `mid_block_chernoff_tail`
+    以降の tail absorption / `midblockCstar` / `Kset` / `Emid` / `GoodX`
+    owner として残した
+- `MiddleBlockTail`
+  から mid-block event 定義層を
+  `DkMath.ABC.MiddleBlockEvents`
+  に分離
+  - 新設:
+    `MiddleBlockEvents.lean`
+  - moved:
+    `Prob.Kset`,
+    `Prob.Emid`,
+    `Prob.GoodX`,
+    `Prob.goodX_compl_eq_union`,
+    `Prob.goodX_pointwise`,
+    `Prob.goodX_pointwise_qaddδ_card`,
+    `Prob.goodX_sum_over_k_qaddδ_card`,
+    `Prob.Kset_mono`,
+    `Prob.GoodX_antitone`
+  - `MiddleBlockTail.lean`
+    は
+    `MiddleBlockEvents`
+    direct import に差し替え、
+    `midblockCstar`,
+    dependent union absorption,
+    `goodX_measure_ge_one_sub_midblockCstar`
+    を保持した
+  - `MiddleBlockIndependentTail.lean`
+    も
+    `TailRadicalBasic`
+    経由で
+    `Kset` / `Emid` / `GoodX`
+    を参照できることを確認した
+- `MiddleBlockTail`
+  から dyadic tail / two-power summability 層を
+  `DkMath.ABC.MiddleBlockDyadicTail`
+  に分離
+  - 新設:
+    `MiddleBlockDyadicTail.lean`
+  - moved:
+    `Prob.mid_block_upper_hp_dep_twoPow_exists`,
+    `Prob.mid_block_upper_hp_dep_twoPow_exists_of_2k_le_X`,
+    `Prob.exp_neg_two_pow_ratio_le`,
+    `Prob.exp_neg_two_pow_le_geom`,
+    `Prob.summable_exp_neg_two_pow`,
+    `Prob.midblock_tail_dep_dyadic`
+  - `MiddleBlockTail.lean`
+    は
+    `MiddleBlockDyadicTail`
+    direct import に差し替え、
+    `midblockCstar`,
+    dependent union absorption,
+    `goodX_measure_ge_one_sub_midblockCstar`
+    を保持した
+  - `TailRadicalBasic.lean`
+    は
+    `MiddleBlockTail`
+    ではなく
+    `MiddleBlockDyadicTail`
+    を direct import する形へ変更し、
+    `summable_exp_neg_two_pow`
+    と event API だけを必要とする import 境界へ縮小した
+- `MiddleBlockTail`
+  から dependent union absorption 層を
+  `DkMath.ABC.MiddleBlockDepAbsorption`
+  に分離
+  - 新設:
+    `MiddleBlockDepAbsorption.lean`
+  - moved:
+    `Prob.midblockCstar`,
+    `Prob.midblockCstar_nonneg`,
+    `Prob.union_over_k_midblock_bound_dep`,
+    `Prob.union_over_k_midblock_bound_dep'`,
+    `Prob.midblock_union_absorb_dep`,
+    `Prob.midblock_union_absorb_dep_const`,
+    `Prob.goodX_measure_ge_one_sub_midblockCstar`
+  - `MiddleBlockDepAbsorption.lean`
+    は
+    `MiddleBlockDyadicTail`
+    を import し、
+    `MiddleBlockTail`
+    の scaffold / independent wrapper には依存しない owner とした
+  - `MiddleBlockTail.lean`
+    は
+    `MiddleBlockDepAbsorption`
+    direct import に差し替え、
+    `ABC010`
+    relay entry として dependent absorption API を re-export する
+  - `MiddleBlockTail.lean`
+    の残存本体は
+    `mid_block_chernoff_tail`,
+    `badcount_by_expect`,
+    `mid_block_chernoff_tail_indep`,
+    `union_over_k_midblock_bound_indep`,
+    `EZmid_expect_le_card_smul_q`
+    の scaffold / independent wrapper 層に縮小された
+- `MiddleBlockTail`
+  から scaffold / independent wrapper 層を
+  `DkMath.ABC.MiddleBlockScaffoldTail`
+  に分離
+  - 新設:
+    `MiddleBlockScaffoldTail.lean`
+  - moved:
+    `Prob.mid_block_chernoff_tail`,
+    `Prob.badcount_by_expect`,
+    `Prob.mid_block_chernoff_tail_indep`,
+    `Prob.union_over_k_midblock_bound_indep`,
+    `Prob.EZmid_expect_le_card_smul_q`
+  - `MiddleBlockScaffoldTail.lean`
+    は
+    `MiddleBlockDepAbsorption`
+    を import し、
+    旧 `MiddleBlockTail`
+    に残っていた scaffold / independent wrapper / expectation helper を保持する owner とした
+  - `MiddleBlockTail.lean`
+    は
+    `MiddleBlockScaffoldTail`
+    を import する薄い `ABC010` relay entry になり、
+    実体定義を持たない re-export ファイルへ縮小された
+- `ABC010.lean`
+  の import を
+  `DkMath.ABC.MiddleBlockTail`
+  から
+  `DkMath.ABC.MiddleBlockScaffoldTail`
+  へ直接差し替え
+  - `MiddleBlockTail.lean`
+    はコード上の import 参照がなくなり、
+    旧互換用の未参照 thin relay になった
+  - `check-relay-lean.md`
+    では
+    `ABC010`
+    の現行移設先を
+    `MiddleBlockScaffoldTail.lean`
+    に更新し、
+    `MiddleBlockTail.lean`
+    を旧互換 relay として記録した
+- `TailRadicalBasic`
+  から finite-union / independent Cstar 層を
+  `DkMath.ABC.TailUnionBasic`
+  に分離
+  - 新設:
+    `TailUnionBasic.lean`
+  - moved:
+    `measure_union_over_k`,
+    `measure_union_over_k_bound`,
+    `summable_exp_neg_two_pow_mul`,
+    `midblockCstarIndep`,
+    `prob_real_le_one`
+  - `TailRadicalBasic.lean`
+    は
+    `TailUnionBasic`
+    を import し、
+    `slice_sum_eq_badcount`
+    以降の slice / rad / piSqRad 解析 owner に縮小した
+  - `MiddleBlockIndependentTail.lean`
+    は
+    `TailRadicalBasic`
+    経由ではなく
+    `TailUnionBasic`
+    を direct import する形へ変更し、
+    independent tail 側から rad / piSqRad owner への不要な依存を切った
+  - `AnalyticQualityBridge.lean`
+    は
+    `piSqRad`
+    を直接使うため、
+    `TailRadicalBasic`
+    を明示 import する形へ変更した
+- `MiddleBlockIndependentTail`
+  から Kset small/large decomposition 層を
+  `DkMath.ABC.MiddleBlockKSplit`
+  に分離
+  - 新設:
+    `MiddleBlockKSplit.lean`
+  - moved:
+    `Prob.Ksmall`,
+    `Prob.Klarge`,
+    `Prob.Kset_disjoint_union`,
+    `Prob.card_Ksmall_le_three`
+  - `TailUnionBasic`
+    の上に置き、
+    independent absorption 本体に依存しない K-index decomposition owner とした
+- `MiddleBlockIndependentTail`
+  から independent dyadic tail 層を
+  `DkMath.ABC.MiddleBlockIndependentDyadic`
+  に分離
+  - 新設:
+    `MiddleBlockIndependentDyadic.lean`
+  - moved:
+    `Prob.two_mul_sq_over_add_ge_self`,
+    `Prob.midblock_tail_indep_dyadic_strong`
+  - `MiddleBlockIndependentDyadic.lean`
+    は
+    `MiddleBlockKSplit`
+    を import し、
+    independent Chernoff から dyadic tail へ落とす owner とした
+  - `MiddleBlockIndependentTail.lean`
+    は
+    `MiddleBlockIndependentDyadic`
+    を import し、
+    `midblock_union_absorb_indep_const`
+    と
+    `goodX_measure_ge_one_sub_midblockCstarIndep`
+    の absorption / GoodX 下界 owner に縮小した
+- `SliceDiagonalCounting`
+  から slice-average / Markov 層を
+  `DkMath.ABC.SliceAverageBasic`
+  に分離
+  - 新設:
+    `SliceAverageBasic.lean`
+  - moved:
+    `slice_heavy_card_le`,
+    `eventually_slice_heavy_sublinear`,
+    `eventually_slice_heavy_sublinear_of_badcount_subquad`
+  - `SliceAverageBasic.lean`
+    は
+    `RatioBound`
+    を import し、
+    `sliceBadCount` / `BadCount`
+    と
+    `eventually_badcount_le_eps`
+    だけで閉じる slice-average owner とした
+  - `SliceDiagonalCounting.lean`
+    は
+    `MiddleBlockIndependentTail`
+    ではなく
+    `SliceAverageBasic`
+    を import する形へ変更し、
+    diagonal count / Icc rewrite / rad-log helper 側に縮小した
+- `SliceDiagonalCounting`
+  から rad-log positivity 層を
+  `DkMath.ABC.RadLogBasic`
+  に分離
+  - 新設:
+    `RadLogBasic.lean`
+  - moved:
+    `one_le_rad_real`,
+    `log_rad_nonneg`,
+    `log_rad_mul_nonneg`
+  - `RadLogBasic.lean`
+    は
+    `Rad`
+    だけを import する軽量 owner とし、
+    radical の実数下界と log 非負性を保持する
+  - `SliceDiagonalCounting.lean`
+    は
+    `RadLogBasic`
+    を import し、
+    diagonal count / Icc rewrite owner にさらに縮小した
+  - `AnalyticQualityBridge.lean`
+    は
+    `SliceDiagonalCounting`
+    ではなく
+    `RadLogBasic`
+    と
+    `TailRadicalBasic`
+    を直接 import する形へ変更し、
+    analytic quality wrapper から diagonal counting 依存を外した

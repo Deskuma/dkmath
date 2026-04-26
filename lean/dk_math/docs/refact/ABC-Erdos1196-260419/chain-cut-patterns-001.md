@@ -1035,3 +1035,347 @@ public entry build で unknown identifier として露出する型。
   これにより
   `ABC001` から `ABC007`
   までの前段 relay 化が一通り完了する。
+- `ABC008`
+  は既に
+  `JansonBasic`
+  への relay になっていたため、
+  numbered file 側ではなく
+  `JansonBasic`
+  内部の責務境界を切るのが次の一手になる。
+  冒頭の
+  `Block_Janson_downward_skeleton_indep`
+  と adjacent density placeholders は
+  `MiddleBandJansonSkeleton`
+  の finite-uniform indicator API に直接依存するだけなので、
+  `JansonFiniteUniform`
+  へ分けられる。
+  一方で
+  `JansonModel`,
+  `product_pmf`,
+  `expect_indicator_prod`
+  以降は PMF product owner として
+  `JansonBasic`
+  に残すのが現時点では安定する。
+- `JansonBasic`
+  の残存本体はさらに
+  `JansonPMFProduct`
+  へ whole-file promotion できた。
+  この層は
+  `JansonSetup`,
+  `JansonModel`,
+  `product_pmf`,
+  `expect_indicator_prod`,
+  `bound_v2`
+  などを含む PMF product owner であり、
+  `MiddleJansonBridge`
+  と
+  `JansonRoadmap`
+  は
+  `JansonBasic`
+  relay を介さず direct import できる。
+  したがって
+  `ABC008 -> JansonBasic -> JansonPMFProduct`
+  の compatibility chain は残しつつ、
+  実装上の consumer は named owner へ寄せられる。
+- `ABC009`
+  relay target の
+  `MiddleJansonBridge`
+  は、
+  PMF product を実数確率 API に包む
+  `JSProb`
+  と、
+  middle-band aggregation / BlockJS を同居させていた。
+  `JSProb`
+  は
+  `JansonPMFProduct`
+  だけを直接使う薄い wrapper なので、
+  `MiddleJSProb`
+  へ独立させられる。
+  これにより
+  `MiddleJansonBridge`
+  は
+  `MiddleJSProb`
+  と
+  `MiddleDyadicCompose`
+  を合流させる aggregation owner に寄る。
+- `ABC009`
+  relay target の次段では、
+  `JSProb`
+  から作った実数評価
+  (`janson_mu`, `janson_dbar`, `janson_block_exp`)
+  と
+  block record
+  (`Params`, `BlockJS`, `buildBlockJS`)
+  を
+  `MiddleBlockJS`
+  に分けられる。
+  これで
+  `MiddleJansonBridge`
+  は
+  `middle_band_sum_bound`
+  / `middle_band_bound_top`
+  の aggregation owner として読める。
+- この分割後、
+  downstream の `MiddleBlockTail`
+  が aggregation API を使っていない場合は、
+  `MiddleJansonBridge`
+  ではなく
+  `MiddleBandJansonSkeleton`
+  と
+  `MiddleDyadicCompose`
+  を direct import するのがよい。
+  ただし
+  `MiddleDyadicCompose`
+  単体では
+  `Prob.indR`,
+  `chernoff_lower_tail`,
+  `middleBandBlockBound`
+  を持たないため、
+  `MiddleBandJansonSkeleton`
+  を併記する必要がある。
+- `ABC010`
+  relay target の
+  `MiddleBlockTail`
+  は、
+  `Zmid` / finite mid-block sum 基礎層と、
+  `QuadMGF` / Chernoff wrapper / `GoodX` tail absorption 層が同居していた。
+  前者は
+  `MiddleBandJansonSkeleton`
+  の
+  `Prob.indR`,
+  `middleBandBlockBound`
+  と
+  `MiddleDyadicCompose`
+  の
+  `MidBlock`
+  dyadic primitive だけに依存するため、
+  `MiddleZmidBasic`
+  に分けられる。
+  これにより
+  `MiddleBlockTail`
+  は
+  `MiddleZmidBasic`
+  を入口として、
+  MGF / tail probability API の owner に寄せられる。
+- `ABC010`
+  relay target の次段では、
+  `MiddleBlockTail`
+  から
+  `QuadMGF` / `QuadMGFPos` / `SubGammaParam`
+  と
+  fixed-block Chernoff wrapper を
+  `MiddleBlockMGF`
+  に分けられる。
+  この層は
+  `MiddleZmidBasic`
+  の
+  `Zmid`
+  と finite-sum integrability を使うが、
+  `Kset`,
+  `Emid`,
+  `GoodX`
+  の union absorption には依存しない。
+  したがって
+  `MiddleBlockTail`
+  は
+  `MiddleBlockMGF`
+  を入口として、
+  dyadic two-pow absorption,
+  `midblockCstar`,
+  `Kset` / `Emid` / `GoodX`
+  を束ねる tail owner に縮小できる。
+- `ABC010`
+  relay target のさらに次段では、
+  `Kset`,
+  `Emid`,
+  `GoodX`
+  と、
+  それらの集合論的・点ごと補題
+  (`goodX_compl_eq_union`,
+  `goodX_pointwise`,
+  `Kset_mono`,
+  `GoodX_antitone`)
+  を
+  `MiddleBlockEvents`
+  に分けられる。
+  この層は
+  `MiddleBlockMGF`
+  の `Zmid` API を使うが、
+  `midblockCstar`
+  や dependent union absorption には依存しない。
+  したがって
+  `MiddleBlockTail`
+  は
+  event 定義を import した上で、
+  dyadic summability,
+  `midblockCstar`,
+  `union_over_k_midblock_bound_dep`,
+  `goodX_measure_ge_one_sub_midblockCstar`
+  を持つ absorption owner としてさらに狭められる。
+- `ABC010`
+  relay target の dyadic tail 層は、
+  `2^k`
+  への指数吸収と
+  `exp(-c * 2^k)`
+  の可和性だけを必要とする downstream から独立に参照される。
+  そのため
+  `mid_block_upper_hp_dep_twoPow_exists`,
+  `summable_exp_neg_two_pow`,
+  `midblock_tail_dep_dyadic`
+  は
+  `MiddleBlockDyadicTail`
+  に分けられる。
+  `TailRadicalBasic`
+  のように finite union / independent absorption 側で
+  `summable_exp_neg_two_pow`
+  と
+  `Kset` / `Emid`
+  だけを使うファイルは、
+  `MiddleBlockTail`
+  を通さず
+  `MiddleBlockDyadicTail`
+  を direct import できる。
+  これにより
+  dependent union absorption owner と independent tail basic owner の import 鎖を切れる。
+- `ABC010`
+  relay target の dependent absorption 層は、
+  `midblockCstar`
+  と
+  `union_over_k_midblock_bound_dep`
+  / `goodX_measure_ge_one_sub_midblockCstar`
+  を束ねるが、
+  `mid_block_chernoff_tail`
+  や
+  independent scaffold wrapper には依存しない。
+  そのため
+  `MiddleBlockDepAbsorption`
+  として
+  `MiddleBlockDyadicTail`
+  の上に置ける。
+  `MiddleBlockTail`
+  は
+  ABC010 relay entry としてこれを import して re-export しつつ、
+  自身の本体は
+  scaffold / independent wrapper / expectation helper
+  に縮小できる。
+- `ABC010`
+  relay target の最後の残存本体は、
+  witness scaffold,
+  independent wrapper,
+  expectation helper
+  だけで構成される。
+  これは
+  `MiddleBlockScaffoldTail`
+  に分けられる。
+  その後の
+  `MiddleBlockTail`
+  は
+  `MiddleBlockScaffoldTail`
+  を import するだけの thin relay になり、
+  `ABC010.lean`
+  の互換入口を保ったまま、
+  実体 owner 群をすべて名前付きファイルへ移せる。
+- `ABC010.lean`
+  自体は、
+  実体 owner が確定した時点で
+  thin relay の
+  `MiddleBlockTail`
+  ではなく
+  `MiddleBlockScaffoldTail`
+  へ direct import できる。
+  この状態では
+  `MiddleBlockTail`
+  はコード上未参照の互換 relay となるため、
+  最終削除フェーズで残すか削るかを判断しやすい。
+- `ABC011`
+  relay target の先頭にある finite-union / independent Cstar 層は、
+  rad / `piSqRad`
+  解析補題とは独立に
+  `TailUnionBasic`
+  へ分けられる。
+  `MiddleBlockIndependentTail`
+  のように
+  `midblockCstarIndep`,
+  `prob_real_le_one`,
+  `summable_exp_neg_two_pow_mul`
+  だけを使う downstream は、
+  `TailRadicalBasic`
+  を通さず
+  `TailUnionBasic`
+  を direct import できる。
+  逆に
+  `AnalyticQualityBridge`
+  のように
+  `piSqRad`
+  を直接使う downstream は、
+  推移 import に頼らず
+  `TailRadicalBasic`
+  を明示 import する。
+- `ABC012`
+  relay target の independent tail 層は、
+  `Kset`
+  の small/large decomposition,
+  independent Chernoff から dyadic tail への変換,
+  union absorption / GoodX 下界
+  に分けられる。
+  `Ksmall`,
+  `Klarge`,
+  `Kset_disjoint_union`,
+  `card_Ksmall_le_three`
+  は
+  `MiddleBlockKSplit`
+  に置ける。
+  `midblock_tail_indep_dyadic_strong`
+  は
+  `MiddleBlockIndependentDyadic`
+  に置ける。
+  その結果
+  `MiddleBlockIndependentTail`
+  は
+  `midblock_union_absorb_indep_const`
+  と
+  `goodX_measure_ge_one_sub_midblockCstarIndep`
+  だけを持つ absorption owner に縮小できる。
+- `ABC013`
+  relay target の counting extraction 層は、
+  slice-average / Markov 側と
+  diagonal counting 側に分けられる。
+  `slice_heavy_card_le`
+  と
+  `eventually_slice_heavy_sublinear`
+  系は
+  `RatioBound`
+  までの依存で閉じるため、
+  `SliceAverageBasic`
+  に置ける。
+  `SliceDiagonalCounting`
+  は
+  `MiddleBlockIndependentTail`
+  を通さず
+  `SliceAverageBasic`
+  を import し、
+  `diagCount`,
+  `diagCountFwd`,
+  `diag_badcount_le_badcount`
+  などの diagonal extraction owner に寄せられる。
+- `ABC014`
+  relay target の analytic quality bridge は、
+  radical の log 非負性だけを必要とする場合に
+  `SliceDiagonalCounting`
+  を import すべきではない。
+  `one_le_rad_real`,
+  `log_rad_nonneg`,
+  `log_rad_mul_nonneg`
+  は
+  `Rad`
+  だけで閉じるため、
+  `RadLogBasic`
+  に置ける。
+  その結果
+  `AnalyticQualityBridge`
+  は
+  `RadLogBasic`
+  と
+  `TailRadicalBasic`
+  を direct import し、
+  diagonal counting owner から切り離せる。
