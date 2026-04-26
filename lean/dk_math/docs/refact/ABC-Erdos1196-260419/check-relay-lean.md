@@ -47,6 +47,7 @@
   - 再分割先 → [SliceAverageBasic.lean](../../../DkMath/ABC/SliceAverageBasic.lean)
 - [x] [ABC014](../../../DkMath/ABC/ABC014.lean)
   - 移設先 → [AnalyticQualityBridge.lean](../../../DkMath/ABC/AnalyticQualityBridge.lean)
+  - 再分割先 → [RadLogBasic.lean](../../../DkMath/ABC/RadLogBasic.lean)
 - [x] [ABC015](../../../DkMath/ABC/ABC015.lean)
   - 移設先 → [QualityTailBridge.lean](../../../DkMath/ABC/QualityTailBridge.lean)
 - [x] [ABC016](../../../DkMath/ABC/ABC016.lean)

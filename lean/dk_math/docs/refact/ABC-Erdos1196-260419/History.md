@@ -2334,3 +2334,86 @@ Archive
      `TailRadicalBasic`
      / `Rad`
      系 owner に移す価値があるか、downstream 参照を見て判断する。
+
+## 2026/04/26 06:46 JST
+
+1. 目的:
+   - `ABC014`
+     / `AnalyticQualityBridge`
+     の import 境界を整理する。
+   - `AnalyticQualityBridge`
+     が
+     rad-log positivity helper のためだけに
+     `SliceDiagonalCounting`
+     へ依存している状態を解消する。
+2. 実施:
+   - `RadLogBasic.lean`
+     を新設した。
+   - `SliceDiagonalCounting.lean`
+     から次を移設した:
+     `one_le_rad_real`,
+     `log_rad_nonneg`,
+     `log_rad_mul_nonneg`
+   - `RadLogBasic.lean`
+     は
+     `Rad`
+     だけを import し、
+     radical の実数下界と log 非負性を保持する owner とした。
+   - `SliceDiagonalCounting.lean`
+     は
+     `RadLogBasic`
+     を import し、
+     diagonal count / Icc rewrite owner にさらに縮小した。
+   - `AnalyticQualityBridge.lean`
+     は
+     `SliceDiagonalCounting`
+     import を廃止し、
+     `RadLogBasic`
+     と
+     `TailRadicalBasic`
+     を直接 import する形へ変更した。
+3. 判断:
+   - rad-log positivity helper は
+     diagonal counting ではなく
+     `Rad`
+     近傍の基礎 API として扱うのが自然。
+   - `AnalyticQualityBridge`
+     は
+     `piSqRad`
+     と rad-log helper を使うが、
+     `diagCount`
+     / `diag_badcount_le_badcount`
+     には依存していない。
+   - そのため、
+     analytic quality wrapper から diagonal counting owner を切ることで、
+     `ABC014`
+     relay の依存境界が明確になった。
+4. 追跡文書:
+   - `check-relay-lean.md`
+     の
+     `ABC014`
+     に
+     `RadLogBasic`
+     を再分割先として追記した。
+   - `refact-changed-001.md`
+     に今回の moved declaration と import 境界変更を追記した。
+   - `chain-cut-patterns-001.md`
+     に
+     rad-log owner と analytic quality bridge の分離パターンを追記した。
+5. 検証:
+   - `./lean-build.sh -v --log-level=info DkMath.ABC.RadLogBasic DkMath.ABC.SliceDiagonalCounting DkMath.ABC.AnalyticQualityBridge DkMath.ABC.ABC014 DkMath.ABC.Main`
+   - 以上を確認済み。
+   - 既知警告:
+     `ZsigmondyCyclotomicResearch.lean`
+     の `sorry`
+   - 既知 info:
+     `ABC038Bridge.lean`
+     の axioms note
+6. 次の課題:
+   - `ABC014`
+     / `AnalyticQualityBridge`
+     内の analytic quality wrapper と adjacent / tail 側 wrapper の境界を確認する。
+   - `ABC015`
+     / `QualityTailBridge`
+     との重複 API が残っていれば、
+     downstream import を見ながら owner へ寄せる。

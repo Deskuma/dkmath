@@ -1941,3 +1941,32 @@
     `SliceAverageBasic`
     を import する形へ変更し、
     diagonal count / Icc rewrite / rad-log helper 側に縮小した
+- `SliceDiagonalCounting`
+  から rad-log positivity 層を
+  `DkMath.ABC.RadLogBasic`
+  に分離
+  - 新設:
+    `RadLogBasic.lean`
+  - moved:
+    `one_le_rad_real`,
+    `log_rad_nonneg`,
+    `log_rad_mul_nonneg`
+  - `RadLogBasic.lean`
+    は
+    `Rad`
+    だけを import する軽量 owner とし、
+    radical の実数下界と log 非負性を保持する
+  - `SliceDiagonalCounting.lean`
+    は
+    `RadLogBasic`
+    を import し、
+    diagonal count / Icc rewrite owner にさらに縮小した
+  - `AnalyticQualityBridge.lean`
+    は
+    `SliceDiagonalCounting`
+    ではなく
+    `RadLogBasic`
+    と
+    `TailRadicalBasic`
+    を直接 import する形へ変更し、
+    analytic quality wrapper から diagonal counting 依存を外した

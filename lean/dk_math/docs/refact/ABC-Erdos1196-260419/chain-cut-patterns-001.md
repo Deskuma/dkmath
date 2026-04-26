@@ -1358,3 +1358,24 @@ public entry build で unknown identifier として露出する型。
   `diagCountFwd`,
   `diag_badcount_le_badcount`
   などの diagonal extraction owner に寄せられる。
+- `ABC014`
+  relay target の analytic quality bridge は、
+  radical の log 非負性だけを必要とする場合に
+  `SliceDiagonalCounting`
+  を import すべきではない。
+  `one_le_rad_real`,
+  `log_rad_nonneg`,
+  `log_rad_mul_nonneg`
+  は
+  `Rad`
+  だけで閉じるため、
+  `RadLogBasic`
+  に置ける。
+  その結果
+  `AnalyticQualityBridge`
+  は
+  `RadLogBasic`
+  と
+  `TailRadicalBasic`
+  を direct import し、
+  diagonal counting owner から切り離せる。
