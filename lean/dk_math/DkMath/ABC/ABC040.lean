@@ -12,23 +12,7 @@ import DkMath.ABC.ChernoffQualityFinal
 -- ※これは `ABC039.lean` 以降の新規実装分を書く予定のファイル。
 -- 特に新規性の定理がなければ、将来的に不要となる。
 
-set_option linter.style.longLine false
-set_option linter.style.emptyLine false
-
 /- Note:
 ※細分化前にエラー／警告を出さない補題・定理ファイル。
   ABC.lean で定義されるべき定理のうち、ABC.lean 内で定義されていた定理をここに移動している。
 -/
-
-namespace DkMath.ABC
-
-namespace Chernoff
-
-open scoped BigOperators
-
-open Nat Real Rat Filter Finset
-open MeasureTheory ProbabilityTheory
-
-end Chernoff
-
-end DkMath.ABC

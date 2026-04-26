@@ -9,15 +9,8 @@ import DkMath.ABC.AdjacentDiagonalBasic
 
 #print "file: DkMath.ABC.ABC001"
 
-set_option linter.style.longLine false
-set_option linter.style.emptyLine false
-
 /- Note:
 ※ relay file.
   細分化前に `ABC001.lean` に置かれていた adjacent / diagonal / slice-radical
   helper 群は `DkMath.ABC.AdjacentDiagonalBasic` へ移設済み。
 -/
-
-namespace DkMath.ABC
-
-end DkMath.ABC

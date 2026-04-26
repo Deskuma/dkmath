@@ -10,16 +10,9 @@ import DkMath.ABC.AdjKBasic
 
 #print "file: DkMath.ABC.ABC003"
 
-set_option linter.style.longLine false
-set_option linter.style.emptyLine false
-
 /- Note:
 ※ relay file.
   細分化前に `ABC003.lean` に置かれていた middle dyadic scaffold は
   `DkMath.ABC.MiddleDyadicScaffold` へ、k-diagonal / AdjK 基礎層は
   `DkMath.ABC.AdjKBasic` へ移設済み。
 -/
-
-namespace DkMath.ABC
-
-end DkMath.ABC

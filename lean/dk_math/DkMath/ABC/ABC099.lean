@@ -10,7 +10,6 @@ import DkMath.Basic
 #print "file: DkMath.ABC.ABC099"
 
 set_option linter.style.longLine false
-set_option linter.style.emptyLine false
 
 /-! == a+b=c =======================
     **       abc conjecture       **
@@ -34,38 +33,3 @@ Unproven, unorganized, unoptimized
 Full-scratch prototype
 **
 -/
-
--- set_option maxHeartbeats 2000000
--- set_option maxRecDepth 256
--- set_option diagnostics true
-
--- ===== Utils ===============================================================
-
--- ==========================================
--- Basic Tool Lemmas
--- ==========================================
-
--- None
-
--- ===== ABC Utils ===============================================================
-
--- ==========================================
--- ABC Basic Tool Lemmas
--- ==========================================
-
--- ABC.Basic.lean
-
--- ==========================================
--- Auxiliary Lemmas (from Prototype)
--- ==========================================
-
--- ABC.Core.lean
-
-namespace DkMath.ABC
-
-open scoped BigOperators
-
-open Nat Real Rat Filter Finset
-open MeasureTheory ProbabilityTheory
-
-end DkMath.ABC

@@ -9,15 +9,8 @@ import DkMath.ABC.ChernoffMgfLayercake
 
 #print "file: DkMath.ABC.ABC024"
 
-set_option linter.style.longLine false
-set_option linter.style.emptyLine false
-
 /- Note:
 ※ relay file.
   細分化前に `ABC024.lean` に置かれていた layer-cake MGF 補題は
   `DkMath.ABC.ChernoffMgfLayercake` へ移設済み。
 -/
-
-namespace DkMath.ABC
-
-end DkMath.ABC
