@@ -220,3 +220,95 @@ Archive
    - 他の環への応用: `ZMod p` 上でのリンク条件の性質解析
    - Fermat の最終定理との関連: `aⁿ + bⁿ = cⁿ` (n≥3) が宇宙式リンクで満たされない構造的理由の探求
    - 宇宙式単位系の幾何学的意味の解明: 単位代表の選択と幾何学的性質の対応関係
+
+---
+
+### 日時: 2026/04/27 21:36 JST (Representation Gauge and Gap/Beam API 固定完了)
+
+1. 目的:
+   - レビュー (review-003.md) の指示に従い、表現ゲージ自由度と Gap/Beam API を完成させる
+   - `EquivRepresentation` を同値関係に昇格
+   - 各辺別スケール操作 `rescaleEach` の実装
+   - Gap/Beam を構造体 API に接続
+   - CF-Pythagoras の第一章を完成させる
+
+2. 実施:
+   - **同値関係の形式化**:
+     - `equivRepresentation_refl`: 反射律
+     - `equivRepresentation_symm`: 対称律
+     - `equivRepresentation_trans`: 推移律
+     - これにより `EquivRepresentation` が真の同値関係として使用可能に
+
+   - **三単位宇宙ゲージ自由度の完全形式化**:
+     - `cosmic_link_rescale_each`: 各辺別スケール `(k₁, k₂, k₃)` でのリンク条件保存
+     - 共通スケール `k` ではなく、各単位系独立のスケール `(k₁, k₂, k₃)` を許容
+     - これは `(K×)³` 作用として、三単位宇宙の本質的な自由度を表現
+
+   - **rescaleEach 操作**:
+     - `rescaleEach`: 各辺を独立にスケールする構造体変換操作
+     - `rescaleEach_equiv`: スケール後も同じ辺を表すことの証明
+     - `rescaleEach_isLinked`: リンク性の保存証明
+     - bundled 化により、ゲージ変換が構造体レベルで操作可能に
+
+   - **Gap/Beam の構造体 API 化**:
+     - `gapA (T)`: 構造体 T に対する Gap `c - a`
+     - `beamA (T)`: 構造体 T に対する Beam `c + a`
+     - `b_sq_eq_gapA_mul_beamA`: **短辺平方 = Gap × Beam** の中心定理
+     - ピタゴラスの定理が完全に「差分生成構造」として表現された
+
+3. 結論:
+   - **宇宙式ピタゴラス橋の第一章が完成**:
+     - リンク条件 `α² u₁² + β² u₂² = γ² u₃²`
+     - ゲージ自由度 `(K×)³` 作用
+     - Gap/Beam 生成 `b² = (c-a)(c+a)`
+     - 三本柱が揃い、再利用可能な理論 API として完成
+
+   - **研究上の意義**:
+     - ピタゴラスの定理が「完成形 a²+b²=c²」ではなく「生成構造」として扱える
+     - 単位宇宙の選択自由度が (K×)³ として明示化
+     - Gap × Beam 因数分解が定理として証明され、宇宙式語彙と接続
+     - より高次元（3D ピタゴラス）や FLT への拡張準備が完了
+
+4. 検証:
+   - `lake build` でビルド成功を確認
+   - 以下の技術的問題を解決:
+     - `b_sq_eq_gapA_mul_beamA` の証明で `linarith` が CommRing では動作しない
+       - 原因: 一般可換環では線形算術の公理が完全には適用されない
+       - 修正: `sub_eq_of_eq_add'` を使って手動で式変形
+     - `rescaleEach_equiv` で `field_simp` を各辺に適用
+     - コメント追加: `cosmic_link_rescale` に "After clearing denominators" の説明
+   - 全ての定理が証明完了（sorry なし）
+   - warning なし
+
+5. 失敗事例:
+   - `b_sq_eq_gapA_mul_beamA` で最初 `linarith` を使おうとして失敗
+     - 原因: CommRing 上では `linarith` が `a + b = c` から `c - a = b` を導けない
+     - 修正: `sub_eq_of_eq_add'` 補題を明示的に使用
+   - 型の向きミス: `sub_eq_of_eq_add'` の結果に `.symm` が必要
+     - 修正: 型を確認して `.symm` を追加
+
+6. 次の課題:
+   - 3D ピタゴラス定理 `a² + b² + c² = d²` への拡張
+   - gapB, beamB (b と c の差分) の定義と対称性定理
+   - 宇宙式パラメトリゼーション `(m²-n², 2mn, m²+n²)` を rescaleEach で分析
+   - ZMod p 上での宇宙式リンク条件の性質探求
+   - FLT (n≥3) が宇宙式リンクで満たされない構造的証明への挑戦
+
+## CF-Pythagoras 第一章完成宣言
+
+この時点で、宇宙式ピタゴラス橋の基礎理論は完成した。
+
+**完成した API**:
+
+- 型一般化 (CommRing/Field)
+- リンク条件と Pythagorean 述語の橋
+- 表現同値関係 (refl/symm/trans)
+- ゲージ自由度 `(K×)³`
+- Gap/Beam 因数分解
+
+次のステップは、この基礎の上に以下を構築することになる:
+
+1. 高次元化 (3D, nD)
+2. パラメトリゼーション理論の深化
+3. FLT への応用可能性の探求
+4. 宇宙式的視点からの整数論的性質の解明

@@ -354,6 +354,17 @@ def c (T : CosmicPythagoreanTriple R) : R := T.γ * T.u₃
 def IsLinked (T : CosmicPythagoreanTriple R) : Prop :=
   T.α^2 * T.u₁^2 + T.β^2 * T.u₂^2 = T.γ^2 * T.u₃^2
 
+/-! ### Gap and Beam for Cosmic Triples
+
+The Gap (c - a) and Beam (c + a) provide the factorization of b².
+-/
+
+/-- The gap between the hypotenuse and side a. -/
+def gapA (T : CosmicPythagoreanTriple R) : R := T.c - T.a
+
+/-- The beam: the sum of hypotenuse and side a. -/
+def beamA (T : CosmicPythagoreanTriple R) : R := T.c + T.a
+
 /-- If a triple is linked, it satisfies the Pythagorean relation. -/
 theorem linked_satisfies_pythagoras (T : CosmicPythagoreanTriple R) (h : T.IsLinked) :
     IsPythagoreanTripleOver T.a T.b T.c := by
@@ -362,6 +373,18 @@ theorem linked_satisfies_pythagoras (T : CosmicPythagoreanTriple R) (h : T.IsLin
       = T.α ^ 2 * T.u₁ ^ 2 + T.β ^ 2 * T.u₂ ^ 2 := by ring
     _ = T.γ ^ 2 * T.u₃ ^ 2 := h
     _ = (T.γ * T.u₃) ^ 2 := by ring
+
+/-- For a linked triple, b² equals Gap × Beam. -/
+theorem b_sq_eq_gapA_mul_beamA (T : CosmicPythagoreanTriple R) (h : T.IsLinked) :
+    T.b ^ 2 = gapA T * beamA T := by
+  have pyth := linked_satisfies_pythagoras T h
+  unfold IsPythagoreanTripleOver at pyth
+  unfold gapA beamA
+  calc T.b ^ 2
+      = T.c ^ 2 - T.a ^ 2 := by
+          have h := pyth
+          exact (sub_eq_of_eq_add' h.symm).symm
+    _ = (T.c - T.a) * (T.c + T.a) := by ring
 
 /-- The standard representation with unit representatives all equal to 1. -/
 def standard (α β γ : R) : CosmicPythagoreanTriple R :=
@@ -392,13 +415,98 @@ theorem cosmic_link_rescale {K : Type*} [Field K]
     (h : @CosmicLinkCondition K _ α β γ u₁ u₂ u₃) :
     @CosmicLinkCondition K _ (α * k) (β * k) (γ * k) (u₁ / k) (u₂ / k) (u₃ / k) := by
   unfold CosmicLinkCondition at *
+  -- After clearing denominators, the goal reduces exactly to the original link condition.
   field_simp [hk]
+  exact h
+
+/-- Rescaling each edge separately preserves the cosmic link condition.
+    This represents the full gauge freedom of the three-unit-universe system. -/
+theorem cosmic_link_rescale_each {K : Type*} [Field K]
+    (α β γ u₁ u₂ u₃ k₁ k₂ k₃ : K)
+    (hk₁ : k₁ ≠ 0) (hk₂ : k₂ ≠ 0) (hk₃ : k₃ ≠ 0)
+    (h : @CosmicLinkCondition K _ α β γ u₁ u₂ u₃) :
+    @CosmicLinkCondition K _
+      (α * k₁) (β * k₂) (γ * k₃)
+      (u₁ / k₁) (u₂ / k₂) (u₃ / k₃) := by
+  unfold CosmicLinkCondition at *
+  field_simp [hk₁, hk₂, hk₃]
   exact h
 
 /-- Two representations are equivalent if they produce the same edges. -/
 def EquivRepresentation {R : Type*} [CommRing R]
     (T₁ T₂ : CosmicPythagoreanTriple R) : Prop :=
   T₁.a = T₂.a ∧ T₁.b = T₂.b ∧ T₁.c = T₂.c
+
+/-! ### Equivalence Relation Properties
+
+`EquivRepresentation` forms an equivalence relation on cosmic Pythagorean triples.
+-/
+
+/-- Reflexivity: a representation is equivalent to itself. -/
+theorem equivRepresentation_refl {R : Type*} [CommRing R]
+    (T : CosmicPythagoreanTriple R) :
+    EquivRepresentation T T := by
+  unfold EquivRepresentation
+  exact ⟨rfl, rfl, rfl⟩
+
+/-- Symmetry: if T₁ is equivalent to T₂, then T₂ is equivalent to T₁. -/
+theorem equivRepresentation_symm {R : Type*} [CommRing R]
+    {T₁ T₂ : CosmicPythagoreanTriple R}
+    (h : EquivRepresentation T₁ T₂) :
+    EquivRepresentation T₂ T₁ := by
+  rcases h with ⟨ha, hb, hc⟩
+  exact ⟨ha.symm, hb.symm, hc.symm⟩
+
+/-- Transitivity: if T₁ ~ T₂ and T₂ ~ T₃, then T₁ ~ T₃. -/
+theorem equivRepresentation_trans {R : Type*} [CommRing R]
+    {T₁ T₂ T₃ : CosmicPythagoreanTriple R}
+    (h12 : EquivRepresentation T₁ T₂)
+    (h23 : EquivRepresentation T₂ T₃) :
+    EquivRepresentation T₁ T₃ := by
+  rcases h12 with ⟨ha12, hb12, hc12⟩
+  rcases h23 with ⟨ha23, hb23, hc23⟩
+  exact ⟨ha12.trans ha23, hb12.trans hb23, hc12.trans hc23⟩
+
+/-! ### Rescaling Operations
+
+Operations for rescaling the representation while preserving the observed edges.
+-/
+
+/-- Rescale each edge separately with different scale factors.
+    This represents the full gauge freedom: (K×)³ action. -/
+def rescaleEach {K : Type*} [Field K]
+    (T : CosmicPythagoreanTriple K)
+    (k₁ k₂ k₃ : K) : CosmicPythagoreanTriple K :=
+  { α := T.α * k₁
+    β := T.β * k₂
+    γ := T.γ * k₃
+    u₁ := T.u₁ / k₁
+    u₂ := T.u₂ / k₂
+    u₃ := T.u₃ / k₃ }
+
+/-- Rescaling each edge produces an equivalent representation. -/
+theorem rescaleEach_equiv {K : Type*} [Field K]
+    (T : CosmicPythagoreanTriple K)
+    (k₁ k₂ k₃ : K)
+    (hk₁ : k₁ ≠ 0) (hk₂ : k₂ ≠ 0) (hk₃ : k₃ ≠ 0) :
+    EquivRepresentation T (rescaleEach T k₁ k₂ k₃) := by
+  unfold EquivRepresentation rescaleEach a b c
+  simp only
+  constructor
+  · field_simp [hk₁]
+  constructor
+  · field_simp [hk₂]
+  · field_simp [hk₃]
+
+/-- Rescaling preserves the linked property. -/
+theorem rescaleEach_isLinked {K : Type*} [Field K]
+    (T : CosmicPythagoreanTriple K)
+    (k₁ k₂ k₃ : K)
+    (hk₁ : k₁ ≠ 0) (hk₂ : k₂ ≠ 0) (hk₃ : k₃ ≠ 0)
+    (h : T.IsLinked) :
+    (rescaleEach T k₁ k₂ k₃).IsLinked := by
+  unfold rescaleEach IsLinked
+  exact cosmic_link_rescale_each T.α T.β T.γ T.u₁ T.u₂ T.u₃ k₁ k₂ k₃ hk₁ hk₂ hk₃ h
 
 end CosmicPythagoreanTriple
 
