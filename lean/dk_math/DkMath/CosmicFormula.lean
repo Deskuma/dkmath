@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 import DkMath.CosmicFormula.Basic  -- Cosmic Formula Basics
+import DkMath.CosmicFormula.CosmicFormulaPythagoras  -- Pythagorean Theorem as Cosmic Formula
 
 #print "file: DkMath.CosmicFormula"
 
