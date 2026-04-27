@@ -50,9 +50,13 @@ namespace DkMath.CosmicFormula.Pythagoras
 
 /-! ## Pythagorean Triple Definitions -/
 
-/-- A predicate stating that `(a, b, c)` forms a Pythagorean triple. -/
-def IsPythagoreanTriple (a b c : ℝ) : Prop :=
+/-- A predicate stating that `(a, b, c)` forms a Pythagorean triple over a commutative ring. -/
+def IsPythagoreanTripleOver {R : Type*} [CommRing R] (a b c : R) : Prop :=
   a^2 + b^2 = c^2
+
+/-- A predicate stating that `(a, b, c)` forms a Pythagorean triple (real number version). -/
+abbrev IsPythagoreanTriple (a b c : ℝ) : Prop :=
+  IsPythagoreanTripleOver a b c
 
 /-- Alias for non-negative real Pythagorean triples. -/
 def IsPythagoreanTriplePos (a b c : ℝ) : Prop :=
@@ -76,7 +80,7 @@ def PythagoreanCosmicForm (a u : ℝ) : ℝ := 2 * a * u + u^2
 /-- The classical Pythagorean theorem is equivalent to the difference form. -/
 theorem pythagoras_as_difference (a b c : ℝ) :
     IsPythagoreanTriple a b c ↔ c^2 - a^2 = b^2 ∧ c^2 - b^2 = a^2 := by
-  unfold IsPythagoreanTriple
+  unfold IsPythagoreanTriple IsPythagoreanTripleOver
   constructor
   · intro h
     constructor
@@ -88,13 +92,13 @@ theorem pythagoras_as_difference (a b c : ℝ) :
 /-- The difference structure `c² - a²` equals `b²` for Pythagorean triples. -/
 theorem pythagorean_diff_eq_square (a b c : ℝ) (h : IsPythagoreanTriple a b c) :
     PythagoreanDifference₁ a c = b^2 := by
-  unfold IsPythagoreanTriple PythagoreanDifference₁ at *
+  unfold IsPythagoreanTriple IsPythagoreanTripleOver PythagoreanDifference₁ at *
   linarith
 
 /-- The difference structure `c² - b²` equals `a²` for Pythagorean triples. -/
 theorem pythagorean_diff_eq_square' (a b c : ℝ) (h : IsPythagoreanTriple a b c) :
     PythagoreanDifference₂ b c = a^2 := by
-  unfold IsPythagoreanTriple PythagoreanDifference₂ at *
+  unfold IsPythagoreanTriple IsPythagoreanTripleOver PythagoreanDifference₂ at *
   linarith
 
 /-! ## Cosmic Formula Representation -/
@@ -115,7 +119,7 @@ theorem pythagoras_cosmic_form_factor (a u : ℝ) :
 theorem pythagoras_in_cosmic_form (a b u : ℝ) (h : IsPythagoreanTriple a b (a + u)) :
     b^2 = PythagoreanCosmicForm a u := by
   have : (a + u)^2 - a^2 = b^2 := by
-    unfold IsPythagoreanTriple at h
+    unfold IsPythagoreanTriple IsPythagoreanTripleOver at h
     linarith
   rw [pythagoras_cosmic_form] at this
   exact this.symm
@@ -147,7 +151,7 @@ theorem pythagoras_special_cosmic_case (u : ℝ) :
 theorem short_side_as_diff_of_squares (a b c : ℝ) (h : IsPythagoreanTriple a b c) :
     b^2 = (c - a) * (c + a) := by
   have : c^2 - a^2 = b^2 := by
-    unfold IsPythagoreanTriple at h
+    unfold IsPythagoreanTriple IsPythagoreanTripleOver at h
     linarith
   calc b^2 = c^2 - a^2 := this.symm
     _ = (c - a) * (c + a) := by ring
@@ -156,12 +160,34 @@ theorem short_side_as_diff_of_squares (a b c : ℝ) (h : IsPythagoreanTriple a b
 theorem short_side_as_diff_of_squares' (a b c : ℝ) (h : IsPythagoreanTriple a b c) :
     a^2 = (c - b) * (c + b) := by
   have : c^2 - b^2 = a^2 := by
-    unfold IsPythagoreanTriple at h
+    unfold IsPythagoreanTriple IsPythagoreanTripleOver at h
     linarith
   calc a^2 = c^2 - b^2 := this.symm
     _ = (c - b) * (c + b) := by ring
 
 /-! ## Pythagorean Difference as "Gap" and "Beam" Interpretation -/
+
+/-- The boundary gap: the difference between hypotenuse and a side. -/
+def boundaryGap {R : Type*} [Ring R] (a c : R) : R := c - a
+
+/-- The Pythagorean beam: the sum of hypotenuse and a side. -/
+def pythagoreanBeam {R : Type*} [Ring R] (a c : R) : R := c + a
+
+/-- The difference of squares factors as Gap × Beam. -/
+theorem sq_sub_sq_gap_beam {R : Type*} [CommRing R] (a c : R) :
+    c ^ 2 - a ^ 2 = boundaryGap a c * pythagoreanBeam a c := by
+  unfold boundaryGap pythagoreanBeam
+  ring
+
+/-- When c = a + u, the square difference equals u times the beam. -/
+theorem sq_diff_of_gap {R : Type*} [CommRing R] (a u : R) :
+    (a + u) ^ 2 - a ^ 2 = u * (2 * a + u) := by
+  ring
+
+/-- The Gap-Beam factorization is equivalent to the boundary gap theorem. -/
+theorem gap_beam_factorization {R : Type*} [CommRing R] (a u : R) :
+    (a + u) ^ 2 - a ^ 2 = boundaryGap a (a + u) * pythagoreanBeam a (a + u) := by
+  rw [sq_sub_sq_gap_beam]
 
 /-- When `c = a + u`, the difference `u` is the "gap" and `2a + u` is the "beam". -/
 theorem pythagoras_gap_beam_interpretation (a u : ℝ) :
@@ -183,9 +209,8 @@ def IsPythagoreanTripleInt (a b c : ℤ) : Prop :=
 theorem int_pythagoras_to_real (a b c : ℤ) :
     IsPythagoreanTripleInt a b c → IsPythagoreanTriple (a : ℝ) (b : ℝ) (c : ℝ) := by
   intro h
-  unfold IsPythagoreanTripleInt at h
-  unfold IsPythagoreanTriple
-  norm_cast
+  unfold IsPythagoreanTripleInt IsPythagoreanTriple IsPythagoreanTripleOver at *
+  exact_mod_cast h
 
 /-! ## Classical Pythagorean Triple Examples -/
 
@@ -247,36 +272,49 @@ The link condition states: `α² * u₁² + β² * u₂² = γ² * u₃²`
 -/
 
 /-- The cosmic link condition: a Pythagorean relation expressed through
-    scaled unit representatives. -/
-def CosmicLinkCondition (α β γ u₁ u₂ u₃ : ℝ) : Prop :=
+    scaled unit representatives (general version over a commutative ring). -/
+def CosmicLinkCondition {R : Type*} [CommRing R] (α β γ u₁ u₂ u₃ : R) : Prop :=
   α^2 * u₁^2 + β^2 * u₂^2 = γ^2 * u₃^2
+
+/-- Real number version of the cosmic link condition. -/
+abbrev CosmicLinkConditionReal (α β γ u₁ u₂ u₃ : ℝ) : Prop :=
+  CosmicLinkCondition α β γ u₁ u₂ u₃
 
 /-- Integer version of the cosmic link condition. -/
-def CosmicLinkConditionInt (α β γ u₁ u₂ u₃ : ℤ) : Prop :=
-  α^2 * u₁^2 + β^2 * u₂^2 = γ^2 * u₃^2
+abbrev CosmicLinkConditionInt (α β γ u₁ u₂ u₃ : ℤ) : Prop :=
+  CosmicLinkCondition α β γ u₁ u₂ u₃
 
 /-- If the cosmic link condition holds, then `(αu₁, βu₂, γu₃)` forms a Pythagorean triple. -/
-theorem cosmic_link_to_pythagoras (α β γ u₁ u₂ u₃ : ℝ)
+theorem cosmic_link_to_pythagoras {R : Type*} [CommRing R] (α β γ u₁ u₂ u₃ : R)
     (h : CosmicLinkCondition α β γ u₁ u₂ u₃) :
-    IsPythagoreanTriple (α * u₁) (β * u₂) (γ * u₃) := by
-  unfold CosmicLinkCondition IsPythagoreanTriple at *
+    IsPythagoreanTripleOver (α * u₁) (β * u₂) (γ * u₃) := by
+  unfold CosmicLinkCondition IsPythagoreanTripleOver at *
   calc (α * u₁) ^ 2 + (β * u₂) ^ 2
       = α ^ 2 * u₁ ^ 2 + β ^ 2 * u₂ ^ 2 := by ring
     _ = γ ^ 2 * u₃ ^ 2 := h
     _ = (γ * u₃) ^ 2 := by ring
 
 /-- Conversely, any Pythagorean triple can be expressed via the cosmic link condition. -/
-theorem pythagoras_to_cosmic_link (a b c : ℝ) (h : IsPythagoreanTriple a b c) :
+theorem pythagoras_to_cosmic_link {R : Type*} [CommRing R] (a b c : R)
+    (h : IsPythagoreanTripleOver a b c) :
     CosmicLinkCondition a b c 1 1 1 := by
-  unfold CosmicLinkCondition IsPythagoreanTriple at *
+  unfold CosmicLinkCondition IsPythagoreanTripleOver at *
   simp only [one_pow, mul_one]
   exact h
 
 /-- The simplest cosmic link: all units are 1. -/
-theorem cosmic_link_unit_one (α β γ : ℝ) :
+theorem cosmic_link_unit_one {R : Type*} [CommRing R] (α β γ : R) :
     CosmicLinkCondition α β γ 1 1 1 ↔ α^2 + β^2 = γ^2 := by
   unfold CosmicLinkCondition
   simp
+
+/-- The parametrization satisfies the cosmic link condition. -/
+theorem parametrization_cosmic_link (m n : ℤ) :
+    let (a, b, c) := PythagoreanParametrization m n
+    CosmicLinkCondition a b c 1 1 1 := by
+  unfold PythagoreanParametrization CosmicLinkCondition
+  simp
+  ring
 
 /-! ## Cosmic Pythagorean Triple Structure
 
@@ -318,8 +356,8 @@ def IsLinked (T : CosmicPythagoreanTriple R) : Prop :=
 
 /-- If a triple is linked, it satisfies the Pythagorean relation. -/
 theorem linked_satisfies_pythagoras (T : CosmicPythagoreanTriple R) (h : T.IsLinked) :
-    T.a^2 + T.b^2 = T.c^2 := by
-  unfold IsLinked a b c at *
+    IsPythagoreanTripleOver T.a T.b T.c := by
+  unfold IsPythagoreanTripleOver IsLinked a b c at *
   calc (T.α * T.u₁) ^ 2 + (T.β * T.u₂) ^ 2
       = T.α ^ 2 * T.u₁ ^ 2 + T.β ^ 2 * T.u₂ ^ 2 := by ring
     _ = T.γ ^ 2 * T.u₃ ^ 2 := h
@@ -334,6 +372,33 @@ theorem standard_linked_iff (α β γ : R) :
     (standard α β γ).IsLinked ↔ α^2 + β^2 = γ^2 := by
   unfold standard IsLinked
   simp only [one_pow, mul_one]
+
+/-! ## Representation Freedom (Gauge Symmetry)
+
+The cosmic link representation has gauge freedom: the same observed edge
+can be expressed with different (α, u) pairs. This section formalizes
+this representational freedom.
+-/
+
+/-- Rescaling preserves the observed edge in a field. -/
+theorem observed_edge_rescale {K : Type*} [Field K]
+    (α u k : K) (hk : k ≠ 0) :
+    (α * k) * (u / k) = α * u := by
+  field_simp [hk]
+
+/-- Rescaling preserves the cosmic link condition in a field. -/
+theorem cosmic_link_rescale {K : Type*} [Field K]
+    (α β γ u₁ u₂ u₃ k : K) (hk : k ≠ 0)
+    (h : @CosmicLinkCondition K _ α β γ u₁ u₂ u₃) :
+    @CosmicLinkCondition K _ (α * k) (β * k) (γ * k) (u₁ / k) (u₂ / k) (u₃ / k) := by
+  unfold CosmicLinkCondition at *
+  field_simp [hk]
+  exact h
+
+/-- Two representations are equivalent if they produce the same edges. -/
+def EquivRepresentation {R : Type*} [CommRing R]
+    (T₁ T₂ : CosmicPythagoreanTriple R) : Prop :=
+  T₁.a = T₂.a ∧ T₁.b = T₂.b ∧ T₁.c = T₂.c
 
 end CosmicPythagoreanTriple
 

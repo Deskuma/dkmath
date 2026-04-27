@@ -152,3 +152,71 @@ Archive
    - `(X+u)² - X² = 2Xu + u²` や `(x+u)² - x(x+2u) = u²` との橋渡し定理の追加
    - より高次元 (3D ピタゴラス定理) への拡張
    - Fermat の最終定理への応用可能性の探求
+
+---
+
+### 日時: 2026/04/27 16:27 JST (一般化と理論部品化完了)
+
+1. 目的:
+   - レビュー (review-002.md) の指示に従い、具体例から全称定理への昇格を実施
+   - `CosmicLinkCondition` と `IsPythagoreanTriple` を CommRing 一般化
+   - Gap/Beam の一般補題化
+   - `PythagoreanParametrization` の全称定理化
+   - 表現自由度 (Gauge Symmetry) の形式化
+
+2. 実施:
+   - **型の一般化**:
+     - `IsPythagoreanTripleOver {R : Type*} [CommRing R]`: 一般環版のピタゴラス三つ組述語
+     - `IsPythagoreanTriple` は実数版の abbrev として維持（互換性）
+     - `CosmicLinkCondition {R : Type*} [CommRing R]`: 一般環版の宇宙式リンク条件
+     - `CosmicLinkConditionReal`, `CosmicLinkConditionInt` を abbrev で提供
+
+   - **Gap/Beam の一般化**:
+     - `boundaryGap {R : Type*} [Ring R]`: 境界ギャップの定義
+     - `pythagoreanBeam {R : Type*} [Ring R]`: ピタゴラスビームの定義
+     - `sq_sub_sq_gap_beam`: `c² - a² = Gap × Beam` の一般定理
+     - `sq_diff_of_gap`: `(a+u)² - a² = u × (2a + u)` の一般定理
+     - `gap_beam_factorization`: Gap-Beam 分解の等価性
+
+   - **パラメトリゼーションの全称定理化**:
+     - `parametrization_cosmic_link`: (m,n) パラメトリゼーションが常にリンク条件を満たす全称定理
+     - 定義順序の修正: `CosmicLinkCondition` 定義の後に配置
+
+   - **表現自由度 (Gauge Symmetry)**:
+     - `observed_edge_rescale`: 観測辺のリスケール保存
+     - `cosmic_link_rescale`: リンク条件のリスケール保存（Field 上で証明完了）
+     - `EquivRepresentation`: 同じ辺を生成する表現の等価性述語
+
+3. 結論:
+   - **宇宙式ピタゴラス橋が再利用可能な理論部品に昇格**:
+     - ℤ, ℚ, ℝ, 多項式環など、任意の可換環で使用可能
+     - 具体例が一般定理に裏付けられた形に
+     - リンク条件の表現自由度（ゲージ対称性）を定理化
+   - **研究上の意義**:
+     - 同じ幾何学的三角形を複数の宇宙式表現で記述できることを証明
+     - `(α, u)` の分解の非一意性を形式化
+     - より高次元や他の環への拡張準備が整った
+
+4. 検証:
+   - `lake build` でビルド成功を確認
+   - 以下の技術的問題を解決:
+     - 定義順序の問題: `parametrization_cosmic_link` を `CosmicLinkCondition` 定義の後に移動
+     - implicit parameter 解決: `@CosmicLinkCondition` 記法で明示的に型を指定
+     - `field_simp` の挙動理解: 分数を消去して元の条件と同じ形にする
+     - Examples ファイルで `CosmicLinkCondition` の展開を追加
+   - 全ての定理が証明完了（sorry なし）
+   - VSCode lint エラーは拡張機能のキャッシュ問題と判明（Issue-003.md に記録）
+
+5. 失敗事例:
+   - `cosmic_link_rescale` の証明で `field_simp` と `ring` の相互作用に苦戦
+     - 原因: `field_simp` が分数を消去した後の式の形を正しく理解していなかった
+     - 修正: `unfold` → `field_simp` → `exact h` のシンプルな流れで証明完了
+   - `parametrization_cosmic_link` が "Unknown identifier" エラー
+     - 原因: `CosmicLinkCondition` 定義の前に配置していた
+     - 修正: 定義の後に移動することで解決
+
+6. 次の課題:
+   - 高次元への拡張: 3D ピタゴラス定理 `a² + b² + c² = d²` を宇宙式で表現
+   - 他の環への応用: `ZMod p` 上でのリンク条件の性質解析
+   - Fermat の最終定理との関連: `aⁿ + bⁿ = cⁿ` (n≥3) が宇宙式リンクで満たされない構造的理由の探求
+   - 宇宙式単位系の幾何学的意味の解明: 単位代表の選択と幾何学的性質の対応関係

@@ -38,7 +38,7 @@ open CosmicPythagoreanTriple
 
 /-- The (3,4,5) triangle satisfies the cosmic link condition with unit representatives. -/
 example : CosmicLinkConditionInt 3 4 5 1 1 1 := by
-  unfold CosmicLinkConditionInt
+  unfold CosmicLinkConditionInt CosmicLinkCondition
   norm_num
 
 /-- The (3,4,5) triangle as a standard cosmic triple. -/
@@ -59,7 +59,7 @@ example : triple_3_4_5.a = 3 ∧ triple_3_4_5.b = 4 ∧ triple_3_4_5.c = 5 := by
 
 /-- The (5,12,13) triangle satisfies the cosmic link condition. -/
 example : CosmicLinkConditionInt 5 12 13 1 1 1 := by
-  unfold CosmicLinkConditionInt
+  unfold CosmicLinkConditionInt CosmicLinkCondition
   norm_num
 
 /-- The (5,12,13) triangle as a standard cosmic triple. -/
@@ -76,7 +76,7 @@ example : triple_5_12_13.IsLinked := by
 
 /-- The (8,15,17) triangle satisfies the cosmic link condition. -/
 example : CosmicLinkConditionInt 8 15 17 1 1 1 := by
-  unfold CosmicLinkConditionInt
+  unfold CosmicLinkConditionInt CosmicLinkCondition
   norm_num
 
 /-- The (8,15,17) triangle as a standard cosmic triple. -/
@@ -142,13 +142,13 @@ section ParametrizationExamples
 /-- For m=2, n=1, we get the (3,4,5) triple. -/
 example : let (a, b, c) := PythagoreanParametrization 2 1
           CosmicLinkConditionInt a b c 1 1 1 := by
-  unfold PythagoreanParametrization CosmicLinkConditionInt
+  unfold PythagoreanParametrization CosmicLinkConditionInt CosmicLinkCondition
   norm_num
 
 /-- For m=3, n=2, we get the (5,12,13) triple. -/
 example : let (a, b, c) := PythagoreanParametrization 3 2
           CosmicLinkConditionInt a b c 1 1 1 := by
-  unfold PythagoreanParametrization CosmicLinkConditionInt
+  unfold PythagoreanParametrization CosmicLinkConditionInt CosmicLinkCondition
   norm_num
 
 /-- For m=4, n=1, we get the (15,8,17) triple (note: a and b swapped). -/
@@ -156,32 +156,8 @@ example : let (a, b, c) := PythagoreanParametrization 4 1
           a = 15 ∧ b = 8 ∧ c = 17 := by
   decide
 
-set_option linter.style.longLine false
--- 2026/04/27 15:47
--- ※ここで VSCode 上のエディタでは Error が出る。
--- が、Lean 4 のコンパイルは通る。ビルドの方が正しい。と、みなす。
--- Lean 4 Web での確認も行い、Error は出ないことを確認済み。
-
-/- VSCode Error Message
-Unknown constant `DkMath.CosmicFormula.Pythagoras.Examples._example.match_1`Lean 4(lean.unknownIdentifier)
-A docComment parses a "documentation comment" like /-- foo -/. This is not treated like a regular comment (that is, as whitespace); it is parsed and forms part of the syntax tree structure.
-
-At parse time, docComment checks the value of the doc.verso option. If it is true, the contents are parsed as Verso markup. If not, the contents are treated as plain text or Markdown. Use plainDocComment to always treat the contents as plain text.
-
-A plain text doc comment node contains a /-- atom and then the remainder of the comment, foo -/ in this example. Use TSyntax.getDocString to extract the body text from a doc string syntax node. A Verso comment node contains the /-- atom, the document's syntax tree, and a closing -/ atom.
--/
-
-/- Build Log
-ℹ [8375/8470] Replayed DkMath.CosmicFormula.Basic
-info: DkMath/CosmicFormula/Basic.lean:29:0: file: DkMath.CosmicFormula.Basic
-ℹ [8376/8470] Replayed DkMath.CosmicFormula.CosmicFormulaPythagoras
-info: DkMath/CosmicFormula/CosmicFormulaPythagoras.lean:10:0: file: DkMath.CosmicFormula.CosmicFormulaPythagoras
-ℹ [8377/8470] Replayed DkMath.CosmicFormula.CosmicFormulaPythagorasExamples
-info: DkMath/CosmicFormula/CosmicFormulaPythagorasExamples.lean:10:0: file: DkMath.CosmicFormula.CosmicFormulaPythagorasExamples
-ℹ [8378/8470] Replayed DkMath.CosmicFormula
-info: DkMath/CosmicFormula.lean:12:0: file: DkMath.CosmicFormula
--/
-set_option linter.style.longLine true
+-- NOTE: VSCode may show a stale parser error here; lake build passes.
+-- `Issue-003.md` <lean/dk_math/docs/dev/CF-Pythagoras-260427/Issue-003.md>
 
 end ParametrizationExamples
 
