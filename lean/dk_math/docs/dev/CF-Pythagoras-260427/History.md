@@ -312,3 +312,73 @@ Archive
 2. パラメトリゼーション理論の深化
 3. FLT への応用可能性の探求
 4. 宇宙式的視点からの整数論的性質の解明
+
+---
+
+### 日時: 2026/04/27 22:45 JST (対称 Gap/Beam API と Power Gap/Beam 骨格の実装)
+
+1. 目的:
+   - review-004.md の提案に従い、Chapter 2 へ進む前段として対称的な Gap/Beam API を完成させる
+   - 既存の `gapA` / `beamA` に対し、`b` 側基準の対称 API を追加する
+   - rewriting 用の逆向き補題と、一般関数 `boundaryGap` / `pythagoreanBeam` への橋を用意する
+   - 高次差冪へ拡張するための `PowerGapBeam.lean` を新設する
+
+2. 実施:
+   - **対称 Gap/Beam API の追加**:
+     - `gapB T = T.c - T.b`
+     - `beamB T = T.c + T.b`
+     - `a_sq_eq_gapB_mul_beamB`: linked triple に対して `a² = (c-b)(c+b)` を証明
+
+   - **rewriting 用の逆向き補題を追加**:
+     - `gapA_mul_beamA_eq_b_sq`: `gapA T * beamA T = T.b²`
+     - `gapB_mul_beamB_eq_a_sq`: `gapB T * beamB T = T.a²`
+
+   - **一般関数との橋を追加**:
+     - `gapA_eq_boundaryGap`
+     - `beamA_eq_pythagoreanBeam`
+     - `gapB_eq_boundaryGap`
+     - `beamB_eq_pythagoreanBeam`
+
+   - **Examples の拡充**:
+     - `triple_3_4_5_rat`: ℚ 上の (3,4,5) triple を追加
+     - `rescaleEach triple_3_4_5_rat 2 3 5` が同じ辺を表すことを確認
+     - rescale 後も `IsLinked` が保存されることを確認
+     - `(1/2, 1/2, 1/2)` による rescale 例を追加
+
+   - **高次 Gap/Beam の骨格実装**:
+     - 新規ファイル `DkMath/CosmicFormula/PowerGapBeam.lean` を作成
+     - `powerGap x z := z - x`
+     - `powerBeam d x z := ∑ i in Finset.range d, z^(d-1-i) * x^i`
+     - `powerBeam_zero`, `powerBeam_one`, `powerBeam_two` を証明
+     - `pow_two_sub_eq_pythagorean`: d=2 の通常因数分解 `z² - x² = (z-x)(z+x)` を証明
+     - `powerBeam_two_eq_pythagorean_beam`: d=2 で高次 Beam が Pythagorean Beam と一致する補題を追加
+     - `DkMath/CosmicFormula.lean` から `PowerGapBeam` を import
+
+3. 結論:
+   - **二次 Gap/Beam の左右対称 API が完成**:
+     - `b² = (c-a)(c+a)` と `a² = (c-b)(c+b)` の両側が構造体 API として利用可能になった
+     - rewrite 方向の補題により、後続証明で Gap/Beam 積と辺平方を相互に使いやすくなった
+     - 一般補題 `boundaryGap` / `pythagoreanBeam` と構造体 API の接続が明示された
+
+   - **高次差冪への橋が始まった**:
+     - 二次の Beam `z+x` を、高次 Beam `∑ z^(d-1-i)x^i` に一般化する入口ができた
+     - FLT 型の式 `x^d + y^d = z^d` を `Gap × Beam_d` 構造として読む準備が整った
+
+4. 検証:
+   - `lake build` でビルド成功を確認
+   - `PowerGapBeam.lean` に計画的な `sorry` が 1 個残っている:
+     - `pow_sub_pow_eq_gap_mul_powerBeam`
+     - 既存の GN / diffPowSum 系補題を使って後続サイクルで証明予定
+   - 対称 Gap/Beam API、逆向き補題、bridge 補題、Examples の rescale 例は証明完了
+
+5. 失敗事例:
+   - 高次主定理 `z^d - x^d = powerGap x z * powerBeam d x z` は、このサイクルでは骨格定義に留めた
+     - 理由: Nat 減算を含む `powerBeam` の和の扱いを、既存の GN / diffPowSum 補題とどう接続するか確認が必要
+     - 対応: `sorry` を明示的な TODO として残し、周辺の d=0,1,2 補題と二次因数分解を先に固定
+
+6. 次の課題:
+   - `pow_sub_pow_eq_gap_mul_powerBeam` の `sorry` を解消する
+   - `powerBeam 2 x z = pythagoreanBeam x z` の bridge を既存 API 名に完全に接続する
+   - `CosmicLinkConditionD` を定義し、高次リンク条件 `α^d u₁^d + β^d u₂^d = γ^d u₃^d` を導入する
+   - FLT 型仮定 `x^d + y^d = z^d` から `y^d = powerGap x z * powerBeam d x z` を得る薄い bridge 補題を追加する
+   - 高次 Beam と既存 GN / Tail / DiffPow 系 API の接続方針を決める

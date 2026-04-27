@@ -8,6 +8,7 @@ import Mathlib
 import DkMath.CosmicFormula.Basic  -- Cosmic Formula Basics
 import DkMath.CosmicFormula.CosmicFormulaPythagoras  -- Pythagorean Theorem as Cosmic Formula
 import DkMath.CosmicFormula.CosmicFormulaPythagorasExamples  -- Examples
+import DkMath.CosmicFormula.PowerGapBeam  -- Power Gap/Beam for higher degrees
 
 #print "file: DkMath.CosmicFormula"
 

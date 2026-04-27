@@ -386,6 +386,62 @@ theorem b_sq_eq_gapA_mul_beamA (T : CosmicPythagoreanTriple R) (h : T.IsLinked) 
           exact (sub_eq_of_eq_add' h.symm).symm
     _ = (T.c - T.a) * (T.c + T.a) := by ring
 
+/-- The gap between the hypotenuse and side b (symmetric version). -/
+def gapB (T : CosmicPythagoreanTriple R) : R := T.c - T.b
+
+/-- The beam: the sum of hypotenuse and side b (symmetric version). -/
+def beamB (T : CosmicPythagoreanTriple R) : R := T.c + T.b
+
+/-- For a linked triple, a² equals Gap × Beam (symmetric version). -/
+theorem a_sq_eq_gapB_mul_beamB (T : CosmicPythagoreanTriple R) (h : T.IsLinked) :
+    T.a ^ 2 = gapB T * beamB T := by
+  have pyth := linked_satisfies_pythagoras T h
+  unfold IsPythagoreanTripleOver at pyth
+  unfold gapB beamB
+  calc T.a ^ 2
+      = T.c ^ 2 - T.b ^ 2 := by
+          have h1 : T.a ^ 2 + T.b ^ 2 = T.c ^ 2 := pyth
+          have h2 : T.b ^ 2 + T.a ^ 2 = T.c ^ 2 := by
+            calc T.b ^ 2 + T.a ^ 2
+                = T.a ^ 2 + T.b ^ 2 := by ring
+              _ = T.c ^ 2 := h1
+          exact (sub_eq_of_eq_add' h2.symm).symm
+    _ = (T.c - T.b) * (T.c + T.b) := by ring
+
+/-! ### Reverse direction lemmas for rewriting -/
+
+/-- Gap × Beam equals b² (reverse direction for rewriting). -/
+theorem gapA_mul_beamA_eq_b_sq (T : CosmicPythagoreanTriple R) (h : T.IsLinked) :
+    gapA T * beamA T = T.b ^ 2 := by
+  exact (b_sq_eq_gapA_mul_beamA T h).symm
+
+/-- Gap × Beam equals a² (reverse direction for rewriting). -/
+theorem gapB_mul_beamB_eq_a_sq (T : CosmicPythagoreanTriple R) (h : T.IsLinked) :
+    gapB T * beamB T = T.a ^ 2 := by
+  exact (a_sq_eq_gapB_mul_beamB T h).symm
+
+/-! ### Bridge to general functions -/
+
+/-- gapA is the boundary gap applied to sides a and c. -/
+theorem gapA_eq_boundaryGap (T : CosmicPythagoreanTriple R) :
+    gapA T = boundaryGap T.a T.c := by
+  rfl
+
+/-- beamA is the pythagorean beam applied to sides a and c. -/
+theorem beamA_eq_pythagoreanBeam (T : CosmicPythagoreanTriple R) :
+    beamA T = pythagoreanBeam T.a T.c := by
+  rfl
+
+/-- gapB is the boundary gap applied to sides b and c. -/
+theorem gapB_eq_boundaryGap (T : CosmicPythagoreanTriple R) :
+    gapB T = boundaryGap T.b T.c := by
+  rfl
+
+/-- beamB is the pythagorean beam applied to sides b and c. -/
+theorem beamB_eq_pythagoreanBeam (T : CosmicPythagoreanTriple R) :
+    beamB T = pythagoreanBeam T.b T.c := by
+  rfl
+
 /-- The standard representation with unit representatives all equal to 1. -/
 def standard (α β γ : R) : CosmicPythagoreanTriple R :=
   { α := α, β := β, γ := γ, u₁ := 1, u₂ := 1, u₃ := 1 }
