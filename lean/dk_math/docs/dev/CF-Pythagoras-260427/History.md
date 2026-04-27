@@ -84,3 +84,71 @@ Archive
    - ピタゴラス三つ組の完全分類と宇宙式的解釈
    - Fermat の最終定理 (FLT) との関連: `a⁴ + b⁴ = c⁴` が解を持たないことと、4次宇宙式構造の関係
    - 研究ノートで示唆された「辺 = u²」解釈 (4次世界) への拡張可能性の探求
+
+---
+
+### 日時: 2026/04/27 15:26 JST (Cosmic Link Condition と構造体の実装)
+
+1. 目的:
+   - レビュー (review-001.md) の指示に従い、宇宙式リンク条件と CosmicPythagoreanTriple 構造体を実装する
+   - `a = α u₁, b = β u₂, c = γ u₃` という形式でピタゴラス三つ組を表現する枠組みを構築
+   - 具体例 (3,4,5), (5,12,13), (8,15,17) を実装し、宇宙式的解釈を検証
+
+2. 実施:
+   - **CosmicFormulaPythagoras.lean への追加**:
+     - `CosmicLinkCondition α β γ u₁ u₂ u₃`: 宇宙式リンク条件 `α² u₁² + β² u₂² = γ² u₃²`
+     - `CosmicLinkConditionInt`: 整数版リンク条件
+     - `cosmic_link_to_pythagoras`: リンク条件からピタゴラス三つ組への変換定理
+     - `pythagoras_to_cosmic_link`: ピタゴラス三つ組からリンク条件への逆変換
+     - `cosmic_link_unit_one`: 単位代表がすべて 1 の場合の簡約形
+     - **`CosmicPythagoreanTriple` 構造体**: 6 つのフィールド (α, β, γ, u₁, u₂, u₃) を持つ bundled 構造
+     - `a`, `b`, `c`: 三辺を計算する定義
+     - `IsLinked`: 構造体がリンク条件を満たすかの述語
+     - `linked_satisfies_pythagoras`: リンクされた三つ組はピタゴラスの定理を満たす
+     - `standard`: 単位代表がすべて 1 の標準表現
+     - `standard_linked_iff`: 標準表現がリンクされる条件
+
+   - **CosmicFormulaPythagorasExamples.lean の新規作成**:
+     - 古典的ピタゴラス三つ組の検証:
+       - (3,4,5), (5,12,13), (8,15,17) のリンク条件確認
+       - 各三つ組を `CosmicPythagoreanTriple` として定義
+     - スケール表現: (6,8,10) を `α=3, β=4, γ=5` と `u₁=u₂=u₃=2` で表現
+     - 代替単位表現: 同じ三角形を異なる (α, u) の組み合わせで表現
+     - パラメトリゼーション例: (m,n) から生成される三つ組の検証
+     - 宇宙式差分構造の具体例: `c² - a² = b²` の数値確認
+     - Cosmic Form `b² = 2au + u²` の具体例
+     - Gap/Beam 因数分解 `b² = u × (2a + u)` の具体例
+
+3. 結論:
+   - **宇宙式ピタゴラス橋の第一基礎 API が完成**:
+     - `a = α u₁, b = β u₂, c = γ u₃` という形式が Lean 上で実体化
+     - リンク条件 `α² u₁² + β² u₂² = γ² u₃²` ↔ `a² + b² = c²` の等価性を証明
+     - 構造体による bundled 化で、研究ノートの言葉に近い形式を実現
+   - **研究ノートの主張を厳密に検証**:
+     - 最小例 (3,4,5) を `u₁=u₂=u₃=1, α=3, β=4, γ=5` として実装・検証
+     - 同じ幾何学的三角形を複数の宇宙式表現で記述できることを示した
+     - 境界差生成式 `c² - a² = 2a(c-a) + (c-a)²` が具体例で機能することを確認
+
+4. 検証:
+   - `lake build` でビルド成功を確認
+   - 以下のエラーを修正:
+     - `cosmic_link_to_pythagoras`: `α² * u₁²` と `(α * u₁)²` の型不一致を `calc` と `ring` で解決
+     - `linked_satisfies_pythagoras`: 同様の型不一致を `calc` で明示的に証明
+     - `standard_linked_iff`: `simp only [one_pow, mul_one]` で簡約
+     - Examples ファイル: `decide` の代わりに `norm_num` を使用（Decidable インスタンスが不足）
+   - 全ての具体例 (3,4,5), (5,12,13), (8,15,17), (6,8,10) が正しく検証された
+
+5. 失敗事例:
+   - 初回実装で `mul_pow` の方向を誤解し、`simp only [mul_pow]` では型が一致しなかった
+     - 原因: `(a * b)^n = a^n * b^n` と `a^n * b^n = (a * b)^n` の区別を曖昧にした
+     - 修正: `calc` を使って `ring` で明示的に式変形を記述
+   - `decide` タクティックが使えない場面があった
+     - 原因: `IsLinked` や `CosmicLinkConditionInt` に Decidable インスタンスがない
+     - 修正: `norm_num` や展開後の計算で証明
+
+6. 次の課題:
+   - 一般ピタゴラス三つ組のパラメトリゼーション `(m²-n², 2mn, m²+n²)` を宇宙式リンクで分析
+   - 宇宙式単位系 `u₁, u₂, u₃` の選択自由度と幾何学的意味の関係を定理化
+   - `(X+u)² - X² = 2Xu + u²` や `(x+u)² - x(x+2u) = u²` との橋渡し定理の追加
+   - より高次元 (3D ピタゴラス定理) への拡張
+   - Fermat の最終定理への応用可能性の探求

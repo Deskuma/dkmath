@@ -233,4 +233,108 @@ theorem parametrization_embeds_cosmic_structure (m n : ℤ) :
   simp
   ring
 
+/-! ## Cosmic Link Condition: 宇宙式リンク条件
+
+The "cosmic link condition" represents Pythagorean triples in the form:
+- `a = α * u₁`
+- `b = β * u₂`
+- `c = γ * u₃`
+
+where `α, β, γ` are scaling factors and `u₁, u₂, u₃` are unit representatives
+from different "cosmic unit systems".
+
+The link condition states: `α² * u₁² + β² * u₂² = γ² * u₃²`
+-/
+
+/-- The cosmic link condition: a Pythagorean relation expressed through
+    scaled unit representatives. -/
+def CosmicLinkCondition (α β γ u₁ u₂ u₃ : ℝ) : Prop :=
+  α^2 * u₁^2 + β^2 * u₂^2 = γ^2 * u₃^2
+
+/-- Integer version of the cosmic link condition. -/
+def CosmicLinkConditionInt (α β γ u₁ u₂ u₃ : ℤ) : Prop :=
+  α^2 * u₁^2 + β^2 * u₂^2 = γ^2 * u₃^2
+
+/-- If the cosmic link condition holds, then `(αu₁, βu₂, γu₃)` forms a Pythagorean triple. -/
+theorem cosmic_link_to_pythagoras (α β γ u₁ u₂ u₃ : ℝ)
+    (h : CosmicLinkCondition α β γ u₁ u₂ u₃) :
+    IsPythagoreanTriple (α * u₁) (β * u₂) (γ * u₃) := by
+  unfold CosmicLinkCondition IsPythagoreanTriple at *
+  calc (α * u₁) ^ 2 + (β * u₂) ^ 2
+      = α ^ 2 * u₁ ^ 2 + β ^ 2 * u₂ ^ 2 := by ring
+    _ = γ ^ 2 * u₃ ^ 2 := h
+    _ = (γ * u₃) ^ 2 := by ring
+
+/-- Conversely, any Pythagorean triple can be expressed via the cosmic link condition. -/
+theorem pythagoras_to_cosmic_link (a b c : ℝ) (h : IsPythagoreanTriple a b c) :
+    CosmicLinkCondition a b c 1 1 1 := by
+  unfold CosmicLinkCondition IsPythagoreanTriple at *
+  simp only [one_pow, mul_one]
+  exact h
+
+/-- The simplest cosmic link: all units are 1. -/
+theorem cosmic_link_unit_one (α β γ : ℝ) :
+    CosmicLinkCondition α β γ 1 1 1 ↔ α^2 + β^2 = γ^2 := by
+  unfold CosmicLinkCondition
+  simp
+
+/-! ## Cosmic Pythagorean Triple Structure
+
+A bundled structure representing a Pythagorean triple in the cosmic formula framework.
+-/
+
+/-- A Pythagorean triple expressed in cosmic formula form with scaling factors
+    and unit representatives. -/
+structure CosmicPythagoreanTriple (R : Type*) [Ring R] where
+  /-- Scaling factor for side a -/
+  α : R
+  /-- Scaling factor for side b -/
+  β : R
+  /-- Scaling factor for hypotenuse c -/
+  γ : R
+  /-- Unit representative for side a -/
+  u₁ : R
+  /-- Unit representative for side b -/
+  u₂ : R
+  /-- Unit representative for hypotenuse c -/
+  u₃ : R
+
+namespace CosmicPythagoreanTriple
+
+variable {R : Type*} [CommRing R]
+
+/-- Side a of the triangle -/
+def a (T : CosmicPythagoreanTriple R) : R := T.α * T.u₁
+
+/-- Side b of the triangle -/
+def b (T : CosmicPythagoreanTriple R) : R := T.β * T.u₂
+
+/-- Hypotenuse c of the triangle -/
+def c (T : CosmicPythagoreanTriple R) : R := T.γ * T.u₃
+
+/-- The cosmic link condition for a bundled triple. -/
+def IsLinked (T : CosmicPythagoreanTriple R) : Prop :=
+  T.α^2 * T.u₁^2 + T.β^2 * T.u₂^2 = T.γ^2 * T.u₃^2
+
+/-- If a triple is linked, it satisfies the Pythagorean relation. -/
+theorem linked_satisfies_pythagoras (T : CosmicPythagoreanTriple R) (h : T.IsLinked) :
+    T.a^2 + T.b^2 = T.c^2 := by
+  unfold IsLinked a b c at *
+  calc (T.α * T.u₁) ^ 2 + (T.β * T.u₂) ^ 2
+      = T.α ^ 2 * T.u₁ ^ 2 + T.β ^ 2 * T.u₂ ^ 2 := by ring
+    _ = T.γ ^ 2 * T.u₃ ^ 2 := h
+    _ = (T.γ * T.u₃) ^ 2 := by ring
+
+/-- The standard representation with unit representatives all equal to 1. -/
+def standard (α β γ : R) : CosmicPythagoreanTriple R :=
+  { α := α, β := β, γ := γ, u₁ := 1, u₂ := 1, u₃ := 1 }
+
+/-- The standard representation is linked iff the scaling factors satisfy Pythagoras. -/
+theorem standard_linked_iff (α β γ : R) :
+    (standard α β γ).IsLinked ↔ α^2 + β^2 = γ^2 := by
+  unfold standard IsLinked
+  simp only [one_pow, mul_one]
+
+end CosmicPythagoreanTriple
+
 end DkMath.CosmicFormula.Pythagoras
