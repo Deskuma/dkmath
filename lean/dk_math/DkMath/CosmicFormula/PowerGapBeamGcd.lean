@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.CosmicFormula.PowerGapBeam
 import DkMath.NumberTheory.GdcDivD
+import DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree
 
 #print "file: DkMath.CosmicFormula.PowerGapBeamGcd"
 
@@ -315,5 +316,56 @@ theorem flt_beam_prime_val_le_one_contradiction_symm
     one_le_padicValNat_of_prime_dvd hp hbeam_ne hbeam
   exact padicValNat_eq_d_mul_and_le_one_contradiction
     hd2 hval_pos hbeam_le_one hval_eq
+
+/-! ## Squarefree Beam Bridge -/
+
+/-- A squarefree nonzero Power Beam has p-adic valuation at most one. -/
+theorem powerBeam_padicValNat_le_one_of_squarefree
+    {d p : ℕ} {x z : ℤ}
+    (hp : Nat.Prime p)
+    (hbeam_ne : (powerBeam d x z).natAbs ≠ 0)
+    (hsq : Squarefree (powerBeam d x z).natAbs) :
+    padicValNat p (powerBeam d x z).natAbs ≤ 1 :=
+  DkMath.NumberTheory.GcdNext.padicValNat_le_one_of_squarefree hp hbeam_ne hsq
+
+/-- Squarefree Beam route to the FLT valuation contradiction. -/
+theorem flt_beam_squarefree_prime_contradiction
+    {d p : ℕ} {x y z : ℤ}
+    (hd1 : 1 ≤ d)
+    (hd2 : 2 ≤ d)
+    (hcop : Int.gcd z x = 1)
+    (hflt : x ^ d + y ^ d = z ^ d)
+    (hy_ne : y.natAbs ≠ 0)
+    (hp : Nat.Prime p)
+    (hpnd : ¬ p ∣ d)
+    (hbeam : p ∣ (powerBeam d x z).natAbs)
+    (hbeam_ne : (powerBeam d x z).natAbs ≠ 0)
+    (hsq : Squarefree (powerBeam d x z).natAbs) :
+    False :=
+  flt_beam_prime_val_le_one_contradiction
+    (d := d) (p := p) (x := x) (y := y) (z := z)
+    hd1 hd2 hcop hflt hy_ne hp hpnd hbeam hbeam_ne
+    (powerBeam_padicValNat_le_one_of_squarefree
+      (d := d) (p := p) (x := x) (z := z) hp hbeam_ne hsq)
+
+/-- Symmetric squarefree Beam route to the FLT valuation contradiction. -/
+theorem flt_beam_squarefree_prime_contradiction_symm
+    {d p : ℕ} {x y z : ℤ}
+    (hd1 : 1 ≤ d)
+    (hd2 : 2 ≤ d)
+    (hcop : Int.gcd z y = 1)
+    (hflt : x ^ d + y ^ d = z ^ d)
+    (hx_ne : x.natAbs ≠ 0)
+    (hp : Nat.Prime p)
+    (hpnd : ¬ p ∣ d)
+    (hbeam : p ∣ (powerBeam d y z).natAbs)
+    (hbeam_ne : (powerBeam d y z).natAbs ≠ 0)
+    (hsq : Squarefree (powerBeam d y z).natAbs) :
+    False :=
+  flt_beam_prime_val_le_one_contradiction_symm
+    (d := d) (p := p) (x := x) (y := y) (z := z)
+    hd1 hd2 hcop hflt hx_ne hp hpnd hbeam hbeam_ne
+    (powerBeam_padicValNat_le_one_of_squarefree
+      (d := d) (p := p) (x := y) (z := z) hp hbeam_ne hsq)
 
 end DkMath.CosmicFormula.PowerGapBeam

@@ -678,3 +678,42 @@ Archive
    - S2-H として、Beam 側の primitive prime / squarefree 上界 API から `padicValNat p Beam ≤ 1` を供給する bridge を実装する
    - `Beam.natAbs ≠ 0` と辺の非ゼロ仮定を FLT primitive package から自然に供給する補助補題を検討する
    - `FLTPowerGapBeamDatum` 構造体を導入するか、現行の wrapper 群を維持するか判断する
+
+---
+
+### 日時: 2026/04/28 17:58 JST (S2-H: Squarefree Beam valuation bridge)
+
+1. 目的:
+   - review-012.md の S2-H 方針に従い、Beam 側の squarefree 仮定から `padicValNat p Beam ≤ 1` を供給する bridge を作る
+   - S2-G の `flt_beam_prime_val_le_one_contradiction` に squarefree route を接続する
+   - 左右対称版も用意する
+
+2. 実施:
+   - `PowerGapBeamGcd.lean` に `DkMath.NumberTheory.ZsigmondyCyclotomicSquarefree` を import
+   - 既存補題 `DkMath.NumberTheory.GcdNext.padicValNat_le_one_of_squarefree` を再利用
+   - `powerBeam_padicValNat_le_one_of_squarefree` を追加:
+     - 仮定: `Nat.Prime p`, `(powerBeam d x z).natAbs ≠ 0`, `Squarefree (powerBeam d x z).natAbs`
+     - 結論: `padicValNat p (powerBeam d x z).natAbs ≤ 1`
+   - `flt_beam_squarefree_prime_contradiction` を追加:
+     - squarefree Beam 仮定から valuation 上界を供給し、S2-G の `flt_beam_prime_val_le_one_contradiction` に接続
+   - `flt_beam_squarefree_prime_contradiction_symm` を追加:
+     - 対称に `x` 側基準の squarefree route を実装
+
+3. 結論:
+   - S2-G の抽象矛盾補題に、具体的な上界供給ルートとして squarefree Beam 仮定を接続できた
+   - FLT 型方程式 + primitive/coprime 条件 + `p ∤ d` + Beam prime + squarefree Beam から直接 `False` を得る API ができた
+   - Chapter 2 の Power Gap/Beam valuation engine は、squarefree route について一通り no-sorry で閉じた
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamGcd` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規補題はすべて no-sorry で証明完了
+
+5. 失敗事例:
+   - 大きな失敗はなし
+   - squarefree からの valuation 上界は自前で再証明せず、既存の `ZsigmondyCyclotomicSquarefree` 側の補題を薄く wrap した
+
+6. 次の課題:
+   - primitive prime / Zsigmondy route から `p ∣ Beam`, `p ∤ d`, `Squarefree Beam` または `padicValNat p Beam ≤ 1` を供給する bridge を検討する
+   - `powerBeam` と既存 `GN d (a-b) b` / `diffPowSum` / `PrimitiveBeam` API の対応を明示する
+   - Chapter 2 の wrapper 群が増えたため、`FLTPowerGapBeamDatum` 構造体を導入するか判断する
