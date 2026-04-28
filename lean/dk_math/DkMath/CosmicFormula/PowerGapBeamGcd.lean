@@ -228,4 +228,92 @@ theorem flt_padicValNat_beam_eq_d_mul_x_of_beam_prime_symm
     _ = d * padicValNat p x.natAbs := by
           exact padicValNat.pow d hx_ne
 
+/-! ## Valuation Contradiction Bridge -/
+
+/-- A positive valuation bounded by one cannot be a multiple of `d ≥ 2`. -/
+theorem padicValNat_eq_d_mul_and_le_one_contradiction
+    {d v k : ℕ}
+    (hd : 2 ≤ d)
+    (hv_pos : 1 ≤ v)
+    (hv_le_one : v ≤ 1)
+    (hv_eq : v = d * k) :
+    False := by
+  have hv_one : v = 1 := by omega
+  have hk_pos : 1 ≤ k := by
+    by_contra hk_not
+    have hk_zero : k = 0 := by omega
+    have hv_zero : v = 0 := by
+      rw [hv_eq, hk_zero]
+      simp
+    omega
+  have htwo_le : 2 ≤ d * k := by
+    calc
+      2 ≤ d := hd
+      _ ≤ d * k := by
+        exact Nat.le_mul_of_pos_right d hk_pos
+  omega
+
+/-- If a nonzero natural number is divisible by a prime, its p-adic valuation is positive. -/
+theorem one_le_padicValNat_of_prime_dvd
+    {p n : ℕ}
+    (hp : Nat.Prime p)
+    (hn : n ≠ 0)
+    (hdvd : p ∣ n) :
+    1 ≤ padicValNat p n := by
+  haveI : Fact p.Prime := ⟨hp⟩
+  have hp_pow : p ^ 1 ∣ n := by
+    simpa using hdvd
+  exact (@padicValNat_dvd_iff_le p (Fact.mk hp) n 1 hn).mp hp_pow
+
+/-- A Beam prime with valuation at most one contradicts the FLT power valuation
+    constraint when `2 ≤ d`. -/
+theorem flt_beam_prime_val_le_one_contradiction
+    {d p : ℕ} {x y z : ℤ}
+    (hd1 : 1 ≤ d)
+    (hd2 : 2 ≤ d)
+    (hcop : Int.gcd z x = 1)
+    (hflt : x ^ d + y ^ d = z ^ d)
+    (hy_ne : y.natAbs ≠ 0)
+    (hp : Nat.Prime p)
+    (hpnd : ¬ p ∣ d)
+    (hbeam : p ∣ (powerBeam d x z).natAbs)
+    (hbeam_ne : (powerBeam d x z).natAbs ≠ 0)
+    (hbeam_le_one : padicValNat p (powerBeam d x z).natAbs ≤ 1) :
+    False := by
+  have hval_eq :
+      padicValNat p (powerBeam d x z).natAbs =
+        d * padicValNat p y.natAbs :=
+    flt_padicValNat_beam_eq_d_mul_y_of_beam_prime
+      (d := d) (p := p) (x := x) (y := y) (z := z)
+      hd1 hcop hflt hy_ne hp hpnd hbeam
+  have hval_pos : 1 ≤ padicValNat p (powerBeam d x z).natAbs :=
+    one_le_padicValNat_of_prime_dvd hp hbeam_ne hbeam
+  exact padicValNat_eq_d_mul_and_le_one_contradiction
+    hd2 hval_pos hbeam_le_one hval_eq
+
+/-- Symmetric version of `flt_beam_prime_val_le_one_contradiction`. -/
+theorem flt_beam_prime_val_le_one_contradiction_symm
+    {d p : ℕ} {x y z : ℤ}
+    (hd1 : 1 ≤ d)
+    (hd2 : 2 ≤ d)
+    (hcop : Int.gcd z y = 1)
+    (hflt : x ^ d + y ^ d = z ^ d)
+    (hx_ne : x.natAbs ≠ 0)
+    (hp : Nat.Prime p)
+    (hpnd : ¬ p ∣ d)
+    (hbeam : p ∣ (powerBeam d y z).natAbs)
+    (hbeam_ne : (powerBeam d y z).natAbs ≠ 0)
+    (hbeam_le_one : padicValNat p (powerBeam d y z).natAbs ≤ 1) :
+    False := by
+  have hval_eq :
+      padicValNat p (powerBeam d y z).natAbs =
+        d * padicValNat p x.natAbs :=
+    flt_padicValNat_beam_eq_d_mul_x_of_beam_prime_symm
+      (d := d) (p := p) (x := x) (y := y) (z := z)
+      hd1 hcop hflt hx_ne hp hpnd hbeam
+  have hval_pos : 1 ≤ padicValNat p (powerBeam d y z).natAbs :=
+    one_le_padicValNat_of_prime_dvd hp hbeam_ne hbeam
+  exact padicValNat_eq_d_mul_and_le_one_contradiction
+    hd2 hval_pos hbeam_le_one hval_eq
+
 end DkMath.CosmicFormula.PowerGapBeam

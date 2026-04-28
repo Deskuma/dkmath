@@ -634,3 +634,47 @@ Archive
    - S2-G として、`p ∣ Beam`, `padicValNat p Beam ≤ 1`, `2 ≤ d` と S2-F の等式から矛盾を導く補題を作る
    - Beam 側の primitive prime / squarefree 上界 API から `padicValNat p Beam ≤ 1` を供給する橋を探す
    - 必要なら非ゼロ仮定を FLT primitive package 側から供給する補助補題を整備する
+
+---
+
+### 日時: 2026/04/28 17:51 JST (S2-G: Beam valuation upper-bound contradiction)
+
+1. 目的:
+   - review-011.md の S2-G 方針に従い、Beam 側 valuation が `≤ 1` である場合に FLT 型の完全 d 乗制約と衝突する補題を作る
+   - `p ∣ Beam`, `padicValNat p Beam ≤ 1`, `2 ≤ d` と S2-F の等式 `v_p(Beam)=d*v_p(side)` から矛盾を導く
+   - 左右対称版も用意する
+
+2. 実施:
+   - `PowerGapBeamGcd.lean` に Valuation Contradiction Bridge セクションを追加
+   - 一般算術補題 `padicValNat_eq_d_mul_and_le_one_contradiction` を追加:
+     - 仮定: `2 ≤ d`, `1 ≤ v`, `v ≤ 1`, `v = d * k`
+     - 結論: `False`
+   - 補助補題 `one_le_padicValNat_of_prime_dvd` を追加:
+     - 仮定: `Nat.Prime p`, `n ≠ 0`, `p ∣ n`
+     - 結論: `1 ≤ padicValNat p n`
+     - `padicValNat_dvd_iff_le` を使用
+   - `flt_beam_prime_val_le_one_contradiction` を追加:
+     - 仮定: `1 ≤ d`, `2 ≤ d`, `Int.gcd z x = 1`, `x^d + y^d = z^d`, `y.natAbs ≠ 0`, `Nat.Prime p`, `¬ p ∣ d`, `p ∣ Beam`, `Beam ≠ 0`, `v_p(Beam) ≤ 1`
+     - 結論: `False`
+   - `flt_beam_prime_val_le_one_contradiction_symm` を追加:
+     - 対称に `x` 側基準の補題を実装
+
+3. 結論:
+   - Beam 側に現れた `p ∤ d` の素因子が valuation `≤ 1` であるなら、FLT 型方程式とは両立しないことを Lean 上で示せるようになった
+   - S2-B から S2-G までで、FLT 方程式から Gap/Beam 分解、gcd 制御、valuation 抽出、valuation 上界との矛盾までが no-sorry で接続された
+   - 残る主課題は、既存 primitive prime / squarefree API から `v_p(Beam) ≤ 1` を供給する bridge を作ることになった
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamGcd` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規補題はすべて no-sorry で証明完了
+
+5. 失敗事例:
+   - `p ∣ Beam` だけでは `Beam = 0` を排除できないため、`one_le_padicValNat_of_prime_dvd` には `n ≠ 0` を明示仮定として入れた
+   - そのため FLT wrapper 側にも `Beam.natAbs ≠ 0` を明示仮定として追加した
+   - `padicValNat_dvd_iff_le` は通常の名前付き引数ではなく `@padicValNat_dvd_iff_le p (Fact.mk hp) n 1 hn` の形で適用した
+
+6. 次の課題:
+   - S2-H として、Beam 側の primitive prime / squarefree 上界 API から `padicValNat p Beam ≤ 1` を供給する bridge を実装する
+   - `Beam.natAbs ≠ 0` と辺の非ゼロ仮定を FLT primitive package から自然に供給する補助補題を検討する
+   - `FLTPowerGapBeamDatum` 構造体を導入するか、現行の wrapper 群を維持するか判断する
