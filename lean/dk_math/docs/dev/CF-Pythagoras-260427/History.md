@@ -798,3 +798,42 @@ Archive
    - `PrimitiveBeam.primitive_prime_dvd_GN` を `powerBeam` 表現へ移す wrapper を作る
    - 特に `q ∣ GN d (a-b) b` から `q ∣ powerBeam d b a` へ接続する補題を検討する
    - 一般次数 bridge は、既存 `GTail` / `GN_eq_sum` の和変形補題を整えてから再挑戦する
+
+---
+
+### 日時: 2026/04/28 19:02 JST (S2-K: GN gap to endpoint PowerBeam wrappers)
+
+1. 目的:
+   - review-015.md の S2-K 方針に従い、`GN d (a-b) b` 側の情報を endpoint 型 `powerBeam d b a` へ移す bridge を作る
+   - まず d=3, d=4 の等式 bridge を固定し、既存 PrimitiveBeam / Zsigmondy route の低次数情報を Chapter 2 の PowerBeam API へ流せるようにする
+   - divisibility と p-adic valuation の移送に使う薄い wrapper を用意する
+
+2. 実施:
+   - `PowerGapBeamGN.lean` に以下の endpoint-gap 等式 bridge を追加:
+     - `powerBeam_three_eq_GN_of_gap`: `powerBeam 3 b a = GN 3 (a - b) b`
+     - `powerBeam_four_eq_GN_of_gap`: `powerBeam 4 b a = GN 4 (a - b) b`
+   - d=3 の divisibility wrapper を追加:
+     - `dvd_powerBeam_three_of_dvd_GN_gap`
+     - `q ∣ GN 3 (a-b) b` から `q ∣ powerBeam 3 b a` を得る
+   - d=3 の valuation wrapper を追加:
+     - `powerBeam_three_padicValNat_eq_GN_gap`
+     - `padicValNat p (powerBeam 3 b a).natAbs = padicValNat p (GN 3 (a-b) b).natAbs`
+
+3. 結論:
+   - shifted bridge `powerBeam d x (x+u) = GN d u x` に加えて、実際の endpoint `a,b` で使いやすい gap bridge が d=3,4 で揃った
+   - 既存の `PrimitiveBeam.primitive_prime_dvd_GN` などが返す `q ∣ GN d (a-b) b` 型の情報を、少なくとも d=3 では直接 `powerBeam` 側へ移せるようになった
+   - p-adic valuation についても、GN 側の上界や等式を PowerBeam 側へ運ぶ入口ができた
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamGN` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規補題はすべて no-sorry で証明完了
+
+5. 失敗事例:
+   - 大きな失敗はなし
+   - endpoint-gap bridge は `GN_eq_sum` を展開し、低次数では `norm_num` / `norm_num [Nat.choose]` と `ring` で閉じられることを確認した
+
+6. 次の課題:
+   - d=4 についても必要なら divisibility / valuation wrapper を追加する
+   - `PrimitiveBeam.primitive_prime_dvd_GN` から `q ∣ powerBeam 3 b a` へ進む specialized wrapper を作る
+   - `GN` 側の squarefree / valuation 上界を `powerBeam` 側の S2-G/S2-H 矛盾 API へ接続する

@@ -40,4 +40,39 @@ theorem powerBeam_four_shift_eq_GN {R : Type*} [CommRing R] (x u : R) :
   norm_num [Nat.choose]
   ring
 
+/-- In degree 3, the endpoint Power Beam agrees with `GN` at the endpoint gap. -/
+theorem powerBeam_three_eq_GN_of_gap {R : Type*} [CommRing R] (a b : R) :
+    powerBeam 3 b a = DkMath.CosmicFormulaBinom.GN 3 (a - b) b := by
+  rw [powerBeam_three]
+  rw [DkMath.CosmicFormulaBinom.GN_eq_sum]
+  rw [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_succ,
+    Finset.sum_range_zero]
+  norm_num
+  ring
+
+/-- In degree 4, the endpoint Power Beam agrees with `GN` at the endpoint gap. -/
+theorem powerBeam_four_eq_GN_of_gap {R : Type*} [CommRing R] (a b : R) :
+    powerBeam 4 b a = DkMath.CosmicFormulaBinom.GN 4 (a - b) b := by
+  rw [powerBeam_four]
+  rw [DkMath.CosmicFormulaBinom.GN_eq_sum]
+  rw [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_succ,
+    Finset.sum_range_succ, Finset.sum_range_zero]
+  norm_num [Nat.choose]
+  ring
+
+/-- Divisibility transfers from the cubic `GN` gap expression to the endpoint
+    Power Beam. -/
+theorem dvd_powerBeam_three_of_dvd_GN_gap {R : Type*} [CommRing R]
+    {q a b : R}
+    (h : q ∣ DkMath.CosmicFormulaBinom.GN 3 (a - b) b) :
+    q ∣ powerBeam 3 b a := by
+  rwa [powerBeam_three_eq_GN_of_gap]
+
+/-- The cubic endpoint bridge preserves `padicValNat` after taking integer
+    absolute values. -/
+theorem powerBeam_three_padicValNat_eq_GN_gap (p : ℕ) (a b : ℤ) :
+    padicValNat p (powerBeam 3 b a).natAbs =
+      padicValNat p (DkMath.CosmicFormulaBinom.GN 3 (a - b) b).natAbs := by
+  rw [powerBeam_three_eq_GN_of_gap]
+
 end DkMath.CosmicFormula.PowerGapBeam
