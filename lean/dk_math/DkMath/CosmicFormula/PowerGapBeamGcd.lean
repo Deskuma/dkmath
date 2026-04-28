@@ -169,4 +169,63 @@ theorem flt_padicValNat_product_eq_beam_of_beam_prime_symm
   exact padicValNat_natAbs_mul_eq_right_of_not_dvd_left
     (p := p) (gap := powerGap y z) (beam := powerBeam d y z) hp hgap
 
+/-! ## Power Valuation Bridge -/
+
+/-- In an FLT-style primitive context, a prime dividing the Beam but not the
+    degree forces the Beam valuation to be a multiple of `d`. -/
+theorem flt_padicValNat_beam_eq_d_mul_y_of_beam_prime
+    {d p : ℕ} {x y z : ℤ}
+    (hd : 1 ≤ d)
+    (hcop : Int.gcd z x = 1)
+    (hflt : x ^ d + y ^ d = z ^ d)
+    (hy_ne : y.natAbs ≠ 0)
+    (hp : Nat.Prime p)
+    (hpnd : ¬ p ∣ d)
+    (hbeam : p ∣ (powerBeam d x z).natAbs) :
+    padicValNat p (powerBeam d x z).natAbs =
+      d * padicValNat p y.natAbs := by
+  have hprod : y ^ d = powerGap x z * powerBeam d x z :=
+    flt_eq_forces_powerGapBeam d x y z hflt
+  have hval_prod :
+      padicValNat p (powerGap x z * powerBeam d x z).natAbs =
+        padicValNat p (powerBeam d x z).natAbs :=
+    flt_padicValNat_product_eq_beam_of_beam_prime
+      (d := d) (p := p) (x := x) (y := y) (z := z) hd hcop hflt hp hpnd hbeam
+  haveI : Fact p.Prime := ⟨hp⟩
+  calc
+    padicValNat p (powerBeam d x z).natAbs
+        = padicValNat p (powerGap x z * powerBeam d x z).natAbs := hval_prod.symm
+    _ = padicValNat p (y ^ d).natAbs := by rw [← hprod]
+    _ = padicValNat p (y.natAbs ^ d) := by rw [Int.natAbs_pow]
+    _ = d * padicValNat p y.natAbs := by
+          exact padicValNat.pow d hy_ne
+
+/-- Symmetric version of `flt_padicValNat_beam_eq_d_mul_y_of_beam_prime`. -/
+theorem flt_padicValNat_beam_eq_d_mul_x_of_beam_prime_symm
+    {d p : ℕ} {x y z : ℤ}
+    (hd : 1 ≤ d)
+    (hcop : Int.gcd z y = 1)
+    (hflt : x ^ d + y ^ d = z ^ d)
+    (hx_ne : x.natAbs ≠ 0)
+    (hp : Nat.Prime p)
+    (hpnd : ¬ p ∣ d)
+    (hbeam : p ∣ (powerBeam d y z).natAbs) :
+    padicValNat p (powerBeam d y z).natAbs =
+      d * padicValNat p x.natAbs := by
+  have hprod : x ^ d = powerGap y z * powerBeam d y z :=
+    flt_eq_forces_powerGapBeam_symm d x y z hflt
+  have hval_prod :
+      padicValNat p (powerGap y z * powerBeam d y z).natAbs =
+        padicValNat p (powerBeam d y z).natAbs :=
+    flt_padicValNat_product_eq_beam_of_beam_prime_symm
+      (d := d) (p := p) (x := x) (y := y) (z := z) hd hcop hflt hp hpnd hbeam
+  haveI : Fact p.Prime := ⟨hp⟩
+  calc
+    padicValNat p (powerBeam d y z).natAbs
+        = padicValNat p (powerGap y z * powerBeam d y z).natAbs := hval_prod.symm
+    _ = padicValNat p (x ^ d).natAbs := by rw [← hprod]
+    _ = padicValNat p (x.natAbs ^ d) := by rw [Int.natAbs_pow]
+    _ = d * padicValNat p x.natAbs := by
+          exact padicValNat.pow d hx_ne
+
 end DkMath.CosmicFormula.PowerGapBeam

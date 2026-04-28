@@ -592,3 +592,45 @@ Archive
    - `y^d = Gap * Beam` と今回の valuation bridge を組み合わせ、`padicValNat p Beam = d * padicValNat p |y|` 型の補題へ進む
    - `padicValNat.pow` と `Int.natAbs_pow` を使って完全 d 乗側の valuation を取り出す
    - Beam 側の primitive prime / valuation 上界 API と接続する
+
+---
+
+### 日時: 2026/04/28 17:41 JST (S2-F: Beam valuation equals d times side valuation)
+
+1. 目的:
+   - review-010.md の S2-F 方針に従い、Beam 側 valuation が完全 d 乗側から `d * padicValNat p |side|` になることを証明する
+   - S2-E の `v_p(|Gap * Beam|) = v_p(|Beam|)` と、FLT 積分解 `side^d = Gap * Beam` を合成する
+   - 左右対称に `y` 側 / `x` 側の補題を用意する
+
+2. 実施:
+   - `PowerGapBeamGcd.lean` に Power Valuation Bridge セクションを追加
+   - `flt_padicValNat_beam_eq_d_mul_y_of_beam_prime` を追加:
+     - 仮定: `1 ≤ d`, `Int.gcd z x = 1`, `x^d + y^d = z^d`, `y.natAbs ≠ 0`, `Nat.Prime p`, `¬ p ∣ d`, `p ∣ (powerBeam d x z).natAbs`
+     - 結論: `padicValNat p (powerBeam d x z).natAbs = d * padicValNat p y.natAbs`
+   - `flt_padicValNat_beam_eq_d_mul_x_of_beam_prime_symm` を追加:
+     - 仮定: `1 ≤ d`, `Int.gcd z y = 1`, `x^d + y^d = z^d`, `x.natAbs ≠ 0`, `Nat.Prime p`, `¬ p ∣ d`, `p ∣ (powerBeam d y z).natAbs`
+     - 結論: `padicValNat p (powerBeam d y z).natAbs = d * padicValNat p x.natAbs`
+   - 証明では以下を接続:
+     - `flt_eq_forces_powerGapBeam` / 対称版
+     - `flt_padicValNat_product_eq_beam_of_beam_prime` / 対称版
+     - `Int.natAbs_pow`
+     - `padicValNat.pow`
+
+3. 結論:
+   - Beam 側の `p`-進付値が、完全 d 乗の付値制約により `d` の倍数になることを Lean 上で扱えるようになった
+   - S2-B から S2-F までで、FLT 方程式から `Gap × Beam` 分解、gcd 制御、Beam 側 valuation 制約までが一本につながった
+   - primitive prime / squarefree 上界と衝突させるための直前段階が整った
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamGcd` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規補題はすべて no-sorry で証明完了
+
+5. 失敗事例:
+   - 当初は `p ∣ Beam` から観測辺 `y` / `x` の非ゼロ性を導こうとしたが、`Beam = 0` の可能性を排除できないため不十分だった
+   - 修正として、`padicValNat.pow` に必要な仮定 `y.natAbs ≠ 0` / `x.natAbs ≠ 0` を定理の明示的な仮定に追加した
+
+6. 次の課題:
+   - S2-G として、`p ∣ Beam`, `padicValNat p Beam ≤ 1`, `2 ≤ d` と S2-F の等式から矛盾を導く補題を作る
+   - Beam 側の primitive prime / squarefree 上界 API から `padicValNat p Beam ≤ 1` を供給する橋を探す
+   - 必要なら非ゼロ仮定を FLT primitive package 側から供給する補助補題を整備する
