@@ -879,3 +879,41 @@ Archive
    - GN 側 squarefree / valuation 上界を S2-G/S2-H の `flt_beam_*_contradiction` へ直接接続する d=3 wrapper を作る
    - `primitive_prime_dvd_powerBeam_three_natAbs` と `flt_beam_prime_val_le_one_contradiction` を合成する
    - `PrimitiveBeam` import によって `ZsigmondyCyclotomicResearch` の既存 `sorry` 警告が流入するため、必要なら bridge ファイル分割を検討する
+
+---
+
+### 日時: 2026/04/28 19:19 JST (S2-M: Cubic GN fuel to FLT contradiction)
+
+1. 目的:
+   - review-017.md の S2-M 方針に従い、GN 側の valuation 上界 / squarefree 仮定を S2-G/S2-H の FLT 矛盾 API へ直接接続する
+   - d=3 の `GN 3 (z-x) x` 情報から、`powerBeam 3 x z` の valuation contradiction へ一発で進む wrapper を作る
+   - Chapter 2 の `GN -> PowerBeam -> contradiction` 経路を明示 API として固定する
+
+2. 実施:
+   - `PowerGapBeamGN.lean` に `DkMath.CosmicFormula.PowerGapBeamGcd` を import
+   - d=3 の GN valuation 上界版 contradiction wrapper を追加:
+     - `flt_three_beam_GN_val_le_one_contradiction`
+     - `padicValNat p (GN 3 (z-x) x).natAbs ≤ 1` を `powerBeam_three_padicValNat_le_one_of_GN_le_one` で Beam 側へ移し、`flt_beam_prime_val_le_one_contradiction` に渡す
+   - d=3 の GN squarefree 版 contradiction wrapper を追加:
+     - `flt_three_beam_GN_squarefree_contradiction`
+     - `Squarefree (GN 3 (z-x) x).natAbs` を `powerBeam_three_squarefree_of_GN_squarefree` で Beam 側へ移し、`flt_beam_squarefree_prime_contradiction` に渡す
+
+3. 結論:
+   - GN 側で得られる valuation 上界または squarefree 仮定から、d=3 の FLT 型方程式に対する `False` までを直接導けるようになった
+   - S2-K/S2-L で作った GN/PowerBeam bridge が、S2-G/S2-H の valuation contradiction engine と実際に接続された
+   - Chapter 2 は d=3 について、`GN fuel -> PowerBeam valuation refuter` の薄い完成形に到達した
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamGN` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規補題はすべて no-sorry で証明完了
+   - build warning として、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` 警告が再表示された
+
+5. 失敗事例:
+   - 大きな失敗はなし
+   - `PowerGapBeamGcd` の既存 contradiction wrapper に、S2-L の valuation / squarefree 移送補題を渡すだけで閉じた
+
+6. 次の課題:
+   - `primitive_prime_dvd_powerBeam_three_natAbs` を使い、Nat primitive prime witness から d=3 contradiction wrapper の `hbeam` を供給する合成補題を検討する
+   - `PowerGapBeamGN.lean` が `PrimitiveBeam` と `PowerGapBeamGcd` の両方を import して重くなってきたため、必要なら `PowerGapBeamPrimitive.lean` などへ分割する
+   - `FLTPowerGapBeamDatum` 構造体を導入するか、wrapper 群のまま進めるか判断する

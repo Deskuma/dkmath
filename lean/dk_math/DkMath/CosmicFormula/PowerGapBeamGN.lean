@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.CosmicFormula.PowerGapBeam
 import DkMath.CosmicFormula.CosmicFormulaBinom
+import DkMath.CosmicFormula.PowerGapBeamGcd
 import DkMath.NumberTheory.PrimitiveBeam
 
 #print "file: DkMath.CosmicFormula.PowerGapBeamGN"
@@ -121,5 +122,45 @@ theorem primitive_prime_dvd_powerBeam_three_natAbs
       exact_mod_cast hGN_nat
     exact Int.natCast_dvd.mp hGN_int
   simpa [powerBeam_three_eq_GN_of_gap] using hbeam_nat
+
+/-- Cubic FLT contradiction from a `GN` valuation upper bound for the observed
+    endpoint Beam. -/
+theorem flt_three_beam_GN_val_le_one_contradiction
+    {p : ℕ} {x y z : ℤ}
+    (hcop : Int.gcd z x = 1)
+    (hflt : x ^ 3 + y ^ 3 = z ^ 3)
+    (hy_ne : y.natAbs ≠ 0)
+    (hp : Nat.Prime p)
+    (hpnd : ¬ p ∣ 3)
+    (hbeam : p ∣ (powerBeam 3 x z).natAbs)
+    (hbeam_ne : (powerBeam 3 x z).natAbs ≠ 0)
+    (hGN_le_one :
+      padicValNat p (DkMath.CosmicFormulaBinom.GN 3 (z - x) x).natAbs ≤ 1) :
+    False :=
+  flt_beam_prime_val_le_one_contradiction
+    (d := 3) (p := p) (x := x) (y := y) (z := z)
+    (by norm_num) (by norm_num) hcop hflt hy_ne hp hpnd hbeam hbeam_ne
+    (powerBeam_three_padicValNat_le_one_of_GN_le_one
+      (p := p) (a := z) (b := x) hGN_le_one)
+
+/-- Cubic FLT contradiction from squarefreeness of the corresponding `GN`
+    endpoint Beam. -/
+theorem flt_three_beam_GN_squarefree_contradiction
+    {p : ℕ} {x y z : ℤ}
+    (hcop : Int.gcd z x = 1)
+    (hflt : x ^ 3 + y ^ 3 = z ^ 3)
+    (hy_ne : y.natAbs ≠ 0)
+    (hp : Nat.Prime p)
+    (hpnd : ¬ p ∣ 3)
+    (hbeam : p ∣ (powerBeam 3 x z).natAbs)
+    (hbeam_ne : (powerBeam 3 x z).natAbs ≠ 0)
+    (hGN_sq :
+      Squarefree (DkMath.CosmicFormulaBinom.GN 3 (z - x) x).natAbs) :
+    False :=
+  flt_beam_squarefree_prime_contradiction
+    (d := 3) (p := p) (x := x) (y := y) (z := z)
+    (by norm_num) (by norm_num) hcop hflt hy_ne hp hpnd hbeam hbeam_ne
+    (powerBeam_three_squarefree_of_GN_squarefree
+      (a := z) (b := x) hGN_sq)
 
 end DkMath.CosmicFormula.PowerGapBeam
