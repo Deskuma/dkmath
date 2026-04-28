@@ -218,4 +218,43 @@ example : (12 : ℤ)^2 = 8 * (2 * 5 + 8) := by norm_num
 /-- For (8,15,17): 15² = 9 × (2×8 + 9) = 9 × 25 -/
 example : (15 : ℤ)^2 = 9 * (2 * 8 + 9) := by norm_num
 
+/-! ## Rescale Freedom Examples
+
+Demonstrating that rescaling each edge independently preserves the triple
+while representing the same geometric object with different unit systems.
+-/
+
+/-- The (3,4,5) triple represented over ℚ. -/
+def triple_3_4_5_rat : CosmicPythagoreanTriple ℚ :=
+  standard 3 4 5
+
+/-- Rescaling (3,4,5) with different scale factors preserves equivalence. -/
+example :
+    EquivRepresentation triple_3_4_5_rat
+      (rescaleEach triple_3_4_5_rat 2 3 5) := by
+  apply rescaleEach_equiv
+  · norm_num
+  · norm_num
+  · norm_num
+
+/-- The rescaled triple is still linked. -/
+example :
+    (rescaleEach triple_3_4_5_rat 2 3 5).IsLinked := by
+  apply rescaleEach_isLinked
+  · norm_num
+  · norm_num
+  · norm_num
+  · unfold triple_3_4_5_rat
+    rw [standard_linked_iff]
+    norm_num
+
+/-- Rescaling with factor 1/2 for all edges. -/
+example :
+    EquivRepresentation triple_3_4_5_rat
+      (rescaleEach triple_3_4_5_rat (1/2) (1/2) (1/2)) := by
+  apply rescaleEach_equiv
+  · norm_num
+  · norm_num
+  · norm_num
+
 end DkMath.CosmicFormula.Pythagoras.Examples

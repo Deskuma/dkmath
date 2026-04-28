@@ -276,6 +276,20 @@ The link condition states: `α² * u₁² + β² * u₂² = γ² * u₃²`
 def CosmicLinkCondition {R : Type*} [CommRing R] (α β γ u₁ u₂ u₃ : R) : Prop :=
   α^2 * u₁^2 + β^2 * u₂^2 = γ^2 * u₃^2
 
+/-- The degree-`d` cosmic link condition: a higher-power analogue of
+    `CosmicLinkCondition`. -/
+def CosmicLinkConditionD {R : Type*} [CommRing R]
+    (d : ℕ) (α β γ u₁ u₂ u₃ : R) : Prop :=
+  α ^ d * u₁ ^ d + β ^ d * u₂ ^ d = γ ^ d * u₃ ^ d
+
+/-- At degree 2, the higher cosmic link condition is exactly the original
+    Pythagorean cosmic link condition. -/
+theorem cosmicLinkConditionD_two_iff {R : Type*} [CommRing R]
+    (α β γ u₁ u₂ u₃ : R) :
+    CosmicLinkConditionD 2 α β γ u₁ u₂ u₃ ↔
+      CosmicLinkCondition α β γ u₁ u₂ u₃ := by
+  rfl
+
 /-- Real number version of the cosmic link condition. -/
 abbrev CosmicLinkConditionReal (α β γ u₁ u₂ u₃ : ℝ) : Prop :=
   CosmicLinkCondition α β γ u₁ u₂ u₃
@@ -293,6 +307,21 @@ theorem cosmic_link_to_pythagoras {R : Type*} [CommRing R] (α β γ u₁ u₂ u
       = α ^ 2 * u₁ ^ 2 + β ^ 2 * u₂ ^ 2 := by ring
     _ = γ ^ 2 * u₃ ^ 2 := h
     _ = (γ * u₃) ^ 2 := by ring
+
+/-- If the degree-`d` cosmic link condition holds, then the observed edges
+    satisfy the corresponding degree-`d` power equation. -/
+theorem cosmic_linkD_to_power_equation {R : Type*} [CommRing R]
+    (d : ℕ) (α β γ u₁ u₂ u₃ : R)
+    (h : CosmicLinkConditionD d α β γ u₁ u₂ u₃) :
+    (α * u₁) ^ d + (β * u₂) ^ d = (γ * u₃) ^ d := by
+  unfold CosmicLinkConditionD at h
+  calc
+    (α * u₁) ^ d + (β * u₂) ^ d
+        = α ^ d * u₁ ^ d + β ^ d * u₂ ^ d := by
+          rw [mul_pow, mul_pow]
+    _ = γ ^ d * u₃ ^ d := h
+    _ = (γ * u₃) ^ d := by
+          rw [mul_pow]
 
 /-- Conversely, any Pythagorean triple can be expressed via the cosmic link condition. -/
 theorem pythagoras_to_cosmic_link {R : Type*} [CommRing R] (a b c : R)
@@ -385,6 +414,62 @@ theorem b_sq_eq_gapA_mul_beamA (T : CosmicPythagoreanTriple R) (h : T.IsLinked) 
           have h := pyth
           exact (sub_eq_of_eq_add' h.symm).symm
     _ = (T.c - T.a) * (T.c + T.a) := by ring
+
+/-- The gap between the hypotenuse and side b (symmetric version). -/
+def gapB (T : CosmicPythagoreanTriple R) : R := T.c - T.b
+
+/-- The beam: the sum of hypotenuse and side b (symmetric version). -/
+def beamB (T : CosmicPythagoreanTriple R) : R := T.c + T.b
+
+/-- For a linked triple, a² equals Gap × Beam (symmetric version). -/
+theorem a_sq_eq_gapB_mul_beamB (T : CosmicPythagoreanTriple R) (h : T.IsLinked) :
+    T.a ^ 2 = gapB T * beamB T := by
+  have pyth := linked_satisfies_pythagoras T h
+  unfold IsPythagoreanTripleOver at pyth
+  unfold gapB beamB
+  calc T.a ^ 2
+      = T.c ^ 2 - T.b ^ 2 := by
+          have h1 : T.a ^ 2 + T.b ^ 2 = T.c ^ 2 := pyth
+          have h2 : T.b ^ 2 + T.a ^ 2 = T.c ^ 2 := by
+            calc T.b ^ 2 + T.a ^ 2
+                = T.a ^ 2 + T.b ^ 2 := by ring
+              _ = T.c ^ 2 := h1
+          exact (sub_eq_of_eq_add' h2.symm).symm
+    _ = (T.c - T.b) * (T.c + T.b) := by ring
+
+/-! ### Reverse direction lemmas for rewriting -/
+
+/-- Gap × Beam equals b² (reverse direction for rewriting). -/
+theorem gapA_mul_beamA_eq_b_sq (T : CosmicPythagoreanTriple R) (h : T.IsLinked) :
+    gapA T * beamA T = T.b ^ 2 := by
+  exact (b_sq_eq_gapA_mul_beamA T h).symm
+
+/-- Gap × Beam equals a² (reverse direction for rewriting). -/
+theorem gapB_mul_beamB_eq_a_sq (T : CosmicPythagoreanTriple R) (h : T.IsLinked) :
+    gapB T * beamB T = T.a ^ 2 := by
+  exact (a_sq_eq_gapB_mul_beamB T h).symm
+
+/-! ### Bridge to general functions -/
+
+/-- gapA is the boundary gap applied to sides a and c. -/
+theorem gapA_eq_boundaryGap (T : CosmicPythagoreanTriple R) :
+    gapA T = boundaryGap T.a T.c := by
+  rfl
+
+/-- beamA is the pythagorean beam applied to sides a and c. -/
+theorem beamA_eq_pythagoreanBeam (T : CosmicPythagoreanTriple R) :
+    beamA T = pythagoreanBeam T.a T.c := by
+  rfl
+
+/-- gapB is the boundary gap applied to sides b and c. -/
+theorem gapB_eq_boundaryGap (T : CosmicPythagoreanTriple R) :
+    gapB T = boundaryGap T.b T.c := by
+  rfl
+
+/-- beamB is the pythagorean beam applied to sides b and c. -/
+theorem beamB_eq_pythagoreanBeam (T : CosmicPythagoreanTriple R) :
+    beamB T = pythagoreanBeam T.b T.c := by
+  rfl
 
 /-- The standard representation with unit representatives all equal to 1. -/
 def standard (α β γ : R) : CosmicPythagoreanTriple R :=
