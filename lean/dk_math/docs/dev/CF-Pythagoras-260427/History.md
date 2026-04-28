@@ -507,3 +507,46 @@ Archive
    - `p ∤ d` の primitive prime が Beam 側へ現れる場合の valuation 制御へ接続する
    - Nat 版 / ℤ 版のどちらを標準 API にするか整理する
    - `powerBeam 2 x z = pythagoreanBeam x z` の Pythagorean bridge を別ファイルで明示する
+
+---
+
+### 日時: 2026/04/28 17:21 JST (S2-D: FLT Power Gap/Beam Datum Bridge)
+
+1. 目的:
+   - review-008.md の S2-D 方針に従い、FLT 型方程式から得る Power Gap/Beam 積分解と gcd 制御を同時に返す wrapper を作る
+   - 左右対称に、`y` 側と `x` 側の両方を観測できる形にする
+   - `p ∤ d` の素数が Beam 側に現れた場合、同じ素数が Gap 側に入らないことを FLT 文脈の補題として用意する
+
+2. 実施:
+   - `PowerGapBeamGcd.lean` に FLT datum bridge セクションを追加
+   - `flt_eq_forces_powerGapBeam_and_gcd` を追加:
+     - 仮定: `1 ≤ d`, `Int.gcd z x = 1`, `x^d + y^d = z^d`
+     - 結論: `y^d = powerGap x z * powerBeam d x z` かつ `Int.gcd (powerGap x z) (powerBeam d x z) ∣ d`
+   - `flt_eq_forces_powerGapBeam_and_gcd_symm` を追加:
+     - 仮定: `1 ≤ d`, `Int.gcd z y = 1`, `x^d + y^d = z^d`
+     - 結論: `x^d = powerGap y z * powerBeam d y z` かつ `Int.gcd (powerGap y z) (powerBeam d y z) ∣ d`
+   - `flt_beam_prime_not_dvd_gap_of_not_dvd_d` を追加:
+     - `p ∤ d` かつ `p ∣ (powerBeam d x z).natAbs` なら、`p ∤ (powerGap x z).natAbs`
+   - `flt_beam_prime_not_dvd_gap_of_not_dvd_d_symm` を追加:
+     - 対称に `y` 側基準の Beam / Gap で同じ性質を証明
+
+3. 結論:
+   - FLT 型仮定を、Power Gap/Beam の「積分解 + gcd 制御」データとして一括取得できるようになった
+   - S2-B の因数分解 bridge と S2-C の gcd bridge が、S2-D で FLT 専用 API として統合された
+   - 次段の p-adic / primitive prime 議論で、Beam 側の素因子が Gap 側と分離される入口ができた
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamGcd` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規補題はすべて no-sorry で証明完了
+
+5. 失敗事例:
+   - 大きな失敗はなし
+   - `FLTPowerGapBeamDatum` 構造体は今回は作らず、まずは使いやすい conjunction 形式の定理として実装した
+     - 理由: 現段階では後続の valuation 補題が必要とするフィールド構成が未確定であり、構造体を早く固定しすぎない方がよい
+
+6. 次の課題:
+   - S2-E として、Beam 側の素因子を `padicValNat` の積分解・冪乗付値制約へ接続する
+   - `p ∤ d` かつ `p ∣ Beam` のとき、`padicValNat p (Gap * Beam)` が Beam 側から来ることを示す wrapper を検討する
+   - primitive prime / valuation 上界側の既存 API と接続する
+   - 必要に応じて `FLTPowerGapBeamDatum` 構造体を導入する
