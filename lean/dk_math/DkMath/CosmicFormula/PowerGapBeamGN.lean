@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.CosmicFormula.PowerGapBeam
 import DkMath.CosmicFormula.CosmicFormulaBinom
+import DkMath.NumberTheory.PrimitiveBeam
 
 #print "file: DkMath.CosmicFormula.PowerGapBeamGN"
 
@@ -74,5 +75,51 @@ theorem powerBeam_three_padicValNat_eq_GN_gap (p : ℕ) (a b : ℤ) :
     padicValNat p (powerBeam 3 b a).natAbs =
       padicValNat p (DkMath.CosmicFormulaBinom.GN 3 (a - b) b).natAbs := by
   rw [powerBeam_three_eq_GN_of_gap]
+
+/-- A cubic `GN` valuation upper bound transfers to the endpoint Power Beam. -/
+theorem powerBeam_three_padicValNat_le_one_of_GN_le_one
+    {p : ℕ} {a b : ℤ}
+    (hGN :
+      padicValNat p (DkMath.CosmicFormulaBinom.GN 3 (a - b) b).natAbs ≤ 1) :
+    padicValNat p (powerBeam 3 b a).natAbs ≤ 1 := by
+  simpa [powerBeam_three_padicValNat_eq_GN_gap] using hGN
+
+/-- Cubic squarefreeness transfers from the `GN` gap expression to the endpoint
+    Power Beam. -/
+theorem powerBeam_three_squarefree_of_GN_squarefree
+    {a b : ℤ}
+    (hGN :
+      Squarefree (DkMath.CosmicFormulaBinom.GN 3 (a - b) b).natAbs) :
+    Squarefree (powerBeam 3 b a).natAbs := by
+  simpa [powerBeam_three_eq_GN_of_gap] using hGN
+
+/-- Primitive-prime divisibility from the Nat `GN` API, transported to the
+    integer endpoint Power Beam used by the valuation engine. -/
+theorem primitive_prime_dvd_powerBeam_three_natAbs
+    {q a b : ℕ}
+    (hq : DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow q a b 3)
+    (hab_lt : b < a) :
+    q ∣ (powerBeam 3 (b : ℤ) (a : ℤ)).natAbs := by
+  have hGN_nat :
+      q ∣ DkMath.CosmicFormulaBinom.GN 3 (a - b) b :=
+    DkMath.NumberTheory.PrimitiveBeam.primitive_prime_dvd_GN
+      (q := q) (a := a) (b := b) (d := 3)
+      hq (by norm_num) (by norm_num) hab_lt
+  have hbeam_nat :
+      q ∣ (DkMath.CosmicFormulaBinom.GN 3 ((a : ℤ) - (b : ℤ)) (b : ℤ)).natAbs := by
+    have hsub_cast : ((a - b : ℕ) : ℤ) = (a : ℤ) - (b : ℤ) :=
+      Nat.cast_sub (Nat.le_of_lt hab_lt)
+    have hGN_cast :
+        ((DkMath.CosmicFormulaBinom.GN 3 (a - b) b : ℕ) : ℤ) =
+          DkMath.CosmicFormulaBinom.GN 3 ((a : ℤ) - (b : ℤ)) (b : ℤ) := by
+      rw [← hsub_cast]
+      simp
+    have hGN_int :
+        (q : ℤ) ∣
+          DkMath.CosmicFormulaBinom.GN 3 ((a : ℤ) - (b : ℤ)) (b : ℤ) := by
+      rw [← hGN_cast]
+      exact_mod_cast hGN_nat
+    exact Int.natCast_dvd.mp hGN_int
+  simpa [powerBeam_three_eq_GN_of_gap] using hbeam_nat
 
 end DkMath.CosmicFormula.PowerGapBeam

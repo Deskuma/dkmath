@@ -837,3 +837,45 @@ Archive
    - d=4 についても必要なら divisibility / valuation wrapper を追加する
    - `PrimitiveBeam.primitive_prime_dvd_GN` から `q ∣ powerBeam 3 b a` へ進む specialized wrapper を作る
    - `GN` 側の squarefree / valuation 上界を `powerBeam` 側の S2-G/S2-H 矛盾 API へ接続する
+
+---
+
+### 日時: 2026/04/28 19:11 JST (S2-L: PrimitiveBeam to cubic PowerBeam bridge)
+
+1. 目的:
+   - review-016.md の S2-L 方針に従い、既存 `PrimitiveBeam` / `GN` 側の情報を d=3 の `powerBeam` 側へ直接運ぶ wrapper を作る
+   - GN 側の valuation 上界・squarefree 仮定を PowerBeam 側へ移送する薄い補題を追加する
+   - Nat API で得られる primitive prime divisibility を、整数 `powerBeam` の `natAbs` divisibility へ接続する
+
+2. 実施:
+   - `PowerGapBeamGN.lean` に `DkMath.NumberTheory.PrimitiveBeam` を import
+   - d=3 の valuation 上界移送補題を追加:
+     - `powerBeam_three_padicValNat_le_one_of_GN_le_one`
+     - `padicValNat p (GN 3 (a-b) b).natAbs ≤ 1` から `padicValNat p (powerBeam 3 b a).natAbs ≤ 1` を得る
+   - d=3 の squarefree 移送補題を追加:
+     - `powerBeam_three_squarefree_of_GN_squarefree`
+     - `Squarefree (GN 3 (a-b) b).natAbs` から `Squarefree (powerBeam 3 b a).natAbs` を得る
+   - Nat `PrimitiveBeam` から整数 PowerBeam への divisibility wrapper を追加:
+     - `primitive_prime_dvd_powerBeam_three_natAbs`
+     - `PrimitivePrimeFactorOfDiffPow q a b 3` と `b < a` から `q ∣ (powerBeam 3 (b : ℤ) (a : ℤ)).natAbs` を得る
+     - `Nat.cast_sub` と `Int.natCast_dvd` で Nat `GN` の割り切りを Int `natAbs` へ移送
+
+3. 結論:
+   - `PrimitiveBeam.primitive_prime_dvd_GN` の出力を、Chapter 2 の valuation engine が直接使う `p ∣ (powerBeam 3 ...).natAbs` 型へ運べるようになった
+   - GN 側の valuation 上界・squarefree 情報も d=3 PowerBeam 側へ薄く移せるため、S2-G/S2-H の矛盾 API へ接続する入口が広がった
+   - Nat 側 primitive prime API と Int 側 FLT/PowerBeam API の型差を、専用 wrapper で吸収できた
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamGN` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規補題はすべて no-sorry で証明完了
+   - build warning として、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` 警告が再表示された
+
+5. 失敗事例:
+   - Nat `GN` と Int `GN.natAbs` の等式を直接 `rw` / `ring` で処理しようとすると、和の展開と `natAbs` の正規形が噛み合わなかった
+   - 修正として、`Nat.cast_sub` で gap を cast し、Nat divisibility を `exact_mod_cast` で Int divisibility に移してから `Int.natCast_dvd` で `natAbs` 側へ戻した
+
+6. 次の課題:
+   - GN 側 squarefree / valuation 上界を S2-G/S2-H の `flt_beam_*_contradiction` へ直接接続する d=3 wrapper を作る
+   - `primitive_prime_dvd_powerBeam_three_natAbs` と `flt_beam_prime_val_le_one_contradiction` を合成する
+   - `PrimitiveBeam` import によって `ZsigmondyCyclotomicResearch` の既存 `sorry` 警告が流入するため、必要なら bridge ファイル分割を検討する
