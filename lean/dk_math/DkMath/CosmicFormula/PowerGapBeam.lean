@@ -62,10 +62,20 @@ namespace DkMath.CosmicFormula.PowerGapBeam
 def powerGap {R : Type*} [Ring R] (x z : R) : R :=
   z - x
 
+/-- `powerGap` is definitionally the boundary difference `z - x`. -/
+theorem powerGap_eq_sub {R : Type*} [Ring R] (x z : R) :
+    powerGap x z = z - x := by
+  rfl
+
 /-- The power beam: the sum ∑ i < d, z^(d-1-i) × x^i.
     For d=2, this is z + x (the Pythagorean beam). -/
 def powerBeam {R : Type*} [CommRing R] (d : ℕ) (x z : R) : R :=
   Finset.sum (Finset.range d) fun i => z ^ (d - 1 - i) * x ^ i
+
+/-- `powerBeam` is the existing `diffPowSum` with endpoint order `(z, x)`. -/
+theorem powerBeam_eq_diffPowSum {R : Type*} [CommRing R] (d : ℕ) (x z : R) :
+    powerBeam d x z = DkMath.Algebra.DiffPow.diffPowSum z x d := by
+  rfl
 
 /-! ## Basic Properties -/
 
@@ -89,6 +99,22 @@ theorem powerBeam_two {R : Type*} [CommRing R] (x z : R) :
   unfold powerBeam
   rw [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_zero]
   simp
+
+/-- For d=3, the power beam is the cubic difference quotient. -/
+theorem powerBeam_three {R : Type*} [CommRing R] (x z : R) :
+    powerBeam 3 x z = z ^ 2 + z * x + x ^ 2 := by
+  unfold powerBeam
+  rw [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_succ,
+    Finset.sum_range_zero]
+  ring
+
+/-- For d=4, the power beam is the quartic difference quotient. -/
+theorem powerBeam_four {R : Type*} [CommRing R] (x z : R) :
+    powerBeam 4 x z = z ^ 3 + z ^ 2 * x + z * x ^ 2 + x ^ 3 := by
+  unfold powerBeam
+  rw [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_succ,
+    Finset.sum_range_succ, Finset.sum_range_zero]
+  ring
 
 /-! ## Main Factorization Theorem -/
 

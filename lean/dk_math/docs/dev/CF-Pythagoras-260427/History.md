@@ -717,3 +717,44 @@ Archive
    - primitive prime / Zsigmondy route から `p ∣ Beam`, `p ∤ d`, `Squarefree Beam` または `padicValNat p Beam ≤ 1` を供給する bridge を検討する
    - `powerBeam` と既存 `GN d (a-b) b` / `diffPowSum` / `PrimitiveBeam` API の対応を明示する
    - Chapter 2 の wrapper 群が増えたため、`FLTPowerGapBeamDatum` 構造体を導入するか判断する
+
+---
+
+### 日時: 2026/04/28 18:10 JST (S2-I: PowerBeam diffPowSum/GN bridge)
+
+1. 目的:
+   - review-013.md の S2-I 方針に従い、`powerBeam` を既存の `diffPowSum` / `GN` API へ明示的に接続する
+   - Power Gap/Beam 側で使っている境界差・差冪和の定義的対応を補題として固定する
+   - 低次数の展開補題を用意し、特に 3 次 Beam と既存 `GN` 表現の橋を作る
+
+2. 実施:
+   - `PowerGapBeam.lean` に以下の基本 bridge を追加:
+     - `powerGap_eq_sub`: `powerGap x z = z - x`
+     - `powerBeam_eq_diffPowSum`: `powerBeam d x z = DkMath.Algebra.DiffPow.diffPowSum z x d`
+   - 低次数展開として以下を追加:
+     - `powerBeam_three`: `powerBeam 3 x z = z^2 + z*x + x^2`
+     - `powerBeam_four`: `powerBeam 4 x z = z^3 + z^2*x + z*x^2 + x^3`
+   - 新規ファイル `PowerGapBeamGN.lean` を追加:
+     - `CosmicFormulaBinom` 依存を純粋な `PowerGapBeam.lean` から分離
+     - `powerBeam_three_shift_eq_GN` を追加し、`powerBeam 3 x (x + u) = GN 3 u x` を証明
+   - `CosmicFormula.lean` に `PowerGapBeamGN` の import を追加
+
+3. 結論:
+   - Chapter 2 の Power Gap/Beam API が、既存の差冪和 API と Lean 上で明示的に接続された
+   - 3 次の場合について、shifted endpoint 表現 `x, x+u` と既存 `GN 3 u x` の一致を no-sorry で証明できた
+   - `GN` 依存を別ファイルに切り出したため、基礎的な Gap/Beam module は軽い依存関係のまま維持できた
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeam` 成功
+   - `lake build DkMath.CosmicFormula.PowerGapBeamGN` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規補題はすべて no-sorry で証明完了
+
+5. 失敗事例:
+   - `powerBeam_three_shift_eq_GN` の初回証明では、`GN` を直接簡約するだけでは目標形まで落ちなかった
+   - 修正として `GN_eq_sum` を明示的に rewrite し、`Finset.range` を展開してから `norm_num` と `ring` で閉じた
+
+6. 次の課題:
+   - 一般次数の `powerBeam d x (x+u)` と `GN d u x` の bridge を検討する
+   - `PrimitiveBeam` / Zsigmondy route から Chapter 2 の Beam prime 仮定へ接続する
+   - `FLTPowerGapBeamDatum` 構造体導入の要否を、次段の wrapper 増加を見て判断する

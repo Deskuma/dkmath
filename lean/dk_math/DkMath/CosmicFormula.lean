@@ -10,6 +10,7 @@ import DkMath.CosmicFormula.CosmicFormulaPythagoras  -- Pythagorean Theorem as C
 import DkMath.CosmicFormula.CosmicFormulaPythagorasExamples  -- Examples
 import DkMath.CosmicFormula.PowerGapBeam  -- Power Gap/Beam for higher degrees
 import DkMath.CosmicFormula.PowerGapBeamGcd  -- GCD control for Power Gap/Beam
+import DkMath.CosmicFormula.PowerGapBeamGN  -- Bridge from Power Beam to GN
 
 #print "file: DkMath.CosmicFormula"
 
