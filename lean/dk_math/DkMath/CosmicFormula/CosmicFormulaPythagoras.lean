@@ -276,6 +276,20 @@ The link condition states: `α² * u₁² + β² * u₂² = γ² * u₃²`
 def CosmicLinkCondition {R : Type*} [CommRing R] (α β γ u₁ u₂ u₃ : R) : Prop :=
   α^2 * u₁^2 + β^2 * u₂^2 = γ^2 * u₃^2
 
+/-- The degree-`d` cosmic link condition: a higher-power analogue of
+    `CosmicLinkCondition`. -/
+def CosmicLinkConditionD {R : Type*} [CommRing R]
+    (d : ℕ) (α β γ u₁ u₂ u₃ : R) : Prop :=
+  α ^ d * u₁ ^ d + β ^ d * u₂ ^ d = γ ^ d * u₃ ^ d
+
+/-- At degree 2, the higher cosmic link condition is exactly the original
+    Pythagorean cosmic link condition. -/
+theorem cosmicLinkConditionD_two_iff {R : Type*} [CommRing R]
+    (α β γ u₁ u₂ u₃ : R) :
+    CosmicLinkConditionD 2 α β γ u₁ u₂ u₃ ↔
+      CosmicLinkCondition α β γ u₁ u₂ u₃ := by
+  rfl
+
 /-- Real number version of the cosmic link condition. -/
 abbrev CosmicLinkConditionReal (α β γ u₁ u₂ u₃ : ℝ) : Prop :=
   CosmicLinkCondition α β γ u₁ u₂ u₃
@@ -293,6 +307,21 @@ theorem cosmic_link_to_pythagoras {R : Type*} [CommRing R] (α β γ u₁ u₂ u
       = α ^ 2 * u₁ ^ 2 + β ^ 2 * u₂ ^ 2 := by ring
     _ = γ ^ 2 * u₃ ^ 2 := h
     _ = (γ * u₃) ^ 2 := by ring
+
+/-- If the degree-`d` cosmic link condition holds, then the observed edges
+    satisfy the corresponding degree-`d` power equation. -/
+theorem cosmic_linkD_to_power_equation {R : Type*} [CommRing R]
+    (d : ℕ) (α β γ u₁ u₂ u₃ : R)
+    (h : CosmicLinkConditionD d α β γ u₁ u₂ u₃) :
+    (α * u₁) ^ d + (β * u₂) ^ d = (γ * u₃) ^ d := by
+  unfold CosmicLinkConditionD at h
+  calc
+    (α * u₁) ^ d + (β * u₂) ^ d
+        = α ^ d * u₁ ^ d + β ^ d * u₂ ^ d := by
+          rw [mul_pow, mul_pow]
+    _ = γ ^ d * u₃ ^ d := h
+    _ = (γ * u₃) ^ d := by
+          rw [mul_pow]
 
 /-- Conversely, any Pythagorean triple can be expressed via the cosmic link condition. -/
 theorem pythagoras_to_cosmic_link {R : Type*} [CommRing R] (a b c : R)

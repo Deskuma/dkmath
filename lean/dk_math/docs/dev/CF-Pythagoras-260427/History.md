@@ -419,3 +419,50 @@ Archive
    - `CosmicLinkConditionD` と `cosmicLinkConditionD_two_iff` を追加する
    - FLT 型仮定 `x^d + y^d = z^d` から `y^d = powerGap x z * powerBeam d x z` を得る bridge 補題を実装する
    - 必要に応じて `PowerGapBeam.lean` の依存を純代数層と Pythagoras bridge 層に分離する
+
+---
+
+### 日時: 2026/04/28 16:50 JST (S2-B: Higher Cosmic Link and FLT Gap/Beam Bridge)
+
+1. 目的:
+   - review-006.md の S2-B 方針に従い、高次宇宙リンク条件と FLT Gap/Beam bridge を実装する
+   - `CosmicLinkCondition` の d 次版を導入し、d=2 で既存条件へ戻ることを確認する
+   - 高次リンク条件から観測辺の高次冪方程式を導く
+   - FLT 型仮定 `x^d + y^d = z^d` を Power Gap/Beam 積として観測する補題を追加する
+
+2. 実施:
+   - **高次宇宙リンク条件の追加** (`CosmicFormulaPythagoras.lean`):
+     - `CosmicLinkConditionD d α β γ u₁ u₂ u₃`
+     - 定義: `α^d * u₁^d + β^d * u₂^d = γ^d * u₃^d`
+   - **d=2 での既存条件との接続**:
+     - `cosmicLinkConditionD_two_iff`
+     - `CosmicLinkConditionD 2 ... ↔ CosmicLinkCondition ...` を `rfl` で証明
+   - **高次リンクから高次冪方程式への橋**:
+     - `cosmic_linkD_to_power_equation`
+     - `CosmicLinkConditionD d α β γ u₁ u₂ u₃` から `(α*u₁)^d + (β*u₂)^d = (γ*u₃)^d` を導出
+     - `mul_pow` によりリンク条件と観測辺の冪を接続
+   - **FLT Gap/Beam bridge の追加** (`PowerGapBeam.lean`):
+     - `flt_eq_forces_powerGapBeam`
+     - `x^d + y^d = z^d` から `y^d = powerGap x z * powerBeam d x z` を導出
+     - `flt_eq_forces_powerGapBeam_symm`
+     - 対称に `x^d = powerGap y z * powerBeam d y z` を導出
+
+3. 結論:
+   - Chapter 2 の高次宇宙リンク層が立ち上がった
+   - d=2 の Pythagorean link は `CosmicLinkConditionD` の特殊例として位置づけられた
+   - FLT 型方程式を、左右どちらの辺についても `Gap × Beam_d` の生成構造として扱えるようになった
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.CosmicFormulaPythagoras` 成功
+   - `lake build DkMath.CosmicFormula.PowerGapBeam` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規補題はすべて no-sorry で証明完了
+
+5. 失敗事例:
+   - 大きな失敗はなし
+   - `flt_eq_forces_powerGapBeam` では一般 `CommRing` 上の減法変形として `sub_eq_of_eq_add'` を使い、線形算術に依存しない形にした
+
+6. 次の課題:
+   - `powerBeam 2 x z = pythagoreanBeam x z` を既存 Pythagorean API と明示的に接続する bridge を整理する
+   - S2-C として `gcd(powerGap, powerBeam_d) ∣ d` 型の制御、または既存 `GcdDiffPow` との接続へ進む
+   - `PowerGapBeam` の純代数層と Pythagoras bridge 層を分離するか検討する
