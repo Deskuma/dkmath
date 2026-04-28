@@ -758,3 +758,43 @@ Archive
    - 一般次数の `powerBeam d x (x+u)` と `GN d u x` の bridge を検討する
    - `PrimitiveBeam` / Zsigmondy route から Chapter 2 の Beam prime 仮定へ接続する
    - `FLTPowerGapBeamDatum` 構造体導入の要否を、次段の wrapper 増加を見て判断する
+
+---
+
+### 日時: 2026/04/28 18:40 JST (S2-J: Quartic PowerBeam/GN bridge)
+
+1. 目的:
+   - review-014.md の S2-J 方針に従い、`powerBeam` と `GN` の bridge を d=4 まで拡張する
+   - 一般次数 bridge `powerBeam d x (x+u) = GN d u x` が今すぐ薄く通る形か確認する
+   - 後続の PrimitiveBeam / Zsigmondy route 接続に向けて、低次数の安定 API を増やす
+
+2. 実施:
+   - `CosmicFormulaBinom.GN_eq_sum` の形を確認:
+     - `GN d x u` は `∑ k < d, choose d (k+1) * x^k * u^(d-1-k)` という二項係数展開
+     - `powerBeam d x (x+u)` は endpoint 型の差冪和なので、一般次数 bridge には二項展開側の整理が必要
+   - `PowerGapBeamGN.lean` に `powerBeam_four_shift_eq_GN` を追加:
+     - `powerBeam 4 x (x + u) = DkMath.CosmicFormulaBinom.GN 4 u x`
+   - `PrimitiveBeam.lean` / `Zsigmondy.lean` の既存 API を確認:
+     - `primitive_prime_dvd_GN`
+     - `primitive_prime_padic_eq_GN`
+     - `primitive_prime_padic_bound_diff_of_squarefree_GN`
+     - `primitivePrimeDivisor_body_three_imp_dvd_GN`
+
+3. 結論:
+   - d=3 に続き、d=4 でも shifted Power Beam と既存 `GN` 表現の一致を no-sorry で固定できた
+   - 一般次数 bridge は数学的には自然だが、`GN` が二項係数展開であるため、単なる `rfl` / `simp` ではなく和変形または既存 GTail API の追加整備が必要と判断した
+   - PrimitiveBeam / Zsigmondy 側には `GN` への divisibility / valuation API が既にあり、次段では `powerBeam` 側へ運ぶ thin wrapper を作る方針が見えた
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamGN` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規補題は no-sorry で証明完了
+
+5. 失敗事例:
+   - `powerBeam_four_shift_eq_GN` の初回証明では `Nat.choose 4 2` が `6` に正規化されず、`ring` が閉じなかった
+   - 修正として `norm_num [Nat.choose]` を使い、二項係数を明示的に数値化してから `ring` で閉じた
+
+6. 次の課題:
+   - `PrimitiveBeam.primitive_prime_dvd_GN` を `powerBeam` 表現へ移す wrapper を作る
+   - 特に `q ∣ GN d (a-b) b` から `q ∣ powerBeam d b a` へ接続する補題を検討する
+   - 一般次数 bridge は、既存 `GTail` / `GN_eq_sum` の和変形補題を整えてから再挑戦する
