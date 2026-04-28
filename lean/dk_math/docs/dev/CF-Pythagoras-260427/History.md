@@ -382,3 +382,40 @@ Archive
    - `CosmicLinkConditionD` を定義し、高次リンク条件 `α^d u₁^d + β^d u₂^d = γ^d u₃^d` を導入する
    - FLT 型仮定 `x^d + y^d = z^d` から `y^d = powerGap x z * powerBeam d x z` を得る薄い bridge 補題を追加する
    - 高次 Beam と既存 GN / Tail / DiffPow 系 API の接続方針を決める
+
+---
+
+### 日時: 2026/04/28 16:38 JST (Power Gap/Beam 主定理の sorry 解消)
+
+1. 目的:
+   - review-005.md の S2-A 方針に従い、`PowerGapBeam.lean` に残っていた主定理の `sorry` を解消する
+   - 高次差冪因数分解 `z^d - x^d = (z-x) * powerBeam d x z` を既存 API と接続して証明する
+
+2. 実施:
+   - 既存の差冪 API を確認し、`DkMath.Algebra.DiffPow` に以下が既に実装済みであることを確認:
+     - `diffPowSum a b d = ∑ i ∈ range d, a^(d-1-i) * b^i`
+     - `pow_sub_pow_factor`: `a^d - b^d = (a-b) * diffPowSum a b d`
+   - `PowerGapBeam.lean` に `import DkMath.Algebra.DiffPow` を追加
+   - `pow_sub_pow_eq_gap_mul_powerBeam` を `pow_sub_pow_factor (a := z) (b := x)` の wrapper として証明
+   - `powerGap`, `powerBeam`, `DkMath.Algebra.DiffPow.diffPowSum` を `simpa` で展開し、独自定義と既存商の一致を利用
+
+3. 結論:
+   - `pow_sub_pow_eq_gap_mul_powerBeam` の `sorry` を解消した
+   - `PowerGapBeam` は独自に帰納法を再実装せず、既存の `DiffPow` 基盤を再利用する薄い高次 Gap/Beam フロントエンドになった
+   - Chapter 2 の入口である高次差冪の主因数分解が Lean 上で証明済みになった
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeam` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - `grep -n "sorry" lean/dk_math/DkMath/CosmicFormula/PowerGapBeam.lean` で対象ファイル内に `sorry` が残っていないことを確認
+
+5. 失敗事例:
+   - 直接帰納法による証明は採用しなかった
+     - 理由: `d - 1 - i` を含む和の添字操作を再証明する必要があり、既存 `DiffPow` の証明と重複するため
+     - 対応: `DiffPow.pow_sub_pow_factor` を正準補題として再利用し、`PowerGapBeam` 側は概念名の wrapper に徹した
+
+6. 次の課題:
+   - `PowerGapBeam` と Pythagorean API の bridge を整理し、`powerBeam 2 x z = pythagoreanBeam x z` を既存 API 名で明示する
+   - `CosmicLinkConditionD` と `cosmicLinkConditionD_two_iff` を追加する
+   - FLT 型仮定 `x^d + y^d = z^d` から `y^d = powerGap x z * powerBeam d x z` を得る bridge 補題を実装する
+   - 必要に応じて `PowerGapBeam.lean` の依存を純代数層と Pythagoras bridge 層に分離する

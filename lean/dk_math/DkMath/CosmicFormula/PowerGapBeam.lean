@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import Mathlib
+import DkMath.Algebra.DiffPow
 import DkMath.CosmicFormula.CosmicFormulaBasic
 
 #print "file: DkMath.CosmicFormula.PowerGapBeam"
@@ -99,7 +100,8 @@ theorem powerBeam_two {R : Type*} [CommRing R] (x z : R) :
 theorem pow_sub_pow_eq_gap_mul_powerBeam {R : Type*} [CommRing R]
     (d : ℕ) (x z : R) :
     z ^ d - x ^ d = powerGap x z * powerBeam d x z := by
-  sorry  -- TODO: Implement using existing GN/diffPowSum lemmas
+  simpa [powerGap, powerBeam, DkMath.Algebra.DiffPow.diffPowSum] using
+    DkMath.Algebra.DiffPow.pow_sub_pow_factor (a := z) (b := x) (d := d)
 
 /-! ## Connection to Pythagorean Case -/
 
