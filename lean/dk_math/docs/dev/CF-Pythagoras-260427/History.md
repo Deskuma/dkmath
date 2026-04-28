@@ -550,3 +550,45 @@ Archive
    - `p ∤ d` かつ `p ∣ Beam` のとき、`padicValNat p (Gap * Beam)` が Beam 側から来ることを示す wrapper を検討する
    - primitive prime / valuation 上界側の既存 API と接続する
    - 必要に応じて `FLTPowerGapBeamDatum` 構造体を導入する
+
+---
+
+### 日時: 2026/04/28 17:31 JST (S2-E: Power Gap/Beam valuation bridge)
+
+1. 目的:
+   - review-009.md の S2-E 方針に従い、Beam 側の素因子が積全体の p-adic valuation にそのまま反映される bridge を作る
+   - `p ∤ Gap` から `v_p(|Gap * Beam|) = v_p(|Beam|)` を導く一般補題を用意する
+   - FLT 文脈で `p ∤ d` かつ `p ∣ Beam` のとき、S2-D の Gap 非整除補題を介して valuation 等式を得る
+
+2. 実施:
+   - `PowerGapBeamGcd.lean` に Valuation Bridge セクションを追加
+   - `padicValNat_natAbs_mul_eq_right_of_not_dvd_left` を追加:
+     - 仮定: `Nat.Prime p`, `¬ p ∣ gap.natAbs`
+     - 結論: `padicValNat p (gap * beam).natAbs = padicValNat p beam.natAbs`
+     - `Int.natAbs_mul`, `padicValNat.mul`, `padicValNat.eq_zero_of_not_dvd` を使用
+     - `beam = 0` の場合も分岐して処理
+   - `flt_padicValNat_product_eq_beam_of_beam_prime` を追加:
+     - 仮定: `1 ≤ d`, `Int.gcd z x = 1`, `x^d + y^d = z^d`, `Nat.Prime p`, `¬ p ∣ d`, `p ∣ (powerBeam d x z).natAbs`
+     - 結論: `padicValNat p (powerGap x z * powerBeam d x z).natAbs = padicValNat p (powerBeam d x z).natAbs`
+   - `flt_padicValNat_product_eq_beam_of_beam_prime_symm` を追加:
+     - 対称に `y` 側基準の Gap / Beam で同じ valuation 等式を証明
+
+3. 結論:
+   - S2-D の「Beam prime は Gap に入らない」という補題が、p-adic valuation の等式へ接続された
+   - FLT 型方程式から得た `Gap × Beam_d` の積に対して、`p ∤ d` の Beam 側素因子は valuation 上も Beam 側だけから来ることを Lean 上で扱えるようになった
+   - primitive prime / squarefree 上界と衝突させるための valuation 入口ができた
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamGcd` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規補題はすべて no-sorry で証明完了
+
+5. 失敗事例:
+   - 大きな失敗はなし
+   - `padicValNat.mul` は非ゼロ仮定を要求するため、`beam.natAbs = 0` の場合を先に分岐した
+   - `gap.natAbs ≠ 0` は `¬ p ∣ gap.natAbs` から導出した
+
+6. 次の課題:
+   - `y^d = Gap * Beam` と今回の valuation bridge を組み合わせ、`padicValNat p Beam = d * padicValNat p |y|` 型の補題へ進む
+   - `padicValNat.pow` と `Int.natAbs_pow` を使って完全 d 乗側の valuation を取り出す
+   - Beam 側の primitive prime / valuation 上界 API と接続する
