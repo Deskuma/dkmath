@@ -466,3 +466,44 @@ Archive
    - `powerBeam 2 x z = pythagoreanBeam x z` を既存 Pythagorean API と明示的に接続する bridge を整理する
    - S2-C として `gcd(powerGap, powerBeam_d) ∣ d` 型の制御、または既存 `GcdDiffPow` との接続へ進む
    - `PowerGapBeam` の純代数層と Pythagoras bridge 層を分離するか検討する
+
+---
+
+### 日時: 2026/04/28 17:05 JST (S2-C: Power Gap/Beam gcd control bridge)
+
+1. 目的:
+   - review-007.md の S2-C 方針に従い、Power Gap/Beam と既存 `GcdDiffPow` の gcd 制御を接続する
+   - `gcd(powerGap, powerBeam_d) ∣ d` 型の wrapper を用意する
+   - FLT bridge の次段で使う「d を割らない素数は Gap と Beam を同時に割れない」という形を追加する
+
+2. 実施:
+   - 新規ファイル `DkMath/CosmicFormula/PowerGapBeamGcd.lean` を作成
+   - `PowerGapBeam.lean` 本体には数論依存を入れず、gcd 制御を bridge ファイルへ分離
+   - `DkMath.NumberTheory.GcdDiffPow.gcd_divides_d` を再利用
+   - `gcd_powerGap_powerBeam_dvd_d_of_coprime_int` を追加:
+     - 仮定: `1 ≤ d`, `Int.gcd z x = 1`
+     - 結論: `Int.gcd (powerGap x z) (powerBeam d x z) ∣ d`
+   - `prime_not_dvd_d_not_dvd_powerGap_and_powerBeam` を追加:
+     - 仮定: `1 ≤ d`, `Int.gcd z x = 1`, `¬ p ∣ d`
+     - 結論: `p` は `(powerGap x z).natAbs` と `(powerBeam d x z).natAbs` を同時には割れない
+   - `DkMath/CosmicFormula.lean` から `PowerGapBeamGcd` を import
+
+3. 結論:
+   - Power Gap/Beam が単なる差冪恒等式から、既存 FLT 幹線の gcd 制御層へ接続された
+   - primitive 条件 `gcd(z,x)=1` の下で、Gap と Beam の共通因子が次数 `d` に押し込まれる形を得た
+   - FLT 型方程式を `Gap × Beam_d` と見た後、p-adic / primitive prime 議論へ進むための入口ができた
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamGcd` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規補題はすべて no-sorry で証明完了
+
+5. 失敗事例:
+   - 大きな失敗はなし
+   - 当初は `PowerGapBeam.lean` 本体に gcd 補題を置く選択肢もあったが、依存を重くしすぎないため新規 bridge ファイルへ分離した
+
+6. 次の課題:
+   - `flt_eq_forces_powerGapBeam` と `gcd_powerGap_powerBeam_dvd_d_of_coprime_int` を組み合わせた FLT 専用 bridge を作る
+   - `p ∤ d` の primitive prime が Beam 側へ現れる場合の valuation 制御へ接続する
+   - Nat 版 / ℤ 版のどちらを標準 API にするか整理する
+   - `powerBeam 2 x z = pythagoreanBeam x z` の Pythagorean bridge を別ファイルで明示する
