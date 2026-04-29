@@ -1,0 +1,16 @@
+import DkMath.CosmicFormula.PowerGapBeamGN
+import DkMath.CosmicFormula.PowerGapBeamPrimitive
+
+open DkMath.CosmicFormula.PowerGapBeam
+
+#check powerBeam_three_eq_GN_of_gap
+#check powerBeam_three_padicValNat_eq_GN_gap
+#check powerBeam_three_squarefree_of_GN_squarefree
+
+#check CubicPrimitiveFLTContext
+#check CubicPrimitiveFLTContext.prime
+#check CubicPrimitiveFLTContext.q_not_dvd_three
+#check CubicPrimitiveFLTContext.beam_dvd
+#check CubicPrimitiveFLTContext.beam_ne
+#check CubicPrimitiveFLTContext.val_le_one_contradiction
+#check CubicPrimitiveFLTContext.squarefree_contradiction
