@@ -917,3 +917,405 @@ Archive
    - `primitive_prime_dvd_powerBeam_three_natAbs` を使い、Nat primitive prime witness から d=3 contradiction wrapper の `hbeam` を供給する合成補題を検討する
    - `PowerGapBeamGN.lean` が `PrimitiveBeam` と `PowerGapBeamGcd` の両方を import して重くなってきたため、必要なら `PowerGapBeamPrimitive.lean` などへ分割する
    - `FLTPowerGapBeamDatum` 構造体を導入するか、wrapper 群のまま進めるか判断する
+
+---
+
+### 日時: 2026/04/29 19:29 JST (S2-N: Primitive witness to cubic GN contradiction)
+
+1. 目的:
+   - review-018.md の S2-N 方針に従い、Nat primitive prime witness から d=3 の FLT contradiction wrapper へ直接接続する
+   - S2-L の `primitive_prime_dvd_powerBeam_three_natAbs` を使って、S2-M の `hbeam` 仮定を自動供給する
+   - GN 側 valuation 上界版と squarefree 版の両方で、primitive witness 付きの一発 wrapper を作る
+
+2. 実施:
+   - `PowerGapBeamGN.lean` に以下の合成補題を追加:
+     - `flt_three_primitive_GN_val_le_one_contradiction`
+     - `flt_three_primitive_GN_squarefree_contradiction`
+   - `PrimitivePrimeFactorOfDiffPow q a b 3` から `Nat.Prime q` は `hq.1` で取り出す形にした
+   - `q ∣ (powerBeam 3 (b : ℤ) (a : ℤ)).natAbs` は `primitive_prime_dvd_powerBeam_three_natAbs hq hab_lt` で供給
+   - `q ∤ 3` は primitive witness には含まれないため、明示仮定 `hqnd : ¬ q ∣ 3` として残した
+
+3. 結論:
+   - Nat 側 primitive prime witness から、d=3 の GN valuation / squarefree fuel を使った FLT contradiction までが直接つながった
+   - Chapter 2 の d=3 route は、`PrimitiveBeam -> GN -> PowerBeam -> valuation contradiction` の合成 API まで到達した
+   - 利用者は Nat/Int cast や `hbeam` 供給を手で行わず、primitive witness と GN 側上界情報を渡すだけで `False` を得られる
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamGN` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規補題はすべて no-sorry で証明完了
+   - build warning として、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` 警告が再表示された
+
+5. 失敗事例:
+   - 大きな失敗はなし
+   - S2-M の contradiction wrapper に、S2-L の primitive divisibility wrapper を渡すだけで閉じた
+
+6. 次の課題:
+   - `PowerGapBeamGN.lean` が重くなったため、軽量 GN bridge と primitive/gcd contradiction bridge をファイル分割するか検討する
+   - `q ∤ 3` や `hbeam_ne` を既存 primitive / FLT 文脈から供給できる補助補題を検討する
+   - `FLTPowerGapBeamDatum` 構造体の導入タイミングを判断する
+
+---
+
+### 日時: 2026/04/29 19:42 JST (S2-O: Split primitive bridge from PowerGapBeamGN)
+
+1. 目的:
+   - review-019.md の提案に従い、重くなった `PowerGapBeamGN.lean` を軽量 GN bridge に戻す
+   - `PrimitiveBeam` と `PowerGapBeamGcd` に依存する contradiction wrapper 群を専用ファイルへ分離する
+   - `PrimitiveBeam` 経由で流入する既存 `sorry` warning を、軽量 GN bridge から隔離する
+
+2. 実施:
+   - 新規ファイル `PowerGapBeamPrimitive.lean` を追加:
+     - `DkMath.CosmicFormula.PowerGapBeamGN`
+     - `DkMath.CosmicFormula.PowerGapBeamGcd`
+     - `DkMath.NumberTheory.PrimitiveBeam`
+     を import
+   - `PowerGapBeamGN.lean` から以下の重い bridge を `PowerGapBeamPrimitive.lean` へ移動:
+     - `primitive_prime_dvd_powerBeam_three_natAbs`
+     - `flt_three_beam_GN_val_le_one_contradiction`
+     - `flt_three_beam_GN_squarefree_contradiction`
+     - `flt_three_primitive_GN_val_le_one_contradiction`
+     - `flt_three_primitive_GN_squarefree_contradiction`
+   - `PowerGapBeamGN.lean` から `PowerGapBeamGcd` / `PrimitiveBeam` import を削除
+   - `CosmicFormula.lean` に `PowerGapBeamPrimitive` import を追加
+
+3. 結論:
+   - `PowerGapBeamGN.lean` は、低次数 GN bridge と valuation / squarefree の単純移送に責務を戻した
+   - primitive witness と FLT contradiction まで含む重い API は `PowerGapBeamPrimitive.lean` に隔離された
+   - モジュール境界が整理され、軽量 GN bridge を使うだけなら `PrimitiveBeam` / research warning に触れずに済む構造になった
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamGN` 成功
+   - `lake build DkMath.CosmicFormula.PowerGapBeamPrimitive` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 移動した補題はすべて no-sorry のまま維持
+   - `PowerGapBeamPrimitive` 側では、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` 警告が再表示される
+
+5. 失敗事例:
+   - 大きな失敗はなし
+   - 補題本体は変更せず、import 境界と配置だけを整理したため、証明はそのまま通った
+
+6. 次の課題:
+   - `q ∤ 3` を primitive witness または追加補題から供給できるか調査する
+   - `hbeam_ne` を既存 positivity / nonzero API から供給できるか調査する
+   - `FLTPowerGapBeamDatum` または cubic 専用 datum 構造体を導入するか判断する
+
+---
+
+### 日時: 2026/04/29 19:56 JST (S2-P: Cubic PowerBeam nonzero from ordered endpoints)
+
+1. 目的:
+   - review-020.md の提案に従い、d=3 primitive contradiction wrapper の明示仮定 `hbeam_ne` を削減する
+   - `b < a` から `(powerBeam 3 (b : ℤ) (a : ℤ)).natAbs ≠ 0` を自動供給する補題を作る
+   - 既存の primitive contradiction wrapper に、Beam 非ゼロ仮定を内部供給する使いやすい版を追加する
+
+2. 実施:
+   - `PowerGapBeamPrimitive.lean` に `powerBeam_three_natAbs_ne_zero_of_lt` を追加:
+     - 仮定: `b < a`
+     - 結論: `(powerBeam 3 (b : ℤ) (a : ℤ)).natAbs ≠ 0`
+     - `powerBeam_three` で展開し、`a > 0` と `positivity` から Beam 正値性を示した
+   - `hbeam_ne` を明示仮定に取らない wrapper を追加:
+     - `flt_three_primitive_GN_val_le_one_contradiction_of_lt`
+     - `flt_three_primitive_GN_squarefree_contradiction_of_lt`
+   - 既存の `flt_three_primitive_GN_*_contradiction` は後方互換のため残し、新補題は `hab_lt` から `powerBeam_three_natAbs_ne_zero_of_lt` を呼び出す構成にした
+
+3. 結論:
+   - d=3 primitive contradiction wrapper の利用時に、Beam 非ゼロ性を手で渡す必要がなくなった
+   - `b < a` は primitive / endpoint 文脈で既に自然に持っている仮定なので、API の実用性が上がった
+   - `q ∤ 3` は cubic 例外と絡む可能性があるため、今回は明示仮定として維持した
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamPrimitive` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規補題はすべて no-sorry で証明完了
+   - build warning として、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` 警告が再表示された
+
+5. 失敗事例:
+   - 大きな失敗はなし
+   - Int 上の三次 Beam を `powerBeam_three` で明示展開し、`positivity` で正値性を閉じられた
+
+6. 次の課題:
+   - `q ∤ 3` を primitive witness から無条件に出せるか、または cubic 例外として残すべきかを調査する
+   - `hqnd` を維持する場合、名前付き wrapper / context 構造体で扱いやすくする
+   - cubic 専用 datum 構造体を導入するか判断する
+
+---
+
+### 日時: 2026/04/29 20:04 JST (S2-Q: q ≠ 3 wrapper for cubic primitive route)
+
+1. 目的:
+   - review-021.md の提案に従い、明示仮定 `q ∤ 3` をより読みやすい十分条件 `q ≠ 3` から供給する
+   - cubic では `q = 3` が特例になり得るため、primitive witness から無条件に `q ∤ 3` を消すことは避ける
+   - 既存の `_of_lt` wrapper に、`q ≠ 3` 版の使いやすい入口を追加する
+
+2. 実施:
+   - `PowerGapBeamPrimitive.lean` に `prime_not_dvd_three_of_ne_three` を追加:
+     - 仮定: `Nat.Prime q`, `q ≠ 3`
+     - 結論: `¬ q ∣ 3`
+     - `Nat.dvd_prime Nat.prime_three` で `q ∣ 3` から `q = 1 ∨ q = 3` を取り出し、素数性と `q ≠ 3` で矛盾させた
+   - `q ≠ 3` を受け取る cubic primitive contradiction wrapper を追加:
+     - `flt_three_primitive_GN_val_le_one_contradiction_of_lt_ne_three`
+     - `flt_three_primitive_GN_squarefree_contradiction_of_lt_ne_three`
+   - 新 wrapper は `hq.1 : Nat.Prime q` と `q ≠ 3` から `prime_not_dvd_three_of_ne_three` を呼び、既存の `_of_lt` 版へ接続する構成にした
+
+3. 結論:
+   - 利用者は `¬ q ∣ 3` を直接渡さず、より自然な `q ≠ 3` を渡せるようになった
+   - cubic の特別素数 `3` を無理に排除せず、例外を明示的に分岐できる API になった
+   - 既存の `hqnd` 明示版は維持しつつ、通常利用向けの読みやすい十分条件版が追加された
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamPrimitive` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規補題はすべて no-sorry で証明完了
+   - 初回は存在しない補題名 `Nat.Prime.dvd_prime_iff_eq` を使って失敗し、既存コードでも使われていた `Nat.dvd_prime` へ修正して解決した
+   - build warning として、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` 警告が再表示された
+
+5. 失敗事例:
+   - `Nat.Prime.dvd_prime_iff_eq` は現環境に存在せず、ビルドに失敗した
+   - 修正として `Nat.dvd_prime Nat.prime_three` を用い、`q ∣ 3` から `q = 1 ∨ q = 3` を得る形にした
+
+6. 次の課題:
+   - `q = 3` の cubic 特例を別ルートとして扱うべきか調査する
+   - `hqnd` / `q ≠ 3` を含む cubic 専用 context 構造体を導入するか判断する
+   - 既存 wrapper 群の標準入口を `_of_lt_ne_three` 版へ寄せるか検討する
+
+---
+
+### 日時: 2026/04/29 20:09 JST (S2-R: Cubic primitive FLT context)
+
+1. 目的:
+   - review-022.md の提案に従い、通常 branch (`q ≠ 3`) の cubic primitive route を束ねる context 構造体を試作する
+   - 既存 wrapper の長い仮定列をまとめ、valuation / squarefree contradiction を context theorem として呼べるようにする
+   - `q = 3` の exceptional branch は未解決のまま分離し、通常 branch の API を整理する
+
+2. 実施:
+   - `PowerGapBeamPrimitive.lean` に `CubicPrimitiveFLTContext` 構造体を追加:
+     - `q a b : ℕ`
+     - `y : ℤ`
+     - `hprim : PrimitivePrimeFactorOfDiffPow q a b 3`
+     - `hab_lt : b < a`
+     - `hcop : Int.gcd (a : ℤ) (b : ℤ) = 1`
+     - `hflt : (b : ℤ)^3 + y^3 = (a : ℤ)^3`
+     - `hy_ne : y.natAbs ≠ 0`
+     - `hq_ne_three : q ≠ 3`
+   - `CubicPrimitiveFLTContext` namespace に以下を追加:
+     - `val_le_one_contradiction`
+     - `squarefree_contradiction`
+   - どちらも既存の `_of_lt_ne_three` wrapper を呼ぶ薄い構成にした
+
+3. 結論:
+   - 通常 cubic primitive route の仮定群を一つの context として扱えるようになった
+   - GN 側の valuation 上界または squarefree 仮定だけを追加で渡せば、context theorem から `False` を得られる
+   - `q ≠ 3` は context の明示フィールドとして残し、cubic exceptional branch を無理に通常 route に混ぜない設計にした
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamPrimitive` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規構造体 / 補題は no-sorry で証明完了
+   - build warning として、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` 警告が再表示された
+
+5. 失敗事例:
+   - 大きな失敗はなし
+   - context theorem は既存 `_of_lt_ne_three` wrapper に委譲するだけで閉じた
+
+6. 次の課題:
+   - `q = 3` の cubic exceptional branch を別 context または別 wrapper として扱うか調査する
+   - 通常 branch の標準入口を context theorem に寄せるか判断する
+   - context に追加すべき導出補題（Beam divisibility / Beam nonzero など）を整理する
+
+---
+
+### 日時: 2026/04/29 20:14 JST (S2-S: Cubic context derived facts)
+
+1. 目的:
+   - review-023.md の提案に従い、`CubicPrimitiveFLTContext` を観測パックとして使いやすくする
+   - context から頻繁に使う導出事実を namespace theorem として追加する
+   - 通常 cubic branch の利用時に、primitive witness / endpoint 条件からの導出を毎回手で展開しなくてよいようにする
+
+2. 実施:
+   - `PowerGapBeamPrimitive.lean` の `CubicPrimitiveFLTContext` namespace に以下を追加:
+     - `prime`: `Nat.Prime C.q`
+     - `q_not_dvd_three`: `¬ C.q ∣ 3`
+     - `beam_dvd`: `C.q ∣ (powerBeam 3 (C.b : ℤ) (C.a : ℤ)).natAbs`
+     - `beam_ne`: `(powerBeam 3 (C.b : ℤ) (C.a : ℤ)).natAbs ≠ 0`
+   - 既存補題を薄く再利用:
+     - `prime_not_dvd_three_of_ne_three`
+     - `primitive_prime_dvd_powerBeam_three_natAbs`
+     - `powerBeam_three_natAbs_ne_zero_of_lt`
+
+3. 結論:
+   - `CubicPrimitiveFLTContext` が、単なる仮定束ではなく、必要な観測事実を引き出せる API になった
+   - 通常 branch で必要な prime / degree 非整除 / Beam divisibility / Beam nonzero が context から直接取得できる
+   - 既存の contradiction theorem はそのまま維持し、context の利便性だけを増やした
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamPrimitive` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規補題はすべて no-sorry で証明完了
+   - build warning として、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` 警告が再表示された
+
+5. 失敗事例:
+   - 大きな失敗はなし
+   - すべて既存の wrapper / projection に委譲するだけで閉じた
+
+6. 次の課題:
+   - `q = 3` の cubic exceptional branch を別 context として切るか判断する
+   - context theorem を通常 branch の標準入口として文書化する
+   - context から GN 側 valuation / squarefree 仮定をどの形で供給するのが自然か検討する
+
+---
+
+### 日時: 2026/04/29 21:23 JST (S2-T: Cubic context standard API documentation)
+
+1. 目的:
+   - review-024.md の提案に従い、`CubicPrimitiveFLTContext` を通常 cubic branch (`q ≠ 3`) の標準入口として明確化する
+   - 既存の context API が、どの分岐で何を供給するためのものかを docstring 上で読み取れるようにする
+   - 新しい数学補題は追加せず、S2-S までに作った API の signage を整える
+
+2. 実施:
+   - `PowerGapBeamPrimitive.lean` のモジュールドキュメントを拡張:
+     - `PowerGapBeamGN` を軽量な algebra / `GN` identity 層として保つことを明記
+     - `PowerGapBeamPrimitive` が `PrimitiveBeam` / `PowerGapBeamGcd` を読む重い primitive-prime 層であることを明記
+     - `CubicPrimitiveFLTContext` が ordinary branch `q ≠ 3` の bundled entry point であり、exceptional branch `q = 3` は別 API に分ける方針を記録
+   - `CubicPrimitiveFLTContext` の docstring を拡張:
+     - primitive witness, `b < a`, coprime FLT-shaped equation, observed side nonzero, `q ≠ 3` を束ねる context であることを明記
+     - 標準利用 API として `C.prime`, `C.q_not_dvd_three`, `C.beam_dvd`, `C.beam_ne`, `C.val_le_one_contradiction`, `C.squarefree_contradiction` を列挙
+   - context namespace 内の各 theorem docstring を標準 API / 標準 contradiction API として明示:
+     - `prime`
+     - `q_not_dvd_three`
+     - `beam_dvd`
+     - `beam_ne`
+     - `val_le_one_contradiction`
+     - `squarefree_contradiction`
+
+3. 結論:
+   - ordinary cubic primitive branch の入口が `CubicPrimitiveFLTContext` であることが、コード上の docstring から追えるようになった
+   - `q = 3` exceptional branch をこの context に混ぜない設計判断も明文化された
+   - S2-S で追加した導出 API と contradiction API の位置づけが整理された
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamPrimitive` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - `grep -n "sorry" lean/dk_math/DkMath/CosmicFormula/PowerGapBeamPrimitive.lean` は該当なし
+   - build warning として、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` 警告が再表示された
+
+5. 失敗事例:
+   - 大きな失敗はなし
+   - 今回は docstring のみの変更で、定理本体・証明本体には触れていない
+
+6. 次の課題:
+   - `q = 3` の cubic exceptional branch を別 context / 別 wrapper として設計するか判断する
+   - GN 側 valuation / squarefree 仮定を context API にどの粒度で寄せるか検討する
+   - ordinary branch の標準入口を downstream から実際に使い、必要な補助 API を追加する
+
+---
+
+### 日時: 2026/04/29 21:36 JST (S2-U: Chapter 2 route map documentation)
+
+1. 目的:
+   - review-025.md の提案に従い、これ以上数学本体を増やさず、Chapter 2 の接続図を文書化する
+   - d=3 ordinary primitive branch (`q ≠ 3`) で閉じた範囲と、まだ閉じていない範囲を明確に分ける
+   - 後続作業で再開しやすいよう、主要 theorem / file / API の対応関係を route map として固定する
+
+2. 実施:
+   - `RouteMap.md` を新規作成
+   - Chapter 2 の到達点を次の形で記録:
+     - d=3 ordinary primitive branch の抽象反駁エンジンは no-sorry で接続済み
+     - FLT d=3 全体を閉じたとはまだ主張しない
+   - 通常枝の主要経路を文書化:
+     - `PrimitiveBeam -> GN -> PowerBeam -> gcd / p-adic valuation -> contradiction`
+   - Lean 上の層と主要 API を表で整理:
+     - `PowerGapBeam.lean`
+     - `PowerGapBeamGN.lean`
+     - `PowerGapBeamGcd.lean`
+     - `PowerGapBeamPrimitive.lean`
+     - `CubicPrimitiveFLTContext`
+   - `CubicPrimitiveFLTContext` の標準 API を列挙:
+     - `C.prime`
+     - `C.q_not_dvd_three`
+     - `C.beam_dvd`
+     - `C.beam_ne`
+     - `C.val_le_one_contradiction`
+     - `C.squarefree_contradiction`
+   - 残課題を明示:
+     - exceptional branch `q = 3`
+     - GN 側 valuation / squarefree fuel の自動供給
+
+3. 結論:
+   - Chapter 2 の成果を「d=3 ordinary primitive branch の no-sorry 抽象反駁エンジン」として、誠実な範囲で固定できた
+   - `q = 3` exceptional branch と GN fuel 自動供給は、別タスクとして残すことを明記した
+   - 後続作業で、どの theorem がどの層に属するかを `RouteMap.md` から追えるようになった
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula` 成功
+   - `grep -R "sorry" -n lean/dk_math/DkMath/CosmicFormula/PowerGapBeam*.lean` は該当なし
+   - build warning として、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` 警告が再表示された
+
+5. 失敗事例:
+   - 大きな失敗はなし
+   - 今回は文書追加のみで、Lean の定理本体・証明本体には触れていない
+
+6. 次の課題:
+   - `q = 3` exceptional branch の context / wrapper 設計を検討する
+   - GN 側 valuation / squarefree fuel を供給する Zsigmondy / squarefree pipeline を整理する
+   - Chapter 2 の route map をもとに、次章で扱う範囲を切り分ける
+
+---
+
+### 日時: 2026/04/29 21:48 JST (S2-V..S2-Z: Chapter 2 closure and S3 handoff)
+
+1. 目的:
+   - review-026.md の提案に従い、S2-V から S2-Z までの残る〆作業を一括で完了する
+   - Chapter 2 の成果、未解決課題、warning/import 境界、標準 API smoke check、S3 候補を文書として固定する
+   - この branch を「d=3 ordinary primitive branch の no-sorry 抽象反駁エンジン」までで閉じる
+
+2. 実施:
+   - S2-V: `OpenProblems.md` を新規作成し、次章送りの課題を整理:
+     - cubic exceptional branch `q = 3`
+     - GN fuel 自動供給
+     - 一般次数 bridge
+     - d=4 / Pythagorean square-lift route
+     - lightweight / heavy import 境界
+   - S2-W: import / warning 境界を確認:
+     - `PowerGapBeamGN` は軽量 bridge として既存 `sorry` warning を引かずに build 成功
+     - `PowerGapBeamPrimitive` は重い primitive-prime 層として、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` warning を引く
+   - S2-X: `SmokeCheck.lean` を新規作成し、標準 API の `#check` を実行:
+     - `powerBeam_three_eq_GN_of_gap`
+     - `powerBeam_three_padicValNat_eq_GN_gap`
+     - `powerBeam_three_squarefree_of_GN_squarefree`
+     - `CubicPrimitiveFLTContext`
+     - `CubicPrimitiveFLTContext.prime`
+     - `CubicPrimitiveFLTContext.q_not_dvd_three`
+     - `CubicPrimitiveFLTContext.beam_dvd`
+     - `CubicPrimitiveFLTContext.beam_ne`
+     - `CubicPrimitiveFLTContext.val_le_one_contradiction`
+     - `CubicPrimitiveFLTContext.squarefree_contradiction`
+   - S2-Y: `Chapter2Summary.md` を新規作成し、Chapter 2 の claim / non-claim を整理
+   - S2-Z: `S3-Considerations.md` を新規作成し、S3 の候補方向を整理:
+     - exceptional cubic branch
+     - GN fuel automation
+     - general degree bridge
+     - d=4 route
+   - `RouteMap.md` に closure documents の一覧を追記
+
+3. 結論:
+   - Chapter 2 は、d=3 ordinary primitive branch (`q ≠ 3`) の抽象反駁エンジンまでを no-sorry で接続した章として閉じた
+   - FLT d=3 全体の完全反駁は主張せず、`q = 3` exceptional branch と GN fuel 自動供給を S3 以降の課題として明示した
+   - 後続作業は `RouteMap.md`, `OpenProblems.md`, `Chapter2Summary.md`, `S3-Considerations.md`, `SmokeCheck.lean` から再開できる状態になった
+
+4. 検証:
+   - `lake env lean docs/dev/CF-Pythagoras-260427/SmokeCheck.lean` 成功
+   - `lake build DkMath.CosmicFormula.PowerGapBeamGN` 成功
+   - `lake build DkMath.CosmicFormula.PowerGapBeamPrimitive` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - `grep -R "sorry" -n lean/dk_math/DkMath/CosmicFormula/PowerGapBeam*.lean` は該当なし
+   - build warning として、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` 警告が再表示された
+
+5. 失敗事例:
+   - 通常 sandbox で `lake env lean docs/dev/CF-Pythagoras-260427/SmokeCheck.lean` が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した
+   - 承認済みの escalated 実行で同じ smoke check を再実行し、成功を確認した
+
+6. 次の課題:
+   - S3-A として `q = 3` exceptional branch の context/API 境界を設計する
+   - S3-B として GN fuel automation のため、Zsigmondy / squarefree 層から proved API を昇格できるか調べる
+   - S3-C 以降で general degree bridge または d=4 route を、Chapter 2 の ordinary cubic route とは分けて進める

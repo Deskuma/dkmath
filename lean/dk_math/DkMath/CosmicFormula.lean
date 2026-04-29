@@ -11,6 +11,7 @@ import DkMath.CosmicFormula.CosmicFormulaPythagorasExamples  -- Examples
 import DkMath.CosmicFormula.PowerGapBeam  -- Power Gap/Beam for higher degrees
 import DkMath.CosmicFormula.PowerGapBeamGcd  -- GCD control for Power Gap/Beam
 import DkMath.CosmicFormula.PowerGapBeamGN  -- Bridge from Power Beam to GN
+import DkMath.CosmicFormula.PowerGapBeamPrimitive  -- Primitive Power Beam bridge
 
 #print "file: DkMath.CosmicFormula"
 
