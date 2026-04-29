@@ -19,6 +19,17 @@ out of the lightweight `PowerGapBeamGN` bridge.
 
 namespace DkMath.CosmicFormula.PowerGapBeam
 
+/-- A prime distinct from `3` does not divide `3`. -/
+theorem prime_not_dvd_three_of_ne_three
+    {q : ℕ}
+    (hq : Nat.Prime q)
+    (hne : q ≠ 3) :
+    ¬ q ∣ 3 := by
+  intro hq_dvd_three
+  rcases (Nat.dvd_prime Nat.prime_three).mp hq_dvd_three with hq_one | hq_three
+  · exact Nat.Prime.ne_one hq hq_one
+  · exact hne hq_three
+
 /-- Primitive-prime divisibility from the Nat `GN` API, transported to the
     integer endpoint Power Beam used by the valuation engine. -/
 theorem primitive_prime_dvd_powerBeam_three_natAbs
@@ -180,6 +191,46 @@ theorem flt_three_primitive_GN_squarefree_contradiction_of_lt
   flt_three_primitive_GN_squarefree_contradiction
     hq hab_lt hcop hflt hy_ne hqnd
     (powerBeam_three_natAbs_ne_zero_of_lt hab_lt)
+    hGN_sq
+
+/-- Cubic FLT contradiction from a Nat primitive-prime witness and a `GN`
+    valuation upper bound, using `q ≠ 3` as the readable sufficient condition
+    for `q ∤ 3`. -/
+theorem flt_three_primitive_GN_val_le_one_contradiction_of_lt_ne_three
+    {q a b : ℕ} {y : ℤ}
+    (hq : DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow q a b 3)
+    (hab_lt : b < a)
+    (hcop : Int.gcd (a : ℤ) (b : ℤ) = 1)
+    (hflt : (b : ℤ) ^ 3 + y ^ 3 = (a : ℤ) ^ 3)
+    (hy_ne : y.natAbs ≠ 0)
+    (hq_ne_three : q ≠ 3)
+    (hGN_le_one :
+      padicValNat q
+        (DkMath.CosmicFormulaBinom.GN 3 ((a : ℤ) - (b : ℤ)) (b : ℤ)).natAbs ≤ 1) :
+    False :=
+  flt_three_primitive_GN_val_le_one_contradiction_of_lt
+    hq hab_lt hcop hflt hy_ne
+    (prime_not_dvd_three_of_ne_three hq.1 hq_ne_three)
+    hGN_le_one
+
+/-- Cubic FLT contradiction from a Nat primitive-prime witness and
+    squarefreeness of the corresponding `GN` Beam, using `q ≠ 3` as the readable
+    sufficient condition for `q ∤ 3`. -/
+theorem flt_three_primitive_GN_squarefree_contradiction_of_lt_ne_three
+    {q a b : ℕ} {y : ℤ}
+    (hq : DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow q a b 3)
+    (hab_lt : b < a)
+    (hcop : Int.gcd (a : ℤ) (b : ℤ) = 1)
+    (hflt : (b : ℤ) ^ 3 + y ^ 3 = (a : ℤ) ^ 3)
+    (hy_ne : y.natAbs ≠ 0)
+    (hq_ne_three : q ≠ 3)
+    (hGN_sq :
+      Squarefree
+        (DkMath.CosmicFormulaBinom.GN 3 ((a : ℤ) - (b : ℤ)) (b : ℤ)).natAbs) :
+    False :=
+  flt_three_primitive_GN_squarefree_contradiction_of_lt
+    hq hab_lt hcop hflt hy_ne
+    (prime_not_dvd_three_of_ne_three hq.1 hq_ne_three)
     hGN_sq
 
 end DkMath.CosmicFormula.PowerGapBeam

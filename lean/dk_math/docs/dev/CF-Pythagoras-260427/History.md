@@ -1038,3 +1038,43 @@ Archive
    - `q ∤ 3` を primitive witness から無条件に出せるか、または cubic 例外として残すべきかを調査する
    - `hqnd` を維持する場合、名前付き wrapper / context 構造体で扱いやすくする
    - cubic 専用 datum 構造体を導入するか判断する
+
+---
+
+### 日時: 2026/04/29 20:04 JST (S2-Q: q ≠ 3 wrapper for cubic primitive route)
+
+1. 目的:
+   - review-021.md の提案に従い、明示仮定 `q ∤ 3` をより読みやすい十分条件 `q ≠ 3` から供給する
+   - cubic では `q = 3` が特例になり得るため、primitive witness から無条件に `q ∤ 3` を消すことは避ける
+   - 既存の `_of_lt` wrapper に、`q ≠ 3` 版の使いやすい入口を追加する
+
+2. 実施:
+   - `PowerGapBeamPrimitive.lean` に `prime_not_dvd_three_of_ne_three` を追加:
+     - 仮定: `Nat.Prime q`, `q ≠ 3`
+     - 結論: `¬ q ∣ 3`
+     - `Nat.dvd_prime Nat.prime_three` で `q ∣ 3` から `q = 1 ∨ q = 3` を取り出し、素数性と `q ≠ 3` で矛盾させた
+   - `q ≠ 3` を受け取る cubic primitive contradiction wrapper を追加:
+     - `flt_three_primitive_GN_val_le_one_contradiction_of_lt_ne_three`
+     - `flt_three_primitive_GN_squarefree_contradiction_of_lt_ne_three`
+   - 新 wrapper は `hq.1 : Nat.Prime q` と `q ≠ 3` から `prime_not_dvd_three_of_ne_three` を呼び、既存の `_of_lt` 版へ接続する構成にした
+
+3. 結論:
+   - 利用者は `¬ q ∣ 3` を直接渡さず、より自然な `q ≠ 3` を渡せるようになった
+   - cubic の特別素数 `3` を無理に排除せず、例外を明示的に分岐できる API になった
+   - 既存の `hqnd` 明示版は維持しつつ、通常利用向けの読みやすい十分条件版が追加された
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamPrimitive` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規補題はすべて no-sorry で証明完了
+   - 初回は存在しない補題名 `Nat.Prime.dvd_prime_iff_eq` を使って失敗し、既存コードでも使われていた `Nat.dvd_prime` へ修正して解決した
+   - build warning として、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` 警告が再表示された
+
+5. 失敗事例:
+   - `Nat.Prime.dvd_prime_iff_eq` は現環境に存在せず、ビルドに失敗した
+   - 修正として `Nat.dvd_prime Nat.prime_three` を用い、`q ∣ 3` から `q = 1 ∨ q = 3` を得る形にした
+
+6. 次の課題:
+   - `q = 3` の cubic 特例を別ルートとして扱うべきか調査する
+   - `hqnd` / `q ≠ 3` を含む cubic 専用 context 構造体を導入するか判断する
+   - 既存 wrapper 群の標準入口を `_of_lt_ne_three` 版へ寄せるか検討する
