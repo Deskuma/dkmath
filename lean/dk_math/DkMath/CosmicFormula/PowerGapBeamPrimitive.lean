@@ -249,6 +249,28 @@ structure CubicPrimitiveFLTContext where
 
 namespace CubicPrimitiveFLTContext
 
+/-- The primitive witness in a cubic context supplies primality of `q`. -/
+theorem prime (C : CubicPrimitiveFLTContext) :
+    Nat.Prime C.q :=
+  C.hprim.1
+
+/-- In the ordinary cubic branch, the primitive prime does not divide the
+    degree `3`. -/
+theorem q_not_dvd_three (C : CubicPrimitiveFLTContext) :
+    ¬ C.q ∣ 3 :=
+  prime_not_dvd_three_of_ne_three C.prime C.hq_ne_three
+
+/-- The primitive witness supplies divisibility of the cubic endpoint Power
+    Beam. -/
+theorem beam_dvd (C : CubicPrimitiveFLTContext) :
+    C.q ∣ (powerBeam 3 (C.b : ℤ) (C.a : ℤ)).natAbs :=
+  primitive_prime_dvd_powerBeam_three_natAbs C.hprim C.hab_lt
+
+/-- The endpoint Power Beam in a cubic context is nonzero. -/
+theorem beam_ne (C : CubicPrimitiveFLTContext) :
+    (powerBeam 3 (C.b : ℤ) (C.a : ℤ)).natAbs ≠ 0 :=
+  powerBeam_three_natAbs_ne_zero_of_lt C.hab_lt
+
 /-- A bundled ordinary cubic primitive context contradicts a `GN` valuation
     upper bound. -/
 theorem val_le_one_contradiction

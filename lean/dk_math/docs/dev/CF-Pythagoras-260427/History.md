@@ -1122,3 +1122,43 @@ Archive
    - `q = 3` の cubic exceptional branch を別 context または別 wrapper として扱うか調査する
    - 通常 branch の標準入口を context theorem に寄せるか判断する
    - context に追加すべき導出補題（Beam divisibility / Beam nonzero など）を整理する
+
+---
+
+### 日時: 2026/04/29 20:14 JST (S2-S: Cubic context derived facts)
+
+1. 目的:
+   - review-023.md の提案に従い、`CubicPrimitiveFLTContext` を観測パックとして使いやすくする
+   - context から頻繁に使う導出事実を namespace theorem として追加する
+   - 通常 cubic branch の利用時に、primitive witness / endpoint 条件からの導出を毎回手で展開しなくてよいようにする
+
+2. 実施:
+   - `PowerGapBeamPrimitive.lean` の `CubicPrimitiveFLTContext` namespace に以下を追加:
+     - `prime`: `Nat.Prime C.q`
+     - `q_not_dvd_three`: `¬ C.q ∣ 3`
+     - `beam_dvd`: `C.q ∣ (powerBeam 3 (C.b : ℤ) (C.a : ℤ)).natAbs`
+     - `beam_ne`: `(powerBeam 3 (C.b : ℤ) (C.a : ℤ)).natAbs ≠ 0`
+   - 既存補題を薄く再利用:
+     - `prime_not_dvd_three_of_ne_three`
+     - `primitive_prime_dvd_powerBeam_three_natAbs`
+     - `powerBeam_three_natAbs_ne_zero_of_lt`
+
+3. 結論:
+   - `CubicPrimitiveFLTContext` が、単なる仮定束ではなく、必要な観測事実を引き出せる API になった
+   - 通常 branch で必要な prime / degree 非整除 / Beam divisibility / Beam nonzero が context から直接取得できる
+   - 既存の contradiction theorem はそのまま維持し、context の利便性だけを増やした
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamPrimitive` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規補題はすべて no-sorry で証明完了
+   - build warning として、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` 警告が再表示された
+
+5. 失敗事例:
+   - 大きな失敗はなし
+   - すべて既存の wrapper / projection に委譲するだけで閉じた
+
+6. 次の課題:
+   - `q = 3` の cubic exceptional branch を別 context として切るか判断する
+   - context theorem を通常 branch の標準入口として文書化する
+   - context から GN 側 valuation / squarefree 仮定をどの形で供給するのが自然か検討する
