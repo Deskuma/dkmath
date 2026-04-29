@@ -954,3 +954,48 @@ Archive
    - `PowerGapBeamGN.lean` が重くなったため、軽量 GN bridge と primitive/gcd contradiction bridge をファイル分割するか検討する
    - `q ∤ 3` や `hbeam_ne` を既存 primitive / FLT 文脈から供給できる補助補題を検討する
    - `FLTPowerGapBeamDatum` 構造体の導入タイミングを判断する
+
+---
+
+### 日時: 2026/04/29 19:42 JST (S2-O: Split primitive bridge from PowerGapBeamGN)
+
+1. 目的:
+   - review-019.md の提案に従い、重くなった `PowerGapBeamGN.lean` を軽量 GN bridge に戻す
+   - `PrimitiveBeam` と `PowerGapBeamGcd` に依存する contradiction wrapper 群を専用ファイルへ分離する
+   - `PrimitiveBeam` 経由で流入する既存 `sorry` warning を、軽量 GN bridge から隔離する
+
+2. 実施:
+   - 新規ファイル `PowerGapBeamPrimitive.lean` を追加:
+     - `DkMath.CosmicFormula.PowerGapBeamGN`
+     - `DkMath.CosmicFormula.PowerGapBeamGcd`
+     - `DkMath.NumberTheory.PrimitiveBeam`
+     を import
+   - `PowerGapBeamGN.lean` から以下の重い bridge を `PowerGapBeamPrimitive.lean` へ移動:
+     - `primitive_prime_dvd_powerBeam_three_natAbs`
+     - `flt_three_beam_GN_val_le_one_contradiction`
+     - `flt_three_beam_GN_squarefree_contradiction`
+     - `flt_three_primitive_GN_val_le_one_contradiction`
+     - `flt_three_primitive_GN_squarefree_contradiction`
+   - `PowerGapBeamGN.lean` から `PowerGapBeamGcd` / `PrimitiveBeam` import を削除
+   - `CosmicFormula.lean` に `PowerGapBeamPrimitive` import を追加
+
+3. 結論:
+   - `PowerGapBeamGN.lean` は、低次数 GN bridge と valuation / squarefree の単純移送に責務を戻した
+   - primitive witness と FLT contradiction まで含む重い API は `PowerGapBeamPrimitive.lean` に隔離された
+   - モジュール境界が整理され、軽量 GN bridge を使うだけなら `PrimitiveBeam` / research warning に触れずに済む構造になった
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamGN` 成功
+   - `lake build DkMath.CosmicFormula.PowerGapBeamPrimitive` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 移動した補題はすべて no-sorry のまま維持
+   - `PowerGapBeamPrimitive` 側では、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` 警告が再表示される
+
+5. 失敗事例:
+   - 大きな失敗はなし
+   - 補題本体は変更せず、import 境界と配置だけを整理したため、証明はそのまま通った
+
+6. 次の課題:
+   - `q ∤ 3` を primitive witness または追加補題から供給できるか調査する
+   - `hbeam_ne` を既存 positivity / nonzero API から供給できるか調査する
+   - `FLTPowerGapBeamDatum` または cubic 専用 datum 構造体を導入するか判断する
