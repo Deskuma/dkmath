@@ -917,3 +917,40 @@ Archive
    - `primitive_prime_dvd_powerBeam_three_natAbs` を使い、Nat primitive prime witness から d=3 contradiction wrapper の `hbeam` を供給する合成補題を検討する
    - `PowerGapBeamGN.lean` が `PrimitiveBeam` と `PowerGapBeamGcd` の両方を import して重くなってきたため、必要なら `PowerGapBeamPrimitive.lean` などへ分割する
    - `FLTPowerGapBeamDatum` 構造体を導入するか、wrapper 群のまま進めるか判断する
+
+---
+
+### 日時: 2026/04/29 19:29 JST (S2-N: Primitive witness to cubic GN contradiction)
+
+1. 目的:
+   - review-018.md の S2-N 方針に従い、Nat primitive prime witness から d=3 の FLT contradiction wrapper へ直接接続する
+   - S2-L の `primitive_prime_dvd_powerBeam_three_natAbs` を使って、S2-M の `hbeam` 仮定を自動供給する
+   - GN 側 valuation 上界版と squarefree 版の両方で、primitive witness 付きの一発 wrapper を作る
+
+2. 実施:
+   - `PowerGapBeamGN.lean` に以下の合成補題を追加:
+     - `flt_three_primitive_GN_val_le_one_contradiction`
+     - `flt_three_primitive_GN_squarefree_contradiction`
+   - `PrimitivePrimeFactorOfDiffPow q a b 3` から `Nat.Prime q` は `hq.1` で取り出す形にした
+   - `q ∣ (powerBeam 3 (b : ℤ) (a : ℤ)).natAbs` は `primitive_prime_dvd_powerBeam_three_natAbs hq hab_lt` で供給
+   - `q ∤ 3` は primitive witness には含まれないため、明示仮定 `hqnd : ¬ q ∣ 3` として残した
+
+3. 結論:
+   - Nat 側 primitive prime witness から、d=3 の GN valuation / squarefree fuel を使った FLT contradiction までが直接つながった
+   - Chapter 2 の d=3 route は、`PrimitiveBeam -> GN -> PowerBeam -> valuation contradiction` の合成 API まで到達した
+   - 利用者は Nat/Int cast や `hbeam` 供給を手で行わず、primitive witness と GN 側上界情報を渡すだけで `False` を得られる
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamGN` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規補題はすべて no-sorry で証明完了
+   - build warning として、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` 警告が再表示された
+
+5. 失敗事例:
+   - 大きな失敗はなし
+   - S2-M の contradiction wrapper に、S2-L の primitive divisibility wrapper を渡すだけで閉じた
+
+6. 次の課題:
+   - `PowerGapBeamGN.lean` が重くなったため、軽量 GN bridge と primitive/gcd contradiction bridge をファイル分割するか検討する
+   - `q ∤ 3` や `hbeam_ne` を既存 primitive / FLT 文脈から供給できる補助補題を検討する
+   - `FLTPowerGapBeamDatum` 構造体の導入タイミングを判断する

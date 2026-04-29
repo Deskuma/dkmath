@@ -163,4 +163,46 @@ theorem flt_three_beam_GN_squarefree_contradiction
     (powerBeam_three_squarefree_of_GN_squarefree
       (a := z) (b := x) hGN_sq)
 
+/-- Cubic FLT contradiction from a Nat primitive-prime witness and a `GN`
+    valuation upper bound. -/
+theorem flt_three_primitive_GN_val_le_one_contradiction
+    {q a b : ℕ} {y : ℤ}
+    (hq : DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow q a b 3)
+    (hab_lt : b < a)
+    (hcop : Int.gcd (a : ℤ) (b : ℤ) = 1)
+    (hflt : (b : ℤ) ^ 3 + y ^ 3 = (a : ℤ) ^ 3)
+    (hy_ne : y.natAbs ≠ 0)
+    (hqnd : ¬ q ∣ 3)
+    (hbeam_ne : (powerBeam 3 (b : ℤ) (a : ℤ)).natAbs ≠ 0)
+    (hGN_le_one :
+      padicValNat q
+        (DkMath.CosmicFormulaBinom.GN 3 ((a : ℤ) - (b : ℤ)) (b : ℤ)).natAbs ≤ 1) :
+    False :=
+  flt_three_beam_GN_val_le_one_contradiction
+    (p := q) (x := (b : ℤ)) (y := y) (z := (a : ℤ))
+    hcop hflt hy_ne hq.1 hqnd
+    (primitive_prime_dvd_powerBeam_three_natAbs hq hab_lt)
+    hbeam_ne hGN_le_one
+
+/-- Cubic FLT contradiction from a Nat primitive-prime witness and
+    squarefreeness of the corresponding `GN` Beam. -/
+theorem flt_three_primitive_GN_squarefree_contradiction
+    {q a b : ℕ} {y : ℤ}
+    (hq : DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow q a b 3)
+    (hab_lt : b < a)
+    (hcop : Int.gcd (a : ℤ) (b : ℤ) = 1)
+    (hflt : (b : ℤ) ^ 3 + y ^ 3 = (a : ℤ) ^ 3)
+    (hy_ne : y.natAbs ≠ 0)
+    (hqnd : ¬ q ∣ 3)
+    (hbeam_ne : (powerBeam 3 (b : ℤ) (a : ℤ)).natAbs ≠ 0)
+    (hGN_sq :
+      Squarefree
+        (DkMath.CosmicFormulaBinom.GN 3 ((a : ℤ) - (b : ℤ)) (b : ℤ)).natAbs) :
+    False :=
+  flt_three_beam_GN_squarefree_contradiction
+    (p := q) (x := (b : ℤ)) (y := y) (z := (a : ℤ))
+    hcop hflt hy_ne hq.1 hqnd
+    (primitive_prime_dvd_powerBeam_three_natAbs hq hab_lt)
+    hbeam_ne hGN_sq
+
 end DkMath.CosmicFormula.PowerGapBeam
