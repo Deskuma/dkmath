@@ -1207,3 +1207,55 @@ Archive
    - `q = 3` の cubic exceptional branch を別 context / 別 wrapper として設計するか判断する
    - GN 側 valuation / squarefree 仮定を context API にどの粒度で寄せるか検討する
    - ordinary branch の標準入口を downstream から実際に使い、必要な補助 API を追加する
+
+---
+
+### 日時: 2026/04/29 21:36 JST (S2-U: Chapter 2 route map documentation)
+
+1. 目的:
+   - review-025.md の提案に従い、これ以上数学本体を増やさず、Chapter 2 の接続図を文書化する
+   - d=3 ordinary primitive branch (`q ≠ 3`) で閉じた範囲と、まだ閉じていない範囲を明確に分ける
+   - 後続作業で再開しやすいよう、主要 theorem / file / API の対応関係を route map として固定する
+
+2. 実施:
+   - `RouteMap.md` を新規作成
+   - Chapter 2 の到達点を次の形で記録:
+     - d=3 ordinary primitive branch の抽象反駁エンジンは no-sorry で接続済み
+     - FLT d=3 全体を閉じたとはまだ主張しない
+   - 通常枝の主要経路を文書化:
+     - `PrimitiveBeam -> GN -> PowerBeam -> gcd / p-adic valuation -> contradiction`
+   - Lean 上の層と主要 API を表で整理:
+     - `PowerGapBeam.lean`
+     - `PowerGapBeamGN.lean`
+     - `PowerGapBeamGcd.lean`
+     - `PowerGapBeamPrimitive.lean`
+     - `CubicPrimitiveFLTContext`
+   - `CubicPrimitiveFLTContext` の標準 API を列挙:
+     - `C.prime`
+     - `C.q_not_dvd_three`
+     - `C.beam_dvd`
+     - `C.beam_ne`
+     - `C.val_le_one_contradiction`
+     - `C.squarefree_contradiction`
+   - 残課題を明示:
+     - exceptional branch `q = 3`
+     - GN 側 valuation / squarefree fuel の自動供給
+
+3. 結論:
+   - Chapter 2 の成果を「d=3 ordinary primitive branch の no-sorry 抽象反駁エンジン」として、誠実な範囲で固定できた
+   - `q = 3` exceptional branch と GN fuel 自動供給は、別タスクとして残すことを明記した
+   - 後続作業で、どの theorem がどの層に属するかを `RouteMap.md` から追えるようになった
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula` 成功
+   - `grep -R "sorry" -n lean/dk_math/DkMath/CosmicFormula/PowerGapBeam*.lean` は該当なし
+   - build warning として、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` 警告が再表示された
+
+5. 失敗事例:
+   - 大きな失敗はなし
+   - 今回は文書追加のみで、Lean の定理本体・証明本体には触れていない
+
+6. 次の課題:
+   - `q = 3` exceptional branch の context / wrapper 設計を検討する
+   - GN 側 valuation / squarefree fuel を供給する Zsigmondy / squarefree pipeline を整理する
+   - Chapter 2 の route map をもとに、次章で扱う範囲を切り分ける
