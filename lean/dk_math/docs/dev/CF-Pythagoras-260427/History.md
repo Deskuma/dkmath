@@ -999,3 +999,42 @@ Archive
    - `q ∤ 3` を primitive witness または追加補題から供給できるか調査する
    - `hbeam_ne` を既存 positivity / nonzero API から供給できるか調査する
    - `FLTPowerGapBeamDatum` または cubic 専用 datum 構造体を導入するか判断する
+
+---
+
+### 日時: 2026/04/29 19:56 JST (S2-P: Cubic PowerBeam nonzero from ordered endpoints)
+
+1. 目的:
+   - review-020.md の提案に従い、d=3 primitive contradiction wrapper の明示仮定 `hbeam_ne` を削減する
+   - `b < a` から `(powerBeam 3 (b : ℤ) (a : ℤ)).natAbs ≠ 0` を自動供給する補題を作る
+   - 既存の primitive contradiction wrapper に、Beam 非ゼロ仮定を内部供給する使いやすい版を追加する
+
+2. 実施:
+   - `PowerGapBeamPrimitive.lean` に `powerBeam_three_natAbs_ne_zero_of_lt` を追加:
+     - 仮定: `b < a`
+     - 結論: `(powerBeam 3 (b : ℤ) (a : ℤ)).natAbs ≠ 0`
+     - `powerBeam_three` で展開し、`a > 0` と `positivity` から Beam 正値性を示した
+   - `hbeam_ne` を明示仮定に取らない wrapper を追加:
+     - `flt_three_primitive_GN_val_le_one_contradiction_of_lt`
+     - `flt_three_primitive_GN_squarefree_contradiction_of_lt`
+   - 既存の `flt_three_primitive_GN_*_contradiction` は後方互換のため残し、新補題は `hab_lt` から `powerBeam_three_natAbs_ne_zero_of_lt` を呼び出す構成にした
+
+3. 結論:
+   - d=3 primitive contradiction wrapper の利用時に、Beam 非ゼロ性を手で渡す必要がなくなった
+   - `b < a` は primitive / endpoint 文脈で既に自然に持っている仮定なので、API の実用性が上がった
+   - `q ∤ 3` は cubic 例外と絡む可能性があるため、今回は明示仮定として維持した
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamPrimitive` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規補題はすべて no-sorry で証明完了
+   - build warning として、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` 警告が再表示された
+
+5. 失敗事例:
+   - 大きな失敗はなし
+   - Int 上の三次 Beam を `powerBeam_three` で明示展開し、`positivity` で正値性を閉じられた
+
+6. 次の課題:
+   - `q ∤ 3` を primitive witness から無条件に出せるか、または cubic 例外として残すべきかを調査する
+   - `hqnd` を維持する場合、名前付き wrapper / context 構造体で扱いやすくする
+   - cubic 専用 datum 構造体を導入するか判断する
