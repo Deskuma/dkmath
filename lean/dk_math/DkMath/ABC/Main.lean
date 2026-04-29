@@ -4,7 +4,9 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.ABC.ABC090
+import DkMath.ABC.Basic
+import DkMath.ABC.Square
+import DkMath.ABC.ABCMainTheorem
 import DkMath.ABC.Bridge
 import DkMath.ABC.ABC038Bridge
 
@@ -62,7 +64,7 @@ Full-scratch prototype
 
 -- ABC.Core.lean
 
-namespace ABC
+namespace DkMath.ABC
 
 open scoped BigOperators
 
@@ -74,4 +76,4 @@ open MeasureTheory ProbabilityTheory
 
 
 
-end ABC
+end DkMath.ABC

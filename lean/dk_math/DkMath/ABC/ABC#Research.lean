@@ -4,11 +4,11 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.ABC.ABC036
+import DkMath.ABC.ChernoffDensity
 
 #print "file: DkMath.ABC#Research"
 
-namespace ABC
+namespace DkMath.ABC
 namespace Chernoff
 
 -- 例: this : (↑(#S) ≤ C_final * ↑X) が得られているとする
@@ -112,4 +112,4 @@ theorem abc_quality_final (ε : ℝ) (hε : 0 < ε) :
     -- 3. または abc_quality_final の主張を「例外有限個を除く」形に変更
 
 end Chernoff
-end ABC
+end DkMath.ABC

@@ -4,14 +4,15 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.ABC.ABC025
+
+import DkMath.ABC.PadicTelescoping
 
 #print "file: DkMath.ABC.ABC025_allX"
 
 set_option linter.style.longLine false
 set_option linter.style.emptyLine false
 
-namespace ABC
+namespace DkMath.ABC
 
 namespace Telescoping
 
@@ -62,7 +63,7 @@ lemma sum_pow_padicValNat_le_geom_two_all_X {p : ℕ} [hp : Fact p.Prime]
 
 end Telescoping
 
-end ABC
+end DkMath.ABC
 
 /-!
 ### Note (数値検証データ)

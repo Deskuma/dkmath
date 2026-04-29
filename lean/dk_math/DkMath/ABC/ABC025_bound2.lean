@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import Mathlib
+
 import DkMath.ABC.Basic
 
 #print "file: DkMath.ABC.ABC025_bound2"
@@ -21,7 +21,7 @@ set_option linter.style.emptyLine false
 詰めるための補題群をまとめる。
 -/
 
-namespace ABC
+namespace DkMath.ABC
 
 open Real
 
@@ -112,4 +112,4 @@ lemma sqrt_two_X_add_two_sub_one_le_third_X_add_one {X : ℕ} (hX : X ≥ 11) :
     Real.sqrt_le_iff.mpr ⟨by positivity, hsq⟩
   linarith
 
-end ABC
+end DkMath.ABC

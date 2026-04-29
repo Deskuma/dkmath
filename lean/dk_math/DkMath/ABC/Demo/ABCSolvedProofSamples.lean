@@ -6,7 +6,7 @@ Authors: D. and Wise Wolf.
 
 import Mathlib
 
-#print "file: DkMath.ABC.SolvedProofSamples"
+#print "file: DkMath.ABC.Demo.ABCSolvedProofSamples"
 
 set_option linter.style.whitespace false
 set_option linter.style.longLine false
@@ -14,7 +14,7 @@ set_option linter.style.emptyLine false
 
 namespace SolvedProofSamples
 
-namespace ABC
+namespace DkMath.ABC
 
 namespace Nat
 
@@ -27,7 +27,7 @@ theorem succ_sub_self (n : ℕ) : (n + 1) - n = 1 := by
 
 end Nat
 
-end ABC
+end DkMath.ABC
 
 /- ============================================================================
      1. inv_eq_one_div, rpow_neg_one, -x = -x の確認
@@ -1098,7 +1098,7 @@ exp_log expects a proof (0 : ℝ) < 2; change `by norm_num` to produce a real in
 -/
 
 
-namespace ABC
+namespace DkMath.ABC
 
 
 -- Example lemma about the logarithm of the radical
@@ -1149,10 +1149,10 @@ lemma rad_log_ge_sum_prime_logs (n : ℕ) (hn : n ≥ 2) :
   have h := rad_log_eq_sum_prime_logs n hn
   exact le_of_eq (Eq.symm h)
 
-end ABC
+end DkMath.ABC
 
 
-namespace ABC
+namespace DkMath.ABC
 
 -- Abbreviation for p-adic valuation of odd numbers
 @[simp] abbrev Vp (p n : ℕ) : ℕ := padicValNat p (2*n+1)
@@ -1246,7 +1246,7 @@ lemma Excess_iff (p : ℕ) (γ : ℝ) (n : ℕ) :
       simp only [Nat.cast_add, Nat.cast_one, Int.cast_add, Int.cast_natCast, Int.cast_one,
         gt_iff_lt, Nat.succ_eq_add_one, neg_sub, Int.cast_sub, Int.cast_ofNat]
 
-end ABC
+end DkMath.ABC
 
 
 namespace sample
@@ -1268,7 +1268,7 @@ end sample
 
 -- ---------------------------------------------------------------------------
 
-namespace ABC
+namespace DkMath.ABC
 
 def pge3 (p : ℕ) : Prop := p ≥ 3
 def ple3 (p : ℕ) : Prop := p ≤ 3
@@ -1721,9 +1721,9 @@ example {h : (1 + 1 : ℕ) = 2} : True := by
   change (2 = 2) at h  -- h の型が 2 = 2 になる（等価な形なら allowed）
   trivial
 
-end ABC
+end DkMath.ABC
 
-namespace ABC
+namespace DkMath.ABC
 
 namespace Nat
 
@@ -1769,6 +1769,6 @@ lemma Vp_ge_one_iff {p n : ℕ} (hp : p.Prime) (hn : n ≠ 0) : padicValNat p n 
 
 end Chernoff
 
-end ABC
+end DkMath.ABC
 
 end SolvedProofSamples

@@ -11,7 +11,7 @@ Archive
 
 過去ログは、以下にアーカイブしてあります。
 
-- [001](History-001.md)
+- None
 
 ## Note
 
@@ -1094,3 +1094,56 @@ Archive
    - あわせて、論文資料化に向けて
      `Bridge` / `ABC038Bridge` / examples の役割を
      再編しながらリファクタリングする。
+
+## 2026/04/19 06:28 JST
+
+1. 目的:
+   - 今回の Erdos #1196 実装全体を振り返り、
+     数学者向けに読める論文草稿として成果を固定する。
+2. 実施:
+   - `docs/dev/CF-Erdos1196-260418/reviewer/final-review-024.md`
+     と
+     `History.md`
+     を参照して、
+     今回の実装で何が閉じたかを整理した。
+   - `docs/dev/CF-Erdos1196-260418/paper/paper-CF-Erdos1196-260418.md`
+     に新規草稿を書き、
+     以下の流れで章立てした。
+     - 背景と目的
+     - 実装の全体像
+     - 主要定理列
+     - concrete sample
+     - 公開導線
+     - 数学的意義
+     - 限界と今後
+   - 草稿では、
+     `PrimitiveWitnessFamily`
+     から
+     `channelCount`
+     を経て
+     `rad(c)`
+     に至る spine と、
+     それが
+     `ABC038Bridge`
+     を通じて
+     `ABC.Chernoff`
+     の quality machinery に合流した点を中心に叙述した。
+3. 結論:
+   - 今回の実装成果は、
+     「primitive-channel route を既存 ABC 本線に接続し、
+     公開導線まで載せた」
+     という一つの理論的橋梁として記述できる形になった。
+   - これにより、以後の作業は
+     新規実装よりも、
+     資料化・命名整理・階層再編を主戦場とする段階へ移った。
+4. 検証:
+   - 今回は Markdown 文書の執筆のみであり、
+     Lean build は実施していない。
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - 草稿を土台に、
+     `Bridge` / `ABC038Bridge` / examples の章立てを
+     論文向けにさらに圧縮・整理する。
+   - 必要に応じて、
+     theorem 名と数学的主張の対応表を別紙で補う。
