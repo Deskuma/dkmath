@@ -1078,3 +1078,47 @@ Archive
    - `q = 3` の cubic 特例を別ルートとして扱うべきか調査する
    - `hqnd` / `q ≠ 3` を含む cubic 専用 context 構造体を導入するか判断する
    - 既存 wrapper 群の標準入口を `_of_lt_ne_three` 版へ寄せるか検討する
+
+---
+
+### 日時: 2026/04/29 20:09 JST (S2-R: Cubic primitive FLT context)
+
+1. 目的:
+   - review-022.md の提案に従い、通常 branch (`q ≠ 3`) の cubic primitive route を束ねる context 構造体を試作する
+   - 既存 wrapper の長い仮定列をまとめ、valuation / squarefree contradiction を context theorem として呼べるようにする
+   - `q = 3` の exceptional branch は未解決のまま分離し、通常 branch の API を整理する
+
+2. 実施:
+   - `PowerGapBeamPrimitive.lean` に `CubicPrimitiveFLTContext` 構造体を追加:
+     - `q a b : ℕ`
+     - `y : ℤ`
+     - `hprim : PrimitivePrimeFactorOfDiffPow q a b 3`
+     - `hab_lt : b < a`
+     - `hcop : Int.gcd (a : ℤ) (b : ℤ) = 1`
+     - `hflt : (b : ℤ)^3 + y^3 = (a : ℤ)^3`
+     - `hy_ne : y.natAbs ≠ 0`
+     - `hq_ne_three : q ≠ 3`
+   - `CubicPrimitiveFLTContext` namespace に以下を追加:
+     - `val_le_one_contradiction`
+     - `squarefree_contradiction`
+   - どちらも既存の `_of_lt_ne_three` wrapper を呼ぶ薄い構成にした
+
+3. 結論:
+   - 通常 cubic primitive route の仮定群を一つの context として扱えるようになった
+   - GN 側の valuation 上界または squarefree 仮定だけを追加で渡せば、context theorem から `False` を得られる
+   - `q ≠ 3` は context の明示フィールドとして残し、cubic exceptional branch を無理に通常 route に混ぜない設計にした
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamPrimitive` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - 新規構造体 / 補題は no-sorry で証明完了
+   - build warning として、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` 警告が再表示された
+
+5. 失敗事例:
+   - 大きな失敗はなし
+   - context theorem は既存 `_of_lt_ne_three` wrapper に委譲するだけで閉じた
+
+6. 次の課題:
+   - `q = 3` の cubic exceptional branch を別 context または別 wrapper として扱うか調査する
+   - 通常 branch の標準入口を context theorem に寄せるか判断する
+   - context に追加すべき導出補題（Beam divisibility / Beam nonzero など）を整理する

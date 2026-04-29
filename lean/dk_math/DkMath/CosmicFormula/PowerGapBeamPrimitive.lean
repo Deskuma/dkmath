@@ -233,4 +233,45 @@ theorem flt_three_primitive_GN_squarefree_contradiction_of_lt_ne_three
     (prime_not_dvd_three_of_ne_three hq.1 hq_ne_three)
     hGN_sq
 
+/-- Bundled hypotheses for the ordinary cubic primitive Power Beam route
+    (`q ≠ 3`). -/
+structure CubicPrimitiveFLTContext where
+  q : ℕ
+  a : ℕ
+  b : ℕ
+  y : ℤ
+  hprim : DkMath.NumberTheory.PrimitiveBeam.PrimitivePrimeFactorOfDiffPow q a b 3
+  hab_lt : b < a
+  hcop : Int.gcd (a : ℤ) (b : ℤ) = 1
+  hflt : (b : ℤ) ^ 3 + y ^ 3 = (a : ℤ) ^ 3
+  hy_ne : y.natAbs ≠ 0
+  hq_ne_three : q ≠ 3
+
+namespace CubicPrimitiveFLTContext
+
+/-- A bundled ordinary cubic primitive context contradicts a `GN` valuation
+    upper bound. -/
+theorem val_le_one_contradiction
+    (C : CubicPrimitiveFLTContext)
+    (hGN_le_one :
+      padicValNat C.q
+        (DkMath.CosmicFormulaBinom.GN 3 ((C.a : ℤ) - (C.b : ℤ)) (C.b : ℤ)).natAbs
+          ≤ 1) :
+    False :=
+  flt_three_primitive_GN_val_le_one_contradiction_of_lt_ne_three
+    C.hprim C.hab_lt C.hcop C.hflt C.hy_ne C.hq_ne_three hGN_le_one
+
+/-- A bundled ordinary cubic primitive context contradicts squarefreeness of
+    the corresponding `GN` Beam. -/
+theorem squarefree_contradiction
+    (C : CubicPrimitiveFLTContext)
+    (hGN_sq :
+      Squarefree
+        (DkMath.CosmicFormulaBinom.GN 3 ((C.a : ℤ) - (C.b : ℤ)) (C.b : ℤ)).natAbs) :
+    False :=
+  flt_three_primitive_GN_squarefree_contradiction_of_lt_ne_three
+    C.hprim C.hab_lt C.hcop C.hflt C.hy_ne C.hq_ne_three hGN_sq
+
+end CubicPrimitiveFLTContext
+
 end DkMath.CosmicFormula.PowerGapBeam
