@@ -1162,3 +1162,48 @@ Archive
    - `q = 3` の cubic exceptional branch を別 context として切るか判断する
    - context theorem を通常 branch の標準入口として文書化する
    - context から GN 側 valuation / squarefree 仮定をどの形で供給するのが自然か検討する
+
+---
+
+### 日時: 2026/04/29 21:23 JST (S2-T: Cubic context standard API documentation)
+
+1. 目的:
+   - review-024.md の提案に従い、`CubicPrimitiveFLTContext` を通常 cubic branch (`q ≠ 3`) の標準入口として明確化する
+   - 既存の context API が、どの分岐で何を供給するためのものかを docstring 上で読み取れるようにする
+   - 新しい数学補題は追加せず、S2-S までに作った API の signage を整える
+
+2. 実施:
+   - `PowerGapBeamPrimitive.lean` のモジュールドキュメントを拡張:
+     - `PowerGapBeamGN` を軽量な algebra / `GN` identity 層として保つことを明記
+     - `PowerGapBeamPrimitive` が `PrimitiveBeam` / `PowerGapBeamGcd` を読む重い primitive-prime 層であることを明記
+     - `CubicPrimitiveFLTContext` が ordinary branch `q ≠ 3` の bundled entry point であり、exceptional branch `q = 3` は別 API に分ける方針を記録
+   - `CubicPrimitiveFLTContext` の docstring を拡張:
+     - primitive witness, `b < a`, coprime FLT-shaped equation, observed side nonzero, `q ≠ 3` を束ねる context であることを明記
+     - 標準利用 API として `C.prime`, `C.q_not_dvd_three`, `C.beam_dvd`, `C.beam_ne`, `C.val_le_one_contradiction`, `C.squarefree_contradiction` を列挙
+   - context namespace 内の各 theorem docstring を標準 API / 標準 contradiction API として明示:
+     - `prime`
+     - `q_not_dvd_three`
+     - `beam_dvd`
+     - `beam_ne`
+     - `val_le_one_contradiction`
+     - `squarefree_contradiction`
+
+3. 結論:
+   - ordinary cubic primitive branch の入口が `CubicPrimitiveFLTContext` であることが、コード上の docstring から追えるようになった
+   - `q = 3` exceptional branch をこの context に混ぜない設計判断も明文化された
+   - S2-S で追加した導出 API と contradiction API の位置づけが整理された
+
+4. 検証:
+   - `lake build DkMath.CosmicFormula.PowerGapBeamPrimitive` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - `grep -n "sorry" lean/dk_math/DkMath/CosmicFormula/PowerGapBeamPrimitive.lean` は該当なし
+   - build warning として、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` 警告が再表示された
+
+5. 失敗事例:
+   - 大きな失敗はなし
+   - 今回は docstring のみの変更で、定理本体・証明本体には触れていない
+
+6. 次の課題:
+   - `q = 3` の cubic exceptional branch を別 context / 別 wrapper として設計するか判断する
+   - GN 側 valuation / squarefree 仮定を context API にどの粒度で寄せるか検討する
+   - ordinary branch の標準入口を downstream から実際に使い、必要な補助 API を追加する

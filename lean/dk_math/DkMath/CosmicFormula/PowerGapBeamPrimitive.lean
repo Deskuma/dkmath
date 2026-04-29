@@ -13,8 +13,16 @@ import DkMath.NumberTheory.PrimitiveBeam
 /-!
 # Primitive Power Beam Bridge
 
-This file keeps the heavier `PrimitiveBeam` and FLT contradiction dependencies
-out of the lightweight `PowerGapBeamGN` bridge.
+This file is the heavier primitive-prime layer over the lightweight
+`PowerGapBeamGN` bridge.  The algebraic Power Beam / `GN` identities stay in
+`PowerGapBeamGN`; this module imports `PrimitiveBeam` and `PowerGapBeamGcd` to
+connect primitive prime witnesses to the FLT contradiction machinery.
+
+## Standard ordinary cubic branch
+
+`CubicPrimitiveFLTContext` is the standard bundled entry point for the ordinary
+cubic primitive route, where the primitive prime satisfies `q ≠ 3`.  The
+exceptional cubic branch `q = 3` is intentionally not folded into this context.
 -/
 
 namespace DkMath.CosmicFormula.PowerGapBeam
@@ -233,8 +241,22 @@ theorem flt_three_primitive_GN_squarefree_contradiction_of_lt_ne_three
     (prime_not_dvd_three_of_ne_three hq.1 hq_ne_three)
     hGN_sq
 
-/-- Bundled hypotheses for the ordinary cubic primitive Power Beam route
-    (`q ≠ 3`). -/
+/-- Bundled hypotheses for the ordinary cubic primitive Power Beam route.
+
+This is the standard context for the ordinary `q ≠ 3` branch of the cubic
+primitive route.  It packages the primitive prime witness, ordered endpoints
+`b < a`, the coprime FLT-shaped equation, the nonzero observed side, and the
+ordinary-branch assumption `q ≠ 3`.
+
+Use the namespace API as the preferred surface for this branch:
+* `C.prime`
+* `C.q_not_dvd_three`
+* `C.beam_dvd`
+* `C.beam_ne`
+* `C.val_le_one_contradiction`
+* `C.squarefree_contradiction`
+
+The exceptional branch `q = 3` should be handled by a separate context/API. -/
 structure CubicPrimitiveFLTContext where
   q : ℕ
   a : ℕ
@@ -249,30 +271,32 @@ structure CubicPrimitiveFLTContext where
 
 namespace CubicPrimitiveFLTContext
 
-/-- The primitive witness in a cubic context supplies primality of `q`. -/
+/-- Standard API: the primitive witness in an ordinary cubic context supplies
+    primality of `q`. -/
 theorem prime (C : CubicPrimitiveFLTContext) :
     Nat.Prime C.q :=
   C.hprim.1
 
-/-- In the ordinary cubic branch, the primitive prime does not divide the
-    degree `3`. -/
+/-- Standard API: in the ordinary cubic branch, the primitive prime does not
+    divide the degree `3`. -/
 theorem q_not_dvd_three (C : CubicPrimitiveFLTContext) :
     ¬ C.q ∣ 3 :=
   prime_not_dvd_three_of_ne_three C.prime C.hq_ne_three
 
-/-- The primitive witness supplies divisibility of the cubic endpoint Power
-    Beam. -/
+/-- Standard API: the primitive witness supplies divisibility of the cubic
+    endpoint Power Beam. -/
 theorem beam_dvd (C : CubicPrimitiveFLTContext) :
     C.q ∣ (powerBeam 3 (C.b : ℤ) (C.a : ℤ)).natAbs :=
   primitive_prime_dvd_powerBeam_three_natAbs C.hprim C.hab_lt
 
-/-- The endpoint Power Beam in a cubic context is nonzero. -/
+/-- Standard API: the endpoint Power Beam in an ordinary cubic context is
+    nonzero. -/
 theorem beam_ne (C : CubicPrimitiveFLTContext) :
     (powerBeam 3 (C.b : ℤ) (C.a : ℤ)).natAbs ≠ 0 :=
   powerBeam_three_natAbs_ne_zero_of_lt C.hab_lt
 
-/-- A bundled ordinary cubic primitive context contradicts a `GN` valuation
-    upper bound. -/
+/-- Standard contradiction API: a bundled ordinary cubic primitive context
+    contradicts a `GN` valuation upper bound. -/
 theorem val_le_one_contradiction
     (C : CubicPrimitiveFLTContext)
     (hGN_le_one :
@@ -283,8 +307,8 @@ theorem val_le_one_contradiction
   flt_three_primitive_GN_val_le_one_contradiction_of_lt_ne_three
     C.hprim C.hab_lt C.hcop C.hflt C.hy_ne C.hq_ne_three hGN_le_one
 
-/-- A bundled ordinary cubic primitive context contradicts squarefreeness of
-    the corresponding `GN` Beam. -/
+/-- Standard contradiction API: a bundled ordinary cubic primitive context
+    contradicts squarefreeness of the corresponding `GN` Beam. -/
 theorem squarefree_contradiction
     (C : CubicPrimitiveFLTContext)
     (hGN_sq :
