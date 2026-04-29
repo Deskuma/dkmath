@@ -1259,3 +1259,63 @@ Archive
    - `q = 3` exceptional branch の context / wrapper 設計を検討する
    - GN 側 valuation / squarefree fuel を供給する Zsigmondy / squarefree pipeline を整理する
    - Chapter 2 の route map をもとに、次章で扱う範囲を切り分ける
+
+---
+
+### 日時: 2026/04/29 21:48 JST (S2-V..S2-Z: Chapter 2 closure and S3 handoff)
+
+1. 目的:
+   - review-026.md の提案に従い、S2-V から S2-Z までの残る〆作業を一括で完了する
+   - Chapter 2 の成果、未解決課題、warning/import 境界、標準 API smoke check、S3 候補を文書として固定する
+   - この branch を「d=3 ordinary primitive branch の no-sorry 抽象反駁エンジン」までで閉じる
+
+2. 実施:
+   - S2-V: `OpenProblems.md` を新規作成し、次章送りの課題を整理:
+     - cubic exceptional branch `q = 3`
+     - GN fuel 自動供給
+     - 一般次数 bridge
+     - d=4 / Pythagorean square-lift route
+     - lightweight / heavy import 境界
+   - S2-W: import / warning 境界を確認:
+     - `PowerGapBeamGN` は軽量 bridge として既存 `sorry` warning を引かずに build 成功
+     - `PowerGapBeamPrimitive` は重い primitive-prime 層として、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` warning を引く
+   - S2-X: `SmokeCheck.lean` を新規作成し、標準 API の `#check` を実行:
+     - `powerBeam_three_eq_GN_of_gap`
+     - `powerBeam_three_padicValNat_eq_GN_gap`
+     - `powerBeam_three_squarefree_of_GN_squarefree`
+     - `CubicPrimitiveFLTContext`
+     - `CubicPrimitiveFLTContext.prime`
+     - `CubicPrimitiveFLTContext.q_not_dvd_three`
+     - `CubicPrimitiveFLTContext.beam_dvd`
+     - `CubicPrimitiveFLTContext.beam_ne`
+     - `CubicPrimitiveFLTContext.val_le_one_contradiction`
+     - `CubicPrimitiveFLTContext.squarefree_contradiction`
+   - S2-Y: `Chapter2Summary.md` を新規作成し、Chapter 2 の claim / non-claim を整理
+   - S2-Z: `S3-Considerations.md` を新規作成し、S3 の候補方向を整理:
+     - exceptional cubic branch
+     - GN fuel automation
+     - general degree bridge
+     - d=4 route
+   - `RouteMap.md` に closure documents の一覧を追記
+
+3. 結論:
+   - Chapter 2 は、d=3 ordinary primitive branch (`q ≠ 3`) の抽象反駁エンジンまでを no-sorry で接続した章として閉じた
+   - FLT d=3 全体の完全反駁は主張せず、`q = 3` exceptional branch と GN fuel 自動供給を S3 以降の課題として明示した
+   - 後続作業は `RouteMap.md`, `OpenProblems.md`, `Chapter2Summary.md`, `S3-Considerations.md`, `SmokeCheck.lean` から再開できる状態になった
+
+4. 検証:
+   - `lake env lean docs/dev/CF-Pythagoras-260427/SmokeCheck.lean` 成功
+   - `lake build DkMath.CosmicFormula.PowerGapBeamGN` 成功
+   - `lake build DkMath.CosmicFormula.PowerGapBeamPrimitive` 成功
+   - `lake build DkMath.CosmicFormula` 成功
+   - `grep -R "sorry" -n lean/dk_math/DkMath/CosmicFormula/PowerGapBeam*.lean` は該当なし
+   - build warning として、依存先 `ZsigmondyCyclotomicResearch.lean` の既存 `sorry` 警告が再表示された
+
+5. 失敗事例:
+   - 通常 sandbox で `lake env lean docs/dev/CF-Pythagoras-260427/SmokeCheck.lean` が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した
+   - 承認済みの escalated 実行で同じ smoke check を再実行し、成功を確認した
+
+6. 次の課題:
+   - S3-A として `q = 3` exceptional branch の context/API 境界を設計する
+   - S3-B として GN fuel automation のため、Zsigmondy / squarefree 層から proved API を昇格できるか調べる
+   - S3-C 以降で general degree bridge または d=4 route を、Chapter 2 の ordinary cubic route とは分けて進める

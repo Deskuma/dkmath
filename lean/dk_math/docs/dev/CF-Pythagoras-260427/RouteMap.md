@@ -154,3 +154,13 @@ The corresponding non-claim is:
 This does not yet close all of FLT d=3, because the exceptional branch `q = 3`
 and automatic GN valuation/squarefree fuel supply remain separate tasks.
 ```
+
+## Closure Documents
+
+The Chapter 2 closure is split across these documents.
+
+- `RouteMap.md`: theorem route and layer map
+- `OpenProblems.md`: tasks intentionally left for later branches
+- `Chapter2Summary.md`: final Chapter 2 claim and non-claim
+- `S3-Considerations.md`: candidate starts for the next branch
+- `SmokeCheck.lean`: local `#check` smoke test for the standard API surface
