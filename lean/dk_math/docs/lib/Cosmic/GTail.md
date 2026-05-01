@@ -389,10 +389,7 @@ $$
 まず基礎にあるのは、任意の可換半環 $R$ 上で成り立つ純代数恒等式である。
 
 $$
-(x+u)^d = \sum_{j<r}
-\binom{d}{j}x^j u^{d-j}
-+
-x^r \mathrm{GTail}(d,r,x,u)
+(x+u)^d = \sum_{j < r} \binom{d}{j}x^j u^{d-j} + x^r \mathrm{GTail}(d,r,x,u)
 $$
 
 この段階では、自然数も整数も複素数も区別しない。
@@ -401,8 +398,7 @@ $$
 その上に、自然数特有の整除性が乗る。
 
 $$
-x^r \mid
-\left((x+u)^d-\sum_{j<r}\binom{d}{j}x^j u^{d-j}\right)
+x^r \mid \left((x+u)^d-\sum_{j < r}\binom{d}{j}x^j u^{d-j}\right)
 $$
 
 さらにその上に、合同式や p-adic valuation が乗る。
