@@ -35,3 +35,26 @@ Archive
    - （内容）
 6. 次の課題:
    - （内容）
+
+### 日時: 2026/05/01 20:34 JST (GTail 純代数コアの Lib 切り出し)
+
+1. 目的:
+   - `DkMath.CosmicFormula.GTail` に同居していた純代数 GTail コアを `DkMath.Lib.Cosmic.GTail` に切り出し、`ABC.PadicValNat` 依存を持たない基礎層として単体ビルド可能にする。
+2. 実施:
+   - 新規 `DkMath/Lib/Cosmic/GTail.lean` を作成し、`GTail`、分解定理、再帰定理、`r = 1` alias、zero-eval 系を移動した。
+   - namespace は downstream 互換を優先して `DkMath.CosmicFormula` のまま維持した。
+   - 旧 `DkMath/CosmicFormula/GTail.lean` は `DkMath.Lib.Cosmic.GTail` を import し、Nat / p-adic / congruence 系の上位定理だけを保持する形へ整理した。
+3. 結論:
+   - 計画書の序盤方針どおり、純代数コアと Nat/p-adic 層の分離が完了した。
+   - `Lib.Basic` への import 追加は、軽量入口の性格判断が未確定のため今回は保留した。
+4. 検証:
+   - `./lean-build.sh DkMath.Lib.Cosmic.GTail` 成功。
+   - `./lean-build.sh DkMath.CosmicFormula.GTail` 成功。
+   - `./lean-build.sh DkMath.CosmicFormula.Defs` 成功。
+   - `./lean-build.sh DkMath.CosmicFormula.CosmicFormulaBinom` 成功。
+   - `./lean-build.sh DkMath.FLT.Core` 成功。
+5. 失敗事例:
+   - sandbox の `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` により一部コマンドが失敗したため、必要な検索・ビルドは承認済み escalation で再実行した。
+6. 次の課題:
+   - 必要なら `DkMath.Lib.Basic` あるいは専用入口ファイルへの import 導線を追加する。
+   - 次段階で Nat / congruence / p-adic 系を `GTailNat`、`GTailCongruence`、`GTailPadic` へ分けるか判断する。
