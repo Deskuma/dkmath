@@ -138,3 +138,25 @@ Archive
    - 合同ブロック削除時に sandbox の `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` が出たため、承認済み escalation で機械的削除を再実行した。
 6. 次の課題:
    - Step 3 として `DkMath.Lib.Cosmic.GTailPadic` を作り、`padicValNat_*` 系を移動する。
+
+### 日時: 2026/05/07 01:10 JST (Step 3: GTailPadic の分離)
+
+1. 目的:
+   - `DkMath.CosmicFormula.GTail` から `padicValNat_*` 系の p-adic 付値 API を `DkMath.Lib.Cosmic.GTailPadic` へ分離する。
+2. 実施:
+   - 新規 `DkMath/Lib/Cosmic/GTailPadic.lean` を作成した。
+   - `padicValNat_GTail_eq_zero_of_head_unit_of_prime_dvd_x`、`padicValNat_GN_eq_zero_of_head_unit_of_prime_dvd_x`、`padicValNat_higher_tail_lower_bound`、`padicValNat_tail_exact_of_head_unit`、`padicValNat_GN_exact_of_head_unit` を移動した。
+   - `GTailPadic` は設計書どおり `DkMath.Lib.Cosmic.GTailNat` と `DkMath.ABC.PadicValNat` だけに依存させ、`GTailCongruence` とは独立にした。
+   - 旧 `DkMath/CosmicFormula/GTail.lean` は `DkMath.Lib.Cosmic.GTailCongruence` と `DkMath.Lib.Cosmic.GTailPadic` を import する compatibility shell にした。
+3. 結論:
+   - 設計書 Step 3 の GTailPadic 分離が完了した。
+   - 旧 `DkMath.CosmicFormula.GTail` は theorem 本体を持たない互換入口になった。
+4. 検証:
+   - `lake build DkMath.Lib.Cosmic.GTailPadic` 成功。
+   - `lake build DkMath.CosmicFormula.GTail` 成功。
+   - `lake build DkMath.FLT.Core` 成功。
+5. 失敗事例:
+   - 旧ファイルの delete patch は失敗したため、import 差し替えと theorem ブロック削除で compatibility shell に更新した。
+   - shell 更新時に sandbox の `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` が出たため、承認済み escalation で機械的置換を再実行した。
+6. 次の課題:
+   - Step 4 として `DkMath/Lib.lean` の import 導線を更新する。
