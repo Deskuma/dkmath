@@ -80,3 +80,20 @@ Archive
    - ファイル構成確認時に sandbox の `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` が出たため、必要な検索は承認済み escalation で再実行した。
 6. 次の課題:
    - `DkMathlib` 側へ公開対象を移す段階で、`DkMathlib.Basic` 以下にどの Lib 成果を再配置または再 export するかを決める。
+
+### 日時: 2026/05/06 18:10 JST (GTail 分割後構造設計書の追加)
+
+1. 目的:
+   - Nat / congruence / p-adic 系の分割対象が多いため、実装前に混線しない構造設計を固定する。
+2. 実施:
+   - 新規 `post-refactor-structure-DkMath_Lib_Cosmic_GTail.md` を作成した。
+   - `GTail`、`GTailNat`、`GTailCongruence`、`GTailPadic` の役割、依存グラフ、配置対象 theorem、旧 `DkMath.CosmicFormula.GTail` の compatibility shell 方針を整理した。
+   - `GTailPadic` は `GTailCongruence` に依存させず、`GTailNat` から兄弟層として分ける設計を採用した。
+3. 結論:
+   - 次の実装順は `GTailNat`、`GTailCongruence`、`GTailPadic`、入口更新の順とする。
+4. 検証:
+   - Markdown 設計書の追加のみで Lean コード変更はないため、ビルドは未実施。
+5. 失敗事例:
+   - 定理一覧検索時に sandbox の `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` が出たため、既に読めたファイル内容から配置対象を確認した。
+6. 次の課題:
+   - 設計書に従って `DkMath.Lib.Cosmic.GTailNat` から実装分割を開始する。
