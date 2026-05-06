@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.Basic  -- Basic Definitions and Utilities
+import DkMath.Lib  -- Reusable library components
 import DkMath.Samples  -- Sample Theorems and Examples
 -- ABC: abc Conjecture Module
 import DkMath.ABC  -- ABC Conjecture Module
