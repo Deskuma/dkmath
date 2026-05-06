@@ -117,3 +117,24 @@ Archive
    - なし。
 6. 次の課題:
    - Step 2 として `DkMath.Lib.Cosmic.GTailCongruence` を作り、`Nat.ModEq` と mod `p^2` / mod `p^3` 系を移動する。
+
+### 日時: 2026/05/07 00:15 JST (Step 2: GTailCongruence の分離)
+
+1. 目的:
+   - `DkMath.CosmicFormula.GTail` から `Nat.ModEq` と mod `p^2` / mod `p^3` 系の合同 API を `DkMath.Lib.Cosmic.GTailCongruence` へ分離する。
+2. 実施:
+   - 新規 `DkMath/Lib/Cosmic/GTailCongruence.lean` を作成した。
+   - `sum_range_modEq`、`GTail_congr_of_modEq`、`GTail_modEq_eval_zero_of_dvd_x`、`GN_modEq_*`、`GN_mod_p2_head`、`GN_mod_p3_head`、具体等式化補題を移動した。
+   - 旧 `DkMath/CosmicFormula/GTail.lean` は `DkMath.Lib.Cosmic.GTailCongruence` を import し、合同ブロックを削除した。
+3. 結論:
+   - 設計書 Step 2 の GTailCongruence 分離が完了した。
+   - `GTailPadic` はまだ旧 `DkMath.CosmicFormula.GTail` に残っている。
+4. 検証:
+   - `lake build DkMath.Lib.Cosmic.GTailCongruence` 成功。
+   - `lake build DkMath.CosmicFormula.GTail` 成功。
+   - `lake build DkMath.FLT.PrimeProvider.TriominoCosmicBranchA` 成功。
+     - 既存 warning: `declaration uses sorry` は残存するが、今回の分割による失敗ではない。
+5. 失敗事例:
+   - 合同ブロック削除時に sandbox の `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` が出たため、承認済み escalation で機械的削除を再実行した。
+6. 次の課題:
+   - Step 3 として `DkMath.Lib.Cosmic.GTailPadic` を作り、`padicValNat_*` 系を移動する。
