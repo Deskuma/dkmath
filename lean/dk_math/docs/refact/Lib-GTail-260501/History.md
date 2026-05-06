@@ -97,3 +97,23 @@ Archive
    - 定理一覧検索時に sandbox の `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` が出たため、既に読めたファイル内容から配置対象を確認した。
 6. 次の課題:
    - 設計書に従って `DkMath.Lib.Cosmic.GTailNat` から実装分割を開始する。
+
+### 日時: 2026/05/06 20:11 JST (Step 1: GTailNat の分離)
+
+1. 目的:
+   - `DkMath.CosmicFormula.GTail` から `ℕ` 上の可除性・head-unit 非可除性 API を `DkMath.Lib.Cosmic.GTailNat` へ分離する。
+2. 実施:
+   - 新規 `DkMath/Lib/Cosmic/GTailNat.lean` を作成した。
+   - `pow_dvd_higher_tail`、`GTail_not_dvd_of_head_unit_of_prime_dvd_x`、`GN_not_dvd_of_head_unit_of_prime_dvd_x` を移動した。
+   - 旧 `DkMath/CosmicFormula/GTail.lean` は `DkMath.Lib.Cosmic.GTailNat` を import し、該当ブロックを削除した。
+3. 結論:
+   - 設計書 Step 1 の GTailNat 分離が完了した。
+   - p-adic 層はまだ旧 `DkMath.CosmicFormula.GTail` に残し、次段階で `GTailPadic` へ移す。
+4. 検証:
+   - `lake build DkMath.Lib.Cosmic.GTailNat` 成功。
+   - `lake build DkMath.CosmicFormula.GTail` 成功。
+   - `lake build DkMath.Lib.Cosmic.GTail` 成功。
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - Step 2 として `DkMath.Lib.Cosmic.GTailCongruence` を作り、`Nat.ModEq` と mod `p^2` / mod `p^3` 系を移動する。
