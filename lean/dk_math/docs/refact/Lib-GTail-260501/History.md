@@ -58,3 +58,25 @@ Archive
 6. 次の課題:
    - 必要なら `DkMath.Lib.Basic` あるいは専用入口ファイルへの import 導線を追加する。
    - 次段階で Nat / congruence / p-adic 系を `GTailNat`、`GTailCongruence`、`GTailPadic` へ分けるか判断する。
+
+### 日時: 2026/05/06 17:59 JST (Lib / DkMathlib 入口導線の追加)
+
+1. 目的:
+   - `import DkMath.Lib` で再利用可能な Lib 層を使えるようにする。
+   - `import DkMath` からも Lib 層がプロジェクト全体入口として到達可能であることを保証する。
+   - 将来の公式公開入口 `import DkMathlib` を `DkMath` とは切り離したルート入口として用意する。
+2. 実施:
+   - 新規 `DkMath/Lib.lean` を作成し、`DkMath.Lib.Basic` と `DkMath.Lib.Cosmic.GTail` を import する導線入口にした。
+   - `DkMath.lean` に `import DkMath.Lib` を追加した。
+   - 新規 `DkMathlib.lean` を作成し、`DkMathlib.Basic` のみを import する独立入口にした。
+3. 結論:
+   - 開発側入口は `import DkMath.Lib` および `import DkMath` で成立する。
+   - 公開側入口は `import DkMathlib` で成立し、現時点では `DkMath` へ依存しない。
+4. 検証:
+   - `lake build DkMath.Lib` 成功。
+   - `lake build DkMathlib` 成功。
+   - `lake build DkMath` 成功。
+5. 失敗事例:
+   - ファイル構成確認時に sandbox の `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` が出たため、必要な検索は承認済み escalation で再実行した。
+6. 次の課題:
+   - `DkMathlib` 側へ公開対象を移す段階で、`DkMathlib.Basic` 以下にどの Lib 成果を再配置または再 export するかを決める。
