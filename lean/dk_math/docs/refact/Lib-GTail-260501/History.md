@@ -160,3 +160,20 @@ Archive
    - shell 更新時に sandbox の `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` が出たため、承認済み escalation で機械的置換を再実行した。
 6. 次の課題:
    - Step 4 として `DkMath/Lib.lean` の import 導線を更新する。
+
+### 日時: 2026/05/07 05:02 JST (Step 4: DkMath.Lib 入口導線の更新)
+
+1. 目的:
+   - `import DkMath.Lib` で GTail 周辺の分割済み Lib 層を一括利用できるようにする。
+2. 実施:
+   - `DkMath/Lib.lean` に `DkMath.Lib.Cosmic.GTailNat`、`DkMath.Lib.Cosmic.GTailCongruence`、`DkMath.Lib.Cosmic.GTailPadic` の import を追加した。
+   - 設計書では `GTailPadic` の入口投入は判断事項だったが、GTail 周辺 API を `DkMath.Lib` から一括利用する導線を優先して含めた。
+3. 結論:
+   - `import DkMath.Lib` で `GTail`、Nat 可除性、合同、p-adic 付値の各層へ到達できる。
+4. 検証:
+   - `lake build DkMath.Lib` 成功。
+   - `lake build DkMath` 成功。
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - 必要なら downstream の新規コードから `DkMath.CosmicFormula.GTail` ではなく `DkMath.Lib.Cosmic.*` または `DkMath.Lib` を import するように置き換えていく。

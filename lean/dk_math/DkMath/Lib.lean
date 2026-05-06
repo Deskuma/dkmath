@@ -6,6 +6,9 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Lib.Basic
 import DkMath.Lib.Cosmic.GTail
+import DkMath.Lib.Cosmic.GTailNat
+import DkMath.Lib.Cosmic.GTailCongruence
+import DkMath.Lib.Cosmic.GTailPadic
 
 #print "file: DkMath.Lib"
 
