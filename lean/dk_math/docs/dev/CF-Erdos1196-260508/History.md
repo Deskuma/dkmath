@@ -256,3 +256,33 @@ Archive
 6. 次の課題:
    - `Branching` / `SubConservative` から reachability または source-controlled forest を生成する bridge へ進むか判断する。
    - まだ Markov kernel や解析重みは導入しない。
+
+### 日時: 2026/05/09 01:21 JST (Phase H list-shaped prime path)
+
+1. 目的:
+   - `review/review-006.md` の提案に従い、実際の list-shaped prime descent path から `DivisibilityChain` を生成する provider を追加する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/PrimePathList.lean` を新規作成した。
+   - `AdjacentPrimePath L := List.IsChain PrimeDescentStep L` を定義した。
+   - `PairwiseDvdAlongList L` を定義し、list 上の任意二点が割り切り比較可能であることを表現した。
+   - `AdjacentPrimePath.toDvdPath` を追加し、prime step list を divisibility descent list へ忘却できるようにした。
+   - `mem_tail_dvd_head_of_isChain_dvd` を証明し、divisibility descent list の tail member が head を割ることを示した。
+   - `pairwiseDvdAlongList_of_isChain_dvd` と `pairwiseDvdAlongList_of_adjacentPrimePath` を証明した。
+   - `divisibilityChain_toFinset_of_adjacentPrimePath` を追加し、list-shaped prime path の node set が `DivisibilityChain` になる導線を固定した。
+   - `singletonChainFamilyOfAdjacentPrimePath` を追加し、list path を singleton `DivisibilityChainFamily` として package 化できるようにした。
+   - concrete sample として `adjacentPrimePath_eight_four_two`, `divisibilityChain_eight_four_two_toFinset`, `primitive_two_five_hits_eight_four_two_card_le_one` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `PrimePathList` を import し、公開集約へ載せた。
+3. 結論:
+   - `List.IsChain PrimeDescentStep L -> DivisibilityChain L.toFinset` が no-sorry で閉じた。
+   - これにより、実際に並んだ prime descent path から primitive hitting の chain 条件を生成できるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.PrimePathList`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で新規・関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 初回 build では tail membership が `a = y ∨ a ∈ ys` の形まで展開され、`y :: ys` の membership を要求する補題に直接渡せず失敗した。
+   - `simpa only [List.mem_cons]` で tail membership に戻す中間 `have` を追加して解消した。
+6. 次の課題:
+   - list-shaped path を `PrimeReachableControlledChainFamily` や `DvdControlledChainFamily` へ接続する provider を追加するか判断する。
+   - その後に `Branching` / `SubConservative` 接続へ進む。

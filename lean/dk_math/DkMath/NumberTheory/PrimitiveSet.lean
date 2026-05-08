@@ -10,6 +10,7 @@ import DkMath.NumberTheory.PrimitiveSet.BranchBridge
 import DkMath.NumberTheory.PrimitiveSet.DescentBridge
 import DkMath.NumberTheory.PrimitiveSet.PrimeDescent
 import DkMath.NumberTheory.PrimitiveSet.PrimePath
+import DkMath.NumberTheory.PrimitiveSet.PrimePathList
 
 #print "file: DkMath.NumberTheory.PrimitiveSet"
 
@@ -25,4 +26,5 @@ This module exposes:
 - divisibility-controlled descent provider
 - prime-step descent provider
 - multi-step prime reachability provider
+- list-shaped prime path to divisibility-chain provider
 -/
