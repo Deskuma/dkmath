@@ -150,3 +150,29 @@ Archive
 6. 次の課題:
    - `DescentStep` / `DescentChain` の actual relation 版を別ファイルに切るか判断する。
    - あるいは finite chain family を `SubConservative` / `Branching` へ接続し、branch から chain source mass bound を供給する API を追加する。
+
+### 日時: 2026/05/08 16:01 JST (Phase D source-controlled forest bridge)
+
+1. 目的:
+   - `review/review-002.md` の提案に従い、`DivisibilityChainFamily.primitive_hitMass_le_sourceMass` の `hmass` 仮定を毎回手で渡さず、source-controlled package から供給できるようにする。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/BranchBridge.lean` を新規作成した。
+   - `SourceControlledChainFamily M ι` を追加し、`DivisibilityChainFamily ι` に `source : ι -> ℕ` と `mass_le_source` を加えた package とした。
+   - `SourceControlledChainFamily.hitMass` と `SourceControlledChainFamily.sourceMass` を追加し、既存 `DivisibilityChainFamily` 側の indexed mass を wrapper として再公開した。
+   - empty index 用の simp 補題を追加した。
+   - `SourceControlledChainFamily.primitive_hitMass_le_sourceMass` を証明し、`mass_le_source` から既存 family theorem の `hmass` を自動供給する導線を固定した。
+   - concrete sample として `sampleSourceControlledBoolChainFamily` と `primitive_two_three_sampleSourceControlledBoolChainFamily_hitMass_le_sourceMass` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` を新規作成し、`Basic`, `HittingBridge`, `BranchBridge` の小さな公開集約にした。
+3. 結論:
+   - `primitive -> source-controlled forest -> indexed hit mass <= indexed source mass` が no-sorry で閉じた。
+   - actual descent / branch monotonicity はまだ導入していないが、後で `mass_le_source` を供給するだけで既存 hitting theorem に接続できる形になった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.BranchBridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で新規・関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `mass_le_source` を actual descent relation または `Branching` / `SubConservative` から供給する API を追加する。
+   - `DkMath` top-level へ載せるかは、PrimitiveSet API の次段階が安定してから判断する。
