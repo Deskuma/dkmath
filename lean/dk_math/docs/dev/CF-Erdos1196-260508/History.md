@@ -229,3 +229,30 @@ Archive
 6. 次の課題:
    - 複数 step の prime descent path を導入するか、`Branching` / `SubConservative` と接続するか判断する。
    - Markov kernel や von Mangoldt weight はまだ導入せず、finite descent skeleton の provider を増やす。
+
+### 日時: 2026/05/08 21:25 JST (Phase G multi-step prime path)
+
+1. 目的:
+   - `review/review-005.md` の提案に従い、1-step の `PrimeDescentStep` を複数つないだ prime descent path / reachability を追加する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/PrimePath.lean` を新規作成した。
+   - `PrimeReachable n m := Relation.ReflTransGen PrimeDescentStep n m` を定義した。
+   - `PrimeReachable.refl`, `PrimeReachable.single`, `PrimeReachable.trans`, `PrimeReachable.dvd_source` を追加し、multi-step prime reachability が source への整除を保つことを証明した。
+   - `PrimeReachableControlledChainFamily` を追加し、chain の各点が source から zero-or-more prime steps で到達可能である有限 forest を package 化した。
+   - `PrimeReachableControlledChainFamily.toDvdControlled` と `PrimeReachableControlledChainFamily.primitive_hitMass_le_sourceMass` を追加した。
+   - concrete sample として `primeDescentStep_four_two`, `primeDescentStep_three_one`, `primeReachable_eight_two`, `primeReachable_nine_one`, `samplePrimeReachableControlledBoolChainFamily`, `primitive_two_five_samplePrimeReachableControlledBoolChainFamily_hitMass_le_sourceMass` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `PrimePath` を import し、公開集約へ載せた。
+3. 結論:
+   - `PrimeReachable -> DvdControlledChainFamily -> SourceControlledChainFamily -> primitive forest bound` の導線が no-sorry で閉じた。
+   - 有限 skeleton は one-step の `n -> n / p` から multi-step の下降路へ拡張された。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.PrimePath`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で新規・関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 初回 build では sample primitive set に `{1, 2}` を使ったため、`1 ∣ 2` により `PrimitiveOn` が成立せず失敗した。
+   - sample を primitive な `{2, 5}` に差し替えて解消した。
+6. 次の課題:
+   - `Branching` / `SubConservative` から reachability または source-controlled forest を生成する bridge へ進むか判断する。
+   - まだ Markov kernel や解析重みは導入しない。

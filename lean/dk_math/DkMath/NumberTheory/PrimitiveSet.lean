@@ -9,6 +9,7 @@ import DkMath.NumberTheory.PrimitiveSet.HittingBridge
 import DkMath.NumberTheory.PrimitiveSet.BranchBridge
 import DkMath.NumberTheory.PrimitiveSet.DescentBridge
 import DkMath.NumberTheory.PrimitiveSet.PrimeDescent
+import DkMath.NumberTheory.PrimitiveSet.PrimePath
 
 #print "file: DkMath.NumberTheory.PrimitiveSet"
 
@@ -23,4 +24,5 @@ This module exposes:
 - source-controlled forest bridge
 - divisibility-controlled descent provider
 - prime-step descent provider
+- multi-step prime reachability provider
 -/
