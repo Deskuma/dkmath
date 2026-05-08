@@ -125,3 +125,28 @@ Archive
 6. 次の課題:
    - 複数 chain / forest へ拡張するか、または actual descent relation を導入するかを判断する。
    - public import 導線は、NumberTheory 側の集約ファイル方針を確認してから追加する。
+
+### 日時: 2026/05/08 15:19 JST (multi-chain / forest finite layer)
+
+1. 目的:
+   - `review/review-001.md` の次ステップ提案に従い、single chain の primitive hitting を finite chain family / forest へ拡張する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/HittingBridge.lean` に `DescentChain` を追加した。
+     現段階では `DivisibilityChain` の abbrev とし、actual descent step relation は後段へ温存した。
+   - `DivisibilityChainFamily ι` を追加し、有限 index set と `ι -> Finset ℕ` の chain family を package 化した。
+   - `DivisibilityChainFamily.hitMass` と `DivisibilityChainFamily.sourceMass` を追加し、indexed family 上の hit/source mass を定義した。
+   - `DivisibilityChainFamily.primitiveOn_inter_chain_card_le_one` を追加し、各 chain で primitive set が高々一度しか hit しないことを family API から参照できるようにした。
+   - `DivisibilityChainFamily.primitive_hitMass_le_sourceMass` を追加し、各 chain ごとの singleton source mass bound を indexed sum に束ねた。
+   - concrete sample として `sampleBoolChainFamily`, `unitNatMassSpace`, `primitive_two_three_sampleBoolChainFamily_hitMass_le_sourceMass` を追加した。
+3. 結論:
+   - `primitive -> chain family hit at most once per chain -> indexed hit mass <= indexed source mass` の finite forest layer が no-sorry で実装できた。
+   - actual descent relation へ進む前に必要な multi-chain wrapper は最小形で閉じた。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.HittingBridge`
+   - build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で新規・更新 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `DescentStep` / `DescentChain` の actual relation 版を別ファイルに切るか判断する。
+   - あるいは finite chain family を `SubConservative` / `Branching` へ接続し、branch から chain source mass bound を供給する API を追加する。
