@@ -201,3 +201,31 @@ Archive
    - なし。
 6. 次の課題:
    - `PrimeDescentStep` などの actual descent step を追加するか、`Branching` / `SubConservative` から `DvdControlledChainFamily` または `SourceControlledChainFamily` を生成する bridge へ進む。
+
+### 日時: 2026/05/08 19:23 JST (Phase F prime descent step provider)
+
+1. 目的:
+   - `review/review-004.md` の提案に従い、`n -> n / p` に対応する actual prime descent step の最小核を追加する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/PrimeDescent.lean` を新規作成した。
+   - `DvdDescentStep`, `ProperDvdDescentStep`, `PrimeDescentStep`, `PrimePowerDescentStep` を定義した。
+   - `PrimeDescentStep.toDvdDescentStep` / `PrimeDescentStep.dvd_source` を証明し、prime step が既存の divisibility descent provider に接続できることを示した。
+   - `PrimePowerDescentStep.toDvdDescentStep` / `PrimePowerDescentStep.dvd_source` も同様に追加した。
+   - `PrimeStepControlledChainFamily` を追加し、chain の各点が source から 1-step prime descent で得られる有限 forest を package 化した。
+   - `PrimeStepControlledChainFamily.toDvdControlled` と `PrimeStepControlledChainFamily.primitive_hitMass_le_sourceMass` を追加した。
+   - concrete sample として `primeDescentStep_eight_four`, `primeDescentStep_nine_three`, `samplePrimeStepControlledBoolChainFamily`, `primitive_three_four_samplePrimeStepControlledBoolChainFamily_hitMass_le_sourceMass` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `PrimeDescent` を import し、公開集約へ載せた。
+3. 結論:
+   - `PrimeDescentStep -> DvdControlledChainFamily -> SourceControlledChainFamily -> primitive forest bound` の導線が no-sorry で閉じた。
+   - これで有限 skeleton は `n -> n / p` という actual descent step 名まで到達した。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.PrimeDescent`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で新規・関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 初回 build では Bool sample の `if True/False` が残り、`simp` と `subst` が失敗した。
+   - `cases b` で Bool を直接分岐し、`simp only [Bool.false_eq_true, ↓reduceIte, Finset.mem_singleton]` を使う形へ修正して解消した。
+6. 次の課題:
+   - 複数 step の prime descent path を導入するか、`Branching` / `SubConservative` と接続するか判断する。
+   - Markov kernel や von Mangoldt weight はまだ導入せず、finite descent skeleton の provider を増やす。

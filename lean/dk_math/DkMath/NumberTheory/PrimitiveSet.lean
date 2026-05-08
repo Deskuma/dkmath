@@ -8,6 +8,7 @@ import DkMath.NumberTheory.PrimitiveSet.Basic
 import DkMath.NumberTheory.PrimitiveSet.HittingBridge
 import DkMath.NumberTheory.PrimitiveSet.BranchBridge
 import DkMath.NumberTheory.PrimitiveSet.DescentBridge
+import DkMath.NumberTheory.PrimitiveSet.PrimeDescent
 
 #print "file: DkMath.NumberTheory.PrimitiveSet"
 
@@ -21,4 +22,5 @@ This module exposes:
 - finite chain-family hitting bounds
 - source-controlled forest bridge
 - divisibility-controlled descent provider
+- prime-step descent provider
 -/
