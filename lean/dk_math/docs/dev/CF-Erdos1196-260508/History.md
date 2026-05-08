@@ -176,3 +176,28 @@ Archive
 6. 次の課題:
    - `mass_le_source` を actual descent relation または `Branching` / `SubConservative` から供給する API を追加する。
    - `DkMath` top-level へ載せるかは、PrimitiveSet API の次段階が安定してから判断する。
+
+### 日時: 2026/05/08 19:14 JST (Phase E divisibility descent provider)
+
+1. 目的:
+   - `review/review-003.md` の提案に従い、`SourceControlledChainFamily.mass_le_source` を整除下降と質量単調性から供給する provider を追加する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean` を新規作成した。
+   - `DvdMonotoneMass M := ∀ a b, a ∣ b -> M.μ a <= M.μ b` を定義した。
+   - `DvdControlledChainFamily ι` を追加し、`DivisibilityChainFamily ι` に `source : ι -> ℕ` と `chain_dvd_source` を加えた。
+   - `DvdControlledChainFamily.toSourceControlled` を実装し、`DvdMonotoneMass` から `SourceControlledChainFamily.mass_le_source` を供給できるようにした。
+   - `DvdControlledChainFamily.primitive_hitMass_le_sourceMass` を追加し、整除下降 provider から primitive forest bound へ直接進める wrapper を作った。
+   - concrete sample として `unitNatMassSpace_dvdMonotone`, `sampleDvdControlledBoolChainFamily`, `primitive_two_three_sampleDvdControlledBoolChainFamily_hitMass_le_sourceMass` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `DescentBridge` を import し、公開集約へ載せた。
+3. 結論:
+   - `h ∣ source_i` と `DvdMonotoneMass` から `mass_le_source` を自動供給する有限 descent provider が no-sorry で閉じた。
+   - これにより、`primitive -> divisibility-controlled forest -> source-controlled forest -> indexed hit mass <= indexed source mass` の導線ができた。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DescentBridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で新規・関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `PrimeDescentStep` などの actual descent step を追加するか、`Branching` / `SubConservative` から `DvdControlledChainFamily` または `SourceControlledChainFamily` を生成する bridge へ進む。

@@ -7,6 +7,7 @@ Authors: D. and Wise Wolf.
 import DkMath.NumberTheory.PrimitiveSet.Basic
 import DkMath.NumberTheory.PrimitiveSet.HittingBridge
 import DkMath.NumberTheory.PrimitiveSet.BranchBridge
+import DkMath.NumberTheory.PrimitiveSet.DescentBridge
 
 #print "file: DkMath.NumberTheory.PrimitiveSet"
 
@@ -19,5 +20,5 @@ This module exposes:
 - finite divisibility/descent-chain hitting lemmas
 - finite chain-family hitting bounds
 - source-controlled forest bridge
+- divisibility-controlled descent provider
 -/
-
