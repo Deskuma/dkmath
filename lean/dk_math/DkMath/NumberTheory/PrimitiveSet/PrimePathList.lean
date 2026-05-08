@@ -129,6 +129,48 @@ def singletonChainFamilyOfAdjacentPrimePath
     intro i hi
     exact divisibilityChain_toFinset_of_adjacentPrimePath hL
 
+/--
+Every node of a nonempty list-shaped prime path is reachable from the head.
+-/
+theorem mem_reachable_from_head_of_adjacentPrimePath :
+    ∀ {source h : ℕ} {tail : List ℕ},
+      AdjacentPrimePath (source :: tail) →
+      h ∈ source :: tail →
+      PrimeReachable source h
+  | source, h, [], _hL, hh => by
+      simp only [List.mem_singleton] at hh
+      subst h
+      exact Relation.ReflTransGen.refl
+  | source, h, next :: rest, hL, hh => by
+      have hstep : PrimeDescentStep source next :=
+        (List.isChain_cons_cons.mp hL).1
+      have htail : AdjacentPrimePath (next :: rest) :=
+        (List.isChain_cons_cons.mp hL).2
+      simp only [List.mem_cons] at hh
+      rcases hh with rfl | hh_tail
+      · exact Relation.ReflTransGen.refl
+      · exact (PrimeReachable.single hstep).trans
+          (mem_reachable_from_head_of_adjacentPrimePath htail
+            (by simpa only [List.mem_cons] using hh_tail))
+
+/--
+A nonempty list-shaped prime path packaged as a singleton
+`PrimeReachableControlledChainFamily`.
+-/
+def singletonPrimeReachableControlledChainFamilyOfAdjacentPrimePath
+    (source : ℕ) (tail : List ℕ)
+    (hL : AdjacentPrimePath (source :: tail)) :
+    PrimeReachableControlledChainFamily Unit where
+  index := {()}
+  chain := fun _ => (source :: tail).toFinset
+  chain_is_chain := by
+    intro i hi
+    exact divisibilityChain_toFinset_of_adjacentPrimePath hL
+  source := fun _ => source
+  chain_reachable := by
+    intro i hi h hh
+    exact mem_reachable_from_head_of_adjacentPrimePath hL (by simpa using hh)
+
 /-- Concrete list-shaped prime path `8 -> 4 -> 2`. -/
 theorem adjacentPrimePath_eight_four_two :
     AdjacentPrimePath [8, 4, 2] := by
@@ -151,5 +193,36 @@ theorem primitive_two_five_hits_eight_four_two_card_le_one :
     exact primitiveOn_pair (by norm_num) (by norm_num)
   exact primitiveOn_inter_chain_card_le_one hS
     divisibilityChain_eight_four_two_toFinset
+
+/--
+Concrete sample: `2` is reachable from the head of the list path `8 -> 4 -> 2`.
+-/
+theorem mem_reachable_eight_four_two_two :
+    PrimeReachable 8 2 := by
+  exact mem_reachable_from_head_of_adjacentPrimePath
+    adjacentPrimePath_eight_four_two (by simp)
+
+/--
+The list path `8 -> 4 -> 2` packaged as a singleton reachable-controlled
+family.
+-/
+def singletonPrimeReachableFamily_eight_four_two :
+    PrimeReachableControlledChainFamily Unit :=
+  singletonPrimeReachableControlledChainFamilyOfAdjacentPrimePath
+    8 [4, 2] adjacentPrimePath_eight_four_two
+
+/--
+Concrete sample: primitive `{2,5}` hitting the list path `8 -> 4 -> 2` has
+unit hit mass bounded by the source mass at `8`.
+-/
+theorem primitive_two_five_singletonPrimeReachableFamily_eight_four_two_hitMass_le_sourceMass :
+    (singletonPrimeReachableFamily_eight_four_two.toDvdControlled.toSourceControlled
+      unitNatMassSpace_dvdMonotone).hitMass ({2, 5} : Finset ℕ) ≤
+      (singletonPrimeReachableFamily_eight_four_two.toDvdControlled.toSourceControlled
+        unitNatMassSpace_dvdMonotone).sourceMass := by
+  have hS : PrimitiveOn ({2, 5} : Finset ℕ) := by
+    exact primitiveOn_pair (by norm_num) (by norm_num)
+  exact singletonPrimeReachableFamily_eight_four_two.primitive_hitMass_le_sourceMass
+    hS unitNatMassSpace_dvdMonotone
 
 end DkMath.NumberTheory.PrimitiveSet

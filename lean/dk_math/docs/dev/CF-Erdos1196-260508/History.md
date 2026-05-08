@@ -286,3 +286,27 @@ Archive
 6. 次の課題:
    - list-shaped path を `PrimeReachableControlledChainFamily` や `DvdControlledChainFamily` へ接続する provider を追加するか判断する。
    - その後に `Branching` / `SubConservative` 接続へ進む。
+
+### 日時: 2026/05/09 01:31 JST (Phase I list path to reachable-controlled forest)
+
+1. 目的:
+   - `review/review-007.md` の提案に従い、list-shaped prime path から `PrimeReachableControlledChainFamily` へ直接接続する provider を追加する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/PrimePathList.lean` に `mem_reachable_from_head_of_adjacentPrimePath` を追加した。
+   - 非空 list path `source :: tail` の任意 node が head `source` から `PrimeReachable` であることを再帰で証明した。
+   - `singletonPrimeReachableControlledChainFamilyOfAdjacentPrimePath` を追加し、非空 list path を singleton `PrimeReachableControlledChainFamily` として package 化できるようにした。
+   - concrete sample として `mem_reachable_eight_four_two_two`, `singletonPrimeReachableFamily_eight_four_two`, `primitive_two_five_singletonPrimeReachableFamily_eight_four_two_hitMass_le_sourceMass` を追加した。
+3. 結論:
+   - `AdjacentPrimePath (source :: tail) -> PrimeReachableControlledChainFamily Unit` の導線が no-sorry で閉じた。
+   - これにより、実際の prime descent path list から primitive forest mass bound へ直接進めるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.PrimePathList`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で新規・関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 初回 build では recursive equation の `source` 名解決と tail membership の形が合わず失敗した。
+   - `Relation.ReflTransGen.refl` を型から推論させ、tail membership は `simpa only [List.mem_cons]` で戻して解消した。
+6. 次の課題:
+   - finite path skeleton は path -> chain -> reachable-controlled forest -> primitive hit mass bound まで接続された。
+   - 次は `Branching` / `SubConservative` 接続へ進むか、positive/lower-bound support の補助層を追加するか判断する。
