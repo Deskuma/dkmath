@@ -310,3 +310,30 @@ Archive
 6. 次の課題:
    - finite path skeleton は path -> chain -> reachable-controlled forest -> primitive hit mass bound まで接続された。
    - 次は `Branching` / `SubConservative` 接続へ進むか、positive/lower-bound support の補助層を追加するか判断する。
+
+### 日時: 2026/05/09 02:25 JST (Phase J subconservative branch bridge)
+
+1. 目的:
+   - `review/review-008.md` の提案に従い、`Branching` / `SubConservative` から path 上の質量非増加を供給する bridge を追加する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/SubConservativeBridge.lean` を新規作成した。
+   - `child_mass_le_parent_of_subconservative` を追加し、`child ∈ B.children parent` なら `M.μ child <= M.μ parent` を `SubConservative` と各質量の非負性から証明した。
+   - `AdjacentBranchPath B L := List.IsChain (fun parent child => child ∈ B.children parent) L` を定義した。
+   - `AdjacentBranchPath.mem_mass_le_head` を追加し、subconservative branch path の任意 node が head の質量以下であることを証明した。
+   - `singletonSourceControlledChainFamilyOfAdjacentBranchPrimePath` を追加し、prime path かつ branch path である非空 list を singleton `SourceControlledChainFamily` に package 化できるようにした。
+   - concrete sample として `sampleBranching_eight_four_two`, `adjacentBranchPath_eight_four_two`, `sampleBranching_eight_four_two_subConservative`, `singletonSourceControlledFamily_eight_four_two_of_subConservative`, `primitive_two_five_singletonSourceControlledFamily_eight_four_two_hitMass_le_sourceMass` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `SubConservativeBridge` を import し、公開集約へ載せた。
+3. 結論:
+   - `SubConservative -> branch path mass <= source mass -> SourceControlledChainFamily -> primitive hit mass bound` の有限 bridge が no-sorry で閉じた。
+   - これで finite path skeleton は Mass API の `Branching` / `SubConservative` と接続された。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.SubConservativeBridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で新規・関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 初回 build では theorem 呼び出しで改行付き dot notation が誤解釈され、`SourceControlledChainFamily` 値を関数適用しようとして失敗した。
+   - `SourceControlledChainFamily.primitive_hitMass_le_sourceMass hS ...` の通常呼び出しへ直して解消した。
+6. 次の課題:
+   - finite skeleton は branch mass control まで到達したため、次は positive/lower-bound support 補助層、または複数 path family の package 化へ進むか判断する。
+   - Markov kernel / 解析重みはまだ導入しない。
