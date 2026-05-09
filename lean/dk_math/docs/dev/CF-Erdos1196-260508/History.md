@@ -550,3 +550,28 @@ Archive
 6. 次の課題:
    - weighted branch route に続き、必要なら prime path / dvd-monotone route の weighted wrapper を追加する。
    - Markov kernel へ進む場合は、今回の `WeightedPathFamily` を有限重み付き和の受け皿として使い、解析重みは別層に分離する。
+
+### 日時: 2026/05/09 20:55 JST (Phase S weighted prime path route wrapper)
+
+1. 目的:
+   - `review/review-017.md` の提案に従い、weighted branch route に加えて、prime path / dvd-monotone route の weighted wrapper を追加して API を対称にする。
+2. 実施:
+   - `ErdosFinitePrimitiveInput.weightedPrimePathFamily` を追加し、`primePathFamilySourceControlled` で得られる source-controlled forest に非負重みを載せられるようにした。
+   - `ErdosFinitePrimitiveInput.weightedPrimePathFamilyHitMass` を追加した。
+   - `ErdosFinitePrimitiveInput.weightedPrimePathFamilySourceMass` を追加した。
+   - `ErdosFinitePrimitiveInput.weightedHitMass_le_weightedSourceMass_of_primePathFamily` を追加し、`DvdMonotoneMass M` から得る prime path route の weighted finite Erdos bound を用意した。
+   - concrete sample として `erdosFinitePrimitiveInput_two_five_weightedPrimePath_hitMass_le_sourceMass` を追加した。
+3. 結論:
+   - weighted route についても branch/subconservative route と prime/dvd-monotone route が揃った。
+   - `WeightedPathFamily.ofSourceControlled` を共通受け皿として使い、route ごとの source control をそのまま非負重み付き和へ持ち上げられる形になった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.WeightedPathFamily`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - finite weighted route は branch 版と prime path 版が揃ったため、次は Markov kernel の最小 skeleton を検討する。
+   - 解析重みを入れる場合も、まず `WeightedPathFamily` に渡す非負重みを構成する別層として設計する。

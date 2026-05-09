@@ -147,6 +147,65 @@ theorem weightedHitMass_le_weightedSourceMass_of_branchPrimePathFamily
   exact (I.weightedBranchPrimePathFamily M B F weight hweight)
     |>.primitive_weightedHitMass_le_weightedSourceMass I.primitive
 
+/--
+Weighted prime path route: add nonnegative weights to the prime-path-family
+source-controlled forest obtained from divisibility-monotone mass.
+-/
+def weightedPrimePathFamily
+    {x : ℕ} {ι : Type _} [DecidableEq ι]
+    (M : MassSpace ℕ)
+    (I : ErdosFinitePrimitiveInput x)
+    (F : AdjacentPrimePathFamily ι) (hM : DvdMonotoneMass M)
+    (weight : ι → ℚ)
+    (hweight :
+      ∀ i ∈ (I.primePathFamilySourceControlled M F hM).index,
+        0 ≤ weight i) :
+    WeightedPathFamily M ι :=
+  WeightedPathFamily.ofSourceControlled
+    (I.primePathFamilySourceControlled M F hM) weight hweight
+
+/-- Weighted hit mass for the prime-path-family / dvd-monotone route. -/
+def weightedPrimePathFamilyHitMass
+    {x : ℕ} {ι : Type _} [DecidableEq ι]
+    (M : MassSpace ℕ)
+    (I : ErdosFinitePrimitiveInput x)
+    (F : AdjacentPrimePathFamily ι) (hM : DvdMonotoneMass M)
+    (weight : ι → ℚ)
+    (hweight :
+      ∀ i ∈ (I.primePathFamilySourceControlled M F hM).index,
+        0 ≤ weight i) : ℚ :=
+  (I.weightedPrimePathFamily M F hM weight hweight).weightedHitMass
+    I.support
+
+/-- Weighted source mass for the prime-path-family / dvd-monotone route. -/
+def weightedPrimePathFamilySourceMass
+    {x : ℕ} {ι : Type _} [DecidableEq ι]
+    (M : MassSpace ℕ)
+    (I : ErdosFinitePrimitiveInput x)
+    (F : AdjacentPrimePathFamily ι) (hM : DvdMonotoneMass M)
+    (weight : ι → ℚ)
+    (hweight :
+      ∀ i ∈ (I.primePathFamilySourceControlled M F hM).index,
+        0 ≤ weight i) : ℚ :=
+  (I.weightedPrimePathFamily M F hM weight hweight).weightedSourceMass
+
+/--
+Weighted finite Erdos bound for the prime-path-family / dvd-monotone route.
+-/
+theorem weightedHitMass_le_weightedSourceMass_of_primePathFamily
+    {x : ℕ} {ι : Type _} [DecidableEq ι]
+    {M : MassSpace ℕ}
+    (I : ErdosFinitePrimitiveInput x)
+    (F : AdjacentPrimePathFamily ι) (hM : DvdMonotoneMass M)
+    (weight : ι → ℚ)
+    (hweight :
+      ∀ i ∈ (I.primePathFamilySourceControlled M F hM).index,
+        0 ≤ weight i) :
+    I.weightedPrimePathFamilyHitMass M F hM weight hweight ≤
+      I.weightedPrimePathFamilySourceMass M F hM weight hweight := by
+  exact (I.weightedPrimePathFamily M F hM weight hweight)
+    |>.primitive_weightedHitMass_le_weightedSourceMass I.primitive
+
 end ErdosFinitePrimitiveInput
 
 /-- Sample nonnegative rational weights on the Bool-indexed path family. -/
@@ -172,6 +231,31 @@ theorem erdosFinitePrimitiveInput_two_five_weightedBranch_hitMass_le_sourceMass 
   exact erdosFinitePrimitiveInput_two_five
     |>.weightedHitMass_le_weightedSourceMass_of_branchPrimePathFamily
       sampleAdjacentBranchPrimePathBoolFamily sampleBoolPathWeight
+      (by
+        intro b _hb
+        cases b <;> norm_num [sampleBoolPathWeight])
+
+/--
+Concrete weighted sample for the prime-path-family / dvd-monotone finite Erdos
+route.
+-/
+theorem erdosFinitePrimitiveInput_two_five_weightedPrimePath_hitMass_le_sourceMass :
+    erdosFinitePrimitiveInput_two_five.weightedPrimePathFamilyHitMass
+      unitNatMassSpace sampleAdjacentPrimePathBoolFamily
+      unitNatMassSpace_dvdMonotone sampleBoolPathWeight
+      (by
+        intro b _hb
+        cases b <;> norm_num [sampleBoolPathWeight]) ≤
+    erdosFinitePrimitiveInput_two_five.weightedPrimePathFamilySourceMass
+      unitNatMassSpace sampleAdjacentPrimePathBoolFamily
+      unitNatMassSpace_dvdMonotone sampleBoolPathWeight
+      (by
+        intro b _hb
+        cases b <;> norm_num [sampleBoolPathWeight]) := by
+  exact erdosFinitePrimitiveInput_two_five
+    |>.weightedHitMass_le_weightedSourceMass_of_primePathFamily
+      sampleAdjacentPrimePathBoolFamily unitNatMassSpace_dvdMonotone
+      sampleBoolPathWeight
       (by
         intro b _hb
         cases b <;> norm_num [sampleBoolPathWeight])
