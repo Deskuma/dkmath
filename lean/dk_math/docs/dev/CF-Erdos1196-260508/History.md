@@ -421,3 +421,29 @@ Archive
 6. 次の課題:
    - 次は `ErdosFinitePrimitiveInput` のような primitive + lower-bound support の入力 package を追加し、有限 Erdos theorem 文を整理するか判断する。
    - その後、Markov kernel / 解析重みへ進む前に、現在の finite skeleton の theorem-facing API を点検する。
+
+### 日時: 2026/05/09 11:58 JST (Phase N finite Erdos primitive input)
+
+1. 目的:
+   - `review/review-012.md` の提案に従い、primitive 条件と lower-bound support 条件を theorem-facing な有限 Erdos 入力 package としてまとめる。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/ErdosFinite.lean` を新規作成した。
+   - `ErdosFinitePrimitiveInput x` を追加し、`support : Finset ℕ`, `primitive : PrimitiveOn support`, `lowerBound : LowerBoundOn x support` を package 化した。
+   - `ErdosFinitePrimitiveInput.positiveOn_of_one_le`, `not_mem_zero_of_one_le`, `not_mem_one_of_two_le` を追加し、lower-bound support から正値性や `0` / `1` の除外を取り出せるようにした。
+   - `ErdosFinitePrimitiveInput.branchPrimePathFamily_hitMass_le_sourceMass` を追加し、finite Erdos input の `primitive` field を `AdjacentBranchPrimePathFamily.primitive_hitMass_le_sourceMass` へ渡す theorem-facing wrapper を作った。
+   - concrete sample として `erdosFinitePrimitiveInput_two_five`, `erdosFinitePrimitiveInput_two_five_positiveOn`, `erdosFinitePrimitiveInput_two_five_not_mem_one`, `erdosFinitePrimitiveInput_two_five_branchPath_hitMass_le_sourceMass` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `ErdosFinite` を import し、公開集約へ載せた。
+3. 結論:
+   - `PrimitiveOn S` と `LowerBoundOn x S` を theorem の入力として一体化できた。
+   - 既存の branch-controlled multiple path family bound を、finite Erdos input から直接呼べるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.ErdosFinite`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - finite Erdos input を使った theorem-facing API を点検し、hit mass / source mass の表示名や wrapper を追加するか判断する。
+   - Markov kernel / 解析重みへ進む前に、現時点の finite skeleton の公開 API を整理する。

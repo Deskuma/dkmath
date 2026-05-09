@@ -15,6 +15,7 @@ import DkMath.NumberTheory.PrimitiveSet.PrimePathList
 import DkMath.NumberTheory.PrimitiveSet.PathFamily
 import DkMath.NumberTheory.PrimitiveSet.SubConservativeBridge
 import DkMath.NumberTheory.PrimitiveSet.BranchPathFamily
+import DkMath.NumberTheory.PrimitiveSet.ErdosFinite
 
 #print "file: DkMath.NumberTheory.PrimitiveSet"
 
@@ -35,4 +36,5 @@ This module exposes:
 - finite family of list-shaped prime paths
 - subconservative branch bridge
 - finite family of branch-controlled prime paths
+- theorem-facing finite Erdos primitive input
 -/
