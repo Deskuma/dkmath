@@ -364,3 +364,33 @@ Archive
 6. 次の課題:
    - support 条件を既存の primitive hitting sample や path family sample に必要に応じて接続する。
    - 次段階として multiple path family package を追加し、singleton path から複数 path forest へ拡張するか判断する。
+
+### 日時: 2026/05/09 11:38 JST (Phase L multiple prime path family)
+
+1. 目的:
+   - `review/review-010.md` の提案に従い、singleton list path ではなく finite index で束ねた複数の list-shaped prime paths を既存 forest theorem へ渡せるようにする。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/PathFamily.lean` を新規作成した。
+   - `AdjacentPrimePathFamily ι` を追加し、`index : Finset ι`, `source : ι -> ℕ`, `tail : ι -> List ℕ`, `isPath : ∀ i ∈ index, AdjacentPrimePath (source i :: tail i)` を package 化した。
+   - `AdjacentPrimePathFamily.path` と `AdjacentPrimePathFamily.nodeSet` を追加した。
+   - `AdjacentPrimePathFamily.toDivisibilityChainFamily` を追加し、各 list path の node set を既存の `DivisibilityChainFamily` へ忘却できるようにした。
+   - `AdjacentPrimePathFamily.toPrimeReachableControlledChainFamily` を追加し、既存の `mem_reachable_from_head_of_adjacentPrimePath` から各 node の source からの到達可能性を供給した。
+   - `AdjacentPrimePathFamily.primitive_hitMass_le_sourceMass` を追加し、multiple path family から primitive indexed hit mass bound へ直接進める wrapper を作った。
+   - concrete sample として `adjacentPrimePath_nine_three_one`, `sampleAdjacentPrimePathBoolFamily`, `sampleAdjacentPrimePathBoolFamilySourceControlled`, `primitive_two_five_sampleAdjacentPrimePathBoolFamily_hitMass_le_sourceMass` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `PathFamily` を import し、公開集約へ載せた。
+3. 結論:
+   - `finite family of nonempty prime paths -> PrimeReachableControlledChainFamily -> DvdControlledChainFamily -> SourceControlledChainFamily -> primitive hit mass bound` の導線が no-sorry で閉じた。
+   - これにより singleton path だけでなく、複数 descent path を indexed forest として扱えるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.PathFamily`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - 初回 build 後に lint 警告を修正し、再 build で警告なしの成功を確認した。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 初回 build では `change` tactic が不要である lint 警告と、sample theorem の長い行に対する style 警告が出た。
+   - `change` を削除し、sample の source-controlled family を別定義へ切り出して解消した。
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗したため、権限昇格付きで再実行した。
+6. 次の課題:
+   - `AdjacentPrimePathFamily` と `AdjacentBranchPath` / `SubConservative` を組み合わせ、複数 path family に対して branch 側から source mass control を供給する bridge を追加するか判断する。
+   - あるいは `ErdosFinitePrimitiveInput` のような primitive + lower-bound support の入力 package を追加し、有限 Erdos theorem 文を整理する。
