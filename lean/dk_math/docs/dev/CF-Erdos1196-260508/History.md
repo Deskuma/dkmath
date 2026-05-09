@@ -337,3 +337,30 @@ Archive
 6. 次の課題:
    - finite skeleton は branch mass control まで到達したため、次は positive/lower-bound support 補助層、または複数 path family の package 化へ進むか判断する。
    - Markov kernel / 解析重みはまだ導入しない。
+
+### 日時: 2026/05/09 05:44 JST (Phase K positive/lower-bound support)
+
+1. 目的:
+   - `review/review-009.md` の提案に従い、Erdos #1196 の `A ⊂ [x,∞)` 型の有限 support 条件を primitive 条件から分離して追加する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/Support.lean` を新規作成した。
+   - `PositiveOn S := ∀ n ∈ S, 0 < n` を定義した。
+   - `LowerBoundOn x S := ∀ n ∈ S, x ≤ n` を定義した。
+   - `PositiveOn.pos_of_mem`, `PositiveOn.not_mem_zero`, `LowerBoundOn.le_of_mem`, `LowerBoundOn.mono_left`, `LowerBoundOn.positiveOn_of_one_le` を追加した。
+   - top-level alias として `lowerBoundOn_one_implies_positiveOn`, `not_mem_zero_of_positiveOn`, `not_mem_one_of_lowerBoundOn_two` を追加した。
+   - empty / singleton / `{2,5}` の concrete support sample を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `Support` を import し、公開集約へ載せた。
+3. 結論:
+   - `PrimitiveOn` は純粋な divisibility antichain のまま保ちつつ、正値性や下限条件を外部仮定として参照できるようになった。
+   - これにより、後続の有限 Erdos support 条件で `0` や `1` を除外する補題を直接使える。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.Support`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build / `rg` / `git diff` の一部が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 必要な build と検査は権限昇格付きで再実行し、成功または該当なしを確認した。
+6. 次の課題:
+   - support 条件を既存の primitive hitting sample や path family sample に必要に応じて接続する。
+   - 次段階として multiple path family package を追加し、singleton path から複数 path forest へ拡張するか判断する。

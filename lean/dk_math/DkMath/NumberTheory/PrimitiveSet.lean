@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.PrimitiveSet.Basic
+import DkMath.NumberTheory.PrimitiveSet.Support
 import DkMath.NumberTheory.PrimitiveSet.HittingBridge
 import DkMath.NumberTheory.PrimitiveSet.BranchBridge
 import DkMath.NumberTheory.PrimitiveSet.DescentBridge
@@ -21,6 +22,7 @@ Public-facing aggregator for the finite primitive-set hitting layer.
 This module exposes:
 
 - `PrimitiveOn`
+- finite positive and lower-bound support predicates
 - finite divisibility/descent-chain hitting lemmas
 - finite chain-family hitting bounds
 - source-controlled forest bridge
