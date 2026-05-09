@@ -394,3 +394,30 @@ Archive
 6. 次の課題:
    - `AdjacentPrimePathFamily` と `AdjacentBranchPath` / `SubConservative` を組み合わせ、複数 path family に対して branch 側から source mass control を供給する bridge を追加するか判断する。
    - あるいは `ErdosFinitePrimitiveInput` のような primitive + lower-bound support の入力 package を追加し、有限 Erdos theorem 文を整理する。
+
+### 日時: 2026/05/09 11:46 JST (Phase M branch-controlled prime path family)
+
+1. 目的:
+   - `review/review-011.md` の提案に従い、multiple prime path family に `AdjacentBranchPath` / `SubConservative` による source mass control を載せる。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/BranchPathFamily.lean` を新規作成した。
+   - `AdjacentBranchPrimePathFamily ι B` を追加し、`AdjacentPrimePathFamily ι` に各 indexed path が branch relation に従う条件 `isBranchPath` を加えた。
+   - `AdjacentBranchPrimePathFamily.toSourceControlledChainFamily` を追加し、`SubConservative M B` と `AdjacentBranchPath.mem_mass_le_head` から `SourceControlledChainFamily M ι` を生成できるようにした。
+   - `AdjacentBranchPrimePathFamily.primitive_hitMass_le_sourceMass` を追加し、branch subconservativity から multiple path family の primitive indexed hit mass bound へ直接進める wrapper を作った。
+   - concrete sample として `sampleBranching_eight_nine_paths`, `adjacentBranchPath_eight_four_two_sampleBranching_eight_nine_paths`, `adjacentBranchPath_nine_three_one_sampleBranching_eight_nine_paths`, `sampleAdjacentBranchPrimePathBoolFamily`, `sampleAdjacentBranchPrimePathBoolFamilySourceControlled`, `primitive_two_five_sampleAdjacentBranchPrimePathBoolFamily_hitMass_le_sourceMass` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `BranchPathFamily` を import し、公開集約へ載せた。
+3. 結論:
+   - `finite family of prime paths + branch path condition + SubConservative -> SourceControlledChainFamily -> primitive hit mass bound` の導線が no-sorry で閉じた。
+   - Phase L の multiple path forest が、Phase J の branch subconservative mass control と接続された。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.BranchPathFamily`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 初回 build では `AdjacentBranchPrimePathFamily` が `extends AdjacentPrimePathFamily` により自動生成する projection `toAdjacentPrimePathFamily` と、手書きの同名定義が衝突した。
+   - 手書き定義を削除し、自動 projection を使う形へ修正して解消した。
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗したため、権限昇格付きで再実行した。
+6. 次の課題:
+   - 次は `ErdosFinitePrimitiveInput` のような primitive + lower-bound support の入力 package を追加し、有限 Erdos theorem 文を整理するか判断する。
+   - その後、Markov kernel / 解析重みへ進む前に、現在の finite skeleton の theorem-facing API を点検する。

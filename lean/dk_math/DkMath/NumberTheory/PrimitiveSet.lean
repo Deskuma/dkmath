@@ -14,6 +14,7 @@ import DkMath.NumberTheory.PrimitiveSet.PrimePath
 import DkMath.NumberTheory.PrimitiveSet.PrimePathList
 import DkMath.NumberTheory.PrimitiveSet.PathFamily
 import DkMath.NumberTheory.PrimitiveSet.SubConservativeBridge
+import DkMath.NumberTheory.PrimitiveSet.BranchPathFamily
 
 #print "file: DkMath.NumberTheory.PrimitiveSet"
 
@@ -33,4 +34,5 @@ This module exposes:
 - list-shaped prime path to divisibility-chain provider
 - finite family of list-shaped prime paths
 - subconservative branch bridge
+- finite family of branch-controlled prime paths
 -/
