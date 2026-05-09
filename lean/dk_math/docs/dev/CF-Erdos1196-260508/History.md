@@ -602,3 +602,26 @@ Archive
 6. 次の課題:
    - 次は `WeightProvider` / `FiniteKernel` のような、`WeightedPathFamily` に重みを供給する最小構造を別層として追加するか判断する。
    - Markov kernel を導入する場合も、まずは有限 index 上の非負重み provider として設計し、解析重みはさらに後段に分離する。
+
+### 日時: 2026/05/09 21:39 JST (Phase U weighted hit mass uniform bound)
+
+1. 目的:
+   - `review/review-019.md` の提案に従い、weighted source mass の一様上界と primitive weighted hit bound を合成し、`weightedHitMass <= C` を名前付き theorem として追加する。
+2. 実施:
+   - `WeightedPathFamily.weightedHitMass_le_const_mul_totalWeight` を追加し、各 source mass が `C` 以下なら primitive weighted hit mass が `C * totalWeight` 以下であることを証明した。
+   - `WeightedPathFamily.weightedHitMass_le_const_of_subprob` を追加し、sub-probability weight かつ各 source mass が `C` 以下なら primitive weighted hit mass が `C` 以下であることを証明した。
+   - concrete sample として `erdosFinitePrimitiveInput_two_five_weightedBranch_hitMass_le_one` を追加し、`sampleBoolSubprobPathWeight` による branch weighted route の hit mass が `1` 以下であることを確認した。
+3. 結論:
+   - finite weighted skeleton で `weightedHitMass <= weightedSourceMass <= C` の合成が theorem-facing に使える形になった。
+   - Markov kernel 前段として、sub-probability flow が一様 source bound を通じて hit mass bound を与える有限定理が no-sorry で閉じた。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.WeightedPathFamily`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - 次は `WeightProvider` / `FiniteKernel` のような、`WeightedPathFamily` に重みを供給する最小構造を別層として追加するか判断する。
+   - その後、Markov kernel 由来の非負重みを provider として接続する。

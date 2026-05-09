@@ -147,6 +147,42 @@ theorem primitive_weightedHitMass_le_weightedSourceMass
               simp [sourceSetMass]
     exact mul_le_mul_of_nonneg_left hchain (W.weight_nonneg i hi)
 
+/--
+If every source has mass at most `C`, primitive weighted hit mass is bounded by
+`C * totalWeight`.
+-/
+theorem weightedHitMass_le_const_mul_totalWeight
+    {ι : Type _} [DecidableEq ι]
+    {M : MassSpace ℕ} {S : Finset ℕ}
+    (hS : PrimitiveOn S)
+    (W : WeightedPathFamily M ι) {C : ℚ}
+    (hsource : ∀ i ∈ W.index, M.μ (W.source i) ≤ C) :
+    W.weightedHitMass S ≤ C * W.totalWeight := by
+  calc
+    W.weightedHitMass S ≤ W.weightedSourceMass :=
+      W.primitive_weightedHitMass_le_weightedSourceMass hS
+    _ ≤ C * W.totalWeight :=
+      W.weightedSourceMass_le_const_mul_totalWeight hsource
+
+/--
+If the weights are a sub-probability and every source has mass at most `C`,
+primitive weighted hit mass is bounded by `C`.
+-/
+theorem weightedHitMass_le_const_of_subprob
+    {ι : Type _} [DecidableEq ι]
+    {M : MassSpace ℕ} {S : Finset ℕ}
+    (hS : PrimitiveOn S)
+    (W : WeightedPathFamily M ι) {C : ℚ}
+    (hC : 0 ≤ C)
+    (hprob : W.WeightSubProbability)
+    (hsource : ∀ i ∈ W.index, M.μ (W.source i) ≤ C) :
+    W.weightedHitMass S ≤ C := by
+  calc
+    W.weightedHitMass S ≤ W.weightedSourceMass :=
+      W.primitive_weightedHitMass_le_weightedSourceMass hS
+    _ ≤ C :=
+      W.weightedSourceMass_le_const_of_subprob hC hprob hsource
+
 end WeightedPathFamily
 
 namespace ErdosFinitePrimitiveInput
@@ -358,5 +394,38 @@ theorem erdosFinitePrimitiveInput_two_five_weightedBranch_sourceMass_le_one :
     intro i _hi
     rfl
   exact W.weightedSourceMass_le_const_of_subprob (by norm_num) hprob hsource
+
+/--
+Concrete sub-probability sample: the weighted branch hit mass is bounded by the
+same uniform unit source-mass bound.
+-/
+theorem erdosFinitePrimitiveInput_two_five_weightedBranch_hitMass_le_one :
+    (erdosFinitePrimitiveInput_two_five.weightedBranchPrimePathFamily
+      unitNatMassSpace sampleBranching_eight_nine_paths
+      sampleAdjacentBranchPrimePathBoolFamily sampleBoolSubprobPathWeight
+      (by
+        intro b _hb
+        cases b <;> norm_num [sampleBoolSubprobPathWeight])).weightedHitMass
+      erdosFinitePrimitiveInput_two_five.support ≤ 1 := by
+  let W :=
+    erdosFinitePrimitiveInput_two_five.weightedBranchPrimePathFamily
+      unitNatMassSpace sampleBranching_eight_nine_paths
+      sampleAdjacentBranchPrimePathBoolFamily sampleBoolSubprobPathWeight
+      (by
+        intro b _hb
+        cases b <;> norm_num [sampleBoolSubprobPathWeight])
+  have hprob : W.WeightSubProbability := by
+    simp only [WeightedPathFamily.WeightSubProbability,
+      WeightedPathFamily.totalWeight, W,
+      ErdosFinitePrimitiveInput.weightedBranchPrimePathFamily,
+      WeightedPathFamily.ofSourceControlled,
+      ErdosFinitePrimitiveInput.branchPrimePathFamilySourceControlled,
+      sampleAdjacentBranchPrimePathBoolFamily, sampleBoolSubprobPathWeight]
+    norm_num
+  have hsource : ∀ i ∈ W.index, unitNatMassSpace.μ (W.source i) ≤ (1 : ℚ) := by
+    intro i _hi
+    rfl
+  exact W.weightedHitMass_le_const_of_subprob
+    erdosFinitePrimitiveInput_two_five.primitive (by norm_num) hprob hsource
 
 end DkMath.NumberTheory.PrimitiveSet
