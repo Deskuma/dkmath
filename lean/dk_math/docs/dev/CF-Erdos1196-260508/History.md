@@ -625,3 +625,34 @@ Archive
 6. 次の課題:
    - 次は `WeightProvider` / `FiniteKernel` のような、`WeightedPathFamily` に重みを供給する最小構造を別層として追加するか判断する。
    - その後、Markov kernel 由来の非負重みを provider として接続する。
+
+### 日時: 2026/05/09 21:51 JST (Phase V finite weight provider skeleton)
+
+1. 目的:
+   - `review/review-020.md` の提案に従い、`WeightedPathFamily` に直接重みを持たせるだけでなく、重みの供給元を分離する最小 provider 層を追加する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/WeightProvider.lean` を新規作成した。
+   - `WeightProvider ι` を追加し、`index : Finset ι`, `weight : ι -> ℚ`, `weight_nonneg : ∀ i ∈ index, 0 <= weight i` を package 化した。
+   - `WeightProvider.totalWeight`, `WeightProvider.SubProbability`, `WeightProvider.totalWeight_nonneg` を追加した。
+   - `WeightProvider.Compatible P F := P.index = F.index` を追加し、provider と `SourceControlledChainFamily` の index 互換性を明示した。
+   - `WeightProvider.applyToSourceControlled` を追加し、互換な provider を source-controlled forest に適用して `WeightedPathFamily` を作れるようにした。
+   - `WeightProvider.applyToSourceControlled_weightSubProbability` を追加し、provider 側の sub-probability 条件を適用後の weighted family 側へ移送できるようにした。
+   - `WeightProvider.weightedHitMass_le_const_of_subprob_applyToSourceControlled` を追加し、provider 適用後の finite hit mass 一様上界を直接呼べるようにした。
+   - `ErdosFinitePrimitiveInput.providerBranchPrimePathFamily` と `providerBranchPrimePathFamily_hitMass_le_const_of_subprob` を追加し、branch route に provider 由来の重みを適用する wrapper を用意した。
+   - concrete sample として `sampleBoolSubprobWeightProvider`, `sampleBoolSubprobWeightProvider_subProbability`, `erdosFinitePrimitiveInput_two_five_providerBranch_hitMass_le_one` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `WeightProvider` を import し、公開集約へ載せた。
+3. 結論:
+   - 重みそのものを供給する finite provider と、path/source control を持つ `SourceControlledChainFamily` を分離できた。
+   - Markov kernel 由来の重みを将来追加する場合も、まず `WeightProvider` を作って `WeightedPathFamily` に適用する導線ができた。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.WeightProvider`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 初回 build では `applyToSourceControlled_weightSubProbability` で provider 側の `P.index` と適用後 weighted family 側の `F.index` の書き換えが不足し、`P.SubProbability` が目標に合わなかった。
+   - `WeightedPathFamily.WeightSubProbability` と `totalWeight` を展開し、`hcompat : P.index = F.index` で明示的に書き換える形へ修正した。
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗したため、権限昇格付きで再実行した。
+6. 次の課題:
+   - 次は `FiniteKernel` / Markov kernel の最小構造を、`WeightProvider` を生成する層として追加するか判断する。
+   - 解析重みはまだ入れず、有限 index 上の非負・sub-probability provider を返す kernel skeleton に留める。
