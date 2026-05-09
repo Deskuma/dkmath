@@ -26,6 +26,19 @@ structure ErdosFinitePrimitiveInput (x : ℕ) where
 
 namespace ErdosFinitePrimitiveInput
 
+/-!
+Route-facing API naming convention:
+
+- `<route>SourceControlled` packages the finite forest used by that route.
+- `<route>HitMass` is the indexed mass of `I.support` hitting that forest.
+- `<route>SourceMass` is the indexed mass of the route sources.
+- `hitMass_le_sourceMass_of_<route>` is the theorem-facing bound.
+
+The route name records where source control comes from.  Currently
+`branchPrimePathFamily` uses `SubConservative M B`, while `primePathFamily`
+uses `DvdMonotoneMass M`.
+-/
+
 /-- A lower bound by at least `1` gives positivity of the support. -/
 theorem positiveOn_of_one_le
     {x : ℕ} (I : ErdosFinitePrimitiveInput x) (hx : 1 ≤ x) :
@@ -108,6 +121,18 @@ theorem hitMass_le_sourceMass_of_branchPrimePathFamily
   exact I.branchPrimePathFamily_hitMass_le_sourceMass F
 
 /--
+Alias emphasizing that source control is supplied by branch subconservativity.
+-/
+theorem hitMass_le_sourceMass_of_subconservativeBranchPrimePathFamily
+    {x : ℕ} {ι : Type _} [DecidableEq ι]
+    {M : MassSpace ℕ} {B : Branching ℕ} [SubConservative M B]
+    (I : ErdosFinitePrimitiveInput x)
+    (F : AdjacentBranchPrimePathFamily ι B) :
+    I.branchPrimePathFamilyHitMass M B F ≤
+      I.branchPrimePathFamilySourceMass M B F := by
+  exact I.hitMass_le_sourceMass_of_branchPrimePathFamily F
+
+/--
 The source-controlled forest obtained from a prime path family using
 divisibility-monotone mass.
 -/
@@ -149,6 +174,18 @@ theorem hitMass_le_sourceMass_of_primePathFamily
     I.primePathFamilyHitMass M F hM ≤
       I.primePathFamilySourceMass M F hM := by
   exact F.primitive_hitMass_le_sourceMass I.primitive hM
+
+/--
+Alias emphasizing that source control is supplied by divisibility-monotone mass.
+-/
+theorem hitMass_le_sourceMass_of_dvdMonotonePrimePathFamily
+    {x : ℕ} {ι : Type _} [DecidableEq ι]
+    {M : MassSpace ℕ}
+    (I : ErdosFinitePrimitiveInput x)
+    (F : AdjacentPrimePathFamily ι) (hM : DvdMonotoneMass M) :
+    I.primePathFamilyHitMass M F hM ≤
+      I.primePathFamilySourceMass M F hM := by
+  exact I.hitMass_le_sourceMass_of_primePathFamily F hM
 
 end ErdosFinitePrimitiveInput
 
@@ -208,6 +245,34 @@ theorem erdosFinitePrimitiveInput_two_five_primePath_hitMass_le_sourceMass :
       unitNatMassSpace_dvdMonotone := by
   exact erdosFinitePrimitiveInput_two_five
     |>.hitMass_le_sourceMass_of_primePathFamily
+      sampleAdjacentPrimePathBoolFamily unitNatMassSpace_dvdMonotone
+
+/--
+Concrete branch-route sample using the alias that names subconservativity.
+-/
+theorem erdosFinitePrimitiveInput_two_five_subconservativeBranch_alias :
+    erdosFinitePrimitiveInput_two_five.branchPrimePathFamilyHitMass
+      unitNatMassSpace sampleBranching_eight_nine_paths
+      sampleAdjacentBranchPrimePathBoolFamily ≤
+    erdosFinitePrimitiveInput_two_five.branchPrimePathFamilySourceMass
+      unitNatMassSpace sampleBranching_eight_nine_paths
+      sampleAdjacentBranchPrimePathBoolFamily := by
+  exact erdosFinitePrimitiveInput_two_five
+    |>.hitMass_le_sourceMass_of_subconservativeBranchPrimePathFamily
+      sampleAdjacentBranchPrimePathBoolFamily
+
+/--
+Concrete prime-route sample using the alias that names divisibility monotonicity.
+-/
+theorem erdosFinitePrimitiveInput_two_five_dvdMonotonePrime_alias :
+    erdosFinitePrimitiveInput_two_five.primePathFamilyHitMass
+      unitNatMassSpace sampleAdjacentPrimePathBoolFamily
+      unitNatMassSpace_dvdMonotone ≤
+    erdosFinitePrimitiveInput_two_five.primePathFamilySourceMass
+      unitNatMassSpace sampleAdjacentPrimePathBoolFamily
+      unitNatMassSpace_dvdMonotone := by
+  exact erdosFinitePrimitiveInput_two_five
+    |>.hitMass_le_sourceMass_of_dvdMonotonePrimePathFamily
       sampleAdjacentPrimePathBoolFamily unitNatMassSpace_dvdMonotone
 
 end DkMath.NumberTheory.PrimitiveSet

@@ -497,3 +497,28 @@ Archive
 6. 次の課題:
    - theorem-facing API は branch route と prime path route が揃ったため、次は finite theorem 群の alias / naming を最終確認する。
    - Markov kernel / 解析重みへ進む場合は、既存の `ErdosFinitePrimitiveInput` wrapper 命名に合わせて route を追加する。
+
+### 日時: 2026/05/09 16:58 JST (Phase Q route API naming aliases)
+
+1. 目的:
+   - `review/review-015.md` の提案に従い、Markov kernel へ進む前に finite theorem-facing API の route 命名規則を固定し、必要最小限の alias を追加する。
+2. 実施:
+   - `ErdosFinitePrimitiveInput` namespace に route-facing API naming convention のコメントを追加した。
+   - 命名規則を `<route>SourceControlled`, `<route>HitMass`, `<route>SourceMass`, `hitMass_le_sourceMass_of_<route>` と明文化した。
+   - `hitMass_le_sourceMass_of_subconservativeBranchPrimePathFamily` を追加し、branch route の source control が `SubConservative M B` 由来であることを theorem 名から読める alias にした。
+   - `hitMass_le_sourceMass_of_dvdMonotonePrimePathFamily` を追加し、prime path route の source control が `DvdMonotoneMass M` 由来であることを theorem 名から読める alias にした。
+   - concrete sample として `erdosFinitePrimitiveInput_two_five_subconservativeBranch_alias` と `erdosFinitePrimitiveInput_two_five_dvdMonotonePrime_alias` を追加した。
+3. 結論:
+   - branch/subconservative route と prime/dvd-monotone route の theorem-facing API に、短い route 名と根拠明示 alias の両方を用意できた。
+   - 今後 Markov route を追加する場合も、同じ命名規則へ載せやすくなった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.ErdosFinite`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - finite route API は一段固定されたため、次は Markov kernel / weighted path family の最小入口を検討する。
+   - 解析重みを入れる前に、有限 Markov skeleton の責務を Mass API と PrimitiveSet API のどちらへ置くか判断する。
