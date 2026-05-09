@@ -522,3 +522,31 @@ Archive
 6. 次の課題:
    - finite route API は一段固定されたため、次は Markov kernel / weighted path family の最小入口を検討する。
    - 解析重みを入れる前に、有限 Markov skeleton の責務を Mass API と PrimitiveSet API のどちらへ置くか判断する。
+
+### 日時: 2026/05/09 20:45 JST (Phase R finite weighted path-family skeleton)
+
+1. 目的:
+   - `review/review-016.md` の提案に従い、解析重みや Markov kernel へ入る前の有限重み付き path-family skeleton を追加する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/WeightedPathFamily.lean` を新規作成した。
+   - `WeightedPathFamily M ι` を追加し、`SourceControlledChainFamily M ι` に `weight : ι -> ℚ` と `weight_nonneg : ∀ i ∈ index, 0 <= weight i` を加えた。
+   - `WeightedPathFamily.ofSourceControlled` を追加し、既存の source-controlled forest に非負重みを付けられるようにした。
+   - `WeightedPathFamily.weightedHitMass` と `WeightedPathFamily.weightedSourceMass` を追加した。
+   - `WeightedPathFamily.primitive_weightedHitMass_le_weightedSourceMass` を証明し、各 chain の primitive hit mass bound を非負重み付き有限和へ持ち上げた。
+   - `ErdosFinitePrimitiveInput.weightedBranchPrimePathFamily`, `weightedBranchPrimePathFamilyHitMass`, `weightedBranchPrimePathFamilySourceMass`, `weightedHitMass_le_weightedSourceMass_of_branchPrimePathFamily` を追加し、branch-controlled route の weighted wrapper を用意した。
+   - concrete sample として `sampleBoolPathWeight` と `erdosFinitePrimitiveInput_two_five_weightedBranch_hitMass_le_sourceMass` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `WeightedPathFamily` を import し、公開集約へ載せた。
+3. 結論:
+   - `Σ i, w_i * hitMass_i <= Σ i, w_i * sourceMass_i` 型の有限重み付き primitive hitting bound が no-sorry で閉じた。
+   - まだ解析的な Markov kernel や von Mangoldt weight には入らず、有限重み付き route の入口だけを PrimitiveSet 側に追加した。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.WeightedPathFamily`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - weighted branch route に続き、必要なら prime path / dvd-monotone route の weighted wrapper を追加する。
+   - Markov kernel へ進む場合は、今回の `WeightedPathFamily` を有限重み付き和の受け皿として使い、解析重みは別層に分離する。
