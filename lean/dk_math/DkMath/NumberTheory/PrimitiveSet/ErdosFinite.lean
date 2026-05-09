@@ -107,6 +107,49 @@ theorem hitMass_le_sourceMass_of_branchPrimePathFamily
       I.branchPrimePathFamilySourceMass M B F := by
   exact I.branchPrimePathFamily_hitMass_le_sourceMass F
 
+/--
+The source-controlled forest obtained from a prime path family using
+divisibility-monotone mass.
+-/
+def primePathFamilySourceControlled
+    {x : ℕ} {ι : Type _} [DecidableEq ι]
+    (M : MassSpace ℕ) (_I : ErdosFinitePrimitiveInput x)
+    (F : AdjacentPrimePathFamily ι) (hM : DvdMonotoneMass M) :
+    SourceControlledChainFamily M ι :=
+  F.toPrimeReachableControlledChainFamily.toDvdControlled.toSourceControlled hM
+
+/--
+Indexed hit mass of the finite Erdos support against a prime path family, using
+divisibility-monotone mass for source control.
+-/
+def primePathFamilyHitMass
+    {x : ℕ} {ι : Type _} [DecidableEq ι]
+    (M : MassSpace ℕ) (I : ErdosFinitePrimitiveInput x)
+    (F : AdjacentPrimePathFamily ι) (hM : DvdMonotoneMass M) : ℚ :=
+  (I.primePathFamilySourceControlled M F hM).hitMass I.support
+
+/--
+Indexed source mass of a prime path family, using divisibility-monotone mass for
+source control.
+-/
+def primePathFamilySourceMass
+    {x : ℕ} {ι : Type _} [DecidableEq ι]
+    (M : MassSpace ℕ) (I : ErdosFinitePrimitiveInput x)
+    (F : AdjacentPrimePathFamily ι) (hM : DvdMonotoneMass M) : ℚ :=
+  (I.primePathFamilySourceControlled M F hM).sourceMass
+
+/--
+Prime-path-family finite Erdos hit bound using divisibility-monotone mass.
+-/
+theorem hitMass_le_sourceMass_of_primePathFamily
+    {x : ℕ} {ι : Type _} [DecidableEq ι]
+    {M : MassSpace ℕ}
+    (I : ErdosFinitePrimitiveInput x)
+    (F : AdjacentPrimePathFamily ι) (hM : DvdMonotoneMass M) :
+    I.primePathFamilyHitMass M F hM ≤
+      I.primePathFamilySourceMass M F hM := by
+  exact F.primitive_hitMass_le_sourceMass I.primitive hM
+
 end ErdosFinitePrimitiveInput
 
 /-- Concrete finite Erdos input for the primitive support `{2,5}` above `2`. -/
@@ -152,5 +195,19 @@ theorem erdosFinitePrimitiveInput_two_five_named_hitMass_le_sourceMass :
   exact erdosFinitePrimitiveInput_two_five
     |>.hitMass_le_sourceMass_of_branchPrimePathFamily
       sampleAdjacentBranchPrimePathBoolFamily
+
+/--
+Concrete theorem-facing sample for the prime-path-family / dvd-monotone route.
+-/
+theorem erdosFinitePrimitiveInput_two_five_primePath_hitMass_le_sourceMass :
+    erdosFinitePrimitiveInput_two_five.primePathFamilyHitMass
+      unitNatMassSpace sampleAdjacentPrimePathBoolFamily
+      unitNatMassSpace_dvdMonotone ≤
+    erdosFinitePrimitiveInput_two_five.primePathFamilySourceMass
+      unitNatMassSpace sampleAdjacentPrimePathBoolFamily
+      unitNatMassSpace_dvdMonotone := by
+  exact erdosFinitePrimitiveInput_two_five
+    |>.hitMass_le_sourceMass_of_primePathFamily
+      sampleAdjacentPrimePathBoolFamily unitNatMassSpace_dvdMonotone
 
 end DkMath.NumberTheory.PrimitiveSet

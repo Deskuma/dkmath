@@ -472,3 +472,28 @@ Archive
 6. 次の課題:
    - finite skeleton の公開 API は一段整理されたため、次は dvd-monotone / prime-reachable 版の input wrapper を追加するか判断する。
    - あるいは Markov kernel / 解析重みの前に、現在の finite theorem 群を review して最小の rename / alias を追加する。
+
+### 日時: 2026/05/09 14:33 JST (Phase P prime path family input wrappers)
+
+1. 目的:
+   - `review/review-014.md` の提案に従い、branch-controlled 版に加えて、dvd-monotone / prime-reachable route の theorem-facing input wrapper を追加する。
+2. 実施:
+   - `ErdosFinitePrimitiveInput.primePathFamilySourceControlled` を追加し、`AdjacentPrimePathFamily` から `PrimeReachableControlledChainFamily -> DvdControlledChainFamily -> SourceControlledChainFamily` へ進む route に入力側の名前を付けた。
+   - `ErdosFinitePrimitiveInput.primePathFamilyHitMass` を追加し、finite Erdos support が prime path family を hit する indexed mass を入力側から参照できるようにした。
+   - `ErdosFinitePrimitiveInput.primePathFamilySourceMass` を追加し、対応する indexed source mass を入力側から参照できるようにした。
+   - `ErdosFinitePrimitiveInput.hitMass_le_sourceMass_of_primePathFamily` を追加し、`DvdMonotoneMass M` を仮定する prime path family 版の finite Erdos bound を用意した。
+   - concrete sample として `erdosFinitePrimitiveInput_two_five_primePath_hitMass_le_sourceMass` を追加した。
+3. 結論:
+   - branch/subconservative route と prime-reachable/dvd-monotone route の両方を `ErdosFinitePrimitiveInput` から名前付き API として呼べるようになった。
+   - 将来 Markov route を追加する際にも、route ごとに hit/source mass wrapper を並べる設計が取りやすくなった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.ErdosFinite`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - theorem-facing API は branch route と prime path route が揃ったため、次は finite theorem 群の alias / naming を最終確認する。
+   - Markov kernel / 解析重みへ進む場合は、既存の `ErdosFinitePrimitiveInput` wrapper 命名に合わせて route を追加する。
