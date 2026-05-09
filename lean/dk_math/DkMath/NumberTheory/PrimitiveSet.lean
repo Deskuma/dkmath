@@ -18,6 +18,7 @@ import DkMath.NumberTheory.PrimitiveSet.BranchPathFamily
 import DkMath.NumberTheory.PrimitiveSet.ErdosFinite
 import DkMath.NumberTheory.PrimitiveSet.WeightedPathFamily
 import DkMath.NumberTheory.PrimitiveSet.WeightProvider
+import DkMath.NumberTheory.PrimitiveSet.FiniteKernel
 
 #print "file: DkMath.NumberTheory.PrimitiveSet"
 
@@ -41,4 +42,5 @@ This module exposes:
 - theorem-facing finite Erdos primitive input
 - finite weighted path-family skeleton
 - finite weight provider skeleton
+- finite kernel skeleton
 -/

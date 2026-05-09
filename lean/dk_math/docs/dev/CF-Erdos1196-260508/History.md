@@ -656,3 +656,32 @@ Archive
 6. 次の課題:
    - 次は `FiniteKernel` / Markov kernel の最小構造を、`WeightProvider` を生成する層として追加するか判断する。
    - 解析重みはまだ入れず、有限 index 上の非負・sub-probability provider を返す kernel skeleton に留める。
+
+### 日時: 2026/05/09 22:59 JST (Phase W finite kernel skeleton)
+
+1. 目的:
+   - `review/review-021.md` の提案に従い、Markov kernel 由来の重みへ進む前段として、状態ごとに `WeightProvider` を生成する有限 kernel skeleton を追加する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/FiniteKernel.lean` を新規作成した。
+   - `FiniteKernel σ ι` を追加し、`index : σ -> Finset ι`, `weight : σ -> ι -> ℚ`, `weight_nonneg : ∀ s i, i ∈ index s -> 0 <= weight s i` を package 化した。
+   - `FiniteKernel.providerAt` を追加し、各 state `s` から `WeightProvider ι` を生成できるようにした。
+   - `FiniteKernel.totalWeightAt`, `FiniteKernel.SubProbability`, `FiniteKernel.providerAt_subProbability`, `FiniteKernel.totalWeightAt_nonneg` を追加した。
+   - `FiniteKernel.applyAtToSourceControlled` を追加し、state `s` で生成した provider を互換な `SourceControlledChainFamily` に適用できるようにした。
+   - `FiniteKernel.weightedHitMass_le_const_of_subprob_applyAtToSourceControlled` を追加し、sub-probability kernel から provider 経由の weighted hit mass 一様上界へ接続した。
+   - `ErdosFinitePrimitiveInput.kernelBranchPrimePathFamilyAt` と `kernelBranchPrimePathFamilyAt_hitMass_le_const_of_subprob` を追加し、branch route に finite kernel state の重みを適用する theorem-facing wrapper を用意した。
+   - concrete sample として `sampleUnitFiniteKernel`, `sampleUnitFiniteKernel_subProbability`, `erdosFinitePrimitiveInput_two_five_kernelBranch_hitMass_le_one` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `FiniteKernel` を import し、公開集約へ載せた。
+3. 結論:
+   - `state -> WeightProvider -> WeightedPathFamily -> weightedHitMass <= C` の有限 Markov skeleton が no-sorry で閉じた。
+   - まだ解析重みや実数対数は導入せず、有限有理重み kernel の抽象だけを PrimitiveSet 側へ追加した。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.FiniteKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - finite kernel skeleton は入ったため、次は prime path / dvd-monotone route 側にも kernel wrapper を追加するか判断する。
+   - その後、有限 kernel の normalization / compatibility API を整理してから解析 weight 層へ進む。
