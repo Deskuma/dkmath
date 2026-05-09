@@ -55,6 +55,69 @@ def weightedSourceMass
     (W : WeightedPathFamily M ι) : ℚ :=
   W.index.sum fun i => W.weight i * M.μ (W.source i)
 
+/-- Total finite weight carried by a weighted path family. -/
+def totalWeight
+    {ι : Type _} [DecidableEq ι] {M : MassSpace ℕ}
+    (W : WeightedPathFamily M ι) : ℚ :=
+  W.index.sum fun i => W.weight i
+
+/--
+The finite weights form a sub-probability mass on the index set.
+
+This is the normalization layer before introducing an actual Markov kernel.
+-/
+def WeightSubProbability
+    {ι : Type _} [DecidableEq ι] {M : MassSpace ℕ}
+    (W : WeightedPathFamily M ι) : Prop :=
+  W.totalWeight ≤ 1
+
+/-- Total weight is nonnegative. -/
+theorem totalWeight_nonneg
+    {ι : Type _} [DecidableEq ι] {M : MassSpace ℕ}
+    (W : WeightedPathFamily M ι) :
+    0 ≤ W.totalWeight := by
+  classical
+  unfold totalWeight
+  exact Finset.sum_nonneg fun i hi => W.weight_nonneg i hi
+
+/--
+If every source has mass at most `C`, then the weighted source mass is bounded
+by `C * totalWeight`.
+-/
+theorem weightedSourceMass_le_const_mul_totalWeight
+    {ι : Type _} [DecidableEq ι] {M : MassSpace ℕ}
+    (W : WeightedPathFamily M ι) {C : ℚ}
+    (hsource : ∀ i ∈ W.index, M.μ (W.source i) ≤ C) :
+    W.weightedSourceMass ≤ C * W.totalWeight := by
+  classical
+  unfold weightedSourceMass totalWeight
+  calc
+    W.index.sum (fun i => W.weight i * M.μ (W.source i))
+        ≤ W.index.sum (fun i => W.weight i * C) := by
+          exact Finset.sum_le_sum fun i hi =>
+            mul_le_mul_of_nonneg_left (hsource i hi) (W.weight_nonneg i hi)
+    _ = C * W.index.sum (fun i => W.weight i) := by
+          rw [Finset.mul_sum]
+          exact Finset.sum_congr rfl fun i _hi => by ring
+
+/--
+If the weights are a sub-probability and every source has mass at most `C`,
+then the weighted source mass is at most `C`.
+-/
+theorem weightedSourceMass_le_const_of_subprob
+    {ι : Type _} [DecidableEq ι] {M : MassSpace ℕ}
+    (W : WeightedPathFamily M ι) {C : ℚ}
+    (hC : 0 ≤ C)
+    (hprob : W.WeightSubProbability)
+    (hsource : ∀ i ∈ W.index, M.μ (W.source i) ≤ C) :
+    W.weightedSourceMass ≤ C := by
+  calc
+    W.weightedSourceMass ≤ C * W.totalWeight :=
+      W.weightedSourceMass_le_const_mul_totalWeight hsource
+    _ ≤ C * 1 := by
+      exact mul_le_mul_of_nonneg_left hprob hC
+    _ = C := by ring
+
 /--
 Weighted primitive hitting bound.
 
@@ -212,6 +275,10 @@ end ErdosFinitePrimitiveInput
 def sampleBoolPathWeight : Bool → ℚ :=
   fun b => if b then 3 else 2
 
+/-- Sample sub-probability weights on the Bool-indexed path family. -/
+def sampleBoolSubprobPathWeight : Bool → ℚ :=
+  fun b => if b then (2 / 3 : ℚ) else (1 / 3 : ℚ)
+
 /--
 Concrete weighted sample for the branch-controlled finite Erdos route.
 -/
@@ -259,5 +326,37 @@ theorem erdosFinitePrimitiveInput_two_five_weightedPrimePath_hitMass_le_sourceMa
       (by
         intro b _hb
         cases b <;> norm_num [sampleBoolPathWeight])
+
+/--
+Concrete sub-probability sample: the weighted branch source mass is bounded by
+the uniform unit source-mass bound.
+-/
+theorem erdosFinitePrimitiveInput_two_five_weightedBranch_sourceMass_le_one :
+    (erdosFinitePrimitiveInput_two_five.weightedBranchPrimePathFamily
+      unitNatMassSpace sampleBranching_eight_nine_paths
+      sampleAdjacentBranchPrimePathBoolFamily sampleBoolSubprobPathWeight
+      (by
+        intro b _hb
+        cases b <;> norm_num [sampleBoolSubprobPathWeight])).weightedSourceMass
+      ≤ 1 := by
+  let W :=
+    erdosFinitePrimitiveInput_two_five.weightedBranchPrimePathFamily
+      unitNatMassSpace sampleBranching_eight_nine_paths
+      sampleAdjacentBranchPrimePathBoolFamily sampleBoolSubprobPathWeight
+      (by
+        intro b _hb
+        cases b <;> norm_num [sampleBoolSubprobPathWeight])
+  have hprob : W.WeightSubProbability := by
+    simp only [WeightedPathFamily.WeightSubProbability,
+      WeightedPathFamily.totalWeight, W,
+      ErdosFinitePrimitiveInput.weightedBranchPrimePathFamily,
+      WeightedPathFamily.ofSourceControlled,
+      ErdosFinitePrimitiveInput.branchPrimePathFamilySourceControlled,
+      sampleAdjacentBranchPrimePathBoolFamily, sampleBoolSubprobPathWeight]
+    norm_num
+  have hsource : ∀ i ∈ W.index, unitNatMassSpace.μ (W.source i) ≤ (1 : ℚ) := by
+    intro i _hi
+    rfl
+  exact W.weightedSourceMass_le_const_of_subprob (by norm_num) hprob hsource
 
 end DkMath.NumberTheory.PrimitiveSet

@@ -575,3 +575,30 @@ Archive
 6. 次の課題:
    - finite weighted route は branch 版と prime path 版が揃ったため、次は Markov kernel の最小 skeleton を検討する。
    - 解析重みを入れる場合も、まず `WeightedPathFamily` に渡す非負重みを構成する別層として設計する。
+
+### 日時: 2026/05/09 21:33 JST (Phase T weighted normalization support)
+
+1. 目的:
+   - `review/review-018.md` の提案に従い、Markov kernel 本体へ入る前に、有限重み付き path family の正規化を語る最小補題を追加する。
+2. 実施:
+   - `WeightedPathFamily.totalWeight` を追加し、finite index 上の総重みを定義した。
+   - `WeightedPathFamily.WeightSubProbability` を追加し、`totalWeight <= 1` を有限 sub-probability 条件として定義した。
+   - `WeightedPathFamily.totalWeight_nonneg` を追加した。
+   - `WeightedPathFamily.weightedSourceMass_le_const_mul_totalWeight` を追加し、各 source mass が一様に `C` 以下なら weighted source mass が `C * totalWeight` 以下であることを証明した。
+   - `WeightedPathFamily.weightedSourceMass_le_const_of_subprob` を追加し、sub-probability weight かつ source mass が一様に `C` 以下なら weighted source mass が `C` 以下であることを証明した。
+   - concrete sample として `sampleBoolSubprobPathWeight` と `erdosFinitePrimitiveInput_two_five_weightedBranch_sourceMass_le_one` を追加した。
+3. 結論:
+   - `WeightedPathFamily` に Markov kernel 前段として必要な「総重み」「sub-probability」「一様 source bound からの weighted source bound」が no-sorry で入った。
+   - 解析的な重みや実数対数はまだ導入せず、有限有理重みの正規化だけを扱う層として整理できた。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.WeightedPathFamily`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 初回 build では sub-probability sample の `let W` が十分に展開されず、`totalWeight <= 1` が未解決で残った。
+   - `weightedBranchPrimePathFamily`, `ofSourceControlled`, `branchPrimePathFamilySourceControlled` まで明示的に展開してから `norm_num` する形へ修正し、build を通した。
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗したため、権限昇格付きで再実行した。
+6. 次の課題:
+   - 次は `WeightProvider` / `FiniteKernel` のような、`WeightedPathFamily` に重みを供給する最小構造を別層として追加するか判断する。
+   - Markov kernel を導入する場合も、まずは有限 index 上の非負重み provider として設計し、解析重みはさらに後段に分離する。
