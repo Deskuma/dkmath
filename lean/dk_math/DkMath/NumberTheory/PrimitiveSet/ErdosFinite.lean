@@ -47,6 +47,39 @@ theorem not_mem_one_of_two_le
     (LowerBoundOn.mono_left hx I.lowerBound)
 
 /--
+The source-controlled forest obtained from a branch-controlled prime path
+family and a subconservative branching.
+-/
+def branchPrimePathFamilySourceControlled
+    {x : ℕ} {ι : Type _} [DecidableEq ι]
+    (M : MassSpace ℕ) (B : Branching ℕ) [SubConservative M B]
+    (_I : ErdosFinitePrimitiveInput x)
+    (F : AdjacentBranchPrimePathFamily ι B) :
+    SourceControlledChainFamily M ι :=
+  F.toSourceControlledChainFamily M B
+
+/--
+Indexed hit mass of the finite Erdos support against a branch-controlled prime
+path family.
+-/
+def branchPrimePathFamilyHitMass
+    {x : ℕ} {ι : Type _} [DecidableEq ι]
+    (M : MassSpace ℕ) (B : Branching ℕ) [SubConservative M B]
+    (I : ErdosFinitePrimitiveInput x)
+    (F : AdjacentBranchPrimePathFamily ι B) : ℚ :=
+  (I.branchPrimePathFamilySourceControlled M B F).hitMass I.support
+
+/--
+Indexed source mass of a branch-controlled prime path family.
+-/
+def branchPrimePathFamilySourceMass
+    {x : ℕ} {ι : Type _} [DecidableEq ι]
+    (M : MassSpace ℕ) (B : Branching ℕ) [SubConservative M B]
+    (I : ErdosFinitePrimitiveInput x)
+    (F : AdjacentBranchPrimePathFamily ι B) : ℚ :=
+  (I.branchPrimePathFamilySourceControlled M B F).sourceMass
+
+/--
 Branch-controlled finite Erdos hit bound.
 
 This is the theorem-facing wrapper around
@@ -61,6 +94,18 @@ theorem branchPrimePathFamily_hitMass_le_sourceMass
     (F.toSourceControlledChainFamily M B).hitMass I.support ≤
       (F.toSourceControlledChainFamily M B).sourceMass := by
   exact F.primitive_hitMass_le_sourceMass I.primitive
+
+/--
+Named finite Erdos bound using the input-side hit/source mass wrappers.
+-/
+theorem hitMass_le_sourceMass_of_branchPrimePathFamily
+    {x : ℕ} {ι : Type _} [DecidableEq ι]
+    {M : MassSpace ℕ} {B : Branching ℕ} [SubConservative M B]
+    (I : ErdosFinitePrimitiveInput x)
+    (F : AdjacentBranchPrimePathFamily ι B) :
+    I.branchPrimePathFamilyHitMass M B F ≤
+      I.branchPrimePathFamilySourceMass M B F := by
+  exact I.branchPrimePathFamily_hitMass_le_sourceMass F
 
 end ErdosFinitePrimitiveInput
 
@@ -92,5 +137,20 @@ theorem erdosFinitePrimitiveInput_two_five_branchPath_hitMass_le_sourceMass :
       sampleAdjacentBranchPrimePathBoolFamilySourceControlled.sourceMass := by
   exact erdosFinitePrimitiveInput_two_five.branchPrimePathFamily_hitMass_le_sourceMass
     sampleAdjacentBranchPrimePathBoolFamily
+
+/--
+Concrete theorem-facing sample using the input-side hit/source mass wrapper
+names.
+-/
+theorem erdosFinitePrimitiveInput_two_five_named_hitMass_le_sourceMass :
+    erdosFinitePrimitiveInput_two_five.branchPrimePathFamilyHitMass
+      unitNatMassSpace sampleBranching_eight_nine_paths
+      sampleAdjacentBranchPrimePathBoolFamily ≤
+    erdosFinitePrimitiveInput_two_five.branchPrimePathFamilySourceMass
+      unitNatMassSpace sampleBranching_eight_nine_paths
+      sampleAdjacentBranchPrimePathBoolFamily := by
+  exact erdosFinitePrimitiveInput_two_five
+    |>.hitMass_le_sourceMass_of_branchPrimePathFamily
+      sampleAdjacentBranchPrimePathBoolFamily
 
 end DkMath.NumberTheory.PrimitiveSet

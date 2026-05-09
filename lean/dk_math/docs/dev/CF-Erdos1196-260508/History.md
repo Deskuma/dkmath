@@ -447,3 +447,28 @@ Archive
 6. 次の課題:
    - finite Erdos input を使った theorem-facing API を点検し、hit mass / source mass の表示名や wrapper を追加するか判断する。
    - Markov kernel / 解析重みへ進む前に、現時点の finite skeleton の公開 API を整理する。
+
+### 日時: 2026/05/09 13:14 JST (Phase O finite Erdos public API wrappers)
+
+1. 目的:
+   - `review/review-013.md` の提案に従い、Markov kernel / 解析重みへ進む前に `ErdosFinitePrimitiveInput` の theorem-facing API を読みやすく整理する。
+2. 実施:
+   - `ErdosFinitePrimitiveInput.branchPrimePathFamilySourceControlled` を追加し、branch-controlled prime path family から得られる `SourceControlledChainFamily` に入力側の名前を付けた。
+   - `ErdosFinitePrimitiveInput.branchPrimePathFamilyHitMass` を追加し、finite Erdos support が branch-controlled path family を hit する indexed mass を入力側から参照できるようにした。
+   - `ErdosFinitePrimitiveInput.branchPrimePathFamilySourceMass` を追加し、対応する indexed source mass を入力側から参照できるようにした。
+   - `ErdosFinitePrimitiveInput.hitMass_le_sourceMass_of_branchPrimePathFamily` を追加し、hit/source mass wrapper 名を使った theorem-facing bound を用意した。
+   - concrete sample として `erdosFinitePrimitiveInput_two_five_named_hitMass_le_sourceMass` を追加した。
+3. 結論:
+   - `ErdosFinitePrimitiveInput` から hit mass と source mass を名前付き API として直接参照できるようになった。
+   - branch-controlled 版の finite Erdos hit bound が、将来の dvd-monotone 版や Markov 版と区別しやすい名前になった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.ErdosFinite`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - finite skeleton の公開 API は一段整理されたため、次は dvd-monotone / prime-reachable 版の input wrapper を追加するか判断する。
+   - あるいは Markov kernel / 解析重みの前に、現在の finite theorem 群を review して最小の rename / alias を追加する。
