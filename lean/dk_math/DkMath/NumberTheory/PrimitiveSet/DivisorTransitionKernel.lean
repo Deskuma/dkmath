@@ -537,4 +537,84 @@ theorem sampleTenPrimePowerChannelProvider_channelProviderAt_subProbability
     (sampleTenPrimePowerChannelProvider.channelProviderAt n).SubProbability :=
   sampleTenPrimePowerChannelProvider.channelProviderAt_subProbability n
 
+/--
+A finite toy channel weight on the sample: at state `10`, label `2` has weight
+`1` and label `5` has weight `0`.
+-/
+def sampleTenToyWeight (n q : ℕ) : ℚ :=
+  if n = 10 ∧ q = 2 then 1 else 0
+
+/-- The sample toy weight is nonnegative on the sample channel index. -/
+theorem sampleTenToyWeight_nonneg :
+    ∀ n q,
+      q ∈ sampleTenPrimePowerDivisorTransitionKernel.toDivisorTransitionKernel.index n →
+        0 ≤ sampleTenToyWeight n q := by
+  intro n q _hq
+  by_cases h : n = 10 ∧ q = 2
+  · simp [sampleTenToyWeight, h]
+  · simp [sampleTenToyWeight, h]
+
+/-- The sample prime-power kernel with its weights replaced by toy weights. -/
+def sampleTenToyWeightKernel : PrimePowerDivisorTransitionKernel :=
+  sampleTenPrimePowerDivisorTransitionKernel.withWeight
+    sampleTenToyWeight sampleTenToyWeight_nonneg
+
+@[simp] theorem sampleTenToyWeightKernel_index_ten :
+    sampleTenToyWeightKernel.toDivisorTransitionKernel.index 10 =
+      ({2, 5} : Finset ℕ) := by
+  simp [sampleTenToyWeightKernel, sampleTenPrimePowerDivisorTransitionKernel]
+
+/-- The toy-weighted sample keeps the original `10 -> 5` transition by label `2`. -/
+theorem sampleTenToyWeightKernel_next_two :
+    sampleTenToyWeightKernel.toDivisorTransitionKernel.next 10 2 = 5 := by
+  norm_num [sampleTenToyWeightKernel, sampleTenPrimePowerDivisorTransitionKernel,
+    sampleTenDivisorTransitionKernel]
+
+/-- The toy-weighted sample keeps the original `10 -> 2` transition by label `5`. -/
+theorem sampleTenToyWeightKernel_next_five :
+    sampleTenToyWeightKernel.toDivisorTransitionKernel.next 10 5 = 2 := by
+  norm_num [sampleTenToyWeightKernel, sampleTenPrimePowerDivisorTransitionKernel,
+    sampleTenDivisorTransitionKernel]
+
+/-- The toy-weighted sample is sub-probability normalized. -/
+theorem sampleTenToyWeightKernel_subProbability :
+    sampleTenToyWeightKernel.SubProbability := by
+  intro n
+  by_cases hn : n = 10
+  · subst n
+    norm_num [PrimePowerDivisorTransitionKernel.SubProbability,
+      PrimePowerDivisorTransitionKernel.withWeight,
+      DivisorTransitionKernel.SubProbability,
+      DivisorTransitionKernel.toFiniteTransitionKernel,
+      FiniteTransitionKernel.SubProbability,
+      FiniteTransitionKernel.toFiniteKernel,
+      FiniteKernel.providerAt,
+      WeightProvider.SubProbability,
+      WeightProvider.totalWeight,
+      sampleTenPrimePowerDivisorTransitionKernel,
+      sampleTenDivisorTransitionKernel,
+      sampleTenToyWeightKernel,
+      sampleTenToyWeight]
+  · simp [PrimePowerDivisorTransitionKernel.withWeight,
+      DivisorTransitionKernel.toFiniteTransitionKernel,
+      FiniteTransitionKernel.toFiniteKernel,
+      FiniteKernel.providerAt,
+      WeightProvider.SubProbability,
+      WeightProvider.totalWeight,
+      sampleTenPrimePowerDivisorTransitionKernel,
+      sampleTenDivisorTransitionKernel,
+      sampleTenToyWeightKernel,
+      sampleTenToyWeight, hn]
+
+/-- The toy-weighted sample packaged as a prime-power channel provider. -/
+def sampleTenToyWeightChannelProvider : PrimePowerChannelProvider :=
+  PrimePowerChannelProvider.ofKernel
+    sampleTenToyWeightKernel sampleTenToyWeightKernel_subProbability
+
+/-- The toy-weighted channel provider emits sub-probability providers. -/
+theorem sampleTenToyWeightChannelProvider_channelProviderAt_subProbability
+    (n : ℕ) :
+    (sampleTenToyWeightChannelProvider.channelProviderAt n).SubProbability :=
+  sampleTenToyWeightChannelProvider.channelProviderAt_subProbability n
+
 end DkMath.NumberTheory.PrimitiveSet

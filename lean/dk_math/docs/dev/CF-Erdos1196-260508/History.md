@@ -1042,3 +1042,33 @@ Archive
 6. 次の課題:
    - 次は `withWeight` を使った finite toy weight の concrete constructor を検討する。
    - まずは `{2,5}` sample のような finite support 上で nonnegative / sub-probability を示せる toy weight を作り、`PrimePowerChannelProvider.ofKernel` へ接続する。
+
+### 日時: 2026/05/10 17:58 JST (Phase AL concrete finite toy weight)
+
+1. 目的:
+   - `review/review-036.md` の提案に従い、`withWeight` を使って concrete finite toy weight を載せ替え、`PrimePowerChannelProvider.ofKernel` まで接続する。
+   - 本物の von Mangoldt / log には入らず、prime-power channel 上で手定義の有理 toy weight が no-sorry で通ることを確認する。
+2. 実施:
+   - `sampleTenToyWeight n q := if n = 10 ∧ q = 2 then 1 else 0` を追加した。
+   - `sampleTenToyWeight_nonneg` を追加し、sample channel index 上で toy weight が非負であることを示した。
+   - `sampleTenToyWeightKernel` を追加し、`sampleTenPrimePowerDivisorTransitionKernel.withWeight sampleTenToyWeight ...` で weight だけを差し替えた。
+   - `sampleTenToyWeightKernel_index_ten`, `sampleTenToyWeightKernel_next_two`, `sampleTenToyWeightKernel_next_five` を追加し、index と next が元の prime-power channel から保たれることを確認した。
+   - `sampleTenToyWeightKernel_subProbability` を追加し、状態 `10` では weight sum が `1`、それ以外では空 index なので sub-probability であることを示した。
+   - `sampleTenToyWeightChannelProvider` を追加し、toy-weighted kernel を `PrimePowerChannelProvider.ofKernel` へ接続した。
+   - `sampleTenToyWeightChannelProvider_channelProviderAt_subProbability` を追加した。
+3. 結論:
+   - `withWeight` による weight 差し替えと `PrimePowerChannelProvider.ofKernel` への接続が concrete sample で通った。
+   - prime-power channel 構造を保ったまま、別の有限 toy weight を載せて sub-probability provider として扱えるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - 初回 build で toy weight sub-probability proof の unused simp args warning が出たため、該当 simp 引数を削除して再 build し warning なしを確認した。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付き build の初回で unused simp args warning が出た。
+   - warning 修正後、権限昇格付きで単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は toy weight provider が既存 weighted hit mass bound へ入る concrete theorem を追加するか判断する。
+   - その後、`q = p ^ k` の witness に依存する von-Mangoldt-like finite weight の抽象化へ進む。
