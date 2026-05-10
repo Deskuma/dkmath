@@ -734,3 +734,32 @@ Archive
 6. 次の課題:
    - 次は状態 `n` と index `q` に意味を持たせる actual finite Markov transition skeleton を検討する。
    - 解析重みはまだ導入せず、まずは有限遷移 `state -> index -> next state` と provider / path family の接続だけを追加する。
+
+### 日時: 2026/05/10 10:31 JST (Phase Z finite transition kernel skeleton)
+
+1. 目的:
+   - `review/review-024.md` の提案に従い、解析重みを入れずに `state -> index -> next state` を持つ actual finite transition skeleton を追加する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/FiniteTransitionKernel.lean` を新規作成した。
+   - `FiniteTransitionKernel σ ι` を追加し、`index : σ -> Finset ι`, `next : σ -> ι -> σ`, `weight : σ -> ι -> ℚ`, `weight_nonneg : ∀ s i, i ∈ index s -> 0 <= weight s i` を package 化した。
+   - `FiniteTransitionKernel.toFiniteKernel` を追加し、遷移先 `next` を忘却して既存の `FiniteKernel` へ接続できるようにした。
+   - `providerAt`, `totalWeightAt`, `SubProbability`, `providerAt_subProbability`, `CompatibleAt`, `compatibleAt_iff_index_eq`, `applyAtToSourceControlled` を追加した。
+   - `FiniteTransitionKernel.weightedHitMass_le_const_of_subprob_applyAtToSourceControlled` を追加し、transition kernel から既存 weighted hit mass bound へ進めるようにした。
+   - `ErdosFinitePrimitiveInput.transitionBranchPrimePathFamilyAt` と `transitionBranchPrimePathFamilyAt_hitMass_le_const_of_subprob` を追加し、branch route に finite transition kernel state の重みを適用する wrapper を用意した。
+   - concrete sample として `sampleUnitTransitionKernel`, `sampleUnitTransitionKernel_subProbability`, `erdosFinitePrimitiveInput_two_five_transitionBranch_hitMass_le_one` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `FiniteTransitionKernel` を import し、公開集約へ載せた。
+3. 結論:
+   - `state -> index -> next state` を持つ finite transition skeleton が no-sorry で入った。
+   - 重み評価は `toFiniteKernel` 経由で既存の `FiniteKernel` / `WeightProvider` / `WeightedPathFamily` theorem に流せるようになった。
+   - まだ `next` の数論的意味や解析 weight は入れておらず、有限抽象層として分離した。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.FiniteTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - 次は transition kernel の prime path / dvd-monotone route wrapper を追加して branch route と対称化するか判断する。
+   - その後、状態を `ℕ`、index を除去因子として解釈する divisor / prime descent transition skeleton へ進む。

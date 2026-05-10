@@ -19,6 +19,7 @@ import DkMath.NumberTheory.PrimitiveSet.ErdosFinite
 import DkMath.NumberTheory.PrimitiveSet.WeightedPathFamily
 import DkMath.NumberTheory.PrimitiveSet.WeightProvider
 import DkMath.NumberTheory.PrimitiveSet.FiniteKernel
+import DkMath.NumberTheory.PrimitiveSet.FiniteTransitionKernel
 
 #print "file: DkMath.NumberTheory.PrimitiveSet"
 
@@ -43,4 +44,5 @@ This module exposes:
 - finite weighted path-family skeleton
 - finite weight provider skeleton
 - finite kernel skeleton
+- finite transition kernel skeleton
 -/
