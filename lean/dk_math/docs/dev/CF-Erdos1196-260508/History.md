@@ -685,3 +685,26 @@ Archive
 6. 次の課題:
    - finite kernel skeleton は入ったため、次は prime path / dvd-monotone route 側にも kernel wrapper を追加するか判断する。
    - その後、有限 kernel の normalization / compatibility API を整理してから解析 weight 層へ進む。
+
+### 日時: 2026/05/10 02:00 JST (Phase X kernel prime path route wrapper)
+
+1. 目的:
+   - `review/review-022.md` の提案に従い、finite kernel wrapper を branch route だけでなく prime path / dvd-monotone route 側にも追加して API の対称性を保つ。
+2. 実施:
+   - `ErdosFinitePrimitiveInput.kernelPrimePathFamilyAt` を追加し、finite kernel state から得た provider を `primePathFamilySourceControlled` に適用できるようにした。
+   - `ErdosFinitePrimitiveInput.kernelPrimePathFamilyAt_hitMass_le_const_of_subprob` を追加し、`DvdMonotoneMass M` による prime path route でも kernel-supplied sub-probability weight から weighted hit mass 一様上界を得られるようにした。
+   - concrete sample として `erdosFinitePrimitiveInput_two_five_kernelPrimePath_hitMass_le_one` を追加し、`sampleUnitFiniteKernel` を prime path route に適用して hit mass bound `<= 1` を確認した。
+3. 結論:
+   - finite kernel route についても branch/subconservative route と prime/dvd-monotone route の両方が揃った。
+   - `state -> WeightProvider -> WeightedPathFamily -> weightedHitMass <= C` の導線を、二つの source-control route で対称に使えるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.FiniteKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - 次は `FiniteKernel.CompatibleAt` のような compatibility alias / simp API を整理するか判断する。
+   - その後、状態 `n` と index `q` に意味を持たせる actual finite Markov transition skeleton へ進む。

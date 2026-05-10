@@ -128,6 +128,45 @@ theorem kernelBranchPrimePathFamilyAt_hitMass_le_const_of_subprob
     (I.branchPrimePathFamilySourceControlled M B F)
     hcompat I.primitive hC hsource
 
+/-- Apply a finite kernel state to the prime-path-family finite route. -/
+def kernelPrimePathFamilyAt
+    {x : ℕ} {σ ι : Type _} [DecidableEq ι]
+    (M : MassSpace ℕ)
+    (I : ErdosFinitePrimitiveInput x)
+    (F : AdjacentPrimePathFamily ι)
+    (hM : DvdMonotoneMass M)
+    (K : FiniteKernel σ ι) (s : σ)
+    (hcompat :
+      (K.providerAt s).Compatible
+        (I.primePathFamilySourceControlled M F hM)) :
+    WeightedPathFamily M ι :=
+  K.applyAtToSourceControlled s
+    (I.primePathFamilySourceControlled M F hM) hcompat
+
+/--
+Kernel-level prime-path-family route bound under sub-probability weights and a
+uniform source-mass bound.
+-/
+theorem kernelPrimePathFamilyAt_hitMass_le_const_of_subprob
+    {x : ℕ} {σ ι : Type _} [DecidableEq ι]
+    {M : MassSpace ℕ}
+    (I : ErdosFinitePrimitiveInput x)
+    (F : AdjacentPrimePathFamily ι)
+    (hM : DvdMonotoneMass M)
+    (K : FiniteKernel σ ι) (hK : K.SubProbability) (s : σ)
+    (hcompat :
+      (K.providerAt s).Compatible
+        (I.primePathFamilySourceControlled M F hM))
+    {C : ℚ} (hC : 0 ≤ C)
+    (hsource :
+      ∀ i ∈ (I.primePathFamilySourceControlled M F hM).index,
+        M.μ ((I.primePathFamilySourceControlled M F hM).source i) ≤ C) :
+    (I.kernelPrimePathFamilyAt M F hM K s hcompat).weightedHitMass
+      I.support ≤ C := by
+  exact K.weightedHitMass_le_const_of_subprob_applyAtToSourceControlled hK s
+    (I.primePathFamilySourceControlled M F hM)
+    hcompat I.primitive hC hsource
+
 end ErdosFinitePrimitiveInput
 
 /-- A sample finite kernel with the Bool sub-probability weights at every state. -/
@@ -169,6 +208,34 @@ theorem erdosFinitePrimitiveInput_two_five_kernelBranch_hitMass_le_one :
           sampleUnitFiniteKernel,
           ErdosFinitePrimitiveInput.branchPrimePathFamilySourceControlled,
           sampleAdjacentBranchPrimePathBoolFamily])
+      (by norm_num)
+      (by
+        intro i _hi
+        rfl)
+
+/--
+Concrete kernel sample: kernel-supplied weights also give the prime-path-family
+hit mass bound by `1`.
+-/
+theorem erdosFinitePrimitiveInput_two_five_kernelPrimePath_hitMass_le_one :
+    (erdosFinitePrimitiveInput_two_five.kernelPrimePathFamilyAt
+      unitNatMassSpace sampleAdjacentPrimePathBoolFamily
+      unitNatMassSpace_dvdMonotone sampleUnitFiniteKernel ()
+      (by
+        simp [WeightProvider.Compatible, FiniteKernel.providerAt,
+          sampleUnitFiniteKernel,
+          ErdosFinitePrimitiveInput.primePathFamilySourceControlled,
+          sampleAdjacentPrimePathBoolFamily])).weightedHitMass
+      erdosFinitePrimitiveInput_two_five.support ≤ 1 := by
+  exact erdosFinitePrimitiveInput_two_five
+    |>.kernelPrimePathFamilyAt_hitMass_le_const_of_subprob
+      sampleAdjacentPrimePathBoolFamily unitNatMassSpace_dvdMonotone
+      sampleUnitFiniteKernel sampleUnitFiniteKernel_subProbability ()
+      (by
+        simp [WeightProvider.Compatible, FiniteKernel.providerAt,
+          sampleUnitFiniteKernel,
+          ErdosFinitePrimitiveInput.primePathFamilySourceControlled,
+          sampleAdjacentPrimePathBoolFamily])
       (by norm_num)
       (by
         intro i _hi
