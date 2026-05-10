@@ -410,6 +410,18 @@ def ofKernelWithWeight
     PrimePowerChannelProvider :=
   ofKernel (T.withWeight w hw_nonneg) hw_subprob
 
+/--
+Package a finite von-Mangoldt-like weight as a sub-probability channel provider.
+-/
+def ofVonMangoldtLikeWeight
+    (T : PrimePowerDivisorTransitionKernel)
+    (w : ℕ → ℕ → ℚ)
+    (hw : T.VonMangoldtLikeWeight w)
+    (hw_subprob :
+      (T.withWeight w (T.vonMangoldtLikeWeight_nonneg hw)).SubProbability) :
+    PrimePowerChannelProvider :=
+  ofKernelWithWeight T w (T.vonMangoldtLikeWeight_nonneg hw) hw_subprob
+
 @[simp] theorem ofKernelWithWeight_kernel
     (T : PrimePowerDivisorTransitionKernel)
     (w : ℕ → ℕ → ℚ)
@@ -418,6 +430,15 @@ def ofKernelWithWeight
     (hw_subprob : (T.withWeight w hw_nonneg).SubProbability) :
     (ofKernelWithWeight T w hw_nonneg hw_subprob).kernel =
       T.withWeight w hw_nonneg := rfl
+
+@[simp] theorem ofVonMangoldtLikeWeight_kernel
+    (T : PrimePowerDivisorTransitionKernel)
+    (w : ℕ → ℕ → ℚ)
+    (hw : T.VonMangoldtLikeWeight w)
+    (hw_subprob :
+      (T.withWeight w (T.vonMangoldtLikeWeight_nonneg hw)).SubProbability) :
+    (ofVonMangoldtLikeWeight T w hw hw_subprob).kernel =
+      T.withWeight w (T.vonMangoldtLikeWeight_nonneg hw) := rfl
 
 /-- The prime-power channel provider emitted at state `n`. -/
 def providerAt (P : PrimePowerChannelProvider) (n : ℕ) : WeightProvider ℕ :=
@@ -446,6 +467,26 @@ def channelProviderAt (P : PrimePowerChannelProvider) (n : ℕ) :
     (hw_subprob : (T.withWeight w hw_nonneg).SubProbability)
     (n : ℕ) :
     ((ofKernelWithWeight T w hw_nonneg hw_subprob).channelProviderAt n).weight =
+      w n := rfl
+
+@[simp] theorem ofVonMangoldtLikeWeight_channelProviderAt_index
+    (T : PrimePowerDivisorTransitionKernel)
+    (w : ℕ → ℕ → ℚ)
+    (hw : T.VonMangoldtLikeWeight w)
+    (hw_subprob :
+      (T.withWeight w (T.vonMangoldtLikeWeight_nonneg hw)).SubProbability)
+    (n : ℕ) :
+    ((ofVonMangoldtLikeWeight T w hw hw_subprob).channelProviderAt n).index =
+      T.toDivisorTransitionKernel.index n := rfl
+
+@[simp] theorem ofVonMangoldtLikeWeight_channelProviderAt_weight
+    (T : PrimePowerDivisorTransitionKernel)
+    (w : ℕ → ℕ → ℚ)
+    (hw : T.VonMangoldtLikeWeight w)
+    (hw_subprob :
+      (T.withWeight w (T.vonMangoldtLikeWeight_nonneg hw)).SubProbability)
+    (n : ℕ) :
+    ((ofVonMangoldtLikeWeight T w hw hw_subprob).channelProviderAt n).weight =
       w n := rfl
 
 /-- Packaged channel providers emit sub-probability providers at every state. -/
@@ -704,10 +745,10 @@ theorem sampleTenToyWeightKernel_subProbability :
 
 /-- The toy-weighted sample packaged as a prime-power channel provider. -/
 def sampleTenToyWeightChannelProvider : PrimePowerChannelProvider :=
-  PrimePowerChannelProvider.ofKernelWithWeight
+  PrimePowerChannelProvider.ofVonMangoldtLikeWeight
     sampleTenPrimePowerDivisorTransitionKernel
     sampleTenToyWeight
-    sampleTenToyWeight_nonneg
+    sampleTenToyWeight_vonMangoldtLikeWeight
     sampleTenToyWeightKernel_subProbability
 
 /-- The toy-weighted channel provider emits sub-probability providers. -/

@@ -1171,3 +1171,27 @@ Archive
 6. 次の課題:
    - 次は `VonMangoldtLikeWeight` と `ofKernelWithWeight` を直接つなぐ constructor / theorem を検討する。
    - その後、prime-power witness `(p,k)` に依存するより具体的な finite toy weight をどう表現するか判断する。
+
+### 日時: 2026/05/10 22:13 JST (Phase AQ von-Mangoldt-like provider constructor)
+
+1. 目的:
+   - `review/review-041.md` の提案に従い、`VonMangoldtLikeWeight` と `PrimePowerChannelProvider.ofKernelWithWeight` を直接つなぐ constructor を追加する。
+2. 実施:
+   - `PrimePowerChannelProvider.ofVonMangoldtLikeWeight` を追加した。
+   - 入力として `T : PrimePowerDivisorTransitionKernel`, weight `w`, predicate `hw : T.VonMangoldtLikeWeight w`, および `(T.withWeight w (T.vonMangoldtLikeWeight_nonneg hw)).SubProbability` を受け取り、`PrimePowerChannelProvider` を返すようにした。
+   - `ofVonMangoldtLikeWeight_kernel`, `ofVonMangoldtLikeWeight_channelProviderAt_index`, `ofVonMangoldtLikeWeight_channelProviderAt_weight` を `[simp]` 補題として追加した。
+   - `sampleTenToyWeightChannelProvider` を `ofVonMangoldtLikeWeight` 経由に切り替えた。
+3. 結論:
+   - finite von-Mangoldt-like predicate を持つ weight は、非負性を改めて渡さずに channel provider 化できるようになった。
+   - `VonMangoldtLikeWeight -> withWeight -> PrimePowerChannelProvider -> weightedHitMass bound` の route が一つの constructor で接続された。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は prime-power witness `(p,k)` に依存する具体的な finite toy weight をどう表現するか検討する。
+   - 短期的には `q : ℕ` label のまま predicate で性質を管理し、長期的には `PrimePowerLabel` 構造体化も候補にする。
