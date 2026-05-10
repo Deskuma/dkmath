@@ -291,6 +291,46 @@ theorem channelWeightedHitMass_le_const_of_subprob
   T.weightedHitMass_le_const_of_subprob_applyAtToSourceControlled
     hT n F hcompat hS hC hsource
 
+/--
+Replace the weights of a prime-power divisor transition kernel while preserving
+its index, next-state map, divisor semantics, and prime-power channel condition.
+-/
+def withWeight
+    (T : PrimePowerDivisorTransitionKernel)
+    (w : ℕ → ℕ → ℚ)
+    (hw : ∀ n q, q ∈ T.toDivisorTransitionKernel.index n → 0 ≤ w n q) :
+    PrimePowerDivisorTransitionKernel where
+  toDivisorTransitionKernel :=
+    { index := T.toDivisorTransitionKernel.index
+      next := T.toDivisorTransitionKernel.next
+      weight := w
+      weight_nonneg := hw
+      index_dvd := T.toDivisorTransitionKernel.index_dvd
+      next_eq_div := T.toDivisorTransitionKernel.next_eq_div }
+  primePowerIndexed := by
+    intro n q hq
+    exact T.primePowerIndexed n q hq
+
+@[simp] theorem withWeight_index
+    (T : PrimePowerDivisorTransitionKernel)
+    (w : ℕ → ℕ → ℚ)
+    (hw : ∀ n q, q ∈ T.toDivisorTransitionKernel.index n → 0 ≤ w n q) :
+    (T.withWeight w hw).toDivisorTransitionKernel.index =
+      T.toDivisorTransitionKernel.index := rfl
+
+@[simp] theorem withWeight_next
+    (T : PrimePowerDivisorTransitionKernel)
+    (w : ℕ → ℕ → ℚ)
+    (hw : ∀ n q, q ∈ T.toDivisorTransitionKernel.index n → 0 ≤ w n q) :
+    (T.withWeight w hw).toDivisorTransitionKernel.next =
+      T.toDivisorTransitionKernel.next := rfl
+
+@[simp] theorem withWeight_weight
+    (T : PrimePowerDivisorTransitionKernel)
+    (w : ℕ → ℕ → ℚ)
+    (hw : ∀ n q, q ∈ T.toDivisorTransitionKernel.index n → 0 ≤ w n q) :
+    (T.withWeight w hw).toDivisorTransitionKernel.weight = w := rfl
+
 end PrimePowerDivisorTransitionKernel
 
 /--
@@ -302,6 +342,13 @@ structure PrimePowerChannelProvider where
   subprob : kernel.SubProbability
 
 namespace PrimePowerChannelProvider
+
+/-- Package a prime-power divisor transition kernel with a sub-probability proof. -/
+def ofKernel
+    (T : PrimePowerDivisorTransitionKernel) (hT : T.SubProbability) :
+    PrimePowerChannelProvider where
+  kernel := T
+  subprob := hT
 
 /-- The prime-power channel provider emitted at state `n`. -/
 def providerAt (P : PrimePowerChannelProvider) (n : ℕ) : WeightProvider ℕ :=
@@ -472,9 +519,10 @@ theorem sampleTenPrimePowerDivisorTransitionKernel_subProbability :
   sampleTenDivisorTransitionKernel_subProbability
 
 /-- The sample packaged as a prime-power channel provider. -/
-def sampleTenPrimePowerChannelProvider : PrimePowerChannelProvider where
-  kernel := sampleTenPrimePowerDivisorTransitionKernel
-  subprob := sampleTenPrimePowerDivisorTransitionKernel_subProbability
+def sampleTenPrimePowerChannelProvider : PrimePowerChannelProvider :=
+  PrimePowerChannelProvider.ofKernel
+    sampleTenPrimePowerDivisorTransitionKernel
+    sampleTenPrimePowerDivisorTransitionKernel_subProbability
 
 /-- The packaged prime-power sample emits sub-probability channel providers. -/
 theorem sampleTenPrimePowerDivisorTransitionKernel_channelProviderAt_subProbability

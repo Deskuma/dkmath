@@ -1018,3 +1018,27 @@ Archive
 6. 次の課題:
    - 次は `PrimePowerChannelProvider` を入力にした finite toy weight layer を設計する。
    - 本物の von Mangoldt / log にはまだ入らず、prime-power channel 上で非負かつ sub-probability な toy weight を扱う theorem-facing API から始める。
+
+### 日時: 2026/05/10 17:52 JST (Phase AK channel provider constructor and weight replacement)
+
+1. 目的:
+   - `review/review-035.md` の提案に従い、`PrimePowerChannelProvider` の constructor 規約を整え、後続の finite toy weight / von-Mangoldt-like weight 差し替えの入口を作る。
+2. 実施:
+   - `PrimePowerChannelProvider.ofKernel` を追加し、`PrimePowerDivisorTransitionKernel` と sub-probability 証明から provider package を作れるようにした。
+   - `sampleTenPrimePowerChannelProvider` を `PrimePowerChannelProvider.ofKernel` 経由に切り替え、今後の `ofToyWeight` / `ofVonMangoldtLikeWeight` 系 constructor と命名規則を揃えた。
+   - `PrimePowerDivisorTransitionKernel.withWeight` を追加し、index、next、divisor semantics、prime-power channel 条件を保ったまま weight だけ差し替えられるようにした。
+   - `withWeight_index`, `withWeight_next`, `withWeight_weight` を `[simp]` 補題として追加した。
+3. 結論:
+   - prime-power channel provider は `ofKernel` で標準的に package 化できるようになった。
+   - future toy weight は、まず `withWeight` で prime-power divisor kernel の weight を差し替え、その sub-probability を証明して `ofKernel` へ渡す流れで実装できる。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `withWeight` を使った finite toy weight の concrete constructor を検討する。
+   - まずは `{2,5}` sample のような finite support 上で nonnegative / sub-probability を示せる toy weight を作り、`PrimePowerChannelProvider.ofKernel` へ接続する。
