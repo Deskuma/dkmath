@@ -1121,3 +1121,27 @@ Archive
 6. 次の課題:
    - 次は `PrimePowerChannelProvider.ofKernelWithWeight` によって得た provider の kernel/index/weight を取り出す simp API を整理するか判断する。
    - その後、`q = p ^ k` の witness に依存する toy / von-Mangoldt-like finite weight の表現方法を検討する。
+
+### 日時: 2026/05/10 20:46 JST (Phase AO ofKernelWithWeight simp API)
+
+1. 目的:
+   - `PrimePowerChannelProvider.ofKernelWithWeight` で作った provider から、kernel / index / weight を取り出しやすくする simp API を整理する。
+2. 実施:
+   - `PrimePowerChannelProvider.ofKernel_kernel` を追加し、`ofKernel` の kernel projection が元の kernel へ簡約されるようにした。
+   - `PrimePowerChannelProvider.ofKernelWithWeight_kernel` を追加し、`ofKernelWithWeight` の kernel projection が `T.withWeight w hw_nonneg` へ簡約されるようにした。
+   - `PrimePowerChannelProvider.ofKernelWithWeight_channelProviderAt_index` を追加し、constructor 経由の channel provider の index が元 kernel の index と一致することを `[simp]` 化した。
+   - `PrimePowerChannelProvider.ofKernelWithWeight_channelProviderAt_weight` を追加し、constructor 経由の channel provider の weight が `w n` に一致することを `[simp]` 化した。
+3. 結論:
+   - 後続の compatibility 証明や toy / von-Mangoldt-like weight の theorem で、`ofKernelWithWeight` 由来の provider を展開しやすくなった。
+   - 手定義 weight を provider 化した後も、index と weight を theorem 側で直接参照できる。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `q = p ^ k` の witness に依存する toy / von-Mangoldt-like finite weight の表現方法を検討する。
+   - まずは label を構造化せず、外から与える weight に対して prime-power witness 由来であることを predicate として持つ方針が軽い。

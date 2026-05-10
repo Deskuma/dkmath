@@ -350,6 +350,10 @@ def ofKernel
   kernel := T
   subprob := hT
 
+@[simp] theorem ofKernel_kernel
+    (T : PrimePowerDivisorTransitionKernel) (hT : T.SubProbability) :
+    (ofKernel T hT).kernel = T := rfl
+
 /--
 Replace a prime-power divisor kernel's weights and immediately package the
 result as a sub-probability channel provider.
@@ -363,6 +367,15 @@ def ofKernelWithWeight
     PrimePowerChannelProvider :=
   ofKernel (T.withWeight w hw_nonneg) hw_subprob
 
+@[simp] theorem ofKernelWithWeight_kernel
+    (T : PrimePowerDivisorTransitionKernel)
+    (w : ℕ → ℕ → ℚ)
+    (hw_nonneg :
+      ∀ n q, q ∈ T.toDivisorTransitionKernel.index n → 0 ≤ w n q)
+    (hw_subprob : (T.withWeight w hw_nonneg).SubProbability) :
+    (ofKernelWithWeight T w hw_nonneg hw_subprob).kernel =
+      T.withWeight w hw_nonneg := rfl
+
 /-- The prime-power channel provider emitted at state `n`. -/
 def providerAt (P : PrimePowerChannelProvider) (n : ℕ) : WeightProvider ℕ :=
   P.kernel.channelProviderAt n
@@ -371,6 +384,26 @@ def providerAt (P : PrimePowerChannelProvider) (n : ℕ) : WeightProvider ℕ :=
 def channelProviderAt (P : PrimePowerChannelProvider) (n : ℕ) :
     WeightProvider ℕ :=
   P.providerAt n
+
+@[simp] theorem ofKernelWithWeight_channelProviderAt_index
+    (T : PrimePowerDivisorTransitionKernel)
+    (w : ℕ → ℕ → ℚ)
+    (hw_nonneg :
+      ∀ n q, q ∈ T.toDivisorTransitionKernel.index n → 0 ≤ w n q)
+    (hw_subprob : (T.withWeight w hw_nonneg).SubProbability)
+    (n : ℕ) :
+    ((ofKernelWithWeight T w hw_nonneg hw_subprob).channelProviderAt n).index =
+      T.toDivisorTransitionKernel.index n := rfl
+
+@[simp] theorem ofKernelWithWeight_channelProviderAt_weight
+    (T : PrimePowerDivisorTransitionKernel)
+    (w : ℕ → ℕ → ℚ)
+    (hw_nonneg :
+      ∀ n q, q ∈ T.toDivisorTransitionKernel.index n → 0 ≤ w n q)
+    (hw_subprob : (T.withWeight w hw_nonneg).SubProbability)
+    (n : ℕ) :
+    ((ofKernelWithWeight T w hw_nonneg hw_subprob).channelProviderAt n).weight =
+      w n := rfl
 
 /-- Packaged channel providers emit sub-probability providers at every state. -/
 theorem providerAt_subProbability (P : PrimePowerChannelProvider) (n : ℕ) :
