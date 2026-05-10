@@ -940,3 +940,29 @@ Archive
 6. 次の課題:
    - 次は `PrimePowerDivisorTransitionKernel` に対する theorem-facing weight/channel API を設計する。
    - まだ実数対数や本物の von Mangoldt weight には入らず、まず finite toy weight または prime-power channel weight provider への接続を検討する。
+
+### 日時: 2026/05/10 14:28 JST (Phase AH prime-power channel route API)
+
+1. 目的:
+   - `review/review-032.md` の提案に従い、`PrimePowerDivisorTransitionKernel` から既存の weighted route に直接入る theorem-facing API を整える。
+   - まだ本物の von Mangoldt weight や実数対数には入らず、prime-power channel 型でも既存 weighted bound が使えることを no-sorry で閉じる。
+2. 実施:
+   - `PrimePowerDivisorTransitionKernel.compatibleAt_iff_index_eq` を追加し、compatibility が underlying divisor kernel の index と source-controlled family の index の一致であることを明示した。
+   - `PrimePowerDivisorTransitionKernel.providerAt_subProbability` を追加し、package 化された kernel でも sub-probability provider を得られるようにした。
+   - `PrimePowerDivisorTransitionKernel.applyAtToSourceControlled` を追加し、state `n` の重みを `SourceControlledChainFamily M ℕ` に適用して `WeightedPathFamily M ℕ` を作れるようにした。
+   - `PrimePowerDivisorTransitionKernel.weightedHitMass_le_const_of_subprob_applyAtToSourceControlled` を追加し、sub-probability と source mass 一様上界から weighted hit mass bound を直接得られるようにした。
+   - sample theorem として `sampleTenPrimePowerDivisorTransitionKernel_subProbability` を追加した。
+3. 結論:
+   - prime-power channel 条件を型として持つ kernel から、既存の `FiniteTransitionKernel` / `WeightedPathFamily` route へ直接入れるようになった。
+   - 後続で prime-power weight や von Mangoldt-like finite weight を設計する際、まずこの packaged route API を使って hit mass bound へ接続できる。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `PrimePowerDivisorTransitionKernel` 専用の finite toy weight / channel weight provider を追加するか判断する。
+   - 解析重みへ進む前に、prime-power channel 上で非零重みを与える有限 skeleton を作り、既存 sub-probability route に接続する。

@@ -211,6 +211,29 @@ def CompatibleAt
     (F : SourceControlledChainFamily M ℕ) : Prop :=
   T.toDivisorTransitionKernel.CompatibleAt n F
 
+/-- Expanded form of packaged prime-power compatibility. -/
+theorem compatibleAt_iff_index_eq
+    {M : DkMath.CosmicFormula.Mass.MassSpace ℕ}
+    (T : PrimePowerDivisorTransitionKernel) (n : ℕ)
+    (F : SourceControlledChainFamily M ℕ) :
+    T.CompatibleAt n F ↔ T.toDivisorTransitionKernel.index n = F.index := by
+  rfl
+
+/-- Sub-probability packaged kernels emit sub-probability providers. -/
+theorem providerAt_subProbability
+    (T : PrimePowerDivisorTransitionKernel) (hT : T.SubProbability) (n : ℕ) :
+    (T.providerAt n).SubProbability :=
+  T.toFiniteTransitionKernel.providerAt_subProbability hT n
+
+/-- Apply packaged prime-power transition weights at state `n` to a family. -/
+def applyAtToSourceControlled
+    {M : DkMath.CosmicFormula.Mass.MassSpace ℕ}
+    (T : PrimePowerDivisorTransitionKernel) (n : ℕ)
+    (F : SourceControlledChainFamily M ℕ)
+    (hcompat : T.CompatibleAt n F) :
+    WeightedPathFamily M ℕ :=
+  T.toFiniteTransitionKernel.applyAtToSourceControlled n F hcompat
+
 /--
 Every indexed transition in a packaged prime-power divisor kernel is a
 prime-power descent step.
@@ -221,6 +244,22 @@ theorem primePowerDescentStep_of_mem
     PrimePowerDescentStep n (T.toDivisorTransitionKernel.next n q) :=
   T.toDivisorTransitionKernel.primePowerDescentStep_of_primePowerIndexed
     T.primePowerIndexed hqmem
+
+/--
+Packaged prime-power transition finite hit mass bound under sub-probability
+normalization and a uniform source-mass bound.
+-/
+theorem weightedHitMass_le_const_of_subprob_applyAtToSourceControlled
+    {M : DkMath.CosmicFormula.Mass.MassSpace ℕ} {S : Finset ℕ}
+    (T : PrimePowerDivisorTransitionKernel) (hT : T.SubProbability) (n : ℕ)
+    (F : SourceControlledChainFamily M ℕ)
+    (hcompat : T.CompatibleAt n F)
+    (hS : PrimitiveOn S) {C : ℚ} (hC : 0 ≤ C)
+    (hsource : ∀ q ∈ F.index, M.μ (F.source q) ≤ C) :
+    (T.applyAtToSourceControlled n F hcompat).weightedHitMass S ≤ C := by
+  exact T.toFiniteTransitionKernel
+    |>.weightedHitMass_le_const_of_subprob_applyAtToSourceControlled
+      hT n F hcompat hS hC hsource
 
 end PrimePowerDivisorTransitionKernel
 
@@ -340,5 +379,10 @@ theorem sampleTenDivisorTransitionKernel_subProbability :
       WeightProvider.SubProbability,
       WeightProvider.totalWeight,
       sampleTenDivisorTransitionKernel, hn]
+
+/-- The packaged prime-power sample is sub-probability normalized. -/
+theorem sampleTenPrimePowerDivisorTransitionKernel_subProbability :
+    sampleTenPrimePowerDivisorTransitionKernel.SubProbability :=
+  sampleTenDivisorTransitionKernel_subProbability
 
 end DkMath.NumberTheory.PrimitiveSet
