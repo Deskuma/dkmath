@@ -293,6 +293,62 @@ theorem channelWeightedHitMass_le_const_of_subprob
 
 end PrimePowerDivisorTransitionKernel
 
+/--
+A packaged prime-power channel provider: a prime-power divisor transition kernel
+together with sub-probability normalization.
+-/
+structure PrimePowerChannelProvider where
+  kernel : PrimePowerDivisorTransitionKernel
+  subprob : kernel.SubProbability
+
+namespace PrimePowerChannelProvider
+
+/-- The prime-power channel provider emitted at state `n`. -/
+def providerAt (P : PrimePowerChannelProvider) (n : ℕ) : WeightProvider ℕ :=
+  P.kernel.channelProviderAt n
+
+/-- Alias matching the kernel-level channel-provider name. -/
+def channelProviderAt (P : PrimePowerChannelProvider) (n : ℕ) :
+    WeightProvider ℕ :=
+  P.providerAt n
+
+/-- Packaged channel providers emit sub-probability providers at every state. -/
+theorem providerAt_subProbability (P : PrimePowerChannelProvider) (n : ℕ) :
+    (P.providerAt n).SubProbability :=
+  P.kernel.channelProviderAt_subProbability P.subprob n
+
+/-- The channel-provider alias is sub-probability at every state. -/
+theorem channelProviderAt_subProbability
+    (P : PrimePowerChannelProvider) (n : ℕ) :
+    (P.channelProviderAt n).SubProbability :=
+  P.providerAt_subProbability n
+
+/-- Apply the packaged channel weights at state `n` to a source-controlled family. -/
+def applyAtToSourceControlled
+    {M : DkMath.CosmicFormula.Mass.MassSpace ℕ}
+    (P : PrimePowerChannelProvider) (n : ℕ)
+    (F : SourceControlledChainFamily M ℕ)
+    (hcompat : P.kernel.CompatibleAt n F) :
+    WeightedPathFamily M ℕ :=
+  P.kernel.applyAtToSourceControlled n F hcompat
+
+/--
+Packaged channel hit mass bound.  The sub-probability hypothesis is carried by
+the provider package.
+-/
+theorem weightedHitMass_le_const_applyAtToSourceControlled
+    {M : DkMath.CosmicFormula.Mass.MassSpace ℕ} {S : Finset ℕ}
+    (P : PrimePowerChannelProvider) (n : ℕ)
+    (F : SourceControlledChainFamily M ℕ)
+    (hcompat : P.kernel.CompatibleAt n F)
+    (hS : PrimitiveOn S) {C : ℚ} (hC : 0 ≤ C)
+    (hsource : ∀ q ∈ F.index, M.μ (F.source q) ≤ C) :
+    (P.applyAtToSourceControlled n F hcompat).weightedHitMass S ≤ C :=
+  P.kernel.channelWeightedHitMass_le_const_of_subprob
+    P.subprob n F hcompat hS hC hsource
+
+end PrimePowerChannelProvider
+
 /-- A concrete divisor-transition sample at state `10` with labels `2` and `5`. -/
 def sampleTenDivisorTransitionKernel : DivisorTransitionKernel where
   index := fun n => if n = 10 then ({2, 5} : Finset ℕ) else ∅
@@ -415,11 +471,22 @@ theorem sampleTenPrimePowerDivisorTransitionKernel_subProbability :
     sampleTenPrimePowerDivisorTransitionKernel.SubProbability :=
   sampleTenDivisorTransitionKernel_subProbability
 
+/-- The sample packaged as a prime-power channel provider. -/
+def sampleTenPrimePowerChannelProvider : PrimePowerChannelProvider where
+  kernel := sampleTenPrimePowerDivisorTransitionKernel
+  subprob := sampleTenPrimePowerDivisorTransitionKernel_subProbability
+
 /-- The packaged prime-power sample emits sub-probability channel providers. -/
 theorem sampleTenPrimePowerDivisorTransitionKernel_channelProviderAt_subProbability
     (n : ℕ) :
     (sampleTenPrimePowerDivisorTransitionKernel.channelProviderAt n).SubProbability :=
   sampleTenPrimePowerDivisorTransitionKernel.channelProviderAt_subProbability
     sampleTenPrimePowerDivisorTransitionKernel_subProbability n
+
+/-- The sample channel-provider package emits sub-probability providers. -/
+theorem sampleTenPrimePowerChannelProvider_channelProviderAt_subProbability
+    (n : ℕ) :
+    (sampleTenPrimePowerChannelProvider.channelProviderAt n).SubProbability :=
+  sampleTenPrimePowerChannelProvider.channelProviderAt_subProbability n
 
 end DkMath.NumberTheory.PrimitiveSet

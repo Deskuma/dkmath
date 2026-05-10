@@ -991,3 +991,30 @@ Archive
 6. 次の課題:
    - 次は channel provider を sub-probability 証明と package 化する `PrimePowerChannelProvider` のような構造体を追加するか判断する。
    - その後、prime-power channel 上の finite toy weight を設計し、`channelProviderAt` と同じ route へ接続する。
+
+### 日時: 2026/05/10 17:38 JST (Phase AJ prime-power channel provider package)
+
+1. 目的:
+   - `review/review-034.md` の提案に従い、prime-power channel kernel と sub-probability 証明を一つの provider package としてまとめる。
+   - 後続の finite toy weight / von-Mangoldt-like weight 層で、sub-probability 仮定を毎回別に渡さずに channel provider を扱えるようにする。
+2. 実施:
+   - `PrimePowerChannelProvider` を追加し、`kernel : PrimePowerDivisorTransitionKernel` と `subprob : kernel.SubProbability` を package 化した。
+   - `PrimePowerChannelProvider.providerAt` と `channelProviderAt` を追加し、state `n` ごとの prime-power channel provider を取り出せるようにした。
+   - `providerAt_subProbability` と `channelProviderAt_subProbability` を追加し、package の field `subprob` から各 state の provider sub-probability を得られるようにした。
+   - `PrimePowerChannelProvider.applyAtToSourceControlled` を追加し、package された channel weights を source-controlled family に適用できるようにした。
+   - `PrimePowerChannelProvider.weightedHitMass_le_const_applyAtToSourceControlled` を追加し、sub-probability を field から使って weighted hit mass bound を得られるようにした。
+   - concrete sample として `sampleTenPrimePowerChannelProvider` と `sampleTenPrimePowerChannelProvider_channelProviderAt_subProbability` を追加した。
+3. 結論:
+   - prime-power channel と sub-probability normalization が一つの theorem-facing 入力になった。
+   - 後続で finite toy weight を載せる際、`PrimePowerChannelProvider` を受け取れば channel provider と sub-probability を同時に利用できる。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `PrimePowerChannelProvider` を入力にした finite toy weight layer を設計する。
+   - 本物の von Mangoldt / log にはまだ入らず、prime-power channel 上で非負かつ sub-probability な toy weight を扱う theorem-facing API から始める。
