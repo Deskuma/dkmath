@@ -173,6 +173,57 @@ theorem primePowerDescentStep_of_primePowerIndexed
 
 end DivisorTransitionKernel
 
+/--
+A divisor transition kernel whose labels are all prime powers.
+
+This packages the channel-selection condition needed before adding any
+von-Mangoldt-style weight formula.
+-/
+structure PrimePowerDivisorTransitionKernel where
+  toDivisorTransitionKernel : DivisorTransitionKernel
+  primePowerIndexed : toDivisorTransitionKernel.PrimePowerIndexed
+
+namespace PrimePowerDivisorTransitionKernel
+
+/-- Forget prime-power channel information and keep the finite transition. -/
+def toFiniteTransitionKernel
+    (T : PrimePowerDivisorTransitionKernel) :
+    FiniteTransitionKernel ℕ ℕ :=
+  T.toDivisorTransitionKernel.toFiniteTransitionKernel
+
+/-- The finite weight provider emitted at state `n`. -/
+def providerAt (T : PrimePowerDivisorTransitionKernel) (n : ℕ) :
+    WeightProvider ℕ :=
+  T.toDivisorTransitionKernel.providerAt n
+
+/-- Total transition weight at state `n`. -/
+def totalWeightAt (T : PrimePowerDivisorTransitionKernel) (n : ℕ) : ℚ :=
+  T.toDivisorTransitionKernel.totalWeightAt n
+
+/-- The packaged prime-power divisor transition kernel is sub-probability. -/
+def SubProbability (T : PrimePowerDivisorTransitionKernel) : Prop :=
+  T.toDivisorTransitionKernel.SubProbability
+
+/-- Compatibility with a source-controlled family at state `n`. -/
+def CompatibleAt
+    {M : DkMath.CosmicFormula.Mass.MassSpace ℕ}
+    (T : PrimePowerDivisorTransitionKernel) (n : ℕ)
+    (F : SourceControlledChainFamily M ℕ) : Prop :=
+  T.toDivisorTransitionKernel.CompatibleAt n F
+
+/--
+Every indexed transition in a packaged prime-power divisor kernel is a
+prime-power descent step.
+-/
+theorem primePowerDescentStep_of_mem
+    (T : PrimePowerDivisorTransitionKernel) {n q : ℕ}
+    (hqmem : q ∈ T.toDivisorTransitionKernel.index n) :
+    PrimePowerDescentStep n (T.toDivisorTransitionKernel.next n q) :=
+  T.toDivisorTransitionKernel.primePowerDescentStep_of_primePowerIndexed
+    T.primePowerIndexed hqmem
+
+end PrimePowerDivisorTransitionKernel
+
 /-- A concrete divisor-transition sample at state `10` with labels `2` and `5`. -/
 def sampleTenDivisorTransitionKernel : DivisorTransitionKernel where
   index := fun n => if n = 10 then ({2, 5} : Finset ℕ) else ∅
@@ -237,6 +288,12 @@ theorem sampleTenDivisorTransitionKernel_primePowerIndexed :
     exact sampleTenDivisorTransitionKernel_primePowerIndexOn_ten q hq
   · simp [sampleTenDivisorTransitionKernel, hn] at hq
 
+/-- The sample packaged as a prime-power divisor transition kernel. -/
+def sampleTenPrimePowerDivisorTransitionKernel :
+    PrimePowerDivisorTransitionKernel where
+  toDivisorTransitionKernel := sampleTenDivisorTransitionKernel
+  primePowerIndexed := sampleTenDivisorTransitionKernel_primePowerIndexed
+
 /-- The sample transition label `2` is a prime descent step from `10` to `5`. -/
 theorem sampleTenDivisorTransitionKernel_primeDescentStep_two :
     PrimeDescentStep 10 (sampleTenDivisorTransitionKernel.next 10 2) := by
@@ -252,16 +309,16 @@ theorem sampleTenDivisorTransitionKernel_primeDescentStep_five :
 /-- The sample transition label `2 = 2 ^ 1` is a prime-power descent step. -/
 theorem sampleTenDivisorTransitionKernel_primePowerDescentStep_two :
     PrimePowerDescentStep 10 (sampleTenDivisorTransitionKernel.next 10 2) := by
-  exact sampleTenDivisorTransitionKernel.primePowerDescentStep_of_primePowerIndexed
-    sampleTenDivisorTransitionKernel_primePowerIndexed
-    (by simp [sampleTenDivisorTransitionKernel])
+  exact sampleTenPrimePowerDivisorTransitionKernel.primePowerDescentStep_of_mem
+    (by simp [sampleTenPrimePowerDivisorTransitionKernel,
+      sampleTenDivisorTransitionKernel])
 
 /-- The sample transition label `5 = 5 ^ 1` is a prime-power descent step. -/
 theorem sampleTenDivisorTransitionKernel_primePowerDescentStep_five :
     PrimePowerDescentStep 10 (sampleTenDivisorTransitionKernel.next 10 5) := by
-  exact sampleTenDivisorTransitionKernel.primePowerDescentStep_of_primePowerIndexed
-    sampleTenDivisorTransitionKernel_primePowerIndexed
-    (by simp [sampleTenDivisorTransitionKernel])
+  exact sampleTenPrimePowerDivisorTransitionKernel.primePowerDescentStep_of_mem
+    (by simp [sampleTenPrimePowerDivisorTransitionKernel,
+      sampleTenDivisorTransitionKernel])
 
 /-- The sample divisor-transition kernel is sub-probability normalized. -/
 theorem sampleTenDivisorTransitionKernel_subProbability :

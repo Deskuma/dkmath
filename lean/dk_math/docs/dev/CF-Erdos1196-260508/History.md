@@ -913,3 +913,30 @@ Archive
 6. 次の課題:
    - 次は prime-power indexed kernel を構造体化するか、predicate のまま channel / weight API に渡すか判断する。
    - 構造体化する場合は `PrimePowerDivisorTransitionKernel` として `DivisorTransitionKernel` と `PrimePowerIndexed` を package 化し、既存 divisor transition API を忘却で再利用する。
+
+### 日時: 2026/05/10 12:21 JST (Phase AG prime-power divisor transition package)
+
+1. 目的:
+   - `review/review-031.md` の提案に従い、prime-power label だけを持つ divisor transition kernel を一つの型として package 化する。
+2. 実施:
+   - `PrimePowerDivisorTransitionKernel` を追加し、`toDivisorTransitionKernel : DivisorTransitionKernel` と `primePowerIndexed : toDivisorTransitionKernel.PrimePowerIndexed` をまとめた。
+   - `PrimePowerDivisorTransitionKernel.toFiniteTransitionKernel`, `providerAt`, `totalWeightAt`, `SubProbability`, `CompatibleAt` を追加し、既存 divisor / finite transition API へ忘却で接続した。
+   - `PrimePowerDivisorTransitionKernel.primePowerDescentStep_of_mem` を追加し、package 化された kernel の任意の indexed transition が `PrimePowerDescentStep` であることを直接得られるようにした。
+   - concrete sample として `sampleTenPrimePowerDivisorTransitionKernel` を追加した。
+   - sample の prime-power descent theorem を、`PrimePowerDivisorTransitionKernel` package 経由に切り替えた。
+3. 結論:
+   - prime-power channel 条件を theorem の仮定として毎回渡すだけでなく、型として保持できるようになった。
+   - 後続の channel / weight API は、`PrimePowerDivisorTransitionKernel` を入力にすることで「index は prime-power label のみ」という前提を型のフィールドとして利用できる。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - 初回 build では sample 側の `simp` が package を展開せず `simp made no progress` となったため、`sampleTenPrimePowerDivisorTransitionKernel` と `sampleTenDivisorTransitionKernel` を明示して修正した。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付き build の初回で sample の `simp made no progress` が出た。
+   - package 展開を `simp` に明示した後、権限昇格付きで単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `PrimePowerDivisorTransitionKernel` に対する theorem-facing weight/channel API を設計する。
+   - まだ実数対数や本物の von Mangoldt weight には入らず、まず finite toy weight または prime-power channel weight provider への接続を検討する。
