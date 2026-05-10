@@ -763,3 +763,26 @@ Archive
 6. 次の課題:
    - 次は transition kernel の prime path / dvd-monotone route wrapper を追加して branch route と対称化するか判断する。
    - その後、状態を `ℕ`、index を除去因子として解釈する divisor / prime descent transition skeleton へ進む。
+
+### 日時: 2026/05/10 10:40 JST (Phase AA transition prime path route wrapper)
+
+1. 目的:
+   - `review/review-025.md` の提案に従い、`FiniteTransitionKernel` の route wrapper を branch/subconservative 側だけでなく prime path / dvd-monotone 側にも追加する。
+2. 実施:
+   - `ErdosFinitePrimitiveInput.transitionPrimePathFamilyAt` を追加し、finite transition kernel state から得た provider を `primePathFamilySourceControlled` に適用できるようにした。
+   - `ErdosFinitePrimitiveInput.transitionPrimePathFamilyAt_hitMass_le_const_of_subprob` を追加し、`DvdMonotoneMass M` による prime path route でも transition kernel の sub-probability weight から weighted hit mass 一様上界を得られるようにした。
+   - concrete sample として `erdosFinitePrimitiveInput_two_five_transitionPrimePath_hitMass_le_one` を追加し、`sampleUnitTransitionKernel` を prime path route に適用して hit mass bound `<= 1` を確認した。
+3. 結論:
+   - finite transition kernel route についても branch route と prime path route の wrapper が揃った。
+   - `FiniteTransitionKernel -> FiniteKernel -> WeightProvider -> WeightedPathFamily` の導線を、既存の二つの source-control route で対称に使えるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.FiniteTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build と read-only 確認の一部が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は状態を `ℕ`、index を除去因子または素因子候補として解釈する divisor / prime descent transition skeleton を検討する。
+   - 解析 weight はまだ導入せず、まず finite transition の遷移意味と既存 descent provider との接続を薄く作る。
