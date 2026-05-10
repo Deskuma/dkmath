@@ -1195,3 +1195,27 @@ Archive
 6. 次の課題:
    - 次は prime-power witness `(p,k)` に依存する具体的な finite toy weight をどう表現するか検討する。
    - 短期的には `q : ℕ` label のまま predicate で性質を管理し、長期的には `PrimePowerLabel` 構造体化も候補にする。
+
+### 日時: 2026/05/11 05:18 JST (Phase AR prime witness dependent toy weight predicate)
+
+1. 目的:
+   - `review/review-042.md` の提案に従い、label をまだ構造体化せず、`q : ℕ` label のまま prime witness `(p,k)` に依存して表せる toy weight predicate を追加する。
+2. 実施:
+   - `PrimePowerDivisorTransitionKernel.PrimeWitnessDependentWeight` を追加した。
+   - 定義は、任意の indexed label `q ∈ T.index n` に対して `∃ p k, Nat.Prime p ∧ 0 < k ∧ q = p ^ k ∧ w n q = c n p ∧ 0 ≤ w n q` を要求するものとした。
+   - `PrimePowerDivisorTransitionKernel.vonMangoldtLikeWeight_of_primeWitnessDependent` を追加し、この predicate から `VonMangoldtLikeWeight` へ進めるようにした。
+   - concrete sample として `sampleTenToyPrimeBaseWeight` を追加し、`sampleTenToyWeight` が prime base weight `c n p` で表せることを `sampleTenToyWeight_primeWitnessDependent` として示した。
+3. 結論:
+   - 本物の `Λ(q)=log p` にはまだ入らず、weight が prime-power witness の prime base `p` に依存して表せる、という有限 toy predicate を得た。
+   - `PrimeWitnessDependentWeight -> VonMangoldtLikeWeight -> ofVonMangoldtLikeWeight` の意味論的 route が使えるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `PrimeWitnessDependentWeight` を `PrimePowerChannelProvider.ofVonMangoldtLikeWeight` に直接つなぐ constructor を検討する。
+   - その後、`PrimePowerLabel` 構造体化に進むべきか、`q : ℕ` label + predicate route を継続するか判断する。

@@ -343,6 +343,21 @@ def VonMangoldtLikeWeight
   ∀ n q, q ∈ T.toDivisorTransitionKernel.index n →
     ∃ p k, Nat.Prime p ∧ 0 < k ∧ q = p ^ k ∧ 0 ≤ w n q
 
+/--
+A finite toy weight whose value can be expressed through the prime base of a
+prime-power witness.
+
+The auxiliary function `c n p` is the finite placeholder for a future
+von-Mangoldt-like dependence on the prime base `p`.
+-/
+def PrimeWitnessDependentWeight
+    (T : PrimePowerDivisorTransitionKernel)
+    (w : ℕ → ℕ → ℚ) (c : ℕ → ℕ → ℚ) : Prop :=
+  ∀ n q, q ∈ T.toDivisorTransitionKernel.index n →
+    ∃ p k,
+      Nat.Prime p ∧ 0 < k ∧ q = p ^ k ∧
+        w n q = c n p ∧ 0 ≤ w n q
+
 /-- A von-Mangoldt-like weight is nonnegative on the channel index. -/
 theorem vonMangoldtLikeWeight_nonneg
     (T : PrimePowerDivisorTransitionKernel) {w : ℕ → ℕ → ℚ}
@@ -373,6 +388,18 @@ theorem vonMangoldtLikeWeight_of_nonneg
   intro n q hq
   rcases T.primePowerIndexed n q hq with ⟨p, k, hp, hk, hqpow⟩
   exact ⟨p, k, hp, hk, hqpow, hw_nonneg n q hq⟩
+
+/--
+A prime-witness-dependent toy weight is von-Mangoldt-like in the finite
+predicate sense.
+-/
+theorem vonMangoldtLikeWeight_of_primeWitnessDependent
+    (T : PrimePowerDivisorTransitionKernel) {w c : ℕ → ℕ → ℚ}
+    (hw : T.PrimeWitnessDependentWeight w c) :
+    T.VonMangoldtLikeWeight w := by
+  intro n q hq
+  rcases hw n q hq with ⟨p, k, hp, hk, hqpow, _hweight, hnq⟩
+  exact ⟨p, k, hp, hk, hqpow, hnq⟩
 
 end PrimePowerDivisorTransitionKernel
 
@@ -674,6 +701,10 @@ A finite toy channel weight on the sample: at state `10`, label `2` has weight
 def sampleTenToyWeight (n q : ℕ) : ℚ :=
   if n = 10 ∧ q = 2 then 1 else 0
 
+/-- The sample toy base weight assigns weight `1` to prime base `2` at state `10`. -/
+def sampleTenToyPrimeBaseWeight (n p : ℕ) : ℚ :=
+  if n = 10 ∧ p = 2 then 1 else 0
+
 /-- The sample toy weight is nonnegative on the sample channel index. -/
 theorem sampleTenToyWeight_nonneg :
     ∀ n q,
@@ -690,6 +721,27 @@ theorem sampleTenToyWeight_vonMangoldtLikeWeight :
       sampleTenToyWeight :=
   sampleTenPrimePowerDivisorTransitionKernel
     |>.vonMangoldtLikeWeight_of_nonneg sampleTenToyWeight_nonneg
+
+/--
+The sample toy weight is expressible through the prime base of a prime-power
+witness.
+-/
+theorem sampleTenToyWeight_primeWitnessDependent :
+    sampleTenPrimePowerDivisorTransitionKernel.PrimeWitnessDependentWeight
+      sampleTenToyWeight sampleTenToyPrimeBaseWeight := by
+  intro n q hq
+  by_cases hn : n = 10
+  · subst n
+    simp only [sampleTenPrimePowerDivisorTransitionKernel,
+      sampleTenDivisorTransitionKernel, if_true, Finset.mem_insert,
+      Finset.mem_singleton] at hq
+    rcases hq with rfl | rfl
+    · refine ⟨2, 1, by norm_num, by norm_num, by norm_num, ?_, by norm_num [sampleTenToyWeight]⟩
+      norm_num [sampleTenToyWeight, sampleTenToyPrimeBaseWeight]
+    · refine ⟨5, 1, by norm_num, by norm_num, by norm_num, ?_, by norm_num [sampleTenToyWeight]⟩
+      norm_num [sampleTenToyWeight, sampleTenToyPrimeBaseWeight]
+  · simp [sampleTenPrimePowerDivisorTransitionKernel,
+      sampleTenDivisorTransitionKernel, hn] at hq
 
 /-- The sample prime-power kernel with its weights replaced by toy weights. -/
 def sampleTenToyWeightKernel : PrimePowerDivisorTransitionKernel :=
