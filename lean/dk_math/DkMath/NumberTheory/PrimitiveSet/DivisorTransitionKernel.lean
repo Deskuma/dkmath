@@ -437,6 +437,41 @@ theorem vonMangoldtLikeWeight_of_primeWitnessDependent
 end PrimePowerDivisorTransitionKernel
 
 /--
+A choice of explicit prime-power witnesses for every indexed label of a
+prime-power divisor transition kernel.
+-/
+structure PrimePowerWitnessProvider
+    (T : PrimePowerDivisorTransitionKernel) where
+  label :
+    ∀ n q,
+      q ∈ T.toDivisorTransitionKernel.index n →
+        PrimePowerLabel
+  label_q :
+    ∀ n q (hq : q ∈ T.toDivisorTransitionKernel.index n),
+      (label n q hq).q = q
+
+namespace PrimePowerWitnessProvider
+
+/-- The chosen witness for an indexed label proves that the label is a prime power. -/
+theorem isPrimePowerLabel
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T) {n q : ℕ}
+    (hq : q ∈ T.toDivisorTransitionKernel.index n) :
+    IsPrimePowerLabel q := by
+  simpa [W.label_q n q hq] using (W.label n q hq).isPrimePowerLabel
+
+/-- A witness-provider-labelled indexed transition is a prime-power descent step. -/
+theorem primePowerDescentStep
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T) {n q : ℕ}
+    (hq : q ∈ T.toDivisorTransitionKernel.index n) :
+    PrimePowerDescentStep n (T.toDivisorTransitionKernel.next n q) :=
+  T.toDivisorTransitionKernel.primePowerDescentStep_of_isPrimePowerLabel
+    hq (W.isPrimePowerLabel hq)
+
+end PrimePowerWitnessProvider
+
+/--
 A packaged prime-power channel provider: a prime-power divisor transition kernel
 together with sub-probability normalization.
 -/
@@ -727,6 +762,46 @@ def sampleTenPrimePowerDivisorTransitionKernel :
   toDivisorTransitionKernel := sampleTenDivisorTransitionKernel
   primePowerIndexed := sampleTenDivisorTransitionKernel_primePowerIndexed
 
+/-- Explicit prime-power witnesses for every indexed label of the sample kernel. -/
+def sampleTenPrimePowerWitnessProvider :
+    PrimePowerWitnessProvider sampleTenPrimePowerDivisorTransitionKernel where
+  label := by
+    intro n q hq
+    by_cases hn : n = 10
+    · subst n
+      by_cases hq_two : q = 2
+      · subst q
+        exact samplePrimePowerLabel_two
+      · have hq_five : q = 5 := by
+          simp only [sampleTenPrimePowerDivisorTransitionKernel,
+            sampleTenDivisorTransitionKernel, if_true, Finset.mem_insert,
+            Finset.mem_singleton] at hq
+          rcases hq with hq_two' | hq_five
+          · exact False.elim (hq_two hq_two')
+          · exact hq_five
+        subst q
+        exact samplePrimePowerLabel_five
+    · simp [sampleTenPrimePowerDivisorTransitionKernel,
+        sampleTenDivisorTransitionKernel, hn] at hq
+  label_q := by
+    intro n q hq
+    by_cases hn : n = 10
+    · subst n
+      simp only [sampleTenPrimePowerDivisorTransitionKernel,
+        sampleTenDivisorTransitionKernel, if_true, Finset.mem_insert,
+        Finset.mem_singleton] at hq
+      rcases hq with rfl | rfl <;> rfl
+    · simp [sampleTenPrimePowerDivisorTransitionKernel,
+        sampleTenDivisorTransitionKernel, hn] at hq
+
+/-- The sample witness provider proves indexed sample labels are prime powers. -/
+theorem sampleTenPrimePowerWitnessProvider_isPrimePowerLabel
+    {n q : ℕ}
+    (hq :
+      q ∈ sampleTenPrimePowerDivisorTransitionKernel.toDivisorTransitionKernel.index n) :
+    IsPrimePowerLabel q :=
+  sampleTenPrimePowerWitnessProvider.isPrimePowerLabel hq
+
 /-- The sample transition label `2` is a prime descent step from `10` to `5`. -/
 theorem sampleTenDivisorTransitionKernel_primeDescentStep_two :
     PrimeDescentStep 10 (sampleTenDivisorTransitionKernel.next 10 2) := by
@@ -776,6 +851,24 @@ theorem samplePrimePowerLabel_five_descent :
     (by
       simp [samplePrimePowerLabel_five, sampleTenPrimePowerDivisorTransitionKernel,
         sampleTenDivisorTransitionKernel])
+
+/-- The sample witness provider gives the `10 -> 5` prime-power descent step. -/
+theorem sampleTenPrimePowerWitnessProvider_two_descent :
+    PrimePowerDescentStep 10
+      (sampleTenPrimePowerDivisorTransitionKernel.toDivisorTransitionKernel.next
+        10 2) := by
+  exact sampleTenPrimePowerWitnessProvider.primePowerDescentStep
+    (by simp [sampleTenPrimePowerDivisorTransitionKernel,
+      sampleTenDivisorTransitionKernel])
+
+/-- The sample witness provider gives the `10 -> 2` prime-power descent step. -/
+theorem sampleTenPrimePowerWitnessProvider_five_descent :
+    PrimePowerDescentStep 10
+      (sampleTenPrimePowerDivisorTransitionKernel.toDivisorTransitionKernel.next
+        10 5) := by
+  exact sampleTenPrimePowerWitnessProvider.primePowerDescentStep
+    (by simp [sampleTenPrimePowerDivisorTransitionKernel,
+      sampleTenDivisorTransitionKernel])
 
 /-- The sample divisor-transition kernel is sub-probability normalized. -/
 theorem sampleTenDivisorTransitionKernel_subProbability :

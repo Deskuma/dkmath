@@ -1291,3 +1291,29 @@ Archive
 6. 次の課題:
    - Phase AV として `PrimePowerWitnessProvider` を追加し、既存 `PrimePowerDivisorTransitionKernel` の各 indexed `q` に対して `PrimePowerLabel` witness を選ぶ層を作る。
    - その後、witness provider から base-prime 依存 weight `w(n,q)=c(n,p)` を定義する。
+
+### 日時: 2026/05/11 05:55 JST (Phase AV PrimePowerWitnessProvider)
+
+1. 目的:
+   - `review/review-046.md` の提案に従い、`PrimePowerDivisorTransitionKernel` の各 indexed label `q` に対して、明示的な `PrimePowerLabel` witness を選ぶ provider 層を追加する。
+2. 実施:
+   - `PrimePowerWitnessProvider T` を追加し、`q ∈ T.toDivisorTransitionKernel.index n` から `PrimePowerLabel` を返す `label` と、その label が元の `q` を表すことを示す `label_q` を持たせた。
+   - `PrimePowerWitnessProvider.isPrimePowerLabel` を追加し、選ばれた witness から既存 predicate `IsPrimePowerLabel q` へ接続した。
+   - `PrimePowerWitnessProvider.primePowerDescentStep` を追加し、provider 由来の witness から `PrimePowerDescentStep n (T.toDivisorTransitionKernel.next n q)` へ進めるようにした。
+   - sample として `sampleTenPrimePowerWitnessProvider` を追加した。
+   - sample 確認 theorem として `sampleTenPrimePowerWitnessProvider_isPrimePowerLabel`, `sampleTenPrimePowerWitnessProvider_two_descent`, `sampleTenPrimePowerWitnessProvider_five_descent` を追加した。
+3. 結論:
+   - 既存の `q : ℕ` label route を保ったまま、indexed label ごとに base prime `p` を含む witness を選ぶ層ができた。
+   - 次段の `weightOfBase` で `c n (W.label n q hq).p` を使う準備が整った。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 初回実装では `sampleTenPrimePowerWitnessProvider.label` が `PrimePowerLabel : Type` を返す箇所で `q = 2 ∨ q = 5` を直接 `rcases` しようとして、Prop から Type への elimination 制限で失敗した。
+   - `q = 2` の decidable 分岐を先に置き、membership は `q = 5` の Prop 証明にだけ使う形へ修正して build を通した。
+6. 次の課題:
+   - Phase AW として `PrimePowerWitnessProvider.weightOfBase` を追加し、base-prime weight `c : ℕ → ℕ → ℚ` から label weight `w : ℕ → ℕ → ℚ` を作る。
+   - 続けて `weightOfBase_primeWitnessDependent` を証明し、既存 `PrimeWitnessDependentWeight` route へ接続する。
