@@ -966,3 +966,28 @@ Archive
 6. 次の課題:
    - 次は `PrimePowerDivisorTransitionKernel` 専用の finite toy weight / channel weight provider を追加するか判断する。
    - 解析重みへ進む前に、prime-power channel 上で非零重みを与える有限 skeleton を作り、既存 sub-probability route に接続する。
+
+### 日時: 2026/05/10 15:08 JST (Phase AI prime-power channel provider alias)
+
+1. 目的:
+   - `review/review-033.md` の提案に従い、`PrimePowerDivisorTransitionKernel` から state ごとの prime-power channel weight provider を theorem-facing に取り出す API を追加する。
+   - まだ本物の von Mangoldt weight には入らず、後で差し替え可能な入口名を用意する。
+2. 実施:
+   - `PrimePowerDivisorTransitionKernel.channelProviderAt` を追加し、現段階では `providerAt` の alias として定義した。
+   - `PrimePowerDivisorTransitionKernel.channelProviderAt_subProbability` を追加し、sub-probability kernel が sub-probability channel provider を出すことを明示した。
+   - `PrimePowerDivisorTransitionKernel.channelWeightedHitMass_le_const_of_subprob` を追加し、prime-power channel 名の下で既存 weighted hit mass bound を呼べるようにした。
+   - sample theorem として `sampleTenPrimePowerDivisorTransitionKernel_channelProviderAt_subProbability` を追加した。
+3. 結論:
+   - 後続の finite toy weight / von-Mangoldt-like weight 設計で `channelProviderAt` という安定した入口名を使えるようになった。
+   - 現時点では既存 kernel weight をそのまま使うため、実数対数や本物の von Mangoldt 関数には踏み込んでいない。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は channel provider を sub-probability 証明と package 化する `PrimePowerChannelProvider` のような構造体を追加するか判断する。
+   - その後、prime-power channel 上の finite toy weight を設計し、`channelProviderAt` と同じ route へ接続する。
