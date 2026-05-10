@@ -786,3 +786,31 @@ Archive
 6. 次の課題:
    - 次は状態を `ℕ`、index を除去因子または素因子候補として解釈する divisor / prime descent transition skeleton を検討する。
    - 解析 weight はまだ導入せず、まず finite transition の遷移意味と既存 descent provider との接続を薄く作る。
+
+### 日時: 2026/05/10 10:49 JST (Phase AB divisor transition skeleton)
+
+1. 目的:
+   - `review/review-026.md` の提案に従い、状態と index を自然数に寄せ、遷移 `n -> n / q` の意味を持つ divisor transition skeleton を追加する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/DivisorTransitionKernel.lean` を新規作成した。
+   - `DivisorTransitionKernel` を追加し、`index`, `next`, `weight`, `weight_nonneg` に加えて、`index_dvd : q ∈ index n -> q ∣ n` と `next_eq_div : q ∈ index n -> next n q = n / q` を持たせた。
+   - `DivisorTransitionKernel.toFiniteTransitionKernel` を追加し、divisor semantics を忘却して既存の `FiniteTransitionKernel ℕ ℕ` として使えるようにした。
+   - `providerAt`, `totalWeightAt`, `SubProbability`, `CompatibleAt`, `compatibleAt_iff_index_eq` を追加し、既存 transition kernel API へ接続した。
+   - `index_dvd_source`, `next_eq_div_of_mem`, `next_dvd_source` を追加し、index membership から除去因子と遷移先 divisor を取り出せるようにした。
+   - concrete sample として `sampleTenDivisorTransitionKernel` を追加し、`10` から labels `2`, `5` によってそれぞれ `5`, `2` へ進むこと、および sub-probability normalized であることを確認した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `DivisorTransitionKernel` を import し、公開集約へ載せた。
+3. 結論:
+   - finite transition skeleton に `n -> n / q` という数論的意味を持つ薄い層が追加された。
+   - 解析重みはまだ導入せず、有限 index、除去因子、quotient next state、既存 weight provider への忘却だけに留めた。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - 初回 build で出た unused simp args warning を修正し、再 build では warning なしを確認した。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `PrimeDescentStep` と `DivisorTransitionKernel` を接続し、prime label `q` の場合に `PrimeDescentStep n (next n q)` を得る skeleton を検討する。
+   - その後、prime-power label や von Mangoldt 型 weight への入口をどの層で切るか判断する。
