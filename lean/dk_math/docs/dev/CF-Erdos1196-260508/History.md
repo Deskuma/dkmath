@@ -887,3 +887,29 @@ Archive
 6. 次の課題:
    - 次は `PrimePowerIndexOn T n := ∀ q ∈ T.index n, IsPrimePowerLabel q` のような index-level predicate を追加するか判断する。
    - その後、prime-power index predicate を finite transition kernel の channel / weight API に接続する。
+
+### 日時: 2026/05/10 12:13 JST (Phase AF prime-power index predicate)
+
+1. 目的:
+   - `review/review-030.md` の提案に従い、個々の label だけでなく、state `n` の index 全体が prime-power label から成ることを表す predicate API を追加する。
+2. 実施:
+   - `DivisorTransitionKernel.PrimePowerIndexOn T n := ∀ q ∈ T.index n, IsPrimePowerLabel q` を追加した。
+   - `DivisorTransitionKernel.PrimePowerIndexed T := ∀ n, T.PrimePowerIndexOn n` を追加した。
+   - `primePowerDescentStep_of_primePowerIndexOn` を追加し、state `n` の index-level predicate から任意の indexed transition が `PrimePowerDescentStep` であることを得られるようにした。
+   - `primePowerDescentStep_of_primePowerIndexed` を追加し、全状態版 predicate から同じ結論を得られるようにした。
+   - concrete sample として `sampleTenDivisorTransitionKernel_primePowerIndexOn_ten` と `sampleTenDivisorTransitionKernel_primePowerIndexed` を追加した。
+   - sample の prime-power descent theorem を、全状態版 `PrimePowerIndexed` wrapper 経由に切り替えた。
+3. 結論:
+   - 後続層は、各 theorem 呼び出しで個別に `IsPrimePowerLabel q` を渡す代わりに、kernel/state 単位の prime-power index 仮定を使えるようになった。
+   - finite transition の index が von Mangoldt channel 候補だけから成る、という条件を自然に表現できるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は prime-power indexed kernel を構造体化するか、predicate のまま channel / weight API に渡すか判断する。
+   - 構造体化する場合は `PrimePowerDivisorTransitionKernel` として `DivisorTransitionKernel` と `PrimePowerIndexed` を package 化し、既存 divisor transition API を忘却で再利用する。

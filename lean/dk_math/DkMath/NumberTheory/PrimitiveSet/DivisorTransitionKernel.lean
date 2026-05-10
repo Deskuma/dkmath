@@ -66,6 +66,14 @@ def totalWeightAt (T : DivisorTransitionKernel) (n : ℕ) : ℚ :=
 def SubProbability (T : DivisorTransitionKernel) : Prop :=
   T.toFiniteTransitionKernel.SubProbability
 
+/-- All labels available at state `n` are prime-power labels. -/
+def PrimePowerIndexOn (T : DivisorTransitionKernel) (n : ℕ) : Prop :=
+  ∀ q ∈ T.index n, IsPrimePowerLabel q
+
+/-- Every state of the divisor transition kernel has only prime-power labels. -/
+def PrimePowerIndexed (T : DivisorTransitionKernel) : Prop :=
+  ∀ n, T.PrimePowerIndexOn n
+
 /-- Compatibility with a source-controlled family at state `n`. -/
 def CompatibleAt
     {M : DkMath.CosmicFormula.Mass.MassSpace ℕ}
@@ -142,6 +150,27 @@ theorem primePowerDescentStep_of_isPrimePowerLabel
   rcases hqpp with ⟨p, k, hp, hk, hq⟩
   exact T.primePowerDescentStep_of_primePow_label hqmem hp hk hq
 
+/--
+If all labels at state `n` are prime-power labels, every indexed transition
+from `n` is a prime-power descent step.
+-/
+theorem primePowerDescentStep_of_primePowerIndexOn
+    (T : DivisorTransitionKernel) {n q : ℕ}
+    (hT : T.PrimePowerIndexOn n)
+    (hqmem : q ∈ T.index n) :
+    PrimePowerDescentStep n (T.next n q) :=
+  T.primePowerDescentStep_of_isPrimePowerLabel hqmem (hT q hqmem)
+
+/--
+If all states have prime-power labels, every indexed transition is a
+prime-power descent step.
+-/
+theorem primePowerDescentStep_of_primePowerIndexed
+    (T : DivisorTransitionKernel) (hT : T.PrimePowerIndexed)
+    {n q : ℕ} (hqmem : q ∈ T.index n) :
+    PrimePowerDescentStep n (T.next n q) :=
+  T.primePowerDescentStep_of_primePowerIndexOn (hT n) hqmem
+
 end DivisorTransitionKernel
 
 /-- A concrete divisor-transition sample at state `10` with labels `2` and `5`. -/
@@ -189,6 +218,25 @@ theorem sampleTenDivisorTransitionKernel_isPrimePowerLabel_five :
     IsPrimePowerLabel 5 := by
   exact ⟨5, 1, by norm_num, by norm_num, by norm_num⟩
 
+/-- At state `10`, all sample labels are prime-power labels. -/
+theorem sampleTenDivisorTransitionKernel_primePowerIndexOn_ten :
+    sampleTenDivisorTransitionKernel.PrimePowerIndexOn 10 := by
+  intro q hq
+  simp only [sampleTenDivisorTransitionKernel_index_ten, Finset.mem_insert,
+    Finset.mem_singleton] at hq
+  rcases hq with rfl | rfl
+  · exact sampleTenDivisorTransitionKernel_isPrimePowerLabel_two
+  · exact sampleTenDivisorTransitionKernel_isPrimePowerLabel_five
+
+/-- Every state of the sample kernel has only prime-power labels. -/
+theorem sampleTenDivisorTransitionKernel_primePowerIndexed :
+    sampleTenDivisorTransitionKernel.PrimePowerIndexed := by
+  intro n q hq
+  by_cases hn : n = 10
+  · subst n
+    exact sampleTenDivisorTransitionKernel_primePowerIndexOn_ten q hq
+  · simp [sampleTenDivisorTransitionKernel, hn] at hq
+
 /-- The sample transition label `2` is a prime descent step from `10` to `5`. -/
 theorem sampleTenDivisorTransitionKernel_primeDescentStep_two :
     PrimeDescentStep 10 (sampleTenDivisorTransitionKernel.next 10 2) := by
@@ -204,16 +252,16 @@ theorem sampleTenDivisorTransitionKernel_primeDescentStep_five :
 /-- The sample transition label `2 = 2 ^ 1` is a prime-power descent step. -/
 theorem sampleTenDivisorTransitionKernel_primePowerDescentStep_two :
     PrimePowerDescentStep 10 (sampleTenDivisorTransitionKernel.next 10 2) := by
-  exact sampleTenDivisorTransitionKernel.primePowerDescentStep_of_isPrimePowerLabel
+  exact sampleTenDivisorTransitionKernel.primePowerDescentStep_of_primePowerIndexed
+    sampleTenDivisorTransitionKernel_primePowerIndexed
     (by simp [sampleTenDivisorTransitionKernel])
-    sampleTenDivisorTransitionKernel_isPrimePowerLabel_two
 
 /-- The sample transition label `5 = 5 ^ 1` is a prime-power descent step. -/
 theorem sampleTenDivisorTransitionKernel_primePowerDescentStep_five :
     PrimePowerDescentStep 10 (sampleTenDivisorTransitionKernel.next 10 5) := by
-  exact sampleTenDivisorTransitionKernel.primePowerDescentStep_of_isPrimePowerLabel
+  exact sampleTenDivisorTransitionKernel.primePowerDescentStep_of_primePowerIndexed
+    sampleTenDivisorTransitionKernel_primePowerIndexed
     (by simp [sampleTenDivisorTransitionKernel])
-    sampleTenDivisorTransitionKernel_isPrimePowerLabel_five
 
 /-- The sample divisor-transition kernel is sub-probability normalized. -/
 theorem sampleTenDivisorTransitionKernel_subProbability :
