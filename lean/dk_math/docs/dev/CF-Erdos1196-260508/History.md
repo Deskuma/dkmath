@@ -708,3 +708,29 @@ Archive
 6. 次の課題:
    - 次は `FiniteKernel.CompatibleAt` のような compatibility alias / simp API を整理するか判断する。
    - その後、状態 `n` と index `q` に意味を持たせる actual finite Markov transition skeleton へ進む。
+
+### 日時: 2026/05/10 10:24 JST (Phase Y finite kernel compatibility API)
+
+1. 目的:
+   - `review/review-023.md` の提案に従い、actual transition skeleton へ進む前に `FiniteKernel` 周辺の compatibility API を整理する。
+2. 実施:
+   - `FiniteKernel.providerAt_index` と `FiniteKernel.providerAt_weight` を `[simp]` 補題として追加した。
+   - `FiniteKernel.CompatibleAt K s F := (K.providerAt s).Compatible F` を追加した。
+   - `FiniteKernel.compatibleAt_iff_index_eq` を追加し、`CompatibleAt` が `K.index s = F.index` と同値であることを明示した。
+   - `FiniteKernel.applyAtToSourceControlledOfCompatibleAt` を追加し、`CompatibleAt` alias を使って `WeightedPathFamily` を生成できるようにした。
+   - `FiniteKernel.applyAtToSourceControlledOfCompatibleAt_index` を `[simp]` 補題として追加した。
+   - `FiniteKernel.weightedHitMass_le_const_of_subprob_applyAtToSourceControlledOfCompatibleAt` を追加し、`CompatibleAt` alias を使う theorem-facing bound を用意した。
+3. 結論:
+   - `(K.providerAt s).Compatible F` という長い仮定を `K.CompatibleAt s F` として扱えるようになった。
+   - compatibility の中身が `K.index s = F.index` であることも theorem 名から参照でき、今後 actual transition skeleton を追加する際の theorem 文が軽くなる。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.FiniteKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - 次は状態 `n` と index `q` に意味を持たせる actual finite Markov transition skeleton を検討する。
+   - 解析重みはまだ導入せず、まずは有限遷移 `state -> index -> next state` と provider / path family の接続だけを追加する。

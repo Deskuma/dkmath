@@ -35,6 +35,16 @@ def providerAt
   weight := K.weight s
   weight_nonneg := K.weight_nonneg s
 
+@[simp] theorem providerAt_index
+    {σ ι : Type _} [DecidableEq ι]
+    (K : FiniteKernel σ ι) (s : σ) :
+    (K.providerAt s).index = K.index s := rfl
+
+@[simp] theorem providerAt_weight
+    {σ ι : Type _} [DecidableEq ι]
+    (K : FiniteKernel σ ι) (s : σ) :
+    (K.providerAt s).weight = K.weight s := rfl
+
 /-- Total kernel weight at a state. -/
 def totalWeightAt
     {σ ι : Type _} [DecidableEq ι]
@@ -62,6 +72,24 @@ theorem totalWeightAt_nonneg
   (K.providerAt s).totalWeight_nonneg
 
 /--
+Compatibility between the kernel weights at state `s` and a source-controlled
+family: both must use the same finite index set.
+-/
+def CompatibleAt
+    {σ ι : Type _} [DecidableEq ι] {M : MassSpace ℕ}
+    (K : FiniteKernel σ ι) (s : σ)
+    (F : SourceControlledChainFamily M ι) : Prop :=
+  (K.providerAt s).Compatible F
+
+/-- Expanded form of `CompatibleAt`. -/
+theorem compatibleAt_iff_index_eq
+    {σ ι : Type _} [DecidableEq ι] {M : MassSpace ℕ}
+    (K : FiniteKernel σ ι) (s : σ)
+    (F : SourceControlledChainFamily M ι) :
+    K.CompatibleAt s F ↔ K.index s = F.index := by
+  rfl
+
+/--
 Apply the provider emitted at `s` to a compatible source-controlled family.
 -/
 def applyAtToSourceControlled
@@ -71,6 +99,22 @@ def applyAtToSourceControlled
     (hcompat : (K.providerAt s).Compatible F) :
     WeightedPathFamily M ι :=
   (K.providerAt s).applyToSourceControlled F hcompat
+
+/-- Apply the provider emitted at `s`, using the `CompatibleAt` alias. -/
+def applyAtToSourceControlledOfCompatibleAt
+    {σ ι : Type _} [DecidableEq ι] {M : MassSpace ℕ}
+    (K : FiniteKernel σ ι) (s : σ)
+    (F : SourceControlledChainFamily M ι)
+    (hcompat : K.CompatibleAt s F) :
+    WeightedPathFamily M ι :=
+  K.applyAtToSourceControlled s F hcompat
+
+@[simp] theorem applyAtToSourceControlledOfCompatibleAt_index
+    {σ ι : Type _} [DecidableEq ι] {M : MassSpace ℕ}
+    (K : FiniteKernel σ ι) (s : σ)
+    (F : SourceControlledChainFamily M ι)
+    (hcompat : K.CompatibleAt s F) :
+    (K.applyAtToSourceControlledOfCompatibleAt s F hcompat).index = F.index := rfl
 
 /--
 Kernel-level finite hit mass bound under sub-probability normalization and a
@@ -86,6 +130,21 @@ theorem weightedHitMass_le_const_of_subprob_applyAtToSourceControlled
     (K.applyAtToSourceControlled s F hcompat).weightedHitMass S ≤ C := by
   exact (K.providerAt s).weightedHitMass_le_const_of_subprob_applyToSourceControlled
     F hcompat hS hC (K.providerAt_subProbability hK s) hsource
+
+/--
+Kernel-level finite hit mass bound, using the `CompatibleAt` alias.
+-/
+theorem weightedHitMass_le_const_of_subprob_applyAtToSourceControlledOfCompatibleAt
+    {σ ι : Type _} [DecidableEq ι] {M : MassSpace ℕ} {S : Finset ℕ}
+    (K : FiniteKernel σ ι) (hK : K.SubProbability) (s : σ)
+    (F : SourceControlledChainFamily M ι)
+    (hcompat : K.CompatibleAt s F)
+    (hS : PrimitiveOn S) {C : ℚ} (hC : 0 ≤ C)
+    (hsource : ∀ i ∈ F.index, M.μ (F.source i) ≤ C) :
+    (K.applyAtToSourceControlledOfCompatibleAt s F hcompat).weightedHitMass S ≤
+      C := by
+  exact K.weightedHitMass_le_const_of_subprob_applyAtToSourceControlled
+    hK s F hcompat hS hC hsource
 
 end FiniteKernel
 
