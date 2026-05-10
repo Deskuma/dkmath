@@ -1219,3 +1219,28 @@ Archive
 6. 次の課題:
    - 次は `PrimeWitnessDependentWeight` を `PrimePowerChannelProvider.ofVonMangoldtLikeWeight` に直接つなぐ constructor を検討する。
    - その後、`PrimePowerLabel` 構造体化に進むべきか、`q : ℕ` label + predicate route を継続するか判断する。
+
+### 日時: 2026/05/11 05:24 JST (Phase AS prime witness dependent provider constructor)
+
+1. 目的:
+   - `review/review-043.md` の提案に従い、`PrimeWitnessDependentWeight` を `PrimePowerChannelProvider` へ直接接続する constructor を追加する。
+2. 実施:
+   - `PrimePowerChannelProvider.ofPrimeWitnessDependentWeight` を追加した。
+   - 入力として `T`, weight `w`, base-prime weight `c`, predicate `hw : T.PrimeWitnessDependentWeight w c`, および `(T.withWeight w (T.vonMangoldtLikeWeight_nonneg (T.vonMangoldtLikeWeight_of_primeWitnessDependent hw))).SubProbability` を受け取り、`PrimePowerChannelProvider` を返すようにした。
+   - 内部では `T.vonMangoldtLikeWeight_of_primeWitnessDependent hw` で `VonMangoldtLikeWeight` へ変換し、既存の `ofVonMangoldtLikeWeight` を再利用した。
+   - `ofPrimeWitnessDependentWeight_kernel`, `ofPrimeWitnessDependentWeight_channelProviderAt_index`, `ofPrimeWitnessDependentWeight_channelProviderAt_weight` を `[simp]` 補題として追加した。
+   - `sampleTenToyWeightChannelProvider` を `ofPrimeWitnessDependentWeight` 経由に切り替えた。
+3. 結論:
+   - `PrimeWitnessDependentWeight -> VonMangoldtLikeWeight -> withWeight -> PrimePowerChannelProvider` の route が一つの constructor で接続された。
+   - base-prime `p` 依存で説明できる finite toy weight を、直接 channel provider 化できるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `PrimeWitnessDependentWeight` route を使った concrete weighted hit mass theorem を整理するか判断する。
+   - その後、`PrimePowerLabel` 構造体化へ進むか、`q : ℕ` label + predicate route を継続するか判断する。
