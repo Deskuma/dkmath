@@ -1266,3 +1266,28 @@ Archive
 6. 次の課題:
    - 次は `PrimePowerLabel` 構造体化へ進むか、`q : ℕ` label + predicate route を継続するか判断する。
    - 構造体化する場合は既存 `DivisorTransitionKernel` との橋を薄く作る必要がある。
+
+### 日時: 2026/05/11 05:38 JST (Phase AU PrimePowerLabel sidecar)
+
+1. 目的:
+   - `review/review-045.md` の提案に従い、既存の `q : ℕ` label route を壊さず、prime-power witness を明示的に持つ sidecar 構造を追加する。
+2. 実施:
+   - `PrimePowerLabel` を追加し、`q`, `p`, `k`, `Nat.Prime p`, `0 < k`, `q = p ^ k` を一つの構造体にまとめた。
+   - `PrimePowerLabel.isPrimePowerLabel` を追加し、構造体 witness から既存 predicate `IsPrimePowerLabel L.q` へ戻れるようにした。
+   - `PrimePowerLabel.primePowerDescentStep_of_mem` を追加し、`L.q ∈ T.index n` から既存 `DivisorTransitionKernel.primePowerDescentStep_of_primePow_label` 経由で `PrimePowerDescentStep n (T.next n L.q)` を得る橋を作った。
+   - sample として `samplePrimePowerLabel_two`, `samplePrimePowerLabel_five` を追加した。
+   - 確認 theorem として `samplePrimePowerLabel_two_descent`, `samplePrimePowerLabel_five_descent` を追加した。
+3. 結論:
+   - `DivisorTransitionKernel` の index 型や既存 API は変更せず、`q = p ^ k` の証拠を名前付き構造として扱えるようになった。
+   - 次段の witness provider で base prime `p` を取り出すための最小 sidecar が no-sorry で通った。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - Phase AV として `PrimePowerWitnessProvider` を追加し、既存 `PrimePowerDivisorTransitionKernel` の各 indexed `q` に対して `PrimePowerLabel` witness を選ぶ層を作る。
+   - その後、witness provider から base-prime 依存 weight `w(n,q)=c(n,p)` を定義する。
