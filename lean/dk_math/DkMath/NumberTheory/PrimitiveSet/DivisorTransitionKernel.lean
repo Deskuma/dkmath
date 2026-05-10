@@ -350,6 +350,19 @@ def ofKernel
   kernel := T
   subprob := hT
 
+/--
+Replace a prime-power divisor kernel's weights and immediately package the
+result as a sub-probability channel provider.
+-/
+def ofKernelWithWeight
+    (T : PrimePowerDivisorTransitionKernel)
+    (w : ℕ → ℕ → ℚ)
+    (hw_nonneg :
+      ∀ n q, q ∈ T.toDivisorTransitionKernel.index n → 0 ≤ w n q)
+    (hw_subprob : (T.withWeight w hw_nonneg).SubProbability) :
+    PrimePowerChannelProvider :=
+  ofKernel (T.withWeight w hw_nonneg) hw_subprob
+
 /-- The prime-power channel provider emitted at state `n`. -/
 def providerAt (P : PrimePowerChannelProvider) (n : ℕ) : WeightProvider ℕ :=
   P.kernel.channelProviderAt n
@@ -608,8 +621,11 @@ theorem sampleTenToyWeightKernel_subProbability :
 
 /-- The toy-weighted sample packaged as a prime-power channel provider. -/
 def sampleTenToyWeightChannelProvider : PrimePowerChannelProvider :=
-  PrimePowerChannelProvider.ofKernel
-    sampleTenToyWeightKernel sampleTenToyWeightKernel_subProbability
+  PrimePowerChannelProvider.ofKernelWithWeight
+    sampleTenPrimePowerDivisorTransitionKernel
+    sampleTenToyWeight
+    sampleTenToyWeight_nonneg
+    sampleTenToyWeightKernel_subProbability
 
 /-- The toy-weighted channel provider emits sub-probability providers. -/
 theorem sampleTenToyWeightChannelProvider_channelProviderAt_subProbability

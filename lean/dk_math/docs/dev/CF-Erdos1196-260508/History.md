@@ -1098,3 +1098,26 @@ Archive
 6. 次の課題:
    - 次は witness-dependent toy weight へ進む前に、finite index 上の手定義 weight を一般化する constructor を検討する。
    - その後、`IsPrimePowerLabel q` の witness `(p,k)` に依存する von-Mangoldt-like finite weight へ進む。
+
+### 日時: 2026/05/10 18:31 JST (Phase AN general finite toy weight constructor)
+
+1. 目的:
+   - `review/review-039.md` の提案に従い、任意の手定義 weight を prime-power channel provider へ接続する一般 constructor を追加する。
+2. 実施:
+   - `PrimePowerChannelProvider.ofKernelWithWeight` を追加した。
+   - 入力として `T : PrimePowerDivisorTransitionKernel`, weight `w : ℕ -> ℕ -> ℚ`, index 上の非負性 `hw_nonneg`, および `(T.withWeight w hw_nonneg).SubProbability` を受け取り、`PrimePowerChannelProvider` を返すようにした。
+   - `sampleTenToyWeightChannelProvider` を `PrimePowerChannelProvider.ofKernelWithWeight` 経由に切り替えた。
+3. 結論:
+   - `withWeight -> subProbability -> ofKernel` の流れを一つの constructor にまとめられた。
+   - future toy weight / von-Mangoldt-like finite weight は、非負性と sub-probability を示せば同じ constructor で channel provider 化できる。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `PrimePowerChannelProvider.ofKernelWithWeight` によって得た provider の kernel/index/weight を取り出す simp API を整理するか判断する。
+   - その後、`q = p ^ k` の witness に依存する toy / von-Mangoldt-like finite weight の表現方法を検討する。
