@@ -1145,3 +1145,29 @@ Archive
 6. 次の課題:
    - 次は `q = p ^ k` の witness に依存する toy / von-Mangoldt-like finite weight の表現方法を検討する。
    - まずは label を構造化せず、外から与える weight に対して prime-power witness 由来であることを predicate として持つ方針が軽い。
+
+### 日時: 2026/05/10 21:42 JST (Phase AP finite von-Mangoldt-like weight predicate)
+
+1. 目的:
+   - `review/review-040.md` の提案に従い、本物の von Mangoldt 関数や解析対数には入らず、外から与える weight が prime-power witness と非負性を持つことを表す軽い predicate を追加する。
+2. 実施:
+   - `PrimePowerDivisorTransitionKernel.VonMangoldtLikeWeight` を追加した。
+   - 定義は、任意の indexed label `q ∈ T.index n` に対して `∃ p k, Nat.Prime p ∧ 0 < k ∧ q = p ^ k ∧ 0 ≤ w n q` を要求するものとした。
+   - `vonMangoldtLikeWeight_nonneg` を追加し、この predicate から index 上の非負性を取り出せるようにした。
+   - `vonMangoldtLikeWeight_isPrimePowerLabel` を追加し、この predicate から `IsPrimePowerLabel q` を取り出せるようにした。
+   - `vonMangoldtLikeWeight_of_nonneg` を追加し、既に `PrimePowerDivisorTransitionKernel` が prime-power indexed であるため、index 上の非負性だけで finite von-Mangoldt-like predicate を構成できるようにした。
+   - concrete sample として `sampleTenToyWeight_vonMangoldtLikeWeight` を追加した。
+3. 結論:
+   - label を構造体化せず、`q : ℕ` label のまま、weight が prime-power channel witness と非負性を持つことを theorem-facing predicate として扱えるようになった。
+   - 既存の `ofKernelWithWeight` と組み合わせると、future finite von-Mangoldt-like weight は非負性・sub-probability・この predicate を別々に整理して扱える。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `VonMangoldtLikeWeight` と `ofKernelWithWeight` を直接つなぐ constructor / theorem を検討する。
+   - その後、prime-power witness `(p,k)` に依存するより具体的な finite toy weight をどう表現するか判断する。

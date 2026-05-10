@@ -331,6 +331,49 @@ def withWeight
     (hw : ∀ n q, q ∈ T.toDivisorTransitionKernel.index n → 0 ≤ w n q) :
     (T.withWeight w hw).toDivisorTransitionKernel.weight = w := rfl
 
+/--
+A finite von-Mangoldt-like weight predicate for the current prime-power
+channel.
+
+This does not define the analytic von Mangoldt function.  It only records that
+each indexed label has a prime-power witness and receives a nonnegative weight.
+-/
+def VonMangoldtLikeWeight
+    (T : PrimePowerDivisorTransitionKernel) (w : ℕ → ℕ → ℚ) : Prop :=
+  ∀ n q, q ∈ T.toDivisorTransitionKernel.index n →
+    ∃ p k, Nat.Prime p ∧ 0 < k ∧ q = p ^ k ∧ 0 ≤ w n q
+
+/-- A von-Mangoldt-like weight is nonnegative on the channel index. -/
+theorem vonMangoldtLikeWeight_nonneg
+    (T : PrimePowerDivisorTransitionKernel) {w : ℕ → ℕ → ℚ}
+    (hw : T.VonMangoldtLikeWeight w) :
+    ∀ n q, q ∈ T.toDivisorTransitionKernel.index n → 0 ≤ w n q := by
+  intro n q hq
+  rcases hw n q hq with ⟨_p, _k, _hp, _hk, _hqpow, hnq⟩
+  exact hnq
+
+/-- A von-Mangoldt-like weight carries prime-power witnesses on the channel index. -/
+theorem vonMangoldtLikeWeight_isPrimePowerLabel
+    (T : PrimePowerDivisorTransitionKernel) {w : ℕ → ℕ → ℚ}
+    (hw : T.VonMangoldtLikeWeight w) :
+    ∀ n q, q ∈ T.toDivisorTransitionKernel.index n → IsPrimePowerLabel q := by
+  intro n q hq
+  rcases hw n q hq with ⟨p, k, hp, hk, hqpow, _hnq⟩
+  exact ⟨p, k, hp, hk, hqpow⟩
+
+/--
+For a prime-power divisor transition kernel, nonnegative channel weights are
+von-Mangoldt-like in the finite predicate sense.
+-/
+theorem vonMangoldtLikeWeight_of_nonneg
+    (T : PrimePowerDivisorTransitionKernel) {w : ℕ → ℕ → ℚ}
+    (hw_nonneg :
+      ∀ n q, q ∈ T.toDivisorTransitionKernel.index n → 0 ≤ w n q) :
+    T.VonMangoldtLikeWeight w := by
+  intro n q hq
+  rcases T.primePowerIndexed n q hq with ⟨p, k, hp, hk, hqpow⟩
+  exact ⟨p, k, hp, hk, hqpow, hw_nonneg n q hq⟩
+
 end PrimePowerDivisorTransitionKernel
 
 /--
@@ -599,6 +642,13 @@ theorem sampleTenToyWeight_nonneg :
   by_cases h : n = 10 ∧ q = 2
   · simp [sampleTenToyWeight, h]
   · simp [sampleTenToyWeight, h]
+
+/-- The sample toy weight is von-Mangoldt-like in the finite channel sense. -/
+theorem sampleTenToyWeight_vonMangoldtLikeWeight :
+    sampleTenPrimePowerDivisorTransitionKernel.VonMangoldtLikeWeight
+      sampleTenToyWeight :=
+  sampleTenPrimePowerDivisorTransitionKernel
+    |>.vonMangoldtLikeWeight_of_nonneg sampleTenToyWeight_nonneg
 
 /-- The sample prime-power kernel with its weights replaced by toy weights. -/
 def sampleTenToyWeightKernel : PrimePowerDivisorTransitionKernel :=
