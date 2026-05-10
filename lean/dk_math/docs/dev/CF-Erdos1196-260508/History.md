@@ -310,3 +310,456 @@ Archive
 6. 次の課題:
    - finite path skeleton は path -> chain -> reachable-controlled forest -> primitive hit mass bound まで接続された。
    - 次は `Branching` / `SubConservative` 接続へ進むか、positive/lower-bound support の補助層を追加するか判断する。
+
+### 日時: 2026/05/09 02:25 JST (Phase J subconservative branch bridge)
+
+1. 目的:
+   - `review/review-008.md` の提案に従い、`Branching` / `SubConservative` から path 上の質量非増加を供給する bridge を追加する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/SubConservativeBridge.lean` を新規作成した。
+   - `child_mass_le_parent_of_subconservative` を追加し、`child ∈ B.children parent` なら `M.μ child <= M.μ parent` を `SubConservative` と各質量の非負性から証明した。
+   - `AdjacentBranchPath B L := List.IsChain (fun parent child => child ∈ B.children parent) L` を定義した。
+   - `AdjacentBranchPath.mem_mass_le_head` を追加し、subconservative branch path の任意 node が head の質量以下であることを証明した。
+   - `singletonSourceControlledChainFamilyOfAdjacentBranchPrimePath` を追加し、prime path かつ branch path である非空 list を singleton `SourceControlledChainFamily` に package 化できるようにした。
+   - concrete sample として `sampleBranching_eight_four_two`, `adjacentBranchPath_eight_four_two`, `sampleBranching_eight_four_two_subConservative`, `singletonSourceControlledFamily_eight_four_two_of_subConservative`, `primitive_two_five_singletonSourceControlledFamily_eight_four_two_hitMass_le_sourceMass` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `SubConservativeBridge` を import し、公開集約へ載せた。
+3. 結論:
+   - `SubConservative -> branch path mass <= source mass -> SourceControlledChainFamily -> primitive hit mass bound` の有限 bridge が no-sorry で閉じた。
+   - これで finite path skeleton は Mass API の `Branching` / `SubConservative` と接続された。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.SubConservativeBridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で新規・関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 初回 build では theorem 呼び出しで改行付き dot notation が誤解釈され、`SourceControlledChainFamily` 値を関数適用しようとして失敗した。
+   - `SourceControlledChainFamily.primitive_hitMass_le_sourceMass hS ...` の通常呼び出しへ直して解消した。
+6. 次の課題:
+   - finite skeleton は branch mass control まで到達したため、次は positive/lower-bound support 補助層、または複数 path family の package 化へ進むか判断する。
+   - Markov kernel / 解析重みはまだ導入しない。
+
+### 日時: 2026/05/09 05:44 JST (Phase K positive/lower-bound support)
+
+1. 目的:
+   - `review/review-009.md` の提案に従い、Erdos #1196 の `A ⊂ [x,∞)` 型の有限 support 条件を primitive 条件から分離して追加する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/Support.lean` を新規作成した。
+   - `PositiveOn S := ∀ n ∈ S, 0 < n` を定義した。
+   - `LowerBoundOn x S := ∀ n ∈ S, x ≤ n` を定義した。
+   - `PositiveOn.pos_of_mem`, `PositiveOn.not_mem_zero`, `LowerBoundOn.le_of_mem`, `LowerBoundOn.mono_left`, `LowerBoundOn.positiveOn_of_one_le` を追加した。
+   - top-level alias として `lowerBoundOn_one_implies_positiveOn`, `not_mem_zero_of_positiveOn`, `not_mem_one_of_lowerBoundOn_two` を追加した。
+   - empty / singleton / `{2,5}` の concrete support sample を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `Support` を import し、公開集約へ載せた。
+3. 結論:
+   - `PrimitiveOn` は純粋な divisibility antichain のまま保ちつつ、正値性や下限条件を外部仮定として参照できるようになった。
+   - これにより、後続の有限 Erdos support 条件で `0` や `1` を除外する補題を直接使える。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.Support`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build / `rg` / `git diff` の一部が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 必要な build と検査は権限昇格付きで再実行し、成功または該当なしを確認した。
+6. 次の課題:
+   - support 条件を既存の primitive hitting sample や path family sample に必要に応じて接続する。
+   - 次段階として multiple path family package を追加し、singleton path から複数 path forest へ拡張するか判断する。
+
+### 日時: 2026/05/09 11:38 JST (Phase L multiple prime path family)
+
+1. 目的:
+   - `review/review-010.md` の提案に従い、singleton list path ではなく finite index で束ねた複数の list-shaped prime paths を既存 forest theorem へ渡せるようにする。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/PathFamily.lean` を新規作成した。
+   - `AdjacentPrimePathFamily ι` を追加し、`index : Finset ι`, `source : ι -> ℕ`, `tail : ι -> List ℕ`, `isPath : ∀ i ∈ index, AdjacentPrimePath (source i :: tail i)` を package 化した。
+   - `AdjacentPrimePathFamily.path` と `AdjacentPrimePathFamily.nodeSet` を追加した。
+   - `AdjacentPrimePathFamily.toDivisibilityChainFamily` を追加し、各 list path の node set を既存の `DivisibilityChainFamily` へ忘却できるようにした。
+   - `AdjacentPrimePathFamily.toPrimeReachableControlledChainFamily` を追加し、既存の `mem_reachable_from_head_of_adjacentPrimePath` から各 node の source からの到達可能性を供給した。
+   - `AdjacentPrimePathFamily.primitive_hitMass_le_sourceMass` を追加し、multiple path family から primitive indexed hit mass bound へ直接進める wrapper を作った。
+   - concrete sample として `adjacentPrimePath_nine_three_one`, `sampleAdjacentPrimePathBoolFamily`, `sampleAdjacentPrimePathBoolFamilySourceControlled`, `primitive_two_five_sampleAdjacentPrimePathBoolFamily_hitMass_le_sourceMass` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `PathFamily` を import し、公開集約へ載せた。
+3. 結論:
+   - `finite family of nonempty prime paths -> PrimeReachableControlledChainFamily -> DvdControlledChainFamily -> SourceControlledChainFamily -> primitive hit mass bound` の導線が no-sorry で閉じた。
+   - これにより singleton path だけでなく、複数 descent path を indexed forest として扱えるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.PathFamily`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - 初回 build 後に lint 警告を修正し、再 build で警告なしの成功を確認した。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 初回 build では `change` tactic が不要である lint 警告と、sample theorem の長い行に対する style 警告が出た。
+   - `change` を削除し、sample の source-controlled family を別定義へ切り出して解消した。
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗したため、権限昇格付きで再実行した。
+6. 次の課題:
+   - `AdjacentPrimePathFamily` と `AdjacentBranchPath` / `SubConservative` を組み合わせ、複数 path family に対して branch 側から source mass control を供給する bridge を追加するか判断する。
+   - あるいは `ErdosFinitePrimitiveInput` のような primitive + lower-bound support の入力 package を追加し、有限 Erdos theorem 文を整理する。
+
+### 日時: 2026/05/09 11:46 JST (Phase M branch-controlled prime path family)
+
+1. 目的:
+   - `review/review-011.md` の提案に従い、multiple prime path family に `AdjacentBranchPath` / `SubConservative` による source mass control を載せる。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/BranchPathFamily.lean` を新規作成した。
+   - `AdjacentBranchPrimePathFamily ι B` を追加し、`AdjacentPrimePathFamily ι` に各 indexed path が branch relation に従う条件 `isBranchPath` を加えた。
+   - `AdjacentBranchPrimePathFamily.toSourceControlledChainFamily` を追加し、`SubConservative M B` と `AdjacentBranchPath.mem_mass_le_head` から `SourceControlledChainFamily M ι` を生成できるようにした。
+   - `AdjacentBranchPrimePathFamily.primitive_hitMass_le_sourceMass` を追加し、branch subconservativity から multiple path family の primitive indexed hit mass bound へ直接進める wrapper を作った。
+   - concrete sample として `sampleBranching_eight_nine_paths`, `adjacentBranchPath_eight_four_two_sampleBranching_eight_nine_paths`, `adjacentBranchPath_nine_three_one_sampleBranching_eight_nine_paths`, `sampleAdjacentBranchPrimePathBoolFamily`, `sampleAdjacentBranchPrimePathBoolFamilySourceControlled`, `primitive_two_five_sampleAdjacentBranchPrimePathBoolFamily_hitMass_le_sourceMass` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `BranchPathFamily` を import し、公開集約へ載せた。
+3. 結論:
+   - `finite family of prime paths + branch path condition + SubConservative -> SourceControlledChainFamily -> primitive hit mass bound` の導線が no-sorry で閉じた。
+   - Phase L の multiple path forest が、Phase J の branch subconservative mass control と接続された。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.BranchPathFamily`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 初回 build では `AdjacentBranchPrimePathFamily` が `extends AdjacentPrimePathFamily` により自動生成する projection `toAdjacentPrimePathFamily` と、手書きの同名定義が衝突した。
+   - 手書き定義を削除し、自動 projection を使う形へ修正して解消した。
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗したため、権限昇格付きで再実行した。
+6. 次の課題:
+   - 次は `ErdosFinitePrimitiveInput` のような primitive + lower-bound support の入力 package を追加し、有限 Erdos theorem 文を整理するか判断する。
+   - その後、Markov kernel / 解析重みへ進む前に、現在の finite skeleton の theorem-facing API を点検する。
+
+### 日時: 2026/05/09 11:58 JST (Phase N finite Erdos primitive input)
+
+1. 目的:
+   - `review/review-012.md` の提案に従い、primitive 条件と lower-bound support 条件を theorem-facing な有限 Erdos 入力 package としてまとめる。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/ErdosFinite.lean` を新規作成した。
+   - `ErdosFinitePrimitiveInput x` を追加し、`support : Finset ℕ`, `primitive : PrimitiveOn support`, `lowerBound : LowerBoundOn x support` を package 化した。
+   - `ErdosFinitePrimitiveInput.positiveOn_of_one_le`, `not_mem_zero_of_one_le`, `not_mem_one_of_two_le` を追加し、lower-bound support から正値性や `0` / `1` の除外を取り出せるようにした。
+   - `ErdosFinitePrimitiveInput.branchPrimePathFamily_hitMass_le_sourceMass` を追加し、finite Erdos input の `primitive` field を `AdjacentBranchPrimePathFamily.primitive_hitMass_le_sourceMass` へ渡す theorem-facing wrapper を作った。
+   - concrete sample として `erdosFinitePrimitiveInput_two_five`, `erdosFinitePrimitiveInput_two_five_positiveOn`, `erdosFinitePrimitiveInput_two_five_not_mem_one`, `erdosFinitePrimitiveInput_two_five_branchPath_hitMass_le_sourceMass` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `ErdosFinite` を import し、公開集約へ載せた。
+3. 結論:
+   - `PrimitiveOn S` と `LowerBoundOn x S` を theorem の入力として一体化できた。
+   - 既存の branch-controlled multiple path family bound を、finite Erdos input から直接呼べるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.ErdosFinite`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - finite Erdos input を使った theorem-facing API を点検し、hit mass / source mass の表示名や wrapper を追加するか判断する。
+   - Markov kernel / 解析重みへ進む前に、現時点の finite skeleton の公開 API を整理する。
+
+### 日時: 2026/05/09 13:14 JST (Phase O finite Erdos public API wrappers)
+
+1. 目的:
+   - `review/review-013.md` の提案に従い、Markov kernel / 解析重みへ進む前に `ErdosFinitePrimitiveInput` の theorem-facing API を読みやすく整理する。
+2. 実施:
+   - `ErdosFinitePrimitiveInput.branchPrimePathFamilySourceControlled` を追加し、branch-controlled prime path family から得られる `SourceControlledChainFamily` に入力側の名前を付けた。
+   - `ErdosFinitePrimitiveInput.branchPrimePathFamilyHitMass` を追加し、finite Erdos support が branch-controlled path family を hit する indexed mass を入力側から参照できるようにした。
+   - `ErdosFinitePrimitiveInput.branchPrimePathFamilySourceMass` を追加し、対応する indexed source mass を入力側から参照できるようにした。
+   - `ErdosFinitePrimitiveInput.hitMass_le_sourceMass_of_branchPrimePathFamily` を追加し、hit/source mass wrapper 名を使った theorem-facing bound を用意した。
+   - concrete sample として `erdosFinitePrimitiveInput_two_five_named_hitMass_le_sourceMass` を追加した。
+3. 結論:
+   - `ErdosFinitePrimitiveInput` から hit mass と source mass を名前付き API として直接参照できるようになった。
+   - branch-controlled 版の finite Erdos hit bound が、将来の dvd-monotone 版や Markov 版と区別しやすい名前になった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.ErdosFinite`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - finite skeleton の公開 API は一段整理されたため、次は dvd-monotone / prime-reachable 版の input wrapper を追加するか判断する。
+   - あるいは Markov kernel / 解析重みの前に、現在の finite theorem 群を review して最小の rename / alias を追加する。
+
+### 日時: 2026/05/09 14:33 JST (Phase P prime path family input wrappers)
+
+1. 目的:
+   - `review/review-014.md` の提案に従い、branch-controlled 版に加えて、dvd-monotone / prime-reachable route の theorem-facing input wrapper を追加する。
+2. 実施:
+   - `ErdosFinitePrimitiveInput.primePathFamilySourceControlled` を追加し、`AdjacentPrimePathFamily` から `PrimeReachableControlledChainFamily -> DvdControlledChainFamily -> SourceControlledChainFamily` へ進む route に入力側の名前を付けた。
+   - `ErdosFinitePrimitiveInput.primePathFamilyHitMass` を追加し、finite Erdos support が prime path family を hit する indexed mass を入力側から参照できるようにした。
+   - `ErdosFinitePrimitiveInput.primePathFamilySourceMass` を追加し、対応する indexed source mass を入力側から参照できるようにした。
+   - `ErdosFinitePrimitiveInput.hitMass_le_sourceMass_of_primePathFamily` を追加し、`DvdMonotoneMass M` を仮定する prime path family 版の finite Erdos bound を用意した。
+   - concrete sample として `erdosFinitePrimitiveInput_two_five_primePath_hitMass_le_sourceMass` を追加した。
+3. 結論:
+   - branch/subconservative route と prime-reachable/dvd-monotone route の両方を `ErdosFinitePrimitiveInput` から名前付き API として呼べるようになった。
+   - 将来 Markov route を追加する際にも、route ごとに hit/source mass wrapper を並べる設計が取りやすくなった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.ErdosFinite`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - theorem-facing API は branch route と prime path route が揃ったため、次は finite theorem 群の alias / naming を最終確認する。
+   - Markov kernel / 解析重みへ進む場合は、既存の `ErdosFinitePrimitiveInput` wrapper 命名に合わせて route を追加する。
+
+### 日時: 2026/05/09 16:58 JST (Phase Q route API naming aliases)
+
+1. 目的:
+   - `review/review-015.md` の提案に従い、Markov kernel へ進む前に finite theorem-facing API の route 命名規則を固定し、必要最小限の alias を追加する。
+2. 実施:
+   - `ErdosFinitePrimitiveInput` namespace に route-facing API naming convention のコメントを追加した。
+   - 命名規則を `<route>SourceControlled`, `<route>HitMass`, `<route>SourceMass`, `hitMass_le_sourceMass_of_<route>` と明文化した。
+   - `hitMass_le_sourceMass_of_subconservativeBranchPrimePathFamily` を追加し、branch route の source control が `SubConservative M B` 由来であることを theorem 名から読める alias にした。
+   - `hitMass_le_sourceMass_of_dvdMonotonePrimePathFamily` を追加し、prime path route の source control が `DvdMonotoneMass M` 由来であることを theorem 名から読める alias にした。
+   - concrete sample として `erdosFinitePrimitiveInput_two_five_subconservativeBranch_alias` と `erdosFinitePrimitiveInput_two_five_dvdMonotonePrime_alias` を追加した。
+3. 結論:
+   - branch/subconservative route と prime/dvd-monotone route の theorem-facing API に、短い route 名と根拠明示 alias の両方を用意できた。
+   - 今後 Markov route を追加する場合も、同じ命名規則へ載せやすくなった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.ErdosFinite`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - finite route API は一段固定されたため、次は Markov kernel / weighted path family の最小入口を検討する。
+   - 解析重みを入れる前に、有限 Markov skeleton の責務を Mass API と PrimitiveSet API のどちらへ置くか判断する。
+
+### 日時: 2026/05/09 20:45 JST (Phase R finite weighted path-family skeleton)
+
+1. 目的:
+   - `review/review-016.md` の提案に従い、解析重みや Markov kernel へ入る前の有限重み付き path-family skeleton を追加する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/WeightedPathFamily.lean` を新規作成した。
+   - `WeightedPathFamily M ι` を追加し、`SourceControlledChainFamily M ι` に `weight : ι -> ℚ` と `weight_nonneg : ∀ i ∈ index, 0 <= weight i` を加えた。
+   - `WeightedPathFamily.ofSourceControlled` を追加し、既存の source-controlled forest に非負重みを付けられるようにした。
+   - `WeightedPathFamily.weightedHitMass` と `WeightedPathFamily.weightedSourceMass` を追加した。
+   - `WeightedPathFamily.primitive_weightedHitMass_le_weightedSourceMass` を証明し、各 chain の primitive hit mass bound を非負重み付き有限和へ持ち上げた。
+   - `ErdosFinitePrimitiveInput.weightedBranchPrimePathFamily`, `weightedBranchPrimePathFamilyHitMass`, `weightedBranchPrimePathFamilySourceMass`, `weightedHitMass_le_weightedSourceMass_of_branchPrimePathFamily` を追加し、branch-controlled route の weighted wrapper を用意した。
+   - concrete sample として `sampleBoolPathWeight` と `erdosFinitePrimitiveInput_two_five_weightedBranch_hitMass_le_sourceMass` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `WeightedPathFamily` を import し、公開集約へ載せた。
+3. 結論:
+   - `Σ i, w_i * hitMass_i <= Σ i, w_i * sourceMass_i` 型の有限重み付き primitive hitting bound が no-sorry で閉じた。
+   - まだ解析的な Markov kernel や von Mangoldt weight には入らず、有限重み付き route の入口だけを PrimitiveSet 側に追加した。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.WeightedPathFamily`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - weighted branch route に続き、必要なら prime path / dvd-monotone route の weighted wrapper を追加する。
+   - Markov kernel へ進む場合は、今回の `WeightedPathFamily` を有限重み付き和の受け皿として使い、解析重みは別層に分離する。
+
+### 日時: 2026/05/09 20:55 JST (Phase S weighted prime path route wrapper)
+
+1. 目的:
+   - `review/review-017.md` の提案に従い、weighted branch route に加えて、prime path / dvd-monotone route の weighted wrapper を追加して API を対称にする。
+2. 実施:
+   - `ErdosFinitePrimitiveInput.weightedPrimePathFamily` を追加し、`primePathFamilySourceControlled` で得られる source-controlled forest に非負重みを載せられるようにした。
+   - `ErdosFinitePrimitiveInput.weightedPrimePathFamilyHitMass` を追加した。
+   - `ErdosFinitePrimitiveInput.weightedPrimePathFamilySourceMass` を追加した。
+   - `ErdosFinitePrimitiveInput.weightedHitMass_le_weightedSourceMass_of_primePathFamily` を追加し、`DvdMonotoneMass M` から得る prime path route の weighted finite Erdos bound を用意した。
+   - concrete sample として `erdosFinitePrimitiveInput_two_five_weightedPrimePath_hitMass_le_sourceMass` を追加した。
+3. 結論:
+   - weighted route についても branch/subconservative route と prime/dvd-monotone route が揃った。
+   - `WeightedPathFamily.ofSourceControlled` を共通受け皿として使い、route ごとの source control をそのまま非負重み付き和へ持ち上げられる形になった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.WeightedPathFamily`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - finite weighted route は branch 版と prime path 版が揃ったため、次は Markov kernel の最小 skeleton を検討する。
+   - 解析重みを入れる場合も、まず `WeightedPathFamily` に渡す非負重みを構成する別層として設計する。
+
+### 日時: 2026/05/09 21:33 JST (Phase T weighted normalization support)
+
+1. 目的:
+   - `review/review-018.md` の提案に従い、Markov kernel 本体へ入る前に、有限重み付き path family の正規化を語る最小補題を追加する。
+2. 実施:
+   - `WeightedPathFamily.totalWeight` を追加し、finite index 上の総重みを定義した。
+   - `WeightedPathFamily.WeightSubProbability` を追加し、`totalWeight <= 1` を有限 sub-probability 条件として定義した。
+   - `WeightedPathFamily.totalWeight_nonneg` を追加した。
+   - `WeightedPathFamily.weightedSourceMass_le_const_mul_totalWeight` を追加し、各 source mass が一様に `C` 以下なら weighted source mass が `C * totalWeight` 以下であることを証明した。
+   - `WeightedPathFamily.weightedSourceMass_le_const_of_subprob` を追加し、sub-probability weight かつ source mass が一様に `C` 以下なら weighted source mass が `C` 以下であることを証明した。
+   - concrete sample として `sampleBoolSubprobPathWeight` と `erdosFinitePrimitiveInput_two_five_weightedBranch_sourceMass_le_one` を追加した。
+3. 結論:
+   - `WeightedPathFamily` に Markov kernel 前段として必要な「総重み」「sub-probability」「一様 source bound からの weighted source bound」が no-sorry で入った。
+   - 解析的な重みや実数対数はまだ導入せず、有限有理重みの正規化だけを扱う層として整理できた。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.WeightedPathFamily`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 初回 build では sub-probability sample の `let W` が十分に展開されず、`totalWeight <= 1` が未解決で残った。
+   - `weightedBranchPrimePathFamily`, `ofSourceControlled`, `branchPrimePathFamilySourceControlled` まで明示的に展開してから `norm_num` する形へ修正し、build を通した。
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗したため、権限昇格付きで再実行した。
+6. 次の課題:
+   - 次は `WeightProvider` / `FiniteKernel` のような、`WeightedPathFamily` に重みを供給する最小構造を別層として追加するか判断する。
+   - Markov kernel を導入する場合も、まずは有限 index 上の非負重み provider として設計し、解析重みはさらに後段に分離する。
+
+### 日時: 2026/05/09 21:39 JST (Phase U weighted hit mass uniform bound)
+
+1. 目的:
+   - `review/review-019.md` の提案に従い、weighted source mass の一様上界と primitive weighted hit bound を合成し、`weightedHitMass <= C` を名前付き theorem として追加する。
+2. 実施:
+   - `WeightedPathFamily.weightedHitMass_le_const_mul_totalWeight` を追加し、各 source mass が `C` 以下なら primitive weighted hit mass が `C * totalWeight` 以下であることを証明した。
+   - `WeightedPathFamily.weightedHitMass_le_const_of_subprob` を追加し、sub-probability weight かつ各 source mass が `C` 以下なら primitive weighted hit mass が `C` 以下であることを証明した。
+   - concrete sample として `erdosFinitePrimitiveInput_two_five_weightedBranch_hitMass_le_one` を追加し、`sampleBoolSubprobPathWeight` による branch weighted route の hit mass が `1` 以下であることを確認した。
+3. 結論:
+   - finite weighted skeleton で `weightedHitMass <= weightedSourceMass <= C` の合成が theorem-facing に使える形になった。
+   - Markov kernel 前段として、sub-probability flow が一様 source bound を通じて hit mass bound を与える有限定理が no-sorry で閉じた。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.WeightedPathFamily`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - 次は `WeightProvider` / `FiniteKernel` のような、`WeightedPathFamily` に重みを供給する最小構造を別層として追加するか判断する。
+   - その後、Markov kernel 由来の非負重みを provider として接続する。
+
+### 日時: 2026/05/09 21:51 JST (Phase V finite weight provider skeleton)
+
+1. 目的:
+   - `review/review-020.md` の提案に従い、`WeightedPathFamily` に直接重みを持たせるだけでなく、重みの供給元を分離する最小 provider 層を追加する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/WeightProvider.lean` を新規作成した。
+   - `WeightProvider ι` を追加し、`index : Finset ι`, `weight : ι -> ℚ`, `weight_nonneg : ∀ i ∈ index, 0 <= weight i` を package 化した。
+   - `WeightProvider.totalWeight`, `WeightProvider.SubProbability`, `WeightProvider.totalWeight_nonneg` を追加した。
+   - `WeightProvider.Compatible P F := P.index = F.index` を追加し、provider と `SourceControlledChainFamily` の index 互換性を明示した。
+   - `WeightProvider.applyToSourceControlled` を追加し、互換な provider を source-controlled forest に適用して `WeightedPathFamily` を作れるようにした。
+   - `WeightProvider.applyToSourceControlled_weightSubProbability` を追加し、provider 側の sub-probability 条件を適用後の weighted family 側へ移送できるようにした。
+   - `WeightProvider.weightedHitMass_le_const_of_subprob_applyToSourceControlled` を追加し、provider 適用後の finite hit mass 一様上界を直接呼べるようにした。
+   - `ErdosFinitePrimitiveInput.providerBranchPrimePathFamily` と `providerBranchPrimePathFamily_hitMass_le_const_of_subprob` を追加し、branch route に provider 由来の重みを適用する wrapper を用意した。
+   - concrete sample として `sampleBoolSubprobWeightProvider`, `sampleBoolSubprobWeightProvider_subProbability`, `erdosFinitePrimitiveInput_two_five_providerBranch_hitMass_le_one` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `WeightProvider` を import し、公開集約へ載せた。
+3. 結論:
+   - 重みそのものを供給する finite provider と、path/source control を持つ `SourceControlledChainFamily` を分離できた。
+   - Markov kernel 由来の重みを将来追加する場合も、まず `WeightProvider` を作って `WeightedPathFamily` に適用する導線ができた。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.WeightProvider`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 初回 build では `applyToSourceControlled_weightSubProbability` で provider 側の `P.index` と適用後 weighted family 側の `F.index` の書き換えが不足し、`P.SubProbability` が目標に合わなかった。
+   - `WeightedPathFamily.WeightSubProbability` と `totalWeight` を展開し、`hcompat : P.index = F.index` で明示的に書き換える形へ修正した。
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗したため、権限昇格付きで再実行した。
+6. 次の課題:
+   - 次は `FiniteKernel` / Markov kernel の最小構造を、`WeightProvider` を生成する層として追加するか判断する。
+   - 解析重みはまだ入れず、有限 index 上の非負・sub-probability provider を返す kernel skeleton に留める。
+
+### 日時: 2026/05/09 22:59 JST (Phase W finite kernel skeleton)
+
+1. 目的:
+   - `review/review-021.md` の提案に従い、Markov kernel 由来の重みへ進む前段として、状態ごとに `WeightProvider` を生成する有限 kernel skeleton を追加する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/FiniteKernel.lean` を新規作成した。
+   - `FiniteKernel σ ι` を追加し、`index : σ -> Finset ι`, `weight : σ -> ι -> ℚ`, `weight_nonneg : ∀ s i, i ∈ index s -> 0 <= weight s i` を package 化した。
+   - `FiniteKernel.providerAt` を追加し、各 state `s` から `WeightProvider ι` を生成できるようにした。
+   - `FiniteKernel.totalWeightAt`, `FiniteKernel.SubProbability`, `FiniteKernel.providerAt_subProbability`, `FiniteKernel.totalWeightAt_nonneg` を追加した。
+   - `FiniteKernel.applyAtToSourceControlled` を追加し、state `s` で生成した provider を互換な `SourceControlledChainFamily` に適用できるようにした。
+   - `FiniteKernel.weightedHitMass_le_const_of_subprob_applyAtToSourceControlled` を追加し、sub-probability kernel から provider 経由の weighted hit mass 一様上界へ接続した。
+   - `ErdosFinitePrimitiveInput.kernelBranchPrimePathFamilyAt` と `kernelBranchPrimePathFamilyAt_hitMass_le_const_of_subprob` を追加し、branch route に finite kernel state の重みを適用する theorem-facing wrapper を用意した。
+   - concrete sample として `sampleUnitFiniteKernel`, `sampleUnitFiniteKernel_subProbability`, `erdosFinitePrimitiveInput_two_five_kernelBranch_hitMass_le_one` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `FiniteKernel` を import し、公開集約へ載せた。
+3. 結論:
+   - `state -> WeightProvider -> WeightedPathFamily -> weightedHitMass <= C` の有限 Markov skeleton が no-sorry で閉じた。
+   - まだ解析重みや実数対数は導入せず、有限有理重み kernel の抽象だけを PrimitiveSet 側へ追加した。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.FiniteKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - finite kernel skeleton は入ったため、次は prime path / dvd-monotone route 側にも kernel wrapper を追加するか判断する。
+   - その後、有限 kernel の normalization / compatibility API を整理してから解析 weight 層へ進む。
+
+### 日時: 2026/05/10 02:00 JST (Phase X kernel prime path route wrapper)
+
+1. 目的:
+   - `review/review-022.md` の提案に従い、finite kernel wrapper を branch route だけでなく prime path / dvd-monotone route 側にも追加して API の対称性を保つ。
+2. 実施:
+   - `ErdosFinitePrimitiveInput.kernelPrimePathFamilyAt` を追加し、finite kernel state から得た provider を `primePathFamilySourceControlled` に適用できるようにした。
+   - `ErdosFinitePrimitiveInput.kernelPrimePathFamilyAt_hitMass_le_const_of_subprob` を追加し、`DvdMonotoneMass M` による prime path route でも kernel-supplied sub-probability weight から weighted hit mass 一様上界を得られるようにした。
+   - concrete sample として `erdosFinitePrimitiveInput_two_five_kernelPrimePath_hitMass_le_one` を追加し、`sampleUnitFiniteKernel` を prime path route に適用して hit mass bound `<= 1` を確認した。
+3. 結論:
+   - finite kernel route についても branch/subconservative route と prime/dvd-monotone route の両方が揃った。
+   - `state -> WeightProvider -> WeightedPathFamily -> weightedHitMass <= C` の導線を、二つの source-control route で対称に使えるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.FiniteKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - 次は `FiniteKernel.CompatibleAt` のような compatibility alias / simp API を整理するか判断する。
+   - その後、状態 `n` と index `q` に意味を持たせる actual finite Markov transition skeleton へ進む。
+
+### 日時: 2026/05/10 10:24 JST (Phase Y finite kernel compatibility API)
+
+1. 目的:
+   - `review/review-023.md` の提案に従い、actual transition skeleton へ進む前に `FiniteKernel` 周辺の compatibility API を整理する。
+2. 実施:
+   - `FiniteKernel.providerAt_index` と `FiniteKernel.providerAt_weight` を `[simp]` 補題として追加した。
+   - `FiniteKernel.CompatibleAt K s F := (K.providerAt s).Compatible F` を追加した。
+   - `FiniteKernel.compatibleAt_iff_index_eq` を追加し、`CompatibleAt` が `K.index s = F.index` と同値であることを明示した。
+   - `FiniteKernel.applyAtToSourceControlledOfCompatibleAt` を追加し、`CompatibleAt` alias を使って `WeightedPathFamily` を生成できるようにした。
+   - `FiniteKernel.applyAtToSourceControlledOfCompatibleAt_index` を `[simp]` 補題として追加した。
+   - `FiniteKernel.weightedHitMass_le_const_of_subprob_applyAtToSourceControlledOfCompatibleAt` を追加し、`CompatibleAt` alias を使う theorem-facing bound を用意した。
+3. 結論:
+   - `(K.providerAt s).Compatible F` という長い仮定を `K.CompatibleAt s F` として扱えるようになった。
+   - compatibility の中身が `K.index s = F.index` であることも theorem 名から参照でき、今後 actual transition skeleton を追加する際の theorem 文が軽くなる。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.FiniteKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - 次は状態 `n` と index `q` に意味を持たせる actual finite Markov transition skeleton を検討する。
+   - 解析重みはまだ導入せず、まずは有限遷移 `state -> index -> next state` と provider / path family の接続だけを追加する。
+
+### 日時: 2026/05/10 10:31 JST (Phase Z finite transition kernel skeleton)
+
+1. 目的:
+   - `review/review-024.md` の提案に従い、解析重みを入れずに `state -> index -> next state` を持つ actual finite transition skeleton を追加する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/FiniteTransitionKernel.lean` を新規作成した。
+   - `FiniteTransitionKernel σ ι` を追加し、`index : σ -> Finset ι`, `next : σ -> ι -> σ`, `weight : σ -> ι -> ℚ`, `weight_nonneg : ∀ s i, i ∈ index s -> 0 <= weight s i` を package 化した。
+   - `FiniteTransitionKernel.toFiniteKernel` を追加し、遷移先 `next` を忘却して既存の `FiniteKernel` へ接続できるようにした。
+   - `providerAt`, `totalWeightAt`, `SubProbability`, `providerAt_subProbability`, `CompatibleAt`, `compatibleAt_iff_index_eq`, `applyAtToSourceControlled` を追加した。
+   - `FiniteTransitionKernel.weightedHitMass_le_const_of_subprob_applyAtToSourceControlled` を追加し、transition kernel から既存 weighted hit mass bound へ進めるようにした。
+   - `ErdosFinitePrimitiveInput.transitionBranchPrimePathFamilyAt` と `transitionBranchPrimePathFamilyAt_hitMass_le_const_of_subprob` を追加し、branch route に finite transition kernel state の重みを適用する wrapper を用意した。
+   - concrete sample として `sampleUnitTransitionKernel`, `sampleUnitTransitionKernel_subProbability`, `erdosFinitePrimitiveInput_two_five_transitionBranch_hitMass_le_one` を追加した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `FiniteTransitionKernel` を import し、公開集約へ載せた。
+3. 結論:
+   - `state -> index -> next state` を持つ finite transition skeleton が no-sorry で入った。
+   - 重み評価は `toFiniteKernel` 経由で既存の `FiniteKernel` / `WeightProvider` / `WeightedPathFamily` theorem に流せるようになった。
+   - まだ `next` の数論的意味や解析 weight は入れておらず、有限抽象層として分離した。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.FiniteTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build と aggregator build の成功を確認した。
+6. 次の課題:
+   - 次は transition kernel の prime path / dvd-monotone route wrapper を追加して branch route と対称化するか判断する。
+   - その後、状態を `ℕ`、index を除去因子として解釈する divisor / prime descent transition skeleton へ進む。
