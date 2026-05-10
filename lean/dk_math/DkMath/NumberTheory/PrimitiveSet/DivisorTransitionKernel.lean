@@ -111,6 +111,21 @@ theorem primeDescentStep_of_prime_label
   exact ⟨q, hqprime, T.index_dvd_source hqmem,
     T.next_eq_div_of_mem hqmem⟩
 
+/--
+A divisor transition whose label is a positive prime power is a one-step
+prime-power descent from the source to the recorded next state.
+-/
+theorem primePowerDescentStep_of_primePow_label
+    (T : DivisorTransitionKernel) {n q p k : ℕ}
+    (hqmem : q ∈ T.index n)
+    (hp : Nat.Prime p)
+    (hk : 0 < k)
+    (hq : q = p ^ k) :
+    PrimePowerDescentStep n (T.next n q) := by
+  refine ⟨p, k, hp, hk, ?_, ?_⟩
+  · simpa [← hq] using T.index_dvd_source hqmem
+  · simpa [hq] using T.next_eq_div_of_mem hqmem
+
 end DivisorTransitionKernel
 
 /-- A concrete divisor-transition sample at state `10` with labels `2` and `5`. -/
@@ -159,6 +174,22 @@ theorem sampleTenDivisorTransitionKernel_primeDescentStep_five :
     PrimeDescentStep 10 (sampleTenDivisorTransitionKernel.next 10 5) := by
   exact sampleTenDivisorTransitionKernel.primeDescentStep_of_prime_label
     (by simp [sampleTenDivisorTransitionKernel]) (by norm_num)
+
+/-- The sample transition label `2 = 2 ^ 1` is a prime-power descent step. -/
+theorem sampleTenDivisorTransitionKernel_primePowerDescentStep_two :
+    PrimePowerDescentStep 10 (sampleTenDivisorTransitionKernel.next 10 2) := by
+  exact sampleTenDivisorTransitionKernel.primePowerDescentStep_of_primePow_label
+    (n := 10) (q := 2) (p := 2) (k := 1)
+    (by simp [sampleTenDivisorTransitionKernel]) (by norm_num)
+    (by norm_num) (by norm_num)
+
+/-- The sample transition label `5 = 5 ^ 1` is a prime-power descent step. -/
+theorem sampleTenDivisorTransitionKernel_primePowerDescentStep_five :
+    PrimePowerDescentStep 10 (sampleTenDivisorTransitionKernel.next 10 5) := by
+  exact sampleTenDivisorTransitionKernel.primePowerDescentStep_of_primePow_label
+    (n := 10) (q := 5) (p := 5) (k := 1)
+    (by simp [sampleTenDivisorTransitionKernel]) (by norm_num)
+    (by norm_num) (by norm_num)
 
 /-- The sample divisor-transition kernel is sub-probability normalized. -/
 theorem sampleTenDivisorTransitionKernel_subProbability :

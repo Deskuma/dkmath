@@ -838,3 +838,27 @@ Archive
 6. 次の課題:
    - 次は prime-power label の接続を検討し、`q = p ^ k` の場合に `PrimePowerDescentStep n (T.next n q)` を得る skeleton を追加する。
    - その後、prime-power label が von Mangoldt 型 weight の channel になるよう、weight 層との境界を整理する。
+
+### 日時: 2026/05/10 11:32 JST (Phase AD prime-power label descent bridge)
+
+1. 目的:
+   - `review/review-028.md` の提案に従い、`DivisorTransitionKernel` の prime-power label を既存の `PrimePowerDescentStep` と接続する。
+2. 実施:
+   - `DivisorTransitionKernel.primePowerDescentStep_of_primePow_label` を追加した。
+   - 仮定 `q ∈ T.index n`, `Nat.Prime p`, `0 < k`, `q = p ^ k` から `PrimePowerDescentStep n (T.next n q)` を得るようにした。
+   - 証明では `index_dvd_source` を `q = p ^ k` で書き換えて `p ^ k ∣ n` を作り、`next_eq_div_of_mem` を同じ等式で書き換えて `T.next n q = n / p ^ k` を作った。
+   - concrete sample として `sampleTenDivisorTransitionKernel_primePowerDescentStep_two` と `sampleTenDivisorTransitionKernel_primePowerDescentStep_five` を追加した。
+3. 結論:
+   - divisor transition のうち label が positive prime power であるものを、一段の prime-power descent として扱えるようになった。
+   - `n -> n / q` skeleton は prime label と prime-power label の両方で既存 descent route に接続された。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `IsPrimePowerLabel q := ∃ p k, Nat.Prime p ∧ 0 < k ∧ q = p ^ k` のような finite predicate を切り出すか判断する。
+   - その後、prime-power label predicate を weight/channel 層へ渡すための theorem-facing API を整える。
