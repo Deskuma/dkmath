@@ -617,4 +617,48 @@ theorem sampleTenToyWeightChannelProvider_channelProviderAt_subProbability
     (sampleTenToyWeightChannelProvider.channelProviderAt n).SubProbability :=
   sampleTenToyWeightChannelProvider.channelProviderAt_subProbability n
 
+/--
+A source-controlled family whose index matches the toy-weighted sample channel
+at state `10`.
+-/
+def sampleTenToyWeightSourceControlledFamily :
+    SourceControlledChainFamily unitNatMassSpace ℕ where
+  index := ({2, 5} : Finset ℕ)
+  chain := fun q => ({q} : Finset ℕ)
+  chain_is_chain := by
+    intro q _hq a b ha hb
+    simp only [Finset.mem_singleton] at ha hb
+    subst a
+    subst b
+    exact Or.inl dvd_rfl
+  source := fun _ => 10
+  mass_le_source := by
+    intro _q _hq _h _hh
+    rfl
+
+/--
+The toy-weighted sample channel provider gives a concrete weighted hit mass
+bound by `1`.
+-/
+theorem sampleTenToyWeightChannelProvider_hitMass_le_one :
+    (sampleTenToyWeightChannelProvider.applyAtToSourceControlled 10
+      sampleTenToyWeightSourceControlledFamily
+      (by
+        change sampleTenToyWeightKernel.toDivisorTransitionKernel.index 10 =
+          sampleTenToyWeightSourceControlledFamily.index
+        simp [sampleTenToyWeightSourceControlledFamily])).weightedHitMass
+      ({2, 5} : Finset ℕ) ≤ 1 := by
+  exact sampleTenToyWeightChannelProvider
+    |>.weightedHitMass_le_const_applyAtToSourceControlled 10
+      sampleTenToyWeightSourceControlledFamily
+      (by
+        change sampleTenToyWeightKernel.toDivisorTransitionKernel.index 10 =
+          sampleTenToyWeightSourceControlledFamily.index
+        simp [sampleTenToyWeightSourceControlledFamily])
+      (primitiveOn_pair (by norm_num) (by norm_num))
+      (by norm_num)
+      (by
+        intro _q _hq
+        rfl)
+
 end DkMath.NumberTheory.PrimitiveSet

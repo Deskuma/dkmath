@@ -1072,3 +1072,29 @@ Archive
 6. 次の課題:
    - 次は toy weight provider が既存 weighted hit mass bound へ入る concrete theorem を追加するか判断する。
    - その後、`q = p ^ k` の witness に依存する von-Mangoldt-like finite weight の抽象化へ進む。
+
+### 日時: 2026/05/10 18:27 JST (Phase AM toy weight concrete hit mass bound)
+
+1. 目的:
+   - `review/review-037.md` の提案に従い、`sampleTenToyWeightChannelProvider` が既存 weighted hit mass bound に入ることを concrete theorem として確認する。
+2. 実施:
+   - `sampleTenToyWeightSourceControlledFamily` を追加し、state `10` の toy-weighted sample channel と同じ index `{2,5}` を持つ `SourceControlledChainFamily unitNatMassSpace ℕ` を作成した。
+   - chain は各 label `q` に singleton `{q}` を割り当て、source は常に `10` とした。
+   - `sampleTenToyWeightChannelProvider_hitMass_le_one` を追加し、toy-weighted channel provider を source-controlled family に適用した weighted hit mass が `{2,5}` 上で `<= 1` であることを示した。
+   - 証明では `PrimePowerChannelProvider.weightedHitMass_le_const_applyAtToSourceControlled` を呼び、compatibility は `sampleTenToyWeightKernel.toDivisorTransitionKernel.index 10 = sampleTenToyWeightSourceControlledFamily.index` に `change` して解いた。
+3. 結論:
+   - concrete toy weight は `PrimePowerChannelProvider` へ登録されるだけでなく、既存 weighted hit mass bound まで実際に通ることが確認できた。
+   - `withWeight -> ofKernel -> applyAtToSourceControlled -> weightedHitMass <= 1` の concrete route が no-sorry で閉じた。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - 初回 build では compatibility 証明を `simp` だけでは解けなかったため、`change` で index equality に落として修正した。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付き build の初回で compatibility goal が残った。
+   - `change` による明示化後、権限昇格付きで単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は witness-dependent toy weight へ進む前に、finite index 上の手定義 weight を一般化する constructor を検討する。
+   - その後、`IsPrimePowerLabel q` の witness `(p,k)` に依存する von-Mangoldt-like finite weight へ進む。
