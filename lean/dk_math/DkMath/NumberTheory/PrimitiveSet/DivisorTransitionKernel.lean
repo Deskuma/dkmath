@@ -11,6 +11,10 @@ import DkMath.NumberTheory.PrimitiveSet.PrimeDescent
 
 namespace DkMath.NumberTheory.PrimitiveSet
 
+/-- A natural-number label is a positive power of a prime. -/
+def IsPrimePowerLabel (q : ℕ) : Prop :=
+  ∃ p k, Nat.Prime p ∧ 0 < k ∧ q = p ^ k
+
 /--
 A finite transition kernel whose states and labels are natural numbers and whose
 transitions are divisor removal steps `n -> n / q`.
@@ -126,6 +130,18 @@ theorem primePowerDescentStep_of_primePow_label
   · simpa [← hq] using T.index_dvd_source hqmem
   · simpa [hq] using T.next_eq_div_of_mem hqmem
 
+/--
+A divisor transition whose label satisfies the prime-power label predicate is a
+one-step prime-power descent.
+-/
+theorem primePowerDescentStep_of_isPrimePowerLabel
+    (T : DivisorTransitionKernel) {n q : ℕ}
+    (hqmem : q ∈ T.index n)
+    (hqpp : IsPrimePowerLabel q) :
+    PrimePowerDescentStep n (T.next n q) := by
+  rcases hqpp with ⟨p, k, hp, hk, hq⟩
+  exact T.primePowerDescentStep_of_primePow_label hqmem hp hk hq
+
 end DivisorTransitionKernel
 
 /-- A concrete divisor-transition sample at state `10` with labels `2` and `5`. -/
@@ -163,6 +179,16 @@ theorem sampleTenDivisorTransitionKernel_next_five :
     sampleTenDivisorTransitionKernel.next 10 5 = 2 := by
   norm_num [sampleTenDivisorTransitionKernel]
 
+/-- The sample label `2` is a prime-power label. -/
+theorem sampleTenDivisorTransitionKernel_isPrimePowerLabel_two :
+    IsPrimePowerLabel 2 := by
+  exact ⟨2, 1, by norm_num, by norm_num, by norm_num⟩
+
+/-- The sample label `5` is a prime-power label. -/
+theorem sampleTenDivisorTransitionKernel_isPrimePowerLabel_five :
+    IsPrimePowerLabel 5 := by
+  exact ⟨5, 1, by norm_num, by norm_num, by norm_num⟩
+
 /-- The sample transition label `2` is a prime descent step from `10` to `5`. -/
 theorem sampleTenDivisorTransitionKernel_primeDescentStep_two :
     PrimeDescentStep 10 (sampleTenDivisorTransitionKernel.next 10 2) := by
@@ -178,18 +204,16 @@ theorem sampleTenDivisorTransitionKernel_primeDescentStep_five :
 /-- The sample transition label `2 = 2 ^ 1` is a prime-power descent step. -/
 theorem sampleTenDivisorTransitionKernel_primePowerDescentStep_two :
     PrimePowerDescentStep 10 (sampleTenDivisorTransitionKernel.next 10 2) := by
-  exact sampleTenDivisorTransitionKernel.primePowerDescentStep_of_primePow_label
-    (n := 10) (q := 2) (p := 2) (k := 1)
-    (by simp [sampleTenDivisorTransitionKernel]) (by norm_num)
-    (by norm_num) (by norm_num)
+  exact sampleTenDivisorTransitionKernel.primePowerDescentStep_of_isPrimePowerLabel
+    (by simp [sampleTenDivisorTransitionKernel])
+    sampleTenDivisorTransitionKernel_isPrimePowerLabel_two
 
 /-- The sample transition label `5 = 5 ^ 1` is a prime-power descent step. -/
 theorem sampleTenDivisorTransitionKernel_primePowerDescentStep_five :
     PrimePowerDescentStep 10 (sampleTenDivisorTransitionKernel.next 10 5) := by
-  exact sampleTenDivisorTransitionKernel.primePowerDescentStep_of_primePow_label
-    (n := 10) (q := 5) (p := 5) (k := 1)
-    (by simp [sampleTenDivisorTransitionKernel]) (by norm_num)
-    (by norm_num) (by norm_num)
+  exact sampleTenDivisorTransitionKernel.primePowerDescentStep_of_isPrimePowerLabel
+    (by simp [sampleTenDivisorTransitionKernel])
+    sampleTenDivisorTransitionKernel_isPrimePowerLabel_five
 
 /-- The sample divisor-transition kernel is sub-probability normalized. -/
 theorem sampleTenDivisorTransitionKernel_subProbability :

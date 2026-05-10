@@ -862,3 +862,28 @@ Archive
 6. 次の課題:
    - 次は `IsPrimePowerLabel q := ∃ p k, Nat.Prime p ∧ 0 < k ∧ q = p ^ k` のような finite predicate を切り出すか判断する。
    - その後、prime-power label predicate を weight/channel 層へ渡すための theorem-facing API を整える。
+
+### 日時: 2026/05/10 11:38 JST (Phase AE prime-power label predicate)
+
+1. 目的:
+   - `review/review-029.md` の提案に従い、prime-power label を直接 `(p,k)` で渡す API から、後続層が扱いやすい predicate API へ切り出す。
+2. 実施:
+   - `IsPrimePowerLabel q := ∃ p k, Nat.Prime p ∧ 0 < k ∧ q = p ^ k` を追加した。
+   - `DivisorTransitionKernel.primePowerDescentStep_of_isPrimePowerLabel` を追加し、`q ∈ T.index n` と `IsPrimePowerLabel q` から `PrimePowerDescentStep n (T.next n q)` を得られるようにした。
+   - 既存の `primePowerDescentStep_of_primePow_label` は witness `(p,k)` を明示する低レベル補題として残し、新 theorem はそれを unpack して再利用する形にした。
+   - concrete sample として `sampleTenDivisorTransitionKernel_isPrimePowerLabel_two` と `sampleTenDivisorTransitionKernel_isPrimePowerLabel_five` を追加した。
+   - sample の prime-power descent theorem を、新しい `IsPrimePowerLabel` wrapper 経由に切り替えた。
+3. 結論:
+   - prime-power label の認識を theorem 呼び出し側で `(p,k)` に展開しなくても扱えるようになった。
+   - 後続の channel / weight 層は、まず `IsPrimePowerLabel q` だけを要求する形で設計できる。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `PrimePowerIndexOn T n := ∀ q ∈ T.index n, IsPrimePowerLabel q` のような index-level predicate を追加するか判断する。
+   - その後、prime-power index predicate を finite transition kernel の channel / weight API に接続する。
