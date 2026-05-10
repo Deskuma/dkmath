@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.PrimitiveSet.FiniteTransitionKernel
+import DkMath.NumberTheory.PrimitiveSet.PrimeDescent
 
 #print "file: DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel"
 
@@ -98,6 +99,18 @@ theorem next_dvd_source
   rw [T.next_eq_div_of_mem hq]
   exact Nat.div_dvd_of_dvd (T.index_dvd_source hq)
 
+/--
+A divisor transition whose label is prime is exactly a one-step prime descent
+from the source to the recorded next state.
+-/
+theorem primeDescentStep_of_prime_label
+    (T : DivisorTransitionKernel) {n q : ℕ}
+    (hqmem : q ∈ T.index n)
+    (hqprime : Nat.Prime q) :
+    PrimeDescentStep n (T.next n q) := by
+  exact ⟨q, hqprime, T.index_dvd_source hqmem,
+    T.next_eq_div_of_mem hqmem⟩
+
 end DivisorTransitionKernel
 
 /-- A concrete divisor-transition sample at state `10` with labels `2` and `5`. -/
@@ -134,6 +147,18 @@ theorem sampleTenDivisorTransitionKernel_next_two :
 theorem sampleTenDivisorTransitionKernel_next_five :
     sampleTenDivisorTransitionKernel.next 10 5 = 2 := by
   norm_num [sampleTenDivisorTransitionKernel]
+
+/-- The sample transition label `2` is a prime descent step from `10` to `5`. -/
+theorem sampleTenDivisorTransitionKernel_primeDescentStep_two :
+    PrimeDescentStep 10 (sampleTenDivisorTransitionKernel.next 10 2) := by
+  exact sampleTenDivisorTransitionKernel.primeDescentStep_of_prime_label
+    (by simp [sampleTenDivisorTransitionKernel]) (by norm_num)
+
+/-- The sample transition label `5` is a prime descent step from `10` to `2`. -/
+theorem sampleTenDivisorTransitionKernel_primeDescentStep_five :
+    PrimeDescentStep 10 (sampleTenDivisorTransitionKernel.next 10 5) := by
+  exact sampleTenDivisorTransitionKernel.primeDescentStep_of_prime_label
+    (by simp [sampleTenDivisorTransitionKernel]) (by norm_num)
 
 /-- The sample divisor-transition kernel is sub-probability normalized. -/
 theorem sampleTenDivisorTransitionKernel_subProbability :
