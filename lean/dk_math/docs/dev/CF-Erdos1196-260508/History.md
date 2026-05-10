@@ -1244,3 +1244,25 @@ Archive
 6. 次の課題:
    - 次は `PrimeWitnessDependentWeight` route を使った concrete weighted hit mass theorem を整理するか判断する。
    - その後、`PrimePowerLabel` 構造体化へ進むか、`q : ℕ` label + predicate route を継続するか判断する。
+
+### 日時: 2026/05/11 05:28 JST (Phase AT prime witness dependent concrete bound alias)
+
+1. 目的:
+   - `review/review-044.md` の提案に従い、`PrimeWitnessDependentWeight` route で provider 化された toy weight が concrete weighted hit mass bound へ入ることを theorem 名から読めるようにする。
+2. 実施:
+   - `sampleTenPrimeWitnessDependentWeight_hitMass_le_one` を追加した。
+   - 内容は既存の `sampleTenToyWeightChannelProvider_hitMass_le_one` と同じ bound で、`sampleTenToyWeightChannelProvider` がすでに `ofPrimeWitnessDependentWeight` 経由で作られていることを反映した alias theorem とした。
+3. 結論:
+   - `PrimeWitnessDependentWeight -> ofPrimeWitnessDependentWeight -> applyAtToSourceControlled -> weightedHitMass <= 1` の concrete route が theorem 名として明示された。
+   - 実装上は既存 proof を再利用し、余分な構造変更は加えなかった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `PrimePowerLabel` 構造体化へ進むか、`q : ℕ` label + predicate route を継続するか判断する。
+   - 構造体化する場合は既存 `DivisorTransitionKernel` との橋を薄く作る必要がある。

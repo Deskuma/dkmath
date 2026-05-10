@@ -907,4 +907,18 @@ theorem sampleTenToyWeightChannelProvider_hitMass_le_one :
         intro _q _hq
         rfl)
 
+/--
+The same concrete bound, named for the prime-witness-dependent constructor
+route.
+-/
+theorem sampleTenPrimeWitnessDependentWeight_hitMass_le_one :
+    (sampleTenToyWeightChannelProvider.applyAtToSourceControlled 10
+      sampleTenToyWeightSourceControlledFamily
+      (by
+        change sampleTenToyWeightKernel.toDivisorTransitionKernel.index 10 =
+          sampleTenToyWeightSourceControlledFamily.index
+        simp [sampleTenToyWeightSourceControlledFamily])).weightedHitMass
+      ({2, 5} : Finset ℕ) ≤ 1 :=
+  sampleTenToyWeightChannelProvider_hitMass_le_one
+
 end DkMath.NumberTheory.PrimitiveSet
