@@ -1486,3 +1486,27 @@ Archive
 6. 次の課題:
    - Phase BD として、ratio-style weight の sub-probability を示す十分条件を設計する。
    - 典型的には `Σ_q A(p(q)) ≤ B(n)` から `Σ_q A(p(q))/B(n) ≤ 1` を得る finite lemma を検討する。
+
+### 日時: 2026/05/12 01:51 JST (Phase BD ratio budget sub-probability)
+
+1. 目的:
+   - `review/review-054.md` の提案に従い、ratio-style weight `c(n,p)=A(p)/B(n)` の sub-probability を示す十分条件を追加する。
+2. 実施:
+   - `PrimePowerWitnessProvider.RatioBaseWeightBudget` を追加し、各 state `n` で selected numerator の和 `Σ_q A(p(q))` が `B n` 以下であることを表す predicate とした。
+   - `PrimePowerWitnessProvider.baseWeightSubProbability_of_ratioBudget` を追加し、`∀ p, 0 ≤ A p`, `∀ n, 0 < B n`, `RatioBaseWeightBudget W A B` から `W.BaseWeightSubProbability (ratioBasePrimeWeight A B) ...` を得る theorem を証明した。
+   - 証明では `weightOfBase` と `ratioBasePrimeWeight` を index 上で展開し、`Finset.sum_div` と `div_le_iff₀` で `Σ_q A(p(q))/B(n) ≤ 1` へ接続した。
+3. 結論:
+   - ratio-style toy weight は、非負性だけでなく、budget 条件から sub-probability route へ進めるようになった。
+   - これにより `A(p)/B(n)` 型 weight が `BaseWeightNonneg` と `BaseWeightSubProbability` の両方を満たすための有限 skeleton が整った。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 初回 proof では `BaseWeightSubProbability` の定義展開後、すでに provider-level の `SubProbability` まで簡約されていたため、高レベル `SubProbability` を `unfold` しようとして失敗した。
+   - `Finset.sum_div` は和の項が明示的な除算形でないと適用できなかったため、先に `Finset.sum_congr` で `weightOfBase` を ratio 形へ変換してから `Finset.sum_div` を使う二段 proof にした。
+6. 次の課題:
+   - Phase BE として、ratio-style weight の hit mass bound alias を追加する。
+   - `hA`, `hB`, `RatioBaseWeightBudget` から `baseWeight_hitMass_le_const` へ直接進める theorem を整備する。

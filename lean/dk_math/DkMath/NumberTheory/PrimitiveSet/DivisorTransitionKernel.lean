@@ -578,6 +578,74 @@ theorem baseWeightNonneg_of_ratioBasePrimeWeight
   W.baseWeightNonneg_of_basePrimeToyWeight
     (ratioBasePrimeWeight_basePrimeToyWeight A B hA hB)
 
+/--
+Budget condition for a ratio-style base-prime weight: at each state, the sum of
+the selected numerators is bounded by the denominator.
+-/
+def RatioBaseWeightBudget
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (A B : ℕ → ℚ) : Prop :=
+  ∀ n,
+    (T.toDivisorTransitionKernel.index n).sum
+      (fun q =>
+        if hq : q ∈ T.toDivisorTransitionKernel.index n then
+          A ((W.label n q hq).p)
+        else
+          0) ≤ B n
+
+/--
+The ratio-style budget condition supplies sub-probability normalization for the
+witness-provider weight.
+-/
+theorem baseWeightSubProbability_of_ratioBudget
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (A B : ℕ → ℚ)
+    (hA : ∀ p, 0 ≤ A p)
+    (hB : ∀ n, 0 < B n)
+    (hbudget : W.RatioBaseWeightBudget A B) :
+    W.BaseWeightSubProbability (ratioBasePrimeWeight A B)
+      (W.baseWeightNonneg_of_ratioBasePrimeWeight A B hA hB) := by
+  intro n
+  unfold DivisorTransitionKernel.toFiniteTransitionKernel
+    FiniteTransitionKernel.toFiniteKernel FiniteKernel.providerAt
+    WeightProvider.SubProbability WeightProvider.totalWeight
+  dsimp [PrimePowerDivisorTransitionKernel.withWeight]
+  have hsum :
+      (T.toDivisorTransitionKernel.index n).sum
+          (fun q => W.weightOfBase (ratioBasePrimeWeight A B) n q) =
+        ((T.toDivisorTransitionKernel.index n).sum
+          (fun q =>
+            if hq : q ∈ T.toDivisorTransitionKernel.index n then
+              A ((W.label n q hq).p)
+            else
+              0)) / B n := by
+    calc
+      (T.toDivisorTransitionKernel.index n).sum
+          (fun q => W.weightOfBase (ratioBasePrimeWeight A B) n q)
+          =
+        (T.toDivisorTransitionKernel.index n).sum
+          (fun q =>
+            (if hq : q ∈ T.toDivisorTransitionKernel.index n then
+              A ((W.label n q hq).p)
+            else
+              0) / B n) := by
+            refine Finset.sum_congr rfl ?_
+            intro q hq
+            simp [weightOfBase, ratioBasePrimeWeight, hq]
+      _ =
+        ((T.toDivisorTransitionKernel.index n).sum
+          (fun q =>
+            if hq : q ∈ T.toDivisorTransitionKernel.index n then
+              A ((W.label n q hq).p)
+            else
+              0)) / B n := by
+            rw [Finset.sum_div]
+  rw [hsum]
+  rw [div_le_iff₀ (hB n)]
+  simpa using hbudget n
+
 end PrimePowerWitnessProvider
 
 /--
