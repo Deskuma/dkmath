@@ -1342,3 +1342,26 @@ Archive
 6. 次の課題:
    - Phase AX として `PrimePowerChannelProvider.ofWitnessProviderWeight` を追加し、witness provider と base-prime weight から直接 `PrimePowerChannelProvider` を作る constructor を整備する。
    - sample route でも `weightOfBase` 由来 weight が channel provider と hit mass bound に進むことを確認する。
+
+### 日時: 2026/05/11 12:45 JST (Phase AX witness-provider weight constructor)
+
+1. 目的:
+   - `review/review-048.md` の提案に従い、`PrimePowerWitnessProvider` と base-prime weight `c n p` から直接 `PrimePowerChannelProvider` を作る標準 constructor を追加する。
+2. 実施:
+   - `PrimePowerChannelProvider.ofWitnessProviderWeight` を追加した。
+   - 内部では `W.weightOfBase c` と `W.weightOfBase_primeWitnessDependent c hc_nonneg` を使い、既存の `ofPrimeWitnessDependentWeight` に接続した。
+   - `[simp]` 補題として `ofWitnessProviderWeight_kernel`, `ofWitnessProviderWeight_channelProviderAt_index`, `ofWitnessProviderWeight_channelProviderAt_weight` を追加した。
+3. 結論:
+   - `base-prime weight c -> W.weightOfBase c -> PrimeWitnessDependentWeight -> PrimePowerChannelProvider` の導線が一つの constructor にまとまった。
+   - witness-provider-driven weight を後続の channel-provider API へ渡す標準入口ができた。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 今回の Lean 実装自体は初回の権限昇格付き build で通った。
+6. 次の課題:
+   - Phase AY として sample の `sampleTenPrimePowerWitnessProvider` と `sampleTenToyPrimeBaseWeight` から `PrimePowerChannelProvider` を作り、hit mass bound まで接続する。
+   - 必要なら `ofWitnessProviderWeight` route の concrete theorem 名を追加し、手定義 toy weight route と区別して読めるようにする。

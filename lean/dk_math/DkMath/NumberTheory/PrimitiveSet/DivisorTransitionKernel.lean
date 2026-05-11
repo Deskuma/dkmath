@@ -576,6 +576,26 @@ def ofPrimeWitnessDependentWeight
   ofVonMangoldtLikeWeight T w
     (T.vonMangoldtLikeWeight_of_primeWitnessDependent hw) hw_subprob
 
+/--
+Package a base-prime weight through a witness provider as a prime-power channel
+provider.
+-/
+def ofWitnessProviderWeight
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (c : ℕ → ℕ → ℚ)
+    (hc_nonneg :
+      ∀ n q (hq : q ∈ T.toDivisorTransitionKernel.index n),
+        0 ≤ c n ((W.label n q hq).p))
+    (hw_subprob :
+      (T.withWeight (W.weightOfBase c)
+        (T.vonMangoldtLikeWeight_nonneg
+          (T.vonMangoldtLikeWeight_of_primeWitnessDependent
+            (W.weightOfBase_primeWitnessDependent c hc_nonneg)))).SubProbability) :
+    PrimePowerChannelProvider :=
+  ofPrimeWitnessDependentWeight T (W.weightOfBase c) c
+    (W.weightOfBase_primeWitnessDependent c hc_nonneg) hw_subprob
+
 @[simp] theorem ofKernelWithWeight_kernel
     (T : PrimePowerDivisorTransitionKernel)
     (w : ℕ → ℕ → ℚ)
@@ -606,6 +626,24 @@ def ofPrimeWitnessDependentWeight
       T.withWeight w
         (T.vonMangoldtLikeWeight_nonneg
           (T.vonMangoldtLikeWeight_of_primeWitnessDependent hw)) := rfl
+
+@[simp] theorem ofWitnessProviderWeight_kernel
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (c : ℕ → ℕ → ℚ)
+    (hc_nonneg :
+      ∀ n q (hq : q ∈ T.toDivisorTransitionKernel.index n),
+        0 ≤ c n ((W.label n q hq).p))
+    (hw_subprob :
+      (T.withWeight (W.weightOfBase c)
+        (T.vonMangoldtLikeWeight_nonneg
+          (T.vonMangoldtLikeWeight_of_primeWitnessDependent
+            (W.weightOfBase_primeWitnessDependent c hc_nonneg)))).SubProbability) :
+    (ofWitnessProviderWeight W c hc_nonneg hw_subprob).kernel =
+      T.withWeight (W.weightOfBase c)
+        (T.vonMangoldtLikeWeight_nonneg
+          (T.vonMangoldtLikeWeight_of_primeWitnessDependent
+            (W.weightOfBase_primeWitnessDependent c hc_nonneg))) := rfl
 
 /-- The prime-power channel provider emitted at state `n`. -/
 def providerAt (P : PrimePowerChannelProvider) (n : ℕ) : WeightProvider ℕ :=
@@ -679,6 +717,38 @@ def channelProviderAt (P : PrimePowerChannelProvider) (n : ℕ) :
     (n : ℕ) :
     ((ofPrimeWitnessDependentWeight T w c hw hw_subprob).channelProviderAt n).weight =
       w n := rfl
+
+@[simp] theorem ofWitnessProviderWeight_channelProviderAt_index
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (c : ℕ → ℕ → ℚ)
+    (hc_nonneg :
+      ∀ n q (hq : q ∈ T.toDivisorTransitionKernel.index n),
+        0 ≤ c n ((W.label n q hq).p))
+    (hw_subprob :
+      (T.withWeight (W.weightOfBase c)
+        (T.vonMangoldtLikeWeight_nonneg
+          (T.vonMangoldtLikeWeight_of_primeWitnessDependent
+            (W.weightOfBase_primeWitnessDependent c hc_nonneg)))).SubProbability)
+    (n : ℕ) :
+    ((ofWitnessProviderWeight W c hc_nonneg hw_subprob).channelProviderAt n).index =
+      T.toDivisorTransitionKernel.index n := rfl
+
+@[simp] theorem ofWitnessProviderWeight_channelProviderAt_weight
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (c : ℕ → ℕ → ℚ)
+    (hc_nonneg :
+      ∀ n q (hq : q ∈ T.toDivisorTransitionKernel.index n),
+        0 ≤ c n ((W.label n q hq).p))
+    (hw_subprob :
+      (T.withWeight (W.weightOfBase c)
+        (T.vonMangoldtLikeWeight_nonneg
+          (T.vonMangoldtLikeWeight_of_primeWitnessDependent
+            (W.weightOfBase_primeWitnessDependent c hc_nonneg)))).SubProbability)
+    (n : ℕ) :
+    ((ofWitnessProviderWeight W c hc_nonneg hw_subprob).channelProviderAt n).weight =
+      W.weightOfBase c n := rfl
 
 /-- Packaged channel providers emit sub-probability providers at every state. -/
 theorem providerAt_subProbability (P : PrimePowerChannelProvider) (n : ℕ) :
