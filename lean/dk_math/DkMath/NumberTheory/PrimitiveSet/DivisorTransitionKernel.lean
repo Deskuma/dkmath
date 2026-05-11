@@ -974,6 +974,36 @@ theorem baseWeight_hitMass_le_const
   W.weightOfBase_hitMass_le_const c hc_nonneg hw_subprob
     n F hcompat hS hC hsource
 
+/--
+Hit-mass bound for a ratio-style witness-provider base-prime weight.
+-/
+theorem ratioBaseWeight_hitMass_le_const
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (A B : ℕ → ℚ)
+    (hA : ∀ p, 0 ≤ A p)
+    (hB : ∀ n, 0 < B n)
+    (hbudget : W.RatioBaseWeightBudget A B)
+    {M : DkMath.CosmicFormula.Mass.MassSpace ℕ} {S : Finset ℕ}
+    (n : ℕ) (F : SourceControlledChainFamily M ℕ)
+    (hcompat :
+      (PrimePowerChannelProvider.ofWitnessProviderWeight W
+        (ratioBasePrimeWeight A B)
+        (W.baseWeightNonneg_of_ratioBasePrimeWeight A B hA hB)
+        (W.baseWeightSubProbability_of_ratioBudget A B hA hB hbudget))
+          |>.kernel.CompatibleAt n F)
+    (hS : PrimitiveOn S) {C : ℚ} (hC : 0 ≤ C)
+    (hsource : ∀ q ∈ F.index, M.μ (F.source q) ≤ C) :
+    ((PrimePowerChannelProvider.ofWitnessProviderWeight W
+        (ratioBasePrimeWeight A B)
+        (W.baseWeightNonneg_of_ratioBasePrimeWeight A B hA hB)
+        (W.baseWeightSubProbability_of_ratioBudget A B hA hB hbudget))
+          |>.applyAtToSourceControlled n F hcompat).weightedHitMass S ≤ C :=
+  W.baseWeight_hitMass_le_const (ratioBasePrimeWeight A B)
+    (W.baseWeightNonneg_of_ratioBasePrimeWeight A B hA hB)
+    (W.baseWeightSubProbability_of_ratioBudget A B hA hB hbudget)
+    n F hcompat hS hC hsource
+
 end PrimePowerWitnessProvider
 
 /-- A concrete divisor-transition sample at state `10` with labels `2` and `5`. -/

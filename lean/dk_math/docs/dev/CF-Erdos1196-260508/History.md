@@ -1510,3 +1510,26 @@ Archive
 6. 次の課題:
    - Phase BE として、ratio-style weight の hit mass bound alias を追加する。
    - `hA`, `hB`, `RatioBaseWeightBudget` から `baseWeight_hitMass_le_const` へ直接進める theorem を整備する。
+
+### 日時: 2026/05/12 03:15 JST (Phase BE ratio-style hit mass bound alias)
+
+1. 目的:
+   - `review/review-055.md` の提案に従い、ratio-style weight `A(p)/B(n)` から weighted hit mass bound へ直接進む theorem-facing alias を追加する。
+2. 実施:
+   - `PrimePowerWitnessProvider.ratioBaseWeight_hitMass_le_const` を追加した。
+   - 仮定として `∀ p, 0 ≤ A p`, `∀ n, 0 < B n`, `W.RatioBaseWeightBudget A B` を受け取り、既存の `baseWeight_hitMass_le_const` へ接続した。
+   - 内部では `W.baseWeightNonneg_of_ratioBasePrimeWeight A B hA hB` と `W.baseWeightSubProbability_of_ratioBudget A B hA hB hbudget` を使って、ratio-style route の非負性・sub-probability 条件を自動供給する形にした。
+3. 結論:
+   - `A(p)/B(n)` 型の finite toy weight は、分子非負・分母正・budget 条件から、直接 `weightedHitMass ≤ C` へ進めるようになった。
+   - ratio-style route が theorem 名として `ratioBaseWeight_hitMass_le_const` に固定された。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - Lean 実装自体は初回の権限昇格付き build で通った。
+6. 次の課題:
+   - Phase BF として、既存 sample に対して ratio-style toy functions `A`, `B` を具体化し、`RatioBaseWeightBudget` と hit mass bound を concrete に通す。
+   - その後、有理 toy model から実数/log route へ進む前に、追加の theorem-facing alias が必要か判断する。
