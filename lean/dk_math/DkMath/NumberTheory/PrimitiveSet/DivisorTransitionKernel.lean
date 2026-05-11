@@ -469,6 +469,49 @@ theorem primePowerDescentStep
   T.toDivisorTransitionKernel.primePowerDescentStep_of_isPrimePowerLabel
     hq (W.isPrimePowerLabel hq)
 
+/--
+Turn a base-prime weight `c n p` into a label weight by reading the chosen
+prime-power witness of each indexed label.
+-/
+def weightOfBase
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (c : ℕ → ℕ → ℚ) :
+    ℕ → ℕ → ℚ :=
+  fun n q =>
+    if hq : q ∈ T.toDivisorTransitionKernel.index n then
+      c n ((W.label n q hq).p)
+    else
+      0
+
+@[simp] theorem weightOfBase_of_mem
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (c : ℕ → ℕ → ℚ) {n q : ℕ}
+    (hq : q ∈ T.toDivisorTransitionKernel.index n) :
+    W.weightOfBase c n q = c n ((W.label n q hq).p) := by
+  simp [weightOfBase, hq]
+
+/--
+Weights built from a witness provider and a nonnegative base-prime weight are
+prime-witness-dependent weights.
+-/
+theorem weightOfBase_primeWitnessDependent
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (c : ℕ → ℕ → ℚ)
+    (hc_nonneg :
+      ∀ n q (hq : q ∈ T.toDivisorTransitionKernel.index n),
+        0 ≤ c n ((W.label n q hq).p)) :
+    T.PrimeWitnessDependentWeight (W.weightOfBase c) c := by
+  intro n q hq
+  let L := W.label n q hq
+  refine ⟨L.p, L.k, L.prime, L.k_pos, ?_, ?_, ?_⟩
+  · exact (W.label_q n q hq).symm.trans L.eq_pow
+  · exact W.weightOfBase_of_mem c hq
+  · rw [W.weightOfBase_of_mem c hq]
+    exact hc_nonneg n q hq
+
 end PrimePowerWitnessProvider
 
 /--
@@ -925,6 +968,31 @@ def sampleTenToyWeight (n q : ℕ) : ℚ :=
 /-- The sample toy base weight assigns weight `1` to prime base `2` at state `10`. -/
 def sampleTenToyPrimeBaseWeight (n p : ℕ) : ℚ :=
   if n = 10 ∧ p = 2 then 1 else 0
+
+/--
+The sample witness provider turns the sample base-prime weight into a
+prime-witness-dependent label weight.
+-/
+theorem sampleTenPrimePowerWitnessProvider_weightOfBase_primeWitnessDependent :
+    sampleTenPrimePowerDivisorTransitionKernel.PrimeWitnessDependentWeight
+      (sampleTenPrimePowerWitnessProvider.weightOfBase sampleTenToyPrimeBaseWeight)
+      sampleTenToyPrimeBaseWeight := by
+  exact sampleTenPrimePowerWitnessProvider.weightOfBase_primeWitnessDependent
+    sampleTenToyPrimeBaseWeight
+    (by
+      intro n q hq
+      by_cases hn : n = 10
+      · subst n
+        simp only [sampleTenPrimePowerDivisorTransitionKernel,
+          sampleTenDivisorTransitionKernel, if_true, Finset.mem_insert,
+          Finset.mem_singleton] at hq
+        rcases hq with rfl | rfl
+        · norm_num [sampleTenPrimePowerWitnessProvider,
+            samplePrimePowerLabel_two, sampleTenToyPrimeBaseWeight]
+        · norm_num [sampleTenPrimePowerWitnessProvider,
+            samplePrimePowerLabel_five, sampleTenToyPrimeBaseWeight]
+      · simp [sampleTenPrimePowerDivisorTransitionKernel,
+          sampleTenDivisorTransitionKernel, hn] at hq)
 
 /-- The sample toy weight is nonnegative on the sample channel index. -/
 theorem sampleTenToyWeight_nonneg :

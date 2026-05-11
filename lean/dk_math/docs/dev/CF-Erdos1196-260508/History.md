@@ -1317,3 +1317,28 @@ Archive
 6. 次の課題:
    - Phase AW として `PrimePowerWitnessProvider.weightOfBase` を追加し、base-prime weight `c : ℕ → ℕ → ℚ` から label weight `w : ℕ → ℕ → ℚ` を作る。
    - 続けて `weightOfBase_primeWitnessDependent` を証明し、既存 `PrimeWitnessDependentWeight` route へ接続する。
+
+### 日時: 2026/05/11 06:03 JST (Phase AW weightOfBase)
+
+1. 目的:
+   - `review/review-047.md` の提案に従い、`PrimePowerWitnessProvider` が選ぶ base prime `p` を使って、base-prime weight `c n p` から label weight `w n q` を作る。
+2. 実施:
+   - `PrimePowerWitnessProvider.weightOfBase` を追加し、`q ∈ T.toDivisorTransitionKernel.index n` のとき `c n ((W.label n q hq).p)`、それ以外は `0` を返す label weight を定義した。
+   - `[simp]` 補題 `PrimePowerWitnessProvider.weightOfBase_of_mem` を追加し、indexed label 上で `weightOfBase` が選択 witness の base prime weight に簡約されるようにした。
+   - `PrimePowerWitnessProvider.weightOfBase_primeWitnessDependent` を追加し、非負な base-prime weight から `T.PrimeWitnessDependentWeight (W.weightOfBase c) c` を得る一般 theorem を証明した。
+   - sample theorem として `sampleTenPrimePowerWitnessProvider_weightOfBase_primeWitnessDependent` を追加した。
+3. 結論:
+   - `PrimePowerWitnessProvider` で選んだ witness の base prime `p` から、一般の label weight `w(n,q)=c(n,p)` を作れるようになった。
+   - 既存の `PrimeWitnessDependentWeight -> ofPrimeWitnessDependentWeight` route に、witness-provider-driven weight が no-sorry で接続された。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 初回実装では `PrimeWitnessDependentWeight` の非負性結論が `0 ≤ W.weightOfBase c n q` である一方、仮定は `0 ≤ c n ((W.label n q hq).p)` だったため、`weightOfBase_of_mem` による明示的な書き換えが必要だった。
+   - sample の非負性証明では `samplePrimePowerLabel_two/five` を unfold して `p` field を見せる必要があった。
+6. 次の課題:
+   - Phase AX として `PrimePowerChannelProvider.ofWitnessProviderWeight` を追加し、witness provider と base-prime weight から直接 `PrimePowerChannelProvider` を作る constructor を整備する。
+   - sample route でも `weightOfBase` 由来 weight が channel provider と hit mass bound に進むことを確認する。
