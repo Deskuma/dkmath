@@ -787,6 +787,39 @@ theorem weightedHitMass_le_const_applyAtToSourceControlled
 
 end PrimePowerChannelProvider
 
+namespace PrimePowerWitnessProvider
+
+/--
+Hit-mass bound for a channel provider built from a witness-provider base-prime
+weight.
+-/
+theorem weightOfBase_hitMass_le_const
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (c : ℕ → ℕ → ℚ)
+    (hc_nonneg :
+      ∀ n q (hq : q ∈ T.toDivisorTransitionKernel.index n),
+        0 ≤ c n ((W.label n q hq).p))
+    (hw_subprob :
+      (T.withWeight (W.weightOfBase c)
+        (T.vonMangoldtLikeWeight_nonneg
+          (T.vonMangoldtLikeWeight_of_primeWitnessDependent
+            (W.weightOfBase_primeWitnessDependent c hc_nonneg)))).SubProbability)
+    {M : DkMath.CosmicFormula.Mass.MassSpace ℕ} {S : Finset ℕ}
+    (n : ℕ) (F : SourceControlledChainFamily M ℕ)
+    (hcompat :
+      (PrimePowerChannelProvider.ofWitnessProviderWeight W c hc_nonneg
+        hw_subprob).kernel.CompatibleAt n F)
+    (hS : PrimitiveOn S) {C : ℚ} (hC : 0 ≤ C)
+    (hsource : ∀ q ∈ F.index, M.μ (F.source q) ≤ C) :
+    ((PrimePowerChannelProvider.ofWitnessProviderWeight W c hc_nonneg
+      hw_subprob).applyAtToSourceControlled n F hcompat).weightedHitMass S ≤ C := by
+  exact (PrimePowerChannelProvider.ofWitnessProviderWeight W c hc_nonneg
+    hw_subprob).weightedHitMass_le_const_applyAtToSourceControlled
+      n F hcompat hS hC hsource
+
+end PrimePowerWitnessProvider
+
 /-- A concrete divisor-transition sample at state `10` with labels `2` and `5`. -/
 def sampleTenDivisorTransitionKernel : DivisorTransitionKernel where
   index := fun n => if n = 10 then ({2, 5} : Finset ℕ) else ∅

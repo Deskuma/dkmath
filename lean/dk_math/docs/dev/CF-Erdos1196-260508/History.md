@@ -1392,3 +1392,26 @@ Archive
 6. 次の課題:
    - Phase AZ として、`ofWitnessProviderWeight` route の一般 theorem-facing bound alias を追加するか判断する。
    - その後、解析風 weight または `PrimePowerLabel` index kernel の別ルートへ進むかを検討する。
+
+### 日時: 2026/05/11 13:15 JST (Phase AZ witness-provider weight hit-mass alias)
+
+1. 目的:
+   - `review/review-050.md` の提案に従い、`ofWitnessProviderWeight` route で作った channel provider の weighted hit mass bound を theorem 名から読める一般 alias として追加する。
+2. 実施:
+   - `PrimePowerWitnessProvider.weightOfBase_hitMass_le_const` を追加した。
+   - 仮定として base-prime weight の index 上非負性、`W.weightOfBase c` 由来 kernel の sub-probability、source-controlled family との compatibility、primitive set、source mass bound を受け取る形にした。
+   - 証明は `PrimePowerChannelProvider.ofWitnessProviderWeight W c ...` を作り、既存 `weightedHitMass_le_const_applyAtToSourceControlled` へ渡す alias とした。
+3. 結論:
+   - `PrimePowerWitnessProvider + base-prime weight -> ofWitnessProviderWeight -> weightedHitMass <= C` の一般 route が theorem 名として固定された。
+   - sample 専用ではなく、今後の解析風 toy weight に対しても route 名を保ったまま hit mass bound を呼び出せるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - Lean 実装自体は初回の権限昇格付き build で通った。
+6. 次の課題:
+   - 次は base-prime weight `c : ℕ → ℕ → ℚ` の非負性や sub-probability を theorem-facing に分ける predicate を設計する。
+   - あるいは解析風 toy model に入る前に、`PrimePowerLabel` index kernel を別ルートとして作るべきか判断する。
