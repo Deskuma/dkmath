@@ -1415,3 +1415,27 @@ Archive
 6. 次の課題:
    - 次は base-prime weight `c : ℕ → ℕ → ℚ` の非負性や sub-probability を theorem-facing に分ける predicate を設計する。
    - あるいは解析風 toy model に入る前に、`PrimePowerLabel` index kernel を別ルートとして作るべきか判断する。
+
+### 日時: 2026/05/11 19:03 JST (Phase BA base-prime weight predicates)
+
+1. 目的:
+   - `review/review-051.md` の提案に従い、base-prime weight `c : ℕ → ℕ → ℚ` の非負性と sub-probability 条件を theorem-facing predicate として切り出す。
+2. 実施:
+   - `PrimePowerWitnessProvider.BaseWeightNonneg` を追加し、indexed label に対して `0 ≤ c n ((W.label n q hq).p)` を要求する predicate とした。
+   - `PrimePowerWitnessProvider.BaseWeightSubProbability` を追加し、`W.weightOfBase c` 由来の weighted kernel が sub-probability normalized であることを名前付き predicate にした。
+   - `PrimePowerWitnessProvider.baseWeight_hitMass_le_const` を追加し、`BaseWeightNonneg` と `BaseWeightSubProbability` を受け取って hit mass bound へ進む alias を用意した。
+   - sample alias として `sampleTenToyPrimeBaseWeight_baseWeightNonneg` と `sampleTenToyPrimeBaseWeight_baseWeightSubProbability` を追加した。
+3. 結論:
+   - これまで長く展開していた `hc_nonneg` / `hw_subprob` 仮定を、base-prime weight の名前付き性質として扱えるようになった。
+   - 今後の解析風 toy model では、まずこれらの predicate を満たすことを示せば witness-provider route の hit mass bound に接続できる。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - Lean 実装自体は初回の権限昇格付き build で通った。
+6. 次の課題:
+   - Phase BB として、非負な base-prime toy weight 全体を表す軽量 predicate を追加するか判断する。
+   - その後、ratio-style toy weight や解析風 `log p / log n` route に向けた設計を検討する。

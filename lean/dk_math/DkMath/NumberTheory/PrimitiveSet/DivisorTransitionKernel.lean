@@ -484,6 +484,14 @@ def weightOfBase
     else
       0
 
+/-- A base-prime weight is nonnegative on the indexed labels selected by `W`. -/
+def BaseWeightNonneg
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (c : ℕ → ℕ → ℚ) : Prop :=
+  ∀ n q (hq : q ∈ T.toDivisorTransitionKernel.index n),
+    0 ≤ c n ((W.label n q hq).p)
+
 @[simp] theorem weightOfBase_of_mem
     {T : PrimePowerDivisorTransitionKernel}
     (W : PrimePowerWitnessProvider T)
@@ -511,6 +519,20 @@ theorem weightOfBase_primeWitnessDependent
   · exact W.weightOfBase_of_mem c hq
   · rw [W.weightOfBase_of_mem c hq]
     exact hc_nonneg n q hq
+
+/--
+A base-prime weight gives a sub-probability witness-provider kernel when its
+`weightOfBase` channel is sub-probability normalized.
+-/
+def BaseWeightSubProbability
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (c : ℕ → ℕ → ℚ)
+    (hc_nonneg : W.BaseWeightNonneg c) : Prop :=
+  (T.withWeight (W.weightOfBase c)
+    (T.vonMangoldtLikeWeight_nonneg
+      (T.vonMangoldtLikeWeight_of_primeWitnessDependent
+        (W.weightOfBase_primeWitnessDependent c hc_nonneg)))).SubProbability
 
 end PrimePowerWitnessProvider
 
@@ -817,6 +839,28 @@ theorem weightOfBase_hitMass_le_const
   exact (PrimePowerChannelProvider.ofWitnessProviderWeight W c hc_nonneg
     hw_subprob).weightedHitMass_le_const_applyAtToSourceControlled
       n F hcompat hS hC hsource
+
+/--
+Hit-mass bound for a witness-provider base-prime weight, stated with the
+named base-weight predicates.
+-/
+theorem baseWeight_hitMass_le_const
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (c : ℕ → ℕ → ℚ)
+    (hc_nonneg : W.BaseWeightNonneg c)
+    (hw_subprob : W.BaseWeightSubProbability c hc_nonneg)
+    {M : DkMath.CosmicFormula.Mass.MassSpace ℕ} {S : Finset ℕ}
+    (n : ℕ) (F : SourceControlledChainFamily M ℕ)
+    (hcompat :
+      (PrimePowerChannelProvider.ofWitnessProviderWeight W c hc_nonneg
+        hw_subprob).kernel.CompatibleAt n F)
+    (hS : PrimitiveOn S) {C : ℚ} (hC : 0 ≤ C)
+    (hsource : ∀ q ∈ F.index, M.μ (F.source q) ≤ C) :
+    ((PrimePowerChannelProvider.ofWitnessProviderWeight W c hc_nonneg
+      hw_subprob).applyAtToSourceControlled n F hcompat).weightedHitMass S ≤ C :=
+  W.weightOfBase_hitMass_le_const c hc_nonneg hw_subprob
+    n F hcompat hS hC hsource
 
 end PrimePowerWitnessProvider
 
@@ -1275,6 +1319,19 @@ theorem sampleTenWitnessProviderWeightKernel_subProbability :
       sampleTenPrimePowerWitnessProvider,
       sampleTenPrimePowerDivisorTransitionKernel,
       sampleTenDivisorTransitionKernel, hn]
+
+/-- The sample base-prime weight satisfies the named nonnegativity predicate. -/
+theorem sampleTenToyPrimeBaseWeight_baseWeightNonneg :
+    sampleTenPrimePowerWitnessProvider.BaseWeightNonneg
+      sampleTenToyPrimeBaseWeight :=
+  sampleTenToyPrimeBaseWeight_nonneg_on_index
+
+/-- The sample base-prime weight satisfies the named sub-probability predicate. -/
+theorem sampleTenToyPrimeBaseWeight_baseWeightSubProbability :
+    sampleTenPrimePowerWitnessProvider.BaseWeightSubProbability
+      sampleTenToyPrimeBaseWeight
+      sampleTenToyPrimeBaseWeight_baseWeightNonneg :=
+  sampleTenWitnessProviderWeightKernel_subProbability
 
 /-- The toy-weighted sample packaged as a prime-power channel provider. -/
 def sampleTenToyWeightChannelProvider : PrimePowerChannelProvider :=
