@@ -436,6 +436,10 @@ theorem vonMangoldtLikeWeight_of_primeWitnessDependent
 
 end PrimePowerDivisorTransitionKernel
 
+/-- A finite toy base-prime weight is nonnegative everywhere. -/
+def BasePrimeToyWeight (c : ℕ → ℕ → ℚ) : Prop :=
+  ∀ n p, 0 ≤ c n p
+
 /--
 A choice of explicit prime-power witnesses for every indexed label of a
 prime-power divisor transition kernel.
@@ -533,6 +537,16 @@ def BaseWeightSubProbability
     (T.vonMangoldtLikeWeight_nonneg
       (T.vonMangoldtLikeWeight_of_primeWitnessDependent
         (W.weightOfBase_primeWitnessDependent c hc_nonneg)))).SubProbability
+
+/-- A globally nonnegative toy base-prime weight is nonnegative on any witness provider. -/
+theorem baseWeightNonneg_of_basePrimeToyWeight
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    {c : ℕ → ℕ → ℚ}
+    (hc : BasePrimeToyWeight c) :
+    W.BaseWeightNonneg c := by
+  intro n q hq
+  exact hc n ((W.label n q hq).p)
 
 end PrimePowerWitnessProvider
 
@@ -1116,6 +1130,14 @@ def sampleTenToyWeight (n q : ℕ) : ℚ :=
 def sampleTenToyPrimeBaseWeight (n p : ℕ) : ℚ :=
   if n = 10 ∧ p = 2 then 1 else 0
 
+/-- The sample toy base-prime weight is globally nonnegative. -/
+theorem sampleTenToyPrimeBaseWeight_basePrimeToyWeight :
+    BasePrimeToyWeight sampleTenToyPrimeBaseWeight := by
+  intro n p
+  by_cases h : n = 10 ∧ p = 2
+  · simp [sampleTenToyPrimeBaseWeight, h]
+  · simp [sampleTenToyPrimeBaseWeight, h]
+
 /--
 The sample witness provider turns the sample base-prime weight into a
 prime-witness-dependent label weight.
@@ -1324,7 +1346,9 @@ theorem sampleTenWitnessProviderWeightKernel_subProbability :
 theorem sampleTenToyPrimeBaseWeight_baseWeightNonneg :
     sampleTenPrimePowerWitnessProvider.BaseWeightNonneg
       sampleTenToyPrimeBaseWeight :=
-  sampleTenToyPrimeBaseWeight_nonneg_on_index
+  sampleTenPrimePowerWitnessProvider
+    |>.baseWeightNonneg_of_basePrimeToyWeight
+      sampleTenToyPrimeBaseWeight_basePrimeToyWeight
 
 /-- The sample base-prime weight satisfies the named sub-probability predicate. -/
 theorem sampleTenToyPrimeBaseWeight_baseWeightSubProbability :

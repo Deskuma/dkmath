@@ -1439,3 +1439,27 @@ Archive
 6. 次の課題:
    - Phase BB として、非負な base-prime toy weight 全体を表す軽量 predicate を追加するか判断する。
    - その後、ratio-style toy weight や解析風 `log p / log n` route に向けた設計を検討する。
+
+### 日時: 2026/05/11 19:19 JST (Phase BB BasePrimeToyWeight)
+
+1. 目的:
+   - `review/review-052.md` の提案に従い、全域非負な base-prime toy weight を表す軽量 predicate を追加し、任意の witness provider の `BaseWeightNonneg` へ接続する。
+2. 実施:
+   - `BasePrimeToyWeight` を追加し、`∀ n p, 0 ≤ c n p` を要求する全域非負 predicate とした。
+   - `PrimePowerWitnessProvider.baseWeightNonneg_of_basePrimeToyWeight` を追加し、`BasePrimeToyWeight c` から `W.BaseWeightNonneg c` を得られるようにした。
+   - sample theorem として `sampleTenToyPrimeBaseWeight_basePrimeToyWeight` を追加した。
+   - `sampleTenToyPrimeBaseWeight_baseWeightNonneg` を、直接証明ではなく `baseWeightNonneg_of_basePrimeToyWeight` 経由に切り替えた。
+3. 結論:
+   - base-prime weight `c n p` の非負性を、witness provider 非依存の軽量 predicate として扱えるようになった。
+   - 今後の ratio-style toy weight では、まず `BasePrimeToyWeight` を示し、そこから任意の `W.BaseWeightNonneg` へ降ろせる。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - Lean 実装自体は初回の権限昇格付き build で通った。
+6. 次の課題:
+   - Phase BC として、`c(n,p)=A(p)/B(n)` 型の ratio-style toy weight predicate を設計する。
+   - 最初は有理数上の非負性に絞り、解析的な `log` はまだ導入しない。
