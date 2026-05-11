@@ -3,7 +3,7 @@
 ## 1. 結論
 
 うむ、Phase AD は **prime-power descent bridge 完了** じゃ。
-Phase AC では prime label \(q\) から `PrimeDescentStep` へ接続した。今回 Phase AD ではさらに、
+Phase AC では prime label $q$ から `PrimeDescentStep` へ接続した。今回 Phase AD ではさらに、
 
 $$
 q=p^k,\qquad p\text{ prime},\qquad 0<k
@@ -15,7 +15,7 @@ $$
 \mathrm{PrimePowerDescentStep}; n; (T.next\ n\ q)
 $$
 
-を得られるようになった。これで divisor transition の \(n\to n/q\) skeleton は、prime label と prime-power label の両方で既存 descent route に接続されたわけじゃ。
+を得られるようになった。これで divisor transition の $n\to n/q$ skeleton は、prime label と prime-power label の両方で既存 descent route に接続されたわけじゃ。
 
 ## 2. 今回の主役
 
@@ -44,7 +44,7 @@ $$
 next(n,q)=\frac{n}{q}
 $$
 
-を、仮定 \(q=p^k\) で書き換えて、
+を、仮定 $q=p^k$ で書き換えて、
 
 $$
 p^k\mid n,
@@ -52,7 +52,7 @@ p^k\mid n,
 next(n,q)=\frac{n}{p^k}
 $$
 
-にしている。あとは `PrimePowerDescentStep` の witness として \(p,k\) を渡せばよい。
+にしている。あとは `PrimePowerDescentStep` の witness として $p,k$ を渡せばよい。
 
 証明が短いのも良い兆候じゃ。既存 API の分解がうまく効いておる。
 
@@ -79,10 +79,10 @@ $$
 も使える。
 
 これは Erdős #1196 の実際の von Mangoldt 型 downward process に近い。
-なぜなら \(\Lambda(q)\) は、まさに \(q=p^k\) のときに非零になるからじゃ。
+なぜなら $\Lambda(q)$ は、まさに $q=p^k$ のときに非零になるからじゃ。
 
-まだ \(\Lambda(q)\) や \(\log\) は導入していない。
-しかし、 \(\Lambda\) が乗るべき **prime-power channel** の認識は、今回で Lean 上に入った。
+まだ $\Lambda(q)$ や $\log$ は導入していない。
+しかし、 $\Lambda$ が乗るべき **prime-power channel** の認識は、今回で Lean 上に入った。
 
 ## 4. sample の意味
 
@@ -111,7 +111,7 @@ $$
 
 が prime-power descent step でもあることを確認している。
 
-prime label は prime-power label の \(k=1\) 特殊例でもある。
+prime label は prime-power label の $k=1$ 特殊例でもある。
 この sample により、実例としてその接続が通っている。
 
 ## 5. 現在地
@@ -122,12 +122,12 @@ prime label は prime-power label の \(k=1\) 特殊例でもある。
 | ------------------------------------------- | ---- |
 | `FiniteTransitionKernel`                    | 完了   |
 | `DivisorTransitionKernel`                   | 完了   |
-| \(q\mid n\), \(next=n/q\)                       | 完了   |
+| $q\mid n$, $next=n/q$                       | 完了   |
 | prime label → `PrimeDescentStep`            | 完了   |
 | prime-power label → `PrimePowerDescentStep` | 今回完了 |
 | prime-power label predicate                 | 未    |
 | von Mangoldt channel                        | 未    |
-| analytic weight \(\Lambda(q)/\log n\)         | 未    |
+| analytic weight $\Lambda(q)/\log n$         | 未    |
 
 つまり、
 
@@ -135,7 +135,7 @@ $$
 n\to \frac{n}{q}
 $$
 
-という除去因子遷移に対して、 \(q\) が prime でも prime-power でも descent route に乗れるようになった。
+という除去因子遷移に対して、 $q$ が prime でも prime-power でも descent route に乗れるようになった。
 
 ## 6. 今回の位置づけ
 
@@ -155,7 +155,7 @@ $$
 
 だった。
 
-今回の成果は、index \(q\) に
+今回の成果は、index $q$ に
 
 $$
 q=p^k
@@ -186,7 +186,7 @@ def IsPrimePowerLabel (q : ℕ) : Prop :=
   ∃ p k, Nat.Prime p ∧ 0 < k ∧ q = p ^ k
 ```
 
-そして今回の theorem を、直接 \(p,k\) を渡す形だけでなく、
+そして今回の theorem を、直接 $p,k$ を渡す形だけでなく、
 
 ```lean
 theorem primePowerDescentStep_of_isPrimePowerLabel
@@ -204,7 +204,7 @@ $$
 q\text{ is prime power}
 $$
 
-だけを見ればよくなり、毎回 \(p,k\) を明示的に分解しなくて済む。
+だけを見ればよくなり、毎回 $p,k$ を明示的に分解しなくて済む。
 
 ## 8. その次に見える層
 

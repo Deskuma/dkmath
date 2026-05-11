@@ -90,7 +90,7 @@ $$
 が、型から自動的に読めるようになった。
 
 これは theorem-facing API として大きい。
-後続で von Mangoldt 型 weight を扱うとき、「この index は \(\Lambda\) が反応する prime-power channel だけである」という条件を、別証明ではなく入力型そのものに持たせられるからじゃ。
+後続で von Mangoldt 型 weight を扱うとき、「この index は $\Lambda$ が反応する prime-power channel だけである」という条件を、別証明ではなく入力型そのものに持たせられるからじゃ。
 
 ## 4. 既存 API への忘却もよい
 
@@ -165,7 +165,7 @@ sampleTenPrimePowerDivisorTransitionKernel.primePowerDescentStep_of_mem
 | ------------------------------------------- | ---- |
 | `FiniteTransitionKernel`                    | 完了   |
 | `DivisorTransitionKernel`                   | 完了   |
-| \(q\mid n\), \(next=n/q\)                       | 完了   |
+| $q\mid n$, $next=n/q$                       | 完了   |
 | prime label → `PrimeDescentStep`            | 完了   |
 | prime-power label → `PrimePowerDescentStep` | 完了   |
 | `IsPrimePowerLabel`                         | 完了   |
@@ -176,7 +176,7 @@ sampleTenPrimePowerDivisorTransitionKernel.primePowerDescentStep_of_mem
 | 解析 weight                                   | 未    |
 
 つまり、今回で **prime-power channel の型** ができた。
-これは、\(\Lambda(q)\) を導入する前の最終的な通行路としてかなり重要じゃ。
+これは、 $\Lambda(q)$ を導入する前の最終的な通行路としてかなり重要じゃ。
 
 ## 7. 数学的な意味
 
@@ -186,7 +186,7 @@ $$
 w(n,q)\approx \frac{\Lambda(q)}{\log n}
 $$
 
-じゃが、\(\Lambda(q)\) が非零になるのは \(q\) が prime-power のときじゃ。
+じゃが、 $\Lambda(q)$ が非零になるのは $q$ が prime-power のときじゃ。
 
 今回の `PrimePowerDivisorTransitionKernel` は、
 
@@ -196,7 +196,7 @@ $$
 
 を型として表している。
 
-つまり、まだ \(\Lambda\) そのものはないが、
+つまり、まだ $\Lambda$ そのものはないが、
 
 $$
 \Lambda\text{ が乗るべき channel だけを持つ transition kernel}
@@ -286,7 +286,7 @@ $$
 
 が直接読める。
 
-ここでまだ \(\Lambda\) は不要じゃ。
+ここでまだ $\Lambda$ は不要じゃ。
 まず「prime-power channel 型でも既存 weighted bound が使える」という theorem-facing API を整える。
 
 ## 10. 総括

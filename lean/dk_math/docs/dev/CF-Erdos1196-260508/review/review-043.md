@@ -15,7 +15,7 @@ $$
 q=p^k
 $$
 
-という witness の prime base \(p\) に依存する toy weight を表現できるようになった。これは、\(\Lambda(q)=\log p\) へ向かう前の、とても自然な中間層じゃ。
+という witness の prime base $p$ に依存する toy weight を表現できるようになった。これは、 $\Lambda(q)=\log p$ へ向かう前の、とても自然な中間層じゃ。
 
 ## 2. 今回の主役
 
@@ -49,7 +49,7 @@ $$
 w(n,q)=c(n,p)
 $$
 
-と prime base \(p\) を通して表せる、という条件じゃ。
+と prime base $p$ を通して表せる、という条件じゃ。
 
 これはまさに、将来の
 
@@ -83,10 +83,10 @@ $$
 
 を要求する。
 
-つまり、重みが単に非負なだけではなく、prime-power witness の **prime base \(p\)** によって説明できる、という情報が加わった。
+つまり、重みが単に非負なだけではなく、prime-power witness の **prime base $p$** によって説明できる、という情報が加わった。
 
 これは大きい。
-本物の von Mangoldt 重みは \(k\) ではなく base prime \(p\) に依存するので、今回の形はかなり筋がよい。
+本物の von Mangoldt 重みは $k$ ではなく base prime $p$ に依存するので、今回の形はかなり筋がよい。
 
 ## 4. 既存 route への接続
 
@@ -171,7 +171,7 @@ $$
 
 として説明している。
 
-つまり、単なる手書き toy weight が、prime base \(p\) によって説明できる重みとして格上げされたわけじゃ。
+つまり、単なる手書き toy weight が、prime base $p$ によって説明できる重みとして格上げされたわけじゃ。
 
 ## 6. 現在地
 
@@ -189,10 +189,10 @@ $$
 | `PrimeWitnessDependentWeight`                        | 今回完了 |
 | `PrimeWitnessDependentWeight` → provider constructor | 未    |
 | `PrimePowerLabel` 構造体                                | 未    |
-| analytic \(\Lambda(q)/\log n\)                         | 未    |
+| analytic $\Lambda(q)/\log n$                         | 未    |
 
-つまり、まだ本物の \(\log p\) には入っていない。
-だが、\(\log p\) が入るべき位置、すなわち
+つまり、まだ本物の $\log p$ には入っていない。
+だが、 $\log p$ が入るべき位置、すなわち
 
 $$
 c(n,p)
@@ -268,14 +268,14 @@ structure PrimePowerLabel where
   eq_pow : q = p ^ k
 ```
 
-のように構造体化すると、\(p\) を定義的に取り出せるので、\(\Lambda(q)=\log p\) に進みやすい。
+のように構造体化すると、 $p$ を定義的に取り出せるので、 $\Lambda(q)=\log p$ に進みやすい。
 
 ただし今は、predicate route のままもう少し登るのがよい。
-理由は、既存の `DivisorTransitionKernel` が label を \(\mathbb{N}\) としているため、構造体化は周辺 API への影響が大きいからじゃ。
+理由は、既存の `DivisorTransitionKernel` が label を $\mathbb{N}$ としているため、構造体化は周辺 API への影響が大きいからじゃ。
 
 ## 9. 総括
 
-Phase AR は、素冪由来の重みに **prime base \(p\) 依存性** を与えた段階じゃ。
+Phase AR は、素冪由来の重みに **prime base $p$ 依存性** を与えた段階じゃ。
 
 前段では、
 
@@ -292,5 +292,5 @@ $$
 
 と言えるようになった。
 
-山で言えば、料金表に「素冪由来」と書かれていただけでなく、ついに「この料金は base prime \(p\) によって決まる」と説明できるようになった。
+山で言えば、料金表に「素冪由来」と書かれていただけでなく、ついに「この料金は base prime $p$ によって決まる」と説明できるようになった。
 次は、この base-prime 依存の料金表を `PrimePowerChannelProvider` に直接登録する標準フォームを作る番じゃな。

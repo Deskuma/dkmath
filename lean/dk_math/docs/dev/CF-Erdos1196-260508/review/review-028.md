@@ -9,7 +9,7 @@ $$
 n \xrightarrow{q} \frac{n}{q}
 $$
 
-という除去因子付き遷移が入った。今回 Phase AC では、その label \(q\) が素数なら、その遷移をそのまま
+という除去因子付き遷移が入った。今回 Phase AC では、その label $q$ が素数なら、その遷移をそのまま
 
 $$
 \mathrm{PrimeDescentStep}; n; (next(n,q))
@@ -49,7 +49,7 @@ $$
 Nat.Prime(q)
 $$
 
-を足せば、`PrimeDescentStep` の witness として同じ \(q\) を使える。
+を足せば、`PrimeDescentStep` の witness として同じ $q$ を使える。
 
 つまり、
 
@@ -75,9 +75,9 @@ $$
 q\mid n,\qquad next(n,q)=n/q
 $$
 
-を保証していたが、まだ \(q\) が何者かは外側の情報だった。
+を保証していたが、まだ $q$ が何者かは外側の情報だった。
 
-今回から、 \(q\) が prime であるという条件を与えると、既存の
+今回から、 $q$ が prime であるという条件を与えると、既存の
 
 ```lean
 PrimeDescentStep
@@ -100,7 +100,7 @@ $$
 $$
 
 これは重要じゃ。
-Erdős #1196 の downward process では、除去因子 \(q\) が素数・素冪として意味を持つ。今回、そのうち **素数 label** の道が閉じた。
+Erdős #1196 の downward process では、除去因子 $q$ が素数・素冪として意味を持つ。今回、そのうち **素数 label** の道が閉じた。
 
 ## 4. sample の意味
 
@@ -119,7 +119,7 @@ sampleTenDivisorTransitionKernel_primeDescentStep_two
 sampleTenDivisorTransitionKernel_primeDescentStep_five
 ```
 
-が追加され、label \(2\) と \(5\) がそれぞれ prime descent step であることが確認された。
+が追加され、label $2$ と $5$ がそれぞれ prime descent step であることが確認された。
 
 つまり sample は、単なる divisor transition から、
 
@@ -130,7 +130,7 @@ $$
 が **prime descent** として読めることまで示している。
 
 これは教材例としてとても良い。
-「(q) を剥がす」だけでなく、「素数 \(q\) を剥がす」と言えるようになった。
+「 $q$ を剥がす」だけでなく、「素数 $q$ を剥がす」と言えるようになった。
 
 ## 5. 現在地
 
@@ -139,11 +139,11 @@ $$
 | 層                                           | 状態   |
 | ------------------------------------------- | ---- |
 | finite transition kernel                    | 完了   |
-| divisor transition \(n\to n/q\)               | 完了   |
+| divisor transition $n\to n/q$               | 完了   |
 | prime label → `PrimeDescentStep`            | 今回完了 |
 | prime-power label → `PrimePowerDescentStep` | 未    |
 | von Mangoldt channel                        | 未    |
-| analytic weight \(\Lambda(q)/\log n\)         | 未    |
+| analytic weight $\Lambda(q)/\log n$         | 未    |
 
 ここまでで、
 
@@ -164,7 +164,7 @@ $$
 
 次は、History にもある通り **prime-power label** 版じゃな。
 
-Erdős #1196 の von Mangoldt 型過程では、 \(\Lambda(q)\) は \(q=p^k\) のとき \(\log p\) を持つ。
+Erdős #1196 の von Mangoldt 型過程では、 $\Lambda(q)$ は $q=p^k$ のとき $\log p$ を持つ。
 したがって、prime label だけではまだ足りない。次は、
 
 $$
@@ -193,10 +193,10 @@ theorem primePowerDescentStep_of_primePow_label
 
 証明方針は今回と同じじゃ。
 
-* `hqmem` から \(q\mid n\)
-* `hq : q=p^k` で \(p^k\mid n\) に変換
-* `next_eq_div_of_mem` で \(next(n,q)=n/q\)
-* \(q=p^k\) を使って \(next(n,q)=n/p^k\) へ書き換える
+* `hqmem` から $q\mid n$
+* `hq : q=p^k` で $p^k\mid n$ に変換
+* `next_eq_div_of_mem` で $next(n,q)=n/q$
+* $q=p^k$ を使って $next(n,q)=n/p^k$ へ書き換える
 
 ここが閉じれば、
 
@@ -210,7 +210,7 @@ $$
 
 prime-power descent が閉じたら、いよいよ von Mangoldt channel の入口が見える。
 
-ただし、まだ \(\log\) や実数重みを入れる前に、
+ただし、まだ $\log$ や実数重みを入れる前に、
 
 $$
 q=p^k
@@ -244,7 +244,7 @@ $$
 
 ## 8. 総括
 
-Phase AC は、除去因子 \(q\) に **素数としての意味** を与えた段階じゃ。
+Phase AC は、除去因子 $q$ に **素数としての意味** を与えた段階じゃ。
 
 これで、
 
@@ -257,7 +257,7 @@ $$
 
 が no-sorry で使える。
 
-山で言えば、前回までは「この道は \(q\) を剥がして下る」と書かれていた。
-今回、その \(q\) が素数なら「これは prime descent の道である」と正式に道標が立った。
+山で言えば、前回までは「この道は $q$ を剥がして下る」と書かれていた。
+今回、その $q$ が素数なら「これは prime descent の道である」と正式に道標が立った。
 
-次は、素冪 \(p^k\) の道標じゃ。そこまで行くと、Erdős #1196 の \(\Lambda(q)\) ルートがかなり近くなるぞい。
+次は、素冪 $p^k$ の道標じゃ。そこまで行くと、Erdős #1196 の $\Lambda(q)$ ルートがかなり近くなるぞい。

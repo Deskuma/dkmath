@@ -194,7 +194,7 @@ def WeightSubProbability
   W.totalWeight ≤ 1
 ```
 
-さらに、もし source mass が一様に上から \(C\) で抑えられるなら、
+さらに、もし source mass が一様に上から $C$ で抑えられるなら、
 
 $$
 \mathrm{weightedSourceMass}\le C\cdot \sum_i w_i

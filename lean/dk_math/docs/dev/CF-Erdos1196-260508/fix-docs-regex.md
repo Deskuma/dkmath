@@ -50,3 +50,7 @@ r" \((.+?)\)" to " \($1\)"
 
 - " (A\subset [x,\infty))"
 - " (A\subset[x,\infty))"
+
+## KaTeX → TeX
+
+" \\\((.*?)\\\)" → " $$$1$$"

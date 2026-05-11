@@ -23,7 +23,7 @@ $$
 
 を indexed sum に束ねる層じゃ。
 
-以前は一本の chain \(C\) に対して、
+以前は一本の chain $C$ に対して、
 
 $$
 \mathrm{hitSetMass}(S\cap C)
@@ -31,7 +31,7 @@ $$
 \mathrm{sourceSetMass}({r})
 $$
 
-だった。今回の実装では chain family \(F\) に対して、
+だった。今回の実装では chain family $F$ に対して、
 
 $$
 \sum_{i\in F.index}\mathrm{hitSetMass}(S\cap F.chain_i)
@@ -71,16 +71,16 @@ actual descent chain
 
 進捗を段階で見ると、こうじゃ。
 
-| 層                            | 状態   | コメント                                     |         |         |
-| ---------------------------- | ---- | ---------------------------------------- | ------- | ------- |
-| finite hit mass              | 完了   | `MassControlledAssignment` で閉じた          |         |         |
-| primitive finite set         | 完了   | `PrimitiveOn` で divisibility antichain 化 |         |         |
-| single chain bridge          | 完了   | \(                                        \| S\cap C \| \le 1 \) |
-| finite chain family          | 今回完了 | indexed hit/source mass bound            |         |         |
-| actual descent relation      | 未着手  | 次の候補                                     |         |         |
-| Branching/SubConservative 接続 | 未着手  | 次の候補                                     |         |         |
-| Markov kernel                | まだ早い | \(\Lambda(q)/\log n\) は後段                  |         |         |
-| analytic mass                | まだ早い | \(1/(n\log n)\) は後段                        |         |         |
+| 層                             | 状態     | コメント                                   |
+| ------------------------------ | -------- | ------------------------------------------ |
+| finite hit mass                | 完了     | `MassControlledAssignment` で閉じた        |
+| primitive finite set           | 完了     | `PrimitiveOn` で divisibility antichain 化 |
+| single chain bridge            | 完了     | $\| S\cap C \| \le 1$                      |
+| finite chain family            | 今回完了 | indexed hit/source mass bound              |
+| actual descent relation        | 未着手   | 次の候補                                   |
+| Branching/SubConservative 接続 | 未着手   | 次の候補                                   |
+| Markov kernel                  | まだ早い | $\Lambda(q)/\log n$ は後段                 |
+| analytic mass                  | まだ早い | $1/(n\log n)$ は後段                       |
 
 つまり、今は **有限 combinatorial skeleton** が一通り立った状態じゃ。
 
@@ -249,7 +249,6 @@ $$
 
 このまま渡すなら、次の指示がよい。
 
-````md
 ## 次の実装指示: Phase D. Source-controlled forest bridge
 
 ### 目的
@@ -278,56 +277,56 @@ import DkMath.NumberTheory.PrimitiveSet.HittingBridge
 
 1. `SourceControlledChainFamily` を定義する。
 
-```lean
-structure SourceControlledChainFamily
-    (M : MassSpace ℕ) (ι : Type _) [DecidableEq ι$$
-    extends DivisibilityChainFamily ι where
-  source : ι → ℕ
-  mass_le_source :
-    ∀ i ∈ index, ∀ h ∈ chain i, M.μ h ≤ M.μ (source i)
-```
+    ```lean
+    structure SourceControlledChainFamily
+        (M : MassSpace ℕ) (ι : Type _) [DecidableEq ι$$
+        extends DivisibilityChainFamily ι where
+      source : ι → ℕ
+      mass_le_source :
+        ∀ i ∈ index, ∀ h ∈ chain i, M.μ h ≤ M.μ (source i)
+    ```
 
 2. empty index の simp 補題を追加する。
 
-```lean
-@[simp] theorem SourceControlledChainFamily.hitMass_empty_index ...
-@[simp] theorem SourceControlledChainFamily.sourceMass_empty_index ...
-```
+    ```lean
+    @[simp] theorem SourceControlledChainFamily.hitMass_empty_index ...
+    @[simp] theorem SourceControlledChainFamily.sourceMass_empty_index ...
+    ```
 
-これは難しければ保留でよい。
+    これは難しければ保留でよい。
 
 3. 主定理を追加する。
 
-```lean
-theorem SourceControlledChainFamily.primitive_hitMass_le_sourceMass
-    (M : MassSpace ℕ) {ι : Type _} [DecidableEq ι$$
-    {S : Finset ℕ} (hS : PrimitiveOn S)
-    (F : SourceControlledChainFamily M ι) :
-    F.toDivisibilityChainFamily.hitMass M S ≤
-      F.toDivisibilityChainFamily.sourceMass M F.source := by
-  classical
-  exact F.toDivisibilityChainFamily.primitive_hitMass_le_sourceMass
-    M hS F.source
-    (by
-      intro i hi h hh
-      exact F.mass_le_source i hi h (Finset.mem_inter.mp hh).2)
-```
+    ```lean
+    theorem SourceControlledChainFamily.primitive_hitMass_le_sourceMass
+        (M : MassSpace ℕ) {ι : Type _} [DecidableEq ι$$
+        {S : Finset ℕ} (hS : PrimitiveOn S)
+        (F : SourceControlledChainFamily M ι) :
+        F.toDivisibilityChainFamily.hitMass M S ≤
+          F.toDivisibilityChainFamily.sourceMass M F.source := by
+      classical
+      exact F.toDivisibilityChainFamily.primitive_hitMass_le_sourceMass
+        M hS F.source
+        (by
+          intro i hi h hh
+          exact F.mass_le_source i hi h (Finset.mem_inter.mp hh).2)
+    ```
 
 4. concrete sample を追加する。
 
-既存の `sampleBoolChainFamily` と `unitNatMassSpace` を使う場合、`source := fun _ => 1` でよい。
+    既存の `sampleBoolChainFamily` と `unitNatMassSpace` を使う場合、`source := fun _ => 1` でよい。
 
-```lean
-def sampleSourceControlledBoolChainFamily :
-    SourceControlledChainFamily unitNatMassSpace Bool := ...
-```
+    ```lean
+    def sampleSourceControlledBoolChainFamily :
+        SourceControlledChainFamily unitNatMassSpace Bool := ...
+    ```
 
-主例:
+    主例:
 
-```lean
-theorem primitive_two_three_sampleSourceControlled_hitMass_le_sourceMass :
-    ...
-```
+    ```lean
+    theorem primitive_two_three_sampleSourceControlled_hitMass_le_sourceMass :
+        ...
+    ```
 
 ### 検証
 
@@ -344,12 +343,11 @@ cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.HittingBridg
 ### 今回やらないこと
 
 - actual Markov kernel
-- \(\Lambda(q)/\log n\)
-- \(1/(n\log n)\)
+- $\Lambda(q)/\log n$
+- $1/(n\log n)$
 - infinite chain
 - Mertens 型評価
 - ABC 本体定理
-````
 
 ## 10. 総括
 

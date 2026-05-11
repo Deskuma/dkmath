@@ -81,7 +81,7 @@ $$
 singletonPrimeReachableFamily_eight_four_two
 ```
 
-として reachable-controlled family に package 化されている。さらに、primitive set \(\{2,5\}\) がこの path を hit したとき、unit mass で source \(8\) の質量を超えないことまで示している。
+として reachable-controlled family に package 化されている。さらに、primitive set $\{2,5\}$ がこの path を hit したとき、unit mass で source $8$ の質量を超えないことまで示している。
 
 つまり、実例としては
 
@@ -189,7 +189,7 @@ $$
 
 この箱ができたのは大きい。
 
-Erdős #1196 の本体に向けて、まだ Markov kernel や \(\Lambda(q)/\log n\) は入っていない。
+Erdős #1196 の本体に向けて、まだ Markov kernel や $\Lambda(q)/\log n$ は入っていない。
 しかし、そこへ行く前の有限 combinatorial ルートは、かなり読みやすくなった。
 
 ## 8. 次の一手
@@ -198,7 +198,7 @@ Erdős #1196 の本体に向けて、まだ Markov kernel や \(\Lambda(q)/\log 
 
 ### A. 小さく固めるなら positive / lower-bound support
 
-今回も過去に `{1,2}` のような例で primitive 性が壊れた流れがあった。Erdős #1196 本体では \(A\subset [x,\infty)\) なので、 \(0\) や \(1\) を自然に除外する補助語彙が欲しい。
+今回も過去に `{1,2}` のような例で primitive 性が壊れた流れがあった。Erdős #1196 本体では $A\subset [x,\infty)$ なので、 $0$ や $1$ を自然に除外する補助語彙が欲しい。
 
 例えば、
 

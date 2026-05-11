@@ -3,7 +3,7 @@
 ## 1. 結論
 
 うむ、Phase AP は **finite von-Mangoldt-like weight の predicate 化** じゃ。
-ここでは本物の von Mangoldt 関数 \(\Lambda(q)\) や解析的な \(\log n\) にはまだ入らず、
+ここでは本物の von Mangoldt 関数 $\Lambda(q)$ や解析的な $\log n$ にはまだ入らず、
 
 $$
 q\in index(n)
@@ -39,7 +39,7 @@ $$
 $$
 
 を定義しているわけではない。
-いまは「\(\Lambda\) が反応する prime-power channel 上で、非負重みを持つ」という有限 predicate じゃな。
+いまは「 $\Lambda$ が反応する prime-power channel 上で、非負重みを持つ」という有限 predicate じゃな。
 
 ## 3. 何が強くなったか
 
@@ -51,7 +51,7 @@ $$
 
 のまま進めていることじゃ。
 
-`IsPrimePowerLabel q` は存在命題なので、後で \(p,k\) をどう取り出すかは山場になる。
+`IsPrimePowerLabel q` は存在命題なので、後で $p,k$ をどう取り出すかは山場になる。
 だが、いまはまず軽く、
 
 $$
@@ -151,7 +151,7 @@ Phase AP の狙いが concrete sample でもちゃんと効いておる。
 | `VonMangoldtLikeWeight` predicate              | 今回完了 |
 | `VonMangoldtLikeWeight` → provider constructor | 未    |
 | witness-dependent concrete weight              | 未    |
-| analytic \(\Lambda(q)/\log n\)                   | 未    |
+| analytic $\Lambda(q)/\log n$                   | 未    |
 
 これで、finite toy weight が単なる手書き重みではなく、 **prime-power witness を持つ von-Mangoldt-like weight** として扱えるようになった。
 
@@ -208,7 +208,7 @@ $$
 という、より von Mangoldt らしい重みに進む段階じゃ。
 
 ただし、ここは慎重に進むべきじゃ。
-`IsPrimePowerLabel q` は存在命題なので、「その \(p\)」を計算的・定義的に取り出すのは簡単ではない。
+`IsPrimePowerLabel q` は存在命題なので、「その $p$ 」を計算的・定義的に取り出すのは簡単ではない。
 
 短期的には、
 
@@ -241,7 +241,7 @@ structure PrimePowerLabel where
 
 Phase AP は、素冪 channel 上の weight に **von-Mangoldt-like という性格札** を付けた段階じゃ。
 
-まだ本物の \(\Lambda\) ではない。
+まだ本物の $\Lambda$ ではない。
 だが、
 
 $$

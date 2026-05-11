@@ -34,13 +34,13 @@ sampleTenToyWeightSourceControlledFamily
 sampleTenToyWeightChannelProvider_hitMass_le_one
 ```
 
-`sampleTenToyWeightSourceControlledFamily` は、state \(10\) の toy-weighted channel と同じ index
+`sampleTenToyWeightSourceControlledFamily` は、state $10$ の toy-weighted channel と同じ index
 
 $$
 {2,5}
 $$
 
-を持つ `SourceControlledChainFamily unitNatMassSpace ℕ` じゃ。各 label \(q\) に singleton chain \(\{q\}\) を割り当て、source は常に \(10\) にしている。
+を持つ `SourceControlledChainFamily unitNatMassSpace ℕ` じゃ。各 label $q$ に singleton chain $\{q\}$ を割り当て、source は常に $10$ にしている。
 
 つまり、
 
@@ -62,7 +62,7 @@ sampleTenToyWeightChannelProvider_hitMass_le_one
 
 じゃ。
 
-内容は、toy weight を載せ替えた channel provider を `sampleTenToyWeightSourceControlledFamily` に適用し、primitive set \(\{2,5\}\) に対する weighted hit mass が
+内容は、toy weight を載せ替えた channel provider を `sampleTenToyWeightSourceControlledFamily` に適用し、primitive set $\{2,5\}$ に対する weighted hit mass が
 
 $$
 \le 1
@@ -197,7 +197,7 @@ $$
 | finite index 上の手定義 weight 一般 constructor | 未    |
 | witness-dependent toy weight             | 未    |
 | von-Mangoldt-like finite weight          | 未    |
-| analytic \(\Lambda(q)/\log n\)             | 未    |
+| analytic $\Lambda(q)/\log n$             | 未    |
 
 これで finite toy weight route は、かなり一段落じゃな。
 
@@ -222,7 +222,7 @@ $$
 を与えて、
 
 1. index 上で非負
-2. 各 state で総和が \(1\) 以下
+2. 各 state で総和が $1$ 以下
 3. `withWeight` で差し替え
 4. `PrimePowerChannelProvider.ofKernel` で package 化
 
@@ -250,7 +250,7 @@ PrimePowerChannelProvider.ofKernelWithWeight
 
 目的：
 
-`PrimePowerDivisorTransitionKernel` と任意の手定義 weight \(w\) から、非負性と sub-probability を仮定して `PrimePowerChannelProvider` を作る。
+`PrimePowerDivisorTransitionKernel` と任意の手定義 weight $w$ から、非負性と sub-probability を仮定して `PrimePowerChannelProvider` を作る。
 
 候補 API はこうじゃ。
 
@@ -290,11 +290,11 @@ $$
 という witness-dependent toy weight じゃ。
 
 ただし、ここは慎重に進むべきじゃ。
-`IsPrimePowerLabel q` は存在命題なので、Lean 上で \(p\) をどう選ぶか、あるいは \(p,k\) を label 側に構造として持たせるかが問題になる。
+`IsPrimePowerLabel q` は存在命題なので、Lean 上で $p$ をどう選ぶか、あるいは $p,k$ を label 側に構造として持たせるかが問題になる。
 
 安全な候補は二つある。
 
-一つ目は、label を単なる \(q\) ではなく、
+一つ目は、label を単なる $q$ ではなく、
 
 ```lean
 structure PrimePowerLabel where
@@ -308,7 +308,7 @@ structure PrimePowerLabel where
 
 のように構造化する道。
 
-二つ目は、今の \(\mathbb{N}\) label のまま、weight を外から手定義し、 \(\Lambda\)-like 性質だけを predicate として持つ道。
+二つ目は、今の $\mathbb{N}$ label のまま、weight を外から手定義し、 $\Lambda$-like 性質だけを predicate として持つ道。
 
 今の流れなら、まず後者の方が軽いじゃろう。
 

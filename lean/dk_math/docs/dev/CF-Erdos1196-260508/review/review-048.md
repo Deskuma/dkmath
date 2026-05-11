@@ -3,13 +3,13 @@
 ## 1. 結論
 
 うむ、Phase AW は **base-prime weight から label weight を生成する橋** が閉じた段階じゃ。
-前回 Phase AV で `PrimePowerWitnessProvider` が入り、各 indexed label \(q\) に対して
+前回 Phase AV で `PrimePowerWitnessProvider` が入り、各 indexed label $q$ に対して
 
 $$
 q=p^k
 $$
 
-という witness を選べるようになった。今回 Phase AW では、その witness の base prime \(p\) を読み取り、
+という witness を選べるようになった。今回 Phase AW では、その witness の base prime $p$ を読み取り、
 
 $$
 c(n,p)
@@ -21,7 +21,7 @@ $$
 w(n,q)
 $$
 
-という通常の label weight を作れるようになった。これは \(\Lambda(q)=\log p\) 型の重みへ向かう重要な橋じゃ。
+という通常の label weight を作れるようになった。これは $\Lambda(q)=\log p$ 型の重みへ向かう重要な橋じゃ。
 
 ## 2. 今回の主役
 
@@ -45,13 +45,13 @@ $$
 L=W.label(n,q,hq)
 $$
 
-から \(L.p\) を取り出し、
+から $L.p$ を取り出し、
 
 $$
 w(n,q)=c(n,L.p)
 $$
 
-とする。index 外では \(0\) にする。
+とする。index 外では $0$ にする。
 
 Lean では、
 
@@ -70,7 +70,7 @@ def weightOfBase
 
 じゃな。
 
-これはまさに、base prime \(p\) に依存する重みを、既存の \(q:\mathbb{N}\) label route に戻す変換器じゃ。
+これはまさに、base prime $p$ に依存する重みを、既存の $q:\mathbb{N}$ label route に戻す変換器じゃ。
 
 ## 3. 何が強くなったか
 
@@ -82,7 +82,7 @@ weightOfBase_primeWitnessDependent
 
 じゃ。
 
-これは、base-prime weight \(c(n,p)\) が index 上で非負なら、
+これは、base-prime weight $c(n,p)$ が index 上で非負なら、
 
 $$
 T.PrimeWitnessDependentWeight(W.weightOfBase(c),c)
@@ -187,7 +187,7 @@ $$
 
 から作った label weight が、`PrimeWitnessDependentWeight` を満たすことを確認している。
 
-状態 \(10\) の labels は \(2,5\)。witness provider はそれぞれ
+状態 $10$ の labels は $2,5$。witness provider はそれぞれ
 
 $$
 2=2^1,\qquad 5=5^1
@@ -216,15 +216,15 @@ $$
 | ---------------------------------------------- | ---- |
 | `PrimePowerLabel` sidecar                      | 完了   |
 | `PrimePowerWitnessProvider`                    | 完了   |
-| witness → base prime \(p\) 取り出し                  | 完了   |
+| witness → base prime $p$ 取り出し                  | 完了   |
 | `weightOfBase`                                 | 今回完了 |
 | `weightOfBase` → `PrimeWitnessDependentWeight` | 今回完了 |
 | witness-driven provider constructor            | 未    |
 | witness-driven hit mass bound sample           | 未    |
 | `PrimePowerLabel` 本格 index 化                   | 未    |
-| analytic \(\Lambda(q)/\log n\)                   | 未    |
+| analytic $\Lambda(q)/\log n$                   | 未    |
 
-ここまでで、 \(\Lambda(q)=\log p\) の **(p) を読むための骨格** はかなり整った。
+ここまでで、 $\Lambda(q)=\log p$ の **(p) を読むための骨格** はかなり整った。
 
 ## 7. 次の一手: Phase AX
 
@@ -331,19 +331,19 @@ $$
 
 Phase AX / AY のあとで、いよいよ二択になる。
 
-一つ目は、今のまま \(q:\mathbb{N}\) label + witness provider route を継続する道。
+一つ目は、今のまま $q:\mathbb{N}$ label + witness provider route を継続する道。
 
 二つ目は、`PrimePowerLabel` を index 型として持つ別 kernel を作る道。
 
 わっちの見立てでは、まだ一手か二手は今の route でよい。
-理由は、既存の `DivisorTransitionKernel` / `SourceControlledChainFamily` / `WeightProvider ℕ` がすべて \(q:\mathbb{N}\) label で整っているからじゃ。
+理由は、既存の `DivisorTransitionKernel` / `SourceControlledChainFamily` / `WeightProvider ℕ` がすべて $q:\mathbb{N}$ label で整っているからじゃ。
 
 今すぐ full refactor すると、せっかく整えた山道を掘り返すことになる。
 まずは witness provider route で hit mass bound まで通し、そのあと必要なら `PrimePowerLabel` index kernel を別ルートとして作るのが賢い。
 
 ## 10. 総括
 
-Phase AW は、base prime \(p\) を読む仕組みが、ついに重み生成へ接続された段階じゃ。
+Phase AW は、base prime $p$ を読む仕組みが、ついに重み生成へ接続された段階じゃ。
 
 これまでは、
 
@@ -352,7 +352,7 @@ q=p^k
 $$
 
 という witness を持つところまでだった。
-今回からは、その witness の \(p\) を使って、
+今回からは、その witness の $p$ を使って、
 
 $$
 w(n,q)=c(n,p)
@@ -360,5 +360,5 @@ $$
 
 を一般に作れる。
 
-山で言えば、各道標の詳細札から base prime \(p\) を読み取り、その \(p\) に応じて通行料を計算する仕組みができた。
+山で言えば、各道標の詳細札から base prime $p$ を読み取り、その $p$ に応じて通行料を計算する仕組みができた。
 次は、その仕組みを受付 `PrimePowerChannelProvider` に直接つなぐ標準フォームを作る番じゃな。

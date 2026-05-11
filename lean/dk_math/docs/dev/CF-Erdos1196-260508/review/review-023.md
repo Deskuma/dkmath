@@ -26,7 +26,7 @@ kernelPrimePathFamilyAt
 kernelPrimePathFamilyAt_hitMass_le_const_of_subprob
 ```
 
-前者は、finite kernel の state \(s\) から得た provider を、`primePathFamilySourceControlled` に適用する wrapper。
+前者は、finite kernel の state $s$ から得た provider を、`primePathFamilySourceControlled` に適用する wrapper。
 
 後者は、`DvdMonotoneMass M` による prime path route でも、
 
@@ -80,7 +80,7 @@ erdosFinitePrimitiveInput_two_five_kernelPrimePath_hitMass_le_one
 
 じゃ。
 
-これは `sampleUnitFiniteKernel` を prime path route に適用し、 \(\{2,5\}\) の finite Erdős input に対して、
+これは `sampleUnitFiniteKernel` を prime path route に適用し、 $\{2,5\}$ の finite Erdős input に対して、
 
 $$
 \mathrm{weightedHitMass}\le 1
@@ -188,7 +188,7 @@ compatibleAt_iff_index_eq
 
 を置く。
 
-これで、次に状態 \(n\) と index \(q\) に意味を持たせるとき、theorem 文がすっきりする。
+これで、次に状態 $n$ と index $q$ に意味を持たせるとき、theorem 文がすっきりする。
 
 ## 8. その次の山道
 
@@ -202,7 +202,7 @@ $$
 
 のように、状態と index に数論的意味を持たせる段階じゃ。
 
-最小 skeleton は、まだ \(\Lambda(q)/\log n\) なしでよい。
+最小 skeleton は、まだ $\Lambda(q)/\log n$ なしでよい。
 
 たとえば、
 

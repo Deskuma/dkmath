@@ -26,7 +26,7 @@ $$
 まで no-sorry で通した。
 
 これはかなり大きい。
-これまでの「手定義 toy weight route」と同じ bound を、今度は **prime-power witness から base prime \(p\) を読んで weight を作る route** として通せたわけじゃ。
+これまでの「手定義 toy weight route」と同じ bound を、今度は **prime-power witness から base prime $p$ を読んで weight を作る route** として通せたわけじゃ。
 
 ## 2. 今回閉じた主導線
 
@@ -82,7 +82,7 @@ $$
 q=p^k
 $$
 
-の witness から base prime \(p\) を取り出して作られた weight と一致する、という意味づけが得られた。
+の witness から base prime $p$ を取り出して作られた weight と一致する、という意味づけが得られた。
 
 つまり、
 
@@ -111,14 +111,14 @@ sampleTenWitnessProviderWeightKernel_subProbability
 これは今後の一般化で重要じゃ。
 `ofWitnessProviderWeight` は provider を作るために sub-probability 証明を要求する。今回、その実例が閉じた。
 
-状態 \(10\) では labels \(2,5\) に対して、
+状態 $10$ では labels $2,5$ に対して、
 
 $$
 w(10,2)=1,\qquad w(10,5)=0
 $$
 
-なので総量は \(1\)。
-それ以外の状態では index が空なので総量は \(0\)。したがって、
+なので総量は $1$。
+それ以外の状態では index が空なので総量は $0$。したがって、
 
 $$
 \sum_{q\in index(n)} w(n,q)\le 1
@@ -205,7 +205,7 @@ $$
 | witness-provider sample provider    | 今回完了 |
 | witness-provider hit mass bound     | 今回完了 |
 | 一般 theorem-facing bound alias       | 未    |
-| 解析風 weight \(c(n,p)\)                 | 未    |
+| 解析風 weight $c(n,p)$                 | 未    |
 | `PrimePowerLabel` index kernel 別ルート | 未    |
 
 つまり、witness-provider-driven weight route は、sample で完全に開通した。
@@ -299,9 +299,9 @@ $$
 
 ## 10. その次: Phase BA の先読み
 
-Phase AZ で一般 alias を置いたら、次は **解析風 toy weight \(c(n,p)\)** を考える段階じゃ。
+Phase AZ で一般 alias を置いたら、次は **解析風 toy weight $c(n,p)$** を考える段階じゃ。
 
-まだ本物の \(\log\) は入れず、まずは有理 toy model がよい。
+まだ本物の $\log$ は入れず、まずは有理 toy model がよい。
 
 例として、
 
@@ -329,20 +329,20 @@ def BasePrimeSubProbability
 ```
 
 ここは少し設計が必要じゃ。
-焦って \(\log\) に入るより、まず \(c(n,p)\) の非負性と総量制御を theorem-facing に分けるのが賢い。
+焦って $\log$ に入るより、まず $c(n,p)$ の非負性と総量制御を theorem-facing に分けるのが賢い。
 
 ## 11. さらに先の分岐
 
 Phase AZ / BA のあとで、次の二択になる。
 
-一つ目は、今の \(q:\mathbb{N}\) label + witness provider route を続け、解析風 weight だけを強くする道。
+一つ目は、今の $q:\mathbb{N}$ label + witness provider route を続け、解析風 weight だけを強くする道。
 
 二つ目は、`PrimePowerLabel` を index にした別 kernel を作る道。
 
 いまはまだ一つ目を推す。
-理由は、既存 route がきれいに通っており、`weightOfBase` によって \(p\) 依存性も表現できているからじゃ。
+理由は、既存 route がきれいに通っており、`weightOfBase` によって $p$ 依存性も表現できているからじゃ。
 
-`PrimePowerLabel` index kernel は、将来 \(p,k\) を定義的に多用したくなった時に、別登山道として作ればよい。
+`PrimePowerLabel` index kernel は、将来 $p,k$ を定義的に多用したくなった時に、別登山道として作ればよい。
 
 ## 12. 総括
 
@@ -360,5 +360,5 @@ $$
 
 が concrete に通った。
 
-山で言えば、各道標の \(q=p^k\) 札から base prime \(p\) を読み、そこから通行料を計算し、受付に登録して、実際に通行量制限を突破した。
+山で言えば、各道標の $q=p^k$ 札から base prime $p$ を読み、そこから通行料を計算し、受付に登録して、実際に通行量制限を突破した。
 次はこのルートを sample 専用ではなく、一般 theorem 名として案内板に載せる番じゃな。

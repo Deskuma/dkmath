@@ -9,7 +9,7 @@ $$
 w(n,q)=c(n,p)
 $$
 
-という形で、prime-power witness の base prime \(p\) に依存する toy weight を表現できるようになった。今回 Phase AS では、それをさらに
+という形で、prime-power witness の base prime $p$ に依存する toy weight を表現できるようになった。今回 Phase AS では、それをさらに
 
 $$
 \text{PrimeWitnessDependentWeight}
@@ -83,7 +83,7 @@ PrimePowerChannelProvider.ofPrimeWitnessDependentWeight
 を呼べばよい。
 
 構造としては同じでも、API としては大きい。
-後続で「この weight は \(p\) に依存している」と言いたい場合、constructor 名そのものが意味を持つようになった。
+後続で「この weight は $p$ に依存している」と言いたい場合、constructor 名そのものが意味を持つようになった。
 
 ## 4. simp API も整っている
 
@@ -112,7 +112,7 @@ $$
 を自然に取り出せる。
 
 これは今後、具体的な theorem を書く時に効く。
-特に weight が本当に \(w\) として見えることは、後で「これは \(c(n,p)\) に由来する」と展開するための足場になる。
+特に weight が本当に $w$ として見えることは、後で「これは $c(n,p)$ に由来する」と展開するための足場になる。
 
 ## 5. sample の格上げ
 
@@ -134,7 +134,7 @@ $$
 
 つまり sample の意味が一段上がった。
 以前は「この料金表は非負で素冪上にある」だった。
-今は「この料金表は prime base \(p\) に依存して説明できる」と言える。
+今は「この料金表は prime base $p$ に依存して説明できる」と言える。
 
 ## 6. 現在地
 
@@ -151,10 +151,10 @@ $$
 | witness-dependent sample provider           | 今回完了 |
 | witness-dependent concrete hit mass theorem | 未    |
 | `PrimePowerLabel` 構造体化                      | 未    |
-| analytic \(\Lambda(q)/\log n\)                | 未    |
+| analytic $\Lambda(q)/\log n$                | 未    |
 
 かなり登ったのぅ。
-いまは、本物の \(\log p\) には入っていないが、「\(p\) に依存する weight を provider にする」までは閉じた。
+いまは、本物の $\log p$ には入っていないが、「 $p$ に依存する weight を provider にする」までは閉じた。
 
 ## 7. 次の一手
 
@@ -211,7 +211,7 @@ $$
 
 へ進みやすくなる。
 
-ただし、今すぐ構造体化すると既存の `DivisorTransitionKernel` の label \(q:\mathbb{N}\) 路線に大きく影響する。
+ただし、今すぐ構造体化すると既存の `DivisorTransitionKernel` の label $q:\mathbb{N}$ 路線に大きく影響する。
 まずは predicate route で concrete bound をもう少し固めるのが賢い。
 
 ## 9. 総括
@@ -232,7 +232,7 @@ $$
 
 までつながった。
 
-山で言えば、前回は「この料金は base prime \(p\) によって決まる」と説明できた。
+山で言えば、前回は「この料金は base prime $p$ によって決まる」と説明できた。
 今回、その説明書付きの料金表を正式に受付へ提出できるようになった。
 次は、その料金表で実際に
 

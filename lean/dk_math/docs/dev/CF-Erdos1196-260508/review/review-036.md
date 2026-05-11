@@ -185,7 +185,7 @@ PrimePowerChannelProvider.ofVonMangoldtLikeWeight
 | `withWeight` 差し替え API               | 今回完了 |
 | concrete finite toy weight          | 未    |
 | von-Mangoldt-like weight            | 未    |
-| analytic \(\Lambda(q)/\log n\)        | 未    |
+| analytic $\Lambda(q)/\log n$        | 未    |
 
 つまり、まだ toy weight そのものは入っていない。
 だが、toy weight を入れる **安全な差し込み口** はできた。
@@ -198,7 +198,7 @@ PrimePowerChannelProvider.ofVonMangoldtLikeWeight
 
 まずは sample kernel でよい。
 
-たとえば状態 \(10\) の labels \(\{2,5\}\) に対して、
+たとえば状態 $10$ の labels $\{2,5\}$ に対して、
 
 $$
 w(10,2)=\frac12,\qquad
@@ -289,7 +289,7 @@ $$
 
 toy weight constructor ができたら、次に「prime-power label の witness に依存する weight」へ進める。
 
-たとえば、本物の \(\Lambda(q)\) ではなく、有限 toy 版として、
+たとえば、本物の $\Lambda(q)$ ではなく、有限 toy 版として、
 
 $$
 q=p^k \Rightarrow w(n,q)=c(p,n)
@@ -297,7 +297,7 @@ $$
 
 のような形を抽象化する。
 
-ただし、`IsPrimePowerLabel q` は存在証明なので、 \(p\) が一意に取れるか、どのように選ぶかが Lean 的には問題になる。
+ただし、`IsPrimePowerLabel q` は存在証明なので、 $p$ が一意に取れるか、どのように選ぶかが Lean 的には問題になる。
 ここは後で慎重に扱うべきじゃ。
 
 まずは index 上で手定義された toy weight から始めるのが安全じゃな。

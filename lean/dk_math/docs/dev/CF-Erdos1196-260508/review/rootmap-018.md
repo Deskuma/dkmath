@@ -164,7 +164,7 @@ $$
 といった補助も取り出せるようになった。
 
 これは山で言えば、
-「この登山者は primitive support を持ち、標高 \(x\) 以上から登る」
+「この登山者は primitive support を持ち、標高 $x$ 以上から登る」
 という登山届じゃな。
 
 ## 6. 第 5 登山道: 複数 path family と route API

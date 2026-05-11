@@ -140,7 +140,7 @@ sampleDvdControlledBoolChainFamily
 primitive_two_three_sampleDvdControlledBoolChainFamily_hitMass_le_sourceMass
 ```
 
-が入っておる。`unitNatMassSpace` は常に質量 \(1\) なので、整除単調性は `rfl` で閉じる。sample forest では `{2,4,8}` は source \(8\)、`{3,9}` は source \(9\) によって制御されている。
+が入っておる。`unitNatMassSpace` は常に質量 $1$ なので、整除単調性は `rfl` で閉じる。sample forest では `{2,4,8}` は source $8$、`{3,9}` は source $9$ によって制御されている。
 
 これは教材例としてかなり良い。
 
@@ -184,8 +184,8 @@ DescentBridge
 | divisibility-controlled provider | 今回完了 |
 | actual prime descent step        | 未着手  |
 | probabilistic Markov kernel      | 未着手  |
-| analytic weight \(1/(n\log n\))    | 未着手  |
-| asymptotic \(1+O(1/\log x\))       | 未着手  |
+| analytic weight $1/(n\log n)$    | 未着手  |
+| asymptotic $1+O(1/\log x)$       | 未着手  |
 
 今回の段階で、
 
@@ -233,7 +233,7 @@ def PrimePowerDescentStep (n m : ℕ) : Prop :=
   ∃ p k, Nat.Prime p ∧ 0 < k ∧ p^k ∣ n ∧ m = n / p^k
 ```
 
-この道は、将来の \(\Lambda(q)\) ルートに近い。
+この道は、将来の $\Lambda(q)$ ルートに近い。
 
 ### B. `Branching/SubConservative` へ接続する
 

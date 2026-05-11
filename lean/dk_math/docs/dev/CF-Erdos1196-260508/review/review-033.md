@@ -24,7 +24,7 @@ weightedHitMass_le_const_of_subprob_applyAtToSourceControlled
 
 じゃな。
 
-これは、prime-power channel 条件を型として持つ kernel \(T\) について、
+これは、prime-power channel 条件を型として持つ kernel $T$ について、
 
 $$
 T\text{ sub-probability}
@@ -89,8 +89,8 @@ $$
 まで直接進めるようになった。
 
 これは「素冪 label の意味論」と「重み付き hitting bound」が合流したということじゃ。
-まだ \(\Lambda(q)\) はない。まだ \(\log n\) もない。
-しかし、\(\Lambda(q)\) が乗るべき素冪 channel から、既存の mass bound へ入る道は開通した。
+まだ $\Lambda(q)$ はない。まだ $\log n$ もない。
+しかし、 $\Lambda(q)$ が乗るべき素冪 channel から、既存の mass bound へ入る道は開通した。
 
 ## 4. compatibility API の意味
 
@@ -156,7 +156,7 @@ $$
 | ------------------------------------ | ---- |
 | `FiniteTransitionKernel`             | 完了   |
 | `DivisorTransitionKernel`            | 完了   |
-| \(n\to n/q\)                           | 完了   |
+| $n\to n/q$                           | 完了   |
 | prime label bridge                   | 完了   |
 | prime-power label bridge             | 完了   |
 | `IsPrimePowerLabel`                  | 完了   |
@@ -223,7 +223,7 @@ $$
 \text{PrimePowerDivisorTransitionKernel}
 $$
 
-から、state \(n\) ごとの prime-power channel weight provider を theorem-facing に取り出す。
+から、state $n$ ごとの prime-power channel weight provider を theorem-facing に取り出す。
 
 最低限ほしいものは、
 

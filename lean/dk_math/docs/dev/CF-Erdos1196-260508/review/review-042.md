@@ -86,7 +86,7 @@ $$
 \text{prime-power channel 由来の weight}
 $$
 
-として登録できるようになった。これは \(\Lambda(q)\) へ進むための名前空間として、かなり重要じゃ。
+として登録できるようになった。これは $\Lambda(q)$ へ進むための名前空間として、かなり重要じゃ。
 
 ## 4. simp API も揃っている
 
@@ -115,7 +115,7 @@ $$
 が取り出しやすくなった。
 
 これは次の段階で効く。
-特に witness-dependent な weight を設計するとき、provider 化したあとに「本当にこの provider の weight は定義した \(w\) なのか」を `simp` で見えるようにしておくのは大事じゃ。
+特に witness-dependent な weight を設計するとき、provider 化したあとに「本当にこの provider の weight は定義した $w$ なのか」を `simp` で見えるようにしておくのは大事じゃ。
 
 ## 5. sample の切り替えも意味がある
 
@@ -171,19 +171,19 @@ $$
 | von-Mangoldt-like provider simp API | 今回完了 |
 | witness-dependent toy weight        | 未    |
 | `PrimePowerLabel` 構造体               | 未    |
-| analytic \(\Lambda(q)/\log n\)        | 未    |
+| analytic $\Lambda(q)/\log n$        | 未    |
 
 これで、有限 von-Mangoldt-like weight を provider 化して weighted hit mass route に流す入口は、かなり整った。
 
 ## 7. 次の一手
 
-次は History にある通り、prime-power witness \((p,k)\) に依存する具体的な finite toy weight の表現方法を検討する段階じゃ。
+次は History にある通り、prime-power witness $(p,k)$ に依存する具体的な finite toy weight の表現方法を検討する段階じゃ。
 
 ここで分岐がある。
 
-### A. 軽い道: \(q:\mathbb{N}\) label のまま進む
+### A. 軽い道: $q:\mathbb{N}$ label のまま進む
 
-今のまま label を \(q:\mathbb{N}\) にして、weight は外から与える。
+今のまま label を $q:\mathbb{N}$ にして、weight は外から与える。
 
 そして、
 
@@ -194,11 +194,11 @@ T.VonMangoldtLikeWeight w
 で性質を管理する。
 
 この道は軽い。
-ただし、weight が本当に \(q=p^k\) の \(p\) に依存している、ということは predicate として別に述べる必要がある。
+ただし、weight が本当に $q=p^k$ の $p$ に依存している、ということは predicate として別に述べる必要がある。
 
 ### B. 強い道: `PrimePowerLabel` を構造体化する
 
-将来的に \(\Lambda(q)=\log p\) へ進むなら、
+将来的に $\Lambda(q)=\log p$ へ進むなら、
 
 ```lean
 structure PrimePowerLabel where
@@ -212,20 +212,20 @@ structure PrimePowerLabel where
 
 のような型を作る道が強い。
 
-この場合、label 自体が \(p,k\) を持つので、weight を
+この場合、label 自体が $p,k$ を持つので、weight を
 
 $$
 w(n,\ell)
 $$
 
-として \(\ell.p\) に依存させやすい。
+として $\ell.p$ に依存させやすい。
 
-ただしこれは既存の `DivisorTransitionKernel` が label を \(\mathbb{N}\) としている設計から一段抽象化が必要になる。少し重い。
+ただしこれは既存の `DivisorTransitionKernel` が label を $\mathbb{N}$ としている設計から一段抽象化が必要になる。少し重い。
 
 ## 8. わっちの推奨
 
 短期的には A がよい。
-つまり、まずは \(q:\mathbb{N}\) label のまま、
+つまり、まずは $q:\mathbb{N}$ label のまま、
 
 $$
 w(n,q)
@@ -252,7 +252,7 @@ $$
 w(n,q)=c(n,p)
 $$
 
-のような「\(p\) による表現」を持つ predicate にするのがよい。
+のような「 $p$ による表現」を持つ predicate にするのがよい。
 
 ## 9. 総括
 
@@ -262,4 +262,4 @@ Phase AP では「これは von-Mangoldt-like weight である」という札が
 今回、その札付き weight を `PrimePowerChannelProvider` へ直接登録できるようになった。
 
 山で言えば、料金表に「素冪由来」と書かれた公的書式ができ、それを受付がそのまま受理できるようになった。
-次はいよいよ、その料金表がどの素数 \(p\) に基づいているのか、つまり witness-dependent な重み設計へ進む番じゃな。
+次はいよいよ、その料金表がどの素数 $p$ に基づいているのか、つまり witness-dependent な重み設計へ進む番じゃな。

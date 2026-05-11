@@ -3,7 +3,7 @@
 ## 1. 結論
 
 うむ、Phase AO は **`ofKernelWithWeight` 由来 provider の展開 API 整備** じゃ。
-Phase AN で任意の手定義 weight \(w\) を `PrimePowerChannelProvider` に載せる入口ができた。今回 Phase AO では、その provider から
+Phase AN で任意の手定義 weight $w$ を `PrimePowerChannelProvider` に載せる入口ができた。今回 Phase AO では、その provider から
 
 $$
 kernel,\qquad index,\qquad weight
@@ -52,7 +52,7 @@ $$
 
 ## 3. 何が良くなったか
 
-Phase AN までで、任意の手定義 weight \(w\) について、
+Phase AN までで、任意の手定義 weight $w$ について、
 
 $$
 w\ge 0,\qquad \sum w\le 1
@@ -128,7 +128,7 @@ ofKernelWithWeight_channelProviderAt_weight
 | `ofKernelWithWeight` simp API       | 今回完了 |
 | witness-dependent toy weight        | 未    |
 | von-Mangoldt-like finite weight     | 未    |
-| analytic \(\Lambda(q)/\log n\)        | 未    |
+| analytic $\Lambda(q)/\log n$        | 未    |
 
 つまり、手定義 weight を登録して使う基盤はかなり整った。
 次からは、weight の中身をどう設計するか、という本丸に近づく。
@@ -163,7 +163,7 @@ def VonMangoldtLikeWeight
 
 ## 7. 注意点
 
-ここから先で本物の \(\Lambda(q)\) を扱うには、\(q=p^k\) の \(p\) をどう取り出すかが問題になる。
+ここから先で本物の $\Lambda(q)$ を扱うには、 $q=p^k$ の $p$ をどう取り出すかが問題になる。
 
 `IsPrimePowerLabel q` は存在命題なので、
 
@@ -171,15 +171,15 @@ $$
 \exists p,k,\quad q=p^k
 $$
 
-は言えても、計算可能な形で「その \(p\)」を取り出すには別の設計が必要じゃ。
+は言えても、計算可能な形で「その $p$ 」を取り出すには別の設計が必要じゃ。
 
 候補は二つある。
 
-1. 今の \(q:\mathbb{N}\) label を維持し、weight は外から与え、\(\Lambda\)-like 性質を predicate で述べる。
+1. 今の $q:\mathbb{N}$ label を維持し、weight は外から与え、 $\Lambda$-like 性質を predicate で述べる。
 2. label を構造体化して、`q`, `p`, `k`, `prime`, `k_pos`, `eq_pow` を持たせる。
 
 短期的には 1 が軽い。
-長期的に本物の \(\Lambda(q)=\log p\) へ進むなら 2 が強い。
+長期的に本物の $\Lambda(q)=\log p$ へ進むなら 2 が強い。
 
 ## 8. 総括
 

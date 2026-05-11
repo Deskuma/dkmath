@@ -180,20 +180,20 @@ $$
 
 いまの finite skeleton は、かなり一段落じゃ。
 
-| 層                               | 状態   |
-| ------------------------------- | ---- |
-| finite primitive set            | 完了   |
-| single chain hit                | 完了   |
-| forest hit mass                 | 完了   |
-| source-controlled forest        | 完了   |
-| dvd-controlled provider         | 完了   |
-| one-step prime descent provider | 今回完了 |
-| prime-power descent skeleton    | 今回追加 |
-| multi-step prime path           | 未    |
-| Branching / SubConservative 接続  | 未    |
-| Markov kernel                   | 未    |
-| \(1/(n\log n\)) 重み                | 未    |
-| \(1+O(1/\log x\)) 評価              | 未    |
+| 層                                | 状態     |
+| --------------------------------- | -------- |
+| finite primitive set              | 完了     |
+| single chain hit                  | 完了     |
+| forest hit mass                   | 完了     |
+| source-controlled forest          | 完了     |
+| dvd-controlled provider           | 完了     |
+| one-step prime descent provider   | 今回完了 |
+| prime-power descent skeleton      | 今回追加 |
+| multi-step prime path             | 未       |
+| Branching / SubConservative 接続  | 未       |
+| Markov kernel                     | 未       |
+| $1/(n\log n)$ 重み                | 未       |
+| $1+O(1/\log x)$ 評価              | 未       |
 
 つまり、有限・代数・組合せの登山道は、
 

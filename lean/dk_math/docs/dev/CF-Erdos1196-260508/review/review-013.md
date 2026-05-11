@@ -43,7 +43,7 @@ not_mem_zero_of_one_le
 not_mem_one_of_two_le
 ```
 
-が入ったので、下限 \(x\) から \(0\) や \(1\) の除外を自然に引き出せるようになった。
+が入ったので、下限 $x$ から $0$ や $1$ の除外を自然に引き出せるようになった。
 
 これは、以前 `{1,2}` のような sample で primitive 性が壊れた経験を、きちんと API に反映した形じゃな。
 
@@ -69,7 +69,7 @@ $$
 I=(S,\text{primitive},S\subset[x,\infty))
 $$
 
-と branch-controlled prime path family \(F\) があるとき、
+と branch-controlled prime path family $F$ があるとき、
 
 $$
 \mathrm{hitMass}(S,F)
@@ -90,7 +90,7 @@ $$
 erdosFinitePrimitiveInput_two_five
 ```
 
-として、 \(\{2,5\}\) を \(x=2\) 以上の primitive support として package 化している。さらに positivity と \(1\notin S\) を取り出し、branch-controlled two-path family に対する hit mass bound まで通している。
+として、 $\{2,5\}$ を $x=2$ 以上の primitive support として package 化している。さらに positivity と $1\notin S$ を取り出し、branch-controlled two-path family に対する hit mass bound まで通している。
 
 つまり、具体例としては、
 

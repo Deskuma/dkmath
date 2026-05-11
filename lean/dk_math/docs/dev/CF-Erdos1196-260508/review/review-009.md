@@ -61,7 +61,7 @@ $$
 \mu(x_j)\le \mu(x_0)
 $$
 
-が全ての \(j\) で成り立つ、ということじゃ。
+が全ての $j$ で成り立つ、ということじゃ。
 
 これはいよいよ「質量が流れても増えない」という、Erdős 的・宇宙式的な読みそのものになってきた。
 
@@ -107,7 +107,7 @@ $$
 def sampleBranching_eight_four_two
 ```
 
-では、\(8\) の子を \(\{4\}\)、\(4\) の子を \(\{2\}\)、それ以外を空集合としている。さらに、この path が branch に従うこと、unit mass で `SubConservative` であること、そして `{2,5}` の primitive hit mass bound まで通している。
+では、 $8$ の子を $\{4\}$、 $4$ の子を $\{2\}$、それ以外を空集合としている。さらに、この path が branch に従うこと、unit mass で `SubConservative` であること、そして `{2,5}` の primitive hit mass bound まで通している。
 
 これは教材例としてかなり良い。
 
@@ -195,7 +195,7 @@ $$
 
 ### 候補 A. positive / lower-bound support
 
-Erdős #1196 では \(A\subset [x,\infty)\) なので、有限版でも
+Erdős #1196 では $A\subset [x,\infty)$ なので、有限版でも
 
 ```lean
 PositiveOn S
@@ -204,7 +204,7 @@ LowerBoundOn x S
 
 があると扱いやすい。
 
-特に過去に `{1,2}` が primitive でなく失敗した流れがあったので、 \(1\) を含まない層を明示する価値はある。
+特に過去に `{1,2}` が primitive でなく失敗した流れがあったので、 $1$ を含まない層を明示する価値はある。
 
 ### 候補 B. multiple path family package
 

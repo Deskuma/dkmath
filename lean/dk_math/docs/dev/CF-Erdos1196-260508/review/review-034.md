@@ -127,9 +127,9 @@ sampleTenPrimePowerDivisorTransitionKernel_channelProviderAt_subProbability
 
 じゃ。
 
-これは、既存の sample kernel が state \(n\) ごとに sub-probability channel provider を出すことを確認している。
+これは、既存の sample kernel が state $n$ ごとに sub-probability channel provider を出すことを確認している。
 
-具体的には、状態 \(10\) では labels \(2,5\) に重みが乗り、
+具体的には、状態 $10$ では labels $2,5$ に重みが乗り、
 
 $$
 \frac12+\frac12=1
@@ -156,7 +156,7 @@ $$
 | von-Mangoldt-like weight            | 未    |
 | analytic weight                     | 未    |
 
-つまり、まだ本物の \(\Lambda(q)\) ではないが、\(\Lambda(q)\) を載せる **席** はできてきた。
+つまり、まだ本物の $\Lambda(q)$ ではないが、 $\Lambda(q)$ を載せる **席** はできてきた。
 
 ## 7. 次の一手
 
@@ -196,7 +196,7 @@ def providerAt (P : PrimePowerChannelProvider) (n : ℕ) :
 
 `PrimePowerChannelProvider` ができたら、次に finite toy weight じゃ。
 
-ただし、まだ実数対数や \(\Lambda\) 本体には入らない方がよい。
+ただし、まだ実数対数や $\Lambda$ 本体には入らない方がよい。
 
 まずは、例えば次のような **有限 toy weight** でよい。
 

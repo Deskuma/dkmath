@@ -3,7 +3,7 @@
 ## 1. 結論
 
 うむ、Phase AF は **prime-power channel 条件の state/kernel レベル化** じゃ。
-前回 Phase AE では、個々の label \(q\) に対して
+前回 Phase AE では、個々の label $q$ に対して
 
 $$
 \mathrm{IsPrimePowerLabel}(q)
@@ -37,7 +37,7 @@ $$
 T.\mathrm{PrimePowerIndexOn}(n)
 $$
 
-は「状態 \(n\) から出るすべての label が prime-power label」という条件。
+は「状態 $n$ から出るすべての label が prime-power label」という条件。
 
 $$
 T.\mathrm{PrimePowerIndexed}
@@ -105,7 +105,7 @@ sampleTenDivisorTransitionKernel_primePowerIndexed
 
 が追加された。
 
-これは状態 \(10\) の index が \(\{2,5\}\) であり、
+これは状態 $10$ の index が $\{2,5\}$ であり、
 
 $$
 2=2^1,\qquad 5=5^1
@@ -124,7 +124,7 @@ $$
 | ------------------------------------------- | ---- |
 | `FiniteTransitionKernel`                    | 完了   |
 | `DivisorTransitionKernel`                   | 完了   |
-| \(q\mid n\), \(next=n/q\)                       | 完了   |
+| $q\mid n$, $next=n/q$                       | 完了   |
 | prime label → `PrimeDescentStep`            | 完了   |
 | prime-power label → `PrimePowerDescentStep` | 完了   |
 | `IsPrimePowerLabel q`                       | 完了   |
@@ -134,7 +134,7 @@ $$
 | von Mangoldt channel / weight               | 未    |
 
 つまり、個別 label から state-level、さらに kernel-level へ prime-power 条件が持ち上がった。
-これは \(\Lambda(q)\) の前段としてかなり自然な整理じゃ。
+これは $\Lambda(q)$ の前段としてかなり自然な整理じゃ。
 
 ## 6. 今回の数学的意味
 
@@ -144,7 +144,7 @@ $$
 w(n,q)\sim \frac{\Lambda(q)}{\log n}
 $$
 
-であり、\(\Lambda(q)\) が非零になるのは \(q\) が prime-power のときじゃ。
+であり、 $\Lambda(q)$ が非零になるのは $q$ が prime-power のときじゃ。
 
 今回の `PrimePowerIndexed` は、
 
@@ -154,7 +154,7 @@ $$
 
 を表す条件になる。
 
-つまり、まだ \(\Lambda\) そのものは入っていないが、
+つまり、まだ $\Lambda$ そのものは入っていないが、
 
 $$
 \Lambda\text{ が乗るべき channel だけを index にする}
@@ -238,7 +238,7 @@ primePowerDescentStep_of_primePowerIndexed
 
 `PrimePowerDivisorTransitionKernel` ができたら、いよいよ weight/channel 側へ進める。
 
-ただし、まだ実数対数や \(\Lambda\) 本体に入る前に、有限 skeleton として次を考えるのが安全じゃ。
+ただし、まだ実数対数や $\Lambda$ 本体に入る前に、有限 skeleton として次を考えるのが安全じゃ。
 
 ```lean
 structure PrimePowerWeightProvider ...
@@ -250,7 +250,7 @@ structure PrimePowerWeightProvider ...
 def vonMangoldtLikeWeight : ℕ → ℕ → ℚ
 ```
 
-ただし最初は本物の \(\Lambda(q)\) ではなく、prime-power label にだけ非零になる **有限 toy weight** でよい。
+ただし最初は本物の $\Lambda(q)$ ではなく、prime-power label にだけ非零になる **有限 toy weight** でよい。
 
 つまり順序は、
 

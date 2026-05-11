@@ -46,7 +46,7 @@ $$
 であることを `compatibleAt_iff_index_eq` で明示した、ということじゃ。
 
 これは小さいようで大きい。
-次に状態 \(n\) と index \(q\) に意味を持たせるとき、毎回 `providerAt` を展開しながら index 一致を証明するのは読みにくい。今回の alias により、 theorem 文がかなり軽くなる。
+次に状態 $n$ と index $q$ に意味を持たせるとき、毎回 `providerAt` を展開しながら index 一致を証明するのは読みにくい。今回の alias により、 theorem 文がかなり軽くなる。
 
 ## 3. 何が良くなったか
 
@@ -252,4 +252,4 @@ $$
 であることも明示できるようになった。
 
 山で言えば、配給所 `FiniteKernel` と登山道 `SourceControlledChainFamily` の接続口に、正式な案内板が立った。
-次はいよいよ、状態 \(n\)、除去因子 \(q\)、遷移先 \(n/q\) を持つ actual finite Markov transition skeleton へ進める段階じゃ。
+次はいよいよ、状態 $n$、除去因子 $q$、遷移先 $n/q$ を持つ actual finite Markov transition skeleton へ進める段階じゃ。
