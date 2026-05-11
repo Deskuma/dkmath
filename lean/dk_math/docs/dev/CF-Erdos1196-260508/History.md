@@ -1365,3 +1365,30 @@ Archive
 6. 次の課題:
    - Phase AY として sample の `sampleTenPrimePowerWitnessProvider` と `sampleTenToyPrimeBaseWeight` から `PrimePowerChannelProvider` を作り、hit mass bound まで接続する。
    - 必要なら `ofWitnessProviderWeight` route の concrete theorem 名を追加し、手定義 toy weight route と区別して読めるようにする。
+
+### 日時: 2026/05/11 13:01 JST (Phase AY witness-provider sample hit mass bound)
+
+1. 目的:
+   - `review/review-049.md` の提案に従い、sample の `sampleTenPrimePowerWitnessProvider` と `sampleTenToyPrimeBaseWeight` を `ofWitnessProviderWeight` route で `PrimePowerChannelProvider` にし、weighted hit mass bound まで接続する。
+2. 実施:
+   - `sampleTenToyPrimeBaseWeight_nonneg_on_index` を追加し、sample index 上で base-prime weight が非負であることを示した。
+   - `sampleTenPrimePowerWitnessProvider_weightOfBase_eq_sampleTenToyWeight` を追加し、witness-provider-built weight が既存の手定義 toy weight と一致することを固定した。
+   - `sampleTenWitnessProviderWeightKernel_subProbability` を追加し、`W.weightOfBase c` で置き換えた sample kernel が sub-probability normalized であることを示した。
+   - `sampleTenWitnessProviderWeightChannelProvider` を追加し、`PrimePowerChannelProvider.ofWitnessProviderWeight` 経由で sample channel provider を構成した。
+   - `sampleTenWitnessProviderWeightChannelProvider_channelProviderAt_subProbability` と `sampleTenWitnessProviderWeight_hitMass_le_one` を追加した。
+3. 結論:
+   - `PrimePowerWitnessProvider + base-prime toy weight -> weightOfBase -> ofWitnessProviderWeight -> applyAtToSourceControlled -> weightedHitMass <= 1` の concrete route が no-sorry で閉じた。
+   - 手定義 toy weight route と同じ bound を、witness-provider-driven weight route として theorem 名から読めるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - `sampleTenWitnessProviderWeightKernel_subProbability` では dependent proof を含む `withWeight` 目標に対して weight 関数の等式で直接 `rw` できず、`weightOfBase` の定義を unfold して直接計算する形に修正した。
+   - hit mass bound の compatibility 証明では `|>.toDivisorTransitionKernel.index 10` の pipeline 表記が `simp` と誤結合したため、通常の field 表記へ直した。
+   - さらに `sampleTenWitnessProviderWeightChannelProvider` と `sampleTenPrimePowerDivisorTransitionKernel` を明示的に unfold して index equality を閉じた。
+6. 次の課題:
+   - Phase AZ として、`ofWitnessProviderWeight` route の一般 theorem-facing bound alias を追加するか判断する。
+   - その後、解析風 weight または `PrimePowerLabel` index kernel の別ルートへ進むかを検討する。

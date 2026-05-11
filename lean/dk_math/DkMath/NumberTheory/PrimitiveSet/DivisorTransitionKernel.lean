@@ -1064,6 +1064,53 @@ theorem sampleTenPrimePowerWitnessProvider_weightOfBase_primeWitnessDependent :
       · simp [sampleTenPrimePowerDivisorTransitionKernel,
           sampleTenDivisorTransitionKernel, hn] at hq)
 
+/-- The sample base-prime weight is nonnegative on the witness-provider index. -/
+theorem sampleTenToyPrimeBaseWeight_nonneg_on_index :
+    ∀ n q
+      (hq :
+        q ∈ sampleTenPrimePowerDivisorTransitionKernel.toDivisorTransitionKernel.index n),
+      0 ≤ sampleTenToyPrimeBaseWeight n
+        ((sampleTenPrimePowerWitnessProvider.label n q hq).p) := by
+  intro n q hq
+  by_cases hn : n = 10
+  · subst n
+    simp only [sampleTenPrimePowerDivisorTransitionKernel,
+      sampleTenDivisorTransitionKernel, if_true, Finset.mem_insert,
+      Finset.mem_singleton] at hq
+    rcases hq with rfl | rfl
+    · norm_num [sampleTenPrimePowerWitnessProvider,
+        samplePrimePowerLabel_two, sampleTenToyPrimeBaseWeight]
+    · norm_num [sampleTenPrimePowerWitnessProvider,
+        samplePrimePowerLabel_five, sampleTenToyPrimeBaseWeight]
+  · simp [sampleTenPrimePowerDivisorTransitionKernel,
+      sampleTenDivisorTransitionKernel, hn] at hq
+
+/-- The witness-provider-built sample weight agrees with the hand-written toy weight. -/
+theorem sampleTenPrimePowerWitnessProvider_weightOfBase_eq_sampleTenToyWeight :
+    sampleTenPrimePowerWitnessProvider.weightOfBase sampleTenToyPrimeBaseWeight =
+      sampleTenToyWeight := by
+  funext n q
+  by_cases hn : n = 10
+  · subst n
+    by_cases hq_two : q = 2
+    · subst q
+      norm_num [PrimePowerWitnessProvider.weightOfBase,
+        sampleTenPrimePowerWitnessProvider, samplePrimePowerLabel_two,
+        sampleTenPrimePowerDivisorTransitionKernel, sampleTenDivisorTransitionKernel,
+        sampleTenToyPrimeBaseWeight, sampleTenToyWeight]
+    · by_cases hq_five : q = 5
+      · subst q
+        norm_num [PrimePowerWitnessProvider.weightOfBase,
+          sampleTenPrimePowerWitnessProvider, samplePrimePowerLabel_five,
+          sampleTenPrimePowerDivisorTransitionKernel, sampleTenDivisorTransitionKernel,
+          sampleTenToyPrimeBaseWeight, sampleTenToyWeight]
+      · simp [PrimePowerWitnessProvider.weightOfBase,
+          sampleTenPrimePowerDivisorTransitionKernel, sampleTenDivisorTransitionKernel,
+          sampleTenToyWeight, hq_two, hq_five]
+  · simp [PrimePowerWitnessProvider.weightOfBase,
+      sampleTenPrimePowerDivisorTransitionKernel, sampleTenDivisorTransitionKernel,
+      sampleTenToyWeight, hn]
+
 /-- The sample toy weight is nonnegative on the sample channel index. -/
 theorem sampleTenToyWeight_nonneg :
     ∀ n q,
@@ -1154,6 +1201,48 @@ theorem sampleTenToyWeightKernel_subProbability :
       sampleTenToyWeightKernel,
       sampleTenToyWeight, hn]
 
+/--
+The witness-provider-built sample kernel is sub-probability normalized.
+-/
+theorem sampleTenWitnessProviderWeightKernel_subProbability :
+    (sampleTenPrimePowerDivisorTransitionKernel.withWeight
+      (sampleTenPrimePowerWitnessProvider.weightOfBase sampleTenToyPrimeBaseWeight)
+      (sampleTenPrimePowerDivisorTransitionKernel.vonMangoldtLikeWeight_nonneg
+        (sampleTenPrimePowerDivisorTransitionKernel
+          |>.vonMangoldtLikeWeight_of_primeWitnessDependent
+            (sampleTenPrimePowerWitnessProvider.weightOfBase_primeWitnessDependent
+              sampleTenToyPrimeBaseWeight
+              sampleTenToyPrimeBaseWeight_nonneg_on_index)))).SubProbability := by
+  intro n
+  by_cases hn : n = 10
+  · subst n
+    norm_num [PrimePowerDivisorTransitionKernel.SubProbability,
+      PrimePowerDivisorTransitionKernel.withWeight,
+      PrimePowerWitnessProvider.weightOfBase,
+      DivisorTransitionKernel.SubProbability,
+      DivisorTransitionKernel.toFiniteTransitionKernel,
+      FiniteTransitionKernel.SubProbability,
+      FiniteTransitionKernel.toFiniteKernel,
+      FiniteKernel.providerAt,
+      WeightProvider.SubProbability,
+      WeightProvider.totalWeight,
+      sampleTenPrimePowerWitnessProvider,
+      samplePrimePowerLabel_two,
+      samplePrimePowerLabel_five,
+      sampleTenPrimePowerDivisorTransitionKernel,
+      sampleTenDivisorTransitionKernel,
+      sampleTenToyPrimeBaseWeight]
+  · simp [PrimePowerDivisorTransitionKernel.withWeight,
+      PrimePowerWitnessProvider.weightOfBase,
+      DivisorTransitionKernel.toFiniteTransitionKernel,
+      FiniteTransitionKernel.toFiniteKernel,
+      FiniteKernel.providerAt,
+      WeightProvider.SubProbability,
+      WeightProvider.totalWeight,
+      sampleTenPrimePowerWitnessProvider,
+      sampleTenPrimePowerDivisorTransitionKernel,
+      sampleTenDivisorTransitionKernel, hn]
+
 /-- The toy-weighted sample packaged as a prime-power channel provider. -/
 def sampleTenToyWeightChannelProvider : PrimePowerChannelProvider :=
   PrimePowerChannelProvider.ofPrimeWitnessDependentWeight
@@ -1168,6 +1257,24 @@ theorem sampleTenToyWeightChannelProvider_channelProviderAt_subProbability
     (n : ℕ) :
     (sampleTenToyWeightChannelProvider.channelProviderAt n).SubProbability :=
   sampleTenToyWeightChannelProvider.channelProviderAt_subProbability n
+
+/--
+The sample witness provider and base-prime toy weight packaged as a prime-power
+channel provider.
+-/
+def sampleTenWitnessProviderWeightChannelProvider :
+    PrimePowerChannelProvider :=
+  PrimePowerChannelProvider.ofWitnessProviderWeight
+    sampleTenPrimePowerWitnessProvider
+    sampleTenToyPrimeBaseWeight
+    sampleTenToyPrimeBaseWeight_nonneg_on_index
+    sampleTenWitnessProviderWeightKernel_subProbability
+
+/-- The witness-provider-weighted sample emits sub-probability providers. -/
+theorem sampleTenWitnessProviderWeightChannelProvider_channelProviderAt_subProbability
+    (n : ℕ) :
+    (sampleTenWitnessProviderWeightChannelProvider.channelProviderAt n).SubProbability :=
+  sampleTenWitnessProviderWeightChannelProvider.channelProviderAt_subProbability n
 
 /--
 A source-controlled family whose index matches the toy-weighted sample channel
@@ -1226,5 +1333,36 @@ theorem sampleTenPrimeWitnessDependentWeight_hitMass_le_one :
         simp [sampleTenToyWeightSourceControlledFamily])).weightedHitMass
       ({2, 5} : Finset ℕ) ≤ 1 :=
   sampleTenToyWeightChannelProvider_hitMass_le_one
+
+/--
+The witness-provider-built sample channel provider gives the same concrete
+weighted hit mass bound by `1`.
+-/
+theorem sampleTenWitnessProviderWeight_hitMass_le_one :
+    (sampleTenWitnessProviderWeightChannelProvider.applyAtToSourceControlled 10
+      sampleTenToyWeightSourceControlledFamily
+      (by
+        change
+          sampleTenWitnessProviderWeightChannelProvider.kernel.toDivisorTransitionKernel.index 10 =
+          sampleTenToyWeightSourceControlledFamily.index
+        simp [sampleTenWitnessProviderWeightChannelProvider,
+          sampleTenPrimePowerDivisorTransitionKernel,
+          sampleTenToyWeightSourceControlledFamily])).weightedHitMass
+      ({2, 5} : Finset ℕ) ≤ 1 := by
+  exact sampleTenWitnessProviderWeightChannelProvider
+    |>.weightedHitMass_le_const_applyAtToSourceControlled 10
+      sampleTenToyWeightSourceControlledFamily
+      (by
+        change
+          sampleTenWitnessProviderWeightChannelProvider.kernel.toDivisorTransitionKernel.index 10 =
+          sampleTenToyWeightSourceControlledFamily.index
+        simp [sampleTenWitnessProviderWeightChannelProvider,
+          sampleTenPrimePowerDivisorTransitionKernel,
+          sampleTenToyWeightSourceControlledFamily])
+      (primitiveOn_pair (by norm_num) (by norm_num))
+      (by norm_num)
+      (by
+        intro _q _hq
+        rfl)
 
 end DkMath.NumberTheory.PrimitiveSet
