@@ -411,7 +411,7 @@ abbrev DescentChain := DivisibilityChain
 わっちの判定では、
 
 $$
-\text{Erdős \#1196 宇宙式ルート}
+\text{Erdős \\\#1196 宇宙式ルート}
 $$
 
 の進捗は、今回で
