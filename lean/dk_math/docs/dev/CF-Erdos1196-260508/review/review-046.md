@@ -2,7 +2,7 @@
 
 ## 1. 結論
 
-うむ、Phase AU は **既存の (q:\mathbb{N}) label route を壊さずに、prime-power witness を sidecar 化した段階** じゃ。
+うむ、Phase AU は **既存の \(q:\mathbb{N}\) label route を壊さずに、prime-power witness を sidecar 化した段階** じゃ。
 これはかなり良い判断じゃな。
 
 今回追加された `PrimePowerLabel` により、
@@ -11,7 +11,7 @@ $$
 q=p^k,\qquad p\text{ prime},\qquad 0<k
 $$
 
-という証拠を、単なる存在命題ではなく **明示的な構造体** として持てるようになった。しかも `DivisorTransitionKernel` 本体の index 型は (\mathbb{N}) のまま保たれている。つまり、既存の finite transition / weighted route を壊さずに、将来の (p)-依存 weight へ進む足場ができたわけじゃ。
+という証拠を、単なる存在命題ではなく **明示的な構造体** として持てるようになった。しかも `DivisorTransitionKernel` 本体の index 型は \(\mathbb{N}\) のまま保たれている。つまり、既存の finite transition / weighted route を壊さずに、将来の \(p\)-依存 weight へ進む足場ができたわけじゃ。
 
 ## 2. 今回の主役
 
@@ -27,7 +27,7 @@ structure PrimePowerLabel where
   eq_pow : q = p ^ k
 ```
 
-これは、自然数 label (q) に対し、
+これは、自然数 label \(q\) に対し、
 
 $$
 q=p^k
@@ -36,7 +36,7 @@ $$
 という witness を明示的に同梱する sidecar じゃ。
 
 重要なのは、これは既存の label 型を置き換えていないことじゃ。
-`DivisorTransitionKernel` は今まで通り (q:\mathbb{N}) を label として扱う。`PrimePowerLabel` は、その (q) に witness を添える補助構造として使う。
+`DivisorTransitionKernel` は今まで通り \(q:\mathbb{N}\) を label として扱う。`PrimePowerLabel` は、その \(q\) に witness を添える補助構造として使う。
 
 この「全面置換ではなく sidecar」という設計は安全じゃ。
 
@@ -139,7 +139,7 @@ $$
 
 | 層                                           | 状態   |
 | ------------------------------------------- | ---- |
-| (q:\mathbb{N}) label route                  | 継続   |
+| \(q:\mathbb{N}\) label route                  | 継続   |
 | `IsPrimePowerLabel q`                       | 完了   |
 | `PrimeWitnessDependentWeight`               | 完了   |
 | `ofPrimeWitnessDependentWeight`             | 完了   |
@@ -148,11 +148,11 @@ $$
 | `PrimePowerWitnessProvider`                 | 未    |
 | `weightOfBase`                              | 未    |
 | witness-driven provider theorem             | 未    |
-| analytic (\Lambda(q)/\log n)                | 未    |
+| analytic \(\Lambda(q)/\log n\)                | 未    |
 
-つまり、Phase AU で **base prime (p) を定義的に取り出すための器** ができた。
+つまり、Phase AU で **base prime \(p\) を定義的に取り出すための器** ができた。
 
-ただし、まだ「各 index (q) に対してどの `PrimePowerLabel` を選ぶか」は決まっていない。
+ただし、まだ「各 index \(q\) に対してどの `PrimePowerLabel` を選ぶか」は決まっていない。
 それが次の Phase AV の仕事じゃ。
 
 ## 6. Phase AV: 次の一手
@@ -165,7 +165,7 @@ PrimePowerWitnessProvider
 
 が自然じゃ。
 
-目的は、`PrimePowerDivisorTransitionKernel` の各 indexed label (q) に対して、対応する `PrimePowerLabel` を選ぶことじゃ。
+目的は、`PrimePowerDivisorTransitionKernel` の各 indexed label \(q\) に対して、対応する `PrimePowerLabel` を選ぶことじゃ。
 
 候補構造はこう。
 
@@ -235,13 +235,13 @@ theorem PrimePowerWitnessProvider.primePowerDescentStep
 ```
 
 ここは少し注意が必要じゃ。
-`PrimePowerLabel.primePowerDescentStep_of_mem` は `T.next n L.q` を返す形なので、最後に `label_q` で (L.q=q) へ書き換える必要がある。
+`PrimePowerLabel.primePowerDescentStep_of_mem` は `T.next n L.q` を返す形なので、最後に `label_q` で \(L.q=q\) へ書き換える必要がある。
 
 ## 8. Phase AW: 二手目の先読み
 
 Phase AV が閉じたら、次は **weightOfBase** じゃ。
 
-つまり、witness provider から base prime (p) を取り出して、
+つまり、witness provider から base prime \(p\) を取り出して、
 
 $$
 w(n,q)=c(n,p)
@@ -278,7 +278,7 @@ $$
 
 を作れる。
 
-これは、本物の (\Lambda(q)=\log p) へ向かうための有限 toy skeleton としてかなり重要じゃ。
+これは、本物の \(\Lambda(q)=\log p\) へ向かうための有限 toy skeleton としてかなり重要じゃ。
 
 ## 9. Phase AW で欲しい theorem
 
@@ -319,13 +319,13 @@ theorem PrimePowerWitnessProvider.weightOfBase_primeWitnessDependent
 ```
 
 ただし、この theorem はそのままだと少し型が難しいかもしれぬ。
-`PrimeWitnessDependentWeight` は witness として (p,k) を返し、さらに
+`PrimeWitnessDependentWeight` は witness として \(p,k\) を返し、さらに
 
 $$
 w(n,q)=c(n,p)
 $$
 
-を要求する。ここで (p=(W.label n q hq).p) を選べばよい。
+を要求する。ここで \(p=(W.label n q hq).p\) を選べばよい。
 
 `weightOfBase` が `if hq : q ∈ index n` で定義されるので、`simp [weightOfBase, hq]` が効くように設計しておくのが大事じゃ。
 
@@ -391,9 +391,9 @@ PrimePowerChannelProvider.ofWitnessProviderWeight
 
 入力は、
 
-* (T : PrimePowerDivisorTransitionKernel)
-* (W : PrimePowerWitnessProvider T)
-* (c : \mathbb{N}\to\mathbb{N}\to\mathbb{Q})
+* \(T : PrimePowerDivisorTransitionKernel\)
+* \(W : PrimePowerWitnessProvider T\)
+* \(c : \mathbb{N}\to\mathbb{N}\to\mathbb{Q}\)
 * base weight の非負性
 * sub-probability
 
@@ -414,7 +414,7 @@ $$
 ## 12. 注意点
 
 `PrimePowerWitnessProvider` には witness の選択が入る。
-同じ (q) に複数の (p,k) 表現があるか、という数学的には通常ほぼ一意性を期待したくなる部分があるが、最初は一意性に踏み込まなくてよい。
+同じ \(q\) に複数の \(p,k\) 表現があるか、という数学的には通常ほぼ一意性を期待したくなる部分があるが、最初は一意性に踏み込まなくてよい。
 
 今は、
 
@@ -424,14 +424,14 @@ $$
 
 だけで十分じゃ。
 
-本物の (\Lambda(q)=\log p) に進む時は、prime-power 表現の base prime の一意性が重要になるかもしれぬ。
+本物の \(\Lambda(q)=\log p\) に進む時は、prime-power 表現の base prime の一意性が重要になるかもしれぬ。
 しかし、それは次の山。今は witness provider route を立てるのが先じゃな。
 
 ## 13. 総括
 
 Phase AU は、prime-power witness を sidecar として導入した良い段階じゃ。
 
-これにより、既存の (q:\mathbb{N}) route を維持しながら、
+これにより、既存の \(q:\mathbb{N}\) route を維持しながら、
 
 $$
 q=p^k
@@ -449,5 +449,5 @@ $$
 \boxed{\text{Phase AW: weightOfBase と PrimeWitnessDependentWeight 接続}}
 $$
 
-この二手で、base prime (p) に依存する weight を一般に作れるようになる。
-山で言えば、Phase AU で各道標に (q=p^k) の詳細札が付いた。次は Phase AV で、その詳細札を各道に配る案内人を置く。さらに Phase AW で、その札に書かれた base prime (p) から通行料を計算する仕組みを作る番じゃな。
+この二手で、base prime \(p\) に依存する weight を一般に作れるようになる。
+山で言えば、Phase AU で各道標に \(q=p^k\) の詳細札が付いた。次は Phase AV で、その詳細札を各道に配る案内人を置く。さらに Phase AW で、その札に書かれた base prime \(p\) から通行料を計算する仕組みを作る番じゃな。

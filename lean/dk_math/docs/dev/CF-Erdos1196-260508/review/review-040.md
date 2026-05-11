@@ -3,7 +3,7 @@
 ## 1. 結論
 
 うむ、Phase AO は **`ofKernelWithWeight` 由来 provider の展開 API 整備** じゃ。
-Phase AN で任意の手定義 weight (w) を `PrimePowerChannelProvider` に載せる入口ができた。今回 Phase AO では、その provider から
+Phase AN で任意の手定義 weight \(w\) を `PrimePowerChannelProvider` に載せる入口ができた。今回 Phase AO では、その provider から
 
 $$
 kernel,\qquad index,\qquad weight
@@ -128,7 +128,7 @@ ofKernelWithWeight_channelProviderAt_weight
 | `ofKernelWithWeight` simp API       | 今回完了 |
 | witness-dependent toy weight        | 未    |
 | von-Mangoldt-like finite weight     | 未    |
-| analytic (\Lambda(q)/\log n)        | 未    |
+| analytic \(\Lambda(q)/\log n\)        | 未    |
 
 つまり、手定義 weight を登録して使う基盤はかなり整った。
 次からは、weight の中身をどう設計するか、という本丸に近づく。

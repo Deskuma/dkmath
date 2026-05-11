@@ -94,13 +94,13 @@ sampleTenToyWeightKernel_subProbability
 
 じゃ。
 
-状態 (10) では、
+状態 \(10\) では、
 
 $$
 w(10,2)+w(10,5)=1+0=1
 $$
 
-それ以外の状態では index が空なので、総重みは (0)。
+それ以外の状態では index が空なので、総重みは \(0\)。
 したがって全状態で
 
 $$
@@ -193,7 +193,7 @@ $$
 | weighted hit mass bound への concrete theorem | 未    |
 | witness-dependent toy weight                | 未    |
 | von-Mangoldt-like weight                    | 未    |
-| analytic (\Lambda(q)/\log n)                | 未    |
+| analytic \(\Lambda(q)/\log n\)                | 未    |
 
 Phase AL により、toy weight は「設計上できるはず」から「実際に Lean で通る」へ進んだ。
 
@@ -253,7 +253,7 @@ $$
 (n,q)=(10,2)
 $$
 
-だけに重み (1) を置いた。
+だけに重み \(1\) を置いた。
 
 次は、
 
@@ -265,10 +265,10 @@ $$
 
 のような形式へ進む。
 
-ただし注意点として、`IsPrimePowerLabel q` は存在命題なので、Lean 上で (p) をどう選ぶかが問題になる。
+ただし注意点として、`IsPrimePowerLabel q` は存在命題なので、Lean 上で \(p\) をどう選ぶかが問題になる。
 本物の von Mangoldt weight へ進むには、prime-power 表現の一意性や代表選択をどう扱うかが山場になるじゃろう。
 
-だから次の一歩は、まだ本物の (\Lambda) ではなく、
+だから次の一歩は、まだ本物の \(\Lambda\) ではなく、
 
 $$
 \text{witness を明示的に渡す toy weight}

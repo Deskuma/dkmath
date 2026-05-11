@@ -15,7 +15,7 @@ structure AdjacentPrimePathFamily (ι : Type _) [DecidableEq ι] where
   isPath : ∀ i ∈ index, AdjacentPrimePath (source i :: tail i)
 ```
 
-これは、各 index (i) に対して非空 list-shaped prime path
+これは、各 index \(i\) に対して非空 list-shaped prime path
 
 $$
 source_i :: tail_i
@@ -132,7 +132,7 @@ sampleAdjacentPrimePathBoolFamily
 primitive_two_five_sampleAdjacentPrimePathBoolFamily_hitMass_le_sourceMass
 ```
 
-で、primitive set ({2,5}) がこの二本 path family を hit しても、indexed source mass を超えないことが確認されている。
+で、primitive set \(\{2,5\}\) がこの二本 path family を hit しても、indexed source mass を超えないことが確認されている。
 
 これはかなり良い concrete test じゃ。
 一本の道から、複数の道を束ねる forest にちゃんと上がれている。

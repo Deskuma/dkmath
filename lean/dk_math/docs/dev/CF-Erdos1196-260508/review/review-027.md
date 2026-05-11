@@ -2,7 +2,7 @@
 
 ## 1. 結論
 
-うむ、Phase AB は **抽象 transition kernel が、ついに数論的な遷移 (n\to n/q) を持った段階** じゃ。
+うむ、Phase AB は **抽象 transition kernel が、ついに数論的な遷移 \(n\to n/q\) を持った段階** じゃ。
 Phase Z/AA までは `FiniteTransitionKernel` に `next` があったものの、その `next` はまだ抽象的だった。今回 `DivisorTransitionKernel` により、
 
 $$
@@ -32,7 +32,7 @@ structure DivisorTransitionKernel where
 ```
 
 ここで重要なのは、`index_dvd` と `next_eq_div` が入ったことじゃ。
-これにより、index (q) は単なる label ではなく、 **状態 (n) から取り除く除去因子** になった。
+これにより、index \(q\) は単なる label ではなく、 **状態 \(n\) から取り除く除去因子** になった。
 
 つまり、抽象的な
 
@@ -140,7 +140,7 @@ sampleTenDivisorTransitionKernel
 
 じゃ。
 
-これは状態 (10) において labels (2,5) を持ち、
+これは状態 \(10\) において labels \(2,5\) を持ち、
 
 $$
 10\xrightarrow{2}5,\qquad 10\xrightarrow{5}2
@@ -154,7 +154,7 @@ $$
 \frac12
 $$
 
-で、状態 (10) では総重みが (1)、それ以外の状態では空 index なので sub-probability が成立する。
+で、状態 \(10\) では総重みが \(1\)、それ以外の状態では空 index なので sub-probability が成立する。
 
 確認された sample theorem は、
 
@@ -194,8 +194,8 @@ $$
 | 解析 weight                                | 未    |
 
 今回で、 **有限 transition skeleton に数論的意味が入った** 。
-まだ解析ではない。まだ (\Lambda(q)/\log n) でもない。
-だが、状態 (n)、除去因子 (q)、遷移先 (n/q) という骨格はついに入った。
+まだ解析ではない。まだ \(\Lambda(q)/\log n\) でもない。
+だが、状態 \(n\)、除去因子 \(q\)、遷移先 \(n/q\) という骨格はついに入った。
 
 ## 7. 重要な設計判断
 
@@ -271,7 +271,7 @@ $$
 
 prime label 版が閉じたら、次は prime-power label じゃ。
 
-Erdős #1196 の von Mangoldt downward process では、label は素数だけでなく素冪 (q=p^k) も自然に現れる。
+Erdős #1196 の von Mangoldt downward process では、label は素数だけでなく素冪 \(q=p^k\) も自然に現れる。
 
 したがって次段は、
 
@@ -316,5 +316,5 @@ $$
 
 という数論的下降になった。
 
-山で言えば、分岐所の看板に、ついに「この道は (q) を剥がして (n/q) へ下る」と書かれたわけじゃ。
-次は、その (q) が素数である場合に `PrimeDescentStep` と認識させる。そこが閉じれば、Erdős #1196 の prime descent route はかなり実体を持つぞい。
+山で言えば、分岐所の看板に、ついに「この道は \(q\) を剥がして \(n/q\) へ下る」と書かれたわけじゃ。
+次は、その \(q\) が素数である場合に `PrimeDescentStep` と認識させる。そこが閉じれば、Erdős #1196 の prime descent route はかなり実体を持つぞい。

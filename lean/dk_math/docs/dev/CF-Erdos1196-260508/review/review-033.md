@@ -24,7 +24,7 @@ weightedHitMass_le_const_of_subprob_applyAtToSourceControlled
 
 じゃな。
 
-これは、prime-power channel 条件を型として持つ kernel (T) について、
+これは、prime-power channel 条件を型として持つ kernel \(T\) について、
 
 $$
 T\text{ sub-probability}
@@ -156,7 +156,7 @@ $$
 | ------------------------------------ | ---- |
 | `FiniteTransitionKernel`             | 完了   |
 | `DivisorTransitionKernel`            | 完了   |
-| (n\to n/q)                           | 完了   |
+| \(n\to n/q\)                           | 完了   |
 | prime label bridge                   | 完了   |
 | prime-power label bridge             | 完了   |
 | `IsPrimePowerLabel`                  | 完了   |

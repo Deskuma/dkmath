@@ -37,7 +37,7 @@ $$
 T.\mathrm{PrimePowerIndexOn}(n)
 $$
 
-は「状態 (n) から出るすべての label が prime-power label」という条件。
+は「状態 \(n\) から出るすべての label が prime-power label」という条件。
 
 $$
 T.\mathrm{PrimePowerIndexed}
@@ -124,7 +124,7 @@ $$
 | ------------------------------------------- | ---- |
 | `FiniteTransitionKernel`                    | 完了   |
 | `DivisorTransitionKernel`                   | 完了   |
-| (q\mid n), (next=n/q)                       | 完了   |
+| \(q\mid n\), \(next=n/q\)                       | 完了   |
 | prime label → `PrimeDescentStep`            | 完了   |
 | prime-power label → `PrimePowerDescentStep` | 完了   |
 | `IsPrimePowerLabel q`                       | 完了   |

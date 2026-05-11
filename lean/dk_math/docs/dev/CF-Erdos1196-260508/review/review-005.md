@@ -192,8 +192,8 @@ $$
 | multi-step prime path           | 未    |
 | Branching / SubConservative 接続  | 未    |
 | Markov kernel                   | 未    |
-| (1/(n\log n)) 重み                | 未    |
-| (1+O(1/\log x)) 評価              | 未    |
+| \(1/(n\log n\)) 重み                | 未    |
+| \(1+O(1/\log x\)) 評価              | 未    |
 
 つまり、有限・代数・組合せの登山道は、
 

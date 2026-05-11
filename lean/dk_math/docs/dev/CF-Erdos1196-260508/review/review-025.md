@@ -43,7 +43,7 @@ structure FiniteTransitionKernel (σ ι : Type _) [DecidableEq ι] where
   weight_nonneg : ∀ s i, i ∈ index s → 0 ≤ weight s i
 ```
 
-これで、状態 (s) から label (i) を選び、
+これで、状態 \(s\) から label \(i\) を選び、
 
 $$
 s \xrightarrow{i} next(s,i)
@@ -51,7 +51,7 @@ $$
 
 へ進む有限遷移を表せるようになった。
 
-重要なのは、まだ (next) に数論的意味を押し込んでいない点じゃ。
+重要なのは、まだ next に数論的意味を押し込んでいない点じゃ。
 今は抽象的に、
 
 $$
@@ -107,7 +107,7 @@ FiniteTransitionKernel.weightedHitMass_le_const_of_subprob_applyAtToSourceContro
 
 じゃ。
 
-内容は、transition kernel が sub-probability で、source-controlled family と compatible で、source mass が一様に (C) 以下なら、
+内容は、transition kernel が sub-probability で、source-controlled family と compatible で、source mass が一様に \(C\) 以下なら、
 
 $$
 \mathrm{weightedHitMass}\le C
@@ -131,7 +131,7 @@ transitionBranchPrimePathFamilyAt_hitMass_le_const_of_subprob
 
 が追加された。
 
-つまり、finite Erdős input (I)、branch-controlled path family (F)、transition kernel (T)、状態 (s) から、
+つまり、finite Erdős input \(I\)、branch-controlled path family \(F\)、transition kernel \(T\)、状態 \(s\) から、
 
 $$
 \mathrm{weightedHitMass}(I,F,T,s)\le C

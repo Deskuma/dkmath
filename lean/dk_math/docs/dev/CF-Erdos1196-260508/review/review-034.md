@@ -129,7 +129,7 @@ sampleTenPrimePowerDivisorTransitionKernel_channelProviderAt_subProbability
 
 これは、既存の sample kernel が state \(n\) ごとに sub-probability channel provider を出すことを確認している。
 
-具体的には、状態 (10) では labels (2,5) に重みが乗り、
+具体的には、状態 \(10\) では labels \(2,5\) に重みが乗り、
 
 $$
 \frac12+\frac12=1

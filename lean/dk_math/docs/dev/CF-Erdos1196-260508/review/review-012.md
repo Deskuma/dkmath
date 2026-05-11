@@ -30,7 +30,7 @@ structure AdjacentBranchPrimePathFamily
   isBranchPath : ∀ i ∈ index, AdjacentBranchPath B (source i :: tail i)
 ```
 
-これは、有限個の prime path family に対して、各 path が単なる prime descent path であるだけでなく、同時に固定された branching relation (B) に沿っていることを要求する構造じゃ。
+これは、有限個の prime path family に対して、各 path が単なる prime descent path であるだけでなく、同時に固定された branching relation \(B\) に沿っていることを要求する構造じゃ。
 
 これにより、
 
@@ -80,7 +80,7 @@ AdjacentBranchPrimePathFamily.primitive_hitMass_le_sourceMass
 
 じゃ。
 
-これは、primitive set (S) と branch-controlled prime path family (F) があり、branching が `SubConservative` なら、
+これは、primitive set \(S\) と branch-controlled prime path family \(F\) があり、branching が `SubConservative` なら、
 
 $$
 \mathrm{hitMass}(S)
@@ -121,7 +121,7 @@ $$
 
 さらに、それぞれの path が branch relation に従うことを示し、unit mass に対して `SubConservative` instance を与えている。
 
-最後に Bool-indexed の二本 path family を作り、primitive set ({2,5}) の hit mass が indexed source mass を超えないことまで示している。
+最後に Bool-indexed の二本 path family を作り、primitive set \(\{2,5\}\) の hit mass が indexed source mass を超えないことまで示している。
 
 これはとても良い検証じゃ。
 「複数 path」「branch control」「subconservative mass」「primitive hit bound」が一つのサンプルにまとまっている。

@@ -17,7 +17,7 @@ $$
 \sum_i w_i \le 1
 $$
 
-を `WeightSubProbability` として定義し、weighted source mass を一様上界 (C) で押さえる道が入った。これは Markov kernel 直前のかなり自然な足場じゃ。
+を `WeightSubProbability` として定義し、weighted source mass を一様上界 \(C\) で押さえる道が入った。これは Markov kernel 直前のかなり自然な足場じゃ。
 
 ## 2. 今回追加された核
 
@@ -75,7 +75,7 @@ $$
 \forall i,\quad \mu(source_i)\le C
 $$
 
-で、各 source の質量が一様に (C) 以下なら、重み付き source mass 全体も
+で、各 source の質量が一様に \(C\) 以下なら、重み付き source mass 全体も
 
 $$
 C\sum_i w_i
@@ -170,7 +170,7 @@ $$
 
 になる sub-probability、実際には probability の例じゃ。
 
-そして unit mass space では各 source mass が (1) 以下なので、
+そして unit mass space では各 source mass が \(1\) 以下なので、
 
 $$
 \mathrm{weightedSourceMass}\le 1
@@ -193,10 +193,10 @@ $$
 | sub-probability 正規化                     | 今回完了 |
 | weighted source mass の一様上界              | 今回完了 |
 | Markov kernel の重み供給層                    | 未    |
-| 解析重み (1/(n\log n)), (\Lambda(q)/\log n) | 未    |
+| 解析重み \(1/(n\log n)\), \(\Lambda(q)/\log n\) | 未    |
 
 つまり、 **有限重み付き流の正規化** まで来た。
-山で言えば、各登山道の通行量 (w_i) が「総量 1 以下の流れ」として制御された段階じゃ。
+山で言えば、各登山道の通行量 \(w_i\) が「総量 1 以下の流れ」として制御された段階じゃ。
 
 ## 7. 次の一手
 

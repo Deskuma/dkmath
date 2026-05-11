@@ -23,7 +23,7 @@ $$
 
 を indexed sum に束ねる層じゃ。
 
-以前は一本の chain (C) に対して、
+以前は一本の chain \(C\) に対して、
 
 $$
 \mathrm{hitSetMass}(S\cap C)
@@ -31,7 +31,7 @@ $$
 \mathrm{sourceSetMass}({r})
 $$
 
-だった。今回の実装では chain family (F) に対して、
+だった。今回の実装では chain family \(F\) に対して、
 
 $$
 \sum_{i\in F.index}\mathrm{hitSetMass}(S\cap F.chain_i)

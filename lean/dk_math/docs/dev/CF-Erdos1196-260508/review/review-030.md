@@ -101,13 +101,13 @@ primePowerDescentStep_of_primePow_label
 は残されておる。
 
 これは良い設計じゃ。
-低レベルでは (p,k) を明示して証明したい場面がある。一方、高レベルでは `IsPrimePowerLabel q` だけで使いたい。
+低レベルでは \(p,k\) を明示して証明したい場面がある。一方、高レベルでは `IsPrimePowerLabel q` だけで使いたい。
 
 つまり API が二層になった。
 
 | 層    | theorem                                      | 使い所                              |
 | ---- | -------------------------------------------- | -------------------------------- |
-| 低レベル | `primePowerDescentStep_of_primePow_label`    | (p,k) が明示されているとき                 |
+| 低レベル | `primePowerDescentStep_of_primePow_label`    | \(p,k\) が明示されているとき                 |
 | 高レベル | `primePowerDescentStep_of_isPrimePowerLabel` | label が prime-power であることだけを使うとき |
 
 この二層化は、後で weight/channel 層を作るときに効く。
@@ -129,7 +129,7 @@ $$
 2=2^1,\qquad 5=5^1
 $$
 
-として、sample kernel の label (2,5) が prime-power label であることを確認している。
+として、sample kernel の label \(2,5\) が prime-power label であることを確認している。
 
 さらに既存の prime-power descent sample も、新しい wrapper 経由に変更された。
 
@@ -153,7 +153,7 @@ $$
 | ------------------------------------------- | ---- |
 | `FiniteTransitionKernel`                    | 完了   |
 | `DivisorTransitionKernel`                   | 完了   |
-| (q\mid n), (next=n/q)                       | 完了   |
+| \(q\mid n\), \(next=n/q\)                       | 完了   |
 | prime label → `PrimeDescentStep`            | 完了   |
 | prime-power label → `PrimePowerDescentStep` | 完了   |
 | `IsPrimePowerLabel`                         | 今回完了 |

@@ -45,7 +45,7 @@ $$
 
 を内部で作り、`PrimeWitnessDependentWeight` を経由して `PrimePowerChannelProvider` まで持っていける。
 
-これは、(\Lambda(q)=\log p) の「(p) に依存する」構造へ向かうためのかなり重要な足場じゃ。
+これは、 \(\Lambda(q)=\log p\) の「(p) に依存する」構造へ向かうためのかなり重要な足場じゃ。
 
 ## 2. 今回の主役
 
@@ -128,7 +128,7 @@ $$
 PrimePowerChannelProvider
 $$
 
-これで「base prime (p) 依存 weight を provider として使う」道が一般 API になった。
+これで「base prime \(p\) 依存 weight を provider として使う」道が一般 API になった。
 
 ## 4. simp API も良い
 
@@ -172,7 +172,7 @@ $$
 | `ofWitnessProviderWeight`                 | 今回完了 |
 | witness-provider weight の sample provider | 未    |
 | witness-provider weight の hit mass bound  | 未    |
-| (\Lambda(q)=\log p) 型の解析 weight           | 未    |
+| \(\Lambda(q)=\log p\) 型の解析 weight           | 未    |
 
 ここまでで、DkMath の Erdős #1196 ルートは、
 
@@ -180,7 +180,7 @@ $$
 q=p^k
 $$
 
-の witness から base prime (p) を取り出し、
+の witness から base prime \(p\) を取り出し、
 
 $$
 c(n,p)
@@ -344,7 +344,7 @@ $$
 
 の中身を考え始めるのがよい。
 
-現段階では (c(n,p)) は任意の有理 toy weight じゃ。
+現段階では \(c(n,p)\) は任意の有理 toy weight じゃ。
 次に考える候補は、
 
 $$
@@ -353,7 +353,7 @@ $$
 
 のような抽象形。
 
-ただし、まだ (\log) には入らぬ方がよい。
+ただし、まだ \(\log\) には入らぬ方がよい。
 まずは有理 toy version として、
 
 $$
@@ -374,7 +374,7 @@ $$
 
 ## 10. 総括
 
-Phase AX は、base prime (p) 依存 weight を **provider 化する標準入口** を作った段階じゃ。
+Phase AX は、base prime \(p\) 依存 weight を **provider 化する標準入口** を作った段階じゃ。
 
 これで、
 
@@ -382,7 +382,7 @@ $$
 W:\text{PrimePowerWitnessProvider}
 $$
 
-が選ぶ witness から (p) を読み、
+が選ぶ witness から \(p\) を読み、
 
 $$
 c(n,p)
@@ -396,5 +396,5 @@ $$
 
 まで流せるようになった。
 
-山で言えば、各道標から base prime (p) を読む案内人ができ、さらにその (p) に応じた通行料を受付へ直接登録できるようになった。
+山で言えば、各道標から base prime \(p\) を読む案内人ができ、さらにその \(p\) に応じた通行料を受付へ直接登録できるようになった。
 次は sample でこの新しい受付ルートを実際に通し、さらにその次で一般 theorem 名として整えるのが見通しよいぞい。

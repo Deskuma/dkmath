@@ -105,7 +105,7 @@ primitiveOn_pair_two_three
 まで揃えているので、以後の証明で使いやすい。
 
 注意点として、`0` を定義から除外していないのも妥当じゃ。
-これはコメントにも書かれている通り、自然数上では (a>0) なら (a\mid 0) なので、正の元と (0) が同居すれば primitive 性が壊れる。つまり、`0` 問題は定義で無理に消さず、必要な場面で `0 ∉ S` や `∀ a∈S, 0 < a` を足す方が柔軟じゃ。
+これはコメントにも書かれている通り、自然数上では \(a > 0\) なら \(a\mid 0\) なので、正の元と \(0\) が同居すれば primitive 性が壊れる。つまり、`0` 問題は定義で無理に消さず、必要な場面で `0 ∉ S` や `∀ a∈S, 0 < a` を足す方が柔軟じゃ。
 
 ## 4. Phase C: primitive hitting bridge
 
@@ -167,7 +167,7 @@ $$
 S\cap C
 $$
 
-の hit を singleton source ({r}) に割り当てて、
+の hit を singleton source \(\{r\}\) に割り当てて、
 
 $$
 \mathrm{hitSetMass}(S\cap C)
@@ -325,7 +325,7 @@ PrimeStep n m := ∃ p, Nat.Prime p ∧ m = n / p
 
 ### 7.3. `0` と positivity の扱い
 
-Erdős #1196 本体では (a>x) なので、最終的には全部正。
+Erdős #1196 本体では \(a > x\) なので、最終的には全部正。
 したがって、どこかで
 
 ```lean

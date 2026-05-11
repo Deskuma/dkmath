@@ -171,7 +171,7 @@ $$
 | von-Mangoldt-like provider simp API | 今回完了 |
 | witness-dependent toy weight        | 未    |
 | `PrimePowerLabel` 構造体               | 未    |
-| analytic (\Lambda(q)/\log n)        | 未    |
+| analytic \(\Lambda(q)/\log n\)        | 未    |
 
 これで、有限 von-Mangoldt-like weight を provider 化して weighted hit mass route に流す入口は、かなり整った。
 

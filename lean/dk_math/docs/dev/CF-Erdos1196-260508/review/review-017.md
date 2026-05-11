@@ -36,7 +36,7 @@ $$
 を載せた。これは「確率」ではなく、まず有限 weighted sum の一般形じゃ。
 
 この判断は良い。
-いきなり確率測度や (\Lambda(q)/\log n) に入ると重くなるが、非負重みなら Lean でも制御しやすい。
+いきなり確率測度や \(\Lambda(q)/\log n\) に入ると重くなるが、非負重みなら Lean でも制御しやすい。
 
 ## 3. 何が証明されたか
 
@@ -54,7 +54,7 @@ $$
 \mathrm{hitMass}_i\le \mathrm{sourceMass}_i
 $$
 
-に非負重み (w_i) を掛けて足し上げるもの。
+に非負重み \(w_i\) を掛けて足し上げるもの。
 
 証明の要点は二つ。
 
@@ -93,7 +93,7 @@ weightedBranchPrimePathFamilySourceMass
 weightedHitMass_le_weightedSourceMass_of_branchPrimePathFamily
 ```
 
-これにより、有限 Erdős 入力 (I) から、
+これにより、有限 Erdős 入力 \(I\) から、
 
 $$
 I.\mathrm{weightedBranchPrimePathFamilyHitMass}
@@ -139,7 +139,7 @@ def sampleBoolPathWeight : Bool → ℚ :=
 という非負有理重みを載せている。
 
 これは確率ではないが、weighted theorem のテストとしては十分じゃ。
-重み (2,3) であっても、各 chain の hit bound が成り立つなら、重み付き合計も source 側を超えないことを確認しておる。
+重み \(2,3\) であっても、各 chain の hit bound が成り立つなら、重み付き合計も source 側を超えないことを確認しておる。
 
 ## 7. 現在の到達点
 

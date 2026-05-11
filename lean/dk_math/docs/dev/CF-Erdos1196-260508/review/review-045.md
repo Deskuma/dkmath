@@ -30,7 +30,7 @@ $$
 という route が theorem 名から読めるようになった。
 
 これは良い仕上げじゃ。
-Phase AS で base prime (p) 依存の toy weight を provider 化できるようになり、Phase AT でそれが実際に hit mass bound へ到達する看板が立った。ここで一度、次の二手を慎重に決めるのが正解じゃな。
+Phase AS で base prime \(p\) 依存の toy weight を provider 化できるようになり、Phase AT でそれが実際に hit mass bound へ到達する看板が立った。ここで一度、次の二手を慎重に決めるのが正解じゃな。
 
 ## 2. 今回閉じたもの
 
@@ -92,9 +92,9 @@ $$
 | prime witness dependent concrete bound alias | 今回完了 |
 | `PrimePowerLabel` 構造体                        | 未    |
 | witness 選択層                                  | 未    |
-| analytic (\Lambda(q)/\log n)                 | 未    |
+| analytic \(\Lambda(q)/\log n\)                 | 未    |
 
-ここまでで、(q:\mathbb{N}) label を保ったまま、かなり遠くまで来ている。
+ここまでで、 \(q:\mathbb{N}\) label を保ったまま、かなり遠くまで来ている。
 ただし、本物の von Mangoldt 的な
 
 $$
@@ -102,7 +102,7 @@ $$
 \quad(q=p^k)
 $$
 
-へ進むには、いずれ (p) をどう扱うかが問題になる。
+へ進むには、いずれ \(p\) をどう扱うかが問題になる。
 
 ## 4. ここからの判断
 
@@ -129,16 +129,16 @@ $$
 
 のように書きやすい。
 
-ただし、既存の `DivisorTransitionKernel` は label を (\mathbb{N}) として設計されている。ここで全面的に label 型を変えると、既存 API への影響が大きい。
+ただし、既存の `DivisorTransitionKernel` は label を \(\mathbb{N}\) として設計されている。ここで全面的に label 型を変えると、既存 API への影響が大きい。
 
-### B. 既存の (q:\mathbb{N}) route を保ち、構造体は sidecar として追加する
+### B. 既存の \(q:\mathbb{N}\) route を保ち、構造体は sidecar として追加する
 
 こちらがわっちの推奨じゃ。
 
 つまり、`DivisorTransitionKernel` 本体はそのままにして、まず `PrimePowerLabel` を **証拠を持つ補助構造体** として追加する。
-その後、(q\in index(n)) に対して `PrimePowerLabel` を選ぶ witness provider を別レイヤに置く。
+その後、 \(q\in index(n)\) に対して `PrimePowerLabel` を選ぶ witness provider を別レイヤに置く。
 
-これなら既存 route を壊さず、将来の (\Lambda)-like weight に必要な (p) 取り出しだけを増やせる。
+これなら既存 route を壊さず、将来の \(\Lambda\)-like weight に必要な \(p\) 取り出しだけを増やせる。
 
 ## 5. 一手目: Phase AU 案
 
@@ -198,7 +198,7 @@ primePowerDescentStep_of_isPrimePowerLabel
 
 その次は **Phase AV: PrimePowerWitnessProvider** がよい。
 
-これは、既存の (q:\mathbb{N}) index に対して、各 (q) の prime-power witness を選ぶ層じゃ。
+これは、既存の \(q:\mathbb{N}\) index に対して、各 \(q\) の prime-power witness を選ぶ層じゃ。
 
 候補定義：
 
@@ -241,7 +241,7 @@ $$
 q=p^k
 $$
 
-を持つ label (L) を返し、その base prime (p) を使って
+を持つ label \(L\) を返し、その base prime \(p\) を使って
 
 $$
 w(n,q)=c(n,p)
@@ -249,7 +249,7 @@ $$
 
 を定義する、ということじゃ。
 
-これでようやく、prime base (p) に依存する weight が **定義として** 書ける。
+これでようやく、prime base \(p\) に依存する weight が **定義として** 書ける。
 
 ## 7. 二手先までの導線
 
@@ -287,7 +287,7 @@ $$
 つまり、今ある predicate route を保ったまま、より具体的な witness-driven weight へ移行できる。
 
 これが一番安全じゃ。
-既存の `DivisorTransitionKernel` を壊さず、しかし将来の (\Lambda(q)=\log p) に必要な (p) 依存性はちゃんと確保できる。
+既存の `DivisorTransitionKernel` を壊さず、しかし将来の \(\Lambda(q)=\log p\) に必要な \(p\) 依存性はちゃんと確保できる。
 
 ## 8. なぜ今すぐ full refactor しない方がよいか
 
@@ -309,7 +309,7 @@ DivisorTransitionKernel
 
 と合わなくなる。
 
-今の route は (q:\mathbb{N}) label でかなり整っている。
+今の route は \(q:\mathbb{N}\) label でかなり整っている。
 したがって、いきなり構造体化で全線を置き換えるのは、山頂アタック前に登山道を掘り返すようなものじゃ。
 
 まずは sidecar と witness provider。
@@ -410,7 +410,7 @@ $$
 }
 $$
 
-この二手で、既存の (q:\mathbb{N}) label route を壊さずに、base prime (p) を取り出せる道ができる。
+この二手で、既存の \(q:\mathbb{N}\) label route を壊さずに、base prime \(p\) を取り出せる道ができる。
 
 山で言えば、いままでは「この道は素冪由来」と看板に書いてあった。
 次は、その看板に
@@ -420,5 +420,5 @@ q=p^k
 $$
 
 の詳細札を付ける。
-さらに次の一手で、各道標から base prime (p) を読み取る案内人を配置する。
+さらに次の一手で、各道標から base prime \(p\) を読み取る案内人を配置する。
 その先でようやく、本物に近い von-Mangoldt-like weight へ進めるのじゃ。

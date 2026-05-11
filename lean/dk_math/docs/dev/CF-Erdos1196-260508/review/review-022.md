@@ -44,7 +44,7 @@ structure FiniteKernel (σ ι : Type _) [DecidableEq ι] where
   weight_nonneg : ∀ s i, i ∈ index s → 0 ≤ weight s i
 ```
 
-これは、状態 (s : \sigma) ごとに有限 index 集合と非負有理重みを返す構造じゃ。
+これは、状態 \(s : \sigma\) ごとに有限 index 集合と非負有理重みを返す構造じゃ。
 
 つまり、以前の `WeightProvider` が
 
@@ -100,7 +100,7 @@ $$
 じゃ。
 
 これはかなり綺麗。
-Phase U/V の結果を、状態 (s) ごとに使える形へ持ち上げている。
+Phase U/V の結果を、状態 \(s\) ごとに使える形へ持ち上げている。
 
 ## 4. `SubProbability` の位置づけ
 
@@ -112,7 +112,7 @@ $$
 
 という形じゃ。
 
-つまり、各状態 (s) で
+つまり、各状態 \(s\) で
 
 $$
 \sum_{i\in K.index(s)} K.weight(s,i)\le 1
@@ -142,7 +142,7 @@ kernelBranchPrimePathFamilyAt_hitMass_le_const_of_subprob
 
 が追加された。
 
-これは、有限 Erdős 入力 (I)、branch-controlled path family (F)、finite kernel (K)、状態 (s) を受け取り、
+これは、有限 Erdős 入力 \(I\)、branch-controlled path family \(F\)、finite kernel \(K\)、状態 \(s\) を受け取り、
 
 $$
 \mathrm{weightedHitMass}\le C
@@ -231,7 +231,7 @@ $$
 | branch route kernel wrapper               | 今回完了 |
 | prime / dvd-monotone route kernel wrapper | 未    |
 | actual Markov transition semantics        | 未    |
-| analytic weight (\Lambda(q)/\log n)       | 未    |
+| analytic weight \(\Lambda(q)/\log n\)       | 未    |
 
 つまり、今回で **有限 kernel skeleton** は入った。
 ただし、まだ本物の Markov kernel ではない。
@@ -265,8 +265,8 @@ $$
 
 が **状態依存** になった。
 
-以前は、登山道ごとの通行量 (w_i) を固定で持っていた。
-今回からは、現在地 (s) に応じて通行量の割り振りが変わる。
+以前は、登山道ごとの通行量 \(w_i\) を固定で持っていた。
+今回からは、現在地 \(s\) に応じて通行量の割り振りが変わる。
 
 これは、まさに
 
@@ -280,20 +280,20 @@ $$
 n\mapsto n/q
 $$
 
-のような「今いる整数 (n) に応じて次の分岐が変わる」構造へ近づいている。
+のような「今いる整数 \(n\) に応じて次の分岐が変わる」構造へ近づいている。
 
 わっちの見立てでは、Phase W は **finite Markov skeleton の第一到達点** じゃ。
 
 ## 9. 留意点
 
-今回の `FiniteKernel` は、まだ index 型 (ι) 上の重みだけを返す。
+今回の `FiniteKernel` は、まだ index 型 \(ι\) 上の重みだけを返す。
 
-つまり、(ι) が「遷移先」なのか「path 番号」なのか「除去する素因子」なのかは、まだ外部の解釈に任されている。
+つまり、 \(ι\) が「遷移先」なのか「path 番号」なのか「除去する素因子」なのかは、まだ外部の解釈に任されている。
 
 これは今の段階では正しい。
-急いで (ι) を `Nat` や divisor 型に固定すると、解析層と数論層が一気に混ざるからじゃ。
+急いで \(ι\) を `Nat` や divisor 型に固定すると、解析層と数論層が一気に混ざるからじゃ。
 
-ただ、次段階ではこの (ι) の意味を少しずつ具体化する必要がある。
+ただ、次段階ではこの \(ι\) の意味を少しずつ具体化する必要がある。
 
 ## 10. 次の一手
 

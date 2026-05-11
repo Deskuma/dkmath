@@ -141,8 +141,8 @@ PrimePowerWitnessProvider.weightOfBase_hitMass_le_const
 
 では、主役が明確じゃ。
 
-* witness provider (W)
-* base-prime weight (c(n,p))
+* witness provider \(W\)
+* base-prime weight \(c(n,p)\)
 * `weightOfBase`
 * hit mass bound
 
@@ -166,7 +166,7 @@ PrimePowerWitnessProvider.weightOfBase_hitMass_le_const
 | base-prime weight predicate          | 未    |
 | analytic-style toy model             | 未    |
 | `PrimePowerLabel` index kernel 別ルート  | 未    |
-| 本物の (\Lambda(q)/\log n)              | 未    |
+| 本物の \(\Lambda(q)/\log n\)              | 未    |
 
 いまは、かなり良い区切りじゃ。
 有限・素冪・base prime 依存 weight の route は一通り開通した。
@@ -175,17 +175,17 @@ PrimePowerWitnessProvider.weightOfBase_hitMass_le_const
 
 ここから先は二択じゃ。
 
-### A. 今の (q:\mathbb{N}) route を継続する
+### A. 今の \(q:\mathbb{N}\) route を継続する
 
 こちらは軽い。
 既存の `DivisorTransitionKernel`, `WeightProvider ℕ`, `SourceControlledChainFamily M ℕ` をそのまま使える。
 
-次にやることは、base-prime weight (c) の性質を theorem-facing predicate として切り出すことじゃ。
+次にやることは、base-prime weight \(c\) の性質を theorem-facing predicate として切り出すことじゃ。
 
 ### B. `PrimePowerLabel` を index にした別 kernel を作る
 
 こちらは強いが重い。
-`PrimePowerLabel` を index 型にすると、(p,k) を定義的に取り出せる。将来の
+`PrimePowerLabel` を index 型にすると、 \(p,k\) を定義的に取り出せる。将来の
 
 $$
 \Lambda(q)=\log p
@@ -196,7 +196,7 @@ $$
 しかし既存 route との橋が必要になる。今すぐやると、整理済みの道を一度掘り返すことになる。
 
 わっちの推奨は **A を続ける** じゃ。
-今は (q:\mathbb{N}) route がきれいに通っている。まずこの道で解析風 toy model まで進めるのがよい。
+今は \(q:\mathbb{N}\) route がきれいに通っている。まずこの道で解析風 toy model まで進めるのがよい。
 
 ## 6. 次の一手: Phase BA 案
 
@@ -273,7 +273,7 @@ theorem PrimePowerWitnessProvider.baseWeight_hitMass_le_const
 
 Phase BA の次、Phase BB では **解析風 toy model** に進める。
 
-まだ (\log) は入れず、有理 toy model として、
+まだ \(\log\) は入れず、有理 toy model として、
 
 $$
 c(n,p)=\frac{A(p)}{B(n)}
@@ -311,7 +311,7 @@ $$
 
 を別 predicate にしていく。
 
-## 9. 先読み: (\Lambda)-like への道
+## 9. 先読み: \(\Lambda\)-like への道
 
 今後、本物の von Mangoldt に近づけるなら、最終的には
 
@@ -393,7 +393,7 @@ $$
 
 へ入れる。
 
-山で言えば、各道標から base prime (p) を読む案内人がいて、その (p) から通行料を計算し、さらに通行量制限まで進める一般登山道が標識化された。
+山で言えば、各道標から base prime \(p\) を読む案内人がいて、その \(p\) から通行料を計算し、さらに通行量制限まで進める一般登山道が標識化された。
 
-次は、通行料 (c(n,p)) に名前付きの性質を与える段階じゃ。
+次は、通行料 \(c(n,p)\) に名前付きの性質を与える段階じゃ。
 まずは非負性と sub-probability を predicate として切り出す。そこから解析風 toy model へ進むのが、一番見通しの良い道じゃな。

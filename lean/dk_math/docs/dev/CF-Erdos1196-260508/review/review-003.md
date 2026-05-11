@@ -178,7 +178,7 @@ def DvdMonotoneMass (M : MassSpace ℕ) : Prop :=
   ∀ ⦃a b : ℕ⦄, a ∣ b → M.μ a ≤ M.μ b
 ```
 
-ここでは (a\mid b) なら (a) は (b) より下にいる、と見る。
+ここでは \(a\mid b\) なら \(a\) は \(b\) より下にいる、と見る。
 
 ### 主定理
 
@@ -215,7 +215,7 @@ theorem DvdControlledChainFamily.primitive_hitMass_le_sourceMass
 
 ## 6. concrete sample
 
-既存の `unitNatMassSpace` なら、質量は常に (1) なので `DvdMonotoneMass` は即座に成り立つ。
+既存の `unitNatMassSpace` なら、質量は常に \(1\) なので `DvdMonotoneMass` は即座に成り立つ。
 
 ```lean
 theorem unitNatMassSpace_dvdMonotone :
@@ -233,8 +233,8 @@ source true  := 9
 
 にするとよい。
 
-* `{2,4,8}` の全点は (8) を割る
-* `{3,9}` の全点は (9) を割る
+* `{2,4,8}` の全点は \(8\) を割る
+* `{3,9}` の全点は \(9\) を割る
 
 したがって、
 
@@ -326,7 +326,7 @@ def PrimeDescentStep (n m : ℕ) : Prop :=
 
 のような実際の下降 step を入れる。
 
-これは Erdős #1196 の (n\to n/p) に近づく。
+これは Erdős #1196 の \(n\to n/p\) に近づく。
 
 わっちなら、次はまず `DvdControlledChainFamily`。
 その後に `PrimeDescentStep` じゃ。

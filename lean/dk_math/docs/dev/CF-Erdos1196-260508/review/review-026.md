@@ -28,7 +28,7 @@ transitionPrimePathFamilyAt
 transitionPrimePathFamilyAt_hitMass_le_const_of_subprob
 ```
 
-前者は、transition kernel の state (s) から得た provider を、
+前者は、transition kernel の state \(s\) から得た provider を、
 
 ```lean
 I.primePathFamilySourceControlled M F hM
@@ -83,7 +83,7 @@ $$
 
 へ進める。
 
-この左右対称性は、次に実際の (n\mapsto n/q) transition を作るときにかなり効くぞい。
+この左右対称性は、次に実際の \(n\mapsto n/q\) transition を作るときにかなり効くぞい。
 
 ## 4. concrete sample の意味
 
@@ -95,7 +95,7 @@ erdosFinitePrimitiveInput_two_five_transitionPrimePath_hitMass_le_one
 
 じゃ。
 
-これは `sampleUnitTransitionKernel` を prime path route に適用し、({2,5}) の finite Erdős input に対して、
+これは `sampleUnitTransitionKernel` を prime path route に適用し、 \(\{2,5\}\) の finite Erdős input に対して、
 
 $$
 \mathrm{weightedHitMass}\le 1
@@ -209,7 +209,7 @@ structure DivisorTransitionKernel where
   next_eq_div : ∀ n q, q ∈ index n → next n q = n / q
 ```
 
-ここではまだ (\Lambda) も (\log) も要らぬ。
+ここではまだ \(\Lambda\) も \(\log\) も要らぬ。
 まずは
 
 $$

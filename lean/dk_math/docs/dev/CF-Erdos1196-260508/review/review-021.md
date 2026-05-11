@@ -9,7 +9,7 @@ $$
 \mathrm{weightedHitMass}\le C
 $$
 
-という有限 sub-probability flow の上界は閉じていた。今回 Phase V では、その重み (w_i) を `WeightedPathFamily` に直接埋め込むだけでなく、外部の `WeightProvider` から供給できるようになった。これで、将来の Markov kernel 由来の重みを差し込む導線ができたわけじゃ。
+という有限 sub-probability flow の上界は閉じていた。今回 Phase V では、その重み \(w_i\) を `WeightedPathFamily` に直接埋め込むだけでなく、外部の `WeightProvider` から供給できるようになった。これで、将来の Markov kernel 由来の重みを差し込む導線ができたわけじゃ。
 
 ## 2. 今回追加された核
 
@@ -63,7 +63,7 @@ def Compatible
 つまり、provider の index と、適用先 forest の index が同じであることを明示した。
 
 これは地味に見えるが、かなり正しい。
-重み (w_i) は path (i) に掛けるものなので、
+重み \(w_i\) は path \(i\) に掛けるものなので、
 
 $$
 i\in P.index
@@ -180,7 +180,7 @@ providerBranchPrimePathFamily_hitMass_le_const_of_subprob
 
 が追加された。
 
-これにより、有限 Erdős 入力 (I) と branch-controlled path family (F) に対して、外部 provider (P) 由来の重みを載せ、
+これにより、有限 Erdős 入力 \(I\) と branch-controlled path family \(F\) に対して、外部 provider \(P\) 由来の重みを載せ、
 
 $$
 \mathrm{weightedHitMass}(I,F,P)\le C
@@ -272,7 +272,7 @@ $$
 
 次は **FiniteKernel** を作る段階じゃ。
 
-ただし、まだ (\Lambda(q)/\log n) や (1/(n\log n)) は入れない方がよい。
+ただし、まだ \(\Lambda(q)/\log n\) や \(1/(n\log n)\) は入れない方がよい。
 まずは、有限 index 上の非負・sub-probability provider を返す kernel skeleton に留める。
 
 候補はこうじゃ。

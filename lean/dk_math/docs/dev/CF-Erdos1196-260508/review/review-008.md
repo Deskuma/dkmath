@@ -31,7 +31,7 @@ $$
 source :: tail
 $$
 
-の任意 node が、head である (source) から `PrimeReachable` で到達できる、という補題じゃ。再帰で、head 自身は反射到達、tail 側は一段 prime step と tail 内 reachability を合成している。
+の任意 node が、head である source から `PrimeReachable` で到達できる、という補題じゃ。再帰で、head 自身は反射到達、tail 側は一段 prime step と tail 内 reachability を合成している。
 
 これが大きい。
 前回までは list path から `DivisibilityChain` は作れたが、今回はさらに **source から各 node への到達可能性** まで出せるようになった。
@@ -53,7 +53,7 @@ $$
 [source, \ldots]
 $$
 
-という一本の list path を、singleton index の `PrimeReachableControlledChainFamily` として package 化しておる。chain は ((source :: tail).toFinset)、source は head、そして `chain_reachable` はさきほどの `mem_reachable_from_head_of_adjacentPrimePath` から供給される。
+という一本の list path を、singleton index の `PrimeReachableControlledChainFamily` として package 化しておる。chain は `(source :: tail).toFinset`、source は head、そして `chain_reachable` はさきほどの `mem_reachable_from_head_of_adjacentPrimePath` から供給される。
 
 これにより、
 
@@ -81,7 +81,7 @@ $$
 singletonPrimeReachableFamily_eight_four_two
 ```
 
-として reachable-controlled family に package 化されている。さらに、primitive set ({2,5}) がこの path を hit したとき、unit mass で source (8) の質量を超えないことまで示している。
+として reachable-controlled family に package 化されている。さらに、primitive set \(\{2,5\}\) がこの path を hit したとき、unit mass で source \(8\) の質量を超えないことまで示している。
 
 つまり、実例としては
 
@@ -198,7 +198,7 @@ Erdős #1196 の本体に向けて、まだ Markov kernel や \(\Lambda(q)/\log 
 
 ### A. 小さく固めるなら positive / lower-bound support
 
-今回も過去に `{1,2}` のような例で primitive 性が壊れた流れがあった。Erdős #1196 本体では (A\subset [x,\infty)) なので、(0) や (1) を自然に除外する補助語彙が欲しい。
+今回も過去に `{1,2}` のような例で primitive 性が壊れた流れがあった。Erdős #1196 本体では \(A\subset [x,\infty)\) なので、 \(0\) や \(1\) を自然に除外する補助語彙が欲しい。
 
 例えば、
 

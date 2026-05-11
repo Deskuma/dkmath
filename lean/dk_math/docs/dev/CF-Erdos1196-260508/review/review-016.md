@@ -118,7 +118,7 @@ $$
 structure WeightedPathFamily ...
 ```
 
-のように、index (i) ごとの非負重みを持つ path family を作るのがよい。
+のように、index \(i\) ごとの非負重みを持つ path family を作るのがよい。
 
 最初の目標は、
 

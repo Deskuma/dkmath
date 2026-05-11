@@ -223,12 +223,12 @@ $$
 という witness-dependent toy weight へ進める。
 
 ここは少し慎重に行くべきじゃ。
-`IsPrimePowerLabel q` は存在命題なので、(p,k) をどう選ぶかが Lean 的な問題になる。
+`IsPrimePowerLabel q` は存在命題なので、 \(p,k\) をどう選ぶかが Lean 的な問題になる。
 
 候補は二つ。
 
-1. 今の (q:\mathbb{N}) label を保ち、weight は外から手定義して、(\Lambda)-like 性質だけを predicate で持つ。
-2. label を構造体化して、最初から (q,p,k) と証明を持たせる。
+1. 今の \(q:\mathbb{N}\) label を保ち、weight は外から手定義して、 \(\Lambda\)-like 性質だけを predicate で持つ。
+2. label を構造体化して、最初から \(q,p,k\) と証明を持たせる。
 
 ```lean
 structure PrimePowerLabel where
@@ -241,14 +241,14 @@ structure PrimePowerLabel where
 ```
 
 今の流れなら、まずは 1 の方が軽い。
-ただ、将来的に (\Lambda(q)=\log p) を本当に扱うなら、2 の構造体化もかなり魅力がある。
+ただ、将来的に \(\Lambda(q)=\log p\) を本当に扱うなら、2 の構造体化もかなり魅力がある。
 
 ## 9. 総括
 
 Phase AN は、素冪 channel の toy weight を **一般入力化** した段階じゃ。
 
 前回までは、具体的な料金表を一つ登録した。
-今回からは、任意の料金表 (w) について、
+今回からは、任意の料金表 \(w\) について、
 
 $$
 w\ge 0,\qquad \sum w\le 1

@@ -151,7 +151,7 @@ Phase AP の狙いが concrete sample でもちゃんと効いておる。
 | `VonMangoldtLikeWeight` predicate              | 今回完了 |
 | `VonMangoldtLikeWeight` → provider constructor | 未    |
 | witness-dependent concrete weight              | 未    |
-| analytic (\Lambda(q)/\log n)                   | 未    |
+| analytic \(\Lambda(q)/\log n\)                   | 未    |
 
 これで、finite toy weight が単なる手書き重みではなく、 **prime-power witness を持つ von-Mangoldt-like weight** として扱えるようになった。
 

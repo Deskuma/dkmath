@@ -165,7 +165,7 @@ sampleTenPrimePowerDivisorTransitionKernel.primePowerDescentStep_of_mem
 | ------------------------------------------- | ---- |
 | `FiniteTransitionKernel`                    | 完了   |
 | `DivisorTransitionKernel`                   | 完了   |
-| (q\mid n), (next=n/q)                       | 完了   |
+| \(q\mid n\), \(next=n/q\)                       | 完了   |
 | prime label → `PrimeDescentStep`            | 完了   |
 | prime-power label → `PrimePowerDescentStep` | 完了   |
 | `IsPrimePowerLabel`                         | 完了   |
