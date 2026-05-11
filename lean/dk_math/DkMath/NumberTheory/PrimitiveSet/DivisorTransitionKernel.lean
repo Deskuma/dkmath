@@ -440,6 +440,22 @@ end PrimePowerDivisorTransitionKernel
 def BasePrimeToyWeight (c : ℕ → ℕ → ℚ) : Prop :=
   ∀ n p, 0 ≤ c n p
 
+/-- A ratio-style finite toy base-prime weight `c n p = A p / B n`. -/
+def ratioBasePrimeWeight (A B : ℕ → ℚ) : ℕ → ℕ → ℚ :=
+  fun n p => A p / B n
+
+/--
+A ratio-style base-prime weight is globally nonnegative when the numerator is
+nonnegative and the denominator is positive.
+-/
+theorem ratioBasePrimeWeight_basePrimeToyWeight
+    (A B : ℕ → ℚ)
+    (hA : ∀ p, 0 ≤ A p)
+    (hB : ∀ n, 0 < B n) :
+    BasePrimeToyWeight (ratioBasePrimeWeight A B) := by
+  intro n p
+  exact div_nonneg (hA p) (le_of_lt (hB n))
+
 /--
 A choice of explicit prime-power witnesses for every indexed label of a
 prime-power divisor transition kernel.
@@ -547,6 +563,20 @@ theorem baseWeightNonneg_of_basePrimeToyWeight
     W.BaseWeightNonneg c := by
   intro n q hq
   exact hc n ((W.label n q hq).p)
+
+/--
+A ratio-style base-prime weight is nonnegative on any witness provider under
+the same numerator and denominator hypotheses.
+-/
+theorem baseWeightNonneg_of_ratioBasePrimeWeight
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (A B : ℕ → ℚ)
+    (hA : ∀ p, 0 ≤ A p)
+    (hB : ∀ n, 0 < B n) :
+    W.BaseWeightNonneg (ratioBasePrimeWeight A B) :=
+  W.baseWeightNonneg_of_basePrimeToyWeight
+    (ratioBasePrimeWeight_basePrimeToyWeight A B hA hB)
 
 end PrimePowerWitnessProvider
 

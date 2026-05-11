@@ -1463,3 +1463,26 @@ Archive
 6. 次の課題:
    - Phase BC として、`c(n,p)=A(p)/B(n)` 型の ratio-style toy weight predicate を設計する。
    - 最初は有理数上の非負性に絞り、解析的な `log` はまだ導入しない。
+
+### 日時: 2026/05/11 22:53 JST (Phase BC ratio-style base-prime toy weight)
+
+1. 目的:
+   - `review/review-053.md` の提案に従い、`c(n,p)=A(p)/B(n)` 型の ratio-style toy weight を有理数上で導入し、まず非負性だけを閉じる。
+2. 実施:
+   - `ratioBasePrimeWeight` を追加し、`fun n p => A p / B n` として base-prime weight を定義した。
+   - `ratioBasePrimeWeight_basePrimeToyWeight` を追加し、`∀ p, 0 ≤ A p` と `∀ n, 0 < B n` から `BasePrimeToyWeight (ratioBasePrimeWeight A B)` を証明した。
+   - `PrimePowerWitnessProvider.baseWeightNonneg_of_ratioBasePrimeWeight` を追加し、同じ仮定から任意の witness provider に対して `W.BaseWeightNonneg (ratioBasePrimeWeight A B)` を得られるようにした。
+3. 結論:
+   - ratio-style toy weight の入口として、分子非負・分母正から全域非負性、および witness-provider index 上の非負性へ進む導線ができた。
+   - 解析的な `log` には入らず、有理数上の有限 toy model として安全に進めた。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - Lean 実装自体は初回の権限昇格付き build で通った。
+6. 次の課題:
+   - Phase BD として、ratio-style weight の sub-probability を示す十分条件を設計する。
+   - 典型的には `Σ_q A(p(q)) ≤ B(n)` から `Σ_q A(p(q))/B(n) ≤ 1` を得る finite lemma を検討する。
