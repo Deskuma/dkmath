@@ -763,3 +763,655 @@ Archive
 6. 次の課題:
    - 次は transition kernel の prime path / dvd-monotone route wrapper を追加して branch route と対称化するか判断する。
    - その後、状態を `ℕ`、index を除去因子として解釈する divisor / prime descent transition skeleton へ進む。
+
+### 日時: 2026/05/10 10:40 JST (Phase AA transition prime path route wrapper)
+
+1. 目的:
+   - `review/review-025.md` の提案に従い、`FiniteTransitionKernel` の route wrapper を branch/subconservative 側だけでなく prime path / dvd-monotone 側にも追加する。
+2. 実施:
+   - `ErdosFinitePrimitiveInput.transitionPrimePathFamilyAt` を追加し、finite transition kernel state から得た provider を `primePathFamilySourceControlled` に適用できるようにした。
+   - `ErdosFinitePrimitiveInput.transitionPrimePathFamilyAt_hitMass_le_const_of_subprob` を追加し、`DvdMonotoneMass M` による prime path route でも transition kernel の sub-probability weight から weighted hit mass 一様上界を得られるようにした。
+   - concrete sample として `erdosFinitePrimitiveInput_two_five_transitionPrimePath_hitMass_le_one` を追加し、`sampleUnitTransitionKernel` を prime path route に適用して hit mass bound `<= 1` を確認した。
+3. 結論:
+   - finite transition kernel route についても branch route と prime path route の wrapper が揃った。
+   - `FiniteTransitionKernel -> FiniteKernel -> WeightProvider -> WeightedPathFamily` の導線を、既存の二つの source-control route で対称に使えるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.FiniteTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build と read-only 確認の一部が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は状態を `ℕ`、index を除去因子または素因子候補として解釈する divisor / prime descent transition skeleton を検討する。
+   - 解析 weight はまだ導入せず、まず finite transition の遷移意味と既存 descent provider との接続を薄く作る。
+
+### 日時: 2026/05/10 10:49 JST (Phase AB divisor transition skeleton)
+
+1. 目的:
+   - `review/review-026.md` の提案に従い、状態と index を自然数に寄せ、遷移 `n -> n / q` の意味を持つ divisor transition skeleton を追加する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/DivisorTransitionKernel.lean` を新規作成した。
+   - `DivisorTransitionKernel` を追加し、`index`, `next`, `weight`, `weight_nonneg` に加えて、`index_dvd : q ∈ index n -> q ∣ n` と `next_eq_div : q ∈ index n -> next n q = n / q` を持たせた。
+   - `DivisorTransitionKernel.toFiniteTransitionKernel` を追加し、divisor semantics を忘却して既存の `FiniteTransitionKernel ℕ ℕ` として使えるようにした。
+   - `providerAt`, `totalWeightAt`, `SubProbability`, `CompatibleAt`, `compatibleAt_iff_index_eq` を追加し、既存 transition kernel API へ接続した。
+   - `index_dvd_source`, `next_eq_div_of_mem`, `next_dvd_source` を追加し、index membership から除去因子と遷移先 divisor を取り出せるようにした。
+   - concrete sample として `sampleTenDivisorTransitionKernel` を追加し、`10` から labels `2`, `5` によってそれぞれ `5`, `2` へ進むこと、および sub-probability normalized であることを確認した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `DivisorTransitionKernel` を import し、公開集約へ載せた。
+3. 結論:
+   - finite transition skeleton に `n -> n / q` という数論的意味を持つ薄い層が追加された。
+   - 解析重みはまだ導入せず、有限 index、除去因子、quotient next state、既存 weight provider への忘却だけに留めた。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - 初回 build で出た unused simp args warning を修正し、再 build では warning なしを確認した。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `PrimeDescentStep` と `DivisorTransitionKernel` を接続し、prime label `q` の場合に `PrimeDescentStep n (next n q)` を得る skeleton を検討する。
+   - その後、prime-power label や von Mangoldt 型 weight への入口をどの層で切るか判断する。
+
+### 日時: 2026/05/10 11:25 JST (Phase AC prime label descent bridge)
+
+1. 目的:
+   - `review/review-027.md` の提案に従い、`DivisorTransitionKernel` の prime label を既存の `PrimeDescentStep` と接続する。
+2. 実施:
+   - `DivisorTransitionKernel.lean` に `PrimeDescent` を import した。
+   - `DivisorTransitionKernel.primeDescentStep_of_prime_label` を追加し、`q ∈ T.index n` と `Nat.Prime q` から `PrimeDescentStep n (T.next n q)` を得られるようにした。
+   - 証明では `index_dvd_source` から `q ∣ n`、`next_eq_div_of_mem` から `T.next n q = n / q` を取り出し、`PrimeDescentStep` の witness として同じ `q` を使った。
+   - concrete sample として `sampleTenDivisorTransitionKernel_primeDescentStep_two` と `sampleTenDivisorTransitionKernel_primeDescentStep_five` を追加した。
+3. 結論:
+   - divisor transition のうち label が prime であるものを、そのまま一段の prime descent として扱えるようになった。
+   - `n -> n / q` の除去因子 skeleton が、既存の prime descent route に接続された。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は prime-power label の接続を検討し、`q = p ^ k` の場合に `PrimePowerDescentStep n (T.next n q)` を得る skeleton を追加する。
+   - その後、prime-power label が von Mangoldt 型 weight の channel になるよう、weight 層との境界を整理する。
+
+### 日時: 2026/05/10 11:32 JST (Phase AD prime-power label descent bridge)
+
+1. 目的:
+   - `review/review-028.md` の提案に従い、`DivisorTransitionKernel` の prime-power label を既存の `PrimePowerDescentStep` と接続する。
+2. 実施:
+   - `DivisorTransitionKernel.primePowerDescentStep_of_primePow_label` を追加した。
+   - 仮定 `q ∈ T.index n`, `Nat.Prime p`, `0 < k`, `q = p ^ k` から `PrimePowerDescentStep n (T.next n q)` を得るようにした。
+   - 証明では `index_dvd_source` を `q = p ^ k` で書き換えて `p ^ k ∣ n` を作り、`next_eq_div_of_mem` を同じ等式で書き換えて `T.next n q = n / p ^ k` を作った。
+   - concrete sample として `sampleTenDivisorTransitionKernel_primePowerDescentStep_two` と `sampleTenDivisorTransitionKernel_primePowerDescentStep_five` を追加した。
+3. 結論:
+   - divisor transition のうち label が positive prime power であるものを、一段の prime-power descent として扱えるようになった。
+   - `n -> n / q` skeleton は prime label と prime-power label の両方で既存 descent route に接続された。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `IsPrimePowerLabel q := ∃ p k, Nat.Prime p ∧ 0 < k ∧ q = p ^ k` のような finite predicate を切り出すか判断する。
+   - その後、prime-power label predicate を weight/channel 層へ渡すための theorem-facing API を整える。
+
+### 日時: 2026/05/10 11:38 JST (Phase AE prime-power label predicate)
+
+1. 目的:
+   - `review/review-029.md` の提案に従い、prime-power label を直接 `(p,k)` で渡す API から、後続層が扱いやすい predicate API へ切り出す。
+2. 実施:
+   - `IsPrimePowerLabel q := ∃ p k, Nat.Prime p ∧ 0 < k ∧ q = p ^ k` を追加した。
+   - `DivisorTransitionKernel.primePowerDescentStep_of_isPrimePowerLabel` を追加し、`q ∈ T.index n` と `IsPrimePowerLabel q` から `PrimePowerDescentStep n (T.next n q)` を得られるようにした。
+   - 既存の `primePowerDescentStep_of_primePow_label` は witness `(p,k)` を明示する低レベル補題として残し、新 theorem はそれを unpack して再利用する形にした。
+   - concrete sample として `sampleTenDivisorTransitionKernel_isPrimePowerLabel_two` と `sampleTenDivisorTransitionKernel_isPrimePowerLabel_five` を追加した。
+   - sample の prime-power descent theorem を、新しい `IsPrimePowerLabel` wrapper 経由に切り替えた。
+3. 結論:
+   - prime-power label の認識を theorem 呼び出し側で `(p,k)` に展開しなくても扱えるようになった。
+   - 後続の channel / weight 層は、まず `IsPrimePowerLabel q` だけを要求する形で設計できる。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `PrimePowerIndexOn T n := ∀ q ∈ T.index n, IsPrimePowerLabel q` のような index-level predicate を追加するか判断する。
+   - その後、prime-power index predicate を finite transition kernel の channel / weight API に接続する。
+
+### 日時: 2026/05/10 12:13 JST (Phase AF prime-power index predicate)
+
+1. 目的:
+   - `review/review-030.md` の提案に従い、個々の label だけでなく、state `n` の index 全体が prime-power label から成ることを表す predicate API を追加する。
+2. 実施:
+   - `DivisorTransitionKernel.PrimePowerIndexOn T n := ∀ q ∈ T.index n, IsPrimePowerLabel q` を追加した。
+   - `DivisorTransitionKernel.PrimePowerIndexed T := ∀ n, T.PrimePowerIndexOn n` を追加した。
+   - `primePowerDescentStep_of_primePowerIndexOn` を追加し、state `n` の index-level predicate から任意の indexed transition が `PrimePowerDescentStep` であることを得られるようにした。
+   - `primePowerDescentStep_of_primePowerIndexed` を追加し、全状態版 predicate から同じ結論を得られるようにした。
+   - concrete sample として `sampleTenDivisorTransitionKernel_primePowerIndexOn_ten` と `sampleTenDivisorTransitionKernel_primePowerIndexed` を追加した。
+   - sample の prime-power descent theorem を、全状態版 `PrimePowerIndexed` wrapper 経由に切り替えた。
+3. 結論:
+   - 後続層は、各 theorem 呼び出しで個別に `IsPrimePowerLabel q` を渡す代わりに、kernel/state 単位の prime-power index 仮定を使えるようになった。
+   - finite transition の index が von Mangoldt channel 候補だけから成る、という条件を自然に表現できるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は prime-power indexed kernel を構造体化するか、predicate のまま channel / weight API に渡すか判断する。
+   - 構造体化する場合は `PrimePowerDivisorTransitionKernel` として `DivisorTransitionKernel` と `PrimePowerIndexed` を package 化し、既存 divisor transition API を忘却で再利用する。
+
+### 日時: 2026/05/10 12:21 JST (Phase AG prime-power divisor transition package)
+
+1. 目的:
+   - `review/review-031.md` の提案に従い、prime-power label だけを持つ divisor transition kernel を一つの型として package 化する。
+2. 実施:
+   - `PrimePowerDivisorTransitionKernel` を追加し、`toDivisorTransitionKernel : DivisorTransitionKernel` と `primePowerIndexed : toDivisorTransitionKernel.PrimePowerIndexed` をまとめた。
+   - `PrimePowerDivisorTransitionKernel.toFiniteTransitionKernel`, `providerAt`, `totalWeightAt`, `SubProbability`, `CompatibleAt` を追加し、既存 divisor / finite transition API へ忘却で接続した。
+   - `PrimePowerDivisorTransitionKernel.primePowerDescentStep_of_mem` を追加し、package 化された kernel の任意の indexed transition が `PrimePowerDescentStep` であることを直接得られるようにした。
+   - concrete sample として `sampleTenPrimePowerDivisorTransitionKernel` を追加した。
+   - sample の prime-power descent theorem を、`PrimePowerDivisorTransitionKernel` package 経由に切り替えた。
+3. 結論:
+   - prime-power channel 条件を theorem の仮定として毎回渡すだけでなく、型として保持できるようになった。
+   - 後続の channel / weight API は、`PrimePowerDivisorTransitionKernel` を入力にすることで「index は prime-power label のみ」という前提を型のフィールドとして利用できる。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - 初回 build では sample 側の `simp` が package を展開せず `simp made no progress` となったため、`sampleTenPrimePowerDivisorTransitionKernel` と `sampleTenDivisorTransitionKernel` を明示して修正した。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付き build の初回で sample の `simp made no progress` が出た。
+   - package 展開を `simp` に明示した後、権限昇格付きで単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `PrimePowerDivisorTransitionKernel` に対する theorem-facing weight/channel API を設計する。
+   - まだ実数対数や本物の von Mangoldt weight には入らず、まず finite toy weight または prime-power channel weight provider への接続を検討する。
+
+### 日時: 2026/05/10 14:28 JST (Phase AH prime-power channel route API)
+
+1. 目的:
+   - `review/review-032.md` の提案に従い、`PrimePowerDivisorTransitionKernel` から既存の weighted route に直接入る theorem-facing API を整える。
+   - まだ本物の von Mangoldt weight や実数対数には入らず、prime-power channel 型でも既存 weighted bound が使えることを no-sorry で閉じる。
+2. 実施:
+   - `PrimePowerDivisorTransitionKernel.compatibleAt_iff_index_eq` を追加し、compatibility が underlying divisor kernel の index と source-controlled family の index の一致であることを明示した。
+   - `PrimePowerDivisorTransitionKernel.providerAt_subProbability` を追加し、package 化された kernel でも sub-probability provider を得られるようにした。
+   - `PrimePowerDivisorTransitionKernel.applyAtToSourceControlled` を追加し、state `n` の重みを `SourceControlledChainFamily M ℕ` に適用して `WeightedPathFamily M ℕ` を作れるようにした。
+   - `PrimePowerDivisorTransitionKernel.weightedHitMass_le_const_of_subprob_applyAtToSourceControlled` を追加し、sub-probability と source mass 一様上界から weighted hit mass bound を直接得られるようにした。
+   - sample theorem として `sampleTenPrimePowerDivisorTransitionKernel_subProbability` を追加した。
+3. 結論:
+   - prime-power channel 条件を型として持つ kernel から、既存の `FiniteTransitionKernel` / `WeightedPathFamily` route へ直接入れるようになった。
+   - 後続で prime-power weight や von Mangoldt-like finite weight を設計する際、まずこの packaged route API を使って hit mass bound へ接続できる。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `PrimePowerDivisorTransitionKernel` 専用の finite toy weight / channel weight provider を追加するか判断する。
+   - 解析重みへ進む前に、prime-power channel 上で非零重みを与える有限 skeleton を作り、既存 sub-probability route に接続する。
+
+### 日時: 2026/05/10 15:08 JST (Phase AI prime-power channel provider alias)
+
+1. 目的:
+   - `review/review-033.md` の提案に従い、`PrimePowerDivisorTransitionKernel` から state ごとの prime-power channel weight provider を theorem-facing に取り出す API を追加する。
+   - まだ本物の von Mangoldt weight には入らず、後で差し替え可能な入口名を用意する。
+2. 実施:
+   - `PrimePowerDivisorTransitionKernel.channelProviderAt` を追加し、現段階では `providerAt` の alias として定義した。
+   - `PrimePowerDivisorTransitionKernel.channelProviderAt_subProbability` を追加し、sub-probability kernel が sub-probability channel provider を出すことを明示した。
+   - `PrimePowerDivisorTransitionKernel.channelWeightedHitMass_le_const_of_subprob` を追加し、prime-power channel 名の下で既存 weighted hit mass bound を呼べるようにした。
+   - sample theorem として `sampleTenPrimePowerDivisorTransitionKernel_channelProviderAt_subProbability` を追加した。
+3. 結論:
+   - 後続の finite toy weight / von-Mangoldt-like weight 設計で `channelProviderAt` という安定した入口名を使えるようになった。
+   - 現時点では既存 kernel weight をそのまま使うため、実数対数や本物の von Mangoldt 関数には踏み込んでいない。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は channel provider を sub-probability 証明と package 化する `PrimePowerChannelProvider` のような構造体を追加するか判断する。
+   - その後、prime-power channel 上の finite toy weight を設計し、`channelProviderAt` と同じ route へ接続する。
+
+### 日時: 2026/05/10 17:38 JST (Phase AJ prime-power channel provider package)
+
+1. 目的:
+   - `review/review-034.md` の提案に従い、prime-power channel kernel と sub-probability 証明を一つの provider package としてまとめる。
+   - 後続の finite toy weight / von-Mangoldt-like weight 層で、sub-probability 仮定を毎回別に渡さずに channel provider を扱えるようにする。
+2. 実施:
+   - `PrimePowerChannelProvider` を追加し、`kernel : PrimePowerDivisorTransitionKernel` と `subprob : kernel.SubProbability` を package 化した。
+   - `PrimePowerChannelProvider.providerAt` と `channelProviderAt` を追加し、state `n` ごとの prime-power channel provider を取り出せるようにした。
+   - `providerAt_subProbability` と `channelProviderAt_subProbability` を追加し、package の field `subprob` から各 state の provider sub-probability を得られるようにした。
+   - `PrimePowerChannelProvider.applyAtToSourceControlled` を追加し、package された channel weights を source-controlled family に適用できるようにした。
+   - `PrimePowerChannelProvider.weightedHitMass_le_const_applyAtToSourceControlled` を追加し、sub-probability を field から使って weighted hit mass bound を得られるようにした。
+   - concrete sample として `sampleTenPrimePowerChannelProvider` と `sampleTenPrimePowerChannelProvider_channelProviderAt_subProbability` を追加した。
+3. 結論:
+   - prime-power channel と sub-probability normalization が一つの theorem-facing 入力になった。
+   - 後続で finite toy weight を載せる際、`PrimePowerChannelProvider` を受け取れば channel provider と sub-probability を同時に利用できる。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `PrimePowerChannelProvider` を入力にした finite toy weight layer を設計する。
+   - 本物の von Mangoldt / log にはまだ入らず、prime-power channel 上で非負かつ sub-probability な toy weight を扱う theorem-facing API から始める。
+
+### 日時: 2026/05/10 17:52 JST (Phase AK channel provider constructor and weight replacement)
+
+1. 目的:
+   - `review/review-035.md` の提案に従い、`PrimePowerChannelProvider` の constructor 規約を整え、後続の finite toy weight / von-Mangoldt-like weight 差し替えの入口を作る。
+2. 実施:
+   - `PrimePowerChannelProvider.ofKernel` を追加し、`PrimePowerDivisorTransitionKernel` と sub-probability 証明から provider package を作れるようにした。
+   - `sampleTenPrimePowerChannelProvider` を `PrimePowerChannelProvider.ofKernel` 経由に切り替え、今後の `ofToyWeight` / `ofVonMangoldtLikeWeight` 系 constructor と命名規則を揃えた。
+   - `PrimePowerDivisorTransitionKernel.withWeight` を追加し、index、next、divisor semantics、prime-power channel 条件を保ったまま weight だけ差し替えられるようにした。
+   - `withWeight_index`, `withWeight_next`, `withWeight_weight` を `[simp]` 補題として追加した。
+3. 結論:
+   - prime-power channel provider は `ofKernel` で標準的に package 化できるようになった。
+   - future toy weight は、まず `withWeight` で prime-power divisor kernel の weight を差し替え、その sub-probability を証明して `ofKernel` へ渡す流れで実装できる。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `withWeight` を使った finite toy weight の concrete constructor を検討する。
+   - まずは `{2,5}` sample のような finite support 上で nonnegative / sub-probability を示せる toy weight を作り、`PrimePowerChannelProvider.ofKernel` へ接続する。
+
+### 日時: 2026/05/10 17:58 JST (Phase AL concrete finite toy weight)
+
+1. 目的:
+   - `review/review-036.md` の提案に従い、`withWeight` を使って concrete finite toy weight を載せ替え、`PrimePowerChannelProvider.ofKernel` まで接続する。
+   - 本物の von Mangoldt / log には入らず、prime-power channel 上で手定義の有理 toy weight が no-sorry で通ることを確認する。
+2. 実施:
+   - `sampleTenToyWeight n q := if n = 10 ∧ q = 2 then 1 else 0` を追加した。
+   - `sampleTenToyWeight_nonneg` を追加し、sample channel index 上で toy weight が非負であることを示した。
+   - `sampleTenToyWeightKernel` を追加し、`sampleTenPrimePowerDivisorTransitionKernel.withWeight sampleTenToyWeight ...` で weight だけを差し替えた。
+   - `sampleTenToyWeightKernel_index_ten`, `sampleTenToyWeightKernel_next_two`, `sampleTenToyWeightKernel_next_five` を追加し、index と next が元の prime-power channel から保たれることを確認した。
+   - `sampleTenToyWeightKernel_subProbability` を追加し、状態 `10` では weight sum が `1`、それ以外では空 index なので sub-probability であることを示した。
+   - `sampleTenToyWeightChannelProvider` を追加し、toy-weighted kernel を `PrimePowerChannelProvider.ofKernel` へ接続した。
+   - `sampleTenToyWeightChannelProvider_channelProviderAt_subProbability` を追加した。
+3. 結論:
+   - `withWeight` による weight 差し替えと `PrimePowerChannelProvider.ofKernel` への接続が concrete sample で通った。
+   - prime-power channel 構造を保ったまま、別の有限 toy weight を載せて sub-probability provider として扱えるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - 初回 build で toy weight sub-probability proof の unused simp args warning が出たため、該当 simp 引数を削除して再 build し warning なしを確認した。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付き build の初回で unused simp args warning が出た。
+   - warning 修正後、権限昇格付きで単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は toy weight provider が既存 weighted hit mass bound へ入る concrete theorem を追加するか判断する。
+   - その後、`q = p ^ k` の witness に依存する von-Mangoldt-like finite weight の抽象化へ進む。
+
+### 日時: 2026/05/10 18:27 JST (Phase AM toy weight concrete hit mass bound)
+
+1. 目的:
+   - `review/review-037.md` の提案に従い、`sampleTenToyWeightChannelProvider` が既存 weighted hit mass bound に入ることを concrete theorem として確認する。
+2. 実施:
+   - `sampleTenToyWeightSourceControlledFamily` を追加し、state `10` の toy-weighted sample channel と同じ index `{2,5}` を持つ `SourceControlledChainFamily unitNatMassSpace ℕ` を作成した。
+   - chain は各 label `q` に singleton `{q}` を割り当て、source は常に `10` とした。
+   - `sampleTenToyWeightChannelProvider_hitMass_le_one` を追加し、toy-weighted channel provider を source-controlled family に適用した weighted hit mass が `{2,5}` 上で `<= 1` であることを示した。
+   - 証明では `PrimePowerChannelProvider.weightedHitMass_le_const_applyAtToSourceControlled` を呼び、compatibility は `sampleTenToyWeightKernel.toDivisorTransitionKernel.index 10 = sampleTenToyWeightSourceControlledFamily.index` に `change` して解いた。
+3. 結論:
+   - concrete toy weight は `PrimePowerChannelProvider` へ登録されるだけでなく、既存 weighted hit mass bound まで実際に通ることが確認できた。
+   - `withWeight -> ofKernel -> applyAtToSourceControlled -> weightedHitMass <= 1` の concrete route が no-sorry で閉じた。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - 初回 build では compatibility 証明を `simp` だけでは解けなかったため、`change` で index equality に落として修正した。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付き build の初回で compatibility goal が残った。
+   - `change` による明示化後、権限昇格付きで単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は witness-dependent toy weight へ進む前に、finite index 上の手定義 weight を一般化する constructor を検討する。
+   - その後、`IsPrimePowerLabel q` の witness `(p,k)` に依存する von-Mangoldt-like finite weight へ進む。
+
+### 日時: 2026/05/10 18:31 JST (Phase AN general finite toy weight constructor)
+
+1. 目的:
+   - `review/review-039.md` の提案に従い、任意の手定義 weight を prime-power channel provider へ接続する一般 constructor を追加する。
+2. 実施:
+   - `PrimePowerChannelProvider.ofKernelWithWeight` を追加した。
+   - 入力として `T : PrimePowerDivisorTransitionKernel`, weight `w : ℕ -> ℕ -> ℚ`, index 上の非負性 `hw_nonneg`, および `(T.withWeight w hw_nonneg).SubProbability` を受け取り、`PrimePowerChannelProvider` を返すようにした。
+   - `sampleTenToyWeightChannelProvider` を `PrimePowerChannelProvider.ofKernelWithWeight` 経由に切り替えた。
+3. 結論:
+   - `withWeight -> subProbability -> ofKernel` の流れを一つの constructor にまとめられた。
+   - future toy weight / von-Mangoldt-like finite weight は、非負性と sub-probability を示せば同じ constructor で channel provider 化できる。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `PrimePowerChannelProvider.ofKernelWithWeight` によって得た provider の kernel/index/weight を取り出す simp API を整理するか判断する。
+   - その後、`q = p ^ k` の witness に依存する toy / von-Mangoldt-like finite weight の表現方法を検討する。
+
+### 日時: 2026/05/10 20:46 JST (Phase AO ofKernelWithWeight simp API)
+
+1. 目的:
+   - `PrimePowerChannelProvider.ofKernelWithWeight` で作った provider から、kernel / index / weight を取り出しやすくする simp API を整理する。
+2. 実施:
+   - `PrimePowerChannelProvider.ofKernel_kernel` を追加し、`ofKernel` の kernel projection が元の kernel へ簡約されるようにした。
+   - `PrimePowerChannelProvider.ofKernelWithWeight_kernel` を追加し、`ofKernelWithWeight` の kernel projection が `T.withWeight w hw_nonneg` へ簡約されるようにした。
+   - `PrimePowerChannelProvider.ofKernelWithWeight_channelProviderAt_index` を追加し、constructor 経由の channel provider の index が元 kernel の index と一致することを `[simp]` 化した。
+   - `PrimePowerChannelProvider.ofKernelWithWeight_channelProviderAt_weight` を追加し、constructor 経由の channel provider の weight が `w n` に一致することを `[simp]` 化した。
+3. 結論:
+   - 後続の compatibility 証明や toy / von-Mangoldt-like weight の theorem で、`ofKernelWithWeight` 由来の provider を展開しやすくなった。
+   - 手定義 weight を provider 化した後も、index と weight を theorem 側で直接参照できる。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `q = p ^ k` の witness に依存する toy / von-Mangoldt-like finite weight の表現方法を検討する。
+   - まずは label を構造化せず、外から与える weight に対して prime-power witness 由来であることを predicate として持つ方針が軽い。
+
+### 日時: 2026/05/10 21:42 JST (Phase AP finite von-Mangoldt-like weight predicate)
+
+1. 目的:
+   - `review/review-040.md` の提案に従い、本物の von Mangoldt 関数や解析対数には入らず、外から与える weight が prime-power witness と非負性を持つことを表す軽い predicate を追加する。
+2. 実施:
+   - `PrimePowerDivisorTransitionKernel.VonMangoldtLikeWeight` を追加した。
+   - 定義は、任意の indexed label `q ∈ T.index n` に対して `∃ p k, Nat.Prime p ∧ 0 < k ∧ q = p ^ k ∧ 0 ≤ w n q` を要求するものとした。
+   - `vonMangoldtLikeWeight_nonneg` を追加し、この predicate から index 上の非負性を取り出せるようにした。
+   - `vonMangoldtLikeWeight_isPrimePowerLabel` を追加し、この predicate から `IsPrimePowerLabel q` を取り出せるようにした。
+   - `vonMangoldtLikeWeight_of_nonneg` を追加し、既に `PrimePowerDivisorTransitionKernel` が prime-power indexed であるため、index 上の非負性だけで finite von-Mangoldt-like predicate を構成できるようにした。
+   - concrete sample として `sampleTenToyWeight_vonMangoldtLikeWeight` を追加した。
+3. 結論:
+   - label を構造体化せず、`q : ℕ` label のまま、weight が prime-power channel witness と非負性を持つことを theorem-facing predicate として扱えるようになった。
+   - 既存の `ofKernelWithWeight` と組み合わせると、future finite von-Mangoldt-like weight は非負性・sub-probability・この predicate を別々に整理して扱える。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `VonMangoldtLikeWeight` と `ofKernelWithWeight` を直接つなぐ constructor / theorem を検討する。
+   - その後、prime-power witness `(p,k)` に依存するより具体的な finite toy weight をどう表現するか判断する。
+
+### 日時: 2026/05/10 22:13 JST (Phase AQ von-Mangoldt-like provider constructor)
+
+1. 目的:
+   - `review/review-041.md` の提案に従い、`VonMangoldtLikeWeight` と `PrimePowerChannelProvider.ofKernelWithWeight` を直接つなぐ constructor を追加する。
+2. 実施:
+   - `PrimePowerChannelProvider.ofVonMangoldtLikeWeight` を追加した。
+   - 入力として `T : PrimePowerDivisorTransitionKernel`, weight `w`, predicate `hw : T.VonMangoldtLikeWeight w`, および `(T.withWeight w (T.vonMangoldtLikeWeight_nonneg hw)).SubProbability` を受け取り、`PrimePowerChannelProvider` を返すようにした。
+   - `ofVonMangoldtLikeWeight_kernel`, `ofVonMangoldtLikeWeight_channelProviderAt_index`, `ofVonMangoldtLikeWeight_channelProviderAt_weight` を `[simp]` 補題として追加した。
+   - `sampleTenToyWeightChannelProvider` を `ofVonMangoldtLikeWeight` 経由に切り替えた。
+3. 結論:
+   - finite von-Mangoldt-like predicate を持つ weight は、非負性を改めて渡さずに channel provider 化できるようになった。
+   - `VonMangoldtLikeWeight -> withWeight -> PrimePowerChannelProvider -> weightedHitMass bound` の route が一つの constructor で接続された。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は prime-power witness `(p,k)` に依存する具体的な finite toy weight をどう表現するか検討する。
+   - 短期的には `q : ℕ` label のまま predicate で性質を管理し、長期的には `PrimePowerLabel` 構造体化も候補にする。
+
+### 日時: 2026/05/11 05:18 JST (Phase AR prime witness dependent toy weight predicate)
+
+1. 目的:
+   - `review/review-042.md` の提案に従い、label をまだ構造体化せず、`q : ℕ` label のまま prime witness `(p,k)` に依存して表せる toy weight predicate を追加する。
+2. 実施:
+   - `PrimePowerDivisorTransitionKernel.PrimeWitnessDependentWeight` を追加した。
+   - 定義は、任意の indexed label `q ∈ T.index n` に対して `∃ p k, Nat.Prime p ∧ 0 < k ∧ q = p ^ k ∧ w n q = c n p ∧ 0 ≤ w n q` を要求するものとした。
+   - `PrimePowerDivisorTransitionKernel.vonMangoldtLikeWeight_of_primeWitnessDependent` を追加し、この predicate から `VonMangoldtLikeWeight` へ進めるようにした。
+   - concrete sample として `sampleTenToyPrimeBaseWeight` を追加し、`sampleTenToyWeight` が prime base weight `c n p` で表せることを `sampleTenToyWeight_primeWitnessDependent` として示した。
+3. 結論:
+   - 本物の `Λ(q)=log p` にはまだ入らず、weight が prime-power witness の prime base `p` に依存して表せる、という有限 toy predicate を得た。
+   - `PrimeWitnessDependentWeight -> VonMangoldtLikeWeight -> ofVonMangoldtLikeWeight` の意味論的 route が使えるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `PrimeWitnessDependentWeight` を `PrimePowerChannelProvider.ofVonMangoldtLikeWeight` に直接つなぐ constructor を検討する。
+   - その後、`PrimePowerLabel` 構造体化に進むべきか、`q : ℕ` label + predicate route を継続するか判断する。
+
+### 日時: 2026/05/11 05:24 JST (Phase AS prime witness dependent provider constructor)
+
+1. 目的:
+   - `review/review-043.md` の提案に従い、`PrimeWitnessDependentWeight` を `PrimePowerChannelProvider` へ直接接続する constructor を追加する。
+2. 実施:
+   - `PrimePowerChannelProvider.ofPrimeWitnessDependentWeight` を追加した。
+   - 入力として `T`, weight `w`, base-prime weight `c`, predicate `hw : T.PrimeWitnessDependentWeight w c`, および `(T.withWeight w (T.vonMangoldtLikeWeight_nonneg (T.vonMangoldtLikeWeight_of_primeWitnessDependent hw))).SubProbability` を受け取り、`PrimePowerChannelProvider` を返すようにした。
+   - 内部では `T.vonMangoldtLikeWeight_of_primeWitnessDependent hw` で `VonMangoldtLikeWeight` へ変換し、既存の `ofVonMangoldtLikeWeight` を再利用した。
+   - `ofPrimeWitnessDependentWeight_kernel`, `ofPrimeWitnessDependentWeight_channelProviderAt_index`, `ofPrimeWitnessDependentWeight_channelProviderAt_weight` を `[simp]` 補題として追加した。
+   - `sampleTenToyWeightChannelProvider` を `ofPrimeWitnessDependentWeight` 経由に切り替えた。
+3. 結論:
+   - `PrimeWitnessDependentWeight -> VonMangoldtLikeWeight -> withWeight -> PrimePowerChannelProvider` の route が一つの constructor で接続された。
+   - base-prime `p` 依存で説明できる finite toy weight を、直接 channel provider 化できるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `PrimeWitnessDependentWeight` route を使った concrete weighted hit mass theorem を整理するか判断する。
+   - その後、`PrimePowerLabel` 構造体化へ進むか、`q : ℕ` label + predicate route を継続するか判断する。
+
+### 日時: 2026/05/11 05:28 JST (Phase AT prime witness dependent concrete bound alias)
+
+1. 目的:
+   - `review/review-044.md` の提案に従い、`PrimeWitnessDependentWeight` route で provider 化された toy weight が concrete weighted hit mass bound へ入ることを theorem 名から読めるようにする。
+2. 実施:
+   - `sampleTenPrimeWitnessDependentWeight_hitMass_le_one` を追加した。
+   - 内容は既存の `sampleTenToyWeightChannelProvider_hitMass_le_one` と同じ bound で、`sampleTenToyWeightChannelProvider` がすでに `ofPrimeWitnessDependentWeight` 経由で作られていることを反映した alias theorem とした。
+3. 結論:
+   - `PrimeWitnessDependentWeight -> ofPrimeWitnessDependentWeight -> applyAtToSourceControlled -> weightedHitMass <= 1` の concrete route が theorem 名として明示された。
+   - 実装上は既存 proof を再利用し、余分な構造変更は加えなかった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - 次は `PrimePowerLabel` 構造体化へ進むか、`q : ℕ` label + predicate route を継続するか判断する。
+   - 構造体化する場合は既存 `DivisorTransitionKernel` との橋を薄く作る必要がある。
+
+### 日時: 2026/05/11 05:38 JST (Phase AU PrimePowerLabel sidecar)
+
+1. 目的:
+   - `review/review-045.md` の提案に従い、既存の `q : ℕ` label route を壊さず、prime-power witness を明示的に持つ sidecar 構造を追加する。
+2. 実施:
+   - `PrimePowerLabel` を追加し、`q`, `p`, `k`, `Nat.Prime p`, `0 < k`, `q = p ^ k` を一つの構造体にまとめた。
+   - `PrimePowerLabel.isPrimePowerLabel` を追加し、構造体 witness から既存 predicate `IsPrimePowerLabel L.q` へ戻れるようにした。
+   - `PrimePowerLabel.primePowerDescentStep_of_mem` を追加し、`L.q ∈ T.index n` から既存 `DivisorTransitionKernel.primePowerDescentStep_of_primePow_label` 経由で `PrimePowerDescentStep n (T.next n L.q)` を得る橋を作った。
+   - sample として `samplePrimePowerLabel_two`, `samplePrimePowerLabel_five` を追加した。
+   - 確認 theorem として `samplePrimePowerLabel_two_descent`, `samplePrimePowerLabel_five_descent` を追加した。
+3. 結論:
+   - `DivisorTransitionKernel` の index 型や既存 API は変更せず、`q = p ^ k` の証拠を名前付き構造として扱えるようになった。
+   - 次段の witness provider で base prime `p` を取り出すための最小 sidecar が no-sorry で通った。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 権限昇格付きで再実行し、単体 build、aggregator build、no-sorry 検索、差分確認を完了した。
+6. 次の課題:
+   - Phase AV として `PrimePowerWitnessProvider` を追加し、既存 `PrimePowerDivisorTransitionKernel` の各 indexed `q` に対して `PrimePowerLabel` witness を選ぶ層を作る。
+   - その後、witness provider から base-prime 依存 weight `w(n,q)=c(n,p)` を定義する。
+
+### 日時: 2026/05/11 05:55 JST (Phase AV PrimePowerWitnessProvider)
+
+1. 目的:
+   - `review/review-046.md` の提案に従い、`PrimePowerDivisorTransitionKernel` の各 indexed label `q` に対して、明示的な `PrimePowerLabel` witness を選ぶ provider 層を追加する。
+2. 実施:
+   - `PrimePowerWitnessProvider T` を追加し、`q ∈ T.toDivisorTransitionKernel.index n` から `PrimePowerLabel` を返す `label` と、その label が元の `q` を表すことを示す `label_q` を持たせた。
+   - `PrimePowerWitnessProvider.isPrimePowerLabel` を追加し、選ばれた witness から既存 predicate `IsPrimePowerLabel q` へ接続した。
+   - `PrimePowerWitnessProvider.primePowerDescentStep` を追加し、provider 由来の witness から `PrimePowerDescentStep n (T.toDivisorTransitionKernel.next n q)` へ進めるようにした。
+   - sample として `sampleTenPrimePowerWitnessProvider` を追加した。
+   - sample 確認 theorem として `sampleTenPrimePowerWitnessProvider_isPrimePowerLabel`, `sampleTenPrimePowerWitnessProvider_two_descent`, `sampleTenPrimePowerWitnessProvider_five_descent` を追加した。
+3. 結論:
+   - 既存の `q : ℕ` label route を保ったまま、indexed label ごとに base prime `p` を含む witness を選ぶ層ができた。
+   - 次段の `weightOfBase` で `c n (W.label n q hq).p` を使う準備が整った。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 初回実装では `sampleTenPrimePowerWitnessProvider.label` が `PrimePowerLabel : Type` を返す箇所で `q = 2 ∨ q = 5` を直接 `rcases` しようとして、Prop から Type への elimination 制限で失敗した。
+   - `q = 2` の decidable 分岐を先に置き、membership は `q = 5` の Prop 証明にだけ使う形へ修正して build を通した。
+6. 次の課題:
+   - Phase AW として `PrimePowerWitnessProvider.weightOfBase` を追加し、base-prime weight `c : ℕ → ℕ → ℚ` から label weight `w : ℕ → ℕ → ℚ` を作る。
+   - 続けて `weightOfBase_primeWitnessDependent` を証明し、既存 `PrimeWitnessDependentWeight` route へ接続する。
+
+### 日時: 2026/05/11 06:03 JST (Phase AW weightOfBase)
+
+1. 目的:
+   - `review/review-047.md` の提案に従い、`PrimePowerWitnessProvider` が選ぶ base prime `p` を使って、base-prime weight `c n p` から label weight `w n q` を作る。
+2. 実施:
+   - `PrimePowerWitnessProvider.weightOfBase` を追加し、`q ∈ T.toDivisorTransitionKernel.index n` のとき `c n ((W.label n q hq).p)`、それ以外は `0` を返す label weight を定義した。
+   - `[simp]` 補題 `PrimePowerWitnessProvider.weightOfBase_of_mem` を追加し、indexed label 上で `weightOfBase` が選択 witness の base prime weight に簡約されるようにした。
+   - `PrimePowerWitnessProvider.weightOfBase_primeWitnessDependent` を追加し、非負な base-prime weight から `T.PrimeWitnessDependentWeight (W.weightOfBase c) c` を得る一般 theorem を証明した。
+   - sample theorem として `sampleTenPrimePowerWitnessProvider_weightOfBase_primeWitnessDependent` を追加した。
+3. 結論:
+   - `PrimePowerWitnessProvider` で選んだ witness の base prime `p` から、一般の label weight `w(n,q)=c(n,p)` を作れるようになった。
+   - 既存の `PrimeWitnessDependentWeight -> ofPrimeWitnessDependentWeight` route に、witness-provider-driven weight が no-sorry で接続された。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 初回実装では `PrimeWitnessDependentWeight` の非負性結論が `0 ≤ W.weightOfBase c n q` である一方、仮定は `0 ≤ c n ((W.label n q hq).p)` だったため、`weightOfBase_of_mem` による明示的な書き換えが必要だった。
+   - sample の非負性証明では `samplePrimePowerLabel_two/five` を unfold して `p` field を見せる必要があった。
+6. 次の課題:
+   - Phase AX として `PrimePowerChannelProvider.ofWitnessProviderWeight` を追加し、witness provider と base-prime weight から直接 `PrimePowerChannelProvider` を作る constructor を整備する。
+   - sample route でも `weightOfBase` 由来 weight が channel provider と hit mass bound に進むことを確認する。
+
+### 日時: 2026/05/11 12:45 JST (Phase AX witness-provider weight constructor)
+
+1. 目的:
+   - `review/review-048.md` の提案に従い、`PrimePowerWitnessProvider` と base-prime weight `c n p` から直接 `PrimePowerChannelProvider` を作る標準 constructor を追加する。
+2. 実施:
+   - `PrimePowerChannelProvider.ofWitnessProviderWeight` を追加した。
+   - 内部では `W.weightOfBase c` と `W.weightOfBase_primeWitnessDependent c hc_nonneg` を使い、既存の `ofPrimeWitnessDependentWeight` に接続した。
+   - `[simp]` 補題として `ofWitnessProviderWeight_kernel`, `ofWitnessProviderWeight_channelProviderAt_index`, `ofWitnessProviderWeight_channelProviderAt_weight` を追加した。
+3. 結論:
+   - `base-prime weight c -> W.weightOfBase c -> PrimeWitnessDependentWeight -> PrimePowerChannelProvider` の導線が一つの constructor にまとまった。
+   - witness-provider-driven weight を後続の channel-provider API へ渡す標準入口ができた。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 今回の Lean 実装自体は初回の権限昇格付き build で通った。
+6. 次の課題:
+   - Phase AY として sample の `sampleTenPrimePowerWitnessProvider` と `sampleTenToyPrimeBaseWeight` から `PrimePowerChannelProvider` を作り、hit mass bound まで接続する。
+   - 必要なら `ofWitnessProviderWeight` route の concrete theorem 名を追加し、手定義 toy weight route と区別して読めるようにする。
+
+### 日時: 2026/05/11 13:01 JST (Phase AY witness-provider sample hit mass bound)
+
+1. 目的:
+   - `review/review-049.md` の提案に従い、sample の `sampleTenPrimePowerWitnessProvider` と `sampleTenToyPrimeBaseWeight` を `ofWitnessProviderWeight` route で `PrimePowerChannelProvider` にし、weighted hit mass bound まで接続する。
+2. 実施:
+   - `sampleTenToyPrimeBaseWeight_nonneg_on_index` を追加し、sample index 上で base-prime weight が非負であることを示した。
+   - `sampleTenPrimePowerWitnessProvider_weightOfBase_eq_sampleTenToyWeight` を追加し、witness-provider-built weight が既存の手定義 toy weight と一致することを固定した。
+   - `sampleTenWitnessProviderWeightKernel_subProbability` を追加し、`W.weightOfBase c` で置き換えた sample kernel が sub-probability normalized であることを示した。
+   - `sampleTenWitnessProviderWeightChannelProvider` を追加し、`PrimePowerChannelProvider.ofWitnessProviderWeight` 経由で sample channel provider を構成した。
+   - `sampleTenWitnessProviderWeightChannelProvider_channelProviderAt_subProbability` と `sampleTenWitnessProviderWeight_hitMass_le_one` を追加した。
+3. 結論:
+   - `PrimePowerWitnessProvider + base-prime toy weight -> weightOfBase -> ofWitnessProviderWeight -> applyAtToSourceControlled -> weightedHitMass <= 1` の concrete route が no-sorry で閉じた。
+   - 手定義 toy weight route と同じ bound を、witness-provider-driven weight route として theorem 名から読めるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - `sampleTenWitnessProviderWeightKernel_subProbability` では dependent proof を含む `withWeight` 目標に対して weight 関数の等式で直接 `rw` できず、`weightOfBase` の定義を unfold して直接計算する形に修正した。
+   - hit mass bound の compatibility 証明では `|>.toDivisorTransitionKernel.index 10` の pipeline 表記が `simp` と誤結合したため、通常の field 表記へ直した。
+   - さらに `sampleTenWitnessProviderWeightChannelProvider` と `sampleTenPrimePowerDivisorTransitionKernel` を明示的に unfold して index equality を閉じた。
+6. 次の課題:
+   - Phase AZ として、`ofWitnessProviderWeight` route の一般 theorem-facing bound alias を追加するか判断する。
+   - その後、解析風 weight または `PrimePowerLabel` index kernel の別ルートへ進むかを検討する。
+
+### 日時: 2026/05/11 13:15 JST (Phase AZ witness-provider weight hit-mass alias)
+
+1. 目的:
+   - `review/review-050.md` の提案に従い、`ofWitnessProviderWeight` route で作った channel provider の weighted hit mass bound を theorem 名から読める一般 alias として追加する。
+2. 実施:
+   - `PrimePowerWitnessProvider.weightOfBase_hitMass_le_const` を追加した。
+   - 仮定として base-prime weight の index 上非負性、`W.weightOfBase c` 由来 kernel の sub-probability、source-controlled family との compatibility、primitive set、source mass bound を受け取る形にした。
+   - 証明は `PrimePowerChannelProvider.ofWitnessProviderWeight W c ...` を作り、既存 `weightedHitMass_le_const_applyAtToSourceControlled` へ渡す alias とした。
+3. 結論:
+   - `PrimePowerWitnessProvider + base-prime weight -> ofWitnessProviderWeight -> weightedHitMass <= C` の一般 route が theorem 名として固定された。
+   - sample 専用ではなく、今後の解析風 toy weight に対しても route 名を保ったまま hit mass bound を呼び出せるようになった。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - Lean 実装自体は初回の権限昇格付き build で通った。
+6. 次の課題:
+   - 次は base-prime weight `c : ℕ → ℕ → ℚ` の非負性や sub-probability を theorem-facing に分ける predicate を設計する。
+   - あるいは解析風 toy model に入る前に、`PrimePowerLabel` index kernel を別ルートとして作るべきか判断する。

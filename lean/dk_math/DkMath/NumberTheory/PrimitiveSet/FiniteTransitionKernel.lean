@@ -151,6 +151,43 @@ theorem transitionBranchPrimePathFamilyAt_hitMass_le_const_of_subprob
     (I.branchPrimePathFamilySourceControlled M B F)
     hcompat I.primitive hC hsource
 
+/-- Apply a finite transition kernel state to the prime-path-family route. -/
+def transitionPrimePathFamilyAt
+    {x : ℕ} {σ ι : Type _} [DecidableEq ι]
+    (M : MassSpace ℕ)
+    (I : ErdosFinitePrimitiveInput x)
+    (F : AdjacentPrimePathFamily ι)
+    (hM : DvdMonotoneMass M)
+    (T : FiniteTransitionKernel σ ι) (s : σ)
+    (hcompat :
+      T.CompatibleAt s (I.primePathFamilySourceControlled M F hM)) :
+    WeightedPathFamily M ι :=
+  T.applyAtToSourceControlled s
+    (I.primePathFamilySourceControlled M F hM) hcompat
+
+/--
+Transition-kernel prime-path-family route bound under sub-probability weights
+and a uniform source-mass bound.
+-/
+theorem transitionPrimePathFamilyAt_hitMass_le_const_of_subprob
+    {x : ℕ} {σ ι : Type _} [DecidableEq ι]
+    {M : MassSpace ℕ}
+    (I : ErdosFinitePrimitiveInput x)
+    (F : AdjacentPrimePathFamily ι)
+    (hM : DvdMonotoneMass M)
+    (T : FiniteTransitionKernel σ ι) (hT : T.SubProbability) (s : σ)
+    (hcompat :
+      T.CompatibleAt s (I.primePathFamilySourceControlled M F hM))
+    {C : ℚ} (hC : 0 ≤ C)
+    (hsource :
+      ∀ i ∈ (I.primePathFamilySourceControlled M F hM).index,
+        M.μ ((I.primePathFamilySourceControlled M F hM).source i) ≤ C) :
+    (I.transitionPrimePathFamilyAt M F hM T s hcompat).weightedHitMass
+      I.support ≤ C := by
+  exact T.weightedHitMass_le_const_of_subprob_applyAtToSourceControlled hT s
+    (I.primePathFamilySourceControlled M F hM)
+    hcompat I.primitive hC hsource
+
 end ErdosFinitePrimitiveInput
 
 /-- A sample transition kernel with a single unit state and Bool labels. -/
@@ -200,6 +237,42 @@ theorem erdosFinitePrimitiveInput_two_five_transitionBranch_hitMass_le_one :
           sampleUnitTransitionKernel,
           ErdosFinitePrimitiveInput.branchPrimePathFamilySourceControlled,
           sampleAdjacentBranchPrimePathBoolFamily])
+      (by norm_num)
+      (by
+        intro i _hi
+        rfl)
+
+/--
+Concrete sample: transition-kernel weights also give prime-path-family hit mass
+bound by `1`.
+-/
+theorem erdosFinitePrimitiveInput_two_five_transitionPrimePath_hitMass_le_one :
+    (erdosFinitePrimitiveInput_two_five.transitionPrimePathFamilyAt
+      unitNatMassSpace sampleAdjacentPrimePathBoolFamily
+      unitNatMassSpace_dvdMonotone sampleUnitTransitionKernel ()
+      (by
+        simp [FiniteTransitionKernel.CompatibleAt,
+          FiniteKernel.CompatibleAt,
+          WeightProvider.Compatible,
+          FiniteTransitionKernel.toFiniteKernel,
+          FiniteKernel.providerAt,
+          sampleUnitTransitionKernel,
+          ErdosFinitePrimitiveInput.primePathFamilySourceControlled,
+          sampleAdjacentPrimePathBoolFamily])).weightedHitMass
+      erdosFinitePrimitiveInput_two_five.support ≤ 1 := by
+  exact erdosFinitePrimitiveInput_two_five
+    |>.transitionPrimePathFamilyAt_hitMass_le_const_of_subprob
+      sampleAdjacentPrimePathBoolFamily unitNatMassSpace_dvdMonotone
+      sampleUnitTransitionKernel sampleUnitTransitionKernel_subProbability ()
+      (by
+        simp [FiniteTransitionKernel.CompatibleAt,
+          FiniteKernel.CompatibleAt,
+          WeightProvider.Compatible,
+          FiniteTransitionKernel.toFiniteKernel,
+          FiniteKernel.providerAt,
+          sampleUnitTransitionKernel,
+          ErdosFinitePrimitiveInput.primePathFamilySourceControlled,
+          sampleAdjacentPrimePathBoolFamily])
       (by norm_num)
       (by
         intro i _hi
