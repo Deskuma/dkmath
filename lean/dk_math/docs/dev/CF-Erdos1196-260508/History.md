@@ -39,6 +39,28 @@ Archive
 
 ---
 
+### 日時: 2026/05/13 08:06 JST (Phase-R015 real divisor bridge product-budget interface)
+
+1. 目的:
+   - `review/review-073.md` の提案に従い、prime-power witness provider の `basePrimeOf` を R/log 側の `RealLogProductBudget` interface に接続する。
+   - `DivisorTransitionKernel.lean` に R/log 依存を入れず、新規 bridge file に依存を分離する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/RealDivisorBridge.lean` を新規作成した。
+   - `RealDivisorBridge.lean` は `DivisorTransitionKernel` と `RealLog` を import する橋として置いた。
+   - `PrimePowerWitnessProvider.basePrimeOf_realLogNonnegOn` を追加し、`W.basePrimeOf n I hI` が `RealLogNonnegOn` を満たすことを示した。
+   - `PrimePowerWitnessProvider.basePrimeOf_realLogProductBudget_of_productBound` を追加し、`NatProductBoundOn I (W.basePrimeOf n I hI) n` と `1 < n` から `RealLogProductBudget I (W.basePrimeOf n I hI) n` を束ねた。
+   - `PrimitiveSet.lean` aggregator に `RealDivisorBridge` import を追加した。
+3. 結論:
+   - R/log 側が要求する `RealLogProductBudget` を、prime-power witness provider 由来の base-prime reader に接続する bridge ができた。
+   - まだ `NatProductBoundOn` 自体は証明していない。次段以降で重複制御・指数消費 tracking を設計する。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.RealDivisorBridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+
 ### 日時: 2026/05/13 08:00 JST (Phase-R014 witness base-prime read bridge)
 
 1. 目的:
