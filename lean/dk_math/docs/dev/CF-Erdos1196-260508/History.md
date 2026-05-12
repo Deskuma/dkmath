@@ -39,6 +39,24 @@ Archive
 
 ---
 
+### 日時: 2026/05/12 16:14 JST (Phase numbering policy update before R001)
+
+1. 目的:
+   - R 版実装へ進む前に、Phase ナンバリング仕様を修正する。
+   - `BH -> RH` のような英字継続は飛躍が大きいため廃止し、R 版は `R001` から番号管理する。
+2. 実施:
+   - `RealLogRoutePlan.md` に `Phase ナンバリング仕様` を追加した。
+   - R 版の管理範囲を `Phase-R001` から `Phase-R999` までと明記した。
+   - 旧案の `Phase RH`, `Phase RI`, `Phase RJ`, `Phase RK`, `Phase RL` を廃止する旨を明記した。
+   - 実装 Phase 案の見出しを `Phase-R001` から `Phase-R005` に振り直した。
+   - レビュー番号は従来通り `review-060.md` 以降を参照し、Phase 番号とは独立に扱うことを明記した。
+3. 結論:
+   - R 版は以後 `Phase-R001` から開始する。
+   - review 文書は参照のみで、こちらから改変しない。
+4. 検証:
+   - `RealLogRoutePlan.md` 内の新ナンバリング節と Phase 見出しを `sed` / `rg` で確認した。
+   - Lean 実装変更はないため build は実行しない。
+
 ### 日時: 2026/05/12 13:31 JST (Phase BH docs overview and real/log route plan)
 
 1. 目的:

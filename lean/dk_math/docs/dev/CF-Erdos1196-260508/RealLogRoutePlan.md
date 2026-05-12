@@ -80,9 +80,24 @@ q | n   -> log q <= log n
 
 は自明ではない。prime-power labels が互いにどのように選ばれているか、また同じ base prime を重複して読むかを制御する必要がある。
 
+## Phase ナンバリング仕様
+
+R 版の実装 Phase は、この設計書から新しい番号体系で管理する。
+
+```text
+Phase-R001
+Phase-R002
+...
+Phase-R999
+```
+
+以前の案にあった `Phase RH`, `Phase RI`, `Phase RJ`, `Phase RK`, `Phase RL` は廃止する。N/Q 版の `BH` から `RH` へ飛ぶと、作業単位と記録番号の対応が読みづらくなるためである。
+
+以後、R 版実装とその設計更新は `R001` から順に番号を振る。レビュー番号は従来通り `review-060.md` 以降を参照するが、レビュー番号と Phase 番号は独立に扱う。
+
 ## 実装 Phase 案
 
-### Phase RH. Real weight vocabulary
+### Phase-R001. Real weight vocabulary
 
 目的:
 
@@ -110,7 +125,7 @@ def realRatioBasePrimeWeight (A B : ℕ -> ℝ) : ℕ -> ℕ -> ℝ :=
 - `realRatioBasePrimeWeight` の非負性が、`0 <= A p` と `0 < B n` から出る。
 - `Real.log` はまだ使わない。
 
-### Phase RI. Real finite budget lemma
+### Phase-R002. Real finite budget lemma
 
 目的:
 
@@ -131,7 +146,7 @@ theorem real_ratio_sum_le_one
 - `Finset.sum_div` と `div_le_iff₀` 相当の `ℝ` 補題で閉じる。
 - channel API へ接続する前に、純粋な有限和補題として安定させる。
 
-### Phase RJ. Real channel prototype
+### Phase-R003. Real channel prototype
 
 目的:
 
@@ -164,7 +179,7 @@ def RealWeightProvider.SubProbability (P : RealWeightProvider ι) : Prop :=
 - N/Q 版の theorem shape と対応する最小 API ができる。
 - 既存 theorem 群には手を入れない。
 
-### Phase RK. Log positivity
+### Phase-R004. Log positivity
 
 目的:
 
@@ -187,7 +202,7 @@ def RealWeightProvider.SubProbability (P : RealWeightProvider ι) : Prop :=
 
 - `Real.log` の正値性を、後続の ratio theorem に渡せる形で theorem 名にする。
 
-### Phase RL. Log budget design
+### Phase-R005. Log budget design
 
 目的:
 
