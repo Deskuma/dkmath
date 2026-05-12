@@ -1258,6 +1258,28 @@ def sampleTenToyWeight (n q : ℕ) : ℚ :=
 def sampleTenToyPrimeBaseWeight (n p : ℕ) : ℚ :=
   if n = 10 ∧ p = 2 then 1 else 0
 
+/-- The sample ratio-style numerator assigns weight `1` to prime base `2`. -/
+def sampleTenRatioA (p : ℕ) : ℚ :=
+  if p = 2 then 1 else 0
+
+/-- The sample ratio-style denominator is constantly `1`. -/
+def sampleTenRatioB (_n : ℕ) : ℚ :=
+  1
+
+/-- The sample ratio-style numerator is nonnegative. -/
+theorem sampleTenRatioA_nonneg :
+    ∀ p, 0 ≤ sampleTenRatioA p := by
+  intro p
+  by_cases hp : p = 2
+  · simp [sampleTenRatioA, hp]
+  · simp [sampleTenRatioA, hp]
+
+/-- The sample ratio-style denominator is positive. -/
+theorem sampleTenRatioB_pos :
+    ∀ n, 0 < sampleTenRatioB n := by
+  intro n
+  norm_num [sampleTenRatioB]
+
 /-- The sample toy base-prime weight is globally nonnegative. -/
 theorem sampleTenToyPrimeBaseWeight_basePrimeToyWeight :
     BasePrimeToyWeight sampleTenToyPrimeBaseWeight := by
@@ -1485,6 +1507,24 @@ theorem sampleTenToyPrimeBaseWeight_baseWeightSubProbability :
       sampleTenToyPrimeBaseWeight_baseWeightNonneg :=
   sampleTenWitnessProviderWeightKernel_subProbability
 
+/-- The sample ratio-style numerator satisfies the budget condition. -/
+theorem sampleTenRatioBudget :
+    sampleTenPrimePowerWitnessProvider.RatioBaseWeightBudget
+      sampleTenRatioA sampleTenRatioB := by
+  intro n
+  by_cases hn : n = 10
+  · subst n
+    norm_num [PrimePowerWitnessProvider.RatioBaseWeightBudget,
+      sampleTenPrimePowerWitnessProvider,
+      samplePrimePowerLabel_two,
+      samplePrimePowerLabel_five,
+      sampleTenPrimePowerDivisorTransitionKernel,
+      sampleTenDivisorTransitionKernel,
+      sampleTenRatioA,
+      sampleTenRatioB]
+  · simp [sampleTenPrimePowerDivisorTransitionKernel,
+      sampleTenDivisorTransitionKernel, sampleTenRatioB, hn]
+
 /-- The toy-weighted sample packaged as a prime-power channel provider. -/
 def sampleTenToyWeightChannelProvider : PrimePowerChannelProvider :=
   PrimePowerChannelProvider.ofPrimeWitnessDependentWeight
@@ -1517,6 +1557,30 @@ theorem sampleTenWitnessProviderWeightChannelProvider_channelProviderAt_subProba
     (n : ℕ) :
     (sampleTenWitnessProviderWeightChannelProvider.channelProviderAt n).SubProbability :=
   sampleTenWitnessProviderWeightChannelProvider.channelProviderAt_subProbability n
+
+/--
+The sample ratio-style base-prime weight packaged as a prime-power channel
+provider.
+-/
+def sampleTenRatioWeightChannelProvider : PrimePowerChannelProvider :=
+  PrimePowerChannelProvider.ofWitnessProviderWeight
+    sampleTenPrimePowerWitnessProvider
+    (ratioBasePrimeWeight sampleTenRatioA sampleTenRatioB)
+    (sampleTenPrimePowerWitnessProvider
+      |>.baseWeightNonneg_of_ratioBasePrimeWeight
+        sampleTenRatioA sampleTenRatioB
+        sampleTenRatioA_nonneg sampleTenRatioB_pos)
+    (sampleTenPrimePowerWitnessProvider
+      |>.baseWeightSubProbability_of_ratioBudget
+        sampleTenRatioA sampleTenRatioB
+        sampleTenRatioA_nonneg sampleTenRatioB_pos
+        sampleTenRatioBudget)
+
+/-- The ratio-style sample emits sub-probability providers. -/
+theorem sampleTenRatioWeightChannelProvider_channelProviderAt_subProbability
+    (n : ℕ) :
+    (sampleTenRatioWeightChannelProvider.channelProviderAt n).SubProbability :=
+  sampleTenRatioWeightChannelProvider.channelProviderAt_subProbability n
 
 /--
 A source-controlled family whose index matches the toy-weighted sample channel
@@ -1599,6 +1663,40 @@ theorem sampleTenWitnessProviderWeight_hitMass_le_one :
           sampleTenWitnessProviderWeightChannelProvider.kernel.toDivisorTransitionKernel.index 10 =
           sampleTenToyWeightSourceControlledFamily.index
         simp [sampleTenWitnessProviderWeightChannelProvider,
+          sampleTenPrimePowerDivisorTransitionKernel,
+          sampleTenToyWeightSourceControlledFamily])
+      (primitiveOn_pair (by norm_num) (by norm_num))
+      (by norm_num)
+      (by
+        intro _q _hq
+        rfl)
+
+/--
+The ratio-style sample channel provider gives the concrete weighted hit mass
+bound by `1`.
+-/
+theorem sampleTenRatioBaseWeight_hitMass_le_one :
+    (sampleTenRatioWeightChannelProvider.applyAtToSourceControlled 10
+      sampleTenToyWeightSourceControlledFamily
+      (by
+        change
+          sampleTenRatioWeightChannelProvider.kernel.toDivisorTransitionKernel.index 10 =
+          sampleTenToyWeightSourceControlledFamily.index
+        simp [sampleTenRatioWeightChannelProvider,
+          sampleTenPrimePowerDivisorTransitionKernel,
+          sampleTenToyWeightSourceControlledFamily])).weightedHitMass
+      ({2, 5} : Finset ℕ) ≤ 1 := by
+  exact sampleTenPrimePowerWitnessProvider
+    |>.ratioBaseWeight_hitMass_le_const
+      sampleTenRatioA sampleTenRatioB
+      sampleTenRatioA_nonneg sampleTenRatioB_pos
+      sampleTenRatioBudget
+      10 sampleTenToyWeightSourceControlledFamily
+      (by
+        change
+          sampleTenRatioWeightChannelProvider.kernel.toDivisorTransitionKernel.index 10 =
+          sampleTenToyWeightSourceControlledFamily.index
+        simp [sampleTenRatioWeightChannelProvider,
           sampleTenPrimePowerDivisorTransitionKernel,
           sampleTenToyWeightSourceControlledFamily])
       (primitiveOn_pair (by norm_num) (by norm_num))

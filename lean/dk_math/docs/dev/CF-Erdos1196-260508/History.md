@@ -1533,3 +1533,29 @@ Archive
 6. 次の課題:
    - Phase BF として、既存 sample に対して ratio-style toy functions `A`, `B` を具体化し、`RatioBaseWeightBudget` と hit mass bound を concrete に通す。
    - その後、有理 toy model から実数/log route へ進む前に、追加の theorem-facing alias が必要か判断する。
+### 日時: 2026/05/12 04:21 JST (Phase BF concrete ratio-style sample)
+
+1. 目的:
+   - `review/review-056.md` の提案に従い、既存 sample に対して ratio-style toy functions `A`, `B` を具体化し、budget と hit mass bound を concrete に通す。
+2. 実施:
+   - `sampleTenRatioA` を追加し、`p = 2` に weight `1`、それ以外 `0` を返す numerator とした。
+   - `sampleTenRatioB` を追加し、常に `1` を返す denominator とした。
+   - `sampleTenRatioA_nonneg`, `sampleTenRatioB_pos` を追加した。
+   - `sampleTenRatioBudget` を追加し、sample index `{2,5}` 上で selected numerator sum が `1` 以下、その他 state では empty index であることを示した。
+   - `sampleTenRatioWeightChannelProvider` と `sampleTenRatioWeightChannelProvider_channelProviderAt_subProbability` を追加した。
+   - `sampleTenRatioBaseWeight_hitMass_le_one` を追加し、`ratioBaseWeight_hitMass_le_const` 経由で concrete weighted hit mass bound を示した。
+3. 結論:
+   - `A(p)/B(n)` 型の finite ratio-style toy route が sample でも `weightedHitMass ≤ 1` まで no-sorry で通った。
+   - 手定義 toy weight / witness-provider weight route に続き、ratio-style route の concrete example が theorem 名として固定された。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 初回 build は成功したが `sampleTenRatioBudget` の `simp` に unused args 警告が出た。
+   - 第二分岐の `simp` 引数から不要な定義名を外して警告なしにした。
+6. 次の課題:
+   - Phase BG として ratio-style toy route の小まとめ/整理を行うか判断する。
+   - あるいは有理 toy model から実数/log route へ進む前に doc 側で設計メモを追加する。
