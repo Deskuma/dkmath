@@ -41,6 +41,24 @@ theorem basePrimeOf_realLogProductBudget_of_productBound
     RealLogProductBudget I (W.basePrimeOf n I hI) n :=
   ⟨W.basePrimeOf_realLogNonnegOn n I hI, hn, hprod⟩
 
+/--
+The log-ratio real provider built from witness-provider base primes is
+sub-probability under the selected base product bound.
+-/
+theorem basePrimeOf_realLogRatioWeightProvider_subProbability_of_productBound
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n)
+    (hprod : NatProductBoundOn I (W.basePrimeOf n I hI) n) :
+    (realLogRatioWeightProvider I (W.basePrimeOf n I hI) n
+      (W.basePrimeOf_realLogNonnegOn n I hI) hn).SubProbability :=
+  realLogRatioWeightProvider_subProbability_of_productBudget I
+    (W.basePrimeOf n I hI) n
+    (W.basePrimeOf_realLogProductBudget_of_productBound n I hI hn hprod)
+
 end PrimePowerWitnessProvider
 
 end DkMath.NumberTheory.PrimitiveSet

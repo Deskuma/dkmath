@@ -39,6 +39,26 @@ Archive
 
 ---
 
+### 日時: 2026/05/13 08:14 JST (Phase-R016 witness base product bound to provider sub-probability)
+
+1. 目的:
+   - `review/review-074.md` の提案に従い、prime-power witness provider 由来の `basePrimeOf` と product bound から、log-ratio real provider の `SubProbability` へ直接進む theorem を追加する。
+   - R015 の product-budget bridge と R013 の provider sub-probability theorem を接続する。
+2. 実施:
+   - `RealDivisorBridge.lean` に `PrimePowerWitnessProvider.basePrimeOf_realLogRatioWeightProvider_subProbability_of_productBound` を追加した。
+   - 仮定は `I ⊆ T.index n`, `1 < n`, `NatProductBoundOn I (W.basePrimeOf n I hI) n` とした。
+   - `basePrimeOf_realLogProductBudget_of_productBound` で `RealLogProductBudget` を作り、`realLogRatioWeightProvider_subProbability_of_productBudget` へ渡した。
+3. 結論:
+   - witness provider から読んだ base prime に対して、selected base product bound を仮定すれば `log p / log n` real provider が sub-probability になることを theorem 名として固定できた。
+   - 次の本丸は `NatProductBoundOn I (W.basePrimeOf n I hI) n` 自体の供給であり、重複制御・指数消費 tracking の設計へ進む。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.RealDivisorBridge`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+
 ### 日時: 2026/05/13 08:06 JST (Phase-R015 real divisor bridge product-budget interface)
 
 1. 目的:
