@@ -39,6 +39,27 @@ Archive
 
 ---
 
+### 日時: 2026/05/13 07:48 JST (Phase-R013 product budget predicate)
+
+1. 目的:
+   - `review/review-071.md` の提案に従い、prime-power 側から供給すべき product bound の責務を名前付き predicate にする。
+   - `∏ pOf(q) ≤ n` から provider sub-probability へ進む theorem を、bundled budget predicate 経由でも参照できるようにする。
+2. 実施:
+   - `RealLog.lean` に `NatProductBoundOn` を追加した。
+   - `NatProductBoundOn I pOf n` を `(I.prod fun q => pOf q) ≤ n` として定義した。
+   - `RealLogProductBudget` を追加し、`RealLogNonnegOn I pOf`, `1 < n`, `NatProductBoundOn I pOf n` を束ねた。
+   - `realLogRatioWeightProvider_subProbability_of_productBudget` を追加し、bundled product budget から log-ratio real provider の `SubProbability` を示した。
+3. 結論:
+   - 後続の prime-power/divisor channel 側は、まず `RealLogProductBudget I pOf n` を供給すればよい、という interface が固定された。
+   - 次は `pOf` を prime-power witness provider の base prime として読むための設計、または selected base product bound の predicate 化へ進める。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.RealLog`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+
 ### 日時: 2026/05/13 07:36 JST (Phase-R012 nat product bound to log-ratio provider sub-probability)
 
 1. 目的:

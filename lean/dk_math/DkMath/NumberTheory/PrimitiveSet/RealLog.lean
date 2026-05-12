@@ -55,6 +55,26 @@ def RealLogNonnegOn
     (pOf : ι → ℕ) : Prop :=
   ∀ q, q ∈ I → 1 ≤ pOf q
 
+/-- Natural-number product bound on the selected bases. -/
+def NatProductBoundOn
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (n : ℕ) : Prop :=
+  (I.prod fun q => pOf q) ≤ n
+
+/--
+Bundled product-budget hypotheses for the real/log provider route.
+
+This is the interface later prime-power code should try to supply.
+-/
+def RealLogProductBudget
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (n : ℕ) : Prop :=
+  RealLogNonnegOn I pOf ∧ 1 < n ∧ NatProductBoundOn I pOf n
+
 /-- The index-local condition gives nonnegative logarithmic numerators. -/
 theorem real_log_nat_nonneg_on
     {ι : Type _}
@@ -217,5 +237,19 @@ theorem realLogRatioWeightProvider_subProbability_of_nat_product_le
   realLogRatioWeightProvider_subProbability I pOf n hp hn
     (realLogBudget_of_nat_product_le I pOf n hp
       (Nat.lt_trans Nat.zero_lt_one hn) hprod)
+
+/--
+The log-ratio real provider is sub-probability under the bundled product-budget
+predicate.
+-/
+theorem realLogRatioWeightProvider_subProbability_of_productBudget
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (n : ℕ)
+    (hbudget : RealLogProductBudget I pOf n) :
+    (realLogRatioWeightProvider I pOf n hbudget.1 hbudget.2.1).SubProbability :=
+  realLogRatioWeightProvider_subProbability_of_nat_product_le
+    I pOf n hbudget.1 hbudget.2.1 hbudget.2.2
 
 end DkMath.NumberTheory.PrimitiveSet
