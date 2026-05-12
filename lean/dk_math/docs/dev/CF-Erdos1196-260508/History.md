@@ -39,6 +39,26 @@ Archive
 
 ---
 
+### 日時: 2026/05/13 07:36 JST (Phase-R012 nat product bound to log-ratio provider sub-probability)
+
+1. 目的:
+   - `review/review-070.md` の提案に従い、自然数 product bound から log-ratio real provider の `SubProbability` へ直接進む theorem を追加する。
+   - R011 の `realLogBudget_of_nat_product_le` と R007 の `realLogRatioWeightProvider_subProbability` を接続する。
+2. 実施:
+   - `RealLog.lean` に `realLogRatioWeightProvider_subProbability_of_nat_product_le` を追加した。
+   - 仮定は `RealLogNonnegOn I pOf`, `1 < n`, `(I.prod fun q => pOf q) ≤ n` とした。
+   - `realLogBudget_of_nat_product_le` で `RealLogBudget I pOf n` を作り、`realLogRatioWeightProvider_subProbability` へ渡した。
+3. 結論:
+   - `∏ pOf(q) ≤ n` から、`log(pOf q) / log n` 型 provider が sub-probability であることまで no-sorry で直通できるようになった。
+   - 次の本丸は、prime-power/divisor channel 側から `(I.prod fun q => pOf q) ≤ n` をどう供給するか、つまり重複制御・指数消費 tracking の設計である。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.RealLog`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+
 ### 日時: 2026/05/13 07:29 JST (Phase-R011 nat product bound supplies RealLogBudget)
 
 1. 目的:

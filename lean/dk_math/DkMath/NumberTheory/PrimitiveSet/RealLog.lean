@@ -201,4 +201,21 @@ theorem realLogBudget_of_nat_product_le
   · rw [← real_finset_prod_nat_cast I pOf]
     exact_mod_cast hprod
 
+/--
+The log-ratio real provider is sub-probability under a natural-number product
+bound on the selected bases.
+-/
+theorem realLogRatioWeightProvider_subProbability_of_nat_product_le
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (n : ℕ)
+    (hp : RealLogNonnegOn I pOf)
+    (hn : 1 < n)
+    (hprod : (I.prod fun q => pOf q) ≤ n) :
+    (realLogRatioWeightProvider I pOf n hp hn).SubProbability :=
+  realLogRatioWeightProvider_subProbability I pOf n hp hn
+    (realLogBudget_of_nat_product_le I pOf n hp
+      (Nat.lt_trans Nat.zero_lt_one hn) hprod)
+
 end DkMath.NumberTheory.PrimitiveSet
