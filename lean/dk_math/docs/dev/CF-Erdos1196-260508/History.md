@@ -1415,3 +1415,170 @@ Archive
 6. 次の課題:
    - 次は base-prime weight `c : ℕ → ℕ → ℚ` の非負性や sub-probability を theorem-facing に分ける predicate を設計する。
    - あるいは解析風 toy model に入る前に、`PrimePowerLabel` index kernel を別ルートとして作るべきか判断する。
+
+### 日時: 2026/05/11 19:03 JST (Phase BA base-prime weight predicates)
+
+1. 目的:
+   - `review/review-051.md` の提案に従い、base-prime weight `c : ℕ → ℕ → ℚ` の非負性と sub-probability 条件を theorem-facing predicate として切り出す。
+2. 実施:
+   - `PrimePowerWitnessProvider.BaseWeightNonneg` を追加し、indexed label に対して `0 ≤ c n ((W.label n q hq).p)` を要求する predicate とした。
+   - `PrimePowerWitnessProvider.BaseWeightSubProbability` を追加し、`W.weightOfBase c` 由来の weighted kernel が sub-probability normalized であることを名前付き predicate にした。
+   - `PrimePowerWitnessProvider.baseWeight_hitMass_le_const` を追加し、`BaseWeightNonneg` と `BaseWeightSubProbability` を受け取って hit mass bound へ進む alias を用意した。
+   - sample alias として `sampleTenToyPrimeBaseWeight_baseWeightNonneg` と `sampleTenToyPrimeBaseWeight_baseWeightSubProbability` を追加した。
+3. 結論:
+   - これまで長く展開していた `hc_nonneg` / `hw_subprob` 仮定を、base-prime weight の名前付き性質として扱えるようになった。
+   - 今後の解析風 toy model では、まずこれらの predicate を満たすことを示せば witness-provider route の hit mass bound に接続できる。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - Lean 実装自体は初回の権限昇格付き build で通った。
+6. 次の課題:
+   - Phase BB として、非負な base-prime toy weight 全体を表す軽量 predicate を追加するか判断する。
+   - その後、ratio-style toy weight や解析風 `log p / log n` route に向けた設計を検討する。
+
+### 日時: 2026/05/11 19:19 JST (Phase BB BasePrimeToyWeight)
+
+1. 目的:
+   - `review/review-052.md` の提案に従い、全域非負な base-prime toy weight を表す軽量 predicate を追加し、任意の witness provider の `BaseWeightNonneg` へ接続する。
+2. 実施:
+   - `BasePrimeToyWeight` を追加し、`∀ n p, 0 ≤ c n p` を要求する全域非負 predicate とした。
+   - `PrimePowerWitnessProvider.baseWeightNonneg_of_basePrimeToyWeight` を追加し、`BasePrimeToyWeight c` から `W.BaseWeightNonneg c` を得られるようにした。
+   - sample theorem として `sampleTenToyPrimeBaseWeight_basePrimeToyWeight` を追加した。
+   - `sampleTenToyPrimeBaseWeight_baseWeightNonneg` を、直接証明ではなく `baseWeightNonneg_of_basePrimeToyWeight` 経由に切り替えた。
+3. 結論:
+   - base-prime weight `c n p` の非負性を、witness provider 非依存の軽量 predicate として扱えるようになった。
+   - 今後の ratio-style toy weight では、まず `BasePrimeToyWeight` を示し、そこから任意の `W.BaseWeightNonneg` へ降ろせる。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - Lean 実装自体は初回の権限昇格付き build で通った。
+6. 次の課題:
+   - Phase BC として、`c(n,p)=A(p)/B(n)` 型の ratio-style toy weight predicate を設計する。
+   - 最初は有理数上の非負性に絞り、解析的な `log` はまだ導入しない。
+
+### 日時: 2026/05/11 22:53 JST (Phase BC ratio-style base-prime toy weight)
+
+1. 目的:
+   - `review/review-053.md` の提案に従い、`c(n,p)=A(p)/B(n)` 型の ratio-style toy weight を有理数上で導入し、まず非負性だけを閉じる。
+2. 実施:
+   - `ratioBasePrimeWeight` を追加し、`fun n p => A p / B n` として base-prime weight を定義した。
+   - `ratioBasePrimeWeight_basePrimeToyWeight` を追加し、`∀ p, 0 ≤ A p` と `∀ n, 0 < B n` から `BasePrimeToyWeight (ratioBasePrimeWeight A B)` を証明した。
+   - `PrimePowerWitnessProvider.baseWeightNonneg_of_ratioBasePrimeWeight` を追加し、同じ仮定から任意の witness provider に対して `W.BaseWeightNonneg (ratioBasePrimeWeight A B)` を得られるようにした。
+3. 結論:
+   - ratio-style toy weight の入口として、分子非負・分母正から全域非負性、および witness-provider index 上の非負性へ進む導線ができた。
+   - 解析的な `log` には入らず、有理数上の有限 toy model として安全に進めた。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - Lean 実装自体は初回の権限昇格付き build で通った。
+6. 次の課題:
+   - Phase BD として、ratio-style weight の sub-probability を示す十分条件を設計する。
+   - 典型的には `Σ_q A(p(q)) ≤ B(n)` から `Σ_q A(p(q))/B(n) ≤ 1` を得る finite lemma を検討する。
+
+### 日時: 2026/05/12 01:51 JST (Phase BD ratio budget sub-probability)
+
+1. 目的:
+   - `review/review-054.md` の提案に従い、ratio-style weight `c(n,p)=A(p)/B(n)` の sub-probability を示す十分条件を追加する。
+2. 実施:
+   - `PrimePowerWitnessProvider.RatioBaseWeightBudget` を追加し、各 state `n` で selected numerator の和 `Σ_q A(p(q))` が `B n` 以下であることを表す predicate とした。
+   - `PrimePowerWitnessProvider.baseWeightSubProbability_of_ratioBudget` を追加し、`∀ p, 0 ≤ A p`, `∀ n, 0 < B n`, `RatioBaseWeightBudget W A B` から `W.BaseWeightSubProbability (ratioBasePrimeWeight A B) ...` を得る theorem を証明した。
+   - 証明では `weightOfBase` と `ratioBasePrimeWeight` を index 上で展開し、`Finset.sum_div` と `div_le_iff₀` で `Σ_q A(p(q))/B(n) ≤ 1` へ接続した。
+3. 結論:
+   - ratio-style toy weight は、非負性だけでなく、budget 条件から sub-probability route へ進めるようになった。
+   - これにより `A(p)/B(n)` 型 weight が `BaseWeightNonneg` と `BaseWeightSubProbability` の両方を満たすための有限 skeleton が整った。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 初回 proof では `BaseWeightSubProbability` の定義展開後、すでに provider-level の `SubProbability` まで簡約されていたため、高レベル `SubProbability` を `unfold` しようとして失敗した。
+   - `Finset.sum_div` は和の項が明示的な除算形でないと適用できなかったため、先に `Finset.sum_congr` で `weightOfBase` を ratio 形へ変換してから `Finset.sum_div` を使う二段 proof にした。
+6. 次の課題:
+   - Phase BE として、ratio-style weight の hit mass bound alias を追加する。
+   - `hA`, `hB`, `RatioBaseWeightBudget` から `baseWeight_hitMass_le_const` へ直接進める theorem を整備する。
+
+### 日時: 2026/05/12 03:15 JST (Phase BE ratio-style hit mass bound alias)
+
+1. 目的:
+   - `review/review-055.md` の提案に従い、ratio-style weight `A(p)/B(n)` から weighted hit mass bound へ直接進む theorem-facing alias を追加する。
+2. 実施:
+   - `PrimePowerWitnessProvider.ratioBaseWeight_hitMass_le_const` を追加した。
+   - 仮定として `∀ p, 0 ≤ A p`, `∀ n, 0 < B n`, `W.RatioBaseWeightBudget A B` を受け取り、既存の `baseWeight_hitMass_le_const` へ接続した。
+   - 内部では `W.baseWeightNonneg_of_ratioBasePrimeWeight A B hA hB` と `W.baseWeightSubProbability_of_ratioBudget A B hA hB hbudget` を使って、ratio-style route の非負性・sub-probability 条件を自動供給する形にした。
+3. 結論:
+   - `A(p)/B(n)` 型の finite toy weight は、分子非負・分母正・budget 条件から、直接 `weightedHitMass ≤ C` へ進めるようになった。
+   - ratio-style route が theorem 名として `ratioBaseWeight_hitMass_le_const` に固定された。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" ...` で関連 Lean ファイルに該当なしを確認した。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - Lean 実装自体は初回の権限昇格付き build で通った。
+6. 次の課題:
+   - Phase BF として、既存 sample に対して ratio-style toy functions `A`, `B` を具体化し、`RatioBaseWeightBudget` と hit mass bound を concrete に通す。
+   - その後、有理 toy model から実数/log route へ進む前に、追加の theorem-facing alias が必要か判断する。
+### 日時: 2026/05/12 13:09 JST (Phase BG ratio-style route summary)
+
+1. 目的:
+   - `review/review-057.md` の提案に従い、Phase BF で concrete に通った ratio-style toy route を小整理する。
+   - 新しい重い数学定理は増やさず、既存導線を読みやすくする alias / summary theorem を追加する。
+2. 実施:
+   - `sampleTenRatioA/B` から final hit mass bound へ進む sample route の section comment を追加した。
+   - `sampleTenRatioBaseWeightChannelProvider_channelProviderAt_subProbability` を追加し、`A(p) / B(n)` から作った sample channel provider が全状態で sub-probability であることを BaseWeight route 名で参照できるようにした。
+   - `sampleTenRatioBaseWeight_route_summary` を追加し、ratio-style sample route の最終到達点である `weightedHitMass ≤ 1` を summary 名で固定した。
+3. 結論:
+   - Phase BF の concrete ratio-style route を、後続から参照しやすい theorem 名で整理した。
+   - 有理 toy model から実数/log route に進む前の Lean 側の小まとめが完了した。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 外側実行に切り替えて検証した。
+6. 次の課題:
+   - 次段階では doc 側で実数/log route の設計を起こし、`A(p) ≈ log p`, `B(n) ≈ log n` をどの層で扱うかを切り分ける。
+
+### 日時: 2026/05/12 04:21 JST (Phase BF concrete ratio-style sample)
+
+1. 目的:
+   - `review/review-056.md` の提案に従い、既存 sample に対して ratio-style toy functions `A`, `B` を具体化し、budget と hit mass bound を concrete に通す。
+2. 実施:
+   - `sampleTenRatioA` を追加し、`p = 2` に weight `1`、それ以外 `0` を返す numerator とした。
+   - `sampleTenRatioB` を追加し、常に `1` を返す denominator とした。
+   - `sampleTenRatioA_nonneg`, `sampleTenRatioB_pos` を追加した。
+   - `sampleTenRatioBudget` を追加し、sample index `{2,5}` 上で selected numerator sum が `1` 以下、その他 state では empty index であることを示した。
+   - `sampleTenRatioWeightChannelProvider` と `sampleTenRatioWeightChannelProvider_channelProviderAt_subProbability` を追加した。
+   - `sampleTenRatioBaseWeight_hitMass_le_one` を追加し、`ratioBaseWeight_hitMass_le_const` 経由で concrete weighted hit mass bound を示した。
+3. 結論:
+   - `A(p)/B(n)` 型の finite ratio-style toy route が sample でも `weightedHitMass ≤ 1` まで no-sorry で通った。
+   - 手定義 toy weight / witness-provider weight route に続き、ratio-style route の concrete example が theorem 名として固定された。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 初回 build は成功したが `sampleTenRatioBudget` の `simp` に unused args 警告が出た。
+   - 第二分岐の `simp` 引数から不要な定義名を外して警告なしにした。
+6. 次の課題:
+   - Phase BG として ratio-style toy route の小まとめ/整理を行うか判断する。
+   - あるいは有理 toy model から実数/log route へ進む前に doc 側で設計メモを追加する。

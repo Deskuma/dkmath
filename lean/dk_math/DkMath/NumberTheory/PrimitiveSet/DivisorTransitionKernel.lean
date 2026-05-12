@@ -436,6 +436,26 @@ theorem vonMangoldtLikeWeight_of_primeWitnessDependent
 
 end PrimePowerDivisorTransitionKernel
 
+/-- A finite toy base-prime weight is nonnegative everywhere. -/
+def BasePrimeToyWeight (c : ℕ → ℕ → ℚ) : Prop :=
+  ∀ n p, 0 ≤ c n p
+
+/-- A ratio-style finite toy base-prime weight `c n p = A p / B n`. -/
+def ratioBasePrimeWeight (A B : ℕ → ℚ) : ℕ → ℕ → ℚ :=
+  fun n p => A p / B n
+
+/--
+A ratio-style base-prime weight is globally nonnegative when the numerator is
+nonnegative and the denominator is positive.
+-/
+theorem ratioBasePrimeWeight_basePrimeToyWeight
+    (A B : ℕ → ℚ)
+    (hA : ∀ p, 0 ≤ A p)
+    (hB : ∀ n, 0 < B n) :
+    BasePrimeToyWeight (ratioBasePrimeWeight A B) := by
+  intro n p
+  exact div_nonneg (hA p) (le_of_lt (hB n))
+
 /--
 A choice of explicit prime-power witnesses for every indexed label of a
 prime-power divisor transition kernel.
@@ -484,6 +504,14 @@ def weightOfBase
     else
       0
 
+/-- A base-prime weight is nonnegative on the indexed labels selected by `W`. -/
+def BaseWeightNonneg
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (c : ℕ → ℕ → ℚ) : Prop :=
+  ∀ n q (hq : q ∈ T.toDivisorTransitionKernel.index n),
+    0 ≤ c n ((W.label n q hq).p)
+
 @[simp] theorem weightOfBase_of_mem
     {T : PrimePowerDivisorTransitionKernel}
     (W : PrimePowerWitnessProvider T)
@@ -511,6 +539,112 @@ theorem weightOfBase_primeWitnessDependent
   · exact W.weightOfBase_of_mem c hq
   · rw [W.weightOfBase_of_mem c hq]
     exact hc_nonneg n q hq
+
+/--
+A base-prime weight gives a sub-probability witness-provider kernel when its
+`weightOfBase` channel is sub-probability normalized.
+-/
+def BaseWeightSubProbability
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (c : ℕ → ℕ → ℚ)
+    (hc_nonneg : W.BaseWeightNonneg c) : Prop :=
+  (T.withWeight (W.weightOfBase c)
+    (T.vonMangoldtLikeWeight_nonneg
+      (T.vonMangoldtLikeWeight_of_primeWitnessDependent
+        (W.weightOfBase_primeWitnessDependent c hc_nonneg)))).SubProbability
+
+/-- A globally nonnegative toy base-prime weight is nonnegative on any witness provider. -/
+theorem baseWeightNonneg_of_basePrimeToyWeight
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    {c : ℕ → ℕ → ℚ}
+    (hc : BasePrimeToyWeight c) :
+    W.BaseWeightNonneg c := by
+  intro n q hq
+  exact hc n ((W.label n q hq).p)
+
+/--
+A ratio-style base-prime weight is nonnegative on any witness provider under
+the same numerator and denominator hypotheses.
+-/
+theorem baseWeightNonneg_of_ratioBasePrimeWeight
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (A B : ℕ → ℚ)
+    (hA : ∀ p, 0 ≤ A p)
+    (hB : ∀ n, 0 < B n) :
+    W.BaseWeightNonneg (ratioBasePrimeWeight A B) :=
+  W.baseWeightNonneg_of_basePrimeToyWeight
+    (ratioBasePrimeWeight_basePrimeToyWeight A B hA hB)
+
+/--
+Budget condition for a ratio-style base-prime weight: at each state, the sum of
+the selected numerators is bounded by the denominator.
+-/
+def RatioBaseWeightBudget
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (A B : ℕ → ℚ) : Prop :=
+  ∀ n,
+    (T.toDivisorTransitionKernel.index n).sum
+      (fun q =>
+        if hq : q ∈ T.toDivisorTransitionKernel.index n then
+          A ((W.label n q hq).p)
+        else
+          0) ≤ B n
+
+/--
+The ratio-style budget condition supplies sub-probability normalization for the
+witness-provider weight.
+-/
+theorem baseWeightSubProbability_of_ratioBudget
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (A B : ℕ → ℚ)
+    (hA : ∀ p, 0 ≤ A p)
+    (hB : ∀ n, 0 < B n)
+    (hbudget : W.RatioBaseWeightBudget A B) :
+    W.BaseWeightSubProbability (ratioBasePrimeWeight A B)
+      (W.baseWeightNonneg_of_ratioBasePrimeWeight A B hA hB) := by
+  intro n
+  unfold DivisorTransitionKernel.toFiniteTransitionKernel
+    FiniteTransitionKernel.toFiniteKernel FiniteKernel.providerAt
+    WeightProvider.SubProbability WeightProvider.totalWeight
+  dsimp [PrimePowerDivisorTransitionKernel.withWeight]
+  have hsum :
+      (T.toDivisorTransitionKernel.index n).sum
+          (fun q => W.weightOfBase (ratioBasePrimeWeight A B) n q) =
+        ((T.toDivisorTransitionKernel.index n).sum
+          (fun q =>
+            if hq : q ∈ T.toDivisorTransitionKernel.index n then
+              A ((W.label n q hq).p)
+            else
+              0)) / B n := by
+    calc
+      (T.toDivisorTransitionKernel.index n).sum
+          (fun q => W.weightOfBase (ratioBasePrimeWeight A B) n q)
+          =
+        (T.toDivisorTransitionKernel.index n).sum
+          (fun q =>
+            (if hq : q ∈ T.toDivisorTransitionKernel.index n then
+              A ((W.label n q hq).p)
+            else
+              0) / B n) := by
+            refine Finset.sum_congr rfl ?_
+            intro q hq
+            simp [weightOfBase, ratioBasePrimeWeight, hq]
+      _ =
+        ((T.toDivisorTransitionKernel.index n).sum
+          (fun q =>
+            if hq : q ∈ T.toDivisorTransitionKernel.index n then
+              A ((W.label n q hq).p)
+            else
+              0)) / B n := by
+            rw [Finset.sum_div]
+  rw [hsum]
+  rw [div_le_iff₀ (hB n)]
+  simpa using hbudget n
 
 end PrimePowerWitnessProvider
 
@@ -818,6 +952,58 @@ theorem weightOfBase_hitMass_le_const
     hw_subprob).weightedHitMass_le_const_applyAtToSourceControlled
       n F hcompat hS hC hsource
 
+/--
+Hit-mass bound for a witness-provider base-prime weight, stated with the
+named base-weight predicates.
+-/
+theorem baseWeight_hitMass_le_const
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (c : ℕ → ℕ → ℚ)
+    (hc_nonneg : W.BaseWeightNonneg c)
+    (hw_subprob : W.BaseWeightSubProbability c hc_nonneg)
+    {M : DkMath.CosmicFormula.Mass.MassSpace ℕ} {S : Finset ℕ}
+    (n : ℕ) (F : SourceControlledChainFamily M ℕ)
+    (hcompat :
+      (PrimePowerChannelProvider.ofWitnessProviderWeight W c hc_nonneg
+        hw_subprob).kernel.CompatibleAt n F)
+    (hS : PrimitiveOn S) {C : ℚ} (hC : 0 ≤ C)
+    (hsource : ∀ q ∈ F.index, M.μ (F.source q) ≤ C) :
+    ((PrimePowerChannelProvider.ofWitnessProviderWeight W c hc_nonneg
+      hw_subprob).applyAtToSourceControlled n F hcompat).weightedHitMass S ≤ C :=
+  W.weightOfBase_hitMass_le_const c hc_nonneg hw_subprob
+    n F hcompat hS hC hsource
+
+/--
+Hit-mass bound for a ratio-style witness-provider base-prime weight.
+-/
+theorem ratioBaseWeight_hitMass_le_const
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (A B : ℕ → ℚ)
+    (hA : ∀ p, 0 ≤ A p)
+    (hB : ∀ n, 0 < B n)
+    (hbudget : W.RatioBaseWeightBudget A B)
+    {M : DkMath.CosmicFormula.Mass.MassSpace ℕ} {S : Finset ℕ}
+    (n : ℕ) (F : SourceControlledChainFamily M ℕ)
+    (hcompat :
+      (PrimePowerChannelProvider.ofWitnessProviderWeight W
+        (ratioBasePrimeWeight A B)
+        (W.baseWeightNonneg_of_ratioBasePrimeWeight A B hA hB)
+        (W.baseWeightSubProbability_of_ratioBudget A B hA hB hbudget))
+          |>.kernel.CompatibleAt n F)
+    (hS : PrimitiveOn S) {C : ℚ} (hC : 0 ≤ C)
+    (hsource : ∀ q ∈ F.index, M.μ (F.source q) ≤ C) :
+    ((PrimePowerChannelProvider.ofWitnessProviderWeight W
+        (ratioBasePrimeWeight A B)
+        (W.baseWeightNonneg_of_ratioBasePrimeWeight A B hA hB)
+        (W.baseWeightSubProbability_of_ratioBudget A B hA hB hbudget))
+          |>.applyAtToSourceControlled n F hcompat).weightedHitMass S ≤ C :=
+  W.baseWeight_hitMass_le_const (ratioBasePrimeWeight A B)
+    (W.baseWeightNonneg_of_ratioBasePrimeWeight A B hA hB)
+    (W.baseWeightSubProbability_of_ratioBudget A B hA hB hbudget)
+    n F hcompat hS hC hsource
+
 end PrimePowerWitnessProvider
 
 /-- A concrete divisor-transition sample at state `10` with labels `2` and `5`. -/
@@ -1072,6 +1258,42 @@ def sampleTenToyWeight (n q : ℕ) : ℚ :=
 def sampleTenToyPrimeBaseWeight (n p : ℕ) : ℚ :=
   if n = 10 ∧ p = 2 then 1 else 0
 
+/-- The sample ratio-style numerator assigns weight `1` to prime base `2`. -/
+def sampleTenRatioA (p : ℕ) : ℚ :=
+  if p = 2 then 1 else 0
+
+/-- The sample ratio-style denominator is constantly `1`. -/
+def sampleTenRatioB (_n : ℕ) : ℚ :=
+  1
+
+/-
+Ratio-style sample route:
+`A(p) / B(n)` -> nonnegativity and budget -> sub-probability channel provider
+-> concrete weighted hit mass bound.
+-/
+
+/-- The sample ratio-style numerator is nonnegative. -/
+theorem sampleTenRatioA_nonneg :
+    ∀ p, 0 ≤ sampleTenRatioA p := by
+  intro p
+  by_cases hp : p = 2
+  · simp [sampleTenRatioA, hp]
+  · simp [sampleTenRatioA, hp]
+
+/-- The sample ratio-style denominator is positive. -/
+theorem sampleTenRatioB_pos :
+    ∀ n, 0 < sampleTenRatioB n := by
+  intro n
+  norm_num [sampleTenRatioB]
+
+/-- The sample toy base-prime weight is globally nonnegative. -/
+theorem sampleTenToyPrimeBaseWeight_basePrimeToyWeight :
+    BasePrimeToyWeight sampleTenToyPrimeBaseWeight := by
+  intro n p
+  by_cases h : n = 10 ∧ p = 2
+  · simp [sampleTenToyPrimeBaseWeight, h]
+  · simp [sampleTenToyPrimeBaseWeight, h]
+
 /--
 The sample witness provider turns the sample base-prime weight into a
 prime-witness-dependent label weight.
@@ -1276,6 +1498,39 @@ theorem sampleTenWitnessProviderWeightKernel_subProbability :
       sampleTenPrimePowerDivisorTransitionKernel,
       sampleTenDivisorTransitionKernel, hn]
 
+/-- The sample base-prime weight satisfies the named nonnegativity predicate. -/
+theorem sampleTenToyPrimeBaseWeight_baseWeightNonneg :
+    sampleTenPrimePowerWitnessProvider.BaseWeightNonneg
+      sampleTenToyPrimeBaseWeight :=
+  sampleTenPrimePowerWitnessProvider
+    |>.baseWeightNonneg_of_basePrimeToyWeight
+      sampleTenToyPrimeBaseWeight_basePrimeToyWeight
+
+/-- The sample base-prime weight satisfies the named sub-probability predicate. -/
+theorem sampleTenToyPrimeBaseWeight_baseWeightSubProbability :
+    sampleTenPrimePowerWitnessProvider.BaseWeightSubProbability
+      sampleTenToyPrimeBaseWeight
+      sampleTenToyPrimeBaseWeight_baseWeightNonneg :=
+  sampleTenWitnessProviderWeightKernel_subProbability
+
+/-- The sample ratio-style numerator satisfies the budget condition. -/
+theorem sampleTenRatioBudget :
+    sampleTenPrimePowerWitnessProvider.RatioBaseWeightBudget
+      sampleTenRatioA sampleTenRatioB := by
+  intro n
+  by_cases hn : n = 10
+  · subst n
+    norm_num [PrimePowerWitnessProvider.RatioBaseWeightBudget,
+      sampleTenPrimePowerWitnessProvider,
+      samplePrimePowerLabel_two,
+      samplePrimePowerLabel_five,
+      sampleTenPrimePowerDivisorTransitionKernel,
+      sampleTenDivisorTransitionKernel,
+      sampleTenRatioA,
+      sampleTenRatioB]
+  · simp [sampleTenPrimePowerDivisorTransitionKernel,
+      sampleTenDivisorTransitionKernel, sampleTenRatioB, hn]
+
 /-- The toy-weighted sample packaged as a prime-power channel provider. -/
 def sampleTenToyWeightChannelProvider : PrimePowerChannelProvider :=
   PrimePowerChannelProvider.ofPrimeWitnessDependentWeight
@@ -1308,6 +1563,39 @@ theorem sampleTenWitnessProviderWeightChannelProvider_channelProviderAt_subProba
     (n : ℕ) :
     (sampleTenWitnessProviderWeightChannelProvider.channelProviderAt n).SubProbability :=
   sampleTenWitnessProviderWeightChannelProvider.channelProviderAt_subProbability n
+
+/--
+The sample ratio-style base-prime weight packaged as a prime-power channel
+provider.
+-/
+def sampleTenRatioWeightChannelProvider : PrimePowerChannelProvider :=
+  PrimePowerChannelProvider.ofWitnessProviderWeight
+    sampleTenPrimePowerWitnessProvider
+    (ratioBasePrimeWeight sampleTenRatioA sampleTenRatioB)
+    (sampleTenPrimePowerWitnessProvider
+      |>.baseWeightNonneg_of_ratioBasePrimeWeight
+        sampleTenRatioA sampleTenRatioB
+        sampleTenRatioA_nonneg sampleTenRatioB_pos)
+    (sampleTenPrimePowerWitnessProvider
+      |>.baseWeightSubProbability_of_ratioBudget
+        sampleTenRatioA sampleTenRatioB
+        sampleTenRatioA_nonneg sampleTenRatioB_pos
+        sampleTenRatioBudget)
+
+/-- The ratio-style sample emits sub-probability providers. -/
+theorem sampleTenRatioWeightChannelProvider_channelProviderAt_subProbability
+    (n : ℕ) :
+    (sampleTenRatioWeightChannelProvider.channelProviderAt n).SubProbability :=
+  sampleTenRatioWeightChannelProvider.channelProviderAt_subProbability n
+
+/--
+Alias for the ratio-style base-weight route: the sample channel provider built
+from `A(p) / B(n)` is sub-probability at every state.
+-/
+theorem sampleTenRatioBaseWeightChannelProvider_channelProviderAt_subProbability
+    (n : ℕ) :
+    (sampleTenRatioWeightChannelProvider.channelProviderAt n).SubProbability :=
+  sampleTenRatioWeightChannelProvider_channelProviderAt_subProbability n
 
 /--
 A source-controlled family whose index matches the toy-weighted sample channel
@@ -1397,5 +1685,57 @@ theorem sampleTenWitnessProviderWeight_hitMass_le_one :
       (by
         intro _q _hq
         rfl)
+
+/--
+The ratio-style sample channel provider gives the concrete weighted hit mass
+bound by `1`.
+-/
+theorem sampleTenRatioBaseWeight_hitMass_le_one :
+    (sampleTenRatioWeightChannelProvider.applyAtToSourceControlled 10
+      sampleTenToyWeightSourceControlledFamily
+      (by
+        change
+          sampleTenRatioWeightChannelProvider.kernel.toDivisorTransitionKernel.index 10 =
+          sampleTenToyWeightSourceControlledFamily.index
+        simp [sampleTenRatioWeightChannelProvider,
+          sampleTenPrimePowerDivisorTransitionKernel,
+          sampleTenToyWeightSourceControlledFamily])).weightedHitMass
+      ({2, 5} : Finset ℕ) ≤ 1 := by
+  exact sampleTenPrimePowerWitnessProvider
+    |>.ratioBaseWeight_hitMass_le_const
+      sampleTenRatioA sampleTenRatioB
+      sampleTenRatioA_nonneg sampleTenRatioB_pos
+      sampleTenRatioBudget
+      10 sampleTenToyWeightSourceControlledFamily
+      (by
+        change
+          sampleTenRatioWeightChannelProvider.kernel.toDivisorTransitionKernel.index 10 =
+          sampleTenToyWeightSourceControlledFamily.index
+        simp [sampleTenRatioWeightChannelProvider,
+          sampleTenPrimePowerDivisorTransitionKernel,
+          sampleTenToyWeightSourceControlledFamily])
+      (primitiveOn_pair (by norm_num) (by norm_num))
+      (by norm_num)
+      (by
+        intro _q _hq
+        rfl)
+
+/--
+Summary theorem for the concrete ratio-style route on the sample:
+the numerator/denominator weight, budget proof, channel packaging, and source
+application together give the final weighted hit mass bound.
+-/
+theorem sampleTenRatioBaseWeight_route_summary :
+    (sampleTenRatioWeightChannelProvider.applyAtToSourceControlled 10
+      sampleTenToyWeightSourceControlledFamily
+      (by
+        change
+          sampleTenRatioWeightChannelProvider.kernel.toDivisorTransitionKernel.index 10 =
+          sampleTenToyWeightSourceControlledFamily.index
+        simp [sampleTenRatioWeightChannelProvider,
+          sampleTenPrimePowerDivisorTransitionKernel,
+          sampleTenToyWeightSourceControlledFamily])).weightedHitMass
+      ({2, 5} : Finset ℕ) ≤ 1 :=
+  sampleTenRatioBaseWeight_hitMass_le_one
 
 end DkMath.NumberTheory.PrimitiveSet
