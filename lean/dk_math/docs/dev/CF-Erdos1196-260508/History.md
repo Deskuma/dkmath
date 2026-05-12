@@ -1533,6 +1533,29 @@ Archive
 6. 次の課題:
    - Phase BF として、既存 sample に対して ratio-style toy functions `A`, `B` を具体化し、`RatioBaseWeightBudget` と hit mass bound を concrete に通す。
    - その後、有理 toy model から実数/log route へ進む前に、追加の theorem-facing alias が必要か判断する。
+### 日時: 2026/05/12 13:09 JST (Phase BG ratio-style route summary)
+
+1. 目的:
+   - `review/review-057.md` の提案に従い、Phase BF で concrete に通った ratio-style toy route を小整理する。
+   - 新しい重い数学定理は増やさず、既存導線を読みやすくする alias / summary theorem を追加する。
+2. 実施:
+   - `sampleTenRatioA/B` から final hit mass bound へ進む sample route の section comment を追加した。
+   - `sampleTenRatioBaseWeightChannelProvider_channelProviderAt_subProbability` を追加し、`A(p) / B(n)` から作った sample channel provider が全状態で sub-probability であることを BaseWeight route 名で参照できるようにした。
+   - `sampleTenRatioBaseWeight_route_summary` を追加し、ratio-style sample route の最終到達点である `weightedHitMass ≤ 1` を summary 名で固定した。
+3. 結論:
+   - Phase BF の concrete ratio-style route を、後続から参照しやすい theorem 名で整理した。
+   - 有理 toy model から実数/log route に進む前の Lean 側の小まとめが完了した。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 通常 sandbox では build が `bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted` で失敗した。
+   - 外側実行に切り替えて検証した。
+6. 次の課題:
+   - 次段階では doc 側で実数/log route の設計を起こし、`A(p) ≈ log p`, `B(n) ≈ log n` をどの層で扱うかを切り分ける。
+
 ### 日時: 2026/05/12 04:21 JST (Phase BF concrete ratio-style sample)
 
 1. 目的:

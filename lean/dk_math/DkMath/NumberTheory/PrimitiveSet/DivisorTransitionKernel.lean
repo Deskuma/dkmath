@@ -1266,6 +1266,12 @@ def sampleTenRatioA (p : ℕ) : ℚ :=
 def sampleTenRatioB (_n : ℕ) : ℚ :=
   1
 
+/-
+Ratio-style sample route:
+`A(p) / B(n)` -> nonnegativity and budget -> sub-probability channel provider
+-> concrete weighted hit mass bound.
+-/
+
 /-- The sample ratio-style numerator is nonnegative. -/
 theorem sampleTenRatioA_nonneg :
     ∀ p, 0 ≤ sampleTenRatioA p := by
@@ -1583,6 +1589,15 @@ theorem sampleTenRatioWeightChannelProvider_channelProviderAt_subProbability
   sampleTenRatioWeightChannelProvider.channelProviderAt_subProbability n
 
 /--
+Alias for the ratio-style base-weight route: the sample channel provider built
+from `A(p) / B(n)` is sub-probability at every state.
+-/
+theorem sampleTenRatioBaseWeightChannelProvider_channelProviderAt_subProbability
+    (n : ℕ) :
+    (sampleTenRatioWeightChannelProvider.channelProviderAt n).SubProbability :=
+  sampleTenRatioWeightChannelProvider_channelProviderAt_subProbability n
+
+/--
 A source-controlled family whose index matches the toy-weighted sample channel
 at state `10`.
 -/
@@ -1704,5 +1719,23 @@ theorem sampleTenRatioBaseWeight_hitMass_le_one :
       (by
         intro _q _hq
         rfl)
+
+/--
+Summary theorem for the concrete ratio-style route on the sample:
+the numerator/denominator weight, budget proof, channel packaging, and source
+application together give the final weighted hit mass bound.
+-/
+theorem sampleTenRatioBaseWeight_route_summary :
+    (sampleTenRatioWeightChannelProvider.applyAtToSourceControlled 10
+      sampleTenToyWeightSourceControlledFamily
+      (by
+        change
+          sampleTenRatioWeightChannelProvider.kernel.toDivisorTransitionKernel.index 10 =
+          sampleTenToyWeightSourceControlledFamily.index
+        simp [sampleTenRatioWeightChannelProvider,
+          sampleTenPrimePowerDivisorTransitionKernel,
+          sampleTenToyWeightSourceControlledFamily])).weightedHitMass
+      ({2, 5} : Finset ℕ) ≤ 1 :=
+  sampleTenRatioBaseWeight_hitMass_le_one
 
 end DkMath.NumberTheory.PrimitiveSet
