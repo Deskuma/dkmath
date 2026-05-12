@@ -39,6 +39,29 @@ Archive
 
 ---
 
+### 日時: 2026/05/12 16:21 JST (Phase-R001 Real weight vocabulary)
+
+1. 目的:
+   - `RealLogRoutePlan.md` の `Phase-R001` に従い、R 版の最初の実装として実数値 base-prime toy weight の最小語彙を追加する。
+   - `Real.log` にはまだ入らず、実数 ratio skeleton の非負性だけを固定する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/RealWeight.lean` を新規作成した。
+   - `RealBasePrimeToyWeight` を追加し、`ℕ -> ℕ -> ℝ` の重みが全点非負である predicate を定義した。
+   - `realRatioBasePrimeWeight` を追加し、`A(p) / B(n)` 型の実数 ratio-style weight を定義した。
+   - `realRatioBasePrimeWeight_realBasePrimeToyWeight` を追加し、`0 ≤ A p` と `0 < B n` から ratio-style weight の非負性を示した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `RealWeight` import を追加し、公開 aggregator から参照できるようにした。
+3. 結論:
+   - R 版は `Phase-R001` として、`Real.log` なしの実数 ratio skeleton から開始できた。
+   - 次は `Phase-R002` として、純粋な実数有限和 budget lemma に進むのが自然。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.RealWeight`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 初回 build では `realRatioBasePrimeWeight` が `Real.instDivInvMonoid` に依存するため noncomputable 指定が必要、というエラーになった。
+   - `realRatioBasePrimeWeight` を `noncomputable def` に修正して解決した。
+
 ### 日時: 2026/05/12 16:14 JST (Phase numbering policy update before R001)
 
 1. 目的:
