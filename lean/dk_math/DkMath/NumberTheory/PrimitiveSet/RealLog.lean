@@ -124,4 +124,31 @@ theorem realLogRatioWeightProvider_subProbability
   unfold RealWeightProvider.SubProbability RealWeightProvider.totalWeight
   exact real_log_ratio_sum_le_one I pOf n hn hbudget
 
+/-- A finite product of positive real terms is positive. -/
+theorem real_finset_prod_pos_of_pos
+    {ι : Type _}
+    (I : Finset ι)
+    (a : ι → ℝ)
+    (ha : ∀ i, i ∈ I → 0 < a i) :
+    0 < I.prod a :=
+  Finset.prod_pos ha
+
+/-- The logarithm of a finite product of positive real terms is the sum of logs. -/
+theorem real_log_prod_eq_sum_log_of_pos
+    {ι : Type _}
+    (I : Finset ι)
+    (a : ι → ℝ)
+    (ha : ∀ i, i ∈ I → 0 < a i) :
+    Real.log (I.prod a) = I.sum fun i => Real.log (a i) :=
+  Real.log_prod (s := I) (f := a) fun i hi => ne_of_gt (ha i hi)
+
+/-- Alias in the direction used by product-budget-to-log-budget arguments. -/
+theorem real_sum_log_eq_log_prod_of_pos
+    {ι : Type _}
+    (I : Finset ι)
+    (a : ι → ℝ)
+    (ha : ∀ i, i ∈ I → 0 < a i) :
+    (I.sum fun i => Real.log (a i)) = Real.log (I.prod a) :=
+  (real_log_prod_eq_sum_log_of_pos I a ha).symm
+
 end DkMath.NumberTheory.PrimitiveSet

@@ -39,6 +39,26 @@ Archive
 
 ---
 
+### 日時: 2026/05/13 07:09 JST (Phase-R009 positive real finite product lemmas)
+
+1. 目的:
+   - `review/review-067.md` の提案に従い、`RealLogBudget` の product route へ進む前段として、実数値の正の有限積に関する小補題を追加する。
+   - 自然数版や prime-power route へ戻る前に、実数版の `prod` / `log` 部分だけを安定させる。
+2. 実施:
+   - `RealLog.lean` に `real_finset_prod_pos_of_pos` を追加し、index 上で全項正なら有限積も正であることを示した。
+   - `real_log_prod_eq_sum_log_of_pos` を追加し、正の実数有限積に対して `Real.log (I.prod a) = I.sum (fun i => Real.log (a i))` を示した。
+   - 後続の product-budget-to-log-budget 証明で使いやすい向きとして、`real_sum_log_eq_log_prod_of_pos` を追加した。
+3. 結論:
+   - product route のうち、`sum log = log prod` と積の正性の土台が no-sorry で閉じた。
+   - 次は `Phase-R010` として、`I.prod a ≤ N` から `I.sum log(a i) ≤ log N` を得る合成補題へ進める。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.RealLog`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+
 ### 日時: 2026/05/13 07:02 JST (Phase-R008 product route design update)
 
 1. 目的:
