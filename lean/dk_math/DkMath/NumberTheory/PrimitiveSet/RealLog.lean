@@ -44,6 +44,28 @@ def RealLogBudget
   (I.sum fun q => Real.log (pOf q : ℝ)) ≤ Real.log (n : ℝ)
 
 /--
+Index-local positivity condition for logarithmic numerators.
+
+It excludes the problematic `pOf q = 0` case and is weak enough to allow the
+boundary value `pOf q = 1`, where the logarithm is `0`.
+-/
+def RealLogNonnegOn
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ) : Prop :=
+  ∀ q, q ∈ I → 1 ≤ pOf q
+
+/-- The index-local condition gives nonnegative logarithmic numerators. -/
+theorem real_log_nat_nonneg_on
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (hp : RealLogNonnegOn I pOf) :
+    ∀ q, q ∈ I → 0 ≤ Real.log (pOf q : ℝ) := by
+  intro q hq
+  exact real_log_nat_nonneg_of_one_le (hp q hq)
+
+/--
 Log-ratio finite-sum bound from an external log budget.
 
 This is the first theorem where the expression `log p / log n` appears in the

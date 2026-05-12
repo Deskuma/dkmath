@@ -39,6 +39,27 @@ Archive
 
 ---
 
+### 日時: 2026/05/13 01:40 JST (Phase-R006 log numerator nonnegativity on index)
+
+1. 目的:
+   - `review/review-064.md` の提案に従い、log ratio weight を provider に載せる前段として index 上の numerator 非負性を整理する。
+   - `pOf q = 0` のようなケースを排除する条件を、外部仮定 predicate として分離する。
+2. 実施:
+   - `RealLog.lean` に `RealLogNonnegOn` を追加した。
+   - `RealLogNonnegOn I pOf` を `∀ q, q ∈ I → 1 ≤ pOf q` として定義した。
+   - `real_log_nat_nonneg_on` を追加し、`RealLogNonnegOn I pOf` から `∀ q ∈ I, 0 ≤ Real.log (pOf q : ℝ)` を示した。
+   - 証明は既存の `real_log_nat_nonneg_of_one_le` に委譲した。
+3. 結論:
+   - `log(pOf q)` の各項非負性を index-local な theorem 名で参照できるようになった。
+   - 次は `Phase-R007` として、`log p / log n` 型の weight を `RealWeightProvider` に載せる constructor と sub-probability theorem を検討できる。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.RealLog`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+
 ### 日時: 2026/05/12 22:05 JST (Phase-R005 external log budget)
 
 1. 目的:
