@@ -421,3 +421,27 @@ Archive
 5. 次の課題:
    - R 版に進む場合、`DkMath/NumberTheory/PrimitiveSet/RealWeight.lean` を候補として `RealBasePrimeToyWeight` と `realRatioBasePrimeWeight` から始める。
    - 既存 N/Q API の型一般化は避け、まず parallel prototype として進める。
+
+### 日時: 2026/05/13 08:24 JST (Phase-R017 pairwise-coprime product bound supply route)
+
+1. 目的:
+   - `review/review-075.md` の提案に従い、`NatProductBoundOn` 自体を供給する最初の数論側ルートを抽象補題として追加する。
+   - prime-power witness に直接戻る前に、pairwise-coprime な選択因子がそれぞれ `n` を割るなら積も `n` に収まる、という責務を名前付きにする。
+2. 実施:
+   - `RealLog.lean` に `NatProductDvdOn` と `NatPairwiseCoprimeOn` を追加した。
+   - `natProductDvdOn_of_pairwise_coprime_dvd` を追加し、pairwise-coprime な選択因子がすべて `n` を割るなら選択積も `n` を割ることを示した。
+   - `natProductBoundOn_of_product_dvd` を追加し、`0 < n` と product divisibility から `NatProductBoundOn` へ変換した。
+   - `natProductBoundOn_of_pairwise_coprime_dvd` を追加し、pairwise-coprime + itemwise divisibility から product bound へ直接進めるようにした。
+   - `RealDivisorBridge.lean` に `PrimePowerWitnessProvider.basePrimeOf_realLogRatioWeightProvider_subProbability_of_pairwise_coprime_dvd` を追加した。
+3. 結論:
+   - R016 で外部仮定だった selected base product bound に対し、重複なし / pairwise-coprime 版の供給経路ができた。
+   - 次は witness provider 由来の base prime が `n` を割ること、または base prime の重複なし条件をどう供給するかへ進める。
+4. 検証:
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet.RealLog`
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet.RealDivisorBridge`
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 初回 proof では `Finset.induction_on` 前に `hcop` / `hdvd` を一般化しておらず、帰納仮定が仮定を受け取れない形になって build failure になった。
+   - `revert hcop hdvd` で仮定を induction motive に戻し、insert branch で `Finset.mem_insert_of_mem` により部分集合側へ制限して解決した。

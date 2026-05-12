@@ -63,6 +63,86 @@ def NatProductBoundOn
     (n : ℕ) : Prop :=
   (I.prod fun q => pOf q) ≤ n
 
+/-- Natural-number product divisibility for the selected bases. -/
+def NatProductDvdOn
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (n : ℕ) : Prop :=
+  (I.prod fun q => pOf q) ∣ n
+
+/-- Pairwise coprimality of the selected natural-number bases. -/
+def NatPairwiseCoprimeOn
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ) : Prop :=
+  ∀ i, i ∈ I → ∀ j, j ∈ I → i ≠ j → Nat.Coprime (pOf i) (pOf j)
+
+/--
+Pairwise-coprime selected divisors multiply to a divisor of `n`.
+
+This is the first abstract supply route for `NatProductBoundOn`; it deliberately
+does not mention prime-power witnesses yet.
+-/
+theorem natProductDvdOn_of_pairwise_coprime_dvd
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (n : ℕ)
+    (hcop : NatPairwiseCoprimeOn I pOf)
+    (hdvd : ∀ i, i ∈ I → pOf i ∣ n) :
+    NatProductDvdOn I pOf n := by
+  classical
+  unfold NatProductDvdOn
+  revert hcop hdvd
+  induction I using Finset.induction_on with
+  | empty =>
+    intro _ _
+    simp
+  | insert a s ha ih =>
+    intro hcop hdvd
+    rw [Finset.prod_insert ha]
+    have hsdvd : (s.prod fun i => pOf i) ∣ n := by
+      exact ih
+        (fun i hi j hj hij =>
+          hcop i (Finset.mem_insert_of_mem hi) j (Finset.mem_insert_of_mem hj) hij)
+        (fun i hi => hdvd i (Finset.mem_insert_of_mem hi))
+    have hadvd : pOf a ∣ n := hdvd a (Finset.mem_insert_self a s)
+    have hcop_prod : Nat.Coprime (pOf a) (s.prod fun i => pOf i) := by
+      exact Nat.Coprime.prod_right (by
+        intro b hb
+        exact hcop a (Finset.mem_insert_self a s) b (Finset.mem_insert_of_mem hb) (by
+          intro hab
+          exact ha (by simpa [hab] using hb)))
+    exact hcop_prod.mul_dvd_of_dvd_of_dvd hadvd hsdvd
+
+/-- A positive target turns selected product divisibility into a product bound. -/
+theorem natProductBoundOn_of_product_dvd
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    {n : ℕ}
+    (hn : 0 < n)
+    (hprod : NatProductDvdOn I pOf n) :
+    NatProductBoundOn I pOf n :=
+  Nat.le_of_dvd hn hprod
+
+/--
+Pairwise-coprime selected divisors of a positive `n` satisfy the selected
+product bound.
+-/
+theorem natProductBoundOn_of_pairwise_coprime_dvd
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    {n : ℕ}
+    (hn : 0 < n)
+    (hcop : NatPairwiseCoprimeOn I pOf)
+    (hdvd : ∀ i, i ∈ I → pOf i ∣ n) :
+    NatProductBoundOn I pOf n :=
+  natProductBoundOn_of_product_dvd I pOf hn
+    (natProductDvdOn_of_pairwise_coprime_dvd I pOf n hcop hdvd)
+
 /--
 Bundled product-budget hypotheses for the real/log provider route.
 
