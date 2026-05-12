@@ -22,6 +22,7 @@ import DkMath.NumberTheory.PrimitiveSet.FiniteKernel
 import DkMath.NumberTheory.PrimitiveSet.FiniteTransitionKernel
 import DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel
 import DkMath.NumberTheory.PrimitiveSet.RealWeight
+import DkMath.NumberTheory.PrimitiveSet.RealWeightedPath
 
 #print "file: DkMath.NumberTheory.PrimitiveSet"
 
@@ -49,4 +50,5 @@ This module exposes:
 - finite transition kernel skeleton
 - divisor transition kernel skeleton
 - real-valued toy weight skeleton
+- real-valued weight provider skeleton
 -/

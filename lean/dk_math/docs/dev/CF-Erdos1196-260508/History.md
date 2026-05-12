@@ -39,6 +39,30 @@ Archive
 
 ---
 
+### 日時: 2026/05/12 21:43 JST (Phase-R003 real weight provider prototype)
+
+1. 目的:
+   - `review/review-061.md` と `RealLogRoutePlan.md` の `Phase-R003` に従い、R 版の薄い `RealWeightProvider` prototype を追加する。
+   - 既存の `ℚ` 版 `WeightProvider` は型一般化せず、実数値 route を parallel prototype として分離する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/RealWeightedPath.lean` を新規作成した。
+   - `RealWeightProvider` を追加し、`index : Finset ι`, `weight : ι → ℝ`, `weight_nonneg` を持つ有限実数重み provider とした。
+   - `RealWeightProvider.totalWeight` を追加した。
+   - `RealWeightProvider.SubProbability` を追加し、`totalWeight ≤ 1` として定義した。
+   - `RealWeightProvider.totalWeight_nonneg` を追加し、provider の総重みが非負であることを示した。
+   - `RealWeightProvider.subProbability_of_budget` を追加し、直接の budget bound から sub-probability を得る入口を固定した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `RealWeightedPath` import を追加した。
+3. 結論:
+   - R 版の `index / weight / nonnegativity / sub-probability` の器が no-sorry で閉じた。
+   - 次は `Phase-R004` として `Real.log` の正値性を局所化する段階へ進める。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.RealWeightedPath`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+
 ### 日時: 2026/05/12 18:06 JST (Phase-R002 real finite budget lemma)
 
 1. 目的:
