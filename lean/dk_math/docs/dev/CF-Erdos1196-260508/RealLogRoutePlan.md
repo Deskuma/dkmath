@@ -202,11 +202,45 @@ def RealWeightProvider.SubProbability (P : RealWeightProvider ι) : Prop :=
 
 - `Real.log` の正値性を、後続の ratio theorem に渡せる形で theorem 名にする。
 
-### Phase-R005. Log budget design
+### Phase-R005. External log budget
 
 目的:
 
-- `Σ log p(q) <= log n` をどの仮定から得るか設計する。
+- `Σ log p(q) <= log n` をまず外部仮定として受け取り、log-ratio finite sum bound に接続する。
+
+実装済み:
+
+- `RealLogBudget`
+- `real_log_ratio_sum_le_one`
+
+### Phase-R006. Log numerator nonnegativity on index
+
+目的:
+
+- `log p / log n` 型 weight を provider に載せる前段として、index 上の numerator 非負性を整理する。
+
+実装済み:
+
+- `RealLogNonnegOn`
+- `real_log_nat_nonneg_on`
+
+### Phase-R007. Log-ratio real provider
+
+目的:
+
+- `log (pOf q) / log n` 型の有限実数 weight を `RealWeightProvider` に載せる。
+- 外部 `RealLogBudget` から provider の sub-probability を示す。
+
+実装済み:
+
+- `realLogRatioWeightProvider`
+- `realLogRatioWeightProvider_subProbability`
+
+### Phase-R008. Product route design for log budget
+
+目的:
+
+- `RealLogBudget I pOf n` を供給する方法を、いきなり prime-power route に戻らず product budget route として分解する。
 
 候補アプローチ:
 
@@ -214,15 +248,25 @@ def RealWeightProvider.SubProbability (P : RealWeightProvider ι) : Prop :=
 2. selected base primes の積が `n` を割る、または `<= n` であることから導く。
 3. prime-power label の重複制御を入れる。
 
-初期推奨:
+現在の状態:
 
-- まず 1 を採用する。
-- その後、2 と 3 を別 Phase で検討する。
+- 1 は Phase-R005 から Phase-R007 までで完了。
+- 次は 2 を `RealLogBudget_of_product_le` 系の小補題群として設計する。
+- 3 は product budget route が見えてから別 Phase で扱う。
 
 理由:
 
 - Erdos #1196 へ向かう本質は、log budget の構成にある。
 - ここを channel API と同時に実装すると、責務が混ざる。
+
+分解案:
+
+1. 実数値の正の有限積に対して、`sum log = log prod` 型の補題を用意する。
+2. `prod <= N` と `0 < prod`, `0 < N` から `log prod <= log N` を得る。
+3. 1 と 2 を合成して、実数版の `sum log <= log N` を得る。
+4. 自然数版 `pOf : ι -> ℕ`, `n : ℕ` へ戻し、`∀ q ∈ I, 1 ≤ pOf q` と product bound から `RealLogBudget I pOf n` を供給する。
+
+初期実装では、4 へ急がず、1-3 を小さい real lemma として試す。
 
 ## リスク
 

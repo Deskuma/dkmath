@@ -39,6 +39,26 @@ Archive
 
 ---
 
+### 日時: 2026/05/13 07:02 JST (Phase-R008 product route design update)
+
+1. 目的:
+   - `review/review-066.md` の提案に従い、`RealLogBudget` の供給方法を本格実装する前に設計を分解する。
+   - いきなり prime-power route に戻らず、product budget route として小補題群に分ける。
+2. 実施:
+   - `RealLogRoutePlan.md` の Phase-R005 節を、実装済みの external log budget として更新した。
+   - Phase-R006, Phase-R007 の実装済み項目を設計書へ追記した。
+   - Phase-R008 を `Product route design for log budget` として追加した。
+   - `RealLogBudget I pOf n` の供給路を、実数版 `sum log = log prod`、log monotonicity、自然数版への戻し、重複制御の順に分解した。
+3. 結論:
+   - R005-R007 で外部 budget route は完了扱いとし、R008 以降は budget の起源を product route として扱う方針を固定した。
+   - 次の Lean 実装では、自然数や prime-power に戻る前に、実数値の正の有限積に関する小補題から試すのが自然。
+4. 検証:
+   - docs 更新のみのため Lean build は実行しない。
+   - `RealLogRoutePlan.md` の該当範囲を `sed` で確認した。
+5. 次の課題:
+   - Phase-R009 として、`sum log = log prod` または `log prod <= log N` のどちらを先に小補題化するか判断する。
+   - product route が見えてから、`pOf` の重複制御や prime-power witness provider との接続に戻る。
+
 ### 日時: 2026/05/13 06:55 JST (Phase-R007 log ratio real provider)
 
 1. 目的:
