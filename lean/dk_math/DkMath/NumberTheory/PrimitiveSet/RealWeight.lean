@@ -36,4 +36,23 @@ theorem realRatioBasePrimeWeight_realBasePrimeToyWeight
   intro n p
   exact div_nonneg (hA p) (le_of_lt (hB n))
 
+/--
+Pure finite-sum budget lemma for real ratio weights.
+
+If a finite numerator sum is bounded by a positive denominator, then the sum of
+the corresponding ratios is at most `1`.  This is intentionally independent of
+the channel-provider API and does not mention `Real.log`.
+-/
+theorem real_ratio_sum_le_one
+    {ι : Type _}
+    (I : Finset ι)
+    (Aq : ι → ℝ)
+    (B : ℝ)
+    (hB : 0 < B)
+    (hbudget : (I.sum fun q => Aq q) ≤ B) :
+    (I.sum fun q => Aq q / B) ≤ 1 := by
+  rw [← Finset.sum_div]
+  rw [div_le_iff₀ hB]
+  simpa using hbudget
+
 end DkMath.NumberTheory.PrimitiveSet

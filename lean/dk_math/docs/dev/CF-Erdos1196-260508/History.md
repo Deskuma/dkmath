@@ -39,6 +39,28 @@ Archive
 
 ---
 
+### 日時: 2026/05/12 18:06 JST (Phase-R002 real finite budget lemma)
+
+1. 目的:
+   - `review/review-060.md` と `RealLogRoutePlan.md` の `Phase-R002` に従い、実数 ratio-style route の純粋な有限和 budget lemma を追加する。
+   - channel provider や `Real.log` にはまだ接続せず、`Finset` 上の再利用可能な補題として固定する。
+2. 実施:
+   - `RealWeight.lean` に `real_ratio_sum_le_one` を追加した。
+   - theorem は `I : Finset ι`, `Aq : ι → ℝ`, `B : ℝ` に対し、`0 < B` と `I.sum Aq ≤ B` から `I.sum (fun q => Aq q / B) ≤ 1` を示す形にした。
+   - `A`, `pOf`, `n` に依存しない抽象 `Aq` 版として置き、後続の real channel prototype から再利用しやすくした。
+3. 結論:
+   - R 版の ratio finite sum budget が、`Real.log` なしで no-sorry に閉じた。
+   - 次は `Phase-R003` として、`ℚ` 版 `WeightProvider` を一般化せずに `RealWeightProvider` の薄い prototype を作る段階へ進める。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.RealWeight`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 初回 proof では `rw [Finset.sum_div]` の向きが逆で、target 内に該当パターンが見つからなかった。
+   - `rw [← Finset.sum_div]` に修正して解決した。
+   - theorem 型に不要な `[DecidableEq ι]` があり linter 警告が出たため、仮定から削除した。
+
 ### 日時: 2026/05/12 16:21 JST (Phase-R001 Real weight vocabulary)
 
 1. 目的:
