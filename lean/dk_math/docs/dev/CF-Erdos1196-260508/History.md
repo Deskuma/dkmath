@@ -39,6 +39,27 @@ Archive
 
 ---
 
+### 日時: 2026/05/12 21:59 JST (Phase-R004 real log positivity)
+
+1. 目的:
+   - `review/review-062.md` と `RealLogRoutePlan.md` の `Phase-R004` に従い、`Real.log` の自然数向け正値性補題を局所化する。
+   - log budget にはまだ触れず、後続の ratio/log route に渡すための小さい theorem 名だけを固定する。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/RealLog.lean` を新規作成した。
+   - `real_log_nat_nonneg_of_one_le` を追加し、`1 ≤ p` から `0 ≤ Real.log (p : ℝ)` を示した。
+   - `real_log_nat_pos_of_one_lt` を追加し、`1 < n` から `0 < Real.log (n : ℝ)` を示した。
+   - `DkMath/NumberTheory/PrimitiveSet.lean` に `RealLog` import を追加した。
+3. 結論:
+   - numerator 側の非負性と denominator 側の正性に使う自然数版 log 補題が no-sorry で閉じた。
+   - 次は `Phase-R005` として log budget の扱いを設計する段階へ進める。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.RealLog`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+
 ### 日時: 2026/05/12 21:43 JST (Phase-R003 real weight provider prototype)
 
 1. 目的:

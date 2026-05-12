@@ -23,6 +23,7 @@ import DkMath.NumberTheory.PrimitiveSet.FiniteTransitionKernel
 import DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel
 import DkMath.NumberTheory.PrimitiveSet.RealWeight
 import DkMath.NumberTheory.PrimitiveSet.RealWeightedPath
+import DkMath.NumberTheory.PrimitiveSet.RealLog
 
 #print "file: DkMath.NumberTheory.PrimitiveSet"
 
@@ -51,4 +52,5 @@ This module exposes:
 - divisor transition kernel skeleton
 - real-valued toy weight skeleton
 - real-valued weight provider skeleton
+- real/log route positivity lemmas
 -/
