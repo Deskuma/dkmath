@@ -39,6 +39,29 @@ Archive
 
 ---
 
+### 日時: 2026/05/13 08:00 JST (Phase-R014 witness base-prime read bridge)
+
+1. 目的:
+   - `review/review-072.md` の提案に従い、prime-power witness provider から base prime を読む薄い bridge を追加する。
+   - product bound の証明にはまだ入らず、`pOf` を witness provider から供給するための入口と base prime の下界を固定する。
+2. 実施:
+   - `DivisorTransitionKernel.lean` の `PrimePowerWitnessProvider` namespace に `basePrime_one_le` を追加した。
+   - `basePrime_one_le` は indexed label の witness から読んだ base prime が `1` 以上であることを示す。
+   - `basePrimeOf` を追加し、選択集合 `I` と `I ⊆ T.index n` の証明から、`I` 上では witness の base prime、外側では `1` を返す全域関数 `ℕ → ℕ` を定義した。
+   - `basePrimeOf_one_le` を追加し、`I` 上で `basePrimeOf` が `1` 以上であることを示した。
+3. 結論:
+   - 後続で `RealLogNonnegOn I (W.basePrimeOf n I hI)` を供給するための数論側 bridge ができた。
+   - まだ `NatProductBoundOn` は証明していない。次段以降で重複制御・指数消費 tracking を別途設計する。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 初回実装は `simp [basePrimeOf, hq]` で build は通ったが linter の flexible tactic 警告が出た。
+   - `split_ifs with ...` へ変更したが、この環境では生成名を参照できず build failure になった。
+   - 最終的に `unfold basePrimeOf` と `rw [dif_pos hq]` に変更して、警告なしで通した。
+
 ### 日時: 2026/05/13 07:48 JST (Phase-R013 product budget predicate)
 
 1. 目的:

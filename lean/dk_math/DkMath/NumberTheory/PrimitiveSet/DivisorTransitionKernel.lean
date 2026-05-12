@@ -489,6 +489,46 @@ theorem primePowerDescentStep
   T.toDivisorTransitionKernel.primePowerDescentStep_of_isPrimePowerLabel
     hq (W.isPrimePowerLabel hq)
 
+/-- The base prime read from an indexed witness is at least `1`. -/
+theorem basePrime_one_le
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T) {n q : ℕ}
+    (hq : q ∈ T.toDivisorTransitionKernel.index n) :
+    1 ≤ (W.label n q hq).p :=
+  le_of_lt (W.label n q hq).prime.one_lt
+
+/--
+Read the base prime from the witness provider on a selected sub-index.
+
+Outside `I` the value is `1`, so the function is total and harmless for later
+finite products over `I`.
+-/
+def basePrimeOf
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n) :
+    ℕ → ℕ :=
+  fun q =>
+    if hq : q ∈ I then
+      (W.label n q (hI q hq)).p
+    else
+      1
+
+/-- On the selected sub-index, `basePrimeOf` reads a number at least `1`. -/
+theorem basePrimeOf_one_le
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n) :
+    ∀ q, q ∈ I → 1 ≤ W.basePrimeOf n I hI q := by
+  intro q hq
+  unfold basePrimeOf
+  rw [dif_pos hq]
+  exact W.basePrime_one_le (hI q hq)
+
 /--
 Turn a base-prime weight `c n p` into a label weight by reading the chosen
 prime-power witness of each indexed label.
