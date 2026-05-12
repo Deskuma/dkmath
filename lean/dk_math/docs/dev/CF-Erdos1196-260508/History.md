@@ -39,6 +39,30 @@ Archive
 
 ---
 
+### 日時: 2026/05/12 22:05 JST (Phase-R005 external log budget)
+
+1. 目的:
+   - `review/review-063.md` と `RealLogRoutePlan.md` の `Phase-R005` に従い、log budget をまず外部仮定として受け取る形で固定する。
+   - prime-power labels から budget を導く本丸にはまだ入らず、純粋な finite log-ratio bound だけを閉じる。
+2. 実施:
+   - `RealLog.lean` に `RealLogBudget` を追加した。
+   - `RealLogBudget I pOf n` を `Σ q in I, Real.log (pOf q : ℝ) ≤ Real.log (n : ℝ)` として定義した。
+   - `real_log_ratio_sum_le_one` を追加し、`1 < n` と `RealLogBudget I pOf n` から `Σ q in I, Real.log (pOf q : ℝ) / Real.log (n : ℝ) ≤ 1` を示した。
+   - 証明は `real_ratio_sum_le_one` と `real_log_nat_pos_of_one_lt` を接続するだけに留めた。
+3. 結論:
+   - R 版 route で初めて `log p / log n` 型の式が theorem statement に現れた。
+   - log budget は外部入力として分離され、後続で prime-power labels や重複制御から導く余地を残した。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.RealLog`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+6. 次の課題:
+   - `pOf q` の index 上非負性、または prime base 由来の `1 ≤ pOf q` をどう渡すかを整理する。
+   - その後、real log ratio weight を `RealWeightProvider` へ載せる薄い constructor を検討する。
+
 ### 日時: 2026/05/12 21:59 JST (Phase-R004 real log positivity)
 
 1. 目的:

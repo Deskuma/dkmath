@@ -30,4 +30,39 @@ theorem real_log_nat_pos_of_one_lt
     0 < Real.log (n : ℝ) := by
   exact Real.log_pos (by exact_mod_cast hn)
 
+/--
+External budget predicate for the real/log route.
+
+This records the analytic/numerical input
+`Σ log (pOf q) ≤ log n` without trying to derive it from prime-power labels.
+-/
+def RealLogBudget
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (n : ℕ) : Prop :=
+  (I.sum fun q => Real.log (pOf q : ℝ)) ≤ Real.log (n : ℝ)
+
+/--
+Log-ratio finite-sum bound from an external log budget.
+
+This is the first theorem where the expression `log p / log n` appears in the
+R-version route.  It deliberately treats the budget as an input.
+-/
+theorem real_log_ratio_sum_le_one
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (n : ℕ)
+    (hn : 1 < n)
+    (hbudget : RealLogBudget I pOf n) :
+    (I.sum fun q =>
+      Real.log (pOf q : ℝ) / Real.log (n : ℝ)) ≤ 1 :=
+  real_ratio_sum_le_one
+    I
+    (fun q => Real.log (pOf q : ℝ))
+    (Real.log (n : ℝ))
+    (real_log_nat_pos_of_one_lt hn)
+    hbudget
+
 end DkMath.NumberTheory.PrimitiveSet
