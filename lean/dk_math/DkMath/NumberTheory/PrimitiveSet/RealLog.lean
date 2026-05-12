@@ -87,4 +87,41 @@ theorem real_log_ratio_sum_le_one
     (real_log_nat_pos_of_one_lt hn)
     hbudget
 
+/--
+The finite real provider whose weights are `log (pOf q) / log n`.
+
+The hypotheses only ensure itemwise nonnegativity and denominator positivity.
+Sub-probability is supplied separately by `RealLogBudget`.
+-/
+noncomputable def realLogRatioWeightProvider
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (n : ℕ)
+    (hp : RealLogNonnegOn I pOf)
+    (hn : 1 < n) :
+    RealWeightProvider ι where
+  index := I
+  weight := fun q => Real.log (pOf q : ℝ) / Real.log (n : ℝ)
+  weight_nonneg := by
+    intro q hq
+    exact div_nonneg
+      (real_log_nat_nonneg_on I pOf hp q hq)
+      (le_of_lt (real_log_nat_pos_of_one_lt hn))
+
+/--
+The log-ratio real provider is sub-probability under the external log budget.
+-/
+theorem realLogRatioWeightProvider_subProbability
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (n : ℕ)
+    (hp : RealLogNonnegOn I pOf)
+    (hn : 1 < n)
+    (hbudget : RealLogBudget I pOf n) :
+    (realLogRatioWeightProvider I pOf n hp hn).SubProbability := by
+  unfold RealWeightProvider.SubProbability RealWeightProvider.totalWeight
+  exact real_log_ratio_sum_le_one I pOf n hn hbudget
+
 end DkMath.NumberTheory.PrimitiveSet

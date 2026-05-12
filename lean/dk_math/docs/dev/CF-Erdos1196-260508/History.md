@@ -39,6 +39,27 @@ Archive
 
 ---
 
+### 日時: 2026/05/13 06:55 JST (Phase-R007 log ratio real provider)
+
+1. 目的:
+   - `review/review-065.md` の提案に従い、`log p / log n` 型の有限実数 weight を `RealWeightProvider` に載せる。
+   - log budget の起源にはまだ入らず、既存の `RealLogNonnegOn`, `RealLogBudget`, `real_log_ratio_sum_le_one` を束ねる。
+2. 実施:
+   - `RealLog.lean` に `realLogRatioWeightProvider` を追加した。
+   - provider の `index` は `I`、`weight q` は `Real.log (pOf q : ℝ) / Real.log (n : ℝ)` とした。
+   - `RealLogNonnegOn I pOf` から分子非負性、`1 < n` から分母正性を得て `weight_nonneg` を示した。
+   - `realLogRatioWeightProvider_subProbability` を追加し、`RealLogBudget I pOf n` から provider の `SubProbability` を示した。
+3. 結論:
+   - R 版の有限 real provider として `log p / log n` weight が no-sorry で構成された。
+   - 次の本丸は `RealLogBudget I pOf n` をどの構造から導くかであり、積評価・重複制御・log 単調性を分けて設計する必要がある。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.RealLog`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+
 ### 日時: 2026/05/13 01:40 JST (Phase-R006 log numerator nonnegativity on index)
 
 1. 目的:
