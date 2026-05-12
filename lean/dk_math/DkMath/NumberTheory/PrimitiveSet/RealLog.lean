@@ -168,4 +168,37 @@ theorem real_sum_log_le_log_of_prod_le
   rw [real_sum_log_eq_log_prod_of_pos I a ha]
   exact Real.log_le_log (real_finset_prod_pos_of_pos I a ha) hprod
 
+/-- Cast a finite product of natural numbers to a real finite product. -/
+theorem real_finset_prod_nat_cast
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ) :
+    ((I.prod fun q => pOf q : ℕ) : ℝ) =
+      I.prod fun q => (pOf q : ℝ) := by
+  simp [Nat.cast_prod]
+
+/--
+Supply a real log budget from a natural-number product bound.
+
+This is still independent of prime-power labels; it only translates a product
+bound on selected natural numbers into the external `RealLogBudget`.
+-/
+theorem realLogBudget_of_nat_product_le
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (n : ℕ)
+    (hp : RealLogNonnegOn I pOf)
+    (hn : 0 < n)
+    (hprod : (I.prod fun q => pOf q) ≤ n) :
+    RealLogBudget I pOf n := by
+  unfold RealLogBudget
+  refine real_sum_log_le_log_of_prod_le
+    I (fun q => (pOf q : ℝ)) (n : ℝ) ?ha ?hN ?hprodReal
+  · intro q hq
+    exact Nat.cast_pos.mpr (lt_of_lt_of_le Nat.zero_lt_one (hp q hq))
+  · exact_mod_cast hn
+  · rw [← real_finset_prod_nat_cast I pOf]
+    exact_mod_cast hprod
+
 end DkMath.NumberTheory.PrimitiveSet

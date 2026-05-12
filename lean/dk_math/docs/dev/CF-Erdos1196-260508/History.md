@@ -39,6 +39,28 @@ Archive
 
 ---
 
+### 日時: 2026/05/13 07:29 JST (Phase-R011 nat product bound supplies RealLogBudget)
+
+1. 目的:
+   - `review/review-069.md` の提案に従い、自然数版 `pOf : ι → ℕ`, `n : ℕ` の product bound から `RealLogBudget I pOf n` を供給する theorem を追加する。
+   - 実数版 product route を自然数有限積へ戻す。
+2. 実施:
+   - `RealLog.lean` に `real_finset_prod_nat_cast` を追加し、自然数有限積の実数 cast が実数有限積と一致することを固定した。
+   - `realLogBudget_of_nat_product_le` を追加した。
+   - 仮定は `RealLogNonnegOn I pOf`, `0 < n`, `(I.prod fun q => pOf q) ≤ n` とした。
+   - `real_sum_log_le_log_of_prod_le` に `a q = (pOf q : ℝ)`, `N = (n : ℝ)` を代入し、product bound を `real_finset_prod_nat_cast` と cast で渡した。
+3. 結論:
+   - `∏ pOf(q) ≤ n` から `Σ log(pOf(q)) ≤ log n` を供給する自然数版 product route が no-sorry で通った。
+   - 外部仮定だった `RealLogBudget` の供給源が、具体的な自然数 product bound まで降りた。
+4. 検証:
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet.RealLog`
+   - `cd lean/dk_math && ./lean-build.sh DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 初回は `exact_mod_cast` が `(fun q => ↑(pOf q)) q` の形の実数正性目標を解けず失敗した。
+   - `Nat.cast_pos.mpr` で `0 < (pOf q : ℝ)` を直接作る形に修正して解決した。
+
 ### 日時: 2026/05/13 07:21 JST (Phase-R010 product bound to real log-sum bound)
 
 1. 目的:
