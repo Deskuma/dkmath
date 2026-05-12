@@ -151,4 +151,21 @@ theorem real_sum_log_eq_log_prod_of_pos
     (I.sum fun i => Real.log (a i)) = Real.log (I.prod a) :=
   (real_log_prod_eq_sum_log_of_pos I a ha).symm
 
+/--
+Product-budget-to-log-sum bound for positive real finite products.
+
+This is the real-valued core of the later `RealLogBudget` supply route.
+-/
+theorem real_sum_log_le_log_of_prod_le
+    {ι : Type _}
+    (I : Finset ι)
+    (a : ι → ℝ)
+    (N : ℝ)
+    (ha : ∀ i, i ∈ I → 0 < a i)
+    (_hN : 0 < N)
+    (hprod : I.prod a ≤ N) :
+    (I.sum fun i => Real.log (a i)) ≤ Real.log N := by
+  rw [real_sum_log_eq_log_prod_of_pos I a ha]
+  exact Real.log_le_log (real_finset_prod_pos_of_pos I a ha) hprod
+
 end DkMath.NumberTheory.PrimitiveSet
