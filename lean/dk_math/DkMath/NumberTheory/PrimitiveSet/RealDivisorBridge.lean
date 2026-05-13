@@ -116,6 +116,25 @@ theorem basePrimeOf_realLogRatioWeightProvider_subProbability_of_pairwise_distin
     (natPairwiseCoprimeOn_of_pairwise_distinct_prime I (W.basePrimeOf n I hI)
       (W.basePrimeOf_prime_on n I hI) hdistinct)
 
+/--
+Summary theorem for the duplicate-free real/log route.
+
+If the selected witness base primes are pairwise distinct, then the finite
+`log p / log n` provider is sub-probability.
+-/
+theorem basePrimeOf_logRatioSubProbability_of_distinctBasePrimes
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n)
+    (hdistinct : NatPairwiseDistinctOn I (W.basePrimeOf n I hI)) :
+    (realLogRatioWeightProvider I (W.basePrimeOf n I hI) n
+      (W.basePrimeOf_realLogNonnegOn n I hI) hn).SubProbability :=
+  W.basePrimeOf_realLogRatioWeightProvider_subProbability_of_pairwise_distinct
+    n I hI hn hdistinct
+
 end PrimePowerWitnessProvider
 
 end DkMath.NumberTheory.PrimitiveSet

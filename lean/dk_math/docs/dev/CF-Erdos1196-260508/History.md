@@ -492,3 +492,23 @@ Archive
    - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
 5. 失敗事例:
    - 今回は build failure なし。
+
+### 日時: 2026/05/13 14:39 JST (Phase-R020 duplicate-free real/log route summary)
+
+1. 目的:
+   - `review/review-078.md` の提案に従い、重複なし R/log route の到達点を summary theorem と docs にまとめる。
+   - valuation budget route に入る前に、`R001` から `R019` までで閉じた導線を参照しやすくする。
+2. 実施:
+   - `RealDivisorBridge.lean` に `PrimePowerWitnessProvider.basePrimeOf_logRatioSubProbability_of_distinctBasePrimes` を追加した。
+   - これは既存の `basePrimeOf_realLogRatioWeightProvider_subProbability_of_pairwise_distinct` への theorem-facing alias とし、重複なし route の入口名にした。
+   - `README.md` に `R/log 版の現在地` 節を追加し、summary theorem、仮定、provider shape、内部導線、次の valuation budget route を整理した。
+3. 結論:
+   - 重複なし finite log route は、`I ⊆ T.index n`, `1 < n`, selected base primes の pairwise distinctness から real/log provider の `SubProbability` へ進む summary theorem として参照できるようになった。
+   - 次の本丸は、同じ base prime が複数回現れる場合の valuation budget / exponent consumption route である。
+4. 検証:
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet.RealDivisorBridge`
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。

@@ -140,6 +140,51 @@ A(2) + A(5) = 1 <= B(10)
 
 R 版の実装計画は [RealLogRoutePlan.md](./RealLogRoutePlan.md) に分離する。
 
+## R/log 版の現在地
+
+R 版は `Phase-R001` から番号を振り直し、現在は重複なし finite log route まで Lean 上で通っている。
+
+中心の summary theorem は次である。
+
+```lean
+PrimePowerWitnessProvider.basePrimeOf_logRatioSubProbability_of_distinctBasePrimes
+```
+
+これは次の条件から、
+
+```text
+I ⊆ T.index n
+1 < n
+selected base primes are pairwise distinct
+```
+
+次の real provider が `SubProbability` であることを示す。
+
+```text
+q ↦ Real.log (W.basePrimeOf n I hI q) / Real.log n
+```
+
+内部では次の導線を使っている。
+
+```text
+pairwise distinct selected base primes
+-> pairwise coprime selected base primes
+-> selected base product divides n
+-> selected base product <= n
+-> Σ log(basePrime(q)) <= log n
+-> Σ log(basePrime(q)) / log n <= 1
+```
+
+この route では、witness provider 由来の base prime について、選択集合上で次が theorem 名として固定されている。
+
+```lean
+PrimePowerWitnessProvider.basePrimeOf_prime_on
+PrimePowerWitnessProvider.basePrimeOf_dvd_source_on
+PrimePowerWitnessProvider.basePrimeOf_realLogNonnegOn
+```
+
+重複なし route の外部仮定として残るのは、選択された base prime の pairwise distinctness である。次段階の主題は、同じ base prime が複数回現れる場合の valuation budget / exponent consumption route である。
+
 ## 推奨される読み順
 
 1. [ImplementsPlan.md](./ImplementsPlan.md)
