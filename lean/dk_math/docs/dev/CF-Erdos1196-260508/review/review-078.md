@@ -12,7 +12,7 @@ $$
 を、より扱いやすい
 
 $$
-NatPairwiseDistinctOn\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
+\mathrm{NatPairwiseDistinctOn}\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
 $$
 
 から供給できるようになった。つまり、selected base primes が互いに異なれば、 $\log p/\log n$ 型 real provider が `SubProbability` になるところまで no-sorry で通った、ということじゃ。
@@ -106,7 +106,7 @@ $$
 $$
 
 $$
-NatPairwiseDistinctOn\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
+\mathrm{NatPairwiseDistinctOn}\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
 $$
 
 結論として、

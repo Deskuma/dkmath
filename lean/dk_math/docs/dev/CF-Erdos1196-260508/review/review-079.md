@@ -53,7 +53,7 @@ $$
 $$
 
 $$
-NatPairwiseDistinctOn\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
+\mathrm{NatPairwiseDistinctOn}\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
 $$
 
 なら、
