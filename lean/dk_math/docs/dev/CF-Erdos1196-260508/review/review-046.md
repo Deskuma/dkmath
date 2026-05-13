@@ -358,7 +358,7 @@ $$
 $$
 
 $$
-T.PrimeWitnessDependentWeight(w,c)
+\mathrm{T.PrimeWitnessDependentWeight}(w,c)
 $$
 
 $$

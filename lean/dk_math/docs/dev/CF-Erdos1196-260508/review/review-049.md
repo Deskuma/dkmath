@@ -120,7 +120,7 @@ $$
 
 $$
 \longmapsto
-T.PrimeWitnessDependentWeight(\mathrm{W.weightOfBase}(c),c)
+\mathrm{T.PrimeWitnessDependentWeight}(\mathrm{W.weightOfBase}(c),c)
 $$
 
 $$

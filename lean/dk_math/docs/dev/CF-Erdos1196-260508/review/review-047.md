@@ -233,7 +233,7 @@ weightOfBase_primeWitnessDependent
 欲しい結論は、
 
 $$
-T.PrimeWitnessDependentWeight\ (\mathrm{W.weightOfBase}(c))\ c
+\mathrm{T.PrimeWitnessDependentWeight}\ (\mathrm{W.weightOfBase}(c))\ c
 $$
 
 じゃ。

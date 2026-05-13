@@ -85,7 +85,7 @@ weightOfBase_primeWitnessDependent
 これは、base-prime weight $c(n,p)$ が index 上で非負なら、
 
 $$
-T.PrimeWitnessDependentWeight(\mathrm{W.weightOfBase}(c),c)
+\mathrm{T.PrimeWitnessDependentWeight}(\mathrm{W.weightOfBase}(c),c)
 $$
 
 を得る。
