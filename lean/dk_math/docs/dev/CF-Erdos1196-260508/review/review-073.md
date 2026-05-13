@@ -12,7 +12,7 @@ RealLogProductBudget(I,pOf,n)
 \text{log-ratio provider is sub-probability}
 $$
 
-まで閉じていた。今回 Phase-R014 では、その (pOf) を任意関数のまま放置せず、prime-power witness provider から読めるようにする準備が入った。
+まで閉じていた。今回 Phase-R014 では、その $pOf$ を任意関数のまま放置せず、prime-power witness provider から読めるようにする準備が入った。
 
 つまり、
 
@@ -20,7 +20,7 @@ $$
 q=p^k
 $$
 
-の witness から base prime (p) を読み、
+の witness から base prime $p$ を読み、
 
 $$
 pOf(q)=p
@@ -38,7 +38,7 @@ PrimePowerWitnessProvider.basePrimeOf
 PrimePowerWitnessProvider.basePrimeOf_one_le
 ```
 
-`basePrime_one_le` は、indexed label (q) の witness から読んだ base prime が (1) 以上であることを示す。
+`basePrime_one_le` は、indexed label $q$ の witness から読んだ base prime が $1$ 以上であることを示す。
 
 数学的には、
 
@@ -54,7 +54,7 @@ $$
 
 が出る、という補題じゃな。
 
-実際には素数なので (1<p) まであるが、R 側の `RealLogNonnegOn` が要求するのは
+実際には素数なので $1 < p$ まであるが、R 側の `RealLogNonnegOn` が要求するのは
 
 $$
 1\le pOf(q)
@@ -72,7 +72,7 @@ basePrimeOf
 
 はかなり重要じゃ。
 
-選択集合 (I) と、
+選択集合 $I$ と、
 
 $$
 I\subseteq T.index(n)
@@ -84,7 +84,7 @@ $$
 hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n
 ```
 
-を受け取り、(I) 上では witness provider から base prime を読む。
+を受け取り、 $I$ 上では witness provider から base prime を読む。
 
 $$
 q\in I
@@ -92,10 +92,10 @@ q\in I
 basePrimeOf(q)=(W.label(n,q,hI(q))).p
 $$
 
-一方、(I) の外側では (1) を返す。
+一方、 $I$ の外側では $1$ を返す。
 
 これは良い設計じゃ。
-後続の `RealLogProductBudget I pOf n` や `NatProductBoundOn I pOf n` は、基本的に (I) 上だけを見る。だから外側を (1) にしておけば、全域関数
+後続の `RealLogProductBudget I pOf n` や `NatProductBoundOn I pOf n` は、基本的に $I$ 上だけを見る。だから外側を $1$ にしておけば、全域関数
 
 $$
 pOf:\mathbb{N}\to\mathbb{N}
@@ -118,7 +118,7 @@ RealLogNonnegOn(I,pOf)
 $$
 
 $$
-1<n
+1 < n
 $$
 
 $$
@@ -234,7 +234,7 @@ I\subseteq index(n)
 $$
 
 $$
-1<n
+1 < n
 $$
 
 $$
@@ -271,14 +271,14 @@ $$
 q_1=2,\qquad q_2=4
 $$
 
-なら、どちらも base prime は (2)。
+なら、どちらも base prime は $2$ 。
 このとき base product は
 
 $$
 2\cdot2=4
 $$
 
-になる。これを (n) が吸収するには、(n) 側に (2^2) 以上の指数予算が必要になる。
+になる。これを $n$ が吸収するには、 $n$ 側に $2^2$ 以上の指数予算が必要になる。
 
 つまり次の深部には、
 
@@ -304,7 +304,7 @@ $$
 q=p^k
 $$
 
-の witness から base prime (p) を読み、
+の witness から base prime $p$ を読み、
 
 $$
 pOf(q)=p
@@ -312,7 +312,7 @@ $$
 
 として使うための関数 `basePrimeOf` ができた。
 
-そして (I) 上では、
+そして $I$ 上では、
 
 $$
 1\le basePrimeOf(q)
@@ -320,5 +320,5 @@ $$
 
 も証明された。
 
-山で言えば、R 側から伸びてきた (\log p/\log n) のザイルが、ついに prime-power witness の岩場に触れた。
+山で言えば、R 側から伸びてきた $\log p/\log n$ のザイルが、ついに prime-power witness の岩場に触れた。
 次は、そのザイルを `RealLogProductBudget` に正式に結び、さらにその先で product bound をどう得るか、重複制御の岩稜へ進む番じゃ。

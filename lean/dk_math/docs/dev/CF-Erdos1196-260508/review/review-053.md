@@ -10,7 +10,7 @@ $$
 W.BaseWeightNonneg(c)
 $$
 
-という「witness provider (W) が選ぶ base prime 上で (c) が非負」という predicate を作った。今回 Phase BB では、さらにその一段手前として、
+という「witness provider $W$ が選ぶ base prime 上で $c$ が非負」という predicate を作った。今回 Phase BB では、さらにその一段手前として、
 
 $$
 \forall n,p,\quad 0\le c(n,p)
@@ -22,7 +22,7 @@ $$
 BasePrimeToyWeight
 ```
 
-が追加された。これで、(c(n,p)) が全域で非負なら、任意の witness provider (W) に対して自動的に `W.BaseWeightNonneg c` へ降ろせるようになった。実装・build・no-sorry 検査も通っておる。
+が追加された。これで、 $c(n,p)$ が全域で非負なら、任意の witness provider $W$ に対して自動的に `W.BaseWeightNonneg c` へ降ろせるようになった。実装・build・no-sorry 検査も通っておる。
 
 ## 2. 今回の主役
 
@@ -40,10 +40,10 @@ $$
 c:\mathbb{N}\to\mathbb{N}\to\mathbb{Q}
 $$
 
-が base-prime weight として、どの (n,p) に対しても非負である、というもの。
+が base-prime weight として、どの $n,p$ に対しても非負である、というもの。
 
 重要なのは、ここにはまだ witness provider が出てこないことじゃ。
-つまり、これは (W) 非依存の weight 側の性質として独立している。
+つまり、これは $W$ 非依存の weight 側の性質として独立している。
 
 ## 3. 何が良くなったか
 
@@ -63,14 +63,14 @@ $$
 
 じゃ。
 
-証明はとても自然で、(W) が index 上の (q) から base prime
+証明はとても自然で、 $W$ が index 上の $q$ から base prime
 
 $$
 p=(W.label(n,q,hq)).p
 $$
 
 を選ぶ。
-しかし `BasePrimeToyWeight` は全ての (p) で非負だから、ただちに
+しかし `BasePrimeToyWeight` は全ての $p$ で非負だから、ただちに
 
 $$
 0\le c(n,p)
@@ -137,7 +137,7 @@ $$
 | `BasePrimeToyWeight`                    | 今回完了 |
 | `BasePrimeToyWeight → BaseWeightNonneg` | 今回完了 |
 | ratio-style toy weight                  | 未    |
-| 解析風 (\log p/\log n) route               | 未    |
+| 解析風 $\log p/\log n$ route               | 未    |
 
 これで、非負性の扱いはかなり見通しが良くなった。
 
@@ -173,10 +173,10 @@ $$
 型の ratio-style toy weight が自然じゃ。
 
 ただし、最初は `log` へ行かない。
-有理数 (\mathbb{Q}) 上で、
+有理数 $\mathbb{Q}$ 上で、
 
 $$
-0\le A(p),\qquad 0<B(n)
+0\le A(p),\qquad 0 < B(n)
 $$
 
 なら、
@@ -277,7 +277,7 @@ $$
 
 ## 9. 総括
 
-Phase BB は、base-prime weight (c(n,p)) の **非負性の責務を独立化** した段階じゃ。
+Phase BB は、base-prime weight $c(n,p)$ の **非負性の責務を独立化** した段階じゃ。
 
 これで、
 
@@ -285,7 +285,7 @@ $$
 c(n,p)
 $$
 
-はまず `BasePrimeToyWeight` として全域非負性を持ち、そこから任意の witness provider (W) に対して
+はまず `BasePrimeToyWeight` として全域非負性を持ち、そこから任意の witness provider $W$ に対して
 
 $$
 W.BaseWeightNonneg(c)

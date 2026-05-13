@@ -13,7 +13,7 @@ $$
 という ratio-style toy weight を導入し、
 
 $$
-0\le A(p),\qquad 0<B(n)
+0\le A(p),\qquad 0 < B(n)
 $$
 
 から非負性を閉じた。今回 Phase BD ではさらに、
@@ -39,7 +39,7 @@ PrimePowerWitnessProvider.RatioBaseWeightBudget
 PrimePowerWitnessProvider.baseWeightSubProbability_of_ratioBudget
 ```
 
-`RatioBaseWeightBudget` は、各 state (n) において、witness provider (W) が label (q) から読み取る base prime (p(q)) について、
+`RatioBaseWeightBudget` は、各 state $n$ において、witness provider $W$ が label $q$ から読み取る base prime $p(q)$ について、
 
 $$
 \sum_{q\in index(n)} A(p(q))\le B(n)
@@ -47,7 +47,7 @@ $$
 
 を要求する predicate じゃ。
 
-つまり、(A(p)) は各 prime channel の「分子側コスト」、(B(n)) は state (n) が持つ「総予算」と読める。
+つまり、 $A(p)$ は各 prime channel の「分子側コスト」、 $B(n)$ は state $n$ が持つ「総予算」と読める。
 
 ## 3. 何が閉じたか
 
@@ -66,7 +66,7 @@ $$
 $$
 
 $$
-\forall n,\quad 0<B(n)
+\forall n,\quad 0 < B(n)
 $$
 
 $$
@@ -96,21 +96,21 @@ $$
 
 今回の構造はとても綺麗じゃ。
 
-各 state (n) に対して、素冪 label (q) があり、witness provider が
+各 state $n$ に対して、素冪 label $q$ があり、witness provider が
 
 $$
 q=p^k
 $$
 
-の base prime (p) を読む。
+の base prime $p$ を読む。
 
-その (p) に対して分子 weight (A(p)) を与え、state (n) の正規化量 (B(n)) で割る。
+その $p$ に対して分子 weight $A(p)$ を与え、state $n$ の正規化量 $B(n)$ で割る。
 
 $$
 w(n,q)=\frac{A(p(q))}{B(n)}
 $$
 
-このとき、全 label にわたる分子の合計が (B(n)) を超えなければ、
+このとき、全 label にわたる分子の合計が $B(n)$ を超えなければ、
 
 $$
 \sum_q w(n,q)\le 1
@@ -156,7 +156,7 @@ $$
 へ進んでいる。
 
 この二段 proof はかなり良い。
-依存型の (hq) が絡む場面で無理に `simp` だけに頼らず、形を明示してから `Finset.sum_div` を使うのは、Lean 的にも安定した登り方じゃな。
+依存型の $hq$ が絡む場面で無理に `simp` だけに頼らず、形を明示してから `Finset.sum_div` を使うのは、Lean 的にも安定した登り方じゃな。
 
 ## 6. 現在地
 
@@ -171,7 +171,7 @@ $$
 | budget → `BaseWeightSubProbability` | 今回完了 |
 | ratio-style hit mass bound alias    | 未    |
 | concrete ratio-style sample         | 未    |
-| 実数 (\log p/\log n) route            | 未    |
+| 実数 $\log p/\log n$ route            | 未    |
 
 つまり、ratio-style weight は、もう
 
@@ -205,7 +205,7 @@ $$
 $$
 
 $$
-0<B(n)
+0 < B(n)
 $$
 
 $$
@@ -259,13 +259,13 @@ $$
 A(2)=1,\qquad A(5)=0
 $$
 
-に相当する (A) と、
+に相当する $A$ と、
 
 $$
 B(10)=1
 $$
 
-に相当する (B) を置く。
+に相当する $B$ を置く。
 
 そして、
 
@@ -309,10 +309,10 @@ $$
 実数対数へ行く前に、
 
 $$
-A(p)\ge 0,\quad B(n)>0,\quad \sum A(p(q))\le B(n)
+A(p)\ge 0,\quad B(n) > 0,\quad \sum A(p(q))\le B(n)
 $$
 
-という有限条件の API をしっかり使えるようにする。これが本物の (\Lambda(q)/\log n) へ行く前の安全な雪稜じゃ。
+という有限条件の API をしっかり使えるようにする。これが本物の $\Lambda(q)/\log n$ へ行く前の安全な雪稜じゃ。
 
 ## 10. 総括
 
@@ -325,7 +325,7 @@ $$
 $$
 
 という比率表を作った。
-今回 Phase BD では、その比率表の合計が (1) を超えない条件を作った。
+今回 Phase BD では、その比率表の合計が $1$ を超えない条件を作った。
 
 つまり、
 
@@ -341,7 +341,7 @@ $$
 
 が保証される。
 
-山で言えば、登山料の比率表だけでなく、 **合計請求額が予算 (B(n)) を超えない** ことまで確認できた。
+山で言えば、登山料の比率表だけでなく、 **合計請求額が予算 $B(n)$ を超えない** ことまで確認できた。
 次は、その予算内通行料で実際に
 
 $$

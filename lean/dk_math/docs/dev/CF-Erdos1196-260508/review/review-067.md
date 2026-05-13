@@ -139,7 +139,7 @@ $$
 | Phase-R011    | Nat / `pOf` 版へ戻す              | 未    |
 | Phase-R012 以降 | 重複制御・prime-power 接続           | 未    |
 
-R003 で既存の ( \mathbb{Q} ) 版を一般化せず R 版 parallel prototype として `RealWeightProvider` を立てた判断が、今も効いている。R 版側で theorem shape を自由に試せるからじゃ。
+R003 で既存の $\mathbb{Q}$ 版を一般化せず R 版 parallel prototype として `RealWeightProvider` を立てた判断が、今も効いている。R 版側で theorem shape を自由に試せるからじゃ。
 
 ## 5. 次の一手: Phase-R009
 
@@ -298,9 +298,9 @@ $$
 q=p^k
 $$
 
-で (p\mid q)、さらに (q\mid n) という情報から、選んだ (p) たちの積が (n) を超えないことを示したい。
+で $p\mid q$ 、さらに $q\mid n$ という情報から、選んだ $p$ たちの積が $n$ を超えないことを示したい。
 
-しかし同じ (p) が重複して出ると、
+しかし同じ $p$ が重複して出ると、
 
 $$
 p\cdot p
@@ -340,6 +340,6 @@ $$
 
 へ向かう。
 
-山で言えば、すでに (\log p/\log n) のザイルは張れた。
+山で言えば、すでに $\log p/\log n$ のザイルは張れた。
 Phase-R008 では、そのザイルを固定する岩場を調べ、岩を「実数積」「log 単調性」「自然数積」「重複制御」に分けて名前を付けた。
 次はまず実数積の岩、Phase-R009 じゃな。

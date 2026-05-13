@@ -6,7 +6,7 @@
 Phase AD では、
 
 $$
-q=p^k,\quad p\text{ prime},\quad 0<k
+q=p^k,\quad p\text{ prime},\quad 0 < k
 $$
 
 を毎回明示して `PrimePowerDescentStep` に接続していた。今回 Phase AE では、それを
@@ -37,7 +37,7 @@ def IsPrimePowerLabel (q : ℕ) : Prop :=
 $$
 \mathrm{IsPrimePowerLabel}(q)
 \Longleftrightarrow
-\exists p,k,\quad p\text{ prime}\land 0<k\land q=p^k
+\exists p,k,\quad p\text{ prime}\land 0 < k\land q=p^k
 $$
 
 じゃな。
@@ -75,7 +75,7 @@ $$
 以前は theorem 呼び出し側が
 
 $$
-p,\quad k,\quad Nat.Prime(p),\quad 0<k,\quad q=p^k
+p,\quad k,\quad Nat.Prime(p),\quad 0 < k,\quad q=p^k
 $$
 
 を全部渡す必要があった。

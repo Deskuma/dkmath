@@ -86,7 +86,7 @@ sampleTenRatioBaseWeight_route_summary
 を追加したことで、
 
 1. ratio-style route で作った provider は sub-probability である
-2. ratio-style route は最終的に (\mathrm{weightedHitMass}\le 1) へ届く
+2. ratio-style route は最終的に $\mathrm{weightedHitMass}\le 1$ へ届く
 
 という二つの到達点が theorem 名から読めるようになった。
 
@@ -106,7 +106,7 @@ $$
 $$
 
 $$
-0<B(n)
+0 < B(n)
 $$
 
 $$
@@ -127,7 +127,7 @@ $$
 
 へ進める。
 
-そして sample では (C=1) として具体的に閉じた。
+そして sample では $C=1$ として具体的に閉じた。
 
 つまり、有限 toy model の範囲では、
 
@@ -240,7 +240,7 @@ $$
 $$
 
 ただし、現時点では **doc 先行** がよいと思う。
-実数版は有理数版より重い。`ℚ` では `div_nonneg` と `div_le_iff₀` で済んだが、`ℝ` では `Nat.cast`、`Real.log`、正値性、有限和、場合によっては自然数の (>1) 条件まで絡む。
+実数版は有理数版より重い。`ℚ` では `div_nonneg` と `div_le_iff₀` で済んだが、`ℝ` では `Nat.cast`、`Real.log`、正値性、有限和、場合によっては自然数の $> 1$ 条件まで絡む。
 
 まずは設計書で、
 

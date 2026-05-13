@@ -21,7 +21,7 @@ $$
 つまり、まだ `Real.log` も channel provider も出さずに、
 
 $$
-\sum_{q\in I} A_q\le B,\qquad 0<B
+\sum_{q\in I} A_q\le B,\qquad 0 < B
 $$
 
 から、
@@ -55,7 +55,7 @@ $$
 \sum_{q\in I}\frac{A_q}{B} = \frac{\sum_{q\in I}A_q}{B}
 $$
 
-かつ (0 < B) なので、
+かつ $0 < B$ なので、
 
 $$
 \frac{\sum A_q}{B}\le \frac{B}{B}=1
@@ -143,7 +143,7 @@ R 版は今こうなっておる。
 しかし、channel に入る前に必要な二つの代数部品、
 
 $$
-0\le A(p),\quad 0<B(n)
+0\le A(p),\quad 0 < B(n)
 \Rightarrow
 0\le A(p)/B(n)
 $$
@@ -175,8 +175,8 @@ def RealWeightProvider.SubProbability
   P.index.sum P.weight ≤ 1
 ```
 
-ここで狙うのは、既存 ( \mathbb{Q} ) 版の `WeightProvider` を一般化することではない。
-まずは ( \mathbb{R} ) 版の薄い並行試作として、
+ここで狙うのは、既存 $\mathbb{Q}$ 版の `WeightProvider` を一般化することではない。
+まずは $\mathbb{R}$ 版の薄い並行試作として、
 
 $$
 \text{index}
@@ -246,7 +246,7 @@ $$
 $$
 
 $$
-1<n\Rightarrow 0<\log n
+1 < n\Rightarrow 0 < \log n
 $$
 
 ただし、log budget

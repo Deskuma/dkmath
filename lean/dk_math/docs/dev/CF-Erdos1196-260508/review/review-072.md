@@ -28,7 +28,7 @@ RealLogProductBudget
 これにより、後続の prime-power / divisor channel 側は、いちいち
 
 $$
-RealLogNonnegOn(I,pOf),\quad 1<n,\quad \prod pOf(q)\le n
+RealLogNonnegOn(I,pOf),\quad 1 < n,\quad \prod pOf(q)\le n
 $$
 
 をばらばらに供給するのではなく、まず
@@ -78,7 +78,7 @@ $$
 $$
 
 $$
-1<n
+1 < n
 $$
 
 $$
@@ -114,7 +114,7 @@ hbudget : RealLogProductBudget I pOf n
 が得られる。
 
 これはかなり良い。
-特に次段で prime-power witness provider と接続する時、必要なのは「この (I,pOf,n) は log product budget を満たす」と言えることになる。
+特に次段で prime-power witness provider と接続する時、必要なのは「この $I,pOf,n$ は log product budget を満たす」と言えることになる。
 
 つまり、後続の責務がこう整理された。
 
@@ -197,11 +197,11 @@ $$
 q\in I\subseteq index(n)
 $$
 
-なら、`W.label n q ...` から base prime (p) を取り出せる、ということじゃ。
+なら、`W.label n q ...` から base prime $p$ を取り出せる、ということじゃ。
 
 ## 6. Phase-R014 で欲しい最小補題
 
-まず欲しいのは、base prime が (1) 以上、できれば (2) 以上であることじゃ。
+まず欲しいのは、base prime が $1$ 以上、できれば $2$ 以上であることじゃ。
 
 `PrimePowerLabel` には
 
@@ -284,13 +284,13 @@ def SelectedBaseProductBoundOn
 
 ここから先が難所じゃ。
 
-単に各 (q) が
+単に各 $q$ が
 
 $$
 q=p^k
 $$
 
-であり、かつ (q\mid n) だから (p\mid n) というだけでは、
+であり、かつ $q\mid n$ だから $p\mid n$ というだけでは、
 
 $$
 \prod_{q\in I}p(q)\le n
@@ -298,7 +298,7 @@ $$
 
 はすぐには出ない。
 
-なぜなら同じ (p) が複数回出るかもしれないからじゃ。
+なぜなら同じ $p$ が複数回出るかもしれないからじゃ。
 
 例えば、
 
@@ -306,14 +306,14 @@ $$
 q_1=2,\quad q_2=4
 $$
 
-なら base prime はどちらも (2)。
+なら base prime はどちらも $2$ 。
 このとき product は
 
 $$
 2\cdot2=4
 $$
 
-になる。これを (n) が吸収するには、(n) 側に (2^2) 分の指数が必要じゃ。
+になる。これを $n$ が吸収するには、 $n$ 側に $2^2$ 分の指数が必要じゃ。
 
 つまり、今後必要なのは、
 
@@ -335,7 +335,7 @@ $$
 代わりに、
 
 1. witness provider から base prime を読む
-2. base prime が (1) 以上である
+2. base prime が $1$ 以上である
 3. その `pOf` を `RealLogProductBudget` に渡せる形にする
 
 までに留める。
@@ -383,7 +383,7 @@ $$
 q=p^k
 $$
 
-から base prime (p) を読み、
+から base prime $p$ を読み、
 
 $$
 \prod p\le n

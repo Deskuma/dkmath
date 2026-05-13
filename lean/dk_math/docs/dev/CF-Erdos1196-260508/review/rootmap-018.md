@@ -8,7 +8,7 @@ Phase A から Phase S までで、山頂そのものにはまだ着いておら
 今回の山頂は、Erdős #1196 型の評価じゃ。
 
 $$
-\sum_{\substack{a\in A\ a>x}}\frac{1}{a\log a}
+\sum_{\substack{a\in A\ a > x}}\frac{1}{a\log a}
 \le
 1+O!\left(\frac{1}{\log x}\right)
 $$

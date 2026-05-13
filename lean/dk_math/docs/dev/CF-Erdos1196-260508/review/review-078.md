@@ -3,7 +3,7 @@
 ## 1. 結論
 
 うむ、Phase-R019 は **重複なし route がほぼ完成した段階** じゃ。
-Phase-R018 では、witness provider 由来の base prime が source (n) を割ることまで閉じた。今回 Phase-R019 では、残っていた
+Phase-R018 では、witness provider 由来の base prime が source $n$ を割ることまで閉じた。今回 Phase-R019 では、残っていた
 
 $$
 NatPairwiseCoprimeOn\ I\ (W.basePrimeOf\ n\ I\ hI)
@@ -15,7 +15,7 @@ $$
 NatPairwiseDistinctOn\ I\ (W.basePrimeOf\ n\ I\ hI)
 $$
 
-から供給できるようになった。つまり、selected base primes が互いに異なれば、(\log p/\log n) 型 real provider が `SubProbability` になるところまで no-sorry で通った、ということじゃ。
+から供給できるようになった。つまり、selected base primes が互いに異なれば、 $\log p/\log n$ 型 real provider が `SubProbability` になるところまで no-sorry で通った、ということじゃ。
 
 ## 2. 今回の主役
 
@@ -29,7 +29,7 @@ def NatPairwiseDistinctOn
   ∀ i, i ∈ I → ∀ j, j ∈ I → i ≠ j → pOf i ≠ pOf j
 ```
 
-これは、選択集合 (I) 上で、異なる index が異なる base value を読むことを表している。
+これは、選択集合 $I$ 上で、異なる index が異なる base value を読むことを表している。
 
 そして次が重要な橋じゃ。
 
@@ -57,7 +57,7 @@ PrimePowerWitnessProvider.basePrimeOf_prime_on
 
 が追加された。
 
-これは、selected sub-index (I) 上では
+これは、selected sub-index $I$ 上では
 
 $$
 W.basePrimeOf(n,I,hI)(q)
@@ -65,9 +65,9 @@ $$
 
 が本当に素数であることを示す補題じゃ。
 
-Phase-R014 では (1\le p) を得ていた。
-Phase-R018 では (p\mid n) を得ていた。
-今回 Phase-R019 で (p) が素数であることも theorem 名として固定された。
+Phase-R014 では $1\le p$ を得ていた。
+Phase-R018 では $p\mid n$ を得ていた。
+今回 Phase-R019 で $p$ が素数であることも theorem 名として固定された。
 
 これで、`basePrimeOf` について次の三点が揃った。
 
@@ -102,7 +102,7 @@ I\subseteq T.index(n)
 $$
 
 $$
-1<n
+1 < n
 $$
 
 $$
@@ -154,13 +154,13 @@ $$
 
 これは、Erdős #1196 の R route における **重複なし版の有限 log 質量保存** じゃ。
 
-selected labels (q\in I) がそれぞれ prime-power witness
+selected labels $q\in I$ がそれぞれ prime-power witness
 
 $$
 q=p(q)^{k(q)}
 $$
 
-を持ち、その base prime (p(q)) が互いにすべて異なるなら、各 (p(q)\mid n) が成立し、異なる素数なので互いに素。したがって、
+を持ち、その base prime $p(q)$ が互いにすべて異なるなら、各 $p(q)\mid n$ が成立し、異なる素数なので互いに素。したがって、
 
 $$
 \prod_{q\in I}p(q)\mid n
@@ -196,10 +196,10 @@ $$
 
 | 層                                    | 状態   |
 | ------------------------------------ | ---- |
-| (\log p/\log n) real provider        | 完了   |
+| $\log p/\log n$ real provider        | 完了   |
 | external `RealLogBudget` route       | 完了   |
 | nat product bound route              | 完了   |
-| witness base prime が (n) を割る         | 完了   |
+| witness base prime が $n$ を割る         | 完了   |
 | pairwise-coprime route               | 完了   |
 | pairwise-distinct → pairwise-coprime | 今回完了 |
 | 重複なし provider sub-probability        | 今回完了 |
@@ -246,7 +246,7 @@ $$
 
 を pairwise distinct なしで示すこと。
 
-このためには、各素数 (p) について、
+このためには、各素数 $p$ について、
 
 $$
 \\\#{q\in I:basePrime(q)=p}\le v_p(n)
@@ -255,7 +255,7 @@ $$
 のような条件が必要になる。
 
 DkMath 的に言えば、これは **指数消費 tracking** じゃ。
-各 selected label が Big (n) の中の prime exponent budget をどれだけ消費するかを数える。
+各 selected label が Big $n$ の中の prime exponent budget をどれだけ消費するかを数える。
 
 ここからは別登山道として、`ValuationBudget` や `BasePrimeMultiplicity` のような語彙が必要になるかもしれぬ。
 
@@ -282,4 +282,4 @@ $$
 provider の `SubProbability` まで到達した。
 
 山で言えば、互いに干渉しない岩、つまり異なる base prime の岩列にザイルを固定する登山道が開通した。
-次は、同じ岩を何度も使う場合、どれだけ深く打ち込まれているか――すなわち (p)-進指数の消費量を測る道へ進む番じゃな。
+次は、同じ岩を何度も使う場合、どれだけ深く打ち込まれているか――すなわち $p$ -進指数の消費量を測る道へ進む番じゃな。

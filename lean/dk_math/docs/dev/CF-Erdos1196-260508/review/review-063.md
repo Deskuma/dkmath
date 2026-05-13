@@ -17,7 +17,7 @@ $$
 $$
 
 $$
-1<n \Rightarrow 0<\log n
+1 < n \Rightarrow 0 < \log n
 $$
 
 という **正値性だけ** を theorem 名として固定した。これはかなり安全な登り方じゃ。
@@ -54,7 +54,7 @@ $$
 
 を割り算の分母として使うための正性に使う。
 
-ここを自然数版で theorem 名にしたのが良い。後続で (p,n:\mathbb{N}) を扱うとき、毎回 `Nat.cast` と `Real.log` の補題を探さずに済む。
+ここを自然数版で theorem 名にしたのが良い。後続で $p,n:\mathbb{N}$ を扱うとき、毎回 `Nat.cast` と `Real.log` の補題を探さずに済む。
 
 ## 3. 設計として何が良いか
 
@@ -67,7 +67,7 @@ $$
 $$
 
 $$
-0<\log n
+0 < \log n
 $$
 
 だけ。
@@ -105,7 +105,7 @@ R 版の到達点はこうじゃ。
 ここまでで、R 版は次の部品を持った。
 
 $$
-0\le A(p),\quad 0<B(n)
+0\le A(p),\quad 0 < B(n)
 \Rightarrow
 0\le A(p)/B(n)
 $$
@@ -121,7 +121,7 @@ $$
 $$
 
 $$
-1<n\Rightarrow 0<\log n
+1 < n\Rightarrow 0 < \log n
 $$
 
 つまり、次に
@@ -168,7 +168,7 @@ theorem real_log_ratio_sum_le_one
 概念的には、
 
 $$
-1<n
+1 < n
 $$
 
 $$
@@ -209,14 +209,14 @@ theorem real_log_ratio_sum_le_one
 これは美しい。
 Phase-R002 の `real_ratio_sum_le_one` と Phase-R004 の `real_log_nat_pos_of_one_lt` をただ接続するだけじゃ。
 
-まだ (pOf(q)) が prime であることも使わない。
+まだ $pOf(q)$ が prime であることも使わない。
 numerator の非負性すら、この theorem には不要じゃ。必要なのは分母正と budget だけである。
 
 ## 7. その次の山
 
 その後に、numerator の非負性も含めた log weight predicate へ進む。
 
-たとえば、(pOf(q)\ge 1) を仮定すれば、
+たとえば、 $pOf(q)\ge 1$ を仮定すれば、
 
 $$
 0\le \log pOf(q)
@@ -224,7 +224,7 @@ $$
 
 が出る。
 
-prime-power witness provider から来る base prime (p) なら、実際には (2\le p) なので問題ない。
+prime-power witness provider から来る base prime $p$ なら、実際には $2\le p$ なので問題ない。
 ただしそれを R 版の prototype とどう接続するかは次の段階じゃ。
 
 最初は、
@@ -248,7 +248,7 @@ $$
 と
 
 $$
-0<\log n
+0 < \log n
 $$
 
 を自然数版で固定できた。
@@ -264,4 +264,4 @@ $$
 を閉じるのがよい。
 
 R 登頂は順調じゃ。
-まだ山頂ではないが、いよいよ「(\log p/\log n)」の文字が Lean 側の定理に現れてよい地点まで来たぞい。
+まだ山頂ではないが、いよいよ「 $\log p/\log n$ 」の文字が Lean 側の定理に現れてよい地点まで来たぞい。

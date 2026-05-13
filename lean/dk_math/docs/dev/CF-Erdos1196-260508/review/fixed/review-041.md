@@ -27,7 +27,7 @@ def VonMangoldtLikeWeight
 $$
 q\in index_T(n)
 \Rightarrow
-\exists p,k,\quad p\text{ prime}\land 0<k\land q=p^k\land 0\le w(n,q)
+\exists p,k,\quad p\text{ prime}\land 0 < k\land q=p^k\land 0\le w(n,q)
 $$
 
 ということじゃ。

@@ -6,7 +6,7 @@
 Phase AU で `PrimePowerLabel` という sidecar を作り、
 
 $$
-q=p^k,\qquad p\text{ prime},\qquad 0<k
+q=p^k,\qquad p\text{ prime},\qquad 0 < k
 $$
 
 を明示的に持てるようにした。今回 Phase AV では、それをさらに一段上げて、`PrimePowerDivisorTransitionKernel` の各 indexed label $q$ に対し、対応する `PrimePowerLabel` を選ぶ provider が入った。これで、既存の $q:\mathbb{N}$ label route を保ったまま、各 label から base prime $p$ を取り出す準備が整ったわけじゃ。

@@ -6,7 +6,7 @@
 Phase AC では prime label $q$ から `PrimeDescentStep` へ接続した。今回 Phase AD ではさらに、
 
 $$
-q=p^k,\qquad p\text{ prime},\qquad 0<k
+q=p^k,\qquad p\text{ prime},\qquad 0 < k
 $$
 
 という positive prime-power label から、
@@ -71,7 +71,7 @@ $$
 今回からは、
 
 $$
-q\in index(n),\quad q=p^k,\quad p\text{ prime},\quad 0<k
+q\in index(n),\quad q=p^k,\quad p\text{ prime},\quad 0 < k
 \Rightarrow
 PrimePowerDescentStep(n,next(n,q))
 $$

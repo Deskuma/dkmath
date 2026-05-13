@@ -52,7 +52,7 @@ $$
 $$
 
 $$
-1<n
+1 < n
 $$
 
 $$
@@ -137,7 +137,7 @@ RealLogNonnegOn(I,pOf)
 $$
 
 $$
-1<n
+1 < n
 $$
 
 $$
@@ -165,7 +165,7 @@ $$
 これは、単なる解析補題ではない。
 数論側の構造に戻る必要がある。
 
-現在の (pOf(q)) は任意関数じゃ。
+現在の $pOf(q)$ は任意関数じゃ。
 これを、prime-power witness provider の base prime として、
 
 $$
@@ -192,7 +192,7 @@ $$
 q_1=p^2,\qquad q_2=p^3
 $$
 
-のように同じ base prime (p) を読むなら、単純に
+のように同じ base prime $p$ を読むなら、単純に
 
 $$
 pOf(q_1)\cdot pOf(q_2)=p^2
@@ -200,7 +200,7 @@ $$
 
 を積に入れることになる。
 
-このとき (n) 側に十分な (p)-進指数がなければ、
+このとき $n$ 側に十分な $p$ -進指数がなければ、
 
 $$
 \prod pOf(q)\le n
@@ -275,7 +275,7 @@ def SelectedBaseProductBound
 ```
 
 ただし、この形は `if hq` が入って少し重くなる。
-まずは (I\subseteq T.index(n)) を別仮定にして、
+まずは $I\subseteq T.index(n)$ を別仮定にして、
 
 ```lean
 pOf q := (W.label n q (hI q hq)).p

@@ -24,7 +24,7 @@ $$
 RealWeightProvider
 ```
 
-が新規 `RealWeightedPath.lean` に分離して追加された。既存の ( \mathbb{Q} ) 版 `WeightProvider` を型一般化せず、R 版を parallel prototype として進めている点もよい判断じゃ。
+が新規 `RealWeightedPath.lean` に分離して追加された。既存の $\mathbb{Q}$ 版 `WeightProvider` を型一般化せず、R 版を parallel prototype として進めている点もよい判断じゃ。
 
 ## 2. 今回の主役
 
@@ -103,7 +103,7 @@ $$
 
 ## 5. 既存 Q 版を触らなかった価値
 
-今回の一番良い設計判断は、既存の ( \mathbb{Q} ) 版 `WeightProvider` を一般化しなかったことじゃ。
+今回の一番良い設計判断は、既存の $\mathbb{Q}$ 版 `WeightProvider` を一般化しなかったことじゃ。
 
 もしここで既存 API を
 
@@ -155,10 +155,10 @@ $$
 $$
 
 $$
-1<x \Rightarrow 0<\log x
+1 < x \Rightarrow 0 < \log x
 $$
 
-ただし Lean では (p,n:\mathbb{N}) から ( \mathbb{R} ) への coercion が絡むので、自然数版として theorem 名を作るのがよい。
+ただし Lean では $p,n:\mathbb{N}$ から $\mathbb{R}$ への coercion が絡むので、自然数版として theorem 名を作るのがよい。
 
 候補は例えば、
 
@@ -174,17 +174,17 @@ theorem real_log_nat_pos_of_one_lt
     0 < Real.log (n : ℝ)
 ```
 
-ここで `p = 1` だと (\log 1=0) なので numerator 側の非負性には十分。
+ここで `p = 1` だと $\log 1=0$ なので numerator 側の非負性には十分。
 denominator 側は割るので、
 
 $$
-0<\log n
+0 < \log n
 $$
 
 が必要になり、自然に
 
 $$
-1<n
+1 < n
 $$
 
 が条件になる。
@@ -227,10 +227,10 @@ $$
 
 へ進めるかを確認する。
 
-ただしこれは、(p,n) の範囲条件が必要じゃ。
+ただしこれは、 $p,n$ の範囲条件が必要じゃ。
 
-たとえば numerator 側は (1\le p)、denominator 側は (1<n)。
-実際の prime (p) なら (2\le p) なので問題ないが、関数として全域 (p:\mathbb{N}) に定義すると (p=0) が混ざる。ここは後で扱いを決める必要がある。
+たとえば numerator 側は $1\le p$ 、denominator 側は $1 < n$ 。
+実際の prime $p$ なら $2\le p$ なので問題ないが、関数として全域 $p:\mathbb{N}$ に定義すると $p=0$ が混ざる。ここは後で扱いを決める必要がある。
 
 短期的には、全域 predicate ではなく index 上 predicate に寄せる方が安全かもしれぬ。
 

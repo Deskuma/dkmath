@@ -10,10 +10,10 @@ $$
 c(n,p)=\frac{A(p)}{B(n)}
 $$
 
-という ratio-style toy weight が入った。まだ (\log p/\log n) には踏み込まず、有理数 (\mathbb{Q}) 上で、
+という ratio-style toy weight が入った。まだ $\log p/\log n$ には踏み込まず、有理数 $\mathbb{Q}$ 上で、
 
 $$
-0\le A(p),\qquad 0<B(n)
+0\le A(p),\qquad 0 < B(n)
 $$
 
 なら、
@@ -22,7 +22,7 @@ $$
 0\le \frac{A(p)}{B(n)}
 $$
 
-を示して `BasePrimeToyWeight` へ接続した。さらに任意の witness provider (W) に対して `W.BaseWeightNonneg` へ降ろせるようになった。これは登頂アタックとして、かなり筋の良い一歩じゃ。
+を示して `BasePrimeToyWeight` へ接続した。さらに任意の witness provider $W$ に対して `W.BaseWeightNonneg` へ降ろせるようになった。これは登頂アタックとして、かなり筋の良い一歩じゃ。
 
 ## 2. 今回の主役
 
@@ -45,7 +45,7 @@ $$
 B:\mathbb{N}\to\mathbb{Q}
 $$
 
-を state (n) 側の正規化量と見て、
+を state $n$ 側の正規化量と見て、
 
 $$
 c(n,p)=A(p)/B(n)
@@ -60,7 +60,7 @@ c(n,p)\approx \frac{\log p}{\log n}
 $$
 
 にかなり近い形じゃ。
-ただし、今はまだ (\log) ではなく、有限・有理・toy model として安全に扱っている。
+ただし、今はまだ $\log$ ではなく、有限・有理・toy model として安全に扱っている。
 
 ## 3. 何が閉じたか
 
@@ -78,7 +78,7 @@ $$
 $$
 
 $$
-\forall n,\ 0<B(n)
+\forall n,\ 0 < B(n)
 $$
 
 から、
@@ -89,7 +89,7 @@ $$
 
 を出す。
 
-後者はさらに、それを任意の witness provider (W) に降ろして、
+後者はさらに、それを任意の witness provider $W$ に降ろして、
 
 $$
 W.BaseWeightNonneg(ratioBasePrimeWeight(A,B))
@@ -102,7 +102,7 @@ $$
 導線はこうじゃ。
 
 $$
-0\le A(p),\quad 0<B(n)
+0\le A(p),\quad 0 < B(n)
 $$
 
 $$
@@ -125,7 +125,7 @@ $$
 
 ## 4. 数学的な意味
 
-これは、今まで抽象的だった (c(n,p)) に初めて **解析風の形** を与えた段階じゃ。
+これは、今まで抽象的だった $c(n,p)$ に初めて **解析風の形** を与えた段階じゃ。
 
 Erdős #1196 の本物ルートでは、直感的には
 
@@ -133,7 +133,7 @@ $$
 w(n,q)\approx \frac{\Lambda(q)}{\log n}
 $$
 
-であり、(q=p^k) なら (\Lambda(q)=\log p) なので、
+であり、 $q=p^k$ なら $\Lambda(q)=\log p$ なので、
 
 $$
 w(n,q)\approx \frac{\log p}{\log n}
@@ -172,7 +172,7 @@ $$
 | ratio-style → `W.BaseWeightNonneg` | 今回完了 |
 | ratio-style sub-probability 十分条件   | 未    |
 | 有理 toy model の hit mass bound      | 未    |
-| 実数 (\log p/\log n) route           | 未    |
+| 実数 $\log p/\log n$ route           | 未    |
 
 つまり、非負性側はかなりきれいに整った。
 次は、質量保存側、すなわち sub-probability じゃ。
@@ -197,7 +197,7 @@ $$
 
 である。
 
-なぜなら (B(n)>0) なら、
+なぜなら $B(n) > 0$ なら、
 
 $$
 \sum_q \frac{A(p(q))}{B(n)} =
@@ -302,7 +302,7 @@ $$
 $$
 
 $$
-0<B(n)
+0 < B(n)
 $$
 
 $$
@@ -373,7 +373,7 @@ $$
 
 の影が見えるところまで来た段階じゃ。
 
-ただし、賢いことにまだ (\log) そのものには触れていない。
+ただし、賢いことにまだ $\log$ そのものには触れていない。
 まずは
 
 $$
@@ -398,4 +398,4 @@ $$
 ここが閉じれば、ratio-style toy weight は「非負」だけでなく「Big から飛び出せない」weight になる。
 
 山で言えば、Phase BC で登山料の比率表ができた。
-Phase BD では、その総額が予算 (B(n)) を超えないことを示し、有限質量保存の本線へ載せる番じゃな。
+Phase BD では、その総額が予算 $B(n)$ を超えないことを示し、有限質量保存の本線へ載せる番じゃな。

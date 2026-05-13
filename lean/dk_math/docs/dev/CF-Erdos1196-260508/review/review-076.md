@@ -66,7 +66,7 @@ $$
 NatPairwiseCoprimeOn(I,pOf)
 $$
 
-は、選ばれた (pOf(q)) たちが互いに coprime であることを表す。
+は、選ばれた $pOf(q)$ たちが互いに coprime であることを表す。
 
 今回の主補題は、
 
@@ -80,7 +80,7 @@ $$
 \prod_{q\in I}pOf(q)\mid n
 $$
 
-を示すものじゃ。そこから (0<n) を使って、
+を示すものじゃ。そこから $0 < n$ を使って、
 
 $$
 \prod_{q\in I}pOf(q)\le n
@@ -144,7 +144,7 @@ $$
 
 今回の到達点はこう読める。
 
-選択された base prime たちが互いに重複せず、互いに素であり、それぞれが (n) を割るなら、その積は (n) の中に収まる。
+選択された base prime たちが互いに重複せず、互いに素であり、それぞれが $n$ を割るなら、その積は $n$ の中に収まる。
 
 $$
 \forall q\in I,\ p(q)\mid n
@@ -209,7 +209,7 @@ revert hcop hdvd
 
 で仮定を帰納法の motive に戻した点じゃな。
 
-`Finset.induction_on` で selected product の divisibility を示す場合、insert branch では (s) 側の pairwise coprime と divisibility を帰納仮定へ渡す必要がある。
+`Finset.induction_on` で selected product の divisibility を示す場合、insert branch では $s$ 側の pairwise coprime と divisibility を帰納仮定へ渡す必要がある。
 
 そのため、
 
@@ -252,7 +252,7 @@ $$
 | witness `basePrimeOf` → R/log interface     | 完了   |
 | product bound 仮定 → provider sub-probability | 完了   |
 | pairwise-coprime + dvd → product bound      | 今回完了 |
-| witness base prime が (n) を割ること              | 未    |
+| witness base prime が $n$ を割ること              | 未    |
 | witness base prime の pairwise-coprime 条件供給  | 未    |
 | 重複あり指数消費 tracking                           | 未    |
 
@@ -268,9 +268,9 @@ $$
 
 ## 8. 次の一手: Phase-R018 案
 
-次は、witness provider 由来の base prime が (n) を割る条件を整えるのが自然じゃ。
+次は、witness provider 由来の base prime が $n$ を割る条件を整えるのが自然じゃ。
 
-もし `DivisorTransitionKernel` 側で indexed label (q) が本当に (n) の divisor として扱われているなら、
+もし `DivisorTransitionKernel` 側で indexed label $q$ が本当に $n$ の divisor として扱われているなら、
 
 $$
 q\in T.index(n)
@@ -394,7 +394,7 @@ $$
 \prod pOf(q)\le n
 $$
 
-を示すには、重複回数を (n) の (p)-adic valuation 以下に抑える必要がある。
+を示すには、重複回数を $n$ の $p$ -adic valuation 以下に抑える必要がある。
 
 これは後段の **指数消費 tracking** じゃ。
 
@@ -436,4 +436,4 @@ $$
 provider の `SubProbability` まで到達した。
 
 山で言えば、R/log のザイルを固定する岩場として、まず **重複なしの互いに素な岩列** を選んだ。
-次は、その岩列が本当に prime-power witness provider から来ること、すなわち base prime が (n) を割ること、そして互いに異なる prime なら coprime になることを bridge していく番じゃ。
+次は、その岩列が本当に prime-power witness provider から来ること、すなわち base prime が $n$ を割ること、そして互いに異なる prime なら coprime になることを bridge していく番じゃ。
