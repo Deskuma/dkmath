@@ -469,3 +469,26 @@ Archive
 5. 失敗事例:
    - 初回 proof では `rw [hq_pow]` が dependent な `W.label n q hq` の引数まで書き換えようとして build failure になった。
    - `let L := W.label n q hq` の後に goal を `change L.p ∣ q` へ変形し、依存項を消してから `rw [hq_pow]` する形に修正して解決した。
+
+### 日時: 2026/05/13 14:10 JST (Phase-R019 pairwise distinct base primes to coprime route)
+
+1. 目的:
+   - `review/review-077.md` の提案に従い、selected base prime の相異性から `NatPairwiseCoprimeOn` を供給する route を追加する。
+   - witness provider 由来の `basePrimeOf` が selected sub-index 上で prime-valued であることを固定する。
+2. 実施:
+   - `RealLog.lean` に `NatPairwiseDistinctOn` を追加した。
+   - `natPairwiseCoprimeOn_of_pairwise_distinct_prime` を追加し、selected values が prime-valued かつ pairwise distinct なら pairwise coprime であることを示した。
+   - `DivisorTransitionKernel.lean` に `PrimePowerWitnessProvider.basePrimeOf_prime_on` を追加した。
+   - `RealDivisorBridge.lean` に `basePrimeOf_realLogRatioWeightProvider_subProbability_of_pairwise_distinct` を追加し、pairwise distinct 仮定から log-ratio provider の `SubProbability` へ進めるようにした。
+3. 結論:
+   - R018 で残っていた `NatPairwiseCoprimeOn I (W.basePrimeOf n I hI)` の供給を、相異性仮定に落とし込めた。
+   - 重複なし route では、`I ⊆ T.index n`, `1 < n`, selected base primes の pairwise distinctness があれば real/log provider の `SubProbability` に到達できる。
+4. 検証:
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet.RealLog`
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet.RealDivisorBridge`
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。

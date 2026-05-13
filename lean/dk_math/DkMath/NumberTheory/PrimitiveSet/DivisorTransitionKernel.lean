@@ -529,6 +529,19 @@ theorem basePrimeOf_one_le
   rw [dif_pos hq]
   exact W.basePrime_one_le (hI q hq)
 
+/-- On the selected sub-index, `basePrimeOf` reads a prime. -/
+theorem basePrimeOf_prime_on
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n) :
+    ∀ q, q ∈ I → Nat.Prime (W.basePrimeOf n I hI q) := by
+  intro q hq
+  unfold basePrimeOf
+  rw [dif_pos hq]
+  exact (W.label n q (hI q hq)).prime
+
 /-- The base prime of an indexed prime-power witness divides its label. -/
 theorem basePrime_dvd_label
     {T : PrimePowerDivisorTransitionKernel}

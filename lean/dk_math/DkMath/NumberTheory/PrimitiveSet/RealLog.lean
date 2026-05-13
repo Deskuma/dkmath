@@ -78,6 +78,29 @@ def NatPairwiseCoprimeOn
     (pOf : ι → ℕ) : Prop :=
   ∀ i, i ∈ I → ∀ j, j ∈ I → i ≠ j → Nat.Coprime (pOf i) (pOf j)
 
+/-- Pairwise distinctness of the selected natural-number bases. -/
+def NatPairwiseDistinctOn
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ) : Prop :=
+  ∀ i, i ∈ I → ∀ j, j ∈ I → i ≠ j → pOf i ≠ pOf j
+
+/--
+Pairwise distinct selected prime values are pairwise coprime.
+
+This is the abstract bridge for the duplicate-free route.
+-/
+theorem natPairwiseCoprimeOn_of_pairwise_distinct_prime
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (hprime : ∀ i, i ∈ I → Nat.Prime (pOf i))
+    (hdistinct : NatPairwiseDistinctOn I pOf) :
+    NatPairwiseCoprimeOn I pOf := by
+  intro i hi j hj hij
+  exact (Nat.coprime_primes (hprime i hi) (hprime j hj)).mpr
+    (hdistinct i hi j hj hij)
+
 /--
 Pairwise-coprime selected divisors multiply to a divisor of `n`.
 

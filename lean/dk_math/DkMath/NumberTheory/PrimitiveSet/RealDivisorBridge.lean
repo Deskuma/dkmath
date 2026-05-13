@@ -97,6 +97,25 @@ theorem basePrimeOf_realLogRatioWeightProvider_subProbability_of_pairwise_coprim
   W.basePrimeOf_realLogRatioWeightProvider_subProbability_of_pairwise_coprime_dvd
     n I hI hn hcop (W.basePrimeOf_dvd_source_on n I hI)
 
+/--
+The log-ratio real provider built from witness-provider base primes is
+sub-probability when selected base primes are pairwise distinct.
+-/
+theorem basePrimeOf_realLogRatioWeightProvider_subProbability_of_pairwise_distinct
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n)
+    (hdistinct : NatPairwiseDistinctOn I (W.basePrimeOf n I hI)) :
+    (realLogRatioWeightProvider I (W.basePrimeOf n I hI) n
+      (W.basePrimeOf_realLogNonnegOn n I hI) hn).SubProbability :=
+  W.basePrimeOf_realLogRatioWeightProvider_subProbability_of_pairwise_coprime
+    n I hI hn
+    (natPairwiseCoprimeOn_of_pairwise_distinct_prime I (W.basePrimeOf n I hI)
+      (W.basePrimeOf_prime_on n I hI) hdistinct)
+
 end PrimePowerWitnessProvider
 
 end DkMath.NumberTheory.PrimitiveSet
