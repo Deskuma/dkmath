@@ -46,7 +46,7 @@ $$
 を持っている。そこへ
 
 $$
-Nat.Prime(q)
+\mathrm{Nat.Prime}(q)
 $$
 
 を足せば、`PrimeDescentStep` の witness として同じ $q$ を使える。

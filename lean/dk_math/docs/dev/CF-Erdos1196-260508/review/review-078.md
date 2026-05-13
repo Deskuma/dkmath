@@ -76,7 +76,7 @@ $$
 $$
 
 $$
-Nat.Prime(p(q))
+\mathrm{Nat.Prime}(p(q))
 $$
 
 $$

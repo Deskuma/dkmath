@@ -75,7 +75,7 @@ $$
 以前は theorem 呼び出し側が
 
 $$
-p,\quad k,\quad Nat.Prime(p),\quad 0 < k,\quad q=p^k
+p,\quad k,\quad \mathrm{Nat.Prime}(p),\quad 0 < k,\quad q=p^k
 $$
 
 を全部渡す必要があった。

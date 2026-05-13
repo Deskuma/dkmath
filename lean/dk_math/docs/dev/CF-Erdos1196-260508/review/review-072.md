@@ -212,7 +212,7 @@ prime : Nat.Prime p
 があるはずなので、
 
 $$
-Nat.Prime(p)\Rightarrow 1\le p
+\mathrm{Nat.Prime}(p)\Rightarrow 1\le p
 $$
 
 または

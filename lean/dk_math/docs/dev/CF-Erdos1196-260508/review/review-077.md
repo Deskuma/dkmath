@@ -222,7 +222,7 @@ NatPairwiseCoprimeOn I pOf
 `W.basePrimeOf` については、 $I$ 上なら witness の base prime なので、
 
 $$
-Nat.Prime(\mathrm{W.basePrimeOf}(n,I,hI)(q))
+\mathrm{Nat.Prime}(\mathrm{W.basePrimeOf}(n,I,hI)(q))
 $$
 
 も出せるはずじゃ。
