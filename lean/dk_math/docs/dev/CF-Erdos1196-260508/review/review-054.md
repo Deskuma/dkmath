@@ -213,7 +213,7 @@ $$
 \boxed{
 \sum_q A(p(q))\le B(n)
 \Rightarrow
-BaseWeightSubProbability(ratioBasePrimeWeight(A,B))
+\mathrm{BaseWeightSubProbability}(ratioBasePrimeWeight(A,B))
 }
 $$
 
