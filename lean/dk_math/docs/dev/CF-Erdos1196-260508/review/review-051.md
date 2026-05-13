@@ -50,7 +50,7 @@ c(n,p)\ge 0
 $$
 
 $$
-W.weightOfBase(c)\text{ が sub-probability}
+\mathrm{W.weightOfBase}(c)\text{ が sub-probability}
 $$
 
 $$
@@ -128,7 +128,7 @@ PrimePowerChannelProvider.weightedHitMass_le_const_applyAtToSourceControlled
 しかし、それだと weight が
 
 $$
-W.weightOfBase(c)
+\mathrm{W.weightOfBase}(c)
 $$
 
 由来であることは名前から見えない。

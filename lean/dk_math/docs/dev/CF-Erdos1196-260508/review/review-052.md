@@ -13,7 +13,7 @@ $$
 と、
 
 $$
-W.weightOfBase(c)\text{ が sub-probability}
+\mathrm{W.weightOfBase}(c)\text{ が sub-probability}
 $$
 
 を、それぞれ名前付きの predicate として固定した。これにより、今後は長い依存型の仮定を毎回むき出しにせず、
@@ -63,13 +63,13 @@ $$
 次に `BaseWeightSubProbability` は、その $c(n,p)$ から作った
 
 $$
-W.weightOfBase(c)(n,q)=c(n,p(n,q))
+\mathrm{W.weightOfBase}(c)(n,q)=c(n,p(n,q))
 $$
 
 が、実際に sub-probability channel になることを表す。
 
 $$
-\sum_{q\in index(n)} W.weightOfBase(c)(n,q)\le 1
+\sum_{q\in index(n)} \mathrm{W.weightOfBase}(c)(n,q)\le 1
 $$
 
 という質量保存条件を、名前付きにしたわけじゃな。

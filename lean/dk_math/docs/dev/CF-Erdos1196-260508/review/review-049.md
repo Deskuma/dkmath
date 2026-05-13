@@ -115,12 +115,12 @@ $$
 
 $$
 \longmapsto
-W.weightOfBase(c)(n,q)
+\mathrm{W.weightOfBase}(c)(n,q)
 $$
 
 $$
 \longmapsto
-T.PrimeWitnessDependentWeight(W.weightOfBase(c),c)
+T.PrimeWitnessDependentWeight(\mathrm{W.weightOfBase}(c),c)
 $$
 
 $$
@@ -143,7 +143,7 @@ ofWitnessProviderWeight_channelProviderAt_weight
 特に、
 
 $$
-\bigl(\mathrm{ofWitnessProviderWeight}(W,c,\ldots).\mathrm{channelProviderAt}(n)\bigr).\mathrm{weight} = W.weightOfBase(c)(n)
+\bigl(\mathrm{ofWitnessProviderWeight}(W,c,\ldots).\mathrm{channelProviderAt}(n)\bigr).\mathrm{weight} = \mathrm{W.weightOfBase}(c)(n)
 $$
 
 が `[simp]` で取れるのは大きい。
@@ -151,7 +151,7 @@ $$
 今後 sample や一般定理で、
 
 $$
-\text{この provider の weight は本当に }W.weightOfBase(c)\text{ か？}
+\text{この provider の weight は本当に }\mathrm{W.weightOfBase}(c)\text{ か？}
 $$
 
 を確認したい場面が出る。そこを `simp` で処理できる。
@@ -321,7 +321,7 @@ theorem PrimePowerWitnessProvider.weightOfBase_hitMass_le_const
 意味は、
 
 $$
-W.weightOfBase(c)
+\mathrm{W.weightOfBase}(c)
 $$
 
 から作った provider で、

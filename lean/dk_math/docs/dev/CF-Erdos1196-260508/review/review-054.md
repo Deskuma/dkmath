@@ -269,7 +269,7 @@ theorem baseWeightSubProbability_of_ratioBudget
 理由は、
 
 $$
-W.weightOfBase(\mathrm{ratioBasePrimeWeight}(A,B))(n,q)
+\mathrm{W.weightOfBase}(\mathrm{ratioBasePrimeWeight}(A,B))(n,q)
 $$
 
 を展開すると、

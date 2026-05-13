@@ -157,7 +157,7 @@ $$
 質量保存、すなわち
 
 $$
-\sum_{q\in index(n)} W.weightOfBase(c)(n,q)\le 1
+\sum_{q\in index(n)} \mathrm{W.weightOfBase}(c)(n,q)\le 1
 $$
 
 は、まだ `BaseWeightSubProbability` 側で別途示す必要がある。

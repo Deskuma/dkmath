@@ -144,7 +144,7 @@ div_le_iff₀
 つまり、いきなり和を割り算にまとめるのではなく、
 
 $$
-W.weightOfBase(\mathrm{ratioBasePrimeWeight}(A,B))(n,q) = \frac{A(p(q))}{B(n)}
+\mathrm{W.weightOfBase}(\mathrm{ratioBasePrimeWeight}(A,B))(n,q) = \frac{A(p(q))}{B(n)}
 $$
 
 を index 上で揃えてから、
