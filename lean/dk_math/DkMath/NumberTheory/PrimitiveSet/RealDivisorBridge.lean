@@ -5,7 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel
-import DkMath.NumberTheory.PrimitiveSet.RealLog
+import DkMath.NumberTheory.PrimitiveSet.ValuationBudget
 
 #print "file: DkMath.NumberTheory.PrimitiveSet.RealDivisorBridge"
 
@@ -115,6 +115,74 @@ theorem basePrimeOf_realLogRatioWeightProvider_subProbability_of_pairwise_distin
     n I hI hn
     (natPairwiseCoprimeOn_of_pairwise_distinct_prime I (W.basePrimeOf n I hI)
       (W.basePrimeOf_prime_on n I hI) hdistinct)
+
+/--
+The witness-provider base-prime reader is prime-valued on the selected
+sub-index.
+-/
+theorem basePrimeOf_natPrimeValuedOn
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n) :
+    NatPrimeValuedOn I (W.basePrimeOf n I hI) :=
+  W.basePrimeOf_prime_on n I hI
+
+/--
+A multiplicity budget supplies the selected witness base-prime product bound.
+-/
+theorem basePrimeOf_natProductBoundOn_of_multiplicityBudget
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 0 < n)
+    (hbudget :
+      NatBaseMultiplicityBudgetOn I (W.basePrimeOf n I hI) n) :
+    NatProductBoundOn I (W.basePrimeOf n I hI) n :=
+  natProductBoundOn_of_multiplicityBudget I (W.basePrimeOf n I hI) hn
+    (W.basePrimeOf_natPrimeValuedOn n I hI) hbudget
+
+/--
+Bundle the witness-provider base-prime reader into the real/log product-budget
+interface under a multiplicity budget.
+-/
+theorem basePrimeOf_realLogProductBudget_of_multiplicityBudget
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n)
+    (hbudget :
+      NatBaseMultiplicityBudgetOn I (W.basePrimeOf n I hI) n) :
+    RealLogProductBudget I (W.basePrimeOf n I hI) n :=
+  ⟨W.basePrimeOf_realLogNonnegOn n I hI,
+    hn,
+    W.basePrimeOf_natProductBoundOn_of_multiplicityBudget n I hI
+      (Nat.lt_trans Nat.zero_lt_one hn) hbudget⟩
+
+/--
+The log-ratio real provider built from witness-provider base primes is
+sub-probability under a base-prime multiplicity budget.
+-/
+theorem basePrimeOf_logRatioSubProbability_of_multiplicityBudget
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n)
+    (hbudget :
+      NatBaseMultiplicityBudgetOn I (W.basePrimeOf n I hI) n) :
+    (realLogRatioWeightProvider I (W.basePrimeOf n I hI) n
+      (W.basePrimeOf_realLogNonnegOn n I hI) hn).SubProbability :=
+  realLogRatioWeightProvider_subProbability_of_productBudget I
+    (W.basePrimeOf n I hI) n
+    (W.basePrimeOf_realLogProductBudget_of_multiplicityBudget
+      n I hI hn hbudget)
 
 /--
 Summary theorem for the duplicate-free real/log route.

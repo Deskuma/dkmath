@@ -65,6 +65,34 @@ Archive
 
 ---
 
+### 日時: 2026/05/14 02:25 JST (Phase-R025 witness-provider multiplicity budget bridge)
+
+1. 目的:
+   - `review/review-083.md` の提案に従い、R024 の抽象 `pOf` route を `PrimePowerWitnessProvider.basePrimeOf` に特殊化する。
+   - multiplicity budget 仮定から witness-derived log-ratio provider の `SubProbability` へ進む theorem-facing entry point を閉じる。
+2. 実施:
+   - `RealDivisorBridge.lean` の import を `RealLog` から `ValuationBudget` へ更新し、valuation-budget API を bridge 側で利用できるようにした。
+   - `PrimePowerWitnessProvider.basePrimeOf_natPrimeValuedOn` を追加し、`W.basePrimeOf n I hI` が selected index 上で prime-valued であることを固定した。
+   - `basePrimeOf_natProductBoundOn_of_multiplicityBudget` を追加し、witness base-prime multiplicity budget から selected base product bound を供給した。
+   - `basePrimeOf_realLogProductBudget_of_multiplicityBudget` を追加し、witness base-prime reader を R/log product-budget interface へ接続した。
+   - `basePrimeOf_logRatioSubProbability_of_multiplicityBudget` を追加し、重複あり witness-derived log-ratio provider の `SubProbability` を示した。
+   - `ValuationBudgetRoutePlan.md` の Phase-R025 と到達結果を実装済みに更新した。
+3. 結論:
+   - `NatBaseMultiplicityBudgetOn I (W.basePrimeOf n I hI) n` を仮定すれば、pairwise distinct を使わずに witness provider 由来の `log p / log n` real provider が `SubProbability` になる。
+   - R021-R025 の valuation-budget route は、公開 theorem-facing entry point まで no-sorry で閉じた。
+4. 検証:
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet.RealDivisorBridge`
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" DkMath/NumberTheory/PrimitiveSet DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+6. 次の課題:
+   - valuation-budget route を上位 finite/log 設計へどう公開するかを整理する。
+   - 必要なら `NatBaseMultiplicityBudgetOn I (W.basePrimeOf n I hI) n` の供給源を、label exponent や finite channel 側の条件から導く設計へ進む。
+
+---
+
 ### 日時: 2026/05/13 08:14 JST (Phase-R016 witness base product bound to provider sub-probability)
 
 1. 目的:

@@ -209,6 +209,15 @@ NatBaseMultiplicityBudgetOn
 
 ### Phase-R025. Witness-provider bridge
 
+実装済み:
+
+```lean
+theorem PrimePowerWitnessProvider.basePrimeOf_natPrimeValuedOn
+theorem PrimePowerWitnessProvider.basePrimeOf_natProductBoundOn_of_multiplicityBudget
+theorem PrimePowerWitnessProvider.basePrimeOf_realLogProductBudget_of_multiplicityBudget
+theorem PrimePowerWitnessProvider.basePrimeOf_logRatioSubProbability_of_multiplicityBudget
+```
+
 `W.basePrimeOf` について、既存の
 
 ```lean
@@ -216,18 +225,10 @@ PrimePowerWitnessProvider.basePrimeOf_prime_on
 PrimePowerWitnessProvider.basePrimeOf_dvd_source_on
 ```
 
-を使い、multiplicity budget 仮定から witness-derived log-ratio provider の `SubProbability` へ進める。
+を使い、multiplicity budget 仮定から witness-derived log-ratio provider の
+`SubProbability` へ進めた。
 
-## 注意点
-
-- `n = 0` の扱いは避ける。R/log route ではすでに `1 < n` を要求しているため、必要な非零性はここから供給する。
-- `pOf i = 1` は log nonnegativity では許されるが、valuation budget route では prime-valued 仮定を置くため対象外になる。
-- 重複なし route は今後も残す。valuation route はそれを置き換えるのではなく、より一般の route として追加する。
-- 最初から `W.label` の exponent `k(q)` を使い切ろうとしない。まずは base prime の出現回数を `n.factorization` で抑える抽象 route を閉じる。
-
-## 到達目標
-
-最終的には次の theorem-facing shape を目指す。
+これにより、重複あり finite log route の theorem-facing entry point は
 
 ```lean
 theorem basePrimeOf_logRatioSubProbability_of_multiplicityBudget
@@ -243,4 +244,31 @@ theorem basePrimeOf_logRatioSubProbability_of_multiplicityBudget
       (W.basePrimeOf_realLogNonnegOn n I hI) hn).SubProbability
 ```
 
-この theorem が閉じれば、重複あり finite log route の入口ができる。
+として閉じた。
+
+## 注意点
+
+- `n = 0` の扱いは避ける。R/log route ではすでに `1 < n` を要求しているため、必要な非零性はここから供給する。
+- `pOf i = 1` は log nonnegativity では許されるが、valuation budget route では prime-valued 仮定を置くため対象外になる。
+- 重複なし route は今後も残す。valuation route はそれを置き換えるのではなく、より一般の route として追加する。
+- 最初から `W.label` の exponent `k(q)` を使い切ろうとしない。まずは base prime の出現回数を `n.factorization` で抑える抽象 route を閉じる。
+
+## 到達結果
+
+次の theorem-facing shape まで実装済み。
+
+```lean
+theorem basePrimeOf_logRatioSubProbability_of_multiplicityBudget
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n)
+    (hbudget :
+      NatBaseMultiplicityBudgetOn I (W.basePrimeOf n I hI) n) :
+    (realLogRatioWeightProvider I (W.basePrimeOf n I hI) n
+      (W.basePrimeOf_realLogNonnegOn n I hI) hn).SubProbability
+```
+
+この theorem により、重複あり finite log route の入口ができた。
