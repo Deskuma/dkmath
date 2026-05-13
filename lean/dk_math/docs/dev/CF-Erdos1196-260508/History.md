@@ -445,3 +445,27 @@ Archive
 5. 失敗事例:
    - 初回 proof では `Finset.induction_on` 前に `hcop` / `hdvd` を一般化しておらず、帰納仮定が仮定を受け取れない形になって build failure になった。
    - `revert hcop hdvd` で仮定を induction motive に戻し、insert branch で `Finset.mem_insert_of_mem` により部分集合側へ制限して解決した。
+
+### 日時: 2026/05/13 08:32 JST (Phase-R018 witness base-prime divisibility into source)
+
+1. 目的:
+   - `review/review-076.md` の提案に従い、prime-power witness provider 由来の base prime が source state `n` を割ることを bridge する。
+   - R017 の pairwise-coprime route で必要だった itemwise divisibility を、divisor-transition kernel と witness から自動供給できる形にする。
+2. 実施:
+   - `DivisorTransitionKernel.lean` に `PrimePowerWitnessProvider.basePrime_dvd_label` を追加し、`q = p^k`, `0 < k` から witness base prime が label `q` を割ることを示した。
+   - `basePrime_dvd_of_label_dvd` を追加し、`p ∣ q` と `q ∣ n` から `p ∣ n` へ渡した。
+   - `basePrime_dvd_source` を追加し、indexed label の `q ∣ n` を `DivisorTransitionKernel.index_dvd_source` から供給した。
+   - `basePrimeOf_dvd_source_on` を追加し、selected sub-index 上で `W.basePrimeOf n I hI q ∣ n` を供給できるようにした。
+   - `RealDivisorBridge.lean` に `basePrimeOf_realLogRatioWeightProvider_subProbability_of_pairwise_coprime` を追加し、itemwise divisibility 仮定を消して pairwise-coprime 仮定だけで sub-probability へ進めるようにした。
+3. 結論:
+   - R017 の theorem で外部仮定だった `∀ q ∈ I, W.basePrimeOf n I hI q ∣ n` は、kernel の divisor semantics と witness の prime-power equality から供給できるようになった。
+   - 次は `NatPairwiseCoprimeOn I (W.basePrimeOf n I hI)` 自体の供給、特に base prime の相異性から coprime を作る route へ進む。
+4. 検証:
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet.RealDivisorBridge`
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 初回 proof では `rw [hq_pow]` が dependent な `W.label n q hq` の引数まで書き換えようとして build failure になった。
+   - `let L := W.label n q hq` の後に goal を `change L.p ∣ q` へ変形し、依存項を消してから `rw [hq_pow]` する形に修正して解決した。

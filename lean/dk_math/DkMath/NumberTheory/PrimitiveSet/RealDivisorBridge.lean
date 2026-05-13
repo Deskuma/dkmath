@@ -79,6 +79,24 @@ theorem basePrimeOf_realLogRatioWeightProvider_subProbability_of_pairwise_coprim
     (natProductBoundOn_of_pairwise_coprime_dvd I (W.basePrimeOf n I hI)
       (Nat.lt_trans Nat.zero_lt_one hn) hcop hdvd)
 
+/--
+The log-ratio real provider built from witness-provider base primes is
+sub-probability under pairwise coprimality alone: itemwise divisibility into
+`n` is supplied by the divisor-transition kernel and the prime-power witness.
+-/
+theorem basePrimeOf_realLogRatioWeightProvider_subProbability_of_pairwise_coprime
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n)
+    (hcop : NatPairwiseCoprimeOn I (W.basePrimeOf n I hI)) :
+    (realLogRatioWeightProvider I (W.basePrimeOf n I hI) n
+      (W.basePrimeOf_realLogNonnegOn n I hI) hn).SubProbability :=
+  W.basePrimeOf_realLogRatioWeightProvider_subProbability_of_pairwise_coprime_dvd
+    n I hI hn hcop (W.basePrimeOf_dvd_source_on n I hI)
+
 end PrimePowerWitnessProvider
 
 end DkMath.NumberTheory.PrimitiveSet

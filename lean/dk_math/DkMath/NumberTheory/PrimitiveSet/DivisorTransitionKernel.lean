@@ -529,6 +529,50 @@ theorem basePrimeOf_one_le
   rw [dif_pos hq]
   exact W.basePrime_one_le (hI q hq)
 
+/-- The base prime of an indexed prime-power witness divides its label. -/
+theorem basePrime_dvd_label
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T) {n q : ℕ}
+    (hq : q ∈ T.toDivisorTransitionKernel.index n) :
+    (W.label n q hq).p ∣ q := by
+  let L := W.label n q hq
+  have hq_pow : q = L.p ^ L.k :=
+    (W.label_q n q hq).symm.trans L.eq_pow
+  change L.p ∣ q
+  rw [hq_pow]
+  exact dvd_pow_self L.p L.k_pos.ne'
+
+/-- If an indexed label divides `n`, then its witness base prime divides `n`. -/
+theorem basePrime_dvd_of_label_dvd
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T) {n q : ℕ}
+    (hq : q ∈ T.toDivisorTransitionKernel.index n)
+    (hq_dvd : q ∣ n) :
+    (W.label n q hq).p ∣ n :=
+  (W.basePrime_dvd_label hq).trans hq_dvd
+
+/-- The base prime of any indexed witness divides the source state. -/
+theorem basePrime_dvd_source
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T) {n q : ℕ}
+    (hq : q ∈ T.toDivisorTransitionKernel.index n) :
+    (W.label n q hq).p ∣ n :=
+  W.basePrime_dvd_of_label_dvd hq
+    (T.toDivisorTransitionKernel.index_dvd_source hq)
+
+/-- On the selected sub-index, `basePrimeOf` divides the source state. -/
+theorem basePrimeOf_dvd_source_on
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n) :
+    ∀ q, q ∈ I → W.basePrimeOf n I hI q ∣ n := by
+  intro q hq
+  unfold basePrimeOf
+  rw [dif_pos hq]
+  exact W.basePrime_dvd_source (hI q hq)
+
 /--
 Turn a base-prime weight `c n p` into a label weight by reading the chosen
 prime-power witness of each indexed label.
