@@ -56,5 +56,6 @@ This module exposes:
 - real-valued weight provider skeleton
 - real/log route positivity lemmas
 - valuation-budget vocabulary for repeated base primes
-- bridge from prime-power divisor witnesses to real/log product-budget interface
+- bridge from prime-power divisor witnesses to real/log sub-probability,
+  including the repeated-base valuation-budget route
 -/

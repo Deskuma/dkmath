@@ -149,6 +149,32 @@ Archive
 
 ---
 
+### 日時: 2026/05/14 04:01 JST (Phase-R028 public route documentation update)
+
+1. 目的:
+   - `review/review-086.md` の提案に従い、R021-R027 で閉じた重複あり R/log route を公開導線として整理する。
+   - 今後の推奨入口を `PrimePowerWitnessProvider.basePrimeOf_logRatioSubProbability` として README / route plan 上で明示する。
+2. 実施:
+   - `PrimitiveSet.lean` の module doc を更新し、prime-power divisor witnesses から real/log `SubProbability` へ進む valuation-budget route を公開内容として明記した。
+   - `README.md` の R/log 版現在地を、重複なし route から重複あり route 完了後の状態へ更新した。
+   - `README.md` に推奨 summary theorem `PrimePowerWitnessProvider.basePrimeOf_logRatioSubProbability` を追加した。
+   - `README.md` に R021-R027 の鎖を図式化し、重複なし route は比較用・特殊ケースとして残ることを記録した。
+   - `RealLogRoutePlan.md` の Phase-R008 状態を更新し、product route と repeated-base valuation route が R027 までに完了したことを追記した。
+3. 結論:
+   - docs 上でも、推奨入口は budget 仮定なしの `basePrimeOf_logRatioSubProbability` であることが明確になった。
+   - duplicate-free route と valuation-budget route の位置づけが、前者は比較用、後者は一般 route として整理された。
+4. 検証:
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet`
+   - build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" DkMath/NumberTheory/PrimitiveSet DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+6. 次の課題:
+   - 上位 finite/log API から `basePrimeOf_logRatioSubProbability` をどう呼ぶかを検討する。
+   - 必要に応じて R021-R027 の要約を別途 summary doc として切り出す。
+
+---
+
 ### 日時: 2026/05/13 08:14 JST (Phase-R016 witness base product bound to provider sub-probability)
 
 1. 目的:
