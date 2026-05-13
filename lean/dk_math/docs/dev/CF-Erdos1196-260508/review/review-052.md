@@ -126,7 +126,7 @@ $$
 $$
 
 $$
-W.BaseWeightSubProbability(c)
+\mathrm{W.BaseWeightSubProbability}(c)
 $$
 
 を示せば、
@@ -152,7 +152,7 @@ $$
 $$
 
 $$
-W.BaseWeightSubProbability(c)
+\mathrm{W.BaseWeightSubProbability}(c)
 $$
 
 $$

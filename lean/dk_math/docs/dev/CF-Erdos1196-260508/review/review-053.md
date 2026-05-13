@@ -146,7 +146,7 @@ $$
 \to
 \mathrm{W.BaseWeightNonneg}(c)
 \to
-W.BaseWeightSubProbability(c)
+\mathrm{W.BaseWeightSubProbability}(c)
 \to
 \mathrm{weightedHitMass}\le C
 $$
