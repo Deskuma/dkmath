@@ -93,6 +93,34 @@ Archive
 
 ---
 
+### 日時: 2026/05/14 03:30 JST (Phase-R026 witness exponent reader and per-label valuation bound)
+
+1. 目的:
+   - `review/review-084.md` の指摘に従い、R025 の次課題である multiplicity budget 供給源の自動生成へ進む。
+   - まず、witness provider から base prime だけでなく exponent も読む API を追加し、各 selected label の exponent が `n.factorization` 内に収まることを固定する。
+2. 実施:
+   - `DivisorTransitionKernel.lean` の `PrimePowerWitnessProvider` namespace に `baseExponentOf` を追加した。
+   - `baseExponentOf_pos_on` を追加し、selected index 上で読み出した exponent が正であることを示した。
+   - `basePrimeOf_pow_baseExponentOf_eq_on` を追加し、selected label `q` が `basePrimeOf q ^ baseExponentOf q` と一致することを示した。
+   - `basePrimeOf_pow_baseExponentOf_dvd_source_on` を追加し、再構成した prime power が source state `n` を割ることを示した。
+   - `baseExponentOf_le_factorization_on` を追加し、`n ≠ 0` の下で selected label ごとの exponent が `n.factorization (basePrimeOf q)` 以下であることを示した。
+   - `ValuationBudgetRoutePlan.md` に Phase-R026 を追加した。
+3. 結論:
+   - budget 自動生成のための per-label valuation accounting の入口ができた。
+   - 今後は、同じ base prime を持つ selected labels の個数を、この exponent 情報や distinct prime-power labels の構造から `n.factorization` へ束ねる段階へ進める。
+4. 検証:
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" DkMath/NumberTheory/PrimitiveSet DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+6. 次の課題:
+   - `p(q) = p` でフィルタした selected labels を exponent 側に写し、cardinality を `n.factorization p` で抑える補題を設計する。
+   - その補題から `NatBaseMultiplicityBudgetOn I (W.basePrimeOf n I hI) n` の供給を目指す。
+
+---
+
 ### 日時: 2026/05/13 08:14 JST (Phase-R016 witness base product bound to provider sub-probability)
 
 1. 目的:

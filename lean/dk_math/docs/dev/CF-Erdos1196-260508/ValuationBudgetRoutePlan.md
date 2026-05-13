@@ -246,12 +246,52 @@ theorem basePrimeOf_logRatioSubProbability_of_multiplicityBudget
 
 として閉じた。
 
+### Phase-R026. Witness exponent reader and per-label valuation bound
+
+実装済み:
+
+```lean
+def PrimePowerWitnessProvider.baseExponentOf
+theorem PrimePowerWitnessProvider.baseExponentOf_pos_on
+theorem PrimePowerWitnessProvider.basePrimeOf_pow_baseExponentOf_eq_on
+theorem PrimePowerWitnessProvider.basePrimeOf_pow_baseExponentOf_dvd_source_on
+theorem PrimePowerWitnessProvider.baseExponentOf_le_factorization_on
+```
+
+R025 で multiplicity budget があれば `SubProbability` へ進めることは閉じた。
+次の課題は、その budget を witness provider 側から供給することである。
+
+その準備として、`basePrimeOf` と対応する exponent reader
+
+```lean
+W.baseExponentOf n I hI
+```
+
+を追加した。selected label `q ∈ I` では witness の指数 `k(q)` を返し、
+外側では `0` を返す。
+
+selected index 上では次が成り立つ。
+
+```text
+0 < k(q)
+p(q) ^ k(q) = q
+p(q) ^ k(q) ∣ n
+k(q) ≤ n.factorization (p(q))
+```
+
+ここで `p(q) = W.basePrimeOf n I hI q`、
+`k(q) = W.baseExponentOf n I hI q` である。
+
+これにより、今後の budget 自動生成では、各 label が消費する exponent が
+`n.factorization` の範囲内にあることを直接使える。
+
 ## 注意点
 
 - `n = 0` の扱いは避ける。R/log route ではすでに `1 < n` を要求しているため、必要な非零性はここから供給する。
 - `pOf i = 1` は log nonnegativity では許されるが、valuation budget route では prime-valued 仮定を置くため対象外になる。
 - 重複なし route は今後も残す。valuation route はそれを置き換えるのではなく、より一般の route として追加する。
-- 最初から `W.label` の exponent `k(q)` を使い切ろうとしない。まずは base prime の出現回数を `n.factorization` で抑える抽象 route を閉じる。
+- R021-R025 では base prime の出現回数を `n.factorization` で抑える抽象 route を閉じた。
+- R026 以降では `W.label` の exponent `k(q)` を budget 供給源として使う段階へ入る。
 
 ## 到達結果
 
