@@ -39,6 +39,142 @@ Archive
 
 ---
 
+### 日時: 2026/05/14 02:14 JST (Phase-R024 valuation budget to real/log provider)
+
+1. 目的:
+   - `review/review-082.md` の提案に従い、multiplicity budget から `NatProductBoundOn`、`RealLogProductBudget`、log-ratio real provider の `SubProbability` まで接続する。
+   - witness provider へ戻る前に、抽象 `pOf : ι → ℕ` レベルの重複あり route を閉じる。
+2. 実施:
+   - `ValuationBudget.lean` に `realLogNonnegOn_of_natPrimeValuedOn` を追加した。
+   - `natProductBoundOn_of_multiplicityBudget` を追加し、R023 の `NatProductDvdOn` を `NatProductBoundOn` へ変換した。
+   - `realLogProductBudget_of_multiplicityBudget` を追加し、prime-valued 条件と multiplicity budget から R/log 側の bundled budget を供給した。
+   - `realLogRatioWeightProvider_subProbability_of_multiplicityBudget` を追加し、`log (pOf i) / log n` provider の `SubProbability` まで接続した。
+   - `ValuationBudgetRoutePlan.md` の Phase-R024 を実装済みに更新した。
+3. 結論:
+   - `NatBaseMultiplicityBudgetOn I pOf n` と `NatPrimeValuedOn I pOf` があれば、抽象 base reader `pOf` に対する重複あり R/log provider route は no-sorry で閉じた。
+   - 次は Phase-R025 として、`W.basePrimeOf n I hI` にこの抽象 route を適用する witness-provider bridge へ進む。
+4. 検証:
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet.ValuationBudget`
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" DkMath/NumberTheory/PrimitiveSet DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+6. 次の課題:
+   - `PrimePowerWitnessProvider.basePrimeOf_prime_on` を使って `NatPrimeValuedOn I (W.basePrimeOf n I hI)` を供給し、multiplicity budget 仮定から witness-derived log-ratio provider の `SubProbability` へ接続する。
+
+---
+
+### 日時: 2026/05/14 02:25 JST (Phase-R025 witness-provider multiplicity budget bridge)
+
+1. 目的:
+   - `review/review-083.md` の提案に従い、R024 の抽象 `pOf` route を `PrimePowerWitnessProvider.basePrimeOf` に特殊化する。
+   - multiplicity budget 仮定から witness-derived log-ratio provider の `SubProbability` へ進む theorem-facing entry point を閉じる。
+2. 実施:
+   - `RealDivisorBridge.lean` の import を `RealLog` から `ValuationBudget` へ更新し、valuation-budget API を bridge 側で利用できるようにした。
+   - `PrimePowerWitnessProvider.basePrimeOf_natPrimeValuedOn` を追加し、`W.basePrimeOf n I hI` が selected index 上で prime-valued であることを固定した。
+   - `basePrimeOf_natProductBoundOn_of_multiplicityBudget` を追加し、witness base-prime multiplicity budget から selected base product bound を供給した。
+   - `basePrimeOf_realLogProductBudget_of_multiplicityBudget` を追加し、witness base-prime reader を R/log product-budget interface へ接続した。
+   - `basePrimeOf_logRatioSubProbability_of_multiplicityBudget` を追加し、重複あり witness-derived log-ratio provider の `SubProbability` を示した。
+   - `ValuationBudgetRoutePlan.md` の Phase-R025 と到達結果を実装済みに更新した。
+3. 結論:
+   - `NatBaseMultiplicityBudgetOn I (W.basePrimeOf n I hI) n` を仮定すれば、pairwise distinct を使わずに witness provider 由来の `log p / log n` real provider が `SubProbability` になる。
+   - R021-R025 の valuation-budget route は、公開 theorem-facing entry point まで no-sorry で閉じた。
+4. 検証:
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet.RealDivisorBridge`
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" DkMath/NumberTheory/PrimitiveSet DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+6. 次の課題:
+   - valuation-budget route を上位 finite/log 設計へどう公開するかを整理する。
+   - 必要なら `NatBaseMultiplicityBudgetOn I (W.basePrimeOf n I hI) n` の供給源を、label exponent や finite channel 側の条件から導く設計へ進む。
+
+---
+
+### 日時: 2026/05/14 03:30 JST (Phase-R026 witness exponent reader and per-label valuation bound)
+
+1. 目的:
+   - `review/review-084.md` の指摘に従い、R025 の次課題である multiplicity budget 供給源の自動生成へ進む。
+   - まず、witness provider から base prime だけでなく exponent も読む API を追加し、各 selected label の exponent が `n.factorization` 内に収まることを固定する。
+2. 実施:
+   - `DivisorTransitionKernel.lean` の `PrimePowerWitnessProvider` namespace に `baseExponentOf` を追加した。
+   - `baseExponentOf_pos_on` を追加し、selected index 上で読み出した exponent が正であることを示した。
+   - `basePrimeOf_pow_baseExponentOf_eq_on` を追加し、selected label `q` が `basePrimeOf q ^ baseExponentOf q` と一致することを示した。
+   - `basePrimeOf_pow_baseExponentOf_dvd_source_on` を追加し、再構成した prime power が source state `n` を割ることを示した。
+   - `baseExponentOf_le_factorization_on` を追加し、`n ≠ 0` の下で selected label ごとの exponent が `n.factorization (basePrimeOf q)` 以下であることを示した。
+   - `ValuationBudgetRoutePlan.md` に Phase-R026 を追加した。
+3. 結論:
+   - budget 自動生成のための per-label valuation accounting の入口ができた。
+   - 今後は、同じ base prime を持つ selected labels の個数を、この exponent 情報や distinct prime-power labels の構造から `n.factorization` へ束ねる段階へ進める。
+4. 検証:
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel`
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" DkMath/NumberTheory/PrimitiveSet DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+6. 次の課題:
+   - `p(q) = p` でフィルタした selected labels を exponent 側に写し、cardinality を `n.factorization p` で抑える補題を設計する。
+   - その補題から `NatBaseMultiplicityBudgetOn I (W.basePrimeOf n I hI) n` の供給を目指す。
+
+---
+
+### 日時: 2026/05/14 03:42 JST (Phase-R027 automatic multiplicity budget from witness exponents)
+
+1. 目的:
+   - `review/review-085.md` の提案に従い、R026 の per-label exponent bound を同一 base-prime fiber の cardinality bound へ昇格する。
+   - R025 で外部仮定だった `NatBaseMultiplicityBudgetOn I (W.basePrimeOf n I hI) n` を witness provider から自動生成し、budget 仮定なしで `SubProbability` へ進む。
+2. 実施:
+   - `RealDivisorBridge.lean` に `baseExponentOf_injOn_filter_basePrime` を追加した。
+   - 同一 base prime `p` を持つ selected labels 上で、`q ↦ W.baseExponentOf n I hI q` が単射であることを、R026 の再構成等式から示した。
+   - `basePrimeOf_card_filter_le_factorization` を追加し、同一 base-prime fiber の cardinality が `n.factorization p` 以下であることを示した。
+   - `basePrimeOf_multiplicityBudgetOn` を追加し、`NatBaseMultiplicityBudgetOn I (W.basePrimeOf n I hI) n` を witness provider から供給した。
+   - `basePrimeOf_logRatioSubProbability` を追加し、外部 multiplicity-budget 仮定なしで witness-derived log-ratio provider の `SubProbability` を示した。
+   - `ValuationBudgetRoutePlan.md` に Phase-R027 と到達結果を追記した。
+3. 結論:
+   - `I ⊆ T.index n` と `1 < n` だけで、witness provider 由来の base-prime log-ratio provider が `SubProbability` になる route が閉じた。
+   - R021-R027 により、重複あり R/log route は budget 仮定の利用から自動生成まで no-sorry で接続された。
+4. 検証:
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet.RealDivisorBridge`
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" DkMath/NumberTheory/PrimitiveSet DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+6. 次の課題:
+   - 重複なし route と valuation-budget route の位置づけを docs 上で整理する。
+   - 上位 finite/log 設計から `basePrimeOf_logRatioSubProbability` をどの theorem-facing API として使うか検討する。
+
+---
+
+### 日時: 2026/05/14 04:01 JST (Phase-R028 public route documentation update)
+
+1. 目的:
+   - `review/review-086.md` の提案に従い、R021-R027 で閉じた重複あり R/log route を公開導線として整理する。
+   - 今後の推奨入口を `PrimePowerWitnessProvider.basePrimeOf_logRatioSubProbability` として README / route plan 上で明示する。
+2. 実施:
+   - `PrimitiveSet.lean` の module doc を更新し、prime-power divisor witnesses から real/log `SubProbability` へ進む valuation-budget route を公開内容として明記した。
+   - `README.md` の R/log 版現在地を、重複なし route から重複あり route 完了後の状態へ更新した。
+   - `README.md` に推奨 summary theorem `PrimePowerWitnessProvider.basePrimeOf_logRatioSubProbability` を追加した。
+   - `README.md` に R021-R027 の鎖を図式化し、重複なし route は比較用・特殊ケースとして残ることを記録した。
+   - `RealLogRoutePlan.md` の Phase-R008 状態を更新し、product route と repeated-base valuation route が R027 までに完了したことを追記した。
+3. 結論:
+   - docs 上でも、推奨入口は budget 仮定なしの `basePrimeOf_logRatioSubProbability` であることが明確になった。
+   - duplicate-free route と valuation-budget route の位置づけが、前者は比較用、後者は一般 route として整理された。
+4. 検証:
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet`
+   - build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" DkMath/NumberTheory/PrimitiveSet DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+6. 次の課題:
+   - 上位 finite/log API から `basePrimeOf_logRatioSubProbability` をどう呼ぶかを検討する。
+   - 必要に応じて R021-R027 の要約を別途 summary doc として切り出す。
+
+---
+
 ### 日時: 2026/05/13 08:14 JST (Phase-R016 witness base product bound to provider sub-probability)
 
 1. 目的:
@@ -507,6 +643,74 @@ Archive
    - 次の本丸は、同じ base prime が複数回現れる場合の valuation budget / exponent consumption route である。
 4. 検証:
    - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet.RealDivisorBridge`
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+
+### 日時: 2026/05/13 22:34 JST (Phase-R021 valuation budget route design)
+
+1. 目的:
+   - `review/review-079.md` の提案に従い、重複あり R/log route に入る前の設計書を作成する。
+   - `Nat.factorization` route と `padicValNat` route の役割分担を整理し、次の Lean 実装 Phase を切る。
+2. 実施:
+   - `ValuationBudgetRoutePlan.md` を新規作成した。
+   - 重複あり route の目標を `∏ q in I, W.basePrimeOf n I hI q ≤ n` の供給として整理した。
+   - 候補 API として `NatBaseMultiplicityOn` と `NatBaseMultiplicityBudgetOn` を設計した。
+   - `Nat.factorization` route を主軸にし、必要に応じて `padicValNat` 補題を接続する方針を明記した。
+   - Phase-R022 以降の実装順を、multiplicity vocabulary、product factorization bridge、provider bridge の順に分解した。
+   - `README.md` から `ValuationBudgetRoutePlan.md` への参照を追加した。
+3. 結論:
+   - 重複なし route から重複あり valuation budget route へ進むための設計地図ができた。
+   - 次は `NatBaseMultiplicityOn` / `NatBaseMultiplicityBudgetOn` の Lean vocabulary を追加するのが自然。
+4. 検証:
+   - docs 追加・更新のみのため Lean build は実行しない。
+   - `ValuationBudgetRoutePlan.md` と `README.md` の内容を `sed` で確認した。
+5. 失敗事例:
+   - 今回は build failure なし。
+
+### 日時: 2026/05/13 22:56 JST (Phase-R022 multiplicity vocabulary)
+
+1. 目的:
+   - `review/review-080.md` と `ValuationBudgetRoutePlan.md` に従い、重複あり route の Lean vocabulary を新規ファイルに分離する。
+   - `RealLog.lean` の責務を増やさず、自然数 factorization による product supply route の入口を作る。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/ValuationBudget.lean` を新規作成した。
+   - `NatPrimeValuedOn` を追加し、選択集合上で `pOf` が prime-valued である predicate を定義した。
+   - `NatBaseMultiplicityOn` を追加し、`I.filter (fun i => pOf i = p)` の card として base value の出現回数を定義した。
+   - `NatBaseMultiplicityBudgetOn` を追加し、各 prime `p` の出現回数が `n.factorization p` 以下であることを predicate 化した。
+   - `natBaseMultiplicityOn_eq_card_filter` と `natBaseMultiplicityBudgetOn_iff` を追加し、後続 proof 用の展開補助を用意した。
+   - `PrimitiveSet.lean` aggregator に `ValuationBudget` import を追加した。
+   - `ValuationBudgetRoutePlan.md` の Phase-R022 欄を実装済み内容へ更新した。
+3. 結論:
+   - 重複あり valuation budget route の最小 vocabulary が Lean 上で利用可能になった。
+   - 次は `NatProductDvdOn I pOf n` を multiplicity budget から供給する factorization bridge に進む。
+4. 検証:
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet.ValuationBudget`
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+
+### 日時: 2026/05/13 23:06 JST (Phase-R023 product divisibility from multiplicity budget)
+
+1. 目的:
+   - `review/review-081.md` と `ValuationBudgetRoutePlan.md` に従い、multiplicity budget から selected base product divisibility を供給する。
+   - 重複あり route の自然数側核心である `NatProductDvdOn I pOf n` を factorization 比較から示す。
+2. 実施:
+   - `ValuationBudget.lean` に `factorization_prod_primeValued_eq_multiplicity_of_prime` を追加した。
+   - `pOf` が selected index 上で prime-valued なら、任意の prime `p` について `(I.prod fun i => pOf i).factorization p = NatBaseMultiplicityOn I pOf p` となることを示した。
+   - `Nat.factorization_prod_apply` で積の factorization を和へ展開し、各 prime-valued term の factorization を indicator として読んだ。
+   - `natProductDvdOn_of_multiplicityBudget` を追加し、`NatBaseMultiplicityBudgetOn I pOf n` から `NatProductDvdOn I pOf n` を導いた。
+   - `n = 0` は `dvd_zero` で処理し、`n ≠ 0` では `Nat.factorization_le_iff_dvd` と `Finsupp.le_def` で点wise 比較へ落とした。
+   - `ValuationBudgetRoutePlan.md` の Phase-R023 欄を実装済み内容へ更新した。
+3. 結論:
+   - 重複あり route の核心である、出現回数予算から selected base product が `n` を割る bridge が Lean 上で通った。
+   - 次は `NatProductDvdOn` から `NatProductBoundOn` / `RealLogProductBudget` / provider `SubProbability` へ接続する wrapper に進む。
+4. 検証:
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet.ValuationBudget`
    - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet`
    - いずれも build 成功。
    - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。

@@ -587,6 +587,90 @@ theorem basePrimeOf_dvd_source_on
   exact W.basePrime_dvd_source (hI q hq)
 
 /--
+Read the prime-power exponent from the witness provider on a selected
+sub-index.
+
+Outside `I` the value is `0`, so the function is total and harmless for later
+finite products or sums over `I`.
+-/
+def baseExponentOf
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n) :
+    ℕ → ℕ :=
+  fun q =>
+    if hq : q ∈ I then
+      (W.label n q (hI q hq)).k
+    else
+      0
+
+/-- On the selected sub-index, `baseExponentOf` reads a positive exponent. -/
+theorem baseExponentOf_pos_on
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n) :
+    ∀ q, q ∈ I → 0 < W.baseExponentOf n I hI q := by
+  intro q hq
+  unfold baseExponentOf
+  rw [dif_pos hq]
+  exact (W.label n q (hI q hq)).k_pos
+
+/--
+On the selected sub-index, the read base prime and exponent reconstruct the
+label.
+-/
+theorem basePrimeOf_pow_baseExponentOf_eq_on
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n) :
+    ∀ q, q ∈ I →
+      W.basePrimeOf n I hI q ^ W.baseExponentOf n I hI q = q := by
+  intro q hq
+  unfold basePrimeOf baseExponentOf
+  rw [dif_pos hq, dif_pos hq]
+  exact ((W.label_q n q (hI q hq)).symm.trans
+    (W.label n q (hI q hq)).eq_pow).symm
+
+/--
+The reconstructed witness prime power divides the source state.
+-/
+theorem basePrimeOf_pow_baseExponentOf_dvd_source_on
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n) :
+    ∀ q, q ∈ I → W.basePrimeOf n I hI q ^
+      W.baseExponentOf n I hI q ∣ n := by
+  intro q hq
+  rw [W.basePrimeOf_pow_baseExponentOf_eq_on n I hI q hq]
+  exact T.toDivisorTransitionKernel.index_dvd_source (hI q hq)
+
+/--
+Each selected witness exponent fits inside the source state's factorization at
+its base prime.
+-/
+theorem baseExponentOf_le_factorization_on
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : n ≠ 0) :
+    ∀ q, q ∈ I →
+      W.baseExponentOf n I hI q ≤
+        n.factorization (W.basePrimeOf n I hI q) := by
+  intro q hq
+  exact ((W.basePrimeOf_prime_on n I hI q hq).pow_dvd_iff_le_factorization hn).mp
+    (W.basePrimeOf_pow_baseExponentOf_dvd_source_on n I hI q hq)
+
+/--
 Turn a base-prime weight `c n p` into a label weight by reading the chosen
 prime-power witness of each indexed label.
 -/

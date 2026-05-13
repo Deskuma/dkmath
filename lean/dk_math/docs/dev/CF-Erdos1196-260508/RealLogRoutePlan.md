@@ -251,8 +251,9 @@ def RealWeightProvider.SubProbability (P : RealWeightProvider ι) : Prop :=
 現在の状態:
 
 - 1 は Phase-R005 から Phase-R007 までで完了。
-- 次は 2 を `RealLogBudget_of_product_le` 系の小補題群として設計する。
-- 3 は product budget route が見えてから別 Phase で扱う。
+- 2 は Phase-R009 から Phase-R013 までで完了。
+- 3 は Phase-R021 から Phase-R027 までで完了。
+- 詳細は [ValuationBudgetRoutePlan.md](./ValuationBudgetRoutePlan.md) に分離した。
 
 理由:
 
@@ -267,6 +268,16 @@ def RealWeightProvider.SubProbability (P : RealWeightProvider ι) : Prop :=
 4. 自然数版 `pOf : ι -> ℕ`, `n : ℕ` へ戻し、`∀ q ∈ I, 1 ≤ pOf q` と product bound から `RealLogBudget I pOf n` を供給する。
 
 初期実装では、4 へ急がず、1-3 を小さい real lemma として試す。
+
+R027 時点では、上の分解は witness provider 由来の base prime に対して
+次の summary theorem まで到達している。
+
+```lean
+PrimePowerWitnessProvider.basePrimeOf_logRatioSubProbability
+```
+
+仮定は `I ⊆ T.index n` と `1 < n` のみであり、同じ base prime が複数回現れる場合も、
+witness exponent を `n.factorization` の slot として数えることで処理する。
 
 ## リスク
 

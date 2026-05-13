@@ -4,6 +4,12 @@ review-059.md までは完了済み（Hit するのは Lean コード）
 
 ## tex patterns
 
+### md link to unlink
+
+`\[(.*?)\]\(.*?\)` to `$1`
+
+"[ABC.md](/ABC.md)" → "ABC.md"
+
 ### 前処理
 
 先にこの置換を行なっておくと良い
