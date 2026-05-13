@@ -115,11 +115,11 @@ $$
 Phase RH は、実数値 weight の語彙を作る段階。
 
 $$
-RealBasePrimeToyWeight(c):=\forall n,p,\ 0\le c(n,p)
+\mathrm{RealBasePrimeToyWeight}(c):=\forall n,p,\ 0\le c(n,p)
 $$
 
 $$
-realRatioBasePrimeWeight(A,B)(n,p)=A(p)/B(n)
+\mathrm{realRatioBasePrimeWeight}(A,B)(n,p)=A(p)/B(n)
 $$
 
 を置き、`Real.log` はまだ使わない。
