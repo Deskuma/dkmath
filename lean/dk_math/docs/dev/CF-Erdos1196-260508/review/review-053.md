@@ -7,7 +7,7 @@
 前回 Phase BA では、
 
 $$
-W.BaseWeightNonneg(c)
+\mathrm{W.BaseWeightNonneg}(c)
 $$
 
 という「witness provider $W$ が選ぶ base prime 上で $c$ が非負」という predicate を作った。今回 Phase BB では、さらにその一段手前として、
@@ -58,7 +58,7 @@ PrimePowerWitnessProvider.baseWeightNonneg_of_basePrimeToyWeight
 $$
 \mathrm{BasePrimeToyWeight}(c)
 \Rightarrow
-W.BaseWeightNonneg(c)
+\mathrm{W.BaseWeightNonneg}(c)
 $$
 
 じゃ。
@@ -144,7 +144,7 @@ $$
 $$
 \mathrm{BasePrimeToyWeight}(c)
 \to
-W.BaseWeightNonneg(c)
+\mathrm{W.BaseWeightNonneg}(c)
 \to
 W.BaseWeightSubProbability(c)
 \to
@@ -288,7 +288,7 @@ $$
 はまず `BasePrimeToyWeight` として全域非負性を持ち、そこから任意の witness provider $W$ に対して
 
 $$
-W.BaseWeightNonneg(c)
+\mathrm{W.BaseWeightNonneg}(c)
 $$
 
 へ降ろせるようになった。

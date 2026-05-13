@@ -92,7 +92,7 @@ $$
 後者はさらに、それを任意の witness provider $W$ に降ろして、
 
 $$
-W.BaseWeightNonneg(ratioBasePrimeWeight(A,B))
+\mathrm{W.BaseWeightNonneg}(ratioBasePrimeWeight(A,B))
 $$
 
 を得る。
@@ -118,7 +118,7 @@ $$
 $$
 
 $$
-W.BaseWeightNonneg(c)
+\mathrm{W.BaseWeightNonneg}(c)
 $$
 
 ここまでが Phase BC の成果じゃな。

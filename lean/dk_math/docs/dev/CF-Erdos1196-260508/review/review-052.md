@@ -122,7 +122,7 @@ weightOfBase_hitMass_le_const
 これにより、今後は
 
 $$
-W.BaseWeightNonneg(c)
+\mathrm{W.BaseWeightNonneg}(c)
 $$
 
 $$
@@ -148,7 +148,7 @@ $$
 $$
 
 $$
-W.BaseWeightNonneg(c)
+\mathrm{W.BaseWeightNonneg}(c)
 $$
 
 $$
@@ -295,7 +295,7 @@ $$
 から、任意の witness provider $W$ に対して
 
 $$
-W.BaseWeightNonneg(c)
+\mathrm{W.BaseWeightNonneg}(c)
 $$
 
 が出せる。
