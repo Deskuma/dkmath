@@ -264,7 +264,7 @@ DkMath 的に言えば、これは **指数消費 tracking** じゃ。
 Phase-R019 は、R route の重複なし版を完成形に近づけた大きな一歩じゃ。
 
 $$
-NatPairwiseDistinctOn
+\mathrm{NatPairwiseDistinctOn}
 $$
 
 から
