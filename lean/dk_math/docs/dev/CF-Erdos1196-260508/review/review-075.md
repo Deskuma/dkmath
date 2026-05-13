@@ -2,7 +2,7 @@
 
 ## 1. 結論
 
-うむ、Phase-R016 は **witness-provider 由来の (\log p/\log n) route が、product bound 仮定つきで完全に走った段階** じゃ。
+うむ、Phase-R016 は **witness-provider 由来の \(\log p/\log n\) route が、product bound 仮定つきで完全に走った段階** じゃ。
 
 今回の theorem は、要するにこう言っておる。
 
@@ -76,7 +76,7 @@ $$
 q=p^k
 $$
 
-という prime-power witness から base prime (p) を読み、
+という prime-power witness から base prime \(p\) を読み、
 
 $$
 pOf(q)=p
@@ -84,7 +84,7 @@ $$
 
 とする。
 
-そして selected label 集合 (I) に対して、
+そして selected label 集合 \(I\) に対して、
 
 $$
 \prod_{q\in I}pOf(q)\le n
@@ -148,7 +148,7 @@ $$
 
 の供給。
 
-ここで (p(q)) は、各 (q) の prime-power witness
+ここで \(p(q)\) は、各 \(q\) の prime-power witness
 
 $$
 q=p(q)^{k(q)}
@@ -156,7 +156,7 @@ $$
 
 から読んだ base prime じゃ。
 
-一見すると、各 (q\mid n) なら (p(q)\mid n) なので簡単そうに見える。
+一見すると、各 \(q\mid n\) なら \(p(q)\mid n\) なので簡単そうに見える。
 しかし問題は、同じ base prime が何度も出る場合じゃ。
 
 たとえば、
@@ -165,7 +165,7 @@ $$
 q_1=2,\qquad q_2=4
 $$
 
-なら、両方とも base prime は (2)。
+なら、両方とも base prime は \(2\)。
 このとき base product は、
 
 $$
@@ -173,7 +173,7 @@ $$
 $$
 
 になる。
-これを (n) が吸収するには、(n) 側に (2^2) 以上の指数予算が必要じゃ。
+これを \(n\) が吸収するには、 \(n\) 側に \(2^2\) 以上の指数予算が必要じゃ。
 
 だから次の核心は、
 
@@ -216,9 +216,9 @@ Product bound を出す道は、少なくとも三つ考えられる。
 第一に、外部仮定として持つ道。
 これは既に R016 の形で完了しておる。
 
-第二に、selected labels が base prime に関して重複しない、つまり (p(q)) が互いに異なる場合。
+第二に、selected labels が base prime に関して重複しない、つまり \(p(q)\) が互いに異なる場合。
 
-この場合、各 (p(q)\mid n) が示せれば、
+この場合、各 \(p(q)\mid n\) が示せれば、
 
 $$
 \prod_{q\in I}p(q)\mid n
@@ -232,7 +232,7 @@ $$
 
 を出す。
 
-第三に、重複を許す代わりに、出現回数が (p)-adic valuation 以下であることを示す道。
+第三に、重複を許す代わりに、出現回数が \(p\)-adic valuation 以下であることを示す道。
 
 これは本格的じゃが、最終的には一番自然かもしれぬ。
 

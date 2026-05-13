@@ -55,7 +55,7 @@ $$
 \sum_{q\in I}\frac{A_q}{B} = \frac{\sum_{q\in I}A_q}{B}
 $$
 
-かつ (0 < B) なので、
+かつ \(0 < B\) なので、
 
 $$
 \frac{\sum A_q}{B}\le \frac{B}{B}=1
@@ -175,8 +175,8 @@ def RealWeightProvider.SubProbability
   P.index.sum P.weight ≤ 1
 ```
 
-ここで狙うのは、既存 ( \mathbb{Q} ) 版の `WeightProvider` を一般化することではない。
-まずは ( \mathbb{R} ) 版の薄い並行試作として、
+ここで狙うのは、既存 \(\mathbb{Q}\) 版の `WeightProvider` を一般化することではない。
+まずは \(\mathbb{R}\) 版の薄い並行試作として、
 
 $$
 \text{index}

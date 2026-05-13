@@ -108,7 +108,7 @@ W.ratioBaseWeight_hitMass_le_const A B hA hB hbudget ...
 
 この定理が表しているのは、かなり明快じゃ。
 
-各 state (n) に総予算 (B(n)) があり、各 prime channel の base prime (p(q)) に局所コスト (A(p(q))) がある。
+各 state \(n\) に総予算 \(B(n)\) があり、各 prime channel の base prime \(p(q)\) に局所コスト \(A(p(q))\) がある。
 
 budget 条件は、
 
@@ -131,7 +131,7 @@ $$
 $$
 
 となり、これは sub-probability になる。
-その結果、primitive target への hitting mass は source 側の上界 (C) を超えない。
+その結果、primitive target への hitting mass は source 側の上界 \(C\) を超えない。
 
 つまり、Phase BE の定理は、
 
@@ -171,7 +171,7 @@ $$
 
 次は History にある通り、 **concrete ratio-style sample** が自然じゃ。
 
-既存 sample に合わせるなら、たとえばこういう (A,B) がよい。
+既存 sample に合わせるなら、たとえばこういう \(A,B\) がよい。
 
 ```lean
 def sampleTenRatioA (p : ℕ) : ℚ :=
@@ -189,13 +189,13 @@ $$
 
 となる。
 
-sample index は状態 (10) で
+sample index は状態 \(10\) で
 
 $$
 {2,5}
 $$
 
-なので、witness provider が読む base prime はそれぞれ (2,5)。したがって、
+なので、witness provider が読む base prime はそれぞれ \(2,5\) 。したがって、
 
 $$
 A(2)+A(5)=1+0=1\le B(10)=1
@@ -203,7 +203,7 @@ $$
 
 となり、budget が閉じる。
 
-状態 (10) 以外では index が空なので、
+状態 \(10\) 以外では index が空なので、
 
 $$
 0\le B(n)=1
@@ -279,9 +279,9 @@ $$
 c(n,p)=A(p)/B(n)
 $$
 
-なので、(n\ne 10) でも (p=2) なら (1) になる。
+なので、 \(n\ne 10\) でも \(p=2\) なら \(1\) になる。
 
-ただし、`weightOfBase` は index 外では (0) を返す。sample kernel では (n\ne10) の index が空なので、実際の channel 上では問題にならぬ。
+ただし、`weightOfBase` は index 外では \(0\) を返す。sample kernel では \(n\ne10\) の index が空なので、実際の channel 上では問題にならぬ。
 
 つまり、全域一致よりも、
 
@@ -327,5 +327,5 @@ $$
 
 まで一発で行ける。
 
-山で言えば、予算 (B(n)) の範囲内に収まる登山料 (A(p)/B(n)) なら、どれだけ prime-power channel が分岐しても、質量は Big の外へ飛び出せない。
-次は、その仕組みを sample (A,B) で実際に走らせる番じゃな。
+山で言えば、予算 \(B(n)\) の範囲内に収まる登山料 \(A(p)/B(n)\) なら、どれだけ prime-power channel が分岐しても、質量は Big の外へ飛び出せない。
+次は、その仕組みを sample \(A,B\) で実際に走らせる番じゃな。
