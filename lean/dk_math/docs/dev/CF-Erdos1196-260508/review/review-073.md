@@ -7,12 +7,12 @@
 ここまで R 側では、
 
 $$
-RealLogProductBudget(I,pOf,n)
+RealLogProductBudget(I,\mathrm{pOf},n)
 \Rightarrow
 \text{log-ratio provider is sub-probability}
 $$
 
-まで閉じていた。今回 Phase-R014 では、その $pOf$ を任意関数のまま放置せず、prime-power witness provider から読めるようにする準備が入った。
+まで閉じていた。今回 Phase-R014 では、その $\mathrm{pOf}$ を任意関数のまま放置せず、prime-power witness provider から読めるようにする準備が入った。
 
 つまり、
 
@@ -23,7 +23,7 @@ $$
 の witness から base prime $p$ を読み、
 
 $$
-pOf(q)=p
+\mathrm{pOf}(q)=p
 $$
 
 として扱うための入口ができたわけじゃ。
@@ -57,7 +57,7 @@ $$
 実際には素数なので $1 < p$ まであるが、R 側の `RealLogNonnegOn` が要求するのは
 
 $$
-1\le pOf(q)
+1\le \mathrm{pOf}(q)
 $$
 
 なので、今回の形で十分じゃ。
@@ -75,7 +75,7 @@ basePrimeOf
 選択集合 $I$ と、
 
 $$
-I\subseteq T.index(n)
+I\subseteq \text{T.index}(n)
 $$
 
 を表す
@@ -89,7 +89,7 @@ hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n
 $$
 q\in I
 \Rightarrow
-basePrimeOf(q)=(W.label(n,q,hI(q))).p
+basePrimeOf(q)=(\text{W.label}(n,q,hI(q))).p
 $$
 
 一方、 $I$ の外側では $1$ を返す。
@@ -98,7 +98,7 @@ $$
 後続の `RealLogProductBudget I pOf n` や `NatProductBoundOn I pOf n` は、基本的に $I$ 上だけを見る。だから外側を $1$ にしておけば、全域関数
 
 $$
-pOf:\mathbb{N}\to\mathbb{N}
+\mathrm{pOf}:\mathbb{N}\to\mathbb{N}
 $$
 
 として扱えて、外側で余計な害が出ない。
@@ -108,13 +108,13 @@ $$
 Phase-R013 では、R 側が後続に要求する interface をこう固定した。
 
 $$
-RealLogProductBudget(I,pOf,n)
+RealLogProductBudget(I,\mathrm{pOf},n)
 $$
 
 つまり、
 
 $$
-RealLogNonnegOn(I,pOf)
+\mathrm{RealLogNonnegOn}(I,\mathrm{pOf})
 $$
 
 $$
@@ -122,7 +122,7 @@ $$
 $$
 
 $$
-\prod_{q\in I}pOf(q)\le n
+\prod_{q\in I}\mathrm{pOf}(q)\le n
 $$
 
 じゃ。
@@ -130,7 +130,7 @@ $$
 今回 `basePrimeOf_one_le` により、最初の
 
 $$
-RealLogNonnegOn(I,W.basePrimeOf(n,I,hI))
+\mathrm{RealLogNonnegOn}(I,\mathrm{W.basePrimeOf}(n,I,hI))
 $$
 
 を供給できる見通しが立った。
@@ -208,7 +208,7 @@ theorem basePrimeOf_realLogProductBudget_of_productBound
 その次は、さらに一歩進めて、
 
 $$
-NatProductBoundOn(I,W.basePrimeOf(n,I,hI),n)
+\mathrm{NatProductBoundOn}(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
 $$
 
 を仮定すれば、
@@ -230,7 +230,7 @@ basePrimeOf_realLogRatioWeightProvider_subProbability_of_productBound
 意味は、
 
 $$
-I\subseteq index(n)
+I\subseteq \text{index}(n)
 $$
 
 $$
@@ -238,13 +238,13 @@ $$
 $$
 
 $$
-\prod_{q\in I} W.basePrimeOf(q)\le n
+\prod_{q\in I} \mathrm{W.basePrimeOf}(q)\le n
 $$
 
 なら、
 
 $$
-\frac{\log(W.basePrimeOf(q))}{\log n}
+\frac{\log(\mathrm{W.basePrimeOf}(q))}{\log n}
 $$
 
 を重みとする real provider は sub-probability、ということじゃ。
@@ -256,7 +256,7 @@ $$
 ただし、今回もまだ
 
 $$
-\prod_{q\in I} W.basePrimeOf(q)\le n
+\prod_{q\in I} \mathrm{W.basePrimeOf}(q)\le n
 $$
 
 そのものは証明していない。
@@ -307,7 +307,7 @@ $$
 の witness から base prime $p$ を読み、
 
 $$
-pOf(q)=p
+\mathrm{pOf}(q)=p
 $$
 
 として使うための関数 `basePrimeOf` ができた。

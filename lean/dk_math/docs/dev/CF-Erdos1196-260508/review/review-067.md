@@ -7,22 +7,22 @@
 Phase-R005 ～ R007 で、
 
 $$
-RealLogBudget(I,pOf,n)
+\mathrm{RealLogBudget}(I,\mathrm{pOf},n)
 \Rightarrow
-\sum_{q\in I}\frac{\log(pOf(q))}{\log n}\le 1
+\sum_{q\in I}\frac{\log(\mathrm{pOf}(q))}{\log n}\le 1
 $$
 
 そして
 
 $$
-weight(q)=\frac{\log(pOf(q))}{\log n}
+weight(q)=\frac{\log(\mathrm{pOf}(q))}{\log n}
 $$
 
 を `RealWeightProvider` に載せるところまで閉じた。
 今回 Phase-R008 では、その外部仮定だった
 
 $$
-RealLogBudget(I,pOf,n)
+\mathrm{RealLogBudget}(I,\mathrm{pOf},n)
 $$
 
 を **どこから供給するか** を、product route として分解した。これはかなり良い判断じゃ。
@@ -35,7 +35,7 @@ $$
 今までの R 版は、
 
 $$
-\sum_q \log(pOf(q))\le \log n
+\sum_q \log(\mathrm{pOf}(q))\le \log n
 $$
 
 を外部仮定として受け取っていた。
@@ -43,25 +43,25 @@ $$
 Phase-R008 では、次の供給路を設計したわけじゃ。
 
 $$
-\prod_{q\in I} pOf(q)\le n
+\prod_{q\in I} \mathrm{pOf}(q)\le n
 $$
 
 から、
 
 $$
-\log\left(\prod_{q\in I}pOf(q)\right)\le \log n
+\log\left(\prod_{q\in I}\mathrm{pOf}(q)\right)\le \log n
 $$
 
 へ進み、さらに
 
 $$
-\sum_{q\in I}\log(pOf(q)) = \log\left(\prod_{q\in I}pOf(q)\right)
+\sum_{q\in I}\log(\mathrm{pOf}(q)) = \log\left(\prod_{q\in I}\mathrm{pOf}(q)\right)
 $$
 
 を使って、
 
 $$
-\sum_{q\in I}\log(pOf(q))\le \log n
+\sum_{q\in I}\log(\mathrm{pOf}(q))\le \log n
 $$
 
 を得る。
@@ -89,7 +89,7 @@ $$
 $$
 RealLogBudget
 \to
-realLogRatioWeightProvider.SubProbability
+\mathrm{realLogRatioWeightProvider}.\mathrm{SubProbability}
 $$
 
 は R005 ～ R007 で閉じている。
@@ -117,7 +117,7 @@ $$
 $$
 
 $$
-pOf:\iota\to\mathbb{N},\quad n:\mathbb{N}
+\mathrm{pOf}:\iota\to\mathbb{N},\quad n:\mathbb{N}
 \text{ へ戻す}
 $$
 
@@ -274,7 +274,7 @@ theorem realLogBudget_of_nat_product_le
 ただし、ここは coercion が少し手強い。
 
 $$
-\left(\prod_q pOf(q):\mathbb{R}\right) = \prod_q (pOf(q):\mathbb{R})
+\left(\prod_q \mathrm{pOf}(q):\mathbb{R}\right) = \prod_q (\mathrm{pOf}(q):\mathbb{R})
 $$
 
 の補題が必要になるはずじゃ。
@@ -287,7 +287,7 @@ $$
 Nat product route ができても、まだ問題は残る。
 
 $$
-\prod_{q\in I}pOf(q)\le n
+\prod_{q\in I}\mathrm{pOf}(q)\le n
 $$
 
 をどこから得るかじゃ。
@@ -333,7 +333,7 @@ $$
 次は、
 
 $$
-\prod pOf(q)\le n
+\prod \mathrm{pOf}(q)\le n
 \Rightarrow
 RealLogBudget
 $$

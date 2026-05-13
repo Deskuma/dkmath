@@ -50,7 +50,7 @@ c(n,p)\ge 0
 $$
 
 $$
-W.weightOfBase(c)\text{ が sub-probability}
+\mathrm{W.weightOfBase}(c)\text{ が sub-probability}
 $$
 
 $$
@@ -62,7 +62,7 @@ S\text{ primitive}
 $$
 
 $$
-\forall q\in F.index,\quad \mu(F.source(q))\le C
+\forall q\in \text{F.index},\quad \mu(F.source(q))\le C
 $$
 
 なら、
@@ -76,7 +76,7 @@ $$
 つまり、これまで構築してきた登山道は、いまこう一本化された。
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 $$
 
 $$
@@ -84,7 +84,7 @@ $$
 $$
 
 $$
-W.label(n,q,hq)=(q,p,k,\ldots)
+\text{W.label}(n,q,hq)=(q,p,k,\ldots)
 $$
 
 $$
@@ -100,7 +100,7 @@ $$
 $$
 
 $$
-PrimePowerChannelProvider.ofWitnessProviderWeight
+\mathrm{PrimePowerChannelProvider}.\mathrm{ofWitnessProviderWeight}
 $$
 
 $$
@@ -128,7 +128,7 @@ PrimePowerChannelProvider.weightedHitMass_le_const_applyAtToSourceControlled
 しかし、それだと weight が
 
 $$
-W.weightOfBase(c)
+\mathrm{W.weightOfBase}(c)
 $$
 
 由来であることは名前から見えない。
@@ -306,7 +306,7 @@ def BasePrimeToyWeight
 そのあと、kernel index 上の総量制御
 
 $$
-\sum_{q\in index(n)} c(n,p(q))\le 1
+\sum_{q\in \text{index}(n)} c(n,p(q))\le 1
 $$
 
 を別 predicate にしていく。

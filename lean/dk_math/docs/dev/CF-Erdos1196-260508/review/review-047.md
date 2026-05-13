@@ -30,7 +30,7 @@ structure PrimePowerWitnessProvider
 数学的には、
 
 $$
-q\in T.index(n)
+q\in \text{T.index}(n)
 $$
 
 に対して、
@@ -70,7 +70,7 @@ $$
 後者により、
 
 $$
-q\in T.index(n)
+q\in \text{T.index}(n)
 \Rightarrow
 PrimePowerDescentStep; n; (T.next(n,q))
 $$
@@ -201,7 +201,7 @@ def PrimePowerWitnessProvider.weightOfBase
 数学的には、
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 $$
 
 なら、provider が選んだ witness
@@ -233,7 +233,7 @@ weightOfBase_primeWitnessDependent
 欲しい結論は、
 
 $$
-T.PrimeWitnessDependentWeight\ (W.weightOfBase(c))\ c
+\mathrm{T.PrimeWitnessDependentWeight}\ (\mathrm{W.weightOfBase}(c))\ c
 $$
 
 じゃ。
@@ -246,10 +246,10 @@ $$
 
 として定義した weight が、ちゃんと `PrimeWitnessDependentWeight` を満たす、ということ。
 
-証明では、 $q\in index(n)$ に対して
+証明では、 $q\in \text{index}(n)$ に対して
 
 $$
-L=W.label(n,q,hq)
+L=\text{W.label}(n,q,hq)
 $$
 
 を取り、
@@ -322,7 +322,7 @@ $$
 $$
 
 $$
-ofPrimeWitnessDependentWeight
+\mathrm{ofPrimeWitnessDependentWeight}
 $$
 
 $$

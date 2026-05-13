@@ -34,9 +34,9 @@ $$
 だった。今回の実装では chain family $F$ に対して、
 
 $$
-\sum_{i\in F.index}\mathrm{hitSetMass}(S\cap F.chain_i)
+\sum_{i\in \text{F.index}}\mathrm{hitSetMass}(S\cap F.chain_i)
 \le
-\sum_{i\in F.index}\mu(source_i)
+\sum_{i\in \text{F.index}}\mu(source_i)
 $$
 
 まで持ち上がっておる。

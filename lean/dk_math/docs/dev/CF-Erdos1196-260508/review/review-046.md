@@ -65,7 +65,7 @@ PrimePowerLabel.primePowerDescentStep_of_mem
 により、
 
 $$
-L.q\in T.index(n)
+L.q\in \text{T.index}(n)
 $$
 
 なら、
@@ -88,7 +88,7 @@ $$
 を持っていれば、
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 \Rightarrow
 n\to n/q
 $$
@@ -184,7 +184,7 @@ structure PrimePowerWitnessProvider
 数学的には、
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 $$
 
 に対して、
@@ -218,7 +218,7 @@ theorem PrimePowerWitnessProvider.isPrimePowerLabel
 これは、
 
 $$
-(W.label\ n\ q\ hq).q=q
+(\text{W.label}\ n\ q\ hq).q=q
 $$
 
 と `PrimePowerLabel.isPrimePowerLabel` から出せる。
@@ -325,7 +325,7 @@ $$
 w(n,q)=c(n,p)
 $$
 
-を要求する。ここで $p=(W.label n q hq).p$ を選べばよい。
+を要求する。ここで $p=(\text{W.label} n q hq).p$ を選べばよい。
 
 `weightOfBase` が `if hq : q ∈ index n` で定義されるので、`simp [weightOfBase, hq]` が効くように設計しておくのが大事じゃ。
 
@@ -334,7 +334,7 @@ $$
 Phase AV と AW が閉じると、導線はこうなる。
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 $$
 
 $$
@@ -342,7 +342,7 @@ $$
 $$
 
 $$
-W.label(n,q,hq)=L,\quad L.q=q,\quad L.q=L.p^{L.k}
+\text{W.label}(n,q,hq)=L,\quad L.q=q,\quad L.q=L.p^{L.k}
 $$
 
 $$
@@ -358,7 +358,7 @@ $$
 $$
 
 $$
-T.PrimeWitnessDependentWeight(w,c)
+\mathrm{T.PrimeWitnessDependentWeight}(w,c)
 $$
 
 $$
@@ -366,7 +366,7 @@ $$
 $$
 
 $$
-PrimePowerChannelProvider.ofPrimeWitnessDependentWeight
+\mathrm{PrimePowerChannelProvider}.\mathrm{ofPrimeWitnessDependentWeight}
 $$
 
 $$

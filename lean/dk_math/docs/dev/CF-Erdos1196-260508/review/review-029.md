@@ -34,7 +34,7 @@ theorem DivisorTransitionKernel.primePowerDescentStep_of_primePow_label
 数学的には、
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 \Rightarrow q\mid n
 $$
 
@@ -61,7 +61,7 @@ $$
 Phase AC までの導線は、
 
 $$
-q\in index(n),\quad q\text{ prime}
+q\in \text{index}(n),\quad q\text{ prime}
 \Rightarrow
 PrimeDescentStep(n,next(n,q))
 $$
@@ -71,7 +71,7 @@ $$
 今回からは、
 
 $$
-q\in index(n),\quad q=p^k,\quad p\text{ prime},\quad 0 < k
+q\in \text{index}(n),\quad q=p^k,\quad p\text{ prime},\quad 0 < k
 \Rightarrow
 PrimePowerDescentStep(n,next(n,q))
 $$
@@ -247,7 +247,7 @@ $$
 Phase AD は、Erdős #1196 ルートでかなり象徴的な進展じゃ。
 
 $$
-q\in index(n),\quad q=p^k
+q\in \text{index}(n),\quad q=p^k
 \Rightarrow
 n\to n/q
 \text{ is prime-power descent}

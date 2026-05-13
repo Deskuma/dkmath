@@ -6,7 +6,7 @@
 ここでは本物の von Mangoldt 関数 $\Lambda(q)$ や解析的な $\log n$ にはまだ入らず、
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 $$
 
 上の label が prime-power witness を持ち、かつ weight が非負である、という有限・形式的な条件を `VonMangoldtLikeWeight` として切り出した。これはかなり良い一手じゃ。
@@ -25,7 +25,7 @@ def VonMangoldtLikeWeight
 数学的には、
 
 $$
-q\in index_T(n)
+q\in \text{index}_T(n)
 \Rightarrow
 \exists p,k,\quad p\text{ prime}\land 0 < k\land q=p^k\land 0\le w(n,q)
 $$
@@ -87,13 +87,13 @@ vonMangoldtLikeWeight_of_nonneg
 それぞれの意味はこうじゃ。
 
 $$
-T.VonMangoldtLikeWeight(w)
+\mathrm{T.VonMangoldtLikeWeight}(w)
 \Rightarrow
 0\le w(n,q)
 $$
 
 $$
-T.VonMangoldtLikeWeight(w)
+\mathrm{T.VonMangoldtLikeWeight}(w)
 \Rightarrow
 IsPrimePowerLabel(q)
 $$
@@ -101,9 +101,9 @@ $$
 そして、`T : PrimePowerDivisorTransitionKernel` はすでに index が prime-power だけであることを持っているので、
 
 $$
-\left(\forall q\in index(n),\ 0\le w(n,q)\right)
+\left(\forall q\in \text{index}(n),\ 0\le w(n,q)\right)
 \Rightarrow
-T.VonMangoldtLikeWeight(w)
+\mathrm{T.VonMangoldtLikeWeight}(w)
 $$
 
 が出る。
@@ -176,7 +176,7 @@ def PrimePowerChannelProvider.ofVonMangoldtLikeWeight
 これが入ると、後続では
 
 $$
-T.VonMangoldtLikeWeight(w)
+\mathrm{T.VonMangoldtLikeWeight}(w)
 $$
 
 と sub-probability を示すだけで、provider 化できる。
@@ -184,13 +184,13 @@ $$
 つまり、
 
 $$
-\text{von-Mangoldt-like predicate}
+\mathrm{von-Mangoldt-like predicate}
 \to
-\text{withWeight}
+\mathrm{withWeight}
 \to
-\text{PrimePowerChannelProvider}
+\mathrm{PrimePowerChannelProvider}
 \to
-\text{weightedHitMass bound}
+\mathrm{weightedHitMass bound}
 $$
 
 が一本につながる。
@@ -219,7 +219,7 @@ $$
 を外から与えて、
 
 $$
-T.VonMangoldtLikeWeight(w)
+\mathrm{T.VonMangoldtLikeWeight}(w)
 $$
 
 という predicate で性質だけを管理するのが安全。

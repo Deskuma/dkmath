@@ -34,19 +34,19 @@ theorem DivisorTransitionKernel.primeDescentStep_of_prime_label
 `DivisorTransitionKernel` はすでに
 
 $$
-q\in index(n)\Rightarrow q\mid n
+q\in \text{index}(n)\Rightarrow q\mid n
 $$
 
 と
 
 $$
-q\in index(n)\Rightarrow next(n,q)=n/q
+q\in \text{index}(n)\Rightarrow next(n,q)=n/q
 $$
 
 を持っている。そこへ
 
 $$
-Nat.Prime(q)
+\mathrm{Nat.Prime}(q)
 $$
 
 を足せば、`PrimeDescentStep` の witness として同じ $q$ を使える。
@@ -54,7 +54,7 @@ $$
 つまり、
 
 $$
-q\in index(n),\quad q\mid n,\quad q\text{ prime},\quad next(n,q)=n/q
+q\in \text{index}(n),\quad q\mid n,\quad q\text{ prime},\quad next(n,q)=n/q
 $$
 
 から、
@@ -249,7 +249,7 @@ Phase AC は、除去因子 $q$ に **素数としての意味** を与えた段
 これで、
 
 $$
-q\in index(n),\quad q\text{ prime}
+q\in \text{index}(n),\quad q\text{ prime}
 \Rightarrow
 n\to n/q
 \text{ is a prime descent step}

@@ -19,13 +19,13 @@ $$
 から非負性を閉じた。今回 Phase BD ではさらに、
 
 $$
-\sum_{q\in index(n)} A(p(q))\le B(n)
+\sum_{q\in \text{index}(n)} A(p(q))\le B(n)
 $$
 
 という **予算条件** を入れることで、
 
 $$
-\sum_{q\in index(n)}\frac{A(p(q))}{B(n)}\le 1
+\sum_{q\in \text{index}(n)}\frac{A(p(q))}{B(n)}\le 1
 $$
 
 を Lean 上で通した。つまり、ratio-style weight が単なる非負重みではなく、 **sub-probability weight** として正式に登山道へ乗ったわけじゃ。
@@ -42,7 +42,7 @@ PrimePowerWitnessProvider.baseWeightSubProbability_of_ratioBudget
 `RatioBaseWeightBudget` は、各 state $n$ において、witness provider $W$ が label $q$ から読み取る base prime $p(q)$ について、
 
 $$
-\sum_{q\in index(n)} A(p(q))\le B(n)
+\sum_{q\in \text{index}(n)} A(p(q))\le B(n)
 $$
 
 を要求する predicate じゃ。
@@ -77,7 +77,7 @@ $$
 
 $$
 W.BaseWeightSubProbability
-\bigl(ratioBasePrimeWeight(A,B)\bigr)
+\bigl(\mathrm{ratioBasePrimeWeight}(A,B)\bigr)
 $$
 
 じゃ。
@@ -144,7 +144,7 @@ div_le_iff₀
 つまり、いきなり和を割り算にまとめるのではなく、
 
 $$
-W.weightOfBase(ratioBasePrimeWeight(A,B))(n,q) = \frac{A(p(q))}{B(n)}
+\mathrm{W.weightOfBase}(\mathrm{ratioBasePrimeWeight}(A,B))(n,q) = \frac{A(p(q))}{B(n)}
 $$
 
 を index 上で揃えてから、

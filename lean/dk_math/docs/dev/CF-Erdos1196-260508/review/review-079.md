@@ -7,7 +7,7 @@
 Phase-R019 までで、
 
 $$
-I\subseteq T.index(n),\qquad 1 < n,\qquad
+I\subseteq \text{T.index}(n),\qquad 1 < n,\qquad
 \text{selected base primes are pairwise distinct}
 $$
 
@@ -15,7 +15,7 @@ $$
 
 $$
 q\mapsto
-\frac{\log(W.basePrimeOf(n,I,hI)(q))}{\log n}
+\frac{\log(\mathrm{W.basePrimeOf}(n,I,hI)(q))}{\log n}
 $$
 
 を重みとする real provider が `SubProbability` になるところまで通っていた。今回 Phase-R020 では、それを
@@ -45,7 +45,7 @@ basePrimeOf_realLogRatioWeightProvider_subProbability_of_pairwise_distinct
 意味はこう。
 
 $$
-I\subseteq T.index(n)
+I\subseteq \text{T.index}(n)
 $$
 
 $$
@@ -53,13 +53,13 @@ $$
 $$
 
 $$
-NatPairwiseDistinctOn\ I\ (W.basePrimeOf\ n\ I\ hI)
+\mathrm{NatPairwiseDistinctOn}\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
 $$
 
 なら、
 
 $$
-(realLogRatioWeightProvider\ I\ (W.basePrimeOf\ n\ I\ hI)\ n\ \cdots).SubProbability
+(\mathrm{realLogRatioWeightProvider}\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)\ n\ \cdots).\mathrm{SubProbability}
 $$
 
 が得られる。
@@ -255,7 +255,7 @@ Phase-R020 は、R001 から R019 までの成果を一度まとめ、重複な�
 到達点は、
 
 $$
-I\subseteq T.index(n),\quad 1 < n,\quad
+I\subseteq \text{T.index}(n),\quad 1 < n,\quad
 \text{selected base primes pairwise distinct}
 $$
 

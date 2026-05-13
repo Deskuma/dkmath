@@ -6,13 +6,13 @@
 Phase-R018 では、witness provider 由来の base prime が source $n$ を割ることまで閉じた。今回 Phase-R019 では、残っていた
 
 $$
-NatPairwiseCoprimeOn\ I\ (W.basePrimeOf\ n\ I\ hI)
+\mathrm{NatPairwiseCoprimeOn}\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
 $$
 
 を、より扱いやすい
 
 $$
-NatPairwiseDistinctOn\ I\ (W.basePrimeOf\ n\ I\ hI)
+\mathrm{NatPairwiseDistinctOn}\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
 $$
 
 から供給できるようになった。つまり、selected base primes が互いに異なれば、 $\log p/\log n$ 型 real provider が `SubProbability` になるところまで no-sorry で通った、ということじゃ。
@@ -60,7 +60,7 @@ PrimePowerWitnessProvider.basePrimeOf_prime_on
 これは、selected sub-index $I$ 上では
 
 $$
-W.basePrimeOf(n,I,hI)(q)
+\mathrm{W.basePrimeOf}(n,I,hI)(q)
 $$
 
 が本当に素数であることを示す補題じゃ。
@@ -76,7 +76,7 @@ $$
 $$
 
 $$
-Nat.Prime(p(q))
+\mathrm{Nat.Prime}(p(q))
 $$
 
 $$
@@ -98,7 +98,7 @@ basePrimeOf_realLogRatioWeightProvider_subProbability_of_pairwise_distinct
 これは、次の仮定から、
 
 $$
-I\subseteq T.index(n)
+I\subseteq \text{T.index}(n)
 $$
 
 $$
@@ -106,13 +106,13 @@ $$
 $$
 
 $$
-NatPairwiseDistinctOn\ I\ (W.basePrimeOf\ n\ I\ hI)
+\mathrm{NatPairwiseDistinctOn}\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
 $$
 
 結論として、
 
 $$
-(realLogRatioWeightProvider\ I\ (W.basePrimeOf\ n\ I\ hI)\ n\ \cdots).SubProbability
+(\mathrm{realLogRatioWeightProvider}\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)\ n\ \cdots).\mathrm{SubProbability}
 $$
 
 を出す theorem じゃ。
@@ -241,7 +241,7 @@ basePrimeOf_logRatioSubProbability_of_distinctBasePrimes
 目標は、
 
 $$
-\prod_{q\in I}basePrime(q)\le n
+\prod_{q\in I}\mathrm{basePrime}(q)\le n
 $$
 
 を pairwise distinct なしで示すこと。
@@ -249,7 +249,7 @@ $$
 このためには、各素数 $p$ について、
 
 $$
-\\\#{q\in I:basePrime(q)=p}\le v_p(n)
+\\\#{q\in I:\mathrm{basePrime}(q)=p}\le v_p(n)
 $$
 
 のような条件が必要になる。
@@ -264,13 +264,13 @@ DkMath 的に言えば、これは **指数消費 tracking** じゃ。
 Phase-R019 は、R route の重複なし版を完成形に近づけた大きな一歩じゃ。
 
 $$
-NatPairwiseDistinctOn
+\mathrm{NatPairwiseDistinctOn}
 $$
 
 から
 
 $$
-NatPairwiseCoprimeOn
+\mathrm{NatPairwiseCoprimeOn}
 $$
 
 を供給し、witness provider 由来の base primes が素数であることを使って、

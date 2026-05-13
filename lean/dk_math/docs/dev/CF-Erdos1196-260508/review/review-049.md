@@ -84,7 +84,7 @@ $$
 を入力して、
 
 $$
-w(n,q)=c(n,(W.label(n,q,hq)).p)
+w(n,q)=c(n,(\text{W.label}(n,q,hq)).p)
 $$
 
 を作り、それを channel provider にする標準入口じゃ。
@@ -115,12 +115,12 @@ $$
 
 $$
 \longmapsto
-W.weightOfBase(c)(n,q)
+\mathrm{W.weightOfBase}(c)(n,q)
 $$
 
 $$
 \longmapsto
-T.PrimeWitnessDependentWeight(W.weightOfBase(c),c)
+\mathrm{T.PrimeWitnessDependentWeight}(\mathrm{W.weightOfBase}(c),c)
 $$
 
 $$
@@ -143,7 +143,7 @@ ofWitnessProviderWeight_channelProviderAt_weight
 特に、
 
 $$
-\bigl(\mathrm{ofWitnessProviderWeight}(W,c,\ldots).\mathrm{channelProviderAt}(n)\bigr).\mathrm{weight} = W.weightOfBase(c)(n)
+\bigl(\mathrm{ofWitnessProviderWeight}(W,c,\ldots).\mathrm{channelProviderAt}(n)\bigr).\mathrm{weight} = \mathrm{W.weightOfBase}(c)(n)
 $$
 
 が `[simp]` で取れるのは大きい。
@@ -151,7 +151,7 @@ $$
 今後 sample や一般定理で、
 
 $$
-\text{この provider の weight は本当に }W.weightOfBase(c)\text{ か？}
+\text{この provider の weight は本当に }\mathrm{W.weightOfBase}(c)\text{ か？}
 $$
 
 を確認したい場面が出る。そこを `simp` で処理できる。
@@ -321,7 +321,7 @@ theorem PrimePowerWitnessProvider.weightOfBase_hitMass_le_const
 意味は、
 
 $$
-W.weightOfBase(c)
+\mathrm{W.weightOfBase}(c)
 $$
 
 から作った provider で、
@@ -359,7 +359,7 @@ $$
 $$
 0\le c(n,p),
 \qquad
-\sum_{q\in index(n)} c(n,p(q))\le 1
+\sum_{q\in \text{index}(n)} c(n,p(q))\le 1
 $$
 
 を仮定する形で十分じゃ。
@@ -391,7 +391,7 @@ $$
 で weight を作り、
 
 $$
-PrimePowerChannelProvider
+\mathrm{PrimePowerChannelProvider}
 $$
 
 まで流せるようになった。

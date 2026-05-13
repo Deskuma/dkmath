@@ -40,9 +40,9 @@ structure RealWeightProvider (ι : Type _) where
 数学的には、有限 index 集合上に実数値の非負重みを載せる provider じゃ。
 
 $$
-i\in index
+i\in \text{index}
 \Rightarrow
-0\le weight(i)
+0\le \text{weight}(i)
 $$
 
 を構造体 field として持つ。これで、R 版でも有限確率質量の基本容器ができた。
@@ -93,7 +93,7 @@ RealWeightProvider.totalWeight_nonneg
 各 weight が index 上で非負なら、有限和も非負：
 
 $$
-0\le \sum_{i\in index}weight(i)
+0\le \sum_{i\in \text{index}}weight(i)
 $$
 
 を示している。

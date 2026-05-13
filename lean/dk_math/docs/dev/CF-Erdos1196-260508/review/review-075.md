@@ -7,7 +7,7 @@
 今回の theorem は、要するにこう言っておる。
 
 $$
-I\subseteq T.index(n)
+I\subseteq \text{T.index}(n)
 $$
 
 $$
@@ -15,13 +15,13 @@ $$
 $$
 
 $$
-\prod_{q\in I} W.basePrimeOf(n,I,hI)(q)\le n
+\prod_{q\in I} \mathrm{W.basePrimeOf}(n,I,hI)(q)\le n
 $$
 
 なら、
 
 $$
-q\mapsto \frac{\log(W.basePrimeOf(n,I,hI)(q))}{\log n}
+q\mapsto \frac{\log(\mathrm{W.basePrimeOf}(n,I,hI)(q))}{\log n}
 $$
 
 を weight とする `RealWeightProvider` は `SubProbability` になる。
@@ -47,7 +47,7 @@ basePrimeOf_realLogProductBudget_of_productBound
 で、
 
 $$
-RealLogProductBudget(I,W.basePrimeOf(n,I,hI),n)
+RealLogProductBudget(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
 $$
 
 を作る。
@@ -61,7 +61,7 @@ realLogRatioWeightProvider_subProbability_of_productBudget
 へ渡して、
 
 $$
-(realLogRatioWeightProvider\ I\ (W.basePrimeOf\ n\ I\ hI)\ n\ \cdots).SubProbability
+(\mathrm{realLogRatioWeightProvider}\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)\ n\ \cdots).\mathrm{SubProbability}
 $$
 
 を得る。
@@ -79,7 +79,7 @@ $$
 という prime-power witness から base prime $p$ を読み、
 
 $$
-pOf(q)=p
+\mathrm{pOf}(q)=p
 $$
 
 とする。
@@ -87,13 +87,13 @@ $$
 そして selected label 集合 $I$ に対して、
 
 $$
-\prod_{q\in I}pOf(q)\le n
+\prod_{q\in I}\mathrm{pOf}(q)\le n
 $$
 
 があれば、
 
 $$
-\sum_{q\in I}\frac{\log pOf(q)}{\log n}\le 1
+\sum_{q\in I}\frac{\log \mathrm{pOf}(q)}{\log n}\le 1
 $$
 
 が出る。
@@ -127,7 +127,7 @@ $$
 次からは本当に数論側の問題、
 
 $$
-\prod_{q\in I} W.basePrimeOf(n,I,hI)(q)\le n
+\prod_{q\in I} \mathrm{W.basePrimeOf}(n,I,hI)(q)\le n
 $$
 
 をどう出すか、に入る。
@@ -282,9 +282,9 @@ Phase-R016 によって、R/log route はここまで来た。
 
 $$
 \boxed{
-I\subseteq T.index(n),\quad
+I\subseteq \text{T.index}(n),\quad
 1 < n,\quad
-\prod_{q\in I}basePrime(q)\le n
+\prod_{q\in I}\mathrm{basePrime}(q)\le n
 \Rightarrow
 \log\text{-ratio provider is sub-probability}
 }
@@ -296,7 +296,7 @@ $$
 すなわち、
 
 $$
-\prod basePrime(q)\le n
+\prod \mathrm{basePrime}(q)\le n
 $$
 
 をどう保証するか。

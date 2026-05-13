@@ -84,7 +84,7 @@ $$
 から、
 
 $$
-BasePrimeToyWeight(ratioBasePrimeWeight(A,B))
+\mathrm{BasePrimeToyWeight}(\mathrm{ratioBasePrimeWeight}(A,B))
 $$
 
 を出す。
@@ -92,7 +92,7 @@ $$
 後者はさらに、それを任意の witness provider $W$ に降ろして、
 
 $$
-W.BaseWeightNonneg(ratioBasePrimeWeight(A,B))
+\mathrm{W.BaseWeightNonneg}(\mathrm{ratioBasePrimeWeight}(A,B))
 $$
 
 を得る。
@@ -110,7 +110,7 @@ $$
 $$
 
 $$
-BasePrimeToyWeight(c)
+\mathrm{BasePrimeToyWeight}(c)
 $$
 
 $$
@@ -118,7 +118,7 @@ $$
 $$
 
 $$
-W.BaseWeightNonneg(c)
+\mathrm{W.BaseWeightNonneg}(c)
 $$
 
 ここまでが Phase BC の成果じゃな。
@@ -182,7 +182,7 @@ $$
 次に狙うべきは、
 
 $$
-\sum_{q\in index(n)}
+\sum_{q\in \text{index}(n)}
 \frac{A(p(q))}{B(n)}
 \le 1
 $$
@@ -192,7 +192,7 @@ $$
 自然な十分条件は、
 
 $$
-\sum_{q\in index(n)} A(p(q))\le B(n)
+\sum_{q\in \text{index}(n)} A(p(q))\le B(n)
 $$
 
 である。
@@ -213,7 +213,7 @@ $$
 \boxed{
 \sum_q A(p(q))\le B(n)
 \Rightarrow
-BaseWeightSubProbability(ratioBasePrimeWeight(A,B))
+\mathrm{BaseWeightSubProbability}(\mathrm{ratioBasePrimeWeight}(A,B))
 }
 $$
 
@@ -269,13 +269,13 @@ theorem baseWeightSubProbability_of_ratioBudget
 理由は、
 
 $$
-W.weightOfBase(ratioBasePrimeWeight(A,B))(n,q)
+\mathrm{W.weightOfBase}(\mathrm{ratioBasePrimeWeight}(A,B))(n,q)
 $$
 
 を展開すると、
 
 $$
-\frac{A((W.label(n,q,hq)).p)}{B(n)}
+\frac{A((\text{W.label}(n,q,hq)).p)}{B(n)}
 $$
 
 になるが、`hq` が依存引数として出てくるからじゃ。

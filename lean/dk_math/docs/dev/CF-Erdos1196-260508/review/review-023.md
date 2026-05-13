@@ -147,7 +147,7 @@ FiniteKernel.CompatibleAt
 これは中身としては、
 
 $$
-K.index(s)=F.index
+\text{K.index}(s)=\text{F.index}
 $$
 
 という単純な index 一致条件じゃが、 theorem 文ではやや長い。

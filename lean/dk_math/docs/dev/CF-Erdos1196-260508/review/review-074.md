@@ -14,25 +14,25 @@ DkMath.NumberTheory.PrimitiveSet.RealDivisorBridge
 ここで閉じた導線は、
 
 $$
-W.basePrimeOf(n,I,hI)
+\mathrm{W.basePrimeOf}(n,I,hI)
 $$
 
 が R/log 側の
 
 $$
-RealLogNonnegOn
+\mathrm{RealLogNonnegOn}
 $$
 
 を満たし、さらに外部から
 
 $$
-NatProductBoundOn(I,W.basePrimeOf(n,I,hI),n)
+\mathrm{NatProductBoundOn}(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
 $$
 
 を渡せば、
 
 $$
-RealLogProductBudget(I,W.basePrimeOf(n,I,hI),n)
+RealLogProductBudget(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
 $$
 
 まで作れる、というものじゃ。
@@ -63,13 +63,13 @@ $$
 で選ばれた label から witness provider が base prime を読み、
 
 $$
-1\le W.basePrimeOf(n,I,hI)(q)
+1\le \mathrm{W.basePrimeOf}(n,I,hI)(q)
 $$
 
 を得ることで、
 
 $$
-RealLogNonnegOn(I,W.basePrimeOf(n,I,hI))
+\mathrm{RealLogNonnegOn}(I,\mathrm{W.basePrimeOf}(n,I,hI))
 $$
 
 を満たす、という補題じゃ。
@@ -87,13 +87,13 @@ $$
 $$
 
 $$
-NatProductBoundOn(I,W.basePrimeOf(n,I,hI),n)
+\mathrm{NatProductBoundOn}(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
 $$
 
 を仮定すれば、
 
 $$
-RealLogProductBudget(I,W.basePrimeOf(n,I,hI),n)
+RealLogProductBudget(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
 $$
 
 を作る theorem じゃな。
@@ -103,16 +103,16 @@ $$
 R/log 側では、Phase-R013 までに次の interface ができていた。
 
 $$
-RealLogProductBudget(I,pOf,n)
+RealLogProductBudget(I,\mathrm{pOf},n)
 \Rightarrow
-\frac{\log(pOf(q))}{\log n}
+\frac{\log(\mathrm{pOf}(q))}{\log n}
 \text{ provider is sub-probability}
 $$
 
-今回、その $pOf$ に
+今回、その $\mathrm{pOf}$ に
 
 $$
-pOf(q)=W.basePrimeOf(n,I,hI)(q)
+\mathrm{pOf}(q)=\mathrm{W.basePrimeOf}(n,I,hI)(q)
 $$
 
 を入れる道ができた。
@@ -135,7 +135,7 @@ $$
 だが、R/log 側が要求する入口は、
 
 $$
-NatProductBoundOn(I,W.basePrimeOf(n,I,hI),n)
+\mathrm{NatProductBoundOn}(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
 $$
 
 という明確な形に落ちた。これは大きい。
@@ -180,7 +180,7 @@ import DkMath.NumberTheory.PrimitiveSet.RealLog
 つまり今は、
 
 $$
-W.basePrimeOf
+\mathrm{W.basePrimeOf}
 $$
 
 を R/log 側へ渡す橋ができた段階じゃ。
@@ -190,13 +190,13 @@ $$
 次は、今回の bridge と R013 の theorem をさらに接続して、
 
 $$
-NatProductBoundOn(I,W.basePrimeOf(n,I,hI),n)
+\mathrm{NatProductBoundOn}(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
 $$
 
 から直接
 
 $$
-(realLogRatioWeightProvider\ I\ (W.basePrimeOf n I hI)\ n\ \cdots).SubProbability
+(\mathrm{realLogRatioWeightProvider}\ I\ (\mathrm{W.basePrimeOf} n I hI)\ n\ \cdots).\mathrm{SubProbability}
 $$
 
 を出す alias が自然じゃ。
@@ -242,7 +242,7 @@ basePrimeOf_realLogProductBudget_of_productBound
 
 $$
 \boxed{
-\prod_{q\in I}W.basePrimeOf(q)\le n
+\prod_{q\in I}\mathrm{W.basePrimeOf}(q)\le n
 \Rightarrow
 \log\text{-ratio provider is sub-probability}
 }
@@ -258,13 +258,13 @@ Phase-R016 までは、product bound を仮定して進む道じゃ。
 必要なのは、
 
 $$
-NatProductBoundOn(I,W.basePrimeOf(n,I,hI),n)
+\mathrm{NatProductBoundOn}(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
 $$
 
 すなわち
 
 $$
-\prod_{q\in I}W.basePrimeOf(q)\le n
+\prod_{q\in I}\mathrm{W.basePrimeOf}(q)\le n
 $$
 
 をどう供給するか。
@@ -291,7 +291,7 @@ $$
 または、
 
 $$
-\prod_{q\in I}basePrime(q)\mid n
+\prod_{q\in I}\mathrm{basePrime}(q)\mid n
 $$
 
 のような形になる可能性が高い。
@@ -321,7 +321,7 @@ $$
 その後、いよいよ
 
 $$
-\prod basePrime(q)\le n
+\prod \mathrm{basePrime}(q)\le n
 $$
 
 をどう証明するか、重複制御と指数消費 tracking の岩稜に入る番じゃな。

@@ -115,11 +115,11 @@ $$
 Phase RH は、実数値 weight の語彙を作る段階。
 
 $$
-RealBasePrimeToyWeight(c):=\forall n,p,\ 0\le c(n,p)
+\mathrm{RealBasePrimeToyWeight}(c):=\forall n,p,\ 0\le c(n,p)
 $$
 
 $$
-realRatioBasePrimeWeight(A,B)(n,p)=A(p)/B(n)
+\mathrm{realRatioBasePrimeWeight}(A,B)(n,p)=A(p)/B(n)
 $$
 
 を置き、`Real.log` はまだ使わない。
@@ -146,7 +146,7 @@ Phase RK は `Real.log` の正値性補題を局所化する段階。
 Phase RL は、最も大事な
 
 $$
-\sum_{q\in index(n)}\log p(q)\le \log n
+\sum_{q\in \text{index}(n)}\log p(q)\le \log n
 $$
 
 という budget をどう得るかの設計段階じゃ。計画では、最初はこの budget を外部仮定として受け取る方針が推奨されておる。これも良い。ここは数学的本丸に近いので、channel API と同時に潰しに行くべきではない。
@@ -229,13 +229,13 @@ $$
 $$
 
 $$
-\sum_{q\in I} A(pOf(q))\le B(n)
+\sum_{q\in I} A(\mathrm{pOf}(q))\le B(n)
 $$
 
 から、
 
 $$
-\sum_{q\in I}\frac{A(pOf(q))}{B(n)}\le 1
+\sum_{q\in I}\frac{A(\mathrm{pOf}(q))}{B(n)}\le 1
 $$
 
 を示す。

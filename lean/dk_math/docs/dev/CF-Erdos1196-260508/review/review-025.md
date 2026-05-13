@@ -55,7 +55,7 @@ $$
 今は抽象的に、
 
 $$
-s,; i,; next(s,i),; weight(s,i)
+s,\; i,\; next(s,i),\; \text{weight}(s,i)
 $$
 
 を持つだけ。これは正しい。解析重みや素因子条件をここで混ぜると一気に重くなるからの。
@@ -291,7 +291,7 @@ PrimePowerTransitionKernel
 最小形は、
 
 $$
-q\in index(n)\Rightarrow q\mid n
+q\in \text{index}(n)\Rightarrow q\mid n
 $$
 
 と、

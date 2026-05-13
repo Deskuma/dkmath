@@ -26,13 +26,13 @@ structure PrimePowerChannelProvider where
 数学的には、
 
 $$
-P.kernel
+\mathrm{P.kernel}
 $$
 
 が「index が prime-power label だけから成る divisor transition kernel」であり、
 
 $$
-P.subprob
+\mathrm{P.subprob}
 $$
 
 が「各状態で重み総量が $1$ 以下」という正規化条件じゃ。
@@ -41,7 +41,7 @@ $$
 
 $$
 \forall n,\quad
-\sum_{q\in index(n)} w(n,q)\le 1
+\sum_{q\in \text{index}(n)} w(n,q)\le 1
 $$
 
 を channel package の中に持てる。
@@ -79,7 +79,7 @@ $$
 を持っていれば、別途
 
 $$
-hT : P.kernel.SubProbability
+hT : \mathrm{P.kernel.SubProbability}
 $$
 
 を渡さなくても、
@@ -93,7 +93,7 @@ $$
 定理の読みはこうじゃ。
 
 $$
-P.kernel.CompatibleAt(n,F)
+\mathrm{P.kernel.CompatibleAt}(n,F)
 $$
 
 $$
@@ -101,13 +101,13 @@ S\text{ primitive}
 $$
 
 $$
-\forall q\in F.index,\quad \mu(F.source(q))\le C
+\forall q\in \text{F.index},\quad \mu(F.source(q))\le C
 $$
 
 なら、
 
 $$
-(P.applyAtToSourceControlled(n,F)).weightedHitMass(S)\le C
+(\mathrm{P.applyAtToSourceControlled}(n,F)).\mathrm{weightedHitMass}(S)\le C
 $$
 
 が出る。

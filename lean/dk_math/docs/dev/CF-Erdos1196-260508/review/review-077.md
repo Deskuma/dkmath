@@ -6,13 +6,13 @@
 Phase-R017 では、pairwise-coprime route により、
 
 $$
-\text{pairwise coprime}+\forall q\in I,\ pOf(q)\mid n
+\text{pairwise coprime}+\forall q\in I,\ \mathrm{pOf}(q)\mid n
 $$
 
 から product bound を作り、そこから log-ratio provider の `SubProbability` へ進めた。今回 Phase-R018 では、そのうち
 
 $$
-\forall q\in I,\ W.basePrimeOf(n,I,hI)(q)\mid n
+\forall q\in I,\ \mathrm{W.basePrimeOf}(n,I,hI)(q)\mid n
 $$
 
 を、divisor-transition kernel と prime-power witness から自動供給できるようにした。
@@ -20,7 +20,7 @@ $$
 つまり、いま残った外部仮定は主に
 
 $$
-NatPairwiseCoprimeOn\ I\ (W.basePrimeOf\ n\ I\ hI)
+\mathrm{NatPairwiseCoprimeOn}\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
 $$
 
 だけになった。
@@ -69,7 +69,7 @@ $$
 最後に selected sub-index $I$ 上の全 $q$ について、
 
 $$
-W.basePrimeOf(n,I,hI)(q)\mid n
+\mathrm{W.basePrimeOf}(n,I,hI)(q)\mid n
 $$
 
 を得る。ここまでが R017 で外部仮定だった itemwise divisibility の供給じゃ。
@@ -103,7 +103,7 @@ hcop : NatPairwiseCoprimeOn I (W.basePrimeOf n I hI)
 つまり現在の route はこう圧縮された。
 
 $$
-I\subseteq T.index(n)
+I\subseteq \text{T.index}(n)
 $$
 
 $$
@@ -111,13 +111,13 @@ $$
 $$
 
 $$
-NatPairwiseCoprimeOn(I,W.basePrimeOf(n,I,hI))
+\mathrm{NatPairwiseCoprimeOn}(I,\mathrm{W.basePrimeOf}(n,I,hI))
 $$
 
 なら、
 
 $$
-q\mapsto \frac{\log(W.basePrimeOf(n,I,hI)(q))}{\log n}
+q\mapsto \frac{\log(\mathrm{W.basePrimeOf}(n,I,hI)(q))}{\log n}
 $$
 
 を重みとする real provider は `SubProbability` になる。
@@ -167,7 +167,7 @@ rw [hq_pow]
 残る問いは、
 
 $$
-NatPairwiseCoprimeOn\ I\ (W.basePrimeOf\ n\ I\ hI)
+\mathrm{NatPairwiseCoprimeOn}\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
 $$
 
 をどう得るかじゃ。
@@ -182,13 +182,13 @@ $$
 $$
 i\ne j
 \Rightarrow
-W.basePrimeOf(n,I,hI)(i)\ne W.basePrimeOf(n,I,hI)(j)
+\mathrm{W.basePrimeOf}(n,I,hI)(i)\ne \mathrm{W.basePrimeOf}(n,I,hI)(j)
 $$
 
 を仮定すれば、
 
 $$
-NatPairwiseCoprimeOn\ I\ (W.basePrimeOf\ n\ I\ hI)
+\mathrm{NatPairwiseCoprimeOn}\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
 $$
 
 を作れるはずじゃ。
@@ -222,7 +222,7 @@ NatPairwiseCoprimeOn I pOf
 `W.basePrimeOf` については、 $I$ 上なら witness の base prime なので、
 
 $$
-Nat.Prime(W.basePrimeOf(n,I,hI)(q))
+\mathrm{Nat.Prime}(\mathrm{W.basePrimeOf}(n,I,hI)(q))
 $$
 
 も出せるはずじゃ。
@@ -252,7 +252,7 @@ theorem basePrimeOf_prime_on
 その場合は、
 
 $$
-\prod_{q\in I}basePrime(q)\le n
+\prod_{q\in I}\mathrm{basePrime}(q)\le n
 $$
 
 を直接保証するには、base prime の出現回数を $n$ の $p$ -adic exponent で制御する必要がある。
@@ -260,7 +260,7 @@ $$
 つまり将来は、
 
 $$
-\\\#{q\in I: basePrime(q)=p}\le v_p(n)
+\\\#{q\in I: \mathrm{basePrime}(q)=p}\le v_p(n)
 $$
 
 のような **指数消費 tracking** が必要になる。
@@ -285,7 +285,7 @@ $$
 そして結果として、
 
 $$
-NatPairwiseCoprimeOn(I,W.basePrimeOf(n,I,hI))
+\mathrm{NatPairwiseCoprimeOn}(I,\mathrm{W.basePrimeOf}(n,I,hI))
 $$
 
 さえ示せば、

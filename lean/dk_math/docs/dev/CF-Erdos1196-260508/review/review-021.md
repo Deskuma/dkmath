@@ -66,9 +66,9 @@ def Compatible
 重み $w_i$ は path $i$ に掛けるものなので、
 
 $$
-i\in P.index
+i\in \text{P.index}
 \quad\text{と}\quad
-i\in F.index
+i\in \text{F.index}
 $$
 
 が同じ範囲を走っていなければならない。
@@ -140,7 +140,7 @@ $$
 この補題により、
 
 $$
-P.SubProbability
+\mathrm{P.SubProbability}
 \Rightarrow
 (P.applyToSourceControlled F).WeightSubProbability
 $$

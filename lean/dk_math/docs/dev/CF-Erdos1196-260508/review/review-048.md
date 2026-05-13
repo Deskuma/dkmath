@@ -36,13 +36,13 @@ PrimePowerWitnessProvider.weightOfBase_primeWitnessDependent
 定義としては、
 
 $$
-q\in T.index(n)
+q\in \text{T.index}(n)
 $$
 
 なら、provider が選んだ witness
 
 $$
-L=W.label(n,q,hq)
+L=\text{W.label}(n,q,hq)
 $$
 
 から $L.p$ を取り出し、
@@ -85,7 +85,7 @@ weightOfBase_primeWitnessDependent
 これは、base-prime weight $c(n,p)$ が index 上で非負なら、
 
 $$
-T.PrimeWitnessDependentWeight(W.weightOfBase(c),c)
+\mathrm{T.PrimeWitnessDependentWeight}(\mathrm{W.weightOfBase}(c),c)
 $$
 
 を得る。
@@ -111,17 +111,17 @@ $$
 
 $$
 \to
-\text{PrimeWitnessDependentWeight}
+\mathrm{PrimeWitnessDependentWeight}
 $$
 
 $$
 \to
-\text{ofPrimeWitnessDependentWeight}
+\mathrm{ofPrimeWitnessDependentWeight}
 $$
 
 $$
 \to
-\text{PrimePowerChannelProvider}
+\mathrm{PrimePowerChannelProvider}
 $$
 
 $$
@@ -144,7 +144,7 @@ weightOfBase_of_mem
 index 上では、
 
 $$
-W.weightOfBase(c)(n,q)=c(n,(W.label(n,q,hq)).p)
+\mathrm{W.weightOfBase}(c)(n,q)=c(n,(\text{W.label}(n,q,hq)).p)
 $$
 
 と簡約できる。
@@ -152,13 +152,13 @@ $$
 これがないと、`PrimeWitnessDependentWeight` の非負性結論で
 
 $$
-0\le W.weightOfBase(c)(n,q)
+0\le \mathrm{W.weightOfBase}(c)(n,q)
 $$
 
 を示すとき、仮定
 
 $$
-0\le c(n,(W.label(n,q,hq)).p)
+0\le c(n,(\text{W.label}(n,q,hq)).p)
 $$
 
 と形が合わぬ。History でも、ここは明示的な書き換えが必要だったと記録されておる。

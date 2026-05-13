@@ -71,11 +71,11 @@ $$
 今回の `[simp]` 補題により、後続では
 
 $$
-provider.index = T.index(n)
+provider.\text{index} = \text{T.index}(n)
 $$
 
 $$
-provider.weight = w(n)
+provider.\text{weight} = w(n)
 $$
 
 を自然に取り出せる。
@@ -94,11 +94,11 @@ $$
 を定義したとき、必要になるのは次のような確認じゃ。
 
 $$
-q\in index(n)\Rightarrow 0\le w(n,q)
+q\in \text{index}(n)\Rightarrow 0\le w(n,q)
 $$
 
 $$
-\sum_{q\in index(n)}w(n,q)\le 1
+\sum_{q\in \text{index}(n)}w(n,q)\le 1
 $$
 
 $$
@@ -194,7 +194,7 @@ $$
 から、
 
 $$
-index=T.index,\qquad weight=w
+index=\text{T.index},\qquad \text{weight}=w
 $$
 
 を `simp` で取り出せる。

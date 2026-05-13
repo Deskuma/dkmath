@@ -115,7 +115,7 @@ $$
 つまり、各状態 $s$ で
 
 $$
-\sum_{i\in K.index(s)} K.weight(s,i)\le 1
+\sum_{i\in \text{K.index}(s)} K.\text{weight}(s,i)\le 1
 $$
 
 が成り立つ。
@@ -336,7 +336,7 @@ theorem compatibleAt_iff ...
 特に `providerAt` を展開した compatibility は、
 
 $$
-K.index(s)=F.index
+\text{K.index}(s)=\text{F.index}
 $$
 
 なので、名前を付けると読みやすい。
@@ -350,7 +350,7 @@ def CompatibleAt (K : FiniteKernel σ ι) (s : σ)
 または直接、
 
 ```lean
-K.index s = F.index
+\text{K.index} s = \text{F.index}
 ```
 
 を使う API にしてもよい。

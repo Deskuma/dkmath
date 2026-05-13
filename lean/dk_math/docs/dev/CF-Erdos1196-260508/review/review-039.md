@@ -57,13 +57,13 @@ $$
 を与え、
 
 $$
-q\in index_T(n)\Rightarrow 0\le w(n,q)
+q\in \text{index}_T(n)\Rightarrow 0\le w(n,q)
 $$
 
 と
 
 $$
-\sum_{q\in index_T(n)} w(n,q)\le 1
+\sum_{q\in \text{index}_T(n)} w(n,q)\le 1
 $$
 
 を示せば、ただちに `PrimePowerChannelProvider` が得られる。
@@ -170,7 +170,7 @@ $$
 後続で、
 
 $$
-provider.channelProviderAt(n).weight(q)=w(n,q)
+provider.channelProviderAt(n).\text{weight}(q)=w(n,q)
 $$
 
 のような式を扱いたくなる。

@@ -39,7 +39,7 @@ S\text{ primitive}
 $$
 
 $$
-\forall q\in F.index,\quad \mu(F.source(q))\le C
+\forall q\in \text{F.index},\quad \mu(F.source(q))\le C
 $$
 
 から、
@@ -67,7 +67,7 @@ $$
 Phase AG では、
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 \Rightarrow
 q\text{ is prime-power}
 \Rightarrow
@@ -107,7 +107,7 @@ compatibleAt_iff_index_eq
 $$
 T.CompatibleAt(n,F)
 \Longleftrightarrow
-T.toDivisorTransitionKernel.index(n)=F.index
+T.toDivisorTransitionKernel.\text{index}(n)=\text{F.index}
 $$
 
 という中身を明示するものじゃ。
@@ -267,7 +267,7 @@ index 外の weight を 0 とする support 条件は、後で必要になって
 今の設計では、
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 $$
 
 を持つものだけが channel に参加する。

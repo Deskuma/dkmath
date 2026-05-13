@@ -13,7 +13,7 @@ $$
 と、
 
 $$
-W.weightOfBase(c)\text{ が sub-probability}
+\mathrm{W.weightOfBase}(c)\text{ が sub-probability}
 $$
 
 を、それぞれ名前付きの predicate として固定した。これにより、今後は長い依存型の仮定を毎回むき出しにせず、
@@ -53,9 +53,9 @@ $$
 つまり、
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 \Rightarrow
-0\le c\bigl(n,(W.label(n,q,hq)).p\bigr)
+0\le c\bigl(n,(\text{W.label}(n,q,hq)).p\bigr)
 $$
 
 という条件じゃ。
@@ -63,13 +63,13 @@ $$
 次に `BaseWeightSubProbability` は、その $c(n,p)$ から作った
 
 $$
-W.weightOfBase(c)(n,q)=c(n,p(n,q))
+\mathrm{W.weightOfBase}(c)(n,q)=c(n,p(n,q))
 $$
 
 が、実際に sub-probability channel になることを表す。
 
 $$
-\sum_{q\in index(n)} W.weightOfBase(c)(n,q)\le 1
+\sum_{q\in \text{index}(n)} \mathrm{W.weightOfBase}(c)(n,q)\le 1
 $$
 
 という質量保存条件を、名前付きにしたわけじゃな。
@@ -93,7 +93,7 @@ hw_subprob : W.BaseWeightSubProbability c hc_nonneg
 以前は、
 
 $$
-\forall n,q,hq,\quad 0\le c(n,(W.label(n,q,hq)).p)
+\forall n,q,hq,\quad 0\le c(n,(\text{W.label}(n,q,hq)).p)
 $$
 
 という条件が「たまたま theorem に必要な仮定」として見えていた。
@@ -122,11 +122,11 @@ weightOfBase_hitMass_le_const
 これにより、今後は
 
 $$
-W.BaseWeightNonneg(c)
+\mathrm{W.BaseWeightNonneg}(c)
 $$
 
 $$
-W.BaseWeightSubProbability(c)
+\mathrm{W.BaseWeightSubProbability}(c)
 $$
 
 を示せば、
@@ -148,11 +148,11 @@ $$
 $$
 
 $$
-W.BaseWeightNonneg(c)
+\mathrm{W.BaseWeightNonneg}(c)
 $$
 
 $$
-W.BaseWeightSubProbability(c)
+\mathrm{W.BaseWeightSubProbability}(c)
 $$
 
 $$
@@ -160,7 +160,7 @@ $$
 $$
 
 $$
-PrimePowerChannelProvider.ofWitnessProviderWeight
+\mathrm{PrimePowerChannelProvider}.\mathrm{ofWitnessProviderWeight}
 $$
 
 $$
@@ -259,7 +259,7 @@ $$
 と
 
 $$
-\sum_{q\in index(n)}c(n,p(q))\le 1
+\sum_{q\in \text{index}(n)}c(n,p(q))\le 1
 $$
 
 を Lean 上で扱えることじゃ。
@@ -295,7 +295,7 @@ $$
 から、任意の witness provider $W$ に対して
 
 $$
-W.BaseWeightNonneg(c)
+\mathrm{W.BaseWeightNonneg}(c)
 $$
 
 が出せる。

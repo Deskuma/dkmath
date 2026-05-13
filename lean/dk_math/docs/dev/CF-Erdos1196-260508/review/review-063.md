@@ -75,7 +75,7 @@ $$
 まだ、
 
 $$
-\sum_{q\in index(n)} \log p(q)\le \log n
+\sum_{q\in \text{index}(n)} \log p(q)\le \log n
 $$
 
 は扱っていない。
@@ -209,17 +209,17 @@ theorem real_log_ratio_sum_le_one
 これは美しい。
 Phase-R002 の `real_ratio_sum_le_one` と Phase-R004 の `real_log_nat_pos_of_one_lt` をただ接続するだけじゃ。
 
-まだ $pOf(q)$ が prime であることも使わない。
+まだ $\mathrm{pOf}(q)$ が prime であることも使わない。
 numerator の非負性すら、この theorem には不要じゃ。必要なのは分母正と budget だけである。
 
 ## 7. その次の山
 
 その後に、numerator の非負性も含めた log weight predicate へ進む。
 
-たとえば、 $pOf(q)\ge 1$ を仮定すれば、
+たとえば、 $\mathrm{pOf}(q)\ge 1$ を仮定すれば、
 
 $$
-0\le \log pOf(q)
+0\le \log \mathrm{pOf}(q)
 $$
 
 が出る。

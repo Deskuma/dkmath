@@ -104,7 +104,7 @@ S\text{ primitive}
 $$
 
 $$
-\forall q\in F.index,\quad \mu(F.source(q))\le C
+\forall q\in \text{F.index},\quad \mu(F.source(q))\le C
 $$
 
 から、
@@ -201,13 +201,13 @@ def providerAt (P : PrimePowerChannelProvider) (n : ℕ) :
 まずは、例えば次のような **有限 toy weight** でよい。
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 \Rightarrow
 w(n,q)\ge 0
 $$
 
 $$
-\sum_{q\in index(n)} w(n,q)\le 1
+\sum_{q\in \text{index}(n)} w(n,q)\le 1
 $$
 
 そして prime-power channel 上だけで動く。

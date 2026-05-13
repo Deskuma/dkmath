@@ -59,7 +59,7 @@ DivisorTransitionKernel.primePowerDescentStep_of_isPrimePowerLabel
 これにより、
 
 $$
-q\in T.index(n),
+q\in \text{T.index}(n),
 \qquad
 \mathrm{IsPrimePowerLabel}(q)
 $$
@@ -75,7 +75,7 @@ $$
 以前は theorem 呼び出し側が
 
 $$
-p,\quad k,\quad Nat.Prime(p),\quad 0 < k,\quad q=p^k
+p,\quad k,\quad \mathrm{Nat.Prime}(p),\quad 0 < k,\quad q=p^k
 $$
 
 を全部渡す必要があった。
@@ -184,7 +184,7 @@ def PrimePowerIndexOn (T : DivisorTransitionKernel) (n : ℕ) : Prop :=
 これにより、
 
 $$
-\forall q\in index(n),\quad q\text{ is prime-power}
+\forall q\in \text{index}(n),\quad q\text{ is prime-power}
 $$
 
 を一つの仮定として持てる。

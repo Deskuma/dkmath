@@ -34,7 +34,7 @@ def PrimeWitnessDependentWeight
 数学的には、
 
 $$
-q\in index_T(n)
+q\in \text{index}_T(n)
 $$
 
 ならば、
@@ -99,9 +99,9 @@ theorem vonMangoldtLikeWeight_of_primeWitnessDependent
 内容は、
 
 $$
-PrimeWitnessDependentWeight(T,w,c)
+\mathrm{PrimeWitnessDependentWeight}(T,w,c)
 \Rightarrow
-VonMangoldtLikeWeight(T,w)
+\mathrm{VonMangoldtLikeWeight}(T,w)
 $$
 
 じゃ。
@@ -111,15 +111,15 @@ $$
 これにより、既存の route が自然につながる。
 
 $$
-PrimeWitnessDependentWeight\\
+\mathrm{PrimeWitnessDependentWeight}\\
 \Rightarrow
-VonMangoldtLikeWeight\\
+\mathrm{VonMangoldtLikeWeight}\\
 \Rightarrow
-ofVonMangoldtLikeWeight\\
+\mathrm{ofVonMangoldtLikeWeight}\\
 \Rightarrow
-PrimePowerChannelProvider\\
+\mathrm{PrimePowerChannelProvider}\\
 \Rightarrow
-weightedHitMass\le C
+\mathrm{weightedHitMass}\le C
 $$
 
 ここまでの導線が意味論として見えるようになった。
@@ -237,9 +237,9 @@ def PrimePowerChannelProvider.ofPrimeWitnessDependentWeight
 これが入ると、
 
 $$
-PrimeWitnessDependentWeight
+\mathrm{PrimeWitnessDependentWeight}
 \Rightarrow
-PrimePowerChannelProvider
+\mathrm{PrimePowerChannelProvider}
 $$
 
 が一発で使える。

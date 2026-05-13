@@ -13,7 +13,7 @@ $$
 について、分子非負・分母正・budget 条件
 
 $$
-\sum_{q\in index(n)} A(p(q))\le B(n)
+\sum_{q\in \text{index}(n)} A(p(q))\le B(n)
 $$
 
 から sub-probability へ進めるようになった。今回 Phase BE では、それをさらに一段まとめて、
@@ -113,7 +113,7 @@ W.ratioBaseWeight_hitMass_le_const A B hA hB hbudget ...
 budget 条件は、
 
 $$
-\sum_{q\in index(n)} A(p(q))\le B(n)
+\sum_{q\in \text{index}(n)} A(p(q))\le B(n)
 $$
 
 であり、実際に使う重みは、
@@ -127,7 +127,7 @@ $$
 よって、
 
 $$
-\sum_{q\in index(n)}w(n,q)\le 1
+\sum_{q\in \text{index}(n)}w(n,q)\le 1
 $$
 
 となり、これは sub-probability になる。
@@ -286,7 +286,7 @@ $$
 つまり、全域一致よりも、
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 $$
 
 上で必要な値が合っていることが重要じゃ。

@@ -7,13 +7,13 @@
 ただし、ここで重要なのは、log budget をまだ証明しに行っていないことじゃな。今回の実装は、
 
 $$
-\sum_{q\in I}\log(pOf(q))\le \log n
+\sum_{q\in I}\log(\mathrm{pOf}(q))\le \log n
 $$
 
 を `RealLogBudget` という外部仮定として切り出し、その仮定から
 
 $$
-\sum_{q\in I}\frac{\log(pOf(q))}{\log n}\le 1
+\sum_{q\in I}\frac{\log(\mathrm{pOf}(q))}{\log n}\le 1
 $$
 
 を出す有限和補題を閉じた。
@@ -58,7 +58,7 @@ $$
 に、
 
 $$
-A_q=\log(pOf(q)),\qquad B=\log n
+A_q=\log(\mathrm{pOf}(q)),\qquad B=\log n
 $$
 
 を代入したものじゃ。
@@ -97,13 +97,13 @@ $$
 さらに外部 budget として、
 
 $$
-\sum_{q\in I}\log(pOf(q))\le \log n
+\sum_{q\in I}\log(\mathrm{pOf}(q))\le \log n
 $$
 
 が与えられれば、
 
 $$
-\sum_{q\in I}\frac{\log(pOf(q))}{\log n}\le 1
+\sum_{q\in I}\frac{\log(\mathrm{pOf}(q))}{\log n}\le 1
 $$
 
 が出る。
@@ -144,7 +144,7 @@ $$
 つまり次には、
 
 $$
-0\le \log(pOf(q))
+0\le \log(\mathrm{pOf}(q))
 $$
 
 を index 上で示す必要がある。
@@ -152,7 +152,7 @@ $$
 これは、
 
 $$
-1\le pOf(q)
+1\le \mathrm{pOf}(q)
 $$
 
 から出る。
@@ -167,7 +167,7 @@ $$
 今の `RealLogBudget` は、
 
 $$
-pOf(q)=0
+\mathrm{pOf}(q)=0
 $$
 
 のようなケースを排除しない。
@@ -299,13 +299,13 @@ $$
 ただし、まだ本丸は残る。
 
 $$
-RealLogBudget I pOf n
+\mathrm{RealLogBudget}\ I\ \mathrm{pOf}\ n
 $$
 
 すなわち、
 
 $$
-\sum_{q\in I}\log(pOf(q))\le \log n
+\sum_{q\in I}\log(\mathrm{pOf}(q))\le \log n
 $$
 
 をどこから導くかじゃ。
@@ -313,13 +313,13 @@ $$
 候補は、
 
 $$
-\prod_{q\in I} pOf(q)\le n
+\prod_{q\in I} \mathrm{pOf}(q)\le n
 $$
 
 を示して、
 
 $$
-\sum \log pOf(q)=\log\prod pOf(q)\le \log n
+\sum \log \mathrm{pOf}(q)=\log\prod \mathrm{pOf}(q)\le \log n
 $$
 
 へ進む道じゃ。
@@ -342,9 +342,9 @@ $$
 現在閉じたのは、
 
 $$
-RealLogBudget(I,pOf,n)
+\mathrm{RealLogBudget}(I,\mathrm{pOf},n)
 \Rightarrow
-\sum_{q\in I}\frac{\log(pOf(q))}{\log n}\le 1
+\sum_{q\in I}\frac{\log(\mathrm{pOf}(q))}{\log n}\le 1
 $$
 
 じゃ。
@@ -352,9 +352,9 @@ $$
 次は、
 
 $$
-1\le pOf(q)
+1\le \mathrm{pOf}(q)
 \Rightarrow
-0\le \log(pOf(q))
+0\le \log(\mathrm{pOf}(q))
 $$
 
 を index 上で整え、そこから `RealWeightProvider` へ載せる。

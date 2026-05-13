@@ -40,7 +40,7 @@ $$
 と書けるようにし、その中身が
 
 $$
-K.index(s)=F.index
+\text{K.index}(s)=\text{F.index}
 $$
 
 であることを `compatibleAt_iff_index_eq` で明示した、ということじゃ。
@@ -67,7 +67,7 @@ $$
 ただし、`WeightProvider` と `SourceControlledChainFamily` を接続するたびに、
 
 $$
-(K.providerAt(s)).index = F.index
+(K.providerAt(s)).\text{index} = \text{F.index}
 $$
 
 を Lean に納得させる必要があった。
@@ -127,7 +127,7 @@ S\text{ primitive}
 $$
 
 $$
-\forall i\in F.index,\quad \mu(F.source_i)\le C
+\forall i\in \text{F.index},\quad \mu(F.source_i)\le C
 $$
 
 から、
@@ -246,7 +246,7 @@ $$
 に圧縮し、その中身が
 
 $$
-K.index(s)=F.index
+\text{K.index}(s)=\text{F.index}
 $$
 
 であることも明示できるようになった。

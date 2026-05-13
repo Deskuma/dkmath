@@ -12,7 +12,7 @@ $$
 を持てば `PrimePowerDescentStep` に進めるようになった。今回 Phase AF では、それをさらに持ち上げて、
 
 $$
-\forall q\in index(n),\quad \mathrm{IsPrimePowerLabel}(q)
+\forall q\in \text{index}(n),\quad \mathrm{IsPrimePowerLabel}(q)
 $$
 
 を `PrimePowerIndexOn` として、全状態版を `PrimePowerIndexed` として定義した。これで「この kernel の index はすべて von Mangoldt channel 候補である」と言える入口ができたわけじゃ。
@@ -70,7 +70,7 @@ primePowerDescentStep_of_primePowerIndexed
 $$
 T.\mathrm{PrimePowerIndexOn}(n)
 \quad\text{かつ}\quad
-q\in T.index(n)
+q\in \text{T.index}(n)
 $$
 
 から、
@@ -86,7 +86,7 @@ $$
 $$
 T.\mathrm{PrimePowerIndexed}
 \quad\text{かつ}\quad
-q\in T.index(n)
+q\in \text{T.index}(n)
 $$
 
 だけで同じ結論が出る。
@@ -275,7 +275,7 @@ Phase AF は、素冪 label を **個別通行証** から **全 index の通行
 これで、
 
 $$
-q\in T.index(n)
+q\in \text{T.index}(n)
 \Rightarrow
 q\text{ is prime-power}
 \Rightarrow

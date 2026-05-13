@@ -121,7 +121,7 @@ $$
 それ以外の状態では index が空なので総量は $0$。したがって、
 
 $$
-\sum_{q\in index(n)} w(n,q)\le 1
+\sum_{q\in \text{index}(n)} w(n,q)\le 1
 $$
 
 が成立する。
@@ -161,7 +161,7 @@ $$
 を作り、
 
 $$
-\text{PrimePowerChannelProvider.ofWitnessProviderWeight}
+\mathrm{PrimePowerChannelProvider}.\mathrm{ofWitnessProviderWeight}
 $$
 
 で provider 化し、
@@ -289,7 +289,7 @@ S\text{ primitive}
 $$
 
 $$
-\forall q\in F.\text{index},\quad \mu(F.\text{source}(q))\le C
+\forall q\in \text{F.index},\quad \mu(F.\text{source}(q))\le C
 $$
 
 これを既存 theorem へ渡す alias にする。
