@@ -423,7 +423,7 @@ $$
 $$
 
 $$
-realLogRatioWeightProvider.SubProbability
+\mathrm{realLogRatioWeightProvider}.\mathrm{SubProbability}
 $$
 
 ## 9. 総括

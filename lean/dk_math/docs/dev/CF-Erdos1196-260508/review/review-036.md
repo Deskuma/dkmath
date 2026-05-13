@@ -25,7 +25,7 @@ PrimePowerDivisorTransitionKernel.withWeight
 $$
 T : \mathrm{PrimePowerDivisorTransitionKernel},
 \qquad
-T.SubProbability
+\mathrm{T.SubProbability}
 $$
 
 から、

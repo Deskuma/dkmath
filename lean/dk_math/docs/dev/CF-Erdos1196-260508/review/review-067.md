@@ -89,7 +89,7 @@ $$
 $$
 RealLogBudget
 \to
-realLogRatioWeightProvider.SubProbability
+\mathrm{realLogRatioWeightProvider}.\mathrm{SubProbability}
 $$
 
 は R005 ～ R007 で閉じている。

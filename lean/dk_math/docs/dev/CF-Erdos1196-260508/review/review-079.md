@@ -59,7 +59,7 @@ $$
 なら、
 
 $$
-(realLogRatioWeightProvider\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)\ n\ \cdots).SubProbability
+(\mathrm{realLogRatioWeightProvider}\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)\ n\ \cdots).\mathrm{SubProbability}
 $$
 
 が得られる。

@@ -140,7 +140,7 @@ $$
 この補題により、
 
 $$
-P.SubProbability
+\mathrm{P.SubProbability}
 \Rightarrow
 (P.applyToSourceControlled F).WeightSubProbability
 $$

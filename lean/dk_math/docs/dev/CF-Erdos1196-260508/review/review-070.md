@@ -217,7 +217,7 @@ $$
 から、直接
 
 $$
-(realLogRatioWeightProvider I \mathrm{pOf}\ n\ hp\ hn).SubProbability
+(\mathrm{realLogRatioWeightProvider}\ I \mathrm{pOf}\ n\ hp\ hn).\mathrm{SubProbability}
 $$
 
 を出す theorem じゃ。

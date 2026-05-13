@@ -61,7 +61,7 @@ realLogRatioWeightProvider_subProbability_of_productBudget
 へ渡して、
 
 $$
-(realLogRatioWeightProvider\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)\ n\ \cdots).SubProbability
+(\mathrm{realLogRatioWeightProvider}\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)\ n\ \cdots).\mathrm{SubProbability}
 $$
 
 を得る。

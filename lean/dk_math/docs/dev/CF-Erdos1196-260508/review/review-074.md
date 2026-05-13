@@ -196,7 +196,7 @@ $$
 から直接
 
 $$
-(realLogRatioWeightProvider\ I\ (\mathrm{W.basePrimeOf} n I hI)\ n\ \cdots).SubProbability
+(\mathrm{realLogRatioWeightProvider}\ I\ (\mathrm{W.basePrimeOf} n I hI)\ n\ \cdots).\mathrm{SubProbability}
 $$
 
 を出す alias が自然じゃ。
