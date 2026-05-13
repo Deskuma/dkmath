@@ -2,7 +2,7 @@
 
 ## 1. 結論
 
-うむ、Phase-R005 は **ついに \( \log p / \log n \) が theorem statement に現れた段階** じゃ。
+うむ、Phase-R005 は **ついに \(\log p / \log n\) が theorem statement に現れた段階** じゃ。
 
 ただし、ここで重要なのは、log budget をまだ証明しに行っていないことじゃな。今回の実装は、
 
