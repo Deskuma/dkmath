@@ -121,6 +121,34 @@ Archive
 
 ---
 
+### 日時: 2026/05/14 03:42 JST (Phase-R027 automatic multiplicity budget from witness exponents)
+
+1. 目的:
+   - `review/review-085.md` の提案に従い、R026 の per-label exponent bound を同一 base-prime fiber の cardinality bound へ昇格する。
+   - R025 で外部仮定だった `NatBaseMultiplicityBudgetOn I (W.basePrimeOf n I hI) n` を witness provider から自動生成し、budget 仮定なしで `SubProbability` へ進む。
+2. 実施:
+   - `RealDivisorBridge.lean` に `baseExponentOf_injOn_filter_basePrime` を追加した。
+   - 同一 base prime `p` を持つ selected labels 上で、`q ↦ W.baseExponentOf n I hI q` が単射であることを、R026 の再構成等式から示した。
+   - `basePrimeOf_card_filter_le_factorization` を追加し、同一 base-prime fiber の cardinality が `n.factorization p` 以下であることを示した。
+   - `basePrimeOf_multiplicityBudgetOn` を追加し、`NatBaseMultiplicityBudgetOn I (W.basePrimeOf n I hI) n` を witness provider から供給した。
+   - `basePrimeOf_logRatioSubProbability` を追加し、外部 multiplicity-budget 仮定なしで witness-derived log-ratio provider の `SubProbability` を示した。
+   - `ValuationBudgetRoutePlan.md` に Phase-R027 と到達結果を追記した。
+3. 結論:
+   - `I ⊆ T.index n` と `1 < n` だけで、witness provider 由来の base-prime log-ratio provider が `SubProbability` になる route が閉じた。
+   - R021-R027 により、重複あり R/log route は budget 仮定の利用から自動生成まで no-sorry で接続された。
+4. 検証:
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet.RealDivisorBridge`
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" DkMath/NumberTheory/PrimitiveSet DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+6. 次の課題:
+   - 重複なし route と valuation-budget route の位置づけを docs 上で整理する。
+   - 上位 finite/log 設計から `basePrimeOf_logRatioSubProbability` をどの theorem-facing API として使うか検討する。
+
+---
+
 ### 日時: 2026/05/13 08:14 JST (Phase-R016 witness base product bound to provider sub-probability)
 
 1. 目的:

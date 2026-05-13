@@ -285,13 +285,71 @@ k(q) ≤ n.factorization (p(q))
 これにより、今後の budget 自動生成では、各 label が消費する exponent が
 `n.factorization` の範囲内にあることを直接使える。
 
+### Phase-R027. Automatic multiplicity budget from witness exponents
+
+実装済み:
+
+```lean
+theorem PrimePowerWitnessProvider.baseExponentOf_injOn_filter_basePrime
+theorem PrimePowerWitnessProvider.basePrimeOf_card_filter_le_factorization
+theorem PrimePowerWitnessProvider.basePrimeOf_multiplicityBudgetOn
+theorem PrimePowerWitnessProvider.basePrimeOf_logRatioSubProbability
+```
+
+同じ base prime `p` を持つ selected labels
+
+```text
+{ q ∈ I | W.basePrimeOf n I hI q = p }
+```
+
+上で、`q ↦ W.baseExponentOf n I hI q` が単射であることを示した。
+証明の核は R026 の再構成等式
+
+```text
+W.basePrimeOf n I hI q ^ W.baseExponentOf n I hI q = q
+```
+
+である。同じ base prime かつ同じ exponent なら、再構成される label も同じになる。
+
+さらに各 exponent は
+
+```text
+1 ≤ W.baseExponentOf n I hI q ≤ n.factorization p
+```
+
+に入るため、この fiber は `Finset.Icc 1 (n.factorization p)` へ単射で入る。
+したがって
+
+```text
+#{ q ∈ I | W.basePrimeOf n I hI q = p } ≤ n.factorization p
+```
+
+が得られ、`NatBaseMultiplicityBudgetOn I (W.basePrimeOf n I hI) n` を
+witness provider から自動生成できるようになった。
+
+最終的に、外部 multiplicity-budget 仮定なしで
+
+```lean
+theorem basePrimeOf_logRatioSubProbability
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n) :
+    (realLogRatioWeightProvider I (W.basePrimeOf n I hI) n
+      (W.basePrimeOf_realLogNonnegOn n I hI) hn).SubProbability
+```
+
+まで閉じた。
+
 ## 注意点
 
 - `n = 0` の扱いは避ける。R/log route ではすでに `1 < n` を要求しているため、必要な非零性はここから供給する。
 - `pOf i = 1` は log nonnegativity では許されるが、valuation budget route では prime-valued 仮定を置くため対象外になる。
 - 重複なし route は今後も残す。valuation route はそれを置き換えるのではなく、より一般の route として追加する。
 - R021-R025 では base prime の出現回数を `n.factorization` で抑える抽象 route を閉じた。
-- R026 以降では `W.label` の exponent `k(q)` を budget 供給源として使う段階へ入る。
+- R026-R027 で `W.label` の exponent `k(q)` を budget 供給源として使う route も閉じた。
 
 ## 到達結果
 
@@ -312,3 +370,5 @@ theorem basePrimeOf_logRatioSubProbability_of_multiplicityBudget
 ```
 
 この theorem により、重複あり finite log route の入口ができた。
+さらに R027 により、witness provider から multiplicity budget を自動生成し、
+budget 仮定なしの `basePrimeOf_logRatioSubProbability` まで到達した。
