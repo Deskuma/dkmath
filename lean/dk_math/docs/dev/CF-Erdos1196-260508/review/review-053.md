@@ -56,7 +56,7 @@ PrimePowerWitnessProvider.baseWeightNonneg_of_basePrimeToyWeight
 意味は、
 
 $$
-BasePrimeToyWeight(c)
+\mathrm{BasePrimeToyWeight}(c)
 \Rightarrow
 W.BaseWeightNonneg(c)
 $$
@@ -142,7 +142,7 @@ $$
 これで、非負性の扱いはかなり見通しが良くなった。
 
 $$
-BasePrimeToyWeight(c)
+\mathrm{BasePrimeToyWeight}(c)
 \to
 W.BaseWeightNonneg(c)
 \to

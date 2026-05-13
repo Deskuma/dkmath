@@ -84,7 +84,7 @@ $$
 から、
 
 $$
-BasePrimeToyWeight(ratioBasePrimeWeight(A,B))
+\mathrm{BasePrimeToyWeight}(ratioBasePrimeWeight(A,B))
 $$
 
 を出す。
@@ -110,7 +110,7 @@ $$
 $$
 
 $$
-BasePrimeToyWeight(c)
+\mathrm{BasePrimeToyWeight}(c)
 $$
 
 $$
