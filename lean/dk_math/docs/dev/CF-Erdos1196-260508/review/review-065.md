@@ -134,7 +134,7 @@ $$
 に対して、
 
 $$
-0\le weight(q)
+0\le \text{weight}(q)
 $$
 
 を示せる。

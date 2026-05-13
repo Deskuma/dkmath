@@ -42,7 +42,7 @@ structure RealWeightProvider (ι : Type _) where
 $$
 i\in \text{index}
 \Rightarrow
-0\le weight(i)
+0\le \text{weight}(i)
 $$
 
 を構造体 field として持つ。これで、R 版でも有限確率質量の基本容器ができた。

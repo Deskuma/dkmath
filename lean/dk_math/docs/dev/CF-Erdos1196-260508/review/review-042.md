@@ -109,7 +109,7 @@ channelProviderAt(n).\text{index} = \text{T.index}(n)
 $$
 
 $$
-channelProviderAt(n).weight = w(n)
+channelProviderAt(n).\text{weight} = w(n)
 $$
 
 が取り出しやすくなった。

@@ -75,7 +75,7 @@ provider.\text{index} = \text{T.index}(n)
 $$
 
 $$
-provider.weight = w(n)
+provider.\text{weight} = w(n)
 $$
 
 を自然に取り出せる。
@@ -194,7 +194,7 @@ $$
 から、
 
 $$
-index=\text{T.index},\qquad weight=w
+index=\text{T.index},\qquad \text{weight}=w
 $$
 
 を `simp` で取り出せる。

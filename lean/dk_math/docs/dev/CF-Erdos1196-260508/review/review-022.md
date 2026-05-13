@@ -115,7 +115,7 @@ $$
 つまり、各状態 $s$ で
 
 $$
-\sum_{i\in \text{K.index}(s)} K.weight(s,i)\le 1
+\sum_{i\in \text{K.index}(s)} K.\text{weight}(s,i)\le 1
 $$
 
 が成り立つ。

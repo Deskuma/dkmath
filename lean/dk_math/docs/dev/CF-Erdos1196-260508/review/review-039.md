@@ -170,7 +170,7 @@ $$
 後続で、
 
 $$
-provider.channelProviderAt(n).weight(q)=w(n,q)
+provider.channelProviderAt(n).\text{weight}(q)=w(n,q)
 $$
 
 のような式を扱いたくなる。
