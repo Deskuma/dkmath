@@ -533,3 +533,27 @@ Archive
    - `ValuationBudgetRoutePlan.md` と `README.md` の内容を `sed` で確認した。
 5. 失敗事例:
    - 今回は build failure なし。
+
+### 日時: 2026/05/13 22:56 JST (Phase-R022 multiplicity vocabulary)
+
+1. 目的:
+   - `review/review-080.md` と `ValuationBudgetRoutePlan.md` に従い、重複あり route の Lean vocabulary を新規ファイルに分離する。
+   - `RealLog.lean` の責務を増やさず、自然数 factorization による product supply route の入口を作る。
+2. 実施:
+   - `DkMath/NumberTheory/PrimitiveSet/ValuationBudget.lean` を新規作成した。
+   - `NatPrimeValuedOn` を追加し、選択集合上で `pOf` が prime-valued である predicate を定義した。
+   - `NatBaseMultiplicityOn` を追加し、`I.filter (fun i => pOf i = p)` の card として base value の出現回数を定義した。
+   - `NatBaseMultiplicityBudgetOn` を追加し、各 prime `p` の出現回数が `n.factorization p` 以下であることを predicate 化した。
+   - `natBaseMultiplicityOn_eq_card_filter` と `natBaseMultiplicityBudgetOn_iff` を追加し、後続 proof 用の展開補助を用意した。
+   - `PrimitiveSet.lean` aggregator に `ValuationBudget` import を追加した。
+   - `ValuationBudgetRoutePlan.md` の Phase-R022 欄を実装済み内容へ更新した。
+3. 結論:
+   - 重複あり valuation budget route の最小 vocabulary が Lean 上で利用可能になった。
+   - 次は `NatProductDvdOn I pOf n` を multiplicity budget から供給する factorization bridge に進む。
+4. 検証:
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet.ValuationBudget`
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。

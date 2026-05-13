@@ -137,14 +137,21 @@ def NatBaseMultiplicityBudgetOn
 
 ### Phase-R022. Multiplicity vocabulary
 
-候補:
+実装済み:
 
 ```lean
+def NatPrimeValuedOn
 def NatBaseMultiplicityOn
 def NatBaseMultiplicityBudgetOn
 ```
 
-まず証明なし、または簡単な unfold 補題だけでよい。
+`DkMath/NumberTheory/PrimitiveSet/ValuationBudget.lean` に分離した。
+あわせて、展開用の薄い補題として次を追加済み。
+
+```lean
+theorem natBaseMultiplicityOn_eq_card_filter
+theorem natBaseMultiplicityBudgetOn_iff
+```
 
 ### Phase-R023. Product factorization bridge
 

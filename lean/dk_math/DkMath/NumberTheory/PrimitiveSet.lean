@@ -24,6 +24,7 @@ import DkMath.NumberTheory.PrimitiveSet.DivisorTransitionKernel
 import DkMath.NumberTheory.PrimitiveSet.RealWeight
 import DkMath.NumberTheory.PrimitiveSet.RealWeightedPath
 import DkMath.NumberTheory.PrimitiveSet.RealLog
+import DkMath.NumberTheory.PrimitiveSet.ValuationBudget
 import DkMath.NumberTheory.PrimitiveSet.RealDivisorBridge
 
 #print "file: DkMath.NumberTheory.PrimitiveSet"
@@ -54,5 +55,6 @@ This module exposes:
 - real-valued toy weight skeleton
 - real-valued weight provider skeleton
 - real/log route positivity lemmas
+- valuation-budget vocabulary for repeated base primes
 - bridge from prime-power divisor witnesses to real/log product-budget interface
 -/
