@@ -78,7 +78,7 @@ $$
 を渡し、
 
 $$
-q\in index(n)\Rightarrow 0\le w(n,q)
+q\in \text{index}(n)\Rightarrow 0\le w(n,q)
 $$
 
 さえ証明すれば、新しい重み付き kernel を作れる。
@@ -98,7 +98,7 @@ q\mid n
 $$
 
 $$
-q\in index(n)\Rightarrow q\text{ is prime-power}
+q\in \text{index}(n)\Rightarrow q\text{ is prime-power}
 $$
 
 じゃ。
@@ -143,7 +143,7 @@ withWeight_weight
 特に toy weight を作ると、sub-probability 証明で
 
 $$
-\sum_{q\in index(n)} w(n,q)\le 1
+\sum_{q\in \text{index}(n)} w(n,q)\le 1
 $$
 
 を示す必要がある。ここで `index` が元の kernel と同じであることを `simp` が処理できるのはかなり助かる。

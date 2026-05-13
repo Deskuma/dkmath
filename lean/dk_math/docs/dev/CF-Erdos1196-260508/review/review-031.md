@@ -12,7 +12,7 @@ $$
 を持てば `PrimePowerDescentStep` に進めるようになった。今回 Phase AF では、それをさらに持ち上げて、
 
 $$
-\forall q\in index(n),\quad \mathrm{IsPrimePowerLabel}(q)
+\forall q\in \text{index}(n),\quad \mathrm{IsPrimePowerLabel}(q)
 $$
 
 を `PrimePowerIndexOn` として、全状態版を `PrimePowerIndexed` として定義した。これで「この kernel の index はすべて von Mangoldt channel 候補である」と言える入口ができたわけじゃ。

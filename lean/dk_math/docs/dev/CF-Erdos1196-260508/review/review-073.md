@@ -230,7 +230,7 @@ basePrimeOf_realLogRatioWeightProvider_subProbability_of_productBound
 意味は、
 
 $$
-I\subseteq index(n)
+I\subseteq \text{index}(n)
 $$
 
 $$

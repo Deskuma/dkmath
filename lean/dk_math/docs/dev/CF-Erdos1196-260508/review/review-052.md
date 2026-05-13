@@ -53,7 +53,7 @@ $$
 つまり、
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 \Rightarrow
 0\le c\bigl(n,(\text{W.label}(n,q,hq)).p\bigr)
 $$
@@ -69,7 +69,7 @@ $$
 が、実際に sub-probability channel になることを表す。
 
 $$
-\sum_{q\in index(n)} \mathrm{W.weightOfBase}(c)(n,q)\le 1
+\sum_{q\in \text{index}(n)} \mathrm{W.weightOfBase}(c)(n,q)\le 1
 $$
 
 という質量保存条件を、名前付きにしたわけじゃな。
@@ -259,7 +259,7 @@ $$
 と
 
 $$
-\sum_{q\in index(n)}c(n,p(q))\le 1
+\sum_{q\in \text{index}(n)}c(n,p(q))\le 1
 $$
 
 を Lean 上で扱えることじゃ。

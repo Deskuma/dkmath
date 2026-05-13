@@ -291,7 +291,7 @@ PrimePowerTransitionKernel
 最小形は、
 
 $$
-q\in index(n)\Rightarrow q\mid n
+q\in \text{index}(n)\Rightarrow q\mid n
 $$
 
 と、

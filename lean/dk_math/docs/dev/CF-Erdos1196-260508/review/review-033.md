@@ -67,7 +67,7 @@ $$
 Phase AG では、
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 \Rightarrow
 q\text{ is prime-power}
 \Rightarrow
@@ -267,7 +267,7 @@ index 外の weight を 0 とする support 条件は、後で必要になって
 今の設計では、
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 $$
 
 を持つものだけが channel に参加する。

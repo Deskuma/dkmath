@@ -88,7 +88,7 @@ $$
 を持っていれば、
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 \Rightarrow
 n\to n/q
 $$
@@ -184,7 +184,7 @@ structure PrimePowerWitnessProvider
 数学的には、
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 $$
 
 に対して、
@@ -334,7 +334,7 @@ $$
 Phase AV と AW が閉じると、導線はこうなる。
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 $$
 
 $$

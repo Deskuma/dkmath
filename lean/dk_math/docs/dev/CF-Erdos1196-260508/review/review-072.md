@@ -194,7 +194,7 @@ fun q => (W.label n q (hI q hq)).p
 本質は、
 
 $$
-q\in I\subseteq index(n)
+q\in I\subseteq \text{index}(n)
 $$
 
 なら、`W.label n q ...` から base prime $p$ を取り出せる、ということじゃ。

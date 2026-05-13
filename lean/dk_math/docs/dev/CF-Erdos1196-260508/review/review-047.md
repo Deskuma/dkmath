@@ -201,7 +201,7 @@ def PrimePowerWitnessProvider.weightOfBase
 数学的には、
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 $$
 
 なら、provider が選んだ witness
@@ -246,7 +246,7 @@ $$
 
 として定義した weight が、ちゃんと `PrimeWitnessDependentWeight` を満たす、ということ。
 
-証明では、 $q\in index(n)$ に対して
+証明では、 $q\in \text{index}(n)$ に対して
 
 $$
 L=\text{W.label}(n,q,hq)

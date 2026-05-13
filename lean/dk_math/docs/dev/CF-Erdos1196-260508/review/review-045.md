@@ -136,7 +136,7 @@ $$
 こちらがわっちの推奨じゃ。
 
 つまり、`DivisorTransitionKernel` 本体はそのままにして、まず `PrimePowerLabel` を **証拠を持つ補助構造体** として追加する。
-その後、 $q\in index(n)$ に対して `PrimePowerLabel` を選ぶ witness provider を別レイヤに置く。
+その後、 $q\in \text{index}(n)$ に対して `PrimePowerLabel` を選ぶ witness provider を別レイヤに置く。
 
 これなら既存 route を壊さず、将来の $\Lambda$-like weight に必要な $p$ 取り出しだけを増やせる。
 
@@ -232,7 +232,7 @@ def weightOfBase
 数学的には、
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 $$
 
 なら witness provider が

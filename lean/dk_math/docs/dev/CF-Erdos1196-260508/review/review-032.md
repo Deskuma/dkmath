@@ -34,7 +34,7 @@ structure PrimePowerDivisorTransitionKernel where
 $$
 \text{DivisorTransitionKernel}
 +
-\forall n,\forall q\in index(n),\ q\text{ is prime-power}
+\forall n,\forall q\in \text{index}(n),\ q\text{ is prime-power}
 $$
 
 を一つに束ねた構造じゃ。
@@ -81,7 +81,7 @@ $$
 つまり、
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 \Rightarrow
 n\to n/q
 \text{ is prime-power descent}

@@ -104,7 +104,7 @@ $$
 したがって全状態で
 
 $$
-\sum_{q\in index(n)}w(n,q)\le 1
+\sum_{q\in \text{index}(n)}w(n,q)\le 1
 $$
 
 が成立する。

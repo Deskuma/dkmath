@@ -80,7 +80,7 @@ B = B(n)
 $$
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 $$
 
 この補題自体は、単に

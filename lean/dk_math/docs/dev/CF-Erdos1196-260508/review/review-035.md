@@ -41,7 +41,7 @@ $$
 
 $$
 \forall n,\quad
-\sum_{q\in index(n)} w(n,q)\le 1
+\sum_{q\in \text{index}(n)} w(n,q)\le 1
 $$
 
 を channel package の中に持てる。

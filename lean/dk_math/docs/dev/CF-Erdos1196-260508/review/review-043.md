@@ -34,7 +34,7 @@ def PrimeWitnessDependentWeight
 数学的には、
 
 $$
-q\in index_T(n)
+q\in \text{index}_T(n)
 $$
 
 ならば、

@@ -146,7 +146,7 @@ Phase RK は `Real.log` の正値性補題を局所化する段階。
 Phase RL は、最も大事な
 
 $$
-\sum_{q\in index(n)}\log p(q)\le \log n
+\sum_{q\in \text{index}(n)}\log p(q)\le \log n
 $$
 
 という budget をどう得るかの設計段階じゃ。計画では、最初はこの budget を外部仮定として受け取る方針が推奨されておる。これも良い。ここは数学的本丸に近いので、channel API と同時に潰しに行くべきではない。

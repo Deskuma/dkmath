@@ -75,7 +75,7 @@ $$
 まだ、
 
 $$
-\sum_{q\in index(n)} \log p(q)\le \log n
+\sum_{q\in \text{index}(n)} \log p(q)\le \log n
 $$
 
 は扱っていない。

@@ -76,7 +76,7 @@ $$
 つまり、これまで構築してきた登山道は、いまこう一本化された。
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 $$
 
 $$
@@ -306,7 +306,7 @@ def BasePrimeToyWeight
 そのあと、kernel index 上の総量制御
 
 $$
-\sum_{q\in index(n)} c(n,p(q))\le 1
+\sum_{q\in \text{index}(n)} c(n,p(q))\le 1
 $$
 
 を別 predicate にしていく。

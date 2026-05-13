@@ -6,7 +6,7 @@
 Phase Z/AA までは `FiniteTransitionKernel` に `next` があったものの、その `next` はまだ抽象的だった。今回 `DivisorTransitionKernel` により、
 
 $$
-q\in index(n),\qquad q\mid n,\qquad next(n,q)=\frac{n}{q}
+q\in \text{index}(n),\qquad q\mid n,\qquad next(n,q)=\frac{n}{q}
 $$
 
 が Lean 上の構造として刻まれた。これは、Erdős #1196 の実際の downward process にかなり近づいた一歩じゃ。
@@ -96,15 +96,15 @@ next_dvd_source
 数学的には、
 
 $$
-q\in index(n)\Rightarrow q\mid n
+q\in \text{index}(n)\Rightarrow q\mid n
 $$
 
 $$
-q\in index(n)\Rightarrow next(n,q)=n/q
+q\in \text{index}(n)\Rightarrow next(n,q)=n/q
 $$
 
 $$
-q\in index(n)\Rightarrow next(n,q)\mid n
+q\in \text{index}(n)\Rightarrow next(n,q)\mid n
 $$
 
 じゃ。
@@ -254,7 +254,7 @@ theorem primeDescentStep_of_prime_label
 数学的には、
 
 $$
-q\in index(n),\quad q\mid n,\quad q\text{ prime},\quad next(n,q)=n/q
+q\in \text{index}(n),\quad q\mid n,\quad q\text{ prime},\quad next(n,q)=n/q
 $$
 
 から、
@@ -304,7 +304,7 @@ Phase AB は、山道にかなり大きな道標を刻んだ。
 これまでは、
 
 $$
-state\to index\to next
+state\to \text{index}\to next
 $$
 
 という抽象遷移だった。

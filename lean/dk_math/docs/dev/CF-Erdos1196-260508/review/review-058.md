@@ -110,13 +110,13 @@ $$
 $$
 
 $$
-\sum_{q\in index(n)}A(p(q))\le B(n)
+\sum_{q\in \text{index}(n)}A(p(q))\le B(n)
 $$
 
 これらから、
 
 $$
-\sum_{q\in index(n)}\frac{A(p(q))}{B(n)}\le 1
+\sum_{q\in \text{index}(n)}\frac{A(p(q))}{B(n)}\le 1
 $$
 
 が出て、さらに

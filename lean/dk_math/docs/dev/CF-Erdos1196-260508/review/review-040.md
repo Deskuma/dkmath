@@ -94,11 +94,11 @@ $$
 を定義したとき、必要になるのは次のような確認じゃ。
 
 $$
-q\in index(n)\Rightarrow 0\le w(n,q)
+q\in \text{index}(n)\Rightarrow 0\le w(n,q)
 $$
 
 $$
-\sum_{q\in index(n)}w(n,q)\le 1
+\sum_{q\in \text{index}(n)}w(n,q)\le 1
 $$
 
 $$

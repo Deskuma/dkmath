@@ -359,7 +359,7 @@ $$
 $$
 0\le c(n,p),
 \qquad
-\sum_{q\in index(n)} c(n,p(q))\le 1
+\sum_{q\in \text{index}(n)} c(n,p(q))\le 1
 $$
 
 を仮定する形で十分じゃ。

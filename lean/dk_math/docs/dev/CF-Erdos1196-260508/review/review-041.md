@@ -6,7 +6,7 @@
 ここでは本物の von Mangoldt 関数 $\Lambda(q)$ や解析的な $\log n$ にはまだ入らず、
 
 $$
-q\in index(n)
+q\in \text{index}(n)
 $$
 
 上の label が prime-power witness を持ち、かつ weight が非負である、という有限・形式的な条件を `VonMangoldtLikeWeight` として切り出した。これはかなり良い一手じゃ。
@@ -25,7 +25,7 @@ def VonMangoldtLikeWeight
 数学的には、
 
 $$
-q\in index_T(n)
+q\in \text{index}_T(n)
 \Rightarrow
 \exists p,k,\quad p\text{ prime}\land 0 < k\land q=p^k\land 0\le w(n,q)
 $$
@@ -101,7 +101,7 @@ $$
 そして、`T : PrimePowerDivisorTransitionKernel` はすでに index が prime-power だけであることを持っているので、
 
 $$
-\left(\forall q\in index(n),\ 0\le w(n,q)\right)
+\left(\forall q\in \text{index}(n),\ 0\le w(n,q)\right)
 \Rightarrow
 \mathrm{T.VonMangoldtLikeWeight}(w)
 $$

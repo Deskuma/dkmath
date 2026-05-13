@@ -184,7 +184,7 @@ def PrimePowerIndexOn (T : DivisorTransitionKernel) (n : ℕ) : Prop :=
 これにより、
 
 $$
-\forall q\in index(n),\quad q\text{ is prime-power}
+\forall q\in \text{index}(n),\quad q\text{ is prime-power}
 $$
 
 を一つの仮定として持てる。
