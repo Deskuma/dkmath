@@ -103,7 +103,7 @@ hcop : NatPairwiseCoprimeOn I (W.basePrimeOf n I hI)
 つまり現在の route はこう圧縮された。
 
 $$
-I\subseteq T.index(n)
+I\subseteq \text{T.index}(n)
 $$
 
 $$

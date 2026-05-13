@@ -275,7 +275,7 @@ def SelectedBaseProductBound
 ```
 
 ただし、この形は `if hq` が入って少し重くなる。
-まずは $I\subseteq T.index(n)$ を別仮定にして、
+まずは $I\subseteq \text{T.index}(n)$ を別仮定にして、
 
 ```lean
 pOf q := (W.label n q (hI q hq)).p

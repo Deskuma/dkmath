@@ -65,7 +65,7 @@ PrimePowerLabel.primePowerDescentStep_of_mem
 により、
 
 $$
-L.q\in T.index(n)
+L.q\in \text{T.index}(n)
 $$
 
 なら、

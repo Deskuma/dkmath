@@ -39,7 +39,7 @@ S\text{ primitive}
 $$
 
 $$
-\forall q\in F.index,\quad \mu(F.source(q))\le C
+\forall q\in \text{F.index},\quad \mu(F.source(q))\le C
 $$
 
 から、
@@ -107,7 +107,7 @@ compatibleAt_iff_index_eq
 $$
 T.CompatibleAt(n,F)
 \Longleftrightarrow
-T.toDivisorTransitionKernel.index(n)=F.index
+T.toDivisorTransitionKernel.\text{index}(n)=\text{F.index}
 $$
 
 という中身を明示するものじゃ。

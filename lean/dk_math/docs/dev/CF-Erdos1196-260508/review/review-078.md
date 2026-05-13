@@ -98,7 +98,7 @@ basePrimeOf_realLogRatioWeightProvider_subProbability_of_pairwise_distinct
 これは、次の仮定から、
 
 $$
-I\subseteq T.index(n)
+I\subseteq \text{T.index}(n)
 $$
 
 $$

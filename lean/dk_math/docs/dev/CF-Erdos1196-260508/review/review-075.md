@@ -7,7 +7,7 @@
 今回の theorem は、要するにこう言っておる。
 
 $$
-I\subseteq T.index(n)
+I\subseteq \text{T.index}(n)
 $$
 
 $$
@@ -282,7 +282,7 @@ Phase-R016 によって、R/log route はここまで来た。
 
 $$
 \boxed{
-I\subseteq T.index(n),\quad
+I\subseteq \text{T.index}(n),\quad
 1 < n,\quad
 \prod_{q\in I}basePrime(q)\le n
 \Rightarrow

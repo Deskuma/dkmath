@@ -104,7 +104,7 @@ S\text{ primitive}
 $$
 
 $$
-\forall q\in F.index,\quad \mu(F.source(q))\le C
+\forall q\in \text{F.index},\quad \mu(F.source(q))\le C
 $$
 
 から、

@@ -273,7 +273,7 @@ $$
 もし `DivisorTransitionKernel` 側で indexed label $q$ が本当に $n$ の divisor として扱われているなら、
 
 $$
-q\in T.index(n)
+q\in \text{T.index}(n)
 \Rightarrow q\mid n
 $$
 

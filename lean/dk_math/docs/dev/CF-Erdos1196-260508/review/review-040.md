@@ -71,7 +71,7 @@ $$
 今回の `[simp]` 補題により、後続では
 
 $$
-provider.index = T.index(n)
+provider.\text{index} = \text{T.index}(n)
 $$
 
 $$
@@ -194,7 +194,7 @@ $$
 から、
 
 $$
-index=T.index,\qquad weight=w
+index=\text{T.index},\qquad weight=w
 $$
 
 を `simp` で取り出せる。

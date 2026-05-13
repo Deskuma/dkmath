@@ -48,7 +48,7 @@ T : PrimePowerDivisorTransitionKernel
 を受け取るだけで、
 
 $$
-q\in T.index(n)
+q\in \text{T.index}(n)
 \Rightarrow q=p^k
 $$
 

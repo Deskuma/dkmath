@@ -36,7 +36,7 @@ PrimePowerWitnessProvider.weightOfBase_primeWitnessDependent
 定義としては、
 
 $$
-q\in T.index(n)
+q\in \text{T.index}(n)
 $$
 
 なら、provider が選んだ witness

@@ -121,12 +121,7 @@ change sampleTenToyWeightKernel.toDivisorTransitionKernel.index 10 =
 今回の compatibility は本質的に、
 
 $$
-sampleTenToyWeightKernel.index(10)
-==================================
-
-# {2,5}
-
-sampleTenToyWeightSourceControlledFamily.index
+sampleTenToyWeightKernel.\text{index}(10) = \{2,5\} = sampleTenToyWeightSourceControlledFamily.\text{index}
 $$
 
 という index 一致条件じゃから、`change` で目標を正しい形に露出させるのは Lean 的にも読みやすい。

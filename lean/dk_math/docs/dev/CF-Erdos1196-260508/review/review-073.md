@@ -75,7 +75,7 @@ basePrimeOf
 選択集合 $I$ と、
 
 $$
-I\subseteq T.index(n)
+I\subseteq \text{T.index}(n)
 $$
 
 を表す

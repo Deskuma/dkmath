@@ -59,7 +59,7 @@ DivisorTransitionKernel.primePowerDescentStep_of_isPrimePowerLabel
 これにより、
 
 $$
-q\in T.index(n),
+q\in \text{T.index}(n),
 \qquad
 \mathrm{IsPrimePowerLabel}(q)
 $$

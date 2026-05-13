@@ -102,7 +102,7 @@ kernel = T.withWeight(w)
 $$
 
 $$
-channelProviderAt(n).index = T.index(n)
+channelProviderAt(n).\text{index} = \text{T.index}(n)
 $$
 
 $$

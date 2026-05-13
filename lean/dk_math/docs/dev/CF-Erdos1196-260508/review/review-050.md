@@ -289,7 +289,7 @@ S\text{ primitive}
 $$
 
 $$
-\forall q\in F.\text{index},\quad \mu(F.\text{source}(q))\le C
+\forall q\in \text{F.index},\quad \mu(F.\text{source}(q))\le C
 $$
 
 これを既存 theorem へ渡す alias にする。

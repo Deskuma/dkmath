@@ -30,7 +30,7 @@ structure PrimePowerWitnessProvider
 数学的には、
 
 $$
-q\in T.index(n)
+q\in \text{T.index}(n)
 $$
 
 に対して、
@@ -70,7 +70,7 @@ $$
 後者により、
 
 $$
-q\in T.index(n)
+q\in \text{T.index}(n)
 \Rightarrow
 PrimePowerDescentStep; n; (T.next(n,q))
 $$
