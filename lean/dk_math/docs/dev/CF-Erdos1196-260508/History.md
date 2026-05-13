@@ -39,6 +39,32 @@ Archive
 
 ---
 
+### 日時: 2026/05/14 02:14 JST (Phase-R024 valuation budget to real/log provider)
+
+1. 目的:
+   - `review/review-082.md` の提案に従い、multiplicity budget から `NatProductBoundOn`、`RealLogProductBudget`、log-ratio real provider の `SubProbability` まで接続する。
+   - witness provider へ戻る前に、抽象 `pOf : ι → ℕ` レベルの重複あり route を閉じる。
+2. 実施:
+   - `ValuationBudget.lean` に `realLogNonnegOn_of_natPrimeValuedOn` を追加した。
+   - `natProductBoundOn_of_multiplicityBudget` を追加し、R023 の `NatProductDvdOn` を `NatProductBoundOn` へ変換した。
+   - `realLogProductBudget_of_multiplicityBudget` を追加し、prime-valued 条件と multiplicity budget から R/log 側の bundled budget を供給した。
+   - `realLogRatioWeightProvider_subProbability_of_multiplicityBudget` を追加し、`log (pOf i) / log n` provider の `SubProbability` まで接続した。
+   - `ValuationBudgetRoutePlan.md` の Phase-R024 を実装済みに更新した。
+3. 結論:
+   - `NatBaseMultiplicityBudgetOn I pOf n` と `NatPrimeValuedOn I pOf` があれば、抽象 base reader `pOf` に対する重複あり R/log provider route は no-sorry で閉じた。
+   - 次は Phase-R025 として、`W.basePrimeOf n I hI` にこの抽象 route を適用する witness-provider bridge へ進む。
+4. 検証:
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet.ValuationBudget`
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" DkMath/NumberTheory/PrimitiveSet DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。
+6. 次の課題:
+   - `PrimePowerWitnessProvider.basePrimeOf_prime_on` を使って `NatPrimeValuedOn I (W.basePrimeOf n I hI)` を供給し、multiplicity budget 仮定から witness-derived log-ratio provider の `SubProbability` へ接続する。
+
+---
+
 ### 日時: 2026/05/13 08:14 JST (Phase-R016 witness base product bound to provider sub-probability)
 
 1. 目的:

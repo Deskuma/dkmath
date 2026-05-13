@@ -127,4 +127,62 @@ theorem natProductDvdOn_of_multiplicityBudget
     · rw [Nat.factorization_eq_zero_of_not_prime _ hp]
       exact Nat.zero_le _
 
+/-- Prime-valued selected bases satisfy the real/log nonnegativity condition. -/
+theorem realLogNonnegOn_of_natPrimeValuedOn
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (hprime : NatPrimeValuedOn I pOf) :
+    RealLogNonnegOn I pOf := by
+  intro i hi
+  exact le_of_lt (hprime i hi).one_lt
+
+/-- A multiplicity budget supplies the selected natural-number product bound. -/
+theorem natProductBoundOn_of_multiplicityBudget
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    {n : ℕ}
+    (hn : 0 < n)
+    (hprime : NatPrimeValuedOn I pOf)
+    (hbudget : NatBaseMultiplicityBudgetOn I pOf n) :
+    NatProductBoundOn I pOf n :=
+  natProductBoundOn_of_product_dvd I pOf hn
+    (natProductDvdOn_of_multiplicityBudget I pOf n hprime hbudget)
+
+/--
+A multiplicity budget supplies the bundled real/log product budget for
+prime-valued selected bases.
+-/
+theorem realLogProductBudget_of_multiplicityBudget
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (n : ℕ)
+    (hn : 1 < n)
+    (hprime : NatPrimeValuedOn I pOf)
+    (hbudget : NatBaseMultiplicityBudgetOn I pOf n) :
+    RealLogProductBudget I pOf n :=
+  ⟨realLogNonnegOn_of_natPrimeValuedOn I pOf hprime,
+    hn,
+    natProductBoundOn_of_multiplicityBudget I pOf
+      (Nat.lt_trans Nat.zero_lt_one hn) hprime hbudget⟩
+
+/--
+The log-ratio real provider is sub-probability under a prime-valued
+multiplicity budget.
+-/
+theorem realLogRatioWeightProvider_subProbability_of_multiplicityBudget
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (n : ℕ)
+    (hn : 1 < n)
+    (hprime : NatPrimeValuedOn I pOf)
+    (hbudget : NatBaseMultiplicityBudgetOn I pOf n) :
+    (realLogRatioWeightProvider I pOf n
+      (realLogNonnegOn_of_natPrimeValuedOn I pOf hprime) hn).SubProbability :=
+  realLogRatioWeightProvider_subProbability_of_productBudget I pOf n
+    (realLogProductBudget_of_multiplicityBudget I pOf n hn hprime hbudget)
+
 end DkMath.NumberTheory.PrimitiveSet

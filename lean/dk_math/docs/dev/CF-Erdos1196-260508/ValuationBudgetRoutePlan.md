@@ -181,13 +181,31 @@ NatProductDvdOn I pOf n
 
 ### Phase-R024. Product bound and provider bridge
 
+実装済み:
+
+```lean
+theorem realLogNonnegOn_of_natPrimeValuedOn
+theorem natProductBoundOn_of_multiplicityBudget
+theorem realLogProductBudget_of_multiplicityBudget
+theorem realLogRatioWeightProvider_subProbability_of_multiplicityBudget
+```
+
 R017 と同様に、
 
 ```text
-NatProductDvdOn -> NatProductBoundOn -> RealLogProductBudget -> SubProbability
+NatBaseMultiplicityBudgetOn
+-> NatProductDvdOn
+-> NatProductBoundOn
+-> RealLogProductBudget
+-> SubProbability
 ```
 
-へ接続する。
+へ接続した。
+
+この段階では `pOf : ι → ℕ` を抽象引数のまま扱う。
+`pOf` が selected index 上で prime-valued であり、base multiplicity が
+`n.factorization` に収まるなら、`log (pOf i) / log n` provider は
+`SubProbability` になる。
 
 ### Phase-R025. Witness-provider bridge
 
