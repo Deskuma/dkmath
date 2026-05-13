@@ -20,7 +20,7 @@ $$
 つまり、いま残った外部仮定は主に
 
 $$
-NatPairwiseCoprimeOn\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
+\mathrm{NatPairwiseCoprimeOn}\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
 $$
 
 だけになった。
@@ -111,7 +111,7 @@ $$
 $$
 
 $$
-NatPairwiseCoprimeOn(I,\mathrm{W.basePrimeOf}(n,I,hI))
+\mathrm{NatPairwiseCoprimeOn}(I,\mathrm{W.basePrimeOf}(n,I,hI))
 $$
 
 なら、
@@ -167,7 +167,7 @@ rw [hq_pow]
 残る問いは、
 
 $$
-NatPairwiseCoprimeOn\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
+\mathrm{NatPairwiseCoprimeOn}\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
 $$
 
 をどう得るかじゃ。
@@ -188,7 +188,7 @@ $$
 を仮定すれば、
 
 $$
-NatPairwiseCoprimeOn\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
+\mathrm{NatPairwiseCoprimeOn}\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
 $$
 
 を作れるはずじゃ。
@@ -285,7 +285,7 @@ $$
 そして結果として、
 
 $$
-NatPairwiseCoprimeOn(I,\mathrm{W.basePrimeOf}(n,I,hI))
+\mathrm{NatPairwiseCoprimeOn}(I,\mathrm{W.basePrimeOf}(n,I,hI))
 $$
 
 さえ示せば、

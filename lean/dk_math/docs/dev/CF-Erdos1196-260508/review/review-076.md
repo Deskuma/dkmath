@@ -63,7 +63,7 @@ $$
 そして、
 
 $$
-NatPairwiseCoprimeOn(I,\mathrm{pOf})
+\mathrm{NatPairwiseCoprimeOn}(I,\mathrm{pOf})
 $$
 
 は、選ばれた $\mathrm{pOf}(q)$ たちが互いに coprime であることを表す。
@@ -109,7 +109,7 @@ $$
 について、
 
 $$
-NatPairwiseCoprimeOn(I,\mathrm{pOf})
+\mathrm{NatPairwiseCoprimeOn}(I,\mathrm{pOf})
 $$
 
 と
@@ -263,7 +263,7 @@ $$
 $$
 
 $$
-NatPairwiseCoprimeOn(I,\mathrm{W.basePrimeOf})
+\mathrm{NatPairwiseCoprimeOn}(I,\mathrm{W.basePrimeOf})
 $$
 
 ## 8. 次の一手: Phase-R018 案

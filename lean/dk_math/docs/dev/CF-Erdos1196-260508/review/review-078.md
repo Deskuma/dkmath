@@ -6,7 +6,7 @@
 Phase-R018 では、witness provider 由来の base prime が source $n$ を割ることまで閉じた。今回 Phase-R019 では、残っていた
 
 $$
-NatPairwiseCoprimeOn\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
+\mathrm{NatPairwiseCoprimeOn}\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
 $$
 
 を、より扱いやすい
@@ -270,7 +270,7 @@ $$
 から
 
 $$
-NatPairwiseCoprimeOn
+\mathrm{NatPairwiseCoprimeOn}
 $$
 
 を供給し、witness provider 由来の base primes が素数であることを使って、
