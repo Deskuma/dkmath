@@ -15,7 +15,7 @@ $$
 
 $$
 q\mapsto
-\frac{\log(W.basePrimeOf(n,I,hI)(q))}{\log n}
+\frac{\log(\mathrm{W.basePrimeOf}(n,I,hI)(q))}{\log n}
 $$
 
 を重みとする real provider が `SubProbability` になるところまで通っていた。今回 Phase-R020 では、それを
@@ -53,13 +53,13 @@ $$
 $$
 
 $$
-NatPairwiseDistinctOn\ I\ (W.basePrimeOf\ n\ I\ hI)
+NatPairwiseDistinctOn\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
 $$
 
 なら、
 
 $$
-(realLogRatioWeightProvider\ I\ (W.basePrimeOf\ n\ I\ hI)\ n\ \cdots).SubProbability
+(realLogRatioWeightProvider\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)\ n\ \cdots).SubProbability
 $$
 
 が得られる。

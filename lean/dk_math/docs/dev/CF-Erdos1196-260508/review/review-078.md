@@ -6,13 +6,13 @@
 Phase-R018 では、witness provider 由来の base prime が source $n$ を割ることまで閉じた。今回 Phase-R019 では、残っていた
 
 $$
-NatPairwiseCoprimeOn\ I\ (W.basePrimeOf\ n\ I\ hI)
+NatPairwiseCoprimeOn\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
 $$
 
 を、より扱いやすい
 
 $$
-NatPairwiseDistinctOn\ I\ (W.basePrimeOf\ n\ I\ hI)
+NatPairwiseDistinctOn\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
 $$
 
 から供給できるようになった。つまり、selected base primes が互いに異なれば、 $\log p/\log n$ 型 real provider が `SubProbability` になるところまで no-sorry で通った、ということじゃ。
@@ -60,7 +60,7 @@ PrimePowerWitnessProvider.basePrimeOf_prime_on
 これは、selected sub-index $I$ 上では
 
 $$
-W.basePrimeOf(n,I,hI)(q)
+\mathrm{W.basePrimeOf}(n,I,hI)(q)
 $$
 
 が本当に素数であることを示す補題じゃ。
@@ -106,13 +106,13 @@ $$
 $$
 
 $$
-NatPairwiseDistinctOn\ I\ (W.basePrimeOf\ n\ I\ hI)
+NatPairwiseDistinctOn\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)
 $$
 
 結論として、
 
 $$
-(realLogRatioWeightProvider\ I\ (W.basePrimeOf\ n\ I\ hI)\ n\ \cdots).SubProbability
+(realLogRatioWeightProvider\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)\ n\ \cdots).SubProbability
 $$
 
 を出す theorem じゃ。

@@ -15,13 +15,13 @@ $$
 $$
 
 $$
-\prod_{q\in I} W.basePrimeOf(n,I,hI)(q)\le n
+\prod_{q\in I} \mathrm{W.basePrimeOf}(n,I,hI)(q)\le n
 $$
 
 なら、
 
 $$
-q\mapsto \frac{\log(W.basePrimeOf(n,I,hI)(q))}{\log n}
+q\mapsto \frac{\log(\mathrm{W.basePrimeOf}(n,I,hI)(q))}{\log n}
 $$
 
 を weight とする `RealWeightProvider` は `SubProbability` になる。
@@ -47,7 +47,7 @@ basePrimeOf_realLogProductBudget_of_productBound
 で、
 
 $$
-RealLogProductBudget(I,W.basePrimeOf(n,I,hI),n)
+RealLogProductBudget(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
 $$
 
 を作る。
@@ -61,7 +61,7 @@ realLogRatioWeightProvider_subProbability_of_productBudget
 へ渡して、
 
 $$
-(realLogRatioWeightProvider\ I\ (W.basePrimeOf\ n\ I\ hI)\ n\ \cdots).SubProbability
+(realLogRatioWeightProvider\ I\ (\mathrm{W.basePrimeOf}\ n\ I\ hI)\ n\ \cdots).SubProbability
 $$
 
 を得る。
@@ -127,7 +127,7 @@ $$
 次からは本当に数論側の問題、
 
 $$
-\prod_{q\in I} W.basePrimeOf(n,I,hI)(q)\le n
+\prod_{q\in I} \mathrm{W.basePrimeOf}(n,I,hI)(q)\le n
 $$
 
 をどう出すか、に入る。

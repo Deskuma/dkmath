@@ -130,7 +130,7 @@ $$
 今回 `basePrimeOf_one_le` により、最初の
 
 $$
-RealLogNonnegOn(I,W.basePrimeOf(n,I,hI))
+RealLogNonnegOn(I,\mathrm{W.basePrimeOf}(n,I,hI))
 $$
 
 を供給できる見通しが立った。
@@ -208,7 +208,7 @@ theorem basePrimeOf_realLogProductBudget_of_productBound
 その次は、さらに一歩進めて、
 
 $$
-NatProductBoundOn(I,W.basePrimeOf(n,I,hI),n)
+NatProductBoundOn(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
 $$
 
 を仮定すれば、
@@ -238,13 +238,13 @@ $$
 $$
 
 $$
-\prod_{q\in I} W.basePrimeOf(q)\le n
+\prod_{q\in I} \mathrm{W.basePrimeOf}(q)\le n
 $$
 
 なら、
 
 $$
-\frac{\log(W.basePrimeOf(q))}{\log n}
+\frac{\log(\mathrm{W.basePrimeOf}(q))}{\log n}
 $$
 
 を重みとする real provider は sub-probability、ということじゃ。
@@ -256,7 +256,7 @@ $$
 ただし、今回もまだ
 
 $$
-\prod_{q\in I} W.basePrimeOf(q)\le n
+\prod_{q\in I} \mathrm{W.basePrimeOf}(q)\le n
 $$
 
 そのものは証明していない。

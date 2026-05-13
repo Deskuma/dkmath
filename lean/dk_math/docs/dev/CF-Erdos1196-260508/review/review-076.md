@@ -103,7 +103,7 @@ PrimePowerWitnessProvider.basePrimeOf_realLogRatioWeightProvider_subProbability_
 これは、witness provider 由来の
 
 $$
-pOf(q)=W.basePrimeOf(n,I,hI)(q)
+pOf(q)=\mathrm{W.basePrimeOf}(n,I,hI)(q)
 $$
 
 について、
@@ -259,11 +259,11 @@ $$
 つまり、次は次の二つをどう供給するかじゃ。
 
 $$
-\forall q\in I,\ W.basePrimeOf(q)\mid n
+\forall q\in I,\ \mathrm{W.basePrimeOf}(q)\mid n
 $$
 
 $$
-NatPairwiseCoprimeOn(I,W.basePrimeOf)
+NatPairwiseCoprimeOn(I,\mathrm{W.basePrimeOf})
 $$
 
 ## 8. 次の一手: Phase-R018 案
@@ -303,7 +303,7 @@ $$
 で、
 
 $$
-W.basePrimeOf(q)\mid n
+\mathrm{W.basePrimeOf}(q)\mid n
 $$
 
 が出る。
@@ -337,7 +337,7 @@ theorem basePrimeOf_dvd_on
 として、
 
 $$
-\forall q\in I,\ W.basePrimeOf(n,I,hI)(q)\mid n
+\forall q\in I,\ \mathrm{W.basePrimeOf}(n,I,hI)(q)\mid n
 $$
 
 を出せる。
