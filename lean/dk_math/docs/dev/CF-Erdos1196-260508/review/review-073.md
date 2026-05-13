@@ -271,7 +271,7 @@ $$
 q_1=2,\qquad q_2=4
 $$
 
-なら、どちらも base prime は \(2\)。
+なら、どちらも base prime は \(2\) 。
 このとき base product は
 
 $$

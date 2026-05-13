@@ -394,7 +394,7 @@ $$
 \prod pOf(q)\le n
 $$
 
-を示すには、重複回数を \(n\) の \(p\)-adic valuation 以下に抑える必要がある。
+を示すには、重複回数を \(n\) の \(p\) -adic valuation 以下に抑える必要がある。
 
 これは後段の **指数消費 tracking** じゃ。
 

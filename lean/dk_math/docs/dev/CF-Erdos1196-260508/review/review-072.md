@@ -306,7 +306,7 @@ $$
 q_1=2,\quad q_2=4
 $$
 
-なら base prime はどちらも \(2\)。
+なら base prime はどちらも \(2\) 。
 このとき product は
 
 $$

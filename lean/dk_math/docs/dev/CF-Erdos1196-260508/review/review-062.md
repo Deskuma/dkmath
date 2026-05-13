@@ -229,7 +229,7 @@ $$
 
 ただしこれは、 \(p,n\) の範囲条件が必要じゃ。
 
-たとえば numerator 側は \(1\le p\)、denominator 側は \(1 < n\)。
+たとえば numerator 側は \(1\le p\) 、denominator 側は \(1 < n\) 。
 実際の prime \(p\) なら \(2\le p\) なので問題ないが、関数として全域 \(p:\mathbb{N}\) に定義すると \(p=0\) が混ざる。ここは後で扱いを決める必要がある。
 
 短期的には、全域 predicate ではなく index 上 predicate に寄せる方が安全かもしれぬ。

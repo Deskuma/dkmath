@@ -255,7 +255,7 @@ $$
 \prod_{q\in I}basePrime(q)\le n
 $$
 
-を直接保証するには、base prime の出現回数を \(n\) の \(p\)-adic exponent で制御する必要がある。
+を直接保証するには、base prime の出現回数を \(n\) の \(p\) -adic exponent で制御する必要がある。
 
 つまり将来は、
 
