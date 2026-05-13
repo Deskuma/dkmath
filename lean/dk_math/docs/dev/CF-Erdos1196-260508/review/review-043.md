@@ -101,7 +101,7 @@ theorem vonMangoldtLikeWeight_of_primeWitnessDependent
 $$
 \mathrm{PrimeWitnessDependentWeight}(T,w,c)
 \Rightarrow
-VonMangoldtLikeWeight(T,w)
+\mathrm{VonMangoldtLikeWeight}(T,w)
 $$
 
 じゃ。
@@ -113,9 +113,9 @@ $$
 $$
 \mathrm{PrimeWitnessDependentWeight}\\
 \Rightarrow
-VonMangoldtLikeWeight\\
+\mathrm{VonMangoldtLikeWeight}\\
 \Rightarrow
-ofVonMangoldtLikeWeight\\
+\mathrm{ofVonMangoldtLikeWeight}\\
 \Rightarrow
 \mathrm{PrimePowerChannelProvider}\\
 \Rightarrow

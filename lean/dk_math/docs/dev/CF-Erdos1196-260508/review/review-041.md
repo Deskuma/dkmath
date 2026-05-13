@@ -87,13 +87,13 @@ vonMangoldtLikeWeight_of_nonneg
 それぞれの意味はこうじゃ。
 
 $$
-T.VonMangoldtLikeWeight(w)
+\mathrm{T.VonMangoldtLikeWeight}(w)
 \Rightarrow
 0\le w(n,q)
 $$
 
 $$
-T.VonMangoldtLikeWeight(w)
+\mathrm{T.VonMangoldtLikeWeight}(w)
 \Rightarrow
 IsPrimePowerLabel(q)
 $$
@@ -103,7 +103,7 @@ $$
 $$
 \left(\forall q\in index(n),\ 0\le w(n,q)\right)
 \Rightarrow
-T.VonMangoldtLikeWeight(w)
+\mathrm{T.VonMangoldtLikeWeight}(w)
 $$
 
 が出る。
@@ -176,7 +176,7 @@ def PrimePowerChannelProvider.ofVonMangoldtLikeWeight
 これが入ると、後続では
 
 $$
-T.VonMangoldtLikeWeight(w)
+\mathrm{T.VonMangoldtLikeWeight}(w)
 $$
 
 と sub-probability を示すだけで、provider 化できる。
@@ -219,7 +219,7 @@ $$
 を外から与えて、
 
 $$
-T.VonMangoldtLikeWeight(w)
+\mathrm{T.VonMangoldtLikeWeight}(w)
 $$
 
 という predicate で性質だけを管理するのが安全。

@@ -50,7 +50,7 @@ $$
 今回からは、
 
 $$
-hw : T.VonMangoldtLikeWeight(w)
+hw : \mathrm{T.VonMangoldtLikeWeight}(w)
 $$
 
 から `T.vonMangoldtLikeWeight_nonneg hw` を内部で使う。これで theorem 側の入力がかなり意味論寄りになった。
