@@ -7,7 +7,7 @@
 これまでは、
 
 $$
-RealLogBudget(I,\mathrm{pOf},n)
+\mathrm{RealLogBudget}(I,\mathrm{pOf},n)
 $$
 
 を外から仮定して、
@@ -76,7 +76,7 @@ $$
 から、
 
 $$
-RealLogBudget(I,\mathrm{pOf},n)
+\mathrm{RealLogBudget}(I,\mathrm{pOf},n)
 $$
 
 を出す。
@@ -127,7 +127,7 @@ $$
 これがまさに、
 
 $$
-RealLogBudget(I,\mathrm{pOf},n)
+\mathrm{RealLogBudget}(I,\mathrm{pOf},n)
 $$
 
 じゃ。
@@ -183,7 +183,7 @@ R 版 product route はここまで来た。
 $$
 \prod \mathrm{pOf}(q)\le n
 \Rightarrow
-RealLogBudget(I,\mathrm{pOf},n)
+\mathrm{RealLogBudget}(I,\mathrm{pOf},n)
 \Rightarrow
 \text{log-ratio provider is sub-probability}
 $$

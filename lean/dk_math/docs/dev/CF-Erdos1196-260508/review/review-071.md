@@ -7,7 +7,7 @@
 これまで外部仮定だった
 
 $$
-RealLogBudget(I,\mathrm{pOf},n)
+\mathrm{RealLogBudget}(I,\mathrm{pOf},n)
 $$
 
 は Phase-R011 で、
@@ -82,7 +82,7 @@ realLogRatioWeightProvider_subProbability
 今までの R 版 route はこうだった。
 
 $$
-RealLogBudget(I,\mathrm{pOf},n)
+\mathrm{RealLogBudget}(I,\mathrm{pOf},n)
 \Rightarrow
 \sum_q \frac{\log(\mathrm{pOf}(q))}{\log n}\le 1
 $$

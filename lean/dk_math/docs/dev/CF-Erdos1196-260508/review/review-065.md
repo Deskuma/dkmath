@@ -7,7 +7,7 @@
 Phase-R005 では、
 
 $$
-RealLogBudget(I,\mathrm{pOf},n)
+\mathrm{RealLogBudget}(I,\mathrm{pOf},n)
 $$
 
 から、
@@ -255,7 +255,7 @@ $$
 次の本丸は、やはり
 
 $$
-RealLogBudget(I,\mathrm{pOf},n)
+\mathrm{RealLogBudget}(I,\mathrm{pOf},n)
 $$
 
 をどこから得るかじゃ。

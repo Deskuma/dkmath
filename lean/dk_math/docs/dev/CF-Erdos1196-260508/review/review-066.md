@@ -116,7 +116,7 @@ $$
 さらに `realLogRatioWeightProvider_subProbability` では、
 
 $$
-RealLogBudget(I,\mathrm{pOf},n)
+\mathrm{RealLogBudget}(I,\mathrm{pOf},n)
 $$
 
 すなわち
@@ -214,7 +214,7 @@ $$
 次の本丸は、やはり
 
 $$
-RealLogBudget(I,\mathrm{pOf},n)
+\mathrm{RealLogBudget}(I,\mathrm{pOf},n)
 $$
 
 をどこから導くかじゃ。
@@ -308,7 +308,7 @@ $$
 から、
 
 $$
-RealLogBudget(I,\mathrm{pOf},n)
+\mathrm{RealLogBudget}(I,\mathrm{pOf},n)
 $$
 
 を出す。

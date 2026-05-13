@@ -165,7 +165,7 @@ $$
 から
 
 $$
-RealLogBudget(I,\mathrm{pOf},n)
+\mathrm{RealLogBudget}(I,\mathrm{pOf},n)
 $$
 
 を供給する theorem が自然じゃ。
@@ -248,7 +248,7 @@ Phase-R011 が閉じると、
 $$
 \prod \mathrm{pOf}(q)\le n
 \Rightarrow
-RealLogBudget(I,\mathrm{pOf},n)
+\mathrm{RealLogBudget}(I,\mathrm{pOf},n)
 $$
 
 が得られる。

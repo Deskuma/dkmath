@@ -299,7 +299,7 @@ $$
 ただし、まだ本丸は残る。
 
 $$
-RealLogBudget I \mathrm{pOf} n
+\mathrm{RealLogBudget}\ I\ \mathrm{pOf}\ n
 $$
 
 すなわち、
@@ -342,7 +342,7 @@ $$
 現在閉じたのは、
 
 $$
-RealLogBudget(I,\mathrm{pOf},n)
+\mathrm{RealLogBudget}(I,\mathrm{pOf},n)
 \Rightarrow
 \sum_{q\in I}\frac{\log(\mathrm{pOf}(q))}{\log n}\le 1
 $$

@@ -7,7 +7,7 @@
 Phase-R005 ～ R007 で、
 
 $$
-RealLogBudget(I,\mathrm{pOf},n)
+\mathrm{RealLogBudget}(I,\mathrm{pOf},n)
 \Rightarrow
 \sum_{q\in I}\frac{\log(\mathrm{pOf}(q))}{\log n}\le 1
 $$
@@ -22,7 +22,7 @@ $$
 今回 Phase-R008 では、その外部仮定だった
 
 $$
-RealLogBudget(I,\mathrm{pOf},n)
+\mathrm{RealLogBudget}(I,\mathrm{pOf},n)
 $$
 
 を **どこから供給するか** を、product route として分解した。これはかなり良い判断じゃ。

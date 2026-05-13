@@ -7,7 +7,7 @@
 Phase-R005 ～ R007 では、
 
 $$
-RealLogBudget(I,\mathrm{pOf},n)
+\mathrm{RealLogBudget}(I,\mathrm{pOf},n)
 \Rightarrow
 \sum_{q\in I}\frac{\log(\mathrm{pOf}(q))}{\log n}\le 1
 $$
@@ -331,7 +331,7 @@ Nat product route が閉じると、
 $$
 \prod_{q\in I}\mathrm{pOf}(q)\le n
 \Rightarrow
-RealLogBudget(I,\mathrm{pOf},n)
+\mathrm{RealLogBudget}(I,\mathrm{pOf},n)
 $$
 
 が得られる。
