@@ -99,7 +99,7 @@ theorem vonMangoldtLikeWeight_of_primeWitnessDependent
 内容は、
 
 $$
-PrimeWitnessDependentWeight(T,w,c)
+\mathrm{PrimeWitnessDependentWeight}(T,w,c)
 \Rightarrow
 VonMangoldtLikeWeight(T,w)
 $$
@@ -111,7 +111,7 @@ $$
 これにより、既存の route が自然につながる。
 
 $$
-PrimeWitnessDependentWeight\\
+\mathrm{PrimeWitnessDependentWeight}\\
 \Rightarrow
 VonMangoldtLikeWeight\\
 \Rightarrow
@@ -237,7 +237,7 @@ def PrimePowerChannelProvider.ofPrimeWitnessDependentWeight
 これが入ると、
 
 $$
-PrimeWitnessDependentWeight
+\mathrm{PrimeWitnessDependentWeight}
 \Rightarrow
 \mathrm{PrimePowerChannelProvider}
 $$

@@ -18,11 +18,11 @@ sampleTenPrimeWitnessDependentWeight_hitMass_le_one
 という theorem 名を与えたことで、
 
 $$
-\text{PrimeWitnessDependentWeight}
+\mathrm{PrimeWitnessDependentWeight}
 \to
-\text{ofPrimeWitnessDependentWeight}
+\mathrm{ofPrimeWitnessDependentWeight}
 \to
-\text{applyAtToSourceControlled}
+\mathrm{applyAtToSourceControlled}
 \to
 \mathrm{weightedHitMass}\le 1
 $$
@@ -271,12 +271,12 @@ $$
 
 $$
 \to
-\text{PrimeWitnessDependentWeight}
+\mathrm{PrimeWitnessDependentWeight}
 $$
 
 $$
 \to
-\text{ofPrimeWitnessDependentWeight}
+\mathrm{ofPrimeWitnessDependentWeight}
 $$
 
 $$

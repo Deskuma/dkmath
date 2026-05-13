@@ -12,13 +12,13 @@ $$
 という形で、prime-power witness の base prime $p$ に依存する toy weight を表現できるようになった。今回 Phase AS では、それをさらに
 
 $$
-\text{PrimeWitnessDependentWeight}
+\mathrm{PrimeWitnessDependentWeight}
 \to
-\text{VonMangoldtLikeWeight}
+\mathrm{VonMangoldtLikeWeight}
 \to
-\text{withWeight}
+\mathrm{withWeight}
 \to
-\text{PrimePowerChannelProvider}
+\mathrm{PrimePowerChannelProvider}
 $$
 
 へ一発で流す constructor が追加された。これはかなり良い接続じゃ。
