@@ -66,7 +66,7 @@ $$
 証明はとても自然で、 $W$ が index 上の $q$ から base prime
 
 $$
-p=(W.label(n,q,hq)).p
+p=(\text{W.label}(n,q,hq)).p
 $$
 
 を選ぶ。

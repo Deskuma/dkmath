@@ -399,7 +399,7 @@ $$
 $$
 
 $$
-\mathrm{pOf}(q)=W.label(n,q,hq).p
+\mathrm{pOf}(q)=\text{W.label}(n,q,hq).p
 $$
 
 $$

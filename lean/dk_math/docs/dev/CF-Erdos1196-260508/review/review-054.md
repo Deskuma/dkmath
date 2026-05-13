@@ -275,7 +275,7 @@ $$
 を展開すると、
 
 $$
-\frac{A((W.label(n,q,hq)).p)}{B(n)}
+\frac{A((\text{W.label}(n,q,hq)).p)}{B(n)}
 $$
 
 になるが、`hq` が依存引数として出てくるからじゃ。

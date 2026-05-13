@@ -84,7 +84,7 @@ $$
 を入力して、
 
 $$
-w(n,q)=c(n,(W.label(n,q,hq)).p)
+w(n,q)=c(n,(\text{W.label}(n,q,hq)).p)
 $$
 
 を作り、それを channel provider にする標準入口じゃ。

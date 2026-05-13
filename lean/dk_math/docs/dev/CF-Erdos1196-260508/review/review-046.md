@@ -218,7 +218,7 @@ theorem PrimePowerWitnessProvider.isPrimePowerLabel
 これは、
 
 $$
-(W.label\ n\ q\ hq).q=q
+(\text{W.label}\ n\ q\ hq).q=q
 $$
 
 と `PrimePowerLabel.isPrimePowerLabel` から出せる。
@@ -325,7 +325,7 @@ $$
 w(n,q)=c(n,p)
 $$
 
-を要求する。ここで $p=(W.label n q hq).p$ を選べばよい。
+を要求する。ここで $p=(\text{W.label} n q hq).p$ を選べばよい。
 
 `weightOfBase` が `if hq : q ∈ index n` で定義されるので、`simp [weightOfBase, hq]` が効くように設計しておくのが大事じゃ。
 
@@ -342,7 +342,7 @@ $$
 $$
 
 $$
-W.label(n,q,hq)=L,\quad L.q=q,\quad L.q=L.p^{L.k}
+\text{W.label}(n,q,hq)=L,\quad L.q=q,\quad L.q=L.p^{L.k}
 $$
 
 $$

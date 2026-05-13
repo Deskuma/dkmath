@@ -55,7 +55,7 @@ $$
 $$
 q\in index(n)
 \Rightarrow
-0\le c\bigl(n,(W.label(n,q,hq)).p\bigr)
+0\le c\bigl(n,(\text{W.label}(n,q,hq)).p\bigr)
 $$
 
 という条件じゃ。
@@ -93,7 +93,7 @@ hw_subprob : W.BaseWeightSubProbability c hc_nonneg
 以前は、
 
 $$
-\forall n,q,hq,\quad 0\le c(n,(W.label(n,q,hq)).p)
+\forall n,q,hq,\quad 0\le c(n,(\text{W.label}(n,q,hq)).p)
 $$
 
 という条件が「たまたま theorem に必要な仮定」として見えていた。

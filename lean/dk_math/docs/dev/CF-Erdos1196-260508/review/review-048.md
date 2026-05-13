@@ -42,7 +42,7 @@ $$
 なら、provider が選んだ witness
 
 $$
-L=W.label(n,q,hq)
+L=\text{W.label}(n,q,hq)
 $$
 
 から $L.p$ を取り出し、
@@ -144,7 +144,7 @@ weightOfBase_of_mem
 index 上では、
 
 $$
-\mathrm{W.weightOfBase}(c)(n,q)=c(n,(W.label(n,q,hq)).p)
+\mathrm{W.weightOfBase}(c)(n,q)=c(n,(\text{W.label}(n,q,hq)).p)
 $$
 
 と簡約できる。
@@ -158,7 +158,7 @@ $$
 を示すとき、仮定
 
 $$
-0\le c(n,(W.label(n,q,hq)).p)
+0\le c(n,(\text{W.label}(n,q,hq)).p)
 $$
 
 と形が合わぬ。History でも、ここは明示的な書き換えが必要だったと記録されておる。

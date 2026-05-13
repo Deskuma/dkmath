@@ -84,7 +84,7 @@ $$
 $$
 
 $$
-W.label(n,q,hq)=(q,p,k,\ldots)
+\text{W.label}(n,q,hq)=(q,p,k,\ldots)
 $$
 
 $$
