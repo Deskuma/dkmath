@@ -77,7 +77,7 @@ $$
 
 $$
 W.BaseWeightSubProbability
-\bigl(ratioBasePrimeWeight(A,B)\bigr)
+\bigl(\mathrm{ratioBasePrimeWeight}(A,B)\bigr)
 $$
 
 じゃ。
@@ -144,7 +144,7 @@ div_le_iff₀
 つまり、いきなり和を割り算にまとめるのではなく、
 
 $$
-W.weightOfBase(ratioBasePrimeWeight(A,B))(n,q) = \frac{A(p(q))}{B(n)}
+W.weightOfBase(\mathrm{ratioBasePrimeWeight}(A,B))(n,q) = \frac{A(p(q))}{B(n)}
 $$
 
 を index 上で揃えてから、

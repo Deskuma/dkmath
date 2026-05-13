@@ -84,7 +84,7 @@ $$
 から、
 
 $$
-\mathrm{BasePrimeToyWeight}(ratioBasePrimeWeight(A,B))
+\mathrm{BasePrimeToyWeight}(\mathrm{ratioBasePrimeWeight}(A,B))
 $$
 
 を出す。
@@ -92,7 +92,7 @@ $$
 後者はさらに、それを任意の witness provider $W$ に降ろして、
 
 $$
-\mathrm{W.BaseWeightNonneg}(ratioBasePrimeWeight(A,B))
+\mathrm{W.BaseWeightNonneg}(\mathrm{ratioBasePrimeWeight}(A,B))
 $$
 
 を得る。
@@ -213,7 +213,7 @@ $$
 \boxed{
 \sum_q A(p(q))\le B(n)
 \Rightarrow
-\mathrm{BaseWeightSubProbability}(ratioBasePrimeWeight(A,B))
+\mathrm{BaseWeightSubProbability}(\mathrm{ratioBasePrimeWeight}(A,B))
 }
 $$
 
@@ -269,7 +269,7 @@ theorem baseWeightSubProbability_of_ratioBudget
 理由は、
 
 $$
-W.weightOfBase(ratioBasePrimeWeight(A,B))(n,q)
+W.weightOfBase(\mathrm{ratioBasePrimeWeight}(A,B))(n,q)
 $$
 
 を展開すると、
