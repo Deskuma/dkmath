@@ -21,7 +21,7 @@ $$
 つまり、まだ `Real.log` も channel provider も出さずに、
 
 $$
-\sum_{q\in I} A_q\le B,\qquad 0<B
+\sum_{q\in I} A_q\le B,\qquad 0 < B
 $$
 
 から、
@@ -143,7 +143,7 @@ R 版は今こうなっておる。
 しかし、channel に入る前に必要な二つの代数部品、
 
 $$
-0\le A(p),\quad 0<B(n)
+0\le A(p),\quad 0 < B(n)
 \Rightarrow
 0\le A(p)/B(n)
 $$
@@ -246,7 +246,7 @@ $$
 $$
 
 $$
-1<n\Rightarrow 0<\log n
+1 < n\Rightarrow 0 < \log n
 $$
 
 ただし、log budget

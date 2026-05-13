@@ -41,7 +41,7 @@ basePrimeOf_dvd_source_on
 まず witness から、
 
 $$
-q=p^k,\qquad 0<k
+q=p^k,\qquad 0 < k
 $$
 
 がある。したがって、
@@ -107,7 +107,7 @@ I\subseteq T.index(n)
 $$
 
 $$
-1<n
+1 < n
 $$
 
 $$

@@ -142,7 +142,7 @@ $$
 分子は今回の非負性、分母は Phase-R004 の
 
 $$
-1<n\Rightarrow 0<\log n
+1 < n\Rightarrow 0 < \log n
 $$
 
 を使えばよい。
@@ -298,9 +298,9 @@ $$
 と、
 
 $$
-1<n
+1 < n
 \Rightarrow
-0<\log n
+0 < \log n
 $$
 
 が揃った。

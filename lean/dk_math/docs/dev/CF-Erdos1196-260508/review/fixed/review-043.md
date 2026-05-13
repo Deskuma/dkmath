@@ -40,7 +40,7 @@ $$
 ならば、
 
 $$
-q=p^k,\qquad p\text{ prime},\qquad 0<k
+q=p^k,\qquad p\text{ prime},\qquad 0 < k
 $$
 
 となる witness が存在し、さらに重みが

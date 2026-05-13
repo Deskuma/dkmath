@@ -28,7 +28,7 @@ RealLogProductBudget
 これにより、後続の prime-power / divisor channel 側は、いちいち
 
 $$
-RealLogNonnegOn(I,pOf),\quad 1<n,\quad \prod pOf(q)\le n
+RealLogNonnegOn(I,pOf),\quad 1 < n,\quad \prod pOf(q)\le n
 $$
 
 をばらばらに供給するのではなく、まず
@@ -78,7 +78,7 @@ $$
 $$
 
 $$
-1<n
+1 < n
 $$
 
 $$

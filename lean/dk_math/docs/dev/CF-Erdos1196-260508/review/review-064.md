@@ -83,13 +83,13 @@ real_log_nat_pos_of_one_lt
 今回の theorem は、こう読める。
 
 $$
-1<n
+1 < n
 $$
 
 であれば、
 
 $$
-0<\log n
+0 < \log n
 $$
 
 なので割れる。

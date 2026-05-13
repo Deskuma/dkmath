@@ -83,7 +83,7 @@ PrimePowerWitnessProvider.basePrimeOf_realLogProductBudget_of_productBound
 これは、
 
 $$
-1<n
+1 < n
 $$
 
 $$

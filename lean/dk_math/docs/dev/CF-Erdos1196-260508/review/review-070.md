@@ -66,7 +66,7 @@ RealLogNonnegOn(I,pOf)
 $$
 
 $$
-0<n
+0 < n
 $$
 
 $$
@@ -97,7 +97,7 @@ $$
 があるので、
 
 $$
-0<(pOf(q):\mathbb{R})
+0 < (pOf(q):\mathbb{R})
 $$
 
 が出る。
@@ -158,7 +158,7 @@ Nat.cast_pos.mpr
 で明示的に
 
 $$
-0<(pOf(q):\mathbb{R})
+0 < (pOf(q):\mathbb{R})
 $$
 
 を作ったのも良い判断じゃ。
@@ -207,7 +207,7 @@ RealLogNonnegOn(I,pOf)
 $$
 
 $$
-1<n
+1 < n
 $$
 
 $$

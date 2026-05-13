@@ -176,7 +176,7 @@ $$
 有理数 \(\mathbb{Q}\) 上で、
 
 $$
-0\le A(p),\qquad 0<B(n)
+0\le A(p),\qquad 0 < B(n)
 $$
 
 なら、

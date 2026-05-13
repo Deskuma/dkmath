@@ -13,7 +13,7 @@ $$
 という ratio-style toy weight が入った。まだ \(\log p/\log n\) には踏み込まず、有理数 \(\mathbb{Q}\) 上で、
 
 $$
-0\le A(p),\qquad 0<B(n)
+0\le A(p),\qquad 0 < B(n)
 $$
 
 なら、
@@ -78,7 +78,7 @@ $$
 $$
 
 $$
-\forall n,\ 0<B(n)
+\forall n,\ 0 < B(n)
 $$
 
 から、
@@ -102,7 +102,7 @@ $$
 導線はこうじゃ。
 
 $$
-0\le A(p),\quad 0<B(n)
+0\le A(p),\quad 0 < B(n)
 $$
 
 $$
@@ -302,7 +302,7 @@ $$
 $$
 
 $$
-0<B(n)
+0 < B(n)
 $$
 
 $$

@@ -352,7 +352,7 @@ $$
 まだ \(\log\) は入れず、有理 toy model として、
 
 $$
-0\le A(p),\qquad 0<B(n)
+0\le A(p),\qquad 0 < B(n)
 $$
 
 から

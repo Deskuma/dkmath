@@ -54,7 +54,7 @@ $$
 
 が出る、という補題じゃな。
 
-実際には素数なので \(1<p\) まであるが、R 側の `RealLogNonnegOn` が要求するのは
+実際には素数なので \(1 < p\) まであるが、R 側の `RealLogNonnegOn` が要求するのは
 
 $$
 1\le pOf(q)
@@ -118,7 +118,7 @@ RealLogNonnegOn(I,pOf)
 $$
 
 $$
-1<n
+1 < n
 $$
 
 $$
@@ -234,7 +234,7 @@ I\subseteq index(n)
 $$
 
 $$
-1<n
+1 < n
 $$
 
 $$

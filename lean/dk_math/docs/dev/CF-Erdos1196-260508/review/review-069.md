@@ -88,7 +88,7 @@ real_finset_prod_pos_of_pos
 で
 
 $$
-0<\prod_i a_i
+0 < \prod_i a_i
 $$
 
 を得て、`Real.log_le_log` に渡している。
@@ -110,7 +110,7 @@ $$
 `Real.log_le_log` は、左側の正性
 
 $$
-0<\prod_i a_i
+0 < \prod_i a_i
 $$
 
 と
@@ -121,7 +121,7 @@ $$
 
 から十分に進められる形だった、ということじゃろう。
 
-ただし、API としては \(0<N\) を持っている方が自然じゃ。後続の自然数版や denominator 正性と接続する時に、`N` が正であることは意味論上かなり大事だからの。
+ただし、API としては \(0 < N\) を持っている方が自然じゃ。後続の自然数版や denominator 正性と接続する時に、`N` が正であることは意味論上かなり大事だからの。
 
 ## 5. 現在地
 
@@ -200,11 +200,11 @@ exact real_sum_log_le_log_of_prod_le
 ここで必要になるのは三つ。
 
 $$
-q\in I\Rightarrow 0<(pOf(q):\mathbb{R})
+q\in I\Rightarrow 0 < (pOf(q):\mathbb{R})
 $$
 
 $$
-0<(n:\mathbb{R})
+0 < (n:\mathbb{R})
 $$
 
 $$

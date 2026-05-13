@@ -13,7 +13,7 @@ $$
 という ratio-style toy weight を導入し、
 
 $$
-0\le A(p),\qquad 0<B(n)
+0\le A(p),\qquad 0 < B(n)
 $$
 
 から非負性を閉じた。今回 Phase BD ではさらに、
@@ -66,7 +66,7 @@ $$
 $$
 
 $$
-\forall n,\quad 0<B(n)
+\forall n,\quad 0 < B(n)
 $$
 
 $$
@@ -205,7 +205,7 @@ $$
 $$
 
 $$
-0<B(n)
+0 < B(n)
 $$
 
 $$

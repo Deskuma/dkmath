@@ -17,7 +17,7 @@ $$
 $$
 
 $$
-1<n \Rightarrow 0<\log n
+1 < n \Rightarrow 0 < \log n
 $$
 
 という **正値性だけ** を theorem 名として固定した。これはかなり安全な登り方じゃ。
@@ -67,7 +67,7 @@ $$
 $$
 
 $$
-0<\log n
+0 < \log n
 $$
 
 だけ。
@@ -105,7 +105,7 @@ R 版の到達点はこうじゃ。
 ここまでで、R 版は次の部品を持った。
 
 $$
-0\le A(p),\quad 0<B(n)
+0\le A(p),\quad 0 < B(n)
 \Rightarrow
 0\le A(p)/B(n)
 $$
@@ -121,7 +121,7 @@ $$
 $$
 
 $$
-1<n\Rightarrow 0<\log n
+1 < n\Rightarrow 0 < \log n
 $$
 
 つまり、次に
@@ -168,7 +168,7 @@ theorem real_log_ratio_sum_le_one
 概念的には、
 
 $$
-1<n
+1 < n
 $$
 
 $$
@@ -248,7 +248,7 @@ $$
 と
 
 $$
-0<\log n
+0 < \log n
 $$
 
 を自然数版で固定できた。

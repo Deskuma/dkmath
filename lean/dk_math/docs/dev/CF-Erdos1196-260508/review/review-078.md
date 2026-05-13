@@ -102,7 +102,7 @@ I\subseteq T.index(n)
 $$
 
 $$
-1<n
+1 < n
 $$
 
 $$

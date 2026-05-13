@@ -25,7 +25,7 @@ realRatioBasePrimeWeight_realBasePrimeToyWeight
 これは正しい。まずは
 
 $$
-0\le A(p),\qquad 0<B(n)
+0\le A(p),\qquad 0 < B(n)
 \Rightarrow
 0\le \frac{A(p)}{B(n)}
 $$
@@ -51,7 +51,7 @@ $$
 $$
 
 $$
-\forall n,\ 0<B(n)
+\forall n,\ 0 < B(n)
 $$
 
 なら、
@@ -311,7 +311,7 @@ $$
 現在閉じたのは、
 
 $$
-0\le A(p),\quad 0<B(n)
+0\le A(p),\quad 0 < B(n)
 \Rightarrow
 0\le A(p)/B(n)
 $$

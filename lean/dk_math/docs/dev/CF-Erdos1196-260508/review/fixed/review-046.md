@@ -8,7 +8,7 @@
 今回追加された `PrimePowerLabel` により、
 
 $$
-q=p^k,\qquad p\text{ prime},\qquad 0<k
+q=p^k,\qquad p\text{ prime},\qquad 0 < k
 $$
 
 という証拠を、単なる存在命題ではなく **明示的な構造体** として持てるようになった。しかも `DivisorTransitionKernel` 本体の index 型は $\mathbb{N}$ のまま保たれている。つまり、既存の finite transition / weighted route を壊さずに、将来の $p$-依存 weight へ進む足場ができたわけじゃ。

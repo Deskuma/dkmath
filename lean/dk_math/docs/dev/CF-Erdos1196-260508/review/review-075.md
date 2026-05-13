@@ -11,7 +11,7 @@ I\subseteq T.index(n)
 $$
 
 $$
-1<n
+1 < n
 $$
 
 $$
@@ -283,7 +283,7 @@ Phase-R016 によって、R/log route はここまで来た。
 $$
 \boxed{
 I\subseteq T.index(n),\quad
-1<n,\quad
+1 < n,\quad
 \prod_{q\in I}basePrime(q)\le n
 \Rightarrow
 \log\text{-ratio provider is sub-probability}
