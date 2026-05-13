@@ -155,24 +155,29 @@ theorem natBaseMultiplicityBudgetOn_iff
 
 ### Phase-R023. Product factorization bridge
 
-目標:
+実装済み:
+
+```lean
+theorem factorization_prod_primeValued_eq_multiplicity_of_prime
+theorem natProductDvdOn_of_multiplicityBudget
+```
+
+`pOf` が selected index 上で prime-valued である仮定を明示し、任意の prime `p` について
 
 ```text
-selected base multiplicity budget
----------------------------------
+(∏ i in I, pOf i).factorization p
+=
+NatBaseMultiplicityOn I pOf p
+```
+
+を示した。その後、`NatBaseMultiplicityBudgetOn I pOf n` から factorization の点wise 比較を作り、
+`Nat.factorization_le_iff_dvd` で
+
+```lean
 NatProductDvdOn I pOf n
 ```
 
-最初は `pOf` が prime-valued である仮定を明示する。
-
-候補 theorem shape:
-
-```lean
-theorem natProductDvdOn_of_multiplicityBudget
-    (hprime : ∀ i, i ∈ I → Nat.Prime (pOf i))
-    (hbudget : NatBaseMultiplicityBudgetOn I pOf n) :
-    NatProductDvdOn I pOf n
-```
+へ戻す。
 
 ### Phase-R024. Product bound and provider bridge
 

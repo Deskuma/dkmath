@@ -557,3 +557,26 @@ Archive
    - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
 5. 失敗事例:
    - 今回は build failure なし。
+
+### 日時: 2026/05/13 23:06 JST (Phase-R023 product divisibility from multiplicity budget)
+
+1. 目的:
+   - `review/review-081.md` と `ValuationBudgetRoutePlan.md` に従い、multiplicity budget から selected base product divisibility を供給する。
+   - 重複あり route の自然数側核心である `NatProductDvdOn I pOf n` を factorization 比較から示す。
+2. 実施:
+   - `ValuationBudget.lean` に `factorization_prod_primeValued_eq_multiplicity_of_prime` を追加した。
+   - `pOf` が selected index 上で prime-valued なら、任意の prime `p` について `(I.prod fun i => pOf i).factorization p = NatBaseMultiplicityOn I pOf p` となることを示した。
+   - `Nat.factorization_prod_apply` で積の factorization を和へ展開し、各 prime-valued term の factorization を indicator として読んだ。
+   - `natProductDvdOn_of_multiplicityBudget` を追加し、`NatBaseMultiplicityBudgetOn I pOf n` から `NatProductDvdOn I pOf n` を導いた。
+   - `n = 0` は `dvd_zero` で処理し、`n ≠ 0` では `Nat.factorization_le_iff_dvd` と `Finsupp.le_def` で点wise 比較へ落とした。
+   - `ValuationBudgetRoutePlan.md` の Phase-R023 欄を実装済み内容へ更新した。
+3. 結論:
+   - 重複あり route の核心である、出現回数予算から selected base product が `n` を割る bridge が Lean 上で通った。
+   - 次は `NatProductDvdOn` から `NatProductBoundOn` / `RealLogProductBudget` / provider `SubProbability` へ接続する wrapper に進む。
+4. 検証:
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet.ValuationBudget`
+   - `cd lean/dk_math && lake build DkMath.NumberTheory.PrimitiveSet`
+   - いずれも build 成功。
+   - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
+5. 失敗事例:
+   - 今回は build failure なし。

@@ -67,4 +67,64 @@ theorem natBaseMultiplicityBudgetOn_iff
       ∀ p, Nat.Prime p → NatBaseMultiplicityOn I pOf p ≤ n.factorization p :=
   Iff.rfl
 
+/--
+For prime-valued selected bases, the exponent of a prime `p` in the selected
+product is exactly the number of selected occurrences of `p`.
+-/
+theorem factorization_prod_primeValued_eq_multiplicity_of_prime
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (hprime : NatPrimeValuedOn I pOf)
+    {p : ℕ}
+    (hp : Nat.Prime p) :
+    (I.prod fun i => pOf i).factorization p =
+      NatBaseMultiplicityOn I pOf p := by
+  classical
+  have hnonzero : ∀ i ∈ I, pOf i ≠ 0 := by
+    intro i hi
+    exact (hprime i hi).ne_zero
+  rw [Nat.factorization_prod_apply hnonzero]
+  calc
+    (I.sum fun i => (pOf i).factorization p)
+        = I.sum fun i => if pOf i = p then 1 else 0 := by
+          refine Finset.sum_congr rfl ?_
+          intro i hi
+          by_cases hpi : pOf i = p
+          · subst hpi
+            simp [Nat.Prime.factorization_self hp]
+          · simp [Nat.Prime.factorization (hprime i hi), hpi]
+    _ = NatBaseMultiplicityOn I pOf p := by
+      simp [NatBaseMultiplicityOn]
+
+/--
+A multiplicity budget supplies divisibility of the selected base product by
+`n`.
+
+This is the core natural-number bridge for the repeated-base route.
+-/
+theorem natProductDvdOn_of_multiplicityBudget
+    {ι : Type _}
+    (I : Finset ι)
+    (pOf : ι → ℕ)
+    (n : ℕ)
+    (hprime : NatPrimeValuedOn I pOf)
+    (hbudget : NatBaseMultiplicityBudgetOn I pOf n) :
+    NatProductDvdOn I pOf n := by
+  classical
+  unfold NatProductDvdOn
+  by_cases hn : n = 0
+  · rw [hn]
+    exact dvd_zero _
+  · have hprod_ne : (I.prod fun i => pOf i) ≠ 0 := by
+      exact Finset.prod_ne_zero_iff.mpr fun i hi => (hprime i hi).ne_zero
+    rw [← Nat.factorization_le_iff_dvd hprod_ne hn]
+    rw [Finsupp.le_def]
+    intro p
+    by_cases hp : Nat.Prime p
+    · rw [factorization_prod_primeValued_eq_multiplicity_of_prime I pOf hprime hp]
+      exact hbudget p hp
+    · rw [Nat.factorization_eq_zero_of_not_prime _ hp]
+      exact Nat.zero_le _
+
 end DkMath.NumberTheory.PrimitiveSet
