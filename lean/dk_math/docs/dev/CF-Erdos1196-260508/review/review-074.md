@@ -20,7 +20,7 @@ $$
 が R/log 側の
 
 $$
-RealLogNonnegOn
+\mathrm{RealLogNonnegOn}
 $$
 
 を満たし、さらに外部から
@@ -69,7 +69,7 @@ $$
 を得ることで、
 
 $$
-RealLogNonnegOn(I,\mathrm{W.basePrimeOf}(n,I,hI))
+\mathrm{RealLogNonnegOn}(I,\mathrm{W.basePrimeOf}(n,I,hI))
 $$
 
 を満たす、という補題じゃ。

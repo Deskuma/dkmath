@@ -62,7 +62,7 @@ realLogBudget_of_nat_product_le
 が本命で、
 
 $$
-RealLogNonnegOn(I,pOf)
+\mathrm{RealLogNonnegOn}(I,pOf)
 $$
 
 $$
@@ -203,7 +203,7 @@ realLogRatioWeightProvider_subProbability
 つまり、
 
 $$
-RealLogNonnegOn(I,pOf)
+\mathrm{RealLogNonnegOn}(I,pOf)
 $$
 
 $$

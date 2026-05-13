@@ -133,7 +133,7 @@ R 版の到達点はこうじゃ。
 ここで、R 版の有限 log-ratio weight skeleton はかなり強くなった。
 
 $$
-RealLogNonnegOn(I,pOf)
+\mathrm{RealLogNonnegOn}(I,pOf)
 $$
 
 $$

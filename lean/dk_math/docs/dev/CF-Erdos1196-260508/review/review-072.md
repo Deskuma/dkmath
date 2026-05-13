@@ -28,7 +28,7 @@ RealLogProductBudget
 これにより、後続の prime-power / divisor channel 側は、いちいち
 
 $$
-RealLogNonnegOn(I,pOf),\quad 1 < n,\quad \prod pOf(q)\le n
+\mathrm{RealLogNonnegOn}(I,pOf),\quad 1 < n,\quad \prod pOf(q)\le n
 $$
 
 をばらばらに供給するのではなく、まず
@@ -239,7 +239,7 @@ theorem basePrimeOfWitness_one_le
 これができれば、後で
 
 $$
-RealLogNonnegOn(I,pOf)
+\mathrm{RealLogNonnegOn}(I,pOf)
 $$
 
 を供給する材料になる。

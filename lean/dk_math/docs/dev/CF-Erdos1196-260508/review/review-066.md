@@ -80,7 +80,7 @@ $$
 ここで、各 weight の非負性は
 
 $$
-RealLogNonnegOn(I,pOf)
+\mathrm{RealLogNonnegOn}(I,pOf)
 $$
 
 と

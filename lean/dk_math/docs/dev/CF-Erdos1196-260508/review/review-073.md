@@ -114,7 +114,7 @@ $$
 つまり、
 
 $$
-RealLogNonnegOn(I,pOf)
+\mathrm{RealLogNonnegOn}(I,pOf)
 $$
 
 $$
@@ -130,7 +130,7 @@ $$
 今回 `basePrimeOf_one_le` により、最初の
 
 $$
-RealLogNonnegOn(I,\mathrm{W.basePrimeOf}(n,I,hI))
+\mathrm{RealLogNonnegOn}(I,\mathrm{W.basePrimeOf}(n,I,hI))
 $$
 
 を供給できる見通しが立った。
