@@ -107,7 +107,7 @@ $$
 なら、
 
 $$
-(P.applyAtToSourceControlled(n,F)).weightedHitMass(S)\le C
+(P.applyAtToSourceControlled(n,F)).\mathrm{weightedHitMass}(S)\le C
 $$
 
 が出る。
