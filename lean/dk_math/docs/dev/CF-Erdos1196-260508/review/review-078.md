@@ -241,7 +241,7 @@ basePrimeOf_logRatioSubProbability_of_distinctBasePrimes
 目標は、
 
 $$
-\prod_{q\in I}basePrime(q)\le n
+\prod_{q\in I}\mathrm{basePrime}(q)\le n
 $$
 
 を pairwise distinct なしで示すこと。
@@ -249,7 +249,7 @@ $$
 このためには、各素数 $p$ について、
 
 $$
-\\\#{q\in I:basePrime(q)=p}\le v_p(n)
+\\\#{q\in I:\mathrm{basePrime}(q)=p}\le v_p(n)
 $$
 
 のような条件が必要になる。

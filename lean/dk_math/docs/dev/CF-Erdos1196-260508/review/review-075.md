@@ -284,7 +284,7 @@ $$
 \boxed{
 I\subseteq \text{T.index}(n),\quad
 1 < n,\quad
-\prod_{q\in I}basePrime(q)\le n
+\prod_{q\in I}\mathrm{basePrime}(q)\le n
 \Rightarrow
 \log\text{-ratio provider is sub-probability}
 }
@@ -296,7 +296,7 @@ $$
 すなわち、
 
 $$
-\prod basePrime(q)\le n
+\prod \mathrm{basePrime}(q)\le n
 $$
 
 をどう保証するか。

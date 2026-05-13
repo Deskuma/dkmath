@@ -252,7 +252,7 @@ theorem basePrimeOf_prime_on
 その場合は、
 
 $$
-\prod_{q\in I}basePrime(q)\le n
+\prod_{q\in I}\mathrm{basePrime}(q)\le n
 $$
 
 を直接保証するには、base prime の出現回数を $n$ の $p$ -adic exponent で制御する必要がある。
@@ -260,7 +260,7 @@ $$
 つまり将来は、
 
 $$
-\\\#{q\in I: basePrime(q)=p}\le v_p(n)
+\\\#{q\in I: \mathrm{basePrime}(q)=p}\le v_p(n)
 $$
 
 のような **指数消費 tracking** が必要になる。

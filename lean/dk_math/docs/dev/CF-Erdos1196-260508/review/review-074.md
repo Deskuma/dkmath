@@ -291,7 +291,7 @@ $$
 または、
 
 $$
-\prod_{q\in I}basePrime(q)\mid n
+\prod_{q\in I}\mathrm{basePrime}(q)\mid n
 $$
 
 のような形になる可能性が高い。
@@ -321,7 +321,7 @@ $$
 その後、いよいよ
 
 $$
-\prod basePrime(q)\le n
+\prod \mathrm{basePrime}(q)\le n
 $$
 
 をどう証明するか、重複制御と指数消費 tracking の岩稜に入る番じゃな。
