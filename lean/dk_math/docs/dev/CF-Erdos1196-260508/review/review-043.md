@@ -119,7 +119,7 @@ $$
 \Rightarrow
 \mathrm{PrimePowerChannelProvider}\\
 \Rightarrow
-weightedHitMass\le C
+\mathrm{weightedHitMass}\le C
 $$
 
 ここまでの導線が意味論として見えるようになった。

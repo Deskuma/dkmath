@@ -184,13 +184,13 @@ $$
 つまり、
 
 $$
-\text{von-Mangoldt-like predicate}
+\mathrm{von-Mangoldt-like predicate}
 \to
-\text{withWeight}
+\mathrm{withWeight}
 \to
-\text{PrimePowerChannelProvider}
+\mathrm{PrimePowerChannelProvider}
 \to
-\text{weightedHitMass bound}
+\mathrm{weightedHitMass bound}
 $$
 
 が一本につながる。
