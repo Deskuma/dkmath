@@ -512,3 +512,24 @@ Archive
    - `rg "\\bsorry\\b|\\badmit\\b|^axiom\\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean` は no hits。
 5. 失敗事例:
    - 今回は build failure なし。
+
+### 日時: 2026/05/13 22:34 JST (Phase-R021 valuation budget route design)
+
+1. 目的:
+   - `review/review-079.md` の提案に従い、重複あり R/log route に入る前の設計書を作成する。
+   - `Nat.factorization` route と `padicValNat` route の役割分担を整理し、次の Lean 実装 Phase を切る。
+2. 実施:
+   - `ValuationBudgetRoutePlan.md` を新規作成した。
+   - 重複あり route の目標を `∏ q in I, W.basePrimeOf n I hI q ≤ n` の供給として整理した。
+   - 候補 API として `NatBaseMultiplicityOn` と `NatBaseMultiplicityBudgetOn` を設計した。
+   - `Nat.factorization` route を主軸にし、必要に応じて `padicValNat` 補題を接続する方針を明記した。
+   - Phase-R022 以降の実装順を、multiplicity vocabulary、product factorization bridge、provider bridge の順に分解した。
+   - `README.md` から `ValuationBudgetRoutePlan.md` への参照を追加した。
+3. 結論:
+   - 重複なし route から重複あり valuation budget route へ進むための設計地図ができた。
+   - 次は `NatBaseMultiplicityOn` / `NatBaseMultiplicityBudgetOn` の Lean vocabulary を追加するのが自然。
+4. 検証:
+   - docs 追加・更新のみのため Lean build は実行しない。
+   - `ValuationBudgetRoutePlan.md` と `README.md` の内容を `sed` で確認した。
+5. 失敗事例:
+   - 今回は build failure なし。

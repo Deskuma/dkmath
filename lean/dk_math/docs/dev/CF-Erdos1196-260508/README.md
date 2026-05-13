@@ -185,6 +185,8 @@ PrimePowerWitnessProvider.basePrimeOf_realLogNonnegOn
 
 重複なし route の外部仮定として残るのは、選択された base prime の pairwise distinctness である。次段階の主題は、同じ base prime が複数回現れる場合の valuation budget / exponent consumption route である。
 
+重複あり route の設計は [ValuationBudgetRoutePlan.md](./ValuationBudgetRoutePlan.md) に分離する。
+
 ## 推奨される読み順
 
 1. [ImplementsPlan.md](./ImplementsPlan.md)
@@ -195,5 +197,7 @@ PrimePowerWitnessProvider.basePrimeOf_realLogNonnegOn
    - 現在の N/Q 版まとめ。
 4. [RealLogRoutePlan.md](./RealLogRoutePlan.md)
    - 次段階の R 版設計。
+5. [ValuationBudgetRoutePlan.md](./ValuationBudgetRoutePlan.md)
+   - 重複あり base-prime route と valuation budget の設計。
 
 レビュー詳細は [review/](./review/) に保存されているが、通常の実装判断ではこの README と History を入口にする。
