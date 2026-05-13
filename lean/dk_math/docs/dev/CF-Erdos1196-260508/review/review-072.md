@@ -343,7 +343,7 @@ $$
 そして Phase-R015 以降で、
 
 $$
-NatProductBoundOn(I,\mathrm{pOf},n)
+\mathrm{NatProductBoundOn}(I,\mathrm{pOf},n)
 $$
 
 の供給方法を別設計にする。

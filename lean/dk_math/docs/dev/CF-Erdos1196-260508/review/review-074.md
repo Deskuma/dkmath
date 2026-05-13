@@ -26,7 +26,7 @@ $$
 を満たし、さらに外部から
 
 $$
-NatProductBoundOn(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
+\mathrm{NatProductBoundOn}(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
 $$
 
 を渡せば、
@@ -87,7 +87,7 @@ $$
 $$
 
 $$
-NatProductBoundOn(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
+\mathrm{NatProductBoundOn}(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
 $$
 
 を仮定すれば、
@@ -135,7 +135,7 @@ $$
 だが、R/log 側が要求する入口は、
 
 $$
-NatProductBoundOn(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
+\mathrm{NatProductBoundOn}(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
 $$
 
 という明確な形に落ちた。これは大きい。
@@ -190,7 +190,7 @@ $$
 次は、今回の bridge と R013 の theorem をさらに接続して、
 
 $$
-NatProductBoundOn(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
+\mathrm{NatProductBoundOn}(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
 $$
 
 から直接
@@ -258,7 +258,7 @@ Phase-R016 までは、product bound を仮定して進む道じゃ。
 必要なのは、
 
 $$
-NatProductBoundOn(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
+\mathrm{NatProductBoundOn}(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
 $$
 
 すなわち

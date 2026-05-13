@@ -208,7 +208,7 @@ theorem basePrimeOf_realLogProductBudget_of_productBound
 その次は、さらに一歩進めて、
 
 $$
-NatProductBoundOn(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
+\mathrm{NatProductBoundOn}(I,\mathrm{W.basePrimeOf}(n,I,hI),n)
 $$
 
 を仮定すれば、

@@ -7,7 +7,7 @@
 Phase-R016 までは、
 
 $$
-NatProductBoundOn\ I\ \mathrm{pOf}\ n
+\mathrm{NatProductBoundOn}\ I\ \mathrm{pOf}\ n
 $$
 
 すなわち
