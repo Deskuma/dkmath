@@ -229,13 +229,13 @@ $$
 $$
 
 $$
-\sum_{q\in I} A(pOf(q))\le B(n)
+\sum_{q\in I} A(\mathrm{pOf}(q))\le B(n)
 $$
 
 から、
 
 $$
-\sum_{q\in I}\frac{A(pOf(q))}{B(n)}\le 1
+\sum_{q\in I}\frac{A(\mathrm{pOf}(q))}{B(n)}\le 1
 $$
 
 を示す。

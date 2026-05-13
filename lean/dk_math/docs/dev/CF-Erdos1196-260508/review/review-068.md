@@ -7,9 +7,9 @@
 Phase-R005 ～ R007 では、
 
 $$
-RealLogBudget(I,pOf,n)
+RealLogBudget(I,\mathrm{pOf},n)
 \Rightarrow
-\sum_{q\in I}\frac{\log(pOf(q))}{\log n}\le 1
+\sum_{q\in I}\frac{\log(\mathrm{pOf}(q))}{\log n}\le 1
 $$
 
 および、それを `RealWeightProvider` に載せる route が閉じた。
@@ -301,13 +301,13 @@ theorem realLogBudget_of_nat_product_le
 自然数から実数に戻すなら、
 
 $$
-a(q)=(pOf(q):\mathbb{R})
+a(q)=(\mathrm{pOf}(q):\mathbb{R})
 $$
 
 で、
 
 $$
-0 < (pOf(q):\mathbb{R})
+0 < (\mathrm{pOf}(q):\mathbb{R})
 $$
 
 が必要。
@@ -317,7 +317,7 @@ $$
 また、
 
 $$
-(I.prod fun q => (pOf q : \mathbb{R})) = ((I.prod fun q => pOf q):\mathbb{R})
+(I.prod fun q => (\mathrm{pOf}\ q : \mathbb{R})) = ((I.prod fun q => \mathrm{pOf}\ q):\mathbb{R})
 $$
 
 という cast-prod の橋が必要になる。
@@ -329,9 +329,9 @@ $$
 Nat product route が閉じると、
 
 $$
-\prod_{q\in I}pOf(q)\le n
+\prod_{q\in I}\mathrm{pOf}(q)\le n
 \Rightarrow
-RealLogBudget(I,pOf,n)
+RealLogBudget(I,\mathrm{pOf},n)
 $$
 
 が得られる。
@@ -339,7 +339,7 @@ $$
 その次に本当に大事なのは、
 
 $$
-\prod_{q\in I}pOf(q)\le n
+\prod_{q\in I}\mathrm{pOf}(q)\le n
 $$
 
 を prime-power channel からどう出すか。

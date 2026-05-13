@@ -103,16 +103,16 @@ $$
 R/log 側では、Phase-R013 までに次の interface ができていた。
 
 $$
-RealLogProductBudget(I,pOf,n)
+RealLogProductBudget(I,\mathrm{pOf},n)
 \Rightarrow
-\frac{\log(pOf(q))}{\log n}
+\frac{\log(\mathrm{pOf}(q))}{\log n}
 \text{ provider is sub-probability}
 $$
 
-今回、その $pOf$ に
+今回、その $\mathrm{pOf}$ に
 
 $$
-pOf(q)=\mathrm{W.basePrimeOf}(n,I,hI)(q)
+\mathrm{pOf}(q)=\mathrm{W.basePrimeOf}(n,I,hI)(q)
 $$
 
 を入れる道ができた。

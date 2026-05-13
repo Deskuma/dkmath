@@ -79,7 +79,7 @@ $$
 という prime-power witness から base prime $p$ を読み、
 
 $$
-pOf(q)=p
+\mathrm{pOf}(q)=p
 $$
 
 とする。
@@ -87,13 +87,13 @@ $$
 そして selected label 集合 $I$ に対して、
 
 $$
-\prod_{q\in I}pOf(q)\le n
+\prod_{q\in I}\mathrm{pOf}(q)\le n
 $$
 
 があれば、
 
 $$
-\sum_{q\in I}\frac{\log pOf(q)}{\log n}\le 1
+\sum_{q\in I}\frac{\log \mathrm{pOf}(q)}{\log n}\le 1
 $$
 
 が出る。

@@ -6,7 +6,7 @@
 Phase-R017 では、pairwise-coprime route により、
 
 $$
-\text{pairwise coprime}+\forall q\in I,\ pOf(q)\mid n
+\text{pairwise coprime}+\forall q\in I,\ \mathrm{pOf}(q)\mid n
 $$
 
 から product bound を作り、そこから log-ratio provider の `SubProbability` へ進めた。今回 Phase-R018 では、そのうち

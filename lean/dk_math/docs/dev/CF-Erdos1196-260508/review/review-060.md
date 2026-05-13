@@ -150,13 +150,13 @@ $$
 $$
 
 $$
-\sum_{q\in I} A(pOf(q))\le B(n)
+\sum_{q\in I} A(\mathrm{pOf}(q))\le B(n)
 $$
 
 から、
 
 $$
-\sum_{q\in I}\frac{A(pOf(q))}{B(n)}\le 1
+\sum_{q\in I}\frac{A(\mathrm{pOf}(q))}{B(n)}\le 1
 $$
 
 を得る。
@@ -199,7 +199,7 @@ theorem real_ratioBasePrimeWeight_sum_le_one
 `realRatioBasePrimeWeight A B n p` の第2引数は $p$ なので、index $q$ から $p(q)$ を読むなら
 
 $$
-I.sum\ (fun q => realRatioBasePrimeWeight A B n (pOf q))
+I.sum\ (fun q => \mathrm{realRatioBasePrimeWeight} A B n (\mathrm{pOf}\ q))
 $$
 
 になる。

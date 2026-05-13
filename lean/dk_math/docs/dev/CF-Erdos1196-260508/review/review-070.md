@@ -7,25 +7,25 @@
 これまでは、
 
 $$
-RealLogBudget(I,pOf,n)
+RealLogBudget(I,\mathrm{pOf},n)
 $$
 
 を外から仮定して、
 
 $$
-\sum_{q\in I}\frac{\log(pOf(q))}{\log n}\le 1
+\sum_{q\in I}\frac{\log(\mathrm{pOf}(q))}{\log n}\le 1
 $$
 
 や `realLogRatioWeightProvider.SubProbability` を得ていた。今回ついに、
 
 $$
-\prod_{q\in I} pOf(q)\le n
+\prod_{q\in I} \mathrm{pOf}(q)\le n
 $$
 
 から、
 
 $$
-\sum_{q\in I}\log(pOf(q))\le \log n
+\sum_{q\in I}\log(\mathrm{pOf}(q))\le \log n
 $$
 
 を供給できるようになった。つまり、`RealLogBudget` が **抽象仮定** から **自然数有限積の上界条件** へ接続されたわけじゃ。build と no-sorry 検査も通っておる。
@@ -48,7 +48,7 @@ real_finset_prod_nat_cast
 は、
 
 $$
-\left(\prod_{q\in I} pOf(q):\mathbb{R}\right) = \prod_{q\in I}(pOf(q):\mathbb{R})
+\left(\prod_{q\in I} \mathrm{pOf}(q):\mathbb{R}\right) = \prod_{q\in I}(\mathrm{pOf}(q):\mathbb{R})
 $$
 
 を固定する橋じゃ。
@@ -62,7 +62,7 @@ realLogBudget_of_nat_product_le
 が本命で、
 
 $$
-\mathrm{RealLogNonnegOn}(I,pOf)
+\mathrm{RealLogNonnegOn}(I,\mathrm{pOf})
 $$
 
 $$
@@ -70,13 +70,13 @@ $$
 $$
 
 $$
-\prod_{q\in I}pOf(q)\le n
+\prod_{q\in I}\mathrm{pOf}(q)\le n
 $$
 
 から、
 
 $$
-RealLogBudget(I,pOf,n)
+RealLogBudget(I,\mathrm{pOf},n)
 $$
 
 を出す。
@@ -91,13 +91,13 @@ $$
 まず、各 $q\in I$ に対して
 
 $$
-1\le pOf(q)
+1\le \mathrm{pOf}(q)
 $$
 
 があるので、
 
 $$
-0 < (pOf(q):\mathbb{R})
+0 < (\mathrm{pOf}(q):\mathbb{R})
 $$
 
 が出る。
@@ -105,13 +105,13 @@ $$
 次に、
 
 $$
-\prod_{q\in I}pOf(q)\le n
+\prod_{q\in I}\mathrm{pOf}(q)\le n
 $$
 
 を実数へ cast し、
 
 $$
-\prod_{q\in I}(pOf(q):\mathbb{R})\le (n:\mathbb{R})
+\prod_{q\in I}(\mathrm{pOf}(q):\mathbb{R})\le (n:\mathbb{R})
 $$
 
 へ移す。
@@ -119,7 +119,7 @@ $$
 すると Phase-R010 の実数補題より、
 
 $$
-\sum_{q\in I}\log(pOf(q):\mathbb{R})\le \log(n:\mathbb{R})
+\sum_{q\in I}\log(\mathrm{pOf}(q):\mathbb{R})\le \log(n:\mathbb{R})
 $$
 
 が得られる。
@@ -127,7 +127,7 @@ $$
 これがまさに、
 
 $$
-RealLogBudget(I,pOf,n)
+RealLogBudget(I,\mathrm{pOf},n)
 $$
 
 じゃ。
@@ -158,7 +158,7 @@ Nat.cast_pos.mpr
 で明示的に
 
 $$
-0 < (pOf(q):\mathbb{R})
+0 < (\mathrm{pOf}(q):\mathbb{R})
 $$
 
 を作ったのも良い判断じゃ。
@@ -181,9 +181,9 @@ R 版 product route はここまで来た。
 ここまでで、
 
 $$
-\prod pOf(q)\le n
+\prod \mathrm{pOf}(q)\le n
 \Rightarrow
-RealLogBudget(I,pOf,n)
+RealLogBudget(I,\mathrm{pOf},n)
 \Rightarrow
 \text{log-ratio provider is sub-probability}
 $$
@@ -203,7 +203,7 @@ realLogRatioWeightProvider_subProbability
 つまり、
 
 $$
-\mathrm{RealLogNonnegOn}(I,pOf)
+\mathrm{RealLogNonnegOn}(I,\mathrm{pOf})
 $$
 
 $$
@@ -211,13 +211,13 @@ $$
 $$
 
 $$
-\prod pOf(q)\le n
+\prod \mathrm{pOf}(q)\le n
 $$
 
 から、直接
 
 $$
-(realLogRatioWeightProvider I pOf n hp hn).SubProbability
+(realLogRatioWeightProvider I \mathrm{pOf}\ n\ hp\ hn).SubProbability
 $$
 
 を出す theorem じゃ。
@@ -254,7 +254,7 @@ theorem realLogRatioWeightProvider_subProbability_of_nat_product_le
 Phase-R012 が閉じたら、いよいよ次は、
 
 $$
-\prod_{q\in I}pOf(q)\le n
+\prod_{q\in I}\mathrm{pOf}(q)\le n
 $$
 
 をどこから得るかじゃ。
@@ -268,7 +268,7 @@ q=p^k
 $$
 
 $$
-p=pOf(q)
+p=\mathrm{pOf}(q)
 $$
 
 $$
@@ -307,13 +307,13 @@ Phase-R011 は、R 版 log route の大きな前進じゃ。
 これで、
 
 $$
-\prod_{q\in I}pOf(q)\le n
+\prod_{q\in I}\mathrm{pOf}(q)\le n
 $$
 
 という自然数 product bound から、
 
 $$
-\sum_{q\in I}\log(pOf(q))\le \log n
+\sum_{q\in I}\log(\mathrm{pOf}(q))\le \log n
 $$
 
 すなわち `RealLogBudget` を供給できるようになった。
@@ -322,7 +322,7 @@ $$
 今回、その支点を
 
 $$
-\prod pOf(q)\le n
+\prod \mathrm{pOf}(q)\le n
 $$
 
 という自然数の岩場へ固定できた。

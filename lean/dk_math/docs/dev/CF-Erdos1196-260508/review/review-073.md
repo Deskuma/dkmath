@@ -7,12 +7,12 @@
 ここまで R 側では、
 
 $$
-RealLogProductBudget(I,pOf,n)
+RealLogProductBudget(I,\mathrm{pOf},n)
 \Rightarrow
 \text{log-ratio provider is sub-probability}
 $$
 
-まで閉じていた。今回 Phase-R014 では、その $pOf$ を任意関数のまま放置せず、prime-power witness provider から読めるようにする準備が入った。
+まで閉じていた。今回 Phase-R014 では、その $\mathrm{pOf}$ を任意関数のまま放置せず、prime-power witness provider から読めるようにする準備が入った。
 
 つまり、
 
@@ -23,7 +23,7 @@ $$
 の witness から base prime $p$ を読み、
 
 $$
-pOf(q)=p
+\mathrm{pOf}(q)=p
 $$
 
 として扱うための入口ができたわけじゃ。
@@ -57,7 +57,7 @@ $$
 実際には素数なので $1 < p$ まであるが、R 側の `RealLogNonnegOn` が要求するのは
 
 $$
-1\le pOf(q)
+1\le \mathrm{pOf}(q)
 $$
 
 なので、今回の形で十分じゃ。
@@ -98,7 +98,7 @@ $$
 後続の `RealLogProductBudget I pOf n` や `NatProductBoundOn I pOf n` は、基本的に $I$ 上だけを見る。だから外側を $1$ にしておけば、全域関数
 
 $$
-pOf:\mathbb{N}\to\mathbb{N}
+\mathrm{pOf}:\mathbb{N}\to\mathbb{N}
 $$
 
 として扱えて、外側で余計な害が出ない。
@@ -108,13 +108,13 @@ $$
 Phase-R013 では、R 側が後続に要求する interface をこう固定した。
 
 $$
-RealLogProductBudget(I,pOf,n)
+RealLogProductBudget(I,\mathrm{pOf},n)
 $$
 
 つまり、
 
 $$
-\mathrm{RealLogNonnegOn}(I,pOf)
+\mathrm{RealLogNonnegOn}(I,\mathrm{pOf})
 $$
 
 $$
@@ -122,7 +122,7 @@ $$
 $$
 
 $$
-\prod_{q\in I}pOf(q)\le n
+\prod_{q\in I}\mathrm{pOf}(q)\le n
 $$
 
 じゃ。
@@ -307,7 +307,7 @@ $$
 の witness から base prime $p$ を読み、
 
 $$
-pOf(q)=p
+\mathrm{pOf}(q)=p
 $$
 
 として使うための関数 `basePrimeOf` ができた。

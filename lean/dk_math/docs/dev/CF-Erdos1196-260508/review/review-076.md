@@ -7,13 +7,13 @@
 Phase-R016 までは、
 
 $$
-NatProductBoundOn\ I\ pOf\ n
+NatProductBoundOn\ I\ \mathrm{pOf}\ n
 $$
 
 すなわち
 
 $$
-\prod_{q\in I}pOf(q)\le n
+\prod_{q\in I}\mathrm{pOf}(q)\le n
 $$
 
 を外から仮定すれば、witness provider 由来の
@@ -31,7 +31,7 @@ $$
 \Rightarrow
 \text{積も }n\text{ を割る}
 \Rightarrow
-\prod pOf(q)\le n
+\prod \mathrm{pOf}(q)\le n
 $$
 
 が Lean 上で通った。さらにこれを witness-provider 由来の `basePrimeOf` に接続し、pairwise-coprime + divisibility から log-ratio provider の `SubProbability` まで行けるようになった。
@@ -49,13 +49,13 @@ natProductBoundOn_of_pairwise_coprime_dvd
 数学的には、
 
 $$
-NatProductDvdOn(I,pOf,n)
+NatProductDvdOn(I,\mathrm{pOf},n)
 $$
 
 は、
 
 $$
-\prod_{q\in I}pOf(q)\mid n
+\prod_{q\in I}\mathrm{pOf}(q)\mid n
 $$
 
 を表す。
@@ -63,27 +63,27 @@ $$
 そして、
 
 $$
-NatPairwiseCoprimeOn(I,pOf)
+NatPairwiseCoprimeOn(I,\mathrm{pOf})
 $$
 
-は、選ばれた $pOf(q)$ たちが互いに coprime であることを表す。
+は、選ばれた $\mathrm{pOf}(q)$ たちが互いに coprime であることを表す。
 
 今回の主補題は、
 
 $$
-\forall q\in I,\ pOf(q)\mid n
+\forall q\in I,\ \mathrm{pOf}(q)\mid n
 $$
 
 かつ pairwise coprime なら、
 
 $$
-\prod_{q\in I}pOf(q)\mid n
+\prod_{q\in I}\mathrm{pOf}(q)\mid n
 $$
 
 を示すものじゃ。そこから $0 < n$ を使って、
 
 $$
-\prod_{q\in I}pOf(q)\le n
+\prod_{q\in I}\mathrm{pOf}(q)\le n
 $$
 
 へ降ろしている。
@@ -103,25 +103,25 @@ PrimePowerWitnessProvider.basePrimeOf_realLogRatioWeightProvider_subProbability_
 これは、witness provider 由来の
 
 $$
-pOf(q)=\mathrm{W.basePrimeOf}(n,I,hI)(q)
+\mathrm{pOf}(q)=\mathrm{W.basePrimeOf}(n,I,hI)(q)
 $$
 
 について、
 
 $$
-NatPairwiseCoprimeOn(I,pOf)
+NatPairwiseCoprimeOn(I,\mathrm{pOf})
 $$
 
 と
 
 $$
-\forall q\in I,\ pOf(q)\mid n
+\forall q\in I,\ \mathrm{pOf}(q)\mid n
 $$
 
 を仮定すれば、最終的に
 
 $$
-\frac{\log pOf(q)}{\log n}
+\frac{\log \mathrm{pOf}(q)}{\log n}
 $$
 
 型の real provider が `SubProbability` になる、という theorem じゃ。
@@ -129,7 +129,7 @@ $$
 つまり、Phase-R016 で外部仮定だった
 
 $$
-\prod pOf(q)\le n
+\prod \mathrm{pOf}(q)\le n
 $$
 
 が、Phase-R017 では
@@ -223,19 +223,19 @@ $$
 また insert branch では、
 
 $$
-\gcd(pOf(a), \prod_{i\in s}pOf(i))=1
+\gcd(\mathrm{pOf}(a), \prod_{i\in s}\mathrm{pOf}(i))=1
 $$
 
 を `Nat.Coprime.prod_right` で作り、
 
 $$
-pOf(a)\mid n,\quad \prod_{i\in s}pOf(i)\mid n
+\mathrm{pOf}(a)\mid n,\quad \prod_{i\in s}\mathrm{pOf}(i)\mid n
 $$
 
 から
 
 $$
-pOf(a)\cdot\prod_{i\in s}pOf(i)\mid n
+\mathrm{pOf}(a)\cdot\prod_{i\in s}\mathrm{pOf}(i)\mid n
 $$
 
 へ進んでいる。構造としても自然じゃ。
@@ -377,7 +377,7 @@ NatPairwiseCoprimeOn I pOf
 witness provider 由来なら、`W.label ... .prime` があるので、
 
 $$
-pOf(i),pOf(j)
+\mathrm{pOf}(i),\mathrm{pOf}(j)
 $$
 
 が両方 prime。異なる prime は coprime。
@@ -391,7 +391,7 @@ $$
 その場合は、
 
 $$
-\prod pOf(q)\le n
+\prod \mathrm{pOf}(q)\le n
 $$
 
 を示すには、重複回数を $n$ の $p$ -adic valuation 以下に抑える必要がある。
@@ -424,13 +424,13 @@ $$
 から、
 
 $$
-\prod pOf(q)\le n
+\prod \mathrm{pOf}(q)\le n
 $$
 
 へ進み、
 
 $$
-\frac{\log pOf(q)}{\log n}
+\frac{\log \mathrm{pOf}(q)}{\log n}
 $$
 
 provider の `SubProbability` まで到達した。

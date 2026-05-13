@@ -149,7 +149,7 @@ $$
 次は、ここへ
 
 $$
-a_i=(pOf(i):\mathbb{R}),\qquad N=(n:\mathbb{R})
+a_i=(\mathrm{pOf}(i):\mathbb{R}),\qquad N=(n:\mathbb{R})
 $$
 
 を代入する段階じゃ。
@@ -159,13 +159,13 @@ $$
 次は自然数版へ戻し、
 
 $$
-\prod_{q\in I} pOf(q)\le n
+\prod_{q\in I} \mathrm{pOf}(q)\le n
 $$
 
 から
 
 $$
-RealLogBudget(I,pOf,n)
+RealLogBudget(I,\mathrm{pOf},n)
 $$
 
 を供給する theorem が自然じゃ。
@@ -200,7 +200,7 @@ exact real_sum_log_le_log_of_prod_le
 ここで必要になるのは三つ。
 
 $$
-q\in I\Rightarrow 0 < (pOf(q):\mathbb{R})
+q\in I\Rightarrow 0 < (\mathrm{pOf}(q):\mathbb{R})
 $$
 
 $$
@@ -208,7 +208,7 @@ $$
 $$
 
 $$
-\prod_q (pOf(q):\mathbb{R})\le (n:\mathbb{R})
+\prod_q (\mathrm{pOf}(q):\mathbb{R})\le (n:\mathbb{R})
 $$
 
 じゃ。
@@ -220,7 +220,7 @@ $$
 必要なのは、
 
 $$
-\left(\prod_{q\in I}pOf(q):\mathbb{R}\right) = \prod_{q\in I}(pOf(q):\mathbb{R})
+\left(\prod_{q\in I}\mathrm{pOf}(q):\mathbb{R}\right) = \prod_{q\in I}(\mathrm{pOf}(q):\mathbb{R})
 $$
 
 という橋じゃ。
@@ -246,9 +246,9 @@ theorem real_finset_prod_nat_cast
 Phase-R011 が閉じると、
 
 $$
-\prod pOf(q)\le n
+\prod \mathrm{pOf}(q)\le n
 \Rightarrow
-RealLogBudget(I,pOf,n)
+RealLogBudget(I,\mathrm{pOf},n)
 $$
 
 が得られる。
@@ -256,9 +256,9 @@ $$
 すると Phase-R007 と合成して、
 
 $$
-\prod pOf(q)\le n
+\prod \mathrm{pOf}(q)\le n
 \Rightarrow
-\frac{\log pOf(q)}{\log n}
+\frac{\log \mathrm{pOf}(q)}{\log n}
 \text{ provider is sub-probability}
 $$
 
@@ -267,7 +267,7 @@ $$
 だが、その次に来る本丸は、
 
 $$
-\prod_{q\in I}pOf(q)\le n
+\prod_{q\in I}\mathrm{pOf}(q)\le n
 $$
 
 を prime-power / divisor channel からどう得るかじゃ。
@@ -296,5 +296,5 @@ $$
 
 山で言えば、Phase-R009 で「和の log と積の log をつなぐ岩」を打ち、今回 Phase-R010 で「積の上界を log の上界へ送るロープ」を張った。
 
-次は自然数 $pOf$ と $n$ に戻す Phase-R011。
+次は自然数 $\mathrm{pOf}$ と $n$ に戻す Phase-R011。
 ここを越えると、外部仮定だった `RealLogBudget` の供給源が、かなり具体的に見えてくるぞい。

@@ -7,21 +7,21 @@
 これまで外部仮定だった
 
 $$
-RealLogBudget(I,pOf,n)
+RealLogBudget(I,\mathrm{pOf},n)
 $$
 
 は Phase-R011 で、
 
 $$
-\prod_{q\in I}pOf(q)\le n
+\prod_{q\in I}\mathrm{pOf}(q)\le n
 $$
 
 から供給できるようになった。今回 Phase-R012 では、それをさらに `realLogRatioWeightProvider_subProbability` と接続して、
 
 $$
-\prod_{q\in I}pOf(q)\le n
+\prod_{q\in I}\mathrm{pOf}(q)\le n
 \Rightarrow
-\left(\frac{\log(pOf(q))}{\log n}\right)\text{ provider is sub-probability}
+\left(\frac{\log(\mathrm{pOf}(q))}{\log n}\right)\text{ provider is sub-probability}
 $$
 
 まで一発で通した。
@@ -48,7 +48,7 @@ theorem realLogRatioWeightProvider_subProbability_of_nat_product_le
 数学的には、
 
 $$
-\forall q\in I,\quad 1\le pOf(q)
+\forall q\in I,\quad 1\le \mathrm{pOf}(q)
 $$
 
 $$
@@ -56,13 +56,13 @@ $$
 $$
 
 $$
-\prod_{q\in I}pOf(q)\le n
+\prod_{q\in I}\mathrm{pOf}(q)\le n
 $$
 
 から、
 
 $$
-\sum_{q\in I}\frac{\log(pOf(q))}{\log n}\le 1
+\sum_{q\in I}\frac{\log(\mathrm{pOf}(q))}{\log n}\le 1
 $$
 
 を出す theorem じゃ。
@@ -82,15 +82,15 @@ realLogRatioWeightProvider_subProbability
 今までの R 版 route はこうだった。
 
 $$
-RealLogBudget(I,pOf,n)
+RealLogBudget(I,\mathrm{pOf},n)
 \Rightarrow
-\sum_q \frac{\log(pOf(q))}{\log n}\le 1
+\sum_q \frac{\log(\mathrm{pOf}(q))}{\log n}\le 1
 $$
 
 しかし今回からは、
 
 $$
-\prod_q pOf(q)\le n
+\prod_q \mathrm{pOf}(q)\le n
 $$
 
 を示せば十分になった。
@@ -133,7 +133,7 @@ R 版の到達点はこうじゃ。
 ここで、R 版の有限 log-ratio weight skeleton はかなり強くなった。
 
 $$
-\mathrm{RealLogNonnegOn}(I,pOf)
+\mathrm{RealLogNonnegOn}(I,\mathrm{pOf})
 $$
 
 $$
@@ -141,13 +141,13 @@ $$
 $$
 
 $$
-\prod pOf(q)\le n
+\prod \mathrm{pOf}(q)\le n
 $$
 
 があれば、
 
 $$
-\frac{\log pOf(q)}{\log n}
+\frac{\log \mathrm{pOf}(q)}{\log n}
 $$
 
 を重みとする provider は sub-probability になる。
@@ -157,7 +157,7 @@ $$
 次の課題は、まさに History にある通り、
 
 $$
-\prod_{q\in I}pOf(q)\le n
+\prod_{q\in I}\mathrm{pOf}(q)\le n
 $$
 
 を **prime-power / divisor channel 側からどう供給するか** じゃ。
@@ -165,11 +165,11 @@ $$
 これは、単なる解析補題ではない。
 数論側の構造に戻る必要がある。
 
-現在の $pOf(q)$ は任意関数じゃ。
+現在の $\mathrm{pOf}(q)$ は任意関数じゃ。
 これを、prime-power witness provider の base prime として、
 
 $$
-pOf(q)=(W.label(n,q,hq)).p
+\mathrm{pOf}(q)=(W.label(n,q,hq)).p
 $$
 
 のように読みたい。
@@ -177,7 +177,7 @@ $$
 そのうえで、
 
 $$
-\prod_{q\in I}pOf(q)\le n
+\prod_{q\in I}\mathrm{pOf}(q)\le n
 $$
 
 を示す必要がある。
@@ -195,7 +195,7 @@ $$
 のように同じ base prime $p$ を読むなら、単純に
 
 $$
-pOf(q_1)\cdot pOf(q_2)=p^2
+\mathrm{pOf}(q_1)\cdot \mathrm{pOf}(q_2)=p^2
 $$
 
 を積に入れることになる。
@@ -203,7 +203,7 @@ $$
 このとき $n$ 側に十分な $p$ -進指数がなければ、
 
 $$
-\prod pOf(q)\le n
+\prod \mathrm{pOf}(q)\le n
 $$
 
 は保証できない。
@@ -250,7 +250,7 @@ theorem realLogRatioWeightProvider_subProbability_of_productBudget
 こうしておくと、後で prime-power 側から product bound を供給するとき、
 
 $$
-\prod pOf(q)\le n
+\prod \mathrm{pOf}(q)\le n
 $$
 
 という責務を一つの名前にまとめられる。
@@ -292,13 +292,13 @@ Phase-R012 は、R 版 log route の **product budget 直通 theorem** じゃ。
 これで、
 
 $$
-\prod pOf(q)\le n
+\prod \mathrm{pOf}(q)\le n
 $$
 
 から、
 
 $$
-\sum_q \frac{\log(pOf(q))}{\log n}\le 1
+\sum_q \frac{\log(\mathrm{pOf}(q))}{\log n}\le 1
 $$
 
 つまり log-ratio provider の sub-probability まで進めるようになった。
@@ -307,7 +307,7 @@ $$
 Phase-R012 で、その支点は
 
 $$
-\prod pOf(q)\le n
+\prod \mathrm{pOf}(q)\le n
 $$
 
 という整数積の岩場に結び直された。
