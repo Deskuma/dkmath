@@ -117,7 +117,7 @@ VonMangoldtLikeWeight\\
 \Rightarrow
 ofVonMangoldtLikeWeight\\
 \Rightarrow
-PrimePowerChannelProvider\\
+\mathrm{PrimePowerChannelProvider}\\
 \Rightarrow
 weightedHitMass\le C
 $$
@@ -239,7 +239,7 @@ def PrimePowerChannelProvider.ofPrimeWitnessDependentWeight
 $$
 PrimeWitnessDependentWeight
 \Rightarrow
-PrimePowerChannelProvider
+\mathrm{PrimePowerChannelProvider}
 $$
 
 が一発で使える。

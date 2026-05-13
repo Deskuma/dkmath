@@ -322,7 +322,7 @@ $$
 $$
 
 $$
-ofPrimeWitnessDependentWeight
+\mathrm{ofPrimeWitnessDependentWeight}
 $$
 
 $$

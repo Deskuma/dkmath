@@ -161,7 +161,7 @@ $$
 を作り、
 
 $$
-\text{PrimePowerChannelProvider.ofWitnessProviderWeight}
+\mathrm{PrimePowerChannelProvider}.\mathrm{ofWitnessProviderWeight}
 $$
 
 で provider 化し、

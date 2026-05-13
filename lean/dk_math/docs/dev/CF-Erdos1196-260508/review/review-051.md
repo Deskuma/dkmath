@@ -100,7 +100,7 @@ $$
 $$
 
 $$
-PrimePowerChannelProvider.ofWitnessProviderWeight
+\mathrm{PrimePowerChannelProvider}.\mathrm{ofWitnessProviderWeight}
 $$
 
 $$

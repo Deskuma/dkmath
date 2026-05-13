@@ -366,7 +366,7 @@ $$
 $$
 
 $$
-PrimePowerChannelProvider.ofPrimeWitnessDependentWeight
+\mathrm{PrimePowerChannelProvider}.\mathrm{ofPrimeWitnessDependentWeight}
 $$
 
 $$

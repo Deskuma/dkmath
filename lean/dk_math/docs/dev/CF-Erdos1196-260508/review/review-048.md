@@ -111,17 +111,17 @@ $$
 
 $$
 \to
-\text{PrimeWitnessDependentWeight}
+\mathrm{PrimeWitnessDependentWeight}
 $$
 
 $$
 \to
-\text{ofPrimeWitnessDependentWeight}
+\mathrm{ofPrimeWitnessDependentWeight}
 $$
 
 $$
 \to
-\text{PrimePowerChannelProvider}
+\mathrm{PrimePowerChannelProvider}
 $$
 
 $$

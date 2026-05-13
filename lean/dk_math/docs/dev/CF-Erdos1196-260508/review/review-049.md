@@ -391,7 +391,7 @@ $$
 で weight を作り、
 
 $$
-PrimePowerChannelProvider
+\mathrm{PrimePowerChannelProvider}
 $$
 
 まで流せるようになった。
