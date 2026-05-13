@@ -7,7 +7,7 @@
 Phase BE で一般定理として、
 
 $$
-A(p)\ge 0,\qquad B(n)>0,\qquad \sum_q A(p(q))\le B(n)
+A(p)\ge 0,\qquad B(n) > 0,\qquad \sum_q A(p(q))\le B(n)
 $$
 
 から

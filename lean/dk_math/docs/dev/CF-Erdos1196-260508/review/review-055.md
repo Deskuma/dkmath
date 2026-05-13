@@ -309,7 +309,7 @@ $$
 実数対数へ行く前に、
 
 $$
-A(p)\ge 0,\quad B(n)>0,\quad \sum A(p(q))\le B(n)
+A(p)\ge 0,\quad B(n) > 0,\quad \sum A(p(q))\le B(n)
 $$
 
 という有限条件の API をしっかり使えるようにする。これが本物の \(\Lambda(q)/\log n\) へ行く前の安全な雪稜じゃ。
