@@ -66,7 +66,7 @@ $$
 
 となる。
 
-最後に selected sub-index \(I\) 上の全 \(q\) について、
+最後に selected sub-index $I$ 上の全 $q$ について、
 
 $$
 W.basePrimeOf(n,I,hI)(q)\mid n
@@ -157,7 +157,7 @@ rw [hq_pow]
 | `RealLogProductBudget` interface                               | 完了   |
 | nat product bound から provider `SubProbability`                 | 完了   |
 | pairwise-coprime + itemwise dvd から product bound               | 完了   |
-| witness base prime が source \(n\) を割る                            | 今回完了 |
+| witness base prime が source $n$ を割る                            | 今回完了 |
 | pairwise-coprime だけで witness-derived provider `SubProbability` | 今回完了 |
 | pairwise-coprime 条件そのものの供給                                     | 未    |
 | 重複あり / valuation budget route                                  | 未    |
@@ -177,7 +177,7 @@ $$
 次は、base prime の **相異性** から pairwise-coprime を供給する route が自然じゃ。
 
 素数同士は、異なれば互いに素である。
-したがって、selected sub-index \(I\) 上で、
+したがって、selected sub-index $I$ 上で、
 
 $$
 i\ne j
@@ -219,7 +219,7 @@ NatPairwiseCoprimeOn I pOf
 
 ## 7. witness provider 由来の prime-valued 条件
 
-`W.basePrimeOf` については、 \(I\) 上なら witness の base prime なので、
+`W.basePrimeOf` については、 $I$ 上なら witness の base prime なので、
 
 $$
 Nat.Prime(W.basePrimeOf(n,I,hI)(q))
@@ -255,7 +255,7 @@ $$
 \prod_{q\in I}basePrime(q)\le n
 $$
 
-を直接保証するには、base prime の出現回数を \(n\) の \(p\) -adic exponent で制御する必要がある。
+を直接保証するには、base prime の出現回数を $n$ の $p$ -adic exponent で制御する必要がある。
 
 つまり将来は、
 
@@ -266,7 +266,7 @@ $$
 のような **指数消費 tracking** が必要になる。
 
 しかし今は、まず pairwise distinct / pairwise coprime route を閉じるのが良い。
-これが閉じれば、重複なし版の \(\log p/\log n\) sub-probability route は完成に近い。
+これが閉じれば、重複なし版の $\log p/\log n$ sub-probability route は完成に近い。
 
 ## 9. 総括
 
@@ -296,5 +296,5 @@ $$
 
 型の real provider は `SubProbability` になる。
 
-山で言えば、各岩 \(p\) がちゃんと大岩 \(n\) に刺さっていることは確認できた。
+山で言えば、各岩 $p$ がちゃんと大岩 $n$ に刺さっていることは確認できた。
 次は、それらの岩が互いに干渉しない、つまり pairwise-coprime であることをどう保証するかじゃな。

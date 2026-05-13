@@ -36,13 +36,13 @@ PrimePowerWitnessProvider.BaseWeightSubProbability
 
 意味はこうじゃ。
 
-まず `BaseWeightNonneg` は、witness provider \(W\) が index 上の label \(q\) に対して選ぶ witness
+まず `BaseWeightNonneg` は、witness provider $W$ が index 上の label $q$ に対して選ぶ witness
 
 $$
 q=p^k
 $$
 
-の base prime \(p\) を読み、
+の base prime $p$ を読み、
 
 $$
 0\le c(n,p)
@@ -60,7 +60,7 @@ $$
 
 という条件じゃ。
 
-次に `BaseWeightSubProbability` は、その \(c(n,p)\) から作った
+次に `BaseWeightSubProbability` は、その $c(n,p)$ から作った
 
 $$
 W.weightOfBase(c)(n,q)=c(n,p(n,q))
@@ -99,7 +99,7 @@ $$
 という条件が「たまたま theorem に必要な仮定」として見えていた。
 今回からは、これは **base-prime weight が満たすべき性質** として独立した名前を持った。
 
-つまり、 \(c(n,p)\) が登山道に入るための通行証ができたのじゃ。
+つまり、 $c(n,p)$ が登山道に入るための通行証ができたのじゃ。
 
 ## 4. `baseWeight_hitMass_le_const` の意味
 
@@ -228,7 +228,7 @@ $$
 | named predicate 版 hit mass alias        | 今回完了 |
 | base-prime toy weight 全体の predicate     | 未    |
 | ratio-style toy weight                  | 未    |
-| 解析風 \(\log p/\log n\) route               | 未    |
+| 解析風 $\log p/\log n$ route               | 未    |
 
 つまり、第2キャンプ後の登頂アタックは、まず **重み条件の圧縮と命名** から始まった。
 これは地味に見えるが、山頂側へ進むほど効いてくるタイプの整備じゃ。
@@ -292,7 +292,7 @@ $$
 \forall n,p,\quad 0\le c(n,p)
 $$
 
-から、任意の witness provider \(W\) に対して
+から、任意の witness provider $W$ に対して
 
 $$
 W.BaseWeightNonneg(c)
@@ -349,7 +349,7 @@ c(n,p)=\frac{A(p)}{B(n)}
 $$
 
 のような形を考える。
-まだ \(\log\) は入れず、有理 toy model として、
+まだ $\log$ は入れず、有理 toy model として、
 
 $$
 0\le A(p),\qquad 0 < B(n)

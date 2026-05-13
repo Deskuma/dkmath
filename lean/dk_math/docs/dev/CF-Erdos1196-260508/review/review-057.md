@@ -68,13 +68,13 @@ $$
 
 を作ったわけじゃ。
 
-sample kernel の状態 \(10\) では labels が
+sample kernel の状態 $10$ では labels が
 
 $$
 {2,5}
 $$
 
-で、witness provider はそれぞれ base prime \(2,5\) を読む。したがって、
+で、witness provider はそれぞれ base prime $2,5$ を読む。したがって、
 
 $$
 A(2)+A(5)=1+0=1\le B(10)=1
@@ -82,7 +82,7 @@ $$
 
 となり、budget 条件が閉じる。
 
-状態 \(10\) 以外では index が空なので、総量は \(0\) 。
+状態 $10$ 以外では index が空なので、総量は $0$ 。
 ゆえに全状態で sub-probability が成り立つ。
 
 ## 3. 何が前進したか
@@ -178,7 +178,7 @@ $$
 $$
 
 これはとても良い登り方じゃ。
-いきなり \(\log p/\log n\) へ飛ばず、有理 toy model で構造だけを先に固めておる。
+いきなり $\log p/\log n$ へ飛ばず、有理 toy model で構造だけを先に固めておる。
 
 ## 5. Lean 的にも良い仕上がり
 
@@ -201,7 +201,7 @@ $$
 | concrete ratio-style sample        | 今回完了 |
 | ratio-style route 小まとめ             | 未    |
 | 実数/log route 設計                    | 未    |
-| \(\Lambda(q)/\log n\) 本格接続           | 未    |
+| $\Lambda(q)/\log n$ 本格接続           | 未    |
 
 つまり、有理 toy model としての ratio-style route は一段落しておる。
 
@@ -209,7 +209,7 @@ $$
 
 次は History にもある通り、Phase BG として **ratio-style toy route の小まとめ / 整理** が自然じゃ。
 
-ここまでで定理群がかなり増えたので、いきなり実数 \(\log\) に進むより、まずは導線を再確認した方がよい。
+ここまでで定理群がかなり増えたので、いきなり実数 $\log$ に進むより、まずは導線を再確認した方がよい。
 
 わっちなら Phase BG では、新しい大定理を足すより、次のような alias / section コメント / docstring の整理をする。
 
@@ -237,7 +237,7 @@ sampleTenRatioBaseWeight_route_summary
 
 Phase BG の後は、いよいよ二択じゃ。
 
-一つ目は、まだ有理 toy model のまま、別の \(A,B\) 例を増やす道。
+一つ目は、まだ有理 toy model のまま、別の $A,B$ 例を増やす道。
 
 二つ目は、doc 側で実数/log route の設計を起こす道。
 
@@ -283,7 +283,7 @@ $$
 
 まで sample で通った。
 
-山で言えば、比率表 \(A(p)/B(n)\) を持った登山料モデルが、実際の登山口を通り、予算内に収まり、Big の外へ飛び出さないことが確認された。
+山で言えば、比率表 $A(p)/B(n)$ を持った登山料モデルが、実際の登山口を通り、予算内に収まり、Big の外へ飛び出さないことが確認された。
 
 ここは良い区切りじゃ。
-次は一度、Phase BG として小まとめを張る。そこから先、いよいよ \(\log p/\log n\) の雪稜をどう登るか、設計を描く段階じゃな。
+次は一度、Phase BG として小まとめを張る。そこから先、いよいよ $\log p/\log n$ の雪稜をどう登るか、設計を描く段階じゃな。

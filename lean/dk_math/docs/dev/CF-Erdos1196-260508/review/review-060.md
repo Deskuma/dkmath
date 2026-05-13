@@ -11,7 +11,7 @@ $$
 c(n,p)=\frac{A(p)}{B(n)}
 $$
 
-を \(\mathbb{R}\) 上で扱うために、
+を $\mathbb{R}$ 上で扱うために、
 
 ```lean
 RealBasePrimeToyWeight
@@ -30,7 +30,7 @@ $$
 0\le \frac{A(p)}{B(n)}
 $$
 
-だけを \(\mathbb{R}\) 上で確認した。つまり、N/Q 版 Phase BC の R 版対応ができた段階じゃな。
+だけを $\mathbb{R}$ 上で確認した。つまり、N/Q 版 Phase BC の R 版対応ができた段階じゃな。
 
 ## 2. 今回閉じたもの
 
@@ -69,7 +69,7 @@ exact div_nonneg (hA p) (le_of_lt (hB n))
 ```
 
 で素直に閉じている。
-ここは実数版でも \(\mathbb{Q}\) 版と同じ形でいけることが確認された。
+ここは実数版でも $\mathbb{Q}$ 版と同じ形でいけることが確認された。
 
 ## 3. `noncomputable def` は妥当
 
@@ -196,7 +196,7 @@ theorem real_ratioBasePrimeWeight_sum_le_one
 ```
 
 ただしこれは少し形が怪しい。
-`realRatioBasePrimeWeight A B n p` の第2引数は \(p\) なので、index \(q\) から \(p(q)\) を読むなら
+`realRatioBasePrimeWeight A B n p` の第2引数は $p$ なので、index $q$ から $p(q)$ を読むなら
 
 $$
 I.sum\ (fun q => realRatioBasePrimeWeight A B n (pOf q))
@@ -329,4 +329,4 @@ $$
 を実数有限和で閉じる Phase-R002 じゃな。
 
 山で言えば、R 版の登山口に最初の杭を打った。
-次は、予算 \(B\) を超えない比率表が、実数でも Big から飛び出さないことを示す番じゃ。
+次は、予算 $B$ を超えない比率表が、実数でも Big から飛び出さないことを示す番じゃ。

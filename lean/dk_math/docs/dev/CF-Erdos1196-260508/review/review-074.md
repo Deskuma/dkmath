@@ -109,7 +109,7 @@ RealLogProductBudget(I,pOf,n)
 \text{ provider is sub-probability}
 $$
 
-今回、その \(pOf\) に
+今回、その $pOf$ に
 
 $$
 pOf(q)=W.basePrimeOf(n,I,hI)(q)
@@ -123,7 +123,7 @@ $$
 q=p^k
 $$
 
-という prime-power witness から base prime \(p\) を読み、
+という prime-power witness から base prime $p$ を読み、
 
 $$
 w(q)=\frac{\log p}{\log n}
@@ -271,14 +271,14 @@ $$
 
 ここで出てくる問題は、やはり重複制御じゃ。
 
-例えば同じ base prime \(p\) を複数の label が読むと、
+例えば同じ base prime $p$ を複数の label が読むと、
 
 $$
 p\cdot p\cdot \cdots
 $$
 
 として積に現れる。
-この重複回数は、 \(n\) の \(p\) -進指数予算を超えてはならぬ。
+この重複回数は、 $n$ の $p$ -進指数予算を超えてはならぬ。
 
 したがって次の深い補題群は、
 
@@ -306,7 +306,7 @@ $$
 q=p^k
 $$
 
-から読んだ base prime \(p\) を、
+から読んだ base prime $p$ を、
 
 $$
 \frac{\log p}{\log n}

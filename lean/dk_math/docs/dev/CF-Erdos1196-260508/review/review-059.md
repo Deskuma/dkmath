@@ -3,7 +3,7 @@
 ## 1. 結論
 
 うむ、Phase BH は **登頂前の地図更新** じゃ。
-Lean 本体に新定理を足す段階ではなく、ここまでの \(\mathbb{N}/\mathbb{Q}\) 版成果を README として固定し、次の \(\mathbb{R}\) / \(\log\) ルートを別設計書に切り出した。
+Lean 本体に新定理を足す段階ではなく、ここまでの $\mathbb{N}/\mathbb{Q}$ 版成果を README として固定し、次の $\mathbb{R}$ / $\log$ ルートを別設計書に切り出した。
 
 これはかなり良い判断じゃ。
 Phase BA ～ BG で ratio-style toy route は一段落している。そこでいきなり `Real.log` へ突撃せず、まず
@@ -22,7 +22,7 @@ $$
 
 ## 2. 今回整理された N/Q 版の現在地
 
-`README.md` では、ここまでの \(\mathbb{N}/\mathbb{Q}\) 版の到達点が、かなり見通しよくまとめられている。
+`README.md` では、ここまでの $\mathbb{N}/\mathbb{Q}$ 版の到達点が、かなり見通しよくまとめられている。
 
 中心はこの形じゃ。
 
@@ -58,7 +58,7 @@ $$
 \mathrm{weightedHitMass}\le C
 $$
 
-へ進む ratio-style toy route が \(\mathbb{Q}\) 上で実走済み、という位置づけになっておる。
+へ進む ratio-style toy route が $\mathbb{Q}$ 上で実走済み、という位置づけになっておる。
 
 これは、Phase BG までの成果を「どの theorem 名を読めばよいか」という入口に変換した意味がある。特に `sampleTenRatioBaseWeight_route_summary` が N/Q 版 ratio-style route の concrete summary として明示されたのは良い。
 
@@ -70,10 +70,10 @@ $$
 
 * `Real.log`
 * 実数値 weight
-* \(\log p/\log n\)
+* $\log p/\log n$
 * 無限 primitive set
 * 漸近評価
-* \(1+O(1/\log x)\)
+* $1+O(1/\log x)$
 * von Mangoldt 関数そのものの解析的性質
 
 を N/Q 版では扱わない、と切り分けている。
@@ -98,7 +98,7 @@ $$
 を扱う。ただし、ここではまだ `Real.log` を使わない。
 
 第二層は **Real channel bridge**。
-ここでは既存の \(\mathbb{Q}\) API を壊さず、まず \(\mathbb{R}\) 用の薄い parallel skeleton を作る方針が推奨されている。これは賢い。既存 N/Q route はすでに theorem-facing names が増えて安定しているので、いきなり型一般化すると影響範囲が広すぎる。
+ここでは既存の $\mathbb{Q}$ API を壊さず、まず $\mathbb{R}$ 用の薄い parallel skeleton を作る方針が推奨されている。これは賢い。既存 N/Q route はすでに theorem-facing names が増えて安定しているので、いきなり型一般化すると影響範囲が広すぎる。
 
 第三層は **Log candidate**。
 
@@ -136,7 +136,7 @@ $$
 \sum_q A(p(q))\le B(n)
 $$
 
-と \(0 < B(n)\) から出す。ここでは channel API に接続せず、まず finite sum lemma として安定させる。
+と $0 < B(n)$ から出す。ここでは channel API に接続せず、まず finite sum lemma として安定させる。
 
 Phase RJ は、実数 weight provider の parallel prototype。
 既存 `WeightProvider` を型一般化せず、`RealWeightProvider` の薄い試作を作る方針じゃ。

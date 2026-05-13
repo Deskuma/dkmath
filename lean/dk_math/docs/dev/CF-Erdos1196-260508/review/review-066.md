@@ -167,7 +167,7 @@ $$
 w_i\approx \frac{\Lambda(q_i)}{\log n_i}
 $$
 
-のうち、 \(q_i=p^k\) のとき
+のうち、 $q_i=p^k$ のとき
 
 $$
 \Lambda(q_i)=\log p
@@ -176,7 +176,7 @@ $$
 となる部分を、有限 provider として実装したものじゃ。
 
 まだ von Mangoldt 関数そのものではない。
-しかし、prime-power label の base prime \(p\) を読む route と接続すれば、まさに
+しかし、prime-power label の base prime $p$ を読む route と接続すれば、まさに
 
 $$
 \frac{\log p}{\log n}
@@ -279,7 +279,7 @@ $$
 \prod_q pOf(q)
 $$
 
-がどの程度 \(n\) を割る、または \(n\) 以下であるかを制御せねばならぬ。
+がどの程度 $n$ を割る、または $n$ 以下であるかを制御せねばならぬ。
 
 ここが本物の登攀部じゃな。
 
@@ -370,7 +370,7 @@ RealLogBudgetProduct.lean
 
 ## 8. その次に prime-power route へ戻る
 
-product budget が見えてから、ようやく既存の \(q=p^k\) route へ戻る。
+product budget が見えてから、ようやく既存の $q=p^k$ route へ戻る。
 
 そこで、
 
@@ -386,7 +386,7 @@ $$
 
 をどのように得るかを見る。
 
-このとき、`PrimePowerWitnessProvider` の \(p\) field が生きてくる。
+このとき、`PrimePowerWitnessProvider` の $p$ field が生きてくる。
 
 つまり最終的な道はこうじゃ。
 
@@ -448,5 +448,5 @@ $$
 ここまでで、R 版は「実数比率表」から「本物の log-ratio weight」へ進んだ。
 次の戦いは、budget の起源じゃ。
 
-山で言えば、ついに \(\log p/\log n\) のザイルを実際に張った。
+山で言えば、ついに $\log p/\log n$ のザイルを実際に張った。
 次は、そのザイルをどの岩、すなわちどの数論構造に固定するかを決める番じゃな。
