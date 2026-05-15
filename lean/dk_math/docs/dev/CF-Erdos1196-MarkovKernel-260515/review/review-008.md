@@ -10,7 +10,7 @@ $$
 が **もし供給されれば** `MarkovShadow` に昇格できる、という受け皿を作った。今回 DKMK-006C は、その等式を将来証明するために必要な
 
 $$
-\#{q\in Full(n)\mid \mathrm{basePrime}(q) = p} = n.\mathrm{factorization}(p)
+\\\#{q\in Full(n)\mid \mathrm{basePrime}(q) = p} = n.\mathrm{factorization}(p)
 $$
 
 という **全 exponent slot coverage** の語彙を入れたわけじゃ。
@@ -35,13 +35,13 @@ FullExponentSlotCoverage
 これは、以前の selected route の
 
 $$
-\#{q\in I\mid p(q)=p}\le n.\mathrm{factorization}(p)
+\\\#{q\in I\mid p(q)=p}\le n.\mathrm{factorization}(p)
 $$
 
 ではなく、full route 用に
 
 $$
-\#{q\in \mathrm{Full}(n)\mid p(q)=p}=n.\mathrm{factorization}(p)
+\\\#{q\in \mathrm{Full}(n)\mid p(q)=p}=n.\mathrm{factorization}(p)
 $$
 
 を表す等号条件じゃ。差分でも、これは `NatBaseMultiplicityBudgetOn` の equality counterpart として説明されておる。
@@ -59,7 +59,7 @@ $$
 だから、
 
 $$
-\#{q\in I\mid p(q)=p}\le v_p(n)
+\\\#{q\in I\mid p(q)=p}\le v_p(n)
 $$
 
 だった。
@@ -67,7 +67,7 @@ $$
 今回の full route では、これを
 
 $$
-\#{q\in \mathrm{Full}(n)\mid p(q)=p}=v_p(n)
+\\\#{q\in \mathrm{Full}(n)\mid p(q)=p}=v_p(n)
 $$
 
 へ強めたい。
@@ -138,7 +138,7 @@ $$
 は、prime fiber ごとにまとめると、
 
 $$
-\sum_p \#{q\in \mathrm{Full}(n)\mid p(q)=p}\log p
+\sum_p \\\#{q\in \mathrm{Full}(n)\mid p(q)=p}\log p
 $$
 
 になり、coverage により
@@ -160,13 +160,13 @@ natBaseMultiplicityBudgetOn_of_complete
 により、
 
 $$
-\#\mathrm{fiber} = v_p(n)
+\\\#\mathrm{fiber} = v_p(n)
 $$
 
 から
 
 $$
-\#\mathrm{fiber} \le v_p(n)
+\\\#\mathrm{fiber} \le v_p(n)
 $$
 
 が得られる。
@@ -226,7 +226,7 @@ full equality を示すための exact multiplicity interface が入った
 次に必要なのは、
 
 $$
-\#\mathrm{fiber}(p) = v_p(n)
+\\\#\mathrm{fiber}(p) = v_p(n)
 $$
 
 から
