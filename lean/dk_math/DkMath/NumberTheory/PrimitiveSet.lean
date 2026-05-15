@@ -28,6 +28,7 @@ import DkMath.NumberTheory.PrimitiveSet.ValuationBudget
 import DkMath.NumberTheory.PrimitiveSet.RealDivisorBridge
 import DkMath.NumberTheory.PrimitiveSet.LogCapacityKernel
 import DkMath.NumberTheory.PrimitiveSet.VonMangoldtShadow
+import DkMath.NumberTheory.PrimitiveSet.GlobalLogCapacityKernel
 
 #print "file: DkMath.NumberTheory.PrimitiveSet"
 
@@ -63,4 +64,5 @@ This module exposes:
 - local log-capacity kernel whose normalized shadow is the R/log
   sub-probability theorem
 - finite real-log von-Mangoldt shadow for prime-power witnesses
+- global log-capacity kernel over source states `n > 1`
 -/

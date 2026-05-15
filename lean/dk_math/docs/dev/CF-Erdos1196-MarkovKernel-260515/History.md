@@ -115,3 +115,29 @@ Archive
    - その後、Markov/sub-Markov translation layer で既存 route の `Λ(q)/log n` 表現へ接続する。
 
 ---
+
+### 日時: 2026/05/15 20:13 JST (DKMK-004A/004 GlobalLogCapacityKernel 追加)
+
+1. 目的:
+   - DKMK-004A として cost/weight 対応表を project docs に明示する。
+   - DKMK-004 として local `(n,I)` log-capacity kernel を、状態 `n > 1` 上の global kernel へ拡張する。
+2. 実施:
+   - `DkMath_Markov_kernel-to-ck.md` に `CapacityKernel.cost = witnessLogCost = vonMangoldtShadowCost = log(basePrimeOf)` などの対応表を追加した。
+   - `DkMath.NumberTheory.PrimitiveSet.GlobalLogCapacityKernel` を追加した。
+   - 親状態 `LogCapacityState := { n : ℕ // 1 < n }` を導入し、`log_capacity_pos` を補題化した。
+   - `PrimePowerWitnessProvider.globalLogCapacityKernel` を定義し、外部入力 `IOf : ℕ → Finset ℕ` と `hIOf` から `CapacityKernel LogCapacityState ℕ` を構成した。
+   - global kernel 由来の `RealWeightProvider` と、その `SubProbability` theorem を追加した。
+3. 結論:
+   - local kernel の集合ではなく、`n > 1` 状態空間上の global capacity kernel として R/log shadow route を扱える入口が no-sorry で入った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.GlobalLogCapacityKernel`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/GlobalLogCapacityKernel.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - Markov/sub-Markov translation layer として、global normalized shadow provider を既存 route の Markov-kernel 風表現へ接続する。
+   - full divisor/channel set を選んだ場合の equality route と、selected set の inequality route を切り分ける。
+
+---

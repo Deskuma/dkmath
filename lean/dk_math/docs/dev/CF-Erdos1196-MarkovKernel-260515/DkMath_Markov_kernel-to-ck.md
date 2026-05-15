@@ -84,6 +84,32 @@ DkMath の本体は、
 
 ---
 
+## 2.1. DKMK-004A 対応表
+
+現時点の Lean API では、local log-capacity route の主要語彙は次のように対応する。
+
+```text
+CapacityKernel.cost
+  = PrimePowerWitnessProvider.witnessLogCost
+  = PrimePowerWitnessProvider.vonMangoldtShadowCost
+  = log (PrimePowerWitnessProvider.basePrimeOf ...)
+
+CapacityKernel.normalizedWeight
+  = PrimePowerWitnessProvider.normalizedVonMangoldtShadowWeight
+  = log (PrimePowerWitnessProvider.basePrimeOf ...) / log n
+
+logCapacityKernelRealWeightProvider.weight
+  = normalizedVonMangoldtShadowWeight
+
+globalLogCapacityKernel.cost
+  = vonMangoldtShadowCost
+```
+
+ここで `vonMangoldtShadowCost` は解析的 von Mangoldt 関数そのものではない。
+prime-power witness `q = p^k` から base prime `p` を読み、`log p` を返す有限 shadow である。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route
