@@ -116,6 +116,8 @@ def looks_like_math(expr: str) -> bool:
         return False
     if any(ch in MATH_CHARS for ch in stripped):
         return True
+    if re.fullmatch(r"\d+(?:\.\d+)?", stripped):
+        return True
     if re.fullmatch(r"[A-Za-z][A-Za-z0-9_]*", stripped):
         return stripped in MATH_ATOMS
     if ("(" in stripped or ")" in stripped) and re.search(r"[A-Za-z0-9]", stripped):
