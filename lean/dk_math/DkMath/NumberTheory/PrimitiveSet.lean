@@ -34,6 +34,7 @@ import DkMath.NumberTheory.PrimitiveSet.FullChannelSet
 import DkMath.NumberTheory.PrimitiveSet.GlobalLogCapacityKernel
 import DkMath.NumberTheory.PrimitiveSet.FullChannelEquality
 import DkMath.NumberTheory.PrimitiveSet.FullExponentSlot
+import DkMath.NumberTheory.PrimitiveSet.FullChannelLogSum
 
 #print "file: DkMath.NumberTheory.PrimitiveSet"
 
@@ -76,4 +77,6 @@ This module exposes:
 - global log-capacity kernel over source states `n > 1`
 - full-channel log-cost completeness interface and Markov-shadow bridge
 - full exponent-slot coverage interface for the equality route
+- finite log-sum bridge from full exponent-slot coverage to full-channel
+  log-cost completeness
 -/

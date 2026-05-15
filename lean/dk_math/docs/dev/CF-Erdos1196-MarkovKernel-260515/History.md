@@ -246,3 +246,29 @@ Archive
    - 必要なら label `q` ではなく explicit slot `(p,k)` 上の finite sum を経由する。
 
 ---
+
+### 日時: 2026/05/16 01:25 JST (DKMK-006D FullChannelLogSum 追加)
+
+1. 目的:
+   - `FullExponentSlotCoverage` から `FullChannelLogCostComplete` を導く有限和/log の橋を追加する。
+2. 実施:
+   - `DkMath.NumberTheory.PrimitiveSet.FullChannelLogSum` を追加した。
+   - `sum_log_base_eq_sum_image_multiplicity_mul_log` を追加し、有限 log 和を base-prime fiber ごとの multiplicity 和へ分解した。
+   - `sum_factorization_mul_log_eq_log_nat` を追加し、`Σ v_p(n) log p = log n` を `Nat.prod_factorization_pow_eq_self` と `Real.log_prod` から証明した。
+   - `fullExponentSlotCoverage_image_basePrime_eq_factorization_support` を追加し、coverage の下で base-prime image と `factorization.support` が一致することを示した。
+   - `fullExponentSlotCoverage_sum_log_base_eq_log_nat` と `fullChannelLogCostComplete_of_fullExponentSlotCoverage` を追加した。
+   - project docs に DKMK-006D の位置づけを追記した。
+3. 結論:
+   - `FullExponentSlotCoverage` が供給されれば、full-channel log-cost equality と Markov-shadow bridge まで no-sorry で到達できるようになった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.FullChannelLogSum`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/FullChannelLogSum.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `FullExponentSlotCoverage` 自体を canonical/full channel enumeration から供給できるか確認する。
+   - 必要なら explicit slot `(p,k)` 形式の補助 interface を追加し、coverage 証明の入力をさらに具体化する。
+
+---

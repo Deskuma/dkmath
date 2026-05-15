@@ -327,6 +327,79 @@ fullExponentSlotCoverage_baseMultiplicity_budget
 
 ---
 
+## 2.6. DKMK-006D FullChannelLogSum
+
+DKMK-006D では、DKMK-006C の exact multiplicity を、DKMK-006B の
+`FullChannelLogCostComplete` へ接続する有限和の橋を追加する。
+
+中心になる分解は次である。
+
+\[
+\sum_{q\in I}\log(p(q)) =
+\sum_{p\in I.image(p)}
+\#\{q\in I:p(q)=p\}\log p
+\]
+
+Lean 側ではこれを
+
+```lean
+sum_log_base_eq_sum_image_multiplicity_mul_log
+```
+
+として置く。
+
+さらに、自然数の素因数分解から
+
+\[
+\sum_{p\in n.factorization.support} n.factorization(p)\log p =
+\log n
+\]
+
+を
+
+```lean
+sum_factorization_mul_log_eq_log_nat
+```
+
+として証明する。
+
+`FullExponentSlotCoverage` の下では、base-prime image と
+`n.factorization.support` が一致する。
+
+```lean
+fullExponentSlotCoverage_image_basePrime_eq_factorization_support
+```
+
+したがって、
+
+```lean
+fullExponentSlotCoverage_sum_log_base_eq_log_nat
+```
+
+により full channel 上の base-log sum は `log n` へ落ちる。
+
+最後に、`vonMangoldtShadowCost` が定義上この base-log cost であることから、
+
+```lean
+fullChannelLogCostComplete_of_fullExponentSlotCoverage
+```
+
+が得られる。
+
+これにより、等号 route は次の形で接続された。
+
+```text
+FullExponentSlotCoverage
+  → Σ log basePrime = log n
+  → FullChannelLogCostComplete
+  → fullGlobalLogCapacityMarkovShadow
+```
+
+この段階でも `FullExponentSlotCoverage` 自体は仮定 interface である。
+ただし、その仮定が供給された後の Markov equality への橋は no-sorry で閉じた。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route
