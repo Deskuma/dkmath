@@ -2,7 +2,7 @@
 
 うむ。R026 は、R025 までで残っていた **「budget は仮定すれば使える。では、その budget はどこから来るのか？」** という問いに対して、最初の本格的な供給源を置いた段階じゃ。
 
-これはかなり筋がよい。今回入った `baseExponentOf` により、witness label (q) を
+これはかなり筋がよい。今回入った `baseExponentOf` により、witness label \(q\) を
 
 $$
 q=p(q)^{k(q)}
@@ -22,7 +22,7 @@ theorem PrimePowerWitnessProvider.basePrimeOf_pow_baseExponentOf_dvd_source_on
 theorem PrimePowerWitnessProvider.baseExponentOf_le_factorization_on
 ```
 
-数学的には、selected label (q\in I) に対して
+数学的には、selected label \(q\in I\) に対して
 
 $$
 p(q):=W.\mathrm{basePrimeOf}(n,I,hI,q)
@@ -50,7 +50,7 @@ $$
 k(q)\le n.\mathrm{factorization}(p(q))
 $$
 
-これはまさに、各 selected label が source (n) の valuation budget をどれだけ消費しているかを読む局所 accounting じゃ。
+これはまさに、各 selected label が source \(n\) の valuation budget をどれだけ消費しているかを読む局所 accounting じゃ。
 
 ## 2. 数学的な意味
 
@@ -77,23 +77,23 @@ $$
 q=p(q)^{k(q)}
 $$
 
-であり、しかも (q\mid n) だから
+であり、しかも \(q\mid n\) だから
 
 $$
 k(q)\le v_{p(q)}(n)
 $$
 
-と分かる。これにより、同じ base prime (p) を持つ label たちを、指数 (k(q)) 側へ写して数えられるようになる。
+と分かる。これにより、同じ base prime \(p\) を持つ label たちを、指数 \(k(q)\) 側へ写して数えられるようになる。
 
 ## 3. ここで重要な見方
 
-同じ base prime (p) を持つ selected labels を考える。
+同じ base prime \(p\) を持つ selected labels を考える。
 
 $$
 I_p:={q\in I\mid p(q)=p}
 $$
 
-各 (q\in I_p) は
+各 \(q\in I_p\) は
 
 $$
 q=p^{k(q)}
@@ -102,19 +102,19 @@ $$
 であり、
 
 $$
-0<k(q)\le v_p(n)
+0 < k(q)\le v_p(n)
 $$
 
 を満たす。
 
-ここで (I) は `Finset ℕ` なので、同じ label (q) が重複して入ることはない。
-さらに同じ (p) で
+ここで \(I\) は `Finset ℕ` なので、同じ label \(q\) が重複して入ることはない。
+さらに同じ \(p\) で
 
 $$
 p^{k(q_1)}=q_1,\qquad p^{k(q_2)}=q_2
 $$
 
-だから、もし (k(q_1)=k(q_2)) なら
+だから、もし \(k(q_1)=k(q_2)\) なら
 
 $$
 q_1=p^{k(q_1)}=p^{k(q_2)}=q_2
@@ -128,7 +128,7 @@ $$
 
 が injective になる。
 
-ゆえに (I_p) は、正の整数区間
+ゆえに \(I_p\) は、正の整数区間
 
 $$
 {1,2,\dots,v_p(n)}
@@ -168,7 +168,7 @@ theorem basePrimeOf_multiplicityBudgetOn
     NatBaseMultiplicityBudgetOn I (W.basePrimeOf n I hI) n
 ```
 
-証明の芯は、各 prime (p) に対して、
+証明の芯は、各 prime \(p\) に対して、
 
 ```lean
 (I.filter fun q => W.basePrimeOf n I hI q = p).card
@@ -286,14 +286,14 @@ $$
 
 へ接続される。
 
-言い換えると、同じ prime channel (p) に属する複数 label は、
+言い換えると、同じ prime channel \(p\) に属する複数 label は、
 
 $$
 p^1,p^2,\dots,p^{v_p(n)}
 $$
 
 という有限の指数スロットに配置される。
-だから、その個数は高々 (v_p(n)) 個しかありえない。
+だから、その個数は高々 \(v_p(n)\) 個しかありえない。
 
 これが次の R027 で閉じるべき数学じゃ。
 
@@ -314,7 +314,7 @@ $$
 
 は出ない。
 
-必要なのは、同じ (p) 上で (k(q)) が重複しないことじゃ。
+必要なのは、同じ \(p\) 上で \(k(q)\) が重複しないことじゃ。
 幸い、それは
 
 $$
