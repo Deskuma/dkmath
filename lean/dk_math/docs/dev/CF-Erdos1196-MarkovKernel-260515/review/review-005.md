@@ -139,7 +139,7 @@ ofCapacityKernel_subProbability
 で
 
 $$
-S.SubProbability
+S.\text{SubProbability}
 $$
 
 が従う。
