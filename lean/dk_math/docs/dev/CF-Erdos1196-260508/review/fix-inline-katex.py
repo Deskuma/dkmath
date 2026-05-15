@@ -34,6 +34,7 @@ MATH_ATOMS = {
     "I",
     "T",
     "W",
+    "M",
     "a",
     "d",
     "i",
@@ -47,6 +48,7 @@ MATH_ATOMS = {
     "w",
     "x",
     "y",
+    "pOf",
 }
 
 
