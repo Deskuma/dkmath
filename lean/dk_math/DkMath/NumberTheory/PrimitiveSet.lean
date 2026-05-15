@@ -26,6 +26,7 @@ import DkMath.NumberTheory.PrimitiveSet.RealWeightedPath
 import DkMath.NumberTheory.PrimitiveSet.RealLog
 import DkMath.NumberTheory.PrimitiveSet.ValuationBudget
 import DkMath.NumberTheory.PrimitiveSet.RealDivisorBridge
+import DkMath.NumberTheory.PrimitiveSet.LogCapacityKernel
 
 #print "file: DkMath.NumberTheory.PrimitiveSet"
 
@@ -58,4 +59,6 @@ This module exposes:
 - valuation-budget vocabulary for repeated base primes
 - bridge from prime-power divisor witnesses to real/log sub-probability,
   including the repeated-base valuation-budget route
+- local log-capacity kernel whose normalized shadow is the R/log
+  sub-probability theorem
 -/

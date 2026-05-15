@@ -38,3 +38,29 @@ Archive
    - （内容）
 
 ---
+
+### 日時: 2026/05/15 17:21 JST (CapacityKernel core と LogCapacityKernel bridge 追加)
+
+1. 目的:
+   - Markov kernel を直接置くのではなく、DkMath capacity kernel の正規化像として扱う Lean API の初期層を追加する。
+2. 実施:
+   - `DkMath.Kernel.Capacity` に `CapacityKernel`, `outgoingCost`, `outgoingCost_nonneg`, `outgoingCost_le_capacity` を追加した。
+   - `DkMath.Kernel.Normalize` に `normalizedWeight`, `normalizedOutgoing`, `normalizedOutgoing_le_one`, `normalizedWeight_subProbability` を追加した。
+   - `DkMath.NumberTheory.PrimitiveSet.LogCapacityKernel` に `PrimePowerWitnessProvider.logCapacityKernel` と R/log normalized sub-probability theorem を追加した。
+   - `DkMath.Kernel`, `DkMath.NumberTheory.PrimitiveSet`, `DkMath` の aggregator import を更新した。
+3. 結論:
+   - DK-1/DK-2 の一般 capacity-kernel 層と、DK-4 の最初の prime-power log-capacity bridge が no-sorry で接続された。
+4. 検証:
+   - `lake build DkMath.Kernel.Capacity`
+   - `lake build DkMath.Kernel.Normalize`
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityKernel`
+   - `lake build DkMath.Kernel`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+5. 失敗事例:
+   - 初回は `∑ b in ...` notation が新規 kernel module 内で parse されず失敗したため、core 側は explicit `Finset.sum` 形式へ寄せた。
+6. 次の課題:
+   - `CapacityKernel` の normalized weights を既存 `RealWeightProvider` / hitting API へ接続する DK-3 bridge を追加する。
+   - von Mangoldt shadow 層として `Λ(p^k)=log p` に対応する theorem-facing 補題を設計する。
+
+---
