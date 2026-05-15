@@ -408,11 +408,11 @@ $$
 目的は、
 
 $$
-CapacityKernel
+\text{CapacityKernel}
 \to
-normalizedWeight
+\text{normalizedWeight}
 \to
-RealWeightProvider / SubProbability
+\text{RealWeightProvider} / \text{SubProbability}
 $$
 
 を一般化することじゃ。
