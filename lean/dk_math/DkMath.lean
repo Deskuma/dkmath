@@ -32,6 +32,7 @@ import DkMath.UniqueRepresentation  -- Silver Ratio Unique Representation
 -- DHNT: Dynamic Harmonic Number Theory
 import DkMath.DHNT  -- DHNT: Units and Quantities (Dynamic Harmonic Number Theory)
 import DkMath.KUS  -- KUS: coefficient-unit-blueprint kernel
+import DkMath.Kernel  -- Capacity-kernel normalization layer
 -- RH: Riemann Hypothesis Module
 import DkMath.RH  -- RH: Riemann Hypothesis Module
 -- Unit Cycle Module

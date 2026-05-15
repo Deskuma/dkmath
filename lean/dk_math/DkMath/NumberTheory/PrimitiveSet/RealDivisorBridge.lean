@@ -279,6 +279,11 @@ theorem basePrimeOf_logRatioSubProbability
     (W.basePrimeOf_multiplicityBudgetOn n I hI
       (Nat.ne_of_gt (Nat.lt_trans Nat.zero_lt_one hn)))
 
+#print axioms basePrimeOf_logRatioSubProbability
+-- 'DkMath.NumberTheory.PrimitiveSet
+--  .PrimePowerWitnessProvider.basePrimeOf_logRatioSubProbability'
+-- depends on axioms: [propext, Classical.choice, Quot.sound]
+
 /--
 Summary theorem for the duplicate-free real/log route.
 

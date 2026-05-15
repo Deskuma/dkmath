@@ -26,6 +26,15 @@ import DkMath.NumberTheory.PrimitiveSet.RealWeightedPath
 import DkMath.NumberTheory.PrimitiveSet.RealLog
 import DkMath.NumberTheory.PrimitiveSet.ValuationBudget
 import DkMath.NumberTheory.PrimitiveSet.RealDivisorBridge
+import DkMath.NumberTheory.PrimitiveSet.LogCapacityKernel
+import DkMath.NumberTheory.PrimitiveSet.VonMangoldtShadow
+import DkMath.NumberTheory.PrimitiveSet.SubMarkovShadow
+import DkMath.NumberTheory.PrimitiveSet.MarkovShadow
+import DkMath.NumberTheory.PrimitiveSet.FullChannelSet
+import DkMath.NumberTheory.PrimitiveSet.GlobalLogCapacityKernel
+import DkMath.NumberTheory.PrimitiveSet.FullChannelEquality
+import DkMath.NumberTheory.PrimitiveSet.FullExponentSlot
+import DkMath.NumberTheory.PrimitiveSet.FullChannelLogSum
 
 #print "file: DkMath.NumberTheory.PrimitiveSet"
 
@@ -58,4 +67,16 @@ This module exposes:
 - valuation-budget vocabulary for repeated base primes
 - bridge from prime-power divisor witnesses to real/log sub-probability,
   including the repeated-base valuation-budget route
+- local log-capacity kernel whose normalized shadow is the R/log
+  sub-probability theorem
+- finite real-log von-Mangoldt shadow for prime-power witnesses
+- sub-Markov shadow naming layer for state-indexed real providers
+- Markov shadow naming layer for state-indexed real providers with total
+  outgoing weight exactly one
+- full prime-power channel-set interface for the equality route
+- global log-capacity kernel over source states `n > 1`
+- full-channel log-cost completeness interface and Markov-shadow bridge
+- full exponent-slot coverage interface for the equality route
+- finite log-sum bridge from full exponent-slot coverage to full-channel
+  log-cost completeness
 -/
