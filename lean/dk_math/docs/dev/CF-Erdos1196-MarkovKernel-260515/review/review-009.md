@@ -35,7 +35,7 @@ docs にもこの到達経路が明記されておる。つまり、まだ `Full
 第一に、有限集合 \(I\) 上の base map pOf について、
 
 $$
-\sum_{i\in I}\log(pOf(i))=\sum_{p\in pOf(I)}\#{i\in I\mid pOf(i)=p}\log p
+\sum_{i\in I}\log(\mathrm{pOf}(i))=\sum_{p\in \mathrm{pOf}(I)}\#{i\in I\mid \mathrm{pOf}(i)=p}\log p
 $$
 
 という fiber regrouping を入れた。
@@ -91,7 +91,7 @@ $$
 まず有限和を base prime ごとに束ねる。
 
 $$
-\sum_{q\in C.channels(n)}\log p(q)=\sum_{p\in image(pOf)}m(p)\log p
+\sum_{q\in C.channels(n)}\log p(q)=\sum_{p\in image(\mathrm{pOf})}m(p)\log p
 $$
 
 次に `FullExponentSlotCoverage` で、
@@ -111,13 +111,13 @@ fullExponentSlotCoverage_image_basePrime_eq_factorization_support
 これにより右辺が
 
 $$
-\sum_{p\in n.\mathrm{factorization}.support}n.\mathrm{factorization}(p)\log p
+\sum_{p\in n.\mathrm{factorization.support}}n.\mathrm{factorization}(p)\log p
 $$
 
 になり、最後に
 
 $$
-\sum_{p\in n.\mathrm{factorization}.support}n.\mathrm{factorization}(p)\log p=\log n
+\sum_{p\in n.\mathrm{factorization.support}}n.\mathrm{factorization}(p)\log p=\log n
 $$
 
 で閉じる。
