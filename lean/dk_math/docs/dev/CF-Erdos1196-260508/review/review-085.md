@@ -57,7 +57,7 @@ $$
 R021-R025 では、重複あり route を次の仮定から閉じていた。
 
 $$
-\#{q\in I\mid p(q)=p}\le n.\mathrm{factorization}(p)
+\\\#{q\in I\mid p(q)=p}\le n.\mathrm{factorization}(p)
 $$
 
 この仮定があれば、
@@ -137,7 +137,7 @@ $$
 へ単射で入る。したがって
 
 $$
-\#I_p\le v_p(n)
+\\\#I_p\le v_p(n)
 $$
 
 が従う。
@@ -234,7 +234,7 @@ card_filter_basePrime_le_factorization
 のような補題で、
 
 $$
-\#{q\in I\mid p(q)=p}\le n.\mathrm{factorization}(p)
+\\\#{q\in I\mid p(q)=p}\le n.\mathrm{factorization}(p)
 $$
 
 を出す。
@@ -309,7 +309,7 @@ $$
 これだけでは単純には
 
 $$
-\#{q\mid p(q)=p}\le n.\mathrm{factorization}(p)
+\\\#{q\mid p(q)=p}\le n.\mathrm{factorization}(p)
 $$
 
 は出ない。
@@ -353,7 +353,7 @@ $$
 を同一 base prime fiber 上の単射として使い、
 
 $$
-\#{q\in I\mid p(q)=p}\le v_p(n)
+\\\#{q\in I\mid p(q)=p}\le v_p(n)
 $$
 
 を導くことじゃ。

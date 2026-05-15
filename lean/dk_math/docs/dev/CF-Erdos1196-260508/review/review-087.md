@@ -37,7 +37,7 @@ $$
 へ単射で入るので、
 
 $$
-\#{q\in I\mid p(q)=p}\le n.\mathrm{factorization}(p)
+\\\#{q\in I\mid p(q)=p}\le n.\mathrm{factorization}(p)
 $$
 
 が自動生成される。README 側にもこの説明が反映されておる。

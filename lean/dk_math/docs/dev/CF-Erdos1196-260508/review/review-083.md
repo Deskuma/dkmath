@@ -152,7 +152,7 @@ realLogRatioWeightProvider_subProbability_of_productBudget
 同じ素数 $p$ が何回出たかを
 
 $$
-m_I(p):=\#{i\in I\mid \mathrm{pOf}(i)=p}
+m_I(p):=\\\#{i\in I\mid \mathrm{pOf}(i)=p}
 $$
 
 と数える。

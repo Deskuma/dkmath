@@ -20,7 +20,7 @@ $$
 を返すとき、
 
 $$
-\#{q\in I\mid p(q)=p}\le n.\mathrm{factorization}(p)
+\\\#{q\in I\mid p(q)=p}\le n.\mathrm{factorization}(p)
 $$
 
 が全ての素数 $p$ で成り立てば、
@@ -63,7 +63,7 @@ $$
 $$
 \mathrm{mult}_I(p)
 :=
-\#{q\in I\mid p(q)=p}
+\\\#{q\in I\mid p(q)=p}
 \le
 v_p(n)
 $$
@@ -313,7 +313,7 @@ $$
 第二に、同じ base prime を持つ labels の集合について、
 
 $$
-\#{q\in I\mid p(q)=p}
+\\\#{q\in I\mid p(q)=p}
 \le
 \sum_{q\in I,\ p(q)=p} k(q)
 \le

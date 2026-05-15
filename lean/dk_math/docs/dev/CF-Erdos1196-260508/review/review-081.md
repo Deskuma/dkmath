@@ -38,7 +38,7 @@ $$
 今回の `NatBaseMultiplicityBudgetOn` は、まさにそこを表現しておる。
 
 $$
-\#{i\in I\mid \mathrm{pOf}(i)=p}\le n.\mathrm{factorization}(p)
+\\\#{i\in I\mid \mathrm{pOf}(i)=p}\le n.\mathrm{factorization}(p)
 $$
 
 これで「選択された base prime の消費量」が「 $n$ が持つ素因数指数の予算」を超えない、という形になる。
@@ -74,7 +74,7 @@ def NatBaseMultiplicityOn
 
 $$
 \mathrm{mult}_I(p) =
-\#{i\in I\mid \mathrm{pOf}(i)=p}
+\\\#{i\in I\mid \mathrm{pOf}(i)=p}
 $$
 
 じゃな。
@@ -145,7 +145,7 @@ $$
 
 $$
 v_p!\left(\prod_{i\in I}\mathrm{pOf}(i)\right) =
-\#{i\in I\mid \mathrm{pOf}(i)=p}
+\\\#{i\in I\mid \mathrm{pOf}(i)=p}
 $$
 
 として読めるようになる。ここが R023 の核心じゃ。
@@ -226,13 +226,13 @@ $$
 したがって、任意の素数 $p$ について、 $M$ に含まれる $p$ の指数は、ちょうど $\mathrm{pOf}(i)=p$ となる添字の個数である。
 
 $$
-M.\mathrm{factorization}(p) = \#{i\in I\mid \mathrm{pOf}(i)=p}
+M.\mathrm{factorization}(p) = \\\#{i\in I\mid \mathrm{pOf}(i)=p}
 $$
 
 一方、`NatBaseMultiplicityBudgetOn` により、
 
 $$
-\#{i\in I\mid \mathrm{pOf}(i)=p}
+\\\#{i\in I\mid \mathrm{pOf}(i)=p}
 \le
 n.\mathrm{factorization}(p)
 $$

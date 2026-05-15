@@ -27,7 +27,7 @@ $$
 であるとき、任意の素数 $p$ について
 
 $$
-\left(\prod_{i\in I} \mathrm{pOf}(i)\right).\mathrm{factorization}(p) = \#{i\in I \mid \mathrm{pOf}(i)=p}
+\left(\prod_{i\in I} \mathrm{pOf}(i)\right).\mathrm{factorization}(p) = \\\#{i\in I \mid \mathrm{pOf}(i)=p}
 $$
 
 を証明した。
@@ -35,7 +35,7 @@ $$
 そのうえで、multiplicity budget
 
 $$
-\#{i\in I \mid \mathrm{pOf}(i)=p}
+\\\#{i\in I \mid \mathrm{pOf}(i)=p}
 \le
 n.\mathrm{factorization}(p)
 $$
@@ -129,7 +129,7 @@ $$
 
 $$
 \sum_{i\in I}
-\mathbf{1}_{\mathrm{pOf}(i)=p} = \#{i\in I\mid \mathrm{pOf}(i)=p}
+\mathbf{1}_{\mathrm{pOf}(i)=p} = \\\#{i\in I\mid \mathrm{pOf}(i)=p}
 $$
 
 へ落ちる。

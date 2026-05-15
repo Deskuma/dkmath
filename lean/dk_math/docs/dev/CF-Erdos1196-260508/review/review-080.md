@@ -153,7 +153,7 @@ rg "\bsorry\b|\badmit\b|^axiom\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet 
 
 $$
 \left(\prod_{i\in I}\mathrm{pOf}(i)\right).\mathrm{factorization}(p) =
-\#{i\in I\mid \mathrm{pOf}(i)=p}
+\\\#{i\in I\mid \mathrm{pOf}(i)=p}
 $$
 
 この補題が Lean で少し重くなる可能性がある。じゃが、`pOf` が `I` 上で prime-valued という仮定を明示すれば、帰納法と `Nat.factorization_mul` で十分攻められるはずじゃ。

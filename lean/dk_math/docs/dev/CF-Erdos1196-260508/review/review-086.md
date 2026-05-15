@@ -116,7 +116,7 @@ $$
 であり、
 
 $$
-\#I_p\le n.\mathrm{factorization}(p)
+\\\#I_p\le n.\mathrm{factorization}(p)
 $$
 
 が従う。
@@ -180,7 +180,7 @@ S.image (W.baseExponentOf n I hI)
 を考える。injective なので、
 
 $$
-\#S = \#k(S)
+\\\#S = \\\#k(S)
 $$
 
 さらに各 exponent は
@@ -200,7 +200,7 @@ $$
 よって、
 
 $$
-\#S \le \#{1,\dots,n.\mathrm{factorization}(p)} = n.\mathrm{factorization}(p)
+\\\#S \le \\\#{1,\dots,n.\mathrm{factorization}(p)} = n.\mathrm{factorization}(p)
 $$
 
 が出る。
@@ -222,7 +222,7 @@ Finset.Icc 1 (n.factorization p)
 
 $$
 \forall p,\quad
-\#{q\in I\mid p(q)=p}
+\\\#{q\in I\mid p(q)=p}
 \le
 n.\mathrm{factorization}(p)
 $$
@@ -323,7 +323,7 @@ $$
 したがって、
 
 $$
-\#{q\in I\mid p(q)=p}\le v_p(n)
+\\\#{q\in I\mid p(q)=p}\le v_p(n)
 $$
 
 が出る。

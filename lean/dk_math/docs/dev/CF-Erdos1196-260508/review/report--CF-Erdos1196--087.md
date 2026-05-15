@@ -199,7 +199,7 @@ $$
 が導入された。これは
 
 $$
-\#{q\in I\mid p(q)=p}
+\\\#{q\in I\mid p(q)=p}
 \le
 n.\mathrm{factorization}(p)
 $$
@@ -267,7 +267,7 @@ $$
 が同一 base-prime fiber 上で単射であることを使い、
 
 $$
-\#{q\in I\mid p(q)=p}
+\\\#{q\in I\mid p(q)=p}
 \le
 n.\mathrm{factorization}(p)
 $$
@@ -314,7 +314,7 @@ $$
 ゆえに、
 
 $$
-\#{q\in I\mid p(q)=p}\le v_p(n)
+\\\#{q\in I\mid p(q)=p}\le v_p(n)
 $$
 
 となる。
