@@ -271,13 +271,13 @@ $$
 これが閉じると、
 
 $$
-SubMarkovShadow
+\text{SubMarkovShadow}
 $$
 
 から
 
 $$
-MarkovShadow
+\text{MarkovShadow}
 $$
 
 へ進める。
