@@ -35,7 +35,7 @@ docs にもこの到達経路が明記されておる。つまり、まだ `Full
 第一に、有限集合 \(I\) 上の base map pOf について、
 
 $$
-\sum_{i\in I}\log(\mathrm{pOf}(i))=\sum_{p\in \mathrm{pOf}(I)}\#{i\in I\mid \mathrm{pOf}(i)=p}\log p
+\sum_{i\in I}\log(\mathrm{pOf}(i))=\sum_{p\in \mathrm{pOf}(I)}\\\#{i\in I\mid \mathrm{pOf}(i)=p}\log p
 $$
 
 という fiber regrouping を入れた。
