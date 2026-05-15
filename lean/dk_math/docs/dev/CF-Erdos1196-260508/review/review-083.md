@@ -59,7 +59,7 @@ $$
 
 ### `realLogNonnegOn_of_natPrimeValuedOn`
 
-これは素数なら \(1 < p\) なので、log route 側で必要な自然数下界を供給する補題じゃ。
+これは素数なら $1 < p$ なので、log route 側で必要な自然数下界を供給する補題じゃ。
 
 $$
 pOf(i)\ \text{is prime}
@@ -67,7 +67,7 @@ pOf(i)\ \text{is prime}
 1\le pOf(i)
 $$
 
-実際には素数なら \(2\le p\) なので、log の非負性にも都合がよい。
+実際には素数なら $2\le p$ なので、log の非負性にも都合がよい。
 
 ここで良いのは、R/log route 側の仮定 `RealLogNonnegOn` を、数論側の自然な仮定 `NatPrimeValuedOn` から自動供給できるようにした点じゃな。
 
@@ -94,7 +94,7 @@ natProductBoundOn_of_product_dvd
 ```
 
 へ渡している。
-数学的には、正の自然数 \(n\) に対して \(m\mid n\) なら、通常 \(m\le n\) が成り立つ、という基本事実じゃ。
+数学的には、正の自然数 $n$ に対して $m\mid n$ なら、通常 $m\le n$ が成り立つ、という基本事実じゃ。
 
 ### `realLogProductBudget_of_multiplicityBudget`
 
@@ -113,8 +113,8 @@ $$
 ここで `RealLogProductBudget` は、おそらく次の三つを束ねた構造じゃな。
 
 1. 各 selected base の log 側非負性
-2. \(1 < n\) による分母 \(\log n\) の正性
-3. product bound \(\prod p_i\le n\)
+2. $1 < n$ による分母 $\log n$ の正性
+3. product bound $\prod p_i\le n$
 
 この bundle ができた時点で、あとは既存の R/log theorem へ流すだけになる。
 
@@ -147,9 +147,9 @@ realLogRatioWeightProvider_subProbability_of_productBudget
 
 今回で、重複あり route は次のように完成した。
 
-まず、各 selected label \(i\in I\) が base prime \(p_i=pOf(i)\) を持つ。
+まず、各 selected label $i\in I$ が base prime $p_i=pOf(i)$ を持つ。
 
-同じ素数 \(p\) が何回出たかを
+同じ素数 $p$ が何回出たかを
 
 $$
 m_I(p):=\#{i\in I\mid pOf(i)=p}
@@ -205,7 +205,7 @@ $$
 
 となる。
 
-つまり、同じ base prime が複数回出ても、その消費量が \(n\) の valuation budget 内に収まっていれば、log 質量は親 \(n\) を超えない。
+つまり、同じ base prime が複数回出ても、その消費量が $n$ の valuation budget 内に収まっていれば、log 質量は親 $n$ を超えない。
 
 これが R024 の数学的成果じゃ。
 
@@ -235,7 +235,7 @@ $$
 であればよい。
 
 これは数論的にはかなり自然な一般化じゃ。
-素数チャネルを一度使うなら指数を 1 消費する。二度使うなら指数を 2 消費する。消費量が予算内なら積は \(n\) に収まる。
+素数チャネルを一度使うなら指数を 1 消費する。二度使うなら指数を 2 消費する。消費量が予算内なら積は $n$ に収まる。
 まさに valuation budget という名前どおりじゃな。
 
 ## 5. 今回の実装評価

@@ -13,7 +13,7 @@ $$
 
 ## 1. 最初の地図：DkMath の世界観
 
-初期資料では、DkMath は単なる補題集ではなく、宇宙式・動的調和数論・スケーリング・単位核・指数対数変換を中心に据えた研究ライブラリとして整理されていた。AGENT では、指数対数 \(e^k \leftrightarrow e_k\)、相対多角数、単位核 \(u^d\)、宇宙式 \((P+u)^2=P^2+2Pu+u^2\)、そして \((x+u)^n\) 型の defect 構造までが開発対象に含まれると記されている。
+初期資料では、DkMath は単なる補題集ではなく、宇宙式・動的調和数論・スケーリング・単位核・指数対数変換を中心に据えた研究ライブラリとして整理されていた。AGENT では、指数対数 $e^k \leftrightarrow e_k$、相対多角数、単位核 $u^d$、宇宙式 $(P+u)^2=P^2+2Pu+u^2$、そして $(x+u)^n$ 型の defect 構造までが開発対象に含まれると記されている。
 
 また、リポジトリ全体の構成マップでは、DkMath は `CosmicFormula`、`NumberTheory`、`ABC`、`FLT`、`RH`、`KUS` など複数の柱を持つ構造として整理されていた。特に `DiffPow`、`BinomTail`、`GcdDiffPow`、`ZsigmondyCyclotomic` が、冪差・gcd・原始素因子を扱う数論幹線として位置づけられている。
 
@@ -60,7 +60,7 @@ $$
 x^r GN_d^{(r)}(x,u)
 $$
 
-という一般化 GN 多項式が定義され、 \(x^r\) が境界因子、 \(GN_d^{(r)}\) が内部 Tail として読めるようになった。特に \(r=1\) が標準 GN であり、
+という一般化 GN 多項式が定義され、 $x^r$ が境界因子、 $GN_d^{(r)}$ が内部 Tail として読めるようになった。特に $r=1$ が標準 GN であり、
 
 $$
 (x+u)^d-u^d=x,GN_d(x,u)
@@ -166,7 +166,7 @@ $$
 q=p^k
 $$
 
-を通じて、 \(n\) の内部にある素因子チャネルを読み、base prime \(p\) に log weight を与えるものじゃ。
+を通じて、 $n$ の内部にある素因子チャネルを読み、base prime $p$ に log weight を与えるものじゃ。
 
 この route の基本目標は、
 
@@ -176,9 +176,9 @@ $$
 \le 1
 $$
 
-を有限集合 \(I\) について示すことだった。
+を有限集合 $I$ について示すことだった。
 
-当初は重複なし route、つまり \(p(q)\) が pairwise distinct である場合に限って進めていた。しかし、それでは prime-power labels \(p,p^2,p^3,\dots\) を自然に扱えない。そこで R021 以降、重複あり route へ進んだ。
+当初は重複なし route、つまり $p(q)$ が pairwise distinct である場合に限って進めていた。しかし、それでは prime-power labels $p,p^2,p^3,\dots$ を自然に扱えない。そこで R021 以降、重複あり route へ進んだ。
 
 ## 6. R021-R028：重複あり finite R/log route の登頂
 
@@ -228,7 +228,7 @@ $$
 
 すなわち `SubProbability` へ接続した。
 
-R025 では、抽象 \(pOf\) を `PrimePowerWitnessProvider.basePrimeOf` に特殊化し、witness provider 由来の route にした。
+R025 では、抽象 $pOf$ を `PrimePowerWitnessProvider.basePrimeOf` に特殊化し、witness provider 由来の route にした。
 
 R026 では、base prime だけでなく exponent reader
 
@@ -252,7 +252,7 @@ $$
 
 を固定した。
 
-R027 では、同じ base prime \(p\) を持つ labels を exponent slot
+R027 では、同じ base prime $p$ を持つ labels を exponent slot
 
 $$
 1,2,\dots,n.\mathrm{factorization}(p)
@@ -280,7 +280,7 @@ $$
 PrimePowerWitnessProvider.basePrimeOf_logRatioSubProbability
 ```
 
-として明示された。R028 の資料でも、この theorem は `I ⊆ T.index n` と `1 < n` だけから、 \(q\mapsto \log(W.basePrimeOf\ n\ I\ hI\ q)/\log n\) が `SubProbability` であることを示す、と整理されている。
+として明示された。R028 の資料でも、この theorem は `I ⊆ T.index n` と `1 < n` だけから、 $q\mapsto \log(W.basePrimeOf\ n\ I\ hI\ q)/\log n$ が `SubProbability` であることを示す、と整理されている。
 
 ## 7. 登頂で見えた数学的風景
 
@@ -292,7 +292,7 @@ $$
 n=\prod_p p^{v_p(n)}
 $$
 
-を考える。各素数 \(p\) は、縦方向に
+を考える。各素数 $p$ は、縦方向に
 
 $$
 1,2,\dots,v_p(n)
@@ -306,9 +306,9 @@ $$
 q=p^k
 $$
 
-なので、同じ \(p\) を持つ label は、その \(p\)-塔の \(k\) 番目の棚に置かれる。
+なので、同じ $p$ を持つ label は、その $p$-塔の $k$ 番目の棚に置かれる。
 
-同じ \(p\) かつ同じ \(k\) なら、同じ \(q\) である。
+同じ $p$ かつ同じ $k$ なら、同じ $q$ である。
 だから同じ棚に二つの異なる label は入れない。
 
 ゆえに、
@@ -319,7 +319,7 @@ $$
 
 となる。
 
-これを全ての \(p\) で合わせると、
+これを全ての $p$ で合わせると、
 
 $$
 \prod_{q\in I}p(q)\mid n
@@ -331,7 +331,7 @@ $$
 \sum_{q\in I}\log p(q)\le\log n
 $$
 
-となり、最後に \(1<n\) なので \(\log n>0\) で割って、
+となり、最後に $1 < n$ なので $\log n > 0$ で割って、
 
 $$
 \sum_{q\in I}
@@ -364,7 +364,7 @@ $$
 p=x+u,\qquad k=d,\qquad q=(x+u)^d
 $$
 
-が自然だと整理されていた。つまり、 \(x+u\) が素数なら、
+が自然だと整理されていた。つまり、 $x+u$ が素数なら、
 
 $$
 q=p^k=(x+u)^d=\mathrm{Big}(d;x,u)
@@ -374,8 +374,8 @@ $$
 
 これは今回の R/log route と相性がよい。
 
-R/log route では \(q=p^k\) を prime-power witness として読み、base prime \(p\) に log weight を与える。
-宇宙式側では \((x+u)^d\) が Big であり、もし \(x+u\) が prime なら Big 全体が prime-power channel になる。
+R/log route では $q=p^k$ を prime-power witness として読み、base prime $p$ に log weight を与える。
+宇宙式側では $(x+u)^d$ が Big であり、もし $x+u$ が prime なら Big 全体が prime-power channel になる。
 
 つまり、今回の登頂で見えたのは、
 
@@ -425,12 +425,12 @@ $$
 * primitive set の hitting mass
 * Markov / sub-Markov kernel
 * tail estimate
-* \(1/(a\log a)\) 型の解析的重み
-* \(1+O(1/\log x)\) の漸近評価
+* $1/(a\log a)$ 型の解析的重み
+* $1+O(1/\log x)$ の漸近評価
 
 へ接続する必要がある。
 
-過去の中間まとめでも、Markov kernel や解析的質量 \(\mu(n)=1/(n\log n)\) はまだ未実装であり、有限 skeleton が整った段階だと整理されていた。
+過去の中間まとめでも、Markov kernel や解析的質量 $\mu(n)=1/(n\log n)$ はまだ未実装であり、有限 skeleton が整った段階だと整理されていた。
 
 ## 10. 今回の登頂の価値
 
@@ -491,7 +491,7 @@ $$
 q=p^k
 $$
 
-という一点に集まり、base prime \(p\)、exponent \(k\)、factorization budget、log mass が一本の鎖になった。
+という一点に集まり、base prime $p$、exponent $k$、factorization budget、log mass が一本の鎖になった。
 
 そして R027-R028 で、
 

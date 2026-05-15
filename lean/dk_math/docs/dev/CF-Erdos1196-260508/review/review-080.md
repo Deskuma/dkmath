@@ -82,7 +82,7 @@ theorem natProductDvdOn_of_multiplicityBudget
 
 証明方針は、
 
-1. \(\prod_{i\in I}pOf(i)\) の `factorization p` が、`NatBaseMultiplicityOn I pOf p` と一致することを示す。
+1. $\prod_{i\in I}pOf(i)$ の `factorization p` が、`NatBaseMultiplicityOn I pOf p` と一致することを示す。
 2. `hbudget` により、それが `n.factorization p` 以下になる。
 3. prime-wise factorization comparison から divisibility へ戻す。
 

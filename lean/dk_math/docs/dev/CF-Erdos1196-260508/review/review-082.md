@@ -24,7 +24,7 @@ $$
 pOf(i)\ \text{がすべて素数}
 $$
 
-であるとき、任意の素数 \(p\) について
+であるとき、任意の素数 $p$ について
 
 $$
 \left(\prod_{i\in I} pOf(i)\right).\mathrm{factorization}(p) = \#{i\in I \mid pOf(i)=p}
@@ -48,7 +48,7 @@ $$
 n.\mathrm{factorization}(p)
 $$
 
-を全ての \(p\) で示し、素因数分解の指数比較から
+を全ての $p$ で示し、素因数分解の指数比較から
 
 $$
 \prod_{i\in I} pOf(i)\mid n
@@ -65,7 +65,7 @@ $$
 p_1,p_2,\dots,p_r
 $$
 
-が互いに異なる素数で、各 \(p_j\mid n\) なら
+が互いに異なる素数で、各 $p_j\mid n$ なら
 
 $$
 p_1p_2\cdots p_r\mid n
@@ -79,7 +79,7 @@ $$
 2,2,2,3
 $$
 
-のような列が出る。これは単に \(2\mid n\), \(3\mid n\) では足りず、
+のような列が出る。これは単に $2\mid n$, $3\mid n$ では足りず、
 
 $$
 2^3\cdot 3\mid n
@@ -114,7 +114,7 @@ $$
 
 へ展開しておる。
 
-そして \(pOf(i)\) は素数なので、
+そして $pOf(i)$ は素数なので、
 
 $$
 (pOf(i)).\mathrm{factorization}(p) =
@@ -166,7 +166,7 @@ exact dvd_zero _
 ```
 
 で処理している点じゃ。
-これで定理自体は一般の \(n\) に対して使える。後段の log route ではもちろん \(1 < n\) が必要になるが、この自然数 bridge 自体を広めに保っているのは悪くない。
+これで定理自体は一般の $n$ に対して使える。後段の log route ではもちろん $1 < n$ が必要になるが、この自然数 bridge 自体を広めに保っているのは悪くない。
 
 ## 5. これで何が可能になったか
 
@@ -192,7 +192,7 @@ $$
 \prod_{i\in I}pOf(i)\mid n
 $$
 
-つまり、同じ base prime が複数回出ても、その回数が \(n\) の指数予算内なら product divisibility を供給できる。
+つまり、同じ base prime が複数回出ても、その回数が $n$ の指数予算内なら product divisibility を供給できる。
 
 これは R/log route へ接続する直前の最重要地点じゃ。
 なぜなら log route で欲しいのは概ね
@@ -246,7 +246,7 @@ theorem natProductBoundOn_of_multiplicityBudget
 
 1. R023 で `NatProductDvdOn I pOf n`
 2. `pOf` が prime-valued なので product は正
-3. \(0 < n\) と divisibility から product bound
+3. $0 < n$ と divisibility から product bound
 
 という流れになるはずじゃ。
 
@@ -284,8 +284,8 @@ $$
 
 これは単なる一般化ではなく、#1196 的な「素因子チャネルの消費量」を正確に扱えるようになった、という意味がある。
 
-同じ prime channel を何度も使うなら、そのぶん \(n\) の valuation budget を消費する。
-その消費量が予算内なら、log mass は親 \(n\) を超えない。
+同じ prime channel を何度も使うなら、そのぶん $n$ の valuation budget を消費する。
+その消費量が予算内なら、log mass は親 $n$ を超えない。
 この流れが、Lean 上でかなり明瞭になってきた。
 
 ## 9. 総合判定
