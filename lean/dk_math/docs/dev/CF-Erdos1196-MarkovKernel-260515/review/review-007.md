@@ -317,7 +317,7 @@ $$
 各 \(n > 1\) について、
 
 $$
-C.channels(n) = {p^k\mid p\text{ prime},\ 1\le k\le n.factorization(p)}
+C.channels(n) = {p^k\mid p\text{ prime},\ 1\le k\le n.\mathrm{factorization}(p)}
 $$
 
 である。

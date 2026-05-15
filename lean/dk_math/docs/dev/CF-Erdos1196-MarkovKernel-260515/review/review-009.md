@@ -53,7 +53,7 @@ sum_log_base_eq_sum_image_multiplicity_mul_log
 第二に、自然数の素因数分解について、
 
 $$
-\sum_{p\in n.factorization.support}n.factorization(p)\log p=\log n
+\sum_{p\in n.\mathrm{factorization.support}}n.\mathrm{factorization}(p)\log p=\log n
 $$
 
 を証明した。
@@ -97,7 +97,7 @@ $$
 次に `FullExponentSlotCoverage` で、
 
 $$
-m(p)=n.factorization(p)
+m(p)=n.\mathrm{factorization}(p)
 $$
 
 へ置き換える。
@@ -111,13 +111,13 @@ fullExponentSlotCoverage_image_basePrime_eq_factorization_support
 これにより右辺が
 
 $$
-\sum_{p\in n.factorization.support}n.factorization(p)\log p
+\sum_{p\in n.\mathrm{factorization}.support}n.\mathrm{factorization}(p)\log p
 $$
 
 になり、最後に
 
 $$
-\sum_{p\in n.factorization.support}n.factorization(p)\log p=\log n
+\sum_{p\in n.\mathrm{factorization}.support}n.\mathrm{factorization}(p)\log p=\log n
 $$
 
 で閉じる。
@@ -274,7 +274,7 @@ canonical/full channel enumeration
 `T.index n` が本当に
 
 $$
-{p^k\mid p\text{ prime},,1\le k\le n.factorization(p)}
+{p^k\mid p\text{ prime},,1\le k\le n.\mathrm{factorization}(p)}
 $$
 
 を表しているなら、その性質を証明して `FullExponentSlotCoverage` を供給する。
@@ -292,7 +292,7 @@ $$
 例えば、
 
 $$
-p\in n.factorization.support,\quad 1\le k\le n.factorization(p)
+p\in n.\mathrm{factorization.support},\quad 1\le k\le n.\mathrm{factorization}(p)
 $$
 
 を状態空間として持つ slot set を作り、そこから label \(q=p^k\) へ写す。
