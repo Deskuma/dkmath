@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.Kernel.Capacity
 import DkMath.Kernel.Normalize
+import DkMath.Kernel.SubProbability
 
 #print "file: DkMath.Kernel"
 

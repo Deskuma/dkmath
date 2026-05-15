@@ -64,3 +64,29 @@ Archive
    - von Mangoldt shadow 層として `Λ(p^k)=log p` に対応する theorem-facing 補題を設計する。
 
 ---
+
+### 日時: 2026/05/15 17:51 JST (DKMK-002 SubProbability bridge 追加)
+
+1. 目的:
+   - `CapacityKernel` の normalized weights を既存の `RealWeightProvider` / `SubProbability` API へ接続する。
+2. 実施:
+   - `DkMath.Kernel.SubProbability` を追加し、`normalizedRealWeightProvider` を定義した。
+   - `normalizedRealWeightProvider_totalWeight` と `normalizedRealWeightProvider_subProbability` を追加し、positive-capacity parent から real sub-probability provider を得る橋を作った。
+   - `PrimePowerWitnessProvider.logCapacityKernelRealWeightProvider` を追加し、local log-capacity kernel から既存 `RealWeightProvider ℕ` を供給できるようにした。
+   - `logCapacityKernelRealWeightProvider_subProbability` を追加し、R/log route を provider-facing theorem として固定した。
+3. 結論:
+   - DK-3 の最小 bridge が no-sorry で通り、capacity kernel の normalized shadow が既存 real provider API に接続された。
+4. 検証:
+   - `lake build DkMath.Kernel.SubProbability`
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityKernel`
+   - `lake build DkMath.Kernel`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/Kernel lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityKernel.lean`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DK-5 として `VonMangoldtShadow.lean` を追加し、prime-power witness cost と von Mangoldt 型 weight の一致を theorem-facing にする。
+   - 必要に応じて `CapacityKernel` core の import 最適化を検討する。
+
+---

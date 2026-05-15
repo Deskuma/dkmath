@@ -4,7 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
-import DkMath.Kernel.Normalize
+import DkMath.Kernel.SubProbability
 import DkMath.NumberTheory.PrimitiveSet.RealDivisorBridge
 
 #print "file: DkMath.NumberTheory.PrimitiveSet.LogCapacityKernel"
@@ -89,6 +89,56 @@ theorem logCapacityKernel_normalized_subProbability
   simpa [logCapacityKernel, CapacityKernel.normalizedWeight] using
     (W.logCapacityKernel n I hI hn).normalizedWeight_subProbability ()
       (real_log_nat_pos_of_one_lt hn)
+
+/--
+The local log-capacity kernel supplies an existing real-weight provider on the
+selected channels.
+-/
+noncomputable def logCapacityKernelRealWeightProvider
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n) :
+    RealWeightProvider ℕ :=
+  (W.logCapacityKernel n I hI hn).normalizedRealWeightProvider ()
+    (real_log_nat_pos_of_one_lt hn)
+
+@[simp] theorem logCapacityKernelRealWeightProvider_index
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n) :
+    (W.logCapacityKernelRealWeightProvider n I hI hn).index = I :=
+  rfl
+
+@[simp] theorem logCapacityKernelRealWeightProvider_weight
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n) :
+    (W.logCapacityKernelRealWeightProvider n I hI hn).weight =
+      fun q => Real.log (W.basePrimeOf n I hI q : ℝ) / Real.log (n : ℝ) :=
+  rfl
+
+/--
+Provider-facing form of the local log-capacity sub-probability theorem.
+-/
+theorem logCapacityKernelRealWeightProvider_subProbability
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (n : ℕ)
+    (I : Finset ℕ)
+    (hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n)
+    (hn : 1 < n) :
+    (W.logCapacityKernelRealWeightProvider n I hI hn).SubProbability :=
+  (W.logCapacityKernel n I hI hn).normalizedRealWeightProvider_subProbability ()
+    (real_log_nat_pos_of_one_lt hn)
 
 end PrimePowerWitnessProvider
 
