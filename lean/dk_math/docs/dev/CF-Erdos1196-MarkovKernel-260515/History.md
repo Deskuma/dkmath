@@ -193,3 +193,30 @@ Archive
    - `T.index n` が本当に全 prime-power divisor を重複なく列挙していることを、既存 kernel 側でどこまで表現済みか確認する。
 
 ---
+
+### 日時: 2026/05/16 00:25 JST (DKMK-006B FullChannelLogCostComplete と MarkovShadow 追加)
+
+1. 目的:
+   - full channel set 上の log-cost equality を仮定 interface として分離し、等号が得られた場合に Markov shadow へ昇格する橋を追加する。
+2. 実施:
+   - `DkMath.NumberTheory.PrimitiveSet.MarkovShadow` を追加し、`SubMarkovShadow` に total outgoing weight `= 1` を加えた equality 側の語彙を定義した。
+   - `MarkovShadow.ofCapacityKernel` を追加し、positive-capacity kernel と `outgoingCost = capacity` から Markov shadow を作れるようにした。
+   - `DkMath.NumberTheory.PrimitiveSet.FullChannelEquality` を追加した。
+   - `FullChannelLogCostComplete` を定義し、full channel set 上で `Σ vonMangoldtShadowCost = log n` となることを仮定 interface として固定した。
+   - `fullGlobalLogCapacityKernel_outgoingCost_eq_capacity`, `fullGlobalLogCapacityKernel_normalizedOutgoing_eq_one`, `fullGlobalLogCapacityMarkovShadow` を追加した。
+   - project docs に DKMK-006B の equality interface と Markov shadow への昇格を追記した。
+3. 結論:
+   - full equality 本体の証明をまだ要求せずに、等号が供給された場合の Markov route への接続が no-sorry で入った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.MarkovShadow`
+   - `lake build DkMath.NumberTheory.PrimitiveSet.FullChannelEquality`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/MarkovShadow.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/FullChannelEquality.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+5. 失敗事例:
+   - 初回は `FullChannelLogCostComplete.outgoing_eq` 内で `C.subset_index` を state `s.1` に特殊化せず、`vonMangoldtShadowCost` の `hI` 型と合わずに失敗した。
+6. 次の課題:
+   - `FullChannelLogCostComplete` を証明するため、`T.index n` が全 exponent slot を埋めることを表す構造仮定を設計する。
+   - `Σ log p = log n` の有限 prime-power channel 版を既存 `ValuationBudget` / `RealLog` route とどう接続するか検討する。
+
+---
