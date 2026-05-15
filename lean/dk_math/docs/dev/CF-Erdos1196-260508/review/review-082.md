@@ -114,7 +114,7 @@ $$
 
 へ展開しておる。
 
-そして (pOf(i)) は素数なので、
+そして \(pOf(i)\) は素数なので、
 
 $$
 (pOf(i)).\mathrm{factorization}(p) =

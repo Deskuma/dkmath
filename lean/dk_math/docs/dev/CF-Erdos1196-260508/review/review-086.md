@@ -241,7 +241,7 @@ NatBaseMultiplicityBudgetOn I (W.basePrimeOf n I hI) n
 intro p _hp
 ```
 
-となっていて、(p) が prime である仮定を実際には使っていない点じゃ。
+となっていて、 (p) が prime である仮定を実際には使っていない点じゃ。
 
 これは強い。
 `basePrimeOf_card_filter_le_factorization` が任意の (p) で成り立つ形になっておるからじゃな。
@@ -365,7 +365,7 @@ $$
 
 今回の証明は、かなり美しい「指数スロット数え上げ」になっておる。
 
-素数 (p) について、(n) の中には
+素数 (p) について、 (n) の中には
 
 $$
 p^1,p^2,\dots,p^{v_p(n)}

@@ -60,7 +60,7 @@ $$
 x^r GN_d^{(r)}(x,u)
 $$
 
-という一般化 GN 多項式が定義され、(x^r) が境界因子、(GN_d^{(r)}) が内部 Tail として読めるようになった。特に (r=1) が標準 GN であり、
+という一般化 GN 多項式が定義され、 (x^r) が境界因子、 (GN_d^{(r)}) が内部 Tail として読めるようになった。特に (r=1) が標準 GN であり、
 
 $$
 (x+u)^d-u^d=x,GN_d(x,u)
@@ -166,7 +166,7 @@ $$
 q=p^k
 $$
 
-を通じて、(n) の内部にある素因子チャネルを読み、base prime (p) に log weight を与えるものじゃ。
+を通じて、 (n) の内部にある素因子チャネルを読み、base prime (p) に log weight を与えるものじゃ。
 
 この route の基本目標は、
 
@@ -280,7 +280,7 @@ $$
 PrimePowerWitnessProvider.basePrimeOf_logRatioSubProbability
 ```
 
-として明示された。R028 の資料でも、この theorem は `I ⊆ T.index n` と `1 < n` だけから、(q\mapsto \log(W.basePrimeOf\ n\ I\ hI\ q)/\log n) が `SubProbability` であることを示す、と整理されている。
+として明示された。R028 の資料でも、この theorem は `I ⊆ T.index n` と `1 < n` だけから、 (q\mapsto \log(W.basePrimeOf\ n\ I\ hI\ q)/\log n) が `SubProbability` であることを示す、と整理されている。
 
 ## 7. 登頂で見えた数学的風景
 
@@ -364,7 +364,7 @@ $$
 p=x+u,\qquad k=d,\qquad q=(x+u)^d
 $$
 
-が自然だと整理されていた。つまり、(x+u) が素数なら、
+が自然だと整理されていた。つまり、 (x+u) が素数なら、
 
 $$
 q=p^k=(x+u)^d=\mathrm{Big}(d;x,u)
