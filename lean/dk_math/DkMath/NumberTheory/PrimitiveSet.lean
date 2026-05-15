@@ -29,6 +29,7 @@ import DkMath.NumberTheory.PrimitiveSet.RealDivisorBridge
 import DkMath.NumberTheory.PrimitiveSet.LogCapacityKernel
 import DkMath.NumberTheory.PrimitiveSet.VonMangoldtShadow
 import DkMath.NumberTheory.PrimitiveSet.SubMarkovShadow
+import DkMath.NumberTheory.PrimitiveSet.FullChannelSet
 import DkMath.NumberTheory.PrimitiveSet.GlobalLogCapacityKernel
 
 #print "file: DkMath.NumberTheory.PrimitiveSet"
@@ -66,5 +67,6 @@ This module exposes:
   sub-probability theorem
 - finite real-log von-Mangoldt shadow for prime-power witnesses
 - sub-Markov shadow naming layer for state-indexed real providers
+- full prime-power channel-set interface for the equality route
 - global log-capacity kernel over source states `n > 1`
 -/

@@ -167,3 +167,29 @@ Archive
    - `IOf n = T.index n` 型の canonical/full channel shadow をどの module に置くか検討する。
 
 ---
+
+### 日時: 2026/05/16 00:11 JST (DKMK-006A FullPrimePowerChannelSet 追加)
+
+1. 目的:
+   - full channel / equality route へ進む前に、full channel set であることの interface を分離する。
+2. 実施:
+   - `DkMath.NumberTheory.PrimitiveSet.FullChannelSet` を追加した。
+   - `FullPrimePowerChannelSet` に `channels`, `subset_index`, `full` を持たせ、`channels_eq_index` と `mem_channels_iff` を補題化した。
+   - `FullPrimePowerChannelSet.canonical` として `T.toDivisorTransitionKernel.index` 自身を full set として使う入口を追加した。
+   - `PrimePowerWitnessProvider.fullGlobalLogCapacityKernel` と `fullGlobalLogCapacitySubMarkovShadow` を追加し、full channel interface から global kernel/shadow を作れるようにした。
+   - project docs に DKMK-006A の位置づけを追記し、ここでは equality はまだ主張しないことを明記した。
+3. 結論:
+   - selected inequality route と full equality route の境界として、full channel 仕様層が no-sorry で入った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.FullChannelSet`
+   - `lake build DkMath.NumberTheory.PrimitiveSet.GlobalLogCapacityKernel`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/FullChannelSet.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/GlobalLogCapacityKernel.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - full channel set 上で `Σ vonMangoldtShadowCost = log n` を得るための構造仮定を設計する。
+   - `T.index n` が本当に全 prime-power divisor を重複なく列挙していることを、既存 kernel 側でどこまで表現済みか確認する。
+
+---

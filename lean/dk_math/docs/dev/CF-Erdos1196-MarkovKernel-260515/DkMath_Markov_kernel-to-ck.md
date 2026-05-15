@@ -164,6 +164,51 @@ PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow
 
 ---
 
+## 2.3. DKMK-006A FullPrimePowerChannelSet
+
+full channel route では、任意の selected set ではなく、状態 `n` の全 channel を選んだことを明示する必要がある。
+
+DKMK-006A では、まずこの仕様だけを interface 化する。
+
+```lean
+structure FullPrimePowerChannelSet
+    (T : PrimePowerDivisorTransitionKernel) where
+  channels : ℕ → Finset ℕ
+  subset_index :
+    ∀ n q, q ∈ channels n → q ∈ T.toDivisorTransitionKernel.index n
+  full :
+    ∀ n q, q ∈ T.toDivisorTransitionKernel.index n → q ∈ channels n
+```
+
+ここから
+
+```lean
+C.channels n = T.toDivisorTransitionKernel.index n
+```
+
+が得られる。
+
+さらに global log-capacity route では
+
+```lean
+PrimePowerWitnessProvider.fullGlobalLogCapacityKernel
+PrimePowerWitnessProvider.fullGlobalLogCapacitySubMarkovShadow
+```
+
+を追加し、full channel set を選んだ場合の kernel/shadow を参照できるようにする。
+
+ただし、この段階ではまだ
+
+\[
+\sum_{q\in Full(n)} \mathrm{vonMangoldtShadowCost}(n,q)=\log n
+\]
+
+は主張しない。
+
+DKMK-006A は equality route の前提となる full-channel 仕様層であり、実際の Markov equality は次段の構造仮定または canonical enumeration の確認に委ねる。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

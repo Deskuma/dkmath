@@ -6,6 +6,7 @@ Authors: D. and Wise Wolf.
 
 import DkMath.NumberTheory.PrimitiveSet.SubMarkovShadow
 import DkMath.NumberTheory.PrimitiveSet.VonMangoldtShadow
+import DkMath.NumberTheory.PrimitiveSet.FullChannelSet
 
 #print "file: DkMath.NumberTheory.PrimitiveSet.GlobalLogCapacityKernel"
 
@@ -210,6 +211,70 @@ theorem globalLogCapacitySubMarkovShadow_subProbability
   SubMarkovShadow.ofCapacityKernel_subProbability
     (W.globalLogCapacityKernel IOf hIOf)
     (W.globalLogCapacityKernel_capacity_pos IOf hIOf)
+
+/--
+Global log-capacity kernel for a declared full channel set.
+
+This is still the capacity-kernel layer.  Fullness records that the selected
+channels are extensionally the transition index; the later equality route must
+add the analytic `Σ log p = log n` statement separately.
+-/
+noncomputable def fullGlobalLogCapacityKernel
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (C : FullPrimePowerChannelSet T) :
+    CapacityKernel LogCapacityState ℕ :=
+  W.globalLogCapacityKernel C.channels C.subset_index
+
+@[simp] theorem fullGlobalLogCapacityKernel_children
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (C : FullPrimePowerChannelSet T)
+    (s : LogCapacityState) :
+    (W.fullGlobalLogCapacityKernel C).children s = C.channels s.1 :=
+  rfl
+
+theorem fullGlobalLogCapacityKernel_children_eq_index
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (C : FullPrimePowerChannelSet T)
+    (s : LogCapacityState) :
+    (W.fullGlobalLogCapacityKernel C).children s =
+      T.toDivisorTransitionKernel.index s.1 :=
+  C.channels_eq_index s.1
+
+/-- The normalized full-channel log-capacity kernel as a sub-Markov shadow. -/
+noncomputable def fullGlobalLogCapacitySubMarkovShadow
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (C : FullPrimePowerChannelSet T) :
+    SubMarkovShadow LogCapacityState ℕ :=
+  W.globalLogCapacitySubMarkovShadow C.channels C.subset_index
+
+@[simp] theorem fullGlobalLogCapacitySubMarkovShadow_index
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (C : FullPrimePowerChannelSet T)
+    (s : LogCapacityState) :
+    (W.fullGlobalLogCapacitySubMarkovShadow C).index s = C.channels s.1 :=
+  rfl
+
+theorem fullGlobalLogCapacitySubMarkovShadow_index_eq_index
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (C : FullPrimePowerChannelSet T)
+    (s : LogCapacityState) :
+    (W.fullGlobalLogCapacitySubMarkovShadow C).index s =
+      T.toDivisorTransitionKernel.index s.1 :=
+  C.channels_eq_index s.1
+
+/-- Full-channel normalized shadow is still sub-Markov before equality is proved. -/
+theorem fullGlobalLogCapacitySubMarkovShadow_subProbability
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (C : FullPrimePowerChannelSet T) :
+    (W.fullGlobalLogCapacitySubMarkovShadow C).SubProbability :=
+  W.globalLogCapacitySubMarkovShadow_subProbability C.channels C.subset_index
 
 end PrimePowerWitnessProvider
 
