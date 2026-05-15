@@ -81,7 +81,7 @@ fullExponentSlotCoverage_sum_log_base_eq_log_nat
 これは、coverage 仮定のもとで
 
 $$
-\sum_{q\in C.channels(n)}\log(W.basePrimeOf(n,q))=\log n
+\sum_{q\in C.\text{channels}(n)}\log(W.basePrimeOf(n,q))=\log n
 $$
 
 を出す。
@@ -91,7 +91,7 @@ $$
 まず有限和を base prime ごとに束ねる。
 
 $$
-\sum_{q\in C.channels(n)}\log p(q)=\sum_{p\in image(\mathrm{pOf})}m(p)\log p
+\sum_{q\in C.\text{channels}(n)}\log p(q)=\sum_{p\in \text{image}(\mathrm{pOf})}m(p)\log p
 $$
 
 次に `FullExponentSlotCoverage` で、

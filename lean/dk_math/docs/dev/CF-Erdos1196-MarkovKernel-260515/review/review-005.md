@@ -26,7 +26,7 @@ structure SubMarkovShadow (σ ι : Type _) where
 そして、
 
 $$
-\forall s,\quad \sum_{i\in index(s)} weight(s,i)\le 1
+\forall s,\quad \sum_{i\in \text{index}(s)} weight(s,i)\le 1
 $$
 
 を満たすことを `SubProbability` として定義している。
@@ -121,7 +121,7 @@ $$
 から
 
 $$
-S.index(s)=K.children(s)
+S.\text{index}(s)=K.children(s)
 $$
 
 $$
@@ -243,7 +243,7 @@ RealWeightProvider
 つまり、今は任意の selected channel set
 
 $$
-IOf(n)\subseteq T.index(n)
+IOf(n)\subseteq T.\text{index}(n)
 $$
 
 について
@@ -304,7 +304,7 @@ structure FullPrimePowerChannelSet
 または単純に、
 
 $$
-channels(n)=T.index(n)
+\text{channels}(n)=T.\text{index}(n)
 $$
 
 を使えるならそれでよい。
@@ -314,7 +314,7 @@ $$
 次に、full channel で
 
 $$
-\sum_{q\in channels(n)}
+\sum_{q\in \text{channels}(n)}
 \mathrm{vonMangoldtShadowCost}(n,q) = \log n
 $$
 
@@ -336,7 +336,7 @@ FullIndexAssumption
 今回までの route は、
 
 $$
-I(n)\subseteq T.index(n)
+I(n)\subseteq T.\text{index}(n)
 $$
 
 だけでよかった。

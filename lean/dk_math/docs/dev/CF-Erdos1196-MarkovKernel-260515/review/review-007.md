@@ -120,7 +120,7 @@ structure FullChannelLogCostComplete
 これは、full channel set 上で
 
 $$
-\sum_{q\in C.channels(n)}
+\sum_{q\in C.\text{channels}(n)}
 \mathrm{vonMangoldtShadowCost}(n,q) = \log n
 $$
 
@@ -140,7 +140,7 @@ $$
 つまり、
 
 $$
-\sum_{q\in C.channels(n)}
+\sum_{q\in C.\text{channels}(n)}
 \mathrm{vonMangoldtShadowCost}(n,q) = \log n
 $$
 
@@ -280,13 +280,13 @@ $$
 本当に難しいのは、
 
 $$
-C.channels(n)
+C.\text{channels}(n)
 $$
 
 が全 exponent slot をちょうど一回ずつ含み、
 
 $$
-\sum_{q\in C.channels(n)}\log p(q)=\log n
+\sum_{q\in C.\text{channels}(n)}\log p(q)=\log n
 $$
 
 になることを示す部分じゃ。
@@ -307,7 +307,7 @@ $$
 次は報告にもある通り、
 
 $$
-T.index(n)
+T.\text{index}(n)
 $$
 
 が全 exponent slot を埋めることを表す構造仮定の設計じゃ。
@@ -317,7 +317,7 @@ $$
 各 \(n > 1\) について、
 
 $$
-C.channels(n) = {p^k\mid p\text{ prime},\ 1\le k\le n.\mathrm{factorization}(p)}
+C.\text{channels}(n) = {p^k\mid p\text{ prime},\ 1\le k\le n.\mathrm{factorization}(p)}
 $$
 
 である。
@@ -325,7 +325,7 @@ $$
 このとき、
 
 $$
-\sum_{q\in C.channels(n)}
+\sum_{q\in C.\text{channels}(n)}
 \mathrm{vonMangoldtShadowCost}(n,q) = \sum_p
 \sum_{k=1}^{v_p(n)}
 \log p

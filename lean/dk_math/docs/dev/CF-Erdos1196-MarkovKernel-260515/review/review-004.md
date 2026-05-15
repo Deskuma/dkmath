@@ -67,7 +67,7 @@ hIOf : ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n
 数学的には、各 \(n\) に対して、選ばれた prime-power channel 集合
 
 $$
-I(n)\subseteq T.index(n)
+I(n)\subseteq T.\text{index}(n)
 $$
 
 を与える形じゃ。
@@ -318,14 +318,14 @@ primePowerDivisorChannels (n : ℕ) : Finset ℕ
 今の global kernel は、
 
 $$
-I(n)\subseteq T.index(n)
+I(n)\subseteq T.\text{index}(n)
 $$
 
 なら何でも sub-probability を出す汎用版。
 次に full route を作るなら、
 
 $$
-I(n)=T.index(n)
+I(n)=T.\text{index}(n)
 $$
 
 またはそれと同値な finite enumeration を選び、outgoing equality を狙うことになる。

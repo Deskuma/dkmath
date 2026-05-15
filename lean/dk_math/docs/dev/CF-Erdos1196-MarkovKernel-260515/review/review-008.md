@@ -98,7 +98,7 @@ q ∈ C.channels n
 前回の `FullPrimePowerChannelSet` は、
 
 $$
-C.\mathrm{channels}(n)=T.\text{index}(n)
+C.\text{channels}(n)=T.\text{index}(n)
 $$
 
 という「transition index と同じ」という仕様だった。
@@ -106,7 +106,7 @@ $$
 今回の `FullExponentSlotChannelSet` は、さらに
 
 $$
-C.\mathrm{channels}(n)
+C.\text{channels}(n)
 $$
 
 が具体的に exponent slot 全体である、という算術的仕様を与えている。
@@ -242,8 +242,8 @@ $$
 次の橋は、おそらくこういう形になる。
 
 $$
-\sum_{q\in \mathrm{C.channels}(n)}
-\log(\mathrm{basePrimeOf}(q)) = \sum_{p} \mathrm{NatBaseMultiplicityOn}(\mathrm{C.channels}(n),\mathrm{basePrimeOf},p)\cdot \log p
+\sum_{q\in C.\text{channels}(n)}
+\log(\mathrm{basePrimeOf}(q)) = \sum_{p} \mathrm{NatBaseMultiplicityOn}(C.\text{channels}(n),\mathrm{basePrimeOf},p)\cdot \log p
 $$
 
 そして coverage で、
