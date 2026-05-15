@@ -95,7 +95,7 @@ $$
 q=p^k
 $$
 
-から base prime \(p\) を読み、
+から base prime $p$ を読み、
 
 $$
 \mathrm{vonMangoldtShadowCost}(q)=\log p
@@ -103,12 +103,12 @@ $$
 
 とする。
 
-ここで重要なのは、\(\Lambda(q)\) を先に持ち込んでいないことじゃ。
-DkMath 的には、まず witness があり、そこから \(\log p\) が出る。既存 Markov route の \(\Lambda(p^k)=\log p\) は、その後に現れる影として扱う。
+ここで重要なのは、$\Lambda(q)$ を先に持ち込んでいないことじゃ。
+DkMath 的には、まず witness があり、そこから $\log p$ が出る。既存 Markov route の $\Lambda(p^k)=\log p$ は、その後に現れる影として扱う。
 
 ## 4. DKMK-004：GlobalLogCapacityKernel
 
-DKMK-004 では、local な \((n,I)\) kernel を、状態空間上の global kernel へ持ち上げた。
+DKMK-004 では、local な $(n,I)$ kernel を、状態空間上の global kernel へ持ち上げた。
 
 親状態は、
 
@@ -147,7 +147,7 @@ $$
 
 を定義する。
 
-これで、状態 \(n > 1\) ごとに finite log-capacity route を走らせる global framework ができた。
+これで、状態 $n > 1$ ごとに finite log-capacity route を走らせる global framework ができた。
 
 ## 5. DKMK-005：SubMarkovShadow
 
@@ -442,7 +442,7 @@ $$
 
 そのものを、canonical/full channel enumeration からどう供給するか。
 
-報告でも、次の課題は `FullExponentSlotCoverage` 自体を canonical/full channel enumeration から供給できるか確認すること、必要なら explicit slot \((p,k)\) 形式の補助 interface を追加することだと書かれておる。
+報告でも、次の課題は `FullExponentSlotCoverage` 自体を canonical/full channel enumeration から供給できるか確認すること、必要なら explicit slot $(p,k)$ 形式の補助 interface を追加することだと書かれておる。
 
 つまり未踏部分は、
 
@@ -533,7 +533,7 @@ $$
 (p,k),\quad p\in n.\mathrm{factorization.support},\quad 1\le k\le n.\mathrm{factorization}(p)
 $$
 
-を Finset として構成し、そこから \(q=p^k\) へ写す。
+を Finset として構成し、そこから $q=p^k$ へ写す。
 
 わっちは第二案を先に少し推す。
 slot 形式なら、
@@ -543,7 +543,7 @@ $$
 $$
 
 が自然に出るからじゃ。
-その後、label \(q=p^k\) 側へ bridge すればよい。
+その後、label $q=p^k$ 側へ bridge すればよい。
 
 ## 15. 総括
 
