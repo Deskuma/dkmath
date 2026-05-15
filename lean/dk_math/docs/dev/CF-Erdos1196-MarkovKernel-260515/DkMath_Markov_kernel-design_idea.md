@@ -193,7 +193,7 @@ $$
 同じ \(p\) の labels は exponent slot に単射で入る。
 
 $$
-\#{q\mid p(q)=p}\le v_p(n)
+\\\#{q\mid p(q)=p}\le v_p(n)
 $$
 
 そこから、
@@ -289,7 +289,7 @@ $$
 子 channel：
 
 $$
-q\in I\subseteq T.index(n)
+q\in I\subseteq T.\text{index}(n)
 $$
 
 容量：
@@ -301,7 +301,7 @@ $$
 コスト：
 
 $$
-\mathrm{cost}(n,q)=\log W.basePrimeOf(n,I,hI,q)
+\mathrm{cost}(n,q)=\log W.\mathrm{basePrimeOf}(n,I,hI,q)
 $$
 
 保存則：
