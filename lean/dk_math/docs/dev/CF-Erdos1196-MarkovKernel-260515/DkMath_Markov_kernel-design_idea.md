@@ -440,7 +440,7 @@ structure CapacityKernel ...
 capacity が正なら、
 
 $$
-\sum \frac{cost}{capacity}\le 1
+\sum \frac{\mathrm{cost}}{\mathrm{capacity}}\le 1
 $$
 
 を一般補題にする。
