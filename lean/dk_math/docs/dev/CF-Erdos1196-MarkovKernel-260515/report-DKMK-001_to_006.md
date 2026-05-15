@@ -281,14 +281,14 @@ FullExponentSlotCoverage
 数学的には、selected route では、
 
 $$
-# {q\in I\mid p(q)=p}\le n.\mathrm{factorization}(p)
+\\\#{q\in I\mid p(q)=p}\le n.\mathrm{factorization}(p)
 $$
 
 だった。
 full route ではこれを、
 
 $$
-# {q\in \mathrm{Full}(n)\mid p(q)=p}=n.\mathrm{factorization}(p)
+\\\#{q\in \mathrm{Full}(n)\mid p(q)=p}=n.\mathrm{factorization}(p)
 $$
 
 に強める。
@@ -331,13 +331,13 @@ fullChannelLogCostComplete_of_fullExponentSlotCoverage
 数学的には、まず有限和を fiber ごとにまとめる。
 
 $$
-\sum_{q\in I}\log(p(q))=\sum_{p\in I.\text{image}(p)}\#{q\in I:p(q)=p}\log p
+\sum_{q\in I}\log(p(q))=\sum_{p\in I.\text{image}(p)}\\\#{q\in I:p(q)=p}\log p
 $$
 
 次に、full coverage により、
 
 $$
-\#{q\in \mathrm{Full}(n):p(q)=p}=n.\mathrm{factorization}(p)
+\\\#{q\in \mathrm{Full}(n):p(q)=p}=n.\mathrm{factorization}(p)
 $$
 
 へ置き換える。
