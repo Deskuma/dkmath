@@ -40,7 +40,7 @@ $$
 
 また、DK-2 では `normalizedWeight`, `normalizedOutgoing`, `normalizedOutgoing_le_one` を置く計画だった。今回の `Normalize.lean` には、これらに加えて expression-level の `normalizedWeight_subProbability` まで入っておる。
 
-さらに、DK-4 では `PrimePowerWitnessProvider.logCapacityKernel` を置き、channel set を (I)、capacity を `Real.log n`、cost を `Real.log (W.basePrimeOf ...)` とする予定だった。今回の `logCapacityKernel` はまさに、
+さらに、DK-4 では `PrimePowerWitnessProvider.logCapacityKernel` を置き、channel set を \(I\)、capacity を `Real.log n`、cost を `Real.log (W.basePrimeOf ...)` とする予定だった。今回の `logCapacityKernel` はまさに、
 
 ```lean
 children := fun _ => I
@@ -59,16 +59,16 @@ cost := fun _ q => Real.log (W.basePrimeOf n I hI q : ℝ)
 抽象的には、
 
 $$
-\sum_{b\in children(a)} cost(a,b)\le capacity(a)
+\sum_{b\in \mathrm{children}(a)} \mathrm{cost}(a,b)\le \mathrm{capacity}(a)
 $$
 
 という **容量保存・劣保存** を `CapacityKernel` として固定した。
 
-そして (capacity(a)>0) なら、
+そして \(\mathrm{capacity}(a) > 0\) なら、
 
 $$
-\sum_{b\in children(a)}
-\frac{cost(a,b)}{capacity(a)}
+\sum_{b\in \mathrm{children}(a)}
+\frac{\mathrm{cost}(a,b)}{\mathrm{capacity}(a)}
 \le 1
 $$
 
@@ -77,11 +77,11 @@ $$
 さらに prime-power witness に対して、
 
 $$
-capacity(n)=\log n
+\mathrm{capacity}(n)=\log n
 $$
 
 $$
-cost(n,q)=\log p(q)
+\mathrm{cost}(n,q)=\log p(q)
 $$
 
 と置き、
@@ -151,7 +151,7 @@ DKMK-001 は **最初の第一歩としては成功** 。
 
 まず、DK-3 の `SubProbability` bridge はまだ完全には別ファイル化されていない。今回 `normalizedWeight_subProbability` は入ったが、既存 `RealWeightProvider` / hitting API へ接続する層は次課題として残っている。History にも次の課題として、normalized weights を既存 provider / hitting API へ接続する DK-3 bridge が挙げられておる。
 
-次に、DK-5 の von Mangoldt shadow は未着手じゃ。資料では、prime-power label 上で cost と (\Lambda) の一致、つまり
+次に、DK-5 の von Mangoldt shadow は未着手じゃ。資料では、prime-power label 上で cost と \(\Lambda\) の一致、つまり
 
 $$
 \Lambda(p^k)=\log p
@@ -194,7 +194,7 @@ $$
 
 一点だけ留意点を挙げるなら、`Capacity.lean` が `import Mathlib` から始まっているところじゃな。最初の実装としては構わぬが、後で import 最適化をするなら、`Finset`, `Real`, `BigOperators` 周りへ削れる可能性がある。
 
-もう一点、今回の `CapacityKernel Unit ℕ` は「固定された (n,I) に対する local kernel」じゃ。これは資料でも最初は local kernel 推奨だったので正しい。
+もう一点、今回の `CapacityKernel Unit ℕ` は「固定された \(n,I\) に対する local kernel」じゃ。これは資料でも最初は local kernel 推奨だったので正しい。
 ただし次の段階では、親状態を `ℕ` にする global kernel へ拡張する余地がある。
 
 $$
@@ -202,11 +202,11 @@ n \mapsto I(n)
 $$
 
 $$
-capacity(n)=\log n
+\mathrm{capacity}(n)=\log n
 $$
 
 $$
-cost(n,q)=\log p(q)
+\mathrm{cost}(n,q)=\log p(q)
 $$
 
 のようにすると、より Markov / flow 的な見通しが立つ。
@@ -290,7 +290,7 @@ $$
 \sum_q \mathrm{cost}(n,q)\le \mathrm{capacity}(n)
 $$
 
-を主語にしている。これは、以前の設計資料にある「最初は exact Markov / sub-Markov や (\Lambda(q)/\log n) へ行かず、代数的・構造的 spine を作る」という方針と一致しておる。
+を主語にしている。これは、以前の設計資料にある「最初は exact Markov / sub-Markov や \(\Lambda(q)/\log n\) へ行かず、代数的・構造的 spine を作る」という方針と一致しておる。
 
 さらに、DkMath の Mass API 設計でも、最初から確率を置くのではなく、
 
@@ -316,7 +316,7 @@ outgoing_le : ...
 という形で実装された。さらに `Normalize.lean` で
 
 $$
-\sum_b \frac{cost(a,b)}{capacity(a)}\le 1
+\sum_b \frac{\mathrm{cost}(a,b)}{\mathrm{capacity}(a)}\le 1
 $$
 
 を示す一般補題まで入っている。
@@ -334,11 +334,11 @@ $$
 しかも `LogCapacityKernel.lean` では、R028 の具体 route に接続して、
 
 $$
-capacity(n)=\log n
+\mathrm{capacity}(n)=\log n
 $$
 
 $$
-cost(n,q)=\log W.basePrimeOf(n,I,hI,q)
+\mathrm{cost}(n,q)=\log W.basePrimeOf(n,I,hI,q)
 $$
 
 という concrete kernel まで入っている。
@@ -361,12 +361,12 @@ $$
 
 だが、そこへ直接行くと、すぐに
 
-* (\Lambda)
+* \(\Lambda\)
 * Markov kernel
 * adjoint chain
 * truncated sub-Markov
 * asymptotic estimate
-* (1/(a\log a))
+* \(1/(a\log a)\)
 
 が一斉に出てくる。
 
@@ -386,15 +386,15 @@ $$
 
 本線へ戻すには、次の対応表を明確に固定するのが大事じゃ。
 
-| DkMath kernel      | Erdős #1196 本線                  |
-| ------------------ | ------------------------------- |
-| `capacity n`       | (\log n)                        |
-| `cost n q`         | (\Lambda(q)) または (\log p(q))    |
-| `normalizedWeight` | (\Lambda(q)/\log n)             |
-| `outgoing_le`      | sub-Markov / sub-probability    |
-| `outgoing_eq`      | Markov kernel                   |
-| `children n`       | (q\mid n) の prime-power channel |
-| hitting API        | primitive set の antichain 評価    |
+| DkMath kernel      | Erdős #1196 本線                     |
+| ------------------ | ------------------------------------ |
+| `capacity n`       | \(\log n\)                           |
+| `cost n q`         | \(\Lambda(q)\) または \(\log p(q)\)  |
+| `normalizedWeight` | \(\Lambda(q)/\log n\)                |
+| `outgoing_le`      | sub-Markov / sub-probability         |
+| `outgoing_eq`      | Markov kernel                        |
+| `children n`       | \(q\mid n\) の prime-power channel   |
+| hitting API        | primitive set の antichain 評価      |
 
 この表を Lean 側でも docs 側でも固定する。
 すると、DkMath kernel は本線から外れた枝ではなく、 **本線の抽象上位層** になる。
@@ -408,11 +408,11 @@ $$
 目的は、
 
 $$
-CapacityKernel
+\text{CapacityKernel}
 \to
-normalizedWeight
+\text{normalizedWeight}
 \to
-RealWeightProvider / SubProbability
+\text{RealWeightProvider} / \text{SubProbability}
 $$
 
 を一般化することじゃ。
@@ -472,7 +472,7 @@ q=p^k
 $$
 
 が主語。
-(\Lambda(q)) は後から
+\(\Lambda(q)\) は後から
 
 $$
 \Lambda(q)=\log p
@@ -490,7 +490,7 @@ $$
 `CapacityKernel` から normalized provider を作る。
 
 $$
-\sum \frac{cost}{capacity}\le 1
+\sum \frac{\mathrm{cost}}{\mathrm{capacity}}\le 1
 $$
 
 ### Step 2
@@ -507,15 +507,15 @@ $$
 
 $$
 q=p^k
-\Rightarrow cost(q)=\Lambda(q)
+\Rightarrow \mathrm{cost}(q)=\Lambda(q)
 $$
 
 ### Step 4
 
-`children n` を (I) ではなく、より標準的な divisor / prime-power channel set にする。
+`children n` を \(I\) ではなく、より標準的な divisor / prime-power channel set にする。
 
 $$
-children(n)={q\mid q\mid n,\ q\text{ prime power}}
+\mathrm{children}(n)={q\mid q\mid n,\ q\text{ prime power}}
 $$
 
 ### Step 5

@@ -11,7 +11,7 @@ DKMK-004 で global kernel はできた。今回 DKMK-005 で、その global ke
 DkMath.NumberTheory.PrimitiveSet.SubMarkovShadow
 ```
 
-`SubMarkovShadow` は、状態 (s) ごとに有限 index と非負 weight を持つ構造じゃ。
+`SubMarkovShadow` は、状態 \(s\) ごとに有限 index と非負 weight を持つ構造じゃ。
 
 ```lean
 structure SubMarkovShadow (σ ι : Type _) where
@@ -26,7 +26,7 @@ structure SubMarkovShadow (σ ι : Type _) where
 そして、
 
 $$
-\forall s,\quad \sum_{i\in index(s)} weight(s,i)\le 1
+\forall s,\quad \sum_{i\in \text{index}(s)} \mathrm{weight}(s,i)\le 1
 $$
 
 を満たすことを `SubProbability` として定義している。
@@ -46,7 +46,7 @@ $$
 これまでの `CapacityKernel` は、
 
 $$
-\sum cost\le capacity
+\sum \mathrm{cost}\le \mathrm{capacity}
 $$
 
 を持つ構造だった。
@@ -54,7 +54,7 @@ $$
 正規化すれば、
 
 $$
-\sum \frac{cost}{capacity}\le 1
+\sum \frac{\mathrm{cost}}{\mathrm{capacity}}\le 1
 $$
 
 になる。
@@ -78,7 +78,7 @@ $$
 の場合、
 
 $$
-\sum_{q\in I(n)} weight(n,q)\le 1
+\sum_{q\in I(n)} \mathrm{weight}(n,q)\le 1
 $$
 
 であり、これは **sub-Markov** 。
@@ -92,7 +92,7 @@ $$
 の場合、
 
 $$
-\sum_{q\in I(n)} weight(n,q)=1
+\sum_{q\in I(n)} \mathrm{weight}(n,q)=1
 $$
 
 が期待され、これは **Markov** 。
@@ -115,17 +115,17 @@ SubMarkovShadow.ofCapacityKernel
 数学的には、
 
 $$
-K=(children,capacity,cost)
+K=(\mathrm{children},\mathrm{capacity},\mathrm{cost})
 $$
 
 から
 
 $$
-S.index(s)=K.children(s)
+S.\text{index}(s)=K.\mathrm{children}(s)
 $$
 
 $$
-S.weight(s,i)=\frac{K.cost(s,i)}{K.capacity(s)}
+S.\mathrm{weight}(s,i)=\frac{K.\mathrm{cost}(s,i)}{K.\mathrm{capacity}(s)}
 $$
 
 を作っている。
@@ -139,7 +139,7 @@ ofCapacityKernel_subProbability
 で
 
 $$
-S.SubProbability
+S.\text{SubProbability}
 $$
 
 が従う。
@@ -160,11 +160,11 @@ globalLogCapacitySubMarkovShadow
 これは、
 
 $$
-capacity(n)=\log n
+\mathrm{capacity}(n)=\log n
 $$
 
 $$
-cost(n,q)=\mathrm{vonMangoldtShadowCost}(n,q)=\log p(q)
+\mathrm{cost}(n,q)=\mathrm{vonMangoldtShadowCost}(n,q)=\log p(q)
 $$
 
 を持つ global log-capacity kernel を正規化し、`SubMarkovShadow` として読むものじゃ。
@@ -195,7 +195,7 @@ $$
 globalLogCapacitySubMarkovShadow_subProbability
 ```
 
-で全状態 (n>1) に対し、
+で全状態 \(n > 1\) に対し、
 
 $$
 \sum_{q\in I(n)}
@@ -243,13 +243,13 @@ RealWeightProvider
 つまり、今は任意の selected channel set
 
 $$
-IOf(n)\subseteq T.index(n)
+IOf(n)\subseteq T.\text{index}(n)
 $$
 
 について
 
 $$
-\sum_{q\in IOf(n)} weight(n,q)\le 1
+\sum_{q\in IOf(n)} \mathrm{weight}(n,q)\le 1
 $$
 
 がある。
@@ -257,13 +257,13 @@ $$
 次に欲しいのは、canonical/full channel set を選んだとき、
 
 $$
-\sum_{q\in Full(n)} weight(n,q)=1
+\sum_{q\in Full(n)} \mathrm{weight}(n,q)=1
 $$
 
 または正規化前に、
 
 $$
-\sum_{q\in Full(n)} cost(n,q)=\log n
+\sum_{q\in Full(n)} \mathrm{cost}(n,q)=\log n
 $$
 
 を示すことじゃ。
@@ -271,13 +271,13 @@ $$
 これが閉じると、
 
 $$
-SubMarkovShadow
+\text{SubMarkovShadow}
 $$
 
 から
 
 $$
-MarkovShadow
+\text{MarkovShadow}
 $$
 
 へ進める。
@@ -304,7 +304,7 @@ structure FullPrimePowerChannelSet
 または単純に、
 
 $$
-channels(n)=T.index(n)
+\text{channels}(n)=T.\text{index}(n)
 $$
 
 を使えるならそれでよい。
@@ -314,7 +314,7 @@ $$
 次に、full channel で
 
 $$
-\sum_{q\in channels(n)}
+\sum_{q\in \text{channels}(n)}
 \mathrm{vonMangoldtShadowCost}(n,q) = \log n
 $$
 
@@ -336,7 +336,7 @@ FullIndexAssumption
 今回までの route は、
 
 $$
-I(n)\subseteq T.index(n)
+I(n)\subseteq T.\text{index}(n)
 $$
 
 だけでよかった。
@@ -348,7 +348,7 @@ $$
 \sum_{q\mid n,\ q=p^k}\log p=\log n
 $$
 
-を出すには、各素数 (p) について、(k=1,\dots,v_p(n)) の全ての (p^k) が channels に含まれている必要がある。
+を出すには、各素数 \(p\) について、\(k=1,\dots,v_p(n)\) の全ての \(p^k\) が channels に含まれている必要がある。
 
 つまり、
 

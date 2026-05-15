@@ -21,7 +21,7 @@ $$
 
 ## 1. 今回、何が閉じたか
 
-今回の主眼は、解析的な von Mangoldt 関数 (\Lambda) をいきなり導入することではない。
+今回の主眼は、解析的な von Mangoldt 関数 \(\Lambda\) をいきなり導入することではない。
 そこがよい。
 
 代わりに、prime-power witness
@@ -69,7 +69,7 @@ $$
 DKMK-001/002 の段階では、`LogCapacityKernel` の cost は
 
 $$
-cost(n,q)=\log(W.basePrimeOf(n,I,hI,q))
+\mathrm{cost}(n,q)=\log(W.basePrimeOf(n,I,hI,q))
 $$
 
 だった。
@@ -142,7 +142,7 @@ $$
 
 ここはとても大事じゃ。
 
-もし最初から本物の (\Lambda) を入れると、DkMath branch は既存証明 route の写経に近づく。
+もし最初から本物の \(\Lambda\) を入れると、DkMath branch は既存証明 route の写経に近づく。
 しかし今回の設計では、順序が逆じゃ。
 
 まず witness がある。
@@ -151,7 +151,7 @@ $$
 q=p^k
 $$
 
-そこから base prime (p) を読む。
+そこから base prime \(p\) を読む。
 
 $$
 p=W.basePrimeOf(...)
@@ -166,7 +166,7 @@ $$
 その後で、これを von Mangoldt 的な shadow と呼ぶ。
 
 この順序だから、DkMath らしさが保たれている。
-つまり、(\Lambda) を外から持ち込んだのではなく、 **prime-power witness の内側から (\Lambda) 的な重みが現れた** という形になっておる。
+つまり、\(\Lambda\) を外から持ち込んだのではなく、 **prime-power witness の内側から \(\Lambda\) 的な重みが現れた** という形になっておる。
 
 ## 4. 実装上の評価
 
@@ -200,7 +200,7 @@ normalizedVonMangoldtShadowWeight
 
 を置いている。
 
-そして selected sub-index (q\in I) 上では、
+そして selected sub-index \(q\in I\) 上では、
 
 $$
 W.witnessLogCost(n,I,hI,q) = (W.label(n,q,hI)).vonMangoldtLogCost
@@ -241,7 +241,7 @@ $$
 
 へ戻る直前まで来た。
 
-まだ本物の (\Lambda) ではない。
+まだ本物の \(\Lambda\) ではない。
 しかし、prime-power witness 上では、必要な姿はすでにある。
 
 $$
@@ -251,7 +251,7 @@ q=p^k
 $$
 
 の右辺は、今回 no-sorry で theorem-facing な object になった。
-次に本物の (\Lambda) と接続すれば、既存 route との橋がかかる。
+次に本物の \(\Lambda\) と接続すれば、既存 route との橋がかかる。
 
 ## 6. DKMK-001 から DKMK-003 の流れ
 
@@ -264,7 +264,7 @@ $$
 で、
 
 $$
-\sum cost\le capacity
+\sum \mathrm{cost}\le \mathrm{capacity}
 $$
 
 を置いた。
@@ -276,7 +276,7 @@ $$
 で、
 
 $$
-\sum \frac{cost}{capacity}\le 1
+\sum \frac{\mathrm{cost}}{\mathrm{capacity}}\le 1
 $$
 
 を `RealWeightProvider.SubProbability` にした。
@@ -288,7 +288,7 @@ $$
 で、
 
 $$
-cost(q)=\log p(q)
+\mathrm{cost}(q)=\log p(q)
 $$
 
 を von-Mangoldt-like shadow として名づけた。
@@ -360,7 +360,7 @@ $$
 children : ℕ → Finset ℕ
 ```
 
-として、各 (n) に selected prime-power channel set を返す。
+として、各 \(n\) に selected prime-power channel set を返す。
 ただし最初は完全な divisor set を作る必要はない。まずは
 
 ```lean
@@ -373,11 +373,11 @@ hIOf : ∀ n q, q ∈ IOf n → q ∈ T.index n
 そうすると、
 
 $$
-capacity(n)=\log n
+\mathrm{capacity}(n)=\log n
 $$
 
 $$
-cost(n,q)=vonMangoldtShadowCost(n,q)
+\mathrm{cost}(n,q)=vonMangoldtShadowCost(n,q)
 $$
 
 を持つ global `CapacityKernel ℕ ℕ` が作れる。
@@ -387,7 +387,7 @@ $$
 Global 化で気をつけるべきは、`hn : 1 < n` の扱いじゃ。
 
 local kernel では `hn : 1 < n` を引数に取っている。
-global kernel で全ての (n) に対して `capacity n = log n` を置くと、(n=0,1) で capacity 正性が壊れる。
+global kernel で全ての \(n\) に対して `capacity n = log n` を置くと、\(n=0,1\) で capacity 正性が壊れる。
 
 したがって選択肢は二つある。
 
@@ -402,7 +402,7 @@ global kernel で全ての (n) に対して `capacity n = log n` を置くと、
 これは clean じゃ。
 
 $$
-capacity(n)=\log n>0
+\mathrm{capacity}(n)=\log n > 0
 $$
 
 が常に成り立つ。
@@ -422,14 +422,14 @@ $$
 
 ## 9. 本物の von Mangoldt への接続はいつか
 
-`VonMangoldtShadow` は良い中間層じゃが、いつかは本物の (\Lambda) と接続する必要がある。
+`VonMangoldtShadow` は良い中間層じゃが、いつかは本物の \(\Lambda\) と接続する必要がある。
 
 ただし、急がなくてよい。
 
 まずは global kernel を作り、次に
 
 $$
-\sum_{q\in children(n)}
+\sum_{q\in \mathrm{children}(n)}
 shadowCost(n,q)
 \le
 \log n
@@ -466,7 +466,7 @@ $$
 \text{Capacity first, Markov later}
 $$
 
-という方針を実装上も保ちながら、既存 Markov route の (\Lambda(q)/\log n) へ戻る入口を得た。
+という方針を実装上も保ちながら、既存 Markov route の \(\Lambda(q)/\log n\) へ戻る入口を得た。
 
 これはよいぞ、ぬしよ。
 いよいよ次は、局所 kernel の森をつなげて、global kernel の山道にする段階じゃ。

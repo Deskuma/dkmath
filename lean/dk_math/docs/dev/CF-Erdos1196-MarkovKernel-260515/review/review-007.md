@@ -71,19 +71,19 @@ $$
 数学的には単純で、
 
 $$
-\sum_i cost(s,i)=capacity(s)
+\sum_i \mathrm{cost}(s,i)=\mathrm{capacity}(s)
 $$
 
 かつ
 
 $$
-capacity(s) > 0
+\mathrm{capacity}(s) > 0
 $$
 
 なら、
 
 $$
-\sum_i \frac{cost(s,i)}{capacity(s)} = 1
+\sum_i \frac{\mathrm{cost}(s,i)}{\mathrm{capacity}(s)} = 1
 $$
 
 となる。
@@ -120,7 +120,7 @@ structure FullChannelLogCostComplete
 これは、full channel set 上で
 
 $$
-\sum_{q\in C.channels(n)}
+\sum_{q\in C.\text{channels}(n)}
 \mathrm{vonMangoldtShadowCost}(n,q) = \log n
 $$
 
@@ -140,11 +140,11 @@ $$
 つまり、
 
 $$
-\sum_{q\in C.channels(n)}
+\sum_{q\in C.\text{channels}(n)}
 \mathrm{vonMangoldtShadowCost}(n,q) = \log n
 $$
 
-が全 (n>1) で成り立つ。
+が全 \(n > 1\) で成り立つ。
 
 すると、
 
@@ -245,7 +245,7 @@ $$
 
 が核じゃった。
 
-DkMath route では、これを直接 (\Lambda) で置かず、
+DkMath route では、これを直接 \(\Lambda\) で置かず、
 
 $$
 \mathrm{vonMangoldtShadowCost}(q) = \log p(q)
@@ -280,13 +280,13 @@ $$
 本当に難しいのは、
 
 $$
-C.channels(n)
+C.\text{channels}(n)
 $$
 
 が全 exponent slot をちょうど一回ずつ含み、
 
 $$
-\sum_{q\in C.channels(n)}\log p(q)=\log n
+\sum_{q\in C.\text{channels}(n)}\log p(q)=\log n
 $$
 
 になることを示す部分じゃ。
@@ -307,17 +307,17 @@ $$
 次は報告にもある通り、
 
 $$
-T.index(n)
+T.\text{index}(n)
 $$
 
 が全 exponent slot を埋めることを表す構造仮定の設計じゃ。
 
 数学的には、必要なのは次のような主張じゃ。
 
-各 (n>1) について、
+各 \(n > 1\) について、
 
 $$
-C.channels(n) = {p^k\mid p\text{ prime},\ 1\le k\le n.factorization(p)}
+C.\text{channels}(n) = {p^k\mid p\text{ prime},\ 1\le k\le n.\mathrm{factorization}(p)}
 $$
 
 である。
@@ -325,7 +325,7 @@ $$
 このとき、
 
 $$
-\sum_{q\in C.channels(n)}
+\sum_{q\in C.\text{channels}(n)}
 \mathrm{vonMangoldtShadowCost}(n,q) = \sum_p
 \sum_{k=1}^{v_p(n)}
 \log p
@@ -406,7 +406,7 @@ $$
 
 ここで気をつけたいのは、重複じゃ。
 
-異なる ((p,k)) から同じ (q) が出ることは基本的にない。
+異なる \((p,k)\) から同じ \(q\) が出ることは基本的にない。
 なぜなら prime power 表現は一意だからじゃ。
 
 だが Lean では、
@@ -417,16 +417,16 @@ $$
 
 のような補題が必要になる可能性がある。
 
-ただし、Finset を pair ((p,k)) 上で作り、cost を (\log p) として和を取るなら、(q=p^k) の一意性を避けられる場合がある。
+ただし、Finset を pair \((p,k)\) 上で作り、cost を \(\log p\) として和を取るなら、\(q=p^k\) の一意性を避けられる場合がある。
 
 つまり、次の二案がある。
 
-### 案 A. label (q) の Finset で行く
+### 案 A. label \(q\) の Finset で行く
 
 既存 `PrimePowerWitnessProvider` と接続しやすい。
 しかし prime-power 表現の一意性が必要になる。
 
-### 案 B. slot ((p,k)) の Finset で行く
+### 案 B. slot \((p,k)\) の Finset で行く
 
 等式
 

@@ -10,7 +10,7 @@ $$
 が **もし供給されれば** `MarkovShadow` に昇格できる、という受け皿を作った。今回 DKMK-006C は、その等式を将来証明するために必要な
 
 $$
-\#{q\in Full(n)\mid \mathrm{basePrime}(q) = p} = n.\mathrm{factorization}(p)
+\\\#{q\in Full(n)\mid \mathrm{basePrime}(q) = p} = n.\mathrm{factorization}(p)
 $$
 
 という **全 exponent slot coverage** の語彙を入れたわけじゃ。
@@ -35,20 +35,20 @@ FullExponentSlotCoverage
 これは、以前の selected route の
 
 $$
-\#{q\in I\mid p(q)=p}\le n.\mathrm{factorization}(p)
+\\\#{q\in I\mid p(q)=p}\le n.\mathrm{factorization}(p)
 $$
 
 ではなく、full route 用に
 
 $$
-\#{q\in \mathrm{Full}(n)\mid p(q)=p}=n.\mathrm{factorization}(p)
+\\\#{q\in \mathrm{Full}(n)\mid p(q)=p}=n.\mathrm{factorization}(p)
 $$
 
 を表す等号条件じゃ。差分でも、これは `NatBaseMultiplicityBudgetOn` の equality counterpart として説明されておる。
 
 ## 2. 数学的な意味
 
-R027 までの selected route では、同じ base prime (p) を持つ label たちを exponent slot
+R027 までの selected route では、同じ base prime \(p\) を持つ label たちを exponent slot
 
 $$
 1,2,\dots,v_p(n)
@@ -59,7 +59,7 @@ $$
 だから、
 
 $$
-\#{q\in I\mid p(q)=p}\le v_p(n)
+\\\#{q\in I\mid p(q)=p}\le v_p(n)
 $$
 
 だった。
@@ -67,7 +67,7 @@ $$
 今回の full route では、これを
 
 $$
-\#{q\in \mathrm{Full}(n)\mid p(q)=p}=v_p(n)
+\\\#{q\in \mathrm{Full}(n)\mid p(q)=p}=v_p(n)
 $$
 
 へ強めたい。
@@ -77,7 +77,7 @@ $$
 
 ## 3. `FullExponentSlotChannelSet` の役割
 
-`FullExponentSlotChannelSet` は、full channel set (C.channels(n)) が
+`FullExponentSlotChannelSet` は、full channel set C.channels(n) が
 
 $$
 {p^k\mid p\text{ prime},\ 1\le k\le n.\mathrm{factorization}(p)}
@@ -98,7 +98,7 @@ q ∈ C.channels n
 前回の `FullPrimePowerChannelSet` は、
 
 $$
-C.\mathrm{channels}(n)=T.\text{index}(n)
+C.\text{channels}(n)=T.\text{index}(n)
 $$
 
 という「transition index と同じ」という仕様だった。
@@ -106,16 +106,16 @@ $$
 今回の `FullExponentSlotChannelSet` は、さらに
 
 $$
-C.\mathrm{channels}(n)
+C.\text{channels}(n)
 $$
 
 が具体的に exponent slot 全体である、という算術的仕様を与えている。
 
 ## 4. `FullExponentSlotCoverage` の役割
 
-`FullExponentSlotCoverage` は、witness reader `basePrimeOf` で見たときに、各 prime fiber の個数がちょうど (n.factorization(p)) になることを要求する。
+`FullExponentSlotCoverage` は、witness reader `basePrimeOf` で見たときに、各 prime fiber の個数がちょうど n.factorization(p) になることを要求する。
 
-つまり、各状態 (s) と素数 (p) について、
+つまり、各状態 \(s\) と素数 \(p\) について、
 
 $$
 \mathrm{NatBaseMultiplicityOn}
@@ -138,7 +138,7 @@ $$
 は、prime fiber ごとにまとめると、
 
 $$
-\sum_p \#{q\in \mathrm{Full}(n)\mid p(q)=p}\log p
+\sum_p \\\#{q\in \mathrm{Full}(n)\mid p(q)=p}\log p
 $$
 
 になり、coverage により
@@ -160,13 +160,13 @@ natBaseMultiplicityBudgetOn_of_complete
 により、
 
 $$
-\#\mathrm{fiber} = v_p(n)
+\\\#\mathrm{fiber} = v_p(n)
 $$
 
 から
 
 $$
-\#\mathrm{fiber} \le v_p(n)
+\\\#\mathrm{fiber} \le v_p(n)
 $$
 
 が得られる。
@@ -226,7 +226,7 @@ full equality を示すための exact multiplicity interface が入った
 次に必要なのは、
 
 $$
-\#\mathrm{fiber}(p) = v_p(n)
+\\\#\mathrm{fiber}(p) = v_p(n)
 $$
 
 から
@@ -242,8 +242,8 @@ $$
 次の橋は、おそらくこういう形になる。
 
 $$
-\sum_{q\in \mathrm{C.channels}(n)}
-\log(\mathrm{basePrimeOf}(q)) = \sum_{p} \mathrm{NatBaseMultiplicityOn}(\mathrm{C.channels}(n),\mathrm{basePrimeOf},p)\cdot \log p
+\sum_{q\in C.\text{channels}(n)}
+\log(\mathrm{basePrimeOf}(q)) = \sum_{p} \mathrm{NatBaseMultiplicityOn}(C.\text{channels}(n),\mathrm{basePrimeOf},p)\cdot \log p
 $$
 
 そして coverage で、
@@ -289,7 +289,7 @@ $$
 
 を示すものじゃ。
 
-ただし Lean では任意の (p) 全体を走れないので、右辺の support は
+ただし Lean では任意の \(p\) 全体を走れないので、右辺の support は
 
 $$
 (\mathrm{I.image}\ \mathrm{pOf})
@@ -328,7 +328,7 @@ $$
 
 ## 9. slot 形式を使う選択肢
 
-今回 `FullExponentSlotChannelSet` は label (q) 形式で仕様化されている。
+今回 `FullExponentSlotChannelSet` は label \(q\) 形式で仕様化されている。
 
 だが、等式証明では explicit slot
 

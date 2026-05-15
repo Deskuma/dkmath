@@ -24,14 +24,14 @@ normalizedRealWeightProvider_subProbability
 数学的には、`CapacityKernel` が持つ保存則
 
 $$
-\sum_{b\in children(a)} cost(a,b)\le capacity(a)
+\sum_{b\in \mathrm{children}(a)} \mathrm{cost}(a,b)\le \mathrm{capacity}(a)
 $$
 
 を、正の capacity で割って、
 
 $$
-\sum_{b\in children(a)}
-\frac{cost(a,b)}{capacity(a)}
+\sum_{b\in \mathrm{children}(a)}
+\frac{\mathrm{cost}(a,b)}{\mathrm{capacity}(a)}
 \le 1
 $$
 
@@ -70,7 +70,7 @@ $$
 いままでは、
 
 $$
-\sum \frac{cost}{capacity}\le 1
+\sum \frac{\mathrm{cost}}{\mathrm{capacity}}\le 1
 $$
 
 という式の補題だった。
@@ -98,15 +98,15 @@ logCapacityKernelRealWeightProvider_subProbability
 中身は、
 
 $$
-capacity(n)=\log n
+\mathrm{capacity}(n)=\log n
 $$
 
 $$
-cost(n,q)=\log p(q)
+\mathrm{cost}(n,q)=\log p(q)
 $$
 
 $$
-weight(q)=\frac{\log p(q)}{\log n}
+\mathrm{weight}(q)=\frac{\log p(q)}{\log n}
 $$
 
 じゃな。
@@ -197,7 +197,7 @@ DKMK-005: Markov/sub-Markov translation
 
 次は、報告どおり `VonMangoldtShadow.lean` が自然じゃ。
 
-ただし、最初から解析的な (\Lambda) 全体へ行くより、まずは DkMath 的な shadow を小さく置くのがよい。
+ただし、最初から解析的な \(\Lambda\) 全体へ行くより、まずは DkMath 的な shadow を小さく置くのがよい。
 
 目標は、
 
@@ -247,7 +247,7 @@ $$
 
 じゃ。
 
-次に (\Lambda)-shadow を入れると、
+次に \(\Lambda\)-shadow を入れると、
 
 $$
 \frac{\log p(q)}{\log n}

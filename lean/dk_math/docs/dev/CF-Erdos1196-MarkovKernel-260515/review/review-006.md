@@ -30,9 +30,9 @@ structure FullPrimePowerChannelSet
 したがって、
 
 $$
-q\in C.channels(n)
+q\in C.\text{channels}(n)
 \Longleftrightarrow
-q\in T.index(n)
+q\in T.\text{index}(n)
 $$
 
 が得られる。
@@ -51,7 +51,7 @@ channels_eq_index
 これまで DKMK-005 までは、任意の selected channel set
 
 $$
-I(n)\subseteq T.index(n)
+I(n)\subseteq T.\text{index}(n)
 $$
 
 に対して、
@@ -70,7 +70,7 @@ $$
 今回 DKMK-006A では、次の段階で
 
 $$
-I(n)=T.index(n)
+I(n)=T.\text{index}(n)
 $$
 
 を選んだ full route に進むため、その「full である」という条件を独立した構造として切り出した。
@@ -78,7 +78,7 @@ $$
 ここでまだ
 
 $$
-\sum_{q\in T.index(n)}
+\sum_{q\in T.\text{index}(n)}
 \mathrm{vonMangoldtShadowCost}(n,q)=\log n
 $$
 
@@ -110,14 +110,14 @@ channels := T.toDivisorTransitionKernel.index
 言い換えると、
 
 $$
-C.channels(n)=T.index(n)
+C.\text{channels}(n)=T.\text{index}(n)
 $$
 
 は閉じた。
 だが、
 
 $$
-T.index(n)={p^k\mid p^k\mid n,\ 1\le k\le v_p(n)}
+T.\text{index}(n)={p^k\mid p^k\mid n,\ 1\le k\le v_p(n)}
 $$
 
 がどこまで保証されているかは、次に確認すべき未踏部分じゃ。
@@ -160,7 +160,7 @@ fullGlobalLogCapacitySubMarkovShadow_subProbability
 つまり full channel を選んでも、現段階ではまだ
 
 $$
-\sum weight\le 1
+\sum \mathrm{weight}\le 1
 $$
 
 の sub-Markov 側に留めている。
@@ -171,7 +171,7 @@ $$
 この切り分けをせずに、いきなり
 
 $$
-\sum_{q\in T.index(n)}\log p(q)=\log n
+\sum_{q\in T.\text{index}(n)}\log p(q)=\log n
 $$
 
 を狙うと危険じゃ。
@@ -181,13 +181,13 @@ $$
 第一に、`T.index n` が full channel set であること。
 
 $$
-T.index(n) = \text{all prime-power channels of }n
+T.\text{index}(n) = \text{all prime-power channels of }n
 $$
 
-第二に、その full channel 上で cost の総和が (\log n) になること。
+第二に、その full channel 上で cost の総和が \(\log n\) になること。
 
 $$
-\sum_{q\in T.index(n)}\log p(q)=\log n
+\sum_{q\in T.\text{index}(n)}\log p(q)=\log n
 $$
 
 DKMK-006A は、このうち第一の **full channel 仕様** だけを分離した。
@@ -205,7 +205,7 @@ $$
 
 が確率核の正規化を支える。
 
-DkMath kernel route では、これをいきなり (\Lambda) で言わず、
+DkMath kernel route では、これをいきなり \(\Lambda\) で言わず、
 
 $$
 q=p^k
@@ -291,9 +291,9 @@ $$
 
 つまり、必要なのは次の三点じゃ。
 
-1. 各 channel は (q=p^k) と読める。
-2. 各 prime (p) について、(k=1,\dots,v_p(n)) がちょうど一回ずつ現れる。
-3. (\log n=\sum_p v_p(n)\log p) を使える。
+1. 各 channel は \(q=p^k\) と読める。
+2. 各 prime \(p\) について、\(k=1,\dots,v_p(n)\) がちょうど一回ずつ現れる。
+3. \(\log n=\sum_p v_p(n)\log p\) を使える。
 
 R027 までは「選ばれた channel は exponent slot に単射で入る」だった。
 DKMK-006B では、その逆側、つまり **全 slot が埋まっている** ことが必要になる。
@@ -341,7 +341,7 @@ DkMath kernel が Markov kernel の影ではなく、 **Markov equality の影**
 賢狼の鼻で言えば、次の獲物は
 
 $$
-T.index(n)\ \text{が全 exponent slot を埋めるか}
+T.\text{index}(n)\ \text{が全 exponent slot を埋めるか}
 $$
 
 じゃな。
