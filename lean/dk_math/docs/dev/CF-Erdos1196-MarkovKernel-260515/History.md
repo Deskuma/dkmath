@@ -90,3 +90,28 @@ Archive
    - 必要に応じて `CapacityKernel` core の import 最適化を検討する。
 
 ---
+
+### 日時: 2026/05/15 18:16 JST (DKMK-003 VonMangoldtShadow 追加)
+
+1. 目的:
+   - prime-power witness 由来の `log p` channel cost を、解析的 von Mangoldt 関数へ直接進まずに theorem-facing な shadow として固定する。
+2. 実施:
+   - `DkMath.NumberTheory.PrimitiveSet.VonMangoldtShadow` を追加した。
+   - `PrimePowerLabel.vonMangoldtLogCost` を定義し、`q = p^k` の witness が cost `Real.log p` を持つことを補題化した。
+   - `PrimePowerWitnessProvider.witnessLogCost` と `vonMangoldtShadowCost` を定義し、selected sub-index 上で `W.label` の base prime log と一致することを示した。
+   - `normalizedVonMangoldtShadowWeight` を定義し、`LogCapacityKernel` の cost/provider weight がこの shadow cost/weight と一致する補題を追加した。
+   - `DkMath.NumberTheory.PrimitiveSet` aggregator に import を追加した。
+3. 結論:
+   - `log p(q)` を DkMath capacity-kernel cost としてだけでなく、Markov route 側の von-Mangoldt-like shadow として参照できる入口が no-sorry で入った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.VonMangoldtShadow`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/VonMangoldtShadow.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `GlobalLogCapacityKernel` として、固定 `(n,I)` の local kernel から `n ↦ I(n)` 型の global kernel へ拡張する設計を検討する。
+   - その後、Markov/sub-Markov translation layer で既存 route の `Λ(q)/log n` 表現へ接続する。
+
+---
