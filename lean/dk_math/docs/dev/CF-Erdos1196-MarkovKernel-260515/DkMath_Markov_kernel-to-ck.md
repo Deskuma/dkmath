@@ -264,6 +264,69 @@ PrimePowerWitnessProvider.fullGlobalLogCapacityMarkovShadow
 
 ---
 
+## 2.5. DKMK-006C FullExponentSlot
+
+`FullChannelLogCostComplete` を証明するには、selected route で得ていた
+
+\[
+\#\{q\in I(n): basePrime(q)=p\}\le n.factorization(p)
+\]
+
+を、full route では等号に強める必要がある。
+
+DKMK-006C では、この equality 側の構造仮定を分離する。
+
+まず、`FullPrimePowerChannelSet` が exponent slot 全体を表していることを
+
+```lean
+FullExponentSlotChannelSet
+```
+
+として記録する。
+
+これは
+
+```lean
+q ∈ C.channels n
+  ↔
+∃ p k, Nat.Prime p ∧ 1 ≤ k ∧
+  k ≤ n.factorization p ∧ q = p ^ k
+```
+
+という仕様である。
+
+さらに、witness reader が base prime ごとに全 slot を埋めることを
+
+```lean
+FullExponentSlotCoverage
+```
+
+として記録する。
+
+これは各状態 `s` と素数 `p` について
+
+```lean
+NatBaseMultiplicityOn
+  (C.channels s.1)
+  (W.basePrimeOf s.1 (C.channels s.1) (C.subset_index s.1))
+  p
+=
+s.1.factorization p
+```
+
+を要求する。
+
+この仮定は、既存の selected-channel multiplicity budget `≤` を自動的に含む。
+
+```lean
+fullExponentSlotCoverage_baseMultiplicity_budget
+```
+
+次段では、この exact multiplicity と `RealLog` 側の有限積/log 等式を接続して、
+`FullChannelLogCostComplete` を作ることが焦点になる。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

@@ -220,3 +220,29 @@ Archive
    - `Σ log p = log n` の有限 prime-power channel 版を既存 `ValuationBudget` / `RealLog` route とどう接続するか検討する。
 
 ---
+
+### 日時: 2026/05/16 01:00 JST (DKMK-006C FullExponentSlot 追加)
+
+1. 目的:
+   - `FullChannelLogCostComplete` を証明する前段として、full channel が全 exponent slot を埋めることを表す interface を追加する。
+2. 実施:
+   - `DkMath.NumberTheory.PrimitiveSet.FullExponentSlot` を追加した。
+   - `NatBaseMultiplicityCompleteOn` を追加し、base-prime multiplicity が `n.factorization` と完全一致する equality 側の条件を定義した。
+   - `natBaseMultiplicityBudgetOn_of_complete` を追加し、exact multiplicity が既存の selected-channel budget を含むことを示した。
+   - `FullExponentSlotChannelSet` を追加し、`q ∈ C.channels n ↔ ∃ p k, p prime ∧ 1 ≤ k ∧ k ≤ n.factorization p ∧ q = p^k` という full exponent-slot 仕様を記録した。
+   - `FullExponentSlotCoverage` を追加し、witness reader `basePrimeOf` の各 prime fiber が `n.factorization p` 個ちょうどあることを interface 化した。
+   - project docs に DKMK-006C の位置づけを追記した。
+3. 結論:
+   - selected route の `≤` multiplicity から、full equality route に必要な `=` multiplicity へ進むための構造語彙が no-sorry で入った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.FullExponentSlot`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/FullExponentSlot.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `FullExponentSlotCoverage` と `RealLog` / `ValuationBudget` の有限積-log 補題を接続し、`FullChannelLogCostComplete` を導く橋を設計する。
+   - 必要なら label `q` ではなく explicit slot `(p,k)` 上の finite sum を経由する。
+
+---
