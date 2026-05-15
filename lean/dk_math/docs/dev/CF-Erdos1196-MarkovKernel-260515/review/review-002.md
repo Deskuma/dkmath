@@ -106,7 +106,7 @@ cost(n,q)=\log p(q)
 $$
 
 $$
-weight(q)=\frac{\log p(q)}{\log n}
+\mathrm{weight}(q)=\frac{\log p(q)}{\log n}
 $$
 
 じゃな。

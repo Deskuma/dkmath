@@ -26,7 +26,7 @@ structure SubMarkovShadow (σ ι : Type _) where
 そして、
 
 $$
-\forall s,\quad \sum_{i\in \text{index}(s)} weight(s,i)\le 1
+\forall s,\quad \sum_{i\in \text{index}(s)} \mathrm{weight}(s,i)\le 1
 $$
 
 を満たすことを `SubProbability` として定義している。
@@ -78,7 +78,7 @@ $$
 の場合、
 
 $$
-\sum_{q\in I(n)} weight(n,q)\le 1
+\sum_{q\in I(n)} \mathrm{weight}(n,q)\le 1
 $$
 
 であり、これは **sub-Markov** 。
@@ -92,7 +92,7 @@ $$
 の場合、
 
 $$
-\sum_{q\in I(n)} weight(n,q)=1
+\sum_{q\in I(n)} \mathrm{weight}(n,q)=1
 $$
 
 が期待され、これは **Markov** 。
@@ -125,7 +125,7 @@ S.\text{index}(s)=K.children(s)
 $$
 
 $$
-S.weight(s,i)=\frac{K.cost(s,i)}{K.capacity(s)}
+S.\mathrm{weight}(s,i)=\frac{K.cost(s,i)}{K.capacity(s)}
 $$
 
 を作っている。
@@ -249,7 +249,7 @@ $$
 について
 
 $$
-\sum_{q\in IOf(n)} weight(n,q)\le 1
+\sum_{q\in IOf(n)} \mathrm{weight}(n,q)\le 1
 $$
 
 がある。
@@ -257,7 +257,7 @@ $$
 次に欲しいのは、canonical/full channel set を選んだとき、
 
 $$
-\sum_{q\in Full(n)} weight(n,q)=1
+\sum_{q\in Full(n)} \mathrm{weight}(n,q)=1
 $$
 
 または正規化前に、

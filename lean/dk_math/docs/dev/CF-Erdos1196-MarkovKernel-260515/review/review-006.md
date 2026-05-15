@@ -160,7 +160,7 @@ fullGlobalLogCapacitySubMarkovShadow_subProbability
 つまり full channel を選んでも、現段階ではまだ
 
 $$
-\sum weight\le 1
+\sum \mathrm{weight}\le 1
 $$
 
 の sub-Markov 側に留めている。
