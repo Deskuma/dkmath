@@ -4,7 +4,7 @@
 R022 が「重複あり route を語るための言語」だったのに対して、R023 はその言語から実際に
 
 $$
-\prod_{i\in I} pOf(i) \mid n
+\prod_{i\in I} \mathrm{pOf}(i) \mid n
 $$
 
 を取り出す **自然数側の核心 bridge** を閉じておる。
@@ -21,13 +21,13 @@ natProductDvdOn_of_multiplicityBudget
 数学的には、まず
 
 $$
-pOf(i)\ \text{がすべて素数}
+\mathrm{pOf}(i)\ \text{がすべて素数}
 $$
 
-であるとき、任意の素数 (p) について
+であるとき、任意の素数 $p$ について
 
 $$
-\left(\prod_{i\in I} pOf(i)\right).\mathrm{factorization}(p) = \#{i\in I \mid pOf(i)=p}
+\left(\prod_{i\in I} \mathrm{pOf}(i)\right).\mathrm{factorization}(p) = \\\#{i\in I \mid \mathrm{pOf}(i)=p}
 $$
 
 を証明した。
@@ -35,7 +35,7 @@ $$
 そのうえで、multiplicity budget
 
 $$
-\#{i\in I \mid pOf(i)=p}
+\\\#{i\in I \mid \mathrm{pOf}(i)=p}
 \le
 n.\mathrm{factorization}(p)
 $$
@@ -43,15 +43,15 @@ $$
 を使い、
 
 $$
-\left(\prod_{i\in I} pOf(i)\right).\mathrm{factorization}(p)
+\left(\prod_{i\in I} \mathrm{pOf}(i)\right).\mathrm{factorization}(p)
 \le
 n.\mathrm{factorization}(p)
 $$
 
-を全ての (p) で示し、素因数分解の指数比較から
+を全ての $p$ で示し、素因数分解の指数比較から
 
 $$
-\prod_{i\in I} pOf(i)\mid n
+\prod_{i\in I} \mathrm{pOf}(i)\mid n
 $$
 
 へ戻した。
@@ -65,7 +65,7 @@ $$
 p_1,p_2,\dots,p_r
 $$
 
-が互いに異なる素数で、各 (p_j\mid n) なら
+が互いに異なる素数で、各 $p_j\mid n$ なら
 
 $$
 p_1p_2\cdots p_r\mid n
@@ -79,7 +79,7 @@ $$
 2,2,2,3
 $$
 
-のような列が出る。これは単に (2\mid n), (3\mid n) では足りず、
+のような列が出る。これは単に $2\mid n$, $3\mid n$ では足りず、
 
 $$
 2^3\cdot 3\mid n
@@ -109,18 +109,18 @@ rw [Nat.factorization_prod_apply hnonzero]
 により、
 
 $$
-\left(\prod_{i\in I}pOf(i)\right).\mathrm{factorization}(p) = \sum_{i\in I}(pOf(i)).\mathrm{factorization}(p)
+\left(\prod_{i\in I}\mathrm{pOf}(i)\right).\mathrm{factorization}(p) = \sum_{i\in I}(\mathrm{pOf}(i)).\mathrm{factorization}(p)
 $$
 
 へ展開しておる。
 
-そして (pOf(i)) は素数なので、
+そして $\mathrm{pOf}(i)$ は素数なので、
 
 $$
-(pOf(i)).\mathrm{factorization}(p) =
+(\mathrm{pOf}(i)).\mathrm{factorization}(p) =
 \begin{cases}
-1 & pOf(i)=p,\\
-0 & pOf(i)\ne p
+1 & \mathrm{pOf}(i)=p,\\
+0 & \mathrm{pOf}(i)\ne p
 \end{cases}
 $$
 
@@ -129,7 +129,7 @@ $$
 
 $$
 \sum_{i\in I}
-\mathbf{1}_{pOf(i)=p} = \#{i\in I\mid pOf(i)=p}
+\mathbf{1}_{\mathrm{pOf}(i)=p} = \\\#{i\in I\mid \mathrm{pOf}(i)=p}
 $$
 
 へ落ちる。
@@ -144,7 +144,7 @@ $$
 
 $$
 \forall p,\quad
-\left(\prod_{i\in I}pOf(i)\right).\mathrm{factorization}(p)
+\left(\prod_{i\in I}\mathrm{pOf}(i)\right).\mathrm{factorization}(p)
 \le
 n.\mathrm{factorization}(p)
 $$
@@ -152,7 +152,7 @@ $$
 なら、
 
 $$
-\prod_{i\in I}pOf(i)\mid n
+\prod_{i\in I}\mathrm{pOf}(i)\mid n
 $$
 
 である。
@@ -166,7 +166,7 @@ exact dvd_zero _
 ```
 
 で処理している点じゃ。
-これで定理自体は一般の (n) に対して使える。後段の log route ではもちろん (1<n) が必要になるが、この自然数 bridge 自体を広めに保っているのは悪くない。
+これで定理自体は一般の $n$ に対して使える。後段の log route ではもちろん $1 < n$ が必要になるが、この自然数 bridge 自体を広めに保っているのは悪くない。
 
 ## 5. これで何が可能になったか
 
@@ -189,24 +189,24 @@ $$
 $$
 
 $$
-\prod_{i\in I}pOf(i)\mid n
+\prod_{i\in I}\mathrm{pOf}(i)\mid n
 $$
 
-つまり、同じ base prime が複数回出ても、その回数が (n) の指数予算内なら product divisibility を供給できる。
+つまり、同じ base prime が複数回出ても、その回数が $n$ の指数予算内なら product divisibility を供給できる。
 
 これは R/log route へ接続する直前の最重要地点じゃ。
 なぜなら log route で欲しいのは概ね
 
 $$
-\prod_{i\in I}pOf(i)\le n
+\prod_{i\in I}\mathrm{pOf}(i)\le n
 $$
 
 であり、正の自然数では
 
 $$
-\prod_{i\in I}pOf(i)\mid n
+\prod_{i\in I}\mathrm{pOf}(i)\mid n
 \quad\Longrightarrow\quad
-\prod_{i\in I}pOf(i)\le n
+\prod_{i\in I}\mathrm{pOf}(i)\le n
 $$
 
 が使えるからじゃ。
@@ -246,7 +246,7 @@ theorem natProductBoundOn_of_multiplicityBudget
 
 1. R023 で `NatProductDvdOn I pOf n`
 2. `pOf` が prime-valued なので product は正
-3. (0<n) と divisibility から product bound
+3. $0 < n$ と divisibility から product bound
 
 という流れになるはずじゃ。
 
@@ -284,8 +284,8 @@ $$
 
 これは単なる一般化ではなく、#1196 的な「素因子チャネルの消費量」を正確に扱えるようになった、という意味がある。
 
-同じ prime channel を何度も使うなら、そのぶん (n) の valuation budget を消費する。
-その消費量が予算内なら、log mass は親 (n) を超えない。
+同じ prime channel を何度も使うなら、そのぶん $n$ の valuation budget を消費する。
+その消費量が予算内なら、log mass は親 $n$ を超えない。
 この流れが、Lean 上でかなり明瞭になってきた。
 
 ## 9. 総合判定

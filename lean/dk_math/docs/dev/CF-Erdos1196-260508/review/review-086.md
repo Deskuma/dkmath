@@ -1,7 +1,7 @@
 # review Phase "R" 2nd
 
 うむ。R027 は **かなり大きい閉じ** じゃ。
-R025 では「multiplicity budget があれば `SubProbability`」だった。R026 では「各 witness label (q) は (p(q)^{k(q)}) と読める」まで来た。そして今回 R027 で、ついにその (k(q)) を使って **multiplicity budget 自体を自動生成** した。
+R025 では「multiplicity budget があれば `SubProbability`」だった。R026 では「各 witness label $q$ は $p(q)^{k(q)}$ と読める」まで来た。そして今回 R027 で、ついにその $k(q)$ を使って **multiplicity budget 自体を自動生成** した。
 
 つまり、外部仮定だった
 
@@ -55,7 +55,7 @@ $$
 
 ## 2. 数学的な核心
 
-今回の核心は、同じ base prime (p) を持つ labels の集合
+今回の核心は、同じ base prime $p$ を持つ labels の集合
 
 $$
 I_p:={q\in I\mid p(q)=p}
@@ -69,7 +69,7 @@ $$
 
 で指数スロットへ埋め込んだことじゃ。
 
-R026 で、各 (q\in I) について
+R026 で、各 $q\in I$ について
 
 $$
 q=p(q)^{k(q)}
@@ -85,13 +85,13 @@ $$
 
 が示されていた。
 
-今回、固定した (p) について (p(q)=p) なら、
+今回、固定した $p$ について $p(q)=p$ なら、
 
 $$
 1\le k(q)\le n.\mathrm{factorization}(p)
 $$
 
-となる。さらに同じ (p) 上で (k(q)=k(r)) なら、
+となる。さらに同じ $p$ 上で $k(q)=k(r)$ なら、
 
 $$
 q=p^{k(q)}=p^{k(r)}=r
@@ -103,7 +103,7 @@ $$
 q\mapsto k(q)
 $$
 
-は (I_p) 上で単射になる。
+は $I_p$ 上で単射になる。
 
 したがって、
 
@@ -116,7 +116,7 @@ $$
 であり、
 
 $$
-\#I_p\le n.\mathrm{factorization}(p)
+\\\#I_p\le n.\mathrm{factorization}(p)
 $$
 
 が従う。
@@ -169,7 +169,7 @@ Lean では
 let S := I.filter fun q => W.basePrimeOf n I hI q = p
 ```
 
-として、同じ base prime (p) を持つ selected labels を取り出している。
+として、同じ base prime $p$ を持つ selected labels を取り出している。
 
 そして
 
@@ -180,7 +180,7 @@ S.image (W.baseExponentOf n I hI)
 を考える。injective なので、
 
 $$
-\#S = \#k(S)
+\\\#S = \\\#k(S)
 $$
 
 さらに各 exponent は
@@ -200,7 +200,7 @@ $$
 よって、
 
 $$
-\#S \le \#{1,\dots,n.\mathrm{factorization}(p)} = n.\mathrm{factorization}(p)
+\\\#S \le \\\#{1,\dots,n.\mathrm{factorization}(p)} = n.\mathrm{factorization}(p)
 $$
 
 が出る。
@@ -222,7 +222,7 @@ Finset.Icc 1 (n.factorization p)
 
 $$
 \forall p,\quad
-\#{q\in I\mid p(q)=p}
+\\\#{q\in I\mid p(q)=p}
 \le
 n.\mathrm{factorization}(p)
 $$
@@ -241,11 +241,11 @@ NatBaseMultiplicityBudgetOn I (W.basePrimeOf n I hI) n
 intro p _hp
 ```
 
-となっていて、(p) が prime である仮定を実際には使っていない点じゃ。
+となっていて、 $p$ が prime である仮定を実際には使っていない点じゃ。
 
 これは強い。
-`basePrimeOf_card_filter_le_factorization` が任意の (p) で成り立つ形になっておるからじゃな。
-実際、もし (p) が base prime として現れないなら filter は空になる。もし現れるなら、witness 側から自然に prime であることが出る。したがって prime 仮定なしでも card bound が成立する。
+`basePrimeOf_card_filter_le_factorization` が任意の $p$ で成り立つ形になっておるからじゃな。
+実際、もし $p$ が base prime として現れないなら filter は空になる。もし現れるなら、witness 側から自然に prime であることが出る。したがって prime 仮定なしでも card bound が成立する。
 
 ## 6. `basePrimeOf_logRatioSubProbability` の意味
 
@@ -312,7 +312,7 @@ $$
 
 と読める。
 
-次に、同じ base prime (p) を持つ labels は、それぞれ異なる exponent slot
+次に、同じ base prime $p$ を持つ labels は、それぞれ異なる exponent slot
 
 $$
 1,2,\dots,v_p(n)
@@ -323,7 +323,7 @@ $$
 したがって、
 
 $$
-\#{q\in I\mid p(q)=p}\le v_p(n)
+\\\#{q\in I\mid p(q)=p}\le v_p(n)
 $$
 
 が出る。
@@ -350,7 +350,7 @@ $$
 \log n
 $$
 
-最後に (1<n) なので (\log n>0) として割り、
+最後に $1 < n$ なので $\log n > 0$ として割り、
 
 $$
 \sum_{q\in I}\frac{\log p(q)}{\log n}\le 1
@@ -365,15 +365,15 @@ $$
 
 今回の証明は、かなり美しい「指数スロット数え上げ」になっておる。
 
-素数 (p) について、(n) の中には
+素数 $p$ について、 $n$ の中には
 
 $$
 p^1,p^2,\dots,p^{v_p(n)}
 $$
 
 までの prime-power labels が入れる。
-同じ (p) に属する selected labels は、これらのスロットに高々 1 個ずつしか入らない。
-だから個数は (v_p(n)) を超えない。
+同じ $p$ に属する selected labels は、これらのスロットに高々 1 個ずつしか入らない。
+だから個数は $v_p(n)$ を超えない。
 
 この「同じ base prime の labels は exponent slot に並ぶ」という絵は、valuation-budget route の直観として非常に良い。
 
@@ -407,7 +407,7 @@ $$
 ただし同じ channel 内では指数スロットを消費する。
 
 この方が実際の prime-power divisor transition に合っておる。
-なぜなら index の label は prime そのものではなく、prime power (p^k) だからじゃ。
+なぜなら index の label は prime そのものではなく、prime power $p^k$ だからじゃ。
 
 今回の route は、その prime-power 構造を初めて本格的に使い切った。
 

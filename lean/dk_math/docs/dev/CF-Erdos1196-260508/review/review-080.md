@@ -82,7 +82,7 @@ theorem natProductDvdOn_of_multiplicityBudget
 
 証明方針は、
 
-1. (\prod_{i\in I}pOf(i)) の `factorization p` が、`NatBaseMultiplicityOn I pOf p` と一致することを示す。
+1. $\prod_{i\in I}\mathrm{pOf}(i)$ の `factorization p` が、`NatBaseMultiplicityOn I pOf p` と一致することを示す。
 2. `hbudget` により、それが `n.factorization p` 以下になる。
 3. prime-wise factorization comparison から divisibility へ戻す。
 
@@ -152,8 +152,8 @@ rg "\bsorry\b|\badmit\b|^axiom\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet 
 危険箇所はただ一つ。
 
 $$
-\left(\prod_{i\in I}pOf(i)\right).\mathrm{factorization}(p) =
-\#{i\in I\mid pOf(i)=p}
+\left(\prod_{i\in I}\mathrm{pOf}(i)\right).\mathrm{factorization}(p) =
+\\\#{i\in I\mid \mathrm{pOf}(i)=p}
 $$
 
 この補題が Lean で少し重くなる可能性がある。じゃが、`pOf` が `I` 上で prime-valued という仮定を明示すれば、帰納法と `Nat.factorization_mul` で十分攻められるはずじゃ。

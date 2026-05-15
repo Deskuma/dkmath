@@ -27,21 +27,21 @@ $$
 p_1=2,\quad p_2=2,\quad p_3=3
 $$
 
-のように同じ素数が複数回出る。すると必要なのは単なる「各 (p_i\mid n)」では足りず、
+のように同じ素数が複数回出る。すると必要なのは単なる「各 $p_i\mid n$ 」では足りず、
 
 $$
 2^2\cdot 3 \mid n
 $$
 
-を保証するために、(n) 側が (2) を少なくとも 2 回持っていることを確認せねばならぬ。
+を保証するために、 $n$ 側が $2$ を少なくとも 2 回持っていることを確認せねばならぬ。
 
 今回の `NatBaseMultiplicityBudgetOn` は、まさにそこを表現しておる。
 
 $$
-\#{i\in I\mid pOf(i)=p}\le n.\mathrm{factorization}(p)
+\\\#{i\in I\mid \mathrm{pOf}(i)=p}\le n.\mathrm{factorization}(p)
 $$
 
-これで「選択された base prime の消費量」が「(n) が持つ素因数指数の予算」を超えない、という形になる。
+これで「選択された base prime の消費量」が「 $n$ が持つ素因数指数の予算」を超えない、という形になる。
 
 ## 数学的意味
 
@@ -54,17 +54,17 @@ def NatPrimeValuedOn
 これは
 
 $$
-i\in I \Longrightarrow pOf(i)\ \text{is prime}
+i\in I \Longrightarrow \mathrm{pOf}(i)\ \text{is prime}
 $$
 
 という条件じゃ。
 R023 で product factorization を扱うとき、これがないと
 
 $$
-\left(\prod_{i\in I}pOf(i)\right).\mathrm{factorization}(p)
+\left(\prod_{i\in I}\mathrm{pOf}(i)\right).\mathrm{factorization}(p)
 $$
 
-を「出現回数」として読めぬ。たとえば (pOf(i)=4) が混じれば、(2) の指数を 2 つ消費してしまうからの。
+を「出現回数」として読めぬ。たとえば $\mathrm{pOf}(i)=4$ が混じれば、 $2$ の指数を 2 つ消費してしまうからの。
 
 ```lean
 def NatBaseMultiplicityOn
@@ -74,7 +74,7 @@ def NatBaseMultiplicityOn
 
 $$
 \mathrm{mult}_I(p) =
-\#{i\in I\mid pOf(i)=p}
+\\\#{i\in I\mid \mathrm{pOf}(i)=p}
 $$
 
 じゃな。
@@ -83,14 +83,14 @@ $$
 def NatBaseMultiplicityBudgetOn
 ```
 
-これは出現回数が (n) の素因数分解の指数以下である、という予算条件。
+これは出現回数が $n$ の素因数分解の指数以下である、という予算条件。
 
 $$
 \forall p,\quad p\ \text{prime}\Longrightarrow
 \mathrm{mult}_I(p)\le v_p(n)
 $$
 
-Lean では (v_p(n)) を `n.factorization p` で読む。
+Lean では $v_p(n)$ を `n.factorization p` で読む。
 
 つまり今回の R022 は、
 
@@ -128,7 +128,7 @@ NatProductDvdOn I pOf n
 
 $$
 \forall p,\quad
-v_p!\left(\prod_{i\in I}pOf(i)\right)
+v_p!\left(\prod_{i\in I}\mathrm{pOf}(i)\right)
 \le
 v_p(n)
 $$
@@ -136,7 +136,7 @@ $$
 を示せば、
 
 $$
-\prod_{i\in I}pOf(i)\mid n
+\prod_{i\in I}\mathrm{pOf}(i)\mid n
 $$
 
 となる。
@@ -144,8 +144,8 @@ $$
 今回の vocabulary によって、その左辺は
 
 $$
-v_p!\left(\prod_{i\in I}pOf(i)\right) =
-\#{i\in I\mid pOf(i)=p}
+v_p!\left(\prod_{i\in I}\mathrm{pOf}(i)\right) =
+\\\#{i\in I\mid \mathrm{pOf}(i)=p}
 $$
 
 として読めるようになる。ここが R023 の核心じゃ。
@@ -182,8 +182,8 @@ theorem factorization_prod_primeValued_eq_multiplicity
       NatBaseMultiplicityOn I pOf p
 ```
 
-ただし、この形は (p) が prime でない場合に注意が要るかもしれぬ。
-安全に行くなら、まず prime (p) 限定でよい。
+ただし、この形は $p$ が prime でない場合に注意が要るかもしれぬ。
+安全に行くなら、まず prime $p$ 限定でよい。
 
 ```lean
 theorem factorization_prod_primeValued_eq_multiplicity_of_prime
@@ -214,25 +214,25 @@ theorem natProductDvdOn_of_multiplicityBudget
 
 ## 数学的な証明スケッチ
 
-有限集合 (I) 上の積を
+有限集合 $I$ 上の積を
 
 $$
-M:=\prod_{i\in I}pOf(i)
+M:=\prod_{i\in I}\mathrm{pOf}(i)
 $$
 
 と置く。
 
-`NatPrimeValuedOn` により、各 (pOf(i)) は素数である。
-したがって、任意の素数 (p) について、(M) に含まれる (p) の指数は、ちょうど (pOf(i)=p) となる添字の個数である。
+`NatPrimeValuedOn` により、各 $\mathrm{pOf}(i)$ は素数である。
+したがって、任意の素数 $p$ について、 $M$ に含まれる $p$ の指数は、ちょうど $\mathrm{pOf}(i)=p$ となる添字の個数である。
 
 $$
-M.\mathrm{factorization}(p) = \#{i\in I\mid pOf(i)=p}
+M.\mathrm{factorization}(p) = \\\#{i\in I\mid \mathrm{pOf}(i)=p}
 $$
 
 一方、`NatBaseMultiplicityBudgetOn` により、
 
 $$
-\#{i\in I\mid pOf(i)=p}
+\\\#{i\in I\mid \mathrm{pOf}(i)=p}
 \le
 n.\mathrm{factorization}(p)
 $$
@@ -245,7 +245,7 @@ M.\mathrm{factorization}(p)
 n.\mathrm{factorization}(p)
 $$
 
-が任意の素数 (p) で成り立つ。
+が任意の素数 $p$ で成り立つ。
 よって素因数分解の指数比較から、
 
 $$
@@ -257,7 +257,7 @@ $$
 これで
 
 $$
-\prod_{i\in I}pOf(i)\le n
+\prod_{i\in I}\mathrm{pOf}(i)\le n
 $$
 
 へ進み、さらに log route へ接続できる。
@@ -266,7 +266,7 @@ $$
 
 R023 で少し気をつけるべき点は、`n = 0` の扱いじゃ。
 
-`Nat.factorization` は (0) に対して癖が出る可能性がある。最終的な R/log route では `1 < n` があるので、実戦上は
+`Nat.factorization` は $0$ に対して癖が出る可能性がある。最終的な R/log route では `1 < n` があるので、実戦上は
 
 $$
 1<n

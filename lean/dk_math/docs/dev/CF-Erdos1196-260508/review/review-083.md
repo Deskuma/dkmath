@@ -6,7 +6,7 @@ R023 で自然数側の核心、
 $$
 \mathrm{multiplicity\ budget}
 \Longrightarrow
-\prod_{i\in I}pOf(i)\mid n
+\prod_{i\in I}\mathrm{pOf}(i)\mid n
 $$
 
 を閉じ、R024 でそれをそのまま log 質量評価へ接続した形じゃな。
@@ -16,23 +16,23 @@ $$
 今回の到達点は、次の鎖が Lean 上で通ったことじゃ。
 
 $$
-\text{NatPrimeValuedOn } I\ pOf
+\text{NatPrimeValuedOn } I\ \mathrm{pOf}
 $$
 
 $$
-\text{NatBaseMultiplicityBudgetOn } I\ pOf\ n
+\text{NatBaseMultiplicityBudgetOn } I\ \mathrm{pOf}\ n
 $$
 
 から、
 
 $$
-\prod_{i\in I}pOf(i)\le n
+\prod_{i\in I}\mathrm{pOf}(i)\le n
 $$
 
 を得て、さらに
 
 $$
-\sum_{i\in I}\frac{\log(pOf(i))}{\log n}\le 1
+\sum_{i\in I}\frac{\log(\mathrm{pOf}(i))}{\log n}\le 1
 $$
 
 へ進み、最終的に
@@ -59,15 +59,15 @@ $$
 
 ### `realLogNonnegOn_of_natPrimeValuedOn`
 
-これは素数なら (1<p) なので、log route 側で必要な自然数下界を供給する補題じゃ。
+これは素数なら $1 < p$ なので、log route 側で必要な自然数下界を供給する補題じゃ。
 
 $$
-pOf(i)\ \text{is prime}
+\mathrm{pOf}(i)\ \text{is prime}
 \quad\Longrightarrow\quad
-1\le pOf(i)
+1\le \mathrm{pOf}(i)
 $$
 
-実際には素数なら (2\le p) なので、log の非負性にも都合がよい。
+実際には素数なら $2\le p$ なので、log の非負性にも都合がよい。
 
 ここで良いのは、R/log route 側の仮定 `RealLogNonnegOn` を、数論側の自然な仮定 `NatPrimeValuedOn` から自動供給できるようにした点じゃな。
 
@@ -76,13 +76,13 @@ $$
 これは R023 の
 
 $$
-\prod_{i\in I}pOf(i)\mid n
+\prod_{i\in I}\mathrm{pOf}(i)\mid n
 $$
 
 を、R/log route が欲しがる
 
 $$
-\prod_{i\in I}pOf(i)\le n
+\prod_{i\in I}\mathrm{pOf}(i)\le n
 $$
 
 へ変換する橋じゃ。
@@ -94,7 +94,7 @@ natProductBoundOn_of_product_dvd
 ```
 
 へ渡している。
-数学的には、正の自然数 (n) に対して (m\mid n) なら、通常 (m\le n) が成り立つ、という基本事実じゃ。
+数学的には、正の自然数 $n$ に対して $m\mid n$ なら、通常 $m\le n$ が成り立つ、という基本事実じゃ。
 
 ### `realLogProductBudget_of_multiplicityBudget`
 
@@ -113,8 +113,8 @@ $$
 ここで `RealLogProductBudget` は、おそらく次の三つを束ねた構造じゃな。
 
 1. 各 selected base の log 側非負性
-2. (1 < n) による分母 (\log n) の正性
-3. product bound (\prod p_i\le n)
+2. $1 < n$ による分母 $\log n$ の正性
+3. product bound $\prod p_i\le n$
 
 この bundle ができた時点で、あとは既存の R/log theorem へ流すだけになる。
 
@@ -123,7 +123,7 @@ $$
 これが R024 の頂上じゃ。
 
 $$
-w_i:=\frac{\log(pOf(i))}{\log n}
+w_i:=\frac{\log(\mathrm{pOf}(i))}{\log n}
 $$
 
 と置いた provider が、
@@ -147,12 +147,12 @@ realLogRatioWeightProvider_subProbability_of_productBudget
 
 今回で、重複あり route は次のように完成した。
 
-まず、各 selected label (i\in I) が base prime (p_i=pOf(i)) を持つ。
+まず、各 selected label $i\in I$ が base prime $p_i=\mathrm{pOf}(i)$ を持つ。
 
-同じ素数 (p) が何回出たかを
+同じ素数 $p$ が何回出たかを
 
 $$
-m_I(p):=\#{i\in I\mid pOf(i)=p}
+m_I(p):=\\\#{i\in I\mid \mathrm{pOf}(i)=p}
 $$
 
 と数える。
@@ -205,7 +205,7 @@ $$
 
 となる。
 
-つまり、同じ base prime が複数回出ても、その消費量が (n) の valuation budget 内に収まっていれば、log 質量は親 (n) を超えない。
+つまり、同じ base prime が複数回出ても、その消費量が $n$ の valuation budget 内に収まっていれば、log 質量は親 $n$ を超えない。
 
 これが R024 の数学的成果じゃ。
 
@@ -235,7 +235,7 @@ $$
 であればよい。
 
 これは数論的にはかなり自然な一般化じゃ。
-素数チャネルを一度使うなら指数を 1 消費する。二度使うなら指数を 2 消費する。消費量が予算内なら積は (n) に収まる。
+素数チャネルを一度使うなら指数を 1 消費する。二度使うなら指数を 2 消費する。消費量が予算内なら積は $n$ に収まる。
 まさに valuation budget という名前どおりじゃな。
 
 ## 5. 今回の実装評価
@@ -294,7 +294,7 @@ theorem basePrimeOf_logRatioSubProbability_of_multiplicityBudget
 
 1. witness provider から
    $$
-   pOf(q):=W.basePrimeOf(n,I,hI,q)
+   \mathrm{pOf}(q):=\mathrm{W.basePrimeOf}(n,I,hI,q)
    $$
    が prime-valued であることを得る。
 2. R024 の抽象 theorem に流す。
@@ -315,7 +315,7 @@ $$
 残るのは、
 
 $$
-\text{witness provider 由来の }pOf
+\text{witness provider 由来の }\mathrm{pOf}
 $$
 
 へ特殊化することだけじゃ。

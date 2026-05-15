@@ -1,6 +1,19 @@
 # fix tex docs regex
 
-review-059.md までは完了済み（Hit するのは Lean コード）
+review-087.md までは完了済み（Hit するのは Lean コード）
+
+修正スクリプトを作った
+
+[fix-inline-katex.py](./review/fix-inline-katex.py)
+
+```
+# Usage:
+# 差分確認
+python3 fix-inline-katex.py --check break-inline-KaTeX.md
+
+# 上書き適用
+python3 fix-inline-katex.py -i break-inline-KaTeX.md
+```
 
 ## tex patterns
 
@@ -18,7 +31,7 @@ review-059.md までは完了済み（Hit するのは Lean コード）
 "「(" to "「 ("
 ")」" to ") 」"
 
-r" \((.+?)\)" to " \($1\)"
+r" \((.+?)\)" to r" \($1\)"
 
 ### 対応中
 
