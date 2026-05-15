@@ -69,7 +69,7 @@ $$
 DKMK-001/002 の段階では、`LogCapacityKernel` の cost は
 
 $$
-cost(n,q)=\log(W.basePrimeOf(n,I,hI,q))
+\mathrm{cost}(n,q)=\log(W.basePrimeOf(n,I,hI,q))
 $$
 
 だった。
@@ -264,7 +264,7 @@ $$
 で、
 
 $$
-\sum cost\le capacity
+\sum \mathrm{cost}\le capacity
 $$
 
 を置いた。
@@ -276,7 +276,7 @@ $$
 で、
 
 $$
-\sum \frac{cost}{capacity}\le 1
+\sum \frac{\mathrm{cost}}{capacity}\le 1
 $$
 
 を `RealWeightProvider.SubProbability` にした。
@@ -288,7 +288,7 @@ $$
 で、
 
 $$
-cost(q)=\log p(q)
+\mathrm{cost}(q)=\log p(q)
 $$
 
 を von-Mangoldt-like shadow として名づけた。
@@ -377,7 +377,7 @@ capacity(n)=\log n
 $$
 
 $$
-cost(n,q)=vonMangoldtShadowCost(n,q)
+\mathrm{cost}(n,q)=vonMangoldtShadowCost(n,q)
 $$
 
 を持つ global `CapacityKernel ℕ ℕ` が作れる。

@@ -71,7 +71,7 @@ $$
 数学的には単純で、
 
 $$
-\sum_i cost(s,i)=capacity(s)
+\sum_i \mathrm{cost}(s,i)=capacity(s)
 $$
 
 かつ
@@ -83,7 +83,7 @@ $$
 なら、
 
 $$
-\sum_i \frac{cost(s,i)}{capacity(s)} = 1
+\sum_i \frac{\mathrm{cost}(s,i)}{capacity(s)} = 1
 $$
 
 となる。

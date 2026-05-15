@@ -54,7 +54,7 @@ $$
 正規化すれば、
 
 $$
-\sum \frac{cost}{capacity}\le 1
+\sum \frac{\mathrm{cost}}{capacity}\le 1
 $$
 
 になる。
@@ -115,7 +115,7 @@ SubMarkovShadow.ofCapacityKernel
 数学的には、
 
 $$
-K=(children,capacity,cost)
+K=(children,capacity,\mathrm{cost})
 $$
 
 から
@@ -125,7 +125,7 @@ S.\text{index}(s)=K.children(s)
 $$
 
 $$
-S.\mathrm{weight}(s,i)=\frac{K.cost(s,i)}{K.capacity(s)}
+S.\mathrm{weight}(s,i)=\frac{K.\mathrm{cost}(s,i)}{K.capacity(s)}
 $$
 
 を作っている。
@@ -164,7 +164,7 @@ capacity(n)=\log n
 $$
 
 $$
-cost(n,q)=\mathrm{vonMangoldtShadowCost}(n,q)=\log p(q)
+\mathrm{cost}(n,q)=\mathrm{vonMangoldtShadowCost}(n,q)=\log p(q)
 $$
 
 を持つ global log-capacity kernel を正規化し、`SubMarkovShadow` として読むものじゃ。
@@ -263,7 +263,7 @@ $$
 または正規化前に、
 
 $$
-\sum_{q\in Full(n)} cost(n,q)=\log n
+\sum_{q\in Full(n)} \mathrm{cost}(n,q)=\log n
 $$
 
 を示すことじゃ。

@@ -59,7 +59,7 @@ cost := fun _ q => Real.log (W.basePrimeOf n I hI q : ℝ)
 抽象的には、
 
 $$
-\sum_{b\in children(a)} cost(a,b)\le capacity(a)
+\sum_{b\in children(a)} \mathrm{cost}(a,b)\le capacity(a)
 $$
 
 という **容量保存・劣保存** を `CapacityKernel` として固定した。
@@ -68,7 +68,7 @@ $$
 
 $$
 \sum_{b\in children(a)}
-\frac{cost(a,b)}{capacity(a)}
+\frac{\mathrm{cost}(a,b)}{capacity(a)}
 \le 1
 $$
 
@@ -81,7 +81,7 @@ capacity(n)=\log n
 $$
 
 $$
-cost(n,q)=\log p(q)
+\mathrm{cost}(n,q)=\log p(q)
 $$
 
 と置き、
@@ -206,7 +206,7 @@ capacity(n)=\log n
 $$
 
 $$
-cost(n,q)=\log p(q)
+\mathrm{cost}(n,q)=\log p(q)
 $$
 
 のようにすると、より Markov / flow 的な見通しが立つ。
@@ -316,7 +316,7 @@ outgoing_le : ...
 という形で実装された。さらに `Normalize.lean` で
 
 $$
-\sum_b \frac{cost(a,b)}{capacity(a)}\le 1
+\sum_b \frac{\mathrm{cost}(a,b)}{capacity(a)}\le 1
 $$
 
 を示す一般補題まで入っている。
@@ -338,7 +338,7 @@ capacity(n)=\log n
 $$
 
 $$
-cost(n,q)=\log W.basePrimeOf(n,I,hI,q)
+\mathrm{cost}(n,q)=\log W.basePrimeOf(n,I,hI,q)
 $$
 
 という concrete kernel まで入っている。
@@ -490,7 +490,7 @@ $$
 `CapacityKernel` から normalized provider を作る。
 
 $$
-\sum \frac{cost}{capacity}\le 1
+\sum \frac{\mathrm{cost}}{capacity}\le 1
 $$
 
 ### Step 2
@@ -507,7 +507,7 @@ $$
 
 $$
 q=p^k
-\Rightarrow cost(q)=\Lambda(q)
+\Rightarrow \mathrm{cost}(q)=\Lambda(q)
 $$
 
 ### Step 4
