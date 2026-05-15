@@ -1,7 +1,7 @@
 # review
 
 うむ。DKMK-006D は **かなり大きい接続完了** じゃ。
-前回 DKMK-006C では `FullExponentSlotCoverage`、つまり「各 base prime fiber がちょうど (n.factorization(p)) 個ある」という等号側の coverage 仮定を置いた。今回 DKMK-006D では、その仮定から実際に
+前回 DKMK-006C では `FullExponentSlotCoverage`、つまり「各 base prime fiber がちょうど n.factorization(p) 個ある」という等号側の coverage 仮定を置いた。今回 DKMK-006D では、その仮定から実際に
 
 $$
 \sum_{q\in Full(n)}\log p(q)=\log n
@@ -32,7 +32,7 @@ docs にもこの到達経路が明記されておる。つまり、まだ `Full
 
 今回の数学的な核は二つじゃ。
 
-第一に、有限集合 (I) 上の base map (pOf) について、
+第一に、有限集合 \(I\) 上の base map pOf について、
 
 $$
 \sum_{i\in I}\log(pOf(i))=\sum_{p\in pOf(I)}\#{i\in I\mid pOf(i)=p}\log p
@@ -171,7 +171,7 @@ $$
 
 じゃった。
 
-DkMath route では、これをいきなり (\Lambda) で言わず、
+DkMath route では、これをいきなり \(\Lambda\) で言わず、
 
 $$
 q=p^k,\quad \mathrm{cost}(q)=\log p
@@ -221,7 +221,7 @@ sum_log_base_eq_sum_image_multiplicity_mul_log
 sum_factorization_mul_log_eq_log_nat
 ```
 
-を独立補題として置いたのも良い。これは DkMath kernel の full equality route だけでなく、今後の (\Lambda)-shadow や analytic route でも基礎定理として使える。
+を独立補題として置いたのも良い。これは DkMath kernel の full equality route だけでなく、今後の \(\Lambda\)-shadow や analytic route でも基礎定理として使える。
 
 さらに、base-prime image と factorization support の一致を二方向に分けて示している点も安全じゃ。
 
@@ -245,7 +245,7 @@ $$
 
 そのものをどう供給するかじゃ。
 
-docs でも、次の課題として `FullExponentSlotCoverage` 自体を canonical/full channel enumeration から供給できるか確認し、必要なら explicit slot ((p,k)) 形式の補助 interface を追加すると書かれている。
+docs でも、次の課題として `FullExponentSlotCoverage` 自体を canonical/full channel enumeration から供給できるか確認し、必要なら explicit slot \((p,k)\) 形式の補助 interface を追加すると書かれている。
 
 つまり、今の状態はこうじゃ。
 
@@ -295,7 +295,7 @@ $$
 p\in n.factorization.support,\quad 1\le k\le n.factorization(p)
 $$
 
-を状態空間として持つ slot set を作り、そこから label (q=p^k) へ写す。
+を状態空間として持つ slot set を作り、そこから label \(q=p^k\) へ写す。
 
 この方が等号証明は自然じゃ。
 ただし既存 `PrimePowerWitnessProvider` の `q`-label route との接続補題が必要になる。

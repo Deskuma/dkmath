@@ -197,7 +197,7 @@ DKMK-005: Markov/sub-Markov translation
 
 次は、報告どおり `VonMangoldtShadow.lean` が自然じゃ。
 
-ただし、最初から解析的な (\Lambda) 全体へ行くより、まずは DkMath 的な shadow を小さく置くのがよい。
+ただし、最初から解析的な \(\Lambda\) 全体へ行くより、まずは DkMath 的な shadow を小さく置くのがよい。
 
 目標は、
 
@@ -247,7 +247,7 @@ $$
 
 じゃ。
 
-次に (\Lambda)-shadow を入れると、
+次に \(\Lambda\)-shadow を入れると、
 
 $$
 \frac{\log p(q)}{\log n}

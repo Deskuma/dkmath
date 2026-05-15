@@ -11,7 +11,7 @@ DKMK-004 で global kernel はできた。今回 DKMK-005 で、その global ke
 DkMath.NumberTheory.PrimitiveSet.SubMarkovShadow
 ```
 
-`SubMarkovShadow` は、状態 (s) ごとに有限 index と非負 weight を持つ構造じゃ。
+`SubMarkovShadow` は、状態 \(s\) ごとに有限 index と非負 weight を持つ構造じゃ。
 
 ```lean
 structure SubMarkovShadow (σ ι : Type _) where
@@ -195,7 +195,7 @@ $$
 globalLogCapacitySubMarkovShadow_subProbability
 ```
 
-で全状態 (n>1) に対し、
+で全状態 \(n > 1\) に対し、
 
 $$
 \sum_{q\in I(n)}
@@ -348,7 +348,7 @@ $$
 \sum_{q\mid n,\ q=p^k}\log p=\log n
 $$
 
-を出すには、各素数 (p) について、(k=1,\dots,v_p(n)) の全ての (p^k) が channels に含まれている必要がある。
+を出すには、各素数 \(p\) について、\(k=1,\dots,v_p(n)\) の全ての \(p^k\) が channels に含まれている必要がある。
 
 つまり、
 

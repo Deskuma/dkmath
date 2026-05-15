@@ -144,7 +144,7 @@ $$
 \mathrm{vonMangoldtShadowCost}(n,q) = \log n
 $$
 
-が全 (n>1) で成り立つ。
+が全 \(n > 1\) で成り立つ。
 
 すると、
 
@@ -245,7 +245,7 @@ $$
 
 が核じゃった。
 
-DkMath route では、これを直接 (\Lambda) で置かず、
+DkMath route では、これを直接 \(\Lambda\) で置かず、
 
 $$
 \mathrm{vonMangoldtShadowCost}(q) = \log p(q)
@@ -314,7 +314,7 @@ $$
 
 数学的には、必要なのは次のような主張じゃ。
 
-各 (n>1) について、
+各 \(n > 1\) について、
 
 $$
 C.channels(n) = {p^k\mid p\text{ prime},\ 1\le k\le n.factorization(p)}
@@ -406,7 +406,7 @@ $$
 
 ここで気をつけたいのは、重複じゃ。
 
-異なる ((p,k)) から同じ (q) が出ることは基本的にない。
+異なる \((p,k)\) から同じ \(q\) が出ることは基本的にない。
 なぜなら prime power 表現は一意だからじゃ。
 
 だが Lean では、
@@ -417,16 +417,16 @@ $$
 
 のような補題が必要になる可能性がある。
 
-ただし、Finset を pair ((p,k)) 上で作り、cost を (\log p) として和を取るなら、(q=p^k) の一意性を避けられる場合がある。
+ただし、Finset を pair \((p,k)\) 上で作り、cost を \(\log p\) として和を取るなら、\(q=p^k\) の一意性を避けられる場合がある。
 
 つまり、次の二案がある。
 
-### 案 A. label (q) の Finset で行く
+### 案 A. label \(q\) の Finset で行く
 
 既存 `PrimePowerWitnessProvider` と接続しやすい。
 しかし prime-power 表現の一意性が必要になる。
 
-### 案 B. slot ((p,k)) の Finset で行く
+### 案 B. slot \((p,k)\) の Finset で行く
 
 等式
 

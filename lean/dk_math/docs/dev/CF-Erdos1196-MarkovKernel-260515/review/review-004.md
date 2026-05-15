@@ -19,7 +19,7 @@ abbrev LogCapacityState : Type :=
 ```
 
 を導入しておる。これは非常によい判断じゃ。
-以前から懸念していた通り、global kernel では (n=0,1) を含めると
+以前から懸念していた通り、global kernel では \(n=0,1\) を含めると
 
 $$
 \log n
@@ -64,7 +64,7 @@ hIOf : ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n
 
 を受け取る。
 
-数学的には、各 (n) に対して、選ばれた prime-power channel 集合
+数学的には、各 \(n\) に対して、選ばれた prime-power channel 集合
 
 $$
 I(n)\subseteq T.index(n)
@@ -102,7 +102,7 @@ $$
 \sum_{q\in I}\frac{\log p(q)}{\log n}\le 1
 $$
 
-を、状態 (n) ごとに走る global な kernel API にしたものじゃ。
+を、状態 \(n\) ごとに走る global な kernel API にしたものじゃ。
 
 ## 3. DKMK-004A の対応表は重要
 
@@ -156,7 +156,7 @@ cost := fun s q =>
   W.vonMangoldtShadowCost s.1 (IOf s.1) (hIOf s.1) q
 ```
 
-これにより、親状態 (s) の中身 (s.1=n) に対して、
+これにより、親状態 (s) の中身 \(s.1=n\) に対して、
 
 $$
 children(s)=I(n)
@@ -217,7 +217,7 @@ $$
 \le 1
 $$
 
-を、任意の状態 (n>1) で得る。
+を、任意の状態 \(n > 1\) で得る。
 
 この時点で、DkMath kernel はもう「局所補題の別名」ではなく、状態ごとの provider を供給する global framework になってきた。
 
@@ -392,7 +392,7 @@ $$
 n>1
 $$
 
-を状態空間とし、各 (n) に選択 channel 集合 (I(n)) を与える global kernel として、
+を状態空間とし、各 \(n\) に選択 channel 集合 \(I(n)\) を与える global kernel として、
 
 $$
 s\mapsto
@@ -404,7 +404,7 @@ $$
 これは本線へ戻るための大きな準備じゃ。
 
 まだ Markov kernel 本体ではない。
-まだ (\Lambda) の解析的定義でもない。
+まだ \(\Lambda\) の解析的定義でもない。
 だが、DkMath の言葉ではすでに
 
 $$

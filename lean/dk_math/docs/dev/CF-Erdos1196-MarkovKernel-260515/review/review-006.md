@@ -184,7 +184,7 @@ $$
 T.index(n) = \text{all prime-power channels of }n
 $$
 
-第二に、その full channel 上で cost の総和が (\log n) になること。
+第二に、その full channel 上で cost の総和が \(\log n\) になること。
 
 $$
 \sum_{q\in T.index(n)}\log p(q)=\log n
@@ -205,7 +205,7 @@ $$
 
 が確率核の正規化を支える。
 
-DkMath kernel route では、これをいきなり (\Lambda) で言わず、
+DkMath kernel route では、これをいきなり \(\Lambda\) で言わず、
 
 $$
 q=p^k
@@ -291,9 +291,9 @@ $$
 
 つまり、必要なのは次の三点じゃ。
 
-1. 各 channel は (q=p^k) と読める。
-2. 各 prime (p) について、(k=1,\dots,v_p(n)) がちょうど一回ずつ現れる。
-3. (\log n=\sum_p v_p(n)\log p) を使える。
+1. 各 channel は \(q=p^k\) と読める。
+2. 各 prime \(p\) について、\(k=1,\dots,v_p(n)\) がちょうど一回ずつ現れる。
+3. \(\log n=\sum_p v_p(n)\log p\) を使える。
 
 R027 までは「選ばれた channel は exponent slot に単射で入る」だった。
 DKMK-006B では、その逆側、つまり **全 slot が埋まっている** ことが必要になる。
