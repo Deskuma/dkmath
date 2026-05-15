@@ -159,7 +159,7 @@ cost := fun s q =>
 これにより、親状態 (s) の中身 \(s.1=n\) に対して、
 
 $$
-children(s)=I(n)
+\mathrm{children}(s)=I(n)
 $$
 
 $$

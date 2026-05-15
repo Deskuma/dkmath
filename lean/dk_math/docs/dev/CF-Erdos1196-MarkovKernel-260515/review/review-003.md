@@ -429,7 +429,7 @@ $$
 まずは global kernel を作り、次に
 
 $$
-\sum_{q\in children(n)}
+\sum_{q\in \mathrm{children}(n)}
 shadowCost(n,q)
 \le
 \log n

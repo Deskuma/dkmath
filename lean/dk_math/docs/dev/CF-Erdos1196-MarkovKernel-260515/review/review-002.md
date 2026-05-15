@@ -24,13 +24,13 @@ normalizedRealWeightProvider_subProbability
 数学的には、`CapacityKernel` が持つ保存則
 
 $$
-\sum_{b\in children(a)} \mathrm{cost}(a,b)\le \mathrm{capacity}(a)
+\sum_{b\in \mathrm{children}(a)} \mathrm{cost}(a,b)\le \mathrm{capacity}(a)
 $$
 
 を、正の capacity で割って、
 
 $$
-\sum_{b\in children(a)}
+\sum_{b\in \mathrm{children}(a)}
 \frac{\mathrm{cost}(a,b)}{\mathrm{capacity}(a)}
 \le 1
 $$

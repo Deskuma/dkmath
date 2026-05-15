@@ -115,13 +115,13 @@ SubMarkovShadow.ofCapacityKernel
 数学的には、
 
 $$
-K=(children,\mathrm{capacity},\mathrm{cost})
+K=(\mathrm{children},\mathrm{capacity},\mathrm{cost})
 $$
 
 から
 
 $$
-S.\text{index}(s)=K.children(s)
+S.\text{index}(s)=K.\mathrm{children}(s)
 $$
 
 $$

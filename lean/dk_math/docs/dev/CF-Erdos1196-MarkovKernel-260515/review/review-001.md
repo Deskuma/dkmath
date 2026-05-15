@@ -59,7 +59,7 @@ cost := fun _ q => Real.log (W.basePrimeOf n I hI q : ℝ)
 抽象的には、
 
 $$
-\sum_{b\in children(a)} \mathrm{cost}(a,b)\le \mathrm{capacity}(a)
+\sum_{b\in \mathrm{children}(a)} \mathrm{cost}(a,b)\le \mathrm{capacity}(a)
 $$
 
 という **容量保存・劣保存** を `CapacityKernel` として固定した。
@@ -67,7 +67,7 @@ $$
 そして \(\mathrm{capacity}(a) > 0\) なら、
 
 $$
-\sum_{b\in children(a)}
+\sum_{b\in \mathrm{children}(a)}
 \frac{\mathrm{cost}(a,b)}{\mathrm{capacity}(a)}
 \le 1
 $$
@@ -515,7 +515,7 @@ $$
 `children n` を \(I\) ではなく、より標準的な divisor / prime-power channel set にする。
 
 $$
-children(n)={q\mid q\mid n,\ q\text{ prime power}}
+\mathrm{children}(n)={q\mid q\mid n,\ q\text{ prime power}}
 $$
 
 ### Step 5
