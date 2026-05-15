@@ -24,14 +24,14 @@ normalizedRealWeightProvider_subProbability
 数学的には、`CapacityKernel` が持つ保存則
 
 $$
-\sum_{b\in children(a)} \mathrm{cost}(a,b)\le capacity(a)
+\sum_{b\in children(a)} \mathrm{cost}(a,b)\le \mathrm{capacity}(a)
 $$
 
 を、正の capacity で割って、
 
 $$
 \sum_{b\in children(a)}
-\frac{\mathrm{cost}(a,b)}{capacity(a)}
+\frac{\mathrm{cost}(a,b)}{\mathrm{capacity}(a)}
 \le 1
 $$
 
@@ -70,7 +70,7 @@ $$
 いままでは、
 
 $$
-\sum \frac{\mathrm{cost}}{capacity}\le 1
+\sum \frac{\mathrm{cost}}{\mathrm{capacity}}\le 1
 $$
 
 という式の補題だった。
@@ -98,7 +98,7 @@ logCapacityKernelRealWeightProvider_subProbability
 中身は、
 
 $$
-capacity(n)=\log n
+\mathrm{capacity}(n)=\log n
 $$
 
 $$

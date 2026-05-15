@@ -46,7 +46,7 @@ $$
 これまでの `CapacityKernel` は、
 
 $$
-\sum cost\le capacity
+\sum \mathrm{cost}\le \mathrm{capacity}
 $$
 
 を持つ構造だった。
@@ -54,7 +54,7 @@ $$
 正規化すれば、
 
 $$
-\sum \frac{\mathrm{cost}}{capacity}\le 1
+\sum \frac{\mathrm{cost}}{\mathrm{capacity}}\le 1
 $$
 
 になる。
@@ -115,7 +115,7 @@ SubMarkovShadow.ofCapacityKernel
 数学的には、
 
 $$
-K=(children,capacity,\mathrm{cost})
+K=(children,\mathrm{capacity},\mathrm{cost})
 $$
 
 から
@@ -125,7 +125,7 @@ S.\text{index}(s)=K.children(s)
 $$
 
 $$
-S.\mathrm{weight}(s,i)=\frac{K.\mathrm{cost}(s,i)}{K.capacity(s)}
+S.\mathrm{weight}(s,i)=\frac{K.\mathrm{cost}(s,i)}{K.\mathrm{capacity}(s)}
 $$
 
 を作っている。
@@ -160,7 +160,7 @@ globalLogCapacitySubMarkovShadow
 これは、
 
 $$
-capacity(n)=\log n
+\mathrm{capacity}(n)=\log n
 $$
 
 $$

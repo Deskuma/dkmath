@@ -71,19 +71,19 @@ $$
 数学的には単純で、
 
 $$
-\sum_i \mathrm{cost}(s,i)=capacity(s)
+\sum_i \mathrm{cost}(s,i)=\mathrm{capacity}(s)
 $$
 
 かつ
 
 $$
-capacity(s) > 0
+\mathrm{capacity}(s) > 0
 $$
 
 なら、
 
 $$
-\sum_i \frac{\mathrm{cost}(s,i)}{capacity(s)} = 1
+\sum_i \frac{\mathrm{cost}(s,i)}{\mathrm{capacity}(s)} = 1
 $$
 
 となる。

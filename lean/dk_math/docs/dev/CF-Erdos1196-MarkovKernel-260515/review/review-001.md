@@ -59,16 +59,16 @@ cost := fun _ q => Real.log (W.basePrimeOf n I hI q : ℝ)
 抽象的には、
 
 $$
-\sum_{b\in children(a)} \mathrm{cost}(a,b)\le capacity(a)
+\sum_{b\in children(a)} \mathrm{cost}(a,b)\le \mathrm{capacity}(a)
 $$
 
 という **容量保存・劣保存** を `CapacityKernel` として固定した。
 
-そして \(capacity(a) > 0\) なら、
+そして \(\mathrm{capacity}(a) > 0\) なら、
 
 $$
 \sum_{b\in children(a)}
-\frac{\mathrm{cost}(a,b)}{capacity(a)}
+\frac{\mathrm{cost}(a,b)}{\mathrm{capacity}(a)}
 \le 1
 $$
 
@@ -77,7 +77,7 @@ $$
 さらに prime-power witness に対して、
 
 $$
-capacity(n)=\log n
+\mathrm{capacity}(n)=\log n
 $$
 
 $$
@@ -202,7 +202,7 @@ n \mapsto I(n)
 $$
 
 $$
-capacity(n)=\log n
+\mathrm{capacity}(n)=\log n
 $$
 
 $$
@@ -316,7 +316,7 @@ outgoing_le : ...
 という形で実装された。さらに `Normalize.lean` で
 
 $$
-\sum_b \frac{\mathrm{cost}(a,b)}{capacity(a)}\le 1
+\sum_b \frac{\mathrm{cost}(a,b)}{\mathrm{capacity}(a)}\le 1
 $$
 
 を示す一般補題まで入っている。
@@ -334,7 +334,7 @@ $$
 しかも `LogCapacityKernel.lean` では、R028 の具体 route に接続して、
 
 $$
-capacity(n)=\log n
+\mathrm{capacity}(n)=\log n
 $$
 
 $$
@@ -490,7 +490,7 @@ $$
 `CapacityKernel` から normalized provider を作る。
 
 $$
-\sum \frac{\mathrm{cost}}{capacity}\le 1
+\sum \frac{\mathrm{cost}}{\mathrm{capacity}}\le 1
 $$
 
 ### Step 2

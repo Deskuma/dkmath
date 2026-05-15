@@ -264,7 +264,7 @@ $$
 で、
 
 $$
-\sum \mathrm{cost}\le capacity
+\sum \mathrm{cost}\le \mathrm{capacity}
 $$
 
 を置いた。
@@ -276,7 +276,7 @@ $$
 で、
 
 $$
-\sum \frac{\mathrm{cost}}{capacity}\le 1
+\sum \frac{\mathrm{cost}}{\mathrm{capacity}}\le 1
 $$
 
 を `RealWeightProvider.SubProbability` にした。
@@ -373,7 +373,7 @@ hIOf : ∀ n q, q ∈ IOf n → q ∈ T.index n
 そうすると、
 
 $$
-capacity(n)=\log n
+\mathrm{capacity}(n)=\log n
 $$
 
 $$
@@ -402,7 +402,7 @@ global kernel で全ての \(n\) に対して `capacity n = log n` を置くと�
 これは clean じゃ。
 
 $$
-capacity(n)=\log n>0
+\mathrm{capacity}(n)=\log n > 0
 $$
 
 が常に成り立つ。

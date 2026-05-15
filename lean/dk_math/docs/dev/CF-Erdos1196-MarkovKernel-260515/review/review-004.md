@@ -75,7 +75,7 @@ $$
 そのうえで、
 
 $$
-capacity(n)=\log n
+\mathrm{capacity}(n)=\log n
 $$
 
 $$
@@ -126,7 +126,7 @@ CapacityKernel.normalizedWeight
 DkMath 側では
 
 $$
-\frac{\mathrm{cost}(n,q)}{capacity(n)}
+\frac{\mathrm{cost}(n,q)}{\mathrm{capacity}(n)}
 $$
 
 Markov 風には
@@ -163,7 +163,7 @@ children(s)=I(n)
 $$
 
 $$
-capacity(s)=\log n
+\mathrm{capacity}(s)=\log n
 $$
 
 $$
@@ -359,7 +359,7 @@ $$
 その次に full channel set を導入し、
 
 $$
-outgoingCost(s)=capacity(s)
+outgoingCost(s)=\mathrm{capacity}(s)
 $$
 
 を示す equality route を分離する。
