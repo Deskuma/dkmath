@@ -141,3 +141,29 @@ Archive
    - full divisor/channel set を選んだ場合の equality route と、selected set の inequality route を切り分ける。
 
 ---
+
+### 日時: 2026/05/15 20:25 JST (DKMK-005 SubMarkovShadow 追加)
+
+1. 目的:
+   - selected channel route の inequality 側を、Markov 風に読める sub-Markov shadow 語彙として切り出す。
+2. 実施:
+   - `DkMath.NumberTheory.PrimitiveSet.SubMarkovShadow` を追加した。
+   - `SubMarkovShadow.providerAt`, `totalWeightAt`, `SubProbability`, `providerAt_subProbability`, `totalWeightAt_le_one` を追加した。
+   - positive-capacity な `CapacityKernel` から `SubMarkovShadow` を作る `SubMarkovShadow.ofCapacityKernel` と、その sub-probability theorem を追加した。
+   - `PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow` を追加し、global log-capacity kernel の normalized shadow を sub-Markov shadow として参照できるようにした。
+   - project docs に DKMK-005 の selected set / inequality route の位置づけを追記した。
+3. 結論:
+   - global normalized von-Mangoldt shadow provider を、full equality route とは分離した sub-Markov translation layer として no-sorry で扱えるようになった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.SubMarkovShadow`
+   - `lake build DkMath.NumberTheory.PrimitiveSet.GlobalLogCapacityKernel`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/SubMarkovShadow.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/GlobalLogCapacityKernel.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - full channel set を選んだ場合の outgoing equality route を、sub-Markov inequality route から分離して設計する。
+   - `IOf n = T.index n` 型の canonical/full channel shadow をどの module に置くか検討する。
+
+---

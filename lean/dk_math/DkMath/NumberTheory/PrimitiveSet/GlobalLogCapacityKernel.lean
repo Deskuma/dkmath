@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 Authors: D. and Wise Wolf.
 -/
 
+import DkMath.NumberTheory.PrimitiveSet.SubMarkovShadow
 import DkMath.NumberTheory.PrimitiveSet.VonMangoldtShadow
 
 #print "file: DkMath.NumberTheory.PrimitiveSet.GlobalLogCapacityKernel"
@@ -162,6 +163,53 @@ theorem globalLogCapacityKernel_normalizedShadow_subProbability
         1 := by
   simpa [RealWeightProvider.SubProbability, RealWeightProvider.totalWeight]
     using W.globalLogCapacityKernelRealWeightProvider_subProbability IOf hIOf s
+
+/--
+The normalized global log-capacity kernel as a sub-Markov shadow.
+-/
+noncomputable def globalLogCapacitySubMarkovShadow
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n) :
+    SubMarkovShadow LogCapacityState ℕ :=
+  SubMarkovShadow.ofCapacityKernel (W.globalLogCapacityKernel IOf hIOf)
+    (W.globalLogCapacityKernel_capacity_pos IOf hIOf)
+
+@[simp] theorem globalLogCapacitySubMarkovShadow_index
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState) :
+    (W.globalLogCapacitySubMarkovShadow IOf hIOf).index s =
+      IOf s.1 :=
+  rfl
+
+@[simp] theorem globalLogCapacitySubMarkovShadow_weight
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState) :
+    (W.globalLogCapacitySubMarkovShadow IOf hIOf).weight s =
+      W.normalizedVonMangoldtShadowWeight s.1 (IOf s.1) (hIOf s.1) :=
+  rfl
+
+/-- The global normalized shadow is sub-Markov normalized at every state. -/
+theorem globalLogCapacitySubMarkovShadow_subProbability
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n) :
+    (W.globalLogCapacitySubMarkovShadow IOf hIOf).SubProbability :=
+  SubMarkovShadow.ofCapacityKernel_subProbability
+    (W.globalLogCapacityKernel IOf hIOf)
+    (W.globalLogCapacityKernel_capacity_pos IOf hIOf)
 
 end PrimePowerWitnessProvider
 
