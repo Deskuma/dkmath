@@ -89,7 +89,7 @@ hI : ∀ q, q ∈ I → q ∈ T.toDivisorTransitionKernel.index n
 $$
 q\in I
 \Rightarrow
-basePrimeOf(q)=(\text{W.label}(n,q,hI(q))).p
+\mathrm{basePrimeOf}(q)=(\text{W.label}(n,q,hI(q))).p
 $$
 
 一方、 $I$ の外側では $1$ を返す。

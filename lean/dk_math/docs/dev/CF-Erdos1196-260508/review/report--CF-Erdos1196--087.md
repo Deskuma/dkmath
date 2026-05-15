@@ -280,7 +280,7 @@ $$
 PrimePowerWitnessProvider.basePrimeOf_logRatioSubProbability
 ```
 
-として明示された。R028 の資料でも、この theorem は `I ⊆ T.index n` と `1 < n` だけから、 $q\mapsto \log(W.basePrimeOf\ n\ I\ hI\ q)/\log n$ が `SubProbability` であることを示す、と整理されている。
+として明示された。R028 の資料でも、この theorem は `I ⊆ T.index n` と `1 < n` だけから、 $q\mapsto \log(\mathrm{W.basePrimeOf}\ n\ I\ hI\ q)/\log n$ が `SubProbability` であることを示す、と整理されている。
 
 ## 7. 登頂で見えた数学的風景
 

@@ -294,7 +294,7 @@ theorem basePrimeOf_logRatioSubProbability_of_multiplicityBudget
 
 1. witness provider から
    $$
-   \mathrm{pOf}(q):=W.basePrimeOf(n,I,hI,q)
+   \mathrm{pOf}(q):=\mathrm{W.basePrimeOf}(n,I,hI,q)
    $$
    が prime-valued であることを得る。
 2. R024 の抽象 theorem に流す。
