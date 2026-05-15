@@ -4,7 +4,7 @@
 R022 が「重複あり route を語るための言語」だったのに対して、R023 はその言語から実際に
 
 $$
-\prod_{i\in I} pOf(i) \mid n
+\prod_{i\in I} \mathrm{pOf}(i) \mid n
 $$
 
 を取り出す **自然数側の核心 bridge** を閉じておる。
@@ -21,13 +21,13 @@ natProductDvdOn_of_multiplicityBudget
 数学的には、まず
 
 $$
-pOf(i)\ \text{がすべて素数}
+\mathrm{pOf}(i)\ \text{がすべて素数}
 $$
 
 であるとき、任意の素数 $p$ について
 
 $$
-\left(\prod_{i\in I} pOf(i)\right).\mathrm{factorization}(p) = \#{i\in I \mid pOf(i)=p}
+\left(\prod_{i\in I} \mathrm{pOf}(i)\right).\mathrm{factorization}(p) = \#{i\in I \mid \mathrm{pOf}(i)=p}
 $$
 
 を証明した。
@@ -35,7 +35,7 @@ $$
 そのうえで、multiplicity budget
 
 $$
-\#{i\in I \mid pOf(i)=p}
+\#{i\in I \mid \mathrm{pOf}(i)=p}
 \le
 n.\mathrm{factorization}(p)
 $$
@@ -43,7 +43,7 @@ $$
 を使い、
 
 $$
-\left(\prod_{i\in I} pOf(i)\right).\mathrm{factorization}(p)
+\left(\prod_{i\in I} \mathrm{pOf}(i)\right).\mathrm{factorization}(p)
 \le
 n.\mathrm{factorization}(p)
 $$
@@ -51,7 +51,7 @@ $$
 を全ての $p$ で示し、素因数分解の指数比較から
 
 $$
-\prod_{i\in I} pOf(i)\mid n
+\prod_{i\in I} \mathrm{pOf}(i)\mid n
 $$
 
 へ戻した。
@@ -109,18 +109,18 @@ rw [Nat.factorization_prod_apply hnonzero]
 により、
 
 $$
-\left(\prod_{i\in I}pOf(i)\right).\mathrm{factorization}(p) = \sum_{i\in I}(pOf(i)).\mathrm{factorization}(p)
+\left(\prod_{i\in I}\mathrm{pOf}(i)\right).\mathrm{factorization}(p) = \sum_{i\in I}(\mathrm{pOf}(i)).\mathrm{factorization}(p)
 $$
 
 へ展開しておる。
 
-そして $pOf(i)$ は素数なので、
+そして $\mathrm{pOf}(i)$ は素数なので、
 
 $$
-(pOf(i)).\mathrm{factorization}(p) =
+(\mathrm{pOf}(i)).\mathrm{factorization}(p) =
 \begin{cases}
-1 & pOf(i)=p,\\
-0 & pOf(i)\ne p
+1 & \mathrm{pOf}(i)=p,\\
+0 & \mathrm{pOf}(i)\ne p
 \end{cases}
 $$
 
@@ -129,7 +129,7 @@ $$
 
 $$
 \sum_{i\in I}
-\mathbf{1}_{pOf(i)=p} = \#{i\in I\mid pOf(i)=p}
+\mathbf{1}_{\mathrm{pOf}(i)=p} = \#{i\in I\mid \mathrm{pOf}(i)=p}
 $$
 
 へ落ちる。
@@ -144,7 +144,7 @@ $$
 
 $$
 \forall p,\quad
-\left(\prod_{i\in I}pOf(i)\right).\mathrm{factorization}(p)
+\left(\prod_{i\in I}\mathrm{pOf}(i)\right).\mathrm{factorization}(p)
 \le
 n.\mathrm{factorization}(p)
 $$
@@ -152,7 +152,7 @@ $$
 なら、
 
 $$
-\prod_{i\in I}pOf(i)\mid n
+\prod_{i\in I}\mathrm{pOf}(i)\mid n
 $$
 
 である。
@@ -189,7 +189,7 @@ $$
 $$
 
 $$
-\prod_{i\in I}pOf(i)\mid n
+\prod_{i\in I}\mathrm{pOf}(i)\mid n
 $$
 
 つまり、同じ base prime が複数回出ても、その回数が $n$ の指数予算内なら product divisibility を供給できる。
@@ -198,15 +198,15 @@ $$
 なぜなら log route で欲しいのは概ね
 
 $$
-\prod_{i\in I}pOf(i)\le n
+\prod_{i\in I}\mathrm{pOf}(i)\le n
 $$
 
 であり、正の自然数では
 
 $$
-\prod_{i\in I}pOf(i)\mid n
+\prod_{i\in I}\mathrm{pOf}(i)\mid n
 \quad\Longrightarrow\quad
-\prod_{i\in I}pOf(i)\le n
+\prod_{i\in I}\mathrm{pOf}(i)\le n
 $$
 
 が使えるからじゃ。

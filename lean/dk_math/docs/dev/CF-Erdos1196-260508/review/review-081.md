@@ -38,7 +38,7 @@ $$
 今回の `NatBaseMultiplicityBudgetOn` は、まさにそこを表現しておる。
 
 $$
-\#{i\in I\mid pOf(i)=p}\le n.\mathrm{factorization}(p)
+\#{i\in I\mid \mathrm{pOf}(i)=p}\le n.\mathrm{factorization}(p)
 $$
 
 これで「選択された base prime の消費量」が「 $n$ が持つ素因数指数の予算」を超えない、という形になる。
@@ -54,17 +54,17 @@ def NatPrimeValuedOn
 これは
 
 $$
-i\in I \Longrightarrow pOf(i)\ \text{is prime}
+i\in I \Longrightarrow \mathrm{pOf}(i)\ \text{is prime}
 $$
 
 という条件じゃ。
 R023 で product factorization を扱うとき、これがないと
 
 $$
-\left(\prod_{i\in I}pOf(i)\right).\mathrm{factorization}(p)
+\left(\prod_{i\in I}\mathrm{pOf}(i)\right).\mathrm{factorization}(p)
 $$
 
-を「出現回数」として読めぬ。たとえば $pOf(i)=4$ が混じれば、 $2$ の指数を 2 つ消費してしまうからの。
+を「出現回数」として読めぬ。たとえば $\mathrm{pOf}(i)=4$ が混じれば、 $2$ の指数を 2 つ消費してしまうからの。
 
 ```lean
 def NatBaseMultiplicityOn
@@ -74,7 +74,7 @@ def NatBaseMultiplicityOn
 
 $$
 \mathrm{mult}_I(p) =
-\#{i\in I\mid pOf(i)=p}
+\#{i\in I\mid \mathrm{pOf}(i)=p}
 $$
 
 じゃな。
@@ -128,7 +128,7 @@ NatProductDvdOn I pOf n
 
 $$
 \forall p,\quad
-v_p!\left(\prod_{i\in I}pOf(i)\right)
+v_p!\left(\prod_{i\in I}\mathrm{pOf}(i)\right)
 \le
 v_p(n)
 $$
@@ -136,7 +136,7 @@ $$
 を示せば、
 
 $$
-\prod_{i\in I}pOf(i)\mid n
+\prod_{i\in I}\mathrm{pOf}(i)\mid n
 $$
 
 となる。
@@ -144,8 +144,8 @@ $$
 今回の vocabulary によって、その左辺は
 
 $$
-v_p!\left(\prod_{i\in I}pOf(i)\right) =
-\#{i\in I\mid pOf(i)=p}
+v_p!\left(\prod_{i\in I}\mathrm{pOf}(i)\right) =
+\#{i\in I\mid \mathrm{pOf}(i)=p}
 $$
 
 として読めるようになる。ここが R023 の核心じゃ。
@@ -217,22 +217,22 @@ theorem natProductDvdOn_of_multiplicityBudget
 有限集合 $I$ 上の積を
 
 $$
-M:=\prod_{i\in I}pOf(i)
+M:=\prod_{i\in I}\mathrm{pOf}(i)
 $$
 
 と置く。
 
-`NatPrimeValuedOn` により、各 $pOf(i)$ は素数である。
-したがって、任意の素数 $p$ について、 $M$ に含まれる $p$ の指数は、ちょうど $pOf(i)=p$ となる添字の個数である。
+`NatPrimeValuedOn` により、各 $\mathrm{pOf}(i)$ は素数である。
+したがって、任意の素数 $p$ について、 $M$ に含まれる $p$ の指数は、ちょうど $\mathrm{pOf}(i)=p$ となる添字の個数である。
 
 $$
-M.\mathrm{factorization}(p) = \#{i\in I\mid pOf(i)=p}
+M.\mathrm{factorization}(p) = \#{i\in I\mid \mathrm{pOf}(i)=p}
 $$
 
 一方、`NatBaseMultiplicityBudgetOn` により、
 
 $$
-\#{i\in I\mid pOf(i)=p}
+\#{i\in I\mid \mathrm{pOf}(i)=p}
 \le
 n.\mathrm{factorization}(p)
 $$
@@ -257,7 +257,7 @@ $$
 これで
 
 $$
-\prod_{i\in I}pOf(i)\le n
+\prod_{i\in I}\mathrm{pOf}(i)\le n
 $$
 
 へ進み、さらに log route へ接続できる。

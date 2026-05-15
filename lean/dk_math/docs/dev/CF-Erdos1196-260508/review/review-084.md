@@ -1,7 +1,7 @@
 # review Phase "R" 2nd
 
 うむ。R025 は **valuation-budget route の登頂成功** と見てよい。
-R021 で地図を描き、R022 で語彙を置き、R023 で自然数側の積整除を閉じ、R024 で抽象 $pOf$ の R/log provider まで接続し、今回 R025 でそれを `PrimePowerWitnessProvider.basePrimeOf` に特殊化した。流れがきれいに一本になったの。
+R021 で地図を描き、R022 で語彙を置き、R023 で自然数側の積整除を閉じ、R024 で抽象 $\mathrm{pOf}$ の R/log provider まで接続し、今回 R025 でそれを `PrimePowerWitnessProvider.basePrimeOf` に特殊化した。流れがきれいに一本になったの。
 
 ## 1. 今回閉じたもの
 

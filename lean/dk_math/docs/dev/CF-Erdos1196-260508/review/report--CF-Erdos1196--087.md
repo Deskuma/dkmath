@@ -228,7 +228,7 @@ $$
 
 すなわち `SubProbability` へ接続した。
 
-R025 では、抽象 $pOf$ を `PrimePowerWitnessProvider.basePrimeOf` に特殊化し、witness provider 由来の route にした。
+R025 では、抽象 $\mathrm{pOf}$ を `PrimePowerWitnessProvider.basePrimeOf` に特殊化し、witness provider 由来の route にした。
 
 R026 では、base prime だけでなく exponent reader
 

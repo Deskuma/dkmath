@@ -6,7 +6,7 @@ R023 で自然数側の核心、
 $$
 \mathrm{multiplicity\ budget}
 \Longrightarrow
-\prod_{i\in I}pOf(i)\mid n
+\prod_{i\in I}\mathrm{pOf}(i)\mid n
 $$
 
 を閉じ、R024 でそれをそのまま log 質量評価へ接続した形じゃな。
@@ -16,23 +16,23 @@ $$
 今回の到達点は、次の鎖が Lean 上で通ったことじゃ。
 
 $$
-\text{NatPrimeValuedOn } I\ pOf
+\text{NatPrimeValuedOn } I\ \mathrm{pOf}
 $$
 
 $$
-\text{NatBaseMultiplicityBudgetOn } I\ pOf\ n
+\text{NatBaseMultiplicityBudgetOn } I\ \mathrm{pOf}\ n
 $$
 
 から、
 
 $$
-\prod_{i\in I}pOf(i)\le n
+\prod_{i\in I}\mathrm{pOf}(i)\le n
 $$
 
 を得て、さらに
 
 $$
-\sum_{i\in I}\frac{\log(pOf(i))}{\log n}\le 1
+\sum_{i\in I}\frac{\log(\mathrm{pOf}(i))}{\log n}\le 1
 $$
 
 へ進み、最終的に
@@ -62,9 +62,9 @@ $$
 これは素数なら $1 < p$ なので、log route 側で必要な自然数下界を供給する補題じゃ。
 
 $$
-pOf(i)\ \text{is prime}
+\mathrm{pOf}(i)\ \text{is prime}
 \quad\Longrightarrow\quad
-1\le pOf(i)
+1\le \mathrm{pOf}(i)
 $$
 
 実際には素数なら $2\le p$ なので、log の非負性にも都合がよい。
@@ -76,13 +76,13 @@ $$
 これは R023 の
 
 $$
-\prod_{i\in I}pOf(i)\mid n
+\prod_{i\in I}\mathrm{pOf}(i)\mid n
 $$
 
 を、R/log route が欲しがる
 
 $$
-\prod_{i\in I}pOf(i)\le n
+\prod_{i\in I}\mathrm{pOf}(i)\le n
 $$
 
 へ変換する橋じゃ。
@@ -123,7 +123,7 @@ $$
 これが R024 の頂上じゃ。
 
 $$
-w_i:=\frac{\log(pOf(i))}{\log n}
+w_i:=\frac{\log(\mathrm{pOf}(i))}{\log n}
 $$
 
 と置いた provider が、
@@ -147,12 +147,12 @@ realLogRatioWeightProvider_subProbability_of_productBudget
 
 今回で、重複あり route は次のように完成した。
 
-まず、各 selected label $i\in I$ が base prime $p_i=pOf(i)$ を持つ。
+まず、各 selected label $i\in I$ が base prime $p_i=\mathrm{pOf}(i)$ を持つ。
 
 同じ素数 $p$ が何回出たかを
 
 $$
-m_I(p):=\#{i\in I\mid pOf(i)=p}
+m_I(p):=\#{i\in I\mid \mathrm{pOf}(i)=p}
 $$
 
 と数える。
@@ -294,7 +294,7 @@ theorem basePrimeOf_logRatioSubProbability_of_multiplicityBudget
 
 1. witness provider から
    $$
-   pOf(q):=W.basePrimeOf(n,I,hI,q)
+   \mathrm{pOf}(q):=W.basePrimeOf(n,I,hI,q)
    $$
    が prime-valued であることを得る。
 2. R024 の抽象 theorem に流す。
@@ -315,7 +315,7 @@ $$
 残るのは、
 
 $$
-\text{witness provider 由来の }pOf
+\text{witness provider 由来の }\mathrm{pOf}
 $$
 
 へ特殊化することだけじゃ。

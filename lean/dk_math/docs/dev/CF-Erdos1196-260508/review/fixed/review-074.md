@@ -41,7 +41,7 @@ $$
 
 $$
 \boxed{
-\text{prime-power witness provider 由来の }pOf
+\text{prime-power witness provider 由来の }\mathrm{pOf}
 \text{ に product bound を渡せば、log-ratio provider へ進める}
 }
 $$
