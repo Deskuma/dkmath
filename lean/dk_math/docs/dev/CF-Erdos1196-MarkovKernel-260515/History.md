@@ -402,3 +402,26 @@ Archive
    - 等号一致ではない external slot 表現が必要になった時点で、同型・weight-preserving bridge を設計する。
 
 ---
+
+### 日時: 2026/05/17 01:35 JST (DKMK-006J DKMK-001 to 006I 登頂整理)
+
+1. 目的:
+   - DKMK-001 から DKMK-006I までの route 分岐を一枚の追補 report として整理する。
+2. 実施:
+   - `report-DKMK-001_to_006I.md` を追加した。
+   - canonical equality route を `canonicalExponentSlotLabels → FullChannelLogCostComplete → MarkovShadow` として整理した。
+   - selected inequality route を `selected IOf → log-capacity inequality → SubMarkovShadow` として整理した。
+   - future equivalence route を、等号一致しない external slot representation 用の将来候補として分離した。
+   - project docs に DKMK-006J の位置づけと report 参照を追記した。
+3. 結論:
+   - 次の concrete external kernel に対する判断順序が、`CanonicalExponentSlotIndex T`、selected route、future equivalence bridge の三段に整理された。
+4. 検証:
+   - document-only change のため Lean build は不要。
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - concrete external kernel が現れたら、まず `CanonicalExponentSlotIndex T` を直接狙えるか確認する。
+   - 等号一致しない label 表現が必要になった時点で、weight-preserving equivalence bridge を設計する。
+
+---
