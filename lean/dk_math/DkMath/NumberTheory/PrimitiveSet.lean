@@ -37,6 +37,7 @@ import DkMath.NumberTheory.PrimitiveSet.FullExponentSlot
 import DkMath.NumberTheory.PrimitiveSet.FullChannelLogSum
 import DkMath.NumberTheory.PrimitiveSet.FullExponentSlotBridge
 import DkMath.NumberTheory.PrimitiveSet.FullExponentSlotCanonical
+import DkMath.NumberTheory.PrimitiveSet.FullExponentSlotIndexBridge
 
 #print "file: DkMath.NumberTheory.PrimitiveSet"
 
@@ -83,4 +84,5 @@ This module exposes:
   log-cost completeness
 - bridge from full exponent-slot channel extensionality to Markov shadow
 - canonical exponent-slot kernel and Markov shadow
+- bridge from arbitrary kernels with canonical exponent-slot index to Markov shadow
 -/

@@ -546,6 +546,65 @@ canonicalExponentSlotLabels
 
 ---
 
+## 2.9. DKMK-006G FullExponentSlotIndexBridge
+
+DKMK-006G では、任意の外部 `PrimePowerDivisorTransitionKernel` を
+canonical route に接続するための比較 interface を追加する。
+
+中心は次である。
+
+```lean
+structure CanonicalExponentSlotIndex
+    (T : PrimePowerDivisorTransitionKernel) : Prop where
+  index_eq :
+    ∀ n, T.toDivisorTransitionKernel.index n =
+      canonicalExponentSlotLabels n
+```
+
+これは、外部 kernel の `T.index n` が DKMK-006F の concrete reference model と
+同じ finite label set であることを表す。
+
+この interface から membership を exponent-slot 仕様へ展開できる。
+
+```lean
+CanonicalExponentSlotIndex.mem_iff
+```
+
+さらに、canonical full-channel choice に対して
+
+```lean
+fullExponentSlotChannelSet_of_canonicalExponentSlotIndex
+```
+
+が得られる。
+
+DKMK-006E の bridge と合成すると、任意の witness provider `W` に対して
+
+```lean
+fullChannelLogCostComplete_of_canonicalExponentSlotIndex
+fullGlobalLogCapacityMarkovShadow_of_canonicalExponentSlotIndex
+```
+
+まで到達する。
+
+これで、外部 kernel 側の残り条件は次に整理された。
+
+```text
+T.toDivisorTransitionKernel.index n = canonicalExponentSlotLabels n
+```
+
+を示せば、その `T` の full log-capacity route は Markov shadow へ進める。
+
+また、reference model 自身については
+
+```lean
+canonicalExponentSlotKernel_canonicalExponentSlotIndex
+```
+
+が成立する。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

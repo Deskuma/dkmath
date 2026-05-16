@@ -325,3 +325,30 @@ Archive
    - canonical route を theorem-facing な reference model として、既存 selected/full channel route へどう接続するか整理する。
 
 ---
+
+### 日時: 2026/05/17 00:10 JST (DKMK-006G FullExponentSlotIndexBridge 追加)
+
+1. 目的:
+   - 任意の外部 `PrimePowerDivisorTransitionKernel` を canonical exponent-slot route へ接続する比較 interface を追加する。
+2. 実施:
+   - `DkMath.NumberTheory.PrimitiveSet.FullExponentSlotIndexBridge` を追加した。
+   - `CanonicalExponentSlotIndex` を追加し、`T.toDivisorTransitionKernel.index n = canonicalExponentSlotLabels n` を interface 化した。
+   - `CanonicalExponentSlotIndex.mem_iff` を追加し、外部 `T.index n` の membership を exponent-slot 仕様へ展開できるようにした。
+   - `canonicalExponentSlotKernel_canonicalExponentSlotIndex` を追加し、DKMK-006F の reference model 自身がこの interface を満たすことを示した。
+   - `fullExponentSlotChannelSet_of_canonicalExponentSlotIndex` を追加し、canonical index 条件から `FullExponentSlotChannelSet` を供給した。
+   - `fullChannelLogCostComplete_of_canonicalExponentSlotIndex` と `fullGlobalLogCapacityMarkovShadow_of_canonicalExponentSlotIndex` を追加し、任意の witness provider を Markov shadow route へ接続した。
+   - project docs に DKMK-006G の位置づけを追記した。
+3. 結論:
+   - 外部 kernel 側で `T.index n = canonicalExponentSlotLabels n` さえ示せば、その full log-capacity route は Markov shadow へ到達できるようになった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.FullExponentSlotIndexBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/FullExponentSlotIndexBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - 既存の具体的な `T.index n` が canonical index 条件を満たすか確認する。
+   - 等号ではなく同型・weight-preserving bridge が必要なケースの interface を検討する。
+
+---
