@@ -735,6 +735,71 @@ weight-preserving equivalence bridge を別 interface として設計する。
 
 ---
 
+## 2.11. DKMK-006I KernelCandidateInventory
+
+DKMK-006I では、DKMK-006H の分類を実コード上の小さな inventory として固定する。
+
+追加 module は次である。
+
+```lean
+DkMath.NumberTheory.PrimitiveSet.KernelCandidateInventory
+```
+
+まず、canonical reference model は equality route の本命であることを再掲する。
+
+```lean
+kernelInventory_canonicalExponentSlotKernel_ready :
+  CanonicalExponentSlotIndex canonicalExponentSlotKernel
+```
+
+これは既存の
+
+```lean
+canonicalExponentSlotKernel_canonicalExponentSlotIndex
+```
+
+を inventory 名で参照する入口である。
+
+次に、`sampleTen...` 系が global canonical model ではないことを Lean で固定する。
+証明の観察点は state `2` である。
+
+```lean
+sampleTenPrimePowerDivisorTransitionKernel_index_two_empty :
+  sampleTenPrimePowerDivisorTransitionKernel.toDivisorTransitionKernel.index 2 = ∅
+
+two_mem_canonicalExponentSlotLabels_two :
+  2 ∈ canonicalExponentSlotLabels 2
+```
+
+したがって、state `10` 用の toy kernel は任意の `n` で canonical labels と一致する
+global kernel ではない。
+
+```lean
+sampleTenPrimePowerDivisorTransitionKernel_not_canonicalExponentSlotIndex :
+  ¬ CanonicalExponentSlotIndex sampleTenPrimePowerDivisorTransitionKernel
+
+sampleTenToyWeightKernel_not_canonicalExponentSlotIndex :
+  ¬ CanonicalExponentSlotIndex sampleTenToyWeightKernel
+```
+
+これにより、DKMK-006H の docs 上の分類のうち、
+
+```text
+canonicalExponentSlotKernel:
+  equality route の reference model
+
+sampleTen 系:
+  local toy / sanity check
+  global CanonicalExponentSlotIndex ではない
+```
+
+が Lean theorem として固定された。
+
+selected route と future equivalence route は、ここでは新 interface を追加しない。
+それらは既存の `SubMarkovShadow` route と将来課題として保持する。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

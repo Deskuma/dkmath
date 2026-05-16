@@ -376,3 +376,29 @@ Archive
    - 等号一致でない label 表現が必要になった時点で、同型・weight-preserving bridge を設計する。
 
 ---
+
+### 日時: 2026/05/17 01:05 JST (DKMK-006I KernelCandidateInventory 追加)
+
+1. 目的:
+   - DKMK-006H の分類を、実コード上の小さな inventory theorem として固定する。
+2. 実施:
+   - `DkMath.NumberTheory.PrimitiveSet.KernelCandidateInventory` を追加した。
+   - `kernelInventory_canonicalExponentSlotKernel_ready` を追加し、`canonicalExponentSlotKernel` が `CanonicalExponentSlotIndex` を満たす equality-route reference model であることを inventory 側に再掲した。
+   - `sampleTenPrimePowerDivisorTransitionKernel_index_two_empty` と `two_mem_canonicalExponentSlotLabels_two` を追加し、state `2` で sample-ten index と canonical index が異なることを明示した。
+   - `sampleTenPrimePowerDivisorTransitionKernel_not_canonicalExponentSlotIndex` と `sampleTenToyWeightKernel_not_canonicalExponentSlotIndex` を追加し、`sampleTen...` 系が global `CanonicalExponentSlotIndex` の本命ではないことを theorem 化した。
+   - `PrimitiveSet.lean` に新 module を公開 import した。
+   - project docs に DKMK-006I の位置づけを追記した。
+3. 結論:
+   - canonical route は positive case、`sampleTen...` 系は local toy / sanity check という DKMK-006H の分類が Lean 側でも固定された。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.KernelCandidateInventory`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/KernelCandidateInventory.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+5. 失敗事例:
+   - repo root では `lakefile` が見つからないため、`lean/dk_math` を作業ディレクトリとして build する必要があった。
+6. 次の課題:
+   - 本線で使う具体的な外部 kernel が現れたら、`CanonicalExponentSlotIndex T` を直接狙う。
+   - 等号一致ではない external slot 表現が必要になった時点で、同型・weight-preserving bridge を設計する。
+
+---
