@@ -469,6 +469,83 @@ FullExponentSlotChannelSet
 
 ---
 
+## 2.8. DKMK-006F FullExponentSlotCanonical
+
+DKMK-006F では、具体的な canonical exponent-slot enumeration を追加する。
+
+中心は次の finite label set である。
+
+```lean
+canonicalExponentSlotLabels n
+```
+
+これは
+
+```lean
+n.factorization.support.biUnion fun p =>
+  (Finset.Icc 1 (n.factorization p)).image fun k => p ^ k
+```
+
+として定義される。
+
+membership は次で特徴づける。
+
+```lean
+canonicalExponentSlotLabels_mem_iff
+```
+
+すなわち、
+
+```lean
+q ∈ canonicalExponentSlotLabels n
+  ↔
+∃ p k, Nat.Prime p ∧ 1 ≤ k ∧
+  k ≤ n.factorization p ∧ q = p ^ k
+```
+
+である。
+
+この finite label set を使って、
+
+```lean
+canonicalExponentSlotKernel
+canonicalExponentSlotWitnessProvider
+canonicalExponentSlotFullChannelSet
+```
+
+を構成する。
+
+さらに、
+
+```lean
+canonicalExponentSlotFullChannelSet_fullExponentSlotChannelSet
+```
+
+により、この canonical full channel set が `FullExponentSlotChannelSet` を満たすことを示す。
+DKMK-006E の bridge と合成すると、最終的に
+
+```lean
+canonicalExponentSlotMarkovShadow
+```
+
+が得られる。
+
+これで explicit canonical route は次の形で閉じる。
+
+```text
+canonicalExponentSlotLabels
+  → FullExponentSlotChannelSet
+  → FullExponentSlotCoverage
+  → FullChannelLogCostComplete
+  → MarkovShadow
+```
+
+この canonical kernel は、既存の外部 `T.index n` を解析するものではない。
+むしろ、full exponent-slot route の concrete reference model である。
+次段では、既存 `T.index n` がこの canonical label set と一致するか、または同型に bridge できるかを調べる。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

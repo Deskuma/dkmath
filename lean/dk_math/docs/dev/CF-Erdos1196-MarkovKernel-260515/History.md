@@ -297,3 +297,31 @@ Archive
    - canonical/full channel enumeration が `FullExponentSlotChannelSet` を満たすことを、具体的な `T.index n` または専用 channel constructor から供給する。
 
 ---
+
+### 日時: 2026/05/16 02:12 JST (DKMK-006F FullExponentSlotCanonical 追加)
+
+1. 目的:
+   - concrete reference model として、canonical exponent-slot enumeration を持つ prime-power divisor transition kernel を追加する。
+2. 実施:
+   - `DkMath.NumberTheory.PrimitiveSet.FullExponentSlotCanonical` を追加した。
+   - `canonicalExponentSlotLabels n` を `n.factorization.support` 上の `p^k`, `1 ≤ k ≤ n.factorization p` の finite union として定義した。
+   - `canonicalExponentSlotLabels_mem_iff` を追加し、canonical label set の membership を exponent-slot 仕様で特徴づけた。
+   - `canonicalExponentSlotDivisorTransitionKernel` と `canonicalExponentSlotKernel` を追加した。
+   - `canonicalExponentSlotWitnessProvider` と `canonicalExponentSlotFullChannelSet` を追加した。
+   - `canonicalExponentSlotFullChannelSet_fullExponentSlotChannelSet` を追加し、canonical full channel set が `FullExponentSlotChannelSet` を満たすことを示した。
+   - `canonicalExponentSlotMarkovShadow` を追加し、DKMK-006E の bridge により canonical route が Markov shadow へ到達する入口を置いた。
+   - project docs に DKMK-006F の位置づけを追記した。
+3. 結論:
+   - explicit canonical exponent-slot route は、label enumeration から Markov shadow まで no-sorry で閉じた。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.FullExponentSlotCanonical`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/FullExponentSlotCanonical.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+5. 失敗事例:
+   - `PrimePowerWitnessProvider` は data を返すため、membership 証明から直接 `rcases` して `PrimePowerLabel` を構成すると Prop elimination 制約に当たる。`canonicalExponentSlotLabel_exists` を Prop として示し、`Classical.choose` で witness を選ぶ形に切り替えた。
+6. 次の課題:
+   - 既存の外部 `T.index n` と `canonicalExponentSlotLabels n` の一致、または bridge 条件を設計する。
+   - canonical route を theorem-facing な reference model として、既存 selected/full channel route へどう接続するか整理する。
+
+---
