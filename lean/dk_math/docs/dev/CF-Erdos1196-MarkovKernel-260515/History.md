@@ -352,3 +352,27 @@ Archive
    - 等号ではなく同型・weight-preserving bridge が必要なケースの interface を検討する。
 
 ---
+
+### 日時: 2026/05/17 00:35 JST (DKMK-006H 既存 kernel 候補の棚卸し)
+
+1. 目的:
+   - DKMK-006G で導入した `CanonicalExponentSlotIndex` の観点から、現時点の kernel/route 候補を分類する。
+2. 実施:
+   - project docs に `2.10. DKMK-006H 既存 kernel 候補の棚卸し` を追加した。
+   - `canonicalExponentSlotKernel` は `CanonicalExponentSlotIndex` を満たす equality route の reference model と整理した。
+   - 任意の外部 `PrimePowerDivisorTransitionKernel` は、`CanonicalExponentSlotIndex T` を証明できれば Markov shadow route へ進める対象として整理した。
+   - `sampleTen...` 系は state `10` の local toy / sanity check であり、global `CanonicalExponentSlotIndex` の本命ではないと分類した。
+   - selected channel route は inequality/sub-probability 側として `SubMarkovShadow` のまま保持する方針を明記した。
+   - 等号一致で入らない外部 slot 表現については、将来の weight-preserving equivalence bridge 候補として分離した。
+3. 結論:
+   - 次に証明すべき対象は、「具体的な外部 kernel が global `CanonicalExponentSlotIndex` を満たすか」または「selected/sub-Markov route のまま使うか」の判定に整理された。
+4. 検証:
+   - document-only change のため Lean build は不要。
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - 本線で使う具体的な外部 kernel がある場合、まず `T.toDivisorTransitionKernel.index n = canonicalExponentSlotLabels n` を狙えるか確認する。
+   - 等号一致でない label 表現が必要になった時点で、同型・weight-preserving bridge を設計する。
+
+---

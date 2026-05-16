@@ -605,6 +605,136 @@ canonicalExponentSlotKernel_canonicalExponentSlotIndex
 
 ---
 
+## 2.10. DKMK-006H 既存 kernel 候補の棚卸し
+
+DKMK-006G により、外部 kernel を canonical route へ接続する条件は
+
+```text
+T.toDivisorTransitionKernel.index n = canonicalExponentSlotLabels n
+```
+
+に縮約された。
+DKMK-006H では、現時点の Lean 側にある kernel/route 候補をこの条件の観点から分類する。
+
+### 2.10.1. そのまま canonical equality route に乗るもの
+
+```lean
+canonicalExponentSlotKernel
+canonicalExponentSlotWitnessProvider
+```
+
+これは DKMK-006F の concrete reference model であり、DKMK-006G で
+
+```lean
+canonicalExponentSlotKernel_canonicalExponentSlotIndex
+```
+
+が示されている。
+したがって、この kernel はそのまま
+
+```text
+CanonicalExponentSlotIndex
+  → FullExponentSlotChannelSet
+  → FullChannelLogCostComplete
+  → MarkovShadow
+```
+
+へ進む。
+
+### 2.10.2. 等号 bridge の対象になる任意の外部 kernel
+
+任意の
+
+```lean
+T : PrimePowerDivisorTransitionKernel
+W : PrimePowerWitnessProvider T
+```
+
+について、外部で
+
+```lean
+CanonicalExponentSlotIndex T
+```
+
+を証明できれば、DKMK-006G の
+
+```lean
+W.fullGlobalLogCapacityMarkovShadow_of_canonicalExponentSlotIndex
+```
+
+により Markov shadow へ進める。
+今後の具体的な外部 kernel 接続では、まずこの `index_eq` が証明できるかを確認する。
+
+### 2.10.3. local toy / sample として扱うもの
+
+`DivisorTransitionKernel.lean` には state `10` で `{2, 5}` を index とする toy kernel がある。
+
+```lean
+sampleTenDivisorTransitionKernel
+sampleTenPrimePowerDivisorTransitionKernel
+sampleTenPrimePowerWitnessProvider
+sampleTenToyWeightKernel
+```
+
+これらは prime-power label や sub-probability route の concrete sanity check として有用である。
+ただし、index は state `10` のみに非空であり、任意の `n` で
+`canonicalExponentSlotLabels n` と一致する global canonical model ではない。
+
+したがって分類は次の通りである。
+
+```text
+sampleTen 系:
+  state 10 の局所 toy / sanity check
+  global CanonicalExponentSlotIndex の本命ではない
+```
+
+この系は、必要なら state-local な確認補題を追加できるが、Markov equality route の本線には
+`canonicalExponentSlotKernel` または将来の外部 full kernel を使う。
+
+### 2.10.4. selected / sub-Markov のままでよいもの
+
+DKMK-004 から DKMK-005 までの route は、任意の selected channel set
+
+```lean
+IOf : ℕ → Finset ℕ
+hIOf : ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n
+```
+
+を扱う。
+この route は、一般に outgoing mass が `≤ 1` の sub-probability であり、
+`FullChannelLogCostComplete` や `MarkovShadow` への昇格を要求しない。
+
+したがって、この層は今後も
+
+```text
+selected channel / inequality route:
+  → SubMarkovShadow
+```
+
+として保持する。
+full equality route に進む必要がある場合だけ、`FullPrimePowerChannelSet`、
+`FullExponentSlotChannelSet`、または `CanonicalExponentSlotIndex` を追加で供給する。
+
+### 2.10.5. 同型 bridge が必要になり得るもの
+
+現在の `CanonicalExponentSlotIndex` は、外部 index と canonical labels の **等号一致** を要求する。
+外部 kernel が label として自然数 `q = p^k` そのものではなく、別表現の slot を持つ場合は、
+この等号 bridge では足りない。
+
+その場合は将来、
+
+```text
+external slot index ≃ canonicalExponentSlotLabels n
+```
+
+と、base-log cost または normalized weight を保つ条件を持つ
+weight-preserving equivalence bridge を別 interface として設計する。
+
+現時点では、急いでこの interface を追加しない。
+まずは「等号で入れる kernel」と「selected/sub-Markov のまま使う route」を分ける。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route
