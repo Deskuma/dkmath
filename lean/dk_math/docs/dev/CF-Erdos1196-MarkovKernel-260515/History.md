@@ -272,3 +272,156 @@ Archive
    - 必要なら explicit slot `(p,k)` 形式の補助 interface を追加し、coverage 証明の入力をさらに具体化する。
 
 ---
+
+### 日時: 2026/05/16 01:50 JST (DKMK-006E FullExponentSlotBridge 追加)
+
+1. 目的:
+   - `FullExponentSlotChannelSet` から `FullExponentSlotCoverage` を導き、full exponent-slot 仕様から Markov shadow までの橋を接続する。
+2. 実施:
+   - `DkMath.NumberTheory.PrimitiveSet.FullExponentSlotBridge` を追加した。
+   - `basePrimeOf_eq_of_prime_pow_mem` を追加し、indexed label が `q = p^k` と表される場合、witness-provider の base reader が `p` を返すことを示した。
+   - `fullExponentSlotCoverage_of_fullExponentSlotChannelSet` を追加し、`FullExponentSlotChannelSet` から exact multiplicity coverage を構成した。
+   - `fullChannelLogCostComplete_of_fullExponentSlotChannelSet` を追加し、DKMK-006D の log-sum bridge と合成した。
+   - `fullGlobalLogCapacityMarkovShadow_of_fullExponentSlotChannelSet` を追加し、full exponent-slot 仕様から Markov shadow を直接作れる入口を置いた。
+   - project docs に DKMK-006E の位置づけを追記した。
+3. 結論:
+   - full channel set が exponent slot 全体であることを示せば、coverage 仮定を別途置かずに Markov equality route へ到達できるようになった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.FullExponentSlotBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/FullExponentSlotBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - canonical/full channel enumeration が `FullExponentSlotChannelSet` を満たすことを、具体的な `T.index n` または専用 channel constructor から供給する。
+
+---
+
+### 日時: 2026/05/16 02:12 JST (DKMK-006F FullExponentSlotCanonical 追加)
+
+1. 目的:
+   - concrete reference model として、canonical exponent-slot enumeration を持つ prime-power divisor transition kernel を追加する。
+2. 実施:
+   - `DkMath.NumberTheory.PrimitiveSet.FullExponentSlotCanonical` を追加した。
+   - `canonicalExponentSlotLabels n` を `n.factorization.support` 上の `p^k`, `1 ≤ k ≤ n.factorization p` の finite union として定義した。
+   - `canonicalExponentSlotLabels_mem_iff` を追加し、canonical label set の membership を exponent-slot 仕様で特徴づけた。
+   - `canonicalExponentSlotDivisorTransitionKernel` と `canonicalExponentSlotKernel` を追加した。
+   - `canonicalExponentSlotWitnessProvider` と `canonicalExponentSlotFullChannelSet` を追加した。
+   - `canonicalExponentSlotFullChannelSet_fullExponentSlotChannelSet` を追加し、canonical full channel set が `FullExponentSlotChannelSet` を満たすことを示した。
+   - `canonicalExponentSlotMarkovShadow` を追加し、DKMK-006E の bridge により canonical route が Markov shadow へ到達する入口を置いた。
+   - project docs に DKMK-006F の位置づけを追記した。
+3. 結論:
+   - explicit canonical exponent-slot route は、label enumeration から Markov shadow まで no-sorry で閉じた。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.FullExponentSlotCanonical`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/FullExponentSlotCanonical.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+5. 失敗事例:
+   - `PrimePowerWitnessProvider` は data を返すため、membership 証明から直接 `rcases` して `PrimePowerLabel` を構成すると Prop elimination 制約に当たる。`canonicalExponentSlotLabel_exists` を Prop として示し、`Classical.choose` で witness を選ぶ形に切り替えた。
+6. 次の課題:
+   - 既存の外部 `T.index n` と `canonicalExponentSlotLabels n` の一致、または bridge 条件を設計する。
+   - canonical route を theorem-facing な reference model として、既存 selected/full channel route へどう接続するか整理する。
+
+---
+
+### 日時: 2026/05/17 00:10 JST (DKMK-006G FullExponentSlotIndexBridge 追加)
+
+1. 目的:
+   - 任意の外部 `PrimePowerDivisorTransitionKernel` を canonical exponent-slot route へ接続する比較 interface を追加する。
+2. 実施:
+   - `DkMath.NumberTheory.PrimitiveSet.FullExponentSlotIndexBridge` を追加した。
+   - `CanonicalExponentSlotIndex` を追加し、`T.toDivisorTransitionKernel.index n = canonicalExponentSlotLabels n` を interface 化した。
+   - `CanonicalExponentSlotIndex.mem_iff` を追加し、外部 `T.index n` の membership を exponent-slot 仕様へ展開できるようにした。
+   - `canonicalExponentSlotKernel_canonicalExponentSlotIndex` を追加し、DKMK-006F の reference model 自身がこの interface を満たすことを示した。
+   - `fullExponentSlotChannelSet_of_canonicalExponentSlotIndex` を追加し、canonical index 条件から `FullExponentSlotChannelSet` を供給した。
+   - `fullChannelLogCostComplete_of_canonicalExponentSlotIndex` と `fullGlobalLogCapacityMarkovShadow_of_canonicalExponentSlotIndex` を追加し、任意の witness provider を Markov shadow route へ接続した。
+   - project docs に DKMK-006G の位置づけを追記した。
+3. 結論:
+   - 外部 kernel 側で `T.index n = canonicalExponentSlotLabels n` さえ示せば、その full log-capacity route は Markov shadow へ到達できるようになった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.FullExponentSlotIndexBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/FullExponentSlotIndexBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - 既存の具体的な `T.index n` が canonical index 条件を満たすか確認する。
+   - 等号ではなく同型・weight-preserving bridge が必要なケースの interface を検討する。
+
+---
+
+### 日時: 2026/05/17 00:35 JST (DKMK-006H 既存 kernel 候補の棚卸し)
+
+1. 目的:
+   - DKMK-006G で導入した `CanonicalExponentSlotIndex` の観点から、現時点の kernel/route 候補を分類する。
+2. 実施:
+   - project docs に `2.10. DKMK-006H 既存 kernel 候補の棚卸し` を追加した。
+   - `canonicalExponentSlotKernel` は `CanonicalExponentSlotIndex` を満たす equality route の reference model と整理した。
+   - 任意の外部 `PrimePowerDivisorTransitionKernel` は、`CanonicalExponentSlotIndex T` を証明できれば Markov shadow route へ進める対象として整理した。
+   - `sampleTen...` 系は state `10` の local toy / sanity check であり、global `CanonicalExponentSlotIndex` の本命ではないと分類した。
+   - selected channel route は inequality/sub-probability 側として `SubMarkovShadow` のまま保持する方針を明記した。
+   - 等号一致で入らない外部 slot 表現については、将来の weight-preserving equivalence bridge 候補として分離した。
+3. 結論:
+   - 次に証明すべき対象は、「具体的な外部 kernel が global `CanonicalExponentSlotIndex` を満たすか」または「selected/sub-Markov route のまま使うか」の判定に整理された。
+4. 検証:
+   - document-only change のため Lean build は不要。
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - 本線で使う具体的な外部 kernel がある場合、まず `T.toDivisorTransitionKernel.index n = canonicalExponentSlotLabels n` を狙えるか確認する。
+   - 等号一致でない label 表現が必要になった時点で、同型・weight-preserving bridge を設計する。
+
+---
+
+### 日時: 2026/05/17 01:05 JST (DKMK-006I KernelCandidateInventory 追加)
+
+1. 目的:
+   - DKMK-006H の分類を、実コード上の小さな inventory theorem として固定する。
+2. 実施:
+   - `DkMath.NumberTheory.PrimitiveSet.KernelCandidateInventory` を追加した。
+   - `kernelInventory_canonicalExponentSlotKernel_ready` を追加し、`canonicalExponentSlotKernel` が `CanonicalExponentSlotIndex` を満たす equality-route reference model であることを inventory 側に再掲した。
+   - `sampleTenPrimePowerDivisorTransitionKernel_index_two_empty` と `two_mem_canonicalExponentSlotLabels_two` を追加し、state `2` で sample-ten index と canonical index が異なることを明示した。
+   - `sampleTenPrimePowerDivisorTransitionKernel_not_canonicalExponentSlotIndex` と `sampleTenToyWeightKernel_not_canonicalExponentSlotIndex` を追加し、`sampleTen...` 系が global `CanonicalExponentSlotIndex` の本命ではないことを theorem 化した。
+   - `PrimitiveSet.lean` に新 module を公開 import した。
+   - project docs に DKMK-006I の位置づけを追記した。
+3. 結論:
+   - canonical route は positive case、`sampleTen...` 系は local toy / sanity check という DKMK-006H の分類が Lean 側でも固定された。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.KernelCandidateInventory`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/KernelCandidateInventory.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+5. 失敗事例:
+   - repo root では `lakefile` が見つからないため、`lean/dk_math` を作業ディレクトリとして build する必要があった。
+6. 次の課題:
+   - 本線で使う具体的な外部 kernel が現れたら、`CanonicalExponentSlotIndex T` を直接狙う。
+   - 等号一致ではない external slot 表現が必要になった時点で、同型・weight-preserving bridge を設計する。
+
+---
+
+### 日時: 2026/05/17 01:35 JST (DKMK-006J DKMK-001 to 006I 登頂整理)
+
+1. 目的:
+   - DKMK-001 から DKMK-006I までの route 分岐を一枚の追補 report として整理する。
+2. 実施:
+   - `report-DKMK-001_to_006I.md` を追加した。
+   - canonical equality route を `canonicalExponentSlotLabels → FullChannelLogCostComplete → MarkovShadow` として整理した。
+   - selected inequality route を `selected IOf → log-capacity inequality → SubMarkovShadow` として整理した。
+   - future equivalence route を、等号一致しない external slot representation 用の将来候補として分離した。
+   - project docs に DKMK-006J の位置づけと report 参照を追記した。
+3. 結論:
+   - 次の concrete external kernel に対する判断順序が、`CanonicalExponentSlotIndex T`、selected route、future equivalence bridge の三段に整理された。
+4. 検証:
+   - document-only change のため Lean build は不要。
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - concrete external kernel が現れたら、まず `CanonicalExponentSlotIndex T` を直接狙えるか確認する。
+   - 等号一致しない label 表現が必要になった時点で、weight-preserving equivalence bridge を設計する。
+
+---

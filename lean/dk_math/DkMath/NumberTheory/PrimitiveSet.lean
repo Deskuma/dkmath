@@ -35,6 +35,10 @@ import DkMath.NumberTheory.PrimitiveSet.GlobalLogCapacityKernel
 import DkMath.NumberTheory.PrimitiveSet.FullChannelEquality
 import DkMath.NumberTheory.PrimitiveSet.FullExponentSlot
 import DkMath.NumberTheory.PrimitiveSet.FullChannelLogSum
+import DkMath.NumberTheory.PrimitiveSet.FullExponentSlotBridge
+import DkMath.NumberTheory.PrimitiveSet.FullExponentSlotCanonical
+import DkMath.NumberTheory.PrimitiveSet.FullExponentSlotIndexBridge
+import DkMath.NumberTheory.PrimitiveSet.KernelCandidateInventory
 
 #print "file: DkMath.NumberTheory.PrimitiveSet"
 
@@ -79,4 +83,8 @@ This module exposes:
 - full exponent-slot coverage interface for the equality route
 - finite log-sum bridge from full exponent-slot coverage to full-channel
   log-cost completeness
+- bridge from full exponent-slot channel extensionality to Markov shadow
+- canonical exponent-slot kernel and Markov shadow
+- bridge from arbitrary kernels with canonical exponent-slot index to Markov shadow
+- code-level inventory for current kernel candidates
 -/

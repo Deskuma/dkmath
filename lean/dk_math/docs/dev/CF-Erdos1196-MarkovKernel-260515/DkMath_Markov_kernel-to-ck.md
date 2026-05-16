@@ -394,6 +394,451 @@ FullExponentSlotCoverage
 
 ---
 
+## 2.7. DKMK-006E FullExponentSlotBridge
+
+DKMK-006E では、DKMK-006C で置いた
+
+```lean
+FullExponentSlotChannelSet
+```
+
+から
+
+```lean
+FullExponentSlotCoverage
+```
+
+を供給する橋を追加する。
+
+鍵になるのは、prime-power label の base prime は一意であるという事実である。
+`W.label` が内部的にどの witness を選んでも、indexed label `q` が外延的に
+`q = p^k` で、`p` が素数なら、base reader は `p` を返す。
+
+```lean
+basePrimeOf_eq_of_prime_pow_mem
+```
+
+これにより、`FullExponentSlotChannelSet` が
+
+```lean
+q ∈ C.channels n
+  ↔
+∃ p k, Nat.Prime p ∧ 1 ≤ k ∧
+  k ≤ n.factorization p ∧ q = p ^ k
+```
+
+を持つなら、各素数 `p` について `k = 1, ..., n.factorization p` の
+distinct な label `p^k` がすべて `basePrime = p` の fiber に入る。
+
+一方、逆向きの上界は既存の selected route の
+
+```lean
+basePrimeOf_card_filter_le_factorization
+```
+
+が与える。
+
+したがって、
+
+```lean
+fullExponentSlotCoverage_of_fullExponentSlotChannelSet
+```
+
+が得られる。
+
+DKMK-006D と合成すると、
+
+```lean
+fullChannelLogCostComplete_of_fullExponentSlotChannelSet
+fullGlobalLogCapacityMarkovShadow_of_fullExponentSlotChannelSet
+```
+
+まで到達する。
+
+これで full equality route は次の形になった。
+
+```text
+FullExponentSlotChannelSet
+  → FullExponentSlotCoverage
+  → FullChannelLogCostComplete
+  → MarkovShadow
+```
+
+残る課題は、具体的な canonical/full channel enumeration が
+`FullExponentSlotChannelSet` を満たすことを供給する段階である。
+
+---
+
+## 2.8. DKMK-006F FullExponentSlotCanonical
+
+DKMK-006F では、具体的な canonical exponent-slot enumeration を追加する。
+
+中心は次の finite label set である。
+
+```lean
+canonicalExponentSlotLabels n
+```
+
+これは
+
+```lean
+n.factorization.support.biUnion fun p =>
+  (Finset.Icc 1 (n.factorization p)).image fun k => p ^ k
+```
+
+として定義される。
+
+membership は次で特徴づける。
+
+```lean
+canonicalExponentSlotLabels_mem_iff
+```
+
+すなわち、
+
+```lean
+q ∈ canonicalExponentSlotLabels n
+  ↔
+∃ p k, Nat.Prime p ∧ 1 ≤ k ∧
+  k ≤ n.factorization p ∧ q = p ^ k
+```
+
+である。
+
+この finite label set を使って、
+
+```lean
+canonicalExponentSlotKernel
+canonicalExponentSlotWitnessProvider
+canonicalExponentSlotFullChannelSet
+```
+
+を構成する。
+
+さらに、
+
+```lean
+canonicalExponentSlotFullChannelSet_fullExponentSlotChannelSet
+```
+
+により、この canonical full channel set が `FullExponentSlotChannelSet` を満たすことを示す。
+DKMK-006E の bridge と合成すると、最終的に
+
+```lean
+canonicalExponentSlotMarkovShadow
+```
+
+が得られる。
+
+これで explicit canonical route は次の形で閉じる。
+
+```text
+canonicalExponentSlotLabels
+  → FullExponentSlotChannelSet
+  → FullExponentSlotCoverage
+  → FullChannelLogCostComplete
+  → MarkovShadow
+```
+
+この canonical kernel は、既存の外部 `T.index n` を解析するものではない。
+むしろ、full exponent-slot route の concrete reference model である。
+次段では、既存 `T.index n` がこの canonical label set と一致するか、または同型に bridge できるかを調べる。
+
+---
+
+## 2.9. DKMK-006G FullExponentSlotIndexBridge
+
+DKMK-006G では、任意の外部 `PrimePowerDivisorTransitionKernel` を
+canonical route に接続するための比較 interface を追加する。
+
+中心は次である。
+
+```lean
+structure CanonicalExponentSlotIndex
+    (T : PrimePowerDivisorTransitionKernel) : Prop where
+  index_eq :
+    ∀ n, T.toDivisorTransitionKernel.index n =
+      canonicalExponentSlotLabels n
+```
+
+これは、外部 kernel の `T.index n` が DKMK-006F の concrete reference model と
+同じ finite label set であることを表す。
+
+この interface から membership を exponent-slot 仕様へ展開できる。
+
+```lean
+CanonicalExponentSlotIndex.mem_iff
+```
+
+さらに、canonical full-channel choice に対して
+
+```lean
+fullExponentSlotChannelSet_of_canonicalExponentSlotIndex
+```
+
+が得られる。
+
+DKMK-006E の bridge と合成すると、任意の witness provider `W` に対して
+
+```lean
+fullChannelLogCostComplete_of_canonicalExponentSlotIndex
+fullGlobalLogCapacityMarkovShadow_of_canonicalExponentSlotIndex
+```
+
+まで到達する。
+
+これで、外部 kernel 側の残り条件は次に整理された。
+
+```text
+T.toDivisorTransitionKernel.index n = canonicalExponentSlotLabels n
+```
+
+を示せば、その `T` の full log-capacity route は Markov shadow へ進める。
+
+また、reference model 自身については
+
+```lean
+canonicalExponentSlotKernel_canonicalExponentSlotIndex
+```
+
+が成立する。
+
+---
+
+## 2.10. DKMK-006H 既存 kernel 候補の棚卸し
+
+DKMK-006G により、外部 kernel を canonical route へ接続する条件は
+
+```text
+T.toDivisorTransitionKernel.index n = canonicalExponentSlotLabels n
+```
+
+に縮約された。
+DKMK-006H では、現時点の Lean 側にある kernel/route 候補をこの条件の観点から分類する。
+
+### 2.10.1. そのまま canonical equality route に乗るもの
+
+```lean
+canonicalExponentSlotKernel
+canonicalExponentSlotWitnessProvider
+```
+
+これは DKMK-006F の concrete reference model であり、DKMK-006G で
+
+```lean
+canonicalExponentSlotKernel_canonicalExponentSlotIndex
+```
+
+が示されている。
+したがって、この kernel はそのまま
+
+```text
+CanonicalExponentSlotIndex
+  → FullExponentSlotChannelSet
+  → FullChannelLogCostComplete
+  → MarkovShadow
+```
+
+へ進む。
+
+### 2.10.2. 等号 bridge の対象になる任意の外部 kernel
+
+任意の
+
+```lean
+T : PrimePowerDivisorTransitionKernel
+W : PrimePowerWitnessProvider T
+```
+
+について、外部で
+
+```lean
+CanonicalExponentSlotIndex T
+```
+
+を証明できれば、DKMK-006G の
+
+```lean
+W.fullGlobalLogCapacityMarkovShadow_of_canonicalExponentSlotIndex
+```
+
+により Markov shadow へ進める。
+今後の具体的な外部 kernel 接続では、まずこの `index_eq` が証明できるかを確認する。
+
+### 2.10.3. local toy / sample として扱うもの
+
+`DivisorTransitionKernel.lean` には state `10` で `{2, 5}` を index とする toy kernel がある。
+
+```lean
+sampleTenDivisorTransitionKernel
+sampleTenPrimePowerDivisorTransitionKernel
+sampleTenPrimePowerWitnessProvider
+sampleTenToyWeightKernel
+```
+
+これらは prime-power label や sub-probability route の concrete sanity check として有用である。
+ただし、index は state `10` のみに非空であり、任意の `n` で
+`canonicalExponentSlotLabels n` と一致する global canonical model ではない。
+
+したがって分類は次の通りである。
+
+```text
+sampleTen 系:
+  state 10 の局所 toy / sanity check
+  global CanonicalExponentSlotIndex の本命ではない
+```
+
+この系は、必要なら state-local な確認補題を追加できるが、Markov equality route の本線には
+`canonicalExponentSlotKernel` または将来の外部 full kernel を使う。
+
+### 2.10.4. selected / sub-Markov のままでよいもの
+
+DKMK-004 から DKMK-005 までの route は、任意の selected channel set
+
+```lean
+IOf : ℕ → Finset ℕ
+hIOf : ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n
+```
+
+を扱う。
+この route は、一般に outgoing mass が `≤ 1` の sub-probability であり、
+`FullChannelLogCostComplete` や `MarkovShadow` への昇格を要求しない。
+
+したがって、この層は今後も
+
+```text
+selected channel / inequality route:
+  → SubMarkovShadow
+```
+
+として保持する。
+full equality route に進む必要がある場合だけ、`FullPrimePowerChannelSet`、
+`FullExponentSlotChannelSet`、または `CanonicalExponentSlotIndex` を追加で供給する。
+
+### 2.10.5. 同型 bridge が必要になり得るもの
+
+現在の `CanonicalExponentSlotIndex` は、外部 index と canonical labels の **等号一致** を要求する。
+外部 kernel が label として自然数 `q = p^k` そのものではなく、別表現の slot を持つ場合は、
+この等号 bridge では足りない。
+
+その場合は将来、
+
+```text
+external slot index ≃ canonicalExponentSlotLabels n
+```
+
+と、base-log cost または normalized weight を保つ条件を持つ
+weight-preserving equivalence bridge を別 interface として設計する。
+
+現時点では、急いでこの interface を追加しない。
+まずは「等号で入れる kernel」と「selected/sub-Markov のまま使う route」を分ける。
+
+---
+
+## 2.11. DKMK-006I KernelCandidateInventory
+
+DKMK-006I では、DKMK-006H の分類を実コード上の小さな inventory として固定する。
+
+追加 module は次である。
+
+```lean
+DkMath.NumberTheory.PrimitiveSet.KernelCandidateInventory
+```
+
+まず、canonical reference model は equality route の本命であることを再掲する。
+
+```lean
+kernelInventory_canonicalExponentSlotKernel_ready :
+  CanonicalExponentSlotIndex canonicalExponentSlotKernel
+```
+
+これは既存の
+
+```lean
+canonicalExponentSlotKernel_canonicalExponentSlotIndex
+```
+
+を inventory 名で参照する入口である。
+
+次に、`sampleTen...` 系が global canonical model ではないことを Lean で固定する。
+証明の観察点は state `2` である。
+
+```lean
+sampleTenPrimePowerDivisorTransitionKernel_index_two_empty :
+  sampleTenPrimePowerDivisorTransitionKernel.toDivisorTransitionKernel.index 2 = ∅
+
+two_mem_canonicalExponentSlotLabels_two :
+  2 ∈ canonicalExponentSlotLabels 2
+```
+
+したがって、state `10` 用の toy kernel は任意の `n` で canonical labels と一致する
+global kernel ではない。
+
+```lean
+sampleTenPrimePowerDivisorTransitionKernel_not_canonicalExponentSlotIndex :
+  ¬ CanonicalExponentSlotIndex sampleTenPrimePowerDivisorTransitionKernel
+
+sampleTenToyWeightKernel_not_canonicalExponentSlotIndex :
+  ¬ CanonicalExponentSlotIndex sampleTenToyWeightKernel
+```
+
+これにより、DKMK-006H の docs 上の分類のうち、
+
+```text
+canonicalExponentSlotKernel:
+  equality route の reference model
+
+sampleTen 系:
+  local toy / sanity check
+  global CanonicalExponentSlotIndex ではない
+```
+
+が Lean theorem として固定された。
+
+selected route と future equivalence route は、ここでは新 interface を追加しない。
+それらは既存の `SubMarkovShadow` route と将来課題として保持する。
+
+---
+
+## 2.12. DKMK-006J DKMK-001 to 006I 登頂整理
+
+DKMK-006J では、新しい Lean interface は追加しない。
+代わりに、DKMK-001 から DKMK-006I までで得た route 分岐を一枚の追補 report に整理する。
+
+```text
+report-DKMK-001_to_006I.md
+```
+
+この report では、現在の Markov kernel route を次の三本に分ける。
+
+```text
+canonical equality route:
+  canonicalExponentSlotLabels
+  → FullChannelLogCostComplete
+  → MarkovShadow
+
+selected inequality route:
+  selected IOf
+  → log-capacity inequality
+  → SubMarkovShadow
+
+future equivalence route:
+  external slot representation
+  ≃ canonicalExponentSlotLabels
+  with weight/cost preservation
+```
+
+これにより、次に具体的な外部 kernel が現れたときの判断順序を固定する。
+
+1. `CanonicalExponentSlotIndex T` を直接狙えるなら equality route に乗せる。
+2. selected channel として十分なら `SubMarkovShadow` route のまま使う。
+3. label 表現が等号一致しない場合だけ、weight-preserving equivalence bridge を設計する。
+
+この段階では、同型 bridge を先回りして追加しない。
+DKMK-006J は、次の concrete kernel 接続で迷わないための route map である。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route
