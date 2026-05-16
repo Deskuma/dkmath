@@ -1,4 +1,16 @@
 {
+    "files.watcherExclude": {
+        "**/.lake/**": true,
+        "**/lake-packages/**": true,
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/venv/**": true,
+        "**/.venv/**": true,
+        "**/__pycache__/**": true,
+        "**/node_modules/**": true,
+        "**/build/**": true,
+        "**/dist/**": true
+    },
     "cSpell.words": [
         "Acomp",
         "adjk",
