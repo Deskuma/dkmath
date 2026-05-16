@@ -394,6 +394,81 @@ FullExponentSlotCoverage
 
 ---
 
+## 2.7. DKMK-006E FullExponentSlotBridge
+
+DKMK-006E では、DKMK-006C で置いた
+
+```lean
+FullExponentSlotChannelSet
+```
+
+から
+
+```lean
+FullExponentSlotCoverage
+```
+
+を供給する橋を追加する。
+
+鍵になるのは、prime-power label の base prime は一意であるという事実である。
+`W.label` が内部的にどの witness を選んでも、indexed label `q` が外延的に
+`q = p^k` で、`p` が素数なら、base reader は `p` を返す。
+
+```lean
+basePrimeOf_eq_of_prime_pow_mem
+```
+
+これにより、`FullExponentSlotChannelSet` が
+
+```lean
+q ∈ C.channels n
+  ↔
+∃ p k, Nat.Prime p ∧ 1 ≤ k ∧
+  k ≤ n.factorization p ∧ q = p ^ k
+```
+
+を持つなら、各素数 `p` について `k = 1, ..., n.factorization p` の
+distinct な label `p^k` がすべて `basePrime = p` の fiber に入る。
+
+一方、逆向きの上界は既存の selected route の
+
+```lean
+basePrimeOf_card_filter_le_factorization
+```
+
+が与える。
+
+したがって、
+
+```lean
+fullExponentSlotCoverage_of_fullExponentSlotChannelSet
+```
+
+が得られる。
+
+DKMK-006D と合成すると、
+
+```lean
+fullChannelLogCostComplete_of_fullExponentSlotChannelSet
+fullGlobalLogCapacityMarkovShadow_of_fullExponentSlotChannelSet
+```
+
+まで到達する。
+
+これで full equality route は次の形になった。
+
+```text
+FullExponentSlotChannelSet
+  → FullExponentSlotCoverage
+  → FullChannelLogCostComplete
+  → MarkovShadow
+```
+
+残る課題は、具体的な canonical/full channel enumeration が
+`FullExponentSlotChannelSet` を満たすことを供給する段階である。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

@@ -272,3 +272,28 @@ Archive
    - 必要なら explicit slot `(p,k)` 形式の補助 interface を追加し、coverage 証明の入力をさらに具体化する。
 
 ---
+
+### 日時: 2026/05/16 01:50 JST (DKMK-006E FullExponentSlotBridge 追加)
+
+1. 目的:
+   - `FullExponentSlotChannelSet` から `FullExponentSlotCoverage` を導き、full exponent-slot 仕様から Markov shadow までの橋を接続する。
+2. 実施:
+   - `DkMath.NumberTheory.PrimitiveSet.FullExponentSlotBridge` を追加した。
+   - `basePrimeOf_eq_of_prime_pow_mem` を追加し、indexed label が `q = p^k` と表される場合、witness-provider の base reader が `p` を返すことを示した。
+   - `fullExponentSlotCoverage_of_fullExponentSlotChannelSet` を追加し、`FullExponentSlotChannelSet` から exact multiplicity coverage を構成した。
+   - `fullChannelLogCostComplete_of_fullExponentSlotChannelSet` を追加し、DKMK-006D の log-sum bridge と合成した。
+   - `fullGlobalLogCapacityMarkovShadow_of_fullExponentSlotChannelSet` を追加し、full exponent-slot 仕様から Markov shadow を直接作れる入口を置いた。
+   - project docs に DKMK-006E の位置づけを追記した。
+3. 結論:
+   - full channel set が exponent slot 全体であることを示せば、coverage 仮定を別途置かずに Markov equality route へ到達できるようになった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.FullExponentSlotBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/FullExponentSlotBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - canonical/full channel enumeration が `FullExponentSlotChannelSet` を満たすことを、具体的な `T.index n` または専用 channel constructor から供給する。
+
+---
