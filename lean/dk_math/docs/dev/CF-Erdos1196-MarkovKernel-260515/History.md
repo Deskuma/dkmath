@@ -569,6 +569,11 @@ Archive
    - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
    - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
    - `git diff --check`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
 5. 失敗事例:
    - `{n / q, n}` の membership 証明で `fin_cases` を使うと、`n / q = n` の重複可能性により dependent elimination が失敗したため、membership を `h = n / q ∨ h = n` に展開して処理した。
 6. 次の課題:
@@ -672,6 +677,31 @@ Archive
    - `tailIndicatorNatMassSpace_dvdMonotone` の `b` が tail 側にある分岐で、`simp` だけでは左辺の if が残ったため、if split と `norm_num` で明示的に閉じた。
 6. 次の課題:
    - bounded indicator から、より本命に近い decreasing weight / log weight 型の source mass model へ進む。
+   - one-step divisor-step route を multi-step descent chain へ拡張する。
+
+---
+
+### 日時: 2026/05/18 04:34 JST (DKMK-007J scaled tail-support indicator mass 追加)
+
+1. 目的:
+   - DKMK-007I の tail-support indicator に非負な有理 height `c` を持たせ、support と weight amplitude を分離した bounded toy model を DKMK-007H の接続面に流す。
+2. 実施:
+   - `scaledTailIndicatorNatMassSpace N c hc` を追加し、`0` と `N ≤ n` のノードに mass `c`、それ以外に mass `0` を与える scaled threshold indicator mass として定義した。
+   - `scaledTailIndicatorNatMassSpace_dvdMonotone` を追加し、この mass が divisibility-monotone であることを証明した。
+   - `scaledTailIndicatorNatMassSpace_logCapacitySourceMassBound` を追加し、source mass が `(c : ℝ)` 以下であることを DKMK-007H の provider 形で供給した。
+   - selected route 用に `PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_scaledTailIndicatorDivisorStep_weightedHitMass_le` を追加した。
+   - canonical route 用に `canonicalExponentSlotMarkovShadow_scaledTailIndicatorDivisorStep_weightedHitMass_le` を追加した。
+   - project docs に DKMK-007J の位置づけを追記した。
+3. 結論:
+   - tail support の threshold `N` に加えて、weight amplitude `c` を持つ bounded mass model も、`DvdMonotoneMass` と `LogCapacitySourceMassBound` の二点から selected / canonical divisor-step hitting route に接続できた。
+   - log weight へ進む前に、support と height を分離した weighted-tail toy model が no-sorry で通った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DescentBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+5. 失敗事例:
+   - 初回は `scaledTailIndicatorNatMassSpace_dvdMonotone` の tail 分岐で flexible `simp` warning が出たため、source 側の if を場合分けして明示的に閉じた。
+6. 次の課題:
+   - bounded scaled indicator から、階段型 height や log 型に近い source mass model へ進む。
    - one-step divisor-step route を multi-step descent chain へ拡張する。
 
 ---

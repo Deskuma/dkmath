@@ -249,6 +249,49 @@ theorem tailIndicatorNatMassSpace_dvdMonotone (N : ℕ) :
     simp [tailIndicatorNatMassSpace, hb, ha]
 
 /--
+Scaled tail-support indicator mass above a natural threshold.
+
+This keeps the same support as `tailIndicatorNatMassSpace`, but assigns a
+nonnegative rational height `c` to the tail. It is a bounded toy model for
+separating the support question from the weight-amplitude question.
+-/
+def scaledTailIndicatorNatMassSpace
+    (N : ℕ) (c : ℚ) (hc : 0 ≤ c) : MassSpace ℕ where
+  μ := fun n => if n = 0 ∨ N ≤ n then c else 0
+  nonneg := by
+    intro n
+    by_cases hn : n = 0 ∨ N ≤ n
+    · simp [hn, hc]
+    · simp [hn]
+
+/-- The scaled tail-support indicator mass is monotone along divisibility. -/
+theorem scaledTailIndicatorNatMassSpace_dvdMonotone
+    (N : ℕ) (c : ℚ) (hc : 0 ≤ c) :
+    DvdMonotoneMass (scaledTailIndicatorNatMassSpace N c hc) := by
+  intro a b hab
+  by_cases hb : b = 0 ∨ N ≤ b
+  · by_cases ha : a = 0 ∨ N ≤ a
+    · simp [scaledTailIndicatorNatMassSpace, hb, ha]
+    · simp [scaledTailIndicatorNatMassSpace, hb, ha, hc]
+  · have hb0 : b ≠ 0 := by
+      intro hbz
+      exact hb (Or.inl hbz)
+    have hab_le : a ≤ b := Nat.le_of_dvd (Nat.pos_of_ne_zero hb0) hab
+    have ha0 : a ≠ 0 := by
+      intro haz
+      rcases hab with ⟨d, hd⟩
+      exact hb0 (by simpa [haz] using hd)
+    have hNa : ¬ N ≤ a := by
+      intro hNa
+      exact hb (Or.inr (hNa.trans hab_le))
+    have ha : ¬ (a = 0 ∨ N ≤ a) := by
+      intro ha
+      rcases ha with haz | hNa'
+      · exact ha0 haz
+      · exact hNa hNa'
+    simp [scaledTailIndicatorNatMassSpace, hb, ha]
+
+/--
 The sample Bool-indexed chain family is controlled by divisibility below
 sources `8` and `9`.
 -/
