@@ -451,3 +451,29 @@ Archive
    - `SubMarkovShadow.providerAt_subProbability` / `MarkovShadow.providerAt_subProbability` と DKMK-007A の provider bridge を合成し、shadow から source-controlled family への theorem-facing wrapper を追加する。
 
 ---
+
+### 日時: 2026/05/17 02:35 JST (DKMK-007B ShadowHittingBridge 追加)
+
+1. 目的:
+   - `SubMarkovShadow.providerAt` / `MarkovShadow.providerAt` を DKMK-007A の real weighted path bridge に直接接続する theorem-facing wrapper を追加する。
+2. 実施:
+   - `DkMath.NumberTheory.PrimitiveSet.ShadowHittingBridge` を追加した。
+   - `SubMarkovShadow.applyAtToSourceControlled` を追加し、statewise provider を compatible な `SourceControlledChainFamily` に適用できるようにした。
+   - `SubMarkovShadow.applyAtToSourceControlled_weightSubProbability` と `SubMarkovShadow.weightedHitMass_le_const_applyAtToSourceControlled` を追加した。
+   - `MarkovShadow.applyAtToSourceControlled` を追加し、Markov shadow の statewise provider を同じ形で適用できるようにした。
+   - `MarkovShadow.applyAtToSourceControlled_weightSubProbability` と `MarkovShadow.weightedHitMass_le_const_applyAtToSourceControlled` を追加した。
+   - `PrimitiveSet.lean` に新 module を公開 import した。
+   - project docs に DKMK-007B の位置づけを追記した。
+3. 結論:
+   - `SubMarkovShadow` / `MarkovShadow` から compatible な source-controlled family へ直接進み、primitive real-weighted hit mass bound を呼べる入口ができた。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.ShadowHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/ShadowHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `globalLogCapacitySubMarkovShadow` または `canonicalExponentSlotMarkovShadow` を concrete `SourceControlledChainFamily` に適用する theorem-facing wrapper を追加する。
+
+---

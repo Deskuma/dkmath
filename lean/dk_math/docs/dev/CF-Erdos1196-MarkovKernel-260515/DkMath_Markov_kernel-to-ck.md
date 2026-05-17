@@ -895,6 +895,56 @@ RealWeightProvider.SubProbability
 
 ---
 
+## 2.14. DKMK-007B ShadowHittingBridge
+
+DKMK-007B では、DKMK-007A の `RealWeightProvider` bridge を
+`SubMarkovShadow` / `MarkovShadow` の statewise provider に直接合成する。
+
+追加 module は次である。
+
+```lean
+DkMath.NumberTheory.PrimitiveSet.ShadowHittingBridge
+```
+
+sub-Markov 側では、状態 `s` の provider を compatible な
+`SourceControlledChainFamily` に適用する入口を置く。
+
+```lean
+SubMarkovShadow.applyAtToSourceControlled
+SubMarkovShadow.applyAtToSourceControlled_weightSubProbability
+SubMarkovShadow.weightedHitMass_le_const_applyAtToSourceControlled
+```
+
+ここでは `S.SubProbability` を仮定し、`S.providerAt s` の
+`RealWeightProvider.SubProbability` を DKMK-007A の bridge に渡す。
+
+Markov 側では、`MarkovShadow.providerAt_subProbability` により
+sub-probability は自動で得られる。
+
+```lean
+MarkovShadow.applyAtToSourceControlled
+MarkovShadow.applyAtToSourceControlled_weightSubProbability
+MarkovShadow.weightedHitMass_le_const_applyAtToSourceControlled
+```
+
+これにより、theorem-facing な呼び出しは次の形に短縮される。
+
+```text
+SubMarkovShadow / MarkovShadow
+  + state s
+  + compatible SourceControlledChainFamily
+  + PrimitiveOn A
+  + source mass bound C
+  → real-weighted hit mass ≤ C
+```
+
+DKMK-007A は provider level の橋だった。
+DKMK-007B は shadow level の橋であり、DKMK-006 系で作った
+`globalLogCapacitySubMarkovShadow` や `canonicalExponentSlotMarkovShadow` を
+primitive hitting 側へ渡すための theorem-facing wrapper になる。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

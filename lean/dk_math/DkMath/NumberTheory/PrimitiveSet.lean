@@ -30,6 +30,7 @@ import DkMath.NumberTheory.PrimitiveSet.LogCapacityKernel
 import DkMath.NumberTheory.PrimitiveSet.VonMangoldtShadow
 import DkMath.NumberTheory.PrimitiveSet.SubMarkovShadow
 import DkMath.NumberTheory.PrimitiveSet.MarkovShadow
+import DkMath.NumberTheory.PrimitiveSet.ShadowHittingBridge
 import DkMath.NumberTheory.PrimitiveSet.FullChannelSet
 import DkMath.NumberTheory.PrimitiveSet.GlobalLogCapacityKernel
 import DkMath.NumberTheory.PrimitiveSet.FullChannelEquality
@@ -77,6 +78,7 @@ This module exposes:
 - sub-Markov shadow naming layer for state-indexed real providers
 - Markov shadow naming layer for state-indexed real providers with total
   outgoing weight exactly one
+- bridge from real Markov/sub-Markov shadows to primitive hitting bounds
 - full prime-power channel-set interface for the equality route
 - global log-capacity kernel over source states `n > 1`
 - full-channel log-cost completeness interface and Markov-shadow bridge
