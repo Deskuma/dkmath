@@ -559,6 +559,11 @@ Archive
    - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
    - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
    - `git diff --check`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
 5. 失敗事例:
    - `{n / q, n}` の membership 証明で `fin_cases` を使うと、`n / q = n` の重複可能性により dependent elimination が失敗したため、membership を `h = n / q ∨ h = n` に展開して処理した。
 6. 次の課題:
@@ -584,6 +589,29 @@ Archive
    - なし。
 6. 次の課題:
    - unit mass 以外の具体 mass model で source mass bound を供給する。
+   - one-step divisor-step route を multi-step descent chain へ拡張する。
+
+---
+
+### 日時: 2026/05/17 21:09 JST (DKMK-007G nonunit indicator mass 追加)
+
+1. 目的:
+   - `unitNatMassSpace` 以外の bounded concrete mass model を DKMK-007E の divisor-step route に流す。
+2. 実施:
+   - `nonunitNatMassSpace` を追加し、`μ(1)=0`, `μ(n)=1 (n≠1)` の nonunit indicator mass として定義した。
+   - `nonunitNatMassSpace_dvdMonotone` を追加し、この mass が divisibility-monotone であることを証明した。
+   - selected route 用に `PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_nonunitDivisorStep_weightedHitMass_le_one` を追加した。
+   - canonical route 用に `canonicalExponentSlotMarkovShadow_nonunitDivisorStep_weightedHitMass_le_one` を追加した。
+   - project docs に DKMK-007G の位置づけを追記した。
+3. 結論:
+   - unit mass だけでなく、`1` へ到達する descent chain を区別できる bounded mass model でも、selected / canonical divisor-step hitting route が `≤ 1` で閉じることを確認した。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DescentBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - bounded indicator mass から、本命に近い tail/source mass model へ進める。
    - one-step divisor-step route を multi-step descent chain へ拡張する。
 
 ---

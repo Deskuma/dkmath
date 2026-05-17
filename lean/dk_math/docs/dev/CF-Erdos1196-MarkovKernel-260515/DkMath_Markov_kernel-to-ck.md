@@ -1191,6 +1191,74 @@ canonical route:
 
 ---
 
+## 2.19. DKMK-007G Nonunit indicator mass
+
+DKMK-007G では、`unitNatMassSpace` 以外の bounded concrete mass model を
+divisor-step route に流す最初の観測点を追加する。
+
+追加した mass model は次である。
+
+```lean
+nonunitNatMassSpace
+```
+
+定義は単純である。
+
+```text
+μ(1) = 0
+μ(n) = 1  (n ≠ 1)
+```
+
+これは最終的な tail mass model ではない。
+ただし、`1` に到達する descent chain を unit mass とは区別できるため、
+unit 以外の concrete mass を hitting route に流すための小さな確認点になる。
+
+この mass は divisibility-monotone である。
+
+```lean
+nonunitNatMassSpace_dvdMonotone
+```
+
+理由は、`a ∣ b` かつ `b = 1` なら `a = 1` であり、
+`b ≠ 1` なら target mass はすでに `1` だからである。
+
+`LogCapacityHittingBridge` には、selected / canonical route 用に次を追加した。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_nonunitDivisorStep_weightedHitMass_le_one
+
+canonicalExponentSlotMarkovShadow_nonunitDivisorStep_weightedHitMass_le_one
+```
+
+`LogCapacityState` では常に `1 < s.1` なので、
+
+```lean
+nonunitNatMassSpace.μ s.1 = 1
+```
+
+が成り立つ。したがって DKMK-007E の source mass bound は `C = 1` で閉じる。
+
+到達形は次である。
+
+```text
+selected route:
+  globalLogCapacitySubMarkovShadow
+  → nonunitNatMassSpace
+  → chain(q) = {s.1 / q, s.1}
+  → primitive real-weighted hit mass ≤ 1
+
+canonical route:
+  canonicalExponentSlotMarkovShadow
+  → nonunitNatMassSpace
+  → chain(q) = {s.1 / q, s.1}
+  → primitive real-weighted hit mass ≤ 1
+```
+
+この段階で、unit mass だけでなく、少なくとも一つの非自明な
+bounded mass model が DKMK-007E の divisor-step route を通ることが確認された。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

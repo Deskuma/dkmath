@@ -220,6 +220,28 @@ theorem globalLogCapacitySubMarkovShadow_unitDivisorStep_weightedHitMass_le_one
     (by norm_num)
     (by simp [unitNatMassSpace])
 
+/--
+Primitive hitting bound for the selected global log-capacity sub-Markov shadow
+on the one-step divisor-descent family with nonunit indicator source mass.
+-/
+theorem globalLogCapacitySubMarkovShadow_nonunitDivisorStep_weightedHitMass_le_one
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) :
+    (W.globalLogCapacitySubMarkovShadow_applyAtToDivisorStep
+      IOf hIOf s nonunitNatMassSpace_dvdMonotone).weightedHitMass A ≤ 1 :=
+  W.globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_const
+    IOf hIOf s nonunitNatMassSpace_dvdMonotone hA
+    (by norm_num)
+    (by
+      have hs : s.1 ≠ 1 := Nat.ne_of_gt s.2
+      simp [nonunitNatMassSpace, hs])
+
 end PrimePowerWitnessProvider
 
 /--
@@ -370,5 +392,22 @@ theorem canonicalExponentSlotMarkovShadow_unitDivisorStep_weightedHitMass_le_one
     s unitNatMassSpace_dvdMonotone hA
     (by norm_num)
     (by simp [unitNatMassSpace])
+
+/--
+Primitive hitting bound for the canonical exponent-slot Markov shadow on the
+one-step divisor-descent family with nonunit indicator source mass.
+-/
+theorem canonicalExponentSlotMarkovShadow_nonunitDivisorStep_weightedHitMass_le_one
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) :
+    (canonicalExponentSlotMarkovShadow_applyAtToDivisorStep
+      s nonunitNatMassSpace_dvdMonotone).weightedHitMass A ≤ 1 :=
+  canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_const
+    s nonunitNatMassSpace_dvdMonotone hA
+    (by norm_num)
+    (by
+      have hs : s.1 ≠ 1 := Nat.ne_of_gt s.2
+      simp [nonunitNatMassSpace, hs])
 
 end DkMath.NumberTheory.PrimitiveSet

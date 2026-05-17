@@ -183,6 +183,33 @@ theorem unitNatMassSpace_dvdMonotone :
   rfl
 
 /--
+Indicator mass for nonunit natural nodes.
+
+The node `1` has mass `0`; every other natural node has mass `1`. This is still
+a bounded toy mass, but unlike `unitNatMassSpace` it can distinguish descent
+chains that reach the terminal divisor `1`.
+-/
+def nonunitNatMassSpace : MassSpace ℕ where
+  μ := fun n => if n = 1 then 0 else 1
+  nonneg := by
+    intro n
+    by_cases hn : n = 1 <;> simp [hn]
+
+/--
+The nonunit indicator mass is monotone along divisibility.
+
+If `a ∣ b` and `b = 1`, then `a = 1`; otherwise the target mass is already `1`.
+-/
+theorem nonunitNatMassSpace_dvdMonotone :
+    DvdMonotoneMass nonunitNatMassSpace := by
+  intro a b hab
+  by_cases hb : b = 1
+  · subst b
+    have ha : a = 1 := Nat.dvd_one.mp hab
+    simp [nonunitNatMassSpace, ha]
+  · by_cases ha : a = 1 <;> simp [nonunitNatMassSpace, ha, hb]
+
+/--
 The sample Bool-indexed chain family is controlled by divisibility below
 sources `8` and `9`.
 -/
