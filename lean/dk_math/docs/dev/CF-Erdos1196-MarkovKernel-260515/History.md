@@ -425,3 +425,29 @@ Archive
    - 等号一致しない label 表現が必要になった時点で、weight-preserving equivalence bridge を設計する。
 
 ---
+
+### 日時: 2026/05/17 02:05 JST (DKMK-007A RealWeightedPath bridge 追加)
+
+1. 目的:
+   - real-valued Markov/SubMarkov shadow を primitive hitting / weighted path family 側へ戻すための最初の橋を追加する。
+2. 実施:
+   - `RealWeightedPath.lean` に `RealWeightedPathFamily` を追加した。
+   - `weightedHitMass`, `weightedSourceMass`, `totalWeight`, `WeightSubProbability` を実数値で追加した。
+   - `primitive_weightedHitMass_le_weightedSourceMass`, `weightedHitMass_le_const_mul_totalWeight`, `weightedHitMass_le_const_of_subprob` を追加し、primitive hitting bound を実数重みで使えるようにした。
+   - `RealWeightProvider.Compatible` と `applyToSourceControlled` を追加し、`RealWeightProvider` を `SourceControlledChainFamily` に適用できるようにした。
+   - `applyToSourceControlled_weightSubProbability` と `weightedHitMass_le_const_of_subprob_applyToSourceControlled` を追加し、real sub-probability provider から primitive weighted hit mass bound へ進む入口を置いた。
+   - project docs に DKMK-007A の位置づけを追記した。
+3. 結論:
+   - `SubMarkovShadow.providerAt s` や `MarkovShadow.providerAt s` から得られる実数 provider を、index-compatible な source-controlled family に掛けて primitive hitting bound に渡すための型レベルの橋ができた。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.RealWeightedPath`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/RealWeightedPath.lean`
+5. 失敗事例:
+   - `hitSetMass` / `sourceSetMass` は `DkMath.NumberTheory.ValuationFlow` namespace 側なので、`RealWeightedPathFamily` namespace 内で明示的に open する必要があった。
+   - `RealWeightProvider.Compatible` の index 等式は `P.index = F.index` の向きなので、`F.index` 側の membership を `P.index` 側へ戻す箇所では `rw [hcompat]` を使った。
+6. 次の課題:
+   - `SubMarkovShadow.providerAt_subProbability` / `MarkovShadow.providerAt_subProbability` と DKMK-007A の provider bridge を合成し、shadow から source-controlled family への theorem-facing wrapper を追加する。
+
+---

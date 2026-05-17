@@ -66,7 +66,7 @@ This module exposes:
 - finite transition kernel skeleton
 - divisor transition kernel skeleton
 - real-valued toy weight skeleton
-- real-valued weight provider skeleton
+- real-valued weight provider and weighted path-family bridge
 - real/log route positivity lemmas
 - valuation-budget vocabulary for repeated base primes
 - bridge from prime-power divisor witnesses to real/log sub-probability,

@@ -839,6 +839,62 @@ DKMK-006J は、次の concrete kernel 接続で迷わないための route map 
 
 ---
 
+## 2.13. DKMK-007A RealWeightedPath bridge
+
+DKMK-007A では、DKMK-006 系で整備した real-valued Markov/SubMarkov shadow を、
+primitive hitting / weighted path family 側へ戻すための最初の橋を追加する。
+
+既存の hitting 側には有理重み版の
+
+```lean
+WeightedPathFamily
+WeightProvider.applyToSourceControlled
+```
+
+がある。
+一方、DKMK の log-capacity normalization は `Real.log` を使うため、重みは実数である。
+そこで `RealWeightedPath.lean` に実数版を追加する。
+
+```lean
+RealWeightedPathFamily
+RealWeightedPathFamily.weightedHitMass
+RealWeightedPathFamily.weightedSourceMass
+RealWeightedPathFamily.WeightSubProbability
+```
+
+primitive hitting bound も実数値として閉じる。
+
+```lean
+RealWeightedPathFamily.primitive_weightedHitMass_le_weightedSourceMass
+RealWeightedPathFamily.weightedHitMass_le_const_of_subprob
+```
+
+さらに、状態ごとの real provider を source-controlled family に適用する入口を追加する。
+
+```lean
+RealWeightProvider.Compatible
+RealWeightProvider.applyToSourceControlled
+RealWeightProvider.applyToSourceControlled_weightSubProbability
+RealWeightProvider.weightedHitMass_le_const_of_subprob_applyToSourceControlled
+```
+
+これにより、`SubMarkovShadow.providerAt s` や `MarkovShadow.providerAt s` から得られる
+`RealWeightProvider` を、index が一致する source-controlled family に掛け、
+primitive set の weighted hit mass を `C` で抑える route ができた。
+
+```text
+RealWeightProvider.SubProbability
+  + SourceControlledChainFamily
+  + PrimitiveOn S
+  → real-weighted hit mass bound
+```
+
+これはまだ full Markov equality を直接 hitting theorem に合成する最終段ではない。
+しかし、real normalized kernel と primitive hitting API の間にあった
+`ℚ` / `ℝ` の型差を越える最初の bridge である。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route
