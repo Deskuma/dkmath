@@ -37,6 +37,12 @@ theorem nonunitNatMassSpace_logCapacitySourceMassBound_one :
   have hs : s.1 ≠ 1 := Nat.ne_of_gt s.2
   simp [nonunitNatMassSpace, hs]
 
+/-- Tail-support indicator mass is uniformly bounded by `1`. -/
+theorem tailIndicatorNatMassSpace_logCapacitySourceMassBound_one (N : ℕ) :
+    LogCapacitySourceMassBound (tailIndicatorNatMassSpace N) 1 := by
+  intro s
+  by_cases hs : s.1 = 0 ∨ N ≤ s.1 <;> simp [tailIndicatorNatMassSpace, hs]
+
 namespace PrimePowerWitnessProvider
 
 /--
@@ -281,6 +287,25 @@ theorem globalLogCapacitySubMarkovShadow_nonunitDivisorStep_weightedHitMass_le_o
     IOf hIOf s nonunitNatMassSpace_dvdMonotone hA
     (by norm_num) nonunitNatMassSpace_logCapacitySourceMassBound_one
 
+/--
+Primitive hitting bound for the selected global log-capacity sub-Markov shadow
+on the one-step divisor-descent family with tail-support indicator source mass.
+-/
+theorem globalLogCapacitySubMarkovShadow_tailIndicatorDivisorStep_weightedHitMass_le_one
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (N : ℕ) (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) :
+    (W.globalLogCapacitySubMarkovShadow_applyAtToDivisorStep
+      IOf hIOf s (tailIndicatorNatMassSpace_dvdMonotone N)).weightedHitMass A ≤ 1 :=
+  W.globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound
+    IOf hIOf s (tailIndicatorNatMassSpace_dvdMonotone N) hA
+    (by norm_num) (tailIndicatorNatMassSpace_logCapacitySourceMassBound_one N)
+
 end PrimePowerWitnessProvider
 
 /--
@@ -458,5 +483,19 @@ theorem canonicalExponentSlotMarkovShadow_nonunitDivisorStep_weightedHitMass_le_
   canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound
     s nonunitNatMassSpace_dvdMonotone hA
     (by norm_num) nonunitNatMassSpace_logCapacitySourceMassBound_one
+
+/--
+Primitive hitting bound for the canonical exponent-slot Markov shadow on the
+one-step divisor-descent family with tail-support indicator source mass.
+-/
+theorem canonicalExponentSlotMarkovShadow_tailIndicatorDivisorStep_weightedHitMass_le_one
+    (N : ℕ) (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) :
+    (canonicalExponentSlotMarkovShadow_applyAtToDivisorStep
+      s (tailIndicatorNatMassSpace_dvdMonotone N)).weightedHitMass A ≤ 1 :=
+  canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound
+    s (tailIndicatorNatMassSpace_dvdMonotone N) hA
+    (by norm_num) (tailIndicatorNatMassSpace_logCapacitySourceMassBound_one N)
 
 end DkMath.NumberTheory.PrimitiveSet

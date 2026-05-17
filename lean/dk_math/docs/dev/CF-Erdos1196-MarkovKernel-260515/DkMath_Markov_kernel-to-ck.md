@@ -1314,6 +1314,76 @@ concrete mass model
 
 ---
 
+## 2.21. DKMK-007I Tail-support indicator mass
+
+DKMK-007I では、DKMK-007H で整理した接続面に、bounded な
+tail/source mass model を一つ流す。
+
+追加した mass model は次である。
+
+```lean
+tailIndicatorNatMassSpace N
+```
+
+これは threshold `N` 以上の自然数を mass `1`、それ以外を mass `0`
+として見る indicator mass である。ただし、全自然数上の divisibility
+monotonicity を壊さないため、`0` も mass `1` 側に含める。
+
+```text
+μ(0) = 1
+μ(n) = 1  if N ≤ n
+μ(n) = 0  otherwise
+```
+
+positive な divisor-descent chain 上では、これは通常の tail-support
+indicator として振る舞う。
+
+この mass が divisibility-monotone であることを次で証明した。
+
+```lean
+tailIndicatorNatMassSpace_dvdMonotone
+```
+
+証明の要点は、`a ∣ b` かつ `b ≠ 0` なら `a ≤ b` であることを使い、
+`N ≤ a` なら `N ≤ b` が従う点である。`b = 0` の場合は、
+`μ(0) = 1` としているため上界側が閉じる。
+
+DKMK-007H の source-bound provider としては次を追加した。
+
+```lean
+tailIndicatorNatMassSpace_logCapacitySourceMassBound_one
+```
+
+これは任意の `N` について、
+
+```lean
+LogCapacitySourceMassBound (tailIndicatorNatMassSpace N) 1
+```
+
+を与える。
+
+したがって selected / canonical route では次が得られる。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_tailIndicatorDivisorStep_weightedHitMass_le_one
+
+canonicalExponentSlotMarkovShadow_tailIndicatorDivisorStep_weightedHitMass_le_one
+```
+
+到達形は次である。
+
+```text
+tailIndicatorNatMassSpace N
+  → DvdMonotoneMass
+  → LogCapacitySourceMassBound ... 1
+  → divisor-step weightedHitMass ≤ 1
+```
+
+これにより、unit / nonunit に続いて、threshold parameter を持つ
+bounded tail-support mass model も DKMK-007H の共通 wrapper を通ることが確認された。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

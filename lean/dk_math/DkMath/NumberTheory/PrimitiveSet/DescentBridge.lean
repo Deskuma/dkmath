@@ -210,6 +210,45 @@ theorem nonunitNatMassSpace_dvdMonotone :
   · by_cases ha : a = 1 <;> simp [nonunitNatMassSpace, ha, hb]
 
 /--
+Tail-support indicator mass above a natural threshold.
+
+The mass is `1` on `0` and on nodes `n` with `N ≤ n`, and `0` otherwise. The
+special value at `0` keeps the mass monotone for the global relation `a ∣ b`.
+On positive descent chains this behaves as the usual threshold indicator.
+-/
+def tailIndicatorNatMassSpace (N : ℕ) : MassSpace ℕ where
+  μ := fun n => if n = 0 ∨ N ≤ n then 1 else 0
+  nonneg := by
+    intro n
+    by_cases hn : n = 0 ∨ N ≤ n <;> simp [hn]
+
+/-- The tail-support indicator mass is monotone along divisibility. -/
+theorem tailIndicatorNatMassSpace_dvdMonotone (N : ℕ) :
+    DvdMonotoneMass (tailIndicatorNatMassSpace N) := by
+  intro a b hab
+  by_cases hb : b = 0 ∨ N ≤ b
+  · dsimp [tailIndicatorNatMassSpace]
+    simp [hb]
+    split <;> norm_num
+  · have hb0 : b ≠ 0 := by
+      intro hbz
+      exact hb (Or.inl hbz)
+    have hab_le : a ≤ b := Nat.le_of_dvd (Nat.pos_of_ne_zero hb0) hab
+    have ha0 : a ≠ 0 := by
+      intro haz
+      rcases hab with ⟨c, hc⟩
+      exact hb0 (by simpa [haz] using hc)
+    have hNa : ¬ N ≤ a := by
+      intro hNa
+      exact hb (Or.inr (hNa.trans hab_le))
+    have ha : ¬ (a = 0 ∨ N ≤ a) := by
+      intro ha
+      rcases ha with haz | hNa'
+      · exact ha0 haz
+      · exact hNa hNa'
+    simp [tailIndicatorNatMassSpace, hb, ha]
+
+/--
 The sample Bool-indexed chain family is controlled by divisibility below
 sources `8` and `9`.
 -/
