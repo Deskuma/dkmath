@@ -1259,6 +1259,61 @@ bounded mass model が DKMK-007E の divisor-step route を通ることが確認
 
 ---
 
+## 2.20. DKMK-007H LogCapacitySourceMassBound wrapper
+
+DKMK-007H では、DKMK-007E の divisor-step route に必要だった
+source mass bound を、concrete mass model ごとに直接書き下すのではなく、
+小さな provider 形に分離する。
+
+追加した語彙は次である。
+
+```lean
+LogCapacitySourceMassBound M C
+```
+
+意味は次の一点上界である。
+
+```lean
+∀ s : LogCapacityState, (M.μ s.1 : ℝ) ≤ C
+```
+
+divisor-step family では、全 channel の source が `s.1` に揃う。
+したがって、route 側で本当に必要なのは channel ごとの複雑な bound ではなく、
+log-capacity state 上の source mass の一様上界だけである。
+
+既存の concrete mass model について、次を追加した。
+
+```lean
+unitNatMassSpace_logCapacitySourceMassBound_one
+nonunitNatMassSpace_logCapacitySourceMassBound_one
+```
+
+これにより、selected / canonical route の divisor-step hitting bound は、
+次の共通 wrapper から供給できる。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound
+
+canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound
+```
+
+既存の `unit..._weightedHitMass_le_one` と
+`nonunit..._weightedHitMass_le_one` は、この wrapper 経由に整理した。
+
+到達形は次である。
+
+```text
+concrete mass model
+  → DvdMonotoneMass M
+  → LogCapacitySourceMassBound M C
+  → divisor-step weightedHitMass ≤ C
+```
+
+この段階で、今後 tail/source mass model を追加するときの接続面は、
+`DvdMonotoneMass` と `LogCapacitySourceMassBound` の二点に整理された。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

@@ -585,6 +585,11 @@ Archive
    - selected / canonical log-capacity shadow を one-step divisor-descent family に適用し、primitive real-weighted hit mass `≤ 1` を外部 source-bound なしで呼べるようになった。
 4. 検証:
    - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
 5. 失敗事例:
    - なし。
 6. 次の課題:
@@ -612,6 +617,31 @@ Archive
    - なし。
 6. 次の課題:
    - bounded indicator mass から、本命に近い tail/source mass model へ進める。
+   - one-step divisor-step route を multi-step descent chain へ拡張する。
+
+---
+
+### 日時: 2026/05/17 23:29 JST (DKMK-007H LogCapacitySourceMassBound wrapper 追加)
+
+1. 目的:
+   - DKMK-007E の divisor-step route に必要な source mass bound を、mass model ごとの個別定理から切り出し、再利用できる薄い provider 形に整理する。
+2. 実施:
+   - `LogCapacitySourceMassBound M C` を追加し、log-capacity state 上で `(M.μ s.1 : ℝ) ≤ C` が一様に成り立つことを表す語彙にした。
+   - `unitNatMassSpace_logCapacitySourceMassBound_one` を追加した。
+   - `nonunitNatMassSpace_logCapacitySourceMassBound_one` を追加した。
+   - selected route 用に `PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound` を追加した。
+   - canonical route 用に `canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound` を追加した。
+   - unit / nonunit の `..._weightedHitMass_le_one` 定理を、新しい source-bound wrapper 経由に整理した。
+   - project docs に DKMK-007H の位置づけを追記した。
+3. 結論:
+   - 今後の tail/source mass model は、まず `DvdMonotoneMass M` と `LogCapacitySourceMassBound M C` を供給すれば、selected / canonical の divisor-step hitting bound に接続できる形になった。
+   - DKMK-007F/G で追加した concrete mass theorem は維持しつつ、内部の source-bound 証明は共通 wrapper に集約された。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+5. 失敗事例:
+   - `LogCapacitySourceMassBound` を `simp` 引数に入れると unused simp argument warning が出たため、具体 mass model の定義だけを展開する形に修正した。
+6. 次の課題:
+   - 本命に近い tail/source mass model を `DvdMonotoneMass` と `LogCapacitySourceMassBound` の二点で接続する。
    - one-step divisor-step route を multi-step descent chain へ拡張する。
 
 ---

@@ -14,6 +14,29 @@ namespace DkMath.NumberTheory.PrimitiveSet
 
 open DkMath.CosmicFormula.Mass
 
+/--
+Uniform source-mass bound on log-capacity states.
+
+This small provider shape lets concrete mass models supply the single source
+bound needed by one-step divisor-descent families.
+-/
+def LogCapacitySourceMassBound
+    (M : MassSpace ℕ) (C : ℝ) : Prop :=
+  ∀ s : LogCapacityState, (M.μ s.1 : ℝ) ≤ C
+
+/-- Unit mass is uniformly bounded by `1` on log-capacity states. -/
+theorem unitNatMassSpace_logCapacitySourceMassBound_one :
+    LogCapacitySourceMassBound unitNatMassSpace 1 := by
+  intro s
+  simp [unitNatMassSpace]
+
+/-- Nonunit indicator mass is uniformly bounded by `1` on log-capacity states. -/
+theorem nonunitNatMassSpace_logCapacitySourceMassBound_one :
+    LogCapacitySourceMassBound nonunitNatMassSpace 1 := by
+  intro s
+  have hs : s.1 ≠ 1 := Nat.ne_of_gt s.2
+  simp [nonunitNatMassSpace, hs]
+
 namespace PrimePowerWitnessProvider
 
 /--
@@ -202,6 +225,26 @@ theorem globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_const
 
 /--
 Primitive hitting bound for the selected global log-capacity sub-Markov shadow
+on the one-step divisor-descent family, using a statewise source-bound provider.
+-/
+theorem globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    {M : MassSpace ℕ} (hM : DvdMonotoneMass M)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) {C : ℝ} (hC : 0 ≤ C)
+    (hsource : LogCapacitySourceMassBound M C) :
+    (W.globalLogCapacitySubMarkovShadow_applyAtToDivisorStep
+      IOf hIOf s hM).weightedHitMass A ≤ C :=
+  W.globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_const
+    IOf hIOf s hM hA hC (hsource s)
+
+/--
+Primitive hitting bound for the selected global log-capacity sub-Markov shadow
 on the one-step divisor-descent family with unit source mass.
 -/
 theorem globalLogCapacitySubMarkovShadow_unitDivisorStep_weightedHitMass_le_one
@@ -215,10 +258,9 @@ theorem globalLogCapacitySubMarkovShadow_unitDivisorStep_weightedHitMass_le_one
     (hA : PrimitiveOn A) :
     (W.globalLogCapacitySubMarkovShadow_applyAtToDivisorStep
       IOf hIOf s unitNatMassSpace_dvdMonotone).weightedHitMass A ≤ 1 :=
-  W.globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_const
+  W.globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound
     IOf hIOf s unitNatMassSpace_dvdMonotone hA
-    (by norm_num)
-    (by simp [unitNatMassSpace])
+    (by norm_num) unitNatMassSpace_logCapacitySourceMassBound_one
 
 /--
 Primitive hitting bound for the selected global log-capacity sub-Markov shadow
@@ -235,12 +277,9 @@ theorem globalLogCapacitySubMarkovShadow_nonunitDivisorStep_weightedHitMass_le_o
     (hA : PrimitiveOn A) :
     (W.globalLogCapacitySubMarkovShadow_applyAtToDivisorStep
       IOf hIOf s nonunitNatMassSpace_dvdMonotone).weightedHitMass A ≤ 1 :=
-  W.globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_const
+  W.globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound
     IOf hIOf s nonunitNatMassSpace_dvdMonotone hA
-    (by norm_num)
-    (by
-      have hs : s.1 ≠ 1 := Nat.ne_of_gt s.2
-      simp [nonunitNatMassSpace, hs])
+    (by norm_num) nonunitNatMassSpace_logCapacitySourceMassBound_one
 
 end PrimePowerWitnessProvider
 
@@ -380,6 +419,20 @@ theorem canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_const
 
 /--
 Primitive hitting bound for the canonical exponent-slot Markov shadow on the
+one-step divisor-descent family, using a statewise source-bound provider.
+-/
+theorem canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound
+    (s : LogCapacityState)
+    {M : MassSpace ℕ} (hM : DvdMonotoneMass M)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) {C : ℝ} (hC : 0 ≤ C)
+    (hsource : LogCapacitySourceMassBound M C) :
+    (canonicalExponentSlotMarkovShadow_applyAtToDivisorStep s hM).weightedHitMass A ≤ C :=
+  canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_const
+    s hM hA hC (hsource s)
+
+/--
+Primitive hitting bound for the canonical exponent-slot Markov shadow on the
 one-step divisor-descent family with unit source mass.
 -/
 theorem canonicalExponentSlotMarkovShadow_unitDivisorStep_weightedHitMass_le_one
@@ -388,10 +441,9 @@ theorem canonicalExponentSlotMarkovShadow_unitDivisorStep_weightedHitMass_le_one
     (hA : PrimitiveOn A) :
     (canonicalExponentSlotMarkovShadow_applyAtToDivisorStep
       s unitNatMassSpace_dvdMonotone).weightedHitMass A ≤ 1 :=
-  canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_const
+  canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound
     s unitNatMassSpace_dvdMonotone hA
-    (by norm_num)
-    (by simp [unitNatMassSpace])
+    (by norm_num) unitNatMassSpace_logCapacitySourceMassBound_one
 
 /--
 Primitive hitting bound for the canonical exponent-slot Markov shadow on the
@@ -403,11 +455,8 @@ theorem canonicalExponentSlotMarkovShadow_nonunitDivisorStep_weightedHitMass_le_
     (hA : PrimitiveOn A) :
     (canonicalExponentSlotMarkovShadow_applyAtToDivisorStep
       s nonunitNatMassSpace_dvdMonotone).weightedHitMass A ≤ 1 :=
-  canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_const
+  canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound
     s nonunitNatMassSpace_dvdMonotone hA
-    (by norm_num)
-    (by
-      have hs : s.1 ≠ 1 := Nat.ne_of_gt s.2
-      simp [nonunitNatMassSpace, hs])
+    (by norm_num) nonunitNatMassSpace_logCapacitySourceMassBound_one
 
 end DkMath.NumberTheory.PrimitiveSet
