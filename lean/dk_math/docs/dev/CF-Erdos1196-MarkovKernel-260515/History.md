@@ -532,3 +532,32 @@ Archive
    - selected route と canonical route の source mass bound を、具体的な mass model から供給する。
 
 ---
+
+### 日時: 2026/05/17 19:05 JST (DKMK-007E Divisor-step source-controlled family 追加)
+
+1. 目的:
+   - DKMK-007D の singleton model から進め、各 channel `q` に実際の divisor descent step `{n / q, n}` を持たせる。
+2. 実施:
+   - `DvdControlledChainFamily.divisorStep` を追加し、`q ∣ n` から chain `{n / q, n}` と source `n` を持つ divisibility-controlled family を構成した。
+   - `SourceControlledChainFamily.ofDivisorStep` を追加し、`DvdMonotoneMass M` により divisor-step family を source-controlled family へ変換できるようにした。
+   - `LogCapacityHittingBridge` に selected route 用の `globalLogCapacitySubMarkovShadow_applyAtToDivisorStep` と `globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_const` を追加した。
+   - `LogCapacityHittingBridge` に canonical route 用の `canonicalExponentSlotMarkovShadow_applyAtToDivisorStep` と `canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_const` を追加した。
+   - `PrimitiveSet.lean` の公開説明と project docs に DKMK-007E の位置づけを追記した。
+3. 結論:
+   - selected / canonical log-capacity shadow を、singleton ではなく `n ↦ n / q` を含む one-step divisor-descent family に直接適用できるようになった。
+   - divisor-step family では source が全 channel で `s.1` に揃うため、source mass bound は `(M.μ s.1 : ℝ) ≤ C` の一点上界で済む。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DescentBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - `{n / q, n}` の membership 証明で `fin_cases` を使うと、`n / q = n` の重複可能性により dependent elimination が失敗したため、membership を `h = n / q ∨ h = n` に展開して処理した。
+6. 次の課題:
+   - divisor-step family の source mass bound `(M.μ s.1 : ℝ) ≤ C` を具体的な mass model から供給する。
+   - one-step から multi-step descent chain へ拡張するか、または hitting 対象 `A` の配置を明確化する。
+
+---

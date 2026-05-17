@@ -37,6 +37,52 @@ structure DvdControlledChainFamily
 namespace DvdControlledChainFamily
 
 /--
+Divisibility-controlled one-step divisor-descent family at source `n`.
+
+For each indexed divisor label `q`, the chain is `{n / q, n}` and the source is
+`n`. The divisor hypothesis supplies `n / q ∣ n`, so each chain is comparable
+by divisibility and lies below its source.
+-/
+def divisorStep
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    DvdControlledChainFamily ℕ where
+  index := I
+  chain := fun q => ({n / q, n} : Finset ℕ)
+  chain_is_chain := by
+    intro q hq a b ha hb
+    have hchild : n / q ∣ n := Nat.div_dvd_of_dvd (hdiv q hq)
+    simp only [Finset.mem_insert, Finset.mem_singleton] at ha hb
+    rcases ha with rfl | rfl <;> rcases hb with rfl | rfl
+    · exact Or.inl (dvd_refl (n / q))
+    · exact Or.inl hchild
+    · exact Or.inr hchild
+    · exact Or.inl (dvd_refl _)
+  source := fun _ => n
+  chain_dvd_source := by
+    intro q hq h hh
+    have hchild : n / q ∣ n := Nat.div_dvd_of_dvd (hdiv q hq)
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hh
+    rcases hh with rfl | rfl
+    · exact hchild
+    · exact dvd_refl _
+
+@[simp] theorem divisorStep_index
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    (divisorStep n I hdiv).index = I := rfl
+
+@[simp] theorem divisorStep_chain
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    (divisorStep n I hdiv).chain = fun q => ({n / q, n} : Finset ℕ) := rfl
+
+@[simp] theorem divisorStep_source
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    (divisorStep n I hdiv).source = fun _ => n := rfl
+
+/--
 Convert a divisibility-controlled forest into a source-controlled forest using
 a divisibility-monotone mass.
 -/
@@ -89,6 +135,46 @@ theorem primitive_hitMass_le_sourceMass
   exact (F.toSourceControlled hM).primitive_hitMass_le_sourceMass hS
 
 end DvdControlledChainFamily
+
+namespace SourceControlledChainFamily
+
+/--
+Source-controlled one-step divisor-descent family at source `n`.
+
+This is `DvdControlledChainFamily.divisorStep` converted by a
+divisibility-monotone mass. Its index is definitionally the supplied index,
+which keeps compatibility with divisor-channel providers lightweight.
+-/
+def ofDivisorStep
+    {M : MassSpace ℕ}
+    (hM : DvdMonotoneMass M)
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    SourceControlledChainFamily M ℕ :=
+  (DvdControlledChainFamily.divisorStep n I hdiv).toSourceControlled hM
+
+@[simp] theorem ofDivisorStep_index
+    {M : MassSpace ℕ}
+    (hM : DvdMonotoneMass M)
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    (ofDivisorStep hM n I hdiv).index = I := rfl
+
+@[simp] theorem ofDivisorStep_chain
+    {M : MassSpace ℕ}
+    (hM : DvdMonotoneMass M)
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    (ofDivisorStep hM n I hdiv).chain = fun q => ({n / q, n} : Finset ℕ) := rfl
+
+@[simp] theorem ofDivisorStep_source
+    {M : MassSpace ℕ}
+    (hM : DvdMonotoneMass M)
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    (ofDivisorStep hM n I hdiv).source = fun _ => n := rfl
+
+end SourceControlledChainFamily
 
 /-- The unit natural mass is monotone along divisibility. -/
 theorem unitNatMassSpace_dvdMonotone :

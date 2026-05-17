@@ -5,6 +5,7 @@ Authors: D. and Wise Wolf.
 -/
 
 import DkMath.NumberTheory.PrimitiveSet.ShadowHittingBridge
+import DkMath.NumberTheory.PrimitiveSet.DescentBridge
 import DkMath.NumberTheory.PrimitiveSet.FullExponentSlotCanonical
 
 #print "file: DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge"
@@ -142,6 +143,63 @@ theorem globalLogCapacitySubMarkovShadow_natSingletonSelf_weightedHitMass_le_con
     (by
       simpa using hsource)
 
+/--
+Apply the selected global log-capacity sub-Markov shadow to the one-step
+divisor-descent family `{s.1 / q, s.1}` indexed by `IOf s.1`.
+-/
+noncomputable def globalLogCapacitySubMarkovShadow_applyAtToDivisorStep
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    {M : MassSpace ℕ}
+    (hM : DvdMonotoneMass M) :
+    RealWeightedPathFamily M ℕ :=
+  W.globalLogCapacitySubMarkovShadow_applyAtToSourceControlled IOf hIOf s
+    (SourceControlledChainFamily.ofDivisorStep hM s.1 (IOf s.1)
+      (fun q hq => T.toDivisorTransitionKernel.index_dvd s.1 q (hIOf s.1 q hq)))
+    rfl
+
+@[simp] theorem globalLogCapacitySubMarkovShadow_applyAtToDivisorStep_index
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    {M : MassSpace ℕ}
+    (hM : DvdMonotoneMass M) :
+    (W.globalLogCapacitySubMarkovShadow_applyAtToDivisorStep IOf hIOf s hM).index =
+      IOf s.1 :=
+  rfl
+
+/--
+Primitive hitting bound for the selected global log-capacity sub-Markov shadow
+on the one-step divisor-descent family at state `s`.
+-/
+theorem globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_const
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (s : LogCapacityState)
+    {M : MassSpace ℕ} (hM : DvdMonotoneMass M)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) {C : ℝ} (hC : 0 ≤ C)
+    (hsource : (M.μ s.1 : ℝ) ≤ C) :
+    (W.globalLogCapacitySubMarkovShadow_applyAtToDivisorStep
+      IOf hIOf s hM).weightedHitMass A ≤ C :=
+  W.globalLogCapacitySubMarkovShadow_weightedHitMass_le_const IOf hIOf s
+    (SourceControlledChainFamily.ofDivisorStep hM s.1 (IOf s.1)
+      (fun q hq => T.toDivisorTransitionKernel.index_dvd s.1 q (hIOf s.1 q hq)))
+    rfl hA hC
+    (by
+      intro q hq
+      simpa using hsource)
+
 end PrimePowerWitnessProvider
 
 /--
@@ -233,6 +291,49 @@ theorem canonicalExponentSlotMarkovShadow_natSingletonSelf_weightedHitMass_le_co
       (M := M) (canonicalExponentSlotLabels s.1))
     rfl hA hC
     (by
+      simpa using hsource)
+
+/--
+Apply the canonical exponent-slot Markov shadow to the one-step
+divisor-descent family `{s.1 / q, s.1}` indexed by the canonical labels.
+-/
+noncomputable def canonicalExponentSlotMarkovShadow_applyAtToDivisorStep
+    (s : LogCapacityState)
+    {M : MassSpace ℕ}
+    (hM : DvdMonotoneMass M) :
+    RealWeightedPathFamily M ℕ :=
+  canonicalExponentSlotMarkovShadow_applyAtToSourceControlled s
+    (SourceControlledChainFamily.ofDivisorStep hM s.1
+      (canonicalExponentSlotLabels s.1)
+      (fun q hq => canonicalExponentSlotDivisorTransitionKernel.index_dvd s.1 q hq))
+    rfl
+
+@[simp] theorem canonicalExponentSlotMarkovShadow_applyAtToDivisorStep_index
+    (s : LogCapacityState)
+    {M : MassSpace ℕ}
+    (hM : DvdMonotoneMass M) :
+    (canonicalExponentSlotMarkovShadow_applyAtToDivisorStep s hM).index =
+      canonicalExponentSlotLabels s.1 :=
+  rfl
+
+/--
+Primitive hitting bound for the canonical exponent-slot Markov shadow on the
+one-step divisor-descent family at state `s`.
+-/
+theorem canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_const
+    (s : LogCapacityState)
+    {M : MassSpace ℕ} (hM : DvdMonotoneMass M)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) {C : ℝ} (hC : 0 ≤ C)
+    (hsource : (M.μ s.1 : ℝ) ≤ C) :
+    (canonicalExponentSlotMarkovShadow_applyAtToDivisorStep s hM).weightedHitMass A ≤ C :=
+  canonicalExponentSlotMarkovShadow_weightedHitMass_le_const s
+    (SourceControlledChainFamily.ofDivisorStep hM s.1
+      (canonicalExponentSlotLabels s.1)
+      (fun q hq => canonicalExponentSlotDivisorTransitionKernel.index_dvd s.1 q hq))
+    rfl hA hC
+    (by
+      intro q hq
       simpa using hsource)
 
 end DkMath.NumberTheory.PrimitiveSet

@@ -1067,6 +1067,86 @@ canonical route:
 
 ---
 
+## 2.17. DKMK-007E Divisor-step source-controlled family
+
+DKMK-007E では、DKMK-007D の singleton model から一段進め、
+実際の divisor descent step を持つ chain family を追加する。
+
+追加した入口は次である。
+
+```lean
+DvdControlledChainFamily.divisorStep
+SourceControlledChainFamily.ofDivisorStep
+```
+
+`DvdControlledChainFamily.divisorStep n I hdiv` は、各 channel label `q`
+に対して次の chain を割り当てる。
+
+```lean
+chain q = {n / q, n}
+source q = n
+```
+
+ここで `hdiv : ∀ q ∈ I, q ∣ n` により、`n / q ∣ n` が供給される。
+したがって、各 chain は divisibility chain であり、かつ source `n` の下にある。
+
+`SourceControlledChainFamily.ofDivisorStep` は、この
+divisibility-controlled family を `DvdMonotoneMass M` で
+source-controlled family へ変換する。
+
+```lean
+SourceControlledChainFamily.ofDivisorStep hM n I hdiv
+```
+
+これにより、DKMK-007D と同じく index は定義上保存される。
+
+```lean
+(SourceControlledChainFamily.ofDivisorStep hM n I hdiv).index = I
+```
+
+`LogCapacityHittingBridge` には、selected / canonical route から
+この divisor-step family を直接使う API を追加した。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_applyAtToDivisorStep
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_const
+
+canonicalExponentSlotMarkovShadow_applyAtToDivisorStep
+canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_const
+```
+
+selected route では、`hIOf` と divisor kernel の `index_dvd` から
+`q ∣ s.1` が得られる。
+
+canonical route では、`canonicalExponentSlotDivisorTransitionKernel.index_dvd`
+から `q ∣ s.1` が得られる。
+
+到達形は次である。
+
+```text
+selected route:
+  globalLogCapacitySubMarkovShadow
+  → chain(q) = {s.1 / q, s.1}
+  → primitive real-weighted hit mass ≤ C
+
+canonical route:
+  canonicalExponentSlotMarkovShadow
+  → chain(q) = {s.1 / q, s.1}
+  → primitive real-weighted hit mass ≤ C
+```
+
+source は全 channel で `s.1` に揃うため、hitting bound 側の source bound は
+次の一点上界で足りる。
+
+```lean
+(M.μ s.1 : ℝ) ≤ C
+```
+
+これで、形式的 singleton model ではなく、実際の divisor removal
+`n ↦ n / q` を含む primitive hitting route に入った。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route
