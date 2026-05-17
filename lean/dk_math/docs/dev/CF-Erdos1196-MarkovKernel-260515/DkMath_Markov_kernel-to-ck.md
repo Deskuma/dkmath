@@ -1004,6 +1004,69 @@ canonical exponent-slot MarkovShadow
 
 ---
 
+## 2.16. DKMK-007D SourceControlledChainFamily constructors
+
+DKMK-007D では、DKMK-007C で外部入力だった
+`SourceControlledChainFamily` の concrete constructor を小さく追加する。
+
+追加した入口は次である。
+
+```lean
+SourceControlledChainFamily.ofIndex
+SourceControlledChainFamily.singletonSelf
+SourceControlledChainFamily.natSingletonSelf
+```
+
+`ofIndex` は、index / chain / source / mass control をそのまま束ねる
+薄い named constructor である。
+
+`singletonSelf` は、各 index `i` に singleton chain `{label i}` を割り当て、
+source も `label i` とする最小 concrete model である。
+したがって、index は定義上そのまま保存される。
+
+```lean
+(SourceControlledChainFamily.singletonSelf I label).index = I
+```
+
+nat-indexed route では、さらに次を使う。
+
+```lean
+SourceControlledChainFamily.natSingletonSelf I
+```
+
+これは source を `id` にした singleton model であり、
+`IOf s.1` や `canonicalExponentSlotLabels s.1` を index に選ぶだけで、
+DKMK-007C の compatibility が `rfl` で閉じる。
+
+このため、`LogCapacityHittingBridge` にも convenience API を追加した。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_applyAtToNatSingletonSelf
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_natSingletonSelf_weightedHitMass_le_const
+
+canonicalExponentSlotMarkovShadow_applyAtToNatSingletonSelf
+canonicalExponentSlotMarkovShadow_natSingletonSelf_weightedHitMass_le_const
+```
+
+到達形は次である。
+
+```text
+selected route:
+  choose F := natSingletonSelf (IOf s.1)
+  → F.index = IOf s.1 by rfl
+  → primitive real-weighted hit mass ≤ C
+
+canonical route:
+  choose F := natSingletonSelf (canonicalExponentSlotLabels s.1)
+  → F.index = canonicalExponentSlotLabels s.1 by rfl
+  → primitive real-weighted hit mass ≤ C
+```
+
+これで、DKMK-007C の残り入力だった index compatibility は、
+少なくとも singleton concrete family については theorem 呼び出し側から消えた。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

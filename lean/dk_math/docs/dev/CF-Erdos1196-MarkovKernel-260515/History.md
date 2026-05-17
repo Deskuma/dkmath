@@ -504,3 +504,31 @@ Archive
    - `SourceControlledChainFamily` 側の concrete constructor を整備し、`F.index = IOf s.1` または `F.index = canonicalExponentSlotLabels s.1` を自然に供給できるようにする。
 
 ---
+
+### 日時: 2026/05/17 17:25 JST (DKMK-007D SourceControlledChainFamily constructors 追加)
+
+1. 目的:
+   - DKMK-007C で外部入力だった `SourceControlledChainFamily` の concrete constructor を整備し、log-capacity shadow との index compatibility を自然に供給できるようにする。
+2. 実施:
+   - `SourceControlledChainFamily.ofIndex` を追加し、明示 index を持つ source-controlled family を named constructor として構成できるようにした。
+   - `SourceControlledChainFamily.singletonSelf` を追加し、各 index に singleton chain `{label i}` と source `label i` を割り当てる最小 concrete model を追加した。
+   - `SourceControlledChainFamily.natSingletonSelf` を追加し、nat-indexed route で source を `id` とする singleton model を使えるようにした。
+   - `LogCapacityHittingBridge` に selected route / canonical route 用の `applyAtToNatSingletonSelf` と hitting bound theorem を追加した。
+   - `PrimitiveSet.lean` の公開説明と project docs に DKMK-007D の位置づけを追記した。
+3. 結論:
+   - `IOf s.1` または `canonicalExponentSlotLabels s.1` をそのまま index とする singleton source-controlled family を選ぶことで、DKMK-007C の compatibility が `rfl` で閉じるようになった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.BranchBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/BranchBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/BranchBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - singleton family ではなく、実際の divisor-chain / descent-chain content を持つ `SourceControlledChainFamily` constructor へ拡張する。
+   - selected route と canonical route の source mass bound を、具体的な mass model から供給する。
+
+---

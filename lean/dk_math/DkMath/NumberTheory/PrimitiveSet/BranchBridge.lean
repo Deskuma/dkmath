@@ -28,6 +28,126 @@ structure SourceControlledChainFamily
 
 namespace SourceControlledChainFamily
 
+/--
+Named constructor for a source-controlled family with an explicitly chosen
+finite index.
+-/
+def ofIndex
+    {ι : Type _} [DecidableEq ι]
+    {M : MassSpace ℕ}
+    (I : Finset ι)
+    (chain : ι → Finset ℕ)
+    (hchain : ∀ i ∈ I, DivisibilityChain (chain i))
+    (source : ι → ℕ)
+    (hmass : ∀ i ∈ I, ∀ h ∈ chain i, M.μ h ≤ M.μ (source i)) :
+    SourceControlledChainFamily M ι where
+  index := I
+  chain := chain
+  chain_is_chain := hchain
+  source := source
+  mass_le_source := hmass
+
+@[simp] theorem ofIndex_index
+    {ι : Type _} [DecidableEq ι]
+    {M : MassSpace ℕ}
+    (I : Finset ι)
+    (chain : ι → Finset ℕ)
+    (hchain : ∀ i ∈ I, DivisibilityChain (chain i))
+    (source : ι → ℕ)
+    (hmass : ∀ i ∈ I, ∀ h ∈ chain i, M.μ h ≤ M.μ (source i)) :
+    (ofIndex (M := M) I chain hchain source hmass).index = I := rfl
+
+@[simp] theorem ofIndex_chain
+    {ι : Type _} [DecidableEq ι]
+    {M : MassSpace ℕ}
+    (I : Finset ι)
+    (chain : ι → Finset ℕ)
+    (hchain : ∀ i ∈ I, DivisibilityChain (chain i))
+    (source : ι → ℕ)
+    (hmass : ∀ i ∈ I, ∀ h ∈ chain i, M.μ h ≤ M.μ (source i)) :
+    (ofIndex (M := M) I chain hchain source hmass).chain = chain := rfl
+
+@[simp] theorem ofIndex_source
+    {ι : Type _} [DecidableEq ι]
+    {M : MassSpace ℕ}
+    (I : Finset ι)
+    (chain : ι → Finset ℕ)
+    (hchain : ∀ i ∈ I, DivisibilityChain (chain i))
+    (source : ι → ℕ)
+    (hmass : ∀ i ∈ I, ∀ h ∈ chain i, M.μ h ≤ M.μ (source i)) :
+    (ofIndex (M := M) I chain hchain source hmass).source = source := rfl
+
+/--
+Concrete source-controlled family whose `i`-th chain is the singleton
+`{label i}` and whose source is the same node.
+
+This is the smallest index-aligned model: the index is exactly the supplied
+finite set, so compatibility goals for shadow providers can usually close by
+`rfl` after choosing the intended index.
+-/
+def singletonSelf
+    {ι : Type _} [DecidableEq ι]
+    {M : MassSpace ℕ}
+    (I : Finset ι) (label : ι → ℕ) :
+    SourceControlledChainFamily M ι :=
+  ofIndex (M := M) I
+    (fun i => ({label i} : Finset ℕ))
+    (by
+      intro i _hi a b ha hb
+      simp only [Finset.mem_singleton] at ha hb
+      subst a
+      subst b
+      exact Or.inl (dvd_refl (label i)))
+    label
+    (by
+      intro i _hi h hh
+      simp only [Finset.mem_singleton] at hh
+      subst h
+      rfl)
+
+@[simp] theorem singletonSelf_index
+    {ι : Type _} [DecidableEq ι]
+    {M : MassSpace ℕ}
+    (I : Finset ι) (label : ι → ℕ) :
+    (singletonSelf (M := M) I label).index = I := rfl
+
+@[simp] theorem singletonSelf_chain
+    {ι : Type _} [DecidableEq ι]
+    {M : MassSpace ℕ}
+    (I : Finset ι) (label : ι → ℕ) :
+    (singletonSelf (M := M) I label).chain =
+      fun i => ({label i} : Finset ℕ) := rfl
+
+@[simp] theorem singletonSelf_source
+    {ι : Type _} [DecidableEq ι]
+    {M : MassSpace ℕ}
+    (I : Finset ι) (label : ι → ℕ) :
+    (singletonSelf (M := M) I label).source = label := rfl
+
+/--
+Nat-indexed singleton model using each index value as its own source node.
+-/
+def natSingletonSelf
+    {M : MassSpace ℕ}
+    (I : Finset ℕ) :
+    SourceControlledChainFamily M ℕ :=
+  singletonSelf (M := M) I id
+
+@[simp] theorem natSingletonSelf_index
+    {M : MassSpace ℕ}
+    (I : Finset ℕ) :
+    (natSingletonSelf (M := M) I).index = I := rfl
+
+@[simp] theorem natSingletonSelf_chain
+    {M : MassSpace ℕ}
+    (I : Finset ℕ) :
+    (natSingletonSelf (M := M) I).chain = fun q => ({q} : Finset ℕ) := rfl
+
+@[simp] theorem natSingletonSelf_source
+    {M : MassSpace ℕ}
+    (I : Finset ℕ) :
+    (natSingletonSelf (M := M) I).source = id := rfl
+
 /-- Indexed hit mass of a source-controlled chain family. -/
 def hitMass
     {ι : Type _} [DecidableEq ι]

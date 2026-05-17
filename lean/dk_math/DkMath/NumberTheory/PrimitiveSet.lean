@@ -53,7 +53,7 @@ This module exposes:
 - finite positive and lower-bound support predicates
 - finite divisibility/descent-chain hitting lemmas
 - finite chain-family hitting bounds
-- source-controlled forest bridge
+- source-controlled forest bridge and concrete singleton constructors
 - divisibility-controlled descent provider
 - prime-step descent provider
 - multi-step prime reachability provider
