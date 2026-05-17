@@ -477,3 +477,30 @@ Archive
    - `globalLogCapacitySubMarkovShadow` または `canonicalExponentSlotMarkovShadow` を concrete `SourceControlledChainFamily` に適用する theorem-facing wrapper を追加する。
 
 ---
+
+### 日時: 2026/05/17 03:05 JST (DKMK-007C LogCapacityHittingBridge 追加)
+
+1. 目的:
+   - `globalLogCapacitySubMarkovShadow` と `canonicalExponentSlotMarkovShadow` を primitive hitting wrapper に接続する theorem-facing API を追加する。
+2. 実施:
+   - `DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge` を追加した。
+   - selected route 用に `globalLogCapacitySubMarkovShadow_providerAt_compatible`, `globalLogCapacitySubMarkovShadow_applyAtToSourceControlled`, `globalLogCapacitySubMarkovShadow_weightedHitMass_le_const` を追加した。
+   - selected route の index compatibility を `IOf s.1 = F.index` として外部入力化した。
+   - canonical route 用に `canonicalExponentSlotMarkovShadow_providerAt_compatible`, `canonicalExponentSlotMarkovShadow_applyAtToSourceControlled`, `canonicalExponentSlotMarkovShadow_weightedHitMass_le_const` を追加した。
+   - canonical route の index compatibility を `canonicalExponentSlotLabels s.1 = F.index` として外部入力化した。
+   - `PrimitiveSet.lean` に新 module を公開 import した。
+   - project docs に DKMK-007C の位置づけを追記した。
+3. 結論:
+   - selected log-capacity sub-Markov shadow と canonical exponent-slot Markov shadow を、index-compatible な `SourceControlledChainFamily` に適用して primitive real-weighted hit mass bound を得る入口ができた。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+5. 失敗事例:
+   - theorem statement 内の `|>.weightedHitMass` は parser に合わなかったため、明示的な `.weightedHitMass` 呼び出しへ変更した。
+   - 初回 build で 100 文字超えの style warning が出たため、該当行を折り返した。
+6. 次の課題:
+   - `SourceControlledChainFamily` 側の concrete constructor を整備し、`F.index = IOf s.1` または `F.index = canonicalExponentSlotLabels s.1` を自然に供給できるようにする。
+
+---

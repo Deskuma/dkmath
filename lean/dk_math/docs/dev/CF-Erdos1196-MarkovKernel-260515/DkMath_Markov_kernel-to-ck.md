@@ -945,6 +945,65 @@ primitive hitting 側へ渡すための theorem-facing wrapper になる。
 
 ---
 
+## 2.15. DKMK-007C LogCapacityHittingBridge
+
+DKMK-007C では、DKMK-007B の shadow-level wrapper を、具体的な
+log-capacity shadow に接続する。
+
+追加 module は次である。
+
+```lean
+DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge
+```
+
+selected route では、`globalLogCapacitySubMarkovShadow` を
+source-controlled family に適用する入口を追加する。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_providerAt_compatible
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_applyAtToSourceControlled
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_weightedHitMass_le_const
+```
+
+必要な compatibility は次の具体的な index 一致である。
+
+```lean
+IOf s.1 = F.index
+```
+
+canonical equality route では、`canonicalExponentSlotMarkovShadow` について
+同じ形の入口を追加する。
+
+```lean
+canonicalExponentSlotMarkovShadow_providerAt_compatible
+canonicalExponentSlotMarkovShadow_applyAtToSourceControlled
+canonicalExponentSlotMarkovShadow_weightedHitMass_le_const
+```
+
+こちらの compatibility は次である。
+
+```lean
+canonicalExponentSlotLabels s.1 = F.index
+```
+
+これで、DKMK-006/007 の流れは具体的に次まで到達した。
+
+```text
+selected log-capacity SubMarkovShadow
+  + F.index = IOf s.1
+  → primitive real-weighted hit mass ≤ C
+
+canonical exponent-slot MarkovShadow
+  + F.index = canonicalExponentSlotLabels s.1
+  → primitive real-weighted hit mass ≤ C
+```
+
+まだ source-controlled family `F` 自体の構成は外部入力である。
+ただし、log-capacity shadow と primitive hitting theorem の接続点は、
+具体的な theorem-facing API として固定された。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route
