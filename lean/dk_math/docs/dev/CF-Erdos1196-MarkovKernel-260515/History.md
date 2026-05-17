@@ -496,6 +496,11 @@ Archive
    - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
    - `lake build DkMath.NumberTheory.PrimitiveSet`
    - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
    - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
 5. 失敗事例:
    - theorem statement 内の `|>.weightedHitMass` は parser に合わなかったため、明示的な `.weightedHitMass` 呼び出しへ変更した。
@@ -559,5 +564,26 @@ Archive
 6. 次の課題:
    - divisor-step family の source mass bound `(M.μ s.1 : ℝ) ≤ C` を具体的な mass model から供給する。
    - one-step から multi-step descent chain へ拡張するか、または hitting 対象 `A` の配置を明確化する。
+
+---
+
+### 日時: 2026/05/17 19:51 JST (DKMK-007F unit mass divisor-step bound 追加)
+
+1. 目的:
+   - DKMK-007E で残っていた divisor-step route の source mass bound を、既存の concrete mass model `unitNatMassSpace` から供給する。
+2. 実施:
+   - selected route 用に `PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_unitDivisorStep_weightedHitMass_le_one` を追加した。
+   - canonical route 用に `canonicalExponentSlotMarkovShadow_unitDivisorStep_weightedHitMass_le_one` を追加した。
+   - どちらも `unitNatMassSpace_dvdMonotone` と `unitNatMassSpace.μ _ = 1` を使い、DKMK-007E の `hsource : (M.μ s.1 : ℝ) ≤ C` を `C = 1` で閉じた。
+   - project docs に DKMK-007F の位置づけを追記した。
+3. 結論:
+   - selected / canonical log-capacity shadow を one-step divisor-descent family に適用し、primitive real-weighted hit mass `≤ 1` を外部 source-bound なしで呼べるようになった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - unit mass 以外の具体 mass model で source mass bound を供給する。
+   - one-step divisor-step route を multi-step descent chain へ拡張する。
 
 ---

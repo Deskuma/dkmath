@@ -1147,6 +1147,50 @@ source は全 channel で `s.1` に揃うため、hitting bound 側の source bo
 
 ---
 
+## 2.18. DKMK-007F Unit mass divisor-step bounds
+
+DKMK-007F では、DKMK-007E で残っていた source mass bound を、
+既存の concrete mass model `unitNatMassSpace` から供給する。
+
+DKMK-007E の divisor-step route では source が全 channel で `s.1` に揃うため、
+一般形の仮定は次であった。
+
+```lean
+hsource : (M.μ s.1 : ℝ) ≤ C
+```
+
+`unitNatMassSpace` ではすべての点の mass が `1` なので、`C = 1` として
+この仮定は自動的に閉じる。
+
+追加した theorem は次である。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_unitDivisorStep_weightedHitMass_le_one
+
+canonicalExponentSlotMarkovShadow_unitDivisorStep_weightedHitMass_le_one
+```
+
+到達形は次である。
+
+```text
+selected route:
+  globalLogCapacitySubMarkovShadow
+  → unitNatMassSpace
+  → chain(q) = {s.1 / q, s.1}
+  → primitive real-weighted hit mass ≤ 1
+
+canonical route:
+  canonicalExponentSlotMarkovShadow
+  → unitNatMassSpace
+  → chain(q) = {s.1 / q, s.1}
+  → primitive real-weighted hit mass ≤ 1
+```
+
+これにより、selected / canonical の divisor-step hitting route は、
+外部から `C` や source mass bound を渡さずに直接呼べる形になった。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route
