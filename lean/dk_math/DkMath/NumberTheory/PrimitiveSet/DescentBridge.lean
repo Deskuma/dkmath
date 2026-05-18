@@ -351,6 +351,48 @@ theorem twoStepTailNatMassSpace_dvdMonotone
       simp [twoStepTailNatMassSpace, hbHigh, haHigh, hbLow, hNa]
 
 /--
+Bounded monotone natural mass from a height function.
+
+This is the common interface for finite step tail masses: `height` may be a
+piecewise-constant finite-step function, as long as it is nonnegative,
+monotone in the natural label, and bounded above by `C`. The value at `0` is
+set to the top bound `C` so divisibility monotonicity remains valid globally.
+-/
+def boundedMonotoneNatMassSpace
+    (height : ℕ → ℚ) (C : ℚ)
+    (hnonneg : ∀ n, 0 ≤ height n)
+    (hbound : ∀ n, height n ≤ C) : MassSpace ℕ where
+  μ := fun n => if n = 0 then C else height n
+  nonneg := by
+    intro n
+    have hC : 0 ≤ C := (hnonneg 0).trans (hbound 0)
+    by_cases hn : n = 0
+    · simp [hn, hC]
+    · simp [hn, hnonneg n]
+
+/--
+A bounded monotone height function gives a divisibility-monotone mass.
+-/
+theorem boundedMonotoneNatMassSpace_dvdMonotone
+    (height : ℕ → ℚ) (C : ℚ)
+    (hnonneg : ∀ n, 0 ≤ height n)
+    (hbound : ∀ n, height n ≤ C)
+    (hmono : ∀ ⦃a b : ℕ⦄, a ≤ b → height a ≤ height b) :
+    DvdMonotoneMass (boundedMonotoneNatMassSpace height C hnonneg hbound) := by
+  intro a b hab
+  by_cases hb : b = 0
+  · subst b
+    by_cases ha : a = 0
+    · simp [boundedMonotoneNatMassSpace, ha]
+    · simp [boundedMonotoneNatMassSpace, ha, hbound a]
+  · have hab_le : a ≤ b := Nat.le_of_dvd (Nat.pos_of_ne_zero hb) hab
+    have ha : a ≠ 0 := by
+      intro haz
+      rcases hab with ⟨d, hd⟩
+      exact hb (by simpa [haz] using hd)
+    simp [boundedMonotoneNatMassSpace, ha, hb, hmono hab_le]
+
+/--
 The sample Bool-indexed chain family is controlled by divisibility below
 sources `8` and `9`.
 -/

@@ -66,6 +66,19 @@ theorem twoStepTailNatMassSpace_logCapacitySourceMassBound
     · simp [twoStepTailNatMassSpace, hsHigh, hsLow, hStep]
     · simp [twoStepTailNatMassSpace, hsHigh, hsLow, hHigh]
 
+/-- Bounded monotone natural mass is uniformly bounded by its top bound. -/
+theorem boundedMonotoneNatMassSpace_logCapacitySourceMassBound
+    (height : ℕ → ℚ) (C : ℚ)
+    (hnonneg : ∀ n, 0 ≤ height n)
+    (hbound : ∀ n, height n ≤ C) :
+    LogCapacitySourceMassBound
+      (boundedMonotoneNatMassSpace height C hnonneg hbound) (C : ℝ) := by
+  intro s
+  by_cases hs : s.1 = 0
+  · simp [boundedMonotoneNatMassSpace, hs]
+  · simp only [boundedMonotoneNatMassSpace, hs, if_false, Rat.cast_le]
+    exact hbound s.1
+
 namespace PrimePowerWitnessProvider
 
 /--
@@ -376,6 +389,37 @@ theorem globalLogCapacitySubMarkovShadow_twoStepTailDivisorStep_weightedHitMass_
     (by exact_mod_cast hLow.trans hStep)
     (twoStepTailNatMassSpace_logCapacitySourceMassBound N M cLow cHigh hLow hStep)
 
+/--
+Primitive hitting bound for the selected global log-capacity sub-Markov shadow
+on the one-step divisor-descent family with bounded monotone source mass.
+-/
+theorem globalLogCapacitySubMarkovShadow_boundedMonotoneDivisorStep_weightedHitMass_le
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (height : ℕ → ℚ) (C : ℚ)
+    (hnonneg : ∀ n, 0 ≤ height n)
+    (hbound : ∀ n, height n ≤ C)
+    (hmono : ∀ ⦃a b : ℕ⦄, a ≤ b → height a ≤ height b)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) :
+    (W.globalLogCapacitySubMarkovShadow_applyAtToDivisorStep
+      IOf hIOf s
+        (boundedMonotoneNatMassSpace_dvdMonotone
+          height C hnonneg hbound hmono)).weightedHitMass A ≤
+      (C : ℝ) := by
+  have hC : 0 ≤ C := (hnonneg 0).trans (hbound 0)
+  exact
+    W.globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound
+      IOf hIOf s
+      (boundedMonotoneNatMassSpace_dvdMonotone height C hnonneg hbound hmono)
+      hA
+      (by exact_mod_cast hC)
+      (boundedMonotoneNatMassSpace_logCapacitySourceMassBound height C hnonneg hbound)
+
 end PrimePowerWitnessProvider
 
 /--
@@ -602,5 +646,30 @@ theorem canonicalExponentSlotMarkovShadow_twoStepTailDivisorStep_weightedHitMass
     s (twoStepTailNatMassSpace_dvdMonotone N M cLow cHigh hLow hStep) hA
     (by exact_mod_cast hLow.trans hStep)
     (twoStepTailNatMassSpace_logCapacitySourceMassBound N M cLow cHigh hLow hStep)
+
+/--
+Primitive hitting bound for the canonical exponent-slot Markov shadow on the
+one-step divisor-descent family with bounded monotone source mass.
+-/
+theorem canonicalExponentSlotMarkovShadow_boundedMonotoneDivisorStep_weightedHitMass_le
+    (height : ℕ → ℚ) (C : ℚ)
+    (hnonneg : ∀ n, 0 ≤ height n)
+    (hbound : ∀ n, height n ≤ C)
+    (hmono : ∀ ⦃a b : ℕ⦄, a ≤ b → height a ≤ height b)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) :
+    (canonicalExponentSlotMarkovShadow_applyAtToDivisorStep
+      s (boundedMonotoneNatMassSpace_dvdMonotone
+        height C hnonneg hbound hmono)).weightedHitMass A ≤
+      (C : ℝ) := by
+  have hC : 0 ≤ C := (hnonneg 0).trans (hbound 0)
+  exact
+    canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound
+      s
+      (boundedMonotoneNatMassSpace_dvdMonotone height C hnonneg hbound hmono)
+      hA
+      (by exact_mod_cast hC)
+      (boundedMonotoneNatMassSpace_logCapacitySourceMassBound height C hnonneg hbound)
 
 end DkMath.NumberTheory.PrimitiveSet

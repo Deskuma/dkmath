@@ -1538,6 +1538,91 @@ height が変わる finite step tail mass へ一段進んだ。
 
 ---
 
+## 2.24. DKMK-007L Bounded monotone nat mass interface
+
+DKMK-007L では、DKMK-007K の two-step tail mass をさらに一般化し、
+有限段 step function を載せられる共通 interface を追加する。
+
+追加した mass model は次である。
+
+```lean
+boundedMonotoneNatMassSpace height C hnonneg hbound
+```
+
+ここで、
+
+```lean
+height : ℕ → ℚ
+C : ℚ
+hnonneg : ∀ n, 0 ≤ height n
+hbound : ∀ n, height n ≤ C
+```
+
+を仮定する。定義は次の通りである。
+
+```text
+μ(0) = C
+μ(n) = height n  if n ≠ 0
+```
+
+`height` は finite step function である必要はないが、有限段 tail mass を
+入れるための受け口になる。`0` を top bound `C` に置くのは、
+全自然数上の divisibility monotonicity を保つためである。
+
+この mass が divisibility-monotone になるための theorem は次である。
+
+```lean
+boundedMonotoneNatMassSpace_dvdMonotone
+```
+
+追加仮定は、height が自然数ラベルに対して非減少であることだけである。
+
+```lean
+hmono : ∀ ⦃a b : ℕ⦄, a ≤ b → height a ≤ height b
+```
+
+`a ∣ b` かつ `b ≠ 0` なら `a ≤ b` なので、`hmono` から
+`height a ≤ height b` が従う。`b = 0` の場合は target mass が `C` であり、
+`hbound` により source mass は `C` 以下になる。
+
+DKMK-007H の source-bound provider としては次を追加した。
+
+```lean
+boundedMonotoneNatMassSpace_logCapacitySourceMassBound
+```
+
+これは、
+
+```lean
+LogCapacitySourceMassBound
+  (boundedMonotoneNatMassSpace height C hnonneg hbound) (C : ℝ)
+```
+
+を与える。
+
+したがって selected / canonical route では次が得られる。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_boundedMonotoneDivisorStep_weightedHitMass_le
+
+canonicalExponentSlotMarkovShadow_boundedMonotoneDivisorStep_weightedHitMass_le
+```
+
+到達形は次である。
+
+```text
+bounded monotone height function
+  → boundedMonotoneNatMassSpace
+  → DvdMonotoneMass
+  → LogCapacitySourceMassBound ... (C : ℝ)
+  → divisor-step weightedHitMass ≤ (C : ℝ)
+```
+
+これにより、two-step 専用 theorem から、任意の bounded monotone
+finite-step tail height を載せられる interface へ進んだ。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route
