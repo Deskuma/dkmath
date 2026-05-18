@@ -1830,6 +1830,119 @@ interface の特殊例としても利用できるようになった。
 
 ---
 
+## 2.27. DKMK-007O Mass model route summary
+
+DKMK-007O では、DKMK-007A から DKMK-007N までで整えた
+mass model route を短く総括する。
+
+この区間の目的は、log-capacity shadow を one-step divisor descent family
+へ載せたとき、primitive set に対する hitting mass を source mass の
+一様上界で制御することであった。
+
+中心となる共通形は次である。
+
+```text
+source mass model M
+  → DvdMonotoneMass M
+  → SourceControlledChainFamily.ofDivisorStep
+  → LogCapacitySourceMassBound M C
+  → weightedHitMass A ≤ C
+```
+
+この route は selected / canonical の両方で使える。
+
+selected route では、外部に選んだ channel set
+
+```lean
+IOf : ℕ → Finset ℕ
+```
+
+とその divisor-kernel compatibility を仮定する。
+
+canonical route では、full exponent-slot channel から得た
+`canonicalExponentSlotLabels` を使うため、selected channel set を外から
+渡さずに同じ hitting bound へ到達する。
+
+DKMK-007 の mass model は次の順に進んだ。
+
+```text
+unitNatMassSpace
+  固定 mass 1
+
+nonunitNatMassSpace
+  terminal divisor 1 を 0、それ以外を 1
+
+tailIndicatorNatMassSpace
+  threshold support
+
+scaledTailIndicatorNatMassSpace
+  threshold support + height c
+
+twoStepTailNatMassSpace
+  lower tail cLow と upper tail cHigh
+
+boundedMonotoneNatMassSpace
+  任意の非負・上界付き・非減少 height
+
+finiteStepTailHeight / finiteStepTailNatMassSpace
+  非負 tail increment の有限和
+
+twoStepAsFiniteStepTailNatMassSpace
+  two-step を finite-step interface の特殊例として回収
+```
+
+設計上の重要点は、全自然数上の divisibility relation では
+
+```text
+a ∣ 0
+```
+
+が常に成り立つため、`0` の mass を top bound 側に置くことである。
+これにより、`DvdMonotoneMass` は global な自然数空間で壊れない。
+
+DKMK-007L 以降では、この規約を
+
+```lean
+boundedMonotoneNatMassSpace height C hnonneg hbound
+```
+
+に集約した。
+
+finite-step route の到達形は次である。
+
+```text
+finite nonnegative tail increments
+  → finiteStepTailHeight
+  → boundedMonotoneNatMassSpace
+  → DvdMonotoneMass
+  → LogCapacitySourceMassBound by total increment
+  → divisor-step weightedHitMass ≤ total increment
+```
+
+したがって、今後 three-step / many-step の mass を個別に増やす必要は
+基本的にない。新しい有限段 tail mass は、`finiteStepTailHeight` へ
+threshold と nonnegative increment を渡せば、既存の selected / canonical
+hitting bound に乗る。
+
+一方で、ここまでの DKMK-007 route は still one-step である。
+chain 側は
+
+```text
+n → n / q
+```
+
+の divisor-step family に留まる。
+
+次の DKMK-008 では、この chain 側を
+
+```text
+n → n / q₁ → n / (q₁ q₂) → ...
+```
+
+の multi-step descent chain へ拡張することが自然な次段階である。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

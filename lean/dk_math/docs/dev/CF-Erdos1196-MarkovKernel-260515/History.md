@@ -832,3 +832,25 @@ Archive
    - DKMK-008 として one-step divisor-step route を multi-step descent chain へ拡張する。
 
 ---
+
+### 日時: 2026/05/18 18:41 JST (DKMK-007O mass model route summary 追加)
+
+1. 目的:
+   - DKMK-008 の multi-step descent chain へ進む前に、DKMK-007A から DKMK-007N までの mass model route を短く総括する。
+2. 実施:
+   - project docs に `DKMK-007O Mass model route summary` を追加した。
+   - selected / canonical の共通形として、`DvdMonotoneMass`, `SourceControlledChainFamily.ofDivisorStep`, `LogCapacitySourceMassBound`, `weightedHitMass ≤ C` の流れを整理した。
+   - unit / nonunit / tail indicator / scaled tail / two-step / bounded monotone / finite-step / two-step-as-finite-step の順に mass model の到達点をまとめた。
+   - 全自然数上で `a ∣ 0` が成り立つため、`0` の mass を top bound 側に置く設計規約を明記した。
+   - DKMK-008 の入口として、one-step `n → n / q` から multi-step `n → n / q₁ → n / (q₁ q₂) → ...` へ進む方針を記録した。
+3. 結論:
+   - DKMK-007 の mass model route は、有限段 tail mass を `finiteStepTailHeight` に集約し、selected / canonical の one-step hitting bound へ流せる形で一区切りとなった。
+   - 次は chain 側を伸ばす DKMK-008 に進める。
+4. 検証:
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-008 として one-step divisor-step route を multi-step descent chain へ拡張する。
+
+---
