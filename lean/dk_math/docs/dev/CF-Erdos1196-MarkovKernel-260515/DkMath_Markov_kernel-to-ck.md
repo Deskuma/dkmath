@@ -1943,6 +1943,115 @@ n → n / q₁ → n / (q₁ q₂) → ...
 
 ---
 
+## 2.28. DKMK-008A Adjacent divisor path list interface
+
+DKMK-008A では、DKMK-007 の one-step divisor descent family を
+multi-step descent chain へ伸ばすため、list-shaped divisor path の
+最小 interface を追加する。
+
+追加した module は次である。
+
+```lean
+DkMath.NumberTheory.PrimitiveSet.DivisorPathList
+```
+
+中心となる predicate は次である。
+
+```lean
+AdjacentDivisorPath L
+```
+
+定義は、既存の `DvdDescentStep` を使った list chain である。
+
+```lean
+List.IsChain DvdDescentStep L
+```
+
+つまり、list の隣接ノード `a, b` について、
+
+```text
+b ∣ a
+```
+
+が成り立つことを表す。
+
+この predicate から、primitive hitting に必要な chain 条件へ落とす
+補題を追加した。
+
+```lean
+AdjacentDivisorPath.pairwiseDvdAlongList
+AdjacentDivisorPath.divisibilityChain_toFinset
+```
+
+到達形は次である。
+
+```text
+AdjacentDivisorPath L
+  → PairwiseDvdAlongList L
+  → DivisibilityChain L.toFinset
+```
+
+また、非空 path の head を source として読むために、
+各 node が head を割ることを示す補題を追加した。
+
+```lean
+AdjacentDivisorPath.mem_dvd_head
+```
+
+これにより、
+
+```text
+source :: tail
+```
+
+型の path では、任意の node `h` について `h ∣ source` が得られる。
+
+さらに、後続 DKMK-008B/C で family constructor へ繋げるため、
+singleton family 版も追加した。
+
+```lean
+singletonChainFamilyOfAdjacentDivisorPath
+singletonDvdControlledChainFamilyOfAdjacentDivisorPath
+```
+
+後者は、
+
+```text
+AdjacentDivisorPath (source :: tail)
+→ DvdControlledChainFamily Unit
+```
+
+を与える。したがって、既存の DKMK-007 route と同じく
+`DvdMonotoneMass` を使って `SourceControlledChainFamily` へ流せる。
+
+サンプルとして、次の path を追加した。
+
+```text
+12 → 6 → 3
+```
+
+対応する theorem は次である。
+
+```lean
+adjacentDivisorPath_twelve_six_three
+divisibilityChain_twelve_six_three_toFinset
+primitive_three_five_hits_twelve_six_three_card_le_one
+primitive_three_five_singletonDvdControlled_twelve_six_three_hitMass_le_sourceMass
+```
+
+これで DKMK-008 は、まず
+
+```text
+list-shaped multi-step divisor path
+  → DivisibilityChain
+  → DvdControlledChainFamily
+  → source-controlled hitting bound
+```
+
+という最小の入口を得た。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

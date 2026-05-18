@@ -854,3 +854,33 @@ Archive
    - DKMK-008 として one-step divisor-step route を multi-step descent chain へ拡張する。
 
 ---
+
+### 日時: 2026/05/19 02:27 JST (DKMK-008A adjacent divisor path list interface 追加)
+
+1. 目的:
+   - DKMK-008 の入口として、one-step divisorStep の前に list-shaped multi-step divisor path の最小仕様を追加する。
+2. 実施:
+   - `DkMath.NumberTheory.PrimitiveSet.DivisorPathList` を追加した。
+   - `AdjacentDivisorPath L := List.IsChain DvdDescentStep L` を追加した。
+   - `AdjacentDivisorPath.pairwiseDvdAlongList` と `AdjacentDivisorPath.divisibilityChain_toFinset` を追加した。
+   - 非空 path の各 node が head source を割ることを示す `AdjacentDivisorPath.mem_dvd_head` を追加した。
+   - `singletonChainFamilyOfAdjacentDivisorPath` と `singletonDvdControlledChainFamilyOfAdjacentDivisorPath` を追加した。
+   - sample path `12 -> 6 -> 3` と primitive hitting sample theorem を追加した。
+   - `DkMath.NumberTheory.PrimitiveSet` aggregator と project docs を更新した。
+3. 結論:
+   - DKMK-008 の chain 側の最小入口として、list-shaped divisor path から `DivisibilityChain` と `DvdControlledChainFamily` へ進む no-sorry API が入った。
+   - 後続で indexed external path provider を作れば、selected / canonical shadow wrapper へ接続できる。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DivisorPathList`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DivisorPathList.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DivisorPathList.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - sample path の `DvdDescentStep` 証明で `norm_num` だけでは定義が展開されなかったため、`change 6 ∣ 12` / `change 3 ∣ 6` を明示した。
+6. 次の課題:
+   - indexed path provider から `DvdControlledChainFamily` を作る constructor を追加する。
+   - selected / canonical log-capacity shadow を multi-step divisor path family に適用する wrapper へ進む。
+
+---
