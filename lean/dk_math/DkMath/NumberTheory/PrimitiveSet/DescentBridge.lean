@@ -292,6 +292,65 @@ theorem scaledTailIndicatorNatMassSpace_dvdMonotone
     simp [scaledTailIndicatorNatMassSpace, hb, ha]
 
 /--
+Two-step tail-support mass with a low and high tail height.
+
+The mass is `cHigh` on `0` and on the upper tail `M ≤ n`, `cLow` on the
+intermediate tail `N ≤ n` before the upper tail, and `0` below `N`. The
+assumption `cLow ≤ cHigh` makes the height monotone as the natural label grows.
+-/
+def twoStepTailNatMassSpace
+    (N M : ℕ) (cLow cHigh : ℚ)
+    (hLow : 0 ≤ cLow) (hStep : cLow ≤ cHigh) : MassSpace ℕ where
+  μ := fun n =>
+    if n = 0 ∨ M ≤ n then cHigh else if N ≤ n then cLow else 0
+  nonneg := by
+    intro n
+    have hHigh : 0 ≤ cHigh := hLow.trans hStep
+    by_cases hnHigh : n = 0 ∨ M ≤ n
+    · simp [hnHigh, hHigh]
+    · by_cases hnLow : N ≤ n
+      · simp [hnHigh, hnLow, hLow]
+      · simp [hnHigh, hnLow]
+
+/-- The two-step tail-support mass is monotone along divisibility. -/
+theorem twoStepTailNatMassSpace_dvdMonotone
+    (N M : ℕ) (cLow cHigh : ℚ)
+    (hLow : 0 ≤ cLow) (hStep : cLow ≤ cHigh) :
+    DvdMonotoneMass (twoStepTailNatMassSpace N M cLow cHigh hLow hStep) := by
+  intro a b hab
+  have hHigh : 0 ≤ cHigh := hLow.trans hStep
+  by_cases hbHigh : b = 0 ∨ M ≤ b
+  · by_cases haHigh : a = 0 ∨ M ≤ a
+    · simp [twoStepTailNatMassSpace, hbHigh, haHigh]
+    · by_cases haLow : N ≤ a
+      · simp [twoStepTailNatMassSpace, hbHigh, haHigh, haLow, hStep]
+      · simp [twoStepTailNatMassSpace, hbHigh, haHigh, haLow, hHigh]
+  · have hb0 : b ≠ 0 := by
+      intro hbz
+      exact hbHigh (Or.inl hbz)
+    have hab_le : a ≤ b := Nat.le_of_dvd (Nat.pos_of_ne_zero hb0) hab
+    have ha0 : a ≠ 0 := by
+      intro haz
+      rcases hab with ⟨d, hd⟩
+      exact hb0 (by simpa [haz] using hd)
+    have hMa : ¬ M ≤ a := by
+      intro hMa
+      exact hbHigh (Or.inr (hMa.trans hab_le))
+    have haHigh : ¬ (a = 0 ∨ M ≤ a) := by
+      intro ha
+      rcases ha with haz | hMa'
+      · exact ha0 haz
+      · exact hMa hMa'
+    by_cases hbLow : N ≤ b
+    · by_cases haLow : N ≤ a
+      · simp [twoStepTailNatMassSpace, hbHigh, haHigh, hbLow, haLow]
+      · simp [twoStepTailNatMassSpace, hbHigh, haHigh, hbLow, haLow, hLow]
+    · have hNa : ¬ N ≤ a := by
+        intro hNa
+        exact hbLow (hNa.trans hab_le)
+      simp [twoStepTailNatMassSpace, hbHigh, haHigh, hbLow, hNa]
+
+/--
 The sample Bool-indexed chain family is controlled by divisibility below
 sources `8` and `9`.
 -/

@@ -52,6 +52,20 @@ theorem scaledTailIndicatorNatMassSpace_logCapacitySourceMassBound
   · simp [scaledTailIndicatorNatMassSpace, hs]
   · simp [scaledTailIndicatorNatMassSpace, hs, hc]
 
+/-- Two-step tail-support mass is uniformly bounded by its high height. -/
+theorem twoStepTailNatMassSpace_logCapacitySourceMassBound
+    (N M : ℕ) (cLow cHigh : ℚ)
+    (hLow : 0 ≤ cLow) (hStep : cLow ≤ cHigh) :
+    LogCapacitySourceMassBound
+      (twoStepTailNatMassSpace N M cLow cHigh hLow hStep) (cHigh : ℝ) := by
+  intro s
+  have hHigh : 0 ≤ cHigh := hLow.trans hStep
+  by_cases hsHigh : s.1 = 0 ∨ M ≤ s.1
+  · simp [twoStepTailNatMassSpace, hsHigh]
+  · by_cases hsLow : N ≤ s.1
+    · simp [twoStepTailNatMassSpace, hsHigh, hsLow, hStep]
+    · simp [twoStepTailNatMassSpace, hsHigh, hsLow, hHigh]
+
 namespace PrimePowerWitnessProvider
 
 /--
@@ -337,6 +351,31 @@ theorem globalLogCapacitySubMarkovShadow_scaledTailIndicatorDivisorStep_weighted
     (by exact_mod_cast hc)
     (scaledTailIndicatorNatMassSpace_logCapacitySourceMassBound N c hc)
 
+/--
+Primitive hitting bound for the selected global log-capacity sub-Markov shadow
+on the one-step divisor-descent family with two-step tail-support source mass.
+-/
+theorem globalLogCapacitySubMarkovShadow_twoStepTailDivisorStep_weightedHitMass_le
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (N M : ℕ) (cLow cHigh : ℚ)
+    (hLow : 0 ≤ cLow) (hStep : cLow ≤ cHigh)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) :
+    (W.globalLogCapacitySubMarkovShadow_applyAtToDivisorStep
+      IOf hIOf s
+        (twoStepTailNatMassSpace_dvdMonotone
+          N M cLow cHigh hLow hStep)).weightedHitMass A ≤
+      (cHigh : ℝ) :=
+  W.globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound
+    IOf hIOf s (twoStepTailNatMassSpace_dvdMonotone N M cLow cHigh hLow hStep) hA
+    (by exact_mod_cast hLow.trans hStep)
+    (twoStepTailNatMassSpace_logCapacitySourceMassBound N M cLow cHigh hLow hStep)
+
 end PrimePowerWitnessProvider
 
 /--
@@ -544,5 +583,24 @@ theorem canonicalExponentSlotMarkovShadow_scaledTailIndicatorDivisorStep_weighte
     s (scaledTailIndicatorNatMassSpace_dvdMonotone N c hc) hA
     (by exact_mod_cast hc)
     (scaledTailIndicatorNatMassSpace_logCapacitySourceMassBound N c hc)
+
+/--
+Primitive hitting bound for the canonical exponent-slot Markov shadow on the
+one-step divisor-descent family with two-step tail-support source mass.
+-/
+theorem canonicalExponentSlotMarkovShadow_twoStepTailDivisorStep_weightedHitMass_le
+    (N M : ℕ) (cLow cHigh : ℚ)
+    (hLow : 0 ≤ cLow) (hStep : cLow ≤ cHigh)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) :
+    (canonicalExponentSlotMarkovShadow_applyAtToDivisorStep
+      s (twoStepTailNatMassSpace_dvdMonotone
+        N M cLow cHigh hLow hStep)).weightedHitMass A ≤
+      (cHigh : ℝ) :=
+  canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound
+    s (twoStepTailNatMassSpace_dvdMonotone N M cLow cHigh hLow hStep) hA
+    (by exact_mod_cast hLow.trans hStep)
+    (twoStepTailNatMassSpace_logCapacitySourceMassBound N M cLow cHigh hLow hStep)
 
 end DkMath.NumberTheory.PrimitiveSet

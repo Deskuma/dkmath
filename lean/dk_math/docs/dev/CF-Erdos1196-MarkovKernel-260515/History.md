@@ -574,6 +574,11 @@ Archive
    - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
    - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
    - `git diff --check`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
 5. 失敗事例:
    - `{n / q, n}` の membership 証明で `fin_cases` を使うと、`n / q = n` の重複可能性により dependent elimination が失敗したため、membership を `h = n / q ∨ h = n` に展開して処理した。
 6. 次の課題:
@@ -702,6 +707,31 @@ Archive
    - 初回は `scaledTailIndicatorNatMassSpace_dvdMonotone` の tail 分岐で flexible `simp` warning が出たため、source 側の if を場合分けして明示的に閉じた。
 6. 次の課題:
    - bounded scaled indicator から、階段型 height や log 型に近い source mass model へ進む。
+   - one-step divisor-step route を multi-step descent chain へ拡張する。
+
+---
+
+### 日時: 2026/05/18 04:44 JST (DKMK-007K two-step tail-support mass 追加)
+
+1. 目的:
+   - DKMK-007J の単一 height `c` から進め、低い tail band と高い tail band を持つ finite step tail mass を DKMK-007H の接続面に流す。
+2. 実施:
+   - `twoStepTailNatMassSpace N M cLow cHigh hLow hStep` を追加し、`0` と `M ≤ n` では mass `cHigh`、`N ≤ n` かつ `¬ M ≤ n` では mass `cLow`、それ以外では mass `0` を与える two-step tail mass として定義した。
+   - `twoStepTailNatMassSpace_dvdMonotone` を追加し、`0 ≤ cLow` と `cLow ≤ cHigh` から divisibility-monotone であることを証明した。
+   - `twoStepTailNatMassSpace_logCapacitySourceMassBound` を追加し、source mass が `(cHigh : ℝ)` 以下であることを DKMK-007H の provider 形で供給した。
+   - selected route 用に `PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_twoStepTailDivisorStep_weightedHitMass_le` を追加した。
+   - canonical route 用に `canonicalExponentSlotMarkovShadow_twoStepTailDivisorStep_weightedHitMass_le` を追加した。
+   - project docs に DKMK-007K の位置づけを追記した。
+3. 結論:
+   - 単一 height の scaled indicator から、場所によって height が変わる finite step tail mass へ進み、selected / canonical divisor-step hitting route で上界 `(cHigh : ℝ)` が得られることを確認した。
+   - `DvdMonotoneMass` の向きに合わせ、height が `0 ≤ cLow ≤ cHigh` と増える形にしたことで no-sorry で接続できた。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DescentBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - two-step から finite-many step の一般 interface へ進むか、log 型に近い具体 step approximation へ進む。
    - one-step divisor-step route を multi-step descent chain へ拡張する。
 
 ---
