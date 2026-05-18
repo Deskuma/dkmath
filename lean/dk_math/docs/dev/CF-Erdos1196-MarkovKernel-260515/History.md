@@ -425,3 +425,432 @@ Archive
    - 等号一致しない label 表現が必要になった時点で、weight-preserving equivalence bridge を設計する。
 
 ---
+
+### 日時: 2026/05/17 02:05 JST (DKMK-007A RealWeightedPath bridge 追加)
+
+1. 目的:
+   - real-valued Markov/SubMarkov shadow を primitive hitting / weighted path family 側へ戻すための最初の橋を追加する。
+2. 実施:
+   - `RealWeightedPath.lean` に `RealWeightedPathFamily` を追加した。
+   - `weightedHitMass`, `weightedSourceMass`, `totalWeight`, `WeightSubProbability` を実数値で追加した。
+   - `primitive_weightedHitMass_le_weightedSourceMass`, `weightedHitMass_le_const_mul_totalWeight`, `weightedHitMass_le_const_of_subprob` を追加し、primitive hitting bound を実数重みで使えるようにした。
+   - `RealWeightProvider.Compatible` と `applyToSourceControlled` を追加し、`RealWeightProvider` を `SourceControlledChainFamily` に適用できるようにした。
+   - `applyToSourceControlled_weightSubProbability` と `weightedHitMass_le_const_of_subprob_applyToSourceControlled` を追加し、real sub-probability provider から primitive weighted hit mass bound へ進む入口を置いた。
+   - project docs に DKMK-007A の位置づけを追記した。
+3. 結論:
+   - `SubMarkovShadow.providerAt s` や `MarkovShadow.providerAt s` から得られる実数 provider を、index-compatible な source-controlled family に掛けて primitive hitting bound に渡すための型レベルの橋ができた。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.RealWeightedPath`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/RealWeightedPath.lean`
+5. 失敗事例:
+   - `hitSetMass` / `sourceSetMass` は `DkMath.NumberTheory.ValuationFlow` namespace 側なので、`RealWeightedPathFamily` namespace 内で明示的に open する必要があった。
+   - `RealWeightProvider.Compatible` の index 等式は `P.index = F.index` の向きなので、`F.index` 側の membership を `P.index` 側へ戻す箇所では `rw [hcompat]` を使った。
+6. 次の課題:
+   - `SubMarkovShadow.providerAt_subProbability` / `MarkovShadow.providerAt_subProbability` と DKMK-007A の provider bridge を合成し、shadow から source-controlled family への theorem-facing wrapper を追加する。
+
+---
+
+### 日時: 2026/05/17 02:35 JST (DKMK-007B ShadowHittingBridge 追加)
+
+1. 目的:
+   - `SubMarkovShadow.providerAt` / `MarkovShadow.providerAt` を DKMK-007A の real weighted path bridge に直接接続する theorem-facing wrapper を追加する。
+2. 実施:
+   - `DkMath.NumberTheory.PrimitiveSet.ShadowHittingBridge` を追加した。
+   - `SubMarkovShadow.applyAtToSourceControlled` を追加し、statewise provider を compatible な `SourceControlledChainFamily` に適用できるようにした。
+   - `SubMarkovShadow.applyAtToSourceControlled_weightSubProbability` と `SubMarkovShadow.weightedHitMass_le_const_applyAtToSourceControlled` を追加した。
+   - `MarkovShadow.applyAtToSourceControlled` を追加し、Markov shadow の statewise provider を同じ形で適用できるようにした。
+   - `MarkovShadow.applyAtToSourceControlled_weightSubProbability` と `MarkovShadow.weightedHitMass_le_const_applyAtToSourceControlled` を追加した。
+   - `PrimitiveSet.lean` に新 module を公開 import した。
+   - project docs に DKMK-007B の位置づけを追記した。
+3. 結論:
+   - `SubMarkovShadow` / `MarkovShadow` から compatible な source-controlled family へ直接進み、primitive real-weighted hit mass bound を呼べる入口ができた。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.ShadowHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/ShadowHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - `globalLogCapacitySubMarkovShadow` または `canonicalExponentSlotMarkovShadow` を concrete `SourceControlledChainFamily` に適用する theorem-facing wrapper を追加する。
+
+---
+
+### 日時: 2026/05/17 03:05 JST (DKMK-007C LogCapacityHittingBridge 追加)
+
+1. 目的:
+   - `globalLogCapacitySubMarkovShadow` と `canonicalExponentSlotMarkovShadow` を primitive hitting wrapper に接続する theorem-facing API を追加する。
+2. 実施:
+   - `DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge` を追加した。
+   - selected route 用に `globalLogCapacitySubMarkovShadow_providerAt_compatible`, `globalLogCapacitySubMarkovShadow_applyAtToSourceControlled`, `globalLogCapacitySubMarkovShadow_weightedHitMass_le_const` を追加した。
+   - selected route の index compatibility を `IOf s.1 = F.index` として外部入力化した。
+   - canonical route 用に `canonicalExponentSlotMarkovShadow_providerAt_compatible`, `canonicalExponentSlotMarkovShadow_applyAtToSourceControlled`, `canonicalExponentSlotMarkovShadow_weightedHitMass_le_const` を追加した。
+   - canonical route の index compatibility を `canonicalExponentSlotLabels s.1 = F.index` として外部入力化した。
+   - `PrimitiveSet.lean` に新 module を公開 import した。
+   - project docs に DKMK-007C の位置づけを追記した。
+3. 結論:
+   - selected log-capacity sub-Markov shadow と canonical exponent-slot Markov shadow を、index-compatible な `SourceControlledChainFamily` に適用して primitive real-weighted hit mass bound を得る入口ができた。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "sorry|admit" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+5. 失敗事例:
+   - theorem statement 内の `|>.weightedHitMass` は parser に合わなかったため、明示的な `.weightedHitMass` 呼び出しへ変更した。
+   - 初回 build で 100 文字超えの style warning が出たため、該当行を折り返した。
+6. 次の課題:
+   - `SourceControlledChainFamily` 側の concrete constructor を整備し、`F.index = IOf s.1` または `F.index = canonicalExponentSlotLabels s.1` を自然に供給できるようにする。
+
+---
+
+### 日時: 2026/05/17 17:25 JST (DKMK-007D SourceControlledChainFamily constructors 追加)
+
+1. 目的:
+   - DKMK-007C で外部入力だった `SourceControlledChainFamily` の concrete constructor を整備し、log-capacity shadow との index compatibility を自然に供給できるようにする。
+2. 実施:
+   - `SourceControlledChainFamily.ofIndex` を追加し、明示 index を持つ source-controlled family を named constructor として構成できるようにした。
+   - `SourceControlledChainFamily.singletonSelf` を追加し、各 index に singleton chain `{label i}` と source `label i` を割り当てる最小 concrete model を追加した。
+   - `SourceControlledChainFamily.natSingletonSelf` を追加し、nat-indexed route で source を `id` とする singleton model を使えるようにした。
+   - `LogCapacityHittingBridge` に selected route / canonical route 用の `applyAtToNatSingletonSelf` と hitting bound theorem を追加した。
+   - `PrimitiveSet.lean` の公開説明と project docs に DKMK-007D の位置づけを追記した。
+3. 結論:
+   - `IOf s.1` または `canonicalExponentSlotLabels s.1` をそのまま index とする singleton source-controlled family を選ぶことで、DKMK-007C の compatibility が `rfl` で閉じるようになった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.BranchBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/BranchBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/BranchBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - singleton family ではなく、実際の divisor-chain / descent-chain content を持つ `SourceControlledChainFamily` constructor へ拡張する。
+   - selected route と canonical route の source mass bound を、具体的な mass model から供給する。
+
+---
+
+### 日時: 2026/05/17 19:05 JST (DKMK-007E Divisor-step source-controlled family 追加)
+
+1. 目的:
+   - DKMK-007D の singleton model から進め、各 channel `q` に実際の divisor descent step `{n / q, n}` を持たせる。
+2. 実施:
+   - `DvdControlledChainFamily.divisorStep` を追加し、`q ∣ n` から chain `{n / q, n}` と source `n` を持つ divisibility-controlled family を構成した。
+   - `SourceControlledChainFamily.ofDivisorStep` を追加し、`DvdMonotoneMass M` により divisor-step family を source-controlled family へ変換できるようにした。
+   - `LogCapacityHittingBridge` に selected route 用の `globalLogCapacitySubMarkovShadow_applyAtToDivisorStep` と `globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_const` を追加した。
+   - `LogCapacityHittingBridge` に canonical route 用の `canonicalExponentSlotMarkovShadow_applyAtToDivisorStep` と `canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_const` を追加した。
+   - `PrimitiveSet.lean` の公開説明と project docs に DKMK-007E の位置づけを追記した。
+3. 結論:
+   - selected / canonical log-capacity shadow を、singleton ではなく `n ↦ n / q` を含む one-step divisor-descent family に直接適用できるようになった。
+   - divisor-step family では source が全 channel で `s.1` に揃うため、source mass bound は `(M.μ s.1 : ℝ) ≤ C` の一点上界で済む。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DescentBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - `{n / q, n}` の membership 証明で `fin_cases` を使うと、`n / q = n` の重複可能性により dependent elimination が失敗したため、membership を `h = n / q ∨ h = n` に展開して処理した。
+6. 次の課題:
+   - divisor-step family の source mass bound `(M.μ s.1 : ℝ) ≤ C` を具体的な mass model から供給する。
+   - one-step から multi-step descent chain へ拡張するか、または hitting 対象 `A` の配置を明確化する。
+
+---
+
+### 日時: 2026/05/17 19:51 JST (DKMK-007F unit mass divisor-step bound 追加)
+
+1. 目的:
+   - DKMK-007E で残っていた divisor-step route の source mass bound を、既存の concrete mass model `unitNatMassSpace` から供給する。
+2. 実施:
+   - selected route 用に `PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_unitDivisorStep_weightedHitMass_le_one` を追加した。
+   - canonical route 用に `canonicalExponentSlotMarkovShadow_unitDivisorStep_weightedHitMass_le_one` を追加した。
+   - どちらも `unitNatMassSpace_dvdMonotone` と `unitNatMassSpace.μ _ = 1` を使い、DKMK-007E の `hsource : (M.μ s.1 : ℝ) ≤ C` を `C = 1` で閉じた。
+   - project docs に DKMK-007F の位置づけを追記した。
+3. 結論:
+   - selected / canonical log-capacity shadow を one-step divisor-descent family に適用し、primitive real-weighted hit mass `≤ 1` を外部 source-bound なしで呼べるようになった。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - unit mass 以外の具体 mass model で source mass bound を供給する。
+   - one-step divisor-step route を multi-step descent chain へ拡張する。
+
+---
+
+### 日時: 2026/05/17 21:09 JST (DKMK-007G nonunit indicator mass 追加)
+
+1. 目的:
+   - `unitNatMassSpace` 以外の bounded concrete mass model を DKMK-007E の divisor-step route に流す。
+2. 実施:
+   - `nonunitNatMassSpace` を追加し、`μ(1)=0`, `μ(n)=1 (n≠1)` の nonunit indicator mass として定義した。
+   - `nonunitNatMassSpace_dvdMonotone` を追加し、この mass が divisibility-monotone であることを証明した。
+   - selected route 用に `PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_nonunitDivisorStep_weightedHitMass_le_one` を追加した。
+   - canonical route 用に `canonicalExponentSlotMarkovShadow_nonunitDivisorStep_weightedHitMass_le_one` を追加した。
+   - project docs に DKMK-007G の位置づけを追記した。
+3. 結論:
+   - unit mass だけでなく、`1` へ到達する descent chain を区別できる bounded mass model でも、selected / canonical divisor-step hitting route が `≤ 1` で閉じることを確認した。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DescentBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - bounded indicator mass から、本命に近い tail/source mass model へ進める。
+   - one-step divisor-step route を multi-step descent chain へ拡張する。
+
+---
+
+### 日時: 2026/05/17 23:29 JST (DKMK-007H LogCapacitySourceMassBound wrapper 追加)
+
+1. 目的:
+   - DKMK-007E の divisor-step route に必要な source mass bound を、mass model ごとの個別定理から切り出し、再利用できる薄い provider 形に整理する。
+2. 実施:
+   - `LogCapacitySourceMassBound M C` を追加し、log-capacity state 上で `(M.μ s.1 : ℝ) ≤ C` が一様に成り立つことを表す語彙にした。
+   - `unitNatMassSpace_logCapacitySourceMassBound_one` を追加した。
+   - `nonunitNatMassSpace_logCapacitySourceMassBound_one` を追加した。
+   - selected route 用に `PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound` を追加した。
+   - canonical route 用に `canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound` を追加した。
+   - unit / nonunit の `..._weightedHitMass_le_one` 定理を、新しい source-bound wrapper 経由に整理した。
+   - project docs に DKMK-007H の位置づけを追記した。
+3. 結論:
+   - 今後の tail/source mass model は、まず `DvdMonotoneMass M` と `LogCapacitySourceMassBound M C` を供給すれば、selected / canonical の divisor-step hitting bound に接続できる形になった。
+   - DKMK-007F/G で追加した concrete mass theorem は維持しつつ、内部の source-bound 証明は共通 wrapper に集約された。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+5. 失敗事例:
+   - `LogCapacitySourceMassBound` を `simp` 引数に入れると unused simp argument warning が出たため、具体 mass model の定義だけを展開する形に修正した。
+6. 次の課題:
+   - 本命に近い tail/source mass model を `DvdMonotoneMass` と `LogCapacitySourceMassBound` の二点で接続する。
+   - one-step divisor-step route を multi-step descent chain へ拡張する。
+
+---
+
+### 日時: 2026/05/18 03:25 JST (DKMK-007I tail-support indicator mass 追加)
+
+1. 目的:
+   - DKMK-007H で整理した `DvdMonotoneMass` と `LogCapacitySourceMassBound` の接続面に、threshold parameter を持つ bounded tail/source mass model を流す。
+2. 実施:
+   - `tailIndicatorNatMassSpace N` を追加し、`0` と `N ≤ n` のノードに mass `1`、それ以外に mass `0` を与える threshold indicator mass として定義した。
+   - `tailIndicatorNatMassSpace_dvdMonotone` を追加し、この mass が divisibility-monotone であることを証明した。
+   - `tailIndicatorNatMassSpace_logCapacitySourceMassBound_one` を追加し、任意の threshold `N` で source mass が `≤ 1` であることを DKMK-007H の provider 形で供給した。
+   - selected route 用に `PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_tailIndicatorDivisorStep_weightedHitMass_le_one` を追加した。
+   - canonical route 用に `canonicalExponentSlotMarkovShadow_tailIndicatorDivisorStep_weightedHitMass_le_one` を追加した。
+   - project docs に DKMK-007I の位置づけを追記した。
+3. 結論:
+   - unit / nonunit に続いて、parameterized な bounded tail-support mass model も DKMK-007H の共通 wrapper から selected / canonical divisor-step hitting route に接続できた。
+   - `0` は全自然数上の `a ∣ b` に対する monotonicity を保つため mass `1` 側に置いたが、positive descent chain 上では通常の threshold indicator として読める。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DescentBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+5. 失敗事例:
+   - `tailIndicatorNatMassSpace_dvdMonotone` の `b` が tail 側にある分岐で、`simp` だけでは左辺の if が残ったため、if split と `norm_num` で明示的に閉じた。
+6. 次の課題:
+   - bounded indicator から、より本命に近い decreasing weight / log weight 型の source mass model へ進む。
+   - one-step divisor-step route を multi-step descent chain へ拡張する。
+
+---
+
+### 日時: 2026/05/18 04:34 JST (DKMK-007J scaled tail-support indicator mass 追加)
+
+1. 目的:
+   - DKMK-007I の tail-support indicator に非負な有理 height `c` を持たせ、support と weight amplitude を分離した bounded toy model を DKMK-007H の接続面に流す。
+2. 実施:
+   - `scaledTailIndicatorNatMassSpace N c hc` を追加し、`0` と `N ≤ n` のノードに mass `c`、それ以外に mass `0` を与える scaled threshold indicator mass として定義した。
+   - `scaledTailIndicatorNatMassSpace_dvdMonotone` を追加し、この mass が divisibility-monotone であることを証明した。
+   - `scaledTailIndicatorNatMassSpace_logCapacitySourceMassBound` を追加し、source mass が `(c : ℝ)` 以下であることを DKMK-007H の provider 形で供給した。
+   - selected route 用に `PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_scaledTailIndicatorDivisorStep_weightedHitMass_le` を追加した。
+   - canonical route 用に `canonicalExponentSlotMarkovShadow_scaledTailIndicatorDivisorStep_weightedHitMass_le` を追加した。
+   - project docs に DKMK-007J の位置づけを追記した。
+3. 結論:
+   - tail support の threshold `N` に加えて、weight amplitude `c` を持つ bounded mass model も、`DvdMonotoneMass` と `LogCapacitySourceMassBound` の二点から selected / canonical divisor-step hitting route に接続できた。
+   - log weight へ進む前に、support と height を分離した weighted-tail toy model が no-sorry で通った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DescentBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+5. 失敗事例:
+   - 初回は `scaledTailIndicatorNatMassSpace_dvdMonotone` の tail 分岐で flexible `simp` warning が出たため、source 側の if を場合分けして明示的に閉じた。
+6. 次の課題:
+   - bounded scaled indicator から、階段型 height や log 型に近い source mass model へ進む。
+   - one-step divisor-step route を multi-step descent chain へ拡張する。
+
+---
+
+### 日時: 2026/05/18 04:44 JST (DKMK-007K two-step tail-support mass 追加)
+
+1. 目的:
+   - DKMK-007J の単一 height `c` から進め、低い tail band と高い tail band を持つ finite step tail mass を DKMK-007H の接続面に流す。
+2. 実施:
+   - `twoStepTailNatMassSpace N M cLow cHigh hLow hStep` を追加し、`0` と `M ≤ n` では mass `cHigh`、`N ≤ n` かつ `¬ M ≤ n` では mass `cLow`、それ以外では mass `0` を与える two-step tail mass として定義した。
+   - `twoStepTailNatMassSpace_dvdMonotone` を追加し、`0 ≤ cLow` と `cLow ≤ cHigh` から divisibility-monotone であることを証明した。
+   - `twoStepTailNatMassSpace_logCapacitySourceMassBound` を追加し、source mass が `(cHigh : ℝ)` 以下であることを DKMK-007H の provider 形で供給した。
+   - selected route 用に `PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_twoStepTailDivisorStep_weightedHitMass_le` を追加した。
+   - canonical route 用に `canonicalExponentSlotMarkovShadow_twoStepTailDivisorStep_weightedHitMass_le` を追加した。
+   - project docs に DKMK-007K の位置づけを追記した。
+3. 結論:
+   - 単一 height の scaled indicator から、場所によって height が変わる finite step tail mass へ進み、selected / canonical divisor-step hitting route で上界 `(cHigh : ℝ)` が得られることを確認した。
+   - `DvdMonotoneMass` の向きに合わせ、height が `0 ≤ cLow ≤ cHigh` と増える形にしたことで no-sorry で接続できた。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DescentBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - two-step から finite-many step の一般 interface へ進むか、log 型に近い具体 step approximation へ進む。
+   - one-step divisor-step route を multi-step descent chain へ拡張する。
+
+---
+
+### 日時: 2026/05/18 13:34 JST (DKMK-007L bounded monotone nat mass interface 追加)
+
+1. 目的:
+   - DKMK-007K の two-step tail mass を抽象化し、finite step tail height を載せられる bounded monotone height interface を追加する。
+2. 実施:
+   - `boundedMonotoneNatMassSpace height C hnonneg hbound` を追加し、`n = 0` では top bound `C`、`n ≠ 0` では `height n` を mass とする一般 interface を定義した。
+   - `boundedMonotoneNatMassSpace_dvdMonotone` を追加し、`height` が自然数ラベルに対して非減少なら divisibility-monotone であることを証明した。
+   - `boundedMonotoneNatMassSpace_logCapacitySourceMassBound` を追加し、source mass が `(C : ℝ)` 以下であることを DKMK-007H の provider 形で供給した。
+   - selected route 用に `PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_boundedMonotoneDivisorStep_weightedHitMass_le` を追加した。
+   - canonical route 用に `canonicalExponentSlotMarkovShadow_boundedMonotoneDivisorStep_weightedHitMass_le` を追加した。
+   - project docs に DKMK-007L の位置づけを追記した。
+3. 結論:
+   - two-step 専用 theorem から、非負・非減少・上界付きの任意 height function を DKMK-007H の共通 wrapper に接続できる形へ進んだ。
+   - finite step tail mass は、この interface に piecewise-constant な `height` を渡すことで扱える。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DescentBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+5. 失敗事例:
+   - `boundedMonotoneNatMassSpace` の定義内部で同名定義を `simp` 引数に入れて失敗したため、定義内部では if の場合分けだけで閉じる形に修正した。
+   - `boundedMonotoneNatMassSpace_logCapacitySourceMassBound` の非ゼロ分岐で flexible `simp` warning が出たため、`simp only` と `Rat.cast_le` へ寄せた。
+6. 次の課題:
+   - bounded monotone interface に具体的な finite step height constructor を載せる。
+   - one-step divisor-step route を multi-step descent chain へ拡張する。
+
+---
+
+### 日時: 2026/05/18 16:57 JST (DKMK-007M finite step tail height constructor 追加)
+
+1. 目的:
+   - DKMK-007L の bounded monotone interface に、具体的な finite step tail height constructor を載せる。
+2. 実施:
+   - `finiteStepTailHeight steps threshold increment` を追加し、tail 条件 `threshold i ≤ n` で有効化される非負 increment の有限和として height を定義した。
+   - `finiteStepTailHeight_nonneg`, `finiteStepTailHeight_le_total`, `finiteStepTailHeight_mono` を追加した。
+   - `finiteStepTailNatMassSpace steps threshold increment hinc` を追加し、DKMK-007L の `boundedMonotoneNatMassSpace` へ接続した。
+   - `finiteStepTailNatMassSpace_dvdMonotone` を追加した。
+   - `finiteStepTailNatMassSpace_logCapacitySourceMassBound` を追加し、total increment による source-bound provider を供給した。
+   - selected route 用に `PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_finiteStepTailDivisorStep_weightedHitMass_le` を追加した。
+   - canonical route 用に `canonicalExponentSlotMarkovShadow_finiteStepTailDivisorStep_weightedHitMass_le` を追加した。
+   - project docs に DKMK-007M の位置づけを追記した。
+3. 結論:
+   - threshold を事前に整列せず、非負 cumulative increment の有限和として任意有限段の tail mass を扱える入口ができた。
+   - two-step tail mass の先にある finite step mass を、bounded monotone interface の具体例として no-sorry で接続できた。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DescentBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+5. 失敗事例:
+   - `∑ i in steps, ...` notation が当該 module の構文環境で parse されなかったため、`Finset.sum steps ...` へ寄せた。
+   - finite step height の非負性・上界・単調性証明で定義 unfolding が不足したため、`change` で `Finset.sum` の形に揃えてから `Finset.sum_nonneg` / `Finset.sum_le_sum` を適用した。
+6. 次の課題:
+   - finite step tail mass を two-step tail mass の上位 interface として再利用する wrapper を検討する。
+   - one-step divisor-step route を multi-step descent chain へ拡張する。
+
+---
+
+### 日時: 2026/05/18 17:56 JST (DKMK-007N two-step via finite-step interface 追加)
+
+1. 目的:
+   - DKMK-007K の two-step tail bound を、DKMK-007M の finite-step constructor の特殊例として再利用できる wrapper を追加する。
+2. 実施:
+   - `twoStepTailFiniteThreshold N M` を追加し、Bool-indexed に lower step `N` と upper step `M` を表現した。
+   - `twoStepTailFiniteIncrement cLow cHigh` を追加し、lower increment を `cLow`、upper increment を `cHigh - cLow` とした。
+   - `twoStepTailFiniteIncrement_nonneg` と `twoStepTailFiniteIncrement_sum` を追加した。
+   - `twoStepAsFiniteStepTailNatMassSpace N M cLow cHigh hLow hStep` を追加し、two-step data を finite-step mass へ流した。
+   - `twoStepAsFiniteStepTailNatMassSpace_dvdMonotone` を追加した。
+   - `twoStepAsFiniteStepTailNatMassSpace_logCapacitySourceMassBound` を追加し、finite-step total bound を `cHigh` に戻した。
+   - selected route 用に `PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_twoStepAsFiniteStepTailDivisorStep_weightedHitMass_le` を追加した。
+   - canonical route 用に `canonicalExponentSlotMarkovShadow_twoStepAsFiniteStepTailDivisorStep_weightedHitMass_le` を追加した。
+   - project docs に DKMK-007N の位置づけを追記した。
+3. 結論:
+   - two-step tail bound が finite-step interface の特殊例としても利用できるようになった。
+   - 既存 `twoStepTailNatMassSpace` は維持しつつ、finite-step route から同じ `≤ cHigh` bound を得る橋が no-sorry で入った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DescentBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+5. 失敗事例:
+   - Bool `Finset.univ` の sum 表示順が source-bound の expected type と合わなかったため、`twoStepTailFiniteIncrement_sum` を実数 cast した等式で明示的に上界を書き換えた。
+6. 次の課題:
+   - DKMK-007A から DKMK-007N までの mass model route を短く総括する。
+   - DKMK-008 として one-step divisor-step route を multi-step descent chain へ拡張する。
+
+---
+
+### 日時: 2026/05/18 18:41 JST (DKMK-007O mass model route summary 追加)
+
+1. 目的:
+   - DKMK-008 の multi-step descent chain へ進む前に、DKMK-007A から DKMK-007N までの mass model route を短く総括する。
+2. 実施:
+   - project docs に `DKMK-007O Mass model route summary` を追加した。
+   - selected / canonical の共通形として、`DvdMonotoneMass`, `SourceControlledChainFamily.ofDivisorStep`, `LogCapacitySourceMassBound`, `weightedHitMass ≤ C` の流れを整理した。
+   - unit / nonunit / tail indicator / scaled tail / two-step / bounded monotone / finite-step / two-step-as-finite-step の順に mass model の到達点をまとめた。
+   - 全自然数上で `a ∣ 0` が成り立つため、`0` の mass を top bound 側に置く設計規約を明記した。
+   - DKMK-008 の入口として、one-step `n → n / q` から multi-step `n → n / q₁ → n / (q₁ q₂) → ...` へ進む方針を記録した。
+3. 結論:
+   - DKMK-007 の mass model route は、有限段 tail mass を `finiteStepTailHeight` に集約し、selected / canonical の one-step hitting bound へ流せる形で一区切りとなった。
+   - 次は chain 側を伸ばす DKMK-008 に進める。
+4. 検証:
+   - `git diff --check`
+5. 失敗事例:
+   - なし。
+6. 次の課題:
+   - DKMK-008 として one-step divisor-step route を multi-step descent chain へ拡張する。
+
+---

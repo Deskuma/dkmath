@@ -839,6 +839,1110 @@ DKMK-006J は、次の concrete kernel 接続で迷わないための route map 
 
 ---
 
+## 2.13. DKMK-007A RealWeightedPath bridge
+
+DKMK-007A では、DKMK-006 系で整備した real-valued Markov/SubMarkov shadow を、
+primitive hitting / weighted path family 側へ戻すための最初の橋を追加する。
+
+既存の hitting 側には有理重み版の
+
+```lean
+WeightedPathFamily
+WeightProvider.applyToSourceControlled
+```
+
+がある。
+一方、DKMK の log-capacity normalization は `Real.log` を使うため、重みは実数である。
+そこで `RealWeightedPath.lean` に実数版を追加する。
+
+```lean
+RealWeightedPathFamily
+RealWeightedPathFamily.weightedHitMass
+RealWeightedPathFamily.weightedSourceMass
+RealWeightedPathFamily.WeightSubProbability
+```
+
+primitive hitting bound も実数値として閉じる。
+
+```lean
+RealWeightedPathFamily.primitive_weightedHitMass_le_weightedSourceMass
+RealWeightedPathFamily.weightedHitMass_le_const_of_subprob
+```
+
+さらに、状態ごとの real provider を source-controlled family に適用する入口を追加する。
+
+```lean
+RealWeightProvider.Compatible
+RealWeightProvider.applyToSourceControlled
+RealWeightProvider.applyToSourceControlled_weightSubProbability
+RealWeightProvider.weightedHitMass_le_const_of_subprob_applyToSourceControlled
+```
+
+これにより、`SubMarkovShadow.providerAt s` や `MarkovShadow.providerAt s` から得られる
+`RealWeightProvider` を、index が一致する source-controlled family に掛け、
+primitive set の weighted hit mass を `C` で抑える route ができた。
+
+```text
+RealWeightProvider.SubProbability
+  + SourceControlledChainFamily
+  + PrimitiveOn S
+  → real-weighted hit mass bound
+```
+
+これはまだ full Markov equality を直接 hitting theorem に合成する最終段ではない。
+しかし、real normalized kernel と primitive hitting API の間にあった
+`ℚ` / `ℝ` の型差を越える最初の bridge である。
+
+---
+
+## 2.14. DKMK-007B ShadowHittingBridge
+
+DKMK-007B では、DKMK-007A の `RealWeightProvider` bridge を
+`SubMarkovShadow` / `MarkovShadow` の statewise provider に直接合成する。
+
+追加 module は次である。
+
+```lean
+DkMath.NumberTheory.PrimitiveSet.ShadowHittingBridge
+```
+
+sub-Markov 側では、状態 `s` の provider を compatible な
+`SourceControlledChainFamily` に適用する入口を置く。
+
+```lean
+SubMarkovShadow.applyAtToSourceControlled
+SubMarkovShadow.applyAtToSourceControlled_weightSubProbability
+SubMarkovShadow.weightedHitMass_le_const_applyAtToSourceControlled
+```
+
+ここでは `S.SubProbability` を仮定し、`S.providerAt s` の
+`RealWeightProvider.SubProbability` を DKMK-007A の bridge に渡す。
+
+Markov 側では、`MarkovShadow.providerAt_subProbability` により
+sub-probability は自動で得られる。
+
+```lean
+MarkovShadow.applyAtToSourceControlled
+MarkovShadow.applyAtToSourceControlled_weightSubProbability
+MarkovShadow.weightedHitMass_le_const_applyAtToSourceControlled
+```
+
+これにより、theorem-facing な呼び出しは次の形に短縮される。
+
+```text
+SubMarkovShadow / MarkovShadow
+  + state s
+  + compatible SourceControlledChainFamily
+  + PrimitiveOn A
+  + source mass bound C
+  → real-weighted hit mass ≤ C
+```
+
+DKMK-007A は provider level の橋だった。
+DKMK-007B は shadow level の橋であり、DKMK-006 系で作った
+`globalLogCapacitySubMarkovShadow` や `canonicalExponentSlotMarkovShadow` を
+primitive hitting 側へ渡すための theorem-facing wrapper になる。
+
+---
+
+## 2.15. DKMK-007C LogCapacityHittingBridge
+
+DKMK-007C では、DKMK-007B の shadow-level wrapper を、具体的な
+log-capacity shadow に接続する。
+
+追加 module は次である。
+
+```lean
+DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge
+```
+
+selected route では、`globalLogCapacitySubMarkovShadow` を
+source-controlled family に適用する入口を追加する。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_providerAt_compatible
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_applyAtToSourceControlled
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_weightedHitMass_le_const
+```
+
+必要な compatibility は次の具体的な index 一致である。
+
+```lean
+IOf s.1 = F.index
+```
+
+canonical equality route では、`canonicalExponentSlotMarkovShadow` について
+同じ形の入口を追加する。
+
+```lean
+canonicalExponentSlotMarkovShadow_providerAt_compatible
+canonicalExponentSlotMarkovShadow_applyAtToSourceControlled
+canonicalExponentSlotMarkovShadow_weightedHitMass_le_const
+```
+
+こちらの compatibility は次である。
+
+```lean
+canonicalExponentSlotLabels s.1 = F.index
+```
+
+これで、DKMK-006/007 の流れは具体的に次まで到達した。
+
+```text
+selected log-capacity SubMarkovShadow
+  + F.index = IOf s.1
+  → primitive real-weighted hit mass ≤ C
+
+canonical exponent-slot MarkovShadow
+  + F.index = canonicalExponentSlotLabels s.1
+  → primitive real-weighted hit mass ≤ C
+```
+
+まだ source-controlled family `F` 自体の構成は外部入力である。
+ただし、log-capacity shadow と primitive hitting theorem の接続点は、
+具体的な theorem-facing API として固定された。
+
+---
+
+## 2.16. DKMK-007D SourceControlledChainFamily constructors
+
+DKMK-007D では、DKMK-007C で外部入力だった
+`SourceControlledChainFamily` の concrete constructor を小さく追加する。
+
+追加した入口は次である。
+
+```lean
+SourceControlledChainFamily.ofIndex
+SourceControlledChainFamily.singletonSelf
+SourceControlledChainFamily.natSingletonSelf
+```
+
+`ofIndex` は、index / chain / source / mass control をそのまま束ねる
+薄い named constructor である。
+
+`singletonSelf` は、各 index `i` に singleton chain `{label i}` を割り当て、
+source も `label i` とする最小 concrete model である。
+したがって、index は定義上そのまま保存される。
+
+```lean
+(SourceControlledChainFamily.singletonSelf I label).index = I
+```
+
+nat-indexed route では、さらに次を使う。
+
+```lean
+SourceControlledChainFamily.natSingletonSelf I
+```
+
+これは source を `id` にした singleton model であり、
+`IOf s.1` や `canonicalExponentSlotLabels s.1` を index に選ぶだけで、
+DKMK-007C の compatibility が `rfl` で閉じる。
+
+このため、`LogCapacityHittingBridge` にも convenience API を追加した。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_applyAtToNatSingletonSelf
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_natSingletonSelf_weightedHitMass_le_const
+
+canonicalExponentSlotMarkovShadow_applyAtToNatSingletonSelf
+canonicalExponentSlotMarkovShadow_natSingletonSelf_weightedHitMass_le_const
+```
+
+到達形は次である。
+
+```text
+selected route:
+  choose F := natSingletonSelf (IOf s.1)
+  → F.index = IOf s.1 by rfl
+  → primitive real-weighted hit mass ≤ C
+
+canonical route:
+  choose F := natSingletonSelf (canonicalExponentSlotLabels s.1)
+  → F.index = canonicalExponentSlotLabels s.1 by rfl
+  → primitive real-weighted hit mass ≤ C
+```
+
+これで、DKMK-007C の残り入力だった index compatibility は、
+少なくとも singleton concrete family については theorem 呼び出し側から消えた。
+
+---
+
+## 2.17. DKMK-007E Divisor-step source-controlled family
+
+DKMK-007E では、DKMK-007D の singleton model から一段進め、
+実際の divisor descent step を持つ chain family を追加する。
+
+追加した入口は次である。
+
+```lean
+DvdControlledChainFamily.divisorStep
+SourceControlledChainFamily.ofDivisorStep
+```
+
+`DvdControlledChainFamily.divisorStep n I hdiv` は、各 channel label `q`
+に対して次の chain を割り当てる。
+
+```lean
+chain q = {n / q, n}
+source q = n
+```
+
+ここで `hdiv : ∀ q ∈ I, q ∣ n` により、`n / q ∣ n` が供給される。
+したがって、各 chain は divisibility chain であり、かつ source `n` の下にある。
+
+`SourceControlledChainFamily.ofDivisorStep` は、この
+divisibility-controlled family を `DvdMonotoneMass M` で
+source-controlled family へ変換する。
+
+```lean
+SourceControlledChainFamily.ofDivisorStep hM n I hdiv
+```
+
+これにより、DKMK-007D と同じく index は定義上保存される。
+
+```lean
+(SourceControlledChainFamily.ofDivisorStep hM n I hdiv).index = I
+```
+
+`LogCapacityHittingBridge` には、selected / canonical route から
+この divisor-step family を直接使う API を追加した。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_applyAtToDivisorStep
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_const
+
+canonicalExponentSlotMarkovShadow_applyAtToDivisorStep
+canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_const
+```
+
+selected route では、`hIOf` と divisor kernel の `index_dvd` から
+`q ∣ s.1` が得られる。
+
+canonical route では、`canonicalExponentSlotDivisorTransitionKernel.index_dvd`
+から `q ∣ s.1` が得られる。
+
+到達形は次である。
+
+```text
+selected route:
+  globalLogCapacitySubMarkovShadow
+  → chain(q) = {s.1 / q, s.1}
+  → primitive real-weighted hit mass ≤ C
+
+canonical route:
+  canonicalExponentSlotMarkovShadow
+  → chain(q) = {s.1 / q, s.1}
+  → primitive real-weighted hit mass ≤ C
+```
+
+source は全 channel で `s.1` に揃うため、hitting bound 側の source bound は
+次の一点上界で足りる。
+
+```lean
+(M.μ s.1 : ℝ) ≤ C
+```
+
+これで、形式的 singleton model ではなく、実際の divisor removal
+`n ↦ n / q` を含む primitive hitting route に入った。
+
+---
+
+## 2.18. DKMK-007F Unit mass divisor-step bounds
+
+DKMK-007F では、DKMK-007E で残っていた source mass bound を、
+既存の concrete mass model `unitNatMassSpace` から供給する。
+
+DKMK-007E の divisor-step route では source が全 channel で `s.1` に揃うため、
+一般形の仮定は次であった。
+
+```lean
+hsource : (M.μ s.1 : ℝ) ≤ C
+```
+
+`unitNatMassSpace` ではすべての点の mass が `1` なので、`C = 1` として
+この仮定は自動的に閉じる。
+
+追加した theorem は次である。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_unitDivisorStep_weightedHitMass_le_one
+
+canonicalExponentSlotMarkovShadow_unitDivisorStep_weightedHitMass_le_one
+```
+
+到達形は次である。
+
+```text
+selected route:
+  globalLogCapacitySubMarkovShadow
+  → unitNatMassSpace
+  → chain(q) = {s.1 / q, s.1}
+  → primitive real-weighted hit mass ≤ 1
+
+canonical route:
+  canonicalExponentSlotMarkovShadow
+  → unitNatMassSpace
+  → chain(q) = {s.1 / q, s.1}
+  → primitive real-weighted hit mass ≤ 1
+```
+
+これにより、selected / canonical の divisor-step hitting route は、
+外部から `C` や source mass bound を渡さずに直接呼べる形になった。
+
+---
+
+## 2.19. DKMK-007G Nonunit indicator mass
+
+DKMK-007G では、`unitNatMassSpace` 以外の bounded concrete mass model を
+divisor-step route に流す最初の観測点を追加する。
+
+追加した mass model は次である。
+
+```lean
+nonunitNatMassSpace
+```
+
+定義は単純である。
+
+```text
+μ(1) = 0
+μ(n) = 1  (n ≠ 1)
+```
+
+これは最終的な tail mass model ではない。
+ただし、`1` に到達する descent chain を unit mass とは区別できるため、
+unit 以外の concrete mass を hitting route に流すための小さな確認点になる。
+
+この mass は divisibility-monotone である。
+
+```lean
+nonunitNatMassSpace_dvdMonotone
+```
+
+理由は、`a ∣ b` かつ `b = 1` なら `a = 1` であり、
+`b ≠ 1` なら target mass はすでに `1` だからである。
+
+`LogCapacityHittingBridge` には、selected / canonical route 用に次を追加した。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_nonunitDivisorStep_weightedHitMass_le_one
+
+canonicalExponentSlotMarkovShadow_nonunitDivisorStep_weightedHitMass_le_one
+```
+
+`LogCapacityState` では常に `1 < s.1` なので、
+
+```lean
+nonunitNatMassSpace.μ s.1 = 1
+```
+
+が成り立つ。したがって DKMK-007E の source mass bound は `C = 1` で閉じる。
+
+到達形は次である。
+
+```text
+selected route:
+  globalLogCapacitySubMarkovShadow
+  → nonunitNatMassSpace
+  → chain(q) = {s.1 / q, s.1}
+  → primitive real-weighted hit mass ≤ 1
+
+canonical route:
+  canonicalExponentSlotMarkovShadow
+  → nonunitNatMassSpace
+  → chain(q) = {s.1 / q, s.1}
+  → primitive real-weighted hit mass ≤ 1
+```
+
+この段階で、unit mass だけでなく、少なくとも一つの非自明な
+bounded mass model が DKMK-007E の divisor-step route を通ることが確認された。
+
+---
+
+## 2.20. DKMK-007H LogCapacitySourceMassBound wrapper
+
+DKMK-007H では、DKMK-007E の divisor-step route に必要だった
+source mass bound を、concrete mass model ごとに直接書き下すのではなく、
+小さな provider 形に分離する。
+
+追加した語彙は次である。
+
+```lean
+LogCapacitySourceMassBound M C
+```
+
+意味は次の一点上界である。
+
+```lean
+∀ s : LogCapacityState, (M.μ s.1 : ℝ) ≤ C
+```
+
+divisor-step family では、全 channel の source が `s.1` に揃う。
+したがって、route 側で本当に必要なのは channel ごとの複雑な bound ではなく、
+log-capacity state 上の source mass の一様上界だけである。
+
+既存の concrete mass model について、次を追加した。
+
+```lean
+unitNatMassSpace_logCapacitySourceMassBound_one
+nonunitNatMassSpace_logCapacitySourceMassBound_one
+```
+
+これにより、selected / canonical route の divisor-step hitting bound は、
+次の共通 wrapper から供給できる。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound
+
+canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound
+```
+
+既存の `unit..._weightedHitMass_le_one` と
+`nonunit..._weightedHitMass_le_one` は、この wrapper 経由に整理した。
+
+到達形は次である。
+
+```text
+concrete mass model
+  → DvdMonotoneMass M
+  → LogCapacitySourceMassBound M C
+  → divisor-step weightedHitMass ≤ C
+```
+
+この段階で、今後 tail/source mass model を追加するときの接続面は、
+`DvdMonotoneMass` と `LogCapacitySourceMassBound` の二点に整理された。
+
+---
+
+## 2.21. DKMK-007I Tail-support indicator mass
+
+DKMK-007I では、DKMK-007H で整理した接続面に、bounded な
+tail/source mass model を一つ流す。
+
+追加した mass model は次である。
+
+```lean
+tailIndicatorNatMassSpace N
+```
+
+これは threshold `N` 以上の自然数を mass `1`、それ以外を mass `0`
+として見る indicator mass である。ただし、全自然数上の divisibility
+monotonicity を壊さないため、`0` も mass `1` 側に含める。
+
+```text
+μ(0) = 1
+μ(n) = 1  if N ≤ n
+μ(n) = 0  otherwise
+```
+
+positive な divisor-descent chain 上では、これは通常の tail-support
+indicator として振る舞う。
+
+この mass が divisibility-monotone であることを次で証明した。
+
+```lean
+tailIndicatorNatMassSpace_dvdMonotone
+```
+
+証明の要点は、`a ∣ b` かつ `b ≠ 0` なら `a ≤ b` であることを使い、
+`N ≤ a` なら `N ≤ b` が従う点である。`b = 0` の場合は、
+`μ(0) = 1` としているため上界側が閉じる。
+
+DKMK-007H の source-bound provider としては次を追加した。
+
+```lean
+tailIndicatorNatMassSpace_logCapacitySourceMassBound_one
+```
+
+これは任意の `N` について、
+
+```lean
+LogCapacitySourceMassBound (tailIndicatorNatMassSpace N) 1
+```
+
+を与える。
+
+したがって selected / canonical route では次が得られる。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_tailIndicatorDivisorStep_weightedHitMass_le_one
+
+canonicalExponentSlotMarkovShadow_tailIndicatorDivisorStep_weightedHitMass_le_one
+```
+
+到達形は次である。
+
+```text
+tailIndicatorNatMassSpace N
+  → DvdMonotoneMass
+  → LogCapacitySourceMassBound ... 1
+  → divisor-step weightedHitMass ≤ 1
+```
+
+これにより、unit / nonunit に続いて、threshold parameter を持つ
+bounded tail-support mass model も DKMK-007H の共通 wrapper を通ることが確認された。
+
+---
+
+## 2.22. DKMK-007J Scaled tail-support indicator mass
+
+DKMK-007J では、DKMK-007I の tail-support indicator に、
+非負な有理 height `c` を持たせる。
+
+追加した mass model は次である。
+
+```lean
+scaledTailIndicatorNatMassSpace N c hc
+```
+
+ここで `hc : 0 ≤ c` であり、定義は次の通りである。
+
+```text
+μ(0) = c
+μ(n) = c  if N ≤ n
+μ(n) = 0  otherwise
+```
+
+DKMK-007I が「どこを見るか」を threshold `N` で指定する model だったのに対し、
+DKMK-007J は「どれだけ重く見るか」を height `c` として分離する。
+これは log weight へ進む前の、bounded な weighted-tail toy model である。
+
+この mass が divisibility-monotone であることを次で証明した。
+
+```lean
+scaledTailIndicatorNatMassSpace_dvdMonotone
+```
+
+証明の構造は `tailIndicatorNatMassSpace_dvdMonotone` と同じである。
+`b = 0` または `N ≤ b` なら target mass は `c` なので、
+source 側は `0` または `c` で抑えられる。
+`b ≠ 0` かつ `¬ N ≤ b` の場合は、`a ∣ b` から `a ≤ b` を使い、
+`a` も tail 側ではないことを示す。
+
+DKMK-007H の source-bound provider としては次を追加した。
+
+```lean
+scaledTailIndicatorNatMassSpace_logCapacitySourceMassBound
+```
+
+これは任意の `N`, `c`, `hc : 0 ≤ c` について、
+
+```lean
+LogCapacitySourceMassBound (scaledTailIndicatorNatMassSpace N c hc) (c : ℝ)
+```
+
+を与える。
+
+したがって selected / canonical route では次が得られる。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_scaledTailIndicatorDivisorStep_weightedHitMass_le
+
+canonicalExponentSlotMarkovShadow_scaledTailIndicatorDivisorStep_weightedHitMass_le
+```
+
+到達形は次である。
+
+```text
+scaledTailIndicatorNatMassSpace N c hc
+  → DvdMonotoneMass
+  → LogCapacitySourceMassBound ... (c : ℝ)
+  → divisor-step weightedHitMass ≤ (c : ℝ)
+```
+
+これにより、support indicator だけでなく、height parameter を持つ
+bounded weighted-tail toy model も DKMK-007H の共通 wrapper を通ることが確認された。
+
+---
+
+## 2.23. DKMK-007K Two-step tail-support mass
+
+DKMK-007K では、DKMK-007J の単一 height `c` を一段進め、
+低い tail band と高い tail band を持つ finite step mass を追加する。
+
+追加した mass model は次である。
+
+```lean
+twoStepTailNatMassSpace N M cLow cHigh hLow hStep
+```
+
+ここで、
+
+```lean
+hLow : 0 ≤ cLow
+hStep : cLow ≤ cHigh
+```
+
+を仮定する。定義は次の通りである。
+
+```text
+μ(0) = cHigh
+μ(n) = cHigh  if M ≤ n
+μ(n) = cLow   if N ≤ n and not M ≤ n
+μ(n) = 0      otherwise
+```
+
+`0` を `cHigh` 側に置く理由は、これまでの tail indicator と同じく、
+全自然数上の divisibility monotonicity を保つためである。
+
+この mass が divisibility-monotone であることを次で証明した。
+
+```lean
+twoStepTailNatMassSpace_dvdMonotone
+```
+
+証明の要点は、`a ∣ b` かつ `b ≠ 0` なら `a ≤ b` であること、
+そして height が
+
+```text
+0 ≤ cLow ≤ cHigh
+```
+
+の順に増えることである。したがって、source が lower band に落ちても
+target の band height を超えない。
+
+DKMK-007H の source-bound provider としては次を追加した。
+
+```lean
+twoStepTailNatMassSpace_logCapacitySourceMassBound
+```
+
+これは任意の `N`, `M`, `cLow`, `cHigh` について、
+
+```lean
+LogCapacitySourceMassBound
+  (twoStepTailNatMassSpace N M cLow cHigh hLow hStep) (cHigh : ℝ)
+```
+
+を与える。
+
+したがって selected / canonical route では次が得られる。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_twoStepTailDivisorStep_weightedHitMass_le
+
+canonicalExponentSlotMarkovShadow_twoStepTailDivisorStep_weightedHitMass_le
+```
+
+到達形は次である。
+
+```text
+twoStepTailNatMassSpace N M cLow cHigh hLow hStep
+  → DvdMonotoneMass
+  → LogCapacitySourceMassBound ... (cHigh : ℝ)
+  → divisor-step weightedHitMass ≤ (cHigh : ℝ)
+```
+
+これにより、単一 height の scaled indicator から、場所によって
+height が変わる finite step tail mass へ一段進んだ。
+
+---
+
+## 2.24. DKMK-007L Bounded monotone nat mass interface
+
+DKMK-007L では、DKMK-007K の two-step tail mass をさらに一般化し、
+有限段 step function を載せられる共通 interface を追加する。
+
+追加した mass model は次である。
+
+```lean
+boundedMonotoneNatMassSpace height C hnonneg hbound
+```
+
+ここで、
+
+```lean
+height : ℕ → ℚ
+C : ℚ
+hnonneg : ∀ n, 0 ≤ height n
+hbound : ∀ n, height n ≤ C
+```
+
+を仮定する。定義は次の通りである。
+
+```text
+μ(0) = C
+μ(n) = height n  if n ≠ 0
+```
+
+`height` は finite step function である必要はないが、有限段 tail mass を
+入れるための受け口になる。`0` を top bound `C` に置くのは、
+全自然数上の divisibility monotonicity を保つためである。
+
+この mass が divisibility-monotone になるための theorem は次である。
+
+```lean
+boundedMonotoneNatMassSpace_dvdMonotone
+```
+
+追加仮定は、height が自然数ラベルに対して非減少であることだけである。
+
+```lean
+hmono : ∀ ⦃a b : ℕ⦄, a ≤ b → height a ≤ height b
+```
+
+`a ∣ b` かつ `b ≠ 0` なら `a ≤ b` なので、`hmono` から
+`height a ≤ height b` が従う。`b = 0` の場合は target mass が `C` であり、
+`hbound` により source mass は `C` 以下になる。
+
+DKMK-007H の source-bound provider としては次を追加した。
+
+```lean
+boundedMonotoneNatMassSpace_logCapacitySourceMassBound
+```
+
+これは、
+
+```lean
+LogCapacitySourceMassBound
+  (boundedMonotoneNatMassSpace height C hnonneg hbound) (C : ℝ)
+```
+
+を与える。
+
+したがって selected / canonical route では次が得られる。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_boundedMonotoneDivisorStep_weightedHitMass_le
+
+canonicalExponentSlotMarkovShadow_boundedMonotoneDivisorStep_weightedHitMass_le
+```
+
+到達形は次である。
+
+```text
+bounded monotone height function
+  → boundedMonotoneNatMassSpace
+  → DvdMonotoneMass
+  → LogCapacitySourceMassBound ... (C : ℝ)
+  → divisor-step weightedHitMass ≤ (C : ℝ)
+```
+
+これにより、two-step 専用 theorem から、任意の bounded monotone
+finite-step tail height を載せられる interface へ進んだ。
+
+---
+
+## 2.25. DKMK-007M Finite step tail height constructor
+
+DKMK-007M では、DKMK-007L の bounded monotone interface に載せる
+具体的な有限段 height constructor を追加する。
+
+追加した height は次である。
+
+```lean
+finiteStepTailHeight steps threshold increment
+```
+
+ここで、
+
+```lean
+steps : Finset ι
+threshold : ι → ℕ
+increment : ι → ℚ
+```
+
+であり、各 step `i` は tail 条件 `threshold i ≤ n` が成り立つ
+自然数ラベル `n` でだけ非負 increment を加える。
+
+定義の形は次である。
+
+```text
+finiteStepTailHeight n
+  = sum over i in steps of
+      if threshold i ≤ n then increment i else 0
+```
+
+この表現では、thresholds を事前に sort する必要がない。
+非負 increment の有限和として書くことで、次が直接得られる。
+
+```lean
+finiteStepTailHeight_nonneg
+finiteStepTailHeight_le_total
+finiteStepTailHeight_mono
+```
+
+仮定は次だけである。
+
+```lean
+hinc : ∀ i ∈ steps, 0 ≤ increment i
+```
+
+`finiteStepTailHeight_mono` により、自然数ラベルに対して非減少である。
+また `finiteStepTailHeight_le_total` により、上界は total increment
+
+```lean
+Finset.sum steps increment
+```
+
+で与えられる。
+
+この height を DKMK-007L の interface に流した mass model が次である。
+
+```lean
+finiteStepTailNatMassSpace steps threshold increment hinc
+```
+
+これは内部的には、
+
+```lean
+boundedMonotoneNatMassSpace
+  (finiteStepTailHeight steps threshold increment)
+  (Finset.sum steps increment)
+  ...
+```
+
+である。したがって divisibility-monotone theorem は次で済む。
+
+```lean
+finiteStepTailNatMassSpace_dvdMonotone
+```
+
+DKMK-007H の source-bound provider としては次を追加した。
+
+```lean
+finiteStepTailNatMassSpace_logCapacitySourceMassBound
+```
+
+これは、
+
+```lean
+LogCapacitySourceMassBound
+  (finiteStepTailNatMassSpace steps threshold increment hinc)
+  ((Finset.sum steps increment : ℚ) : ℝ)
+```
+
+を与える。
+
+selected / canonical route では次の theorem を追加した。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_finiteStepTailDivisorStep_weightedHitMass_le
+
+canonicalExponentSlotMarkovShadow_finiteStepTailDivisorStep_weightedHitMass_le
+```
+
+到達形は次である。
+
+```text
+finite nonnegative tail increments
+  → finiteStepTailHeight
+  → boundedMonotoneNatMassSpace
+  → DvdMonotoneMass
+  → LogCapacitySourceMassBound by total increment
+  → divisor-step weightedHitMass ≤ total increment
+```
+
+これで、two-step tail mass の先にある任意有限段の累積 tail mass を、
+threshold の整列補題なしに扱う入口ができた。
+
+---
+
+## 2.26. DKMK-007N Two-step via finite-step interface
+
+DKMK-007N では、DKMK-007K の two-step tail mass を DKMK-007M の
+finite-step interface から再利用する wrapper を追加する。
+
+Bool-indexed の finite-step 表現として、次を追加した。
+
+```lean
+twoStepTailFiniteThreshold N M
+twoStepTailFiniteIncrement cLow cHigh
+```
+
+threshold は、`false` 側を lower step `N`、`true` 側を upper step `M`
+として読む。
+
+increment は次の形である。
+
+```text
+false ↦ cLow
+true  ↦ cHigh - cLow
+```
+
+したがって、`hLow : 0 ≤ cLow` と `hStep : cLow ≤ cHigh` の下で、
+各 increment は非負である。
+
+```lean
+twoStepTailFiniteIncrement_nonneg
+```
+
+また total increment は high height に戻る。
+
+```lean
+twoStepTailFiniteIncrement_sum
+```
+
+すなわち、
+
+```lean
+Finset.sum (Finset.univ : Finset Bool)
+  (twoStepTailFiniteIncrement cLow cHigh) = cHigh
+```
+
+である。
+
+この Bool-indexed finite-step 表現を mass にしたものが次である。
+
+```lean
+twoStepAsFiniteStepTailNatMassSpace N M cLow cHigh hLow hStep
+```
+
+これは既存の `twoStepTailNatMassSpace` を定義上置き換えるものではなく、
+two-step bound が finite-step route からも出ることを記録する wrapper
+である。
+
+divisibility-monotone theorem は次である。
+
+```lean
+twoStepAsFiniteStepTailNatMassSpace_dvdMonotone
+```
+
+DKMK-007H の source-bound provider としては次を追加した。
+
+```lean
+twoStepAsFiniteStepTailNatMassSpace_logCapacitySourceMassBound
+```
+
+これは、finite-step route の total increment bound を
+`twoStepTailFiniteIncrement_sum` で `cHigh` へ戻す。
+
+selected / canonical route では次の theorem を追加した。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_twoStepAsFiniteStepTailDivisorStep_weightedHitMass_le
+
+canonicalExponentSlotMarkovShadow_twoStepAsFiniteStepTailDivisorStep_weightedHitMass_le
+```
+
+到達形は次である。
+
+```text
+two-step data cLow ≤ cHigh
+  → Bool-indexed finite-step increments
+  → finiteStepTailNatMassSpace
+  → total increment = cHigh
+  → divisor-step weightedHitMass ≤ cHigh
+```
+
+これにより、DKMK-007K の two-step bound が DKMK-007M の finite-step
+interface の特殊例としても利用できるようになった。
+
+---
+
+## 2.27. DKMK-007O Mass model route summary
+
+DKMK-007O では、DKMK-007A から DKMK-007N までで整えた
+mass model route を短く総括する。
+
+この区間の目的は、log-capacity shadow を one-step divisor descent family
+へ載せたとき、primitive set に対する hitting mass を source mass の
+一様上界で制御することであった。
+
+中心となる共通形は次である。
+
+```text
+source mass model M
+  → DvdMonotoneMass M
+  → SourceControlledChainFamily.ofDivisorStep
+  → LogCapacitySourceMassBound M C
+  → weightedHitMass A ≤ C
+```
+
+この route は selected / canonical の両方で使える。
+
+selected route では、外部に選んだ channel set
+
+```lean
+IOf : ℕ → Finset ℕ
+```
+
+とその divisor-kernel compatibility を仮定する。
+
+canonical route では、full exponent-slot channel から得た
+`canonicalExponentSlotLabels` を使うため、selected channel set を外から
+渡さずに同じ hitting bound へ到達する。
+
+DKMK-007 の mass model は次の順に進んだ。
+
+```text
+unitNatMassSpace
+  固定 mass 1
+
+nonunitNatMassSpace
+  terminal divisor 1 を 0、それ以外を 1
+
+tailIndicatorNatMassSpace
+  threshold support
+
+scaledTailIndicatorNatMassSpace
+  threshold support + height c
+
+twoStepTailNatMassSpace
+  lower tail cLow と upper tail cHigh
+
+boundedMonotoneNatMassSpace
+  任意の非負・上界付き・非減少 height
+
+finiteStepTailHeight / finiteStepTailNatMassSpace
+  非負 tail increment の有限和
+
+twoStepAsFiniteStepTailNatMassSpace
+  two-step を finite-step interface の特殊例として回収
+```
+
+設計上の重要点は、全自然数上の divisibility relation では
+
+```text
+a ∣ 0
+```
+
+が常に成り立つため、`0` の mass を top bound 側に置くことである。
+これにより、`DvdMonotoneMass` は global な自然数空間で壊れない。
+
+DKMK-007L 以降では、この規約を
+
+```lean
+boundedMonotoneNatMassSpace height C hnonneg hbound
+```
+
+に集約した。
+
+finite-step route の到達形は次である。
+
+```text
+finite nonnegative tail increments
+  → finiteStepTailHeight
+  → boundedMonotoneNatMassSpace
+  → DvdMonotoneMass
+  → LogCapacitySourceMassBound by total increment
+  → divisor-step weightedHitMass ≤ total increment
+```
+
+したがって、今後 three-step / many-step の mass を個別に増やす必要は
+基本的にない。新しい有限段 tail mass は、`finiteStepTailHeight` へ
+threshold と nonnegative increment を渡せば、既存の selected / canonical
+hitting bound に乗る。
+
+一方で、ここまでの DKMK-007 route は still one-step である。
+chain 側は
+
+```text
+n → n / q
+```
+
+の divisor-step family に留まる。
+
+次の DKMK-008 では、この chain 側を
+
+```text
+n → n / q₁ → n / (q₁ q₂) → ...
+```
+
+の multi-step descent chain へ拡張することが自然な次段階である。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

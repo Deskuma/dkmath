@@ -37,6 +37,52 @@ structure DvdControlledChainFamily
 namespace DvdControlledChainFamily
 
 /--
+Divisibility-controlled one-step divisor-descent family at source `n`.
+
+For each indexed divisor label `q`, the chain is `{n / q, n}` and the source is
+`n`. The divisor hypothesis supplies `n / q ∣ n`, so each chain is comparable
+by divisibility and lies below its source.
+-/
+def divisorStep
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    DvdControlledChainFamily ℕ where
+  index := I
+  chain := fun q => ({n / q, n} : Finset ℕ)
+  chain_is_chain := by
+    intro q hq a b ha hb
+    have hchild : n / q ∣ n := Nat.div_dvd_of_dvd (hdiv q hq)
+    simp only [Finset.mem_insert, Finset.mem_singleton] at ha hb
+    rcases ha with rfl | rfl <;> rcases hb with rfl | rfl
+    · exact Or.inl (dvd_refl (n / q))
+    · exact Or.inl hchild
+    · exact Or.inr hchild
+    · exact Or.inl (dvd_refl _)
+  source := fun _ => n
+  chain_dvd_source := by
+    intro q hq h hh
+    have hchild : n / q ∣ n := Nat.div_dvd_of_dvd (hdiv q hq)
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hh
+    rcases hh with rfl | rfl
+    · exact hchild
+    · exact dvd_refl _
+
+@[simp] theorem divisorStep_index
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    (divisorStep n I hdiv).index = I := rfl
+
+@[simp] theorem divisorStep_chain
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    (divisorStep n I hdiv).chain = fun q => ({n / q, n} : Finset ℕ) := rfl
+
+@[simp] theorem divisorStep_source
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    (divisorStep n I hdiv).source = fun _ => n := rfl
+
+/--
 Convert a divisibility-controlled forest into a source-controlled forest using
 a divisibility-monotone mass.
 -/
@@ -90,11 +136,411 @@ theorem primitive_hitMass_le_sourceMass
 
 end DvdControlledChainFamily
 
+namespace SourceControlledChainFamily
+
+/--
+Source-controlled one-step divisor-descent family at source `n`.
+
+This is `DvdControlledChainFamily.divisorStep` converted by a
+divisibility-monotone mass. Its index is definitionally the supplied index,
+which keeps compatibility with divisor-channel providers lightweight.
+-/
+def ofDivisorStep
+    {M : MassSpace ℕ}
+    (hM : DvdMonotoneMass M)
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    SourceControlledChainFamily M ℕ :=
+  (DvdControlledChainFamily.divisorStep n I hdiv).toSourceControlled hM
+
+@[simp] theorem ofDivisorStep_index
+    {M : MassSpace ℕ}
+    (hM : DvdMonotoneMass M)
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    (ofDivisorStep hM n I hdiv).index = I := rfl
+
+@[simp] theorem ofDivisorStep_chain
+    {M : MassSpace ℕ}
+    (hM : DvdMonotoneMass M)
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    (ofDivisorStep hM n I hdiv).chain = fun q => ({n / q, n} : Finset ℕ) := rfl
+
+@[simp] theorem ofDivisorStep_source
+    {M : MassSpace ℕ}
+    (hM : DvdMonotoneMass M)
+    (n : ℕ) (I : Finset ℕ)
+    (hdiv : ∀ q ∈ I, q ∣ n) :
+    (ofDivisorStep hM n I hdiv).source = fun _ => n := rfl
+
+end SourceControlledChainFamily
+
 /-- The unit natural mass is monotone along divisibility. -/
 theorem unitNatMassSpace_dvdMonotone :
     DvdMonotoneMass unitNatMassSpace := by
   intro _a _b _hab
   rfl
+
+/--
+Indicator mass for nonunit natural nodes.
+
+The node `1` has mass `0`; every other natural node has mass `1`. This is still
+a bounded toy mass, but unlike `unitNatMassSpace` it can distinguish descent
+chains that reach the terminal divisor `1`.
+-/
+def nonunitNatMassSpace : MassSpace ℕ where
+  μ := fun n => if n = 1 then 0 else 1
+  nonneg := by
+    intro n
+    by_cases hn : n = 1 <;> simp [hn]
+
+/--
+The nonunit indicator mass is monotone along divisibility.
+
+If `a ∣ b` and `b = 1`, then `a = 1`; otherwise the target mass is already `1`.
+-/
+theorem nonunitNatMassSpace_dvdMonotone :
+    DvdMonotoneMass nonunitNatMassSpace := by
+  intro a b hab
+  by_cases hb : b = 1
+  · subst b
+    have ha : a = 1 := Nat.dvd_one.mp hab
+    simp [nonunitNatMassSpace, ha]
+  · by_cases ha : a = 1 <;> simp [nonunitNatMassSpace, ha, hb]
+
+/--
+Tail-support indicator mass above a natural threshold.
+
+The mass is `1` on `0` and on nodes `n` with `N ≤ n`, and `0` otherwise. The
+special value at `0` keeps the mass monotone for the global relation `a ∣ b`.
+On positive descent chains this behaves as the usual threshold indicator.
+-/
+def tailIndicatorNatMassSpace (N : ℕ) : MassSpace ℕ where
+  μ := fun n => if n = 0 ∨ N ≤ n then 1 else 0
+  nonneg := by
+    intro n
+    by_cases hn : n = 0 ∨ N ≤ n <;> simp [hn]
+
+/-- The tail-support indicator mass is monotone along divisibility. -/
+theorem tailIndicatorNatMassSpace_dvdMonotone (N : ℕ) :
+    DvdMonotoneMass (tailIndicatorNatMassSpace N) := by
+  intro a b hab
+  by_cases hb : b = 0 ∨ N ≤ b
+  · dsimp [tailIndicatorNatMassSpace]
+    simp [hb]
+    split <;> norm_num
+  · have hb0 : b ≠ 0 := by
+      intro hbz
+      exact hb (Or.inl hbz)
+    have hab_le : a ≤ b := Nat.le_of_dvd (Nat.pos_of_ne_zero hb0) hab
+    have ha0 : a ≠ 0 := by
+      intro haz
+      rcases hab with ⟨c, hc⟩
+      exact hb0 (by simpa [haz] using hc)
+    have hNa : ¬ N ≤ a := by
+      intro hNa
+      exact hb (Or.inr (hNa.trans hab_le))
+    have ha : ¬ (a = 0 ∨ N ≤ a) := by
+      intro ha
+      rcases ha with haz | hNa'
+      · exact ha0 haz
+      · exact hNa hNa'
+    simp [tailIndicatorNatMassSpace, hb, ha]
+
+/--
+Scaled tail-support indicator mass above a natural threshold.
+
+This keeps the same support as `tailIndicatorNatMassSpace`, but assigns a
+nonnegative rational height `c` to the tail. It is a bounded toy model for
+separating the support question from the weight-amplitude question.
+-/
+def scaledTailIndicatorNatMassSpace
+    (N : ℕ) (c : ℚ) (hc : 0 ≤ c) : MassSpace ℕ where
+  μ := fun n => if n = 0 ∨ N ≤ n then c else 0
+  nonneg := by
+    intro n
+    by_cases hn : n = 0 ∨ N ≤ n
+    · simp [hn, hc]
+    · simp [hn]
+
+/-- The scaled tail-support indicator mass is monotone along divisibility. -/
+theorem scaledTailIndicatorNatMassSpace_dvdMonotone
+    (N : ℕ) (c : ℚ) (hc : 0 ≤ c) :
+    DvdMonotoneMass (scaledTailIndicatorNatMassSpace N c hc) := by
+  intro a b hab
+  by_cases hb : b = 0 ∨ N ≤ b
+  · by_cases ha : a = 0 ∨ N ≤ a
+    · simp [scaledTailIndicatorNatMassSpace, hb, ha]
+    · simp [scaledTailIndicatorNatMassSpace, hb, ha, hc]
+  · have hb0 : b ≠ 0 := by
+      intro hbz
+      exact hb (Or.inl hbz)
+    have hab_le : a ≤ b := Nat.le_of_dvd (Nat.pos_of_ne_zero hb0) hab
+    have ha0 : a ≠ 0 := by
+      intro haz
+      rcases hab with ⟨d, hd⟩
+      exact hb0 (by simpa [haz] using hd)
+    have hNa : ¬ N ≤ a := by
+      intro hNa
+      exact hb (Or.inr (hNa.trans hab_le))
+    have ha : ¬ (a = 0 ∨ N ≤ a) := by
+      intro ha
+      rcases ha with haz | hNa'
+      · exact ha0 haz
+      · exact hNa hNa'
+    simp [scaledTailIndicatorNatMassSpace, hb, ha]
+
+/--
+Two-step tail-support mass with a low and high tail height.
+
+The mass is `cHigh` on `0` and on the upper tail `M ≤ n`, `cLow` on the
+intermediate tail `N ≤ n` before the upper tail, and `0` below `N`. The
+assumption `cLow ≤ cHigh` makes the height monotone as the natural label grows.
+-/
+def twoStepTailNatMassSpace
+    (N M : ℕ) (cLow cHigh : ℚ)
+    (hLow : 0 ≤ cLow) (hStep : cLow ≤ cHigh) : MassSpace ℕ where
+  μ := fun n =>
+    if n = 0 ∨ M ≤ n then cHigh else if N ≤ n then cLow else 0
+  nonneg := by
+    intro n
+    have hHigh : 0 ≤ cHigh := hLow.trans hStep
+    by_cases hnHigh : n = 0 ∨ M ≤ n
+    · simp [hnHigh, hHigh]
+    · by_cases hnLow : N ≤ n
+      · simp [hnHigh, hnLow, hLow]
+      · simp [hnHigh, hnLow]
+
+/-- The two-step tail-support mass is monotone along divisibility. -/
+theorem twoStepTailNatMassSpace_dvdMonotone
+    (N M : ℕ) (cLow cHigh : ℚ)
+    (hLow : 0 ≤ cLow) (hStep : cLow ≤ cHigh) :
+    DvdMonotoneMass (twoStepTailNatMassSpace N M cLow cHigh hLow hStep) := by
+  intro a b hab
+  have hHigh : 0 ≤ cHigh := hLow.trans hStep
+  by_cases hbHigh : b = 0 ∨ M ≤ b
+  · by_cases haHigh : a = 0 ∨ M ≤ a
+    · simp [twoStepTailNatMassSpace, hbHigh, haHigh]
+    · by_cases haLow : N ≤ a
+      · simp [twoStepTailNatMassSpace, hbHigh, haHigh, haLow, hStep]
+      · simp [twoStepTailNatMassSpace, hbHigh, haHigh, haLow, hHigh]
+  · have hb0 : b ≠ 0 := by
+      intro hbz
+      exact hbHigh (Or.inl hbz)
+    have hab_le : a ≤ b := Nat.le_of_dvd (Nat.pos_of_ne_zero hb0) hab
+    have ha0 : a ≠ 0 := by
+      intro haz
+      rcases hab with ⟨d, hd⟩
+      exact hb0 (by simpa [haz] using hd)
+    have hMa : ¬ M ≤ a := by
+      intro hMa
+      exact hbHigh (Or.inr (hMa.trans hab_le))
+    have haHigh : ¬ (a = 0 ∨ M ≤ a) := by
+      intro ha
+      rcases ha with haz | hMa'
+      · exact ha0 haz
+      · exact hMa hMa'
+    by_cases hbLow : N ≤ b
+    · by_cases haLow : N ≤ a
+      · simp [twoStepTailNatMassSpace, hbHigh, haHigh, hbLow, haLow]
+      · simp [twoStepTailNatMassSpace, hbHigh, haHigh, hbLow, haLow, hLow]
+    · have hNa : ¬ N ≤ a := by
+        intro hNa
+        exact hbLow (hNa.trans hab_le)
+      simp [twoStepTailNatMassSpace, hbHigh, haHigh, hbLow, hNa]
+
+/--
+Bounded monotone natural mass from a height function.
+
+This is the common interface for finite step tail masses: `height` may be a
+piecewise-constant finite-step function, as long as it is nonnegative,
+monotone in the natural label, and bounded above by `C`. The value at `0` is
+set to the top bound `C` so divisibility monotonicity remains valid globally.
+-/
+def boundedMonotoneNatMassSpace
+    (height : ℕ → ℚ) (C : ℚ)
+    (hnonneg : ∀ n, 0 ≤ height n)
+    (hbound : ∀ n, height n ≤ C) : MassSpace ℕ where
+  μ := fun n => if n = 0 then C else height n
+  nonneg := by
+    intro n
+    have hC : 0 ≤ C := (hnonneg 0).trans (hbound 0)
+    by_cases hn : n = 0
+    · simp [hn, hC]
+    · simp [hn, hnonneg n]
+
+/--
+A bounded monotone height function gives a divisibility-monotone mass.
+-/
+theorem boundedMonotoneNatMassSpace_dvdMonotone
+    (height : ℕ → ℚ) (C : ℚ)
+    (hnonneg : ∀ n, 0 ≤ height n)
+    (hbound : ∀ n, height n ≤ C)
+    (hmono : ∀ ⦃a b : ℕ⦄, a ≤ b → height a ≤ height b) :
+    DvdMonotoneMass (boundedMonotoneNatMassSpace height C hnonneg hbound) := by
+  intro a b hab
+  by_cases hb : b = 0
+  · subst b
+    by_cases ha : a = 0
+    · simp [boundedMonotoneNatMassSpace, ha]
+    · simp [boundedMonotoneNatMassSpace, ha, hbound a]
+  · have hab_le : a ≤ b := Nat.le_of_dvd (Nat.pos_of_ne_zero hb) hab
+    have ha : a ≠ 0 := by
+      intro haz
+      rcases hab with ⟨d, hd⟩
+      exact hb (by simpa [haz] using hd)
+    simp [boundedMonotoneNatMassSpace, ha, hb, hmono hab_le]
+
+/--
+Finite tail step height built from nonnegative cumulative increments.
+
+Each step `i` contributes `increment i` exactly on the tail
+`threshold i <= n`. This represents a finite monotone step function without
+requiring the thresholds to be pre-sorted.
+-/
+def finiteStepTailHeight
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (threshold : ι → ℕ) (increment : ι → ℚ) :
+    ℕ → ℚ :=
+  fun n => Finset.sum steps (fun i => if threshold i ≤ n then increment i else 0)
+
+/-- A finite step tail height is nonnegative when every increment is. -/
+theorem finiteStepTailHeight_nonneg
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (threshold : ι → ℕ) (increment : ι → ℚ)
+    (hinc : ∀ i ∈ steps, 0 ≤ increment i) :
+    ∀ n, 0 ≤ finiteStepTailHeight steps threshold increment n := by
+  intro n
+  change 0 ≤ Finset.sum steps (fun i => if threshold i ≤ n then increment i else 0)
+  exact Finset.sum_nonneg (by
+    intro i hi
+    by_cases h : threshold i ≤ n
+    · simp [h, hinc i hi]
+    · simp [h])
+
+/--
+The total increment sum is a uniform upper bound for a finite step tail height.
+-/
+theorem finiteStepTailHeight_le_total
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (threshold : ι → ℕ) (increment : ι → ℚ)
+    (hinc : ∀ i ∈ steps, 0 ≤ increment i) :
+    ∀ n, finiteStepTailHeight steps threshold increment n ≤
+      Finset.sum steps increment := by
+  intro n
+  change Finset.sum steps (fun i => if threshold i ≤ n then increment i else 0) ≤
+    Finset.sum steps increment
+  exact Finset.sum_le_sum (by
+    intro i hi
+    by_cases h : threshold i ≤ n
+    · simp [h]
+    · simp [h, hinc i hi])
+
+/-- A finite step tail height is monotone in the natural label. -/
+theorem finiteStepTailHeight_mono
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (threshold : ι → ℕ) (increment : ι → ℚ)
+    (hinc : ∀ i ∈ steps, 0 ≤ increment i) :
+    ∀ ⦃a b : ℕ⦄, a ≤ b →
+      finiteStepTailHeight steps threshold increment a ≤
+        finiteStepTailHeight steps threshold increment b := by
+  intro a b hab
+  change
+    Finset.sum steps (fun i => if threshold i ≤ a then increment i else 0) ≤
+      Finset.sum steps (fun i => if threshold i ≤ b then increment i else 0)
+  exact Finset.sum_le_sum (by
+    intro i hi
+    by_cases ha : threshold i ≤ a
+    · have hb : threshold i ≤ b := ha.trans hab
+      simp [ha, hb]
+    · by_cases hb : threshold i ≤ b
+      · simp [ha, hb, hinc i hi]
+      · simp [ha, hb])
+
+/--
+Finite step tail mass obtained by feeding `finiteStepTailHeight` into the
+bounded monotone mass interface.
+-/
+def finiteStepTailNatMassSpace
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (threshold : ι → ℕ) (increment : ι → ℚ)
+    (hinc : ∀ i ∈ steps, 0 ≤ increment i) : MassSpace ℕ :=
+  boundedMonotoneNatMassSpace
+    (finiteStepTailHeight steps threshold increment)
+    (Finset.sum steps increment)
+    (finiteStepTailHeight_nonneg steps threshold increment hinc)
+    (finiteStepTailHeight_le_total steps threshold increment hinc)
+
+/-- Finite step tail mass is monotone along divisibility. -/
+theorem finiteStepTailNatMassSpace_dvdMonotone
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (threshold : ι → ℕ) (increment : ι → ℚ)
+    (hinc : ∀ i ∈ steps, 0 ≤ increment i) :
+    DvdMonotoneMass (finiteStepTailNatMassSpace steps threshold increment hinc) :=
+  boundedMonotoneNatMassSpace_dvdMonotone
+    (finiteStepTailHeight steps threshold increment)
+    (Finset.sum steps increment)
+    (finiteStepTailHeight_nonneg steps threshold increment hinc)
+    (finiteStepTailHeight_le_total steps threshold increment hinc)
+    (finiteStepTailHeight_mono steps threshold increment hinc)
+
+/-- Bool-indexed finite-step thresholds representing the two-step tail model. -/
+def twoStepTailFiniteThreshold (N M : ℕ) : Bool → ℕ :=
+  fun high => if high then M else N
+
+/--
+Bool-indexed finite-step increments representing the two-step tail model.
+
+The lower step contributes `cLow`; the upper step contributes the additional
+increment `cHigh - cLow`.
+-/
+def twoStepTailFiniteIncrement (cLow cHigh : ℚ) : Bool → ℚ :=
+  fun high => if high then cHigh - cLow else cLow
+
+/-- The two-step finite increments are nonnegative under `0 <= cLow <= cHigh`. -/
+theorem twoStepTailFiniteIncrement_nonneg
+    (cLow cHigh : ℚ) (hLow : 0 ≤ cLow) (hStep : cLow ≤ cHigh) :
+    ∀ i ∈ (Finset.univ : Finset Bool),
+      0 ≤ twoStepTailFiniteIncrement cLow cHigh i := by
+  intro i _hi
+  cases i
+  · simp [twoStepTailFiniteIncrement, hLow]
+  · simp [twoStepTailFiniteIncrement, sub_nonneg.mpr hStep]
+
+/-- The total finite-step increment for the two-step model is `cHigh`. -/
+theorem twoStepTailFiniteIncrement_sum
+    (cLow cHigh : ℚ) :
+    Finset.sum (Finset.univ : Finset Bool)
+      (twoStepTailFiniteIncrement cLow cHigh) = cHigh := by
+  simp [twoStepTailFiniteIncrement]
+
+/--
+Two-step tail mass expressed through the finite-step tail constructor.
+
+This is not intended to replace `twoStepTailNatMassSpace`; it records that the
+same two-step bound is available from the general finite-step interface.
+-/
+def twoStepAsFiniteStepTailNatMassSpace
+    (N M : ℕ) (cLow cHigh : ℚ)
+    (hLow : 0 ≤ cLow) (hStep : cLow ≤ cHigh) : MassSpace ℕ :=
+  finiteStepTailNatMassSpace
+    (Finset.univ : Finset Bool)
+    (twoStepTailFiniteThreshold N M)
+    (twoStepTailFiniteIncrement cLow cHigh)
+    (twoStepTailFiniteIncrement_nonneg cLow cHigh hLow hStep)
+
+/-- The finite-step presentation of the two-step tail mass is dvd-monotone. -/
+theorem twoStepAsFiniteStepTailNatMassSpace_dvdMonotone
+    (N M : ℕ) (cLow cHigh : ℚ)
+    (hLow : 0 ≤ cLow) (hStep : cLow ≤ cHigh) :
+    DvdMonotoneMass
+      (twoStepAsFiniteStepTailNatMassSpace N M cLow cHigh hLow hStep) :=
+  finiteStepTailNatMassSpace_dvdMonotone
+    (Finset.univ : Finset Bool)
+    (twoStepTailFiniteThreshold N M)
+    (twoStepTailFiniteIncrement cLow cHigh)
+    (twoStepTailFiniteIncrement_nonneg cLow cHigh hLow hStep)
 
 /--
 The sample Bool-indexed chain family is controlled by divisibility below

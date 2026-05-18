@@ -30,6 +30,7 @@ import DkMath.NumberTheory.PrimitiveSet.LogCapacityKernel
 import DkMath.NumberTheory.PrimitiveSet.VonMangoldtShadow
 import DkMath.NumberTheory.PrimitiveSet.SubMarkovShadow
 import DkMath.NumberTheory.PrimitiveSet.MarkovShadow
+import DkMath.NumberTheory.PrimitiveSet.ShadowHittingBridge
 import DkMath.NumberTheory.PrimitiveSet.FullChannelSet
 import DkMath.NumberTheory.PrimitiveSet.GlobalLogCapacityKernel
 import DkMath.NumberTheory.PrimitiveSet.FullChannelEquality
@@ -39,6 +40,7 @@ import DkMath.NumberTheory.PrimitiveSet.FullExponentSlotBridge
 import DkMath.NumberTheory.PrimitiveSet.FullExponentSlotCanonical
 import DkMath.NumberTheory.PrimitiveSet.FullExponentSlotIndexBridge
 import DkMath.NumberTheory.PrimitiveSet.KernelCandidateInventory
+import DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge
 
 #print "file: DkMath.NumberTheory.PrimitiveSet"
 
@@ -51,7 +53,7 @@ This module exposes:
 - finite positive and lower-bound support predicates
 - finite divisibility/descent-chain hitting lemmas
 - finite chain-family hitting bounds
-- source-controlled forest bridge
+- source-controlled forest bridge and concrete singleton/divisor-step constructors
 - divisibility-controlled descent provider
 - prime-step descent provider
 - multi-step prime reachability provider
@@ -66,7 +68,7 @@ This module exposes:
 - finite transition kernel skeleton
 - divisor transition kernel skeleton
 - real-valued toy weight skeleton
-- real-valued weight provider skeleton
+- real-valued weight provider and weighted path-family bridge
 - real/log route positivity lemmas
 - valuation-budget vocabulary for repeated base primes
 - bridge from prime-power divisor witnesses to real/log sub-probability,
@@ -77,6 +79,7 @@ This module exposes:
 - sub-Markov shadow naming layer for state-indexed real providers
 - Markov shadow naming layer for state-indexed real providers with total
   outgoing weight exactly one
+- bridge from real Markov/sub-Markov shadows to primitive hitting bounds
 - full prime-power channel-set interface for the equality route
 - global log-capacity kernel over source states `n > 1`
 - full-channel log-cost completeness interface and Markov-shadow bridge
@@ -87,4 +90,5 @@ This module exposes:
 - canonical exponent-slot kernel and Markov shadow
 - bridge from arbitrary kernels with canonical exponent-slot index to Markov shadow
 - code-level inventory for current kernel candidates
+- bridge from log-capacity shadows to primitive hitting bounds
 -/
