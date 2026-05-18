@@ -21,7 +21,7 @@ $$
 
 という **log-capacity state 上の source mass 一様上界** じゃ。
 
-DKMK-007E の divisor-step family では、各 channel (q) の source がすべて同じ (s.1) だった。
+DKMK-007E の divisor-step family では、各 channel \(q\) の source がすべて同じ \(s.1\) だった。
 
 $$
 source(q)=s.1
@@ -43,7 +43,7 @@ $$
 \mu(n)=1
 $$
 
-により (C=1) を閉じた。
+により \(C=1\) を閉じた。
 
 DKMK-007G では `nonunitNatMassSpace` について、
 
@@ -51,7 +51,7 @@ $$
 \mu(1)=0,\quad \mu(n)=1\text{ for }n\ne 1
 $$
 
-により、`LogCapacityState` では常に (1<s.1) なので同じく (C=1) を閉じた。
+により、`LogCapacityState` では常に \(1<s.1\) なので同じく \(C=1\) を閉じた。
 
 今回、それぞれが次の provider theorem に整理された。
 
@@ -175,7 +175,7 @@ DvdMonotoneMass M と LogCapacitySourceMassBound M C があればよい
 
 今後、本命に近い tail/source mass model を入れるとき、必要な作業が明確になった。
 
-新しい mass (M) を作ったら、示すべきことはまず二つ。
+新しい mass \(M\) を作ったら、示すべきことはまず二つ。
 
 ```lean
 DvdMonotoneMass M
@@ -256,7 +256,7 @@ DKMK-007I:
   DvdMonotoneMass M と LogCapacitySourceMassBound M C を証明する。
 ```
 
-ただし、いきなり (\mu(n)=1/(n\log n)) のような実数 log mass に行くと、単調性や (n=1) 周りで面倒が出そうじゃ。
+ただし、いきなり \(\mu(n)=1/(n\log n)\) のような実数 log mass に行くと、単調性や \(n=1\) 周りで面倒が出そうじゃ。
 まずは階段型・bounded 型・support indicator 型を一つ挟むのが安全じゃな。
 
 第二は、 **multi-step descent chain へ進む** 道。

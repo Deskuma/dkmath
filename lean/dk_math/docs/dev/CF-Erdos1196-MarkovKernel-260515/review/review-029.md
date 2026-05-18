@@ -12,7 +12,7 @@ twoStepTailFiniteThreshold
 twoStepTailFiniteIncrement
 ```
 
-`twoStepTailFiniteThreshold N M` は、Bool の `false` 側を lower step (N)、`true` 側を upper step (M) として読む。
+`twoStepTailFiniteThreshold N M` は、Bool の `false` 側を lower step \(N\)、`true` 側を upper step \(M\) として読む。
 
 `twoStepTailFiniteIncrement cLow cHigh` は、
 
@@ -55,7 +55,7 @@ hStep : cLow ≤ cHigh
 
 じゃ。
 
-これにより lower increment (cLow) は非負であり、upper increment (cHigh-cLow) も非負になる。
+これにより lower increment cLow は非負であり、upper increment cHigh - cLow も非負になる。
 
 $$
 0\le cLow,\quad 0\le cHigh-cLow

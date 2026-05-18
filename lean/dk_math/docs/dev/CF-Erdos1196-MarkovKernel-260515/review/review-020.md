@@ -1,7 +1,7 @@
 # review
 
 うむ。DKMK-007E は **singleton model から本物の divisor descent へ踏み出した回** じゃ。
-これは DKMK-007 系の中でも意味が大きい。DKMK-007D では chain が ({q}) だけだったので、形式的には hitting bridge を使えても、下降過程としてはまだ薄かった。今回、各 channel (q) に対して
+これは DKMK-007 系の中でも意味が大きい。DKMK-007D では chain が \(\{q\}\) だけだったので、形式的には hitting bridge を使えても、下降過程としてはまだ薄かった。今回、各 channel \(q\) に対して
 
 $$
 chain(q)={n/q,n}
@@ -18,7 +18,7 @@ DvdControlledChainFamily.divisorStep
 SourceControlledChainFamily.ofDivisorStep
 ```
 
-`divisorStep n I hdiv` は、各 (q\in I) に対して、
+`divisorStep n I hdiv` は、各 \(q\in I\) に対して、
 
 $$
 chain(q)={n/q,n},\qquad source(q)=n
@@ -150,9 +150,9 @@ canonical exponent-slot MarkovShadow
 
 ## 5. source mass bound が一点化された
 
-今回の設計で良いのは、source が全 channel で同じ (n=s.1) に揃っていることじゃ。
+今回の設計で良いのは、source が全 channel で同じ \(n=s.1\) に揃っていることじゃ。
 
-DKMK-007C では一般の (F) に対して、
+DKMK-007C では一般の \(F\) に対して、
 
 $$
 \forall q\in F.index,\quad \mu(F.source(q))\le C
@@ -212,7 +212,7 @@ log-capacity weight
 
 ただし、まだ one-step じゃ。
 
-`chain(q)=\{n/q,n\}` は、各 channel (q) による一回の下降だけを表す。
+`chain(q)=\{n/q,n\}` は、各 channel \(q\) による一回の下降だけを表す。
 既存証明の本格的な hitting / adjoint chain では、複数段の下降や stopping / truncation が出てくる。
 
 したがって残る課題は二つある。
@@ -224,7 +224,7 @@ $$
 $$
 
 を、どの mass model から出すか。
-たとえば unit mass なら (C=1) にできるか、log-tail 型 mass ならどうなるか、という話じゃ。
+たとえば unit mass なら \(C=1\) にできるか、log-tail 型 mass ならどうなるか、という話じゃ。
 
 第二に、one-step から multi-step descent chain への拡張。
 
@@ -318,4 +318,4 @@ one-step divisorStep を multi-step descent family に拡張する
 のどちらかじゃ。
 
 わっちのおすすめは、まず source mass bound の具体化じゃな。
-`unitNatMassSpace` など既存 mass model で (C=1) 型の theorem を作ると、DKMK-007E の結果がすぐに「呼べる定理」になる。その後で multi-step に進むのがよい。
+`unitNatMassSpace` など既存 mass model で \(C=1\) 型の theorem を作ると、DKMK-007E の結果がすぐに「呼べる定理」になる。その後で multi-step に進むのがよい。

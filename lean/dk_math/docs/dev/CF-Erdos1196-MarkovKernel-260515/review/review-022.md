@@ -1,7 +1,7 @@
 # review
 
 うむ。DKMK-007G は **unit mass の玩具段階を越えて、mass model 差し替え可能性を確認した回** じゃ。
-前回 DKMK-007F では `unitNatMassSpace` により source mass bound を (C=1) で閉じた。今回は `nonunitNatMassSpace` を追加し、`1` だけを質量 (0)、それ以外を質量 (1) とする bounded concrete mass でも、selected / canonical の divisor-step hitting route が同じく (≤1) で通ることを確認しておる。
+前回 DKMK-007F では `unitNatMassSpace` により source mass bound を \(C=1\) で閉じた。今回は `nonunitNatMassSpace` を追加し、`1` だけを質量 \(0\)、それ以外を質量 \(1\) とする bounded concrete mass でも、selected / canonical の divisor-step hitting route が同じく \(\le1\) で通ることを確認しておる。
 
 ## 1. 今回の核心
 
@@ -21,7 +21,7 @@ $$
 という指示関数型の質量じゃな。
 
 これは最終的な tail mass ではない。
-しかし `unitNatMassSpace` と違って、下降 chain が終端 (1) に到達した場合を質量 (0) として区別できる。つまり、 **下降の終端を見分ける最初の nontrivial bounded mass** になっておる。
+しかし `unitNatMassSpace` と違って、下降 chain が終端 \(1\) に到達した場合を質量 \(0\) として区別できる。つまり、 **下降の終端を見分ける最初の nontrivial bounded mass** になっておる。
 
 ## 2. divisibility-monotone が閉じた意味
 
@@ -42,8 +42,8 @@ $$
 a\mid b
 $$
 
-で、もし (b=1) なら (a=1)。したがって両方の質量は (0)。
-もし (b\ne 1) なら (\mu(b)=1) なので、(\mu(a)\le 1) は自明。
+で、もし \(b=1\) なら \(a=1\)。したがって両方の質量は \(0\)。
+もし \(b\ne 1\) なら \(\mu(b)=1\) なので、\(\mu(a)\le 1\) は自明。
 
 この mass は単純だが、divisibility に沿って増えすぎない。だから DKMK-007E の divisor-step bridge にそのまま入る。
 
@@ -61,15 +61,15 @@ $$
 chain(q)={s.1/q,s.1}
 $$
 
-へ載せ、mass model として `nonunitNatMassSpace` を使ったとき、primitive set (A) の weighted hit mass が (1) 以下になる、という定理じゃ。
+へ載せ、mass model として `nonunitNatMassSpace` を使ったとき、primitive set \(A\) の weighted hit mass が \(1\) 以下になる、という定理じゃ。
 
-ここで (s : LogCapacityState) なので、
+ここで \(s : LogCapacityState\) なので、
 
 $$
 1<s.1
 $$
 
-が常にある。ゆえに (s.1\ne 1) であり、
+が常にある。ゆえに \(s.1\ne 1\) であり、
 
 $$
 \mu(s.1)=1
@@ -82,7 +82,7 @@ $$
 (M.\mu(s.1):\mathbb{R})\le C
 $$
 
-を (C=1) で閉じられるわけじゃ。
+を \(C=1\) で閉じられるわけじゃ。
 
 ## 4. canonical route の追加
 
@@ -119,13 +119,13 @@ canonical exponent-slot MarkovShadow
 
 ## 5. DKMK-007F との違い
 
-DKMK-007F の unit mass は、すべての点に質量 (1) を置く。
+DKMK-007F の unit mass は、すべての点に質量 \(1\) を置く。
 
 $$
 \mu(n)=1
 $$
 
-これは source bound を閉じるには最も簡単じゃが、下降の終端 (1) も他の点と同じ扱いになる。
+これは source bound を閉じるには最も簡単じゃが、下降の終端 \(1\) も他の点と同じ扱いになる。
 
 一方、今回の nonunit mass は、
 
@@ -133,10 +133,10 @@ $$
 \mu(1)=0,\quad \mu(n)=1\text{ for }n\ne 1
 $$
 
-なので、少なくとも (1) に到達したかどうかを mass が識別する。
+なので、少なくとも \(1\) に到達したかどうかを mass が識別する。
 
 これは小さな差に見えるが、multi-step descent に進むと効いてくる可能性がある。
-なぜなら、下降過程では (1) は自然な終端であり、そこを質量 (0) にすることで「終端に吸収された流れ」を別扱いできるからじゃ。
+なぜなら、下降過程では \(1\) は自然な終端であり、そこを質量 \(0\) にすることで「終端に吸収された流れ」を別扱いできるからじゃ。
 
 ## 6. 数学的な位置づけ
 
@@ -250,8 +250,8 @@ theorem ..._divisorStep_weightedHitMass_le_of_sourceBound
 
 DKMK-007G は **小さいが重要な mass-model 実験の成功** じゃ。
 
-unit mass だけでは「まあ (1) で閉じるよね」で終わる。
-しかし nonunit mass により、終端 (1) を区別する bounded model でも selected / canonical divisor-step hitting route が (≤1) で閉じることが確認された。
+unit mass だけでは「まあ \(1\) で閉じるよね」で終わる。
+しかし nonunit mass により、終端 \(1\) を区別する bounded model でも selected / canonical divisor-step hitting route が \(\le1\) で閉じることが確認された。
 
 到達形はこうじゃ。
 

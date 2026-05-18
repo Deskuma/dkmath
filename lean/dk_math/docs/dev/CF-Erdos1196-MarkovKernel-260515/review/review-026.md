@@ -1,7 +1,7 @@
 # review
 
 うむ。DKMK-007K は **finite step tail mass への第一歩** じゃ。
-DKMK-007J では tail support に単一 height (c) を持たせた。今回 DKMK-007K では、それをさらに進めて、低い tail band と高い tail band を持つ **two-step tail mass** を導入しておる。つまり、質量が「どこを見るか」「どれだけ重く見るか」に加えて、 **場所によって高さを変える** ところまで来た。
+DKMK-007J では tail support に単一 height \(c\) を持たせた。今回 DKMK-007K では、それをさらに進めて、低い tail band と高い tail band を持つ **two-step tail mass** を導入しておる。つまり、質量が「どこを見るか」「どれだけ重く見るか」に加えて、 **場所によって高さを変える** ところまで来た。
 
 ## 1. 今回の核心
 
@@ -40,7 +40,7 @@ M 以上:
   cHigh
 ```
 
-`0` を `cHigh` 側に入れている理由は、これまでの tail indicator と同じじゃ。全自然数上の整除関係では (a\mid 0) が常に起きるので、(\mu(0)) を十分大きくしておかないと `DvdMonotoneMass` が壊れる。
+`0` を `cHigh` 側に入れている理由は、これまでの tail indicator と同じじゃ。全自然数上の整除関係では \(a\mid 0\) が常に起きるので、\(\mu(0)\) を十分大きくしておかないと `DvdMonotoneMass` が壊れる。
 
 ## 2. DKMK-007J から何が進んだか
 
@@ -83,7 +83,7 @@ $$
 
 証明の要点は二つじゃ。
 
-まず (b\ne 0) なら、(a\mid b) から
+まず \(b\ne 0\) なら、\(a\mid b\) から
 
 $$
 a\le b
@@ -98,10 +98,10 @@ $$
 $$
 
 と上がっていく。
-だから、source 側 (a) が低い band に落ちても、target 側 (b) の height を超えない。
+だから、source 側 \(a\) が低い band に落ちても、target 側 \(b\) の height を超えない。
 
 ここは非常に DkMath kernel らしいところじゃ。
-整除下降では (a\mid b) のとき (a) は構造的に (b) 以下へ落ちる。だから mass を自然数の大きさに対して非減少にしておけば、divisibility-monotone が成立する。
+整除下降では \(a\mid b\) のとき \(a\) は構造的に \(b\) 以下へ落ちる。だから mass を自然数の大きさに対して非減少にしておけば、divisibility-monotone が成立する。
 
 ## 4. LogCapacitySourceMassBound への接続
 
@@ -175,7 +175,7 @@ canonical exponent-slot MarkovShadow
 → weightedHitMass A ≤ (cHigh : ℝ)
 ```
 
-canonical route では weight 総量が等号で (1) だが、hitting bound としては source 側の最大 mass (cHigh) が最終上界になる。
+canonical route では weight 総量が等号で \(1\) だが、hitting bound としては source 側の最大 mass cHigh が最終上界になる。
 
 ## 7. 数学的な位置づけ
 
@@ -214,9 +214,9 @@ $$
 
 これは `DvdMonotoneMass` の向きに合っている。
 
-なぜなら (a\mid b) かつ (b\ne 0) なら (a\le b) なので、(\mu(a)\le\mu(b)) を示すには、(\mu) は自然数の大きさに対して非減少である方が扱いやすい。
+なぜなら \(a\mid b\) かつ \(b\ne 0\) なら \(a\le b\) なので、\(\mu(a)\le\mu(b)\) を示すには、\(\mu\) は自然数の大きさに対して非減少である方が扱いやすい。
 
-一方、解析的な (1/(n\log n)) は自然数が大きいほど小さくなる。
+一方、解析的な \(1/(n\log n)\) は自然数が大きいほど小さくなる。
 つまり本命の tail weight へ進むには、今の `DvdMonotoneMass` とは向きが反対になる可能性がある。
 
 ここは重要な分岐じゃ。

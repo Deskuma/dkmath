@@ -19,7 +19,7 @@ $$
 
 じゃ。
 
-各 step (i) は、自分の threshold を越えたところから height に寄与する。
+各 step \(i\) は、自分の threshold を越えたところから height に寄与する。
 重要なのは、threshold を事前に整列しなくてよいことじゃ。各 step が独立に tail 条件で発火し、それらを有限和として足す。
 
 つまり、finite step function を「段の並び」ではなく、 **非負 increment の累積和** として表現している。これは Lean 的にも数学的にもかなり扱いやすい。
@@ -50,13 +50,13 @@ $$
 
 が出る。
 
-第二に、各項は (0) または (increment(i)) なので、全体は total increment 以下になる。
+第二に、各項は \(0\) または \(increment(i)\) なので、全体は total increment 以下になる。
 
 $$
 finiteStepTailHeight(n)\le \sum_{i\in steps}increment(i)
 $$
 
-第三に、(a\le b) なら、(threshold(i)\le a) から (threshold(i)\le b) が従う。したがって各 step の寄与は減らず、全体として単調になる。
+第三に、\(a\le b\) なら、\(threshold(i)\le a\) から \(threshold(i)\le b\) が従う。したがって各 step の寄与は減らず、全体として単調になる。
 
 $$
 a\le b\Rightarrow finiteStepTailHeight(a)\le finiteStepTailHeight(b)
@@ -84,7 +84,7 @@ boundedMonotoneNatMassSpace
 として定義されている。
 
 つまり、DKMK-007L の抽象 interface に、今回の concrete finite step height を載せたものじゃ。
-上界 (C) は total increment、
+上界 \(C\) は total increment、
 
 $$
 C=\sum_{i\in steps}increment(i)
@@ -120,7 +120,7 @@ $$
 
 を供給する。
 
-つまり、任意の log-capacity state (s) で、
+つまり、任意の log-capacity state \(s\) で、
 
 $$
 \mu(s.1)\le \sum_{i\in steps}increment(i)
@@ -237,9 +237,9 @@ DKMK-007M は、DKMK-007L の抽象 interface に concrete な finite-step const
 今回の `finiteStepTailHeight` は、height が自然数ラベルに対して非減少になる構造じゃ。
 
 これは `DvdMonotoneMass` には合っている。
-一方、解析的に現れる (1/(n\log n)) は (n) が増えるほど減るので、向きは逆じゃ。
+一方、解析的に現れる \(1/(n\log n)\) は \(n\) が増えるほど減るので、向きは逆じゃ。
 
-したがって今の finite step mass は、直接 (1/(n\log n)) を近似するというより、 **source-controlled hitting に適した単調 mass** の有限段 model と見るべきじゃ。
+したがって今の finite step mass は、直接 \(1/(n\log n)\) を近似するというより、 **source-controlled hitting に適した単調 mass** の有限段 model と見るべきじゃ。
 
 もし将来 decreasing weight を直接扱うなら、`DvdMonotoneMass` とは別向きの control interface が必要になるかもしれぬ。
 ただし、今の目的は one-step divisor descent の source mass bound を作ることなので、この向きは自然じゃ。

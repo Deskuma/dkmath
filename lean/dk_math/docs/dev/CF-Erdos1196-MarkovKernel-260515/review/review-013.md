@@ -118,7 +118,7 @@ T.index n = canonicalExponentSlotLabels n を示せるか？
 `sampleTen...` 系は、state `10` で `{2,5}` を index とする toy kernel として分類された。
 
 これは sanity check としては有用じゃ。
-しかし、任意の (n) について canonical exponent-slot labels と一致する global model ではない。
+しかし、任意の \(n\) について canonical exponent-slot labels と一致する global model ではない。
 
 だから分類は、
 
@@ -190,7 +190,7 @@ $$
 という等号一致を要求する。
 これは強いが、扱いやすい。
 
-もし将来、外部 kernel が label として (q=p^k) そのものではなく、別表現の slot を持つなら、
+もし将来、外部 kernel が label として \(q=p^k\) そのものではなく、別表現の slot を持つなら、
 
 $$
 externalSlot(n)\simeq canonicalExponentSlotLabels(n)

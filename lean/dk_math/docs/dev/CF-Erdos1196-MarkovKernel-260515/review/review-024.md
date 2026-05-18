@@ -18,11 +18,11 @@ $$
 $$
 
 という threshold indicator mass じゃ。
-直感的には「(N) 以上の tail 領域を質量 (1) として見る」mass であり、positive な descent chain 上では通常の tail-support indicator として読める。
+直感的には「\(N\) 以上の tail 領域を質量 \(1\) として見る」mass であり、positive な descent chain 上では通常の tail-support indicator として読める。
 
-ただし、Lean 上では全 (\mathbb{N}) で `a ∣ b` に対する単調性を示す必要がある。そこで `0` を mass (1) 側に入れている。これは重要な設計判断じゃ。
+ただし、Lean 上では全 \(\mathbb{N}\) で `a ∣ b` に対する単調性を示す必要がある。そこで `0` を mass \(1\) 側に入れている。これは重要な設計判断じゃ。
 
-## なぜ `0` を mass (1) にしたのか
+## なぜ `0` を mass \(1\) にしたのか
 
 `DvdMonotoneMass` は、
 
@@ -32,23 +32,23 @@ $$
 
 を要求する。
 
-自然数の整除では、任意の (a) が (0) を割る。
+自然数の整除では、任意の \(a\) が \(0\) を割る。
 
 $$
 a\mid 0
 $$
 
-したがって、もし (\mu(0)=0) にしてしまうと、たとえば (a) が tail 側にいて (\mu(a)=1) の場合、
+したがって、もし \(\mu(0)=0\) にしてしまうと、たとえば \(a\) が tail 側にいて \(\mu(a)=1\) の場合、
 
 $$
 1\le 0
 $$
 
 が必要になり、単調性が壊れる。
-だから全 (\mathbb{N}) 上の整除単調性を保つには、(\mu(0)=1) にするのが自然じゃ。docs でも、`0` を mass (1) 側に含める理由は divisibility monotonicity を壊さないためだと整理されている。
+だから全 \(\mathbb{N}\) 上の整除単調性を保つには、\(\mu(0)=1\) にするのが自然じゃ。docs でも、`0` を mass \(1\) 側に含める理由は divisibility monotonicity を壊さないためだと整理されている。
 
 これはかなり Lean 的に正しい判断じゃな。
-実際の positive descent chain では (0) は通常登場しないので、数学的な読みとしては tail indicator のままでよい。
+実際の positive descent chain では \(0\) は通常登場しないので、数学的な読みとしては tail indicator のままでよい。
 
 ## 証明されたこと
 
@@ -66,14 +66,14 @@ $$
 
 が証明された。
 
-証明の核は、(a\mid b) かつ (b\ne 0) なら、
+証明の核は、\(a\mid b\) かつ \(b\ne 0\) なら、
 
 $$
 a\le b
 $$
 
 が使えることじゃ。
-そのため、もし (N\le a) なら (N\le b) も従う。逆に (b) が tail 側でなければ、(a) も tail 側ではない。`b = 0` の場合だけは (\mu(0)=1) にしてあるので上界側が閉じる。
+そのため、もし \(N\le a\) なら \(N\le b\) も従う。逆に \(b\) が tail 側でなければ、\(a\) も tail 側ではない。`b = 0` の場合だけは \(\mu(0)=1\) にしてあるので上界側が閉じる。
 
 次に、DKMK-007H の source-bound provider として、
 
@@ -83,13 +83,13 @@ tailIndicatorNatMassSpace_logCapacitySourceMassBound_one
 
 が追加された。
 
-これは任意の threshold (N) について、
+これは任意の threshold \(N\) について、
 
 ```lean
 LogCapacitySourceMassBound (tailIndicatorNatMassSpace N) 1
 ```
 
-を与える。つまり log-capacity state 上で source mass は常に (1) 以下になる。
+を与える。つまり log-capacity state 上で source mass は常に \(1\) 以下になる。
 
 $$
 (M.\mu(s.1):\mathbb{R})\le 1
@@ -118,7 +118,7 @@ tailIndicatorNatMassSpace N
   → divisor-step weightedHitMass ≤ 1
 ```
 
-つまり、DKMK-007H で整備した共通 wrapper がきちんと働いた。unit / nonunit だけでなく、parameter (N) を持つ tail-support mass も selected / canonical の divisor-step hitting route に流せたわけじゃ。
+つまり、DKMK-007H で整備した共通 wrapper がきちんと働いた。unit / nonunit だけでなく、parameter \(N\) を持つ tail-support mass も selected / canonical の divisor-step hitting route に流せたわけじゃ。
 
 ## 数学的な意味
 
@@ -150,8 +150,8 @@ $$
 \sum_{\substack{a\in A\ a > x}}\frac{1}{a\log a}\le 1+O(1/\log x)
 $$
 
-だから、「threshold (N) 以上を検出する mass」が入ったことは、本線に近づく意味がある。
-まだ重みは (1/(a\log a)) ではない。だが、 **tail support を見る** という方向性は明確に入った。
+だから、「threshold \(N\) 以上を検出する mass」が入ったことは、本線に近づく意味がある。
+まだ重みは \(1/(a\log a)\) ではない。だが、 **tail support を見る** という方向性は明確に入った。
 
 ## ここまでの DKMK-007 系の進化
 
