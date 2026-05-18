@@ -393,6 +393,99 @@ theorem boundedMonotoneNatMassSpace_dvdMonotone
     simp [boundedMonotoneNatMassSpace, ha, hb, hmono hab_le]
 
 /--
+Finite tail step height built from nonnegative cumulative increments.
+
+Each step `i` contributes `increment i` exactly on the tail
+`threshold i <= n`. This represents a finite monotone step function without
+requiring the thresholds to be pre-sorted.
+-/
+def finiteStepTailHeight
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (threshold : ι → ℕ) (increment : ι → ℚ) :
+    ℕ → ℚ :=
+  fun n => Finset.sum steps (fun i => if threshold i ≤ n then increment i else 0)
+
+/-- A finite step tail height is nonnegative when every increment is. -/
+theorem finiteStepTailHeight_nonneg
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (threshold : ι → ℕ) (increment : ι → ℚ)
+    (hinc : ∀ i ∈ steps, 0 ≤ increment i) :
+    ∀ n, 0 ≤ finiteStepTailHeight steps threshold increment n := by
+  intro n
+  change 0 ≤ Finset.sum steps (fun i => if threshold i ≤ n then increment i else 0)
+  exact Finset.sum_nonneg (by
+    intro i hi
+    by_cases h : threshold i ≤ n
+    · simp [h, hinc i hi]
+    · simp [h])
+
+/--
+The total increment sum is a uniform upper bound for a finite step tail height.
+-/
+theorem finiteStepTailHeight_le_total
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (threshold : ι → ℕ) (increment : ι → ℚ)
+    (hinc : ∀ i ∈ steps, 0 ≤ increment i) :
+    ∀ n, finiteStepTailHeight steps threshold increment n ≤
+      Finset.sum steps increment := by
+  intro n
+  change Finset.sum steps (fun i => if threshold i ≤ n then increment i else 0) ≤
+    Finset.sum steps increment
+  exact Finset.sum_le_sum (by
+    intro i hi
+    by_cases h : threshold i ≤ n
+    · simp [h]
+    · simp [h, hinc i hi])
+
+/-- A finite step tail height is monotone in the natural label. -/
+theorem finiteStepTailHeight_mono
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (threshold : ι → ℕ) (increment : ι → ℚ)
+    (hinc : ∀ i ∈ steps, 0 ≤ increment i) :
+    ∀ ⦃a b : ℕ⦄, a ≤ b →
+      finiteStepTailHeight steps threshold increment a ≤
+        finiteStepTailHeight steps threshold increment b := by
+  intro a b hab
+  change
+    Finset.sum steps (fun i => if threshold i ≤ a then increment i else 0) ≤
+      Finset.sum steps (fun i => if threshold i ≤ b then increment i else 0)
+  exact Finset.sum_le_sum (by
+    intro i hi
+    by_cases ha : threshold i ≤ a
+    · have hb : threshold i ≤ b := ha.trans hab
+      simp [ha, hb]
+    · by_cases hb : threshold i ≤ b
+      · simp [ha, hb, hinc i hi]
+      · simp [ha, hb])
+
+/--
+Finite step tail mass obtained by feeding `finiteStepTailHeight` into the
+bounded monotone mass interface.
+-/
+def finiteStepTailNatMassSpace
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (threshold : ι → ℕ) (increment : ι → ℚ)
+    (hinc : ∀ i ∈ steps, 0 ≤ increment i) : MassSpace ℕ :=
+  boundedMonotoneNatMassSpace
+    (finiteStepTailHeight steps threshold increment)
+    (Finset.sum steps increment)
+    (finiteStepTailHeight_nonneg steps threshold increment hinc)
+    (finiteStepTailHeight_le_total steps threshold increment hinc)
+
+/-- Finite step tail mass is monotone along divisibility. -/
+theorem finiteStepTailNatMassSpace_dvdMonotone
+    {ι : Type _} [DecidableEq ι]
+    (steps : Finset ι) (threshold : ι → ℕ) (increment : ι → ℚ)
+    (hinc : ∀ i ∈ steps, 0 ≤ increment i) :
+    DvdMonotoneMass (finiteStepTailNatMassSpace steps threshold increment hinc) :=
+  boundedMonotoneNatMassSpace_dvdMonotone
+    (finiteStepTailHeight steps threshold increment)
+    (Finset.sum steps increment)
+    (finiteStepTailHeight_nonneg steps threshold increment hinc)
+    (finiteStepTailHeight_le_total steps threshold increment hinc)
+    (finiteStepTailHeight_mono steps threshold increment hinc)
+
+/--
 The sample Bool-indexed chain family is controlled by divisibility below
 sources `8` and `9`.
 -/

@@ -1623,6 +1623,121 @@ finite-step tail height を載せられる interface へ進んだ。
 
 ---
 
+## 2.25. DKMK-007M Finite step tail height constructor
+
+DKMK-007M では、DKMK-007L の bounded monotone interface に載せる
+具体的な有限段 height constructor を追加する。
+
+追加した height は次である。
+
+```lean
+finiteStepTailHeight steps threshold increment
+```
+
+ここで、
+
+```lean
+steps : Finset ι
+threshold : ι → ℕ
+increment : ι → ℚ
+```
+
+であり、各 step `i` は tail 条件 `threshold i ≤ n` が成り立つ
+自然数ラベル `n` でだけ非負 increment を加える。
+
+定義の形は次である。
+
+```text
+finiteStepTailHeight n
+  = sum over i in steps of
+      if threshold i ≤ n then increment i else 0
+```
+
+この表現では、thresholds を事前に sort する必要がない。
+非負 increment の有限和として書くことで、次が直接得られる。
+
+```lean
+finiteStepTailHeight_nonneg
+finiteStepTailHeight_le_total
+finiteStepTailHeight_mono
+```
+
+仮定は次だけである。
+
+```lean
+hinc : ∀ i ∈ steps, 0 ≤ increment i
+```
+
+`finiteStepTailHeight_mono` により、自然数ラベルに対して非減少である。
+また `finiteStepTailHeight_le_total` により、上界は total increment
+
+```lean
+Finset.sum steps increment
+```
+
+で与えられる。
+
+この height を DKMK-007L の interface に流した mass model が次である。
+
+```lean
+finiteStepTailNatMassSpace steps threshold increment hinc
+```
+
+これは内部的には、
+
+```lean
+boundedMonotoneNatMassSpace
+  (finiteStepTailHeight steps threshold increment)
+  (Finset.sum steps increment)
+  ...
+```
+
+である。したがって divisibility-monotone theorem は次で済む。
+
+```lean
+finiteStepTailNatMassSpace_dvdMonotone
+```
+
+DKMK-007H の source-bound provider としては次を追加した。
+
+```lean
+finiteStepTailNatMassSpace_logCapacitySourceMassBound
+```
+
+これは、
+
+```lean
+LogCapacitySourceMassBound
+  (finiteStepTailNatMassSpace steps threshold increment hinc)
+  ((Finset.sum steps increment : ℚ) : ℝ)
+```
+
+を与える。
+
+selected / canonical route では次の theorem を追加した。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_finiteStepTailDivisorStep_weightedHitMass_le
+
+canonicalExponentSlotMarkovShadow_finiteStepTailDivisorStep_weightedHitMass_le
+```
+
+到達形は次である。
+
+```text
+finite nonnegative tail increments
+  → finiteStepTailHeight
+  → boundedMonotoneNatMassSpace
+  → DvdMonotoneMass
+  → LogCapacitySourceMassBound by total increment
+  → divisor-step weightedHitMass ≤ total increment
+```
+
+これで、two-step tail mass の先にある任意有限段の累積 tail mass を、
+threshold の整列補題なしに扱う入口ができた。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

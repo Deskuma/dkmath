@@ -584,6 +584,11 @@ Archive
    - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
    - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
    - `git diff --check`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
 5. 失敗事例:
    - `{n / q, n}` の membership 証明で `fin_cases` を使うと、`n / q = n` の重複可能性により dependent elimination が失敗したため、membership を `h = n / q ∨ h = n` に展開して処理した。
 6. 次の課題:
@@ -763,6 +768,34 @@ Archive
    - `boundedMonotoneNatMassSpace_logCapacitySourceMassBound` の非ゼロ分岐で flexible `simp` warning が出たため、`simp only` と `Rat.cast_le` へ寄せた。
 6. 次の課題:
    - bounded monotone interface に具体的な finite step height constructor を載せる。
+   - one-step divisor-step route を multi-step descent chain へ拡張する。
+
+---
+
+### 日時: 2026/05/18 16:57 JST (DKMK-007M finite step tail height constructor 追加)
+
+1. 目的:
+   - DKMK-007L の bounded monotone interface に、具体的な finite step tail height constructor を載せる。
+2. 実施:
+   - `finiteStepTailHeight steps threshold increment` を追加し、tail 条件 `threshold i ≤ n` で有効化される非負 increment の有限和として height を定義した。
+   - `finiteStepTailHeight_nonneg`, `finiteStepTailHeight_le_total`, `finiteStepTailHeight_mono` を追加した。
+   - `finiteStepTailNatMassSpace steps threshold increment hinc` を追加し、DKMK-007L の `boundedMonotoneNatMassSpace` へ接続した。
+   - `finiteStepTailNatMassSpace_dvdMonotone` を追加した。
+   - `finiteStepTailNatMassSpace_logCapacitySourceMassBound` を追加し、total increment による source-bound provider を供給した。
+   - selected route 用に `PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_finiteStepTailDivisorStep_weightedHitMass_le` を追加した。
+   - canonical route 用に `canonicalExponentSlotMarkovShadow_finiteStepTailDivisorStep_weightedHitMass_le` を追加した。
+   - project docs に DKMK-007M の位置づけを追記した。
+3. 結論:
+   - threshold を事前に整列せず、非負 cumulative increment の有限和として任意有限段の tail mass を扱える入口ができた。
+   - two-step tail mass の先にある finite step mass を、bounded monotone interface の具体例として no-sorry で接続できた。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DescentBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+5. 失敗事例:
+   - `∑ i in steps, ...` notation が当該 module の構文環境で parse されなかったため、`Finset.sum steps ...` へ寄せた。
+   - finite step height の非負性・上界・単調性証明で定義 unfolding が不足したため、`change` で `Finset.sum` の形に揃えてから `Finset.sum_nonneg` / `Finset.sum_le_sum` を適用した。
+6. 次の課題:
+   - finite step tail mass を two-step tail mass の上位 interface として再利用する wrapper を検討する。
    - one-step divisor-step route を multi-step descent chain へ拡張する。
 
 ---
