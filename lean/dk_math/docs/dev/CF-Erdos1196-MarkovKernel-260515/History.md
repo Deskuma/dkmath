@@ -589,6 +589,11 @@ Archive
    - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
    - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
    - `git diff --check`
+   - `lake build DkMath.NumberTheory.PrimitiveSet`
+   - `lake build DkMath`
+   - `rg -n "^.{101,}$" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `rg -n "\b(sorry|admit)\b" lean/dk_math/DkMath/NumberTheory/PrimitiveSet/DescentBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet/LogCapacityHittingBridge.lean lean/dk_math/DkMath/NumberTheory/PrimitiveSet.lean`
+   - `git diff --check`
 5. 失敗事例:
    - `{n / q, n}` の membership 証明で `fin_cases` を使うと、`n / q = n` の重複可能性により dependent elimination が失敗したため、membership を `h = n / q ∨ h = n` に展開して処理した。
 6. 次の課題:
@@ -797,5 +802,33 @@ Archive
 6. 次の課題:
    - finite step tail mass を two-step tail mass の上位 interface として再利用する wrapper を検討する。
    - one-step divisor-step route を multi-step descent chain へ拡張する。
+
+---
+
+### 日時: 2026/05/18 17:56 JST (DKMK-007N two-step via finite-step interface 追加)
+
+1. 目的:
+   - DKMK-007K の two-step tail bound を、DKMK-007M の finite-step constructor の特殊例として再利用できる wrapper を追加する。
+2. 実施:
+   - `twoStepTailFiniteThreshold N M` を追加し、Bool-indexed に lower step `N` と upper step `M` を表現した。
+   - `twoStepTailFiniteIncrement cLow cHigh` を追加し、lower increment を `cLow`、upper increment を `cHigh - cLow` とした。
+   - `twoStepTailFiniteIncrement_nonneg` と `twoStepTailFiniteIncrement_sum` を追加した。
+   - `twoStepAsFiniteStepTailNatMassSpace N M cLow cHigh hLow hStep` を追加し、two-step data を finite-step mass へ流した。
+   - `twoStepAsFiniteStepTailNatMassSpace_dvdMonotone` を追加した。
+   - `twoStepAsFiniteStepTailNatMassSpace_logCapacitySourceMassBound` を追加し、finite-step total bound を `cHigh` に戻した。
+   - selected route 用に `PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_twoStepAsFiniteStepTailDivisorStep_weightedHitMass_le` を追加した。
+   - canonical route 用に `canonicalExponentSlotMarkovShadow_twoStepAsFiniteStepTailDivisorStep_weightedHitMass_le` を追加した。
+   - project docs に DKMK-007N の位置づけを追記した。
+3. 結論:
+   - two-step tail bound が finite-step interface の特殊例としても利用できるようになった。
+   - 既存 `twoStepTailNatMassSpace` は維持しつつ、finite-step route から同じ `≤ cHigh` bound を得る橋が no-sorry で入った。
+4. 検証:
+   - `lake build DkMath.NumberTheory.PrimitiveSet.DescentBridge`
+   - `lake build DkMath.NumberTheory.PrimitiveSet.LogCapacityHittingBridge`
+5. 失敗事例:
+   - Bool `Finset.univ` の sum 表示順が source-bound の expected type と合わなかったため、`twoStepTailFiniteIncrement_sum` を実数 cast した等式で明示的に上界を書き換えた。
+6. 次の課題:
+   - DKMK-007A から DKMK-007N までの mass model route を短く総括する。
+   - DKMK-008 として one-step divisor-step route を multi-step descent chain へ拡張する。
 
 ---

@@ -1738,6 +1738,98 @@ threshold の整列補題なしに扱う入口ができた。
 
 ---
 
+## 2.26. DKMK-007N Two-step via finite-step interface
+
+DKMK-007N では、DKMK-007K の two-step tail mass を DKMK-007M の
+finite-step interface から再利用する wrapper を追加する。
+
+Bool-indexed の finite-step 表現として、次を追加した。
+
+```lean
+twoStepTailFiniteThreshold N M
+twoStepTailFiniteIncrement cLow cHigh
+```
+
+threshold は、`false` 側を lower step `N`、`true` 側を upper step `M`
+として読む。
+
+increment は次の形である。
+
+```text
+false ↦ cLow
+true  ↦ cHigh - cLow
+```
+
+したがって、`hLow : 0 ≤ cLow` と `hStep : cLow ≤ cHigh` の下で、
+各 increment は非負である。
+
+```lean
+twoStepTailFiniteIncrement_nonneg
+```
+
+また total increment は high height に戻る。
+
+```lean
+twoStepTailFiniteIncrement_sum
+```
+
+すなわち、
+
+```lean
+Finset.sum (Finset.univ : Finset Bool)
+  (twoStepTailFiniteIncrement cLow cHigh) = cHigh
+```
+
+である。
+
+この Bool-indexed finite-step 表現を mass にしたものが次である。
+
+```lean
+twoStepAsFiniteStepTailNatMassSpace N M cLow cHigh hLow hStep
+```
+
+これは既存の `twoStepTailNatMassSpace` を定義上置き換えるものではなく、
+two-step bound が finite-step route からも出ることを記録する wrapper
+である。
+
+divisibility-monotone theorem は次である。
+
+```lean
+twoStepAsFiniteStepTailNatMassSpace_dvdMonotone
+```
+
+DKMK-007H の source-bound provider としては次を追加した。
+
+```lean
+twoStepAsFiniteStepTailNatMassSpace_logCapacitySourceMassBound
+```
+
+これは、finite-step route の total increment bound を
+`twoStepTailFiniteIncrement_sum` で `cHigh` へ戻す。
+
+selected / canonical route では次の theorem を追加した。
+
+```lean
+PrimePowerWitnessProvider.globalLogCapacitySubMarkovShadow_twoStepAsFiniteStepTailDivisorStep_weightedHitMass_le
+
+canonicalExponentSlotMarkovShadow_twoStepAsFiniteStepTailDivisorStep_weightedHitMass_le
+```
+
+到達形は次である。
+
+```text
+two-step data cLow ≤ cHigh
+  → Bool-indexed finite-step increments
+  → finiteStepTailNatMassSpace
+  → total increment = cHigh
+  → divisor-step weightedHitMass ≤ cHigh
+```
+
+これにより、DKMK-007K の two-step bound が DKMK-007M の finite-step
+interface の特殊例としても利用できるようになった。
+
+---
+
 ## 3. 背景
 
 ## 3.1. 既存証明 route

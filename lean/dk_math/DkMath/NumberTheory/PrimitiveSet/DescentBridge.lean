@@ -485,6 +485,63 @@ theorem finiteStepTailNatMassSpace_dvdMonotone
     (finiteStepTailHeight_le_total steps threshold increment hinc)
     (finiteStepTailHeight_mono steps threshold increment hinc)
 
+/-- Bool-indexed finite-step thresholds representing the two-step tail model. -/
+def twoStepTailFiniteThreshold (N M : ℕ) : Bool → ℕ :=
+  fun high => if high then M else N
+
+/--
+Bool-indexed finite-step increments representing the two-step tail model.
+
+The lower step contributes `cLow`; the upper step contributes the additional
+increment `cHigh - cLow`.
+-/
+def twoStepTailFiniteIncrement (cLow cHigh : ℚ) : Bool → ℚ :=
+  fun high => if high then cHigh - cLow else cLow
+
+/-- The two-step finite increments are nonnegative under `0 <= cLow <= cHigh`. -/
+theorem twoStepTailFiniteIncrement_nonneg
+    (cLow cHigh : ℚ) (hLow : 0 ≤ cLow) (hStep : cLow ≤ cHigh) :
+    ∀ i ∈ (Finset.univ : Finset Bool),
+      0 ≤ twoStepTailFiniteIncrement cLow cHigh i := by
+  intro i _hi
+  cases i
+  · simp [twoStepTailFiniteIncrement, hLow]
+  · simp [twoStepTailFiniteIncrement, sub_nonneg.mpr hStep]
+
+/-- The total finite-step increment for the two-step model is `cHigh`. -/
+theorem twoStepTailFiniteIncrement_sum
+    (cLow cHigh : ℚ) :
+    Finset.sum (Finset.univ : Finset Bool)
+      (twoStepTailFiniteIncrement cLow cHigh) = cHigh := by
+  simp [twoStepTailFiniteIncrement]
+
+/--
+Two-step tail mass expressed through the finite-step tail constructor.
+
+This is not intended to replace `twoStepTailNatMassSpace`; it records that the
+same two-step bound is available from the general finite-step interface.
+-/
+def twoStepAsFiniteStepTailNatMassSpace
+    (N M : ℕ) (cLow cHigh : ℚ)
+    (hLow : 0 ≤ cLow) (hStep : cLow ≤ cHigh) : MassSpace ℕ :=
+  finiteStepTailNatMassSpace
+    (Finset.univ : Finset Bool)
+    (twoStepTailFiniteThreshold N M)
+    (twoStepTailFiniteIncrement cLow cHigh)
+    (twoStepTailFiniteIncrement_nonneg cLow cHigh hLow hStep)
+
+/-- The finite-step presentation of the two-step tail mass is dvd-monotone. -/
+theorem twoStepAsFiniteStepTailNatMassSpace_dvdMonotone
+    (N M : ℕ) (cLow cHigh : ℚ)
+    (hLow : 0 ≤ cLow) (hStep : cLow ≤ cHigh) :
+    DvdMonotoneMass
+      (twoStepAsFiniteStepTailNatMassSpace N M cLow cHigh hLow hStep) :=
+  finiteStepTailNatMassSpace_dvdMonotone
+    (Finset.univ : Finset Bool)
+    (twoStepTailFiniteThreshold N M)
+    (twoStepTailFiniteIncrement cLow cHigh)
+    (twoStepTailFiniteIncrement_nonneg cLow cHigh hLow hStep)
+
 /--
 The sample Bool-indexed chain family is controlled by divisibility below
 sources `8` and `9`.

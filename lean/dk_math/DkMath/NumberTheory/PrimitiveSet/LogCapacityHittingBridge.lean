@@ -93,6 +93,28 @@ theorem finiteStepTailNatMassSpace_logCapacitySourceMassBound
     (finiteStepTailHeight_nonneg steps threshold increment hinc)
     (finiteStepTailHeight_le_total steps threshold increment hinc)
 
+/--
+Two-step-as-finite-step tail mass is uniformly bounded by its high height.
+-/
+theorem twoStepAsFiniteStepTailNatMassSpace_logCapacitySourceMassBound
+    (N M : ℕ) (cLow cHigh : ℚ)
+    (hLow : 0 ≤ cLow) (hStep : cLow ≤ cHigh) :
+    LogCapacitySourceMassBound
+      (twoStepAsFiniteStepTailNatMassSpace N M cLow cHigh hLow hStep)
+      (cHigh : ℝ) := by
+  have hsource :=
+    finiteStepTailNatMassSpace_logCapacitySourceMassBound
+      (Finset.univ : Finset Bool)
+      (twoStepTailFiniteThreshold N M)
+      (twoStepTailFiniteIncrement cLow cHigh)
+      (twoStepTailFiniteIncrement_nonneg cLow cHigh hLow hStep)
+  have hsum :
+      ((Finset.sum (Finset.univ : Finset Bool)
+        (twoStepTailFiniteIncrement cLow cHigh) : ℚ) : ℝ) = (cHigh : ℝ) := by
+    exact_mod_cast twoStepTailFiniteIncrement_sum cLow cHigh
+  rw [← hsum]
+  simpa [twoStepAsFiniteStepTailNatMassSpace] using hsource
+
 namespace PrimePowerWitnessProvider
 
 /--
@@ -463,6 +485,34 @@ theorem globalLogCapacitySubMarkovShadow_finiteStepTailDivisorStep_weightedHitMa
     (finiteStepTailNatMassSpace_logCapacitySourceMassBound
       steps threshold increment hinc)
 
+/--
+Primitive hitting bound for the selected global log-capacity sub-Markov shadow
+using the two-step tail mass through the finite-step interface.
+-/
+theorem globalLogCapacitySubMarkovShadow_twoStepAsFiniteStepTailDivisorStep_weightedHitMass_le
+    {T : PrimePowerDivisorTransitionKernel}
+    (W : PrimePowerWitnessProvider T)
+    (IOf : ℕ → Finset ℕ)
+    (hIOf :
+      ∀ n q, q ∈ IOf n → q ∈ T.toDivisorTransitionKernel.index n)
+    (N M : ℕ) (cLow cHigh : ℚ)
+    (hLow : 0 ≤ cLow) (hStep : cLow ≤ cHigh)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) :
+    (W.globalLogCapacitySubMarkovShadow_applyAtToDivisorStep
+      IOf hIOf s
+        (twoStepAsFiniteStepTailNatMassSpace_dvdMonotone
+          N M cLow cHigh hLow hStep)).weightedHitMass A ≤
+      (cHigh : ℝ) :=
+  W.globalLogCapacitySubMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound
+    IOf hIOf s
+    (twoStepAsFiniteStepTailNatMassSpace_dvdMonotone N M cLow cHigh hLow hStep)
+    hA
+    (by exact_mod_cast hLow.trans hStep)
+    (twoStepAsFiniteStepTailNatMassSpace_logCapacitySourceMassBound
+      N M cLow cHigh hLow hStep)
+
 end PrimePowerWitnessProvider
 
 /--
@@ -735,5 +785,27 @@ theorem canonicalExponentSlotMarkovShadow_finiteStepTailDivisorStep_weightedHitM
     (by exact_mod_cast Finset.sum_nonneg hinc)
     (finiteStepTailNatMassSpace_logCapacitySourceMassBound
       steps threshold increment hinc)
+
+/--
+Primitive hitting bound for the canonical exponent-slot Markov shadow using
+the two-step tail mass through the finite-step interface.
+-/
+theorem canonicalExponentSlotMarkovShadow_twoStepAsFiniteStepTailDivisorStep_weightedHitMass_le
+    (N M : ℕ) (cLow cHigh : ℚ)
+    (hLow : 0 ≤ cLow) (hStep : cLow ≤ cHigh)
+    (s : LogCapacityState)
+    {A : Finset ℕ}
+    (hA : PrimitiveOn A) :
+    (canonicalExponentSlotMarkovShadow_applyAtToDivisorStep
+      s (twoStepAsFiniteStepTailNatMassSpace_dvdMonotone
+        N M cLow cHigh hLow hStep)).weightedHitMass A ≤
+      (cHigh : ℝ) :=
+  canonicalExponentSlotMarkovShadow_divisorStep_weightedHitMass_le_of_sourceBound
+    s
+    (twoStepAsFiniteStepTailNatMassSpace_dvdMonotone N M cLow cHigh hLow hStep)
+    hA
+    (by exact_mod_cast hLow.trans hStep)
+    (twoStepAsFiniteStepTailNatMassSpace_logCapacitySourceMassBound
+      N M cLow cHigh hLow hStep)
 
 end DkMath.NumberTheory.PrimitiveSet
